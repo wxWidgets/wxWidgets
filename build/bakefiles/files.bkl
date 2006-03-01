@@ -956,6 +956,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/tbargtk.cpp
     src/gtk/textctrl.cpp
     src/gtk/tglbtn.cpp
+    src/gtk/treeentry_gtk.c
     src/gtk/utilsres.cpp
 </set>
 <set var="GTK_HDR" hints="files">
@@ -1001,6 +1002,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/textctrl.h
     wx/gtk/tglbtn.h
     wx/gtk/treectrl.h
+    wx/gtk/treeentry_gtk.h
 </set>
 
 

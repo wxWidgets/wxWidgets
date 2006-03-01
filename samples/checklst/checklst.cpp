@@ -57,7 +57,19 @@ public:
     void OnUncheckFirstItem(wxCommandEvent& event);
     void OnToggleFirstItem(wxCommandEvent& event);
     void OnToggleSelection(wxCommandEvent& event);
-    void OnAddItems(wxCommandEvent& event);
+    void OnToggleSorting(wxCommandEvent& event);
+    void OnToggleExtended(wxCommandEvent& event);
+
+    void OnInsertItemsStart(wxCommandEvent& event);
+    void OnInsertItemsMiddle(wxCommandEvent& event);
+    void OnInsertItemsEnd(wxCommandEvent& event);
+    void OnAppendItems(wxCommandEvent& event);
+    void OnRemoveItems(wxCommandEvent& event);
+
+    void OnGetItemHeight(wxCommandEvent& event);
+    void OnGetBestSize(wxCommandEvent& event);
+
+    void OnMakeItemFirst(wxCommandEvent& event);
 
     void OnListboxSelect(wxCommandEvent& event);
     void OnCheckboxToggle(wxCommandEvent& event);
@@ -89,7 +101,16 @@ enum
     Menu_UncheckFirst,
     Menu_ToggleFirst,
     Menu_Selection,
-    Menu_AddItems,
+    Menu_Extended,
+    Menu_Sorting,
+    Menu_InsertItemsStart,
+    Menu_InsertItemsMiddle,
+    Menu_InsertItemsEnd,
+    Menu_AppendItems,
+    Menu_RemoveItems,
+    Menu_GetItemHeight,
+    Menu_GetBestSize,
+    Menu_MakeItemFirst,
 
     Control_First,
     Control_Listbox,
@@ -106,7 +127,19 @@ BEGIN_EVENT_TABLE(CheckListBoxFrame, wxFrame)
     EVT_MENU(Menu_UncheckFirst, CheckListBoxFrame::OnUncheckFirstItem)
     EVT_MENU(Menu_ToggleFirst, CheckListBoxFrame::OnToggleFirstItem)
     EVT_MENU(Menu_Selection, CheckListBoxFrame::OnToggleSelection)
-    EVT_MENU(Menu_AddItems, CheckListBoxFrame::OnAddItems)
+    EVT_MENU(Menu_Extended, CheckListBoxFrame::OnToggleExtended)
+    EVT_MENU(Menu_Sorting, CheckListBoxFrame::OnToggleSorting)
+    
+    EVT_MENU(Menu_InsertItemsStart, CheckListBoxFrame::OnInsertItemsStart)
+    EVT_MENU(Menu_InsertItemsMiddle, CheckListBoxFrame::OnInsertItemsMiddle)
+    EVT_MENU(Menu_InsertItemsEnd, CheckListBoxFrame::OnInsertItemsEnd)
+    EVT_MENU(Menu_AppendItems, CheckListBoxFrame::OnAppendItems)
+    EVT_MENU(Menu_RemoveItems, CheckListBoxFrame::OnRemoveItems)
+
+    EVT_MENU(Menu_GetItemHeight, CheckListBoxFrame::OnGetItemHeight)
+    EVT_MENU(Menu_GetBestSize, CheckListBoxFrame::OnGetBestSize)
+
+    EVT_MENU(Menu_MakeItemFirst, CheckListBoxFrame::OnMakeItemFirst)
 
     EVT_LISTBOX(Control_Listbox, CheckListBoxFrame::OnListboxSelect)
     EVT_CHECKLISTBOX(Control_Listbox, CheckListBoxFrame::OnCheckboxToggle)
@@ -158,9 +191,21 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
     menuList->Append(Menu_UncheckFirst, _T("Uncheck the first item\tCtrl-U"));
     menuList->Append(Menu_ToggleFirst, _T("Toggle the first item\tCtrl-T"));
     menuList->AppendSeparator();
-    menuList->Append(Menu_AddItems, _T("Add more items\tCtrl-A"));
+    menuList->Append(Menu_InsertItemsStart, _T("Insert some item at the beginning"));
+    menuList->Append(Menu_InsertItemsMiddle, _T("Insert some item at the middle"));
+    menuList->Append(Menu_InsertItemsEnd, _T("Insert some item at the end"));
+    menuList->Append(Menu_AppendItems, _T("Append some items\tCtrl-A"));
+    menuList->Append(Menu_RemoveItems, _T("Remove some items"));
     menuList->AppendSeparator();
     menuList->AppendCheckItem(Menu_Selection, _T("Multiple selection\tCtrl-M"));
+    menuList->AppendCheckItem(Menu_Extended, _T("Extended selection"));
+    menuList->AppendCheckItem(Menu_Sorting, _T("Sorting"));
+    menuList->AppendSeparator();
+    menuList->Append(Menu_GetItemHeight, _T("Get the height of an item"));
+    menuList->Append(Menu_GetBestSize, _T("Get the best size of the checklistbox control"));
+    menuList->AppendSeparator();
+    menuList->Append(Menu_MakeItemFirst, _T("Make selected item the first item"));
+
 
     // put it all together
     wxMenuBar *menu_bar = new wxMenuBar;
@@ -271,7 +316,7 @@ void CheckListBoxFrame::OnToggleFirstItem(wxCommandEvent& WXUNUSED(event))
         m_pListBox->Check(0, !m_pListBox->IsChecked(0));
 }
 
-void CheckListBoxFrame::OnAddItems(wxCommandEvent& WXUNUSED(event))
+void CheckListBoxFrame::OnInsertItemsStart(wxCommandEvent& WXUNUSED(event))
 {
     static size_t s_nItem = 0;
     wxArrayString items;
@@ -280,6 +325,74 @@ void CheckListBoxFrame::OnAddItems(wxCommandEvent& WXUNUSED(event))
     items.Add(wxString::Format(_T("New item %lu"), (unsigned long)++s_nItem));
 
     m_pListBox->InsertItems(items, 0);//m_pListBox->GetCount());
+}
+
+void CheckListBoxFrame::OnInsertItemsMiddle(wxCommandEvent& WXUNUSED(event))
+{
+    static size_t s_nItem = 0;
+    wxArrayString items;
+    items.Add(wxString::Format(_T("New item %lu"), (unsigned long)++s_nItem));
+    items.Add(wxString::Format(_T("New item %lu"), (unsigned long)++s_nItem));
+    items.Add(wxString::Format(_T("New item %lu"), (unsigned long)++s_nItem));
+
+    m_pListBox->InsertItems(items, m_pListBox->GetCount() ? 1 : 0);
+}
+
+void CheckListBoxFrame::OnInsertItemsEnd(wxCommandEvent& WXUNUSED(event))
+{
+    static size_t s_nItem = 0;
+    wxArrayString items;
+    items.Add(wxString::Format(_T("New item %lu"), (unsigned long)++s_nItem));
+    items.Add(wxString::Format(_T("New item %lu"), (unsigned long)++s_nItem));
+    items.Add(wxString::Format(_T("New item %lu"), (unsigned long)++s_nItem));
+
+    m_pListBox->InsertItems(items, m_pListBox->GetCount() );
+}
+
+void CheckListBoxFrame::OnAppendItems(wxCommandEvent& WXUNUSED(event))
+{
+    static size_t s_nItem = 0;
+    m_pListBox->Append(wxString::Format(_T("New item %lu"), (unsigned long)++s_nItem));
+    m_pListBox->Append(wxString::Format(_T("New item %lu"), (unsigned long)++s_nItem));
+    m_pListBox->Append(wxString::Format(_T("New item %lu"), (unsigned long)++s_nItem));
+}
+
+void CheckListBoxFrame::OnRemoveItems(wxCommandEvent& WXUNUSED(event))
+{
+    if(m_pListBox->GetCount())
+        m_pListBox->Delete(0);
+    if(m_pListBox->GetCount())
+        m_pListBox->Delete(0);
+    if(m_pListBox->GetCount())
+        m_pListBox->Delete(0);
+}
+
+void CheckListBoxFrame::OnGetItemHeight(wxCommandEvent& WXUNUSED(event))
+{
+    int height = m_pListBox->GetItemHeight();
+
+    wxMessageBox(wxString::Format(wxT("Height of an item is:%i"),
+                                  height
+                                 )
+                );
+}
+
+void CheckListBoxFrame::OnGetBestSize(wxCommandEvent& WXUNUSED(event))
+{
+    wxSize bestSize = m_pListBox->GetBestSize();
+
+    wxMessageBox(wxString::Format(wxT("Best size of the checklistbox is:[%i,%i]"),
+                                  bestSize.x, bestSize.y
+                                 )
+                );
+}
+
+void CheckListBoxFrame::OnMakeItemFirst(wxCommandEvent& WXUNUSED(event))
+{
+    if(m_pListBox->GetSelection() != -1)
+        m_pListBox->SetFirstItem(m_pListBox->GetSelection());
+    else
+        wxMessageBox(wxT("Nothing selected!"));
 }
 
 void CheckListBoxFrame::OnToggleSelection(wxCommandEvent& event)
@@ -294,6 +407,34 @@ void CheckListBoxFrame::OnToggleSelection(wxCommandEvent& event)
     sizer->Insert(0, m_pListBox, 1, wxGROW | wxALL, 10);
 
     m_panel->Layout();
+}
+
+void CheckListBoxFrame::OnToggleExtended(wxCommandEvent& event)
+{
+    wxSizer *sizer = m_panel->GetSizer();
+
+    sizer->Detach( m_pListBox );
+    delete m_pListBox;
+
+    CreateCheckListbox(event.IsChecked() ? wxLB_EXTENDED : 0);
+
+    sizer->Insert(0, m_pListBox, 1, wxGROW | wxALL, 10);
+
+    m_panel->Layout();    
+}
+
+void CheckListBoxFrame::OnToggleSorting(wxCommandEvent& event)
+{
+    wxSizer *sizer = m_panel->GetSizer();
+
+    sizer->Detach( m_pListBox );
+    delete m_pListBox;
+
+    CreateCheckListbox(event.IsChecked() ? wxLB_SORT : 0);
+
+    sizer->Insert(0, m_pListBox, 1, wxGROW | wxALL, 10);
+
+    m_panel->Layout();    
 }
 
 void CheckListBoxFrame::OnListboxSelect(wxCommandEvent& event)

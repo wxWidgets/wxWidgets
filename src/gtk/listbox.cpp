@@ -2,6 +2,7 @@
 // Name:        src/gtk/listbox.cpp
 // Purpose:
 // Author:      Robert Roebling
+// Modified By: Ryan Norton (GtkTreeView implementation)
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
@@ -21,20 +22,26 @@
 #include "wx/intl.h"
 #include "wx/checklst.h"
 #include "wx/settings.h"
-
-// FIXME: Use GtkTreeView/GtkListModel instead?
-#include <gtk/gtkversion.h>
-#ifdef GTK_DISABLE_DEPRECATED
-#undef GTK_DISABLE_DEPRECATED
-#endif
-
+#include "wx/log.h"
 #include "wx/gtk/private.h"
+#include "wx/gtk/treeentry_gtk.h"
 
 #if wxUSE_TOOLTIPS
 #include "wx/tooltip.h"
 #endif
 
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+
+//-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern bool           g_blockEventsOnDrag;
+extern bool           g_blockEventsOnScroll;
+extern wxCursor       g_globalCursor;
+
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -44,168 +51,107 @@ extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
 //-----------------------------------------------------------------------------
-// data
+// Macro to tell which row the strings are in (1 if native checklist, 0 if not)
 //-----------------------------------------------------------------------------
 
-extern bool           g_blockEventsOnDrag;
-extern bool           g_blockEventsOnScroll;
-extern wxCursor       g_globalCursor;
-extern wxWindowGTK   *g_delayedFocus;
-extern wxWindowGTK   *g_focusWindow;
-extern wxWindowGTK   *g_focusWindowLast;
+#if wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
+#   define WXLISTBOX_DATACOLUMN_ARG(x)  (x->m_hasCheckBoxes ? 1 : 0)
+#else
+#   define WXLISTBOX_DATACOLUMN_ARG(x)  (0)
+#endif // wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
 
-static bool       g_hasDoubleClicked = FALSE;
-
-//-----------------------------------------------------------------------------
-// idle callback for SetFirstItem
-//-----------------------------------------------------------------------------
-
-struct wxlistbox_idle_struct
-{
-    wxListBox   *m_listbox;
-    int          m_item;
-    gint         m_tag;
-};
-
-extern "C" {
-static gint wxlistbox_idle_callback( gpointer gdata )
-{
-    wxlistbox_idle_struct* data = (wxlistbox_idle_struct*) gdata;
-    gdk_threads_enter();
-
-    g_source_remove( data->m_tag );
-
-    // check that the items haven't been deleted from the listbox since we had
-    // installed this callback
-    wxListBox *lbox = data->m_listbox;
-    if ( data->m_item < lbox->GetCount() )
-    {
-        lbox->SetFirstItem( data->m_item );
-    }
-
-    delete data;
-
-    gdk_threads_leave();
-
-    return TRUE;
-}
-}
+#define WXLISTBOX_DATACOLUMN    WXLISTBOX_DATACOLUMN_ARG(this)
 
 //-----------------------------------------------------------------------------
-// "focus_in_event"
+// "row-activated"
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_listitem_focus_in_callback( GtkWidget *widget,
-                                          GdkEvent *WXUNUSED(event),
-                                          wxWindow *win )
-{
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-    g_focusWindowLast =
-    g_focusWindow = win;
-
-    // does the window itself think that it has the focus?
-    if ( !win->m_hasFocus )
-    {
-        // not yet, notify it
-        win->m_hasFocus = TRUE;
-
-        wxChildFocusEvent eventChildFocus(win);
-        (void)win->GetEventHandler()->ProcessEvent(eventChildFocus);
-
-        wxFocusEvent eventFocus(wxEVT_SET_FOCUS, win->GetId());
-        eventFocus.SetEventObject(win);
-
-        (void)win->GetEventHandler()->ProcessEvent(eventFocus);
-    }
-
-    return FALSE;
-}
-}
-
-//-----------------------------------------------------------------------------
-// "focus_out_event"
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static gint gtk_listitem_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk_event, wxWindowGTK *win )
-{
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-    g_focusWindow = (wxWindowGTK *)NULL;
-
-    // don't send the window a kill focus event if it thinks that it doesn't
-    // have focus already
-    if ( win->m_hasFocus )
-    {
-        win->m_hasFocus = FALSE;
-
-        wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
-        event.SetEventObject( win );
-
-        // even if we did process the event in wx code, still let GTK itself
-        // process it too as otherwise bad things happen, especially in GTK2
-        // where the text control simply aborts the program if it doesn't get
-        // the matching focus out event
-        (void)win->GetEventHandler()->ProcessEvent( event );
-    }
-
-    return FALSE;
-}
-}
-
-//-----------------------------------------------------------------------------
-// "button_release_event"
-//-----------------------------------------------------------------------------
-
-/* we would normally emit a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event once
-   a GDK_2BUTTON_PRESS occurs, but this has the particular problem of the
-   listbox keeping the focus until it receives a GDK_BUTTON_RELEASE event.
-   this can lead to race conditions so that we emit the dclick event
-   after the GDK_BUTTON_RELEASE event after the GDK_2BUTTON_PRESS event */
-
-extern "C" {
-static gint
-gtk_listbox_button_release_callback( GtkWidget * WXUNUSED(widget),
-                                     GdkEventButton * WXUNUSED(gdk_event),
-                                     wxListBox *listbox )
+static void
+gtk_listbox_row_activated_callback(GtkTreeView        *treeview,
+                                   GtkTreePath        *path,
+                                   GtkTreeViewColumn  *col,
+                                   wxListBox          *listbox)
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (g_blockEventsOnDrag) return FALSE;
-    if (g_blockEventsOnScroll) return FALSE;
+    if (g_blockEventsOnDrag) return;
+    if (g_blockEventsOnScroll) return;
 
-    if (!listbox->m_hasVMT) return FALSE;
+    if (!listbox->m_hasVMT) return;
 
-    if (!g_hasDoubleClicked) return FALSE;
+    //Notes:
+    //1) This is triggered by either a double-click or a space press
+    //2) We handle both here because
+    //2a) in the case of a space/keypress we can't really know
+    //    which item was pressed on because we can't get coords
+    //    from a keyevent
+    //2b) It seems more correct
 
-    wxCommandEvent event( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
-    event.SetEventObject( listbox );
+    int sel = gtk_tree_path_get_indices(path)[0];
 
-    wxArrayInt aSelections;
-    int n, count = listbox->GetSelections(aSelections);
-    if ( count > 0 )
+    if(!listbox->m_spacePressed)
     {
-        n = aSelections[0];
-        if ( listbox->HasClientObjectData() )
-            event.SetClientObject( listbox->GetClientObject(n) );
-        else if ( listbox->HasClientUntypedData() )
-            event.SetClientData( listbox->GetClientData(n) );
-        event.SetString( listbox->GetString(n) );
+        //Assume it was double-click
+        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
+        event.SetEventObject( listbox );
+
+        if(listbox->IsSelected(sel))
+        {
+            GtkTreeEntry* entry = listbox->GtkGetEntry(sel);
+
+            if(entry)
+            {
+                event.SetInt(sel);
+                event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
+
+                if ( listbox->HasClientObjectData() )
+                    event.SetClientObject( 
+                    (wxClientData*) gtk_tree_entry_get_userdata(entry) );
+                else if ( listbox->HasClientUntypedData() )
+                    event.SetClientData( gtk_tree_entry_get_userdata(entry) );
+                g_object_unref(G_OBJECT(entry));
+            }
+            else
+            {
+                wxLogSysError(wxT("Internal error - could not get entry for double-click"));
+                event.SetInt(-1);
+            }
+        }
+        else
+            event.SetInt(-1);
+
+        listbox->GetEventHandler()->ProcessEvent( event );
     }
     else
     {
-        n = -1;
+        listbox->m_spacePressed = false; //don't block selection behaviour anymore
+
+        //Space was pressed - toggle the appropriate checkbox and the selection
+#if wxUSE_CHECKLISTBOX //Do it for both native and non-native
+        if (listbox->m_hasCheckBoxes)
+        {
+            wxCheckListBox *clb = (wxCheckListBox *)listbox;
+
+            clb->Check( sel, !clb->IsChecked(sel) );
+
+            wxCommandEvent new_event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, listbox->GetId() );
+            new_event.SetEventObject( listbox );
+            new_event.SetInt( sel );
+            listbox->GetEventHandler()->ProcessEvent( new_event );
+        }
+#endif // wxUSE_CHECKLISTBOX
+
+        if(  (((listbox->GetWindowStyleFlag() & wxLB_MULTIPLE) != 0) ||
+              ((listbox->GetWindowStyleFlag() & wxLB_EXTENDED) != 0)) )
+    {
+            //toggle the selection + send event
+            if(listbox->IsSelected( sel ))
+                listbox->GtkSetSelection(sel, FALSE, FALSE);
+    else
+                listbox->GtkSetSelection(sel, TRUE, FALSE);
+        }
     }
-
-    event.SetInt(n);
-
-    listbox->GetEventHandler()->ProcessEvent( event );
-
-    return FALSE;
 }
 }
 
@@ -226,11 +172,20 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
 
     if (!listbox->m_hasVMT) return FALSE;
 
-    int sel = listbox->GtkGetIndex( widget );
+    //Just to be on the safe side - it should be unset in the activate callback
+    //but we don't want any obscure bugs if it doesn't get called somehow...
+    listbox->m_spacePressed = false;
 
-#if wxUSE_CHECKLISTBOX
+#if wxUSE_CHECKLISTBOX && !wxUSE_NATIVEGTKCHECKLIST
     if ((listbox->m_hasCheckBoxes) && (gdk_event->x < 15) && (gdk_event->type != GDK_2BUTTON_PRESS))
     {
+        GtkTreePath* path;
+        gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(widget), 
+                                  (gint)gdk_event->x, (gint)gdk_event->y,
+                                  &path, NULL, NULL, NULL);
+        int sel = gtk_tree_path_get_indices(path)[0];
+        gtk_tree_path_free(path);
+
         wxCheckListBox *clb = (wxCheckListBox *)listbox;
 
         clb->Check( sel, !clb->IsChecked(sel) );
@@ -240,26 +195,7 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
         event.SetInt( sel );
         listbox->GetEventHandler()->ProcessEvent( event );
     }
-#endif // wxUSE_CHECKLISTBOX
-
-    if ((gdk_event->state == 0) &&
-         (((listbox->GetWindowStyleFlag() & wxLB_MULTIPLE) != 0) ||
-          ((listbox->GetWindowStyleFlag() & wxLB_EXTENDED) != 0)) )
-    {
-            listbox->m_blockEvent = TRUE;
-
-            int i;
-            for (i = 0; i < (int)listbox->GetCount(); i++)
-                if (i != sel)
-                    gtk_list_unselect_item( GTK_LIST(listbox->m_list), i );
-
-            listbox->m_blockEvent = FALSE;
-
-            return false;
-    }
-
-    /* emit wxEVT_COMMAND_LISTBOX_DOUBLECLICKED later */
-    g_hasDoubleClicked = (gdk_event->type == GDK_2BUTTON_PRESS);
+#endif // wxUSE_CHECKLISTBOX && !wxUSE_NATIVEGTKCHECKLIST
 
     return FALSE;
 }
@@ -271,13 +207,14 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
 
 extern "C" {
 static gint
-gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxListBox *listbox )
+gtk_listbox_key_press_callback( GtkWidget *widget, 
+                                GdkEventKey *gdk_event, 
+                                wxListBox *listbox )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    if (g_isIdle) wxapp_install_idle_handler();
 
-    if (g_blockEventsOnDrag)
-        return FALSE;
+    if (g_blockEventsOnDrag) return FALSE;
+
 
     bool ret = FALSE;
 
@@ -294,62 +231,21 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
 
     if ((gdk_event->keyval == GDK_Return) && (!ret))
     {
-        // eat return in all modes
+        // eat return in all modes (RN:WHY?)
         ret = TRUE;
     }
 
-#if wxUSE_CHECKLISTBOX
-    if ((gdk_event->keyval == ' ') && (listbox->m_hasCheckBoxes) && (!ret))
-    {
-        int sel = listbox->GtkGetIndex( widget );
-
-        wxCheckListBox *clb = (wxCheckListBox *)listbox;
-
-        clb->Check( sel, !clb->IsChecked(sel) );
-
-        wxCommandEvent new_event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, listbox->GetId() );
-        new_event.SetEventObject( listbox );
-        new_event.SetInt( sel );
-        ret = listbox->GetEventHandler()->ProcessEvent( new_event );
-    }
-#endif // wxUSE_CHECKLISTBOX
-
     // Check or uncheck item with SPACE
-    if ((gdk_event->keyval == ' ') && (!ret) &&
-         (((listbox->GetWindowStyleFlag() & wxLB_MULTIPLE) != 0) ||
-          ((listbox->GetWindowStyleFlag() & wxLB_EXTENDED) != 0)) )
-    {
-        int sel = listbox->GtkGetIndex( widget );
-
-        if (sel != -1)
+    if (gdk_event->keyval == ' ')
         {
-            ret = TRUE;
-
-            if (listbox->IsSelected( sel ))
-                gtk_list_unselect_item( listbox->m_list, sel );
-            else
-                gtk_list_select_item( listbox->m_list, sel );
-
-            wxCommandEvent new_event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
-            new_event.SetEventObject( listbox );
-            wxArrayInt aSelections;
-            int n, count = listbox->GetSelections(aSelections);
-            if ( count > 0 )
-            {
-                n = aSelections[0];
-                if ( listbox->HasClientObjectData() )
-                    new_event.SetClientObject( listbox->GetClientObject(n) );
-                else if ( listbox->HasClientUntypedData() )
-                    new_event.SetClientData( listbox->GetClientData(n) );
-                new_event.SetString( listbox->GetString(n) );
-            }
-            else
-            {
-                n = -1;
-            }
-            new_event.SetInt(n);
-            listbox->GetEventHandler()->ProcessEvent( new_event );
-        }
+        //In the keyevent we don't know the index of the item
+        //and the activated event gets called anyway...
+        //
+        //Also, activating with the space causes the treeview to 
+        //unselect all the items and then select the item in question
+        //wx's behaviour is to just toggle the item's selection state
+        //and leave the others alone
+        listbox->m_spacePressed = true;
     }
 
     if (ret)
@@ -366,67 +262,159 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
 // "select" and "deselect"
 //-----------------------------------------------------------------------------
 
-static void gtk_listitem_select_cb( GtkWidget *widget,
-                                    wxListBox *listbox,
-                                    bool is_selection )
+extern "C" {
+static gboolean gtk_listitem_select_cb( GtkTreeSelection* selection,
+                                        GtkTreeModel* model,
+                                        GtkTreePath* path,
+                                        gboolean is_selected,
+                                        wxListBox *listbox )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!listbox->m_hasVMT) return;
-    if (g_blockEventsOnDrag) return;
+    if (!listbox->m_hasVMT) return TRUE;
+    if (g_blockEventsOnDrag) return TRUE;
 
-    if (listbox->m_blockEvent) return;
+    if (listbox->m_spacePressed) return FALSE; //see keyevent callback
+    if (listbox->m_blockEvent) return TRUE;
 
+    // NB: wxdocs explicitly say that this event only gets sent when
+    // something is actually selected, plus the controls example
+    // assumes so and passes -1 to the dogetclientdata funcs if not
+
+    // OK, so basically we need to do a bit of a run-around here as
+    // 1) is_selected says whether the item(s?) are CURRENTLY selected -    
+    //    i.e. if is_selected is FALSE then the item is going to be 
+    //    selected right now!
+    // 2) However, since it is not already selected and the user 
+    //    will expect it to be we need to manually select it and
+    //    return FALSE telling GTK we handled the selection
+    if (is_selected) return TRUE;
+
+    int nIndex = gtk_tree_path_get_indices(path)[0];
+    GtkTreeEntry* entry = listbox->GtkGetEntry(nIndex);
+
+    if(entry)
+    {
+        //Now, as mentioned above, we manually select the row that is/was going
+        //to be selected anyway by GTK
+        listbox->m_blockEvent = TRUE; //if we don't block events we will lock the
+                                      //app due to recursion!!
+
+        GtkTreeSelection* selection = 
+            gtk_tree_view_get_selection(listbox->m_treeview);
+        GtkTreeIter iter;
+        gtk_tree_model_get_iter(GTK_TREE_MODEL(listbox->m_liststore), &iter, path);
+        gtk_tree_selection_select_iter(selection, &iter);
+
+        listbox->m_blockEvent = FALSE;
+
+        //Finally, send the wx event
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
     event.SetEventObject( listbox );
 
     // indicate whether this is a selection or a deselection
-    event.SetExtraLong( is_selection );
+        event.SetExtraLong( 1 );
 
-    if ((listbox->GetWindowStyleFlag() & wxLB_SINGLE) != 0)
-    {
-        int sel = listbox->GtkGetIndex( widget );
+        event.SetInt(nIndex);
+        event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
 
-        if (listbox->m_prevSelection != sel)
-            gtk_list_unselect_item( listbox->m_list, listbox->m_prevSelection );
-
-        listbox->m_prevSelection = sel;
-    }
-
-    wxArrayInt aSelections;
-    int n, count = listbox->GetSelections(aSelections);
-    if ( count > 0 )
-    {
-        n = aSelections[0];
         if ( listbox->HasClientObjectData() )
-            event.SetClientObject( listbox->GetClientObject(n) );
+            event.SetClientObject( 
+                    (wxClientData*) gtk_tree_entry_get_userdata(entry) 
+                                 );
         else if ( listbox->HasClientUntypedData() )
-            event.SetClientData( listbox->GetClientData(n) );
-        event.SetString( listbox->GetString(n) );
-    }
-    else
-    {
-        n = -1;
-    }
+            event.SetClientData( gtk_tree_entry_get_userdata(entry) );
 
-    event.SetInt(n);
-
-//    No longer required with new code in wxLB_SINGLE
-//    listbox->GetEventHandler()->AddPendingEvent( event );
     listbox->GetEventHandler()->ProcessEvent( event );
+
+        g_object_unref(G_OBJECT(entry));
+        return FALSE;  //We handled it/did it manually
+    }
+
+    return TRUE; //allow selection to change
+}
 }
 
+//-----------------------------------------------------------------------------
+// GtkTreeEntry destruction (to destroy client data)
+//-----------------------------------------------------------------------------
+
 extern "C" {
-static void gtk_listitem_select_callback( GtkWidget *widget, wxListBox *listbox )
+static void gtk_tree_entry_destroy_cb(GtkTreeEntry* entry, 
+                                      wxListBox* listbox)
 {
-    gtk_listitem_select_cb( widget, listbox, TRUE );
+    if(listbox->HasClientObjectData())
+    {
+        gpointer userdata = gtk_tree_entry_get_userdata(entry);
+        if(userdata)
+            delete (wxClientData *)userdata;
+    }
 }
 }
 
+//-----------------------------------------------------------------------------
+// Sorting callback (standard CmpNoCase return value)
+//-----------------------------------------------------------------------------
+
 extern "C" {
-static void gtk_listitem_deselect_callback( GtkWidget *widget, wxListBox *listbox )
+static gint gtk_listbox_sort_callback(GtkTreeModel *model,
+                                      GtkTreeIter  *a,
+                                      GtkTreeIter  *b,
+                                      wxListBox    *listbox)
 {
-    gtk_listitem_select_cb( widget, listbox, FALSE );
+    GtkTreeEntry* entry;
+    GtkTreeEntry* entry2;
+
+    gtk_tree_model_get(GTK_TREE_MODEL(listbox->m_liststore),
+                             a,
+                             WXLISTBOX_DATACOLUMN_ARG(listbox), 
+                             &entry, -1);
+    gtk_tree_model_get(GTK_TREE_MODEL(listbox->m_liststore),
+                             b,
+                             WXLISTBOX_DATACOLUMN_ARG(listbox), 
+                             &entry2, -1);
+    wxCHECK_MSG(entry, 0, wxT("Could not get entry"));
+    wxCHECK_MSG(entry2, 0, wxT("Could not get entry2"));
+
+    //We compare collate keys here instead of calling g_utf8_collate
+    //as it is rather slow (and even the docs reccommend this)
+    int ret = strcasecmp(gtk_tree_entry_get_collate_key(entry),
+                         gtk_tree_entry_get_collate_key(entry2));
+
+    g_object_unref(G_OBJECT(entry));
+    g_object_unref(G_OBJECT(entry2));
+
+    return ret;
+}
+}
+
+//-----------------------------------------------------------------------------
+// Searching callback (TRUE == not equal, FALSE == equal)
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static gboolean gtk_listbox_searchequal_callback(GtkTreeModel* model,
+                                                 gint column,
+                                                 const gchar* key,
+                                                 GtkTreeIter* iter,
+                                                 wxListBox* listbox)
+{
+    GtkTreeEntry* entry;
+
+    gtk_tree_model_get(GTK_TREE_MODEL(listbox->m_liststore),
+                             iter,
+                             WXLISTBOX_DATACOLUMN_ARG(listbox), 
+                             &entry, -1);
+    wxCHECK_MSG(entry, 0, wxT("Could not get entry"));
+    gchar* keycollatekey = g_utf8_collate_key(key, -1);
+
+    int ret = strcasecmp(keycollatekey,
+                         gtk_tree_entry_get_collate_key(entry));
+
+    g_free(keycollatekey);
+    g_object_unref(G_OBJECT(entry));
+
+    return ret != 0;
 }
 }
 
@@ -434,26 +422,7 @@ static void gtk_listitem_deselect_callback( GtkWidget *widget, wxListBox *listbo
 // wxListBox
 //-----------------------------------------------------------------------------
 
-extern "C" {
-static gint
-gtk_listbox_realized_callback( GtkWidget *m_widget, wxListBox *win )
-{
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-    GList *child = win->m_list->children;
-    for (child = win->m_list->children; child != NULL; child = child->next)
-        gtk_widget_show( GTK_WIDGET(child->data) );
-
-    return false;
-}
-}
-
-//-----------------------------------------------------------------------------
-// wxListBox
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxListBox,wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 
 // ----------------------------------------------------------------------------
 // construction
@@ -461,10 +430,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxListBox,wxControl)
 
 wxListBox::wxListBox()
 {
-    m_list = (GtkList *) NULL;
+    m_treeview = (GtkTreeView*) NULL;
 #if wxUSE_CHECKLISTBOX
     m_hasCheckBoxes = FALSE;
 #endif // wxUSE_CHECKLISTBOX
+    m_spacePressed = false;
 }
 
 bool wxListBox::Create( wxWindow *parent, wxWindowID id,
@@ -487,7 +457,6 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 {
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
-    m_prevSelection = 0;  // or -1 ??
     m_blockEvent = FALSE;
 
     if (!PreCreation( parent, pos, size ) ||
@@ -509,7 +478,56 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
     }
 
-    m_list = GTK_LIST( gtk_list_new() );
+    m_treeview = GTK_TREE_VIEW( gtk_tree_view_new( ) );
+
+    //wxListBox doesn't have a header :)
+    //NB: If enabled SetFirstItem doesn't work correctly
+    gtk_tree_view_set_headers_visible(m_treeview, FALSE);
+
+#if wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
+    if(m_hasCheckBoxes)
+        ((wxCheckListBox*)this)->DoCreateCheckList();
+#endif // wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
+
+    // Create the data column
+    gtk_tree_view_insert_column_with_attributes(m_treeview, -1, "", 
+                                                gtk_cell_renderer_text_new(),
+                                                "text", 
+                                                WXLISTBOX_DATACOLUMN, NULL);
+
+    // Now create+set the model (GtkListStore) - first argument # of columns
+
+#if wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
+    if(m_hasCheckBoxes)
+        m_liststore = gtk_list_store_new(2, G_TYPE_BOOLEAN,
+                                            GTK_TYPE_TREE_ENTRY);
+    else
+#endif
+        m_liststore = gtk_list_store_new(1, GTK_TYPE_TREE_ENTRY);
+
+    gtk_tree_view_set_model(m_treeview, GTK_TREE_MODEL(m_liststore));
+    
+    g_object_unref(G_OBJECT(m_liststore)); //free on treeview destruction
+    
+    // Disable the pop-up textctrl that enables searching - note that
+    // the docs specify that even if this disabled (which we are doing)
+    // the user can still have it through the start-interactive-search
+    // key binding...either way we want to provide a searchequal callback
+    // NB: If this is enabled a doubleclick event (activate) gets sent 
+    //     on a successful search
+    gtk_tree_view_set_search_column(m_treeview, WXLISTBOX_DATACOLUMN);
+    gtk_tree_view_set_search_equal_func(m_treeview, 
+       (GtkTreeViewSearchEqualFunc) gtk_listbox_searchequal_callback,
+                                        this,
+                                        NULL);
+
+    gtk_tree_view_set_enable_search(m_treeview, FALSE);
+
+
+    GtkTreeSelection* selection = gtk_tree_view_get_selection( m_treeview );
+    gtk_tree_selection_set_select_function(selection, 
+                     (GtkTreeSelectionFunc)gtk_listitem_select_cb,
+                                           this, NULL); //NULL == destroycb         
 
     GtkSelectionMode mode;
     if (style & wxLB_MULTIPLE)
@@ -527,36 +545,50 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
         mode = GTK_SELECTION_SINGLE;
     }
 
-    gtk_list_set_selection_mode( GTK_LIST(m_list), mode );
+    gtk_tree_selection_set_mode( selection, mode );
 
-    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(m_widget), GTK_WIDGET(m_list) );
+    //Handle sortable stuff 
+    if(style & wxLB_SORT)
+    {
+        //Setup sorting in ascending (wx) order
+        gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(m_liststore), 
+                                             WXLISTBOX_DATACOLUMN, 
+                                             GTK_SORT_ASCENDING);
+
+        //Set the sort callback
+        gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(m_liststore),
+                                        WXLISTBOX_DATACOLUMN,
+                   (GtkTreeIterCompareFunc) gtk_listbox_sort_callback,
+                                        this, //userdata
+                                        NULL //"destroy notifier"
+                                       );
+    }
+
+
+    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(m_widget), 
+                                           GTK_WIDGET(m_treeview) );
 
     /* make list scroll when moving the focus down using cursor keys */
     gtk_container_set_focus_vadjustment(
-        GTK_CONTAINER(m_list),
+        GTK_CONTAINER(m_treeview),
         gtk_scrolled_window_get_vadjustment(
-            GTK_SCROLLED_WINDOW(m_widget)));
+        GTK_SCROLLED_WINDOW(m_widget)));
 
-    gtk_widget_show( GTK_WIDGET(m_list) );
+    gtk_widget_show( GTK_WIDGET(m_treeview) );
 
-    g_signal_connect (m_list, "realize",
-                      G_CALLBACK (gtk_listbox_realized_callback), this);
+    wxListBox::DoInsertItems(wxArrayString(n, choices), 0); // insert initial items
 
-    if ( style & wxLB_SORT )
-    {
-        // this will change DoAppend() behaviour
-        m_strings = new wxSortedArrayString;
-    }
-    else
-    {
-        m_strings = (wxSortedArrayString *)NULL;
-    }
+    //treeview-specific events
+    g_signal_connect(m_treeview, "row-activated",
+                     G_CALLBACK(gtk_listbox_row_activated_callback), this);
 
-    for (int i = 0; i < n; i++)
-    {
-        // add one by one
-        DoAppend(choices[i]);
-    }
+    // other events
+    g_signal_connect (m_treeview, "button_press_event",
+                      G_CALLBACK (gtk_listbox_button_press_callback),
+                      this);
+    g_signal_connect (m_treeview, "key_press_event",
+                      G_CALLBACK (gtk_listbox_key_press_callback),
+                           this);
 
     m_parent->DoAddChild( this );
 
@@ -571,201 +603,111 @@ wxListBox::~wxListBox()
     m_hasVMT = FALSE;
 
     Clear();
-
-    if (m_strings)
-      delete m_strings;
 }
 
 // ----------------------------------------------------------------------------
 // adding items
 // ----------------------------------------------------------------------------
 
-void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
+void wxListBox::GtkInsertItems(const wxArrayString& items, 
+                        void** clientData, int pos)
 {
-    wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
-
-    // VZ: notice that InsertItems knows nothing about sorting, so calling it
-    //     from outside (and not from our own Append) is likely to break
-    //     everything
-
-    // code elsewhere supposes we have as many items in m_clientList as items
-    // in the listbox
-    wxASSERT_MSG( m_clientList.GetCount() == (size_t)GetCount(),
-                  wxT("bug in client data management") );
+    wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
     InvalidateBestSize();
 
-    GList *children = m_list->children;
-    int length = g_list_length(children);
+    // Create and set column ids and GValues
 
-    wxCHECK_RET( pos <= length, wxT("invalid index in wxListBox::InsertItems") );
+    size_t nNum = items.GetCount();
+    int nCurCount = wxListBox::GetCount();
+    wxASSERT_MSG(pos <= nCurCount, wxT("Invalid index passed to wxListBox"));
 
-    size_t nItems = items.GetCount();
-    int index;
-
-    if (m_strings)
+    GtkTreeIter* pIter;
+    if (pos == nCurCount)
     {
-        for (size_t n = 0; n < nItems; n++)
-        {
-            index = m_strings->Add( items[n] );
-
-            if (index != GetCount())
-            {
-                GtkAddItem( items[n], index );
-                wxList::compatibility_iterator node = m_clientList.Item( index );
-                m_clientList.Insert( node, (wxObject*) NULL );
-            }
-            else
-            {
-                GtkAddItem( items[n] );
-                m_clientList.Append( (wxObject*) NULL );
-            }
-        }
+        pIter = NULL; // append
     }
     else
     {
-        if (pos == length)
+        GtkTreeIter iter;
+        gboolean res = gtk_tree_model_iter_nth_child(
+                        GTK_TREE_MODEL(m_liststore),
+                        &iter, NULL, //NULL = parent = get first
+                        pos );
+        if(!res)
         {
-            for ( size_t n = 0; n < nItems; n++ )
-            {
-                GtkAddItem( items[n] );
-
-                m_clientList.Append((wxObject *)NULL);
-            }
+            wxLogSysError(wxT("internal wxListBox error in insertion"));
+            return;   
         }
-        else
-        {
-            wxList::compatibility_iterator node = m_clientList.Item( pos );
-            for ( size_t n = 0; n < nItems; n++ )
-            {
-                GtkAddItem( items[n], pos+n );
 
-                m_clientList.Insert( node, (wxObject *)NULL );
-            }
-        }
+        pIter = &iter;
     }
 
-    wxASSERT_MSG( m_clientList.GetCount() == (size_t)GetCount(),
-                      wxT("bug in client data management") );
-}
-
-int wxListBox::DoAppend( const wxString& item )
-{
-    InvalidateBestSize();
-
-    if (m_strings)
+    for (size_t i = 0; i < nNum; ++i)
     {
-        // need to determine the index
-        int index = m_strings->Add( item );
+        wxString label = items[i];
 
-        // only if not at the end anyway
-        if (index != GetCount())
-        {
-           GtkAddItem( item, index );
-
-           wxList::compatibility_iterator node = m_clientList.Item( index );
-           m_clientList.Insert( node, (wxObject *)NULL );
-
-           return index;
-        }
-    }
-
-    GtkAddItem(item);
-
-    m_clientList.Append((wxObject *)NULL);
-
-    return GetCount() - 1;
-}
-
-void wxListBox::GtkAddItem( const wxString &item, int pos )
-{
-    wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
-
-    GtkWidget *list_item;
-
-    wxString label(item);
-#if wxUSE_CHECKLISTBOX
+#if wxUSE_CHECKLISTBOX && !wxUSE_NATIVEGTKCHECKLIST
     if (m_hasCheckBoxes)
     {
         label.Prepend(wxCHECKLBOX_STRING);
     }
 #endif // wxUSE_CHECKLISTBOX
 
-    list_item = gtk_list_item_new_with_label( wxGTK_CONV( label ) );
 
-    GList *gitem_list = g_list_alloc ();
-    gitem_list->data = list_item;
-
-    if (pos == -1)
-        gtk_list_append_items( GTK_LIST (m_list), gitem_list );
-    else
-        gtk_list_insert_items( GTK_LIST (m_list), gitem_list, pos );
-
-    g_signal_connect_after (list_item, "select",
-                            G_CALLBACK (gtk_listitem_select_callback),
+        GtkTreeEntry* entry = gtk_tree_entry_new();
+        gtk_tree_entry_set_label(entry, wxConvUTF8.cWX2MB(label));
+        gtk_tree_entry_set_destroy_func(entry, 
+                (GtkTreeEntryDestroy)gtk_tree_entry_destroy_cb,
                             this);
 
-    if (HasFlag(wxLB_MULTIPLE) || HasFlag(wxLB_EXTENDED))
-        g_signal_connect_after (list_item, "deselect",
-                                G_CALLBACK (gtk_listitem_deselect_callback),
-                                this);
+        if (clientData)
+            gtk_tree_entry_set_userdata(entry, clientData[i]);
 
-    g_signal_connect (list_item, "button_press_event",
-                      G_CALLBACK (gtk_listbox_button_press_callback),
-                      this);
-    g_signal_connect_after (list_item, "button_release_event",
-                            G_CALLBACK (gtk_listbox_button_release_callback),
-                            this);
-    g_signal_connect (list_item, "key_press_event",
-                      G_CALLBACK (gtk_listbox_key_press_callback),
-                           this);
-    g_signal_connect (list_item, "focus_in_event",
-                      G_CALLBACK (gtk_listitem_focus_in_callback),
-                      this);
-    g_signal_connect (list_item, "focus_out_event",
-                      G_CALLBACK (gtk_listitem_focus_out_callback),
-                      this);
+        GtkTreeIter itercur;
+        gtk_list_store_insert_before(m_liststore, &itercur, pIter);
 
-    ConnectWidget( list_item );
-
-    if (GTK_WIDGET_REALIZED(m_widget))
-    {
-        gtk_widget_show( list_item );
-
-        gtk_widget_realize( list_item );
-        gtk_widget_realize( GTK_BIN(list_item)->child );
-
-#if wxUSE_TOOLTIPS
-        if (m_tooltip) m_tooltip->Apply( this );
+#if wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
+        if (m_hasCheckBoxes)
+        {
+            gtk_list_store_set(m_liststore, &itercur, 
+                                 0, FALSE, //FALSE == not toggled
+                                 1, entry, -1);
+        }
+        else
 #endif
-    }
+            gtk_list_store_set(m_liststore, &itercur, 
+                                 0, entry, -1);
 
-    // Apply current widget style to the new list_item
-    GtkRcStyle *style = CreateWidgetStyle();
-    if (style)
-    {
-        gtk_widget_modify_style( GTK_WIDGET( list_item ), style );
-        GtkBin *bin = GTK_BIN( list_item );
-        gtk_widget_modify_style( GTK_WIDGET( bin->child ), style );
-        gtk_rc_style_unref( style );
+        g_object_unref(G_OBJECT(entry)); //liststore always refs :)
     }
+}
+
+void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
+{
+    GtkInsertItems(items, NULL, pos);
+}
+
+int wxListBox::DoAppend( const wxString& item )
+{
+    InvalidateBestSize();
+
+    //Just call DoInsertItems for now
+    //RN: Originally I had gtk_list_store_append etc.
+    //    here as an optimization but now the insert
+    //    has been streamlined and its quite a bit of code duplication
+    int nWhere = wxListBox::GetCount();
+    wxArrayString aItems;
+    aItems.Add(item);
+    wxListBox::DoInsertItems(aItems, nWhere);
+    return nWhere;
 }
 
 void wxListBox::DoSetItems( const wxArrayString& items,
                             void **clientData)
 {
     Clear();
-
-    DoInsertItems(items, 0);
-
-    if ( clientData )
-    {
-        size_t count = items.GetCount();
-        for ( size_t n = 0; n < count; n++ )
-        {
-            SetClientData(n, clientData[n]);
-        }
-    }
+    GtkInsertItems(items, clientData, 0);
 }
 
 // ----------------------------------------------------------------------------
@@ -774,198 +716,175 @@ void wxListBox::DoSetItems( const wxArrayString& items,
 
 void wxListBox::Clear()
 {
-    wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
+    wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
-    gtk_list_clear_items( m_list, 0, GetCount() );
-
-    if ( GTK_LIST(m_list)->last_focus_child != NULL  )
-    {
-        // This should be NULL, I think.
-        GTK_LIST(m_list)->last_focus_child = NULL;
-    }
-
-    if ( HasClientObjectData() )
-    {
-        // destroy the data (due to Robert's idea of using wxList<wxObject>
-        // and not wxList<wxClientData> we can't just say
-        // m_clientList.DeleteContents(TRUE) - this would crash!
-        wxList::compatibility_iterator node = m_clientList.GetFirst();
-        while ( node )
-        {
-            delete (wxClientData *)node->GetData();
-            node = node->GetNext();
-        }
-    }
-    m_clientList.Clear();
-
-    if ( m_strings )
-        m_strings->Clear();
+    gtk_list_store_clear( m_liststore ); /* well, THAT was easy :) */
 }
 
 void wxListBox::Delete( int n )
 {
-    wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
+    wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
-    GList *child = g_list_nth( m_list->children, n );
+    GtkTreeIter iter;
+    gboolean res = gtk_tree_model_iter_nth_child(
+                        GTK_TREE_MODEL(m_liststore),
+                        &iter, NULL, //NULL = parent = get first
+                        n
+                                                );
 
-    wxCHECK_RET( child, wxT("wrong listbox index") );
+    wxCHECK_RET( res, wxT("wrong listbox index") );
 
-    GList *list = g_list_append( (GList*) NULL, child->data );
-    gtk_list_remove_items( m_list, list );
-    g_list_free( list );
+    //this returns false if iter is invalid (i.e. deleting item
+    //at end) but since we don't use iter, well... :)
+    gtk_list_store_remove(m_liststore, &iter);
+}
 
-    wxList::compatibility_iterator node = m_clientList.Item( n );
-    if ( node )
+// ----------------------------------------------------------------------------
+// get GtkTreeEntry from position (note: you need to g_unref it if valid)
+// ----------------------------------------------------------------------------
+
+struct _GtkTreeEntry* wxListBox::GtkGetEntry(int n) const
+{
+    GtkTreeIter iter;
+    gboolean res = gtk_tree_model_iter_nth_child(
+                        GTK_TREE_MODEL(m_liststore),
+                        &iter, NULL, //NULL = parent = get first
+                        n );
+
+    if (!res)
     {
-        if ( m_clientDataItemsType == wxClientData_Object )
-        {
-            wxClientData *cd = (wxClientData*)node->GetData();
-            delete cd;
-        }
-
-        m_clientList.Erase( node );
+        wxLogDebug(wxT("gtk_tree_model_iter_nth_child failed\n")
+                   wxT("Passed in value was:[%i]  List size:[%i]"),
+                   n, wxListBox::GetCount() );
+        return NULL;
     }
 
-    if ( m_strings )
-        m_strings->RemoveAt(n);
+
+    GtkTreeEntry* entry = NULL;
+    gtk_tree_model_get(GTK_TREE_MODEL(m_liststore), &iter,
+                       WXLISTBOX_DATACOLUMN, &entry, -1);
+
+    return entry;
 }
 
 // ----------------------------------------------------------------------------
 // client data
 // ----------------------------------------------------------------------------
 
-void wxListBox::DoSetItemClientData( int n, void* clientData )
-{
-    wxCHECK_RET( m_widget != NULL, wxT("invalid listbox control") );
-
-    wxList::compatibility_iterator node = m_clientList.Item( n );
-    wxCHECK_RET( node, wxT("invalid index in wxListBox::DoSetItemClientData") );
-
-    node->SetData( (wxObject*) clientData );
-}
-
 void* wxListBox::DoGetItemClientData( int n ) const
 {
-    wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid listbox control") );
+    wxCHECK_MSG( n >= 0 && n < wxListBox::GetCount(), NULL, 
+                 wxT("Invalid index passed to GetItemClientData") );
 
-    wxList::compatibility_iterator node = m_clientList.Item( n );
-    wxCHECK_MSG( node, NULL, wxT("invalid index in wxListBox::DoGetItemClientData") );
+    GtkTreeEntry* entry = GtkGetEntry(n);
+    wxCHECK_MSG(entry, NULL, wxT("could not get entry"));
 
-    return node->GetData();
-}
-
-void wxListBox::DoSetItemClientObject( int n, wxClientData* clientData )
-{
-    wxCHECK_RET( m_widget != NULL, wxT("invalid listbox control") );
-
-    wxList::compatibility_iterator node = m_clientList.Item( n );
-    wxCHECK_RET( node, wxT("invalid index in wxListBox::DoSetItemClientObject") );
-
-    // wxItemContainer already deletes data for us
-
-    node->SetData( (wxObject*) clientData );
+    void* userdata = gtk_tree_entry_get_userdata( entry );
+    g_object_unref(G_OBJECT(entry));
+    return userdata;
 }
 
 wxClientData* wxListBox::DoGetItemClientObject( int n ) const
 {
-    wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, wxT("invalid listbox control") );
+    return (wxClientData*) wxListBox::DoGetItemClientData(n);
+}
 
-    wxList::compatibility_iterator node = m_clientList.Item( n );
-    wxCHECK_MSG( node, (wxClientData *)NULL,
-                 wxT("invalid index in wxListBox::DoGetItemClientObject") );
+void wxListBox::DoSetItemClientData( int n, void* clientData )
+{
+    wxCHECK_RET( n >= 0 && n < wxListBox::GetCount(), 
+                 wxT("Invalid index passed to SetItemClientData") );
 
-    return (wxClientData*) node->GetData();
+    GtkTreeEntry* entry = GtkGetEntry(n);
+    wxCHECK_RET(entry, wxT("could not get entry"));
+
+    gtk_tree_entry_set_userdata( entry, clientData );
+    g_object_unref(G_OBJECT(entry));
+}
+
+void wxListBox::DoSetItemClientObject( int n, wxClientData* clientData )
+{
+    // wxItemContainer already deletes data for us
+    wxListBox::DoSetItemClientData(n, (void*) clientData);
 }
 
 // ----------------------------------------------------------------------------
 // string list access
 // ----------------------------------------------------------------------------
 
-wxString wxListBox::GetRealLabel(GList *item) const
-{
-    GtkBin *bin = GTK_BIN( item->data );
-    GtkLabel *label = GTK_LABEL( bin->child );
-
-    wxString str;
-
-    str = wxGTK_CONV_BACK( gtk_label_get_text( label ) );
-
-#if wxUSE_CHECKLISTBOX
-    // checklistboxes have "[±] " prepended to their lables, remove it
-    //
-    // NB: 4 below is the length of wxCHECKLBOX_STRING from wx/gtk/checklst.h
-    if ( m_hasCheckBoxes )
-        str.erase(0, 4);
-#endif // wxUSE_CHECKLISTBOX
-
-    return str;
-}
-
 void wxListBox::SetString( int n, const wxString &string )
 {
-    wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
+    wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
-    GList *child = g_list_nth( m_list->children, n );
-    if (child)
-    {
-        GtkBin *bin = GTK_BIN( child->data );
-        GtkLabel *label = GTK_LABEL( bin->child );
+    GtkTreeEntry* entry = GtkGetEntry(n);
+    wxCHECK_RET( entry, wxT("wrong listbox index") );
 
-        wxString str;
-#if wxUSE_CHECKLISTBOX
+    wxString label = string;
+
+#if wxUSE_CHECKLISTBOX && !wxUSE_NATIVEGTKCHECKLIST
         if (m_hasCheckBoxes)
-            str += wxCHECKLBOX_STRING;
+            label.Prepend(wxCHECKLBOX_STRING);
 #endif // wxUSE_CHECKLISTBOX
-        str += string;
 
-        gtk_label_set_text( label, wxGTK_CONV( str ) );
-    }
-    else
-    {
-        wxFAIL_MSG(wxT("wrong listbox index"));
-    }
+    // RN: This may look wierd but the problem is that the TreeView 
+    // doesn't resort or update when changed above and there is no real
+    // notification function...
+    void* userdata = gtk_tree_entry_get_userdata(entry);
+    gtk_tree_entry_set_userdata(entry, NULL); //don't delete on destroy
+    g_object_unref(G_OBJECT(entry));
+
+    bool bWasSelected = wxListBox::IsSelected(n);
+    wxListBox::Delete(n);
+
+    wxArrayString aItems;
+    aItems.Add(label);
+    GtkInsertItems(aItems, &userdata, n);
+    if (bWasSelected)
+        wxListBox::GtkSetSelection(n, TRUE, TRUE);
 }
 
 wxString wxListBox::GetString( int n ) const
 {
-    wxCHECK_MSG( m_list != NULL, wxEmptyString, wxT("invalid listbox") );
+    wxCHECK_MSG( m_treeview != NULL, wxEmptyString, wxT("invalid listbox") );
 
-    GList *child = g_list_nth( m_list->children, n );
-    if (child)
-    {
-        return GetRealLabel(child);
-    }
+    GtkTreeEntry* entry = GtkGetEntry(n);
+    wxCHECK_MSG( entry, wxEmptyString, wxT("wrong listbox index") );
 
-    wxFAIL_MSG(wxT("wrong listbox index"));
+    wxString label = wxGTK_CONV_BACK( gtk_tree_entry_get_label(entry) );
 
-    return wxEmptyString;
+#if wxUSE_CHECKLISTBOX && !wxUSE_NATIVEGTKCHECKLIST
+    // checklistboxes have "[±] " prepended to their lables, remove it
+    //
+    // NB: 4 below is the length of wxCHECKLBOX_STRING from wx/gtk/checklst.h
+    if ( m_hasCheckBoxes )
+        label.erase(0, 4);
+#endif // wxUSE_CHECKLISTBOX
+
+    g_object_unref(G_OBJECT(entry));
+    return label;
 }
 
 int wxListBox::GetCount() const
 {
-    wxCHECK_MSG( m_list != NULL, -1, wxT("invalid listbox") );
+    wxCHECK_MSG( m_treeview != NULL, -1, wxT("invalid listbox") );
 
-    GList *children = m_list->children;
-    return g_list_length(children);
+    return gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_liststore), NULL);
 }
 
 int wxListBox::FindString( const wxString &item, bool bCase ) const
 {
-    wxCHECK_MSG( m_list != NULL, wxNOT_FOUND, wxT("invalid listbox") );
+    wxCHECK_MSG( m_treeview != NULL, wxNOT_FOUND, wxT("invalid listbox") );
 
-    GList *child = m_list->children;
-    int count = 0;
-    while (child)
+    //Sort of hackish - maybe there is a faster way
+    int nCount = wxListBox::GetCount();
+
+    for(int i = 0; i < nCount; ++i)
     {
-        if ( item.IsSameAs( GetRealLabel(child), bCase ) )
-            return count;
-
-        count++;
-        child = child->next;
+        if( item.IsSameAs( wxListBox::GetString(i), bCase ) )
+            return i;
     }
 
-    // it's not an error if the string is not found -> no wxCHECK
 
+    // it's not an error if the string is not found -> no wxCHECK
     return wxNOT_FOUND;
 }
 
@@ -975,181 +894,194 @@ int wxListBox::FindString( const wxString &item, bool bCase ) const
 
 int wxListBox::GetSelection() const
 {
-    wxCHECK_MSG( m_list != NULL, -1, wxT("invalid listbox") );
+    wxCHECK_MSG( m_treeview != NULL, -1, wxT("invalid listbox"));
+    wxCHECK_MSG( HasFlag(wxLB_SINGLE), -1, 
+                    wxT("must be single selection listbox"));
 
-    GList *child = m_list->children;
-    int count = 0;
-    while (child)
-    {
-        if (GTK_WIDGET(child->data)->state == GTK_STATE_SELECTED) return count;
-        count++;
-        child = child->next;
-    }
-    return -1;
+    GtkTreeIter iter;    
+    GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
+
+    // only works on single-sel    
+    if (!gtk_tree_selection_get_selected(selection, NULL, &iter))
+        return -1;
+
+    GtkTreePath* path =
+        gtk_tree_model_get_path(GTK_TREE_MODEL(m_liststore), &iter);
+
+    int sel = gtk_tree_path_get_indices(path)[0];
+
+    gtk_tree_path_free(path);
+
+    return sel;
 }
 
 int wxListBox::GetSelections( wxArrayInt& aSelections ) const
 {
-    wxCHECK_MSG( m_list != NULL, -1, wxT("invalid listbox") );
-
-    // get the number of selected items first
-    GList *child = m_list->children;
-    int count = 0;
-    for (child = m_list->children; child != NULL; child = child->next)
-    {
-        if (GTK_WIDGET(child->data)->state == GTK_STATE_SELECTED)
-            count++;
-    }
+    wxCHECK_MSG( m_treeview != NULL, -1, wxT("invalid listbox") );
 
     aSelections.Empty();
 
-    if (count > 0)
-    {
-        // now fill the list
-        aSelections.Alloc(count); // optimization attempt
         int i = 0;
-        for (child = m_list->children; child != NULL; child = child->next, i++)
+    GtkTreeIter iter;    
+    GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
+
+    if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(m_liststore), &iter))
+    { //gtk_tree_selection_get_selected_rows is GTK 2.2+ so iter instead
+        do
         {
-            if (GTK_WIDGET(child->data)->state == GTK_STATE_SELECTED)
-                 aSelections.Add(i);
-        }
+            if (gtk_tree_selection_iter_is_selected(selection, &iter))
+                aSelections.Add(i);
+
+            i++;
+        } while(gtk_tree_model_iter_next(GTK_TREE_MODEL(m_liststore), &iter));
     }
 
-    return count;
+    return aSelections.GetCount();
 }
 
 bool wxListBox::IsSelected( int n ) const
 {
-    wxCHECK_MSG( m_list != NULL, FALSE, wxT("invalid listbox") );
+    wxCHECK_MSG( m_treeview != NULL, FALSE, wxT("invalid listbox") );
 
-    GList *target = g_list_nth( m_list->children, n );
+    GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
 
-    wxCHECK_MSG( target, FALSE, wxT("invalid listbox index") );
+    GtkTreeIter iter;
+    gboolean res = gtk_tree_model_iter_nth_child(
+                        GTK_TREE_MODEL(m_liststore),
+                        &iter, NULL, //NULL = parent = get first
+                        n );
+                        
+    wxCHECK_MSG( res, FALSE, wxT("Invalid index") );
 
-    return (GTK_WIDGET(target->data)->state == GTK_STATE_SELECTED) ;
+    return gtk_tree_selection_iter_is_selected(selection, &iter);
 }
 
 void wxListBox::DoSetSelection( int n, bool select )
 {
-    wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
+    return GtkSetSelection(n, select, TRUE); //docs say no events here
+}
 
-    m_blockEvent = TRUE;
+void wxListBox::GtkSetSelection(int n, const bool select, const bool blockEvent)
+{
+    wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
+
+    GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
+
+    GtkTreeIter iter;
+    gboolean res = gtk_tree_model_iter_nth_child(
+                        GTK_TREE_MODEL(m_liststore),
+                        &iter, NULL, //NULL = parent = get first
+                        n
+                                                );
+    wxCHECK_RET( res, wxT("Invalid index") );
+
+    m_blockEvent = blockEvent;
 
     if (select)
-    {
-        if ((m_windowStyle & wxLB_SINGLE) != 0)
-            gtk_list_unselect_item( m_list, m_prevSelection );
-        gtk_list_select_item( m_list, n );
-        m_prevSelection = n;
-    }
+        gtk_tree_selection_select_iter(selection, &iter);
     else
-        gtk_list_unselect_item( m_list, n );
+        gtk_tree_selection_unselect_iter(selection, &iter);
 
     m_blockEvent = FALSE;
 }
 
 void wxListBox::DoSetFirstItem( int n )
 {
-    wxCHECK_RET( m_list, wxT("invalid listbox") );
+    wxCHECK_RET( m_treeview, wxT("invalid listbox") );
+    wxCHECK_RET( n >= 0 && n < wxListBox::GetCount(), wxT("invalid index"));
 
-    if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (m_list))
+    //RN: I have no idea why this line is needed...
+    if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (m_treeview))
         return;
 
-    // terribly efficient
+    // terribly efficient (RN:???)
+    // RN: Note that evidently the vadjustment property "vadjustment" from
+    // GtkTreeView is different from the "gtk-vadjustment"...
+    // (i.e. gtk_tree_view_get_vadjustment)
     const gchar *vadjustment_key = "gtk-vadjustment";
     guint vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
 
     GtkAdjustment *adjustment =
-       (GtkAdjustment*) gtk_object_get_data_by_id (GTK_OBJECT (m_list), vadjustment_key_id);
+       (GtkAdjustment*) g_object_get_qdata(G_OBJECT (m_treeview), vadjustment_key_id);
     wxCHECK_RET( adjustment, wxT("invalid listbox code") );
 
-    GList *target = g_list_nth( m_list->children, n );
-    wxCHECK_RET( target, wxT("invalid listbox index") );
+    // Get the greater of the item heights from each column
+    gint cellheight = 0, cellheightcur;
+    GList* columnlist = gtk_tree_view_get_columns(m_treeview);
+    GList* curlist = columnlist;
 
-    GtkWidget *item = GTK_WIDGET(target->data);
-    wxCHECK_RET( item, wxT("invalid listbox code") );
-
-    if (item->allocation.y == -1)
+    while(curlist)
     {
-        wxlistbox_idle_struct* data = new wxlistbox_idle_struct;
-        data->m_listbox = this;
-        data->m_item = n;
-        data->m_tag = g_idle_add_full( 800, wxlistbox_idle_callback, data, NULL );
+        gtk_tree_view_column_cell_get_size(
+            GTK_TREE_VIEW_COLUMN(curlist->data),
+            NULL, NULL, NULL, NULL,
+            &cellheightcur);
 
-        return;
+        cellheight = cellheightcur > cellheight ? 
+                      cellheightcur : cellheight;
+
+        curlist = curlist->next;
     }
 
-    float y = item->allocation.y;
+    g_list_free(columnlist);
+
+    float y = (float) (cellheight * n);
     if (y > adjustment->upper - adjustment->page_size)
         y = adjustment->upper - adjustment->page_size;
     gtk_adjustment_set_value( adjustment, y );
 }
 
+
 // ----------------------------------------------------------------------------
 // helpers
 // ----------------------------------------------------------------------------
 
-int wxListBox::GtkGetIndex( GtkWidget *item ) const
-{
-    if (item)
-    {
-        GList *child = m_list->children;
-        int count = 0;
-        while (child)
-        {
-            if (GTK_WIDGET(child->data) == item) return count;
-            count++;
-            child = child->next;
-        }
-    }
-    return -1;
-}
-
 #if wxUSE_TOOLTIPS
 void wxListBox::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
 {
-    GList *child = m_list->children;
-    while (child)
-    {
-        gtk_tooltips_set_tip( tips, GTK_WIDGET( child->data ), wxConvCurrent->cWX2MB(tip), (gchar*) NULL );
-        child = child->next;
-    }
+    // RN: Is this needed anymore?
+    gtk_tooltips_set_tip( tips, GTK_WIDGET( m_treeview ), wxGTK_CONV(tip), (gchar*) NULL );
 }
 #endif // wxUSE_TOOLTIPS
 
 GtkWidget *wxListBox::GetConnectWidget()
 {
-    // return GTK_WIDGET(m_list);
+    // return GTK_WIDGET(m_treeview);
     return m_widget;
 }
 
 bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
 {
-    return TRUE;
+    return (window == GetGtkBinWindow());
+}
 
-#if 0
-    if (m_widget->window == window) return TRUE;
-
-    if (GTK_WIDGET(m_list)->window == window) return TRUE;
-
-    GList *child = m_list->children;
-    while (child)
-    {
-        GtkWidget *bin = GTK_WIDGET( child->data );
-        if (bin->window == window) return TRUE;
-        child = child->next;
-    }
-
-    return FALSE;
-#endif
+GdkWindow* wxListBox::GetGtkBinWindow()
+{
+    // GtkTreeView has 2 GdkWindows (just like GtkPizza and
+    // any other GtkWidget that can scroll). The one on top
+    // is usually called "->bin_window" and is the one we are
+    // looking for here. Since GtkTreeView hides this in the
+    // private data section, we assume that "->window" only has
+    // one child window, namely, the "->bin_window". 
+    
+    GdkWindow *window = GTK_WIDGET(m_treeview)->window;
+    if (window == NULL)
+        return NULL;
+    
+    GList *children = gdk_window_peek_children( window );
+    if (g_list_length(children) == 0)
+        return NULL;
+        
+    GdkWindow *bin_window = (GdkWindow*) g_list_nth_data( children, 0 );
+    return bin_window;
 }
 
 void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     if (m_hasBgCol && m_backgroundColour.Ok())
     {
-        GdkWindow *window = GTK_WIDGET(m_list)->window;
-        if ( window )
+        GdkWindow *window = GetGtkBinWindow();
+        if (window)
         {
             m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
             gdk_window_set_background( window, m_backgroundColour.GetColor() );
@@ -1157,55 +1089,23 @@ void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)
         }
     }
 
-    GList *child = m_list->children;
-    while (child)
-    {
-        gtk_widget_modify_style( GTK_WIDGET(child->data), style );
-
-        GtkBin *bin = GTK_BIN( child->data );
-        GtkWidget *label = GTK_WIDGET( bin->child );
-        gtk_widget_modify_style( label, style );
-
-        child = child->next;
-    }
+    gtk_widget_modify_style( GTK_WIDGET(m_treeview), style );
 }
 
 void wxListBox::OnInternalIdle()
 {
+    //RN: Is this needed anymore?
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
-    if (GTK_WIDGET(m_list)->window && cursor.Ok())
+    if (GTK_WIDGET(m_treeview)->window && cursor.Ok())
     {
         /* I now set the cursor the anew in every OnInternalIdle call
            as setting the cursor in a parent window also effects the
            windows above so that checking for the current cursor is
            not possible. */
-
-        gdk_window_set_cursor( GTK_WIDGET(m_list)->window, cursor.GetCursor() );
-
-        GList *child = m_list->children;
-        while (child)
-        {
-            GtkBin *bin = GTK_BIN( child->data );
-            GtkWidget *label = GTK_WIDGET( bin->child );
-
-            if (!label->window)
-                break;
-            else
-                gdk_window_set_cursor( label->window, cursor.GetCursor() );
-
-            child = child->next;
-        }
-    }
-
-    if (g_delayedFocus == this)
-    {
-        if (GTK_WIDGET_REALIZED(m_widget))
-        {
-            gtk_widget_grab_focus( m_widget );
-            g_delayedFocus = NULL;
-        }
+        GdkWindow *window = GetGtkBinWindow();
+        gdk_window_set_cursor( window, cursor.GetCursor() );
     }
 
     if (wxUpdateUIEvent::CanUpdate(this))
@@ -1214,16 +1114,16 @@ void wxListBox::OnInternalIdle()
 
 wxSize wxListBox::DoGetBestSize() const
 {
-    int lbWidth = 100;  // some defaults
-    int lbHeight = 110;
-    int wLine;
+    wxCHECK_MSG(m_treeview, wxDefaultSize, wxT("invalid tree view"));
 
-    // Find the widest line
-    for(int i = 0; i < GetCount(); i++) {
-        wxString str(GetString(i));
-        GetTextExtent(str, &wLine, NULL);
-        lbWidth = wxMax(lbWidth, wLine);
-    }
+    int lbWidth;
+    int lbHeight;
+
+    // Get the visible area of the tree view
+    GdkRectangle rect;
+    gtk_tree_view_get_visible_rect(m_treeview, &rect);
+    lbWidth = rect.width;
+    lbHeight = rect.height;
 
     // Add room for the scrollbar
     lbWidth += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
@@ -1242,20 +1142,11 @@ wxSize wxListBox::DoGetBestSize() const
     return best;
 }
 
-void wxListBox::FixUpMouseEvent(GtkWidget *widget, wxCoord& x, wxCoord& y)
-{
-    // the mouse event coords are relative to the listbox items, we need to
-    // translate them to the normal client coords
-    x += widget->allocation.x;
-    y += widget->allocation.y;
-}
-
-
 // static
 wxVisualAttributes
 wxListBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_list_new, true);
+    return GetDefaultAttributesFromGTKWidget(gtk_tree_view_new, true);
 }
 
 #endif // wxUSE_LISTBOX

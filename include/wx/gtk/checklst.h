@@ -24,6 +24,10 @@
     #define wxCHECKLBOX_STRING    _T("[ ] ")
 #endif
 
+//Use the native GTK2.0+ checklist?? You should say YYEEESS unless
+//there are like some major bugs or something :)
+#define wxUSE_NATIVEGTKCHECKLIST 1
+
 //-----------------------------------------------------------------------------
 // wxCheckListBox
 // ----------------------------------------------------------------------------
@@ -53,6 +57,10 @@ public:
 
     int GetItemHeight() const;
     
+#if wxUSE_NATIVEGTKCHECKLIST
+    void DoCreateCheckList();
+#endif
+
 private:
     DECLARE_DYNAMIC_CLASS(wxCheckListBox)
 };
