@@ -735,6 +735,7 @@ public:
     virtual bool RowDeleted( size_t row );
     virtual bool RowChanged( size_t row );
     virtual bool ValueChanged( size_t col, size_t row );
+    virtual bool RowsReordered( size_t *new_order );
     virtual bool Cleared();
     
     GtkWxListStore      *m_gtk_store;
@@ -806,7 +807,7 @@ bool wxGtkDataViewListModelNotifier::RowChanged( size_t row )
 
 bool wxGtkDataViewListModelNotifier::ValueChanged( size_t model_col, size_t model_row )
 {
-    // This adds GTK+'s missing MVC logic for SetValue
+    // This adds GTK+'s missing MVC logic for ValueChanged
     wxNode *node = GetOwner()->m_viewingColumns.GetFirst();
     while (node)
     {
@@ -831,6 +832,30 @@ bool wxGtkDataViewListModelNotifier::ValueChanged( size_t model_col, size_t mode
 
         node = node->GetNext();
     }
+    
+    return true;
+}
+
+bool wxGtkDataViewListModelNotifier::RowsReordered( size_t *new_order )
+{
+    // Assume sizeof(size_t)= == sizeof(gint)
+
+    GtkTreePath *path = gtk_tree_path_new ();
+    gtk_tree_model_rows_reordered (GTK_TREE_MODEL (m_gtk_store), path, NULL, (gint*)new_order);
+    gtk_tree_path_free (path);
+
+    // This adds GTK+'s missing MVC logic for RowsReordered
+    wxNode *node = GetOwner()->m_viewingColumns.GetFirst();
+    while (node)
+    {
+        wxDataViewViewingColumn* viewing_column = (wxDataViewViewingColumn*) node->GetData();
+        GtkTreeView *widget = GTK_TREE_VIEW(viewing_column->m_viewColumn->GetOwner()->m_treeview);
+        // Doesn't work yet...
+        gtk_widget_queue_draw( GTK_WIDGET(widget) ); 
+
+        node = node->GetNext();
+    }
+
     
     return true;
 }

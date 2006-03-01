@@ -68,6 +68,7 @@ public:
     virtual bool RowDeleted( size_t row ) = 0;
     virtual bool RowChanged( size_t row ) = 0;
     virtual bool ValueChanged( size_t col, size_t row ) = 0;
+    virtual bool RowsReordered( size_t *new_order ) = 0;
     virtual bool Cleared() = 0;
     
     void SetOwner( wxDataViewListModel *owner ) { m_owner = owner; }
@@ -116,6 +117,7 @@ public:
     virtual bool RowDeleted( size_t row );
     virtual bool RowChanged( size_t row );
     virtual bool ValueChanged( size_t col, size_t row );
+    virtual bool RowsReordered( size_t *new_order );
     virtual bool Cleared();
 
     // Used internally    
@@ -163,13 +165,17 @@ public:
     virtual bool RowDeleted( size_t row );
     virtual bool RowChanged( size_t row );
     virtual bool ValueChanged( size_t col, size_t row );
+    virtual bool RowsReordered( size_t *new_order );
     virtual bool Cleared();
+
+    bool ChildValueChanged( size_t col, size_t row );
 
     virtual void Resort();
 
 private:
     wxDataViewListModel             *m_child;
     wxDataViewSortedIndexArray       m_array;
+    wxDataViewListModelNotifier     *m_notifierOnChild;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewSortedListModel)

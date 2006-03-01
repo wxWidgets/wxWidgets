@@ -142,6 +142,22 @@ bool wxDataViewListModel::ValueChanged( size_t col, size_t row )
     return ret;
 }
 
+bool wxDataViewListModel::RowsReordered( size_t *new_order )
+{
+    bool ret = true;
+
+    wxNode *node = m_notifiers.GetFirst();
+    while (node)
+    {
+        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
+        if (!notifier->RowsReordered( new_order ))
+            ret = false;
+        node = node->GetNext();
+    }
+        
+    return ret;
+}
+
 bool wxDataViewListModel::Cleared()
 {
     bool ret = true;
@@ -192,7 +208,30 @@ void wxDataViewListModel::RemoveNotifier( wxDataViewListModelNotifier *notifier 
 }
 
 // --------------------------------------------------------- 
-// wxDataViewSortedListModel
+// wxDataViewSortedListModelNotifier
+// --------------------------------------------------------- 
+
+class wxDataViewSortedListModelNotifier: public wxDataViewListModelNotifier
+{
+public:
+    wxDataViewSortedListModelNotifier( wxDataViewSortedListModel *model )
+    { m_model = model; }
+    
+    virtual bool RowAppended() { return true; }
+    virtual bool RowPrepended()  { return true; }
+    virtual bool RowInserted( size_t before )  { return true; }
+    virtual bool RowDeleted( size_t row ) { return true; }
+    virtual bool RowChanged( size_t row ) { return true; }
+    virtual bool ValueChanged( size_t col, size_t row )
+         { return m_model->ChildValueChanged( col, row); }
+    virtual bool RowsReordered( size_t *new_order ) { return true; }
+    virtual bool Cleared() { return true; }
+    
+    wxDataViewSortedListModel *m_model;
+};
+
+// --------------------------------------------------------- 
+// wxDataViewSortedListModel compare function
 // --------------------------------------------------------- 
 
 int wxCALLBACK wxDataViewListModelSortedDefaultCompare
@@ -241,6 +280,9 @@ int LINKAGEMODE wxDataViewIntermediateCmp( size_t row1, size_t row2 )
     return s_CmpFunc( row1, row2, s_CmpCol, s_CmpModel );
 }
 
+// --------------------------------------------------------- 
+// wxDataViewSortedListModel
+// ---------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewSortedListModel, wxDataViewListModel)
 
@@ -252,11 +294,15 @@ wxDataViewSortedListModel::wxDataViewSortedListModel( wxDataViewListModel *child
     s_CmpModel = child;
     s_CmpFunc = wxDataViewListModelSortedDefaultCompare;
     
+    m_notifierOnChild = new wxDataViewSortedListModelNotifier( this );
+    m_child->AddNotifier( m_notifierOnChild );
+    
     Resort();    
 }
 
 wxDataViewSortedListModel::~wxDataViewSortedListModel()
 {
+    m_child->RemoveNotifier( m_notifierOnChild );
 }
 
 void wxDataViewSortedListModel::Resort()
@@ -266,6 +312,59 @@ void wxDataViewSortedListModel::Resort()
     size_t i;
     for (i = 0; i < n; i++)
         m_array.Add( i );
+}
+
+bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
+{
+    size_t i;
+    size_t len = m_array.GetCount();
+    
+    // Remove and readd sorted. Find out at which
+    // position it was and where it ended.
+    size_t start_pos = 0,end_pos = 0;
+    for (i = 0; i < len; i++)
+        if (m_array[i] == row)
+        {
+            start_pos = i;
+            break;
+        }
+    m_array.Remove( row );
+    m_array.Add( row );
+    for (i = 0; i < len; i++)
+        if (m_array[i] == row)
+        {
+            end_pos = i;
+            break;
+        }
+        
+    if (end_pos == start_pos)
+        return wxDataViewListModel::ValueChanged( col, start_pos );
+    
+    // Create an array where order[old] -> new_pos, so that
+    // if nothing changed order[0] -> 0 etc.
+    size_t *order = new size_t[ len ];
+    // Fill up initial values.
+    for (i = 0; i < len; i++)
+        order[i] = i;
+
+    if (start_pos < end_pos)
+    {
+        for (i = start_pos; i < end_pos; i++)
+            order[i] = order[i+1];
+        order[end_pos] = start_pos;
+    }
+    else
+    {
+        for (i = end_pos; i > start_pos; i--)
+            order[i] = order[i-1];
+        order[start_pos] = end_pos;
+    }   
+    
+    RowsReordered( order );
+    
+    delete [] order;
+    
+    return true;
 }
 
 size_t wxDataViewSortedListModel::GetNumberOfRows()
@@ -293,7 +392,9 @@ bool wxDataViewSortedListModel::SetValue( wxVariant &variant, size_t col, size_t
 {
     size_t child_row = m_array[row];
     bool ret = m_child->SetValue( variant, col, child_row );
-    // resort in ::ValueChanged()
+    
+    // Resort in ::ChildValueChanged() which gets reported back.
+    
     return ret;
 }
 
@@ -333,7 +434,8 @@ bool wxDataViewSortedListModel::RowDeleted( size_t row )
     
     bool ret = m_child->RowDeleted( child_row );
     
-    wxDataViewListModel::RowDeleted( row );
+    // Do nothing here as the change in the
+    // child model will be reported back.
     
     return ret;
 }
@@ -343,7 +445,8 @@ bool wxDataViewSortedListModel::RowChanged( size_t row )
     size_t child_row = m_array[row];
     bool ret = m_child->RowChanged( child_row );
     
-    // report delete old pos, inserted new pos
+    // Do nothing here as the change in the
+    // child model will be reported back.
     
     return ret;
 }
@@ -353,10 +456,17 @@ bool wxDataViewSortedListModel::ValueChanged( size_t col, size_t row )
     size_t child_row = m_array[row];
     bool ret = m_child->ValueChanged( col, child_row );
     
-    // Do nothing if not the sorted col..
-    // report delete old pos, inserted new pos
+    // Do nothing here as the change in the
+    // child model will be reported back.
     
     return ret;
+}
+
+bool wxDataViewSortedListModel::RowsReordered( size_t *new_order )
+{
+    // We sort them ourselves.
+
+    return false;
 }
 
 bool wxDataViewSortedListModel::Cleared()
