@@ -24,6 +24,9 @@
 #include "wx/msgdlg.h"
 #include "wx/module.h"
 #include "wx/combobox.h"
+#if wxUSE_TOOLBAR_NATIVE
+#include "wx/toolbar.h"
+#endif
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
@@ -2910,9 +2913,46 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         y = currentY;
     AdjustForParentClientOrigin(x, y, sizeFlags);
 
-    if (m_parent->m_wxwindow == NULL) /* i.e. wxNotebook */
+    // calculate the best size if we should auto size the window
+    if ( ((sizeFlags & wxSIZE_AUTO_WIDTH) && width == -1) ||
+         ((sizeFlags & wxSIZE_AUTO_HEIGHT) && height == -1) )
     {
-        /* don't set the size for children of wxNotebook, just take the values. */
+        const wxSize sizeBest = GetBestSize();
+        if ( (sizeFlags & wxSIZE_AUTO_WIDTH) && width == -1 )
+            width = sizeBest.x;
+        if ( (sizeFlags & wxSIZE_AUTO_HEIGHT) && height == -1 )
+            height = sizeBest.y;
+    }
+
+    if (width != -1)
+        m_width = width;
+    if (height != -1)
+        m_height = height;
+
+    int minWidth  = GetMinWidth(),
+        minHeight = GetMinHeight(),
+        maxWidth  = GetMaxWidth(),
+        maxHeight = GetMaxHeight();
+
+    if ((minWidth  != -1) && (m_width  < minWidth )) m_width  = minWidth;
+    if ((minHeight != -1) && (m_height < minHeight)) m_height = minHeight;
+    if ((maxWidth  != -1) && (m_width  > maxWidth )) m_width  = maxWidth;
+    if ((maxHeight != -1) && (m_height > maxHeight)) m_height = maxHeight;
+
+#if wxUSE_TOOLBAR_NATIVE
+    if (wxDynamicCast(GetParent(), wxToolBar))
+    {
+       // don't take the x,y values, they're wrong because toolbar sets them
+       GtkWidget  *widget = GTK_WIDGET(m_widget);
+       gtk_widget_set_size_request (widget, m_width, m_height);
+       if (GTK_WIDGET_VISIBLE (widget))
+            gtk_widget_queue_resize (widget);
+    }
+    else 
+#endif
+    if (m_parent->m_wxwindow == NULL) // i.e. wxNotebook
+    {
+        // don't set the size for children of wxNotebook, just take the values.
         m_x = x;
         m_y = y;
         m_width = width;
@@ -2931,32 +2971,6 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
             m_x = x + pizza->xoffset;
             m_y = y + pizza->yoffset;
         }
-
-        // calculate the best size if we should auto size the window
-        if ( ((sizeFlags & wxSIZE_AUTO_WIDTH) && width == -1) ||
-                ((sizeFlags & wxSIZE_AUTO_HEIGHT) && height == -1) )
-        {
-            const wxSize sizeBest = GetBestSize();
-            if ( (sizeFlags & wxSIZE_AUTO_WIDTH) && width == -1 )
-                width = sizeBest.x;
-            if ( (sizeFlags & wxSIZE_AUTO_HEIGHT) && height == -1 )
-                height = sizeBest.y;
-        }
-
-        if (width != -1)
-            m_width = width;
-        if (height != -1)
-            m_height = height;
-
-        int minWidth = GetMinWidth(),
-            minHeight = GetMinHeight(),
-            maxWidth = GetMaxWidth(),
-            maxHeight = GetMaxHeight();
-
-        if ((minWidth != -1) && (m_width < minWidth)) m_width = minWidth;
-        if ((minHeight != -1) && (m_height < minHeight)) m_height = minHeight;
-        if ((maxWidth != -1) && (m_width > maxWidth)) m_width = maxWidth;
-        if ((maxHeight != -1) && (m_height > maxHeight)) m_height = maxHeight;
 
         int left_border = 0;
         int right_border = 0;
