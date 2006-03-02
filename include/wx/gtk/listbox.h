@@ -82,7 +82,6 @@ public:
 
     GtkWidget *GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
-    GdkWindow* GetGtkBinWindow();
     void OnInternalIdle();
 
 #if wxUSE_TOOLTIPS

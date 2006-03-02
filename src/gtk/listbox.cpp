@@ -1045,35 +1045,14 @@ GtkWidget *wxListBox::GetConnectWidget()
 
 bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
 {
-    return (window == GetGtkBinWindow());
-}
-
-GdkWindow* wxListBox::GetGtkBinWindow()
-{
-    // GtkTreeView has 2 GdkWindows (just like GtkPizza and
-    // any other GtkWidget that can scroll). The one on top
-    // is usually called "->bin_window" and is the one we are
-    // looking for here. Since GtkTreeView hides this in the
-    // private data section, we assume that "->window" only has
-    // one child window, namely, the "->bin_window". 
-    
-    GdkWindow *window = GTK_WIDGET(m_treeview)->window;
-    if (window == NULL)
-        return NULL;
-    
-    GList *children = gdk_window_peek_children( window );
-    if (g_list_length(children) == 0)
-        return NULL;
-        
-    GdkWindow *bin_window = (GdkWindow*) g_list_nth_data( children, 0 );
-    return bin_window;
+    return (window == gtk_tree_view_get_bin_window(m_treeview));
 }
 
 void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     if (m_hasBgCol && m_backgroundColour.Ok())
     {
-        GdkWindow *window = GetGtkBinWindow();
+        GdkWindow *window = gtk_tree_view_get_bin_window(m_treeview);
         if (window)
         {
             m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
@@ -1097,7 +1076,7 @@ void wxListBox::OnInternalIdle()
            as setting the cursor in a parent window also effects the
            windows above so that checking for the current cursor is
            not possible. */
-        GdkWindow *window = GetGtkBinWindow();
+        GdkWindow *window = gtk_tree_view_get_bin_window(m_treeview);
         gdk_window_set_cursor( window, cursor.GetCursor() );
     }
 
