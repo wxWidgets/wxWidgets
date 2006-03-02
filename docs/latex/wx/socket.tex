@@ -561,11 +561,11 @@ The {\bf wxSOCKET\_REUSEADDR} flag controls the use of the SO\_REUSEADDR standar
 setsockopt() flag. This flag allows the socket to bind to a port that is already in use.
 This is mostly used on UNIX-based systems to allow rapid starting and stopping of a server - 
 otherwise you may have to wait several minutes for the port to become available.
-wxSOCKET_REUSEADDR can also be used with socket clients to (re)bind to a particular local port
+wxSOCKET\_REUSEADDR can also be used with socket clients to (re)bind to a particular local port
 for an outgoing connection.
 This option can have surprising platform dependent behavior, so check the documentation for
 your platform's implementation of setsockopt(). Note that on BSD-based systems (e.g. Mac OS X),
-use of wxSOCKET_REUSEADDR implies SO_REUSEPORT in addition to SO_REUSEADDR to be consistent
+use of wxSOCKET\_REUSEADDR implies SO\_REUSEPORT in addition to SO\_REUSEADDR to be consistent
 with Windows.
 
 So:
