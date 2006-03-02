@@ -237,8 +237,9 @@ public:
 int wxCALLBACK wxDataViewListModelSortedDefaultCompare
       (size_t row1, size_t row2, size_t col, wxDataViewListModel* model )
 {
-    wxVariant value1 = model->GetValue( col, row1 );
-    wxVariant value2 = model->GetValue( col, row2 );
+    wxVariant value1,value2;
+    model->GetValue( value1, col, row1 );
+    model->GetValue( value2, col, row2 );
     if (value1.GetType() == wxT("string"))
     {
         wxString str1 = value1.GetString();
@@ -314,6 +315,22 @@ void wxDataViewSortedListModel::Resort()
         m_array.Add( i );
 }
 
+#if 0
+static void Dump( wxDataViewListModel *model, size_t col )
+{
+    size_t n = model->GetNumberOfRows();
+    size_t i;
+    for (i = 0; i < n; i++)
+    {
+        wxVariant variant;
+        model->GetValue( variant, col, i );
+        wxString tmp;
+        tmp = variant.GetString();
+        wxPrintf( wxT("%d: %s\n"), (int) i, tmp.c_str() );
+    }
+}
+#endif
+
 bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
 {
     size_t i;
@@ -328,15 +345,16 @@ bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
             start_pos = i;
             break;
         }
-    m_array.Remove( row );
+    m_array.RemoveAt( start_pos );
     m_array.Add( row );
+    
     for (i = 0; i < len; i++)
         if (m_array[i] == row)
         {
             end_pos = i;
             break;
         }
-        
+    
     if (end_pos == start_pos)
         return wxDataViewListModel::ValueChanged( col, start_pos );
     
@@ -360,7 +378,7 @@ bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
         order[start_pos] = end_pos;
     }   
     
-    RowsReordered( order );
+    wxDataViewListModel::RowsReordered( order );
     
     delete [] order;
     
@@ -369,7 +387,7 @@ bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
 
 size_t wxDataViewSortedListModel::GetNumberOfRows()
 {
-    return m_child->GetNumberOfRows();
+    return m_array.GetCount();
 }
 
 size_t wxDataViewSortedListModel::GetNumberOfCols()
@@ -382,10 +400,10 @@ wxString wxDataViewSortedListModel::GetColType( size_t col )
     return m_child->GetColType( col );
 }
 
-wxVariant wxDataViewSortedListModel::GetValue( size_t col, size_t row )
+void wxDataViewSortedListModel::GetValue( wxVariant &variant, size_t col, size_t row )
 {
     size_t child_row = m_array[row];
-    return m_child->GetValue( col, child_row );
+    m_child->GetValue( variant, col, child_row );
 }
 
 bool wxDataViewSortedListModel::SetValue( wxVariant &variant, size_t col, size_t row )

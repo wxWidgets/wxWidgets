@@ -106,7 +106,7 @@ public:
     // return type as reported by wxVariant
     virtual wxString GetColType( size_t col ) = 0;
     // get value into a wxVariant
-    virtual wxVariant GetValue( size_t col, size_t row ) = 0;
+    virtual void GetValue( wxVariant &variant, size_t col, size_t row ) = 0;
     // set value, call ValueChanged() afterwards!
     virtual bool SetValue( wxVariant &variant, size_t col, size_t row ) = 0;
 
@@ -154,7 +154,7 @@ public:
     // return type as reported by wxVariant
     virtual wxString GetColType( size_t col );
     // get value into a wxVariant
-    virtual wxVariant GetValue( size_t col, size_t row );
+    virtual void GetValue( wxVariant &variant, size_t col, size_t row );
     // set value, call ValueChanged() afterwards!
     virtual bool SetValue( wxVariant &variant, size_t col, size_t row );
 

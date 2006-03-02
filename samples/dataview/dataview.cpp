@@ -75,33 +75,33 @@ public:
             return wxT("string"); 
         }
         
-    virtual wxVariant GetValue( size_t col, size_t row )
+    virtual void GetValue( wxVariant &variant, size_t col, size_t row )
         {
             if (col == 6)
             {
-                return (wxDateTime) *m_dates[row];
+                variant = (wxDateTime) *m_dates[row];
             } else
             if (col == 5)
             {
-                return (long) m_progress[row];
+                variant = (long) m_progress[row];
             } else
             if (col == 4)
             {
-                return m_colours[row];
+                variant = m_colours[row];
             } else
             if (col == 3)
             {
-                return (bool) m_bools[row];
+                variant = (bool) m_bools[row];
             } else 
             if (col == 2)
             {
-                return m_list[row];
+                variant = m_list[row];
             }
             else
             {
                 wxString tmp; 
                 tmp.Printf( wxT("item(%d;%d)"), (int)row, (int)col ); 
-                return tmp;
+                variant = tmp;
             }
         }
     virtual bool SetValue( wxVariant &value, size_t col, size_t row )
@@ -192,13 +192,16 @@ public:
     virtual size_t GetNumberOfRows() { return m_list.GetCount(); }
     virtual size_t GetNumberOfCols() { return 2; }
     virtual wxString GetColType( size_t col ) { return wxT("string"); }
-    virtual wxVariant GetValue( size_t col, size_t row )
+    virtual void GetValue( wxVariant &variant, size_t col, size_t row )
     {
         if (col == 0)
-            return m_list[row];
+        {
+            variant = m_list[row];
+            return;
+        }
         wxString tmp;
         tmp.Printf( wxT("item(%d;%d)"), (int)row, (int)col ); 
-        return tmp;
+        variant = tmp;
     }
     virtual bool SetValue( wxVariant &variant, size_t col, size_t row )
     {

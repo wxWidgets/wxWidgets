@@ -20,6 +20,7 @@
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
 #include "wx/sizer.h"
+#include "wx/log.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
@@ -304,8 +305,9 @@ wxgtk_list_store_get_value (GtkTreeModel *tree_model,
     wxString mtype = model->GetColType( (size_t) column );
     if (mtype == wxT("string"))
     {
+        wxVariant variant;
         g_value_init( value, G_TYPE_STRING );
-        wxVariant variant = model->GetValue( (size_t) column, (size_t) iter->user_data );
+        model->GetValue( variant, (size_t) column, (size_t) iter->user_data );
         g_value_set_string( value, wxGTK_CONV(variant.GetString()) );
     }
     else
@@ -855,7 +857,6 @@ bool wxGtkDataViewListModelNotifier::RowsReordered( size_t *new_order )
 
         node = node->GetNext();
     }
-
     
     return true;
 }
@@ -1295,7 +1296,8 @@ wxSize wxDataViewDateCell::GetSize()
 
 bool wxDataViewDateCell::Activate( wxRect cell, wxDataViewListModel *model, size_t col, size_t row )
 {
-    wxVariant variant = model->GetValue( col, row );
+    wxVariant variant;
+    model->GetValue( variant, col, row );
     wxDateTime value = variant.GetDateTime();
 
     wxDataViewDateCellPopupTransient *popup = new wxDataViewDateCellPopupTransient( 
@@ -1334,11 +1336,11 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 
     size_t model_row = (size_t) iter->user_data;
     
-    wxVariant value = list_store->model->GetValue( 
-        cell->GetOwner()->GetModelColumn(), model_row );
+    wxVariant value;
+    list_store->model->GetValue( value, cell->GetOwner()->GetModelColumn(), model_row );
 
     if (value.GetType() != cell->GetVariantType())
-        wxPrintf( wxT("Wrong type\n") );
+        wxLogError( wxT("Wrong type\n") );
                                             
     cell->SetValue( value );
 }
