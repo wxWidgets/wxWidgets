@@ -621,7 +621,8 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     if (dir.empty())
     {
         // FIXME. Create \temp dir?
-        dir = wxT("\\");
+        if (DirExists(wxT("\\temp")))
+            dir = wxT("\\temp");
     }
     path = dir + wxT("\\") + name;
     int i = 1;
