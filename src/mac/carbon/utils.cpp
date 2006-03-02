@@ -1554,10 +1554,6 @@ CMProfileRef wxMacOpenGenericProfile()
     return it whenever this function is called.
 */
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_4
-#define kCGColorSpaceGenericRGB   CFSTR("kCGColorSpaceGenericRGB")
-#endif
-
 CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 {
     static wxMacCFRefHolder<CGColorSpaceRef> genericRGBColorSpace ;
@@ -1566,7 +1562,7 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
     {
         if ( UMAGetSystemVersion() >= 0x1040 )
         {
-            genericRGBColorSpace.Set( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) ) ;
+            genericRGBColorSpace.Set( CGColorSpaceCreateWithName( CFSTR("kCGColorSpaceGenericRGB") ) ) ;
         }
         else
         {
