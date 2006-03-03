@@ -22,7 +22,7 @@ if [ $skipwin != yes ]; then
      
      echo "Running build script on $WIN_HOST..."
      wxdir=$WIN_BUILD/wxWidgets
-     cmd="./makesetup.sh --wxmsw --wxos2 --wxbase --wxall --no-inno --getmakefiles"
+     cmd="./makesetup.sh --wxmsw --wxos2 --wxbase --wxall --no-inno"
      ssh $WIN_HOST "cd $wxdir/distrib/scripts/msw && chmod +x makesetup.sh && WXWIN=$wxdir VERSION=$BUILD_VERSION $cmd"
 
      echo "Fetching the results..."
