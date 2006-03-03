@@ -503,17 +503,6 @@ wxApp::wxApp()
 
 wxApp::~wxApp()
 {
-    // our cmd line arguments are allocated inside wxEntry(HINSTANCE), they
-    // don't come from main(), so we have to free them
-
-    while ( argc )
-    {
-        // m_argv elements were allocated by wxStrdup()
-        free(argv[--argc]);
-    }
-
-    // but m_argv itself -- using new[]
-    delete [] argv;
 }
 
 // ----------------------------------------------------------------------------

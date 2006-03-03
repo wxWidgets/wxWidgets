@@ -27,6 +27,7 @@
 #include "wx/event.h"
 #include "wx/app.h"
 #include "wx/cmdline.h"
+#include "wx/scopeguard.h"
 
 #include "wx/msw/private.h"
 
@@ -331,6 +332,20 @@ static bool wxIsUnicodeAvailable()
 // Windows-specific wxEntry
 // ----------------------------------------------------------------------------
 
+// helper function used to clean up in wxEntry() just below
+//
+// notice that argv elements are supposed to be allocated using malloc() while
+// argv array itself is allocated with new
+static void wxFreeArgs(int argc, wxChar **argv)
+{
+    for ( int i = 0; i < argc; i++ )
+    {
+        free(argv[i]);
+    }
+
+    delete [] argv;
+}
+
 WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
                         HINSTANCE WXUNUSED(hPrevInstance),
                         wxCmdLineArgType WXUNUSED(pCmdLine),
@@ -378,6 +393,8 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
 
     // argv[] must be NULL-terminated
     argv[argc] = NULL;
+
+    wxON_BLOCK_EXIT2(wxFreeArgs, argc, argv);
 
     return wxEntry(argc, argv);
 }
