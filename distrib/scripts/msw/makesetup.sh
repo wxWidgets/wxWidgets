@@ -296,8 +296,8 @@ dospindocs()
     # PDF/HTML docs that should go into the Windows setup because
     # there are no WinHelp equivalents
     echo Creating $DESTDIR/wxWidgets-$VERSION-ExtraDoc.zip
-    expandlines $SCRIPT/extradoc.rsp
-    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-ExtraDoc.zip < 
+    expandlines $SCRIPT/extradoc.rsp /tmp/extradocs
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-ExtraDoc.zip < /tmp/extradocs
     rearchive wxWidgets-$VERSION-ExtraDoc.zip wxWidgets-$VERSION $DESTDIR
 }
 
