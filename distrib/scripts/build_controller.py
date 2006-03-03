@@ -1,5 +1,5 @@
 import sys, os, string, time, shutil
-import ReleaseForge
+#import ReleaseForge
 
 from taskrunner import Job, Task, TaskRunner, Config
 
