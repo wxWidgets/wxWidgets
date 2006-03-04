@@ -486,7 +486,6 @@ void MyFrame::InitWithReportItems()
     m_listCtrl->SetItem( item );
 
     m_listCtrl->SetTextColour(*wxBLUE);
-    m_listCtrl->SetBackgroundColour(*wxLIGHT_GREY);
 
     m_listCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
     m_listCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
