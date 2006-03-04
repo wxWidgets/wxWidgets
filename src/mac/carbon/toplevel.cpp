@@ -497,6 +497,10 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
 #endif
                 }
             }
+
+            // disabled windows must not get any input messages
+            if ( currentMouseWindow && !currentMouseWindow->MacIsReallyEnabled() )
+                currentMouseWindow = NULL;
         }
     }
 
