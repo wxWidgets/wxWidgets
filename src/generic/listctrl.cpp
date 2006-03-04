@@ -2949,7 +2949,8 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
     if ( !hitResult )
     {
-        // outside of any item
+        // outside of any item, reset the selection and bail out
+        HighlightAll(false);
         return;
     }
 
