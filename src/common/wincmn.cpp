@@ -446,8 +446,9 @@ void wxWindowBase::InvalidateBestSize()
     m_bestSizeCache = wxDefaultSize;
 
     // parent's best size calculation may depend on its children's
-    // best sizes, so let's invalidate it as well to be safe
-    // (but don't influence other wxTLWs)
+    // as long as child window we are in is not top level window itself
+    // (because the TLW size is never resized automatically)
+    // so let's invalidate it as well to be safe:
     if (m_parent && !IsTopLevel())
         m_parent->InvalidateBestSize();
 }
