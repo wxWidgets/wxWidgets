@@ -561,9 +561,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         // make tooltips current
 
 #if wxUSE_TOOLTIPS
-        if ( wxevent.GetEventType() == wxEVT_MOTION
-            || wxevent.GetEventType() == wxEVT_ENTER_WINDOW
-            || wxevent.GetEventType() == wxEVT_LEAVE_WINDOW )
+        if ( wxevent.GetEventType() == wxEVT_MOTION )
             wxToolTip::RelayEvent( currentMouseWindow , wxevent );
 #endif
 
@@ -638,8 +636,8 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                 cursorPoint += cursorTarget->GetPosition();
         }
 
-    } // else if ( currentMouseWindow )
-    else
+    }
+    else // currentMouseWindow == NULL
     {
         // don't mess with controls we don't know about
         // for some reason returning eventNotHandledErr does not lead to the correct behaviour
@@ -648,17 +646,17 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         {
             EventModifiers modifiers = cEvent.GetParameter<EventModifiers>(kEventParamKeyModifiers, typeUInt32) ;
             Point clickLocation = windowMouseLocation ;
+#if TARGET_API_MAC_OSX
             if ( toplevelWindow->MacUsesCompositing() )
             {
-#ifdef __WXMAC_OSX__
                 HIPoint hiPoint ;
                 hiPoint.x = clickLocation.h ;
                 hiPoint.y = clickLocation.v ;
                 HIViewConvertPoint( &hiPoint , (ControlRef) toplevelWindow->GetHandle() , control  ) ;
                 clickLocation.h = (int)hiPoint.x ;
                 clickLocation.v = (int)hiPoint.y ;
-#endif
             }
+#endif // TARGET_API_MAC_OSX
 
             HandleControlClick( control , clickLocation , modifiers , (ControlActionUPP ) -1 ) ;
             result = noErr ;
