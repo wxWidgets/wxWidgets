@@ -1291,10 +1291,10 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     // font attributes:
 
     // size
-    int isize = wxDEFAULT;
+    int isize = -1;
     bool hasSize = HasParam(wxT("size"));
     if (hasSize)
-        isize = GetLong(wxT("size"), wxDEFAULT);
+        isize = GetLong(wxT("size"), -1);
 
     // style
     int istyle = wxNORMAL;
@@ -1372,36 +1372,38 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     }
 
     // is this font based on a system font?
-    wxFont sysfont = GetSystemFont(GetParamValue(wxT("sysfont")));
+    wxFont font = GetSystemFont(GetParamValue(wxT("sysfont")));
 
-    if (sysfont.Ok())
+    if (font.Ok())
     {
-        if (hasSize)
-            sysfont.SetPointSize(isize);
+        if (hasSize && isize != -1)
+            font.SetPointSize(isize);
         else if (HasParam(wxT("relativesize")))
-            sysfont.SetPointSize(int(sysfont.GetPointSize() *
+            font.SetPointSize(int(font.GetPointSize() *
                                      GetFloat(wxT("relativesize"))));
 
         if (hasStyle)
-            sysfont.SetStyle(istyle);
+            font.SetStyle(istyle);
         if (hasWeight)
-            sysfont.SetWeight(iweight);
+            font.SetWeight(iweight);
         if (hasUnderlined)
-            sysfont.SetUnderlined(underlined);
+            font.SetUnderlined(underlined);
         if (hasFamily)
-            sysfont.SetFamily(ifamily);
+            font.SetFamily(ifamily);
         if (hasFacename)
-            sysfont.SetFaceName(facename);
+            font.SetFaceName(facename);
         if (hasEncoding)
-            sysfont.SetDefaultEncoding(enc);
-
-        m_node = oldnode;
-        return sysfont;
+            font.SetDefaultEncoding(enc);
+    }
+    else // not based on system font
+    {
+        font = wxFont(isize == -1 ? wxNORMAL_FONT->GetPointSize() : isize,
+                      ifamily, istyle, iweight,
+                      underlined, facename, enc);
     }
 
     m_node = oldnode;
-    return wxFont(isize, ifamily, istyle, iweight,
-                  underlined, facename, enc);
+    return font;
 }
 
 
