@@ -2614,9 +2614,10 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                         
                         evtCtx.SetEventObject(this);
                         if (GetEventHandler()->ProcessEvent(evtCtx))
+                        {
                             processed = true;
-                        else
-                            return MSWDefWindowProc(message, wParam, lParam);
+                            return true;
+                        }
                     }
                 }
 #endif
