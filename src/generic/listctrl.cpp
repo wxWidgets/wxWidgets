@@ -2042,7 +2042,7 @@ void wxListTextCtrlWrapper::Finish()
     {
         m_finished = true;
 
-        m_text->PopEventHandler(this);
+        m_text->RemoveEventHandler(this);
         m_owner->FinishEditing(m_text);
 
         delete this;
