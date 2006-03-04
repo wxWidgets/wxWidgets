@@ -203,6 +203,7 @@ fi
 SPINWXALL=0
 SPINWXMAC=0
 SPINEVERYTHING=0
+SILENT=0
 
 usage()
 {
@@ -212,6 +213,7 @@ usage()
     echo "    --wxall        Spin wxAll"
     echo "    --wxmac        Spin wxMac"
     echo "    --all          Spin EVERYTHING"
+    echo "    --silent       Don't ask for confirmation before running"
 
     exit 1
 }
@@ -223,6 +225,7 @@ for i in "$@"; do
 	--wxall) SPINWXALL=1 ;;
 	--wxmac) SPINWXMAC=1 ;;
 	--all) SPINEVERYTHING=1 ;;
+	--silent) SILENT=1 ;;
 	*)
 	    usage
 	    exit
@@ -230,13 +233,14 @@ for i in "$@"; do
     esac
 done
 
-
-echo About to archive wxWidgets:
-echo   From    $WXSRC
-echo   To      $WXDEST
-echo   Version $WXVER
-echo CTRL-C if this is not correct.
-read dummy
+if [ "$SILENT" = "0" ]; then
+  echo About to archive wxWidgets:
+  echo   From    $WXSRC
+  echo   To      $WXDEST
+  echo   Version $WXVER
+  echo CTRL-C if this is not correct.
+  read dummy
+fi
 
 doinit
 
