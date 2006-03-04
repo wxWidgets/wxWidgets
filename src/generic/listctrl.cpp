@@ -392,7 +392,12 @@ private:
 
     // draw the text on the DC with the correct justification; also add an
     // ellipsis if the text is too large to fit in the current width
-    void DrawTextFormatted(wxDC *dc, const wxString &text, int col, int x, int y, int width);
+    void DrawTextFormatted(wxDC *dc,
+                           const wxString &text,
+                           int col,
+                           int x,
+                           int yMid,    // this is middle, not top, of the text
+                           int width);
 };
 
 WX_DECLARE_EXPORTED_OBJARRAY(wxListLineData, wxListLineDataArray);
@@ -1498,7 +1503,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         dc->DrawRectangle( rectHL );
 
     wxCoord x = rect.x + HEADER_OFFSET_X,
-            y = rect.y + (LINE_SPACING + EXTRA_HEIGHT) / 2;
+            yMid = rect.y + rect.height/2;
 
     size_t col = 0;
     for ( wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
@@ -1514,8 +1519,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         if ( item->HasImage() )
         {
             int ix, iy;
-            m_owner->DrawImage( item->GetImage(), dc, xOld, y );
             m_owner->GetImageSize( item->GetImage(), ix, iy );
+            m_owner->DrawImage( item->GetImage(), dc, xOld, yMid - iy/2 );
 
             ix += IMAGE_MARGIN_IN_REPORT_MODE;
 
@@ -1523,10 +1528,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
             width -= ix;
         }
 
-        wxDCClipper clipper(*dc, xOld, y, width - 8, rect.height);
-
         if ( item->HasText() )
-            DrawTextFormatted(dc, item->GetText(), col, xOld, y, width - 8);
+            DrawTextFormatted(dc, item->GetText(), col, xOld, yMid, width - 8);
     }
 }
 
@@ -1534,18 +1537,21 @@ void wxListLineData::DrawTextFormatted(wxDC *dc,
                                        const wxString &text,
                                        int col,
                                        int x,
-                                       int y,
+                                       int yMid,
                                        int width)
 {
-    wxString drawntext, ellipsis;
-    wxCoord w, h, base_w;
-    wxListItem item;
+    wxCoord w, h;
+    dc->GetTextExtent(text, &w, &h);
+
+    const wxCoord y = yMid - (h + 1)/2;
+
+    wxDCClipper clipper(*dc, x, y, width, h);
 
     // determine if the string can fit inside the current width
-    dc->GetTextExtent(text, &w, &h);
     if (w <= width)
     {
         // it can, draw it using the items alignment
+        wxListItem item;
         m_owner->GetColumn(col, item);
         switch ( item.GetAlign() )
         {
@@ -1571,13 +1577,14 @@ void wxListLineData::DrawTextFormatted(wxDC *dc,
     else // otherwise, truncate and add an ellipsis if possible
     {
         // determine the base width
-        ellipsis = wxString(wxT("..."));
+        wxString ellipsis(wxT("..."));
+        wxCoord base_w;
         dc->GetTextExtent(ellipsis, &base_w, &h);
 
         // continue until we have enough space or only one character left
         wxCoord w_c, h_c;
         size_t len = text.Length();
-        drawntext = text.Left(len);
+        wxString drawntext = text.Left(len);
         while (len > 1)
         {
             dc->GetTextExtent(drawntext.Last(), &w_c, &h_c);
