@@ -2420,12 +2420,16 @@ static void HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
         }
 
         // notice that even if this item doesn't have any image, the list
-        // control still leaves space for the image if the image list is not
-        // empty (presumably so that items with and without images align?)
-        int wImage, hImage;
-        ImageList_GetIconSize(himl, &wImage, &hImage);
+        // control still leaves space for the image in the first column if the
+        // image list is not empty (presumably so that items with and without
+        // images align?)
+        if ( it.iImage != -1 || it.iSubItem == 0 )
+        {
+            int wImage, hImage;
+            ImageList_GetIconSize(himl, &wImage, &hImage);
 
-        rc.left += wImage + 2;
+            rc.left += wImage + 2;
+        }
     }
 
     ::SetBkMode(hdc, TRANSPARENT);
