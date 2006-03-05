@@ -1645,6 +1645,7 @@ COND_TOOLKIT_MGL_LOWLEVEL_HDR =  \
 	wx/mgl/dcclient.h \
 	wx/mgl/dcmemory.h \
 	wx/mgl/dcscreen.h \
+	wx/mgl/display.h \
 	wx/mgl/font.h \
 	wx/mgl/fontutil.h \
 	wx/mgl/gdiobj.h \
@@ -3471,6 +3472,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_dcmemory.o \
 	monodll_dcscreen.o \
 	monodll_dirmgl.o \
+	monodll_display.o \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_fontenum.o \
@@ -4265,6 +4267,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_dcmemory.o \
 	monodll_dcscreen.o \
 	monodll_dirmgl.o \
+	monodll_display.o \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_fontenum.o \
@@ -5091,6 +5094,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_dcmemory.o \
 	monolib_dcscreen.o \
 	monolib_dirmgl.o \
+	monolib_display.o \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_fontenum.o \
@@ -5886,6 +5890,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_dcmemory.o \
 	monolib_dcscreen.o \
 	monolib_dirmgl.o \
+	monolib_display.o \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_fontenum.o \
@@ -6944,6 +6949,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_dcmemory.o \
 	coredll_dcscreen.o \
 	coredll_dirmgl.o \
+	coredll_display.o \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_fontenum.o \
@@ -7739,6 +7745,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_dcmemory.o \
 	coredll_dcscreen.o \
 	coredll_dirmgl.o \
+	coredll_display.o \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_fontenum.o \
@@ -8273,6 +8280,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_dcmemory.o \
 	corelib_dcscreen.o \
 	corelib_dirmgl.o \
+	corelib_display.o \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_fontenum.o \
@@ -9068,6 +9076,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_dcmemory.o \
 	corelib_dcscreen.o \
 	corelib_dirmgl.o \
+	corelib_display.o \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_fontenum.o \
@@ -13082,6 +13091,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_display.o: $(srcdir)/src/msw/display.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/display.cpp
 
+@COND_TOOLKIT_MGL_USE_GUI_1@monodll_display.o: $(srcdir)/src/mgl/display.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/display.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_display.o: $(srcdir)/src/mac/carbon/display.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/display.cpp
 
@@ -16858,6 +16870,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_display.o: $(srcdir)/src/msw/display.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/display.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@monolib_display.o: $(srcdir)/src/mgl/display.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/display.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_display.o: $(srcdir)/src/mac/carbon/display.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/display.cpp
@@ -21053,6 +21068,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@coredll_display.o: $(srcdir)/src/msw/display.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/display.cpp
 
+@COND_TOOLKIT_MGL_USE_GUI_1@coredll_display.o: $(srcdir)/src/mgl/display.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/display.cpp
+
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_display.o: $(srcdir)/src/mac/carbon/display.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/display.cpp
 
@@ -23818,6 +23836,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@corelib_display.o: $(srcdir)/src/msw/display.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/display.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@corelib_display.o: $(srcdir)/src/mgl/display.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/display.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_display.o: $(srcdir)/src/mac/carbon/display.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/display.cpp

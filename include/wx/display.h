@@ -113,6 +113,8 @@ protected:
     #include "wx/mac/display.h"
 #elif defined(__WXPM__)
     #include "wx/os2/display.h"
+#elif defined(__WXMGL__)
+    #include "wx/mgl/display.h"
 #endif
 
 #endif // wxUSE_DISPLAY

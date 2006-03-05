@@ -1693,6 +1693,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mgl/dcmemory.cpp
     src/mgl/dcscreen.cpp
     src/mgl/dirmgl.cpp
+    src/mgl/display.cpp
     src/mgl/evtloop.cpp
     src/mgl/font.cpp
     src/mgl/fontenum.cpp
@@ -1721,6 +1722,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mgl/dcclient.h
     wx/mgl/dcmemory.h
     wx/mgl/dcscreen.h
+    wx/mgl/display.h
     wx/mgl/font.h
     wx/mgl/fontutil.h
     wx/mgl/gdiobj.h
