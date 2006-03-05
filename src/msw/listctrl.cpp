@@ -2449,7 +2449,8 @@ static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd; // just a shortcut
 
-    HWND hwndList = nmcd.hdr.hwndFrom;
+    const HWND hwndList = nmcd.hdr.hwndFrom;
+    const int item = nmcd.dwItemSpec;
 
     // unfortunately we can't trust CDIS_SELECTED, it is often set even when
     // the item is not at all selected for some reason (comctl32 6), but we
@@ -2465,11 +2466,21 @@ static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
             break;
         }
 
-        if ( (DWORD)i == nmcd.dwItemSpec )
+        if ( i == item )
         {
             nmcd.uItemState |= CDIS_SELECTED;
             break;
         }
+    }
+
+    // same thing for CDIS_FOCUS (except simpler as there is only one of them)
+    if ( ListView_GetNextItem(hwndList, -1, LVNI_FOCUSED) == item )
+    {
+        nmcd.uItemState |= CDIS_FOCUS;
+    }
+    else
+    {
+        nmcd.uItemState &= ~CDIS_FOCUS;
     }
 
     if ( nmcd.uItemState & CDIS_SELECTED )
