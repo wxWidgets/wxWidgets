@@ -426,6 +426,7 @@ public:
                                      wxDateTime_t minute = 0,
                                      wxDateTime_t second = 0,
                                      wxDateTime_t millisec = 0));
+    %RenameCtor(DateTimeFromDateTime, wxDateTime(const wxDateTime& date));
             
     ~wxDateTime();
 
