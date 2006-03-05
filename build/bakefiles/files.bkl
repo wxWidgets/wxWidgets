@@ -1348,7 +1348,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/x11/gdiobj.cpp
     src/x11/gsockx11.cpp
     src/x11/icon.cpp
-    src/x11/main.cpp
     src/x11/minifram.cpp
     src/x11/nanox.c
     src/x11/palette.cpp

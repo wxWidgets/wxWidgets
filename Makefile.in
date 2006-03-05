@@ -3620,7 +3620,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gdiobj.o \
 	monodll_gsockx11.o \
 	monodll_icon.o \
-	monodll_main.o \
 	monodll_minifram.o \
 	monodll_nanox.o \
 	monodll_palette.o \
@@ -4415,7 +4414,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_gdiobj.o \
 	monodll_gsockx11.o \
 	monodll_icon.o \
-	monodll_main.o \
 	monodll_minifram.o \
 	monodll_nanox.o \
 	monodll_palette.o \
@@ -5242,7 +5240,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_gdiobj.o \
 	monolib_gsockx11.o \
 	monolib_icon.o \
-	monolib_main.o \
 	monolib_minifram.o \
 	monolib_nanox.o \
 	monolib_palette.o \
@@ -6038,7 +6035,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_gdiobj.o \
 	monolib_gsockx11.o \
 	monolib_icon.o \
-	monolib_main.o \
 	monolib_minifram.o \
 	monolib_nanox.o \
 	monolib_palette.o \
@@ -7097,7 +7093,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_gdiobj.o \
 	coredll_gsockx11.o \
 	coredll_icon.o \
-	coredll_main.o \
 	coredll_minifram.o \
 	coredll_nanox.o \
 	coredll_palette.o \
@@ -7893,7 +7888,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_gdiobj.o \
 	coredll_gsockx11.o \
 	coredll_icon.o \
-	coredll_main.o \
 	coredll_minifram.o \
 	coredll_nanox.o \
 	coredll_palette.o \
@@ -8428,7 +8422,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_gdiobj.o \
 	corelib_gsockx11.o \
 	corelib_icon.o \
-	corelib_main.o \
 	corelib_minifram.o \
 	corelib_nanox.o \
 	corelib_palette.o \
@@ -9224,7 +9217,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_gdiobj.o \
 	corelib_gsockx11.o \
 	corelib_icon.o \
-	corelib_main.o \
 	corelib_minifram.o \
 	corelib_nanox.o \
 	corelib_palette.o \
@@ -12129,9 +12121,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_main.o: $(srcdir)/src/gtk1/main.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/main.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@monodll_main.o: $(srcdir)/src/x11/main.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/main.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_main.o: $(srcdir)/src/motif/main.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/main.cpp
@@ -15909,9 +15898,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_main.o: $(srcdir)/src/gtk1/main.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/main.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@monolib_main.o: $(srcdir)/src/x11/main.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/main.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_main.o: $(srcdir)/src/motif/main.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/main.cpp
@@ -20107,9 +20093,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@coredll_main.o: $(srcdir)/src/gtk1/main.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/main.cpp
 
-@COND_TOOLKIT_X11_USE_GUI_1@coredll_main.o: $(srcdir)/src/x11/main.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/main.cpp
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_main.o: $(srcdir)/src/motif/main.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/main.cpp
 
@@ -22875,9 +22858,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@corelib_main.o: $(srcdir)/src/gtk1/main.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/main.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@corelib_main.o: $(srcdir)/src/x11/main.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/main.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_main.o: $(srcdir)/src/motif/main.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/main.cpp
