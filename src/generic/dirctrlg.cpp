@@ -118,8 +118,9 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
         name.Printf(wxT("%c:"), driveBuffer[i]);
 
 #if !defined(__WXWINCE__)
-        wxChar pname[52];
-        if (GetVolumeInformation( path.c_str(), pname, 52, NULL, NULL, NULL, NULL, 0 ))
+        wxChar pname[52]; // FIXME: why 52 and not MAX_PATH or whatever?
+        if ( GetVolumeInformation(path, pname, WXSIZEOF(pname),
+                                  NULL, NULL, NULL, NULL, 0) )
         {
             name << _T(' ') << pname;
         }
