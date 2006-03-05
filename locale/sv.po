@@ -3192,8 +3192,8 @@ msgid "PRC Envelope #10 324 x 458 mm"
 msgstr "PRC kuvert #10 324 x 458 mm"
 
 #: ../src/common/paper.cpp:219
-msgid "PRC Envelope #10 Rotated 458 x 324 m"
-msgstr "PRC kuvert #10 roterat 458 x 324 m"
+msgid "PRC Envelope #10 Rotated 458 x 324 mm"
+msgstr "PRC kuvert #10 roterat 458 x 324 mm"
 
 #: ../src/common/paper.cpp:198
 msgid "PRC Envelope #2 102 x 176 mm"

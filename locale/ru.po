@@ -3148,7 +3148,7 @@ msgstr "Конверт C3, 324 x 458 мм"
 
 #: ../src/common/paper.cpp:219
 #, fuzzy
-msgid "PRC Envelope #10 Rotated 458 x 324 m"
+msgid "PRC Envelope #10 Rotated 458 x 324 mm"
 msgstr "Конверт C4, 229 x 324 мм"
 
 #: ../src/common/paper.cpp:198

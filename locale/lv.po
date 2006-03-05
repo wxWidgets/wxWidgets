@@ -3097,7 +3097,7 @@ msgstr "C3 Vēstule, 324 x 458 mm"
 
 #: ../src/common/paper.cpp:219
 #, fuzzy
-msgid "PRC Envelope #10 Rotated 458 x 324 m"
+msgid "PRC Envelope #10 Rotated 458 x 324 mm"
 msgstr "C4 Vēstule, 229 x 324 mm"
 
 #: ../src/common/paper.cpp:198

@@ -3199,7 +3199,7 @@ msgid "PRC Envelope #10 324 x 458 mm"
 msgstr "中国标准信封10#, 324 x 458 毫米"
 
 #: ../src/common/paper.cpp:219
-msgid "PRC Envelope #10 Rotated 458 x 324 m"
+msgid "PRC Envelope #10 Rotated 458 x 324 mm"
 msgstr "中国标准信封10#(横向), 458 x 324 毫米"
 
 #: ../src/common/paper.cpp:198
