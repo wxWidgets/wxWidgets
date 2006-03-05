@@ -947,6 +947,12 @@ option is not present, the function returns 0.", "
     static void AddHandler( wxImageHandler *handler );
     static void InsertHandler( wxImageHandler *handler );
     static bool RemoveHandler( const wxString& name );
+    %extend {
+        static PyObject* GetHandlers() {
+            wxList& list = wxImage::GetHandlers();
+            return wxPy_ConvertList(&list);
+        }
+    }
     
     DocDeclStr(
         static wxString , GetImageExtWildcard(),
