@@ -483,10 +483,8 @@ public:
     // return the total area occupied by all the items (icon/small icon only)
     wxRect GetViewRect() const;
 
-#ifdef __WXMSW__
     // Gets the edit control for editing labels.
     wxTextCtrl* GetEditControl() const;
-#endif
 
     // Gets information about the item
     %pythonAppend GetItem "if val is not None: val.thisown = 1";  // %newobject doesn't work with OOR typemap
