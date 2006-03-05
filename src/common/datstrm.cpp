@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        datstrm.cpp
+// Name:        src/common/datstrm.cpp
 // Purpose:     Data stream classes
 // Author:      Guilhem Lavaux
 // Modified by: Mickael Gilabert
@@ -296,7 +296,7 @@ void wxDataInputStream::ReadLL(wxLongLong *buffer, size_t size)
 wxLongLong wxDataInputStream::ReadLL(void)
 {
     wxLongLong ll;
-    DoReadLL(&ll, 1, m_input, m_be_order);
+    DoReadLL(&ll, (size_t)1, m_input, m_be_order);
     return ll;
 }
 #endif // wxUSE_LONGLONG
@@ -724,4 +724,3 @@ wxDataOutputStream& wxDataOutputStream::operator<<(float f)
 
 #endif
   // wxUSE_STREAMS
-
