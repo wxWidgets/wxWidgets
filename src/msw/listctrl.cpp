@@ -2409,14 +2409,19 @@ static void HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     it.cchTextMax = WXSIZEOF(text);
     ListView_GetItem(hwndList, &it);
 
-    if ( it.iImage != -1 )
+    HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_SMALL);
+    if ( himl && ImageList_GetImageCount(himl) )
     {
-        HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_SMALL);
+        if ( it.iImage != -1 )
+        {
+            ImageList_Draw(himl, it.iImage, hdc, rc.left, rc.top,
+                           nmcd.uItemState & CDIS_SELECTED ? ILD_SELECTED
+                                                           : ILD_TRANSPARENT);
+        }
 
-        ImageList_Draw(himl, it.iImage, hdc, rc.left, rc.top,
-                       nmcd.uItemState & CDIS_SELECTED ? ILD_SELECTED
-                                                       : ILD_TRANSPARENT);
-
+        // notice that even if this item doesn't have any image, the list
+        // control still leaves space for the image if the image list is not
+        // empty (presumably so that items with and without images align?)
         int wImage, hImage;
         ImageList_GetIconSize(himl, &wImage, &hImage);
 
