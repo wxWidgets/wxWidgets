@@ -48,7 +48,7 @@
 
     <!-- List of output formats to generate: -->
     <add-formats>
-        autoconf,borland,dmars_smake,dmars,mingw,msvc,msvc6prj,watcom,cbuilderx,cbx_unix
+        autoconf,borland,dmars_smake,dmars,mingw,msvc,msvc6prj,msevc4prj,watcom,cbuilderx,cbx_unix
     </add-formats>
 
     <del-formats files="../../samples/*.bkl">
