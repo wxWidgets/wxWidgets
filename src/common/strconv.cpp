@@ -1834,6 +1834,9 @@ private:
 
     static bool IsAtLeastWin2kSP4()
     {
+#ifdef __WXWINCE__
+        return false;
+#else
         static int s_isAtLeastWin2kSP4 = -1;
 
         if ( s_isAtLeastWin2kSP4 == -1 )
@@ -1853,6 +1856,7 @@ private:
         }
 
         return s_isAtLeastWin2kSP4 == 1;
+#endif
     }
 
     long m_CodePage;
