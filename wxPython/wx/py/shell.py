@@ -168,6 +168,7 @@ class ShellFacade:
         d = self.__dict__
         d['other'] = other
         d['helpText'] = HELP_TEXT
+        d['this'] = other.this
 
     def help(self):
         """Display some useful information about how to use the shell."""
