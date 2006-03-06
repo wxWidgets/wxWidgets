@@ -15,9 +15,6 @@
 
     Reasons why these formats are disabled (and so not in CVS):
 
-    dmars     - In beta testing, will be added when it stabilizes.
-    dmars_smake     - ditto
-    msevc4prj - ditto
     cbuilderx - Generated projects are too bad to be included in CVS. Please
                 *do not* enable this format until FIXMEs in .bkl files related
                 to cbuilderx are addressed. In particular, the project must
@@ -26,7 +23,7 @@
     cbx_unix  - Doesn't integrate well and won't be used by most Unix people.
     -->
 
-    <disable-formats>dmars,dmars_smake,cbx_unix,cbuilderx,msevc4prj</disable-formats>
+    <disable-formats>cbx_unix,cbuilderx</disable-formats>
 
 
     <!-- These wildcards match all .bkl files in wxWidgets tree: -->
@@ -51,7 +48,7 @@
 
     <!-- List of output formats to generate: -->
     <add-formats>
-        autoconf,borland,dmars_smake,dmars,mingw,msvc,msvc6prj,msevc4prj,watcom,cbuilderx,cbx_unix
+        autoconf,borland,dmars_smake,dmars,mingw,msvc,msvc6prj,watcom,cbuilderx,cbx_unix
     </add-formats>
 
     <del-formats files="../../samples/*.bkl">
