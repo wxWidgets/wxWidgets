@@ -43,7 +43,7 @@ class TestPanel(wx.Panel):
         # hide a little surprise in the button...
         b.SetBitmapSelected(images.getRobinBitmap())
 
-       b.SetToolTipString("This is a bitmap button with \nwx.NO_BORDER style.")
+        b.SetToolTipString("This is a bitmap button with \nwx.NO_BORDER style.")
         self.Bind(wx.EVT_BUTTON, self.OnClick, b)
         
 
