@@ -1649,6 +1649,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="WINCE_SRC" hints="files">
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
+    src/generic/filedlgg.cpp
     src/generic/fontdlgg.cpp
     src/msw/wince/checklst.cpp
     src/msw/wince/choicece.cpp
@@ -1662,6 +1663,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="WINCE_HDR" hints="files">
     wx/generic/fdrepdlg.h
+    wx/generic/filedlgg.h
     wx/generic/fontdlgg.h
     wx/msw/wince/checklst.h
     wx/msw/wince/choicece.h
