@@ -756,7 +756,7 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 
 #ifdef __WXGTK20__
     GtkNotebook * notebook = GTK_NOTEBOOK(m_widget);
-    if (gtk_notebook_get_scrollable(notebook));
+    if (gtk_notebook_get_scrollable(notebook))
         i = g_list_position( notebook->children, notebook->first_tab );
 #endif
 
