@@ -331,7 +331,7 @@ domakedocs()
 dospinwxdocs()
 {
   # First make the docs
-  domakedocs
+#  domakedocs
 
 echo Tarring wxDocs...
 
