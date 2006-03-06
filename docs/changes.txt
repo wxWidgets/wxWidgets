@@ -212,6 +212,7 @@ wxWinCE:
   directly, however.
 - Added support for the context menu event (wxContextMenuEvent)
   and added platform-specific wxWindow::EnableContextMenu.
+- Fixed wxGenericFileDialog to work with WinCE.
 
 wxUniv:
 
