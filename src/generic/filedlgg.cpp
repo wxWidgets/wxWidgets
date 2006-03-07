@@ -250,7 +250,7 @@ void wxFileData::ReadData()
             NULL);
 
     if (fileHandle != INVALID_HANDLE_VALUE)
-    { 
+    {
         m_size = GetFileSize(fileHandle, 0);
         CloseHandle(fileHandle);
     }
@@ -284,7 +284,7 @@ void wxFileData::ReadData()
     m_dateTime = buff.st_mtime;
 #endif
     // __WXWINCE__
-    
+
 #if defined(__UNIX__)
     m_permissions.Printf(_T("%c%c%c%c%c%c%c%c%c"),
                          buff.st_mode & wxS_IRUSR ? _T('r') : _T('-'),
@@ -998,7 +998,11 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
         return true;
 
     if (!wxDialog::Create( parent, wxID_ANY, message, pos, wxDefaultSize,
-                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ))
+                           wxDEFAULT_DIALOG_STYLE
+#ifndef __WXWINCE__
+                           | wxRESIZE_BORDER
+#endif
+                           ))
     {
         return false;
     }
@@ -1126,10 +1130,15 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
         m_choice = new wxChoice( this, ID_CHOICE );
         textsizer->Add( m_choice, 1, wxCENTER|wxALL, 5 );
 
-        buttonsizer = new wxBoxSizer( wxHORIZONTAL );
-        buttonsizer->Add( new wxButton( this, wxID_OK ), 0, wxCENTER | wxALL, 5 );
-        buttonsizer->Add( new wxButton( this, wxID_CANCEL ), 0, wxCENTER | wxALL, 5 );
-        mainsizer->Add( buttonsizer, 0, wxALIGN_RIGHT );
+        wxSizer *bsizer = CreateButtonSizer( wxOK|wxCANCEL , false, 5 );
+        if(bsizer->GetChildren().GetCount() > 0 )
+        {
+            mainsizer->Add( bsizer, 0, wxEXPAND | wxALL, 5 );
+        }
+        else
+        {
+            delete bsizer;
+        }
     }
     else
     {
@@ -1163,9 +1172,9 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
 
         Centre( wxBOTH );
     }
-    
+
     m_text->SetFocus();
-    
+
     ignoreChanges = false;
 
     return true;
@@ -1346,9 +1355,17 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
         return;
 
     wxString filename( fn );
-    wxString dir = m_list->GetDir();
-    if (filename.empty()) return;
+    if (filename.empty())
+    {
+#ifdef __WXWINCE__
+        wxCommandEvent event;
+        wxDialog::OnCancel(event);
+#endif
+        return;
+    }
     if (filename == wxT(".")) return;
+
+    wxString dir = m_list->GetDir();
 
     // "some/place/" means they want to chdir not try to load "place"
     bool want_dir = filename.Last() == wxFILE_SEP_PATH;
