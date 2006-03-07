@@ -8,10 +8,13 @@ PROGNAME=$0
 WXSRCDIR=$WXWIN
 WXDESTDIR=$WXSRCDIR/deliver
 
+# Default binary subdirectory to copy sample executable from
+WINBINDIR=vc_msw
+
 # Suffix to append to each demo tarball, e.g. SuSE92 for widgets-SuSE92
 SUFFIX=linux
 
-dobuilddemos()
+dobuilddemos_unix()
 {
     if [ ! -d "$WXSRCDIR" ] ; then
         echo Cannot find wxWidgets source directory. Use --wxdir option.
@@ -94,6 +97,75 @@ dobuilddemos()
     popd    
 }
 
+dobuilddemos_windows()
+{
+    if [ ! -d "$WXSRCDIR" ] ; then
+        echo Cannot find wxWidgets source directory. Use --wxdir option.
+        exit
+    fi
+    if [ ! -d "$WXDESTDIR" ] ; then
+        echo Cannot find wxWidgets destination directory. Use --deliver option.
+        exit
+    fi
+    if [ ! -d samples ] ; then
+        echo Cannot find samples directory. Invoke this script from the root of the build folder.
+        exit
+    fi
+
+    echo wxWidgets build directory is `pwd`
+    echo wxWidgets source directory is $WXSRCDIR
+    echo wxWidgets deliver directory is $WXDESTDIR
+    echo Suffix is $SUFFIX
+
+    rm -f $WXDESTDIR/*.zip
+
+    # Dialogs
+
+    pushd samples/dialogs
+    if [ -f $WINBINDIR/dialogs.exe ] ; then
+        cp $WINBINDIR/dialogs.exe .
+        zip $WXDESTDIR/wxWidgets-DialogsDemo-$SUFFIX.zip dialogs.exe *.cpp *.h
+        rm -f dialogs.exe
+    else
+        echo "*** Warning: dialogs sample did not build"
+    fi
+    popd
+    
+    # HTML
+
+    pushd samples/html/test
+    if [ -f $WINBINDIR/test.exe ] ; then
+        cp $WINBINDIR/test.exe htmldemo.exe
+        zip $WXDESTDIR/wxWidgets-HtmlDemo-$SUFFIX.zip htmldemo.exe *.cpp *.png *.gif *.htm*
+        rm -f htmldemo.exe
+    else
+        echo "*** Warning: HTML sample did not build"
+    fi
+    popd
+    
+    # Widgets
+
+    pushd samples/widgets
+    if [ -f $WINBINDIR/widgets.exe ] ; then
+        cp $WINBINDIR/widgets.exe .
+        zip $WXDESTDIR/wxWidgets-WidgetsDemo-$SUFFIX.zip widgets.exe *.cpp *.h
+    else
+        echo "*** Warning: widgets sample did not build"
+    fi
+    popd
+    
+    # Life
+
+    pushd demos/life
+    if [ -f $WINBINDIR/life.exe ] ; then
+        cp $WINBINDIR/life.exe .
+        zip $WXDESTDIR/wxWidgets-LifeDemo-$SUFFIX.zip life.exe *.cpp *.h *.xpm *.inc *.lif bitmaps/*.*
+    else
+        echo "*** Warning: life demo did not build"
+    fi
+    popd    
+}
+
 usage()
 {
     echo "Usage: $PROGNAME [ options ]" 1>&2
@@ -123,5 +195,10 @@ do
     shift
 done
 
-dobuilddemos
+if [ $OS == "Windows_NT" ] ; then
+    dobuilddemos_windows
+else
+    dobuilddemos_linux
+fi
+
 
