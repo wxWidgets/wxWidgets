@@ -45,6 +45,8 @@ if myconfig:
     
 tasks = Task([ Job("pre-flight", "./scripts/pre-flight.sh", env=config_env), 
                Job("win_build", "./scripts/build-windows.sh", env=config_env),
+               Job("lin_build", "./scripts/build-linux.sh", env=config_env),
+               Job("mac_build", "./scripts/build-mac.sh", env=config_env),
              ])
              
 print "Build getting started at: ", time.ctime()
