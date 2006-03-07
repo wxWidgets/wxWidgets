@@ -1400,13 +1400,17 @@ size_t wxFileTypeImpl::GetAllCommands(wxArrayString *verbs,
                  count++;
                  if ( vrb.IsSameAs(wxT("open")))
                  {
-                     verbs->Insert(vrb, 0u);
-                     commands ->Insert(cmd, 0u);
+                     if ( verbs )
+                        verbs->Insert(vrb, 0u);
+                     if ( commands )
+                        commands ->Insert(cmd, 0u);
                  }
                  else
                  {
-                     verbs->Add(vrb);
-                     commands->Add(cmd);
+                     if ( verbs )
+                        verbs->Add(vrb);
+                     if ( commands )
+                        commands->Add(cmd);
                  }
              }
         }
