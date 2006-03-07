@@ -412,7 +412,7 @@ dospininstaller()
     zip $ZIPFLAGS -r wxMSW-$VERSION.zip wxWidgets-$VERSION/*
     cd wxWidgets-$VERSION
 
-    if ["$INNO" != "0"]; then
+    if [ "$INNO" != "0" ]; then
         echo Generating $SETUPSCRIPTNAME
         rm -f $SETUPSCRIPTNAME
     
