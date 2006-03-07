@@ -467,12 +467,14 @@ bool wxSound::Create(const wxString& fileName,
     wxUint8 *data = new wxUint8[len];
     if ( fileWave.Read(data, len) != lenOrig )
     {
+        delete [] data;
         wxLogError(_("Couldn't load sound data from '%s'."), fileName.c_str());
         return false;
     }
 
     if (!LoadWAV(data, len, false))
     {
+        delete [] data;
         wxLogError(_("Sound file '%s' is in unsupported format."),
                    fileName.c_str());
         return false;
