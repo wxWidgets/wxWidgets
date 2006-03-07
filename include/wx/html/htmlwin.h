@@ -269,9 +269,13 @@ protected:
     void StopAutoScrolling();
 #endif // wxUSE_CLIPBOARD
 
-protected:
     wxString DoSelectionToText(wxHtmlSelection *sel);
 
+private:
+    // implementation of SetPage()
+    bool DoSetPage(const wxString& source);
+
+protected:
     // This is pointer to the first cell in parsed data.  (Note: the first cell
     // is usually top one = all other cells are sub-cells of this one)
     wxHtmlContainerCell *m_Cell;

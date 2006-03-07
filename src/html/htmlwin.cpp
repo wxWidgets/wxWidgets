@@ -237,30 +237,29 @@ void wxHtmlWindow::SetRelatedStatusBar(int bar)
 
 void wxHtmlWindow::SetFonts(const wxString& normal_face, const wxString& fixed_face, const int *sizes)
 {
-    wxString op = m_OpenedPage;
-
     m_Parser->SetFonts(normal_face, fixed_face, sizes);
-    // fonts changed => contents invalid, so reload the page:
-    SetPage(wxT("<html><body></body></html>"));
-    if (!op.empty())
-        LoadPage(op);
+
+    // re-layout the page after changing fonts:
+    DoSetPage(*(m_Parser->GetSource()));
 }
 
 void wxHtmlWindow::SetStandardFonts(int size,
                                     const wxString& normal_face,
                                     const wxString& fixed_face)
 {
-    wxString op = m_OpenedPage;
-
     m_Parser->SetStandardFonts(size, normal_face, fixed_face);
-    // fonts changed => contents invalid, so reload the page:
-    SetPage(wxT("<html><body></body></html>"));
-    if (!op.empty())
-        LoadPage(op);
+
+    // re-layout the page after changing fonts:
+    DoSetPage(*(m_Parser->GetSource()));
 }
 
-
 bool wxHtmlWindow::SetPage(const wxString& source)
+{
+    m_OpenedPage = m_OpenedAnchor = m_OpenedPageTitle = wxEmptyString;
+    return DoSetPage(source);
+}
+
+bool wxHtmlWindow::DoSetPage(const wxString& source)
 {
     wxString newsrc(source);
 
@@ -307,7 +306,7 @@ bool wxHtmlWindow::SetPage(const wxString& source)
     dc->SetMapMode(wxMM_TEXT);
     SetBackgroundColour(wxColour(0xFF, 0xFF, 0xFF));
     SetBackgroundImage(wxNullBitmap);
-    m_OpenedPage = m_OpenedAnchor = m_OpenedPageTitle = wxEmptyString;
+
     m_Parser->SetDC(dc);
     if (m_Cell)
     {
@@ -326,7 +325,7 @@ bool wxHtmlWindow::SetPage(const wxString& source)
 
 bool wxHtmlWindow::AppendToPage(const wxString& source)
 {
-    return SetPage(*(GetParser()->GetSource()) + source);
+    return DoSetPage(*(GetParser()->GetSource()) + source);
 }
 
 bool wxHtmlWindow::LoadPage(const wxString& location)
