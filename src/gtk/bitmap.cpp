@@ -455,7 +455,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
                     old_x = x;
                 }
 
-                if (bpp == 1)
+                if ( dst )
                 {
                     if (!pixval)
                     {
@@ -480,14 +480,14 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
             }
 
             // do not forget the last byte
-            if ((bpp == 1) && (width % 8 != 0))
+            if ( dst && (width % 8 != 0) )
                 dst[h*dstbyteperline+width/8] = outbyte;
         }
 
         gdk_image_destroy( img );
         if (gc) gdk_gc_unref( gc );
 
-        if (bpp == 1)
+        if ( dst )
         {
             bmp = wxBitmap( (const char *)dst, width, height, 1 );
             free( dst );
