@@ -51,7 +51,7 @@ if [ ! -d $WX_SRC_DIR/deliver ]; then
   mkdir $WX_SRC_DIR/deliver
 fi
 
-# Now generate the wxAll tarball. We will push this to our build machines.
+# Now generate the mega tarball with everything. We will push this to our build machines.
 
 cd $WX_TEMP_DIR
 WX_TARBALL=$WX_TEMP_DIR/wxWidgets-$BUILD_VERSION.tar.gz
@@ -67,12 +67,5 @@ else
   cp $WX_TARBALL $STAGING_DIR
   cp -r $WX_WEB_DIR $STAGING_DIR
   
-  if [ $setup_msvc_for_cygwin = yes ]; then
-    # create a setup script to be sourced whenever we need nmake, etc.
-    
-  
-  fi
-  
   echo "Pre-flight complete. Ready for takeoff."
 fi
-# assuming this has all succeeded, we can delete the temp dir
