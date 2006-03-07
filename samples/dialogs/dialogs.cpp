@@ -27,6 +27,7 @@
 #include "wx/bookctrl.h"
 #include "wx/artprov.h"
 #include "wx/imaglist.h"
+#include "wx/sysopt.h"
 
 #if wxUSE_COLOURDLG
     #include "wx/colordlg.h"
@@ -823,6 +824,10 @@ void MyFrame::FileOpenGeneric(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::FilesOpenGeneric(wxCommandEvent& WXUNUSED(event) )
 {
+    // On PocketPC you can disable OK-only dialogs policy using system option
+    int buttons = wxSystemOptions::GetOptionInt(wxT("wince.dialog.real-ok-cancel"));
+    wxSystemOptions::SetOption(wxT("wince.dialog.real-ok-cancel"), 1);
+
     wxString wildcards = _T("All files (*.*)|*.*|C++ files (*.cpp;*.h)|*.cpp;*.h");
     wxGenericFileDialog dialog(this, _T("Testing open multiple file dialog"),
                         wxEmptyString, wxEmptyString, wildcards,
@@ -850,6 +855,9 @@ void MyFrame::FilesOpenGeneric(wxCommandEvent& WXUNUSED(event) )
         wxMessageDialog dialog2(this, msg, _T("Selected files"));
         dialog2.ShowModal();
     }
+
+    // restore system option
+    wxSystemOptions::SetOption(wxT("wince.dialog.real-ok-cancel"), buttons);
 }
 
 void MyFrame::FileSaveGeneric(wxCommandEvent& WXUNUSED(event) )
@@ -1412,7 +1420,7 @@ SettingsDialog::SettingsDialog(wxWindow* win, bool useToolBook)
 
     int tabImage1 = -1;
     int tabImage2 = -1;
-    
+
     if (useToolBook)
     {
         tabImage1 = 0;
@@ -1442,7 +1450,7 @@ SettingsDialog::SettingsDialog(wxWindow* win, bool useToolBook)
 #endif
     );
 
-    // If using a toolbook, also follow Mac style and don't create buttons    
+    // If using a toolbook, also follow Mac style and don't create buttons
     if (!useToolBook)
         CreateButtons(wxOK|wxCANCEL
 #ifndef __POCKETPC__
