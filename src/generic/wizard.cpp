@@ -780,10 +780,12 @@ void wxWizard::OnBackOrNext(wxCommandEvent& event)
                   (event.GetEventObject() == m_btnPrev),
                   wxT("unknown button") );
 
+    wxCHECK_RET( m_page, _T("should have a valid current page") );
+
     // ask the current page first: notice that we do it before calling
     // GetNext/Prev() because the data transfered from the controls of the page
     // may change the value returned by these methods
-    if ( m_page && (!m_page->Validate() || !m_page->TransferDataFromWindow()) )
+    if ( !m_page->Validate() || !m_page->TransferDataFromWindow() )
     {
         // the page data is incorrect, don't do anything
         return;
