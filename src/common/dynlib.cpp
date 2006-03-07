@@ -245,8 +245,8 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
     {
         wxAppTraits *traits = wxAppConsole::GetInstance() ?
                               wxAppConsole::GetInstance()->GetTraits() : NULL;
-        wxASSERT_MSG( traits,
-               _("can't query for GUI plugins name in console applications") );
+        wxCHECK_MSG( traits, _T(""),
+                     _("can't query for GUI plugins name in console applications") );
         suffix = traits->GetToolkitInfo().shortName;
     }
 #if wxUSE_UNICODE
