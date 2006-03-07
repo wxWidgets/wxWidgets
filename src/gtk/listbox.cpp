@@ -615,14 +615,10 @@ void wxListBox::GtkInsertItems(const wxArrayString& items,
     int nCurCount = wxListBox::GetCount();
     wxASSERT_MSG(pos <= nCurCount, wxT("Invalid index passed to wxListBox"));
 
-    GtkTreeIter* pIter;
-    if (pos == nCurCount)
+    GtkTreeIter* pIter = NULL; // append by default
+    GtkTreeIter iter;
+    if (pos != nCurCount)
     {
-        pIter = NULL; // append
-    }
-    else
-    {
-        GtkTreeIter iter;
         gboolean res = gtk_tree_model_iter_nth_child(
                         GTK_TREE_MODEL(m_liststore),
                         &iter, NULL, //NULL = parent = get first
