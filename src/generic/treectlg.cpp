@@ -199,9 +199,9 @@ public:
     wxGenericTreeItem *GetParent() const { return m_parent; }
 
     // operations
-        // deletes all children notifying the treectrl about it if !NULL
-        // pointer given
-    void DeleteChildren(wxGenericTreeCtrl *tree = NULL);
+
+    // deletes all children notifying the treectrl about it
+    void DeleteChildren(wxGenericTreeCtrl *tree);
 
     // get count of all children (and grand children if 'recursively')
     size_t GetChildrenCount(bool recursively = true) const;
@@ -548,11 +548,10 @@ void wxGenericTreeItem::DeleteChildren(wxGenericTreeCtrl *tree)
     for ( size_t n = 0; n < count; n++ )
     {
         wxGenericTreeItem *child = m_children[n];
-        if (tree)
-            tree->SendDeleteEvent(child);
+        tree->SendDeleteEvent(child);
 
         child->DeleteChildren(tree);
-        if (child == tree->m_select_me)
+        if ( child == tree->m_select_me )
             tree->m_select_me = NULL;
         delete child;
     }
