@@ -57,8 +57,8 @@ dobuilddemos()
     if [ -f test ] ; then
         mv test htmldemo
         cp $WXSRCDIR/samples/html/test/*.cpp $WXSRCDIR/samples/html/test/*.htm* $WXSRCDIR/samples/html/test/*.png $WXSRCDIR/samples/html/test/*.gif .
-        tar cfz $WXDESTDIR/wxWidgets-HtmlDemo-$SUFFIX.tar.gz htmldemo *.cpp *.h
-        rm -f *.cpp *.h
+        tar cfz $WXDESTDIR/wxWidgets-HtmlDemo-$SUFFIX.tar.gz htmldemo *.cpp *.png *.gif *.htm*
+        rm -f *.cpp *.gif *.png *.htm*
     else
         echo "*** Warning: HTML sample did not build"
     fi
