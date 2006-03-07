@@ -1,0 +1,62 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        wupdlock.tex
+%% Purpose:     wxWindowUpdateLocker documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     2006-03-06
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxWindowUpdateLocker}}\label{wxwindowupdatelocker}
+
+This tiny class prevents redrawing of a \helpref{wxWindow}{wxwindow} during its
+lifetime by using \helpref{wxWindow::Freeze}{wxwindowfreeze} and 
+\helpref{Thaw}{wxwindowthaw} methods. It is typically used for creating
+automatic objects to temporarily suppress window updates before a batch of
+operations is performed:
+{\small
+\begin{verbatim}
+    void MyFrame::Foo()
+    {
+        m_text = new wxTextCtrl(this, ...);
+
+        wxWindowUpdateLocker noUpdates(m_text);
+        m_text->AppendText();
+        ... many other operations with m_text...
+        m_text->WriteText();
+    }
+\end{verbatim}
+}
+
+Using this class is easier and safer than calling 
+\helpref{Freeze}{wxwindowfreeze} and \helpref{Thaw}{wxwindowthaw} because you
+don't risk to forget calling the latter.
+
+\wxheading{Derived from}
+
+None.
+
+\wxheading{Include files}
+
+<wx/wupdlock.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxWindowUpdateLocker::wxWindowUpdateLocker}\label{wxwindowupdatelockerctor}
+
+\func{}{wxWindowUpdateLocker}{\param{wxWindow *}{win}}
+
+Creates an object preventing the updates of the specified \arg{win}. The
+parameter must be non-\NULL and the window must exist for longer than
+wxWindowUpdateLocker object itself.
+
+
+\membersection{wxWindowUpdateLocker::\destruct{wxWindowUpdateLocker}}\label{wxwindowupdatelockerdtor}
+
+\func{}{\destruct{wxWindowUpdateLocker}}{\void}
+
+Destructor reenables updates for the window this object is associated with.
+
