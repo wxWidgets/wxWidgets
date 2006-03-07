@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpwnd.cpp
+// Name:        src/html/helpwnd.cpp
 // Purpose:     wxHtmlHelpWindow
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
@@ -342,13 +342,13 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     // The sizer for the whole top-level window.
     wxSizer *topWindowSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(topWindowSizer);
-    SetAutoLayout(TRUE);
+    SetAutoLayout(true);
 
 #if wxUSE_TOOLBAR
     // toolbar?
     if (helpStyle & (wxHF_TOOLBAR | wxHF_FLAT_TOOLBAR))
     {
-        wxToolBar *toolBar = new wxToolBar(this, -1, wxDefaultPosition, wxDefaultSize,
+        wxToolBar *toolBar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                            wxNO_BORDER | wxTB_HORIZONTAL |
                                            wxTB_DOCKABLE | wxTB_NODIVIDER |
                                            (helpStyle & wxHF_FLAT_TOOLBAR ? wxTB_FLAT : 0));
@@ -874,7 +874,7 @@ bool wxHtmlHelpWindow::KeywordSearch(const wxString& keyword,
         }
 
         m_SearchButton->Enable();
-        m_SearchText->SetSelection(0, keyword.Length());
+        m_SearchText->SetSelection(0, keyword.length());
         m_SearchText->SetFocus();
     }
     else if (mode == wxHELP_SEARCH_INDEX)
@@ -885,8 +885,7 @@ bool wxHtmlHelpWindow::KeywordSearch(const wxString& keyword,
         m_IndexButtonAll->Disable();
         m_IndexText->SetValue(keyword);
 
-        wxCommandEvent dummy;
-        OnIndexFind(dummy); // what a hack...
+        DoIndexFind();
         m_IndexButton->Enable();
         m_IndexButtonAll->Enable();
         foundcnt = m_IndexList->GetCount();
@@ -1584,13 +1583,18 @@ void wxHtmlHelpWindow::OnIndexSel(wxCommandEvent& WXUNUSED(event))
         DisplayIndexItem(it);
 }
 
-void wxHtmlHelpWindow::OnIndexFind(wxCommandEvent& event)
+void wxHtmlHelpWindow::OnIndexFind(wxCommandEvent& WXUNUSED(event))
+{
+    DoIndexFind();
+}
+
+void wxHtmlHelpWindow::DoIndexFind()
 {
     wxString sr = m_IndexText->GetLineText(0);
     sr.MakeLower();
     if (sr == wxEmptyString)
     {
-        OnIndexAll(event);
+        DoIndexAll();
     }
     else
     {
@@ -1654,12 +1658,17 @@ void wxHtmlHelpWindow::OnIndexFind(wxCommandEvent& event)
         cnttext.Printf(_("%i of %i"), displ, cnt);
         m_IndexCountInfo->SetLabel(cnttext);
 
-        m_IndexText->SetSelection(0, sr.Length());
+        m_IndexText->SetSelection(0, sr.length());
         m_IndexText->SetFocus();
     }
 }
 
 void wxHtmlHelpWindow::OnIndexAll(wxCommandEvent& WXUNUSED(event))
+{
+    DoIndexAll();
+}
+
+void wxHtmlHelpWindow::DoIndexAll()
 {
     wxBusyCursor bcur;
 

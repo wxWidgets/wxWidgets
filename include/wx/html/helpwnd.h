@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpwnd.h
+// Name:        wx/html/helpwnd.h
 // Purpose:     wxHtmlHelpWindow
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
@@ -252,6 +252,8 @@ protected:
     int m_hfStyle;
 
 private:
+    void DoIndexFind();
+    void DoIndexAll();
     void DisplayIndexItem(const wxHtmlHelpMergedIndexItem *it);
     wxHtmlHelpMergedIndex *m_mergedIndex;
 
@@ -327,4 +329,3 @@ END_DECLARE_EVENT_TYPES()
 #endif // wxUSE_WXHTML_HELP
 
 #endif
-
