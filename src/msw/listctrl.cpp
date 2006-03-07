@@ -2544,12 +2544,12 @@ static WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
 
 
     // set the colours to use for text drawing
-    pLVCD->clrText = wxColourToRGB(attr->HasTextColour()
-                                    ? attr->GetTextColour()
-                                    : listctrl->GetTextColour());
-    pLVCD->clrTextBk = wxColourToRGB(attr->HasBackgroundColour()
-                                        ? attr->GetBackgroundColour()
-                                        : listctrl->GetBackgroundColour());
+    pLVCD->clrText = attr->HasTextColour()
+                     ? wxColourToRGB(attr->GetTextColour())
+                     : wxColourToRGB(listctrl->GetTextColour());
+    pLVCD->clrTextBk = attr->HasBackgroundColour()
+                       ? wxColourToRGB(attr->GetBackgroundColour())
+                       : wxColourToRGB(listctrl->GetBackgroundColour());
 
     // select the font if non default one is specified
     if ( attr->HasFont() )
