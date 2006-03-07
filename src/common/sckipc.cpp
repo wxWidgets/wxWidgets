@@ -163,14 +163,14 @@ wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
                                                const wxString& serverName,
                                                const wxString& topic)
 {
+  wxSockAddress *addr = GetAddressFromName(serverName, host);
+  if ( !addr )
+      return NULL;
+
   wxSocketClient *client = new wxSocketClient(SCKIPC_FLAGS);
   wxSocketStream *stream = new wxSocketStream(*client);
   wxDataInputStream *data_is = new wxDataInputStream(*stream);
   wxDataOutputStream *data_os = new wxDataOutputStream(*stream);
-
-  wxSockAddress *addr = GetAddressFromName(serverName, host);
-  if ( !addr )
-      return NULL;
 
   bool ok = client->Connect(*addr);
   delete addr;
