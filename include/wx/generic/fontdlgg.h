@@ -71,21 +71,26 @@ public:
 #endif
 
 protected:
-    // common part of all ctors
-    void Init();
 
     virtual bool DoCreate(wxWindow *parent);
 
-    wxFont dialogFont;
+private:
 
-    wxChoice *familyChoice;
-    wxChoice *styleChoice;
-    wxChoice *weightChoice;
-    wxChoice *colourChoice;
-    wxCheckBox *underLineCheckBox;
+    // common part of all ctors
+    void Init();
+
+    void DoChangeFont();
+
+    wxFont m_dialogFont;
+
+    wxChoice *m_familyChoice;
+    wxChoice *m_styleChoice;
+    wxChoice *m_weightChoice;
+    wxChoice *m_colourChoice;
+    wxCheckBox *m_underLineCheckBox;
 
 #if !USE_SPINCTRL_FOR_POINT_SIZE
-    wxChoice   *pointSizeChoice;
+    wxChoice   *m_pointSizeChoice;
 #endif
 
     wxFontPreviewer *m_previewer;
