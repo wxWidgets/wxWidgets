@@ -55,8 +55,7 @@ wxObject *wxWizardXmlHandler::DoCreateResource()
     }
     else
     {
-        wxWizardPage *page = NULL;
-        wxUnusedVar(page);
+        wxWizardPage *page;
 
         if (m_class == wxT("wxWizardPageSimple"))
         {
@@ -69,13 +68,14 @@ wxObject *wxWizardXmlHandler::DoCreateResource()
         }
         else /*if (m_class == wxT("wxWizardPage"))*/
         {
-            wxWizardPage *p = NULL;
-            if (m_instance)
-                p = wxStaticCast(m_instance, wxWizardPage);
-            else
+            if ( !m_instance )
+            {
                 wxLogError(wxT("wxWizardPage is abstract class, must be subclassed"));
-            p->Create(m_wizard, GetBitmap());
-            page = p;
+                return NULL;
+            }
+
+            page = wxStaticCast(m_instance, wxWizardPage);
+            page->Create(m_wizard, GetBitmap());
         }
 
         page->SetName(GetName());
