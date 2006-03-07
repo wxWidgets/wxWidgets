@@ -297,7 +297,7 @@ void wxFileData::ReadData()
                          buff.st_mode & wxS_IWOTH ? _T('w') : _T('-'),
                          buff.st_mode & wxS_IXOTH ? _T('x') : _T('-'));
 #elif defined(__WIN32__)
-    DWORD attribs = GetFileAttributes(m_filePath.fn_str());
+    DWORD attribs = ::GetFileAttributes(m_filePath.c_str());
     if (attribs != (DWORD)-1)
     {
         m_permissions.Printf(_T("%c%c%c%c"),
