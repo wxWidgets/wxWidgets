@@ -872,8 +872,8 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
 
     unsigned char* data = image.GetData();
 
-    /* buffer = line = width*rgb(3)*hexa(2)+'\n'(1)+null(1) */
-    char* buffer = new char[ w*6+2 ];
+    // size of the buffer = width*rgb(3)*hexa(2)+'\n'
+    wxCharBuffer buffer(w*6 + 1);
     int firstDigit, secondDigit;
 
     //rows
