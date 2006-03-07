@@ -155,7 +155,7 @@ __DLLFLAG_p = -DWXUSINGDLL
 !if "$(SHARED)" == "1"
 __DLLFLAG_p_1 = -dWXUSINGDLL
 !endif
-!if "$(MONOLITHIC)" == "0"
+!if "$(MONOLITHIC)" == "0" && "$(USE_MEDIA)" == "1"
 __WXLIB_MEDIA_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media.lib
 !endif
