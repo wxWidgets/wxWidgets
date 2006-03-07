@@ -1465,17 +1465,16 @@ wxFileTypeImpl::SetCommand(const wxString& cmd,
     wxArrayString strExtensions;
     wxString strDesc, strIcon;
 
+    wxArrayString strTypes;
+    GetMimeTypes(strTypes);
+    if ( strTypes.IsEmpty() )
+        return false;
+
     wxMimeTypeCommands *entry = new wxMimeTypeCommands();
     entry->Add(verb + wxT("=")  + cmd + wxT(" %s "));
 
-    wxArrayString strTypes;
-    GetMimeTypes(strTypes);
-    if (strTypes.GetCount() < 1)
-        return false;
-
-    size_t i;
     bool ok = true;
-    for (i = 0; i < strTypes.GetCount(); i++)
+    for ( size_t i = 0; i < strTypes.GetCount(); i++ )
     {
         if (!m_manager->DoAssociation(strTypes[i], strIcon, entry, strExtensions, strDesc))
             ok = false;
