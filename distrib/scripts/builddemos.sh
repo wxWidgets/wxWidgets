@@ -7,12 +7,23 @@
 PROGNAME=$0
 WXSRCDIR=$WXWIN
 WXDESTDIR=$WXSRCDIR/deliver
+PLATFORM=linux
 
 # Default binary subdirectory to copy sample executable from
 WINBINDIR=vc_msw
 
 # Suffix to append to each demo tarball, e.g. SuSE92 for widgets-SuSE92
 SUFFIX=linux
+
+# Determine if the binary name is .app or not
+determine_binary()
+{
+    if [ "$PLATFORM" = "mac" ]; then
+        BINARYNAME=$1.app
+    else
+        BINARYNAME=$1
+    fi
+}
 
 dobuilddemos_unix()
 {
@@ -28,7 +39,7 @@ dobuilddemos_unix()
         echo Cannot find samples directory. Invoke this script from the root of the build folder.
         exit
     fi
-    if [ -d src ] ; then
+    if [ -d include ] ; then
         echo Do not invoke this from the source directory - invoke from the build directory.
         exit
     fi
@@ -45,8 +56,9 @@ dobuilddemos_unix()
     pushd samples/dialogs
     make
     if [ -f dialogs ] ; then
+        determine_binary dialogs
         cp $WXSRCDIR/samples/dialogs/*.cpp $WXSRCDIR/samples/dialogs/*.h .
-        tar cfz $WXDESTDIR/wxWidgets-DialogsDemo-$SUFFIX.tar.gz dialogs *.cpp *.h
+        tar cfz $WXDESTDIR/wxWidgets-DialogsDemo-$SUFFIX.tar.gz $BINARYNAME *.cpp *.h
         rm -f *.cpp *.h
     else
         echo "*** Warning: dialogs sample did not build"
@@ -58,9 +70,15 @@ dobuilddemos_unix()
     pushd samples/html/test
     make
     if [ -f test ] ; then
-        mv test htmldemo
+        if [ "$PLATFORM" = "mac" ]; then
+            # Don't rename app on Mac in case it messes up the bundle
+            determine_binary test
+        else
+            mv test htmldemo
+            determine_binary htmldemo
+        fi
         cp $WXSRCDIR/samples/html/test/*.cpp $WXSRCDIR/samples/html/test/*.htm* $WXSRCDIR/samples/html/test/*.png $WXSRCDIR/samples/html/test/*.gif .
-        tar cfz $WXDESTDIR/wxWidgets-HtmlDemo-$SUFFIX.tar.gz htmldemo *.cpp *.png *.gif *.htm*
+        tar cfz $WXDESTDIR/wxWidgets-HtmlDemo-$SUFFIX.tar.gz $BINARYNAME *.cpp *.png *.gif *.htm*
         rm -f *.cpp *.gif *.png *.htm*
     else
         echo "*** Warning: HTML sample did not build"
@@ -72,8 +90,9 @@ dobuilddemos_unix()
     pushd samples/widgets
     make
     if [ -f widgets ] ; then
+        determine_binary widgets
         cp $WXSRCDIR/samples/widgets/*.cpp $WXSRCDIR/samples/widgets/*.h .
-        tar cfz $WXDESTDIR/wxWidgets-WidgetsDemo-$SUFFIX.tar.gz widgets *.cpp *.h
+        tar cfz $WXDESTDIR/wxWidgets-WidgetsDemo-$SUFFIX.tar.gz $BINARYNAME *.cpp *.h
         rm -f *.cpp *.h
     else
         echo "*** Warning: widgets sample did not build"
@@ -85,10 +104,11 @@ dobuilddemos_unix()
     pushd demos/life
     make
     if [ -f life ] ; then
+        determine_binary life
         cp $WXSRCDIR/demos/life/*.cpp $WXSRCDIR/demos/life/*.h $WXSRCDIR/demos/life/*.xpm $WXSRCDIR/demos/life/*.inc $WXSRCDIR/demos/life/*.lif .
         mkdir bitmaps
         cp $WXSRCDIR/demos/life/bitmaps/*.* bitmaps
-        tar cfz $WXDESTDIR/wxWidgets-LifeDemo-$SUFFIX.tar.gz life *.cpp *.h *.xpm *.inc *.lif bitmaps/*.*
+        tar cfz $WXDESTDIR/wxWidgets-LifeDemo-$SUFFIX.tar.gz $BINARYNAME *.cpp *.h *.xpm *.inc *.lif bitmaps/*.*
         rm -f *.cpp *.h *.xpm *.inc *.lif
         rm -f -r bitmaps
     else
@@ -174,6 +194,7 @@ usage()
     echo "    --suffix          Append suffix to each tarball"
     echo "    --wxdir           wxWidgets source dir"
     echo "    --deliver         Tarball destination dir"
+    echo "    --mac             Whether we're building on Mac"
     echo.
     echo Note that options only override settings in $SCRIPTDIR/setup.var.
     exit 1
@@ -187,6 +208,7 @@ do
         --suffix) SUFFIX=$2; shift;;
         --wxdir) WXSRCDIR=$2; WXDESTDIR=$WXSRCDIR/deliver; shift;;
         --deliver) WXDESTDIR=$2; shift;;
+        --mac) PLATFORM=mac;;
         *)
             usage
 	        exit
@@ -195,10 +217,11 @@ do
     shift
 done
 
-if [ $OS == "Windows_NT" ] ; then
+if [ "$OS" = "Windows_NT" ]; then
     dobuilddemos_windows
 else
-    dobuilddemos_linux
+    dobuilddemos_unix
 fi
+
 
 
