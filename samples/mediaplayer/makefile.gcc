@@ -147,8 +147,10 @@ ifeq ($(SHARED),1)
 __DLLFLAG_p_1 = --define WXUSINGDLL
 endif
 ifeq ($(MONOLITHIC),0)
+ifeq ($(USE_MEDIA),1)
 __WXLIB_MEDIA_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media
+endif
 endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_CORE_p = \
