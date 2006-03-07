@@ -1159,19 +1159,24 @@ void wxGridCellFloatEditor::SetParameters(const wxString& params)
 wxString wxGridCellFloatEditor::GetString() const
 {
     wxString fmt;
-    if ( m_width == -1 )
-    {
-        // default width/precision
-        fmt = _T("%f");
-    }
-    else if ( m_precision == -1 )
+    if ( m_precision == -1 && m_width != -1)
     {
         // default precision
         fmt.Printf(_T("%%%d.f"), m_width);
     }
-    else
+    else if ( m_precision != -1 && m_width == -1)
+    {
+        // default width
+        fmt.Printf(_T("%%.%df"), m_precision);
+    }
+    else if ( m_precision != -1 && m_width != -1 )
     {
         fmt.Printf(_T("%%%d.%df"), m_width, m_precision);
+    }
+    else
+    {
+        // default width/precision
+        fmt = _T("%f");
     }
 
     return wxString::Format(fmt, m_valueOld);
