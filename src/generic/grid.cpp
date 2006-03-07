@@ -5821,7 +5821,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         // Dragging on the corner of a cell to resize in both
         // directions is not implemented yet...
         //
-        if ( dragRow >= 0  &&  dragCol >= 0 )
+        if ( dragRow >= 0 && dragCol >= 0 )
         {
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
             return;
@@ -5836,16 +5836,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 if ( CanDragRowSize() && CanDragGridSize() )
                     ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW);
             }
-
-            if ( dragCol >= 0 )
-            {
-                m_dragRowOrCol = dragCol;
-            }
-
-            return;
         }
-
-        if ( dragCol >= 0 )
+        else if ( dragCol >= 0 )
         {
             m_dragRowOrCol = dragCol;
 
@@ -5854,15 +5846,13 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 if ( CanDragColSize() && CanDragGridSize() )
                     ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL);
             }
-
-            return;
         }
-
-        // Neither on a row or col edge
-        //
-        if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
+        else // Neither on a row or col edge
         {
-            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
+            if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
+            {
+                ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
+            }
         }
     }
 }
