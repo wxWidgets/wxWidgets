@@ -81,7 +81,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
     str << wxT("<table border=0 cellpadding=0 cellspacing=0><tr><td width=\"100%\">");
     
     str << wxString::Format(wxT("<font face=\"%s\" size=\"%i\" color=\"#%02X%02X%02X\" >"),
-        currentParaStyle.GetFont().GetFaceName(), Pt_To_Size( currentParaStyle.GetFont().GetPointSize() ), 
+        currentParaStyle.GetFont().GetFaceName().c_str(), Pt_To_Size( currentParaStyle.GetFont().GetPointSize() ), 
         currentParaStyle.GetTextColour().Red(), currentParaStyle.GetTextColour().Green(),
         currentParaStyle.GetTextColour().Blue());
     
@@ -162,7 +162,7 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
                 //Get the appropriate tag, an ol for numerical values, an ul for dot, square etc.
                 wxString tag;
                 TypeOfList(thisStyle, tag);
-                str << wxString::Format(wxT("%s<li>"), tag);
+                str << tag << wxT("<li>");
             }
         }
         else
@@ -175,7 +175,7 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
             //Get the appropriate tag, an ol for numerical values, an ul for dot, square etc.
             wxString tag;
             TypeOfList(thisStyle, tag);
-            str << wxString::Format(wxT("%s<li>"), tag);
+            str << tag << wxT("<li>");
             
             //Now we have a list, mark it.
             m_list = true;
@@ -202,8 +202,7 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
                 {
                     if( thisStyle.GetLeftSubIndent() < 0 )
                     {
-                        wxString symbolic_indent = SymbolicIndent(~thisStyle.GetLeftSubIndent());
-                        str << wxString::Format(wxT("%s"), symbolic_indent);
+                        str << SymbolicIndent(~thisStyle.GetLeftSubIndent());
                     }
                 }
                 else
@@ -231,8 +230,7 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
                             {
                                 if( thisStyle.GetLeftSubIndent() < 0 )
                                 {
-                                    wxString symbolic_indent = SymbolicIndent(~thisStyle.GetLeftSubIndent());
-                                    str << wxString::Format(wxT("%s"), symbolic_indent);
+                                    str << SymbolicIndent(~thisStyle.GetLeftSubIndent());
                                 }
                                 break;
                             }
@@ -274,14 +272,18 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
     
     //Is there any change on the font properties of the item
     if( thisStyle.GetFont().GetFaceName() != currentStyle.GetFont().GetFaceName() )
-        style += wxString::Format(wxT(" face=\"%s\""), thisStyle.GetFont().GetFaceName());
+        style += wxString::Format(wxT(" face=\"%s\""), thisStyle.GetFont().GetFaceName().c_str());
     if( thisStyle.GetFont().GetPointSize() != currentStyle.GetFont().GetPointSize() )
         style += wxString::Format(wxT(" size=\"%i\""), Pt_To_Size(thisStyle.GetFont().GetPointSize()) );
     if( thisStyle.GetTextColour() != currentStyle.GetTextColour() )
         style += wxString::Format(wxT(" color=\"#%02X%02X%02X\""), thisStyle.GetTextColour().Red(), 
         thisStyle.GetTextColour().Green(), thisStyle.GetTextColour().Blue());
     
-    if( style.size() ){str << wxString::Format(wxT("<font %s >"), style); m_font = true;}
+    if( style.size() )
+    {
+        str << wxString::Format(wxT("<font %s >"), style.c_str());
+        m_font = true;
+    }
     
     if( thisStyle.GetFont().GetWeight() == wxBOLD )
         str << wxT("<b>");
@@ -317,7 +319,7 @@ void wxRichTextHTMLHandler::OutputParagraphFormatting(const wxTextAttrEx& WXUNUS
     {
         wxTextOutputStream str(stream);
         wxString align = GetAlignment( thisStyle );
-        str << wxString::Format(wxT("<p align=\"%s\">"), align);
+        str << wxString::Format(wxT("<p align=\"%s\">"), align.c_str());
     }
 }
 
@@ -393,13 +395,12 @@ void wxRichTextHTMLHandler::Indent( const wxTextAttrEx& thisStyle, wxTextOutputS
     str << wxT("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
     
     wxString symbolic_indent = SymbolicIndent( (thisStyle.GetLeftIndent() + thisStyle.GetLeftSubIndent()) - m_indent );
-    str << wxString::Format( wxT("<td>%s</td>"), symbolic_indent );
+    str << wxString::Format( wxT("<td>%s</td>"), symbolic_indent.c_str() );
     str << wxT("<td width=\"100%\">");
     
     if( thisStyle.GetLeftSubIndent() < 0 )
     {
-        symbolic_indent = SymbolicIndent(~thisStyle.GetLeftSubIndent());
-        str << wxString::Format(wxT("%s"), symbolic_indent);
+        str << SymbolicIndent(~thisStyle.GetLeftSubIndent());
     }
 }
 
@@ -432,7 +433,7 @@ void wxRichTextHTMLHandler::LIndent( const wxTextAttrEx& thisStyle, wxTextOutput
     str << wxT("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
     
     wxString symbolic_indent = SymbolicIndent( (thisStyle.GetLeftIndent() - m_indent) - 100);
-    str << wxString::Format( wxT("<td>%s</td>"), symbolic_indent );
+    str << wxString::Format( wxT("<td>%s</td>"), symbolic_indent.c_str() );
     str << wxT("<td width=\"100%\">");
 }
 
@@ -513,7 +514,7 @@ wxString wxRichTextHTMLHandler::SymbolicIndent(long indent)
     return in;
 }
 
-wxChar* wxRichTextHTMLHandler::GetMimeType(int imageType)
+const wxChar* wxRichTextHTMLHandler::GetMimeType(int imageType)
 {
     switch(imageType)
     {
@@ -539,7 +540,7 @@ wxChar* wxRichTextHTMLHandler::b64enc( unsigned char* input, size_t in_len )
     //otherwise encoder will fail
     //hmmm.. Does wxT macro define a char as 16 bit value
     //when compiling with UNICODE option? 
-    const static wxChar* enc64 = wxT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
+    static const wxChar enc64[] = wxT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
     wxChar* output = new wxChar[4*((in_len+2)/3)+1];
     wxChar* p = output;
     

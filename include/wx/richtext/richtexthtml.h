@@ -69,7 +69,7 @@ protected:
 	wxChar* b64enc( unsigned char* input, size_t in_len );
 	
 	/// Gets the mime type of the given wxBITMAP_TYPE
-	wxChar* GetMimeType(int imageType);
+    const wxChar* GetMimeType(int imageType);
 	
 	/// Gets the html equivalent of the specified value
 	wxString GetAlignment( const wxTextAttrEx& thisStyle );
