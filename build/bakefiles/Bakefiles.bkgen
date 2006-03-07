@@ -21,9 +21,11 @@
                 be placed into build/msw(?) directory and store object files
                 in its subdirectory and it must copy setup.h as others do.
     cbx_unix  - Doesn't integrate well and won't be used by most Unix people.
+    dmars, dmars_smake, msevc4prj - These are generated at release time and
+                we don't want to clutter the source tree with these files.
     -->
 
-    <disable-formats>cbx_unix,cbuilderx</disable-formats>
+    <disable-formats>dmars,dmars_smake,msevc4prj,cbx_unix,cbuilderx</disable-formats>
 
 
     <!-- These wildcards match all .bkl files in wxWidgets tree: -->
