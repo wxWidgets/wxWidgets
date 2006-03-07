@@ -999,7 +999,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
 
     if (!wxDialog::Create( parent, wxID_ANY, message, pos, wxDefaultSize,
                            wxDEFAULT_DIALOG_STYLE
-#ifndef __WXWINCE__
+#if !(defined(__PDA__) || defined(__SMARTPHONE__))
                            | wxRESIZE_BORDER
 #endif
                            ))
@@ -1296,9 +1296,7 @@ void wxGenericFileDialog::OnActivated( wxListEvent &event )
 
 void wxGenericFileDialog::OnTextEnter( wxCommandEvent &WXUNUSED(event) )
 {
-    wxCommandEvent cevent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
-    cevent.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( cevent );
+    HandleAction( m_text->GetValue() );
 }
 
 void wxGenericFileDialog::OnTextChange( wxCommandEvent &WXUNUSED(event) )
@@ -1358,8 +1356,7 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
     if (filename.empty())
     {
 #ifdef __WXWINCE__
-        wxCommandEvent event;
-        wxDialog::OnCancel(event);
+        EndModal(wxID_CANCEL);
 #endif
         return;
     }
@@ -1482,8 +1479,7 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
         }
     }
 
-    wxCommandEvent event;
-    wxDialog::OnOK(event);
+    EndModal(wxID_OK);
 }
 
 void wxGenericFileDialog::OnListOk( wxCommandEvent &WXUNUSED(event) )
