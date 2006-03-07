@@ -134,6 +134,10 @@
     #define LVS_EX_SUBITEMIMAGES 0x00000002
 #endif
 
+#ifndef HDN_GETDISPINFOW
+    #define HDN_GETDISPINFOW (HDN_FIRST-29)
+#endif
+
  /*
   * In addition to the above, the following are required for several compilers.
   */
@@ -206,10 +210,6 @@
 
 #ifndef HDM_GETITEMRECT
     #define HDM_GETITEMRECT (HDM_FIRST+7)
-#endif
-
-#ifndef HDN_GETDISPINFOW
-    #define HDN_GETDISPINFOW (HDN_FIRST-29)
 #endif
 
 #ifndef ListView_GetHeader
