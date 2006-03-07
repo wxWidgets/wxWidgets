@@ -412,79 +412,81 @@ dospininstaller()
     zip $ZIPFLAGS -r wxMSW-$VERSION.zip wxWidgets-$VERSION/*
     cd wxWidgets-$VERSION
 
-    echo Generating $SETUPSCRIPTNAME
-    rm -f $SETUPSCRIPTNAME
-
-    sh $SCRIPTDIR/msw/makeinno.sh $SETUPIMAGEDIR $INNOTOP $INNOBOTTOM $SETUPSCRIPTNAME
-
-    if [ ! -f $SETUPSCRIPTNAME ]; then
-        echo "*** Error - something went wrong with the script file generation."
-        exit 1
-    fi
-
-    # Now replace %VERSION% with the real application version, and other
-    # variables
-    echo Replacing variables in the setup script
-    doreplace $SETUPSCRIPTNAME "s/%VERSION%/$VERSION/g"
-    doreplace $SETUPSCRIPTNAME "s/%COPYRIGHTHOLDER%/$AUTHOR/g"
-    doreplace $SETUPSCRIPTNAME "s/%VENDOR%/$VENDOR/g"
-
-    unix2dosname $READMEFILE
-    doreplace $SETUPSCRIPTNAME "s;%READMEFILE%;$RETVALUE;g"
-
-    unix2dosname $READMEAFTERFILE
-    doreplace $SETUPSCRIPTNAME "s;%READMEAFTERFILE%;$RETVALUE;g"
-
-    unix2dosname $LICENSEFILE
-    doreplace $SETUPSCRIPTNAME "s;%LICENSEFILE%;$RETVALUE;g"
-
-    doreplace $SETUPSCRIPTNAME "s/%APPNAME%/$APPNAME/g"
-    doreplace $SETUPSCRIPTNAME "s/%APPTITLE%/$APPTITLE/g"
-
-    unix2dosname $SETUPIMAGEDIR
-    doreplace $SETUPSCRIPTNAME "s;%SOURCEDIR%;$RETVALUE;g"
-
-    unix2dosname $DESTDIR
-    doreplace $SETUPSCRIPTNAME "s;%OUTPUTDIR%;$RETVALUE;g"
-
-    doreplace $SETUPSCRIPTNAME "s/%APPEXTENSION%/$APPEXTENSION/g"
-
-    # FIXME: how do we get the first name in the list?
-	if [ "$MANUALFILES" != "" ]; then
-	    HELPFILE=`basename $MANUALFILES`
-		unix2dosname $HELPFILE
-		doreplace $SETUPSCRIPTNAME "s;%HELPFILE%;$RETVALUE;g"
-    fi
-
-    rm -f $DESTDIR/setup*.* $DESTDIR/wxMSW-$VERSION-Setup.exe
-
-    # Inno Setup complains if this step is not done
-    unix2dos --unix2dos $SETUPSCRIPTNAME
+    if ["$INNO" != "0"]; then
+        echo Generating $SETUPSCRIPTNAME
+        rm -f $SETUPSCRIPTNAME
     
-    # Now invoke INNO compiler on the new ISS file
-    # First, make a DOS filename or Inno Setup will get confused.
+        sh $SCRIPTDIR/msw/makeinno.sh $SETUPIMAGEDIR $INNOTOP $INNOBOTTOM $SETUPSCRIPTNAME
+    
+        if [ ! -f $SETUPSCRIPTNAME ]; then
+            echo "*** Error - something went wrong with the script file generation."
+            exit 1
+        fi
+    
+        # Now replace %VERSION% with the real application version, and other
+        # variables
+        echo Replacing variables in the setup script
+        doreplace $SETUPSCRIPTNAME "s/%VERSION%/$VERSION/g"
+        doreplace $SETUPSCRIPTNAME "s/%COPYRIGHTHOLDER%/$AUTHOR/g"
+        doreplace $SETUPSCRIPTNAME "s/%VENDOR%/$VENDOR/g"
+    
+        unix2dosname $READMEFILE
+        doreplace $SETUPSCRIPTNAME "s;%READMEFILE%;$RETVALUE;g"
+    
+        unix2dosname $READMEAFTERFILE
+        doreplace $SETUPSCRIPTNAME "s;%READMEAFTERFILE%;$RETVALUE;g"
+    
+        unix2dosname $LICENSEFILE
+        doreplace $SETUPSCRIPTNAME "s;%LICENSEFILE%;$RETVALUE;g"
+    
+        doreplace $SETUPSCRIPTNAME "s/%APPNAME%/$APPNAME/g"
+        doreplace $SETUPSCRIPTNAME "s/%APPTITLE%/$APPTITLE/g"
+    
+        unix2dosname $SETUPIMAGEDIR
+        doreplace $SETUPSCRIPTNAME "s;%SOURCEDIR%;$RETVALUE;g"
+    
+        unix2dosname $DESTDIR
+        doreplace $SETUPSCRIPTNAME "s;%OUTPUTDIR%;$RETVALUE;g"
+    
+        doreplace $SETUPSCRIPTNAME "s/%APPEXTENSION%/$APPEXTENSION/g"
+    
+        # FIXME: how do we get the first name in the list?
+        if [ "$MANUALFILES" != "" ]; then
+            HELPFILE=`basename $MANUALFILES`
+            unix2dosname $HELPFILE
+            doreplace $SETUPSCRIPTNAME "s;%HELPFILE%;$RETVALUE;g"
+        fi
+    
+        rm -f $DESTDIR/setup*.* $DESTDIR/wxMSW-$VERSION-Setup.exe
+    
+        # Inno Setup complains if this step is not done
+        unix2dos --unix2dos $SETUPSCRIPTNAME
+        
+        # Now invoke INNO compiler on the new ISS file
+        # First, make a DOS filename or Inno Setup will get confused.
+    
+        unix2dosname2 $SETUPSCRIPTNAME
+        DOSFILENAME=$RETVALUE
+    
+        # Note: the double slash is Mingw32/MSYS convention for
+        # denoting a switch, that must not be converted into
+        # a path (otherwise /c = c:/)
+    
+        cd `dirname $SETUPSCRIPTNAME`
+        BASESCRIPTNAME=`basename $SETUPSCRIPTNAME`
+        echo Invoking Inno Setup compiler on $BASESCRIPTNAME
+    
+        "$SETUPCOMPILER" //cc $BASESCRIPTNAME
+    
+        if [ ! -f $DESTDIR/setup.exe ]; then
+            echo "*** Error - the setup.exe was not generated."
+            exit
+        fi
+    
+        cd $DESTDIR
+        mv setup.exe wxMSW-$VERSION-Setup.exe
 
-    unix2dosname2 $SETUPSCRIPTNAME
-    DOSFILENAME=$RETVALUE
-
-    # Note: the double slash is Mingw32/MSYS convention for
-    # denoting a switch, that must not be converted into
-    # a path (otherwise /c = c:/)
-
-    cd `dirname $SETUPSCRIPTNAME`
-    BASESCRIPTNAME=`basename $SETUPSCRIPTNAME`
-    echo Invoking Inno Setup compiler on $BASESCRIPTNAME
-
-    "$SETUPCOMPILER" //cc $BASESCRIPTNAME
-
-    if [ ! -f $DESTDIR/setup.exe ]; then
-        echo "*** Error - the setup.exe was not generated."
-        exit
     fi
-
-    cd $DESTDIR
-    mv setup.exe wxMSW-$VERSION-Setup.exe
-
     # echo Putting all the setup files into a single zip archive
     # zip wxMSW-$VERSION-setup.zip readme-$VERSION.txt setup*.*
 
@@ -614,46 +616,10 @@ makesetup()
     # Do misc files spin
     dospinmisc
 
-    cp $APPDIR/docs/changes.txt $DESTDIR/changes-$VERSION.txt
-    cp $APPDIR/docs/readme.txt $DESTDIR/readme-$VERSION.txt
-
-    cp $APPDIR/docs/msw/readme.txt $DESTDIR/readme-msw-$VERSION.txt
-    cp $APPDIR/docs/msw/install.txt $DESTDIR/install-msw-$VERSION.txt
-
-    cp $APPDIR/docs/mac/readme.txt $DESTDIR/readme-mac-$VERSION.txt
-    cp $APPDIR/docs/mac/install.txt $DESTDIR/install-mac-$VERSION.txt
-
-    cp $APPDIR/docs/motif/readme.txt $DESTDIR/readme-motif-$VERSION.txt
-    cp $APPDIR/docs/motif/install.txt $DESTDIR/install-motif-$VERSION.txt
-
-    cp $APPDIR/docs/gtk/readme.txt $DESTDIR/readme-gtk-$VERSION.txt
-    cp $APPDIR/docs/gtk/install.txt $DESTDIR/install-gtk-$VERSION.txt
-
-    cp $APPDIR/docs/x11/readme.txt $DESTDIR/readme-x11-$VERSION.txt
-#    cp $APPDIR/docs/x11/readme-nanox.txt $DESTDIR/readme-nanox-$VERSION.txt
-    cp $APPDIR/docs/x11/install.txt $DESTDIR/install-x11-$VERSION.txt
-
-    cp $APPDIR/docs/mgl/readme.txt $DESTDIR/readme-mgl-$VERSION.txt
-    cp $APPDIR/docs/mgl/install.txt $DESTDIR/install-mgl-$VERSION.txt
-
-    cp $APPDIR/docs/cocoa/readme.txt $DESTDIR/readme-cocoa-$VERSION.txt
-    cp $APPDIR/docs/cocoa/install.txt $DESTDIR/install-cocoa-$VERSION.txt
-
-    cp $APPDIR/docs/base/readme.txt $DESTDIR/readme-base-$VERSION.txt
-
-    cp $APPDIR/docs/os2/install.txt $DESTDIR/install-os2-$VERSION.txt
-
-    cp $APPDIR/docs/univ/readme.txt $DESTDIR/readme-univ-$VERSION.txt
-
-    cp $APPDIR/docs/readme_vms.txt $DESTDIR/readme-vms-$VERSION.txt
-
-    # cp $APPDIR/docs/motif/makewxmotif $DESTDIR/makewxmotif-$VERSION
-    # cp $APPDIR/docs/gtk/makewxgtk $DESTDIR/makewxgtk-$VERSION
+    docopydocs $APPDIR $DESTDIR
     
     # Time to regenerate the Inno Install script
-    if [ "$INNO" != "0" ]; then
-        dospininstaller
-    fi
+    dospininstaller
 }
 
 # Get the makefiles that aren't in CVS and unarchive them
@@ -700,6 +666,7 @@ usage()
 # Process command line options.
 
 for i in "$@"; do
+
     case "$i" in
 	--inno) INNO=1 ;;
 	--no-inno) INNO=0 ;;
