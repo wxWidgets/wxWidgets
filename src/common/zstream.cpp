@@ -284,8 +284,8 @@ size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
 
   if (!m_deflate || !m_z_buffer)
   {
+    // notice that this will make IsOk() test just below return false
     m_lasterror = wxSTREAM_WRITE_ERROR;
-    return 0;
   }
 
   if (!IsOk() || !size)
