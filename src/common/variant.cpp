@@ -470,7 +470,7 @@ bool wxVariantDataReal::Write(wxSTD ostream& str) const
 
 bool wxVariantDataReal::Write(wxString& str) const
 {
-    str.Printf(wxT("%.4f"), m_value);
+    str.Printf(wxT("%.14g"), m_value);
     return true;
 }
 
