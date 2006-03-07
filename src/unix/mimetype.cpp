@@ -1493,19 +1493,26 @@ bool wxFileTypeImpl::SetDefaultIcon(const wxString& strIcon, int WXUNUSED(index)
     wxArrayString strExtensions;
     wxString strDesc;
 
-    wxMimeTypeCommands *entry = new wxMimeTypeCommands();
-
     wxArrayString strTypes;
     GetMimeTypes(strTypes);
-    if (strTypes.GetCount() < 1)
+    if ( strTypes.IsEmpty() )
         return false;
 
-    size_t i;
+    wxMimeTypeCommands *entry = new wxMimeTypeCommands();
     bool ok = true;
-    for (i = 0; i < strTypes.GetCount(); i++)
+    for ( size_t i = 0; i < strTypes.GetCount(); i++ )
     {
-        if (!m_manager->DoAssociation(strTypes[i], strIcon, entry, strExtensions, strDesc))
+        if ( !m_manager->DoAssociation
+                         (
+                            strTypes[i],
+                            strIcon,
+                            entry,
+                            strExtensions,
+                            strDesc
+                         ) )
+        {
             ok = false;
+        }
     }
 
     return ok;
