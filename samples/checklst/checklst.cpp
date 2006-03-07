@@ -66,7 +66,6 @@ public:
     void OnAppendItems(wxCommandEvent& event);
     void OnRemoveItems(wxCommandEvent& event);
 
-    void OnGetItemHeight(wxCommandEvent& event);
     void OnGetBestSize(wxCommandEvent& event);
 
     void OnMakeItemFirst(wxCommandEvent& event);
@@ -108,7 +107,6 @@ enum
     Menu_InsertItemsEnd,
     Menu_AppendItems,
     Menu_RemoveItems,
-    Menu_GetItemHeight,
     Menu_GetBestSize,
     Menu_MakeItemFirst,
 
@@ -136,7 +134,6 @@ BEGIN_EVENT_TABLE(CheckListBoxFrame, wxFrame)
     EVT_MENU(Menu_AppendItems, CheckListBoxFrame::OnAppendItems)
     EVT_MENU(Menu_RemoveItems, CheckListBoxFrame::OnRemoveItems)
 
-    EVT_MENU(Menu_GetItemHeight, CheckListBoxFrame::OnGetItemHeight)
     EVT_MENU(Menu_GetBestSize, CheckListBoxFrame::OnGetBestSize)
 
     EVT_MENU(Menu_MakeItemFirst, CheckListBoxFrame::OnMakeItemFirst)
@@ -201,7 +198,6 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
     menuList->AppendCheckItem(Menu_Extended, _T("Extended selection"));
     menuList->AppendCheckItem(Menu_Sorting, _T("Sorting"));
     menuList->AppendSeparator();
-    menuList->Append(Menu_GetItemHeight, _T("Get the height of an item"));
     menuList->Append(Menu_GetBestSize, _T("Get the best size of the checklistbox control"));
     menuList->AppendSeparator();
     menuList->Append(Menu_MakeItemFirst, _T("Make selected item the first item"));
@@ -365,16 +361,6 @@ void CheckListBoxFrame::OnRemoveItems(wxCommandEvent& WXUNUSED(event))
         m_pListBox->Delete(0);
     if(m_pListBox->GetCount())
         m_pListBox->Delete(0);
-}
-
-void CheckListBoxFrame::OnGetItemHeight(wxCommandEvent& WXUNUSED(event))
-{
-    int height = m_pListBox->GetItemHeight();
-
-    wxMessageBox(wxString::Format(wxT("Height of an item is:%i"),
-                                  height
-                                 )
-                );
 }
 
 void CheckListBoxFrame::OnGetBestSize(wxCommandEvent& WXUNUSED(event))
