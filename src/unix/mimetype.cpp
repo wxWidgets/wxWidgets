@@ -646,7 +646,9 @@ void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename,
         nLine++;
     } // end of while, save any data
 
-    if (! curMimeType.empty())
+    if ( curMimeType.empty() )
+        delete entry;
+    else
         AddToMimeData( curMimeType, curIconFile, entry, strExtensions, strDesc);
 }
 
