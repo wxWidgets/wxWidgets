@@ -189,10 +189,22 @@
 
 #ifdef __DMC__
 
-#ifdef __DMC__
-    #ifndef _TrackMouseEvent
-        #define _TrackMouseEvent TrackMouseEvent
-    #endif
+typedef struct _OSVERSIONINFOEX {
+    DWORD dwOSVersionInfoSize;
+    DWORD dwMajorVersion;
+    DWORD dwMinorVersion;
+    DWORD dwBuildNumber;
+    DWORD dwPlatformId;
+    TCHAR szCSDVersion[ 128 ];
+    WORD  wServicePackMajor;
+    WORD  wServicePackMinor;
+    WORD  wSuiteMask;
+    BYTE  wProductType;
+    BYTE  wReserved;
+} OSVERSIONINFOEX;
+
+#ifndef _TrackMouseEvent
+    #define _TrackMouseEvent TrackMouseEvent
 #endif
 
 #ifndef LVM_SETEXTENDEDLISTVIEWSTYLE
@@ -223,6 +235,10 @@
 #ifndef LVSICF_NOSCROLL
     #define LVSICF_NOINVALIDATEALL  0x0001
     #define LVSICF_NOSCROLL         0x0002
+#endif
+
+#ifndef CP_SYMBOL
+    #define CP_SYMBOL 42
 #endif
 
 // ----------------------------------------------------------------------------
