@@ -283,7 +283,11 @@ size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
   wxASSERT_MSG(m_deflate && m_z_buffer, wxT("Deflate stream not open"));
 
   if (!m_deflate || !m_z_buffer)
+  {
     m_lasterror = wxSTREAM_WRITE_ERROR;
+    return 0;
+  }
+
   if (!IsOk() || !size)
     return 0;
 
