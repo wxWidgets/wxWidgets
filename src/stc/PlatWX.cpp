@@ -108,7 +108,7 @@ void Font::Create(const char *faceName, int characterSet, int size, bool bold, b
     // so we adjust the encoding before passing it to Scintilla.  See also
     // wxStyledTextCtrl::StyleSetCharacterSet
     wxFontEncoding encoding = (wxFontEncoding)(characterSet-1);
-    
+
     wxFontEncodingArray ea = wxEncodingConverter::GetPlatformEquivalents(encoding);
     if (ea.GetCount())
         encoding = ea[0];
@@ -667,7 +667,7 @@ END_EVENT_TABLE()
 
 
 
-#if wxUSE_POPUPWIN //-----------------------------------   
+#if wxUSE_POPUPWIN //-----------------------------------
 #include <wx/popupwin.h>
 
 
@@ -677,9 +677,9 @@ END_EVENT_TABLE()
 // implement wxPopupWindow for the Mac!!)
 //
 // In the meantime, be careful to duplicate any changes as needed...
-//    
-    
-// A popup window to place the wxSTCListBox upon    
+//
+
+// A popup window to place the wxSTCListBox upon
 class wxSTCListBoxWin : public wxPopupWindow
 {
 private:
@@ -687,7 +687,7 @@ private:
     CallBackAction      doubleClickAction;
     void*               doubleClickActionData;
 public:
-    wxSTCListBoxWin(wxWindow* parent, wxWindowID id, Point location) :
+    wxSTCListBoxWin(wxWindow* parent, wxWindowID id, Point WXUNUSED(location)) :
         wxPopupWindow(parent, wxBORDER_NONE)
     {
         SetBackgroundColour(*wxBLACK);  // for our simple border
@@ -703,7 +703,7 @@ public:
         // "right" to the user.  But since the wxPopupWindow or its children
         // can't receive focus then we have to pull a fast one and temporarily
         // parent the listctrl on the STC window and then call SetFocus and
-        // then reparent it back to the popup. 
+        // then reparent it back to the popup.
         lv->SetFocus();
         lv->Reparent(this);
 #ifdef __WXMSW__
@@ -794,7 +794,7 @@ BEGIN_EVENT_TABLE(wxSTCListBoxWin, wxPopupWindow)
     EVT_LIST_ITEM_ACTIVATED(wxID_ANY, wxSTCListBoxWin::OnActivate)
 END_EVENT_TABLE()
 
-    
+
 
 #else // wxUSE_POPUPWIN -----------------------------------
 
@@ -882,7 +882,7 @@ public:
         return rv;
     }
 #endif
-    
+
     void OnActivate(wxListEvent& WXUNUSED(event)) {
         doubleClickAction(doubleClickActionData);
     }
@@ -1055,7 +1055,7 @@ void ListBoxImpl::Append(const wxString& text, int type) {
     long count  = GETLB(id)->GetItemCount();
     long itemID  = GETLB(id)->InsertItem(count, wxEmptyString);
     GETLB(id)->SetItem(itemID, 1, text);
-    maxStrWidth = wxMax(maxStrWidth, text.Length());
+    maxStrWidth = wxMax(maxStrWidth, text.length());
     if (type != -1) {
         wxCHECK_RET(imgTypeMap, wxT("Unexpected NULL imgTypeMap"));
         long idx = imgTypeMap->Item(type);
@@ -1065,7 +1065,7 @@ void ListBoxImpl::Append(const wxString& text, int type) {
 
 void ListBoxImpl::SetList(const char* list, char separator, char typesep) {
     GETLB(id)->Freeze();
-    Clear();    
+    Clear();
     wxStringTokenizer tkzr(stc2wx(list), (wxChar)separator);
     while ( tkzr.HasMoreTokens() ) {
         wxString token = tkzr.GetNextToken();
@@ -1396,9 +1396,3 @@ const wxWX2MBbuf wx2stc(const wxString& str)
 }
 
 #endif
-
-
-
-
-
-
