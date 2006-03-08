@@ -879,7 +879,7 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
     //rows
     for (int j = 0; j < h; j++)
     {
-        char* bufferindex = buffer;
+        char* bufferindex = buffer.data();
 
         //cols
         for (int i = 0; i < w*3; i++)
