@@ -200,6 +200,11 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
     else if (m_class == wxT("wxGridBagSizer"))
         sizer = Handle_wxGridBagSizer();
 
+    if ( !sizer )
+    {
+        wxLogError(_T("Failed to create size of class \"%s\""), m_class.c_str());
+        return NULL;
+    }
 
     wxSize minsize = GetSize(wxT("minsize"));
     if (!(minsize == wxDefaultSize))
