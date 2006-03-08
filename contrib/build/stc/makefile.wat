@@ -252,19 +252,24 @@ STCDLL_OBJECTS =  &
 	$(OBJS)\stcdll_LexAsn1.obj &
 	$(OBJS)\stcdll_LexBaan.obj &
 	$(OBJS)\stcdll_LexBash.obj &
+	$(OBJS)\stcdll_LexBasic.obj &
 	$(OBJS)\stcdll_LexBullant.obj &
 	$(OBJS)\stcdll_LexCLW.obj &
 	$(OBJS)\stcdll_LexCPP.obj &
 	$(OBJS)\stcdll_LexCSS.obj &
+	$(OBJS)\stcdll_LexCaml.obj &
+	$(OBJS)\stcdll_LexCsound.obj &
 	$(OBJS)\stcdll_LexConf.obj &
 	$(OBJS)\stcdll_LexCrontab.obj &
 	$(OBJS)\stcdll_LexEScript.obj &
 	$(OBJS)\stcdll_LexEiffel.obj &
 	$(OBJS)\stcdll_LexErlang.obj &
+	$(OBJS)\stcdll_LexFlagship.obj &
 	$(OBJS)\stcdll_LexForth.obj &
 	$(OBJS)\stcdll_LexFortran.obj &
 	$(OBJS)\stcdll_LexGui4Cli.obj &
 	$(OBJS)\stcdll_LexHTML.obj &
+	$(OBJS)\stcdll_LexHaskell.obj &
 	$(OBJS)\stcdll_LexKix.obj &
 	$(OBJS)\stcdll_LexLisp.obj &
 	$(OBJS)\stcdll_LexLout.obj &
@@ -282,8 +287,11 @@ STCDLL_OBJECTS =  &
 	$(OBJS)\stcdll_LexPascal.obj &
 	$(OBJS)\stcdll_LexPerl.obj &
 	$(OBJS)\stcdll_LexPython.obj &
+	$(OBJS)\stcdll_LexRebol.obj &
 	$(OBJS)\stcdll_LexRuby.obj &
 	$(OBJS)\stcdll_LexSQL.obj &
+	$(OBJS)\stcdll_LexSmalltalk.obj &
+	$(OBJS)\stcdll_LexTADS3.obj &
 	$(OBJS)\stcdll_LexScriptol.obj &
 	$(OBJS)\stcdll_LexSpecman.obj &
 	$(OBJS)\stcdll_LexTeX.obj &
@@ -332,19 +340,24 @@ STCLIB_OBJECTS =  &
 	$(OBJS)\stclib_LexAsn1.obj &
 	$(OBJS)\stclib_LexBaan.obj &
 	$(OBJS)\stclib_LexBash.obj &
+	$(OBJS)\stclib_LexBasic.obj &
 	$(OBJS)\stclib_LexBullant.obj &
 	$(OBJS)\stclib_LexCLW.obj &
 	$(OBJS)\stclib_LexCPP.obj &
 	$(OBJS)\stclib_LexCSS.obj &
+	$(OBJS)\stclib_LexCaml.obj &
+	$(OBJS)\stclib_LexCsound.obj &
 	$(OBJS)\stclib_LexConf.obj &
 	$(OBJS)\stclib_LexCrontab.obj &
 	$(OBJS)\stclib_LexEScript.obj &
 	$(OBJS)\stclib_LexEiffel.obj &
 	$(OBJS)\stclib_LexErlang.obj &
+	$(OBJS)\stclib_LexFlagship.obj &
 	$(OBJS)\stclib_LexForth.obj &
 	$(OBJS)\stclib_LexFortran.obj &
 	$(OBJS)\stclib_LexGui4Cli.obj &
 	$(OBJS)\stclib_LexHTML.obj &
+	$(OBJS)\stclib_LexHaskell.obj &
 	$(OBJS)\stclib_LexKix.obj &
 	$(OBJS)\stclib_LexLisp.obj &
 	$(OBJS)\stclib_LexLout.obj &
@@ -362,8 +375,11 @@ STCLIB_OBJECTS =  &
 	$(OBJS)\stclib_LexPascal.obj &
 	$(OBJS)\stclib_LexPerl.obj &
 	$(OBJS)\stclib_LexPython.obj &
+	$(OBJS)\stclib_LexRebol.obj &
 	$(OBJS)\stclib_LexRuby.obj &
 	$(OBJS)\stclib_LexSQL.obj &
+	$(OBJS)\stclib_LexSmalltalk.obj &
+	$(OBJS)\stclib_LexTADS3.obj &
 	$(OBJS)\stclib_LexScriptol.obj &
 	$(OBJS)\stclib_LexSpecman.obj &
 	$(OBJS)\stclib_LexTeX.obj &
@@ -492,6 +508,9 @@ $(OBJS)\stcdll_LexBaan.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBaan.cx
 $(OBJS)\stcdll_LexBash.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBash.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
+$(OBJS)\stcdll_LexBasic.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBasic.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+
 $(OBJS)\stcdll_LexBullant.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBullant.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
@@ -502,6 +521,12 @@ $(OBJS)\stcdll_LexCPP.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCPP.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexCSS.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCSS.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexCaml.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCaml.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexCsound.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCsound.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexConf.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexConf.cxx
@@ -519,6 +544,9 @@ $(OBJS)\stcdll_LexEiffel.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexEiffe
 $(OBJS)\stcdll_LexErlang.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexErlang.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
+$(OBJS)\stcdll_LexFlagship.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexFlagship.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+
 $(OBJS)\stcdll_LexForth.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexForth.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
@@ -529,6 +557,9 @@ $(OBJS)\stcdll_LexGui4Cli.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexGui4
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexHTML.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexHTML.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexHaskell.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexHaskell.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexKix.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexKix.cxx
@@ -582,10 +613,19 @@ $(OBJS)\stcdll_LexPerl.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPerl.cx
 $(OBJS)\stcdll_LexPython.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPython.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
+$(OBJS)\stcdll_LexRebol.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexRebol.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+
 $(OBJS)\stcdll_LexRuby.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexRuby.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexSQL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexSQL.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexSmalltalk.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexSmalltalk.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexTADS3.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexTADS3.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexScriptol.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexScriptol.cxx
@@ -705,6 +745,9 @@ $(OBJS)\stclib_LexBaan.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBaan.cx
 $(OBJS)\stclib_LexBash.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBash.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
+$(OBJS)\stclib_LexBasic.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBasic.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+
 $(OBJS)\stclib_LexBullant.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexBullant.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
@@ -715,6 +758,12 @@ $(OBJS)\stclib_LexCPP.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCPP.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexCSS.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCSS.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexCaml.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCaml.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexCsound.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexCsound.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexConf.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexConf.cxx
@@ -732,6 +781,9 @@ $(OBJS)\stclib_LexEiffel.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexEiffe
 $(OBJS)\stclib_LexErlang.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexErlang.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
+$(OBJS)\stclib_LexFlagship.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexFlagship.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+
 $(OBJS)\stclib_LexForth.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexForth.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
@@ -742,6 +794,9 @@ $(OBJS)\stclib_LexGui4Cli.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexGui4
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexHTML.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexHTML.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexHaskell.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexHaskell.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexKix.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexKix.cxx
@@ -795,10 +850,19 @@ $(OBJS)\stclib_LexPerl.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPerl.cx
 $(OBJS)\stclib_LexPython.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexPython.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
+$(OBJS)\stclib_LexRebol.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexRebol.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+
 $(OBJS)\stclib_LexRuby.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexRuby.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexSQL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexSQL.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexSmalltalk.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexSmalltalk.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexTADS3.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexTADS3.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexScriptol.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexScriptol.cxx

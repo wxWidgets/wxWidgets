@@ -52,19 +52,24 @@ STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_LexAsn1.o \
 	$(OBJS)\stcdll_LexBaan.o \
 	$(OBJS)\stcdll_LexBash.o \
+	$(OBJS)\stcdll_LexBasic.o \
 	$(OBJS)\stcdll_LexBullant.o \
 	$(OBJS)\stcdll_LexCLW.o \
 	$(OBJS)\stcdll_LexCPP.o \
 	$(OBJS)\stcdll_LexCSS.o \
+	$(OBJS)\stcdll_LexCaml.o \
+	$(OBJS)\stcdll_LexCsound.o \
 	$(OBJS)\stcdll_LexConf.o \
 	$(OBJS)\stcdll_LexCrontab.o \
 	$(OBJS)\stcdll_LexEScript.o \
 	$(OBJS)\stcdll_LexEiffel.o \
 	$(OBJS)\stcdll_LexErlang.o \
+	$(OBJS)\stcdll_LexFlagship.o \
 	$(OBJS)\stcdll_LexForth.o \
 	$(OBJS)\stcdll_LexFortran.o \
 	$(OBJS)\stcdll_LexGui4Cli.o \
 	$(OBJS)\stcdll_LexHTML.o \
+	$(OBJS)\stcdll_LexHaskell.o \
 	$(OBJS)\stcdll_LexKix.o \
 	$(OBJS)\stcdll_LexLisp.o \
 	$(OBJS)\stcdll_LexLout.o \
@@ -82,8 +87,11 @@ STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_LexPascal.o \
 	$(OBJS)\stcdll_LexPerl.o \
 	$(OBJS)\stcdll_LexPython.o \
+	$(OBJS)\stcdll_LexRebol.o \
 	$(OBJS)\stcdll_LexRuby.o \
 	$(OBJS)\stcdll_LexSQL.o \
+	$(OBJS)\stcdll_LexSmalltalk.o \
+	$(OBJS)\stcdll_LexTADS3.o \
 	$(OBJS)\stcdll_LexScriptol.o \
 	$(OBJS)\stcdll_LexSpecman.o \
 	$(OBJS)\stcdll_LexTeX.o \
@@ -132,19 +140,24 @@ STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_LexAsn1.o \
 	$(OBJS)\stclib_LexBaan.o \
 	$(OBJS)\stclib_LexBash.o \
+	$(OBJS)\stclib_LexBasic.o \
 	$(OBJS)\stclib_LexBullant.o \
 	$(OBJS)\stclib_LexCLW.o \
 	$(OBJS)\stclib_LexCPP.o \
 	$(OBJS)\stclib_LexCSS.o \
+	$(OBJS)\stclib_LexCaml.o \
+	$(OBJS)\stclib_LexCsound.o \
 	$(OBJS)\stclib_LexConf.o \
 	$(OBJS)\stclib_LexCrontab.o \
 	$(OBJS)\stclib_LexEScript.o \
 	$(OBJS)\stclib_LexEiffel.o \
 	$(OBJS)\stclib_LexErlang.o \
+	$(OBJS)\stclib_LexFlagship.o \
 	$(OBJS)\stclib_LexForth.o \
 	$(OBJS)\stclib_LexFortran.o \
 	$(OBJS)\stclib_LexGui4Cli.o \
 	$(OBJS)\stclib_LexHTML.o \
+	$(OBJS)\stclib_LexHaskell.o \
 	$(OBJS)\stclib_LexKix.o \
 	$(OBJS)\stclib_LexLisp.o \
 	$(OBJS)\stclib_LexLout.o \
@@ -162,8 +175,11 @@ STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_LexPascal.o \
 	$(OBJS)\stclib_LexPerl.o \
 	$(OBJS)\stclib_LexPython.o \
+	$(OBJS)\stclib_LexRebol.o \
 	$(OBJS)\stclib_LexRuby.o \
 	$(OBJS)\stclib_LexSQL.o \
+	$(OBJS)\stclib_LexSmalltalk.o \
+	$(OBJS)\stclib_LexTADS3.o \
 	$(OBJS)\stclib_LexScriptol.o \
 	$(OBJS)\stclib_LexSpecman.o \
 	$(OBJS)\stclib_LexTeX.o \
@@ -450,6 +466,9 @@ $(OBJS)\stcdll_LexBaan.o: ../../src/stc/scintilla/src/LexBaan.cxx
 $(OBJS)\stcdll_LexBash.o: ../../src/stc/scintilla/src/LexBash.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\stcdll_LexBasic.o: ../../src/stc/scintilla/src/LexBasic.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\stcdll_LexBullant.o: ../../src/stc/scintilla/src/LexBullant.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -460,6 +479,12 @@ $(OBJS)\stcdll_LexCPP.o: ../../src/stc/scintilla/src/LexCPP.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stcdll_LexCSS.o: ../../src/stc/scintilla/src/LexCSS.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stcdll_LexCaml.o: ../../src/stc/scintilla/src/LexCaml.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stcdll_LexCsound.o: ../../src/stc/scintilla/src/LexCsound.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stcdll_LexConf.o: ../../src/stc/scintilla/src/LexConf.cxx
@@ -477,6 +502,9 @@ $(OBJS)\stcdll_LexEiffel.o: ../../src/stc/scintilla/src/LexEiffel.cxx
 $(OBJS)\stcdll_LexErlang.o: ../../src/stc/scintilla/src/LexErlang.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\stcdll_LexFlagship.o: ../../src/stc/scintilla/src/LexFlagship.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\stcdll_LexForth.o: ../../src/stc/scintilla/src/LexForth.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -487,6 +515,9 @@ $(OBJS)\stcdll_LexGui4Cli.o: ../../src/stc/scintilla/src/LexGui4Cli.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stcdll_LexHTML.o: ../../src/stc/scintilla/src/LexHTML.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stcdll_LexHaskell.o: ../../src/stc/scintilla/src/LexHaskell.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stcdll_LexKix.o: ../../src/stc/scintilla/src/LexKix.cxx
@@ -540,10 +571,19 @@ $(OBJS)\stcdll_LexPerl.o: ../../src/stc/scintilla/src/LexPerl.cxx
 $(OBJS)\stcdll_LexPython.o: ../../src/stc/scintilla/src/LexPython.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\stcdll_LexRebol.o: ../../src/stc/scintilla/src/LexRebol.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\stcdll_LexRuby.o: ../../src/stc/scintilla/src/LexRuby.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stcdll_LexSQL.o: ../../src/stc/scintilla/src/LexSQL.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stcdll_LexSmalltalk.o: ../../src/stc/scintilla/src/LexSmalltalk.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stcdll_LexTADS3.o: ../../src/stc/scintilla/src/LexTADS3.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stcdll_LexScriptol.o: ../../src/stc/scintilla/src/LexScriptol.cxx
@@ -663,6 +703,9 @@ $(OBJS)\stclib_LexBaan.o: ../../src/stc/scintilla/src/LexBaan.cxx
 $(OBJS)\stclib_LexBash.o: ../../src/stc/scintilla/src/LexBash.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\stclib_LexBasic.o: ../../src/stc/scintilla/src/LexBasic.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\stclib_LexBullant.o: ../../src/stc/scintilla/src/LexBullant.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -673,6 +716,12 @@ $(OBJS)\stclib_LexCPP.o: ../../src/stc/scintilla/src/LexCPP.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stclib_LexCSS.o: ../../src/stc/scintilla/src/LexCSS.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stclib_LexCaml.o: ../../src/stc/scintilla/src/LexCaml.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stclib_LexCsound.o: ../../src/stc/scintilla/src/LexCsound.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stclib_LexConf.o: ../../src/stc/scintilla/src/LexConf.cxx
@@ -690,6 +739,9 @@ $(OBJS)\stclib_LexEiffel.o: ../../src/stc/scintilla/src/LexEiffel.cxx
 $(OBJS)\stclib_LexErlang.o: ../../src/stc/scintilla/src/LexErlang.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\stclib_LexFlagship.o: ../../src/stc/scintilla/src/LexFlagship.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\stclib_LexForth.o: ../../src/stc/scintilla/src/LexForth.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -700,6 +752,9 @@ $(OBJS)\stclib_LexGui4Cli.o: ../../src/stc/scintilla/src/LexGui4Cli.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stclib_LexHTML.o: ../../src/stc/scintilla/src/LexHTML.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stclib_LexHaskell.o: ../../src/stc/scintilla/src/LexHaskell.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stclib_LexKix.o: ../../src/stc/scintilla/src/LexKix.cxx
@@ -753,10 +808,19 @@ $(OBJS)\stclib_LexPerl.o: ../../src/stc/scintilla/src/LexPerl.cxx
 $(OBJS)\stclib_LexPython.o: ../../src/stc/scintilla/src/LexPython.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\stclib_LexRebol.o: ../../src/stc/scintilla/src/LexRebol.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\stclib_LexRuby.o: ../../src/stc/scintilla/src/LexRuby.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stclib_LexSQL.o: ../../src/stc/scintilla/src/LexSQL.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stclib_LexSmalltalk.o: ../../src/stc/scintilla/src/LexSmalltalk.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stclib_LexTADS3.o: ../../src/stc/scintilla/src/LexTADS3.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stclib_LexScriptol.o: ../../src/stc/scintilla/src/LexScriptol.cxx

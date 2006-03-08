@@ -82,19 +82,24 @@ STCDLL_OBJECTS =  \
 	stcdll_LexAsn1.o \
 	stcdll_LexBaan.o \
 	stcdll_LexBash.o \
+	stcdll_LexBasic.o \
 	stcdll_LexBullant.o \
 	stcdll_LexCLW.o \
 	stcdll_LexCPP.o \
 	stcdll_LexCSS.o \
+	stcdll_LexCaml.o \
+	stcdll_LexCsound.o \
 	stcdll_LexConf.o \
 	stcdll_LexCrontab.o \
 	stcdll_LexEScript.o \
 	stcdll_LexEiffel.o \
 	stcdll_LexErlang.o \
+	stcdll_LexFlagship.o \
 	stcdll_LexForth.o \
 	stcdll_LexFortran.o \
 	stcdll_LexGui4Cli.o \
 	stcdll_LexHTML.o \
+	stcdll_LexHaskell.o \
 	stcdll_LexKix.o \
 	stcdll_LexLisp.o \
 	stcdll_LexLout.o \
@@ -112,8 +117,11 @@ STCDLL_OBJECTS =  \
 	stcdll_LexPascal.o \
 	stcdll_LexPerl.o \
 	stcdll_LexPython.o \
+	stcdll_LexRebol.o \
 	stcdll_LexRuby.o \
 	stcdll_LexSQL.o \
+	stcdll_LexSmalltalk.o \
+	stcdll_LexTADS3.o \
 	stcdll_LexScriptol.o \
 	stcdll_LexSpecman.o \
 	stcdll_LexTeX.o \
@@ -159,19 +167,24 @@ STCLIB_OBJECTS =  \
 	stclib_LexAsn1.o \
 	stclib_LexBaan.o \
 	stclib_LexBash.o \
+	stclib_LexBasic.o \
 	stclib_LexBullant.o \
 	stclib_LexCLW.o \
 	stclib_LexCPP.o \
 	stclib_LexCSS.o \
+	stclib_LexCaml.o \
+	stclib_LexCsound.o \
 	stclib_LexConf.o \
 	stclib_LexCrontab.o \
 	stclib_LexEScript.o \
 	stclib_LexEiffel.o \
 	stclib_LexErlang.o \
+	stclib_LexFlagship.o \
 	stclib_LexForth.o \
 	stclib_LexFortran.o \
 	stclib_LexGui4Cli.o \
 	stclib_LexHTML.o \
+	stclib_LexHaskell.o \
 	stclib_LexKix.o \
 	stclib_LexLisp.o \
 	stclib_LexLout.o \
@@ -189,8 +202,11 @@ STCLIB_OBJECTS =  \
 	stclib_LexPascal.o \
 	stclib_LexPerl.o \
 	stclib_LexPython.o \
+	stclib_LexRebol.o \
 	stclib_LexRuby.o \
 	stclib_LexSQL.o \
+	stclib_LexSmalltalk.o \
+	stclib_LexTADS3.o \
 	stclib_LexScriptol.o \
 	stclib_LexSpecman.o \
 	stclib_LexTeX.o \
@@ -447,6 +463,9 @@ stcdll_LexBaan.o: $(srcdir)/scintilla/src/LexBaan.cxx
 stcdll_LexBash.o: $(srcdir)/scintilla/src/LexBash.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexBash.cxx
 
+stcdll_LexBasic.o: $(srcdir)/scintilla/src/LexBasic.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexBasic.cxx
+
 stcdll_LexBullant.o: $(srcdir)/scintilla/src/LexBullant.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexBullant.cxx
 
@@ -458,6 +477,12 @@ stcdll_LexCPP.o: $(srcdir)/scintilla/src/LexCPP.cxx
 
 stcdll_LexCSS.o: $(srcdir)/scintilla/src/LexCSS.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexCSS.cxx
+
+stcdll_LexCaml.o: $(srcdir)/scintilla/src/LexCaml.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexCaml.cxx
+
+stcdll_LexCsound.o: $(srcdir)/scintilla/src/LexCsound.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexCsound.cxx
 
 stcdll_LexConf.o: $(srcdir)/scintilla/src/LexConf.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexConf.cxx
@@ -474,6 +499,9 @@ stcdll_LexEiffel.o: $(srcdir)/scintilla/src/LexEiffel.cxx
 stcdll_LexErlang.o: $(srcdir)/scintilla/src/LexErlang.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexErlang.cxx
 
+stcdll_LexFlagship.o: $(srcdir)/scintilla/src/LexFlagship.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexFlagship.cxx
+
 stcdll_LexForth.o: $(srcdir)/scintilla/src/LexForth.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexForth.cxx
 
@@ -485,6 +513,9 @@ stcdll_LexGui4Cli.o: $(srcdir)/scintilla/src/LexGui4Cli.cxx
 
 stcdll_LexHTML.o: $(srcdir)/scintilla/src/LexHTML.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexHTML.cxx
+
+stcdll_LexHaskell.o: $(srcdir)/scintilla/src/LexHaskell.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexHaskell.cxx
 
 stcdll_LexKix.o: $(srcdir)/scintilla/src/LexKix.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexKix.cxx
@@ -537,11 +568,20 @@ stcdll_LexPerl.o: $(srcdir)/scintilla/src/LexPerl.cxx
 stcdll_LexPython.o: $(srcdir)/scintilla/src/LexPython.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexPython.cxx
 
+stcdll_LexRebol.o: $(srcdir)/scintilla/src/LexRebol.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexRebol.cxx
+
 stcdll_LexRuby.o: $(srcdir)/scintilla/src/LexRuby.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexRuby.cxx
 
 stcdll_LexSQL.o: $(srcdir)/scintilla/src/LexSQL.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexSQL.cxx
+
+stcdll_LexSmalltalk.o: $(srcdir)/scintilla/src/LexSmalltalk.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexSmalltalk.cxx
+
+stcdll_LexTADS3.o: $(srcdir)/scintilla/src/LexTADS3.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexTADS3.cxx
 
 stcdll_LexScriptol.o: $(srcdir)/scintilla/src/LexScriptol.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/LexScriptol.cxx
@@ -660,6 +700,9 @@ stclib_LexBaan.o: $(srcdir)/scintilla/src/LexBaan.cxx
 stclib_LexBash.o: $(srcdir)/scintilla/src/LexBash.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexBash.cxx
 
+stclib_LexBasic.o: $(srcdir)/scintilla/src/LexBasic.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexBasic.cxx
+
 stclib_LexBullant.o: $(srcdir)/scintilla/src/LexBullant.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexBullant.cxx
 
@@ -671,6 +714,12 @@ stclib_LexCPP.o: $(srcdir)/scintilla/src/LexCPP.cxx
 
 stclib_LexCSS.o: $(srcdir)/scintilla/src/LexCSS.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexCSS.cxx
+
+stclib_LexCaml.o: $(srcdir)/scintilla/src/LexCaml.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexCaml.cxx
+
+stclib_LexCsound.o: $(srcdir)/scintilla/src/LexCsound.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexCsound.cxx
 
 stclib_LexConf.o: $(srcdir)/scintilla/src/LexConf.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexConf.cxx
@@ -687,6 +736,9 @@ stclib_LexEiffel.o: $(srcdir)/scintilla/src/LexEiffel.cxx
 stclib_LexErlang.o: $(srcdir)/scintilla/src/LexErlang.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexErlang.cxx
 
+stclib_LexFlagship.o: $(srcdir)/scintilla/src/LexFlagship.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexFlagship.cxx
+
 stclib_LexForth.o: $(srcdir)/scintilla/src/LexForth.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexForth.cxx
 
@@ -698,6 +750,9 @@ stclib_LexGui4Cli.o: $(srcdir)/scintilla/src/LexGui4Cli.cxx
 
 stclib_LexHTML.o: $(srcdir)/scintilla/src/LexHTML.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexHTML.cxx
+
+stclib_LexHaskell.o: $(srcdir)/scintilla/src/LexHaskell.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexHaskell.cxx
 
 stclib_LexKix.o: $(srcdir)/scintilla/src/LexKix.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexKix.cxx
@@ -750,11 +805,20 @@ stclib_LexPerl.o: $(srcdir)/scintilla/src/LexPerl.cxx
 stclib_LexPython.o: $(srcdir)/scintilla/src/LexPython.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexPython.cxx
 
+stclib_LexRebol.o: $(srcdir)/scintilla/src/LexRebol.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexRebol.cxx
+
 stclib_LexRuby.o: $(srcdir)/scintilla/src/LexRuby.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexRuby.cxx
 
 stclib_LexSQL.o: $(srcdir)/scintilla/src/LexSQL.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexSQL.cxx
+
+stclib_LexSmalltalk.o: $(srcdir)/scintilla/src/LexSmalltalk.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexSmalltalk.cxx
+
+stclib_LexTADS3.o: $(srcdir)/scintilla/src/LexTADS3.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexTADS3.cxx
 
 stclib_LexScriptol.o: $(srcdir)/scintilla/src/LexScriptol.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/LexScriptol.cxx
