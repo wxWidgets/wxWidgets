@@ -134,7 +134,16 @@ public:
     virtual bool IsActive();
 
 #ifdef __WXMAC__
-    void MacSetMetalAppearance( bool on );
+    %extend {
+        void MacSetMetalAppearance( bool on ) {
+            int style = self->GetExtraStyle();
+            if ( on )
+                style |= wxFRAME_EX_METAL;
+            else
+                style &= ~wxFRAME_EX_METAL;
+            self->SetExtraStyle(style);
+        }
+    }
     bool MacGetMetalAppearance() const;
 #else
     %extend
