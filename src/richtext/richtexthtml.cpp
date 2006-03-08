@@ -80,7 +80,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
     
     str << wxT("<table border=0 cellpadding=0 cellspacing=0><tr><td width=\"100%\">");
     
-    str << wxString::Format(wxT("<font face=\"%s\" size=\"%i\" color=\"#%02X%02X%02X\" >"),
+    str << wxString::Format(wxT("<font face=\"%s\" size=\"%ld\" color=\"#%02X%02X%02X\" >"),
         currentParaStyle.GetFont().GetFaceName().c_str(), Pt_To_Size( currentParaStyle.GetFont().GetPointSize() ), 
         currentParaStyle.GetTextColour().Red(), currentParaStyle.GetTextColour().Green(),
         currentParaStyle.GetTextColour().Blue());
@@ -274,7 +274,7 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
     if( thisStyle.GetFont().GetFaceName() != currentStyle.GetFont().GetFaceName() )
         style += wxString::Format(wxT(" face=\"%s\""), thisStyle.GetFont().GetFaceName().c_str());
     if( thisStyle.GetFont().GetPointSize() != currentStyle.GetFont().GetPointSize() )
-        style += wxString::Format(wxT(" size=\"%i\""), Pt_To_Size(thisStyle.GetFont().GetPointSize()) );
+        style += wxString::Format(wxT(" size=\"%ld\""), Pt_To_Size(thisStyle.GetFont().GetPointSize()) );
     if( thisStyle.GetTextColour() != currentStyle.GetTextColour() )
         style += wxString::Format(wxT(" color=\"#%02X%02X%02X\""), thisStyle.GetTextColour().Red(), 
         thisStyle.GetTextColour().Green(), thisStyle.GetTextColour().Blue());
