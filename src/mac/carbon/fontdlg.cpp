@@ -45,8 +45,8 @@
 // wxFontDialog stub for mac OS's without a native font dialog
 // ---------------------------------------------------------------------------
 
-static const wxChar *wxFontFamilyIntToString(int family);
-static int wxFontFamilyStringToInt(const wxChar *family);
+static const wxChar *FontFamilyIntToString(int family);
+static int FontFamilyStringToInt(const wxChar *family);
 
 
 //-----------------------------------------------------------------------------
@@ -496,7 +496,7 @@ void wxFontDialog::InitializeControls()
     wxString facename = m_dialogFont.GetFaceName();
     if (facename.empty() || m_facenameCtrl->FindString(facename) == wxNOT_FOUND)
     {
-        facename = wxFontFamilyIntToString(m_dialogFont.GetFamily());
+        facename = FontFamilyIntToString(m_dialogFont.GetFamily());
     }
     m_facenameCtrl->SetStringSelection(facename);
 
@@ -521,7 +521,7 @@ void wxFontDialog::ChangeFont()
     int size = m_sizeCtrl->GetValue();
     wxString facename = m_facenameCtrl->GetStringSelection();
 
-    int family = wxFontFamilyStringToInt(facename);
+    int family = FontFamilyStringToInt(facename);
     if (family == -1)
         family = wxDEFAULT;
     else
@@ -555,7 +555,7 @@ void wxFontDialog::OnPanelClose()
 {
 }
 
-const wxChar *wxFontFamilyIntToString(int family)
+const wxChar *FontFamilyIntToString(int family)
 {
     switch (family)
     {
@@ -575,7 +575,7 @@ const wxChar *wxFontFamilyIntToString(int family)
     }
 }
 
-int wxFontFamilyStringToInt(const wxChar *family)
+int FontFamilyStringToInt(const wxChar *family)
 {
     if (!family)
         return wxSWISS;
