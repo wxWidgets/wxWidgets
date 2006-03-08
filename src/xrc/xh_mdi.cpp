@@ -78,7 +78,10 @@ wxWindow *wxMdiXmlHandler::CreateFrame()
         wxMDIParentFrame *mdiParent = wxDynamicCast(m_parent, wxMDIParentFrame);
 
         if ( !mdiParent )
-            wxLogError(wxT("Parent is not of type wxMDIParentFrame."));
+        {
+            wxLogError(wxT("Parent of wxMDIParentFrame must be wxMDIParentFrame."));
+            return NULL;
+        }
 
         XRC_MAKE_INSTANCE(frame, wxMDIChildFrame);
 
