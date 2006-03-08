@@ -71,6 +71,7 @@ public:
     void OnChar(wxKeyEvent& event);
 
     void OnText(wxCommandEvent& event);
+    void OnTextEnter(wxCommandEvent& event);
     void OnTextURL(wxTextUrlEvent& event);
     void OnTextMaxLen(wxCommandEvent& event);
 
@@ -510,6 +511,7 @@ BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
     EVT_CHAR(MyTextCtrl::OnChar)
 
     EVT_TEXT(wxID_ANY, MyTextCtrl::OnText)
+    EVT_TEXT_ENTER(wxID_ANY, MyTextCtrl::OnTextEnter)
     EVT_TEXT_URL(wxID_ANY, MyTextCtrl::OnTextURL)
     EVT_TEXT_MAXLEN(wxID_ANY, MyTextCtrl::OnTextMaxLen)
 
@@ -771,6 +773,23 @@ void MyTextCtrl::OnText(wxCommandEvent& event)
     {
         // wxLogMessage( event.GetString() );
         wxLogMessage(_T("Text changed in some control"));
+    }
+}
+
+void MyTextCtrl::OnTextEnter(wxCommandEvent& event)
+{
+    if ( !ms_logText )
+        return;
+
+    MyTextCtrl *win = (MyTextCtrl *)event.GetEventObject();
+    const wxChar *data = (const wxChar *)(win->GetClientData());
+    if ( data )
+    {
+        wxLogMessage(_T("Enter pressed in control '%s'"), data);
+    }
+    else
+    {
+        wxLogMessage(_T("Enter pressed in some control"));
     }
 }
 
