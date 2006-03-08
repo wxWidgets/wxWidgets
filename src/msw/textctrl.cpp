@@ -1800,16 +1800,15 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     switch ( event.GetKeyCode() )
     {
         case WXK_RETURN:
-            if ( !HasFlag(wxTE_MULTILINE) )
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
                 InitCommandEvent(event);
                 event.SetString(GetValue());
                 if ( GetEventHandler()->ProcessEvent(event) )
+                if ( !HasFlag(wxTE_MULTILINE) )
                     return;
+                //else: multiline controls need Enter for themselves
             }
-            //else: multiline controls need Enter for themselves
-
             break;
 
         case WXK_TAB:
