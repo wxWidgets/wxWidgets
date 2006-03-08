@@ -49,6 +49,21 @@ private:
 
 
 #if wxUSE_DRAG_AND_DROP
+class wxStartDragTimer : public wxTimer {
+public:
+    wxStartDragTimer(ScintillaWX* swx) {
+        this->swx = swx;
+    }
+
+    void Notify() {
+        swx->DoStartDrag();
+    }
+
+private:
+    ScintillaWX* swx;
+};
+
+
 bool wxSTCDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& data) {
     return swx->DoDropText(x, y, data);
 }
@@ -197,11 +212,15 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
     sysCaretWidth = 0;
     sysCaretHeight = 0;
 #endif
+#if wxUSE_DRAG_AND_DROP
+    startDragTimer = new wxStartDragTimer(this);
+#endif
 }
 
 
 ScintillaWX::~ScintillaWX() {
-    Finalise();
+    delete startDragTimer;
+    Finalise();    
 }
 
 //----------------------------------------------------------------------
@@ -233,6 +252,14 @@ void ScintillaWX::Finalise() {
 
 void ScintillaWX::StartDrag() {
 #if wxUSE_DRAG_AND_DROP
+    // We defer the starting of the DnD, otherwise the LeftUp of a normal
+    // click could be lost and the STC will think it is doing a DnD when the
+    // user just wanted a normal click.
+    startDragTimer->Start(100, true);
+#endif
+}
+
+void ScintillaWX::DoStartDrag() {
     wxString dragText = stc2wx(drag.s, drag.len);
 
     // Send an event to allow the drag text to be changed
@@ -258,7 +285,6 @@ void ScintillaWX::StartDrag() {
         inDragDrop = false;
         SetDragPosition(invalidPosition);
     }
-#endif
 }
 
 
@@ -797,6 +823,12 @@ void ScintillaWX::DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, b
 }
 
 void ScintillaWX::DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl) {
+#if wxUSE_DRAG_AND_DROP
+    if (startDragTimer->IsRunning()) {
+        startDragTimer->Stop();
+        SetEmptySelection(PositionFromLocation(pt));        
+    }
+#endif
     ButtonUp(pt, curTime, ctrl);
 }
 
