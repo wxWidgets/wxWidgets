@@ -2523,7 +2523,7 @@ void wxStyledTextCtrl::SetLexerLanguage(const wxString& language) {
 
 // Retrieve a 'property' value previously set with SetProperty.
 wxString wxStyledTextCtrl::GetProperty(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTY, (long)(const char*)wx2stc(key), NULL);
+         int len = SendMsg(SCI_GETPROPERTY, (long)(const char*)wx2stc(key), (long)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -2537,7 +2537,7 @@ wxString wxStyledTextCtrl::GetProperty(const wxString& key) {
 // Retrieve a 'property' value previously set with SetProperty,
 // with '$()' variable replacement on returned buffer.
 wxString wxStyledTextCtrl::GetPropertyExpanded(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTYEXPANDED, (long)(const char*)wx2stc(key), NULL);
+         int len = SendMsg(SCI_GETPROPERTYEXPANDED, (long)(const char*)wx2stc(key), (long)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);

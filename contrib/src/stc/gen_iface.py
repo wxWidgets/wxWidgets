@@ -531,7 +531,7 @@ methodOverrideMap = {
      'wxString %s(const wxString& key);',
 
      '''wxString %s(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTY, (long)(const char*)wx2stc(key), NULL);
+         int len = SendMsg(SCI_GETPROPERTY, (long)(const char*)wx2stc(key), (long)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -547,7 +547,7 @@ methodOverrideMap = {
      'wxString %s(const wxString& key);',
 
      '''wxString %s(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTYEXPANDED, (long)(const char*)wx2stc(key), NULL);
+         int len = SendMsg(SCI_GETPROPERTYEXPANDED, (long)(const char*)wx2stc(key), (long)NULL);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
