@@ -11,12 +11,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/colour.h"
-#include "wx/gdicmn.h"
 #include "wx/gtk/private.h"
 
 #include <gdk/gdk.h>
-#include <gdk/gdkx.h>
-#include <gdk/gdkprivate.h>
 
 //-----------------------------------------------------------------------------
 // wxColour
@@ -31,7 +28,7 @@ public:
         m_color.green = 0;
         m_color.blue = 0;
         m_color.pixel = 0;
-        m_colormap = (GdkColormap *) NULL;
+        m_colormap = NULL;
         m_hasPixel = false;
     }
 
@@ -48,59 +45,19 @@ public:
         FreeColour();
     }
 
-    bool operator == (const wxColourRefData& data) const
-    {
-        return (m_colormap == data.m_colormap &&
-                m_hasPixel == data.m_hasPixel &&
-                m_color.red == data.m_color.red &&
-                m_color.green == data.m_color.green &&
-                m_color.blue == data.m_color.blue &&
-                m_color.pixel == data.m_color.pixel);
-    }
-
     void FreeColour();
     void AllocColour( GdkColormap* cmap );
 
     GdkColor     m_color;
     GdkColormap *m_colormap;
     bool         m_hasPixel;
-
-    friend class wxColour;
-
-    // reference counter for systems with <= 8-Bit display
-    static gushort colMapAllocCounter[ 256 ];
-};
-
-gushort wxColourRefData::colMapAllocCounter[ 256 ] =
-{
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 void wxColourRefData::FreeColour()
 {
-    if (m_colormap)
+    if (m_hasPixel)
     {
-        if ((m_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
-            (m_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
-        {
-            int idx = m_color.pixel;
-            colMapAllocCounter[ idx ] = colMapAllocCounter[ idx ] - 1;
-
-            if (colMapAllocCounter[ idx ] == 0)
-                gdk_colormap_free_colors( m_colormap, &m_color, 1 );
-        }
+        gdk_colormap_free_colors(m_colormap, &m_color, 1);
     }
 }
 
@@ -111,23 +68,13 @@ void wxColourRefData::AllocColour( GdkColormap *cmap )
 
     FreeColour();
 
-    if ( (cmap->visual->type == GDK_VISUAL_GRAYSCALE) ||
-         (cmap->visual->type == GDK_VISUAL_PSEUDO_COLOR) )
-    {
-        m_hasPixel = gdk_colormap_alloc_color( cmap, &m_color, FALSE, TRUE );
-        int idx = m_color.pixel;
-        colMapAllocCounter[ idx ] = colMapAllocCounter[ idx ] + 1;
-    }
-    else
-    {
-        m_hasPixel = gdk_color_alloc( cmap, &m_color );
-    }
+    m_hasPixel = gdk_colormap_alloc_color(cmap, &m_color, FALSE, TRUE);
     m_colormap = cmap;
 }
 
 //-----------------------------------------------------------------------------
 
-#define M_COLDATA ((wxColourRefData *)m_refData)
+#define M_COLDATA wx_static_cast(wxColourRefData*, m_refData)
 
 // GDK's values are in 0..65535 range, our are in 0..255
 #define SHIFT  8
@@ -136,7 +83,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour,wxGDIObject)
 
 wxColour::wxColour( unsigned char red, unsigned char green, unsigned char blue )
 {
-    m_refData = new wxColourRefData();
+    m_refData = new wxColourRefData;
     M_COLDATA->m_color.red = ((unsigned short)red) << SHIFT;
     M_COLDATA->m_color.green = ((unsigned short)green) << SHIFT;
     M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
@@ -163,22 +110,17 @@ wxColour wxColour::CreateByName(const wxString& name)
 void wxColour::InitFromName( const wxString &colourName )
 {
     // check the cache first
-    wxColour col;
     if ( wxTheColourDatabase )
     {
-        col = wxTheColourDatabase->Find(colourName);
+        *this = wxTheColourDatabase->Find(colourName);
     }
 
-    if ( !col.Ok() )
+    if ( !Ok() )
     {
-        col = CreateByName(colourName);
+        *this = CreateByName(colourName);
     }
 
-    if ( col.Ok() )
-    {
-        *this = col;
-    }
-    else
+    if ( !Ok() )
     {
         wxFAIL_MSG( wxT("wxColour: couldn't find colour") );
     }
@@ -196,11 +138,11 @@ bool wxColour::operator == ( const wxColour& col ) const
     if (!m_refData || !col.m_refData)
         return false;
 
-    GdkColor *own = &(((wxColourRefData*)m_refData)->m_color);
-    GdkColor *other = &(((wxColourRefData*)col.m_refData)->m_color);
-    return own->red == other->red &&
-                own->blue == other->blue &&
-                     own->green == other->green;
+    const GdkColor& own = M_COLDATA->m_color;
+    const GdkColor& other = wx_static_cast(wxColourRefData*, col.m_refData)->m_color;
+    return own.red == other.red &&
+           own.blue == other.blue &&
+           own.green == other.green;
 }
 
 wxObjectRefData *wxColour::CreateRefData() const
@@ -222,7 +164,7 @@ void wxColour::Set( unsigned char red, unsigned char green, unsigned char blue )
     M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
     M_COLDATA->m_color.pixel = 0;
 
-    M_COLDATA->m_colormap = (GdkColormap*) NULL;
+    M_COLDATA->m_colormap = NULL;
     M_COLDATA->m_hasPixel = false;
 }
 
@@ -263,7 +205,7 @@ int wxColour::GetPixel() const
 
 GdkColor *wxColour::GetColor() const
 {
-    wxCHECK_MSG( Ok(), (GdkColor *) NULL, wxT("invalid colour") );
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid colour") );
 
     return &M_COLDATA->m_color;
 }
