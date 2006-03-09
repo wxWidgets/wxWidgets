@@ -1061,8 +1061,9 @@ void wxListBox::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
 
 GtkWidget *wxListBox::GetConnectWidget()
 {
-    // return GTK_WIDGET(m_treeview);
-    return m_widget;
+    // the correct widget for listbox events (such as mouse clicks for example)
+    // is m_treeview, not the parent scrolled window
+    return GTK_WIDGET(m_treeview);
 }
 
 bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
