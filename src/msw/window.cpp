@@ -1143,6 +1143,9 @@ void wxWindowMSW::SetWindowStyleFlag(long flags)
     if ( !GetHwnd() )
         return;
 
+    // we may need to call SetWindowPos() when we change some styles
+    bool callSWP = false;
+
     WXDWORD exstyle, exstyleOld;
     long style = MSWGetStyle(flags, &exstyle),
          styleOld = MSWGetStyle(flagsOld, &exstyleOld);
@@ -1158,17 +1161,40 @@ void wxWindowMSW::SetWindowStyleFlag(long flags)
         styleReal |= style;
 
         ::SetWindowLong(GetHwnd(), GWL_STYLE, styleReal);
+
+        // If any of the style changes changed any of the frame styles:
+        // MSDN: SetWindowLong:
+        //       Certain window data is cached, so changes you make using 
+        //       SetWindowLong will not take effect until you call the 
+        //       SetWindowPos function. Specifically, if you change any of 
+        //       the frame styles, you must call SetWindowPos with the 
+        //       SWP_FRAMECHANGED flag for the cache to be updated properly.
+
+        callSWP = ((styleOld ^ style ) & (WS_BORDER |
+                                      WS_THICKFRAME |
+                                      WS_CAPTION |
+                                      WS_DLGFRAME |
+                                      WS_MAXIMIZEBOX |
+                                      WS_MINIMIZEBOX |
+                                      WS_SYSMENU) ) != 0;
     }
 
     // and the extended style
+    long exstyleReal = ::GetWindowLong(GetHwnd(), GWL_EXSTYLE);
+
     if ( exstyle != exstyleOld )
     {
-        long exstyleReal = ::GetWindowLong(GetHwnd(), GWL_EXSTYLE);
         exstyleReal &= ~exstyleOld;
         exstyleReal |= exstyle;
 
         ::SetWindowLong(GetHwnd(), GWL_EXSTYLE, exstyleReal);
 
+        // ex style changes don't take effect without calling SetWindowPos
+        callSWP = true;
+    }
+
+    if ( callSWP )
+    {
         // we must call SetWindowPos() to flush the cached extended style and
         // also to make the change to wxSTAY_ON_TOP style take effect: just
         // setting the style simply doesn't work
@@ -1176,7 +1202,7 @@ void wxWindowMSW::SetWindowStyleFlag(long flags)
                              exstyleReal & WS_EX_TOPMOST ? HWND_TOPMOST
                                                          : HWND_NOTOPMOST,
                              0, 0, 0, 0,
-                             SWP_NOMOVE | SWP_NOSIZE) )
+                             SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED) )
         {
             wxLogLastError(_T("SetWindowPos"));
         }
