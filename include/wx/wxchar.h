@@ -232,7 +232,8 @@
     #if !wxUSE_UNICODE
         #define _T(x) x
     #else /* Unicode */
-        #define _T(x) L ## x
+        /* use wxCONCAT_HELPER so that x could be expanded if it's a macro */
+        #define _T(x) wxCONCAT_HELPER(L, x)
     #endif /* ASCII/Unicode */
 #endif /* !defined(_T) */
 
