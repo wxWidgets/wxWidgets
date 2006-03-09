@@ -89,7 +89,7 @@ public:
     void UsePrimarySelection( bool WXUNUSED(primary) = false ) { }
 
 private:
-    bool m_clearOnExit;
+    IDataObject *m_lastDataObject;
     bool m_isOpened;
 };
 

@@ -531,13 +531,13 @@ wxClipboard::wxClipboard()
     wxOleInitialize();
 #endif
 
-    m_clearOnExit = false;
+    m_lastDataObject = NULL;
     m_isOpened = false;
 }
 
 wxClipboard::~wxClipboard()
 {
-    if ( m_clearOnExit )
+    if ( m_lastDataObject )
     {
         Clear();
     }
@@ -550,10 +550,19 @@ wxClipboard::~wxClipboard()
 void wxClipboard::Clear()
 {
 #if wxUSE_OLE_CLIPBOARD
-    HRESULT hr = OleSetClipboard(NULL);
+    if (m_lastDataObject)
+    {
+        // don't touch data set by other applications
+        HRESULT hr = OleIsCurrentClipboard(m_lastDataObject);
+        if (S_OK == hr)
+        {
+            hr = OleSetClipboard(NULL);
     if ( FAILED(hr) )
     {
         wxLogApiError(wxT("OleSetClipboard(NULL)"), hr);
+    }
+        }
+        m_lastDataObject = NULL;
     }
 #endif // wxUSE_OLE_CLIPBOARD
 }
@@ -561,19 +570,24 @@ void wxClipboard::Clear()
 bool wxClipboard::Flush()
 {
 #if wxUSE_OLE_CLIPBOARD
-    HRESULT hr = OleFlushClipboard();
+    if (m_lastDataObject)
+    {
+        // don't touch data set by other applications
+        HRESULT hr = OleIsCurrentClipboard(m_lastDataObject);
+        m_lastDataObject = NULL;
+        if (S_OK == hr)
+        {
+            hr = OleFlushClipboard();
     if ( FAILED(hr) )
     {
         wxLogApiError(wxT("OleFlushClipboard"), hr);
 
         return false;
     }
-    else
-    {
-        m_clearOnExit = false;
-
         return true;
     }
+    }
+    return false;
 #else // !wxUSE_OLE_CLIPBOARD
     return false;
 #endif // wxUSE_OLE_CLIPBOARD/!wxUSE_OLE_CLIPBOARD
@@ -626,18 +640,18 @@ bool wxClipboard::AddData( wxDataObject *data )
         return false;
     }
 
+    // we have to call either OleSetClipboard(NULL) or OleFlushClipboard() when
+    // using OLE clipboard when the app terminates - by default, we call
+    // OleSetClipboard(NULL) which won't waste RAM, but the app can call
+    // wxClipboard::Flush() to change this
+    m_lastDataObject = data->GetInterface();
+
     // we have a problem here because we should delete wxDataObject, but we
     // can't do it because IDataObject which we just gave to the clipboard
     // would try to use it when it will need the data. IDataObject is ref
     // counted and so doesn't suffer from such problem, so we release it now
     // and tell it to delete wxDataObject when it is deleted itself.
     data->SetAutoDelete();
-
-    // we have to call either OleSetClipboard(NULL) or OleFlushClipboard() when
-    // using OLE clipboard when the app terminates - by default, we call
-    // OleSetClipboard(NULL) which won't waste RAM, but the app can call
-    // wxClipboard::Flush() to chaneg this
-    m_clearOnExit = true;
 
     return true;
 #elif wxUSE_DATAOBJ
