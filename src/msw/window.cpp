@@ -798,22 +798,10 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
         return false;
     }
 
-    if ( m_cursor.Ok() )
+    // don't "overwrite" busy cursor
+    if ( m_cursor.Ok() && !wxIsBusy() )
     {
-        HWND hWnd = GetHwnd();
-
-        // Change the cursor NOW if we're within the correct window
-        POINT point;
-#ifdef __WXWINCE__
-        ::GetCursorPosWinCE(&point);
-#else
-        ::GetCursorPos(&point);
-#endif
-
-        RECT rect = wxGetWindowRect(hWnd);
-
-        if ( ::PtInRect(&rect, point) && !wxIsBusy() )
-            ::SetCursor(GetHcursorOf(m_cursor));
+        ::SetCursor(GetHcursorOf(m_cursor));
     }
 
     return true;
@@ -1957,7 +1945,7 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 #if defined(__WXWINCE__)
     UINT flags = 0;
 #else
-    UINT flags = TPM_RIGHTBUTTON;
+    UINT flags = TPM_RIGHTBUTTON | TPM_RECURSE;
 #endif
     ::TrackPopupMenu(hMenu, flags, point.x, point.y, 0, hWnd, NULL);
 
