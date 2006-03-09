@@ -580,7 +580,7 @@ int FontFamilyStringToInt(const wxChar *family)
     if (!family)
         return wxSWISS;
 
-    if (wxStrcmp(family, _("<Any Roman")) == 0)
+    if (wxStrcmp(family, _("<Any Roman>")) == 0)
         return wxROMAN;
     else if (wxStrcmp(family, _("<Any Decorative>")) == 0)
         return wxDECORATIVE;
