@@ -1123,6 +1123,12 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
     wxFillOtherKeyEventFields(event, win, gdk_event);
 
     event.m_keyCode = key_code;
+#if wxUSE_UNICODE
+    if ( gdk_event->type == GDK_KEY_PRESS ||  gdk_event->type == GDK_KEY_RELEASE )
+    {
+        event.m_uniChar = key_code;
+    }
+#endif
 
     return true;
 }
@@ -1316,6 +1322,16 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
             event.m_keyCode = key_code;
 
+            // To conform to the docs we need to translate Ctrl-alpha
+            // characters to values in the range 1-26.
+            if (event.ControlDown() && key_code >= 'a' && key_code <= 'z' )
+            {
+                event.m_keyCode = key_code - 'a' + 1;
+#if wxUSE_UNICODE
+                event.m_uniChar = event.m_keyCode;
+#endif
+            }               
+
             // Implement OnCharHook by checking ancesteror top level windows
             wxWindow *parent = win;
             while (parent && !parent->IsTopLevel())
@@ -1451,6 +1467,17 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
 #else
         event.m_keyCode = *pstr;
 #endif  // wxUSE_UNICODE
+
+        // To conform to the docs we need to translate Ctrl-alpha
+        // characters to values in the range 1-26.
+        if (event.ControlDown() && *pstr >= 'a' && *pstr <= 'z' )
+        {
+            event.m_keyCode = *pstr - 'a' + 1;
+#if wxUSE_UNICODE
+            event.m_uniChar = event.m_keyCode;
+#endif  
+        }               
+
         if (parent)
         {
             event.SetEventType( wxEVT_CHAR_HOOK );
