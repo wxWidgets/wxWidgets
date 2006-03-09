@@ -972,41 +972,22 @@ void wxListBox::DoSetFirstItem( int n )
     if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (m_treeview))
         return;
 
-    // terribly efficient (RN:???)
-    // RN: Note that evidently the vadjustment property "vadjustment" from
-    // GtkTreeView is different from the "gtk-vadjustment"...
-    // (i.e. gtk_tree_view_get_vadjustment)
-    const gchar *vadjustment_key = "gtk-vadjustment";
-    guint vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
+    GtkTreeIter iter;
+    gtk_tree_model_iter_nth_child(
+                                    GTK_TREE_MODEL(m_liststore),
+                                    &iter,
+                                    NULL, //NULL = parent = get first
+                                    n
+                                 );
 
-    GtkAdjustment *adjustment =
-       (GtkAdjustment*) g_object_get_qdata(G_OBJECT (m_treeview), vadjustment_key_id);
-    wxCHECK_RET( adjustment, wxT("invalid listbox code") );
+    GtkTreePath* path = gtk_tree_model_get_path(
+                            GTK_TREE_MODEL(m_liststore), &iter);
 
-    // Get the greater of the item heights from each column
-    gint cellheight = 0, cellheightcur;
-    GList* columnlist = gtk_tree_view_get_columns(m_treeview);
-    GList* curlist = columnlist;
+    // Scroll to the desired cell (0.0 == topleft alignment)
+    gtk_tree_view_scroll_to_cell(m_treeview, path, NULL,
+                                 TRUE, 0.0f, 0.0f);
 
-    while(curlist)
-    {
-        gtk_tree_view_column_cell_get_size(
-            GTK_TREE_VIEW_COLUMN(curlist->data),
-            NULL, NULL, NULL, NULL,
-            &cellheightcur);
-
-        cellheight = cellheightcur > cellheight ? 
-                      cellheightcur : cellheight;
-
-        curlist = curlist->next;
-    }
-
-    g_list_free(columnlist);
-
-    float y = (float) (cellheight * n);
-    if (y > adjustment->upper - adjustment->page_size)
-        y = adjustment->upper - adjustment->page_size;
-    gtk_adjustment_set_value( adjustment, y );
+    gtk_tree_path_free(path);
 }
 
 // ----------------------------------------------------------------------------
