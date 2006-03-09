@@ -3,7 +3,7 @@ Recent Changes for wxPython
 
 2.6.3.0
 -------
-* Feb-2006
+* Mar-2006
 
 Change the wx.ListCtrl InsertStringItem wrapper to use the form that
 takes an imageIndex, and set the default to -1.  This ensures that on
@@ -52,6 +52,13 @@ wxGTK: Fix RequestMore for idle events.
 
 wxGTK: Implement user dashes for PS and GNOME printing.
 
+wxGTK: Correct update region code. Don't always invalidate the whole
+window upon resize. Reenable support for thewx.NO_FULL_REPAINT_ON_RESIZE 
+flag.  Also disable refreshing custom controls when focusing in and out.
+
+wx.lib.pubsub: Publisher is now able to parse a dotted notation string
+into a topic tuple.  For example: subscribing to "timer.clock.seconds"
+is the same as subscribing to ("timer", "clock", "seconds").
 
 
 
