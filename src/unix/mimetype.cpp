@@ -140,6 +140,11 @@ public:
             if ( idx )
                 *idx = n;
         }
+        else if ( idx )
+        {
+            // different from any valid index
+            *idx = (size_t)-1;
+        }
 
         return s;
     }
