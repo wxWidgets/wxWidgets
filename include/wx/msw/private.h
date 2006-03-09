@@ -896,9 +896,9 @@ inline void *wxSetWindowUserData(HWND hwnd, void *data)
 
 // note that the casts to LONG_PTR here are required even on 32-bit machines
 // for the 64-bit warning mode of later versions of MSVC (C4311/4312)
-inline void *wxGetWindowProc(HWND hwnd)
+inline WNDPROC wxGetWindowProc(HWND hwnd)
 {
-    return (void *)(LONG_PTR)::GetWindowLong(hwnd, GWL_WNDPROC);
+    return (WNDPROC)(LONG_PTR)::GetWindowLong(hwnd, GWL_WNDPROC);
 }
 
 inline void *wxGetWindowUserData(HWND hwnd)

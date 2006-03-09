@@ -38,8 +38,8 @@
 // functions prototypes
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
-                                       WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
+                                         WPARAM wParam, LPARAM lParam);
 
 UINT_PTR CALLBACK wxFindReplaceDialogHookProc(HWND hwnd,
                                               UINT uiMsg,
@@ -190,7 +190,7 @@ void wxFindReplaceDialogImpl::SubclassDialog(HWND hwnd)
 
     // check that we don't subclass the parent twice: this would be a bad idea
     // as then we'd have infinite recursion in wxFindReplaceWindowProc
-    wxCHECK_RET( wxGetWindowProc(hwnd) != (void *)wxFindReplaceWindowProc,
+    wxCHECK_RET( wxGetWindowProc(hwnd) != &wxFindReplaceWindowProc,
                  _T("can't have more than one find dialog currently") );
 
     // set the new one and save the old as user data to allow access to it
@@ -216,7 +216,7 @@ wxFindReplaceDialogImpl::~wxFindReplaceDialogImpl()
 // Window Proc for handling RegisterWindowMessage(FINDMSGSTRING)
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
+LRESULT CALLBACK wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
                                          WPARAM wParam, LPARAM lParam)
 {
 #if wxUSE_UNICODE_MSLU
