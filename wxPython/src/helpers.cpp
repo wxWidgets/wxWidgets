@@ -15,6 +15,7 @@
 #include <Python.h>
 #include "wx/wxPython/wxPython_int.h"
 #include "wx/wxPython/pyistream.h"
+#include "wx/wxPython/swigver.h"
 
 #ifdef __WXMSW__
 #include <wx/msw/private.h>
@@ -690,6 +691,7 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
 #else
     _AddInfoString("wx-assertions-off");
 #endif
+    _AddInfoString(wxPy_SWIG_VERSION);    
 
 #undef _AddInfoString
 
