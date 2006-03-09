@@ -496,7 +496,6 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
                                                 WXLISTBOX_DATACOLUMN, NULL);
 
     // Now create+set the model (GtkListStore) - first argument # of columns
-
 #if wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
     if(m_hasCheckBoxes)
         m_liststore = gtk_list_store_new(2, G_TYPE_BOOLEAN,
@@ -679,12 +678,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 
 int wxListBox::DoAppend( const wxString& item )
 {
-    InvalidateBestSize();
-
-    //Just call DoInsertItems for now
-    //RN: Originally I had gtk_list_store_append etc.
-    //    here as an optimization but now the insert
-    //    has been streamlined and its quite a bit of code duplication
+    // Call DoInsertItems
     int nWhere = wxListBox::GetCount();
     wxArrayString aItems;
     aItems.Add(item);
@@ -707,12 +701,16 @@ void wxListBox::Clear()
 {
     wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
+    InvalidateBestSize();
+
     gtk_list_store_clear( m_liststore ); /* well, THAT was easy :) */
 }
 
 void wxListBox::Delete( int n )
 {
     wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
+
+    InvalidateBestSize();
 
     GtkTreeIter iter;
     gboolean res = gtk_tree_model_iter_nth_child(
@@ -1087,23 +1085,45 @@ wxSize wxListBox::DoGetBestSize() const
     int lbWidth;
     int lbHeight;
 
-    // Get the visible area of the tree view
-    GdkRectangle rect;
-    gtk_tree_view_get_visible_rect(m_treeview, &rect);
-    lbWidth = rect.width;
-    lbHeight = rect.height;
-
-    // Add room for the scrollbar
-    lbWidth += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
-
-    // And just a bit more
+    // Start with a minimum size that's not too small
     int cx, cy;
     GetTextExtent( wxT("X"), &cx, &cy);
     lbWidth += 3 * cx;
+    lbHeight += 10;
+
+    // Get the visible area of the tree view (limit to the 10th item    
+    // so that it isn't too big)
+    int count = GetCount();
+    if (count)
+    {
+        int wLine;
+
+        // Find the widest line
+        for(int i = 0; i < count; i++) {
+            wxString str(GetString(i));
+            GetTextExtent(str, &wLine, NULL);
+            lbWidth = wxMax(lbWidth, wLine);
+        }
+
+        lbWidth += 3 * cx;
+
+        // And just a bit more for the checkbox if present and then some
+        // (these are rough guesses)
+#if wxUSE_CHECKLISTBOX && wxUSE_NATIVEGTKCHECKLIST
+        if ( m_hasCheckBoxes )
+        {
+            lbWidth += 35;
+            cy = cy > 25 ? cy : 25; // rough height of checkbox
+        }
+#endif
 
     // don't make the listbox too tall (limit height to around 10 items) but don't
     // make it too small neither
-    lbHeight = (cy+4) * wxMin(wxMax(GetCount(), 3), 10);
+        lbHeight = (cy+4) * wxMin(wxMax(count, 3), 10);
+    }
+    
+    // Add room for the scrollbar
+    lbWidth += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 
     wxSize best(lbWidth, lbHeight);
     CacheBestSize(best);
