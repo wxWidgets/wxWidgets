@@ -43,12 +43,6 @@ extern bool           g_blockEventsOnScroll;
 extern wxCursor       g_globalCursor;
 
 
-//-----------------------------------------------------------------------------
-// idle system
-//-----------------------------------------------------------------------------
-
-extern void wxapp_install_idle_handler();
-extern bool g_isIdle;
 
 //-----------------------------------------------------------------------------
 // Macro to tell which row the strings are in (1 if native checklist, 0 if not)

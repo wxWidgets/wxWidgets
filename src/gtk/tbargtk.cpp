@@ -38,10 +38,6 @@
 // globals
 // ----------------------------------------------------------------------------
 
-// idle system
-extern void wxapp_install_idle_handler();
-extern bool g_isIdle;
-
 // data
 extern bool       g_blockEventsOnDrag;
 extern wxCursor   g_globalCursor;

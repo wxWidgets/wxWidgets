@@ -53,6 +53,17 @@ void gtk_window_set_policy (GtkWindow *window,
 
 G_END_DECLS
 
+//-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
+// GTK+ scroll types -> wxEventType
+//-----------------------------------------------------------------------------
+
 // translate a GTK+ scroll type to a wxEventType
 inline wxEventType GtkScrollTypeToWx(guint scrollType)
 {
@@ -88,6 +99,11 @@ inline wxEventType GtkScrollWinTypeToWx(guint scrollType)
     return GtkScrollTypeToWx(scrollType) +
             wxEVT_SCROLLWIN_TOP - wxEVT_SCROLL_TOP;
 }
+
+
+//-----------------------------------------------------------------------------
+// Misc. functions
+//-----------------------------------------------------------------------------
 
 // Needed for implementing e.g. combobox on wxGTK within a modal dialog.
 void wxAddGrab(wxWindow* window);

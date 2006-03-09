@@ -74,6 +74,7 @@
 
 #include "wx/unix/private.h"
 #include "wx/gtk/win_gtk.h"
+#include "wx/gtk/private.h"
 
 #include <gtk/gtk.h>
 
@@ -89,8 +90,6 @@ static GtkWidget *gs_RootWindow = (GtkWidget*) NULL;
 //-----------------------------------------------------------------------------
 // idle system
 //-----------------------------------------------------------------------------
-
-extern bool g_isIdle;
 
 void wxapp_install_idle_handler();
 

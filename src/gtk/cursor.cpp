@@ -14,15 +14,10 @@
 #include "wx/utils.h"
 #include "wx/app.h"
 
+#include "wx/gtk/private.h" //for idle stuff
+
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
-
-//-----------------------------------------------------------------------------
-// idle system
-//-----------------------------------------------------------------------------
-
-extern void wxapp_install_idle_handler();
-extern bool g_isIdle;
 
 //-----------------------------------------------------------------------------
 // wxCursor

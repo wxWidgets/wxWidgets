@@ -26,8 +26,6 @@
 
 #include "wx/gtk/private.h"
 
-extern void wxapp_install_idle_handler();
-extern bool g_isIdle;
 extern bool      g_blockEventsOnDrag;
 extern wxCursor   g_globalCursor;
 

@@ -25,9 +25,6 @@
 // idle system
 //-----------------------------------------------------------------------------
 
-extern void wxapp_install_idle_handler();
-extern bool g_isIdle;
-
 static const float sensitivity = 0.02;
 
 //-----------------------------------------------------------------------------
