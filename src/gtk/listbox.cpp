@@ -144,12 +144,9 @@ gtk_listbox_row_activated_callback(GtkTreeView        *treeview,
 
         if(  (((listbox->GetWindowStyleFlag() & wxLB_MULTIPLE) != 0) ||
               ((listbox->GetWindowStyleFlag() & wxLB_EXTENDED) != 0)) )
-    {
+        {
             //toggle the selection + send event
-            if(listbox->IsSelected( sel ))
-                listbox->GtkSetSelection(sel, FALSE, FALSE);
-    else
-                listbox->GtkSetSelection(sel, TRUE, FALSE);
+            listbox->GtkSetSelection(sel, !listbox->IsSelected( sel ), FALSE);
         }
     }
 }
@@ -309,10 +306,10 @@ static gboolean gtk_listitem_select_cb( GtkTreeSelection* selection,
         listbox->m_blockEvent = FALSE;
 
         //Finally, send the wx event
-    wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
-    event.SetEventObject( listbox );
+        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
+        event.SetEventObject( listbox );
 
-    // indicate whether this is a selection or a deselection
+        // indicate whether this is a selection or a deselection
         event.SetExtraLong( 1 );
 
         event.SetInt(nIndex);
@@ -325,7 +322,7 @@ static gboolean gtk_listitem_select_cb( GtkTreeSelection* selection,
         else if ( listbox->HasClientUntypedData() )
             event.SetClientData( gtk_tree_entry_get_userdata(entry) );
 
-    listbox->GetEventHandler()->ProcessEvent( event );
+        listbox->GetEventHandler()->ProcessEvent( event );
 
         g_object_unref(G_OBJECT(entry));
         return FALSE;  //We handled it/did it manually
@@ -1082,14 +1079,11 @@ wxSize wxListBox::DoGetBestSize() const
 {
     wxCHECK_MSG(m_treeview, wxDefaultSize, wxT("invalid tree view"));
 
-    int lbWidth;
-    int lbHeight;
-
     // Start with a minimum size that's not too small
     int cx, cy;
     GetTextExtent( wxT("X"), &cx, &cy);
-    lbWidth += 3 * cx;
-    lbHeight += 10;
+    int lbWidth = 3 * cx;
+    int lbHeight = 10;
 
     // Get the visible area of the tree view (limit to the 10th item    
     // so that it isn't too big)
