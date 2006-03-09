@@ -491,7 +491,8 @@ wxString wxHtmlEntitiesParser::Parse(const wxString& input)
         {
             if (c - last > 0)
                 output.append(last, c - last);
-            if (++c == wxT('\0')) break;
+            if ( *++c == wxT('\0') )
+                break;
 
             wxString entity;
             const wxChar *ent_s = c;
