@@ -201,6 +201,25 @@ parameter for wxPython, which is a list of strings.}
 \perlnote{In wxPerl there is just an array reference in place of {\tt nItems}
 and {\tt items}.}
 
+\membersection{wxListBox::HitTest}\label{wxlistboxhittest}
+
+\constfunc{int}{HitTest}{\param{const wxPoint&}{ point}}
+
+Returns the item located at \arg{point}, or \texttt{wxNOT\_FOUND} if there
+is no item located at \arg{point}.
+
+\newsince{2.7.0}. It is currently implemented for wxMSW, wxMac and wxGTK2
+ports.
+
+\wxheading{Parameters}
+
+\docparam{point}{Point of item (in client coordinates) to obtain}
+
+\wxheading{Return value}
+
+Item located at \arg{point}, or \texttt{wxNOT\_FOUND} if unimplemented
+or the item does not exist.
+
 \membersection{wxListBox::IsSelected}\label{wxlistboxisselected}
 
 \constfunc{bool}{IsSelected}{\param{int}{ n}}

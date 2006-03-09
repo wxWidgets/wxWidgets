@@ -552,6 +552,16 @@ wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     InvalidateBestSize();
 }
 
+int wxListBox::DoListHitTest(const wxPoint& point) const
+{
+    LRESULT lRes =  ::SendMessage(GetHwnd(), LB_ITEMFROMPOINT, 
+                                  0L, MAKELONG(point.x, point.y));
+
+    // non zero high-order word means that this item is outside of the client
+    // area, IOW the point is outside of the listbox
+    return HIWORD(lRes) ? wxNOT_FOUND : lRes;
+}
+
 void wxListBox::SetString(int N, const wxString& s)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,

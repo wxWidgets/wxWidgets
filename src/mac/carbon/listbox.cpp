@@ -782,6 +782,82 @@ void wxListBox::MacScrollTo( int n )
     verify_noerr( m_peer->RevealItem( id , kTextColumnId , kDataBrowserRevealWithoutSelecting ) ) ;
 }
 
+int wxListBox::DoListHitTest(const wxPoint& point) const
+{
+    //Yuck - there is no easy way to get a databrowseritem from a point
+    //so we need to iterate through our items to see which one this falls under
+    int count = GetCount();
+    DataBrowserTableViewColumnID colId = 0;
+
+    //Get column property id (req. for call to itempartbounds)
+    GetDataBrowserTableViewColumnProperty(m_peer->GetControlRef(), 0, &colId);
+    
+    for(int i = 1; i <= count; ++i)
+    {
+        Rect bounds;
+        GetDataBrowserItemPartBounds(m_peer->GetControlRef(), i, colId, 
+                                     kDataBrowserPropertyEnclosingPart,
+                                     &bounds);
+        
+        //translate to client coords
+        MacRootWindowToWindow(&bounds.left, &bounds.top);
+        MacRootWindowToWindow(&bounds.right, &bounds.bottom);
+        
+#if 0 //debugging :)
+        wxPrintf(wxT("L:%i R:%i T:%i B:%i HT:%i,%i\n"),
+                    bounds.left, bounds.right,
+                    bounds.top, bounds.bottom, 
+                    point.x, point.y);
+        fflush(stdout);
+#endif
+        //if point is within the bounds, return this item
+        if( (point.x >= bounds.left && point.x <= bounds.right) &&
+            (point.y >= bounds.top && point.y <= bounds.bottom) )
+        {
+            return i - 1; //found
+        }
+    }
+    
+    return wxNOT_FOUND;
+}
+
+int wxListBox::MacHitTest(const wxPoint& point)
+{
+    //Yuck - there is no easy way to get a databrowseritem from a point
+    //so we need to iterate through our items to see which one this falls under
+
+    // TODO: binary search would be faster
+    int count = GetCount();
+    DataBrowserTableViewColumnID colId = 0;
+
+    //Get column property id (req. for call to itempartbounds)
+    GetDataBrowserTableViewColumnProperty(m_peer->GetControlRef(), 0, &colId);
+    
+    for(int i = 1; i <= count; ++i)
+    {
+        Rect bounds;
+        GetDataBrowserItemPartBounds(m_peer->GetControlRef(), i, colId, 
+                                     kDataBrowserPropertyEnclosingPart,
+                                     &bounds);
+        
+        //translate to client coords
+        //
+        // TODO: it would probably be more efficient to translate point to
+        //       screen coordinates once outside of the loop
+        MacRootWindowToWindow(&bounds.left, &bounds.top);
+        MacRootWindowToWindow(&bounds.right, &bounds.bottom);
+        
+        //if point is within the bounds, return this item
+        if( (point.x >= bounds.left && point.x <= bounds.right) &&
+            (point.y >= bounds.top && point.y <= bounds.bottom) )
+        {
+            return i - 1; //found
+        }
+    }
+    
+    return wxNOT_FOUND;
+}
+
 #if !TARGET_API_MAC_OSX
 
 void wxListBox::OnChar(wxKeyEvent& event)

@@ -142,6 +142,7 @@ protected:
     virtual void* DoGetItemClientData(int n) const;
     virtual void DoSetItemClientObject(int n, wxClientData* clientData);
     virtual wxClientData* DoGetItemClientObject(int n) const;
+    virtual int DoListHitTest(const wxPoint& point) const;
 
     // free memory (common part of Clear() and dtor)
     void Free();

@@ -124,6 +124,7 @@ protected:
 
     void OnListbox(wxCommandEvent& event);
     void OnListboxDClick(wxCommandEvent& event);
+    void OnListboxRDown(wxMouseEvent& event);
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
@@ -487,6 +488,9 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     m_logTarget = new LboxLogger(m_lboxLog, wxLog::GetActiveTarget());
     wxLog::SetActiveTarget(m_logTarget);
 #endif // wxUSE_LOG
+
+    m_lbox->Connect(wxEVT_RIGHT_DOWN, 
+        wxMouseEventHandler(LboxTestFrame::OnListboxRDown), NULL, this);
 }
 
 LboxTestFrame::~LboxTestFrame()
@@ -697,6 +701,18 @@ void LboxTestFrame::OnListboxDClick(wxCommandEvent& event)
 {
     int sel = event.GetInt();
     wxLogMessage(_T("Listbox item %d double clicked"), sel);
+}
+
+void LboxTestFrame::OnListboxRDown(wxMouseEvent& event)
+{
+    int item = m_lbox->HitTest(event.GetPosition());
+
+    if ( item != wxNOT_FOUND )
+        wxLogMessage(_T("Listbox item %d right clicked"), item);
+    else
+        wxLogMessage(_T("Listbox right clicked but no item clicked upon"));
+
+    event.Skip();
 }
 
 void LboxTestFrame::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))

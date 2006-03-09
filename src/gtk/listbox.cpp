@@ -1015,6 +1015,30 @@ void wxListBox::DoSetFirstItem( int n )
     gtk_adjustment_set_value( adjustment, y );
 }
 
+// ----------------------------------------------------------------------------
+// hittest
+// ----------------------------------------------------------------------------
+
+int wxListBox::DoListHitTest(const wxPoint& point)
+{
+    //Need to translate from master window since it is in client coords
+    gint binx, biny;
+    gdk_window_get_geometry(gtk_tree_view_get_bin_window(m_treeview), 
+                            &binx, &biny, NULL, NULL, NULL);
+
+    GtkTreePath* path;
+    if(!gtk_tree_view_get_path_at_pos(m_treeview, 
+                                  point.x - binx, point.y - biny,
+                                  &path, NULL, NULL, NULL)) //last two == x,y rel to cell
+    {
+        return wxNOT_FOUND;
+    }
+
+    int index = gtk_tree_path_get_indices(path)[0];
+    gtk_tree_path_free(path);
+
+    return index;
+}
 
 // ----------------------------------------------------------------------------
 // helpers

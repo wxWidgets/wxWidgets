@@ -107,6 +107,9 @@ public:
     // instead
     bool Selected(int n) const { return IsSelected(n); }
 
+    // returns the item number at a point or wxNOT_FOUND
+    int HitTest(const wxPoint& point) const { return DoListHitTest(point); }
+
 protected:
     // NB: due to wxGTK implementation details, DoInsert() is implemented
     //     using DoInsertItems() and not the other way round
@@ -120,6 +123,10 @@ protected:
     virtual void DoSetFirstItem(int n) = 0;
 
     virtual void DoSetSelection(int n, bool select) = 0;
+
+    // there is already wxWindow::DoHitTest() so call this one differently
+    virtual int DoListHitTest(const wxPoint& WXUNUSED(point)) const
+        { return wxNOT_FOUND; }
 
 
     DECLARE_NO_COPY_CLASS(wxListBoxBase)
