@@ -123,7 +123,7 @@ void wxStreamBuffer::FreeBuffer()
     if ( m_destroybuf )
     {
         free(m_buffer_start);
-        m_flushable = NULL;
+        m_buffer_start = NULL;
     }
 }
 
