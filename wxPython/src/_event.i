@@ -567,6 +567,32 @@ radiobox selection (only if the event was a selection, not a
 deselection), or a boolean value representing the value of a checkbox.", "");
     
 
+     %extend {
+        DocStr(GetClientData,
+               "Returns the client data object for a listbox or choice selection event, (if any.)", "");
+        PyObject* GetClientData() {
+            wxPyClientData* data = (wxPyClientData*)self->GetClientObject();
+            if (data) {
+                Py_INCREF(data->m_obj);
+                return data->m_obj;
+            } else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+
+        DocStr(SetClientData,
+               "Associate the given client data with the item at position n.", "");
+        void SetClientData(PyObject* clientData) {
+            wxPyClientData* data = new wxPyClientData(clientData);
+            self->SetClientObject(data);
+        }
+    }
+    %pythoncode {
+         GetClientObject = GetClientData
+         SetClientObject = SetClientData
+    }
+             
     virtual wxEvent *Clone() const;
 
 };
