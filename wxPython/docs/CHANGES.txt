@@ -62,6 +62,8 @@ is the same as subscribing to ("timer", "clock", "seconds").
 
 Applied patch #1441370: lib.plot - allow passing in wx.Colour()
 
+Added wx.CommandEvent.GetClientData.
+
 
 
 
