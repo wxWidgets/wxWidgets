@@ -2656,13 +2656,13 @@ void wxDC::DoGradientFillLinear (const wxRect& rect,
         vertices[1].x = rect.GetRight();
         vertices[1].y = rect.GetBottom();
 
-        vertices[firstVertex].Red = initialColour.Red() << 8;
-        vertices[firstVertex].Green = initialColour.Green() << 8;
-        vertices[firstVertex].Blue = initialColour.Blue() << 8;
+        vertices[firstVertex].Red = (COLOR16)(initialColour.Red() << 8);
+        vertices[firstVertex].Green = (COLOR16)(initialColour.Green() << 8);
+        vertices[firstVertex].Blue = (COLOR16)(initialColour.Blue() << 8);
         vertices[firstVertex].Alpha = 0;
-        vertices[1 - firstVertex].Red = destColour.Red() << 8;
-        vertices[1 - firstVertex].Green = destColour.Green() << 8;
-        vertices[1 - firstVertex].Blue = destColour.Blue() << 8;
+        vertices[1 - firstVertex].Red = (COLOR16)(destColour.Red() << 8);
+        vertices[1 - firstVertex].Green = (COLOR16)(destColour.Green() << 8);
+        vertices[1 - firstVertex].Blue = (COLOR16)(destColour.Blue() << 8);
         vertices[1 - firstVertex].Alpha = 0;
 
         if (nDirection == wxWEST ||
