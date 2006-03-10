@@ -27,8 +27,11 @@
 #include "wx/evtloop.h"
 #include "wx/app.h"
 
-#include <Carbon/Carbon.h>
-
+#ifdef __DARWIN__
+    #include <Carbon/Carbon.h>
+#else
+    #include <Carbon.h>
+#endif
 // ============================================================================
 // wxEventLoop implementation
 // ============================================================================

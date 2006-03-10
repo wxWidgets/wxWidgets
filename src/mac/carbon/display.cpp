@@ -31,6 +31,7 @@
     #include <Quickdraw.h>
     #include <Video.h>  // for VDSwitchInfoRec
     #include <FixMath.h>
+    #include <Debugging.h>
 #endif
 
 #include "wx/display.h"
