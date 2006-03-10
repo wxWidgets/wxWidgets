@@ -24952,6 +24952,52 @@ static PyObject *_wrap_ListCtrl_SetItemImage(PyObject *, PyObject *args, PyObjec
 }
 
 
+static PyObject *_wrap_ListCtrl_SetItemColumnImage(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxPyListCtrl *arg1 = (wxPyListCtrl *) 0 ;
+    long arg2 ;
+    long arg3 ;
+    int arg4 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "item",(char *) "column",(char *) "image", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:ListCtrl_SetItemColumnImage",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyListCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = static_cast<long >(SWIG_As_long(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = static_cast<long >(SWIG_As_long(obj2)); 
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        arg4 = static_cast<int >(SWIG_As_int(obj3)); 
+        if (SWIG_arg_fail(4)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->SetItemColumnImage(arg2,arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_ListCtrl_GetItemText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxPyListCtrl *arg1 = (wxPyListCtrl *) 0 ;
@@ -36082,6 +36128,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ListCtrl_GetItemState", (PyCFunction) _wrap_ListCtrl_GetItemState, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_SetItemState", (PyCFunction) _wrap_ListCtrl_SetItemState, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_SetItemImage", (PyCFunction) _wrap_ListCtrl_SetItemImage, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ListCtrl_SetItemColumnImage", (PyCFunction) _wrap_ListCtrl_SetItemColumnImage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_GetItemText", (PyCFunction) _wrap_ListCtrl_GetItemText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_SetItemText", (PyCFunction) _wrap_ListCtrl_SetItemText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_GetItemData", (PyCFunction) _wrap_ListCtrl_GetItemData, METH_VARARGS | METH_KEYWORDS, NULL},

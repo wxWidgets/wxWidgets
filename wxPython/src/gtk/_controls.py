@@ -4636,6 +4636,10 @@ class ListCtrl(_core.Control):
         """SetItemImage(self, long item, int image, int selImage=-1) -> bool"""
         return _controls_.ListCtrl_SetItemImage(*args, **kwargs)
 
+    def SetItemColumnImage(*args, **kwargs):
+        """SetItemColumnImage(self, long item, long column, int image) -> bool"""
+        return _controls_.ListCtrl_SetItemColumnImage(*args, **kwargs)
+
     def GetItemText(*args, **kwargs):
         """GetItemText(self, long item) -> String"""
         return _controls_.ListCtrl_GetItemText(*args, **kwargs)

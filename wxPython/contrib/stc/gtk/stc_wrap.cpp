@@ -3626,6 +3626,43 @@ static PyObject *_wrap_StyledTextCtrl_MarkerDefineBitmap(PyObject *, PyObject *a
 }
 
 
+static PyObject *_wrap_StyledTextCtrl_MarkerAddSet(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    int arg3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "line",(char *) "set", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_MarkerAddSet",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = static_cast<int >(SWIG_As_int(obj2)); 
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->MarkerAddSet(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_StyledTextCtrl_SetMarginType(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
@@ -6111,6 +6148,124 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetTypeSeparator(PyObject *, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_AutoCompSetMaxWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "characterCount", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_AutoCompSetMaxWidth",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->AutoCompSetMaxWidth(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_AutoCompGetMaxWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_AutoCompGetMaxWidth",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->AutoCompGetMaxWidth();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int(static_cast<int >(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_AutoCompSetMaxHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "rowCount", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_AutoCompSetMaxHeight",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->AutoCompSetMaxHeight(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_AutoCompGetMaxHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_AutoCompGetMaxHeight",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->AutoCompGetMaxHeight();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int(static_cast<int >(result)); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -8729,6 +8884,40 @@ static PyObject *_wrap_StyledTextCtrl_DocLineFromVisible(PyObject *, PyObject *a
 }
 
 
+static PyObject *_wrap_StyledTextCtrl_WrapCount(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "line", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_WrapCount",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->WrapCount(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int(static_cast<int >(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_StyledTextCtrl_SetFoldLevel(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
@@ -9872,7 +10061,7 @@ static PyObject *_wrap_StyledTextCtrl_SetEndAtLastLine(PyObject *, PyObject *arg
 static PyObject *_wrap_StyledTextCtrl_GetEndAtLastLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
-    int result;
+    bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -9883,13 +10072,13 @@ static PyObject *_wrap_StyledTextCtrl_GetEndAtLastLine(PyObject *, PyObject *arg
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)(arg1)->GetEndAtLastLine();
+        result = (bool)(arg1)->GetEndAtLastLine();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = SWIG_From_int(static_cast<int >(result)); 
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     }
     return resultobj;
     fail:
@@ -14356,6 +14545,174 @@ static PyObject *_wrap_StyledTextCtrl_FindColumn(PyObject *, PyObject *args, PyO
 }
 
 
+static PyObject *_wrap_StyledTextCtrl_GetCaretSticky(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_GetCaretSticky",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->GetCaretSticky();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_SetCaretSticky(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    bool arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "useCaretStickyBehaviour", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetCaretSticky",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = static_cast<bool >(SWIG_As_bool(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetCaretSticky(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_ToggleCaretSticky(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_ToggleCaretSticky",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->ToggleCaretSticky();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_SetPasteConvertEndings(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    bool arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "convert", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetPasteConvertEndings",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = static_cast<bool >(SWIG_As_bool(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetPasteConvertEndings(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetPasteConvertEndings(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_GetPasteConvertEndings",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->GetPasteConvertEndings();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_SelectionDuplicate(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_SelectionDuplicate",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SelectionDuplicate();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_StyledTextCtrl_StartRecord(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
@@ -14643,6 +15000,174 @@ static PyObject *_wrap_StyledTextCtrl_SetLexerLanguage(PyObject *, PyObject *arg
         if (temp2)
         delete arg2;
     }
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetProperty(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    wxString *arg2 = 0 ;
+    wxString result;
+    bool temp2 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "key", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetProperty",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetProperty((wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetPropertyExpanded(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    wxString *arg2 = 0 ;
+    wxString result;
+    bool temp2 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "key", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetPropertyExpanded",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetPropertyExpanded((wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetPropertyInt(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    wxString *arg2 = 0 ;
+    int result;
+    bool temp2 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "key", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetPropertyInt",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->GetPropertyInt((wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int(static_cast<int >(result)); 
+    }
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetStyleBitsNeeded(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_GetStyleBitsNeeded",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->GetStyleBitsNeeded();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_int(static_cast<int >(result)); 
+    }
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -17268,6 +17793,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StyledTextCtrl_MarkerNext", (PyCFunction) _wrap_StyledTextCtrl_MarkerNext, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_MarkerPrevious", (PyCFunction) _wrap_StyledTextCtrl_MarkerPrevious, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_MarkerDefineBitmap", (PyCFunction) _wrap_StyledTextCtrl_MarkerDefineBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_MarkerAddSet", (PyCFunction) _wrap_StyledTextCtrl_MarkerAddSet, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetMarginType", (PyCFunction) _wrap_StyledTextCtrl_SetMarginType, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_GetMarginType", (PyCFunction) _wrap_StyledTextCtrl_GetMarginType, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetMarginWidth", (PyCFunction) _wrap_StyledTextCtrl_SetMarginWidth, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -17342,6 +17868,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StyledTextCtrl_ClearRegisteredImages", (PyCFunction) _wrap_StyledTextCtrl_ClearRegisteredImages, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_AutoCompGetTypeSeparator", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetTypeSeparator, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_AutoCompSetTypeSeparator", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetTypeSeparator, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_AutoCompSetMaxWidth", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetMaxWidth, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_AutoCompGetMaxWidth", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetMaxWidth, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_AutoCompSetMaxHeight", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetMaxHeight, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_AutoCompGetMaxHeight", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetMaxHeight, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetIndent", (PyCFunction) _wrap_StyledTextCtrl_SetIndent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_GetIndent", (PyCFunction) _wrap_StyledTextCtrl_GetIndent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetUseTabs", (PyCFunction) _wrap_StyledTextCtrl_SetUseTabs, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -17423,6 +17953,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StyledTextCtrl_CallTipSetForegroundHighlight", (PyCFunction) _wrap_StyledTextCtrl_CallTipSetForegroundHighlight, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_VisibleFromDocLine", (PyCFunction) _wrap_StyledTextCtrl_VisibleFromDocLine, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_DocLineFromVisible", (PyCFunction) _wrap_StyledTextCtrl_DocLineFromVisible, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_WrapCount", (PyCFunction) _wrap_StyledTextCtrl_WrapCount, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetFoldLevel", (PyCFunction) _wrap_StyledTextCtrl_SetFoldLevel, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_GetFoldLevel", (PyCFunction) _wrap_StyledTextCtrl_GetFoldLevel, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_GetLastChild", (PyCFunction) _wrap_StyledTextCtrl_GetLastChild, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -17617,6 +18148,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StyledTextCtrl_AutoCompGetCurrent", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetCurrent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_Allocate", (PyCFunction) _wrap_StyledTextCtrl_Allocate, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_FindColumn", (PyCFunction) _wrap_StyledTextCtrl_FindColumn, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_GetCaretSticky", (PyCFunction) _wrap_StyledTextCtrl_GetCaretSticky, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_SetCaretSticky", (PyCFunction) _wrap_StyledTextCtrl_SetCaretSticky, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_ToggleCaretSticky", (PyCFunction) _wrap_StyledTextCtrl_ToggleCaretSticky, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_SetPasteConvertEndings", (PyCFunction) _wrap_StyledTextCtrl_SetPasteConvertEndings, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_GetPasteConvertEndings", (PyCFunction) _wrap_StyledTextCtrl_GetPasteConvertEndings, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_SelectionDuplicate", (PyCFunction) _wrap_StyledTextCtrl_SelectionDuplicate, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StartRecord", (PyCFunction) _wrap_StyledTextCtrl_StartRecord, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StopRecord", (PyCFunction) _wrap_StyledTextCtrl_StopRecord, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetLexer", (PyCFunction) _wrap_StyledTextCtrl_SetLexer, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -17625,6 +18162,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StyledTextCtrl_SetProperty", (PyCFunction) _wrap_StyledTextCtrl_SetProperty, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetKeyWords", (PyCFunction) _wrap_StyledTextCtrl_SetKeyWords, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetLexerLanguage", (PyCFunction) _wrap_StyledTextCtrl_SetLexerLanguage, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_GetProperty", (PyCFunction) _wrap_StyledTextCtrl_GetProperty, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_GetPropertyExpanded", (PyCFunction) _wrap_StyledTextCtrl_GetPropertyExpanded, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_GetPropertyInt", (PyCFunction) _wrap_StyledTextCtrl_GetPropertyInt, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_GetStyleBitsNeeded", (PyCFunction) _wrap_StyledTextCtrl_GetStyleBitsNeeded, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_GetCurrentLine", (PyCFunction) _wrap_StyledTextCtrl_GetCurrentLine, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StyleSetSpec", (PyCFunction) _wrap_StyledTextCtrl_StyleSetSpec, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StyleSetFont", (PyCFunction) _wrap_StyledTextCtrl_StyleSetFont, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -19241,6 +19782,9 @@ SWIGEXPORT void SWIG_init(void) {
         PyDict_SetItemString(d,"STC_MARK_PIXMAP", SWIG_From_int(static_cast<int >(25))); 
     }
     {
+        PyDict_SetItemString(d,"STC_MARK_FULLRECT", SWIG_From_int(static_cast<int >(26))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_MARK_CHARACTER", SWIG_From_int(static_cast<int >(10000))); 
     }
     {
@@ -19331,6 +19875,9 @@ SWIGEXPORT void SWIG_init(void) {
         PyDict_SetItemString(d,"STC_CHARSET_RUSSIAN", SWIG_From_int(static_cast<int >(204))); 
     }
     {
+        PyDict_SetItemString(d,"STC_CHARSET_CYRILLIC", SWIG_From_int(static_cast<int >(1251))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_CHARSET_SHIFTJIS", SWIG_From_int(static_cast<int >(128))); 
     }
     {
@@ -19353,6 +19900,9 @@ SWIGEXPORT void SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"STC_CHARSET_THAI", SWIG_From_int(static_cast<int >(222))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CHARSET_8859_15", SWIG_From_int(static_cast<int >(1000))); 
     }
     {
         PyDict_SetItemString(d,"STC_CASE_MIXED", SWIG_From_int(static_cast<int >(0))); 
@@ -19481,6 +20031,9 @@ SWIGEXPORT void SWIG_init(void) {
         PyDict_SetItemString(d,"STC_WRAP_WORD", SWIG_From_int(static_cast<int >(1))); 
     }
     {
+        PyDict_SetItemString(d,"STC_WRAP_CHAR", SWIG_From_int(static_cast<int >(2))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_WRAPVISUALFLAG_NONE", SWIG_From_int(static_cast<int >(0x0000))); 
     }
     {
@@ -19577,6 +20130,9 @@ SWIGEXPORT void SWIG_init(void) {
         PyDict_SetItemString(d,"STC_PERFORMED_REDO", SWIG_From_int(static_cast<int >(0x40))); 
     }
     {
+        PyDict_SetItemString(d,"STC_MULTISTEPUNDOREDO", SWIG_From_int(static_cast<int >(0x80))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_LASTSTEPINUNDOREDO", SWIG_From_int(static_cast<int >(0x100))); 
     }
     {
@@ -19589,7 +20145,10 @@ SWIGEXPORT void SWIG_init(void) {
         PyDict_SetItemString(d,"STC_MOD_BEFOREDELETE", SWIG_From_int(static_cast<int >(0x800))); 
     }
     {
-        PyDict_SetItemString(d,"STC_MODEVENTMASKALL", SWIG_From_int(static_cast<int >(0xF77))); 
+        PyDict_SetItemString(d,"STC_MULTILINEUNDOREDO", SWIG_From_int(static_cast<int >(0x1000))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_MODEVENTMASKALL", SWIG_From_int(static_cast<int >(0x1FFF))); 
     }
     {
         PyDict_SetItemString(d,"STC_KEY_DOWN", SWIG_From_int(static_cast<int >(300))); 
@@ -19641,6 +20200,9 @@ SWIGEXPORT void SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"STC_KEY_DIVIDE", SWIG_From_int(static_cast<int >(312))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SCMOD_NORM", SWIG_From_int(static_cast<int >(0))); 
     }
     {
         PyDict_SetItemString(d,"STC_SCMOD_SHIFT", SWIG_From_int(static_cast<int >(1))); 
@@ -19737,12 +20299,6 @@ SWIGEXPORT void SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"STC_LEX_VBSCRIPT", SWIG_From_int(static_cast<int >(28))); 
-    }
-    {
-        PyDict_SetItemString(d,"STC_LEX_ASP", SWIG_From_int(static_cast<int >(29))); 
-    }
-    {
-        PyDict_SetItemString(d,"STC_LEX_PHP", SWIG_From_int(static_cast<int >(30))); 
     }
     {
         PyDict_SetItemString(d,"STC_LEX_BAAN", SWIG_From_int(static_cast<int >(31))); 
@@ -19847,6 +20403,39 @@ SWIGEXPORT void SWIG_init(void) {
         PyDict_SetItemString(d,"STC_LEX_VHDL", SWIG_From_int(static_cast<int >(64))); 
     }
     {
+        PyDict_SetItemString(d,"STC_LEX_CAML", SWIG_From_int(static_cast<int >(65))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LEX_BLITZBASIC", SWIG_From_int(static_cast<int >(66))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LEX_PUREBASIC", SWIG_From_int(static_cast<int >(67))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LEX_HASKELL", SWIG_From_int(static_cast<int >(68))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LEX_PHPSCRIPT", SWIG_From_int(static_cast<int >(69))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LEX_TADS3", SWIG_From_int(static_cast<int >(70))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LEX_REBOL", SWIG_From_int(static_cast<int >(71))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LEX_SMALLTALK", SWIG_From_int(static_cast<int >(72))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LEX_FLAGSHIP", SWIG_From_int(static_cast<int >(73))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LEX_CSOUND", SWIG_From_int(static_cast<int >(74))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LEX_FREEBASIC", SWIG_From_int(static_cast<int >(75))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_LEX_AUTOMATIC", SWIG_From_int(static_cast<int >(1000))); 
     }
     {
@@ -19890,6 +20479,12 @@ SWIGEXPORT void SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"STC_P_STRINGEOL", SWIG_From_int(static_cast<int >(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_P_WORD2", SWIG_From_int(static_cast<int >(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_P_DECORATOR", SWIG_From_int(static_cast<int >(15))); 
     }
     {
         PyDict_SetItemString(d,"STC_C_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
@@ -20333,6 +20928,9 @@ SWIGEXPORT void SWIG_init(void) {
         PyDict_SetItemString(d,"STC_PL_SYMBOLTABLE", SWIG_From_int(static_cast<int >(15))); 
     }
     {
+        PyDict_SetItemString(d,"STC_PL_VARIABLE_INDEXER", SWIG_From_int(static_cast<int >(16))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_PL_REGEX", SWIG_From_int(static_cast<int >(17))); 
     }
     {
@@ -20373,6 +20971,111 @@ SWIGEXPORT void SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"STC_PL_STRING_QW", SWIG_From_int(static_cast<int >(30))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_PL_POD_VERB", SWIG_From_int(static_cast<int >(31))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_ERROR", SWIG_From_int(static_cast<int >(1))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_COMMENTLINE", SWIG_From_int(static_cast<int >(2))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_POD", SWIG_From_int(static_cast<int >(3))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_NUMBER", SWIG_From_int(static_cast<int >(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_WORD", SWIG_From_int(static_cast<int >(5))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_STRING", SWIG_From_int(static_cast<int >(6))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_CHARACTER", SWIG_From_int(static_cast<int >(7))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_CLASSNAME", SWIG_From_int(static_cast<int >(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_DEFNAME", SWIG_From_int(static_cast<int >(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_OPERATOR", SWIG_From_int(static_cast<int >(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_IDENTIFIER", SWIG_From_int(static_cast<int >(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_REGEX", SWIG_From_int(static_cast<int >(12))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_GLOBAL", SWIG_From_int(static_cast<int >(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_SYMBOL", SWIG_From_int(static_cast<int >(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_MODULE_NAME", SWIG_From_int(static_cast<int >(15))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_INSTANCE_VAR", SWIG_From_int(static_cast<int >(16))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_CLASS_VAR", SWIG_From_int(static_cast<int >(17))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_BACKTICKS", SWIG_From_int(static_cast<int >(18))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_DATASECTION", SWIG_From_int(static_cast<int >(19))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_HERE_DELIM", SWIG_From_int(static_cast<int >(20))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_HERE_Q", SWIG_From_int(static_cast<int >(21))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_HERE_QQ", SWIG_From_int(static_cast<int >(22))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_HERE_QX", SWIG_From_int(static_cast<int >(23))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_STRING_Q", SWIG_From_int(static_cast<int >(24))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_STRING_QQ", SWIG_From_int(static_cast<int >(25))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_STRING_QX", SWIG_From_int(static_cast<int >(26))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_STRING_QR", SWIG_From_int(static_cast<int >(27))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_STRING_QW", SWIG_From_int(static_cast<int >(28))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_WORD_DEMOTED", SWIG_From_int(static_cast<int >(29))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_STDIN", SWIG_From_int(static_cast<int >(30))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_STDOUT", SWIG_From_int(static_cast<int >(31))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_STDERR", SWIG_From_int(static_cast<int >(40))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_RB_UPPER_BOUND", SWIG_From_int(static_cast<int >(41))); 
     }
     {
         PyDict_SetItemString(d,"STC_B_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
@@ -20418,6 +21121,18 @@ SWIGEXPORT void SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"STC_B_ASM", SWIG_From_int(static_cast<int >(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_B_LABEL", SWIG_From_int(static_cast<int >(15))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_B_ERROR", SWIG_From_int(static_cast<int >(16))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_B_HEXNUMBER", SWIG_From_int(static_cast<int >(17))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_B_BINNUMBER", SWIG_From_int(static_cast<int >(18))); 
     }
     {
         PyDict_SetItemString(d,"STC_PROPS_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
@@ -20795,6 +21510,12 @@ SWIGEXPORT void SWIG_init(void) {
         PyDict_SetItemString(d,"STC_LISP_KEYWORD", SWIG_From_int(static_cast<int >(3))); 
     }
     {
+        PyDict_SetItemString(d,"STC_LISP_KEYWORD_KW", SWIG_From_int(static_cast<int >(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LISP_SYMBOL", SWIG_From_int(static_cast<int >(5))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_LISP_STRING", SWIG_From_int(static_cast<int >(6))); 
     }
     {
@@ -20805,6 +21526,12 @@ SWIGEXPORT void SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"STC_LISP_OPERATOR", SWIG_From_int(static_cast<int >(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LISP_SPECIAL", SWIG_From_int(static_cast<int >(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LISP_MULTI_COMMENT", SWIG_From_int(static_cast<int >(12))); 
     }
     {
         PyDict_SetItemString(d,"STC_EIFFEL_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
@@ -21116,6 +21843,9 @@ SWIGEXPORT void SWIG_init(void) {
         PyDict_SetItemString(d,"STC_CSS_IDENTIFIER2", SWIG_From_int(static_cast<int >(15))); 
     }
     {
+        PyDict_SetItemString(d,"STC_CSS_ATTRIBUTE", SWIG_From_int(static_cast<int >(16))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_POV_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
     }
     {
@@ -21329,6 +22059,18 @@ SWIGEXPORT void SWIG_init(void) {
         PyDict_SetItemString(d,"STC_NSIS_NUMBER", SWIG_From_int(static_cast<int >(14))); 
     }
     {
+        PyDict_SetItemString(d,"STC_NSIS_SECTIONGROUP", SWIG_From_int(static_cast<int >(15))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_NSIS_PAGEEX", SWIG_From_int(static_cast<int >(16))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_NSIS_FUNCTIONDEF", SWIG_From_int(static_cast<int >(17))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_NSIS_COMMENTBOX", SWIG_From_int(static_cast<int >(18))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_MMIXAL_LEADWS", SWIG_From_int(static_cast<int >(0))); 
     }
     {
@@ -21413,19 +22155,25 @@ SWIGEXPORT void SWIG_init(void) {
         PyDict_SetItemString(d,"STC_CLW_COMPILER_DIRECTIVE", SWIG_From_int(static_cast<int >(9))); 
     }
     {
-        PyDict_SetItemString(d,"STC_CLW_BUILTIN_PROCEDURES_FUNCTION", SWIG_From_int(static_cast<int >(10))); 
+        PyDict_SetItemString(d,"STC_CLW_RUNTIME_EXPRESSIONS", SWIG_From_int(static_cast<int >(10))); 
     }
     {
-        PyDict_SetItemString(d,"STC_CLW_STRUCTURE_DATA_TYPE", SWIG_From_int(static_cast<int >(11))); 
+        PyDict_SetItemString(d,"STC_CLW_BUILTIN_PROCEDURES_FUNCTION", SWIG_From_int(static_cast<int >(11))); 
     }
     {
-        PyDict_SetItemString(d,"STC_CLW_ATTRIBUTE", SWIG_From_int(static_cast<int >(12))); 
+        PyDict_SetItemString(d,"STC_CLW_STRUCTURE_DATA_TYPE", SWIG_From_int(static_cast<int >(12))); 
     }
     {
-        PyDict_SetItemString(d,"STC_CLW_STANDARD_EQUATE", SWIG_From_int(static_cast<int >(13))); 
+        PyDict_SetItemString(d,"STC_CLW_ATTRIBUTE", SWIG_From_int(static_cast<int >(13))); 
     }
     {
-        PyDict_SetItemString(d,"STC_CLW_ERROR", SWIG_From_int(static_cast<int >(14))); 
+        PyDict_SetItemString(d,"STC_CLW_STANDARD_EQUATE", SWIG_From_int(static_cast<int >(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CLW_ERROR", SWIG_From_int(static_cast<int >(15))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CLW_DEPRECATED", SWIG_From_int(static_cast<int >(16))); 
     }
     {
         PyDict_SetItemString(d,"STC_LOT_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
@@ -21803,6 +22551,12 @@ SWIGEXPORT void SWIG_init(void) {
         PyDict_SetItemString(d,"STC_AU3_SPECIAL", SWIG_From_int(static_cast<int >(12))); 
     }
     {
+        PyDict_SetItemString(d,"STC_AU3_EXPAND", SWIG_From_int(static_cast<int >(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_AU3_COMOBJ", SWIG_From_int(static_cast<int >(14))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_APDL_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
     }
     {
@@ -21960,6 +22714,486 @@ SWIGEXPORT void SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"STC_VHDL_USERWORD", SWIG_From_int(static_cast<int >(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_IDENTIFIER", SWIG_From_int(static_cast<int >(1))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_TAGNAME", SWIG_From_int(static_cast<int >(2))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_KEYWORD", SWIG_From_int(static_cast<int >(3))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_KEYWORD2", SWIG_From_int(static_cast<int >(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_KEYWORD3", SWIG_From_int(static_cast<int >(5))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_LINENUM", SWIG_From_int(static_cast<int >(6))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_OPERATOR", SWIG_From_int(static_cast<int >(7))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_NUMBER", SWIG_From_int(static_cast<int >(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_CHAR", SWIG_From_int(static_cast<int >(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_STRING", SWIG_From_int(static_cast<int >(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_COMMENT", SWIG_From_int(static_cast<int >(12))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_COMMENT1", SWIG_From_int(static_cast<int >(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_COMMENT2", SWIG_From_int(static_cast<int >(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CAML_COMMENT3", SWIG_From_int(static_cast<int >(15))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_IDENTIFIER", SWIG_From_int(static_cast<int >(1))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_KEYWORD", SWIG_From_int(static_cast<int >(2))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_NUMBER", SWIG_From_int(static_cast<int >(3))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_STRING", SWIG_From_int(static_cast<int >(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_CHARACTER", SWIG_From_int(static_cast<int >(5))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_CLASS", SWIG_From_int(static_cast<int >(6))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_MODULE", SWIG_From_int(static_cast<int >(7))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_CAPITAL", SWIG_From_int(static_cast<int >(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_DATA", SWIG_From_int(static_cast<int >(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_IMPORT", SWIG_From_int(static_cast<int >(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_OPERATOR", SWIG_From_int(static_cast<int >(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_INSTANCE", SWIG_From_int(static_cast<int >(12))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_COMMENTLINE", SWIG_From_int(static_cast<int >(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_COMMENTBLOCK", SWIG_From_int(static_cast<int >(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_COMMENTBLOCK2", SWIG_From_int(static_cast<int >(15))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_HA_COMMENTBLOCK3", SWIG_From_int(static_cast<int >(16))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_X_DEFAULT", SWIG_From_int(static_cast<int >(1))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_PREPROCESSOR", SWIG_From_int(static_cast<int >(2))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_BLOCK_COMMENT", SWIG_From_int(static_cast<int >(3))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_LINE_COMMENT", SWIG_From_int(static_cast<int >(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_OPERATOR", SWIG_From_int(static_cast<int >(5))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_KEYWORD", SWIG_From_int(static_cast<int >(6))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_NUMBER", SWIG_From_int(static_cast<int >(7))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_IDENTIFIER", SWIG_From_int(static_cast<int >(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_S_STRING", SWIG_From_int(static_cast<int >(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_D_STRING", SWIG_From_int(static_cast<int >(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_X_STRING", SWIG_From_int(static_cast<int >(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_LIB_DIRECTIVE", SWIG_From_int(static_cast<int >(12))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_MSG_PARAM", SWIG_From_int(static_cast<int >(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_HTML_TAG", SWIG_From_int(static_cast<int >(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_HTML_DEFAULT", SWIG_From_int(static_cast<int >(15))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_HTML_STRING", SWIG_From_int(static_cast<int >(16))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_USER1", SWIG_From_int(static_cast<int >(17))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_USER2", SWIG_From_int(static_cast<int >(18))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_T3_USER3", SWIG_From_int(static_cast<int >(19))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_COMMENTLINE", SWIG_From_int(static_cast<int >(1))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_COMMENTBLOCK", SWIG_From_int(static_cast<int >(2))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_PREFACE", SWIG_From_int(static_cast<int >(3))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_OPERATOR", SWIG_From_int(static_cast<int >(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_CHARACTER", SWIG_From_int(static_cast<int >(5))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_QUOTEDSTRING", SWIG_From_int(static_cast<int >(6))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_BRACEDSTRING", SWIG_From_int(static_cast<int >(7))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_NUMBER", SWIG_From_int(static_cast<int >(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_PAIR", SWIG_From_int(static_cast<int >(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_TUPLE", SWIG_From_int(static_cast<int >(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_BINARY", SWIG_From_int(static_cast<int >(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_MONEY", SWIG_From_int(static_cast<int >(12))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_ISSUE", SWIG_From_int(static_cast<int >(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_TAG", SWIG_From_int(static_cast<int >(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_FILE", SWIG_From_int(static_cast<int >(15))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_EMAIL", SWIG_From_int(static_cast<int >(16))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_URL", SWIG_From_int(static_cast<int >(17))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_DATE", SWIG_From_int(static_cast<int >(18))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_TIME", SWIG_From_int(static_cast<int >(19))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_IDENTIFIER", SWIG_From_int(static_cast<int >(20))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_WORD", SWIG_From_int(static_cast<int >(21))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_WORD2", SWIG_From_int(static_cast<int >(22))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_WORD3", SWIG_From_int(static_cast<int >(23))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_WORD4", SWIG_From_int(static_cast<int >(24))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_WORD5", SWIG_From_int(static_cast<int >(25))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_WORD6", SWIG_From_int(static_cast<int >(26))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_WORD7", SWIG_From_int(static_cast<int >(27))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_REBOL_WORD8", SWIG_From_int(static_cast<int >(28))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_COMMENT", SWIG_From_int(static_cast<int >(1))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_COMMENTLINE", SWIG_From_int(static_cast<int >(2))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_COMMENTDOC", SWIG_From_int(static_cast<int >(3))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_NUMBER", SWIG_From_int(static_cast<int >(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_WORD", SWIG_From_int(static_cast<int >(5))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_STRING", SWIG_From_int(static_cast<int >(6))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_CHARACTER", SWIG_From_int(static_cast<int >(7))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_SQLPLUS", SWIG_From_int(static_cast<int >(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_SQLPLUS_PROMPT", SWIG_From_int(static_cast<int >(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_OPERATOR", SWIG_From_int(static_cast<int >(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_IDENTIFIER", SWIG_From_int(static_cast<int >(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_SQLPLUS_COMMENT", SWIG_From_int(static_cast<int >(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_COMMENTLINEDOC", SWIG_From_int(static_cast<int >(15))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_WORD2", SWIG_From_int(static_cast<int >(16))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_COMMENTDOCKEYWORD", SWIG_From_int(static_cast<int >(17))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_COMMENTDOCKEYWORDERROR", SWIG_From_int(static_cast<int >(18))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_USER1", SWIG_From_int(static_cast<int >(19))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_USER2", SWIG_From_int(static_cast<int >(20))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_USER3", SWIG_From_int(static_cast<int >(21))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_USER4", SWIG_From_int(static_cast<int >(22))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_SQL_QUOTEDIDENTIFIER", SWIG_From_int(static_cast<int >(23))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_STRING", SWIG_From_int(static_cast<int >(1))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_NUMBER", SWIG_From_int(static_cast<int >(2))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_COMMENT", SWIG_From_int(static_cast<int >(3))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_SYMBOL", SWIG_From_int(static_cast<int >(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_BINARY", SWIG_From_int(static_cast<int >(5))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_BOOL", SWIG_From_int(static_cast<int >(6))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_SELF", SWIG_From_int(static_cast<int >(7))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_SUPER", SWIG_From_int(static_cast<int >(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_NIL", SWIG_From_int(static_cast<int >(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_GLOBAL", SWIG_From_int(static_cast<int >(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_RETURN", SWIG_From_int(static_cast<int >(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_SPECIAL", SWIG_From_int(static_cast<int >(12))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_KWSEND", SWIG_From_int(static_cast<int >(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_ASSIGN", SWIG_From_int(static_cast<int >(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_CHARACTER", SWIG_From_int(static_cast<int >(15))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_ST_SPEC_SEL", SWIG_From_int(static_cast<int >(16))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_COMMENT", SWIG_From_int(static_cast<int >(1))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_COMMENTLINE", SWIG_From_int(static_cast<int >(2))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_COMMENTDOC", SWIG_From_int(static_cast<int >(3))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_COMMENTLINEDOC", SWIG_From_int(static_cast<int >(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_COMMENTDOCKEYWORD", SWIG_From_int(static_cast<int >(5))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_COMMENTDOCKEYWORDERROR", SWIG_From_int(static_cast<int >(6))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_KEYWORD", SWIG_From_int(static_cast<int >(7))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_KEYWORD2", SWIG_From_int(static_cast<int >(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_KEYWORD3", SWIG_From_int(static_cast<int >(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_KEYWORD4", SWIG_From_int(static_cast<int >(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_NUMBER", SWIG_From_int(static_cast<int >(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_STRING", SWIG_From_int(static_cast<int >(12))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_PREPROCESSOR", SWIG_From_int(static_cast<int >(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_OPERATOR", SWIG_From_int(static_cast<int >(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_IDENTIFIER", SWIG_From_int(static_cast<int >(15))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_DATE", SWIG_From_int(static_cast<int >(16))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_STRINGEOL", SWIG_From_int(static_cast<int >(17))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_CONSTANT", SWIG_From_int(static_cast<int >(18))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_ASM", SWIG_From_int(static_cast<int >(19))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_LABEL", SWIG_From_int(static_cast<int >(20))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_ERROR", SWIG_From_int(static_cast<int >(21))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_HEXNUMBER", SWIG_From_int(static_cast<int >(22))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_FS_BINNUMBER", SWIG_From_int(static_cast<int >(23))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_DEFAULT", SWIG_From_int(static_cast<int >(0))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_COMMENT", SWIG_From_int(static_cast<int >(1))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_NUMBER", SWIG_From_int(static_cast<int >(2))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_OPERATOR", SWIG_From_int(static_cast<int >(3))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_INSTR", SWIG_From_int(static_cast<int >(4))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_IDENTIFIER", SWIG_From_int(static_cast<int >(5))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_OPCODE", SWIG_From_int(static_cast<int >(6))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_HEADERSTMT", SWIG_From_int(static_cast<int >(7))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_USERKEYWORD", SWIG_From_int(static_cast<int >(8))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_COMMENTBLOCK", SWIG_From_int(static_cast<int >(9))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_PARAM", SWIG_From_int(static_cast<int >(10))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_ARATE_VAR", SWIG_From_int(static_cast<int >(11))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_KRATE_VAR", SWIG_From_int(static_cast<int >(12))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_IRATE_VAR", SWIG_From_int(static_cast<int >(13))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_GLOBAL_VAR", SWIG_From_int(static_cast<int >(14))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_CSOUND_STRINGEOL", SWIG_From_int(static_cast<int >(15))); 
     }
     {
         PyDict_SetItemString(d,"STC_CMD_REDO", SWIG_From_int(static_cast<int >(2011))); 
@@ -22308,6 +23542,9 @@ SWIGEXPORT void SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"wxEVT_STC_CALLTIP_CLICK", SWIG_From_int(static_cast<int >(wxEVT_STC_CALLTIP_CLICK))); 
+    }
+    {
+        PyDict_SetItemString(d,"wxEVT_STC_AUTOCOMP_SELECTION", SWIG_From_int(static_cast<int >(wxEVT_STC_AUTOCOMP_SELECTION))); 
     }
     
     

@@ -497,13 +497,7 @@ class Frame(TopLevelWindow):
         return _windows_.Frame_Create(*args, **kwargs)
 
     def GetClientAreaOrigin(*args, **kwargs):
-        """
-        GetClientAreaOrigin(self) -> Point
-
-        Get the origin of the client area of the window relative to the
-        window's top left corner (the client area may be shifted because of
-        the borders, scrollbars, other decorations...)
-        """
+        """GetClientAreaOrigin(self) -> Point"""
         return _windows_.Frame_GetClientAreaOrigin(*args, **kwargs)
 
     def SendSizeEvent(*args, **kwargs):
