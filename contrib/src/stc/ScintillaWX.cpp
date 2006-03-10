@@ -79,7 +79,7 @@ wxDragResult  wxSTCDropTarget::OnDragOver(wxCoord x, wxCoord y, wxDragResult def
 void  wxSTCDropTarget::OnLeave() {
     swx->DoDragLeave();
 }
-#endif
+#endif // wxUSE_DRAG_AND_DROP
 
 
 #if wxUSE_POPUPWIN && wxSTC_USE_POPUP
@@ -214,13 +214,15 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
 #endif
 #if wxUSE_DRAG_AND_DROP
     startDragTimer = new wxStartDragTimer(this);
-#endif
+#endif // wxUSE_DRAG_AND_DROP
 }
 
 
 ScintillaWX::~ScintillaWX() {
+#if wxUSE_DRAG_AND_DROP
     delete startDragTimer;
-    Finalise();    
+#endif // wxUSE_DRAG_AND_DROP
+    Finalise();
 }
 
 //----------------------------------------------------------------------
@@ -233,7 +235,7 @@ void ScintillaWX::Initialise() {
     dropTarget = new wxSTCDropTarget;
     dropTarget->SetScintilla(this);
     stc->SetDropTarget(dropTarget);
-#endif
+#endif // wxUSE_DRAG_AND_DROP
 #ifdef __WXMAC__
     vs.extraFontFlag = false;  // UseAntiAliasing
 #else
@@ -256,10 +258,11 @@ void ScintillaWX::StartDrag() {
     // click could be lost and the STC will think it is doing a DnD when the
     // user just wanted a normal click.
     startDragTimer->Start(100, true);
-#endif
+#endif // wxUSE_DRAG_AND_DROP
 }
 
 void ScintillaWX::DoStartDrag() {
+#if wxUSE_DRAG_AND_DROP
     wxString dragText = stc2wx(drag.s, drag.len);
 
     // Send an event to allow the drag text to be changed
@@ -272,7 +275,7 @@ void ScintillaWX::DoStartDrag() {
     stc->GetEventHandler()->ProcessEvent(evt);
     dragText = evt.GetDragText();
 
-    if (dragText.Length()) {
+    if (dragText.length()) {
         wxDropSource        source(stc);
         wxTextDataObject    data(dragText);
         wxDragResult        result;
@@ -285,6 +288,7 @@ void ScintillaWX::DoStartDrag() {
         inDragDrop = false;
         SetDragPosition(invalidPosition);
     }
+#endif // wxUSE_DRAG_AND_DROP
 }
 
 
@@ -826,9 +830,9 @@ void ScintillaWX::DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl) {
 #if wxUSE_DRAG_AND_DROP
     if (startDragTimer->IsRunning()) {
         startDragTimer->Stop();
-        SetEmptySelection(PositionFromLocation(pt));        
+        SetEmptySelection(PositionFromLocation(pt));
     }
-#endif
+#endif // wxUSE_DRAG_AND_DROP
     ButtonUp(pt, curTime, ctrl);
 }
 
@@ -1031,7 +1035,7 @@ wxDragResult ScintillaWX::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {
 void ScintillaWX::DoDragLeave() {
     SetDragPosition(invalidPosition);
 }
-#endif
+#endif // wxUSE_DRAG_AND_DROP
 //----------------------------------------------------------------------
 
 // Force the whole window to be repainted
