@@ -486,9 +486,6 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     m_logTarget = new LboxLogger(m_lboxLog, wxLog::GetActiveTarget());
     wxLog::SetActiveTarget(m_logTarget);
 #endif // wxUSE_LOG
-
-    m_lbox->Connect(wxEVT_RIGHT_DOWN, 
-        wxMouseEventHandler(LboxTestFrame::OnListboxRDown), NULL, this);
 }
 
 LboxTestFrame::~LboxTestFrame()
