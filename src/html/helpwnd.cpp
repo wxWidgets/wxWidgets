@@ -1718,11 +1718,11 @@ void wxHtmlHelpWindow::OnSearch(wxCommandEvent& WXUNUSED(event))
 
 void wxHtmlHelpWindow::OnBookmarksSel(wxCommandEvent& WXUNUSED(event))
 {
-    wxString sr = m_Bookmarks->GetStringSelection();
-
-    if (sr != wxEmptyString && sr != _("(bookmarks)"))
+    wxString str = m_Bookmarks->GetStringSelection();
+    int idx = m_BookmarksNames.Index(str);
+    if (!str.empty() && str != _("(bookmarks)") && idx != wxNOT_FOUND)
     {
-       m_HtmlWin->LoadPage(m_BookmarksPages[m_BookmarksNames.Index(sr)]);
+       m_HtmlWin->LoadPage(m_BookmarksPages[(size_t)idx]);
        NotifyPageChanged();
     }
 }
