@@ -129,7 +129,7 @@ static void gtk_slider_callback( GtkAdjustment *adjust,
     win->m_oldPos = dvalue;
 }
 
-#ifdef __GTK20__
+#ifdef __WXGTK20__
 static gint gtk_slider_button_press_callback( GtkWidget * /* widget */,
                                               GdkEventButton * /* gdk_event */,
                                               wxWindowGTK *win)
