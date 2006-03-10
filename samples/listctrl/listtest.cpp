@@ -1027,15 +1027,9 @@ wxString MyListCtrl::OnGetItemText(long item, long column) const
     }
 }
 
-int MyListCtrl::OnGetItemColumnImage(long item, long column) const
+int MyListCtrl::OnGetItemImage(long WXUNUSED(item)) const
 {
-    if (!column)
-        return 0;
-
-    if (!(item %3) && column == 1)
-        return 0;
-
-    return -1;
+    return 0;
 }
 
 wxListItemAttr *MyListCtrl::OnGetItemAttr(long item) const
