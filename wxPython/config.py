@@ -713,6 +713,9 @@ if os.name == 'nt':
     if not FINAL or HYBRID:
         defines.append( ('__WXDEBUG__', None) )
 
+    if UNICODE:
+        defines.append( ('wxUSE_UNICODE', 1) )
+
     libdirs = [ opj(WXDIR, 'lib', 'vc_dll') ]
     if MONOLITHIC:
         libs = makeLibName('')
