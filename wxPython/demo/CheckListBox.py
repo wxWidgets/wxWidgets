@@ -20,6 +20,8 @@ class TestPanel(wx.Panel):
         lb.SetSelection(0)
         self.lb = lb
 
+        lb.Bind(wx.EVT_RIGHT_DOWN, self.OnDoHitTest)
+        
         pos = lb.GetPosition().x + lb.GetSize().width + 25
         btn = wx.Button(self, -1, "Test SetString", (pos, 50))
         self.Bind(wx.EVT_BUTTON, self.OnTestButton, btn)
@@ -39,6 +41,10 @@ class TestPanel(wx.Panel):
 
     def OnTestButton(self, evt):
         self.lb.SetString(4, "FUBAR")
+
+    def OnDoHitTest(self, evt):
+        item = self.lb.HitTest(evt.GetPosition())
+        self.log.write("HitTest: %d\n" % item)
 
 #----------------------------------------------------------------------
 
