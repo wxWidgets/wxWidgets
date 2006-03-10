@@ -3015,6 +3015,11 @@ class Image(Object):
         return _core_.Image_RemoveHandler(*args, **kwargs)
 
     RemoveHandler = staticmethod(RemoveHandler)
+    def GetHandlers(*args, **kwargs):
+        """GetHandlers() -> PyObject"""
+        return _core_.Image_GetHandlers(*args, **kwargs)
+
+    GetHandlers = staticmethod(GetHandlers)
     def GetImageExtWildcard(*args, **kwargs):
         """
         GetImageExtWildcard() -> String
@@ -3188,6 +3193,10 @@ def Image_InsertHandler(*args, **kwargs):
 def Image_RemoveHandler(*args, **kwargs):
     """Image_RemoveHandler(String name) -> bool"""
     return _core_.Image_RemoveHandler(*args, **kwargs)
+
+def Image_GetHandlers(*args, **kwargs):
+    """Image_GetHandlers() -> PyObject"""
+    return _core_.Image_GetHandlers(*args, **kwargs)
 
 def Image_GetImageExtWildcard(*args, **kwargs):
     """
@@ -4327,6 +4336,25 @@ class CommandEvent(Event):
         deselection), or a boolean value representing the value of a checkbox.
         """
         return _core_.CommandEvent_GetInt(*args, **kwargs)
+
+    def GetClientData(*args, **kwargs):
+        """
+        GetClientData(self) -> PyObject
+
+        Returns the client data object for a listbox or choice selection event, (if any.)
+        """
+        return _core_.CommandEvent_GetClientData(*args, **kwargs)
+
+    def SetClientData(*args, **kwargs):
+        """
+        SetClientData(self, PyObject clientData)
+
+        Associate the given client data with the item at position n.
+        """
+        return _core_.CommandEvent_SetClientData(*args, **kwargs)
+
+    GetClientObject = GetClientData
+    SetClientObject = SetClientData
 
     def Clone(*args, **kwargs):
         """Clone(self) -> Event"""

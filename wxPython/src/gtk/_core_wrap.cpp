@@ -2602,6 +2602,10 @@ static void wxImage_SetAlphaBuffer(wxImage *self,buffer alpha,int ALPHASIZE){
             }
             self->SetAlpha(alpha, true);
         }
+static PyObject *wxImage_GetHandlers(){
+            wxList& list = wxImage::GetHandlers();
+            return wxPy_ConvertList(&list);
+        }
 static wxBitmap wxImage_ConvertToBitmap(wxImage *self,int depth=-1){
             wxBitmap bitmap(*self, depth);
             return bitmap;
@@ -2667,6 +2671,20 @@ static void wxEvtHandler__setOORInfo(wxEvtHandler *self,PyObject *_self,bool inc
                     self->SetClientObject(NULL);  // This will delete it too
                 }
             }
+        }
+static PyObject *wxCommandEvent_GetClientData(wxCommandEvent *self){
+            wxPyClientData* data = (wxPyClientData*)self->GetClientObject();
+            if (data) {
+                Py_INCREF(data->m_obj);
+                return data->m_obj;
+            } else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+static void wxCommandEvent_SetClientData(wxCommandEvent *self,PyObject *clientData){
+            wxPyClientData* data = new wxPyClientData(clientData);
+            self->SetClientObject(data);
         }
 
 static int wxKeyEvent_GetUnicodeKey(wxKeyEvent *self){
@@ -14342,6 +14360,28 @@ static PyObject *_wrap_Image_RemoveHandler(PyObject *, PyObject *args, PyObject 
 }
 
 
+static PyObject *_wrap_Image_GetHandlers(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    PyObject *result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":Image_GetHandlers",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (PyObject *)wxImage_GetHandlers();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Image_GetImageExtWildcard(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxString result;
@@ -16633,6 +16673,60 @@ static PyObject *_wrap_CommandEvent_GetInt(PyObject *, PyObject *args, PyObject 
     {
         resultobj = SWIG_From_long(static_cast<long >(result)); 
     }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_CommandEvent_GetClientData(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxCommandEvent *arg1 = (wxCommandEvent *) 0 ;
+    PyObject *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CommandEvent_GetClientData",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxCommandEvent, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (PyObject *)wxCommandEvent_GetClientData(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_CommandEvent_SetClientData(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxCommandEvent *arg1 = (wxCommandEvent *) 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "clientData", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CommandEvent_SetClientData",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxCommandEvent, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    arg2 = obj1;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxCommandEvent_SetClientData(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -46484,6 +46578,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_AddHandler", (PyCFunction) _wrap_Image_AddHandler, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_InsertHandler", (PyCFunction) _wrap_Image_InsertHandler, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_RemoveHandler", (PyCFunction) _wrap_Image_RemoveHandler, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Image_GetHandlers", (PyCFunction) _wrap_Image_GetHandlers, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_GetImageExtWildcard", (PyCFunction) _wrap_Image_GetImageExtWildcard, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_ConvertToBitmap", (PyCFunction) _wrap_Image_ConvertToBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_ConvertToMonoBitmap", (PyCFunction) _wrap_Image_ConvertToMonoBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -46563,6 +46658,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CommandEvent_GetExtraLong", (PyCFunction) _wrap_CommandEvent_GetExtraLong, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"CommandEvent_SetInt", (PyCFunction) _wrap_CommandEvent_SetInt, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"CommandEvent_GetInt", (PyCFunction) _wrap_CommandEvent_GetInt, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"CommandEvent_GetClientData", (PyCFunction) _wrap_CommandEvent_GetClientData, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"CommandEvent_SetClientData", (PyCFunction) _wrap_CommandEvent_SetClientData, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"CommandEvent_Clone", (PyCFunction) _wrap_CommandEvent_Clone, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"CommandEvent_swigregister", CommandEvent_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_NotifyEvent", (PyCFunction) _wrap_new_NotifyEvent, METH_VARARGS | METH_KEYWORDS, NULL},

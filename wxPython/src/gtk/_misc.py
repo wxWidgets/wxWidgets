@@ -1264,7 +1264,7 @@ class Timer(_core.EvtHandler):
         return _misc_.Timer_GetId(*args, **kwargs)
 
     def Destroy(self):
-        """NO-OP: Timers must be destroyed by normal refrence counting"""
+        """NO-OP: Timers must be destroyed by normal reference counting"""
         pass
 
 
