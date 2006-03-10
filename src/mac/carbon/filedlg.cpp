@@ -173,11 +173,11 @@ void MakeUserDataRec(OpenUserDataRec *myData , const wxString& filter )
             wxString extension = myData->extensions[i];
 
             // Remove leading '*'
-            if (extension.GetChar(0) == '*')
+            if (extension.length() && (extension.GetChar(0) == '*'))
                 extension = extension.Mid( 1 );
 
             // Remove leading '.'
-            if (extension.GetChar(0) == '.')
+            if (extension.length() && (extension.GetChar(0) == '.'))
                 extension = extension.Mid( 1 );
        
             if (wxFileName::MacFindDefaultTypeAndCreator( extension, &fileType, &creator ))
