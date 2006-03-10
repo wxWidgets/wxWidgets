@@ -64,7 +64,6 @@
 
     NSRect rectCancel = NSMakeRect( 10.0 , 10.0 , 82  , 24 );
     NSRect rectOK = NSMakeRect( 100.0 , 10.0 , 82  , 24 );
-    NSView* panel = [[NSView alloc] initWithFrame:rectBox];
     
     NSButton* cancelButton = [[NSButton alloc] initWithFrame:rectCancel];
     [cancelButton setTitle:(NSString*)cfCancelString.Detach()];
