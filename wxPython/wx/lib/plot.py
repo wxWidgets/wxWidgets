@@ -201,7 +201,9 @@ class PolyLine(PolyPoints):
         colour = self.attributes['colour']
         width = self.attributes['width'] * printerScale
         style= self.attributes['style']
-        pen = wx.Pen(wx.NamedColour(colour), width, style)
+        if not isinstance(colour, wx.Colour):
+            colour = wx.NamedColour(colour)
+        pen = wx.Pen(colour, width, style)
         pen.SetCap(wx.CAP_BUTT)
         dc.SetPen(pen)
         if coord == None:
@@ -262,11 +264,16 @@ class PolyMarker(PolyPoints):
         fillstyle = self.attributes['fillstyle']
         marker = self.attributes['marker']
 
-        dc.SetPen(wx.Pen(wx.NamedColour(colour), width))
+        if colour and not isinstance(colour, wx.Colour):
+            colour = wx.NamedColour(colour)
+        if fillcolour and not isinstance(fillcolour, wx.Colour):
+            fillcolour = wx.NamedColour(fillcolour)
+            
+        dc.SetPen(wx.Pen(colour, width))
         if fillcolour:
-            dc.SetBrush(wx.Brush(wx.NamedColour(fillcolour),fillstyle))
+            dc.SetBrush(wx.Brush(fillcolour,fillstyle))
         else:
-            dc.SetBrush(wx.Brush(wx.NamedColour(colour), fillstyle))
+            dc.SetBrush(wx.Brush(colour, fillstyle))
         if coord == None:
             self._drawmarkers(dc, self.scaled, marker, size)
         else:
@@ -486,6 +493,17 @@ class PlotCanvas(wx.Window):
         # platforms at initialization, but little harm done.
         if wx.Platform != "__WXMAC__":
             self.OnSize(None) # sets the initial size based on client size
+
+        self._gridColour = wx.NamedColour('black')
+
+    def GetGridColour(self):
+        return self._gridColour
+
+    def SetGridColour(self, colour):
+        if isinstance(colour, wx.Colour):
+            self._gridColour = colour
+        else:
+            self._gridColour = wx.NamedColour(colour)
 
         
     # SaveFile
@@ -1226,7 +1244,7 @@ class PlotCanvas(wx.Window):
     def _drawAxes(self, dc, p1, p2, scale, shift, xticks, yticks):
         
         penWidth= self.printerScale        # increases thickness for printing only
-        dc.SetPen(wx.Pen(wx.NamedColour('BLACK'), penWidth))
+        dc.SetPen(wx.Pen(self._gridColour, penWidth))
         
         # set length of tick marks--long ones make grid
         if self._gridEnabled:

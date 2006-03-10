@@ -60,6 +60,9 @@ wx.lib.pubsub: Publisher is now able to parse a dotted notation string
 into a topic tuple.  For example: subscribing to "timer.clock.seconds"
 is the same as subscribing to ("timer", "clock", "seconds").
 
+Applied patch #1441370: lib.plot - allow passing in wx.Colour()
+
+
 
 
 
