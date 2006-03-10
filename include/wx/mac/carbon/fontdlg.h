@@ -15,6 +15,38 @@
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
 
+/*
+ * Font dialog
+ */
+
+#ifndef wxMAC_USE_EXPERIMENTAL_FONTDIALOG
+#define wxMAC_USE_EXPERIMENTAL_FONTDIALOG 0
+#endif
+
+#if wxMAC_USE_EXPERIMENTAL_FONTDIALOG
+
+class WXDLLEXPORT wxFontDialog : public wxDialog
+{
+public:
+    wxFontDialog();
+    wxFontDialog(wxWindow *parent, const wxFontData& data);
+    ~wxFontDialog();
+
+    bool Create(wxWindow *parent, const wxFontData& data);
+
+    int ShowModal();
+    wxFontData& GetFontData() { return m_fontData; }
+
+protected:
+    wxFontData m_fontData;
+
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxFontDialog)
+};
+
+extern "C" int RunMixedFontDialog(wxFontDialog* dialog) ;
+
+#else // wxMAC_USE_EXPERIMENTAL_FONTDIALOG
+
 #if !USE_NATIVE_FONT_DIALOG_FOR_MACOSX
 
 /*!
@@ -46,10 +78,6 @@ class WXDLLEXPORT wxCheckBox;
 #endif
     // !USE_NATIVE_FONT_DIALOG_FOR_MACOSX
 
-/*
- * Font dialog
- */
- 
 class WXDLLEXPORT wxFontDialog: public wxDialog
 {
 DECLARE_DYNAMIC_CLASS(wxFontDialog)
@@ -131,6 +159,8 @@ protected:
     wxFontData  m_fontData;
     void*		m_pEventHandlerRef;
 };
+
+#endif
 
 #endif
     // _WX_FONTDLG_H_
