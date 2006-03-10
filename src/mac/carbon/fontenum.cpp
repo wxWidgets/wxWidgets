@@ -88,7 +88,6 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
 void wxFontEnumeratorHelper::DoEnumerate()
 {
     MenuHandle    menu;
-    Str255        p_name;
     short         lines;
 
     menu = NewMenu( 32000, "\pFont" );
@@ -97,8 +96,19 @@ void wxFontEnumeratorHelper::DoEnumerate()
 
     for ( int i = 1; i < lines + 1; i ++ )
     {
+        wxString c_name ;
+#if TARGET_API_MAC_CARBON
+        CFStringRef menutext ;
+        c_name = wxEmptyString ;
+        if ( CopyMenuItemTextAsCFString (menu, i, &menutext) == noErr )
+        {
+            c_name = wxMacCFStringHolder(menutext).AsString(wxLocale::GetSystemEncoding());
+        }
+#else
+        Str255        p_name;
         GetMenuItemText( menu, i, p_name );
-        wxString c_name = wxMacMakeStringFromPascal( p_name );
+        c_name = wxMacMakeStringFromPascal( p_name );
+#endif
 
 #if 0
         if ( m_fixedOnly )
