@@ -29,6 +29,7 @@ extern "C"
 }
 
 #include "wx/gtk/win_gtk.h"
+#include "wx/gtk/private.h"
 
 // DLL options compatibility check:
 #include "wx/build.h"
