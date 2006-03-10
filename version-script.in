@@ -12,6 +12,7 @@
     global:
         *wxGenericListCtrl*DoClientToScreen*;
         *wxGenericListCtrl*DoScreenToClient*;
+        *wxGenericListCtrl*SetItemColumnImage*;
         # for wxString::operator<<(wxString&, wxLongLongNative const&)
         # note no trailing '*' or it also matches wxGetDiskSpace
         *wxString*wxLongLongNative;

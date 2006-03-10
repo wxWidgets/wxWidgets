@@ -68,7 +68,7 @@ private:
     void LogColEvent(const wxListEvent& event, const wxChar *eventName);
 
     virtual wxString OnGetItemText(long item, long column) const;
-    virtual int OnGetItemImage(long item) const;
+    virtual int OnGetItemColumnImage(long item, long column) const;
     virtual wxListItemAttr *OnGetItemAttr(long item) const;
 
     wxListItemAttr m_attr;

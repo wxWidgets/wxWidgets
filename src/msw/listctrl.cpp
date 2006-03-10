@@ -915,14 +915,23 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 // Sets the item image
 bool wxListCtrl::SetItemImage(long item, int image, int WXUNUSED(selImage))
 {
+    return SetItemColumnImage(item, 0, image);
+}
+
+#if wxABI_VERSION >= 20603
+// Sets the item image
+bool wxListCtrl::SetItemColumnImage(long item, long column, int image)
+{
     wxListItem info;
 
     info.m_mask = wxLIST_MASK_IMAGE;
     info.m_image = image;
     info.m_itemId = item;
+    info.m_col = column;
 
     return SetItem(info);
 }
+#endif
 
 // Gets the item text
 wxString wxListCtrl::GetItemText(long item) const

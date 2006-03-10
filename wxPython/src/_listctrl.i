@@ -513,6 +513,7 @@ public:
 
     // Sets the item image
     bool SetItemImage(long item, int image, int selImage=-1) ;
+    bool SetItemColumnImage( long item, long column, int image );
 
     // Gets the item text
     wxString GetItemText(long item) const ;
