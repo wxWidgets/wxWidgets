@@ -782,40 +782,106 @@ void wxListBox::MacScrollTo( int n )
     verify_noerr( m_peer->RevealItem( id , kTextColumnId , kDataBrowserRevealWithoutSelecting ) ) ;
 }
 
-int wxListBox::DoListHitTest(const wxPoint& point) const
+int wxListBox::DoListHitTest(const wxPoint& inpoint) const
 {
-    //Yuck - there is no easy way to get a databrowseritem from a point
-    //so we need to iterate through our items to see which one this falls under
+    OSErr err;
 
-    // TODO: binary search would be faster
-    int count = GetCount();
+    // There are few reasons why this is complicated:
+    // 1) There is no native hittest function for mac
+    // 2) GetDataBrowserItemPartBounds only works on visible items
+    // 3) We can't do it through GetDataBrowserTableView[Item]RowHeight
+    //    because what it returns is basically inaccurate in the context
+    //    of the coordinates we want here, but we use this as a guess
+    //    for where the first visible item lies
+
+    wxPoint point = inpoint;
+    // interestingly enough 10.2 (and below?) have GetDataBrowserItemPartBounds
+    // giving root window coordinates but 10.3 and above give client coordinates
+    // so we only compare using root window coordinates on 10.3 and up
+    if ( UMAGetSystemVersion() < 0x1030 )
+        MacClientToRootWindow(&point.x, &point.y);
+
+    // get column property id (req. for call to itempartbounds)
     DataBrowserTableViewColumnID colId = 0;
+    err = GetDataBrowserTableViewColumnProperty(m_peer->GetControlRef(), 0, &colId);
+    wxCHECK_MSG(err == noErr, wxNOT_FOUND, wxT("Unexpected error from GetDataBrowserTableViewColumnProperty"));
 
-    //Get column property id (req. for call to itempartbounds)
-    GetDataBrowserTableViewColumnProperty(m_peer->GetControlRef(), 0, &colId);
-    
-    for(int i = 1; i <= count; ++i)
+    // OK, first we need to find the first visible item we have -
+    // this will be the "low" for our binary search. There is no real
+    // easy way around this, as we will need to do a SLOW linear search
+    // until we find a visible item, but we can do a cheap calculation
+    // via the row height to speed things up a bit
+    UInt32 scrollx, scrolly;
+    err = GetDataBrowserScrollPosition(m_peer->GetControlRef(), &scrollx, &scrolly);
+    wxCHECK_MSG(err == noErr, wxNOT_FOUND, wxT("Unexpected error from GetDataBrowserScrollPosition"));
+
+    UInt16 height;
+    err = GetDataBrowserTableViewRowHeight(m_peer->GetControlRef(), &height);
+    wxCHECK_MSG(err == noErr, wxNOT_FOUND, wxT("Unexpected error from GetDataBrowserTableViewRowHeight"));
+
+    // these indices are 0-based, as usual, so we need to add 1 to them when
+    // passing them to data browser functions which use 1-based indices
+    int low = scrolly / height,
+        high = GetCount() - 1;
+
+
+    // search for the first visible item (note that the scroll guess above
+    // is the low bounds of where the item might lie so we only use that as a
+    // starting point - we should reach it within 1 or 2 iterations of the loop)
+    while ( low <= high )
     {
         Rect bounds;
-        GetDataBrowserItemPartBounds(m_peer->GetControlRef(), i, colId, 
-                                     kDataBrowserPropertyEnclosingPart,
-                                     &bounds);
-        
-        //translate to client coords
-        //
-        // TODO: it would probably be more efficient to translate point to
-        //       screen coordinates once outside of the loop
-        MacRootWindowToWindow(&bounds.left, &bounds.top);
-        MacRootWindowToWindow(&bounds.right, &bounds.bottom);
-        
-        //if point is within the bounds, return this item
-        if( (point.x >= bounds.left && point.x <= bounds.right) &&
-            (point.y >= bounds.top && point.y <= bounds.bottom) )
+        err = GetDataBrowserItemPartBounds(m_peer->GetControlRef(), low + 1, colId,
+                                           kDataBrowserPropertyEnclosingPart,
+                                           &bounds); //note +1 to trans to mac id
+        if ( err == noErr )
+            break;
+
+        // errDataBrowserItemNotFound is expected as it simply means that the
+        // item is not currently visible -- but other errors are not
+        wxCHECK_MSG( err == errDataBrowserItemNotFound, wxNOT_FOUND,
+                     wxT("Unexpected error from GetDataBrowserItemPartBounds") );
+
+        low++;
+    }
+
+    // NOW do a binary search for where the item lies, searching low again if
+    // we hit an item that isn't visible
+    while ( low <= high )
+    {
+        int mid = (low + high) / 2;
+
+        Rect bounds;
+        err = GetDataBrowserItemPartBounds(m_peer->GetControlRef(), mid + 1, colId,
+                                           kDataBrowserPropertyEnclosingPart,
+                                           &bounds); //note +1 to trans to mac id
+        wxCHECK_MSG( err == noErr || err == errDataBrowserItemNotFound,
+                     wxNOT_FOUND,
+                     wxT("Unexpected error from GetDataBrowserItemPartBounds") );
+
+        if ( err == errDataBrowserItemNotFound )
         {
-            return i - 1; //found
+            // item not visible, attempt to find a visible one
+            high = mid - 1; // search lower
+        }
+        else // visible item, do actual hitttest
+        {
+            // if point is within the bounds, return this item (since we assume
+            // all x coords of items are equal we only test the x coord in
+            // equality)
+            if( (point.x >= bounds.left && point.x <= bounds.right) &&
+                (point.y >= bounds.top && point.y <= bounds.bottom) )
+            {
+                return mid;     // found!
+            }
+
+            if ( point.y < bounds.top )
+                high = mid - 1; // index(bounds) greater then key(point)
+            else
+                low = mid + 1;  // index(bounds) less then key(point)
         }
     }
-    
+
     return wxNOT_FOUND;
 }
 
