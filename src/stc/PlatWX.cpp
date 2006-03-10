@@ -919,7 +919,7 @@ private:
     bool                unicodeMode;
     int                 desiredVisibleRows;
     int                 aveCharWidth;
-    int                 maxStrWidth;
+    size_t              maxStrWidth;
     Point               location;       // Caret location at which the list is opened
     wxImageList*        imgList;
     wxArrayInt*         imgTypeMap;
