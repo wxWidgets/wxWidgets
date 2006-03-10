@@ -50,8 +50,30 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 
 int wxColourDialog::ShowModal()
 {
+    RGBColor currentColor = *((RGBColor*)m_colourData.m_dataColour.GetPixel()) ;
+
+#if TARGET_API_MAC_OSX
+    NColorPickerInfo info;
+    OSStatus err ;
+    memset(&info, 0, sizeof(info)) ;
+    // TODO : use parent to determine better position and then kAtSpecifiedOrigin
+    info.placeWhere = kCenterOnMainScreen ; 
+    info.flags = kColorPickerDialogIsMoveable | kColorPickerDialogIsModal ;
+    info.theColor.color.rgb.red =  currentColor.red ;
+    info.theColor.color.rgb.green =  currentColor.green ;
+    info.theColor.color.rgb.blue =  currentColor.blue ;
+    err = NPickColor(&info);
+    if ((err == noErr) && info.newColorChosen)
+    {
+        currentColor.red = info.theColor.color.rgb.red ;
+        currentColor.green = info.theColor.color.rgb.green ;
+        currentColor.blue = info.theColor.color.rgb.blue ;
+        m_colourData.m_dataColour.Set((WXCOLORREF*) &currentColor);
+        return wxID_OK;
+    }
+#else
+    RGBColor newColor ;
     Point where ;
-    RGBColor currentColor = *((RGBColor*)m_colourData.m_dataColour.GetPixel()) , newColor ;
 
     where.h = where.v = -1;
 
@@ -60,7 +82,7 @@ int wxColourDialog::ShowModal()
         m_colourData.m_dataColour.Set( (WXCOLORREF*) &newColor ) ;
         return wxID_OK;
     }
-
+#endif
     return wxID_CANCEL;
 }
 
