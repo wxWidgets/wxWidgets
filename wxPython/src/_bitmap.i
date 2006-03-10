@@ -201,6 +201,7 @@ bitmap. This preserves mask information so that bitmaps and images can
 be converted back and forth without loss in that respect.", "");
     
 
+    
     DocDeclStr(
         virtual wxMask* , GetMask() const,
         "Gets the associated mask (if any) which may have been loaded from a
@@ -211,13 +212,14 @@ file or explpicitly set for the bitmap.
 
     // MSW only?    wxBitmap GetMaskBitmap() const;
 
+    %disownarg(wxMask*);
     DocDeclStr(
         virtual void , SetMask(wxMask* mask),
         "Sets the mask for this bitmap.
 
 :see: `GetMask`, `wx.Mask`
 ", "");
-    
+    %cleardisown(wxMask*);
     
     %extend {
         DocStr(SetMaskColour,
@@ -338,7 +340,7 @@ passed then BLACK is used.
         }
     }
     
-    //~wxMask();
+    ~wxMask();
 };
 
 %pythoncode { MaskColour = wx._deprecated(Mask, "wx.MaskColour is deprecated, use `wx.Mask` instead.") }

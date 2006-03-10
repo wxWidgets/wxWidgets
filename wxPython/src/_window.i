@@ -1810,7 +1810,7 @@ Only functional on Windows.", "");
     // constraints and sizers
     // ----------------------
 
-    // set the constraints for this window or retrieve them (may be NULL)
+    %disownarg(wxLayoutConstraints*);
     DocDeclStr(
         void , SetConstraints( wxLayoutConstraints *constraints ),
         "Sets the window to have the given layout constraints. If an existing
@@ -1828,6 +1828,7 @@ effect.", "");
         wxLayoutConstraints *, GetConstraints() const,
         "Returns a pointer to the window's layout constraints, or None if there
 are none.", "");
+    %cleardisown(wxLayoutConstraints*);
     
 
     DocDeclStr(
