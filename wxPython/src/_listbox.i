@@ -106,6 +106,8 @@ public:
     // return True if this listbox is sorted
     bool IsSorted() const;
 
+    // return the index of the item at this position or wxNOT_FOUND
+    int HitTest(const wxPoint& pt) const;
 
     %extend {
         void SetItemForegroundColour(int item, const wxColour& c) {
@@ -170,9 +172,6 @@ public:
     int GetItemHeight();
 #endif
 
-    // return the index of the item at this position or wxNOT_FOUND
-    int HitTest(const wxPoint& pt) const;
-    %Rename(HitTestXY, int, HitTest(wxCoord x, wxCoord y) const);
 };
 
 //---------------------------------------------------------------------------
