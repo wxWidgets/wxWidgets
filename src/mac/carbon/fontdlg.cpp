@@ -126,7 +126,7 @@ pascal OSStatus wxMacCarbonFontPanelHandler(EventHandlerCallRef nextHandler, Eve
                             ByteCount *sizePtr = (ByteCount *)CFDataGetBytePtr(sizesData);
                             UInt32 *bytePtr = (UInt32*)CFDataGetBytePtr(valuesData);
                             ATSUAttributeValuePtr valuesPtr = bytePtr ;
-                            for ( int i = 0 ; i < count ; ++i)
+                            for ( ItemCount i = 0 ; i < count ; ++i)
                             {
                                 if ( tagPtr[i] == kATSUColorTag && sizePtr[i] == sizeof(RGBColor))
                                 {
