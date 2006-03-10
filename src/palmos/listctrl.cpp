@@ -284,6 +284,12 @@ bool wxListCtrl::SetItemImage(long item, int image, int WXUNUSED(selImage))
     return false;
 }
 
+// Sets the item image
+bool wxListCtrl::SetItemColumnImage(long item, long column, int image)
+{
+    return false;
+}
+
 // Gets the item text
 wxString wxListCtrl::GetItemText(long item) const
 {

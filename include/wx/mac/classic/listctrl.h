@@ -223,6 +223,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
 
   // Sets the item image
   bool SetItemImage(long item, int image, int selImage) ;
+  bool SetItemColumnImage(long item, long column, int image);
 
   // Gets the item text
   wxString GetItemText(long item) const ;

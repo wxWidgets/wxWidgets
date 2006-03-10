@@ -4936,10 +4936,17 @@ bool wxGenericListCtrl::SetItemState( long item, long state, long stateMask )
 bool
 wxGenericListCtrl::SetItemImage( long item, int image, int WXUNUSED(selImage) )
 {
+    return SetItemColumnImage(item, 0, image);
+}
+
+bool
+wxGenericListCtrl::SetItemColumnImage( long item, long column, int image )
+{
     wxListItem info;
     info.m_image = image;
     info.m_mask = wxLIST_MASK_IMAGE;
     info.m_itemId = item;
+    info.m_col = column;
     m_mainWin->SetItem( info );
     return true;
 }

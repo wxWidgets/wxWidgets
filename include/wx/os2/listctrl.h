@@ -133,6 +133,10 @@ public:
                       ,int  nImage
                       ,int  lSelImage
                      );
+    bool SetItemColumnImage( long lItem
+                            ,long lColumn
+                            ,int  nImage
+                           );
 
     //
     // Item text

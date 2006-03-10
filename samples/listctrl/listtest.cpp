@@ -491,6 +491,15 @@ void MyFrame::InitWithReportItems()
     m_listCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
     m_listCtrl->SetColumnWidth( 2, wxLIST_AUTOSIZE );
 
+    // Set images in columns
+    m_listCtrl->SetItemColumnImage(1, 1, 0);
+
+    wxListItem info;
+    info.SetImage(0);
+    info.SetId(3);
+    info.SetColumn(2);
+    m_listCtrl->SetItem(info);
+
     // test SetItemFont too
     m_listCtrl->SetItemFont(0, *wxITALIC_FONT);
 }
@@ -1012,9 +1021,15 @@ wxString MyListCtrl::OnGetItemText(long item, long column) const
     }
 }
 
-int MyListCtrl::OnGetItemImage(long WXUNUSED(item)) const
+int MyListCtrl::OnGetItemColumnImage(long item, long column) const
 {
-    return 0;
+    if (!column)
+        return 0;
+
+    if (!(item %3) && column == 1)
+        return 0;
+
+    return -1;
 }
 
 wxListItemAttr *MyListCtrl::OnGetItemAttr(long item) const

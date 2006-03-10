@@ -920,13 +920,22 @@ Sets the item's font.
 \func{bool}{SetItemImage}{\param{long }{item}, \param{int }{image}}
 
 Sets the image associated with the item. The image is an index into the
-image list associated with the list control.
+image list associated with the list control. In report view, this only sets
+the image for the first column.
 
 \func{bool}{SetItemImage}{\param{long }{item}, \param{int }{image}, \param{int }{selImage}}
 
 Sets the unselected and selected images associated with the item. The images are indices into the
 image list associated with the list control. This form is deprecated: {\it selImage} is not
 used.
+
+
+\membersection{wxListCtrl::SetItemColumnImage}\label{wxlistctrlsetitemcolumnimage}
+
+\func{bool}{SetItemImage}{\param{long }{item}, \param{long }{column}\param{int }{image}}
+
+Sets the image associated with the item. In report view, you can specify the column.
+The image is an index into the image list associated with the list control.
 
 
 \membersection{wxListCtrl::SetItemPosition}\label{wxlistctrlsetitemposition}
