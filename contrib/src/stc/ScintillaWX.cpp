@@ -257,7 +257,7 @@ void ScintillaWX::StartDrag() {
     // We defer the starting of the DnD, otherwise the LeftUp of a normal
     // click could be lost and the STC will think it is doing a DnD when the
     // user just wanted a normal click.
-    startDragTimer->Start(100, true);
+    startDragTimer->Start(200, true);
 #endif // wxUSE_DRAG_AND_DROP
 }
 
