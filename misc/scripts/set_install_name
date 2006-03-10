@@ -65,7 +65,7 @@ GiveUsageErrorAndExit()
 ChangeInstallNames()
 {
     # only change the libs themselves, not symlinks to them
-    all_libs=`find $libdir -type f -name libwx_\*.dylib`
+    all_libs=`find "$libdir" -type f -name libwx_\*.dylib`
     if [ -z "$all_libs" ]; then
         Error "No wx libraries found in \"$libdir\"."
         exit 1
