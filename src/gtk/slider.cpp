@@ -129,6 +129,7 @@ static void gtk_slider_callback( GtkAdjustment *adjust,
     win->m_oldPos = dvalue;
 }
 
+#ifdef __GTK20__
 static gint gtk_slider_button_press_callback( GtkWidget * /* widget */,
                                               GdkEventButton * /* gdk_event */,
                                               wxWindowGTK *win)
@@ -151,6 +152,7 @@ static gint gtk_slider_button_release_callback( GtkWidget *scale,
 
     return FALSE;
 }
+#endif
 
 }
 
@@ -213,16 +215,21 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
     m_adjust = gtk_range_get_adjustment( GTK_RANGE(m_widget) );
 
+#ifdef __WXGTK20__
     if (style & wxSL_INVERSE)
         gtk_range_set_inverted( GTK_RANGE(m_widget), TRUE );
+#endif
 
     GtkEnableEvents();
+
+#ifdef __WXGTK20__
     g_signal_connect (m_widget, "button_press_event",
                       G_CALLBACK (gtk_slider_button_press_callback),
                       this);
     g_signal_connect (m_widget, "button_release_event",
                       G_CALLBACK (gtk_slider_button_release_callback),
                       this);
+#endif
 
     SetRange( minValue, maxValue );
     SetValue( value );
@@ -250,7 +257,7 @@ void wxSlider::SetValue( int value )
 
     GtkDisableEvents();
 
-    g_signal_emit_by_name (m_adjust, "value_changed");
+    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
 
     GtkEnableEvents();
 }
@@ -273,7 +280,7 @@ void wxSlider::SetRange( int minValue, int maxValue )
 
     GtkDisableEvents();
 
-    g_signal_emit_by_name (m_adjust, "changed");
+    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
 
     GtkEnableEvents();
 }
@@ -298,7 +305,7 @@ void wxSlider::SetPageSize( int pageSize )
 
     GtkDisableEvents();
 
-    g_signal_emit_by_name (m_adjust, "changed");
+    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
 
     GtkEnableEvents();
 }
@@ -318,7 +325,7 @@ void wxSlider::SetThumbLength( int len )
 
     GtkDisableEvents();
 
-    g_signal_emit_by_name (m_adjust, "changed");
+    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
 
     GtkEnableEvents();
 }
@@ -353,15 +360,17 @@ bool wxSlider::IsOwnGtkWindow( GdkWindow *window )
 
 void wxSlider::GtkDisableEvents()
 {
-    g_signal_handlers_disconnect_by_func (m_adjust,
-                                          (gpointer) gtk_slider_callback,
-                                          this);
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_adjust),
+                        GTK_SIGNAL_FUNC(gtk_slider_callback),
+                        (gpointer) this );
 }
 
 void wxSlider::GtkEnableEvents()
 {
-    g_signal_connect (m_adjust, "value_changed",
-                      G_CALLBACK (gtk_slider_callback), this);
+    gtk_signal_connect( GTK_OBJECT (m_adjust),
+                        "value_changed",
+                        GTK_SIGNAL_FUNC(gtk_slider_callback),
+                        (gpointer) this );
 }
 
 // static
