@@ -18,7 +18,10 @@ class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
 {
 public:
     // ctors and such
-    wxListBox();
+    wxListBox()
+    {
+        Init();
+    }
     wxListBox( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
@@ -27,9 +30,7 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxListBoxNameStr )
     {
-#if wxUSE_CHECKLISTBOX
-        m_hasCheckBoxes = FALSE;
-#endif // wxUSE_CHECKLISTBOX
+        Init();
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
     wxListBox( wxWindow *parent, wxWindowID id,
@@ -40,12 +41,12 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxListBoxNameStr )
     {
-#if wxUSE_CHECKLISTBOX
-        m_hasCheckBoxes = FALSE;
-#endif // wxUSE_CHECKLISTBOX
+        Init();
         Create(parent, id, pos, size, choices, style, validator, name);
     }
     virtual ~wxListBox();
+
+    void Init(); //common construction
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,

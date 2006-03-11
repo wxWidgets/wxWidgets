@@ -419,7 +419,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 // construction
 // ----------------------------------------------------------------------------
 
-wxListBox::wxListBox()
+void wxListBox::Init()
 {
     m_treeview = (GtkTreeView*) NULL;
 #if wxUSE_CHECKLISTBOX
