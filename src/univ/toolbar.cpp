@@ -651,12 +651,6 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
         PerformAction( wxACTION_BUTTON_CLICK, numArg );
                         
         // Write by Danny Raynor to change state again.                
-        if( tool->IsToggled() )
-        {
-            // Change toggle state to false
-            tool->Toggle(false);
-        }
-  
         // Check button still pressed or not
         if( tool->IsInverted() )
         {        
