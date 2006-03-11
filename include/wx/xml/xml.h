@@ -9,16 +9,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-/* ************************************************************************* *
- *                                CAUTION!                                   *
- *                                                                           *
- *  The API defined in this header *WILL* change in the future and backward  *
- *  compatibility will *not* be preserved. If you use these classes in your  *
- *  application, it probably won't compile with future wxWidgets releases.   *
- *  Use on your own risk.                                                    *
- *                                                                           *
- * ************************************************************************* */
-
 #ifndef _WX_XML_H_
 #define _WX_XML_H_
 
@@ -75,8 +65,9 @@ class WXDLLIMPEXP_XML wxXmlProperty
 public:
     wxXmlProperty() : m_next(NULL) {}
     wxXmlProperty(const wxString& name, const wxString& value,
-                  wxXmlProperty *next)
+                  wxXmlProperty *next = NULL)
             : m_name(name), m_value(value), m_next(next) {}
+    virtual ~wxXmlProperty() {}
 
     wxString GetName() const { return m_name; }
     wxString GetValue() const { return m_value; }
@@ -108,10 +99,10 @@ class WXDLLIMPEXP_XML wxXmlNode
 public:
     wxXmlNode() : m_properties(NULL), m_parent(NULL),
                   m_children(NULL), m_next(NULL) {}
-    wxXmlNode(wxXmlNode *parent,wxXmlNodeType type,
-              const wxString& name, const wxString& content,
-              wxXmlProperty *props, wxXmlNode *next);
-    ~wxXmlNode();
+    wxXmlNode(wxXmlNode *parent, wxXmlNodeType type,
+              const wxString& name, const wxString& content = wxEmptyString,
+              wxXmlProperty *props = NULL, wxXmlNode *next = NULL);
+    virtual ~wxXmlNode();
 
     // copy ctor & operator=. Note that this does NOT copy syblings
     // and parent pointer, i.e. m_parent and m_next will be NULL
@@ -123,16 +114,23 @@ public:
     // user-friendly creation:
     wxXmlNode(wxXmlNodeType type, const wxString& name,
               const wxString& content = wxEmptyString);
-    void AddChild(wxXmlNode *child);
-    void InsertChild(wxXmlNode *child, wxXmlNode *before_node);
-    bool RemoveChild(wxXmlNode *child);
-    void AddProperty(const wxString& name, const wxString& value);
-    bool DeleteProperty(const wxString& name);
+    virtual void AddChild(wxXmlNode *child);
+    virtual void InsertChild(wxXmlNode *child, wxXmlNode *before_node);
+    virtual bool RemoveChild(wxXmlNode *child);
+    virtual void AddProperty(const wxString& name, const wxString& value);
+    virtual bool DeleteProperty(const wxString& name);
 
     // access methods:
     wxXmlNodeType GetType() const { return m_type; }
     wxString GetName() const { return m_name; }
     wxString GetContent() const { return m_content; }
+
+    // Gets node content from wxXML_ENTITY_NODE
+    // The problem is, <tag>content<tag> is represented as
+    // wxXML_ENTITY_NODE name="tag", content=""
+    //    |-- wxXML_TEXT_NODE or
+    //        wxXML_CDATA_SECTION_NODE name="" content="content"
+    wxString GetNodeContent() const;
 
     wxXmlNode *GetParent() const { return m_parent; }
     wxXmlNode *GetNext() const { return m_next; }
@@ -153,7 +151,7 @@ public:
     void SetChildren(wxXmlNode *child) { m_children = child; }
 
     void SetProperties(wxXmlProperty *prop) { m_properties = prop; }
-    void AddProperty(wxXmlProperty *prop);
+    virtual void AddProperty(wxXmlProperty *prop);
 
 private:
     wxXmlNodeType m_type;
@@ -181,21 +179,21 @@ public:
                   const wxString& encoding = wxT("UTF-8"));
     wxXmlDocument(wxInputStream& stream,
                   const wxString& encoding = wxT("UTF-8"));
-    ~wxXmlDocument() { delete m_root; }
+    virtual ~wxXmlDocument() { wxDELETE(m_root); }
 
     wxXmlDocument(const wxXmlDocument& doc);
     wxXmlDocument& operator=(const wxXmlDocument& doc);
 
     // Parses .xml file and loads data. Returns TRUE on success, FALSE
     // otherwise.
-    bool Load(const wxString& filename,
+    virtual bool Load(const wxString& filename,
               const wxString& encoding = wxT("UTF-8"));
-    bool Load(wxInputStream& stream,
+    virtual bool Load(wxInputStream& stream,
               const wxString& encoding = wxT("UTF-8"));
     
     // Saves document as .xml file.
-    bool Save(const wxString& filename) const;
-    bool Save(wxOutputStream& stream) const;
+    virtual bool Save(const wxString& filename) const;
+    virtual bool Save(wxOutputStream& stream) const;
 
     bool IsOk() const { return m_root != NULL; }
 
@@ -210,7 +208,7 @@ public:
     wxString GetFileEncoding() const { return m_fileEncoding; }
 
     // Write-access methods:
-    void SetRoot(wxXmlNode *node) { delete m_root ; m_root = node; }
+    void SetRoot(wxXmlNode *node) { wxDELETE(m_root); m_root = node; }
     void SetVersion(const wxString& version) { m_version = version; }
     void SetFileEncoding(const wxString& encoding) { m_fileEncoding = encoding; }
 
@@ -231,6 +229,8 @@ private:
     wxXmlNode *m_root;
 
     void DoCopy(const wxXmlDocument& doc);
+
+    DECLARE_CLASS(wxXmlDocument)
 };
 
 #endif // wxUSE_XML

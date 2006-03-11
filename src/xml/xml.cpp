@@ -32,6 +32,11 @@
 #include "wx/app.h"
 WX_CHECK_BUILD_OPTIONS("wxXML")
 
+
+IMPLEMENT_CLASS(wxXmlDocument, wxObject)
+
+
+
 //-----------------------------------------------------------------------------
 //  wxXmlNode
 //-----------------------------------------------------------------------------
@@ -266,6 +271,20 @@ bool wxXmlNode::DeleteProperty(const wxString& name)
         }
         return false;
     }
+}
+
+wxString wxXmlNode::GetNodeContent() const
+{
+    wxXmlNode *n = GetChildren();
+
+    while (n)
+    {
+        if (n->GetType() == wxXML_TEXT_NODE ||
+            n->GetType() == wxXML_CDATA_SECTION_NODE)
+            return n->GetContent();
+        n = n->GetNext();
+    }
+    return wxEmptyString;
 }
 
 
