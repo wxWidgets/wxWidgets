@@ -1571,6 +1571,8 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     }
 #endif // wxUSE_ACCEL
 
+#if !TARGET_API_MAC_OSX
+
     if (!handled)
     {
         wxTopLevelWindowMac *tlw = focus->MacGetTopLevelWindow() ;
@@ -1648,6 +1650,7 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
             }
           }
     }
+#endif
     return handled ;
 }
 
@@ -1730,3 +1733,167 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
 
     return handled ;
 }
+
+bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+{
+    if ( !focus )
+        return false ;
+    
+    wxKeyEvent event(wxEVT_CHAR) ;
+    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
+    long keyval = event.m_keyCode ;
+
+    bool handled = false ;
+
+    wxTopLevelWindowMac *tlw = focus->MacGetTopLevelWindow() ;
+        
+    if (tlw)
+    {
+        event.SetEventType( wxEVT_CHAR_HOOK );
+        handled = tlw->GetEventHandler()->ProcessEvent( event );
+        if ( handled && event.GetSkipped() )
+            handled = false ;
+    }
+
+    if ( !handled )
+    {
+        event.SetEventType( wxEVT_CHAR );
+        event.Skip( false ) ;
+        handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+    }
+        
+    if ( !handled && (keyval == WXK_TAB) )
+    {
+        wxWindow* iter = focus->GetParent() ;
+        while ( iter && !handled )
+        {
+            if ( iter->HasFlag( wxTAB_TRAVERSAL ) )
+            {
+                wxNavigationKeyEvent new_event;
+                new_event.SetEventObject( focus );
+                new_event.SetDirection( !event.ShiftDown() );
+                /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
+                new_event.SetWindowChange( event.ControlDown() );
+                new_event.SetCurrentFocus( focus );
+                handled = focus->GetParent()->GetEventHandler()->ProcessEvent( new_event );
+                if ( handled && new_event.GetSkipped() )
+                    handled = false ;
+            }
+
+            iter = iter->GetParent() ;
+        }
+    }
+
+    // backdoor handler for default return and command escape
+    if ( !handled && (!focus->IsKindOf(CLASSINFO(wxControl) ) || !focus->MacCanFocus() ) )
+    {
+        // if window is not having a focus still testing for default enter or cancel
+        // TODO: add the UMA version for ActiveNonFloatingWindow
+        wxWindow* focus = wxFindWinFromMacWindow( FrontWindow() ) ;
+        if ( focus )
+        {
+            if ( keyval == WXK_RETURN )
+            {
+                wxButton *def = wxDynamicCast(focus->GetDefaultItem(), wxButton);
+                if ( def && def->IsEnabled() )
+                {
+                    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+                    event.SetEventObject(def);
+                    def->Command(event);
+
+                    return true ;
+                }
+            }
+            else if (keyval == WXK_ESCAPE || (keyval == '.' && modifiers & cmdKey ) )
+            {
+                // generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs)
+                wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+                new_event.SetEventObject( focus );
+                handled = focus->GetEventHandler()->ProcessEvent( new_event );
+            }
+        }
+    }
+    return handled ;
+}
+
+// This method handles common code for SendKeyDown, SendKeyUp, and SendChar events. 
+void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+{
+    short keycode, keychar ;
+
+    keychar = short(keymessage & charCodeMask);
+    keycode = short(keymessage & keyCodeMask) >> 8 ;
+    if ( !(event.GetEventType() == wxEVT_CHAR) && (modifiers & (controlKey | shiftKey | optionKey) ) )
+    {
+        // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
+        // and look at the character after
+        UInt32 state = 0;
+        UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~(controlKey | shiftKey | optionKey))) | keycode, &state);
+        keychar = short(keyInfo & charCodeMask);
+    }
+
+    long keyval = wxMacTranslateKey(keychar, keycode) ;
+    if ( keyval == keychar && ( event.GetEventType() == wxEVT_KEY_UP || event.GetEventType() == wxEVT_KEY_DOWN ) )
+        keyval = wxToupper( keyval ) ;
+
+    // Check for NUMPAD keys
+    if (keyval >= '0' && keyval <= '9' && keycode >= 82 && keycode <= 92)
+    {
+        keyval = (keyval - '0') + WXK_NUMPAD0;
+    }
+    else if (keycode >= 67 && keycode <= 81)
+    {
+        switch (keycode)
+        {
+        case 76 :
+            keyval = WXK_NUMPAD_ENTER;
+            break;
+
+        case 81:
+            keyval = WXK_NUMPAD_EQUAL;
+            break;
+
+        case 67:
+            keyval = WXK_NUMPAD_MULTIPLY;
+            break;
+
+        case 75:
+            keyval = WXK_NUMPAD_DIVIDE;
+            break;
+
+        case 78:
+            keyval = WXK_NUMPAD_SUBTRACT;
+            break;
+
+        case 69:
+            keyval = WXK_NUMPAD_ADD;
+            break;
+
+        case 65:
+            keyval = WXK_NUMPAD_DECIMAL;
+            break;
+
+        default:
+            break;
+        } // end switch
+    }
+
+    event.m_shiftDown = modifiers & shiftKey;
+    event.m_controlDown = modifiers & controlKey;
+    event.m_altDown = modifiers & optionKey;
+    event.m_metaDown = modifiers & cmdKey;
+    event.m_keyCode = keyval ;
+#if wxUSE_UNICODE
+    event.m_uniChar = uniChar ;
+    if ( event.GetEventType() == wxEVT_CHAR )
+        event.m_keyCode = uniChar ;
+#endif
+
+    event.m_rawCode = keymessage;
+    event.m_rawFlags = modifiers;
+    event.m_x = wherex;
+    event.m_y = wherey;
+    event.SetTimestamp(when);
+    event.SetEventObject(focus);
+}
+

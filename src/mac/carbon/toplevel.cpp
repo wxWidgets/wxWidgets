@@ -90,8 +90,9 @@ static const EventTypeSpec eventList[] =
 {
     // TODO remove control related event like key and mouse (except for WindowLeave events)
 #if 1
+#if !TARGET_API_MAC_OSX
     { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
-
+#endif
     { kEventClassKeyboard, kEventRawKeyDown } ,
     { kEventClassKeyboard, kEventRawKeyRepeat } ,
     { kEventClassKeyboard, kEventRawKeyUp } ,
@@ -114,6 +115,8 @@ static const EventTypeSpec eventList[] =
     { kEventClassMouse , kEventMouseMoved } ,
     { kEventClassMouse , kEventMouseDragged } ,
 } ;
+
+#if !TARGET_API_MAC_OSX
 
 static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
@@ -168,6 +171,7 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
 
     return result ;
 }
+#endif
 
 static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
@@ -808,9 +812,11 @@ pascal OSStatus wxMacTopLevelEventHandler( EventHandlerCallRef handler , EventRe
         case kEventClassKeyboard :
             result = KeyboardEventHandler( handler, event , data ) ;
             break ;
+#if !TARGET_API_MAC_OSX
         case kEventClassTextInput :
             result = TextInputEventHandler( handler, event , data ) ;
             break ;
+#endif
         case kEventClassWindow :
             result = wxMacTopLevelWindowEventHandler( handler, event , data ) ;
             break ;

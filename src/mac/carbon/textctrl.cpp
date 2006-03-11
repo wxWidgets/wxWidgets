@@ -969,6 +969,9 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     if (!eat_key)
     {
         // perform keystroke handling
+#if TARGET_API_MAC_OSX
+		event.Skip() ;
+#else
         if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
             CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
         else
@@ -985,6 +988,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 m_peer->HandleKey( keycode , keychar , ev->modifiers ) ;
             }
         }
+#endif
     }
     if ( ( key >= 0x20 && key < WXK_START ) ||
          key == WXK_RETURN ||
