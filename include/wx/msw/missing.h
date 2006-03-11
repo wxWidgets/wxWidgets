@@ -117,6 +117,10 @@
 #define EM_SETUSEMOUSEFORINPUT (WM_USER + 0x224)
 #endif
 
+#ifndef TPM_RECURSE
+#define TPM_RECURSE 1
+#endif
+
 // ----------------------------------------------------------------------------
 // ListView common control
 // Needed by listctrl.cpp
