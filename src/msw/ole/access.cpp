@@ -297,8 +297,8 @@ public:
 
 // Obsolete
 
-    STDMETHODIMP put_accName(VARIANT varChild, BSTR szName) { return E_FAIL; }
-    STDMETHODIMP put_accValue(VARIANT varChild, BSTR szName) { return E_FAIL; }
+    STDMETHODIMP put_accName(VARIANT /* varChild */, BSTR /* szName */) { return E_FAIL; }
+    STDMETHODIMP put_accValue(VARIANT /* varChild */, BSTR /* szName */) { return E_FAIL; }
 
 // IDispatch
 
