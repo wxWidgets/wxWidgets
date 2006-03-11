@@ -587,7 +587,7 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
     delete [] uniChars ;
     if ( charBuf != buf )
         delete [] charBuf ;
-    
+
     return result ;
 }
 
@@ -1259,14 +1259,16 @@ void wxWindowMac::MacSetBackgroundBrush( const wxBrush &brush )
 bool wxWindowMac::MacCanFocus() const
 {
     // TODO : evaluate performance hits by looking up this value, eventually cache the results for a 1 sec or so
-    // CAUTION : the value returned currently is 0 or 2, I've also found values of 1 having the same meaning, but the value range
-    // is nowhere documented
+    // CAUTION : the value returned currently is 0 or 2, I've also found values of 1 having the same meaning,
+    // but the value range is nowhere documented
     Boolean keyExistsAndHasValidFormat ;
-    CFIndex fullKeyboardAccess = CFPreferencesGetAppIntegerValue ( CFSTR("AppleKeyboardUIMode" ) ,
-        kCFPreferencesCurrentApplication, &keyExistsAndHasValidFormat);  
-    
+    CFIndex fullKeyboardAccess = CFPreferencesGetAppIntegerValue( CFSTR("AppleKeyboardUIMode" ) ,
+        kCFPreferencesCurrentApplication, &keyExistsAndHasValidFormat );
+
     if ( keyExistsAndHasValidFormat && fullKeyboardAccess > 0 )
+    {
         return true ;
+    }
     else
     {
         UInt32 features = 0 ;
@@ -1336,7 +1338,7 @@ void wxWindowMac::DoCaptureMouse()
     wxApp::s_captureWindow = this ;
 }
 
-wxWindow* wxWindowBase::GetCapture()
+wxWindow * wxWindowBase::GetCapture()
 {
     return wxApp::s_captureWindow ;
 }
@@ -1362,7 +1364,7 @@ void wxWindowMac::SetDropTarget(wxDropTarget *pDropTarget)
 
 #endif
 
-// Old style file-manager drag&drop
+// Old-style File Manager Drag & Drop
 void wxWindowMac::DragAcceptFiles(bool accept)
 {
     // TODO:
@@ -1385,10 +1387,7 @@ bool wxWindowMac::MacGetBoundsForControl(
     int& x, int& y,
     int& w, int& h , bool adjustOrigin ) const
 {
-    bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
-
     // the desired size, minus the border pixels gives the correct size of the control
-
     x = (int)pos.x;
     y = (int)pos.y;
 
@@ -1396,6 +1395,7 @@ bool wxWindowMac::MacGetBoundsForControl(
     w = wxMax(size.x, 0) ; // WidthDefault( size.x );
     h = wxMax(size.y, 0) ; // HeightDefault( size.y ) ;
 
+    bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
     if ( !isCompositing )
         GetParent()->MacWindowToRootWindow( &x , &y ) ;
 

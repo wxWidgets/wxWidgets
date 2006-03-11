@@ -40,6 +40,7 @@ bool wxButton::Create(wxWindow *parent,
 
     m_label = label ;
 
+    OSStatus err;
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
     m_peer = new wxMacControl(this) ;
     if ( id == wxID_HELP )
@@ -47,8 +48,10 @@ bool wxButton::Create(wxWindow *parent,
         ControlButtonContentInfo info ;
         info.contentType = kControlContentIconRef ;
         GetIconRef(kOnSystemDisk, kSystemIconsCreator, kHelpIcon, &info.u.iconRef);
-        verify_noerr ( CreateRoundButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , kControlRoundButtonNormalSize ,
-            &info , m_peer->GetControlRefAddr() ) );
+        err = CreateRoundButtonControl(
+            MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
+            &bounds, kControlRoundButtonNormalSize,
+            &info, m_peer->GetControlRefAddr() );
     }
     else if ( label.Find('\n' ) == wxNOT_FOUND && label.Find('\r' ) == wxNOT_FOUND)
     {
@@ -71,19 +74,24 @@ bool wxButton::Create(wxWindow *parent,
         }
 #endif
 
-        verify_noerr ( CreatePushButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , m_peer->GetControlRefAddr() ) );
+        err = CreatePushButtonControl(
+            MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
+            &bounds, CFSTR(""), m_peer->GetControlRefAddr() );
     }
     else
     {
         ControlButtonContentInfo info ;
         info.contentType = kControlNoContent ;
-        verify_noerr(CreateBevelButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds, CFSTR(""),
-            kControlBevelButtonLargeBevel , kControlBehaviorPushbutton , &info , 0 , 0 , 0 , m_peer->GetControlRefAddr() ) );
+        err = CreateBevelButtonControl(
+            MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds, CFSTR(""),
+            kControlBevelButtonLargeBevel, kControlBehaviorPushbutton,
+            &info, 0, 0, 0, m_peer->GetControlRefAddr() );
     }
 
+    verify_noerr( err );
     wxASSERT_MSG( m_peer != NULL && m_peer->Ok() , wxT("No valid Mac control") ) ;
 
-    MacPostControlCreate(pos, size) ;
+    MacPostControlCreate( pos, size );
 
     return true;
 }
@@ -169,7 +177,7 @@ void wxButton::Command (wxCommandEvent & event)
 
 wxInt32 wxButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
 {
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId );
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId);
     event.SetEventObject(this);
     ProcessCommand(event);
 

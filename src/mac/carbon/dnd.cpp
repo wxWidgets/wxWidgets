@@ -141,41 +141,41 @@ bool wxDropTarget::GetData()
         return false;
 
     if ( !CurrentDragHasSupportedFormat() )
-        return false ;
+        return false;
 
-    bool transferred = false ;
+    bool transferred = false;
     if ( gTrackingGlobals.m_currentSource != NULL )
     {
-        wxDataObject* data = gTrackingGlobals.m_currentSource->GetDataObject() ;
+        wxDataObject* data = gTrackingGlobals.m_currentSource->GetDataObject();
 
-        if ( data )
+        if (data != NULL)
         {
-            size_t formatcount = data->GetFormatCount() ;
+            size_t formatcount = data->GetFormatCount();
             wxDataFormat *array = new wxDataFormat[formatcount];
             data->GetAllFormats( array );
-            for (size_t i = 0; !transferred && i < formatcount ; i++)
+            for (size_t i = 0; !transferred && i < formatcount; i++)
             {
-                wxDataFormat format = array[i] ;
+                wxDataFormat format = array[i];
                 if ( m_dataObject->IsSupported( format ) )
                 {
                     int size = data->GetDataSize( format );
-                    transferred = true ;
+                    transferred = true;
 
                     if (size == 0)
                     {
-                        m_dataObject->SetData( format , 0 , 0 );
+                        m_dataObject->SetData( format, 0, 0 );
                     }
                     else
                     {
                         char *d = new char[size];
-                        data->GetDataHere( format , (void*) d );
-                        m_dataObject->SetData( format , size , d ) ;
-                        delete [] d ;
+                        data->GetDataHere( format, (void*)d );
+                        m_dataObject->SetData( format, size, d );
+                        delete [] d;
                     }
                 }
             }
 
-            delete [] array ;
+            delete [] array;
         }
     }
 
@@ -237,7 +237,10 @@ bool wxDropTarget::GetData()
                             dataSize++ ;
                         }
 
-                        theData = new char[dataSize];
+                        if (dataSize > 0)
+                            theData = new char[dataSize];
+                        else
+                            theData = NULL;
 
                         GetFlavorData( (DragReference)m_currentDrag, theItem, theType, (void*) theData, &dataSize, 0L );
                         if ( theType == kScrapFlavorTypeText )
@@ -334,7 +337,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     if (m_data->GetFormatCount() == 0)
         return (wxDragResult) wxDragNone;
 
-    OSErr result;
+    OSStatus result;
     DragReference theDrag;
     RgnHandle dragRegion;
     if ((result = NewDrag(&theDrag)) != noErr)
@@ -490,13 +493,13 @@ void wxMacEnsureTrackingHandlersInstalled()
 {
     if ( !gTrackingGlobalsInstalled )
     {
-        OSErr result;
+        OSStatus err;
 
-        result = InstallTrackingHandler( NewDragTrackingHandlerUPP(wxMacWindowDragTrackingHandler), 0L, &gTrackingGlobals );
-        wxASSERT( result == noErr );
+        err = InstallTrackingHandler( NewDragTrackingHandlerUPP(wxMacWindowDragTrackingHandler), 0L, &gTrackingGlobals );
+        verify_noerr( err );
 
-        result = InstallReceiveHandler( NewDragReceiveHandlerUPP(wxMacWindowDragReceiveHandler), 0L, &gTrackingGlobals );
-        wxASSERT( result == noErr );
+        err = InstallReceiveHandler( NewDragReceiveHandlerUPP(wxMacWindowDragReceiveHandler), 0L, &gTrackingGlobals );
+        verify_noerr( err );
 
         gTrackingGlobalsInstalled = true;
     }
@@ -616,21 +619,21 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                   {
                       switch ( result )
                       {
-                          case wxDragCopy :
+                          case wxDragCopy:
                               {
                                   wxCursor cursor(wxCURSOR_COPY_ARROW) ;
                                   cursor.MacInstall() ;
                               }
                               break ;
 
-                          case wxDragMove :
+                          case wxDragMove:
                               {
                                   wxCursor cursor(wxCURSOR_ARROW) ;
                                   cursor.MacInstall() ;
                               }
                               break ;
 
-                          case wxDragNone :
+                          case wxDragNone:
                               {
                                   wxCursor cursor(wxCURSOR_NO_ENTRY) ;
                                   cursor.MacInstall() ;
