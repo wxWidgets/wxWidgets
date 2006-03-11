@@ -201,6 +201,24 @@ AC_DEFUN([AM_PATH_WXCONFIG],
         fi
       fi
 
+      dnl starting with version 2.7.0 wx-config has --rescomp option
+      wx_has_rescomp=""
+      if test $wx_config_major_version -gt 2; then
+        wx_has_rescomp=yes
+      else
+        if test $wx_config_major_version -eq 2; then
+           if test $wx_config_minor_version -ge 7; then
+              wx_has_rescomp=yes
+           fi
+        fi
+      fi
+      if test "x$wx_has_rescomp" = x ; then
+         dnl cannot give any useful info for resource compiler
+         WX_RESCOMP=
+      else
+         WX_RESCOMP=`$WX_CONFIG_WITH_ARGS --rescomp`
+      fi
+
       if test "x$wx_has_cppflags" = x ; then
          dnl no choice but to define all flags like CFLAGS
          WX_CFLAGS=`$WX_CONFIG_WITH_ARGS --cflags`
@@ -235,6 +253,7 @@ AC_DEFUN([AM_PATH_WXCONFIG],
        WX_CXXFLAGS=""
        WX_LIBS=""
        WX_LIBS_STATIC=""
+       WX_RESCOMP=""
        ifelse([$3], , :, [$3])
 
     fi
@@ -245,6 +264,8 @@ AC_DEFUN([AM_PATH_WXCONFIG],
     WX_CXXFLAGS=""
     WX_LIBS=""
     WX_LIBS_STATIC=""
+    WX_RESCOMP=""
+
     ifelse([$3], , :, [$3])
 
   fi
@@ -257,6 +278,7 @@ AC_DEFUN([AM_PATH_WXCONFIG],
   AC_SUBST(WX_LIBS)
   AC_SUBST(WX_LIBS_STATIC)
   AC_SUBST(WX_VERSION)
+  AC_SUBST(WX_RESCOMP)
 ])
 
 dnl ---------------------------------------------------------------------------

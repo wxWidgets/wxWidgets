@@ -30,6 +30,7 @@ Format-specific notes:
         <option name="WX_CXXFLAGS"/>
         <option name="WX_CPPFLAGS"/>
         <option name="WX_LIBS"/>
+        <option name="WX_RESCOMP"/>
     </if>
 
     <!-- ============================================================== -->
@@ -57,6 +58,10 @@ Format-specific notes:
             <default-value>`$(DOLLAR)(WX_CONFIG) --libs`</default-value>
             <description>wxWidgets libraries to link against</description>
         </option>
+        <option name="WX_RESCOMP">
+            <default-value>`$(DOLLAR)(WX_CONFIG) --rescomp`</default-value>
+            <description>wxWidgets resource compiler and flags</description>
+        </option>
 
         <!-- we need this but the trick used in default-values above
              prevents bakefile from detecting it: -->
@@ -72,6 +77,24 @@ Format-specific notes:
             Don't include presets/wx_unix.bkl directly, use presets/wx.bkl.
         </error>
     </if>
+
+    <!--
+         We need to re-define the resource compiler, used by bakefile when compiling
+         resources, to the resource compiler returned by 'wx-config --rescomp' since
+         'wx-config --rescomp' returns both the name of the resource compiler to use
+         and the flags required for that compiler (rcflags are rccompiler-specific
+         and thus it would be wrong to use them with other resource compilers).
+
+         This line typically does something *only* when the Makefile.in generated
+         using this bakefile, is used on Windows with MSYS (when using Cygwin, resources
+         are not compiled at all).
+
+         NOTE: overwriting the RESCOMP variable we modify the entire Bakefile behaviour
+               for resource compilation; this could be a problem if the bakefile which
+               includes this file needs the standard Bakefile resource compiler to
+               build a non wx-based application.
+    -->
+    <set var="RESCOMP">$(WX_RESCOMP)</set>
 
     <template id="wx-lib">
         <cxxflags>$(WX_CXXFLAGS)</cxxflags>
