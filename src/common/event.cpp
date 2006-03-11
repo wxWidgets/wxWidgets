@@ -1344,6 +1344,10 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
         wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
 #endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
+        // get next node before (maybe) calling the event handler as it could
+        // call Disconnect() invalidating the current node
+        node = node->GetNext();
+
         if ((event.GetEventType() == entry->m_eventType) && (entry->m_fn != 0))
         {
             wxEvtHandler *handler =
@@ -1358,8 +1362,6 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
                 return true;
             }
         }
-
-        node = node->GetNext();
     }
 
     return false;
