@@ -50,6 +50,11 @@ MustHaveApp(wxStyledTextCtrl);
 
 %include stc.h
 
+%pythoncode {
+%# NOTE: These lexers have been deprecated, use STC_LEX_HTML instead
+STC_LEX_ASP = 29
+STC_LEX_PHP = 30    
+}
 //---------------------------------------------------------------------------
 // Python functions to act like the event macros
 
