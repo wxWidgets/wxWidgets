@@ -63,6 +63,15 @@ extern WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName;
 LRESULT WXDLLIMPEXP_CORE APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
                                    WPARAM wParam, LPARAM lParam);
 
+//---------------------------------------------------------------------------
+// Killed MSVC warnings
+//---------------------------------------------------------------------------
+//disable "cast truncates constant value" for VARIANT_BOOL values
+//passed as parameters in VC5 and up
+#ifdef _MSC_VER
+#pragma warning (disable:4310)
+#endif
+
 //===========================================================================
 // BACKEND DECLARATIONS
 //===========================================================================
