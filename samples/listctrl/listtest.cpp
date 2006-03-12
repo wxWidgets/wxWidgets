@@ -41,6 +41,7 @@
 #include "wx/listctrl.h"
 #include "wx/timer.h"           // for wxStopWatch
 #include "wx/colordlg.h"        // for wxGetColourFromUser
+#include "wx/settings.h"
 
 #include "listtest.h"
 
@@ -120,6 +121,9 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
 
     EVT_LIST_CACHE_HINT(LIST_CTRL, MyListCtrl::OnCacheHint)
 
+#if USE_CONTEXT_MENU
+    EVT_CONTEXT_MENU(MyListCtrl::OnContextMenu)
+#endif
     EVT_CHAR(MyListCtrl::OnChar)
 END_EVENT_TABLE()
 
@@ -146,7 +150,7 @@ int wxCALLBACK MyCompareFunction(long item1, long item2, long WXUNUSED(sortData)
 bool MyApp::OnInit()
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame(wxT("wxListCtrl Test"), 50, 50, 450, 340);
+  MyFrame *frame = new MyFrame(wxT("wxListCtrl Test"));
 
   // Show the frame
   frame->Show(true);
@@ -157,9 +161,12 @@ bool MyApp::OnInit()
 }
 
 // My frame constructor
-MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
-       : wxFrame(NULL, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
+MyFrame::MyFrame(const wxChar *title)
+       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxDefaultSize))
 {
+    if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_SMALL)
+        SetSize(wxSize(450, 340));
+    
     m_listCtrl = NULL;
     m_logWindow = NULL;
     m_smallVirtual = false;
@@ -1050,3 +1057,31 @@ void MyListCtrl::InsertItemInReportView(int i)
     buf.Printf(_T("Item %d in column 2"), i);
     SetItem(i, 2, buf);
 }
+
+#if USE_CONTEXT_MENU
+void MyListCtrl::OnContextMenu(wxContextMenuEvent& event)
+{
+    wxPoint point = event.GetPosition();
+    // If from keyboard
+    if (point.x == -1 && point.y == -1) {
+        wxSize size = GetSize();
+        point.x = size.x / 2;
+        point.y = size.y / 2;
+    } else {
+        point = ScreenToClient(point);
+    }
+    ShowContextMenu(point);
+}
+#endif
+
+void MyListCtrl::ShowContextMenu(const wxPoint& pos)
+{
+    wxMenu menu;
+
+    menu.Append(wxID_ABOUT, _T("&About"));
+    menu.AppendSeparator();
+    menu.Append(wxID_EXIT, _T("E&xit"));
+
+    PopupMenu(&menu, pos.x, pos.y);
+}
+
