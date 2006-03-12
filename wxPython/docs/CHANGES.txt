@@ -64,6 +64,13 @@ Applied patch #1441370: lib.plot - allow passing in wx.Colour()
 
 Added wx.CommandEvent.GetClientData.
 
+Updated wxStyledTextCtrl to use version 1.67 of Scintilla.  
+NOTE: The STC_LEXT_ASP and STC_LEX_PHP lexers have been deprecated,
+you should use STC_LEX_HTML instead.
+
+wxSTC: Implemented Fix for SF Bug #1436503.  Delay the start of the
+DnD operation in case the user just intended to click, not drag.
+
 
 
 
