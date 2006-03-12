@@ -647,6 +647,9 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             break;
 
         case CBN_SELCHANGE:
+            // don't generate any events while the dropdown is opened as the
+            // selection is not final yet
+            if ( m_lastAcceptedSelection == wxID_NONE )
             {
                 const int n = GetSelection();
 
