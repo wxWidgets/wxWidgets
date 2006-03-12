@@ -947,10 +947,38 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 
 int wxTextCtrl::GetNumberOfLines() const
 {
-    if (m_windowStyle & wxTE_MULTILINE)
-        return gtk_text_buffer_get_line_count( m_buffer );
-    else
+    if ( m_windowStyle & wxTE_MULTILINE )
+    {
+        GtkTextIter iter;
+        gtk_text_buffer_get_iter_at_offset( m_buffer, &iter, 0 );
+
+        // move forward by one display line until the end is reached
+        int lineCount = 1;
+        while ( gtk_text_view_forward_display_line(GTK_TEXT_VIEW(m_text), &iter) )
+        {
+            lineCount++;
+        }
+
+        // If the last character in the text buffer is a newline,
+        // gtk_text_view_forward_display_line() will return false without that
+        // line being counted. Must add one manually in that case.
+        GtkTextIter lastCharIter;        
+        gtk_text_buffer_get_iter_at_offset
+        (
+            m_buffer,
+            &lastCharIter,
+            gtk_text_buffer_get_char_count(m_buffer) - 1
+        );
+        gchar lastChar = gtk_text_iter_get_char( &lastCharIter );
+        if ( lastChar == wxT('\n') )
+            lineCount++;
+
+        return lineCount;
+    }
+    else // single line
+    {
         return 1;
+    }
 }
 
 void wxTextCtrl::SetInsertionPoint( long pos )
