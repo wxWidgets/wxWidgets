@@ -129,13 +129,8 @@ protected:
     // common part of all ctors
     void Init();
 
-    // check that the index is valid
-    // FIXME: remove once GTK will derive from wxRadioBoxBase
-    inline bool IsValid(int n) const { return n >= 0 && n < GetCount(); }
-
 private:
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 };
 
 #endif // _WX_GTK_RADIOBOX_H_
-
