@@ -127,6 +127,9 @@ public:
 protected:
     void DoApplyWidgetStyle(GtkRcStyle *style);
 
+    virtual bool GTKWidgetNeedsMnemonic() const;
+    virtual void GTKWidgetDoSetMnemonic(GtkWidget* w);
+
     // common part of all ctors
     void Init();
 

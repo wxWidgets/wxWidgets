@@ -43,6 +43,9 @@ public:
     virtual bool IsTransparentForMouse() const { return TRUE; }
 
 protected:
+    virtual bool GTKWidgetNeedsMnemonic() const;
+    virtual void GTKWidgetDoSetMnemonic(GtkWidget* w);
+
     void DoApplyWidgetStyle(GtkRcStyle *style);
     
 private:

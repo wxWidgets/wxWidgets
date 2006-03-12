@@ -205,8 +205,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
         return false;
     }
 
-    m_widget = gtk_frame_new(NULL);
-    SetLabel(title);
+    m_widget = GTKCreateFrame(title);
+    wxControl::SetLabel(title);
 
     // majorDim may be 0 if all trailing parameters were omitted, so don't
     // assert here but just use the correct value for it
@@ -530,8 +530,7 @@ void wxRadioBox::GtkEnableEvents()
 
 void wxRadioBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    gtk_widget_modify_style( m_widget, style );
-    gtk_widget_modify_style(GTK_FRAME(m_widget)->label_widget, style);
+    GTKFrameApplyWidgetStyle(GTK_FRAME(m_widget), style);
 
     wxList::compatibility_iterator node = m_boxes.GetFirst();
     while (node)
@@ -543,6 +542,16 @@ void wxRadioBox::DoApplyWidgetStyle(GtkRcStyle *style)
 
         node = node->GetNext();
     }
+}
+
+bool wxRadioBox::GTKWidgetNeedsMnemonic() const
+{
+    return true;
+}
+
+void wxRadioBox::GTKWidgetDoSetMnemonic(GtkWidget* w)
+{
+    GTKFrameSetMnemonicWidget(GTK_FRAME(m_widget), w);
 }
 
 #if wxUSE_TOOLTIPS

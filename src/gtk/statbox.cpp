@@ -56,8 +56,8 @@ bool wxStaticBox::Create( wxWindow *parent,
         return FALSE;
     }
 
-    m_widget = gtk_frame_new(NULL);
-    SetLabel(label);
+    m_widget = GTKCreateFrame(label);
+    wxControl::SetLabel(label);
 
     m_parent->DoAddChild( this );
 
@@ -87,8 +87,17 @@ void wxStaticBox::SetLabel( const wxString& label )
 
 void wxStaticBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    gtk_widget_modify_style(m_widget, style);
-    gtk_widget_modify_style(GTK_FRAME(m_widget)->label_widget, style);
+    GTKFrameApplyWidgetStyle(GTK_FRAME(m_widget), style);
+}
+
+bool wxStaticBox::GTKWidgetNeedsMnemonic() const
+{
+    return true;
+}
+
+void wxStaticBox::GTKWidgetDoSetMnemonic(GtkWidget* w)
+{
+    GTKFrameSetMnemonicWidget(GTK_FRAME(m_widget), w);
 }
 
 // static

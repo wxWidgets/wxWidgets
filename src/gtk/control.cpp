@@ -66,7 +66,6 @@ wxSize wxControl::DoGetBestSize() const
     return best;
 }
 
-
 void wxControl::PostCreation(const wxSize& size)
 {
     wxWindow::PostCreation();
@@ -110,22 +109,54 @@ void wxControl::GTKSetLabelForLabel(GtkLabel *w, const wxString& label)
     gtk_label_set_text_with_mnemonic(w, wxGTK_CONV(labelGTK));
 }
 
-void wxControl::GTKSetLabelForFrame(GtkFrame *w, const wxString& label)
+// ----------------------------------------------------------------------------
+// GtkFrame helpers
+//
+// GtkFrames do in fact support mnemonics in GTK2+ but not through
+// gtk_frame_set_label, rather you need to use a custom label widget
+// instead (idea gleaned from the native gtk font dialog code in GTK)
+// ----------------------------------------------------------------------------
+
+GtkWidget* wxControl::GTKCreateFrame(const wxString& label)
 {
-    wxControl::SetLabel(label);
+    const wxString labelGTK = GTKConvertMnemonics(label);
+    GtkWidget* labelwidget = gtk_label_new_with_mnemonic(wxGTK_CONV(labelGTK));
+    gtk_widget_show(labelwidget); // without this it won't show...
 
-    // frames don't support mnemonics even under GTK+ 2
-    const wxString labelGTK = GTKRemoveMnemonics(label);
+    GtkWidget* framewidget = gtk_frame_new(NULL);
+    gtk_frame_set_label_widget(GTK_FRAME(framewidget), labelwidget);
 
-    gtk_frame_set_label(w, labelGTK.empty() ? (char *)NULL
-                                            : wxGTK_CONV(labelGTK));
+    return framewidget; //note that the label is already set so you'll 
+                        //only need to call wxControl::SetLabel afterwards
 }
 
+void wxControl::GTKSetLabelForFrame(GtkFrame *w, const wxString& label)
+{
+    GtkLabel* labelwidget = GTK_LABEL(gtk_frame_get_label_widget(w));
+    GTKSetLabelForLabel(labelwidget, label);
+}
+
+void wxControl::GTKFrameApplyWidgetStyle(GtkFrame* w, GtkRcStyle* style)
+{
+    gtk_widget_modify_style(GTK_WIDGET(w), style);
+    gtk_widget_modify_style(gtk_frame_get_label_widget (w), style);
+}
+
+void wxControl::GTKFrameSetMnemonicWidget(GtkFrame* w, GtkWidget* widget)
+{
+    GtkLabel* labelwidget = GTK_LABEL(gtk_frame_get_label_widget(w));
+
+    gtk_label_set_mnemonic_widget(labelwidget, widget);
+}
+
+// ----------------------------------------------------------------------------
 // worker function implementing both GTKConvert/RemoveMnemonics()
 //
 // notice that under GTK+ 1 we only really need to support MNEMONICS_REMOVE as
 // it doesn't support mnemonics anyhow but this would make the code so ugly
 // that we do the same thing for GKT+ 1 and 2
+// ----------------------------------------------------------------------------
+
 enum MnemonicsFlag
 {
     MNEMONICS_REMOVE,

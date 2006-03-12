@@ -50,7 +50,6 @@
 #include "wx/settings.h"
 #include "wx/log.h"
 #include "wx/fontutil.h"
-#include "wx/stattext.h"
 
 #ifdef __WXDEBUG__
     #include "wx/thread.h"
@@ -1755,7 +1754,7 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
             // Rewrite cursor handling here (away from idle).
         }
     }
-    
+
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
         g_signal_stop_emission_by_name (widget, "motion_notify_event");
@@ -2024,7 +2023,7 @@ gtk_window_enter_callback( GtkWidget *widget,
             // Rewrite cursor handling here (away from idle).
         }
     }
-    
+
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
        g_signal_stop_emission_by_name (widget, "enter_notify_event");
@@ -2943,7 +2942,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
        if (GTK_WIDGET_VISIBLE (widget))
             gtk_widget_queue_resize (widget);
     }
-    else 
+    else
 #endif
     if (m_parent->m_wxwindow == NULL) // i.e. wxNotebook
     {
@@ -3606,44 +3605,62 @@ void wxWindowGTK::DoMoveInTabOrder(wxWindow *win, MoveKind move)
         wxapp_install_idle_handler();
 }
 
+bool wxWindowGTK::GTKWidgetNeedsMnemonic() const
+{
+    // none needed by default
+    return false;
+}
+
+void wxWindowGTK::GTKWidgetDoSetMnemonic(GtkWidget* WXUNUSED(w))
+{
+    // nothing to do by default since none is needed
+}
+
 void wxWindowGTK::RealizeTabOrder()
 {
     if (m_wxwindow)
     {
         if ( !m_children.empty() )
         {
-#if wxUSE_STATTEXT
             // we don't only construct the correct focus chain but also use
-            // this opportunity to update the mnemonic widgets for all labels
-            //
-            // it would be nice to extract this code from here and put it in
-            // stattext.cpp to reduce dependencies but there is no really easy
-            // way to do it unfortunately
-            wxStaticText *lastLabel = NULL;
-#endif // wxUSE_STATTEXT
+            // this opportunity to update the mnemonic widgets for the widgets
+            // that need them
 
             GList *chain = NULL;
+            wxWindowGTK* mnemonicWindow = NULL;
 
             for ( wxWindowList::const_iterator i = m_children.begin();
                   i != m_children.end();
                   ++i )
             {
                 wxWindowGTK *win = *i;
-#if wxUSE_STATTEXT
-                if ( lastLabel )
+
+                if ( mnemonicWindow )
                 {
                     if ( win->AcceptsFocusFromKeyboard() )
                     {
-                        GtkLabel *l = GTK_LABEL(lastLabel->m_widget);
-                        gtk_label_set_mnemonic_widget(l, win->m_widget);
-                        lastLabel = NULL;
+                        // wxComboBox et al. needs to focus on on a different
+                        // widget than m_widget, so if the main widget isn't
+                        // focusable try the connect widget
+                        GtkWidget* w = win->m_widget;
+                        if ( !GTK_WIDGET_CAN_FOCUS(w) )
+                        {
+                            w = win->GetConnectWidget();
+                            if ( !GTK_WIDGET_CAN_FOCUS(w) )
+                                w = NULL;
+                        }
+
+                        if ( w )
+                        {
+                            mnemonicWindow->GTKWidgetDoSetMnemonic(w);
+                            mnemonicWindow = NULL;
+                        }
                     }
                 }
-                else // check if this one is a label
+                else if ( win->GTKWidgetNeedsMnemonic() )
                 {
-                    lastLabel = wxDynamicCast(win, wxStaticText);
+                    mnemonicWindow = win;
                 }
-#endif // wxUSE_STATTEXT
 
                 chain = g_list_prepend(chain, win->m_widget);
             }

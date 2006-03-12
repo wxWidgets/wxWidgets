@@ -66,8 +66,11 @@ protected:
     // sets the label to the given string and also sets it for the given widget
     void GTKSetLabelForLabel(GtkLabel *w, const wxString& label);
 
-    // as GTKSetLabelForLabel() but for a GtkFrame widget
+    // GtkFrame helpers
+    GtkWidget* GTKCreateFrame(const wxString& label);
     void GTKSetLabelForFrame(GtkFrame *w, const wxString& label);
+    void GTKFrameApplyWidgetStyle(GtkFrame* w, GtkRcStyle* rc);
+    void GTKFrameSetMnemonicWidget(GtkFrame* w, GtkWidget* widget);
 
     // remove mnemonics ("&"s) from the label
     static wxString GTKRemoveMnemonics(const wxString& label);

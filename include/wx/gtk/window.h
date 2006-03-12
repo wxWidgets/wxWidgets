@@ -156,6 +156,13 @@ public:
     virtual bool IsOwnGtkWindow( GdkWindow *window );
     void ConnectWidget( GtkWidget *widget );
 
+    // Override GTKWidgetNeedsMnemonic and return true if your
+    // needs to set its mnemonic widget, such as for a 
+    // GtkLabel for wxStaticText, then do the actual
+    // setting of the widget inside GTKWidgetDoSetMnemonic
+    virtual bool GTKWidgetNeedsMnemonic() const;
+    virtual void GTKWidgetDoSetMnemonic(GtkWidget* w);
+
     // Returns the default context which usually is anti-aliased
     PangoContext   *GtkGetPangoDefaultContext();
 

@@ -166,6 +166,16 @@ bool wxStaticText::SetForegroundColour(const wxColour& colour)
     return true;
 }
 
+bool wxStaticText::GTKWidgetNeedsMnemonic() const
+{
+    return true;
+}
+
+void wxStaticText::GTKWidgetDoSetMnemonic(GtkWidget* w)
+{
+    gtk_label_set_mnemonic_widget(GTK_LABEL(m_widget), w);
+}
+
 // static
 wxVisualAttributes
 wxStaticText::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
