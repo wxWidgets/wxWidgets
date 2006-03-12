@@ -157,6 +157,7 @@ wxGTK:
 - Polygon and line drawing speeded up if there is no scaling.
 - Fixed problems with CJK input method.
 - Implemented ScrollLines/Pages() for all windows (Paul Cornett)
+- Support underlined fonts in wxTextCtrl
 
 wxMac:
 
