@@ -53,8 +53,8 @@ inline void wxSetCCUnicodeFormat(HWND WXUNUSED_IN_WINCE(hwnd))
 // Return the default font for the common controls
 //
 // this is implemented in msw/settings.cpp
+class wxFont;
 extern wxFont wxGetCCDefaultFont();
 #endif
 
 #endif // _WX_MSW_WRAPCCTL_H_
-
