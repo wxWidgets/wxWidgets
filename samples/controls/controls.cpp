@@ -74,7 +74,6 @@ public:
     MyPanel(wxFrame *frame, int x, int y, int w, int h);
     virtual ~MyPanel();
 
-    void OnSize( wxSizeEvent& event );
     void OnIdle( wxIdleEvent &event );
     void OnListBox( wxCommandEvent &event );
     void OnListBoxDoubleClick( wxCommandEvent &event );
@@ -480,7 +479,6 @@ const int  ID_SIZER_CHECK14     = 205;
 const int  ID_SIZER_CHECKBIG    = 206;
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
-EVT_SIZE      (                         MyPanel::OnSize)
 EVT_IDLE      (                         MyPanel::OnIdle)
 EVT_BOOKCTRL_PAGE_CHANGING(ID_BOOK,     MyPanel::OnPageChanging)
 EVT_BOOKCTRL_PAGE_CHANGED(ID_BOOK,      MyPanel::OnPageChanged)
@@ -1040,16 +1038,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     panel->SetSizer( sizer );
 
     m_book->AddPage(panel, _T("wxSizer"));
-}
 
-void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
-{
-    int x = 0;
-    int y = 0;
-    GetClientSize( &x, &y );
-
-    if (m_book) m_book->SetSize( 2, 2, x-4, y*2/3-4 );
-    if (m_text) m_text->SetSize( 2, y*2/3+2, x-4, y/3-4 );
+    // set the sizer for the panel itself
+    sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(m_book, wxSizerFlags().Border().Expand());
+    sizer->Add(m_text, wxSizerFlags(1).Border().Expand());
+    SetSizer(sizer);
 }
 
 void MyPanel::OnIdle(wxIdleEvent& event)
