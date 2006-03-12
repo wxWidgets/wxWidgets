@@ -2395,7 +2395,7 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
                 pEnd = wxStrchr(++pc, wxT('"'));
                 if ( pEnd == NULL )
                 {
-                    wxLogWarning(wxT("Mime.types file %s, line %d: unterminated quoted string."),
+                    wxLogWarning(wxT("Mime.types file %s, line %lu: unterminated quoted string."),
                                  strFileName.c_str(), nLine + 1);
                 }
             }
@@ -2453,7 +2453,7 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
                 // unregistered extensions according to the standard practice,
                 // but it may be worth telling the user about other junk in
                 // his mime.types file
-                wxLogWarning(wxT("Unknown field in file %s, line %d: '%s'."),
+                wxLogWarning(wxT("Unknown field in file %s, line %lu: '%s'."),
                              strFileName.c_str(), nLine + 1, strLHS.c_str());
             }
 
@@ -2781,7 +2781,7 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
         // check that we really read something reasonable
         if ( currentToken < Field_Other )
         {
-            wxLogWarning(wxT("Mailcap file %s, line %d: incomplete entry ignored."),
+            wxLogWarning(wxT("Mailcap file %s, line %lu: incomplete entry ignored."),
                          strFileName.c_str(), nLine + 1);
 
             continue;
