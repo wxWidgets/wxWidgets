@@ -1802,6 +1802,7 @@ bool wxIsWild( const wxString& pattern )
 * Written By Douglas A. Lewis <dalewis@cs.Buffalo.EDU>
 *
 * The match procedure is public domain code (from ircII's reg.c)
+* but modified to suit our tastes (RN: No "%" syntax I guess)
 */
 
 bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
@@ -1815,11 +1816,8 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
     const wxChar *m = pat.c_str(),
     *n = text.c_str(),
     *ma = NULL,
-    *na = NULL,
-    *mp = NULL,
-    *np = NULL;
+    *na = NULL;
     int just = 0,
-    pcount = 0,
     acount = 0,
     count = 0;
 
@@ -1837,7 +1835,6 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
             ma = ++m;
             na = n;
             just = 1;
-            mp = NULL;
             acount = count;
         }
         else if (*m == wxT('?'))
@@ -1880,8 +1877,6 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
             if (*m == *n)
             {
                 m++;
-                if (*n == wxT(' '))
-                    mp = NULL;
                 count++;
                 n++;
             }
@@ -1898,19 +1893,6 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
                 */
                 if (!*n)
                     return false;
-                if (mp)
-                {
-                    m = mp;
-                    if (*np == wxT(' '))
-                    {
-                        mp = NULL;
-                        goto check_percent;
-                    }
-                    n = ++np;
-                    count = pcount;
-                }
-                else
-                check_percent:
 
                 if (ma)
                 {
