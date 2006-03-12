@@ -20436,6 +20436,12 @@ SWIGEXPORT void SWIG_init(void) {
         PyDict_SetItemString(d,"STC_LEX_FREEBASIC", SWIG_From_int(static_cast<int >(75))); 
     }
     {
+        PyDict_SetItemString(d,"STC_LEX_ASP", SWIG_From_int(static_cast<int >(29))); 
+    }
+    {
+        PyDict_SetItemString(d,"STC_LEX_PHP", SWIG_From_int(static_cast<int >(30))); 
+    }
+    {
         PyDict_SetItemString(d,"STC_LEX_AUTOMATIC", SWIG_From_int(static_cast<int >(1000))); 
     }
     {

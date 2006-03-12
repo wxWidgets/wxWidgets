@@ -261,6 +261,8 @@
 %rename(STC_LEX_FLAGSHIP)                   wxSTC_LEX_FLAGSHIP;
 %rename(STC_LEX_CSOUND)                     wxSTC_LEX_CSOUND;
 %rename(STC_LEX_FREEBASIC)                  wxSTC_LEX_FREEBASIC;
+%rename(STC_LEX_ASP)                        wxSTC_LEX_ASP;
+%rename(STC_LEX_PHP)                        wxSTC_LEX_PHP;
 %rename(STC_LEX_AUTOMATIC)                  wxSTC_LEX_AUTOMATIC;
 %rename(STC_P_DEFAULT)                      wxSTC_P_DEFAULT;
 %rename(STC_P_COMMENTLINE)                  wxSTC_P_COMMENTLINE;
