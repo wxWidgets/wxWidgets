@@ -1492,7 +1492,7 @@ public:
     virtual void ClearStyleStack();
 
     /// Get the size of the style stack, for example to check correct nesting
-    virtual int GetStyleStackSize() const { return m_attributeStack.GetCount(); }
+    virtual size_t GetStyleStackSize() const { return m_attributeStack.GetCount(); }
 
     /// Begin using bold
     bool BeginBold();

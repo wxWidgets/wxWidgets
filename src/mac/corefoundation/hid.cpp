@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        hid.cpp
+// Name:        src/mac/corefoundation/hid.cpp
 // Purpose:     DARWIN HID layer for WX Implementation
 // Author:      Ryan Norton
 // Modified by:
@@ -208,7 +208,7 @@ USB Product Name
     return true;
 }//end Create()
 
-int wxHIDDevice::GetCount (int nClass, int nType)
+size_t wxHIDDevice::GetCount (int nClass, int nType)
 {
     mach_port_t             m_pPort;
 
@@ -248,7 +248,7 @@ int wxHIDDevice::GetCount (int nClass, int nType)
     //Now we iterate through them
     io_object_t pObject;
 
-    int nCount = 0;
+    size_t nCount = 0;
 
     while ( (pObject = IOIteratorNext(pIterator)) != 0)
         ++nCount;
