@@ -275,7 +275,7 @@ static void ColouriseTeXDoc(
 // Hooks into the system:
 
 static const char * const texWordListDesc[] = {
-    "TeX, eTeX, pdfTeX, Omega"
+    "TeX, eTeX, pdfTeX, Omega",
     "ConTeXt Dutch",
     "ConTeXt English",
     "ConTeXt German",
