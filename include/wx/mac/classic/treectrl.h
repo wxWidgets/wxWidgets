@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        treectrl.h
+// Name:        wx/mac/classic/treectrl.h
 // Purpose:     wxTreeCtrl class
 // Author:      Stefan Csomor
 // Modified by:
@@ -137,7 +137,7 @@ public:
     // accessors
     // ---------
       //
-    int GetCount() const;
+    size_t GetCount() const;
 
       // indent
     int GetIndent() const;
