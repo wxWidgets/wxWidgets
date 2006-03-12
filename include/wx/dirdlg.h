@@ -84,6 +84,11 @@ public:
 
     #include "wx/mac/dirdlg.h"
 
+// Native Cocoa
+#elif defined(__WXCOCOA__)
+
+    #include "wx/cocoa/dirdlg.h"
+
 // Other ports use generic implementation
 #elif defined(__WXMOTIF__) || \
       defined(__WXGTK__)   || \

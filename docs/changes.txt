@@ -201,6 +201,10 @@ wxMac:
 - Fixed joystick GetXMin/Max bug.
 - Fixed Unix domain socket problem in wxIPC.
 
+wxCocoa:
+
+- wxDirDialog is now native (Hiroyuki Nakamura)
+
 wxWinCE:
 
 - Pressing build-in joystick on WinCE phones fires wxEVT_JOY_BUTTON_DOWN event.

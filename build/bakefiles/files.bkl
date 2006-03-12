@@ -2260,6 +2260,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/dcmemory.mm
     src/cocoa/dcscreen.cpp
     src/cocoa/dialog.mm
+    src/cocoa/dirdlg.mm
     src/cocoa/display.mm
     src/cocoa/drawer.mm
     src/cocoa/evtloop.mm
@@ -2305,7 +2306,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/accel.cpp
     src/generic/caret.cpp
     src/generic/colrdlgg.cpp
-    src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/fontdlgg.cpp
     src/generic/imaglist.cpp
@@ -2354,6 +2354,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/dcmemory.h
     wx/cocoa/dcscreen.h
     wx/cocoa/dialog.h
+    wx/cocoa/dirdlg.h
     wx/cocoa/display.h
     wx/cocoa/drawer.h
     wx/cocoa/filedlg.h
@@ -2390,7 +2391,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/window.h
     <!-- Generic implementations used by wxCocoa: -->
     wx/generic/caret.h
-    wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
     wx/generic/fontdlgg.h
     wx/generic/imaglist.h
