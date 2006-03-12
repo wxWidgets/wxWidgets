@@ -291,7 +291,9 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr)
         : wxRadioBox(parent, id, title, pos, size, n, choices, majorDim,
-                     style, validator, name) { SetForegroundColour(*wxRED); }
+                     style, validator, name)
+    {
+    }
 
 protected:
     void OnFocusGot(wxFocusEvent& event)
@@ -621,7 +623,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_text = new wxTextCtrl(this, wxID_ANY, _T("This is the log window.\n"),
                             wxPoint(0, 250), wxSize(100, 50), wxTE_MULTILINE);
-    m_text->SetBackgroundColour(wxT("wheat"));
 
     m_logTargetOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_text));
 
@@ -743,7 +744,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxButton *button = new MyButton( panel, ID_LISTBOX_FONT, _T("Set &Italic font"), wxPoint(340,130), wxSize(140,30) );
 
     button->SetDefault();
-    button->SetForegroundColour(*wxBLUE);
 
 #if wxUSE_TOOLTIPS
     button->SetToolTip( _T("Press here to set italic font") );
@@ -770,7 +770,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     SetChoiceClientData(wxT("choice"), m_choiceSorted);
 
     m_choice->SetSelection(2);
-    m_choice->SetBackgroundColour( wxT("red") );
     (void)new wxButton( panel, ID_CHOICE_SEL_NUM, _T("Select #&2"), wxPoint(180,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_CHOICE_SEL_STR, _T("&Select 'This'"), wxPoint(340,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_CHOICE_CLEAR, _T("&Clear"), wxPoint(180,80), wxSize(140,30) );
@@ -789,7 +788,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                               wxPoint(20,25), wxSize(120, wxDefaultCoord),
                               5, choices,
                               wxPROCESS_ENTER);
-    m_combo->SetBackgroundColour(*wxBLUE);
 
     (void)new wxButton( panel, ID_COMBO_SEL_NUM, _T("Select #&2"), wxPoint(180,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_SEL_STR, _T("&Select 'This'"), wxPoint(340,30), wxSize(140,30) );
@@ -812,7 +810,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     panel = new wxPanel(m_book);
     (void)new MyRadioBox( panel, ID_RADIOBOX, _T("&That"), wxPoint(10,160), wxDefaultSize, WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
     m_radio = new wxRadioBox( panel, ID_RADIOBOX, _T("T&his"), wxPoint(10,10), wxDefaultSize, WXSIZEOF(choices), choices, 1, wxRA_SPECIFY_COLS );
-    m_radio->SetForegroundColour(*wxRED);
 
 #if wxUSE_TOOLTIPS
     m_combo->SetToolTip(_T("This is a natural\ncombobox - can you believe me?"));
@@ -842,8 +839,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxBoxSizer *sz = new wxBoxSizer( wxVERTICAL );
     gauge_sizer->Add( sz );
     m_gauge = new wxGauge( panel, wxID_ANY, 200, wxDefaultPosition, wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER );
-    m_gauge->SetBackgroundColour(*wxGREEN);
-    m_gauge->SetForegroundColour(*wxRED);
     sz->Add( m_gauge, 0, wxALL, 10 );
     m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200,
                              wxDefaultPosition, wxSize(155,wxDefaultCoord),
@@ -1444,27 +1439,20 @@ void MyPanel::OnRadioButtons( wxCommandEvent &event )
     switch (event.GetId())
     {
         case ID_RADIOBOX_ENABLE:
-            {
-                m_radio->Enable( event.GetInt() == 0 );
-                break;
-            }
-        case ID_RADIOBOX_SEL_NUM:
-            {
-                m_radio->SetSelection( 2 );
-                break;
-            }
-        case ID_RADIOBOX_SEL_STR:
-            {
-                m_radio->SetStringSelection( _T("This") );
-                break;
-            }
-        case ID_RADIOBOX_FONT:
-            {
-                    m_radio->SetForegroundColour(*wxGREEN);
+            m_radio->Enable( event.GetInt() == 0 );
+            break;
 
-                m_radio->SetFont( *wxITALIC_FONT );
-                break;
-            }
+        case ID_RADIOBOX_SEL_NUM:
+            m_radio->SetSelection( 2 );
+            break;
+
+        case ID_RADIOBOX_SEL_STR:
+            m_radio->SetStringSelection( _T("This") );
+            break;
+
+        case ID_RADIOBOX_FONT:
+            m_radio->SetFont( *wxITALIC_FONT );
+            break;
     }
 }
 
