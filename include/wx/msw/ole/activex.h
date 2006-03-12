@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/activex.h
+// Name:        wx/msw/ole/activex.h
 // Purpose:     wxActiveXContainer class
 // Author:      Ryan Norton <wxprojects@comcast.net>
 // Modified by:
@@ -196,24 +196,24 @@ public:
     virtual wxEvent *Clone() const
     { return new wxActiveXEvent(*this); }
 
-    int ParamCount() const
+    size_t ParamCount() const
     {   return m_params.GetCount();  }
 
-    wxString ParamType(int idx) const
+    wxString ParamType(size_t idx) const
     {
-        wxASSERT(idx >= 0 && idx < m_params.GetCount());
+        wxASSERT(idx < m_params.GetCount());
         return m_params[idx].GetType();
     }
 
-    wxString ParamName(int idx) const
+    wxString ParamName(size_t idx) const
     {
-        wxASSERT(idx >= 0 && idx < m_params.GetCount());
+        wxASSERT(idx < m_params.GetCount());
         return m_params[idx].GetName();
     }
 
-    wxVariant& operator[] (int idx)
+    wxVariant& operator[] (size_t idx)
     {
-        wxASSERT(idx >= 0 && idx < ParamCount());
+        wxASSERT(idx < ParamCount());
         return m_params[idx];
     }
 
@@ -229,4 +229,3 @@ typedef void (wxEvtHandler::*wxActiveXEventFunction)(wxActiveXEvent&);
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxActiveXEventFunction, &func)
 
 #endif // _WX_MSW_OLE_ACTIVEXCONTAINER_H_
-

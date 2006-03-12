@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        variant.tex
+%% Purpose:     wxVariant docs
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:     01/30/2005
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxVariant}}\label{wxvariant}
 
 The {\bf wxVariant} class represents a container for any type.
@@ -79,7 +90,7 @@ Construction from user-defined data.  The variant holds onto the {\it data} poin
 
 \func{}{wxVariant}{\param{wxDateTime\&}{ val}, \param{const wxString\& }{name = ``"}}
 
-Construction from a \helpref{wxDateTime}{wxdatetime}.  
+Construction from a \helpref{wxDateTime}{wxdatetime}.
 
 \func{}{wxVariant}{\param{wxArrayString\&}{ val}, \param{const wxString\& }{name = ``"}}
 
@@ -136,13 +147,13 @@ Retrieves and converts the value of this variant to the type that {\it value} is
 
 \membersection{wxVariant::GetCount}\label{wxvariantgetcount}
 
-\constfunc{int}{GetCount}{\void}
+\constfunc{size_t}{GetCount}{\void}
 
 Returns the number of elements in the list.
 
 \membersection{wxVariant::Delete}\label{wxvariantdelete}
 
-\func{bool}{Delete}{\param{int }{item}}
+\func{bool}{Delete}{\param{size_t }{item}}
 
 Deletes the zero-based {\it item} from the list.
 
@@ -479,11 +490,10 @@ Writes the data to {\it stream} or {\it string}.
 
 This macro returns the data stored in {\it variant} cast to the type {\it classname *} if
 the data is of this type (the check is done during the run-time) or
-{\tt NULL} otherwise. 
+{\tt NULL} otherwise.
 
 
 \wxheading{See also}
 
 \helpref{RTTI overview}{runtimeclassoverview}\\
 \helpref{wxDynamicCast}{wxdynamiccast}
-

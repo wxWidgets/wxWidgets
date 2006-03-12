@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        variant.h
+// Name:        wx/variant.h
 // Purpose:     wxVariant class, container for any type
 // Author:      Julian Smart
 // Modified by:
@@ -207,7 +207,7 @@ public:
     bool IsValueKindOf(const wxClassInfo* type) const;
 
     // Return the number of elements in a list
-    int GetCount() const;
+    size_t GetCount() const;
 
 // Value accessors
     double GetReal() const ;
@@ -245,7 +245,7 @@ public:
     bool Member(const wxVariant& value) const;
 
     // Deletes the nth element of the list
-    bool Delete(int item);
+    bool Delete(size_t item);
 
     // Clear list
     void ClearList();

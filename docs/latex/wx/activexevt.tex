@@ -40,28 +40,28 @@ recieves an activex event.}
 
 \membersection{wxActiveXEvent::ParamCount}\label{wxactivexeventparamcount}
 
-\constfunc{int}{ParamCount}{\void}
+\constfunc{size_t}{ParamCount}{\void}
 
 Obtains the number of parameters passed through the activex event.
 
 
 \membersection{wxActiveXEvent::ParamType}\label{wxactivexeventparamtype}
 
-\constfunc{wxString}{ParamType}{\param{int }{idx}}
+\constfunc{wxString}{ParamType}{\param{size_t }{idx}}
 
 Obtains the param type of the param number idx specifies as a string.
 
 
 \membersection{wxActiveXEvent::ParamName}\label{wxactivexeventparamname}
 
-\constfunc{wxString}{ParamName}{\param{int }{idx}}
+\constfunc{wxString}{ParamName}{\param{size_t }{idx}}
 
 Obtains the param name of the param number idx specifies as a string.
 
 
 \membersection{wxActiveXEvent::operator[]}\label{wxactivexeventoparray}
 
-\func{wxVariant&}{operator[]}{\param{int }{idx}}
+\func{wxVariant&}{operator[]}{\param{size_t }{idx}}
 
 Obtains the actual parameter value specified by idx.
 
@@ -72,4 +72,3 @@ Obtains the actual parameter value specified by idx.
 
 Returns the dispatch id of this activex event. This is the numeric value from
 the .idl file specified by the id().
-
