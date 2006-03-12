@@ -23,7 +23,7 @@
 class WXDLLEXPORT wxComboBox: public wxChoice
 {
 public:
-    wxComboBox() { Init(); }
+    wxComboBox() { }
 
     wxComboBox(wxWindow *parent, wxWindowID id,
             const wxString& value = wxEmptyString,
@@ -34,8 +34,6 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxComboBoxNameStr)
     {
-        Init();
-
         Create(parent, id, value, pos, size, n, choices, style, validator, name);
     }
     wxComboBox(wxWindow *parent, wxWindowID id,
@@ -47,8 +45,6 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxComboBoxNameStr)
     {
-        Init();
-
         Create(parent, id, value, pos, size, choices, style, validator, name);
     }
 
@@ -75,7 +71,7 @@ public:
     // List functions: see wxChoice
 
     // Text field functions
-    wxString GetValue() const { return m_value; }
+    virtual wxString GetValue() const;
     virtual void SetValue(const wxString& value);
 
     // Clipboard operations
@@ -91,19 +87,18 @@ public:
     virtual wxTextPos GetLastPosition() const;
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
-    virtual void SetSelection(int n);
+    virtual void SetSelection(int n) { wxChoice::SetSelection(n); }
     virtual void SetSelection(long from, long to);
-    virtual int GetSelection() const;
+    virtual int GetSelection() const { return wxChoice::GetSelection(); }
     virtual void GetSelection(long* from, long* to) const;
     virtual void SetEditable(bool editable);
-    virtual void Clear();
 
-    virtual void Undo() ;
-    virtual void Redo() ;
+    virtual void Undo();
+    virtual void Redo();
     virtual bool CanUndo() const;
     virtual bool CanRedo() const;
     virtual void SelectAll();
-    virtual bool IsEditable() const ;
+    virtual bool IsEditable() const;
     virtual bool HasSelection() const;
 
     // implementation only from now on
@@ -131,17 +126,6 @@ public:
     void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
-
-protected:
-    // common part of all ctors
-    void Init() { m_selectionOld = -1; }
-
-
-    // the previous selection (see MSWCommand() to see why it is needed)
-    int m_selectionOld;
-
-    // the current selection (also see MSWCommand())
-    wxString m_value;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)
