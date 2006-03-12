@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/datectrl.cpp
+// Name:        src/msw/datectrl.cpp
 // Purpose:     wxDatePickerCtrl implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -23,22 +23,22 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#endif
-
 #if wxUSE_DATEPICKCTRL
 
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/intl.h"
+    #include "wx/dcclient.h"
+    #include "wx/msw/wrapwin.h"
+    #include "wx/msw/wrapcctl.h"
+    #include "wx/msw/private.h"
+#endif
+
 #include "wx/datectrl.h"
-#include "wx/app.h"
-#include "wx/intl.h"
 #include "wx/dynlib.h"
 
 #define _WX_DEFINE_DATE_EVENTS_
 #include "wx/dateevt.h"
-
-#include "wx/msw/wrapwin.h"
-#include "wx/msw/wrapcctl.h"
-#include "wx/msw/private.h"
 
 // apparently some versions of mingw define these macros erroneously
 #ifndef DateTime_GetSystemtime
@@ -127,7 +127,7 @@ wxDatePickerCtrl::Create(wxWindow *parent,
         }
 
         s_initDone = true;
-#endif        
+#endif
     }
 
 
@@ -331,4 +331,3 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 }
 
 #endif // wxUSE_DATEPICKCTRL
-
