@@ -24,6 +24,7 @@ public:
     virtual int CocoaDataSource_numberOfRows() = 0;
     virtual struct objc_object* CocoaDataSource_objectForTableColumn(
         WX_NSTableColumn tableColumn, int rowIndex) = 0;
+    virtual ~wxCocoaNSTableView() { }
 };
 
 #endif // _WX_COCOA_NSTABLEVIEW_H_

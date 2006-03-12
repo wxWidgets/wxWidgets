@@ -62,6 +62,7 @@ public:
     {   return false; }
     virtual bool Cocoa_resetCursorRects()
     {	return false; }
+    virtual ~wxCocoaNSView() { }
 };
 
 #endif // _WX_COCOA_NSVIEW_H_

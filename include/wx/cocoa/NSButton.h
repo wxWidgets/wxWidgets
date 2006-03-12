@@ -23,13 +23,15 @@ class wxCocoaNSButton
     WX_DECLARE_OBJC_INTERFACE_HASHMAP(NSButton);
 public:
     void AssociateNSButton(WX_NSButton cocoaNSButton);
-    inline void DisassociateNSButton(WX_NSButton cocoaNSButton)
+    void DisassociateNSButton(WX_NSButton cocoaNSButton)
     {
         if(cocoaNSButton)
             sm_cocoaHash.erase(cocoaNSButton);
     }
 
     virtual void Cocoa_wxNSButtonAction(void) = 0;
+    virtual ~wxCocoaNSButton() { }
+
 protected:
     static const wxObjcAutoRefFromAlloc<struct objc_object*> sm_cocoaTarget;
 };

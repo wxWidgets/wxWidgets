@@ -27,6 +27,8 @@ public:
     void DisassociateNSTabView(WX_NSTabView ocoaNSTabView);
     virtual void CocoaDelegate_tabView_didSelectTabViewItem(WX_NSTabViewItem tabviewItem) = 0;
     virtual bool CocoaDelegate_tabView_shouldSelectTabViewItem(WX_NSTabViewItem tabviewItem) = 0;
+    virtual ~wxCocoaNSTabView() { }
+
 protected:
     static wxObjcAutoRefFromAlloc<struct objc_object*> sm_cocoaDelegate;
 };

@@ -25,13 +25,15 @@ class wxCocoaNSScroller
     WX_DECLARE_OBJC_INTERFACE_HASHMAP(NSScroller);
 public:
     void AssociateNSScroller(WX_NSScroller cocoaNSScroller);
-    inline void DisassociateNSScroller(WX_NSScroller cocoaNSScroller)
+    void DisassociateNSScroller(WX_NSScroller cocoaNSScroller)
     {
         if(cocoaNSScroller)
             sm_cocoaHash.erase(cocoaNSScroller);
     }
 
     virtual void Cocoa_wxNSScrollerAction(void) = 0;
+    virtual ~wxCocoaNSScroller() { }
+
 protected:
     static const wxObjcAutoRefFromAlloc<struct objc_object*> sm_cocoaTarget;
 };

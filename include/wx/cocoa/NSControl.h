@@ -22,6 +22,9 @@ class wxCocoaNSControl
 public:
     virtual void CocoaTarget_action() {}
 //    virtual void Cocoa_didChangeText(void) = 0;
+
+    virtual ~wxCocoaNSControl() { }
+
 protected:
     static struct objc_object *sm_cocoaTarget;
 };

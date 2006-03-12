@@ -28,6 +28,7 @@ public:
     void DisassociateNSComboBox(WX_NSComboBox cocoaNSComboBox);
 
     virtual void doWxEvent(int nEvent) = 0;
+    virtual ~wxCocoaNSComboBox() { }
 };
 
 //begin combobox.h
