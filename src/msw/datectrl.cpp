@@ -180,9 +180,46 @@ WXDWORD wxDatePickerCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxSize wxDatePickerCtrl::DoGetBestSize() const
 {
-    const int y = GetCharHeight();
+    wxClientDC dc(wx_const_cast(wxDatePickerCtrl *, this));
+    dc.SetFont(GetFont());
 
-    wxSize best(DEFAULT_ITEM_WIDTH, EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
+    // we can't use FormatDate() here as the CRT doesn't always use the same
+    // format as the date picker control
+    wxString s;
+    for ( int len = 100; ; len *= 2 )
+    {
+        if ( ::GetDateFormat
+               (
+                    LOCALE_USER_DEFAULT,    // the control should use the same
+                    DATE_SHORTDATE,         // the format used by the control
+                    NULL,                   // use current date (we don't care)
+                    NULL,                   // no custom format
+                    wxStringBuffer(s, len), // output buffer
+                    len                     // and its length
+               ) )
+        {
+            // success
+            break;
+        }
+
+        const DWORD rc = ::GetLastError();
+        if ( rc != ERROR_INSUFFICIENT_BUFFER )
+        {
+            wxLogApiError(_T("GetDateFormat"), rc);
+
+            // fall back on wxDateTime, what else to do?
+            s = wxDateTime::Today().FormatDate();
+            break;
+        }
+    }
+
+    // the control adds a lot of extra space around separators
+    s.Replace(_T(","), _T("    ,    "));
+
+    int x, y;
+    dc.GetTextExtent(s, &x, &y);
+
+    wxSize best(x + 40 /* margin + arrows */, EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
     CacheBestSize(best);
     return best;
 }
