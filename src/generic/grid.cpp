@@ -7772,9 +7772,6 @@ void wxGrid::EnableCellEditControl( bool enable )
     if (! m_editable)
         return;
 
-    if ( m_currentCellCoords == wxGridNoCellCoords )
-        SetCurrentCell( 0, 0 );
-
     if ( enable != m_cellEditCtrlEnabled )
     {
         if ( enable )
@@ -9705,7 +9702,7 @@ wxGrid::GetDefaultEditorForType(const wxString& typeName) const
     int index = m_typeRegistry->FindOrCloneDataType(typeName);
     if ( index == wxNOT_FOUND )
     {
-    wxString errStr;
+        wxString errStr;
 
         errStr.Printf(wxT("Unknown data type name [%s]"), typeName.c_str());
         wxFAIL_MSG(errStr.c_str());
