@@ -824,6 +824,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_fontButton = new wxButton( panel, ID_SET_FONT, _T("Set &more Italic font"), wxPoint(340,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_RADIOBOX_FONT, _T("Set &Italic font"), wxPoint(340,80), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_RADIOBOX_ENABLE, _T("&Disable"), wxPoint(340,130), wxDefaultSize );
+
     wxRadioButton *rb = new wxRadioButton( panel, ID_RADIOBUTTON_1, _T("Radiobutton1"), wxPoint(210,170), wxDefaultSize, wxRB_GROUP );
     rb->SetValue( false );
     (void)new wxRadioButton( panel, ID_RADIOBUTTON_2, _T("&Radiobutton2"), wxPoint(340,170), wxDefaultSize );
@@ -1269,35 +1270,32 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
 }
 
 #if wxUSE_CHOICE
+
+static const wxChar *GetDataString(wxClientData *data)
+{
+    return data ? wx_static_cast(wxStringClientData *, data)->GetData().c_str()
+                : _T("none");
+}
+
 void MyPanel::OnChoice( wxCommandEvent &event )
 {
     wxChoice *choice = event.GetId() == ID_CHOICE ? m_choice
                                                   : m_choiceSorted;
 
-    m_text->AppendText( _T("Choice event selection string is: '") );
-    m_text->AppendText( event.GetString() );
-    m_text->AppendText( _T("'\n") );
-    m_text->AppendText( _T("Choice control selection string is: '") );
-    m_text->AppendText( choice->GetStringSelection() );
-    m_text->AppendText( _T("'\n") );
+    const int sel = choice->GetSelection();
 
-    wxStringClientData *obj = ((wxStringClientData *)event.GetClientObject());
-    m_text->AppendText( _T("Choice event client data string is: '") );
+    wxClientData *dataEvt = event.GetClientObject(),
+                 *dataCtrl = choice->GetClientObject(sel);
 
-    if (obj)
-       m_text->AppendText( obj->GetData() );
-    else
-       m_text->AppendText( wxString(_T("none")) );
-
-    m_text->AppendText( _T("'\n") );
-    m_text->AppendText( _T("Choice control client data string is: '") );
-    obj = (wxStringClientData *)choice->GetClientObject(choice->GetSelection());
-
-    if (obj)
-       m_text->AppendText( obj->GetData() );
-    else
-       m_text->AppendText( wxString(_T("none")) );
-    m_text->AppendText( _T("'\n") );
+    wxLogMessage(_T("EVT_CHOICE: item %d/%d (event/control), ")
+                 _T("string \"%s\"/\"%s\", ")
+                 _T("data \"%s\"/\"%s\""),
+                 (int)event.GetInt(),
+                 sel,
+                 event.GetString().c_str(),
+                 choice->GetStringSelection().c_str(),
+                 GetDataString(dataEvt),
+                 GetDataString(dataCtrl));
 }
 
 void MyPanel::OnChoiceButtons( wxCommandEvent &event )
