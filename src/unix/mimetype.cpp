@@ -2396,7 +2396,7 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
                 if ( pEnd == NULL )
                 {
                     wxLogWarning(wxT("Mime.types file %s, line %lu: unterminated quoted string."),
-                                 strFileName.c_str(), nLine + 1);
+                                 strFileName.c_str(), nLine + 1L);
                 }
             }
             else
@@ -2454,7 +2454,7 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
                 // but it may be worth telling the user about other junk in
                 // his mime.types file
                 wxLogWarning(wxT("Unknown field in file %s, line %lu: '%s'."),
-                             strFileName.c_str(), nLine + 1, strLHS.c_str());
+                             strFileName.c_str(), nLine + 1L, strLHS.c_str());
             }
 
             if ( !entryEnded )
@@ -2680,7 +2680,7 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
 
                             wxLogDebug(wxT("Mailcap file %s, line %lu: '\\' on the end of the last line ignored."),
                                        strFileName.c_str(),
-                                       (unsigned long)nLine + 1);
+                                       nLine + 1L);
                         }
                         else
                         {
@@ -2744,7 +2744,7 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                                 (
                                     wxT("Mailcap file %s, line %lu: unknown field '%s' for the MIME type '%s' ignored."),
                                     strFileName.c_str(),
-                                    (unsigned long)nLine + 1,
+                                    nLine + 1L,
                                     curField.c_str(),
                                     data.type.c_str()
                                 );
@@ -2782,7 +2782,7 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
         if ( currentToken < Field_Other )
         {
             wxLogWarning(wxT("Mailcap file %s, line %lu: incomplete entry ignored."),
-                         strFileName.c_str(), nLine + 1);
+                         strFileName.c_str(), nLine + 1L);
 
             continue;
         }
