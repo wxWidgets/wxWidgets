@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/mimetype.cpp
+// Name:        src/msw/mimetype.cpp
 // Purpose:     classes and functions to manage MIME types
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -509,7 +509,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
                  _T("Associate() needs extension") );
 
     bool ok;
-    int iExtCount = 0 ;
+    size_t iExtCount = 0;
     wxString filetype;
     wxString extWithDot;
 

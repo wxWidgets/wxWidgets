@@ -119,7 +119,7 @@ public:
     const wxString& GetDescription() const { return m_desc; }
         // get the array of all extensions
     const wxArrayString& GetExtensions() const { return m_exts; }
-    int GetExtensionsCount() const {return m_exts.GetCount(); }
+    size_t GetExtensionsCount() const {return m_exts.GetCount(); }
         // get the icon info
     const wxString& GetIconFile() const { return m_iconFile; }
     int GetIconIndex() const { return m_iconIndex; }
