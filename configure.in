@@ -3619,14 +3619,9 @@ dnl ---------------------------------------------------------------------------
         fi
     elif test "$wxUSE_MSW" = 1; then
 dnl ---------------------------------------------------------------------------
-dnl DirectDraw  / Multimon for MSW
+dnl DirectDraw for MSW - optionally used by WxDisplay.
 dnl ---------------------------------------------------------------------------
-        AC_CHECK_HEADERS([multimon.h ddraw.h], [],
-            [
-                wxUSE_DISPLAY="no"
-                AC_MSG_WARN([ddraw.h or multimon.h not found; disabling wxDisplay])
-            ],
-            [#include <windows.h>])
+        AC_CHECK_HEADERS([ddraw.h], [], [], [#include <windows.h>])
     fi
 fi
 

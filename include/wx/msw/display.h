@@ -37,9 +37,6 @@ public:
     virtual bool IsPrimary() const;
 
 private:
-    // get the display name to use with EnumDisplaySettings()
-    wxString GetNameForEnumSettings() const;
-
     // we have different implementations using DirectDraw and without it
     wxArrayVideoModes DoGetModesDirectX(const wxVideoMode& modeMatch) const;
     bool DoChangeModeDirectX(const wxVideoMode& mode);

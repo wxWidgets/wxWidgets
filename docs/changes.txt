@@ -138,6 +138,7 @@ wxMSW:
 - Fall back to unthemed wxNotebook if specified orientation not available.
 - wxListCtrl and wxTreeCtrl now resize their standard font if the user
   changes the system font.
+- wxDisplay doesn't require multimon.h now and is enabled by default (Olly Betts)
 
 wxGTK:
 
