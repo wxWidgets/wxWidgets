@@ -43,6 +43,10 @@
 // include standard Windows headers
 #if defined(__WXMSW__)
     #include "wx/msw/wrapwin.h"
+    #include "wx/msw/wrapcctl.h"
+    #include "wx/msw/wrapcdlg.h"
+    #include "wx/msw/private.h"
+    #include "wx/msw/missing.h"
 #endif
 
 // include all PalmOS headers at once
