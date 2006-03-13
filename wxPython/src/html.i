@@ -506,7 +506,8 @@ public:
     %typemap(out) wxHtmlCell*;    // turn off this typemap
 
     wxHtmlCell();
-
+    ~wxHtmlCell();
+    
     // Turn it back on again
     %typemap(out) wxHtmlCell* { $result = wxPyMake_wxObject($1, $owner); }
 
@@ -536,7 +537,11 @@ public:
 
 
     void SetLink(const wxHtmlLinkInfo& link);
+
+    %disownarg(wxHtmlCell*);
     void SetNext(wxHtmlCell *cell);
+    %cleardisown(wxHtmlCell*);
+    
     void SetParent(wxHtmlContainerCell *p);
     void SetPos(int x, int y);
     void Layout(int w);
@@ -601,7 +606,10 @@ class wxHtmlContainerCell : public wxHtmlCell {
 public:
     wxHtmlContainerCell(wxHtmlContainerCell *parent);
 
+    %disownarg(wxHtmlCell*);
     void InsertCell(wxHtmlCell *cell);
+    %cleardisown(wxHtmlCell*);
+
     void SetAlignHor(int al);
     int GetAlignHor();
     void SetAlignVer(int al);
