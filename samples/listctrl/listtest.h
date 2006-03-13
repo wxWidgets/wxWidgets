@@ -71,11 +71,14 @@ public:
     void OnCacheHint(wxListEvent& event);
 
     void OnChar(wxKeyEvent& event);
+
 #if USE_CONTEXT_MENU
     void OnContextMenu(wxContextMenuEvent& event);
 #endif
 
 private:
+    void ShowContextMenu(const wxPoint& pos);
+    wxLog *m_logOld;
     void SetColumnImage(int col, int image);
 
     void LogEvent(const wxListEvent& event, const wxChar *eventName);
@@ -201,4 +204,3 @@ enum
 
     LIST_CTRL                   = 1000
 };
-

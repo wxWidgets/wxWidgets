@@ -162,11 +162,11 @@ bool MyApp::OnInit()
 
 // My frame constructor
 MyFrame::MyFrame(const wxChar *title)
-       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxDefaultSize))
+       : wxFrame(NULL, wxID_ANY, title)
 {
     if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_SMALL)
         SetSize(wxSize(450, 340));
-    
+
     m_listCtrl = NULL;
     m_logWindow = NULL;
     m_smallVirtual = false;
@@ -1084,4 +1084,3 @@ void MyListCtrl::ShowContextMenu(const wxPoint& pos)
 
     PopupMenu(&menu, pos.x, pos.y);
 }
-
