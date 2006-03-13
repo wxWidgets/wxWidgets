@@ -423,6 +423,8 @@ void wxDisplay::UseDirectX(bool useDX)
 #ifdef HAVE_DDRAW_H
     // DirectDrawEnumerateEx requires Win98 or Win2k anyway.
     if ( OsSupportsMultipleMonitors() ) gs_useDirectX = useDX;
+#else
+    wxUnusedVar(useDX);
 #endif
 }
 
@@ -809,8 +811,9 @@ bool wxDisplay::DoChangeModeDirectX(const wxVideoMode& mode)
 bool wxDisplay::DoChangeModeWindows(const wxVideoMode& mode)
 {
     // prepare ChangeDisplaySettingsEx() parameters
-    DEVMODE dm,
-           *pDevMode;
+    DEVMODE dm;
+    DEVMODE *pDevMode;
+
     int flags;
 
     if ( mode == wxDefaultVideoMode )
@@ -926,4 +929,3 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 }
 
 #endif // wxUSE_DISPLAY
-
