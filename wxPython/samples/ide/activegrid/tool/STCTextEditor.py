@@ -926,7 +926,7 @@ class TextOptionsPanel(wx.Panel):
         data.SetInitialFont(self._textFont)
         data.SetColour(self._textColor)
         fontDialog = wx.FontDialog(self, data)
-        fontDialog.CenterOnParent()
+        ##fontDialog.CenterOnParent()
         if fontDialog.ShowModal() == wx.ID_OK:
             data = fontDialog.GetFontData()
             self._textFont = data.GetChosenFont()
