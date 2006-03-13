@@ -222,7 +222,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         // normally, nothing more to do here - except if it was a paint event
         // which wasn't really processed, then we'll try to call our
         // OnDraw() below (from HandleOnPaint)
-        if ( m_hasDrawnWindow )
+        if ( m_hasDrawnWindow || event.IsCommandEvent() )
         {
             return true;
         }
