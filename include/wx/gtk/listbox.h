@@ -46,8 +46,6 @@ public:
     }
     virtual ~wxListBox();
 
-    void Init(); //common construction
-
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -120,6 +118,8 @@ protected:
     void DoApplyWidgetStyle(GtkRcStyle *style);
 
 private:
+    void Init(); //common construction
+
     DECLARE_DYNAMIC_CLASS(wxListBox)
 };
 
