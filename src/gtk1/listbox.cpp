@@ -10,8 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-
 #if wxUSE_LISTBOX
 
 #include "wx/listbox.h"
@@ -49,7 +47,7 @@ extern wxWindowGTK   *g_delayedFocus;
 extern wxWindowGTK   *g_focusWindow;
 extern wxWindowGTK   *g_focusWindowLast;
 
-static bool       g_hasDoubleClicked = FALSE;
+static bool       g_hasDoubleClicked = false;
 
 //-----------------------------------------------------------------------------
 // idle callback for SetFirstItem
@@ -105,7 +103,7 @@ static gint gtk_listitem_focus_in_callback( GtkWidget *widget,
     if ( !win->m_hasFocus )
     {
         // not yet, notify it
-        win->m_hasFocus = TRUE;
+        win->m_hasFocus = true;
 
         wxChildFocusEvent eventChildFocus(win);
         (void)win->GetEventHandler()->ProcessEvent(eventChildFocus);
@@ -136,7 +134,7 @@ static gint gtk_listitem_focus_out_callback( GtkWidget *widget, GdkEventFocus *g
     // have focus already
     if ( win->m_hasFocus )
     {
-        win->m_hasFocus = FALSE;
+        win->m_hasFocus = false;
 
         wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
         event.SetEventObject( win );
@@ -241,14 +239,14 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
          (((listbox->GetWindowStyleFlag() & wxLB_MULTIPLE) != 0) ||
           ((listbox->GetWindowStyleFlag() & wxLB_EXTENDED) != 0)) )
     {
-            listbox->m_blockEvent = TRUE;
+            listbox->m_blockEvent = true;
 
             int i;
             for (i = 0; i < (int)listbox->GetCount(); i++)
                 if (i != sel)
                     gtk_list_unselect_item( GTK_LIST(listbox->m_list), i );
 
-            listbox->m_blockEvent = FALSE;
+            listbox->m_blockEvent = false;
 
             return false;
     }
@@ -274,7 +272,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
     if (g_blockEventsOnDrag)
         return FALSE;
 
-    bool ret = FALSE;
+    bool ret = false;
 
     if ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab))
     {
@@ -290,7 +288,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
     if ((gdk_event->keyval == GDK_Return) && (!ret))
     {
         // eat return in all modes
-        ret = TRUE;
+        ret = true;
     }
 
 #if wxUSE_CHECKLISTBOX
@@ -318,7 +316,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
 
         if (sel != -1)
         {
-            ret = TRUE;
+            ret = true;
 
             if (listbox->IsSelected( sel ))
                 gtk_list_unselect_item( listbox->m_list, sel );
@@ -458,7 +456,7 @@ wxListBox::wxListBox()
 {
     m_list = (GtkList *) NULL;
 #if wxUSE_CHECKLISTBOX
-    m_hasCheckBoxes = FALSE;
+    m_hasCheckBoxes = false;
 #endif // wxUSE_CHECKLISTBOX
 }
 
@@ -480,16 +478,16 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
                         long style, const wxValidator& validator,
                         const wxString &name )
 {
-    m_needParent = TRUE;
-    m_acceptsFocus = TRUE;
+    m_needParent = true;
+    m_acceptsFocus = true;
     m_prevSelection = 0;  // or -1 ??
-    m_blockEvent = FALSE;
+    m_blockEvent = false;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxListBox creation failed") );
-        return FALSE;
+        return false;
     }
 
     m_widget = gtk_scrolled_window_new( (GtkAdjustment*) NULL, (GtkAdjustment*) NULL );
@@ -558,12 +556,12 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     PostCreation(size);
     SetBestSize(size); // need this too because this is a wxControlWithItems
 
-    return TRUE;
+    return true;
 }
 
 wxListBox::~wxListBox()
 {
-    m_hasVMT = FALSE;
+    m_hasVMT = false;
 
     Clear();
 
@@ -787,7 +785,7 @@ void wxListBox::Clear()
     {
         // destroy the data (due to Robert's idea of using wxList<wxObject>
         // and not wxList<wxClientData> we can't just say
-        // m_clientList.DeleteContents(TRUE) - this would crash!
+        // m_clientList.DeleteContents(true) - this would crash!
         wxList::compatibility_iterator node = m_clientList.GetFirst();
         while ( node )
         {
@@ -1019,11 +1017,11 @@ int wxListBox::GetSelections( wxArrayInt& aSelections ) const
 
 bool wxListBox::IsSelected( int n ) const
 {
-    wxCHECK_MSG( m_list != NULL, FALSE, wxT("invalid listbox") );
+    wxCHECK_MSG( m_list != NULL, false, wxT("invalid listbox") );
 
     GList *target = g_list_nth( m_list->children, n );
 
-    wxCHECK_MSG( target, FALSE, wxT("invalid listbox index") );
+    wxCHECK_MSG( target, false, wxT("invalid listbox index") );
 
     return (GTK_WIDGET(target->data)->state == GTK_STATE_SELECTED) ;
 }
@@ -1032,7 +1030,7 @@ void wxListBox::DoSetSelection( int n, bool select )
 {
     wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
 
-    m_blockEvent = TRUE;
+    m_blockEvent = true;
 
     if (select)
     {
@@ -1044,7 +1042,7 @@ void wxListBox::DoSetSelection( int n, bool select )
     else
         gtk_list_unselect_item( m_list, n );
 
-    m_blockEvent = FALSE;
+    m_blockEvent = false;
 }
 
 void wxListBox::DoSetFirstItem( int n )
@@ -1124,22 +1122,22 @@ GtkWidget *wxListBox::GetConnectWidget()
 
 bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
 {
-    return TRUE;
+    return true;
 
 #if 0
-    if (m_widget->window == window) return TRUE;
+    if (m_widget->window == window) return true;
 
-    if (GTK_WIDGET(m_list)->window == window) return TRUE;
+    if (GTK_WIDGET(m_list)->window == window) return true;
 
     GList *child = m_list->children;
     while (child)
     {
         GtkWidget *bin = GTK_WIDGET( child->data );
-        if (bin->window == window) return TRUE;
+        if (bin->window == window) return true;
         child = child->next;
     }
 
-    return FALSE;
+    return false;
 #endif
 }
 

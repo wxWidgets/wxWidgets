@@ -32,7 +32,7 @@ public:
             const wxString& name = wxListBoxNameStr )
     {
 #if wxUSE_CHECKLISTBOX
-        m_hasCheckBoxes = FALSE;
+        m_hasCheckBoxes = false;
 #endif // wxUSE_CHECKLISTBOX
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
@@ -45,7 +45,7 @@ public:
             const wxString& name = wxListBoxNameStr )
     {
 #if wxUSE_CHECKLISTBOX
-        m_hasCheckBoxes = FALSE;
+        m_hasCheckBoxes = false;
 #endif // wxUSE_CHECKLISTBOX
         Create(parent, id, pos, size, choices, style, validator, name);
     }

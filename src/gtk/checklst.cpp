@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        checklst.cpp
+// Name:        src/gtk/checklst.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Modified by: Ryan Norton (Native GTK2.0+ checklist) 
+// Modified by: Ryan Norton (Native GTK2.0+ checklist)
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
@@ -10,8 +10,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/defs.h"
 
 #if wxUSE_CHECKLISTBOX
 
@@ -34,13 +32,13 @@ static void gtk_checklist_toggled(GtkCellRendererToggle *renderer,
     wxCHECK_RET( listbox->m_treeview != NULL, wxT("invalid listbox") );
 
     GtkTreePath* path = gtk_tree_path_new_from_string(stringpath);
-    wxCommandEvent new_event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, 
+    wxCommandEvent new_event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED,
                               listbox->GetId() );
     new_event.SetEventObject( listbox );
     new_event.SetInt( gtk_tree_path_get_indices(path)[0] );
     gtk_tree_path_free(path);
     listbox->Check( new_event.GetInt(), !listbox->IsChecked(new_event.GetInt()));
-    listbox->GetEventHandler()->ProcessEvent( new_event );    
+    listbox->GetEventHandler()->ProcessEvent( new_event );
 }
 }
 #endif
@@ -53,7 +51,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox,wxListBox)
 
 wxCheckListBox::wxCheckListBox() : wxListBox()
 {
-    m_hasCheckBoxes = TRUE;
+    m_hasCheckBoxes = true;
 }
 
 wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
@@ -65,7 +63,7 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
                                const wxValidator& validator,
                                const wxString& name )
 {
-    m_hasCheckBoxes = TRUE;
+    m_hasCheckBoxes = true;
     wxListBox::Create( parent, id, pos, size, nStrings, choices, style, validator, name );
 }
 
@@ -77,7 +75,7 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
                                const wxValidator& validator,
                                const wxString& name )
 {
-    m_hasCheckBoxes = TRUE;
+    m_hasCheckBoxes = true;
     wxListBox::Create( parent, id, pos, size, choices,
                        style, validator, name );
 }
@@ -86,9 +84,9 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
 void wxCheckListBox::DoCreateCheckList()
 {
     //Create the checklist in our treeview and set up events for it
-    GtkCellRenderer* renderer = 
+    GtkCellRenderer* renderer =
         gtk_cell_renderer_toggle_new();
-    GtkTreeViewColumn* column = 
+    GtkTreeViewColumn* column =
         gtk_tree_view_column_new_with_attributes( "", renderer,
                                                   "active", 0,
                                                   NULL );
@@ -120,7 +118,7 @@ bool wxCheckListBox::IsChecked( int index ) const
     gtk_tree_model_get_value(GTK_TREE_MODEL(m_liststore),
                              &iter,
                              0, //column
-                             &value);    
+                             &value);
 
     return g_value_get_boolean(&value) == TRUE ? true : false;
 }
@@ -141,7 +139,7 @@ void wxCheckListBox::Check( int index, bool check )
     gtk_list_store_set(m_liststore,
                        &iter,
                        0, //column
-                       check ? TRUE : FALSE, -1);    
+                       check ? TRUE : FALSE, -1);
 }
 
 int wxCheckListBox::GetItemHeight() const
@@ -160,7 +158,7 @@ int wxCheckListBox::GetItemHeight() const
 
 bool wxCheckListBox::IsChecked( int index ) const
 {
-    wxCHECK_MSG( m_treeview != NULL, FALSE, wxT("invalid checklistbox") );
+    wxCHECK_MSG( m_treeview != NULL, false, wxT("invalid checklistbox") );
 
     GtkTreeEntry* entry = GtkGetEntry(index);
     if (entry)
@@ -171,7 +169,7 @@ bool wxCheckListBox::IsChecked( int index ) const
     }
 
     wxFAIL_MSG(wxT("wrong checklistbox index"));
-    return FALSE;
+    return false;
 }
 
 void wxCheckListBox::Check( int index, bool check )
