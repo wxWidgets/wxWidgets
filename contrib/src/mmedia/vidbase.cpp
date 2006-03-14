@@ -11,9 +11,9 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include <wx/stream.h>
-#include <wx/wfstream.h>
-#include <wx/intl.h>
+#include "wx/stream.h"
+#include "wx/wfstream.h"
+#include "wx/intl.h"
 #endif
 
 #include "wx/mmedia/vidbase.h"

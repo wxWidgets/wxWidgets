@@ -11,12 +11,12 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
 #ifdef __WXGTK__
 // Pizza !
-#include <wx/gtk/win_gtk.h>
+#include "wx/gtk/win_gtk.h"
 #endif
 
 #include <X11/Xlib.h>
@@ -28,10 +28,10 @@
 #include <gdk/gdkprivate.h>
 #endif
 
-#include <wx/filefn.h>
-#include <wx/wfstream.h>
-#include <wx/datstrm.h>
-#include <wx/tokenzr.h>
+#include "wx/filefn.h"
+#include "wx/wfstream.h"
+#include "wx/datstrm.h"
+#include "wx/tokenzr.h"
 
 #define WXMMEDIA_INTERNAL
 #include "wx/mmedia/vidbase.h"
