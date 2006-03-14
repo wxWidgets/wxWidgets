@@ -43,6 +43,7 @@ All:
 - Added support for wxLongLong in wx stream classes (Mark Junker)
 - wxSOCKET_REUSEADDR can be used with wxSocketClient.
 - Overloaded Connect and SetLocal methods for binding to local address/port.
+- Consistency of count getters (GetCount()) with returning size_t everywhere.
 
 All (GUI):
 

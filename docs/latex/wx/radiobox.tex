@@ -3,7 +3,7 @@
 %% Purpose:     wxRadioBox documentation
 %% Author:      wxWidgets Team
 %% Modified by:
-%% Created:     
+%% Created:
 %% RCS-ID:      $Id$
 %% Copyright:   (c) wxWidgets Team
 %% License:     wxWindows license
@@ -17,6 +17,7 @@ labelled buttons.
 
 \wxheading{Derived from}
 
+\helpref{wxControlWithItems}{wxcontrolwithitems}\\
 \helpref{wxControl}{wxcontrol}\\
 \helpref{wxWindow}{wxwindow}\\
 \helpref{wxEvtHandler}{wxevthandler}\\
@@ -192,13 +193,6 @@ Finds a button matching the given string, returning the position if found, or
 Returns the number of columns in the radiobox.
 
 
-\membersection{wxRadioBox::GetCount}\label{wxradioboxgetcount}
-
-\constfunc{int}{GetCount}{\void}
-
-Returns the number of items in the radiobox.
-
-
 \membersection{wxRadioBox::GetLabel}\label{wxradioboxgetlabel}
 
 \constfunc{wxString}{GetLabel}{\void}
@@ -258,7 +252,7 @@ Returns the label for the button at the given position.
 
 \constfunc{bool}{IsItemEnabled}{\void}
 
-Returns \true if the item is enabled or \false if it was disabled using 
+Returns \true if the item is enabled or \false if it was disabled using
 \helpref{Enable(n, false)}{wxradioboxenable}.
 
 {\bf Platform note:} Currently only implemented in wxMSW, wxGTK and wxUniversal
@@ -269,7 +263,7 @@ and always returns \true in the other ports.
 
 \constfunc{bool}{IsItemShown}{\void}
 
-Returns \true if the item is currently shown or \false if it was hidden using 
+Returns \true if the item is currently shown or \false if it was hidden using
 \helpref{Show(n, false)}{wxradioboxshow}.
 
 Note that this function returns \true for an item which hadn't been hidden even

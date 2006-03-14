@@ -12,8 +12,8 @@
 \section{\class{wxControlWithItems}}\label{wxcontrolwithitems}
 
 This class is an abstract base class for some wxWidgets controls which contain
-several items, such as \helpref{wxListBox}{wxlistbox} and 
-\helpref{wxCheckListBox}{wxchecklistbox} derived from it, 
+several items, such as \helpref{wxListBox}{wxlistbox} and
+\helpref{wxCheckListBox}{wxchecklistbox} derived from it,
 \helpref{wxChoice}{wxchoice} and \helpref{wxComboBox}{wxcombobox}.
 
 It defines the methods for accessing the controls items and although each of
@@ -25,8 +25,8 @@ optionally, client data associated with them. Client data may be of two
 different kinds: either simple untyped ({\tt void *}) pointers which are simply
 stored by the control but not used in any way by it, or typed pointers
 ({\tt wxClientData *}) which are owned by the control meaning that the typed
-client data (and only it) will be deleted when an item is 
-\helpref{deleted}{wxcontrolwithitemsdelete} or the entire control is 
+client data (and only it) will be deleted when an item is
+\helpref{deleted}{wxcontrolwithitemsdelete} or the entire control is
 \helpref{cleared}{wxcontrolwithitemsclear} (which also happens when it is
 destroyed). Finally note that in the same control all items must have client
 data of the same type (typed or untyped), if any. This type is determined by
@@ -161,7 +161,7 @@ A pointer to the client data, or {\tt NULL} if not present.
 
 \membersection{wxControlWithItems::GetCount}\label{wxcontrolwithitemsgetcount}
 
-\constfunc{int}{GetCount}{\void}
+\constfunc{size\_t}{GetCount}{\void}
 
 Returns the number of items in the control.
 
@@ -183,7 +183,7 @@ The position of the current selection.
 
 \wxheading{Remarks}
 
-This method can be used with single selection list boxes only, you should use 
+This method can be used with single selection list boxes only, you should use
 \helpref{wxListBox::GetSelections}{wxlistboxgetselections} for the list boxes
 with {\tt wxLB\_MULTIPLE} style.
 
@@ -266,7 +266,7 @@ Returns {\tt true} if the control is empty or {\tt false} if it has some items.
 
 {\bf Obsolescence note:} This method is obsolete and was replaced with
 \helpref{GetCount}{wxcontrolwithitemsgetcount}, please use the new method in
-the new code. This method is only available if wxWidgets was compiled with 
+the new code. This method is only available if wxWidgets was compiled with
 {\tt WXWIN\_COMPATIBILITY\_2\_2} defined and will disappear completely in
 future versions.
 
@@ -299,7 +299,7 @@ associated with the control items before.
 
 \func{void}{SetClientObject}{\param{int}{ n}, \param{wxClientData *}{data}}
 
-Associates the given typed client data pointer with the given item: the 
+Associates the given typed client data pointer with the given item: the
 {\it data} object will be deleted when the item is deleted (either explicitly
 by using \helpref{Deletes}{wxcontrolwithitemsdelete} or implicitly when the
 control itself is destroyed).
@@ -366,5 +366,3 @@ the control.
 \wxheading{See also}
 
 \helpref{SetSelection}{wxcontrolwithitemssetselection}
-
-

@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        treectrl.tex
+%% Purpose:     wxTreeCtrl documentation
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxTreeCtrl}}\label{wxtreectrl}
 
 A tree control presents information as a hierarchy, with items that may be expanded
@@ -31,7 +42,7 @@ to show + and - buttons to the left of parent items.}
 to hide vertical level connectors.}
 \twocolitem{\windowstyle{wxTR\_FULL\_ROW\_HIGHLIGHT}}{Use this style to have the background
 colour and the selection highlight extend over the entire horizontal
-row of the tree control window. (This flag is ignored under Windows unless you 
+row of the tree control window. (This flag is ignored under Windows unless you
 specify wxTR\_NO\_LINES as well.) }
 \twocolitem{\windowstyle{wxTR\_LINES\_AT\_ROOT}}{Use this style
 to show lines between root nodes.
@@ -105,7 +116,7 @@ implemented in the system library {\tt comctl32.dll}. Some versions of this
 library are known to have bugs with handling the tree control colours: the
 usual symptom is that the expanded items leave black (or otherwise incorrectly
 coloured) background behind them, especially for the controls using non-default background colour. The recommended solution is to upgrade the {\tt comctl32.dll}
-to a newer version: see 
+to a newer version: see
 \urlref{http://www.microsoft.com/downloads/release.asp?ReleaseID=11916}{http://www.microsoft.com/downloads/release.asp?ReleaseID=11916}.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
@@ -257,7 +268,7 @@ This function may cause a subsequent call to GetNextChild to fail.
 
 \func{void}{DeleteAllItems}{\void}
 
-Deletes all items in the control. Note that this may not generate 
+Deletes all items in the control. Note that this may not generate
 {\tt EVT\_TREE\_DELETE\_ITEM} events under some Windows versions although
 normally such event is generated for each removed item.
 
@@ -267,7 +278,7 @@ normally such event is generated for each removed item.
 \func{void}{DeleteChildren}{\param{const wxTreeItemId\& }{item}}
 
 Deletes all children of the given item (but not the item itself). Note that
-this will {\bf not} generate any events unlike 
+this will {\bf not} generate any events unlike
 \helpref{Delete}{wxtreectrldelete} method.
 
 If you have called \helpref{wxTreeCtrl::SetItemHasChildren}{wxtreectrlsetitemhaschildren}, you
@@ -336,7 +347,7 @@ item is currently invisible.
 {\tt item} and {\tt textOnly} parameters.  The return value is either a
 {\tt wxRect} object or {\tt None}.}
 
-\perlnote{In wxPerl this method only takes the parameters {\tt item} and 
+\perlnote{In wxPerl this method only takes the parameters {\tt item} and
   {\tt textOnly}, and returns a Wx::Rect ( or undef ).}
 
 
@@ -359,7 +370,7 @@ of descendants, otherwise only one level of children is counted.
 
 \membersection{wxTreeCtrl::GetCount}\label{wxtreectrlgetcount}
 
-\constfunc{int}{GetCount}{\void}
+\constfunc{size\_t}{GetCount}{\void}
 
 Returns the number of items in the control.
 
@@ -976,5 +987,3 @@ all items if it does have this style.
 \func{void}{UnselectItem}{\param{const wxTreeItemId\& }{item}}
 
 Unselects the given item. This works in multiselection controls only.
-
-
