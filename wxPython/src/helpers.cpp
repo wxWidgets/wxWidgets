@@ -1775,7 +1775,7 @@ void wxPyCallbackHelper::clearRecursionGuard(PyObject* method) const
 // }
 
 
-bool wxPyCallbackHelper::findCallback(const char* name) const {
+bool wxPyCallbackHelper::findCallback(const char* name, bool setGuard) const {
     wxPyCallbackHelper* self = (wxPyCallbackHelper*)this; // cast away const
     PyObject *method, *klass;
     PyObject* nameo = PyString_FromString(name);
@@ -1795,7 +1795,8 @@ bool wxPyCallbackHelper::findCallback(const char* name) const {
             // ...then we'll save a pointer to the method so callCallback can
             // call it.  But first, set a recursion guard in case the
             // overridden method wants to call the base class version.
-            setRecursionGuard(method);
+            if (setGuard)
+                setRecursionGuard(method);
             self->m_lastFound = method;
         }
         else {
@@ -1847,8 +1848,8 @@ void wxPyCBH_setCallbackInfo(wxPyCallbackHelper& cbh, PyObject* self, PyObject* 
     cbh.setSelf(self, klass, incref);
 }
 
-bool wxPyCBH_findCallback(const wxPyCallbackHelper& cbh, const char* name) {
-    return cbh.findCallback(name);
+bool wxPyCBH_findCallback(const wxPyCallbackHelper& cbh, const char* name, bool setGuard) {
+    return cbh.findCallback(name, setGuard);
 }
 
 int  wxPyCBH_callCallback(const wxPyCallbackHelper& cbh, PyObject* argTuple) {
