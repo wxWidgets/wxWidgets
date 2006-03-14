@@ -65,17 +65,6 @@ public:
     // wxControl-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
 
-    // Reserved for future use
-    virtual void ReservedControlFunc1() {}
-    virtual void ReservedControlFunc2() {}
-    virtual void ReservedControlFunc3() {}
-    virtual void ReservedControlFunc4() {}
-    virtual void ReservedControlFunc5() {}
-    virtual void ReservedControlFunc6() {}
-    virtual void ReservedControlFunc7() {}
-    virtual void ReservedControlFunc8() {}
-    virtual void ReservedControlFunc9() {}
-
 protected:
     // creates the control (calls wxWindowBase::CreateBase inside) and adds it
     // to the list of parents children

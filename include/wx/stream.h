@@ -71,17 +71,6 @@ public:
     // returns true if the streams supports seeking to arbitrary offsets
     virtual bool IsSeekable() const { return false; }
 
-    // Reserved for future use
-    virtual void ReservedStreamFunc1() {}
-    virtual void ReservedStreamFunc2() {}
-    virtual void ReservedStreamFunc3() {}
-    virtual void ReservedStreamFunc4() {}
-    virtual void ReservedStreamFunc5() {}
-    virtual void ReservedStreamFunc6() {}
-    virtual void ReservedStreamFunc7() {}
-    virtual void ReservedStreamFunc8() {}
-    virtual void ReservedStreamFunc9() {}
-
 protected:
     virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode);
     virtual wxFileOffset OnSysTell() const;
