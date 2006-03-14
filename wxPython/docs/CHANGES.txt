@@ -100,11 +100,22 @@ methods.
 
 Added the wx.HVScrolledWindow class.
 
+wxGTK: wx.ListBox and wx.CheckListBox are now using native GTK2
+widgets.
+
+Added wx.ListBox.HitTest() from patch 1446207
+
+Bumped up to SWIG 1.3.29.  This provides some more runtime performance
+boosts, gets rid of the dreaded Ptr classes, and some other nice new
+things. 
+
+
 
 
 
 2.6.3.0
 -------
+* Mar-2006
 
 Change the wx.ListCtrl InsertStringItem wrapper to use the form that
 takes an imageIndex, and set the default to -1.  This ensures that on
@@ -146,6 +157,32 @@ Added wx.Toolbar.GetToolsCount.
 Added wx.GridSizer.CalcRowsCols.
 
 Added wx.OutputStream.LastWrite.
+
+wxGTK: EVT_SET_CURSOR is now sent.
+
+wxGTK: Fix RequestMore for idle events.
+
+wxGTK: Implement user dashes for PS and GNOME printing.
+
+wxGTK: Correct update region code. Don't always invalidate the whole
+window upon resize. Reenable support for thewx.NO_FULL_REPAINT_ON_RESIZE 
+flag.  Also disable refreshing custom controls when focusing in and out.
+
+wx.lib.pubsub: Publisher is now able to parse a dotted notation string
+into a topic tuple.  For example: subscribing to "timer.clock.seconds"
+is the same as subscribing to ("timer", "clock", "seconds").
+
+Applied patch #1441370: lib.plot - allow passing in wx.Colour()
+
+Added wx.CommandEvent.GetClientData.
+
+Updated wxStyledTextCtrl to use version 1.67 of Scintilla.  
+NOTE: The STC_LEX_ASP and STC_LEX_PHP lexers have been deprecated,
+you should use STC_LEX_HTML instead.
+
+wxSTC: Implemented Fix for SF Bug #1436503.  Delay the start of the
+DnD operation in case the user just intended to click, not drag.
+
 
 
 

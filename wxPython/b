@@ -6,6 +6,11 @@ if [ "$OSTYPE" = "cygwin" ]; then
     exit
 fi
 
+# make it easy to switch versions of SWIG
+if [ "$SWIG" = "" ]; then
+  SWIG=/opt/swig/bin/swig-1.3.29
+fi
+
 
 function getpyver {
     if [ "$1" = "15" ]; then
@@ -33,7 +38,7 @@ python$PYVER -c "import sys;print '\n', sys.version, '\n'"
 
 
 SETUP="python$PYVER -u setup.py"
-FLAGS="USE_SWIG=1 SWIG=/opt/swig/bin/swig" 
+FLAGS="USE_SWIG=1 SWIG=$SWIG" 
 OTHERFLAGS=""
 PORTFLAGS=""
 UNIFLAG="UNICODE=1"

@@ -81,7 +81,7 @@ public:
 
     // get the array of all extensions
     const wxArrayString& GetExtensions() const;
-    int GetExtensionsCount() const;
+    size_t GetExtensionsCount() const;
 
     // get the icon info
     const wxString& GetIconFile() const;

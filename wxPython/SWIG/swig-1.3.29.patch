@@ -1,0 +1,94 @@
+Index: Lib/typemaps/exception.swg
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Lib/typemaps/exception.swg,v
+retrieving revision 1.8
+diff -u -4 -r1.8 exception.swg
+--- Lib/typemaps/exception.swg	7 Mar 2006 00:14:10 -0000	1.8
++++ Lib/typemaps/exception.swg	10 Mar 2006 00:39:14 -0000
+@@ -12,9 +12,9 @@
+ 
+ /* macros for error manipulation */
+ #define %nullref_fmt()                     "invalid null reference "		   
+ #define %varfail_fmt(_type,_name)          "in variable '"`_name`"' of type '"`_type`"'"
+-#define %argfail_fmt(_type,_name,_argn)    "in method '" `_name` "', argument " `_argn`" of type '" `_type`"'"
++#define %argfail_fmt(_type,_name,_argn)    "in method '" `_name` "', expected argument " `_argn`" of type '" `_type`"'"
+ #define %outfail_fmt(_type)                "in output value of type '"_type"'"	   
+ #define %argnullref_fmt(_type,_name,_argn) %nullref_fmt() %argfail_fmt(_type, _name, _argn)  
+ #define %varnullref_fmt(_type,_name)       %nullref_fmt() %varfail_fmt(_type, _name)  		   
+ #define %outnullref_fmt(_type)             %nullref_fmt() %outfail_fmt(_type)         
+Index: Source/Modules/python.cxx
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
+retrieving revision 1.202
+diff -u -4 -r1.202 python.cxx
+--- Source/Modules/python.cxx	7 Mar 2006 22:02:54 -0000	1.202
++++ Source/Modules/python.cxx	10 Mar 2006 00:39:14 -0000
+@@ -39,9 +39,8 @@
+ static  File         *f_directors_h = 0;
+ static  File         *f_init = 0;
+ static  File         *f_shadow_py = 0;
+ static  String       *f_shadow = 0;
+-static  String       *f_shadow_imports = 0;
+ static  String       *f_shadow_stubs = 0;
+ 
+ static  String       *methods;
+ static  String       *class_name;
+@@ -669,9 +668,8 @@
+       }
+       Delete(filen); filen = NULL;
+ 
+       f_shadow = NewString("");
+-      f_shadow_imports = NewString("");
+       f_shadow_stubs = NewString("");
+ 
+       Swig_register_filebyname("shadow",f_shadow);
+       Swig_register_filebyname("python",f_shadow);
+@@ -817,12 +815,8 @@
+     Printf(f_wrappers,"}\n");
+     Printf(f_wrappers,"#endif\n");
+ 
+     if (shadow) {
+-      /*
+-      Printf(f_shadow_imports,"\nimport %s\n", module);
+-      Printv(f_shadow_py, f_shadow_imports, "\n",NIL);
+-      */
+       Printv(f_shadow_py, f_shadow, "\n",NIL);
+       Printv(f_shadow_py, f_shadow_stubs, "\n",NIL);
+ 
+       Close(f_shadow_py);
+@@ -882,14 +876,11 @@
+         }
+ 
+         // finally, output the name of the imported module
+ 	if (shadowimport) {
+-	  if (!options || (!Getattr(options, "noshadow") && !Getattr(options, "noproxy"))) {	    
+-	    Printf(import, "_%s\n", modname);
+-	    if (!Strstr(f_shadow_imports, import)) {
+-	      Printf(f_shadow, "import %s\n", modname);
+-	      Printv(f_shadow_imports, import, NULL);
+-	    }
++	  if (!options || (!Getattr(options, "noshadow") && !Getattr(options, "noproxy"))) {
++            Printf(import, "%s\n", modname);
++            Printf(f_shadow, "%s", import);
+ 	  }
+ 	}
+ 	
+ 	Delete(import);
+@@ -1154,10 +1145,15 @@
+         
+       // Do the param type too?
+       if (showTypes) {
+         type =  SwigType_base(type);
+-	lookup = Swig_symbol_clookup(type, 0);
+-	if (lookup) type = Getattr(lookup, "sym:name");
++        SwigType* qt = SwigType_typedef_resolve_all(type);
++        if (SwigType_isenum(qt))
++          type = NewString("int");
++        else {
++          lookup = Swig_symbol_clookup(type, 0);
++          if (lookup) type = Getattr(lookup, "sym:name");
++        }
+         Printf(doc, "%s ", type);
+       }
+ 
+       if (name) {

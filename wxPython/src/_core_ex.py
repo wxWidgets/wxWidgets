@@ -266,7 +266,7 @@ class __DocFilter:
         obj = self._globals.get(name, None)
         if type(obj) not in [type, types.ClassType, types.FunctionType, types.BuiltinFunctionType]:
             return False
-        if name.startswith('_') or name.endswith('Ptr') or name.startswith('EVT'):
+        if name.startswith('_') or name.startswith('EVT') or name.endswith('_swigregister')  or name.endswith('Ptr') :
             return False
         return True
 
