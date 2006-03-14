@@ -12,6 +12,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_RADIOBOX
+
 #ifndef WX_PRECOMP
     #include <stdio.h>
     #include "wx/wxchar.h"
@@ -79,7 +81,7 @@ wxRadioBox::~wxRadioBox()
         wxRemoveHandleAssociation(this);
     if (m_ahRadioButtons)
     {
-        for (int i = 0; i < m_nNoItems; i++)
+        for (size_t i = 0; i < m_nNoItems; i++)
         {
             wxWindow* pWin = wxFindWinFromHandle((WXHWND)m_ahRadioButtons[i]);
             wxRemoveHandleAssociation(pWin);
@@ -94,20 +96,16 @@ wxRadioBox::~wxRadioBox()
         delete[] m_pnRadioHeight;
 } // end of wxRadioBox::~wxRadioBox
 
-void wxRadioBox::Command (
-  wxCommandEvent&                   rEvent
-)
+void wxRadioBox::Command ( wxCommandEvent& rEvent )
 {
     SetSelection (rEvent.GetInt());
     ProcessCommand(rEvent);
 } // end of wxRadioBox::Command
 
-bool wxRadioBox::ContainsHWND(
-  WXHWND                            hWnd
-) const
+bool wxRadioBox::ContainsHWND( WXHWND hWnd ) const
 {
-    size_t                          nCount = GetCount();
-    size_t                          i;
+    size_t nCount = GetCount();
+    size_t i;
 
     for (i = 0; i < nCount; i++)
     {
@@ -117,18 +115,16 @@ bool wxRadioBox::ContainsHWND(
     return false;
 } // end of wxRadioBox::ContainsHWND
 
-bool wxRadioBox::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxString&                   rsTitle
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, const wxArrayString&              asChoices
-, int                               nMajorDim
-, long                              lStyle
-, const wxValidator&                rVal
-, const wxString&                   rsName
-)
+bool wxRadioBox::Create( wxWindow* pParent,
+                         wxWindowID vId,
+                         const wxString& rsTitle,
+                         const wxPoint& rPos,
+                         const wxSize& rSize,
+                         const wxArrayString& asChoices,
+                         int nMajorDim,
+                         long lStyle,
+                         const wxValidator& rVal,
+                         const wxString& rsName )
 {
     wxCArrayString chs(asChoices);
 
@@ -136,23 +132,21 @@ bool wxRadioBox::Create(
                   chs.GetStrings(), nMajorDim, lStyle, rVal, rsName);
 }
 
-bool wxRadioBox::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxString&                   rsTitle
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, int                               nNum
-, const wxString                    asChoices[]
-, int                               nMajorDim
-, long                              lStyle
-, const wxValidator&                rVal
-, const wxString&                   rsName
-)
+bool wxRadioBox::Create( wxWindow* pParent,
+                         wxWindowID vId,
+                         const wxString& rsTitle,
+                         const wxPoint& rPos,
+                         const wxSize& rSize,
+                         int nNum,
+                         const wxString asChoices[],
+                         int nMajorDim,
+                         long lStyle,
+                         const wxValidator& rVal,
+                         const wxString& rsName )
 {
-    wxColour                        vColour;
-    LONG                            lColor;
-    HWND                            hWndParent = GetHwndOf(pParent);
+    wxColour vColour;
+    LONG     lColor;
+    HWND     hWndParent = GetHwndOf(pParent);
 
     vColour.Set(wxString(wxT("BLACK")));
     m_backgroundColour = pParent->GetBackgroundColour();
@@ -184,7 +178,7 @@ bool wxRadioBox::Create(
     //
     // Now we can set m_nNoItems and let SetMajorDim set m_numCols/m_numRows
     //
-    m_nNoItems = nNum;
+    m_nNoItems = (size_t)nNum;
     SetMajorDim(nMajorDim == 0 ? nNum : nMajorDim, lStyle);
 
     m_ahRadioButtons = new WXHWND[nNum];
@@ -412,14 +406,14 @@ void wxRadioBox::DoSetSize(
     nStartX = nXOffset;
     nStartY = nYOffset;
 
-    for (int i = 0; i < m_nNoItems; i++)
+    for (size_t i = 0; i < m_nNoItems; i++)
     {
         //
         // The last button in the row may be wider than the other ones as the
         // radiobox may be wider than the sum of the button widths (as it
         // happens, for example, when the radiobox label is very long)
         //
-        bool                        bIsLastInTheRow;
+        bool bIsLastInTheRow;
 
         if (m_windowStyle & wxRA_SPECIFY_COLS)
         {
@@ -525,18 +519,16 @@ bool wxRadioBox::Enable(int nItem, bool bEnable)
     return true;
 } // end of wxRadioBox::Enable
 
-bool wxRadioBox::Enable(
-  bool                              bEnable
-)
+bool wxRadioBox::Enable(bool bEnable)
 {
     if ( !wxControl::Enable(bEnable) )
         return false;
-    for (int i = 0; i < m_nNoItems; i++)
+    for (size_t i = 0; i < m_nNoItems; i++)
         ::WinEnableWindow((HWND)m_ahRadioButtons[i], bEnable);
     return true;
 } // end of wxRadioBox::Enable
 
-int wxRadioBox::GetCount() const
+size_t wxRadioBox::GetCount() const
 {
     return m_nNoItems;
 } // end of wxRadioBox::GetCount
@@ -550,13 +542,13 @@ wxString wxRadioBox::GetLabel(int nItem) const
 
 wxSize wxRadioBox::GetMaxButtonSize() const
 {
-    int                             nWidthMax = 0;
-    int                             nHeightMax = 0;
+    int nWidthMax = 0;
+    int nHeightMax = 0;
 
-    for (int i = 0 ; i < m_nNoItems; i++)
+    for (size_t i = 0 ; i < m_nNoItems; i++)
     {
-        int                         nWidth;
-        int                         nHeight;
+        int nWidth;
+        int nHeight;
 
         if (m_pnRadioWidth[i] < 0L)
         {
@@ -595,7 +587,7 @@ int wxRadioBox::GetSelection() const
 
 void wxRadioBox::GetSize( int* pnWidth, int* pnHeight ) const
 {
-    RECT                            vRect;
+    RECT vRect;
 
     vRect.xLeft   = -1;
     vRect.xRight  = -1;
@@ -603,14 +595,10 @@ void wxRadioBox::GetSize( int* pnWidth, int* pnHeight ) const
     vRect.yBottom = -1;
 
     if (m_hWnd)
-        wxFindMaxSize( m_hWnd
-                      ,&vRect
-                     );
+        wxFindMaxSize( m_hWnd, &vRect );
 
-    for (int i = 0; i < m_nNoItems; i++)
-        wxFindMaxSize( m_ahRadioButtons[i]
-                      ,&vRect
-                     );
+    for (size_t i = 0; i < m_nNoItems; i++)
+        wxFindMaxSize( m_ahRadioButtons[i], &vRect );
 
     if (pnWidth)
         *pnWidth  = vRect.xRight - vRect.xLeft;
@@ -701,7 +689,7 @@ bool wxRadioBox::OS2Command( WXUINT uCmd,
         if (wId == GetId())
             return true;
 
-        for (int i = 0; i < m_nNoItems; i++)
+        for (size_t i = 0; i < m_nNoItems; i++)
         {
             if (wId == wxGetWindowId(m_ahRadioButtons[i]))
             {
@@ -750,9 +738,7 @@ void wxRadioBox::SetFocus()
     }
 } // end of wxRadioBox::SetFocus
 
-bool wxRadioBox::SetFont(
-  const wxFont&                     rFont
-)
+bool wxRadioBox::SetFont(const wxFont& rFont)
 {
     if (!wxControl::SetFont(rFont))
     {
@@ -764,13 +750,11 @@ bool wxRadioBox::SetFont(
     //
     // Also set the font of our radio buttons
     //
-    for (int n = 0; n < (int)m_nNoItems; n++)
+    for (size_t n = 0; n < m_nNoItems; n++)
     {
-        HWND                        hWndBtn = (HWND)m_ahRadioButtons[n];
+        HWND hWndBtn = (HWND)m_ahRadioButtons[n];
 
-        wxOS2SetFont( hWndBtn
-                     ,rFont
-                    );
+        wxOS2SetFont( hWndBtn, rFont );
         ::WinInvalidateRect(hWndBtn, NULL, FALSE);
     }
     return true;
@@ -814,14 +798,12 @@ bool wxRadioBox::SetStringSelection(const wxString& rsStr)
         return false;
 } // end of wxRadioBox::SetStringSelection
 
-bool wxRadioBox::Show(
-  bool                              bShow
-)
+bool wxRadioBox::Show(bool bShow)
 {
     if (!wxControl::Show(bShow))
         return false;
 
-    for (int i = 0; i < m_nNoItems; i++)
+    for (size_t i = 0; i < m_nNoItems; i++)
     {
         ::WinShowWindow((HWND)m_ahRadioButtons[i], (BOOL)bShow);
     }
@@ -959,3 +941,5 @@ MRESULT EXPENTRY wxRadioBoxWndProc( HWND hWnd,
                                (MPARAM)lParam )
            );
 } // end of wxRadioBoxWndProc
+
+#endif // wxUSE_RADIOBOX

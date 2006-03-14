@@ -88,7 +88,7 @@ public:
     // implement the radiobox interface
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
-    virtual int GetCount() const;
+    virtual size_t GetCount() const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
 
@@ -136,12 +136,11 @@ protected:
     // get the total size occupied by the radio box buttons
     wxSize GetTotalButtonSize(const wxSize& sizeBtn) const;
 
-    int *             m_radioWidth;  // for bitmaps
-    int *             m_radioHeight;
+    int *m_radioWidth;  // for bitmaps
+    int *m_radioHeight;
 
-    int               m_noItems;
-    int               m_noRowsOrCols;
-    int               m_selectedButton;
+    int  m_noRowsOrCols;
+    int  m_selectedButton;
 
     virtual wxSize DoGetBestSize() const;
 

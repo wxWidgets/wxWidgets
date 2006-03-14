@@ -99,8 +99,8 @@ public:
     virtual void Clear();
     virtual void Delete(int n);
 
-    virtual int GetCount() const
-        { return (int)m_strings->GetCount(); }
+    virtual size_t GetCount() const
+        { return m_strings->GetCount(); }
     virtual wxString GetString(int n) const
         { return m_strings->Item(n); }
     virtual void SetString(int n, const wxString& s);

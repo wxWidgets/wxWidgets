@@ -65,7 +65,7 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
     if (!rb->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
-    if ( ((gdk_event->keyval == GDK_Tab) || 
+    if ( ((gdk_event->keyval == GDK_Tab) ||
           (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
          rb->GetParent() && (rb->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
     {
@@ -498,7 +498,7 @@ bool wxRadioBox::IsItemShown(int item) const
     return GTK_WIDGET_VISIBLE(GTK_WIDGET(button));
 }
 
-int wxRadioBox::GetCount() const
+size_t wxRadioBox::GetCount() const
 {
     return m_boxes.GetCount();
 }

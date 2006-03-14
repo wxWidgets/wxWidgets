@@ -81,7 +81,7 @@ public:
     virtual void Clear();
     virtual void Delete(int n);
 
-    virtual int GetCount() const;
+    virtual size_t GetCount() const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& s);
     virtual int FindString(const wxString& s, bool bCase = false) const;
@@ -147,7 +147,7 @@ protected:
     // free memory (common part of Clear() and dtor)
     void Free();
 
-    int m_noItems;
+    size_t m_noItems;
     int m_selected;
 
     virtual wxSize DoGetBestSize() const;

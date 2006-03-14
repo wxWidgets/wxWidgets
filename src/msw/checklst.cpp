@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/checklst.cpp
+// Name:        src/msw/checklst.cpp
 // Purpose:     implementation of wxCheckListBox class
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -337,7 +337,7 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
 
 void wxCheckListBox::Delete(int N)
 {
-    wxCHECK_RET( N >= 0 && N < m_noItems,
+    wxCHECK_RET( IsValid(N),
                  wxT("invalid index in wxListBox::Delete") );
 
     wxListBox::Delete(N);
@@ -521,7 +521,7 @@ int wxCheckListBox::DoHitTestItem(wxCoord x, wxCoord y) const
                               MAKELPARAM(x, y)
                              );
 
-  return nItem >= m_noItems ? wxNOT_FOUND : nItem;
+  return nItem >= (int)m_noItems ? wxNOT_FOUND : nItem;
 }
 
 
@@ -534,4 +534,3 @@ wxSize wxCheckListBox::DoGetBestSize() const
 }
 
 #endif
-

@@ -12,11 +12,11 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_RADIOBOX
+
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #endif
-
-#include "wx/defs.h"
 
 #include "wx/radiobox.h"
 #include "wx/utils.h"
@@ -59,7 +59,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     if( !CreateControl( parent, id, pos, size, style, val, name ) )
         return false;
 
-    m_noItems = n;
+    m_noItems = (size_t)n;
     m_noRowsOrCols = majorDim;
 
     SetMajorDim(majorDim == 0 ? n : majorDim, style);
@@ -197,8 +197,7 @@ void wxRadioBox::SetSelection(int n)
 
     XmToggleButtonSetState ((Widget) m_radioButtons[n], True, False);
 
-    int i;
-    for (i = 0; i < m_noItems; i++)
+    for (size_t i = 0; i < m_noItems; i++)
         if (i != n)
             XmToggleButtonSetState ((Widget) m_radioButtons[i], False, False);
 
@@ -259,8 +258,7 @@ bool wxRadioBox::Enable(bool enable)
     if ( !wxControl::Enable(enable) )
         return false;
 
-    int i;
-    for (i = 0; i < m_noItems; i++)
+    for (size_t i = 0; i < m_noItems; i++)
         XtSetSensitive ((Widget) m_radioButtons[i], (Boolean) enable);
 
     return true;
@@ -335,8 +333,7 @@ void wxRadioBox::ChangeFont(bool keepOriginalSize)
 {
     wxWindow::ChangeFont(keepOriginalSize);
 
-    int i;
-    for (i = 0; i < m_noItems; i++)
+    for (size_t i = 0; i < m_noItems; i++)
     {
         WXWidget radioButton = m_radioButtons[i];
 
@@ -352,8 +349,7 @@ void wxRadioBox::ChangeBackgroundColour()
 
     int selectPixel = wxBLACK->AllocColour(XtDisplay((Widget)m_mainWidget));
 
-    int i;
-    for (i = 0; i < m_noItems; i++)
+    for (size_t i = 0; i < m_noItems; i++)
     {
         WXWidget radioButton = m_radioButtons[i];
 
@@ -369,8 +365,7 @@ void wxRadioBox::ChangeForegroundColour()
 {
     wxWindow::ChangeForegroundColour();
 
-    int i;
-    for (i = 0; i < m_noItems; i++)
+    for (size_t i = 0; i < m_noItems; i++)
     {
         WXWidget radioButton = m_radioButtons[i];
 
@@ -402,3 +397,5 @@ void wxRadioBoxCallback (Widget w, XtPointer clientData,
   event.SetEventObject(item);
   item->ProcessCommand (event);
 }
+
+#endif // wxUSE_RADIOBOX

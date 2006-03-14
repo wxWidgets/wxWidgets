@@ -88,8 +88,7 @@ public:
     int GetCurrentSelection() const;
     wxString GetString( int n ) const;
     wxString GetStringSelection() const;
-    int GetCount() const;
-    int Number() const { return GetCount(); }
+    virtual size_t GetCount() const;
     void SetSelection( int n );
     void SetString(int n, const wxString &text);
 

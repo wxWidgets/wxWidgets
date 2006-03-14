@@ -69,7 +69,7 @@ public:
     int GetCurrentSelection() const { return GetSelection(); }
     void SetSelection( int n );
 
-    virtual int GetCount() const;
+    virtual size_t GetCount() const;
     virtual int FindString(const wxString& s, bool bCase = false) const;
     wxString GetString( int n ) const;
     void SetString( int n, const wxString& string );
@@ -95,7 +95,7 @@ protected:
 
 private:
     // common part of Create() and DoAppend()
-    int GtkAddHelper(GtkWidget *menu, int pos, const wxString& item);
+    int GtkAddHelper(GtkWidget *menu, size_t pos, const wxString& item);
 
     // this array is only used for controls with wxCB_SORT style, so only
     // allocate it if it's needed (hence using pointer)

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobox.h
+// Name:        wx/mac/classic/radiobox.h
 // Purpose:     wxRadioBox class
 // Author:      Stefan Csomor
 // Modified by:
@@ -58,7 +58,7 @@ public:
     virtual void SetSelection(int item);
     virtual int GetSelection() const;
 
-    inline virtual int GetCount() const { return m_noItems; } ;
+    virtual size_t GetCount() const { return m_noItems; } ;
 
     virtual wxString GetString(int item) const;
     virtual void SetString(int item, const wxString& label) ;
@@ -80,10 +80,11 @@ public:
     inline void SetNumberOfRowsOrCols(int n) { m_noRowsOrCols = n; }
 
     void OnRadioButton( wxCommandEvent& event ) ;
-protected:
-    wxRadioButton        *m_radioButtonCycle;
 
-    int               m_noItems;
+protected:
+    wxRadioButton    *m_radioButtonCycle;
+
+    size_t            m_noItems;
     int               m_noRowsOrCols;
 
 // Internal functions

@@ -156,9 +156,9 @@ void wxChoice::Delete(int n)
     [(NSPopUpButton*)m_cocoaNSView removeItemAtIndex:n];
 }
 
-int wxChoice::GetCount() const
+size_t wxChoice::GetCount() const
 {
-    return [(NSPopUpButton*)m_cocoaNSView numberOfItems];
+    return (size_t)[(NSPopUpButton*)m_cocoaNSView numberOfItems];
 }
 
 wxString wxChoice::GetString(int n) const

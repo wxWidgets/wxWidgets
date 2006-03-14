@@ -540,7 +540,7 @@ bool wxComboListBox::SetSelection(const wxString& value)
     // always matches), but we want to show the first one in such case
     if ( value.empty() )
     {
-        if ( GetCount() )
+        if ( GetCount() > 0 )
         {
             wxListBox::SetSelection(0);
         }
@@ -798,7 +798,7 @@ void wxComboBox::Clear()
 
 void wxComboBox::Delete(int n)
 {
-    wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid index in wxComboBox::Delete") );
+    wxCHECK_RET( IsValid(n), _T("invalid index in wxComboBox::Delete") );
 
     if (GetSelection() == n)
         GetText()->SetValue(wxEmptyString);
@@ -806,21 +806,21 @@ void wxComboBox::Delete(int n)
     GetLBox()->Delete(n);
 }
 
-int wxComboBox::GetCount() const
+size_t wxComboBox::GetCount() const
 {
     return GetLBox()->GetCount();
 }
 
 wxString wxComboBox::GetString(int n) const
 {
-    wxCHECK_MSG( (n >= 0) && (n < GetCount()), wxEmptyString, _T("invalid index in wxComboBox::GetString") );
+    wxCHECK_MSG( IsValid(n), wxEmptyString, _T("invalid index in wxComboBox::GetString") );
 
     return GetLBox()->GetString(n);
 }
 
 void wxComboBox::SetString(int n, const wxString& s)
 {
-    wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid index in wxComboBox::SetString") );
+    wxCHECK_RET( IsValid(n), _T("invalid index in wxComboBox::SetString") );
 
     GetLBox()->SetString(n, s);
 }
@@ -832,7 +832,7 @@ int wxComboBox::FindString(const wxString& s, bool bCase) const
 
 void wxComboBox::SetSelection(int n)
 {
-    wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid index in wxComboBox::Select") );
+    wxCHECK_RET( IsValid(n), _T("invalid index in wxComboBox::Select") );
 
     GetLBox()->SetSelection(n);
     GetText()->SetValue(GetLBox()->GetString(n));
@@ -859,9 +859,9 @@ int wxComboBox::DoAppend(const wxString& item)
 int wxComboBox::DoInsert(const wxString& item, int pos)
 {
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
-    wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
+    wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
 
-    if (pos == GetCount())
+    if ((size_t)pos == GetCount())
         return DoAppend(item);
 
     GetLBox()->Insert(item, pos);

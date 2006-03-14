@@ -58,7 +58,7 @@ public:
 
     // public interface derived from wxListBox and lower classes
     virtual void Clear();
-    virtual int GetCount() const;
+    virtual size_t GetCount() const;
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
     virtual wxString GetString(int n) const;

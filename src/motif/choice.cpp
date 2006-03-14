@@ -12,14 +12,12 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_CHOICE
+
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #define XtParent XTPARENT
 #endif
-
-#include "wx/defs.h"
-
-#if wxUSE_CHOICE
 
 #include "wx/choice.h"
 #include "wx/utils.h"
@@ -192,7 +190,7 @@ static inline wxChar* MYcopystring(const wxChar* s)
 int wxChoice::DoInsert(const wxString& item, int pos)
 {
 #ifndef XmNpositionIndex
-    wxCHECK_MSG( pos == GetCount(), -1, wxT("insert not implemented"));
+    wxCHECK_MSG( (size_t)pos == GetCount(), -1, wxT("insert not implemented"));
 #endif
     Widget w = XtVaCreateManagedWidget (wxStripMenuCodes(item),
 #if wxUSE_GADGETS
@@ -238,7 +236,7 @@ int wxChoice::DoInsert(const wxString& item, int pos)
 
 int wxChoice::DoAppend(const wxString& item)
 {
-    return DoInsert(item, GetCount());
+    return DoInsert(item, (int)GetCount());
 }
 
 void wxChoice::Delete(int n)
@@ -497,7 +495,7 @@ void wxChoice::ChangeForegroundColour()
         wxDoChangeForegroundColour(m_widgetArray[i], m_foregroundColour);
 }
 
-int wxChoice::GetCount() const
+size_t wxChoice::GetCount() const
 {
     return m_noStrings;
 }

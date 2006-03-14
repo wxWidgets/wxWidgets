@@ -66,7 +66,7 @@ public:
     ~wxListBox();
 
     // implementation of wxControlWithItems
-    virtual int GetCount() const;
+    virtual size_t GetCount() const;
     virtual int DoAppend(const wxString& item);
     virtual void DoSetItemClientData(int n, void* clientData);
     virtual void* DoGetItemClientData(int n) const;
@@ -101,7 +101,7 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const;
 
-    int       m_noItems;
+    size_t m_noItems;
 
     // List mapping positions->client data
     wxClientDataDictionary m_clientDataDict;

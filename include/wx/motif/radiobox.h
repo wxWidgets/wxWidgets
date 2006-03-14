@@ -84,7 +84,7 @@ public:
 
     virtual wxString GetStringSelection() const;
     virtual bool SetStringSelection(const wxString& s);
-    virtual int GetCount() const { return m_noItems; } ;
+    virtual size_t GetCount() const { return m_noItems; } ;
     void Command(wxCommandEvent& event);
 
     int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
@@ -103,7 +103,7 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
-    int               m_noItems;
+    size_t            m_noItems;
     int               m_noRowsOrCols;
     int               m_selectedButton;
 

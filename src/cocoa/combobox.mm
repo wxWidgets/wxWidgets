@@ -75,6 +75,7 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/wxprec.h"
+
 #if wxUSE_COMBOBOX
 
 #ifndef WX_PRECOMP
@@ -260,9 +261,9 @@ void wxComboBox::Delete(int nIndex)
     m_Datas.RemoveAt(nIndex);
 }
 
-int wxComboBox::GetCount() const
+size_t wxComboBox::GetCount() const
 {
-    return [GetNSComboBox() numberOfItems];
+    return (size_t)[GetNSComboBox() numberOfItems];
 }
 
 wxString wxComboBox::GetString(int nIndex) const

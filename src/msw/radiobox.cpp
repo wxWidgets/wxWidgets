@@ -269,8 +269,8 @@ bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
 
         int selectedButton = wxNOT_FOUND;
 
-        int count = GetCount();
-        for ( int i = 0; i < count; i++ )
+        const size_t count = GetCount();
+        for ( size_t i = 0; i < count; i++ )
         {
             if ( id == wxGetWindowId((*m_radioButtons)[i]) )
             {
@@ -323,7 +323,7 @@ void wxRadioBox::SendNotificationEvent()
 // simple accessors
 // ----------------------------------------------------------------------------
 
-int wxRadioBox::GetCount() const
+size_t wxRadioBox::GetCount() const
 {
     return m_radioButtons->GetCount();
 }
@@ -432,8 +432,8 @@ wxSize wxRadioBox::GetMaxButtonSize() const
     // calculate the max button size
     int widthMax = 0,
         heightMax = 0;
-    const int count = GetCount();
-    for ( int i = 0 ; i < count; i++ )
+    const size_t count = GetCount();
+    for ( size_t i = 0 ; i < count; i++ )
     {
         int width, height;
         if ( m_radioWidth[i] < 0 )
@@ -565,8 +565,8 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int startX = x_offset;
     int startY = y_offset;
 
-    const int count = GetCount();
-    for ( int i = 0; i < count; i++ )
+    const size_t count = GetCount();
+    for ( size_t i = 0; i < count; i++ )
     {
         // the last button in the row may be wider than the other ones as the
         // radiobox may be wider than the sum of the button widths (as it
@@ -576,7 +576,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         {
             // item is the last in its row if it is a multiple of the number of
             // columns or if it is just the last item
-            int n = i + 1;
+            size_t n = i + 1;
             isLastInTheRow = ((n % GetMajorDim()) == 0) || (n == count);
         }
         else // wxRA_SPECIFY_ROWS

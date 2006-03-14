@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/radiobox.cpp
+// Name:        src/univ/radiobox.cpp
 // Purpose:     wxRadioBox implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -335,7 +335,7 @@ bool wxRadioBox::Enable(bool enable)
         return false;
 
     // also enable/disable the buttons
-    size_t count = m_buttons.GetCount();
+    const size_t count = m_buttons.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
         Enable(n, enable);
@@ -350,7 +350,7 @@ bool wxRadioBox::Show(bool show)
         return false;
 
     // also show/hide the buttons
-    size_t count = m_buttons.GetCount();
+    const size_t count = m_buttons.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
         Show(n, show);
@@ -375,7 +375,7 @@ void wxRadioBox::DoSetToolTip(wxToolTip *tooltip)
     wxControl::DoSetToolTip(tooltip);
 
     // Also set them for all Radio Buttons
-    size_t count = m_buttons.GetCount();
+    const size_t count = m_buttons.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
         if (tooltip)
@@ -395,7 +395,7 @@ wxSize wxRadioBox::GetMaxButtonSize() const
     int widthMax, heightMax, width = 0, height = 0;
     widthMax = heightMax = 0;
 
-    int count = GetCount();
+    const int count = GetCount();
     for ( int n = 0; n < count; n++ )
     {
         m_buttons[n]->GetBestSize(&width, &height);
@@ -442,8 +442,8 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
     int x = x0,
         y = y0;
 
-    int count = GetCount();
-    for ( int n = 0; n < count; n++ )
+    const size_t count = GetCount();
+    for ( size_t n = 0; n < count; n++ )
     {
         m_buttons[n]->SetSize(x, y, sizeBtn.x, sizeBtn.y);
 
@@ -523,4 +523,3 @@ bool wxRadioBox::OnKeyDown(wxKeyEvent& event)
 }
 
 #endif // wxUSE_RADIOBOX
-

@@ -95,7 +95,7 @@ public:
     virtual void Clear();
     virtual void Delete(int n);
     // accessing strings
-    virtual int GetCount() const;
+    virtual size_t GetCount() const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& s);
     virtual int FindString(const wxString& s, bool bCase = false) const;

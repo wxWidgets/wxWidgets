@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/listbox.cpp
+// Name:        src/univ/listbox.cpp
 // Purpose:     wxListBox implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -327,7 +327,7 @@ void wxListBox::Clear()
 
 void wxListBox::Delete(int n)
 {
-    wxCHECK_RET( n >= 0 && n < GetCount(),
+    wxCHECK_RET( IsValid(n),
                  _T("invalid index in wxListBox::Delete") );
 
     // do it before removing the index as otherwise the last item will not be
@@ -574,7 +574,7 @@ void wxListBox::UpdateScrollbars()
     wxSize size = GetClientSize();
 
     // is our height enough to show all items?
-    int nLines = GetCount();
+    size_t nLines = GetCount();
     wxCoord lineHeight = GetLineHeight();
     bool showScrollbarY = nLines*lineHeight > size.y;
 
@@ -913,8 +913,8 @@ void wxListBox::SetCurrentItem(int n)
 
 bool wxListBox::FindItem(const wxString& prefix, bool strictlyAfter)
 {
-    int count = GetCount();
-    if ( !count )
+    size_t count = GetCount();
+    if ( count==0 )
     {
         // empty listbox, we can't find anything in it
         return false;
@@ -937,13 +937,13 @@ bool wxListBox::FindItem(const wxString& prefix, bool strictlyAfter)
     int last = first == 0 ? count - 1 : first - 1;
 
     // if this is not true we'd never exit from the loop below!
-    wxASSERT_MSG( first < count && last < count, _T("logic error") );
+    wxASSERT_MSG( first < (int)count && last < (int)count, _T("logic error") );
 
     // precompute it outside the loop
     size_t len = prefix.length();
 
     // loop over all items in the listbox
-    for ( int item = first; item != last; item < count - 1 ? item++ : item = 0 )
+    for ( int item = first; item != (int)last; item < count - 1 ? item++ : item = 0 )
     {
         if ( wxStrnicmp(this->GetString(item).c_str(), prefix, len) == 0 )
         {
@@ -1055,8 +1055,8 @@ void wxListBox::ExtendSelection(int itemTo)
         SetSelection(n);
     }
 
-    int count = GetCount();
-    for ( ; n < count; n++ )
+    size_t count = GetCount();
+    for ( ; n < (int)count; n++ )
     {
         Deselect(n);
     }
@@ -1230,7 +1230,7 @@ int wxStdListboxInputHandler::FixItemIndex(const wxListBox *lbox,
         // mouse is above the first item
         item = 0;
     }
-    else if ( item >= lbox->GetCount() )
+    else if ( (size_t)item >= lbox->GetCount() )
     {
         // mouse is below the last item
         item = lbox->GetCount() - 1;
@@ -1241,7 +1241,7 @@ int wxStdListboxInputHandler::FixItemIndex(const wxListBox *lbox,
 
 bool wxStdListboxInputHandler::IsValidIndex(const wxListBox *lbox, int item)
 {
-    return item >= 0 && item < lbox->GetCount();
+    return item >= 0 && (size_t)item < lbox->GetCount();
 }
 
 wxControlAction

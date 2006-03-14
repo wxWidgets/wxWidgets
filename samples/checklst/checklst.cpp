@@ -499,7 +499,7 @@ void CheckListBoxFrame::OnButtonMove(bool up)
         wxString label = m_pListBox->GetString(selection);
 
         int positionNew = up ? selection - 1 : selection + 2;
-        if ( positionNew < 0 || positionNew > m_pListBox->GetCount() )
+        if ( positionNew < 0 || positionNew > (int)m_pListBox->GetCount() )
         {
             wxLogStatus(this, wxT("Can't move this item %s"), up ? wxT("up") : wxT("down"));
         }

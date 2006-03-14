@@ -84,7 +84,7 @@ public:
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
 
-    virtual int GetCount() const { return (int) m_buttons.GetCount(); }
+    virtual size_t GetCount() const { return m_buttons.GetCount(); }
 
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);

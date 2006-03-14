@@ -12,8 +12,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-
 #if wxUSE_CHOICE
 
 #ifndef WX_PRECOMP
@@ -125,19 +123,16 @@ int wxChoice::DoAppend(
     return nIndex;
 } // end of wxChoice::DoAppend
 
-int wxChoice::DoInsert(
-  const wxString&                   rsItem,
-  int                               pos
-)
+int wxChoice::DoInsert( const wxString& rsItem, int pos )
 {
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
-    wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
+    wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
 
-    if (pos == GetCount())
+    if ((size_t)pos == GetCount())
         return DoAppend(rsItem);
 
-    int                             nIndex;
-    LONG                            nIndexType = 0;
+    int  nIndex;
+    LONG nIndexType = 0;
 
     if (m_windowStyle & wxLB_SORT)
         nIndexType = LIT_SORTASCENDING;
@@ -151,11 +146,9 @@ int wxChoice::DoInsert(
     return nIndex;
 } // end of wxChoice::DoInsert
 
-void wxChoice::Delete(
-  int                               n
-)
+void wxChoice::Delete( int n )
 {
-    wxCHECK_RET( n < GetCount(), wxT("invalid item index in wxChoice::Delete") );
+    wxCHECK_RET( IsValid(n), wxT("invalid item index in wxChoice::Delete") );
     ::WinSendMsg(GetHwnd(), LM_DELETEITEM, (MPARAM)n, (MPARAM)0);
 } // end of wxChoice::Delete
 
@@ -189,9 +182,9 @@ void wxChoice::SetSelection(
 // string list functions
 // ----------------------------------------------------------------------------
 
-int wxChoice::GetCount() const
+size_t wxChoice::GetCount() const
 {
-    return((int)LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMCOUNT, (MPARAM)0, (MPARAM)0)));
+    return((size_t)LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMCOUNT, (MPARAM)0, (MPARAM)0)));
 } // end of wxChoice::GetCount
 
 void wxChoice::SetString( int n, const wxString& rsStr )
@@ -316,21 +309,18 @@ wxSize wxChoice::DoGetBestSize() const
     //
     // Find the widest string
     //
-    int                             nLineWidth;
-    int                             nChoiceWidth = 0;
-    int                             nItems = GetCount();
-    int                             nCx;
-    int                             nCy;
-    wxFont                          vFont = (wxFont)GetFont();
+    int    nLineWidth;
+    int    nChoiceWidth = 0;
+    int    nCx;
+    int    nCy;
+    wxFont vFont = (wxFont)GetFont();
 
-    for (int i = 0; i < nItems; i++)
+    const size_t nItems = GetCount();
+
+    for (size_t i = 0; i < nItems; i++)
     {
-        wxString                    sStr(GetString(i));
-
-        GetTextExtent( sStr
-                      ,&nLineWidth
-                      ,NULL
-                     );
+        wxString sStr(GetString(i));
+        GetTextExtent( sStr, &nLineWidth, NULL );
         if (nLineWidth > nChoiceWidth)
             nChoiceWidth = nLineWidth;
     }
@@ -345,11 +335,7 @@ wxSize wxChoice::DoGetBestSize() const
     //
     // The combobox should be larger than the widest string
     //
-    wxGetCharSize( GetHWND()
-                  ,&nCx
-                  ,&nCy
-                  ,&vFont
-                 );
+    wxGetCharSize( GetHWND(), &nCx, &nCy, &vFont );
     nChoiceWidth += 5 * nCx;
 
     //
@@ -411,7 +397,7 @@ void wxChoice::Free()
 {
     if (HasClientObjectData())
     {
-        size_t                      nCount = GetCount();
+        const size_t nCount = GetCount();
 
         for (size_t n = 0; n < nCount; n++)
         {

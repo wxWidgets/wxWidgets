@@ -7,7 +7,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
+#include "wx/wxprec.h"
 
 #if wxUSE_CHOICE
 
@@ -133,7 +133,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     GtkWidget *menu = gtk_menu_new();
 
-    for (int i = 0; i < n; i++)
+    for (size_t i = 0; i < (size_t)n; i++)
     {
         GtkAddHelper(menu, i, choices[i]);
     }
@@ -167,9 +167,9 @@ int wxChoice::DoAppend( const wxString &item )
 int wxChoice::DoInsert( const wxString &item, int pos )
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid choice control") );
-    wxCHECK_MSG( (pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
+    wxCHECK_MSG( IsValidInsert(pos), -1, wxT("invalid index"));
 
-    if (pos == GetCount())
+    if ((size_t)pos == GetCount())
         return DoAppend(item);
 
     GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
@@ -181,7 +181,7 @@ int wxChoice::DoInsert( const wxString &item, int pos )
         m_selection_hack++;
     }
 
-    return GtkAddHelper(menu, pos, item);
+    return GtkAddHelper(menu, (size_t)pos, item);
 }
 
 void wxChoice::DoSetItemClientData( int n, void* clientData )
@@ -262,10 +262,10 @@ void wxChoice::Delete( int n )
 
     // VZ: apparently GTK+ doesn't have a built-in function to do it (not even
     //     in 2.0), hence this dumb implementation -- still better than nothing
-    int i,
-        count = GetCount();
+    int i;
+    size_t count = GetCount();
 
-    wxCHECK_RET( n >= 0 && n < count, _T("invalid index in wxChoice::Delete") );
+    wxCHECK_RET( IsValid(n), _T("invalid index in wxChoice::Delete") );
 
     // if the item to delete is before the selection, and the selection is valid
     if ((n < m_selection_hack) && (m_selection_hack != wxNOT_FOUND))
@@ -287,7 +287,7 @@ void wxChoice::Delete( int n )
     wxArrayString items;
     wxArrayPtrVoid itemsData;
     items.Alloc(count);
-    for ( i = 0; i < count; i++ )
+    for ( i = 0; (size_t)i < count; i++ )
     {
         if ( i != n )
         {
@@ -432,12 +432,12 @@ wxString wxChoice::GetString( int n ) const
     return wxEmptyString;
 }
 
-int wxChoice::GetCount() const
+size_t wxChoice::GetCount() const
 {
     wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid choice") );
 
     GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
-    int count = 0;
+    size_t count = 0;
     GList *child = menu_shell->children;
     while (child)
     {
@@ -455,7 +455,7 @@ void wxChoice::SetSelection( int n )
     gtk_option_menu_set_history( GTK_OPTION_MENU(m_widget), (gint)tmp );
 
     // set the local selection variable manually
-    if ((n >= 0) && (n < GetCount()))
+    if ((n >= 0) && ((size_t)n < GetCount()))
     {
         // a valid selection has been made
         m_selection_hack = n;
@@ -498,9 +498,9 @@ void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)
     }
 }
 
-int wxChoice::GtkAddHelper(GtkWidget *menu, int pos, const wxString& item)
+int wxChoice::GtkAddHelper(GtkWidget *menu, size_t pos, const wxString& item)
 {
-    wxCHECK_MSG((pos>=0) && (pos<=(int)m_clientList.GetCount()), -1, wxT("invalid index"));
+    wxCHECK_MSG(pos<=m_clientList.GetCount(), -1, wxT("invalid index"));
 
     GtkWidget *menu_item = gtk_menu_item_new_with_label( wxGTK_CONV( item ) );
 

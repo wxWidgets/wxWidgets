@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 //-------------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ bool wxRadioBox::Create( wxWindow *parent,
 
     int i;
 
-    m_noItems = n;
+    m_noItems = (size_t)n;
     m_noRowsOrCols = majorDim;
     m_radioButtonCycle = NULL;
 
@@ -148,14 +148,13 @@ bool wxRadioBox::Create( wxWindow *parent,
 //
 bool wxRadioBox::Enable(bool enable)
 {
-    int i;
     wxRadioButton *current;
 
     if (!wxControl::Enable( enable ))
         return false;
 
     current = m_radioButtonCycle;
-    for (i = 0; i < m_noItems; i++)
+    for (size_t i = 0; i < m_noItems; i++)
     {
         current->Enable( enable );
         current = current->NextInCycle();
@@ -285,11 +284,10 @@ void wxRadioBox::SetSelection(int item)
 //
 bool wxRadioBox::Show(bool show)
 {
-    int i;
     wxRadioButton *current;
 
     current = m_radioButtonCycle;
-    for (i=0; i<m_noItems; i++)
+    for (size_t i=0; i<m_noItems; i++)
     {
         current->Show( show );
         current = current->NextInCycle();
@@ -389,7 +387,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
     maxWidth = -1;
     maxHeight = -1;
-    for (i = 0 ; i < m_noItems; i++)
+    for (size_t i = 0 ; i < m_noItems; i++)
     {
         GetTextExtent( GetString( i ), &eachWidth[i], &eachHeight[i] );
         eachWidth[i] = (int)(eachWidth[i] + RADIO_SIZE);
@@ -479,7 +477,7 @@ wxSize wxRadioBox::DoGetBestSize() const
     maxWidth = -1;
     maxHeight = -1;
 
-    for (int i = 0 ; i < m_noItems; i++)
+    for (size_t i = 0 ; i < m_noItems; i++)
     {
         GetTextExtent( GetString( i ), &eachWidth, &eachHeight, NULL, NULL, &font );
         eachWidth  = (int)(eachWidth + RADIO_SIZE);
@@ -506,4 +504,4 @@ wxSize wxRadioBox::DoGetBestSize() const
     return wxSize( totWidth, totHeight );
 }
 
-#endif
+#endif // wxUSE_RADIOBOX

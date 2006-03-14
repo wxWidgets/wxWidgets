@@ -110,7 +110,7 @@ public:
     wxListBoxItem(const wxString& str = wxEmptyString);
 };
 
-wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, FALSE)
+wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, false)
 {
     // no bitmaps/checkmarks
     SetMarginWidth(0);
@@ -254,9 +254,9 @@ void wxListBox::SetString(int N, const wxString& s)
 {
 }
 
-int wxListBox::GetCount() const
+size_t wxListBox::GetCount() const
 {
-    return m_noItems;
+    return 0;
 }
 
 // ----------------------------------------------------------------------------

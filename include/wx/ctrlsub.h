@@ -38,7 +38,7 @@ public:
     // accessing strings
     // -----------------
 
-    virtual int GetCount() const = 0;
+    virtual size_t GetCount() const = 0;
     bool IsEmpty() const { return GetCount() == 0; }
 
     virtual wxString GetString(int n) const = 0;
@@ -50,9 +50,9 @@ public:
     // supported search type
     virtual int FindString(const wxString& s, bool bCase = false) const
     {
-        int count = GetCount();
+        size_t count = GetCount();
 
-        for ( int i = 0; i < count ; i ++ )
+        for ( size_t i = 0; i < count ; ++i )
         {
             if (GetString(i).IsSameAs( s , bCase ))
                 return i;
@@ -82,7 +82,9 @@ public:
 protected:
 
     // check that the index is valid
-    inline bool IsValid(int n) const { return n >= 0 && n < GetCount(); }
+    // FIXME: once api will move to size_t, drop >= 0 check
+    inline bool IsValid(int n) const { return n >= 0 && (size_t)n < GetCount(); }
+    inline bool IsValidInsert(int n) const { return n >= 0 && (size_t)n <= GetCount(); }
 };
 
 class WXDLLEXPORT wxItemContainer : public wxItemContainerImmutable

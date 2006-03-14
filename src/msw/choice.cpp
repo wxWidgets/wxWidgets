@@ -239,7 +239,7 @@ int wxChoice::DoAppend(const wxString& item)
 int wxChoice::DoInsert(const wxString& item, int pos)
 {
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
-    wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
+    wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
 
     int n = (int)SendMessage(GetHwnd(), CB_INSERTSTRING, pos, (LPARAM)item.c_str());
     if ( n == CB_ERR )
@@ -258,7 +258,7 @@ int wxChoice::DoInsert(const wxString& item, int pos)
 
 void wxChoice::Delete(int n)
 {
-    wxCHECK_RET( n < GetCount(), wxT("invalid item index in wxChoice::Delete") );
+    wxCHECK_RET( IsValid(n), wxT("invalid item index in wxChoice::Delete") );
 
     if ( HasClientObjectData() )
     {
@@ -326,9 +326,9 @@ void wxChoice::SetSelection(int n)
 // string list functions
 // ----------------------------------------------------------------------------
 
-int wxChoice::GetCount() const
+size_t wxChoice::GetCount() const
 {
-    return (int)SendMessage(GetHwnd(), CB_GETCOUNT, 0, 0);
+    return (size_t)SendMessage(GetHwnd(), CB_GETCOUNT, 0, 0);
 }
 
 int wxChoice::FindString(const wxString& s, bool bCase) const
@@ -336,8 +336,8 @@ int wxChoice::FindString(const wxString& s, bool bCase) const
 #if defined(__WATCOMC__) && defined(__WIN386__)
     // For some reason, Watcom in WIN386 mode crashes in the CB_FINDSTRINGEXACT message.
     // wxChoice::Do it the long way instead.
-    int count = GetCount();
-    for ( int i = 0; i < count; i++ )
+    size_t count = GetCount();
+    for ( size_t i = 0; i < count; i++ )
     {
         // as CB_FINDSTRINGEXACT is case insensitive, be case insensitive too
         if ( GetString(i).IsSameAs(s, bCase) )
@@ -350,8 +350,8 @@ int wxChoice::FindString(const wxString& s, bool bCase) const
    //passed to SendMessage, so we have to do it ourselves in that case
    if ( s.empty() )
    {
-       int count = GetCount();
-       for ( int i = 0; i < count; i++ )
+       size_t count = GetCount();
+       for ( size_t i = 0; i < count; i++ )
        {
          if ( GetString(i).empty() )
              return i;
@@ -376,8 +376,7 @@ int wxChoice::FindString(const wxString& s, bool bCase) const
 
 void wxChoice::SetString(int n, const wxString& s)
 {
-    wxCHECK_RET( n >= 0 && n < GetCount(),
-                 wxT("invalid item index in wxChoice::SetString") );
+    wxCHECK_RET( IsValid(n), wxT("invalid item index in wxChoice::SetString") );
 
     // we have to delete and add back the string as there is no way to change a
     // string in place

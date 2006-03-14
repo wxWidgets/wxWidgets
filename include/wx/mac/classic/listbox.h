@@ -81,13 +81,13 @@ public:
                 const wxString& name = wxListBoxNameStr);
 
     virtual ~wxListBox();
-    virtual void Refresh(bool eraseBack = TRUE, const wxRect *rect = NULL);
+    virtual void Refresh(bool eraseBack = true, const wxRect *rect = NULL);
 
     // implement base class pure virtuals
     virtual void Clear();
     virtual void Delete(int n);
 
-    virtual int GetCount() const;
+    virtual size_t GetCount() const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& s);
     virtual int FindString(const wxString& s, bool bCase = false) const;
@@ -156,7 +156,7 @@ protected:
     // prevent collision with some BSD definitions of macro Free()
     void FreeData();
 
-    int m_noItems;
+    size_t m_noItems;
     int m_selected;
     wxString  m_typeIn ;
     long      m_lastTypeIn ;

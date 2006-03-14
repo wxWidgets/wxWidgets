@@ -9,6 +9,10 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#include "wx/wxprec.h"
+
+#if wxUSE_LISTBOX
+
 #include "wx/app.h"
 #include "wx/listbox.h"
 #include "wx/button.h"
@@ -304,7 +308,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
     LSetDrawingMode( true , (ListHandle)m_macList ) ;
 
-    return TRUE;
+    return true;
 }
 
 wxListBox::~wxListBox()
@@ -339,7 +343,7 @@ void wxListBox::FreeData()
 #endif // wxUSE_OWNER_DRAWN
     if ( HasClientObjectData() )
     {
-        for ( size_t n = 0; n < (size_t)m_noItems; n++ )
+        for ( size_t n = 0; n < m_noItems; n++ )
         {
             delete GetClientObject(n);
         }
@@ -374,7 +378,7 @@ void wxListBox::DoSetFirstItem(int N)
 
 void wxListBox::Delete(int N)
 {
-    wxCHECK_RET( N >= 0 && N < m_noItems,
+    wxCHECK_RET( IsValid(N),
                  wxT("invalid index in wxListBox::Delete") );
 
 #if wxUSE_OWNER_DRAWN
@@ -397,7 +401,7 @@ int wxListBox::DoAppend(const wxString& item)
 {
     InvalidateBestSize();
 
-    int index = m_noItems ;
+    size_t index = m_noItems ;
     m_stringArray.Add( item ) ;
     m_dataArray.Add( NULL );
     m_noItems ++;
@@ -439,7 +443,7 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
         m_aItems.Empty();
 
         // then create new ones
-        for ( ui = 0; ui < (size_t)m_noItems; ui++ ) {
+        for ( ui = 0; ui < m_noItems; ui++ ) {
             wxOwnerDrawn *pNewItem = CreateItem(ui);
             pNewItem->SetName(choices[ui]);
             m_aItems.Add(pNewItem);
@@ -458,26 +462,26 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
 {
     if ( s.Right(1) == wxT("*") )
     {
-        wxString search = s.Left( s.Length() - 1 ) ;
-        int len = search.Length() ;
+        wxString search = s.Left( s.length() - 1 ) ;
+        int len = search.length() ;
         Str255 s1 , s2 ;
         wxMacStringToPascal( search , s2 ) ;
 
-        for ( int i = 0 ; i < m_noItems ; ++ i )
+        for ( size_t i = 0 ; i < m_noItems ; ++ i )
         {
             wxMacStringToPascal( m_stringArray[i].Left( len ) , s1 ) ;
 
             if ( EqualString( s1 , s2 , bCase , false ) )
-                return i ;
+                return (int)i ;
         }
-        if ( s.Left(1) == wxT("*") && s.Length() > 1 )
+        if ( s.Left(1) == wxT("*") && s.length() > 1 )
         {
             wxString st = s ;
             st.MakeLower() ;
-            for ( int i = 0 ; i < m_noItems ; ++i )
+            for ( size_t i = 0 ; i < m_noItems ; ++i )
             {
                 if ( GetString(i).Lower().Matches(st) )
-                    return i ;
+                    return (int)i ;
             }
         }
 
@@ -488,12 +492,12 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
 
         wxMacStringToPascal( s , s2 ) ;
 
-        for ( int i = 0 ; i < m_noItems ; ++ i )
+        for ( size_t i = 0 ; i < m_noItems ; ++ i )
         {
             wxMacStringToPascal( m_stringArray[i] , s1 ) ;
 
             if ( EqualString( s1 , s2 , bCase , false ) )
-                return i ;
+                return (int)i ;
         }
     }
 
@@ -511,7 +515,7 @@ void wxListBox::Clear()
 
 void wxListBox::DoSetSelection(int N, bool select)
 {
-    wxCHECK_RET( N >= 0 && N < m_noItems,
+    wxCHECK_RET( IsValid(N),
         wxT("invalid index in wxListBox::SetSelection") );
     MacSetSelection( N , select ) ;
     GetSelections( m_selectionPreImage ) ;
@@ -519,7 +523,7 @@ void wxListBox::DoSetSelection(int N, bool select)
 
 bool wxListBox::IsSelected(int N) const
 {
-    wxCHECK_MSG( N >= 0 && N < m_noItems, FALSE,
+    wxCHECK_MSG( IsValid(N), false,
         wxT("invalid index in wxListBox::Selected") );
 
     return MacIsSelected( N ) ;
@@ -527,7 +531,7 @@ bool wxListBox::IsSelected(int N) const
 
 void *wxListBox::DoGetItemClientData(int N) const
 {
-    wxCHECK_MSG( N >= 0 && N < m_noItems, NULL,
+    wxCHECK_MSG( IsValid(N), NULL,
         wxT("invalid index in wxListBox::GetClientData"));
 
     return (void *)m_dataArray[N];
@@ -540,7 +544,7 @@ wxClientData *wxListBox::DoGetItemClientObject(int N) const
 
 void wxListBox::DoSetItemClientData(int N, void *Client_data)
 {
-    wxCHECK_RET( N >= 0 && N < m_noItems,
+    wxCHECK_RET( IsValid(N),
         wxT("invalid index in wxListBox::SetClientData") );
 
 #if wxUSE_OWNER_DRAWN
@@ -588,14 +592,14 @@ wxString wxListBox::GetString(int N) const
 
 void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 {
-    wxCHECK_RET( pos >= 0 && pos <= m_noItems,
+    wxCHECK_RET( IsValidInsert(pos),
         wxT("invalid index in wxListBox::InsertItems") );
 
     InvalidateBestSize();
 
-    int nItems = items.GetCount();
+    size_t nItems = items.GetCount();
 
-    for ( int i = 0 ; i < nItems ; i++ )
+    for ( size_t i = 0 ; i < nItems ; i++ )
     {
         m_stringArray.Insert( items[i] , pos + i ) ;
         m_dataArray.Insert( NULL , pos + i ) ;
@@ -647,7 +651,7 @@ wxSize wxListBox::DoGetBestSize() const
                 &baseline );
             wLine = bounds.h ;
         #else
-            wLine = ::TextWidth( str.c_str() , 0 , str.Length() ) ;
+            wLine = ::TextWidth( str.c_str() , 0 , str.length() ) ;
         #endif
             lbWidth = wxMax(lbWidth, wLine);
         }
@@ -667,7 +671,7 @@ wxSize wxListBox::DoGetBestSize() const
     return wxSize(lbWidth, lbHeight);
 }
 
-int wxListBox::GetCount() const
+size_t wxListBox::GetCount() const
 {
     return m_noItems;
 }
@@ -692,7 +696,7 @@ public:
     wxListBoxItem(const wxString& str = wxEmptyString);
 };
 
-wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, FALSE)
+wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, false)
 {
     // no bitmaps/checkmarks
     SetMarginWidth(0);
@@ -721,7 +725,7 @@ list = (wxListBox*)refCon;
   ::TextFont( kFontIDMonaco ) ;
   ::TextSize( 9  );
   ::TextFace( 0 ) ;
-  DrawText(text, 0 , text.Length());
+  DrawText(text, 0 , text.length());
 
     }
 */
@@ -1017,3 +1021,5 @@ void wxListBox::OnChar(wxKeyEvent& event)
         }
     }
 }
+
+#endif // wxUSE_LISTBOX

@@ -106,21 +106,17 @@ public:
     virtual void          Clear(void);
     virtual void          Delete(int n);
 
-    virtual int           GetCount(void) const;
+    virtual size_t        GetCount() const;
     virtual wxString      GetString(int n) const;
     virtual void          SetString(int n, const wxString& rsString);
 
     virtual bool          IsSelected(int n) const;
-    virtual void          DoSetSelection( int  n
-                                       ,bool bSelect
-                                      );
+    virtual void          DoSetSelection(int  n, bool bSelect);
     virtual int           GetSelection(void) const;
     virtual int           GetSelections(wxArrayInt& raSelections) const;
 
     virtual int           DoAppend(const wxString& rsItem);
-    virtual void          DoInsertItems( const wxArrayString& raItems
-                                        ,int                  rPos
-                                       );
+    virtual void          DoInsertItems( const wxArrayString& raItems, int rPos );
     virtual void          DoSetItems( const wxArrayString& raItems
                                      ,void **              ppClientData
                                     );
@@ -158,9 +154,8 @@ protected:
     bool                  HasMultipleSelection(void) const;
     virtual wxSize        DoGetBestSize(void) const;
 
-    int                             m_nNumItems;
-    int                             m_nSelected;
-
+    size_t  m_nNumItems;
+    int     m_nSelected;
 
 #if wxUSE_OWNER_DRAWN
     //

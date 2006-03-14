@@ -4,7 +4,7 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/03/18
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ public:
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
     // string access
-    virtual int GetCount() const;
+    virtual size_t GetCount() const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
     // change the individual radio button state

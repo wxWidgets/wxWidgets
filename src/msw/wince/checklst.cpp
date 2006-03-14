@@ -156,8 +156,7 @@ void wxCheckListBox::OnSize(wxSizeEvent& event)
 
 void wxCheckListBox::Delete(int n)
 {
-    wxCHECK_RET( n >= 0 && n < GetCount(),
-                 _T("invalid index in wxCheckListBox::Delete") );
+    wxCHECK_RET( IsValid( n ), _T("invalid index in wxCheckListBox::Delete") );
 
     if ( !ListView_DeleteItem(GetHwnd(), n) )
     {
@@ -171,7 +170,7 @@ void wxCheckListBox::Delete(int n)
 
 bool wxCheckListBox::IsChecked(size_t uiIndex) const
 {
-    wxCHECK_MSG( uiIndex < (size_t)GetCount(), false,
+    wxCHECK_MSG( IsValid( uiIndex ), false,
                  _T("invalid index in wxCheckListBox::IsChecked") );
 
     return (ListView_GetCheckState(((HWND)GetHWND()), uiIndex) != 0);
@@ -179,7 +178,7 @@ bool wxCheckListBox::IsChecked(size_t uiIndex) const
 
 void wxCheckListBox::Check(size_t uiIndex, bool bCheck)
 {
-    wxCHECK_RET( uiIndex < (size_t)GetCount(),
+    wxCHECK_RET( IsValid( uiIndex ),
                  _T("invalid index in wxCheckListBox::Check") );
 
     ListView_SetCheckState(((HWND)GetHWND()), uiIndex, bCheck)
@@ -190,7 +189,7 @@ void wxCheckListBox::Check(size_t uiIndex, bool bCheck)
 
 void wxCheckListBox::Clear()
 {
-    int n = GetCount();
+    int n = (int)GetCount();
 
     while ( n > 0 )
     {
@@ -204,15 +203,15 @@ void wxCheckListBox::Clear()
                  _T("broken wxCheckListBox::Clear()") );
 }
 
-int wxCheckListBox::GetCount() const
+size_t wxCheckListBox::GetCount() const
 {
-    return ListView_GetItemCount( (HWND)GetHWND() );
+    return (size_t)ListView_GetItemCount( (HWND)GetHWND() );
 }
 
 int wxCheckListBox::GetSelection() const
 {
     int i;
-    for (i = 0; i < GetCount(); i++)
+    for (i = 0; (size_t)i < GetCount(); i++)
     {
         int selState = ListView_GetItemState(GetHwnd(), i, LVIS_SELECTED);
         if (selState == LVIS_SELECTED)
@@ -225,7 +224,7 @@ int wxCheckListBox::GetSelection() const
 int wxCheckListBox::GetSelections(wxArrayInt& aSelections) const
 {
     int i;
-    for (i = 0; i < GetCount(); i++)
+    for (i = 0; (size_t)i < GetCount(); i++)
     {
         int selState = ListView_GetItemState(GetHwnd(), i, LVIS_SELECTED);
         if (selState == LVIS_SELECTED)
@@ -253,7 +252,7 @@ bool wxCheckListBox::IsSelected(int n) const
 
 void wxCheckListBox::SetString(int n, const wxString& s)
 {
-    wxCHECK_RET( n < GetCount(),
+    wxCHECK_RET( IsValid( n ),
                  _T("invalid index in wxCheckListBox::SetString") );
     wxChar *buf = new wxChar[s.length()+1];
     wxStrcpy(buf, s.c_str());
@@ -263,7 +262,7 @@ void wxCheckListBox::SetString(int n, const wxString& s)
 
 int wxCheckListBox::DoAppend(const wxString& item)
 {
-    int n = GetCount();
+    int n = (int)GetCount();
     LVITEM newItem;
     wxZeroMemory(newItem);
     newItem.iItem = n;
@@ -286,7 +285,7 @@ wxClientData* wxCheckListBox::DoGetItemClientObject(int n) const
 
 void wxCheckListBox::DoInsertItems(const wxArrayString& items, int pos)
 {
-    wxCHECK_RET( pos >= 0 && pos <= GetCount(),
+    wxCHECK_RET( IsValidInsert( pos ),
                  wxT("invalid index in wxListBox::InsertItems") );
 
     for( size_t i = 0; i < items.GetCount(); i++ )

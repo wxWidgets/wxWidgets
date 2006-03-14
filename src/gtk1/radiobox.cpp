@@ -492,7 +492,7 @@ bool wxRadioBox::IsItemShown(int item) const
     return GTK_WIDGET_VISIBLE(GTK_WIDGET(button));
 }
 
-int wxRadioBox::GetCount() const
+size_t wxRadioBox::GetCount() const
 {
     return m_boxes.GetCount();
 }

@@ -85,7 +85,7 @@ public:
     // implement the radiobox interface
     virtual void SetSelection(int n);
     virtual int GetSelection() const { return m_selectedButton; }
-    virtual int GetCount() const;
+    virtual size_t GetCount() const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
     virtual bool Enable(int n, bool enable = true);

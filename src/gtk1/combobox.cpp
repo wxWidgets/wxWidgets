@@ -10,9 +10,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/combobox.h"
-
 #if wxUSE_COMBOBOX
+
+#include "wx/combobox.h"
 
 #include "wx/settings.h"
 #include "wx/arrstr.h"
@@ -347,11 +347,11 @@ int wxComboBox::DoAppend( const wxString &item )
 
     gtk_widget_show( list_item );
 
-    const int count = GetCount();
+    const size_t count = GetCount();
 
-    if ( (int)m_clientDataList.GetCount() < count )
+    if ( m_clientDataList.GetCount() < count )
         m_clientDataList.Append( (wxObject*) NULL );
-    if ( (int)m_clientObjectList.GetCount() < count )
+    if ( m_clientObjectList.GetCount() < count )
         m_clientObjectList.Append( (wxObject*) NULL );
 
     EnableEvents();
@@ -368,10 +368,9 @@ int wxComboBox::DoInsert( const wxString &item, int pos )
 
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
 
-    int count = GetCount();
-    wxCHECK_MSG( (pos >= 0) && (pos <= count), -1, wxT("invalid index") );
+    wxCHECK_MSG( IsValidInsert(pos), -1, wxT("invalid index") );
 
-    if (pos == count)
+    if ((size_t)pos == GetCount())
         return Append(item);
 
     DisableEvents();
@@ -394,11 +393,11 @@ int wxComboBox::DoInsert( const wxString &item, int pos )
 
     gtk_widget_show( list_item );
 
-    count = GetCount();
+    const size_t count = GetCount();
 
-    if ( (int)m_clientDataList.GetCount() < count )
+    if ( m_clientDataList.GetCount() < count )
         m_clientDataList.Insert( pos, (wxObject*) NULL );
-    if ( (int)m_clientObjectList.GetCount() < count )
+    if ( m_clientObjectList.GetCount() < count )
         m_clientObjectList.Insert( pos, (wxObject*) NULL );
 
     EnableEvents();
@@ -455,7 +454,7 @@ void wxComboBox::Clear()
     DisableEvents();
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
-    gtk_list_clear_items( GTK_LIST(list), 0, GetCount() );
+    gtk_list_clear_items( GTK_LIST(list), 0, (int)GetCount() );
 
     wxList::compatibility_iterator node = m_clientObjectList.GetFirst();
     while (node)
@@ -581,7 +580,7 @@ int wxComboBox::GetCurrentSelection() const
         }
     }
 
-    return -1;
+    return wxNOT_FOUND;
 }
 
 wxString wxComboBox::GetString( int n ) const
@@ -626,14 +625,14 @@ wxString wxComboBox::GetStringSelection() const
     return wxEmptyString;
 }
 
-int wxComboBox::GetCount() const
+size_t wxComboBox::GetCount() const
 {
     wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid combobox") );
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
     GList *child = GTK_LIST(list)->children;
-    int count = 0;
+    size_t count = 0;
     while (child) { count++; child = child->next; }
     return count;
 }
@@ -798,7 +797,7 @@ void wxComboBox::Replace( long from, long to, const wxString& value )
     wxCharBuffer buffer = wxConvUTF8.cWX2MB( value );
     gtk_editable_insert_text( GTK_EDITABLE(entry), (const char*) buffer, strlen( (const char*) buffer ), &pos );
 #else
-    gtk_editable_insert_text( GTK_EDITABLE(entry), value.c_str(), value.Length(), &pos );
+    gtk_editable_insert_text( GTK_EDITABLE(entry), value.c_str(), value.length(), &pos );
 #endif
 }
 

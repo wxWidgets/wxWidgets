@@ -6,16 +6,18 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 //-------------------------------------------------------------------------------------
 //         headers
 //-------------------------------------------------------------------------------------
 
-#include "wx/defs.h"
-#include "wx/arrstr.h"
+#include "wx/wxprec.h"
 
+#if wxUSE_RADIOBOX
+
+#include "wx/arrstr.h"
 #include "wx/radiobox.h"
 #include "wx/radiobut.h"
 #include "wx/mac/uma.h"
@@ -109,7 +111,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
     int i;
 
-    m_noItems = n;
+    m_noItems = (size_t)n;
     m_noRowsOrCols = majorDim;
     m_radioButtonCycle = NULL;
 
@@ -153,14 +155,13 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
 bool wxRadioBox::Enable(bool enable)
 {
-    int i;
     wxRadioButton *current;
 
     if (!wxControl::Enable(enable))
         return false;
 
     current = m_radioButtonCycle;
-    for (i = 0; i < m_noItems; i++) {
+    for (size_t i = 0; i < m_noItems; i++) {
         current->Enable(enable);
         current = current->NextInCycle();
     }
@@ -310,13 +311,12 @@ void wxRadioBox::SetSelection(int item)
 
 bool wxRadioBox::Show(bool show)
 {
-    int i;
     wxRadioButton *current;
 
     wxControl::Show(show);
 
     current=m_radioButtonCycle;
-    for (i=0;i<m_noItems;i++)
+    for (size_t i=0; i<m_noItems; i++)
     {
         current->Show(show);
         current=current->NextInCycle();
@@ -385,7 +385,7 @@ void wxRadioBox::SetFocus()
 
 void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    int i;
+    size_t i;
     wxRadioButton *current;
 
     // define the position
@@ -423,7 +423,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         eachHeight[i] = (int)((3*eachHeight[i])/2);
         if (maxWidth<eachWidth[i]) maxWidth = eachWidth[i];
         if (maxHeight<eachHeight[i]) maxHeight = eachHeight[i];
-          }
+    }
 
     totHeight = GetRowCount() * (maxHeight + charHeight/2) + charHeight ;
     totWidth  = GetColumnCount() * (maxWidth + charWidth) + charWidth;
@@ -504,7 +504,7 @@ wxSize wxRadioBox::DoGetBestSize() const
     maxWidth = -1;
     maxHeight = -1;
 
-    for (int i = 0 ; i < m_noItems; i++)
+    for (size_t i = 0 ; i < m_noItems; i++)
     {
         GetTextExtent(GetString(i), &eachWidth, &eachHeight);
         eachWidth  = (int)(eachWidth + RADIO_SIZE) ;
@@ -529,3 +529,5 @@ wxSize wxRadioBox::DoGetBestSize() const
 
     return wxSize(totWidth, totHeight);
 }
+
+#endif // wxUSE_RADIOBOX

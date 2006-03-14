@@ -104,7 +104,7 @@ class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
     virtual void Remove(long from, long to);
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
-    virtual int GetCount() const { return m_choice->GetCount() ; }
+    virtual size_t GetCount() const { return m_choice->GetCount() ; }
 
     virtual bool IsEditable() const ;
 

@@ -125,7 +125,7 @@ public:
 
 
 
-           virtual int      GetCount(void) const;
+           virtual size_t   GetCount() const;
     inline         WXHWND*  GetRadioButtons(void) const { return m_ahRadioButtons; }
                    int      GetSelection(void) const;
                    void     GetSize( int* pnX
@@ -170,11 +170,12 @@ protected:
     WXHWND* m_ahRadioButtons;
     int*    m_pnRadioWidth;  // for bitmaps
     int*    m_pnRadioHeight;
-    int     m_nNoItems;
     int     m_nSelectedButton;
     int     m_nSizeFlags;
 
 private:
+
+    size_t  m_nNoItems;
 
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 }; // end of wxRadioBox

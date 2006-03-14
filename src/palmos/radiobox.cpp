@@ -112,7 +112,7 @@ void wxRadioBox::Init()
     m_size = wxSize(0,0);
 }
 
-int wxRadioBox::GetCount() const
+size_t wxRadioBox::GetCount() const
 {
     return m_radios.GetCount();
 }
@@ -238,12 +238,12 @@ void wxRadioBox::DoMoveWindow(int x, int y, int width, int height)
 
     const bool use_cols = HasFlag(wxRA_SPECIFY_COLS);
 
-    const int n = GetCount();
-    int minor = n / GetMajorDim();
+    const size_t n = GetCount();
+    size_t minor = n / GetMajorDim();
     if(n % GetMajorDim() > 0)
         minor++;
 
-    int i = 0;
+    size_t i = 0;
     for ( int j = 0; j < minor; j++ )
     {
         for ( int k = 0; k < GetMajorDim(); k++ )
@@ -327,8 +327,8 @@ void wxRadioBox::SetFocus()
 // Enable all subcontrols
 bool wxRadioBox::Enable(bool enable)
 {
-    for(int i=0; i<GetCount(); i++)
-        Enable(i, enable);
+    for(size_t i=0; i<GetCount(); i++)
+        Enable((int)i, enable);
     return true;
 }
 
@@ -343,8 +343,8 @@ bool wxRadioBox::Enable(int item, bool enable)
 
 bool wxRadioBox::Show(bool show)
 {
-    for(int i=0; i<GetCount(); i++)
-        Show(i, show);
+    for(size_t i=0; i<GetCount(); i++)
+        Show((int)i, show);
     return true;
 }
 

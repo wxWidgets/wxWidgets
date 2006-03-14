@@ -188,7 +188,7 @@ void wxChoice::SetSelection(int n)
 // string list functions
 // ----------------------------------------------------------------------------
 
-int wxChoice::GetCount() const
+size_t wxChoice::GetCount() const
 {
     return 0;
 }

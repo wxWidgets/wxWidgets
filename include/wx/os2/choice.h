@@ -94,7 +94,7 @@ public:
     virtual void     Delete(int n);
     virtual void     Clear(void);
 
-    virtual int      GetCount(void) const;
+    virtual size_t   GetCount() const;
     virtual int      GetSelection(void) const ;
     virtual void     SetSelection(int n);
 

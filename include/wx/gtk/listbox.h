@@ -65,7 +65,7 @@ public:
     virtual void Clear();
     virtual void Delete(int n);
 
-    virtual int GetCount() const;
+    virtual size_t GetCount() const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& s);
     virtual int FindString(const wxString& s, bool bCase = false) const;
@@ -98,8 +98,8 @@ public:
     bool       m_spacePressed;
 
     struct _GtkTreeEntry* GtkGetEntry(int pos) const;
-    void GtkInsertItems(const wxArrayString& items, 
-                        void** clientData, int pos);
+    void GtkInsertItems(const wxArrayString& items,
+                        void** clientData, size_t pos);
     void GtkSetSelection(int n, const bool select, const bool blockEvent);
 
 protected:

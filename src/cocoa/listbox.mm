@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/listbox.mm
+// Name:        src/cocoa/listbox.mm
 // Purpose:     wxListBox
 // Author:      David Elliott
 // Modified by:
@@ -224,9 +224,9 @@ void wxListBox::Delete(int n)
 }
 
     // accessing strings
-int wxListBox::GetCount() const
+size_t wxListBox::GetCount() const
 {
-    return [m_cocoaItems count];
+    return (size_t)[m_cocoaItems count];
 }
 
 wxString wxListBox::GetString(int n) const

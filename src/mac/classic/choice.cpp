@@ -6,10 +6,10 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
+#include "wx/wxprec.h"
 
 #if wxUSE_CHOICE
 
@@ -99,7 +99,7 @@ int wxChoice::DoAppend(const wxString& item)
 int wxChoice::DoInsert(const wxString& item, int pos)
 {
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
-    wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
+    wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
 
     if (pos == GetCount())
         return DoAppend(item);
@@ -114,7 +114,7 @@ int wxChoice::DoInsert(const wxString& item, int pos)
 
 void wxChoice::Delete(int n)
 {
-    wxCHECK_RET( n < GetCount(), wxT("invalid item index in wxChoice::Delete") );
+    wxCHECK_RET( IsValid(n), wxT("invalid item index in wxChoice::Delete") );
     if ( HasClientObjectData() )
     {
         delete GetClientObject(n);
@@ -166,7 +166,7 @@ void wxChoice::SetSelection(int n)
 // string list functions
 // ----------------------------------------------------------------------------
 
-int wxChoice::GetCount() const
+size_t wxChoice::GetCount() const
 {
     return m_strings.GetCount() ;
 }
@@ -182,7 +182,7 @@ void wxChoice::SetString(int n, const wxString& s)
 
 wxString wxChoice::GetString(int n) const
 {
-    wxCHECK_MSG( n >= 0 && (size_t)n < m_strings.GetCount(), wxEmptyString,
+    wxCHECK_MSG( IsValid(n), wxEmptyString,
                     _T("wxChoice::GetString(): invalid index") );
 
     return m_strings[n] ;
@@ -272,7 +272,7 @@ wxSize wxChoice::DoGetBestSize() const
                 &baseline );
             wLine = bounds.h ;
         #else
-            wLine = ::TextWidth( str.c_str() , 0 , str.Length() ) ;
+            wLine = ::TextWidth( str.c_str() , 0 , str.length() ) ;
         #endif
             lbWidth = wxMax(lbWidth, wLine);
         }

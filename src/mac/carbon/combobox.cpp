@@ -410,7 +410,7 @@ wxString wxComboBox::GetValue() const
     return result;
 }
 
-int wxComboBox::GetCount() const
+size_t wxComboBox::GetCount() const
 {
     return m_choice->GetCount() ;
 }

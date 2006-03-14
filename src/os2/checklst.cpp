@@ -272,7 +272,7 @@ wxCheckListBox::wxCheckListBox ( wxWindow* pParent,
 
 void wxCheckListBox::Delete( int n )
 {
-    wxCHECK_RET( n >= 0 && n < m_nNumItems,
+    wxCHECK_RET( IsValid(n),
                  wxT("invalid index in wxCheckListBox::Delete") );
     wxListBox::Delete(n);
 
@@ -408,7 +408,7 @@ void wxCheckListBox::OnLeftClick ( wxMouseEvent& rEvent )
 
         size_t nItem = (size_t)(nY / vHeight);
 
-        if (nItem < (size_t)m_nNumItems)
+        if (nItem < m_nNumItems)
             GetItem(nItem)->Toggle();
         //
         // else: it's not an error, just click outside of client zone

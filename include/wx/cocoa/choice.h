@@ -82,7 +82,7 @@ protected:
 public:
     virtual void Clear();
     virtual void Delete(int);
-    virtual int GetCount() const;
+    virtual size_t GetCount() const;
     virtual wxString GetString(int) const;
     virtual void SetString(int, const wxString&);
     virtual int FindString(const wxString& s, bool bCase = false) const;

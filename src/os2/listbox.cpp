@@ -12,6 +12,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_LISTBOX
+
 #include "wx/window.h"
 #include "wx/os2/private.h"
 
@@ -31,8 +33,6 @@
 
 #include "wx/dynarray.h"
 #include "wx/log.h"
-
-#if wxUSE_LISTBOX
 
 #if wxUSE_OWNER_DRAWN
     #include  "wx/ownerdrw.h"
@@ -100,17 +100,15 @@ bool wxListBox::Create(
                   lStyle, rValidator, rsName);
 }
 
-bool wxListBox::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, int                               n
-, const wxString                    asChoices[]
-, long                              lStyle
-, const wxValidator&                rValidator
-, const wxString&                   rsName
-)
+bool wxListBox::Create( wxWindow* pParent,
+                        wxWindowID vId,
+                        const wxPoint& rPos,
+                        const wxSize& rSize,
+                        int n,
+                        const wxString asChoices[],
+                        long lStyle,
+                        const wxValidator& rValidator,
+                        const wxString& rsName )
 {
     m_nNumItems = 0;
     m_hWnd      = 0;
@@ -227,7 +225,7 @@ bool wxListBox::Create(
 wxListBox::~wxListBox()
 {
 #if wxUSE_OWNER_DRAWN
-    size_t                          lUiCount = m_aItems.Count();
+    size_t lUiCount = m_aItems.Count();
 
     while (lUiCount-- != 0)
     {
@@ -246,21 +244,17 @@ void wxListBox::SetupColours()
 // implementation of wxListBoxBase methods
 // ----------------------------------------------------------------------------
 
-void wxListBox::DoSetFirstItem(
-  int                               N
-)
+void wxListBox::DoSetFirstItem(int N)
 {
-    wxCHECK_RET( N >= 0 && N < m_nNumItems,
+    wxCHECK_RET( IsValid(N),
                  wxT("invalid index in wxListBox::SetFirstItem") );
 
     ::WinSendMsg(GetHwnd(), LM_SETTOPINDEX, MPFROMLONG(N), (MPARAM)0);
 } // end of wxListBox::DoSetFirstItem
 
-void wxListBox::Delete(
-  int                               N
-)
+void wxListBox::Delete(int N)
 {
-    wxCHECK_RET( N >= 0 && N < m_nNumItems,
+    wxCHECK_RET( IsValid(N),
                  wxT("invalid index in wxListBox::Delete") );
 
 #if wxUSE_OWNER_DRAWN
@@ -277,17 +271,16 @@ void wxListBox::Delete(
     m_nNumItems--;
 } // end of wxListBox::DoSetFirstItem
 
-int wxListBox::DoAppend(
-  const wxString&                   rsItem
-)
+int wxListBox::DoAppend(const wxString& rsItem)
 {
-    long                            lIndex = 0;
-    LONG                            lIndexType = 0;
+    long lIndex = 0;
+    LONG lIndexType = 0;
 
     if (m_windowStyle & wxLB_SORT)
         lIndexType = LIT_SORTASCENDING;
     else
         lIndexType = LIT_END;
+
     lIndex = (long)::WinSendMsg(GetHwnd(), LM_INSERTITEM, (MPARAM)lIndexType, (MPARAM)rsItem.c_str());
     m_nNumItems++;
 
@@ -307,14 +300,11 @@ int wxListBox::DoAppend(
     return (int)lIndex;
 } // end of wxListBox::DoAppend
 
-void wxListBox::DoSetItems(
-  const wxArrayString&              raChoices
-, void**                            ppClientData
-)
+void wxListBox::DoSetItems( const wxArrayString& raChoices,
+                            void** ppClientData )
 {
-    BOOL                            bHideAndShow = IsShown();
-    int                             i;
-    LONG                            lIndexType = 0;
+    BOOL bHideAndShow = IsShown();
+    LONG lIndexType = 0;
 
     if (bHideAndShow)
     {
@@ -322,9 +312,8 @@ void wxListBox::DoSetItems(
     }
     ::WinSendMsg(GetHwnd(), LM_DELETEALL, (MPARAM)0, (MPARAM)0);
     m_nNumItems = raChoices.GetCount();
-    for (i = 0; i < m_nNumItems; i++)
+    for (size_t i = 0; i < m_nNumItems; i++)
     {
-
         if (m_windowStyle & wxLB_SORT)
             lIndexType = LIT_SORTASCENDING;
         else
@@ -353,7 +342,7 @@ void wxListBox::DoSetItems(
         //
         // Then create new ones
         //
-        for (size_t ui = 0; ui < (size_t)m_nNumItems; ui++)
+        for (size_t ui = 0; ui < m_nNumItems; ui++)
         {
             wxOwnerDrawn*           pNewItem = CreateItem(ui);
 
@@ -369,7 +358,7 @@ void wxListBox::DoSetItems(
 void wxListBox::Clear()
 {
 #if wxUSE_OWNER_DRAWN
-    size_t                          lUiCount = m_aItems.Count();
+    size_t lUiCount = m_aItems.Count();
 
     while (lUiCount-- != 0)
     {
@@ -391,12 +380,9 @@ void wxListBox::Clear()
     m_nNumItems = 0;
 } // end of wxListBox::Clear
 
-void wxListBox::DoSetSelection(
-  int                               N
-, bool                              bSelect
-)
+void wxListBox::DoSetSelection( int N, bool bSelect)
 {
-    wxCHECK_RET( N >= 0 && N < m_nNumItems,
+    wxCHECK_RET( IsValid(N),
                  wxT("invalid index in wxListBox::SetSelection") );
     ::WinSendMsg( GetHwnd()
                  ,LM_SELECTITEM
@@ -407,11 +393,9 @@ void wxListBox::DoSetSelection(
         Refresh();
 } // end of wxListBox::SetSelection
 
-bool wxListBox::IsSelected(
-  int                               N
-) const
+bool wxListBox::IsSelected( int N ) const
 {
-    wxCHECK_MSG( N >= 0 && N < m_nNumItems, false,
+    wxCHECK_MSG( IsValid(N), false,
                  wxT("invalid index in wxListBox::Selected") );
 
     LONG                            lItem;
@@ -430,39 +414,27 @@ bool wxListBox::IsSelected(
     return (lItem == (LONG)N && lItem != LIT_NONE);
 } // end of wxListBox::IsSelected
 
-wxClientData* wxListBox::DoGetItemClientObject(
-  int                               n
-) const
+wxClientData* wxListBox::DoGetItemClientObject(int n) const
 {
     return (wxClientData *)DoGetItemClientData(n);
 }
 
-void* wxListBox::DoGetItemClientData(
-  int                               n
-) const
+void* wxListBox::DoGetItemClientData(int n) const
 {
-    wxCHECK_MSG( n >= 0 && n < m_nNumItems, NULL,
+    wxCHECK_MSG( IsValid(n), NULL,
                  wxT("invalid index in wxListBox::GetClientData") );
 
     return((void *)::WinSendMsg(GetHwnd(), LM_QUERYITEMHANDLE, MPFROMLONG(n), (MPARAM)0));
 } // end of wxListBox::DoGetItemClientData
 
-void wxListBox::DoSetItemClientObject(
-  int                               n
-, wxClientData*                     pClientData
-)
+void wxListBox::DoSetItemClientObject(int n, wxClientData* pClientData)
 {
-    DoSetItemClientData( n
-                        ,pClientData
-                       );
+    DoSetItemClientData(n, pClientData);
 } // end of wxListBox::DoSetItemClientObject
 
-void wxListBox::DoSetItemClientData(
-  int                               n
-, void*                             pClientData
-)
+void wxListBox::DoSetItemClientData(int n, void* pClientData)
 {
-    wxCHECK_RET( n >= 0 && n < m_nNumItems,
+    wxCHECK_RET( IsValid(n),
                  wxT("invalid index in wxListBox::SetClientData") );
 
 #if wxUSE_OWNER_DRAWN
@@ -486,8 +458,8 @@ bool wxListBox::HasMultipleSelection() const
 
 int wxListBox::GetSelections( wxArrayInt& raSelections ) const
 {
-    int                             nCount = 0;
-    LONG                            lItem;
+    int  nCount = 0;
+    LONG lItem;
 
 
     raSelections.Empty();
@@ -561,15 +533,13 @@ int wxListBox::GetSelection() const
                      ));
 } // end of wxListBox::GetSelection
 
-wxString wxListBox::GetString(
-  int                               N
-) const
+wxString wxListBox::GetString( int N ) const
 {
-    LONG                            lLen = 0;
-    wxChar*                         zBuf;
-    wxString                        sResult;
+    LONG     lLen = 0;
+    wxChar*  zBuf;
+    wxString sResult;
 
-    wxCHECK_MSG( N >= 0 && N < m_nNumItems, wxEmptyString,
+    wxCHECK_MSG( IsValid(N), wxEmptyString,
                  wxT("invalid index in wxListBox::GetClientData") );
 
     lLen = LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXTLENGTH, (MPARAM)N, (MPARAM)0));
@@ -581,25 +551,22 @@ wxString wxListBox::GetString(
     return sResult;
 } // end of wxListBox::GetString
 
-void wxListBox::DoInsertItems(
-  const wxArrayString&              asItems
-, int                               nPos
-)
+void wxListBox::DoInsertItems( const wxArrayString& asItems,
+                               int nPos )
 {
-    wxCHECK_RET( nPos >= 0 && nPos <= m_nNumItems,
+    wxCHECK_RET( IsValidInsert(nPos),
                  wxT("invalid index in wxListBox::InsertItems") );
 
-    int                             nItems = asItems.GetCount();
+    size_t nItems = asItems.GetCount();
 
-    for (int i = 0; i < nItems; i++)
+    for (size_t i = 0; i < nItems; i++)
     {
-        int                         nIndex = (int)::WinSendMsg( GetHwnd()
-                                                               ,LM_INSERTITEM
-                                                               ,MPFROMLONG((LONG)(i + nPos))
-                                                               ,(MPARAM)asItems[i].c_str()
-                                                              );
+        int nIndex = (int)::WinSendMsg( GetHwnd(),
+                                        LM_INSERTITEM,
+                                        MPFROMLONG((LONG)(i + nPos)),
+                                        (MPARAM)asItems[i].c_str() );
 
-        wxOwnerDrawn*               pNewItem = CreateItem(nIndex);
+        wxOwnerDrawn* pNewItem = CreateItem(nIndex);
 
         pNewItem->SetName(asItems[i]);
         pNewItem->SetFont(GetFont());
@@ -613,20 +580,17 @@ void wxListBox::DoInsertItems(
     }
 } // end of wxListBox::DoInsertItems
 
-void wxListBox::SetString(
-  int                               N
-, const wxString&                   rsString
-)
+void wxListBox::SetString(int N, const wxString& rsString)
 {
-    wxCHECK_RET( N >= 0 && N < m_nNumItems,
+    wxCHECK_RET( IsValid(N),
                  wxT("invalid index in wxListBox::SetString") );
 
     //
     // Remember the state of the item
     //
-    bool                            bWasSelected = IsSelected(N);
-    void*                           pOldData = NULL;
-    wxClientData*                   pOldObjData = NULL;
+    bool           bWasSelected = IsSelected(N);
+    void*          pOldData = NULL;
+    wxClientData*  pOldObjData = NULL;
 
     if (m_clientDataItemsType == wxClientData_Void)
         pOldData = GetClientData(N);
@@ -680,7 +644,7 @@ void wxListBox::SetString(
 #endif  //USE_OWNER_DRAWN
 } // end of wxListBox::SetString
 
-int wxListBox::GetCount() const
+size_t wxListBox::GetCount() const
 {
     return m_nNumItems;
 }
@@ -694,20 +658,17 @@ wxSize wxListBox::DoGetBestSize() const
     //
     // Find the widest string
     //
-    int                             nLine;
-    int                             nListbox = 0;
-    int                             nCx;
-    int                             nCy;
-    wxFont                          vFont = (wxFont)GetFont();
+    int        nLine;
+    int        nListbox = 0;
+    int        nCx;
+    int        nCy;
+    wxFont     vFont = (wxFont)GetFont();
 
-    for (int i = 0; i < m_nNumItems; i++)
+    for (size_t i = 0; i < m_nNumItems; i++)
     {
-        wxString                    vStr(GetString(i));
+        wxString vStr(GetString(i));
 
-        GetTextExtent( vStr
-                      ,&nLine
-                      ,NULL
-                     );
+        GetTextExtent( vStr, &nLine, NULL );
         if (nLine > nListbox)
             nListbox = nLine;
     }
@@ -729,7 +690,7 @@ wxSize wxListBox::DoGetBestSize() const
                  );
     nListbox += 3 * nCx;
 
-    int                             hListbox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy) * (wxMax(m_nNumItems, 7));
+    int hListbox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy) * (wxMax(m_nNumItems, 7));
 
     return wxSize( nListbox
                   ,hListbox
@@ -767,9 +728,9 @@ bool wxListBox::OS2Command(
 
     vEvent.SetEventObject(this);
 
-    wxArrayInt                      aSelections;
-    int                             n;
-    int                             nCount = GetSelections(aSelections);
+    wxArrayInt aSelections;
+    int        n;
+    int        nCount = GetSelections(aSelections);
 
     if (nCount > 0)
     {
@@ -800,9 +761,7 @@ bool wxListBox::OS2Command(
 //
 #define OWNER_DRAWN_LISTBOX_EXTRA_SPACE    (1)
 
-long wxListBox::OS2OnMeasure(
-  WXMEASUREITEMSTRUCT*              pItem
-)
+long wxListBox::OS2OnMeasure(WXMEASUREITEMSTRUCT* pItem)
 {
     if (!pItem)
         pItem = (WXMEASUREITEMSTRUCT*)new OWNERITEM;
@@ -944,4 +903,4 @@ bool wxListBox::OS2OnDraw (
 
 #endif // ndef for wxUSE_OWNER_DRAWN
 
-#endif // ndef for wxUSE_LISTBOX
+#endif // wxUSE_LISTBOX

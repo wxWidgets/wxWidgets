@@ -71,7 +71,7 @@ static gint wxlistbox_idle_callback( gpointer gdata )
     // check that the items haven't been deleted from the listbox since we had
     // installed this callback
     wxListBox *lbox = data->m_listbox;
-    if ( data->m_item < lbox->GetCount() )
+    if ( data->m_item < (int)lbox->GetCount() )
     {
         lbox->SetFirstItem( data->m_item );
     }
@@ -583,7 +583,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 
     // code elsewhere supposes we have as many items in m_clientList as items
     // in the listbox
-    wxASSERT_MSG( m_clientList.GetCount() == (size_t)GetCount(),
+    wxASSERT_MSG( m_clientList.GetCount() == GetCount(),
                   wxT("bug in client data management") );
 
     InvalidateBestSize();
@@ -602,7 +602,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
         {
             index = m_strings->Add( items[n] );
 
-            if (index != GetCount())
+            if (index != (int)GetCount())
             {
                 GtkAddItem( items[n], index );
                 wxList::compatibility_iterator node = m_clientList.Item( index );
@@ -638,7 +638,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
         }
     }
 
-    wxASSERT_MSG( m_clientList.GetCount() == (size_t)GetCount(),
+    wxASSERT_MSG( m_clientList.GetCount() == GetCount(),
                       wxT("bug in client data management") );
 }
 
@@ -652,7 +652,7 @@ int wxListBox::DoAppend( const wxString& item )
         int index = m_strings->Add( item );
 
         // only if not at the end anyway
-        if (index != GetCount())
+        if (index != (int)GetCount())
         {
            GtkAddItem( item, index );
 
@@ -773,7 +773,7 @@ void wxListBox::Clear()
 {
     wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
 
-    gtk_list_clear_items( m_list, 0, GetCount() );
+    gtk_list_clear_items( m_list, 0, (int)GetCount() );
 
     if ( GTK_LIST(m_list)->last_focus_child != NULL  )
     {
@@ -938,9 +938,9 @@ wxString wxListBox::GetString( int n ) const
     return wxEmptyString;
 }
 
-int wxListBox::GetCount() const
+size_t wxListBox::GetCount() const
 {
-    wxCHECK_MSG( m_list != NULL, -1, wxT("invalid listbox") );
+    wxCHECK_MSG( m_list != NULL, 0, wxT("invalid listbox") );
 
     GList *children = m_list->children;
     return g_list_length(children);
@@ -1216,7 +1216,7 @@ wxSize wxListBox::DoGetBestSize() const
     int wLine;
 
     // Find the widest line
-    for(int i = 0; i < GetCount(); i++) {
+    for(size_t i = 0; i < GetCount(); i++) {
         wxString str(GetString(i));
         GetTextExtent(str, &wLine, NULL);
         lbWidth = wxMax(lbWidth, wLine);

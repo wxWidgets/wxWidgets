@@ -49,7 +49,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     if( !CreateControl( parent, id, pos, size, style, validator, name ) )
         return false;
 
-    m_noStrings = n;
+    m_noStrings = (size_t)n;
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -162,7 +162,7 @@ int wxComboBox::DoAppend(const wxString& item)
 int wxComboBox::DoInsert(const wxString& item, int pos)
 {
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
-    wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
+    wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
 
     if (pos == GetCount())
         return DoAppend(item);

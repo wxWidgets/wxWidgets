@@ -71,7 +71,7 @@ public:
         const wxString& name = wxChoiceNameStr);
 
     // implementation of wxControlWithItems
-    virtual int GetCount() const;
+    virtual size_t GetCount() const;
     virtual int DoAppend(const wxString& item);
     virtual int DoInsert(const wxString& item, int pos);
     virtual void DoSetItemClientData(int n, void* clientData);
