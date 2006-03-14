@@ -467,7 +467,7 @@ int wxComboBox::DoInsert( const wxString &item, int pos )
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
     wxCHECK_MSG( IsValidInsert(pos), -1, wxT("invalid index") );
 
-    const size_t count = GetCount();
+    size_t count = GetCount();
 
     if ((size_t)pos == count)
         return Append(item);
