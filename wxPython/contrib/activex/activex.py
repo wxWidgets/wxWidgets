@@ -1,18 +1,18 @@
-# This file was created automatically by SWIG 1.3.27.
+# This file was created automatically by SWIG 1.3.29.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _activex
-
+import new
+new_instancemethod = new.instancemethod
 def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "thisown"): return self.this.own(value)
     if (name == "this"):
-        if isinstance(value, class_type):
-            self.__dict__[name] = value.this
-            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
-            del value.thisown
+        if type(value).__name__ == 'PySwigObject':
+            self.__dict__[name] = value
             return
     method = class_type.__swig_setmethods__.get(name,None)
     if method: return method(self,value)
-    if (not static) or hasattr(self,name) or (name == "thisown"):
+    if (not static) or hasattr(self,name):
         self.__dict__[name] = value
     else:
         raise AttributeError("You cannot add attributes to %s" % self)
@@ -21,9 +21,15 @@ def _swig_setattr(self,class_type,name,value):
     return _swig_setattr_nondynamic(self,class_type,name,value,0)
 
 def _swig_getattr(self,class_type,name):
+    if (name == "thisown"): return self.this.own()
     method = class_type.__swig_getmethods__.get(name,None)
     if method: return method(self)
     raise AttributeError,name
+
+def _swig_repr(self):
+    try: strthis = "proxy of " + self.this.__repr__()
+    except: strthis = ""
+    return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis,)
 
 import types
 try:
@@ -37,7 +43,8 @@ del types
 
 def _swig_setattr_nondynamic_method(set):
     def set_attr(self,name,value):
-        if hasattr(self,name) or (name in ("this", "thisown")):
+        if (name == "thisown"): return self.this.own(value)
+        if hasattr(self,name) or (name == "this"):
             set(self,name,value)
         else:
             raise AttributeError("You cannot add attributes to %s" % self)
@@ -57,9 +64,9 @@ class CLSID(object):
     'WordPad.Document.1') or a classID string, (such as
     '{CA8A9783-280D-11CF-A24D-444553540000}').
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ CLSID instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, String id) -> CLSID
 
@@ -69,16 +76,9 @@ class CLSID(object):
         'WordPad.Document.1') or a classID string, (such as
         '{CA8A9783-280D-11CF-A24D-444553540000}').
         """
-        newobj = _activex.new_CLSID(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_activex.delete_CLSID):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _activex.CLSID_swiginit(self,_activex.new_CLSID(*args, **kwargs))
+    __swig_destroy__ = _activex.delete_CLSID
+    __del__ = lambda self : None;
     def GetCLSIDString(*args, **kwargs):
         """GetCLSIDString(self) -> String"""
         return _activex.CLSID_GetCLSIDString(*args, **kwargs)
@@ -88,21 +88,16 @@ class CLSID(object):
         return _activex.CLSID_GetProgIDString(*args, **kwargs)
 
     def __str__(self):   return self.GetCLSIDString() 
-
-class CLSIDPtr(CLSID):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = CLSID
-_activex.CLSID_swigregister(CLSIDPtr)
+CLSID_swigregister = _activex.CLSID_swigregister
+CLSID_swigregister(CLSID)
 
 #---------------------------------------------------------------------------
 
 class ParamX(object):
     """Proxy of C++ ParamX class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxParamX instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     flags = property(_activex.ParamX_flags_get)
     isPtr = property(_activex.ParamX_isPtr_get)
     isSafeArray = property(_activex.ParamX_isSafeArray_get)
@@ -117,37 +112,27 @@ class ParamX(object):
 
     isRetVal = property(_activex.ParamX_IsRetVal)
 
-
-class ParamXPtr(ParamX):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = ParamX
-_activex.ParamX_swigregister(ParamXPtr)
+ParamX_swigregister = _activex.ParamX_swigregister
+ParamX_swigregister(ParamX)
 
 class FuncX(object):
     """Proxy of C++ FuncX class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxFuncX instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     name = property(_activex.FuncX_name_get)
     memid = property(_activex.FuncX_memid_get)
     hasOut = property(_activex.FuncX_hasOut_get)
     retType = property(_activex.FuncX_retType_get)
     params = property(_activex.FuncX_params_get)
-
-class FuncXPtr(FuncX):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = FuncX
-_activex.FuncX_swigregister(FuncXPtr)
+FuncX_swigregister = _activex.FuncX_swigregister
+FuncX_swigregister(FuncX)
 
 class PropX(object):
     """Proxy of C++ PropX class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPropX instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     name = property(_activex.PropX_name_get)
     memid = property(_activex.PropX_memid_get)
     type = property(_activex.PropX_type_get)
@@ -157,19 +142,14 @@ class PropX(object):
 
     canSet = property(_activex.PropX_CanSet)
 
-
-class PropXPtr(PropX):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PropX
-_activex.PropX_swigregister(PropXPtr)
+PropX_swigregister = _activex.PropX_swigregister
+PropX_swigregister(PropX)
 
 class ParamXArray(object):
     """Proxy of C++ ParamXArray class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxParamXArray instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def __nonzero__(*args, **kwargs):
         """__nonzero__(self) -> bool"""
         return _activex.ParamXArray___nonzero__(*args, **kwargs)
@@ -182,19 +162,14 @@ class ParamXArray(object):
         """__getitem__(self, int idx) -> ParamX"""
         return _activex.ParamXArray___getitem__(*args, **kwargs)
 
-
-class ParamXArrayPtr(ParamXArray):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = ParamXArray
-_activex.ParamXArray_swigregister(ParamXArrayPtr)
+ParamXArray_swigregister = _activex.ParamXArray_swigregister
+ParamXArray_swigregister(ParamXArray)
 
 class FuncXArray(object):
     """Proxy of C++ FuncXArray class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxFuncXArray instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def __nonzero__(*args, **kwargs):
         """__nonzero__(self) -> bool"""
         return _activex.FuncXArray___nonzero__(*args, **kwargs)
@@ -207,19 +182,14 @@ class FuncXArray(object):
         """__getitem__(self, int idx) -> FuncX"""
         return _activex.FuncXArray___getitem__(*args, **kwargs)
 
-
-class FuncXArrayPtr(FuncXArray):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = FuncXArray
-_activex.FuncXArray_swigregister(FuncXArrayPtr)
+FuncXArray_swigregister = _activex.FuncXArray_swigregister
+FuncXArray_swigregister(FuncXArray)
 
 class PropXArray(object):
     """Proxy of C++ PropXArray class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPropXArray instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def __nonzero__(*args, **kwargs):
         """__nonzero__(self) -> bool"""
         return _activex.PropXArray___nonzero__(*args, **kwargs)
@@ -232,13 +202,8 @@ class PropXArray(object):
         """__getitem__(self, int idx) -> PropX"""
         return _activex.PropXArray___getitem__(*args, **kwargs)
 
-
-class PropXArrayPtr(PropXArray):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PropXArray
-_activex.PropXArray_swigregister(PropXArrayPtr)
+PropXArray_swigregister = _activex.PropXArray_swigregister
+PropXArray_swigregister(PropXArray)
 
 #---------------------------------------------------------------------------
 
@@ -254,9 +219,9 @@ class ActiveXWindow(_core.Window):
     specified by the TypeInfo.
 
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxActiveXWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, CLSID clsId, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
@@ -265,10 +230,7 @@ class ActiveXWindow(_core.Window):
         Creates an ActiveX control from the clsID given and makes it act
         as much like a regular wx.Window as possible.
         """
-        newobj = _activex.new_ActiveXWindow(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _activex.ActiveXWindow_swiginit(self,_activex.new_ActiveXWindow(*args, **kwargs))
         self._setOORInfo(self)
 
     def GetCLSID(*args, **kwargs):
@@ -384,24 +346,19 @@ class ActiveXWindow(_core.Window):
         """
         return self._CallAXMethod(name, args)
 
-
-class ActiveXWindowPtr(ActiveXWindow):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = ActiveXWindow
-_activex.ActiveXWindow_swigregister(ActiveXWindowPtr)
+ActiveXWindow_swigregister = _activex.ActiveXWindow_swigregister
+ActiveXWindow_swigregister(ActiveXWindow)
 
 #---------------------------------------------------------------------------
 
 
 def RegisterActiveXEvent(*args, **kwargs):
-    """
+  """
     RegisterActiveXEvent(String eventName) -> wxEventType
 
     Creates a standard wx event ID for the given eventName.
     """
-    return _activex.RegisterActiveXEvent(*args, **kwargs)
+  return _activex.RegisterActiveXEvent(*args, **kwargs)
 class ActiveXEvent(_core.CommandEvent):
     """
     An instance of ActiveXEvent is sent to the handler for all bound
@@ -410,9 +367,9 @@ class ActiveXEvent(_core.CommandEvent):
     Additionally, there is a property called eventName that will
     return (surprisingly <wink>) the name of the ActiveX event.
     """
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxActiveXEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     eventName = property(_activex.ActiveXEvent_EventName)
 
     def _preCallInit(*args, **kwargs):
@@ -423,24 +380,16 @@ class ActiveXEvent(_core.CommandEvent):
         """_postCallCleanup(self, PyObject pyself)"""
         return _activex.ActiveXEvent__postCallCleanup(*args, **kwargs)
 
-
-class ActiveXEventPtr(ActiveXEvent):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = ActiveXEvent
-_activex.ActiveXEvent_swigregister(ActiveXEventPtr)
+ActiveXEvent_swigregister = _activex.ActiveXEvent_swigregister
+ActiveXEvent_swigregister(ActiveXEvent)
 
 #---------------------------------------------------------------------------
 
 class IEHtmlWindowBase(ActiveXWindow):
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxIEHtmlWindowBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        newobj = _activex.new_IEHtmlWindowBase(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        _activex.IEHtmlWindowBase_swiginit(self,_activex.new_IEHtmlWindowBase(*args, **kwargs))
         self._setOORInfo(self)
 
     def SetCharset(*args, **kwargs): return _activex.IEHtmlWindowBase_SetCharset(*args, **kwargs)
@@ -448,13 +397,8 @@ class IEHtmlWindowBase(ActiveXWindow):
     def LoadStream(*args, **kwargs): return _activex.IEHtmlWindowBase_LoadStream(*args, **kwargs)
     def GetStringSelection(*args, **kwargs): return _activex.IEHtmlWindowBase_GetStringSelection(*args, **kwargs)
     def GetText(*args, **kwargs): return _activex.IEHtmlWindowBase_GetText(*args, **kwargs)
-
-class IEHtmlWindowBasePtr(IEHtmlWindowBase):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = IEHtmlWindowBase
-_activex.IEHtmlWindowBase_swigregister(IEHtmlWindowBasePtr)
+IEHtmlWindowBase_swigregister = _activex.IEHtmlWindowBase_swigregister
+IEHtmlWindowBase_swigregister(IEHtmlWindowBase)
 
 #---------------------------------------------------------------------------
 # Some helper and utility functions for ActiveX

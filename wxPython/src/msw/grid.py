@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG 1.3.27.
+# This file was created automatically by SWIG 1.3.29.
 # Don't modify this file, modify the SWIG interface instead.
 
 """
@@ -6,17 +6,17 @@ Classes for implementing a spreadsheet-like control.
 """
 
 import _grid
-
+import new
+new_instancemethod = new.instancemethod
 def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "thisown"): return self.this.own(value)
     if (name == "this"):
-        if isinstance(value, class_type):
-            self.__dict__[name] = value.this
-            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
-            del value.thisown
+        if type(value).__name__ == 'PySwigObject':
+            self.__dict__[name] = value
             return
     method = class_type.__swig_setmethods__.get(name,None)
     if method: return method(self,value)
-    if (not static) or hasattr(self,name) or (name == "thisown"):
+    if (not static) or hasattr(self,name):
         self.__dict__[name] = value
     else:
         raise AttributeError("You cannot add attributes to %s" % self)
@@ -25,9 +25,15 @@ def _swig_setattr(self,class_type,name,value):
     return _swig_setattr_nondynamic(self,class_type,name,value,0)
 
 def _swig_getattr(self,class_type,name):
+    if (name == "thisown"): return self.this.own()
     method = class_type.__swig_getmethods__.get(name,None)
     if method: return method(self)
     raise AttributeError,name
+
+def _swig_repr(self):
+    try: strthis = "proxy of " + self.this.__repr__()
+    except: strthis = ""
+    return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis,)
 
 import types
 try:
@@ -41,7 +47,8 @@ del types
 
 def _swig_setattr_nondynamic_method(set):
     def set_attr(self,name,value):
-        if hasattr(self,name) or (name in ("this", "thisown")):
+        if (name == "thisown"): return self.this.own(value)
+        if hasattr(self,name) or (name == "this"):
             set(self,name,value)
         else:
             raise AttributeError("You cannot add attributes to %s" % self)
@@ -73,9 +80,9 @@ GRID_MIN_COL_WIDTH = _grid.GRID_MIN_COL_WIDTH
 GRID_DEFAULT_SCROLLBAR_WIDTH = _grid.GRID_DEFAULT_SCROLLBAR_WIDTH
 class GridCellRenderer(object):
     """Proxy of C++ GridCellRenderer class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def _setOORInfo(*args, **kwargs):
         """_setOORInfo(self, PyObject _self)"""
         return _grid.GridCellRenderer__setOORInfo(*args, **kwargs)
@@ -107,27 +114,19 @@ class GridCellRenderer(object):
         """Clone(self) -> GridCellRenderer"""
         return _grid.GridCellRenderer_Clone(*args, **kwargs)
 
-
-class GridCellRendererPtr(GridCellRenderer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellRenderer
-_grid.GridCellRenderer_swigregister(GridCellRendererPtr)
+GridCellRenderer_swigregister = _grid.GridCellRenderer_swigregister
+GridCellRenderer_swigregister(GridCellRenderer)
 cvar = _grid.cvar
 GridNoCellCoords = cvar.GridNoCellCoords
 GridNoCellRect = cvar.GridNoCellRect
 
 class PyGridCellRenderer(GridCellRenderer):
     """Proxy of C++ PyGridCellRenderer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyGridCellRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> PyGridCellRenderer"""
-        newobj = _grid.new_PyGridCellRenderer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.PyGridCellRenderer_swiginit(self,_grid.new_PyGridCellRenderer(*args, **kwargs))
         self._setCallbackInfo(self, PyGridCellRenderer);self._setOORInfo(self)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -143,64 +142,40 @@ class PyGridCellRenderer(GridCellRenderer):
     base_SetParameters = wx._deprecated(base_SetParameters,
                                    "Please use PyGridCellRenderer.SetParameters instead.")
 
-
-class PyGridCellRendererPtr(PyGridCellRenderer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PyGridCellRenderer
-_grid.PyGridCellRenderer_swigregister(PyGridCellRendererPtr)
+PyGridCellRenderer_swigregister = _grid.PyGridCellRenderer_swigregister
+PyGridCellRenderer_swigregister(PyGridCellRenderer)
 
 class GridCellStringRenderer(GridCellRenderer):
     """Proxy of C++ GridCellStringRenderer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellStringRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> GridCellStringRenderer"""
-        newobj = _grid.new_GridCellStringRenderer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellStringRenderer_swiginit(self,_grid.new_GridCellStringRenderer(*args, **kwargs))
         self._setOORInfo(self)
 
-
-class GridCellStringRendererPtr(GridCellStringRenderer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellStringRenderer
-_grid.GridCellStringRenderer_swigregister(GridCellStringRendererPtr)
+GridCellStringRenderer_swigregister = _grid.GridCellStringRenderer_swigregister
+GridCellStringRenderer_swigregister(GridCellStringRenderer)
 
 class GridCellNumberRenderer(GridCellStringRenderer):
     """Proxy of C++ GridCellNumberRenderer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellNumberRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> GridCellNumberRenderer"""
-        newobj = _grid.new_GridCellNumberRenderer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellNumberRenderer_swiginit(self,_grid.new_GridCellNumberRenderer(*args, **kwargs))
         self._setOORInfo(self)
 
-
-class GridCellNumberRendererPtr(GridCellNumberRenderer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellNumberRenderer
-_grid.GridCellNumberRenderer_swigregister(GridCellNumberRendererPtr)
+GridCellNumberRenderer_swigregister = _grid.GridCellNumberRenderer_swigregister
+GridCellNumberRenderer_swigregister(GridCellNumberRenderer)
 
 class GridCellFloatRenderer(GridCellStringRenderer):
     """Proxy of C++ GridCellFloatRenderer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellFloatRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, int width=-1, int precision=-1) -> GridCellFloatRenderer"""
-        newobj = _grid.new_GridCellFloatRenderer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellFloatRenderer_swiginit(self,_grid.new_GridCellFloatRenderer(*args, **kwargs))
         self._setOORInfo(self)
 
     def GetWidth(*args, **kwargs):
@@ -219,99 +194,62 @@ class GridCellFloatRenderer(GridCellStringRenderer):
         """SetPrecision(self, int precision)"""
         return _grid.GridCellFloatRenderer_SetPrecision(*args, **kwargs)
 
-
-class GridCellFloatRendererPtr(GridCellFloatRenderer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellFloatRenderer
-_grid.GridCellFloatRenderer_swigregister(GridCellFloatRendererPtr)
+GridCellFloatRenderer_swigregister = _grid.GridCellFloatRenderer_swigregister
+GridCellFloatRenderer_swigregister(GridCellFloatRenderer)
 
 class GridCellBoolRenderer(GridCellRenderer):
     """Proxy of C++ GridCellBoolRenderer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellBoolRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> GridCellBoolRenderer"""
-        newobj = _grid.new_GridCellBoolRenderer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellBoolRenderer_swiginit(self,_grid.new_GridCellBoolRenderer(*args, **kwargs))
         self._setOORInfo(self)
 
-
-class GridCellBoolRendererPtr(GridCellBoolRenderer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellBoolRenderer
-_grid.GridCellBoolRenderer_swigregister(GridCellBoolRendererPtr)
+GridCellBoolRenderer_swigregister = _grid.GridCellBoolRenderer_swigregister
+GridCellBoolRenderer_swigregister(GridCellBoolRenderer)
 
 class GridCellDateTimeRenderer(GridCellStringRenderer):
     """Proxy of C++ GridCellDateTimeRenderer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellDateTimeRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, String outformat=wxPyDefaultDateTimeFormat, String informat=wxPyDefaultDateTimeFormat) -> GridCellDateTimeRenderer"""
-        newobj = _grid.new_GridCellDateTimeRenderer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellDateTimeRenderer_swiginit(self,_grid.new_GridCellDateTimeRenderer(*args, **kwargs))
         self._setOORInfo(self)
 
-
-class GridCellDateTimeRendererPtr(GridCellDateTimeRenderer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellDateTimeRenderer
-_grid.GridCellDateTimeRenderer_swigregister(GridCellDateTimeRendererPtr)
+GridCellDateTimeRenderer_swigregister = _grid.GridCellDateTimeRenderer_swigregister
+GridCellDateTimeRenderer_swigregister(GridCellDateTimeRenderer)
 
 class GridCellEnumRenderer(GridCellStringRenderer):
     """Proxy of C++ GridCellEnumRenderer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellEnumRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, String choices=EmptyString) -> GridCellEnumRenderer"""
-        newobj = _grid.new_GridCellEnumRenderer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellEnumRenderer_swiginit(self,_grid.new_GridCellEnumRenderer(*args, **kwargs))
         self._setOORInfo(self)
 
-
-class GridCellEnumRendererPtr(GridCellEnumRenderer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellEnumRenderer
-_grid.GridCellEnumRenderer_swigregister(GridCellEnumRendererPtr)
+GridCellEnumRenderer_swigregister = _grid.GridCellEnumRenderer_swigregister
+GridCellEnumRenderer_swigregister(GridCellEnumRenderer)
 
 class GridCellAutoWrapStringRenderer(GridCellStringRenderer):
     """Proxy of C++ GridCellAutoWrapStringRenderer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellAutoWrapStringRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> GridCellAutoWrapStringRenderer"""
-        newobj = _grid.new_GridCellAutoWrapStringRenderer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellAutoWrapStringRenderer_swiginit(self,_grid.new_GridCellAutoWrapStringRenderer(*args, **kwargs))
         self._setOORInfo(self)
 
-
-class GridCellAutoWrapStringRendererPtr(GridCellAutoWrapStringRenderer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellAutoWrapStringRenderer
-_grid.GridCellAutoWrapStringRenderer_swigregister(GridCellAutoWrapStringRendererPtr)
+GridCellAutoWrapStringRenderer_swigregister = _grid.GridCellAutoWrapStringRenderer_swigregister
+GridCellAutoWrapStringRenderer_swigregister(GridCellAutoWrapStringRenderer)
 
 class GridCellEditor(object):
     """Proxy of C++ GridCellEditor class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def _setOORInfo(*args, **kwargs):
         """_setOORInfo(self, PyObject _self)"""
         return _grid.GridCellEditor__setOORInfo(*args, **kwargs)
@@ -402,63 +340,21 @@ class GridCellEditor(object):
         args[0].thisown = 0
         return val
 
-
-class GridCellEditorPtr(GridCellEditor):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellEditor
-_grid.GridCellEditor_swigregister(GridCellEditorPtr)
+GridCellEditor_swigregister = _grid.GridCellEditor_swigregister
+GridCellEditor_swigregister(GridCellEditor)
 
 class PyGridCellEditor(GridCellEditor):
     """Proxy of C++ PyGridCellEditor class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyGridCellEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> PyGridCellEditor"""
-        newobj = _grid.new_PyGridCellEditor(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.PyGridCellEditor_swiginit(self,_grid.new_PyGridCellEditor(*args, **kwargs))
         self._setCallbackInfo(self, PyGridCellEditor);self._setOORInfo(self)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _grid.PyGridCellEditor__setCallbackInfo(*args, **kwargs)
-
-    def SetSize(*args, **kwargs):
-        """SetSize(self, Rect rect)"""
-        return _grid.PyGridCellEditor_SetSize(*args, **kwargs)
-
-    def Show(*args, **kwargs):
-        """Show(self, bool show, GridCellAttr attr=None)"""
-        return _grid.PyGridCellEditor_Show(*args, **kwargs)
-
-    def PaintBackground(*args, **kwargs):
-        """PaintBackground(self, Rect rectCell, GridCellAttr attr)"""
-        return _grid.PyGridCellEditor_PaintBackground(*args, **kwargs)
-
-    def IsAcceptedKey(*args, **kwargs):
-        """IsAcceptedKey(self, KeyEvent event) -> bool"""
-        return _grid.PyGridCellEditor_IsAcceptedKey(*args, **kwargs)
-
-    def StartingKey(*args, **kwargs):
-        """StartingKey(self, KeyEvent event)"""
-        return _grid.PyGridCellEditor_StartingKey(*args, **kwargs)
-
-    def StartingClick(*args, **kwargs):
-        """StartingClick(self)"""
-        return _grid.PyGridCellEditor_StartingClick(*args, **kwargs)
-
-    def HandleReturn(*args, **kwargs):
-        """HandleReturn(self, KeyEvent event)"""
-        return _grid.PyGridCellEditor_HandleReturn(*args, **kwargs)
-
-    def Destroy(*args, **kwargs):
-        """Destroy(self)"""
-        val = _grid.PyGridCellEditor_Destroy(*args, **kwargs)
-        args[0].thisown = 0
-        return val
 
     def SetParameters(*args, **kwargs):
         """SetParameters(self, String params)"""
@@ -509,186 +405,109 @@ class PyGridCellEditor(GridCellEditor):
     base_SetParameters = wx._deprecated(base_SetParameters,
                                    "Please use PyGridCellEditor.SetParameters instead.")
 
-
-class PyGridCellEditorPtr(PyGridCellEditor):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PyGridCellEditor
-_grid.PyGridCellEditor_swigregister(PyGridCellEditorPtr)
+PyGridCellEditor_swigregister = _grid.PyGridCellEditor_swigregister
+PyGridCellEditor_swigregister(PyGridCellEditor)
 
 class GridCellTextEditor(GridCellEditor):
     """Proxy of C++ GridCellTextEditor class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellTextEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> GridCellTextEditor"""
-        newobj = _grid.new_GridCellTextEditor(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellTextEditor_swiginit(self,_grid.new_GridCellTextEditor(*args, **kwargs))
         self._setOORInfo(self)
 
     def GetValue(*args, **kwargs):
         """GetValue(self) -> String"""
         return _grid.GridCellTextEditor_GetValue(*args, **kwargs)
 
-
-class GridCellTextEditorPtr(GridCellTextEditor):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellTextEditor
-_grid.GridCellTextEditor_swigregister(GridCellTextEditorPtr)
+GridCellTextEditor_swigregister = _grid.GridCellTextEditor_swigregister
+GridCellTextEditor_swigregister(GridCellTextEditor)
 
 class GridCellNumberEditor(GridCellTextEditor):
     """Proxy of C++ GridCellNumberEditor class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellNumberEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, int min=-1, int max=-1) -> GridCellNumberEditor"""
-        newobj = _grid.new_GridCellNumberEditor(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellNumberEditor_swiginit(self,_grid.new_GridCellNumberEditor(*args, **kwargs))
         self._setOORInfo(self)
 
-    def GetValue(*args, **kwargs):
-        """GetValue(self) -> String"""
-        return _grid.GridCellNumberEditor_GetValue(*args, **kwargs)
-
-
-class GridCellNumberEditorPtr(GridCellNumberEditor):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellNumberEditor
-_grid.GridCellNumberEditor_swigregister(GridCellNumberEditorPtr)
+GridCellNumberEditor_swigregister = _grid.GridCellNumberEditor_swigregister
+GridCellNumberEditor_swigregister(GridCellNumberEditor)
 
 class GridCellFloatEditor(GridCellTextEditor):
     """Proxy of C++ GridCellFloatEditor class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellFloatEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, int width=-1, int precision=-1) -> GridCellFloatEditor"""
-        newobj = _grid.new_GridCellFloatEditor(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellFloatEditor_swiginit(self,_grid.new_GridCellFloatEditor(*args, **kwargs))
         self._setOORInfo(self)
 
-    def GetValue(*args, **kwargs):
-        """GetValue(self) -> String"""
-        return _grid.GridCellFloatEditor_GetValue(*args, **kwargs)
-
-
-class GridCellFloatEditorPtr(GridCellFloatEditor):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellFloatEditor
-_grid.GridCellFloatEditor_swigregister(GridCellFloatEditorPtr)
+GridCellFloatEditor_swigregister = _grid.GridCellFloatEditor_swigregister
+GridCellFloatEditor_swigregister(GridCellFloatEditor)
 
 class GridCellBoolEditor(GridCellEditor):
     """Proxy of C++ GridCellBoolEditor class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellBoolEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> GridCellBoolEditor"""
-        newobj = _grid.new_GridCellBoolEditor(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellBoolEditor_swiginit(self,_grid.new_GridCellBoolEditor(*args, **kwargs))
         self._setOORInfo(self)
 
     def GetValue(*args, **kwargs):
         """GetValue(self) -> String"""
         return _grid.GridCellBoolEditor_GetValue(*args, **kwargs)
 
-
-class GridCellBoolEditorPtr(GridCellBoolEditor):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellBoolEditor
-_grid.GridCellBoolEditor_swigregister(GridCellBoolEditorPtr)
+GridCellBoolEditor_swigregister = _grid.GridCellBoolEditor_swigregister
+GridCellBoolEditor_swigregister(GridCellBoolEditor)
 
 class GridCellChoiceEditor(GridCellEditor):
     """Proxy of C++ GridCellChoiceEditor class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellChoiceEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, int choices=0, bool allowOthers=False) -> GridCellChoiceEditor"""
-        newobj = _grid.new_GridCellChoiceEditor(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellChoiceEditor_swiginit(self,_grid.new_GridCellChoiceEditor(*args, **kwargs))
         self._setOORInfo(self)
 
     def GetValue(*args, **kwargs):
         """GetValue(self) -> String"""
         return _grid.GridCellChoiceEditor_GetValue(*args, **kwargs)
 
-
-class GridCellChoiceEditorPtr(GridCellChoiceEditor):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellChoiceEditor
-_grid.GridCellChoiceEditor_swigregister(GridCellChoiceEditorPtr)
+GridCellChoiceEditor_swigregister = _grid.GridCellChoiceEditor_swigregister
+GridCellChoiceEditor_swigregister(GridCellChoiceEditor)
 
 class GridCellEnumEditor(GridCellChoiceEditor):
     """Proxy of C++ GridCellEnumEditor class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellEnumEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, String choices=EmptyString) -> GridCellEnumEditor"""
-        newobj = _grid.new_GridCellEnumEditor(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellEnumEditor_swiginit(self,_grid.new_GridCellEnumEditor(*args, **kwargs))
         self._setOORInfo(self)
 
-    def GetValue(*args, **kwargs):
-        """GetValue(self) -> String"""
-        return _grid.GridCellEnumEditor_GetValue(*args, **kwargs)
-
-
-class GridCellEnumEditorPtr(GridCellEnumEditor):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellEnumEditor
-_grid.GridCellEnumEditor_swigregister(GridCellEnumEditorPtr)
+GridCellEnumEditor_swigregister = _grid.GridCellEnumEditor_swigregister
+GridCellEnumEditor_swigregister(GridCellEnumEditor)
 
 class GridCellAutoWrapStringEditor(GridCellTextEditor):
     """Proxy of C++ GridCellAutoWrapStringEditor class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellAutoWrapStringEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> GridCellAutoWrapStringEditor"""
-        newobj = _grid.new_GridCellAutoWrapStringEditor(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellAutoWrapStringEditor_swiginit(self,_grid.new_GridCellAutoWrapStringEditor(*args, **kwargs))
         self._setOORInfo(self)
 
-    def GetValue(*args, **kwargs):
-        """GetValue(self) -> String"""
-        return _grid.GridCellAutoWrapStringEditor_GetValue(*args, **kwargs)
-
-
-class GridCellAutoWrapStringEditorPtr(GridCellAutoWrapStringEditor):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellAutoWrapStringEditor
-_grid.GridCellAutoWrapStringEditor_swigregister(GridCellAutoWrapStringEditorPtr)
+GridCellAutoWrapStringEditor_swigregister = _grid.GridCellAutoWrapStringEditor_swigregister
+GridCellAutoWrapStringEditor_swigregister(GridCellAutoWrapStringEditor)
 
 class GridCellAttr(object):
     """Proxy of C++ GridCellAttr class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
     Any = _grid.GridCellAttr_Any
     Default = _grid.GridCellAttr_Default
     Cell = _grid.GridCellAttr_Cell
@@ -699,12 +518,9 @@ class GridCellAttr(object):
         """_setOORInfo(self, PyObject _self)"""
         return _grid.GridCellAttr__setOORInfo(*args, **kwargs)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs): 
         """__init__(self, GridCellAttr attrDefault=None) -> GridCellAttr"""
-        newobj = _grid.new_GridCellAttr(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellAttr_swiginit(self,_grid.new_GridCellAttr(*args, **kwargs))
         self._setOORInfo(self)
 
     def Clone(*args, **kwargs):
@@ -839,24 +655,16 @@ class GridCellAttr(object):
         """SetDefAttr(self, GridCellAttr defAttr)"""
         return _grid.GridCellAttr_SetDefAttr(*args, **kwargs)
 
-
-class GridCellAttrPtr(GridCellAttr):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellAttr
-_grid.GridCellAttr_swigregister(GridCellAttrPtr)
+GridCellAttr_swigregister = _grid.GridCellAttr_swigregister
+GridCellAttr_swigregister(GridCellAttr)
 
 class GridCellAttrProvider(object):
     """Proxy of C++ GridCellAttrProvider class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellAttrProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> GridCellAttrProvider"""
-        newobj = _grid.new_GridCellAttrProvider(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridCellAttrProvider_swiginit(self,_grid.new_GridCellAttrProvider(*args, **kwargs))
         self._setOORInfo(self)
 
     def _setOORInfo(*args, **kwargs):
@@ -887,24 +695,16 @@ class GridCellAttrProvider(object):
         """UpdateAttrCols(self, size_t pos, int numCols)"""
         return _grid.GridCellAttrProvider_UpdateAttrCols(*args, **kwargs)
 
-
-class GridCellAttrProviderPtr(GridCellAttrProvider):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellAttrProvider
-_grid.GridCellAttrProvider_swigregister(GridCellAttrProviderPtr)
+GridCellAttrProvider_swigregister = _grid.GridCellAttrProvider_swigregister
+GridCellAttrProvider_swigregister(GridCellAttrProvider)
 
 class PyGridCellAttrProvider(GridCellAttrProvider):
     """Proxy of C++ PyGridCellAttrProvider class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyGridCellAttrProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> PyGridCellAttrProvider"""
-        newobj = _grid.new_PyGridCellAttrProvider(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.PyGridCellAttrProvider_swiginit(self,_grid.new_PyGridCellAttrProvider(*args, **kwargs))
         self._setCallbackInfo(self, PyGridCellAttrProvider)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -947,19 +747,14 @@ class PyGridCellAttrProvider(GridCellAttrProvider):
     base_SetColAttr = wx._deprecated(base_SetColAttr,
                                    "Please use PyGridCellAttrProvider.SetColAttr instead.")
 
-
-class PyGridCellAttrProviderPtr(PyGridCellAttrProvider):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PyGridCellAttrProvider
-_grid.PyGridCellAttrProvider_swigregister(PyGridCellAttrProviderPtr)
+PyGridCellAttrProvider_swigregister = _grid.PyGridCellAttrProvider_swigregister
+PyGridCellAttrProvider_swigregister(PyGridCellAttrProvider)
 
 class GridTableBase(_core.Object):
     """Proxy of C++ GridTableBase class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridTableBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def _setOORInfo(*args, **kwargs):
         """_setOORInfo(self, PyObject _self)"""
         return _grid.GridTableBase__setOORInfo(*args, **kwargs)
@@ -1100,24 +895,16 @@ class GridTableBase(_core.Object):
         """SetColAttr(self, GridCellAttr attr, int col)"""
         return _grid.GridTableBase_SetColAttr(*args, **kwargs)
 
-
-class GridTableBasePtr(GridTableBase):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridTableBase
-_grid.GridTableBase_swigregister(GridTableBasePtr)
+GridTableBase_swigregister = _grid.GridTableBase_swigregister
+GridTableBase_swigregister(GridTableBase)
 
 class PyGridTableBase(GridTableBase):
     """Proxy of C++ PyGridTableBase class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyGridTableBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> PyGridTableBase"""
-        newobj = _grid.new_PyGridTableBase(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.PyGridTableBase_swiginit(self,_grid.new_PyGridTableBase(*args, **kwargs))
         self._setCallbackInfo(self, PyGridTableBase);self._setOORInfo(self)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -1133,82 +920,6 @@ class PyGridTableBase(GridTableBase):
         val = _grid.PyGridTableBase_Destroy(*args, **kwargs)
         args[0].thisown = 0
         return val
-
-    def GetTypeName(*args, **kwargs):
-        """GetTypeName(self, int row, int col) -> String"""
-        return _grid.PyGridTableBase_GetTypeName(*args, **kwargs)
-
-    def CanGetValueAs(*args, **kwargs):
-        """CanGetValueAs(self, int row, int col, String typeName) -> bool"""
-        return _grid.PyGridTableBase_CanGetValueAs(*args, **kwargs)
-
-    def CanSetValueAs(*args, **kwargs):
-        """CanSetValueAs(self, int row, int col, String typeName) -> bool"""
-        return _grid.PyGridTableBase_CanSetValueAs(*args, **kwargs)
-
-    def Clear(*args, **kwargs):
-        """Clear(self)"""
-        return _grid.PyGridTableBase_Clear(*args, **kwargs)
-
-    def InsertRows(*args, **kwargs):
-        """InsertRows(self, size_t pos=0, size_t numRows=1) -> bool"""
-        return _grid.PyGridTableBase_InsertRows(*args, **kwargs)
-
-    def AppendRows(*args, **kwargs):
-        """AppendRows(self, size_t numRows=1) -> bool"""
-        return _grid.PyGridTableBase_AppendRows(*args, **kwargs)
-
-    def DeleteRows(*args, **kwargs):
-        """DeleteRows(self, size_t pos=0, size_t numRows=1) -> bool"""
-        return _grid.PyGridTableBase_DeleteRows(*args, **kwargs)
-
-    def InsertCols(*args, **kwargs):
-        """InsertCols(self, size_t pos=0, size_t numCols=1) -> bool"""
-        return _grid.PyGridTableBase_InsertCols(*args, **kwargs)
-
-    def AppendCols(*args, **kwargs):
-        """AppendCols(self, size_t numCols=1) -> bool"""
-        return _grid.PyGridTableBase_AppendCols(*args, **kwargs)
-
-    def DeleteCols(*args, **kwargs):
-        """DeleteCols(self, size_t pos=0, size_t numCols=1) -> bool"""
-        return _grid.PyGridTableBase_DeleteCols(*args, **kwargs)
-
-    def GetRowLabelValue(*args, **kwargs):
-        """GetRowLabelValue(self, int row) -> String"""
-        return _grid.PyGridTableBase_GetRowLabelValue(*args, **kwargs)
-
-    def GetColLabelValue(*args, **kwargs):
-        """GetColLabelValue(self, int col) -> String"""
-        return _grid.PyGridTableBase_GetColLabelValue(*args, **kwargs)
-
-    def SetRowLabelValue(*args, **kwargs):
-        """SetRowLabelValue(self, int row, String value)"""
-        return _grid.PyGridTableBase_SetRowLabelValue(*args, **kwargs)
-
-    def SetColLabelValue(*args, **kwargs):
-        """SetColLabelValue(self, int col, String value)"""
-        return _grid.PyGridTableBase_SetColLabelValue(*args, **kwargs)
-
-    def CanHaveAttributes(*args, **kwargs):
-        """CanHaveAttributes(self) -> bool"""
-        return _grid.PyGridTableBase_CanHaveAttributes(*args, **kwargs)
-
-    def GetAttr(*args, **kwargs):
-        """GetAttr(self, int row, int col, int kind) -> GridCellAttr"""
-        return _grid.PyGridTableBase_GetAttr(*args, **kwargs)
-
-    def SetAttr(*args, **kwargs):
-        """SetAttr(self, GridCellAttr attr, int row, int col)"""
-        return _grid.PyGridTableBase_SetAttr(*args, **kwargs)
-
-    def SetRowAttr(*args, **kwargs):
-        """SetRowAttr(self, GridCellAttr attr, int row)"""
-        return _grid.PyGridTableBase_SetRowAttr(*args, **kwargs)
-
-    def SetColAttr(*args, **kwargs):
-        """SetColAttr(self, GridCellAttr attr, int col)"""
-        return _grid.PyGridTableBase_SetColAttr(*args, **kwargs)
 
     def base_GetTypeName(*args, **kw):
         return PyGridTableBase.GetTypeName(*args, **kw)
@@ -1305,33 +1016,20 @@ class PyGridTableBase(GridTableBase):
     base_SetColAttr = wx._deprecated(base_SetColAttr,
                                    "Please use PyGridTableBase.SetColAttr instead.")
 
-
-class PyGridTableBasePtr(PyGridTableBase):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PyGridTableBase
-_grid.PyGridTableBase_swigregister(PyGridTableBasePtr)
+PyGridTableBase_swigregister = _grid.PyGridTableBase_swigregister
+PyGridTableBase_swigregister(PyGridTableBase)
 
 class GridStringTable(GridTableBase):
     """Proxy of C++ GridStringTable class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridStringTable instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, int numRows=0, int numCols=0) -> GridStringTable"""
-        newobj = _grid.new_GridStringTable(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridStringTable_swiginit(self,_grid.new_GridStringTable(*args, **kwargs))
         self._setOORInfo(self)
 
-
-class GridStringTablePtr(GridStringTable):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridStringTable
-_grid.GridStringTable_swigregister(GridStringTablePtr)
+GridStringTable_swigregister = _grid.GridStringTable_swigregister
+GridStringTable_swigregister(GridStringTable)
 
 GRIDTABLE_REQUEST_VIEW_GET_VALUES = _grid.GRIDTABLE_REQUEST_VIEW_GET_VALUES
 GRIDTABLE_REQUEST_VIEW_SEND_VALUES = _grid.GRIDTABLE_REQUEST_VIEW_SEND_VALUES
@@ -1343,20 +1041,13 @@ GRIDTABLE_NOTIFY_COLS_APPENDED = _grid.GRIDTABLE_NOTIFY_COLS_APPENDED
 GRIDTABLE_NOTIFY_COLS_DELETED = _grid.GRIDTABLE_NOTIFY_COLS_DELETED
 class GridTableMessage(object):
     """Proxy of C++ GridTableMessage class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridTableMessage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, GridTableBase table, int id, int comInt1=-1, int comInt2=-1) -> GridTableMessage"""
-        newobj = _grid.new_GridTableMessage(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_grid.delete_GridTableMessage):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _grid.GridTableMessage_swiginit(self,_grid.new_GridTableMessage(*args, **kwargs))
+    __swig_destroy__ = _grid.delete_GridTableMessage
+    __del__ = lambda self : None;
     def SetTableObject(*args, **kwargs):
         """SetTableObject(self, GridTableBase table)"""
         return _grid.GridTableMessage_SetTableObject(*args, **kwargs)
@@ -1389,30 +1080,18 @@ class GridTableMessage(object):
         """GetCommandInt2(self) -> int"""
         return _grid.GridTableMessage_GetCommandInt2(*args, **kwargs)
 
-
-class GridTableMessagePtr(GridTableMessage):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridTableMessage
-_grid.GridTableMessage_swigregister(GridTableMessagePtr)
+GridTableMessage_swigregister = _grid.GridTableMessage_swigregister
+GridTableMessage_swigregister(GridTableMessage)
 
 class GridCellCoords(object):
     """Proxy of C++ GridCellCoords class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellCoords instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, int r=-1, int c=-1) -> GridCellCoords"""
-        newobj = _grid.new_GridCellCoords(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_grid.delete_GridCellCoords):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _grid.GridCellCoords_swiginit(self,_grid.new_GridCellCoords(*args, **kwargs))
+    __swig_destroy__ = _grid.delete_GridCellCoords
+    __del__ = lambda self : None;
     def GetRow(*args, **kwargs):
         """GetRow(self) -> int"""
         return _grid.GridCellCoords_GetRow(*args, **kwargs)
@@ -1455,28 +1134,20 @@ class GridCellCoords(object):
         elif index == 1: self.SetCol(val)
         else: raise IndexError
 
-
-class GridCellCoordsPtr(GridCellCoords):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridCellCoords
-_grid.GridCellCoords_swigregister(GridCellCoordsPtr)
+GridCellCoords_swigregister = _grid.GridCellCoords_swigregister
+GridCellCoords_swigregister(GridCellCoords)
 
 class Grid(_windows.ScrolledWindow):
     """Proxy of C++ Grid class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGrid instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=WANTS_CHARS, 
             String name=PanelNameStr) -> Grid
         """
-        newobj = _grid.new_Grid(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.Grid_swiginit(self,_grid.new_Grid(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
@@ -1515,7 +1186,7 @@ class Grid(_windows.ScrolledWindow):
         return _grid.Grid_GetNumberCols(*args, **kwargs)
 
     def ProcessTableMessage(*args, **kwargs):
-        """ProcessTableMessage(self, GridTableMessage ??) -> bool"""
+        """ProcessTableMessage(self, GridTableMessage ?) -> bool"""
         return _grid.Grid_ProcessTableMessage(*args, **kwargs)
 
     def GetTable(*args, **kwargs):
@@ -1560,7 +1231,7 @@ class Grid(_windows.ScrolledWindow):
 
     def DrawTextRectangle(*args, **kwargs):
         """
-        DrawTextRectangle(self, DC dc, String ??, Rect ??, int horizontalAlignment=LEFT, 
+        DrawTextRectangle(self, DC dc, String ?, Rect ?, int horizontalAlignment=LEFT, 
             int verticalAlignment=TOP, int textOrientation=HORIZONTAL)
         """
         return _grid.Grid_DrawTextRectangle(*args, **kwargs)
@@ -1786,15 +1457,15 @@ class Grid(_windows.ScrolledWindow):
         return _grid.Grid_SetColLabelSize(*args, **kwargs)
 
     def SetLabelBackgroundColour(*args, **kwargs):
-        """SetLabelBackgroundColour(self, Colour ??)"""
+        """SetLabelBackgroundColour(self, Colour ?)"""
         return _grid.Grid_SetLabelBackgroundColour(*args, **kwargs)
 
     def SetLabelTextColour(*args, **kwargs):
-        """SetLabelTextColour(self, Colour ??)"""
+        """SetLabelTextColour(self, Colour ?)"""
         return _grid.Grid_SetLabelTextColour(*args, **kwargs)
 
     def SetLabelFont(*args, **kwargs):
-        """SetLabelFont(self, Font ??)"""
+        """SetLabelFont(self, Font ?)"""
         return _grid.Grid_SetLabelFont(*args, **kwargs)
 
     def SetRowLabelAlignment(*args, **kwargs):
@@ -1810,19 +1481,19 @@ class Grid(_windows.ScrolledWindow):
         return _grid.Grid_SetColLabelTextOrientation(*args, **kwargs)
 
     def SetRowLabelValue(*args, **kwargs):
-        """SetRowLabelValue(self, int row, String ??)"""
+        """SetRowLabelValue(self, int row, String ?)"""
         return _grid.Grid_SetRowLabelValue(*args, **kwargs)
 
     def SetColLabelValue(*args, **kwargs):
-        """SetColLabelValue(self, int col, String ??)"""
+        """SetColLabelValue(self, int col, String ?)"""
         return _grid.Grid_SetColLabelValue(*args, **kwargs)
 
     def SetGridLineColour(*args, **kwargs):
-        """SetGridLineColour(self, Colour ??)"""
+        """SetGridLineColour(self, Colour ?)"""
         return _grid.Grid_SetGridLineColour(*args, **kwargs)
 
     def SetCellHighlightColour(*args, **kwargs):
-        """SetCellHighlightColour(self, Colour ??)"""
+        """SetCellHighlightColour(self, Colour ?)"""
         return _grid.Grid_SetCellHighlightColour(*args, **kwargs)
 
     def SetCellHighlightPenWidth(*args, **kwargs):
@@ -2050,27 +1721,27 @@ class Grid(_windows.ScrolledWindow):
         return _grid.Grid_GetRowMinimalAcceptableHeight(*args, **kwargs)
 
     def SetDefaultCellBackgroundColour(*args, **kwargs):
-        """SetDefaultCellBackgroundColour(self, Colour ??)"""
+        """SetDefaultCellBackgroundColour(self, Colour ?)"""
         return _grid.Grid_SetDefaultCellBackgroundColour(*args, **kwargs)
 
     def SetCellBackgroundColour(*args, **kwargs):
-        """SetCellBackgroundColour(self, int row, int col, Colour ??)"""
+        """SetCellBackgroundColour(self, int row, int col, Colour ?)"""
         return _grid.Grid_SetCellBackgroundColour(*args, **kwargs)
 
     def SetDefaultCellTextColour(*args, **kwargs):
-        """SetDefaultCellTextColour(self, Colour ??)"""
+        """SetDefaultCellTextColour(self, Colour ?)"""
         return _grid.Grid_SetDefaultCellTextColour(*args, **kwargs)
 
     def SetCellTextColour(*args, **kwargs):
-        """SetCellTextColour(self, int row, int col, Colour ??)"""
+        """SetCellTextColour(self, int row, int col, Colour ?)"""
         return _grid.Grid_SetCellTextColour(*args, **kwargs)
 
     def SetDefaultCellFont(*args, **kwargs):
-        """SetDefaultCellFont(self, Font ??)"""
+        """SetDefaultCellFont(self, Font ?)"""
         return _grid.Grid_SetDefaultCellFont(*args, **kwargs)
 
     def SetCellFont(*args, **kwargs):
-        """SetCellFont(self, int row, int col, Font ??)"""
+        """SetCellFont(self, int row, int col, Font ?)"""
         return _grid.Grid_SetCellFont(*args, **kwargs)
 
     def SetDefaultCellAlignment(*args, **kwargs):
@@ -2306,22 +1977,16 @@ class Grid(_windows.ScrolledWindow):
         return _grid.Grid_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-
-class GridPtr(Grid):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = Grid
-_grid.Grid_swigregister(GridPtr)
+Grid_swigregister = _grid.Grid_swigregister
+Grid_swigregister(Grid)
 
 def PreGrid(*args, **kwargs):
     """PreGrid() -> Grid"""
     val = _grid.new_PreGrid(*args, **kwargs)
-    val.thisown = 1
     return val
 
 def Grid_GetClassDefaultAttributes(*args, **kwargs):
-    """
+  """
     Grid_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
     Get the default attributes for this class.  This is useful if you want
@@ -2335,23 +2000,20 @@ def Grid_GetClassDefaultAttributes(*args, **kwargs):
     the returned font. See `wx.Window.SetWindowVariant` for more about
     this.
     """
-    return _grid.Grid_GetClassDefaultAttributes(*args, **kwargs)
+  return _grid.Grid_GetClassDefaultAttributes(*args, **kwargs)
 
 class GridEvent(_core.NotifyEvent):
     """Proxy of C++ GridEvent class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, int id, wxEventType type, Grid obj, int row=-1, int col=-1, 
             int x=-1, int y=-1, bool sel=True, bool control=False, 
             bool shift=False, bool alt=False, 
             bool meta=False) -> GridEvent
         """
-        newobj = _grid.new_GridEvent(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridEvent_swiginit(self,_grid.new_GridEvent(*args, **kwargs))
     def GetRow(*args, **kwargs):
         """GetRow(self) -> int"""
         return _grid.GridEvent_GetRow(*args, **kwargs)
@@ -2384,28 +2046,20 @@ class GridEvent(_core.NotifyEvent):
         """AltDown(self) -> bool"""
         return _grid.GridEvent_AltDown(*args, **kwargs)
 
-
-class GridEventPtr(GridEvent):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridEvent
-_grid.GridEvent_swigregister(GridEventPtr)
+GridEvent_swigregister = _grid.GridEvent_swigregister
+GridEvent_swigregister(GridEvent)
 
 class GridSizeEvent(_core.NotifyEvent):
     """Proxy of C++ GridSizeEvent class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridSizeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, int id, wxEventType type, Grid obj, int rowOrCol=-1, 
             int x=-1, int y=-1, bool control=False, bool shift=False, 
             bool alt=False, bool meta=False) -> GridSizeEvent
         """
-        newobj = _grid.new_GridSizeEvent(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridSizeEvent_swiginit(self,_grid.new_GridSizeEvent(*args, **kwargs))
     def GetRowOrCol(*args, **kwargs):
         """GetRowOrCol(self) -> int"""
         return _grid.GridSizeEvent_GetRowOrCol(*args, **kwargs)
@@ -2430,29 +2084,21 @@ class GridSizeEvent(_core.NotifyEvent):
         """AltDown(self) -> bool"""
         return _grid.GridSizeEvent_AltDown(*args, **kwargs)
 
-
-class GridSizeEventPtr(GridSizeEvent):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridSizeEvent
-_grid.GridSizeEvent_swigregister(GridSizeEventPtr)
+GridSizeEvent_swigregister = _grid.GridSizeEvent_swigregister
+GridSizeEvent_swigregister(GridSizeEvent)
 
 class GridRangeSelectEvent(_core.NotifyEvent):
     """Proxy of C++ GridRangeSelectEvent class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridRangeSelectEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, int id, wxEventType type, Grid obj, GridCellCoords topLeft, 
             GridCellCoords bottomRight, bool sel=True, 
             bool control=False, bool shift=False, 
             bool alt=False, bool meta=False) -> GridRangeSelectEvent
         """
-        newobj = _grid.new_GridRangeSelectEvent(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridRangeSelectEvent_swiginit(self,_grid.new_GridRangeSelectEvent(*args, **kwargs))
     def GetTopLeftCoords(*args, **kwargs):
         """GetTopLeftCoords(self) -> GridCellCoords"""
         return _grid.GridRangeSelectEvent_GetTopLeftCoords(*args, **kwargs)
@@ -2497,27 +2143,19 @@ class GridRangeSelectEvent(_core.NotifyEvent):
         """AltDown(self) -> bool"""
         return _grid.GridRangeSelectEvent_AltDown(*args, **kwargs)
 
-
-class GridRangeSelectEventPtr(GridRangeSelectEvent):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridRangeSelectEvent
-_grid.GridRangeSelectEvent_swigregister(GridRangeSelectEventPtr)
+GridRangeSelectEvent_swigregister = _grid.GridRangeSelectEvent_swigregister
+GridRangeSelectEvent_swigregister(GridRangeSelectEvent)
 
 class GridEditorCreatedEvent(_core.CommandEvent):
     """Proxy of C++ GridEditorCreatedEvent class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridEditorCreatedEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, int id, wxEventType type, Object obj, int row, int col, 
             Control ctrl) -> GridEditorCreatedEvent
         """
-        newobj = _grid.new_GridEditorCreatedEvent(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _grid.GridEditorCreatedEvent_swiginit(self,_grid.new_GridEditorCreatedEvent(*args, **kwargs))
     def GetRow(*args, **kwargs):
         """GetRow(self) -> int"""
         return _grid.GridEditorCreatedEvent_GetRow(*args, **kwargs)
@@ -2542,13 +2180,8 @@ class GridEditorCreatedEvent(_core.CommandEvent):
         """SetControl(self, Control ctrl)"""
         return _grid.GridEditorCreatedEvent_SetControl(*args, **kwargs)
 
-
-class GridEditorCreatedEventPtr(GridEditorCreatedEvent):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GridEditorCreatedEvent
-_grid.GridEditorCreatedEvent_swigregister(GridEditorCreatedEventPtr)
+GridEditorCreatedEvent_swigregister = _grid.GridEditorCreatedEvent_swigregister
+GridEditorCreatedEvent_swigregister(GridEditorCreatedEvent)
 
 wxEVT_GRID_CELL_LEFT_CLICK = _grid.wxEVT_GRID_CELL_LEFT_CLICK
 wxEVT_GRID_CELL_RIGHT_CLICK = _grid.wxEVT_GRID_CELL_RIGHT_CLICK
