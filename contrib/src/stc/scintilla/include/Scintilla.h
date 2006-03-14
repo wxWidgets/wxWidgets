@@ -11,7 +11,7 @@
 #ifndef SCINTILLA_H
 #define SCINTILLA_H
 
-#if LCCWIN
+#if defined(LCCWIN) && LCCWIN
 typedef BOOL bool;
 #endif
 
@@ -25,7 +25,7 @@ int Scintilla_LinkLexers();
 // Here should be placed typedefs for uptr_t, an unsigned integer type large enough to
 // hold a pointer and sptr_t, a signed integer large enough to hold a pointer.
 // May need to be changed for 64 bit platforms.
-#if _MSC_VER >= 1300
+#if defined(_MSC_VER) && _MSC_VER >= 1300
 #include <BaseTsd.h>
 #endif
 #ifdef MAXULONG_PTR
