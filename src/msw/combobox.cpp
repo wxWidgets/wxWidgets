@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/combobox.cpp
+// Name:        src/msw/combobox.cpp
 // Purpose:     wxComboBox class
 // Author:      Julian Smart
 // Modified by:
@@ -323,9 +323,11 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
     switch ( param )
     {
         case CBN_SELENDOK:
+#ifndef __SMARTPHONE__
             // we need to reset this to prevent the selection from being undone
             // by wxChoice, see wxChoice::MSWCommand() and comments there
             m_lastAcceptedSelection = wxID_NONE;
+#endif
 
             // set these variables so that they could be also fixed in
             // CBN_EDITCHANGE below
@@ -786,4 +788,3 @@ void wxComboBox::OnUpdateSelectAll(wxUpdateUIEvent& event)
 }
 
 #endif // wxUSE_COMBOBOX
-
