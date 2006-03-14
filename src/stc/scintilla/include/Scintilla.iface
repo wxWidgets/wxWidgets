@@ -1821,6 +1821,11 @@ val SCLEX_FLAGSHIP=73
 val SCLEX_CSOUND=74
 val SCLEX_FREEBASIC=75
 
+# These are deprecated, STC_LEX_HTML should be used instead.
+val SCLEX_ASP=29
+val SCLEX_PHP=30
+
+
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
 val SCLEX_AUTOMATIC=1000

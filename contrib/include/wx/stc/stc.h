@@ -382,6 +382,10 @@
 #define wxSTC_LEX_CSOUND 74
 #define wxSTC_LEX_FREEBASIC 75
 
+// These are deprecated, STC_LEX_HTML should be used instead.
+#define wxSTC_LEX_ASP 29
+#define wxSTC_LEX_PHP 30
+
 // When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 // value assigned in sequence from SCLEX_AUTOMATIC+1.
 #define wxSTC_LEX_AUTOMATIC 1000
