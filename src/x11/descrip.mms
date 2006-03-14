@@ -47,7 +47,6 @@ OBJECTS_X11=app.obj,dc.obj,\
 		gdiobj.obj,\
 		gsockx11.obj,\
 		icon.obj,\
-		main.obj,\
 		minifram.obj,\
 		nanox.obj,\
 		palette.obj,\
@@ -81,7 +80,6 @@ SOURCES = \
 		gdiobj.cpp,\
 		gsockx11.cpp,\
 		icon.cpp,\
-		main.cpp,\
 		minifram.cpp,\
 		nanox.c,\
 		palette.cpp,\
@@ -124,7 +122,6 @@ font.obj : font.cpp
 gdiobj.obj : gdiobj.cpp
 gsockx11.obj : gsockx11.cpp
 icon.obj : icon.cpp
-main.obj : main.cpp
 minifram.obj : minifram.cpp
 nanox.obj : nanox.c
 palette.obj : palette.cpp
