@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------
 # Name:        wx.lib.splitter
 # Purpose:     A class similar to wx.SplitterWindow but that allows more
-#              a single split
+#              than a single split
 #
 # Author:      Robin Dunn
 #
