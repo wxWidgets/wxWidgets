@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG 1.3.27.
+# This file was created automatically by SWIG 1.3.29.
 # Don't modify this file, modify the SWIG interface instead.
 
 """
@@ -7,17 +7,17 @@ Various *gizmo* classes: `DynamicSashWindow`, `EditableListBox`,
 """
 
 import _gizmos
-
+import new
+new_instancemethod = new.instancemethod
 def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "thisown"): return self.this.own(value)
     if (name == "this"):
-        if isinstance(value, class_type):
-            self.__dict__[name] = value.this
-            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
-            del value.thisown
+        if type(value).__name__ == 'PySwigObject':
+            self.__dict__[name] = value
             return
     method = class_type.__swig_setmethods__.get(name,None)
     if method: return method(self,value)
-    if (not static) or hasattr(self,name) or (name == "thisown"):
+    if (not static) or hasattr(self,name):
         self.__dict__[name] = value
     else:
         raise AttributeError("You cannot add attributes to %s" % self)
@@ -26,9 +26,15 @@ def _swig_setattr(self,class_type,name,value):
     return _swig_setattr_nondynamic(self,class_type,name,value,0)
 
 def _swig_getattr(self,class_type,name):
+    if (name == "thisown"): return self.this.own()
     method = class_type.__swig_getmethods__.get(name,None)
     if method: return method(self)
     raise AttributeError,name
+
+def _swig_repr(self):
+    try: strthis = "proxy of " + self.this.__repr__()
+    except: strthis = ""
+    return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis,)
 
 import types
 try:
@@ -42,7 +48,8 @@ del types
 
 def _swig_setattr_nondynamic_method(set):
     def set_attr(self,name,value):
-        if hasattr(self,name) or (name in ("this", "thisown")):
+        if (name == "thisown"): return self.this.own(value)
+        if hasattr(self,name) or (name == "this"):
             set(self,name,value)
         else:
             raise AttributeError("You cannot add attributes to %s" % self)
@@ -60,21 +67,13 @@ wxEVT_DYNAMIC_SASH_SPLIT = _gizmos.wxEVT_DYNAMIC_SASH_SPLIT
 wxEVT_DYNAMIC_SASH_UNIFY = _gizmos.wxEVT_DYNAMIC_SASH_UNIFY
 class DynamicSashSplitEvent(_core.CommandEvent):
     """Proxy of C++ DynamicSashSplitEvent class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxDynamicSashSplitEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, Object target) -> DynamicSashSplitEvent"""
-        newobj = _gizmos.new_DynamicSashSplitEvent(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-
-class DynamicSashSplitEventPtr(DynamicSashSplitEvent):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = DynamicSashSplitEvent
-_gizmos.DynamicSashSplitEvent_swigregister(DynamicSashSplitEventPtr)
+        _gizmos.DynamicSashSplitEvent_swiginit(self,_gizmos.new_DynamicSashSplitEvent(*args, **kwargs))
+DynamicSashSplitEvent_swigregister = _gizmos.DynamicSashSplitEvent_swigregister
+DynamicSashSplitEvent_swigregister(DynamicSashSplitEvent)
 cvar = _gizmos.cvar
 DynamicSashNameStr = cvar.DynamicSashNameStr
 EditableListBoxNameStr = cvar.EditableListBoxNameStr
@@ -83,36 +82,25 @@ StaticPictureNameStr = cvar.StaticPictureNameStr
 
 class DynamicSashUnifyEvent(_core.CommandEvent):
     """Proxy of C++ DynamicSashUnifyEvent class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxDynamicSashUnifyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, Object target) -> DynamicSashUnifyEvent"""
-        newobj = _gizmos.new_DynamicSashUnifyEvent(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-
-class DynamicSashUnifyEventPtr(DynamicSashUnifyEvent):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = DynamicSashUnifyEvent
-_gizmos.DynamicSashUnifyEvent_swigregister(DynamicSashUnifyEventPtr)
+        _gizmos.DynamicSashUnifyEvent_swiginit(self,_gizmos.new_DynamicSashUnifyEvent(*args, **kwargs))
+DynamicSashUnifyEvent_swigregister = _gizmos.DynamicSashUnifyEvent_swigregister
+DynamicSashUnifyEvent_swigregister(DynamicSashUnifyEvent)
 
 class DynamicSashWindow(_core.Window):
     """Proxy of C++ DynamicSashWindow class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxDynamicSashWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxCLIP_CHILDREN|wxDS_MANAGE_SCROLLBARS|wxDS_DRAG_CORNER, 
             String name=DynamicSashNameStr) -> DynamicSashWindow
         """
-        newobj = _gizmos.new_DynamicSashWindow(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _gizmos.DynamicSashWindow_swiginit(self,_gizmos.new_DynamicSashWindow(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
@@ -131,18 +119,12 @@ class DynamicSashWindow(_core.Window):
         """GetVScrollBar(self, Window child) -> ScrollBar"""
         return _gizmos.DynamicSashWindow_GetVScrollBar(*args, **kwargs)
 
-
-class DynamicSashWindowPtr(DynamicSashWindow):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = DynamicSashWindow
-_gizmos.DynamicSashWindow_swigregister(DynamicSashWindowPtr)
+DynamicSashWindow_swigregister = _gizmos.DynamicSashWindow_swigregister
+DynamicSashWindow_swigregister(DynamicSashWindow)
 
 def PreDynamicSashWindow(*args, **kwargs):
     """PreDynamicSashWindow() -> DynamicSashWindow"""
     val = _gizmos.new_PreDynamicSashWindow(*args, **kwargs)
-    val.thisown = 1
     return val
 
 EVT_DYNAMIC_SASH_SPLIT = wx.PyEventBinder( wxEVT_DYNAMIC_SASH_SPLIT, 1 )
@@ -153,19 +135,16 @@ EL_ALLOW_EDIT = _gizmos.EL_ALLOW_EDIT
 EL_ALLOW_DELETE = _gizmos.EL_ALLOW_DELETE
 class EditableListBox(_windows.Panel):
     """Proxy of C++ EditableListBox class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxEditableListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, String label=EmptyString, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE, 
             String name=EditableListBoxNameStr) -> EditableListBox
         """
-        newobj = _gizmos.new_EditableListBox(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _gizmos.EditableListBox_swiginit(self,_gizmos.new_EditableListBox(*args, **kwargs))
         self._setOORInfo(self)
 
     def SetStrings(*args, **kwargs):
@@ -200,27 +179,19 @@ class EditableListBox(_windows.Panel):
         """GetEditButton(self) -> BitmapButton"""
         return _gizmos.EditableListBox_GetEditButton(*args, **kwargs)
 
-
-class EditableListBoxPtr(EditableListBox):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = EditableListBox
-_gizmos.EditableListBox_swigregister(EditableListBoxPtr)
+EditableListBox_swigregister = _gizmos.EditableListBox_swigregister
+EditableListBox_swigregister(EditableListBox)
 
 class RemotelyScrolledTreeCtrl(_controls.TreeCtrl):
     """Proxy of C++ RemotelyScrolledTreeCtrl class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxRemotelyScrolledTreeCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=TR_HAS_BUTTONS) -> RemotelyScrolledTreeCtrl
         """
-        newobj = _gizmos.new_RemotelyScrolledTreeCtrl(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _gizmos.RemotelyScrolledTreeCtrl_swiginit(self,_gizmos.new_RemotelyScrolledTreeCtrl(*args, **kwargs))
         self._setOORInfo(self)
 
     def HideVScrollbar(*args, **kwargs):
@@ -247,27 +218,19 @@ class RemotelyScrolledTreeCtrl(_controls.TreeCtrl):
         """GetCompanionWindow(self) -> Window"""
         return _gizmos.RemotelyScrolledTreeCtrl_GetCompanionWindow(*args, **kwargs)
 
-
-class RemotelyScrolledTreeCtrlPtr(RemotelyScrolledTreeCtrl):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = RemotelyScrolledTreeCtrl
-_gizmos.RemotelyScrolledTreeCtrl_swigregister(RemotelyScrolledTreeCtrlPtr)
+RemotelyScrolledTreeCtrl_swigregister = _gizmos.RemotelyScrolledTreeCtrl_swigregister
+RemotelyScrolledTreeCtrl_swigregister(RemotelyScrolledTreeCtrl)
 
 class TreeCompanionWindow(_core.Window):
     """Proxy of C++ TreeCompanionWindow class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyTreeCompanionWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0) -> TreeCompanionWindow
         """
-        newobj = _gizmos.new_TreeCompanionWindow(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _gizmos.TreeCompanionWindow_swiginit(self,_gizmos.new_TreeCompanionWindow(*args, **kwargs))
         self._setOORInfo(self);self._setCallbackInfo(self, TreeCompanionWindow)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -282,59 +245,38 @@ class TreeCompanionWindow(_core.Window):
         """SetTreeCtrl(self, RemotelyScrolledTreeCtrl treeCtrl)"""
         return _gizmos.TreeCompanionWindow_SetTreeCtrl(*args, **kwargs)
 
-
-class TreeCompanionWindowPtr(TreeCompanionWindow):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = TreeCompanionWindow
-_gizmos.TreeCompanionWindow_swigregister(TreeCompanionWindowPtr)
+TreeCompanionWindow_swigregister = _gizmos.TreeCompanionWindow_swigregister
+TreeCompanionWindow_swigregister(TreeCompanionWindow)
 
 class ThinSplitterWindow(_windows.SplitterWindow):
     """Proxy of C++ ThinSplitterWindow class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxThinSplitterWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxSP_3D|wxCLIP_CHILDREN) -> ThinSplitterWindow
         """
-        newobj = _gizmos.new_ThinSplitterWindow(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _gizmos.ThinSplitterWindow_swiginit(self,_gizmos.new_ThinSplitterWindow(*args, **kwargs))
         self._setOORInfo(self)
 
-
-class ThinSplitterWindowPtr(ThinSplitterWindow):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = ThinSplitterWindow
-_gizmos.ThinSplitterWindow_swigregister(ThinSplitterWindowPtr)
+ThinSplitterWindow_swigregister = _gizmos.ThinSplitterWindow_swigregister
+ThinSplitterWindow_swigregister(ThinSplitterWindow)
 
 class SplitterScrolledWindow(_windows.ScrolledWindow):
     """Proxy of C++ SplitterScrolledWindow class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxSplitterScrolledWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0) -> SplitterScrolledWindow
         """
-        newobj = _gizmos.new_SplitterScrolledWindow(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _gizmos.SplitterScrolledWindow_swiginit(self,_gizmos.new_SplitterScrolledWindow(*args, **kwargs))
         self._setOORInfo(self)
 
-
-class SplitterScrolledWindowPtr(SplitterScrolledWindow):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = SplitterScrolledWindow
-_gizmos.SplitterScrolledWindow_swigregister(SplitterScrolledWindowPtr)
+SplitterScrolledWindow_swigregister = _gizmos.SplitterScrolledWindow_swigregister
+SplitterScrolledWindow_swigregister(SplitterScrolledWindow)
 
 LED_ALIGN_LEFT = _gizmos.LED_ALIGN_LEFT
 LED_ALIGN_RIGHT = _gizmos.LED_ALIGN_RIGHT
@@ -343,17 +285,14 @@ LED_ALIGN_MASK = _gizmos.LED_ALIGN_MASK
 LED_DRAW_FADED = _gizmos.LED_DRAW_FADED
 class LEDNumberCtrl(_core.Control):
     """Proxy of C++ LEDNumberCtrl class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxLEDNumberCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxLED_ALIGN_LEFT|wxLED_DRAW_FADED) -> LEDNumberCtrl
         """
-        newobj = _gizmos.new_LEDNumberCtrl(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _gizmos.LEDNumberCtrl_swiginit(self,_gizmos.new_LEDNumberCtrl(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
@@ -389,18 +328,12 @@ class LEDNumberCtrl(_core.Control):
         """SetValue(self, String Value, bool Redraw=True)"""
         return _gizmos.LEDNumberCtrl_SetValue(*args, **kwargs)
 
-
-class LEDNumberCtrlPtr(LEDNumberCtrl):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = LEDNumberCtrl
-_gizmos.LEDNumberCtrl_swigregister(LEDNumberCtrlPtr)
+LEDNumberCtrl_swigregister = _gizmos.LEDNumberCtrl_swigregister
+LEDNumberCtrl_swigregister(LEDNumberCtrl)
 
 def PreLEDNumberCtrl(*args, **kwargs):
     """PreLEDNumberCtrl() -> LEDNumberCtrl"""
     val = _gizmos.new_PreLEDNumberCtrl(*args, **kwargs)
-    val.thisown = 1
     return val
 
 TL_ALIGN_LEFT = _gizmos.TL_ALIGN_LEFT
@@ -416,17 +349,14 @@ TR_DONT_ADJUST_MAC = _gizmos.TR_DONT_ADJUST_MAC
 wx.TR_DONT_ADJUST_MAC = TR_DONT_ADJUST_MAC 
 class TreeListColumnInfo(_core.Object):
     """Proxy of C++ TreeListColumnInfo class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxTreeListColumnInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, String text=EmptyString, int image=-1, size_t width=100, 
             bool shown=True, int alignment=TL_ALIGN_LEFT) -> TreeListColumnInfo
         """
-        newobj = _gizmos.new_TreeListColumnInfo(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _gizmos.TreeListColumnInfo_swiginit(self,_gizmos.new_TreeListColumnInfo(*args, **kwargs))
     def GetShown(*args, **kwargs):
         """GetShown(self) -> bool"""
         return _gizmos.TreeListColumnInfo_GetShown(*args, **kwargs)
@@ -475,29 +405,21 @@ class TreeListColumnInfo(_core.Object):
         """SetWidth(self, size_t with)"""
         return _gizmos.TreeListColumnInfo_SetWidth(*args, **kwargs)
 
-
-class TreeListColumnInfoPtr(TreeListColumnInfo):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = TreeListColumnInfo
-_gizmos.TreeListColumnInfo_swigregister(TreeListColumnInfoPtr)
+TreeListColumnInfo_swigregister = _gizmos.TreeListColumnInfo_swigregister
+TreeListColumnInfo_swigregister(TreeListColumnInfo)
 
 class TreeListCtrl(_core.Control):
     """Proxy of C++ TreeListCtrl class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyTreeListCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
             Validator validator=DefaultValidator, 
             String name=TreeListCtrlNameStr) -> TreeListCtrl
         """
-        newobj = _gizmos.new_TreeListCtrl(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _gizmos.TreeListCtrl_swiginit(self,_gizmos.new_TreeListCtrl(*args, **kwargs))
         self._setOORInfo(self);self._setCallbackInfo(self, TreeListCtrl)
 
     def Create(*args, **kwargs):
@@ -917,18 +839,12 @@ class TreeListCtrl(_core.Control):
         """GetMainWindow(self) -> ScrolledWindow"""
         return _gizmos.TreeListCtrl_GetMainWindow(*args, **kwargs)
 
-
-class TreeListCtrlPtr(TreeListCtrl):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = TreeListCtrl
-_gizmos.TreeListCtrl_swigregister(TreeListCtrlPtr)
+TreeListCtrl_swigregister = _gizmos.TreeListCtrl_swigregister
+TreeListCtrl_swigregister(TreeListCtrl)
 
 def PreTreeListCtrl(*args, **kwargs):
     """PreTreeListCtrl() -> TreeListCtrl"""
     val = _gizmos.new_PreTreeListCtrl(*args, **kwargs)
-    val.thisown = 1
     return val
 
 SCALE_HORIZONTAL = _gizmos.SCALE_HORIZONTAL
@@ -937,18 +853,15 @@ SCALE_UNIFORM = _gizmos.SCALE_UNIFORM
 SCALE_CUSTOM = _gizmos.SCALE_CUSTOM
 class StaticPicture(_core.Control):
     """Proxy of C++ StaticPicture class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxStaticPicture instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, Bitmap label=wxNullBitmap, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, String name=StaticPictureNameStr) -> StaticPicture
         """
-        newobj = _gizmos.new_StaticPicture(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _gizmos.StaticPicture_swiginit(self,_gizmos.new_StaticPicture(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
@@ -999,18 +912,12 @@ class StaticPicture(_core.Control):
         """GetCustomScale(self, float OUTPUT, float OUTPUT)"""
         return _gizmos.StaticPicture_GetCustomScale(*args, **kwargs)
 
-
-class StaticPicturePtr(StaticPicture):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = StaticPicture
-_gizmos.StaticPicture_swigregister(StaticPicturePtr)
+StaticPicture_swigregister = _gizmos.StaticPicture_swigregister
+StaticPicture_swigregister(StaticPicture)
 
 def PreStaticPicture(*args, **kwargs):
     """PreStaticPicture() -> StaticPicture"""
     val = _gizmos.new_PreStaticPicture(*args, **kwargs)
-    val.thisown = 1
     return val
 
 

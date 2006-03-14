@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG 1.3.27.
+# This file was created automatically by SWIG 1.3.29.
 # Don't modify this file, modify the SWIG interface instead.
 
 """
@@ -6,17 +6,17 @@ wx.webkit.WebKitCtrl for Mac OSX.
 """
 
 import _webkit
-
+import new
+new_instancemethod = new.instancemethod
 def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "thisown"): return self.this.own(value)
     if (name == "this"):
-        if isinstance(value, class_type):
-            self.__dict__[name] = value.this
-            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
-            del value.thisown
+        if type(value).__name__ == 'PySwigObject':
+            self.__dict__[name] = value
             return
     method = class_type.__swig_setmethods__.get(name,None)
     if method: return method(self,value)
-    if (not static) or hasattr(self,name) or (name == "thisown"):
+    if (not static) or hasattr(self,name):
         self.__dict__[name] = value
     else:
         raise AttributeError("You cannot add attributes to %s" % self)
@@ -25,9 +25,15 @@ def _swig_setattr(self,class_type,name,value):
     return _swig_setattr_nondynamic(self,class_type,name,value,0)
 
 def _swig_getattr(self,class_type,name):
+    if (name == "thisown"): return self.this.own()
     method = class_type.__swig_getmethods__.get(name,None)
     if method: return method(self)
     raise AttributeError,name
+
+def _swig_repr(self):
+    try: strthis = "proxy of " + self.this.__repr__()
+    except: strthis = ""
+    return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis,)
 
 import types
 try:
@@ -41,7 +47,8 @@ del types
 
 def _swig_setattr_nondynamic_method(set):
     def set_attr(self,name,value):
-        if hasattr(self,name) or (name in ("this", "thisown")):
+        if (name == "thisown"): return self.this.own(value)
+        if hasattr(self,name) or (name == "this"):
             set(self,name,value)
         else:
             raise AttributeError("You cannot add attributes to %s" % self)
@@ -53,19 +60,16 @@ wx = _core
 __docfilter__ = wx.__DocFilter(globals()) 
 class WebKitCtrl(_core.Control):
     """Proxy of C++ WebKitCtrl class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxWebKitCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int winID=-1, String strURL=EmptyString, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
             String name=WebKitNameStr) -> WebKitCtrl
         """
-        newobj = _webkit.new_WebKitCtrl(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _webkit.WebKitCtrl_swiginit(self,_webkit.new_WebKitCtrl(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
@@ -125,20 +129,14 @@ class WebKitCtrl(_core.Control):
         """GetPageTitle(self) -> String"""
         return _webkit.WebKitCtrl_GetPageTitle(*args, **kwargs)
 
-
-class WebKitCtrlPtr(WebKitCtrl):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = WebKitCtrl
-_webkit.WebKitCtrl_swigregister(WebKitCtrlPtr)
+WebKitCtrl_swigregister = _webkit.WebKitCtrl_swigregister
+WebKitCtrl_swigregister(WebKitCtrl)
 cvar = _webkit.cvar
 WebKitNameStr = cvar.WebKitNameStr
 
 def PreWebKitCtrl(*args, **kwargs):
     """PreWebKitCtrl() -> WebKitCtrl"""
     val = _webkit.new_PreWebKitCtrl(*args, **kwargs)
-    val.thisown = 1
     return val
 
 WEBKIT_STATE_START = _webkit.WEBKIT_STATE_START
@@ -150,14 +148,11 @@ WEBKIT_STATE_FAILED = _webkit.WEBKIT_STATE_FAILED
 wxEVT_WEBKIT_STATE_CHANGED = _webkit.wxEVT_WEBKIT_STATE_CHANGED
 class WebKitStateChangedEvent(_core.CommandEvent):
     """Proxy of C++ WebKitStateChangedEvent class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxWebKitStateChangedEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, Window win=None) -> WebKitStateChangedEvent"""
-        newobj = _webkit.new_WebKitStateChangedEvent(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _webkit.WebKitStateChangedEvent_swiginit(self,_webkit.new_WebKitStateChangedEvent(*args, **kwargs))
     def GetState(*args, **kwargs):
         """GetState(self) -> int"""
         return _webkit.WebKitStateChangedEvent_GetState(*args, **kwargs)
@@ -174,13 +169,8 @@ class WebKitStateChangedEvent(_core.CommandEvent):
         """SetURL(self, String url)"""
         return _webkit.WebKitStateChangedEvent_SetURL(*args, **kwargs)
 
-
-class WebKitStateChangedEventPtr(WebKitStateChangedEvent):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = WebKitStateChangedEvent
-_webkit.WebKitStateChangedEvent_swigregister(WebKitStateChangedEventPtr)
+WebKitStateChangedEvent_swigregister = _webkit.WebKitStateChangedEvent_swigregister
+WebKitStateChangedEvent_swigregister(WebKitStateChangedEvent)
 
 EVT_WEBKIT_STATE_CHANGED = wx.PyEventBinder(wxEVT_WEBKIT_STATE_CHANGED)
 
