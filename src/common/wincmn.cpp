@@ -715,6 +715,18 @@ wxSize wxWindowBase::DoGetVirtualSize() const
     return size;
 }
 
+void wxWindowBase::DoGetScreenPosition(int *x, int *y) const
+{
+    // screen position is the same as (0, 0) in client coords for non TLWs (and
+    // TLWs override this method)
+    if ( x )
+        *x = 0;
+    if ( y )
+        *y = 0;
+
+    return ClientToScreen(x, y);
+}
+
 // ----------------------------------------------------------------------------
 // show/hide/enable/disable the window
 // ----------------------------------------------------------------------------

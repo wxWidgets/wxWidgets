@@ -222,6 +222,8 @@ public:
     void Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING)
         { Move(pt.x, pt.y, flags); }
 
+    void SetPosition(const wxPoint& pt) { Move(pt); }
+
         // Z-order
     virtual void Raise() = 0;
     virtual void Lower() = 0;
@@ -236,18 +238,30 @@ public:
     void SetClientSize(const wxRect& rect)
         { SetClientSize( rect.width, rect.height ); }
 
-        // get the window position and/or size (pointers may be NULL)
+        // get the window position (pointers may be NULL): notice that it is in
+        // client coordinates for child windows and screen coordinates for the
+        // top level ones, use GetScreenPosition() if you need screen
+        // coordinates for all kinds of windows
     void GetPosition( int *x, int *y ) const { DoGetPosition(x, y); }
     wxPoint GetPosition() const
     {
-        int w, h;
-        DoGetPosition(&w, &h);
+        int x, y;
+        DoGetPosition(&x, &y);
 
-        return wxPoint(w, h);
+        return wxPoint(x, y);
     }
 
-    void SetPosition( const wxPoint& pt ) { Move( pt ) ; }
+        // get the window position in screen coordinates
+    void GetScreenPosition(int *x, int *y) const { DoGetScreenPosition(x, y); }
+    wxPoint GetScreenPosition() const
+    {
+        int x, y;
+        DoGetScreenPosition(&x, &y);
 
+        return wxPoint(x, y);
+    }
+
+        // get the window size (pointers may be NULL)
     void GetSize( int *w, int *h ) const { DoGetSize(w, h); }
     wxSize GetSize() const
     {
@@ -256,22 +270,32 @@ public:
         return wxSize(w, h);
     }
 
-    wxRect GetRect() const
-    {
-        int x, y, w, h;
-        GetPosition(& x, & y);
-        GetSize(& w, & h);
-
-        return wxRect(x, y, w, h);
-    }
-
     void GetClientSize( int *w, int *h ) const { DoGetClientSize(w, h); }
     wxSize GetClientSize() const
     {
         int w, h;
-        DoGetClientSize(& w, & h);
+        DoGetClientSize(&w, &h);
 
         return wxSize(w, h);
+    }
+
+        // get the position and size at once
+    wxRect GetRect() const
+    {
+        int x, y, w, h;
+        GetPosition(&x, &y);
+        GetSize(&w, &h);
+
+        return wxRect(x, y, w, h);
+    }
+
+    wxRect GetScreenRect() const
+    {
+        int x, y, w, h;
+        GetScreenPosition(&x, &y);
+        GetSize(&w, &h);
+
+        return wxRect(x, y, w, h);
     }
 
         // get the origin of the client area of the window relative to the
@@ -1258,9 +1282,10 @@ protected:
     virtual void DoReleaseMouse() = 0;
 
     // retrieve the position/size of the window
-    virtual void DoGetPosition( int *x, int *y ) const = 0;
-    virtual void DoGetSize( int *width, int *height ) const = 0;
-    virtual void DoGetClientSize( int *width, int *height ) const = 0;
+    virtual void DoGetPosition(int *x, int *y) const = 0;
+    virtual void DoGetScreenPosition(int *x, int *y) const;
+    virtual void DoGetSize(int *width, int *height) const = 0;
+    virtual void DoGetClientSize(int *width, int *height) const = 0;
 
     // get the size which best suits the window: for a control, it would be
     // the minimal size which doesn't truncate the control, for a panel - the

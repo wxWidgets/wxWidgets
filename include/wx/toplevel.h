@@ -224,6 +224,12 @@ protected:
     // add support for wxCENTRE_ON_SCREEN
     virtual void DoCentre(int dir);
 
+    // no need to do client to screen translation to get our position in screen
+    // coordinates: this is already the case
+    virtual void DoGetScreenPosition(int *x, int *y) const
+    {
+        return DoGetPosition(x, y);
+    }
 
     // test whether this window makes part of the frame
     // (menubar, toolbar and statusbar are excluded from automatic layout)
