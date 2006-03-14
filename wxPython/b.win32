@@ -1,12 +1,8 @@
 #!/bin/bash
 # ----------------------------------------------------------------------
 
-# To Robin: I tried to avoid making any changes to the existing
-# build scripts, but my env requires me to specify Windows paths...
-# if this breaks something at your end, let me know and we can
-# figure out some solution for both of us.
 if [ "$SWIGDIR" = "" ]; then
-  SWIGDIR=$PROJECTS\\SWIG-1.3.27
+  SWIGDIR=$PROJECTS\\SWIG-1.3.29
 fi
 
 
