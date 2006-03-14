@@ -1,18 +1,18 @@
-# This file was created automatically by SWIG 1.3.27.
+# This file was created automatically by SWIG 1.3.29.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _misc_
-
+import new
+new_instancemethod = new.instancemethod
 def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "thisown"): return self.this.own(value)
     if (name == "this"):
-        if isinstance(value, class_type):
-            self.__dict__[name] = value.this
-            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
-            del value.thisown
+        if type(value).__name__ == 'PySwigObject':
+            self.__dict__[name] = value
             return
     method = class_type.__swig_setmethods__.get(name,None)
     if method: return method(self,value)
-    if (not static) or hasattr(self,name) or (name == "thisown"):
+    if (not static) or hasattr(self,name):
         self.__dict__[name] = value
     else:
         raise AttributeError("You cannot add attributes to %s" % self)
@@ -21,9 +21,15 @@ def _swig_setattr(self,class_type,name,value):
     return _swig_setattr_nondynamic(self,class_type,name,value,0)
 
 def _swig_getattr(self,class_type,name):
+    if (name == "thisown"): return self.this.own()
     method = class_type.__swig_getmethods__.get(name,None)
     if method: return method(self)
     raise AttributeError,name
+
+def _swig_repr(self):
+    try: strthis = "proxy of " + self.this.__repr__()
+    except: strthis = ""
+    return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis,)
 
 import types
 try:
@@ -37,7 +43,8 @@ del types
 
 def _swig_setattr_nondynamic_method(set):
     def set_attr(self,name,value):
-        if hasattr(self,name) or (name in ("this", "thisown")):
+        if (name == "thisown"): return self.this.own(value)
+        if hasattr(self,name) or (name == "this"):
             set(self,name,value)
         else:
             raise AttributeError("You cannot add attributes to %s" % self)
@@ -142,9 +149,9 @@ SYS_SCREEN_SMALL = _misc_.SYS_SCREEN_SMALL
 SYS_SCREEN_DESKTOP = _misc_.SYS_SCREEN_DESKTOP
 class SystemSettings(object):
     """Proxy of C++ SystemSettings class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxSystemSettings instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def GetColour(*args, **kwargs):
         """GetColour(int index) -> Colour"""
         return _misc_.SystemSettings_GetColour(*args, **kwargs)
@@ -175,48 +182,40 @@ class SystemSettings(object):
         return _misc_.SystemSettings_SetScreenType(*args, **kwargs)
 
     SetScreenType = staticmethod(SetScreenType)
-
-class SystemSettingsPtr(SystemSettings):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = SystemSettings
-_misc_.SystemSettings_swigregister(SystemSettingsPtr)
+SystemSettings_swigregister = _misc_.SystemSettings_swigregister
+SystemSettings_swigregister(SystemSettings)
 
 def SystemSettings_GetColour(*args, **kwargs):
-    """SystemSettings_GetColour(int index) -> Colour"""
-    return _misc_.SystemSettings_GetColour(*args, **kwargs)
+  """SystemSettings_GetColour(int index) -> Colour"""
+  return _misc_.SystemSettings_GetColour(*args, **kwargs)
 
 def SystemSettings_GetFont(*args, **kwargs):
-    """SystemSettings_GetFont(int index) -> Font"""
-    return _misc_.SystemSettings_GetFont(*args, **kwargs)
+  """SystemSettings_GetFont(int index) -> Font"""
+  return _misc_.SystemSettings_GetFont(*args, **kwargs)
 
 def SystemSettings_GetMetric(*args, **kwargs):
-    """SystemSettings_GetMetric(int index, Window win=None) -> int"""
-    return _misc_.SystemSettings_GetMetric(*args, **kwargs)
+  """SystemSettings_GetMetric(int index, Window win=None) -> int"""
+  return _misc_.SystemSettings_GetMetric(*args, **kwargs)
 
 def SystemSettings_HasFeature(*args, **kwargs):
-    """SystemSettings_HasFeature(int index) -> bool"""
-    return _misc_.SystemSettings_HasFeature(*args, **kwargs)
+  """SystemSettings_HasFeature(int index) -> bool"""
+  return _misc_.SystemSettings_HasFeature(*args, **kwargs)
 
-def SystemSettings_GetScreenType(*args, **kwargs):
-    """SystemSettings_GetScreenType() -> int"""
-    return _misc_.SystemSettings_GetScreenType(*args, **kwargs)
+def SystemSettings_GetScreenType(*args):
+  """SystemSettings_GetScreenType() -> int"""
+  return _misc_.SystemSettings_GetScreenType(*args)
 
 def SystemSettings_SetScreenType(*args, **kwargs):
-    """SystemSettings_SetScreenType(int screen)"""
-    return _misc_.SystemSettings_SetScreenType(*args, **kwargs)
+  """SystemSettings_SetScreenType(int screen)"""
+  return _misc_.SystemSettings_SetScreenType(*args, **kwargs)
 
 class SystemOptions(_core.Object):
     """Proxy of C++ SystemOptions class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxSystemOptions instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> SystemOptions"""
-        newobj = _misc_.new_SystemOptions(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.SystemOptions_swiginit(self,_misc_.new_SystemOptions(*args, **kwargs))
     def SetOption(*args, **kwargs):
         """SetOption(String name, String value)"""
         return _misc_.SystemOptions_SetOption(*args, **kwargs)
@@ -247,172 +246,167 @@ class SystemOptions(_core.Object):
         return _misc_.SystemOptions_IsFalse(*args, **kwargs)
 
     IsFalse = staticmethod(IsFalse)
-
-class SystemOptionsPtr(SystemOptions):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = SystemOptions
-_misc_.SystemOptions_swigregister(SystemOptionsPtr)
+SystemOptions_swigregister = _misc_.SystemOptions_swigregister
+SystemOptions_swigregister(SystemOptions)
 cvar = _misc_.cvar
 WINDOW_DEFAULT_VARIANT = cvar.WINDOW_DEFAULT_VARIANT
 
 def SystemOptions_SetOption(*args, **kwargs):
-    """SystemOptions_SetOption(String name, String value)"""
-    return _misc_.SystemOptions_SetOption(*args, **kwargs)
+  """SystemOptions_SetOption(String name, String value)"""
+  return _misc_.SystemOptions_SetOption(*args, **kwargs)
 
 def SystemOptions_SetOptionInt(*args, **kwargs):
-    """SystemOptions_SetOptionInt(String name, int value)"""
-    return _misc_.SystemOptions_SetOptionInt(*args, **kwargs)
+  """SystemOptions_SetOptionInt(String name, int value)"""
+  return _misc_.SystemOptions_SetOptionInt(*args, **kwargs)
 
 def SystemOptions_GetOption(*args, **kwargs):
-    """SystemOptions_GetOption(String name) -> String"""
-    return _misc_.SystemOptions_GetOption(*args, **kwargs)
+  """SystemOptions_GetOption(String name) -> String"""
+  return _misc_.SystemOptions_GetOption(*args, **kwargs)
 
 def SystemOptions_GetOptionInt(*args, **kwargs):
-    """SystemOptions_GetOptionInt(String name) -> int"""
-    return _misc_.SystemOptions_GetOptionInt(*args, **kwargs)
+  """SystemOptions_GetOptionInt(String name) -> int"""
+  return _misc_.SystemOptions_GetOptionInt(*args, **kwargs)
 
 def SystemOptions_HasOption(*args, **kwargs):
-    """SystemOptions_HasOption(String name) -> bool"""
-    return _misc_.SystemOptions_HasOption(*args, **kwargs)
+  """SystemOptions_HasOption(String name) -> bool"""
+  return _misc_.SystemOptions_HasOption(*args, **kwargs)
 
 def SystemOptions_IsFalse(*args, **kwargs):
-    """SystemOptions_IsFalse(String name) -> bool"""
-    return _misc_.SystemOptions_IsFalse(*args, **kwargs)
+  """SystemOptions_IsFalse(String name) -> bool"""
+  return _misc_.SystemOptions_IsFalse(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
 
-def NewId(*args, **kwargs):
-    """NewId() -> long"""
-    return _misc_.NewId(*args, **kwargs)
+def NewId(*args):
+  """NewId() -> long"""
+  return _misc_.NewId(*args)
 
 def RegisterId(*args, **kwargs):
-    """RegisterId(long id)"""
-    return _misc_.RegisterId(*args, **kwargs)
+  """RegisterId(long id)"""
+  return _misc_.RegisterId(*args, **kwargs)
 
-def GetCurrentId(*args, **kwargs):
-    """GetCurrentId() -> long"""
-    return _misc_.GetCurrentId(*args, **kwargs)
+def GetCurrentId(*args):
+  """GetCurrentId() -> long"""
+  return _misc_.GetCurrentId(*args)
 
 def IsStockID(*args, **kwargs):
-    """IsStockID(int id) -> bool"""
-    return _misc_.IsStockID(*args, **kwargs)
+  """IsStockID(int id) -> bool"""
+  return _misc_.IsStockID(*args, **kwargs)
 
 def IsStockLabel(*args, **kwargs):
-    """IsStockLabel(int id, String label) -> bool"""
-    return _misc_.IsStockLabel(*args, **kwargs)
+  """IsStockLabel(int id, String label) -> bool"""
+  return _misc_.IsStockLabel(*args, **kwargs)
 
 def GetStockLabel(*args, **kwargs):
-    """GetStockLabel(int id, bool withCodes=True, String accelerator=EmptyString) -> String"""
-    return _misc_.GetStockLabel(*args, **kwargs)
+  """GetStockLabel(int id, bool withCodes=True, String accelerator=EmptyString) -> String"""
+  return _misc_.GetStockLabel(*args, **kwargs)
 
-def Bell(*args, **kwargs):
-    """Bell()"""
-    return _misc_.Bell(*args, **kwargs)
+def Bell(*args):
+  """Bell()"""
+  return _misc_.Bell(*args)
 
-def EndBusyCursor(*args, **kwargs):
-    """EndBusyCursor()"""
-    return _misc_.EndBusyCursor(*args, **kwargs)
+def EndBusyCursor(*args):
+  """EndBusyCursor()"""
+  return _misc_.EndBusyCursor(*args)
 
 def GetElapsedTime(*args, **kwargs):
-    """GetElapsedTime(bool resetTimer=True) -> long"""
-    return _misc_.GetElapsedTime(*args, **kwargs)
+  """GetElapsedTime(bool resetTimer=True) -> long"""
+  return _misc_.GetElapsedTime(*args, **kwargs)
 
-def IsBusy(*args, **kwargs):
-    """IsBusy() -> bool"""
-    return _misc_.IsBusy(*args, **kwargs)
+def IsBusy(*args):
+  """IsBusy() -> bool"""
+  return _misc_.IsBusy(*args)
 
-def Now(*args, **kwargs):
-    """Now() -> String"""
-    return _misc_.Now(*args, **kwargs)
+def Now(*args):
+  """Now() -> String"""
+  return _misc_.Now(*args)
 
 def Shell(*args, **kwargs):
-    """Shell(String command=EmptyString) -> bool"""
-    return _misc_.Shell(*args, **kwargs)
+  """Shell(String command=EmptyString) -> bool"""
+  return _misc_.Shell(*args, **kwargs)
 
-def StartTimer(*args, **kwargs):
-    """StartTimer()"""
-    return _misc_.StartTimer(*args, **kwargs)
+def StartTimer(*args):
+  """StartTimer()"""
+  return _misc_.StartTimer(*args)
 
-def GetOsVersion(*args, **kwargs):
-    """GetOsVersion() -> (platform, major, minor)"""
-    return _misc_.GetOsVersion(*args, **kwargs)
+def GetOsVersion(*args):
+  """GetOsVersion() -> (platform, major, minor)"""
+  return _misc_.GetOsVersion(*args)
 
-def GetOsDescription(*args, **kwargs):
-    """GetOsDescription() -> String"""
-    return _misc_.GetOsDescription(*args, **kwargs)
+def GetOsDescription(*args):
+  """GetOsDescription() -> String"""
+  return _misc_.GetOsDescription(*args)
 
-def GetFreeMemory(*args, **kwargs):
-    """GetFreeMemory() -> wxMemorySize"""
-    return _misc_.GetFreeMemory(*args, **kwargs)
+def GetFreeMemory(*args):
+  """GetFreeMemory() -> wxMemorySize"""
+  return _misc_.GetFreeMemory(*args)
 SHUTDOWN_POWEROFF = _misc_.SHUTDOWN_POWEROFF
 SHUTDOWN_REBOOT = _misc_.SHUTDOWN_REBOOT
 
 def Shutdown(*args, **kwargs):
-    """Shutdown(int wFlags) -> bool"""
-    return _misc_.Shutdown(*args, **kwargs)
+  """Shutdown(int wFlags) -> bool"""
+  return _misc_.Shutdown(*args, **kwargs)
 
 def Sleep(*args, **kwargs):
-    """Sleep(int secs)"""
-    return _misc_.Sleep(*args, **kwargs)
+  """Sleep(int secs)"""
+  return _misc_.Sleep(*args, **kwargs)
 
 def MilliSleep(*args, **kwargs):
-    """MilliSleep(unsigned long milliseconds)"""
-    return _misc_.MilliSleep(*args, **kwargs)
+  """MilliSleep(unsigned long milliseconds)"""
+  return _misc_.MilliSleep(*args, **kwargs)
 
 def MicroSleep(*args, **kwargs):
-    """MicroSleep(unsigned long microseconds)"""
-    return _misc_.MicroSleep(*args, **kwargs)
+  """MicroSleep(unsigned long microseconds)"""
+  return _misc_.MicroSleep(*args, **kwargs)
 Usleep = MilliSleep 
 
 def EnableTopLevelWindows(*args, **kwargs):
-    """EnableTopLevelWindows(bool enable)"""
-    return _misc_.EnableTopLevelWindows(*args, **kwargs)
+  """EnableTopLevelWindows(bool enable)"""
+  return _misc_.EnableTopLevelWindows(*args, **kwargs)
 
 def StripMenuCodes(*args, **kwargs):
-    """StripMenuCodes(String in) -> String"""
-    return _misc_.StripMenuCodes(*args, **kwargs)
+  """StripMenuCodes(String in) -> String"""
+  return _misc_.StripMenuCodes(*args, **kwargs)
 
-def GetEmailAddress(*args, **kwargs):
-    """GetEmailAddress() -> String"""
-    return _misc_.GetEmailAddress(*args, **kwargs)
+def GetEmailAddress(*args):
+  """GetEmailAddress() -> String"""
+  return _misc_.GetEmailAddress(*args)
 
-def GetHostName(*args, **kwargs):
-    """GetHostName() -> String"""
-    return _misc_.GetHostName(*args, **kwargs)
+def GetHostName(*args):
+  """GetHostName() -> String"""
+  return _misc_.GetHostName(*args)
 
-def GetFullHostName(*args, **kwargs):
-    """GetFullHostName() -> String"""
-    return _misc_.GetFullHostName(*args, **kwargs)
+def GetFullHostName(*args):
+  """GetFullHostName() -> String"""
+  return _misc_.GetFullHostName(*args)
 
-def GetUserId(*args, **kwargs):
-    """GetUserId() -> String"""
-    return _misc_.GetUserId(*args, **kwargs)
+def GetUserId(*args):
+  """GetUserId() -> String"""
+  return _misc_.GetUserId(*args)
 
-def GetUserName(*args, **kwargs):
-    """GetUserName() -> String"""
-    return _misc_.GetUserName(*args, **kwargs)
+def GetUserName(*args):
+  """GetUserName() -> String"""
+  return _misc_.GetUserName(*args)
 
-def GetHomeDir(*args, **kwargs):
-    """GetHomeDir() -> String"""
-    return _misc_.GetHomeDir(*args, **kwargs)
+def GetHomeDir(*args):
+  """GetHomeDir() -> String"""
+  return _misc_.GetHomeDir(*args)
 
 def GetUserHome(*args, **kwargs):
-    """GetUserHome(String user=EmptyString) -> String"""
-    return _misc_.GetUserHome(*args, **kwargs)
+  """GetUserHome(String user=EmptyString) -> String"""
+  return _misc_.GetUserHome(*args, **kwargs)
 
-def GetProcessId(*args, **kwargs):
-    """GetProcessId() -> unsigned long"""
-    return _misc_.GetProcessId(*args, **kwargs)
+def GetProcessId(*args):
+  """GetProcessId() -> unsigned long"""
+  return _misc_.GetProcessId(*args)
 
-def Trap(*args, **kwargs):
-    """Trap()"""
-    return _misc_.Trap(*args, **kwargs)
+def Trap(*args):
+  """Trap()"""
+  return _misc_.Trap(*args)
 
 def FileSelector(*args, **kwargs):
-    """
+  """
     FileSelector(String message=FileSelectorPromptStr, String default_path=EmptyString, 
         String default_filename=EmptyString, 
         String default_extension=EmptyString, 
@@ -420,171 +414,171 @@ def FileSelector(*args, **kwargs):
         int flags=0, Window parent=None, int x=-1, 
         int y=-1) -> String
     """
-    return _misc_.FileSelector(*args, **kwargs)
+  return _misc_.FileSelector(*args, **kwargs)
 
 def LoadFileSelector(*args, **kwargs):
-    """
+  """
     LoadFileSelector(String what, String extension, String default_name=EmptyString, 
         Window parent=None) -> String
     """
-    return _misc_.LoadFileSelector(*args, **kwargs)
+  return _misc_.LoadFileSelector(*args, **kwargs)
 
 def SaveFileSelector(*args, **kwargs):
-    """
+  """
     SaveFileSelector(String what, String extension, String default_name=EmptyString, 
         Window parent=None) -> String
     """
-    return _misc_.SaveFileSelector(*args, **kwargs)
+  return _misc_.SaveFileSelector(*args, **kwargs)
 
 def DirSelector(*args, **kwargs):
-    """
+  """
     DirSelector(String message=DirSelectorPromptStr, String defaultPath=EmptyString, 
         long style=DD_DEFAULT_STYLE, 
         Point pos=DefaultPosition, Window parent=None) -> String
     """
-    return _misc_.DirSelector(*args, **kwargs)
+  return _misc_.DirSelector(*args, **kwargs)
 
 def GetTextFromUser(*args, **kwargs):
-    """
+  """
     GetTextFromUser(String message, String caption=EmptyString, String default_value=EmptyString, 
         Window parent=None, 
         int x=-1, int y=-1, bool centre=True) -> String
     """
-    return _misc_.GetTextFromUser(*args, **kwargs)
+  return _misc_.GetTextFromUser(*args, **kwargs)
 
 def GetPasswordFromUser(*args, **kwargs):
-    """
+  """
     GetPasswordFromUser(String message, String caption=EmptyString, String default_value=EmptyString, 
         Window parent=None) -> String
     """
-    return _misc_.GetPasswordFromUser(*args, **kwargs)
+  return _misc_.GetPasswordFromUser(*args, **kwargs)
 
 def GetSingleChoice(*args, **kwargs):
-    """
+  """
     GetSingleChoice(String message, String caption, int choices, Window parent=None, 
         int x=-1, int y=-1, bool centre=True, 
         int width=150, int height=200) -> String
     """
-    return _misc_.GetSingleChoice(*args, **kwargs)
+  return _misc_.GetSingleChoice(*args, **kwargs)
 
 def GetSingleChoiceIndex(*args, **kwargs):
-    """
+  """
     GetSingleChoiceIndex(String message, String caption, int choices, Window parent=None, 
         int x=-1, int y=-1, bool centre=True, 
         int width=150, int height=200) -> int
     """
-    return _misc_.GetSingleChoiceIndex(*args, **kwargs)
+  return _misc_.GetSingleChoiceIndex(*args, **kwargs)
 
 def MessageBox(*args, **kwargs):
-    """
+  """
     MessageBox(String message, String caption=EmptyString, int style=wxOK|wxCENTRE, 
         Window parent=None, int x=-1, 
         int y=-1) -> int
     """
-    return _misc_.MessageBox(*args, **kwargs)
+  return _misc_.MessageBox(*args, **kwargs)
 
-def ColourDisplay(*args, **kwargs):
-    """ColourDisplay() -> bool"""
-    return _misc_.ColourDisplay(*args, **kwargs)
+def ColourDisplay(*args):
+  """ColourDisplay() -> bool"""
+  return _misc_.ColourDisplay(*args)
 
-def DisplayDepth(*args, **kwargs):
-    """DisplayDepth() -> int"""
-    return _misc_.DisplayDepth(*args, **kwargs)
+def DisplayDepth(*args):
+  """DisplayDepth() -> int"""
+  return _misc_.DisplayDepth(*args)
 
-def GetDisplayDepth(*args, **kwargs):
-    """GetDisplayDepth() -> int"""
-    return _misc_.GetDisplayDepth(*args, **kwargs)
+def GetDisplayDepth(*args):
+  """GetDisplayDepth() -> int"""
+  return _misc_.GetDisplayDepth(*args)
 
-def DisplaySize(*args, **kwargs):
-    """DisplaySize() -> (width, height)"""
-    return _misc_.DisplaySize(*args, **kwargs)
+def DisplaySize(*args):
+  """DisplaySize() -> (width, height)"""
+  return _misc_.DisplaySize(*args)
 
-def GetDisplaySize(*args, **kwargs):
-    """GetDisplaySize() -> Size"""
-    return _misc_.GetDisplaySize(*args, **kwargs)
+def GetDisplaySize(*args):
+  """GetDisplaySize() -> Size"""
+  return _misc_.GetDisplaySize(*args)
 
-def DisplaySizeMM(*args, **kwargs):
-    """DisplaySizeMM() -> (width, height)"""
-    return _misc_.DisplaySizeMM(*args, **kwargs)
+def DisplaySizeMM(*args):
+  """DisplaySizeMM() -> (width, height)"""
+  return _misc_.DisplaySizeMM(*args)
 
-def GetDisplaySizeMM(*args, **kwargs):
-    """GetDisplaySizeMM() -> Size"""
-    return _misc_.GetDisplaySizeMM(*args, **kwargs)
+def GetDisplaySizeMM(*args):
+  """GetDisplaySizeMM() -> Size"""
+  return _misc_.GetDisplaySizeMM(*args)
 
-def ClientDisplayRect(*args, **kwargs):
-    """ClientDisplayRect() -> (x, y, width, height)"""
-    return _misc_.ClientDisplayRect(*args, **kwargs)
+def ClientDisplayRect(*args):
+  """ClientDisplayRect() -> (x, y, width, height)"""
+  return _misc_.ClientDisplayRect(*args)
 
-def GetClientDisplayRect(*args, **kwargs):
-    """GetClientDisplayRect() -> Rect"""
-    return _misc_.GetClientDisplayRect(*args, **kwargs)
+def GetClientDisplayRect(*args):
+  """GetClientDisplayRect() -> Rect"""
+  return _misc_.GetClientDisplayRect(*args)
 
 def SetCursor(*args, **kwargs):
-    """SetCursor(Cursor cursor)"""
-    return _misc_.SetCursor(*args, **kwargs)
+  """SetCursor(Cursor cursor)"""
+  return _misc_.SetCursor(*args, **kwargs)
 
-def GetXDisplay(*args, **kwargs):
-    """
+def GetXDisplay(*args):
+  """
     GetXDisplay() -> void
 
     Returns a swigified pointer to the X11 display.  Returns None on
     other platforms.
     """
-    return _misc_.GetXDisplay(*args, **kwargs)
+  return _misc_.GetXDisplay(*args)
 
 def BeginBusyCursor(*args, **kwargs):
-    """BeginBusyCursor(Cursor cursor=wxHOURGLASS_CURSOR)"""
-    return _misc_.BeginBusyCursor(*args, **kwargs)
+  """BeginBusyCursor(Cursor cursor=wxHOURGLASS_CURSOR)"""
+  return _misc_.BeginBusyCursor(*args, **kwargs)
 
-def GetMousePosition(*args, **kwargs):
-    """
+def GetMousePosition(*args):
+  """
     GetMousePosition() -> Point
 
     Get the current mouse position on the screen.
     """
-    return _misc_.GetMousePosition(*args, **kwargs)
+  return _misc_.GetMousePosition(*args)
 
-def FindWindowAtPointer(*args, **kwargs):
-    """
+def FindWindowAtPointer(*args):
+  """
     FindWindowAtPointer() -> Window
 
     Returns the window currently under the mouse pointer, if it belongs to
         this application.  Otherwise it returns None.
     """
-    return _misc_.FindWindowAtPointer(*args, **kwargs)
+  return _misc_.FindWindowAtPointer(*args)
 
-def GetActiveWindow(*args, **kwargs):
-    """
+def GetActiveWindow(*args):
+  """
     GetActiveWindow() -> Window
 
     Get the currently active window of this application, or None
     """
-    return _misc_.GetActiveWindow(*args, **kwargs)
+  return _misc_.GetActiveWindow(*args)
 
 def GenericFindWindowAtPoint(*args, **kwargs):
-    """GenericFindWindowAtPoint(Point pt) -> Window"""
-    return _misc_.GenericFindWindowAtPoint(*args, **kwargs)
+  """GenericFindWindowAtPoint(Point pt) -> Window"""
+  return _misc_.GenericFindWindowAtPoint(*args, **kwargs)
 
 def FindWindowAtPoint(*args, **kwargs):
-    """FindWindowAtPoint(Point pt) -> Window"""
-    return _misc_.FindWindowAtPoint(*args, **kwargs)
+  """FindWindowAtPoint(Point pt) -> Window"""
+  return _misc_.FindWindowAtPoint(*args, **kwargs)
 
 def GetTopLevelParent(*args, **kwargs):
-    """GetTopLevelParent(Window win) -> Window"""
-    return _misc_.GetTopLevelParent(*args, **kwargs)
+  """GetTopLevelParent(Window win) -> Window"""
+  return _misc_.GetTopLevelParent(*args, **kwargs)
 
 def LaunchDefaultBrowser(*args, **kwargs):
-    """
+  """
     LaunchDefaultBrowser(String url) -> bool
 
     Launches the user's default browser and tells it to open the location
     at ``url``.  Returns ``True`` if the application was successfully
     launched.
     """
-    return _misc_.LaunchDefaultBrowser(*args, **kwargs)
+  return _misc_.LaunchDefaultBrowser(*args, **kwargs)
 
 def GetKeyState(*args, **kwargs):
-    """
+  """
     GetKeyState(int key) -> bool
 
     Get the state of a key (true if pressed or toggled on, false if not.)
@@ -593,31 +587,24 @@ def GetKeyState(*args, **kwargs):
     function is able to detect.
 
     """
-    return _misc_.GetKeyState(*args, **kwargs)
+  return _misc_.GetKeyState(*args, **kwargs)
 class MouseState(object):
     """
     `wx.MouseState` is used to hold information about mouse button and
     modifier key states and is what is returned from `wx.GetMouseState`.
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxMouseState instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self) -> MouseState
 
         `wx.MouseState` is used to hold information about mouse button and
         modifier key states and is what is returned from `wx.GetMouseState`.
         """
-        newobj = _misc_.new_MouseState(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_MouseState):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.MouseState_swiginit(self,_misc_.new_MouseState(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_MouseState
+    __del__ = lambda self : None;
     def GetX(*args, **kwargs):
         """GetX(self) -> int"""
         return _misc_.MouseState_GetX(*args, **kwargs)
@@ -705,20 +692,15 @@ class MouseState(object):
     metaDown = property(MetaDown, SetMetaDown)
     cmdDown = property(CmdDown)
 
-
-class MouseStatePtr(MouseState):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = MouseState
-_misc_.MouseState_swigregister(MouseStatePtr)
+MouseState_swigregister = _misc_.MouseState_swigregister
+MouseState_swigregister(MouseState)
 FileSelectorPromptStr = cvar.FileSelectorPromptStr
 FileSelectorDefaultWildcardStr = cvar.FileSelectorDefaultWildcardStr
 DirSelectorPromptStr = cvar.DirSelectorPromptStr
 
 
-def GetMouseState(*args, **kwargs):
-    """
+def GetMouseState(*args):
+  """
     GetMouseState() -> MouseState
 
     Returns the current state of the mouse.  Returns an instance of a
@@ -726,65 +708,46 @@ def GetMouseState(*args, **kwargs):
     pointer in screen coordinants, as well as boolean values indicating
     the up/down status of the mouse buttons and the modifier keys.
     """
-    return _misc_.GetMouseState(*args, **kwargs)
+  return _misc_.GetMouseState(*args)
 
-def WakeUpMainThread(*args, **kwargs):
-    """WakeUpMainThread()"""
-    return _misc_.WakeUpMainThread(*args, **kwargs)
+def WakeUpMainThread(*args):
+  """WakeUpMainThread()"""
+  return _misc_.WakeUpMainThread(*args)
 
-def MutexGuiEnter(*args, **kwargs):
-    """MutexGuiEnter()"""
-    return _misc_.MutexGuiEnter(*args, **kwargs)
+def MutexGuiEnter(*args):
+  """MutexGuiEnter()"""
+  return _misc_.MutexGuiEnter(*args)
 
-def MutexGuiLeave(*args, **kwargs):
-    """MutexGuiLeave()"""
-    return _misc_.MutexGuiLeave(*args, **kwargs)
+def MutexGuiLeave(*args):
+  """MutexGuiLeave()"""
+  return _misc_.MutexGuiLeave(*args)
 class MutexGuiLocker(object):
     """Proxy of C++ MutexGuiLocker class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxMutexGuiLocker instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> MutexGuiLocker"""
-        newobj = _misc_.new_MutexGuiLocker(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_MutexGuiLocker):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
+        _misc_.MutexGuiLocker_swiginit(self,_misc_.new_MutexGuiLocker(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_MutexGuiLocker
+    __del__ = lambda self : None;
+MutexGuiLocker_swigregister = _misc_.MutexGuiLocker_swigregister
+MutexGuiLocker_swigregister(MutexGuiLocker)
 
 
-class MutexGuiLockerPtr(MutexGuiLocker):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = MutexGuiLocker
-_misc_.MutexGuiLocker_swigregister(MutexGuiLockerPtr)
-
-
-def Thread_IsMain(*args, **kwargs):
-    """Thread_IsMain() -> bool"""
-    return _misc_.Thread_IsMain(*args, **kwargs)
+def Thread_IsMain(*args):
+  """Thread_IsMain() -> bool"""
+  return _misc_.Thread_IsMain(*args)
 #---------------------------------------------------------------------------
 
 class ToolTip(_core.Object):
     """Proxy of C++ ToolTip class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxToolTip instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, String tip) -> ToolTip"""
-        newobj = _misc_.new_ToolTip(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_ToolTip):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.ToolTip_swiginit(self,_misc_.new_ToolTip(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_ToolTip
+    __del__ = lambda self : None;
     def SetTip(*args, **kwargs):
         """SetTip(self, String tip)"""
         return _misc_.ToolTip_SetTip(*args, **kwargs)
@@ -807,38 +770,26 @@ class ToolTip(_core.Object):
         return _misc_.ToolTip_SetDelay(*args, **kwargs)
 
     SetDelay = staticmethod(SetDelay)
-
-class ToolTipPtr(ToolTip):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = ToolTip
-_misc_.ToolTip_swigregister(ToolTipPtr)
+ToolTip_swigregister = _misc_.ToolTip_swigregister
+ToolTip_swigregister(ToolTip)
 
 def ToolTip_Enable(*args, **kwargs):
-    """ToolTip_Enable(bool flag)"""
-    return _misc_.ToolTip_Enable(*args, **kwargs)
+  """ToolTip_Enable(bool flag)"""
+  return _misc_.ToolTip_Enable(*args, **kwargs)
 
 def ToolTip_SetDelay(*args, **kwargs):
-    """ToolTip_SetDelay(long milliseconds)"""
-    return _misc_.ToolTip_SetDelay(*args, **kwargs)
+  """ToolTip_SetDelay(long milliseconds)"""
+  return _misc_.ToolTip_SetDelay(*args, **kwargs)
 
 class Caret(object):
     """Proxy of C++ Caret class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxCaret instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, Window window, Size size) -> Caret"""
-        newobj = _misc_.new_Caret(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_Caret):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.Caret_swiginit(self,_misc_.new_Caret(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_Caret
+    __del__ = lambda self : None;
     def Destroy(*args, **kwargs):
         """
         Destroy(self)
@@ -912,104 +863,60 @@ class Caret(object):
         return _misc_.Caret_SetBlinkTime(*args, **kwargs)
 
     SetBlinkTime = staticmethod(SetBlinkTime)
+Caret_swigregister = _misc_.Caret_swigregister
+Caret_swigregister(Caret)
 
-class CaretPtr(Caret):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = Caret
-_misc_.Caret_swigregister(CaretPtr)
-
-def Caret_GetBlinkTime(*args, **kwargs):
-    """Caret_GetBlinkTime() -> int"""
-    return _misc_.Caret_GetBlinkTime(*args, **kwargs)
+def Caret_GetBlinkTime(*args):
+  """Caret_GetBlinkTime() -> int"""
+  return _misc_.Caret_GetBlinkTime(*args)
 
 def Caret_SetBlinkTime(*args, **kwargs):
-    """Caret_SetBlinkTime(int milliseconds)"""
-    return _misc_.Caret_SetBlinkTime(*args, **kwargs)
+  """Caret_SetBlinkTime(int milliseconds)"""
+  return _misc_.Caret_SetBlinkTime(*args, **kwargs)
 
 class BusyCursor(object):
     """Proxy of C++ BusyCursor class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxBusyCursor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, Cursor cursor=wxHOURGLASS_CURSOR) -> BusyCursor"""
-        newobj = _misc_.new_BusyCursor(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_BusyCursor):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-
-class BusyCursorPtr(BusyCursor):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = BusyCursor
-_misc_.BusyCursor_swigregister(BusyCursorPtr)
+        _misc_.BusyCursor_swiginit(self,_misc_.new_BusyCursor(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_BusyCursor
+    __del__ = lambda self : None;
+BusyCursor_swigregister = _misc_.BusyCursor_swigregister
+BusyCursor_swigregister(BusyCursor)
 
 class WindowDisabler(object):
     """Proxy of C++ WindowDisabler class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxWindowDisabler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, Window winToSkip=None) -> WindowDisabler"""
-        newobj = _misc_.new_WindowDisabler(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_WindowDisabler):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-
-class WindowDisablerPtr(WindowDisabler):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = WindowDisabler
-_misc_.WindowDisabler_swigregister(WindowDisablerPtr)
+        _misc_.WindowDisabler_swiginit(self,_misc_.new_WindowDisabler(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_WindowDisabler
+    __del__ = lambda self : None;
+WindowDisabler_swigregister = _misc_.WindowDisabler_swigregister
+WindowDisabler_swigregister(WindowDisabler)
 
 class BusyInfo(_core.Object):
     """Proxy of C++ BusyInfo class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxBusyInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, String message) -> BusyInfo"""
-        newobj = _misc_.new_BusyInfo(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_BusyInfo):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-
-class BusyInfoPtr(BusyInfo):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = BusyInfo
-_misc_.BusyInfo_swigregister(BusyInfoPtr)
+        _misc_.BusyInfo_swiginit(self,_misc_.new_BusyInfo(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_BusyInfo
+    __del__ = lambda self : None;
+BusyInfo_swigregister = _misc_.BusyInfo_swigregister
+BusyInfo_swigregister(BusyInfo)
 
 class StopWatch(object):
     """Proxy of C++ StopWatch class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxStopWatch instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> StopWatch"""
-        newobj = _misc_.new_StopWatch(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.StopWatch_swiginit(self,_misc_.new_StopWatch(*args, **kwargs))
     def Start(*args, **kwargs):
         """Start(self, long t0=0)"""
         return _misc_.StopWatch_Start(*args, **kwargs)
@@ -1026,30 +933,18 @@ class StopWatch(object):
         """Time(self) -> long"""
         return _misc_.StopWatch_Time(*args, **kwargs)
 
-
-class StopWatchPtr(StopWatch):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = StopWatch
-_misc_.StopWatch_swigregister(StopWatchPtr)
+StopWatch_swigregister = _misc_.StopWatch_swigregister
+StopWatch_swigregister(StopWatch)
 
 class FileHistory(_core.Object):
     """Proxy of C++ FileHistory class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxFileHistory instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, int maxFiles=9, int idBase=ID_FILE1) -> FileHistory"""
-        newobj = _misc_.new_FileHistory(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_FileHistory):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.FileHistory_swiginit(self,_misc_.new_FileHistory(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_FileHistory
+    __del__ = lambda self : None;
     def AddFileToHistory(*args, **kwargs):
         """AddFileToHistory(self, String file)"""
         return _misc_.FileHistory_AddFileToHistory(*args, **kwargs)
@@ -1095,30 +990,18 @@ class FileHistory(_core.Object):
         return _misc_.FileHistory_GetCount(*args, **kwargs)
 
     GetNoHistoryFiles = GetCount 
-
-class FileHistoryPtr(FileHistory):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = FileHistory
-_misc_.FileHistory_swigregister(FileHistoryPtr)
+FileHistory_swigregister = _misc_.FileHistory_swigregister
+FileHistory_swigregister(FileHistory)
 
 class SingleInstanceChecker(object):
     """Proxy of C++ SingleInstanceChecker class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxSingleInstanceChecker instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, String name, String path=EmptyString) -> SingleInstanceChecker"""
-        newobj = _misc_.new_SingleInstanceChecker(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_SingleInstanceChecker):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.SingleInstanceChecker_swiginit(self,_misc_.new_SingleInstanceChecker(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_SingleInstanceChecker
+    __del__ = lambda self : None;
     def Create(*args, **kwargs):
         """Create(self, String name, String path=EmptyString) -> bool"""
         return _misc_.SingleInstanceChecker_Create(*args, **kwargs)
@@ -1127,37 +1010,27 @@ class SingleInstanceChecker(object):
         """IsAnotherRunning(self) -> bool"""
         return _misc_.SingleInstanceChecker_IsAnotherRunning(*args, **kwargs)
 
-
-class SingleInstanceCheckerPtr(SingleInstanceChecker):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = SingleInstanceChecker
-_misc_.SingleInstanceChecker_swigregister(SingleInstanceCheckerPtr)
+SingleInstanceChecker_swigregister = _misc_.SingleInstanceChecker_swigregister
+SingleInstanceChecker_swigregister(SingleInstanceChecker)
 
 def PreSingleInstanceChecker(*args, **kwargs):
     """PreSingleInstanceChecker() -> SingleInstanceChecker"""
     val = _misc_.new_PreSingleInstanceChecker(*args, **kwargs)
-    val.thisown = 1
     return val
 
 
 def DrawWindowOnDC(*args, **kwargs):
-    """DrawWindowOnDC(Window window, DC dc) -> bool"""
-    return _misc_.DrawWindowOnDC(*args, **kwargs)
+  """DrawWindowOnDC(Window window, DC dc) -> bool"""
+  return _misc_.DrawWindowOnDC(*args, **kwargs)
 #---------------------------------------------------------------------------
 
 class TipProvider(object):
     """Proxy of C++ TipProvider class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxTipProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __del__(self, destroy=_misc_.delete_TipProvider):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _misc_.delete_TipProvider
+    __del__ = lambda self : None;
     def GetTip(*args, **kwargs):
         """GetTip(self) -> String"""
         return _misc_.TipProvider_GetTip(*args, **kwargs)
@@ -1170,46 +1043,33 @@ class TipProvider(object):
         """PreprocessTip(self, String tip) -> String"""
         return _misc_.TipProvider_PreprocessTip(*args, **kwargs)
 
-
-class TipProviderPtr(TipProvider):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = TipProvider
-_misc_.TipProvider_swigregister(TipProviderPtr)
+TipProvider_swigregister = _misc_.TipProvider_swigregister
+TipProvider_swigregister(TipProvider)
 
 class PyTipProvider(TipProvider):
     """Proxy of C++ PyTipProvider class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyTipProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, size_t currentTip) -> PyTipProvider"""
-        newobj = _misc_.new_PyTipProvider(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.PyTipProvider_swiginit(self,_misc_.new_PyTipProvider(*args, **kwargs))
         self._setCallbackInfo(self, PyTipProvider)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.PyTipProvider__setCallbackInfo(*args, **kwargs)
 
-
-class PyTipProviderPtr(PyTipProvider):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PyTipProvider
-_misc_.PyTipProvider_swigregister(PyTipProviderPtr)
+PyTipProvider_swigregister = _misc_.PyTipProvider_swigregister
+PyTipProvider_swigregister(PyTipProvider)
 
 
 def ShowTip(*args, **kwargs):
-    """ShowTip(Window parent, TipProvider tipProvider, bool showAtStartup=True) -> bool"""
-    return _misc_.ShowTip(*args, **kwargs)
+  """ShowTip(Window parent, TipProvider tipProvider, bool showAtStartup=True) -> bool"""
+  return _misc_.ShowTip(*args, **kwargs)
 
 def CreateFileTipProvider(*args, **kwargs):
-    """CreateFileTipProvider(String filename, size_t currentTip) -> TipProvider"""
-    return _misc_.CreateFileTipProvider(*args, **kwargs)
+  """CreateFileTipProvider(String filename, size_t currentTip) -> TipProvider"""
+  return _misc_.CreateFileTipProvider(*args, **kwargs)
 #---------------------------------------------------------------------------
 
 TIMER_CONTINUOUS = _misc_.TIMER_CONTINUOUS
@@ -1217,28 +1077,21 @@ TIMER_ONE_SHOT = _misc_.TIMER_ONE_SHOT
 wxEVT_TIMER = _misc_.wxEVT_TIMER
 class Timer(_core.EvtHandler):
     """Proxy of C++ Timer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyTimer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(self, EvtHandler owner=None, int id=-1) -> Timer"""
-        newobj = _misc_.new_Timer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, EvtHandler owner=None, int id=ID_ANY) -> Timer"""
+        _misc_.Timer_swiginit(self,_misc_.new_Timer(*args, **kwargs))
         self._setCallbackInfo(self, Timer, 0); self._setOORInfo(self, 0)
 
-    def __del__(self, destroy=_misc_.delete_Timer):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+    __swig_destroy__ = _misc_.delete_Timer
+    __del__ = lambda self : None;
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class, int incref=1)"""
         return _misc_.Timer__setCallbackInfo(*args, **kwargs)
 
     def SetOwner(*args, **kwargs):
-        """SetOwner(self, EvtHandler owner, int id=-1)"""
+        """SetOwner(self, EvtHandler owner, int id=ID_ANY)"""
         return _misc_.Timer_SetOwner(*args, **kwargs)
 
     def GetOwner(*args, **kwargs):
@@ -1265,25 +1118,20 @@ class Timer(_core.EvtHandler):
         """GetInterval(self) -> int"""
         return _misc_.Timer_GetInterval(*args, **kwargs)
 
-    def IsOneShot(*args, **kwargs):
-        """IsOneShot(self) -> bool"""
-        return _misc_.Timer_IsOneShot(*args, **kwargs)
-
     def GetId(*args, **kwargs):
         """GetId(self) -> int"""
         return _misc_.Timer_GetId(*args, **kwargs)
 
+    def IsOneShot(*args, **kwargs):
+        """IsOneShot(self) -> bool"""
+        return _misc_.Timer_IsOneShot(*args, **kwargs)
+
     def Destroy(self):
-        """NO-OP: Timers must be destroyed by normal refrence counting"""
+        """NO-OP: Timers must be destroyed by normal reference counting"""
         pass
 
-
-class TimerPtr(Timer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = Timer
-_misc_.Timer_swigregister(TimerPtr)
+Timer_swigregister = _misc_.Timer_swigregister
+Timer_swigregister(Timer)
 
 # For backwards compatibility with 2.4
 class PyTimer(Timer):
@@ -1301,56 +1149,36 @@ EVT_TIMER = wx.PyEventBinder( wxEVT_TIMER, 1 )
 
 class TimerEvent(_core.Event):
     """Proxy of C++ TimerEvent class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxTimerEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, int timerid=0, int interval=0) -> TimerEvent"""
-        newobj = _misc_.new_TimerEvent(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.TimerEvent_swiginit(self,_misc_.new_TimerEvent(*args, **kwargs))
     def GetInterval(*args, **kwargs):
         """GetInterval(self) -> int"""
         return _misc_.TimerEvent_GetInterval(*args, **kwargs)
 
-
-class TimerEventPtr(TimerEvent):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = TimerEvent
-_misc_.TimerEvent_swigregister(TimerEventPtr)
+TimerEvent_swigregister = _misc_.TimerEvent_swigregister
+TimerEvent_swigregister(TimerEvent)
 
 class TimerRunner(object):
     """Proxy of C++ TimerRunner class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxTimerRunner instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
         """
         __init__(self, wxTimer timer) -> TimerRunner
         __init__(self, wxTimer timer, int milli, bool oneShot=False) -> TimerRunner
         """
-        newobj = _misc_.new_TimerRunner(*args)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_TimerRunner):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.TimerRunner_swiginit(self,_misc_.new_TimerRunner(*args))
+    __swig_destroy__ = _misc_.delete_TimerRunner
+    __del__ = lambda self : None;
     def Start(*args, **kwargs):
         """Start(self, int milli, bool oneShot=False)"""
         return _misc_.TimerRunner_Start(*args, **kwargs)
 
-
-class TimerRunnerPtr(TimerRunner):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = TimerRunner
-_misc_.TimerRunner_swigregister(TimerRunnerPtr)
+TimerRunner_swigregister = _misc_.TimerRunner_swigregister
+TimerRunner_swigregister(TimerRunner)
 
 #---------------------------------------------------------------------------
 
@@ -1377,20 +1205,13 @@ TraceRefCount = _misc_.TraceRefCount
 TraceOleCalls = _misc_.TraceOleCalls
 class Log(object):
     """Proxy of C++ Log class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxLog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> Log"""
-        newobj = _misc_.new_Log(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_Log):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.Log_swiginit(self,_misc_.new_Log(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_Log
+    __del__ = lambda self : None;
     def IsEnabled(*args, **kwargs):
         """IsEnabled() -> bool"""
         return _misc_.Log_IsEnabled(*args, **kwargs)
@@ -1516,170 +1337,138 @@ class Log(object):
         args[0].thisown = 0
         return val
 
+Log_swigregister = _misc_.Log_swigregister
+Log_swigregister(Log)
 
-class LogPtr(Log):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = Log
-_misc_.Log_swigregister(LogPtr)
-
-def Log_IsEnabled(*args, **kwargs):
-    """Log_IsEnabled() -> bool"""
-    return _misc_.Log_IsEnabled(*args, **kwargs)
+def Log_IsEnabled(*args):
+  """Log_IsEnabled() -> bool"""
+  return _misc_.Log_IsEnabled(*args)
 
 def Log_EnableLogging(*args, **kwargs):
-    """Log_EnableLogging(bool doIt=True) -> bool"""
-    return _misc_.Log_EnableLogging(*args, **kwargs)
+  """Log_EnableLogging(bool doIt=True) -> bool"""
+  return _misc_.Log_EnableLogging(*args, **kwargs)
 
 def Log_OnLog(*args, **kwargs):
-    """Log_OnLog(wxLogLevel level, wxChar szString, time_t t)"""
-    return _misc_.Log_OnLog(*args, **kwargs)
+  """Log_OnLog(wxLogLevel level, wxChar szString, time_t t)"""
+  return _misc_.Log_OnLog(*args, **kwargs)
 
-def Log_FlushActive(*args, **kwargs):
-    """Log_FlushActive()"""
-    return _misc_.Log_FlushActive(*args, **kwargs)
+def Log_FlushActive(*args):
+  """Log_FlushActive()"""
+  return _misc_.Log_FlushActive(*args)
 
-def Log_GetActiveTarget(*args, **kwargs):
-    """Log_GetActiveTarget() -> Log"""
-    return _misc_.Log_GetActiveTarget(*args, **kwargs)
+def Log_GetActiveTarget(*args):
+  """Log_GetActiveTarget() -> Log"""
+  return _misc_.Log_GetActiveTarget(*args)
 
 def Log_SetActiveTarget(*args, **kwargs):
-    """Log_SetActiveTarget(Log pLogger) -> Log"""
-    return _misc_.Log_SetActiveTarget(*args, **kwargs)
+  """Log_SetActiveTarget(Log pLogger) -> Log"""
+  return _misc_.Log_SetActiveTarget(*args, **kwargs)
 
-def Log_Suspend(*args, **kwargs):
-    """Log_Suspend()"""
-    return _misc_.Log_Suspend(*args, **kwargs)
+def Log_Suspend(*args):
+  """Log_Suspend()"""
+  return _misc_.Log_Suspend(*args)
 
-def Log_Resume(*args, **kwargs):
-    """Log_Resume()"""
-    return _misc_.Log_Resume(*args, **kwargs)
+def Log_Resume(*args):
+  """Log_Resume()"""
+  return _misc_.Log_Resume(*args)
 
 def Log_SetVerbose(*args, **kwargs):
-    """Log_SetVerbose(bool bVerbose=True)"""
-    return _misc_.Log_SetVerbose(*args, **kwargs)
+  """Log_SetVerbose(bool bVerbose=True)"""
+  return _misc_.Log_SetVerbose(*args, **kwargs)
 
 def Log_SetLogLevel(*args, **kwargs):
-    """Log_SetLogLevel(wxLogLevel logLevel)"""
-    return _misc_.Log_SetLogLevel(*args, **kwargs)
+  """Log_SetLogLevel(wxLogLevel logLevel)"""
+  return _misc_.Log_SetLogLevel(*args, **kwargs)
 
-def Log_DontCreateOnDemand(*args, **kwargs):
-    """Log_DontCreateOnDemand()"""
-    return _misc_.Log_DontCreateOnDemand(*args, **kwargs)
+def Log_DontCreateOnDemand(*args):
+  """Log_DontCreateOnDemand()"""
+  return _misc_.Log_DontCreateOnDemand(*args)
 
 def Log_SetTraceMask(*args, **kwargs):
-    """Log_SetTraceMask(wxTraceMask ulMask)"""
-    return _misc_.Log_SetTraceMask(*args, **kwargs)
+  """Log_SetTraceMask(wxTraceMask ulMask)"""
+  return _misc_.Log_SetTraceMask(*args, **kwargs)
 
 def Log_AddTraceMask(*args, **kwargs):
-    """Log_AddTraceMask(String str)"""
-    return _misc_.Log_AddTraceMask(*args, **kwargs)
+  """Log_AddTraceMask(String str)"""
+  return _misc_.Log_AddTraceMask(*args, **kwargs)
 
 def Log_RemoveTraceMask(*args, **kwargs):
-    """Log_RemoveTraceMask(String str)"""
-    return _misc_.Log_RemoveTraceMask(*args, **kwargs)
+  """Log_RemoveTraceMask(String str)"""
+  return _misc_.Log_RemoveTraceMask(*args, **kwargs)
 
-def Log_ClearTraceMasks(*args, **kwargs):
-    """Log_ClearTraceMasks()"""
-    return _misc_.Log_ClearTraceMasks(*args, **kwargs)
+def Log_ClearTraceMasks(*args):
+  """Log_ClearTraceMasks()"""
+  return _misc_.Log_ClearTraceMasks(*args)
 
-def Log_GetTraceMasks(*args, **kwargs):
-    """Log_GetTraceMasks() -> wxArrayString"""
-    return _misc_.Log_GetTraceMasks(*args, **kwargs)
+def Log_GetTraceMasks(*args):
+  """Log_GetTraceMasks() -> wxArrayString"""
+  return _misc_.Log_GetTraceMasks(*args)
 
 def Log_SetTimestamp(*args, **kwargs):
-    """Log_SetTimestamp(wxChar ts)"""
-    return _misc_.Log_SetTimestamp(*args, **kwargs)
+  """Log_SetTimestamp(wxChar ts)"""
+  return _misc_.Log_SetTimestamp(*args, **kwargs)
 
-def Log_GetVerbose(*args, **kwargs):
-    """Log_GetVerbose() -> bool"""
-    return _misc_.Log_GetVerbose(*args, **kwargs)
+def Log_GetVerbose(*args):
+  """Log_GetVerbose() -> bool"""
+  return _misc_.Log_GetVerbose(*args)
 
-def Log_GetTraceMask(*args, **kwargs):
-    """Log_GetTraceMask() -> wxTraceMask"""
-    return _misc_.Log_GetTraceMask(*args, **kwargs)
+def Log_GetTraceMask(*args):
+  """Log_GetTraceMask() -> wxTraceMask"""
+  return _misc_.Log_GetTraceMask(*args)
 
 def Log_IsAllowedTraceMask(*args, **kwargs):
-    """Log_IsAllowedTraceMask(wxChar mask) -> bool"""
-    return _misc_.Log_IsAllowedTraceMask(*args, **kwargs)
+  """Log_IsAllowedTraceMask(wxChar mask) -> bool"""
+  return _misc_.Log_IsAllowedTraceMask(*args, **kwargs)
 
-def Log_GetLogLevel(*args, **kwargs):
-    """Log_GetLogLevel() -> wxLogLevel"""
-    return _misc_.Log_GetLogLevel(*args, **kwargs)
+def Log_GetLogLevel(*args):
+  """Log_GetLogLevel() -> wxLogLevel"""
+  return _misc_.Log_GetLogLevel(*args)
 
-def Log_GetTimestamp(*args, **kwargs):
-    """Log_GetTimestamp() -> wxChar"""
-    return _misc_.Log_GetTimestamp(*args, **kwargs)
+def Log_GetTimestamp(*args):
+  """Log_GetTimestamp() -> wxChar"""
+  return _misc_.Log_GetTimestamp(*args)
 
-def Log_TimeStamp(*args, **kwargs):
-    """Log_TimeStamp() -> String"""
-    return _misc_.Log_TimeStamp(*args, **kwargs)
+def Log_TimeStamp(*args):
+  """Log_TimeStamp() -> String"""
+  return _misc_.Log_TimeStamp(*args)
 
 class LogStderr(Log):
     """Proxy of C++ LogStderr class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxLogStderr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> LogStderr"""
-        newobj = _misc_.new_LogStderr(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-
-class LogStderrPtr(LogStderr):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = LogStderr
-_misc_.LogStderr_swigregister(LogStderrPtr)
+        _misc_.LogStderr_swiginit(self,_misc_.new_LogStderr(*args, **kwargs))
+LogStderr_swigregister = _misc_.LogStderr_swigregister
+LogStderr_swigregister(LogStderr)
 
 class LogTextCtrl(Log):
     """Proxy of C++ LogTextCtrl class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxLogTextCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, wxTextCtrl pTextCtrl) -> LogTextCtrl"""
-        newobj = _misc_.new_LogTextCtrl(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-
-class LogTextCtrlPtr(LogTextCtrl):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = LogTextCtrl
-_misc_.LogTextCtrl_swigregister(LogTextCtrlPtr)
+        _misc_.LogTextCtrl_swiginit(self,_misc_.new_LogTextCtrl(*args, **kwargs))
+LogTextCtrl_swigregister = _misc_.LogTextCtrl_swigregister
+LogTextCtrl_swigregister(LogTextCtrl)
 
 class LogGui(Log):
     """Proxy of C++ LogGui class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxLogGui instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> LogGui"""
-        newobj = _misc_.new_LogGui(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-
-class LogGuiPtr(LogGui):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = LogGui
-_misc_.LogGui_swigregister(LogGuiPtr)
+        _misc_.LogGui_swiginit(self,_misc_.new_LogGui(*args, **kwargs))
+LogGui_swigregister = _misc_.LogGui_swigregister
+LogGui_swigregister(LogGui)
 
 class LogWindow(Log):
     """Proxy of C++ LogWindow class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxLogWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, wxFrame pParent, String szTitle, bool bShow=True, bool bPassToOld=True) -> LogWindow"""
-        newobj = _misc_.new_LogWindow(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.LogWindow_swiginit(self,_misc_.new_LogWindow(*args, **kwargs))
     def Show(*args, **kwargs):
         """Show(self, bool bShow=True)"""
         return _misc_.LogWindow_Show(*args, **kwargs)
@@ -1700,24 +1489,16 @@ class LogWindow(Log):
         """PassMessages(self, bool bDoPass)"""
         return _misc_.LogWindow_PassMessages(*args, **kwargs)
 
-
-class LogWindowPtr(LogWindow):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = LogWindow
-_misc_.LogWindow_swigregister(LogWindowPtr)
+LogWindow_swigregister = _misc_.LogWindow_swigregister
+LogWindow_swigregister(LogWindow)
 
 class LogChain(Log):
     """Proxy of C++ LogChain class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxLogChain instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, Log logger) -> LogChain"""
-        newobj = _misc_.new_LogChain(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.LogChain_swiginit(self,_misc_.new_LogChain(*args, **kwargs))
     def SetLog(*args, **kwargs):
         """SetLog(self, Log logger)"""
         return _misc_.LogChain_SetLog(*args, **kwargs)
@@ -1734,150 +1515,113 @@ class LogChain(Log):
         """GetOldLog(self) -> Log"""
         return _misc_.LogChain_GetOldLog(*args, **kwargs)
 
-
-class LogChainPtr(LogChain):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = LogChain
-_misc_.LogChain_swigregister(LogChainPtr)
+LogChain_swigregister = _misc_.LogChain_swigregister
+LogChain_swigregister(LogChain)
 
 class LogBuffer(Log):
     """Proxy of C++ LogBuffer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxLogBuffer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> LogBuffer"""
-        newobj = _misc_.new_LogBuffer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.LogBuffer_swiginit(self,_misc_.new_LogBuffer(*args, **kwargs))
     def GetBuffer(*args, **kwargs):
         """GetBuffer(self) -> String"""
         return _misc_.LogBuffer_GetBuffer(*args, **kwargs)
 
-    def Flush(*args, **kwargs):
-        """Flush(self)"""
-        return _misc_.LogBuffer_Flush(*args, **kwargs)
+LogBuffer_swigregister = _misc_.LogBuffer_swigregister
+LogBuffer_swigregister(LogBuffer)
 
 
-class LogBufferPtr(LogBuffer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = LogBuffer
-_misc_.LogBuffer_swigregister(LogBufferPtr)
-
-
-def SysErrorCode(*args, **kwargs):
-    """SysErrorCode() -> unsigned long"""
-    return _misc_.SysErrorCode(*args, **kwargs)
+def SysErrorCode(*args):
+  """SysErrorCode() -> unsigned long"""
+  return _misc_.SysErrorCode(*args)
 
 def SysErrorMsg(*args, **kwargs):
-    """SysErrorMsg(unsigned long nErrCode=0) -> String"""
-    return _misc_.SysErrorMsg(*args, **kwargs)
+  """SysErrorMsg(unsigned long nErrCode=0) -> String"""
+  return _misc_.SysErrorMsg(*args, **kwargs)
 
 def LogFatalError(*args, **kwargs):
-    """LogFatalError(String msg)"""
-    return _misc_.LogFatalError(*args, **kwargs)
+  """LogFatalError(String msg)"""
+  return _misc_.LogFatalError(*args, **kwargs)
 
 def LogError(*args, **kwargs):
-    """LogError(String msg)"""
-    return _misc_.LogError(*args, **kwargs)
+  """LogError(String msg)"""
+  return _misc_.LogError(*args, **kwargs)
 
 def LogWarning(*args, **kwargs):
-    """LogWarning(String msg)"""
-    return _misc_.LogWarning(*args, **kwargs)
+  """LogWarning(String msg)"""
+  return _misc_.LogWarning(*args, **kwargs)
 
 def LogMessage(*args, **kwargs):
-    """LogMessage(String msg)"""
-    return _misc_.LogMessage(*args, **kwargs)
+  """LogMessage(String msg)"""
+  return _misc_.LogMessage(*args, **kwargs)
 
 def LogInfo(*args, **kwargs):
-    """LogInfo(String msg)"""
-    return _misc_.LogInfo(*args, **kwargs)
+  """LogInfo(String msg)"""
+  return _misc_.LogInfo(*args, **kwargs)
 
 def LogDebug(*args, **kwargs):
-    """LogDebug(String msg)"""
-    return _misc_.LogDebug(*args, **kwargs)
+  """LogDebug(String msg)"""
+  return _misc_.LogDebug(*args, **kwargs)
 
 def LogVerbose(*args, **kwargs):
-    """LogVerbose(String msg)"""
-    return _misc_.LogVerbose(*args, **kwargs)
+  """LogVerbose(String msg)"""
+  return _misc_.LogVerbose(*args, **kwargs)
 
 def LogStatus(*args, **kwargs):
-    """LogStatus(String msg)"""
-    return _misc_.LogStatus(*args, **kwargs)
+  """LogStatus(String msg)"""
+  return _misc_.LogStatus(*args, **kwargs)
 
 def LogStatusFrame(*args, **kwargs):
-    """LogStatusFrame(wxFrame pFrame, String msg)"""
-    return _misc_.LogStatusFrame(*args, **kwargs)
+  """LogStatusFrame(wxFrame pFrame, String msg)"""
+  return _misc_.LogStatusFrame(*args, **kwargs)
 
 def LogSysError(*args, **kwargs):
-    """LogSysError(String msg)"""
-    return _misc_.LogSysError(*args, **kwargs)
+  """LogSysError(String msg)"""
+  return _misc_.LogSysError(*args, **kwargs)
 
 def LogGeneric(*args, **kwargs):
-    """LogGeneric(unsigned long level, String msg)"""
-    return _misc_.LogGeneric(*args, **kwargs)
+  """LogGeneric(unsigned long level, String msg)"""
+  return _misc_.LogGeneric(*args, **kwargs)
 
 def SafeShowMessage(*args, **kwargs):
-    """SafeShowMessage(String title, String text)"""
-    return _misc_.SafeShowMessage(*args, **kwargs)
+  """SafeShowMessage(String title, String text)"""
+  return _misc_.SafeShowMessage(*args, **kwargs)
 class LogNull(object):
     """Proxy of C++ LogNull class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxLogNull instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> LogNull"""
-        newobj = _misc_.new_LogNull(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_LogNull):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-
-class LogNullPtr(LogNull):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = LogNull
-_misc_.LogNull_swigregister(LogNullPtr)
+        _misc_.LogNull_swiginit(self,_misc_.new_LogNull(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_LogNull
+    __del__ = lambda self : None;
+LogNull_swigregister = _misc_.LogNull_swigregister
+LogNull_swigregister(LogNull)
 
 def LogTrace(*args):
-    """
+  """
     LogTrace(unsigned long mask, String msg)
     LogTrace(String mask, String msg)
     """
-    return _misc_.LogTrace(*args)
+  return _misc_.LogTrace(*args)
 
 class PyLog(Log):
     """Proxy of C++ PyLog class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyLog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> PyLog"""
-        newobj = _misc_.new_PyLog(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.PyLog_swiginit(self,_misc_.new_PyLog(*args, **kwargs))
         self._setCallbackInfo(self, PyLog)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.PyLog__setCallbackInfo(*args, **kwargs)
 
-
-class PyLogPtr(PyLog):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PyLog
-_misc_.PyLog_swigregister(PyLogPtr)
+PyLog_swigregister = _misc_.PyLog_swigregister
+PyLog_swigregister(PyLog)
 
 #---------------------------------------------------------------------------
 
@@ -1909,8 +1653,8 @@ SIGALRM = _misc_.SIGALRM
 SIGTERM = _misc_.SIGTERM
 class Process(_core.EvtHandler):
     """Proxy of C++ Process class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyProcess instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
     def Kill(*args, **kwargs):
         """Kill(int pid, int sig=SIGTERM, int flags=KILL_NOCHILDREN) -> int"""
         return _misc_.Process_Kill(*args, **kwargs)
@@ -1926,12 +1670,9 @@ class Process(_core.EvtHandler):
         return _misc_.Process_Open(*args, **kwargs)
 
     Open = staticmethod(Open)
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs): 
         """__init__(self, EvtHandler parent=None, int id=-1) -> Process"""
-        newobj = _misc_.new_Process(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.Process_swiginit(self,_misc_.new_Process(*args, **kwargs))
         self._setCallbackInfo(self, Process)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -1987,36 +1728,28 @@ class Process(_core.EvtHandler):
         """IsErrorAvailable(self) -> bool"""
         return _misc_.Process_IsErrorAvailable(*args, **kwargs)
 
-
-class ProcessPtr(Process):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = Process
-_misc_.Process_swigregister(ProcessPtr)
+Process_swigregister = _misc_.Process_swigregister
+Process_swigregister(Process)
 
 def Process_Kill(*args, **kwargs):
-    """Process_Kill(int pid, int sig=SIGTERM, int flags=KILL_NOCHILDREN) -> int"""
-    return _misc_.Process_Kill(*args, **kwargs)
+  """Process_Kill(int pid, int sig=SIGTERM, int flags=KILL_NOCHILDREN) -> int"""
+  return _misc_.Process_Kill(*args, **kwargs)
 
 def Process_Exists(*args, **kwargs):
-    """Process_Exists(int pid) -> bool"""
-    return _misc_.Process_Exists(*args, **kwargs)
+  """Process_Exists(int pid) -> bool"""
+  return _misc_.Process_Exists(*args, **kwargs)
 
 def Process_Open(*args, **kwargs):
-    """Process_Open(String cmd, int flags=EXEC_ASYNC) -> Process"""
-    return _misc_.Process_Open(*args, **kwargs)
+  """Process_Open(String cmd, int flags=EXEC_ASYNC) -> Process"""
+  return _misc_.Process_Open(*args, **kwargs)
 
 class ProcessEvent(_core.Event):
     """Proxy of C++ ProcessEvent class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxProcessEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, int id=0, int pid=0, int exitcode=0) -> ProcessEvent"""
-        newobj = _misc_.new_ProcessEvent(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.ProcessEvent_swiginit(self,_misc_.new_ProcessEvent(*args, **kwargs))
     def GetPid(*args, **kwargs):
         """GetPid(self) -> int"""
         return _misc_.ProcessEvent_GetPid(*args, **kwargs)
@@ -2027,13 +1760,8 @@ class ProcessEvent(_core.Event):
 
     m_pid = property(_misc_.ProcessEvent_m_pid_get, _misc_.ProcessEvent_m_pid_set)
     m_exitcode = property(_misc_.ProcessEvent_m_exitcode_get, _misc_.ProcessEvent_m_exitcode_set)
-
-class ProcessEventPtr(ProcessEvent):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = ProcessEvent
-_misc_.ProcessEvent_swigregister(ProcessEventPtr)
+ProcessEvent_swigregister = _misc_.ProcessEvent_swigregister
+ProcessEvent_swigregister(ProcessEvent)
 
 wxEVT_END_PROCESS = _misc_.wxEVT_END_PROCESS
 EVT_END_PROCESS = wx.PyEventBinder( wxEVT_END_PROCESS, 1 )
@@ -2045,12 +1773,12 @@ EXEC_MAKE_GROUP_LEADER = _misc_.EXEC_MAKE_GROUP_LEADER
 EXEC_NODISABLE = _misc_.EXEC_NODISABLE
 
 def Execute(*args, **kwargs):
-    """Execute(String command, int flags=EXEC_ASYNC, Process process=None) -> long"""
-    return _misc_.Execute(*args, **kwargs)
+  """Execute(String command, int flags=EXEC_ASYNC, Process process=None) -> long"""
+  return _misc_.Execute(*args, **kwargs)
 
 def Kill(*args, **kwargs):
-    """Kill(long pid, int sig=SIGTERM, int rc, int flags=KILL_NOCHILDREN) -> int"""
-    return _misc_.Kill(*args, **kwargs)
+  """Kill(long pid, int sig=SIGTERM, int rc, int flags=KILL_NOCHILDREN) -> int"""
+  return _misc_.Kill(*args, **kwargs)
 #---------------------------------------------------------------------------
 
 JOYSTICK1 = _misc_.JOYSTICK1
@@ -2062,20 +1790,13 @@ JOY_BUTTON3 = _misc_.JOY_BUTTON3
 JOY_BUTTON4 = _misc_.JOY_BUTTON4
 class Joystick(object):
     """Proxy of C++ Joystick class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxJoystick instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, int joystick=JOYSTICK1) -> Joystick"""
-        newobj = _misc_.new_Joystick(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_Joystick):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.Joystick_swiginit(self,_misc_.new_Joystick(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_Joystick
+    __del__ = lambda self : None;
     def GetPosition(*args, **kwargs):
         """GetPosition(self) -> Point"""
         return _misc_.Joystick_GetPosition(*args, **kwargs)
@@ -2245,13 +1966,8 @@ class Joystick(object):
         return _misc_.Joystick_ReleaseCapture(*args, **kwargs)
 
     def __nonzero__(self): return self.IsOk() 
-
-class JoystickPtr(Joystick):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = Joystick
-_misc_.Joystick_swigregister(JoystickPtr)
+Joystick_swigregister = _misc_.Joystick_swigregister
+Joystick_swigregister(Joystick)
 
 wxEVT_JOY_BUTTON_DOWN = _misc_.wxEVT_JOY_BUTTON_DOWN
 wxEVT_JOY_BUTTON_UP = _misc_.wxEVT_JOY_BUTTON_UP
@@ -2259,17 +1975,14 @@ wxEVT_JOY_MOVE = _misc_.wxEVT_JOY_MOVE
 wxEVT_JOY_ZMOVE = _misc_.wxEVT_JOY_ZMOVE
 class JoystickEvent(_core.Event):
     """Proxy of C++ JoystickEvent class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxJoystickEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, wxEventType type=wxEVT_NULL, int state=0, int joystick=JOYSTICK1, 
             int change=0) -> JoystickEvent
         """
-        newobj = _misc_.new_JoystickEvent(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.JoystickEvent_swiginit(self,_misc_.new_JoystickEvent(*args, **kwargs))
     def GetPosition(*args, **kwargs):
         """GetPosition(self) -> Point"""
         return _misc_.JoystickEvent_GetPosition(*args, **kwargs)
@@ -2340,13 +2053,8 @@ class JoystickEvent(_core.Event):
     m_buttonState = property(GetButtonState, SetButtonState)
     m_joyStick = property(GetJoystick, SetJoystick)
 
-
-class JoystickEventPtr(JoystickEvent):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = JoystickEvent
-_misc_.JoystickEvent_swigregister(JoystickEventPtr)
+JoystickEvent_swigregister = _misc_.JoystickEvent_swigregister
+JoystickEvent_swigregister(JoystickEvent)
 
 EVT_JOY_BUTTON_DOWN = wx.PyEventBinder( wxEVT_JOY_BUTTON_DOWN )
 EVT_JOY_BUTTON_UP = wx.PyEventBinder( wxEVT_JOY_BUTTON_UP )
@@ -2367,20 +2075,13 @@ SOUND_ASYNC = _misc_.SOUND_ASYNC
 SOUND_LOOP = _misc_.SOUND_LOOP
 class Sound(object):
     """Proxy of C++ Sound class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxSound instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, String fileName=EmptyString) -> Sound"""
-        newobj = _misc_.new_Sound(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_Sound):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.Sound_swiginit(self,_misc_.new_Sound(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_Sound
+    __del__ = lambda self : None;
     def Create(*args, **kwargs):
         """Create(self, String fileName) -> bool"""
         return _misc_.Sound_Create(*args, **kwargs)
@@ -2408,27 +2109,21 @@ class Sound(object):
 
     Stop = staticmethod(Stop)
     def __nonzero__(self): return self.IsOk() 
-
-class SoundPtr(Sound):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = Sound
-_misc_.Sound_swigregister(SoundPtr)
+Sound_swigregister = _misc_.Sound_swigregister
+Sound_swigregister(Sound)
 
 def SoundFromData(*args, **kwargs):
     """SoundFromData(PyObject data) -> Sound"""
     val = _misc_.new_SoundFromData(*args, **kwargs)
-    val.thisown = 1
     return val
 
 def Sound_PlaySound(*args, **kwargs):
-    """Sound_PlaySound(String filename, unsigned int flags=SOUND_ASYNC) -> bool"""
-    return _misc_.Sound_PlaySound(*args, **kwargs)
+  """Sound_PlaySound(String filename, unsigned int flags=SOUND_ASYNC) -> bool"""
+  return _misc_.Sound_PlaySound(*args, **kwargs)
 
-def Sound_Stop(*args, **kwargs):
-    """Sound_Stop()"""
-    return _misc_.Sound_Stop(*args, **kwargs)
+def Sound_Stop(*args):
+  """Sound_Stop()"""
+  return _misc_.Sound_Stop(*args)
 
 #---------------------------------------------------------------------------
 
@@ -2439,14 +2134,11 @@ MAILCAP_GNOME = _misc_.MAILCAP_GNOME
 MAILCAP_ALL = _misc_.MAILCAP_ALL
 class FileTypeInfo(object):
     """Proxy of C++ FileTypeInfo class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxFileTypeInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, String mimeType, String openCmd, String printCmd, String desc) -> FileTypeInfo"""
-        newobj = _misc_.new_FileTypeInfo(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.FileTypeInfo_swiginit(self,_misc_.new_FileTypeInfo(*args, **kwargs))
     def IsValid(*args, **kwargs):
         """IsValid(self) -> bool"""
         return _misc_.FileTypeInfo_IsValid(*args, **kwargs)
@@ -2484,7 +2176,7 @@ class FileTypeInfo(object):
         return _misc_.FileTypeInfo_GetExtensions(*args, **kwargs)
 
     def GetExtensionsCount(*args, **kwargs):
-        """GetExtensionsCount(self) -> int"""
+        """GetExtensionsCount(self) -> size_t"""
         return _misc_.FileTypeInfo_GetExtensionsCount(*args, **kwargs)
 
     def GetIconFile(*args, **kwargs):
@@ -2495,42 +2187,28 @@ class FileTypeInfo(object):
         """GetIconIndex(self) -> int"""
         return _misc_.FileTypeInfo_GetIconIndex(*args, **kwargs)
 
-
-class FileTypeInfoPtr(FileTypeInfo):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = FileTypeInfo
-_misc_.FileTypeInfo_swigregister(FileTypeInfoPtr)
+FileTypeInfo_swigregister = _misc_.FileTypeInfo_swigregister
+FileTypeInfo_swigregister(FileTypeInfo)
 
 def FileTypeInfoSequence(*args, **kwargs):
     """FileTypeInfoSequence(wxArrayString sArray) -> FileTypeInfo"""
     val = _misc_.new_FileTypeInfoSequence(*args, **kwargs)
-    val.thisown = 1
     return val
 
 def NullFileTypeInfo(*args, **kwargs):
     """NullFileTypeInfo() -> FileTypeInfo"""
     val = _misc_.new_NullFileTypeInfo(*args, **kwargs)
-    val.thisown = 1
     return val
 
 class FileType(object):
     """Proxy of C++ FileType class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxFileType instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, FileTypeInfo ftInfo) -> FileType"""
-        newobj = _misc_.new_FileType(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_FileType):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.FileType_swiginit(self,_misc_.new_FileType(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_FileType
+    __del__ = lambda self : None;
     def GetMimeType(*args, **kwargs):
         """GetMimeType(self) -> PyObject"""
         return _misc_.FileType_GetMimeType(*args, **kwargs)
@@ -2584,33 +2262,25 @@ class FileType(object):
         return _misc_.FileType_ExpandCommand(*args, **kwargs)
 
     ExpandCommand = staticmethod(ExpandCommand)
-
-class FileTypePtr(FileType):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = FileType
-_misc_.FileType_swigregister(FileTypePtr)
+FileType_swigregister = _misc_.FileType_swigregister
+FileType_swigregister(FileType)
 
 def FileType_ExpandCommand(*args, **kwargs):
-    """FileType_ExpandCommand(String command, String filename, String mimetype=EmptyString) -> String"""
-    return _misc_.FileType_ExpandCommand(*args, **kwargs)
+  """FileType_ExpandCommand(String command, String filename, String mimetype=EmptyString) -> String"""
+  return _misc_.FileType_ExpandCommand(*args, **kwargs)
 
 class MimeTypesManager(object):
     """Proxy of C++ MimeTypesManager class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxMimeTypesManager instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
     def IsOfType(*args, **kwargs):
         """IsOfType(String mimeType, String wildcard) -> bool"""
         return _misc_.MimeTypesManager_IsOfType(*args, **kwargs)
 
     IsOfType = staticmethod(IsOfType)
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> MimeTypesManager"""
-        newobj = _misc_.new_MimeTypesManager(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.MimeTypesManager_swiginit(self,_misc_.new_MimeTypesManager(*args, **kwargs))
     def Initialize(*args, **kwargs):
         """Initialize(self, int mailcapStyle=MAILCAP_ALL, String extraDir=EmptyString)"""
         return _misc_.MimeTypesManager_Initialize(*args, **kwargs)
@@ -2651,24 +2321,15 @@ class MimeTypesManager(object):
         """Unassociate(self, FileType ft) -> bool"""
         return _misc_.MimeTypesManager_Unassociate(*args, **kwargs)
 
-    def __del__(self, destroy=_misc_.delete_MimeTypesManager):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-
-class MimeTypesManagerPtr(MimeTypesManager):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = MimeTypesManager
-_misc_.MimeTypesManager_swigregister(MimeTypesManagerPtr)
+    __swig_destroy__ = _misc_.delete_MimeTypesManager
+    __del__ = lambda self : None;
+MimeTypesManager_swigregister = _misc_.MimeTypesManager_swigregister
+MimeTypesManager_swigregister(MimeTypesManager)
 TheMimeTypesManager = cvar.TheMimeTypesManager
 
 def MimeTypesManager_IsOfType(*args, **kwargs):
-    """MimeTypesManager_IsOfType(String mimeType, String wildcard) -> bool"""
-    return _misc_.MimeTypesManager_IsOfType(*args, **kwargs)
+  """MimeTypesManager_IsOfType(String mimeType, String wildcard) -> bool"""
+  return _misc_.MimeTypesManager_IsOfType(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
@@ -2692,9 +2353,9 @@ class ArtProvider(object):
                 return bmp
 
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyArtProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self) -> ArtProvider
 
@@ -2716,18 +2377,11 @@ class ArtProvider(object):
                     return bmp
 
         """
-        newobj = _misc_.new_ArtProvider(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.ArtProvider_swiginit(self,_misc_.new_ArtProvider(*args, **kwargs))
         self._setCallbackInfo(self, ArtProvider)
 
-    def __del__(self, destroy=_misc_.delete_ArtProvider):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+    __swig_destroy__ = _misc_.delete_ArtProvider
+    __del__ = lambda self : None;
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.ArtProvider__setCallbackInfo(*args, **kwargs)
@@ -2798,13 +2452,8 @@ class ArtProvider(object):
         args[0].thisown = 0
         return val
 
-
-class ArtProviderPtr(ArtProvider):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = ArtProvider
-_misc_.ArtProvider_swigregister(ArtProviderPtr)
+ArtProvider_swigregister = _misc_.ArtProvider_swigregister
+ArtProvider_swigregister(ArtProvider)
 ART_TOOLBAR = cvar.ART_TOOLBAR
 ART_MENU = cvar.ART_MENU
 ART_FRAME_ICON = cvar.ART_FRAME_ICON
@@ -2863,58 +2512,58 @@ ART_FIND = cvar.ART_FIND
 ART_FIND_AND_REPLACE = cvar.ART_FIND_AND_REPLACE
 
 def ArtProvider_PushProvider(*args, **kwargs):
-    """
+  """
     ArtProvider_PushProvider(ArtProvider provider)
 
     Add new provider to the top of providers stack.
     """
-    return _misc_.ArtProvider_PushProvider(*args, **kwargs)
+  return _misc_.ArtProvider_PushProvider(*args, **kwargs)
 
-def ArtProvider_PopProvider(*args, **kwargs):
-    """
+def ArtProvider_PopProvider(*args):
+  """
     ArtProvider_PopProvider() -> bool
 
     Remove latest added provider and delete it.
     """
-    return _misc_.ArtProvider_PopProvider(*args, **kwargs)
+  return _misc_.ArtProvider_PopProvider(*args)
 
 def ArtProvider_RemoveProvider(*args, **kwargs):
-    """
+  """
     ArtProvider_RemoveProvider(ArtProvider provider) -> bool
 
     Remove provider. The provider must have been added previously!  The
     provider is _not_ deleted.
     """
-    val = _misc_.ArtProvider_RemoveProvider(*args, **kwargs)
-    args[1].thisown = 1
-    return val
+  val = _misc_.ArtProvider_RemoveProvider(*args, **kwargs)
+  args[1].thisown = 1
+  return val
 
 def ArtProvider_GetBitmap(*args, **kwargs):
-    """
+  """
     ArtProvider_GetBitmap(String id, String client=ART_OTHER, Size size=DefaultSize) -> Bitmap
 
     Query the providers for bitmap with given ID and return it. Return
     wx.NullBitmap if no provider provides it.
     """
-    return _misc_.ArtProvider_GetBitmap(*args, **kwargs)
+  return _misc_.ArtProvider_GetBitmap(*args, **kwargs)
 
 def ArtProvider_GetIcon(*args, **kwargs):
-    """
+  """
     ArtProvider_GetIcon(String id, String client=ART_OTHER, Size size=DefaultSize) -> Icon
 
     Query the providers for icon with given ID and return it.  Return
     wx.NullIcon if no provider provides it.
     """
-    return _misc_.ArtProvider_GetIcon(*args, **kwargs)
+  return _misc_.ArtProvider_GetIcon(*args, **kwargs)
 
 def ArtProvider_GetSizeHint(*args, **kwargs):
-    """
+  """
     ArtProvider_GetSizeHint(String client, bool platform_dependent=False) -> Size
 
     Get the size hint of an icon from a specific Art Client, queries the
     topmost provider if platform_dependent = false
     """
-    return _misc_.ArtProvider_GetSizeHint(*args, **kwargs)
+  return _misc_.ArtProvider_GetSizeHint(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
@@ -2943,15 +2592,11 @@ class ConfigBase(object):
     should be kept small, no more than a couple kilobytes.
 
     """
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxConfigBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __del__(self, destroy=_misc_.delete_ConfigBase):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _misc_.delete_ConfigBase
+    __del__ = lambda self : None;
     Type_Unknown = _misc_.ConfigBase_Type_Unknown
     Type_String = _misc_.ConfigBase_Type_String
     Type_Boolean = _misc_.ConfigBase_Type_Boolean
@@ -3291,108 +2936,79 @@ class ConfigBase(object):
         """GetStyle(self) -> long"""
         return _misc_.ConfigBase_GetStyle(*args, **kwargs)
 
-
-class ConfigBasePtr(ConfigBase):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = ConfigBase
-_misc_.ConfigBase_swigregister(ConfigBasePtr)
+ConfigBase_swigregister = _misc_.ConfigBase_swigregister
+ConfigBase_swigregister(ConfigBase)
 
 def ConfigBase_Set(*args, **kwargs):
-    """
+  """
     ConfigBase_Set(ConfigBase config) -> ConfigBase
 
     Sets the global config object (the one returned by Get) and returns a
     reference to the previous global config object.
     """
-    return _misc_.ConfigBase_Set(*args, **kwargs)
+  return _misc_.ConfigBase_Set(*args, **kwargs)
 
 def ConfigBase_Get(*args, **kwargs):
-    """
+  """
     ConfigBase_Get(bool createOnDemand=True) -> ConfigBase
 
     Returns the current global config object, creating one if neccessary.
     """
-    return _misc_.ConfigBase_Get(*args, **kwargs)
+  return _misc_.ConfigBase_Get(*args, **kwargs)
 
-def ConfigBase_Create(*args, **kwargs):
-    """
+def ConfigBase_Create(*args):
+  """
     ConfigBase_Create() -> ConfigBase
 
     Create and return a new global config object.  This function will
     create the "best" implementation of wx.Config available for the
     current platform.
     """
-    return _misc_.ConfigBase_Create(*args, **kwargs)
+  return _misc_.ConfigBase_Create(*args)
 
-def ConfigBase_DontCreateOnDemand(*args, **kwargs):
-    """
+def ConfigBase_DontCreateOnDemand(*args):
+  """
     ConfigBase_DontCreateOnDemand()
 
     Should Get() try to create a new log object if there isn't a current
     one?
     """
-    return _misc_.ConfigBase_DontCreateOnDemand(*args, **kwargs)
+  return _misc_.ConfigBase_DontCreateOnDemand(*args)
 
 class Config(ConfigBase):
     """
     This ConfigBase-derived class will use the registry on Windows,
     and will be a wx.FileConfig on other platforms.
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxConfig instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, String appName=EmptyString, String vendorName=EmptyString, 
             String localFilename=EmptyString, String globalFilename=EmptyString, 
             long style=wxCONFIG_USE_LOCAL_FILE|wxCONFIG_USE_GLOBAL_FILE) -> Config
         """
-        newobj = _misc_.new_Config(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_Config):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-
-class ConfigPtr(Config):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = Config
-_misc_.Config_swigregister(ConfigPtr)
+        _misc_.Config_swiginit(self,_misc_.new_Config(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_Config
+    __del__ = lambda self : None;
+Config_swigregister = _misc_.Config_swigregister
+Config_swigregister(Config)
 
 class FileConfig(ConfigBase):
     """This config class will use a file for storage on all platforms."""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxFileConfig instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, String appName=EmptyString, String vendorName=EmptyString, 
             String localFilename=EmptyString, String globalFilename=EmptyString, 
             long style=wxCONFIG_USE_LOCAL_FILE|wxCONFIG_USE_GLOBAL_FILE) -> FileConfig
         """
-        newobj = _misc_.new_FileConfig(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_FileConfig):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-
-class FileConfigPtr(FileConfig):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = FileConfig
-_misc_.FileConfig_swigregister(FileConfigPtr)
+        _misc_.FileConfig_swiginit(self,_misc_.new_FileConfig(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_FileConfig
+    __del__ = lambda self : None;
+FileConfig_swigregister = _misc_.FileConfig_swigregister
+FileConfig_swigregister(FileConfig)
 
 class ConfigPathChanger(object):
     """
@@ -3401,20 +3017,13 @@ class ConfigPathChanger(object):
     variable of this type, you work in the entry directory and the path is
     automatically restored when the function returns.
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxConfigPathChanger instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, ConfigBase config, String entry) -> ConfigPathChanger"""
-        newobj = _misc_.new_ConfigPathChanger(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_ConfigPathChanger):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.ConfigPathChanger_swiginit(self,_misc_.new_ConfigPathChanger(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_ConfigPathChanger
+    __del__ = lambda self : None;
     def Name(*args, **kwargs):
         """
         Name(self) -> String
@@ -3423,17 +3032,12 @@ class ConfigPathChanger(object):
         """
         return _misc_.ConfigPathChanger_Name(*args, **kwargs)
 
-
-class ConfigPathChangerPtr(ConfigPathChanger):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = ConfigPathChanger
-_misc_.ConfigPathChanger_swigregister(ConfigPathChangerPtr)
+ConfigPathChanger_swigregister = _misc_.ConfigPathChanger_swigregister
+ConfigPathChanger_swigregister(ConfigPathChanger)
 
 
 def ExpandEnvVars(*args, **kwargs):
-    """
+  """
     ExpandEnvVars(String sz) -> String
 
     Replace environment variables ($SOMETHING) with their values. The
@@ -3441,13 +3045,13 @@ def ExpandEnvVars(*args, **kwargs):
     characters and '_' only. '$' must be escaped ('\$') in order to be
     taken literally.
     """
-    return _misc_.ExpandEnvVars(*args, **kwargs)
+  return _misc_.ExpandEnvVars(*args, **kwargs)
 #---------------------------------------------------------------------------
 
 class DateTime(object):
     """Proxy of C++ DateTime class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxDateTime instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
     Local = _misc_.DateTime_Local
     GMT_12 = _misc_.DateTime_GMT_12
     GMT_11 = _misc_.DateTime_GMT_11
@@ -3702,18 +3306,11 @@ class DateTime(object):
         return _misc_.DateTime_Today(*args, **kwargs)
 
     Today = staticmethod(Today)
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> DateTime"""
-        newobj = _misc_.new_DateTime(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_DateTime):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.DateTime_swiginit(self,_misc_.new_DateTime(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_DateTime
+    __del__ = lambda self : None;
     def SetToCurrent(*args, **kwargs):
         """SetToCurrent(self) -> DateTime"""
         return _misc_.DateTime_SetToCurrent(*args, **kwargs)
@@ -4116,112 +3713,104 @@ class DateTime(object):
         else:
             return "INVALID DateTime"
 
-
-class DateTimePtr(DateTime):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = DateTime
-_misc_.DateTime_swigregister(DateTimePtr)
+DateTime_swigregister = _misc_.DateTime_swigregister
+DateTime_swigregister(DateTime)
 DefaultDateTimeFormat = cvar.DefaultDateTimeFormat
 DefaultTimeSpanFormat = cvar.DefaultTimeSpanFormat
 
 def DateTime_SetCountry(*args, **kwargs):
-    """DateTime_SetCountry(int country)"""
-    return _misc_.DateTime_SetCountry(*args, **kwargs)
+  """DateTime_SetCountry(int country)"""
+  return _misc_.DateTime_SetCountry(*args, **kwargs)
 
-def DateTime_GetCountry(*args, **kwargs):
-    """DateTime_GetCountry() -> int"""
-    return _misc_.DateTime_GetCountry(*args, **kwargs)
+def DateTime_GetCountry(*args):
+  """DateTime_GetCountry() -> int"""
+  return _misc_.DateTime_GetCountry(*args)
 
 def DateTime_IsWestEuropeanCountry(*args, **kwargs):
-    """DateTime_IsWestEuropeanCountry(int country=Country_Default) -> bool"""
-    return _misc_.DateTime_IsWestEuropeanCountry(*args, **kwargs)
+  """DateTime_IsWestEuropeanCountry(int country=Country_Default) -> bool"""
+  return _misc_.DateTime_IsWestEuropeanCountry(*args, **kwargs)
 
 def DateTime_GetCurrentYear(*args, **kwargs):
-    """DateTime_GetCurrentYear(int cal=Gregorian) -> int"""
-    return _misc_.DateTime_GetCurrentYear(*args, **kwargs)
+  """DateTime_GetCurrentYear(int cal=Gregorian) -> int"""
+  return _misc_.DateTime_GetCurrentYear(*args, **kwargs)
 
 def DateTime_ConvertYearToBC(*args, **kwargs):
-    """DateTime_ConvertYearToBC(int year) -> int"""
-    return _misc_.DateTime_ConvertYearToBC(*args, **kwargs)
+  """DateTime_ConvertYearToBC(int year) -> int"""
+  return _misc_.DateTime_ConvertYearToBC(*args, **kwargs)
 
 def DateTime_GetCurrentMonth(*args, **kwargs):
-    """DateTime_GetCurrentMonth(int cal=Gregorian) -> int"""
-    return _misc_.DateTime_GetCurrentMonth(*args, **kwargs)
+  """DateTime_GetCurrentMonth(int cal=Gregorian) -> int"""
+  return _misc_.DateTime_GetCurrentMonth(*args, **kwargs)
 
 def DateTime_IsLeapYear(*args, **kwargs):
-    """DateTime_IsLeapYear(int year=Inv_Year, int cal=Gregorian) -> bool"""
-    return _misc_.DateTime_IsLeapYear(*args, **kwargs)
+  """DateTime_IsLeapYear(int year=Inv_Year, int cal=Gregorian) -> bool"""
+  return _misc_.DateTime_IsLeapYear(*args, **kwargs)
 
 def DateTime_GetCentury(*args, **kwargs):
-    """DateTime_GetCentury(int year=Inv_Year) -> int"""
-    return _misc_.DateTime_GetCentury(*args, **kwargs)
+  """DateTime_GetCentury(int year=Inv_Year) -> int"""
+  return _misc_.DateTime_GetCentury(*args, **kwargs)
 
 def DateTime_GetNumberOfDaysinYear(*args, **kwargs):
-    """DateTime_GetNumberOfDaysinYear(int year, int cal=Gregorian) -> int"""
-    return _misc_.DateTime_GetNumberOfDaysinYear(*args, **kwargs)
+  """DateTime_GetNumberOfDaysinYear(int year, int cal=Gregorian) -> int"""
+  return _misc_.DateTime_GetNumberOfDaysinYear(*args, **kwargs)
 
 def DateTime_GetNumberOfDaysInMonth(*args, **kwargs):
-    """DateTime_GetNumberOfDaysInMonth(int month, int year=Inv_Year, int cal=Gregorian) -> int"""
-    return _misc_.DateTime_GetNumberOfDaysInMonth(*args, **kwargs)
+  """DateTime_GetNumberOfDaysInMonth(int month, int year=Inv_Year, int cal=Gregorian) -> int"""
+  return _misc_.DateTime_GetNumberOfDaysInMonth(*args, **kwargs)
 
 def DateTime_GetMonthName(*args, **kwargs):
-    """DateTime_GetMonthName(int month, int flags=Name_Full) -> String"""
-    return _misc_.DateTime_GetMonthName(*args, **kwargs)
+  """DateTime_GetMonthName(int month, int flags=Name_Full) -> String"""
+  return _misc_.DateTime_GetMonthName(*args, **kwargs)
 
 def DateTime_GetWeekDayName(*args, **kwargs):
-    """DateTime_GetWeekDayName(int weekday, int flags=Name_Full) -> String"""
-    return _misc_.DateTime_GetWeekDayName(*args, **kwargs)
+  """DateTime_GetWeekDayName(int weekday, int flags=Name_Full) -> String"""
+  return _misc_.DateTime_GetWeekDayName(*args, **kwargs)
 
-def DateTime_GetAmPmStrings(*args, **kwargs):
-    """
+def DateTime_GetAmPmStrings(*args):
+  """
     GetAmPmStrings() -> (am, pm)
 
     Get the AM and PM strings in the current locale (may be empty)
     """
-    return _misc_.DateTime_GetAmPmStrings(*args, **kwargs)
+  return _misc_.DateTime_GetAmPmStrings(*args)
 
 def DateTime_IsDSTApplicable(*args, **kwargs):
-    """DateTime_IsDSTApplicable(int year=Inv_Year, int country=Country_Default) -> bool"""
-    return _misc_.DateTime_IsDSTApplicable(*args, **kwargs)
+  """DateTime_IsDSTApplicable(int year=Inv_Year, int country=Country_Default) -> bool"""
+  return _misc_.DateTime_IsDSTApplicable(*args, **kwargs)
 
 def DateTime_GetBeginDST(*args, **kwargs):
-    """DateTime_GetBeginDST(int year=Inv_Year, int country=Country_Default) -> DateTime"""
-    return _misc_.DateTime_GetBeginDST(*args, **kwargs)
+  """DateTime_GetBeginDST(int year=Inv_Year, int country=Country_Default) -> DateTime"""
+  return _misc_.DateTime_GetBeginDST(*args, **kwargs)
 
 def DateTime_GetEndDST(*args, **kwargs):
-    """DateTime_GetEndDST(int year=Inv_Year, int country=Country_Default) -> DateTime"""
-    return _misc_.DateTime_GetEndDST(*args, **kwargs)
+  """DateTime_GetEndDST(int year=Inv_Year, int country=Country_Default) -> DateTime"""
+  return _misc_.DateTime_GetEndDST(*args, **kwargs)
 
-def DateTime_Now(*args, **kwargs):
-    """DateTime_Now() -> DateTime"""
-    return _misc_.DateTime_Now(*args, **kwargs)
+def DateTime_Now(*args):
+  """DateTime_Now() -> DateTime"""
+  return _misc_.DateTime_Now(*args)
 
-def DateTime_UNow(*args, **kwargs):
-    """DateTime_UNow() -> DateTime"""
-    return _misc_.DateTime_UNow(*args, **kwargs)
+def DateTime_UNow(*args):
+  """DateTime_UNow() -> DateTime"""
+  return _misc_.DateTime_UNow(*args)
 
-def DateTime_Today(*args, **kwargs):
-    """DateTime_Today() -> DateTime"""
-    return _misc_.DateTime_Today(*args, **kwargs)
+def DateTime_Today(*args):
+  """DateTime_Today() -> DateTime"""
+  return _misc_.DateTime_Today(*args)
 
 def DateTimeFromTimeT(*args, **kwargs):
     """DateTimeFromTimeT(time_t timet) -> DateTime"""
     val = _misc_.new_DateTimeFromTimeT(*args, **kwargs)
-    val.thisown = 1
     return val
 
 def DateTimeFromJDN(*args, **kwargs):
     """DateTimeFromJDN(double jdn) -> DateTime"""
     val = _misc_.new_DateTimeFromJDN(*args, **kwargs)
-    val.thisown = 1
     return val
 
 def DateTimeFromHMS(*args, **kwargs):
     """DateTimeFromHMS(int hour, int minute=0, int second=0, int millisec=0) -> DateTime"""
     val = _misc_.new_DateTimeFromHMS(*args, **kwargs)
-    val.thisown = 1
     return val
 
 def DateTimeFromDMY(*args, **kwargs):
@@ -4230,17 +3819,21 @@ def DateTimeFromDMY(*args, **kwargs):
         int minute=0, int second=0, int millisec=0) -> DateTime
     """
     val = _misc_.new_DateTimeFromDMY(*args, **kwargs)
-    val.thisown = 1
+    return val
+
+def DateTimeFromDateTime(*args, **kwargs):
+    """DateTimeFromDateTime(DateTime date) -> DateTime"""
+    val = _misc_.new_DateTimeFromDateTime(*args, **kwargs)
     return val
 
 def DateTime_SetToWeekOfYear(*args, **kwargs):
-    """DateTime_SetToWeekOfYear(int year, int numWeek, int weekday=Mon) -> DateTime"""
-    return _misc_.DateTime_SetToWeekOfYear(*args, **kwargs)
+  """DateTime_SetToWeekOfYear(int year, int numWeek, int weekday=Mon) -> DateTime"""
+  return _misc_.DateTime_SetToWeekOfYear(*args, **kwargs)
 
 class TimeSpan(object):
     """Proxy of C++ TimeSpan class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxTimeSpan instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
     def Seconds(*args, **kwargs):
         """Seconds(long sec) -> TimeSpan"""
         return _misc_.TimeSpan_Seconds(*args, **kwargs)
@@ -4291,18 +3884,11 @@ class TimeSpan(object):
         return _misc_.TimeSpan_Week(*args, **kwargs)
 
     Week = staticmethod(Week)
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs): 
         """__init__(self, long hours=0, long minutes=0, long seconds=0, long milliseconds=0) -> TimeSpan"""
-        newobj = _misc_.new_TimeSpan(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_TimeSpan):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.TimeSpan_swiginit(self,_misc_.new_TimeSpan(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_TimeSpan
+    __del__ = lambda self : None;
     def Add(*args, **kwargs):
         """Add(self, TimeSpan diff) -> TimeSpan"""
         return _misc_.TimeSpan_Add(*args, **kwargs)
@@ -4437,70 +4023,58 @@ class TimeSpan(object):
     def __str__(self):
         return self.Format().encode(wx.GetDefaultPyEncoding())
 
-
-class TimeSpanPtr(TimeSpan):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = TimeSpan
-_misc_.TimeSpan_swigregister(TimeSpanPtr)
+TimeSpan_swigregister = _misc_.TimeSpan_swigregister
+TimeSpan_swigregister(TimeSpan)
 
 def TimeSpan_Seconds(*args, **kwargs):
-    """TimeSpan_Seconds(long sec) -> TimeSpan"""
-    return _misc_.TimeSpan_Seconds(*args, **kwargs)
+  """TimeSpan_Seconds(long sec) -> TimeSpan"""
+  return _misc_.TimeSpan_Seconds(*args, **kwargs)
 
-def TimeSpan_Second(*args, **kwargs):
-    """TimeSpan_Second() -> TimeSpan"""
-    return _misc_.TimeSpan_Second(*args, **kwargs)
+def TimeSpan_Second(*args):
+  """TimeSpan_Second() -> TimeSpan"""
+  return _misc_.TimeSpan_Second(*args)
 
 def TimeSpan_Minutes(*args, **kwargs):
-    """TimeSpan_Minutes(long min) -> TimeSpan"""
-    return _misc_.TimeSpan_Minutes(*args, **kwargs)
+  """TimeSpan_Minutes(long min) -> TimeSpan"""
+  return _misc_.TimeSpan_Minutes(*args, **kwargs)
 
-def TimeSpan_Minute(*args, **kwargs):
-    """TimeSpan_Minute() -> TimeSpan"""
-    return _misc_.TimeSpan_Minute(*args, **kwargs)
+def TimeSpan_Minute(*args):
+  """TimeSpan_Minute() -> TimeSpan"""
+  return _misc_.TimeSpan_Minute(*args)
 
 def TimeSpan_Hours(*args, **kwargs):
-    """TimeSpan_Hours(long hours) -> TimeSpan"""
-    return _misc_.TimeSpan_Hours(*args, **kwargs)
+  """TimeSpan_Hours(long hours) -> TimeSpan"""
+  return _misc_.TimeSpan_Hours(*args, **kwargs)
 
-def TimeSpan_Hour(*args, **kwargs):
-    """TimeSpan_Hour() -> TimeSpan"""
-    return _misc_.TimeSpan_Hour(*args, **kwargs)
+def TimeSpan_Hour(*args):
+  """TimeSpan_Hour() -> TimeSpan"""
+  return _misc_.TimeSpan_Hour(*args)
 
 def TimeSpan_Days(*args, **kwargs):
-    """TimeSpan_Days(long days) -> TimeSpan"""
-    return _misc_.TimeSpan_Days(*args, **kwargs)
+  """TimeSpan_Days(long days) -> TimeSpan"""
+  return _misc_.TimeSpan_Days(*args, **kwargs)
 
-def TimeSpan_Day(*args, **kwargs):
-    """TimeSpan_Day() -> TimeSpan"""
-    return _misc_.TimeSpan_Day(*args, **kwargs)
+def TimeSpan_Day(*args):
+  """TimeSpan_Day() -> TimeSpan"""
+  return _misc_.TimeSpan_Day(*args)
 
 def TimeSpan_Weeks(*args, **kwargs):
-    """TimeSpan_Weeks(long days) -> TimeSpan"""
-    return _misc_.TimeSpan_Weeks(*args, **kwargs)
+  """TimeSpan_Weeks(long days) -> TimeSpan"""
+  return _misc_.TimeSpan_Weeks(*args, **kwargs)
 
-def TimeSpan_Week(*args, **kwargs):
-    """TimeSpan_Week() -> TimeSpan"""
-    return _misc_.TimeSpan_Week(*args, **kwargs)
+def TimeSpan_Week(*args):
+  """TimeSpan_Week() -> TimeSpan"""
+  return _misc_.TimeSpan_Week(*args)
 
 class DateSpan(object):
     """Proxy of C++ DateSpan class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxDateSpan instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, int years=0, int months=0, int weeks=0, int days=0) -> DateSpan"""
-        newobj = _misc_.new_DateSpan(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_DateSpan):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.DateSpan_swiginit(self,_misc_.new_DateSpan(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_DateSpan
+    __del__ = lambda self : None;
     def Days(*args, **kwargs):
         """Days(int days) -> DateSpan"""
         return _misc_.DateSpan_Days(*args, **kwargs)
@@ -4633,62 +4207,57 @@ class DateSpan(object):
         """__ne__(self, DateSpan other) -> bool"""
         return _misc_.DateSpan___ne__(*args, **kwargs)
 
-
-class DateSpanPtr(DateSpan):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = DateSpan
-_misc_.DateSpan_swigregister(DateSpanPtr)
+DateSpan_swigregister = _misc_.DateSpan_swigregister
+DateSpan_swigregister(DateSpan)
 
 def DateSpan_Days(*args, **kwargs):
-    """DateSpan_Days(int days) -> DateSpan"""
-    return _misc_.DateSpan_Days(*args, **kwargs)
+  """DateSpan_Days(int days) -> DateSpan"""
+  return _misc_.DateSpan_Days(*args, **kwargs)
 
-def DateSpan_Day(*args, **kwargs):
-    """DateSpan_Day() -> DateSpan"""
-    return _misc_.DateSpan_Day(*args, **kwargs)
+def DateSpan_Day(*args):
+  """DateSpan_Day() -> DateSpan"""
+  return _misc_.DateSpan_Day(*args)
 
 def DateSpan_Weeks(*args, **kwargs):
-    """DateSpan_Weeks(int weeks) -> DateSpan"""
-    return _misc_.DateSpan_Weeks(*args, **kwargs)
+  """DateSpan_Weeks(int weeks) -> DateSpan"""
+  return _misc_.DateSpan_Weeks(*args, **kwargs)
 
-def DateSpan_Week(*args, **kwargs):
-    """DateSpan_Week() -> DateSpan"""
-    return _misc_.DateSpan_Week(*args, **kwargs)
+def DateSpan_Week(*args):
+  """DateSpan_Week() -> DateSpan"""
+  return _misc_.DateSpan_Week(*args)
 
 def DateSpan_Months(*args, **kwargs):
-    """DateSpan_Months(int mon) -> DateSpan"""
-    return _misc_.DateSpan_Months(*args, **kwargs)
+  """DateSpan_Months(int mon) -> DateSpan"""
+  return _misc_.DateSpan_Months(*args, **kwargs)
 
-def DateSpan_Month(*args, **kwargs):
-    """DateSpan_Month() -> DateSpan"""
-    return _misc_.DateSpan_Month(*args, **kwargs)
+def DateSpan_Month(*args):
+  """DateSpan_Month() -> DateSpan"""
+  return _misc_.DateSpan_Month(*args)
 
 def DateSpan_Years(*args, **kwargs):
-    """DateSpan_Years(int years) -> DateSpan"""
-    return _misc_.DateSpan_Years(*args, **kwargs)
+  """DateSpan_Years(int years) -> DateSpan"""
+  return _misc_.DateSpan_Years(*args, **kwargs)
 
-def DateSpan_Year(*args, **kwargs):
-    """DateSpan_Year() -> DateSpan"""
-    return _misc_.DateSpan_Year(*args, **kwargs)
+def DateSpan_Year(*args):
+  """DateSpan_Year() -> DateSpan"""
+  return _misc_.DateSpan_Year(*args)
 
 
-def GetLocalTime(*args, **kwargs):
-    """GetLocalTime() -> long"""
-    return _misc_.GetLocalTime(*args, **kwargs)
+def GetLocalTime(*args):
+  """GetLocalTime() -> long"""
+  return _misc_.GetLocalTime(*args)
 
-def GetUTCTime(*args, **kwargs):
-    """GetUTCTime() -> long"""
-    return _misc_.GetUTCTime(*args, **kwargs)
+def GetUTCTime(*args):
+  """GetUTCTime() -> long"""
+  return _misc_.GetUTCTime(*args)
 
-def GetCurrentTime(*args, **kwargs):
-    """GetCurrentTime() -> long"""
-    return _misc_.GetCurrentTime(*args, **kwargs)
+def GetCurrentTime(*args):
+  """GetCurrentTime() -> long"""
+  return _misc_.GetCurrentTime(*args)
 
-def GetLocalTimeMillis(*args, **kwargs):
-    """GetLocalTimeMillis() -> wxLongLong"""
-    return _misc_.GetLocalTimeMillis(*args, **kwargs)
+def GetLocalTimeMillis(*args):
+  """GetLocalTimeMillis() -> wxLongLong"""
+  return _misc_.GetLocalTimeMillis(*args)
 #---------------------------------------------------------------------------
 
 DF_INVALID = _misc_.DF_INVALID
@@ -4720,25 +4289,18 @@ class DataFormat(object):
     format the program understands.  A data format is is used to uniquely
     identify this format.
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxDataFormat instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, int type) -> DataFormat
 
         Constructs a data format object for one of the standard data formats
         or an empty data object (use SetType or SetId later in this case)
         """
-        newobj = _misc_.new_DataFormat(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_DataFormat):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.DataFormat_swiginit(self,_misc_.new_DataFormat(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_DataFormat
+    __del__ = lambda self : None;
     def __eq__(*args):
         """
         __eq__(self, int format) -> bool
@@ -4787,13 +4349,8 @@ class DataFormat(object):
         """
         return _misc_.DataFormat_SetId(*args, **kwargs)
 
-
-class DataFormatPtr(DataFormat):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = DataFormat
-_misc_.DataFormat_swigregister(DataFormatPtr)
+DataFormat_swigregister = _misc_.DataFormat_swigregister
+DataFormat_swigregister(DataFormat)
 DefaultDateTime = cvar.DefaultDateTime
 
 def CustomDataFormat(*args, **kwargs):
@@ -4804,7 +4361,6 @@ def CustomDataFormat(*args, **kwargs):
     name.
     """
     val = _misc_.new_CustomDataFormat(*args, **kwargs)
-    val.thisown = 1
     return val
 
 class DataObject(object):
@@ -4822,18 +4378,14 @@ class DataObject(object):
     `wx.CustomDataObject`.
 
     """
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     Get = _misc_.DataObject_Get
     Set = _misc_.DataObject_Set
     Both = _misc_.DataObject_Both
-    def __del__(self, destroy=_misc_.delete_DataObject):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+    __swig_destroy__ = _misc_.delete_DataObject
+    __del__ = lambda self : None;
     def GetPreferredFormat(*args, **kwargs):
         """
         GetPreferredFormat(self, int dir=Get) -> DataFormat
@@ -4895,13 +4447,8 @@ class DataObject(object):
         """
         return _misc_.DataObject_SetData(*args, **kwargs)
 
-
-class DataObjectPtr(DataObject):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = DataObject
-_misc_.DataObject_swigregister(DataObjectPtr)
+DataObject_swigregister = _misc_.DataObject_swigregister
+DataObject_swigregister(DataObject)
 FormatInvalid = cvar.FormatInvalid
 
 class DataObjectSimple(DataObject):
@@ -4914,19 +4461,16 @@ class DataObjectSimple(DataObject):
     or derive your own class from `wx.PyDataObjectSimple`.
 
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxDataObjectSimple instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, DataFormat format=FormatInvalid) -> DataObjectSimple
 
         Constructor accepts the supported format (none by default) which may
         also be set later with `SetFormat`.
         """
-        newobj = _misc_.new_DataObjectSimple(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.DataObjectSimple_swiginit(self,_misc_.new_DataObjectSimple(*args, **kwargs))
     def GetFormat(*args, **kwargs):
         """
         GetFormat(self) -> DataFormat
@@ -4972,13 +4516,8 @@ class DataObjectSimple(DataObject):
         """
         return _misc_.DataObjectSimple_SetData(*args, **kwargs)
 
-
-class DataObjectSimplePtr(DataObjectSimple):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = DataObjectSimple
-_misc_.DataObjectSimple_swigregister(DataObjectSimplePtr)
+DataObjectSimple_swigregister = _misc_.DataObjectSimple_swigregister
+DataObjectSimple_swigregister(DataObjectSimple)
 
 class PyDataObjectSimple(DataObjectSimple):
     """
@@ -4989,9 +4528,9 @@ class PyDataObjectSimple(DataObjectSimple):
     need to create your own simple single-format type of `wx.DataObject`.
 
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyDataObjectSimple instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, DataFormat format=FormatInvalid) -> PyDataObjectSimple
 
@@ -5002,23 +4541,15 @@ class PyDataObjectSimple(DataObjectSimple):
         need to create your own simple single-format type of `wx.DataObject`.
 
         """
-        newobj = _misc_.new_PyDataObjectSimple(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.PyDataObjectSimple_swiginit(self,_misc_.new_PyDataObjectSimple(*args, **kwargs))
         self._setCallbackInfo(self, PyDataObjectSimple)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.PyDataObjectSimple__setCallbackInfo(*args, **kwargs)
 
-
-class PyDataObjectSimplePtr(PyDataObjectSimple):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PyDataObjectSimple
-_misc_.PyDataObjectSimple_swigregister(PyDataObjectSimplePtr)
+PyDataObjectSimple_swigregister = _misc_.PyDataObjectSimple_swigregister
+PyDataObjectSimple_swigregister(PyDataObjectSimple)
 
 class DataObjectComposite(DataObject):
     """
@@ -5035,9 +4566,9 @@ class DataObjectComposite(DataObject):
     efficiency reasons.
 
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxDataObjectComposite instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self) -> DataObjectComposite
 
@@ -5054,10 +4585,7 @@ class DataObjectComposite(DataObject):
         efficiency reasons.
 
         """
-        newobj = _misc_.new_DataObjectComposite(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.DataObjectComposite_swiginit(self,_misc_.new_DataObjectComposite(*args, **kwargs))
     def Add(*args, **kwargs):
         """
         Add(self, DataObjectSimple dataObject, bool preferred=False)
@@ -5067,13 +4595,8 @@ class DataObjectComposite(DataObject):
         """
         return _misc_.DataObjectComposite_Add(*args, **kwargs)
 
-
-class DataObjectCompositePtr(DataObjectComposite):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = DataObjectComposite
-_misc_.DataObjectComposite_swigregister(DataObjectCompositePtr)
+DataObjectComposite_swigregister = _misc_.DataObjectComposite_swigregister
+DataObjectComposite_swigregister(DataObjectComposite)
 
 class TextDataObject(DataObjectSimple):
     """
@@ -5089,19 +4612,16 @@ class TextDataObject(DataObjectSimple):
     requested. For this, `GetTextLength` and `GetText` will have to be
     overridden.
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxTextDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, String text=EmptyString) -> TextDataObject
 
         Constructor, may be used to initialise the text (otherwise `SetText`
         should be used later).
         """
-        newobj = _misc_.new_TextDataObject(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.TextDataObject_swiginit(self,_misc_.new_TextDataObject(*args, **kwargs))
     def GetTextLength(*args, **kwargs):
         """
         GetTextLength(self) -> size_t
@@ -5134,13 +4654,8 @@ class TextDataObject(DataObjectSimple):
         """
         return _misc_.TextDataObject_SetText(*args, **kwargs)
 
-
-class TextDataObjectPtr(TextDataObject):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = TextDataObject
-_misc_.TextDataObject_swigregister(TextDataObjectPtr)
+TextDataObject_swigregister = _misc_.TextDataObject_swigregister
+TextDataObject_swigregister(TextDataObject)
 
 class PyTextDataObject(TextDataObject):
     """
@@ -5151,9 +4666,9 @@ class PyTextDataObject(TextDataObject):
     want to be able to provide text on demand instead of preloading it
     into the data object.
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyTextDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, String text=EmptyString) -> PyTextDataObject
 
@@ -5164,23 +4679,15 @@ class PyTextDataObject(TextDataObject):
         want to be able to provide text on demand instead of preloading it
         into the data object.
         """
-        newobj = _misc_.new_PyTextDataObject(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.PyTextDataObject_swiginit(self,_misc_.new_PyTextDataObject(*args, **kwargs))
         self._setCallbackInfo(self, PyTextDataObject)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.PyTextDataObject__setCallbackInfo(*args, **kwargs)
 
-
-class PyTextDataObjectPtr(PyTextDataObject):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PyTextDataObject
-_misc_.PyTextDataObject_swigregister(PyTextDataObjectPtr)
+PyTextDataObject_swigregister = _misc_.PyTextDataObject_swigregister
+PyTextDataObject_swigregister(PyTextDataObject)
 
 class BitmapDataObject(DataObjectSimple):
     """
@@ -5189,19 +4696,16 @@ class BitmapDataObject(DataObjectSimple):
     or a `wx.DropSource`.
 
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxBitmapDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Bitmap bitmap=wxNullBitmap) -> BitmapDataObject
 
         Constructor, optionally passing a bitmap (otherwise use `SetBitmap`
         later).
         """
-        newobj = _misc_.new_BitmapDataObject(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.BitmapDataObject_swiginit(self,_misc_.new_BitmapDataObject(*args, **kwargs))
     def GetBitmap(*args, **kwargs):
         """
         GetBitmap(self) -> Bitmap
@@ -5224,13 +4728,8 @@ class BitmapDataObject(DataObjectSimple):
         """
         return _misc_.BitmapDataObject_SetBitmap(*args, **kwargs)
 
-
-class BitmapDataObjectPtr(BitmapDataObject):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = BitmapDataObject
-_misc_.BitmapDataObject_swigregister(BitmapDataObjectPtr)
+BitmapDataObject_swigregister = _misc_.BitmapDataObject_swigregister
+BitmapDataObject_swigregister(BitmapDataObject)
 
 class PyBitmapDataObject(BitmapDataObject):
     """
@@ -5239,9 +4738,9 @@ class PyBitmapDataObject(BitmapDataObject):
     to methods in the Python derived class. To be able to provide bitmap
     data on demand derive from this class and overload `GetBitmap`.
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyBitmapDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Bitmap bitmap=wxNullBitmap) -> PyBitmapDataObject
 
@@ -5250,23 +4749,15 @@ class PyBitmapDataObject(BitmapDataObject):
         to methods in the Python derived class. To be able to provide bitmap
         data on demand derive from this class and overload `GetBitmap`.
         """
-        newobj = _misc_.new_PyBitmapDataObject(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.PyBitmapDataObject_swiginit(self,_misc_.new_PyBitmapDataObject(*args, **kwargs))
         self._setCallbackInfo(self, PyBitmapDataObject)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.PyBitmapDataObject__setCallbackInfo(*args, **kwargs)
 
-
-class PyBitmapDataObjectPtr(PyBitmapDataObject):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PyBitmapDataObject
-_misc_.PyBitmapDataObject_swigregister(PyBitmapDataObjectPtr)
+PyBitmapDataObject_swigregister = _misc_.PyBitmapDataObject_swigregister
+PyBitmapDataObject_swigregister(PyBitmapDataObject)
 
 class FileDataObject(DataObjectSimple):
     """
@@ -5277,14 +4768,11 @@ class FileDataObject(DataObjectSimple):
     filemanager under Unix which makes it possible to receive files from
     them using this class.
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxFileDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> FileDataObject"""
-        newobj = _misc_.new_FileDataObject(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.FileDataObject_swiginit(self,_misc_.new_FileDataObject(*args, **kwargs))
     def GetFilenames(*args, **kwargs):
         """
         GetFilenames(self) -> [names]
@@ -5301,13 +4789,8 @@ class FileDataObject(DataObjectSimple):
         """
         return _misc_.FileDataObject_AddFile(*args, **kwargs)
 
-
-class FileDataObjectPtr(FileDataObject):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = FileDataObject
-_misc_.FileDataObject_swigregister(FileDataObjectPtr)
+FileDataObject_swigregister = _misc_.FileDataObject_swigregister
+FileDataObject_swigregister(FileDataObject)
 
 class CustomDataObject(DataObjectSimple):
     """
@@ -5317,9 +4800,9 @@ class CustomDataObject(DataObjectSimple):
     easily be transfered via strings.  A copy of the data is stored in the
     data object.
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxCustomDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
         """
         __init__(self, DataFormat format) -> CustomDataObject
         __init__(self, String formatName) -> CustomDataObject
@@ -5331,10 +4814,7 @@ class CustomDataObject(DataObjectSimple):
         easily be transfered via strings.  A copy of the data is stored in the
         data object.
         """
-        newobj = _misc_.new_CustomDataObject(*args)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.CustomDataObject_swiginit(self,_misc_.new_CustomDataObject(*args))
     def SetData(*args, **kwargs):
         """
         SetData(self, String data) -> bool
@@ -5360,32 +4840,24 @@ class CustomDataObject(DataObjectSimple):
         """
         return _misc_.CustomDataObject_GetData(*args, **kwargs)
 
-
-class CustomDataObjectPtr(CustomDataObject):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = CustomDataObject
-_misc_.CustomDataObject_swigregister(CustomDataObjectPtr)
+CustomDataObject_swigregister = _misc_.CustomDataObject_swigregister
+CustomDataObject_swigregister(CustomDataObject)
 
 class URLDataObject(DataObject):
     """
     This data object holds a URL in a format that is compatible with some
     browsers such that it is able to be dragged to or from them.
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxURLDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self) -> URLDataObject
 
         This data object holds a URL in a format that is compatible with some
         browsers such that it is able to be dragged to or from them.
         """
-        newobj = _misc_.new_URLDataObject(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.URLDataObject_swiginit(self,_misc_.new_URLDataObject(*args, **kwargs))
     def GetURL(*args, **kwargs):
         """
         GetURL(self) -> String
@@ -5402,31 +4874,18 @@ class URLDataObject(DataObject):
         """
         return _misc_.URLDataObject_SetURL(*args, **kwargs)
 
-
-class URLDataObjectPtr(URLDataObject):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = URLDataObject
-_misc_.URLDataObject_swigregister(URLDataObjectPtr)
+URLDataObject_swigregister = _misc_.URLDataObject_swigregister
+URLDataObject_swigregister(URLDataObject)
 
 class MetafileDataObject(DataObjectSimple):
     """Proxy of C++ MetafileDataObject class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxMetafileDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> MetafileDataObject"""
-        newobj = _misc_.new_MetafileDataObject(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-
-class MetafileDataObjectPtr(MetafileDataObject):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = MetafileDataObject
-_misc_.MetafileDataObject_swigregister(MetafileDataObjectPtr)
+        _misc_.MetafileDataObject_swiginit(self,_misc_.new_MetafileDataObject(*args, **kwargs))
+MetafileDataObject_swigregister = _misc_.MetafileDataObject_swigregister
+MetafileDataObject_swigregister(MetafileDataObject)
 
 #---------------------------------------------------------------------------
 
@@ -5441,33 +4900,26 @@ DragLink = _misc_.DragLink
 DragCancel = _misc_.DragCancel
 
 def IsDragResultOk(*args, **kwargs):
-    """IsDragResultOk(int res) -> bool"""
-    return _misc_.IsDragResultOk(*args, **kwargs)
+  """IsDragResultOk(int res) -> bool"""
+  return _misc_.IsDragResultOk(*args, **kwargs)
 class DropSource(object):
     """Proxy of C++ DropSource class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyDropSource instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window win, Icon copy=wxNullIcon, Icon move=wxNullIcon, 
             Icon none=wxNullIcon) -> DropSource
         """
-        newobj = _misc_.new_DropSource(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.DropSource_swiginit(self,_misc_.new_DropSource(*args, **kwargs))
         self._setCallbackInfo(self, DropSource, 0)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class, int incref)"""
         return _misc_.DropSource__setCallbackInfo(*args, **kwargs)
 
-    def __del__(self, destroy=_misc_.delete_DropSource):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+    __swig_destroy__ = _misc_.delete_DropSource
+    __del__ = lambda self : None;
     def SetData(*args, **kwargs):
         """SetData(self, DataObject data)"""
         return _misc_.DropSource_SetData(*args, **kwargs)
@@ -5493,13 +4945,8 @@ class DropSource(object):
     base_GiveFeedback = wx._deprecated(base_GiveFeedback,
                                    "Please use DropSource.GiveFeedback instead.")
 
-
-class DropSourcePtr(DropSource):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = DropSource
-_misc_.DropSource_swigregister(DropSourcePtr)
+DropSource_swigregister = _misc_.DropSource_swigregister
+DropSource_swigregister(DropSource)
 
 def DROP_ICON(filename):
     """
@@ -5515,26 +4962,19 @@ def DROP_ICON(filename):
 
 class DropTarget(object):
     """Proxy of C++ DropTarget class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyDropTarget instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, DataObject dataObject=None) -> DropTarget"""
-        newobj = _misc_.new_DropTarget(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.DropTarget_swiginit(self,_misc_.new_DropTarget(*args, **kwargs))
         self._setCallbackInfo(self, DropTarget)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.DropTarget__setCallbackInfo(*args, **kwargs)
 
-    def __del__(self, destroy=_misc_.delete_DropTarget):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+    __swig_destroy__ = _misc_.delete_DropTarget
+    __del__ = lambda self : None;
     def GetDataObject(*args, **kwargs):
         """GetDataObject(self) -> DataObject"""
         return _misc_.DropTarget_GetDataObject(*args, **kwargs)
@@ -5591,25 +5031,17 @@ class DropTarget(object):
         """GetDefaultAction(self) -> int"""
         return _misc_.DropTarget_GetDefaultAction(*args, **kwargs)
 
-
-class DropTargetPtr(DropTarget):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = DropTarget
-_misc_.DropTarget_swigregister(DropTargetPtr)
+DropTarget_swigregister = _misc_.DropTarget_swigregister
+DropTarget_swigregister(DropTarget)
 
 PyDropTarget = DropTarget 
 class TextDropTarget(DropTarget):
     """Proxy of C++ TextDropTarget class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyTextDropTarget instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> TextDropTarget"""
-        newobj = _misc_.new_TextDropTarget(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.TextDropTarget_swiginit(self,_misc_.new_TextDropTarget(*args, **kwargs))
         self._setCallbackInfo(self, TextDropTarget)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -5670,24 +5102,16 @@ class TextDropTarget(DropTarget):
     base_OnData = wx._deprecated(base_OnData,
                                    "Please use TextDropTarget.OnData instead.")
 
-
-class TextDropTargetPtr(TextDropTarget):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = TextDropTarget
-_misc_.TextDropTarget_swigregister(TextDropTargetPtr)
+TextDropTarget_swigregister = _misc_.TextDropTarget_swigregister
+TextDropTarget_swigregister(TextDropTarget)
 
 class FileDropTarget(DropTarget):
     """Proxy of C++ FileDropTarget class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyFileDropTarget instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> FileDropTarget"""
-        newobj = _misc_.new_FileDropTarget(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _misc_.FileDropTarget_swiginit(self,_misc_.new_FileDropTarget(*args, **kwargs))
         self._setCallbackInfo(self, FileDropTarget)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -5748,13 +5172,8 @@ class FileDropTarget(DropTarget):
     base_OnData = wx._deprecated(base_OnData,
                                    "Please use FileDropTarget.OnData instead.")
 
-
-class FileDropTargetPtr(FileDropTarget):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = FileDropTarget
-_misc_.FileDropTarget_swigregister(FileDropTargetPtr)
+FileDropTarget_swigregister = _misc_.FileDropTarget_swigregister
+FileDropTarget_swigregister(FileDropTarget)
 
 #---------------------------------------------------------------------------
 
@@ -5775,20 +5194,13 @@ class Clipboard(_core.Object):
     :see: `wx.DataObject`
 
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxClipboard instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> Clipboard"""
-        newobj = _misc_.new_Clipboard(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_Clipboard):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.Clipboard_swiginit(self,_misc_.new_Clipboard(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_Clipboard
+    __del__ = lambda self : None;
     def Open(*args, **kwargs):
         """
         Open(self) -> bool
@@ -5897,21 +5309,16 @@ class Clipboard(_core.Object):
         return _misc_.Clipboard_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
+Clipboard_swigregister = _misc_.Clipboard_swigregister
+Clipboard_swigregister(Clipboard)
 
-class ClipboardPtr(Clipboard):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = Clipboard
-_misc_.Clipboard_swigregister(ClipboardPtr)
-
-def Clipboard_Get(*args, **kwargs):
-    """
+def Clipboard_Get(*args):
+  """
     Clipboard_Get() -> Clipboard
 
     Returns global instance (wxTheClipboard) of the object.
     """
-    return _misc_.Clipboard_Get(*args, **kwargs)
+  return _misc_.Clipboard_Get(*args)
 
 class _wxPyDelayedInitWrapper(object):
     def __init__(self, initfunc, *args, **kwargs):
@@ -5936,25 +5343,18 @@ class ClipboardLocker(object):
     A helpful class for opening the clipboard and automatically
     closing it when the locker is destroyed.
     """
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxClipboardLocker instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Clipboard clipboard=None) -> ClipboardLocker
 
         A helpful class for opening the clipboard and automatically
         closing it when the locker is destroyed.
         """
-        newobj = _misc_.new_ClipboardLocker(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_ClipboardLocker):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.ClipboardLocker_swiginit(self,_misc_.new_ClipboardLocker(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_ClipboardLocker
+    __del__ = lambda self : None;
     def __nonzero__(*args, **kwargs):
         """
         __nonzero__(self) -> bool
@@ -5964,36 +5364,24 @@ class ClipboardLocker(object):
         """
         return _misc_.ClipboardLocker___nonzero__(*args, **kwargs)
 
-
-class ClipboardLockerPtr(ClipboardLocker):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = ClipboardLocker
-_misc_.ClipboardLocker_swigregister(ClipboardLockerPtr)
+ClipboardLocker_swigregister = _misc_.ClipboardLocker_swigregister
+ClipboardLocker_swigregister(ClipboardLocker)
 
 #---------------------------------------------------------------------------
 
 class VideoMode(object):
     """A simple struct containing video mode parameters for a display"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxVideoMode instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, int width=0, int height=0, int depth=0, int freq=0) -> VideoMode
 
         A simple struct containing video mode parameters for a display
         """
-        newobj = _misc_.new_VideoMode(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_VideoMode):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.VideoMode_swiginit(self,_misc_.new_VideoMode(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_VideoMode
+    __del__ = lambda self : None;
     def Matches(*args, **kwargs):
         """
         Matches(self, VideoMode other) -> bool
@@ -6051,19 +5439,14 @@ class VideoMode(object):
     h = property(_misc_.VideoMode_h_get, _misc_.VideoMode_h_set)
     bpp = property(_misc_.VideoMode_bpp_get, _misc_.VideoMode_bpp_set)
     refresh = property(_misc_.VideoMode_refresh_get, _misc_.VideoMode_refresh_set)
-
-class VideoModePtr(VideoMode):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = VideoMode
-_misc_.VideoMode_swigregister(VideoModePtr)
+VideoMode_swigregister = _misc_.VideoMode_swigregister
+VideoMode_swigregister(VideoMode)
 
 class Display(object):
     """Represents a display/monitor attached to the system"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxDisplay instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, size_t index=0) -> Display
 
@@ -6071,16 +5454,9 @@ class Display(object):
         are numbered from 0 to GetCount() - 1, 0 is always the primary display
         and the only one which is always supported
         """
-        newobj = _misc_.new_Display(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_Display):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _misc_.Display_swiginit(self,_misc_.new_Display(*args, **kwargs))
+    __swig_destroy__ = _misc_.delete_Display
+    __del__ = lambda self : None;
     def GetCount(*args, **kwargs):
         """
         GetCount() -> size_t
@@ -6198,40 +5574,35 @@ class Display(object):
         """
         return _misc_.Display_ResetMode(*args, **kwargs)
 
-
-class DisplayPtr(Display):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = Display
-_misc_.Display_swigregister(DisplayPtr)
+Display_swigregister = _misc_.Display_swigregister
+Display_swigregister(Display)
 DefaultVideoMode = cvar.DefaultVideoMode
 
-def Display_GetCount(*args, **kwargs):
-    """
+def Display_GetCount(*args):
+  """
     Display_GetCount() -> size_t
 
     Return the number of available displays.
     """
-    return _misc_.Display_GetCount(*args, **kwargs)
+  return _misc_.Display_GetCount(*args)
 
 def Display_GetFromPoint(*args, **kwargs):
-    """
+  """
     Display_GetFromPoint(Point pt) -> int
 
     Find the display where the given point lies, return wx.NOT_FOUND if it
     doesn't belong to any display
     """
-    return _misc_.Display_GetFromPoint(*args, **kwargs)
+  return _misc_.Display_GetFromPoint(*args, **kwargs)
 
 def Display_GetFromWindow(*args, **kwargs):
-    """
+  """
     Display_GetFromWindow(Window window) -> int
 
     Find the display where the given window lies, return wx.NOT_FOUND if
     it is not shown at all.
     """
-    return _misc_.Display_GetFromWindow(*args, **kwargs)
+  return _misc_.Display_GetFromWindow(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
@@ -6263,9 +5634,9 @@ class StandardPaths(object):
     application bundle according to the Apple guidelines. Again, this
     class doesn't help you to do it.
     """
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxStandardPaths instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def Get(*args, **kwargs):
         """
         Get() -> StandardPaths
@@ -6372,21 +5743,16 @@ class StandardPaths(object):
         """
         return _misc_.StandardPaths_GetInstallPrefix(*args, **kwargs)
 
+StandardPaths_swigregister = _misc_.StandardPaths_swigregister
+StandardPaths_swigregister(StandardPaths)
 
-class StandardPathsPtr(StandardPaths):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = StandardPaths
-_misc_.StandardPaths_swigregister(StandardPathsPtr)
-
-def StandardPaths_Get(*args, **kwargs):
-    """
+def StandardPaths_Get(*args):
+  """
     StandardPaths_Get() -> StandardPaths
 
     Return the global standard paths singleton
     """
-    return _misc_.StandardPaths_Get(*args, **kwargs)
+  return _misc_.StandardPaths_Get(*args)
 
 
 

@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG 1.3.27.
+# This file was created automatically by SWIG 1.3.29.
 # Don't modify this file, modify the SWIG interface instead.
 
 """
@@ -8,17 +8,17 @@ animated GIF files
 """
 
 import _animate
-
+import new
+new_instancemethod = new.instancemethod
 def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "thisown"): return self.this.own(value)
     if (name == "this"):
-        if isinstance(value, class_type):
-            self.__dict__[name] = value.this
-            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
-            del value.thisown
+        if type(value).__name__ == 'PySwigObject':
+            self.__dict__[name] = value
             return
     method = class_type.__swig_setmethods__.get(name,None)
     if method: return method(self,value)
-    if (not static) or hasattr(self,name) or (name == "thisown"):
+    if (not static) or hasattr(self,name):
         self.__dict__[name] = value
     else:
         raise AttributeError("You cannot add attributes to %s" % self)
@@ -27,9 +27,15 @@ def _swig_setattr(self,class_type,name,value):
     return _swig_setattr_nondynamic(self,class_type,name,value,0)
 
 def _swig_getattr(self,class_type,name):
+    if (name == "thisown"): return self.this.own()
     method = class_type.__swig_getmethods__.get(name,None)
     if method: return method(self)
     raise AttributeError,name
+
+def _swig_repr(self):
+    try: strthis = "proxy of " + self.this.__repr__()
+    except: strthis = ""
+    return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis,)
 
 import types
 try:
@@ -43,7 +49,8 @@ del types
 
 def _swig_setattr_nondynamic_method(set):
     def set_attr(self,name,value):
-        if hasattr(self,name) or (name in ("this", "thisown")):
+        if (name == "thisown"): return self.this.own(value)
+        if hasattr(self,name) or (name == "this"):
             set(self,name,value)
         else:
             raise AttributeError("You cannot add attributes to %s" % self)
@@ -59,20 +66,13 @@ ANIM_TOBACKGROUND = _animate.ANIM_TOBACKGROUND
 ANIM_TOPREVIOUS = _animate.ANIM_TOPREVIOUS
 class AnimationPlayer(_core.Object):
     """Proxy of C++ AnimationPlayer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxAnimationPlayer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, AnimationBase animation=None, bool destroyAnimation=False) -> AnimationPlayer"""
-        newobj = _animate.new_AnimationPlayer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_animate.delete_AnimationPlayer):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _animate.AnimationPlayer_swiginit(self,_animate.new_AnimationPlayer(*args, **kwargs))
+    __swig_destroy__ = _animate.delete_AnimationPlayer
+    __del__ = lambda self : None;
     def SetAnimation(*args, **kwargs):
         """SetAnimation(self, AnimationBase animation, bool destroyAnimation=False)"""
         return _animate.AnimationPlayer_SetAnimation(*args, **kwargs)
@@ -233,27 +233,18 @@ class AnimationPlayer(_core.Object):
         """GetBackingStore(self) -> Bitmap"""
         return _animate.AnimationPlayer_GetBackingStore(*args, **kwargs)
 
-
-class AnimationPlayerPtr(AnimationPlayer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = AnimationPlayer
-_animate.AnimationPlayer_swigregister(AnimationPlayerPtr)
+AnimationPlayer_swigregister = _animate.AnimationPlayer_swigregister
+AnimationPlayer_swigregister(AnimationPlayer)
 cvar = _animate.cvar
 AnimationControlNameStr = cvar.AnimationControlNameStr
 
 class AnimationBase(_core.Object):
     """Proxy of C++ AnimationBase class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxAnimationBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __del__(self, destroy=_animate.delete_AnimationBase):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _animate.delete_AnimationBase
+    __del__ = lambda self : None;
     def GetFrameCount(*args, **kwargs):
         """GetFrameCount(self) -> int"""
         return _animate.AnimationBase_GetFrameCount(*args, **kwargs)
@@ -294,94 +285,34 @@ class AnimationBase(_core.Object):
         """LoadFile(self, String filename) -> bool"""
         return _animate.AnimationBase_LoadFile(*args, **kwargs)
 
-
-class AnimationBasePtr(AnimationBase):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = AnimationBase
-_animate.AnimationBase_swigregister(AnimationBasePtr)
+AnimationBase_swigregister = _animate.AnimationBase_swigregister
+AnimationBase_swigregister(AnimationBase)
 
 class GIFAnimation(AnimationBase):
     """Proxy of C++ GIFAnimation class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGIFAnimation instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> GIFAnimation"""
-        newobj = _animate.new_GIFAnimation(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_animate.delete_GIFAnimation):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-    def GetFrameCount(*args, **kwargs):
-        """GetFrameCount(self) -> int"""
-        return _animate.GIFAnimation_GetFrameCount(*args, **kwargs)
-
-    def GetFrame(*args, **kwargs):
-        """GetFrame(self, int i) -> Image"""
-        return _animate.GIFAnimation_GetFrame(*args, **kwargs)
-
-    def GetDisposalMethod(*args, **kwargs):
-        """GetDisposalMethod(self, int i) -> int"""
-        return _animate.GIFAnimation_GetDisposalMethod(*args, **kwargs)
-
-    def GetFrameRect(*args, **kwargs):
-        """GetFrameRect(self, int i) -> Rect"""
-        return _animate.GIFAnimation_GetFrameRect(*args, **kwargs)
-
-    def GetDelay(*args, **kwargs):
-        """GetDelay(self, int i) -> int"""
-        return _animate.GIFAnimation_GetDelay(*args, **kwargs)
-
-    def GetLogicalScreenSize(*args, **kwargs):
-        """GetLogicalScreenSize(self) -> Size"""
-        return _animate.GIFAnimation_GetLogicalScreenSize(*args, **kwargs)
-
-    def GetBackgroundColour(*args, **kwargs):
-        """GetBackgroundColour(self, Colour col) -> bool"""
-        return _animate.GIFAnimation_GetBackgroundColour(*args, **kwargs)
-
-    def GetTransparentColour(*args, **kwargs):
-        """GetTransparentColour(self, Colour col) -> bool"""
-        return _animate.GIFAnimation_GetTransparentColour(*args, **kwargs)
-
-    def IsValid(*args, **kwargs):
-        """IsValid(self) -> bool"""
-        return _animate.GIFAnimation_IsValid(*args, **kwargs)
-
-    def LoadFile(*args, **kwargs):
-        """LoadFile(self, String filename) -> bool"""
-        return _animate.GIFAnimation_LoadFile(*args, **kwargs)
-
-
-class GIFAnimationPtr(GIFAnimation):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GIFAnimation
-_animate.GIFAnimation_swigregister(GIFAnimationPtr)
+        _animate.GIFAnimation_swiginit(self,_animate.new_GIFAnimation(*args, **kwargs))
+    __swig_destroy__ = _animate.delete_GIFAnimation
+    __del__ = lambda self : None;
+GIFAnimation_swigregister = _animate.GIFAnimation_swigregister
+GIFAnimation_swigregister(GIFAnimation)
 
 AN_FIT_ANIMATION = _animate.AN_FIT_ANIMATION
 class GIFAnimationCtrl(_core.Control):
     """Proxy of C++ GIFAnimationCtrl class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGIFAnimationCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, String filename=EmptyString, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxAN_FIT_ANIMATION|wxNO_BORDER, 
             String name=AnimationControlNameStr) -> GIFAnimationCtrl
         """
-        newobj = _animate.new_GIFAnimationCtrl(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _animate.GIFAnimationCtrl_swiginit(self,_animate.new_GIFAnimationCtrl(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
@@ -429,18 +360,12 @@ class GIFAnimationCtrl(_core.Control):
         """SetFilename(self, String filename)"""
         return _animate.GIFAnimationCtrl_SetFilename(*args, **kwargs)
 
-
-class GIFAnimationCtrlPtr(GIFAnimationCtrl):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = GIFAnimationCtrl
-_animate.GIFAnimationCtrl_swigregister(GIFAnimationCtrlPtr)
+GIFAnimationCtrl_swigregister = _animate.GIFAnimationCtrl_swigregister
+GIFAnimationCtrl_swigregister(GIFAnimationCtrl)
 
 def PreGIFAnimationCtrl(*args, **kwargs):
     """PreGIFAnimationCtrl() -> GIFAnimationCtrl"""
     val = _animate.new_PreGIFAnimationCtrl(*args, **kwargs)
-    val.thisown = 1
     return val
 
 

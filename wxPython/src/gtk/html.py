@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG 1.3.27.
+# This file was created automatically by SWIG 1.3.29.
 # Don't modify this file, modify the SWIG interface instead.
 
 """
@@ -6,17 +6,17 @@ Classes for a simple HTML rendering window, HTML Help Window, etc.
 """
 
 import _html
-
+import new
+new_instancemethod = new.instancemethod
 def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "thisown"): return self.this.own(value)
     if (name == "this"):
-        if isinstance(value, class_type):
-            self.__dict__[name] = value.this
-            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
-            del value.thisown
+        if type(value).__name__ == 'PySwigObject':
+            self.__dict__[name] = value
             return
     method = class_type.__swig_setmethods__.get(name,None)
     if method: return method(self,value)
-    if (not static) or hasattr(self,name) or (name == "thisown"):
+    if (not static) or hasattr(self,name):
         self.__dict__[name] = value
     else:
         raise AttributeError("You cannot add attributes to %s" % self)
@@ -25,9 +25,15 @@ def _swig_setattr(self,class_type,name,value):
     return _swig_setattr_nondynamic(self,class_type,name,value,0)
 
 def _swig_getattr(self,class_type,name):
+    if (name == "thisown"): return self.this.own()
     method = class_type.__swig_getmethods__.get(name,None)
     if method: return method(self)
     raise AttributeError,name
+
+def _swig_repr(self):
+    try: strthis = "proxy of " + self.this.__repr__()
+    except: strthis = ""
+    return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis,)
 
 import types
 try:
@@ -41,7 +47,8 @@ del types
 
 def _swig_setattr_nondynamic_method(set):
     def set_attr(self,name,value):
-        if hasattr(self,name) or (name in ("this", "thisown")):
+        if (name == "thisown"): return self.this.own(value)
+        if hasattr(self,name) or (name == "this"):
             set(self,name,value)
         else:
             raise AttributeError("You cannot add attributes to %s" % self)
@@ -92,14 +99,11 @@ HTML_URL_IMAGE = _html.HTML_URL_IMAGE
 HTML_URL_OTHER = _html.HTML_URL_OTHER
 class HtmlLinkInfo(_core.Object):
     """Proxy of C++ HtmlLinkInfo class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlLinkInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, String href, String target=EmptyString) -> HtmlLinkInfo"""
-        newobj = _html.new_HtmlLinkInfo(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlLinkInfo_swiginit(self,_html.new_HtmlLinkInfo(*args, **kwargs))
     def GetHref(*args, **kwargs):
         """GetHref(self) -> String"""
         return _html.HtmlLinkInfo_GetHref(*args, **kwargs)
@@ -124,13 +128,8 @@ class HtmlLinkInfo(_core.Object):
         """SetHtmlCell(self, HtmlCell e)"""
         return _html.HtmlLinkInfo_SetHtmlCell(*args, **kwargs)
 
-
-class HtmlLinkInfoPtr(HtmlLinkInfo):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlLinkInfo
-_html.HtmlLinkInfo_swigregister(HtmlLinkInfoPtr)
+HtmlLinkInfo_swigregister = _html.HtmlLinkInfo_swigregister
+HtmlLinkInfo_swigregister(HtmlLinkInfo)
 cvar = _html.cvar
 HtmlWindowNameStr = cvar.HtmlWindowNameStr
 HtmlPrintoutTitleStr = cvar.HtmlPrintoutTitleStr
@@ -138,9 +137,9 @@ HtmlPrintingTitleStr = cvar.HtmlPrintingTitleStr
 
 class HtmlTag(_core.Object):
     """Proxy of C++ HtmlTag class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlTag instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def GetName(*args, **kwargs):
         """GetName(self) -> String"""
         return _html.HtmlTag_GetName(*args, **kwargs)
@@ -173,19 +172,14 @@ class HtmlTag(_core.Object):
         """GetEndPos2(self) -> int"""
         return _html.HtmlTag_GetEndPos2(*args, **kwargs)
 
-
-class HtmlTagPtr(HtmlTag):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlTag
-_html.HtmlTag_swigregister(HtmlTagPtr)
+HtmlTag_swigregister = _html.HtmlTag_swigregister
+HtmlTag_swigregister(HtmlTag)
 
 class HtmlParser(_core.Object):
     """Proxy of C++ HtmlParser class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlParser instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def SetFS(*args, **kwargs):
         """SetFS(self, FileSystem fs)"""
         return _html.HtmlParser_SetFS(*args, **kwargs)
@@ -230,24 +224,16 @@ class HtmlParser(_core.Object):
         """PopTagHandler(self)"""
         return _html.HtmlParser_PopTagHandler(*args, **kwargs)
 
-
-class HtmlParserPtr(HtmlParser):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlParser
-_html.HtmlParser_swigregister(HtmlParserPtr)
+HtmlParser_swigregister = _html.HtmlParser_swigregister
+HtmlParser_swigregister(HtmlParser)
 
 class HtmlWinParser(HtmlParser):
     """Proxy of C++ HtmlWinParser class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlWinParser instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, HtmlWindow wnd=None) -> HtmlWinParser"""
-        newobj = _html.new_HtmlWinParser(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlWinParser_swiginit(self,_html.new_HtmlWinParser(*args, **kwargs))
     def SetDC(*args, **kwargs):
         """SetDC(self, DC dc)"""
         return _html.HtmlWinParser_SetDC(*args, **kwargs)
@@ -371,24 +357,16 @@ class HtmlWinParser(HtmlParser):
         """GetLink(self) -> HtmlLinkInfo"""
         return _html.HtmlWinParser_GetLink(*args, **kwargs)
 
-
-class HtmlWinParserPtr(HtmlWinParser):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlWinParser
-_html.HtmlWinParser_swigregister(HtmlWinParserPtr)
+HtmlWinParser_swigregister = _html.HtmlWinParser_swigregister
+HtmlWinParser_swigregister(HtmlWinParser)
 
 class HtmlTagHandler(_core.Object):
     """Proxy of C++ HtmlTagHandler class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyHtmlTagHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> HtmlTagHandler"""
-        newobj = _html.new_HtmlTagHandler(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlTagHandler_swiginit(self,_html.new_HtmlTagHandler(*args, **kwargs))
         self._setCallbackInfo(self, HtmlTagHandler)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -407,24 +385,16 @@ class HtmlTagHandler(_core.Object):
         """ParseInner(self, HtmlTag tag)"""
         return _html.HtmlTagHandler_ParseInner(*args, **kwargs)
 
-
-class HtmlTagHandlerPtr(HtmlTagHandler):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlTagHandler
-_html.HtmlTagHandler_swigregister(HtmlTagHandlerPtr)
+HtmlTagHandler_swigregister = _html.HtmlTagHandler_swigregister
+HtmlTagHandler_swigregister(HtmlTagHandler)
 
 class HtmlWinTagHandler(HtmlTagHandler):
     """Proxy of C++ HtmlWinTagHandler class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyHtmlWinTagHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> HtmlWinTagHandler"""
-        newobj = _html.new_HtmlWinTagHandler(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlWinTagHandler_swiginit(self,_html.new_HtmlWinTagHandler(*args, **kwargs))
         self._setCallbackInfo(self, HtmlWinTagHandler)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -443,36 +413,24 @@ class HtmlWinTagHandler(HtmlTagHandler):
         """ParseInner(self, HtmlTag tag)"""
         return _html.HtmlWinTagHandler_ParseInner(*args, **kwargs)
 
-
-class HtmlWinTagHandlerPtr(HtmlWinTagHandler):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlWinTagHandler
-_html.HtmlWinTagHandler_swigregister(HtmlWinTagHandlerPtr)
+HtmlWinTagHandler_swigregister = _html.HtmlWinTagHandler_swigregister
+HtmlWinTagHandler_swigregister(HtmlWinTagHandler)
 
 
 def HtmlWinParser_AddTagHandler(*args, **kwargs):
-    """HtmlWinParser_AddTagHandler(PyObject tagHandlerClass)"""
-    return _html.HtmlWinParser_AddTagHandler(*args, **kwargs)
+  """HtmlWinParser_AddTagHandler(PyObject tagHandlerClass)"""
+  return _html.HtmlWinParser_AddTagHandler(*args, **kwargs)
 #---------------------------------------------------------------------------
 
 class HtmlSelection(object):
     """Proxy of C++ HtmlSelection class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlSelection instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> HtmlSelection"""
-        newobj = _html.new_HtmlSelection(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_html.delete_HtmlSelection):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _html.HtmlSelection_swiginit(self,_html.new_HtmlSelection(*args, **kwargs))
+    __swig_destroy__ = _html.delete_HtmlSelection
+    __del__ = lambda self : None;
     def Set(*args, **kwargs):
         """Set(self, Point fromPos, HtmlCell fromCell, Point toPos, HtmlCell toCell)"""
         return _html.HtmlSelection_Set(*args, **kwargs)
@@ -521,33 +479,21 @@ class HtmlSelection(object):
         """IsEmpty(self) -> bool"""
         return _html.HtmlSelection_IsEmpty(*args, **kwargs)
 
-
-class HtmlSelectionPtr(HtmlSelection):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlSelection
-_html.HtmlSelection_swigregister(HtmlSelectionPtr)
+HtmlSelection_swigregister = _html.HtmlSelection_swigregister
+HtmlSelection_swigregister(HtmlSelection)
 
 HTML_SEL_OUT = _html.HTML_SEL_OUT
 HTML_SEL_IN = _html.HTML_SEL_IN
 HTML_SEL_CHANGING = _html.HTML_SEL_CHANGING
 class HtmlRenderingState(object):
     """Proxy of C++ HtmlRenderingState class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlRenderingState instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> HtmlRenderingState"""
-        newobj = _html.new_HtmlRenderingState(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_html.delete_HtmlRenderingState):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _html.HtmlRenderingState_swiginit(self,_html.new_HtmlRenderingState(*args, **kwargs))
+    __swig_destroy__ = _html.delete_HtmlRenderingState
+    __del__ = lambda self : None;
     def SetSelectionState(*args, **kwargs):
         """SetSelectionState(self, int s)"""
         return _html.HtmlRenderingState_SetSelectionState(*args, **kwargs)
@@ -572,19 +518,14 @@ class HtmlRenderingState(object):
         """GetBgColour(self) -> Colour"""
         return _html.HtmlRenderingState_GetBgColour(*args, **kwargs)
 
-
-class HtmlRenderingStatePtr(HtmlRenderingState):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlRenderingState
-_html.HtmlRenderingState_swigregister(HtmlRenderingStatePtr)
+HtmlRenderingState_swigregister = _html.HtmlRenderingState_swigregister
+HtmlRenderingState_swigregister(HtmlRenderingState)
 
 class HtmlRenderingStyle(object):
     """Proxy of C++ HtmlRenderingStyle class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlRenderingStyle instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def GetSelectedTextColour(*args, **kwargs):
         """GetSelectedTextColour(self, Colour clr) -> Colour"""
         return _html.HtmlRenderingStyle_GetSelectedTextColour(*args, **kwargs)
@@ -593,51 +534,26 @@ class HtmlRenderingStyle(object):
         """GetSelectedTextBgColour(self, Colour clr) -> Colour"""
         return _html.HtmlRenderingStyle_GetSelectedTextBgColour(*args, **kwargs)
 
-
-class HtmlRenderingStylePtr(HtmlRenderingStyle):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlRenderingStyle
-_html.HtmlRenderingStyle_swigregister(HtmlRenderingStylePtr)
+HtmlRenderingStyle_swigregister = _html.HtmlRenderingStyle_swigregister
+HtmlRenderingStyle_swigregister(HtmlRenderingStyle)
 
 class DefaultHtmlRenderingStyle(HtmlRenderingStyle):
     """Proxy of C++ DefaultHtmlRenderingStyle class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxDefaultHtmlRenderingStyle instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def GetSelectedTextColour(*args, **kwargs):
-        """GetSelectedTextColour(self, Colour clr) -> Colour"""
-        return _html.DefaultHtmlRenderingStyle_GetSelectedTextColour(*args, **kwargs)
-
-    def GetSelectedTextBgColour(*args, **kwargs):
-        """GetSelectedTextBgColour(self, Colour clr) -> Colour"""
-        return _html.DefaultHtmlRenderingStyle_GetSelectedTextBgColour(*args, **kwargs)
-
-
-class DefaultHtmlRenderingStylePtr(DefaultHtmlRenderingStyle):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = DefaultHtmlRenderingStyle
-_html.DefaultHtmlRenderingStyle_swigregister(DefaultHtmlRenderingStylePtr)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+DefaultHtmlRenderingStyle_swigregister = _html.DefaultHtmlRenderingStyle_swigregister
+DefaultHtmlRenderingStyle_swigregister(DefaultHtmlRenderingStyle)
 
 class HtmlRenderingInfo(object):
     """Proxy of C++ HtmlRenderingInfo class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlRenderingInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> HtmlRenderingInfo"""
-        newobj = _html.new_HtmlRenderingInfo(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_html.delete_HtmlRenderingInfo):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _html.HtmlRenderingInfo_swiginit(self,_html.new_HtmlRenderingInfo(*args, **kwargs))
+    __swig_destroy__ = _html.delete_HtmlRenderingInfo
+    __del__ = lambda self : None;
     def SetSelection(*args, **kwargs):
         """SetSelection(self, HtmlSelection s)"""
         return _html.HtmlRenderingInfo_SetSelection(*args, **kwargs)
@@ -658,13 +574,8 @@ class HtmlRenderingInfo(object):
         """GetState(self) -> HtmlRenderingState"""
         return _html.HtmlRenderingInfo_GetState(*args, **kwargs)
 
-
-class HtmlRenderingInfoPtr(HtmlRenderingInfo):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlRenderingInfo
-_html.HtmlRenderingInfo_swigregister(HtmlRenderingInfoPtr)
+HtmlRenderingInfo_swigregister = _html.HtmlRenderingInfo_swigregister
+HtmlRenderingInfo_swigregister(HtmlRenderingInfo)
 
 #---------------------------------------------------------------------------
 
@@ -673,14 +584,13 @@ HTML_FIND_NEAREST_BEFORE = _html.HTML_FIND_NEAREST_BEFORE
 HTML_FIND_NEAREST_AFTER = _html.HTML_FIND_NEAREST_AFTER
 class HtmlCell(_core.Object):
     """Proxy of C++ HtmlCell class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> HtmlCell"""
-        newobj = _html.new_HtmlCell(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlCell_swiginit(self,_html.new_HtmlCell(*args, **kwargs))
+    __swig_destroy__ = _html.delete_HtmlCell
+    __del__ = lambda self : None;
     def GetPosX(*args, **kwargs):
         """GetPosX(self) -> int"""
         return _html.HtmlCell_GetPosX(*args, **kwargs)
@@ -813,24 +723,16 @@ class HtmlCell(_core.Object):
         """ConvertToText(self, HtmlSelection sel) -> String"""
         return _html.HtmlCell_ConvertToText(*args, **kwargs)
 
-
-class HtmlCellPtr(HtmlCell):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlCell
-_html.HtmlCell_swigregister(HtmlCellPtr)
+HtmlCell_swigregister = _html.HtmlCell_swigregister
+HtmlCell_swigregister(HtmlCell)
 
 class HtmlWordCell(HtmlCell):
     """Proxy of C++ HtmlWordCell class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlWordCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, String word, DC dc) -> HtmlWordCell"""
-        newobj = _html.new_HtmlWordCell(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlWordCell_swiginit(self,_html.new_HtmlWordCell(*args, **kwargs))
     def ConvertToText(*args, **kwargs):
         """ConvertToText(self, HtmlSelection sel) -> String"""
         return _html.HtmlWordCell_ConvertToText(*args, **kwargs)
@@ -843,24 +745,16 @@ class HtmlWordCell(HtmlCell):
         """SetPreviousWord(self, HtmlWordCell cell)"""
         return _html.HtmlWordCell_SetPreviousWord(*args, **kwargs)
 
-
-class HtmlWordCellPtr(HtmlWordCell):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlWordCell
-_html.HtmlWordCell_swigregister(HtmlWordCellPtr)
+HtmlWordCell_swigregister = _html.HtmlWordCell_swigregister
+HtmlWordCell_swigregister(HtmlWordCell)
 
 class HtmlContainerCell(HtmlCell):
     """Proxy of C++ HtmlContainerCell class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlContainerCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, HtmlContainerCell parent) -> HtmlContainerCell"""
-        newobj = _html.new_HtmlContainerCell(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlContainerCell_swiginit(self,_html.new_HtmlContainerCell(*args, **kwargs))
     def InsertCell(*args, **kwargs):
         """InsertCell(self, HtmlCell cell)"""
         return _html.HtmlContainerCell_InsertCell(*args, **kwargs)
@@ -925,110 +819,70 @@ class HtmlContainerCell(HtmlCell):
         """GetFirstChild(self) -> HtmlCell"""
         return _html.HtmlContainerCell_GetFirstChild(*args, **kwargs)
 
-
-class HtmlContainerCellPtr(HtmlContainerCell):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlContainerCell
-_html.HtmlContainerCell_swigregister(HtmlContainerCellPtr)
+HtmlContainerCell_swigregister = _html.HtmlContainerCell_swigregister
+HtmlContainerCell_swigregister(HtmlContainerCell)
 
 class HtmlColourCell(HtmlCell):
     """Proxy of C++ HtmlColourCell class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlColourCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, Colour clr, int flags=HTML_CLR_FOREGROUND) -> HtmlColourCell"""
-        newobj = _html.new_HtmlColourCell(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-
-class HtmlColourCellPtr(HtmlColourCell):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlColourCell
-_html.HtmlColourCell_swigregister(HtmlColourCellPtr)
+        _html.HtmlColourCell_swiginit(self,_html.new_HtmlColourCell(*args, **kwargs))
+HtmlColourCell_swigregister = _html.HtmlColourCell_swigregister
+HtmlColourCell_swigregister(HtmlColourCell)
 
 class HtmlFontCell(HtmlCell):
     """Proxy of C++ HtmlFontCell class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlFontCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, Font font) -> HtmlFontCell"""
-        newobj = _html.new_HtmlFontCell(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-
-class HtmlFontCellPtr(HtmlFontCell):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlFontCell
-_html.HtmlFontCell_swigregister(HtmlFontCellPtr)
+        _html.HtmlFontCell_swiginit(self,_html.new_HtmlFontCell(*args, **kwargs))
+HtmlFontCell_swigregister = _html.HtmlFontCell_swigregister
+HtmlFontCell_swigregister(HtmlFontCell)
 
 class HtmlWidgetCell(HtmlCell):
     """Proxy of C++ HtmlWidgetCell class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlWidgetCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, Window wnd, int w=0) -> HtmlWidgetCell"""
-        newobj = _html.new_HtmlWidgetCell(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-
-class HtmlWidgetCellPtr(HtmlWidgetCell):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlWidgetCell
-_html.HtmlWidgetCell_swigregister(HtmlWidgetCellPtr)
+        _html.HtmlWidgetCell_swiginit(self,_html.new_HtmlWidgetCell(*args, **kwargs))
+HtmlWidgetCell_swigregister = _html.HtmlWidgetCell_swigregister
+HtmlWidgetCell_swigregister(HtmlWidgetCell)
 
 #---------------------------------------------------------------------------
 
 class HtmlFilter(_core.Object):
     """Proxy of C++ HtmlFilter class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyHtmlFilter instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> HtmlFilter"""
-        newobj = _html.new_HtmlFilter(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlFilter_swiginit(self,_html.new_HtmlFilter(*args, **kwargs))
         self._setCallbackInfo(self, HtmlFilter)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _html.HtmlFilter__setCallbackInfo(*args, **kwargs)
 
-
-class HtmlFilterPtr(HtmlFilter):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlFilter
-_html.HtmlFilter_swigregister(HtmlFilterPtr)
+HtmlFilter_swigregister = _html.HtmlFilter_swigregister
+HtmlFilter_swigregister(HtmlFilter)
 
 #---------------------------------------------------------------------------
 
 class HtmlWindow(_windows.ScrolledWindow):
     """Proxy of C++ HtmlWindow class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyHtmlWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, int style=HW_DEFAULT_STYLE, 
             String name=HtmlWindowNameStr) -> HtmlWindow
         """
-        newobj = _html.new_HtmlWindow(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlWindow_swiginit(self,_html.new_HtmlWindow(*args, **kwargs))
         self._setCallbackInfo(self, HtmlWindow); self._setOORInfo(self)
 
     def Create(*args, **kwargs):
@@ -1090,10 +944,6 @@ class HtmlWindow(_windows.ScrolledWindow):
     def SetStandardFonts(*args, **kwargs):
         """SetStandardFonts(self, int size=-1, String normal_face=EmptyString, String fixed_face=EmptyString)"""
         return _html.HtmlWindow_SetStandardFonts(*args, **kwargs)
-
-    def SetLabel(*args, **kwargs):
-        """SetLabel(self, String title)"""
-        return _html.HtmlWindow_SetLabel(*args, **kwargs)
 
     def SetBorders(*args, **kwargs):
         """SetBorders(self, int b)"""
@@ -1226,26 +1076,20 @@ class HtmlWindow(_windows.ScrolledWindow):
         return _html.HtmlWindow_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-
-class HtmlWindowPtr(HtmlWindow):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlWindow
-_html.HtmlWindow_swigregister(HtmlWindowPtr)
+HtmlWindow_swigregister = _html.HtmlWindow_swigregister
+HtmlWindow_swigregister(HtmlWindow)
 
 def PreHtmlWindow(*args, **kwargs):
     """PreHtmlWindow() -> HtmlWindow"""
     val = _html.new_PreHtmlWindow(*args, **kwargs)
-    val.thisown = 1
     return val
 
 def HtmlWindow_AddFilter(*args, **kwargs):
-    """HtmlWindow_AddFilter(HtmlFilter filter)"""
-    return _html.HtmlWindow_AddFilter(*args, **kwargs)
+  """HtmlWindow_AddFilter(HtmlFilter filter)"""
+  return _html.HtmlWindow_AddFilter(*args, **kwargs)
 
 def HtmlWindow_GetClassDefaultAttributes(*args, **kwargs):
-    """
+  """
     HtmlWindow_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
     Get the default attributes for this class.  This is useful if you want
@@ -1259,26 +1103,19 @@ def HtmlWindow_GetClassDefaultAttributes(*args, **kwargs):
     the returned font. See `wx.Window.SetWindowVariant` for more about
     this.
     """
-    return _html.HtmlWindow_GetClassDefaultAttributes(*args, **kwargs)
+  return _html.HtmlWindow_GetClassDefaultAttributes(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
 class HtmlDCRenderer(_core.Object):
     """Proxy of C++ HtmlDCRenderer class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlDCRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> HtmlDCRenderer"""
-        newobj = _html.new_HtmlDCRenderer(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_html.delete_HtmlDCRenderer):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _html.HtmlDCRenderer_swiginit(self,_html.new_HtmlDCRenderer(*args, **kwargs))
+    __swig_destroy__ = _html.delete_HtmlDCRenderer
+    __del__ = lambda self : None;
     def SetDC(*args, **kwargs):
         """SetDC(self, DC dc, int maxwidth)"""
         return _html.HtmlDCRenderer_SetDC(*args, **kwargs)
@@ -1310,27 +1147,19 @@ class HtmlDCRenderer(_core.Object):
         """GetTotalHeight(self) -> int"""
         return _html.HtmlDCRenderer_GetTotalHeight(*args, **kwargs)
 
-
-class HtmlDCRendererPtr(HtmlDCRenderer):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlDCRenderer
-_html.HtmlDCRenderer_swigregister(HtmlDCRendererPtr)
+HtmlDCRenderer_swigregister = _html.HtmlDCRenderer_swigregister
+HtmlDCRenderer_swigregister(HtmlDCRenderer)
 
 PAGE_ODD = _html.PAGE_ODD
 PAGE_EVEN = _html.PAGE_EVEN
 PAGE_ALL = _html.PAGE_ALL
 class HtmlPrintout(_windows.Printout):
     """Proxy of C++ HtmlPrintout class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlPrintout instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, String title=HtmlPrintoutTitleStr) -> HtmlPrintout"""
-        newobj = _html.new_HtmlPrintout(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlPrintout_swiginit(self,_html.new_HtmlPrintout(*args, **kwargs))
     def SetHtmlText(*args, **kwargs):
         """SetHtmlText(self, String html, String basepath=EmptyString, bool isdir=True)"""
         return _html.HtmlPrintout_SetHtmlText(*args, **kwargs)
@@ -1372,38 +1201,26 @@ class HtmlPrintout(_windows.Printout):
         return _html.HtmlPrintout_CleanUpStatics(*args, **kwargs)
 
     CleanUpStatics = staticmethod(CleanUpStatics)
-
-class HtmlPrintoutPtr(HtmlPrintout):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlPrintout
-_html.HtmlPrintout_swigregister(HtmlPrintoutPtr)
+HtmlPrintout_swigregister = _html.HtmlPrintout_swigregister
+HtmlPrintout_swigregister(HtmlPrintout)
 
 def HtmlPrintout_AddFilter(*args, **kwargs):
-    """HtmlPrintout_AddFilter(wxHtmlFilter filter)"""
-    return _html.HtmlPrintout_AddFilter(*args, **kwargs)
+  """HtmlPrintout_AddFilter(wxHtmlFilter filter)"""
+  return _html.HtmlPrintout_AddFilter(*args, **kwargs)
 
-def HtmlPrintout_CleanUpStatics(*args, **kwargs):
-    """HtmlPrintout_CleanUpStatics()"""
-    return _html.HtmlPrintout_CleanUpStatics(*args, **kwargs)
+def HtmlPrintout_CleanUpStatics(*args):
+  """HtmlPrintout_CleanUpStatics()"""
+  return _html.HtmlPrintout_CleanUpStatics(*args)
 
 class HtmlEasyPrinting(_core.Object):
     """Proxy of C++ HtmlEasyPrinting class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlEasyPrinting instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, String name=HtmlPrintingTitleStr, Window parentWindow=None) -> HtmlEasyPrinting"""
-        newobj = _html.new_HtmlEasyPrinting(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_html.delete_HtmlEasyPrinting):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _html.HtmlEasyPrinting_swiginit(self,_html.new_HtmlEasyPrinting(*args, **kwargs))
+    __swig_destroy__ = _html.delete_HtmlEasyPrinting
+    __del__ = lambda self : None;
     def PreviewFile(*args, **kwargs):
         """PreviewFile(self, String htmlfile)"""
         return _html.HtmlEasyPrinting_PreviewFile(*args, **kwargs)
@@ -1448,26 +1265,18 @@ class HtmlEasyPrinting(_core.Object):
         """GetPageSetupData(self) -> PageSetupDialogData"""
         return _html.HtmlEasyPrinting_GetPageSetupData(*args, **kwargs)
 
-
-class HtmlEasyPrintingPtr(HtmlEasyPrinting):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlEasyPrinting
-_html.HtmlEasyPrinting_swigregister(HtmlEasyPrintingPtr)
+HtmlEasyPrinting_swigregister = _html.HtmlEasyPrinting_swigregister
+HtmlEasyPrinting_swigregister(HtmlEasyPrinting)
 
 #---------------------------------------------------------------------------
 
 class HtmlBookRecord(object):
     """Proxy of C++ HtmlBookRecord class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlBookRecord instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, String bookfile, String basepath, String title, String start) -> HtmlBookRecord"""
-        newobj = _html.new_HtmlBookRecord(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlBookRecord_swiginit(self,_html.new_HtmlBookRecord(*args, **kwargs))
     def GetBookFile(*args, **kwargs):
         """GetBookFile(self) -> String"""
         return _html.HtmlBookRecord_GetBookFile(*args, **kwargs)
@@ -1512,19 +1321,14 @@ class HtmlBookRecord(object):
         """GetFullPath(self, String page) -> String"""
         return _html.HtmlBookRecord_GetFullPath(*args, **kwargs)
 
-
-class HtmlBookRecordPtr(HtmlBookRecord):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlBookRecord
-_html.HtmlBookRecord_swigregister(HtmlBookRecordPtr)
+HtmlBookRecord_swigregister = _html.HtmlBookRecord_swigregister
+HtmlBookRecord_swigregister(HtmlBookRecord)
 
 class HtmlSearchStatus(object):
     """Proxy of C++ HtmlSearchStatus class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlSearchStatus instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def Search(*args, **kwargs):
         """Search(self) -> bool"""
         return _html.HtmlSearchStatus_Search(*args, **kwargs)
@@ -1545,30 +1349,18 @@ class HtmlSearchStatus(object):
         """GetName(self) -> String"""
         return _html.HtmlSearchStatus_GetName(*args, **kwargs)
 
-
-class HtmlSearchStatusPtr(HtmlSearchStatus):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlSearchStatus
-_html.HtmlSearchStatus_swigregister(HtmlSearchStatusPtr)
+HtmlSearchStatus_swigregister = _html.HtmlSearchStatus_swigregister
+HtmlSearchStatus_swigregister(HtmlSearchStatus)
 
 class HtmlHelpData(object):
     """Proxy of C++ HtmlHelpData class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlHelpData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self) -> HtmlHelpData"""
-        newobj = _html.new_HtmlHelpData(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_html.delete_HtmlHelpData):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _html.HtmlHelpData_swiginit(self,_html.new_HtmlHelpData(*args, **kwargs))
+    __swig_destroy__ = _html.delete_HtmlHelpData
+    __del__ = lambda self : None;
     def SetTempDir(*args, **kwargs):
         """SetTempDir(self, String path)"""
         return _html.HtmlHelpData_SetTempDir(*args, **kwargs)
@@ -1589,13 +1381,8 @@ class HtmlHelpData(object):
         """GetBookRecArray(self) -> wxHtmlBookRecArray"""
         return _html.HtmlHelpData_GetBookRecArray(*args, **kwargs)
 
-
-class HtmlHelpDataPtr(HtmlHelpData):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlHelpData
-_html.HtmlHelpData_swigregister(HtmlHelpDataPtr)
+HtmlHelpData_swigregister = _html.HtmlHelpData_swigregister
+HtmlHelpData_swigregister(HtmlHelpData)
 
 HF_TOOLBAR = _html.HF_TOOLBAR
 HF_CONTENTS = _html.HF_CONTENTS
@@ -1641,19 +1428,16 @@ ID_HTML_SEARCHCHOICE = _html.ID_HTML_SEARCHCHOICE
 ID_HTML_COUNTINFO = _html.ID_HTML_COUNTINFO
 class HtmlHelpWindow(_core.Window):
     """Proxy of C++ HtmlHelpWindow class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlHelpWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
-        __init__(self, Window parent, int ??, Point pos=DefaultPosition, Size size=DefaultSize, 
+        __init__(self, Window parent, int ?, Point pos=DefaultPosition, Size size=DefaultSize, 
             int style=wxTAB_TRAVERSAL|wxNO_BORDER, 
             int helpStyle=HF_DEFAULT_STYLE, 
             HtmlHelpData data=None) -> HtmlHelpWindow
         """
-        newobj = _html.new_HtmlHelpWindow(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlHelpWindow_swiginit(self,_html.new_HtmlHelpWindow(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
@@ -1736,31 +1520,22 @@ class HtmlHelpWindow(_core.Window):
         """GetTreeCtrl(self) -> wxTreeCtrl"""
         return _html.HtmlHelpWindow_GetTreeCtrl(*args, **kwargs)
 
-
-class HtmlHelpWindowPtr(HtmlHelpWindow):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlHelpWindow
-_html.HtmlHelpWindow_swigregister(HtmlHelpWindowPtr)
+HtmlHelpWindow_swigregister = _html.HtmlHelpWindow_swigregister
+HtmlHelpWindow_swigregister(HtmlHelpWindow)
 
 def PreHtmlHelpWindow(*args, **kwargs):
     """PreHtmlHelpWindow(HtmlHelpData data=None) -> HtmlHelpWindow"""
     val = _html.new_PreHtmlHelpWindow(*args, **kwargs)
-    val.thisown = 1
     self._setOORInfo(self)
     return val
 
 class HtmlWindowEvent(_core.NotifyEvent):
     """Proxy of C++ HtmlWindowEvent class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlWindowEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, wxEventType commandType=wxEVT_NULL, int id=0) -> HtmlWindowEvent"""
-        newobj = _html.new_HtmlWindowEvent(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlWindowEvent_swiginit(self,_html.new_HtmlWindowEvent(*args, **kwargs))
     def SetURL(*args, **kwargs):
         """SetURL(self, String url)"""
         return _html.HtmlWindowEvent_SetURL(*args, **kwargs)
@@ -1769,27 +1544,19 @@ class HtmlWindowEvent(_core.NotifyEvent):
         """GetURL(self) -> String"""
         return _html.HtmlWindowEvent_GetURL(*args, **kwargs)
 
-
-class HtmlWindowEventPtr(HtmlWindowEvent):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlWindowEvent
-_html.HtmlWindowEvent_swigregister(HtmlWindowEventPtr)
+HtmlWindowEvent_swigregister = _html.HtmlWindowEvent_swigregister
+HtmlWindowEvent_swigregister(HtmlWindowEvent)
 
 class HtmlHelpFrame(_windows.Frame):
     """Proxy of C++ HtmlHelpFrame class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlHelpFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
-        __init__(self, Window parent, int ??, String title=EmptyString, int style=wxHF_DEFAULTSTYLE, 
+        __init__(self, Window parent, int ?, String title=EmptyString, int style=wxHF_DEFAULTSTYLE, 
             HtmlHelpData data=None) -> HtmlHelpFrame
         """
-        newobj = _html.new_HtmlHelpFrame(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlHelpFrame_swiginit(self,_html.new_HtmlHelpFrame(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
@@ -1840,34 +1607,25 @@ class HtmlHelpFrame(_windows.Frame):
     def WriteCustomization(self, config, rootpath=""):
         return self.GetHelpWindow().WriteCustomization(config, rootpath)
 
-
-class HtmlHelpFramePtr(HtmlHelpFrame):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlHelpFrame
-_html.HtmlHelpFrame_swigregister(HtmlHelpFramePtr)
+HtmlHelpFrame_swigregister = _html.HtmlHelpFrame_swigregister
+HtmlHelpFrame_swigregister(HtmlHelpFrame)
 
 def PreHtmlHelpFrame(*args, **kwargs):
     """PreHtmlHelpFrame(HtmlHelpData data=None) -> HtmlHelpFrame"""
     val = _html.new_PreHtmlHelpFrame(*args, **kwargs)
-    val.thisown = 1
     self._setOORInfo(self)
     return val
 
 class HtmlHelpDialog(_windows.Dialog):
     """Proxy of C++ HtmlHelpDialog class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlHelpDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
-        __init__(self, Window parent, int ??, String title=EmptyString, int style=HF_DEFAULT_STYLE, 
+        __init__(self, Window parent, int ?, String title=EmptyString, int style=HF_DEFAULT_STYLE, 
             HtmlHelpData data=None) -> HtmlHelpDialog
         """
-        newobj = _html.new_HtmlHelpDialog(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _html.HtmlHelpDialog_swiginit(self,_html.new_HtmlHelpDialog(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
@@ -1894,26 +1652,20 @@ class HtmlHelpDialog(_windows.Dialog):
         """SetTitleFormat(self, String format)"""
         return _html.HtmlHelpDialog_SetTitleFormat(*args, **kwargs)
 
-
-class HtmlHelpDialogPtr(HtmlHelpDialog):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlHelpDialog
-_html.HtmlHelpDialog_swigregister(HtmlHelpDialogPtr)
+HtmlHelpDialog_swigregister = _html.HtmlHelpDialog_swigregister
+HtmlHelpDialog_swigregister(HtmlHelpDialog)
 
 def PreHtmlHelpDialog(*args, **kwargs):
     """PreHtmlHelpDialog(HtmlHelpData data=None) -> HtmlHelpDialog"""
     val = _html.new_PreHtmlHelpDialog(*args, **kwargs)
-    val.thisown = 1
     self._setOORInfo(self)
     return val
 
 class HelpControllerBase(_core.Object):
     """Proxy of C++ HelpControllerBase class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHelpControllerBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def Initialize(*args):
         """
         Initialize(self, String file, int server) -> bool
@@ -1983,30 +1735,18 @@ class HelpControllerBase(_core.Object):
         """GetParentWindow(self) -> Window"""
         return _html.HelpControllerBase_GetParentWindow(*args, **kwargs)
 
-
-class HelpControllerBasePtr(HelpControllerBase):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HelpControllerBase
-_html.HelpControllerBase_swigregister(HelpControllerBasePtr)
+HelpControllerBase_swigregister = _html.HelpControllerBase_swigregister
+HelpControllerBase_swigregister(HelpControllerBase)
 
 class HtmlHelpController(HelpControllerBase):
     """Proxy of C++ HtmlHelpController class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlHelpController instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, int style=HF_DEFAULT_STYLE, Window parentWindow=None) -> HtmlHelpController"""
-        newobj = _html.new_HtmlHelpController(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_html.delete_HtmlHelpController):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
+        _html.HtmlHelpController_swiginit(self,_html.new_HtmlHelpController(*args, **kwargs))
+    __swig_destroy__ = _html.delete_HtmlHelpController
+    __del__ = lambda self : None;
     def GetHelpWindow(*args, **kwargs):
         """GetHelpWindow(self) -> HtmlHelpWindow"""
         return _html.HtmlHelpController_GetHelpWindow(*args, **kwargs)
@@ -2075,34 +1815,21 @@ class HtmlHelpController(HelpControllerBase):
         """FindTopLevelWindow(self) -> Window"""
         return _html.HtmlHelpController_FindTopLevelWindow(*args, **kwargs)
 
-
-class HtmlHelpControllerPtr(HtmlHelpController):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlHelpController
-_html.HtmlHelpController_swigregister(HtmlHelpControllerPtr)
+HtmlHelpController_swigregister = _html.HtmlHelpController_swigregister
+HtmlHelpController_swigregister(HtmlHelpController)
 
 class HtmlModalHelp(object):
     """Proxy of C++ HtmlModalHelp class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxHtmlModalHelp instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, String helpFile, String topic=wxEmptyString, 
             int style=wxHF_DEFAULT_STYLE|wxHF_DIALOG|wxHF_MODAL) -> HtmlModalHelp
         """
-        newobj = _html.new_HtmlModalHelp(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-
-class HtmlModalHelpPtr(HtmlModalHelp):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = HtmlModalHelp
-_html.HtmlModalHelp_swigregister(HtmlModalHelpPtr)
+        _html.HtmlModalHelp_swiginit(self,_html.new_HtmlModalHelp(*args, **kwargs))
+HtmlModalHelp_swigregister = _html.HtmlModalHelp_swigregister
+HtmlModalHelp_swigregister(HtmlModalHelp)
 
 
 

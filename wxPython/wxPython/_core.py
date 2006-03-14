@@ -762,6 +762,7 @@ wxImage_CanReadStream = wx._core.Image_CanReadStream
 wxImage_AddHandler = wx._core.Image_AddHandler
 wxImage_InsertHandler = wx._core.Image_InsertHandler
 wxImage_RemoveHandler = wx._core.Image_RemoveHandler
+wxImage_GetHandlers = wx._core.Image_GetHandlers
 wxImage_GetImageExtWildcard = wx._core.Image_GetImageExtWildcard
 wxImage_RGBtoHSV = wx._core.Image_RGBtoHSV
 wxImage_HSVtoRGB = wx._core.Image_HSVtoRGB

@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG 1.3.27.
+# This file was created automatically by SWIG 1.3.29.
 # Don't modify this file, modify the SWIG interface instead.
 
 """
@@ -7,17 +7,17 @@ or pages.
 """
 
 import _wizard
-
+import new
+new_instancemethod = new.instancemethod
 def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "thisown"): return self.this.own(value)
     if (name == "this"):
-        if isinstance(value, class_type):
-            self.__dict__[name] = value.this
-            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
-            del value.thisown
+        if type(value).__name__ == 'PySwigObject':
+            self.__dict__[name] = value
             return
     method = class_type.__swig_setmethods__.get(name,None)
     if method: return method(self,value)
-    if (not static) or hasattr(self,name) or (name == "thisown"):
+    if (not static) or hasattr(self,name):
         self.__dict__[name] = value
     else:
         raise AttributeError("You cannot add attributes to %s" % self)
@@ -26,9 +26,15 @@ def _swig_setattr(self,class_type,name,value):
     return _swig_setattr_nondynamic(self,class_type,name,value,0)
 
 def _swig_getattr(self,class_type,name):
+    if (name == "thisown"): return self.this.own()
     method = class_type.__swig_getmethods__.get(name,None)
     if method: return method(self)
     raise AttributeError,name
+
+def _swig_repr(self):
+    try: strthis = "proxy of " + self.this.__repr__()
+    except: strthis = ""
+    return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis,)
 
 import types
 try:
@@ -42,7 +48,8 @@ del types
 
 def _swig_setattr_nondynamic_method(set):
     def set_attr(self,name,value):
-        if hasattr(self,name) or (name in ("this", "thisown")):
+        if (name == "thisown"): return self.this.own(value)
+        if hasattr(self,name) or (name == "this"):
             set(self,name,value)
         else:
             raise AttributeError("You cannot add attributes to %s" % self)
@@ -67,17 +74,14 @@ EVT_WIZARD_FINISHED      = wx.PyEventBinder( wxEVT_WIZARD_FINISHED, 1)
 
 class WizardEvent(_core.NotifyEvent):
     """Proxy of C++ WizardEvent class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxWizardEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, wxEventType type=wxEVT_NULL, int id=-1, bool direction=True, 
             WizardPage page=None) -> WizardEvent
         """
-        newobj = _wizard.new_WizardEvent(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _wizard.WizardEvent_swiginit(self,_wizard.new_WizardEvent(*args, **kwargs))
     def GetDirection(*args, **kwargs):
         """GetDirection(self) -> bool"""
         return _wizard.WizardEvent_GetDirection(*args, **kwargs)
@@ -86,19 +90,14 @@ class WizardEvent(_core.NotifyEvent):
         """GetPage(self) -> WizardPage"""
         return _wizard.WizardEvent_GetPage(*args, **kwargs)
 
-
-class WizardEventPtr(WizardEvent):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = WizardEvent
-_wizard.WizardEvent_swigregister(WizardEventPtr)
+WizardEvent_swigregister = _wizard.WizardEvent_swigregister
+WizardEvent_swigregister(WizardEvent)
 
 class WizardPage(_windows.Panel):
     """Proxy of C++ WizardPage class"""
-    def __init__(self): raise RuntimeError, "No constructor defined"
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxWizardPage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
     def Create(*args, **kwargs):
         """Create(self, Wizard parent, Bitmap bitmap=wxNullBitmap, String resource=EmptyString) -> bool"""
         return _wizard.WizardPage_Create(*args, **kwargs)
@@ -115,24 +114,16 @@ class WizardPage(_windows.Panel):
         """GetBitmap(self) -> Bitmap"""
         return _wizard.WizardPage_GetBitmap(*args, **kwargs)
 
-
-class WizardPagePtr(WizardPage):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = WizardPage
-_wizard.WizardPage_swigregister(WizardPagePtr)
+WizardPage_swigregister = _wizard.WizardPage_swigregister
+WizardPage_swigregister(WizardPage)
 
 class PyWizardPage(WizardPage):
     """Proxy of C++ PyWizardPage class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyWizardPage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """__init__(self, Wizard parent, Bitmap bitmap=&wxNullBitmap, String resource=&wxPyEmptyString) -> PyWizardPage"""
-        newobj = _wizard.new_PyWizardPage(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _wizard.PyWizardPage_swiginit(self,_wizard.new_PyWizardPage(*args, **kwargs))
         self._setCallbackInfo(self, PyWizardPage);self._setOORInfo(self)
 
     def Create(*args, **kwargs):
@@ -178,102 +169,6 @@ class PyWizardPage(WizardPage):
     def DoGetBestSize(*args, **kwargs):
         """DoGetBestSize(self) -> Size"""
         return _wizard.PyWizardPage_DoGetBestSize(*args, **kwargs)
-
-    def InitDialog(*args, **kwargs):
-        """
-        InitDialog(self)
-
-        Sends an EVT_INIT_DIALOG event, whose handler usually transfers data
-        to the dialog via validators.
-        """
-        return _wizard.PyWizardPage_InitDialog(*args, **kwargs)
-
-    def TransferDataToWindow(*args, **kwargs):
-        """
-        TransferDataToWindow(self) -> bool
-
-        Transfers values to child controls from data areas specified by their
-        validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY extra
-        style flag set, the method will also call TransferDataToWindow() of
-        all child windows.
-        """
-        return _wizard.PyWizardPage_TransferDataToWindow(*args, **kwargs)
-
-    def TransferDataFromWindow(*args, **kwargs):
-        """
-        TransferDataFromWindow(self) -> bool
-
-        Transfers values from child controls to data areas specified by their
-        validators. Returns false if a transfer failed.  If the window has
-        wx.WS_EX_VALIDATE_RECURSIVELY extra style flag set, the method will
-        also call TransferDataFromWindow() of all child windows.
-        """
-        return _wizard.PyWizardPage_TransferDataFromWindow(*args, **kwargs)
-
-    def Validate(*args, **kwargs):
-        """
-        Validate(self) -> bool
-
-        Validates the current values of the child controls using their
-        validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY extra
-        style flag set, the method will also call Validate() of all child
-        windows.  Returns false if any of the validations failed.
-        """
-        return _wizard.PyWizardPage_Validate(*args, **kwargs)
-
-    def AcceptsFocus(*args, **kwargs):
-        """
-        AcceptsFocus(self) -> bool
-
-        Can this window have focus?
-        """
-        return _wizard.PyWizardPage_AcceptsFocus(*args, **kwargs)
-
-    def AcceptsFocusFromKeyboard(*args, **kwargs):
-        """
-        AcceptsFocusFromKeyboard(self) -> bool
-
-        Can this window be given focus by keyboard navigation? if not, the
-        only way to give it focus (provided it accepts it at all) is to click
-        it.
-        """
-        return _wizard.PyWizardPage_AcceptsFocusFromKeyboard(*args, **kwargs)
-
-    def GetMaxSize(*args, **kwargs):
-        """GetMaxSize(self) -> Size"""
-        return _wizard.PyWizardPage_GetMaxSize(*args, **kwargs)
-
-    def AddChild(*args, **kwargs):
-        """
-        AddChild(self, Window child)
-
-        Adds a child window. This is called automatically by window creation
-        functions so should not be required by the application programmer.
-        """
-        return _wizard.PyWizardPage_AddChild(*args, **kwargs)
-
-    def RemoveChild(*args, **kwargs):
-        """
-        RemoveChild(self, Window child)
-
-        Removes a child window. This is called automatically by window
-        deletion functions so should not be required by the application
-        programmer.
-        """
-        return _wizard.PyWizardPage_RemoveChild(*args, **kwargs)
-
-    def ShouldInheritColours(*args, **kwargs):
-        """
-        ShouldInheritColours(self) -> bool
-
-        Return true from here to allow the colours of this window to be
-        changed by InheritAttributes, returning false forbids inheriting them
-        from the parent window.
-
-        The base class version returns false, but this method is overridden in
-        wxControl where it returns true.
-        """
-        return _wizard.PyWizardPage_ShouldInheritColours(*args, **kwargs)
 
     def GetDefaultAttributes(*args, **kwargs):
         """GetDefaultAttributes(self) -> VisualAttributes"""
@@ -388,33 +283,24 @@ class PyWizardPage(WizardPage):
     base_OnInternalIdle = wx._deprecated(base_OnInternalIdle,
                                    "Please use PyWizardPage.OnInternalIdle instead.")
 
-
-class PyWizardPagePtr(PyWizardPage):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PyWizardPage
-_wizard.PyWizardPage_swigregister(PyWizardPagePtr)
+PyWizardPage_swigregister = _wizard.PyWizardPage_swigregister
+PyWizardPage_swigregister(PyWizardPage)
 
 def PrePyWizardPage(*args, **kwargs):
     """PrePyWizardPage() -> PyWizardPage"""
     val = _wizard.new_PrePyWizardPage(*args, **kwargs)
-    val.thisown = 1
     return val
 
 class WizardPageSimple(WizardPage):
     """Proxy of C++ WizardPageSimple class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxWizardPageSimple instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Wizard parent, WizardPage prev=None, WizardPage next=None, 
             Bitmap bitmap=wxNullBitmap, wxChar resource=None) -> WizardPageSimple
         """
-        newobj = _wizard.new_WizardPageSimple(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _wizard.WizardPageSimple_swiginit(self,_wizard.new_WizardPageSimple(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
@@ -437,38 +323,29 @@ class WizardPageSimple(WizardPage):
         return _wizard.WizardPageSimple_Chain(*args, **kwargs)
 
     Chain = staticmethod(Chain)
-
-class WizardPageSimplePtr(WizardPageSimple):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = WizardPageSimple
-_wizard.WizardPageSimple_swigregister(WizardPageSimplePtr)
+WizardPageSimple_swigregister = _wizard.WizardPageSimple_swigregister
+WizardPageSimple_swigregister(WizardPageSimple)
 
 def PreWizardPageSimple(*args, **kwargs):
     """PreWizardPageSimple() -> WizardPageSimple"""
     val = _wizard.new_PreWizardPageSimple(*args, **kwargs)
-    val.thisown = 1
     return val
 
 def WizardPageSimple_Chain(*args, **kwargs):
-    """WizardPageSimple_Chain(WizardPageSimple first, WizardPageSimple second)"""
-    return _wizard.WizardPageSimple_Chain(*args, **kwargs)
+  """WizardPageSimple_Chain(WizardPageSimple first, WizardPageSimple second)"""
+  return _wizard.WizardPageSimple_Chain(*args, **kwargs)
 
 class Wizard(_windows.Dialog):
     """Proxy of C++ Wizard class"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxWizard instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, String title=EmptyString, 
             Bitmap bitmap=wxNullBitmap, Point pos=DefaultPosition, 
             long style=DEFAULT_DIALOG_STYLE) -> Wizard
         """
-        newobj = _wizard.new_Wizard(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
+        _wizard.Wizard_swiginit(self,_wizard.new_Wizard(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
@@ -526,18 +403,12 @@ class Wizard(_windows.Dialog):
         """HasPrevPage(self, WizardPage page) -> bool"""
         return _wizard.Wizard_HasPrevPage(*args, **kwargs)
 
-
-class WizardPtr(Wizard):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = Wizard
-_wizard.Wizard_swigregister(WizardPtr)
+Wizard_swigregister = _wizard.Wizard_swigregister
+Wizard_swigregister(Wizard)
 
 def PreWizard(*args, **kwargs):
     """PreWizard() -> Wizard"""
     val = _wizard.new_PreWizard(*args, **kwargs)
-    val.thisown = 1
     return val
 
 
