@@ -158,8 +158,9 @@ void wxTopLevelWindowBase::DoCentre(int dir)
     wxRect rectCentre;
     if ( !(dir & wxCENTRE_ON_SCREEN) && GetParent() )
     {
-        // centre on parent window
-        rectCentre = GetParent()->GetRect();
+        // centre on parent window: notice that we need screen coordinates for
+        // positioning this TLW
+        rectCentre = GetParent()->GetScreenRect();
     }
     else
     {
