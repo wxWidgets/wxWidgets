@@ -320,7 +320,7 @@ void wxChoice::Delete( int n )
 
     Clear();
 
-    for ( i = 0; i < count - 1; i++ )
+    for ( i = 0; (size_t)i < count - 1; i++ )
     {
         Append(items[i]);
 
@@ -528,7 +528,7 @@ int wxChoice::GtkAddHelper(GtkWidget *menu, size_t pos, const wxString& item)
         // if we're called from ctor (and GtkMenuShell is still NULL)
 
         // normal control, just append
-        if (pos == (int)m_clientList.GetCount())
+        if (pos == m_clientList.GetCount())
         {
             gtk_menu_append( GTK_MENU(menu), menu_item );
             m_clientList.Append( (wxObject*) NULL );
