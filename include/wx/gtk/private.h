@@ -61,6 +61,24 @@ extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
 //-----------------------------------------------------------------------------
+// Convenience class for g_freeing a gchar* on scope exit automatically
+//-----------------------------------------------------------------------------
+
+class wxGtkString
+{
+public:
+    explicit wxGtkString(gchar *s) : m_str(s) { }
+    ~wxGtkString() { g_free(m_str); }
+
+    operator gchar *() const { return m_str; }
+
+private:
+    gchar *m_str;
+
+    DECLARE_NO_COPY_CLASS(wxGtkString)
+};
+
+//-----------------------------------------------------------------------------
 // GTK+ scroll types -> wxEventType
 //-----------------------------------------------------------------------------
 
