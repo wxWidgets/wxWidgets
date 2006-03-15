@@ -79,7 +79,7 @@
 # its use eventhough there is a compatibility problem that causes a
 # failed compile.
 %if %{?mediactrl:0}%{!?mediactrl:1}
-%define mediactrl 0
+%define mediactrl 1
 %endif
 
 
