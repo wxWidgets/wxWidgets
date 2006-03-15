@@ -40,7 +40,7 @@
 #include "wx/sysopt.h"
 #include "wx/dcprint.h"
 #include "wx/module.h"
-#include "wx/dynload.h"
+#include "wx/dynlib.h"
 
 #ifdef wxHAVE_RAW_BITMAP
 #include "wx/rawbmp.h"
