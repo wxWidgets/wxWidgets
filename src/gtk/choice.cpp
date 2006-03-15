@@ -485,7 +485,7 @@ void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)
 
 int wxChoice::GtkAddHelper(GtkWidget *menu, size_t pos, const wxString& item)
 {
-    wxCHECK_MSG((pos>=0) && (pos<=(int)m_clientList.GetCount()), -1, wxT("invalid index"));
+    wxCHECK_MSG((pos>=0) && (pos<=m_clientList.GetCount()), -1, wxT("invalid index"));
 
     GtkWidget *menu_item = gtk_menu_item_new_with_label( wxGTK_CONV( item ) );
 
