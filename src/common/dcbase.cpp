@@ -958,8 +958,9 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
     }
     else
     {
+        wxNode *node;
         // copy whole ellipse, wxPoints will be deleted outside
-        for( wxNode *node = pointsarray[0].First(); node; node = node->Next() )
+        for( node = pointsarray[0].First(); node; node = node->Next() )
         {
             wxObject *p = node->Data();
             points->Append( p );
