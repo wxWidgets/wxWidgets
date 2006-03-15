@@ -30,7 +30,7 @@
     #include "wx/wx.h"
 #endif
 
-#if !defined(__WXMSW__) || wxUSE_XPM_IN_MSW
+#if !defined(__WXMSW__) // || wxUSE_XPM_IN_MSW
 /* Closed folder */
 static char * icon1_xpm[] = {
 /* width height ncolors chars_per_pixel */
