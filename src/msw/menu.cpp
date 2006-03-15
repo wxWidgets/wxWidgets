@@ -874,7 +874,9 @@ WXHMENU wxMenuBar::Create()
 
     HWND hCommandBar = (HWND) GetToolBar()->GetHWND();
     HMENU hMenu = (HMENU)::SendMessage(hCommandBar, SHCMBM_GETMENU, (WPARAM)0, (LPARAM)0);
-    if (hMenu)
+
+	// hMenu may be zero on Windows Mobile 5. So add the menus anyway.
+    if (1) // (hMenu)
     {
         TBBUTTON tbButton;
         memset(&tbButton, 0, sizeof(TBBUTTON));
