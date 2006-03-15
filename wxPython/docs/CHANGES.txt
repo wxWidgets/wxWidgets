@@ -109,6 +109,10 @@ Bumped up to SWIG 1.3.29.  This provides some more runtime performance
 boosts, gets rid of the dreaded Ptr classes, and some other nice new
 things. 
 
+Added wx.Window.GetScreenPosition and GetScreenRect which returns the
+position of the window in screen coordinates, even if the window is
+not a top-level window.
+
 
 
 

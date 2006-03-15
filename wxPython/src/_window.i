@@ -460,14 +460,32 @@ around panel items, for example.", "");
 
 
     DocStr(GetPosition,   // sets the docstring for both
-           "Get the window's position.", "");
-    wxPoint GetPosition();
+           "Get the window's position.  Notice that the position is in client
+coordinates for child windows and screen coordinates for the top level
+ones, use `GetScreenPosition` if you need screen coordinates for all
+kinds of windows.", "");
+    wxPoint GetPosition() const;
 
     DocDeclAName(
-        void, GetPosition(int *OUTPUT, int *OUTPUT),
+        void, GetPosition(int *OUTPUT, int *OUTPUT) const,
         "GetPositionTuple() -> (x,y)",
         GetPositionTuple);
 
+    
+    DocStr(GetScreenPosition,   // sets the docstring for both
+           "Get the position of the window in screen coordinantes.", "");
+    wxPoint GetScreenPosition() const;
+    DocDeclAName(
+        void, GetScreenPosition(int *OUTPUT, int *OUTPUT) const,
+        "GetScreenPositionTuple() -> (x,y)",
+        GetScreenPositionTuple);
+
+    DocDeclStr(
+        wxRect , GetScreenRect() const,
+        "Returns the size and position of the window in screen coordinantes as
+a `wx.Rect` object.", "
+:see: `GetRect`, `GetScreenPosition`");
+    
    
     DocStr(GetSize, "Get the window size.", "");
     wxSize GetSize() const;
@@ -480,7 +498,7 @@ around panel items, for example.", "");
 
     DocDeclStr(
         wxRect , GetRect() const,
-        "Returns the size and position of the window as a wx.Rect object.", "");
+        "Returns the size and position of the window as a `wx.Rect` object.", "");
     
 
     DocStr(GetClientSize,
