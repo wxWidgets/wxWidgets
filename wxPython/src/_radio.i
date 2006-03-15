@@ -59,7 +59,7 @@ public:
     virtual bool SetStringSelection(const wxString& s);
 
     // string access
-    virtual int GetCount() const;
+    virtual size_t GetCount() const;
     virtual int FindString(const wxString& s) const;
     
     virtual wxString GetString(int n) const;

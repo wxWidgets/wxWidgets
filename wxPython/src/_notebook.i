@@ -100,8 +100,8 @@ public:
 
 
     // get/set size of area between book control area and page area
-    unsigned int GetInternalBorder() const;
-    void SetInternalBorder(unsigned int internalBorder);
+    size_t GetInternalBorder() const;
+    void SetInternalBorder(size_t internalBorder);
 
     // returns true if we have wxCHB_TOP or wxCHB_BOTTOM style
     bool IsVertical() const;

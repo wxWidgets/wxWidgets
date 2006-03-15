@@ -206,7 +206,7 @@ than the number of items in the control.", "");
 
     
     DocDeclStr(
-        virtual int , GetCount() const,
+        virtual size_t , GetCount() const,
         "Returns the number of items in the control.", "");
     
     DocDeclStr(
