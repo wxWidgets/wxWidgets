@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/display.cpp
 // Purpose:     MSW Implementation of wxDisplay class
-// Author:      Royce Mitchell III
-// Modified by: VZ (resolutions enumeration/change support, DirectDraw, ...)
-//              Ryan Norton (IsPrimary override)
+// Author:      Royce Mitchell III, Vadim Zeitlin
+// Modified by: Ryan Norton (IsPrimary override)
 // Created:     06/21/02
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
+// Copyright:   (c) 2002-2006 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -63,16 +63,6 @@
 // IID_IDirectDraw2 definition
 const GUID wxIID_IDirectDraw2 =
     { 0xB3A6F3E0, 0x2B43, 0x11CF, { 0xA2,0xDE,0x00,0xAA,0x00,0xB9,0x33,0x56 } };
-#endif
-
-// ----------------------------------------------------------------------------
-// macros
-// ----------------------------------------------------------------------------
-
-#ifdef _UNICODE
-    #define WINFUNC(x)  _T(#x) L"W"
-#else
-    #define WINFUNC(x) #x "A"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -195,7 +185,7 @@ static bool OsSupportsMultipleMonitors()
             gs_MonitorFromWindow = (MonitorFromWindow_t)
                 dllUser32.GetSymbol(wxT("MonitorFromWindow"));
             gs_GetMonitorInfo = (GetMonitorInfo_t)
-                dllUser32.GetSymbol(WINFUNC(GetMonitorInfo));
+                dllUser32.GetSymbolAorW(wxT("GetMonitorInfo"));
             if ( gs_EnumDisplayMonitors != NULL &&
                  gs_MonitorFromPoint != NULL &&
                  gs_MonitorFromWindow != NULL &&
@@ -318,7 +308,7 @@ static bool DoInitDirectX()
         return false;
 
     DirectDrawEnumerateEx_t pDDEnumEx = (DirectDrawEnumerateEx_t)
-        dllDX.GetSymbol(WINFUNC(DirectDrawEnumerateEx));
+        dllDX.GetSymbolAorW(_T("DirectDrawEnumerateEx"));
     if ( !pDDEnumEx )
         return false;
 
@@ -867,7 +857,7 @@ bool wxDisplay::DoChangeModeWindows(const wxVideoMode& mode)
         if ( dllUser32.IsLoaded() )
         {
             pfnChangeDisplaySettingsEx = (ChangeDisplaySettingsEx_t)
-                dllUser32.GetSymbol(WINFUNC(ChangeDisplaySettingsEx));
+                dllUser32.GetSymbolAorW(_T("ChangeDisplaySettingsEx"));
         }
         //else: huh, no user32.dll??
 
