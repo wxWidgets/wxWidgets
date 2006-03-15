@@ -491,7 +491,7 @@ void ComboboxWidgetsPage::OnUpdateUICurText(wxUpdateUIEvent& event)
 void ComboboxWidgetsPage::OnUpdateUIInsertionPointText(wxUpdateUIEvent& event)
 {
     if (m_combobox)
-        event.SetText( wxString::Format(_T("%d"), m_combobox->GetInsertionPoint()) );
+        event.SetText( wxString::Format(_T("%ld"), m_combobox->GetInsertionPoint()) );
 }
 
 void ComboboxWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)

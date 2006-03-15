@@ -515,7 +515,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
     // mark the origin
     dc.DrawCircle(0, 0, 10);
 
-#if !wxMAC_USE_CORE_GRAPHICS
+#if !defined(wxMAC_USE_CORE_GRAPHICS) || !wxMAC_USE_CORE_GRAPHICS
     // GetPixel and FloodFill not supported by Mac OS X CoreGraphics
     // (FloodFill uses Blit from a non-wxMemoryDC)
     //flood fill using brush, starting at 1,1 and replacing whatever colour we find there
@@ -1142,6 +1142,9 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
         case Show_Gradient:
             DrawGradients(dc);
+            break;
+
+        default:
             break;
     }
 }

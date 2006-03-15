@@ -461,10 +461,10 @@ void wxListBox::DoSetSelection(int n, bool select)
 
 int wxListBox::GetSelection() const
 {
-    wxCHECK_MSG( !HasMultipleSelection(), -1,
+    wxCHECK_MSG( !HasMultipleSelection(), wxNOT_FOUND,
                  _T("use wxListBox::GetSelections for ths listbox") );
 
-    return m_selections.IsEmpty() ? -1 : m_selections[0];
+    return m_selections.IsEmpty() ? wxNOT_FOUND : m_selections[0];
 }
 
 int wxCMPFUNC_CONV wxCompareInts(int *n, int *m)
@@ -576,7 +576,7 @@ void wxListBox::UpdateScrollbars()
     // is our height enough to show all items?
     size_t nLines = GetCount();
     wxCoord lineHeight = GetLineHeight();
-    bool showScrollbarY = nLines*lineHeight > size.y;
+    bool showScrollbarY = (int)nLines*lineHeight > size.y;
 
     // check the width too if required
     wxCoord charWidth, maxWidth;
@@ -927,7 +927,7 @@ bool wxListBox::FindItem(const wxString& prefix, bool strictlyAfter)
     {
         // the following line will set first correctly to 0 if there is no
         // selection (m_current == -1)
-        first = m_current == count - 1 ? 0 : m_current + 1;
+        first = m_current == (int)(count - 1) ? 0 : m_current + 1;
     }
     else // start with the current
     {
@@ -943,7 +943,7 @@ bool wxListBox::FindItem(const wxString& prefix, bool strictlyAfter)
     size_t len = prefix.length();
 
     // loop over all items in the listbox
-    for ( int item = first; item != (int)last; item < count - 1 ? item++ : item = 0 )
+    for ( int item = first; item != (int)last; item < (int)(count - 1) ? item++ : item = 0 )
     {
         if ( wxStrnicmp(this->GetString(item).c_str(), prefix, len) == 0 )
         {
