@@ -523,7 +523,7 @@ public:
     HRESULT STDMETHODCALLTYPE LockContainer(BOOL){return S_OK;}
     //********************IOleItemContainer***************************
     HRESULT STDMETHODCALLTYPE
-    #if defined(__WXWINCE__) && __VISUALC__ < 1400
+    #if 0 // defined(__WXWINCE__) && __VISUALC__ < 1400
     GetObject
     #elif defined(_UNICODE)
     GetObjectW
