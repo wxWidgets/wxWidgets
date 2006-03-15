@@ -1274,8 +1274,10 @@ void wxTopLevelWindowGTK::RequestUserAttention(int flags)
 
 void wxTopLevelWindowGTK::SetWindowStyleFlag( long style )
 {
+#if defined(__WXGTK24__) || GTK_CHECK_VERSION(2,2,0)
     // Store which styles were changed
     long styleChanges = style ^ m_windowStyle;
+#endif
 
     // Process wxWindow styles. This also updates the internal variable
     // Therefore m_windowStyle bits carry now the _new_ style values
