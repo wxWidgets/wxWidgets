@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        menu.cpp
+// Name:        src/gtk1/menu.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -140,7 +140,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
 void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long style)
 {
     // the parent window is known after wxFrame::SetMenu()
-    m_needParent = FALSE;
+    m_needParent = false;
     m_style = style;
     m_invokingWindow = (wxWindow*) NULL;
 
@@ -289,7 +289,7 @@ void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
 bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
 {
     if ( !wxMenuBarBase::Append( menu, title ) )
-        return FALSE;
+        return false;
 
     return GtkAppend(menu, title);
 }
@@ -349,20 +349,20 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
             frame->UpdateMenuBarSize();
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
-        return FALSE;
+        return false;
 
     // TODO
 
     if ( !GtkAppend(menu, title, (int)pos) )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
@@ -767,7 +767,7 @@ void wxMenuItem::SetText( const wxString& str )
     // Some optimization to avoid flicker
     wxString oldLabel = m_text;
     oldLabel = wxStripMenuCodes(oldLabel);
-    oldLabel.Replace(wxT("_"), wxT(""));
+    oldLabel.Replace(wxT("_"), wxEmptyString);
     wxString label1 = wxStripMenuCodes(str);
     wxString oldhotkey = GetHotKey();    // Store the old hotkey in Ctrl-foo format
     wxCharBuffer oldbuf = wxGTK_CONV( GetGtkHotKey(*this) );  // and as <control>foo
@@ -847,7 +847,7 @@ void wxMenuItem::DoSetText( const wxString& str )
         ++pc;
     }
 
-    m_hotKey = wxT("");
+    m_hotKey = wxEmptyString;
 
     if(*pc == wxT('\t'))
     {
@@ -908,9 +908,9 @@ void wxMenuItem::Enable( bool enable )
 
 bool wxMenuItem::IsChecked() const
 {
-    wxCHECK_MSG( m_menuItem, FALSE, wxT("invalid menu item") );
+    wxCHECK_MSG( m_menuItem, false, wxT("invalid menu item") );
 
-    wxCHECK_MSG( IsCheckable(), FALSE,
+    wxCHECK_MSG( IsCheckable(), false,
                  wxT("can't get state of uncheckable item!") );
 
     return ((GtkCheckMenuItem*)m_menuItem)->active != 0;
@@ -972,7 +972,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     GtkWidget *menuItem;
 
     wxString text;
-    GtkLabel* label;
+    GtkLabel* label = NULL;
 
     if ( mitem->IsSeparator() )
     {
@@ -1117,7 +1117,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         // gtk_widget_lock_accelerators(mitem->GetMenuItem());
     }
 
-    return TRUE;
+    return true;
 }
 
 wxMenuItem* wxMenu::DoAppend(wxMenuItem *mitem)
@@ -1551,4 +1551,3 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 }
 
 #endif // wxUSE_MENUS_NATIVE
-
