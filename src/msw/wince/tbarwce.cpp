@@ -556,7 +556,7 @@ WXLRESULT wxToolMenuBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lP
             break;
     }
 
-    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+    return MSWDefWindowProc(nMsg, wParam, lParam);
 }
 
 
