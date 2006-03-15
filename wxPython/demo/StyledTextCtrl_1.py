@@ -213,9 +213,9 @@ def runTest(frame, nb, log):
     # make some styles
     ed.StyleSetSpec(stc.STC_STYLE_DEFAULT, "size:%d,face:%s" % (pb, face3))
     ed.StyleClearAll()
-    ed.StyleSetSpec(1, "size:%d,bold,face:%s,fore:#0000FF" % (pb+2, face1))
+    ed.StyleSetSpec(1, "size:%d,bold,face:%s,fore:#0000FF" % (pb, face1))
     ed.StyleSetSpec(2, "face:%s,italic,fore:#FF0000,size:%d" % (face2, pb))
-    ed.StyleSetSpec(3, "face:%s,bold,size:%d" % (face2, pb+2))
+    ed.StyleSetSpec(3, "face:%s,bold,size:%d" % (face2, pb))
     ed.StyleSetSpec(4, "face:%s,size:%d" % (face1, pb-1))
 
     # Now set some text to those styles...  Normally this would be
@@ -235,7 +235,7 @@ def runTest(frame, nb, log):
     # line numbers in the margin
     ed.SetMarginType(0, stc.STC_MARGIN_NUMBER)
     ed.SetMarginWidth(0, 22)
-    ed.StyleSetSpec(stc.STC_STYLE_LINENUMBER, "size:%d,face:%s" % (pb, face1))
+    ed.StyleSetSpec(stc.STC_STYLE_LINENUMBER, "size:%d,face:%s" % (pb-2, face1))
 
     # setup some markers
     ed.SetMarginType(1, stc.STC_MARGIN_SYMBOL)
