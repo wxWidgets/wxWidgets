@@ -33,7 +33,7 @@ static void gtk_tree_entry_dispose(GObject* obj);
 
 
 /* public */
-GtkTreeEntry* 
+GtkTreeEntry*
 gtk_tree_entry_new()
 {
     return GTK_TREE_ENTRY(g_object_new(GTK_TYPE_TREE_ENTRY, NULL));
@@ -58,8 +58,8 @@ gtk_tree_entry_get_type ()
             16,             /* n_preallocs */
             (GInstanceInitFunc) gtk_tree_entry_init, /*instance_init*/
         };
-        tree_entry_type = g_type_register_static (G_TYPE_OBJECT, "GtkTreeEntry", 
-                                                  &tree_entry_info, 
+        tree_entry_type = g_type_register_static (G_TYPE_OBJECT, "GtkTreeEntry",
+                                                  &tree_entry_info,
                                                   (GTypeFlags)0);
         g_value_register_transform_func(tree_entry_type, G_TYPE_STRING,
                                         gtk_tree_entry_string_transform_func);
@@ -106,13 +106,13 @@ void   gtk_tree_entry_set_userdata      (GtkTreeEntry* entry, gpointer userdata)
     entry->userdata = userdata;
 }
 
-void   gtk_tree_entry_set_destroy_func  (GtkTreeEntry* entry, 
+void   gtk_tree_entry_set_destroy_func  (GtkTreeEntry* entry,
                                          GtkTreeEntryDestroy destroy_func,
                                          gpointer destroy_func_data)
 {
     g_assert(GTK_IS_TREE_ENTRY(entry));
-    entry->destroy_func = destroy_func;    
-    entry->destroy_func_data = destroy_func_data;    
+    entry->destroy_func = destroy_func;
+    entry->destroy_func_data = destroy_func_data;
 }
 
 /* private */
@@ -144,7 +144,7 @@ static void gtk_tree_entry_string_transform_func(const GValue *src_value,
     /* TODO: Use strdup here or just pass it? */
     GtkTreeEntry* entry = GTK_TREE_ENTRY(src_value->data[0].v_pointer);
 
-    g_value_set_string(dest_value, g_strdup(entry->label));
+    g_value_set_string(dest_value, entry->label);
 }
 
 static void gtk_tree_entry_dispose(GObject* obj)
