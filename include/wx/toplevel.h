@@ -217,7 +217,7 @@ protected:
     // coordinates: this is already the case
     virtual void DoGetScreenPosition(int *x, int *y) const
     {
-        return DoGetPosition(x, y);
+        DoGetPosition(x, y);
     }
 
     // test whether this window makes part of the frame
