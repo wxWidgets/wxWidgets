@@ -119,11 +119,11 @@ public:
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const = 0;
 
     // get/set size of area between book control area and page area
-    inline unsigned int GetInternalBorder() const
+    inline size_t GetInternalBorder() const
     {
         return m_internalBorder;
     }
-    void SetInternalBorder(unsigned int internalBorder)
+    void SetInternalBorder(size_t internalBorder)
     {
         m_internalBorder = internalBorder;
     }
@@ -242,7 +242,7 @@ private:
     void Init();
 
     // internal border
-    unsigned int m_internalBorder;
+    size_t m_internalBorder;
 
     DECLARE_ABSTRACT_CLASS(wxBookCtrlBase)
     DECLARE_NO_COPY_CLASS(wxBookCtrlBase)
