@@ -198,7 +198,7 @@ void wxRadioBox::SetSelection(int n)
     XmToggleButtonSetState ((Widget) m_radioButtons[n], True, False);
 
     for (size_t i = 0; i < m_noItems; i++)
-        if (i != n)
+        if (i != (size_t)n)
             XmToggleButtonSetState ((Widget) m_radioButtons[i], False, False);
 
     m_inSetValue = false;
@@ -381,11 +381,11 @@ void wxRadioBoxCallback (Widget w, XtPointer clientData,
 
   wxRadioBox *item = (wxRadioBox *) clientData;
   int sel = -1;
-  int i;
+  size_t i;
   const wxWidgetArray& buttons = item->GetRadioButtons();
   for (i = 0; i < item->GetCount(); i++)
     if (((Widget)buttons[i]) == w)
-      sel = i;
+      sel = (int)i;
   item->SetSel(sel);
 
   if (item->InSetValue())
