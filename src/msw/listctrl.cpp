@@ -2491,7 +2491,7 @@ static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 
     // same thing for CDIS_FOCUS (except simpler as there is only one of them)
     if ( ::GetFocus() == hwndList &&
-            ListView_GetNextItem(hwndList, -1, LVNI_FOCUSED) == item )
+            ListView_GetNextItem(hwndList, (WPARAM)-1, LVNI_FOCUSED) == item )
     {
         nmcd.uItemState |= CDIS_FOCUS;
     }
