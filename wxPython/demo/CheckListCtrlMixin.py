@@ -79,7 +79,10 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-<h2><center>Say something nice here</center></h2>
+<h2><centerCheckListCtrlMixin></center></h2>
+
+CheckListCtrlMixin is a simple mixin class that can add a checkbox to
+the first column of a wx.ListCtrl.
 
 </body></html>
 """
