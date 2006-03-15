@@ -32,7 +32,8 @@ some simplifications, enhancements, and differences in
 behaviour.
 
 For building instructions, see docs/msw/wince in the
-distribution. The rest of this section documents issues you
+distribution, also the section about Visual Studio 2005 project
+files below. The rest of this section documents issues you
 need to be aware of when programming for Windows CE devices.
 
 \subsubsection{General issues for wxWinCE programming}
@@ -343,6 +344,29 @@ Otherwise you will get linker errors similar to this:
 wxwince26d.lib(control.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
 \end{verbatim}
 
+\wxheading{Windows Mobile 5.0 emulator}
+
+Note that there is no separate emulator configuration for Windows Mobile 5.0: the
+emulator runs the ARM code directly.
+
+\wxheading{Visual Studio 2005 project files}
+
+Unfortunately, Visual Studio 2005, required to build Windows Mobile 5.0 applications,
+doesn't do a perfect job of converting the project files from eVC++ format.
+
+When you have converted the wxWidgets workspace, edit the configuration properties
+for each configuration and in the Librarian, add a relative path ..\..\lib to
+each library path. For example: {\tt ..\$(PlatformName)\$(ConfigurationName)\wx_mono.lib}.
+
+Then, for a sample you want to compile, edit the configuration properties
+and make sure {\tt ..\..\lib\$(PlatformName)\$(ConfigurationName)} is in the Linker/General/Additional
+Library Directories property. Also change the Linker/Input/Additional Dependencies
+property to something like {\tt coredll.lib wx\_mono.lib wx\_wxjpeg.lib wx\_wxpng.lib wx\_wxzlib.lib wx\_wxexpat.lib commctrl.lib winsock.lib wininet.lib}
+(since the library names in the wxWidgets workspace were changed by VS 2005).
+
+Alternately, you could could edit all the names to be identical to the original eVC++
+names, but this will probably be more fiddly.
+
 \subsubsection{Remaining issues}
 
 These are some of the remaining problems to be sorted out, and features
@@ -350,8 +374,11 @@ to be supported.
 
 \itemsep=0pt
 \begin{itemize}
-\item {\bf Font dialog.} The generic font dialog is currently used, which
-needs to be simplified (and speeded up).
+\item {\bf Windows Mobile 5 issues.} It is not possible to get the HMENU for
+the command bar on Mobile 5, so the menubar functions need to be rewritten
+to get the individual menus without use of a menubar handle. Also the
+new Mobile 5 convention of using only two menus (and no bitmap buttons) needs to be
+considered.
 \item {\bf Sizer speed.} Particularly for dialogs containing notebooks,
 layout seems slow. Some analysis is required.
 \item {\bf Notification boxes.} The balloon-like notification messages, and their
@@ -393,4 +420,7 @@ options to display information in a particular way using icons and text from
 a specified location.
 \item {\bf Further abstraction.} We should be able to abstract away more of the differences
 between desktop and mobile applications, in particular for sizer layout.
+\item {\bf Dialog captions.} The blue, bold captions on dialogs - with optional help button -
+should be catered for, either by hard-wiring the capability into all dialogs and panels,
+or by providing a standard component and sizer.
 \end{itemize}

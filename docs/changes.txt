@@ -226,6 +226,7 @@ wxWinCE:
 - Added support for the context menu event (wxContextMenuEvent)
   and added platform-specific wxWindow::EnableContextMenu.
 - Fixed wxGenericFileDialog to work with WinCE.
+- Fixed compilation and menubar disappearance on Windows Mobile 5.
 
 wxUniv:
 
