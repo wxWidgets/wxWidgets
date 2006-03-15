@@ -18,9 +18,7 @@
 #include "wx/utils.h"
 #include "wx/log.h"
 
-#include <glib.h>
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
 // thread system
@@ -88,17 +86,14 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
         GdkAtom type = selection_data->type;
         if ( type != GDK_SELECTION_TYPE_ATOM )
         {
-            gchar* atom_name = gdk_atom_name(type);
-            if ( strcmp(atom_name, "TARGETS") )
+            if ( strcmp(wxGtkString(gdk_atom_name(type)), "TARGETS") )
             {
                 wxLogTrace( TRACE_CLIPBOARD,
                             _T("got unsupported clipboard target") );
 
                 clipboard->m_waiting = FALSE;
-                g_free(atom_name);
                 return;
             }
-            g_free(atom_name);
         }
 
 #ifdef __WXDEBUG__
@@ -279,9 +274,9 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     wxLogTrace(TRACE_CLIPBOARD,
                _T("clipboard data in format %s, GtkSelectionData is target=%s type=%s selection=%s timestamp=%u"),
                format.GetId().c_str(),
-               wxString::FromAscii(gdk_atom_name(selection_data->target)).c_str(),
-               wxString::FromAscii(gdk_atom_name(selection_data->type)).c_str(),
-               wxString::FromAscii(gdk_atom_name(selection_data->selection)).c_str(),
+               wxString::FromAscii(wxGtkString(gdk_atom_name(selection_data->target))).c_str(),
+               wxString::FromAscii(wxGtkString(gdk_atom_name(selection_data->type))).c_str(),
+               wxString::FromAscii(wxGtkString(gdk_atom_name(selection_data->selection))).c_str(),
                GPOINTER_TO_UINT( signal_data )
                );
 #endif
