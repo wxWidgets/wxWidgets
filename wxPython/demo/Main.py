@@ -47,6 +47,8 @@ import images
 _treeList = [
     # new stuff
     ('Recent Additions/Updates', [
+        'AnalogClock',
+        'CheckListCtrlMixin',
         'Treebook',
         'Toolbook',
         ]),
@@ -129,7 +131,7 @@ _treeList = [
         ]),
 
     ('Custom Controls', [
-        'AnalogClockWindow',
+        'AnalogClock',
         'ColourSelect',
         'Editor',
         'GenericButtons',
@@ -149,6 +151,7 @@ _treeList = [
         #'RightTextCtrl',     deprecated as we have wxTE_RIGHT now.
         'Calendar',
         'CalendarCtrl',
+        'CheckListCtrlMixin',
         'ContextHelp',
         'DatePickerCtrl',
         'DynamicSashWindow',
