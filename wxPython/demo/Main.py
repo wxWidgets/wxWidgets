@@ -54,6 +54,8 @@ _treeList = [
         'Throbber',
         'GetMouseState',
         'FloatCanvas',
+        'AnalogClock',
+        'CheckListCtrlMixin',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -129,7 +131,7 @@ _treeList = [
         ]),
 
     ('Custom Controls', [
-        'AnalogClockWindow',
+        'AnalogClock',
         'ColourSelect',
         'Editor',
         'GenericButtons',
@@ -149,6 +151,7 @@ _treeList = [
         #'RightTextCtrl',     deprecated as we have wxTE_RIGHT now.
         'Calendar',
         'CalendarCtrl',
+        'CheckListCtrlMixin',
         'ContextHelp',
         'DatePickerCtrl',
         'DynamicSashWindow',

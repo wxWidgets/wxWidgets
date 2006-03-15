@@ -71,6 +71,13 @@ you should use STC_LEX_HTML instead.
 wxSTC: Implemented Fix for SF Bug #1436503.  Delay the start of the
 DnD operation in case the user just intended to click, not drag.
 
+Updated the analogclock.py module to the new analogclock package from
+E. A. Tacao.
+
+Added the wx.lib.mixins.listctrl.CheckListCtrlMixin class from Bruce
+Who, which makes it easy to put checkboxes on list control items.
+
+
 
 
 
