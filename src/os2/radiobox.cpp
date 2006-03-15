@@ -423,7 +423,7 @@ void wxRadioBox::DoSetSize(
             //
             int                  n = i + 1;
 
-            bIsLastInTheRow = ((n % GetMajorDim()) == 0) || (n == m_nNoItems);
+            bIsLastInTheRow = ((n % GetMajorDim()) == 0) || (n == (int)m_nNoItems);
         }
         else // winRA_SPECIFY_ROWS
         {

@@ -301,8 +301,11 @@ bool wxSystemSettingsNative::HasFeature( wxSystemFeature index )
         case wxSYS_CAN_ICONIZE_FRAME:
             return true;
 
-        case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
-            return false;
+        // TODO case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
+        // TODO case wxSYS_TABLET_PRESENT:
+
+        default:
+            break;
     }
 
     return false;
