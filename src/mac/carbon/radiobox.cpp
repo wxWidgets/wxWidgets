@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-//-------------------------------------------------------------------------------------
-//         headers
-//-------------------------------------------------------------------------------------
-
 #include "wx/wxprec.h"
 
 #if wxUSE_RADIOBOX
@@ -107,7 +103,7 @@ bool wxRadioBox::Create( wxWindow *parent,
 
     SetMajorDim( majorDim == 0 ? n : majorDim, style );
 
-    m_label = label ;
+    m_label = label;
 
     Rect bounds = wxMacGetBoundsForControl( this, pos, size );
     if ( bounds.right <= bounds.left )
@@ -433,7 +429,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     y_offset = y_start;
 
     current = m_radioButtonCycle;
-    for ( i = 0 ; i < m_noItems; i++)
+    for (i = 0 ; i < (int)m_noItems; i++)
     {
         // not to do for the zero button!
         if ((i > 0) && ((i % GetMajorDim()) == 0))
