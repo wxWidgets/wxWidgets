@@ -721,7 +721,7 @@ void wxWindowBase::DoGetScreenPosition(int *x, int *y) const
     if ( y )
         *y = 0;
 
-    return ClientToScreen(x, y);
+    ClientToScreen(x, y);
 }
 
 // ----------------------------------------------------------------------------
