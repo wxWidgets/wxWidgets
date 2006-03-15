@@ -497,7 +497,13 @@ bool wxClipboard::AddData( wxDataObject *data )
     gtk_signal_connect( GTK_OBJECT(m_clipboardWidget),
                         "selection_get",
                         GTK_SIGNAL_FUNC(selection_handler),
-                        GUINT_TO_POINTER( gtk_get_current_event_time() ) );
+                        GUINT_TO_POINTER(
+#ifdef __WXGTK20__
+                                gtk_get_current_event_time()
+#else
+                                gdk_event_get_time(gtk_get_current_event())
+#endif
+                                        ) );
 
 #if wxUSE_THREADS
     /* disable GUI threads */
