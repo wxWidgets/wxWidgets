@@ -35,6 +35,7 @@
 
 GdkAtom  g_clipboardAtom   = 0;
 GdkAtom  g_targetsAtom     = 0;
+GdkAtom  g_timestampAtom   = 0;
 
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_CLIPBOARD) to enable the trace messages from here
@@ -83,14 +84,17 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
         GdkAtom type = selection_data->type;
         if ( type != GDK_SELECTION_TYPE_ATOM )
         {
-            if ( strcmp(gdk_atom_name(type), "TARGETS") )
+            gchar* atom_name = gdk_atom_name(type);
+            if ( strcmp(atom_name, "TARGETS") )
             {
                 wxLogTrace( TRACE_CLIPBOARD,
                             _T("got unsupported clipboard target") );
 
                 clipboard->m_waiting = FALSE;
+                g_free(atom_name);
                 return;
             }
+            g_free(atom_name);
         }
 
 #ifdef __WXDEBUG__
@@ -239,7 +243,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
                    GtkSelectionData *selection_data,
                    guint WXUNUSED(info),
                    guint WXUNUSED(time),
-                   gpointer WXUNUSED(data) )
+                   gpointer signal_data )
 {
     if (!wxTheClipboard) return;
 
@@ -247,15 +251,34 @@ selection_handler( GtkWidget *WXUNUSED(widget),
 
     wxDataObject *data = wxTheClipboard->m_data;
 
+    // ICCCM says that TIMESTAMP is a required atom.
+    // In particular, it satisfies Klipper, which polls
+    // TIMESTAMP to see if the clipboards content has changed.
+    // It shall return the time which was used to set the data.
+    if (selection_data->target == g_timestampAtom)
+    {
+        uint timestamp = GPOINTER_TO_UINT (signal_data);
+        gtk_selection_data_set(selection_data,
+                               GDK_SELECTION_TYPE_INTEGER,
+                               32,
+                               (guchar*)&(timestamp),
+                               sizeof(timestamp));
+        wxLogTrace(TRACE_CLIPBOARD,
+                   _T("Clipboard TIMESTAMP requested, returning timestamp=%u"),
+                   timestamp);
+        return;
+    }
+
     wxDataFormat format( selection_data->target );
 
 #ifdef __WXDEBUG__
     wxLogTrace(TRACE_CLIPBOARD,
-               _T("clipboard data in format %s, GtkSelectionData is target=%s type=%s selection=%s"),
+               _T("clipboard data in format %s, GtkSelectionData is target=%s type=%s selection=%s timestamp=%u"),
                format.GetId().c_str(),
                wxString::FromAscii(gdk_atom_name(selection_data->target)).c_str(),
                wxString::FromAscii(gdk_atom_name(selection_data->type)).c_str(),
-               wxString::FromAscii(gdk_atom_name(selection_data->selection)).c_str()
+               wxString::FromAscii(gdk_atom_name(selection_data->selection)).c_str(),
+               GPOINTER_TO_UINT( signal_data )
                );
 #endif
 
@@ -325,6 +348,7 @@ wxClipboard::wxClipboard()
 
     if (!g_clipboardAtom) g_clipboardAtom = gdk_atom_intern( "CLIPBOARD", FALSE );
     if (!g_targetsAtom) g_targetsAtom = gdk_atom_intern ("TARGETS", FALSE);
+    if (!g_timestampAtom) g_timestampAtom = gdk_atom_intern ("TIMESTAMP", FALSE);
 
     m_formatSupported = FALSE;
     m_targetRequested = 0;
@@ -424,6 +448,11 @@ bool wxClipboard::AddData( wxDataObject *data )
     GdkAtom clipboard = m_usePrimary ? (GdkAtom)GDK_SELECTION_PRIMARY
                                      : g_clipboardAtom;
 
+    // by default provide TIMESTAMP as a target
+    gtk_selection_add_target( GTK_WIDGET(m_clipboardWidget),
+                              clipboard,
+                              g_timestampAtom,
+                              0 );
 
     for (size_t i = 0; i < m_data->GetFormatCount(); i++)
     {
@@ -445,7 +474,7 @@ bool wxClipboard::AddData( wxDataObject *data )
     gtk_signal_connect( GTK_OBJECT(m_clipboardWidget),
                         "selection_get",
                         GTK_SIGNAL_FUNC(selection_handler),
-                        (gpointer) NULL );
+                        GUINT_TO_POINTER( gtk_get_current_event_time() ) );
 
 #if wxUSE_THREADS
     /* disable GUI threads */
