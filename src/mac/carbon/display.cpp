@@ -55,7 +55,11 @@
 class wxDisplayImplMacOSX : public wxDisplayImpl
 {
 public:
-    wxDisplayImplMacOSX(CGDirectDisplayID id) : m_id(id) { }
+    wxDisplayImplMacOSX(size_t n, CGDirectDisplayID id)
+        : wxDisplayImpl(n),
+          m_id(id)
+    {
+    }
 
     virtual wxRect GetGeometry() const;
     virtual wxString GetName() const { return wxString(); }
@@ -148,7 +152,7 @@ wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(size_t n)
     wxASSERT( err == CGDisplayNoErr );
     wxASSERT( n < theCount );
 
-    wxDisplayImplMacOSX *display = new wxDisplayImplMacOSX(theIDs[n]);
+    wxDisplayImplMacOSX *display = new wxDisplayImplMacOSX(n, theIDs[n]);
 
     delete [] theIDs;
 
@@ -251,7 +255,11 @@ bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
 class wxDisplayImplMac : public wxDisplayImpl
 {
 public:
-    wxDisplayImplMac(GDHandle hndl) : m_hndl(hndl) { }
+    wxDisplayImplMac(size_t n, GDHandle hndl)
+        : wxDisplayImpl(n),
+          m_hndl(hndl)
+    {
+    }
 
     virtual wxRect GetGeometry() const;
     virtual wxString GetName() const { return wxString(); }
@@ -318,12 +326,14 @@ int wxDisplayFactoryMac::GetFromPoint(const wxPoint &p)
 
 wxDisplayImpl *wxDisplayFactoryMac::CreateDisplay(size_t n)
 {
+    size_t nOrig = n;
+
     GDHandle hndl = DMGetFirstScreenDevice(true);
     while(hndl)
     {
         if (n == 0)
         {
-            return new wxDisplayImplMac(hndl);
+            return new wxDisplayImplMac(nOrig, hndl);
         }
         n--;
         hndl = DMGetNextScreenDevice(hndl, true);

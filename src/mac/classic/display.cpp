@@ -53,7 +53,11 @@
 class wxDisplayImplMac : public wxDisplayImpl
 {
 public:
-    wxDisplayImplMac(GDHandle hndl) : m_hndl(hndl) { }
+    wxDisplayImplMac(size_t n, GDHandle hndl)
+        : wxDisplayImpl(n),
+          m_hndl(hndl)
+    {
+    }
 
     virtual wxRect GetGeometry() const;
     virtual wxString GetName() const { return wxString(); }
@@ -120,12 +124,14 @@ int wxDisplayFactoryMac::GetFromPoint(const wxPoint &p)
 
 wxDisplayImpl *wxDisplayFactoryMac::CreateDisplay(size_t n)
 {
+    size_t nOrig = n;
+
     GDHandle hndl = DMGetFirstScreenDevice(true);
     while(hndl)
     {
         if (n == 0)
         {
-            return new wxDisplayImplMac(hndl);
+            return new wxDisplayImplMac(nOrig, hndl);
         }
         n--;
         hndl = DMGetNextScreenDevice(hndl, true);
