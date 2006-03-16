@@ -1191,7 +1191,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_bmpbuttn.o \
 	$(OBJS)\monodll_button.o \
 	$(OBJS)\monodll_checkbox.o \
-	$(OBJS)\monodll_checklst.o \
 	$(OBJS)\monodll_choice.o \
 	$(OBJS)\monodll_colordlg.o \
 	$(OBJS)\monodll_combobox.o \
@@ -1231,6 +1230,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textctrl.o \
 	$(OBJS)\monodll_tglbtn.o \
 	$(OBJS)\monodll_treectrl.o \
+	$(OBJS)\monodll_checklst.o \
 	$(OBJS)\monodll_fdrepdlg.o \
 	$(OBJS)\monodll_fontdlg.o \
 	$(OBJS)\monodll_accesscmn.o \
@@ -1709,7 +1709,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_bmpbuttn.o \
 	$(OBJS)\monolib_button.o \
 	$(OBJS)\monolib_checkbox.o \
-	$(OBJS)\monolib_checklst.o \
 	$(OBJS)\monolib_choice.o \
 	$(OBJS)\monolib_colordlg.o \
 	$(OBJS)\monolib_combobox.o \
@@ -1749,6 +1748,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textctrl.o \
 	$(OBJS)\monolib_tglbtn.o \
 	$(OBJS)\monolib_treectrl.o \
+	$(OBJS)\monolib_checklst.o \
 	$(OBJS)\monolib_fdrepdlg.o \
 	$(OBJS)\monolib_fontdlg.o \
 	$(OBJS)\monolib_accesscmn.o \
@@ -2175,7 +2175,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_bmpbuttn.o \
 	$(OBJS)\coredll_button.o \
 	$(OBJS)\coredll_checkbox.o \
-	$(OBJS)\coredll_checklst.o \
 	$(OBJS)\coredll_choice.o \
 	$(OBJS)\coredll_colordlg.o \
 	$(OBJS)\coredll_combobox.o \
@@ -2215,6 +2214,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textctrl.o \
 	$(OBJS)\coredll_tglbtn.o \
 	$(OBJS)\coredll_treectrl.o \
+	$(OBJS)\coredll_checklst.o \
 	$(OBJS)\coredll_fdrepdlg.o \
 	$(OBJS)\coredll_fontdlg.o \
 	$(OBJS)\coredll_accesscmn.o \
@@ -2578,7 +2578,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_bmpbuttn.o \
 	$(OBJS)\corelib_button.o \
 	$(OBJS)\corelib_checkbox.o \
-	$(OBJS)\corelib_checklst.o \
 	$(OBJS)\corelib_choice.o \
 	$(OBJS)\corelib_colordlg.o \
 	$(OBJS)\corelib_combobox.o \
@@ -2618,6 +2617,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textctrl.o \
 	$(OBJS)\corelib_tglbtn.o \
 	$(OBJS)\corelib_treectrl.o \
+	$(OBJS)\corelib_checklst.o \
 	$(OBJS)\corelib_fdrepdlg.o \
 	$(OBJS)\corelib_fontdlg.o \
 	$(OBJS)\corelib_accesscmn.o \
@@ -4981,20 +4981,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
-$(OBJS)\monodll_checklst.o: ../../src/msw/checklst.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\monodll_checklst.o: ../../src/univ/checklst.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),0)
 $(OBJS)\monodll_choice.o: ../../src/msw/choice.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -5241,6 +5227,20 @@ endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),1)
 $(OBJS)\monodll_textctrl.o: ../../src/univ/textctrl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),0)
+$(OBJS)\monodll_checklst.o: ../../src/msw/checklst.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\monodll_checklst.o: ../../src/univ/checklst.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 endif
@@ -6769,20 +6769,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
-$(OBJS)\monolib_checklst.o: ../../src/msw/checklst.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\monolib_checklst.o: ../../src/univ/checklst.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),0)
 $(OBJS)\monolib_choice.o: ../../src/msw/choice.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7029,6 +7015,20 @@ endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),1)
 $(OBJS)\monolib_textctrl.o: ../../src/univ/textctrl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),0)
+$(OBJS)\monolib_checklst.o: ../../src/msw/checklst.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\monolib_checklst.o: ../../src/univ/checklst.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 endif
@@ -8638,20 +8638,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
-$(OBJS)\coredll_checklst.o: ../../src/msw/checklst.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\coredll_checklst.o: ../../src/univ/checklst.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),0)
 $(OBJS)\coredll_choice.o: ../../src/msw/choice.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8898,6 +8884,20 @@ endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),1)
 $(OBJS)\coredll_textctrl.o: ../../src/univ/textctrl.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),0)
+$(OBJS)\coredll_checklst.o: ../../src/msw/checklst.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\coredll_checklst.o: ../../src/univ/checklst.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 endif
@@ -9872,20 +9872,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
-$(OBJS)\corelib_checklst.o: ../../src/msw/checklst.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\corelib_checklst.o: ../../src/univ/checklst.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),0)
 $(OBJS)\corelib_choice.o: ../../src/msw/choice.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10132,6 +10118,20 @@ endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),1)
 $(OBJS)\corelib_textctrl.o: ../../src/univ/textctrl.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),0)
+$(OBJS)\corelib_checklst.o: ../../src/msw/checklst.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\corelib_checklst.o: ../../src/univ/checklst.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 endif

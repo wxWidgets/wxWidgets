@@ -232,7 +232,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_bmpbuttn.obj &
 	$(OBJS)\monodll_button.obj &
 	$(OBJS)\monodll_checkbox.obj &
-	$(OBJS)\monodll_checklst.obj &
 	$(OBJS)\monodll_choice.obj &
 	$(OBJS)\monodll_colordlg.obj &
 	$(OBJS)\monodll_combobox.obj &
@@ -272,6 +271,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_textctrl.obj &
 	$(OBJS)\monodll_tglbtn.obj &
 	$(OBJS)\monodll_treectrl.obj &
+	$(OBJS)\monodll_checklst.obj &
 	$(OBJS)\monodll_fdrepdlg.obj &
 	$(OBJS)\monodll_fontdlg.obj &
 	$(OBJS)\monodll_accesscmn.obj &
@@ -754,7 +754,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_bmpbuttn.obj &
 	$(OBJS)\monolib_button.obj &
 	$(OBJS)\monolib_checkbox.obj &
-	$(OBJS)\monolib_checklst.obj &
 	$(OBJS)\monolib_choice.obj &
 	$(OBJS)\monolib_colordlg.obj &
 	$(OBJS)\monolib_combobox.obj &
@@ -794,6 +793,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_textctrl.obj &
 	$(OBJS)\monolib_tglbtn.obj &
 	$(OBJS)\monolib_treectrl.obj &
+	$(OBJS)\monolib_checklst.obj &
 	$(OBJS)\monolib_fdrepdlg.obj &
 	$(OBJS)\monolib_fontdlg.obj &
 	$(OBJS)\monolib_accesscmn.obj &
@@ -1227,7 +1227,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_bmpbuttn.obj &
 	$(OBJS)\coredll_button.obj &
 	$(OBJS)\coredll_checkbox.obj &
-	$(OBJS)\coredll_checklst.obj &
 	$(OBJS)\coredll_choice.obj &
 	$(OBJS)\coredll_colordlg.obj &
 	$(OBJS)\coredll_combobox.obj &
@@ -1267,6 +1266,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_textctrl.obj &
 	$(OBJS)\coredll_tglbtn.obj &
 	$(OBJS)\coredll_treectrl.obj &
+	$(OBJS)\coredll_checklst.obj &
 	$(OBJS)\coredll_fdrepdlg.obj &
 	$(OBJS)\coredll_fontdlg.obj &
 	$(OBJS)\coredll_accesscmn.obj &
@@ -1632,7 +1632,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_bmpbuttn.obj &
 	$(OBJS)\corelib_button.obj &
 	$(OBJS)\corelib_checkbox.obj &
-	$(OBJS)\corelib_checklst.obj &
 	$(OBJS)\corelib_choice.obj &
 	$(OBJS)\corelib_colordlg.obj &
 	$(OBJS)\corelib_combobox.obj &
@@ -1672,6 +1671,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_textctrl.obj &
 	$(OBJS)\corelib_tglbtn.obj &
 	$(OBJS)\corelib_treectrl.obj &
+	$(OBJS)\corelib_checklst.obj &
 	$(OBJS)\corelib_fdrepdlg.obj &
 	$(OBJS)\corelib_fontdlg.obj &
 	$(OBJS)\corelib_accesscmn.obj &
@@ -5180,20 +5180,6 @@ $(OBJS)\monodll_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
-$(OBJS)\monodll_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
 $(OBJS)\monodll_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -5440,6 +5426,20 @@ $(OBJS)\monodll_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
+$(OBJS)\monodll_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\monodll_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
@@ -6968,20 +6968,6 @@ $(OBJS)\monolib_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
-$(OBJS)\monolib_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
 $(OBJS)\monolib_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -7228,6 +7214,20 @@ $(OBJS)\monolib_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
+$(OBJS)\monolib_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\monolib_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
@@ -8837,20 +8837,6 @@ $(OBJS)\coredll_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
-$(OBJS)\coredll_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
 $(OBJS)\coredll_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -9097,6 +9083,20 @@ $(OBJS)\coredll_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
+$(OBJS)\coredll_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\coredll_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
@@ -10071,20 +10071,6 @@ $(OBJS)\corelib_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
-$(OBJS)\corelib_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
 $(OBJS)\corelib_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -10331,6 +10317,20 @@ $(OBJS)\corelib_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
+$(OBJS)\corelib_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\corelib_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif

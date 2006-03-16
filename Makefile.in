@@ -1341,7 +1341,7 @@ LOCALE_MSW_LINGUAS =  it
 @COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_USE_PLUGINS_0@PLUGIN_ADV_EXTRALIBS = $(EXTRALIBS_SDL)
 @COND_PLATFORM_MACOSX_1@WXMACVERSION_CMD = \
-@COND_PLATFORM_MACOSX_1@	-compatibility_version 3.0 -current_version 3.0
+@COND_PLATFORM_MACOSX_1@	-compatibility_version 3.0 -current_version 3.1
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -2026,7 +2026,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/button.h \
 	wx/msw/caret.h \
 	wx/msw/checkbox.h \
-	wx/msw/checklst.h \
 	wx/msw/choice.h \
 	wx/msw/clipbrd.h \
 	wx/msw/colordlg.h \
@@ -2133,6 +2132,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/question.ico \
 	wx/msw/removble.ico \
 	wx/msw/std.ico \
+	wx/msw/checklst.h \
 	wx/msw/fdrepdlg.h \
 	wx/msw/fontdlg.h \
 	wx/msw/helpbest.h \
@@ -2225,7 +2225,6 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/button.h \
 	wx/msw/caret.h \
 	wx/msw/checkbox.h \
-	wx/msw/checklst.h \
 	wx/msw/choice.h \
 	wx/msw/clipbrd.h \
 	wx/msw/colordlg.h \
@@ -2333,7 +2332,9 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/removble.ico \
 	wx/msw/std.ico \
 	wx/generic/fdrepdlg.h \
+	wx/generic/filedlgg.h \
 	wx/generic/fontdlgg.h \
+	wx/msw/wince/checklst.h \
 	wx/msw/wince/choicece.h \
 	wx/msw/wince/helpwce.h \
 	wx/msw/wince/libraries.h \
@@ -3758,7 +3759,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_bmpbuttn.o \
 	monodll_button.o \
 	monodll_checkbox.o \
-	monodll_checklst.o \
 	monodll_choice.o \
 	monodll_colordlg.o \
 	monodll_combobox.o \
@@ -3798,6 +3798,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_textctrl.o \
 	monodll_tglbtn.o \
 	monodll_treectrl.o \
+	monodll_checklst.o \
 	monodll_fdrepdlg.o \
 	monodll_fontdlg.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS)
@@ -3891,7 +3892,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_bmpbuttn.o \
 	monodll_button.o \
 	monodll_checkbox.o \
-	monodll_checklst.o \
 	monodll_choice.o \
 	monodll_colordlg.o \
 	monodll_combobox.o \
@@ -3933,7 +3933,9 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_treectrl.o \
 	monodll_dirdlgg.o \
 	monodll_fdrepdlg.o \
+	monodll_filedlgg.o \
 	monodll_fontdlgg.o \
+	monodll_checklst.o \
 	monodll_choicece.o \
 	monodll_crt.o \
 	monodll_filedlgwce.o \
@@ -5228,7 +5230,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_bmpbuttn.o \
 	monolib_button.o \
 	monolib_checkbox.o \
-	monolib_checklst.o \
 	monolib_choice.o \
 	monolib_colordlg.o \
 	monolib_combobox.o \
@@ -5268,6 +5269,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_textctrl.o \
 	monolib_tglbtn.o \
 	monolib_treectrl.o \
+	monolib_checklst.o \
 	monolib_fdrepdlg.o \
 	monolib_fontdlg.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1)
@@ -5361,7 +5363,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_bmpbuttn.o \
 	monolib_button.o \
 	monolib_checkbox.o \
-	monolib_checklst.o \
 	monolib_choice.o \
 	monolib_colordlg.o \
 	monolib_combobox.o \
@@ -5403,7 +5404,9 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_treectrl.o \
 	monolib_dirdlgg.o \
 	monolib_fdrepdlg.o \
+	monolib_filedlgg.o \
 	monolib_fontdlgg.o \
+	monolib_checklst.o \
 	monolib_choicece.o \
 	monolib_crt.o \
 	monolib_filedlgwce.o \
@@ -6935,7 +6938,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_bmpbuttn.o \
 	coredll_button.o \
 	coredll_checkbox.o \
-	coredll_checklst.o \
 	coredll_choice.o \
 	coredll_colordlg.o \
 	coredll_combobox.o \
@@ -6975,6 +6977,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_textctrl.o \
 	coredll_tglbtn.o \
 	coredll_treectrl.o \
+	coredll_checklst.o \
 	coredll_fdrepdlg.o \
 	coredll_fontdlg.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2)
@@ -7068,7 +7071,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_bmpbuttn.o \
 	coredll_button.o \
 	coredll_checkbox.o \
-	coredll_checklst.o \
 	coredll_choice.o \
 	coredll_colordlg.o \
 	coredll_combobox.o \
@@ -7110,7 +7112,9 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_treectrl.o \
 	coredll_dirdlgg.o \
 	coredll_fdrepdlg.o \
+	coredll_filedlgg.o \
 	coredll_fontdlgg.o \
+	coredll_checklst.o \
 	coredll_choicece.o \
 	coredll_crt.o \
 	coredll_filedlgwce.o \
@@ -8132,7 +8136,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_bmpbuttn.o \
 	corelib_button.o \
 	corelib_checkbox.o \
-	corelib_checklst.o \
 	corelib_choice.o \
 	corelib_colordlg.o \
 	corelib_combobox.o \
@@ -8172,6 +8175,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_textctrl.o \
 	corelib_tglbtn.o \
 	corelib_treectrl.o \
+	corelib_checklst.o \
 	corelib_fdrepdlg.o \
 	corelib_fontdlg.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3)
@@ -8265,7 +8269,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_bmpbuttn.o \
 	corelib_button.o \
 	corelib_checkbox.o \
-	corelib_checklst.o \
 	corelib_choice.o \
 	corelib_colordlg.o \
 	corelib_combobox.o \
@@ -8307,7 +8310,9 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_treectrl.o \
 	corelib_dirdlgg.o \
 	corelib_fdrepdlg.o \
+	corelib_filedlgg.o \
 	corelib_fontdlgg.o \
+	corelib_checklst.o \
 	corelib_choicece.o \
 	corelib_crt.o \
 	corelib_filedlgwce.o \
@@ -9341,9 +9346,9 @@ COND_TOOLKIT_MAC___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 @COND_USE_SOVERSION_0@dll___targetsuf2 = .$(SO_SUFFIX)
 @COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@dll___targetsuf3 \
 @COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	= \
-@COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	.$(SO_SUFFIX).0.3.0
+@COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	.$(SO_SUFFIX).0.3.1
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf3 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.3.0.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.3.1.$(SO_SUFFIX)
 @COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1@dll___targetsuf3 = -0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf3 = .$(SO_SUFFIX)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
@@ -12448,6 +12453,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@monodll_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
+
 @COND_USE_GUI_1_WXUNIV_1@monodll_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
@@ -12670,8 +12678,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_checklst.o: $(srcdir)/src/msw/checklst.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
 
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_checklst.o: $(srcdir)/src/msw/checklst.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_checklst.o: $(srcdir)/src/msw/wince/checklst.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/wince/checklst.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_checklst.o: $(srcdir)/src/mac/carbon/checklst.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/checklst.cpp
@@ -15916,6 +15924,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@monolib_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
+
 @COND_USE_GUI_1_WXUNIV_1@monolib_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
@@ -16138,8 +16149,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_checklst.o: $(srcdir)/src/msw/checklst.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
 
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_checklst.o: $(srcdir)/src/msw/checklst.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_checklst.o: $(srcdir)/src/msw/wince/checklst.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/wince/checklst.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_checklst.o: $(srcdir)/src/mac/carbon/checklst.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/checklst.cpp
@@ -19813,6 +19824,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@coredll_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
+
 @COND_USE_GUI_1_WXUNIV_1@coredll_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
@@ -20035,8 +20049,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_checklst.o: $(srcdir)/src/msw/checklst.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
 
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_checklst.o: $(srcdir)/src/msw/checklst.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_checklst.o: $(srcdir)/src/msw/wince/checklst.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/wince/checklst.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_checklst.o: $(srcdir)/src/mac/carbon/checklst.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/checklst.cpp
@@ -22321,6 +22335,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@corelib_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
+
 @COND_USE_GUI_1_WXUNIV_1@corelib_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
@@ -22543,8 +22560,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_checklst.o: $(srcdir)/src/msw/checklst.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
 
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_checklst.o: $(srcdir)/src/msw/checklst.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_checklst.o: $(srcdir)/src/msw/wince/checklst.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/wince/checklst.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_checklst.o: $(srcdir)/src/mac/carbon/checklst.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/checklst.cpp
@@ -24742,7 +24759,7 @@ MSW_DIST: ALL_GUI_DIST
 	cp $(INCDIR)/wx/msw/*.ico $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.bmp $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
-	cp $(INCDIR)/wx/msw/wx.manifest $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.manifest $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
 	cp $(INCDIR)/wx/msw/wince/*.h $(DISTDIR)/include/wx/msw/wince
 	mkdir $(DISTDIR)/src/msw/ole
@@ -24759,7 +24776,7 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/include/wx/msw/wince
 	cp $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
-	cp $(INCDIR)/wx/msw/wx.manifest $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.manifest $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
 	cp $(INCDIR)/wx/msw/wince/*.h $(DISTDIR)/include/wx/msw/wince
 	mkdir $(DISTDIR)/src/msw
