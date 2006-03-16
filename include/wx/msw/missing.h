@@ -246,6 +246,53 @@ typedef struct _OSVERSIONINFOEX {
 #endif
 
 // ----------------------------------------------------------------------------
+// wxDisplay
+// ----------------------------------------------------------------------------
+
+// The windows headers with Digital Mars lack some typedefs.
+// typedef them as my_XXX and then #define to rename to XXX in case
+// a newer version of Digital Mars fixes the headers
+// (or up to date PSDK is in use with older version)
+// also we use any required definition (MONITOR_DEFAULTTONULL) to recognize
+// whether whole missing block needs to be included
+
+#ifndef MONITOR_DEFAULTTONULL
+
+    #define HMONITOR_DECLARED
+    DECLARE_HANDLE(HMONITOR);
+    typedef BOOL(CALLBACK* my_MONITORENUMPROC)(HMONITOR,HDC,LPRECT,LPARAM);
+    #define MONITORENUMPROC my_MONITORENUMPROC
+    typedef struct my_tagMONITORINFO {
+        DWORD cbSize;
+        RECT rcMonitor;
+        RECT rcWork;
+        DWORD dwFlags;
+    } my_MONITORINFO,*my_LPMONITORINFO;
+    #define MONITORINFO my_MONITORINFO
+    #define LPMONITORINFO my_LPMONITORINFO
+
+    typedef struct my_MONITORINFOEX : public my_tagMONITORINFO
+    {
+        TCHAR       szDevice[CCHDEVICENAME];
+    } my_MONITORINFOEX, *my_LPMONITORINFOEX;
+    #define MONITORINFOEX my_MONITORINFOEX
+    #define LPMONITORINFOEX my_LPMONITORINFOEX
+
+    #ifndef MONITOR_DEFAULTTONULL
+        #define MONITOR_DEFAULTTONULL 0
+    #endif // MONITOR_DEFAULTTONULL
+
+    #ifndef MONITORINFOF_PRIMARY
+        #define MONITORINFOF_PRIMARY 1
+    #endif // MONITORINFOF_PRIMARY
+
+    #ifndef DDENUM_ATTACHEDSECONDARYDEVICES
+        #define DDENUM_ATTACHEDSECONDARYDEVICES 1
+    #endif
+
+#endif // MONITOR_DEFAULTTONULL
+
+// ----------------------------------------------------------------------------
 // Tree control
 // ----------------------------------------------------------------------------
 
