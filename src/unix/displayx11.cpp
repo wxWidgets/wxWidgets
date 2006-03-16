@@ -84,8 +84,9 @@ private:
 class WXDLLEXPORT wxDisplayImplX11 : public wxDisplayImpl
 {
 public:
-    wxDisplayImplX11(const XineramaScreenInfo& info)
-        : m_rect(info.x_org, info.y_org, info.width, info.height)
+    wxDisplayImplX11(size_t n, const XineramaScreenInfo& info)
+        : wxDisplayImpl(n),
+          m_rect(info.x_org, info.y_org, info.width, info.height)
     {
     }
 
@@ -147,7 +148,7 @@ wxDisplayImpl *wxDisplayFactoryX11::CreateDisplay(size_t n)
 {
     ScreensInfo screens;
 
-    return n < screens.GetCount() ? new wxDisplayImplX11(screens[n]) : NULL;
+    return n < screens.GetCount() ? new wxDisplayImplX11(n, screens[n]) : NULL;
 }
 
 // ============================================================================
@@ -300,10 +301,12 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 
 /* static */ wxDisplayFactory *wxDisplay::CreateFactory()
 {
-    Display *disp = (Display*)wxGetDisplay();
+    if ( XineramaIsActive((Display*)wxGetDisplay()) )
+    {
+        return new wxDisplayFactoryX11;
+    }
 
-    return XineramaIsActive(disp) ? new wxDisplayFactoryX11
-                                  : new wxDisplayFactorySingle;
+    return new wxDisplayFactorySingle;
 }
 
 #endif /* wxUSE_DISPLAY */
