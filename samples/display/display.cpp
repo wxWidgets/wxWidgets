@@ -30,6 +30,7 @@
 #endif
 
 #include "wx/bookctrl.h"
+#include "wx/sysopt.h"
 
 #include "wx/display.h"
 
@@ -70,20 +71,20 @@ public:
     void OnFullScreen(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
+#if wxUSE_DISPLAY
     void OnChangeMode(wxCommandEvent& event);
     void OnResetMode(wxCommandEvent& event);
 
-    void OnLeftClick(wxMouseEvent& event);
-
-#if wxUSE_DISPLAY
     void OnDisplayChanged(wxDisplayChangedEvent& event);
-#endif
+#endif // wxUSE_DISPLAY
+
+    void OnLeftClick(wxMouseEvent& event);
 
 private:
 #if wxUSE_DISPLAY
     // convert video mode to textual description
     wxString VideoModeToText(const wxVideoMode& mode);
-#endif
+#endif // wxUSE_DISPLAY
 
     // GUI controls
     wxBookCtrl *m_book;
@@ -138,14 +139,14 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Display_FullScreen, MyFrame::OnFullScreen)
     EVT_MENU(Display_About, MyFrame::OnAbout)
 
+#if wxUSE_DISPLAY
     EVT_CHOICE(Display_ChangeMode, MyFrame::OnChangeMode)
     EVT_BUTTON(Display_ResetMode, MyFrame::OnResetMode)
 
-    EVT_LEFT_UP(MyFrame::OnLeftClick)
-
-#if wxUSE_DISPLAY
     EVT_DISPLAY_CHANGED(MyFrame::OnDisplayChanged)
-#endif
+#endif // wxUSE_DISPLAY
+
+    EVT_LEFT_UP(MyFrame::OnLeftClick)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -166,15 +167,10 @@ IMPLEMENT_APP(MyApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
-#if !wxUSE_DISPLAY
-    wxMessageBox(_("Please recompile wxWidgets and this sample with wxUSE_DISPLAY set to 1."));
-    return false;
-#else
-
 #ifdef __WXMSW__
     if ( argc == 2 && !wxStricmp(argv[1],  _T("/dx")) )
     {
-        wxDisplay::UseDirectX(true);
+        wxSystemOptions::SetOption(_T("msw.display.directdraw"), 1);
     }
 #endif // __WXMSW__
 
@@ -190,7 +186,6 @@ bool MyApp::OnInit()
     // loop and the application will run. If we returned false here, the
     // application would exit immediately.
     return true;
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -231,9 +226,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     CreateStatusBar();
 #endif // wxUSE_STATUSBAR
 
-#if wxUSE_DISPLAY
     // create child controls
-
     wxPanel *panel = new wxPanel(this, wxID_ANY);
 
     m_book = new wxBookCtrl(panel, wxID_ANY);
@@ -271,6 +264,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
         sizer->Add(new wxStaticText(page, wxID_ANY, _T("Name: ")));
         sizer->Add(new wxStaticText(page, wxID_ANY, display.GetName()));
 
+        wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
+        sizerTop->Add(sizer, 1, wxALL | wxEXPAND, 10);
+
+#if wxUSE_DISPLAY
         wxChoice *choiceModes = new wxChoice(page, Display_ChangeMode);
         const wxArrayVideoModes modes = display.GetModes();
         const size_t count = modes.GetCount();
@@ -290,11 +287,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
                                     VideoModeToText(display.GetCurrentMode())));
 
         // add it to another sizer to have borders around it and button below
-        wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
-        sizerTop->Add(sizer, 1, wxALL | wxEXPAND, 10);
-
         sizerTop->Add(new wxButton(page, Display_ResetMode, _T("&Reset mode")),
                       0, wxALL | wxCENTRE, 5);
+#endif // wxUSE_DISPLAY
+
         page->SetSizer(sizerTop);
 
         m_book->AddPage(page,
@@ -307,10 +303,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     panel->SetSizer(sizer);
     sizer->Fit(this);
     sizer->SetSizeHints(this);
-#endif
 }
 
 #if wxUSE_DISPLAY
+
 wxString MyFrame::VideoModeToText(const wxVideoMode& mode)
 {
     wxString s;
@@ -328,7 +324,8 @@ wxString MyFrame::VideoModeToText(const wxVideoMode& mode)
 
     return s;
 }
-#endif
+
+#endif // wxUSE_DISPLAY
 
 // event handlers
 
@@ -340,7 +337,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("Demo program for wxDisplay class.\n\n(c) 2003 Vadim Zeitlin"),
+    wxMessageBox(_T("Demo program for wxDisplay class.\n\n(c) 2003-2006 Vadim Zeitlin"),
                  _T("About Display Sample"),
                  wxOK | wxICON_INFORMATION,
                  this);
@@ -360,9 +357,10 @@ void MyFrame::OnFullScreen(wxCommandEvent& event)
     ShowFullScreen(event.IsChecked());
 }
 
+#if wxUSE_DISPLAY
+
 void MyFrame::OnChangeMode(wxCommandEvent& event)
 {
-#if wxUSE_DISPLAY
     wxDisplay dpy(m_book->GetSelection());
 
     // you wouldn't write this in real code, would you?
@@ -372,21 +370,19 @@ void MyFrame::OnChangeMode(wxCommandEvent& event)
     {
         wxLogError(_T("Changing video mode failed!"));
     }
-#endif
 }
 
 void MyFrame::OnResetMode(wxCommandEvent& WXUNUSED(event))
 {
-#if wxUSE_DISPLAY
     wxDisplay dpy(m_book->GetSelection());
 
     dpy.ResetMode();
-#endif
 }
+
+#endif // wxUSE_DISPLAY
 
 void MyFrame::OnLeftClick(wxMouseEvent& event)
 {
-#if wxUSE_DISPLAY
     if ( HasCapture() )
     {
         // mouse events are in client coords, wxDisplay works in screen ones
@@ -402,10 +398,10 @@ void MyFrame::OnLeftClick(wxMouseEvent& event)
 
         ReleaseMouse();
     }
-#endif
 }
 
 #if wxUSE_DISPLAY
+
 void MyFrame::OnDisplayChanged(wxDisplayChangedEvent& event)
 {
     // update the current mode text
@@ -423,5 +419,5 @@ void MyFrame::OnDisplayChanged(wxDisplayChangedEvent& event)
 
     event.Skip();
 }
-#endif
 
+#endif // wxUSE_DISPLAY
