@@ -721,6 +721,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/validate.h
     wx/valtext.h
     wx/window.h
+    wx/wupdlock.h
 
     wx/accel.h
     wx/access.h
@@ -742,6 +743,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dialup.h
     wx/dirctrl.h
     wx/display.h
+    wx/display_impl.h
     wx/dnd.h
     wx/docmdi.h
     wx/docview.h
@@ -833,7 +835,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/caret.h
     wx/unix/fontutil.h
     wx/unix/utilsx11.h
-    wx/unix/displayx11.h
 </set>
 
 
@@ -1724,7 +1725,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mgl/dcclient.h
     wx/mgl/dcmemory.h
     wx/mgl/dcscreen.h
-    wx/mgl/display.h
     wx/mgl/font.h
     wx/mgl/fontutil.h
     wx/mgl/gdiobj.h
@@ -1782,7 +1782,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/dcprint.cpp
     src/os2/dcscreen.cpp
     src/os2/dialog.cpp
-    src/os2/display.cpp
     src/os2/dnd.cpp
     src/os2/evtloop.cpp
     src/os2/filedlg.cpp
@@ -1864,7 +1863,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/dcprint.h
     wx/os2/dcscreen.h
     wx/os2/dialog.h
-    wx/os2/display.h
     wx/os2/dnd.h
     wx/os2/filedlg.h
     wx/os2/font.h
@@ -2060,7 +2058,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/dcscreen.h
     wx/mac/dialog.h
     wx/mac/dirdlg.h
-    wx/mac/display.h
     wx/mac/dnd.h
     wx/mac/evtloop.h
     wx/mac/filedlg.h
@@ -2148,7 +2145,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/carbon/dcscreen.h
     wx/mac/carbon/dialog.h
     wx/mac/carbon/dirdlg.h
-    wx/mac/carbon/display.h
     wx/mac/carbon/dnd.h
     wx/mac/carbon/evtloop.h
     wx/mac/carbon/filedlg.h
@@ -2355,7 +2351,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/dcscreen.h
     wx/cocoa/dialog.h
     wx/cocoa/dirdlg.h
-    wx/cocoa/display.h
     wx/cocoa/drawer.h
     wx/cocoa/filedlg.h
     wx/cocoa/font.h
