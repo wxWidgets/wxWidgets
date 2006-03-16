@@ -36,7 +36,11 @@
 class wxDisplayImplMacOSX : public wxDisplayImpl
 {
 public:
-    wxDisplayImplMacOSX(CGDirectDisplayID id_) : m_id(id_) { }
+    wxDisplayImplMacOSX(size_t n, CGDirectDisplayID id_)
+        : wxDisplayImpl(n),
+          m_id(id_)
+    {
+    }
 
     virtual wxRect GetGeometry() const;
     virtual wxString GetName() const { return wxString(); }
@@ -54,7 +58,7 @@ private:
 class wxDisplayFactoryMacOSX : public wxDisplayFactory
 {
 public:
-    wxDisplayFactoryMacOSX();
+    wxDisplayFactoryMacOSX() { }
 
     virtual wxDisplayImpl *CreateDisplay(size_t n);
     virtual size_t GetCount();
@@ -129,7 +133,7 @@ wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(size_t n)
     wxASSERT( err == CGDisplayNoErr );
     wxASSERT( n < theCount );
 
-    wxDisplayImplMacOSX *display = new wxDisplayImplMacOSX(theIDs[n]);
+    wxDisplayImplMacOSX *display = new wxDisplayImplMacOSX(n, theIDs[n]);
 
     delete [] theIDs;
 
@@ -218,7 +222,7 @@ bool wxDisplayImplMacOSX::ChangeMode(const wxVideoMode& mode)
 
 /* static */ wxDisplayFactory *wxDisplay::CreateFactory()
 {
-    return new wxDisplayFactoryMac;
+    return new wxDisplayFactoryMacOSX;
 }
 
 #endif // wxUSE_DISPLAY
