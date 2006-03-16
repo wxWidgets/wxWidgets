@@ -107,7 +107,7 @@ private:
 class wxDisplayFactoryX11 : public wxDisplayFactory
 {
 public:
-    wxDisplayFactoryX11();
+    wxDisplayFactoryX11() { }
 
     virtual wxDisplayImpl *CreateDisplay(size_t n);
     virtual size_t GetCount();
