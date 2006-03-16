@@ -1,13 +1,21 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        display.cpp
+// Name:        src/mac/carbon/display.cpp
 // Purpose:     Mac implementation of wxDisplay class
 // Author:      Ryan Norton & Brian Victor
-// Modified by: Royce Mitchell III
+// Modified by: Royce Mitchell III, Vadim Zeitlin
 // Created:     06/21/02
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 #include "wx/wxprec.h"
 
@@ -20,7 +28,6 @@
 #ifndef WX_PRECOMP
    #include "wx/dynarray.h"
    #include "wx/log.h"
-   #include "wx/msgdlg.h"
 #endif
 
 #ifdef __DARWIN__
@@ -35,32 +42,65 @@
 #endif
 
 #include "wx/display.h"
+#include "wx/display_impl.h"
 #include "wx/gdicmn.h"
 #include "wx/string.h"
 
 // ----------------------------------------------------------------------------
-// private classes
+// display classes implementation
 // ----------------------------------------------------------------------------
 
 #ifdef __WXMAC_OSX__
 
-class wxDisplayMacPriv
+class wxDisplayImplMacOSX : public wxDisplayImpl
 {
 public:
+    wxDisplayImplMacOSX(CGDirectDisplayID id) : m_id(id) { }
+
+    virtual wxRect GetGeometry() const;
+    virtual wxString GetName() const { return wxString(); }
+
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const;
+    virtual wxVideoMode GetCurrentMode() const;
+    virtual bool ChangeMode(const wxVideoMode& mode);
+
+private:
     CGDirectDisplayID m_id;
+
+    DECLARE_NO_COPY_CLASS(wxDisplayImplMacOSX)
 };
 
-size_t wxDisplayBase::GetCount()
+class wxDisplayFactoryMacOSX : public wxDisplayFactory
+{
+public:
+    wxDisplayFactoryMacOSX();
+
+    virtual wxDisplayImpl *CreateDisplay(size_t n);
+    virtual size_t GetCount();
+    virtual int GetFromPoint(const wxPoint& pt);
+
+protected:
+    DECLARE_NO_COPY_CLASS(wxDisplayFactoryMacOSX)
+};
+
+// ============================================================================
+// wxDisplayFactoryMacOSX implementation
+// ============================================================================
+
+size_t wxDisplayFactoryMacOSX::GetCount()
 {
     CGDisplayCount count;
-    CGDisplayErr err = CGGetActiveDisplayList(0, NULL, &count);
+#ifdef __WXDEBUG__
+    CGDisplayErr err =
+#endif
+    CGGetActiveDisplayList(0, NULL, &count);
 
     wxASSERT(err == CGDisplayNoErr);
 
     return count;
 }
 
-int wxDisplayBase::GetFromPoint(const wxPoint &p)
+int wxDisplayFactoryMacOSX::GetFromPoint(const wxPoint& p)
 {
     CGPoint thePoint = {(float)p.x, (float)p.y};
     CGDirectDisplayID theID;
@@ -68,7 +108,7 @@ int wxDisplayBase::GetFromPoint(const wxPoint &p)
     CGDisplayErr err = CGGetDisplaysWithPoint(thePoint, 1, &theID, &theCount);
     wxASSERT(err == CGDisplayNoErr);
 
-    int nWhich = -1;
+    int nWhich = wxNOT_FOUND;
 
     if (theCount)
     {
@@ -88,48 +128,44 @@ int wxDisplayBase::GetFromPoint(const wxPoint &p)
         if (nWhich == (int) theCount)
         {
             wxFAIL_MSG(wxT("Failed to find display in display list"));
-            nWhich = -1;
+            nWhich = wxNOT_FOUND;
         }
     }
 
     return nWhich;
 }
 
-wxDisplay::wxDisplay(size_t index)
-    : wxDisplayBase( index ) ,
-    m_priv( new wxDisplayMacPriv() )
+wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(size_t n)
 {
     CGDisplayCount theCount = GetCount();
     CGDirectDisplayID* theIDs = new CGDirectDisplayID[theCount];
 
-    CGDisplayErr err = CGGetActiveDisplayList(theCount, theIDs, &theCount);
+#ifdef __WXDEBUG__
+    CGDisplayErr err =
+#endif
+    CGGetActiveDisplayList(theCount, theIDs, &theCount);
 
     wxASSERT( err == CGDisplayNoErr );
-    wxASSERT( index < theCount );
+    wxASSERT( n < theCount );
 
-    m_priv->m_id = theIDs[index];
+    wxDisplayImplMacOSX *display = new wxDisplayImplMacOSX(theIDs[n]);
 
     delete [] theIDs;
+
+    return display;
 }
 
-wxRect wxDisplay::GetGeometry() const
+// ============================================================================
+// wxDisplayImplMacOSX implementation
+// ============================================================================
+
+wxRect wxDisplayImplMacOSX::GetGeometry() const
 {
-    CGRect theRect = CGDisplayBounds(m_priv->m_id);
+    CGRect theRect = CGDisplayBounds(m_id);
     return wxRect( (int)theRect.origin.x,
                    (int)theRect.origin.y,
                    (int)theRect.size.width,
                    (int)theRect.size.height ); //floats
-}
-
-int wxDisplay::GetDepth() const
-{
-    return (int) CGDisplayBitsPerPixel( m_priv->m_id ); //size_t
-}
-
-wxString wxDisplay::GetName() const
-{
-    // Macs don't name their displays...
-    return wxEmptyString;
 }
 
 static int wxCFDictKeyToInt( CFDictionaryRef desc, CFStringRef key )
@@ -144,12 +180,11 @@ static int wxCFDictKeyToInt( CFDictionaryRef desc, CFStringRef key )
     return num;
 }
 
-wxArrayVideoModes
-    wxDisplay::GetModes(const wxVideoMode& mode) const
+wxArrayVideoModes wxDisplayImplMacOSX::GetModes(const wxVideoMode& mode) const
 {
     wxArrayVideoModes resultModes;
 
-    CFArrayRef theArray = CGDisplayAvailableModes( m_priv->m_id );
+    CFArrayRef theArray = CGDisplayAvailableModes( m_id );
 
     for (CFIndex i = 0; i < CFArrayGetCount(theArray); ++i)
     {
@@ -168,9 +203,9 @@ wxArrayVideoModes
     return resultModes;
 }
 
-wxVideoMode wxDisplay::GetCurrentMode() const
+wxVideoMode wxDisplayImplMacOSX::GetCurrentMode() const
 {
-    CFDictionaryRef theValue = CGDisplayCurrentMode( m_priv->m_id );
+    CFDictionaryRef theValue = CGDisplayCurrentMode( m_id );
 
     return wxVideoMode(
         wxCFDictKeyToInt( theValue, kCGDisplayWidth ),
@@ -179,7 +214,7 @@ wxVideoMode wxDisplay::GetCurrentMode() const
         wxCFDictKeyToInt( theValue, kCGDisplayRefreshRate ));
 }
 
-bool wxDisplay::ChangeMode( const wxVideoMode& mode )
+bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
 {
     // Changing to default mode (wxDefaultVideoMode) doesn't
     // work because we don't have access to the system's 'scrn'
@@ -187,7 +222,7 @@ bool wxDisplay::ChangeMode( const wxVideoMode& mode )
     // will return to after this app is done
     boolean_t bExactMatch;
     CFDictionaryRef theCGMode = CGDisplayBestModeForParametersAndRefreshRate(
-        m_priv->m_id,
+        m_id,
         (size_t)mode.bpp,
         (size_t)mode.w,
         (size_t)mode.h,
@@ -197,49 +232,74 @@ bool wxDisplay::ChangeMode( const wxVideoMode& mode )
     bool bOK = bExactMatch;
 
     if (bOK)
-        bOK = CGDisplaySwitchToMode( m_priv->m_id, theCGMode ) == CGDisplayNoErr;
+        bOK = CGDisplaySwitchToMode( m_id, theCGMode ) == CGDisplayNoErr;
 
     return bOK;
 }
 
-wxDisplay::~wxDisplay()
+// ============================================================================
+// wxDisplay::CreateFactory()
+// ============================================================================
+
+/* static */ wxDisplayFactory *wxDisplay::CreateFactory()
 {
-    if ( m_priv )
-    {
-        delete m_priv;
-        m_priv = 0;
-    }
+    return new wxDisplayFactoryMacOSX;
 }
 
-#else
+#else // !__WXMAC_OSX__
 
-class wxDisplayMacPriv
+class wxDisplayImplMac : public wxDisplayImpl
 {
 public:
+    wxDisplayImplMac(GDHandle hndl) : m_hndl(hndl) { }
+
+    virtual wxRect GetGeometry() const;
+    virtual wxString GetName() const { return wxString(); }
+
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const;
+    virtual wxVideoMode GetCurrentMode() const;
+    virtual bool ChangeMode(const wxVideoMode& mode);
+
+private:
     GDHandle m_hndl;
+
+    DECLARE_NO_COPY_CLASS(wxDisplayImplMac)
 };
 
-size_t wxDisplayBase::GetCount()
+class wxDisplayFactoryMac : public wxDisplayFactory
 {
-    GDHandle hndl;
+public:
+    wxDisplayFactoryMac();
+
+    virtual wxDisplayImpl *CreateDisplay(size_t n);
+    virtual size_t GetCount();
+    virtual int GetFromPoint(const wxPoint& pt);
+
+protected:
+    DECLARE_NO_COPY_CLASS(wxDisplayFactoryMac)
+};
+
+// ============================================================================
+// wxDisplayFactoryMac implementation
+// ============================================================================
+
+size_t wxDisplayFactoryMac::GetCount()
+{
     size_t num = 0;
-    hndl = DMGetFirstScreenDevice(true);
-    while (hndl)
+    GDHandle hndl = DMGetFirstScreenDevice(true);
+    while(hndl)
     {
         num++;
         hndl = DMGetNextScreenDevice(hndl, true);
     }
-
     return num;
 }
 
-int wxDisplayBase::GetFromPoint(const wxPoint &p)
+int wxDisplayFactoryMac::GetFromPoint(const wxPoint &p)
 {
-    GDHandle hndl;
     size_t num = 0;
-    hndl = DMGetFirstScreenDevice(true);
-
-    while (hndl)
+    GDHandle hndl = DMGetFirstScreenDevice(true);
+    while(hndl)
     {
         Rect screenrect = (*hndl)->gdRect;
         if (p.x >= screenrect.left &&
@@ -249,63 +309,39 @@ int wxDisplayBase::GetFromPoint(const wxPoint &p)
         {
             return num;
         }
-
         num++;
         hndl = DMGetNextScreenDevice(hndl, true);
     }
 
-    return -1;
+    return wxNOT_FOUND;
 }
 
-wxDisplay::wxDisplay( size_t index )
-    : wxDisplayBase( index ),
-    m_priv( new wxDisplayMacPriv() )
+wxDisplayImpl *wxDisplayFactoryMac::CreateDisplay(size_t n)
 {
-    GDHandle hndl;
-    hndl = DMGetFirstScreenDevice(true);
-    m_priv->m_hndl = NULL;
-
-    while (hndl)
+    GDHandle hndl = DMGetFirstScreenDevice(true);
+    while(hndl)
     {
-        if (index == 0)
-            m_priv->m_hndl = hndl;
-
-        index--;
+        if (n == 0)
+        {
+            return new wxDisplayImplMac(hndl);
+        }
+        n--;
         hndl = DMGetNextScreenDevice(hndl, true);
     }
+
+    return NULL;
 }
 
-wxRect wxDisplay::GetGeometry() const
+// ============================================================================
+// wxDisplayImplMac implementation
+// ============================================================================
+
+wxRect wxDisplayImplMac::GetGeometry() const
 {
-    if ((m_priv == NULL) || (m_priv->m_hndl == NULL))
-        return wxRect(0, 0, 0, 0);
-
-    Rect screenrect = (*(m_priv->m_hndl))->gdRect;
-    return wxRect(
-        screenrect.left, screenrect.top,
-        screenrect.right - screenrect.left,
-        screenrect.bottom - screenrect.top );
-}
-
-int wxDisplay::GetDepth() const
-{
-    if ((m_priv == NULL) || (m_priv->m_hndl == NULL))
-        return 0;
-
-    // This cryptic looking code is based on Apple's sample code:
-    // http://developer.apple.com/samplecode/Sample_Code/Graphics_2D/GDevVideo/Gen.cp.htm
-
-    // RN - according to the docs
-    // gdPMap is a bitmap-type representation of the GDevice, and all
-    // 0x0000FFFF does is get the lower 16 bits of pixelSize.  However,
-    // since pixelSize is only 16 bits (a short)...
-    return ((*(*(m_priv->m_hndl))->gdPMap)->pixelSize) & 0x0000FFFF;
-}
-
-wxString wxDisplay::GetName() const
-{
-    // Macs don't name their displays...
-    return wxEmptyString;
+    Rect screenrect = (*m_hndl)->gdRect;
+    return wxRect(screenrect.left, screenrect.top,
+                  screenrect.right - screenrect.left,
+                  screenrect.bottom - screenrect.top);
 }
 
 struct DMModeIteratorRec
@@ -415,8 +451,7 @@ pascal void DMModeTransProc(
 #undef pDBI
 }
 
-wxArrayVideoModes
-    wxDisplay::GetModes(const wxVideoMode& mode) const
+wxArrayVideoModes wxDisplayImplMac::GetModes(const wxVideoMode& mode) const
 {
     wxArrayVideoModes Modes;
     unsigned long dwDMVer;
@@ -432,7 +467,7 @@ wxArrayVideoModes
         DisplayIDType nDisplayID;
         OSErr err;
 
-        err = DMGetDisplayIDByGDevice(m_priv->m_hndl, &nDisplayID, false);
+        err = DMGetDisplayIDByGDevice(m_hndl, &nDisplayID, false);
         verify_noerr( err );
 
         // Create a new list...
@@ -468,7 +503,7 @@ wxArrayVideoModes
     return Modes;
 }
 
-wxVideoMode wxDisplay::GetCurrentMode() const
+wxVideoMode wxDisplayImplMac::GetCurrentMode() const
 {
     unsigned long dwDMVer;
     wxVideoMode RetMode;
@@ -481,7 +516,7 @@ wxVideoMode wxDisplay::GetCurrentMode() const
         VDSwitchInfoRec sMode; // Note: csMode member also contains the bit depth
         OSErr err;
 
-        err = DMGetDisplayMode( m_priv->m_hndl, &sMode );
+        err = DMGetDisplayMode( m_hndl, &sMode );
         if (err == noErr)
         {
             DMListIndexType nNumModes;
@@ -489,7 +524,7 @@ wxVideoMode wxDisplay::GetCurrentMode() const
             DMDisplayModeListIteratorUPP uppMLI;
             DisplayIDType nDisplayID;
 
-            err = DMGetDisplayIDByGDevice(m_priv->m_hndl, &nDisplayID, false);
+            err = DMGetDisplayIDByGDevice(m_hndl, &nDisplayID, false);
             verify_noerr( err );
 
             // Create a new list...
@@ -538,7 +573,7 @@ wxVideoMode wxDisplay::GetCurrentMode() const
     return RetMode;
 }
 
-bool wxDisplay::ChangeMode(const wxVideoMode& mode)
+bool wxDisplayImplMac::ChangeMode(const wxVideoMode& mode)
 {
     unsigned long dwDMVer;
 
@@ -580,7 +615,7 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
         DisplayIDType nDisplayID;
         OSErr err;
 
-        err = DMGetDisplayIDByGDevice(m_priv->m_hndl, &nDisplayID, false);
+        err = DMGetDisplayIDByGDevice(m_hndl, &nDisplayID, false);
         verify_noerr( err );
 
         // Create a new list...
@@ -618,7 +653,7 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
         // For the really paranoid -
         //     unsigned long flags;
         //      Boolean bok;
-        //     wxASSERT(noErr == DMCheckDisplayMode(m_priv->m_hndl, sMode.csData,
+        //     wxASSERT(noErr == DMCheckDisplayMode(m_hndl, sMode.csData,
         //                                          sMode.csMode, &flags, NULL, &bok));
         //     wxASSERT(bok);
 
@@ -632,7 +667,7 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 
         unsigned long dwBPP = (unsigned long) mode.bpp;
         err = DMSetDisplayMode(
-            m_priv->m_hndl, sMode.csData,
+            m_hndl, sMode.csData,
             (unsigned long*) &(dwBPP),
             NULL, //(unsigned long) &sMode
             hDisplayState );
@@ -640,7 +675,7 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
         if (err != noErr)
         {
             DMEndConfigureDisplays(hDisplayState);
-            wxMessageBox( wxString::Format(wxT("Could not set the display mode")) );
+            wxLogError(wxT("Could not set the display mode"));
 
             return false;
         }
@@ -660,13 +695,13 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
     return true;
 }
 
-wxDisplay::~wxDisplay()
+// ============================================================================
+// wxDisplay::CreateFactory()
+// ============================================================================
+
+/* static */ wxDisplayFactory *wxDisplay::CreateFactory()
 {
-    if ( m_priv )
-    {
-        delete m_priv;
-        m_priv = 0;
-    }
+    return new wxDisplayFactoryMac;
 }
 
 #endif // !OSX

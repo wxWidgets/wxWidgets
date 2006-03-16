@@ -52,6 +52,9 @@
 #undef wxUSE_CLIPBOARD
 #define wxUSE_CLIPBOARD 0
 
+#undef wxUSE_DISPLAY
+#define wxUSE_DISPLAY 0
+
 #undef wxUSE_COMBOBOX
 #define wxUSE_COMBOBOX 0
 

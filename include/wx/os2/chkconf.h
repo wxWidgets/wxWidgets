@@ -21,6 +21,11 @@
    to disable here features not supported currently or enable
    features required */
 
+#if wxUSE_DISPLAY
+#   undef wxUSE_DISPLAY
+#   define wxUSE_DISPLAY 0
+#endif /* wxUSE_DISPLAY */
+
 #if wxUSE_STACKWALKER
 #   undef wxUSE_STACKWALKER
 #   define wxUSE_STACKWALKER 0

@@ -56,6 +56,11 @@
 #   define wxUSE_CLIPBOARD 0
 #endif /* wxUSE_CLIPBOARD */
 
+#if wxUSE_DISPLAY
+#   undef wxUSE_DISPLAY
+#   define wxUSE_DISPLAY 0
+#endif /* wxUSE_DISPLAY */
+
 #if wxUSE_SOCKETS
 #   undef wxUSE_SOCKETS
 #   define wxUSE_SOCKETS 0
