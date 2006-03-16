@@ -50,7 +50,6 @@
 		4086D107063BBC5C00D4CD53 /* minimal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F591E05701FCC5DE01000133 /* minimal.cpp */; };
 		4086D109063BBC5C00D4CD53 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
 		4086D10B063BBC5C00D4CD53 /* System.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA60173504D423C000000080 /* System.framework */; };
-		409F039F0977B97100D1030F /* libwx_mac.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 409F039C0977B96200D1030F /* libwx_mac.dylib */; };
 		409F03A10977B97B00D1030F /* libwx_mac_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 409F039A0977B96200D1030F /* libwx_mac_static.a */; };
 /* End PBXBuildFile section */
 
@@ -101,13 +100,6 @@
 			remoteGlobalIDString = 4086C8CB063AB30000D4CD53;
 			remoteInfo = static;
 		};
-		409F039B0977B96200D1030F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 409F03930977B96200D1030F /* wxWindows.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4086CBE1063AB30000D4CD53;
-			remoteInfo = dynamic;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -156,7 +148,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				409F039F0977B97100D1030F /* libwx_mac.dylib in Frameworks */,
 				4086D109063BBC5C00D4CD53 /* Carbon.framework in Frameworks */,
 				4086D10B063BBC5C00D4CD53 /* System.framework in Frameworks */,
 				1842CAFF085664390032BCF7 /* AGL.framework in Frameworks */,
@@ -224,7 +215,6 @@
 			isa = PBXGroup;
 			children = (
 				409F039A0977B96200D1030F /* libwx_mac_static.a */,
-				409F039C0977B96200D1030F /* libwx_mac.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -404,13 +394,6 @@
 			fileType = archive.ar;
 			path = libwx_mac_static.a;
 			remoteRef = 409F03990977B96200D1030F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		409F039C0977B96200D1030F /* libwx_mac.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = libwx_mac.dylib;
-			remoteRef = 409F039B0977B96200D1030F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -717,7 +700,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = __WXDEBUG__;
-				INFOPLIST_FILE = ../Info.plist;
+				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = ../../src/;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PRODUCT_NAME = minimal;
@@ -737,7 +720,7 @@
 				DynamicLibName = libwx_mac.dylib;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
-				INFOPLIST_FILE = ../Info.plist;
+				INFOPLIST_FILE = Info.plist;
 				LIBRARY_SEARCH_PATHS = ../../src/build/Deployment;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PRODUCT_NAME = minimal;
