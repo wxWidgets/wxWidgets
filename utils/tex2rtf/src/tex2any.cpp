@@ -301,81 +301,84 @@ void ForbidWarning(TexMacroDef *def)
 
 TexMacroDef *MatchMacro(wxChar *buffer, int *pos, wxChar **env, bool *parseToBrace)
 {
-  *parseToBrace = true;
-  int i = (*pos);
-  TexMacroDef *def = NULL;
-  wxChar macroBuf[40];
+    *parseToBrace = true;
+    int i = (*pos);
+    TexMacroDef *def = NULL;
+    wxChar macroBuf[40];
 
-  // First, try to find begin{thing}
-  if (wxStrncmp(buffer+i, _T("begin{"), 6) == 0)
-  {
-    i += 6;
-
-    int j = i;
-    while ((isalpha(buffer[j]) || buffer[j] == '*') && ((j - i) < 39))
+    // First, try to find begin{thing}
+    if (wxStrncmp(buffer+i, _T("begin{"), 6) == 0)
     {
-      macroBuf[j-i] = buffer[j];
-      j ++;
+        i += 6;
+
+        int j = i;
+        while ((isalpha(buffer[j]) || buffer[j] == '*') && ((j - i) < 39))
+        {
+              macroBuf[j-i] = buffer[j];
+              j ++;
+        }
+        macroBuf[j-i] = 0;
+        def = (TexMacroDef *)MacroDefs.Get(macroBuf);
+
+        if (def)
+        {
+            *pos = j + 1;  // BUGBUG Should this be + 1???
+            *env = def->name;
+            ForbidWarning(def);
+            return def;
+        }
+        else
+        {
+            return NULL;
+        }
     }
-    macroBuf[j-i] = 0;
-    def = (TexMacroDef *)MacroDefs.Get(macroBuf);
+
+    // Failed, so try to find macro from definition list
+    int j = i;
+
+    // First try getting a one-character macro, but ONLY
+    // if these TWO characters are not both alphabetical (could
+    // be a longer macro)
+    if (!(isalpha(buffer[i]) && isalpha(buffer[i+1])))
+    {
+        macroBuf[0] = buffer[i];
+        macroBuf[1] = 0;
+
+        def = (TexMacroDef *)MacroDefs.Get(macroBuf);
+        if (def) j ++;
+    }
+
+    if (!def)
+    {
+        while ((isalpha(buffer[j]) || buffer[j] == '*') && ((j - i) < 39))
+        {
+            macroBuf[j-i] = buffer[j];
+            j ++;
+        }
+        macroBuf[j-i] = 0;
+        def = (TexMacroDef *)MacroDefs.Get(macroBuf);
+    }
 
     if (def)
     {
-      *pos = j + 1;  // BUGBUG Should this be + 1???
-      *env = def->name;
-      ForbidWarning(def);
-      return def;
+        i = j;
+
+        // We want to check whether this is a space-consuming macro
+        // (e.g. {\bf word})
+        // No brace, e.g. \input thing.tex instead of \input{thing};
+        // or a numeric argument, such as \parindent0pt
+        if ((def->no_args > 0) && ((buffer[i] == 32) || (buffer[i] == '=') || (isdigit(buffer[i]))))
+        {
+            if ((buffer[i] == 32) || (buffer[i] == '='))
+            i ++;
+
+            *parseToBrace = false;
+        }
+        *pos = i;
+        ForbidWarning(def);
+        return def;
     }
-    else return NULL;
-  }
-
-  // Failed, so try to find macro from definition list
-  int j = i;
-
-  // First try getting a one-character macro, but ONLY
-  // if these TWO characters are not both alphabetical (could
-  // be a longer macro)
-  if (!(isalpha(buffer[i]) && isalpha(buffer[i+1])))
-  {
-    macroBuf[0] = buffer[i];
-    macroBuf[1] = 0;
-
-    def = (TexMacroDef *)MacroDefs.Get(macroBuf);
-    if (def) j ++;
-  }
-
-  if (!def)
-  {
-    while ((isalpha(buffer[j]) || buffer[j] == '*') && ((j - i) < 39))
-    {
-      macroBuf[j-i] = buffer[j];
-      j ++;
-    }
-    macroBuf[j-i] = 0;
-    def = (TexMacroDef *)MacroDefs.Get(macroBuf);
-  }
-
-  if (def)
-  {
-    i = j;
-
-    // We want to check whether this is a space-consuming macro
-    // (e.g. {\bf word})
-    // No brace, e.g. \input thing.tex instead of \input{thing};
-    // or a numeric argument, such as \parindent0pt
-    if ((def->no_args > 0) && ((buffer[i] == 32) || (buffer[i] == '=') || (isdigit(buffer[i]))))
-    {
-      if ((buffer[i] == 32) || (buffer[i] == '='))
-        i ++;
-
-      *parseToBrace = false;
-    }
-    *pos = i;
-    ForbidWarning(def);
-    return def;
-  }
-  return NULL;
+    return NULL;
 }
 
 void EatWhiteSpace(wxChar *buffer, int *pos)
@@ -1271,16 +1274,20 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
             children.Append((wxObject *)chunk);
 
           // Eliminate newline after a \begin{} or a \\ if possible
-          if (env || wxStrcmp(def->name, _T("\\")) == 0)
-            if (buffer[pos] == 13)
-            {
+          if ((env || wxStrcmp(def->name, _T("\\")) == 0) && (buffer[pos] == 13))
+          {
               pos ++;
               if (buffer[pos] == 10)
                 pos ++;
-            }
+          }
 
-          pos = ParseMacroBody(def->name, chunk, chunk->no_args,
-                     buffer, pos, env, tmpParseToBrace, customMacroArgs);
+          pos = ParseMacroBody(def->name,
+                               chunk, chunk->no_args,
+                               buffer,
+                               pos,
+                               env,
+                               tmpParseToBrace,
+                               customMacroArgs);
 
           // If custom macro, parse the body substituting the above found args.
           if (customMacro)
