@@ -68,6 +68,8 @@ public:
         return r;
     }
 
+    virtual wxRect GetClientArea() const { return wxGetClientDisplayRect(); }
+
     virtual wxString GetName() const { return wxString(); }
 
 #if wxUSE_DISPLAY
@@ -160,6 +162,13 @@ wxRect wxDisplay::GetGeometry() const
     wxCHECK_MSG( IsOk(), wxRect(), _T("invalid wxDisplay object") );
 
     return m_impl->GetGeometry();
+}
+
+wxRect wxDisplay::GetClientArea() const
+{
+    wxCHECK_MSG( IsOk(), wxRect(), _T("invalid wxDisplay object") );
+
+    return m_impl->GetClientArea();
 }
 
 wxString wxDisplay::GetName() const

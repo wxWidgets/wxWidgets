@@ -260,6 +260,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
                                          r.width, r.height)
                        ));
 
+        const wxRect rc(display.GetClientArea());
+        sizer->Add(new wxStaticText(page, wxID_ANY, _T("Client area: ")));
+        sizer->Add(new wxStaticText
+                       (
+                        page,
+                        wxID_ANY,
+                        wxString::Format(_T("(%d, %d)-(%d, %d)"),
+                                         rc.x, rc.y, rc.width, rc.height)
+                       ));
 
         sizer->Add(new wxStaticText(page, wxID_ANY, _T("Name: ")));
         sizer->Add(new wxStaticText(page, wxID_ANY, display.GetName()));

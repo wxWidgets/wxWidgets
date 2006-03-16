@@ -52,6 +52,9 @@ public:
     // return the full area of this display
     virtual wxRect GetGeometry() const = 0;
 
+    // return the area of the display available for normal windows
+    virtual wxRect GetClientArea() const { return GetGeometry(); }
+
     // return the name (may be empty)
     virtual wxString GetName() const = 0;
 

@@ -94,6 +94,7 @@ All (GUI):
 - UpdateUI handler can now show/hide the window too (Ronald Weiss)
 - More than one filter allowed in in wxDocTemplate filter.
 - Added wxListBox::HitTest()
+- Added wxDisplay::GetClientArea()
 
 wxMSW:
 

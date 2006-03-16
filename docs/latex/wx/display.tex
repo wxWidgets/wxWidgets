@@ -57,6 +57,20 @@ function that changed the video mode to the system
 default by using the system's 'scrn' resource.
 
 
+\membersection{wxDisplay::GetClientArea}\label{wxdisplaygetclientarea}
+
+\constfunc{wxRect }{GetClientArea}{\void}
+
+Returns the client area of the display. The client area is the part of the
+display available for the normal (non full screen) windows, usually it is the
+same as \helpref{GetGeometry}{wxdisplaygetgeometry} but it could be less if
+there is a taskbar (or equivalent) on this display.
+
+\wxheading{See also:}
+
+\helpref{wxClientDisplayRect}{wxclientdisplayrect}
+
+
 \membersection{wxDisplay::GetCount}\label{wxdisplaygetcount}
 
 \func{static size\_t}{GetCount}{\void}
@@ -111,6 +125,10 @@ Returns \texttt{wxNOT\_FOUND} if the window is not on any connected display.
 
 Returns the bounding rectangle of the display whose index was passed to the
 constructor.
+
+\wxheading{See also:}
+
+\helpref{GetClientArea}{wxdisplaygetclientarea}, \helpref{wxDisplaySize}{wxdisplaysize}
 
 
 \membersection{wxDisplay::GetModes}\label{wxdisplaygetmodes}
