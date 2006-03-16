@@ -106,8 +106,7 @@ bool wxApp::Initialize(int& argcOrig, wxChar **argvOrig)
     wxWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
 
 #if wxUSE_INTL
-    // This can cause all text to disappear
-    // wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
+    wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif
 
     return true;
