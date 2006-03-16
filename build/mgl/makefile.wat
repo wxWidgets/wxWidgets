@@ -198,7 +198,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dcmemory.obj &
 	$(OBJS)\monodll_dcscreen.obj &
 	$(OBJS)\monodll_dirmgl.obj &
-	$(OBJS)\monodll_display.obj &
 	$(OBJS)\monodll_evtloop.obj &
 	$(OBJS)\monodll_font.obj &
 	$(OBJS)\monodll_fontenum.obj &
@@ -482,7 +481,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dcmemory.obj &
 	$(OBJS)\monolib_dcscreen.obj &
 	$(OBJS)\monolib_dirmgl.obj &
-	$(OBJS)\monolib_display.obj &
 	$(OBJS)\monolib_evtloop.obj &
 	$(OBJS)\monolib_font.obj &
 	$(OBJS)\monolib_fontenum.obj &
@@ -699,7 +697,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dcmemory.obj &
 	$(OBJS)\coredll_dcscreen.obj &
 	$(OBJS)\coredll_dirmgl.obj &
-	$(OBJS)\coredll_display.obj &
 	$(OBJS)\coredll_evtloop.obj &
 	$(OBJS)\coredll_font.obj &
 	$(OBJS)\coredll_fontenum.obj &
@@ -888,7 +885,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dcmemory.obj &
 	$(OBJS)\corelib_dcscreen.obj &
 	$(OBJS)\corelib_dirmgl.obj &
-	$(OBJS)\corelib_display.obj &
 	$(OBJS)\corelib_evtloop.obj &
 	$(OBJS)\corelib_font.obj &
 	$(OBJS)\corelib_fontenum.obj &
@@ -3404,9 +3400,6 @@ $(OBJS)\monodll_dcscreen.obj :  .AUTODEPEND ..\..\src\mgl\dcscreen.cpp
 $(OBJS)\monodll_dirmgl.obj :  .AUTODEPEND ..\..\src\mgl\dirmgl.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_display.obj :  .AUTODEPEND ..\..\src\mgl\display.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_evtloop.obj :  .AUTODEPEND ..\..\src\mgl\evtloop.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -4428,9 +4421,6 @@ $(OBJS)\monolib_dcscreen.obj :  .AUTODEPEND ..\..\src\mgl\dcscreen.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dirmgl.obj :  .AUTODEPEND ..\..\src\mgl\dirmgl.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_display.obj :  .AUTODEPEND ..\..\src\mgl\display.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_evtloop.obj :  .AUTODEPEND ..\..\src\mgl\evtloop.cpp
@@ -5684,9 +5674,6 @@ $(OBJS)\coredll_dcscreen.obj :  .AUTODEPEND ..\..\src\mgl\dcscreen.cpp
 $(OBJS)\coredll_dirmgl.obj :  .AUTODEPEND ..\..\src\mgl\dirmgl.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_display.obj :  .AUTODEPEND ..\..\src\mgl\display.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_evtloop.obj :  .AUTODEPEND ..\..\src\mgl\evtloop.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -6222,9 +6209,6 @@ $(OBJS)\corelib_dcscreen.obj :  .AUTODEPEND ..\..\src\mgl\dcscreen.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_dirmgl.obj :  .AUTODEPEND ..\..\src\mgl\dirmgl.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_display.obj :  .AUTODEPEND ..\..\src\mgl\display.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_evtloop.obj :  .AUTODEPEND ..\..\src\mgl\evtloop.cpp

@@ -584,6 +584,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 ____ADVANCED_SRC_FILENAMES_OBJECTS =
 !ifeq WXUNIV 0
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
+	$(OBJS)\monodll_datavcmn.obj &
 	$(OBJS)\monodll_calctrl.obj &
 	$(OBJS)\monodll_datectlg.obj &
 	$(OBJS)\monodll_grid.obj &
@@ -609,6 +610,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 !endif
 !ifeq WXUNIV 1
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
+	$(OBJS)\monodll_datavcmn.obj &
 	$(OBJS)\monodll_calctrl.obj &
 	$(OBJS)\monodll_datectlg.obj &
 	$(OBJS)\monodll_grid.obj &
@@ -1127,6 +1129,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =
 !ifeq WXUNIV 0
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
+	$(OBJS)\monolib_datavcmn.obj &
 	$(OBJS)\monolib_calctrl.obj &
 	$(OBJS)\monolib_datectlg.obj &
 	$(OBJS)\monolib_grid.obj &
@@ -1152,6 +1155,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 !endif
 !ifeq WXUNIV 1
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
+	$(OBJS)\monolib_datavcmn.obj &
 	$(OBJS)\monolib_calctrl.obj &
 	$(OBJS)\monolib_datectlg.obj &
 	$(OBJS)\monolib_grid.obj &
@@ -2036,6 +2040,7 @@ __advdll___depname = &
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =
 !ifeq WXUNIV 0
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
+	$(OBJS)\advdll_datavcmn.obj &
 	$(OBJS)\advdll_calctrl.obj &
 	$(OBJS)\advdll_datectlg.obj &
 	$(OBJS)\advdll_grid.obj &
@@ -2061,6 +2066,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 !endif
 !ifeq WXUNIV 1
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
+	$(OBJS)\advdll_datavcmn.obj &
 	$(OBJS)\advdll_calctrl.obj &
 	$(OBJS)\advdll_datectlg.obj &
 	$(OBJS)\advdll_grid.obj &
@@ -2095,6 +2101,7 @@ __advlib___depname = &
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =
 !ifeq WXUNIV 0
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
+	$(OBJS)\advlib_datavcmn.obj &
 	$(OBJS)\advlib_calctrl.obj &
 	$(OBJS)\advlib_datectlg.obj &
 	$(OBJS)\advlib_grid.obj &
@@ -2120,6 +2127,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 !endif
 !ifeq WXUNIV 1
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
+	$(OBJS)\advlib_datavcmn.obj &
 	$(OBJS)\advlib_calctrl.obj &
 	$(OBJS)\advlib_datectlg.obj &
 	$(OBJS)\advlib_grid.obj &
@@ -6065,6 +6073,11 @@ $(OBJS)\monodll_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -7904,6 +7917,11 @@ $(OBJS)\monolib_vlbox.obj :  .AUTODEPEND ..\..\src\generic\vlbox.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -11074,6 +11092,9 @@ $(OBJS)\advdll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 $(OBJS)\advdll_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -11141,6 +11162,9 @@ $(OBJS)\advlib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp

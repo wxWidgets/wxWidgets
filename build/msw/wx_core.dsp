@@ -8455,6 +8455,10 @@ SOURCE=..\..\include\wx\dataobj.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\dataview.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\datectrl.h
 # End Source File
 # Begin Source File
@@ -8520,6 +8524,10 @@ SOURCE=..\..\include\wx\dirdlg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\display.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\display_impl.h
 # End Source File
 # Begin Source File
 
@@ -9016,6 +9024,10 @@ SOURCE=..\..\include\wx\window.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\wizard.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\wupdlock.h
 # End Source File
 # Begin Source File
 

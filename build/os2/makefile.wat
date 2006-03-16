@@ -204,7 +204,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dcprint.obj &
 	$(OBJS)\monodll_dcscreen.obj &
 	$(OBJS)\monodll_dialog.obj &
-	$(OBJS)\monodll_display.obj &
 	$(OBJS)\monodll_dnd.obj &
 	$(OBJS)\monodll_evtloop.obj &
 	$(OBJS)\monodll_filedlg.obj &
@@ -678,7 +677,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dcprint.obj &
 	$(OBJS)\monolib_dcscreen.obj &
 	$(OBJS)\monolib_dialog.obj &
-	$(OBJS)\monolib_display.obj &
 	$(OBJS)\monolib_dnd.obj &
 	$(OBJS)\monolib_evtloop.obj &
 	$(OBJS)\monolib_filedlg.obj &
@@ -1102,7 +1100,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dcprint.obj &
 	$(OBJS)\coredll_dcscreen.obj &
 	$(OBJS)\coredll_dialog.obj &
-	$(OBJS)\coredll_display.obj &
 	$(OBJS)\coredll_dnd.obj &
 	$(OBJS)\coredll_evtloop.obj &
 	$(OBJS)\coredll_filedlg.obj &
@@ -1451,7 +1448,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dcprint.obj &
 	$(OBJS)\corelib_dcscreen.obj &
 	$(OBJS)\corelib_dialog.obj &
-	$(OBJS)\corelib_display.obj &
 	$(OBJS)\corelib_dnd.obj &
 	$(OBJS)\corelib_evtloop.obj &
 	$(OBJS)\corelib_filedlg.obj &
@@ -4219,9 +4215,6 @@ $(OBJS)\monodll_dcprint.obj :  .AUTODEPEND ..\..\src\os2\dcprint.cpp
 $(OBJS)\monodll_dcscreen.obj :  .AUTODEPEND ..\..\src\os2\dcscreen.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_display.obj :  .AUTODEPEND ..\..\src\os2\display.cpp
-	$(CXX) -bt=os2 -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_dnd.obj :  .AUTODEPEND ..\..\src\os2\dnd.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -5853,9 +5846,6 @@ $(OBJS)\monolib_dcprint.obj :  .AUTODEPEND ..\..\src\os2\dcprint.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dcscreen.obj :  .AUTODEPEND ..\..\src\os2\dcscreen.cpp
-	$(CXX) -bt=os2 -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_display.obj :  .AUTODEPEND ..\..\src\os2\display.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dnd.obj :  .AUTODEPEND ..\..\src\os2\dnd.cpp
@@ -7731,9 +7721,6 @@ $(OBJS)\coredll_dcprint.obj :  .AUTODEPEND ..\..\src\os2\dcprint.cpp
 $(OBJS)\coredll_dcscreen.obj :  .AUTODEPEND ..\..\src\os2\dcscreen.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_display.obj :  .AUTODEPEND ..\..\src\os2\display.cpp
-	$(CXX) -bt=os2 -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_dnd.obj :  .AUTODEPEND ..\..\src\os2\dnd.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -8821,9 +8808,6 @@ $(OBJS)\corelib_dcprint.obj :  .AUTODEPEND ..\..\src\os2\dcprint.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_dcscreen.obj :  .AUTODEPEND ..\..\src\os2\dcscreen.cpp
-	$(CXX) -bt=os2 -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_display.obj :  .AUTODEPEND ..\..\src\os2\display.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_dnd.obj :  .AUTODEPEND ..\..\src\os2\dnd.cpp
