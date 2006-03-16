@@ -112,8 +112,8 @@ use the same directory and library names, so for the moment
 these builds cannot co-exist simultaneously.
 
 To use Visual Studio 2005, you need to allow VS to convert the projects
-first, and then you need to adjust the library settings of
-each wxWidgets and sample project.
+first (but install all the SDKs you need to _before_ converting), and then
+you need to adjust the library settings of each wxWidgets and sample project.
 
 Edit the configuration properties for each configuration and in the Librarian,
 add a relative path ..\..\lib to each library path. For example:
