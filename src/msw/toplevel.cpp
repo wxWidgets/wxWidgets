@@ -1071,6 +1071,15 @@ wxDlgProc(HWND hDlg,
 #else // no SHInitDialog()
         wxUnusedVar(hDlg);
 #endif
+
+        // eVC3 with PPC SDK 2002 seem to miss initial positioning
+        // of subcontrols so we force it making dummy resize
+#if defined(__POCKETPC__) && (defined(__WXWINCE__) && _WIN32_WCE < 400)
+        RECT r = wxGetWindowRect(hDlg);
+
+        (void)::PostMessage(hDlg, WM_SIZE, SIZE_RESTORED,
+                            MAKELPARAM(r.right - r.left, r.bottom - r.top));
+#endif
     }
 
     // for almost all messages, returning FALSE means that we didn't process
