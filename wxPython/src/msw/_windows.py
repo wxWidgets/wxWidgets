@@ -1917,6 +1917,14 @@ class VListBox(VScrolledWindow):
         """SetSelectionBackground(self, Colour col)"""
         return _windows_.VListBox_SetSelectionBackground(*args, **kwargs)
 
+    def OnDrawSeparator(*args, **kwargs):
+        """OnDrawSeparator(self, DC dc, Rect rect, size_t n)"""
+        return _windows_.VListBox_OnDrawSeparator(*args, **kwargs)
+
+    def OnDrawBackground(*args, **kwargs):
+        """OnDrawBackground(self, DC dc, Rect rect, size_t n)"""
+        return _windows_.VListBox_OnDrawBackground(*args, **kwargs)
+
 VListBox_swigregister = _windows_.VListBox_swigregister
 VListBox_swigregister(VListBox)
 VListBoxNameStr = cvar.VListBoxNameStr

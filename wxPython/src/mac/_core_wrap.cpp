@@ -30517,12 +30517,12 @@ SWIGINTERN PyObject *_wrap_Window_GetPosition(PyObject *SWIGUNUSEDPARM(self), Py
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_GetPosition" "', expected argument " "1"" of type '" "wxWindow *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_GetPosition" "', expected argument " "1"" of type '" "wxWindow const *""'"); 
   }
   arg1 = reinterpret_cast< wxWindow * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (arg1)->GetPosition();
+    result = ((wxWindow const *)arg1)->GetPosition();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -30552,12 +30552,12 @@ SWIGINTERN PyObject *_wrap_Window_GetPositionTuple(PyObject *SWIGUNUSEDPARM(self
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_GetPositionTuple" "', expected argument " "1"" of type '" "wxWindow *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_GetPositionTuple" "', expected argument " "1"" of type '" "wxWindow const *""'"); 
   }
   arg1 = reinterpret_cast< wxWindow * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->GetPosition(arg2,arg3);
+    ((wxWindow const *)arg1)->GetPosition(arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -30574,6 +30574,109 @@ SWIGINTERN PyObject *_wrap_Window_GetPositionTuple(PyObject *SWIGUNUSEDPARM(self
     int new_flags = SWIG_IsNewObj(res3) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg3), SWIGTYPE_p_int, new_flags));
   }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Window_GetScreenPosition(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  wxPoint result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_GetScreenPosition" "', expected argument " "1"" of type '" "wxWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxWindow const *)arg1)->GetScreenPosition();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxPoint(static_cast< const wxPoint& >(result))), SWIGTYPE_p_wxPoint, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Window_GetScreenPositionTuple(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  int *arg2 = (int *) 0 ;
+  int *arg3 = (int *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int temp2 ;
+  int res2 = SWIG_TMPOBJ ;
+  int temp3 ;
+  int res3 = SWIG_TMPOBJ ;
+  PyObject *swig_obj[1] ;
+  
+  arg2 = &temp2;
+  arg3 = &temp3;
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_GetScreenPositionTuple" "', expected argument " "1"" of type '" "wxWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    ((wxWindow const *)arg1)->GetScreenPosition(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsTmpObj(res2)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_int((*arg2)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res2) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg2), SWIGTYPE_p_int, new_flags));
+  }
+  if (SWIG_IsTmpObj(res3)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_int((*arg3)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res3) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg3), SWIGTYPE_p_int, new_flags));
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Window_GetScreenRect(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  wxRect result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_GetScreenRect" "', expected argument " "1"" of type '" "wxWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxWindow const *)arg1)->GetScreenRect();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxRect(static_cast< const wxRect& >(result))), SWIGTYPE_p_wxRect, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -43963,7 +44066,7 @@ fail:
 SWIGINTERN PyObject *_wrap_ItemContainer_GetCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
-  int result;
+  size_t result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -43977,11 +44080,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_GetCount(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< wxItemContainer * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (int)((wxItemContainer const *)arg1)->GetCount();
+    result = (size_t)((wxItemContainer const *)arg1)->GetCount();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_From_int(static_cast< int >(result));
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -53084,6 +53187,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_SetClientRect", (PyCFunction) _wrap_Window_SetClientRect, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetPosition", (PyCFunction)_wrap_Window_GetPosition, METH_O, NULL},
 	 { (char *)"Window_GetPositionTuple", (PyCFunction)_wrap_Window_GetPositionTuple, METH_O, NULL},
+	 { (char *)"Window_GetScreenPosition", (PyCFunction)_wrap_Window_GetScreenPosition, METH_O, NULL},
+	 { (char *)"Window_GetScreenPositionTuple", (PyCFunction)_wrap_Window_GetScreenPositionTuple, METH_O, NULL},
+	 { (char *)"Window_GetScreenRect", (PyCFunction)_wrap_Window_GetScreenRect, METH_O, NULL},
 	 { (char *)"Window_GetSize", (PyCFunction)_wrap_Window_GetSize, METH_O, NULL},
 	 { (char *)"Window_GetSizeTuple", (PyCFunction)_wrap_Window_GetSizeTuple, METH_O, NULL},
 	 { (char *)"Window_GetRect", (PyCFunction)_wrap_Window_GetRect, METH_O, NULL},

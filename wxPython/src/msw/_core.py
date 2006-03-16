@@ -7754,7 +7754,10 @@ class Window(EvtHandler):
         """
         GetPosition(self) -> Point
 
-        Get the window's position.
+        Get the window's position.  Notice that the position is in client
+        coordinates for child windows and screen coordinates for the top level
+        ones, use `GetScreenPosition` if you need screen coordinates for all
+        kinds of windows.
         """
         return _core_.Window_GetPosition(*args, **kwargs)
 
@@ -7762,9 +7765,37 @@ class Window(EvtHandler):
         """
         GetPositionTuple() -> (x,y)
 
-        Get the window's position.
+        Get the window's position.  Notice that the position is in client
+        coordinates for child windows and screen coordinates for the top level
+        ones, use `GetScreenPosition` if you need screen coordinates for all
+        kinds of windows.
         """
         return _core_.Window_GetPositionTuple(*args, **kwargs)
+
+    def GetScreenPosition(*args, **kwargs):
+        """
+        GetScreenPosition(self) -> Point
+
+        Get the position of the window in screen coordinantes.
+        """
+        return _core_.Window_GetScreenPosition(*args, **kwargs)
+
+    def GetScreenPositionTuple(*args, **kwargs):
+        """
+        GetScreenPositionTuple() -> (x,y)
+
+        Get the position of the window in screen coordinantes.
+        """
+        return _core_.Window_GetScreenPositionTuple(*args, **kwargs)
+
+    def GetScreenRect(*args, **kwargs):
+        """
+        GetScreenRect(self) -> Rect
+
+        Returns the size and position of the window in screen coordinantes as
+        a `wx.Rect` object.
+        """
+        return _core_.Window_GetScreenRect(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
         """
@@ -7786,7 +7817,7 @@ class Window(EvtHandler):
         """
         GetRect(self) -> Rect
 
-        Returns the size and position of the window as a wx.Rect object.
+        Returns the size and position of the window as a `wx.Rect` object.
         """
         return _core_.Window_GetRect(*args, **kwargs)
 
@@ -10535,7 +10566,7 @@ class ItemContainer(object):
 
     def GetCount(*args, **kwargs):
         """
-        GetCount(self) -> int
+        GetCount(self) -> size_t
 
         Returns the number of items in the control.
         """

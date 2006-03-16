@@ -4701,7 +4701,7 @@ class RendererNative(object):
         """
         DrawHeaderButton(self, Window win, DC dc, Rect rect, int flags=0)
 
-        Draw the header control button (such as whar is used by `wx.ListCtrl`
+        Draw the header control button (such as what is used by `wx.ListCtrl`
         in report mode.)
         """
         return _gdi_.RendererNative_DrawHeaderButton(*args, **kwargs)

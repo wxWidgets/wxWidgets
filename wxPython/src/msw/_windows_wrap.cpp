@@ -3008,7 +3008,7 @@ public:
     //
     // the base class version doesn't do anything
     //    virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
-    DEC_PYCALLBACK__DCRECTSIZET_constpure(OnDrawSeparator);
+    DEC_PYCALLBACK__DCRECTSIZET2_const(OnDrawSeparator);
 
 
     // this method is used to draw the items background and, maybe, a border
@@ -3029,7 +3029,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyVListBox, wxVListBox);
 
 IMP_PYCALLBACK__DCRECTSIZET_constpure(wxPyVListBox, wxVListBox, OnDrawItem);
 IMP_PYCALLBACK_COORD_SIZET_constpure (wxPyVListBox, wxVListBox, OnMeasureItem);
-IMP_PYCALLBACK__DCRECTSIZET_constpure(wxPyVListBox, wxVListBox, OnDrawSeparator);
+IMP_PYCALLBACK__DCRECTSIZET2_const   (wxPyVListBox, wxVListBox, OnDrawSeparator);
 IMP_PYCALLBACK__DCRECTSIZET_const    (wxPyVListBox, wxVListBox, OnDrawBackground);
 
 
@@ -3080,6 +3080,10 @@ public:
     // this function may be overridden to decorate HTML returned by OnGetItem()
     DEC_PYCALLBACK_STRING_SIZET(OnGetItemMarkup);
 
+    // These are from wxVListBox
+    DEC_PYCALLBACK__DCRECTSIZET2_const(OnDrawSeparator);
+    DEC_PYCALLBACK__DCRECTSIZET_const(OnDrawBackground);
+
 // TODO:
 //     // this method allows to customize the selection appearance: it may be used
 //     // to specify the colour of the text which normally has the given colour
@@ -3103,6 +3107,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyHtmlListBox, wxHtmlListBox)
 
 IMP_PYCALLBACK_STRING_SIZET_pure(wxPyHtmlListBox, wxHtmlListBox, OnGetItem);
 IMP_PYCALLBACK_STRING_SIZET     (wxPyHtmlListBox, wxHtmlListBox, OnGetItemMarkup);
+IMP_PYCALLBACK__DCRECTSIZET2_const   (wxPyHtmlListBox, wxHtmlListBox, OnDrawSeparator);
+IMP_PYCALLBACK__DCRECTSIZET_const    (wxPyHtmlListBox, wxHtmlListBox, OnDrawBackground);
 
 
 
@@ -15198,6 +15204,120 @@ SWIGINTERN PyObject *_wrap_VListBox_SetSelectionBackground(PyObject *SWIGUNUSEDP
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetSelectionBackground((wxColour const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VListBox_OnDrawSeparator(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyVListBox *arg1 = (wxPyVListBox *) 0 ;
+  wxDC *arg2 = 0 ;
+  wxRect *arg3 = 0 ;
+  size_t arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  wxRect temp3 ;
+  size_t val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "dc",(char *) "rect",(char *) "n", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:VListBox_OnDrawSeparator",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyVListBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VListBox_OnDrawSeparator" "', expected argument " "1"" of type '" "wxPyVListBox const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyVListBox * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDC,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VListBox_OnDrawSeparator" "', expected argument " "2"" of type '" "wxDC &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VListBox_OnDrawSeparator" "', expected argument " "2"" of type '" "wxDC &""'"); 
+  }
+  arg2 = reinterpret_cast< wxDC * >(argp2);
+  {
+    arg3 = &temp3;
+    if ( ! wxRect_helper(obj2, &arg3)) SWIG_fail;
+  }
+  ecode4 = SWIG_AsVal_size_t(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "VListBox_OnDrawSeparator" "', expected argument " "4"" of type '" "size_t""'");
+  } 
+  arg4 = static_cast< size_t >(val4);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    ((wxPyVListBox const *)arg1)->OnDrawSeparator(*arg2,*arg3,arg4);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VListBox_OnDrawBackground(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyVListBox *arg1 = (wxPyVListBox *) 0 ;
+  wxDC *arg2 = 0 ;
+  wxRect *arg3 = 0 ;
+  size_t arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  wxRect temp3 ;
+  size_t val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "dc",(char *) "rect",(char *) "n", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:VListBox_OnDrawBackground",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyVListBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VListBox_OnDrawBackground" "', expected argument " "1"" of type '" "wxPyVListBox const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyVListBox * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDC,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VListBox_OnDrawBackground" "', expected argument " "2"" of type '" "wxDC &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VListBox_OnDrawBackground" "', expected argument " "2"" of type '" "wxDC &""'"); 
+  }
+  arg2 = reinterpret_cast< wxDC * >(argp2);
+  {
+    arg3 = &temp3;
+    if ( ! wxRect_helper(obj2, &arg3)) SWIG_fail;
+  }
+  ecode4 = SWIG_AsVal_size_t(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "VListBox_OnDrawBackground" "', expected argument " "4"" of type '" "size_t""'");
+  } 
+  arg4 = static_cast< size_t >(val4);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    ((wxPyVListBox const *)arg1)->OnDrawBackground(*arg2,(wxRect const &)*arg3,arg4);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -30767,6 +30887,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VListBox_SetMargins", (PyCFunction) _wrap_VListBox_SetMargins, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VListBox_SetMarginsXY", (PyCFunction) _wrap_VListBox_SetMarginsXY, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VListBox_SetSelectionBackground", (PyCFunction) _wrap_VListBox_SetSelectionBackground, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VListBox_OnDrawSeparator", (PyCFunction) _wrap_VListBox_OnDrawSeparator, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VListBox_OnDrawBackground", (PyCFunction) _wrap_VListBox_OnDrawBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VListBox_swigregister", VListBox_swigregister, METH_VARARGS, NULL},
 	 { (char *)"VListBox_swiginit", VListBox_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_HtmlListBox", (PyCFunction) _wrap_new_HtmlListBox, METH_VARARGS | METH_KEYWORDS, NULL},

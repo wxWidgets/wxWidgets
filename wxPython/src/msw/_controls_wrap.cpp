@@ -2870,6 +2870,21 @@ SWIGINTERN wxString wxTextCtrl_GetString(wxTextCtrl *self,long from,long to){
  static const wxString wxPyRadioBoxNameStr(wxRadioBoxNameStr); 
  static const wxString wxPyRadioButtonNameStr(wxRadioButtonNameStr); 
 
+SWIGINTERNINLINE PyObject* 
+SWIG_From_unsigned_SS_long  (unsigned long value)
+{
+  return (value > LONG_MAX) ?
+    PyLong_FromUnsignedLong(value) : PyInt_FromLong(static_cast< long >(value)); 
+}
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_size_t  (size_t value)
+{    
+  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
+}
+
+
 #include <wx/slider.h>
 
 
@@ -2896,50 +2911,12 @@ public:
 
  static const wxString wxPyNotebookNameStr(wxNotebookNameStr); 
 
-SWIGINTERNINLINE PyObject* 
-SWIG_From_unsigned_SS_long  (unsigned long value)
-{
-  return (value > LONG_MAX) ?
-    PyLong_FromUnsignedLong(value) : PyInt_FromLong(static_cast< long >(value)); 
-}
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_size_t  (size_t value)
-{    
-  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
-}
-
-
 SWIGINTERNINLINE int
 SWIG_AsVal_size_t (PyObject * obj, size_t *val)
 {
   unsigned long v;
   int res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
   if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
-  return res;
-}
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_unsigned_SS_int  (unsigned int value)
-{    
-  return SWIG_From_unsigned_SS_long  (value);
-}
-
-
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_int (PyObject * obj, unsigned int *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v > UINT_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = static_cast< unsigned int >(v);
-    }
-  }  
   return res;
 }
 
@@ -3145,6 +3122,29 @@ public:
 
 IMPLEMENT_ABSTRACT_CLASS(wxPyTreeCtrl, wxTreeCtrl);
 
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_unsigned_SS_int  (unsigned int value)
+{    
+  return SWIG_From_unsigned_SS_long  (value);
+}
+
+
+SWIGINTERN int
+SWIG_AsVal_unsigned_SS_int (PyObject * obj, unsigned int *val)
+{
+  unsigned long v;
+  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v > UINT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = static_cast< unsigned int >(v);
+    }
+  }  
+  return res;
+}
 
 SWIGINTERN wxPyTreeItemData *wxPyTreeCtrl_GetItemData(wxPyTreeCtrl *self,wxTreeItemId const &item){
             wxPyTreeItemData* data = (wxPyTreeItemData*)self->GetItemData(item);
@@ -16319,7 +16319,7 @@ fail:
 SWIGINTERN PyObject *_wrap_RadioBox_GetCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxRadioBox *arg1 = (wxRadioBox *) 0 ;
-  int result;
+  size_t result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -16333,11 +16333,11 @@ SWIGINTERN PyObject *_wrap_RadioBox_GetCount(PyObject *SWIGUNUSEDPARM(self), PyO
   arg1 = reinterpret_cast< wxRadioBox * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (int)((wxRadioBox const *)arg1)->GetCount();
+    result = (size_t)((wxRadioBox const *)arg1)->GetCount();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_From_int(static_cast< int >(result));
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -19156,7 +19156,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BookCtrlBase_GetInternalBorder(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxBookCtrlBase *arg1 = (wxBookCtrlBase *) 0 ;
-  unsigned int result;
+  size_t result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -19170,11 +19170,11 @@ SWIGINTERN PyObject *_wrap_BookCtrlBase_GetInternalBorder(PyObject *SWIGUNUSEDPA
   arg1 = reinterpret_cast< wxBookCtrlBase * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (unsigned int)((wxBookCtrlBase const *)arg1)->GetInternalBorder();
+    result = (size_t)((wxBookCtrlBase const *)arg1)->GetInternalBorder();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
   return NULL;
@@ -19184,10 +19184,10 @@ fail:
 SWIGINTERN PyObject *_wrap_BookCtrlBase_SetInternalBorder(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxBookCtrlBase *arg1 = (wxBookCtrlBase *) 0 ;
-  unsigned int arg2 ;
+  size_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int val2 ;
+  size_t val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -19201,11 +19201,11 @@ SWIGINTERN PyObject *_wrap_BookCtrlBase_SetInternalBorder(PyObject *SWIGUNUSEDPA
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BookCtrlBase_SetInternalBorder" "', expected argument " "1"" of type '" "wxBookCtrlBase *""'"); 
   }
   arg1 = reinterpret_cast< wxBookCtrlBase * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BookCtrlBase_SetInternalBorder" "', expected argument " "2"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BookCtrlBase_SetInternalBorder" "', expected argument " "2"" of type '" "size_t""'");
   } 
-  arg2 = static_cast< unsigned int >(val2);
+  arg2 = static_cast< size_t >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetInternalBorder(arg2);

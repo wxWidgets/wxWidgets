@@ -2332,7 +2332,7 @@ class RadioBox(_core.Control):
         return _controls_.RadioBox_SetStringSelection(*args, **kwargs)
 
     def GetCount(*args, **kwargs):
-        """GetCount(self) -> int"""
+        """GetCount(self) -> size_t"""
         return _controls_.RadioBox_GetCount(*args, **kwargs)
 
     def FindString(*args, **kwargs):
@@ -2804,11 +2804,11 @@ class BookCtrlBase(_core.Control):
         return _controls_.BookCtrlBase_CalcSizeFromPage(*args, **kwargs)
 
     def GetInternalBorder(*args, **kwargs):
-        """GetInternalBorder(self) -> unsigned int"""
+        """GetInternalBorder(self) -> size_t"""
         return _controls_.BookCtrlBase_GetInternalBorder(*args, **kwargs)
 
     def SetInternalBorder(*args, **kwargs):
-        """SetInternalBorder(self, unsigned int internalBorder)"""
+        """SetInternalBorder(self, size_t internalBorder)"""
         return _controls_.BookCtrlBase_SetInternalBorder(*args, **kwargs)
 
     def IsVertical(*args, **kwargs):
