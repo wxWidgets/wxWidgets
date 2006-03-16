@@ -124,7 +124,7 @@ public:
                                         wxDC& dc,
                                         const wxRect& rect,
                                         int flags = 0),
-        "Draw the header control button (such as whar is used by `wx.ListCtrl`
+        "Draw the header control button (such as what is used by `wx.ListCtrl`
 in report mode.)", "");
     
 
