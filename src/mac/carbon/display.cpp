@@ -77,7 +77,7 @@ private:
 class wxDisplayFactoryMacOSX : public wxDisplayFactory
 {
 public:
-    wxDisplayFactoryMacOSX();
+    wxDisplayFactoryMacOSX() {}
 
     virtual wxDisplayImpl *CreateDisplay(size_t n);
     virtual size_t GetCount();
