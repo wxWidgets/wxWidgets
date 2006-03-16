@@ -171,7 +171,7 @@ wxDisplayImpl *wxDisplayFactoryX11::CreateDisplay(size_t n)
 #define wxCVM2(v, dc) wxVideoMode(v.hdisplay, v.vdisplay, DefaultDepth((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay())), wxCRR2(v,dc))
 #define wxCVM(v) wxCVM2(v, v.dotclock)
 
-wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& mode) const
+wxArrayVideoModes wxDisplayImplX11::GetModes(const wxVideoMode& mode) const
 {
     //Convenience...
     Display* pDisplay = (Display*) wxGetDisplay(); //default display
@@ -205,7 +205,7 @@ wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& mode) const
     return Modes;
 }
 
-wxVideoMode wxDisplay::GetCurrentMode() const
+wxVideoMode wxDisplayImplX11::GetCurrentMode() const
 {
   XF86VidModeModeLine VM;
   int nDotClock;
@@ -215,7 +215,7 @@ wxVideoMode wxDisplay::GetCurrentMode() const
   return wxCVM2(VM, nDotClock);
 }
 
-bool wxDisplay::ChangeMode(const wxVideoMode& mode)
+bool wxDisplayImplX11::ChangeMode(const wxVideoMode& mode)
 {
     XF86VidModeModeInfo** ppXModes; //Enumerated Modes (Don't forget XFree() :))
     int nNumModes; //Number of modes enumerated....
@@ -264,7 +264,7 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 
 #else // !HAVE_X11_EXTENSIONS_XF86VMODE_H
 
-wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& mode) const
+wxArrayVideoModes wxDisplayImplX11::GetModes(const wxVideoMode& mode) const
 {
     int count_return;
     int* depths = XListDepths((Display*)wxGetDisplay(), 0, &count_return);
@@ -281,13 +281,13 @@ wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& mode) const
     return modes;
 }
 
-wxVideoMode wxDisplay::GetCurrentMode() const
+wxVideoMode wxDisplayImplX11::GetCurrentMode() const
 {
     // Not implemented
     return wxVideoMode();
 }
 
-bool wxDisplay::ChangeMode(const wxVideoMode& mode)
+bool wxDisplayImplX11::ChangeMode(const wxVideoMode& mode)
 {
     // Not implemented
     return false;
