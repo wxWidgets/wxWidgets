@@ -375,6 +375,8 @@ private:
     // we have 2 implementations for modern Windows: one using standard Win32
     // and another using DirectDraw, the choice between them is done using a
     // system option
+
+#ifdef wxUSE_DIRECTDRAW
     if ( wxSystemOptions::GetOptionInt(_T("msw.display.directdraw")) )
     {
         wxDisplayFactoryDirectDraw *factoryDD = new wxDisplayFactoryDirectDraw;
@@ -383,6 +385,7 @@ private:
 
         delete factoryDD;
     }
+#endif // wxUSE_DIRECTDRAW
 
     wxDisplayFactoryMultimon *factoryMM = new wxDisplayFactoryMultimon;
     if ( factoryMM->IsOk() )
