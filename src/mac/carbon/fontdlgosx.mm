@@ -147,6 +147,7 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     SetWindowGroup(carbonWindowRef , GetWindowGroupOfClass(kMovableModalWindowClass));
     
     [fontPanel setFloatingPanel:NO] ;
+    [[fontPanel standardWindowButton:NSWindowCloseButton] setEnabled:NO] ;
     
     wxMacFontPanelAccView* accessoryView = (wxMacFontPanelAccView*) [fontPanel accessoryView] ;
     if ( accessoryView == nil)
@@ -166,6 +167,8 @@ int RunMixedFontDialog(wxFontDialog* dialog)
 
     [NSApp endModalSession:session];
 
+    // if we don't reenable it, FPShowHideFontPanel does not work
+    [[fontPanel standardWindowButton:NSWindowCloseButton] setEnabled:YES] ;
     if( FPIsFontPanelVisible())
         FPShowHideFontPanel() ;
     
