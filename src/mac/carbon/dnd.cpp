@@ -428,11 +428,9 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 #if !TARGET_CARBON // TODO
     ev = (EventRecord*) wxTheApp->MacGetCurrentEvent();
 #else
-    {
-        EventRecord rec;
-        ev = &rec;
-        wxMacConvertEventToRecord( (EventRef) wxTheApp->MacGetCurrentEvent(), &rec );
-    }
+    EventRecord rec;
+    ev = &rec;
+    wxMacConvertEventToRecord( (EventRef) wxTheApp->MacGetCurrentEvent(), &rec );
 #endif
 
     const short dragRegionOuterBoundary = 10;
