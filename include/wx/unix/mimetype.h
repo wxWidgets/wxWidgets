@@ -98,11 +98,6 @@ private:
                                    const wxArrayString& dirs);
     void GetGnomeMimeInfo(const wxString& sExtraDir);
 
-    // write gnome files
-    bool CheckGnomeDirsExist();
-    bool WriteGnomeKeyFile(int index, bool delete_index);
-    bool WriteGnomeMimeFile(int index, bool delete_index);
-
     // read KDE
     void LoadKDELinksForMimeSubtype(const wxString& dirbase,
                                     const wxString& subdir,
