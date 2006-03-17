@@ -816,6 +816,19 @@ private :
 
 ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, const Point& location , WindowRef window , ControlPartCode *outPart ) ;
 
+#if WORDS_BIGENDIAN
+    inline Rect* wxMacGetPictureBounds( PicHandle pict , Rect* rect ) 
+    { 
+       *rect = (**pict).picFrame ; 
+        return rect ;
+    }
+#else
+    inline Rect* wxMacGetPictureBounds( PicHandle pict , Rect* rect ) 
+    {   
+        return QDGetPictureBounds( pict , rect ) ;
+    }
+#endif
+
 #endif // wxUSE_GUI
 
 #define wxMAC_DEFINE_PROC_GETTER( UPP , x ) \
