@@ -332,7 +332,7 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
             // set these variables so that they could be also fixed in
             // CBN_EDITCHANGE below
             sel = GetSelection();
-            value = GetValue();
+            value = GetStringSelection();
             {
                 wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, GetId());
                 event.SetEventObject(this);
