@@ -2059,7 +2059,7 @@ public:
     //
     // the base class version doesn't do anything
     //    virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
-    DEC_PYCALLBACK__DCRECTSIZET_constpure(OnDrawSeparator);
+    DEC_PYCALLBACK__DCRECTSIZET2_const(OnDrawSeparator);
 
 
     // this method is used to draw the items background and, maybe, a border
@@ -2080,7 +2080,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyVListBox, wxVListBox);
 
 IMP_PYCALLBACK__DCRECTSIZET_constpure(wxPyVListBox, wxVListBox, OnDrawItem);
 IMP_PYCALLBACK_COORD_SIZET_constpure (wxPyVListBox, wxVListBox, OnMeasureItem);
-IMP_PYCALLBACK__DCRECTSIZET_constpure(wxPyVListBox, wxVListBox, OnDrawSeparator);
+IMP_PYCALLBACK__DCRECTSIZET2_const   (wxPyVListBox, wxVListBox, OnDrawSeparator);
 IMP_PYCALLBACK__DCRECTSIZET_const    (wxPyVListBox, wxVListBox, OnDrawBackground);
 
 
@@ -2131,6 +2131,10 @@ public:
     // this function may be overridden to decorate HTML returned by OnGetItem()
     DEC_PYCALLBACK_STRING_SIZET(OnGetItemMarkup);
 
+    // These are from wxVListBox
+    DEC_PYCALLBACK__DCRECTSIZET2_const(OnDrawSeparator);
+    DEC_PYCALLBACK__DCRECTSIZET_const(OnDrawBackground);
+
 // TODO:
 //     // this method allows to customize the selection appearance: it may be used
 //     // to specify the colour of the text which normally has the given colour
@@ -2154,6 +2158,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyHtmlListBox, wxHtmlListBox)
 
 IMP_PYCALLBACK_STRING_SIZET_pure(wxPyHtmlListBox, wxHtmlListBox, OnGetItem);
 IMP_PYCALLBACK_STRING_SIZET     (wxPyHtmlListBox, wxHtmlListBox, OnGetItemMarkup);
+IMP_PYCALLBACK__DCRECTSIZET2_const   (wxPyHtmlListBox, wxHtmlListBox, OnDrawSeparator);
+IMP_PYCALLBACK__DCRECTSIZET_const    (wxPyHtmlListBox, wxHtmlListBox, OnDrawBackground);
 
 
 
@@ -12859,6 +12865,102 @@ static PyObject *_wrap_VListBox_SetSelectionBackground(PyObject *, PyObject *arg
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetSelectionBackground((wxColour const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VListBox_base_OnDrawSeparator(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxPyVListBox *arg1 = (wxPyVListBox *) 0 ;
+    wxDC *arg2 = 0 ;
+    wxRect *arg3 = 0 ;
+    size_t arg4 ;
+    wxRect temp3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "dc",(char *) "rect",(char *) "n", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:VListBox_base_OnDrawSeparator",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyVListBox, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(2)) SWIG_fail;
+        if (arg2 == NULL) {
+            SWIG_null_ref("wxDC");
+        }
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = &temp3;
+        if ( ! wxRect_helper(obj2, &arg3)) SWIG_fail;
+    }
+    {
+        arg4 = static_cast<size_t >(SWIG_As_unsigned_SS_long(obj3)); 
+        if (SWIG_arg_fail(4)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        ((wxPyVListBox const *)arg1)->base_OnDrawSeparator(*arg2,*arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VListBox_base_OnDrawBackground(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    wxPyVListBox *arg1 = (wxPyVListBox *) 0 ;
+    wxDC *arg2 = 0 ;
+    wxRect *arg3 = 0 ;
+    size_t arg4 ;
+    wxRect temp3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "dc",(char *) "rect",(char *) "n", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:VListBox_base_OnDrawBackground",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyVListBox, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(2)) SWIG_fail;
+        if (arg2 == NULL) {
+            SWIG_null_ref("wxDC");
+        }
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = &temp3;
+        if ( ! wxRect_helper(obj2, &arg3)) SWIG_fail;
+    }
+    {
+        arg4 = static_cast<size_t >(SWIG_As_unsigned_SS_long(obj3)); 
+        if (SWIG_arg_fail(4)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        ((wxPyVListBox const *)arg1)->base_OnDrawBackground(*arg2,(wxRect const &)*arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -28551,6 +28653,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VListBox_SetMargins", (PyCFunction) _wrap_VListBox_SetMargins, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VListBox_SetMarginsXY", (PyCFunction) _wrap_VListBox_SetMarginsXY, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VListBox_SetSelectionBackground", (PyCFunction) _wrap_VListBox_SetSelectionBackground, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VListBox_base_OnDrawSeparator", (PyCFunction) _wrap_VListBox_base_OnDrawSeparator, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VListBox_base_OnDrawBackground", (PyCFunction) _wrap_VListBox_base_OnDrawBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VListBox_swigregister", VListBox_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_HtmlListBox", (PyCFunction) _wrap_new_HtmlListBox, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreHtmlListBox", (PyCFunction) _wrap_new_PreHtmlListBox, METH_VARARGS | METH_KEYWORDS, NULL},

@@ -2119,6 +2119,14 @@ class VListBox(VScrolledWindow):
         """SetSelectionBackground(self, Colour col)"""
         return _windows_.VListBox_SetSelectionBackground(*args, **kwargs)
 
+    def base_OnDrawSeparator(*args, **kwargs):
+        """base_OnDrawSeparator(self, DC dc, Rect rect, size_t n)"""
+        return _windows_.VListBox_base_OnDrawSeparator(*args, **kwargs)
+
+    def base_OnDrawBackground(*args, **kwargs):
+        """base_OnDrawBackground(self, DC dc, Rect rect, size_t n)"""
+        return _windows_.VListBox_base_OnDrawBackground(*args, **kwargs)
+
 
 class VListBoxPtr(VListBox):
     def __init__(self, this):
