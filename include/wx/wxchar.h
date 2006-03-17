@@ -880,7 +880,8 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
         #if defined(HAVE__VSNWPRINTF)
             #define wxVsnprintf_    _vsnwprintf
         /* MinGW?MSVCRT has the wrong vswprintf */
-        #elif defined(HAVE_VSWPRINTF) && !defined(__MINGW32__)
+		/* Mac OS X has a somehow buggy vswprintf */
+        #elif defined(HAVE_VSWPRINTF) && !defined(__MINGW32__) && !defined(__DARWIN__)
             #define wxVsnprintf_    vswprintf
         #endif
     #else /* ASCII */
