@@ -144,7 +144,7 @@ void * wxGetClipboardData( wxDataFormat dataFormat, long *len )
         return NULL;
     }
 
-    if ( dataFormat.GetType() == wxDF_TEXT )
+    if (dataFormat.GetType() == wxDF_TEXT)
         wxMacConvertNewlines10To13( (char*)data );
 
     return data;
@@ -160,19 +160,19 @@ wxClipboard::wxClipboard()
 
 wxClipboard::~wxClipboard()
 {
-    if (m_data)
+    if (m_data != NULL)
     {
         delete m_data;
-        m_data = (wxDataObject*)NULL;
+        m_data = NULL;
     }
 }
 
 void wxClipboard::Clear()
 {
-    if (m_data)
+    if (m_data != NULL)
     {
         delete m_data;
-        m_data = (wxDataObject*)NULL;
+        m_data = NULL;
     }
 
 #if TARGET_CARBON
@@ -242,11 +242,11 @@ bool wxClipboard::AddData( wxDataObject *data )
 
         size_t sz = data->GetDataSize( array[ i ] );
         void* buf = malloc( sz + 1 );
-        if ( buf )
+        if ( buf != NULL )
         {
             // empty the buffer because in some case GetDataHere does not fill buf
-            memset(buf, 0, sz + 1);
-            data->GetDataHere( array[ i ] , buf );
+            memset( buf, 0, sz + 1 );
+            data->GetDataHere( array[ i ], buf );
             OSType mactype = 0;
             switch ( array[i].GetType() )
             {
@@ -275,7 +275,7 @@ bool wxClipboard::AddData( wxDataObject *data )
                 break;
 
             default:
-                mactype = (OSType)(array[i].GetFormatId());
+                mactype = (OSType)(array[ i ].GetFormatId());
                 break;
             }
 
@@ -310,6 +310,8 @@ bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
     if ( m_data )
         return m_data->IsSupported( dataFormat );
 
+    bool hasData = false;
+
 #if TARGET_CARBON
     OSStatus err = noErr;
     ScrapRef scrapRef;
@@ -325,23 +327,22 @@ bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
         {
             err = GetScrapFlavorSize( scrapRef, dataFormat.GetFormatId(), &byteCount );
             if (err == noErr)
-                return true;
+                hasData = true;
         }
     }
 
-    return false;
-
 #else
-    long offset;
+
+    long offset = 0;
     Handle datahandle = NewHandle( 0 );
     HLock( datahandle );
     GetScrap( datahandle, dataFormat.GetFormatId(), &offset );
     HUnlock( datahandle );
-    bool hasData = GetHandleSize( datahandle ) > 0;
+    hasData = GetHandleSize( datahandle ) > 0;
     DisposeHandle( datahandle );
+#endif
 
     return hasData;
-#endif
 }
 
 bool wxClipboard::GetData( wxDataObject& data )
@@ -372,7 +373,7 @@ bool wxClipboard::GetData( wxDataObject& data )
                 else
                 {
                     char *d = new char[ dataSize ];
-                    m_data->GetDataHere( format, (void*) d );
+                    m_data->GetDataHere( format, (void*)d );
                     data.SetData( format, dataSize, d );
                     delete [] d;
                 }
@@ -413,6 +414,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     }
 
     delete [] array;
+
     return transferred;
 }
 

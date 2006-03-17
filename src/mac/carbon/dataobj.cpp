@@ -96,7 +96,7 @@ void wxDataFormat::SetType( wxDataFormatId dataType )
 
 wxString wxDataFormat::GetId() const
 {
-    wxCHECK_MSG( !IsStandard(), wxEmptyString ,
+    wxCHECK_MSG( !IsStandard(), wxEmptyString,
                  wxT("name of predefined format cannot be retrieved") );
 
     return m_id;
@@ -342,8 +342,8 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
 
     // ownership is transferred to the bitmap
     m_pictCreated = false;
-    Rect frame ;
-    wxMacGetPictureBounds( picHandle , &frame ) ;
+    Rect frame;
+    wxMacGetPictureBounds( picHandle, &frame );
 
     wxMetafile mf;
     mf.SetHMETAFILE( (WXHMETAFILE)m_pictHandle );
