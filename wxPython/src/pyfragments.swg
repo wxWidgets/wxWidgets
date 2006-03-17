@@ -4,9 +4,10 @@
 
 // The standard t_output_helper has been changed to return a list rather than
 // a tuple, we'll replace it with the old implementation here.  In SWIG 1.3.27
-// and earlier it is implemented as a $fragment, so it is only inserted in to
-// the modules that need it.  For SWIG 1.3.28 we just need to add a -D on the
-// compile command line to turn on this version of the AppendOuput function.
+// and earlier it is implemented as a $fragment, so it is only inserted into
+// the modules that need it.  For SWIG 1.3.28+ we just need to add a -D on the
+// compile command line to turn on the tuple version of the AppendOuput
+// function.
 #if SWIG_VERSION < 0x010328
 %fragment("t_output_helper","header")
 %{
