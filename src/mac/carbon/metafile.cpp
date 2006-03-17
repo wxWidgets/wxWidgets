@@ -178,7 +178,8 @@ bool wxMetaFile::Play(wxDC *dc)
 #else
         PicHandle pict = (PicHandle) GetHMETAFILE();
         wxMacPortSetter helper( dc );
-        DrawPicture( pict , &(**pict).picFrame );
+        Rect picFrame ;
+        DrawPicture( pict , wxMacGetPictureBounds( pict , &picFrame ) );
 #endif
     }
 
@@ -192,7 +193,8 @@ wxSize wxMetaFile::GetSize() const
     if ( Ok() )
     {
         PicHandle pict = (PicHandle) GetHMETAFILE() ;
-        Rect &r = (**pict).picFrame ;
+        Rect r ;
+        wxMacGetPictureBounds( pict , &r ) ;
         size.x = r.right - r.left ;
         size.y = r.bottom - r.top ;
     }

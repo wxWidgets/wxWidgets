@@ -342,7 +342,8 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
 
     // ownership is transferred to the bitmap
     m_pictCreated = false;
-    Rect frame = (**picHandle).picFrame;
+    Rect frame ;
+    wxMacGetPictureBounds( picHandle , &frame ) ;
 
     wxMetafile mf;
     mf.SetHMETAFILE( (WXHMETAFILE)m_pictHandle );
