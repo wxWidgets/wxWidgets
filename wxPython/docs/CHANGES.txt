@@ -77,7 +77,9 @@ E. A. Tacao.
 Added the wx.lib.mixins.listctrl.CheckListCtrlMixin class from Bruce
 Who, which makes it easy to put checkboxes on list control items.
 
-
+Applied a patch from Christian Kristukat to wx.lib.plot that adds
+scrollbars when the plot is zoomed in, and also the ability to grab a
+zoomed plot and move it around with a mouse drag.
 
 
 
