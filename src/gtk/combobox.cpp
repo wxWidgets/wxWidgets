@@ -80,6 +80,10 @@ gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
     // when the popup is hidden, throw a SELECTED event only if the combobox
     // selection changed.
     int curSelection = combo->GetCurrentSelection();
+    
+    // reset the selection flag to value meaning that it is hidden
+    g_SelectionBeforePopup = wxID_NONE;
+    
     if (g_SelectionBeforePopup != curSelection)
     {
         wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
@@ -95,8 +99,6 @@ gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
         combo->GetEventHandler()->ProcessEvent( event2 );
     }
 
-    // reset the selection flag to value meaning that it is hidden
-    g_SelectionBeforePopup = wxID_NONE;
 }
 }
 
