@@ -49,6 +49,10 @@ wxGTK:
   whole window upon resize. Reenable support for the
   wxNO_FULL_REPAINT_ON_RESIZE flag. Also disable refreshing
   custom controls when focusing in and out.
+- Change wxMimeTypesManager code to ignore /etc/mailcap and
+  to just read the MIME-types. Modifiying the MIME-types is
+  not allowed under GNOME anyways, so make it a no-op.
+- Speed up reading MIME database.
 
 wxMSW:
 
