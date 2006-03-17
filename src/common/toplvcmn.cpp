@@ -155,32 +155,70 @@ wxSize wxTopLevelWindowBase::GetDefaultSize()
 
 void wxTopLevelWindowBase::DoCentre(int dir)
 {
-    wxRect rectCentre;
+    // we need the display rect anyhow so store it first
+    int nDisplay = wxDisplay::GetFromWindow(this);
+    wxDisplay dpy(nDisplay == wxNOT_FOUND ? 0 : nDisplay);
+    const wxRect rectDisplay(dpy.GetClientArea());
+
+    // what should we centre this window on?
+    wxRect rectParent;
     if ( !(dir & wxCENTRE_ON_SCREEN) && GetParent() )
     {
         // centre on parent window: notice that we need screen coordinates for
         // positioning this TLW
-        rectCentre = GetParent()->GetScreenRect();
-    }
-    else
-    {
-        // we were explicitely asked to centre this window on the entire screen
-        // or if we have no parent anyhow and so can't centre on it
-#if wxUSE_DISPLAY
-        const int nDisplay = wxDisplay::GetFromWindow(this);
-        if ( nDisplay != wxNOT_FOUND )
+        rectParent = GetParent()->GetScreenRect();
+
+        // if the parent is entirely off screen (happens at least with MDI
+        // parent frame under Mac but could happen elsewhere too if the frame
+        // was hidden/moved away for some reason), don't use it as otherwise
+        // this window wouldn't be visible at all
+        if ( !rectDisplay.Inside(rectParent.GetTopLeft()) &&
+                !rectParent.Inside(rectParent.GetBottomRight()) )
         {
-            rectCentre = wxDisplay(nDisplay).GetGeometry();
-        }
-        else
-#endif // wxUSE_DISPLAY
-        {
-            wxDisplaySize(&rectCentre.width, &rectCentre.height);
+            // this is enough to make IsEmpty() test below pass
+            rectParent.width = 0;
         }
     }
 
-    // window may be at -1 if it's centered on a secondary display, for example
-    SetSize(GetRect().CentreIn(rectCentre, dir), wxSIZE_ALLOW_MINUS_ONE);
+    if ( rectParent.IsEmpty() )
+    {
+        // we were explicitely asked to centre this window on the entire screen
+        // or if we have no parent anyhow and so can't centre on it
+        rectParent = rectDisplay;
+    }
+
+    // the new window rect candidate
+    wxRect rect = GetRect().CentreIn(rectParent, dir);
+
+    // we don't want to place the window off screen if Centre() is called as
+    // this is (almost?) never wanted and it would be very difficult to prevent
+    // it from happening from the user code if we didn't check for it here
+    if ( rectDisplay.Inside(rect.GetTopLeft()) )
+    {
+        if ( !rectDisplay.Inside(rect.GetBottomRight()) )
+        {
+            // check if we can move the window so that the bottom right corner
+            // is visible without hiding the top left one
+            int dx = rectDisplay.GetRight() - rect.GetRight();
+            int dy = rectDisplay.GetBottom() - rect.GetBottom();
+            rect.Offset(dx, dy);
+        }
+        //else: the window top left and bottom right corner are both visible,
+        //      although the window might still be not entirely on screen (with
+        //      2 staggered displays for example) we wouldn't be able to
+        //      improve the layout much in such case, so just leave it as is
+    }
+    else // make top left corner visible
+    {
+        if ( rect.x < rectDisplay.x )
+            rect.x = rectDisplay.x;
+
+        if ( rect.y < rectDisplay.y )
+            rect.y = rectDisplay.y;
+    }
+
+    // -1 could be valid coordinate here if there are several displays
+    SetSize(rect, wxSIZE_ALLOW_MINUS_ONE);
 }
 
 // ----------------------------------------------------------------------------
