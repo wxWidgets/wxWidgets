@@ -219,3 +219,23 @@ wxInt32 wxScrollBar::MacControlHit( WXEVENTHANDLERREF handler, WXEVENTREF mevent
 
     return noErr;
 }
+
+
+wxSize wxScrollBar::DoGetBestSize() const
+{
+    int w = 100;
+    int h = 100;
+
+    if ( IsVertical() )
+    {
+        w = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+    }
+    else
+    {
+        h = wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+    }
+
+    wxSize best(w, h);
+    CacheBestSize(best);
+    return best;  
+}
