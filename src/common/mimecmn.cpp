@@ -453,6 +453,34 @@ bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
 #endif
 }
 
+//----------------------------------------------------------------------------
+// wxMimeTypesManagerFactory
+//----------------------------------------------------------------------------
+
+wxMimeTypesManagerFactory *wxMimeTypesManagerFactory::m_factory = NULL;
+
+/* static */ 
+void wxMimeTypesManagerFactory::SetFactory( wxMimeTypesManagerFactory *factory )
+{
+    if (wxMimeTypesManagerFactory::m_factory)
+        delete wxMimeTypesManagerFactory::m_factory;
+
+    wxMimeTypesManagerFactory::m_factory = factory;
+}
+
+/* static */ 
+wxMimeTypesManagerFactory *wxMimeTypesManagerFactory::GetFactory()
+{
+    if (!wxMimeTypesManagerFactory::m_factory)
+        wxMimeTypesManagerFactory::m_factory = new wxMimeTypesManagerFactory;
+
+    return wxMimeTypesManagerFactory::m_factory;
+}
+
+wxMimeTypesManagerImpl *wxMimeTypesManagerFactory::CreateMimeTypesManagerImpl()
+{
+    return new wxMimeTypesManagerImpl;
+}
 
 // ----------------------------------------------------------------------------
 // wxMimeTypesManager
@@ -461,7 +489,7 @@ bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
 void wxMimeTypesManager::EnsureImpl()
 {
     if ( !m_impl )
-        m_impl = new wxMimeTypesManagerImpl;
+        m_impl = wxMimeTypesManagerFactory::GetFactory()->CreateMimeTypesManagerImpl();
 }
 
 bool wxMimeTypesManager::IsOfType(const wxString& mimeType,
