@@ -370,7 +370,7 @@ typedef pid_t GPid;
 
 #define wxUSE_CARET         1
 
-#define wxUSE_DISPLAY       1
+#define wxUSE_DISPLAY       0
 
 #define wxUSE_GEOMETRY            1
 
