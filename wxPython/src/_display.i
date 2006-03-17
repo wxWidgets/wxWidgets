@@ -172,6 +172,12 @@ it is not shown at all.", "");
         virtual wxRect , GetGeometry() const,
         "Returns the bounding rectangle of the display whose index was passed
 to the constructor.", "");
+
+    
+    DocDeclStr(
+        wxRect , GetClientArea() const,
+        "Get the client area of the display, i.e. without taskbars and such", "");
+    
     
 
     DocDeclStr(
