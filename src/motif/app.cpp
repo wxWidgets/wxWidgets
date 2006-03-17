@@ -374,7 +374,7 @@ WXWidget wxCreateTopLevelRealizedWidget( WXDisplay* WXUNUSED(display) )
 {
     Widget rTlw = XtVaCreateWidget( "dummy_widget", topLevelShellWidgetClass,
                                     (Widget)wxTheApp->GetTopLevelWidget(),
-                                     NULL, 0 );
+                                     NULL );
     XtSetMappedWhenManaged( rTlw, False );
     XtRealizeWidget( rTlw );
 
