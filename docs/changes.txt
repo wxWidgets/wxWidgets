@@ -53,6 +53,7 @@ wxGTK:
   to just read the MIME-types. Modifiying the MIME-types is
   not allowed under GNOME anyways, so make it a no-op.
 - Speed up reading MIME database.
+- wxClipboard fixes (thanks to Timothée Lecomte).
 
 wxMSW:
 
