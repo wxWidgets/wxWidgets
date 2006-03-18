@@ -903,6 +903,7 @@ if USE_SWIG:
                        '-fvirtual',
                        '-fastinit',
                        '-fastunpack',
+                       #'-outputtuple',  Currently setting this with a -D define above
                        ]
              
 if UNICODE:

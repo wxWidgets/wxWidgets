@@ -4,7 +4,7 @@ RCS file: /cvsroot/swig/SWIG/Lib/typemaps/exception.swg,v
 retrieving revision 1.8
 diff -u -4 -r1.8 exception.swg
 --- Lib/typemaps/exception.swg	7 Mar 2006 00:14:10 -0000	1.8
-+++ Lib/typemaps/exception.swg	10 Mar 2006 00:39:14 -0000
++++ Lib/typemaps/exception.swg	17 Mar 2006 00:10:52 -0000
 @@ -12,9 +12,9 @@
  
  /* macros for error manipulation */
@@ -19,10 +19,10 @@ diff -u -4 -r1.8 exception.swg
 Index: Source/Modules/python.cxx
 ===================================================================
 RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
-retrieving revision 1.202
-diff -u -4 -r1.202 python.cxx
---- Source/Modules/python.cxx	7 Mar 2006 22:02:54 -0000	1.202
-+++ Source/Modules/python.cxx	10 Mar 2006 00:39:14 -0000
+retrieving revision 1.203
+diff -u -4 -r1.203 python.cxx
+--- Source/Modules/python.cxx	16 Mar 2006 01:46:50 -0000	1.203
++++ Source/Modules/python.cxx	17 Mar 2006 00:10:52 -0000
 @@ -39,9 +39,8 @@
  static  File         *f_directors_h = 0;
  static  File         *f_init = 0;

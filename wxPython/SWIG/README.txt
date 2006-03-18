@@ -8,7 +8,7 @@ wxPython.  These have been submitted to SWIG's SourceForge patch
 tracker, so hopefully they will get incorporated into the main SWIG
 source tree soon.
 
-wxPython currently uses the 1.3.27 version of SWIG, which you can get
+wxPython currently uses the 1.3.29 version of SWIG, which you can get
 from https://sourceforge.net/projects/swig/, plus the patch(es) in
 this directory.  Download the SWIG sources, apply the patch(es) here
 and then build as normal.  I have also have made available a tarball
@@ -23,6 +23,21 @@ patched version to use a different --prefix and then specify that
 executable when running setup.py, like this:
 
 	python setup.py SWIG=/path/to/my/swig [other params]
+
+
+
+------------------------------------------------------------------------
+
+swig-1.3.29.patch
+
+    SWIG changed how the import statments are output to the proxy
+    file, but this also caused the order to change (they all moved to
+    the very top of the file) so this broke the module docstring, as
+    well as some behavior that Chandler development is depending upon,
+    so this patch changes back to how it was done in prior releases.
+
+    Changed the exception message used for TypeErrors to make a little
+    more sense.
 
 
 
