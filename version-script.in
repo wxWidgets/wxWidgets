@@ -17,7 +17,7 @@
         # note no trailing '*' or it also matches wxGetDiskSpace
         *wxString*wxLongLongNative;
         *wxString*wxULongLongNative;
-        *wxWindowGtk*SetDoubleBuffered*;
+        *wxWindow*SetDoubleBuffered*;
         *wx_truncate_cast_impl*;
 };
 
