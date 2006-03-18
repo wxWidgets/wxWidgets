@@ -3378,6 +3378,18 @@ void wxWindowGTK::OnInternalIdle()
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
+#ifdef __WXGTK20__
+#if wxABI_VERSION >= 20603 /* 2.6.3+ only */
+void wxWindowGTK::SetDoubleBuffered( bool on )
+{
+    wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
+
+    if (m_wxwindow)
+        gtk_widget_set_double_buffered( m_wxwindow, on );
+}
+#endif
+#endif
+
 void wxWindowGTK::DoGetSize( int *width, int *height ) const
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
