@@ -1254,7 +1254,6 @@ void wxApp::MacHandleOneEvent( WXEVENTREF evr )
 #endif // wxUSE_THREADS
 }
 
-long wxMacTranslateKey(unsigned char key, unsigned char code) ;
 long wxMacTranslateKey(unsigned char key, unsigned char code)
 {
     long retval = key ;
