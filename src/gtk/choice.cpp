@@ -608,5 +608,4 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return GetDefaultAttributesFromGTKWidget(gtk_option_menu_new);
 }
 
-
 #endif // wxUSE_CHOICE
