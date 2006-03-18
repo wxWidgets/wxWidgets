@@ -164,12 +164,12 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxChar *title)
        : wxFrame(NULL, wxID_ANY, title)
 {
-    if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_SMALL)
-        SetSize(wxSize(450, 340));
-
     m_listCtrl = NULL;
     m_logWindow = NULL;
     m_smallVirtual = false;
+
+    if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_SMALL)
+        SetSize(wxSize(450, 340));
 
     // Give it an icon
     SetIcon( wxICON(mondrian) );
