@@ -1670,8 +1670,6 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     event.m_keyCode = keyval ;
 #if wxUSE_UNICODE
     event.m_uniChar = uniChar ;
-    if ( event.GetEventType() == wxEVT_CHAR )
-        event.m_keyCode = uniChar ;
 #endif
 
     event.m_rawCode = keymessage;
