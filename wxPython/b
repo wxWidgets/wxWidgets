@@ -66,7 +66,6 @@ FLAGS="$FLAGS $PORTFLAGS $UNIFLAG"
 
 
 
-
 # "c" --> clean
 if [ "$1" =  "c" ]; then
     shift
