@@ -477,7 +477,7 @@ For example:
   cd build-debug
   ../configure --with-msw --enable-debug --enable-debug_gdb --disable-shared
   make
-  make install % This step is optional, see note (8) below.
+  make install % This step is optional, see note (6) below.
   cd samples/minimal
   make
   ./minimal.exe
