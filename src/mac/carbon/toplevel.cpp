@@ -86,13 +86,15 @@ extern long wxMacTranslateKey(unsigned char key, unsigned char code) ;
 static const EventTypeSpec eventList[] =
 {
     // TODO: remove control related event like key and mouse (except for WindowLeave events)
-#if 1
+
     { kEventClassKeyboard, kEventRawKeyDown } ,
     { kEventClassKeyboard, kEventRawKeyRepeat } ,
     { kEventClassKeyboard, kEventRawKeyUp } ,
     { kEventClassKeyboard, kEventRawKeyModifiersChanged } ,
-#endif
 
+    { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
+    { kEventClassTextInput, kEventTextInputUpdateActiveInputArea } ,
+    
     { kEventClassWindow , kEventWindowShown } ,
     { kEventClassWindow , kEventWindowActivated } ,
     { kEventClassWindow , kEventWindowDeactivated } ,
@@ -795,12 +797,19 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
     return result ;
 }
 
+// mix this in from window.cpp
+pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , EventRef event , void *data ) ;
+
 pascal OSStatus wxMacTopLevelEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
 
     switch ( GetEventClass( event ) )
     {
+        case kEventClassTextInput :
+            result = wxMacUnicodeTextEventHandler( handler, event , data ) ;
+            break ;
+
         case kEventClassKeyboard :
             result = KeyboardEventHandler( handler, event , data ) ;
             break ;
