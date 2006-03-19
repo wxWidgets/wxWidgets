@@ -208,6 +208,10 @@ application using wx.HelpProvider.Set().", "");
 class wxHelpProvider 
 {
 public:
+    
+    ~wxHelpProvider();
+    
+    
     %disownarg( wxHelpProvider *helpProvider );
     %newobject Set;
     DocDeclStr(
