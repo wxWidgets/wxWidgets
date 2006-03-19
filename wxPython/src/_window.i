@@ -1757,7 +1757,7 @@ already on top/bottom and nothing was done.", "");
         void , SetHelpText(const wxString& text),
         "Sets the help text to be used as context-sensitive help for this
 window.  Note that the text is actually stored by the current
-wxHelpProvider implementation, and not in the window object itself.", "");
+`wx.HelpProvider` implementation, and not in the window object itself.", "");
     
 
     DocDeclStr(
@@ -1770,7 +1770,7 @@ one.", "");
         wxString , GetHelpText() const,
         "Gets the help text to be used as context-sensitive help for this
 window.  Note that the text is actually stored by the current
-wxHelpProvider implementation, and not in the window object itself.", "");
+`wx.HelpProvider` implementation, and not in the window object itself.", "");
     
 
 
