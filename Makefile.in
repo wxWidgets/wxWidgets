@@ -1860,6 +1860,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/frame.h \
 	wx/gtk/gauge.h \
 	wx/gtk/gnome/gprint.h \
+	wx/gtk/gnome/gvfs.h \
 	wx/gtk/listbox.h \
 	wx/gtk/mdi.h \
 	wx/gtk/menu.h \
@@ -2468,6 +2469,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/dcbuffer.h \
 	wx/generic/calctrl.h \
 	wx/generic/datectrl.h \
+	wx/generic/dataview.h \
 	wx/generic/grid.h \
 	wx/generic/gridctrl.h \
 	wx/generic/gridsel.h \
@@ -2504,6 +2506,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/dcbuffer.h \
 	wx/generic/calctrl.h \
 	wx/generic/datectrl.h \
+	wx/generic/dataview.h \
 	wx/generic/grid.h \
 	wx/generic/gridctrl.h \
 	wx/generic/gridsel.h \
@@ -3790,6 +3793,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_frame.o \
 	monodll_gauge.o \
 	monodll_gprint.o \
+	monodll_gvfs.o \
 	monodll_listbox.o \
 	monodll_mdi.o \
 	monodll_menu.o \
@@ -4425,6 +4429,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_datavcmn.o \
 	monodll_calctrl.o \
+	monodll_datavgen.o \
 	monodll_datectlg.o \
 	monodll_grid.o \
 	monodll_gridctrl.o \
@@ -4447,6 +4452,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_datavcmn.o \
 	monodll_calctrl.o \
+	monodll_datavgen.o \
 	monodll_datectlg.o \
 	monodll_grid.o \
 	monodll_gridctrl.o \
@@ -5410,6 +5416,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_frame.o \
 	monolib_gauge.o \
 	monolib_gprint.o \
+	monolib_gvfs.o \
 	monolib_listbox.o \
 	monolib_mdi.o \
 	monolib_menu.o \
@@ -6046,6 +6053,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_datavcmn.o \
 	monolib_calctrl.o \
+	monolib_datavgen.o \
 	monolib_datectlg.o \
 	monolib_grid.o \
 	monolib_gridctrl.o \
@@ -6068,6 +6076,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_datavcmn.o \
 	monolib_calctrl.o \
+	monolib_datavgen.o \
 	monolib_datectlg.o \
 	monolib_grid.o \
 	monolib_gridctrl.o \
@@ -7263,6 +7272,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_frame.o \
 	coredll_gauge.o \
 	coredll_gprint.o \
+	coredll_gvfs.o \
 	coredll_listbox.o \
 	coredll_mdi.o \
 	coredll_menu.o \
@@ -8592,6 +8602,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_frame.o \
 	corelib_gauge.o \
 	corelib_gprint.o \
+	corelib_gvfs.o \
 	corelib_listbox.o \
 	corelib_mdi.o \
 	corelib_menu.o \
@@ -9274,6 +9285,7 @@ COND_USE_SOSYMLINKS_1___advdll___so_symlinks_inst_cmd = rm -f \
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_datavcmn.o \
 	advdll_calctrl.o \
+	advdll_datavgen.o \
 	advdll_datectlg.o \
 	advdll_grid.o \
 	advdll_gridctrl.o \
@@ -9296,6 +9308,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_datavcmn.o \
 	advdll_calctrl.o \
+	advdll_datavgen.o \
 	advdll_datectlg.o \
 	advdll_grid.o \
 	advdll_gridctrl.o \
@@ -9333,6 +9346,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_datavcmn.o \
 	advlib_calctrl.o \
+	advlib_datavgen.o \
 	advlib_datectlg.o \
 	advlib_grid.o \
 	advlib_gridctrl.o \
@@ -9355,6 +9369,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_datavcmn.o \
 	advlib_calctrl.o \
+	advlib_datavgen.o \
 	advlib_datectlg.o \
 	advlib_grid.o \
 	advlib_gridctrl.o \
@@ -11387,6 +11402,9 @@ monodll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONODLL_ODEP)
 
 monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
+
+monodll_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
 
 monodll_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(MONODLL_ODEP)
 	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
@@ -14709,6 +14727,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
 
+@COND_USE_GUI_1@monodll_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/datavgen.cpp
+
 @COND_USE_GUI_1@monodll_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
 
@@ -15164,6 +15185,9 @@ monolib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONOLIB_ODEP)
 
 monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
+
+monolib_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
 
 monolib_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(MONOLIB_ODEP)
 	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
@@ -18486,6 +18510,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
 
+@COND_USE_GUI_1@monolib_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/datavgen.cpp
+
 @COND_USE_GUI_1@monolib_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
 
@@ -19901,6 +19928,9 @@ coredll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(COREDLL_ODEP)
 
 coredll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
+
+coredll_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
 
 coredll_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(COREDLL_ODEP)
 	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
@@ -22668,6 +22698,9 @@ corelib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(CORELIB_ODEP)
 corelib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
+corelib_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
+
 corelib_treeentry_gtk.o: $(srcdir)/src/gtk/treeentry_gtk.c $(CORELIB_ODEP)
 	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $(srcdir)/src/gtk/treeentry_gtk.c
 
@@ -25419,6 +25452,9 @@ advdll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVDLL_ODEP)
 advdll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
 
+advdll_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/datavgen.cpp
+
 advdll_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
 
@@ -25589,6 +25625,9 @@ advlib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVLIB_ODEP)
 
 advlib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
+
+advlib_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/datavgen.cpp
 
 advlib_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp

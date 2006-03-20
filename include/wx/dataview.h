@@ -21,6 +21,16 @@
 #include "wx/bitmap.h"
 #include "wx/variant.h"
 
+
+#if defined(__WXGTK20__)
+    // for testing
+  //  #define wxUSE_GENERICDATAVIEWCTRL 1
+#elif defined(__WXMAC__)
+    #define wxUSE_GENERICDATAVIEWCTRL 1
+#else
+    #define wxUSE_GENERICDATAVIEWCTRL 1
+#endif
+
 // ----------------------------------------------------------------------------
 // wxDataViewCtrl flags 
 // ----------------------------------------------------------------------------
@@ -293,7 +303,9 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCtrlBase)
 };
 
-#if defined(__WXGTK20__)
+#if defined(wxUSE_GENERICDATAVIEWCTRL)
+    #include "wx/generic/dataview.h"
+#elif defined(__WXGTK20__)
     #include "wx/gtk/dataview.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/dataview.h"

@@ -15,6 +15,9 @@
 #if wxUSE_DATAVIEWCTRL
 
 #include "wx/dataview.h"
+
+#ifndef wxUSE_GENERICDATAVIEWCTRL
+
 #include "wx/stockitem.h"
 #include "wx/dcclient.h"
 #include "wx/calctrl.h"
@@ -1450,6 +1453,9 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     return true;
 }
 
+#endif 
+    // !wxUSE_GENERICDATAVIEWCTRL
 
-#endif // wxUSE_DATAVIEWCTRL
+#endif 
+    // wxUSE_DATAVIEWCTRL
 
