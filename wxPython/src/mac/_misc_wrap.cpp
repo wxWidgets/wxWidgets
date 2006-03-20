@@ -3999,54 +3999,18 @@ SWIGINTERN bool wxClipboardLocker___nonzero__(wxClipboardLocker *self){ return !
 SWIGINTERN bool wxVideoMode___eq__(wxVideoMode *self,wxVideoMode const *other){ return other ? (*self == *other) : false; }
 SWIGINTERN bool wxVideoMode___ne__(wxVideoMode *self,wxVideoMode const *other){ return other ? (*self != *other) : true;  }
 
-// dummy version of wxDisplay for when it is not enabled in the wxWidgets build
 #if !wxUSE_DISPLAY
-#include <wx/dynarray.h>
-#include <wx/vidmode.h>
-
-    WX_DECLARE_OBJARRAY(wxVideoMode, wxArrayVideoModes);
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxArrayVideoModes);
-const wxVideoMode wxDefaultVideoMode;
-
-class wxDisplay 
-{
-public:
-    wxDisplay(size_t index = 0) { wxPyRaiseNotImplemented(); }
-    ~wxDisplay() {}
-
-    static size_t  GetCount()
-        { wxPyRaiseNotImplemented(); return 0; }
-    
-    static int GetFromPoint(const wxPoint& pt)
-        { wxPyRaiseNotImplemented(); return wxNOT_FOUND; }
-    static int GetFromWindow(wxWindow *window) 
-        { wxPyRaiseNotImplemented(); return wxNOT_FOUND; }
-        
-    virtual bool IsOk() const { return false; }
-    virtual wxRect GetGeometry() const { wxRect r; return r; }
-    virtual wxString GetName() const { return wxEmptyString; }
-    bool IsPrimary() const { return false; }
-    
-    wxArrayVideoModes GetModes(const wxVideoMode& mode = wxDefaultVideoMode)
-        { wxArrayVideoModes a; return a; }
-
-    virtual wxVideoMode GetCurrentMode() const
-        { return wxDefaultVideoMode; }
-    
-    virtual bool ChangeMode(const wxVideoMode& mode = wxDefaultVideoMode)
-       { return false; }
-    
-    void  ResetMode() {}
-};
+const wxVideoMode     wxDefaultVideoMode;
 #endif
 
 SWIGINTERN PyObject *wxDisplay_GetModes(wxDisplay *self,wxVideoMode const &mode=wxDefaultVideoMode){
+#if wxUSE_DISPLAY
             PyObject* pyList = NULL;
             wxArrayVideoModes arr = self->GetModes(mode);
             wxPyBlock_t blocked = wxPyBeginBlockThreads();
             pyList = PyList_New(0);
-            for (int i=0; i < arr.GetCount(); i++) {
+            for (size_t i=0; i < arr.GetCount(); i++)
+            {
                 wxVideoMode* m = new wxVideoMode(arr.Item(i));
                 PyObject* pyObj = wxPyConstructObject(m, wxT("wxVideoMode"), true);
                 PyList_Append(pyList, pyObj);
@@ -4054,6 +4018,33 @@ SWIGINTERN PyObject *wxDisplay_GetModes(wxDisplay *self,wxVideoMode const &mode=
             }
             wxPyEndBlockThreads(blocked);
             return pyList;
+#else
+        wxPyRaiseNotImplemented();
+        return NULL;
+#endif
+        }
+SWIGINTERN wxVideoMode wxDisplay_GetCurrentMode(wxDisplay const *self){
+#if wxUSE_DISPLAY
+            return self->GetCurrentMode();
+#else
+            wxPyRaiseNotImplemented();
+            return wxDefaultVideoMode;
+#endif
+        }
+SWIGINTERN bool wxDisplay_ChangeMode(wxDisplay *self,wxVideoMode const &mode=wxDefaultVideoMode){
+#if wxUSE_DISPLAY
+            return self->ChangeMode(mode);
+#else
+            wxPyRaiseNotImplemented();
+            return false;
+#endif
+        }
+SWIGINTERN void wxDisplay_ResetMode(wxDisplay *self){
+#if wxUSE_DISPLAY
+            self->ResetMode();
+#else
+            wxPyRaiseNotImplemented();
+#endif
         }
 
 #include <wx/stdpaths.h>
@@ -35194,6 +35185,34 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Display_GetClientArea(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxDisplay *arg1 = (wxDisplay *) 0 ;
+  wxRect result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxDisplay, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Display_GetClientArea" "', expected argument " "1"" of type '" "wxDisplay const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxDisplay * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxDisplay const *)arg1)->GetClientArea();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxRect(static_cast< const wxRect& >(result))), SWIGTYPE_p_wxRect, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Display_GetName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxDisplay *arg1 = (wxDisplay *) 0 ;
@@ -35320,7 +35339,7 @@ SWIGINTERN PyObject *_wrap_Display_GetCurrentMode(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< wxDisplay * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = ((wxDisplay const *)arg1)->GetCurrentMode();
+    result = wxDisplay_GetCurrentMode((wxDisplay const *)arg1);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -35365,7 +35384,7 @@ SWIGINTERN PyObject *_wrap_Display_ChangeMode(PyObject *SWIGUNUSEDPARM(self), Py
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->ChangeMode((wxVideoMode const &)*arg2);
+    result = (bool)wxDisplay_ChangeMode(arg1,(wxVideoMode const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -35394,7 +35413,7 @@ SWIGINTERN PyObject *_wrap_Display_ResetMode(PyObject *SWIGUNUSEDPARM(self), PyO
   arg1 = reinterpret_cast< wxDisplay * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->ResetMode();
+    wxDisplay_ResetMode(arg1);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -36647,6 +36666,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Display_GetFromWindow", (PyCFunction) _wrap_Display_GetFromWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Display_IsOk", (PyCFunction)_wrap_Display_IsOk, METH_O, NULL},
 	 { (char *)"Display_GetGeometry", (PyCFunction)_wrap_Display_GetGeometry, METH_O, NULL},
+	 { (char *)"Display_GetClientArea", (PyCFunction)_wrap_Display_GetClientArea, METH_O, NULL},
 	 { (char *)"Display_GetName", (PyCFunction)_wrap_Display_GetName, METH_O, NULL},
 	 { (char *)"Display_IsPrimary", (PyCFunction)_wrap_Display_IsPrimary, METH_O, NULL},
 	 { (char *)"Display_GetModes", (PyCFunction) _wrap_Display_GetModes, METH_VARARGS | METH_KEYWORDS, NULL},

@@ -39081,6 +39081,34 @@ SWIGINTERN PyObject *ContextHelpButton_swiginit(PyObject *SWIGUNUSEDPARM(self), 
   return SWIG_Python_InitShadowInstance(args);
 }
 
+SWIGINTERN PyObject *_wrap_delete_HelpProvider(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxHelpProvider *arg1 = (wxHelpProvider *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHelpProvider, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_HelpProvider" "', expected argument " "1"" of type '" "wxHelpProvider *""'"); 
+  }
+  arg1 = reinterpret_cast< wxHelpProvider * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_HelpProvider_Set(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxHelpProvider *arg1 = (wxHelpProvider *) 0 ;
@@ -41595,6 +41623,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_ContextHelpButton", (PyCFunction) _wrap_new_ContextHelpButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ContextHelpButton_swigregister", ContextHelpButton_swigregister, METH_VARARGS, NULL},
 	 { (char *)"ContextHelpButton_swiginit", ContextHelpButton_swiginit, METH_VARARGS, NULL},
+	 { (char *)"delete_HelpProvider", (PyCFunction)_wrap_delete_HelpProvider, METH_O, NULL},
 	 { (char *)"HelpProvider_Set", (PyCFunction) _wrap_HelpProvider_Set, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HelpProvider_Get", (PyCFunction)_wrap_HelpProvider_Get, METH_NOARGS, NULL},
 	 { (char *)"HelpProvider_GetHelp", (PyCFunction) _wrap_HelpProvider_GetHelp, METH_VARARGS | METH_KEYWORDS, NULL},

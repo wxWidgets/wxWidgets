@@ -23143,8 +23143,8 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "STC_LEX_FLAGSHIP",SWIG_From_int(static_cast< int >(73)));
   SWIG_Python_SetConstant(d, "STC_LEX_CSOUND",SWIG_From_int(static_cast< int >(74)));
   SWIG_Python_SetConstant(d, "STC_LEX_FREEBASIC",SWIG_From_int(static_cast< int >(75)));
-  SWIG_Python_SetConstant(d, "wxSTC_LEX_ASP",SWIG_From_int(static_cast< int >(29)));
-  SWIG_Python_SetConstant(d, "wxSTC_LEX_PHP",SWIG_From_int(static_cast< int >(30)));
+  SWIG_Python_SetConstant(d, "STC_LEX_ASP",SWIG_From_int(static_cast< int >(29)));
+  SWIG_Python_SetConstant(d, "STC_LEX_PHP",SWIG_From_int(static_cast< int >(30)));
   SWIG_Python_SetConstant(d, "STC_LEX_AUTOMATIC",SWIG_From_int(static_cast< int >(1000)));
   SWIG_Python_SetConstant(d, "STC_P_DEFAULT",SWIG_From_int(static_cast< int >(0)));
   SWIG_Python_SetConstant(d, "STC_P_COMMENTLINE",SWIG_From_int(static_cast< int >(1)));

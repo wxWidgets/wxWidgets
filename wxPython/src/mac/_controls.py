@@ -5834,6 +5834,8 @@ class HelpProvider(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    __swig_destroy__ = _controls_.delete_HelpProvider
+    __del__ = lambda self : None;
     def Set(*args, **kwargs):
         """
         Set(HelpProvider helpProvider) -> HelpProvider

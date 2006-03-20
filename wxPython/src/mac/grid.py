@@ -78,47 +78,42 @@ GRID_LABEL_EDGE_ZONE = _grid.GRID_LABEL_EDGE_ZONE
 GRID_MIN_ROW_HEIGHT = _grid.GRID_MIN_ROW_HEIGHT
 GRID_MIN_COL_WIDTH = _grid.GRID_MIN_COL_WIDTH
 GRID_DEFAULT_SCROLLBAR_WIDTH = _grid.GRID_DEFAULT_SCROLLBAR_WIDTH
-class GridCellRenderer(object):
-    """Proxy of C++ GridCellRenderer class"""
+class GridCellWorker(object):
+    """Proxy of C++ GridCellWorker class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     def _setOORInfo(*args, **kwargs):
         """_setOORInfo(self, PyObject _self)"""
-        return _grid.GridCellRenderer__setOORInfo(*args, **kwargs)
+        return _grid.GridCellWorker__setOORInfo(*args, **kwargs)
 
+    __swig_destroy__ = _grid.delete_GridCellWorker
+    __del__ = lambda self : None;
     def SetParameters(*args, **kwargs):
         """SetParameters(self, String params)"""
-        return _grid.GridCellRenderer_SetParameters(*args, **kwargs)
+        return _grid.GridCellWorker_SetParameters(*args, **kwargs)
 
     def IncRef(*args, **kwargs):
         """IncRef(self)"""
-        return _grid.GridCellRenderer_IncRef(*args, **kwargs)
+        return _grid.GridCellWorker_IncRef(*args, **kwargs)
 
     def DecRef(*args, **kwargs):
         """DecRef(self)"""
-        return _grid.GridCellRenderer_DecRef(*args, **kwargs)
+        return _grid.GridCellWorker_DecRef(*args, **kwargs)
 
-    def Draw(*args, **kwargs):
-        """
-        Draw(self, Grid grid, GridCellAttr attr, DC dc, Rect rect, int row, 
-            int col, bool isSelected)
-        """
-        return _grid.GridCellRenderer_Draw(*args, **kwargs)
-
-    def GetBestSize(*args, **kwargs):
-        """GetBestSize(self, Grid grid, GridCellAttr attr, DC dc, int row, int col) -> Size"""
-        return _grid.GridCellRenderer_GetBestSize(*args, **kwargs)
-
-    def Clone(*args, **kwargs):
-        """Clone(self) -> GridCellRenderer"""
-        return _grid.GridCellRenderer_Clone(*args, **kwargs)
-
-GridCellRenderer_swigregister = _grid.GridCellRenderer_swigregister
-GridCellRenderer_swigregister(GridCellRenderer)
+GridCellWorker_swigregister = _grid.GridCellWorker_swigregister
+GridCellWorker_swigregister(GridCellWorker)
 cvar = _grid.cvar
 GridNoCellCoords = cvar.GridNoCellCoords
 GridNoCellRect = cvar.GridNoCellRect
+
+class GridCellRenderer(GridCellWorker):
+    """Proxy of C++ GridCellRenderer class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+GridCellRenderer_swigregister = _grid.GridCellRenderer_swigregister
+GridCellRenderer_swigregister(GridCellRenderer)
 
 class PyGridCellRenderer(GridCellRenderer):
     """Proxy of C++ PyGridCellRenderer class"""
@@ -245,15 +240,11 @@ class GridCellAutoWrapStringRenderer(GridCellStringRenderer):
 GridCellAutoWrapStringRenderer_swigregister = _grid.GridCellAutoWrapStringRenderer_swigregister
 GridCellAutoWrapStringRenderer_swigregister(GridCellAutoWrapStringRenderer)
 
-class GridCellEditor(object):
+class GridCellEditor(GridCellWorker):
     """Proxy of C++ GridCellEditor class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
-    def _setOORInfo(*args, **kwargs):
-        """_setOORInfo(self, PyObject _self)"""
-        return _grid.GridCellEditor__setOORInfo(*args, **kwargs)
-
     def IsCreated(*args, **kwargs):
         """IsCreated(self) -> bool"""
         return _grid.GridCellEditor_IsCreated(*args, **kwargs)
@@ -273,18 +264,6 @@ class GridCellEditor(object):
     def SetCellAttr(*args, **kwargs):
         """SetCellAttr(self, GridCellAttr attr)"""
         return _grid.GridCellEditor_SetCellAttr(*args, **kwargs)
-
-    def SetParameters(*args, **kwargs):
-        """SetParameters(self, String params)"""
-        return _grid.GridCellEditor_SetParameters(*args, **kwargs)
-
-    def IncRef(*args, **kwargs):
-        """IncRef(self)"""
-        return _grid.GridCellEditor_IncRef(*args, **kwargs)
-
-    def DecRef(*args, **kwargs):
-        """DecRef(self)"""
-        return _grid.GridCellEditor_DecRef(*args, **kwargs)
 
     def Create(*args, **kwargs):
         """Create(self, Window parent, int id, EvtHandler evtHandler)"""
@@ -523,6 +502,8 @@ class GridCellAttr(object):
         _grid.GridCellAttr_swiginit(self,_grid.new_GridCellAttr(*args, **kwargs))
         self._setOORInfo(self)
 
+    __swig_destroy__ = _grid.delete_GridCellAttr
+    __del__ = lambda self : None;
     def Clone(*args, **kwargs):
         """Clone(self) -> GridCellAttr"""
         return _grid.GridCellAttr_Clone(*args, **kwargs)

@@ -2528,99 +2528,99 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_wxGridCellRenderer swig_types[66]
 #define SWIGTYPE_p_wxGridCellStringRenderer swig_types[67]
 #define SWIGTYPE_p_wxGridCellTextEditor swig_types[68]
-#define SWIGTYPE_p_wxGridEditorCreatedEvent swig_types[69]
-#define SWIGTYPE_p_wxGridEvent swig_types[70]
-#define SWIGTYPE_p_wxGridRangeSelectEvent swig_types[71]
-#define SWIGTYPE_p_wxGridSizeEvent swig_types[72]
-#define SWIGTYPE_p_wxGridSizer swig_types[73]
-#define SWIGTYPE_p_wxGridStringTable swig_types[74]
-#define SWIGTYPE_p_wxGridTableBase swig_types[75]
-#define SWIGTYPE_p_wxGridTableMessage swig_types[76]
-#define SWIGTYPE_p_wxICOHandler swig_types[77]
-#define SWIGTYPE_p_wxIconizeEvent swig_types[78]
-#define SWIGTYPE_p_wxIdleEvent swig_types[79]
-#define SWIGTYPE_p_wxImage swig_types[80]
-#define SWIGTYPE_p_wxImageHandler swig_types[81]
-#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[82]
-#define SWIGTYPE_p_wxInitDialogEvent swig_types[83]
-#define SWIGTYPE_p_wxJPEGHandler swig_types[84]
-#define SWIGTYPE_p_wxKeyEvent swig_types[85]
-#define SWIGTYPE_p_wxLayoutAlgorithm swig_types[86]
-#define SWIGTYPE_p_wxLayoutConstraints swig_types[87]
-#define SWIGTYPE_p_wxMDIChildFrame swig_types[88]
-#define SWIGTYPE_p_wxMDIClientWindow swig_types[89]
-#define SWIGTYPE_p_wxMDIParentFrame swig_types[90]
-#define SWIGTYPE_p_wxMaximizeEvent swig_types[91]
-#define SWIGTYPE_p_wxMenu swig_types[92]
-#define SWIGTYPE_p_wxMenuBar swig_types[93]
-#define SWIGTYPE_p_wxMenuEvent swig_types[94]
-#define SWIGTYPE_p_wxMenuItem swig_types[95]
-#define SWIGTYPE_p_wxMessageDialog swig_types[96]
-#define SWIGTYPE_p_wxMiniFrame swig_types[97]
-#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[98]
-#define SWIGTYPE_p_wxMouseEvent swig_types[99]
-#define SWIGTYPE_p_wxMoveEvent swig_types[100]
-#define SWIGTYPE_p_wxMultiChoiceDialog swig_types[101]
-#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[102]
-#define SWIGTYPE_p_wxNcPaintEvent swig_types[103]
-#define SWIGTYPE_p_wxNotifyEvent swig_types[104]
-#define SWIGTYPE_p_wxObject swig_types[105]
-#define SWIGTYPE_p_wxPCXHandler swig_types[106]
-#define SWIGTYPE_p_wxPNGHandler swig_types[107]
-#define SWIGTYPE_p_wxPNMHandler swig_types[108]
-#define SWIGTYPE_p_wxPageSetupDialog swig_types[109]
-#define SWIGTYPE_p_wxPageSetupDialogData swig_types[110]
-#define SWIGTYPE_p_wxPaintEvent swig_types[111]
-#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[112]
-#define SWIGTYPE_p_wxPanel swig_types[113]
-#define SWIGTYPE_p_wxPaperSize swig_types[114]
-#define SWIGTYPE_p_wxPasswordEntryDialog swig_types[115]
-#define SWIGTYPE_p_wxPoint swig_types[116]
-#define SWIGTYPE_p_wxPopupWindow swig_types[117]
-#define SWIGTYPE_p_wxPreviewCanvas swig_types[118]
-#define SWIGTYPE_p_wxPreviewControlBar swig_types[119]
-#define SWIGTYPE_p_wxPreviewFrame swig_types[120]
-#define SWIGTYPE_p_wxPrintData swig_types[121]
-#define SWIGTYPE_p_wxPrintDialog swig_types[122]
-#define SWIGTYPE_p_wxPrintDialogData swig_types[123]
-#define SWIGTYPE_p_wxPrintPreview swig_types[124]
-#define SWIGTYPE_p_wxPrinter swig_types[125]
-#define SWIGTYPE_p_wxProgressDialog swig_types[126]
-#define SWIGTYPE_p_wxPyApp swig_types[127]
-#define SWIGTYPE_p_wxPyCommandEvent swig_types[128]
-#define SWIGTYPE_p_wxPyEvent swig_types[129]
-#define SWIGTYPE_p_wxPyGridCellAttrProvider swig_types[130]
-#define SWIGTYPE_p_wxPyGridCellEditor swig_types[131]
-#define SWIGTYPE_p_wxPyGridCellRenderer swig_types[132]
-#define SWIGTYPE_p_wxPyGridTableBase swig_types[133]
-#define SWIGTYPE_p_wxPyHtmlListBox swig_types[134]
-#define SWIGTYPE_p_wxPyImageHandler swig_types[135]
-#define SWIGTYPE_p_wxPyPanel swig_types[136]
-#define SWIGTYPE_p_wxPyPopupTransientWindow swig_types[137]
-#define SWIGTYPE_p_wxPyPreviewControlBar swig_types[138]
-#define SWIGTYPE_p_wxPyPreviewFrame swig_types[139]
-#define SWIGTYPE_p_wxPyPrintPreview swig_types[140]
-#define SWIGTYPE_p_wxPyPrintout swig_types[141]
-#define SWIGTYPE_p_wxPyScrolledWindow swig_types[142]
-#define SWIGTYPE_p_wxPySizer swig_types[143]
-#define SWIGTYPE_p_wxPyTaskBarIcon swig_types[144]
-#define SWIGTYPE_p_wxPyVListBox swig_types[145]
-#define SWIGTYPE_p_wxPyVScrolledWindow swig_types[146]
-#define SWIGTYPE_p_wxPyValidator swig_types[147]
-#define SWIGTYPE_p_wxPyWindow swig_types[148]
-#define SWIGTYPE_p_wxQueryLayoutInfoEvent swig_types[149]
-#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[150]
-#define SWIGTYPE_p_wxRect swig_types[151]
-#define SWIGTYPE_p_wxSashEvent swig_types[152]
-#define SWIGTYPE_p_wxSashLayoutWindow swig_types[153]
-#define SWIGTYPE_p_wxSashWindow swig_types[154]
-#define SWIGTYPE_p_wxScrollEvent swig_types[155]
-#define SWIGTYPE_p_wxScrollWinEvent swig_types[156]
-#define SWIGTYPE_p_wxScrolledWindow swig_types[157]
-#define SWIGTYPE_p_wxSetCursorEvent swig_types[158]
-#define SWIGTYPE_p_wxShowEvent swig_types[159]
-#define SWIGTYPE_p_wxSingleChoiceDialog swig_types[160]
-#define SWIGTYPE_p_wxSize swig_types[161]
+#define SWIGTYPE_p_wxGridCellWorker swig_types[69]
+#define SWIGTYPE_p_wxGridEditorCreatedEvent swig_types[70]
+#define SWIGTYPE_p_wxGridEvent swig_types[71]
+#define SWIGTYPE_p_wxGridRangeSelectEvent swig_types[72]
+#define SWIGTYPE_p_wxGridSizeEvent swig_types[73]
+#define SWIGTYPE_p_wxGridSizer swig_types[74]
+#define SWIGTYPE_p_wxGridStringTable swig_types[75]
+#define SWIGTYPE_p_wxGridTableBase swig_types[76]
+#define SWIGTYPE_p_wxGridTableMessage swig_types[77]
+#define SWIGTYPE_p_wxICOHandler swig_types[78]
+#define SWIGTYPE_p_wxIconizeEvent swig_types[79]
+#define SWIGTYPE_p_wxIdleEvent swig_types[80]
+#define SWIGTYPE_p_wxImage swig_types[81]
+#define SWIGTYPE_p_wxImageHandler swig_types[82]
+#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[83]
+#define SWIGTYPE_p_wxInitDialogEvent swig_types[84]
+#define SWIGTYPE_p_wxJPEGHandler swig_types[85]
+#define SWIGTYPE_p_wxKeyEvent swig_types[86]
+#define SWIGTYPE_p_wxLayoutAlgorithm swig_types[87]
+#define SWIGTYPE_p_wxLayoutConstraints swig_types[88]
+#define SWIGTYPE_p_wxMDIChildFrame swig_types[89]
+#define SWIGTYPE_p_wxMDIClientWindow swig_types[90]
+#define SWIGTYPE_p_wxMDIParentFrame swig_types[91]
+#define SWIGTYPE_p_wxMaximizeEvent swig_types[92]
+#define SWIGTYPE_p_wxMenu swig_types[93]
+#define SWIGTYPE_p_wxMenuBar swig_types[94]
+#define SWIGTYPE_p_wxMenuEvent swig_types[95]
+#define SWIGTYPE_p_wxMenuItem swig_types[96]
+#define SWIGTYPE_p_wxMessageDialog swig_types[97]
+#define SWIGTYPE_p_wxMiniFrame swig_types[98]
+#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[99]
+#define SWIGTYPE_p_wxMouseEvent swig_types[100]
+#define SWIGTYPE_p_wxMoveEvent swig_types[101]
+#define SWIGTYPE_p_wxMultiChoiceDialog swig_types[102]
+#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[103]
+#define SWIGTYPE_p_wxNcPaintEvent swig_types[104]
+#define SWIGTYPE_p_wxNotifyEvent swig_types[105]
+#define SWIGTYPE_p_wxObject swig_types[106]
+#define SWIGTYPE_p_wxPCXHandler swig_types[107]
+#define SWIGTYPE_p_wxPNGHandler swig_types[108]
+#define SWIGTYPE_p_wxPNMHandler swig_types[109]
+#define SWIGTYPE_p_wxPageSetupDialog swig_types[110]
+#define SWIGTYPE_p_wxPageSetupDialogData swig_types[111]
+#define SWIGTYPE_p_wxPaintEvent swig_types[112]
+#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[113]
+#define SWIGTYPE_p_wxPanel swig_types[114]
+#define SWIGTYPE_p_wxPaperSize swig_types[115]
+#define SWIGTYPE_p_wxPasswordEntryDialog swig_types[116]
+#define SWIGTYPE_p_wxPoint swig_types[117]
+#define SWIGTYPE_p_wxPopupWindow swig_types[118]
+#define SWIGTYPE_p_wxPreviewCanvas swig_types[119]
+#define SWIGTYPE_p_wxPreviewControlBar swig_types[120]
+#define SWIGTYPE_p_wxPreviewFrame swig_types[121]
+#define SWIGTYPE_p_wxPrintData swig_types[122]
+#define SWIGTYPE_p_wxPrintDialog swig_types[123]
+#define SWIGTYPE_p_wxPrintDialogData swig_types[124]
+#define SWIGTYPE_p_wxPrintPreview swig_types[125]
+#define SWIGTYPE_p_wxPrinter swig_types[126]
+#define SWIGTYPE_p_wxProgressDialog swig_types[127]
+#define SWIGTYPE_p_wxPyApp swig_types[128]
+#define SWIGTYPE_p_wxPyCommandEvent swig_types[129]
+#define SWIGTYPE_p_wxPyEvent swig_types[130]
+#define SWIGTYPE_p_wxPyGridCellAttrProvider swig_types[131]
+#define SWIGTYPE_p_wxPyGridCellEditor swig_types[132]
+#define SWIGTYPE_p_wxPyGridCellRenderer swig_types[133]
+#define SWIGTYPE_p_wxPyGridTableBase swig_types[134]
+#define SWIGTYPE_p_wxPyHtmlListBox swig_types[135]
+#define SWIGTYPE_p_wxPyImageHandler swig_types[136]
+#define SWIGTYPE_p_wxPyPanel swig_types[137]
+#define SWIGTYPE_p_wxPyPopupTransientWindow swig_types[138]
+#define SWIGTYPE_p_wxPyPreviewControlBar swig_types[139]
+#define SWIGTYPE_p_wxPyPreviewFrame swig_types[140]
+#define SWIGTYPE_p_wxPyPrintPreview swig_types[141]
+#define SWIGTYPE_p_wxPyPrintout swig_types[142]
+#define SWIGTYPE_p_wxPyScrolledWindow swig_types[143]
+#define SWIGTYPE_p_wxPySizer swig_types[144]
+#define SWIGTYPE_p_wxPyTaskBarIcon swig_types[145]
+#define SWIGTYPE_p_wxPyVListBox swig_types[146]
+#define SWIGTYPE_p_wxPyVScrolledWindow swig_types[147]
+#define SWIGTYPE_p_wxPyValidator swig_types[148]
+#define SWIGTYPE_p_wxPyWindow swig_types[149]
+#define SWIGTYPE_p_wxQueryLayoutInfoEvent swig_types[150]
+#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[151]
+#define SWIGTYPE_p_wxRect swig_types[152]
+#define SWIGTYPE_p_wxSashEvent swig_types[153]
+#define SWIGTYPE_p_wxSashLayoutWindow swig_types[154]
+#define SWIGTYPE_p_wxSashWindow swig_types[155]
+#define SWIGTYPE_p_wxScrollEvent swig_types[156]
+#define SWIGTYPE_p_wxScrollWinEvent swig_types[157]
+#define SWIGTYPE_p_wxScrolledWindow swig_types[158]
+#define SWIGTYPE_p_wxSetCursorEvent swig_types[159]
+#define SWIGTYPE_p_wxShowEvent swig_types[160]
+#define SWIGTYPE_p_wxSingleChoiceDialog swig_types[161]
 #define SWIGTYPE_p_wxSizeEvent swig_types[162]
 #define SWIGTYPE_p_wxSizer swig_types[163]
 #define SWIGTYPE_p_wxSizerItem swig_types[164]
@@ -3195,67 +3195,12 @@ SWIG_From_int  (int value)
   return SWIG_From_long  (value);
 }
 
-SWIGINTERN void wxGridCellRenderer__setOORInfo(wxGridCellRenderer *self,PyObject *_self){
+SWIGINTERN void wxGridCellWorker__setOORInfo(wxGridCellWorker *self,PyObject *_self){
             if (!self->GetClientObject())
                 self->SetClientObject(new wxPyOORClientData(_self));
         }
-
-#include <limits.h>
-#ifndef LLONG_MIN
-# define LLONG_MIN	LONG_LONG_MIN
-#endif
-#ifndef LLONG_MAX
-# define LLONG_MAX	LONG_LONG_MAX
-#endif
-#ifndef ULLONG_MAX
-# define ULLONG_MAX	ULONG_LONG_MAX
-#endif
-
-
-SWIGINTERN int
-SWIG_AsVal_long (PyObject* obj, long* val)
-{
-    if (PyNumber_Check(obj)) {
-        if (val) *val = PyInt_AsLong(obj);
-        return SWIG_OK;
-    }
-    return SWIG_TypeError;
-}
-
-
-SWIGINTERN int
-SWIG_AsVal_int (PyObject * obj, int *val)
-{
-  long v;
-  int res = SWIG_AsVal_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v < INT_MIN || v > INT_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = static_cast< int >(v);
-    }
-  }  
-  return res;
-}
-
-
-SWIGINTERN int
-SWIG_AsVal_bool (PyObject *obj, bool *val)
-{
-  if (obj == Py_True) {
-    if (val) *val = true;
-    return SWIG_OK;
-  } else if (obj == Py_False) {
-    if (val) *val = false;
-    return SWIG_OK;
-  } else {
-    long v = 0;
-    int res = SWIG_AddCast(SWIG_AsVal_long (obj, val ? &v : 0));
-    if (SWIG_IsOK(res) && val) *val = v ? true : false;
-    return res;
-  }
-}
-
+SWIGINTERN void delete_wxGridCellWorker(wxGridCellWorker *self){
+        }
 
 class wxPyGridCellRenderer : public wxGridCellRenderer
 {
@@ -3352,10 +3297,63 @@ public:
 IMP_PYCALLBACK__STRING( wxPyGridCellRenderer, wxGridCellRenderer, SetParameters);
 
 
-SWIGINTERN void wxGridCellEditor__setOORInfo(wxGridCellEditor *self,PyObject *_self){
-            if (!self->GetClientObject())
-                self->SetClientObject(new wxPyOORClientData(_self));
-        }
+
+#include <limits.h>
+#ifndef LLONG_MIN
+# define LLONG_MIN	LONG_LONG_MIN
+#endif
+#ifndef LLONG_MAX
+# define LLONG_MAX	LONG_LONG_MAX
+#endif
+#ifndef ULLONG_MAX
+# define ULLONG_MAX	ULONG_LONG_MAX
+#endif
+
+
+SWIGINTERN int
+SWIG_AsVal_long (PyObject* obj, long* val)
+{
+    if (PyNumber_Check(obj)) {
+        if (val) *val = PyInt_AsLong(obj);
+        return SWIG_OK;
+    }
+    return SWIG_TypeError;
+}
+
+
+SWIGINTERN int
+SWIG_AsVal_int (PyObject * obj, int *val)
+{
+  long v;
+  int res = SWIG_AsVal_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v < INT_MIN || v > INT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = static_cast< int >(v);
+    }
+  }  
+  return res;
+}
+
+
+SWIGINTERN int
+SWIG_AsVal_bool (PyObject *obj, bool *val)
+{
+  if (obj == Py_True) {
+    if (val) *val = true;
+    return SWIG_OK;
+  } else if (obj == Py_False) {
+    if (val) *val = false;
+    return SWIG_OK;
+  } else {
+    long v = 0;
+    int res = SWIG_AddCast(SWIG_AsVal_long (obj, val ? &v : 0));
+    if (SWIG_IsOK(res) && val) *val = v ? true : false;
+    return res;
+  }
+}
+
 
 class wxPyGridCellEditor : public wxGridCellEditor
 {
@@ -3478,6 +3476,8 @@ IMP_PYCALLBACK_STRING__constpure(wxPyGridCellEditor, wxGridCellEditor, GetValue)
 SWIGINTERN void wxGridCellAttr__setOORInfo(wxGridCellAttr *self,PyObject *_self){
             if (!self->GetClientObject())
                 self->SetClientObject(new wxPyOORClientData(_self));
+        }
+SWIGINTERN void delete_wxGridCellAttr(wxGridCellAttr *self){
         }
 SWIGINTERN void wxGridCellAttrProvider__setOORInfo(wxGridCellAttrProvider *self,PyObject *_self){
             if (!self->GetClientObject())
@@ -3782,9 +3782,9 @@ SWIGINTERN PyObject *GridNoCellRect_get(void) {
 }
 
 
-SWIGINTERN PyObject *_wrap_GridCellRenderer__setOORInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_GridCellWorker__setOORInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
-  wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
+  wxGridCellWorker *arg1 = (wxGridCellWorker *) 0 ;
   PyObject *arg2 = (PyObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -3794,16 +3794,16 @@ SWIGINTERN PyObject *_wrap_GridCellRenderer__setOORInfo(PyObject *SWIGUNUSEDPARM
     (char *) "self",(char *) "_self", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GridCellRenderer__setOORInfo",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGridCellRenderer, 0 |  0 );
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GridCellWorker__setOORInfo",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGridCellWorker, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellRenderer__setOORInfo" "', expected argument " "1"" of type '" "wxGridCellRenderer *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellWorker__setOORInfo" "', expected argument " "1"" of type '" "wxGridCellWorker *""'"); 
   }
-  arg1 = reinterpret_cast< wxGridCellRenderer * >(argp1);
+  arg1 = reinterpret_cast< wxGridCellWorker * >(argp1);
   arg2 = obj1;
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxGridCellRenderer__setOORInfo(arg1,arg2);
+    wxGridCellWorker__setOORInfo(arg1,arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -3814,9 +3814,37 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_GridCellRenderer_SetParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_delete_GridCellWorker(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
+  wxGridCellWorker *arg1 = (wxGridCellWorker *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGridCellWorker, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_GridCellWorker" "', expected argument " "1"" of type '" "wxGridCellWorker *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGridCellWorker * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete_wxGridCellWorker(arg1);
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GridCellWorker_SetParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGridCellWorker *arg1 = (wxGridCellWorker *) 0 ;
   wxString *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -3827,12 +3855,12 @@ SWIGINTERN PyObject *_wrap_GridCellRenderer_SetParameters(PyObject *SWIGUNUSEDPA
     (char *) "self",(char *) "params", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GridCellRenderer_SetParameters",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGridCellRenderer, 0 |  0 );
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GridCellWorker_SetParameters",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGridCellWorker, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellRenderer_SetParameters" "', expected argument " "1"" of type '" "wxGridCellRenderer *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellWorker_SetParameters" "', expected argument " "1"" of type '" "wxGridCellWorker *""'"); 
   }
-  arg1 = reinterpret_cast< wxGridCellRenderer * >(argp1);
+  arg1 = reinterpret_cast< wxGridCellWorker * >(argp1);
   {
     arg2 = wxString_in_helper(obj1);
     if (arg2 == NULL) SWIG_fail;
@@ -3859,20 +3887,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_GridCellRenderer_IncRef(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_GridCellWorker_IncRef(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
+  wxGridCellWorker *arg1 = (wxGridCellWorker *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGridCellRenderer, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGridCellWorker, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellRenderer_IncRef" "', expected argument " "1"" of type '" "wxGridCellRenderer *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellWorker_IncRef" "', expected argument " "1"" of type '" "wxGridCellWorker *""'"); 
   }
-  arg1 = reinterpret_cast< wxGridCellRenderer * >(argp1);
+  arg1 = reinterpret_cast< wxGridCellWorker * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->IncRef();
@@ -3886,20 +3914,20 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_GridCellRenderer_DecRef(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_GridCellWorker_DecRef(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
+  wxGridCellWorker *arg1 = (wxGridCellWorker *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGridCellRenderer, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGridCellWorker, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellRenderer_DecRef" "', expected argument " "1"" of type '" "wxGridCellRenderer *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellWorker_DecRef" "', expected argument " "1"" of type '" "wxGridCellWorker *""'"); 
   }
-  arg1 = reinterpret_cast< wxGridCellRenderer * >(argp1);
+  arg1 = reinterpret_cast< wxGridCellWorker * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->DecRef();
@@ -3913,218 +3941,12 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_GridCellRenderer_Draw(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
-  wxGrid *arg2 = 0 ;
-  wxGridCellAttr *arg3 = 0 ;
-  wxDC *arg4 = 0 ;
-  wxRect *arg5 = 0 ;
-  int arg6 ;
-  int arg7 ;
-  bool arg8 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  wxRect temp5 ;
-  int val6 ;
-  int ecode6 = 0 ;
-  int val7 ;
-  int ecode7 = 0 ;
-  bool val8 ;
-  int ecode8 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  PyObject * obj6 = 0 ;
-  PyObject * obj7 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "grid",(char *) "attr",(char *) "dc",(char *) "rect",(char *) "row",(char *) "col",(char *) "isSelected", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOOO:GridCellRenderer_Draw",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGridCellRenderer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellRenderer_Draw" "', expected argument " "1"" of type '" "wxGridCellRenderer *""'"); 
-  }
-  arg1 = reinterpret_cast< wxGridCellRenderer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxGrid,  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GridCellRenderer_Draw" "', expected argument " "2"" of type '" "wxGrid &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GridCellRenderer_Draw" "', expected argument " "2"" of type '" "wxGrid &""'"); 
-  }
-  arg2 = reinterpret_cast< wxGrid * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxGridCellAttr,  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "GridCellRenderer_Draw" "', expected argument " "3"" of type '" "wxGridCellAttr &""'"); 
-  }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GridCellRenderer_Draw" "', expected argument " "3"" of type '" "wxGridCellAttr &""'"); 
-  }
-  arg3 = reinterpret_cast< wxGridCellAttr * >(argp3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_wxDC,  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "GridCellRenderer_Draw" "', expected argument " "4"" of type '" "wxDC &""'"); 
-  }
-  if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GridCellRenderer_Draw" "', expected argument " "4"" of type '" "wxDC &""'"); 
-  }
-  arg4 = reinterpret_cast< wxDC * >(argp4);
-  {
-    arg5 = &temp5;
-    if ( ! wxRect_helper(obj4, &arg5)) SWIG_fail;
-  }
-  ecode6 = SWIG_AsVal_int(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GridCellRenderer_Draw" "', expected argument " "6"" of type '" "int""'");
-  } 
-  arg6 = static_cast< int >(val6);
-  ecode7 = SWIG_AsVal_int(obj6, &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "GridCellRenderer_Draw" "', expected argument " "7"" of type '" "int""'");
-  } 
-  arg7 = static_cast< int >(val7);
-  ecode8 = SWIG_AsVal_bool(obj7, &val8);
-  if (!SWIG_IsOK(ecode8)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "GridCellRenderer_Draw" "', expected argument " "8"" of type '" "bool""'");
-  } 
-  arg8 = static_cast< bool >(val8);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->Draw(*arg2,*arg3,*arg4,(wxRect const &)*arg5,arg6,arg7,arg8);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
+SWIGINTERN PyObject *GridCellWorker_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxGridCellWorker, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
 }
-
-
-SWIGINTERN PyObject *_wrap_GridCellRenderer_GetBestSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
-  wxGrid *arg2 = 0 ;
-  wxGridCellAttr *arg3 = 0 ;
-  wxDC *arg4 = 0 ;
-  int arg5 ;
-  int arg6 ;
-  wxSize result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  int val5 ;
-  int ecode5 = 0 ;
-  int val6 ;
-  int ecode6 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  PyObject * obj5 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "grid",(char *) "attr",(char *) "dc",(char *) "row",(char *) "col", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOO:GridCellRenderer_GetBestSize",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGridCellRenderer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellRenderer_GetBestSize" "', expected argument " "1"" of type '" "wxGridCellRenderer *""'"); 
-  }
-  arg1 = reinterpret_cast< wxGridCellRenderer * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxGrid,  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GridCellRenderer_GetBestSize" "', expected argument " "2"" of type '" "wxGrid &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GridCellRenderer_GetBestSize" "', expected argument " "2"" of type '" "wxGrid &""'"); 
-  }
-  arg2 = reinterpret_cast< wxGrid * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxGridCellAttr,  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "GridCellRenderer_GetBestSize" "', expected argument " "3"" of type '" "wxGridCellAttr &""'"); 
-  }
-  if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GridCellRenderer_GetBestSize" "', expected argument " "3"" of type '" "wxGridCellAttr &""'"); 
-  }
-  arg3 = reinterpret_cast< wxGridCellAttr * >(argp3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_wxDC,  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "GridCellRenderer_GetBestSize" "', expected argument " "4"" of type '" "wxDC &""'"); 
-  }
-  if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GridCellRenderer_GetBestSize" "', expected argument " "4"" of type '" "wxDC &""'"); 
-  }
-  arg4 = reinterpret_cast< wxDC * >(argp4);
-  ecode5 = SWIG_AsVal_int(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GridCellRenderer_GetBestSize" "', expected argument " "5"" of type '" "int""'");
-  } 
-  arg5 = static_cast< int >(val5);
-  ecode6 = SWIG_AsVal_int(obj5, &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GridCellRenderer_GetBestSize" "', expected argument " "6"" of type '" "int""'");
-  } 
-  arg6 = static_cast< int >(val6);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (arg1)->GetBestSize(*arg2,*arg3,*arg4,arg5,arg6);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj((new wxSize(static_cast< const wxSize& >(result))), SWIGTYPE_p_wxSize, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_GridCellRenderer_Clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxGridCellRenderer *arg1 = (wxGridCellRenderer *) 0 ;
-  wxGridCellRenderer *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGridCellRenderer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellRenderer_Clone" "', expected argument " "1"" of type '" "wxGridCellRenderer const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxGridCellRenderer * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxGridCellRenderer *)((wxGridCellRenderer const *)arg1)->Clone();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-    resultobj = wxPyMake_wxGridCellRenderer(result, (bool)0); 
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
 
 SWIGINTERN PyObject *GridCellRenderer_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
@@ -4647,38 +4469,6 @@ SWIGINTERN PyObject *GridCellAutoWrapStringRenderer_swiginit(PyObject *SWIGUNUSE
   return SWIG_Python_InitShadowInstance(args);
 }
 
-SWIGINTERN PyObject *_wrap_GridCellEditor__setOORInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
-  PyObject *arg2 = (PyObject *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "_self", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GridCellEditor__setOORInfo",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGridCellEditor, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellEditor__setOORInfo" "', expected argument " "1"" of type '" "wxGridCellEditor *""'"); 
-  }
-  arg1 = reinterpret_cast< wxGridCellEditor * >(argp1);
-  arg2 = obj1;
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxGridCellEditor__setOORInfo(arg1,arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_GridCellEditor_IsCreated(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
@@ -4835,105 +4625,6 @@ SWIGINTERN PyObject *_wrap_GridCellEditor_SetCellAttr(PyObject *SWIGUNUSEDPARM(s
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetCellAttr(arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_GridCellEditor_SetParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
-  wxString *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  bool temp2 = false ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "params", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GridCellEditor_SetParameters",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGridCellEditor, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellEditor_SetParameters" "', expected argument " "1"" of type '" "wxGridCellEditor *""'"); 
-  }
-  arg1 = reinterpret_cast< wxGridCellEditor * >(argp1);
-  {
-    arg2 = wxString_in_helper(obj1);
-    if (arg2 == NULL) SWIG_fail;
-    temp2 = true;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetParameters((wxString const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  {
-    if (temp2)
-    delete arg2;
-  }
-  return resultobj;
-fail:
-  {
-    if (temp2)
-    delete arg2;
-  }
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_GridCellEditor_IncRef(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGridCellEditor, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellEditor_IncRef" "', expected argument " "1"" of type '" "wxGridCellEditor *""'"); 
-  }
-  arg1 = reinterpret_cast< wxGridCellEditor * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->IncRef();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_GridCellEditor_DecRef(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxGridCellEditor *arg1 = (wxGridCellEditor *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGridCellEditor, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GridCellEditor_DecRef" "', expected argument " "1"" of type '" "wxGridCellEditor *""'"); 
-  }
-  arg1 = reinterpret_cast< wxGridCellEditor * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->DecRef();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -6065,6 +5756,34 @@ SWIGINTERN PyObject *_wrap_new_GridCellAttr(PyObject *SWIGUNUSEDPARM(self), PyOb
   {
     resultobj = wxPyMake_wxGridCellAttr(result,     (bool)SWIG_POINTER_NEW); 
   }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_GridCellAttr(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGridCellAttr *arg1 = (wxGridCellAttr *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGridCellAttr, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_GridCellAttr" "', expected argument " "1"" of type '" "wxGridCellAttr *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGridCellAttr * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete_wxGridCellAttr(arg1);
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -20179,13 +19898,12 @@ SWIGINTERN PyObject *GridEditorCreatedEvent_swiginit(PyObject *SWIGUNUSEDPARM(se
 }
 
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"GridCellRenderer__setOORInfo", (PyCFunction) _wrap_GridCellRenderer__setOORInfo, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"GridCellRenderer_SetParameters", (PyCFunction) _wrap_GridCellRenderer_SetParameters, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"GridCellRenderer_IncRef", (PyCFunction)_wrap_GridCellRenderer_IncRef, METH_O, NULL},
-	 { (char *)"GridCellRenderer_DecRef", (PyCFunction)_wrap_GridCellRenderer_DecRef, METH_O, NULL},
-	 { (char *)"GridCellRenderer_Draw", (PyCFunction) _wrap_GridCellRenderer_Draw, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"GridCellRenderer_GetBestSize", (PyCFunction) _wrap_GridCellRenderer_GetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"GridCellRenderer_Clone", (PyCFunction)_wrap_GridCellRenderer_Clone, METH_O, NULL},
+	 { (char *)"GridCellWorker__setOORInfo", (PyCFunction) _wrap_GridCellWorker__setOORInfo, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_GridCellWorker", (PyCFunction)_wrap_delete_GridCellWorker, METH_O, NULL},
+	 { (char *)"GridCellWorker_SetParameters", (PyCFunction) _wrap_GridCellWorker_SetParameters, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GridCellWorker_IncRef", (PyCFunction)_wrap_GridCellWorker_IncRef, METH_O, NULL},
+	 { (char *)"GridCellWorker_DecRef", (PyCFunction)_wrap_GridCellWorker_DecRef, METH_O, NULL},
+	 { (char *)"GridCellWorker_swigregister", GridCellWorker_swigregister, METH_VARARGS, NULL},
 	 { (char *)"GridCellRenderer_swigregister", GridCellRenderer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PyGridCellRenderer", (PyCFunction)_wrap_new_PyGridCellRenderer, METH_NOARGS, NULL},
 	 { (char *)"PyGridCellRenderer__setCallbackInfo", (PyCFunction) _wrap_PyGridCellRenderer__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -20217,15 +19935,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_GridCellAutoWrapStringRenderer", (PyCFunction)_wrap_new_GridCellAutoWrapStringRenderer, METH_NOARGS, NULL},
 	 { (char *)"GridCellAutoWrapStringRenderer_swigregister", GridCellAutoWrapStringRenderer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"GridCellAutoWrapStringRenderer_swiginit", GridCellAutoWrapStringRenderer_swiginit, METH_VARARGS, NULL},
-	 { (char *)"GridCellEditor__setOORInfo", (PyCFunction) _wrap_GridCellEditor__setOORInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GridCellEditor_IsCreated", (PyCFunction)_wrap_GridCellEditor_IsCreated, METH_O, NULL},
 	 { (char *)"GridCellEditor_GetControl", (PyCFunction)_wrap_GridCellEditor_GetControl, METH_O, NULL},
 	 { (char *)"GridCellEditor_SetControl", (PyCFunction) _wrap_GridCellEditor_SetControl, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GridCellEditor_GetCellAttr", (PyCFunction)_wrap_GridCellEditor_GetCellAttr, METH_O, NULL},
 	 { (char *)"GridCellEditor_SetCellAttr", (PyCFunction) _wrap_GridCellEditor_SetCellAttr, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"GridCellEditor_SetParameters", (PyCFunction) _wrap_GridCellEditor_SetParameters, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"GridCellEditor_IncRef", (PyCFunction)_wrap_GridCellEditor_IncRef, METH_O, NULL},
-	 { (char *)"GridCellEditor_DecRef", (PyCFunction)_wrap_GridCellEditor_DecRef, METH_O, NULL},
 	 { (char *)"GridCellEditor_Create", (PyCFunction) _wrap_GridCellEditor_Create, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GridCellEditor_BeginEdit", (PyCFunction) _wrap_GridCellEditor_BeginEdit, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GridCellEditor_EndEdit", (PyCFunction) _wrap_GridCellEditor_EndEdit, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -20271,6 +19985,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GridCellAutoWrapStringEditor_swiginit", GridCellAutoWrapStringEditor_swiginit, METH_VARARGS, NULL},
 	 { (char *)"GridCellAttr__setOORInfo", (PyCFunction) _wrap_GridCellAttr__setOORInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_GridCellAttr", (PyCFunction) _wrap_new_GridCellAttr, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_GridCellAttr", (PyCFunction)_wrap_delete_GridCellAttr, METH_O, NULL},
 	 { (char *)"GridCellAttr_Clone", (PyCFunction)_wrap_GridCellAttr_Clone, METH_O, NULL},
 	 { (char *)"GridCellAttr_MergeWith", (PyCFunction) _wrap_GridCellAttr_MergeWith, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GridCellAttr_IncRef", (PyCFunction)_wrap_GridCellAttr_IncRef, METH_O, NULL},
@@ -20682,6 +20397,60 @@ static void *_p_wxGridCellEnumRendererTo_p_wxGridCellStringRenderer(void *x) {
 }
 static void *_p_wxGridCellAutoWrapStringRendererTo_p_wxGridCellStringRenderer(void *x) {
     return (void *)((wxGridCellStringRenderer *)  ((wxGridCellAutoWrapStringRenderer *) x));
+}
+static void *_p_wxGridCellChoiceEditorTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellEditor *) ((wxGridCellChoiceEditor *) x));
+}
+static void *_p_wxGridCellEnumEditorTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellEditor *)(wxGridCellChoiceEditor *) ((wxGridCellEnumEditor *) x));
+}
+static void *_p_wxGridCellAutoWrapStringEditorTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellEditor *)(wxGridCellTextEditor *) ((wxGridCellAutoWrapStringEditor *) x));
+}
+static void *_p_wxGridCellFloatEditorTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellEditor *)(wxGridCellTextEditor *) ((wxGridCellFloatEditor *) x));
+}
+static void *_p_wxGridCellNumberEditorTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellEditor *)(wxGridCellTextEditor *) ((wxGridCellNumberEditor *) x));
+}
+static void *_p_wxGridCellTextEditorTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellEditor *) ((wxGridCellTextEditor *) x));
+}
+static void *_p_wxPyGridCellEditorTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellEditor *) ((wxPyGridCellEditor *) x));
+}
+static void *_p_wxGridCellEditorTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *)  ((wxGridCellEditor *) x));
+}
+static void *_p_wxGridCellBoolEditorTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellEditor *) ((wxGridCellBoolEditor *) x));
+}
+static void *_p_wxGridCellAutoWrapStringRendererTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellRenderer *)(wxGridCellStringRenderer *) ((wxGridCellAutoWrapStringRenderer *) x));
+}
+static void *_p_wxGridCellEnumRendererTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellRenderer *)(wxGridCellStringRenderer *) ((wxGridCellEnumRenderer *) x));
+}
+static void *_p_wxGridCellDateTimeRendererTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellRenderer *)(wxGridCellStringRenderer *) ((wxGridCellDateTimeRenderer *) x));
+}
+static void *_p_wxGridCellBoolRendererTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellRenderer *) ((wxGridCellBoolRenderer *) x));
+}
+static void *_p_wxGridCellFloatRendererTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellRenderer *)(wxGridCellStringRenderer *) ((wxGridCellFloatRenderer *) x));
+}
+static void *_p_wxGridCellNumberRendererTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellRenderer *)(wxGridCellStringRenderer *) ((wxGridCellNumberRenderer *) x));
+}
+static void *_p_wxGridCellStringRendererTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellRenderer *) ((wxGridCellStringRenderer *) x));
+}
+static void *_p_wxPyGridCellRendererTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *) (wxGridCellRenderer *) ((wxPyGridCellRenderer *) x));
+}
+static void *_p_wxGridCellRendererTo_p_wxGridCellWorker(void *x) {
+    return (void *)((wxGridCellWorker *)  ((wxGridCellRenderer *) x));
 }
 static void *_p_wxScrolledWindowTo_p_wxPanel(void *x) {
     return (void *)((wxPanel *)  ((wxScrolledWindow *) x));
@@ -21802,6 +21571,7 @@ static swig_type_info _swigt__p_wxGridCellNumberRenderer = {"_p_wxGridCellNumber
 static swig_type_info _swigt__p_wxGridCellRenderer = {"_p_wxGridCellRenderer", "wxGridCellRenderer *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxGridCellStringRenderer = {"_p_wxGridCellStringRenderer", "wxGridCellStringRenderer *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxGridCellTextEditor = {"_p_wxGridCellTextEditor", "wxGridCellTextEditor *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxGridCellWorker = {"_p_wxGridCellWorker", "wxGridCellWorker *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxGridEditorCreatedEvent = {"_p_wxGridEditorCreatedEvent", "wxGridEditorCreatedEvent *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxGridEvent = {"_p_wxGridEvent", "wxGridEvent *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxGridRangeSelectEvent = {"_p_wxGridRangeSelectEvent", "wxGridRangeSelectEvent *", 0, 0, (void*)0, 0};
@@ -21864,7 +21634,6 @@ static swig_type_info _swigt__p_wxPyGridCellRenderer = {"_p_wxPyGridCellRenderer
 static swig_type_info _swigt__p_wxPyGridTableBase = {"_p_wxPyGridTableBase", "wxPyGridTableBase *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxRect = {"_p_wxRect", "wxRect *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxScrolledWindow = {"_p_wxScrolledWindow", "wxScrolledWindow *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_wxSize = {"_p_wxSize", "wxSize *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxString = {"_p_wxString", "wxString *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxVisualAttributes = {"_p_wxVisualAttributes", "wxVisualAttributes *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxWindow = {"_p_wxWindow", "wxWindow *", 0, 0, (void*)0, 0};
@@ -21939,6 +21708,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxGridCellRenderer,
   &_swigt__p_wxGridCellStringRenderer,
   &_swigt__p_wxGridCellTextEditor,
+  &_swigt__p_wxGridCellWorker,
   &_swigt__p_wxGridEditorCreatedEvent,
   &_swigt__p_wxGridEvent,
   &_swigt__p_wxGridRangeSelectEvent,
@@ -22031,7 +21801,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxSetCursorEvent,
   &_swigt__p_wxShowEvent,
   &_swigt__p_wxSingleChoiceDialog,
-  &_swigt__p_wxSize,
   &_swigt__p_wxSizeEvent,
   &_swigt__p_wxSizer,
   &_swigt__p_wxSizerItem,
@@ -22178,6 +21947,7 @@ static swig_cast_info _swigc__p_wxGridCellNumberRenderer[] = {  {&_swigt__p_wxGr
 static swig_cast_info _swigc__p_wxGridCellRenderer[] = {  {&_swigt__p_wxGridCellRenderer, 0, 0, 0},  {&_swigt__p_wxPyGridCellRenderer, _p_wxPyGridCellRendererTo_p_wxGridCellRenderer, 0, 0},  {&_swigt__p_wxGridCellStringRenderer, _p_wxGridCellStringRendererTo_p_wxGridCellRenderer, 0, 0},  {&_swigt__p_wxGridCellNumberRenderer, _p_wxGridCellNumberRendererTo_p_wxGridCellRenderer, 0, 0},  {&_swigt__p_wxGridCellFloatRenderer, _p_wxGridCellFloatRendererTo_p_wxGridCellRenderer, 0, 0},  {&_swigt__p_wxGridCellDateTimeRenderer, _p_wxGridCellDateTimeRendererTo_p_wxGridCellRenderer, 0, 0},  {&_swigt__p_wxGridCellEnumRenderer, _p_wxGridCellEnumRendererTo_p_wxGridCellRenderer, 0, 0},  {&_swigt__p_wxGridCellAutoWrapStringRenderer, _p_wxGridCellAutoWrapStringRendererTo_p_wxGridCellRenderer, 0, 0},  {&_swigt__p_wxGridCellBoolRenderer, _p_wxGridCellBoolRendererTo_p_wxGridCellRenderer, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxGridCellStringRenderer[] = {  {&_swigt__p_wxGridCellStringRenderer, 0, 0, 0},  {&_swigt__p_wxGridCellNumberRenderer, _p_wxGridCellNumberRendererTo_p_wxGridCellStringRenderer, 0, 0},  {&_swigt__p_wxGridCellFloatRenderer, _p_wxGridCellFloatRendererTo_p_wxGridCellStringRenderer, 0, 0},  {&_swigt__p_wxGridCellDateTimeRenderer, _p_wxGridCellDateTimeRendererTo_p_wxGridCellStringRenderer, 0, 0},  {&_swigt__p_wxGridCellEnumRenderer, _p_wxGridCellEnumRendererTo_p_wxGridCellStringRenderer, 0, 0},  {&_swigt__p_wxGridCellAutoWrapStringRenderer, _p_wxGridCellAutoWrapStringRendererTo_p_wxGridCellStringRenderer, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxGridCellTextEditor[] = {  {&_swigt__p_wxGridCellTextEditor, 0, 0, 0},  {&_swigt__p_wxGridCellNumberEditor, _p_wxGridCellNumberEditorTo_p_wxGridCellTextEditor, 0, 0},  {&_swigt__p_wxGridCellFloatEditor, _p_wxGridCellFloatEditorTo_p_wxGridCellTextEditor, 0, 0},  {&_swigt__p_wxGridCellAutoWrapStringEditor, _p_wxGridCellAutoWrapStringEditorTo_p_wxGridCellTextEditor, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxGridCellWorker[] = {  {&_swigt__p_wxGridCellChoiceEditor, _p_wxGridCellChoiceEditorTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellEnumEditor, _p_wxGridCellEnumEditorTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellAutoWrapStringEditor, _p_wxGridCellAutoWrapStringEditorTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellFloatEditor, _p_wxGridCellFloatEditorTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellNumberEditor, _p_wxGridCellNumberEditorTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellTextEditor, _p_wxGridCellTextEditorTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxPyGridCellEditor, _p_wxPyGridCellEditorTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellEditor, _p_wxGridCellEditorTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellBoolEditor, _p_wxGridCellBoolEditorTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellWorker, 0, 0, 0},  {&_swigt__p_wxGridCellAutoWrapStringRenderer, _p_wxGridCellAutoWrapStringRendererTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellEnumRenderer, _p_wxGridCellEnumRendererTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellDateTimeRenderer, _p_wxGridCellDateTimeRendererTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellBoolRenderer, _p_wxGridCellBoolRendererTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellFloatRenderer, _p_wxGridCellFloatRendererTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellNumberRenderer, _p_wxGridCellNumberRendererTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellStringRenderer, _p_wxGridCellStringRendererTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxPyGridCellRenderer, _p_wxPyGridCellRendererTo_p_wxGridCellWorker, 0, 0},  {&_swigt__p_wxGridCellRenderer, _p_wxGridCellRendererTo_p_wxGridCellWorker, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxGridEditorCreatedEvent[] = {  {&_swigt__p_wxGridEditorCreatedEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxGridEvent[] = {  {&_swigt__p_wxGridEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxGridRangeSelectEvent[] = {  {&_swigt__p_wxGridRangeSelectEvent, 0, 0, 0},{0, 0, 0, 0}};
@@ -22240,7 +22010,6 @@ static swig_cast_info _swigc__p_wxPyGridCellRenderer[] = {  {&_swigt__p_wxPyGrid
 static swig_cast_info _swigc__p_wxPyGridTableBase[] = {  {&_swigt__p_wxPyGridTableBase, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxRect[] = {  {&_swigt__p_wxRect, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxScrolledWindow[] = {  {&_swigt__p_wxGrid, _p_wxGridTo_p_wxScrolledWindow, 0, 0},  {&_swigt__p_wxScrolledWindow, 0, 0, 0},  {&_swigt__p_wxPyScrolledWindow, _p_wxPyScrolledWindowTo_p_wxScrolledWindow, 0, 0},  {&_swigt__p_wxPreviewCanvas, _p_wxPreviewCanvasTo_p_wxScrolledWindow, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxSize[] = {  {&_swigt__p_wxSize, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxString[] = {  {&_swigt__p_wxString, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxVisualAttributes[] = {  {&_swigt__p_wxVisualAttributes, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxWindow[] = {  {&_swigt__p_wxSplashScreen, _p_wxSplashScreenTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMiniFrame, _p_wxMiniFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyPanel, _p_wxPyPanelTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxWindow, 0, 0},  {&_swigt__p_wxGrid, _p_wxGridTo_p_wxWindow, 0, 0},  {&_swigt__p_wxFindReplaceDialog, _p_wxFindReplaceDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxProgressDialog, _p_wxProgressDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMessageDialog, _p_wxMessageDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPasswordEntryDialog, _p_wxPasswordEntryDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxTextEntryDialog, _p_wxTextEntryDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSingleChoiceDialog, _p_wxSingleChoiceDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMultiChoiceDialog, _p_wxMultiChoiceDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxFileDialog, _p_wxFileDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPanel, _p_wxPanelTo_p_wxWindow, 0, 0},  {&_swigt__p_wxStatusBar, _p_wxStatusBarTo_p_wxWindow, 0, 0},  {&_swigt__p_wxTipWindow, _p_wxTipWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyPopupTransientWindow, _p_wxPyPopupTransientWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPopupWindow, _p_wxPopupWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSashLayoutWindow, _p_wxSashLayoutWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxTopLevelWindow, _p_wxTopLevelWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSplashScreenWindow, _p_wxSplashScreenWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSplitterWindow, _p_wxSplitterWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSashWindow, _p_wxSashWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMDIClientWindow, _p_wxMDIClientWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyScrolledWindow, _p_wxPyScrolledWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxScrolledWindow, _p_wxScrolledWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxWindow, 0, 0, 0},  {&_swigt__p_wxPyPreviewFrame, _p_wxPyPreviewFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPreviewFrame, _p_wxPreviewFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxControl, _p_wxControlTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMDIChildFrame, _p_wxMDIChildFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPreviewCanvas, _p_wxPreviewCanvasTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyWindow, _p_wxPyWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyPreviewControlBar, _p_wxPyPreviewControlBarTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPreviewControlBar, _p_wxPreviewControlBarTo_p_wxWindow, 0, 0},  {&_swigt__p_wxFrame, _p_wxFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxFontDialog, _p_wxFontDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxDirDialog, _p_wxDirDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxColourDialog, _p_wxColourDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxDialog, _p_wxDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMDIParentFrame, _p_wxMDIParentFrameTo_p_wxWindow, 0, 0},{0, 0, 0, 0}};
@@ -22315,6 +22084,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxGridCellRenderer,
   _swigc__p_wxGridCellStringRenderer,
   _swigc__p_wxGridCellTextEditor,
+  _swigc__p_wxGridCellWorker,
   _swigc__p_wxGridEditorCreatedEvent,
   _swigc__p_wxGridEvent,
   _swigc__p_wxGridRangeSelectEvent,
@@ -22407,7 +22177,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxSetCursorEvent,
   _swigc__p_wxShowEvent,
   _swigc__p_wxSingleChoiceDialog,
-  _swigc__p_wxSize,
   _swigc__p_wxSizeEvent,
   _swigc__p_wxSizer,
   _swigc__p_wxSizerItem,

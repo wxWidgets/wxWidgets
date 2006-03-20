@@ -5386,8 +5386,8 @@ class VideoMode(object):
         """
         Matches(self, VideoMode other) -> bool
 
-        Returns true if this mode matches the other one in the sense that all
-        non zero fields of the other mode have the same value in this
+        Returns True if this mode matches the other one in the sense that all
+        non-zero fields of the other mode have the same value in this
         one (except for refresh which is allowed to have a greater value)
         """
         return _misc_.VideoMode_Matches(*args, **kwargs)
@@ -5404,8 +5404,7 @@ class VideoMode(object):
         """
         GetHeight(self) -> int
 
-        Returns the screen width in pixels (e.g. 640*480), 0 means
-        unspecified
+        Returns the screen height in pixels (e.g. 640*480), 0 means unspecified
         """
         return _misc_.VideoMode_GetHeight(*args, **kwargs)
 
@@ -5504,6 +5503,15 @@ class Display(object):
         """
         return _misc_.Display_GetGeometry(*args, **kwargs)
 
+    def GetClientArea(*args, **kwargs):
+        """
+        GetClientArea(self) -> Rect
+
+        Returns the bounding rectangle the client area of the display,
+        i.e., without taskbars and such.
+        """
+        return _misc_.Display_GetClientArea(*args, **kwargs)
+
     def GetName(*args, **kwargs):
         """
         GetName(self) -> String
@@ -5516,7 +5524,7 @@ class Display(object):
         """
         IsPrimary(self) -> bool
 
-        Returns true if the display is the primary display. The primary
+        Returns True if the display is the primary display. The primary
         display is the one whose index is 0.
         """
         return _misc_.Display_IsPrimary(*args, **kwargs)

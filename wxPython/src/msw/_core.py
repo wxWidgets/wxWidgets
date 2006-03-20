@@ -9341,7 +9341,7 @@ class Window(EvtHandler):
 
         Sets the help text to be used as context-sensitive help for this
         window.  Note that the text is actually stored by the current
-        wxHelpProvider implementation, and not in the window object itself.
+        `wx.HelpProvider` implementation, and not in the window object itself.
         """
         return _core_.Window_SetHelpText(*args, **kwargs)
 
@@ -9360,7 +9360,7 @@ class Window(EvtHandler):
 
         Gets the help text to be used as context-sensitive help for this
         window.  Note that the text is actually stored by the current
-        wxHelpProvider implementation, and not in the window object itself.
+        `wx.HelpProvider` implementation, and not in the window object itself.
         """
         return _core_.Window_GetHelpText(*args, **kwargs)
 
