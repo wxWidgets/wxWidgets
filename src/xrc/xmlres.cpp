@@ -1094,13 +1094,13 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
     wxImage img(*(fsfile->GetStream()));
     delete fsfile;
 #else
-    wxImage img(GetParamValue(wxT("bitmap")));
+    wxImage img(name);
 #endif
 
     if (!img.Ok())
     {
         wxLogError(_("XRC resource: Cannot create bitmap from '%s'."),
-                   param.c_str());
+                   name.c_str());
         return wxNullBitmap;
     }
     if (!(size == wxDefaultSize)) img.Rescale(size.x, size.y);
