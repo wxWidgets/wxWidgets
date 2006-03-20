@@ -287,17 +287,16 @@ bool MyApp::OnInit()
     wxHelpProvider::Set(provider);
 
 #if wxUSE_HTML
-#if wxUSE_GIF
-    // Required for images in the online documentation
-    wxImage::AddHandler(new wxGIFHandler);
+    #if wxUSE_GIF
+        // Required for images in the online documentation
+        wxImage::AddHandler(new wxGIFHandler);
+    #endif // wxUSE_GIF
 
     // Required for advanced HTML help
-#if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB
-      wxFileSystem::AddHandler(new wxZipFSHandler);
-#endif
-
-#endif
-#endif
+    #if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB
+        wxFileSystem::AddHandler(new wxZipFSHandler);
+    #endif
+#endif // wxUSE_HTML
 
     // Create the main application window
     MyFrame *frame = new MyFrame(_T("HelpDemo wxWidgets App"),
@@ -309,7 +308,7 @@ bool MyApp::OnInit()
 #else
     provider->SetHelpController(& frame->GetHelpController());
 #endif
-#endif
+#endif // !USE_SIMPLE_HELP_PROVIDER
 
     frame->Show(true);
     SetTopWindow(frame);
