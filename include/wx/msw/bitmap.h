@@ -64,7 +64,7 @@ public:
     // Create a bitmap compatible with the given DC
     wxBitmap(int width, int height, const wxDC& dc);
 
-#if wxUSE_IMAGE && wxUSE_WXDIB
+#if wxUSE_IMAGE
     // Convert from wxImage
     wxBitmap(const wxImage& image, int depth = -1)
         { (void)CreateFromImage(image, depth); }
@@ -94,7 +94,7 @@ public:
 
     virtual ~wxBitmap();
 
-#if wxUSE_IMAGE && wxUSE_WXDIB
+#if wxUSE_IMAGE
     wxImage ConvertToImage() const;
 #endif // wxUSE_IMAGE
 
@@ -171,7 +171,7 @@ protected:
     // creates an uninitialized bitmap, called from Create()s above
     bool DoCreate(int w, int h, int depth, WXHDC hdc);
 
-#if wxUSE_IMAGE && wxUSE_WXDIB
+#if wxUSE_IMAGE
     // creates the bitmap from wxImage, supposed to be called from ctor
     bool CreateFromImage(const wxImage& image, int depth);
 
@@ -183,10 +183,9 @@ protected:
 #endif // wxUSE_IMAGE
 
 private:
-#ifdef __WIN32__
     // common part of CopyFromIcon/CopyFromCursor for Win32
     bool CopyFromIconOrCursor(const wxGDIImage& icon);
-#endif // __WIN32__
+
 
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
