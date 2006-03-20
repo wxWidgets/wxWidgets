@@ -565,12 +565,12 @@ void wxComboBox::Clear()
     if (!gtk_check_version(2,4,0))
     {
         GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
-        size_t i;
-        for (i = 0; i < GetCount(); i++)
+        const size_t count = GetCount();
+        for (size_t i = 0; i < count; i++)
             gtk_combo_box_remove_text( combobox, 0 );
     }
-    else
-#endif
+    else // GTK+ < 2.4.0
+#endif // __WXGTK24__
     {
         GtkWidget *list = GTK_COMBO(m_widget)->list;
         gtk_list_clear_items( GTK_LIST(list), 0, GetCount() );
@@ -580,7 +580,7 @@ void wxComboBox::Clear()
     while (node)
     {
         wxClientData *cd = (wxClientData*)node->GetData();
-        if (cd) delete cd;
+        delete cd;
         node = node->GetNext();
     }
     m_clientObjectList.Clear();
