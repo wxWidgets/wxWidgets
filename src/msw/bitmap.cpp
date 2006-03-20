@@ -808,8 +808,9 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
     wxDIB dib(image);
     if ( !dib.IsOk() )
         return false;
-	if (depth == -1)
-		depth = dib.GetDepth();	// Get depth from image if none specified
+
+    if ( depth == -1 )
+        depth = dib.GetDepth(); // Get depth from image if none specified
 
     // store the bitmap parameters
     wxBitmapRefData *refData = new wxBitmapRefData;
