@@ -14,6 +14,7 @@
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/control.h"
+#include "wx/scrolwin.h"
 
 // --------------------------------------------------------- 
 // classes
@@ -76,7 +77,7 @@ class wxDataViewCustomCell: public wxDataViewCell
 {
 public:
     wxDataViewCustomCell( const wxString &varianttype = wxT("string"), 
-                          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT )
+                          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
     ~wxDataViewCustomCell();
     bool Init();
     
