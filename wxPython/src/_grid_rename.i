@@ -24,6 +24,7 @@
 %rename(GRID_MIN_ROW_HEIGHT)                wxGRID_MIN_ROW_HEIGHT;
 %rename(GRID_MIN_COL_WIDTH)                 wxGRID_MIN_COL_WIDTH;
 %rename(GRID_DEFAULT_SCROLLBAR_WIDTH)       wxGRID_DEFAULT_SCROLLBAR_WIDTH;
+%rename(GridCellWorker)                     wxGridCellWorker;
 %rename(GridCellRenderer)                   wxGridCellRenderer;
 %rename(PyGridCellRenderer)                 wxPyGridCellRenderer;
 %rename(GridCellStringRenderer)             wxGridCellStringRenderer;

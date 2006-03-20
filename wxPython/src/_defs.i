@@ -104,6 +104,8 @@ typedef unsigned long   wxUIntPtr;
 #define %disownarg(typespec)   %typemap(in) typespec = SWIGTYPE* DISOWN
 #define %cleardisown(typespec) %typemap(in) typespec
     
+#define %ref   %feature("ref")
+#define %unref %feature("unref")
 
 
 #ifndef %pythoncode
