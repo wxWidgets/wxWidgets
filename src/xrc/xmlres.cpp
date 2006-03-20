@@ -1104,11 +1104,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
         return wxNullBitmap;
     }
     if (!(size == wxDefaultSize)) img.Rescale(size.x, size.y);
-#if !defined(__WXMSW__) || wxUSE_WXDIB
     return wxBitmap(img);
-#else
-    return wxBitmap();
-#endif
 }
 
 
