@@ -421,9 +421,9 @@ private:
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewHeaderWindow)
     DECLARE_EVENT_TABLE()
-}
+};
 
-IMPLEMENT_DYNAMIC_CLASS(wxDataViewHeaderWindow, wxWindow)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewHeaderWindow, wxWindow)
 
 BEGIN_EVENT_TABLE(wxDataViewHeaderWindow,wxWindow)
     EVT_PAINT         (wxDataViewHeaderWindow::OnPaint)
@@ -467,7 +467,7 @@ void wxDataViewHeaderWindow::OnPaint( wxPaintEvent &event )
     
     dc.SetFont( GetFont() );
     
-    dc.DrawText( wxT("This is the header..", 5, 5 );
+    dc.DrawText( wxT("This is the header.."), 5, 5 );
 }
 
 void wxDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
@@ -506,9 +506,9 @@ private:
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewMainWindow)
     DECLARE_EVENT_TABLE()
-}
+};
 
-IMPLEMENT_DYNAMIC_CLASS(wxDataViewMainWindow, wxWindow)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewMainWindow, wxWindow)
 
 BEGIN_EVENT_TABLE(wxDataViewMainWindow,wxWindow)
     EVT_PAINT         (wxDataViewMainWindow::OnPaint)
@@ -534,7 +534,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &event )
     PrepareDC( dc );
 
     int dev_x, dev_y;
-    CalcScrolledPosition( 0, 0, &dev_x, &dev_y );
+    m_owner->CalcScrolledPosition( 0, 0, &dev_x, &dev_y );
 
     dc.SetFont( GetFont() );
     
