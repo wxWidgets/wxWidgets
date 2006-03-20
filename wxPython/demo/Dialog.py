@@ -5,7 +5,7 @@ import  wx
 # Create and set a help provider.  Normally you would do this in
 # the app's OnInit as it must be done before any SetHelpText calls.
 provider = wx.SimpleHelpProvider()
-wx.HelpProvider_Set(provider)
+wx.HelpProvider.Set(provider)
 
 #---------------------------------------------------------------------------
 
