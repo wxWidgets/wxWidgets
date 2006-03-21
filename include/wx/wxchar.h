@@ -242,20 +242,20 @@
 /* and _() in wxWidgets sources */
 #define wxT(x)       _T(x)
 
+/* a helper macro allowing to make another macro Unicode-friendly, see below */
+#define wxAPPLY_T(x) _T(x)
+
 /* Unicode-friendly __FILE__, __DATE__ and __TIME__ analogs */
 #ifndef __TFILE__
-    #define __XFILE__(x) wxT(x)
-    #define __TFILE__ __XFILE__(__FILE__)
+    #define __TFILE__ wxAPPLY_T(__FILE__)
 #endif
 
 #ifndef __TDATE__
-    #define __XDATE__(x) wxT(x)
-    #define __TDATE__ __XDATE__(__DATE__)
+    #define __TDATE__ wxAPPLY_T(__DATE__)
 #endif
 
 #ifndef __TTIME__
-    #define __XTIME__(x) wxT(x)
-    #define __TTIME__ __XTIME__(__TIME__)
+    #define __TTIME__ wxAPPLY_T(__TIME__)
 #endif
 
 /*
