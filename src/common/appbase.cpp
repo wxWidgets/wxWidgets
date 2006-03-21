@@ -587,16 +587,6 @@ void wxTrap()
 #endif // Win/Unix
 }
 
-void wxAssert(int cond,
-              const wxChar *szFile,
-              int nLine,
-              const wxChar *szCond,
-              const wxChar *szMsg)
-{
-    if ( !cond )
-        wxOnAssert(szFile, nLine, szCond, szMsg);
-}
-
 // this function is called when an assert fails
 void wxOnAssert(const wxChar *szFile,
                 int nLine,

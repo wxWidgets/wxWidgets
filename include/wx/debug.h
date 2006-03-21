@@ -72,12 +72,13 @@
 /*  NB: these functions are implemented in src/common/appcmn.cpp */
 #if defined(__cplusplus) && defined(__WXDEBUG__)
   /*
-    this function may be redefined to do something non trivial and is called
-    whenever one of debugging macros fails (i.e. condition is false in an
-    assertion)
+    This function is called whenever one of debugging macros fails (i.e.
+    condition is false in an assertion). To customize its behaviour, override
+    wxApp::OnAssert().
 
-    parameters:
+    Parameters:
        szFile and nLine - file name and line number of the ASSERT
+       szCond           - text form of the condition which failed
        szMsg            - optional message explaining the reason
   */
   extern void WXDLLIMPEXP_BASE wxOnAssert(const wxChar *szFile,
@@ -89,23 +90,18 @@
   /*  the program is running under debugger, of course) */
   extern void WXDLLIMPEXP_BASE wxTrap();
 
-  /*  helper function used to implement wxASSERT and wxASSERT_MSG */
-  /*  */
-  /*  note using "int" and not "bool" for cond to avoid VC++ warnings about */
-  /*  implicit conversions when doing "wxAssert( pointer )" and also use of */
-  /*  "!!cond" below to ensure that everything is converted to int */
-  extern void WXDLLIMPEXP_BASE wxAssert(int cond,
-                                        const wxChar *szFile,
-                                        int nLine,
-                                        const wxChar *szCond,
-                                        const wxChar *szMsg = NULL) ;
-
   /*  generic assert macro */
-  #define wxASSERT(cond) wxAssert(!!(cond), __TFILE__, __LINE__, _T(#cond))
+  #define wxASSERT(cond) wxASSERT_MSG(cond, NULL)
 
   /*  assert with additional message explaining it's cause */
   #define wxASSERT_MSG(cond, msg) \
-    wxAssert(!!(cond), __TFILE__, __LINE__, _T(#cond), msg)
+    if (cond) ; else wxOnAssert(__TFILE__, __LINE__, _T(#cond), msg)
+
+  /*  special form of assert: always triggers it (in debug mode) */
+  #define wxFAIL wxFAIL_MSG(NULL)
+
+  /*  FAIL with some message */
+  #define wxFAIL_MSG(msg) wxOnAssert(__TFILE__, __LINE__, wxT("wxAssertFailure"), msg)
 
   /*  an assert helper used to avoid warning when testing constant expressions, */
   /*  i.e. wxASSERT( sizeof(int) == 4 ) can generate a compiler warning about */
@@ -122,6 +118,8 @@
   /*  no more bugs ;-) */
   #define wxASSERT(cond)
   #define wxASSERT_MSG(x, m)
+  #define wxFAIL
+  #define wxFAIL_MSG(msg)
 #endif  /* __WXDEBUG__ */
 
 #ifdef __cplusplus
@@ -131,12 +129,6 @@
 #endif
 
 #define wxAssertFailure wxFalse
-
-/*  special form of assert: always triggers it (in debug mode) */
-#define wxFAIL                 wxASSERT(wxAssertFailure)
-
-/*  FAIL with some message */
-#define wxFAIL_MSG(msg)        wxASSERT_MSG(wxAssertFailure, msg)
 
 /*  NB: the following macros work also in release mode! */
 
@@ -148,16 +140,16 @@
 */
 
 /*  check that expression is true, "return" if not (also FAILs in debug mode) */
-#define wxCHECK(x, rc)            if (!(x)) {wxFAIL; return rc; }
+#define wxCHECK(x, rc)            wxCHECK_MSG(x, rc, NULL)
 
 /*  as wxCHECK but with a message explaining why we fail */
-#define wxCHECK_MSG(x, rc, msg)   if (!(x)) {wxFAIL_MSG(msg); return rc; }
+#define wxCHECK_MSG(x, rc, msg)   wxCHECK2_MSG(x, return rc, msg)
 
 /*  check that expression is true, perform op if not */
-#define wxCHECK2(x, op)           if (!(x)) {wxFAIL; op; }
+#define wxCHECK2(x, op)           wxCHECK2_MSG(x, op, NULL)
 
 /*  as wxCHECK2 but with a message explaining why we fail */
-#define wxCHECK2_MSG(x, op, msg)  if (!(x)) {wxFAIL_MSG(msg); op; }
+#define wxCHECK2_MSG(x, op, msg)  if (x) ; else do { wxFAIL_MSG(msg); op; } while (0)
 
 /*  special form of wxCHECK2: as wxCHECK, but for use in void functions */
 /*  */
@@ -165,7 +157,7 @@
 /*      there is no other way to tell the caller what exactly went wrong */
 /*      from the void function (of course, the function shouldn't be void */
 /*      to begin with...) */
-#define wxCHECK_RET(x, msg)       if (!(x)) {wxFAIL_MSG(msg); return; }
+#define wxCHECK_RET(x, msg)       wxCHECK2_MSG(x, return, msg)
 
 /*  ---------------------------------------------------------------------------- */
 /*  Compile time asserts */
