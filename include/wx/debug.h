@@ -47,6 +47,13 @@
     #endif /*  !WXDEBUG */
 #endif /*  __WXDEBUG__ */
 
+/* TODO: add more compilers supporting __FUNCTION__ */
+#if defined(__GNUC__) || (defined(_MSC_VER) && _MSC_VER >= 1300)
+    #define __TFUNC__ wxAPPLY_T(__FUNCTION__)
+#else /* old compilers without __FUNCTION__ support */
+    #define __TFUNC__ _T("")
+#endif
+
 /*  ---------------------------------------------------------------------------- */
 /*  Debugging macros */
 /*  */
@@ -78,11 +85,13 @@
 
     Parameters:
        szFile and nLine - file name and line number of the ASSERT
+       szFunc           - function name of the ASSERT, may be empty
        szCond           - text form of the condition which failed
        szMsg            - optional message explaining the reason
   */
   extern void WXDLLIMPEXP_BASE wxOnAssert(const wxChar *szFile,
                                           int nLine,
+                                          const wxChar *szFunc,
                                           const wxChar *szCond,
                                           const wxChar *szMsg = NULL);
 
@@ -94,14 +103,18 @@
   #define wxASSERT(cond) wxASSERT_MSG(cond, NULL)
 
   /*  assert with additional message explaining it's cause */
-  #define wxASSERT_MSG(cond, msg) \
-    if (cond) ; else wxOnAssert(__TFILE__, __LINE__, _T(#cond), msg)
+  #define wxASSERT_MSG(cond, msg)                                             \
+    if ( cond )                                                               \
+        ;                                                                     \
+    else                                                                      \
+        wxOnAssert(__TFILE__, __LINE__, __TFUNC__, _T(#cond), msg)
 
   /*  special form of assert: always triggers it (in debug mode) */
   #define wxFAIL wxFAIL_MSG(NULL)
 
   /*  FAIL with some message */
-  #define wxFAIL_MSG(msg) wxOnAssert(__TFILE__, __LINE__, wxT("wxAssertFailure"), msg)
+  #define wxFAIL_MSG(msg)                                                     \
+      wxOnAssert(__TFILE__, __LINE__,  __TFUNC__, _T("wxAssertFailure"), msg)
 
   /*  an assert helper used to avoid warning when testing constant expressions, */
   /*  i.e. wxASSERT( sizeof(int) == 4 ) can generate a compiler warning about */
@@ -117,7 +130,7 @@
   /*  nothing to do in release modes (hopefully at this moment there are */
   /*  no more bugs ;-) */
   #define wxASSERT(cond)
-  #define wxASSERT_MSG(x, m)
+  #define wxASSERT_MSG(cond, msg)
   #define wxFAIL
   #define wxFAIL_MSG(msg)
 #endif  /* __WXDEBUG__ */
@@ -140,16 +153,24 @@
 */
 
 /*  check that expression is true, "return" if not (also FAILs in debug mode) */
-#define wxCHECK(x, rc)            wxCHECK_MSG(x, rc, NULL)
+#define wxCHECK(cond, rc)            wxCHECK_MSG(cond, rc, NULL)
 
 /*  as wxCHECK but with a message explaining why we fail */
-#define wxCHECK_MSG(x, rc, msg)   wxCHECK2_MSG(x, return rc, msg)
+#define wxCHECK_MSG(cond, rc, msg)   wxCHECK2_MSG(cond, return rc, msg)
 
 /*  check that expression is true, perform op if not */
-#define wxCHECK2(x, op)           wxCHECK2_MSG(x, op, NULL)
+#define wxCHECK2(cond, op)           wxCHECK2_MSG(cond, op, NULL)
 
 /*  as wxCHECK2 but with a message explaining why we fail */
-#define wxCHECK2_MSG(x, op, msg)  if (x) ; else do { wxFAIL_MSG(msg); op; } while (0)
+#define wxCHECK2_MSG(cond, op, msg)                                           \
+    if ( cond )                                                               \
+        ;                                                                     \
+    else                                                                      \
+        do                                                                    \
+        {                                                                     \
+            wxOnAssert(__TFILE__, __LINE__, __TFUNC__, _T(#cond), msg);       \
+            op;                                                               \
+        } while ( 0 )
 
 /*  special form of wxCHECK2: as wxCHECK, but for use in void functions */
 /*  */
@@ -157,7 +178,7 @@
 /*      there is no other way to tell the caller what exactly went wrong */
 /*      from the void function (of course, the function shouldn't be void */
 /*      to begin with...) */
-#define wxCHECK_RET(x, msg)       wxCHECK2_MSG(x, return, msg)
+#define wxCHECK_RET(cond, msg)       wxCHECK2_MSG(cond, return, msg)
 
 /*  ---------------------------------------------------------------------------- */
 /*  Compile time asserts */

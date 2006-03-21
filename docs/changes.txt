@@ -47,6 +47,8 @@ All:
 - Overloaded Connect() and SetLocal() methods for binding to local address/port.
 - All GetCount() methods now return size_t and not int
 - Albanian translation added (Besnik Bleta)
+- Assert messages now show the function in which assert failed
+- wxApp::OnAssertFailure() should now be used instead the old wxApp::OnAssert()
 
 All (GUI):
 

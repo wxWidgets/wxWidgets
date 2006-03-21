@@ -93,6 +93,7 @@
     static
     void ShowAssertDialog(const wxChar *szFile,
                           int nLine,
+                          const wxChar *szFunc,
                           const wxChar *szCond,
                           const wxChar *szMsg,
                           wxAppTraits *traits = NULL);
@@ -434,12 +435,21 @@ bool wxAppConsole::CheckBuildOptions(const char *optionsSignature,
 
 #ifdef __WXDEBUG__
 
+void wxAppConsole::OnAssertFailure(const wxChar *file,
+                                   int line,
+                                   const wxChar *func,
+                                   const wxChar *cond,
+                                   const wxChar *msg)
+{
+    ShowAssertDialog(file, line, func, cond, msg, GetTraits());
+}
+
 void wxAppConsole::OnAssert(const wxChar *file,
                             int line,
                             const wxChar *cond,
                             const wxChar *msg)
 {
-    ShowAssertDialog(file, line, cond, msg, GetTraits());
+    OnAssertFailure(file, line, _T(""), cond, msg);
 }
 
 #endif // __WXDEBUG__
@@ -590,6 +600,7 @@ void wxTrap()
 // this function is called when an assert fails
 void wxOnAssert(const wxChar *szFile,
                 int nLine,
+                const wxChar *szFunc,
                 const wxChar *szCond,
                 const wxChar *szMsg)
 {
@@ -612,12 +623,12 @@ void wxOnAssert(const wxChar *szFile,
     {
         // by default, show the assert dialog box -- we can't customize this
         // behaviour
-        ShowAssertDialog(szFile, nLine, szCond, szMsg);
+        ShowAssertDialog(szFile, nLine, szFunc, szCond, szMsg);
     }
     else
     {
         // let the app process it as it wants
-        wxTheApp->OnAssert(szFile, nLine, szCond, szMsg);
+        wxTheApp->OnAssertFailure(szFile, nLine, szFunc, szCond, szMsg);
     }
 
     s_bInAssert = false;
@@ -747,6 +758,7 @@ static wxString GetAssertStackTrace()
 static
 void ShowAssertDialog(const wxChar *szFile,
                       int nLine,
+                      const wxChar *szFunc,
                       const wxChar *szCond,
                       const wxChar *szMsg,
                       wxAppTraits *traits)
@@ -762,6 +774,11 @@ void ShowAssertDialog(const wxChar *szFile,
     // the failed assert
     msg.Printf(wxT("%s(%d): assert \"%s\" failed"), szFile, nLine, szCond);
 
+    // add the function name, if any
+    if ( szFunc && *szFunc )
+        msg << _T(" in ") << szFunc << _T("()");
+
+    // and the message itself
     if ( szMsg )
     {
         msg << _T(": ") << szMsg;
