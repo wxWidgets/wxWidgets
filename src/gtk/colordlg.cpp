@@ -104,12 +104,10 @@ void wxColourDialog::ColourDataToDialog()
         }
     }
 
-    gchar *pal = gtk_color_selection_palette_to_string(colors, n_colors);
+    wxGtkString pal(gtk_color_selection_palette_to_string(colors, n_colors));
 
     GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET(sel));
     g_object_set(settings, "gtk-color-palette", pal, NULL);
-
-    g_free(pal);
 }
 
 void wxColourDialog::DialogToColourData()
