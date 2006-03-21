@@ -401,7 +401,7 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
 
         // 1d and 1e have special meaning to SetItemCmd, so
         // do not use for these character codes.
-        if (key != WXK_UP && key != WXK_RIGHT)
+        if (key != WXK_UP && key != WXK_RIGHT && key != WXK_DOWN && key != WXK_LEFT)
             SetItemCmd( menu, item , macKey );
 
         SetMenuItemModifiers( menu, item , modifiers ) ;
