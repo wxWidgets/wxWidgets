@@ -375,6 +375,12 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
         // Have we come to the last or first item on the panel?
         if ( !node )
         {
+            if ( !start_node )
+            {
+                // exit now as otherwise we'd loop forever
+                break;
+            }
+
             if ( !goingDown )
             {
                 // Check if our (maybe grand) parent is another panel: if this
