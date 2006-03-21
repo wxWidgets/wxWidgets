@@ -277,7 +277,7 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 bool wxSpinButton::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
                                WXWORD pos, WXHWND control)
 {
-    wxCHECK_MSG( control, false, wxT("scrolling what?") )
+    wxCHECK_MSG( control, false, wxT("scrolling what?") );
 
     if ( wParam != SB_THUMBPOSITION )
     {

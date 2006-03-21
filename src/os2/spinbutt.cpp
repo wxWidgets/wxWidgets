@@ -192,7 +192,7 @@ bool wxSpinButton::OS2OnScroll( int    WXUNUSED(nOrientation),
                                 WXWORD wPos,
                                 WXHWND hControl )
 {
-    wxCHECK_MSG(hControl, false, wxT("scrolling what?") )
+    wxCHECK_MSG(hControl, false, wxT("scrolling what?") );
 
     wxSpinEvent vEvent( wxEVT_SCROLL_THUMBTRACK, m_windowId );
     int nVal = (int)wPos;    // cast is important for negative values!

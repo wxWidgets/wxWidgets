@@ -508,10 +508,10 @@ wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
 
 bool wxBitmap::CreateFromXpm(const char **bits)
 {
-    wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") )
+    wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") );
     wxXPMDecoder decoder;
     wxImage img = decoder.ReadData(bits);
-    wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid bitmap data") )
+    wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid bitmap data") );
     *this = wxBitmap(img);
     return TRUE;
 }
@@ -718,8 +718,8 @@ bool wxBitmap::Create(void *data, wxBitmapType type, int width, int height, int 
 
 wxBitmap::wxBitmap(const wxImage& image, int depth)
 {
-    wxCHECK_RET( image.Ok(), wxT("invalid image") )
-    wxCHECK_RET( depth == -1, wxT("invalid bitmap depth") )
+    wxCHECK_RET( image.Ok(), wxT("invalid image") );
+    wxCHECK_RET( depth == -1, wxT("invalid bitmap depth") );
 
     m_refData = new wxBitmapRefData();
 

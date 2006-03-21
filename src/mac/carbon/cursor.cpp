@@ -262,10 +262,10 @@ wxCursor::wxCursor(char **bits)
 bool wxCursor::CreateFromXpm(const char **bits)
 {
 #if wxUSE_IMAGE
-    wxCHECK_MSG( bits != NULL, false, wxT("invalid cursor data") )
+    wxCHECK_MSG( bits != NULL, false, wxT("invalid cursor data") );
     wxXPMDecoder decoder;
     wxImage img = decoder.ReadData(bits);
-    wxCHECK_MSG( img.Ok(), false, wxT("invalid cursor data") )
+    wxCHECK_MSG( img.Ok(), false, wxT("invalid cursor data") );
     CreateFromImage( img ) ;
     return true;
 #else

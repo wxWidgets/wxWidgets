@@ -10,6 +10,8 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
   even compile)
 - For all wxInputStreams, Eof() becomes true after an attempt has been made
   to read _past_ the end of file.
+- wxCHECK family of macros now must be followed by a semicolon
+
 
 Deprecated methods since 2.6.x and their replacements
 -----------------------------------------------------

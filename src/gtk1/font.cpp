@@ -757,7 +757,7 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
 {
     GdkFont *font = (GdkFont *) NULL;
 
-    wxCHECK_MSG( Ok(), font, wxT("invalid font") )
+    wxCHECK_MSG( Ok(), font, wxT("invalid font") );
 
     long int_scale = long(scale * 100.0 + 0.5); // key for fontlist
     int point_scale = (int)((M_FONTDATA->m_pointSize * 10 * int_scale) / 100);

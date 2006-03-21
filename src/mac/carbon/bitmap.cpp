@@ -876,11 +876,11 @@ void wxBitmap::EndRawAccess()
 bool wxBitmap::CreateFromXpm(const char **bits)
 {
 #if wxUSE_IMAGE
-    wxCHECK_MSG( bits != NULL, false, wxT("invalid bitmap data") )
+    wxCHECK_MSG( bits != NULL, false, wxT("invalid bitmap data") );
 
     wxXPMDecoder decoder;
     wxImage img = decoder.ReadData(bits);
-    wxCHECK_MSG( img.Ok(), false, wxT("invalid bitmap data") )
+    wxCHECK_MSG( img.Ok(), false, wxT("invalid bitmap data") );
 
     *this = wxBitmap(img);
 
@@ -1027,7 +1027,7 @@ bool wxBitmap::Create(void *data, wxBitmapType type, int width, int height, int 
 
 wxBitmap::wxBitmap(const wxImage& image, int depth)
 {
-    wxCHECK_RET( image.Ok(), wxT("invalid image") )
+    wxCHECK_RET( image.Ok(), wxT("invalid image") );
 
     // width and height of the device-dependent bitmap
     int width = image.GetWidth();

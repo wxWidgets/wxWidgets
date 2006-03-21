@@ -389,12 +389,12 @@ bool wxBitmap::CreateFromXpm(
 #if wxUSE_IMAGE && wxUSE_XPM
     Init();
 
-    wxCHECK_MSG(ppData != NULL, false, wxT("invalid bitmap data"))
+    wxCHECK_MSG(ppData != NULL, false, wxT("invalid bitmap data"));
 
     wxXPMDecoder                    vDecoder;
     wxImage                         vImg = vDecoder.ReadData(ppData);
 
-    wxCHECK_MSG(vImg.Ok(), false, wxT("invalid bitmap data"))
+    wxCHECK_MSG(vImg.Ok(), false, wxT("invalid bitmap data"));
 
     *this = wxBitmap(vImg);
     return true;

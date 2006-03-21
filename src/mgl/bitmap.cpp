@@ -205,7 +205,7 @@ bool wxBitmap::Create(int width, int height, int depth)
 {
     UnRef();
 
-    wxCHECK_MSG( (width > 0) && (height > 0), false, wxT("invalid bitmap size") )
+    wxCHECK_MSG( (width > 0) && (height > 0), false, wxT("invalid bitmap size") );
 
     pixel_format_t pf_dummy;
     pixel_format_t *pf;
@@ -267,11 +267,11 @@ bool wxBitmap::Create(int width, int height, int depth)
 
 bool wxBitmap::CreateFromXpm(const char **bits)
 {
-    wxCHECK_MSG( bits != NULL, false, wxT("invalid bitmap data") )
+    wxCHECK_MSG( bits != NULL, false, wxT("invalid bitmap data") );
 
     wxXPMDecoder decoder;
     wxImage img = decoder.ReadData(bits);
-    wxCHECK_MSG( img.Ok(), false, wxT("invalid bitmap data") )
+    wxCHECK_MSG( img.Ok(), false, wxT("invalid bitmap data") );
 
     *this = wxBitmap(img);
 
@@ -282,7 +282,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
 {
     long width, height;
 
-    wxCHECK_RET( image.Ok(), wxT("invalid image") )
+    wxCHECK_RET( image.Ok(), wxT("invalid image") );
 
     width = image.GetWidth();
     height = image.GetHeight();

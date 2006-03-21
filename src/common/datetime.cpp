@@ -204,13 +204,8 @@ struct tm *wxGmtime_r(const time_t* ticks, struct tm* temp)
 // ----------------------------------------------------------------------------
 
 // debugging helper: just a convenient replacement of wxCHECK()
-#define wxDATETIME_CHECK(expr, msg)     \
-        if ( !(expr) )                  \
-        {                               \
-            wxFAIL_MSG(msg);            \
-            *this = wxInvalidDateTime;  \
-            return *this;               \
-        }
+#define wxDATETIME_CHECK(expr, msg) \
+    wxCHECK2_MSG(expr, *this = wxInvalidDateTime; return *this, msg)
 
 // ----------------------------------------------------------------------------
 // private classes
