@@ -190,6 +190,9 @@ private:
             }                                                                 \
             compatibility_iterator GetPrevious() const                        \
             {                                                                 \
+                if ( m_iter == m_list->begin() )                              \
+                    return compatibility_iterator();                          \
+                                                                              \
                 iterator i = m_iter;                                          \
                 return compatibility_iterator( m_list, --i );                 \
             }                                                                 \
