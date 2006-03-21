@@ -191,11 +191,8 @@ private:
             }                                                                 \
             int IndexOf() const                                               \
             {                                                                 \
-                return m_list ?                                               \
-                    m_iter != m_list->end() ?                                 \
-                        std::distance( m_list->begin(), m_iter ) :            \
-                            wxNOT_FOUND :                                     \
-                        wxNOT_FOUND;                                          \
+                return *this ? std::distance( m_list->begin(), m_iter )       \
+                             : wxNOT_FOUND;                                   \
             }                                                                 \
         };                                                                    \
     public:                                                                   \
