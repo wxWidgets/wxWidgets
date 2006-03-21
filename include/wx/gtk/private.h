@@ -70,6 +70,8 @@ public:
     explicit wxGtkString(gchar *s) : m_str(s) { }
     ~wxGtkString() { g_free(m_str); }
 
+    const gchar *c_str() const { return m_str; }
+
     operator gchar *() const { return m_str; }
 
 private:
