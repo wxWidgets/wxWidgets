@@ -3817,9 +3817,11 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                 }
                 else // may be either day or year
                 {
+                    // use a leap year if we don't have the year yet to allow
+                    // dates like 2/29/1976 which would be rejected otherwise
                     wxDateTime_t max_days = (wxDateTime_t)(
                         haveMon
-                        ? GetNumOfDaysInMonth(haveYear ? year : Inv_Year, mon)
+                        ? GetNumOfDaysInMonth(haveYear ? year : 1976, mon)
                         : 31
                     );
 
@@ -3972,7 +3974,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
     {
         wxLogDebug(_T("ParseDate: no day, no weekday hence no date."));
 
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     if ( haveWDay && (haveMon || haveYear || haveDay) &&
@@ -3981,7 +3983,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
         // without adjectives (which we don't support here) the week day only
         // makes sense completely separately or with the full date
         // specification (what would "Wed 1999" mean?)
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     if ( !haveWDay && haveYear && !(haveDay && haveMon) )
@@ -4011,7 +4013,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
             // if we give the year, month and day must be given too
             wxLogDebug(_T("ParseDate: day and month should be specified if year is."));
 
-            return (wxChar *)NULL;
+            return NULL;
         }
     }
 
@@ -4027,6 +4029,11 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
 
     if ( haveDay )
     {
+        // normally we check the day above but the check is optimistic in case
+        // we find the day before its month/year so we have to redo it now
+        if ( day > GetNumOfDaysInMonth(year, mon) )
+            return NULL;
+
         Set(day, mon, year);
 
         if ( haveWDay )

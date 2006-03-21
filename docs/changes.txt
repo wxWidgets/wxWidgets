@@ -49,6 +49,7 @@ All:
 - Albanian translation added (Besnik Bleta)
 - Assert messages now show the function in which assert failed
 - wxApp::OnAssertFailure() should now be used instead the old wxApp::OnAssert()
+- Fixed several bugs in wxDateTime::ParseDate()
 
 All (GUI):
 
