@@ -381,28 +381,30 @@ wxArrayString XmlResApp::PrepareTempFiles()
 // Does 'node' contain filename information at all?
 static bool NodeContainsFilename(wxXmlNode *node)
 {
-   // Any bitmaps:
-   if (node->GetName() == _T("bitmap"))
+   const wxString name = node->GetName();
+
+   // Any bitmaps (bitmap2 is used for disabled toolbar buttons):
+   if ( name == _T("bitmap") || name == _T("bitmap2") )
        return true;
 
-   if (node->GetName() == _T("icon"))
+   if ( name == _T("icon") )
        return true;
 
    // URLs in wxHtmlWindow:
-   if (node->GetName() == _T("url"))
+   if ( name == _T("url") )
        return true;
 
    // wxBitmapButton:
    wxXmlNode *parent = node->GetParent();
    if (parent != NULL &&
        parent->GetPropVal(_T("class"), _T("")) == _T("wxBitmapButton") &&
-       (node->GetName() == _T("focus") ||
-        node->GetName() == _T("disabled") ||
-        node->GetName() == _T("selected")))
+       (name == _T("focus") ||
+        name == _T("disabled") ||
+        name == _T("selected")))
        return true;
 
    // wxBitmap or wxIcon toplevel resources:
-   if (node->GetName() == _T("object"))
+   if ( name == _T("object") )
    {
        wxString klass = node->GetPropVal(_T("class"), wxEmptyString);
        if (klass == _T("wxBitmap") || klass == _T("wxIcon"))
