@@ -274,8 +274,10 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
         wxHtmlProcessorList::compatibility_iterator nodeL, nodeG;
         int prL, prG;
 
-        nodeL = (m_Processors) ? m_Processors->GetFirst() : wxHtmlProcessorList::compatibility_iterator();
-        nodeG = (m_GlobalProcessors) ? m_GlobalProcessors->GetFirst() : wxHtmlProcessorList::compatibility_iterator();
+        if ( m_Processors )
+            nodeL = m_Processors->GetFirst();
+        if ( m_GlobalProcessors )
+            nodeG = m_GlobalProcessors->GetFirst();
 
         // VS: there are two lists, global and local, both of them sorted by
         //     priority. Since we have to go through _both_ lists with

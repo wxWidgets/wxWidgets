@@ -567,7 +567,9 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
         if (firstParagraph)
         {
             wxRichTextObjectList::compatibility_iterator firstNode = m_children.Find(firstParagraph);
-            wxRichTextObjectList::compatibility_iterator previousNode = firstNode ? firstNode->GetPrevious() : wxRichTextObjectList::compatibility_iterator();
+            wxRichTextObjectList::compatibility_iterator previousNode;
+            if ( firstNode )
+                previousNode = firstNode->GetPrevious();
             if (firstNode && previousNode)
             {
                 wxRichTextParagraph* previousParagraph = wxDynamicCast(previousNode->GetData(), wxRichTextParagraph);

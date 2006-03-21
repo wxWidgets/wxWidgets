@@ -680,7 +680,17 @@ private:
     {                                                                       \
     public:                                                                 \
         typedef nodetype Node;                                              \
-        typedef Node* compatibility_iterator;                               \
+        class compatibility_iterator                                        \
+        {                                                                   \
+        public:                                                             \
+            compatibility_iterator(Node *ptr = NULL) : m_ptr(ptr) { }       \
+                                                                            \
+            Node *operator->() const { return m_ptr; }                      \
+            operator Node *() const { return m_ptr; }                       \
+                                                                            \
+        private:                                                            \
+            Node *m_ptr;                                                    \
+        };                                                                  \
                                                                             \
         name(wxKeyType keyType = wxKEY_NONE) : wxListBase(keyType)          \
             { }                                                             \
