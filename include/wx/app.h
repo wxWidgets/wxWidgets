@@ -245,13 +245,22 @@ public:
     // debugging support
     // -----------------
 
+#ifdef __WXDEBUG__
     // this function is called when an assert failure occurs, the base class
     // version does the normal processing (i.e. shows the usual assert failure
     // dialog box)
     //
-    // the arguments are the place where the assert occurred, the text of the
+    // the arguments are the location of the failed assert (func may be empty
+    // if the compiler doesn't support C99 __FUNCTION__), the text of the
     // assert itself and the user-specified message
-#ifdef __WXDEBUG__
+    virtual void OnAssertFailure(const wxChar *file,
+                                 int line,
+                                 const wxChar *func,
+                                 const wxChar *cond,
+                                 const wxChar *msg);
+
+    // old version of the function without func parameter, for compatibility
+    // only, override OnAssertFailure() in the new code
     virtual void OnAssert(const wxChar *file,
                           int line,
                           const wxChar *cond,

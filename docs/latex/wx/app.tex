@@ -268,16 +268,16 @@ Returns 0 under X, and the wParam of the WM\_QUIT message under Windows.
 %%\helpref{wxWindow::OnCharHook}{wxwindowoncharhook}, \helpref{wxDialog::OnCharHook}{wxdialogoncharhook}
 
 
-\membersection{wxApp::OnAssert}\label{wxapponassert}
+\membersection{wxApp::OnAssertFailure}\label{wxapponassertfailure}
 
-\func{void}{OnAssert}{\param{const wxChar }{*file}, \param{int }{line}, \param{const wxChar }{*cond}, \param{const wxChar }{*msg}}
+\func{void}{OnAssertFailure}{\param{const wxChar }{*file}, \param{int }{line}, \param{const wxChar }{*func}, \param{const wxChar }{*cond}, \param{const wxChar }{*msg}}
 
 This function is called when an assert failure occurs, i.e. the condition
 specified in \helpref{wxASSERT}{wxassert} macro evaluated to {\tt false}.
 It is only called in debug mode (when {\tt \_\_WXDEBUG\_\_} is defined) as
 asserts are not left in the release code at all.
 
-The base class version show the default assert failure dialog box proposing to
+The base class version shows the default assert failure dialog box proposing to
 the user to stop the program, continue or ignore all subsequent asserts.
 
 \wxheading{Parameters}
@@ -286,7 +286,10 @@ the user to stop the program, continue or ignore all subsequent asserts.
 
 \docparam{line}{the line number in this file where the assert occurred}
 
-\docparam{cond}{the condition of the failed assert in string form}
+\docparam{func}{the name of the function where the assert occurred, may be
+empty if the compiler doesn't support C99 \texttt{\_\_FUNCTION\_\_}}
+
+\docparam{cond}{the condition of the failed assert in text form}
 
 \docparam{msg}{the message specified as argument to 
 \helpref{wxASSERT\_MSG}{wxassertmsg} or \helpref{wxFAIL\_MSG}{wxfailmsg}, will
