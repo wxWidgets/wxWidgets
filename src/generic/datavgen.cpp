@@ -381,6 +381,7 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell,
     size_t model_column, int flags ) :
     wxDataViewColumnBase( title, cell, model_column, flags )
 {
+    m_width = 80;
 }
 
 wxDataViewColumn::~wxDataViewColumn()
@@ -436,7 +437,7 @@ wxDataViewHeaderWindow::wxDataViewHeaderWindow( wxDataViewCtrl *parent, wxWindow
     wxWindow( parent, id, pos, size, 0, name )
 {
     SetOwner( parent );
-    
+
     m_resizeCursor = new wxCursor( wxCURSOR_SIZEWE );
     
     wxVisualAttributes attr = wxPanel::GetClassDefaultAttributes();
@@ -453,8 +454,10 @@ wxDataViewHeaderWindow::~wxDataViewHeaderWindow()
 
 void wxDataViewHeaderWindow::OnPaint( wxPaintEvent &event )
 {
-    wxPaintDC dc;
-    PrepareDC( dc );
+    int w, h;
+    GetClientSize( &w, &h );
+
+    wxPaintDC dc( this );
     
     int xpix;
     m_owner->GetScrollPixelsPerUnit( &xpix, NULL );
@@ -467,7 +470,37 @@ void wxDataViewHeaderWindow::OnPaint( wxPaintEvent &event )
     
     dc.SetFont( GetFont() );
     
-    dc.DrawText( wxT("This is the header.."), 5, 5 );
+    size_t cols = GetOwner()->GetNumberOfColumns();
+    size_t i;
+    int xpos = 0;
+    for (i = 0; i < cols; i++)
+    {
+        wxDataViewColumn *col = GetOwner()->GetColumn( i );
+        int width = col->GetWidth();
+        
+        // the width of the rect to draw: make it smaller to fit entirely
+        // inside the column rect
+#ifdef __WXMAC__
+        int cw = width;
+        int ch = h;
+#else
+        int cw = width - 2;
+        int ch = h - 2;
+#endif
+
+        wxRendererNative::Get().DrawHeaderButton
+                                (
+                                    this,
+                                    dc,
+                                    wxRect(xpos, 0, cw, ch),
+                                    m_parent->IsEnabled() ? 0
+                                                          : (int)wxCONTROL_DISABLED
+                                );
+
+        dc.DrawText( col->GetTitle(), xpos+3, 3 );   
+                                
+        xpos += width;
+    }
 }
 
 void wxDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
@@ -500,8 +533,15 @@ public:
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
     
+    void UpdateDisplay();
+    void RecalculateDisplay();
+    void OnInternalIdle();
+    
+    void ScrollWindow( int dx, int dy, const wxRect *rect );
 private:
     wxDataViewCtrl      *m_owner;
+    int                  m_lineHeight;
+    bool                 m_dirty;
     
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewMainWindow)
@@ -521,20 +561,70 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     wxWindow( parent, id, pos, size, 0, name )
 {
     SetOwner( parent );
+    
+    // We need to calculate this smartly..
+    m_lineHeight = 20;
+    
+    UpdateDisplay();
 }
 
 wxDataViewMainWindow::~wxDataViewMainWindow()
 {
 }
 
+void wxDataViewMainWindow::UpdateDisplay()
+{
+    m_dirty = true;
+}
+
+void wxDataViewMainWindow::OnInternalIdle()
+{
+    wxWindow::OnInternalIdle();
+    
+    if (m_dirty)
+    {
+        RecalculateDisplay();
+        m_dirty = false;
+    }
+}
+
+void wxDataViewMainWindow::RecalculateDisplay()
+{
+    wxDataViewListModel *model = GetOwner()->GetModel();
+    if (!model)
+    {
+        Refresh();
+        return;
+    }
+    
+    int width = 0;
+    size_t cols = GetOwner()->GetNumberOfColumns();
+    size_t i;
+    for (i = 0; i < cols; i++)
+    {
+        wxDataViewColumn *col = GetOwner()->GetColumn( i );
+        width += col->GetWidth();
+    }
+    
+    int height = model->GetNumberOfRows() * m_lineHeight;
+
+    SetVirtualSize( width, height );
+    GetOwner()->SetScrollRate( 10, m_lineHeight );
+    
+    Refresh();
+}
+
+void wxDataViewMainWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
+{
+    wxWindow::ScrollWindow( dx, dy, rect );
+    GetOwner()->m_headerArea->ScrollWindow( dx, 0 );
+}
+
 void wxDataViewMainWindow::OnPaint( wxPaintEvent &event )
 {
     wxPaintDC dc( this );
 
-    PrepareDC( dc );
-
-    int dev_x, dev_y;
-    m_owner->CalcScrolledPosition( 0, 0, &dev_x, &dev_y );
+    GetOwner()->PrepareDC( dc );
 
     dc.SetFont( GetFont() );
     
@@ -557,6 +647,10 @@ void wxDataViewMainWindow::OnSetFocus( wxFocusEvent &event )
 
 IMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl, wxDataViewCtrlBase)
 
+BEGIN_EVENT_TABLE(wxDataViewCtrl, wxDataViewCtrlBase)
+    EVT_SIZE(wxDataViewCtrl::OnSize)
+END_EVENT_TABLE()
+
 wxDataViewCtrl::~wxDataViewCtrl()
 {
     if (m_notifier)
@@ -572,6 +666,9 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos, const wxSize& size, 
            long style, const wxValidator& validator )
 {
+    if (!wxControl::Create( parent, id, pos, size, style | wxScrolledWindowStyle|wxSUNKEN_BORDER, validator))
+        return false;
+
     Init();
     
 #ifdef __WXMAC__
@@ -610,10 +707,18 @@ WXLRESULT wxDataViewCtrl::MSWWindowProc(WXUINT nMsg,
 }
 #endif
 
-void wxDataViewCtrl::ScrollWindow( int dx, int dy, const wxRect *rect )
+void wxDataViewCtrl::OnSize( wxSizeEvent &event )
 {
-    wxDataViewCtrlBase::ScrollWindow( dx, dy, rect );
-    m_headerArea->ScrollWindow( dx, 0, rect );
+    // We need to override OnSize so that our scrolled
+    // window a) does call Layout() to use sizers for
+    // positioning the controls but b) does not query
+    // the sizer for their size and use that for setting
+    // the scrollable area as set that ourselves by
+    // calling SetScrollbar() further down.
+
+    Layout();
+
+    AdjustScrollbars();
 }
 
 bool wxDataViewCtrl::AssociateModel( wxDataViewListModel *model )
@@ -625,6 +730,8 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewListModel *model )
 
     model->AddNotifier( m_notifier );    
 
+    m_clientArea->UpdateDisplay();
+    
     return true;
 }
 
@@ -632,7 +739,9 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
 {
     if (!wxDataViewCtrlBase::AppendColumn(col))
         return false;
-        
+    
+    m_clientArea->UpdateDisplay();
+    
     return true;
 }
 

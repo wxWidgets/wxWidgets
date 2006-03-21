@@ -21,6 +21,8 @@
 // --------------------------------------------------------- 
 
 class WXDLLIMPEXP_CORE wxDataViewCtrl;
+class WXDLLIMPEXP_CORE wxDataViewMainWindow;
+class WXDLLIMPEXP_CORE wxDataViewHeaderWindow;
 
 // --------------------------------------------------------- 
 // wxDataViewCell
@@ -169,7 +171,11 @@ public:
 
     virtual void SetTitle( const wxString &title );
     
+    void SetWidth( int width ) { m_width = width; }
+    int GetWidth() { return m_width; }
+    
 private:
+    int     m_width;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumn)
@@ -179,7 +185,7 @@ protected:
 // wxDataViewCtrl
 // --------------------------------------------------------- 
 
-class WXDLLIMPEXP_CORE wxDataViewCtrl: public wxDataViewCtrlBase,
+class WXDLLIMPEXP_CORE wxDataViewCtrl: public wxDataViewCtrlBase, 
                                        public wxScrollHelperNative
 {
 public:
@@ -191,8 +197,8 @@ public:
     wxDataViewCtrl( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator ) :
-           wxScrollHelperNative(this)
+           const wxValidator& validator = wxDefaultValidator ) 
+             : wxScrollHelperNative(this)
     {
         Create(parent, id, pos, size, style, validator );
     }
@@ -210,13 +216,14 @@ public:
     virtual bool AppendColumn( wxDataViewColumn *col );
     
 private:
+    friend class wxDataViewMainWindow;
     wxDataViewListModelNotifier *m_notifier;
-    wxWindow                    *m_clientArea;
-    wxWindow                    *m_headerArea;
+    wxDataViewMainWindow        *m_clientArea;
+    wxDataViewHeaderWindow      *m_headerArea;
     
 private:
-    virtual void ScrollWindow( int dx, int dy, const wxRect *rect );
-
+    void OnSize( wxSizeEvent &event );
+    
     // we need to return a special WM_GETDLGCODE value to process just the
     // arrows but let the other navigation characters through
 #ifdef __WXMSW__
@@ -224,10 +231,11 @@ private:
 #endif // __WXMSW__
 
     WX_FORWARD_TO_SCROLL_HELPER()
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewCtrl)
     DECLARE_NO_COPY_CLASS(wxDataViewCtrl)
+    DECLARE_EVENT_TABLE()
 };
 
 
