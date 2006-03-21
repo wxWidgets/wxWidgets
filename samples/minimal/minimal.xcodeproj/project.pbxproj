@@ -500,8 +500,6 @@
 					MACOS_CLASSIC,
 					"__WXDEBUG__=1",
 				);
-				GCC_VERSION_i386 = 4.0;
-				GCC_VERSION_ppc = 3.3;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../../src/build/Development";
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
@@ -538,8 +536,6 @@
 					"WX_PRECOMP=1",
 					MACOS_CLASSIC,
 				);
-				GCC_VERSION_i386 = 4.0;
-				GCC_VERSION_ppc = 3.3;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../../src/build/Deployment";
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
