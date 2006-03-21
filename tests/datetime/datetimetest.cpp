@@ -20,14 +20,23 @@
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
 
+#if wxUSE_DATETIME
+
 #include "wx/datetime.h"
+#include "wx/ioswrap.h"
+
+// need this to be able to use CPPUNIT_ASSERT_EQUAL with wxDateTime objects
+static wxSTD ostream& operator<<(wxSTD ostream& ostr, const wxDateTime& dt)
+{
+    ostr << dt.Format();
+
+    return ostr;
+}
 
 // to test Today() meaningfully we must be able to change the system date which
 // is not usually the case, but if we're under Win32 we can try it -- define
 // the macro below to do it
 //#define CHANGE_SYSTEM_DATE
-
-#if wxUSE_DATETIME
 
 #ifndef __WINDOWS__
     #undef CHANGE_SYSTEM_DATE
@@ -179,7 +188,8 @@ private:
         CPPUNIT_TEST( TestTimeDST );
         CPPUNIT_TEST( TestTimeFormat );
         CPPUNIT_TEST( TestTimeTicks );
-        CPPUNIT_TEST( TestTimeParse );
+        CPPUNIT_TEST( TestParceRFC822 );
+        CPPUNIT_TEST( TestDateParse );
         CPPUNIT_TEST( TestTimeArithmetics );
         CPPUNIT_TEST( TestDSTBug );
     CPPUNIT_TEST_SUITE_END();
@@ -192,7 +202,8 @@ private:
     void TestTimeDST();
     void TestTimeFormat();
     void TestTimeTicks();
-    void TestTimeParse();
+    void TestParceRFC822();
+    void TestDateParse();
     void TestTimeArithmetics();
     void TestDSTBug();
 
@@ -680,12 +691,12 @@ void DateTimeTestCase::TestTimeTicks()
     }
 }
 
-// test text -> wxDateTime conversion
-void DateTimeTestCase::TestTimeParse()
+// test parsing dates in RFC822 format
+void DateTimeTestCase::TestParceRFC822()
 {
     static const struct ParseTestData
     {
-        const wxChar *format;
+        const wxChar *rfc822;
         Date date;              // NB: this should be in UTC
         bool good;
     } parseTestDates[] =
@@ -709,15 +720,56 @@ void DateTimeTestCase::TestTimeParse()
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
-        const wxChar *format = parseTestDates[n].format;
-
         wxDateTime dt;
-        if ( dt.ParseRfc822Date(format) )
+        if ( dt.ParseRfc822Date(parseTestDates[n].rfc822) )
         {
             CPPUNIT_ASSERT( parseTestDates[n].good );
 
             wxDateTime dtReal = parseTestDates[n].date.DT().FromUTC();
-            CPPUNIT_ASSERT( dt == dtReal );
+            CPPUNIT_ASSERT_EQUAL( dtReal, dt );
+        }
+        else // failed to parse
+        {
+            CPPUNIT_ASSERT( !parseTestDates[n].good );
+        }
+    }
+}
+
+// test parsing dates in free format
+void DateTimeTestCase::TestDateParse()
+{
+    static const struct ParseTestData
+    {
+        const wxChar *str;
+        Date date;              // NB: this should be in UTC
+        bool good;
+    } parseTestDates[] =
+    {
+        { _T("21 Mar 2006"), { 21, wxDateTime::Mar, 2006 }, true },
+        { _T("29 Feb 1976"), { 29, wxDateTime::Feb, 1976 }, true },
+        { _T("Feb 29 1976"), { 29, wxDateTime::Feb, 1976 }, true },
+        { _T("31/03/06"),    { 31, wxDateTime::Mar,    6 }, true },
+        { _T("31/03/2006"),  { 31, wxDateTime::Mar, 2006 }, true },
+
+        // some invalid ones too
+        { _T("29 Feb 2006") },
+        { _T("31/04/06") },
+        { _T("bloordyblop") }
+    };
+
+    // special cases
+    wxDateTime dt;
+    CPPUNIT_ASSERT( dt.ParseDate(_T("today")) );
+    CPPUNIT_ASSERT_EQUAL( wxDateTime::Today(), dt );
+
+    for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
+    {
+        wxDateTime dt;
+        if ( dt.ParseDate(parseTestDates[n].str) )
+        {
+            CPPUNIT_ASSERT( parseTestDates[n].good );
+
+            CPPUNIT_ASSERT_EQUAL( parseTestDates[n].date.DT(), dt );
         }
         else // failed to parse
         {
