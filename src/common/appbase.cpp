@@ -739,7 +739,7 @@ static wxString GetAssertStackTrace()
     };
 
     StackDump dump;
-    dump.Walk(5); // don't show OnAssert() call itself
+    dump.Walk(2); // don't show OnAssert() call itself
     stackTrace = dump.GetStackTrace();
 
     // don't show more than maxLines or we could get a dialog too tall to be
