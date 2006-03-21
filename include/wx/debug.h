@@ -48,10 +48,9 @@
 #endif /*  __WXDEBUG__ */
 
 /* TODO: add more compilers supporting __FUNCTION__ */
-#if defined(__GNUC__) || (defined(_MSC_VER) && _MSC_VER >= 1300)
-    #define __TFUNC__ wxAPPLY_T(__FUNCTION__)
-#else /* old compilers without __FUNCTION__ support */
-    #define __TFUNC__ _T("")
+#if !defined(__GNUC__) && !(defined(_MSC_VER) && _MSC_VER >= 1300)
+    /* no __FUNCTION__ support, still define it to avoid #ifdefs elsewhere */
+    #define __FUNCTION__ (NULL)
 #endif
 
 /*  ---------------------------------------------------------------------------- */
@@ -85,13 +84,13 @@
 
     Parameters:
        szFile and nLine - file name and line number of the ASSERT
-       szFunc           - function name of the ASSERT, may be empty
+       szFunc           - function name of the ASSERT, may be NULL (NB: ASCII)
        szCond           - text form of the condition which failed
        szMsg            - optional message explaining the reason
   */
   extern void WXDLLIMPEXP_BASE wxOnAssert(const wxChar *szFile,
                                           int nLine,
-                                          const wxChar *szFunc,
+                                          const char *szFunc,
                                           const wxChar *szCond,
                                           const wxChar *szMsg = NULL);
 
@@ -107,14 +106,14 @@
     if ( cond )                                                               \
         ;                                                                     \
     else                                                                      \
-        wxOnAssert(__TFILE__, __LINE__, __TFUNC__, _T(#cond), msg)
+        wxOnAssert(__TFILE__, __LINE__, __FUNCTION__, _T(#cond), msg)
 
   /*  special form of assert: always triggers it (in debug mode) */
   #define wxFAIL wxFAIL_MSG(NULL)
 
   /*  FAIL with some message */
   #define wxFAIL_MSG(msg)                                                     \
-      wxOnAssert(__TFILE__, __LINE__,  __TFUNC__, _T("wxAssertFailure"), msg)
+      wxOnAssert(__TFILE__, __LINE__,  __FUNCTION__, _T("wxAssertFailure"), msg)
 
   /*  an assert helper used to avoid warning when testing constant expressions, */
   /*  i.e. wxASSERT( sizeof(int) == 4 ) can generate a compiler warning about */
@@ -168,7 +167,7 @@
     else                                                                      \
         do                                                                    \
         {                                                                     \
-            wxOnAssert(__TFILE__, __LINE__, __TFUNC__, _T(#cond), msg);       \
+            wxOnAssert(__TFILE__, __LINE__, __FUNCTION__, _T(#cond), msg);       \
             op;                                                               \
         } while ( 0 )
 

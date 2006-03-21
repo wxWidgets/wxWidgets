@@ -449,7 +449,7 @@ void wxAppConsole::OnAssert(const wxChar *file,
                             const wxChar *cond,
                             const wxChar *msg)
 {
-    OnAssertFailure(file, line, _T(""), cond, msg);
+    OnAssertFailure(file, line, NULL, cond, msg);
 }
 
 #endif // __WXDEBUG__
@@ -600,7 +600,7 @@ void wxTrap()
 // this function is called when an assert fails
 void wxOnAssert(const wxChar *szFile,
                 int nLine,
-                const wxChar *szFunc,
+                const char *szFunc,
                 const wxChar *szCond,
                 const wxChar *szMsg)
 {
@@ -619,16 +619,19 @@ void wxOnAssert(const wxChar *szFile,
 
     s_bInAssert = true;
 
+    // __FUNCTION__ is always in ASCII, convert it to wide char if needed
+    const wxString strFunc = wxString::FromAscii(szFunc);
+
     if ( !wxTheApp )
     {
         // by default, show the assert dialog box -- we can't customize this
         // behaviour
-        ShowAssertDialog(szFile, nLine, szFunc, szCond, szMsg);
+        ShowAssertDialog(szFile, nLine, strFunc, szCond, szMsg);
     }
     else
     {
         // let the app process it as it wants
-        wxTheApp->OnAssertFailure(szFile, nLine, szFunc, szCond, szMsg);
+        wxTheApp->OnAssertFailure(szFile, nLine, strFunc, szCond, szMsg);
     }
 
     s_bInAssert = false;
