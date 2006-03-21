@@ -107,7 +107,7 @@ void wxColourDialog::ColourDataToDialog()
     wxGtkString pal(gtk_color_selection_palette_to_string(colors, n_colors));
 
     GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET(sel));
-    g_object_set(settings, "gtk-color-palette", pal, NULL);
+    g_object_set(settings, "gtk-color-palette", pal.c_str(), NULL);
 }
 
 void wxColourDialog::DialogToColourData()
