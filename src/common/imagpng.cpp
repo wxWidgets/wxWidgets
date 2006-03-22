@@ -179,12 +179,14 @@ PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 // from pngerror.c
 // so that the libpng doesn't send anything on stderr
 void
-PNGLINKAGEMODE wx_png_error(png_structp WXUNUSED(png_ptr), png_const_charp message)
+PNGLINKAGEMODE wx_png_error(png_structp png_ptr, png_const_charp message)
 {
-    // JS: deliver it to wx_png_warning and don't perform any more actions:
-    // libpng will jump back to the calling function (LoadFile and SaveFile)
-    // and allow it to handle the error
     wx_png_warning(NULL, message);
+
+    // we're not using libpng built-in jump buffer (see comment before
+    // wxPNGInfoStruct above) so we have to return ourselves, otherwise libpng
+    // would just abort
+    longjmp(WX_PNG_INFO(png_ptr)->jmpbuf, 1);
 }
 
 } // extern "C"
@@ -539,7 +541,7 @@ wxPNGHandler::LoadFile(wxImage *image,
     if (setjmp(wxinfo.jmpbuf))
         goto error;
 
-    png_uint_32 i, width, height;
+    png_uint_32 i, width, height = 0;
     int bit_depth, color_type, interlace_type;
 
     png_read_info( png_ptr, info_ptr );
@@ -601,6 +603,9 @@ error:
 
     if ( lines )
     {
+        for ( unsigned int n = 0; n < height; n++ )
+            free( lines[n] );
+
         free( lines );
     }
 
