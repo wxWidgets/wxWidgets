@@ -171,11 +171,11 @@
     if ( cond )                                                               \
         ;                                                                     \
     else                                                                      \
-        do                                                                    \
-        {                                                                     \
-            wxFAIL_COND_MSG(#cond, msg);                                      \
-            op;                                                               \
-        } while ( 0 )
+    {                                                                         \
+        wxFAIL_COND_MSG(#cond, msg);                                          \
+        op;                                                                   \
+    }                                                                         \
+    struct wxDummyCheckStruct /* just to force a semicolon */
 
 /*  special form of wxCHECK2: as wxCHECK, but for use in void functions */
 /*  */
