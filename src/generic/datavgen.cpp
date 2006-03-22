@@ -139,16 +139,50 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewCell, wxDataViewCellBase)
 wxDataViewCell::wxDataViewCell( const wxString &varianttype, wxDataViewCellMode mode ) :
     wxDataViewCellBase( varianttype, mode )
 {
+    m_dc = NULL;
 }
 
+wxDataViewCell::~wxDataViewCell()
+{
+    if (m_dc)
+        delete m_dc;
+}
+
+wxDC *wxDataViewCell::GetDC()
+{
+    if (m_dc == NULL)
+    {
+        if (GetOwner() == NULL)
+            return NULL;
+        if (GetOwner()->GetOwner() == NULL)
+            return NULL;
+        m_dc = new wxClientDC( GetOwner()->GetOwner() );
+    }
+        
+    return m_dc;
+}
+
+// --------------------------------------------------------- 
+// wxDataViewCustomCell
+// --------------------------------------------------------- 
+
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomCell, wxDataViewCell)
+
+wxDataViewCustomCell::wxDataViewCustomCell( const wxString &varianttype, 
+                          wxDataViewCellMode mode ) :
+    wxDataViewCell( varianttype, mode )
+{
+}
+
+    
 // --------------------------------------------------------- 
 // wxDataViewTextCell
 // --------------------------------------------------------- 
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewTextCell, wxDataViewCell)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewTextCell, wxDataViewCustomCell)
 
 wxDataViewTextCell::wxDataViewTextCell( const wxString &varianttype, wxDataViewCellMode mode ) :
-    wxDataViewCell( varianttype, mode )
+    wxDataViewCustomCell( varianttype, mode )
 {
 }
 
@@ -162,15 +196,25 @@ bool wxDataViewTextCell::GetValue( wxVariant &value )
     return false;
 }
 
+bool wxDataViewTextCell::Render( wxRect cell, wxDC *dc, int state )
+{
+    return false;
+}
+
+wxSize wxDataViewTextCell::GetSize()
+{
+    return wxSize(80,20);
+}
+
 // --------------------------------------------------------- 
 // wxDataViewToggleCell
 // --------------------------------------------------------- 
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleCell, wxDataViewCell)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleCell, wxDataViewCustomCell)
 
 wxDataViewToggleCell::wxDataViewToggleCell( const wxString &varianttype, 
                         wxDataViewCellMode mode ) :
-    wxDataViewCell( varianttype, mode )
+    wxDataViewCustomCell( varianttype, mode )
 {
 }
 
@@ -184,46 +228,16 @@ bool wxDataViewToggleCell::GetValue( wxVariant &value )
     return false;
 }
     
-// --------------------------------------------------------- 
-// wxDataViewCustomCell
-// --------------------------------------------------------- 
-
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomCell, wxDataViewCell)
-
-wxDataViewCustomCell::wxDataViewCustomCell( const wxString &varianttype, 
-                          wxDataViewCellMode mode ) :
-    wxDataViewCell( varianttype, mode )
-{
-    m_dc = NULL;
-    
-    Init();
-}
-
-bool wxDataViewCustomCell::Init()
+bool wxDataViewToggleCell::Render( wxRect cell, wxDC *dc, int state )
 {
     return false;
 }
 
-wxDataViewCustomCell::~wxDataViewCustomCell()
+wxSize wxDataViewToggleCell::GetSize()
 {
-    if (m_dc)
-        delete m_dc;
+    return wxSize(20,20);
 }
 
-wxDC *wxDataViewCustomCell::GetDC()
-{
-    if (m_dc == NULL)
-    {
-        if (GetOwner() == NULL)
-            return NULL;
-        if (GetOwner()->GetOwner() == NULL)
-            return NULL;
-        m_dc = new wxClientDC( GetOwner()->GetOwner() );
-    }
-        
-    return m_dc;
-}
-    
 // --------------------------------------------------------- 
 // wxDataViewProgressCell
 // --------------------------------------------------------- 

@@ -32,57 +32,8 @@ class wxDataViewCell: public wxDataViewCellBase
 {
 public:
     wxDataViewCell( const wxString &varianttype, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+    ~wxDataViewCell();
 
-protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCell)
-};
-    
-// --------------------------------------------------------- 
-// wxDataViewTextCell
-// --------------------------------------------------------- 
-
-class wxDataViewTextCell: public wxDataViewCell
-{
-public:
-    wxDataViewTextCell( const wxString &varianttype = wxT("string"), 
-                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
-
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant &value );
-    
-protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextCell)
-};
-    
-// --------------------------------------------------------- 
-// wxDataViewToggleCell
-// --------------------------------------------------------- 
-
-class wxDataViewToggleCell: public wxDataViewCell
-{
-public:
-    wxDataViewToggleCell( const wxString &varianttype = wxT("bool"), 
-                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
-
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant &value );
-    
-protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleCell)
-};
-    
-// --------------------------------------------------------- 
-// wxDataViewCustomCell
-// --------------------------------------------------------- 
-
-class wxDataViewCustomCell: public wxDataViewCell
-{
-public:
-    wxDataViewCustomCell( const wxString &varianttype = wxT("string"), 
-                          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
-    ~wxDataViewCustomCell();
-    bool Init();
-    
     virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
     virtual wxSize GetSize() = 0;
     
@@ -107,7 +58,61 @@ private:
     wxDC        *m_dc;
     
 protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCell)
+};
+    
+// --------------------------------------------------------- 
+// wxDataViewCustomCell
+// --------------------------------------------------------- 
+
+class wxDataViewCustomCell: public wxDataViewCell
+{
+public:
+    wxDataViewCustomCell( const wxString &varianttype = wxT("string"), 
+                          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+    
+protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomCell)
+};
+    
+// --------------------------------------------------------- 
+// wxDataViewTextCell
+// --------------------------------------------------------- 
+
+class wxDataViewTextCell: public wxDataViewCustomCell
+{
+public:
+    wxDataViewTextCell( const wxString &varianttype = wxT("string"), 
+                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+
+    bool SetValue( const wxVariant &value );
+    bool GetValue( wxVariant &value );
+    
+    bool Render( wxRect cell, wxDC *dc, int state );
+    wxSize GetSize();
+    
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextCell)
+};
+    
+// --------------------------------------------------------- 
+// wxDataViewToggleCell
+// --------------------------------------------------------- 
+
+class wxDataViewToggleCell: public wxDataViewCustomCell
+{
+public:
+    wxDataViewToggleCell( const wxString &varianttype = wxT("bool"), 
+                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+
+    bool SetValue( const wxVariant &value );
+    bool GetValue( wxVariant &value );
+    
+    bool Render( wxRect cell, wxDC *dc, int state );
+    wxSize GetSize();
+    
+protected:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleCell)
 };
     
 // --------------------------------------------------------- 
@@ -217,6 +222,7 @@ public:
     
 private:
     friend class wxDataViewMainWindow;
+    friend class wxDataViewHeaderWindow;
     wxDataViewListModelNotifier *m_notifier;
     wxDataViewMainWindow        *m_clientArea;
     wxDataViewHeaderWindow      *m_headerArea;
