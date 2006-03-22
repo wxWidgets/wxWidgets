@@ -631,6 +631,10 @@ typedef pid_t GPid;
  */
 #define wxUSE_LIBGNOMEPRINT 0
 /*
+ * Use GNOME VFS for MIME types
+ */
+#define wxUSE_LIBGNOMEVFS 0
+/*
  * Use the Hildon framework
  */
 #define wxUSE_LIBHILDON 0

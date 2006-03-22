@@ -483,6 +483,10 @@ void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)
     }
 }
 
+#ifdef __VMS
+#pragma message disable unscomzer
+#endif
+
 int wxChoice::GtkAddHelper(GtkWidget *menu, size_t pos, const wxString& item)
 {
     wxCHECK_MSG((pos>=0) && (pos<=m_clientList.GetCount()), -1, wxT("invalid index"));
@@ -550,6 +554,10 @@ int wxChoice::GtkAddHelper(GtkWidget *menu, size_t pos, const wxString& item)
     // return the index of the item in the control
     return index;
 }
+
+#ifdef __VMS
+#pragma message enable unscomzer
+#endif
 
 wxSize wxChoice::DoGetBestSize() const
 {
