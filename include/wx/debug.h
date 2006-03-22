@@ -112,8 +112,11 @@
   #define wxFAIL wxFAIL_MSG(NULL)
 
   /*  FAIL with some message */
-  #define wxFAIL_MSG(msg)                                                     \
-      wxOnAssert(__TFILE__, __LINE__,  __FUNCTION__, _T("wxAssertFailure"), msg)
+  #define wxFAIL_MSG(msg) wxFAIL_COND_MSG("wxAssertFailure", msg)
+
+  /*  FAIL with some message and a condition */
+  #define wxFAIL_COND_MSG(cond, msg)                                          \
+      wxOnAssert(__TFILE__, __LINE__,  __FUNCTION__, _T(cond), msg)
 
   /*  an assert helper used to avoid warning when testing constant expressions, */
   /*  i.e. wxASSERT( sizeof(int) == 4 ) can generate a compiler warning about */
@@ -132,6 +135,7 @@
   #define wxASSERT_MSG(cond, msg)
   #define wxFAIL
   #define wxFAIL_MSG(msg)
+  #define wxFAIL_COND_MSG(cond, msg)
 #endif  /* __WXDEBUG__ */
 
 #ifdef __cplusplus
@@ -167,7 +171,7 @@
     else                                                                      \
         do                                                                    \
         {                                                                     \
-            wxOnAssert(__TFILE__, __LINE__, __FUNCTION__, _T(#cond), msg);       \
+            wxFAIL_COND_MSG(#cond, msg);                                      \
             op;                                                               \
         } while ( 0 )
 
