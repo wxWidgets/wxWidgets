@@ -302,7 +302,7 @@ bool wxMDIParentFrame::ShouldBeVisible() const
         if ( win->IsShown()
                 && !wxDynamicCast(win, wxMDIChildFrame)
 #if wxUSE_STATUSBAR
-                && win != GetStatusBar()
+                && win != (wxWindow*) GetStatusBar()
 #endif
                 && win != GetClientWindow() )
         {

@@ -23,6 +23,7 @@
 #include "wx/fontmap.h"
 #include "wx/fontutil.h"
 #include "wx/encinfo.h"
+#include "wx/intl.h"
 
 #include "wx/mac/private.h"
 
