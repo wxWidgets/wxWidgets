@@ -807,7 +807,7 @@ private :
 
 ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, Point location , WindowRef window , ControlPartCode *outPart ) ;
 
-#if WORDS_BIGENDIAN
+#ifdef WORDS_BIGENDIAN
 inline Rect* wxMacGetPictureBounds( PicHandle pict , Rect* rect ) 
 { 
     *rect = (**pict).picFrame ; 
