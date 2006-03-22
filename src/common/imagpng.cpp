@@ -183,7 +183,7 @@ PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 // from pngerror.c
 // so that the libpng doesn't send anything on stderr
 void
-PNGLINKAGEMODE wx_png_error(png_structp WXUNUSED(png_ptr), png_const_charp message)
+PNGLINKAGEMODE wx_png_error(png_structp png_ptr, png_const_charp message)
 {
     wx_png_warning(NULL, message);
 
