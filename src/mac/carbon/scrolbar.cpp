@@ -16,6 +16,7 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/settings.h"
 #include "wx/scrolbar.h"
 #include "wx/mac/uma.h"
 
