@@ -48,7 +48,9 @@
 #endif /*  __WXDEBUG__ */
 
 /* TODO: add more compilers supporting __FUNCTION__ */
-#if !defined(__GNUC__) && !(defined(_MSC_VER) && _MSC_VER >= 1300)
+#if !defined(__GNUC__) && \
+    !(defined(_MSC_VER) && _MSC_VER >= 1300) && \
+    !defined(__FUNCTION__)
     /* no __FUNCTION__ support, still define it to avoid #ifdefs elsewhere */
     #define __FUNCTION__ (NULL)
 #endif
