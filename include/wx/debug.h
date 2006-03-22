@@ -48,11 +48,13 @@
 #endif /*  __WXDEBUG__ */
 
 /* TODO: add more compilers supporting __FUNCTION__ */
-#if !defined(__GNUC__) && \
-    !(defined(_MSC_VER) && _MSC_VER >= 1300) && \
-    !defined(__FUNCTION__)
-    /* no __FUNCTION__ support, still define it to avoid #ifdefs elsewhere */
-    #define __FUNCTION__ (NULL)
+#if defined(__GNUC__) || \
+    (defined(_MSC_VER) && _MSC_VER >= 1300) || \
+    defined(__FUNCTION__)
+    #define __WXFUNCTION__ __FUNCTION__
+#else
+    /* still define __WXFUNCTION__ to avoid #ifdefs elsewhere */
+    #define __WXFUNCTION__ (NULL)
 #endif
 
 /*  ---------------------------------------------------------------------------- */
@@ -108,7 +110,7 @@
     if ( cond )                                                               \
         ;                                                                     \
     else                                                                      \
-        wxOnAssert(__TFILE__, __LINE__, __FUNCTION__, _T(#cond), msg)
+        wxOnAssert(__TFILE__, __LINE__, __WXFUNCTION__, _T(#cond), msg)
 
   /*  special form of assert: always triggers it (in debug mode) */
   #define wxFAIL wxFAIL_MSG(NULL)
@@ -118,7 +120,7 @@
 
   /*  FAIL with some message and a condition */
   #define wxFAIL_COND_MSG(cond, msg)                                          \
-      wxOnAssert(__TFILE__, __LINE__,  __FUNCTION__, _T(cond), msg)
+      wxOnAssert(__TFILE__, __LINE__,  __WXFUNCTION__, _T(cond), msg)
 
   /*  an assert helper used to avoid warning when testing constant expressions, */
   /*  i.e. wxASSERT( sizeof(int) == 4 ) can generate a compiler warning about */
