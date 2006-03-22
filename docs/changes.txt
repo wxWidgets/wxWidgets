@@ -25,6 +25,7 @@ All:
 
 All (GUI):
 
+- Fixed abort() on loading invalid PNG image
 - Added space after list item number in wxHTML.
 - wxCalendarCtrl drawing, positioning and hit-testing fixes.
 - More checking of image validity before loading into wxImage.
