@@ -516,6 +516,7 @@ wxPNGHandler::LoadFile(wxImage *image,
     //     method is to use goto (setjmp is not really C++ dtors friendly...)
 
     unsigned char **lines = NULL;
+    png_uint_32 height = 0;
     png_infop info_ptr = (png_infop) NULL;
     wxPNGInfoStruct wxinfo;
 
@@ -545,7 +546,7 @@ wxPNGHandler::LoadFile(wxImage *image,
     if (setjmp(wxinfo.jmpbuf))
         goto error;
 
-    png_uint_32 i, width, height = 0;
+    png_uint_32 i, width;
     int bit_depth, color_type, interlace_type;
 
     png_read_info( png_ptr, info_ptr );
