@@ -508,12 +508,15 @@ wxPNGHandler::LoadFile(wxImage *image,
                        bool verbose,
                        int WXUNUSED(index))
 {
-    // VZ: as this function uses setjmp() the only fool proof error handling
+    // VZ: as this function uses setjmp() the only fool-proof error handling
     //     method is to use goto (setjmp is not really C++ dtors friendly...)
 
     unsigned char **lines = NULL;
     png_infop info_ptr = (png_infop) NULL;
     wxPNGInfoStruct wxinfo;
+
+    png_uint_32 i, width, height = 0;
+    int bit_depth, color_type, interlace_type;
 
     wxinfo.verbose = verbose;
     wxinfo.stream.in = &stream;
@@ -540,9 +543,6 @@ wxPNGHandler::LoadFile(wxImage *image,
 
     if (setjmp(wxinfo.jmpbuf))
         goto error;
-
-    png_uint_32 i, width, height = 0;
-    int bit_depth, color_type, interlace_type;
 
     png_read_info( png_ptr, info_ptr );
     png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, (int*) NULL, (int*) NULL );
