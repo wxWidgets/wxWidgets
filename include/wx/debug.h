@@ -47,15 +47,17 @@
     #endif /*  !WXDEBUG */
 #endif /*  __WXDEBUG__ */
 
-/* TODO: add more compilers supporting __FUNCTION__ */
-#if defined(__GNUC__) || \
-    (defined(_MSC_VER) && _MSC_VER >= 1300) || \
-    defined(__FUNCTION__)
-    #define __WXFUNCTION__ __FUNCTION__
-#else
-    /* still define __WXFUNCTION__ to avoid #ifdefs elsewhere */
-    #define __WXFUNCTION__ (NULL)
-#endif
+#ifndef __WXFUNCTION__
+    /* TODO: add more compilers supporting __FUNCTION__ */
+    #if defined(__GNUC__) || \
+        (defined(_MSC_VER) && _MSC_VER >= 1300) || \
+        defined(__FUNCTION__)
+        #define __WXFUNCTION__ __FUNCTION__
+    #else
+        /* still define __WXFUNCTION__ to avoid #ifdefs elsewhere */
+        #define __WXFUNCTION__ (NULL)
+    #endif
+#endif /* __WXFUNCTION__ already defined */
 
 /*  ---------------------------------------------------------------------------- */
 /*  Debugging macros */
