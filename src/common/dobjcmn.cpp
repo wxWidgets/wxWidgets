@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/dobjcmn.cpp
+// Name:        src/common/dobjcmn.cpp
 // Purpose:     implementation of data object methods common to all platforms
 // Author:      Vadim Zeitlin, Robert Roebling
 // Modified by:
@@ -9,14 +9,7 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
+// For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -28,7 +21,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/debug.h"
-#endif // WX_PRECOMP
+#endif
 
 #include "wx/dataobj.h"
 
@@ -62,15 +55,15 @@ wxDataObjectBase::~wxDataObjectBase()
 bool wxDataObjectBase::IsSupported(const wxDataFormat& format,
                                    Direction dir) const
 {
-    size_t nFormatCount = GetFormatCount(dir);
+    size_t nFormatCount = GetFormatCount( dir );
     if ( nFormatCount == 1 )
     {
-        return format == GetPreferredFormat(dir);
+        return format == GetPreferredFormat( dir );
     }
     else
     {
         wxDataFormat *formats = new wxDataFormat[nFormatCount];
-        GetAllFormats(formats, dir);
+        GetAllFormats( formats, dir );
 
         size_t n;
         for ( n = 0; n < nFormatCount; n++ )
@@ -97,7 +90,7 @@ wxDataObjectComposite::wxDataObjectComposite()
 
 wxDataObjectComposite::~wxDataObjectComposite()
 {
-    WX_CLEAR_LIST(wxSimpleDataObjectList, m_dataObjects);
+    WX_CLEAR_LIST( wxSimpleDataObjectList, m_dataObjects );
 }
 
 wxDataObjectSimple *
@@ -168,7 +161,7 @@ const void* wxDataObjectComposite::GetSizeFromBuffer( const void* buffer,
 void* wxDataObjectComposite::SetSizeInBuffer( void* buffer, size_t size,
                                               const wxDataFormat& format )
 {
-    wxDataObjectSimple *dataObj = GetObject(format);
+    wxDataObjectSimple *dataObj = GetObject( format );
 
     wxCHECK_MSG( dataObj, NULL,
                  wxT("unsupported format in wxDataObjectComposite"));
@@ -209,24 +202,24 @@ size_t wxDataObjectComposite::GetDataSize(const wxDataFormat& format) const
 bool wxDataObjectComposite::GetDataHere(const wxDataFormat& format,
                                         void *buf) const
 {
-    wxDataObjectSimple *dataObj = GetObject(format);
+    wxDataObjectSimple *dataObj = GetObject( format );
 
     wxCHECK_MSG( dataObj, false,
                  wxT("unsupported format in wxDataObjectComposite"));
 
-    return dataObj->GetDataHere(buf);
+    return dataObj->GetDataHere( buf );
 }
 
 bool wxDataObjectComposite::SetData(const wxDataFormat& format,
                                     size_t len,
                                     const void *buf)
 {
-    wxDataObjectSimple *dataObj = GetObject(format);
+    wxDataObjectSimple *dataObj = GetObject( format );
 
     wxCHECK_MSG( dataObj, false,
                  wxT("unsupported format in wxDataObjectComposite"));
 
-    return dataObj->SetData(len, buf);
+    return dataObj->SetData( len, buf );
 }
 
 // ----------------------------------------------------------------------------
@@ -244,16 +237,20 @@ static inline wxMBConv& GetConv(const wxDataFormat& format)
 size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
 {
     wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
-    return buffer ? strlen(buffer) + 1 : 0;
+
+    return buffer ? strlen( buffer ) + 1 : 0;
 }
 
 bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
 {
-    wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
-    if ( !buffer )
+    if ( buf == NULL )
         return false;
 
-    strcpy( (char*) buf, buffer );
+    wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
+    if ( buffer == NULL )
+        return false;
+
+    strcpy( (char*)buf, buffer );
 
     return true;
 }
@@ -261,42 +258,50 @@ bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
 bool wxTextDataObject::SetData(const wxDataFormat& format,
                                size_t WXUNUSED(len), const void *buf)
 {
-    wxWCharBuffer buffer = GetConv(format).cMB2WX((const char *)buf);
-    if ( !buffer )
+    if ( buf == NULL )
         return false;
 
-    SetText(buffer);
+    wxWCharBuffer buffer = GetConv(format).cMB2WX( (const char*)buf );
+    if ( buffer == NULL )
+        return false;
+
+    SetText( buffer );
 
     return true;
 }
 
 #elif wxUSE_UNICODE && defined(__WXMAC__)
 
-static wxMBConvUTF16 sUTF16Converter ;
+static wxMBConvUTF16 sUTF16Converter;
 
 static inline wxMBConv& GetConv(const wxDataFormat& format)
 {
-    return format == wxDF_UNICODETEXT ? (wxMBConv&) sUTF16Converter
-                                      : (wxMBConv&) wxConvLocal;
+    return
+        format == wxDF_UNICODETEXT
+        ? (wxMBConv&) sUTF16Converter
+        : (wxMBConv&) wxConvLocal;
 }
 
 size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
 {
-    size_t len = GetConv(format).WC2MB( NULL , GetText().c_str() , 0 )  
-        + ( format == wxDF_UNICODETEXT ? 2 : 1 ) ;
-    return len ;
+    size_t len = GetConv(format).WC2MB( NULL, GetText().c_str(), 0 );
+    len += (format == wxDF_UNICODETEXT ? 2 : 1);
+
+    return len;
 }
 
 bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
 {
-    wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
-    if ( !buffer )
+    if ( buf == NULL )
         return false;
 
-    size_t len = GetConv(format).WC2MB( NULL , GetText().c_str() , 0 )  
-        + ( format == wxDF_UNICODETEXT ? 2 : 1 ) ;
+    wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
 
-    memcpy( (char*) buf, (const char*) buffer , len ); // trailing (uni)char 0
+    size_t len = GetConv(format).WC2MB( NULL, GetText().c_str(), 0 );
+    len += (format == wxDF_UNICODETEXT ? 2 : 1);
+
+    // trailing (uni)char 0
+    memcpy( (char*)buf, (const char*)buffer, len );
 
     return true;
 }
@@ -304,12 +309,13 @@ bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
 bool wxTextDataObject::SetData(const wxDataFormat& format,
                                size_t WXUNUSED(len), const void *buf)
 {
-    wxWCharBuffer buffer = GetConv(format).cMB2WX((const char *)buf);
-    if ( !buffer )
+    if ( buf == NULL )
         return false;
-    
-    SetText(buffer);
-    
+
+    wxWCharBuffer buffer = GetConv(format).cMB2WX( (const char*)buf );
+
+    SetText( buffer );
+
     return true;
 }
 
@@ -322,14 +328,14 @@ size_t wxTextDataObject::GetDataSize() const
 
 bool wxTextDataObject::GetDataHere(void *buf) const
 {
-    wxStrcpy((wxChar *)buf, GetText().c_str());
+    wxStrcpy( (wxChar*)buf, GetText().c_str() );
 
     return true;
 }
 
 bool wxTextDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 {
-    SetText(wxString((const wxChar *)buf));
+    SetText( wxString((const wxChar*)buf) );
 
     return true;
 }
@@ -381,7 +387,7 @@ void wxFileDataObjectBase::SetFilenames(const wxChar* filenames)
     }
 }
 
-#endif // 0
+#endif
 
 // ----------------------------------------------------------------------------
 // wxCustomDataObject
@@ -390,7 +396,8 @@ void wxFileDataObjectBase::SetFilenames(const wxChar* filenames)
 wxCustomDataObject::wxCustomDataObject(const wxDataFormat& format)
     : wxDataObjectSimple(format)
 {
-    m_data = (void *)NULL;
+    m_data = NULL;
+    m_size = 0;
 }
 
 wxCustomDataObject::~wxCustomDataObject()
@@ -413,9 +420,9 @@ void *wxCustomDataObject::Alloc(size_t size)
 
 void wxCustomDataObject::Free()
 {
-    delete [] (char *)m_data;
+    delete [] (char*)m_data;
     m_size = 0;
-    m_data = (void *)NULL;
+    m_data = (void*)NULL;
 }
 
 size_t wxCustomDataObject::GetDataSize() const
@@ -425,11 +432,14 @@ size_t wxCustomDataObject::GetDataSize() const
 
 bool wxCustomDataObject::GetDataHere(void *buf) const
 {
-    void *data = GetData();
-    if ( !data )
+    if ( buf == NULL )
         return false;
 
-    memcpy(buf, data, GetSize());
+    void *data = GetData();
+    if ( data == NULL )
+        return false;
+
+    memcpy( buf, data, GetSize() );
 
     return true;
 }
@@ -439,10 +449,11 @@ bool wxCustomDataObject::SetData(size_t size, const void *buf)
     Free();
 
     m_data = Alloc(size);
-    if ( !m_data )
+    if ( m_data == NULL )
         return false;
 
-    memcpy(m_data, buf, m_size = size);
+    m_size = size;
+    memcpy( m_data, buf, m_size );
 
     return true;
 }
@@ -474,7 +485,7 @@ wxDragResult wxTextDropTarget::OnData(wxCoord x, wxCoord y, wxDragResult def)
         return wxDragNone;
 
     wxTextDataObject *dobj = (wxTextDataObject *)m_dataObject;
-    return OnDropText(x, y, dobj->GetText()) ? def : wxDragNone;
+    return OnDropText( x, y, dobj->GetText() ) ? def : wxDragNone;
 }
 
 // ----------------------------------------------------------------------------
@@ -492,7 +503,7 @@ wxDragResult wxFileDropTarget::OnData(wxCoord x, wxCoord y, wxDragResult def)
         return wxDragNone;
 
     wxFileDataObject *dobj = (wxFileDataObject *)m_dataObject;
-    return OnDropFiles(x, y, dobj->GetFilenames()) ? def : wxDragNone;
+    return OnDropFiles( x, y, dobj->GetFilenames() ) ? def : wxDragNone;
 }
 
 #endif // wxUSE_DRAG_AND_DROP
