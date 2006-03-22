@@ -702,12 +702,12 @@ private:
         name& operator=(const name& list)                                   \
             { Assign(list); return *this; }                                 \
                                                                             \
-        nodetype *GetFirst() const                                          \
+        compatibility_iterator GetFirst() const                             \
             { return (nodetype *)wxListBase::GetFirst(); }                  \
-        nodetype *GetLast() const                                           \
+        compatibility_iterator GetLast() const                              \
             { return (nodetype *)wxListBase::GetLast(); }                   \
                                                                             \
-        nodetype *Item(size_t index) const                                  \
+        compatibility_iterator Item(size_t index) const                     \
             { return (nodetype *)wxListBase::Item(index); }                 \
                                                                             \
         T *operator[](size_t index) const                                   \
@@ -716,18 +716,18 @@ private:
             return node ? (T*)(node->GetData()) : (T*)NULL;                 \
         }                                                                   \
                                                                             \
-        nodetype *Append(Tbase *object)                                     \
+        compatibility_iterator Append(Tbase *object)                        \
             { return (nodetype *)wxListBase::Append(object); }              \
-        nodetype *Insert(Tbase *object)                                     \
+        compatibility_iterator Insert(Tbase *object)                        \
             { return (nodetype *)Insert((nodetype*)NULL, object); }         \
-        nodetype *Insert(size_t pos, Tbase *object)                         \
+        compatibility_iterator Insert(size_t pos, Tbase *object)            \
             { return (nodetype *)wxListBase::Insert(pos, object); }         \
-        nodetype *Insert(nodetype *prev, Tbase *object)                     \
+        compatibility_iterator Insert(nodetype *prev, Tbase *object)        \
             { return (nodetype *)wxListBase::Insert(prev, object); }        \
                                                                             \
-        nodetype *Append(long key, void *object)                            \
+        compatibility_iterator Append(long key, void *object)               \
             { return (nodetype *)wxListBase::Append(key, object); }         \
-        nodetype *Append(const wxChar *key, void *object)                   \
+        compatibility_iterator Append(const wxChar *key, void *object)      \
             { return (nodetype *)wxListBase::Append(key, object); }         \
                                                                             \
         nodetype *DetachNode(nodetype *node)                                \
@@ -739,7 +739,7 @@ private:
         void Erase(compatibility_iterator it)                               \
             { DeleteNode(it); }                                             \
                                                                             \
-        nodetype *Find(const Tbase *object) const                           \
+        compatibility_iterator Find(const Tbase *object) const              \
             { return (nodetype *)wxListBase::Find(object); }                \
                                                                             \
         virtual nodetype *Find(const wxListKey& key) const                  \

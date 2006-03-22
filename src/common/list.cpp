@@ -742,12 +742,14 @@ void wxStringList::Sort()
 
 wxNode *wxStringList::Add(const wxChar *s)
 {
-    return (wxNode *)wxStringListBase::Append(MYcopystring(s));
+    return (wxNode *)(wxStringListBase::Node *)
+            wxStringListBase::Append(MYcopystring(s));
 }
 
 wxNode *wxStringList::Prepend(const wxChar *s)
 {
-    return (wxNode *)wxStringListBase::Insert(MYcopystring(s));
+    return (wxNode *)(wxStringListBase::Node *)
+            wxStringListBase::Insert(MYcopystring(s));
 }
 
 #endif // wxLIST_COMPATIBILITY
