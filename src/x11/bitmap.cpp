@@ -327,7 +327,7 @@ bool wxBitmap::Create( int width, int height, int depth )
     if (depth == -1) depth = bpp;
 
     wxCHECK_MSG( (depth == bpp) ||
-                 (depth == 1), false, wxT("invalid bitmap depth") )
+                 (depth == 1), false, wxT("invalid bitmap depth") );
 
     M_BMPDATA->m_mask = (wxMask *) NULL;
     M_BMPDATA->m_width = width;
