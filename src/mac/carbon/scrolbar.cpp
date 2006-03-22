@@ -22,6 +22,7 @@
 
 #include "wx/scrolbar.h"
 #include "wx/mac/uma.h"
+#include "wx/settings.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
 
