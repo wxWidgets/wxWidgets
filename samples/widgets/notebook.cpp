@@ -211,22 +211,19 @@ NotebookWidgetsPage::NotebookWidgetsPage(wxBookCtrlBase *book,
     wxStaticBox *box = new wxStaticBox(this, wxID_ANY, _T("&Set style"));
 
     // must be in sync with Orient enum
-    wxString orientations[] =
-    {
-        _T("&top"),
-        _T("&bottom"),
-        _T("&left"),
-        _T("&right"),
-    };
+    wxArrayString orientations;
+    orientations.Add(_T("&top"));
+    orientations.Add(_T("&bottom"));
+    orientations.Add(_T("&left"));
+    orientations.Add(_T("&right"));
 
-    wxASSERT_MSG( WXSIZEOF(orientations) == Orient_Max,
+    wxASSERT_MSG( orientations.GetCount() == Orient_Max,
                   _T("forgot to update something") );
 
     m_chkImages = new wxCheckBox(this, wxID_ANY, _T("Show &images"));
     m_radioOrient = new wxRadioBox(this, wxID_ANY, _T("&Tab orientation"),
                                    wxDefaultPosition, wxDefaultSize,
-                                   WXSIZEOF(orientations), orientations,
-                                   1, wxRA_SPECIFY_COLS);
+                                   orientations, 1, wxRA_SPECIFY_COLS);
 
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
