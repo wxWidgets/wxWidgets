@@ -946,7 +946,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
                 hret = cp->Advise(new wxActiveXEvents(this, ta->guid),
                                   &adviseCookie);
                 wxASSERT_MSG( SUCCEEDED(hret),
-                    wxString::Format(wxT("Cannot connect!\nHRESULT:%X"), hret)
+                    wxString::Format(wxT("Cannot connect!\nHRESULT:%X"), (unsigned int)hret)
                             );
             }
         }

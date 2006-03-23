@@ -772,16 +772,20 @@ void wxHVScrolledWindow::SetRowColumnCounts(size_t rowCount, size_t columnCount)
 
     // recalculate the scrollbars parameters
     if(m_rowsFirst >= rowCount)
-        m_rowsFirst = rowCount-1;
+        m_rowsFirst = (rowCount > 0) ? rowCount - 1 : 0;
 
     if(m_columnsFirst >= columnCount)
-        m_columnsFirst = columnCount-1;
+        m_columnsFirst = (columnCount > 0) ? columnCount - 1 : 0;
 
+#if 0
+    // checks disabled due to size_t type of members
+    // but leave them here if anyone would want to do some debugging
     if(m_rowsFirst < 0)
         m_rowsFirst = 0;
 
     if(m_columnsFirst < 0)
         m_columnsFirst = 0;
+#endif
 
     ScrollToRowColumn(m_rowsFirst, m_columnsFirst);
 }
