@@ -511,17 +511,28 @@ void wxChoice::DoSetSize(int x, int y,
     // is, of course, just the height of the permanently visible part of it
     if ( height != wxDefaultCoord )
     {
-        // don't make the drop down list too tall, arbitrarily limit it to 40
-        // items max and also don't leave it empty
-        size_t nItems = GetCount();
-        if ( !nItems )
-            nItems = 9;
-        else if ( nItems > 24 )
-            nItems = 24;
-
-        // add space for the drop down list
-        const int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
-        height += hItem*(nItems + 1);
+        int w, h;
+        DoGetSize(&w, &h);
+        
+        // Don't change the height if it's already this size
+        if (h == height)
+        {
+            height = -1;
+        }
+        else
+        {
+            // don't make the drop down list too tall, arbitrarily limit it to 40
+            // items max and also don't leave it empty
+            size_t nItems = GetCount();
+            if ( !nItems )
+                nItems = 9;
+            else if ( nItems > 24 )
+                nItems = 24;
+            
+            // add space for the drop down list
+            const int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
+            height += hItem*(nItems + 1);
+        }
     }
     else
     {
@@ -535,7 +546,7 @@ void wxChoice::DoSetSize(int x, int y,
         int w, h;
         RECT r;
         DoGetSize(&w, &h);
-        if (::SendMessage(GetHwnd(), CB_GETDROPPEDCONTROLRECT, 0, (LPARAM) &r) != 0)
+        if (::SendMessage(GetHwnd(), CB_GETDROPPEDCONTROLRECT, 0, (LPARAM) &r) != 0 && r.bottom < 30000)
         {
             height = h + r.bottom - r.top;
         }
