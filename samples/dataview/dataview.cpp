@@ -376,7 +376,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     dataview_right->AppendColumn( column );
     dataview_right->AppendTextColumn( wxT("first"), 0 );
     dataview_right->AppendTextColumn( wxT("second"), 1 );
-    wxDataViewToggleCell *toggle_cell = new wxDataViewToggleCell( wxT("bool"), wxDATAVIEW_CELL_EDITABLE );
+    wxDataViewToggleCell *toggle_cell = new wxDataViewToggleCell( wxT("bool"), wxDATAVIEW_CELL_ACTIVATABLE );
     column = new wxDataViewColumn( wxT("bool"), toggle_cell, 3 );
     dataview_right->AppendColumn( column );
 

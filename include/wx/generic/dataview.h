@@ -112,6 +112,7 @@ public:
     bool GetValue( wxVariant &value );
     
     bool Render( wxRect cell, wxDC *dc, int state );
+    bool Activate( wxRect cell, wxDataViewListModel *model, size_t col, size_t row );
     wxSize GetSize();
     
 private:

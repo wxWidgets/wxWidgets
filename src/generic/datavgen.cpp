@@ -252,7 +252,10 @@ bool wxDataViewToggleCell::Render( wxRect cell, wxDC *dc, int state )
 {
     // User wxRenderer here
     
-    dc->SetPen( *wxBLACK_PEN );
+    if (GetMode() == wxDATAVIEW_CELL_ACTIVATABLE)
+        dc->SetPen( *wxBLACK_PEN );
+    else
+        dc->SetPen( *wxGREY_PEN );
     dc->SetBrush( *wxTRANSPARENT_BRUSH );
     wxRect rect;
     rect.x = cell.x + cell.width/2 - 10;
@@ -270,6 +273,15 @@ bool wxDataViewToggleCell::Render( wxRect cell, wxDC *dc, int state )
         dc->DrawLine( rect.x+rect.width, rect.y, rect.x, rect.y+rect.height );
     }
     
+    return true;
+}
+
+bool wxDataViewToggleCell::Activate( wxRect cell, wxDataViewListModel *model, size_t col, size_t row )
+{
+    bool value = !m_toggle;
+    wxVariant variant = value;
+    model->SetValue( variant, col, row );
+    model->ValueChanged( col, row );    
     return true;
 }
 
@@ -595,7 +607,11 @@ bool wxDataViewMainWindow::RowChanged( size_t row )
 
 bool wxDataViewMainWindow::ValueChanged( size_t col, size_t row )
 {
-    return false;
+    wxRect rect( 0, row*m_lineHeight, 10000, m_lineHeight );
+    m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+    Refresh( true, &rect );
+
+    return true;
 }
 
 bool wxDataViewMainWindow::RowsReordered( size_t *new_order )
@@ -699,6 +715,47 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &event )
 
 void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 {
+    int x = event.GetX();
+    int y = event.GetY();
+    m_owner->CalcUnscrolledPosition( x, y, &x, &y );
+
+    wxDataViewColumn *col = NULL;
+
+    int xpos = 0;
+    size_t cols = GetOwner()->GetNumberOfColumns();
+    size_t i;
+    for (i = 0; i < cols; i++)
+    {
+        wxDataViewColumn *c = GetOwner()->GetColumn( i );
+        if (x < xpos + c->GetWidth())
+        {
+            col = c;
+            break;
+        }
+        xpos += c->GetWidth();
+    }
+    if (!col)  
+        return;
+    wxDataViewCell *cell = col->GetCell();
+    
+    size_t row = y / m_lineHeight;
+    
+    wxDataViewListModel *model = GetOwner()->GetModel();
+
+    if (event.LeftDClick())
+    {
+        if (cell->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE)
+        {
+            wxVariant value;
+            model->GetValue( value, col->GetModelColumn(), row );
+            cell->SetValue( value );
+            wxRect cell_rect( xpos, row * m_lineHeight, col->GetWidth(), m_lineHeight );
+            cell->Activate( cell_rect, model, col->GetModelColumn(), row );
+        }
+        
+        return;
+    }
+
     event.Skip();
 }
 

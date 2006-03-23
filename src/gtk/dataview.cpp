@@ -997,7 +997,7 @@ wxDataViewToggleCell::wxDataViewToggleCell( const wxString &varianttype,
 {
     m_renderer = (void*) gtk_cell_renderer_toggle_new();
     
-    if (m_mode & wxDATAVIEW_CELL_EDITABLE)
+    if (m_mode & wxDATAVIEW_CELL_ACTIVATABLE)
     {
         g_signal_connect_after( m_renderer, "toggled", G_CALLBACK(wxGtkToggleRendererToggledCallback), this );
     }

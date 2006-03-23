@@ -219,7 +219,8 @@ public:
     virtual bool GetValue( wxVariant &value )       { return true; }
     virtual bool Validate( wxVariant &value )       { return true; }
     
-    wxString GetVariantType()   { return m_variantType; }
+    wxString GetVariantType()       { return m_variantType; }
+    wxDataViewCellMode GetMode()    { return m_mode; }
     
     void SetOwner( wxDataViewColumn *owner )    { m_owner = owner; }
     wxDataViewColumn* GetOwner()                { return m_owner; }
