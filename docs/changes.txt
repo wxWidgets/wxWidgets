@@ -21,7 +21,7 @@ All:
 - Fixed occasional wxThread cleanup crash.
 - Fixed build error in list.h with VC++ 2005.
 - wxImage::Copy() forgot the alpha channel.
-- Fixed wxSocketBase::InterruptWait on wxBase
+- Fixed wxSocketBase::InterruptWait on wxBase.
 
 All (GUI):
 
@@ -58,7 +58,7 @@ wxGTK:
 
 wxMSW:
 
-- Fixed crash with ownerdrawn menu items accelerators (Perry Miller)
+- Fixed crash with ownerdrawn menu items accelerators (Perry Miller).
 - wxFileDialog respects absence of wxCHANGE_DIG flag under NT (Brad Anderson).
 - Fixed MDI context menu problem.
 - Create msw/rcdefs.h in setup.h's directory, which can be included by
@@ -90,6 +90,9 @@ wxMSW:
 - Fixed problem with getting input in universal/unicode build of wxMSW.
 - Link oleacc.lib conditionally.
 - Fall back to unthemed wxNotebook if specified orientation not available.
+- Fixed wxChoice/wxComboBox slow appending and infinite recursion
+  if its size is set within a paint handler (for example when embedded in a
+  wxHtmlWindow).
 
 wxWinCE:
 
@@ -143,7 +146,9 @@ wxMac:
 
 wxX11:
 
+- Invisible text problem fixed.
 - Bitmap clipping with masks and scaling improved.
+- Fixed a crash bug in the generic timer.
 
 wxODBC:
 
