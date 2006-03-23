@@ -382,6 +382,14 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
                     macKey = kDownArrowCharCode ;
                     glyph = kMenuDownArrowGlyph ;
                     break ;
+                case WXK_HOME :
+                    macKey = kHomeCharCode ;
+                    glyph = kMenuNorthwestArrowGlyph ;
+                    break ;
+                case WXK_END :
+                    macKey = kEndCharCode ;
+                    glyph = kMenuSoutheastArrowGlyph ;
+                    break ;
                 default :
                     macKey = toupper( key ) ;
                     break ;
