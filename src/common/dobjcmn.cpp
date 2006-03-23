@@ -247,8 +247,6 @@ bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
         return false;
 
     wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
-    if ( buffer == NULL )
-        return false;
 
     strcpy( (char*)buf, buffer );
 
@@ -262,8 +260,6 @@ bool wxTextDataObject::SetData(const wxDataFormat& format,
         return false;
 
     wxWCharBuffer buffer = GetConv(format).cMB2WX( (const char*)buf );
-    if ( buffer == NULL )
-        return false;
 
     SetText( buffer );
 
