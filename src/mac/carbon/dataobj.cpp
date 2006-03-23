@@ -26,7 +26,6 @@
 #include "wx/metafile.h"
 #include "wx/tokenzr.h"
 
-
 #include "wx/mac/private.h"
 
 #ifndef __DARWIN__
@@ -130,7 +129,7 @@ void wxDataFormat::SetId( NativeFormat format )
     default:
         m_type = wxDF_PRIVATE;
         char text[5];
-        strncpy( text, (char*)&format, 4 );
+        memcpy( text, (const char*)&format, 4 );
         text[4] = 0;
         m_id = wxString::FromAscii( text );
         break;
@@ -171,14 +170,14 @@ bool wxDataObject::IsSupportedFormat( const wxDataFormat& rFormat, Direction vDi
     }
     else
     {
-        wxDataFormat* pFormats = new wxDataFormat[nFormatCount];
+        wxDataFormat *pFormats = new wxDataFormat[nFormatCount];
         GetAllFormats( pFormats, vDir );
 
         for (size_t n = 0; n < nFormatCount; n++)
         {
             if (pFormats[n] == rFormat)
             {
-            	found = true;
+                found = true;
                 break;
             }
         }
@@ -205,16 +204,16 @@ void wxTextDataObject::GetAllFormats( wxDataFormat *formats, wxDataObjectBase::D
 // wxFileDataObject
 // ----------------------------------------------------------------------------
 
-void wxFileDataObject::GetFileNames(wxCharBuffer &buf) const
+void wxFileDataObject::GetFileNames( wxCharBuffer &buf ) const
 {
     wxString filenames;
-    
+
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
         filenames += m_filenames[i];
         filenames += wxT('\n');
     }
-    
+
     buf = filenames.fn_str();
 }
 
@@ -224,9 +223,11 @@ bool wxFileDataObject::GetDataHere( void *pBuf ) const
         return false;
 
     wxCharBuffer buf;
-    GetFileNames( buf );
+    size_t buffLength;
 
-    memcpy( pBuf, (const char*) buf, strlen(buf) + 1 );
+    GetFileNames( buf );
+    buffLength = strlen( buf );
+    memcpy( pBuf, (const char*)buf, buffLength + 1 );
 
     return true;
 }
@@ -234,22 +235,26 @@ bool wxFileDataObject::GetDataHere( void *pBuf ) const
 size_t wxFileDataObject::GetDataSize() const
 {
     wxCharBuffer buf;
-    GetFileNames( buf );
+    size_t buffLength;
 
-    return strlen(buf) + 1;
+    GetFileNames( buf );
+    buffLength = strlen( buf );
+
+    return buffLength + 1;
 }
 
 bool wxFileDataObject::SetData( size_t nSize, const void *pBuf )
 {
     wxString filenames;
+
 #if wxUSE_UNICODE
-    filenames = wxString( (const char*) pBuf , *wxConvFileName );
+    filenames = wxString( (const char*)pBuf, *wxConvFileName );
 #else
-    filenames = wxString( wxConvFileName->cMB2WX( pBuf ) , wxConvLocal );
+    filenames = wxString( wxConvFileName->cMB2WX( pBuf ), wxConvLocal );
 #endif
 
-    m_filenames = wxStringTokenize( filenames , wxT("\n") , wxTOKEN_STRTOK );
-    
+    m_filenames = wxStringTokenize( filenames, wxT("\n"), wxTOKEN_STRTOK );
+
     return true;
 }
 
