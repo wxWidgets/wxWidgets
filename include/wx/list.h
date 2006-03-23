@@ -145,7 +145,7 @@ private:
         typedef elT _WX_LIST_ITEM_TYPE_##liT;                                 \
         static void DeleteFunction( _WX_LIST_ITEM_TYPE_##liT X );             \
     public:                                                                   \
-        class compatibility_iterator                                          \
+        decl compatibility_iterator                                           \
         {                                                                     \
         private:                                                              \
           /* Workaround for broken VC6 nested class name resolution */        \
@@ -680,7 +680,7 @@ private:
     {                                                                       \
     public:                                                                 \
         typedef nodetype Node;                                              \
-        class compatibility_iterator                                        \
+        classexp compatibility_iterator                                     \
         {                                                                   \
         public:                                                             \
             compatibility_iterator(Node *ptr = NULL) : m_ptr(ptr) { }       \
@@ -773,7 +773,7 @@ private:
         typedef base_value_type& base_reference;                            \
         typedef const base_value_type& const_base_reference;                \
                                                                             \
-        class iterator                                                      \
+        classexp iterator                                                   \
         {                                                                   \
             typedef name list;                                              \
         public:                                                             \
@@ -813,7 +813,7 @@ private:
             bool operator==(const itor& it) const                           \
                 { return it.m_node == m_node; }                             \
         };                                                                  \
-        class const_iterator                                                \
+        classexp const_iterator                                             \
         {                                                                   \
             typedef name list;                                              \
         public:                                                             \
@@ -856,7 +856,7 @@ private:
             bool operator==(const itor& it) const                           \
                 { return it.m_node == m_node; }                             \
         };                                                                  \
-        class reverse_iterator                                              \
+        classexp reverse_iterator                                           \
         {                                                                   \
             typedef name list;                                              \
         public:                                                             \
@@ -895,7 +895,7 @@ private:
             bool operator==(const itor& it) const                           \
                 { return it.m_node == m_node; }                             \
         };                                                                  \
-        class const_reverse_iterator                                        \
+        classexp const_reverse_iterator                                     \
         {                                                                   \
             typedef name list;                                              \
         public:                                                             \
