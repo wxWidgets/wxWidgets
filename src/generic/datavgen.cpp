@@ -706,7 +706,19 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &event )
             wxVariant value;
             model->GetValue( value, col->GetModelColumn(), item );
             cell->SetValue( value );
-            cell->Render( cell_rect, &dc, 0 );
+            wxSize size = cell->GetSize();
+            // cannot be bigger than allocated space
+            size.x = wxMin( size.x, cell_rect.width );
+            size.y = wxMin( size.y, cell_rect.height );
+            // TODO: check for left/right/centre alignment here
+            wxRect item_rect;
+            // for now: centre
+            item_rect.x = cell_rect.x + (cell_rect.width / 2) - (size.x / 2);
+            item_rect.y = cell_rect.y + (cell_rect.height / 2) - (size.y / 2);
+            
+            item_rect.width = size.x;
+            item_rect.height= size.y;
+            cell->Render( item_rect, &dc, 0 );
         }
         
         cell_rect.x += cell_rect.width;
