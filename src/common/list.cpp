@@ -760,7 +760,7 @@ wxNode *wxStringList::Prepend(const wxChar *s)
     WX_DEFINE_LIST(wxObjectList)
 
 // with wxUSE_STL wxStringList contains wxString objects, not pointers
-void wxStringListBase::DeleteFunction( wxString WXUNUSED(X) )
+void _WX_LIST_HELPER_wxStringListBase::DeleteFunction( wxString WXUNUSED(X) )
 {
 }
 

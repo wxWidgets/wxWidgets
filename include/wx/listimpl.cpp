@@ -12,10 +12,10 @@
 #if wxUSE_STL
 
     #undef  WX_DEFINE_LIST
-    #define WX_DEFINE_LIST(name)                                        \
-        void name::DeleteFunction( _WX_LIST_ITEM_TYPE_##name X )        \
-        {                                                               \
-            delete X;                                                   \
+    #define WX_DEFINE_LIST(name)                                                   \
+        void _WX_LIST_HELPER_##name::DeleteFunction( _WX_LIST_ITEM_TYPE_##name X ) \
+        {                                                                          \
+            delete X;                                                              \
         }
 
 #else // if !wxUSE_STL
