@@ -104,11 +104,11 @@ public:
     // Implement base class pure virtuals
     //
     virtual void          Clear(void);
-    virtual void          Delete(int n);
+    virtual void          Delete(unsigned int n);
 
-    virtual size_t        GetCount() const;
-    virtual wxString      GetString(int n) const;
-    virtual void          SetString(int n, const wxString& rsString);
+    virtual unsigned int  GetCount() const;
+    virtual wxString      GetString(unsigned int n) const;
+    virtual void          SetString(unsigned int n, const wxString& rsString);
 
     virtual bool          IsSelected(int n) const;
     virtual void          DoSetSelection(int  n, bool bSelect);
@@ -116,21 +116,17 @@ public:
     virtual int           GetSelections(wxArrayInt& raSelections) const;
 
     virtual int           DoAppend(const wxString& rsItem);
-    virtual void          DoInsertItems( const wxArrayString& raItems, int rPos );
+    virtual void          DoInsertItems( const wxArrayString& raItems, unsigned int rPos );
     virtual void          DoSetItems( const wxArrayString& raItems
                                      ,void **              ppClientData
                                     );
 
     virtual void          DoSetFirstItem(int n);
 
-    virtual void          DoSetItemClientData( int   n
-                                              ,void* pClientData
-                                             );
-    virtual void*         DoGetItemClientData(int n) const;
-    virtual void          DoSetItemClientObject( int           n
-                                                ,wxClientData* pClientData
-                                               );
-    virtual wxClientData* DoGetItemClientObject(int n) const;
+    virtual void          DoSetItemClientData(unsigned int n, void* pClientData);
+    virtual void*         DoGetItemClientData(unsigned int n) const;
+    virtual void          DoSetItemClientObject(unsigned int n, wxClientData* pClientData);
+    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
 
     //
     // wxCheckListBox support
@@ -154,8 +150,8 @@ protected:
     bool                  HasMultipleSelection(void) const;
     virtual wxSize        DoGetBestSize(void) const;
 
-    size_t  m_nNumItems;
-    int     m_nSelected;
+    unsigned int          m_nNumItems;
+    int                   m_nSelected;
 
 #if wxUSE_OWNER_DRAWN
     //

@@ -101,16 +101,16 @@ void wxCheckListBox::DoCreateCheckList()
     gtk_tree_view_append_column(m_treeview, column);
 }
 
-bool wxCheckListBox::IsChecked( int index ) const
+bool wxCheckListBox::IsChecked(unsigned int index) const
 {
-    wxCHECK_MSG( m_treeview != NULL, FALSE, wxT("invalid checklistbox") );
+    wxCHECK_MSG( m_treeview != NULL, false, wxT("invalid checklistbox") );
 
     GtkTreeIter iter;
     gboolean res = gtk_tree_model_iter_nth_child(
                         GTK_TREE_MODEL(m_liststore),
                         &iter, NULL, //NULL = parent = get first
                         index
-                                                );
+                   );
     if(!res)
         return false;
 
@@ -123,7 +123,7 @@ bool wxCheckListBox::IsChecked( int index ) const
     return g_value_get_boolean(&value) == TRUE ? true : false;
 }
 
-void wxCheckListBox::Check( int index, bool check )
+void wxCheckListBox::Check(unsigned int index, bool check)
 {
     wxCHECK_RET( m_treeview != NULL, wxT("invalid checklistbox") );
 
@@ -132,7 +132,7 @@ void wxCheckListBox::Check( int index, bool check )
                         GTK_TREE_MODEL(m_liststore),
                         &iter, NULL, //NULL = parent = get first
                         index
-                                                );
+                   );
     if(!res)
         return;
 

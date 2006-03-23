@@ -187,10 +187,10 @@ static inline wxChar* MYcopystring(const wxChar* s)
     return wxStrcpy(copy, s);
 }
 
-int wxChoice::DoInsert(const wxString& item, int pos)
+int wxChoice::DoInsert(const wxString& item, unsigned int pos)
 {
 #ifndef XmNpositionIndex
-    wxCHECK_MSG( (size_t)pos == GetCount(), -1, wxT("insert not implemented"));
+    wxCHECK_MSG( pos == GetCount(), -1, wxT("insert not implemented"));
 #endif
     Widget w = XtVaCreateManagedWidget (wxStripMenuCodes(item),
 #if wxUSE_GADGETS
@@ -236,10 +236,10 @@ int wxChoice::DoInsert(const wxString& item, int pos)
 
 int wxChoice::DoAppend(const wxString& item)
 {
-    return DoInsert(item, (int)GetCount());
+    return DoInsert(item, GetCount());
 }
 
-void wxChoice::Delete(int n)
+void wxChoice::Delete(unsigned int n)
 {
     Widget w = (Widget)m_widgetArray[n];
     XtRemoveCallback(w, XmNactivateCallback, (XtCallbackProc)wxChoiceCallback,
@@ -249,13 +249,13 @@ void wxChoice::Delete(int n)
     m_clientDataDict.Delete(n, HasClientObjectData());
 
     XtDestroyWidget(w);
-    m_noStrings --;
+    m_noStrings--;
 }
 
 void wxChoice::Clear()
 {
     m_stringList.Clear ();
-    size_t i;
+    unsigned int i;
     for (i = 0; i < m_noStrings; i++)
     {
         XtRemoveCallback((Widget) m_widgetArray[i],
@@ -337,7 +337,7 @@ void wxChoice::SetSelection(int n)
     m_inSetValue = false;
 }
 
-wxString wxChoice::GetString(int n) const
+wxString wxChoice::GetString(unsigned int n) const
 {
     wxStringList::compatibility_iterator node = m_stringList.Item(n);
     if (node)
@@ -384,7 +384,7 @@ void wxChoice::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
     if (width > -1)
     {
-        size_t i;
+        unsigned int i;
         for (i = 0; i < m_noStrings; i++)
             XtVaSetValues ((Widget) m_widgetArray[i],
                            XmNwidth, actualWidth,
@@ -395,7 +395,7 @@ void wxChoice::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (height > -1)
     {
 #if 0
-        size_t i;
+        unsigned int i;
         for (i = 0; i < m_noStrings; i++)
             XtVaSetValues ((Widget) m_widgetArray[i],
                            XmNheight, actualHeight,
@@ -462,7 +462,7 @@ void wxChoice::ChangeFont(bool keepOriginalSize)
                        fontTag, m_font.GetFontTypeC(dpy),
                        NULL);
 
-        for( size_t i = 0; i < m_noStrings; ++i )
+        for( unsigned int i = 0; i < m_noStrings; ++i )
             XtVaSetValues( (Widget)m_widgetArray[i],
                            fontTag, m_font.GetFontTypeC(dpy),
                            NULL );
@@ -480,7 +480,7 @@ void wxChoice::ChangeBackgroundColour()
     wxDoChangeBackgroundColour(m_formWidget, m_backgroundColour);
     wxDoChangeBackgroundColour(m_buttonWidget, m_backgroundColour);
     wxDoChangeBackgroundColour(m_menuWidget, m_backgroundColour);
-    size_t i;
+    unsigned int i;
     for (i = 0; i < m_noStrings; i++)
         wxDoChangeBackgroundColour(m_widgetArray[i], m_backgroundColour);
 }
@@ -490,38 +490,38 @@ void wxChoice::ChangeForegroundColour()
     wxDoChangeForegroundColour(m_formWidget, m_foregroundColour);
     wxDoChangeForegroundColour(m_buttonWidget, m_foregroundColour);
     wxDoChangeForegroundColour(m_menuWidget, m_foregroundColour);
-    size_t i;
+    unsigned int i;
     for (i = 0; i < m_noStrings; i++)
         wxDoChangeForegroundColour(m_widgetArray[i], m_foregroundColour);
 }
 
-size_t wxChoice::GetCount() const
+unsigned int wxChoice::GetCount() const
 {
     return m_noStrings;
 }
 
-void wxChoice::DoSetItemClientData(int n, void* clientData)
+void wxChoice::DoSetItemClientData(unsigned int n, void* clientData)
 {
     m_clientDataDict.Set(n, (wxClientData*)clientData, false);
 }
 
-void* wxChoice::DoGetItemClientData(int n) const
+void* wxChoice::DoGetItemClientData(unsigned int n) const
 {
     return (void*)m_clientDataDict.Get(n);
 }
 
-void wxChoice::DoSetItemClientObject(int n, wxClientData* clientData)
+void wxChoice::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
 {
     // don't delete, wxItemContainer does that for us
     m_clientDataDict.Set(n, clientData, false);
 }
 
-wxClientData* wxChoice::DoGetItemClientObject(int n) const
+wxClientData* wxChoice::DoGetItemClientObject(unsigned int n) const
 {
     return m_clientDataDict.Get(n);
 }
 
-void wxChoice::SetString(int WXUNUSED(n), const wxString& WXUNUSED(s))
+void wxChoice::SetString(unsigned int WXUNUSED(n), const wxString& WXUNUSED(s))
 {
     wxFAIL_MSG( wxT("wxChoice::SetString not implemented") );
 }

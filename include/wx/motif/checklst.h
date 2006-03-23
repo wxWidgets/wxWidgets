@@ -56,16 +56,16 @@ public:
         const wxString& name = wxListBoxNameStr);
 
     // items may be checked
-    bool IsChecked(size_t uiIndex) const;
-    void Check(size_t uiIndex, bool bCheck = true);
+    bool IsChecked(unsigned int uiIndex) const;
+    void Check(unsigned int uiIndex, bool bCheck = true);
 
     // override base class functions
     virtual int DoAppend(const wxString& item);
     virtual int FindString(const wxString& s, bool bCase = false) const;
-    virtual void SetString(int n, const wxString& s);
-    virtual wxString GetString(int n) const;
+    virtual void SetString(unsigned int n, const wxString& s);
+    virtual wxString GetString(unsigned int n) const;
 
-    virtual void DoInsertItems(const wxArrayString& items, int pos);
+    virtual void DoInsertItems(const wxArrayString& items, unsigned int pos);
     virtual void DoSetItems(const wxArrayString& items, void **clientData);
 private:
     void DoToggleItem( int item, int x );

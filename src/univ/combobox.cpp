@@ -796,29 +796,29 @@ void wxComboBox::Clear()
     GetText()->SetValue(wxEmptyString);
 }
 
-void wxComboBox::Delete(int n)
+void wxComboBox::Delete(unsigned int n)
 {
     wxCHECK_RET( IsValid(n), _T("invalid index in wxComboBox::Delete") );
 
-    if (GetSelection() == n)
+    if (GetSelection() == (int)n)
         GetText()->SetValue(wxEmptyString);
 
     GetLBox()->Delete(n);
 }
 
-size_t wxComboBox::GetCount() const
+unsigned int wxComboBox::GetCount() const
 {
     return GetLBox()->GetCount();
 }
 
-wxString wxComboBox::GetString(int n) const
+wxString wxComboBox::GetString(unsigned int n) const
 {
     wxCHECK_MSG( IsValid(n), wxEmptyString, _T("invalid index in wxComboBox::GetString") );
 
     return GetLBox()->GetString(n);
 }
 
-void wxComboBox::SetString(int n, const wxString& s)
+void wxComboBox::SetString(unsigned int n, const wxString& s)
 {
     wxCHECK_RET( IsValid(n), _T("invalid index in wxComboBox::SetString") );
 
@@ -856,34 +856,34 @@ int wxComboBox::DoAppend(const wxString& item)
     return GetLBox()->Append(item);
 }
 
-int wxComboBox::DoInsert(const wxString& item, int pos)
+int wxComboBox::DoInsert(const wxString& item, unsigned int pos)
 {
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
     wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
 
-    if ((size_t)pos == GetCount())
+    if (pos == GetCount())
         return DoAppend(item);
 
     GetLBox()->Insert(item, pos);
     return pos;
 }
 
-void wxComboBox::DoSetItemClientData(int n, void* clientData)
+void wxComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
     GetLBox()->SetClientData(n, clientData);
 }
 
-void *wxComboBox::DoGetItemClientData(int n) const
+void *wxComboBox::DoGetItemClientData(unsigned int n) const
 {
     return GetLBox()->GetClientData(n);
 }
 
-void wxComboBox::DoSetItemClientObject(int n, wxClientData* clientData)
+void wxComboBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
 {
     GetLBox()->SetClientObject(n, clientData);
 }
 
-wxClientData* wxComboBox::DoGetItemClientObject(int n) const
+wxClientData* wxComboBox::DoGetItemClientObject(unsigned int n) const
 {
     return GetLBox()->GetClientObject(n);
 }

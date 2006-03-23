@@ -38,24 +38,24 @@ public:
     // accessing strings
     // -----------------
 
-    virtual size_t GetCount() const = 0;
+    virtual unsigned int GetCount() const = 0;
     bool IsEmpty() const { return GetCount() == 0; }
 
-    virtual wxString GetString(int n) const = 0;
+    virtual wxString GetString(unsigned int n) const = 0;
     wxArrayString GetStrings() const;
-    virtual void SetString(int n, const wxString& s) = 0;
+    virtual void SetString(unsigned int n, const wxString& s) = 0;
 
     // finding string natively is either case sensitive or insensitive
     // but never both so fall back to this base version for not
     // supported search type
     virtual int FindString(const wxString& s, bool bCase = false) const
     {
-        size_t count = GetCount();
+        unsigned int count = GetCount();
 
-        for ( size_t i = 0; i < count ; ++i )
+        for ( unsigned int i = 0; i < count ; ++i )
         {
             if (GetString(i).IsSameAs( s , bCase ))
-                return i;
+                return (int)i;
         }
 
         return wxNOT_FOUND;
@@ -82,9 +82,8 @@ public:
 protected:
 
     // check that the index is valid
-    // FIXME: once api will move to size_t, drop >= 0 check
-    inline bool IsValid(int n) const { return n >= 0 && (size_t)n < GetCount(); }
-    inline bool IsValidInsert(int n) const { return n >= 0 && (size_t)n <= GetCount(); }
+    inline bool IsValid(unsigned int n) const { return n < GetCount(); }
+    inline bool IsValidInsert(unsigned int n) const { return n <= GetCount(); }
 };
 
 class WXDLLEXPORT wxItemContainer : public wxItemContainerImmutable
@@ -110,26 +109,26 @@ public:
     // append several items at once to the control
     void Append(const wxArrayString& strings);
 
-    int Insert(const wxString& item, int pos)
+    int Insert(const wxString& item, unsigned int pos)
         { return DoInsert(item, pos); }
-    int Insert(const wxString& item, int pos, void *clientData);
-    int Insert(const wxString& item, int pos, wxClientData *clientData);
+    int Insert(const wxString& item, unsigned int pos, void *clientData);
+    int Insert(const wxString& item, unsigned int pos, wxClientData *clientData);
 
     // deleting items
     // --------------
 
     virtual void Clear() = 0;
-    virtual void Delete(int n) = 0;
+    virtual void Delete(unsigned int n) = 0;
 
     // misc
     // ----
 
     // client data stuff
-    void SetClientData(int n, void* clientData);
-    void* GetClientData(int n) const;
+    void SetClientData(unsigned int n, void* clientData);
+    void* GetClientData(unsigned int n) const;
 
-    void SetClientObject(int n, wxClientData* clientData);
-    wxClientData* GetClientObject(int n) const;
+    void SetClientObject(unsigned int n, wxClientData* clientData);
+    wxClientData* GetClientObject(unsigned int n) const;
 
     bool HasClientObjectData() const
         { return m_clientDataItemsType == wxClientData_Object; }
@@ -138,12 +137,12 @@ public:
 
 protected:
     virtual int DoAppend(const wxString& item) = 0;
-    virtual int DoInsert(const wxString& item, int pos) = 0;
+    virtual int DoInsert(const wxString& item, unsigned int pos) = 0;
 
-    virtual void DoSetItemClientData(int n, void* clientData) = 0;
-    virtual void* DoGetItemClientData(int n) const = 0;
-    virtual void DoSetItemClientObject(int n, wxClientData* clientData) = 0;
-    virtual wxClientData* DoGetItemClientObject(int n) const = 0;
+    virtual void DoSetItemClientData(unsigned int n, void* clientData) = 0;
+    virtual void* DoGetItemClientData(unsigned int n) const = 0;
+    virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData) = 0;
+    virtual wxClientData* DoGetItemClientObject(unsigned int n) const = 0;
 
     // the type of the client data for the items
     wxClientDataType m_clientDataItemsType;
@@ -162,13 +161,13 @@ protected:
         { wxControl::SetClientObject(data); }                              \
     wxClientData *GetClientObject() const                                  \
         { return wxControl::GetClientObject(); }                           \
-    void SetClientData(int n, void* clientData)                            \
+    void SetClientData(unsigned int n, void* clientData)                   \
         { wxItemContainer::SetClientData(n, clientData); }                 \
-    void* GetClientData(int n) const                                       \
+    void* GetClientData(unsigned int n) const                              \
         { return wxItemContainer::GetClientData(n); }                      \
-    void SetClientObject(int n, wxClientData* clientData)                  \
+    void SetClientObject(unsigned int n, wxClientData* clientData)         \
         { wxItemContainer::SetClientObject(n, clientData); }               \
-    wxClientData* GetClientObject(int n) const                             \
+    wxClientData* GetClientObject(unsigned int n) const                    \
         { return wxItemContainer::GetClientObject(n); }
 
 class WXDLLEXPORT wxControlWithItems : public wxControl, public wxItemContainer

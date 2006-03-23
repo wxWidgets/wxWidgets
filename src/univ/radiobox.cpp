@@ -197,8 +197,8 @@ wxRadioBox::~wxRadioBox()
     // the buttons themselves: this must be done as the user code expects them
     // to disappear now and not some time later when they will be deleted by
     // our (common) parent
-    size_t count = m_buttons.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    unsigned int count = m_buttons.GetCount();
+    for ( unsigned int n = 0; n < count; n++ )
     {
         m_buttons[n]->PopEventHandler(true /* delete it */);
 
@@ -282,7 +282,7 @@ void wxRadioBox::OnRadioButton(wxEvent& event)
 // methods forwarded to the buttons
 // ----------------------------------------------------------------------------
 
-wxString wxRadioBox::GetString(int n) const
+wxString wxRadioBox::GetString(unsigned int n) const
 {
     wxCHECK_MSG( IsValid(n), wxEmptyString,
                  _T("invalid index in wxRadioBox::GetString") );
@@ -290,35 +290,35 @@ wxString wxRadioBox::GetString(int n) const
     return m_buttons[n]->GetLabel();
 }
 
-void wxRadioBox::SetString(int n, const wxString& label)
+void wxRadioBox::SetString(unsigned int n, const wxString& label)
 {
     wxCHECK_RET( IsValid(n), _T("invalid index in wxRadioBox::SetString") );
 
     m_buttons[n]->SetLabel(label);
 }
 
-bool wxRadioBox::Enable(int n, bool enable)
+bool wxRadioBox::Enable(unsigned int n, bool enable)
 {
     wxCHECK_MSG( IsValid(n), false, _T("invalid index in wxRadioBox::Enable") );
 
     return m_buttons[n]->Enable(enable);
 }
 
-bool wxRadioBox::IsItemEnabled(int n) const
+bool wxRadioBox::IsItemEnabled(unsigned int n) const
 {
     wxCHECK_MSG( IsValid(n), false, _T("invalid index in wxRadioBox::IsItemEnabled") );
 
     return m_buttons[n]->IsEnabled();
 }
 
-bool wxRadioBox::Show(int n, bool show)
+bool wxRadioBox::Show(unsigned int n, bool show)
 {
     wxCHECK_MSG( IsValid(n), false, _T("invalid index in wxRadioBox::Show") );
 
     return m_buttons[n]->Show(show);
 }
 
-bool wxRadioBox::IsItemShown(int n) const
+bool wxRadioBox::IsItemShown(unsigned int n) const
 {
     wxCHECK_MSG( IsValid(n), false, _T("invalid index in wxRadioBox::IsItemShown") );
 
@@ -335,8 +335,8 @@ bool wxRadioBox::Enable(bool enable)
         return false;
 
     // also enable/disable the buttons
-    const size_t count = m_buttons.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    const unsigned int count = m_buttons.GetCount();
+    for ( unsigned int n = 0; n < count; n++ )
     {
         Enable(n, enable);
     }
@@ -350,8 +350,8 @@ bool wxRadioBox::Show(bool show)
         return false;
 
     // also show/hide the buttons
-    const size_t count = m_buttons.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    const unsigned int count = m_buttons.GetCount();
+    for ( unsigned int n = 0; n < count; n++ )
     {
         Show(n, show);
     }
@@ -375,8 +375,8 @@ void wxRadioBox::DoSetToolTip(wxToolTip *tooltip)
     wxControl::DoSetToolTip(tooltip);
 
     // Also set them for all Radio Buttons
-    const size_t count = m_buttons.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    const unsigned int count = m_buttons.GetCount();
+    for ( unsigned int n = 0; n < count; n++ )
     {
         if (tooltip)
             m_buttons[n]->SetToolTip(tooltip->GetTip());
@@ -395,8 +395,8 @@ wxSize wxRadioBox::GetMaxButtonSize() const
     int widthMax, heightMax, width = 0, height = 0;
     widthMax = heightMax = 0;
 
-    const int count = GetCount();
-    for ( int n = 0; n < count; n++ )
+    const unsigned int count = GetCount();
+    for ( unsigned int n = 0; n < count; n++ )
     {
         m_buttons[n]->GetBestSize(&width, &height);
 
@@ -442,8 +442,8 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
     int x = x0,
         y = y0;
 
-    const size_t count = GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    const unsigned int count = GetCount();
+    for ( unsigned int n = 0; n < count; n++ )
     {
         m_buttons[n]->SetSize(x, y, sizeBtn.x, sizeBtn.y);
 

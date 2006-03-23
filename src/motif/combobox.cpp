@@ -49,7 +49,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     if( !CreateControl( parent, id, pos, size, style, validator, name ) )
         return false;
 
-    m_noStrings = (size_t)n;
+    m_noStrings = n;
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -144,7 +144,7 @@ void wxComboBox::SetValue(const wxString& value)
     m_inSetValue = false;
 }
 
-void wxComboBox::SetString(int WXUNUSED(n), const wxString& WXUNUSED(s))
+void wxComboBox::SetString(unsigned int WXUNUSED(n), const wxString& WXUNUSED(s))
 {
     wxFAIL_MSG( wxT("wxComboBox::SetString only implemented for Motif 2.0") );
 }
@@ -159,7 +159,7 @@ int wxComboBox::DoAppend(const wxString& item)
     return GetCount() - 1;
 }
 
-int wxComboBox::DoInsert(const wxString& item, int pos)
+int wxComboBox::DoInsert(const wxString& item, unsigned int pos)
 {
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
     wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
@@ -176,7 +176,7 @@ int wxComboBox::DoInsert(const wxString& item, int pos)
     return pos;
 }
 
-void wxComboBox::Delete(int n)
+void wxComboBox::Delete(unsigned int n)
 {
     XmComboBoxDeletePos((Widget) m_mainWidget, n+1);
     wxStringList::Node *node = m_stringList.Item(n);
@@ -213,7 +213,7 @@ int wxComboBox::GetSelection (void) const
         return sel - 1;
 }
 
-wxString wxComboBox::GetString(int n) const
+wxString wxComboBox::GetString(unsigned int n) const
 {
     wxStringList::Node *node = m_stringList.Item(n);
     if (node)

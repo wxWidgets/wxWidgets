@@ -88,7 +88,7 @@ by the control.
 
 \membersection{wxControlWithItems::Delete}\label{wxcontrolwithitemsdelete}
 
-\func{void}{Delete}{\param{int}{ n}}
+\func{void}{Delete}{\param{unsigned int}{ n}}
 
 Deletes an item from the control. The client data associated with the item
 will be also deleted if it is owned by the control.
@@ -125,7 +125,7 @@ not found.
 
 \membersection{wxControlWithItems::GetClientData}\label{wxcontrolwithitemsgetclientdata}
 
-\constfunc{void *}{GetClientData}{\param{int}{ n}}
+\constfunc{void *}{GetClientData}{\param{unsigned int}{ n}}
 
 Returns a pointer to the client data associated with the given item (if any).
 It is an error to call this function for a control which doesn't have untyped
@@ -143,7 +143,7 @@ A pointer to the client data, or {\tt NULL} if not present.
 
 \membersection{wxControlWithItems::GetClientObject}\label{wxcontrolwithitemsgetclientobject}
 
-\constfunc{wxClientData *}{GetClientObject}{\param{int}{ n}}
+\constfunc{wxClientData *}{GetClientObject}{\param{unsigned int}{ n}}
 
 Returns a pointer to the client data associated with the given item (if any).
 It is an error to call this function for a control which doesn't have typed
@@ -161,7 +161,7 @@ A pointer to the client data, or {\tt NULL} if not present.
 
 \membersection{wxControlWithItems::GetCount}\label{wxcontrolwithitemsgetcount}
 
-\constfunc{size\_t}{GetCount}{\void}
+\constfunc{unsigned int}{GetCount}{\void}
 
 Returns the number of items in the control.
 
@@ -195,7 +195,7 @@ with {\tt wxLB\_MULTIPLE} style.
 
 \membersection{wxControlWithItems::GetString}\label{wxcontrolwithitemsgetstring}
 
-\constfunc{wxString}{GetString}{\param{int}{ n}}
+\constfunc{wxString}{GetString}{\param{unsigned int}{ n}}
 
 Returns the label of the item with the given index.
 
@@ -222,14 +222,14 @@ selected.
 
 \membersection{wxControlWithItems::Insert}\label{wxcontrolwithitemsinsert}
 
-\func{int}{Insert}{\param{const wxString\& }{ item}, \param{int }{pos}}
+\func{int}{Insert}{\param{const wxString\& }{ item}, \param{unsigned int }{pos}}
 
 Inserts the item into the list before pos.
 Not valid for {\tt wxLB\_SORT} or {\tt wxCB\_SORT} styles, use Append instead.
 
-\func{int}{Insert}{\param{const wxString\& }{ item}, \param{int }{pos}, \param{void *}{clientData}}
+\func{int}{Insert}{\param{const wxString\& }{ item}, \param{unsigned int }{pos}, \param{void *}{clientData}}
 
-\func{int}{Insert}{\param{const wxString\& }{ item}, \param{int }{pos}, \param{wxClientData *}{clientData}}
+\func{int}{Insert}{\param{const wxString\& }{ item}, \param{unsigned int }{pos}, \param{wxClientData *}{clientData}}
 
 Inserts the item into the list before pos, associating the given, typed or
 untyped, client data pointer with the item.
@@ -282,7 +282,7 @@ multiple selection.
 
 \membersection{wxControlWithItems::SetClientData}\label{wxcontrolwithitemssetclientdata}
 
-\func{void}{SetClientData}{\param{int}{ n}, \param{void *}{data}}
+\func{void}{SetClientData}{\param{unsigned int}{ n}, \param{void *}{data}}
 
 Associates the given untyped client data pointer with the given item. Note that
 it is an error to call this function if any typed client data pointers had been
@@ -297,7 +297,7 @@ associated with the control items before.
 
 \membersection{wxControlWithItems::SetClientObject}\label{wxcontrolwithitemssetclientobject}
 
-\func{void}{SetClientObject}{\param{int}{ n}, \param{wxClientData *}{data}}
+\func{void}{SetClientObject}{\param{unsigned int}{ n}, \param{wxClientData *}{data}}
 
 Associates the given typed client data pointer with the given item: the
 {\it data} object will be deleted when the item is deleted (either explicitly
@@ -336,7 +336,7 @@ deselect any other items in the controls which support multiple selections.
 
 \membersection{wxControlWithItems::SetString}\label{wxcontrolwithitemssetstring}
 
-\func{void}{SetString}{\param{int}{ n}, \param{const wxString\& }{ string}}
+\func{void}{SetString}{\param{unsigned int}{ n}, \param{const wxString\& }{ string}}
 
 Sets the label for the given item.
 

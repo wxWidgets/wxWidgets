@@ -71,18 +71,18 @@ public:
         const wxString& name = wxChoiceNameStr);
 
     // implementation of wxControlWithItems
-    virtual size_t GetCount() const;
+    virtual unsigned int GetCount() const;
     virtual int DoAppend(const wxString& item);
-    virtual int DoInsert(const wxString& item, int pos);
-    virtual void DoSetItemClientData(int n, void* clientData);
-    virtual void* DoGetItemClientData(int n) const;
-    virtual void DoSetItemClientObject(int n, wxClientData* clientData);
-    virtual wxClientData* DoGetItemClientObject(int n) const;
+    virtual int DoInsert(const wxString& item, unsigned int pos);
+    virtual void DoSetItemClientData(unsigned int n, void* clientData);
+    virtual void* DoGetItemClientData(unsigned int n) const;
+    virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
+    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
     virtual int GetSelection() const;
-    virtual void Delete(int n);
+    virtual void Delete(unsigned int n);
     virtual void Clear();
-    virtual void SetString(int n, const wxString& s);
-    virtual wxString GetString(int n) const;
+    virtual void SetString(unsigned int n, const wxString& s);
+    virtual wxString GetString(unsigned int n) const;
 
     // implementation of wxChoiceBase
     virtual void SetSelection(int n);
@@ -112,7 +112,7 @@ protected:
     // common part of all contructors
     void Init();
 
-    size_t        m_noStrings;
+    unsigned int  m_noStrings;
     WXWidget      m_menuWidget;
     WXWidget      m_buttonWidget;
     wxWidgetArray m_widgetArray;

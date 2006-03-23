@@ -123,12 +123,12 @@ int wxChoice::DoAppend(
     return nIndex;
 } // end of wxChoice::DoAppend
 
-int wxChoice::DoInsert( const wxString& rsItem, int pos )
+int wxChoice::DoInsert( const wxString& rsItem, unsigned int pos )
 {
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
     wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
 
-    if ((size_t)pos == GetCount())
+    if (pos == GetCount())
         return DoAppend(rsItem);
 
     int  nIndex;
@@ -146,7 +146,7 @@ int wxChoice::DoInsert( const wxString& rsItem, int pos )
     return nIndex;
 } // end of wxChoice::DoInsert
 
-void wxChoice::Delete( int n )
+void wxChoice::Delete(unsigned int n)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid item index in wxChoice::Delete") );
     ::WinSendMsg(GetHwnd(), LM_DELETEITEM, (MPARAM)n, (MPARAM)0);
@@ -182,12 +182,12 @@ void wxChoice::SetSelection(
 // string list functions
 // ----------------------------------------------------------------------------
 
-size_t wxChoice::GetCount() const
+unsigned int wxChoice::GetCount() const
 {
-    return((size_t)LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMCOUNT, (MPARAM)0, (MPARAM)0)));
+    return((unsigned int)LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMCOUNT, (MPARAM)0, (MPARAM)0)));
 } // end of wxChoice::GetCount
 
-void wxChoice::SetString( int n, const wxString& rsStr )
+void wxChoice::SetString(unsigned int n, const wxString& rsStr)
 {
     LONG  nIndexType = 0;
     void* pData;
@@ -215,13 +215,11 @@ void wxChoice::SetString( int n, const wxString& rsStr )
 
     if (pData)
     {
-        DoSetItemClientData( n
-                            ,pData
-                           );
+        DoSetItemClientData(n, pData);
     }
 } // end of wxChoice::SetString
 
-wxString wxChoice::GetString(int n) const
+wxString wxChoice::GetString(unsigned int n) const
 {
     int      nLen = 0;
     wxString sStr = wxEmptyString;
@@ -246,35 +244,23 @@ wxString wxChoice::GetString(int n) const
 // client data
 // ----------------------------------------------------------------------------
 
-void wxChoice::DoSetItemClientData(
-  int                               n
-, void*                             pClientData
-)
+void wxChoice::DoSetItemClientData(unsigned int n, void* pClientData)
 {
     ::WinSendMsg(GetHwnd(), LM_SETITEMHANDLE, (MPARAM)n, MPFROMP(pClientData));
 } // end of wxChoice::DoSetItemClientData
 
-void* wxChoice::DoGetItemClientData( int n ) const
+void* wxChoice::DoGetItemClientData(unsigned int n) const
 {
-    MRESULT                         rc = 0L;
-
-    rc = ::WinSendMsg(GetHwnd(), LM_QUERYITEMHANDLE, (MPARAM)n, (MPARAM)0);
+    MRESULT rc = ::WinSendMsg(GetHwnd(), LM_QUERYITEMHANDLE, (MPARAM)n, (MPARAM)0);
     return((void*)rc);
-} // end of wxChoice::DoSetItemClientData
+} // end of wxChoice::DoGetItemClientData
 
-void wxChoice::DoSetItemClientObject(
-  int                               n
-, wxClientData*                     pClientData
-)
+void wxChoice::DoSetItemClientObject(unsigned int n, wxClientData* pClientData)
 {
-    DoSetItemClientData( n
-                        ,pClientData
-                       );
+    DoSetItemClientData(n, pClientData);
 } // end of wxChoice::DoSetItemClientObject
 
-wxClientData* wxChoice::DoGetItemClientObject(
-  int                               n
-) const
+wxClientData* wxChoice::DoGetItemClientObject(unsigned int n) const
 {
     return (wxClientData *)DoGetItemClientData(n);
 } // end of wxChoice::DoGetItemClientObject
@@ -315,9 +301,9 @@ wxSize wxChoice::DoGetBestSize() const
     int    nCy;
     wxFont vFont = (wxFont)GetFont();
 
-    const size_t nItems = GetCount();
+    const unsigned int nItems = GetCount();
 
-    for (size_t i = 0; i < nItems; i++)
+    for (unsigned int i = 0; i < nItems; i++)
     {
         wxString sStr(GetString(i));
         GetTextExtent( sStr, &nLineWidth, NULL );
@@ -341,12 +327,10 @@ wxSize wxChoice::DoGetBestSize() const
     //
     // Choice drop-down list depends on number of items (limited to 10)
     //
-    size_t                          nStrings = nItems == 0 ? 10 : wxMin(10, nItems) + 1;
-    int                             nChoiceHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy) * nStrings;
+    size_t nStrings = nItems == 0 ? 10 : wxMin(10, nItems) + 1;
+    int    nChoiceHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy) * nStrings;
 
-    return wxSize( nChoiceWidth
-                  ,nChoiceHeight
-                 );
+    return wxSize(nChoiceWidth, nChoiceHeight);
 } // end of wxChoice::DoGetBestSize
 
 MRESULT wxChoice::OS2WindowProc(
@@ -397,9 +381,9 @@ void wxChoice::Free()
 {
     if (HasClientObjectData())
     {
-        const size_t nCount = GetCount();
+        const unsigned int nCount = GetCount();
 
-        for (size_t n = 0; n < nCount; n++)
+        for (unsigned int n = 0; n < nCount; n++)
         {
             delete GetClientObject(n);
         }

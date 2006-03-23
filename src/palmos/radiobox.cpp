@@ -112,7 +112,7 @@ void wxRadioBox::Init()
     m_size = wxSize(0,0);
 }
 
-size_t wxRadioBox::GetCount() const
+unsigned int wxRadioBox::GetCount() const
 {
     return m_radios.GetCount();
 }
@@ -160,9 +160,9 @@ bool wxRadioBox::Create(wxWindow *parent,
         return false;
 
     int i = 0;
-    for ( int j = 0; j < minor; j++ )
+    for ( unsigned int j = 0; j < minor; j++ )
     {
-        for ( int k = 0; k < GetMajorDim(); k++ )
+        for ( unsigned int k = 0; k < GetMajorDim(); k++ )
         {
             if(i<n)
             {
@@ -238,15 +238,15 @@ void wxRadioBox::DoMoveWindow(int x, int y, int width, int height)
 
     const bool use_cols = HasFlag(wxRA_SPECIFY_COLS);
 
-    const size_t n = GetCount();
-    size_t minor = n / GetMajorDim();
+    const unsigned int n = GetCount();
+    unsigned int minor = n / GetMajorDim();
     if(n % GetMajorDim() > 0)
         minor++;
 
-    size_t i = 0;
-    for ( int j = 0; j < minor; j++ )
+    unsigned int i = 0;
+    for ( unsigned int j = 0; j < minor; j++ )
     {
-        for ( int k = 0; k < GetMajorDim(); k++ )
+        for ( unsigned int k = 0; k < GetMajorDim(); k++ )
         {
             if(i<n)
             {
@@ -275,7 +275,7 @@ wxPoint wxRadioBox::GetClientAreaOrigin() const
     return GetPosition();
 }
 
-void wxRadioBox::SetString(int item, const wxString& label)
+void wxRadioBox::SetString(unsigned int item, const wxString& label)
 {
     wxRadioButton *btn = GetRadioButton(item);
     if(btn)
@@ -293,7 +293,7 @@ int wxRadioBox::GetSelection() const
 }
 
 // Find string for position
-wxString wxRadioBox::GetString(int item) const
+wxString wxRadioBox::GetString(unsigned int item) const
 {
     wxRadioButton *btn = GetRadioButton(item);
     if(btn)
@@ -327,13 +327,13 @@ void wxRadioBox::SetFocus()
 // Enable all subcontrols
 bool wxRadioBox::Enable(bool enable)
 {
-    for(size_t i=0; i<GetCount(); i++)
-        Enable((int)i, enable);
+    for(unsigned int i=0; i<GetCount(); i++)
+        Enable(i, enable);
     return true;
 }
 
 // Enable a specific button
-bool wxRadioBox::Enable(int item, bool enable)
+bool wxRadioBox::Enable(unsigned int item, bool enable)
 {
     wxRadioButton *btn = GetRadioButton(item);
     if(btn)
@@ -343,13 +343,13 @@ bool wxRadioBox::Enable(int item, bool enable)
 
 bool wxRadioBox::Show(bool show)
 {
-    for(size_t i=0; i<GetCount(); i++)
-        Show((int)i, show);
+    for(unsigned int i=0; i<GetCount(); i++)
+        Show(i, show);
     return true;
 }
 
 // Show a specific button
-bool wxRadioBox::Show(int item, bool show)
+bool wxRadioBox::Show(unsigned int item, bool show)
 {
     wxRadioButton *btn = GetRadioButton(item);
     if(btn)

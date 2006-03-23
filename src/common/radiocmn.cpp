@@ -34,7 +34,7 @@
 // implementation
 // ============================================================================
 
-void wxRadioBoxBase::SetMajorDim(int majorDim, long style)
+void wxRadioBoxBase::SetMajorDim(unsigned int majorDim, long style)
 {
     wxCHECK_RET( majorDim != 0, _T("major radiobox dimension can't be 0") );
 

@@ -76,28 +76,28 @@ int wxRadioBox::GetSelection() const
 }
 
     // string access
-size_t wxRadioBox::GetCount() const
+unsigned int wxRadioBox::GetCount() const
 {
     return 0;
 }
 
-wxString wxRadioBox::GetString(int n) const
+wxString wxRadioBox::GetString(unsigned int n) const
 {
     return wxEmptyString;
 }
 
-void wxRadioBox::SetString(int n, const wxString& label)
+void wxRadioBox::SetString(unsigned int n, const wxString& label)
 {
 }
 
     // change the individual radio button state
-bool wxRadioBox::Enable(int n, bool enable)
+bool wxRadioBox::Enable(unsigned int n, bool enable)
 {
     // TODO
     return false;
 }
 
-bool wxRadioBox::Show(int n, bool show)
+bool wxRadioBox::Show(unsigned int n, bool show)
 {
     // TODO
     return false;

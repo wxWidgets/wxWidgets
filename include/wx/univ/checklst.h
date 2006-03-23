@@ -70,8 +70,8 @@ public:
                 const wxString& name = wxListBoxNameStr);
 
     // implement check list box methods
-    virtual bool IsChecked(size_t item) const;
-    virtual void Check(size_t item, bool check = true);
+    virtual bool IsChecked(unsigned int item) const;
+    virtual void Check(unsigned int item, bool check = true);
 
     // and input handling
     virtual bool PerformAction(const wxControlAction& action,
@@ -80,11 +80,11 @@ public:
 
     // override all methods which add/delete items to update m_checks array as
     // well
-    virtual void Delete(int n);
+    virtual void Delete(unsigned int n);
 
 protected:
     virtual int DoAppend(const wxString& item);
-    virtual void DoInsertItems(const wxArrayString& items, int pos);
+    virtual void DoInsertItems(const wxArrayString& items, unsigned int pos);
     virtual void DoSetItems(const wxArrayString& items, void **clientData);
     virtual void DoClear();
 
@@ -122,4 +122,3 @@ public:
 };
 
 #endif // _WX_UNIV_CHECKLST_H_
-

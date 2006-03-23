@@ -71,14 +71,14 @@ public:
 
     // implementation of wxControlWithItems
     virtual int DoAppend(const wxString& item);
-    virtual int DoInsert(const wxString& item, int pos);
-    virtual void Delete(int n);
+    virtual int DoInsert(const wxString& item, unsigned int pos);
+    virtual void Delete(unsigned int n);
     virtual void Clear();
     virtual int GetSelection() const ;
     virtual void SetSelection(int n);
     virtual int FindString(const wxString& s, bool bCase = false) const;
-    virtual wxString GetString(int n) const ;
-    virtual void SetString(int n, const wxString& s);
+    virtual wxString GetString(unsigned int n) const ;
+    virtual void SetString(unsigned int n, const wxString& s);
 
     // Text field functions
     virtual wxString GetValue() const ;

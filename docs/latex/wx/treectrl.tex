@@ -362,7 +362,7 @@ This function is only available in the generic version.
 
 \membersection{wxTreeCtrl::GetChildrenCount}\label{wxtreectrlgetchildrencount}
 
-\constfunc{size\_t}{GetChildrenCount}{\param{const wxTreeItemId\&}{ item}, \param{bool}{ recursively = {\tt true}}}
+\constfunc{unsigned int}{GetChildrenCount}{\param{const wxTreeItemId\&}{ item}, \param{bool}{ recursively = {\tt true}}}
 
 Returns the number of items in the branch. If {\it recursively} is {\tt true}, returns the total number
 of descendants, otherwise only one level of children is counted.
@@ -370,7 +370,7 @@ of descendants, otherwise only one level of children is counted.
 
 \membersection{wxTreeCtrl::GetCount}\label{wxtreectrlgetcount}
 
-\constfunc{size\_t}{GetCount}{\void}
+\constfunc{unsigned int}{GetCount}{\void}
 
 Returns the number of items in the control.
 
@@ -631,7 +631,7 @@ this style.
 
 \membersection{wxTreeCtrl::GetSelections}\label{wxtreectrlgetselections}
 
-\constfunc{size\_t}{GetSelections}{\param{wxArrayTreeItemIds\& }{selection}}
+\constfunc{unsigned int}{GetSelections}{\param{wxArrayTreeItemIds\& }{selection}}
 
 Fills the array of tree items passed in with the currently selected items. This
 function can be called only if the control has the wxTR\_MULTIPLE style.

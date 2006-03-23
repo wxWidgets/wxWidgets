@@ -293,10 +293,10 @@ public:
 
     // wxControlWithItems methods
     virtual void Clear();
-    virtual void Delete(int n);
-    virtual size_t GetCount() const;
-    virtual wxString GetString(int n) const;
-    virtual void SetString(int n, const wxString& s);
+    virtual void Delete(unsigned int n);
+    virtual unsigned int GetCount() const;
+    virtual wxString GetString(unsigned int n) const;
+    virtual void SetString(unsigned int n, const wxString& s);
     virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
@@ -305,11 +305,11 @@ public:
 
 protected:
     virtual int DoAppend(const wxString& item);
-    virtual int DoInsert(const wxString& item, int pos);
-    virtual void DoSetItemClientData(int n, void* clientData);
-    virtual void* DoGetItemClientData(int n) const;
-    virtual void DoSetItemClientObject(int n, wxClientData* clientData);
-    virtual wxClientData* DoGetItemClientObject(int n) const;
+    virtual int DoInsert(const wxString& item, unsigned int pos);
+    virtual void DoSetItemClientData(unsigned int n, void* clientData);
+    virtual void* DoGetItemClientData(unsigned int n) const;
+    virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
+    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
 
     // common part of all ctors
     void Init();

@@ -16,6 +16,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_CHECKLISTBOX
+
 #include "wx/defs.h"
 
 #include "wx/checklst.h"
@@ -116,12 +118,12 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
 // check items
 // -----------
 
-bool wxCheckListBox::IsChecked(size_t uiIndex) const
+bool wxCheckListBox::IsChecked(unsigned int uiIndex) const
 {
     return ::IsChecked(wxListBox::GetString(uiIndex));
 }
 
-void wxCheckListBox::Check(size_t uiIndex, bool bCheck)
+void wxCheckListBox::Check(unsigned int uiIndex, bool bCheck)
 {
     wxString label = wxListBox::GetString(uiIndex);
     if(::IsChecked(label) == bCheck) return;
@@ -145,7 +147,7 @@ void wxCheckListBox::DoToggleItem( int n, int x )
         event.SetInt(n);
         event.SetExtraLong(true);
         event.SetEventObject(this);
-        event.SetString( GetString( n ) );
+        event.SetString(GetString(n));
 
         GetEventHandler()->ProcessEvent(event);
     }
@@ -170,17 +172,17 @@ int wxCheckListBox::FindString(const wxString& s, bool bCase) const
     return min;
 }
 
-void wxCheckListBox::SetString(int n, const wxString& s)
+void wxCheckListBox::SetString(unsigned int n, const wxString& s)
 {
-    wxListBox::SetString( n, Prefix(IsChecked(n)) + s );
+    wxListBox::SetString(n, Prefix(IsChecked(n)) + s);
 }
 
-wxString wxCheckListBox::GetString(int n) const
+wxString wxCheckListBox::GetString(unsigned int n) const
 {
     return wxListBox::GetString(n).substr(4);
 }
 
-void wxCheckListBox::DoInsertItems(const wxArrayString& items, int pos)
+void wxCheckListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
 {
     wxArrayString copy;
     CopyStringsAddingPrefix(items, copy);
@@ -193,3 +195,5 @@ void wxCheckListBox::DoSetItems(const wxArrayString& items, void **clientData)
     CopyStringsAddingPrefix(items, copy);
     wxListBox::DoSetItems(copy, clientData);
 }
+
+#endif // wxUSE_CHECKLISTBOX

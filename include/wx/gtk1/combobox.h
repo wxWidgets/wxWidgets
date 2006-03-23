@@ -81,16 +81,16 @@ public:
            const wxString& name = wxComboBoxNameStr);
 
     void Clear();
-    void Delete( int n );
+    void Delete(unsigned int n);
 
     virtual int FindString(const wxString& s, bool bCase = false) const;
     int GetSelection() const;
     int GetCurrentSelection() const;
-    wxString GetString( int n ) const;
+    virtual wxString GetString(unsigned int n) const;
     wxString GetStringSelection() const;
-    virtual size_t GetCount() const;
-    void SetSelection( int n );
-    void SetString(int n, const wxString &text);
+    virtual unsigned int GetCount() const;
+    virtual void SetSelection(int n);
+    virtual void SetString(unsigned int n, const wxString &text);
 
     wxString GetValue() const;
     void SetValue(const wxString& value);
@@ -160,12 +160,12 @@ public:
 
 protected:
     virtual int DoAppend(const wxString& item);
-    virtual int DoInsert(const wxString& item, int pos);
+    virtual int DoInsert(const wxString& item, unsigned int pos);
 
-    virtual void DoSetItemClientData( int n, void* clientData );
-    virtual void* DoGetItemClientData( int n ) const;
-    virtual void DoSetItemClientObject( int n, wxClientData* clientData );
-    virtual wxClientData* DoGetItemClientObject( int n ) const;
+    virtual void DoSetItemClientData(unsigned int n, void* clientData);
+    virtual void* DoGetItemClientData(unsigned int n) const;
+    virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
+    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
 
     virtual wxSize DoGetBestSize() const;
 

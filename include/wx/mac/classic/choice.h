@@ -71,26 +71,26 @@ public:
 
     // implement base class pure virtuals
     virtual int DoAppend(const wxString& item);
-    virtual int DoInsert(const wxString& item, int pos);
-    virtual void Delete(int n);
+    virtual int DoInsert(const wxString& item, unsigned int pos);
+    virtual void Delete(unsigned int n);
     virtual void Clear();
 
-    virtual size_t GetCount() const ;
+    virtual unsigned int GetCount() const ;
     virtual int GetSelection() const ;
     virtual void SetSelection(int n);
 
-    virtual wxString GetString(int n) const ;
-    virtual void SetString( int , const wxString& s ) ;
+    virtual wxString GetString(unsigned int n) const ;
+    virtual void SetString(unsigned int pos, const wxString& s);
     void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
 
 protected:
     virtual wxSize DoGetBestSize() const ;
 
 public: // for wxComboBox only
-    virtual void DoSetItemClientData( int n, void* clientData );
-    virtual void* DoGetItemClientData( int n ) const;
-    virtual void DoSetItemClientObject( int n, wxClientData* clientData );
-    virtual wxClientData* DoGetItemClientObject( int n ) const;
+    virtual void DoSetItemClientData(unsigned int n, void* clientData );
+    virtual void* DoGetItemClientData(unsigned int n) const;
+    virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
+    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
 
 protected:
     // free all memory we have (used by Clear() and dtor)

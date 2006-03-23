@@ -255,23 +255,23 @@ void wxComboBox::Clear()
     m_Datas.Clear();
 }
 
-void wxComboBox::Delete(int nIndex)
+void wxComboBox::Delete(unsigned int n)
 {
-    [GetNSComboBox() removeItemAtIndex:nIndex];
-    m_Datas.RemoveAt(nIndex);
+    [GetNSComboBox() removeItemAtIndex:n];
+    m_Datas.RemoveAt(n);
 }
 
-size_t wxComboBox::GetCount() const
+unsigned int wxComboBox::GetCount() const
 {
-    return (size_t)[GetNSComboBox() numberOfItems];
+    return (unsigned int)[GetNSComboBox() numberOfItems];
 }
 
-wxString wxComboBox::GetString(int nIndex) const
+wxString wxComboBox::GetString(unsigned int nIndex) const
 {
     return wxStringWithNSString([GetNSComboBox() itemObjectValueAtIndex:nIndex]);
 }
 
-void wxComboBox::SetString(int nIndex, const wxString& szString)
+void wxComboBox::SetString(unsigned int nIndex, const wxString& szString)
 {
     wxAutoNSAutoreleasePool pool;
     //FIXME:  There appears to be no "set item data" method - maybe
@@ -299,30 +299,30 @@ int wxComboBox::DoAppend(const wxString& szItem)
     return [GetNSComboBox() numberOfItems];
 }
 
-int wxComboBox::DoInsert(const wxString& szItem, int nIndex)
+int wxComboBox::DoInsert(const wxString& szItem, unsigned int nIndex)
 {
     m_Datas.Insert(NULL, nIndex);
     wxAutoNSAutoreleasePool pool;
     [GetNSComboBox() insertItemWithObjectValue:wxNSStringWithWxString(szItem) atIndex:nIndex];
-    return nIndex;
+    return (int)nIndex;
 }
 
-void wxComboBox::DoSetItemClientData(int nIndex, void* pData)
+void wxComboBox::DoSetItemClientData(unsigned int nIndex, void* pData)
 {
     m_Datas[nIndex] = pData;
 }
 
-void* wxComboBox::DoGetItemClientData(int nIndex) const
+void* wxComboBox::DoGetItemClientData(unsigned int nIndex) const
 {
     return m_Datas[nIndex];
 }
 
-void wxComboBox::DoSetItemClientObject(int nIndex, wxClientData* pClientData)
+void wxComboBox::DoSetItemClientObject(unsigned int nIndex, wxClientData* pClientData)
 {
     m_Datas[nIndex] = (void*) pClientData;
 }
 
-wxClientData* wxComboBox::DoGetItemClientObject(int nIndex) const
+wxClientData* wxComboBox::DoGetItemClientObject(unsigned int nIndex) const
 {
     return (wxClientData*) m_Datas[nIndex];
 }

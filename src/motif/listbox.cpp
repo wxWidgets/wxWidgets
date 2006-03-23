@@ -89,7 +89,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
                                    validator, name ) )
         return false;
 
-    m_noItems = (size_t)n;
+    m_noItems = (unsigned int)n;
     m_backgroundColour = * wxWHITE;
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
@@ -204,7 +204,7 @@ void wxListBox::DoSetFirstItem( int N )
     XmListSetPos ((Widget) m_mainWidget, N + 1);
 }
 
-void wxListBox::Delete(int N)
+void wxListBox::Delete(unsigned int n)
 {
     wxSizeKeeper sk( this );
     Widget listBox = (Widget) m_mainWidget;
@@ -214,13 +214,13 @@ void wxListBox::Delete(int N)
     if (managed)
         XtUnmanageChild (listBox);
 
-    XmListDeletePos (listBox, N + 1);
+    XmListDeletePos (listBox, n + 1);
 
     if (managed)
         XtManageChild (listBox);
 
     sk.Restore();
-    m_clientDataDict.Delete(N, HasClientObjectData());
+    m_clientDataDict.Delete(n, HasClientObjectData());
     m_noItems --;
 }
 
@@ -265,7 +265,7 @@ void wxListBox::DoSetItems(const wxArrayString& items, void** clientData)
     if (managed)
         XtUnmanageChild (listBox);
     XmString *text = new XmString[items.GetCount()];
-    size_t i;
+    unsigned int i;
     for (i = 0; i < items.GetCount(); ++i)
         text[i] = wxStringToXmString (items[i]);
 
@@ -390,24 +390,24 @@ bool wxListBox::IsSelected(int N) const
     return false;
 }
 
-void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)
+void wxListBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
 {
     m_clientDataDict.Set(n, clientData, false);
 }
 
-wxClientData* wxListBox::DoGetItemClientObject(int n) const
+wxClientData* wxListBox::DoGetItemClientObject(unsigned int n) const
 {
     return m_clientDataDict.Get(n);
 }
 
-void *wxListBox::DoGetItemClientData(int N) const
+void *wxListBox::DoGetItemClientData(unsigned int n) const
 {
-    return (void*)m_clientDataDict.Get(N);
+    return (void*)m_clientDataDict.Get(n);
 }
 
-void wxListBox::DoSetItemClientData(int N, void *Client_data)
+void wxListBox::DoSetItemClientData(unsigned int n, void *Client_data)
 {
-    m_clientDataDict.Set(N, (wxClientData*)Client_data, false);
+    m_clientDataDict.Set(n, (wxClientData*)Client_data, false);
 }
 
 // Return number of selections and an array of selected integers
@@ -477,12 +477,12 @@ wxString wxDoGetStringInList( Widget listBox, int n )
         return wxEmptyString;
 }
 
-wxString wxListBox::GetString( int n ) const
+wxString wxListBox::GetString(unsigned int n) const
 {
     return wxDoGetStringInList( (Widget)m_mainWidget, n );
 }
 
-void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
+void wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
 {
     wxSizeKeeper sk( this );
     Widget listBox = (Widget) m_mainWidget;
@@ -493,7 +493,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
         XtUnmanageChild(listBox);
 
     XmString *text = new XmString[items.GetCount()];
-    size_t i;
+    unsigned int i;
     // Steve Hammes: Motif 1.1 compatibility
     // #if XmVersion > 1100
     // Corrected by Sergey Krasnov from Steve Hammes' code
@@ -525,7 +525,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     m_noItems += items.GetCount();
 }
 
-void wxListBox::SetString(int N, const wxString& s)
+void wxListBox::SetString(unsigned int n, const wxString& s)
 {
     wxSizeKeeper sk( this );
     Widget listBox = (Widget) m_mainWidget;
@@ -534,8 +534,8 @@ void wxListBox::SetString(int N, const wxString& s)
 
     // delete the item and add it again.
     // FIXME isn't there a way to change it in place?
-    XmListDeletePos (listBox, N+1);
-    XmListAddItem (listBox, text(), N+1);
+    XmListDeletePos (listBox, n+1);
+    XmListAddItem (listBox, text(), n+1);
 
     sk.Restore();
 }
@@ -666,7 +666,7 @@ void wxListBox::ChangeForegroundColour()
     */
 }
 
-size_t wxListBox::GetCount() const
+unsigned int wxListBox::GetCount() const
 {
     return m_noItems;
 }

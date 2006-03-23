@@ -65,16 +65,16 @@ public:
 
     // implement base class pure virtuals
     virtual int DoAppend(const wxString& item);
-    virtual int DoInsert(const wxString& item, int pos);
-    virtual void Delete(int n);
+    virtual int DoInsert(const wxString& item, unsigned int pos);
+    virtual void Delete(unsigned int n);
     virtual void Clear();
 
-    virtual size_t GetCount() const;
+    virtual unsigned int GetCount() const;
     virtual int GetSelection() const;
     virtual void SetSelection(int n);
 
-    virtual wxString GetString(int n) const;
-    virtual void SetString(int n, const wxString& s);
+    virtual wxString GetString(unsigned int n) const;
+    virtual void SetString(unsigned int n, const wxString& s);
 
     // MSW only
     virtual bool MSWCommand(WXUINT param, WXWORD id);
@@ -82,10 +82,10 @@ public:
 
 protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
-    virtual void DoSetItemClientData( int n, void* clientData );
-    virtual void* DoGetItemClientData( int n ) const;
-    virtual void DoSetItemClientObject( int n, wxClientData* clientData );
-    virtual wxClientData* DoGetItemClientObject( int n ) const;
+    virtual void DoSetItemClientData(unsigned int n, void* clientData);
+    virtual void* DoGetItemClientData(unsigned int n) const;
+    virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
+    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
 
     // MSW implementation
     virtual wxSize DoGetBestSize() const;

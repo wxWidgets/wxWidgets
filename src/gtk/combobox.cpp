@@ -447,7 +447,7 @@ int wxComboBox::DoAppend( const wxString &item )
         EnableEvents();
     }
 
-    const size_t count = GetCount();
+    const unsigned int count = GetCount();
 
     if ( m_clientDataList.GetCount() < count )
         m_clientDataList.Append( (wxObject*) NULL );
@@ -459,7 +459,7 @@ int wxComboBox::DoAppend( const wxString &item )
     return count - 1;
 }
 
-int wxComboBox::DoInsert( const wxString &item, int pos )
+int wxComboBox::DoInsert(const wxString &item, unsigned int pos)
 {
     wxCHECK_MSG( !(GetWindowStyle() & wxCB_SORT), -1,
                     wxT("can't insert into sorted list"));
@@ -467,9 +467,9 @@ int wxComboBox::DoInsert( const wxString &item, int pos )
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
     wxCHECK_MSG( IsValidInsert(pos), -1, wxT("invalid index") );
 
-    size_t count = GetCount();
+    unsigned int count = GetCount();
 
-    if ((size_t)pos == count)
+    if (pos == count)
         return Append(item);
 
 #ifdef __WXGTK24__
@@ -515,7 +515,7 @@ int wxComboBox::DoInsert( const wxString &item, int pos )
     return pos;
 }
 
-void wxComboBox::DoSetItemClientData( int n, void* clientData )
+void wxComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -525,7 +525,7 @@ void wxComboBox::DoSetItemClientData( int n, void* clientData )
     node->SetData( (wxObject*) clientData );
 }
 
-void* wxComboBox::DoGetItemClientData( int n ) const
+void* wxComboBox::DoGetItemClientData(unsigned int n) const
 {
     wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid combobox") );
 
@@ -534,7 +534,7 @@ void* wxComboBox::DoGetItemClientData( int n ) const
     return node ? node->GetData() : NULL;
 }
 
-void wxComboBox::DoSetItemClientObject( int n, wxClientData* clientData )
+void wxComboBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -546,7 +546,7 @@ void wxComboBox::DoSetItemClientObject( int n, wxClientData* clientData )
     node->SetData( (wxObject*) clientData );
 }
 
-wxClientData* wxComboBox::DoGetItemClientObject( int n ) const
+wxClientData* wxComboBox::DoGetItemClientObject(unsigned int n) const
 {
     wxCHECK_MSG( m_widget != NULL, (wxClientData*)NULL, wxT("invalid combobox") );
 
@@ -565,8 +565,8 @@ void wxComboBox::Clear()
     if (!gtk_check_version(2,4,0))
     {
         GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
-        const size_t count = GetCount();
-        for (size_t i = 0; i < count; i++)
+        const unsigned int count = GetCount();
+        for (unsigned int i = 0; i < count; i++)
             gtk_combo_box_remove_text( combobox, 0 );
     }
     else // GTK+ < 2.4.0
@@ -592,7 +592,7 @@ void wxComboBox::Clear()
     InvalidateBestSize();
 }
 
-void wxComboBox::Delete( int n )
+void wxComboBox::Delete(unsigned int n)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -641,7 +641,7 @@ void wxComboBox::Delete( int n )
     InvalidateBestSize();
 }
 
-void wxComboBox::SetString(int n, const wxString &text)
+void wxComboBox::SetString(unsigned int n, const wxString &text)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -783,7 +783,7 @@ int wxComboBox::GetCurrentSelection() const
     return -1;
 }
 
-wxString wxComboBox::GetString( int n ) const
+wxString wxComboBox::GetString(unsigned int n) const
 {
     wxCHECK_MSG( m_widget != NULL, wxEmptyString, wxT("invalid combobox") );
 
@@ -836,7 +836,7 @@ wxString wxComboBox::GetStringSelection() const
         int sel = gtk_combo_box_get_active( combobox );
         if (sel == -1)
             return wxEmptyString;
-        return GetString( sel );
+        return GetString(sel);
     }
     else
 #endif
@@ -858,7 +858,7 @@ wxString wxComboBox::GetStringSelection() const
     return wxEmptyString;
 }
 
-size_t wxComboBox::GetCount() const
+unsigned int wxComboBox::GetCount() const
 {
     wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid combobox") );
 
@@ -871,7 +871,7 @@ size_t wxComboBox::GetCount() const
         gtk_tree_model_get_iter_first( model, &iter );
         if (!gtk_list_store_iter_is_valid(GTK_LIST_STORE(model), &iter ))
             return 0;
-        size_t ret = 1;
+        unsigned int ret = 1;
         while (gtk_tree_model_iter_next( model, &iter ))
             ret++;
         return ret;
@@ -882,8 +882,12 @@ size_t wxComboBox::GetCount() const
         GtkWidget *list = GTK_COMBO(m_widget)->list;
 
         GList *child = GTK_LIST(list)->children;
-        size_t count = 0;
-        while (child) { count++; child = child->next; }
+        unsigned int count = 0;
+        while (child)
+        {
+            count++;
+            child = child->next;
+        }
         return count;
     }
 
@@ -1347,10 +1351,10 @@ wxSize wxComboBox::DoGetBestSize() const
     if ( m_widget )
     {
         int width;
-        size_t count = GetCount();
-        for ( size_t n = 0; n < count; n++ )
+        unsigned int count = GetCount();
+        for ( unsigned int n = 0; n < count; n++ )
         {
-            GetTextExtent( GetString(n), &width, NULL, NULL, NULL );
+            GetTextExtent(GetString(n), &width, NULL, NULL, NULL );
             if ( width > ret.x )
                 ret.x = width;
         }

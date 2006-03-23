@@ -269,8 +269,8 @@ bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
 
         int selectedButton = wxNOT_FOUND;
 
-        const size_t count = GetCount();
-        for ( size_t i = 0; i < count; i++ )
+        const unsigned int count = GetCount();
+        for ( unsigned int i = 0; i < count; i++ )
         {
             if ( id == wxGetWindowId((*m_radioButtons)[i]) )
             {
@@ -314,7 +314,7 @@ void wxRadioBox::SendNotificationEvent()
 {
     wxCommandEvent event(wxEVT_COMMAND_RADIOBOX_SELECTED, m_windowId);
     event.SetInt( m_selectedButton );
-    event.SetString( GetString(m_selectedButton) );
+    event.SetString(GetString(m_selectedButton));
     event.SetEventObject( this );
     ProcessCommand(event);
 }
@@ -323,12 +323,12 @@ void wxRadioBox::SendNotificationEvent()
 // simple accessors
 // ----------------------------------------------------------------------------
 
-size_t wxRadioBox::GetCount() const
+unsigned int wxRadioBox::GetCount() const
 {
     return m_radioButtons->GetCount();
 }
 
-void wxRadioBox::SetString(int item, const wxString& label)
+void wxRadioBox::SetString(unsigned int item, const wxString& label)
 {
     wxCHECK_RET( IsValid(item), wxT("invalid radiobox index") );
 
@@ -355,7 +355,7 @@ void wxRadioBox::SetSelection(int N)
 }
 
 // Find string for position
-wxString wxRadioBox::GetString(int item) const
+wxString wxRadioBox::GetString(unsigned int item) const
 {
     wxCHECK_MSG( IsValid(item), wxEmptyString,
                  wxT("invalid radiobox index") );
@@ -374,7 +374,7 @@ void wxRadioBox::SetFocus()
 }
 
 // Enable a specific button
-bool wxRadioBox::Enable(int item, bool enable)
+bool wxRadioBox::Enable(unsigned int item, bool enable)
 {
     wxCHECK_MSG( IsValid(item), false,
                  wxT("invalid item in wxRadioBox::Enable()") );
@@ -384,7 +384,7 @@ bool wxRadioBox::Enable(int item, bool enable)
     return (ret == 0) != enable;
 }
 
-bool wxRadioBox::IsItemEnabled(int item) const
+bool wxRadioBox::IsItemEnabled(unsigned int item) const
 {
     wxCHECK_MSG( IsValid(item), false,
                  wxT("invalid item in wxRadioBox::IsItemEnabled()") );
@@ -393,7 +393,7 @@ bool wxRadioBox::IsItemEnabled(int item) const
 }
 
 // Show a specific button
-bool wxRadioBox::Show(int item, bool show)
+bool wxRadioBox::Show(unsigned int item, bool show)
 {
     wxCHECK_MSG( IsValid(item), false,
                  wxT("invalid item in wxRadioBox::Show()") );
@@ -409,7 +409,7 @@ bool wxRadioBox::Show(int item, bool show)
     return changed;
 }
 
-bool wxRadioBox::IsItemShown(int item) const
+bool wxRadioBox::IsItemShown(unsigned int item) const
 {
     wxCHECK_MSG( IsValid(item), false,
                  wxT("invalid item in wxRadioBox::IsItemShown()") );
@@ -432,8 +432,8 @@ wxSize wxRadioBox::GetMaxButtonSize() const
     // calculate the max button size
     int widthMax = 0,
         heightMax = 0;
-    const size_t count = GetCount();
-    for ( size_t i = 0 ; i < count; i++ )
+    const unsigned int count = GetCount();
+    for ( unsigned int i = 0 ; i < count; i++ )
     {
         int width, height;
         if ( m_radioWidth[i] < 0 )
@@ -565,8 +565,8 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int startX = x_offset;
     int startY = y_offset;
 
-    const size_t count = GetCount();
-    for ( size_t i = 0; i < count; i++ )
+    const unsigned int count = GetCount();
+    for (unsigned int i = 0; i < count; i++)
     {
         // the last button in the row may be wider than the other ones as the
         // radiobox may be wider than the sum of the button widths (as it
@@ -576,7 +576,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         {
             // item is the last in its row if it is a multiple of the number of
             // columns or if it is just the last item
-            size_t n = i + 1;
+            unsigned int n = i + 1;
             isLastInTheRow = ((n % GetMajorDim()) == 0) || (n == count);
         }
         else // wxRA_SPECIFY_ROWS
@@ -651,8 +651,8 @@ WXHRGN wxRadioBox::MSWGetRegionWithoutChildren()
     ::GetWindowRect(GetHwnd(), &rc);
     HRGN hrgn = ::CreateRectRgn(rc.left, rc.top, rc.right + 1, rc.bottom + 1);
 
-    const size_t count = GetCount();
-    for ( size_t i = 0; i < count; ++i )
+    const unsigned int count = GetCount();
+    for ( unsigned int i = 0; i < count; ++i )
     {
         // don't clip out hidden children
         if ( !IsItemShown(i) )

@@ -591,7 +591,7 @@ wxListBox::~wxListBox()
 // ----------------------------------------------------------------------------
 
 void wxListBox::GtkInsertItems(const wxArrayString& items,
-                               void** clientData, size_t pos)
+                               void** clientData, unsigned int pos)
 {
     wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
@@ -599,8 +599,8 @@ void wxListBox::GtkInsertItems(const wxArrayString& items,
 
     // Create and set column ids and GValues
 
-    size_t nNum = items.GetCount();
-    size_t nCurCount = wxListBox::GetCount();
+    unsigned int nNum = items.GetCount();
+    unsigned int nCurCount = wxListBox::GetCount();
     wxASSERT_MSG(pos <= nCurCount, wxT("Invalid index passed to wxListBox"));
 
     GtkTreeIter* pIter = NULL; // append by default
@@ -620,7 +620,7 @@ void wxListBox::GtkInsertItems(const wxArrayString& items,
         pIter = &iter;
     }
 
-    for (size_t i = 0; i < nNum; ++i)
+    for (unsigned int i = 0; i < nNum; ++i)
     {
         wxString label = items[i];
 
@@ -660,17 +660,17 @@ void wxListBox::GtkInsertItems(const wxArrayString& items,
     }
 }
 
-void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
+void wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
 {
     wxCHECK_RET( IsValidInsert(pos), wxT("invalid index in wxListBox::InsertItems") );
 
-    GtkInsertItems(items, NULL, (size_t)pos);
+    GtkInsertItems(items, NULL, pos);
 }
 
 int wxListBox::DoAppend( const wxString& item )
 {
     // Call DoInsertItems
-    int nWhere = (int)wxListBox::GetCount();
+    unsigned int nWhere = wxListBox::GetCount();
     wxArrayString aItems;
     aItems.Add(item);
     wxListBox::DoInsertItems(aItems, nWhere);
@@ -697,7 +697,7 @@ void wxListBox::Clear()
     gtk_list_store_clear( m_liststore ); /* well, THAT was easy :) */
 }
 
-void wxListBox::Delete( int n )
+void wxListBox::Delete(unsigned int n)
 {
     wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
@@ -708,7 +708,7 @@ void wxListBox::Delete( int n )
                         GTK_TREE_MODEL(m_liststore),
                         &iter, NULL, //NULL = parent = get first
                         n
-                                                );
+                   );
 
     wxCHECK_RET( res, wxT("wrong listbox index") );
 
@@ -749,9 +749,9 @@ struct _GtkTreeEntry* wxListBox::GtkGetEntry(int n) const
 // client data
 // ----------------------------------------------------------------------------
 
-void* wxListBox::DoGetItemClientData( int n ) const
+void* wxListBox::DoGetItemClientData(unsigned int n) const
 {
-    wxCHECK_MSG( n >= 0 && (size_t)n < wxListBox::GetCount(), NULL,
+    wxCHECK_MSG( IsValid(n), NULL,
                  wxT("Invalid index passed to GetItemClientData") );
 
     GtkTreeEntry* entry = GtkGetEntry(n);
@@ -762,14 +762,14 @@ void* wxListBox::DoGetItemClientData( int n ) const
     return userdata;
 }
 
-wxClientData* wxListBox::DoGetItemClientObject( int n ) const
+wxClientData* wxListBox::DoGetItemClientObject(unsigned int n) const
 {
     return (wxClientData*) wxListBox::DoGetItemClientData(n);
 }
 
-void wxListBox::DoSetItemClientData( int n, void* clientData )
+void wxListBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
-    wxCHECK_RET( n >= 0 && (size_t)n < wxListBox::GetCount(),
+    wxCHECK_RET( IsValid(n),
                  wxT("Invalid index passed to SetItemClientData") );
 
     GtkTreeEntry* entry = GtkGetEntry(n);
@@ -779,7 +779,7 @@ void wxListBox::DoSetItemClientData( int n, void* clientData )
     g_object_unref(G_OBJECT(entry));
 }
 
-void wxListBox::DoSetItemClientObject( int n, wxClientData* clientData )
+void wxListBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
 {
     // wxItemContainer already deletes data for us
     wxListBox::DoSetItemClientData(n, (void*) clientData);
@@ -789,7 +789,7 @@ void wxListBox::DoSetItemClientObject( int n, wxClientData* clientData )
 // string list access
 // ----------------------------------------------------------------------------
 
-void wxListBox::SetString( int n, const wxString &string )
+void wxListBox::SetString(unsigned int n, const wxString &string)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::SetString") );
     wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
@@ -816,12 +816,12 @@ void wxListBox::SetString( int n, const wxString &string )
 
     wxArrayString aItems;
     aItems.Add(label);
-    GtkInsertItems(aItems, &userdata, (size_t)n);
+    GtkInsertItems(aItems, &userdata, n);
     if (bWasSelected)
         wxListBox::GtkSetSelection(n, true, true);
 }
 
-wxString wxListBox::GetString( int n ) const
+wxString wxListBox::GetString(unsigned int n) const
 {
     wxCHECK_MSG( m_treeview != NULL, wxEmptyString, wxT("invalid listbox") );
 
@@ -842,11 +842,11 @@ wxString wxListBox::GetString( int n ) const
     return label;
 }
 
-size_t wxListBox::GetCount() const
+unsigned int wxListBox::GetCount() const
 {
     wxCHECK_MSG( m_treeview != NULL, 0, wxT("invalid listbox") );
 
-    return (size_t)gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_liststore), NULL);
+    return (unsigned int)gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_liststore), NULL);
 }
 
 int wxListBox::FindString( const wxString &item, bool bCase ) const
@@ -854,9 +854,9 @@ int wxListBox::FindString( const wxString &item, bool bCase ) const
     wxCHECK_MSG( m_treeview != NULL, wxNOT_FOUND, wxT("invalid listbox") );
 
     //Sort of hackish - maybe there is a faster way
-    size_t nCount = wxListBox::GetCount();
+    unsigned int nCount = wxListBox::GetCount();
 
-    for(size_t i = 0; i < nCount; ++i)
+    for(unsigned int i = 0; i < nCount; ++i)
     {
         if( item.IsSameAs( wxListBox::GetString(i), bCase ) )
             return (int)i;
@@ -1095,13 +1095,13 @@ wxSize wxListBox::DoGetBestSize() const
 
     // Get the visible area of the tree view (limit to the 10th item
     // so that it isn't too big)
-    size_t count = GetCount();
+    unsigned int count = GetCount();
     if (count)
     {
         int wLine;
 
         // Find the widest line
-        for(size_t i = 0; i < count; i++) {
+        for(unsigned int i = 0; i < count; i++) {
             wxString str(GetString(i));
             GetTextExtent(str, &wLine, NULL);
             lbWidth = wxMax(lbWidth, wLine);
@@ -1119,8 +1119,8 @@ wxSize wxListBox::DoGetBestSize() const
         }
 #endif
 
-    // don't make the listbox too tall (limit height to around 10 items) but don't
-    // make it too small neither
+        // don't make the listbox too tall (limit height to around 10 items) but don't
+        // make it too small neither
         lbHeight = (cy+4) * wxMin(wxMax(count, 3), 10);
     }
 

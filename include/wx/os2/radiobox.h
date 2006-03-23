@@ -102,7 +102,7 @@ public:
     void Command(wxCommandEvent& rEvent);
     bool ContainsHWND(WXHWND hWnd) const;
     virtual bool Enable(bool bEnable = true);
-    virtual bool Enable(int  nItem, bool bEnable = true);
+    virtual bool Enable(unsigned int nItem, bool bEnable = true);
 
     virtual WXHBRUSH OnCtlColor( WXHDC    hDC
                                 ,WXHWND   hWnd
@@ -115,7 +115,7 @@ public:
                                 ,WXWORD wId
                                );
     void             SendNotificationEvent(void);
-    virtual bool     Show(int  nItem, bool bShow = true);
+    virtual bool     Show(unsigned int nItem, bool bShow = true);
     virtual bool     Show(bool bShow = true);
     MRESULT          WindowProc( WXUINT   uMsg
                                 ,WXWPARAM wParam
@@ -125,24 +125,20 @@ public:
 
 
 
-           virtual size_t   GetCount() const;
+           virtual unsigned int GetCount() const;
     inline         WXHWND*  GetRadioButtons(void) const { return m_ahRadioButtons; }
                    int      GetSelection(void) const;
-                   void     GetSize( int* pnX
-                                    ,int* pnY
-                                   ) const;
+                   void     GetSize(int* pnX, int* pnY) const;
     inline         int      GetSizeFlags(void) const { return m_nSizeFlags; }
-                   wxString GetString(int nIndex) const;
+           virtual wxString GetString(unsigned int nIndex) const;
            virtual wxString GetStringSelection(void) const;
 
     inline         void     SetButtonFont(const wxFont& rFont) { SetFont(rFont); }
                    void     SetFocus(void);
            virtual bool     SetFont(const wxFont& rFont);
     inline         void     SetLabelFont(const wxFont& WXUNUSED(font)) {};
-                   void     SetSelection(int nIndex);
-           virtual void     SetString( int             nNum
-                                      ,const wxString& rsLabel
-                                     );
+           virtual void     SetSelection(int nIndex);
+           virtual void     SetString(unsigned int nNum, const wxString& rsLabel);
     virtual bool SetStringSelection(const wxString& rsStr);
 
     virtual void SetLabel(const wxString& rsLabel)
@@ -175,7 +171,7 @@ protected:
 
 private:
 
-    size_t  m_nNoItems;
+    unsigned int m_nNoItems;
 
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 }; // end of wxRadioBox

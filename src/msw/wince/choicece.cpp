@@ -345,7 +345,7 @@ int wxChoice::DoAppend(const wxString& item)
     return n;
 }
 
-int wxChoice::DoInsert(const wxString& item, int pos)
+int wxChoice::DoInsert(const wxString& item, unsigned int pos)
 {
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into choice"));
     wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
@@ -359,7 +359,7 @@ int wxChoice::DoInsert(const wxString& item, int pos)
     return n;
 }
 
-void wxChoice::Delete(int n)
+void wxChoice::Delete(unsigned int n)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid item index in wxChoice::Delete") );
 
@@ -382,8 +382,8 @@ void wxChoice::Free()
 {
     if ( HasClientObjectData() )
     {
-        size_t count = GetCount();
-        for ( size_t n = 0; n < count; n++ )
+        unsigned int count = GetCount();
+        for ( unsigned int n = 0; n < count; n++ )
         {
             delete GetClientObject(n);
         }
@@ -408,9 +408,9 @@ void wxChoice::SetSelection(int n)
 // string list functions
 // ----------------------------------------------------------------------------
 
-size_t wxChoice::GetCount() const
+unsigned int wxChoice::GetCount() const
 {
-    return (size_t)::SendMessage(GetBuddyHwnd(), LB_GETCOUNT, 0, 0);
+    return (unsigned int)::SendMessage(GetBuddyHwnd(), LB_GETCOUNT, 0, 0);
 }
 
 int wxChoice::FindString(const wxString& s, bool bCase) const
@@ -425,7 +425,7 @@ int wxChoice::FindString(const wxString& s, bool bCase) const
     return pos == LB_ERR ? wxNOT_FOUND : pos;
 }
 
-void wxChoice::SetString(int n, const wxString& s)
+void wxChoice::SetString(unsigned int n, const wxString& s)
 {
     wxCHECK_RET( IsValid(n),
                  wxT("invalid item index in wxChoice::SetString") );
@@ -454,7 +454,7 @@ void wxChoice::SetString(int n, const wxString& s)
     //else: it's already NULL by default
 }
 
-wxString wxChoice::GetString(int n) const
+wxString wxChoice::GetString(unsigned int n) const
 {
     int len = (int)::SendMessage(GetBuddyHwnd(), LB_GETTEXTLEN, n, 0);
 
@@ -480,7 +480,7 @@ wxString wxChoice::GetString(int n) const
 // client data
 // ----------------------------------------------------------------------------
 
-void wxChoice::DoSetItemClientData( int n, void* clientData )
+void wxChoice::DoSetItemClientData(unsigned int n, void* clientData)
 {
     if ( ::SendMessage(GetHwnd(), LB_SETITEMDATA,
                        n, (LPARAM)clientData) == LB_ERR )
@@ -489,7 +489,7 @@ void wxChoice::DoSetItemClientData( int n, void* clientData )
     }
 }
 
-void* wxChoice::DoGetItemClientData( int n ) const
+void* wxChoice::DoGetItemClientData(unsigned int n) const
 {
     LPARAM rc = ::SendMessage(GetHwnd(), LB_GETITEMDATA, n, 0);
     if ( rc == LB_ERR )
@@ -503,12 +503,12 @@ void* wxChoice::DoGetItemClientData( int n ) const
     return (void *)rc;
 }
 
-void wxChoice::DoSetItemClientObject( int n, wxClientData* clientData )
+void wxChoice::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
 {
     DoSetItemClientData(n, clientData);
 }
 
-wxClientData* wxChoice::DoGetItemClientObject( int n ) const
+wxClientData* wxChoice::DoGetItemClientObject(unsigned int n) const
 {
     return (wxClientData *)DoGetItemClientData(n);
 }

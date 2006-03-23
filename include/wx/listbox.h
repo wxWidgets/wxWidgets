@@ -44,15 +44,15 @@ public:
 
     // all generic methods are in wxControlWithItems, except for the following
     // ones which are not yet implemented by wxChoice/wxComboBox
-    void Insert(const wxString& item, int pos)
+    void Insert(const wxString& item, unsigned int pos)
         { DoInsert(item, pos); }
-    void Insert(const wxString& item, int pos, void *clientData)
+    void Insert(const wxString& item, unsigned int pos, void *clientData)
         { DoInsert(item, pos); SetClientData(pos, clientData); }
-    void Insert(const wxString& item, int pos, wxClientData *clientData)
+    void Insert(const wxString& item, unsigned int pos, wxClientData *clientData)
         { DoInsert(item, pos); SetClientObject(pos, clientData); }
 
-    void InsertItems(int nItems, const wxString *items, int pos);
-    void InsertItems(const wxArrayString& items, int pos)
+    void InsertItems(unsigned int nItems, const wxString *items, unsigned int pos);
+    void InsertItems(const wxArrayString& items, unsigned int pos)
         { DoInsertItems(items, pos); }
 
     void Set(int n, const wxString* items, void **clientData = NULL);
@@ -113,11 +113,11 @@ public:
 protected:
     // NB: due to wxGTK implementation details, DoInsert() is implemented
     //     using DoInsertItems() and not the other way round
-    virtual int DoInsert(const wxString& item, int pos)
+    virtual int DoInsert(const wxString& item, unsigned int pos)
         { InsertItems(1, &item, pos); return pos; }
 
     // to be implemented in derived classes
-    virtual void DoInsertItems(const wxArrayString& items, int pos) = 0;
+    virtual void DoInsertItems(const wxArrayString& items, unsigned int pos) = 0;
     virtual void DoSetItems(const wxArrayString& items, void **clientData) = 0;
 
     virtual void DoSetFirstItem(int n) = 0;

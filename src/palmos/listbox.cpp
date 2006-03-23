@@ -177,7 +177,7 @@ void wxListBox::DoSetFirstItem(int N)
 {
 }
 
-void wxListBox::Delete(int N)
+void wxListBox::Delete(unsigned int n)
 {
 }
 
@@ -207,21 +207,21 @@ bool wxListBox::IsSelected(int N) const
     return false;
 }
 
-wxClientData* wxListBox::DoGetItemClientObject(int n) const
+wxClientData* wxListBox::DoGetItemClientObject(unsigned int n) const
 {
     return (wxClientData *)DoGetItemClientData(n);
 }
 
-void *wxListBox::DoGetItemClientData(int n) const
+void *wxListBox::DoGetItemClientData(unsigned int n) const
 {
     return (void *)NULL;
 }
 
-void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)
+void wxListBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
 {
 }
 
-void wxListBox::DoSetItemClientData(int n, void *clientData)
+void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
 {
 }
 
@@ -238,23 +238,21 @@ int wxListBox::GetSelection() const
 }
 
 // Find string for position
-wxString wxListBox::GetString(int N) const
+wxString wxListBox::GetString(unsigned int n) const
 {
-    wxString result;
-
-    return result;
+    return wxEmptyString;
 }
 
 void
-wxListBox::DoInsertItems(const wxArrayString& items, int pos)
+wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
 {
 }
 
-void wxListBox::SetString(int N, const wxString& s)
+void wxListBox::SetString(unsigned int n, const wxString& s)
 {
 }
 
-size_t wxListBox::GetCount() const
+unsigned int wxListBox::GetCount() const
 {
     return 0;
 }

@@ -573,7 +573,7 @@ wxListBox::~wxListBox()
 // adding items
 // ----------------------------------------------------------------------------
 
-void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
+void wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
 {
     wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
 
@@ -593,12 +593,12 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 
     wxCHECK_RET( pos <= length, wxT("invalid index in wxListBox::InsertItems") );
 
-    size_t nItems = items.GetCount();
+    unsigned int nItems = items.GetCount();
     int index;
 
     if (m_strings)
     {
-        for (size_t n = 0; n < nItems; n++)
+        for (unsigned int n = 0; n < nItems; n++)
         {
             index = m_strings->Add( items[n] );
 
@@ -619,7 +619,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     {
         if (pos == length)
         {
-            for ( size_t n = 0; n < nItems; n++ )
+            for ( unsigned int n = 0; n < nItems; n++ )
             {
                 GtkAddItem( items[n] );
 
@@ -629,7 +629,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
         else
         {
             wxList::compatibility_iterator node = m_clientList.Item( pos );
-            for ( size_t n = 0; n < nItems; n++ )
+            for ( unsigned int n = 0; n < nItems; n++ )
             {
                 GtkAddItem( items[n], pos+n );
 
@@ -757,8 +757,8 @@ void wxListBox::DoSetItems( const wxArrayString& items,
 
     if ( clientData )
     {
-        size_t count = items.GetCount();
-        for ( size_t n = 0; n < count; n++ )
+        unsigned int count = items.GetCount();
+        for ( unsigned int n = 0; n < count; n++ )
         {
             SetClientData(n, clientData[n]);
         }
@@ -799,7 +799,7 @@ void wxListBox::Clear()
         m_strings->Clear();
 }
 
-void wxListBox::Delete( int n )
+void wxListBox::Delete(unsigned int n)
 {
     wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
 
@@ -831,7 +831,7 @@ void wxListBox::Delete( int n )
 // client data
 // ----------------------------------------------------------------------------
 
-void wxListBox::DoSetItemClientData( int n, void* clientData )
+void wxListBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid listbox control") );
 
@@ -841,7 +841,7 @@ void wxListBox::DoSetItemClientData( int n, void* clientData )
     node->SetData( (wxObject*) clientData );
 }
 
-void* wxListBox::DoGetItemClientData( int n ) const
+void* wxListBox::DoGetItemClientData(unsigned int n) const
 {
     wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid listbox control") );
 
@@ -851,7 +851,7 @@ void* wxListBox::DoGetItemClientData( int n ) const
     return node->GetData();
 }
 
-void wxListBox::DoSetItemClientObject( int n, wxClientData* clientData )
+void wxListBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid listbox control") );
 
@@ -863,7 +863,7 @@ void wxListBox::DoSetItemClientObject( int n, wxClientData* clientData )
     node->SetData( (wxObject*) clientData );
 }
 
-wxClientData* wxListBox::DoGetItemClientObject( int n ) const
+wxClientData* wxListBox::DoGetItemClientObject(unsigned int n) const
 {
     wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, wxT("invalid listbox control") );
 
@@ -898,7 +898,7 @@ wxString wxListBox::GetRealLabel(GList *item) const
     return str;
 }
 
-void wxListBox::SetString( int n, const wxString &string )
+void wxListBox::SetString(unsigned int n, const wxString &string)
 {
     wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
 
@@ -923,7 +923,7 @@ void wxListBox::SetString( int n, const wxString &string )
     }
 }
 
-wxString wxListBox::GetString( int n ) const
+wxString wxListBox::GetString(unsigned int n) const
 {
     wxCHECK_MSG( m_list != NULL, wxEmptyString, wxT("invalid listbox") );
 
@@ -938,7 +938,7 @@ wxString wxListBox::GetString( int n ) const
     return wxEmptyString;
 }
 
-size_t wxListBox::GetCount() const
+unsigned int wxListBox::GetCount() const
 {
     wxCHECK_MSG( m_list != NULL, 0, wxT("invalid listbox") );
 
@@ -1216,7 +1216,7 @@ wxSize wxListBox::DoGetBestSize() const
     int wLine;
 
     // Find the widest line
-    for(size_t i = 0; i < GetCount(); i++) {
+    for(unsigned int i = 0; i < GetCount(); i++) {
         wxString str(GetString(i));
         GetTextExtent(str, &wLine, NULL);
         lbWidth = wxMax(lbWidth, wLine);

@@ -148,14 +148,14 @@ private:
 };
 
 wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
-                  : wxOwnerDrawn(wxEmptyString, TRUE)   // checkable
+                  : wxOwnerDrawn(wxEmptyString, true)   // checkable
 {
 }
 
 bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                                     wxODAction act, wxODStatus stat)
 {
-    return FALSE;
+    return false;
 }
 
 // change the state of the item and redraw it
@@ -229,7 +229,7 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
 // misc overloaded methods
 // -----------------------
 
-void wxCheckListBox::Delete(int N)
+void wxCheckListBox::Delete(unsigned int n)
 {
 }
 
@@ -258,12 +258,12 @@ bool wxCheckListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 // check items
 // -----------
 
-bool wxCheckListBox::IsChecked(size_t uiIndex) const
+bool wxCheckListBox::IsChecked(unsigned int uiIndex) const
 {
     return false;
 }
 
-void wxCheckListBox::Check(size_t uiIndex, bool bCheck)
+void wxCheckListBox::Check(unsigned int uiIndex, bool bCheck)
 {
 }
 
@@ -284,4 +284,3 @@ int wxCheckListBox::DoHitTestItem(wxCoord x, wxCoord y) const
 }
 
 #endif
-

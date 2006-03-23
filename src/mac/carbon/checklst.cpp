@@ -153,7 +153,7 @@ static pascal OSStatus ListBoxGetSetItemData(
                     int i = itemID - 1;
                     if ((i >= 0) && (i < (int)list->GetCount()))
                     {
-                        verify_noerr( ::SetDataBrowserItemDataButtonValue( itemData, list->IsChecked( i ) ? kThemeButtonOn : kThemeButtonOff ) );
+                        verify_noerr( ::SetDataBrowserItemDataButtonValue( itemData, list->IsChecked(i) ? kThemeButtonOn : kThemeButtonOff ) );
                         err = noErr;
                     }
                 }
@@ -184,7 +184,7 @@ static pascal OSStatus ListBoxGetSetItemData(
                     if ((i >= 0) && (i < (int)list->GetCount()))
                     {
                         // we have to change this behind the back, since Check() would be triggering another update round
-                        bool newVal = !list->IsChecked( i );
+                        bool newVal = !list->IsChecked(i);
                         verify_noerr( ::SetDataBrowserItemDataButtonValue( itemData, newVal ? kThemeButtonOn : kThemeButtonOff ) );
                         err = noErr;
                         list->m_checks[i] = newVal;
@@ -336,17 +336,17 @@ bool wxCheckListBox::Create(
 // wxCheckListBox functions
 // ----------------------------------------------------------------------------
 
-bool wxCheckListBox::IsChecked(size_t item) const
+bool wxCheckListBox::IsChecked(unsigned int item) const
 {
-    wxCHECK_MSG( item < m_checks.GetCount(), false,
+    wxCHECK_MSG( IsValid(item), false,
                  wxT("invalid index in wxCheckListBox::IsChecked") );
 
     return m_checks[item] != 0;
 }
 
-void wxCheckListBox::Check(size_t item, bool check)
+void wxCheckListBox::Check(unsigned int item, bool check)
 {
-    wxCHECK_RET( item < m_checks.GetCount(),
+    wxCHECK_RET( IsValid(item),
                  wxT("invalid index in wxCheckListBox::Check") );
 
     bool isChecked = m_checks[item] != 0;
@@ -365,9 +365,9 @@ void wxCheckListBox::Check(size_t item, bool check)
 // methods forwarded to wxCheckListBox
 // ----------------------------------------------------------------------------
 
-void wxCheckListBox::Delete(int n)
+void wxCheckListBox::Delete(unsigned int n)
 {
-    wxCHECK_RET( (size_t)n < GetCount(), wxT("invalid index in wxCheckListBox::Delete") );
+    wxCHECK_RET( IsValid(n), wxT("invalid index in wxCheckListBox::Delete") );
 
     wxListBox::Delete( n );
     m_checks.RemoveAt( n );
@@ -383,12 +383,12 @@ int wxCheckListBox::DoAppend(const wxString& item)
     return pos;
 }
 
-void wxCheckListBox::DoInsertItems(const wxArrayString& items, int pos)
+void wxCheckListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
 {
     wxListBox::DoInsertItems( items, pos );
 
-    size_t count = items.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    unsigned int count = items.GetCount();
+    for ( unsigned int n = 0; n < count; n++ )
     {
         m_checks.Insert( false, pos + n );
     }
@@ -399,8 +399,8 @@ void wxCheckListBox::DoSetItems(const wxArrayString& items, void **clientData)
     // call it first as it does DoClear()
     wxListBox::DoSetItems( items, clientData );
 
-    size_t count = items.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    unsigned int count = items.GetCount();
+    for ( unsigned int n = 0; n < count; n++ )
     {
         m_checks.Add( false );
     }

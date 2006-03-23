@@ -81,21 +81,21 @@ public:
 
 
     // implement wxItemContainerImmutable methods
-    virtual size_t GetCount() const;
+    virtual unsigned int GetCount() const;
 
-    virtual wxString GetString(int n) const;
-    virtual void SetString(int n, const wxString& s);
+    virtual wxString GetString(unsigned int n) const;
+    virtual void SetString(unsigned int n, const wxString& s);
 
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
 
 
     // implement wxRadioBoxBase methods
-    virtual bool Show(int n, bool show = true);
-    virtual bool Enable(int n, bool enable = true);
+    virtual bool Show(unsigned int n, bool show = true);
+    virtual bool Enable(unsigned int n, bool enable = true);
 
-    virtual bool IsItemEnabled(int n) const;
-    virtual bool IsItemShown(int n) const;
+    virtual bool IsItemEnabled(unsigned int n) const;
+    virtual bool IsItemShown(unsigned int n) const;
 
 
     // override some base class methods to operate on radiobox itself too

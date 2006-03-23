@@ -58,9 +58,7 @@ public:
     //
     // ctor
     //
-    wxCheckListBoxItem( wxCheckListBox* pParent,
-                        size_t          nIndex
-                      );
+    wxCheckListBoxItem(wxCheckListBox* pParent, size_t nIndex);
 
     //
     // Drawing functions
@@ -86,8 +84,7 @@ private:
 
 
 
-wxCheckListBoxItem::wxCheckListBoxItem ( wxCheckListBox* pParent,
-                                         size_t nIndex)
+wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox* pParent, size_t nIndex)
                    :wxOwnerDrawn( wxEmptyString, true /* checkable */ )
 {
     m_bChecked = false;
@@ -184,7 +181,7 @@ bool wxCheckListBoxItem::OnDrawItem ( wxDC& rDc,
 //
 // Change the state of the item and redraw it
 //
-void wxCheckListBoxItem::Check ( bool bCheck )
+void wxCheckListBoxItem::Check( bool bCheck )
 {
     m_bChecked = bCheck;
 
@@ -270,7 +267,7 @@ wxCheckListBox::wxCheckListBox ( wxWindow* pParent,
             lStyle | wxLB_OWNERDRAW, rVal, rsName );
 } // end of wxCheckListBox::wxCheckListBox
 
-void wxCheckListBox::Delete( int n )
+void wxCheckListBox::Delete(unsigned int n)
 {
     wxCHECK_RET( IsValid(n),
                  wxT("invalid index in wxCheckListBox::Delete") );
@@ -283,12 +280,12 @@ void wxCheckListBox::Delete( int n )
     m_aItems.RemoveAt(n);
 } // end of wxCheckListBox::Delete
 
-void wxCheckListBox::DoInsertItems(const wxArrayString& items, int pos)
+void wxCheckListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
 {
     // pos is validated in wxListBox
     wxListBox::DoInsertItems( items, pos );
-    int n = items.GetCount();
-    for (int i = 0; i < n; i++)
+    unsigned int n = items.GetCount();
+    for (unsigned int i = 0; i < n; i++)
     {
         wxOwnerDrawn* pNewItem = CreateItem((size_t)(pos + i));
 
@@ -304,7 +301,7 @@ void wxCheckListBox::DoInsertItems(const wxArrayString& items, int pos)
 
 bool wxCheckListBox::SetFont ( const wxFont& rFont )
 {
-    for (size_t i = 0; i < m_aItems.GetCount(); i++)
+    for (unsigned int i = 0; i < m_aItems.GetCount(); i++)
         m_aItems[i]->SetFont(rFont);
     wxListBox::SetFont(rFont);
     return true;
@@ -320,7 +317,7 @@ bool wxCheckListBox::SetFont ( const wxFont& rFont )
 //
 // Create a check list box item
 //
-wxOwnerDrawn* wxCheckListBox::CreateItem ( size_t nIndex )
+wxOwnerDrawn* wxCheckListBox::CreateItem(size_t nIndex)
 {
     wxCheckListBoxItem* pItem = new wxCheckListBoxItem( this, nIndex );
     return pItem;
@@ -360,12 +357,12 @@ long wxCheckListBox::OS2OnMeasure ( WXMEASUREITEMSTRUCT* pItem )
 // Check items
 // -----------
 //
-bool wxCheckListBox::IsChecked ( size_t uiIndex) const
+bool wxCheckListBox::IsChecked(unsigned int uiIndex) const
 {
     return GetItem(uiIndex)->IsChecked();
 } // end of wxCheckListBox::IsChecked
 
-void wxCheckListBox::Check ( size_t uiIndex, bool bCheck )
+void wxCheckListBox::Check(unsigned int uiIndex, bool bCheck)
 {
     GetItem(uiIndex)->Check(bCheck);
 } // end of wxCheckListBox::Check

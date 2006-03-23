@@ -103,17 +103,17 @@ bool wxCheckListBox::Create(wxWindow *parent,
 // wxCheckListBox functions
 // ----------------------------------------------------------------------------
 
-bool wxCheckListBox::IsChecked(size_t item) const
+bool wxCheckListBox::IsChecked(unsigned int item) const
 {
-    wxCHECK_MSG( item < m_checks.GetCount(), false,
+    wxCHECK_MSG( IsValid(item), false,
                  _T("invalid index in wxCheckListBox::IsChecked") );
 
     return m_checks[item] != 0;
 }
 
-void wxCheckListBox::Check(size_t item, bool check)
+void wxCheckListBox::Check(unsigned int item, bool check)
 {
-    wxCHECK_RET( item < m_checks.GetCount(),
+    wxCHECK_RET( IsValid(item),
                  _T("invalid index in wxCheckListBox::Check") );
 
     // intermediate var is needed to avoid compiler warning with VC++
@@ -130,7 +130,7 @@ void wxCheckListBox::Check(size_t item, bool check)
 // methods forwarded to wxListBox
 // ----------------------------------------------------------------------------
 
-void wxCheckListBox::Delete(int n)
+void wxCheckListBox::Delete(unsigned int n)
 {
     wxCHECK_RET( IsValid(n), _T("invalid index in wxListBox::Delete") );
 
@@ -149,12 +149,12 @@ int wxCheckListBox::DoAppend(const wxString& item)
     return pos;
 }
 
-void wxCheckListBox::DoInsertItems(const wxArrayString& items, int pos)
+void wxCheckListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
 {
     wxListBox::DoInsertItems(items, pos);
 
-    size_t count = items.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    unsigned int count = items.GetCount();
+    for ( unsigned int n = 0; n < count; n++ )
     {
         m_checks.Insert(false, pos + n);
     }
@@ -165,8 +165,8 @@ void wxCheckListBox::DoSetItems(const wxArrayString& items, void **clientData)
     // call it first as it does DoClear()
     wxListBox::DoSetItems(items, clientData);
 
-    size_t count = items.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    unsigned int count = items.GetCount();
+    for ( unsigned int n = 0; n < count; n++ )
     {
         m_checks.Add(false);
     }
@@ -265,7 +265,7 @@ bool wxStdCheckListboxInputHandler::HandleMouse(wxInputConsumer *consumer,
         if ( x >= 0 &&
              x < renderer->GetCheckBitmapSize().x &&
              item >= 0 &&
-             (size_t)item < lbox->GetCount() )
+             (unsigned int)item < lbox->GetCount() )
         {
             lbox->PerformAction(wxACTION_CHECKLISTBOX_TOGGLE, item);
 

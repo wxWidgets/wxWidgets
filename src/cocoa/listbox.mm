@@ -168,7 +168,7 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
     return [GetNSTableView() numberOfSelectedRows];
 }
 
-void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
+void wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
 {
     wxAutoNSAutoreleasePool pool;
 
@@ -189,7 +189,7 @@ void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
     [m_cocoaItems removeAllObjects];
     m_itemClientData.Clear();
     // Provide the data
-    for(size_t i=0; i < items.GetCount(); i++)
+    for(unsigned int i=0; i < items.GetCount(); i++)
     {
         [m_cocoaItems addObject: wxNSStringWithWxString(items[i])];
         m_itemClientData.Add(clientData[i]);
@@ -216,7 +216,7 @@ void wxListBox::Clear()
     [GetNSTableView() reloadData];
 }
 
-void wxListBox::Delete(int n)
+void wxListBox::Delete(unsigned int n)
 {
     [m_cocoaItems removeObjectAtIndex:n];
     m_itemClientData.RemoveAt(n);
@@ -224,17 +224,17 @@ void wxListBox::Delete(int n)
 }
 
     // accessing strings
-size_t wxListBox::GetCount() const
+unsigned int wxListBox::GetCount() const
 {
-    return (size_t)[m_cocoaItems count];
+    return (unsigned int)[m_cocoaItems count];
 }
 
-wxString wxListBox::GetString(int n) const
+wxString wxListBox::GetString(unsigned int n) const
 {
     return wxStringWithNSString([m_cocoaItems objectAtIndex:n]);
 }
 
-void wxListBox::SetString(int n, const wxString& s)
+void wxListBox::SetString(unsigned int n, const wxString& s)
 {
     wxAutoNSAutoreleasePool pool;
     [m_cocoaItems removeObjectAtIndex:n];
@@ -264,22 +264,22 @@ int wxListBox::DoAppend(const wxString& item)
     return [m_cocoaItems count];
 }
 
-void wxListBox::DoSetItemClientData(int n, void* clientData)
+void wxListBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
     m_itemClientData[n] = clientData;
 }
 
-void* wxListBox::DoGetItemClientData(int n) const
+void* wxListBox::DoGetItemClientData(unsigned int n) const
 {
     return m_itemClientData[n];
 }
 
-void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)
+void wxListBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
 {
     m_itemClientData[n] = (void*) clientData;
 }
 
-wxClientData* wxListBox::DoGetItemClientObject(int n) const
+wxClientData* wxListBox::DoGetItemClientObject(unsigned int n) const
 {
     return (wxClientData*) m_itemClientData[n];
 }

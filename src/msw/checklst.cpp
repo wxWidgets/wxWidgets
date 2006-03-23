@@ -126,44 +126,44 @@ class wxCheckListBoxItem : public wxOwnerDrawn
 {
 friend class WXDLLEXPORT wxCheckListBox;
 public:
-  // ctor
-  wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex);
+    // ctor
+    wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex);
 
-  // drawing functions
-  virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat);
+    // drawing functions
+    virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat);
 
-  // simple accessors and operations
-  bool IsChecked() const { return m_bChecked; }
+    // simple accessors and operations
+    bool IsChecked() const { return m_bChecked; }
 
-  void Check(bool bCheck);
-  void Toggle() { Check(!IsChecked()); }
+    void Check(bool bCheck);
+    void Toggle() { Check(!IsChecked()); }
 
-  void SendEvent();
+    void SendEvent();
 
 private:
-  bool            m_bChecked;
-  wxCheckListBox *m_pParent;
-  size_t          m_nIndex;
+    bool            m_bChecked;
+    wxCheckListBox *m_pParent;
+    size_t    m_nIndex;
 
-  DECLARE_NO_COPY_CLASS(wxCheckListBoxItem)
+    DECLARE_NO_COPY_CLASS(wxCheckListBoxItem)
 };
 
 wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
                   : wxOwnerDrawn(wxEmptyString, true)   // checkable
 {
-  m_bChecked = false;
-  m_pParent  = pParent;
-  m_nIndex   = nIndex;
+    m_bChecked = false;
+    m_pParent  = pParent;
+    m_nIndex   = nIndex;
 
-  // we don't initialize m_nCheckHeight/Width vars because it's
-  // done in OnMeasure while they are used only in OnDraw and we
-  // know that there will always be OnMeasure before OnDraw
+    // we don't initialize m_nCheckHeight/Width vars because it's
+    // done in OnMeasure while they are used only in OnDraw and we
+    // know that there will always be OnMeasure before OnDraw
 
-  // fix appearance for check list boxes: they don't look quite the same as
-  // menu icons
-  SetMarginWidth(::GetSystemMetrics(SM_CXMENUCHECK) -
-                    2*wxSystemSettings::GetMetric(wxSYS_EDGE_X) + 1);
-  SetBackgroundColour(pParent->GetBackgroundColour());
+    // fix appearance for check list boxes: they don't look quite the same as
+    // menu icons
+    SetMarginWidth(::GetSystemMetrics(SM_CXMENUCHECK) -
+                      2*wxSystemSettings::GetMetric(wxSYS_EDGE_X) + 1);
+    SetBackgroundColour(pParent->GetBackgroundColour());
 }
 
 bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
@@ -335,22 +335,22 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
 // misc overloaded methods
 // -----------------------
 
-void wxCheckListBox::Delete(int N)
+void wxCheckListBox::Delete(unsigned int n)
 {
-    wxCHECK_RET( IsValid(N),
+    wxCHECK_RET( IsValid(n),
                  wxT("invalid index in wxListBox::Delete") );
 
-    wxListBox::Delete(N);
+    wxListBox::Delete(n);
 
     // free memory
-    delete m_aItems[N];
+    delete m_aItems[n];
 
-    m_aItems.RemoveAt(N);
+    m_aItems.RemoveAt(n);
 }
 
 bool wxCheckListBox::SetFont( const wxFont &font )
 {
-    size_t i;
+    unsigned int i;
     for ( i = 0; i < m_aItems.GetCount(); i++ )
         m_aItems[i]->SetFont(font);
 
@@ -391,16 +391,16 @@ bool wxCheckListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 // check items
 // -----------
 
-bool wxCheckListBox::IsChecked(size_t uiIndex) const
+bool wxCheckListBox::IsChecked(unsigned int uiIndex) const
 {
-    wxCHECK_MSG( uiIndex < (size_t)GetCount(), false, _T("bad wxCheckListBox index") );
+    wxCHECK_MSG( IsValid(uiIndex), false, _T("bad wxCheckListBox index") );
 
     return GetItem(uiIndex)->IsChecked();
 }
 
-void wxCheckListBox::Check(size_t uiIndex, bool bCheck)
+void wxCheckListBox::Check(unsigned int uiIndex, bool bCheck)
 {
-    wxCHECK_RET( uiIndex < (size_t)GetCount(), _T("bad wxCheckListBox index") );
+    wxCHECK_RET( IsValid(uiIndex), _T("bad wxCheckListBox index") );
 
     GetItem(uiIndex)->Check(bCheck);
 }
@@ -494,21 +494,24 @@ void wxCheckListBox::OnKeyDown(wxKeyEvent& event)
 
 void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
 {
-  // clicking on the item selects it, clicking on the checkmark toggles
-  if ( event.GetX() <= wxOwnerDrawn::GetDefaultMarginWidth() ) {
-    int nItem = HitTest(event.GetX(), event.GetY());
+    // clicking on the item selects it, clicking on the checkmark toggles
+    if ( event.GetX() <= wxOwnerDrawn::GetDefaultMarginWidth() )
+    {
+        int nItem = HitTest(event.GetX(), event.GetY());
 
-    if ( nItem != wxNOT_FOUND ) {
-      wxCheckListBoxItem *item = GetItem(nItem);
-      item->Toggle();
-      item->SendEvent();
+        if ( nItem != wxNOT_FOUND )
+        {
+            wxCheckListBoxItem *item = GetItem(nItem);
+            item->Toggle();
+            item->SendEvent();
+        }
+        //else: it's not an error, just click outside of client zone
     }
-    //else: it's not an error, just click outside of client zone
-  }
-  else {
-    // implement default behaviour: clicking on the item selects it
-    event.Skip();
-  }
+    else
+    {
+        // implement default behaviour: clicking on the item selects it
+        event.Skip();
+    }
 }
 
 int wxCheckListBox::DoHitTestItem(wxCoord x, wxCoord y) const
@@ -521,7 +524,7 @@ int wxCheckListBox::DoHitTestItem(wxCoord x, wxCoord y) const
                               MAKELPARAM(x, y)
                              );
 
-  return nItem >= (int)m_noItems ? wxNOT_FOUND : nItem;
+    return nItem >= (int)m_noItems ? wxNOT_FOUND : nItem;
 }
 
 

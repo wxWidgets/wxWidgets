@@ -213,8 +213,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     SetMajorDim(majorDim == 0 ? n : majorDim, style);
 
 
-    int num_of_cols = GetColumnCount();
-    int num_of_rows = GetRowCount();
+    unsigned int num_of_cols = GetColumnCount();
+    unsigned int num_of_rows = GetRowCount();
 
     GtkRadioButton *m_radio = (GtkRadioButton*) NULL;
 
@@ -226,7 +226,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     wxString label;
     GSList *radio_button_group = (GSList *) NULL;
-    for (int i = 0; i < n; i++)
+    for (unsigned int i = 0; i < n; i++)
     {
         if ( i != 0 )
             radio_button_group = gtk_radio_button_get_group( GTK_RADIO_BUTTON(m_radio) );
@@ -381,7 +381,7 @@ int wxRadioBox::GetSelection(void) const
     return wxNOT_FOUND;
 }
 
-wxString wxRadioBox::GetString( int n ) const
+wxString wxRadioBox::GetString(unsigned int n) const
 {
     wxCHECK_MSG( m_widget != NULL, wxEmptyString, wxT("invalid radiobox") );
 
@@ -403,7 +403,7 @@ void wxRadioBox::SetLabel( const wxString& label )
     GTKSetLabelForFrame(GTK_FRAME(m_widget), label);
 }
 
-void wxRadioBox::SetString( int item, const wxString& label )
+void wxRadioBox::SetString(unsigned int item, const wxString& label)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid radiobox") );
 
@@ -435,7 +435,7 @@ bool wxRadioBox::Enable( bool enable )
     return true;
 }
 
-bool wxRadioBox::Enable( int item, bool enable )
+bool wxRadioBox::Enable(unsigned int item, bool enable)
 {
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid radiobox") );
 
@@ -452,7 +452,7 @@ bool wxRadioBox::Enable( int item, bool enable )
     return true;
 }
 
-bool wxRadioBox::IsItemEnabled(int item) const
+bool wxRadioBox::IsItemEnabled(unsigned int item) const
 {
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid radiobox") );
 
@@ -467,7 +467,7 @@ bool wxRadioBox::IsItemEnabled(int item) const
     return GTK_WIDGET_SENSITIVE(GTK_WIDGET(button));
 }
 
-bool wxRadioBox::Show( int item, bool show )
+bool wxRadioBox::Show(unsigned int item, bool show)
 {
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid radiobox") );
 
@@ -485,7 +485,7 @@ bool wxRadioBox::Show( int item, bool show )
     return true;
 }
 
-bool wxRadioBox::IsItemShown(int item) const
+bool wxRadioBox::IsItemShown(unsigned int item) const
 {
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid radiobox") );
 
@@ -498,7 +498,7 @@ bool wxRadioBox::IsItemShown(int item) const
     return GTK_WIDGET_VISIBLE(GTK_WIDGET(button));
 }
 
-size_t wxRadioBox::GetCount() const
+unsigned int wxRadioBox::GetCount() const
 {
     return m_boxes.GetCount();
 }

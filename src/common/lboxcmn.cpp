@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/lboxcmn.cpp
+// Name:        src/common/lboxcmn.cpp
 // Purpose:     wxListBox class methods common to all platforms
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -45,10 +45,10 @@ wxListBoxBase::~wxListBoxBase()
 // adding items
 // ----------------------------------------------------------------------------
 
-void wxListBoxBase::InsertItems(int nItems, const wxString *items, int pos)
+void wxListBoxBase::InsertItems(unsigned int nItems, const wxString *items, unsigned int pos)
 {
     wxArrayString aItems;
-    for ( int n = 0; n < nItems; n++ )
+    for ( unsigned int n = 0; n < nItems; n++ )
     {
         aItems.Add(items[n]);
     }

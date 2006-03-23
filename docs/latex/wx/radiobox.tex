@@ -149,7 +149,7 @@ for further details.
 
 Enables or disables the entire radiobox.
 
-\func{virtual bool}{Enable}{\param{int}{ n}, \param{bool}{ enable = {\tt true}}}
+\func{virtual bool}{Enable}{\param{unsigned int}{ n}, \param{bool}{ enable = {\tt true}}}
 
 Enables or disables an individual button in the radiobox.
 
@@ -188,7 +188,7 @@ Finds a button matching the given string, returning the position if found, or
 
 \membersection{wxRadioBox::GetColumnCount}\label{wxradioboxgetcolumncount}
 
-\constfunc{int}{GetColumnCount}{\void}
+\constfunc{unsigned int}{GetColumnCount}{\void}
 
 Returns the number of columns in the radiobox.
 
@@ -218,7 +218,7 @@ implements the following methods:\par
 
 \membersection{wxRadioBox::GetRowCount}\label{wxradioboxgetrowcount}
 
-\constfunc{int}{GetRowCount}{\void}
+\constfunc{unsigned int}{GetRowCount}{\void}
 
 Returns the number of rows in the radiobox.
 
@@ -239,7 +239,7 @@ Returns the selected string.
 
 \membersection{wxRadioBox::GetString}\label{wxradioboxgetstring}
 
-\constfunc{wxString}{GetString}{\param{int}{ n}}
+\constfunc{wxString}{GetString}{\param{unsigned int}{ n}}
 
 Returns the label for the button at the given position.
 
@@ -250,7 +250,7 @@ Returns the label for the button at the given position.
 
 \membersection{wxRadioBox::IsItemEnabled}\label{wxradioboxisitemenabled}
 
-\constfunc{bool}{IsItemEnabled}{\void}
+\constfunc{bool}{IsItemEnabled}{\param{unsigned int}{ n}}
 
 Returns \true if the item is enabled or \false if it was disabled using
 \helpref{Enable(n, false)}{wxradioboxenable}.
@@ -258,10 +258,14 @@ Returns \true if the item is enabled or \false if it was disabled using
 {\bf Platform note:} Currently only implemented in wxMSW, wxGTK and wxUniversal
 and always returns \true in the other ports.
 
+\wxheading{Parameters}
+
+\docparam{n}{The zero-based button position.}
+
 
 \membersection{wxRadioBox::IsItemShown}\label{wxradioboxisitemshown}
 
-\constfunc{bool}{IsItemShown}{\void}
+\constfunc{bool}{IsItemShown}{\param{unsigned int}{ n}}
 
 Returns \true if the item is currently shown or \false if it was hidden using
 \helpref{Show(n, false)}{wxradioboxshow}.
@@ -271,6 +275,10 @@ if the entire radiobox is not currently shown.
 
 {\bf Platform note:} Currently only implemented in wxMSW, wxGTK and wxUniversal
 and always returns \true in the other ports.
+
+\wxheading{Parameters}
+
+\docparam{n}{The zero-based button position.}
 
 
 \membersection{wxRadioBox::SetLabel}\label{wxradioboxsetlabel}
@@ -325,7 +333,7 @@ a wxEVT\_COMMAND\_RADIOBOX\_SELECTED event to get emitted.
 
 Shows or hides the entire radiobox.
 
-\func{virtual bool}{Show}{\param{int}{ item}, \param{const bool}{ show = {\tt true}}}
+\func{virtual bool}{Show}{\param{unsigned int}{ item}, \param{const bool}{ show = {\tt true}}}
 
 Shows or hides individual buttons.
 

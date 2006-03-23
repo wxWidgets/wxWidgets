@@ -154,12 +154,12 @@ int wxChoice::DoAppend(const wxString& item)
     return 0;
 }
 
-int wxChoice::DoInsert(const wxString& item, int pos)
+int wxChoice::DoInsert(const wxString& item, unsigned int pos)
 {
     return 0;
 }
 
-void wxChoice::Delete(int n)
+void wxChoice::Delete(unsigned int n)
 {
 }
 
@@ -188,40 +188,38 @@ void wxChoice::SetSelection(int n)
 // string list functions
 // ----------------------------------------------------------------------------
 
-size_t wxChoice::GetCount() const
+unsigned int wxChoice::GetCount() const
 {
     return 0;
 }
 
-void wxChoice::SetString(int n, const wxString& s)
+void wxChoice::SetString(unsigned int n, const wxString& s)
 {
 }
 
-wxString wxChoice::GetString(int n) const
+wxString wxChoice::GetString(unsigned int n) const
 {
-    wxString str;
-
-    return str;
+    return wxEmptyString;
 }
 
 // ----------------------------------------------------------------------------
 // client data
 // ----------------------------------------------------------------------------
 
-void wxChoice::DoSetItemClientData( int n, void* clientData )
+void wxChoice::DoSetItemClientData(unsigned int n, void* clientData)
 {
 }
 
-void* wxChoice::DoGetItemClientData( int n ) const
+void* wxChoice::DoGetItemClientData(unsigned int n) const
 {
     return (void *)NULL;
 }
 
-void wxChoice::DoSetItemClientObject( int n, wxClientData* clientData )
+void wxChoice::DoSetItemClientObject(unsigned int n, wxClientData* clientData )
 {
 }
 
-wxClientData* wxChoice::DoGetItemClientObject( int n ) const
+wxClientData* wxChoice::DoGetItemClientObject(unsigned int n) const
 {
     return (wxClientData *)DoGetItemClientData(n);
 }

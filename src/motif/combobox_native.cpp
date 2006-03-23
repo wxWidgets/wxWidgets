@@ -179,7 +179,7 @@ wxString wxComboBox::GetValue() const
     return str;
 }
 
-void wxComboBox::SetString(int n, const wxString& s)
+void wxComboBox::SetString(unsigned int n, const wxString& s)
 {
     wxXmString text(s);
     Widget listBox = GetXmList(this);
@@ -213,12 +213,12 @@ int wxComboBox::DoAppend(const wxString& item)
     return GetCount() - 1;
 }
 
-int wxComboBox::DoInsert(const wxString& item, int pos)
+int wxComboBox::DoInsert(const wxString& item, unsigned int pos)
 {
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
     wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
 
-    if ((size_t)pos == GetCount())
+    if (pos == GetCount())
         return DoAppend(item);
 
     wxXmString str( item.c_str() );
@@ -229,7 +229,7 @@ int wxComboBox::DoInsert(const wxString& item, int pos)
     return GetCount() - 1;
 }
 
-void wxComboBox::Delete(int n)
+void wxComboBox::Delete(unsigned int n)
 {
 #ifdef LESSTIF_VERSION
     XmListDeletePos (GetXmList(this), n + 1);
@@ -269,7 +269,7 @@ void wxComboBox::SetSelection (int n)
     SetValue(GetString(n));
 #else
 #if 0
-    wxXmString str( GetString(n).c_str() );
+    wxXmString str(GetString(n).c_str());
     XmComboBoxSelectItem((Widget) m_mainWidget, str());
 #endif
     XtVaSetValues( (Widget)m_mainWidget,
@@ -285,7 +285,7 @@ int wxComboBox::GetSelection (void) const
     return wxDoGetSelectionInList( GetXmList( this ) );
 }
 
-wxString wxComboBox::GetString(int n) const
+wxString wxComboBox::GetString(unsigned int n) const
 {
     return wxDoGetStringInList( GetXmList(this), n );
 }

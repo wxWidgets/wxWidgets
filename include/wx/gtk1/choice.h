@@ -62,17 +62,17 @@ public:
             const wxString& name = wxChoiceNameStr );
 
     // implement base class pure virtuals
-    void Delete(int n);
+    void Delete(unsigned int n);
     void Clear();
 
     int GetSelection() const;
     int GetCurrentSelection() const { return GetSelection(); }
-    void SetSelection( int n );
+    virtual void SetSelection(int n);
 
-    virtual size_t GetCount() const;
+    virtual unsigned int GetCount() const;
     virtual int FindString(const wxString& s, bool bCase = false) const;
-    wxString GetString( int n ) const;
-    void SetString( int n, const wxString& string );
+    virtual wxString GetString(unsigned int n) const;
+    virtual void SetString(unsigned int n, const wxString& string);
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -82,12 +82,12 @@ protected:
 
     void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual int DoAppend(const wxString& item);
-    virtual int DoInsert(const wxString& item, int pos);
+    virtual int DoInsert(const wxString& item, unsigned int pos);
 
-    virtual void DoSetItemClientData( int n, void* clientData );
-    virtual void* DoGetItemClientData( int n ) const;
-    virtual void DoSetItemClientObject( int n, wxClientData* clientData );
-    virtual wxClientData* DoGetItemClientObject( int n ) const;
+    virtual void DoSetItemClientData(unsigned int n, void* clientData);
+    virtual void* DoGetItemClientData(unsigned int n) const;
+    virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
+    virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
 
     virtual wxSize DoGetBestSize() const;
 
@@ -95,7 +95,7 @@ protected:
 
 private:
     // common part of Create() and DoAppend()
-    int GtkAddHelper(GtkWidget *menu, size_t pos, const wxString& item);
+    int GtkAddHelper(GtkWidget *menu, unsigned int pos, const wxString& item);
 
     // this array is only used for controls with wxCB_SORT style, so only
     // allocate it if it's needed (hence using pointer)

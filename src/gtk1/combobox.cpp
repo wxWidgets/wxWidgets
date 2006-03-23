@@ -347,7 +347,7 @@ int wxComboBox::DoAppend( const wxString &item )
 
     gtk_widget_show( list_item );
 
-    const size_t count = GetCount();
+    const unsigned int count = GetCount();
 
     if ( m_clientDataList.GetCount() < count )
         m_clientDataList.Append( (wxObject*) NULL );
@@ -361,7 +361,7 @@ int wxComboBox::DoAppend( const wxString &item )
     return count - 1;
 }
 
-int wxComboBox::DoInsert( const wxString &item, int pos )
+int wxComboBox::DoInsert( const wxString &item, unsigned int pos )
 {
     wxCHECK_MSG( !(GetWindowStyle() & wxCB_SORT), -1,
                     wxT("can't insert into sorted list"));
@@ -370,7 +370,7 @@ int wxComboBox::DoInsert( const wxString &item, int pos )
 
     wxCHECK_MSG( IsValidInsert(pos), -1, wxT("invalid index") );
 
-    if ((size_t)pos == GetCount())
+    if (pos == GetCount())
         return Append(item);
 
     DisableEvents();
@@ -393,7 +393,7 @@ int wxComboBox::DoInsert( const wxString &item, int pos )
 
     gtk_widget_show( list_item );
 
-    const size_t count = GetCount();
+    const unsigned int count = GetCount();
 
     if ( m_clientDataList.GetCount() < count )
         m_clientDataList.Insert( pos, (wxObject*) NULL );
@@ -407,7 +407,7 @@ int wxComboBox::DoInsert( const wxString &item, int pos )
     return pos;
 }
 
-void wxComboBox::DoSetItemClientData( int n, void* clientData )
+void wxComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -417,7 +417,7 @@ void wxComboBox::DoSetItemClientData( int n, void* clientData )
     node->SetData( (wxObject*) clientData );
 }
 
-void* wxComboBox::DoGetItemClientData( int n ) const
+void* wxComboBox::DoGetItemClientData(unsigned int n) const
 {
     wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid combobox") );
 
@@ -426,7 +426,7 @@ void* wxComboBox::DoGetItemClientData( int n ) const
     return node ? node->GetData() : NULL;
 }
 
-void wxComboBox::DoSetItemClientObject( int n, wxClientData* clientData )
+void wxComboBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -438,7 +438,7 @@ void wxComboBox::DoSetItemClientObject( int n, wxClientData* clientData )
     node->SetData( (wxObject*) clientData );
 }
 
-wxClientData* wxComboBox::DoGetItemClientObject( int n ) const
+wxClientData* wxComboBox::DoGetItemClientObject(unsigned int n) const
 {
     wxCHECK_MSG( m_widget != NULL, (wxClientData*)NULL, wxT("invalid combobox") );
 
@@ -472,7 +472,7 @@ void wxComboBox::Clear()
     InvalidateBestSize();
 }
 
-void wxComboBox::Delete( int n )
+void wxComboBox::Delete(unsigned int n)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -509,7 +509,7 @@ void wxComboBox::Delete( int n )
     InvalidateBestSize();
 }
 
-void wxComboBox::SetString(int n, const wxString &text)
+void wxComboBox::SetString(unsigned int n, const wxString &text)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -583,7 +583,7 @@ int wxComboBox::GetCurrentSelection() const
     return wxNOT_FOUND;
 }
 
-wxString wxComboBox::GetString( int n ) const
+wxString wxComboBox::GetString(unsigned int n) const
 {
     wxCHECK_MSG( m_widget != NULL, wxEmptyString, wxT("invalid combobox") );
 
@@ -625,14 +625,14 @@ wxString wxComboBox::GetStringSelection() const
     return wxEmptyString;
 }
 
-size_t wxComboBox::GetCount() const
+unsigned int wxComboBox::GetCount() const
 {
     wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid combobox") );
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
     GList *child = GTK_LIST(list)->children;
-    size_t count = 0;
+    unsigned int count = 0;
     while (child) { count++; child = child->next; }
     return count;
 }
@@ -929,10 +929,10 @@ wxSize wxComboBox::DoGetBestSize() const
     if ( m_widget )
     {
         int width;
-        size_t count = GetCount();
-        for ( size_t n = 0; n < count; n++ )
+        unsigned int count = GetCount();
+        for ( unsigned int n = 0; n < count; n++ )
         {
-            GetTextExtent( GetString(n), &width, NULL, NULL, NULL );
+            GetTextExtent(GetString(n), &width, NULL, NULL, NULL );
             if ( width > ret.x )
                 ret.x = width;
         }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        checklst.h
+// Name:        wx/msw/checklst.h
 // Purpose:     wxCheckListBox class - a listbox with checkable items
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -56,13 +56,13 @@ public:
                 const wxString& name = wxListBoxNameStr);
 
   // override base class virtuals
-  virtual void Delete(int n);
+  virtual void Delete(unsigned int n);
 
   virtual bool SetFont( const wxFont &font );
 
   // items may be checked
-  virtual bool IsChecked(size_t uiIndex) const;
-  virtual void Check(size_t uiIndex, bool bCheck = true);
+  virtual bool IsChecked(unsigned int uiIndex) const;
+  virtual void Check(unsigned int uiIndex, bool bCheck = true);
 
   // return the index of the item at this position or wxNOT_FOUND
   int HitTest(const wxPoint& pt) const { return DoHitTestItem(pt.x, pt.y); }

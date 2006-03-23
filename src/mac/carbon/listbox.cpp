@@ -326,7 +326,7 @@ void wxListBox::FreeData()
 {
     if ( HasClientObjectData() )
     {
-        for ( size_t n = 0; n < m_noItems; n++ )
+        for ( unsigned int n = 0; n < m_noItems; n++ )
         {
             delete GetClientObject( n );
         }
@@ -345,7 +345,7 @@ void wxListBox::DoSetFirstItem(int n)
     MacScrollTo( n ) ;
 }
 
-void wxListBox::Delete(int n)
+void wxListBox::Delete(unsigned int n)
 {
     wxCHECK_RET( IsValid(n),
                  wxT("invalid index in wxListBox::Delete") );
@@ -364,7 +364,7 @@ int wxListBox::DoAppend(const wxString& item)
 {
     InvalidateBestSize();
 
-    size_t index = m_noItems ;
+    unsigned int index = m_noItems ;
     m_stringArray.Add( item ) ;
     m_dataArray.Add( NULL );
     m_noItems++;
@@ -377,7 +377,7 @@ int wxListBox::DoAppend(const wxString& item)
 void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
 {
     Clear() ;
-    size_t n = choices.GetCount();
+    unsigned int n = choices.GetCount();
 
     for ( size_t i = 0 ; i < n ; ++i )
     {
@@ -397,7 +397,7 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
         Str255 s1 , s2 ;
         wxMacStringToPascal( search , s2 ) ;
 
-        for ( size_t i = 0 ; i < m_noItems ; ++ i )
+        for ( unsigned int i = 0 ; i < m_noItems ; ++ i )
         {
             wxMacStringToPascal( m_stringArray[i].Left( len ) , s1 ) ;
 
@@ -410,9 +410,9 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
             wxString st = s ;
             st.MakeLower() ;
 
-            for ( size_t i = 0 ; i < m_noItems ; ++i )
+            for ( unsigned int i = 0 ; i < m_noItems ; ++i )
             {
-                if ( GetString( i ).Lower().Matches(st) )
+                if (GetString(i).Lower().Matches(st) )
                     return (int)i ;
             }
         }
@@ -423,7 +423,7 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
 
         wxMacStringToPascal( s , s2 ) ;
 
-        for ( size_t i = 0 ; i < m_noItems ; ++ i )
+        for ( unsigned int i = 0 ; i < m_noItems ; ++ i )
         {
             wxMacStringToPascal( m_stringArray[i] , s1 ) ;
 
@@ -463,33 +463,33 @@ bool wxListBox::IsSelected(int n) const
     return MacIsSelected( n ) ;
 }
 
-void *wxListBox::DoGetItemClientData(int n) const
+void *wxListBox::DoGetItemClientData(unsigned int n) const
 {
     wxCHECK_MSG( IsValid(n), NULL, wxT("invalid index in wxListBox::GetClientData"));
 
-    wxASSERT_MSG( m_dataArray.GetCount() >= (size_t) n , wxT("invalid client_data array") ) ;
+    wxASSERT_MSG( m_dataArray.GetCount() >= (unsigned int) n , wxT("invalid client_data array") ) ;
 
     return (void *)m_dataArray[n];
 }
 
-wxClientData *wxListBox::DoGetItemClientObject(int n) const
+wxClientData *wxListBox::DoGetItemClientObject(unsigned int n) const
 {
     return (wxClientData *) DoGetItemClientData( n ) ;
 }
 
-void wxListBox::DoSetItemClientData(int n, void *clientData)
+void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::SetClientData") );
 
-    wxASSERT_MSG( m_dataArray.GetCount() >= (size_t) n , wxT("invalid client_data array") ) ;
+    wxASSERT_MSG( m_dataArray.GetCount() >= (unsigned int) n , wxT("invalid client_data array") ) ;
 
-    if ( m_dataArray.GetCount() > (size_t) n )
+    if ( m_dataArray.GetCount() > (unsigned int) n )
         m_dataArray[n] = (char*)clientData ;
     else
         m_dataArray.Add( (char*)clientData ) ;
 }
 
-void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)
+void wxListBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
 {
     DoSetItemClientData(n, clientData);
 }
@@ -507,7 +507,7 @@ int wxListBox::GetSelection() const
 }
 
 // Find string for position
-wxString wxListBox::GetString(int n) const
+wxString wxListBox::GetString(unsigned int n) const
 {
     wxCHECK_MSG( IsValid(n), wxEmptyString,
                  wxT("invalid index in wxListBox::GetString") );
@@ -515,16 +515,16 @@ wxString wxListBox::GetString(int n) const
     return m_stringArray[n]  ;
 }
 
-void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
+void wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
 {
     wxCHECK_RET( IsValidInsert(pos),
         wxT("invalid index in wxListBox::InsertItems") );
 
     InvalidateBestSize();
 
-    size_t nItems = items.GetCount();
+    unsigned int nItems = items.GetCount();
 
-    for ( size_t i = 0 ; i < nItems ; i++ )
+    for ( unsigned int i = 0 ; i < nItems ; i++ )
     {
         m_stringArray.Insert( items[i] , pos + i ) ;
         m_dataArray.Insert( NULL , pos + i ) ;
@@ -533,7 +533,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     }
 }
 
-void wxListBox::SetString(int n, const wxString& s)
+void wxListBox::SetString(unsigned int n, const wxString& s)
 {
     m_stringArray[n] = s ;
     MacSet( n , s ) ;
@@ -563,9 +563,9 @@ wxSize wxListBox::DoGetBestSize() const
         }
 
         // Find the widest line
-        for (size_t i = 0; i < GetCount(); i++)
+        for (unsigned int i = 0; i < GetCount(); i++)
         {
-            wxString str( GetString( i ) );
+            wxString str(GetString(i));
 
 #if wxUSE_UNICODE
             Point bounds = {0, 0} ;
@@ -603,7 +603,7 @@ wxSize wxListBox::DoGetBestSize() const
     return wxSize( lbWidth, lbHeight );
 }
 
-size_t wxListBox::GetCount() const
+unsigned int wxListBox::GetCount() const
 {
     return m_noItems;
 }
@@ -638,7 +638,7 @@ void wxListBox::MacDelete( int n )
     UInt32 id = m_noItems + 1 ;
 
     verify_noerr( m_peer->RemoveItems( kDataBrowserNoItem , 1 , (UInt32*) &id , kDataBrowserItemNoProperty ) ) ;
-    for ( size_t i = 0 ; i < selectionBefore.GetCount() ; ++i )
+    for ( unsigned int i = 0 ; i < selectionBefore.GetCount() ; ++i )
     {
         int current = selectionBefore[i] ;
         if ( current == n )
@@ -737,7 +737,7 @@ bool wxListBox::MacIsSelected( int n ) const
 
 int wxListBox::MacGetSelection() const
 {
-    for ( size_t i = 0 ; i < GetCount() ; ++i )
+    for ( unsigned int i = 0 ; i < GetCount() ; ++i )
     {
         if ( m_peer->IsItemSelected( i + 1 ) )
             return i ;
@@ -956,7 +956,7 @@ void wxListBox::OnChar(wxKeyEvent& event)
                 event.SetClientObject( GetClientObject( n ) );
             else if ( HasClientUntypedData() )
                 event.SetClientData( GetClientData( n ) );
-            event.SetString( GetString( n ) );
+            event.SetString(GetString(n));
         }
         else
         {
@@ -988,8 +988,8 @@ void wxListBox::OnChar(wxKeyEvent& event)
                     event.SetClientObject( GetClientObject( line ) );
                 else if ( HasClientUntypedData() )
                     event.SetClientData( GetClientData( line ) );
-                event.SetString( GetString( line ) );
-                event.SetInt( line );
+                event.SetString(GetString(line));
+                event.SetInt(line);
 
                 GetEventHandler()->ProcessEvent(event);
             }

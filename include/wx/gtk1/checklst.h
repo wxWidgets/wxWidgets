@@ -48,8 +48,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxListBoxNameStr);
 
-    bool IsChecked( int index ) const;
-    void Check( int index, bool check = TRUE );
+    bool IsChecked(unsigned int index) const;
+    void Check(unsigned int index, bool check = true);
 
     int GetItemHeight() const;
 

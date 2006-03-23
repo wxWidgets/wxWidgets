@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        treectrl.tex
+%% Purpose:     wxChoice documentation
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxChoice}}\label{wxchoice}
 
 A choice item is used to select one of a list of strings. Unlike a
@@ -113,17 +124,6 @@ Destructor, destroying the choice item.
 Creates the choice for two-step construction. See \helpref{wxChoice::wxChoice}{wxchoicector}.
 
 
-\membersection{wxChoice::Delete}\label{wxchoicedelete}
-
-\func{void}{Delete}{\param{int }{n}}
-
-Deletes the item with the given index from the control.
-
-\wxheading{Parameters}
-
-\docparam{n}{The item to delete.}
-
-
 \membersection{wxChoice::GetColumns}\label{wxchoicegetcolumns}
 
 \constfunc{int}{GetColumns}{\void}
@@ -147,7 +147,7 @@ That is, while the dropdown list is shown, it returns the currently selected
 item in it. When it is not shown, its result is the same as for the other
 function.
 
-\newsince{2.6.2} (before this version 
+\newsince{2.6.2} (before this version
 \helpref{GetSelection}{wxcontrolwithitemsgetselection} itself behaved like
 this).
 
@@ -166,4 +166,3 @@ Sets the number of columns in this choice item.
 
 This is implemented for Motif only and doesn't do anything under other
 platforms.
-

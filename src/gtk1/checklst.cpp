@@ -55,7 +55,7 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
                        style, validator, name );
 }
 
-bool wxCheckListBox::IsChecked( int index ) const
+bool wxCheckListBox::IsChecked(unsigned int index) const
 {
     wxCHECK_MSG( m_list != NULL, false, wxT("invalid checklistbox") );
 
@@ -74,7 +74,7 @@ bool wxCheckListBox::IsChecked( int index ) const
     return false;
 }
 
-void wxCheckListBox::Check( int index, bool check )
+void wxCheckListBox::Check(unsigned int index, bool check )
 {
     wxCHECK_RET( m_list != NULL, wxT("invalid checklistbox") );
 

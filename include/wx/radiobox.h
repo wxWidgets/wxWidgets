@@ -28,17 +28,17 @@ class WXDLLEXPORT wxRadioBoxBase : public wxItemContainerImmutable
 {
 public:
     // change/query the individual radio button state
-    virtual bool Enable(int n, bool enable = true) = 0;
-    virtual bool Show(int n, bool show = true) = 0;
+    virtual bool Enable(unsigned int n, bool enable = true) = 0;
+    virtual bool Show(unsigned int n, bool show = true) = 0;
 
     // NB: these functions are stubbed here for now but should become pure
     //     virtual once all ports implement them
-    virtual bool IsItemEnabled(int WXUNUSED(n)) const { return true; }
-    virtual bool IsItemShown(int WXUNUSED(n)) const { return true; }
+    virtual bool IsItemEnabled(unsigned int WXUNUSED(n)) const { return true; }
+    virtual bool IsItemShown(unsigned int WXUNUSED(n)) const { return true; }
 
     // return number of columns/rows in this radiobox
-    int GetColumnCount() const { return m_numCols; }
-    int GetRowCount() const { return m_numRows; }
+    unsigned int GetColumnCount() const { return m_numCols; }
+    unsigned int GetRowCount() const { return m_numRows; }
 
     // return the item above/below/to the left/right of the given one
     int GetNextItem(int item, wxDirection dir, long style) const;
@@ -60,21 +60,21 @@ protected:
 
     // return the number of items in major direction (which depends on whether
     // we have wxRA_SPECIFY_COLS or wxRA_SPECIFY_ROWS style)
-    int GetMajorDim() const { return m_majorDim; }
+    unsigned int GetMajorDim() const { return m_majorDim; }
 
     // sets m_majorDim and also updates m_numCols/Rows
     //
     // the style parameter should be the style of the radiobox itself
-    void SetMajorDim(int majorDim, long style);
+    void SetMajorDim(unsigned int majorDim, long style);
 
 
 private:
     // the number of elements in major dimension (i.e. number of columns if
     // wxRA_SPECIFY_COLS or the number of rows if wxRA_SPECIFY_ROWS) and also
     // the number of rows/columns calculated from it
-    int m_majorDim,
-        m_numCols,
-        m_numRows;
+    unsigned int m_majorDim,
+                 m_numCols,
+                 m_numRows;
 };
 
 #if defined(__WXUNIVERSAL__)

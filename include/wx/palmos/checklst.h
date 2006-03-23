@@ -56,13 +56,13 @@ public:
                 const wxString& name = wxListBoxNameStr);
 
   // override base class virtuals
-  virtual void Delete(int n);
+  virtual void Delete(unsigned int n);
 
   virtual bool SetFont( const wxFont &font );
 
   // items may be checked
-  virtual bool IsChecked(size_t uiIndex) const;
-  virtual void Check(size_t uiIndex, bool bCheck = TRUE);
+  virtual bool IsChecked(unsigned int uiIndex) const;
+  virtual void Check(unsigned int uiIndex, bool bCheck = true);
 
   // return the index of the item at this position or wxNOT_FOUND
   int HitTest(const wxPoint& pt) const { return DoHitTestItem(pt.x, pt.y); }
@@ -85,7 +85,7 @@ protected:
   void OnLeftClick(wxMouseEvent& event);
 
 private:
-  size_t    m_nItemHeight;  // height of checklistbox items (the same for all)
+  size_t m_nItemHeight;  // height of checklistbox items (the same for all)
 
   DECLARE_EVENT_TABLE()
   DECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckListBox)
