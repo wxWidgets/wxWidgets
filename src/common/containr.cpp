@@ -369,7 +369,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
     for ( ;; )
     {
         // don't go into infinite loop
-        if ( start_node && node == start_node )
+        if ( start_node && node && node == start_node )
             break;
 
         // Have we come to the last or first item on the panel?
