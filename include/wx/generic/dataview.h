@@ -91,6 +91,9 @@ public:
     bool Render( wxRect cell, wxDC *dc, int state );
     wxSize GetSize();
     
+private:
+    wxString m_text;
+    
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextCell)
 };
@@ -110,6 +113,9 @@ public:
     
     bool Render( wxRect cell, wxDC *dc, int state );
     wxSize GetSize();
+    
+private:
+    bool    m_toggle;
     
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleCell)
