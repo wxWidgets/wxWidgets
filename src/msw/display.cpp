@@ -258,7 +258,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxDisplayImplMultimon)
 };
 
-class WXDLLEXPORT wxDisplayFactoryMultimon : public wxDisplayFactoryWin32Base
+class wxDisplayFactoryMultimon : public wxDisplayFactoryWin32Base
 {
 public:
     wxDisplayFactoryMultimon();
@@ -334,7 +334,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxDisplayImplDirectDraw)
 };
 
-class WXDLLEXPORT wxDisplayFactoryDirectDraw : public wxDisplayFactoryWin32Base
+class wxDisplayFactoryDirectDraw : public wxDisplayFactoryWin32Base
 {
 public:
     wxDisplayFactoryDirectDraw();
