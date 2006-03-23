@@ -7983,6 +7983,10 @@ SOURCE=..\..\include\wx\generic\colrdlgg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\dataview.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\datectrl.h
 # End Source File
 # Begin Source File

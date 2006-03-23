@@ -1701,6 +1701,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavcmn.obj \
 	$(OBJS)\monodll_calctrl.obj \
+	$(OBJS)\monodll_datavgen.obj \
 	$(OBJS)\monodll_datectlg.obj \
 	$(OBJS)\monodll_grid.obj \
 	$(OBJS)\monodll_gridctrl.obj \
@@ -1727,6 +1728,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavcmn.obj \
 	$(OBJS)\monodll_calctrl.obj \
+	$(OBJS)\monodll_datavgen.obj \
 	$(OBJS)\monodll_datectlg.obj \
 	$(OBJS)\monodll_grid.obj \
 	$(OBJS)\monodll_gridctrl.obj \
@@ -2242,6 +2244,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavcmn.obj \
 	$(OBJS)\monolib_calctrl.obj \
+	$(OBJS)\monolib_datavgen.obj \
 	$(OBJS)\monolib_datectlg.obj \
 	$(OBJS)\monolib_grid.obj \
 	$(OBJS)\monolib_gridctrl.obj \
@@ -2268,6 +2271,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavcmn.obj \
 	$(OBJS)\monolib_calctrl.obj \
+	$(OBJS)\monolib_datavgen.obj \
 	$(OBJS)\monolib_datectlg.obj \
 	$(OBJS)\monolib_grid.obj \
 	$(OBJS)\monolib_gridctrl.obj \
@@ -3157,6 +3161,7 @@ __RUNTIME_LIBS_195 = $(__THREADSFLAG)
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datavcmn.obj \
 	$(OBJS)\advdll_calctrl.obj \
+	$(OBJS)\advdll_datavgen.obj \
 	$(OBJS)\advdll_datectlg.obj \
 	$(OBJS)\advdll_grid.obj \
 	$(OBJS)\advdll_gridctrl.obj \
@@ -3183,6 +3188,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datavcmn.obj \
 	$(OBJS)\advdll_calctrl.obj \
+	$(OBJS)\advdll_datavgen.obj \
 	$(OBJS)\advdll_datectlg.obj \
 	$(OBJS)\advdll_grid.obj \
 	$(OBJS)\advdll_gridctrl.obj \
@@ -3218,6 +3224,7 @@ __RUNTIME_LIBS_208 = $(__THREADSFLAG)
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datavcmn.obj \
 	$(OBJS)\advlib_calctrl.obj \
+	$(OBJS)\advlib_datavgen.obj \
 	$(OBJS)\advlib_datectlg.obj \
 	$(OBJS)\advlib_grid.obj \
 	$(OBJS)\advlib_gridctrl.obj \
@@ -3244,6 +3251,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datavcmn.obj \
 	$(OBJS)\advlib_calctrl.obj \
+	$(OBJS)\advlib_datavgen.obj \
 	$(OBJS)\advlib_datectlg.obj \
 	$(OBJS)\advlib_grid.obj \
 	$(OBJS)\advlib_gridctrl.obj \
@@ -5988,6 +5996,11 @@ $(OBJS)\monodll_calctrl.obj: ..\..\src\generic\calctrl.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_datavgen.obj: ..\..\src\generic\datavgen.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_datectlg.obj: ..\..\src\generic\datectlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 !endif
@@ -7732,6 +7745,11 @@ $(OBJS)\monolib_datavcmn.obj: ..\..\src\common\datavcmn.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_calctrl.obj: ..\..\src\generic\calctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_datavgen.obj: ..\..\src\generic\datavgen.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -10703,6 +10721,9 @@ $(OBJS)\advdll_datavcmn.obj: ..\..\src\common\datavcmn.cpp
 $(OBJS)\advdll_calctrl.obj: ..\..\src\generic\calctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
 
+$(OBJS)\advdll_datavgen.obj: ..\..\src\generic\datavgen.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
+
 $(OBJS)\advdll_datectlg.obj: ..\..\src\generic\datectlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
 
@@ -10773,6 +10794,9 @@ $(OBJS)\advlib_datavcmn.obj: ..\..\src\common\datavcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_calctrl.obj: ..\..\src\generic\calctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
+
+$(OBJS)\advlib_datavgen.obj: ..\..\src\generic\datavgen.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_datectlg.obj: ..\..\src\generic\datectlg.cpp

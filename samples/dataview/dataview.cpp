@@ -20,6 +20,8 @@
 #include "wx/wx.h"
 #endif
 
+#include "wx/datetime.h"
+
 #ifndef __WXMSW__
 #include "mondrian.xpm"
 #endif
@@ -37,7 +39,7 @@ WX_DEFINE_LIST(wxArrayDate);
 class MyTextModel: public wxDataViewListModel
 {
 public:
-    MyTextModel() 
+    MyTextModel()
     {
         size_t i;
         for (i = 0; i < 1000; i++)
@@ -49,32 +51,32 @@ public:
         for (i = 0; i < 1000; i++)
             { m_progress.Add( i/10 ); }
         for (i = 0; i < 1000; i++)
-            { 
+            {
                 wxDateTime *date = new wxDateTime( wxDateTime::Now() );
-                m_dates.Append( date ); 
+                m_dates.Append( date );
             }
     }
-    
-    virtual size_t GetNumberOfRows() 
+
+    virtual size_t GetNumberOfRows()
         { return 1000; }
     virtual size_t GetNumberOfCols()
         { return 7; }
-        
+
     // as reported by wxVariant
     virtual wxString GetColType( size_t col )
         {
             if (col == 6)
                 return wxT("datetime");
-                
+
             if (col == 5)
                 return wxT("long");
-                
+
             if (col == 3)
                 return wxT("bool");
-                 
-            return wxT("string"); 
+
+            return wxT("string");
         }
-        
+
     virtual void GetValue( wxVariant &variant, size_t col, size_t row )
         {
             if (col == 6)
@@ -92,15 +94,15 @@ public:
             if (col == 3)
             {
                 variant = (bool) m_bools[row];
-            } else 
+            } else
             if (col == 2)
             {
                 variant = m_list[row];
             }
             else
             {
-                wxString tmp; 
-                tmp.Printf( wxT("item(%d;%d)"), (int)row, (int)col ); 
+                wxString tmp;
+                tmp.Printf( wxT("item(%d;%d)"), (int)row, (int)col );
                 variant = tmp;
             }
         }
@@ -120,7 +122,7 @@ public:
             }
             return true;
         }
-    
+
     wxArrayString m_list;
     wxArrayInt    m_bools;
     wxArrayString m_colours;
@@ -136,9 +138,9 @@ class MyCustomCell: public wxDataViewCustomCell
 {
 public:
     MyCustomCell() :
-        wxDataViewCustomCell( wxT("string"), wxDATAVIEW_CELL_ACTIVATABLE ) 
-    { 
-        m_colour = wxT("black"); 
+        wxDataViewCustomCell( wxT("string"), wxDATAVIEW_CELL_ACTIVATABLE )
+    {
+        m_colour = wxT("black");
     }
     bool SetValue( const wxVariant &value )
     {
@@ -146,13 +148,13 @@ public:
         return true;
     }
     bool Render( wxRect rect, wxDC *dc, int state )
-    {   
+    {
         dc->SetPen( *wxBLACK_PEN );
         if (m_colour == wxT("red"))
             dc->SetBrush( *wxRED_BRUSH );
         else if (m_colour == wxT("green"))
             dc->SetBrush( *wxGREEN_BRUSH );
-        else 
+        else
             dc->SetBrush( *wxBLACK_BRUSH );
         dc->DrawRectangle( rect );
         return true;
@@ -168,7 +170,7 @@ public:
     }
 
 private:
-    wxString m_colour;    
+    wxString m_colour;
 };
 
 // -------------------------------------
@@ -200,7 +202,7 @@ public:
             return;
         }
         wxString tmp;
-        tmp.Printf( wxT("item(%d;%d)"), (int)row, (int)col ); 
+        tmp.Printf( wxT("item(%d;%d)"), (int)row, (int)col );
         variant = tmp;
     }
     virtual bool SetValue( wxVariant &variant, size_t col, size_t row )
@@ -211,7 +213,7 @@ public:
             return true;
         }
         return false;
-        
+
     }
 
     wxArrayString m_list;
@@ -239,7 +241,7 @@ public:
 public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    
+
 private:
     wxDataViewCtrl* dataview_left;
     wxDataViewCtrl* dataview_right;
@@ -256,7 +258,7 @@ enum my_events
     ID_INSERT_ROW_LEFT,
     ID_DELETE_ROW_LEFT,
     ID_EDIT_ROW_LEFT,
-    
+
     ID_APPEND_ROW_RIGHT,
     ID_PREPEND_ROW_RIGHT,
     ID_INSERT_ROW_RIGHT,
@@ -272,23 +274,23 @@ public:
 public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    
+
     void OnAppendRowLeft(wxCommandEvent& event);
     void OnPrependRowLeft(wxCommandEvent& event);
     void OnInsertRowLeft(wxCommandEvent& event);
     void OnDeleteRowLeft(wxCommandEvent& event);
     void OnEditRowLeft(wxCommandEvent& event);
-    
+
     void OnAppendRowRight(wxCommandEvent& event);
     void OnPrependRowRight(wxCommandEvent& event);
     void OnInsertRowRight(wxCommandEvent& event);
     void OnDeleteRowRight(wxCommandEvent& event);
     void OnEditRowRight(wxCommandEvent& event);
-    
+
 private:
     wxDataViewCtrl* dataview_left;
     wxDataViewCtrl* dataview_right;
-    
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -342,31 +344,31 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
                     wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnAbout) );
 
     CreateStatusBar();
-    
-    
+
+
     // Left wxDataViewCtrl
     dataview_left = new wxDataViewCtrl( this, -1 );
-    
+
     MyTextModel *model = new MyTextModel;
     dataview_left->AssociateModel( model );
-    
+
     dataview_left->AppendTextColumn( wxT("first"), 0 );
     dataview_left->AppendTextColumn( wxT("second"), 1 );
 
     wxDataViewTextCell *text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
     wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_cell, 2 );
     dataview_left->AppendColumn( column );
-    
+
     dataview_left->AppendToggleColumn( wxT("fourth"), 3 );
-    
+
     MyCustomCell *custom_cell = new MyCustomCell;
     column = new wxDataViewColumn( wxT("custom"), custom_cell, 4 );
     dataview_left->AppendColumn( column );
-    
+
     dataview_left->AppendProgressColumn( wxT("progress"), 5 );
-    
+
     dataview_left->AppendDateColumn( wxT("date"), 6 );
-    
+
     // Right wxDataViewCtrl using the same model
     dataview_right = new wxDataViewCtrl( this, -1 );
     dataview_right->AssociateModel( model );
@@ -381,9 +383,9 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     dataview_right->AppendColumn( column );
 
     dataview_right->AppendDateColumn( wxT("date"), 6 );
-    
+
     // layout dataview controls.
-    
+
     wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
     sizer->Add( dataview_left, 3, wxGROW );
     sizer->Add(10,10);
@@ -436,8 +438,8 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
                     wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MySortingFrame::OnAbout) );
 
     CreateStatusBar();
-    
-    
+
+
     // Left wxDataViewCtrl
     dataview_left = new wxDataViewCtrl( this, -1 );
 
@@ -447,10 +449,10 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_cell, 0 );
     dataview_left->AppendColumn( column );
     dataview_left->AppendTextColumn( wxT("second"), 1 );
-    
+
     // Right wxDataViewCtrl using the sorting model
     dataview_right = new wxDataViewCtrl( this, -1 );
-    wxDataViewSortedListModel *sorted_model = 
+    wxDataViewSortedListModel *sorted_model =
         new wxDataViewSortedListModel( model );
     dataview_right->AssociateModel( sorted_model );
     text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
@@ -459,12 +461,12 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     dataview_right->AppendTextColumn( wxT("second"), 1 );
 
     // layout dataview controls.
-    
+
     wxBoxSizer *top_sizer = new wxBoxSizer( wxHORIZONTAL );
     top_sizer->Add( dataview_left, 1, wxGROW );
     top_sizer->Add(10,10);
     top_sizer->Add( dataview_right, 1, wxGROW );
-    
+
     wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
     button_sizer->Add( 10, 10, 1 );
     wxFlexGridSizer *left_sizer = new wxFlexGridSizer( 2 );
@@ -483,11 +485,11 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     right_sizer->Add( new wxButton( this, ID_EDIT_ROW_RIGHT, wxT("Edit") ), 0, wxALL, 5 );
     button_sizer->Add( right_sizer );
     button_sizer->Add( 10, 10, 1 );
-    
+
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
     main_sizer->Add( top_sizer, 1, wxGROW );
     main_sizer->Add( button_sizer, 0, wxGROW );
-    
+
     SetSizer( main_sizer );
 }
 

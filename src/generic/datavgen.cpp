@@ -187,7 +187,6 @@ wxDataViewCustomCell::wxDataViewCustomCell( const wxString &varianttype,
 {
 }
 
-    
 // --------------------------------------------------------- 
 // wxDataViewTextCell
 // --------------------------------------------------------- 
@@ -828,7 +827,7 @@ WXLRESULT wxDataViewCtrl::MSWWindowProc(WXUINT nMsg,
                                        WXWPARAM wParam,
                                        WXLPARAM lParam)
 {
-    WXLRESULT rc = wxPanel::MSWWindowProc(nMsg, wParam, lParam);
+    WXLRESULT rc = wxDataViewCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 
 #ifndef __WXWINCE__
     // we need to process arrows ourselves for scrolling
