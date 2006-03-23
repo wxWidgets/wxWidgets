@@ -189,6 +189,8 @@ bool wxDropTarget::GetData()
         FlavorFlags theFlags;
         UInt16 flavors;
         bool firstFileAdded = false;
+        
+        wxString filenamesPassed ;
 
         CountDragItems( (DragReference)m_currentDrag, &items );
         for (UInt16 index = 1; index <= items; ++index)
@@ -261,23 +263,13 @@ bool wxDropTarget::GetData()
 
                         case kDragFlavorTypeHFS:
                             {
-                                wxFileDataObject *fdo = dynamic_cast<wxFileDataObject*>(m_dataObject);
-                                wxASSERT( fdo != NULL );
-
-                                if ((theData != NULL) && (fdo != NULL))
+                                if (theData != NULL)
                                 {
                                     HFSFlavor* theFile = (HFSFlavor*) theData;
                                     wxString name = wxMacFSSpec2MacFilename( &theFile->fileSpec );
 
-                                    if ( !firstFileAdded )
-                                    {
-                                        // reset file list
-                                        fdo->SetData( 0, "" );
-                                        firstFileAdded = true;
-                                    }
-
                                     if (!name.IsEmpty())
-                                        fdo->AddFile( name );
+                                        filenamesPassed += name + wxT("\n");
                                 }
                             }
                             break;
@@ -292,6 +284,11 @@ bool wxDropTarget::GetData()
                     break;
                 }
             }
+        }
+        if ( filenamesPassed.Len() > 0 )
+        {
+            wxCharBuffer buf = filenamesPassed.fn_str();
+            m_dataObject->SetData( wxDataFormat( wxDF_FILENAME ) , strlen( buf ) , (const char*) buf );
         }
     }
 
