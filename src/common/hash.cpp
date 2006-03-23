@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        hash.cpp
+// Name:        src/common/hash.cpp
 // Purpose:     wxHashTable implementation
 // Author:      Julian Smart
 // Modified by: VZ at 25.02.00: type safe hashes with WX_DECLARE_HASH()
@@ -1036,7 +1036,7 @@ void wxHashTable::DoCopy( const wxHashTable& WXUNUSED(table) )
 {
     Create( m_keyType, m_size );
 
-    wxASSERT( false );
+    wxFAIL;
 }
 
 void wxHashTable::DoDeleteContents( wxHashTableBase_Node* node )
