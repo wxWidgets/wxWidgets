@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        os2/dataobj2.h
+// Name:        mac/dataobj2.h
 // Purpose:     declaration of standard wxDataObjectSimple-derived classes
 // Author:      David Webster (adapted from Robert Roebling's gtk port
 // Modified by:
@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_DATAOBJ2_H_
-#define _WX_GTK_DATAOBJ2_H_
+#ifndef _WX_MAC_DATAOBJ2_H_
+#define _WX_MAC_DATAOBJ2_H_
 
 // ----------------------------------------------------------------------------
 // wxBitmapDataObject is a specialization of wxDataObject for bitmaps
@@ -68,7 +68,7 @@ public:
     // ----------------------------------
 
     void AddFile( const wxString &filename );
-
+    
     virtual size_t GetDataSize() const;
     virtual bool GetDataHere(void *buf) const;
     virtual bool SetData(size_t len, const void *buf);
@@ -85,7 +85,10 @@ public:
     {
         return SetData(len, buf);
     }
+protected:
+    // translates the filenames stored into a utf8 encoded char stream
+    void GetFileNames(wxCharBuffer &buf) const ;
 };
 
-#endif // _WX_GTK_DATAOBJ2_H_
+#endif // _WX_MAC_DATAOBJ2_H_
 
