@@ -730,12 +730,12 @@ private:
         name& operator=(const name& list)                                   \
             { Assign(list); return *this; }                                 \
                                                                             \
-        compatibility_iterator GetFirst() const                             \
+        nodetype *GetFirst() const                                          \
             { return (nodetype *)wxListBase::GetFirst(); }                  \
-        compatibility_iterator GetLast() const                              \
+        nodetype *GetLast() const                                           \
             { return (nodetype *)wxListBase::GetLast(); }                   \
                                                                             \
-        compatibility_iterator Item(size_t index) const                     \
+        nodetype *Item(size_t index) const                                  \
             { return (nodetype *)wxListBase::Item(index); }                 \
                                                                             \
         T *operator[](size_t index) const                                   \
@@ -744,18 +744,18 @@ private:
             return node ? (T*)(node->GetData()) : (T*)NULL;                 \
         }                                                                   \
                                                                             \
-        compatibility_iterator Append(Tbase *object)                        \
+        nodetype *Append(Tbase *object)                                     \
             { return (nodetype *)wxListBase::Append(object); }              \
-        compatibility_iterator Insert(Tbase *object)                        \
+        nodetype *Insert(Tbase *object)                                     \
             { return (nodetype *)Insert((nodetype*)NULL, object); }         \
-        compatibility_iterator Insert(size_t pos, Tbase *object)            \
+        nodetype *Insert(size_t pos, Tbase *object)                         \
             { return (nodetype *)wxListBase::Insert(pos, object); }         \
-        compatibility_iterator Insert(nodetype *prev, Tbase *object)        \
+        nodetype *Insert(nodetype *prev, Tbase *object)                     \
             { return (nodetype *)wxListBase::Insert(prev, object); }        \
                                                                             \
-        compatibility_iterator Append(long key, void *object)               \
+        nodetype *Append(long key, void *object)                            \
             { return (nodetype *)wxListBase::Append(key, object); }         \
-        compatibility_iterator Append(const wxChar *key, void *object)      \
+        nodetype *Append(const wxChar *key, void *object)                   \
             { return (nodetype *)wxListBase::Append(key, object); }         \
                                                                             \
         nodetype *DetachNode(nodetype *node)                                \
@@ -764,10 +764,10 @@ private:
             { return wxListBase::DeleteNode(node); }                        \
         bool DeleteObject(Tbase *object)                                    \
             { return wxListBase::DeleteObject(object); }                    \
-        void Erase(compatibility_iterator it)                               \
+        void Erase(nodetype *it)                                            \
             { DeleteNode(it); }                                             \
                                                                             \
-        compatibility_iterator Find(const Tbase *object) const              \
+        nodetype *Find(const Tbase *object) const                           \
             { return (nodetype *)wxListBase::Find(object); }                \
                                                                             \
         virtual nodetype *Find(const wxListKey& key) const                  \
