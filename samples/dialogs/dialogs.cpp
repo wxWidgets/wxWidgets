@@ -383,9 +383,7 @@ bool MyApp::OnInit()
     myCanvas = new MyCanvas(frame);
     myCanvas->SetBackgroundColour(*wxWHITE);
 
-#ifndef __WXWINCE__
     frame->Centre(wxBOTH);
-#endif
 
     // Show the frame
     frame->Show(true);
