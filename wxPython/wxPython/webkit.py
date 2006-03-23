@@ -21,7 +21,6 @@ del sys, _wx
 # Now assign all the reverse-renamed names:
 wxWebKitNameStr = wx.webkit.WebKitNameStr
 wxWebKitCtrl = wx.webkit.WebKitCtrl
-wxWebKitCtrlPtr = wx.webkit.WebKitCtrlPtr
 wxPreWebKitCtrl = wx.webkit.PreWebKitCtrl
 wxWEBKIT_STATE_START = wx.webkit.WEBKIT_STATE_START
 wxWEBKIT_STATE_NEGOTIATING = wx.webkit.WEBKIT_STATE_NEGOTIATING
@@ -31,7 +30,6 @@ wxWEBKIT_STATE_STOP = wx.webkit.WEBKIT_STATE_STOP
 wxWEBKIT_STATE_FAILED = wx.webkit.WEBKIT_STATE_FAILED
 wxEVT_WEBKIT_STATE_CHANGED = wx.webkit.wxEVT_WEBKIT_STATE_CHANGED
 wxWebKitStateChangedEvent = wx.webkit.WebKitStateChangedEvent
-wxWebKitStateChangedEventPtr = wx.webkit.WebKitStateChangedEventPtr
 
 
 d = globals()

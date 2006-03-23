@@ -21,7 +21,6 @@ del sys, _wx
 # Now assign all the reverse-renamed names:
 wxGLCanvasNameStr = wx.glcanvas.GLCanvasNameStr
 wxGLContext = wx.glcanvas.GLContext
-wxGLContextPtr = wx.glcanvas.GLContextPtr
 WX_GL_RGBA = wx.glcanvas.WX_GL_RGBA
 WX_GL_BUFFER_SIZE = wx.glcanvas.WX_GL_BUFFER_SIZE
 WX_GL_LEVEL = wx.glcanvas.WX_GL_LEVEL
@@ -39,7 +38,6 @@ WX_GL_MIN_ACCUM_GREEN = wx.glcanvas.WX_GL_MIN_ACCUM_GREEN
 WX_GL_MIN_ACCUM_BLUE = wx.glcanvas.WX_GL_MIN_ACCUM_BLUE
 WX_GL_MIN_ACCUM_ALPHA = wx.glcanvas.WX_GL_MIN_ACCUM_ALPHA
 wxGLCanvas = wx.glcanvas.GLCanvas
-wxGLCanvasPtr = wx.glcanvas.GLCanvasPtr
 wxGLCanvasWithContext = wx.glcanvas.GLCanvasWithContext
 
 

@@ -26,18 +26,13 @@ wxEVT_WIZARD_CANCEL = wx.wizard.wxEVT_WIZARD_CANCEL
 wxEVT_WIZARD_HELP = wx.wizard.wxEVT_WIZARD_HELP
 wxEVT_WIZARD_FINISHED = wx.wizard.wxEVT_WIZARD_FINISHED
 wxWizardEvent = wx.wizard.WizardEvent
-wxWizardEventPtr = wx.wizard.WizardEventPtr
 wxWizardPage = wx.wizard.WizardPage
-wxWizardPagePtr = wx.wizard.WizardPagePtr
 wxPyWizardPage = wx.wizard.PyWizardPage
-wxPyWizardPagePtr = wx.wizard.PyWizardPagePtr
 wxPrePyWizardPage = wx.wizard.PrePyWizardPage
 wxWizardPageSimple = wx.wizard.WizardPageSimple
-wxWizardPageSimplePtr = wx.wizard.WizardPageSimplePtr
 wxPreWizardPageSimple = wx.wizard.PreWizardPageSimple
 wxWizardPageSimple_Chain = wx.wizard.WizardPageSimple_Chain
 wxWizard = wx.wizard.Wizard
-wxWizardPtr = wx.wizard.WizardPtr
 wxPreWizard = wx.wizard.PreWizard
 
 
