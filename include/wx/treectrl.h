@@ -50,7 +50,7 @@ public:
     // ---------
 
         // get the total number of items in the control
-    virtual size_t GetCount() const = 0;
+    virtual unsigned int GetCount() const = 0;
 
         // indent is the number of pixels the children are indented relative to
         // the parents position. SetIndent() also redraws the control

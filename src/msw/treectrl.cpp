@@ -817,9 +817,9 @@ void wxTreeCtrl::DoSetItem(wxTreeViewItem* tvItem)
     }
 }
 
-size_t wxTreeCtrl::GetCount() const
+unsigned int wxTreeCtrl::GetCount() const
 {
-    return (size_t)TreeView_GetCount(GetHwnd());
+    return (unsigned int)TreeView_GetCount(GetHwnd());
 }
 
 unsigned int wxTreeCtrl::GetIndent() const

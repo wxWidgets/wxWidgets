@@ -863,7 +863,7 @@ wxGenericTreeCtrl::~wxGenericTreeCtrl()
 // accessors
 // -----------------------------------------------------------------------------
 
-size_t wxGenericTreeCtrl::GetCount() const
+unsigned int wxGenericTreeCtrl::GetCount() const
 {
     if ( !m_anchor )
     {
@@ -871,7 +871,7 @@ size_t wxGenericTreeCtrl::GetCount() const
         return 0;
     }
 
-    size_t count = m_anchor->GetChildrenCount();
+    unsigned int count = m_anchor->GetChildrenCount();
     if ( !HasFlag(wxTR_HIDE_ROOT) )
     {
         // take the root itself into account

@@ -492,16 +492,17 @@ void wxTreeCtrl::DoSetItem (
     }
 } // end of wxTreeCtrl::DoSetItem
 
-size_t wxTreeCtrl::GetCount () const
+unsigned int wxTreeCtrl::GetCount () const
 {
-    CNRINFO                         vCnrInfo;
+    CNRINFO  vCnrInfo;
 
     ::WinSendMsg( GetHWND()
                  ,CM_QUERYCNRINFO
                  ,MPFROMP(&vCnrInfo)
                  ,(MPARAM)(USHORT)sizeof(CNRINFO)
                 );
-    return (size_t)vCnrInfo.cRecords;
+
+    return (unsigned int)vCnrInfo.cRecords;
 } // end of wxTreeCtrl::GetCount
 
 unsigned int wxTreeCtrl::GetIndent () const

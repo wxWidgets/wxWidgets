@@ -210,8 +210,9 @@ void wxTreeCtrl::DoSetItem(wxTreeViewItem* tvItem)
 {
 }
 
-size_t wxTreeCtrl::GetCount() const
+unsigned int wxTreeCtrl::GetCount() const
 {
+    // TODO
     return 0;
 }
 

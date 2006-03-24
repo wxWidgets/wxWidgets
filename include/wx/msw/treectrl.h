@@ -78,7 +78,7 @@ public:
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual size_t GetCount() const;
+    virtual unsigned int GetCount() const;
 
     virtual unsigned int GetIndent() const;
     virtual void SetIndent(unsigned int indent);

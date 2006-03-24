@@ -137,7 +137,7 @@ public:
     // accessors
     // ---------
       //
-    size_t GetCount() const;
+    virtual unsigned int GetCount() const;
 
       // indent
     int GetIndent() const;

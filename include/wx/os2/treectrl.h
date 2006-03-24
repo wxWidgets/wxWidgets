@@ -90,7 +90,7 @@ public:
     //
     // Get the total number of items in the control
     //
-    size_t GetCount(void) const;
+    virtual unsigned int GetCount(void) const;
 
     //
     // Indent is the number of pixels the children are indented relative to

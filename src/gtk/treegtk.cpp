@@ -152,12 +152,14 @@ static void gtk_treectrl_count_callback (GtkWidget *widget, gpointer data) {
     gtk_container_foreach(GTK_CONTAINER(widget), gtk_treectrl_count_callback, data);
 }
 
-size_t wxTreeCtrl::GetCount() const {
-  int count = 0;
+unsigned int wxTreeCtrl::GetCount() const
+{
+    int count = 0;
 
-  if (m_anchor != NULL)
-    gtk_treectrl_count_callback(GTK_WIDGET(m_anchor), &count);
-  return count;
+    if (m_anchor != NULL)
+        gtk_treectrl_count_callback(GTK_WIDGET(m_anchor), &count);
+
+    return (unsigned int)count;
 }
 
 unsigned int wxTreeCtrl::GetIndent() const {
