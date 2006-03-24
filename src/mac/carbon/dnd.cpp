@@ -188,9 +188,7 @@ bool wxDropTarget::GetData()
         FlavorType theType;
         FlavorFlags theFlags;
         UInt16 flavors;
-        bool firstFileAdded = false;
-        
-        wxString filenamesPassed ;
+        wxString filenamesPassed;
 
         CountDragItems( (DragReference)m_currentDrag, &items );
         for (UInt16 index = 1; index <= items; ++index)
@@ -201,22 +199,22 @@ bool wxDropTarget::GetData()
             wxDataFormat preferredFormat = m_dataObject->GetPreferredFormat( wxDataObject::Set );
             bool hasPreferredFormat = false;
 
-            for ( UInt16 flavor = 1; flavor <= flavors; ++flavor )
+            for (UInt16 flavor = 1; flavor <= flavors; ++flavor)
             {
                 result = GetFlavorType( (DragReference)m_currentDrag, theItem, flavor, &theType );
                 wxDataFormat format( theType );
-                if ( preferredFormat == format )
+                if (preferredFormat == format)
                 {
                     hasPreferredFormat = true;
                     break;
                 }
             }
 
-            for ( UInt16 flavor = 1; flavor <= flavors; ++flavor )
+            for (UInt16 flavor = 1; flavor <= flavors; ++flavor)
             {
                 result = GetFlavorType( (DragReference)m_currentDrag, theItem, flavor, &theType );
                 wxDataFormat format( theType );
-                if ( (hasPreferredFormat && format == preferredFormat)
+                if ((hasPreferredFormat && format == preferredFormat)
                     || (!hasPreferredFormat && m_dataObject->IsSupportedFormat( format )))
                 {
                     result = GetFlavorFlags( (DragReference)m_currentDrag, theItem, theType, &theFlags );
@@ -226,13 +224,13 @@ bool wxDropTarget::GetData()
                         Ptr theData;
 
                         GetFlavorDataSize( (DragReference)m_currentDrag, theItem, theType, &dataSize );
-                        if ( theType == kScrapFlavorTypeText )
+                        if (theType == kScrapFlavorTypeText)
                         {
                             // this increment is only valid for allocating:
                             // on the next GetFlavorData call it is reset again to the original value
                             dataSize++;
                         }
-                        else if ( theType == kScrapFlavorTypeUnicode )
+                        else if (theType == kScrapFlavorTypeUnicode)
                         {
                             // this increment is only valid for allocating:
                             // on the next GetFlavorData call it is reset again to the original value
@@ -245,7 +243,7 @@ bool wxDropTarget::GetData()
                         else
                             theData = NULL;
 
-                        GetFlavorData( (DragReference)m_currentDrag, theItem, theType, (void*) theData, &dataSize, 0L );
+                        GetFlavorData( (DragReference)m_currentDrag, theItem, theType, (void*)theData, &dataSize, 0L );
                         switch (theType)
                         {
                         case kScrapFlavorTypeText:
@@ -262,18 +260,16 @@ bool wxDropTarget::GetData()
 #endif
 
                         case kDragFlavorTypeHFS:
+                            if (theData != NULL)
                             {
-                                if (theData != NULL)
-                                {
-                                    HFSFlavor* theFile = (HFSFlavor*) theData;
-                                    wxString name = wxMacFSSpec2MacFilename( &theFile->fileSpec );
+                                HFSFlavor* theFile = (HFSFlavor*)theData;
+                                wxString name = wxMacFSSpec2MacFilename( &theFile->fileSpec );
 
-                                    if (!name.IsEmpty())
-                                        filenamesPassed += name + wxT("\n");
-                                }
+                                if (!name.IsEmpty())
+                                    filenamesPassed += name + wxT("\n");
                             }
                             break;
- 
+
                         default:
                             m_dataObject->SetData( format, dataSize, theData );
                             break;
@@ -285,10 +281,11 @@ bool wxDropTarget::GetData()
                 }
             }
         }
-        if ( filenamesPassed.Len() > 0 )
+
+        if (filenamesPassed.Len() > 0)
         {
             wxCharBuffer buf = filenamesPassed.fn_str();
-            m_dataObject->SetData( wxDataFormat( wxDF_FILENAME ) , strlen( buf ) , (const char*) buf );
+            m_dataObject->SetData( wxDataFormat(wxDF_FILENAME), strlen( buf ), (const char*)buf );
         }
     }
 
@@ -334,15 +331,14 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 {
     wxASSERT_MSG( m_data, wxT("Drop source: no data") );
 
-    if (!m_data)
-        return (wxDragResult) wxDragNone;
-    if (m_data->GetFormatCount() == 0)
-        return (wxDragResult) wxDragNone;
+    if ((m_data == NULL) || (m_data->GetFormatCount() == 0))
+        return (wxDragResult)wxDragNone;
 
     OSStatus result;
     DragReference theDrag;
     RgnHandle dragRegion;
-    if ((result = NewDrag(&theDrag)) != noErr)
+
+    if ((result = NewDrag( &theDrag )) != noErr)
         return wxDragNone;
 
     // add data to drag
@@ -619,27 +615,20 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                 {
                   if ( !trackingGlobals->m_currentSource->MacInstallDefaultCursor( result ) )
                   {
-                      switch ( result )
+                      int cursorID = wxCURSOR_NONE;
+
+                      switch (result)
                       {
                           case wxDragCopy:
-                              {
-                                  wxCursor cursor(wxCURSOR_COPY_ARROW);
-                                  cursor.MacInstall();
-                              }
+                              cursorID = wxCURSOR_COPY_ARROW;
                               break;
 
                           case wxDragMove:
-                              {
-                                  wxCursor cursor(wxCURSOR_ARROW);
-                                  cursor.MacInstall();
-                              }
+                              cursorID = wxCURSOR_ARROW;
                               break;
 
                           case wxDragNone:
-                              {
-                                  wxCursor cursor(wxCURSOR_NO_ENTRY);
-                                  cursor.MacInstall();
-                              }
+                              cursorID = wxCURSOR_NO_ENTRY;
                               break;
 
                           case wxDragError:
@@ -648,6 +637,12 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                           default:
                               // put these here to make gcc happy
                               ;
+                      }
+
+                      if (cursorID != wxCURSOR_NONE)
+                      {
+                          wxCursor cursor( cursorID );
+                          cursor.MacInstall();
                       }
                    }
                 }
