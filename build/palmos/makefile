@@ -144,7 +144,6 @@ PALMOS_LOWLEVEL_SRC = \
 ../../src/palmos/dcprint.cpp \
 ../../src/palmos/dcscreen.cpp \
 ../../src/palmos/dib.cpp \
-../../src/palmos/display.cpp \
 ../../src/palmos/enhmeta.cpp \
 ../../src/palmos/evtloop.cpp \
 ../../src/palmos/font.cpp \
