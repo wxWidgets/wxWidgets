@@ -93,6 +93,7 @@ class wxFileSystemHandler //: public wxObject
 {
 public:
     //wxFileSystemHandler();
+    ~wxFileSystemHandler();
 };
 
 
@@ -138,7 +139,10 @@ public:
     wxString FindFirst(const wxString& spec, int flags = 0);
     wxString FindNext();
 
+    %disownarg(wxFileSystemHandler *handler);
     static void AddHandler(wxFileSystemHandler *handler);
+    %cleardisown(wxFileSystemHandler *handler);
+    
     static void CleanUpHandlers();
 
     // Returns the file URL for a native path
