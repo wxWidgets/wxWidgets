@@ -70,6 +70,22 @@ public:
             const wxString& name = wxRadioBoxNameStr);
     virtual ~wxRadioBox();
 
+    // Enabling
+    virtual bool Enable(unsigned int n, bool enable = true);
+    virtual bool IsItemEnabled(unsigned int WXUNUSED(n)) const
+    {
+        /* TODO */
+        return true;
+    }
+
+    // Showing
+    virtual bool Show(unsigned int n, bool show = true);
+    virtual bool IsItemShown(unsigned int WXUNUSED(n)) const
+    {
+        /* TODO */
+        return true;
+    }
+
 // ------------------------------------------------------------------------
 // Cocoa callbacks
 // ------------------------------------------------------------------------
@@ -89,8 +105,6 @@ public:
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& label);
     // change the individual radio button state
-    virtual bool Enable(unsigned int n, bool enable = true);
-    virtual bool Show(unsigned int n, bool show = true);
 protected:
     virtual wxSize DoGetBestSize() const;
 };

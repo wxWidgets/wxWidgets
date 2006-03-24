@@ -85,18 +85,30 @@ public:
                 const wxValidator& val = wxDefaultValidator,
                 const wxString& name = wxRadioBoxNameStr);
 
+    // Enabling
+    virtual bool Enable(bool enable = true);
+    virtual bool Enable(unsigned int n, bool enable = true);
+    virtual bool IsItemEnabled(unsigned int WXUNUSED(n)) const
+    {
+        /* TODO */
+        return true;
+    }
+
+    // Showing
+    virtual bool Show(bool show = true);
+    virtual bool Show(unsigned int n, bool show = true);
+    virtual bool IsItemShown(unsigned int WXUNUSED(n)) const
+    {
+        /* TODO */
+        return true;
+    }
+
     // implement the radiobox interface
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& label);
-
-    virtual bool Enable(bool enable = true);
-    virtual bool Enable(unsigned int n, bool enable = true);
-
-    virtual bool Show(bool show = true);
-    virtual bool Show(unsigned int n, bool show = true);
 
     virtual void SetLabel(const wxString& label);
     virtual wxString GetLabel();

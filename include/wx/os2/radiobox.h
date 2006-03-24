@@ -99,10 +99,26 @@ public:
                 ,const wxString&      rsName = wxRadioBoxNameStr
                );
 
-    void Command(wxCommandEvent& rEvent);
-    bool ContainsHWND(WXHWND hWnd) const;
+    // Enabling
     virtual bool Enable(bool bEnable = true);
     virtual bool Enable(unsigned int nItem, bool bEnable = true);
+    virtual bool IsItemEnabled(unsigned int WXUNUSED(n)) const
+    {
+        /* TODO */
+        return true;
+    }
+
+    // Showing
+    virtual bool Show(bool bShow = true);
+    virtual bool Show(unsigned int nItem, bool bShow = true);
+    virtual bool IsItemShown(unsigned int WXUNUSED(n)) const
+    {
+        /* TODO */
+        return true;
+    }
+
+    void Command(wxCommandEvent& rEvent);
+    bool ContainsHWND(WXHWND hWnd) const;
 
     virtual WXHBRUSH OnCtlColor( WXHDC    hDC
                                 ,WXHWND   hWnd
@@ -115,8 +131,6 @@ public:
                                 ,WXWORD wId
                                );
     void             SendNotificationEvent(void);
-    virtual bool     Show(unsigned int nItem, bool bShow = true);
-    virtual bool     Show(bool bShow = true);
     MRESULT          WindowProc( WXUINT   uMsg
                                 ,WXWPARAM wParam
                                 ,WXLPARAM lParam

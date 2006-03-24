@@ -30,11 +30,8 @@ public:
     // change/query the individual radio button state
     virtual bool Enable(unsigned int n, bool enable = true) = 0;
     virtual bool Show(unsigned int n, bool show = true) = 0;
-
-    // NB: these functions are stubbed here for now but should become pure
-    //     virtual once all ports implement them
-    virtual bool IsItemEnabled(unsigned int WXUNUSED(n)) const { return true; }
-    virtual bool IsItemShown(unsigned int WXUNUSED(n)) const { return true; }
+    virtual bool IsItemEnabled(unsigned int n) const = 0;
+    virtual bool IsItemShown(unsigned int n) const = 0;
 
     // return number of columns/rows in this radiobox
     unsigned int GetColumnCount() const { return m_numCols; }
