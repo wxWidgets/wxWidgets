@@ -282,7 +282,7 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
             m_updateScrollbarX = true;
         }
         // or also decreased if the old string was the longest one
-        else if ( n == m_maxWidthItem )
+        else if ( n == (unsigned int)m_maxWidthItem )
         {
             RefreshHorzScrollbar();
         }
@@ -348,7 +348,7 @@ void wxListBox::Delete(unsigned int n)
     {
         m_current = -1;
     }
-    else if ( n < m_current )
+    else if ( (int)n < m_current )
     {
         m_current--;
     }
@@ -360,12 +360,12 @@ void wxListBox::Delete(unsigned int n)
     unsigned int count = m_selections.GetCount();
     for ( unsigned int item = 0; item < count; item++ )
     {
-        if ( m_selections[item] == n )
+        if ( m_selections[item] == (int)n )
         {
             // remember to delete it later
             index = item;
         }
-        else if ( m_selections[item] > n )
+        else if ( m_selections[item] > (int)n )
         {
             // to account for the index shift
             m_selections[item]--;
@@ -382,7 +382,7 @@ void wxListBox::Delete(unsigned int n)
     m_updateScrollbarY = true;
 
     // finally, if the longest item was deleted the scrollbar may disappear
-    if ( n == m_maxWidthItem )
+    if ( (int)n == m_maxWidthItem )
     {
         RefreshHorzScrollbar();
     }
@@ -1340,14 +1340,10 @@ bool wxStdListboxInputHandler::HandleKey(wxInputConsumer *consumer,
                 break;
 
             case WXK_PAGEUP:
-
-            case WXK_PRIOR:
                 action = wxACTION_LISTBOX_PAGEUP;
                 break;
 
             case WXK_PAGEDOWN:
-
-            case WXK_NEXT:
                 action = wxACTION_LISTBOX_PAGEDOWN;
                 break;
 
