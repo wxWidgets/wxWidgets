@@ -63,7 +63,7 @@ public:
         }
     }
 
-    void InsertItems(const wxArrayString& items, int pos);
+    void InsertItems(const wxArrayString& items, unsigned int pos);
     void Set(const wxArrayString& items/*, void **clientData = NULL */);
 
     // multiple selection logic
@@ -165,8 +165,8 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxPyListBoxNameStr);
 
-    bool  IsChecked(int index);
-    void  Check(int index, int check = true);
+    bool  IsChecked(unsigned int index);
+    void  Check(unsigned int index, int check = true);
 
 #if defined(__WXMSW__) || defined(__WXGTK__)
     int GetItemHeight();

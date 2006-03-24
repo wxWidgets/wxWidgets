@@ -68,23 +68,17 @@ public:
     %pythoncode { SetItemLabel = SetString };
 
     // change the individual radio button state
-    %Rename(EnableItem,  virtual void, Enable(int n, bool enable = true));
-    %Rename(ShowItem,  virtual void, Show(int n, bool show = true));
+    %Rename(EnableItem,  virtual void, Enable(unsigned int n, bool enable = true));
+    %Rename(ShowItem,  virtual void, Show(unsigned int n, bool show = true));
+    virtual bool IsItemEnabled(unsigned int n) const;
+    virtual bool IsItemShown(unsigned int n) const;
 
-#ifndef __WXGTK__
     // layout parameters
-    virtual int GetColumnCount() const;
-    virtual int GetRowCount() const;
+    virtual unsigned int GetColumnCount() const;
+    virtual unsigned int GetRowCount() const;
 
     // return the item above/below/to the left/right of the given one
     int GetNextItem(int item, wxDirection dir, long style) const;
-#else
-    %extend {
-        int GetColumnCount() const { return -1; }
-        int GetRowCount() const { return -1; }
-        int GetNextItem(int item, wxDirection dir, long style) const { return -1; }
-    }
-#endif
 
 //    bool IsValid(int n) const;  ** not public
         

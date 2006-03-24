@@ -157,7 +157,7 @@ need to add a lot of items.", "",
         DocStr(Insert,
                "Insert an item into the control before the item at the ``pos`` index,
 optionally associating some data object with the item.", "");
-        int Insert(const wxString& item, int pos, PyObject* clientData=NULL) {
+        int Insert(const wxString& item, unsigned int pos, PyObject* clientData=NULL) {
             if (clientData) {
                 wxPyClientData* data = new wxPyClientData(clientData);
                 return self->Insert(item, pos, data);
@@ -172,7 +172,7 @@ optionally associating some data object with the item.", "");
         "Removes all items from the control.", "");
     
     DocDeclStr(
-        virtual void , Delete(int n),
+        virtual void , Delete(unsigned int n),
         "Deletes the item at the zero-based index 'n' from the control. Note
 that it is an error (signalled by a `wx.PyAssertionError` exception if
 enabled) to remove an item with the index negative or greater or equal
@@ -184,7 +184,7 @@ than the number of items in the control.", "");
      %extend {
         DocStr(GetClientData,
                "Returns the client data associated with the given item, (if any.)", "");
-        PyObject* GetClientData(int n) {
+        PyObject* GetClientData(unsigned int n) {
             wxPyClientData* data = (wxPyClientData*)self->GetClientObject(n);
             if (data) {
                 Py_INCREF(data->m_obj);
@@ -197,7 +197,7 @@ than the number of items in the control.", "");
 
         DocStr(SetClientData,
                "Associate the given client data with the item at position n.", "");
-        void SetClientData(int n, PyObject* clientData) {
+        void SetClientData(unsigned int n, PyObject* clientData) {
             wxPyClientData* data = new wxPyClientData(clientData);
             self->SetClientObject(n, data);
         }
@@ -206,7 +206,7 @@ than the number of items in the control.", "");
 
     
     DocDeclStr(
-        virtual size_t , GetCount() const,
+        virtual unsigned int , GetCount() const,
         "Returns the number of items in the control.", "");
     
     DocDeclStr(
@@ -214,7 +214,7 @@ than the number of items in the control.", "");
         "Returns True if the control is empty or False if it has some items.", "");
     
     DocDeclStr(
-        virtual wxString , GetString(int n) const,
+        virtual wxString , GetString(unsigned int n) const,
         "Returns the label of the item with the given index.", "");
     
     DocDeclStr(
@@ -222,7 +222,7 @@ than the number of items in the control.", "");
         "", "");
     
     DocDeclStr(
-        virtual void , SetString(int n, const wxString& s),
+        virtual void , SetString(unsigned int n, const wxString& s),
         "Sets the label for the given item.", "");
     
     DocDeclStr(
