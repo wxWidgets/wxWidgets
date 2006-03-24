@@ -97,15 +97,8 @@ class WXDLLEXPORT wxMacPortSaver
     DECLARE_NO_COPY_CLASS(wxMacPortSaver)
 
 public:
-    wxMacPortSaver( GrafPtr port )
-    {
-        ::GetPort( &m_port ) ;
-        ::SetPort( port ) ;
-    }
-    ~wxMacPortSaver()
-    {
-        ::SetPort( m_port ) ;
-    }
+    wxMacPortSaver( GrafPtr port );
+    ~wxMacPortSaver();
 private :
     GrafPtr m_port ;
 } ;
