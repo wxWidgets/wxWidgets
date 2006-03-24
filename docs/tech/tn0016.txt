@@ -116,9 +116,15 @@ in the sample's bakefile (see e.g. samples/image/image.bkl for an example).
 Make sure to add <wx-lib> statements for all libraries from multilib build
 that are required by the sample.
 
+The Windows resource specification should use the central .rc file:
+
+        <win32-res>../sample.rc</win32-res>
+        
 Run bakefile_gen in $(wx)/build/bakefiles to regenerate the bakefiles.
 
-Finally commit $(wx)/build/bakefiles/Makefile and all the other modified files.
+Finally commit $(wx)/build/bakefiles/make_dist.mk and all the other modified files.
+
+Currently we commit the generated makefiles except .dms, .vcp.
 
 
 5. Adding contrib library
