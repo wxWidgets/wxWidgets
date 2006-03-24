@@ -103,7 +103,7 @@ public:
                     const wxBitmap& bitmap = wxNullBitmap,
                     const wxString& resource = wxPyEmptyString) {
             wxChar* res = NULL;
-            if (resource.Length())
+            if (resource.length())
                 res = (wxChar*)resource.c_str();
             return self->Create(parent, bitmap, res);
         }
@@ -218,7 +218,7 @@ public:
                        const wxBitmap* bitmap = &wxNullBitmap,
                        const wxString* resource = &wxPyEmptyString) {
             wxChar* res = NULL;
-            if (resource->Length())
+            if (resource->length())
                 res = (wxChar*)resource->c_str();
             return new wxPyWizardPage(parent, *bitmap, res);
         }
@@ -234,7 +234,7 @@ public:
                     const wxBitmap& bitmap = wxNullBitmap,
                     const wxString& resource = wxPyEmptyString) {
             wxChar* res = NULL;
-            if (resource.Length())
+            if (resource.length())
                 res = (wxChar*)resource.c_str();
             return self->Create(parent, bitmap, res);
         }
@@ -403,7 +403,7 @@ public:
     virtual void SetBorder(int border);
 
     // is the wizard running?
-    bool IsRunning() const { return m_page != NULL; }
+    bool IsRunning() const;
 
     // show the prev/next page, but call TransferDataFromWindow on the current
     // page first and return False without changing the page if
