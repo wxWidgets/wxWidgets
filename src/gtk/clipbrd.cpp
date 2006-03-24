@@ -310,7 +310,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
         gtk_selection_data_set_text(
             selection_data,
             (const gchar*)d,
-            size-1 );
+            size );
     }
     else
 #endif
@@ -320,7 +320,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
             GDK_SELECTION_TYPE_STRING,
             8*sizeof(gchar),
             (unsigned char*) d,
-            size-1 );
+            size );
     }
 
     free(d);
