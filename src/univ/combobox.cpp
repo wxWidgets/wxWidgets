@@ -506,8 +506,6 @@ void wxComboTextCtrl::OnKey(wxKeyEvent& event)
         case WXK_ESCAPE:
         case WXK_PAGEDOWN:
         case WXK_PAGEUP:
-        case WXK_PRIOR:
-        case WXK_NEXT:
             (void)m_combo->ProcessEvent(event);
             return;
     }
