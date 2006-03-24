@@ -997,7 +997,7 @@ bool wxHVScrolledWindow::Layout()
         y = -GetRowsHeight(0, GetVisibleRowsBegin());
         x = -GetColumnsWidth(0, GetVisibleColumnsBegin());
         GetVirtualSize(&w, &h);
-        GetSizer()->SetDimension(0, y, w, h);
+        GetSizer()->SetDimension(x, y, w, h);
         return true;
     }
 
