@@ -285,5 +285,7 @@ class Tools(wxPanel):
                 self.EnableGroup(GROUP_SIZERS)
                 if not (xxx.isSizer or xxx.parent and xxx.parent.isSizer):
                     self.EnableGroupItem(GROUP_SIZERS, ID_NEW.SPACER, False)
+            if xxx.__class__ == xxxFrame:
+                self.EnableGroupItem(GROUP_MENUS, ID_NEW.MENU_BAR)
         # Save state
         self.state = state

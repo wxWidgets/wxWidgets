@@ -103,6 +103,7 @@ class Frame(wxFrame):
         self.res = wxXmlResource('')
         # !!! Blocking of assert failure occurring in older unicode builds
         try:
+            quietlog = wx.LogNull()
             self.res.Load(os.path.join(basePath, 'xrced.xrc'))
         except wx._core.PyAssertionError:
             print 'PyAssertionError was ignored'
@@ -413,12 +414,14 @@ class Frame(wxFrame):
         selected = tree.selection
         if not selected: return         # key pressed event
         xxx = tree.GetPyData(selected)
-        wx.TheClipboard.Open()
-        data = wx.CustomDataObject('XRCED')
-        data.SetData(cPickle.dumps(xxx.element.toxml()))
-        wx.TheClipboard.SetData(data)
-        wx.TheClipboard.Close()
-        self.SetStatusText('Copied')
+        if wx.TheClipboard.Open():
+            data = wx.CustomDataObject('XRCED')
+            data.SetData(cPickle.dumps(xxx.element.toxml()))
+            wx.TheClipboard.SetData(data)
+            wx.TheClipboard.Close()
+            self.SetStatusText('Copied')
+        else:
+            wx.MessageBox("Unable to open the clipboard", "Error")
 
     def OnPaste(self, evt):
         selected = tree.selection
@@ -447,14 +450,19 @@ class Frame(wxFrame):
         parent = tree.GetPyData(parentLeaf).treeObject()
 
         # Create a copy of clipboard pickled element
-        wx.TheClipboard.Open()
-        data = wx.CustomDataObject('XRCED')
-        if not wx.TheClipboard.IsSupported(data.GetFormat()):
+        success = False
+        if wx.TheClipboard.Open():
+            data = wx.CustomDataObject('XRCED')
+            if wx.TheClipboard.IsSupported(data.GetFormat()):
+                success = wx.TheClipboard.GetData(data)
             wx.TheClipboard.Close()
-            wx.LogError('unsupported clipboard format')
+
+        if not success:
+            wx.MessageBox(
+                "There is no data in the clipboard in the required format",
+                "Error")
             return
-        wx.TheClipboard.GetData(data)
-        wx.TheClipboard.Close()
+
         xml = cPickle.loads(data.GetData()) # xml representation of element
         elem = minidom.parseString(xml).childNodes[0]
         # Tempopary xxx object to test things
@@ -549,6 +557,7 @@ class Frame(wxFrame):
         self.SetModified()
         self.SetStatusText('Pasted')
 
+        
     def OnCutDelete(self, evt):
         selected = tree.selection
         if not selected: return         # key pressed event
@@ -577,11 +586,13 @@ class Frame(wxFrame):
         elem = tree.RemoveLeaf(selected)
         undoMan.RegisterUndo(UndoCutDelete(index, parent, elem))
         if evt.GetId() == wxID_CUT:
-            wx.TheClipboard.Open()
-            data = wx.CustomDataObject('XRCED')
-            data.SetData(cPickle.dumps(elem.toxml()))
-            wx.TheClipboard.SetData(data)
-            wx.TheClipboard.Close()
+            if wx.TheClipboard.Open():
+                data = wx.CustomDataObject('XRCED')
+                data.SetData(cPickle.dumps(elem.toxml()))
+                wx.TheClipboard.SetData(data)
+                wx.TheClipboard.Close()
+            else:
+                wx.MessageBox("Unable to open the clipboard", "Error")
         tree.pendingHighLight = None
         tree.UnselectAll()
         tree.selection = None
@@ -1141,6 +1152,7 @@ Homepage: http://xrced.sourceforge.net\
                                'Save before too late?', flags )
         say = dlg.ShowModal()
         dlg.Destroy()
+        wxYield()
         if say == wxID_YES:
             self.OnSaveOrSaveAs(wxCommandEvent(wxID_SAVE))
             # If save was successful, modified flag is unset
@@ -1213,7 +1225,6 @@ Please upgrade wxWindows to %d.%d.%d or higher.''' % MinWxVersion)
         conf.panic = not conf.HasEntry('nopanic')
         # Add handlers
         wxFileSystem_AddHandler(wxMemoryFSHandler())
-        wxInitAllImageHandlers()
         # Create main frame
         frame = Frame(pos, size)
         frame.Show(True)

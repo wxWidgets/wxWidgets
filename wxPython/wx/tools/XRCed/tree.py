@@ -298,6 +298,7 @@ class PullDownMenu:
              (ID_NEW.SPLITTER_WINDOW, 'SplitterWindow', 'Create splitter window'),
              (ID_NEW.TOOL_BAR, 'ToolBar', 'Create toolbar'),
              (ID_NEW.STATUS_BAR, 'StatusBar', 'Create status bar'),
+             (ID_NEW.MENU_BAR, 'MenuBar', 'Create menubar'),
 #             (ID_NEW.WIZARD_PAGE, 'Wizard Page', 'Create wizard page'),
              (ID_NEW.WIZARD_PAGE_SIMPLE, 'WizardPageSimple', 'Create simple wizard page'),
              ],
@@ -1070,6 +1071,8 @@ class XML_Tree(wxTreeCtrl):
                         m.Enable(m.FindItem('sizer'), False)
                     elif not (xxx.isSizer or xxx.parent and xxx.parent.isSizer):
                         m.Enable(ID_NEW.SPACER, False)
+                    if xxx.__class__ is not xxxFrame:
+                        m.Enable(ID_NEW.MENU_BAR, False)
                 m.AppendSeparator()
                 m.Append(ID_NEW.REF, 'reference...', 'Create object_ref node')
             # Select correct label for create menu
