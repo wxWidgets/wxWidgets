@@ -44,7 +44,6 @@ All:
 - Added support for wxLongLong in wx stream classes (Mark Junker).
 - wxSOCKET_REUSEADDR can be used with wxSocketClient.
 - Overloaded Connect() and SetLocal() methods for binding to local address/port.
-- All GetCount() methods now return unsigned int and not int
 - Albanian translation added (Besnik Bleta)
 - Assert messages now show the function in which assert failed
 - wxApp::OnAssertFailure() should now be used instead the old wxApp::OnAssert()
@@ -104,6 +103,7 @@ All (GUI):
 - More than one filter allowed in in wxDocTemplate filter.
 - Added wxListBox::HitTest().
 - Added wxDisplay::GetClientArea().
+- Indices and counts in wxControlWithItems derived API are unsigned.
 
 wxMSW:
 
