@@ -12,7 +12,6 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
   to read _past_ the end of file.
 - wxCHECK family of macros now must be followed by a semicolon
 
-
 Deprecated methods since 2.6.x and their replacements
 -----------------------------------------------------
 
@@ -50,6 +49,11 @@ All:
 - Assert messages now show the function in which assert failed
 - wxApp::OnAssertFailure() should now be used instead the old wxApp::OnAssert()
 - Fixed several bugs in wxDateTime::ParseDate()
+- The WXK*PRIOR and WXK*NEXT constants are now aliases for WXK*PAGEUP 
+  and WXK*PAGEDOWN.  If you have switch statements that use both
+  constants from a set then you need to remove the PRIOR/NEXT 
+  versions in order to eliminate compiler errors.
+
 
 All (GUI):
 
