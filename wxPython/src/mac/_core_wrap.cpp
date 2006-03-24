@@ -3811,14 +3811,14 @@ SWIGINTERN int wxItemContainer_Append(wxItemContainer *self,wxString const &item
             } else
                 return self->Append(item);
         }
-SWIGINTERN int wxItemContainer_Insert(wxItemContainer *self,wxString const &item,int pos,PyObject *clientData=NULL){
+SWIGINTERN int wxItemContainer_Insert(wxItemContainer *self,wxString const &item,unsigned int pos,PyObject *clientData=NULL){
             if (clientData) {
                 wxPyClientData* data = new wxPyClientData(clientData);
                 return self->Insert(item, pos, data);
             } else
                 return self->Insert(item, pos);
         }
-SWIGINTERN PyObject *wxItemContainer_GetClientData(wxItemContainer *self,int n){
+SWIGINTERN PyObject *wxItemContainer_GetClientData(wxItemContainer *self,unsigned int n){
             wxPyClientData* data = (wxPyClientData*)self->GetClientObject(n);
             if (data) {
                 Py_INCREF(data->m_obj);
@@ -3828,7 +3828,7 @@ SWIGINTERN PyObject *wxItemContainer_GetClientData(wxItemContainer *self,int n){
                 return Py_None;
             }
         }
-SWIGINTERN void wxItemContainer_SetClientData(wxItemContainer *self,int n,PyObject *clientData){
+SWIGINTERN void wxItemContainer_SetClientData(wxItemContainer *self,unsigned int n,PyObject *clientData){
             wxPyClientData* data = new wxPyClientData(clientData);
             self->SetClientObject(n, data);
         }
@@ -9828,6 +9828,34 @@ SWIGINTERN PyObject *FSFile_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *a
   return SWIG_Python_InitShadowInstance(args);
 }
 
+SWIGINTERN PyObject *_wrap_delete_CPPFileSystemHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxFileSystemHandler *arg1 = (wxFileSystemHandler *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxFileSystemHandler, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_CPPFileSystemHandler" "', expected argument " "1"" of type '" "wxFileSystemHandler *""'"); 
+  }
+  arg1 = reinterpret_cast< wxFileSystemHandler * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *CPPFileSystemHandler_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -10650,7 +10678,6 @@ fail:
 SWIGINTERN PyObject *_wrap_FileSystem_AddHandler(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxFileSystemHandler *arg1 = (wxFileSystemHandler *) 0 ;
-  void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   char *  kwnames[] = {
@@ -10658,11 +10685,10 @@ SWIGINTERN PyObject *_wrap_FileSystem_AddHandler(PyObject *SWIGUNUSEDPARM(self),
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:FileSystem_AddHandler",kwnames,&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxFileSystemHandler, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, SWIG_as_voidptrptr(&arg1), SWIGTYPE_p_wxFileSystemHandler, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileSystem_AddHandler" "', expected argument " "1"" of type '" "wxFileSystemHandler *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileSystem_AddHandler" "', expected argument " "1"" of type '" "wxFileSystemHandler *""'");
   }
-  arg1 = reinterpret_cast< wxFileSystemHandler * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxFileSystem::AddHandler(arg1);
@@ -43862,13 +43888,13 @@ SWIGINTERN PyObject *_wrap_ItemContainer_Insert(PyObject *SWIGUNUSEDPARM(self), 
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
   wxString *arg2 = 0 ;
-  int arg3 ;
+  unsigned int arg3 ;
   PyObject *arg4 = (PyObject *) NULL ;
   int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool temp2 = false ;
-  int val3 ;
+  unsigned int val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -43889,11 +43915,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_Insert(PyObject *SWIGUNUSEDPARM(self), 
     if (arg2 == NULL) SWIG_fail;
     temp2 = true;
   }
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ItemContainer_Insert" "', expected argument " "3"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ItemContainer_Insert" "', expected argument " "3"" of type '" "unsigned int""'");
   } 
-  arg3 = static_cast< int >(val3);
+  arg3 = static_cast< unsigned int >(val3);
   if (obj3) {
     arg4 = obj3;
   }
@@ -43948,10 +43974,10 @@ fail:
 SWIGINTERN PyObject *_wrap_ItemContainer_Delete(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
-  int arg2 ;
+  unsigned int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
+  unsigned int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -43965,11 +43991,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_Delete(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ItemContainer_Delete" "', expected argument " "1"" of type '" "wxItemContainer *""'"); 
   }
   arg1 = reinterpret_cast< wxItemContainer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_Delete" "', expected argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_Delete" "', expected argument " "2"" of type '" "unsigned int""'");
   } 
-  arg2 = static_cast< int >(val2);
+  arg2 = static_cast< unsigned int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->Delete(arg2);
@@ -43986,11 +44012,11 @@ fail:
 SWIGINTERN PyObject *_wrap_ItemContainer_GetClientData(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
-  int arg2 ;
+  unsigned int arg2 ;
   PyObject *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
+  unsigned int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -44004,11 +44030,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_GetClientData(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ItemContainer_GetClientData" "', expected argument " "1"" of type '" "wxItemContainer *""'"); 
   }
   arg1 = reinterpret_cast< wxItemContainer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_GetClientData" "', expected argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_GetClientData" "', expected argument " "2"" of type '" "unsigned int""'");
   } 
-  arg2 = static_cast< int >(val2);
+  arg2 = static_cast< unsigned int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (PyObject *)wxItemContainer_GetClientData(arg1,arg2);
@@ -44025,11 +44051,11 @@ fail:
 SWIGINTERN PyObject *_wrap_ItemContainer_SetClientData(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
-  int arg2 ;
+  unsigned int arg2 ;
   PyObject *arg3 = (PyObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
+  unsigned int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -44044,11 +44070,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_SetClientData(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ItemContainer_SetClientData" "', expected argument " "1"" of type '" "wxItemContainer *""'"); 
   }
   arg1 = reinterpret_cast< wxItemContainer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_SetClientData" "', expected argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_SetClientData" "', expected argument " "2"" of type '" "unsigned int""'");
   } 
-  arg2 = static_cast< int >(val2);
+  arg2 = static_cast< unsigned int >(val2);
   arg3 = obj2;
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -44066,7 +44092,7 @@ fail:
 SWIGINTERN PyObject *_wrap_ItemContainer_GetCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
-  size_t result;
+  unsigned int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -44080,11 +44106,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_GetCount(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< wxItemContainer * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (size_t)((wxItemContainer const *)arg1)->GetCount();
+    result = (unsigned int)((wxItemContainer const *)arg1)->GetCount();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  resultobj = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -44124,11 +44150,11 @@ fail:
 SWIGINTERN PyObject *_wrap_ItemContainer_GetString(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
-  int arg2 ;
+  unsigned int arg2 ;
   wxString result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
+  unsigned int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -44142,11 +44168,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_GetString(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ItemContainer_GetString" "', expected argument " "1"" of type '" "wxItemContainer const *""'"); 
   }
   arg1 = reinterpret_cast< wxItemContainer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_GetString" "', expected argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_GetString" "', expected argument " "2"" of type '" "unsigned int""'");
   } 
-  arg2 = static_cast< int >(val2);
+  arg2 = static_cast< unsigned int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = ((wxItemContainer const *)arg1)->GetString(arg2);
@@ -44199,11 +44225,11 @@ fail:
 SWIGINTERN PyObject *_wrap_ItemContainer_SetString(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
-  int arg2 ;
+  unsigned int arg2 ;
   wxString *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
+  unsigned int val2 ;
   int ecode2 = 0 ;
   bool temp3 = false ;
   PyObject * obj0 = 0 ;
@@ -44219,11 +44245,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_SetString(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ItemContainer_SetString" "', expected argument " "1"" of type '" "wxItemContainer *""'"); 
   }
   arg1 = reinterpret_cast< wxItemContainer * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_SetString" "', expected argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_SetString" "', expected argument " "2"" of type '" "unsigned int""'");
   } 
-  arg2 = static_cast< int >(val2);
+  arg2 = static_cast< unsigned int >(val2);
   {
     arg3 = wxString_in_helper(obj2);
     if (arg3 == NULL) SWIG_fail;
@@ -52497,6 +52523,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FSFile_GetModificationTime", (PyCFunction)_wrap_FSFile_GetModificationTime, METH_O, NULL},
 	 { (char *)"FSFile_swigregister", FSFile_swigregister, METH_VARARGS, NULL},
 	 { (char *)"FSFile_swiginit", FSFile_swiginit, METH_VARARGS, NULL},
+	 { (char *)"delete_CPPFileSystemHandler", (PyCFunction)_wrap_delete_CPPFileSystemHandler, METH_O, NULL},
 	 { (char *)"CPPFileSystemHandler_swigregister", CPPFileSystemHandler_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_FileSystemHandler", (PyCFunction)_wrap_new_FileSystemHandler, METH_NOARGS, NULL},
 	 { (char *)"FileSystemHandler__setCallbackInfo", (PyCFunction) _wrap_FileSystemHandler__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},

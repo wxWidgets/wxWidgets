@@ -701,6 +701,14 @@ class ComboBox(Choice):
         """
         return _controls_.ComboBox_SetStringSelection(*args, **kwargs)
 
+    def SetString(*args, **kwargs):
+        """
+        SetString(self, int n, String string)
+
+        Set the label for the n'th item (zero based) in the list.
+        """
+        return _controls_.ComboBox_SetString(*args, **kwargs)
+
     def SetEditable(*args, **kwargs):
         """SetEditable(self, bool editable)"""
         return _controls_.ComboBox_SetEditable(*args, **kwargs)
@@ -1294,7 +1302,7 @@ class ListBox(_core.ControlWithItems):
         return _controls_.ListBox_Insert(*args, **kwargs)
 
     def InsertItems(*args, **kwargs):
-        """InsertItems(self, wxArrayString items, int pos)"""
+        """InsertItems(self, wxArrayString items, unsigned int pos)"""
         return _controls_.ListBox_InsertItems(*args, **kwargs)
 
     def Set(*args, **kwargs):
@@ -1444,11 +1452,11 @@ class CheckListBox(ListBox):
         return _controls_.CheckListBox_Create(*args, **kwargs)
 
     def IsChecked(*args, **kwargs):
-        """IsChecked(self, int index) -> bool"""
+        """IsChecked(self, unsigned int index) -> bool"""
         return _controls_.CheckListBox_IsChecked(*args, **kwargs)
 
     def Check(*args, **kwargs):
-        """Check(self, int index, int check=True)"""
+        """Check(self, unsigned int index, int check=True)"""
         return _controls_.CheckListBox_Check(*args, **kwargs)
 
     def GetItemHeight(*args, **kwargs):
@@ -2350,19 +2358,27 @@ class RadioBox(_core.Control):
     GetItemLabel = GetString 
     SetItemLabel = SetString 
     def EnableItem(*args, **kwargs):
-        """EnableItem(self, int n, bool enable=True)"""
+        """EnableItem(self, unsigned int n, bool enable=True)"""
         return _controls_.RadioBox_EnableItem(*args, **kwargs)
 
     def ShowItem(*args, **kwargs):
-        """ShowItem(self, int n, bool show=True)"""
+        """ShowItem(self, unsigned int n, bool show=True)"""
         return _controls_.RadioBox_ShowItem(*args, **kwargs)
 
+    def IsItemEnabled(*args, **kwargs):
+        """IsItemEnabled(self, unsigned int n) -> bool"""
+        return _controls_.RadioBox_IsItemEnabled(*args, **kwargs)
+
+    def IsItemShown(*args, **kwargs):
+        """IsItemShown(self, unsigned int n) -> bool"""
+        return _controls_.RadioBox_IsItemShown(*args, **kwargs)
+
     def GetColumnCount(*args, **kwargs):
-        """GetColumnCount(self) -> int"""
+        """GetColumnCount(self) -> unsigned int"""
         return _controls_.RadioBox_GetColumnCount(*args, **kwargs)
 
     def GetRowCount(*args, **kwargs):
-        """GetRowCount(self) -> int"""
+        """GetRowCount(self) -> unsigned int"""
         return _controls_.RadioBox_GetRowCount(*args, **kwargs)
 
     def GetNextItem(*args, **kwargs):
