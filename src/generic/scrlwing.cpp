@@ -1084,13 +1084,11 @@ void wxScrollHelper::HandleOnChar(wxKeyEvent& event)
     switch ( event.GetKeyCode() )
     {
         case WXK_PAGEUP:
-        case WXK_PRIOR:
             dsty = sty - (5 * cliy / 6);
             Scroll(-1, (dsty == -1) ? 0 : dsty);
             break;
 
         case WXK_PAGEDOWN:
-        case WXK_NEXT:
             Scroll(-1, sty + (5 * cliy / 6));
             break;
 

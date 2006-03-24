@@ -538,13 +538,11 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
             break;
 
         case WXK_PAGEDOWN:
-        case WXK_NEXT:
             PageDown();
             current = GetFirstVisibleLine();
             break;
 
         case WXK_PAGEUP:
-        case WXK_PRIOR:
             if ( m_current == (int)GetFirstVisibleLine() )
             {
                 PageUp();
