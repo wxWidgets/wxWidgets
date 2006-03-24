@@ -1221,7 +1221,9 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     // the root control level handleer
     MacInstallEventHandler( (WXWidget) m_peer->GetControlRef() ) ;
 
-#if TARGET_API_MAC_OSX
+    // Causes the inner part of the window not to be metal
+    // if the style is used before window creation.
+#if 0 // TARGET_API_MAC_OSX
     if ( m_macUsesCompositing && m_macWindow != NULL )
     {
         if ( GetExtraStyle() & wxFRAME_EX_METAL )
