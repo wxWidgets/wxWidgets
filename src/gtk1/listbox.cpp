@@ -589,7 +589,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
     InvalidateBestSize();
 
     GList *children = m_list->children;
-    int length = g_list_length(children);
+    unsigned int length = g_list_length(children);
 
     wxCHECK_RET( pos <= length, wxT("invalid index in wxListBox::InsertItems") );
 

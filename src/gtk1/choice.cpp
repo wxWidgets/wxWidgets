@@ -133,7 +133,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     GtkWidget *menu = gtk_menu_new();
 
-    for (unsigned int i = 0; i < n; i++)
+    for (unsigned int i = 0; i < (unsigned int)n; i++)
     {
         GtkAddHelper(menu, i, choices[i]);
     }
