@@ -472,7 +472,7 @@ SOURCE=.\dataview.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\dataview.rc
+SOURCE=.\..\sample.rc
 # End Source File
 # End Group
 # End Target
