@@ -1233,12 +1233,10 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 hotkey << wxT("Down" );
                 break;
             case WXK_PAGEUP:
-            case WXK_PRIOR:
-                hotkey << wxT("Prior" );
+                hotkey << wxT("PgUp" );
                 break;
             case WXK_PAGEDOWN:
-            case WXK_NEXT:
-                hotkey << wxT("Next" );
+                hotkey << wxT("PgDn" );
                 break;
             case WXK_LEFT:
                 hotkey << wxT("Left" );
@@ -1355,11 +1353,11 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
             case WXK_NUMPAD_DOWN:
                 hotkey << wxT("KP_Down" );
                 break;
-            case WXK_NUMPAD_PRIOR: case WXK_NUMPAD_PAGEUP:
-                hotkey << wxT("KP_Prior" );
+            case WXK_NUMPAD_PAGEUP:
+                hotkey << wxT("KP_PgUp" );
                 break;
-            case WXK_NUMPAD_NEXT:  case WXK_NUMPAD_PAGEDOWN:
-                hotkey << wxT("KP_Next" );
+            case WXK_NUMPAD_PAGEDOWN:
+                hotkey << wxT("KP_PgDn" );
                 break;
             case WXK_NUMPAD_END:
                 hotkey << wxT("KP_End" );
