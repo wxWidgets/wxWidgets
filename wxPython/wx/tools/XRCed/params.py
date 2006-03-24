@@ -187,7 +187,6 @@ class ParamExStyle(ParamBinaryOr):
         else:
             self.values = []
         ParamBinaryOr.__init__(self, parent, name)
-        self.SetTitle('Extended window styles')
 
 class ParamColour(PPanel):
     def __init__(self, parent, name):
@@ -234,7 +233,7 @@ class ParamColour(PPanel):
 
 ################################################################################
 
-# Mapping from wx constants ro XML strings
+# Mapping from wx constants to XML strings
 fontFamiliesWx2Xml = {wxDEFAULT: 'default', wxDECORATIVE: 'decorative',
                 wxROMAN: 'roman', wxSCRIPT: 'script', wxSWISS: 'swiss',
                 wxMODERN: 'modern'}
