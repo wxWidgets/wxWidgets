@@ -72,6 +72,12 @@
 #endif
 
 #if defined(__PALMOS__)
+#   if __PALMOS__ == 0x06000000
+#       define __WXPALMOS6__
+#   endif
+#   if __PALMOS__ == 0x05000000
+#       define __WXPALMOS5__
+#   endif
 #   ifndef __WXPALMOS__
 #       define __WXPALMOS__
 #   endif
