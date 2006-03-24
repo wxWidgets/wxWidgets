@@ -1580,5 +1580,16 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 }
 #endif
 
+wxMacPortSaver::wxMacPortSaver( GrafPtr port )
+{
+    ::GetPort( &m_port ) ;
+    ::SetPort( port ) ;
+}
+
+wxMacPortSaver::~wxMacPortSaver()
+{
+    ::SetPort( m_port ) ;
+}
+
 #endif // wxUSE_GUI
 
