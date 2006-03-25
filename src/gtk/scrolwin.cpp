@@ -528,6 +528,7 @@ void wxScrolledWindow::DoPrepareDC(wxDC& dc)
 {
     dc.SetDeviceOrigin( -m_xScrollPosition * m_xScrollPixelsPerLine,
                         -m_yScrollPosition * m_yScrollPixelsPerLine );
+    dc.SetUserScale( m_scaleX, m_scaleY );
 }
 
 void wxScrolledWindow::SetScrollRate( int xstep, int ystep )

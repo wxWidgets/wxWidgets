@@ -81,6 +81,7 @@ place, then do the same for wxPython.
                       --enable-debug \
                       --enable-geometry \
                       --enable-sound --with-sdl \
+		      --enable-mediactrl \
                       --enable-display \
                       --disable-debugreport \
                       

@@ -1123,6 +1123,12 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
     wxFillOtherKeyEventFields(event, win, gdk_event);
 
     event.m_keyCode = key_code;
+#if wxUSE_UNICODE
+    if ( gdk_event->type == GDK_KEY_PRESS ||  gdk_event->type == GDK_KEY_RELEASE )
+    {
+        event.m_uniChar = key_code;
+    }
+#endif
 
     return true;
 }
@@ -1316,6 +1322,16 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
             event.m_keyCode = key_code;
 
+            // To conform to the docs we need to translate Ctrl-alpha
+            // characters to values in the range 1-26.
+            if (event.ControlDown() && key_code >= 'a' && key_code <= 'z' )
+            {
+                event.m_keyCode = key_code - 'a' + 1;
+#if wxUSE_UNICODE
+                event.m_uniChar = event.m_keyCode;
+#endif
+            }               
+
             // Implement OnCharHook by checking ancesteror top level windows
             wxWindow *parent = win;
             while (parent && !parent->IsTopLevel())
@@ -1451,6 +1467,17 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
 #else
         event.m_keyCode = *pstr;
 #endif  // wxUSE_UNICODE
+
+        // To conform to the docs we need to translate Ctrl-alpha
+        // characters to values in the range 1-26.
+        if (event.ControlDown() && *pstr >= 'a' && *pstr <= 'z' )
+        {
+            event.m_keyCode = *pstr - 'a' + 1;
+#if wxUSE_UNICODE
+            event.m_uniChar = event.m_keyCode;
+#endif  
+        }               
+
         if (parent)
         {
             event.SetEventType( wxEVT_CHAR_HOOK );
@@ -1974,6 +2001,15 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
     {
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
     }
+    
+    if ( !g_captureWindow )
+    {
+        wxSetCursorEvent cevent( event.m_x, event.m_y );
+        if (win->GetEventHandler()->ProcessEvent( cevent ))
+        {
+            // Rewrite cursor handling here (away from idle).
+        }
+    }
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
@@ -2113,19 +2149,24 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     }
 #endif // wxUSE_CARET
 
+    gboolean ret = FALSE;
+
     // does the window itself think that it has the focus?
     if ( !win->m_hasFocus )
     {
         // not yet, notify it
         win->m_hasFocus = true;
 
-        if ( DoSendFocusEvents(win) )
-        {
-           gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
-           return TRUE;
-        }
+        (void)DoSendFocusEvents(win);
+        
+        ret = TRUE;
     }
 
+    // Disable default focus handling for custom windows
+    // since the default GTK+ handler issues a repaint
+    if (win->m_wxwindow)
+        return ret;
+        
     return FALSE;
 }
 }
@@ -2135,7 +2176,7 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk_event, wxWindowGTK *win )
+static gboolean gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk_event, wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
 
@@ -2171,6 +2212,8 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk
     }
 #endif // wxUSE_CARET
 
+    gboolean ret = FALSE;
+
     // don't send the window a kill focus event if it thinks that it doesn't
     // have focus already
     if ( win->m_hasFocus )
@@ -2180,13 +2223,16 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk
         wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
         event.SetEventObject( win );
 
-        // even if we did process the event in wx code, still let GTK itself
-        // process it too as otherwise bad things happen, especially in GTK2
-        // where the text control simply aborts the program if it doesn't get
-        // the matching focus out event
         (void)win->GetEventHandler()->ProcessEvent( event );
+        
+        ret = TRUE;
     }
-
+    
+    // Disable default focus handling for custom windows
+    // since the default GTK+ handler issues a repaint
+    if (win->m_wxwindow)
+        return ret;
+           
     return FALSE;
 }
 }
@@ -2226,6 +2272,15 @@ gint gtk_window_enter_callback( GtkWidget *widget,
     event.m_x = x + pt.x;
     event.m_y = y + pt.y;
 
+    if ( !g_captureWindow )
+    {
+        wxSetCursorEvent cevent( event.m_x, event.m_y );
+        if (win->GetEventHandler()->ProcessEvent( cevent ))
+        {
+            // Rewrite cursor handling here (away from idle).
+        }
+    }
+    
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "enter_notify_event" );
@@ -2675,6 +2730,31 @@ wxWindow *wxGetActiveWindow()
     return wxWindow::FindFocus();
 }
 
+
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+
+    gint x;
+    gint y;
+    GdkModifierType mask;
+
+    gdk_window_get_pointer(NULL, &x, &y, &mask);
+
+    ms.SetX(x);
+    ms.SetY(y);
+    ms.SetLeftDown(mask & GDK_BUTTON1_MASK);
+    ms.SetMiddleDown(mask & GDK_BUTTON2_MASK);
+    ms.SetRightDown(mask & GDK_BUTTON3_MASK);
+
+    ms.SetControlDown(mask & GDK_CONTROL_MASK);
+    ms.SetShiftDown(mask & GDK_SHIFT_MASK);
+    ms.SetAltDown(mask & GDK_MOD1_MASK);
+    ms.SetMetaDown(mask & GDK_MOD2_MASK);
+    
+    return ms;
+}
+ 
 //-----------------------------------------------------------------------------
 // wxWindowGTK
 //-----------------------------------------------------------------------------
@@ -2906,6 +2986,11 @@ wxWindowGTK::~wxWindowGTK()
         gdk_ic_attr_destroy (m_icattr);
 #endif
 
+#ifdef __WXGTK20__
+    // delete before the widgets to avoid a crash on solaris
+    delete m_imData;
+#endif
+
     if (m_wxwindow)
     {
         gtk_widget_destroy( m_wxwindow );
@@ -2917,10 +3002,6 @@ wxWindowGTK::~wxWindowGTK()
         gtk_widget_destroy( m_widget );
         m_widget = (GtkWidget*) NULL;
     }
-
-#ifdef __WXGTK20__
-    delete m_imData;
-#endif
 }
 
 bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const wxSize &size )
@@ -2963,7 +3044,7 @@ void wxWindowGTK::PostCreation()
                     GTK_SIGNAL_FUNC(gtk_window_event_event_callback), (gpointer)this );
             }
 #else
-            // gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), !HasFlag( wxFULL_REPAINT_ON_RESIZE ) );
+            gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), HasFlag( wxFULL_REPAINT_ON_RESIZE ) );
 #endif
         }
 
@@ -2995,11 +3076,22 @@ void wxWindowGTK::PostCreation()
         if (m_focusWidget == NULL)
             m_focusWidget = m_widget;
 
-        gtk_signal_connect( GTK_OBJECT(m_focusWidget), "focus_in_event",
-            GTK_SIGNAL_FUNC(gtk_window_focus_in_callback), (gpointer)this );
+        if (m_wxwindow)
+        {
+            gtk_signal_connect( GTK_OBJECT(m_focusWidget), "focus_in_event",
+                GTK_SIGNAL_FUNC(gtk_window_focus_in_callback), (gpointer)this );
 
-        gtk_signal_connect_after( GTK_OBJECT(m_focusWidget), "focus_out_event",
-            GTK_SIGNAL_FUNC(gtk_window_focus_out_callback), (gpointer)this );
+            gtk_signal_connect( GTK_OBJECT(m_focusWidget), "focus_out_event",
+                GTK_SIGNAL_FUNC(gtk_window_focus_out_callback), (gpointer)this );
+        }
+        else
+        {
+            gtk_signal_connect_after( GTK_OBJECT(m_focusWidget), "focus_in_event",
+                GTK_SIGNAL_FUNC(gtk_window_focus_in_callback), (gpointer)this );
+
+            gtk_signal_connect_after( GTK_OBJECT(m_focusWidget), "focus_out_event",
+                GTK_SIGNAL_FUNC(gtk_window_focus_out_callback), (gpointer)this );
+        }
     }
 
     // connect to the various key and mouse handlers
@@ -3285,6 +3377,16 @@ void wxWindowGTK::OnInternalIdle()
     if (wxUpdateUIEvent::CanUpdate(this))
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
+
+#ifdef __WXGTK20__
+void wxWindowGTK::SetDoubleBuffered( bool on )
+{
+    wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
+
+    if (m_wxwindow)
+        gtk_widget_set_double_buffered( m_wxwindow, on );
+}
+#endif // __WXGTK20__
 
 void wxWindowGTK::DoGetSize( int *width, int *height ) const
 {
@@ -4872,9 +4974,19 @@ wxPoint wxGetMousePosition()
     return wxPoint(rootX, rootY);
 
 }
+// Needed for implementing e.g. combobox on wxGTK within a modal dialog.
+void wxAddGrab(wxWindow* window)
+{
+    gtk_grab_add( (GtkWidget*) window->GetHandle() );
+}
+
+void wxRemoveGrab(wxWindow* window)
+{
+    gtk_grab_remove( (GtkWidget*) window->GetHandle() );
+}
 
 // ----------------------------------------------------------------------------
-// wxDCModule
+// wxWinModule
 // ----------------------------------------------------------------------------
 
 class wxWinModule : public wxModule

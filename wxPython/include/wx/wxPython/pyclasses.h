@@ -20,7 +20,7 @@
 //---------------------------------------------------------------------------
 
 class wxPySizer : public wxSizer {
-    DECLARE_DYNAMIC_CLASS(wxPySizer);
+    DECLARE_DYNAMIC_CLASS(wxPySizer)
 public:
     wxPySizer() : wxSizer() {};
 
@@ -33,7 +33,7 @@ public:
 //---------------------------------------------------------------------------
 
 class wxPyValidator : public wxValidator {
-    DECLARE_DYNAMIC_CLASS(wxPyValidator);
+    DECLARE_DYNAMIC_CLASS(wxPyValidator)
 public:
     wxPyValidator() {
     }

@@ -256,7 +256,7 @@ wxString wxPathList::FindValidPath (const wxString& file)
 
   for (wxStringList::compatibility_iterator node = GetFirst(); node; node = node->GetNext())
     {
-      const wxChar *path = node->GetData();
+      const wxString path(node->GetData());
       wxStrcpy (wxFileFunctionsBuffer, path);
       wxChar ch = wxFileFunctionsBuffer[wxStrlen(wxFileFunctionsBuffer)-1];
       if (ch != wxT('\\') && ch != wxT('/'))
@@ -306,7 +306,12 @@ wxFileExists (const wxString& filename)
 #else // !__WIN32__
     wxStructStat st;
 #ifndef wxNEED_WX_UNISTD_H
-    return wxStat( filename.fn_str() , &st) == 0 && (st.st_mode & S_IFREG);
+    return (wxStat( filename.fn_str() , &st) == 0 && (st.st_mode & S_IFREG))
+#ifdef __OS2__
+      || (errno == EACCES) // if access is denied something with that name
+                            // exists and is opened in exclusive mode.
+#endif
+      ;
 #else
     return wxStat( filename , &st) == 0 && (st.st_mode & S_IFREG);
 #endif
@@ -1341,12 +1346,12 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 {
 #if defined(__WXPALMOS__)
     // TODO ?
-    return NULL;
+    if(buf && sz>0) buf[0] = _T('\0');
+    return buf;
 #elif defined(__WXWINCE__)
     // TODO
-    wxUnusedVar(buf);
-    wxUnusedVar(sz);
-    return NULL;
+    if(buf && sz>0) buf[0] = _T('\0');
+    return buf;
 #else
     if ( !buf )
     {
@@ -1965,8 +1970,7 @@ wxFileKind wxGetFileKind(FILE *fp)
 {
     // Note: The watcom rtl dll doesn't have fileno (the static lib does).
     //       Should be fixed in version 1.4.
-#if defined(wxFILEKIND_STUB) || \
-        (defined(__WATCOMC__) && __WATCOMC__ <= 1230 && defined(__SW_BR))
+#if defined(wxFILEKIND_STUB) || wxONLY_WATCOM_EARLIER_THAN(1,4)
     (void)fp;
     return wxFILE_KIND_DISK;
 #else

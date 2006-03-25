@@ -1,4 +1,3 @@
-
 <HTML>
 
 <HEAD>
@@ -82,6 +81,15 @@ the wxWidgets Reference Manual, and also the <a href="http://www.wxwidgets.org/e
 From wxWidgets 2.5, the XP manifest is included in wx/msw/wx.rc and
 so your application will be themed automatically so long as you include wx.rc
 in your own .rc file.<P>
+
+There is support for Win64 manifests and VC++ 8 automatic manifests starting
+with wxWidgets 2.6.3. An include file wx/msw/rcdefs.h is generated in the same
+directory as wx/setup.h when the wxWidgets library is compiled. It contains
+compiler specific defines that allows wx.rc to include the correct manifest
+for the target cpu, or no manifest for VC++ 8 or later (this requires that the
+resource compiler's include path includes rcdef.h's location). For VC++ 8 and
+later wx/defs.h adds common controls 6 to the automatically generated
+manifest.<p>
 
 For versions of wxWidgets below 2.5, you need to provide the manifest
 explicitly, as follows.<p>
@@ -341,7 +349,7 @@ example) and regenerate the makefile using tmake.<P>
 
 tmake can be found at
 <a href="http://www.troll.no/freebies/tmake.html" target=_new>www.troll.no/freebies/tmake.html</a>.
-It&#39;s a Perl5 program and so it needs Perl (doh). There is a binary for 
+It&#39;s a Perl5 program and so it needs Perl (doh). There is a binary for
 Windows (available from the same page), but I haven&#39;t used it, so
 I don&#39;t know if it works as flawlessly as "perl tmake" does (note
 for people knowing Perl: don&#39;t try to run tmake with -w, it won&#39;t
@@ -350,7 +358,7 @@ just go to distrib/msw/tmake and type<P>
 
 <pre>tmake -t b32 wxwin.pro -o ../../src/msw/makefile.b32</pre><P>
 
-The makefiles are untested - I don&#39;t have any of Borland, Watcom  or
+The makefiles are untested - I don&#39;t have any of Borland, Watcom or
 Symantec and I don&#39;t have enough diskspace to recompile even with
 VC6 using makefiles. The new makefiles are as close as possible to the
 old ones, but not closer: in fact, there has been many strange things
@@ -457,7 +465,7 @@ First, you can use wxRegKey directly, for example:
     regKey.SetName(idName);
 
     {
-        wxLogNull dummy; 
+        wxLogNull dummy;
         if (!regKey.Create())
         {
             idName = wxT("HKEY_CURRENT_USER\\SOFTWARE\\My Company\\My Product\\Stuff\\");
@@ -554,9 +562,9 @@ the following message from Peter Whaite could help:
 
 The reason for this is that __WXDEBUG__ is also used by the DXSDK (9.0
 in my case) to &#39;#pragma once&#39; the contents of
-DXSDK/Samples/C++/DirectShow/BaseClasses/wxdebug.h.  So if __WXDEBUG__
+DXSDK/Samples/C++/DirectShow/BaseClasses/wxdebug.h. So if __WXDEBUG__
 is defined, then wxdebug.h doesn&#39;t get included, and the assert macros
-don&#39;t get defined.  You have to #undef __WXDEBUG__ before including the
+don&#39;t get defined. You have to #undef __WXDEBUG__ before including the
 directshow baseclass&#39;s &lt;streams.h&gt;.
 </blockquote>
 

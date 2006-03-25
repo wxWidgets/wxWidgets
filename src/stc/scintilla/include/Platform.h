@@ -393,9 +393,10 @@ public:
 	static ListBox *Allocate();
 
 	virtual void SetFont(Font &font)=0;
-	virtual void Create(Window &parent, int ctrlID, int lineHeight_, bool unicodeMode_)=0;
+	virtual void Create(Window &parent, int ctrlID, Point location, int lineHeight_, bool unicodeMode_)=0;
 	virtual void SetAverageCharWidth(int width)=0;
 	virtual void SetVisibleRows(int rows)=0;
+	virtual int GetVisibleRows() const=0;
 	virtual PRectangle GetDesiredRect()=0;
 	virtual int CaretFromEdge()=0;
 	virtual void Clear()=0;
@@ -408,6 +409,7 @@ public:
 	virtual void RegisterImage(int type, const char *xpm_data)=0;
 	virtual void ClearRegisteredImages()=0;
 	virtual void SetDoubleClickAction(CallBackAction, void *)=0;
+	virtual void SetList(const char* list, char separator, char typesep)=0;
 };
 
 /**

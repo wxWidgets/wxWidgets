@@ -260,7 +260,7 @@ creation.", "");
         "Sets the current date.", "");
 
     DocDeclStr(
-        const wxDateTime&, GetDate() const,
+        const wxDateTime, GetDate() const,
         "Gets the currently selected date.", "");
     
 
@@ -274,11 +274,11 @@ creation.", "");
         "set the range in which selection can occur", "");
     
     DocDeclStr(
-        const wxDateTime&, GetLowerDateLimit() const,
+        const wxDateTime, GetLowerDateLimit() const,
         "get the range in which selection can occur", "");
     
     DocDeclStr(
-        const wxDateTime&, GetUpperDateLimit() const,
+        const wxDateTime, GetUpperDateLimit() const,
         "get the range in which selection can occur", "");
 
     DocDeclStr(

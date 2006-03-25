@@ -310,8 +310,12 @@ static const int gs_metricsMap[] =
 
     SM_CXBORDER,
     SM_CYBORDER,
-    SM_CXCURSOR,
+#ifdef SM_CXCURSOR
+	SM_CXCURSOR,
     SM_CYCURSOR,
+#else
+	-1, -1,
+#endif
     SM_CXDOUBLECLK,
     SM_CYDOUBLECLK,
 #if defined(__WIN32__) && defined(SM_CXDRAG)

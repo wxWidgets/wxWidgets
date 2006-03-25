@@ -53,7 +53,11 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
         {
             wxMenu *p_menu = wxDynamicCast(m_parent, wxMenu);
             if (p_menu)
+            {
                 p_menu->Append(GetID(), title, menu, help);
+                if (HasParam(wxT("enabled")))
+                    p_menu->Enable(GetID(), GetBool(wxT("enabled")));
+            }
         }
 
         return menu;

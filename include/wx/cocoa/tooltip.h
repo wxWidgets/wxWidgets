@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_COCOA_TOOLTIP_H_
+#define _WX_COCOA_TOOLTIP_H_
+
 #include "wx/object.h"
 
 class wxWindow;
@@ -44,3 +47,5 @@ private:
     
     DECLARE_ABSTRACT_CLASS(wxToolTip)
 };
+
+#endif // _WX_COCOA_TOOLTIP_H_

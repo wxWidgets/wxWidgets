@@ -50,16 +50,9 @@ public:
     void SetAffirmativeId(int affirmativeId) { m_affirmativeId = affirmativeId; }
     int GetAffirmativeId() const { return m_affirmativeId; }
 
-    // Identifier for Esc key translation
-#if wxCHECK_VERSION(2, 7, 0)
-    #error "Uncomment SetEscapeId() implementation"
-
-    // this is what we should do in 2.7: remove the "#else" part and add
-    // m_escapeId declaration and the docs for Set/GetEscapeId()
-    void SetEscapeId(int escapeId) { m_escapeId = escapeId; }
-    int GetEscapeId() const { return m_escapeId; }
-#elif wxABI_VERSION > 20601
-    // just a stub for 2.6
+#if wxABI_VERSION > 20601
+    // just a stub for 2.6, this allows the code using it to build with both
+    // 2.7 and 2.6 (even though it only really works with 2.7)
     int GetEscapeId() const { return wxID_ANY; }
 #endif
 

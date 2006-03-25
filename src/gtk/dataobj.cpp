@@ -81,9 +81,9 @@ wxDataFormat::wxDataFormat( NativeFormat format )
 void wxDataFormat::SetType( wxDataFormatId type )
 {
     PrepareFormats();
-    
+
     m_type = type;
-    
+
 #if wxUSE_UNICODE
     if (m_type == wxDF_UNICODETEXT)
         m_format = g_textAtom;
@@ -112,7 +112,9 @@ wxDataFormatId wxDataFormat::GetType() const
 
 wxString wxDataFormat::GetId() const
 {
-    wxString ret = wxString::FromAscii( gdk_atom_name( m_format ) );
+    gchar* atom_name = gdk_atom_name( m_format );
+    wxString ret = wxString::FromAscii( atom_name );
+    g_free(atom_name);
     return ret;
 }
 
@@ -145,7 +147,7 @@ void wxDataFormat::SetId( const wxChar *id )
     PrepareFormats();
     m_type = wxDF_PRIVATE;
     wxString tmp( id );
-    m_format = gdk_atom_intern( (const char*) tmp.ToAscii(), FALSE ); 
+    m_format = gdk_atom_intern( (const char*) tmp.ToAscii(), FALSE );
 }
 
 void wxDataFormat::PrepareFormats()
@@ -186,17 +188,17 @@ wxDataObject::~wxDataObject()
 bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) const
 {
     size_t nFormatCount = GetFormatCount(dir);
-    if ( nFormatCount == 1 ) 
+    if ( nFormatCount == 1 )
     {
         return format == GetPreferredFormat();
     }
-    else 
+    else
     {
         wxDataFormat *formats = new wxDataFormat[nFormatCount];
         GetAllFormats(formats,dir);
 
         size_t n;
-        for ( n = 0; n < nFormatCount; n++ ) 
+        for ( n = 0; n < nFormatCount; n++ )
         {
             if ( formats[n] == format )
                 break;

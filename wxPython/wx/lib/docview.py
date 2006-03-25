@@ -28,10 +28,12 @@ DOC_MDI = 2
 DOC_NEW = 4
 DOC_SILENT = 8
 DOC_OPEN_ONCE = 16
+DOC_NO_VIEW = 32
 DEFAULT_DOCMAN_FLAGS = DOC_SDI & DOC_OPEN_ONCE
 
 TEMPLATE_VISIBLE = 1
 TEMPLATE_INVISIBLE = 2
+TEMPLATE_NO_CREATE = (4 | TEMPLATE_VISIBLE)
 DEFAULT_TEMPLATE_FLAGS = TEMPLATE_VISIBLE
 
 MAX_FILE_HISTORY = 9
@@ -680,8 +682,10 @@ class Document(wx.EvtHandler):
         """
         The default implementation calls DeleteContents (an empty
         implementation) sets the modified flag to false. Override this to
-        supply additional behaviour when the document is closed with Close.
+        supply additional behaviour when the document is opened with Open.
         """
+        if flags & DOC_NO_VIEW:
+            return True
         return self.GetDocumentTemplate().CreateView(self, flags)
 
 
@@ -1193,6 +1197,16 @@ class DocTemplate(wx.Object):
         return (self._flags & TEMPLATE_VISIBLE) == TEMPLATE_VISIBLE
 
 
+    def IsNewable(self):
+        """
+        Returns true if the document template can be shown in "New" dialogs,
+        false otherwise.
+        
+        This method has been added to wxPython and is not in wxWindows.
+        """
+        return (self._flags & TEMPLATE_NO_CREATE) != TEMPLATE_NO_CREATE
+        
+
     def GetDocumentName(self):
         """
         Returns the document type name, as passed to the document template
@@ -1250,8 +1264,9 @@ class DocTemplate(wx.Object):
         """
         ext = FindExtension(path)
         if not ext: return False
-        return ext in self.GetFileFilter()
-        # return self.GetDefaultExtension() == FindExtension(path)
+        
+        extList = self.GetFileFilter().replace('*','').split(';')
+        return ext in extList
 
 
 class DocManager(wx.EvtHandler):
@@ -1802,7 +1817,13 @@ class DocManager(wx.EvtHandler):
         will delete the oldest currently loaded document before creating a new
         one.
 
-        wxPython version supports the document manager's wx.lib.docview.DOC_OPEN_ONCE flag.
+        wxPython version supports the document manager's wx.lib.docview.DOC_OPEN_ONCE
+        and wx.lib.docview.DOC_NO_VIEW flag.
+        
+        if wx.lib.docview.DOC_OPEN_ONCE is present, trying to open the same file multiple 
+        times will just return the same document.
+        if wx.lib.docview.DOC_NO_VIEW is present, opening a file will generate the document,
+        but not generate a corresponding view.
         """
         templates = []
         for temp in self._templates:
@@ -1817,16 +1838,13 @@ class DocManager(wx.EvtHandler):
                return None
 
         if flags & DOC_NEW:
+            for temp in templates[:]:
+                if not temp.IsNewable():
+                    templates.remove(temp)
             if len(templates) == 1:
                 temp = templates[0]
-                newDoc = temp.CreateDocument(path, flags)
-                if newDoc:
-                    newDoc.SetDocumentName(temp.GetDocumentName())
-                    newDoc.SetDocumentTemplate(temp)
-                    newDoc.OnNewDocument()
-                return newDoc
-
-            temp = self.SelectDocumentType(templates)
+            else:
+                temp = self.SelectDocumentType(templates)
             if temp:
                 newDoc = temp.CreateDocument(path, flags)
                 if newDoc:
@@ -1865,7 +1883,12 @@ class DocManager(wx.EvtHandler):
                             document.SetDocumentModificationDate()
 
                     firstView = document.GetFirstView()
-                    if firstView and firstView.GetFrame():
+                    if not firstView and not (flags & DOC_NO_VIEW):
+                        document.GetDocumentTemplate().CreateView(document, flags)
+                        document.UpdateAllViews()
+                        firstView = document.GetFirstView()
+                        
+                    if firstView and firstView.GetFrame() and not (flags & DOC_NO_VIEW):
                         firstView.GetFrame().SetFocus()  # Not in wxWindows code but useful nonetheless
                         if hasattr(firstView.GetFrame(), "IsIconized") and firstView.GetFrame().IsIconized():  # Not in wxWindows code but useful nonetheless
                             firstView.GetFrame().Iconize(False)
@@ -1878,7 +1901,9 @@ class DocManager(wx.EvtHandler):
                 newDoc.SetDocumentTemplate(temp)
                 if not newDoc.OnOpenDocument(path):
                     newDoc.DeleteAllViews()  # Implicitly deleted by DeleteAllViews
-                    newDoc.GetFirstView().GetFrame().Destroy() # DeleteAllViews doesn't get rid of the frame, so we'll explicitly destroy it.
+                    frame = newDoc.GetFirstView().GetFrame()
+                    if frame:
+                        Destroy() # DeleteAllViews doesn't get rid of the frame, so we'll explicitly destroy it.
                     return None
                 self.AddFileToHistory(path)
             return newDoc
@@ -2117,41 +2142,32 @@ class DocManager(wx.EvtHandler):
         This function is used in wxDocManager.CreateDocument.
         """
         if wx.Platform == "__WXMSW__" or wx.Platform == "__WXGTK__" or wx.Platform == "__WXMAC__":
-            allfilter = ''
             descr = ''
             for temp in templates:
                 if temp.IsVisible():
                     if len(descr) > 0:
                         descr = descr + _('|')
-                        allfilter = allfilter + _(';')
                     descr = descr + temp.GetDescription() + _(" (") + temp.GetFileFilter() + _(") |") + temp.GetFileFilter()  # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
-                    allfilter = allfilter + temp.GetFileFilter()
-            descr = _("All (%s)|%s|%s|Any (*.*) | *.*") %  (allfilter, allfilter, descr)  # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
+            descr = _("All (*.*)|*.*|%s") % descr  # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
         else:
             descr = _("*.*")
 
-        path = wx.FileSelector(_("Select a File"),
-                               self._lastDirectory,
-                               _(""),
-                               wildcard = descr,
-                               flags = wx.HIDE_READONLY,
-                               parent = self.FindSuitableParent())
-        if path:
-            if not FileExists(path):
-                msgTitle = wx.GetApp().GetAppName()
-                if not msgTitle:
-                    msgTitle = _("File Error")
-                    wx.MessageBox("Could not open '%s'." % FileNameFromPath(path),
-                          msgTitle,
-                          wx.OK | wx.ICON_EXCLAMATION,
-                          parent)
-                    return (None, None)
-            self._lastDirectory = PathOnly(path)
-
+        dlg = wx.FileDialog(self.FindSuitableParent(),
+                               _("Select a File"),
+                               wildcard=descr,
+                               style=wx.OPEN|wx.FILE_MUST_EXIST|wx.CHANGE_DIR)
+        # dlg.CenterOnParent()  # wxBug: caused crash with wx.FileDialog
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+        else:
+            path = None
+        dlg.Destroy()
+            
+        if path:  
             theTemplate = self.FindTemplateForPath(path)
             return (theTemplate, path)
-
-        return (None, None)
+        
+        return (None, None)           
 
 
     def OnOpenFileFailure(self):
@@ -3151,8 +3167,10 @@ class CommandProcessor(wx.Object):
         the history list.
         """
         done = command.Do()
-        if done and storeIt:
-            self._commands.append(command)
+        if done:
+            del self._redoCommands[:]
+            if storeIt:
+                self._commands.append(command)
         if self._maxCommands > -1:
             if len(self._commands) > self._maxCommands:
                 del self._commands[0]

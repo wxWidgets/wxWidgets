@@ -9,6 +9,14 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// not all ports have support for EVT_CONTEXT_MENU yet, don't define
+// USE_CONTEXT_MENU for those which don't
+#if defined(__WXMOTIF__) || defined(__WXPM__) || defined(__WXX11__) || defined(__WXMGL__)
+    #define USE_CONTEXT_MENU 0
+#else
+    #define USE_CONTEXT_MENU 1
+#endif
+
 // Define a new application type
 class MyApp: public wxApp
 {
@@ -32,6 +40,9 @@ public:
         : wxListCtrl(parent, id, pos, size, style),
           m_attr(*wxBLUE, *wxLIGHT_GREY, wxNullFont)
         {
+#ifdef __POCKETPC__
+            EnableContextMenu();
+#endif
         }
 
     // add one item to the listctrl in report mode
@@ -61,7 +72,13 @@ public:
 
     void OnChar(wxKeyEvent& event);
 
+#if USE_CONTEXT_MENU
+    void OnContextMenu(wxContextMenuEvent& event);
+#endif
+
 private:
+    void ShowContextMenu(const wxPoint& pos);
+    wxLog *m_logOld;
     void SetColumnImage(int col, int image);
 
     void LogEvent(const wxListEvent& event, const wxChar *eventName);
@@ -81,7 +98,7 @@ private:
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(const wxChar *title, int x, int y, int w, int h);
+    MyFrame(const wxChar *title);
     virtual ~MyFrame();
 
     void DoSize();
@@ -142,9 +159,7 @@ private:
     // and return false if it is
     bool CheckNonVirtual() const;
 
-
     wxLog *m_logOld;
-
     bool m_smallVirtual;
 
     DECLARE_NO_COPY_CLASS(MyFrame)

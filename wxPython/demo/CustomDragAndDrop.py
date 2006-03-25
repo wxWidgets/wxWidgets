@@ -14,11 +14,11 @@ class DoodlePad(wx.Window):
         self.x = self.y = 0
         self.SetMode("Draw")
 
-        wx.EVT_LEFT_DOWN(self, self.OnLeftDown)
-        wx.EVT_LEFT_UP(self, self.OnLeftUp)
-        wx.EVT_RIGHT_UP(self, self.OnRightUp)
-        wx.EVT_MOTION(self, self.OnMotion)
-        wx.EVT_PAINT(self, self.OnPaint)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
+        self.Bind(wx.EVT_LEFT_UP,  self.OnLeftUp)
+        self.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)
+        self.Bind(wx.EVT_MOTION, self.OnMotion)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
 
     def SetMode(self, mode):
@@ -182,7 +182,7 @@ class DoodleViewer(wx.Window):
         self.x = self.y = 0
         dt = DoodleDropTarget(self, log)
         self.SetDropTarget(dt)
-        wx.EVT_PAINT(self, self.OnPaint)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
 
     def SetLines(self, lines):
@@ -256,8 +256,8 @@ class CustomDnDPanel(wx.Panel):
         self.SetSizer(sizer)
 
         # Events
-        wx.EVT_RADIOBUTTON(self, rb1.GetId(), self.OnRadioButton)
-        wx.EVT_RADIOBUTTON(self, rb2.GetId(), self.OnRadioButton)
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnRadioButton, rb1)
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnRadioButton, rb2)
 
 
     def OnRadioButton(self, evt):
@@ -314,11 +314,11 @@ if __name__ == '__main__':
         def MakeFrame(self, event=None):
             frame = wx.Frame(None, -1, "Custom Drag and Drop", size=(550,400))
             menu = wx.Menu()
-            menu.Append(6543, "Window")
+            item = menu.Append(-1, "Window")
             mb = wx.MenuBar()
             mb.Append(menu, "New")
             frame.SetMenuBar(mb)
-            wx.EVT_MENU(frame, 6543, self.MakeFrame)
+            frame.Bind(wx.EVT_MENU, self.MakeFrame, item)
             panel = TestPanel(frame, DummyLog())
             frame.Show(True)
             self.SetTopWindow(frame)

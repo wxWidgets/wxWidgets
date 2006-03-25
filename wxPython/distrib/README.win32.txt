@@ -12,15 +12,15 @@ page for more information about managing multiple installs:
 
 In addition to the wxPython modules, several tools scripts (such as
 XRCed and PyShell) and batch file launchers have been installed to
-Python's Scripts directory.  (For example, c:\Python23\Scripts.)  IF
+Python's Scripts directory.  (For example, c:\Python23\Scripts.)  If
 you have multiple versions of wxPython installed these tool scripts
 will use whichever is the default install.  If you would like to
 control which version is used then follow the directions at the wiki
 page for using wxversion.
 
 This installer does *not* include the wxPython documentation, the
-wxPython demo and other sample applications are provided as part of
-wxPython.  Those are available in a separate installer named
+wxPython demo and other sample applications that are provided as part
+of wxPython.  Those are available in a separate installer named
 wxPython2.6-win32-docs-demos-*.exe which should also be located from
 wherever you downloaded this package from.  The Docs and Demos
 installer will also create Start Menu shortcuts for the tool scripts

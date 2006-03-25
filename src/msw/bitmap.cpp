@@ -487,7 +487,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 // Create from XPM data
 bool wxBitmap::CreateFromXpm(const char **data)
 {
-#if wxUSE_IMAGE && wxUSE_XPM
+#if wxUSE_IMAGE && wxUSE_XPM && wxUSE_WXDIB
     Init();
 
     wxCHECK_MSG( data != NULL, false, wxT("invalid bitmap data") )
@@ -830,7 +830,8 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
     wxDIB dib(image);
     if ( !dib.IsOk() )
         return false;
-
+	if (depth == -1)
+		depth = dib.GetDepth();	// Get depth from image if none specified
 
     // store the bitmap parameters
     wxBitmapRefData *refData = new wxBitmapRefData;
@@ -853,14 +854,14 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
         hbitmap = dib.Detach();
 
         refData->m_isDIB = true;
-        refData->m_depth = dib.GetDepth();
+        refData->m_depth = depth;
     }
 #ifndef ALWAYS_USE_DIB
     else // we need to convert DIB to DDB
     {
         hbitmap = dib.CreateDDB((HDC)hdc);
 
-        refData->m_depth = depth == -1 ? dib.GetDepth() : depth;
+        refData->m_depth = depth;
     }
 #endif // !ALWAYS_USE_DIB
 
@@ -1014,7 +1015,7 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
 
         return handler->LoadFile(this, filename, type, -1, -1);
     }
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && wxUSE_WXDIB
     else // no bitmap handler found
     {
         wxImage image;
@@ -1058,7 +1059,7 @@ bool wxBitmap::SaveFile(const wxString& filename,
     {
         return handler->SaveFile(this, filename, type, palette);
     }
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && wxUSE_WXDIB
     else // no bitmap handler found
     {
         // FIXME what about palette? shouldn't we use it?
@@ -1639,22 +1640,32 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
         return 0;
     }
 
-    wxMask* mask;
-    wxBitmap newbmp;
     if ( bmp.HasAlpha() )
     {
-        // Convert alpha to a mask.  NOTE: It would be better to actually put
-        // the alpha into the icon instead of making a mask, but I don't have
-        // time to figure that out today.
-        wxImage img = bmp.ConvertToImage();
-        img.ConvertAlphaToMask();
-        newbmp = wxBitmap(img);
-        mask = newbmp.GetMask();
+        // Create an empty mask bitmap.
+        // it doesn't seem to work if we mess with the mask at all.
+        HBITMAP hMonoBitmap = CreateBitmap(bmp.GetWidth(),bmp.GetHeight(),1,1,NULL);
+
+        ICONINFO iconInfo;
+        wxZeroMemory(iconInfo);
+        iconInfo.fIcon = iconWanted;  // do we want an icon or a cursor?
+        if ( !iconWanted )
+        {
+            iconInfo.xHotspot = hotSpotX;
+            iconInfo.yHotspot = hotSpotY;
+        }
+
+        iconInfo.hbmMask = hMonoBitmap;
+        iconInfo.hbmColor = GetHbitmapOf(bmp);
+
+        HICON hicon = ::CreateIconIndirect(&iconInfo);
+
+        ::DeleteObject(hMonoBitmap);
+
+        return hicon;
     }
-    else
-    {
-        mask = bmp.GetMask();
-    }
+
+    wxMask* mask = bmp.GetMask();
 
     if ( !mask )
     {

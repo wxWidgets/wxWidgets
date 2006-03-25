@@ -34,12 +34,18 @@
     #define WM_UPDATEUISTATE    0x0128
 #endif
 
+#ifndef WM_CHANGEUISTATE
+    #define WM_CHANGEUISTATE    0x0127
+#endif
+
 #ifndef WM_PRINTCLIENT
     #define WM_PRINTCLIENT 0x318
 #endif
 
 // Needed by toplevel.cpp
-#ifndef UIS_INITIALIZE
+#ifndef UIS_SET
+    #define UIS_SET         1
+    #define UIS_CLEAR       2
     #define UIS_INITIALIZE  3
 #endif
 
@@ -101,6 +107,14 @@
 
 #ifndef LVS_EX_LABELTIP
     #define LVS_EX_LABELTIP 0x00004000
+#endif
+
+#ifndef LVS_EX_SUBITEMIMAGES
+    #define LVS_EX_SUBITEMIMAGES 0x00000002
+#endif
+
+#ifndef HDN_GETDISPINFOW
+    #define HDN_GETDISPINFOW (HDN_FIRST-29)
 #endif
 
  /*
@@ -175,10 +189,6 @@
 
 #ifndef HDM_GETITEMRECT
     #define HDM_GETITEMRECT (HDM_FIRST+7)
-#endif
-
-#ifndef HDN_GETDISPINFOW
-    #define HDN_GETDISPINFOW (HDN_FIRST-29)
 #endif
 
 #ifndef ListView_GetHeader

@@ -285,6 +285,8 @@ the ``type`` parameter.", "");
     bool CopyFromCursor(const wxCursor& cursor);
     int GetQuality();
     void SetQuality(int q);
+    %pythoncode { GetQuality = wx._deprecated(GetQuality) }
+    %pythoncode { SetQuality = wx._deprecated(SetQuality) }
 #endif
 
     %pythoncode { def __nonzero__(self): return self.Ok() }

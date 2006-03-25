@@ -506,10 +506,13 @@ void wxChoice::DoSetSize(int x, int y,
 {
     int heightOrig = height;
 
+    int widthCurrent, heightCurrent;
+    DoGetSize(&widthCurrent, &heightCurrent);
+
     // the height which we must pass to Windows should be the total height of
     // the control including the drop down list while the height given to us
     // is, of course, just the height of the permanently visible part of it
-    if ( height != wxDefaultCoord )
+    if ( height != wxDefaultCoord && height != heightCurrent )
     {
         // don't make the drop down list too tall, arbitrarily limit it to 40
         // items max and also don't leave it empty
@@ -523,8 +526,28 @@ void wxChoice::DoSetSize(int x, int y,
         const int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
         height += hItem*(nItems + 1);
     }
-    else
+    else // keep the same height as now
     {
+        // normally wxWindow::DoSetSize() checks if we set the same size as the
+        // window already has and does nothing in this case, but for us the
+        // check fails as the size we pass to it includes the dropdown while
+        // the size returned by our GetSize() does not, so test if the size
+        // didn't really change ourselves here
+        if ( width == wxDefaultCoord || width == widthCurrent )
+        {
+            // size doesn't change, what about position?
+            int xCurrent, yCurrent;
+            DoGetPosition(&xCurrent, &yCurrent);
+            const bool defMeansUnchanged = !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE);
+            if ( ((x == wxDefaultCoord && defMeansUnchanged) || x == xCurrent)
+                    &&
+                 ((y == wxDefaultCoord && defMeansUnchanged) || y == yCurrent) )
+            {
+                // nothing changes, nothing to do
+                return;
+            }
+        }
+
         // We cannot pass wxDefaultCoord as height to wxControl. wxControl uses
         // wxGetWindowRect() to determine the current height of the combobox,
         // and then again sets the combobox's height to that value. Unfortunately,
@@ -532,12 +555,15 @@ void wxChoice::DoSetSize(int x, int y,
         // on Win2K), so this would result in a combobox with dropdown height of
         // 1 pixel. We have to determine the default height ourselves and call
         // wxControl with that value instead.
-        int w, h;
+        //
+        // Also notice that sometimes CB_GETDROPPEDCONTROLRECT seems to return
+        // wildly incorrect values (~32000) which looks like a bug in it, just
+        // ignore them in this case
         RECT r;
-        DoGetSize(&w, &h);
-        if (::SendMessage(GetHwnd(), CB_GETDROPPEDCONTROLRECT, 0, (LPARAM) &r) != 0)
+        if ( ::SendMessage(GetHwnd(), CB_GETDROPPEDCONTROLRECT, 0, (LPARAM) &r)
+                    && r.bottom < 30000 )
         {
-            height = h + r.bottom - r.top;
+            height = heightCurrent + r.bottom - r.top;
         }
     }
 

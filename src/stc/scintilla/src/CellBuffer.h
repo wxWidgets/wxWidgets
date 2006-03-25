@@ -191,7 +191,6 @@ public:
 	int LineStart(int line);
 	int LineFromPosition(int pos) { return lv.LineFromPosition(pos); }
 	const char *InsertString(int position, char *s, int insertLength);
-	void InsertCharStyle(int position, char ch, char style);
 
 	/// Setting styles for positions outside the range of the buffer is safe and has no effect.
 	/// @return true if the style of a character is changed.

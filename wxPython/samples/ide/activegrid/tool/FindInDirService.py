@@ -79,8 +79,7 @@ class FindInDirService(FindService.FindService):
         id = event.GetId()
         if id == FindInDirService.FINDALL_ID:
             projectService = wx.GetApp().GetService(ProjectEditor.ProjectService)
-            view = projectService.GetView()
-            if view and view.GetDocument() and view.GetDocument().GetFiles():
+            if projectService.GetFilesFromCurrentProject():
                 event.Enable(True)
             else:
                 event.Enable(False)
@@ -94,7 +93,7 @@ class FindInDirService(FindService.FindService):
     def ShowFindDirDialog(self, findString=None):
         config = wx.ConfigBase_Get()
 
-        frame = wx.Dialog(None, -1, _("Find in Directory"), size= (320,200))
+        frame = wx.Dialog(wx.GetApp().GetTopWindow(), -1, _("Find in Directory"), size= (320,200))
         borderSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         contentSizer = wx.BoxSizer(wx.VERTICAL)
@@ -112,11 +111,11 @@ class FindInDirService(FindService.FindService):
             dir = dirCtrl.GetValue()
             if len(dir):
                 dlg.SetPath(dir)
+            dlg.CenterOnParent()
             if dlg.ShowModal() == wx.ID_OK:
                 dirCtrl.SetValue(dlg.GetPath())
                 dirCtrl.SetToolTipString(dirCtrl.GetValue())
                 dirCtrl.SetInsertionPointEnd()
-
             dlg.Destroy()
         wx.EVT_BUTTON(findDirButton, -1, OnBrowseButton)
 
@@ -127,6 +126,9 @@ class FindInDirService(FindService.FindService):
         lineSizer = wx.BoxSizer(wx.VERTICAL)    # let the line expand horizontally without vertical expansion
         lineSizer.Add(wx.StaticLine(frame, -1, size = (10,-1)), 0, flag=wx.EXPAND)
         contentSizer.Add(lineSizer, flag=wx.EXPAND|wx.ALIGN_CENTER_VERTICAL|wx.BOTTOM, border=HALF_SPACE)
+        
+        if wx.Platform == "__WXMAC__":
+            contentSizer.Add((-1, 10), 0, wx.EXPAND)
         
         lineSizer = wx.BoxSizer(wx.HORIZONTAL)
         lineSizer.Add(wx.StaticText(frame, -1, _("Find what:")), 0, wx.ALIGN_CENTER | wx.RIGHT, HALF_SPACE)
@@ -151,13 +153,17 @@ class FindInDirService(FindService.FindService):
         buttonSizer = wx.BoxSizer(wx.VERTICAL)
         findBtn = wx.Button(frame, wx.ID_OK, _("Find"))
         findBtn.SetDefault()
-        buttonSizer.Add(findBtn, 0, wx.BOTTOM, HALF_SPACE)
+        BTM_SPACE = HALF_SPACE
+        if wx.Platform == "__WXMAC__":
+            BTM_SPACE = SPACE
+        buttonSizer.Add(findBtn, 0, wx.BOTTOM, BTM_SPACE)
         buttonSizer.Add(wx.Button(frame, wx.ID_CANCEL), 0)
         borderSizer.Add(buttonSizer, 0, wx.ALL, SPACE)
 
         frame.SetSizer(borderSizer)
         frame.Fit()
 
+        frame.CenterOnParent()
         status = frame.ShowModal()
 
         passedCheck = False
@@ -168,6 +174,7 @@ class FindInDirService(FindService.FindService):
                                        _("Find in Directory"),
                                        wx.OK | wx.ICON_EXCLAMATION
                                        )
+                dlg.CenterOnParent()
                 dlg.ShowModal()
                 dlg.Destroy()
 
@@ -178,6 +185,7 @@ class FindInDirService(FindService.FindService):
                                        _("Find in Directory"),
                                        wx.OK | wx.ICON_EXCLAMATION
                                        )
+                dlg.CenterOnParent()
                 dlg.ShowModal()
                 dlg.Destroy()
 
@@ -197,10 +205,8 @@ class FindInDirService(FindService.FindService):
         regExpr = regExprCtrl.IsChecked()
         self.SaveFindConfig(findString, wholeWord, matchCase, regExpr)
 
-            
+        frame.Destroy()
         if status == wx.ID_OK:            
-            frame.Destroy()
-
             messageService = wx.GetApp().GetService(MessageService.MessageService)
             messageService.ShowWindow()
 
@@ -267,7 +273,6 @@ class FindInDirService(FindService.FindService):
 
             return True
         else:
-            frame.Destroy()
             return False
             
 
@@ -285,7 +290,7 @@ class FindInDirService(FindService.FindService):
     def ShowFindAllDialog(self, findString=None):
         config = wx.ConfigBase_Get()
 
-        frame = wx.Dialog(None, -1, _("Find in Project"), size= (320,200))
+        frame = wx.Dialog(wx.GetApp().GetTopWindow(), -1, _("Find in Project"), size= (320,200))
         borderSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         contentSizer = wx.BoxSizer(wx.VERTICAL)
@@ -310,13 +315,17 @@ class FindInDirService(FindService.FindService):
         buttonSizer = wx.BoxSizer(wx.VERTICAL)
         findBtn = wx.Button(frame, wx.ID_OK, _("Find"))
         findBtn.SetDefault()
-        buttonSizer.Add(findBtn, 0, wx.BOTTOM, HALF_SPACE)
+        BTM_SPACE = HALF_SPACE
+        if wx.Platform == "__WXMAC__":
+            BTM_SPACE = SPACE
+        buttonSizer.Add(findBtn, 0, wx.BOTTOM, BTM_SPACE)
         buttonSizer.Add(wx.Button(frame, wx.ID_CANCEL), 0)
         borderSizer.Add(buttonSizer, 0, wx.ALL, SPACE)
 
         frame.SetSizer(borderSizer)
         frame.Fit()
 
+        frame.CenterOnParent()
         status = frame.ShowModal()
 
         # save user choice state for this and other Find Dialog Boxes
@@ -326,9 +335,8 @@ class FindInDirService(FindService.FindService):
         regExpr = regExprCtrl.IsChecked()
         self.SaveFindConfig(findString, wholeWord, matchCase, regExpr)
 
+        frame.Destroy()
         if status == wx.ID_OK:
-            frame.Destroy()
-
             messageService = wx.GetApp().GetService(MessageService.MessageService)
             messageService.ShowWindow()
 
@@ -412,7 +420,6 @@ class FindInDirService(FindService.FindService):
 
             return True
         else:
-            frame.Destroy()
             return False
 
 
@@ -442,8 +449,9 @@ class FindInDirService(FindService.FindService):
                 break
 
         if not foundView:
-            doc = wx.GetApp().GetDocumentManager().CreateDocument(filename, wx.lib.docview.DOC_SILENT)
-            foundView = doc.GetFirstView()
+            doc = wx.GetApp().GetDocumentManager().CreateDocument(filename, wx.lib.docview.DOC_SILENT|wx.lib.docview.DOC_OPEN_ONCE)
+            if doc:
+                foundView = doc.GetFirstView()
 
         if foundView:
             foundView.GetFrame().SetFocus()
