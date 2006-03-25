@@ -1014,11 +1014,12 @@ wxString GetMsgCatalogSubdir(const wxChar *prefix, const wxChar *lang)
     searchPath << prefix << wxFILE_SEP_PATH << lang;
 
     // under Unix, the message catalogs are supposed to go into LC_MESSAGES
-    // subdirectory but there is no such requirement/tradition on the other
-    // systems
+    // subdirectory so look there too
 #ifdef __UNIX__
-    searchPath << wxFILE_SEP_PATH << wxT("LC_MESSAGES");
-#endif
+    const wxString searchPathOrig(searchPath);
+    searchPath << wxFILE_SEP_PATH << wxT("LC_MESSAGES")
+               << wxPATH_SEP << searchPathOrig;
+#endif // __UNIX__
 
     return searchPath;
 }
