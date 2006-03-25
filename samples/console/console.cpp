@@ -201,7 +201,7 @@ static void TestCmdLineConvert()
 #ifdef __UNIX__
     static const wxChar *ROOTDIR = _T("/");
     static const wxChar *TESTDIR = _T("/usr/local/share");
-#elif defined(__WXMSW__) || defined(__DOS__)
+#elif defined(__WXMSW__) || defined(__DOS__) || defined(__OS2__)
     static const wxChar *ROOTDIR = _T("c:\\");
     static const wxChar *TESTDIR = _T("d:\\");
 #else
@@ -227,6 +227,8 @@ static void TestDirEnumHelper(wxDir& dir,
 
     wxPuts(wxEmptyString);
 }
+
+#if TEST_ALL
 
 static void TestDirEnum()
 {
@@ -283,6 +285,8 @@ static void TestDirEnum()
     TestDirEnumHelper(dirNo);
 }
 
+#endif // TEST_ALL
+
 class DirPrintTraverser : public wxDirTraverser
 {
 public:
@@ -333,6 +337,8 @@ static void TestDirTraverse()
     dir.Traverse(traverser, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN);
 }
 
+#if TEST_ALL
+
 static void TestDirExists()
 {
     wxPuts(_T("*** Testing wxDir::Exists() ***"));
@@ -365,6 +371,8 @@ static void TestDirExists()
                                             : _T("doesn't exist"));
     }
 }
+
+#endif // TEST_ALL
 
 #endif // TEST_DIR
 
@@ -4385,4 +4393,3 @@ int main(int argc, char **argv)
     wxUnusedVar(argv);
     return 0;
 }
-

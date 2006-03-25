@@ -1,0 +1,35 @@
+# Purpose: makefile for makegen example (TWIN)
+# Created: 2000-01-03
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/makegen.$(OBJSUFF) $(OBJDIR)/makegen.$(OBJSUFF)
+
+all:    $(OBJDIR) makegen$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+makegen$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o makegen$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/makegen.$(OBJSUFF):	makegen.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ makegen.$(SRCSUFF)
+
+makegen.c:  makegen.rc
+	$(RESCOMP) $(RCINPUTSWITCH) makegen.rc $(RCOUTPUTSWITCH) makegen.c $(RESFLAGS)
+
+$(OBJDIR)/makegen.$(OBJSUFF):	makegen.c
+	$(CC) -c $(CPPFLAGS) -o $@ makegen.c
+
+#$(OBJDIR)/makegen.o:  makegen.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) makegen.rc $(RCOUTPUTSWITCH) $(OBJDIR)/makegen.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) makegen$(GUISUFFIX).exe core *.rsc *.res

@@ -169,7 +169,7 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
             bmp = node->GetData()->CreateBitmap(id, client, size);
             if ( bmp.Ok() )
             {
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
                 if ( size != wxDefaultSize &&
                      (bmp.GetWidth() != size.x || bmp.GetHeight() != size.y) )
                 {

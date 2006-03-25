@@ -901,7 +901,7 @@ bool wxRegKey::QueryValue(const wxChar *szValue,
     {
 
         // first get the type and size of the data
-        DWORD dwType, dwSize;
+        DWORD dwType=REG_NONE, dwSize=0;
         m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
                                         &dwType, NULL, &dwSize);
         if ( m_dwLastError == ERROR_SUCCESS )

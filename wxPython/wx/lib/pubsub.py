@@ -39,7 +39,7 @@ Ideally, _TopicTreeNode would be a generic _TreeNode with named
 subnodes, and _TopicTreeRoot would be a generic _Tree with named
 nodes, and Publisher would store listeners in each node and a topic
 tuple would be converted to a path in the tree.  This would lead to a
-much cleaner separation of concerns. But time is over, tim to move on.
+much cleaner separation of concerns. But time is over, time to move on.
 
 """
 #---------------------------------------------------------------------------
@@ -90,9 +90,11 @@ def _paramMinCount(callableObject):
 def _tupleize(items):
     """Convert items to tuple if not already one, 
     so items must be a list, tuple or non-sequence"""
-    if isinstance(items, type([])):
+    if isinstance(items, list):
         raise TypeError, 'Not allowed to tuple-ize a list'
-    elif not isinstance(items, type(())):
+    elif isinstance(items, (str, unicode)) and items.find('.') != -1:
+        items = tuple(items.split('.'))
+    elif not isinstance(items, tuple):
         items = (items,)
     return items
 
@@ -561,10 +563,11 @@ class Publisher:
       with only one argument. In every case, the parameter 'a' will contain
       the message. 
 
-    - topic: a single word or tuple of words (though word could probably 
-      be any kind of object, not just a string, but this has not been 
-      tested). A tuple denotes a hierarchy of topics from most general
-      to least. For example, a listener of this topic::
+    - topic: a single word, a tuple of words, or a string containing a
+      set of words separated by dots, for example: 'sports.baseball'.
+      A tuple or a dotted notation string denotes a hierarchy of
+      topics from most general to least. For example, a listener of
+      this topic::
 
           ('sports','baseball')
 
@@ -614,11 +617,11 @@ class Publisher:
         listener will be subscribed for all topics (that listener will 
         receive a Message for any topic for which a message is generated). 
         
-        This method may be
-        called multiple times for one listener, registering it with
-        many topics.  It can also be invoked many times for a
-        particular topic, each time with a different listener.
-        See the class doc for requirements on listener and topic.
+        This method may be called multiple times for one listener,
+        registering it with many topics.  It can also be invoked many
+        times for a particular topic, each time with a different
+        listener.  See the class doc for requirements on listener and
+        topic.
 
         :note: Calling 
         this method for the same listener, with two topics in the same 
@@ -691,7 +694,7 @@ class Publisher:
             return
         
         # make sure every topics are in tuple form
-        if isinstance(topics, type([])):
+        if isinstance(topics, list):
             topicList = [_tupleize(x) for x in topics]
         else:
             topicList = [_tupleize(topics)]

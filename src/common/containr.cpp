@@ -186,8 +186,8 @@ wxRadioButton* wxGetPreviousButtonInGroup(wxRadioButton *btn)
         // no more buttons in group
         return NULL;
     }
-    else
-        return prevBtn;
+
+    return prevBtn;
 }
 
 wxRadioButton* wxGetNextButtonInGroup(wxRadioButton *btn)
@@ -216,8 +216,8 @@ wxRadioButton* wxGetNextButtonInGroup(wxRadioButton *btn)
         // no more buttons or the first button of the next group
         return NULL;
     }
-    else
-        return nextBtn;
+
+    return nextBtn;
 }
 
 wxRadioButton* wxGetFirstButtonInGroup(wxRadioButton *btn)
@@ -229,6 +229,18 @@ wxRadioButton* wxGetFirstButtonInGroup(wxRadioButton *btn)
             return btn;
 
         btn = prevBtn;
+    }
+}
+
+wxRadioButton* wxGetLastButtonInGroup(wxRadioButton *btn)
+{
+    while (true)
+    {
+        wxRadioButton* nextBtn = wxGetNextButtonInGroup(btn);
+        if (!nextBtn)
+            return btn;
+
+        btn = nextBtn;
     }
 }
 
@@ -362,11 +374,21 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
     }
 
     // we want to cycle over all elements passing by NULL
-    while ( node != start_node )
+    for( ;; )
     {
+        // if it is the starting node then break
+        if( node && start_node && node == start_node )
+            break;
+
         // Have we come to the last or first item on the panel?
         if ( !node )
         {
+            if ( !start_node )
+            {
+                // exit now as otherwise we'd loop forever
+                break;
+            }
+
             if ( !goingDown )
             {
                 // Check if our (may be grand) parent is another panel: if this
@@ -403,57 +425,68 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
         wxWindow *child = node->GetData();
 
 #ifdef __WXMSW__
-        bool canSelectRadioButton = true;
-        if (!event.IsFromTab())
+        if ( event.IsFromTab() )
         {
-            // If navigating using cursor keys, make sure not to navigate out of a radio button group.
-            if (m_winLastFocused && wxIsKindOf(m_winLastFocused, wxRadioButton))
+            if ( wxIsKindOf(child, wxRadioButton) )
             {
-                if (!wxIsKindOf(child, wxRadioButton))
+                // only radio buttons with either wxRB_GROUP or wxRB_SINGLE
+                // can be tabbed to
+                if ( child->HasFlag(wxRB_GROUP) )
                 {
-                    child = forward ?
-                                wxGetNextButtonInGroup((wxRadioButton*)m_winLastFocused) :
-                                wxGetPreviousButtonInGroup((wxRadioButton*)m_winLastFocused);
-                    if (!child)
-                    {
-                        event.Skip(false);
-                        return;
-                    }
+                    // need to tab into the active button within a group
+                    wxRadioButton *rb = wxGetSelectedButtonInGroup((wxRadioButton*)child);
+                    if ( rb )
+                        child = rb;
+                }
+                else if ( !child->HasFlag(wxRB_SINGLE) )
+                {
+                    node = forward ? node->GetNext() : node->GetPrevious();
+                    continue;
                 }
             }
         }
-        else
+        else if ( m_winLastFocused &&
+                  wxIsKindOf(m_winLastFocused, wxRadioButton) &&
+                  !m_winLastFocused->HasFlag(wxRB_SINGLE) )
         {
-            // If navigating using tabs, skip all but the first radio button in a group.
-            if (wxIsKindOf(child, wxRadioButton))
+            // cursor keys don't navigate out of a radio button group so
+            // find the correct radio button to focus
+            if ( forward )
             {
-                if (wxGetPreviousButtonInGroup((wxRadioButton*)child))
-                    canSelectRadioButton = false;
+                child = wxGetNextButtonInGroup((wxRadioButton*)m_winLastFocused);
+                if ( !child )
+                {
+                    // no next button in group, set it to the first button
+                    child = wxGetFirstButtonInGroup((wxRadioButton*)m_winLastFocused);
+                }
+            }
+            else
+            {
+                child = wxGetPreviousButtonInGroup((wxRadioButton*)m_winLastFocused);
+                if ( !child )
+                {
+                    // no previous button in group, set it to the last button
+                    child = wxGetLastButtonInGroup((wxRadioButton*)m_winLastFocused);
+                }
+            }
+
+            if ( child == m_winLastFocused )
+            {
+                // must be a group consisting of only one button therefore
+                // no need to send a navigation event
+                event.Skip(false);
+                return;
             }
         }
-#else
-        static bool canSelectRadioButton = true;
-#endif
+#endif // __WXMSW__
 
-        if ( child->AcceptsFocusFromKeyboard() && canSelectRadioButton )
+        if ( child->AcceptsFocusFromKeyboard() )
         {
             // if we're setting the focus to a child panel we should prevent it
             // from giving it to the child which had the focus the last time
             // and instead give it to the first/last child depending from which
             // direction we're coming
             event.SetEventObject(m_winParent);
-
-#if defined(__WXMSW__)
-            // we need to hop to the next activated
-            // radio button, not just the next radio
-            // button under MSW
-            if (wxIsKindOf(child, wxRadioButton) && event.IsFromTab())
-            {
-                wxRadioButton *rb = wxGetSelectedButtonInGroup((wxRadioButton*)child);
-                if (rb)
-                    child = rb;
-            }
-#endif // __WXMSW__
 
             // disable propagation for this call as otherwise the event might
             // bounce back to us.

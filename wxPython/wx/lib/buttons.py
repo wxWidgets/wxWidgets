@@ -529,10 +529,10 @@ class __ToggleMixin:
         if not self.IsEnabled() or not self.HasCapture():
             return
         if self.HasCapture():
-            if self.up != self.saveUp:
-                self.Notify()
             self.ReleaseMouse()
             self.Refresh()
+            if self.up != self.saveUp:
+                self.Notify()
 
     def OnKeyDown(self, event):
         event.Skip()

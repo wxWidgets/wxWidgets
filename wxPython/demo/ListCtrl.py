@@ -200,10 +200,10 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
 
     def OnRightDown(self, event):
-        self.x = event.GetX()
-        self.y = event.GetY()
-        self.log.WriteText("x, y = %s\n" % str((self.x, self.y)))
-        item, flags = self.list.HitTest((self.x, self.y))
+        x = event.GetX()
+        y = event.GetY()
+        self.log.WriteText("x, y = %s\n" % str((x, y)))
+        item, flags = self.list.HitTest((x, y))
 
         if flags & wx.LIST_HITTEST_ONITEM:
             self.list.Select(item)
@@ -313,7 +313,7 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
 
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
-        self.PopupMenu(menu, (self.x, self.y))
+        self.PopupMenu(menu)
         menu.Destroy()
 
 

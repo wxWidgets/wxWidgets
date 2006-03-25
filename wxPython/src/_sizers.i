@@ -121,7 +121,7 @@ of item.", "");
 needed by borders.", "");
 
     DocDeclStr(
-        void , SetDimension( wxPoint pos, wxSize size ),
+        void , SetDimension( const wxPoint& pos, const wxSize& size ),
         "Set the position and size of the space allocated for this item by the
 sizer, and adjust the position and size of the item (window or
 subsizer) to be within that space taking alignment and borders into
@@ -261,6 +261,18 @@ isn't any.", "");
                 return Py_None;
             }
         }
+
+        DocStr(SetUserData,
+               "Associate a Python object with this sizer item.", "");
+        void SetUserData(PyObject* userData) {
+            wxPyUserData* data = NULL;
+            if ( userData ) {
+                wxPyBlock_t blocked = wxPyBeginBlockThreads();
+                data = new wxPyUserData(userData);
+                wxPyEndBlockThreads(blocked);
+            }
+            self->SetUserData(data);
+        }
     }
 };
 
@@ -318,14 +330,14 @@ static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize,
     if ( !(info.window || info.sizer || (checkSize && info.gotSize) || (checkIdx && info.gotPos)) ) {
         // no expected type, figure out what kind of error message to generate
         if ( !checkSize && !checkIdx )
-            PyErr_SetString(PyExc_TypeError, "wxWindow or wxSizer expected for item");
+            PyErr_SetString(PyExc_TypeError, "wx.Window or wx.Sizer expected for item");
         else if ( checkSize && !checkIdx )
-            PyErr_SetString(PyExc_TypeError, "wxWindow, wxSizer, wxSize, or (w,h) expected for item");
+            PyErr_SetString(PyExc_TypeError, "wx.Window, wx.Sizer, wx.Size, or (w,h) expected for item");
         else if ( !checkSize && checkIdx)
-            PyErr_SetString(PyExc_TypeError, "wxWindow, wxSizer or int (position) expected for item");
+            PyErr_SetString(PyExc_TypeError, "wx.Window, wx.Sizer or int (position) expected for item");
         else
             // can this one happen?
-            PyErr_SetString(PyExc_TypeError, "wxWindow, wxSizer, wxSize, or (w,h) or int (position) expected for item");
+            PyErr_SetString(PyExc_TypeError, "wx.Window, wx.Sizer, wx.Size, or (w,h) or int (position) expected for item");
     }
 
     return info;
@@ -1140,11 +1152,11 @@ define extra space between all children.", "");
 
     DocDeclStr(
         int , GetCols(),
-        "Returns the number of columns in the sizer.", "");
+        "Returns the number of columns in the sizer, as specified in the constructor.", "");
 
     DocDeclStr(
         int , GetRows(),
-        "Returns the number of rows in the sizer.", "");
+        "Returns the number of rows in the sizer, as specified in the constructor.", "");
 
     DocDeclStr(
         int , GetVGap(),
@@ -1154,6 +1166,25 @@ define extra space between all children.", "");
         int , GetHGap(),
         "Returns the horizontal gap (in pixels) between cells in the sizer.", "");
 
+    %pythoncode {
+        def CalcRowsCols(self):
+            """
+            CalcRowsCols() -> (rows, cols)
+
+            Calculates how many rows and columns will be in the sizer based
+            on the current number of items and also the rows, cols specified
+            in the constructor.
+            """
+            nitems = len(self.GetChildren())
+            rows = self.GetRows()
+            cols = self.GetCols()
+            assert rows != 0 or cols != 0, "Grid sizer must have either rows or columns fixed"
+            if cols != 0:
+                rows = (nitems + cols - 1) / cols
+            elif rows != 0:
+                cols = (nitems + rows - 1) / rows
+            return (rows, cols)
+    }
 };
 
 //---------------------------------------------------------------------------

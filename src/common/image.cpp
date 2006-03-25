@@ -266,8 +266,16 @@ wxImage wxImage::Copy() const
 
     memcpy( data, GetData(), M_IMGDATA->m_width*M_IMGDATA->m_height*3 );
 
-    // also copy the image options
     wxImageRefData *imgData = (wxImageRefData *)image.m_refData;
+    
+    // also copy the alpha channel
+    if (HasAlpha())
+    {
+        image.SetAlpha();
+        unsigned char* alpha = image.GetAlpha();
+        memcpy( alpha, GetAlpha(), M_IMGDATA->m_width*M_IMGDATA->m_height );
+    }
+
     imgData->m_optionNames = M_IMGDATA->m_optionNames;
     imgData->m_optionValues = M_IMGDATA->m_optionValues;
 
@@ -1558,7 +1566,13 @@ bool wxImage::LoadFile( wxInputStream& stream, long type, int index )
         return false;
     }
 
-    return handler->LoadFile(this, stream, true/*verbose*/, index);
+    if (stream.IsSeekable() && !handler->CanRead(stream))
+    {
+        wxLogError(_("Image file is not of type %d."), type);
+        return false;
+    }
+    else
+        return handler->LoadFile(this, stream, true/*verbose*/, index);
 }
 
 bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int index )
@@ -1576,7 +1590,13 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
         return false;
     }
 
-    return handler->LoadFile( this, stream, true/*verbose*/, index );
+    if (stream.IsSeekable() && !handler->CanRead(stream))
+    {
+        wxLogError(_("Image file is not of type %s."), (const wxChar*) mimetype);
+        return false;
+    }
+    else
+        return handler->LoadFile( this, stream, true/*verbose*/, index );
 }
 
 bool wxImage::SaveFile( wxOutputStream& stream, int type ) const

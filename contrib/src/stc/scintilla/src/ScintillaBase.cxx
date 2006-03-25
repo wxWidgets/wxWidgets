@@ -38,8 +38,10 @@
 ScintillaBase::ScintillaBase() {
 	displayPopupMenu = true;
 	listType = 0;
+	maxListWidth = 0;
 #ifdef SCI_LEXER
 	lexLanguage = SCLEX_CONTAINER;
+	performingStyle = false;
 	lexCurrent = 0;
 	for (int wl = 0;wl < numWordLists;wl++)
 		keyWordLists[wl] = new WordList;
@@ -214,7 +216,8 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 			return;
 		}
 	}
-	ac.Start(wMain, idAutoComplete, currentPos, lenEntered, vs.lineHeight, IsUnicodeMode());
+	ac.Start(wMain, idAutoComplete, currentPos, LocationFromPosition(currentPos),
+				lenEntered, vs.lineHeight, IsUnicodeMode());
 
 	PRectangle rcClient = GetClientRectangle();
 	Point pt = LocationFromPosition(currentPos - lenEntered);
@@ -242,7 +245,8 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 	rcac.bottom = Platform::Minimum(rcac.top + heightLB, rcClient.bottom);
 	ac.lb->SetPositionRelative(rcac, wMain);
 	ac.lb->SetFont(vs.styles[STYLE_DEFAULT].font);
-	ac.lb->SetAverageCharWidth(vs.styles[STYLE_DEFAULT].aveCharWidth);
+	unsigned int aveCharWidth = vs.styles[STYLE_DEFAULT].aveCharWidth;
+	ac.lb->SetAverageCharWidth(aveCharWidth);
 	ac.lb->SetDoubleClickAction(AutoCompleteDoubleClick, this);
 
 	ac.SetList(list);
@@ -251,6 +255,8 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 	PRectangle rcList = ac.lb->GetDesiredRect();
 	int heightAlloced = rcList.bottom - rcList.top;
 	widthLB = Platform::Maximum(widthLB, rcList.right - rcList.left);
+	if (maxListWidth != 0)
+		widthLB = Platform::Minimum(widthLB, aveCharWidth*maxListWidth);
 	// Make an allowance for large strings in list
 	rcList.left = pt.x - ac.lb->CaretFromEdge();
 	rcList.right = rcList.left + widthLB;
@@ -262,7 +268,7 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 	}
 	rcList.bottom = rcList.top + heightAlloced;
 	ac.lb->SetPositionRelative(rcList, wMain);
-	ac.Show();
+	ac.Show(true);
 	if (lenEntered != 0) {
 		AutoCompleteMoveToCurrentWord();
 	}
@@ -312,25 +318,31 @@ void ScintillaBase::AutoCompleteCompleted() {
 	selected[0] = '\0';
 	if (item != -1) {
 		ac.lb->GetValue(item, selected, sizeof(selected));
-	}
-	ac.Cancel();
-	if (item == -1)
-		return;
-
-	if (listType > 0) {
-		userListSelected = selected;
-		SCNotification scn;
-		scn.nmhdr.code = SCN_USERLISTSELECTION;
-		scn.message = 0;
-		scn.wParam = listType;
-		scn.listType = listType;
-		scn.lParam = 0;
-		scn.text = userListSelected.c_str();
-		NotifyParent(scn);
+	} else {
+		ac.Cancel();
 		return;
 	}
 
+	ac.Show(false);
+
+	listSelected = selected;
+	SCNotification scn = {0};
+	scn.nmhdr.code = listType > 0 ? SCN_USERLISTSELECTION : SCN_AUTOCSELECTION;
+	scn.message = 0;
+	scn.wParam = listType;
+	scn.listType = listType;
 	Position firstPos = ac.posStart - ac.startLen;
+	scn.lParam = firstPos;
+	scn.text = listSelected.c_str();
+	NotifyParent(scn);
+
+	if (!ac.Active())
+		return;
+	ac.Cancel();
+
+	if (listType > 0)
+		return;
+
 	Position endPos = currentPos;
 	if (ac.dropRestOfWord)
 		endPos = pdoc->ExtendWordSelect(endPos, 1, true);
@@ -378,7 +390,7 @@ void ScintillaBase::CallTipShow(Point pt, const char *defn) {
 }
 
 void ScintillaBase::CallTipClick() {
-	SCNotification scn;
+	SCNotification scn = {0};
 	scn.nmhdr.code = SCN_CALLTIPCLICK;
 	scn.position = ct.clickPlace;
 	NotifyParent(scn);
@@ -430,29 +442,38 @@ void ScintillaBase::SetLexerLanguage(const char *languageName) {
 }
 
 void ScintillaBase::Colourise(int start, int end) {
-	int lengthDoc = pdoc->Length();
-	if (end == -1)
-		end = lengthDoc;
-	int len = end - start;
+	if (!performingStyle) {
+		// Protect against reentrance, which may occur, for example, when
+		// fold points are discovered while performing styling and the folding
+		// code looks for child lines which may trigger styling.
+		performingStyle = true;
 
-	PLATFORM_ASSERT(len >= 0);
-	PLATFORM_ASSERT(start + len <= lengthDoc);
+		int lengthDoc = pdoc->Length();
+		if (end == -1)
+			end = lengthDoc;
+		int len = end - start;
 
-	//WindowAccessor styler(wMain.GetID(), props);
-	DocumentAccessor styler(pdoc, props, wMain.GetID());
+		PLATFORM_ASSERT(len >= 0);
+		PLATFORM_ASSERT(start + len <= lengthDoc);
 
-	int styleStart = 0;
-	if (start > 0)
-		styleStart = styler.StyleAt(start - 1);
-	styler.SetCodePage(pdoc->dbcsCodePage);
+		//WindowAccessor styler(wMain.GetID(), props);
+		DocumentAccessor styler(pdoc, props, wMain.GetID());
 
-	if (lexCurrent && (len > 0)) {	// Should always succeed as null lexer should always be available
-		lexCurrent->Lex(start, len, styleStart, keyWordLists, styler);
-		styler.Flush();
-		if (styler.GetPropertyInt("fold")) {
-			lexCurrent->Fold(start, len, styleStart, keyWordLists, styler);
+		int styleStart = 0;
+		if (start > 0)
+			styleStart = styler.StyleAt(start - 1);
+		styler.SetCodePage(pdoc->dbcsCodePage);
+
+		if (lexCurrent && (len > 0)) {	// Should always succeed as null lexer should always be available
+			lexCurrent->Lex(start, len, styleStart, keyWordLists, styler);
 			styler.Flush();
+			if (styler.GetPropertyInt("fold")) {
+				lexCurrent->Fold(start, len, styleStart, keyWordLists, styler);
+				styler.Flush();
+			}
 		}
+
+		performingStyle = false;
 	}
 }
 #endif
@@ -553,6 +574,20 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 	case SCI_AUTOCGETDROPRESTOFWORD:
 		return ac.dropRestOfWord;
 
+	case SCI_AUTOCSETMAXHEIGHT:
+		ac.lb->SetVisibleRows(wParam);
+		break;
+
+	case SCI_AUTOCGETMAXHEIGHT:
+		return ac.lb->GetVisibleRows();
+
+	case SCI_AUTOCSETMAXWIDTH:
+		maxListWidth = wParam;
+		break;
+
+	case SCI_AUTOCGETMAXWIDTH:
+		return maxListWidth;
+
 	case SCI_REGISTERIMAGE:
 		ac.lb->RegisterImage(wParam, reinterpret_cast<const char *>(lParam));
 		break;
@@ -616,7 +651,12 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 		return lexLanguage;
 
 	case SCI_COLOURISE:
-		Colourise(wParam, lParam);
+		if (lexLanguage == SCLEX_CONTAINER) {
+			pdoc->ModifiedAt(wParam);
+			NotifyStyleToNeeded((lParam == -1) ? pdoc->Length() : lParam);
+		} else {
+			Colourise(wParam, lParam);
+		}
 		Redraw();
 		break;
 
@@ -624,6 +664,31 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 		props.Set(reinterpret_cast<const char *>(wParam),
 		          reinterpret_cast<const char *>(lParam));
 		break;
+
+	case SCI_GETPROPERTY: {
+			SString val = props.Get(reinterpret_cast<const char *>(wParam));
+			const int n = val.length();
+			if (lParam != 0) {
+				char *ptr = reinterpret_cast<char *>(lParam);
+				memcpy(ptr, val.c_str(), n);
+				ptr[n] = '\0';	// terminate
+			}
+			return n;	// Not including NUL
+		}
+
+	case SCI_GETPROPERTYEXPANDED: {
+			SString val = props.GetExpanded(reinterpret_cast<const char *>(wParam));
+			const int n = val.length();
+			if (lParam != 0) {
+				char *ptr = reinterpret_cast<char *>(lParam);
+				memcpy(ptr, val.c_str(), n);
+				ptr[n] = '\0';	// terminate
+			}
+			return n;	// Not including NUL
+		}
+
+	case SCI_GETPROPERTYINT:
+		return props.GetInt(reinterpret_cast<const char *>(wParam), lParam);
 
 	case SCI_SETKEYWORDS:
 		if (wParam < numWordLists) {
@@ -636,6 +701,8 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 		SetLexerLanguage(reinterpret_cast<const char *>(lParam));
 		break;
 
+	case SCI_GETSTYLEBITSNEEDED:
+		return lexCurrent ? lexCurrent->GetStyleBitsNeeded() : 5;
 #endif
 
 	default:

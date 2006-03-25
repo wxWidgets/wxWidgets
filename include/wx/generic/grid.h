@@ -9,8 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
-
 #ifndef __WXGRID_H__
 #define __WXGRID_H__
 

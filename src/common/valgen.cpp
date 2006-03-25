@@ -44,14 +44,16 @@
   #include "wx/slider.h"
 #endif
 
-
-  #include "wx/spinctrl.h"
+#include "wx/spinctrl.h"
 
 #if wxUSE_SPINBTN
   #include "wx/spinbutt.h"
 #endif
 #if wxUSE_CHECKLISTBOX
   #include "wx/checklst.h"
+#endif
+#if wxUSE_TOGGLEBTN
+  #include "wx/tglbtn.h"
 #endif
 
 #include "wx/valgen.h"
@@ -127,6 +129,17 @@ bool wxGenericValidator::TransferToWindow(void)
             pControl->SetValue(*m_pBool) ;
             return true;
         }
+    } else
+#endif
+#if wxUSE_TOGGLEBTN
+    if (m_validatorWindow->IsKindOf(CLASSINFO(wxToggleButton)) )
+    {
+        wxToggleButton * pControl = (wxToggleButton *) m_validatorWindow;
+	if (m_pBool)
+	{
+	    pControl->SetValue(*m_pBool);
+	    return true;
+	}
     } else
 #endif
 
@@ -281,6 +294,7 @@ bool wxGenericValidator::TransferToWindow(void)
         }
     } else
 #endif
+
     // array controls
 #if wxUSE_CHECKLISTBOX
     // NOTE: wxCheckListBox is a wxListBox, so wxCheckListBox MUST come first:
@@ -360,6 +374,17 @@ bool wxGenericValidator::TransferFromWindow(void)
             *m_pBool = pControl->GetValue() ;
             return true;
         }
+    } else
+#endif
+#if wxUSE_TOGGLEBTN
+    if (m_validatorWindow->IsKindOf(CLASSINFO(wxToggleButton)) )
+    {
+	wxToggleButton *pControl = (wxToggleButton *) m_validatorWindow;
+	if (m_pBool)
+	{
+	    *m_pBool = pControl->GetValue() ;
+	    return true;
+	}
     } else
 #endif
 

@@ -106,6 +106,8 @@ class ServiceView(wx.EvtHandler):
             if (self._service.GetEmbeddedWindowLocation() == wx.lib.pydocview.EMBEDDED_WINDOW_BOTTOM):
                 if ServiceView.bottomTab == None:
                     ServiceView.bottomTab = wx.Notebook(frame, wx.NewId(), (0,0), (100,100), wx.LB_DEFAULT, "Bottom Tab")
+                    wx.EVT_RIGHT_DOWN(ServiceView.bottomTab, self.OnNotebookRightClick)
+                    wx.EVT_MIDDLE_DOWN(ServiceView.bottomTab, self.OnNotebookMiddleClick)
                     sizer.Add(ServiceView.bottomTab, 1, wx.TOP|wx.EXPAND, 4)
                     def OnFrameResize(event):
                         ServiceView.bottomTab.SetSize(ServiceView.bottomTab.GetParent().GetSize())
@@ -125,10 +127,46 @@ class ServiceView(wx.EvtHandler):
             sizer.Add(self._control, 1, wx.EXPAND, 0)
         frame.SetSizer(sizer)
         frame.Layout()
-
+        self.Activate()
         return True
 
 
+    def OnNotebookMiddleClick(self, event):
+        index, type = ServiceView.bottomTab.HitTest(event.GetPosition())
+        # 0 tab is always message. This code assumes the rest are run/debug windows
+        if index > 0:
+            page = ServiceView.bottomTab.GetPage(index)
+            if hasattr(page, 'StopAndRemoveUI'):
+                page.StopAndRemoveUI(event)
+ 
+       
+    def OnNotebookRightClick(self, event):
+        index, type = ServiceView.bottomTab.HitTest(event.GetPosition())
+        menu = wx.Menu()
+        x, y = event.GetX(), event.GetY()
+        # 0 tab is always message. This code assumes the rest are run/debug windows
+        if index > 0:
+            page = ServiceView.bottomTab.GetPage(index)
+            id = wx.NewId()
+            menu.Append(id, _("Close"))
+            def OnRightMenuSelect(event):
+                if hasattr(page, 'StopAndRemoveUI'):
+                    page.StopAndRemoveUI(event)
+            wx.EVT_MENU(ServiceView.bottomTab, id, OnRightMenuSelect)
+            if ServiceView.bottomTab.GetPageCount() > 1:
+                id = wx.NewId()
+                menu.Append(id, _("Close All but \"Message\""))
+                def OnRightMenuSelect(event):
+                    for i in range(ServiceView.bottomTab.GetPageCount()-1, 0, -1): # Go from len-1 to 1
+                        page = ServiceView.bottomTab.GetPage(i)
+                        if hasattr(page, 'StopAndRemoveUI'):
+                            page.StopAndRemoveUI(event)
+                wx.EVT_MENU(ServiceView.bottomTab, id, OnRightMenuSelect)
+        
+        ServiceView.bottomTab.PopupMenu(menu, wx.Point(x, y))
+        menu.Destroy()
+
+        
     def OnCloseWindow(self, event):
         frame = self.GetFrame()
         config = wx.ConfigBase_Get()

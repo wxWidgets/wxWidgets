@@ -8,10 +8,13 @@ libwxgtk		wxGTK runtime shared libraries, including selected
 libwxgtk-dev		extra files required for building wxGTK apps
 libwxgtk-dbg		wxGTK libraries built with -g and __WXDEBUG__
 
-libwxgtk-python		Python binding to wxGTK  (from 2.2.3 onward, this
+python-wxgtk		Python binding to wxGTK  (from 2.2.3 onward, this
 			obsoletes the libwxgtk-python-contrib package as
 			all python modules are built into a single monolith)
+python-wxversion	The wxversion.py version selector, new to wxPython2.6
+python-wxtools		The ancillary tools from the wxPython distribution.
 
+wx-common		common helper files and support applications.
 wx-headers		common header files for building wxWidgets apps
 wx-doc			HTML version of the wxWidgets manual
 wx-examples		wxWidgets and wxPython demos and samples (source)
@@ -45,7 +48,7 @@ wx-headers-msw		extra headers needed for wxMSW.
 	in debian/rules.
 
 
-	It is also possible to build a libwxgtk-dbg-python package.
+	It is also possible to build a python-wxgtk-dbg package.
 	There are some limitations (like this package cannot be installed
 	concurrently with the release version), but some developers may
 	find such a thing useful in any case.  It will transparently

@@ -53,7 +53,9 @@
 // Dynamic library function defs.
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#if wxUSE_DYNLIB_CLASS
 static wxDynamicLibrary s_mprLib;
+#endif
 
 typedef DWORD (WINAPI* WNetOpenEnumPtr)(DWORD, DWORD, DWORD, LPNETRESOURCE, LPHANDLE);
 typedef DWORD (WINAPI* WNetEnumResourcePtr)(HANDLE, LPDWORD, LPVOID, LPDWORD);
@@ -382,6 +384,7 @@ wxArrayString wxFSVolumeBase::GetVolumes(int flagsSet, int flagsUnset)
 {
     ::InterlockedExchange(&s_cancelSearch, FALSE);     // reset
 
+#if wxUSE_DYNLIB_CLASS
     if (!s_mprLib.IsLoaded() && s_mprLib.Load(_T("mpr.dll")))
     {
 #ifdef UNICODE
@@ -393,6 +396,7 @@ wxArrayString wxFSVolumeBase::GetVolumes(int flagsSet, int flagsUnset)
 #endif
         s_pWNetCloseEnum = (WNetCloseEnumPtr)s_mprLib.GetSymbol(_T("WNetCloseEnum"));
     }
+#endif
 
     wxArrayString list;
 

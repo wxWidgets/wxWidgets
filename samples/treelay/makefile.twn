@@ -1,0 +1,35 @@
+# Purpose: makefile for treelay example (TWIN)
+# Created: 2000-03-15
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/treelay.$(OBJSUFF) $(OBJDIR)/treelay.$(OBJSUFF)
+
+all:    $(OBJDIR) treelay$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+treelay$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o treelay$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/treelay.$(OBJSUFF):	treelay.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ treelay.$(SRCSUFF)
+
+treelay.c:  treelay.rc
+	$(RESCOMP) $(RCINPUTSWITCH) treelay.rc $(RCOUTPUTSWITCH) treelay.c $(RESFLAGS)
+
+$(OBJDIR)/treelay.$(OBJSUFF):	treelay.c
+	$(CC) -c $(CPPFLAGS) -o $@ treelay.c
+
+#$(OBJDIR)/treelay.o:  treelay.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) treelay.rc $(RCOUTPUTSWITCH) $(OBJDIR)/treelay.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) treelay$(GUISUFFIX).exe core *.rsc *.res

@@ -106,7 +106,7 @@ public:
     // return True if the timer is running
     virtual bool IsRunning() const;
 
-    // get the (last) timer interval in the milliseconds
+    // get the (last) timer interval in milliseconds
     int GetInterval() const;
 
     // return True if the timer is one shot
@@ -117,7 +117,7 @@ public:
 
     %pythoncode {
         def Destroy(self):
-            """NO-OP: Timers must be destroyed by normal refrence counting"""
+            """NO-OP: Timers must be destroyed by normal reference counting"""
             pass
     }
 };

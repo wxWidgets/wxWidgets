@@ -29,6 +29,7 @@ protected:
 	Property *props[hashRoots];
 	Property *enumnext;
 	int enumhash;
+	static bool caseSensitiveFilenames;
 	static unsigned int HashString(const char *s, size_t len) {
 		unsigned int ret = 0;
 		while (len--) {
@@ -58,9 +59,12 @@ public:
 	char *ToString();	// Caller must delete[] the return value
 	bool GetFirst(char **key, char **val);
 	bool GetNext(char **key, char **val);
+	static void SetCaseSensitiveFilenames(bool caseSensitiveFilenames_) {
+		caseSensitiveFilenames = caseSensitiveFilenames_;
+	}
 
 private:
-	// copy-value semantics not implemented	
+	// copy-value semantics not implemented
 	PropSet(const PropSet &copy);
 	void operator=(const PropSet &assign);
 };
@@ -76,9 +80,11 @@ public:
 	int len;
 	bool onlyLineEnds;	///< Delimited by any white space or only line ends
 	bool sorted;
+	bool sortedNoCase;
 	int starts[256];
 	WordList(bool onlyLineEnds_ = false) :
-		words(0), wordsNoCase(0), list(0), len(0), onlyLineEnds(onlyLineEnds_), sorted(false) {}
+		words(0), wordsNoCase(0), list(0), len(0), onlyLineEnds(onlyLineEnds_),
+		sorted(false), sortedNoCase(false) {}
 	~WordList() { Clear(); }
 	operator bool() { return len ? true : false; }
 	char *operator[](int ind) { return words[ind]; }
@@ -87,6 +93,7 @@ public:
 	char *Allocate(int size);
 	void SetFromAllocated();
 	bool InList(const char *s);
+	bool InListAbbreviated(const char *s, const char marker);
 	const char *GetNearestWord(const char *wordStart, int searchLen,
 		bool ignoreCase = false, SString wordCharacters="", int wordIndex = -1);
 	char *GetNearestWords(const char *wordStart, int searchLen,

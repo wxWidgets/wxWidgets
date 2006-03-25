@@ -1,0 +1,11 @@
+# Purpose: makefile for #NAME example (VC++ 32bit)
+# Created: #DATE
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+PROGRAM=#NAME
+OBJECTS = $(PROGRAM).obj
+
+!include $(WXDIR)\src\makeprog.vc
+

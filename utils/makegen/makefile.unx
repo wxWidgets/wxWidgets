@@ -1,0 +1,23 @@
+# Purpose: makefile for makegen example (Unix)
+# Created: 2000-01-03
+
+CC = gcc
+
+PROGRAM = makegen
+
+OBJECTS = $(PROGRAM).o
+
+# implementation
+
+.SUFFIXES:	.o .cpp
+
+.cpp.o :
+	$(CC) -c `wx-config --cflags` -o $@ $<
+
+all:    $(PROGRAM)
+
+$(PROGRAM):	$(OBJECTS)
+	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
+
+clean:
+	rm -f *.o $(PROGRAM)

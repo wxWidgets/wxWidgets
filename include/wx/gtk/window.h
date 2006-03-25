@@ -113,6 +113,12 @@ public:
     virtual void RemoveChild( wxWindowBase *child );
 #endif
 
+#ifdef __WXGTK20__
+#if wxABI_VERSION >= 20603 /* 2.6.3+ only */
+    void SetDoubleBuffered( bool on );
+#endif
+#endif
+
     // implementation
     // --------------
 

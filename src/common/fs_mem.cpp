@@ -239,8 +239,10 @@ wxMemoryFSHandler::AddFile(const wxString& filename,
                            const wxBitmap& bitmap,
                            long type)
 {
+#if !defined(__WXMSW__) || wxUSE_WXDIB
     wxImage img = bitmap.ConvertToImage();
     AddFile(filename, img, type);
+#endif
 }
 
 #endif // wxUSE_IMAGE

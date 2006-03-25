@@ -315,7 +315,7 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
               ((m_validatorStyle & wxFILTER_ALPHA) && !wxIsalpha(keyCode)) ||
               ((m_validatorStyle & wxFILTER_ALPHANUMERIC) && !wxIsalnum(keyCode)) ||
               ((m_validatorStyle & wxFILTER_NUMERIC) && !wxIsdigit(keyCode)
-                                && keyCode != '.' && keyCode != ',' && keyCode != '-')
+                                && keyCode != wxT('.') && keyCode != wxT(',') && keyCode != wxT('-') && keyCode != wxT('+') && keyCode != wxT('e') && keyCode != wxT('E'))
              )
            )
         {
@@ -337,7 +337,7 @@ static bool wxIsNumeric(const wxString& val)
     {
         // Allow for "," (French) as well as "." -- in future we should
         // use wxSystemSettings or other to do better localisation
-        if ((!wxIsdigit(val[i])) && (val[i] != '.') && (val[i] != ',') && (val[i] != wxT('e')) && (val[i] != wxT('E')) && (val[i] != wxT('+')) && (val[i] != wxT('-')))
+        if ((!wxIsdigit(val[i])) && (val[i] != wxT('.')) && (val[i] != wxT(',')) && (val[i] != wxT('e')) && (val[i] != wxT('E')) && (val[i] != wxT('+')) && (val[i] != wxT('-')))
             return false;
     }
     return true;

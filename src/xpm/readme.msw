@@ -1,0 +1,127 @@
+
+README.MSW	hedu@cul-ipn.uni-kiel.de	5/94
+
+		The XPM library for MS-Windows
+		
+Motivated by the wxWindows library, which is a (freely available) toolkit
+for developing multi-platform, graphical applications from the same body 
+of C++ code, I wanted to have XPM pixmaps for MS-windows. Instead of rewriting 
+a XPM-parser I managed to port the XPM-library-code to MS-windows.
+Thanks to Anaud Le Hors this became a part of the official XPM-library.
+
+Until now it's only used together with wxWindows. And even there it's more 
+a kind of beta. But it should be possible to run it as a simple libxpm.a 
+without wxWindows.
+
+The key is a transformation of some X types plus some basic X functions.
+There is not yet a special MSW-API, so you should know the X types used.
+
+The following is done in simx.h:
+
+typedef HDC Display;
+typedef COLORREF Pixel;
+
+typedef struct {
+    Pixel pixel;
+    BYTE red, green, blue;
+}      XColor;
+
+typedef struct {
+    HBITMAP bitmap;
+    unsigned int width;
+    unsigned int height;
+    unsigned int depth;
+}      XImage;
+
+With these defines and the according functions from simx.c you can call
+XPM-functions the way it's done under X windows. It can look like this:
+
+	ErrorStatus=XpmCreateImageFromData(&dc, data, 
+				&ximage,(XImage **)NULL, &xpmAttr);
+	ms_bitmap = ximage->bitmap;
+	// releases the malloc,but do not destroy the bitmap
+	XImageFree(ximage);
+	
+Supported functions are the Xpm*Image* but not the Xpm*Pixmap*.
+
+DRAWBACKS:
+The main drawback is the missing support for Colormaps! There was nothing for
+it in wxWindows, so I did not know how to deal with Colormaps.
+
+The size of the pixmaps is bounded by malloc() (width*height*2 < 64K).
+
+Close colors do not look that close. But that seems to be the window system.
+
+Neither a special API for MSW nor a special MSW documentation other than this.
+(I can only point you to wxxpm as an example , see below.)
+
+INSTALLATION:
+There is not yet a makefile with it. Simply take all the *.c files
+into your project except the files related to Pixmap operations: *P*.c.
+!!!You MUST set FOR_MSW on the preprocessor options!!!
+(You might uncomment NEED_STRCASECMP in xpm.h if it's in your lib)
+This should compile into libxpm.a. Good luck...
+
+FTP:  
+wxWindows is currently available from the Artificial Intelligence
+Applications Institute (University of Edinburgh) by anonymous FTP.
+	skye.aiai.ed.ac.uk  pub/wxwin/
+or read http://burray.aiai.ed.ac.uk/aiai/aiai.html
+
+wxxpm, XPM support for wxWindows, the latest version is available at
+	yoda.cul-ipn.uni-kiel.de pub/wxxpm/
+	and maybe in the contrib or tools of wxWindows
+	
+Please contact me if you have suggestions, comments or problems!
+
+================================================================
+Some fixes and comments by Jan Wielemaker (jan@swi.psy.uva.nl),
+Oct 24, 1996:
+
+	* Please try not to disturb me on this, XPM is not my
+	piece of cake.
+
+	* Hermann Dunkel has appearently moved in virtual space.
+
+Changes:
+
+	* I've used the xpm package under NT 4.0 and MSVC++ 4.2.
+
+	* I've made a big performance improvement in 
+	ParseAndPutPixels(), fixed creation of the mask in
+	SetColor() in create.c.  I looked into XCreateImage()
+	in simx.c, but commented out my improvement for reasons
+	you'll find there.  If you know what is going on, statement
+	(1) does not apply to you.
+
+Comments on installation:
+
+	* Donot include the to/from pixmap files into the project.
+	These are the ones containing a capital P somewhere in their
+	name.  You can also first include all, and then remove all
+	the files you get errors on :-)
+
+	* The DC that is requested should be a valid memory DC, thus
+	CreateCompatibleDC(NULL) provides a good generic one, but
+	GetDC(NULL) doesn't!  This costed me some time.
+
+	* The real difficulty is using the mask, mostly due to the
+	bad documentation.  If 95 or NT is your target, use:
+
+	MaskBlt(context.hdc,	// Destination DC
+		x, y, w, h,	// Destination area
+		mhdc,		// Memory DC with the image selected
+		sx, sy,		// Source X,Y
+		msk,		// HBITMAP of the mask
+		sx, sy,		// Mask X,Y
+		MAKEROP4(SRCPAINT, SRCCOPY));	// The magic op code.
+================================================================
+
+
+--
+   ////|\\\\   \\\\\\  Hermann Dunkel
+     O   O     //////  IPN Uni Kiel, Germany
+       |       \\\\\\  Tel: +49 431 / 880 3144
+     \___/     //////  E-mail: hedu@cul-ipn.uni-kiel.de
+      \_/      \\\\\\  X.400 : c=de;a=d400;p=uni-kiel;ou=nw-didaktik;s=dunkel
+

@@ -1067,10 +1067,6 @@
 // NB: stuff which doesn't work at all under CE is forcefully disabled in
 //     wx/msw/wince/chkconf.h
 
-// wxCheckListBox requires wxOwnerDrawn which is disabled below
-#undef wxUSE_CHECKLISTBOX
-#define wxUSE_CHECKLISTBOX 0
-
 // Windows CE doesn't use RAS so wxDialUpManager doesn't work under it
 #undef wxUSE_DIALUP_MANAGER
 #define wxUSE_DIALUP_MANAGER 0

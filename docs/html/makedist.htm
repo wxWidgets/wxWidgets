@@ -1,0 +1,129 @@
+<HTML>
+
+<HEAD>
+<TITLE>Making a wxMSW distribution</TITLE>
+
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT=#000000 LINK=#FF0000 VLINK=#000000>
+
+<font face="Arial, Lucida Sans, Helvetica">
+
+<a name="top"></a>
+
+<table width=100% border=0 cellpadding=5 cellspacing=0>
+<tr>
+<td bgcolor="#C4ECF9">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#000000">
+Making a wxMSW distribution
+</font>
+</td>
+</tr>
+</table>
+
+<P>
+
+These are some notes on the steps involved in making up a wxMSW distribution from
+a CVS hierarchy.
+Currently only Julian Smart does this, but in the event of the duty being
+transferred, or to allow people to produce custom distributions, the following may be helpful.<P>
+
+The distribution scripts are in the distrib/msw directory.<P>
+
+<H3>Requirements</H3>
+
+<ol>
+<li>A wxWindows hierarchy from CVS.
+<li>A copy of Tex2RTF in your path.
+<li>32-bit zip and unzip utilities. I use zip 2.0.1 by Mark Adler and others, and unzip 5.12
+by Info-ZIP. I call them zip32 and unzip32 in the scripts.
+<li>Adobe Acrobat to generate the PDF documentation.
+<li>The scripts use 4DOS, so you will need a copy (the evaluation copy should do).
+<li>Several Windows compilers to test out the distribution (see below). VC++ is assumed, for
+running some of the scripts, e.g. the makefile for running Tex2RTF.
+<li>To make the setup.exe version of the distribution, a copy of WISE Installer
+(I use version 5.0: I don't know if the scripts are compatible with
+other versions).
+<li>If you need to extract the top and bottom from the wxWindows WISE script after editing it with WISE (so that
+the distribution script can automatically rebuild the .wse script from the distribution files + .wse script top and bottom),
+you will need to compile distrib/msw/splitwise.cpp into distrib/msw/splitwise.exe, a DOS command line program.
+<li><a href="http://wildsau.idv.uni-linz.ac.at/mfx/upx.html" target=_top>UPX</a>, for compressing executables.
+<li>A <i>lot</i> of disk space.
+</ol>
+
+<H3>Steps</H3>
+
+<ol>
+<li>Compile utils/projgen if necessary and run, to generate the .dsp/.dsw files for the samples, demos and utils
+using VC++ 5/6. In fact when wxWindows is fairly stable and new samples haven't been added and settings
+changed, this step isn't necessary.<P>
+<li>Update version numbers:
+<ul>
+<li>Ensure include/wx/version.h specifies the correct wxWindows version.
+<li>Alter WXVERSION or other version-related variables in src/makevc.env, src/makeg95.env, src/makeb32.env.
+<li>Alter the DLL version in the VC++ project files using distrib/msw/vcupdate.bat (no arguments).
+<li>Edit distrib/msw/zipdist.bat and change the <b>version</b> variable to the appropriate version.
+<li>Edit the WISE script (normally distrib/msw/wisetop.txt) to change the version number. See also below for other WISE script changes.
+<li>Update the date and version number in docs/latex/wx/manual.tex.
+</ul>
+<P>
+<li>Check setup.h is correct for the distribution (e.g. wxUSE_ODBC = 1, wxUSE_UNICODE = 0, etc.).<P>
+<li>Regenerate makefiles from the tmake templates, if necessary. Most makefiles have a target to do this using the makefile name,
+or else 'self'. Or you can use the 'makeall.bat' script in distrib\msw\tmake.<P>
+<li>Using VC++ 6, make a WIN32 release executable of Dialog Editor and place it in the top-level <b>bin</b> directory
+in your CVS hierarchy. Similarly for Tex2RTF and Life!. Compress them with UPX to save space.<P>
+<li>Ensure that the library and most of the samples/demos compile for the popular compilers. Currently I check
+with the following compilers:<P>
+VC++ 1.5, VC++ 4.0, VC++ 5.0, VC++ 6.0 (static and DLL), BC++ 4.5 (WIN16/WIN32), BC++ 5.0 (WIN16/WIN32), C++Builder 3,
+Watcom C++ 10.6, Cygwin b20, Mingw32 2.95. For VC++ 6 and BC++ 5.0, check compilation using both the
+makefiles and the project files (wxvc.dsp, wxvc_dll.dsp, bc32.ide). See distrib/msw/makeall.bat for a script
+to build wxWindows and samples for a variety of compilers.<P>
+<li>Ensure that all .rsp files, that list the files to go in the distribution, are up-to-date.
+For example, samples or demos may have been added to the hierarchy. The same applies to projgen (see above).<P>
+<li>Likewise, ensure that vc.rsp contains references to all the sample project files (that have been generated
+by projgen).<P>
+<li>Ensure docs/msw/install.txt is up-to-date (detail any gotchas for particular compiler versions, etc.).<P>
+<li>Update docs/readme.txt, docs/changes.txt (summarize from CVS change notifications).<P>
+<li>Build the WinHelp, HTML, and PDF documentation
+via the VC++ makefile, src/msw/makefile.vc. You can use e.g. the targets <b>cleandocs alldocs</b>. Check the
+output of the Windows Help Compiler for missing links, and edit/recompile the docs if necessary. The PDF documentation is produced from the Word RTF
+document, and read into Word. Apply the wxManual Style Template to improve presentation (Format|Style Gallery...). Select all, press F9 to reformat the fields. Check the table of contents for
+overspill from the body of a section into the TOC. If there's a problem, it's due to the lack of a
+blank line at the end of the relevant .tex file. Insert the blank line, regenerate the RTF, and reload into Word.
+Then use Adobe Distiller to generate the PDF.<P>
+<li>You need to edit the WISE script to change the version number, and any other changes you wish to make.
+For simple changes, you can edit distrib/msw/wisetop.txt directly with a text editor. If you
+wish to use WISE Installer directly, you will need to make a full wxwin2.wse file first,
+by: (a) making up the distribution (next step), (b) editing wxwin2.wse with WISE Installer, (c)
+running the distrib/msw/splitwise program to produce wisetop.txt, wisebott.txt, (d) executing the
+next step again to remake the distribution programatically (or just run WISE directly: but remember
+to run splitwise to be in sync for future reference). For more details, please see distrib/msw/readme.txt.<P>
+<li>Make a <b>deliver</b> directory in the top-level wxWin hierarchy, change directory to distrib\msw,
+and run <b>zipdist wise</b> (omit 'wise' if you don't want to build the setup.exe files).<P>
+<li>You should now have lots of .zip files in your <b>deliver</b> folder, some setup.* files,
+plus a <b>wx</b> hierarchy (extracted
+from the zips) that you can now delete.<P>
+<li>Test the setup.exe distribution by installing it, preferably compiling using several compilers
+e.g. using distrib\msw\makeall.bat.<P>
+<li>Go into Linux, unpack the distribution zip files, then call the Linux distribution script
+to create .tgz files for wxMotif.<P>
+<li>Upload the appropriate files to the SourceGear ftp site.<P>
+<li>Download Robert's wxGTK files and upload to the SourceGear ftp site.<P>
+<li>Update the web site front page, news, download and CD-ROM pages to reflect the new version.<P>
+<li>If updating the CD-ROM hierarchy as well, follow these steps using the CD-ROM makefile:
+  <ol>
+  <li>Edit WXDISTDIR in the makefile and change to the correct distribution directory for this version.
+  <li>Run the makefile with <b>copydist</b>. This copies the distribution to the correct place
+on the CD-ROM.
+  <li>Run the makefile with <b>copydocs</b>. This copies the wxWindows 2 manuals to the correct
+place on the CD-ROM.
+  <li>Copy any project file zips that didn't need updating from an old distribution, e.g. wxWindows-x.y.z-wat.zip.
+  <li>Copy Robert's wxGTK files to the directory by hand.
+  </ol><P>
+</ol>
+
+</font>
+
+</BODY>
+
+</HTML>

@@ -1325,10 +1325,12 @@ void wxFlexGridSizer::AdjustForFlexDirection()
         wxArrayInt& array = m_flexDirection == wxVERTICAL ? m_colWidths
                                                           : m_rowHeights;
 
-        const int count = array.GetCount();
+        const size_t count = array.GetCount();
 
         // find the largest value in this array
-        int n, largest = 0;
+        size_t n;
+        int largest = 0;
+
         for ( n = 0; n < count; ++n )
         {
             if ( array[n] > largest )
@@ -1746,7 +1748,11 @@ wxStdDialogButtonSizer::wxStdDialogButtonSizer()
     // If we are going to use vertical buttons, we should
     // put the sizer to the right of other controls in the dialog,
     // and that's beyond the scope of this sizer.
-#ifndef __WXWINCE__
+    // 
+    // It also looks rubbish on GPE and other standard GTK
+    // dialogs also just use normal buttons side by side
+    // under GPE
+#if 0
     bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
     // If we have a PDA screen, put yes/no button over
     // all other buttons, otherwise on the left side.
@@ -1843,28 +1849,33 @@ void wxStdDialogButtonSizer::Realize()
         // Extra space around and at the right
         Add(12, 24);
 #elif defined(__WXGTK20__)
+        bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
+    
+        int space_step = 3;
+        if (is_pda) space_step = 0;
+    
         Add(0, 0, 0, wxLEFT, 9);
         if (m_buttonHelp)
-            Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+            Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, space_step);
 
         // extra whitespace between help and cancel/ok buttons
         Add(0, 0, 1, wxEXPAND, 0);
 
         if (m_buttonNegative){
-            Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+            Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, space_step);
         }
 
         if (m_buttonCancel){
-            Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+            Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, space_step);
             // Cancel or help should be default
             // m_buttonCancel->SetDefaultButton();
         }
 
         if (m_buttonApply)
-            Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+            Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, space_step);
 
         if (m_buttonAffirmative)
-            Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT, 6);
+            Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT, 2*space_step);
 #elif defined(__WXMSW__)
         // Windows
 

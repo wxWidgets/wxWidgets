@@ -1,0 +1,42 @@
+\section{\class{wxPropertyValidatorRegistry}}\label{wxpropertyvalidatorregistry}
+
+The {\bf wxPropertyValidatorRegistry} class is used for storing validators,
+indexed by the `role name' of the property, by which groups of property
+can be identified for the purpose of validation and editing.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPropertyValidatorRegistry::wxPropertyValidatorRegistry}
+
+\func{void}{wxPropertyValidatorRegistry}{\void}
+
+Constructor.
+
+\membersection{wxPropertyValidatorRegistry::\destruct{wxPropertyValidatorRegistry}}
+
+\func{void}{\destruct{wxPropertyValidatorRegistry}}{\void}
+
+Destructor.
+
+\membersection{wxPropertyValidatorRegistry::Clear}
+
+\func{void}{ClearRegistry}{\void}
+
+Clears the registry, deleting the validators.
+
+\membersection{wxPropertyValidatorRegistry::GetValidator}
+
+\func{wxPropertyValidator *}{GetValidator}{\param{wxString\& }{roleName}}
+
+Retrieve a validator by the property role name.
+
+\membersection{wxPropertyValidatorRegistry::RegisterValidator}\label{wxpropertyvalidatorregistervalidator}
+
+\func{void}{RegisterValidator}{\param{wxString\& }{roleName}, \param{wxPropertyValidator *}{validator}}
+
+Register a validator with the registry. {\it roleName} is a name indicating the
+role of the property, such as ``filename''. Later, when a validator is chosen for
+editing a property, this role name is matched against the class names of the property,
+if the property does not already have a validator explicitly associated with it.
+
+

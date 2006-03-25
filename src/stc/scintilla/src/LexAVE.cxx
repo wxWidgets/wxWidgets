@@ -12,7 +12,6 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include <fcntl.h>
 
 #include "Platform.h"
 
@@ -183,7 +182,9 @@ static void FoldAveDoc(unsigned int startPos, int length, int /* initStyle */, W
 				if ((strcmp(s, "then") == 0) || (strcmp(s, "for") == 0) || (strcmp(s, "while") == 0)) {
 					levelCurrent++;
 				}
-				if ((strcmp(s, "end") == 0)) {
+				if ((strcmp(s, "end") == 0) || (strcmp(s, "elseif") == 0)) {
+					// Normally "elseif" and "then" will be on the same line and will cancel
+					// each other out.  // As implemented, this does not support fold.at.else.
 					levelCurrent--;
 				}
 			}

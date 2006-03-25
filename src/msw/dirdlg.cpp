@@ -28,9 +28,9 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_DIRDLG && (!defined(__WXWINCE__) || defined(__HANDHELDPC__))
+#if wxUSE_DIRDLG
 
-#if defined(__WIN95__) && !defined(__GNUWIN32_OLD__) && wxUSE_OLE
+#if wxUSE_OLE && !defined(__GNUWIN32_OLD__) && (!defined(__WXWINCE__) || (defined(__HANDHELDPC__) && (_WIN32_WCE >= 500)))
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -244,9 +244,7 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
     return 0;
 }
 
-
-#else
-    #include "../generic/dirdlgg.cpp"
 #endif // compiler/platform on which the code here compiles
 
-#endif // wxUSE_DIRDLG && !(__SMARTPHONE__ && __WXWINCE__)
+#endif // wxUSE_DIRDLG
+

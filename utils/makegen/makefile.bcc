@@ -1,0 +1,14 @@
+# Purpose: makefile for makegen example (BC++ 16bit)
+# Created: 2000-01-03
+
+!if "$(WXWIN)" == ""
+!error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
+!endif
+
+WXDIR = $(WXWIN)
+
+TARGET=makegen
+OBJECTS=$(TARGET).obj
+
+!include $(WXDIR)\src\makeprog.bcc
+

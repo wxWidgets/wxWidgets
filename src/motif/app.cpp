@@ -215,8 +215,20 @@ bool wxApp::OnInitGui()
     wxTheApp->m_appContext = (WXAppContext) XtCreateApplicationContext();
     XtAppSetFallbackResources((XtAppContext) wxTheApp->m_appContext, fallbackResources);
 
-    Display *dpy = XtOpenDisplay((XtAppContext) wxTheApp->m_appContext,(String)NULL,NULL,
-        wxTheApp->GetClassName().c_str(), NULL, 0,
+    // we shouldn't pass empty application/class name as it results in
+    // immediate crash inside XOpenIM() (if XIM is used) under IRIX
+    wxString appname = wxTheApp->GetAppName();
+    if ( appname.empty() )
+        appname = _T("wxapp");
+    wxString clsname = wxTheApp->GetClassName();
+    if ( clsname.empty() )
+        clsname = _T("wx");
+
+    Display *dpy = XtOpenDisplay((XtAppContext) wxTheApp->m_appContext,
+        (String)NULL,
+        appname.c_str(),
+        clsname.c_str(),
+        NULL, 0,    // no options
 # if XtSpecificationRelease < 5
         (Cardinal*) &argc,
 # else

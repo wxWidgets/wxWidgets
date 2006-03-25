@@ -740,8 +740,10 @@ void wxMacWakeUp()
     if ( isSame )
     {
 #if TARGET_CARBON
-        static wxMacCarbonEvent s_wakeupEvent ;
         OSStatus err = noErr ;
+#if 0
+        // lead sometimes to race conditions, although all calls used should be thread safe ...
+        static wxMacCarbonEvent s_wakeupEvent ;
         if ( !s_wakeupEvent.IsValid() )
         {
            err = s_wakeupEvent.Create( 'WXMC', 'WXMC', GetCurrentEventTime(),
@@ -749,12 +751,20 @@ void wxMacWakeUp()
         }
         if ( err == noErr )
         {
+            
             if ( IsEventInQueue( GetMainEventQueue() , s_wakeupEvent ) )
                 return ;
-            s_wakeupEvent.SetTime(0) ;
+            s_wakeupEvent.SetCurrentTime() ;
             err = PostEventToQueue(GetMainEventQueue(), s_wakeupEvent,
-                                  kEventPriorityHigh);
+                                  kEventPriorityHigh );
         }
+#else
+        wxMacCarbonEvent wakeupEvent ;
+        wakeupEvent.Create( 'WXMC', 'WXMC', GetCurrentEventTime(),
+                            kEventAttributeNone ) ;
+        err = PostEventToQueue(GetMainEventQueue(), wakeupEvent,
+                               kEventPriorityHigh );
+#endif
 #else
         PostEvent( nullEvent , 0 ) ;
 #endif
@@ -1544,24 +1554,42 @@ CMProfileRef wxMacOpenGenericProfile(void)
 
 CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 {
-    static CGColorSpaceRef genericRGBColorSpace = NULL;
+    static wxMacCFRefHolder<CGColorSpaceRef> genericRGBColorSpace ;
 
 	if (genericRGBColorSpace == NULL)
 	{
-		CMProfileRef genericRGBProfile = wxMacOpenGenericProfile();
-	
-		if (genericRGBProfile)
-		{
-			genericRGBColorSpace = CGColorSpaceCreateWithPlatformColorSpace(genericRGBProfile);
-			wxASSERT_MSG( genericRGBColorSpace != NULL, wxT("couldn't create the generic RGB color space") ) ;
-			
-			// we opened the profile so it is up to us to close it
-			CMCloseProfile(genericRGBProfile); 
-		}
+        if ( UMAGetSystemVersion() >= 0x1040 )
+        {
+            genericRGBColorSpace.Set( CGColorSpaceCreateWithName( CFSTR("kCGColorSpaceGenericRGB") ) ) ;
+        }
+        else
+        {
+            CMProfileRef genericRGBProfile = wxMacOpenGenericProfile();
+        
+            if (genericRGBProfile)
+            {
+                genericRGBColorSpace.Set( CGColorSpaceCreateWithPlatformColorSpace(genericRGBProfile) ) ;
+                wxASSERT_MSG( genericRGBColorSpace != NULL, wxT("couldn't create the generic RGB color space") ) ;
+                
+                // we opened the profile so it is up to us to close it
+                CMCloseProfile(genericRGBProfile); 
+            }
+        }
 	}
     return genericRGBColorSpace;
 }
 #endif
+
+wxMacPortSaver::wxMacPortSaver( GrafPtr port )
+{
+    ::GetPort( &m_port ) ;
+    ::SetPort( port ) ;
+}
+
+wxMacPortSaver::~wxMacPortSaver()
+{
+    ::SetPort( m_port ) ;
+}
 
 #endif // wxUSE_GUI
 

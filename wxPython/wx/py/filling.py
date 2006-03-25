@@ -61,10 +61,10 @@ class FillingTree(wx.TreeCtrl):
         rootData = wx.TreeItemData(rootObject)
         self.item = self.root = self.AddRoot(rootLabel, -1, -1, rootData)
         self.SetItemHasChildren(self.root, self.objHasChildren(rootObject))
-        wx.EVT_TREE_ITEM_EXPANDING(self, self.GetId(), self.OnItemExpanding)
-        wx.EVT_TREE_ITEM_COLLAPSED(self, self.GetId(), self.OnItemCollapsed)
-        wx.EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
-        wx.EVT_TREE_ITEM_ACTIVATED(self, self.GetId(), self.OnItemActivated)
+        self.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.OnItemExpanding, id=self.GetId())
+        self.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self.OnItemCollapsed, id=self.GetId())
+        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelChanged, id=self.GetId())
+        self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated, id=self.GetId())
         if not static:
             dispatcher.connect(receiver=self.push, signal='Interpreter.push')
 
@@ -159,6 +159,8 @@ class FillingTree(wx.TreeCtrl):
 
     def display(self):
         item = self.item
+        if not item:
+            return
         if self.IsExpanded(item):
             self.addChildren(item)
         self.setText('')
@@ -277,23 +279,48 @@ class Filling(wx.SplitterWindow):
     revision = __revision__
 
     def __init__(self, parent, id=-1, pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, style=wx.SP_3D,
+                 size=wx.DefaultSize, style=wx.SP_3D|wx.SP_LIVE_UPDATE,
                  name='Filling Window', rootObject=None,
                  rootLabel=None, rootIsNamespace=False, static=False):
         """Create a Filling instance."""
         wx.SplitterWindow.__init__(self, parent, id, pos, size, style, name)
+
         self.tree = FillingTree(parent=self, rootObject=rootObject,
                                 rootLabel=rootLabel,
                                 rootIsNamespace=rootIsNamespace,
                                 static=static)
         self.text = FillingText(parent=self, static=static)
-        self.SplitVertically(self.tree, self.text, 130)
+        
+        wx.FutureCall(1, self.SplitVertically, self.tree, self.text, 200)
+        
         self.SetMinimumPaneSize(1)
+
         # Override the filling so that descriptions go to FillingText.
         self.tree.setText = self.text.SetText
+
         # Display the root item.
-##        self.tree.SelectItem(self.tree.root)
+        self.tree.SelectItem(self.tree.root)
         self.tree.display()
+
+        self.Bind(wx.EVT_SPLITTER_SASH_POS_CHANGED, self.OnChanged)
+
+    def OnChanged(self, event):
+        #this is important: do not evaluate this event=> otherwise, splitterwindow behaves strange
+        #event.Skip()
+        pass
+
+
+    def LoadSettings(self, config):
+        pos = config.ReadInt('Sash/FillingPos', 200)
+        wx.FutureCall(250, self.SetSashPosition, pos)
+        zoom = config.ReadInt('View/Zoom/Filling', -99)
+        if zoom != -99:
+            self.text.SetZoom(zoom)
+
+    def SaveSettings(self, config):
+        config.WriteInt('Sash/FillingPos', self.GetSashPosition())
+        config.WriteInt('View/Zoom/Filling', self.text.GetZoom())
+
 
 
 class FillingFrame(wx.Frame):

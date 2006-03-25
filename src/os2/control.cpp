@@ -128,9 +128,15 @@ bool wxControl::OS2CreateControl( const wxChar*   zClassname,
         zClass = WC_NOTEBOOK;
     else if ((wxStrcmp(zClassname, _T("CONTAINER"))) == 0)
         zClass = WC_CONTAINER;
-    dwStyle |= WS_VISIBLE;
+    if ((zClass == WC_STATIC) || (zClass == WC_BUTTON))
+        dwStyle |= DT_MNEMONIC;
 
-    wxString                        sLabel = ::wxPMTextToLabel(rsLabel);
+    m_dwStyle = dwStyle;
+    wxString sLabel;
+    if (dwStyle & DT_MNEMONIC)
+        sLabel = ::wxPMTextToLabel(rsLabel);
+    else
+        sLabel = rsLabel;
 
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                        ,(PSZ)zClass              // Window class
@@ -247,7 +253,11 @@ void wxControl::SetLabel(
   const wxString&                   rsLabel
 )
 {
-    wxString                        sLabel = ::wxPMTextToLabel(rsLabel);
+    wxString sLabel;
+    if (m_dwStyle & DT_MNEMONIC)
+        sLabel = ::wxPMTextToLabel(rsLabel);
+    else
+        sLabel = rsLabel;
 
     ::WinSetWindowText(GetHwnd(), (PSZ)sLabel.c_str());
 } // end of wxControl::SetLabel

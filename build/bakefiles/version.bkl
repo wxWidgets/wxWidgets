@@ -30,9 +30,9 @@
        6. If any interfaces have been removed since the last public release,
           then set AGE to 0.
     -->
-    <set var="WX_CURRENT">2</set>
-    <set var="WX_REVISION">0</set>
-    <set var="WX_AGE">2</set>
+    <set var="WX_CURRENT">3</set>
+    <set var="WX_REVISION">1</set>
+    <set var="WX_AGE">3</set>
 
 
     <!-- ================================================================== -->

@@ -1,0 +1,310 @@
+LIBRARY OS2PNG INITINSTANCE TERMINSTANCE
+PROTMODE
+DATA MULTIPLE NONSHARED READWRITE LOADONCALL
+CODE LOADONCALL
+
+EXPORTS
+;From library:  H:\dev\wx2\wxWindows\LIB\os2png.lib
+  ;From object file:  ..\png\png.c
+    ;PUBDEFs (Symbols available from object file):
+      png_reset_crc
+      png_pHYs
+      png_sBIT
+      png_zTXt
+      png_zfree
+      png_sRGB
+      png_zalloc
+      png_oFFs
+      png_init_io
+      png_convert_to_rfc1123
+      png_create_info_struct
+      png_pass_ystart
+      png_pass_start
+      png_info_init
+      png_destroy_info_struct
+      png_IDAT
+      png_get_io_ptr
+      png_libpng_ver
+      png_IHDR
+      png_set_sig_bytes
+      png_tRNS
+      png_pass_mask
+      png_pass_dsp_mask
+      png_check_sig
+      png_sig_cmp
+      png_hIST
+      png_get_copyright
+      png_bKGD
+      png_IEND
+      png_info_destroy
+      png_tIME
+      png_gAMA
+      png_cHRM
+      png_get_header_version
+      png_calculate_crc
+      png_pass_yinc
+      png_pCAL
+      png_tEXt
+      png_PLTE
+      png_sig
+      png_pass_inc
+  ;From object file:  ..\png\pngread.c
+    ;PUBDEFs (Symbols available from object file):
+      png_create_read_struct
+      png_set_read_status_fn
+      png_read_row
+      png_read_end
+      png_destroy_read_struct
+      png_start_read_image
+      png_read_destroy
+      png_read_init
+      png_read_image
+      png_read_info
+      png_read_update_info
+      png_read_rows
+  ;From object file:  ..\png\pngrtran.c
+    ;PUBDEFs (Symbols available from object file):
+      png_do_unshift
+      png_build_gamma_table
+      png_do_read_swap_alpha
+      png_do_read_invert_alpha
+      png_do_gray_to_rgb
+      png_init_read_transformations
+      png_do_read_transformations
+      png_set_background
+      png_set_expand
+      png_build_grayscale_palette
+      png_set_strip_16
+      png_read_transform_info
+      png_set_rgb_to_gray
+      png_do_rgb_to_gray
+      png_do_dither
+      png_do_read_filler
+      png_do_expand
+      png_do_chop
+      png_set_strip_alpha
+      png_set_gamma
+      png_set_crc_action
+      png_set_read_user_transform_fn
+      png_set_gray_to_rgb
+      png_do_background
+      png_do_expand_palette
+      png_do_gamma
+      png_set_dither
+      png_do_unpack
+  ;From object file:  ..\png\pngrutil.c
+    ;PUBDEFs (Symbols available from object file):
+      png_handle_IEND
+      png_handle_tEXt
+      png_get_uint_32
+      png_handle_sRGB
+      png_read_finish_row
+      png_handle_sBIT
+      png_handle_zTXt
+      png_handle_bKGD
+      png_handle_gAMA
+      png_handle_cHRM
+      png_crc_error
+      png_read_filter_row
+      png_handle_pCAL
+      png_handle_PLTE
+      png_do_read_interlace
+      png_check_chunk_name
+      png_handle_pHYs
+      png_crc_read
+      png_handle_tIME
+      png_get_int_32
+      png_handle_unknown
+      png_handle_IHDR
+      png_handle_tRNS
+      png_read_start_row
+      png_combine_row
+      png_crc_finish
+      png_handle_hIST
+      png_get_uint_16
+      png_handle_oFFs
+  ;From object file:  ..\png\pngpread.c
+    ;PUBDEFs (Symbols available from object file):
+      png_push_read_IDAT
+      png_push_read_zTXt
+      png_push_crc_finish
+      png_push_restore_buffer
+      png_push_read_chunk
+      png_push_handle_zTXt
+      png_push_save_buffer
+      png_set_progressive_read_fn
+      png_get_progressive_ptr
+      png_read_push_finish_row
+      png_push_handle_tEXt
+      png_push_crc_skip
+      png_process_IDAT_data
+      png_push_have_row
+      png_push_have_end
+      png_process_data
+      png_process_some_data
+      png_push_have_info
+      png_push_read_tEXt
+      png_push_fill_buffer
+      png_push_handle_unknown
+      png_push_read_sig
+      png_push_process_row
+      png_progressive_combine_row
+  ;From object file:  ..\png\pngtrans.c
+    ;PUBDEFs (Symbols available from object file):
+      png_set_shift
+      png_do_invert
+      png_set_invert_alpha
+      png_set_packswap
+      png_set_bgr
+      png_set_packing
+      png_set_invert_mono
+      png_set_interlace_handling
+      png_do_swap
+      png_do_packswap
+      png_set_swap_alpha
+      png_set_swap
+      png_do_strip_filler
+      png_do_bgr
+      png_set_filler
+  ;From object file:  ..\png\pngwrite.c
+    ;PUBDEFs (Symbols available from object file):
+      png_write_end
+      png_set_compression_method
+      png_convert_from_struct_tm
+      png_write_rows
+      png_create_write_struct
+      png_write_flush
+      png_set_compression_mem_level
+      png_write_destroy
+      png_set_flush
+      png_destroy_write_struct
+      png_set_compression_strategy
+      png_set_write_user_transform_fn
+      png_write_info
+      png_set_filter_heuristics
+      png_write_init
+      png_write_image
+      png_set_write_status_fn
+      png_write_row
+      png_set_compression_window_bits
+      png_convert_from_time_t
+      png_set_compression_level
+      png_set_filter
+  ;From object file:  ..\png\pngwtran.c
+    ;PUBDEFs (Symbols available from object file):
+      png_do_write_swap_alpha
+      png_do_write_transformations
+      png_do_pack
+      png_do_shift
+      png_do_write_invert_alpha
+  ;From object file:  ..\png\pngwutil.c
+    ;PUBDEFs (Symbols available from object file):
+      png_write_bKGD
+      png_save_int_32
+      png_write_IHDR
+      png_save_uint_16
+      png_write_start_row
+      png_write_sBIT
+      png_write_pCAL
+      png_write_cHRM
+      png_save_uint_32
+      png_write_sig
+      png_write_tRNS
+      png_write_pHYs
+      png_write_chunk_end
+      png_write_zTXt
+      png_write_IEND
+      png_write_tIME
+      png_write_chunk
+      png_write_oFFs
+      png_write_chunk_start
+      png_write_IDAT
+      png_write_chunk_data
+      png_do_write_interlace
+      png_write_sRGB
+      png_write_finish_row
+      png_write_filtered_row
+      png_write_hIST
+      png_write_tEXt
+      png_check_keyword
+      png_write_PLTE
+      png_write_gAMA
+      png_write_find_filter
+  ;From object file:  ..\png\pngerror.c
+    ;PUBDEFs (Symbols available from object file):
+      png_chunk_error
+      png_set_error_fn
+      png_get_error_ptr
+      png_warning
+      png_chunk_warning
+      png_error
+  ;From object file:  ..\png\pngmem.c
+    ;PUBDEFs (Symbols available from object file):
+      png_memcpy_check
+      png_memset_check
+      png_create_struct
+      png_destroy_struct
+      png_free
+      png_malloc
+  ;From object file:  ..\png\pngwio.c
+    ;PUBDEFs (Symbols available from object file):
+      png_set_write_fn
+      png_flush
+      png_write_data
+  ;From object file:  ..\png\pngrio.c
+    ;PUBDEFs (Symbols available from object file):
+      png_read_data
+      png_set_read_fn
+  ;From object file:  ..\png\pngget.c
+    ;PUBDEFs (Symbols available from object file):
+      png_get_text
+      png_get_x_offset_pixels
+      png_get_tRNS
+      png_get_valid
+      png_get_pCAL
+      png_get_image_height
+      png_get_compression_type
+      png_get_PLTE
+      png_get_rowbytes
+      png_get_pixel_aspect_ratio
+      png_get_pHYs
+      png_get_bKGD
+      png_get_sBIT
+      png_get_hIST
+      png_get_filter_type
+      png_get_tIME
+      png_get_cHRM
+      png_get_pixels_per_meter
+      png_get_x_offset_microns
+      png_get_y_offset_microns
+      png_get_rgb_to_gray_status
+      png_get_image_width
+      png_get_interlace_type
+      png_get_sRGB
+      png_get_y_offset_pixels
+      png_get_oFFs
+      png_get_channels
+      png_get_bit_depth
+      png_get_color_type
+      png_get_signature
+      png_get_gAMA
+      png_get_x_pixels_per_meter
+      png_get_y_pixels_per_meter
+      png_get_IHDR
+  ;From object file:  ..\png\pngset.c
+    ;PUBDEFs (Symbols available from object file):
+      png_set_text
+      png_set_cHRM
+      png_set_gAMA
+      png_set_sRGB
+      png_set_sBIT
+      png_set_bKGD
+      png_set_PLTE
+      png_set_sRGB_gAMA_and_cHRM
+      png_set_IHDR
+      png_set_oFFs
+      png_set_tRNS
+      png_set_pHYs
+      png_set_pCAL
+      png_set_tIME
+      png_set_hIST

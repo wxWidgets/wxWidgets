@@ -483,6 +483,7 @@ class Editor(wx.ScrolledWindow):
         self.SelectEnd = None
         self.UpdateView()
         self.CaptureMouse()
+        self.SetFocus()
 
     def OnLeftUp(self, event):
         if not self.HasCapture():

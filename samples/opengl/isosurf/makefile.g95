@@ -1,0 +1,20 @@
+#
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
+#
+# Makefile for wxWindows sample (Cygwin/Mingw32).
+
+WXDIR = ../../..
+
+TARGET=isosurf
+# EXTRACPPFLAGS=-I../../win
+EXTRALIBS=-lopengl32 -lglu32
+OBJECTS = $(TARGET).o
+
+include $(WXDIR)/src/makeprog.g95
+
+isosurf.dat: isosurf.dat.gz
+	gzip -c -d isosurf.dat.gz > isosurf.dat

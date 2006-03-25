@@ -2,6 +2,9 @@
 import  wx
 import  images
 
+#import wx.lib.buttons
+#wx.BitmapButton = wx.lib.buttons.GenBitmapButton
+
 #----------------------------------------------------------------------
 
 class TestPanel(wx.Panel):
@@ -29,11 +32,20 @@ class TestPanel(wx.Panel):
             mask = wx.Mask(bmp, wx.BLUE)
 
         bmp.SetMask(mask)
-        b = wx.BitmapButton(self, 30, bmp, (20, 20),
+        b = wx.BitmapButton(self, -1, bmp, (20, 20),
                        (bmp.GetWidth()+10, bmp.GetHeight()+10))
         b.SetToolTipString("This is a bitmap button.")
         self.Bind(wx.EVT_BUTTON, self.OnClick, b)
+
+        b = wx.BitmapButton(self, 30, bmp, (20, 120),
+                            style = wx.NO_BORDER)
         
+        # hide a little surprise in the button...
+        b.SetBitmapSelected(images.getRobinBitmap())
+
+        b.SetToolTipString("This is a bitmap button with \nwx.NO_BORDER style.")
+        self.Bind(wx.EVT_BUTTON, self.OnClick, b)
+
 
     def OnClick(self, event):
         self.log.write("Click! (%d)\n" % event.GetId())
