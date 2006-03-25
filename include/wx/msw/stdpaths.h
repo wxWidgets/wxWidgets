@@ -26,12 +26,13 @@ public:
     virtual wxString GetUserDataDir() const;
     virtual wxString GetUserLocalDataDir() const;
     virtual wxString GetPluginsDir() const;
-    virtual wxString GetLocalizedResourcesDir(const wxChar *lang,
-                                              ResourceCat category) const;
 
 protected:
     // get the path corresponding to the given standard CSIDL_XXX constant
     static wxString DoGetDirectory(int csidl);
+
+    // return the directory of the application itself
+    static wxString GetAppDir();
 };
 
 // ----------------------------------------------------------------------------
