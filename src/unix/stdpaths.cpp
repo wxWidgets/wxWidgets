@@ -38,10 +38,6 @@
     #include <unistd.h>
 #endif
 
-#if defined(__WXMAC__)
-    #include "wx/mac/private.h"
-#endif
-
 // ============================================================================
 // wxStandardPaths implementation
 // ============================================================================
@@ -132,8 +128,6 @@ wxString wxStandardPaths::GetUserDataDir() const
 {
 #ifdef __VMS
    return wxFileName::GetHomeDir();
-#elif defined(__WXMAC__)
-   return AppendAppName(wxMacFindFolder((short) kUserDomain, kApplicationSupportFolderType, kDontCreateFolder));
 #else
    return AppendAppName(wxFileName::GetHomeDir() + _T("/."));
 #endif
