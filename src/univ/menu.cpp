@@ -375,7 +375,7 @@ wxMenuItemIter wxPopupMenuWindow::GetPrevNode() const
 {
     // return the last node if there had been no previously selected one
     return m_nodeCurrent ? GetPrevNode(m_nodeCurrent)
-                         : m_menu->GetMenuItems().GetLast();
+                         : wxMenuItemIter(m_menu->GetMenuItems().GetLast());
 }
 
 wxMenuItemIter
@@ -398,7 +398,7 @@ wxMenuItemIter wxPopupMenuWindow::GetNextNode() const
 {
     // return the first node if there had been no previously selected one
     return m_nodeCurrent ? GetNextNode(m_nodeCurrent)
-                         : m_menu->GetMenuItems().GetFirst();
+                         : wxMenuItemIter(m_menu->GetMenuItems().GetFirst());
 }
 
 wxMenuItemIter
