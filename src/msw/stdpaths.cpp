@@ -278,7 +278,6 @@ wxString wxStandardPaths::GetPluginsDir() const
     return wxFileName(wxGetFullModuleName()).GetPath();
 }
 
-
 // ============================================================================
 // wxStandardPathsWin16 implementation
 // ============================================================================

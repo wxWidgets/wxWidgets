@@ -85,7 +85,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-    #define TEST_DIR
+    #define TEST_STDPATHS
 #endif
 
 // some tests are interactive, define this to run them
@@ -2685,6 +2685,15 @@ static void TestStandardPaths()
     wxPrintf(_T("Data dir (user):\t%s\n"), stdp.GetUserDataDir().c_str());
     wxPrintf(_T("Data dir (user local):\t%s\n"), stdp.GetUserLocalDataDir().c_str());
     wxPrintf(_T("Plugins dir:\t\t%s\n"), stdp.GetPluginsDir().c_str());
+    wxPrintf(_T("Resources dir:\t\t%s\n"), stdp.GetResourcesDir().c_str());
+    wxPrintf(_T("Localized res. dir:\t%s\n"),
+             stdp.GetLocalizedResourcesDir(_T("fr")).c_str());
+    wxPrintf(_T("Message catalogs dir:\t%s\n"),
+             stdp.GetLocalizedResourcesDir
+                  (
+                    _T("fr"),
+                    wxStandardPaths::ResourceCat_Messages
+                  ).c_str());
 }
 
 #endif // TEST_STDPATHS

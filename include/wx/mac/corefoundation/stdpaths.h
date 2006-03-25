@@ -13,6 +13,10 @@
 #define _WX_MAC_STDPATHS_H_
 
 struct __CFBundle;
+struct __CFURL;
+
+typedef const __CFURL * wxCFURLRef;
+typedef __CFBundle * wxCFBundleRef;
 
 // ----------------------------------------------------------------------------
 // wxStandardPaths
@@ -25,8 +29,8 @@ public:
     ~wxStandardPathsCF();
 
     // wxMac specific: allow user to specify a different bundle
-    wxStandardPathsCF(struct __CFBundle *bundle);
-    void SetBundle(struct __CFBundle *bundle);
+    wxStandardPathsCF(wxCFBundleRef bundle);
+    void SetBundle(wxCFBundleRef bundle);
 
     // implement base class pure virtuals
     virtual wxString GetConfigDir() const;
@@ -35,8 +39,16 @@ public:
     virtual wxString GetLocalDataDir() const;
     virtual wxString GetUserDataDir() const;
     virtual wxString GetPluginsDir() const;
+    virtual wxString GetResourcesDir() const;
+    virtual wxString GetLocalizedResourcesDir(const wxChar *lang,
+                                              ResourceCat category) const;
+
 protected:
-    struct __CFBundle *m_bundle;
+    // this function can be called with any of CFBundleCopyXXXURL function
+    // pointer as parameter
+    wxString GetFromFunc(wxCFURLRef (*func)(wxCFBundleRef)) const;
+
+    wxCFBundleRef m_bundle;
 };
 
 // If using UNIX (i.e. darwin) then use UNIX standard paths

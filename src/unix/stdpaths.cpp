@@ -93,6 +93,13 @@ wxString wxStandardPaths::GetPluginsDir() const
     return wxString(); // TODO: this is wrong, it should return something
 }
 
+wxString
+wxStandardPaths::GetLocalizedResourcesDir(const wxChar *lang,
+                                          ResourceCat category) const
+{
+    return wxStandardPathsBase::GetLocalizedResourcesDir(lang, category);
+}
+
 #else // !__VMS
 
 // ============================================================================
@@ -159,6 +166,16 @@ wxString wxStandardPaths::GetUserDataDir() const
 wxString wxStandardPaths::GetPluginsDir() const
 {
     return AppendAppName(GetInstallPrefix() + _T("/lib"));
+}
+
+wxString
+wxStandardPaths::GetLocalizedResourcesDir(const wxChar *lang,
+                                          ResourceCat category) const
+{
+    if ( category != ResourceCat_Messages )
+        return wxStandardPathsBase::GetLocalizedResourcesDir(lang, category);
+
+    return GetInstallPrefix() + _T("/share/locale/") + lang + _T("/LC_MESSAGES");
 }
 
 #endif // __VMS/!__VMS

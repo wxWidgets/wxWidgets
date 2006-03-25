@@ -9,6 +9,14 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #include "wx/wxprec.h"
 
 #if wxUSE_STDPATHS
@@ -35,23 +43,22 @@
 #define kDefaultPathStyle kCFURLHFSPathStyle
 #endif
 
-static wxString BundleRelativeURLToPath(CFURLRef relativeURL)
-{
-    CFURLRef absoluteURL = CFURLCopyAbsoluteURL(relativeURL);
-    wxCHECK_MSG(absoluteURL, wxEmptyString, wxT("Failed to resolve relative URL to absolute URL"));
-    CFStringRef cfStrPath = CFURLCopyFileSystemPath(absoluteURL,kDefaultPathStyle);
-    CFRelease(absoluteURL);
-    return wxMacCFStringHolder(cfStrPath).AsString(wxLocale::GetSystemEncoding());
-}
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxStandardPathsCF ctors/dtor
+// ----------------------------------------------------------------------------
 
 wxStandardPathsCF::wxStandardPathsCF()
-:   m_bundle(CFBundleGetMainBundle())
+                 : m_bundle(CFBundleGetMainBundle())
 {
     CFRetain(m_bundle);
 }
 
-wxStandardPathsCF::wxStandardPathsCF(struct __CFBundle *bundle)
-:   m_bundle(bundle)
+wxStandardPathsCF::wxStandardPathsCF(wxCFBundleRef bundle)
+                 : m_bundle(bundle)
 {
     CFRetain(m_bundle);
 }
@@ -61,12 +68,44 @@ wxStandardPathsCF::~wxStandardPathsCF()
     CFRelease(m_bundle);
 }
 
-void wxStandardPathsCF::SetBundle(struct __CFBundle *bundle)
+// ----------------------------------------------------------------------------
+// wxStandardPathsCF Mac-specific methods
+// ----------------------------------------------------------------------------
+
+void wxStandardPathsCF::SetBundle(wxCFBundleRef bundle)
 {
     CFRetain(bundle);
     CFRelease(m_bundle);
     m_bundle = bundle;
 }
+
+// ----------------------------------------------------------------------------
+// generic functions in terms of which the other ones are implemented
+// ----------------------------------------------------------------------------
+
+static wxString BundleRelativeURLToPath(CFURLRef relativeURL)
+{
+    CFURLRef absoluteURL = CFURLCopyAbsoluteURL(relativeURL);
+    wxCHECK_MSG(absoluteURL, wxEmptyString, wxT("Failed to resolve relative URL to absolute URL"));
+    CFStringRef cfStrPath = CFURLCopyFileSystemPath(absoluteURL,kDefaultPathStyle);
+    CFRelease(absoluteURL);
+    return wxMacCFStringHolder(cfStrPath).AsString(wxLocale::GetSystemEncoding());
+}
+
+wxString wxStandardPathsCF::GetFromFunc(wxCFURLRef (*func)(wxCFBundleRef)) const
+{
+    wxCHECK_MSG(m_bundle, wxEmptyString,
+                wxT("wxStandardPaths for CoreFoundation only works with bundled apps"));
+    CFURLRef relativeURL = (*func)(m_bundle);
+    wxCHECK_MSG(relativeURL, wxEmptyString, wxT("Couldn't get URL"));
+    wxString ret(BundleRelativeURLToPath(relativeURL));
+    CFRelease(relativeURL);
+    return ret;
+}
+
+// ----------------------------------------------------------------------------
+// wxStandardPathsCF public API
+// ----------------------------------------------------------------------------
 
 wxString wxStandardPathsCF::GetConfigDir() const
 {
@@ -82,12 +121,7 @@ wxString wxStandardPathsCF::GetUserConfigDir() const
 
 wxString wxStandardPathsCF::GetDataDir() const
 {
-    wxCHECK_MSG(m_bundle, wxEmptyString, wxT("wxStandardPaths for CoreFoundation only works with bundled apps"));
-    CFURLRef relativeURL = CFBundleCopySharedSupportURL(m_bundle);
-    wxCHECK_MSG(relativeURL, wxEmptyString, wxT("Couldn't get SharedSupport URL"));
-    wxString ret(BundleRelativeURLToPath(relativeURL));
-    CFRelease(relativeURL);
-    return ret;
+    return GetFromFunc(CFBundleCopySharedSupportURL);
 }
 
 wxString wxStandardPathsCF::GetLocalDataDir() const
@@ -102,12 +136,20 @@ wxString wxStandardPathsCF::GetUserDataDir() const
 
 wxString wxStandardPathsCF::GetPluginsDir() const
 {
-    wxCHECK_MSG(m_bundle, wxEmptyString, wxT("wxStandardPaths for CoreFoundation only works with bundled apps"));
-    CFURLRef relativeURL = CFBundleCopyBuiltInPlugInsURL(m_bundle);
-    wxCHECK_MSG(relativeURL, wxEmptyString, wxT("Couldn't get BuiltInPlugIns URL"));
-    wxString ret(BundleRelativeURLToPath(relativeURL));
-    CFRelease(relativeURL);
-    return ret;
+    return GetFromFunc(CFBundleCopyBuiltInPlugInsURL);
+}
+
+wxString wxStandardPathsCF::GetResourcesDir() const
+{
+    return GetFromFunc(CFBundleCopyResourcesDirectoryURL);
+}
+
+wxString
+wxStandardPathsCF::GetLocalizedResourcesDir(const wxChar *lang,
+                                            ResourceCat category) const
+{
+    return wxStandardPathsBase::
+            GetLocalizedResourcesDir(lang, category) + _T(".lproj");
 }
 
 #endif // wxUSE_STDPATHS
