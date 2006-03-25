@@ -52,11 +52,6 @@ wxString wxStandardPaths::GetUserConfigDir() const
     return wxFileName::GetHomeDir();
 }
 
-wxString wxStandardPaths::GetPluginsDir() const
-{
-    return wxString();
-}
-
 // ============================================================================
 // wxStandardPaths implementation for VMS
 // ============================================================================
@@ -69,6 +64,8 @@ wxString wxStandardPaths::GetInstallPrefix() const
     {
         wx_const_cast(wxStandardPaths *, this)->m_prefix = wxT("/sys$system");
     }
+
+    return m_prefix;
 }
 
 wxString wxStandardPaths::GetConfigDir() const
@@ -89,6 +86,11 @@ wxString wxStandardPaths::GetLocalDataDir() const
 wxString wxStandardPaths::GetUserDataDir() const
 {
    return wxFileName::GetHomeDir();
+}
+
+wxString wxStandardPaths::GetPluginsDir() const
+{
+    return wxString(); // TODO: this is wrong, it should return something
 }
 
 #else // !__VMS
@@ -152,6 +154,11 @@ wxString wxStandardPaths::GetLocalDataDir() const
 wxString wxStandardPaths::GetUserDataDir() const
 {
    return AppendAppName(wxFileName::GetHomeDir() + _T("/."));
+}
+
+wxString wxStandardPaths::GetPluginsDir() const
+{
+    return AppendAppName(GetInstallPrefix() + _T("/lib"));
 }
 
 #endif // __VMS/!__VMS
