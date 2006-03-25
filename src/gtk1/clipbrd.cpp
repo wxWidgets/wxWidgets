@@ -298,7 +298,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
             GDK_SELECTION_TYPE_STRING,
             8 * sizeof(gchar),
             (unsigned char*) d,
-            size-1 );
+            size );
 
     free(d);
 }
