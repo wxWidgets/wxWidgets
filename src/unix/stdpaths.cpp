@@ -39,17 +39,63 @@
 #endif
 
 // ============================================================================
-// wxStandardPaths implementation
+// common VMS/Unix part of wxStandardPaths implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// prefix management
-// ----------------------------------------------------------------------------
 
 void wxStandardPaths::SetInstallPrefix(const wxString& prefix)
 {
     m_prefix = prefix;
 }
+
+wxString wxStandardPaths::GetUserConfigDir() const
+{
+    return wxFileName::GetHomeDir();
+}
+
+wxString wxStandardPaths::GetPluginsDir() const
+{
+    return wxString();
+}
+
+// ============================================================================
+// wxStandardPaths implementation for VMS
+// ============================================================================
+
+#ifdef __VMS
+
+wxString wxStandardPaths::GetInstallPrefix() const
+{
+    if ( m_prefix.empty() )
+    {
+        wx_const_cast(wxStandardPaths *, this)->m_prefix = wxT("/sys$system");
+    }
+}
+
+wxString wxStandardPaths::GetConfigDir() const
+{
+   return _T("/sys$manager");
+}
+
+wxString wxStandardPaths::GetDataDir() const
+{
+   return AppendAppName(GetInstallPrefix() + _T("/sys$share"));
+}
+
+wxString wxStandardPaths::GetLocalDataDir() const
+{
+   return AppendAppName(_T("/sys$manager"));
+}
+
+wxString wxStandardPaths::GetUserDataDir() const
+{
+   return wxFileName::GetHomeDir();
+}
+
+#else // !__VMS
+
+// ============================================================================
+// wxStandardPaths implementation for Unix
+// ============================================================================
 
 wxString wxStandardPaths::GetInstallPrefix() const
 {
@@ -77,11 +123,7 @@ wxString wxStandardPaths::GetInstallPrefix() const
 
         if ( m_prefix.empty() )
         {
-#ifdef __VMS
-            pathPtr->m_prefix = wxT("/sys$system");
-#else
             pathPtr->m_prefix = wxT("/usr/local");
-#endif
         }
     }
 
@@ -94,48 +136,24 @@ wxString wxStandardPaths::GetInstallPrefix() const
 
 wxString wxStandardPaths::GetConfigDir() const
 {
-#ifdef __VMS
-   return _T("/sys$manager");
-#else
    return _T("/etc");
-#endif
-}
-
-wxString wxStandardPaths::GetUserConfigDir() const
-{
-    return wxFileName::GetHomeDir();
 }
 
 wxString wxStandardPaths::GetDataDir() const
 {
-#ifdef __VMS
-   return AppendAppName(GetInstallPrefix() + _T("/sys$share"));
-#else
    return AppendAppName(GetInstallPrefix() + _T("/share"));
-#endif
 }
 
 wxString wxStandardPaths::GetLocalDataDir() const
 {
-#ifdef __VMS
-   return AppendAppName(_T("/sys$manager"));
-#else
    return AppendAppName(_T("/etc"));
-#endif
 }
 
 wxString wxStandardPaths::GetUserDataDir() const
 {
-#ifdef __VMS
-   return wxFileName::GetHomeDir();
-#else
    return AppendAppName(wxFileName::GetHomeDir() + _T("/."));
-#endif
 }
 
-wxString wxStandardPaths::GetPluginsDir() const
-{
-    return wxString();
-}
+#endif // __VMS/!__VMS
 
 #endif // wxUSE_STDPATHS
