@@ -70,11 +70,10 @@ wxString wxStandardPaths::GetInstallPrefix() const
         {
             buf[result] = '\0'; // readlink() doesn't NUL-terminate the buffer
 
-            wxString exeStr(buf, wxConvLibc);
+            const wxString exeStr(buf, wxConvLibc);
 
             // consider that we're in the last "bin" subdirectory of our prefix
-            wxString basename(wxString(wxTheApp->argv[0]).AfterLast(_T('/')));
-            size_t pos = exeStr.find(wxT("/bin/") + basename);
+            size_t pos = exeStr.rfind(wxT("/bin/"));
             if ( pos != wxString::npos )
                 pathPtr->m_prefix.assign(exeStr, 0, pos);
         }
