@@ -77,6 +77,7 @@
 #include "wx/ptr_scpd.h"
 #include "wx/app.h"
 #include "wx/apptrait.h"
+#include "wx/stdpaths.h"
 
 #if defined(__WXMAC__)
   #include  "wx/mac/private.h"  // includes mac headers
@@ -984,7 +985,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // the list of the directories to search for message catalog files
-static wxArrayString s_searchPrefixes;
+static wxArrayString gs_searchPrefixes;
 
 // ============================================================================
 // implementation
@@ -1005,18 +1006,19 @@ wxMsgCatalogFile::~wxMsgCatalogFile()
     wxDELETEA(m_pData);
 }
 
-// return all directories to search for given prefix
-static wxString GetAllMsgCatalogSubdirs(const wxChar *prefix,
-                                        const wxChar *lang)
+// return the directory to search for message catalogs under the given prefix
+static
+wxString GetMsgCatalogSubdir(const wxChar *prefix, const wxChar *lang)
 {
     wxString searchPath;
+    searchPath << prefix << wxFILE_SEP_PATH << lang;
 
-    // search first in prefix/fr/LC_MESSAGES, then in prefix/fr and finally in
-    // prefix (assuming the language is 'fr')
-    searchPath << prefix << wxFILE_SEP_PATH << lang << wxFILE_SEP_PATH
-                         << wxT("LC_MESSAGES") << wxPATH_SEP
-               << prefix << wxFILE_SEP_PATH << lang << wxPATH_SEP
-               << prefix << wxPATH_SEP;
+    // under Unix, the message catalogs are supposed to go into LC_MESSAGES
+    // subdirectory but there is no such requirement/tradition on the other
+    // systems
+#ifdef __UNIX__
+    searchPath << wxFILE_SEP_PATH << wxT("LC_MESSAGES");
+#endif
 
     return searchPath;
 }
@@ -1024,48 +1026,59 @@ static wxString GetAllMsgCatalogSubdirs(const wxChar *prefix,
 // construct the search path for the given language
 static wxString GetFullSearchPath(const wxChar *lang)
 {
-    wxString searchPath;
-
     // first take the entries explicitly added by the program
-    size_t count = s_searchPrefixes.Count();
-    for ( size_t n = 0; n < count; n++ )
+    wxArrayString paths;
+    paths.reserve(gs_searchPrefixes.size() + 1);
+    size_t n,
+           count = gs_searchPrefixes.size();
+    for ( n = 0; n < count; n++ )
     {
-        searchPath << GetAllMsgCatalogSubdirs(s_searchPrefixes[n], lang)
-                   << wxPATH_SEP;
+        paths.Add(GetMsgCatalogSubdir(gs_searchPrefixes[n], lang));
     }
 
-    // TODO: use wxStandardPaths instead of all this mess!!
 
+#if wxUSE_STDPATHS
+    // then look in the standard location
+    const wxString stdp = wxStandardPaths::Get().
+        GetLocalizedResourcesDir(lang, wxStandardPaths::ResourceCat_Messages);
+
+    if ( paths.Index(stdp) == wxNOT_FOUND )
+        paths.Add(stdp);
+#endif // wxUSE_STDPATHS
+
+    // last look in default locations
+#ifdef __UNIX__
     // LC_PATH is a standard env var containing the search path for the .mo
     // files
-#ifndef __WXWINCE__
     const wxChar *pszLcPath = wxGetenv(wxT("LC_PATH"));
-    if ( pszLcPath != NULL )
-        searchPath << GetAllMsgCatalogSubdirs(pszLcPath, lang);
-#endif
+    if ( pszLcPath )
+    {
+        const wxString lcp = GetMsgCatalogSubdir(pszLcPath, lang);
+        if ( paths.Index(lcp) == wxNOT_FOUND )
+            paths.Add(lcp);
+    }
 
-#ifdef __UNIX__
-    // add some standard ones and the one in the tree where wxWin was installed:
-    searchPath
-        << GetAllMsgCatalogSubdirs(wxString(wxGetInstallPrefix()) + wxT("/share/locale"), lang)
-        << GetAllMsgCatalogSubdirs(wxT("/usr/share/locale"), lang)
-        << GetAllMsgCatalogSubdirs(wxT("/usr/lib/locale"), lang)
-        << GetAllMsgCatalogSubdirs(wxT("/usr/local/share/locale"), lang);
+    // also add the one from where wxWin was installed:
+    wxString wxp = wxGetInstallPrefix();
+    if ( !wxp.empty() )
+    {
+        wxp = GetMsgCatalogSubdir(wxp + _T("/share/locale"), lang);
+        if ( paths.Index(wxp) == wxNOT_FOUND )
+            paths.Add(wxp);
+    }
 #endif // __UNIX__
 
-    // then take the current directory
-    // FIXME it should be the directory of the executable
-#if defined(__WXMAC__)
-    searchPath << GetAllMsgCatalogSubdirs(wxGetCwd(), lang);
-    // generic search paths could be somewhere in the system folder preferences
-#elif defined(__WXMSW__)
-    // look in the directory of the executable
-    wxString path;
-    wxSplitPath(wxGetFullModuleName(), &path, NULL, NULL);
-    searchPath << GetAllMsgCatalogSubdirs(path, lang);
-#else // !Mac, !MSW
-    searchPath << GetAllMsgCatalogSubdirs(wxT("."), lang);
-#endif // platform
+
+    // finally construct the full search path
+    wxString searchPath;
+    searchPath.reserve(500);
+    count = paths.size();
+    for ( n = 0; n < count; n++ )
+    {
+        searchPath += paths[n];
+        if ( n != count - 1 )
+            searchPath += wxPATH_SEP;
+    }
 
     return searchPath;
 }
@@ -1098,9 +1111,9 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName,
       // also add just base locale name: for things like "fr_BE" (belgium
       // french) we should use "fr" if no belgium specific message catalogs
       // exist
-      searchPath << GetFullSearchPath(wxString(szDirPrefix).
-                                      Left((size_t)(sublocale - szDirPrefix)))
-                 << wxPATH_SEP;
+      searchPath << wxPATH_SEP
+                 << GetFullSearchPath(wxString(szDirPrefix).
+                                      Left((size_t)(sublocale - szDirPrefix)));
   }
 
   // don't give translation errors here because the wxstd catalog might
@@ -1818,9 +1831,9 @@ bool wxLocale::Init(int language, int flags)
 
 void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
 {
-    if ( s_searchPrefixes.Index(prefix) == wxNOT_FOUND )
+    if ( gs_searchPrefixes.Index(prefix) == wxNOT_FOUND )
     {
-        s_searchPrefixes.Add(prefix);
+        gs_searchPrefixes.Add(prefix);
     }
     //else: already have it
 }
