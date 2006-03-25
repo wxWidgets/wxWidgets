@@ -1166,7 +1166,7 @@ class Shape(ShapeEvtHandler):
         """Flash the shape."""
         if self.GetCanvas():
             dc = wx.ClientDC(self.GetCanvas())
-            self.GetCanvas.PrepareDC(dc)
+            self.GetCanvas().PrepareDC(dc)
 
             dc.SetLogicalFunction(OGLRBLF)
             self.Draw(dc)
