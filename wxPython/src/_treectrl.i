@@ -346,7 +346,7 @@ public:
 
     
     // get the total number of items in the control
-    size_t GetCount() const;
+    unsigned int GetCount() const;
 
     // indent is the number of pixels the children are indented relative to
     // the parents position. SetIndent() also redraws the control
