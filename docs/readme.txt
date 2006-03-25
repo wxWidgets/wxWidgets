@@ -1,5 +1,5 @@
-wxWidgets 2.6.3 (Release Candidate 2)
----------------------------------------------------------
+wxWidgets 2.6.3
+---------------
 
 Welcome to wxWidgets, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using
