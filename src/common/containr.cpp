@@ -374,11 +374,21 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
     }
 
     // we want to cycle over all elements passing by NULL
-    while ( node != start_node )
+    for( ;; )
     {
+        // if it is the starting node then break
+        if( node && start_node && node == start_node )
+            break;
+
         // Have we come to the last or first item on the panel?
         if ( !node )
         {
+            if ( !start_node )
+            {
+                // exit now as otherwise we'd loop forever
+                break;
+            }
+
             if ( !goingDown )
             {
                 // Check if our (may be grand) parent is another panel: if this
