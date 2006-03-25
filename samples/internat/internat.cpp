@@ -190,9 +190,11 @@ bool MyApp::OnInit()
         }
     }
 
-    // if the message catalogs are installed in non-default locations you can
-    // use this function to let wxLocale know about them
-    //  wxLocale::AddCatalogLookupPathPrefix(wxT("message_catalogs_subdir"));
+    // normally this wouldn't be necessary as the catalog files would be found
+    // in the default locations, but when the program is not installed the
+    // catalogs are in the build directory where we wouldn't find them by
+    // default
+    wxLocale::AddCatalogLookupPathPrefix(wxT("."));
 
     // Initialize the catalogs we'll be using
     m_locale.AddCatalog(wxT("internat"));
