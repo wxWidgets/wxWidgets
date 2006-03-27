@@ -16,17 +16,17 @@
 #include "wx/control.h"
 #include "wx/scrolwin.h"
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // classes
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxDataViewCtrl;
 class WXDLLIMPEXP_CORE wxDataViewMainWindow;
 class WXDLLIMPEXP_CORE wxDataViewHeaderWindow;
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewCell
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class wxDataViewCell: public wxDataViewCellBase
 {
@@ -36,144 +36,155 @@ public:
 
     virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
     virtual wxSize GetSize() = 0;
-    
-    virtual bool Activate( wxRect cell,
-                           wxDataViewListModel *model, size_t col, size_t row )   
+
+    virtual bool Activate( wxRect WXUNUSED(cell),
+                           wxDataViewListModel *WXUNUSED(model),
+                           size_t WXUNUSED(col),
+                           size_t WXUNUSED(row) )
                            { return false; }
-    
-    virtual bool LeftClick( wxPoint cursor, wxRect cell, 
-                           wxDataViewListModel *model, size_t col, size_t row )   
-                           { return false; }
-    virtual bool RightClick( wxPoint cursor, wxRect cell,
-                           wxDataViewListModel *model, size_t col, size_t row )   
-                           { return false; }
-    virtual bool StartDrag( wxPoint cursor, wxRect cell, 
-                           wxDataViewListModel *model, size_t col, size_t row )   
-                           { return false; }
-    
+
+    virtual bool LeftClick( wxPoint WXUNUSED(cursor),
+                            wxRect WXUNUSED(cell),
+                            wxDataViewListModel *WXUNUSED(model),
+                            size_t WXUNUSED(col),
+                            size_t WXUNUSED(row) )
+                            { return false; }
+    virtual bool RightClick( wxPoint WXUNUSED(cursor),
+                             wxRect WXUNUSED(cell),
+                             wxDataViewListModel *WXUNUSED(model),
+                             size_t WXUNUSED(col),
+                             size_t WXUNUSED(row) )
+                             { return false; }
+    virtual bool StartDrag( wxPoint WXUNUSED(cursor),
+                            wxRect WXUNUSED(cell),
+                            wxDataViewListModel *WXUNUSED(model),
+                            size_t WXUNUSED(col),
+                            size_t WXUNUSED(row) )
+                            { return false; }
+
     // Create DC on request
     virtual wxDC *GetDC();
-    
+
 private:
     wxDC        *m_dc;
-    
+
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCell)
 };
-    
-// --------------------------------------------------------- 
+
+// ---------------------------------------------------------
 // wxDataViewCustomCell
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class wxDataViewCustomCell: public wxDataViewCell
 {
 public:
-    wxDataViewCustomCell( const wxString &varianttype = wxT("string"), 
+    wxDataViewCustomCell( const wxString &varianttype = wxT("string"),
                           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
-    
+
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomCell)
 };
-    
-// --------------------------------------------------------- 
+
+// ---------------------------------------------------------
 // wxDataViewTextCell
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class wxDataViewTextCell: public wxDataViewCustomCell
 {
 public:
-    wxDataViewTextCell( const wxString &varianttype = wxT("string"), 
+    wxDataViewTextCell( const wxString &varianttype = wxT("string"),
                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
 
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant &value );
-    
+
     bool Render( wxRect cell, wxDC *dc, int state );
     wxSize GetSize();
-    
+
 private:
     wxString m_text;
-    
+
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextCell)
 };
-    
-// --------------------------------------------------------- 
+
+// ---------------------------------------------------------
 // wxDataViewToggleCell
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class wxDataViewToggleCell: public wxDataViewCustomCell
 {
 public:
-    wxDataViewToggleCell( const wxString &varianttype = wxT("bool"), 
+    wxDataViewToggleCell( const wxString &varianttype = wxT("bool"),
                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
 
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant &value );
-    
+
     bool Render( wxRect cell, wxDC *dc, int state );
     bool Activate( wxRect cell, wxDataViewListModel *model, size_t col, size_t row );
     wxSize GetSize();
-    
+
 private:
     bool    m_toggle;
-    
+
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleCell)
 };
-    
-// --------------------------------------------------------- 
+
+// ---------------------------------------------------------
 // wxDataViewProgressCell
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class wxDataViewProgressCell: public wxDataViewCustomCell
 {
 public:
-    wxDataViewProgressCell( const wxString &label = wxEmptyString, 
-                            const wxString &varianttype = wxT("long"), 
+    wxDataViewProgressCell( const wxString &label = wxEmptyString,
+                            const wxString &varianttype = wxT("long"),
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
     ~wxDataViewProgressCell();
-    
+
     bool SetValue( const wxVariant &value );
-    
+
     virtual bool Render( wxRect cell, wxDC *dc, int state );
     virtual wxSize GetSize();
-    
+
 private:
     wxString    m_label;
     int         m_value;
-    
+
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressCell)
 };
-    
-// --------------------------------------------------------- 
+
+// ---------------------------------------------------------
 // wxDataViewDateCell
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class wxDataViewDateCell: public wxDataViewCustomCell
 {
 public:
-    wxDataViewDateCell( const wxString &varianttype = wxT("datetime"), 
+    wxDataViewDateCell( const wxString &varianttype = wxT("datetime"),
                         wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE );
-    
+
     bool SetValue( const wxVariant &value );
-    
+
     virtual bool Render( wxRect cell, wxDC *dc, int state );
     virtual wxSize GetSize();
     virtual bool Activate( wxRect cell,
                            wxDataViewListModel *model, size_t col, size_t row );
-    
+
 private:
     wxDateTime    m_date;
-    
+
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateCell)
 };
-    
-// --------------------------------------------------------- 
+
+// ---------------------------------------------------------
 // wxDataViewColumn
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxDataViewColumn: public wxDataViewColumnBase
 {
@@ -182,10 +193,10 @@ public:
     virtual ~wxDataViewColumn();
 
     virtual void SetTitle( const wxString &title );
-    
+
     void SetWidth( int width ) { m_width = width; }
     int GetWidth() { return m_width; }
-    
+
 private:
     int     m_width;
 
@@ -193,11 +204,11 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumn)
 };
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewCtrl
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDataViewCtrl: public wxDataViewCtrlBase, 
+class WXDLLIMPEXP_CORE wxDataViewCtrl: public wxDataViewCtrlBase,
                                        public wxScrollHelperNative
 {
 public:
@@ -205,11 +216,11 @@ public:
     {
         Init();
     }
-    
+
     wxDataViewCtrl( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator ) 
+           const wxValidator& validator = wxDefaultValidator )
              : wxScrollHelperNative(this)
     {
         Create(parent, id, pos, size, style, validator );
@@ -226,17 +237,17 @@ public:
 
     virtual bool AssociateModel( wxDataViewListModel *model );
     virtual bool AppendColumn( wxDataViewColumn *col );
-    
+
 private:
     friend class wxDataViewMainWindow;
     friend class wxDataViewHeaderWindow;
     wxDataViewListModelNotifier *m_notifier;
     wxDataViewMainWindow        *m_clientArea;
     wxDataViewHeaderWindow      *m_headerArea;
-    
+
 private:
     void OnSize( wxSizeEvent &event );
-    
+
     // we need to return a special WM_GETDLGCODE value to process just the
     // arrows but let the other navigation characters through
 #ifdef __WXMSW__

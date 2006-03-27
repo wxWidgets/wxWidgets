@@ -15,24 +15,25 @@
     #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
-
 #if wxUSE_DATAVIEWCTRL
 
-#include "wx/object.h"
-#include "wx/dataview.h"
-#include "wx/log.h"
-#include "wx/image.h"
+#ifndef WX_PRECOMP
+    #include "wx/object.h"
+    #include "wx/log.h"
+#endif
 
-// --------------------------------------------------------- 
+#include "wx/image.h"
+#include "wx/dataview.h"
+
+// ---------------------------------------------------------
 // wxDataViewModel
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewModel, wxObject)
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewListModel
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewListModel, wxDataViewModel)
 
@@ -58,7 +59,7 @@ bool wxDataViewListModel::RowAppended()
             ret = false;
         node = node->GetNext();
     }
-        
+
     return ret;
 }
 
@@ -74,7 +75,7 @@ bool wxDataViewListModel::RowPrepended()
             ret = false;
         node = node->GetNext();
     }
-        
+
     return ret;
 }
 
@@ -90,7 +91,7 @@ bool wxDataViewListModel::RowInserted( size_t before )
             ret = false;
         node = node->GetNext();
     }
-        
+
     return ret;
 }
 
@@ -106,7 +107,7 @@ bool wxDataViewListModel::RowDeleted( size_t row )
             ret = false;
         node = node->GetNext();
     }
-        
+
     return ret;
 }
 
@@ -122,7 +123,7 @@ bool wxDataViewListModel::RowChanged( size_t row )
             ret = false;
         node = node->GetNext();
     }
-        
+
     return ret;
 }
 
@@ -138,7 +139,7 @@ bool wxDataViewListModel::ValueChanged( size_t col, size_t row )
             ret = false;
         node = node->GetNext();
     }
-    
+
     return ret;
 }
 
@@ -154,7 +155,7 @@ bool wxDataViewListModel::RowsReordered( size_t *new_order )
             ret = false;
         node = node->GetNext();
     }
-        
+
     return ret;
 }
 
@@ -170,7 +171,7 @@ bool wxDataViewListModel::Cleared()
             ret = false;
         node = node->GetNext();
     }
-        
+
     return ret;
 }
 
@@ -185,13 +186,13 @@ void wxDataViewListModel::RemoveViewingColumn( wxDataViewColumn *column )
     while (node)
     {
         wxDataViewViewingColumn* tmp = (wxDataViewViewingColumn*) node->GetData();
-        
+
         if (tmp->m_viewColumn == column)
         {
             m_viewingColumns.DeleteObject( tmp );
             return;
         }
-    
+
         node = node->GetNext();
     }
 }
@@ -207,32 +208,32 @@ void wxDataViewListModel::RemoveNotifier( wxDataViewListModelNotifier *notifier 
     m_notifiers.DeleteObject( notifier );
 }
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewSortedListModelNotifier
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class wxDataViewSortedListModelNotifier: public wxDataViewListModelNotifier
 {
 public:
     wxDataViewSortedListModelNotifier( wxDataViewSortedListModel *model )
     { m_model = model; }
-    
+
     virtual bool RowAppended() { return true; }
     virtual bool RowPrepended()  { return true; }
-    virtual bool RowInserted( size_t before )  { return true; }
-    virtual bool RowDeleted( size_t row ) { return true; }
-    virtual bool RowChanged( size_t row ) { return true; }
+    virtual bool RowInserted( size_t WXUNUSED(before) )  { return true; }
+    virtual bool RowDeleted( size_t WXUNUSED(row) ) { return true; }
+    virtual bool RowChanged( size_t WXUNUSED(row) ) { return true; }
     virtual bool ValueChanged( size_t col, size_t row )
          { return m_model->ChildValueChanged( col, row); }
-    virtual bool RowsReordered( size_t *new_order ) { return true; }
+    virtual bool RowsReordered( size_t *WXUNUSED(new_order) ) { return true; }
     virtual bool Cleared() { return true; }
-    
+
     wxDataViewSortedListModel *m_model;
 };
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewSortedListModel compare function
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 int wxCALLBACK wxDataViewListModelSortedDefaultCompare
       (size_t row1, size_t row2, size_t col, wxDataViewListModel* model )
@@ -281,7 +282,7 @@ int LINKAGEMODE wxDataViewIntermediateCmp( size_t row1, size_t row2 )
     return s_CmpFunc( row1, row2, s_CmpCol, s_CmpModel );
 }
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewSortedListModel
 // ---------------------------------------------------------
 
@@ -294,11 +295,11 @@ wxDataViewSortedListModel::wxDataViewSortedListModel( wxDataViewListModel *child
     s_CmpCol = 0;
     s_CmpModel = child;
     s_CmpFunc = wxDataViewListModelSortedDefaultCompare;
-    
+
     m_notifierOnChild = new wxDataViewSortedListModelNotifier( this );
     m_child->AddNotifier( m_notifierOnChild );
-    
-    Resort();    
+
+    Resort();
 }
 
 wxDataViewSortedListModel::~wxDataViewSortedListModel()
@@ -335,7 +336,7 @@ bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
 {
     size_t i;
     size_t len = m_array.GetCount();
-    
+
     // Remove and readd sorted. Find out at which
     // position it was and where it ended.
     size_t start_pos = 0,end_pos = 0;
@@ -347,17 +348,17 @@ bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
         }
     m_array.RemoveAt( start_pos );
     m_array.Add( row );
-    
+
     for (i = 0; i < len; i++)
         if (m_array[i] == row)
         {
             end_pos = i;
             break;
         }
-    
+
     if (end_pos == start_pos)
         return wxDataViewListModel::ValueChanged( col, start_pos );
-    
+
     // Create an array where order[old] -> new_pos, so that
     // if nothing changed order[0] -> 0 etc.
     size_t *order = new size_t[ len ];
@@ -376,12 +377,12 @@ bool wxDataViewSortedListModel::ChildValueChanged( size_t col, size_t row )
         for (i = end_pos; i > start_pos; i--)
             order[i] = order[i-1];
         order[start_pos] = end_pos;
-    }   
-    
+    }
+
     wxDataViewListModel::RowsReordered( order );
-    
+
     delete [] order;
-    
+
     return true;
 }
 
@@ -410,9 +411,9 @@ bool wxDataViewSortedListModel::SetValue( wxVariant &variant, size_t col, size_t
 {
     size_t child_row = m_array[row];
     bool ret = m_child->SetValue( variant, col, child_row );
-    
+
     // Resort in ::ChildValueChanged() which gets reported back.
-    
+
     return ret;
 }
 
@@ -420,9 +421,9 @@ bool wxDataViewSortedListModel::RowAppended()
 {
     // you can only append
     bool ret = m_child->RowAppended();
-    
+
     // report RowInsrted
-    
+
     return ret;
 }
 
@@ -430,31 +431,31 @@ bool wxDataViewSortedListModel::RowPrepended()
 {
     // you can only append
     bool ret = m_child->RowAppended();
-    
+
     // report RowInsrted
-    
+
     return ret;
 }
 
-bool wxDataViewSortedListModel::RowInserted( size_t before )
+bool wxDataViewSortedListModel::RowInserted( size_t WXUNUSED(before) )
 {
     // you can only append
     bool ret = m_child->RowAppended();
-    
+
     // report different RowInsrted
-    
+
     return ret;
 }
 
 bool wxDataViewSortedListModel::RowDeleted( size_t row )
 {
     size_t child_row = m_array[row];
-    
+
     bool ret = m_child->RowDeleted( child_row );
-    
+
     // Do nothing here as the change in the
     // child model will be reported back.
-    
+
     return ret;
 }
 
@@ -462,10 +463,10 @@ bool wxDataViewSortedListModel::RowChanged( size_t row )
 {
     size_t child_row = m_array[row];
     bool ret = m_child->RowChanged( child_row );
-    
+
     // Do nothing here as the change in the
     // child model will be reported back.
-    
+
     return ret;
 }
 
@@ -473,14 +474,14 @@ bool wxDataViewSortedListModel::ValueChanged( size_t col, size_t row )
 {
     size_t child_row = m_array[row];
     bool ret = m_child->ValueChanged( col, child_row );
-    
+
     // Do nothing here as the change in the
     // child model will be reported back.
-    
+
     return ret;
 }
 
-bool wxDataViewSortedListModel::RowsReordered( size_t *new_order )
+bool wxDataViewSortedListModel::RowsReordered( size_t *WXUNUSED(new_order) )
 {
     // We sort them ourselves.
 
@@ -490,15 +491,15 @@ bool wxDataViewSortedListModel::RowsReordered( size_t *new_order )
 bool wxDataViewSortedListModel::Cleared()
 {
     bool ret = m_child->Cleared();
-    
+
     wxDataViewListModel::Cleared();
-    
+
     return ret;
 }
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewCellBase
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewCellBase, wxObject)
 
@@ -507,10 +508,10 @@ wxDataViewCellBase::wxDataViewCellBase( const wxString &varianttype, wxDataViewC
     m_variantType = varianttype;
     m_mode = mode;
 }
-    
-// --------------------------------------------------------- 
+
+// ---------------------------------------------------------
 // wxDataViewColumnBase
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumnBase, wxObject)
 
@@ -528,7 +529,7 @@ wxDataViewColumnBase::~wxDataViewColumnBase()
 {
     if (m_cell)
         delete m_cell;
-        
+
     if (GetOwner())
     {
         GetOwner()->GetModel()->RemoveViewingColumn( (wxDataViewColumn*) this );
@@ -545,9 +546,9 @@ wxString wxDataViewColumnBase::GetTitle()
     return m_title;
 }
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewCtrlBase
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewCtrlBase, wxControl)
 
@@ -564,7 +565,7 @@ wxDataViewCtrlBase::~wxDataViewCtrlBase()
 bool wxDataViewCtrlBase::AssociateModel( wxDataViewListModel *model )
 {
     m_model = model;
-    
+
     return true;
 }
 
@@ -606,7 +607,7 @@ size_t wxDataViewCtrlBase::GetNumberOfColumns()
     return m_cols.GetCount();
 }
 
-bool wxDataViewCtrlBase::DeleteColumn( size_t pos )
+bool wxDataViewCtrlBase::DeleteColumn( size_t WXUNUSED(pos) )
 {
     return false;
 }

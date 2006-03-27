@@ -32,7 +32,7 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// wxDataViewCtrl flags 
+// wxDataViewCtrl flags
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
@@ -47,23 +47,23 @@ class WXDLLIMPEXP_CORE wxDataViewCell;
 
 extern WXDLLEXPORT_DATA(const wxChar) wxDataViewCtrlNameStr[];
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewModel
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class wxDataViewModel: public wxObject
 {
 public:
     wxDataViewModel() { }
     virtual ~wxDataViewModel() { }
-    
+
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewModel)
 };
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewListModelNotifier
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 
 class wxDataViewListModelNotifier: public wxObject
@@ -71,7 +71,7 @@ class wxDataViewListModelNotifier: public wxObject
 public:
     wxDataViewListModelNotifier() { }
     virtual ~wxDataViewListModelNotifier() { }
-    
+
     virtual bool RowAppended() = 0;
     virtual bool RowPrepended() = 0;
     virtual bool RowInserted( size_t before ) = 0;
@@ -80,17 +80,17 @@ public:
     virtual bool ValueChanged( size_t col, size_t row ) = 0;
     virtual bool RowsReordered( size_t *new_order ) = 0;
     virtual bool Cleared() = 0;
-    
+
     void SetOwner( wxDataViewListModel *owner ) { m_owner = owner; }
     wxDataViewListModel *GetOwner()             { return m_owner; }
-    
+
 private:
     wxDataViewListModel *m_owner;
 };
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewListModel
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class wxDataViewViewingColumn: public wxObject
 {
@@ -100,7 +100,7 @@ public:
         m_viewColumn = view_column;
         m_modelColumn = model_column;
     }
-    
+
     wxDataViewColumn   *m_viewColumn;
     size_t              m_modelColumn;
 };
@@ -130,13 +130,13 @@ public:
     virtual bool RowsReordered( size_t *new_order );
     virtual bool Cleared();
 
-    // Used internally    
+    // Used internally
     virtual void AddViewingColumn( wxDataViewColumn *view_column, size_t model_column );
     virtual void RemoveViewingColumn( wxDataViewColumn *column );
-    
+
     virtual void AddNotifier( wxDataViewListModelNotifier *notifier );
     virtual void RemoveNotifier( wxDataViewListModelNotifier *notifier );
-    
+
     wxList                      m_notifiers;
     wxList                      m_viewingColumns;
 
@@ -144,9 +144,9 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewListModel)
 };
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewSortedListModel
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 typedef int (wxCALLBACK *wxDataViewListModelCompare)
     (size_t row1, size_t row2, size_t col, wxDataViewListModel* model );
@@ -191,9 +191,9 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewSortedListModel)
 };
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewCellBase
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 enum wxDataViewCellMode
 {
@@ -215,16 +215,16 @@ class wxDataViewCellBase: public wxObject
 public:
     wxDataViewCellBase( const wxString &varianttype, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
 
-    virtual bool SetValue( const wxVariant &value ) { return true; }
-    virtual bool GetValue( wxVariant &value )       { return true; }
-    virtual bool Validate( wxVariant &value )       { return true; }
-    
+    virtual bool SetValue( const wxVariant& WXUNUSED(value) ) { return true; }
+    virtual bool GetValue( wxVariant& WXUNUSED(value) )       { return true; }
+    virtual bool Validate( wxVariant& WXUNUSED(value) )       { return true; }
+
     wxString GetVariantType()       { return m_variantType; }
     wxDataViewCellMode GetMode()    { return m_mode; }
-    
+
     void SetOwner( wxDataViewColumn *owner )    { m_owner = owner; }
     wxDataViewColumn* GetOwner()                { return m_owner; }
-    
+
 protected:
     wxDataViewCellMode      m_mode;
     wxString                m_variantType;
@@ -234,9 +234,9 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCellBase)
 };
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewColumnBase
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 enum wxDataViewColumnFlags
 {
@@ -253,11 +253,11 @@ public:
 
     virtual void SetTitle( const wxString &title );
     virtual wxString GetTitle();
-    
+
     wxDataViewCell* GetCell()               { return m_cell; }
-    
+
     size_t GetModelColumn()                 { return m_model_column; }
-    
+
     void SetOwner( wxDataViewCtrl *owner )  { m_owner = owner; }
     wxDataViewCtrl *GetOwner()              { return m_owner; }
 
@@ -273,29 +273,29 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumnBase)
 };
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewCtrlBase
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class wxDataViewCtrlBase: public wxControl
 {
 public:
     wxDataViewCtrlBase();
     ~wxDataViewCtrlBase();
-    
+
     virtual bool AssociateModel( wxDataViewListModel *model );
     wxDataViewListModel* GetModel();
-    
+
     virtual bool AppendTextColumn( const wxString &label, size_t model_column );
     virtual bool AppendToggleColumn( const wxString &label, size_t model_column );
     virtual bool AppendProgressColumn( const wxString &label, size_t model_column );
     virtual bool AppendDateColumn( const wxString &label, size_t model_column );
-    virtual bool AppendColumn( wxDataViewColumn *col );    
+    virtual bool AppendColumn( wxDataViewColumn *col );
     virtual size_t GetNumberOfColumns();
     virtual bool DeleteColumn( size_t pos );
     virtual bool ClearColumns();
     virtual wxDataViewColumn* GetColumn( size_t pos );
-    
+
 private:
     wxDataViewListModel    *m_model;
     wxList                  m_cols;

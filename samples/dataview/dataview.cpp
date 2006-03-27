@@ -147,7 +147,7 @@ public:
         m_colour = value.GetString();
         return true;
     }
-    bool Render( wxRect rect, wxDC *dc, int state )
+    bool Render( wxRect rect, wxDC *dc, int WXUNUSED(state) )
     {
         dc->SetPen( *wxBLACK_PEN );
         if (m_colour == wxT("red"))
@@ -163,8 +163,10 @@ public:
     {
         return wxSize(20,8);
     }
-    bool Activate( wxRect rect,
-                   wxDataViewListModel *model, size_t col, size_t row )
+    bool Activate( wxRect WXUNUSED(rect),
+                   wxDataViewListModel *WXUNUSED(model),
+                   size_t WXUNUSED(col),
+                   size_t WXUNUSED(row) )
     {
         return false;
     }
@@ -193,7 +195,7 @@ public:
 
     virtual size_t GetNumberOfRows() { return m_list.GetCount(); }
     virtual size_t GetNumberOfCols() { return 2; }
-    virtual wxString GetColType( size_t col ) { return wxT("string"); }
+    virtual wxString GetColType( size_t WXUNUSED(col) ) { return wxT("string"); }
     virtual void GetValue( wxVariant &variant, size_t col, size_t row )
     {
         if (col == 0)
@@ -347,7 +349,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
 
 
     // Left wxDataViewCtrl
-    dataview_left = new wxDataViewCtrl( this, -1 );
+    dataview_left = new wxDataViewCtrl( this, wxID_ANY );
 
     MyTextModel *model = new MyTextModel;
     dataview_left->AssociateModel( model );
@@ -370,7 +372,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     dataview_left->AppendDateColumn( wxT("date"), 6 );
 
     // Right wxDataViewCtrl using the same model
-    dataview_right = new wxDataViewCtrl( this, -1 );
+    dataview_right = new wxDataViewCtrl( this, wxID_ANY );
     dataview_right->AssociateModel( model );
 
     text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
@@ -441,7 +443,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
 
 
     // Left wxDataViewCtrl
-    dataview_left = new wxDataViewCtrl( this, -1 );
+    dataview_left = new wxDataViewCtrl( this, wxID_ANY );
 
     MyUnsortedTextModel *model = new MyUnsortedTextModel;
     dataview_left->AssociateModel( model );
@@ -451,7 +453,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     dataview_left->AppendTextColumn( wxT("second"), 1 );
 
     // Right wxDataViewCtrl using the sorting model
-    dataview_right = new wxDataViewCtrl( this, -1 );
+    dataview_right = new wxDataViewCtrl( this, wxID_ANY );
     wxDataViewSortedListModel *sorted_model =
         new wxDataViewSortedListModel( model );
     dataview_right->AssociateModel( sorted_model );
@@ -506,43 +508,43 @@ void MySortingFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
     dialog.ShowModal();
 }
 
-void MySortingFrame::OnAppendRowLeft(wxCommandEvent& event)
+void MySortingFrame::OnAppendRowLeft(wxCommandEvent& WXUNUSED(event))
 {
 }
 
-void MySortingFrame::OnPrependRowLeft(wxCommandEvent& event)
+void MySortingFrame::OnPrependRowLeft(wxCommandEvent& WXUNUSED(event))
 {
 }
 
-void MySortingFrame::OnInsertRowLeft(wxCommandEvent& event)
+void MySortingFrame::OnInsertRowLeft(wxCommandEvent& WXUNUSED(event))
 {
 }
 
-void MySortingFrame::OnDeleteRowLeft(wxCommandEvent& event)
+void MySortingFrame::OnDeleteRowLeft(wxCommandEvent& WXUNUSED(event))
 {
 }
 
-void MySortingFrame::OnEditRowLeft(wxCommandEvent& event)
+void MySortingFrame::OnEditRowLeft(wxCommandEvent& WXUNUSED(event))
 {
 }
 
-void MySortingFrame::OnAppendRowRight(wxCommandEvent& event)
+void MySortingFrame::OnAppendRowRight(wxCommandEvent& WXUNUSED(event))
 {
 }
 
-void MySortingFrame::OnPrependRowRight(wxCommandEvent& event)
+void MySortingFrame::OnPrependRowRight(wxCommandEvent& WXUNUSED(event))
 {
 }
 
-void MySortingFrame::OnInsertRowRight(wxCommandEvent& event)
+void MySortingFrame::OnInsertRowRight(wxCommandEvent& WXUNUSED(event))
 {
 }
 
-void MySortingFrame::OnDeleteRowRight(wxCommandEvent& event)
+void MySortingFrame::OnDeleteRowRight(wxCommandEvent& WXUNUSED(event))
 {
 }
 
-void MySortingFrame::OnEditRowRight(wxCommandEvent& event)
+void MySortingFrame::OnEditRowRight(wxCommandEvent& WXUNUSED(event))
 {
 }
 

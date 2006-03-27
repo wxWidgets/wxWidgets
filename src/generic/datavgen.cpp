@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        datavgen.cpp
+// Name:        src/generic/datavgen.cpp
 // Purpose:     wxDataViewCtrl generic implementation
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -10,25 +10,25 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-
 #if wxUSE_DATAVIEWCTRL
 
 #include "wx/dataview.h"
 
 #ifdef wxUSE_GENERICDATAVIEWCTRL
 
+#ifndef WX_PRECOMP
+    #include "wx/sizer.h"
+    #include "wx/log.h"
+#endif
+
 #include "wx/stockitem.h"
 #include "wx/dcclient.h"
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
-#include "wx/sizer.h"
-#include "wx/log.h"
 #include "wx/renderer.h"
 
 #ifdef __WXMSW__
-    #include <windows.h> // for DLGC_WANTARROWS
-    #include "wx/msw/winundef.h"
+    #include "wx/msw/wrapwin.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -57,11 +57,11 @@ public:
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
-    
+
 private:
     wxDataViewCtrl      *m_owner;
     wxCursor            *m_resizeCursor;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewHeaderWindow)
     DECLARE_EVENT_TABLE()
@@ -97,32 +97,32 @@ public:
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
-    
+
     void UpdateDisplay();
     void RecalculateDisplay();
     void OnInternalIdle();
-    
+
     void ScrollWindow( int dx, int dy, const wxRect *rect );
 private:
     wxDataViewCtrl      *m_owner;
     int                  m_lineHeight;
     bool                 m_dirty;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewMainWindow)
     DECLARE_EVENT_TABLE()
 };
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxGenericDataViewListModelNotifier
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class wxGenericDataViewListModelNotifier: public wxDataViewListModelNotifier
 {
 public:
     wxGenericDataViewListModelNotifier( wxDataViewMainWindow *mainWindow )
         { m_mainWindow = mainWindow; }
-        
+
     virtual bool RowAppended()
         { return m_mainWindow->RowAppended(); }
     virtual bool RowPrepended()
@@ -139,13 +139,13 @@ public:
         { return m_mainWindow->RowsReordered( new_order ); }
     virtual bool Cleared()
         { return m_mainWindow->Cleared(); }
-    
+
     wxDataViewMainWindow    *m_mainWindow;
 };
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewCell
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewCell, wxDataViewCellBase)
 
@@ -171,25 +171,25 @@ wxDC *wxDataViewCell::GetDC()
             return NULL;
         m_dc = new wxClientDC( GetOwner()->GetOwner() );
     }
-        
+
     return m_dc;
 }
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewCustomCell
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomCell, wxDataViewCell)
 
-wxDataViewCustomCell::wxDataViewCustomCell( const wxString &varianttype, 
+wxDataViewCustomCell::wxDataViewCustomCell( const wxString &varianttype,
                           wxDataViewCellMode mode ) :
     wxDataViewCell( varianttype, mode )
 {
 }
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewTextCell
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewTextCell, wxDataViewCustomCell)
 
@@ -201,16 +201,16 @@ wxDataViewTextCell::wxDataViewTextCell( const wxString &varianttype, wxDataViewC
 bool wxDataViewTextCell::SetValue( const wxVariant &value )
 {
     m_text = value.GetString();
-    
+
     return true;
 }
 
-bool wxDataViewTextCell::GetValue( wxVariant &value )
+bool wxDataViewTextCell::GetValue( wxVariant& WXUNUSED(value) )
 {
     return false;
 }
 
-bool wxDataViewTextCell::Render( wxRect cell, wxDC *dc, int state )
+bool wxDataViewTextCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
     dc->DrawText( m_text, cell.x, cell.y );
 
@@ -222,13 +222,13 @@ wxSize wxDataViewTextCell::GetSize()
     return wxSize(80,20);
 }
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewToggleCell
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleCell, wxDataViewCustomCell)
 
-wxDataViewToggleCell::wxDataViewToggleCell( const wxString &varianttype, 
+wxDataViewToggleCell::wxDataViewToggleCell( const wxString &varianttype,
                         wxDataViewCellMode mode ) :
     wxDataViewCustomCell( varianttype, mode )
 {
@@ -238,19 +238,19 @@ wxDataViewToggleCell::wxDataViewToggleCell( const wxString &varianttype,
 bool wxDataViewToggleCell::SetValue( const wxVariant &value )
 {
     m_toggle = value.GetBool();
-    
+
     return true;;
 }
 
-bool wxDataViewToggleCell::GetValue( wxVariant &value )
+bool wxDataViewToggleCell::GetValue( wxVariant &WXUNUSED(value) )
 {
     return false;
 }
-    
-bool wxDataViewToggleCell::Render( wxRect cell, wxDC *dc, int state )
+
+bool wxDataViewToggleCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
     // User wxRenderer here
-    
+
     if (GetMode() == wxDATAVIEW_CELL_ACTIVATABLE)
         dc->SetPen( *wxBLACK_PEN );
     else
@@ -271,16 +271,16 @@ bool wxDataViewToggleCell::Render( wxRect cell, wxDC *dc, int state )
         dc->DrawLine( rect.x, rect.y, rect.x+rect.width, rect.y+rect.height );
         dc->DrawLine( rect.x+rect.width, rect.y, rect.x, rect.y+rect.height );
     }
-    
+
     return true;
 }
 
-bool wxDataViewToggleCell::Activate( wxRect cell, wxDataViewListModel *model, size_t col, size_t row )
+bool wxDataViewToggleCell::Activate( wxRect WXUNUSED(cell), wxDataViewListModel *model, size_t col, size_t row )
 {
     bool value = !m_toggle;
     wxVariant variant = value;
     model->SetValue( variant, col, row );
-    model->ValueChanged( col, row );    
+    model->ValueChanged( col, row );
     return true;
 }
 
@@ -289,15 +289,15 @@ wxSize wxDataViewToggleCell::GetSize()
     return wxSize(20,20);
 }
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewProgressCell
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressCell, wxDataViewCustomCell)
 
-wxDataViewProgressCell::wxDataViewProgressCell( const wxString &label, 
+wxDataViewProgressCell::wxDataViewProgressCell( const wxString &label,
     const wxString &varianttype, wxDataViewCellMode mode ) :
-    wxDataViewCustomCell( varianttype, mode )  
+    wxDataViewCustomCell( varianttype, mode )
 {
     m_label = label;
     m_value = 0;
@@ -310,14 +310,14 @@ wxDataViewProgressCell::~wxDataViewProgressCell()
 bool wxDataViewProgressCell::SetValue( const wxVariant &value )
 {
     m_value = (long) value;
-    
+
     if (m_value < 0) m_value = 0;
     if (m_value > 100) m_value = 100;
-    
+
     return true;
 }
-    
-bool wxDataViewProgressCell::Render( wxRect cell, wxDC *dc, int state )
+
+bool wxDataViewProgressCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
     double pct = (double)m_value / 100.0;
     wxRect bar = cell;
@@ -329,7 +329,7 @@ bool wxDataViewProgressCell::Render( wxRect cell, wxDC *dc, int state )
     dc->SetBrush( *wxTRANSPARENT_BRUSH );
     dc->SetPen( *wxBLACK_PEN );
     dc->DrawRectangle( cell );
-    
+
     return true;
 }
 
@@ -337,14 +337,14 @@ wxSize wxDataViewProgressCell::GetSize()
 {
     return wxSize(40,12);
 }
-    
-// --------------------------------------------------------- 
+
+// ---------------------------------------------------------
 // wxDataViewDateCell
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 class wxDataViewDateCellPopupTransient: public wxPopupTransientWindow
 {
-public: 
+public:
     wxDataViewDateCellPopupTransient( wxWindow* parent, wxDateTime *value,
         wxDataViewListModel *model, size_t col, size_t row ) :
         wxPopupTransientWindow( parent, wxBORDER_SIMPLE )
@@ -352,30 +352,30 @@ public:
         m_model = model;
         m_col = col;
         m_row = row;
-        m_cal = new wxCalendarCtrl( this, -1, *value );
+        m_cal = new wxCalendarCtrl( this, wxID_ANY, *value );
         wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
         sizer->Add( m_cal, 1, wxGROW );
         SetSizer( sizer );
         sizer->Fit( this );
     }
-    
+
     virtual void OnDismiss()
     {
     }
-    
+
     void OnCalendar( wxCalendarEvent &event );
-    
+
     wxCalendarCtrl      *m_cal;
-    wxDataViewListModel *m_model; 
+    wxDataViewListModel *m_model;
     size_t               m_col;
     size_t               m_row;
-    
+
 private:
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(wxDataViewDateCellPopupTransient,wxPopupTransientWindow)
-    EVT_CALENDAR( -1, wxDataViewDateCellPopupTransient::OnCalendar )
+    EVT_CALENDAR( wxID_ANY, wxDataViewDateCellPopupTransient::OnCalendar )
 END_EVENT_TABLE()
 
 void wxDataViewDateCellPopupTransient::OnCalendar( wxCalendarEvent &event )
@@ -394,15 +394,15 @@ wxDataViewDateCell::wxDataViewDateCell( const wxString &varianttype,
     wxDataViewCustomCell( varianttype, mode )
 {
 }
-    
+
 bool wxDataViewDateCell::SetValue( const wxVariant &value )
 {
     m_date = value.GetDateTime();
-    
+
     return true;
 }
 
-bool wxDataViewDateCell::Render( wxRect cell, wxDC *dc, int state )
+bool wxDataViewDateCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
     dc->SetFont( GetOwner()->GetOwner()->GetFont() );
     wxString tmp = m_date.FormatDate();
@@ -420,13 +420,13 @@ wxSize wxDataViewDateCell::GetSize()
     return wxSize(x,y+d);
 }
 
-bool wxDataViewDateCell::Activate( wxRect cell, wxDataViewListModel *model, size_t col, size_t row )
+bool wxDataViewDateCell::Activate( wxRect WXUNUSED(cell), wxDataViewListModel *model, size_t col, size_t row )
 {
     wxVariant variant;
     model->GetValue( variant, col, row );
     wxDateTime value = variant.GetDateTime();
 
-    wxDataViewDateCellPopupTransient *popup = new wxDataViewDateCellPopupTransient( 
+    wxDataViewDateCellPopupTransient *popup = new wxDataViewDateCellPopupTransient(
         GetOwner()->GetOwner()->GetParent(), &value, model, col, row );
     wxPoint pos = wxGetMousePosition();
     popup->Move( pos );
@@ -436,13 +436,13 @@ bool wxDataViewDateCell::Activate( wxRect cell, wxDataViewListModel *model, size
     return true;
 }
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 // wxDataViewColumn
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
-wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell, 
+wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell,
     size_t model_column, int flags ) :
     wxDataViewColumnBase( title, cell, model_column, flags )
 {
@@ -456,7 +456,7 @@ wxDataViewColumn::~wxDataViewColumn()
 void wxDataViewColumn::SetTitle( const wxString &title )
 {
     wxDataViewColumnBase::SetTitle( title );
-    
+
 }
 
 //-----------------------------------------------------------------------------
@@ -478,7 +478,7 @@ wxDataViewHeaderWindow::wxDataViewHeaderWindow( wxDataViewCtrl *parent, wxWindow
     SetOwner( parent );
 
     m_resizeCursor = new wxCursor( wxCURSOR_SIZEWE );
-    
+
     wxVisualAttributes attr = wxPanel::GetClassDefaultAttributes();
     SetOwnForegroundColour( attr.colFg );
     SetOwnBackgroundColour( attr.colBg );
@@ -491,13 +491,13 @@ wxDataViewHeaderWindow::~wxDataViewHeaderWindow()
     delete m_resizeCursor;
 }
 
-void wxDataViewHeaderWindow::OnPaint( wxPaintEvent &event )
+void wxDataViewHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     int w, h;
     GetClientSize( &w, &h );
 
     wxPaintDC dc( this );
-    
+
     int xpix;
     m_owner->GetScrollPixelsPerUnit( &xpix, NULL );
 
@@ -506,9 +506,9 @@ void wxDataViewHeaderWindow::OnPaint( wxPaintEvent &event )
 
     // account for the horz scrollbar offset
     dc.SetDeviceOrigin( -x * xpix, 0 );
-    
+
     dc.SetFont( GetFont() );
-    
+
     size_t cols = GetOwner()->GetNumberOfColumns();
     size_t i;
     int xpos = 0;
@@ -516,7 +516,7 @@ void wxDataViewHeaderWindow::OnPaint( wxPaintEvent &event )
     {
         wxDataViewColumn *col = GetOwner()->GetColumn( i );
         int width = col->GetWidth();
-        
+
         // the width of the rect to draw: make it smaller to fit entirely
         // inside the column rect
 #ifdef __WXMAC__
@@ -536,13 +536,13 @@ void wxDataViewHeaderWindow::OnPaint( wxPaintEvent &event )
                                                           : (int)wxCONTROL_DISABLED
                                 );
 
-        dc.DrawText( col->GetTitle(), xpos+3, 3 );   
-                                
+        dc.DrawText( col->GetTitle(), xpos+3, 3 );
+
         xpos += width;
     }
 }
 
-void wxDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
+void wxDataViewHeaderWindow::OnMouse( wxMouseEvent &WXUNUSED(event) )
 {
 }
 
@@ -568,10 +568,10 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     wxWindow( parent, id, pos, size, 0, name )
 {
     SetOwner( parent );
-    
+
     // We need to calculate this smartly..
     m_lineHeight = 20;
-    
+
     UpdateDisplay();
 }
 
@@ -589,22 +589,22 @@ bool wxDataViewMainWindow::RowPrepended()
     return false;
 }
 
-bool wxDataViewMainWindow::RowInserted( size_t before )
+bool wxDataViewMainWindow::RowInserted( size_t WXUNUSED(before) )
 {
     return false;
 }
 
-bool wxDataViewMainWindow::RowDeleted( size_t row )
+bool wxDataViewMainWindow::RowDeleted( size_t WXUNUSED(row) )
 {
     return false;
 }
 
-bool wxDataViewMainWindow::RowChanged( size_t row )
+bool wxDataViewMainWindow::RowChanged( size_t WXUNUSED(row) )
 {
     return false;
 }
 
-bool wxDataViewMainWindow::ValueChanged( size_t col, size_t row )
+bool wxDataViewMainWindow::ValueChanged( size_t WXUNUSED(col), size_t row )
 {
     wxRect rect( 0, row*m_lineHeight, 10000, m_lineHeight );
     m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
@@ -613,7 +613,7 @@ bool wxDataViewMainWindow::ValueChanged( size_t col, size_t row )
     return true;
 }
 
-bool wxDataViewMainWindow::RowsReordered( size_t *new_order )
+bool wxDataViewMainWindow::RowsReordered( size_t *WXUNUSED(new_order) )
 {
     return false;
 }
@@ -631,7 +631,7 @@ void wxDataViewMainWindow::UpdateDisplay()
 void wxDataViewMainWindow::OnInternalIdle()
 {
     wxWindow::OnInternalIdle();
-    
+
     if (m_dirty)
     {
         RecalculateDisplay();
@@ -647,7 +647,7 @@ void wxDataViewMainWindow::RecalculateDisplay()
         Refresh();
         return;
     }
-    
+
     int width = 0;
     size_t cols = GetOwner()->GetNumberOfColumns();
     size_t i;
@@ -656,12 +656,12 @@ void wxDataViewMainWindow::RecalculateDisplay()
         wxDataViewColumn *col = GetOwner()->GetColumn( i );
         width += col->GetWidth();
     }
-    
+
     int height = model->GetNumberOfRows() * m_lineHeight;
 
     SetVirtualSize( width, height );
     GetOwner()->SetScrollRate( 10, m_lineHeight );
-    
+
     Refresh();
 }
 
@@ -671,7 +671,7 @@ void wxDataViewMainWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
     GetOwner()->m_headerArea->ScrollWindow( dx, 0 );
 }
 
-void wxDataViewMainWindow::OnPaint( wxPaintEvent &event )
+void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc( this );
 
@@ -681,9 +681,9 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &event )
 
     wxRect update = GetUpdateRegion().GetBox();
     m_owner->CalcUnscrolledPosition( update.x, update.y, &update.x, &update.y );
-    
+
     wxDataViewListModel *model = GetOwner()->GetModel();
-    
+
     size_t item_start = update.y / m_lineHeight;
     size_t item_count = (update.height / m_lineHeight) + 1;
 
@@ -697,7 +697,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &event )
         wxDataViewColumn *col = GetOwner()->GetColumn( i );
         wxDataViewCell *cell = col->GetCell();
         cell_rect.width = col->GetWidth();
-        
+
         size_t item;
         for (item = item_start; item <= item_start+item_count; item++)
         {
@@ -714,12 +714,12 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &event )
             // for now: centre
             item_rect.x = cell_rect.x + (cell_rect.width / 2) - (size.x / 2);
             item_rect.y = cell_rect.y + (cell_rect.height / 2) - (size.y / 2);
-            
+
             item_rect.width = size.x;
             item_rect.height= size.y;
             cell->Render( item_rect, &dc, 0 );
         }
-        
+
         cell_rect.x += cell_rect.width;
     }
 }
@@ -745,12 +745,12 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         }
         xpos += c->GetWidth();
     }
-    if (!col)  
+    if (!col)
         return;
     wxDataViewCell *cell = col->GetCell();
-    
+
     size_t row = y / m_lineHeight;
-    
+
     wxDataViewListModel *model = GetOwner()->GetModel();
 
     if (event.LeftDClick())
@@ -763,7 +763,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             wxRect cell_rect( xpos, row * m_lineHeight, col->GetWidth(), m_lineHeight );
             cell->Activate( cell_rect, model, col->GetModelColumn(), row );
         }
-        
+
         return;
     }
 
@@ -797,23 +797,23 @@ void wxDataViewCtrl::Init()
 }
 
 bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos, const wxSize& size, 
+           const wxPoint& pos, const wxSize& size,
            long style, const wxValidator& validator )
 {
     if (!wxControl::Create( parent, id, pos, size, style | wxScrolledWindowStyle|wxSUNKEN_BORDER, validator))
         return false;
 
     Init();
-    
+
 #ifdef __WXMAC__
     MacSetClipChildren( true ) ;
 #endif
 
-    m_clientArea = new wxDataViewMainWindow( this, -1 );
-    m_headerArea = new wxDataViewHeaderWindow( this, -1, wxDefaultPosition, wxSize(-1,25) );
-    
+    m_clientArea = new wxDataViewMainWindow( this, wxID_ANY );
+    m_headerArea = new wxDataViewHeaderWindow( this, wxID_ANY, wxDefaultPosition, wxSize(wxDefaultCoord,25) );
+
     SetTargetWindow( m_clientArea );
-    
+
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add( m_headerArea, 0, wxGROW );
     sizer->Add( m_clientArea, 1, wxGROW );
@@ -841,7 +841,7 @@ WXLRESULT wxDataViewCtrl::MSWWindowProc(WXUINT nMsg,
 }
 #endif
 
-void wxDataViewCtrl::OnSize( wxSizeEvent &event )
+void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
     // We need to override OnSize so that our scrolled
     // window a) does call Layout() to use sizers for
@@ -862,10 +862,10 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewListModel *model )
 
     m_notifier = new wxGenericDataViewListModelNotifier( m_clientArea );
 
-    model->AddNotifier( m_notifier );    
+    model->AddNotifier( m_notifier );
 
     m_clientArea->UpdateDisplay();
-    
+
     return true;
 }
 
@@ -873,15 +873,15 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
 {
     if (!wxDataViewCtrlBase::AppendColumn(col))
         return false;
-    
+
     m_clientArea->UpdateDisplay();
-    
+
     return true;
 }
 
-#endif 
+#endif
     // !wxUSE_GENERICDATAVIEWCTRL
 
-#endif 
+#endif
     // wxUSE_DATAVIEWCTRL
 
