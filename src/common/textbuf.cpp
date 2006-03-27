@@ -268,9 +268,7 @@ wxTextFileType wxTextBuffer::GuessType() const
 
 bool wxTextBuffer::Close()
 {
-    m_aTypes.Clear();
-    m_aLines.Clear();
-    m_nCurLine = 0;
+    Clear();
     m_isOpened = false;
 
     return true;
