@@ -121,11 +121,48 @@ This is the same as \helpref{GetDataDir()}{wxstandardpathsgetdatadir} except
 under Unix where it returns \texttt{/etc/\textit{appname}}.
 
 
+\membersection{wxStandardPaths::GetLocalizedResourcesDir}\label{wxstandardpathsgetlocalizedresourcesdir}
+
+\func{wxString}{GetLocalizedResourcesDir}{\param{const wxChar *lang}, \param{ResourceCat }{category = ResourceCat\_None}}
+
+Return the localized resources directory containing the resource files of the
+specified category for the given language.
+
+In general this is just the same as \arg{lang} subdirectory of 
+\helpref{GetResourcesDir()}{wxstandardpathsgetresourcesdir} (or 
+\texttt{\arg{lang}.lproj} under Mac OS X) but is something quite
+different for message catalog category under Unix where it returns the standard 
+\texttt{\textit{prefix}/share/locale/\arg{lang}/LC\_MESSAGES} directory.
+
+
 \membersection{wxStandardPaths::GetPluginsDir}\label{wxstandardpathsgetpluginsdir}
 
 \func{wxString}{GetPluginsDir}{\void}
 
 Return the directory where the loadable modules (plugins) live.
+
+Example return values:
+\begin{itemize}
+    \item Unix: \texttt{\textit{prefix}/share/\textit{appname}}
+    \item Windows: the directory where the executable file is located
+    \item Mac: \texttt{\textit{appname}.app/Contents/Resources} bundle subdirectory
+\end{itemize}
+
+\wxheading{See also}
+
+\helpref{wxDynamicLibrary}{wxdynamiclibrary}
+
+
+\membersection{wxStandardPaths::GetResourcesDir}\label{wxstandardpathsgetresourcesdir}
+
+\func{wxString}{GetResourcesDir}{\void}
+
+Return the directory where the application resource files are located. The
+resources are the auxiliary data files needed for the application to run and
+include, for example, image and sound files it might use.
+
+This function is the same as \helpref{GetDataDir}{wxstandardpathsgetdatadir} for
+all platforms except Mac OS X.
 
 Example return values:
 \begin{itemize}
@@ -136,7 +173,7 @@ Example return values:
 
 \wxheading{See also}
 
-\helpref{wxDynamicLibrary}{wxdynamiclibrary}
+\helpref{GetLocalizedResourcesDir}{wxstandardpathsgetlocalizedresourcesdir}
 
 
 \membersection{wxStandardPaths::GetUserConfigDir}\label{wxstandardpathsgetuserconfigdir}
