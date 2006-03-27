@@ -41,8 +41,10 @@
 // define this to 1 to use HTML help even under Windows (by default, Windows
 // version will use WinHelp).
 // Please also see samples/html/helpview.
-
 #define USE_HTML_HELP 1
+
+// define this to 1 to use external help controller (not used by default)
+#define USE_EXT_HELP 0
 
 // Define this to 0 to use the help controller as the help
 // provider, or to 1 to use the 'simple help provider'
@@ -67,6 +69,10 @@
 
 #if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
 #include "wx/msw/helpbest.h"
+#endif
+
+#if USE_EXT_HELP
+#include "wx/generic/helpext.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -104,7 +110,7 @@ public:
     // ctor(s)
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 
-    wxHelpController& GetHelpController() { return m_help; }
+    wxHelpControllerBase& GetHelpController() { return m_help; }
 
 #if USE_HTML_HELP
     wxHtmlHelpController& GetAdvancedHtmlHelpController() { return m_advancedHtmlHelp; }
@@ -136,7 +142,11 @@ public:
     void ShowHelp(int commandId, wxHelpControllerBase& helpController);
 
 private:
+#if USE_EXT_HELP
+   wxExtHelpController      m_help;
+#else
    wxHelpController         m_help;
+#endif
 
 #if USE_HTML_HELP
    wxHtmlHelpController     m_advancedHtmlHelp;
@@ -286,7 +296,7 @@ bool MyApp::OnInit()
 #endif
     wxHelpProvider::Set(provider);
 
-#if wxUSE_HTML
+#if USE_HTML_HELP
     #if wxUSE_GIF
         // Required for images in the online documentation
         wxImage::AddHandler(new wxGIFHandler);
