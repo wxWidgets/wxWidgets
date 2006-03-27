@@ -196,6 +196,9 @@ wxString wxFileTipProvider::GetTip()
         tip = tip.BeforeLast(wxT('\"'));
         // ...and replace escaped quotes
         tip.Replace(wxT("\\\""), wxT("\""));
+
+        // and translate it as requested
+        tip = wxGetTranslation(tip);
     }
 
     return tip;
@@ -218,7 +221,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
                       wxDEFAULT_DIALOG_STYLE
 #if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
                       | wxRESIZE_BORDER
-#endif                      
+#endif
                       )
 {
     m_tipProvider = tipProvider;
