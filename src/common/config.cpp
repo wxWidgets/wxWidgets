@@ -33,8 +33,6 @@
 
 #include "wx/app.h"
 #include "wx/file.h"
-#include "wx/textfile.h"
-#include "wx/utils.h"
 #include "wx/utils.h"
 #include "wx/math.h"
 
