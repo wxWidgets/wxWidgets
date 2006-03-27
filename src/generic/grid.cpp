@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// Name:        generic/grid.cpp
+// Name:        src/generic/grid.cpp
 // Purpose:     wxGrid and related classes
 // Author:      Michael Bedward (based on code by Julian Smart, Robin Dunn)
 // Modified by: Robin Dunn, Vadim Zeitlin
@@ -1616,7 +1616,7 @@ void wxGridCellEditorEvtHandler::OnChar(wxKeyEvent& event)
 
             // get the widths of all cells previous to this one
             int colXPos = 0;
-            for ( int i = 0; i < col; i++ ) 
+            for ( int i = 0; i < col; i++ )
             {
                 colXPos += m_grid->GetColSize(i);
             }
@@ -1667,7 +1667,7 @@ void wxGridCellEditorEvtHandler::OnChar(wxKeyEvent& event)
 
             // get the widths of all cells previous to this one
             int colXPos = 0;
-            for ( int i = 0; i < col; i++ ) 
+            for ( int i = 0; i < col; i++ )
             {
                 colXPos += m_grid->GetColSize(i);
             }
@@ -6609,11 +6609,11 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 }
                 break;
 
-            case WXK_PRIOR:
+            case WXK_PAGEUP:
                 MovePageUp();
                 break;
 
-            case WXK_NEXT:
+            case WXK_PAGEDOWN:
                 MovePageDown();
                 break;
 
@@ -7665,7 +7665,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
     wxString eol = wxTextFile::GetEOL( wxTextFileType_Unix );
     wxString tVal = wxTextFile::Translate( value, wxTextFileType_Unix );
 
-    while ( startPos < (int)tVal.Length() )
+    while ( startPos < (int)tVal.length() )
     {
         pos = tVal.Mid(startPos).Find( eol );
         if ( pos < 0 )
@@ -7683,7 +7683,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
         startPos += pos + 1;
     }
 
-    if ( startPos < (int)value.Length() )
+    if ( startPos < (int)value.length() )
     {
         lines.Add( value.Mid( startPos ) );
     }
@@ -7964,7 +7964,7 @@ void wxGrid::ShowCellEditControl()
             editor->Show( true, attr );
 
             int colXPos = 0;
-            for (int i = 0; i < m_currentCellCoords.GetCol(); i++) 
+            for (int i = 0; i < m_currentCellCoords.GetCol(); i++)
             {
                 colXPos += GetColSize(i);
             }
@@ -8305,7 +8305,7 @@ void wxGrid::MakeCellVisible( int row, int col )
         }
 
         // special handling for wide cells - show always left part of the cell!
-        // Otherwise, e.g. when stepping from row to row, it would jump between 
+        // Otherwise, e.g. when stepping from row to row, it would jump between
         // left and right part of the cell on every step!
 //      if ( left < 0 )
         if ( left < 0 || (right-left) >= cw )
@@ -10648,4 +10648,3 @@ wxGridEditorCreatedEvent::wxGridEditorCreatedEvent(int id, wxEventType type,
 }
 
 #endif // wxUSE_GRID
-

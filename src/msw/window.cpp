@@ -1164,10 +1164,10 @@ void wxWindowMSW::SetWindowStyleFlag(long flags)
 
         // If any of the style changes changed any of the frame styles:
         // MSDN: SetWindowLong:
-        //       Certain window data is cached, so changes you make using 
-        //       SetWindowLong will not take effect until you call the 
-        //       SetWindowPos function. Specifically, if you change any of 
-        //       the frame styles, you must call SetWindowPos with the 
+        //       Certain window data is cached, so changes you make using
+        //       SetWindowLong will not take effect until you call the
+        //       SetWindowPos function. Specifically, if you change any of
+        //       the frame styles, you must call SetWindowPos with the
         //       SWP_FRAMECHANGED flag for the cache to be updated properly.
 
         callSWP = ((styleOld ^ style ) & (WS_BORDER |
@@ -2610,22 +2610,22 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 if (IsContextMenuEnabled() && message == WM_LBUTTONDOWN)
                 {
                     SHRGINFO shrgi = {0};
-                    
+
                     shrgi.cbSize = sizeof(SHRGINFO);
                     shrgi.hwndClient = (HWND) GetHWND();
                     shrgi.ptDown.x = x;
                     shrgi.ptDown.y = y;
-                    
+
                     shrgi.dwFlags = SHRG_RETURNCMD;
                     // shrgi.dwFlags = SHRG_NOTIFYPARENT;
-                    
+
                     if (GN_CONTEXTMENU == ::SHRecognizeGesture(&shrgi))
                     {
                         wxPoint pt(x, y);
                         pt = ClientToScreen(pt);
-                        
+
                         wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU, GetId(), pt);
-                        
+
                         evtCtx.SetEventObject(this);
                         if (GetEventHandler()->ProcessEvent(evtCtx))
                         {
@@ -5380,10 +5380,10 @@ int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam)
 
         // handle extended keys
         case VK_PRIOR:
-            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_PRIOR, WXK_PRIOR);
+            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_PAGEUP, WXK_PAGEUP);
             break;
         case VK_NEXT:
-            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_NEXT, WXK_NEXT);
+            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_PAGEDOWN, WXK_PAGEDOWN);
             break;
         case VK_END:
             id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_END, WXK_END);
@@ -5435,8 +5435,8 @@ WXWORD wxCharCodeWXToMSW(int id, bool *isVirtual)
     case WXK_ALT:       keySym = VK_MENU; break;
     case WXK_PAUSE:     keySym = VK_PAUSE; break;
     case WXK_CAPITAL:   keySym = VK_CAPITAL; break;
-    case WXK_PRIOR:     keySym = VK_PRIOR; break;
-    case WXK_NEXT :     keySym = VK_NEXT; break;
+    case WXK_PAGEUP:    keySym = VK_PRIOR; break;
+    case WXK_PAGEDOWN:  keySym = VK_NEXT; break;
     case WXK_END:       keySym = VK_END; break;
     case WXK_HOME :     keySym = VK_HOME; break;
     case WXK_LEFT :     keySym = VK_LEFT; break;

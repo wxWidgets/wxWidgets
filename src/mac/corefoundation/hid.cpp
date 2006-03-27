@@ -440,13 +440,13 @@ void wxHIDKeyboard::BuildCookies(wxCFArray& Array)
                 AddCookie(Array[i], WXK_SPACE);
                 break;
             case kHIDUsage_KeyboardPageUp:
-                AddCookie(Array[i], WXK_PRIOR);
+                AddCookie(Array[i], WXK_PAGEUP);
                 break;
             case kHIDUsage_KeyboardEnd:
                 AddCookie(Array[i], WXK_END);
                 break;
             case kHIDUsage_KeyboardPageDown:
-                AddCookie(Array[i], WXK_NEXT);
+                AddCookie(Array[i], WXK_PAGEDOWN);
                 break;
             case kHIDUsage_KeyboardRightArrow:
                 AddCookie(Array[i], WXK_RIGHT);

@@ -575,9 +575,9 @@ int wxCharCodeXToWX(KeySym keySym)
         case XK_Down:
             id = WXK_DOWN; break;
         case XK_Next:
-            id = WXK_NEXT; break;
+            id = WXK_PAGEDOWN; break;
         case XK_Prior:
-            id = WXK_PRIOR; break;
+            id = WXK_PAGEUP; break;
         case XK_Menu:
             id = WXK_MENU; break;
         case XK_Select:
@@ -704,8 +704,8 @@ KeySym wxCharCodeWXToX(int id)
         case WXK_PAUSE:         keySym = XK_Pause; break;
         case WXK_ESCAPE:        keySym = XK_Escape; break;
         case WXK_SPACE:         keySym = ' '; break;
-        case WXK_PRIOR:         keySym = XK_Prior; break;
-        case WXK_NEXT :         keySym = XK_Next; break;
+        case WXK_PAGEUP:        keySym = XK_Prior; break;
+        case WXK_PAGEDOWN:      keySym = XK_Next; break;
         case WXK_END:           keySym = XK_End; break;
         case WXK_HOME :         keySym = XK_Home; break;
         case WXK_LEFT :         keySym = XK_Left; break;

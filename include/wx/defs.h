@@ -76,7 +76,7 @@
     /* For VC++ 5.0 for release mode, the warning 'C4702: unreachable code */
     /* is buggy, and occurs for code that does actually get executed */
 #   if !defined __WXDEBUG__ && __VISUALC__ <= 1100
-#       pragma warning(disable:4702)    /* unreachable code */ 
+#       pragma warning(disable:4702)    /* unreachable code */
 #   endif
 
 /* Deprecated functions such as sprintf, localtime */
@@ -2140,8 +2140,10 @@ enum wxKeyCode
     WXK_SCROLL,
     WXK_PAGEUP,
     WXK_PAGEDOWN,
+#if WXWIN_COMPATIBILITY_2_6
     WXK_PRIOR = WXK_PAGEUP,
     WXK_NEXT  = WXK_PAGEDOWN,
+#endif
 
     WXK_NUMPAD_SPACE,
     WXK_NUMPAD_TAB,
@@ -2157,8 +2159,10 @@ enum wxKeyCode
     WXK_NUMPAD_DOWN,
     WXK_NUMPAD_PAGEUP,
     WXK_NUMPAD_PAGEDOWN,
+#if WXWIN_COMPATIBILITY_2_6
     WXK_NUMPAD_PRIOR = WXK_NUMPAD_PAGEUP,
     WXK_NUMPAD_NEXT  = WXK_NUMPAD_PAGEDOWN,
+#endif
     WXK_NUMPAD_END,
     WXK_NUMPAD_BEGIN,
     WXK_NUMPAD_INSERT,

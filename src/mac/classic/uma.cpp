@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        uma.cpp
+// Name:        src/mac/classic/uma.cpp
 // Purpose:     UMA support
 // Author:      Stefan Csomor
 // Modified by:
@@ -363,11 +363,11 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
                     macKey = kClearCharCode ;
                     glyph = kMenuClearGlyph ;
                     break ;
-                case WXK_PRIOR : // PAGE UP
+                case WXK_PAGEUP :
                     macKey = kPageUpCharCode ;
                     glyph = kMenuPageUpGlyph ;
                     break ;
-                case WXK_NEXT :
+                case WXK_PAGEDOWN :
                     macKey = kPageDownCharCode ;
                     glyph = kMenuPageDownGlyph ;
                     break ;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        univ/slider.cpp
+// Name:        src/univ/slider.cpp
 // Purpose:     implementation of the universal version of wxSlider
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -1009,12 +1009,10 @@ bool wxStdSliderButtonInputHandler::HandleKey(wxInputConsumer *consumer,
                 action = wxACTION_SLIDER_LINE_DOWN;
                 break;
 
-            case WXK_PRIOR:
             case WXK_PAGEUP:
                 action = wxACTION_SLIDER_PAGE_UP;
                 break;
 
-            case WXK_NEXT:
             case WXK_PAGEDOWN:
                 action = wxACTION_SLIDER_PAGE_DOWN;
                 break;

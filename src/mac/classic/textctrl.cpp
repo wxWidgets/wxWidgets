@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textctrl.cpp
+// Name:        src/mac/classic/textctrl.cpp
 // Purpose:     wxTextCtrl
 // Author:      Stefan Csomor
 // Modified by:
@@ -1192,7 +1192,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& str)
         ::SetControlData((ControlHandle)  m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
         TESetSelect( from , to  , ((TEHandle) m_macTE) ) ;
         TEDelete( ((TEHandle) m_macTE) ) ;
-        TEInsert( value , value.Length() , ((TEHandle) m_macTE) ) ;
+        TEInsert( value , value.length() , ((TEHandle) m_macTE) ) ;
     }
     else
     {
@@ -1448,7 +1448,7 @@ int wxTextCtrl::GetNumberOfLines() const
         wxString content = GetValue() ;
 
         int count = 1;
-        for (size_t i = 0; i < content.Length() ; i++)
+        for (size_t i = 0; i < content.length() ; i++)
         {
             if (content[i] == '\r') count++;
         }
@@ -1499,13 +1499,13 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 
     // Find line first
     int count = 0;
-    for (size_t i = 0; i < content.Length() ; i++)
+    for (size_t i = 0; i < content.length() ; i++)
     {
         if (count == lineNo)
         {
             // Count chars in line then
             count = 0;
-            for (size_t j = i; j < content.Length(); j++)
+            for (size_t j = i; j < content.length(); j++)
             {
                 count++;
                 if (content[j] == '\n') return count;
@@ -1525,14 +1525,14 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
 
     // Find line first
     int count = 0;
-    for (size_t i = 0; i < content.Length() ; i++)
+    for (size_t i = 0; i < content.length() ; i++)
     {
         if (count == lineNo)
         {
             // Add chars in line then
             wxString tmp;
 
-            for (size_t j = i; j < content.Length(); j++)
+            for (size_t j = i; j < content.length(); j++)
             {
                 if (content[j] == '\n')
                     return tmp;
@@ -1580,7 +1580,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
     if ( !IsEditable() && key != WXK_LEFT && key != WXK_RIGHT && key != WXK_DOWN && key != WXK_UP && key != WXK_TAB &&
         !( key == WXK_RETURN && ( (m_windowStyle & wxPROCESS_ENTER) || (m_windowStyle & wxTE_MULTILINE) ) )
-/*        && key != WXK_PRIOR && key != WXK_NEXT && key != WXK_HOME && key != WXK_END */
+/*        && key != WXK_PAGEUP && key != WXK_PAGEDOWN && key != WXK_HOME && key != WXK_END */
         )
     {
         // eat it

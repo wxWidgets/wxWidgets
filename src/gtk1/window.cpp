@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/window.cpp
+// Name:        src/gtk1/window.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -739,11 +739,11 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
             break;
 
         case GDK_Prior:     // == GDK_Page_Up
-            key_code = WXK_PRIOR;
+            key_code = WXK_PAGEUP;
             break;
 
         case GDK_Next:      // == GDK_Page_Down
-            key_code = WXK_NEXT;
+            key_code = WXK_PAGEDOWN;
             break;
 
         case GDK_End:
@@ -822,11 +822,11 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
             break;
 
         case GDK_KP_Prior: // == GDK_KP_Page_Up
-            key_code = isChar ? WXK_PRIOR : WXK_NUMPAD_PRIOR;
+            key_code = isChar ? WXK_PAGEUP : WXK_NUMPAD_PAGEUP;
             break;
 
         case GDK_KP_Next: // == GDK_KP_Page_Down
-            key_code = isChar ? WXK_NEXT : WXK_NUMPAD_NEXT;
+            key_code = isChar ? WXK_NEXT : WXK_NUMPAD_PAGEDOWN;
             break;
 
         case GDK_KP_End:
@@ -4232,4 +4232,3 @@ void wxWinModule::OnExit()
     if (g_eraseGC)
         gdk_gc_unref( g_eraseGC );
 }
-

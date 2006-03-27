@@ -174,9 +174,9 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                     else if ( current == wxT("ENTER") || current == wxT("RETURN") )
                         keyCode = WXK_RETURN;
                     else if ( current == wxT("PGUP") )
-                        keyCode = WXK_PRIOR;
+                        keyCode = WXK_PAGEUP;
                     else if ( current == wxT("PGDN") )
-                        keyCode = WXK_NEXT;
+                        keyCode = WXK_PAGEDOWN;
                     else if ( current == wxT("LEFT") )
                         keyCode = WXK_LEFT;
                     else if ( current == wxT("RIGHT") )
@@ -250,11 +250,11 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                     else if ( current == wxT("KP_DOWN") )
                         keyCode = WXK_NUMPAD_DOWN;
                     else if ( current == wxT("KP_PRIOR") )
-                        keyCode = WXK_NUMPAD_PRIOR;
+                        keyCode = WXK_NUMPAD_PAGEUP;
                     else if ( current == wxT("KP_PAGEUP") )
                         keyCode = WXK_NUMPAD_PAGEUP;
                     else if ( current == wxT("KP_NEXT;") )
-                        keyCode = WXK_NUMPAD_NEXT;
+                        keyCode = WXK_NUMPAD_PAGEDOWN;
                     else if ( current == wxT("KP_PAGEDOWN") )
                         keyCode = WXK_NUMPAD_PAGEDOWN;
                     else if ( current == wxT("KP_END") )

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textctrl.cpp
+// Name:        src/mac/carbon/textctrl.cpp
 // Purpose:     wxTextCtrl
 // Author:      Stefan Csomor
 // Modified by: Ryan Norton (MLTE GetLineLength and GetLineText)
@@ -886,7 +886,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
     if ( !IsEditable() && key != WXK_LEFT && key != WXK_RIGHT && key != WXK_DOWN && key != WXK_UP && key != WXK_TAB &&
         !( key == WXK_RETURN && ( (m_windowStyle & wxPROCESS_ENTER) || (m_windowStyle & wxTE_MULTILINE) ) )
-//        && key != WXK_PRIOR && key != WXK_NEXT && key != WXK_HOME && key != WXK_END
+//        && key != WXK_PAGEUP && key != WXK_PAGEDOWN && key != WXK_HOME && key != WXK_END
         )
     {
         // eat it
@@ -895,7 +895,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
     // Check if we have reached the max # of chars (if it is set), but still
     // allow navigation and deletion
-    if ( !IsMultiLine() && m_maxLength && GetValue().Length() >= m_maxLength &&
+    if ( !IsMultiLine() && m_maxLength && GetValue().length() >= m_maxLength &&
         key != WXK_LEFT && key != WXK_RIGHT && key != WXK_TAB &&
         key != WXK_BACK && !( key == WXK_RETURN && (m_windowStyle & wxPROCESS_ENTER) )
        )
@@ -1109,7 +1109,7 @@ void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
         m_privateContextMenu->AppendSeparator();
         m_privateContextMenu->Append(wxID_SELECTALL, _("Select &All"));
     }
-    
+
     if (m_privateContextMenu != NULL)
         PopupMenu(m_privateContextMenu);
 }
@@ -1208,7 +1208,7 @@ void wxMacTextControl::SetEditable(bool editable)
 
 wxTextPos wxMacTextControl::GetLastPosition() const
 {
-    return GetStringValue().Length() ;
+    return GetStringValue().length() ;
 }
 
 void wxMacTextControl::Replace( long from , long to , const wxString &val )
@@ -1266,7 +1266,7 @@ int wxMacTextControl::GetNumberOfLines() const
     wxString content = GetStringValue() ;
     lines = 1;
 
-    for (size_t i = 0; i < content.Length() ; i++)
+    for (size_t i = 0; i < content.length() ; i++)
     {
         if (content[i] == '\r')
             lines++;
@@ -1282,14 +1282,14 @@ wxString wxMacTextControl::GetLineText(long lineNo) const
 
     // Find line first
     int count = 0;
-    for (size_t i = 0; i < content.Length() ; i++)
+    for (size_t i = 0; i < content.length() ; i++)
     {
         if (count == lineNo)
         {
             // Add chars in line then
             wxString tmp;
 
-            for (size_t j = i; j < content.Length(); j++)
+            for (size_t j = i; j < content.length(); j++)
             {
                 if (content[j] == '\n')
                     return tmp;
@@ -1314,13 +1314,13 @@ int wxMacTextControl::GetLineLength(long lineNo) const
 
     // Find line first
     int count = 0;
-    for (size_t i = 0; i < content.Length() ; i++)
+    for (size_t i = 0; i < content.length() ; i++)
     {
         if (count == lineNo)
         {
             // Count chars in line then
             count = 0;
-            for (size_t j = i; j < content.Length(); j++)
+            for (size_t j = i; j < content.length(); j++)
             {
                 count++;
                 if (content[j] == '\n')
@@ -1484,7 +1484,7 @@ void wxMacUnicodeTextControl::WriteText( const wxString& str )
         val.Remove( start , end - start ) ;
         val.insert( start , str ) ;
         SetStringValue( val ) ;
-        SetSelection( start + str.Length() , start + str.Length() ) ;
+        SetSelection( start + str.length() , start + str.length() ) ;
 #endif
 }
 

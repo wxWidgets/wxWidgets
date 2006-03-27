@@ -654,9 +654,9 @@ void wxPreviewCanvas::OnChar(wxKeyEvent &event)
 
     switch(event.GetKeyCode())
     {
-        case WXK_NEXT:
+        case WXK_PAGEDOWN:
             controlBar->OnNext(); break;
-        case WXK_PRIOR:
+        case WXK_PAGEUP:
             controlBar->OnPrevious(); break;
         case WXK_HOME:
             controlBar->OnFirst(); break;

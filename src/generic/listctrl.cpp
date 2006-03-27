@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        generic/listctrl.cpp
+// Name:        src/generic/listctrl.cpp
 // Purpose:     generic implementation of wxListCtrl
 // Author:      Robert Roebling
 //              Vadim Zeitlin (virtual list control support)
@@ -1583,7 +1583,7 @@ void wxListLineData::DrawTextFormatted(wxDC *dc,
 
         // continue until we have enough space or only one character left
         wxCoord w_c, h_c;
-        size_t len = text.Length();
+        size_t len = text.length();
         wxString drawntext = text.Left(len);
         while (len > 1)
         {
@@ -1596,9 +1596,9 @@ void wxListLineData::DrawTextFormatted(wxDC *dc,
         }
 
         // if still not enough space, remove ellipsis characters
-        while (ellipsis.Length() > 0 && w + base_w > width)
+        while (ellipsis.length() > 0 && w + base_w > width)
         {
-            ellipsis = ellipsis.Left(ellipsis.Length() - 1);
+            ellipsis = ellipsis.Left(ellipsis.length() - 1);
             dc->GetTextExtent(ellipsis, &base_w, &h);
         }
 
@@ -3262,7 +3262,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                 OnArrowChar( 0, event );
             break;
 
-        case WXK_PRIOR:
+        case WXK_PAGEUP:
             {
                 int steps = InReportView() ? m_linesPerPage - 1 : m_current % m_linesPerPage;
 
@@ -3274,7 +3274,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
             }
             break;
 
-        case WXK_NEXT:
+        case WXK_PAGEDOWN:
             {
                 int steps = InReportView()
                                ? m_linesPerPage - 1
@@ -5344,10 +5344,10 @@ void wxGenericListCtrl::ResizeReportView(bool showHeader)
     {
         m_headerWin->SetSize( 0, 0, cw, m_headerHeight );
         if(ch > m_headerHeight)
-            m_mainWin->SetSize( 0, m_headerHeight + 1, 
+            m_mainWin->SetSize( 0, m_headerHeight + 1,
                                    cw, ch - m_headerHeight - 1 );
         else
-            m_mainWin->SetSize( 0, m_headerHeight + 1, 
+            m_mainWin->SetSize( 0, m_headerHeight + 1,
                                    cw, 0);
     }
     else // no header window
@@ -5626,4 +5626,3 @@ void wxGenericListCtrl::Thaw()
 }
 
 #endif // wxUSE_LISTCTRL
-
