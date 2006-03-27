@@ -104,7 +104,8 @@ public:
     // prefix/share/locale/lang/LC_MESSAGES)
     virtual wxString
     GetLocalizedResourcesDir(const wxChar *lang,
-                             ResourceCat category = ResourceCat_None) const
+                             ResourceCat WXUNUSED(category)
+                                = ResourceCat_None) const
     {
         return GetResourcesDir() + wxFILE_SEP_PATH + lang;
     }
