@@ -98,7 +98,6 @@ public:
     // Cleans up hash table used for fast searching.
     wxDEPRECATED( static void CleanUpClasses() );
 #endif
-    static void     CleanUp();
 
 public:
     const wxChar            *m_className;

@@ -208,15 +208,6 @@ wxClassInfo *wxClassInfo::FindClass(const wxChar *className)
     }
 }
 
-void wxClassInfo::CleanUp()
-{
-    if ( sm_classTable )
-    {
-        delete sm_classTable;
-        sm_classTable = NULL;
-    }
-}
-
 void wxClassInfo::Register()
 {
     if ( !sm_classTable )

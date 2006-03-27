@@ -356,8 +356,6 @@ static void DoCommonPostCleanup()
 {
     wxModule::CleanUpModules();
 
-    wxClassInfo::CleanUp();
-
     // we can't do this in wxApp itself because it doesn't know if argv had
     // been allocated
 #if wxUSE_UNICODE
