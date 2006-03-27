@@ -44,34 +44,16 @@ file.
 \item Translating the strings extracted in the previous step to other
 language(s). It involves editing the .po file.
 \item Compiling the .po file into .mo file to be used by the program.
+\item Installing the .mo files with your application in the appropriate
+location for the target system which is the one returned by 
+\helpref{wxStandardPaths::GetLocalizedResourcesDir(wxStandardPaths::ResourceCat\_Messages)}{wxstandardpathsgetlocalizedresourcesdir}.
+If the message catalogs are not installed in this default location you may
+explicitly use \helpref{AddCatalogLookupPathPrefix()}{wxlocaleaddcataloglookuppathprefix} to
+still allow wxWidgets to find them but it is strongly recommended to use the
+default directory.
 \item Setting the appropriate locale in your program to use the strings for the
 given language: see \helpref{wxLocale}{wxlocale}.
 \end{enumerate}
-
-If you want your app to run under MacOS X with internationlization as
-described above you'll need to make one modification to the Info.plist
-file which describes the contents of the "application bundle". This
-file (an XML text file in UTF-8 format) should have a
-CFBundleDevelopmentRegion entry describing the language of the developer
-- mostly English - and normally MacOS X will query the bundle for the
-presence of certain resource directories to find out which languages
-are supported (e.g. the directory German.lproj for German). 
-Since wxWidgets based applications don't use these directories
-for storing resource information (they store the translation in the
-mo files instead) the application needs to be told explicitly which
-langauges are supported. This is done by adding a CFBundleLocalizations
-entry to Info.plist. This can look like this:
-
-\begin{verbatim}
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleLocalizations</key>
-	<array>
-		<string>en</string>
-		<string>de</string>
-		<string>fr</string>
-	</array>
-\end{verbatim}
 
 See also the GNU gettext documentation linked from {\tt docs/html/index.htm} in
 your wxWidgets distribution.
