@@ -68,11 +68,6 @@
 // other standard headers
 #include <ctype.h>
 
-#ifdef __VMS
-/* silence warnings for comparing unsigned int's <0 */
-# pragma message disable unscomzer
-#endif
-
 // this class extends wxTextFile
 //
 // VZ: ???
