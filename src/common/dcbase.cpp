@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/dcbase.cpp
+// Name:        src/common/dcbase.cpp
 // Purpose:     generic methods of the wxDC Class
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -817,9 +817,9 @@ void wxDCBase::GradientFillConcentric(const wxRect& rect,
                 nGradient = 0;
 
             //get dest colors
-            nR = nR1 + ((nR2 - nR1) * nGradient / 100);
-            nG = nG1 + ((nG2 - nG1) * nGradient / 100);
-            nB = nB1 + ((nB2 - nB1) * nGradient / 100);
+            nR = (wxUint8)(nR1 + ((nR2 - nR1) * nGradient / 100));
+            nG = (wxUint8)(nG1 + ((nG2 - nG1) * nGradient / 100));
+            nB = (wxUint8)(nB1 + ((nB2 - nB1) * nGradient / 100));
 
             //set the pixel
             m_pen.SetColour(wxColour(nR,nG,nB));
@@ -1141,4 +1141,3 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
 } // CalculateEllipticPoints
 
 #endif
-
