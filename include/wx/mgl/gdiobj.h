@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msw/gdiobj.h
+// Name:        wx/mgl/gdiobj.h
 // Purpose:     wxGDIObject class: base class for other GDI classes
 // Author:      Julian Smart
 // Modified by:
@@ -32,7 +32,7 @@ class WXDLLEXPORT wxGDIRefData : public wxObjectRefData
 class WXDLLEXPORT wxGDIObject : public wxObject
 {
 public:
-    wxGDIObject() { m_visible = FALSE; }
+    wxGDIObject() { m_visible = false; }
 
     virtual bool GetVisible() { return m_visible; }
     virtual void SetVisible( bool visible ) { m_visible = visible; }
