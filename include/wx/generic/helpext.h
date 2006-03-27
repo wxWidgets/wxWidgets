@@ -144,7 +144,7 @@ public:
 
 protected:
    /// Filename of currently active map file.
-   wxString         m_MapFile;
+   wxString         m_helpDir;
    /// How many entries do we have in the map file?
    int              m_NumOfEntries;
    /// A list containing all id,url,documentation triples.

@@ -115,7 +115,7 @@ wxExtHelpController::DisplayHelp(const wxString &relativeURL)
 
 #if defined(__WXMSW__)
    wxString url;
-   url << m_MapFile << '\\' << relativeURL.BeforeFirst('#');
+   url << m_helpDir << '\\' << relativeURL.BeforeFirst('#');
    bool bOk = (int)ShellExecute(NULL, wxT("open"), url.c_str(),
                                 NULL, NULL, SW_SHOWNORMAL ) > 32;
    if ( !bOk )
@@ -128,7 +128,7 @@ wxExtHelpController::DisplayHelp(const wxString &relativeURL)
 #elif  defined(__OS2__)
 
    wxString url;
-   url << m_MapFile << '\\' << relativeURL.BeforeFirst('#');
+   url << m_helpDir << '\\' << relativeURL.BeforeFirst('#');
 //   will have to fix for OS/2, later.....DW
 //   bool bOk = (int)ShellExecute(NULL, "open", url,
 //                                NULL, NULL, SW_SHOWNORMAL ) > 32;
@@ -145,7 +145,7 @@ wxExtHelpController::DisplayHelp(const wxString &relativeURL)
    wxString command;
    command = m_BrowserName;
    command << wxT(" file://")
-           << m_MapFile << wxFILE_SEP_PATH << relativeURL;
+           << m_helpDir << wxFILE_SEP_PATH << relativeURL;
    return wxExecute(command) != 0;
 
 #else // UNIX
@@ -170,7 +170,7 @@ wxExtHelpController::DisplayHelp(const wxString &relativeURL)
       {
          long success;
          command << m_BrowserName << wxT(" -remote openURL(")
-                 << wxT("file://") << m_MapFile
+                 << wxT("file://") << m_helpDir
                  << wxFILE_SEP_PATH << relativeURL << wxT(")");
          success = wxExecute(command);
          if(success != 0 ) // returns PID on success
@@ -180,7 +180,7 @@ wxExtHelpController::DisplayHelp(const wxString &relativeURL)
 #endif
    command = m_BrowserName;
    command << wxT(" file://")
-           << m_MapFile << wxFILE_SEP_PATH << relativeURL;
+           << m_helpDir << wxFILE_SEP_PATH << relativeURL;
    return wxExecute(command) != 0;
 #endif
 }
@@ -366,7 +366,7 @@ bool wxExtHelpController::LoadFile(const wxString& file)
         return false;
     }
 
-    m_MapFile = helpDir.GetFullPath(); // now it's valid
+    m_helpDir = helpDir.GetFullPath(); // now it's valid
     return true;
 }
 
@@ -393,7 +393,7 @@ wxExtHelpController::DisplayContents()
 
    bool rc = false;
    wxString file;
-   file << m_MapFile << wxFILE_SEP_PATH << contents;
+   file << m_helpDir << wxFILE_SEP_PATH << contents;
    if(file.Contains(wxT('#')))
       file = file.BeforeLast(wxT('#'));
    if(contents.length() && wxFileExists(file))
