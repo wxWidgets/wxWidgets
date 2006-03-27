@@ -14,17 +14,6 @@
 
 #include "wx/helpbase.h"
 
-/// Path separator.
-#ifdef __WXMSW__
-#define WXEXTHELP_SEPARATOR _T('\\')
-#elif defined(__WXMAC__)
-#define WXEXTHELP_SEPARATOR _T(':')
-#else
-#define WXEXTHELP_SEPARATOR _T('/')
-#endif
-
-class WXDLLIMPEXP_ADV wxExtHelpMapList;
-
 #ifndef WXEXTHELP_DEFAULTBROWSER
 /// Default browser name.
 #   define WXEXTHELP_DEFAULTBROWSER _T("netscape")
@@ -53,8 +42,7 @@ class WXDLLIMPEXP_ADV wxExtHelpMapList;
 
 class WXDLLIMPEXP_ADV wxExtHelpController : public wxHelpControllerBase
 {
-DECLARE_CLASS(wxExtHelpController)
-   public:
+public:
    wxExtHelpController(wxWindow* parentWindow = NULL);
    ~wxExtHelpController();
 
@@ -154,21 +142,30 @@ DECLARE_CLASS(wxExtHelpController)
          return (wxFrame*) NULL;// does nothing by default
       }
 
- protected:
+protected:
    /// Filename of currently active map file.
    wxString         m_MapFile;
    /// How many entries do we have in the map file?
    int              m_NumOfEntries;
    /// A list containing all id,url,documentation triples.
    wxList          *m_MapList;
+
+private:
+   // parse a single line of the map file (called by LoadFile())
+   //
+   // return true if the line was valid or false otherwise
+   bool ParseMapFileLine(const wxString& line);
+
    /// Deletes the list and all objects.
    void DeleteList(void);
 
- private:
+
    /// How to call the html viewer.
    wxString         m_BrowserName;
    /// Is the viewer a variant of netscape?
    bool             m_BrowserIsNetscape;
+
+    DECLARE_CLASS(wxExtHelpController)
 };
 
 #endif // wxUSE_HELP
