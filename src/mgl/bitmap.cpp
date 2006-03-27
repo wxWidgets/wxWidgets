@@ -237,7 +237,7 @@ bool wxBitmap::Create(int width, int height, int depth)
             pf = &gs_pixel_format_32;
             break;
         default:
-            wxASSERT_MSG( 0, wxT("invalid bitmap depth") );
+            wxFAIL_MSG(wxT("invalid bitmap depth"));
             return false;
     }
 
