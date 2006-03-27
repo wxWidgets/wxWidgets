@@ -132,6 +132,8 @@ wxString wxTextBuffer::Translate(const wxString& text, wxTextFileType type)
 
 #if wxUSE_TEXTBUFFER
 
+wxString wxTextBuffer::ms_eof;
+
 // ----------------------------------------------------------------------------
 // ctors & dtor
 // ----------------------------------------------------------------------------

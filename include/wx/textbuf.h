@@ -114,12 +114,15 @@ public:
 
     // NB: const is commented out because not all compilers understand
     //     'mutable' keyword yet (m_nCurLine should be mutable)
-    wxString& GetFirstLine() /* const */ { return m_aLines[m_nCurLine = 0]; }
-    wxString& GetNextLine()  /* const */ { return m_aLines[++m_nCurLine];   }
+    wxString& GetFirstLine() /* const */
+        { return m_aLines.empty() ? ms_eof : m_aLines[m_nCurLine = 0]; }
+    wxString& GetNextLine()  /* const */
+        { return ++m_nCurLine == m_aLines.size() ? ms_eof
+                                                 : m_aLines[m_nCurLine]; }
     wxString& GetPrevLine()  /* const */
-        { wxASSERT(m_nCurLine > 0); return m_aLines[--m_nCurLine];   }
+        { wxASSERT(m_nCurLine > 0); return m_aLines[--m_nCurLine]; }
     wxString& GetLastLine() /* const */
-        { return m_aLines[m_nCurLine = m_aLines.size() - 1]; }
+        { m_nCurLine = m_aLines.size() - 1; return m_aLines.Last(); }
 
     // get the type of the line (see also GetEOL)
     wxTextFileType GetLineType(size_t n) const { return m_aTypes[n]; }
@@ -183,7 +186,8 @@ protected:
     virtual bool OnRead(wxMBConv& conv) = 0;
     virtual bool OnWrite(wxTextFileType typeNew, wxMBConv& conv) = 0;
 
-    wxString m_strBufferName;  // name of the buffer
+    static wxString ms_eof;     // dummy string returned at EOF
+    wxString m_strBufferName;   // name of the buffer
 
 private:
     wxArrayLinesType m_aTypes;   // type of each line
