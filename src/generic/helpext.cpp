@@ -73,13 +73,12 @@ IMPLEMENT_CLASS(wxExtHelpController, wxHelpControllerBase)
    and a file mapping numerical Section numbers to relative URLS.
 */
 
-wxExtHelpController::wxExtHelpController(wxWindow* parentWindow):
-    wxHelpControllerBase(parentWindow)
+wxExtHelpController::wxExtHelpController(wxWindow* parentWindow)
+                   : wxHelpControllerBase(parentWindow)
 {
-   m_MapList = (wxList*) NULL;
+   m_MapList = NULL;
    m_NumOfEntries = 0;
-   m_BrowserName = WXEXTHELP_DEFAULTBROWSER;
-   m_BrowserIsNetscape = WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE;
+   m_BrowserIsNetscape = false;
 
    wxChar *browser = wxGetenv(WXEXTHELP_ENVVAR_BROWSER);
    if(browser)
@@ -104,85 +103,35 @@ void wxExtHelpController::SetBrowser(const wxString& browsername, bool isNetscap
 // Set viewer: new, generic name for SetBrowser
 void wxExtHelpController::SetViewer(const wxString& viewer, long flags)
 {
-    SetBrowser(viewer, ((flags & wxHELP_NETSCAPE) == wxHELP_NETSCAPE));
+    SetBrowser(viewer, (flags & wxHELP_NETSCAPE) != 0);
 }
 
 bool
 wxExtHelpController::DisplayHelp(const wxString &relativeURL)
 {
-   wxBusyCursor b; // display a busy cursor
+    // construct hte URL to open -- it's just a file
+    wxString url(_T("file://") + m_helpDir);
+    url << wxFILE_SEP_PATH << relativeURL;
 
+    // use the explicit browser program if specified
+    if ( !m_BrowserName.empty() )
+    {
+        if ( m_BrowserIsNetscape )
+        {
+            wxString command;
+            command << m_BrowserName
+                    << wxT(" -remote openURL(") << url << wxT(')');
+            if ( wxExecute(command, wxEXEC_SYNC) != -1 )
+                return true;
+        }
 
-#if defined(__WXMSW__)
-   wxString url;
-   url << m_helpDir << '\\' << relativeURL.BeforeFirst('#');
-   bool bOk = (int)ShellExecute(NULL, wxT("open"), url.c_str(),
-                                NULL, NULL, SW_SHOWNORMAL ) > 32;
-   if ( !bOk )
-   {
-      wxLogSysError(_("Cannot open URL '%s'"), relativeURL.c_str());
-      return false;
-   }
-
-   return true;
-#elif  defined(__OS2__)
-
-   wxString url;
-   url << m_helpDir << '\\' << relativeURL.BeforeFirst('#');
-//   will have to fix for OS/2, later.....DW
-//   bool bOk = (int)ShellExecute(NULL, "open", url,
-//                                NULL, NULL, SW_SHOWNORMAL ) > 32;
-//   if ( !bOk )
-//   {
-//      wxLogSysError(_("Cannot open URL '%s'"), relativeURL.c_str());
-//      return false;
-//   }
-//   else
-      return true;
-
-#elif defined(__DOS__)
-
-   wxString command;
-   command = m_BrowserName;
-   command << wxT(" file://")
-           << m_helpDir << wxFILE_SEP_PATH << relativeURL;
-   return wxExecute(command) != 0;
-
-#else // UNIX
-   wxString command;
-
-#ifndef __EMX__
-   if(m_BrowserIsNetscape) // try re-loading first
-   {
-      wxString lockfile;
-      wxGetHomeDir(&lockfile);
-#ifdef __VMS__
-      lockfile << wxFILE_SEP_PATH << wxT(".netscape]lock.");
-      struct stat statbuf;
-      if(stat(lockfile.fn_str(), &statbuf) == 0)
-#else
-      lockfile << wxFILE_SEP_PATH << wxT(".netscape/lock");
-      struct stat statbuf;
-      if(lstat(lockfile.fn_str(), &statbuf) == 0)
-      // cannot use wxFileExists, because it's a link pointing to a
-      // non-existing location      if(wxFileExists(lockfile))
-#endif
-      {
-         long success;
-         command << m_BrowserName << wxT(" -remote openURL(")
-                 << wxT("file://") << m_helpDir
-                 << wxFILE_SEP_PATH << relativeURL << wxT(")");
-         success = wxExecute(command);
-         if(success != 0 ) // returns PID on success
+        if ( wxExecute(m_BrowserName + _T(' ') + url, wxEXEC_SYNC) != -1 )
             return true;
-      }
-   }
-#endif
-   command = m_BrowserName;
-   command << wxT(" file://")
-           << m_helpDir << wxFILE_SEP_PATH << relativeURL;
-   return wxExecute(command) != 0;
-#endif
+    }
+    //else: either no browser explicitly specified or we failed to open it
+
+    // just use default browser
+    return wxLaunchDefaultBrowser(url);
 }
 
 class wxExtHelpMapEntry : public wxObject

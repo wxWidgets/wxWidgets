@@ -14,13 +14,6 @@
 
 #include "wx/helpbase.h"
 
-#ifndef WXEXTHELP_DEFAULTBROWSER
-/// Default browser name.
-#   define WXEXTHELP_DEFAULTBROWSER _T("netscape")
-/// Is default browse a variant of netscape?
-#   define WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE true
-#endif
-
 /**
    This class implements help via an external browser.
    It requires the name of a directory containing the documentation
@@ -54,12 +47,12 @@ public:
        @param browsername The command to call a browser/html viewer.
        @param isNetscape Set this to true if the browser is some variant of Netscape.
    */
-   // Obsolete form
-   void SetBrowser(const wxString & browsername = WXEXTHELP_DEFAULTBROWSER,
-                   bool isNetscape = WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE);
+   void SetBrowser(const wxString& browsername = wxEmptyString,
+                   bool isNetscape = false);
 
   // Set viewer: new name for SetBrowser
-  virtual void SetViewer(const wxString& viewer = WXEXTHELP_DEFAULTBROWSER, long flags = wxHELP_NETSCAPE);
+  virtual void SetViewer(const wxString& viewer = wxEmptyString,
+                         long flags = wxHELP_NETSCAPE);
 
    /** This must be called to tell the controller where to find the
        documentation.
