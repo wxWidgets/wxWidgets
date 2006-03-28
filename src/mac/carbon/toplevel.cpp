@@ -94,7 +94,7 @@ static const EventTypeSpec eventList[] =
 
     { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
     { kEventClassTextInput, kEventTextInputUpdateActiveInputArea } ,
-    
+
     { kEventClassWindow , kEventWindowShown } ,
     { kEventClassWindow , kEventWindowActivated } ,
     { kEventClassWindow , kEventWindowDeactivated } ,
@@ -448,7 +448,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
     Point screenMouseLocation = cEvent.GetParameter<Point>(kEventParamMouseLocation) ;
     Point windowMouseLocation = screenMouseLocation ;
 
-    WindowRef window ;
+    WindowRef window = NULL;
     short windowPart = ::FindWindow(screenMouseLocation, &window);
 
     wxWindow* currentMouseWindow = NULL ;
@@ -1416,11 +1416,11 @@ bool wxTopLevelWindowMac::IsFullScreen() const
     return m_macFullScreenData != NULL ;
 }
 
-void wxTopLevelWindowMac::SetExtraStyle(long exStyle) 
+void wxTopLevelWindowMac::SetExtraStyle(long exStyle)
 {
     if ( GetExtraStyle() == exStyle )
         return ;
-    
+
     wxTopLevelWindowBase::SetExtraStyle( exStyle ) ;
 
 #if TARGET_API_MAC_OSX
@@ -1433,8 +1433,8 @@ void wxTopLevelWindowMac::SetExtraStyle(long exStyle)
 #endif
 }
 
+// TODO: switch to structure bounds -
 // we are still using coordinates of the content view
-// TODO: switch to structure bounds
 //
 void wxTopLevelWindowMac::MacGetContentAreaInset( int &left , int &top , int &right , int &bottom )
 {
