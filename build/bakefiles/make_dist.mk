@@ -468,9 +468,7 @@ DEMOS_DIST: ALL_GUI_DIST
 	$(CP_P) $(DEMODIR)/forty/*.h $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/*.cpp $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/*.xpm $(DISTDIR)/demos/forty
-	$(CP_P) $(DEMODIR)/forty/*.xbm $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/*.htm $(DISTDIR)/demos/forty
-	$(CP_P) $(DEMODIR)/forty/*.bmp $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/*.ico $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/*.rc $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/readme.txt $(DISTDIR)/demos/forty
