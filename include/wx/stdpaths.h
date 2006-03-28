@@ -17,6 +17,7 @@
 #if wxUSE_STDPATHS
 
 #include "wx/string.h"
+#include "wx/filefn.h"
 
 // ----------------------------------------------------------------------------
 // wxStandardPaths returns the standard locations in the file system
