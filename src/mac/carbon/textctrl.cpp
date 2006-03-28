@@ -885,7 +885,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     }
 
     if ( !IsEditable() && key != WXK_LEFT && key != WXK_RIGHT && key != WXK_DOWN && key != WXK_UP && key != WXK_TAB &&
-        !( key == WXK_RETURN && ( (m_windowStyle & wxPROCESS_ENTER) || (m_windowStyle & wxTE_MULTILINE) ) )
+        !( key == WXK_RETURN && ( (m_windowStyle & wxTE_PROCESS_ENTER) || (m_windowStyle & wxTE_MULTILINE) ) )
 //        && key != WXK_PAGEUP && key != WXK_PAGEDOWN && key != WXK_HOME && key != WXK_END
         )
     {
@@ -897,7 +897,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     // allow navigation and deletion
     if ( !IsMultiLine() && m_maxLength && GetValue().length() >= m_maxLength &&
         key != WXK_LEFT && key != WXK_RIGHT && key != WXK_TAB &&
-        key != WXK_BACK && !( key == WXK_RETURN && (m_windowStyle & wxPROCESS_ENTER) )
+        key != WXK_BACK && !( key == WXK_RETURN && (m_windowStyle & wxTE_PROCESS_ENTER) )
        )
     {
         // eat it, we don't want to add more than allowed # of characters
@@ -928,7 +928,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     switch ( key )
     {
         case WXK_RETURN:
-            if (m_windowStyle & wxPROCESS_ENTER)
+            if (m_windowStyle & wxTE_PROCESS_ENTER)
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
                 event.SetEventObject( this );

@@ -199,7 +199,7 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
             {
                 wxCHECK_MSG( win, 0, _T("should have a parent") );
 
-                if ( win->GetWindowStyle() & wxPROCESS_ENTER )
+                if ( win->GetWindowStyle() & wxTE_PROCESS_ENTER )
                 {
                     // need to return a custom dlg code or we'll never get it
                     return DLGC_WANTMESSAGE;

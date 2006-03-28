@@ -1887,7 +1887,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
         }
         case WXK_RETURN:
         {
-            if (m_windowStyle & wxPROCESS_ENTER)
+            if (m_windowStyle & wxTE_PROCESS_ENTER)
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
                 event.SetEventObject(this);

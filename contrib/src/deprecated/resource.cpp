@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        resource.cpp
+// Name:        contrib/src/deprecated/resource.cpp
 // Purpose:     Resource system
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:    wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -2107,8 +2107,10 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
     { wxT("wxGA_VERTICAL"), wxGA_VERTICAL },
 
     /* wxTextCtrl */
-    { wxT("wxPASSWORD"), wxPASSWORD},
-    { wxT("wxPROCESS_ENTER"), wxPROCESS_ENTER},
+#if WXWIN_COMPATIBILITY_2_6
+    { wxT("wxPASSWORD"), wxTE_PASSWORD},
+    { wxT("wxPROCESS_ENTER"), wxTE_PROCESS_ENTER},
+#endif
     { wxT("wxTE_PASSWORD"), wxTE_PASSWORD},
     { wxT("wxTE_READONLY"), wxTE_READONLY},
     { wxT("wxTE_PROCESS_ENTER"), wxTE_PROCESS_ENTER},
@@ -3275,4 +3277,3 @@ wxControl *wxCreateItem(wxWindow* thisWindow, const wxItemResource *resource, co
 #endif // VC++
 
 #endif // wxUSE_WX_RESOURCES
-

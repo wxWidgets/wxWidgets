@@ -1122,7 +1122,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
         mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );
 
         wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
-        m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxPROCESS_ENTER );
+        m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
         textsizer->Add( m_text, 1, wxCENTER | wxALL, 5 );
         mainsizer->Add( textsizer, 0, wxEXPAND );
 
@@ -1145,7 +1145,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
         mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
 
         wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
-        m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxPROCESS_ENTER );
+        m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
         textsizer->Add( m_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
         textsizer->Add( new wxButton( this, wxID_OK ), 0, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
         mainsizer->Add( textsizer, 0, wxEXPAND );

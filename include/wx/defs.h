@@ -1034,7 +1034,7 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 
     #define wxHAS_INT64 1
 
-#else // !wxUSE_LONGLONG
+#else /* !wxUSE_LONGLONG */
 
     #define wxHAS_INT64 0
 
@@ -1526,9 +1526,11 @@ enum wxBorder
 /*  always show an entire number of rows */
 #define wxLB_INT_HEIGHT     0x0800
 
-/*  deprecated synonyms */
-#define wxPROCESS_ENTER     0x0400  /*  wxTE_PROCESS_ENTER */
-#define wxPASSWORD          0x0800  /*  wxTE_PASSWORD */
+#if WXWIN_COMPATIBILITY_2_6
+    /*  deprecated synonyms */
+    #define wxPROCESS_ENTER   0x0400  /*  wxTE_PROCESS_ENTER */
+    #define wxPASSWORD        0x0800  /*  wxTE_PASSWORD */
+#endif
 
 /*
  * wxComboBox style flags

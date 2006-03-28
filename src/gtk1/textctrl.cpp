@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textctrl.cpp
+// Name:        src/gtk1/textctrl.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -325,7 +325,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
         wxWX2MBbuf val = value.mbc_str();
         gtk_editable_insert_text( GTK_EDITABLE(m_text), val, strlen(val), &tmp );
 #else
-        gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &tmp );
+        gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.length(), &tmp );
 #endif
 
         if (multi_line)
@@ -418,7 +418,7 @@ void wxTextCtrl::SetValue( const wxString &value )
         gint len = gtk_text_get_length( GTK_TEXT(m_text) );
         gtk_editable_delete_text( GTK_EDITABLE(m_text), 0, len );
         len = 0;
-        gtk_editable_insert_text( GTK_EDITABLE(m_text), value.mbc_str(), value.Length(), &len );
+        gtk_editable_insert_text( GTK_EDITABLE(m_text), value.mbc_str(), value.length(), &len );
     }
     else
     {
@@ -587,7 +587,7 @@ long wxTextCtrl::XYToPosition(long x, long y ) const
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
     wxString str = GetLineText (lineNo);
-    return (int) str.Length();
+    return (int) str.length();
 }
 
 int wxTextCtrl::GetNumberOfLines() const
@@ -794,7 +794,7 @@ void wxTextCtrl::SetSelection( long from, long to )
     if (from == -1 && to == -1)
     {
         from = 0;
-        to = GetValue().Length();
+        to = GetValue().length();
     }
 
     if ( (m_windowStyle & wxTE_MULTILINE) &&
@@ -873,7 +873,7 @@ void wxTextCtrl::Replace( long from, long to, const wxString &value )
         wxWX2MBbuf buf = value.mbc_str();
         gtk_editable_insert_text( GTK_EDITABLE(m_text), buf, strlen(buf), &pos );
 #else
-        gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &pos );
+        gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.length(), &pos );
 #endif // wxUSE_UNICODE
     }
 }
@@ -978,7 +978,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    if ((key_event.GetKeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
+    if ((key_event.GetKeyCode() == WXK_RETURN) && (m_windowStyle & wxTE_PROCESS_ENTER))
     {
         wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
         event.SetEventObject(this);

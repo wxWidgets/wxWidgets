@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textctrl.cpp
+// Name:        src/gtk/textctrl.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -954,7 +954,7 @@ int wxTextCtrl::GetLineLength(long lineNo) const
     else
     {
         wxString str = GetLineText (lineNo);
-        return (int) str.Length();
+        return (int) str.length();
     }
 }
 
@@ -975,7 +975,7 @@ int wxTextCtrl::GetNumberOfLines() const
         // If the last character in the text buffer is a newline,
         // gtk_text_view_forward_display_line() will return false without that
         // line being counted. Must add one manually in that case.
-        GtkTextIter lastCharIter;        
+        GtkTextIter lastCharIter;
         gtk_text_buffer_get_iter_at_offset
         (
             m_buffer,
@@ -1152,7 +1152,7 @@ void wxTextCtrl::SetSelection( long from, long to )
     if (from == -1 && to == -1)
     {
         from = 0;
-        to = GetValue().Length();
+        to = GetValue().length();
     }
 
     if (m_windowStyle & wxTE_MULTILINE)
@@ -1412,7 +1412,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    if ((key_event.GetKeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
+    if ((key_event.GetKeyCode() == WXK_RETURN) && (m_windowStyle & wxTE_PROCESS_ENTER))
     {
         wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
         event.SetEventObject(this);

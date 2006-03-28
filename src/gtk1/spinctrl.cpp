@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        spinbutt.cpp
+// Name:        src/gtk1/spinbutt.cpp
 // Purpose:     wxSpinCtrl
 // Author:      Robert
 // Modified by:
@@ -101,14 +101,14 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
                         int min, int max, int initial,
                         const wxString& name)
 {
-    m_needParent = TRUE;
-    m_acceptsFocus = TRUE;
+    m_needParent = true;
+    m_acceptsFocus = true;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxSpinCtrl creation failed") );
-        return FALSE;
+        return false;
     }
 
     m_oldPos = initial;
@@ -128,7 +128,7 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
 
     SetValue( value );
 
-    return TRUE;
+    return true;
 }
 
 void wxSpinCtrl::GtkDisableEvents()
@@ -274,7 +274,7 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
         }
     }
 
-    if ((event.GetKeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
+    if ((event.GetKeyCode() == WXK_RETURN) && (m_windowStyle & wxTE_PROCESS_ENTER))
     {
         wxCommandEvent evt( wxEVT_COMMAND_TEXT_ENTER, m_windowId );
         evt.SetEventObject(this);
@@ -289,11 +289,11 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
 
 bool wxSpinCtrl::IsOwnGtkWindow( GdkWindow *window )
 {
-    if (GTK_SPIN_BUTTON(m_widget)->entry.text_area == window) return TRUE;
+    if (GTK_SPIN_BUTTON(m_widget)->entry.text_area == window) return true;
 
-    if (GTK_SPIN_BUTTON(m_widget)->panel == window) return TRUE;
+    if (GTK_SPIN_BUTTON(m_widget)->panel == window) return true;
 
-    return FALSE;
+    return false;
 }
 
 wxSize wxSpinCtrl::DoGetBestSize() const
