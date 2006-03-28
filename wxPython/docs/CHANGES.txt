@@ -98,8 +98,6 @@ classes affected by this are:
 Added the wx.DC.GradientFillConcentric and wx.DC.GradientFillLinear
 methods.
 
-Added the wx.HVScrolledWindow class.
-
 wxGTK: wx.ListBox and wx.CheckListBox are now using native GTK2
 widgets.
 
@@ -119,7 +117,7 @@ not a top-level window.
 
 2.6.3.0
 -------
-* Mar-2006
+* 27-March-2006
 
 Change the wx.ListCtrl InsertStringItem wrapper to use the form that
 takes an imageIndex, and set the default to -1.  This ensures that on
@@ -140,7 +138,7 @@ wxPython exposes, and to be able to generate code that matches that
 which wxPython is using.  If you are building wxPython yourself and
 need to modify any of the \*.i files or to add your own, then you will
 want to be sure to use a matching SWIG.  See wxPython/SWIG/README.txt
-in the source tarbal for details.
+in the source tarball for details.
 
 wx.Image.Copy now also copies the alpha channel.
 
@@ -187,6 +185,17 @@ you should use STC_LEX_HTML instead.
 wxSTC: Implemented Fix for SF Bug #1436503.  Delay the start of the
 DnD operation in case the user just intended to click, not drag.
 
+Updated the analogclock.py module to the new analogclock package from
+E. A. Tacao.
+
+Added the wx.lib.mixins.listctrl.CheckListCtrlMixin class from Bruce
+Who, which makes it easy to put checkboxes on list control items.
+
+Applied a patch from Christian Kristukat to wx.lib.plot that adds
+scrollbars when the plot is zoomed in, and also the ability to grab a
+zoomed plot and move it around with a mouse drag.
+
+XRCed updated to allow wxMenuBar to be created inside a wxFrame.
 
 
 
