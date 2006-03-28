@@ -11,10 +11,10 @@
 \section{\class{wxStackWalker}}\label{wxstackwalker}
 
 wxStackWalker allows an application to enumerate, or walk, the stack frames (the function callstack).
-It is mostly useful in only two situations: 
+It is mostly useful in only two situations:
 inside \helpref{wxApp::OnFatalException}{wxapponfatalexception} function to
-programmatically get the location of the crash and, in debug builds, in 
-\helpref{wxApp::OnAssert}{wxapponassert} to report the caller of the failed
+programmatically get the location of the crash and, in debug builds, in
+\helpref{wxApp::OnAssertFailure}{wxapponassertfailure} to report the caller of the failed
 assert.
 
 wxStackWalker works by repeatedly calling
@@ -95,6 +95,5 @@ notice that Walk() frame itself is not included if skip $\ge 1$).
 \func{void}{WalkFromException}{\void}
 
 Enumerate stack frames from the location of uncaught exception.
-This method can only be called from 
+This method can only be called from
 \helpref{wxApp::OnFatalException()}{wxapponfatalexception}.
-

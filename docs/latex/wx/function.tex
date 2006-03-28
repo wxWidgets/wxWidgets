@@ -3053,7 +3053,7 @@ public:
     void        SetLeftDown(bool down);
     void        SetMiddleDown(bool down);
     void        SetRightDown(bool down);
-    
+
     void        SetControlDown(bool down);
     void        SetShiftDown(bool down);
     void        SetAltDown(bool down);
@@ -4331,7 +4331,7 @@ builds the \helpref{wxCHECK}{wxcheck} failures don't result in anything.
 To override the default behaviour in the debug builds which is to show the user
 a dialog asking whether he wants to abort the program, continue or continue
 ignoring any subsequent assert failures, you may override
-\helpref{wxApp::OnAssert}{wxapponassert} which is called by this function if
+\helpref{wxApp::OnAssertFailure}{wxapponassertfailure} which is called by this function if
 the global application object exists.
 
 
