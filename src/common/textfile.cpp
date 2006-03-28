@@ -135,6 +135,7 @@ bool wxTextFile::OnRead(wxMBConv& conv)
 
         str += strbuf;
 #else // ANSI
+        wxUnusedVar(conv);
         buf[nRead] = '\0';
         str += buf;
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
