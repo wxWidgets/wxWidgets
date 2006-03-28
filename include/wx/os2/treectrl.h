@@ -36,9 +36,11 @@ struct WXDLLEXPORT wxTreeViewItem;
 // they're equivalent
 class wxTreeItemData;
 
-// flags for deprecated InsertItem() variant
-#define wxTREE_INSERT_FIRST 0xFFFF0001
-#define wxTREE_INSERT_LAST  0xFFFF0002
+#if WXWIN_COMPATIBILITY_2_6
+    // flags for deprecated InsertItem() variant
+    #define wxTREE_INSERT_FIRST 0xFFFF0001
+    #define wxTREE_INSERT_LAST  0xFFFF0002
+#endif
 
 // hash storing attributes for our items
 WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP(wxTreeItemAttr *, wxMapTreeAttr);

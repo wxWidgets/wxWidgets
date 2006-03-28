@@ -52,7 +52,7 @@ enum {
     wxTREE_NEXT_CHILD,                 // Retrieves the first child item. The hItem parameter must be NULL.
     wxTREE_NEXT_DROPHILITE,            // Retrieves the item that is the target of a drag-and-drop operation.
     wxTREE_NEXT_FIRSTVISIBLE,          // Retrieves the first visible item.
-    wxTREE_NEXT_NEXT,                 // Retrieves the next sibling item.
+    wxTREE_NEXT_NEXT,                  // Retrieves the next sibling item.
     wxTREE_NEXT_NEXTVISIBLE,           // Retrieves the next visible item that follows the specified item.
     wxTREE_NEXT_PARENT,                // Retrieves the parent of the specified item.
     wxTREE_NEXT_PREVIOUS,              // Retrieves the previous sibling item.
@@ -60,16 +60,18 @@ enum {
     wxTREE_NEXT_ROOT                   // Retrieves the first child item of the root item of which the specified item is a part.
 };
 
-// Flags for InsertItem
-enum {
-    wxTREE_INSERT_LAST = -1,
-    wxTREE_INSERT_FIRST = -2,
-    wxTREE_INSERT_SORT = -3
-};
+#if WXWIN_COMPATIBILITY_2_6
+    // Flags for InsertItem
+    enum {
+        wxTREE_INSERT_LAST = -1,
+        wxTREE_INSERT_FIRST = -2,
+        wxTREE_INSERT_SORT = -3
+    };
+#endif
 
 class WXDLLEXPORT wxTreeItem: public wxObject
 {
- DECLARE_DYNAMIC_CLASS(wxTreeItem)
+    DECLARE_DYNAMIC_CLASS(wxTreeItem)
 public:
     long            m_mask;
     long            m_itemId;
@@ -144,7 +146,6 @@ public:
     void SetIndent(int indent);
       // image list
     wxImageList *GetImageList(int which = wxIMAGE_LIST_NORMAL) const;
-    void SetImageList(wxImageList *imageList, int which = wxIMAGE_LIST_NORMAL);
 
       // navigation inside the tree
     long GetNextItem(long item, int code) const;
@@ -186,20 +187,24 @@ public:
     // ----------
       // adding/deleting items
     bool DeleteItem(long item);
-    long InsertItem(long parent, wxTreeItem& info,
-                    long insertAfter = wxTREE_INSERT_LAST);
+
+#if WXWIN_COMPATIBILITY_2_6
+    wxDEPRECATED( long InsertItem(long parent, wxTreeItem& info,
+                                  long insertAfter = wxTREE_INSERT_LAST) );
       // If image > -1 and selImage == -1, the same image is used for
       // both selected and unselected items.
-    long InsertItem(long parent, const wxString& label,
-                    int image = -1, int selImage = -1,
-                    long insertAfter = wxTREE_INSERT_LAST);
+    wxDEPRECATED( long InsertItem(long parent, const wxString& label,
+                                  int image = -1, int selImage = -1,
+                                  long insertAfter = wxTREE_INSERT_LAST) );
+    wxDEPRECATED( bool ExpandItem(long item, int action) );
+    wxDEPRECATED( void SetImageList(wxImageList *imageList, int which = wxIMAGE_LIST_NORMAL) );
+#endif // WXWIN_COMPATIBILITY_2_6
 
       // changing item state
     bool ExpandItem(long item)   { return ExpandItem(item, wxTREE_EXPAND_EXPAND);   }
     bool CollapseItem(long item) { return ExpandItem(item, wxTREE_EXPAND_COLLAPSE); }
     bool ToggleItem(long item)   { return ExpandItem(item, wxTREE_EXPAND_TOGGLE);   }
       // common interface for {Expand|Collapse|Toggle}Item
-    bool ExpandItem(long item, int action);
 
       //
     bool SelectItem(long item);
@@ -246,20 +251,21 @@ protected:
 
 class WXDLLEXPORT wxTreeEvent: public wxCommandEvent
 {
-  DECLARE_DYNAMIC_CLASS(wxTreeEvent)
+    DECLARE_DYNAMIC_CLASS(wxTreeEvent)
 
- public:
-  wxTreeEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
+public:
 
-  int           m_code;
-  wxTreeItem    m_item;
-  long          m_oldItem;
-  wxPoint       m_pointDrag;
+    wxTreeEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
-  inline long GetOldItem() const { return m_oldItem; }
-  inline wxTreeItem& GetItem() const { return (wxTreeItem&) m_item; }
-  inline wxPoint GetPoint() const { return m_pointDrag; }
-  inline int GetCode() const { return m_code; }
+    int           m_code;
+    wxTreeItem    m_item;
+    long          m_oldItem;
+    wxPoint       m_pointDrag;
+
+    inline long GetOldItem() const { return m_oldItem; }
+    inline wxTreeItem& GetItem() const { return (wxTreeItem&) m_item; }
+    inline wxPoint GetPoint() const { return m_pointDrag; }
+    inline int GetCode() const { return m_code; }
 };
 
 typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);

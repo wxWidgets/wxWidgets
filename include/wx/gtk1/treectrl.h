@@ -63,12 +63,13 @@ static const int wxTREE_HITTEST_ONITEM  = wxTREE_HITTEST_ONITEMICON |
                                           wxTREE_HITTEST_ONITEMLABEL |
                                           wxTREE_HITTEST_ONITEMSTATEICON;
 
-// NB: all the following flags are for compatbility only and will be removed in
-//     next versions
-
-// flags for deprecated InsertItem() variant
-#define wxTREE_INSERT_FIRST 0xFFFF0001
-#define wxTREE_INSERT_LAST  0xFFFF0002
+#if WXWIN_COMPATIBILITY_2_6
+    // NB: all the following flags are for compatbility only and will be removed in
+    //     next versions
+    // flags for deprecated InsertItem() variant
+    #define wxTREE_INSERT_FIRST 0xFFFF0001
+    #define wxTREE_INSERT_LAST  0xFFFF0002
+#endif
 
 // ----------------------------------------------------------------------------
 // wxTreeItemId identifies an element of the tree. In this implementation, it's
@@ -190,8 +191,6 @@ public:
     wxString GetItemText(const wxTreeItemId& item) const;
         // get the normal item image
     int GetItemImage(const wxTreeItemId& item) const;
-        // get the selected item image
-    int GetItemSelectedImage(const wxTreeItemId& item) const;
         // get the data associated with the item
     wxTreeItemData *GetItemData(const wxTreeItemId& item) const;
 
@@ -202,8 +201,6 @@ public:
     void SetItemText(const wxTreeItemId& item, const wxString& text);
         // set the normal item image
     void SetItemImage(const wxTreeItemId& item, int image);
-        // set the selected item image
-    void SetItemSelectedImage(const wxTreeItemId& item, int image);
         // associate some data with the item
     void SetItemData(const wxTreeItemId& item, wxTreeItemData *data);
 
@@ -247,10 +244,6 @@ public:
         // the "cookie" passed to GetFirstChild() and GetNextChild() should be
         // the same!
 
-        // get the first child of this item
-    wxTreeItemId GetFirstChild(const wxTreeItemId& item, long& cookie) const;
-        // get the next child (after GetFirstChild or GetNextChild)
-    wxTreeItemId GetNextChild(const wxTreeItemId& item, long& cookie) const;
         // get the last child of this item - this method doesn't use cookies
     wxTreeItemId GetLastChild(const wxTreeItemId& item) const;
 
@@ -342,55 +335,71 @@ public:
     // deprecated
     // ----------
 
+#if WXWIN_COMPATIBILITY_2_6
     // these methods are deprecated and will be removed in future versions of
     // wxWidgets, they're here for compatibility only, don't use them in new
     // code (the comments indicate why these methods are now useless and how to
     // replace them)
 
         // use Expand, Collapse, CollapseAndReset or Toggle
-    void ExpandItem(const wxTreeItemId& item, int action);
+    wxDEPRECATED( void ExpandItem(const wxTreeItemId& item, int action) );
+
+        // use SetImageList
+    wxDEPRECATED( void SetImageList(wxImageList *imageList, int) )
+        { SetImageList(imageList); }
+
+        // use Set/GetItemImage directly
+    wxDEPRECATED( int GetItemSelectedImage(const wxTreeItemId& item) const );
+    wxDEPRECATED( void SetItemSelectedImage(const wxTreeItemId& item, int image) );
+
+        // get the first child of this item
+    wxDEPRECATED( wxTreeItemId GetFirstChild(const wxTreeItemId& item, long& cookie) const );
+        // get the next child (after GetFirstChild or GetNextChild)
+    wxDEPRECATED( wxTreeItemId GetNextChild(const wxTreeItemId& item, long& cookie) const );
 
         // use AddRoot, PrependItem or AppendItem
-    wxTreeItemId InsertItem(const wxTreeItemId& parent,
-                            const wxString& text,
-                            int image = -1, int selImage = -1,
-                            long insertAfter = wxTREE_INSERT_LAST);
+    wxDEPRECATED( wxTreeItemId InsertItem(const wxTreeItemId& parent,
+                                          const wxString& text,
+                                          int image = -1, int selImage = -1,
+                                          long insertAfter = wxTREE_INSERT_LAST) );
+
+#endif // WXWIN_COMPATIBILITY_2_6
 
         // use Set/GetImageList and Set/GetStateImageList
     wxImageList *GetImageList(int) const
         { return GetImageList(); }
-    void SetImageList(wxImageList *imageList, int)
-        { SetImageList(imageList); }
 
-  void SendExpanding(const wxTreeItemId& item);
-  void SendExpanded(const wxTreeItemId& item);
-  void SendCollapsing(const wxTreeItemId& item);
-  void SendCollapsed(const wxTreeItemId& item);
-  void SendSelChanging(const wxTreeItemId& item);
-  void SendSelChanged(const wxTreeItemId& item);
+    void SendExpanding(const wxTreeItemId& item);
+    void SendExpanded(const wxTreeItemId& item);
+    void SendCollapsing(const wxTreeItemId& item);
+    void SendCollapsed(const wxTreeItemId& item);
+    void SendSelChanging(const wxTreeItemId& item);
+    void SendSelChanged(const wxTreeItemId& item);
+
 protected:
-  wxTreeItemId m_editItem;
-  GtkTree *m_tree;
-  GtkTreeItem *m_anchor;
-  wxTextCtrl*  m_textCtrl;
-  wxImageList* m_imageListNormal;
-  wxImageList* m_imageListState;
 
-  long m_curitemId;
+    wxTreeItemId m_editItem;
+    GtkTree *m_tree;
+    GtkTreeItem *m_anchor;
+    wxTextCtrl*  m_textCtrl;
+    wxImageList* m_imageListNormal;
+    wxImageList* m_imageListState;
 
-  void SendMessage(wxEventType command, const wxTreeItemId& item);
+    long m_curitemId;
+
+    void SendMessage(wxEventType command, const wxTreeItemId& item);
 //  GtkTreeItem *findGtkTreeItem(wxTreeCtrlId &id) const;
 
     // the common part of all ctors
-  void Init();
-      // insert a new item in as the last child of the parent
-  wxTreeItemId p_InsertItem(GtkTreeItem *p,
-                          const wxString& text,
-                          int image, int selectedImage,
-                          wxTreeItemData *data);
+    void Init();
+    // insert a new item in as the last child of the parent
+    wxTreeItemId p_InsertItem(GtkTreeItem *p,
+                              const wxString& text,
+                              int image, int selectedImage,
+                              wxTreeItemData *data);
 
 
-  DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
+    DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
 };
 
 #endif

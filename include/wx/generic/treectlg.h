@@ -377,4 +377,3 @@ public:
 #endif // wxUSE_TREECTRL
 
 #endif // _GENERIC_TREECTRL_H_
-
