@@ -36,10 +36,8 @@
 #include "forty.h"
 #include "card.h"
 
-#ifndef __WXMSW__
 #include "pictures.xpm"
-#include "symbols.xbm"
-#endif
+#include "symbols.xpm"
 
 wxBitmap* Card::m_pictureBmap = 0;
 wxBitmap* Card::m_symbolBmap = 0;
@@ -61,11 +59,7 @@ Card::Card(int value, WayUp way_up) :
 {
     if (!m_symbolBmap)
     {
-#ifdef __WXMSW__
-        m_symbolBmap = new wxBitmap(_T("CardSymbols"), wxBITMAP_TYPE_BMP_RESOURCE);
-#else
-        m_symbolBmap = new wxBitmap(Symbols_bits, Symbols_width, Symbols_height);
-#endif
+        m_symbolBmap = new wxBitmap(symbols_xpm);
         if (!m_symbolBmap->Ok())
         {
             ::wxMessageBox(_T("Failed to load bitmap CardSymbols"), _T("Error"));
@@ -73,11 +67,7 @@ Card::Card(int value, WayUp way_up) :
     }
     if (!m_pictureBmap)
     {
-#ifdef __WXMSW__
-        m_pictureBmap = new wxBitmap(_T("CardPictures"), wxBITMAP_TYPE_BMP_RESOURCE);
-#else
         m_pictureBmap = new wxBitmap(Pictures);
-#endif
         if (!m_pictureBmap->Ok())
         {
             ::wxMessageBox(_T("Failed to load bitmap CardPictures"), _T("Error"));
