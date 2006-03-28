@@ -91,14 +91,21 @@ bool wxTextFile::OnRead(wxMBConv& conv)
     wxASSERT( m_file.IsOpened() &&
                 (m_file.GetKind() != wxFILE_KIND_DISK || m_file.Tell() == 0) );
 
-    char buf[1025];
+    static const size_t BUF_SIZE = 1024;
+#if wxUSE_UNICODE
+    static const size_t NUL_SIZE = 4;
+#else
+    static const size_t NUL_SIZE = 1;
+#endif
+
+    char buf[BUF_SIZE + NUL_SIZE];
     wxChar chLast = '\0';
     wxString str;
 
     for ( ;; )
     {
         // leave space for trailing NUL
-        ssize_t nRead = m_file.Read(buf, WXSIZEOF(buf) - 1);
+        ssize_t nRead = m_file.Read(buf, BUF_SIZE);
 
         if ( nRead == wxInvalidOffset )
         {
@@ -109,10 +116,29 @@ bool wxTextFile::OnRead(wxMBConv& conv)
         if ( nRead == 0 )
             break;
 
-        buf[nRead] = '\0';
+#if wxUSE_UNICODE
+        // we have to properly NUL-terminate the string for any encoding it may
+        // use -- 4 NULs should be enough for everyone (this is why we add 4
+        // extra bytes to the buffer)
+        buf[nRead] =
+        buf[nRead + 1] =
+        buf[nRead + 2] =
+        buf[nRead + 3] = '\0';
 
         // append to the remains of the last block, don't overwrite
-        str += wxString(buf, conv);
+        wxString strbuf(buf, conv);
+        if ( strbuf.empty() )
+        {
+            // conversion failed
+            return false;
+        }
+
+        str += strbuf;
+#else // ANSI
+        buf[nRead] = '\0';
+        str += buf;
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+
 
         // the beginning of the current line, changes inside the loop
         const wxChar *lineStart = str.begin();
