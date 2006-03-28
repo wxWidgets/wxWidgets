@@ -2858,6 +2858,7 @@ void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
 {
+
 #ifdef __WXMAC__
     // On wxMac we can't depend on the EVT_KILL_FOCUS event to properly
     // shutdown the edit control when the mouse is clicked elsewhere on the
@@ -2879,7 +2880,15 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     }
 
     if ( !HasCurrent() || IsEmpty() )
+    {
+        if (event.RightDown())
+        {
+            SendNotify( (size_t)-1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
+            // Allow generation of context menu event
+            event.Skip();
+        }
         return;
+    }
 
     if (m_dirty)
         return;
@@ -2949,8 +2958,19 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
     if ( !hitResult )
     {
-        // outside of any item, reset the selection and bail out
-        HighlightAll(false);
+        // outside of any item
+        if (event.RightDown())
+        {
+            SendNotify( (size_t) -1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
+            // Allow generation of context menu event
+            event.Skip();
+        }
+        else
+        {
+            // reset the selection and bail out
+            HighlightAll(false);
+        }
+        
         return;
     }
 
@@ -3264,6 +3284,10 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_PAGEUP:
             {
+                // we get a floating point exception without this
+                if (m_linesPerPage == 0)
+                    m_linesPerPage = 1;
+                    
                 int steps = InReportView() ? m_linesPerPage - 1 : m_current % m_linesPerPage;
 
                 int index = m_current - steps;
@@ -3276,6 +3300,10 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_PAGEDOWN:
             {
+                // we get a floating point exception without this
+                if (m_linesPerPage == 0)
+                    m_linesPerPage = 1;
+                    
                 int steps = InReportView()
                                ? m_linesPerPage - 1
                                : m_linesPerPage - (m_current % m_linesPerPage) - 1;
@@ -4588,7 +4616,13 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
-    // update our idea of which lines are shown when we redraw the window the
+	int cw, ch, vw, vh;
+	GetVirtualSize(&vw, &vh);  
+	GetClientSize(&cw, &ch);
+
+	if( event.GetOrientation() == wxVERTICAL && ch >= vh)
+		return;
+	// update our idea of which lines are shown when we redraw the window the
     // next time
     ResetVisibleLinesRange();
 
