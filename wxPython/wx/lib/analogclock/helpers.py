@@ -649,11 +649,11 @@ class TickSet:
         a_tick = self.ticks[0]
 
         size = a_tick.GetMaxSize(scale)
-        self.font.SetPointSize(size)
         maxsize = size
 
         # Try to find a 'good' max size for text-based ticks.
         if a_tick.text is not None:
+            self.font.SetPointSize(size)
             dc = wx.MemoryDC()
             dc.SelectObject(wx.EmptyBitmap(*clocksize.Get()))
             dc.SetFont(self.font)
