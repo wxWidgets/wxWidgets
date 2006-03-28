@@ -1,9 +1,9 @@
 #!/usr/bin/python -u
 #----------------------------------------------------------------------
 # Name:        build-all.py
-# Purpose:     Master build script for building all the installers and
-#              such on all the build machines in my lab, and then 
-#              distributing the results as needed.
+# Purpose:     Master build script for building all the wxPython
+#              installers and such on all the build machines in
+#              my lab, and then distributing the results as needed.
 #
 #              This will replace the build-all bash script and is
 #              needed because the needs of the build have outgrown
@@ -62,29 +62,31 @@ def getTasks(config_env):
     
     beastTask1 = Task(
         [ Job("beast.23",     "distrib/all/build-windows", ["2.3"], env=config_env),
+          Job("co-rh9.23",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-rh9",   "rh9",   "2.3"]),
           Job("beast.24",     "distrib/all/build-windows", ["2.4"], env=config_env),
-          Job("co-mdk102.24", "distrib/all/build-rpm", ["beast", "co-mdk102","mdk102","2.4"], env=config_env),
+          Job("co-rh9.24",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-rh9",   "rh9",   "2.4"]),
           ])
     
     beastTask2 = Task(
-        [ Job("co-fc2.23",    "distrib/all/build-rpm", ["beast", "co-fc2",   "fc2",   "2.3"], env=config_env),
-          Job("co-mdk101.23", "distrib/all/build-rpm", ["beast", "co-mdk101","mdk101","2.3"], env=config_env),
-          Job("co-fc2.24",    "distrib/all/build-rpm", ["beast", "co-fc2",   "fc2",   "2.4"], env=config_env),
-          #Job("co-mdk101.24", "distrib/all/build-rpm", ["beast", "co-mdk101","mdk101","2.4"], env=config),
+        [ Job("co-fc2.23",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc2",   "fc2",   "2.3"]),
+          #Job("co-mdk101.23", ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk101","mdk101","2.3"]),
+          Job("co-fc4.24",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc4",   "fc4",   "2.4"]),
+          #Job("co-fc2.24",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc2",   "fc2",   "2.4"]),
+          Job("co-mdk102.24", ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk102","mdk102","2.4"]),
           ])
-    
-    cyclopsTask = Task(
-        [ Job("co-mdk92.23",  "distrib/all/build-rpm", ["cyclops", "co-mdk92", "mdk92", "2.3"], env=config_env),
-          Job("co-rh9.23",    "distrib/all/build-rpm", ["cyclops", "co-rh9",   "rh9",   "2.3"], env=config_env),
-          Job("co-mdk92.24",  "distrib/all/build-rpm", ["cyclops", "co-mdk92", "mdk92", "2.4"], env=config_env),
-          Job("co-rh9.24",    "distrib/all/build-rpm", ["cyclops", "co-rh9",   "rh9",   "2.4"], env=config_env),
-          ])
+
+##     cyclopsTask = Task(
+##         [ Job("co-mdk92.23",  "distrib/all/build-rpm", ["cyclops", "co-mdk92", "mdk92", "2.3"], env=config_env),
+##           Job("co-rh9.23",    "distrib/all/build-rpm", ["cyclops", "co-rh9",   "rh9",   "2.3"], env=config_env),
+##           Job("co-mdk92.24",  "distrib/all/build-rpm", ["cyclops", "co-mdk92", "mdk92", "2.4"], env=config_env),
+##           Job("co-rh9.24",    "distrib/all/build-rpm", ["cyclops", "co-rh9",   "rh9",   "2.4"], env=config_env),
+##           ])
     
     buildTasks = [ jaguarTask,
                    pantherTask,
                    beastTask1,
                    beastTask2,
-                   cyclopsTask,
+##                    cyclopsTask,
                    ]
     
     # Finalization.  This is for things that must wait until all the
