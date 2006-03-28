@@ -777,6 +777,8 @@ if __name__ == "__main__":
 
               packages = ['wxPython',
                           'wxPython.lib',
+                          'wx.lib.analogclock',
+                          'wx.lib.analogclock.lib_setup',
                           'wxPython.lib.colourchooser',
                           'wxPython.lib.editor',
                           'wxPython.lib.mixins',
