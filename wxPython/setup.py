@@ -824,6 +824,8 @@ if __name__ == "__main__":
                           'wx',
                           'wx.build',
                           'wx.lib',
+                          'wx.lib.analogclock',
+                          'wx.lib.analogclock.lib_setup',
                           'wx.lib.colourchooser',
                           'wx.lib.editor',
                           'wx.lib.floatcanvas',
