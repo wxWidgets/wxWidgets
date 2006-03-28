@@ -14,17 +14,19 @@
 #ifndef _WX_OS2_CHKCONF_H_
 #define _WX_OS2_CHKCONF_H_
 
-#ifdef __WATCOMC__
+/*
+   wxDisplay is not implemented for OS/2, use stub common version instead.
+ */
+#if wxUSE_DISPLAY
+#   undef wxUSE_DISPLAY
+#   define wxUSE_DISPLAY 0
+#endif /* wxUSE_DISPLAY */
 
 /* Watcom builds for OS/2 port are setup.h driven and setup.h is
    automatically generated from include/wx/setup_inc.h so we have
    to disable here features not supported currently or enable
    features required */
-
-#if wxUSE_DISPLAY
-#   undef wxUSE_DISPLAY
-#   define wxUSE_DISPLAY 0
-#endif /* wxUSE_DISPLAY */
+#ifdef __WATCOMC__
 
 #if wxUSE_STACKWALKER
 #   undef wxUSE_STACKWALKER

@@ -14,6 +14,14 @@
 #ifndef _WX_MGL_CHKCONF_H_
 #define _WX_MGL_CHKCONF_H_
 
+/*
+   wxDisplay is not implemented for OS/2, use stub common version instead.
+ */
+#if wxUSE_DISPLAY
+#   undef wxUSE_DISPLAY
+#   define wxUSE_DISPLAY 0
+#endif /* wxUSE_DISPLAY */
+
 #ifdef __WATCOMC__
 
 /* Watcom builds for MGL port are setup.h driven and setup.h is
@@ -55,11 +63,6 @@
 #   undef wxUSE_CLIPBOARD
 #   define wxUSE_CLIPBOARD 0
 #endif /* wxUSE_CLIPBOARD */
-
-#if wxUSE_DISPLAY
-#   undef wxUSE_DISPLAY
-#   define wxUSE_DISPLAY 0
-#endif /* wxUSE_DISPLAY */
 
 #if wxUSE_SOCKETS
 #   undef wxUSE_SOCKETS
