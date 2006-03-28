@@ -607,7 +607,7 @@ void wxListBox::SetString(unsigned int n, const wxString& rsString)
 
     int nNewN = n;
 
-    if (n == (int)(m_nNumItems - 1))
+    if (n == (m_nNumItems - 1))
         nNewN = -1;
 
     ::WinSendMsg( GetHwnd()
