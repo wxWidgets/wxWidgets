@@ -696,6 +696,8 @@ Event Handling
                             self._SetKeycodeHandler(WXK_UP, self.IncrementValue)
                             self._SetKeyHandler('-', self._OnChangeSign)
 
+        (Setting a func of None removes any keyhandler for the given key.)
+        
         "Navigation" keys are assumed to change the cursor position, and
         therefore don't cause automatic motion of the cursor as insertable
         characters do.
@@ -2106,7 +2108,10 @@ class MaskedEditMixin:
         used by the control.  <func> should take the event as argument
         and return False if no further action on the key is necessary.
         """
-        self._keyhandlers[keycode] = func
+        if func:
+            self._keyhandlers[keycode] = func
+        elif self._keyhandlers.has_key(keycode):
+            del self._keyhandlers[keycode]
 
 
     def _SetKeyHandler(self, char, func):
@@ -2126,6 +2131,9 @@ class MaskedEditMixin:
         self._nav.append(keycode)
         if handler:
             self._keyhandlers[keycode] = handler
+        elif self.keyhandlers.has_key(keycode):
+            del self._keyhandlers[keycode]
+
 
 
     def _AddNavKey(self, char, handler=None):
@@ -2154,6 +2162,8 @@ class MaskedEditMixin:
             self._nav.append(keycode)
             if func:
                 self._keyhandlers[keycode] = func
+            elif self.keyhandlers.has_key(keycode):
+                del self._keyhandlers[keycode]
 
 
     def _processMask(self, mask):
@@ -2611,6 +2621,12 @@ class MaskedEditMixin:
                 keycode = ord(key)
                 if not self._keyhandlers.has_key(keycode):
                     self._SetKeyHandler(key, self._OnChangeSign)
+        elif self._isInt or self._isFloat:
+            signkeys = ['-', '+', ' ', '(', ')']
+            for key in signkeys:
+                keycode = ord(key)
+                if self._keyhandlers.has_key(keycode) and self._keyhandlers[keycode] == self._OnChangeSign:
+                    self._SetKeyHandler(key, None)
 
 
 
@@ -2674,14 +2690,15 @@ class MaskedEditMixin:
                 self._SetKeycodeHandler(wx.WXK_UP, self._OnUpNumeric)  # (adds "shift" to up arrow, and calls _OnChangeField)
 
             # On ., truncate contents right of cursor to decimal point (if any)
-            # leaves cusor after decimal point if floating point, otherwise at 0.
-            if not self._keyhandlers.has_key(ord(self._decimalChar)):
+            # leaves cursor after decimal point if floating point, otherwise at 0.
+            if not self._keyhandlers.has_key(ord(self._decimalChar)) or self._keyhandlers[ord(self._decimalChar)] != self._OnDecimalPoint:
                 self._SetKeyHandler(self._decimalChar, self._OnDecimalPoint)
-            if not self._keyhandlers.has_key(ord(self._shiftDecimalChar)):
+    
+            if not self._keyhandlers.has_key(ord(self._shiftDecimalChar)) or self._keyhandlers[ord(self._shiftDecimalChar)] != self._OnChangeField:
                 self._SetKeyHandler(self._shiftDecimalChar, self._OnChangeField)   # (Shift-'.' == '>' on US keyboards)
 
             # Allow selective insert of groupchar in numbers:
-            if not self._keyhandlers.has_key(ord(self._fields[0]._groupChar)):
+            if not self._keyhandlers.has_key(ord(self._fields[0]._groupChar)) or self._keyhandlers[ord(self._fields[0]._groupChar)] != self._OnGroupChar:
                 self._SetKeyHandler(self._fields[0]._groupChar, self._OnGroupChar)
 
 ##        dbg(indent=0, suspend=0)
@@ -3784,13 +3801,17 @@ class MaskedEditMixin:
         value = self._eraseSelection()
         integer = self._fields[0]
         start, end = integer._extent
+        sel_start, sel_to = self._GetSelection()
 
 ####        dbg('adjusted pos:', pos)
         if chr(key) in ('-','+','(', ')') or (chr(key) == " " and pos == self._signpos):
             cursign = self._isNeg
 ##            dbg('cursign:', cursign)
             if chr(key) in ('-','(', ')'):
-                self._isNeg = (not self._isNeg)   ## flip value
+                if sel_start <= self._signpos:
+                    self._isNeg = True
+                else:
+                    self._isNeg = (not self._isNeg)   ## flip value
             else:
                 self._isNeg = False
 ##            dbg('isNeg?', self._isNeg)
@@ -4098,7 +4119,7 @@ class MaskedEditMixin:
         # first space for sign, and last one if using parens.
         if( self._signOk
             and ((pos == self._signpos and key in (ord('-'), ord('+'), ord(' ')) )
-                 or self._useParens and pos == self._masklength -1)):
+                 or (self._useParens and pos == self._masklength -1))):
 ##            dbg('adjusted pos:', pos, indent=0)
             return pos
 
@@ -4106,6 +4127,7 @@ class MaskedEditMixin:
             field = self._FindField(pos)
 
 ##            dbg('field._insertRight?', field._insertRight)
+##            if self._signOk: dbg('self._signpos:', self._signpos)
             if field._insertRight:              # if allow right-insert
                 start, end = field._extent
                 slice = self._GetValue()[start:end].strip()
@@ -4140,12 +4162,14 @@ class MaskedEditMixin:
 ##                        # restore selection
 ##                        self._SetSelection(sel_start, pos)
 
-                    elif self._signOk and sel_start == 0:   # if selected to beginning and signed,
+                    # if selected to beginning and signed, and not changing sign explicitly:
+                    elif self._signOk and sel_start == 0 and key not in (ord('-'), ord('+'), ord(' ')):
                         # adjust to past reserved sign position:
                         pos = self._fields[0]._extent[0]
+##                        dbg('adjusting field to ', pos)
                         self._SetInsertionPoint(pos)
-                        # restore selection
-                        self._SetSelection(pos, sel_to)
+                        # but keep original selection, to allow replacement of any sign: 
+                        self._SetSelection(0, sel_to)
                     else:
                         pass    # leave position/selection alone
 
@@ -4526,11 +4550,11 @@ class MaskedEditMixin:
         if self._signOk:
             text, signpos, right_signpos = self._getSignedValue()
 ##            dbg('text: "%s", signpos:' % text, signpos)
+            if text and signpos != self._signpos:
+                self._signpos = signpos
             if not text or text[signpos] not in ('-','('):
                 self._isNeg = False
 ##                dbg('no valid sign found; new sign:', self._isNeg)
-                if text and signpos != self._signpos:
-                    self._signpos = signpos
             elif text and self._valid and not self._isNeg and text[signpos] in ('-', '('):
 ##                dbg('setting _isNeg to True')
                 self._isNeg = True
@@ -5352,6 +5376,8 @@ class MaskedEditMixin:
             field = self._FindField(self._GetInsertionPoint())
             edit_start, edit_end = field._extent
             if field._selectOnFieldEntry:
+                if self._isFloat or self._isInt and field == self._fields[0]:
+                    edit_start = 0
                 self._SetInsertionPoint(edit_start)
                 self._SetSelection(edit_start, edit_end)
 
@@ -5368,8 +5394,8 @@ class MaskedEditMixin:
 
                 if integer._selectOnFieldEntry:
 ##                    dbg('select on field entry:')
-                    self._SetInsertionPoint(edit_start)
-                    self._SetSelection(edit_start, edit_end)
+                    self._SetInsertionPoint(0)
+                    self._SetSelection(0, edit_end)
 
                 elif integer._insertRight:
 ##                    dbg('moving insertion point to end')
@@ -6546,6 +6572,22 @@ __i=0
 
 ## CHANGELOG:
 ## ====================
+##  Version 1.9
+##  1. Now ignores kill focus events when being destroyed.
+##  2. Added missing call to set insertion point on changing fields.
+##  3. Modified SetKeyHandler() to accept None as means of removing one.
+##  4. Fixed keyhandler processing for group and decimal character changes.
+##  5. Fixed a problem that prevented input into the integer digit of a 
+##     integerwidth=1 numctrl, if the current value was 0.
+##  6. Fixed logic involving processing of "_signOk" flag, to remove default
+##     sign key handlers if false, so that SetAllowNegative(False) in the
+##     NumCtrl works properly.
+##  7. Fixed selection logic for numeric controls so that if selectOnFieldEntry
+##     is true, and the integer portion of an integer format control is selected
+##     and the sign position is selected, the sign keys will always result in a
+##     negative value, rather than toggling the previous sign.
+##
+##
 ##  Version 1.8
 ##  1. Fixed bug involving incorrect variable name, causing combobox autocomplete to fail.
 ##  2. Added proper support for unicode version of wxPython

@@ -108,16 +108,18 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     // NB: (RN) Ticks here are sometimes off in the GUI if there
     // is not as many ticks as there are values
     //
-    UInt16 tickMarks = 0 ;
+    int tickMarks = 0 ;
     if ( style & wxSL_AUTOTICKS )
         tickMarks = (maxValue - minValue) + 1; //+1 for the 0 value
 
+    // keep the number of tickmarks from becoming unwieldly, therefore below it is ok to cast
+    // it to a UInt16
     while (tickMarks > 20)
-        tickMarks /= 5; //keep the number of tickmarks from becoming unwieldly
+        tickMarks /= 5;
 
-    m_peer = new wxMacControl(this) ;
+    m_peer = new wxMacControl( this );
     verify_noerr ( CreateSliderControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds ,
-        value , minValue , maxValue , kControlSliderPointsDownOrRight , tickMarks , true /* liveTracking */ ,
+        value , minValue , maxValue , kControlSliderPointsDownOrRight , (UInt16) tickMarks , true /* liveTracking */ ,
         GetwxMacLiveScrollbarActionProc() , m_peer->GetControlRefAddr() ) );
 
     if(style & wxSL_VERTICAL) {
@@ -277,7 +279,7 @@ void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bo
 {
     // Whatever the native value is, we may need to invert it for calling
     // SetValue and putting the possibly inverted value in the event
-    SInt16 value = ValueInvertOrNot ( m_peer->GetValue() ) ;
+    int value = ValueInvertOrNot ( m_peer->GetValue() ) ;
 
     SetValue( value ) ;
 
@@ -301,7 +303,7 @@ wxInt32 wxSlider::MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF mevent )
 {
     // Whatever the native value is, we may need to invert it for calling
     // SetValue and putting the possibly inverted value in the event
-    SInt16 value = ValueInvertOrNot ( m_peer->GetValue() ) ;
+    int value = ValueInvertOrNot ( m_peer->GetValue() ) ;
 
     SetValue( value ) ;
 

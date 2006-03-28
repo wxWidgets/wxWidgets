@@ -137,7 +137,13 @@ public:
                       ,int  nImage
                       ,int  lSelImage
                      );
-
+#if wxABI_VERSION >= 20603
+    bool SetItemColumnImage( long lItem
+                            ,long lColumn
+                            ,int  nImage
+                           );
+#endif
+    
     //
     // Item text
     //

@@ -99,6 +99,7 @@ class SVNService(wx.lib.pydocview.DocService):
                 _("Comment"),
                 _("SVN Log Message"))
 
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             retcode = True
             message = dlg.GetValue()
@@ -141,11 +142,12 @@ class SVNService(wx.lib.pydocview.DocService):
         dlg.Fit()
         dlg.Layout()
 
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             retcode = True
             username = usernameTxt.GetValue().strip()
             password = passwordTxt.GetValue()
-            save = savePasswordCheckBox.IsChecked()
+            save = savePasswordCheckbox.IsChecked()
         else:
             retcode = False
             username = None
@@ -195,6 +197,7 @@ class SVNService(wx.lib.pydocview.DocService):
         acceptedFailures = 0
         save = False
 
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             cert = certRadio.GetStringSelection()
             if cert == _("Accept Always"):
@@ -206,6 +209,7 @@ class SVNService(wx.lib.pydocview.DocService):
                 acceptedFailures = trustDict.get('failures')
                 save = False
 
+        dlg.Destroy()
         return retcode, acceptedFailures, save
 
 
@@ -238,10 +242,11 @@ class SVNService(wx.lib.pydocview.DocService):
         dlg.Fit()
         dlg.Layout()
 
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             retcode = True
             password = passwordTxt.GetValue()
-            save = savePasswordCheckBox.IsChecked()
+            save = savePasswordCheckbox.IsChecked()
         else:
             retcode = False
             password = None
@@ -253,10 +258,11 @@ class SVNService(wx.lib.pydocview.DocService):
 
     def SSLClientCert(self):
         dlg = wx.FileDialog(wx.GetApp().GetTopWindow(),
-            message="Choose certificate", defaultDir=os.getcwd(), 
-            style=wx.OPEN|wx.CHANGE_DIR
+            message="Choose certificate",
+            style=wx.OPEN|wx.FILE_MUST_EXIST|wx.CHANGE_DIR
             )
             
+        # dlg.CenterOnParent()  # wxBug: caused crash with wx.FileDialog
         if dlg.ShowModal() == wx.ID_OK:
             retcode = True
             certfile = dlg.GetPath()
@@ -321,8 +327,14 @@ class SVNService(wx.lib.pydocview.DocService):
         if id == SVNService.SVN_UPDATE_ID:
             wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
             
-            filenames = self.GetCurrentDocuments()[:]
-            filenames.sort(self.BasenameCaseInsensitiveCompare)
+            filenames = self.GetCurrentDocuments()
+            if filenames:
+                filenames = filenames[:]
+                filenames.sort(self.BasenameCaseInsensitiveCompare)
+            else:
+                folderPath = self.GetCurrentFolder()
+                if folderPath:
+                    filenames = [folderPath]
 
             messageService = wx.GetApp().GetService(MessageService.MessageService)
             messageService.ShowWindow()
@@ -346,7 +358,10 @@ class SVNService(wx.lib.pydocview.DocService):
                                                          _("Updated file '%s' is currently open.  Close it?") % os.path.basename(filename),
                                                          _("Close File"),
                                                          wx.YES_NO|wx.ICON_QUESTION)
-                                if yesNoMsg.ShowModal() == wx.ID_YES:
+                                yesNoMsg.CenterOnParent()
+                                status = yesNoMsg.ShowModal()
+                                yesNoMsg.Destroy()
+                                if status == wx.ID_YES:
                                     doc.DeleteAllViews()
                                 break
                     else:
@@ -377,8 +392,8 @@ class SVNService(wx.lib.pydocview.DocService):
             view.ClearLines()
             view.AddLines(_("SVN Update:\n"))
             
-            projects = self.GetCurrentProjects()
-            for project in projects:
+            project = self.GetCurrentProject()
+            if project:
                 openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
                 for doc in openDocs:
                     if doc.GetFilename() == project:
@@ -400,7 +415,9 @@ class SVNService(wx.lib.pydocview.DocService):
                                                                      _("Updated file '%s' is currently open.  Close it?") % os.path.basename(filename),
                                                                      _("Close File"),
                                                                      wx.YES_NO|wx.CANCEL|wx.ICON_QUESTION)
+                                            yesNoMsg.CenterOnParent()
                                             status = yesNoMsg.ShowModal()
+                                            yesNoMsg.Destroy()
                                             if status == wx.ID_YES:
                                                 doc.DeleteAllViews()
                                             elif status == wx.ID_NO:
@@ -428,8 +445,8 @@ class SVNService(wx.lib.pydocview.DocService):
 
         elif id == SVNService.SVN_CHECKIN_ALL_ID:
             filenames = []
-            projects = self.GetCurrentProjects()
-            for project in projects:
+            project = self.GetCurrentProject()
+            if project:
                 openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
                 for doc in openDocs:
                     if doc.GetFilename() == project:
@@ -447,7 +464,9 @@ class SVNService(wx.lib.pydocview.DocService):
                                                  _("'%s' has unsaved modifications.  Save it before commit?") % os.path.basename(filename),
                                                  _("SVN Commit"),
                                                  wx.YES_NO|wx.CANCEL|wx.ICON_QUESTION)
+                        yesNoMsg.CenterOnParent()
                         status = yesNoMsg.ShowModal()
+                        yesNoMsg.Destroy()
                         if status == wx.ID_YES:
                             doc.Save()
                         elif status == wx.ID_NO:
@@ -474,11 +493,12 @@ class SVNService(wx.lib.pydocview.DocService):
                 fileList.Check(i, True)
             sizer.Add(fileList, 0, wx.EXPAND|wx.TOP, HALF_SPACE)
 
-            buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
+            buttonSizer = wx.StdDialogButtonSizer()
             okBtn = wx.Button(dlg, wx.ID_OK)
             okBtn.SetDefault()
-            buttonSizer.Add(okBtn, 0, wx.RIGHT, HALF_SPACE)
-            buttonSizer.Add(wx.Button(dlg, wx.ID_CANCEL), 0)
+            buttonSizer.AddButton(okBtn)
+            buttonSizer.AddButton(wx.Button(dlg, wx.ID_CANCEL))
+            buttonSizer.Realize()
 
             contentSizer = wx.BoxSizer(wx.VERTICAL)
             contentSizer.Add(sizer, 0, wx.ALL, SPACE)
@@ -488,6 +508,7 @@ class SVNService(wx.lib.pydocview.DocService):
             dlg.Fit()
             dlg.Layout()
 
+            dlg.CenterOnParent()
             if dlg.ShowModal() == wx.ID_OK:
                 wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
 
@@ -544,7 +565,9 @@ class SVNService(wx.lib.pydocview.DocService):
                                                  _("'%s' has unsaved modifications.  Save it before commit?") % os.path.basename(filename),
                                                  _("SVN Commit"),
                                                  wx.YES_NO|wx.CANCEL|wx.ICON_QUESTION)
+                        yesNoMsg.CenterOnParent()
                         status = yesNoMsg.ShowModal()
+                        yesNoMsg.Destroy()
                         if status == wx.ID_YES:
                             doc.Save()
                         elif status == wx.ID_NO:
@@ -571,12 +594,13 @@ class SVNService(wx.lib.pydocview.DocService):
                 fileList.Check(i, True)
             sizer.Add(fileList, 0, wx.EXPAND|wx.TOP, HALF_SPACE)
 
-            buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
+            buttonSizer = wx.StdDialogButtonSizer()
             okBtn = wx.Button(dlg, wx.ID_OK)
             okBtn.SetDefault()
-            buttonSizer.Add(okBtn, 0, wx.RIGHT, HALF_SPACE)
-            buttonSizer.Add(wx.Button(dlg, wx.ID_CANCEL), 0)
-
+            buttonSizer.AddButton(okBtn)
+            buttonSizer.AddButton(wx.Button(dlg, wx.ID_CANCEL))
+            buttonSizer.Realize()
+            
             contentSizer = wx.BoxSizer(wx.VERTICAL)
             contentSizer.Add(sizer, 0, wx.ALL, SPACE)
             contentSizer.Add(buttonSizer, 0, wx.ALL|wx.ALIGN_RIGHT, SPACE)
@@ -585,6 +609,7 @@ class SVNService(wx.lib.pydocview.DocService):
             dlg.Fit()
             dlg.Layout()
 
+            dlg.CenterOnParent()
             if dlg.ShowModal() == wx.ID_OK:
                 wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
 
@@ -654,11 +679,11 @@ class SVNService(wx.lib.pydocview.DocService):
                 dir = localPath.GetValue()
                 if len(dir):
                     dirDlg.SetPath(dir)
+                dirDlg.CenterOnParent()
                 if dirDlg.ShowModal() == wx.ID_OK:
                     localPath.SetValue(dirDlg.GetPath())
                     localPath.SetToolTipString(localPath.GetValue())
                     localPath.SetInsertionPointEnd()
-
                 dirDlg.Destroy()
             wx.EVT_BUTTON(findDirButton, -1, OnBrowseButton)
 
@@ -667,11 +692,12 @@ class SVNService(wx.lib.pydocview.DocService):
             sizer.Add(findDirButton, 0, wx.LEFT, HALF_SPACE)
             gridSizer.Add(sizer, 0)
 
-            buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
+            buttonSizer = wx.StdDialogButtonSizer()
             okBtn = wx.Button(dlg, wx.ID_OK)
             okBtn.SetDefault()
-            buttonSizer.Add(okBtn, 0, wx.RIGHT, HALF_SPACE)
-            buttonSizer.Add(wx.Button(dlg, wx.ID_CANCEL), 0)
+            buttonSizer.AddButton(okBtn)
+            buttonSizer.AddButton(wx.Button(dlg, wx.ID_CANCEL))
+            buttonSizer.Realize()
 
             contentSizer = wx.BoxSizer(wx.VERTICAL)
             contentSizer.Add(gridSizer, 0, wx.ALL, SPACE)
@@ -681,6 +707,7 @@ class SVNService(wx.lib.pydocview.DocService):
             dlg.Fit()
             dlg.Layout()
 
+            dlg.CenterOnParent()
             if dlg.ShowModal() == wx.ID_OK:
                 wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
                 
@@ -737,7 +764,10 @@ class SVNService(wx.lib.pydocview.DocService):
                                                  _("Reverted file '%s' is currently open.  Close it?") % os.path.basename(doc.GetFilename()),
                                                  _("Close File"),
                                                  wx.YES_NO|wx.ICON_QUESTION)
-                        if yesNoMsg.ShowModal() == wx.ID_YES:
+                        yesNoMsg.CenterOnParent()
+                        status = yesNoMsg.ShowModal()
+                        yesNoMsg.Destroy()
+                        if status == wx.ID_YES:
                             doc.DeleteAllViews()
 
             except pysvn.ClientError, e:
@@ -819,12 +849,18 @@ class SVNService(wx.lib.pydocview.DocService):
     def ProcessUpdateUIEvent(self, event):
         id = event.GetId()
 
-        if id in [SVNService.SVN_UPDATE_ID,
-                  SVNService.SVN_CHECKIN_ID,
+        if id in [SVNService.SVN_CHECKIN_ID,
                   SVNService.SVN_REVERT_ID,
                   SVNService.SVN_ADD_ID,
                   SVNService.SVN_DELETE_ID]:
             if self.GetCurrentDocuments():
+                event.Enable(True)
+            else:
+                event.Enable(False)
+            return True
+
+        elif id == SVNService.SVN_UPDATE_ID:
+            if self.GetCurrentDocuments() or self.GetCurrentFolder():
                 event.Enable(True)
             else:
                 event.Enable(False)
@@ -836,7 +872,7 @@ class SVNService(wx.lib.pydocview.DocService):
 
         elif (id == SVNService.SVN_UPDATE_ALL_ID
         or id == SVNService.SVN_CHECKIN_ALL_ID):
-            if self.GetCurrentProjects():
+            if self.GetCurrentProject():
                 event.Enable(True)
             else:
                 event.Enable(False)
@@ -845,27 +881,20 @@ class SVNService(wx.lib.pydocview.DocService):
         return False
 
 
-    def GetCurrentProjects(self):
+    def GetCurrentProject(self):
         projectService = wx.GetApp().GetService(ProjectEditor.ProjectService)
         if projectService:
             projView = projectService.GetView()
-
-            if projView.HasFocus():
-                filenames = projView.GetSelectedProjects()
-                if len(filenames):
-                    return filenames
-                else:
-                    return None
+            return projView.GetSelectedProject()
         return None
 
 
     def GetCurrentDocuments(self):
-
         projectService = wx.GetApp().GetService(ProjectEditor.ProjectService)
         if projectService:
             projView = projectService.GetView()
 
-            if projView.HasFocus():
+            if projView.FilesHasFocus():
                 filenames = projView.GetSelectedFiles()
                 if len(filenames):
                     return filenames
@@ -879,6 +908,19 @@ class SVNService(wx.lib.pydocview.DocService):
             filenames = None
 
         return filenames
+
+
+    def GetCurrentFolder(self):
+        projectService = wx.GetApp().GetService(ProjectEditor.ProjectService)
+        if projectService:
+            projView = projectService.GetView()
+
+            if projView.FilesHasFocus():
+                folderPath = projView.GetSelectedPhysicalFolder()
+                if folderPath:
+                    return folderPath
+
+        return None
 
 
     def BasenameCaseInsensitiveCompare(self, s1, s2):
@@ -903,6 +945,7 @@ class SVNOptionsPanel(wx.Panel):
 
         borderSizer = wx.BoxSizer(wx.VERTICAL)
         sizer = wx.FlexGridSizer(cols = 2, hgap = 5, vgap = 5)
+        sizer.AddGrowableCol(1, 1)
 
         sizer.Add(wx.StaticText(self, -1, _("SVN Config Dir:")), 0, wx.ALIGN_CENTER_VERTICAL)
 
@@ -919,18 +962,18 @@ class SVNOptionsPanel(wx.Panel):
             dir = self._svnConfigDir.GetValue()
             if len(dir):
                 dirDlg.SetPath(dir)
+            dirDlg.CenterOnParent()
             if dirDlg.ShowModal() == wx.ID_OK:
                 self._svnConfigDir.SetValue(dirDlg.GetPath())
                 self._svnConfigDir.SetToolTipString(self._svnConfigDir.GetValue())
                 self._svnConfigDir.SetInsertionPointEnd()
-
             dirDlg.Destroy()
         wx.EVT_BUTTON(findDirButton, -1, OnBrowseButton)
 
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
         hsizer.Add(self._svnConfigDir, 1, wx.EXPAND)
         hsizer.Add(findDirButton, 0, wx.LEFT, HALF_SPACE)
-        sizer.Add(hsizer, 0)
+        sizer.Add(hsizer, 0, wx.EXPAND)
 
 
         svnUrlList = ReadSvnUrlList()
@@ -941,7 +984,7 @@ class SVNOptionsPanel(wx.Panel):
             self._svnURLCombobox.SetStringSelection(svnUrlList[0])
         else:
             self._svnURLCombobox.SetToolTipString(_("Set Repository URL"))
-        sizer.Add(self._svnURLCombobox, 0)
+        sizer.Add(self._svnURLCombobox, 0, wx.EXPAND)
 
 
         sizer.Add(wx.StaticText(self, -1, _("SVN_SSH:")), 0, wx.ALIGN_CENTER_VERTICAL)
@@ -956,6 +999,7 @@ class SVNOptionsPanel(wx.Panel):
 
         def OnBrowseFileButton(event):
             dirDlg = wx.FileDialog(self, _("Choose a file:"), style=wx.OPEN|wx.CHANGE_DIR)
+            # dirDlg.CenterOnParent()  # wxBug: caused crash with wx.FileDialog
             if dirDlg.ShowModal() == wx.ID_OK:
                 self._svnSSH.SetValue(dirDlg.GetPath())
                 self._svnSSH.SetToolTipString(self._svnSSH.GetValue())
@@ -966,13 +1010,17 @@ class SVNOptionsPanel(wx.Panel):
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
         hsizer.Add(self._svnSSH, 1, wx.EXPAND)
         hsizer.Add(findSSHButton, 0, wx.LEFT, HALF_SPACE)
-        sizer.Add(hsizer, 0)
+        sizer.Add(hsizer, 0, wx.EXPAND)
 
 
-        borderSizer.Add(sizer, 0, wx.ALL, SPACE)
+        borderSizer.Add(sizer, 0, wx.ALL|wx.EXPAND, SPACE)
         self.SetSizer(borderSizer)
         self.Layout()
         parent.AddPage(self, _("SVN"))
+
+
+    def GetIcon(self):
+        return wx.NullIcon
 
 
     def OnOK(self, optionsDialog):

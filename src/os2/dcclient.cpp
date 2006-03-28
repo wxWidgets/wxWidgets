@@ -172,8 +172,8 @@ void wxWindowDC::InitDC()
     vColor.Set( wxT("WHITE") );
     m_brush.SetColour(vColor);
     InitializePalette();
-    wxFont*                         pFont = new wxFont( 12
-                                                       ,wxNORMAL
+    wxFont*                         pFont = new wxFont( 10
+                                                       ,wxMODERN
                                                        ,wxNORMAL
                                                        ,wxBOLD
                                                       );

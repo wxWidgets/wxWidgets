@@ -621,7 +621,7 @@ void wxLogStream::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 {
     wxString str;
     TimeStamp(&str);
-    (*m_ostr) << str << wxConvertWX2MB(szString) << wxSTD endl;
+    (*m_ostr) << wxConvertWX2MB(str) << wxConvertWX2MB(szString) << wxSTD endl;
 }
 #endif // wxUSE_STD_IOSTREAM
 

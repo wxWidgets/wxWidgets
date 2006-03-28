@@ -22,8 +22,12 @@
 //     including libraries in project files.
 
 #if defined(__VISUALC__) && defined(__WXWINCE__)
+
 #if (_WIN32_WCE >= 400) || defined(__POCKETPC__)
+    // No commdlg.lib in Mobile 5.0 Smartphone
+#if !(defined(__SMARTPHONE__) && _WIN32_WCE >= 1200)
     #pragma comment(lib,"commdlg.lib")
+#endif
 #endif
 
 #if (_WIN32_WCE >= 400) && !defined(wxNO_RTTI)

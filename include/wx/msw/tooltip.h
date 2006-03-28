@@ -9,6 +9,11 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_MSW_TOOLTIP_H_
+#define _WX_MSW_TOOLTIP_H_
+
+#include "wx/object.h"
+
 class WXDLLEXPORT wxToolTip : public wxObject
 {
 public:
@@ -58,3 +63,4 @@ private:
     DECLARE_NO_COPY_CLASS(wxToolTip)
 };
 
+#endif // _WX_MSW_TOOLTIP_H_

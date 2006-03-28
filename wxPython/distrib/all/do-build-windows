@@ -108,9 +108,9 @@ mkdir -p dist
 
 for ver in $PYVER; do
     echo $ver
-    b $ver d USE_SWIG=0
-    b $ver h USE_SWIG=0 EP_ADD_OPTS=1
-    b $ver r USE_SWIG=0
+    b $ver d UNICODE=0 USE_SWIG=0
+    b $ver h UNICODE=0 USE_SWIG=0 EP_ADD_OPTS=1
+    b $ver r UNICODE=0 USE_SWIG=0
     b $ver d UNICODE=1 USE_SWIG=0
     b $ver h UNICODE=1 USE_SWIG=0 EP_ADD_OPTS=1
     b $ver r UNICODE=1 USE_SWIG=0

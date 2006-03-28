@@ -162,8 +162,10 @@ void wxFontEnumeratorHelper::DoEnumerate()
     HDC hDC = ::GetDC(NULL);
 
 #ifdef __WXWINCE__
-    ::EnumFontFamilies(hDC, m_facename, (wxFONTENUMPROC)wxFontEnumeratorProc,
-                         (LPARAM)this) ;
+    ::EnumFontFamilies(hDC,
+                       m_facename.empty() ? NULL : m_facename.c_str(),
+                       (wxFONTENUMPROC)wxFontEnumeratorProc,
+                       (LPARAM)this) ;
 #else // __WIN32__
     LOGFONT lf;
     lf.lfCharSet = (BYTE)m_charset;

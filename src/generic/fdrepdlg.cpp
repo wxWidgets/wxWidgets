@@ -116,7 +116,7 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
     sizer2Col->AddGrowableCol(2);
 
     sizer2Col->Add(new wxStaticText(this, wxID_ANY, _("Search for:"),
-                                    wxDefaultPosition, wxSize(80, wxDefaultCoord)),
+                                    wxDefaultPosition, wxSize(isPda ? -1 : 80, wxDefaultCoord)),
                                     0,
                                     wxALIGN_CENTRE_VERTICAL | wxALIGN_RIGHT);
 
@@ -128,12 +128,12 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
     if ( style & wxFR_REPLACEDIALOG )
     {
         sizer2Col->Add(new wxStaticText(this, wxID_ANY, _("Replace with:"),
-                                        wxDefaultPosition, wxSize(80, wxDefaultCoord)),
+                                        wxDefaultPosition, wxSize(isPda ? -1 : 80, wxDefaultCoord)),
                                         0,
                                         wxALIGN_CENTRE_VERTICAL |
                                         wxALIGN_RIGHT | wxTOP, 5);
 
-        sizer2Col->Add(isPda ? 2 : 10, 0);
+        sizer2Col->Add(10, 0);
 
         m_textRepl = new wxTextCtrl(this, wxID_ANY,
                                     m_FindReplaceData->GetReplaceString());

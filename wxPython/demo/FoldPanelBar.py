@@ -171,7 +171,7 @@ class Extended(wx.Frame):
               "Please report any bug/requests or improvements\n" + \
               "To me at the following adresses:\n\n" + \
               "andrea.gavana@agip.it\n" + "andrea_gavana@tin.it\n\n" + \
-              "Based On Julian Smart C++ demo implementation.\n\n" + \
+              "Based On Jorgen Bodde C++ demo implementation.\n\n" + \
               "Welcome To wxPython " + wx.VERSION_STRING + "!!"
               
         dlg = wx.MessageDialog(self, msg, "FoldPanelBar Extended Demo",
@@ -344,6 +344,10 @@ class Extended(wx.Frame):
         # or normal
         
         if event.IsChecked():
+            self.GetMenuBar().Check(self._singlestyle, False)
+            self.GetMenuBar().Check(self._exclusivestyle, False)
+            self._flags = self._flags & ~fpb.FPB_SINGLE_FOLD
+            self._flags = self._flags & ~fpb.FPB_EXCLUSIVE_FOLD
             self._flags = self._flags | fpb.FPB_COLLAPSE_TO_BOTTOM
         else:
             self._flags = self._flags & ~fpb.FPB_COLLAPSE_TO_BOTTOM
@@ -352,19 +356,38 @@ class Extended(wx.Frame):
 
 
     def OnCreateNormalStyle(self, event):
-
+        
         # recreate with style where only one panel at the time is
         # allowed to be opened
-        
-        # TODO: Not yet implemented even in the C++ class!!!!
 
         if event.IsChecked():
+            self.GetMenuBar().Check(self._bottomstyle, False)
+            self.GetMenuBar().Check(self._exclusivestyle, False)
+            self._flags = self._flags & ~fpb.FPB_EXCLUSIVE_FOLD
+            self._flags = self._flags & ~fpb.FPB_COLLAPSE_TO_BOTTOM
             self._flags = self._flags | fpb.FPB_SINGLE_FOLD
         else:
             self._flags = self._flags & ~fpb.FPB_SINGLE_FOLD
 
         self.ReCreateFoldPanel(self._flags)
 
+
+    def OnCreateExclusiveStyle(self, event):
+
+        # recreate with style where only one panel at the time is
+        # allowed to be opened and the others are collapsed to bottom
+
+        if event.IsChecked():
+            self.GetMenuBar().Check(self._singlestyle, False)
+            self.GetMenuBar().Check(self._bottomstyle, False)
+            self._flags = self._flags & ~fpb.FPB_SINGLE_FOLD
+            self._flags = self._flags & ~fpb.FPB_COLLAPSE_TO_BOTTOM
+            self._flags = self._flags | fpb.FPB_EXCLUSIVE_FOLD
+        else:
+            self._flags = self._flags & ~fpb.FPB_EXCLUSIVE_FOLD
+
+        self.ReCreateFoldPanel(self._flags)
+        
 
     def OnCollapseMe(self, event):
 
@@ -487,8 +510,9 @@ class Extended(wx.Frame):
 
         FPBTEST_QUIT = wx.NewId()
         FPBTEST_REFRESH = wx.NewId()
-        FPB_BOTTOM_STICK = wx.NewId()
+        FPB_BOTTOM_FOLD = wx.NewId()
         FPB_SINGLE_FOLD = wx.NewId()
+        FPB_EXCLUSIVE_FOLD = wx.NewId()
         FPBTEST_TOGGLE_WINDOW = wx.NewId()
         FPBTEST_ABOUT = wx.NewId()
         
@@ -504,10 +528,13 @@ class Extended(wx.Frame):
         # make fold panel menu
         
         fpb_menu = wx.Menu()
-        fpb_menu.AppendCheckItem(FPB_BOTTOM_STICK, "Create with &fpb.FPB_COLLAPSE_TO_BOTTOM")
+        fpb_menu.AppendCheckItem(FPB_BOTTOM_FOLD, "Create with &fpb.FPB_COLLAPSE_TO_BOTTOM")
         
-        # Not Yet Implemented In The C++ class!!!
-        # fpb_menu.AppendCheckItem(FPB_SINGLE_FOLD, _T("Create with &FPB_SINGLE_FOLD"))
+        # Now Implemented!
+        fpb_menu.AppendCheckItem(FPB_SINGLE_FOLD, "Create with &fpb.FPB_SINGLE_FOLD")
+
+        # Now Implemented!
+        fpb_menu.AppendCheckItem(FPB_EXCLUSIVE_FOLD, "Create with &fpb.FPB_EXCLUSIVE_FOLD")        
 
         fpb_menu.AppendSeparator()
         fpb_menu.Append(FPBTEST_TOGGLE_WINDOW, "&Toggle FoldPanelBar")
@@ -528,8 +555,13 @@ class Extended(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnAbout, id=FPBTEST_ABOUT)
         self.Bind(wx.EVT_MENU, self.OnQuit, id=FPBTEST_QUIT)
         self.Bind(wx.EVT_MENU, self.OnToggleWindow, id=FPBTEST_TOGGLE_WINDOW)
-        self.Bind(wx.EVT_MENU, self.OnCreateBottomStyle, id=FPB_BOTTOM_STICK)
+        self.Bind(wx.EVT_MENU, self.OnCreateBottomStyle, id=FPB_BOTTOM_FOLD)
         self.Bind(wx.EVT_MENU, self.OnCreateNormalStyle, id=FPB_SINGLE_FOLD)
+        self.Bind(wx.EVT_MENU, self.OnCreateExclusiveStyle, id=FPB_EXCLUSIVE_FOLD)
+
+        self._bottomstyle = FPB_BOTTOM_FOLD
+        self._singlestyle = FPB_SINGLE_FOLD
+        self._exclusivestyle = FPB_EXCLUSIVE_FOLD
 
         return menu_bar
 

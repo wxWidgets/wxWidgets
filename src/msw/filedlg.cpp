@@ -261,7 +261,8 @@ int wxFileDialog::ShowModal()
     }
 
     // if wxCHANGE_DIR flag is not given we shouldn't change the CWD which the
-    // standard dialog does by default
+    // standard dialog does by default (notice that under NT it does it anyhow, 
+    // OFN_NOCHANGEDIR or not, see below)
     if ( !(m_dialogStyle & wxCHANGE_DIR) )
     {
         msw_flags |= OFN_NOCHANGEDIR;
@@ -279,7 +280,7 @@ int wxFileDialog::ShowModal()
     // comcdlg32.dll, but as we don't use the extended fields anyhow, set
     // the struct size to the old value - otherwise, the programs compiled
     // with new headers will not work with the old libraries
-#if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0500)
+#if !defined(__WXWINCE__) && defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0500)
     of.lStructSize       = sizeof(OPENFILENAME) -
                            (sizeof(void *) + 2*sizeof(DWORD));
 #else // old headers
@@ -391,12 +392,31 @@ int wxFileDialog::ShowModal()
         }
     }
 
+    // store off before the standard windows dialog can possibly change it 
+    const wxString cwdOrig = wxGetCwd(); 
+
     //== Execute FileDialog >>=================================================
 
     bool success = (m_dialogStyle & wxSAVE ? GetSaveFileName(&of)
                                            : GetOpenFileName(&of)) != 0;
 
+#ifdef __WXWINCE__
+    DWORD errCode = GetLastError();
+#else
     DWORD errCode = CommDlgExtendedError();
+
+    // GetOpenFileName will always change the current working directory on 
+    // (according to MSDN) "Windows NT 4.0/2000/XP" because the flag 
+    // OFN_NOCHANGEDIR has no effect.  If the user did not specify wxCHANGE_DIR 
+    // let's restore the current working directory to what it was before the 
+    // dialog was shown (assuming this behavior extends to Windows Server 2003 
+    // seems safe). 
+    if ( success && 
+            (msw_flags & OFN_NOCHANGEDIR) && 
+                wxGetOsVersion() == wxWINDOWS_NT ) 
+    { 
+        wxSetWorkingDirectory(cwdOrig); 
+    } 
 
 #ifdef __WIN32__
     if (!success && (errCode == CDERR_STRUCTSIZE))
@@ -417,6 +437,7 @@ int wxFileDialog::ShowModal()
         }
     }
 #endif // __WIN32__
+#endif // __WXWINCE__
 
     if ( success )
     {
@@ -490,6 +511,28 @@ int wxFileDialog::ShowModal()
     {
         // common dialog failed - why?
 #ifdef __WXDEBUG__
+#ifdef __WXWINCE__
+        if (errCode == 0)
+        {
+            // OK, user cancelled the dialog
+        }
+        else if (errCode == ERROR_INVALID_PARAMETER)
+        {
+            wxLogError(wxT("Invalid parameter passed to file dialog function."));
+        }
+        else if (errCode == ERROR_OUTOFMEMORY)
+        {
+            wxLogError(wxT("Out of memory when calling file dialog function."));
+        }
+        else if (errCode == ERROR_CALL_NOT_IMPLEMENTED)
+        {
+            wxLogError(wxT("Call not implemented when calling file dialog function."));
+        }
+        else
+        {
+            wxLogError(wxT("Unknown error %d when calling file dialog function."), errCode);
+        }
+#else
         DWORD dwErr = CommDlgExtendedError();
         if ( dwErr != 0 )
         {
@@ -498,6 +541,7 @@ int wxFileDialog::ShowModal()
                        dwErr);
         }
         //else: it was just cancelled
+#endif
 #endif
     }
 

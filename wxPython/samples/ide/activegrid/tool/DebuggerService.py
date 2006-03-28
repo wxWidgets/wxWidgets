@@ -310,6 +310,13 @@ class RunCommandUI(wx.Panel):
         self._textCtrl.SetFontColor(wx.BLACK)   
         self._textCtrl.StyleClearAll()
         self._textCtrl.SetReadOnly(True)
+
+    def StopAndRemoveUI(self, event):
+        self.StopExecution()
+        self.StopExecution()
+        index = self._noteBook.GetSelection()
+        self._noteBook.GetPage(index).Show(False)
+        self._noteBook.RemovePage(index)
         
     #------------------------------------------------------------------------------
     # Event handling
@@ -322,10 +329,7 @@ class RunCommandUI(wx.Panel):
             self.StopExecution()
             
         elif id == self.CLOSE_TAB_ID:
-            self.StopExecution()
-            index = self._noteBook.GetSelection()
-            self._noteBook.GetPage(index).Show(False)
-            self._noteBook.RemovePage(index)
+            self.StopAndRemoveUI(event)
             
     def OnDoubleClick(self, event):
         # Looking for a stack trace line.
@@ -368,7 +372,7 @@ class RunCommandUI(wx.Panel):
         # FACTOR THIS INTO DocManager
         openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
         for openDoc in openDocs:  
-            if(isinstance(openDoc.GetFirstView(), CodeEditor.CodeView)): 
+            if(isinstance(openDoc, CodeEditor.CodeDocument)): 
                 openDoc.GetFirstView().GetCtrl().ClearCurrentLineMarkers()    
                 
         foundView.GetCtrl().MarkerAdd(lineNum -1, CodeEditor.CodeCtrl.CURRENT_LINE_MARKER_NUM)
@@ -419,8 +423,9 @@ class DebugCommandUI(wx.Panel):
     def ReturnPortToPool(port):
         config = wx.ConfigBase_Get()
         startingPort = config.ReadInt("DebuggerStartingPort", DEFAULT_PORT)
-        if port in range(startingPort, startingPort + PORT_COUNT):
-            DebugCommandUI.debuggerPortList.append(port)
+        val = int(startingPort) + int(PORT_COUNT)
+        if int(port) >= startingPort and (int(port) <= val):
+            DebugCommandUI.debuggerPortList.append(int(port))
             
     ReturnPortToPool = staticmethod(ReturnPortToPool)
 
@@ -588,7 +593,7 @@ class DebugCommandUI(wx.Panel):
             self._tb.EnableTool(self.ADD_WATCH_ID, False)
         openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
         for openDoc in openDocs:  
-            if(isinstance(openDoc.GetFirstView(), CodeEditor.CodeView)): 
+            if(isinstance(openDoc, CodeEditor.CodeDocument)): 
                 openDoc.GetFirstView().GetCtrl().ClearCurrentLineMarkers() 
         if self.framesTab:   
             self.framesTab.ClearWhileRunning()
@@ -662,7 +667,7 @@ class DebugCommandUI(wx.Panel):
     def DeleteCurrentLineMarkers(self):
         openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
         for openDoc in openDocs:  
-            if(isinstance(openDoc.GetFirstView(), CodeEditor.CodeView)): 
+            if(isinstance(openDoc, CodeEditor.CodeDocument)): 
                 openDoc.GetFirstView().GetCtrl().ClearCurrentLineMarkers()    
         
     def LoadFramesListXML(self, framesXML):
@@ -848,7 +853,7 @@ class WatchDialog(wx.Dialog):
         self.label_4 = wx.StaticText(self, -1, ",frame.f_globals, frame.f_locals)")
         self.radio_box_1 = wx.RadioBox(self, -1, "Watch Information", choices=[WatchDialog.WATCH_ALL_FRAMES, WatchDialog.WATCH_THIS_FRAME, WatchDialog.WATCH_ONCE], majorDimension=0, style=wx.RA_SPECIFY_ROWS)
 
-        self._okButton = wx.Button(self, wx.ID_OK, "OK", size=(75,-1))
+        self._okButton = wx.Button(self, wx.ID_OK, "OK")
         self._okButton.SetDefault()
         self._okButton.SetHelpText(_("The OK button completes the dialog"))
         def OnOkClick(event):
@@ -861,7 +866,7 @@ class WatchDialog(wx.Dialog):
             self.EndModal(wx.ID_OK)
         self.Bind(wx.EVT_BUTTON, OnOkClick, self._okButton)
             
-        self._cancelButton = wx.Button(self, wx.ID_CANCEL, _("Cancel"), size=(75,-1))
+        self._cancelButton = wx.Button(self, wx.ID_CANCEL, _("Cancel"))
         self._cancelButton.SetHelpText(_("The Cancel button cancels the dialog."))
         
         self.__set_properties()
@@ -900,7 +905,6 @@ class WatchDialog(wx.Dialog):
         box.Add(self._okButton, 0, wx.ALIGN_RIGHT|wx.ALL, 5)
         box.Add(self._cancelButton, 0, wx.ALIGN_RIGHT|wx.ALL, 5)
         sizer_1.Add(box, 1, wx.EXPAND, 0)
-        self.SetAutoLayout(True)
         self.SetSizer(sizer_1)
         self.Layout()
         
@@ -979,30 +983,31 @@ class FramesUI(wx.SplitterWindow):
         #sizer.Fit(panel)
 
         return panel
+
+    def ReplaceLastLine(self, command):
+        line = self._interCtrl.GetLineCount() - 1
+        self._interCtrl.GotoLine(line)
+        start = self._interCtrl.GetCurrentPos()
+        self._interCtrl.SetTargetStart(start)
+        end = self._interCtrl.GetLineEndPosition(line)
+        self._interCtrl.SetTargetEnd(end)
+        self._interCtrl.ReplaceTarget(">>> " + command)
+        self._interCtrl.GotoLine(line)
+        self._interCtrl.SetSelectionStart(self._interCtrl.GetLineEndPosition(line))
+
+    def ExecuteCommand(self, command):
+        if not len(self.command_list) or not command == self.command_list[len(self.command_list) -1]:
+            self.command_list.append(command)
+            self.command_index = len(self.command_list) - 1
+        retval = self._ui._callback._debuggerServer.execute_in_frame(self._framesChoiceCtrl.GetStringSelection(), command)
+        self._interCtrl.AddText("\n" + str(retval))
+        self._interCtrl.ScrollToLine(self._interCtrl.GetLineCount())
+        # Refresh the tree view in case this command resulted in changes there. TODO: Need to reopen tree items.
+        self.PopulateTreeFromFrameMessage(self._framesChoiceCtrl.GetStringSelection())
         
     def MakeInspectConsoleTab(self, parent, id):
         self.command_list = []
         self.command_index = 0
-        def ExecuteCommand(command):
-            if not len(self.command_list) or not command == self.command_list[len(self.command_list) -1]:
-                self.command_list.append(command)
-                self.command_index = len(self.command_list) - 1
-            retval = self._ui._callback._debuggerServer.execute_in_frame(self._framesChoiceCtrl.GetStringSelection(), command)
-            self._interCtrl.AddText("\n" + str(retval))
-            self._interCtrl.ScrollToLine(self._interCtrl.GetLineCount())
-            # Refresh the tree view in case this command resulted in changes there. TODO: Need to reopen tree items.
-            self.PopulateTreeFromFrameMessage(self._framesChoiceCtrl.GetStringSelection())
-
-        def ReplaceLastLine(command):
-            line = self._interCtrl.GetLineCount() - 1
-            self._interCtrl.GotoLine(line)
-            start = self._interCtrl.GetCurrentPos()
-            self._interCtrl.SetTargetStart(start)
-            end = self._interCtrl.GetLineEndPosition(line)
-            self._interCtrl.SetTargetEnd(end)
-            self._interCtrl.ReplaceTarget(">>> " + command)
-            self._interCtrl.GotoLine(line)
-            self._interCtrl.SetSelectionStart(self._interCtrl.GetLineEndPosition(line))
             
         def OnKeyPressed(event):
             key = event.KeyCode()
@@ -1011,13 +1016,13 @@ class FramesUI(wx.SplitterWindow):
                     return
             elif key == wx.WXK_RETURN:
                 command = self._interCtrl.GetLine(self._interCtrl.GetCurrentLine())[4:]
-                ExecuteCommand(command)             
+                self.ExecuteCommand(command)             
                 self._interCtrl.AddText("\n>>> ")
                 return
             elif key == wx.WXK_UP:
                 if not len(self.command_list):
                     return
-                ReplaceLastLine(self.command_list[self.command_index])
+                self.ReplaceLastLine(self.command_list[self.command_index])
                 if self.command_index  == 0:
                     self.command_index  = len(self.command_list) - 1
                 else:
@@ -1030,7 +1035,7 @@ class FramesUI(wx.SplitterWindow):
                     self.command_index = self.command_index + 1
                 else:
                     self.command_index = 0
-                ReplaceLastLine(self.command_list[self.command_index])                        
+                self.ReplaceLastLine(self.command_list[self.command_index])                        
                 return
             event.Skip()
 
@@ -1081,6 +1086,12 @@ class FramesUI(wx.SplitterWindow):
                 self.Bind(wx.EVT_MENU, self.OnView, id=self.viewID)
             item = wx.MenuItem(menu, self.viewID, "View in Dialog")
             menu.AppendItem(item)
+            if not hasattr(self, "toInteractID"):
+                self.toInteractID = wx.NewId()
+                self.Bind(wx.EVT_MENU, self.OnSendToInteract, id=self.toInteractID)
+            item = wx.MenuItem(menu, self.toInteractID, "Send to Interact")
+            menu.AppendItem(item)
+
         offset = wx.Point(x=0, y=20)
         menuSpot = event.GetPoint() + offset
         self._treeCtrl.PopupMenu(menu, menuSpot)
@@ -1105,13 +1116,33 @@ class FramesUI(wx.SplitterWindow):
         value = self._treeCtrl.GetItemText(self._introspectItem,1)
         dlg = wx.lib.dialogs.ScrolledMessageDialog(self, value, title, style=wx.DD_DEFAULT_STYLE | wx.RESIZE_BORDER)
         dlg.Show()
-
+        
+    def OnSendToInteract(self, event):
+        value = ""
+        prevItem = ""
+        for item in self._parentChain:
+            
+            if item.find(prevItem + '[') != -1:
+               value += item[item.find('['):]
+               continue
+            if value != "":
+                value = value + '.'
+            if item == 'globals':
+                item = 'globals()'
+            if item != 'locals':
+                value += item
+                prevItem = item
+        print value
+        self.ReplaceLastLine(value)
+        self.ExecuteCommand(value)
+        
     def OnWatch(self, event):
         try:
             if hasattr(self, '_parentChain'):
                 wd = WatchDialog(wx.GetApp().GetTopWindow(), "Add a Watch", self._parentChain)
             else:
                 wd = WatchDialog(wx.GetApp().GetTopWindow(), "Add a Watch", None)
+            wd.CenterOnParent()
             if wd.ShowModal() == wx.ID_OK:
                 name, text, send_frame, run_once = wd.GetSettings()
                 if send_frame:
@@ -1125,6 +1156,7 @@ class FramesUI(wx.SplitterWindow):
                 nodeList = domDoc.getElementsByTagName('watch')
                 if len(nodeList) == 1:
                     watchValue = nodeList.item(0).getAttribute("message")
+            wd.Destroy()
         except:
             tp, val, tb = sys.exc_info()
             traceback.print_exception(tp, val, tb)   
@@ -1147,6 +1179,8 @@ class FramesUI(wx.SplitterWindow):
                 tree = self._treeCtrl
                 parent = tree.GetItemParent(self._introspectItem)
                 treeNode = self.AppendSubTreeFromNode(thingToWalk, thingToWalk.getAttribute('name'), parent, insertBefore=self._introspectItem)
+                if thingToWalk.getAttribute('name').find('[') == -1:
+                    self._treeCtrl.SortChildren(treeNode)
                 self._treeCtrl.Expand(treeNode)
                 tree.Delete(self._introspectItem)
         except:
@@ -1297,7 +1331,8 @@ class FramesUI(wx.SplitterWindow):
                 if intro == "True":
                     tree.SetItemHasChildren(n, True)
                     tree.SetPyData(n, "Introspect")
-
+        if name.find('[') == -1:
+            self._treeCtrl.SortChildren(treeNode)
         return treeNode
         
     def StripOuterSingleQuotes(self, string):
@@ -1613,7 +1648,7 @@ class DebuggerService(Service.Service):
     RUN_ID = wx.NewId()
     DEBUG_ID = wx.NewId()
     DEBUG_WEBSERVER_ID = wx.NewId()
-
+    RUN_WEBSERVER_ID = wx.NewId()
             
     def ComparePaths(first, second):
         one = DebuggerService.ExpandPath(first)
@@ -1695,6 +1730,9 @@ class DebuggerService(Service.Service):
                 debuggerMenu.Append(DebuggerService.DEBUG_WEBSERVER_ID, _("Debug Internal Web Server"), _("Debugs the internal webservier"))
                 wx.EVT_MENU(frame, DebuggerService.DEBUG_WEBSERVER_ID, frame.ProcessEvent)
                 wx.EVT_UPDATE_UI(frame, DebuggerService.DEBUG_WEBSERVER_ID, frame.ProcessUpdateUIEvent)
+                debuggerMenu.Append(DebuggerService.RUN_WEBSERVER_ID, _("Restart Internal Web Server"), _("Restarts the internal webservier"))
+                wx.EVT_MENU(frame, DebuggerService.RUN_WEBSERVER_ID, frame.ProcessEvent)
+                wx.EVT_UPDATE_UI(frame, DebuggerService.RUN_WEBSERVER_ID, frame.ProcessUpdateUIEvent)
             
             debuggerMenu.AppendSeparator()
             
@@ -1709,6 +1747,11 @@ class DebuggerService(Service.Service):
             
         viewMenuIndex = menuBar.FindMenu(_("&Project"))
         menuBar.Insert(viewMenuIndex + 1, debuggerMenu, _("&Run"))
+        
+        toolBar.AddSeparator()
+        toolBar.AddTool(DebuggerService.RUN_ID, getRunningManBitmap(), shortHelpString = _("Run"), longHelpString = _("Run"))
+        toolBar.AddTool(DebuggerService.DEBUG_ID, getDebuggingManBitmap(), shortHelpString = _("Debug"), longHelpString = _("Debug"))
+        toolBar.Realize()
 
         return True
 
@@ -1741,6 +1784,9 @@ class DebuggerService(Service.Service):
             return True
         elif an_id == DebuggerService.DEBUG_WEBSERVER_ID:
             self.OnDebugWebServer(event)
+            return True
+        elif an_id == DebuggerService.RUN_WEBSERVER_ID:
+            self.OnRunWebServer(event)
             return True
         return False
         
@@ -1778,13 +1824,13 @@ class DebuggerService(Service.Service):
             return
         self.ShowWindow(True)
         projectService = wx.GetApp().GetService(ProjectEditor.ProjectService)
-        project = projectService.GetView().GetDocument()
         try:
             dlg = CommandPropertiesDialog(self.GetView().GetFrame(), 'Debug Python File', projectService, None, pythonOnly=True, okButtonName="Debug", debugging=True)
         except:
             return
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
-            fileToDebug, initialArgs, startIn, isPython, environment = dlg.GetSettings()
+            projectPath, fileToDebug, initialArgs, startIn, isPython, environment = dlg.GetSettings()
             dlg.Destroy()
         else:
             dlg.Destroy()
@@ -1822,7 +1868,13 @@ class DebuggerService(Service.Service):
             page.Execute(args, startIn=os.getcwd(), environment=os.environ)
         except:
             pass
-         
+            
+    def OnRunWebServer(self, event):
+        if not Executor.GetPythonExecutablePath():
+            return
+        import WebServerService
+        wsService = wx.GetApp().GetService(WebServerService.WebServerService)
+        wsService.ShutDownAndRestart()                
                                
     def HasAnyFiles(self):
         docs = wx.GetApp().GetDocumentManager().GetDocuments()
@@ -1849,10 +1901,12 @@ class DebuggerService(Service.Service):
                           _("Debug"),
                           wx.YES_NO|wx.ICON_QUESTION
                           )
+            yesNoMsg.CenterOnParent()
             if yesNoMsg.ShowModal() == wx.ID_YES:
                 docs = wx.GetApp().GetDocumentManager().GetDocuments()
                 for doc in docs:
                     doc.Save()
+            yesNoMsg.Destroy()
 
     def OnExit(self):
         DebugCommandUI.ShutdownAllDebuggers()
@@ -1865,15 +1919,13 @@ class DebuggerService(Service.Service):
         if not Executor.GetPythonExecutablePath():
             return
         projectService = wx.GetApp().GetService(ProjectEditor.ProjectService)
-        project = projectService.GetView().GetDocument()
         try:
             dlg = CommandPropertiesDialog(self.GetView().GetFrame(), 'Run', projectService, None)
         except:
             return
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
-            fileToRun, initialArgs, startIn, isPython, environment = dlg.GetSettings()
-            
-
+            projectPath, fileToRun, initialArgs, startIn, isPython, environment = dlg.GetSettings()
             dlg.Destroy()
         else:
             dlg.Destroy()
@@ -1881,7 +1933,12 @@ class DebuggerService(Service.Service):
         self.PromptToSaveFiles()
         # This will need to change when we can run more than .py and .bpel files.
         if not isPython:
-            projectService.RunProcessModel(fileToRun)
+            projects = projectService.FindProjectByFile(projectPath)
+            if not projects:
+                return
+            project = projects[0]
+            deployFilePath = project.GenerateDeployment()
+            projectService.RunProcessModel(fileToRun, project.GetAppInfo().language, deployFilePath)
             return
             
         self.ShowWindow(True)
@@ -1901,10 +1958,16 @@ class DebuggerService(Service.Service):
             fileName = wx.GetApp().GetDocumentManager().GetCurrentDocument().GetFilename()
             if line < 0:
                 line = view.GetCtrl().GetCurrentLine()
+        else:
+            view = None
         if  self.BreakpointSet(fileName, line + 1):
             self.ClearBreak(fileName, line + 1)
+            if view:
+                view.GetCtrl().Refresh()
         else:
             self.SetBreak(fileName, line + 1)
+            if view:
+                view.GetCtrl().Refresh()
         # Now refresh all the markers icons in all the open views.
         self.ClearAllBreakpointMarkers()
         self.SetAllBreakpointMarkers()    
@@ -1939,6 +2002,10 @@ class DebuggerService(Service.Service):
         else:
             return self._masterBPDict[expandedName] 
 
+    def SetBreakpointList(self, fileName, bplist):
+        expandedName = DebuggerService.ExpandPath(fileName)
+        self._masterBPDict[expandedName] = bplist
+        
     def BreakpointSet(self, fileName, line):
         expandedName = DebuggerService.ExpandPath(fileName)
         if not self._masterBPDict.has_key(expandedName):
@@ -1977,16 +2044,20 @@ class DebuggerService(Service.Service):
     def ClearAllBreakpointMarkers(self):
         openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
         for openDoc in openDocs:  
-            if(isinstance(openDoc.GetFirstView(), CodeEditor.CodeView)): 
+            if isinstance(openDoc, CodeEditor.CodeDocument): 
                 openDoc.GetFirstView().MarkerDeleteAll(CodeEditor.CodeCtrl.BREAKPOINT_MARKER_NUM) 
-
+                
+    def UpdateBreakpointsFromMarkers(self, view, fileName):
+        newbpLines = view.GetMarkerLines(CodeEditor.CodeCtrl.BREAKPOINT_MARKER_NUM)
+        self.SetBreakpointList(fileName, newbpLines)
+        
     def GetMasterBreakpointDict(self):
         return self._masterBPDict
         
     def SetAllBreakpointMarkers(self):
         openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
         for openDoc in openDocs:  
-            if(isinstance(openDoc.GetFirstView(), CodeEditor.CodeView)): 
+            if(isinstance(openDoc, CodeEditor.CodeDocument)): 
                 self.SetCurrentBreakpointMarkers(openDoc.GetFirstView())
             
     def SetCurrentBreakpointMarkers(self, view):
@@ -2052,6 +2123,11 @@ class DebuggerOptionsPanel(wx.Panel):
         config.Write("DebuggerHostName", self._LocalHostTextCtrl.GetValue())
         if self._PortNumberTextCtrl.IsInBounds():
             config.WriteInt("DebuggerStartingPort", self._PortNumberTextCtrl.GetValue())
+            
+
+    def GetIcon(self):
+        return getContinueIcon()
+
 
 class CommandPropertiesDialog(wx.Dialog):
     
@@ -2070,10 +2146,8 @@ class CommandPropertiesDialog(wx.Dialog):
         if not self._projectNameList:
             wx.MessageBox(_("To run or debug you must have an open runnable file or project containing runnable files. Use File->Open to open the file you wish to run or debug."), _("Nothing to Run"))
             raise BadBadBad
-        if _WINDOWS:
-            wx.Dialog.__init__(self, parent, -1, title)
-        else:
-            wx.Dialog.__init__(self, parent, -1, title, size=(390,270)) 
+
+        wx.Dialog.__init__(self, parent, -1, title)
            
         projStaticText = wx.StaticText(self, -1, _("Project:")) 
         fileStaticText = wx.StaticText(self, -1, _("File:")) 
@@ -2082,43 +2156,43 @@ class CommandPropertiesDialog(wx.Dialog):
         pythonPathStaticText = wx.StaticText(self, -1, _("PYTHONPATH:"))
         postpendStaticText = _("Postpend win32api path")
         cpPanelBorderSizer = wx.BoxSizer(wx.VERTICAL)
-        self._projList = wx.Choice(self, -1, (200,-1), choices=self._projectNameList)
+        self._projList = wx.Choice(self, -1, choices=self._projectNameList)
         self.Bind(wx.EVT_CHOICE, self.EvtListBox, self._projList)
         HALF_SPACE = 5
-        flexGridSizer = wx.FlexGridSizer(cols = 3, vgap = 10, hgap = 10)
+        GAP = HALF_SPACE
+        if wx.Platform == "__WXMAC__":
+            GAP = 10
+        flexGridSizer = wx.GridBagSizer(GAP, GAP)
         
-        flexGridSizer.Add(projStaticText, 0, flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
-        flexGridSizer.Add(self._projList, 1, flag=wx.EXPAND)
-        flexGridSizer.Add(wx.StaticText(parent, -1, ""), 0)
+        flexGridSizer.Add(projStaticText, (0,0), flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
+        flexGridSizer.Add(self._projList, (0,1), (1,2), flag=wx.EXPAND)
         
-        flexGridSizer.Add(fileStaticText, 0, flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
-        self._fileList = wx.Choice(self, -1, (200,-1))
+        flexGridSizer.Add(fileStaticText, (1,0), flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
+        self._fileList = wx.Choice(self, -1)
         self.Bind(wx.EVT_CHOICE, self.OnFileSelected, self._fileList)
-        flexGridSizer.Add(self._fileList, 1, flag=wx.EXPAND)
-        flexGridSizer.Add(wx.StaticText(parent, -1, ""), 0)
+        flexGridSizer.Add(self._fileList, (1,1), (1,2), flag=wx.EXPAND)
         
         config = wx.ConfigBase_Get()
         self._lastArguments = config.Read("LastRunArguments")
         self._argsEntry = wx.TextCtrl(self, -1, str(self._lastArguments))
         self._argsEntry.SetToolTipString(str(self._lastArguments))
 
-        flexGridSizer.Add(argsStaticText, 0, flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
-        flexGridSizer.Add(self._argsEntry, 1, flag=wx.EXPAND)
-        flexGridSizer.Add(wx.StaticText(parent, -1, ""), 0)
+        flexGridSizer.Add(argsStaticText, (2,0), flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
+        flexGridSizer.Add(self._argsEntry, (2,1), (1,2), flag=wx.EXPAND)
         
-        flexGridSizer.Add(startInStaticText, 0, flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
+        flexGridSizer.Add(startInStaticText, (3,0), flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
         self._lastStartIn = config.Read("LastRunStartIn")
         if not self._lastStartIn:
             self._lastStartIn = str(os.getcwd())
         self._startEntry = wx.TextCtrl(self, -1, self._lastStartIn)
         self._startEntry.SetToolTipString(self._lastStartIn)
 
-        flexGridSizer.Add(self._startEntry, 1, wx.EXPAND)
+        flexGridSizer.Add(self._startEntry, (3,1), flag=wx.EXPAND)
         self._findDir = wx.Button(self, -1, _("Browse..."))
         self.Bind(wx.EVT_BUTTON, self.OnFindDirClick, self._findDir)
-        flexGridSizer.Add(self._findDir, 0, wx.RIGHT, 10)
+        flexGridSizer.Add(self._findDir, (3,2))
         
-        flexGridSizer.Add(pythonPathStaticText, 0, flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
+        flexGridSizer.Add(pythonPathStaticText, (4,0), flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
         if os.environ.has_key('PYTHONPATH'):
             startval = os.environ['PYTHONPATH']
         else:
@@ -2126,34 +2200,29 @@ class CommandPropertiesDialog(wx.Dialog):
         self._lastPythonPath = config.Read("LastPythonPath", startval)
         self._pythonPathEntry = wx.TextCtrl(self, -1, self._lastPythonPath)
         self._pythonPathEntry.SetToolTipString(self._lastPythonPath)
-        flexGridSizer.Add(self._pythonPathEntry, 1, wx.EXPAND)
-        flexGridSizer.Add(wx.StaticText(parent, -1, ""), 0)
-        flexGridSizer.Add(wx.StaticText(parent, -1, ""), 0)
+        flexGridSizer.Add(self._pythonPathEntry, (4,1), (1,2), flag=wx.EXPAND)
+        
         if debugging and _WINDOWS:
             self._postpendCheckBox = wx.CheckBox(self, -1, postpendStaticText)
             checked = bool(config.ReadInt("PythonPathPostpend", 1))
             self._postpendCheckBox.SetValue(checked)
-            flexGridSizer.Add(self._postpendCheckBox, 1, wx.EXPAND)
-        flexGridSizer.Add(wx.StaticText(parent, -1, ""), 0)
-        cpPanelBorderSizer.Add(flexGridSizer, 0, wx.ALL, 10)
+            flexGridSizer.Add(self._postpendCheckBox, (5,1), flag=wx.EXPAND)
+        cpPanelBorderSizer.Add(flexGridSizer, 0, flag=wx.ALL, border=10)
         
-        box = wx.BoxSizer(wx.HORIZONTAL)
+        box = wx.StdDialogButtonSizer()
         self._okButton = wx.Button(self, wx.ID_OK, okButtonName)
         self._okButton.SetDefault()
         self._okButton.SetHelpText(_("The ") + okButtonName + _(" button completes the dialog"))
-        box.Add(self._okButton, 0, wx.ALIGN_RIGHT|wx.ALL, 5)
+        box.AddButton(self._okButton)
         self.Bind(wx.EVT_BUTTON, self.OnOKClick, self._okButton)
         btn = wx.Button(self, wx.ID_CANCEL, _("Cancel"))
         btn.SetHelpText(_("The Cancel button cancels the dialog."))
-        box.Add(btn, 0, wx.ALIGN_RIGHT|wx.ALL, 5)
-        cpPanelBorderSizer.Add(box, 0, wx.ALIGN_RIGHT|wx.BOTTOM, 5)
+        box.AddButton(btn)
+        box.Realize()
+        cpPanelBorderSizer.Add(box, 0, flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
         
         self.SetSizer(cpPanelBorderSizer)
-        if _WINDOWS:
-            self.GetSizer().Fit(self)
-        
-        self.Layout()
-        
+                
         # Set up selections based on last values used.
         self._fileNameList = None
         self._selectedFileIndex = 0
@@ -2168,6 +2237,9 @@ class CommandPropertiesDialog(wx.Dialog):
         self._selectedProjectIndex = selectedIndex
         self._selectedProjectDocument = self._projectDocumentList[selectedIndex]
         self.PopulateFileList(self._selectedProjectDocument, lastFile)
+
+        cpPanelBorderSizer.Fit(self)
+
             
     def OnOKClick(self, event):
         startIn = self._startEntry.GetValue()
@@ -2193,6 +2265,7 @@ class CommandPropertiesDialog(wx.Dialog):
         self.EndModal(wx.ID_OK)
             
     def GetSettings(self):  
+        projectPath = self._selectedProjectDocument.GetFilename()
         filename = self._fileNameList[self._selectedFileIndex]
         args = self._argsEntry.GetValue() 
         startIn = self._startEntry.GetValue()
@@ -2207,7 +2280,7 @@ class CommandPropertiesDialog(wx.Dialog):
         else:
             env['PYTHONPATH'] = self._pythonPathEntry.GetValue()
             
-        return filename, args, startIn, isPython, env
+        return projectPath, filename, args, startIn, isPython, env
                       
     def OnFileSelected(self, event):
         self._selectedFileIndex = self._fileList.GetSelection()
@@ -2229,16 +2302,17 @@ class CommandPropertiesDialog(wx.Dialog):
             self._argsEntry.SetValue(self._lastArguments)  
                 
             
-
     def OnFindDirClick(self, event):
         dlg = wx.DirDialog(self, "Choose a starting directory:", self._startEntry.GetValue(),
                           style=wx.DD_DEFAULT_STYLE|wx.DD_NEW_DIR_BUTTON)
 
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             self._startEntry.SetValue(dlg.GetPath())
             
         dlg.Destroy() 
            
+
     def EvtListBox(self, event):
         if event.GetString():
             index = self._projectNameList.index(event.GetString())
@@ -2524,3 +2598,76 @@ def getAddWatchImage():
 
 def getAddWatchIcon():
     return wx.IconFromBitmap(getAddWatchBitmap())
+    
+#----------------------------------------------------------------------
+def getRunningManData():
+    return \
+'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+\x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
+\x00\x01\x86IDAT8\x8d\xa5\x93\xb1K\x02Q\x1c\xc7\xbf\xcf\x9a\x1bZl\x88\xb4\
+\x04\x83\x10\xa2\x96\xc0A\xa8\x96\x96\xf4h\xe9\xf0\x1f\xd0\xcd(Bpi\x13nH\xb2\
+%\x9d\x1a"\xb9)\xb4\x16i\x10\n\x13MA\x84\xa3&\xa1\xa1A\xa1E\xbdw\x97\xa2\xbd\
+\x06\xf1(\xef,\xac\xef\xf6x\xdf\xf7}\x9f\xdf\x97\xf7\x081M\xe0?\x9a\xfc\xcd \
+\\\xdc2\x99\xb6A[\x14\x91C\x9e\x8c\x1d\x00\x00\xd5\xa7*\x9a\x8a\xfa7\x82u\
+\xfb\x14dj\x03mQ\xc3}\xf2\xb5\x83\xc7B\x9e\x89\xf7/\xda\xba\xd1\x94\x01\x00j\
+CF\xe2t\xef\x1b>\x1f\x8c3Q\xf0\x11\xd3p\xa2yf\x1a\xbc\xcb\n\xdee\x85\xdd>\
+\x07\xb5!C\xe9\xb4\xb1\xe9=b\x03\x8fc\xc3\xcf\xbcN\xb3\x9e`@\x11\xb9\xaa`\
+\x7fg\x19\'\x97y\xd8\x96\xfa\xf8\x95\xf23d\xa5O4\xbfh\x87(\xf8\x88a\xc0 $|~\
+\x87n\xf7\x03\xaa\xf2\x8e\xc0\xee\n\x00 \x91\xab\xc3\xeb4\xc3\xed\xe1\xb4qF\
+\x96\xb8`\xb3h\xb7\xa6Jo\xa0\x9d\x1eD\xc1G\xc4!\x9f\xae\x03\x00\xa8\xd5jh4e\
+\r\xb9\xf0P\x82T,\x83\xf3\x0bl\xd8k\x18\xe0\xf6p\x84vz\xa0M\x8aB\xf2\x98\x84\
+\x03[\xb0.XP\xcafu^m\x04>\x18\xd7\x9aM\xe4\xea\xba\xc0x\xec\x8c\xa9\xca*^\
+\xa5\x1b}\xc0u*\xc9B\xd14\x12\xe8\x97%\x15\xcbF`\xdaH\xba\x80P4\r)\x13#R\xc6\
+\xf0\xdc\x8f2\x01\x80\x94\x89\xe9>\xc9(\xcd:\xb6\xd9\x1aw\xa0\x95i\xf8\x0e\
+\xc6\xd1\'\'\x86\xa2\xd5\x8d \xbe@\x00\x00\x00\x00IEND\xaeB`\x82' 
+
+def getRunningManBitmap():
+    return BitmapFromImage(getRunningManImage())
+
+def getRunningManImage():
+    stream = cStringIO.StringIO(getRunningManData())
+    return ImageFromStream(stream)
+
+def getRunningManIcon():
+    icon = EmptyIcon()
+    icon.CopyFromBitmap(getRunningManBitmap())
+    return icon
+
+#----------------------------------------------------------------------
+def getDebuggingManData():
+    return \
+'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+\x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
+\x00\x01\xafIDAT8\x8d\x8d\x93\xbfK[Q\x14\xc7?7\n:\t\xb5SA\xc1?@\xc1A\x9c,%\
+\xd0\xa9\x83\xb5\x98!(b\t\xbc\xa7q("m\x1c\n5V]D\xd4-\xf8\x83\xa7\xa2\t\xa1\
+\xa6\xed$8\x08\x92\xa1\x8b\x14A\xd0YB"\xa4\xf4\x87\x90\x97K\xa8\xcb\xed\xf0\
+\xc8m\xae\xfa\xd4\x03\x07.\xe7\x9e\xf3\xfd\x9e\x9f\x88@\x1d\xb5\xba\x94\xca\
+\xaa\xeb\xb6\xbb4\xc0\x03d&\xb1\xa7\xfc\xfe\x0c\x80L\xdaQ\xd2\xad\x90I;F\x80\
+++\xbe\xe0bve\xdf\xd7y\xfemH\xc4\x162\xaa\xbb\xa5D(\x1c\x11\xb7\x02\x88@\x9d\
+f?*4\xd1\xf6\xa2\x0f\x80\x93\xf4\x8e\xe1\xb8\xf2\xf1\xb5\x18\x9cH(\x80\xe4bT\
+\x83\xd5W\x1f\xa1pD\x8c|\xd8T\x00\xdf\xd6\xd7\xe8\x1f\xb3tp\xf1\n^\xfe\xf8\
+\xa5^u7\x00P\x1eYP\xd2\x95\x1c\xa4\xa6\x84\x18\x8do\xab*C&\xed\xa8\xafG\x7f\
+\xe9\x1f\xb3x\xdc\x08\xad\x8f \x7f\tg%\xf8Y\x82\xe3\x8de\x86\x82\xcdF9\xba\
+\x84\xc1\x89\x84*K\t\xc0\xf0\xbbq:\x9f\xfcO\x7f?\xe7\x01\x9c\xff\x86Br\x8e\
+\x83\xd4\x94\x06\xd0SH.F\xc5P\xb0\x19\xe9z \xf9KOmkN\x07\x03\x14/r\xb4?\x8b\
+\xe8\xc6\xeb\x1e\x00l\x1f\xfe\xd15\x17\xaf<\xdb\xd37\xef\xd9\x9d\xb4\xe9\x8a\
+\xadj\xbfx\xb4\x878(#\x03\x00\xe9JF{[\xf92\xeb\xb1V\x99\xbbb\xab|\x9f\xb7\
+\x8d\xa9\x9cf\x1dq\x9au\xc4\x8dM\x0c\x85#\xa2x\x91cw\xd2\xd6i\x83\trk\x13\
+\x9f\x0fL\xab\xda\xe6\xd4\xd6Y+\xf1h\x8f\xb9T~G\xd2\x11\xb4\xd4\xe7O[\xf7\
+\x1e\xd6\x9d\xc7\xe4\xb7\xbe\x86\xf8\xb1?\xf4\x9c\xff\x01\xbe\xe9\xaf\x96\
+\xf0\x7fPA\x00\x00\x00\x00IEND\xaeB`\x82' 
+
+def getDebuggingManBitmap():
+    return BitmapFromImage(getDebuggingManImage())
+
+def getDebuggingManImage():
+    stream = cStringIO.StringIO(getDebuggingManData())
+    return ImageFromStream(stream)
+
+def getDebuggingManIcon():
+    icon = EmptyIcon()
+    icon.CopyFromBitmap(getDebuggingManBitmap())
+    return icon
+
+#----------------------------------------------------------------------
+

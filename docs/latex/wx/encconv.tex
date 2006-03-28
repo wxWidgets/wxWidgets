@@ -7,8 +7,8 @@
 
 This class is capable of converting strings between two
 8-bit encodings/charsets. It can also convert from/to Unicode (but only
-if you compiled wxWidgets with wxUSE\_WCHAR\_T set to 1). Only limited subset
-of encodings in supported by wxEncodingConverter:
+if you compiled wxWidgets with wxUSE\_WCHAR\_T set to 1). Only a limited subset
+of encodings is supported by wxEncodingConverter:
 {\tt wxFONTENCODING\_ISO8859\_1..15}, {\tt wxFONTENCODING\_CP1250..1257} and 
 {\tt wxFONTENCODING\_KOI8}.
 
@@ -82,7 +82,7 @@ or output encoding is not supported.)
 
 \membersection{wxEncodingConverter::CanConvert}\label{wxencodingconvertercanconvert}
 
-\func{static bool}{CanConvert}{\param{wxFontEncoding}{encIn}, \param{wxFontEncoding }{encOut}}
+\func{static bool}{CanConvert}{\param{wxFontEncoding }{encIn}, \param{wxFontEncoding }{encOut}}
 
 Return true if (any text in) multibyte encoding \arg{encIn} can be converted to
 another one ({\it encOut}) losslessly.

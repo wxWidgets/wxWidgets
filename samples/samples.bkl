@@ -48,7 +48,6 @@
     <subproject id="mediaplayer" template="sub"/>
     <subproject id="memcheck" template="sub"/>
     <subproject id="menu" template="sub"/>
-    <subproject id="mfc" template="sub"/>
     <subproject id="minifram" template="sub"/>
     <subproject id="minimal" template="sub"/>
     <subproject id="mobile" template="sub"/>
@@ -85,5 +84,7 @@
     <subproject id="vscroll" template="sub"/>
     <subproject id="widgets" template="sub"/>
     <subproject id="wizard" template="sub"/>
+    <!-- Put samples most likely to fail at the end -->    
+    <subproject id="mfc" template="sub"/>
 
 </makefile>

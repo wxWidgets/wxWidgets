@@ -274,17 +274,18 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
         wxTheApp->m_idleTag = 0;
     }
 
+    bool moreIdles;
+
     // Send idle event to all who request them as long as
     // no events have popped up in the event queue.
-    while (wxTheApp->ProcessIdle() && (gtk_events_pending() == 0))
+    while ( (moreIdles = wxTheApp->ProcessIdle()) && gtk_events_pending() == 0)
         ;
 
     // Release lock again
     gdk_threads_leave();
 
-    // Return FALSE to indicate that no more idle events are
-    // to be sent (single shot instead of continuous stream).
-    return FALSE;
+    // Return FALSE if no more idle events are to be sent
+    return moreIdles; 
 }
 
 #if wxUSE_THREADS

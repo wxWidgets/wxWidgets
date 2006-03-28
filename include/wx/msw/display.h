@@ -9,12 +9,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_MSW_DISPLAY_H_
+#define _WX_MSW_DISPLAY_H_
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "display.h"
 #endif
-
-#ifndef _WX_MSW_DISPLAY_H_
-#define _WX_MSW_DISPLAY_H_
 
 class WXDLLEXPORT wxDisplay : public wxDisplayBase
 {

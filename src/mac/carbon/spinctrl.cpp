@@ -58,6 +58,7 @@ protected:
             // Send event that the text was manually changed
             wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_spin->GetId());
             event.SetEventObject(m_spin);
+            event.SetString(m_spin->GetText()->GetValue());
             event.SetInt(val);
 
             m_spin->GetEventHandler()->ProcessEvent(event);

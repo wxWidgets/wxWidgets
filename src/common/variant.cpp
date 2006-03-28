@@ -473,7 +473,7 @@ bool wxVariantDataReal::Write(wxSTD ostream& str) const
 
 bool wxVariantDataReal::Write(wxString& str) const
 {
-    str.Printf(wxT("%.4f"), m_value);
+    str.Printf(wxT("%.14g"), m_value);
     return true;
 }
 
@@ -709,7 +709,7 @@ bool wxVariantDataChar::Read(wxInputStream& str)
 
 bool wxVariantDataChar::Read(wxString& str)
 {
-    m_value = str.ToAscii()[0u];
+    m_value = str.ToAscii()[size_t(0)];
     return true;
 }
 

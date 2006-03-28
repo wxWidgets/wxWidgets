@@ -57,10 +57,6 @@ extern wxList WXDLLEXPORT wxPendingDelete;
 extern wxMenu *wxCurrentPopupMenu;
 #endif
 
-extern void  wxAssociateWinWithHandle( HWND         hWnd
-                                      ,wxWindowOS2* pWin
-                                     );
-
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
@@ -580,7 +576,7 @@ bool wxFrame::ShowFullScreen( bool bShow, long lStyle )
         ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
         nWidth = vRect.xRight - vRect.xLeft;
         //
-        // Rmember OS/2 is backwards!
+        // Remember OS/2 is backwards!
         //
         nHeight = vRect.yTop - vRect.yBottom;
 

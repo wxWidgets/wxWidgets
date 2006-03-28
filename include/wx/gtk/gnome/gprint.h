@@ -17,15 +17,13 @@
 
 // Include wxWindows' headers
 
-#ifndef WX_PRECOMP
-    #include <wx/wx.h>
-#endif
+#include "wx/defs.h"
 
 #if wxUSE_LIBGNOMEPRINT
 
 #include "wx/print.h"
-#include "wx/prntbase.h"
 #include "wx/printdlg.h"
+#include "wx/dc.h"
 
 typedef struct _GnomePrintJob GnomePrintJob;
 typedef struct _GnomePrintContext GnomePrintContext;
@@ -294,6 +292,8 @@ private:
     wxGnomePrinter         *m_printer;
     GnomePrintContext      *m_gpc;
 
+    void makeEllipticalPath(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    
 private:
     wxCoord XDEV2LOG(wxCoord x) const
     {
