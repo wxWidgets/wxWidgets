@@ -111,6 +111,9 @@ Added wx.Window.GetScreenPosition and GetScreenRect which returns the
 position of the window in screen coordinates, even if the window is
 not a top-level window.
 
+Added GetResourcesDir and GetLocalizedResourcesDir to
+wx.StandardPaths. 
+
 
 
 
