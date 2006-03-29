@@ -4322,7 +4322,7 @@ compilation error messages if the condition they check fail.
 
 \membersection{::wxOnAssert}\label{wxonassert}
 
-\func{void}{wxOnAssert}{\param{const char *}{fileName}, \param{int}{ lineNumber}, \param{const char *}{cond}, \param{const char *}{msg = NULL}}
+\func{void}{wxOnAssert}{\param{const char *}{fileName}, \param{int}{ lineNumber}, \param{const char *}{func}, \param{const char *}{cond}, \param{const char *}{msg = NULL}}
 
 This function is called whenever one of debugging macros fails (i.e. condition
 is false in an assertion). It is only defined in the debug mode, in release
