@@ -5520,12 +5520,12 @@ bool wxGenericListCtrl::DoPopupMenu( wxMenu *menu, int x, int y )
 
 void wxGenericListCtrl::DoClientToScreen( int *x, int *y ) const
 {
-    return m_mainWin->DoClientToScreen(x, y);
+    m_mainWin->DoClientToScreen(x, y);
 }
 
 void wxGenericListCtrl::DoScreenToClient( int *x, int *y ) const
 {
-    return m_mainWin->DoScreenToClient(x, y);
+    m_mainWin->DoScreenToClient(x, y);
 }
 
 void wxGenericListCtrl::SetFocus()
