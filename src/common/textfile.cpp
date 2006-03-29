@@ -142,9 +142,9 @@ bool wxTextFile::OnRead(wxMBConv& conv)
 
 
         // the beginning of the current line, changes inside the loop
-        const wxChar *lineStart = str.begin();
-        const wxChar * const end = str.end();
-        for ( const wxChar *p = lineStart; p != end; p++ )
+        wxString::const_iterator lineStart = str.begin();
+        const wxString::const_iterator end = str.end();
+        for ( wxString::const_iterator p = lineStart; p != end; p++ )
         {
             const wxChar ch = *p;
             switch ( ch )
