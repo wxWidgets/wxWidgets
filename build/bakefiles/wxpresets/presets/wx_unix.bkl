@@ -80,8 +80,8 @@ Format-specific notes:
 
     <!--
          We need to re-define the resource compiler, used by bakefile when compiling
-         resources, to the resource compiler returned by 'wx-config --rescomp' since
-         'wx-config --rescomp' returns both the name of the resource compiler to use
+         resources, to the resource compiler returned by 'wx-config &#45;-rescomp' since
+         'wx-config &#45;-rescomp' returns both the name of the resource compiler to use
          and the flags required for that compiler (rcflags are rccompiler-specific
          and thus it would be wrong to use them with other resource compilers).
 
