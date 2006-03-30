@@ -1,10 +1,24 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.6.3.1
+2.6.3.2
 -------
 
 Fixed reference leak in wx.gizmos.TreeListCtrl.GetSelections.
+
+wxMSW: Fixed sizing issue with wx.Choice and wx.ComboBox.  This change
+was implemented by reverting a prior fix for a different problem
+(contiuous painting/resizing when a combobox is used as a widget in a
+wx.html.HtmlWindow) so a method o fix both problems is still being
+investigated.
+
+wxGTK: Fixed potential buffer overrun when pasting from the
+clipboard. 
+
+Fixed problem in wx.lib.splitter when used on 64-bit platforms.  Used
+the current length of the list for specifying an append instead of
+sys.maxint.
+
 
 
 
