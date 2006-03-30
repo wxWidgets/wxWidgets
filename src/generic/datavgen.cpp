@@ -26,6 +26,7 @@
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
 #include "wx/renderer.h"
+#include "wx/timer.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/wrapwin.h"
@@ -68,6 +69,59 @@ private:
 };
 
 //-----------------------------------------------------------------------------
+// wxDataViewRenameTimer
+//-----------------------------------------------------------------------------
+
+class wxDataViewRenameTimer: public wxTimer
+{
+private:
+    wxDataViewMainWindow *m_owner;
+
+public:
+    wxDataViewRenameTimer( wxDataViewMainWindow *owner );
+    void Notify();
+};
+
+//-----------------------------------------------------------------------------
+// wxDataViewTextCtrlWrapper: wraps a wxTextCtrl for inline editing
+//-----------------------------------------------------------------------------
+
+class wxDataViewTextCtrlWrapper : public wxEvtHandler
+{
+public:
+    // NB: text must be a valid object but not Create()d yet
+    wxDataViewTextCtrlWrapper( wxDataViewMainWindow *owner,
+                               wxTextCtrl *text,
+                               wxDataViewListModel *model,
+                               size_t col, size_t row,
+                               wxRect cellLabel );
+
+    wxTextCtrl *GetText() const { return m_text; }
+
+    void AcceptChangesAndFinish();
+
+protected:
+    void OnChar( wxKeyEvent &event );
+    void OnKeyUp( wxKeyEvent &event );
+    void OnKillFocus( wxFocusEvent &event );
+
+    bool AcceptChanges();
+    void Finish();
+
+private:
+    wxDataViewMainWindow   *m_owner;
+    wxTextCtrl             *m_text;
+    wxString                m_startValue;
+    wxDataViewListModel    *m_model;
+    size_t                  m_col; 
+    size_t                  m_row;
+    bool                    m_finished;
+    bool                    m_aboutToFinish;
+
+    DECLARE_EVENT_TABLE()
+};
+
+//-----------------------------------------------------------------------------
 // wxDataViewMainWindow
 //-----------------------------------------------------------------------------
 
@@ -102,11 +156,21 @@ public:
     void RecalculateDisplay();
     void OnInternalIdle();
 
+    void OnRenameTimer();
+    void FinishEditing( wxTextCtrl *text );
+
     void ScrollWindow( int dx, int dy, const wxRect *rect );
 private:
-    wxDataViewCtrl      *m_owner;
-    int                  m_lineHeight;
-    bool                 m_dirty;
+    wxDataViewCtrl             *m_owner;
+    int                         m_lineHeight;
+    bool                        m_dirty;
+    
+    wxDataViewColumn           *m_currentCol;
+    size_t                      m_currentRow;
+    
+    wxDataViewRenameTimer      *m_renameTimer;
+    wxDataViewTextCtrlWrapper  *m_textctrlWrapper;
+    bool                        m_lastOnSame;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewMainWindow)
@@ -552,6 +616,163 @@ void wxDataViewHeaderWindow::OnSetFocus( wxFocusEvent &event )
 }
 
 //-----------------------------------------------------------------------------
+// wxDataViewRenameTimer
+//-----------------------------------------------------------------------------
+
+wxDataViewRenameTimer::wxDataViewRenameTimer( wxDataViewMainWindow *owner )
+{
+    m_owner = owner;
+}
+
+void wxDataViewRenameTimer::Notify()
+{
+    m_owner->OnRenameTimer();
+}
+
+//-----------------------------------------------------------------------------
+// wxDataViewTextCtrlWrapper: wraps a wxTextCtrl for inline editing
+//-----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(wxDataViewTextCtrlWrapper, wxEvtHandler)
+    EVT_CHAR           (wxDataViewTextCtrlWrapper::OnChar)
+    EVT_KEY_UP         (wxDataViewTextCtrlWrapper::OnKeyUp)
+    EVT_KILL_FOCUS     (wxDataViewTextCtrlWrapper::OnKillFocus)
+END_EVENT_TABLE()
+
+wxDataViewTextCtrlWrapper::wxDataViewTextCtrlWrapper(
+                        wxDataViewMainWindow *owner,
+                        wxTextCtrl *text,
+                        wxDataViewListModel *model,
+                        size_t col, size_t row,
+                        wxRect rectLabel )
+{
+    m_owner = owner;
+    m_model = model;
+    m_row = row;
+    m_col = col;
+    m_text = text; 
+    
+    m_finished = false;
+    m_aboutToFinish = false;
+    
+    wxVariant value;
+    model->GetValue( value, col, row );
+    m_startValue = value.GetString();
+    
+    m_owner->GetOwner()->CalcScrolledPosition(
+        rectLabel.x, rectLabel.y, &rectLabel.x, &rectLabel.y );
+
+    m_text->Create( owner, wxID_ANY, m_startValue,
+                    wxPoint(rectLabel.x-2,rectLabel.y-2),
+                    wxSize(rectLabel.width+7,rectLabel.height+4) );
+    m_text->SetFocus();
+                       
+    m_text->PushEventHandler(this);
+}
+
+void wxDataViewTextCtrlWrapper::AcceptChangesAndFinish()
+{
+    m_aboutToFinish = true;
+
+    // Notify the owner about the changes
+    AcceptChanges();
+
+    // Even if vetoed, close the control (consistent with MSW)
+    Finish();
+}
+
+void wxDataViewTextCtrlWrapper::OnChar( wxKeyEvent &event )
+{
+    switch ( event.m_keyCode )
+    {
+        case WXK_RETURN:
+            AcceptChangesAndFinish();
+            break;
+
+        case WXK_ESCAPE:
+            // m_owner->OnRenameCancelled( m_itemEdited );
+            Finish();
+            break;
+
+        default:
+            event.Skip();
+    }
+}
+
+void wxDataViewTextCtrlWrapper::OnKeyUp( wxKeyEvent &event )
+{
+    if (m_finished)
+    {
+        event.Skip();
+        return;
+    }
+
+    // auto-grow the textctrl
+    wxSize parentSize = m_owner->GetSize();
+    wxPoint myPos = m_text->GetPosition();
+    wxSize mySize = m_text->GetSize();
+    int sx, sy;
+    m_text->GetTextExtent(m_text->GetValue() + _T("MM"), &sx, &sy);
+    if (myPos.x + sx > parentSize.x)
+        sx = parentSize.x - myPos.x;
+    if (mySize.x > sx)
+        sx = mySize.x;
+    m_text->SetSize(sx, wxDefaultCoord);
+
+    event.Skip();
+}
+
+void wxDataViewTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
+{
+    if ( !m_finished && !m_aboutToFinish )
+    {
+        AcceptChanges();
+        //if ( !AcceptChanges() )
+        //    m_owner->OnRenameCancelled( m_itemEdited );
+        
+        Finish();
+    }
+
+    // We must let the native text control handle focus
+    event.Skip();
+}
+
+bool wxDataViewTextCtrlWrapper::AcceptChanges()
+{
+    const wxString value = m_text->GetValue();
+
+    if ( value == m_startValue )
+        // nothing changed, always accept
+        return true;
+
+//    if ( !m_owner->OnRenameAccept(m_itemEdited, value) )
+        // vetoed by the user
+//        return false;
+
+    // accepted, do rename the item
+    wxVariant variant;
+    variant = value;
+    m_model->SetValue( variant, m_col, m_row );
+    m_model->ValueChanged( m_col, m_row );
+
+    return true;
+}
+
+void wxDataViewTextCtrlWrapper::Finish()
+{
+    if ( !m_finished )
+    {
+        m_finished = true;
+
+        m_text->RemoveEventHandler(this);
+        m_owner->FinishEditing(m_text);
+
+        // delete later
+        wxPendingDelete.Append( this );
+    }
+}
+
+//-----------------------------------------------------------------------------
 // wxDataViewMainWindow
 //-----------------------------------------------------------------------------
 
@@ -569,7 +790,15 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 {
     SetOwner( parent );
 
-    // We need to calculate this smartly..
+    m_lastOnSame = false;
+    m_renameTimer = new wxDataViewRenameTimer( this );
+    m_textctrlWrapper = NULL;
+    
+    // TODO: user better initial values/nothing selected
+    m_currentCol = NULL;
+    m_currentRow = 0;
+
+    // TODO: we need to calculate this smartly
     m_lineHeight = 20;
 
     UpdateDisplay();
@@ -577,6 +806,42 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
 wxDataViewMainWindow::~wxDataViewMainWindow()
 {
+    delete m_renameTimer;
+}
+
+void wxDataViewMainWindow::OnRenameTimer()
+{
+    // We have to call this here because changes may just have
+    // been made and no screen update taken place.
+    if ( m_dirty )
+        wxSafeYield();
+
+
+    int xpos = 0;
+    size_t cols = GetOwner()->GetNumberOfColumns();
+    size_t i;
+    for (i = 0; i < cols; i++)
+    {
+        wxDataViewColumn *c = GetOwner()->GetColumn( i );
+        if (c == m_currentCol)
+            break;
+        xpos += c->GetWidth();
+    }
+    wxRect labelRect( xpos, m_currentRow * m_lineHeight, m_currentCol->GetWidth(), m_lineHeight );
+
+    wxClassInfo *textControlClass = CLASSINFO(wxTextCtrl);
+
+    wxTextCtrl * const text = (wxTextCtrl *)textControlClass->CreateObject();
+    m_textctrlWrapper = new wxDataViewTextCtrlWrapper(this, text, GetOwner()->GetModel(), 
+        m_currentCol->GetModelColumn(), m_currentRow, labelRect );
+}
+
+void wxDataViewMainWindow::FinishEditing( wxTextCtrl *text )
+{
+    delete text;
+    m_textctrlWrapper = NULL;
+    SetFocus();
+  //  SetFocusIgnoringChildren();
 }
 
 bool wxDataViewMainWindow::RowAppended()
@@ -615,7 +880,9 @@ bool wxDataViewMainWindow::ValueChanged( size_t WXUNUSED(col), size_t row )
 
 bool wxDataViewMainWindow::RowsReordered( size_t *WXUNUSED(new_order) )
 {
-    return false;
+    Refresh();
+    
+    return true;
 }
 
 bool wxDataViewMainWindow::Cleared()
@@ -684,8 +951,9 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     wxDataViewListModel *model = GetOwner()->GetModel();
 
-    size_t item_start = update.y / m_lineHeight;
-    size_t item_count = (update.height / m_lineHeight) + 1;
+    size_t item_start = wxMax( 0, update.y / m_lineHeight );
+    size_t item_count = wxMin( (update.height / m_lineHeight) + 1, 
+                                (int)(model->GetNumberOfRows()-item_start) );
 
     wxRect cell_rect;
     cell_rect.x = 0;
@@ -699,7 +967,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         cell_rect.width = col->GetWidth();
 
         size_t item;
-        for (item = item_start; item <= item_start+item_count; item++)
+        for (item = item_start; item < item_start+item_count; item++)
         {
             cell_rect.y = item*m_lineHeight;
             wxVariant value;
@@ -753,6 +1021,12 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
     wxDataViewListModel *model = GetOwner()->GetModel();
 
+    if (event.ButtonDClick())
+    {
+        m_renameTimer->Stop();
+        m_lastOnSame = false;
+    }
+
     if (event.LeftDClick())
     {
         if (cell->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE)
@@ -764,6 +1038,32 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             cell->Activate( cell_rect, model, col->GetModelColumn(), row );
         }
 
+        return;
+    } else
+    if (event.LeftUp())
+    {
+        if (m_lastOnSame)
+        {
+            if ((col == m_currentCol) & (row == m_currentRow) &&
+                (cell->GetMode() == wxDATAVIEW_CELL_EDITABLE) )
+            {
+                m_renameTimer->Start( 100, true );
+            }
+        }
+
+        m_lastOnSame = false;
+    } else
+    if (event.LeftDown())
+    {
+        wxDataViewColumn *oldCurrentCol = m_currentCol;
+        size_t oldCurrentRow = m_currentRow;
+        
+        // Update selection here...
+        m_currentCol = col;
+        m_currentRow = row;
+    
+        m_lastOnSame = (col == oldCurrentCol) && (row == oldCurrentRow);
+        
         return;
     }
 
