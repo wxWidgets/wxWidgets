@@ -1,6 +1,14 @@
 Recent Changes for wxPython
 =====================================================================
 
+2.6.3.1
+-------
+
+Fixed reference leak in wx.gizmos.TreeListCtrl.GetSelections.
+
+
+
+
 2.6.3.0
 -------
 * 27-March-2006
