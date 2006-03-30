@@ -463,15 +463,14 @@ WXDLLIMPEXP_BASE bool wxRmdir(const wxString& dir, int flags = 0);
 WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(int fd);
 WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(FILE *fp);
 
+#if WXWIN_COMPATIBILITY_2_6
 // compatibility defines, don't use in new code
-// consider removal droping 2.4 compatibility
-// #if WXWIN_COMPATIBILITY_2_4
 wxDEPRECATED( inline bool wxPathExists(const wxChar *pszPathName) );
 inline bool wxPathExists(const wxChar *pszPathName)
 {
     return wxDirExists(pszPathName);
 }
-// #endif //WXWIN_COMPATIBILITY_2_4
+#endif //WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
 // separators in file names

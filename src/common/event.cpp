@@ -736,10 +736,12 @@ wxKeyEvent::wxKeyEvent(const wxKeyEvent& evt)
 #endif
 }
 
+#if WXWIN_COMPATIBILITY_2_6
 long wxKeyEvent::KeyCode() const
 {
     return m_keyCode;
 }
+#endif // WXWIN_COMPATIBILITY_2_6
 
 wxWindowCreateEvent::wxWindowCreateEvent(wxWindow *win)
 {

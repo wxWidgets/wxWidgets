@@ -704,6 +704,7 @@ public:
                                      Month month = Inv_Month,
                                      int year = Inv_Year);
 
+#if WXWIN_COMPATIBILITY_2_6
         // sets the date to the given day of the given week in the year,
         // returns true on success and false if given date doesn't exist (e.g.
         // numWeek is > 53)
@@ -716,6 +717,7 @@ public:
     wxDEPRECATED( wxDateTime GetWeek(wxDateTime_t numWeek,
                                      WeekDay weekday = Mon,
                                      WeekFlags flags = Monday_First) const );
+#endif // WXWIN_COMPATIBILITY_2_6
 
         // returns the date corresponding to the given week day of the given
         // week (in ISO notation) of the specified year

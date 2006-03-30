@@ -177,9 +177,10 @@ public:
     void RefreshItem(long item);
     void RefreshItems(long itemFrom, long itemTo);
 
+#if WXWIN_COMPATIBILITY_2_6
     // obsolete, don't use
     wxDEPRECATED( int GetItemSpacing( bool isSmall ) const );
-
+#endif // WXWIN_COMPATIBILITY_2_6
 
     virtual wxVisualAttributes GetDefaultAttributes() const
     {
@@ -244,7 +245,7 @@ protected:
     virtual wxString OnGetItemText(long item, long column) const;
 
     // return the icon for the given item. In report view, OnGetItemImage will
-    // only be called for the first column. See OnGetItemColumnImage for 
+    // only be called for the first column. See OnGetItemColumnImage for
     // details.
     virtual int OnGetItemImage(long item) const;
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gdicmn.h
+// Name:        wx/gdicmn.h
 // Purpose:     Common GDI classes, types and declarations
 // Author:      Julian Smart
 // Modified by:
@@ -503,8 +503,10 @@ public:
     // add a new colour to the database
     void AddColour(const wxString& name, const wxColour& colour);
 
+#if WXWIN_COMPATIBILITY_2_6
     // deprecated, use Find() instead
     wxDEPRECATED( wxColour *FindColour(const wxString& name) );
+#endif // WXWIN_COMPATIBILITY_2_6
 
 
 #ifdef __WXPM__

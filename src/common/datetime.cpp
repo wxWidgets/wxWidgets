@@ -1811,6 +1811,7 @@ wxDateTime::SetToWeekOfYear(int year, wxDateTime_t numWeek, WeekDay wd)
     return dt;
 }
 
+#if WXWIN_COMPATIBILITY_2_6
 // use a separate function to avoid warnings about using deprecated
 // SetToTheWeek in GetWeek below
 static wxDateTime
@@ -1848,6 +1849,7 @@ wxDateTime wxDateTime::GetWeek(wxDateTime_t numWeek,
 {
     return ::SetToTheWeek(GetYear(), numWeek, weekday, flags);
 }
+#endif // WXWIN_COMPATIBILITY_2_6
 
 wxDateTime& wxDateTime::SetToLastMonthDay(Month month,
                                           int year)

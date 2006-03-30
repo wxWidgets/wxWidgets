@@ -504,7 +504,7 @@ void MyFrame::ChooseFontGeneric(wxCommandEvent& WXUNUSED(event) )
     data.SetInitialFont(wxGetApp().m_canvasFont);
     data.SetColour(wxGetApp().m_canvasTextColour);
 
-    wxGenericFontDialog *dialog = new wxGenericFontDialog(this, &data);
+    wxGenericFontDialog *dialog = new wxGenericFontDialog(this, data);
     if (dialog->ShowModal() == wxID_OK)
     {
         wxFontData retData = dialog->GetFontData();

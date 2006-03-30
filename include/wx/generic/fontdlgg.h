@@ -54,9 +54,10 @@ public:
 
     virtual int ShowModal();
 
+#if WXWIN_COMPATIBILITY_2_6
     // deprecated, for backwards compatibility only
-    wxGenericFontDialog(wxWindow *parent, const wxFontData *data)
-        : wxFontDialogBase(parent, data) { Init(); }
+    wxDEPRECATED( wxGenericFontDialog(wxWindow *parent, const wxFontData *data) );
+#endif // WXWIN_COMPATIBILITY_2_6
 
     // Internal functions
     void OnCloseWindow(wxCloseEvent& event);
@@ -107,5 +108,11 @@ WXDLLEXPORT const wxChar *wxFontStyleIntToString(int style);
 WXDLLEXPORT int wxFontFamilyStringToInt(wxChar *family);
 WXDLLEXPORT int wxFontWeightStringToInt(wxChar *weight);
 WXDLLEXPORT int wxFontStyleStringToInt(wxChar *style);
+
+#if WXWIN_COMPATIBILITY_2_6
+    // deprecated, for backwards compatibility only
+inline wxGenericFontDialog::wxGenericFontDialog(wxWindow *parent, const wxFontData *data)
+                           :wxFontDialogBase(parent) { Init(); InitFontData(data); Create(parent); }
+#endif // WXWIN_COMPATIBILITY_2_6
 
 #endif // _WX_GENERIC_FONTDLGG_H

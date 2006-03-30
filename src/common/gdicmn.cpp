@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gdicmn.cpp
+// Name:        src/common/gdicmn.cpp
 // Purpose:     Common GDI classes
 // Author:      Julian Smart
 // Modified by:
@@ -488,6 +488,7 @@ wxString wxColourDatabase::FindName(const wxColour& colour) const
 // deprecated wxColourDatabase methods
 // ----------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_2_6
 wxColour *wxColourDatabase::FindColour(const wxString& name)
 {
     // This function is deprecated, use Find() instead.
@@ -516,6 +517,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& name)
 
     return new wxColour(s_col);
 }
+#endif // WXWIN_COMPATIBILITY_2_6
 
 // ============================================================================
 // stock objects
@@ -950,4 +952,3 @@ wxResourceCache::~wxResourceCache ()
         node = node->GetNext ();
     }
 }
-

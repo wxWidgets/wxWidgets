@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fontdlg.h
+// Name:        wx/os2/fontdlg.h
 // Purpose:     wxFontDialog class. Use generic version if no
 //              platform-specific implementation.
 // Author:      David Webster
@@ -39,24 +39,22 @@ public:
 
     virtual int ShowModal();
 
+#if WXWIN_COMPATIBILITY_2_6
     //
     // Deprecated interface, don't use
     //
-    wxFontDialog( wxWindow*         pParent
-                 ,const wxFontData* pData
-                )
-                : wxFontDialogBase( pParent
-                                   ,pData
-                                  )
-    {
-        Create( pParent
-               ,pData
-              );
-    }
+    wxDEPRECATED( wxFontDialog( wxWindow* pParent, const wxFontData* pData ) );
+#endif // WXWIN_COMPATIBILITY_2_6
+
 protected:
     DECLARE_DYNAMIC_CLASS(wxFontDialog)
 }; // end of CLASS wxFontDialog
 
+#if WXWIN_COMPATIBILITY_2_6
+    // deprecated interface, don't use
+inline wxFontDialog::wxFontDialog(wxWindow *parent, const wxFontData *data)
+        : wxFontDialogBase(parent) { InitFontData(data); Create(parent); }
+#endif // WXWIN_COMPATIBILITY_2_6
+
 #endif
     // _WX_FONTDLG_H_
-

@@ -27,14 +27,9 @@ public:
 
     virtual int ShowModal();
 
-    // deprecated interface, don't use
-    wxFontDialog(wxWindow *parent, const wxFontData *data)
-        : wxFontDialogBase(parent, data) { Create(parent, data); }
-
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxFontDialog)
 };
 
 #endif
     // _WX_PALMOS_FONTDLG_H_
-
