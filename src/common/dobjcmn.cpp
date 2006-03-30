@@ -253,11 +253,15 @@ size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
 
 bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
 {
+    if ( !buf )
+        return false;
+        
     wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
     if ( !buffer )
         return false;
 
-    strcpy( (char*) buf, buffer );
+    memcpy( (char*) buf, buffer, GetDataSize(format) );
+    // strcpy( (char*) buf, buffer );
 
     return true;
 }
