@@ -1014,9 +1014,6 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
     event.m_scanCode = gdk_event->keyval;
     event.m_rawCode = (wxUint32) gdk_event->keyval;
     event.m_rawFlags = 0;
-#if wxUSE_UNICODE
-    event.m_uniChar = gdk_keyval_to_unicode(gdk_event->keyval);
-#endif
     wxGetMousePosition( &x, &y );
     win->ScreenToClient( &x, &y );
     event.m_x = x;
@@ -1327,11 +1324,11 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
             if (event.ControlDown() && key_code >= 'a' && key_code <= 'z' )
             {
                 event.m_keyCode = key_code - 'a' + 1;
-#if wxUSE_UNICODE
-                event.m_uniChar = event.m_keyCode;
-#endif
             }               
 
+#if wxUSE_UNICODE
+            event.m_uniChar = event.m_keyCode;
+#endif
             // Implement OnCharHook by checking ancesteror top level windows
             wxWindow *parent = win;
             while (parent && !parent->IsTopLevel())
