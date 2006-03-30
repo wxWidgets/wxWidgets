@@ -504,8 +504,46 @@ void wxChoice::DoSetSize(int x, int y,
                          int width, int height,
                          int sizeFlags)
 {
-    int heightOrig = height;
+    // the height which we must pass to Windows should be the total height of
+    // the control including the drop down list while the height given to us
+    // is, of course, just the height of the permanently visible part of it
+    if ( height != wxDefaultCoord )
+    {
+        // don't make the drop down list too tall, arbitrarily limit it to 40
+        // items max and also don't leave it empty
+        size_t nItems = GetCount();
+        if ( !nItems )
+            nItems = 9;
+        else if ( nItems > 24 )
+            nItems = 24;
 
+        // add space for the drop down list
+        const int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
+        height += hItem*(nItems + 1);
+    }
+    else
+    {
+        // We cannot pass wxDefaultCoord as height to wxControl. wxControl uses
+        // wxGetWindowRect() to determine the current height of the combobox,
+        // and then again sets the combobox's height to that value. Unfortunately,
+        // wxGetWindowRect doesn't include the dropdown list's height (at least
+        // on Win2K), so this would result in a combobox with dropdown height of
+        // 1 pixel. We have to determine the default height ourselves and call
+        // wxControl with that value instead.
+        int w, h;
+        RECT r;
+        DoGetSize(&w, &h);
+        if (::SendMessage(GetHwnd(), CB_GETDROPPEDCONTROLRECT, 0, (LPARAM) &r) != 0)
+        {
+            height = h + r.bottom - r.top;
+        }
+    }
+
+    wxControl::DoSetSize(x, y, width, height, sizeFlags);
+
+    // This solution works on XP, but causes choice/combobox lists to be
+    // too short on W2K and earlier.
+#if 0
     int widthCurrent, heightCurrent;
     DoGetSize(&widthCurrent, &heightCurrent);
 
@@ -568,26 +606,6 @@ void wxChoice::DoSetSize(int x, int y,
     }
 
     wxControl::DoSetSize(x, y, width, height, sizeFlags);
-
-    // I'm commenting this out since the code appears to make choices
-    // and comboxes too high when they have associated sizers. I'm sure this
-    // is not the end of the story, which is why I'm leaving it #if'ed out for
-    // now. JACS.
-#if 0
-    // if the height specified for the visible part of the control is
-    // different from the current one, we need to change it separately
-    // as it is not affected by normal WM_SETSIZE
-    if ( height != wxDefaultCoord )
-    {
-        const int delta = heightOrig - GetSize().y;
-        if ( delta )
-        {
-            int h = ::SendMessage(GetHwnd(), CB_GETITEMHEIGHT, (WPARAM)-1, 0);
-            SendMessage(GetHwnd(), CB_SETITEMHEIGHT, (WPARAM)-1, h + delta);
-        }
-    }
-#else
-    wxUnusedVar(heightOrig);
 #endif
 }
 

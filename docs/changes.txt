@@ -155,7 +155,7 @@ wxMSW:
 - wxDisplay doesn't require multimon.h now and is enabled by default (Olly Betts).
 - Fixed wxChoice/wxComboBox slow appending and infinite recursion
   if its size is set within a paint handler (for example when embedded in a
-  wxHtmlWindow).
+  wxHtmlWindow). [Now reverted due to problems in W2K and below.]
 
 wxGTK:
 
