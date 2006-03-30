@@ -39,18 +39,12 @@
 #include "wx/display.h"
 #include "wx/display_impl.h"
 
-// Mingw's w32api headers don't include ddraw.h, though the user may have
-// installed it.  If using configure, we actually probe for ddraw.h there
-// and set wxUSE_DIRECTDRAW.  Otherwise, assume we don't have it if using
-// the w32api headers, and that we do otherwise.
-#if !defined HAVE_W32API_H && !defined HAVE_DDRAW_H
-    #define HAVE_DDRAW_H
-#endif
+// define this to use DirectDraw for display mode switching: this is disabled
+// by default because ddraw.h is now always available and also it's not really
+// clear what are the benefits of using DirectDraw compared to the standard API
 
-// user may disable compilation of DirectDraw code by setting
-// wxUSE_DIRECTDRAW to 0 in the makefile/project settings
-#if defined(HAVE_DDRAW_H) && !defined(wxUSE_DIRECTDRAW)
-    #define wxUSE_DIRECTDRAW 1
+#if !defined(wxUSE_DIRECTDRAW)
+    #define wxUSE_DIRECTDRAW 0
 #endif
 
 #ifndef __WXWINCE__
@@ -80,13 +74,13 @@
     #endif
 #endif // !__WXWINCE__
 
-#ifdef wxUSE_DIRECTDRAW
-#include <ddraw.h>
+#if wxUSE_DIRECTDRAW
+    #include <ddraw.h>
 
-// we don't want to link with ddraw.lib which contains the real
-// IID_IDirectDraw2 definition
-const GUID wxIID_IDirectDraw2 =
-    { 0xB3A6F3E0, 0x2B43, 0x11CF, { 0xA2,0xDE,0x00,0xAA,0x00,0xB9,0x33,0x56 } };
+    // we don't want to link with ddraw.lib which contains the real
+    // IID_IDirectDraw2 definition
+    const GUID wxIID_IDirectDraw2 =
+     { 0xB3A6F3E0, 0x2B43, 0x11CF, { 0xA2,0xDE,0x00,0xAA,0x00,0xB9,0x33,0x56 } };
 #endif // wxUSE_DIRECTDRAW
 
 // ----------------------------------------------------------------------------
@@ -99,7 +93,7 @@ typedef LONG (WINAPI *ChangeDisplaySettingsEx_t)(LPCTSTR lpszDeviceName,
                                                  DWORD dwFlags,
                                                  LPVOID lParam);
 
-#ifdef wxUSE_DIRECTDRAW
+#if wxUSE_DIRECTDRAW
 typedef BOOL (PASCAL *DDEnumExCallback_t)(GUID *pGuid,
                                           LPTSTR driverDescription,
                                           LPTSTR driverName,
@@ -297,7 +291,7 @@ private:
 // wxDisplay implementation using DirectDraw
 // ----------------------------------------------------------------------------
 
-#ifdef wxUSE_DIRECTDRAW
+#if wxUSE_DIRECTDRAW
 
 struct wxDisplayInfoDirectDraw : wxDisplayInfo
 {
@@ -396,7 +390,7 @@ private:
     // and another using DirectDraw, the choice between them is done using a
     // system option
 
-#ifdef wxUSE_DIRECTDRAW
+#if wxUSE_DIRECTDRAW
     if ( wxSystemOptions::GetOptionInt(_T("msw.display.directdraw")) )
     {
         wxDisplayFactoryDirectDraw *factoryDD = new wxDisplayFactoryDirectDraw;
