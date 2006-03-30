@@ -693,7 +693,7 @@ bool wxSocketBase::_Wait(long seconds,
   else
     timeout = m_timeout * 1000;
 
-  bool has_event_loop = wxTheApp ? (wxTheApp->GetTraits() ? true : false) : false;
+  bool has_event_loop = wxTheApp->GetTraits() ? (wxTheApp->GetTraits()->GetSocketGUIFunctionsTable() ? true : false) : false;
 
   // Wait in an active polling loop.
   //
