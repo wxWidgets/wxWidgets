@@ -1903,7 +1903,7 @@ class DocManager(wx.EvtHandler):
                     newDoc.DeleteAllViews()  # Implicitly deleted by DeleteAllViews
                     frame = newDoc.GetFirstView().GetFrame()
                     if frame:
-                        Destroy() # DeleteAllViews doesn't get rid of the frame, so we'll explicitly destroy it.
+                        frame.Destroy() # DeleteAllViews doesn't get rid of the frame, so we'll explicitly destroy it.
                     return None
                 self.AddFileToHistory(path)
             return newDoc
