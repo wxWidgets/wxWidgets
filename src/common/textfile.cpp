@@ -116,6 +116,10 @@ bool wxTextFile::OnRead(wxMBConv& conv)
         if ( nRead == 0 )
             break;
 
+        // save the number characters which we already processed during the
+        // last loop iteration
+        const size_t lenOld = str.length();
+
 #if wxUSE_UNICODE
         // we have to properly NUL-terminate the string for any encoding it may
         // use -- 4 NULs should be enough for everyone (this is why we add 4
@@ -144,7 +148,7 @@ bool wxTextFile::OnRead(wxMBConv& conv)
         // the beginning of the current line, changes inside the loop
         wxString::const_iterator lineStart = str.begin();
         const wxString::const_iterator end = str.end();
-        for ( wxString::const_iterator p = lineStart; p != end; p++ )
+        for ( wxString::const_iterator p = lineStart + lenOld; p != end; p++ )
         {
             const wxChar ch = *p;
             switch ( ch )
