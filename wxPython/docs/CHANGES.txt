@@ -9,7 +9,7 @@ Fixed reference leak in wx.gizmos.TreeListCtrl.GetSelections.
 wxMSW: Fixed sizing issue with wx.Choice and wx.ComboBox.  This change
 was implemented by reverting a prior fix for a different problem
 (contiuous painting/resizing when a combobox is used as a widget in a
-wx.html.HtmlWindow) so a method o fix both problems is still being
+wx.html.HtmlWindow) so a method to fix both problems is still being
 investigated.
 
 wxGTK: Fixed potential buffer overrun when pasting from the
