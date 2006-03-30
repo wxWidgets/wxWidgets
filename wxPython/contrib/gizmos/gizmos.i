@@ -768,6 +768,7 @@ public:
                 wxTreeItemId *tii = new wxTreeItemId(array.Item(x));
                 PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), true);
                 PyList_Append(rval, item);
+                Py_DECREF(item);
             }
             wxPyEndBlockThreads(blocked);
             return rval;
