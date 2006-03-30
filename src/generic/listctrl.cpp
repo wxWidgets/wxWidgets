@@ -2033,6 +2033,8 @@ wxListTextCtrlWrapper::wxListTextCtrlWrapper(wxListMainWindow *owner,
     m_text->Create(owner, wxID_ANY, m_startValue,
                    wxPoint(rectLabel.x-4,rectLabel.y-4),
                    wxSize(rectLabel.width+11,rectLabel.height+8));
+    m_text->SetFocus();
+    
     m_text->PushEventHandler(this);
 }
 
@@ -2045,7 +2047,7 @@ void wxListTextCtrlWrapper::Finish()
         m_text->RemoveEventHandler(this);
         m_owner->FinishEditing(m_text);
 
-        delete this;
+        wxPendingDelete.Append( this );
     }
 }
 
@@ -2087,8 +2089,8 @@ void wxListTextCtrlWrapper::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_ESCAPE:
-            Finish();
             m_owner->OnRenameCancelled( m_itemEdited );
+            Finish();
             break;
 
         default:
@@ -2123,16 +2125,13 @@ void wxListTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
 {
     if ( !m_finished && !m_aboutToFinish )
     {
-        // We must finish regardless of success, otherwise we'll get
-        // focus problems:
-        Finish();
-
         if ( !AcceptChanges() )
             m_owner->OnRenameCancelled( m_itemEdited );
+            
+        Finish();
     }
 
-    // We must let the native text control handle focus, too, otherwise
-    // it could have problems with the cursor (e.g., in wxGTK).
+    // We must let the native text control handle focus
     event.Skip();
 }
 
