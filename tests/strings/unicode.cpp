@@ -18,10 +18,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
 #endif // WX_PRECOMP
-
-#include "wx/textfile.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -35,11 +32,9 @@ public:
 private:
     CPPUNIT_TEST_SUITE( UnicodeTestCase );
         CPPUNIT_TEST( ToFromAscii );
-        CPPUNIT_TEST( TextFileRead );
     CPPUNIT_TEST_SUITE_END();
 
     void ToFromAscii();
-    void TextFileRead();
 
     DECLARE_NO_COPY_CLASS(UnicodeTestCase)
 };
@@ -68,29 +63,3 @@ void UnicodeTestCase::ToFromAscii()
     TEST_TO_FROM_ASCII( "additional \" special \t test \\ component \n :-)" );
 }
 
-void UnicodeTestCase::TextFileRead()
-{
-    wxTextFile file;
-    bool file_opened = file.Open(_T("testdata.fc"), wxConvLocal);
-
-    CPPUNIT_ASSERT( file_opened );
-
-    static const wxChar *lines[6] = { 
-        _T("# this is the test data file for wxFileConfig tests"),
-        _T("value1=one"),
-        _T("# a comment here"),
-        _T("value2=two"),
-        _T("value\\ with\\ spaces\\ inside\\ it=nothing special"),
-        _T("path=$PATH")
-    };
-
-    if( file_opened )
-    {
-        const size_t count = file.GetLineCount();
-        CPPUNIT_ASSERT( count == 6 );
-        for ( size_t n = 0; n < count; n++ )
-        {
-            CPPUNIT_ASSERT( wxStrcmp( file[n].c_str() , lines[n] ) == 0 );
-        }
-    }
-}
