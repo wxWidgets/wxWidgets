@@ -1694,7 +1694,8 @@ public:
         // check if we succeeded, by doing a double trip:
         if ( !flags && buf )
         {
-            wxCharBuffer mbBuf(n);
+            const size_t mbLen = strlen(psz);
+            wxCharBuffer mbBuf(mbLen);
             if ( ::WideCharToMultiByte
                    (
                       m_CodePage,
@@ -1702,7 +1703,7 @@ public:
                       buf,
                       -1,
                       mbBuf.data(),
-                      n + 1,        // size in bytes, not length
+                      mbLen + 1,        // size in bytes, not length
                       NULL,
                       NULL
                    ) == 0 ||
