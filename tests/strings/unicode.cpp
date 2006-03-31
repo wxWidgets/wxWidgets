@@ -138,14 +138,18 @@ void UnicodeTestCase::ConstructorsWithConversion()
 void UnicodeTestCase::Conversion()
 {
 #if wxUSE_UNICODE
-        wxString szTheString(L"The\0String", wxConvLibc, 10);
+        static const size_t lenNulString = 10;
+
+        wxString szTheString(L"The\0String", wxConvLibc, lenNulString);
         wxCharBuffer theBuffer = szTheString.mb_str();
 
-        CPPUNIT_ASSERT( memcmp(theBuffer.data(), "The\0String", 11) == 0 );
+        CPPUNIT_ASSERT( memcmp(theBuffer.data(), "The\0String",
+                        lenNulString + 1) == 0 );
 
-        wxString szTheString2("The\0String", wxConvLocal, 10);
-        CPPUNIT_ASSERT( szTheString2.length() == 11 );
-        CPPUNIT_ASSERT( wxTmemcmp(szTheString2.c_str(), L"The\0String", 11) == 0 );
+        wxString szTheString2("The\0String", wxConvLocal, lenNulString);
+        CPPUNIT_ASSERT_EQUAL( lenNulString, szTheString2.length() );
+        CPPUNIT_ASSERT( wxTmemcmp(szTheString2.c_str(), L"The\0String",
+                        lenNulString + 1) == 0 );
 #else
         wxString szTheString(wxT("TheString"));
         szTheString.insert(3, 1, '\0');
