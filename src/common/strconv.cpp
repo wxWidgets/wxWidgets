@@ -864,7 +864,9 @@ size_t wxMBConvUTF16swap::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
     size_t len = 0;
 
-    while ( *psz && (!buf || len < n) )
+    // UTF16 string must be terminated by 2 NULs as single NULs may occur
+    // inside the string
+    while ( (psz[0] || psz[1]) && (!buf || len < n) )
     {
         if ( buf )
         {
