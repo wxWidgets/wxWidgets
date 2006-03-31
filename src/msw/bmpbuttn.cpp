@@ -259,7 +259,7 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     int hBmp   = bitmap->GetHeight();
 
 #if wxUSE_UXTHEME
-    if ( wxUxThemeEngine::GetIfActive() )
+    if ( autoDraw && wxUxThemeEngine::GetIfActive() )
     {
         MSWDrawXPBackground(item);
         wxUxThemeHandle theme(this, L"BUTTON");
@@ -557,7 +557,7 @@ wxSize wxBitmapButton::DoGetBestSize() const
     if ( m_bmpNormal.Ok() )
     {
 #if wxUSE_UXTHEME
-        if ( wxUxThemeEngine::GetIfActive() )
+        if ( (GetWindowStyleFlag() & wxBU_AUTODRAW) && wxUxThemeEngine::GetIfActive() )
         {
             wxUxThemeHandle theme((wxBitmapButton *)this, L"BUTTON");
 
