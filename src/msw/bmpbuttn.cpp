@@ -31,6 +31,23 @@
 #include "wx/msw/private.h"
 #include "wx/image.h"
 
+#if wxUSE_UXTHEME
+    #include "wx/msw/uxtheme.h"
+
+    // no need to include tmschema.h
+    #ifndef BP_PUSHBUTTON
+        #define BP_PUSHBUTTON 1
+
+        #define PBS_NORMAL    1
+        #define PBS_HOT       2
+        #define PBS_PRESSED   3
+        #define PBS_DISABLED  4
+        #define PBS_DEFAULTED 5
+
+        #define TMT_CONTENTMARGINS 3602
+    #endif
+#endif // wxUSE_UXTHEME
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -119,8 +136,6 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
 
     parent->AddChild(this);
 
-    m_backgroundColour = parent->GetBackgroundColour();
-    m_foregroundColour = parent->GetForegroundColour();
     m_windowStyle = style;
 
     if ( style & wxBU_AUTODRAW )
@@ -243,6 +258,58 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     int wBmp   = bitmap->GetWidth();
     int hBmp   = bitmap->GetHeight();
 
+#if wxUSE_UXTHEME
+    if ( wxUxThemeEngine::GetIfActive() )
+    {
+        MSWDrawXPBackground(item);
+        wxUxThemeHandle theme(this, L"BUTTON");
+
+        // calculate content area margins
+        // assuming here that each state is the same size
+        MARGINS margins;
+        wxUxThemeEngine::Get()->GetThemeMargins(theme, NULL,
+                                                BP_PUSHBUTTON, PBS_NORMAL,
+                                                TMT_CONTENTMARGINS, NULL,
+                                                &margins);
+        int marginX = margins.cxLeftWidth + 1;
+        int marginY = margins.cyTopHeight + 1;
+        int x1,y1;
+
+        if ( m_windowStyle & wxBU_LEFT )
+        {
+            x1 = x + marginX;
+        }
+        else if ( m_windowStyle & wxBU_RIGHT )
+        {
+            x1 = x + (width - wBmp) - marginX;
+        }
+        else
+        {
+            x1 = x + (width - wBmp) / 2;
+        }
+
+        if ( m_windowStyle & wxBU_TOP )
+        {
+            y1 = y + marginY;
+        }
+        else if ( m_windowStyle & wxBU_BOTTOM )
+        {
+            y1 = y + (height - hBmp) - marginY;
+        }
+        else
+        {
+            y1 = y + (height - hBmp) / 2;
+        }
+
+        // draw the bitmap
+        wxDC dst;
+        dst.SetHDC((WXHDC) hDC, false);
+        dst.DrawBitmap(*bitmap, x1, y1, true);
+
+        return true;
+    }
+#endif // wxUSE_UXTHEME
+
     int x1,y1;
 
     if(m_windowStyle & wxBU_LEFT)
@@ -319,10 +386,7 @@ void wxBitmapButton::DrawFace( WXHDC dc, int left, int top,
     penLight    = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DLIGHT));
     penShadow   = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DSHADOW));
     penDkShadow = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DDKSHADOW));
-    // brushFace   = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
-    // Taking the background colour fits in better with
-    // Windows XP themes.
-    brushFace   = CreateSolidBrush(m_backgroundColour.m_pixel);
+    brushFace   = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
 
     // draw the rectangle
     RECT rect;
@@ -492,6 +556,25 @@ wxSize wxBitmapButton::DoGetBestSize() const
 {
     if ( m_bmpNormal.Ok() )
     {
+#if wxUSE_UXTHEME
+        if ( wxUxThemeEngine::GetIfActive() )
+        {
+            wxUxThemeHandle theme((wxBitmapButton *)this, L"BUTTON");
+
+            // calculate content area margins
+            // assuming here that each state is the same size
+            MARGINS margins;
+            wxUxThemeEngine::Get()->GetThemeMargins(theme, NULL,
+                                                    BP_PUSHBUTTON, PBS_NORMAL,
+                                                    TMT_CONTENTMARGINS, NULL,
+                                                    &margins);
+            wxSize best(m_bmpNormal.GetWidth() + 2 * (margins.cxLeftWidth + 1),
+                        m_bmpNormal.GetHeight() + 2* (margins.cyTopHeight + 1));
+            CacheBestSize(best);
+            return best;
+        }
+#endif // wxUSE_UXTHEME
+
         wxSize best(m_bmpNormal.GetWidth() + 2*m_marginX,
                       m_bmpNormal.GetHeight() + 2*m_marginY);
         CacheBestSize(best);
