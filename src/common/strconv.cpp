@@ -1702,7 +1702,7 @@ public:
                       buf,
                       -1,
                       mbBuf.data(),
-                      n,
+                      n + 1,        // size in bytes, not length
                       NULL,
                       NULL
                    ) == 0 ||
