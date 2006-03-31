@@ -19,6 +19,11 @@ Fixed problem in wx.lib.splitter when used on 64-bit platforms.  Used
 the current length of the list for specifying an append instead of
 sys.maxint.
 
+wxMSW: Support added for XP themed owner drawn buttons and bitmap
+buttons.
+
+XRCed: Fix for Copy/Paste objects with international characters.
+
 
 
 

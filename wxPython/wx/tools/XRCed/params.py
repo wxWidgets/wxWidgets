@@ -211,8 +211,11 @@ class ParamColour(PPanel):
         self.freeze = True
         if not value: value = '#FFFFFF'
         self.text.SetValue(str(value))  # update text ctrl
-        colour = wxColour(int(value[1:3], 16), int(value[3:5], 16), int(value[5:7], 16))
-        self.button.SetBackgroundColour(colour)
+        try:
+            colour = wxColour(int(value[1:3], 16), int(value[3:5], 16), int(value[5:7], 16))
+            self.button.SetBackgroundColour(colour)
+        except:                         # ignore errors
+            pass
         self.button.Refresh()
         self.freeze = False
     def OnPaintButton(self, evt):
