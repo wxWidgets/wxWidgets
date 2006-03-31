@@ -21,6 +21,25 @@
 #endif // WX_PRECOMP
 
 // ----------------------------------------------------------------------------
+// local functions
+// ----------------------------------------------------------------------------
+
+#if wxUSE_WCHAR_T && !wxUSE_UNICODE
+
+// in case wcscmp is missing
+static int wx_wcscmp(const wchar_t *s1, const wchar_t *s2)
+{
+    while (*s1 == *s2 && *s1 != 0)
+    {
+        s1++;
+        s2++;
+    }
+    return *s1 - *s2;
+}
+
+#endif // wxUSE_WCHAR_T && !wxUSE_UNICODE
+
+// ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
@@ -142,24 +161,10 @@ void UnicodeTestCase::Conversion()
 #endif
 }
 
-#if !wxUSE_UNICODE
-// in case wcscmp is missing
-//
-static int wx_wcscmp(const wchar_t *s1, const wchar_t *s2)
-{
-    while (*s1 == *s2 && *s1 != 0)
-    {
-        s1++;
-        s2++;
-    }
-    return *s1 - *s2;
-}
-#endif
-
 void
 UnicodeTestCase::DoTestConversion(const char *s,
-                                 const wchar_t *ws,
-                                 wxCSConv& conv)
+                                  const wchar_t *ws,
+                                  wxCSConv& conv)
 {
 #if wxUSE_UNICODE
     if ( ws )
@@ -193,21 +198,14 @@ void UnicodeTestCase::ConversionUTF7()
     {
         { "+-", L"+" },
         { "+--", L"+-" },
-        //\u isn't recognized on MSVC 6
-#if !defined(_MSC_VER)
-#if !defined(__GNUC__) || (__GNUC__ >= 3)
+
+#ifdef wxHAVE_U_ESCAPE
         { "+AKM-", L"\u00a3" },
-#endif
-#endif
-        // Windows accepts invalid UTF-7 strings and so does our UTF-7
-        // conversion code -- this is wrong IMO but the way it is for now
-        //
-        // notice that converting "+" still behaves as expected because the
-        // result is just an empty string, i.e. the same as if there were an
-        // error, but converting "a+" results in "a" while it really should
-        // fail
+#endif // wxHAVE_U_ESCAPE
+
+        // the following are invalid UTF-7 sequences
         { "+", NULL },
-        { "a+", L"a" },
+        { "a+", NULL },
     };
 
     wxCSConv conv(_T("utf-7"));
@@ -223,10 +221,8 @@ void UnicodeTestCase::ConversionUTF8()
     static const StringConversionData utf8data[] =
     {
         //\u isn't recognized on MSVC 6
-#if !defined(_MSC_VER)
-#if !defined(__GNUC__) || (__GNUC__ >= 3)
+#ifdef wxHAVE_U_ESCAPE
         { "\xc2\xa3", L"\u00a3" },
-#endif
 #endif
         { "\xc2", NULL },
     };
