@@ -79,7 +79,7 @@ protected:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const ;
 
     // helper for MSWOnDraw
-    bool MSWDrawXPBackground(WXDRAWITEMSTRUCT *item);
+    void MSWDrawXPBackground(WXDRAWITEMSTRUCT *item);
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxButton)
