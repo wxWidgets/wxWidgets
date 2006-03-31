@@ -1,3 +1,8 @@
+0.1.7-3
+-------
+
+Fix for Copy/Paste objects with international characters.
+
 0.1.7-2
 -------
 
