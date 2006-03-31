@@ -171,7 +171,7 @@ void TextFileTestCase::ReadUTF8()
     CPPUNIT_ASSERT_EQUAL( 2u, f.GetLineCount() );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Unix, f.GetLineType(0) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(1) );
-#if wxHAVE_U_ESCAPE
+#ifdef wxHAVE_U_ESCAPE
     CPPUNIT_ASSERT_EQUAL( wxString(L"\u041f"), f.GetFirstLine() );
     CPPUNIT_ASSERT_EQUAL( wxString(L"\u0440\u0438\u0432\u0435\u0442"),
                           f.GetLastLine() );
@@ -192,7 +192,7 @@ void TextFileTestCase::ReadUTF16()
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Dos, f.GetLineType(0) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(1) );
 
-#if wxHAVE_U_ESCAPE
+#ifdef wxHAVE_U_ESCAPE
     CPPUNIT_ASSERT_EQUAL( wxString(L"\u041f"), f.GetFirstLine() );
     CPPUNIT_ASSERT_EQUAL( wxString(L"\u0440\u0438\u0432\u0435\u0442"),
                           f.GetLastLine() );
