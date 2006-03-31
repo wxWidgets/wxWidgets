@@ -68,8 +68,16 @@
 }
 %enddef
 
-    
 
+// This macro can be used to disable the releasing of the GIL when calling the
+// C++ function.
+%define KeepGIL(name)
+%exception name {
+    $action
+    if (PyErr_Occurred()) SWIG_fail;
+}
+%enddef
+        
 //---------------------------------------------------------------------------
 // some type definitions to simplify things for SWIG
 
