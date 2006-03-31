@@ -137,8 +137,10 @@ bool wxTextFile::OnRead(wxMBConv& conv)
     }
 
     const wxString str(buf, conv);
+
+    // this doesn't risk to happen in ANSI build
 #if wxUSE_UNICODE
-    if ( str.empty() )
+    if ( bufSize > 4 && str.empty() )
     {
         wxLogError(_("Failed to convert file contents to Unicode."));
         return false;
