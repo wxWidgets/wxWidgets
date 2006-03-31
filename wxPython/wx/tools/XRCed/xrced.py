@@ -416,7 +416,11 @@ class Frame(wxFrame):
         xxx = tree.GetPyData(selected)
         if wx.TheClipboard.Open():
             data = wx.CustomDataObject('XRCED')
-            data.SetData(cPickle.dumps(xxx.element.toxml()))
+            # Set encoding in header
+            # (False,True)
+            s = (xxx.element.toxml(encoding=g.currentEncoding),
+                 xxx.element.toxml())[not g.currentEncoding] 
+            data.SetData(cPickle.dumps(s))
             wx.TheClipboard.SetData(data)
             wx.TheClipboard.Close()
             self.SetStatusText('Copied')
@@ -588,7 +592,10 @@ class Frame(wxFrame):
         if evt.GetId() == wxID_CUT:
             if wx.TheClipboard.Open():
                 data = wx.CustomDataObject('XRCED')
-                data.SetData(cPickle.dumps(elem.toxml()))
+                # (False, True)
+                s = (elem.toxml(encoding=g.currentEncoding),
+                     elem.toxml())[not g.currentEncoding] 
+                data.SetData(cPickle.dumps(s))
                 wx.TheClipboard.SetData(data)
                 wx.TheClipboard.Close()
             else:
