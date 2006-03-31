@@ -25,12 +25,12 @@
 class WXDLLIMPEXP_BASE classname                                            \
 {                                                                           \
 public:                                                                     \
-    classname(const chartype *str)                                          \
+    classname(const chartype *str = NULL)                                   \
         : m_str(str ? strdupfunc(str) : NULL)                               \
     {                                                                       \
     }                                                                       \
                                                                             \
-    classname(size_t len=0)                                                 \
+    classname(size_t len)                                                   \
         : m_str((chartype *)malloc((len + 1)*sizeof(chartype)))             \
     {                                                                       \
         m_str[len] = (chartype)0;                                           \
