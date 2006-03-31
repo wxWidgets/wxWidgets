@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dialog.h
+// Name:        wx/motif/dialog.h
 // Purpose:     wxDialog class
 // Author:      Julian Smart
 // Modified by:
@@ -22,7 +22,6 @@ class WXDLLEXPORT wxDialog : public wxDialogBase
 public:
     wxDialog();
 
-    // Constructor with no modal flag - the new convention.
     wxDialog(wxWindow *parent, wxWindowID id,
         const wxString& title,
         const wxPoint& pos = wxDefaultPosition,
@@ -51,7 +50,7 @@ public:
     void SetModal(bool flag);
 
     virtual bool IsModal() const
-    { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
+    { return m_modalShowing; }
 
     virtual int ShowModal();
     virtual void EndModal(int retCode);

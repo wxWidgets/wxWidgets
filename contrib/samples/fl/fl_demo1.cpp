@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
+// Name:        fl_demo1.cpp
 // Purpose:     Contrib. demo
 // Author:      Aleksandras Gluchovas
 // Modified by: Sebastian Haase (June 21, 2001)
@@ -124,7 +124,7 @@ MyFrame::MyFrame(wxFrame *frame)
     : wxFrame( frame, wxID_ANY, _("wxWidgets 2.0 wxFrameLayout Test Application"), wxDefaultPosition,
           wxSize( 700, 500 ),
           wxCLIP_CHILDREN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX |
-          wxTHICK_FRAME   | wxSYSTEM_MENU  | wxCAPTION | wxCLOSE_BOX,
+          wxRESIZE_BORDER   | wxSYSTEM_MENU  | wxCAPTION | wxCLOSE_BOX,
           wxT("freimas") )
 {
     mpClientWnd = CreateTextCtrl( _("Client window") );

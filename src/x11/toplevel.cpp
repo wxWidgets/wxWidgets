@@ -696,10 +696,10 @@ bool wxSetWMDecorations(Window w, long style)
         // The default dialog style doesn't include any kind
         // of border, which is a bit odd. Anyway, inclusion
         // of a caption surely implies a border.
-        style |= wxTHICK_FRAME;
+        style |= wxRESIZE_BORDER;
     }
 
-    if (style & wxTHICK_FRAME)
+    if (style & wxRESIZE_BORDER)
     {
         wmProp.props |= GR_WM_PROPS_APPFRAME ;
         wmProp.flags |= GR_WM_FLAGS_PROPS ;
@@ -721,7 +721,7 @@ bool wxSetWMDecorations(Window w, long style)
         wmProp.flags |= GR_WM_FLAGS_PROPS ;
     }
 
-    if (((style & wxBORDER) != wxBORDER) && ((style & wxTHICK_FRAME) != wxTHICK_FRAME)
+    if (((style & wxBORDER) != wxBORDER) && ((style & wxRESIZE_BORDER) != wxRESIZE_BORDER)
         && ((style & wxRESIZE_BORDER) != wxRESIZE_BORDER))
     {
         wmProp.props |= GR_WM_PROPS_NODECORATE ;

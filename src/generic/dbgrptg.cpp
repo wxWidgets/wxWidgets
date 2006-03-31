@@ -296,7 +296,7 @@ wxDebugReportDialog::wxDebugReportDialog(wxDebugReport& dbgrpt)
                               dbgrpt.GetReportName().c_str()),
                               wxDefaultPosition,
                               wxDefaultSize,
-                              wxDEFAULT_DIALOG_STYLE | wxTHICK_FRAME),
+                              wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER),
                      m_dbgrpt(dbgrpt)
 {
     // upper part of the dialog: explanatory message

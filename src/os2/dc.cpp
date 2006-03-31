@@ -2043,73 +2043,33 @@ void wxDC::SetBrush(
     }
 } // end of wxDC::SetBrush
 
-void wxDC::SetBackground(
-  const wxBrush&                    rBrush
-)
+void wxDC::SetBackground(const wxBrush& rBrush)
 {
     m_backgroundBrush = rBrush;
-    if (!m_backgroundBrush.Ok())
-        return;
-    if (m_pCanvas)
-    {
-        bool                        bCustomColours = true;
 
-        //
-        // If we haven't specified wxUSER_COLOURS, don't allow the panel/dialog box to
-        // change background colours from the control-panel specified colours.
-        //
-        if (m_pCanvas->IsKindOf(CLASSINFO(wxWindow)) &&
-            ((m_pCanvas->GetWindowStyleFlag() & wxUSER_COLOURS) != wxUSER_COLOURS))
-            bCustomColours = false;
-        if (bCustomColours)
-        {
-            if (m_backgroundBrush.GetStyle()==wxTRANSPARENT)
-            {
-                m_pCanvas->SetTransparent(true);
-            }
-            else
-            {
-                //
-                // Setting the background brush of a DC
-                // doesn't affect the window background colour. However,
-                // I'm leaving in the transparency setting because it's needed by
-                // various controls (e.g. wxStaticText) to determine whether to draw
-                // transparently or not. TODO: maybe this should be a new function
-                // wxWindow::SetTransparency(). Should that apply to the child itself, or the
-                // parent?
-                // m_canvas->SetBackgroundColour(m_backgroundBrush.GetColour());
-                //
-                m_pCanvas->SetTransparent(false);
-            }
-        }
+    if (m_backgroundBrush.Ok())
+    {
+        (void)::GpiSetBackColor((HPS)m_hPS, m_backgroundBrush.GetColour().GetPixel());
     }
-    COLORREF                        vNewColor = m_backgroundBrush.GetColour().GetPixel();
-    (void)::GpiSetBackColor((HPS)m_hPS, (LONG)vNewColor);
 } // end of wxDC::SetBackground
 
-void wxDC::SetBackgroundMode(
-  int                               nMode
-)
+void wxDC::SetBackgroundMode(int nMode)
 {
     m_backgroundMode = nMode;
 } // end of wxDC::SetBackgroundMode
 
-void wxDC::SetLogicalFunction(
-  int                               nFunction
-)
+void wxDC::SetLogicalFunction(int nFunction)
 {
     m_logicalFunction = nFunction;
     SetRop((WXHDC)m_hDC);
 } // wxDC::SetLogicalFunction
 
-void wxDC::SetRop(
-  WXHDC                             hDC
-)
+void wxDC::SetRop(WXHDC hDC)
 {
     if (!hDC || m_logicalFunction < 0)
         return;
 
-    LONG                            lCRop;
+    LONG lCRop;
     switch (m_logicalFunction)
     {
         case wxXOR:

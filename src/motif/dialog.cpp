@@ -69,12 +69,12 @@ extern wxList wxPendingDelete;
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 
 BEGIN_EVENT_TABLE(wxDialog, wxTopLevelWindow)
-  EVT_BUTTON(wxID_OK, wxDialog::OnOK)
-  EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
-  EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
-  EVT_CHAR_HOOK(wxDialog::OnCharHook)
-  EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
-  EVT_CLOSE(wxDialog::OnCloseWindow)
+    EVT_BUTTON(wxID_OK, wxDialog::OnOK)
+    EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
+    EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
+    EVT_CHAR_HOOK(wxDialog::OnCharHook)
+    EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
+    EVT_CLOSE(wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 
@@ -319,8 +319,6 @@ bool wxDialog::Show( bool show )
 // Shows a dialog modally, returning a return code
 int wxDialog::ShowModal()
 {
-    m_windowStyle |= wxDIALOG_MODAL;
-
     Show(true);
 
     // after the event loop ran, the widget might already have been destroyed

@@ -154,7 +154,7 @@ bool wxTopLevelWindowMotif::Create( wxWindow *parent, wxWindowID id,
             ( m_windowStyle & wxTINY_CAPTION_HORIZ ) ||
             ( m_windowStyle & wxTINY_CAPTION_VERT ) )
             decor |= MWM_DECOR_TITLE;
-        if( m_windowStyle & wxTHICK_FRAME )
+        if( m_windowStyle & wxRESIZE_BORDER )
             decor |= MWM_DECOR_BORDER;
         if( m_windowStyle & wxMINIMIZE_BOX )
             decor |= MWM_DECOR_MINIMIZE;
@@ -423,4 +423,3 @@ void wxTLWEventHandler( Widget wid,
 
     *continueToDispatch = True;
 }
-

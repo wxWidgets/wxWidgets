@@ -39,7 +39,7 @@ wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
            : wxFrame(parent, wxID_ANY, wxT("Busy"),
                      wxDefaultPosition, wxDefaultSize,
 #if defined(__WXX11__)
-                     wxTHICK_FRAME
+                     wxRESIZE_BORDER
 #else
                      wxSIMPLE_BORDER
 #endif

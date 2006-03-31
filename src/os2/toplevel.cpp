@@ -234,7 +234,7 @@ WXDWORD wxTopLevelWindowOS2::OS2GetStyle(
         lMsflags |= FCF_MINBUTTON;
     if (lStyle & wxMAXIMIZE_BOX)
         lMsflags |= FCF_MAXBUTTON;
-    if (lStyle & wxTHICK_FRAME)
+    if (lStyle & wxRESIZE_BORDER)
         lMsflags |= FCF_DLGBORDER;
     if (lStyle & wxSYSTEM_MENU)
         lMsflags |= FCF_SYSMENU;
@@ -250,7 +250,7 @@ WXDWORD wxTopLevelWindowOS2::OS2GetStyle(
     if (lStyle & wxTINY_CAPTION_HORIZ)
         lMsflags |= FCF_TASKLIST;
 
-    if ((lStyle & wxTHICK_FRAME) == 0)
+    if ((lStyle & wxRESIZE_BORDER) == 0)
         lMsflags |= FCF_BORDER;
     if (lStyle & wxFRAME_TOOL_WINDOW)
         *pdwExflags = kFrameToolWindow;

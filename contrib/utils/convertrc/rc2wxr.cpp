@@ -153,7 +153,7 @@ wxFprintf(m_wxr,_T("static char *dialog%i = \"dialog(name = '%s',\\\n"),dlgid,dl
 
 //be lazy about style for now. add it later
 
-wxFprintf(m_wxr,_T("style = 'wxRAISED_BORDER | wxCAPTION | wxTHICK_FRAME | wxSYSTEM_MENU',\\\n"));
+wxFprintf(m_wxr,_T("style = 'wxRAISED_BORDER | wxCAPTION | wxRESIZE_BORDER | wxSYSTEM_MENU',\\\n"));
 wxFprintf(m_wxr,_T("id = %i,\\\n"),dlgid);
 
 //Record x,y,width,height
@@ -795,4 +795,3 @@ void rc2wxr::ParseCtrlButton(wxString label, wxString varname)
         wxFprintf(m_wxr,_T("[8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\\\n"));
     }
 }
-

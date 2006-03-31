@@ -752,7 +752,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     msflags |= WS_MINIMIZEBOX;
   if (style & wxMAXIMIZE_BOX)
     msflags |= WS_MAXIMIZEBOX;
-  if (style & wxTHICK_FRAME)
+  if (style & wxRESIZE_BORDER)
     msflags |= WS_THICKFRAME;
   if (style & wxSYSTEM_MENU)
     msflags |= WS_SYSMENU;

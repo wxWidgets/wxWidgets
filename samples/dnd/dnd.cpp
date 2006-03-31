@@ -984,7 +984,7 @@ DnDFrame::DnDFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int
                                 wxLB_HSCROLL | wxLB_ALWAYS_SB );
 
 #if wxUSE_LOG
-    m_ctrlLog   = new wxTextCtrl(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize,
+    m_ctrlLog   = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
                                  wxTE_MULTILINE | wxTE_READONLY |
                                  wxSUNKEN_BORDER );
 
@@ -1160,7 +1160,7 @@ void DnDFrame::OnLogClear(wxCommandEvent& /* event */ )
 void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
 {
 #if wxUSE_DRAG_AND_DROP
-    if ( !m_strText.IsEmpty() )
+    if ( !m_strText.empty() )
     {
         // start drag operation
         wxTextDataObject textData(m_strText);
@@ -1231,9 +1231,9 @@ void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
 {
     // PNG support is not always compiled in under Windows, so use BMP there
 #if wxUSE_LIBPNG
-    wxFileDialog dialog(this, _T("Open a PNG file"), _T(""), _T(""), _T("PNG files (*.png)|*.png"), 0);
+    wxFileDialog dialog(this, _T("Open a PNG file"), wxEmptyString, wxEmptyString, _T("PNG files (*.png)|*.png"), 0);
 #else
-    wxFileDialog dialog(this, _T("Open a BMP file"), _T(""), _T(""), _T("BMP files (*.bmp)|*.bmp"), 0);
+    wxFileDialog dialog(this, _T("Open a BMP file"), wxEmptyString, wxEmptyString, _T("BMP files (*.bmp)|*.bmp"), 0);
 #endif
 
     if (dialog.ShowModal() != wxID_OK)
@@ -1242,7 +1242,7 @@ void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
         return;
     }
 
-    if (dialog.GetPath().IsEmpty())
+    if (dialog.GetPath().empty())
     {
         wxLogMessage( _T("Returned empty string.") );
         return;
@@ -1375,7 +1375,7 @@ void DnDFrame::OnPasteMetafile(wxCommandEvent& WXUNUSED(event))
 void DnDFrame::OnCopyFiles(wxCommandEvent& WXUNUSED(event))
 {
 #ifdef __WXMSW__
-    wxFileDialog dialog(this, _T("Select a file to copy"), _T(""), _T(""),
+    wxFileDialog dialog(this, _T("Select a file to copy"), wxEmptyString, wxEmptyString,
                          _T("All files (*.*)|*.*"), 0);
 
     wxArrayString filenames;
@@ -1407,7 +1407,7 @@ void DnDFrame::OnCopyFiles(wxCommandEvent& WXUNUSED(event))
             else
             {
                 wxLogStatus(this, wxT("%d file%s copied to the clipboard"),
-                            count, count == 1 ? wxT("") : wxT("s"));
+                            count, count == 1 ? wxEmptyString : wxEmptyString);
             }
         }
     }
@@ -1509,7 +1509,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
 DnDShapeDialog::DnDShapeDialog(wxFrame *parent, DnDShape *shape)
   :wxDialog( parent, 6001, wxT("Choose Shape"), wxPoint( 10, 10 ),
              wxSize( 40, 40 ),
-             wxDEFAULT_DIALOG_STYLE | wxRAISED_BORDER | wxTHICK_FRAME )
+             wxDEFAULT_DIALOG_STYLE | wxRAISED_BORDER | wxRESIZE_BORDER )
 {
     m_shape = shape;
     wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );

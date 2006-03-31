@@ -1,5 +1,5 @@
 static char *dialog1 = "dialog(name = 'dialog1',\
-  style = 'wxRAISED_BORDER | wxCAPTION | wxTHICK_FRAME | wxSYSTEM_MENU',\
+  style = 'wxRAISED_BORDER | wxCAPTION | wxRESIZE_BORDER | wxSYSTEM_MENU',\
   title = 'Test dialog box',\
   id = 100,\
   x = 10, y = 10, width = 210, height = 145,\

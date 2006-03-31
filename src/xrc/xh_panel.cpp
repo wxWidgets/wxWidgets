@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_panel.cpp
+// Name:        src/xrc/xh_panel.cpp
 // Purpose:     XRC resource for panels
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
@@ -19,16 +19,18 @@
 
 #include "wx/xrc/xh_panel.h"
 #include "wx/panel.h"
-#include "wx/frame.h"  // to get wxNO_3D
+#include "wx/frame.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxPanelXmlHandler, wxXmlResourceHandler)
 
 wxPanelXmlHandler::wxPanelXmlHandler() : wxXmlResourceHandler()
 {
+#if WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxNO_3D);
+#endif // WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
     XRC_ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
-    
+
     AddWindowStyles();
 }
 

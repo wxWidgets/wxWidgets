@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_dlg.cpp
+// Name:        src/xrc/xh_dlg.cpp
 // Purpose:     XRC resource for dialogs
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
@@ -30,16 +30,11 @@ wxDialogXmlHandler::wxDialogXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxSTAY_ON_TOP);
     XRC_ADD_STYLE(wxCAPTION);
     XRC_ADD_STYLE(wxDEFAULT_DIALOG_STYLE);
-    XRC_ADD_STYLE(wxTHICK_FRAME);
     XRC_ADD_STYLE(wxSYSTEM_MENU);
     XRC_ADD_STYLE(wxRESIZE_BORDER);
-    XRC_ADD_STYLE(wxRESIZE_BOX);
     XRC_ADD_STYLE(wxCLOSE_BOX);
-    XRC_ADD_STYLE(wxDIALOG_MODAL);
-    XRC_ADD_STYLE(wxDIALOG_MODELESS);
     XRC_ADD_STYLE(wxDIALOG_NO_PARENT);
 
-    XRC_ADD_STYLE(wxNO_3D);
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
     XRC_ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
     XRC_ADD_STYLE(wxDIALOG_EX_METAL);
@@ -47,6 +42,14 @@ wxDialogXmlHandler::wxDialogXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxMINIMIZE_BOX);
     XRC_ADD_STYLE(wxFRAME_SHAPED);
     XRC_ADD_STYLE(wxDIALOG_EX_CONTEXTHELP);
+
+#if WXWIN_COMPATIBILITY_2_6
+    XRC_ADD_STYLE(wxDIALOG_MODAL);
+    XRC_ADD_STYLE(wxTHICK_FRAME);
+    XRC_ADD_STYLE(wxRESIZE_BOX);
+    XRC_ADD_STYLE(wxDIALOG_MODELESS);
+    XRC_ADD_STYLE(wxNO_3D);
+#endif // WXWIN_COMPATIBILITY_2_6
 
     AddWindowStyles();
 }

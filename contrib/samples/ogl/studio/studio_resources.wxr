@@ -172,7 +172,7 @@ static char *triangle = "dialog(name = 'triangle',\
   control = [5112, wxTextCtrl, '1', '0', 'textctrl2', 227, 213, 40, 19, '1']).";
 
 static char *shape_label_dialog = "dialog(name = 'shape_label_dialog',\
-  style = 'wxRAISED_BORDER | wxCAPTION | wxTHICK_FRAME | wxSYSTEM_MENU',\
+  style = 'wxRAISED_BORDER | wxCAPTION | wxRESIZE_BORDER | wxSYSTEM_MENU',\
   title = 'Edit Shape Label',\
   id = 6008,\
   x = 10, y = 10, width = 190, height = 60,\
