@@ -61,6 +61,9 @@
             #if wxUSE_MEDIACTRL
                 #pragma comment(lib,"wxmsw27ud_media")
             #endif
+            #if wxUSE_ODBC
+                #pragma comment(lib,"wxbase27ud_odbc")
+            #endif
         #else // release
             #if wxUSE_XML
                 #pragma comment(lib,"wxexpat")
@@ -92,6 +95,9 @@
             #pragma comment(lib,"wxmsw27u_xrc")
             #if wxUSE_MEDIACTRL
                 #pragma comment(lib,"wxmsw27u_media")
+            #endif
+            #if wxUSE_ODBC
+                #pragma comment(lib,"wxbase27u_odbc")
             #endif
         #endif // debug/release
     #else // !_UNICODE
@@ -141,6 +147,9 @@
             #if wxUSE_MEDIACTRL
                 #pragma comment(lib,"wxmsw27d_media")
             #endif
+            #if wxUSE_ODBC
+                #pragma comment(lib,"wxbase27d_odbc")
+            #endif
         #else // release
             #if wxUSE_XML
                 #pragma comment(lib,"wxexpat")
@@ -172,6 +181,9 @@
             #pragma comment(lib,"wxmsw27_xrc")
             #if wxUSE_MEDIACTRL
                 #pragma comment(lib,"wxmsw27_media")
+            #endif
+            #if wxUSE_ODBC
+                #pragma comment(lib,"wxbase27_odbc")
             #endif
         #endif // debug/release
     #endif // _UNICODE/!_UNICODE
