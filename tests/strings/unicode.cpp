@@ -70,7 +70,7 @@ private:
     //
     // if either of the first 2 arguments is NULL, the conversion is supposed
     // to fail
-    void DoTestConversion(const char *s, const wchar_t *w, wxCSConv& conv);
+    void DoTestConversion(const char *s, const wchar_t *w, wxMBConv& conv);
 #endif // wxUSE_WCHAR_T
 
 
@@ -168,7 +168,7 @@ void UnicodeTestCase::Conversion()
 void
 UnicodeTestCase::DoTestConversion(const char *s,
                                   const wchar_t *ws,
-                                  wxCSConv& conv)
+                                  wxMBConv& conv)
 {
 #if wxUSE_UNICODE
     if ( ws )
@@ -217,6 +217,7 @@ void UnicodeTestCase::ConversionUTF7()
     {
         const StringConversionData& d = utf7data[n];
         DoTestConversion(d.str, d.wcs, conv);
+        DoTestConversion(d.str, d.wcs, wxConvUTF7);
     }
 }
 
@@ -236,6 +237,7 @@ void UnicodeTestCase::ConversionUTF8()
     {
         const StringConversionData& d = utf8data[n];
         DoTestConversion(d.str, d.wcs, conv);
+        DoTestConversion(d.str, d.wcs, wxConvUTF8);
     }
 }
 
