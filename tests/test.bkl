@@ -56,6 +56,7 @@
             streams/tempfile.cpp
             streams/textstreamtest.cpp
             streams/zlibstream.cpp
+            textfile/textfiletest.cpp
             uris/uris.cpp
         </sources>
         <wx-lib>net</wx-lib>
