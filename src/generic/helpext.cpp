@@ -81,7 +81,7 @@ wxExtHelpController::wxExtHelpController(wxWindow* parentWindow)
    m_BrowserIsNetscape = false;
 
    wxChar *browser = wxGetenv(WXEXTHELP_ENVVAR_BROWSER);
-   if(browser)
+   if (browser)
    {
       m_BrowserName = browser;
       browser = wxGetenv(WXEXTHELP_ENVVAR_BROWSERISNETSCAPE);
@@ -106,8 +106,7 @@ void wxExtHelpController::SetViewer(const wxString& viewer, long flags)
     SetBrowser(viewer, (flags & wxHELP_NETSCAPE) != 0);
 }
 
-bool
-wxExtHelpController::DisplayHelp(const wxString &relativeURL)
+bool wxExtHelpController::DisplayHelp(const wxString &relativeURL)
 {
     // construct hte URL to open -- it's just a file
     wxString url(_T("file://") + m_helpDir);
@@ -146,7 +145,7 @@ public:
 
 void wxExtHelpController::DeleteList()
 {
-   if(m_MapList)
+   if (m_MapList)
    {
       wxList::compatibility_iterator node = m_MapList->GetFirst();
       while (node)
@@ -155,22 +154,19 @@ void wxExtHelpController::DeleteList()
          m_MapList->Erase(node);
          node = m_MapList->GetFirst();
       }
+
       delete m_MapList;
       m_MapList = (wxList*) NULL;
    }
 }
 
-/** This must be called to tell the controller where to find the
-    documentation.
-    @param file - NOT a filename, but a directory name.
-    @return true on success
-*/
-bool
-wxExtHelpController::Initialize(const wxString& file)
+// This must be called to tell the controller where to find the documentation.
+//  @param file - NOT a filename, but a directory name.
+//  @return true on success
+bool wxExtHelpController::Initialize(const wxString& file)
 {
    return LoadFile(file);
 }
-
 
 bool wxExtHelpController::ParseMapFileLine(const wxString& line)
 {
@@ -244,7 +240,7 @@ bool wxExtHelpController::LoadFile(const wxString& file)
         helpDirLoc.AppendDir(locName);
         dirExists = helpDirLoc.DirExists();
 
-        if ( !dirExists )
+        if ( ! dirExists )
         {
             // try without encoding
             const wxString locNameWithoutEncoding = locName.BeforeLast(_T('.'));
@@ -273,7 +269,7 @@ bool wxExtHelpController::LoadFile(const wxString& file)
     }
 #endif // wxUSE_INTL
 
-    if ( !dirExists && !helpDir.DirExists() )
+    if ( ! dirExists && !helpDir.DirExists() )
     {
         wxLogError(_("Help directory \"%s\" not found."),
                    helpDir.GetFullPath().c_str());
@@ -281,7 +277,7 @@ bool wxExtHelpController::LoadFile(const wxString& file)
     }
 
     const wxFileName mapFile(helpDir.GetFullPath(), WXEXTHELP_MAPFILE);
-    if ( !mapFile.FileExists() )
+    if ( ! mapFile.FileExists() )
     {
         wxLogError(_("Help file \"%s\" not found."),
                    mapFile.GetFullPath().c_str());
@@ -320,54 +316,54 @@ bool wxExtHelpController::LoadFile(const wxString& file)
 }
 
 
-bool
-wxExtHelpController::DisplayContents()
+bool wxExtHelpController::DisplayContents()
 {
-   if(! m_NumOfEntries)
+   if (! m_NumOfEntries)
       return false;
 
    wxString contents;
    wxList::compatibility_iterator node = m_MapList->GetFirst();
    wxExtHelpMapEntry *entry;
-   while(node)
+   while (node)
    {
       entry = (wxExtHelpMapEntry *)node->GetData();
-      if(entry->id == CONTENTS_ID)
+      if (entry->id == CONTENTS_ID)
       {
          contents = entry->url;
          break;
       }
+
       node = node->GetNext();
    }
 
    bool rc = false;
    wxString file;
    file << m_helpDir << wxFILE_SEP_PATH << contents;
-   if(file.Contains(wxT('#')))
+   if (file.Contains(wxT('#')))
       file = file.BeforeLast(wxT('#'));
-   if(contents.length() && wxFileExists(file))
+   if (contents.length() && wxFileExists(file))
       rc = DisplaySection(CONTENTS_ID);
 
    // if not found, open homemade toc:
    return rc ? true : KeywordSearch(wxEmptyString);
 }
 
-bool
-wxExtHelpController::DisplaySection(int sectionNo)
+bool wxExtHelpController::DisplaySection(int sectionNo)
 {
-   if(! m_NumOfEntries)
+   if (! m_NumOfEntries)
       return false;
 
    wxBusyCursor b; // display a busy cursor
    wxList::compatibility_iterator node = m_MapList->GetFirst();
    wxExtHelpMapEntry *entry;
-   while(node)
+   while (node)
    {
       entry = (wxExtHelpMapEntry *)node->GetData();
-      if(entry->id == sectionNo)
+      if (entry->id == sectionNo)
          return DisplayHelp(entry->url);
       node = node->GetNext();
    }
+
    return false;
 }
 
@@ -381,74 +377,99 @@ bool wxExtHelpController::DisplaySection(const wxString& section)
         return KeywordSearch(section);
 }
 
-bool
-wxExtHelpController::DisplayBlock(long blockNo)
+bool wxExtHelpController::DisplayBlock(long blockNo)
 {
    return DisplaySection((int)blockNo);
 }
 
-bool
-wxExtHelpController::KeywordSearch(const wxString& k,
+bool wxExtHelpController::KeywordSearch(const wxString& k,
                                    wxHelpSearchMode WXUNUSED(mode))
 {
-   if(! m_NumOfEntries)
+   if (! m_NumOfEntries)
       return false;
 
-   wxString     *choices = new wxString[m_NumOfEntries];
-   wxString     *urls = new wxString[m_NumOfEntries];
-   wxString compA, compB;
+   wxString *choices = new wxString[m_NumOfEntries];
+   wxString *urls = new wxString[m_NumOfEntries];
 
-   int          idx = 0, j;
-   bool         rc;
+   int          idx = 0;
+   bool         rc = false;
    bool         showAll = k.empty();
+
    wxList::compatibility_iterator node = m_MapList->GetFirst();
-   wxExtHelpMapEntry *entry;
 
    {
-      wxBusyCursor b; // display a busy cursor
-      compA = k; compA.LowerCase(); // we compare case insensitive
-      while(node)
-      {
-         entry = (wxExtHelpMapEntry *)node->GetData();
-         compB = entry->doc; compB.LowerCase();
-         if((showAll || compB.Contains(k)) && ! compB.empty())
-         {
-            urls[idx] = entry->url;
-            // doesn't work:
-            // choices[idx] = (**i).doc.Contains((**i).doc.Before(WXEXTHELP_COMMENTCHAR));
-            //if(choices[idx].empty()) // didn't contain the ';'
-            //   choices[idx] = (**i).doc;
-            choices[idx] = wxEmptyString;
-            for(j=0;entry->doc.c_str()[j]
-                   && entry->doc.c_str()[j] != WXEXTHELP_COMMENTCHAR; j++)
-               choices[idx] << entry->doc.c_str()[j];
-            idx++;
-         }
-         node = node->GetNext();
-      }
-   }
+        // display a busy cursor
+        wxBusyCursor b;
+        wxString compA, compB;
+        wxExtHelpMapEntry *entry;
 
-   if(idx == 1)
-      rc = DisplayHelp(urls[0]);
-   else if(idx == 0)
-   {
-      wxMessageBox(_("No entries found."));
-      rc = false;
-   }
-   else
-   {
-      idx = wxGetSingleChoiceIndex(showAll ? _("Help Index") : _("Relevant entries:"),
-                                   showAll ? _("Help Index") : _("Entries found"),
-                                   idx,choices);
-      if(idx != -1)
-         rc = DisplayHelp(urls[idx]);
-      else
-         rc = false;
-   }
-   delete[] urls;
-   delete[] choices;
+        // we compare case insensitive
+        if (! showAll)
+        {
+            compA = k;
+            compA.LowerCase();
+        }
 
-   return rc;
+        while (node)
+        {
+            entry = (wxExtHelpMapEntry *)node->GetData();
+            compB = entry->doc;
+
+            bool testTarget = ! compB.empty();
+            if (testTarget && ! showAll)
+            {
+                compB.LowerCase();
+                testTarget = compB.Contains(compA);
+            }
+
+            if (testTarget)
+            {
+                urls[idx] = entry->url;
+                // doesn't work:
+                // choices[idx] = (**i).doc.Contains((**i).doc.Before(WXEXTHELP_COMMENTCHAR));
+                //if (choices[idx].empty()) // didn't contain the ';'
+                //   choices[idx] = (**i).doc;
+                choices[idx] = wxEmptyString;
+                for (int j=0; ; j++)
+                {
+                    wxChar targetChar = entry->doc.c_str()[j];
+                    if ((targetChar == 0) || (targetChar == WXEXTHELP_COMMENTCHAR))
+                        break;
+
+                    choices[idx] << targetChar;
+                }
+
+                idx++;
+            }
+
+            node = node->GetNext();
+        }
+    }
+
+    switch (idx)
+    {
+    case 0:
+        wxMessageBox(_("No entries found."));
+        break;
+
+    case 1:
+        rc = DisplayHelp(urls[0]);
+        break;
+
+    default:
+        idx = wxGetSingleChoiceIndex(
+            showAll ? _("Help Index") : _("Relevant entries:"),
+            showAll ? _("Help Index") : _("Entries found"),
+            idx, choices);
+        if (idx >= 0)
+            rc = DisplayHelp(urls[idx]);
+        break;
+    }
+
+    delete [] urls;
+    delete [] choices;
+
+    return rc;
 }
 
 
@@ -460,6 +481,5 @@ bool wxExtHelpController::Quit()
 void wxExtHelpController::OnQuit()
 {
 }
-
 
 #endif // wxUSE_HELP
