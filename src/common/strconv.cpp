@@ -862,20 +862,22 @@ size_t wxMBConvUTF16straight::WC2MB(char *buf, const wchar_t *psz, size_t n) con
 // swap 16bit MB to 16bit String
 size_t wxMBConvUTF16swap::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
-    size_t len=0;
+    size_t len = 0;
 
-    while (*(wxUint16*)psz && (!buf || len < n))
+    while ( *psz && (!buf || len < n) )
     {
-        if (buf)
+        if ( buf )
         {
             ((char *)buf)[0] = psz[1];
             ((char *)buf)[1] = psz[0];
             buf++;
         }
         len++;
-        psz += sizeof(wxUint16);
+        psz += 2;
     }
-    if (buf && len<n)   *buf=0;
+
+    if ( buf && len < n )
+        *buf = L'\0';
 
     return len;
 }
