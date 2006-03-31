@@ -408,7 +408,7 @@ size_t wxMBConvUTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
     size_t len = 0;
 
-    while (*psz && ((!buf) || (len < n)))
+    while ( *psz && (!buf || (len < n)) )
     {
         unsigned char cc = *psz++;
         if (cc != '+')
@@ -426,20 +426,19 @@ size_t wxMBConvUTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
             len++;
             psz++;
         }
-        else
+        else // start of BASE64 encoded string
         {
-            // BASE64 encoded string
-            bool lsb;
-            unsigned char c;
+            bool lsb, ok;
             unsigned int d, l;
-            for (lsb = false, d = 0, l = 0;
-                (cc = utf7unb64[(unsigned char)*psz]) != 0xff; psz++)
+            for ( ok = lsb = false, d = 0, l = 0;
+                  (cc = utf7unb64[(unsigned char)*psz]) != 0xff;
+                  psz++ )
             {
                 d <<= 6;
                 d += cc;
                 for (l += 6; l >= 8; lsb = !lsb)
                 {
-                    c = (unsigned char)((d >> (l -= 8)) % 256);
+                    unsigned char c = (unsigned char)((d >> (l -= 8)) % 256);
                     if (lsb)
                     {
                         if (buf)
@@ -447,16 +446,29 @@ size_t wxMBConvUTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
                         len ++;
                     }
                     else
+                    {
                         if (buf)
                             *buf = (wchar_t)(c << 8);
+                    }
+
+                    ok = true;
                 }
             }
+
+            if ( !ok )
+            {
+                // in valid UTF7 we should have valid characters after '+'
+                return (size_t)-1;
+            }
+
             if (*psz == '-')
                 psz++;
         }
     }
-    if (buf && (len < n))
-        *buf = 0;
+
+    if ( buf && (len < n) )
+        *buf = '\0';
+
     return len;
 }
 
