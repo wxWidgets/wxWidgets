@@ -106,14 +106,32 @@ COLORREF is returned. On X, an allocated pixel value is returned.  -1
 is returned if the pixel is invalid (on X, unallocated).", "");
     
     
-    DocDeclStr(
-        bool , operator==(const wxColour& colour) const,
-        "Compare colours for equality", "");
-    
-    DocDeclStr(
-        bool , operator!=(const wxColour& colour) const,
-        "Compare colours for inequality", "");
-    
+    %extend {
+        KeepGIL(__eq__);
+        DocStr(__eq__, "Compare colours for equality.", "");
+        bool __eq__(PyObject* other) {
+            wxColour  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxColour_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+
+        
+        KeepGIL(__ne__);
+        DocStr(__ne__, "Compare colours for inequality.", "");
+        bool __ne__(PyObject* other) {
+            wxColour  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxColour_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
+    }
 
 
     %extend {

@@ -24,6 +24,13 @@ buttons.
 
 XRCed: Fix for Copy/Paste objects with international characters.
 
+Fixed the equality and inequality operators for some of the basic
+data types (wx.Point, wx.Size, wx.Colour, etc.) to no longer raise a
+TypeError if the compared object is not compatible, but to just return
+a boolean as expected.  For example::
+
+	  wx.Colour(64,0,64) == 123      ==> False
+
 
 
 
