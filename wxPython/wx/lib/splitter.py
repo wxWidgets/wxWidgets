@@ -17,7 +17,6 @@ more than once.
 """
 
 import wx
-import sys
 
 _RENDER_VER = (2,6,1,1)
 
@@ -134,7 +133,7 @@ class MultiSplitterWindow(wx.PyPanel):
         of the window stack.  If sashPos is given then it is used to
         size the new window.
         """
-        self.InsertWindow(sys.maxint, window, sashPos)
+        self.InsertWindow(len(self._windows), window, sashPos)
 
 
     def InsertWindow(self, idx, window, sashPos=-1):
