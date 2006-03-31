@@ -72,7 +72,7 @@ typedef HRESULT (__stdcall *PFNWXUENABLETHEMING)(BOOL);
 // we always define this class, even if wxUSE_UXTHEME == 0, but we just make it
 // empty in this case -- this allows to use it elsewhere without any #ifdefs
 #if wxUSE_UXTHEME
-    #include "wx/dynload.h"
+    #include "wx/dynlib.h"
 
     #define wxUX_THEME_DECLARE(type, func) type func;
 #else
