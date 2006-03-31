@@ -53,18 +53,20 @@ private:
         CPPUNIT_TEST( ToFromAscii );
 #if wxUSE_WCHAR_T
         CPPUNIT_TEST( ConstructorsWithConversion );
-        CPPUNIT_TEST( Conversion );
+        CPPUNIT_TEST( ConversionWithNULs );
         CPPUNIT_TEST( ConversionUTF7 );
         CPPUNIT_TEST( ConversionUTF8 );
+        CPPUNIT_TEST( ConversionUTF16 );
 #endif // wxUSE_WCHAR_T
     CPPUNIT_TEST_SUITE_END();
 
     void ToFromAscii();
 #if wxUSE_WCHAR_T
     void ConstructorsWithConversion();
-    void Conversion();
+    void ConversionWithNULs();
     void ConversionUTF7();
     void ConversionUTF8();
+    void ConversionUTF16();
 
     // test if converting s using the given encoding gives ws and vice versa
     //
@@ -135,7 +137,7 @@ void UnicodeTestCase::ConstructorsWithConversion()
 #endif
 }
 
-void UnicodeTestCase::Conversion()
+void UnicodeTestCase::ConversionWithNULs()
 {
 #if wxUSE_UNICODE
         static const size_t lenNulString = 10;
@@ -185,7 +187,7 @@ UnicodeTestCase::DoTestConversion(const char *s,
         if ( ws )
             CPPUNIT_ASSERT( wx_wcscmp(wbuf, ws) == 0 );
         else
-            CPPUNIT_ASSERT( !*wbuf );
+            CPPUNIT_ASSERT_EQUAL( L'\0', *wbuf );
     }
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
@@ -209,6 +211,7 @@ void UnicodeTestCase::ConversionUTF7()
 
         // the following are invalid UTF-7 sequences
         { "+", NULL },
+        { "+~", NULL },
         { "a+", NULL },
     };
 
@@ -225,7 +228,6 @@ void UnicodeTestCase::ConversionUTF8()
 {
     static const StringConversionData utf8data[] =
     {
-        //\u isn't recognized on MSVC 6
 #ifdef wxHAVE_U_ESCAPE
         { "\xc2\xa3", L"\u00a3" },
 #endif
@@ -238,6 +240,25 @@ void UnicodeTestCase::ConversionUTF8()
         const StringConversionData& d = utf8data[n];
         DoTestConversion(d.str, d.wcs, conv);
         DoTestConversion(d.str, d.wcs, wxConvUTF8);
+    }
+}
+
+void UnicodeTestCase::ConversionUTF16()
+{
+    static const StringConversionData utf16data[] =
+    {
+#ifdef wxHAVE_U_ESCAPE
+        { "\x04\x1f\x04\x40\x04\x38\x04\x32\x04\x35\x04\x42",
+          L"\u041f\u0440\u0438\u0432\u0435\u0442" },
+#endif
+        { "\0f\0o\0o", L"foo" },
+    };
+
+    wxCSConv conv(wxFONTENCODING_UTF16BE);
+    for ( size_t n = 0; n < WXSIZEOF(utf16data); n++ )
+    {
+        const StringConversionData& d = utf16data[n];
+        DoTestConversion(d.str, d.wcs, conv);
     }
 }
 
