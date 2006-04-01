@@ -134,9 +134,10 @@ public:
     }
 
 private:
-    virtual wxCharBuffer GetMBNul(size_t *nulLen) const
+    virtual const char *GetMBNul(size_t *nulLen) const
     {
-        return m_conv->GetMBNul(nulLen);
+        // cast needed to call a private function
+        return ((wxConvBrokenFileNames *)m_conv)->GetMBNul(nulLen);
     }
 
 

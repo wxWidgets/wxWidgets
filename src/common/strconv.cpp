@@ -214,11 +214,9 @@ wxMBConv::cMB2WC(const char *in, size_t inLen, size_t *outLen) const
         // not the most efficient algorithm but it shouldn't matter as normally
         // there are not many NULs in the string and so normally memcmp()
         // should stop on the first character
-        for ( const char *p = in; ; p++ )
-        {
-            if ( memcmp(p, nul, nulLen) == 0 )
-                break;
-        }
+        const char *p = in;
+        while ( memcmp(p, nul, nulLen) != 0 )
+            p++;
 
         inLen = p - in + nulLen;
     }
@@ -1658,7 +1656,7 @@ const char *wxMBConv_iconv::GetMBNul(size_t *nulLen) const
         size_t inLen = 1,
                outLen = WXSIZEOF(m_nulBuf);
         self->m_nulLen = iconv(w2m, ICONV_CHAR_CAST(L""), &inLen,
-                               &self->m_nulBuf, &outLen);
+                               (char **)&self->m_nulBuf, &outLen);
     }
 
     *nulLen = m_nulLen;
