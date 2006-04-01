@@ -1653,10 +1653,19 @@ const char *wxMBConv_iconv::GetMBNul(size_t *nulLen) const
         wxMutexLocker lock(self->m_iconvMutex);
 #endif
 
-        size_t inLen = 1,
+        wchar_t *wnul = L"";
+        size_t inLen = sizeof(wchar_t),
                outLen = WXSIZEOF(m_nulBuf);
-        self->m_nulLen = iconv(w2m, ICONV_CHAR_CAST(L""), &inLen,
-                               (char **)&self->m_nulBuf, &outLen);
+        char *in = (char *)wnul,
+             *out = self->m_nulBuf;
+        if ( iconv(w2m, &in, &inLen, &out, &outLen) == (size_t)-1 )
+        {
+            self->m_nulLen = (size_t)-1;
+        }
+        else // ok
+        {
+            self->m_nulLen = out - m_nulBuf;
+        }
     }
 
     *nulLen = m_nulLen;
