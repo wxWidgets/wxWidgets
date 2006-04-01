@@ -11,6 +11,9 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
 - For all wxInputStreams, Eof() becomes true after an attempt has been made
   to read _past_ the end of file.
 - wxCHECK family of macros now must be followed by a semicolon
+- wxMBConv::cMB2WC() and cWC2MB() take size of the input buffer and return
+  length of the converted string in all cases now.
+
 
 Deprecated methods since 2.6.x and their replacements
 -----------------------------------------------------

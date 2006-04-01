@@ -1008,103 +1008,60 @@ int STRINGCLASS::compare(size_t nStart, size_t nLen,
 // from multibyte string
 wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 {
-    // if nLength != npos, then we have to make a NULL-terminated copy
-    // of first nLength bytes of psz first because the input buffer to MB2WC
-    // must always be NULL-terminated:
-    wxCharBuffer inBuf((const char *)NULL);
-    if (nLength != npos)
-    {
-        wxASSERT( psz != NULL );
-        wxCharBuffer tmp(nLength);
-        memcpy(tmp.data(), psz, nLength);
-        tmp.data()[nLength] = '\0';
-        inBuf = tmp;
-        psz = inBuf.data();
-    }
-
-    // first get the size of the buffer we need
-    size_t nLen;
-    if ( psz )
-    {
-        // calculate the needed size ourselves or use the provided one
-        if (nLength == npos)
-            nLen = strlen(psz);
-        else
-            nLen = nLength;
-    }
-    else
-    {
-        // nothing to convert
-        nLen = 0;
-    }
-
-
     // anything to do?
-    if ( (nLen != 0) && (nLen != (size_t)-1) )
+    if ( psz && nLength != 0 )
     {
-        //Convert string
-        size_t nRealSize;
-        wxWCharBuffer theBuffer = conv.cMB2WC(psz, nLen, &nRealSize);
+        if ( nLength == npos )
+        {
+            nLength = (size_t)-1;
+        }
+        else if ( nLength == length() )
+        {
+            // this is important to avoid copying the string in cMB2WC: we're
+            // already NUL-terminated so we can pass this NUL with the data
+            nLength++;
+        }
 
-        //Copy
-        if (nRealSize)
-            assign( theBuffer.data() , nRealSize - 1 );
+        size_t nLenWide;
+        wxWCharBuffer wbuf = conv.cMB2WC(psz, nLength, &nLenWide);
+
+        if ( nLenWide )
+            assign(wbuf, nLenWide);
     }
 }
 
 //Convert wxString in Unicode mode to a multi-byte string
 const wxCharBuffer wxString::mb_str(wxMBConv& conv) const
 {
-    size_t dwOutSize;
-    return conv.cWC2MB(c_str(), length(), &dwOutSize);
+    return conv.cWC2MB(c_str(), length() + 1 /* size, not length */, NULL);
 }
 
 #else // ANSI
 
 #if wxUSE_WCHAR_T
+
 // from wide string
 wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
 {
-    // if nLength != npos, then we have to make a NULL-terminated copy
-    // of first nLength chars of psz first because the input buffer to WC2MB
-    // must always be NULL-terminated:
-    wxWCharBuffer inBuf((const wchar_t *)NULL);
-    if (nLength != npos)
-    {
-        wxASSERT( pwz != NULL );
-        wxWCharBuffer tmp(nLength);
-        memcpy(tmp.data(), pwz, nLength * sizeof(wchar_t));
-        tmp.data()[nLength] = '\0';
-        inBuf = tmp;
-        pwz = inBuf.data();
-    }
-
-    // first get the size of the buffer we need
-    size_t nLen;
-    if ( pwz )
-    {
-        // calculate the needed size ourselves or use the provided one
-        if (nLength == npos)
-            nLen = wxWcslen(pwz);
-        else
-            nLen = nLength;
-    }
-    else
-    {
-        // nothing to convert
-        nLen = 0;
-    }
-
     // anything to do?
-    if ( (nLen != 0) && (nLen != (size_t)-1) )
+    if ( pwz && nLength != 0 )
     {
-        //Convert string
-        size_t nRealSize;
-        wxCharBuffer theBuffer = conv.cWC2MB(pwz, nLen, &nRealSize);
+        if ( nLength == npos )
+        {
+            nLength = (size_t)-1;
+        }
+        else if ( nLength == length() )
+        {
+            // this is important to avoid copying the string in cMB2WC: we're
+            // already NUL-terminated so we can pass this NUL with the data
+            nLength++;
+        }
 
-        //Copy
-        if (nRealSize)
-            assign( theBuffer.data() , nRealSize - 1 );
+        size_t nLenMB;
+        wxCharBuffer buf = conv.cWC2MB(pwz, nLength, &nLenMB);
+
+        if ( nLenMB )
+            assign(buf, nLenMB);
     }
 }
 
@@ -1112,8 +1069,7 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
 //mode is not enabled and wxUSE_WCHAR_T is enabled
 const wxWCharBuffer wxString::wc_str(wxMBConv& conv) const
 {
-    size_t dwOutSize;
-    return conv.cMB2WC(c_str(), length(), &dwOutSize);
+    return conv.cMB2WC(c_str(), length() + 1 /* size, not length */, NULL);
 }
 
 #endif // wxUSE_WCHAR_T
