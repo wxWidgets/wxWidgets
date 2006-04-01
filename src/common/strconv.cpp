@@ -1656,8 +1656,8 @@ const char *wxMBConv_iconv::GetMBNul(size_t *nulLen) const
         wchar_t *wnul = L"";
         size_t inLen = sizeof(wchar_t),
                outLen = WXSIZEOF(m_nulBuf);
-        char *in = (char *)wnul,
-             *out = self->m_nulBuf;
+        const char *in = (char *)wnul;
+        char *out = self->m_nulBuf;
         if ( iconv(w2m, &in, &inLen, &out, &outLen) == (size_t)-1 )
         {
             self->m_nulLen = (size_t)-1;
