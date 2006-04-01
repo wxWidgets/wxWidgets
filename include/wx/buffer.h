@@ -84,6 +84,18 @@ public:                                                                     \
         return *this;                                                       \
     }                                                                       \
                                                                             \
+    bool extend(size_t len)                                                 \
+    {                                                                       \
+        chartype *                                                          \
+            str = (chartype *)realloc(m_str, (len + 1)*sizeof(chartype));   \
+        if ( !str )                                                         \
+            return false;                                                   \
+                                                                            \
+        m_str = str;                                                        \
+                                                                            \
+        return true;                                                        \
+    }                                                                       \
+                                                                            \
     chartype *data() { return m_str; }                                      \
     const chartype *data() const { return m_str; }                          \
     operator const chartype *() const { return m_str; }                     \
