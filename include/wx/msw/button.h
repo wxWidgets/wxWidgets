@@ -78,11 +78,6 @@ protected:
     virtual wxSize DoGetBestSize() const;
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const ;
 
-#if wxABI_VERSION >= 20603
-    // helper for MSWOnDraw
-    void MSWDrawXPBackground(WXDRAWITEMSTRUCT *item);
-#endif
-
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxButton)
 };
