@@ -1252,7 +1252,10 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 
 void wxToolBar::UpdateSize()
 {
+    wxPoint pos = GetPosition();
     ::SendMessage(GetHwnd(), TB_AUTOSIZE, 0, 0);
+    if (pos != GetPosition())
+        Move(pos);
 
     // In case Realize is called after the initial display (IOW the programmer
     // may have rebuilt the toolbar) give the frame the option of resizing the
