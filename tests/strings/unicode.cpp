@@ -185,9 +185,14 @@ UnicodeTestCase::DoTestConversion(const char *s,
         wxWCharBuffer wbuf = conv.cMB2WC(s, (size_t)-1, NULL);
 
         if ( ws )
+        {
+            CPPUNIT_ASSERT( wbuf.data() );
             CPPUNIT_ASSERT( wx_wcscmp(wbuf, ws) == 0 );
-        else
+        }
+        else // conversion is supposed to fail
+        {
             CPPUNIT_ASSERT_EQUAL( (wchar_t *)NULL, wbuf.data() );
+        }
     }
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
