@@ -78,6 +78,7 @@ TEST_OBJECTS =  \
 	test_tempfile.o \
 	test_textstreamtest.o \
 	test_zlibstream.o \
+	test_textfiletest.o \
 	test_uris.o
 TEST_ODEP =  $(___pch_testprec_test_testprec_h_gch___depname)
 TEST_GUI_CXXFLAGS = $(__test_gui_PCH_INC) -D__WX$(TOOLKIT)__ \
@@ -357,6 +358,9 @@ test_textstreamtest.o: $(srcdir)/streams/textstreamtest.cpp $(TEST_ODEP)
 
 test_zlibstream.o: $(srcdir)/streams/zlibstream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/zlibstream.cpp
+
+test_textfiletest.o: $(srcdir)/textfile/textfiletest.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/textfile/textfiletest.cpp
 
 test_uris.o: $(srcdir)/uris/uris.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/uris/uris.cpp
