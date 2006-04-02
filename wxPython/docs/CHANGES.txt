@@ -3,6 +3,7 @@ Recent Changes for wxPython
 
 2.6.3.2
 -------
+* 3-April-2006
 
 Fixed reference leak in wx.gizmos.TreeListCtrl.GetSelections.
 
@@ -20,7 +21,9 @@ the current length of the list for specifying an append instead of
 sys.maxint.
 
 wxMSW: Support added for XP themed owner drawn buttons and bitmap
-buttons.
+buttons.  For example, if you change the foreground color of a button
+it will now be drawn with the XP themed style rather than an ugly
+generic button style.
 
 XRCed: Fix for Copy/Paste objects with international characters.
 
@@ -30,6 +33,10 @@ TypeError if the compared object is not compatible, but to just return
 a boolean as expected.  For example::
 
 	  wx.Colour(64,0,64) == 123      ==> False
+
+wxMSW: Fixed (again) sizing/positioning issues of calling Realize on
+a wx.ToolBar that is not manaaged directly by a frame and that is
+already shown.
 
 
 
