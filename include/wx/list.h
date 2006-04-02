@@ -159,7 +159,7 @@ private:
 
 // the real wxList-class declaration
 #define WX_DECLARE_LIST_XO(elT, liT, decl)                                    \
-    class WXDLLEXPORT _WX_LIST_HELPER_##liT                                   \
+    decl _WX_LIST_HELPER_##liT                                                \
     {                                                                         \
         typedef elT _WX_LIST_ITEM_TYPE_##liT;                                 \
     public:                                                                   \
