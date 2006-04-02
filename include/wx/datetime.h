@@ -1115,7 +1115,7 @@ public:
     // ------------------------------------------------------------------------
 
         // return the timespan for the given number of seconds
-    static wxTimeSpan Seconds(long sec) { return wxTimeSpan(0, 0, sec); }
+    static wxTimeSpan Seconds(wxLongLong sec) { return wxTimeSpan(0, 0, sec); }
     static wxTimeSpan Second() { return Seconds(1); }
 
         // return the timespan for the given number of minutes
@@ -1142,8 +1142,8 @@ public:
         // milliseconds)
     inline wxTimeSpan(long hours,
                       long minutes = 0,
-                      long seconds = 0,
-                      long milliseconds = 0);
+                      wxLongLong seconds = 0,
+                      wxLongLong milliseconds = 0);
 
         // default copy ctor is ok
 
@@ -1893,8 +1893,8 @@ wxDateTime::FromTimezone(const wxDateTime::TimeZone& tz, bool noDST) const
 
 inline wxTimeSpan::wxTimeSpan(long hours,
                               long minutes,
-                              long seconds,
-                              long milliseconds)
+                              wxLongLong seconds,
+                              wxLongLong milliseconds)
 {
     // assign first to avoid precision loss
     m_diff = hours;
