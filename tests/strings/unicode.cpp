@@ -152,7 +152,7 @@ void UnicodeTestCase::ConversionWithNULs()
         CPPUNIT_ASSERT_EQUAL( lenNulString, szTheString2.length() );
         CPPUNIT_ASSERT( wxTmemcmp(szTheString2.c_str(), L"The\0String",
                         lenNulString + 1) == 0 );
-#else
+#else // !wxUSE_UNICODE
         wxString szTheString(wxT("TheString"));
         szTheString.insert(3, 1, '\0');
         wxWCharBuffer theBuffer = szTheString.wc_str(wxConvLibc);
@@ -164,7 +164,7 @@ void UnicodeTestCase::ConversionWithNULs()
         wxWCharBuffer theLocalBuffer = szLocalTheString.wc_str(wxConvLocal);
 
         CPPUNIT_ASSERT( memcmp(theLocalBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 );
-#endif
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
 
 void
@@ -266,6 +266,13 @@ void UnicodeTestCase::ConversionUTF16()
         const StringConversionData& d = utf16data[n];
         DoTestConversion(d.str, d.wcs, conv);
     }
+
+    // special case: this string has consecutive NULs inside it which don't
+    // terminate the string, this exposed a bug in our conversion code which
+    // got confused in this case
+    size_t len;
+    wxWCharBuffer wbuf(conv.cMB2WC("\x01\0\0B\0C" /* A macron BC */, 6, &len));
+    CPPUNIT_ASSERT_EQUAL( 3u, len );
 }
 
 #endif // wxUSE_WCHAR_T
