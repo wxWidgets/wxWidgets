@@ -282,7 +282,8 @@ void UnicodeTestCase::ConversionUTF32()
     static const StringConversionData utf32data[] =
     {
 #ifdef wxHAVE_U_ESCAPE
-        { "\0\0\x04\x1f\0\0\x04\x40\0\0\x04\x38\0\0\x04\x32\0\0\x04\x35\0\0\x04\x42\0\0",
+        {
+            "\0\0\x04\x1f\0\0\x04\x40\0\0\x04\x38\0\0\x04\x32\0\0\x04\x35\0\0\x04\x42\0\0\0\0",
           L"\u041f\u0440\u0438\u0432\u0435\u0442" },
 #endif
         { "\0\0\0f\0\0\0o\0\0\0o\0\0\0\0", L"foo" },
