@@ -274,7 +274,7 @@ void UnicodeTestCase::ConversionUTF16()
     // got confused in this case
     size_t len;
     wxWCharBuffer wbuf(conv.cMB2WC("\x01\0\0B\0C" /* A macron BC */, 6, &len));
-    CPPUNIT_ASSERT_EQUAL( 3u, len );
+    CPPUNIT_ASSERT_EQUAL( (size_t)3, len );
 }
 
 void UnicodeTestCase::ConversionUTF32()
@@ -299,7 +299,7 @@ void UnicodeTestCase::ConversionUTF32()
     size_t len;
     wxWCharBuffer wbuf(conv.cMB2WC("\0\0\x01\0\0\0\0B\0\0\0C" /* A macron BC */,
                                    12, &len));
-    CPPUNIT_ASSERT_EQUAL( 3u, len );
+    CPPUNIT_ASSERT_EQUAL( (size_t)3, len );
 }
 
 #endif // wxUSE_WCHAR_T

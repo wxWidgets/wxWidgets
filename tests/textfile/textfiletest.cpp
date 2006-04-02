@@ -97,7 +97,7 @@ void TextFileTestCase::ReadEmpty()
     wxTextFile f;
     CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
 
-    CPPUNIT_ASSERT_EQUAL( 0u, f.GetLineCount() );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, f.GetLineCount() );
 }
 
 void TextFileTestCase::ReadDOS()
@@ -107,7 +107,7 @@ void TextFileTestCase::ReadDOS()
     wxTextFile f;
     CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
 
-    CPPUNIT_ASSERT_EQUAL( 3u, f.GetLineCount() );
+    CPPUNIT_ASSERT_EQUAL( (size_t)3, f.GetLineCount() );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Dos, f.GetLineType(0) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(2) );
     CPPUNIT_ASSERT_EQUAL( wxString(_T("bar")), f.GetLine(1) );
@@ -121,7 +121,7 @@ void TextFileTestCase::ReadUnix()
     wxTextFile f;
     CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
 
-    CPPUNIT_ASSERT_EQUAL( 3u, f.GetLineCount() );
+    CPPUNIT_ASSERT_EQUAL( (size_t)3, f.GetLineCount() );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Unix, f.GetLineType(0) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(2) );
     CPPUNIT_ASSERT_EQUAL( wxString(_T("bar")), f.GetLine(1) );
@@ -135,7 +135,7 @@ void TextFileTestCase::ReadMac()
     wxTextFile f;
     CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
 
-    CPPUNIT_ASSERT_EQUAL( 3u, f.GetLineCount() );
+    CPPUNIT_ASSERT_EQUAL( (size_t)3, f.GetLineCount() );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Mac, f.GetLineType(0) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(2) );
     CPPUNIT_ASSERT_EQUAL( wxString(_T("bar")), f.GetLine(1) );
@@ -149,7 +149,7 @@ void TextFileTestCase::ReadMixed()
     wxTextFile f;
     CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
 
-    CPPUNIT_ASSERT_EQUAL( 3u, f.GetLineCount() );
+    CPPUNIT_ASSERT_EQUAL( (size_t)3, f.GetLineCount() );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Mac, f.GetLineType(0) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Dos, f.GetLineType(1) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Unix, f.GetLineType(2) );
@@ -168,7 +168,7 @@ void TextFileTestCase::ReadUTF8()
     wxTextFile f;
     CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName()), wxConvUTF8) );
 
-    CPPUNIT_ASSERT_EQUAL( 2u, f.GetLineCount() );
+    CPPUNIT_ASSERT_EQUAL( (size_t)2, f.GetLineCount() );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Unix, f.GetLineType(0) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(1) );
 #ifdef wxHAVE_U_ESCAPE
@@ -188,7 +188,7 @@ void TextFileTestCase::ReadUTF16()
     wxMBConvUTF16 conv;
     CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName()), conv) );
 
-    CPPUNIT_ASSERT_EQUAL( 2u, f.GetLineCount() );
+    CPPUNIT_ASSERT_EQUAL( (size_t)2, f.GetLineCount() );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Dos, f.GetLineType(0) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(1) );
 
