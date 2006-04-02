@@ -86,6 +86,15 @@
 // implementation
 // ============================================================================
 
+// helper function of cMB2WC(): check if n bytes at this location are all NUL
+static bool NotAllNULs(const char *p, size_t n)
+{
+    while ( n && *p++ == '\0' )
+        n--;
+
+    return n != 0;
+}
+
 // ----------------------------------------------------------------------------
 // UTF-16 en/decoding to/from UCS-4
 // ----------------------------------------------------------------------------
@@ -185,15 +194,6 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
     wxCharBuffer buf((char *)NULL);
 
     return buf;
-}
-
-// helper of cMB2WC(): check if n bytes at this location are all NUL
-static bool NotAllNULs(const char *p, size_t n)
-{
-    while ( n && *p++ == '\0' )
-        n--;
-
-    return n != 0;
 }
 
 const wxWCharBuffer
@@ -1540,6 +1540,31 @@ wxMBConv_iconv::~wxMBConv_iconv()
 
 size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
+    // find the string length: notice that must be done differently for
+    // NUL-terminated strings and UTF-16/32 which are terminated with 2/4 NULs
+    size_t inbuf;
+    const size_t nulLen = GetMinMBCharWidth();
+    switch ( nulLen )
+    {
+        default:
+            return (size_t)-1;
+
+        case 1:
+            inbuf = strlen(psz); // arguably more optimized than our version
+            break;
+
+        case 2:
+        case 4:
+            // for UTF-16/32 not only we need to have 2/4 consecutive NULs but
+            // they also have to start at character boundary and not span two
+            // adjacent characters
+            const char *p;
+            for ( p = psz; NotAllNULs(p, nulLen); p += nulLen )
+                ;
+            inbuf = p - psz;
+            break;
+    }
+
 #if wxUSE_THREADS
     // NB: iconv() is MT-safe, but each thread must use it's own iconv_t handle.
     //     Unfortunately there is a couple of global wxCSConv objects such as
@@ -1548,9 +1573,9 @@ size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
     //     only a few wx classes would be safe to use from non-main threads
     //     as MB<->WC conversion would fail "randomly".
     wxMutexLocker lock(wxConstCast(this, wxMBConv_iconv)->m_iconvMutex);
-#endif
+#endif // wxUSE_THREADS
 
-    size_t inbuf = strlen(psz);
+
     size_t outbuf = n * SIZEOF_WCHAR_T;
     size_t res, cres;
     // VS: Use these instead of psz, buf because iconv() modifies its arguments:
@@ -1572,9 +1597,7 @@ size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
                 buf[n] = WC_BSWAP(buf[i]);
         }
 
-        // NB: iconv was given only strlen(psz) characters on input, and so
-        //     it couldn't convert the trailing zero. Let's do it ourselves
-        //     if there's some room left for it in the output buffer.
+        // NUL-terminate the string if there is any space left
         if (res < n)
             buf[res] = 0;
     }
