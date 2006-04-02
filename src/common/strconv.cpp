@@ -187,6 +187,15 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
     return buf;
 }
 
+// helper of cMB2WC(): check if n bytes at this location are all NUL
+static bool NotAllNULs(const char *p, size_t n)
+{
+    while ( n && *p++ == '\0' )
+        n--;
+
+    return n != 0;
+}
+
 const wxWCharBuffer
 wxMBConv::cMB2WC(const char *in, size_t inLen, size_t *outLen) const
 {
@@ -196,87 +205,108 @@ wxMBConv::cMB2WC(const char *in, size_t inLen, size_t *outLen) const
     // the current length of wbuf
     size_t lenBuf = 0;
 
-    // we need to know the representation of L'\0' for this conversion
-    size_t nulLen;
-    const char * const nul = GetMBNul(&nulLen);
-    if ( nulLen == (size_t)-1 || nulLen == 0 )
-        return wxWCharBuffer();
+    // the number of NULs terminating this string
+    size_t nulLen   wxDUMMY_INITIALIZE(0);
 
     // make a copy of the input string unless it is already properly
     // NUL-terminated
     wxCharBuffer bufTmp;
 
-    // now we can compute the input size if we were not given it: notice that
-    // in this case the string must be properly NUL-terminated, of course, as
-    // otherwise we have no way of knowing how long it is
-    if ( inLen == (size_t)-1 )
+    // if we were not given the input size we just have to assume that the
+    // string is properly terminated as we have no way of knowing how long it
+    // is anyhow, but if we do have the size check whether there are enough
+    // NULs at the end
+    if ( inLen != (size_t)-1 )
     {
-        // not the most efficient algorithm but it shouldn't matter as normally
-        // there are not many NULs in the string and so normally memcmp()
-        // should stop on the first character
-        const char *p = in;
-        while ( memcmp(p, nul, nulLen) != 0 )
-            p++;
+        // we need to know how to find the end of this string
+        nulLen = GetMinMBCharWidth();
+        if ( nulLen == (size_t)-1 )
+            return wbuf;
 
-        inLen = p - in + nulLen;
-    }
-    else // we already have the size
-    {
-        // check if it's not already NUL-terminated too to avoid the copy
-        if ( inLen < nulLen || memcmp(in + inLen - nulLen, nul, nulLen) != 0 )
+        // if there are enough NULs we can avoid the copy
+        if ( inLen < nulLen || NotAllNULs(in + inLen - nulLen, nulLen) )
         {
             // make a copy in order to properly NUL-terminate the string
             bufTmp = wxCharBuffer(inLen + nulLen - 1 /* 1 will be added */);
-            memcpy(bufTmp.data(), in, inLen);
-            memcpy(bufTmp.data() + inLen, nul, nulLen);
+            char * const p = bufTmp.data();
+            memcpy(p, in, inLen);
+            for ( char *s = p + inLen; s < p + inLen + nulLen; s++ )
+                *s = '\0';
         }
     }
 
     if ( bufTmp )
         in = bufTmp;
 
+    size_t lenChunk;
     for ( const char * const inEnd = in + inLen;; )
     {
-        // try to convert the current chunk if anything left
-        size_t lenChunk = in < inEnd ? MB2WC(NULL, in, 0) : 0;
+        // try to convert the current chunk
+        lenChunk = MB2WC(NULL, in, 0);
         if ( lenChunk == 0 )
         {
             // nothing left in the input string, conversion succeeded
-            if ( outLen )
-            {
-                // we shouldn't include the last NUL in the result length
-                *outLen = lenBuf ? lenBuf - 1 : 0;
-            }
-
-            return wbuf;
+            break;
         }
 
         if ( lenChunk == (size_t)-1 )
             break;
 
+        // if we already have a previous chunk, leave the NUL separating it
+        // from this one
+        if ( lenBuf )
+            lenBuf++;
+
         const size_t lenBufNew = lenBuf + lenChunk;
         if ( !wbuf.extend(lenBufNew) )
+        {
+            lenChunk = (size_t)-1;
             break;
+        }
 
         lenChunk = MB2WC(wbuf.data() + lenBuf, in, lenChunk + 1 /* for NUL */);
         if ( lenChunk == (size_t)-1 )
             break;
 
-        // +! for the embedded NUL (if something follows)
-        lenBuf = lenBufNew + 1;
+        lenBuf = lenBufNew;
+
+        if ( inLen == (size_t)-1 )
+        {
+            // convert only one chunk in this case, as we suppose that the
+            // string is NUL-terminated and so inEnd is not used at all
+            break;
+        }
 
         // advance the input pointer past the end of this chunk
-        while ( memcmp(in, nul, nulLen) != 0 )
-            in++;
+        while ( NotAllNULs(in, nulLen) )
+        {
+            // notice that we must skip over multiple bytes here as we suppose
+            // that if NUL takes 2 or 4 bytes, then all the other characters do
+            // too and so if advanced by a single byte we might erroneously
+            // detect sequences of NUL bytes in the middle of the input
+            in += nulLen;
+        }
 
         in += nulLen; // skipping over its terminator as well
+
+        // note that ">=" (and not just "==") is needed here as the terminator
+        // we skipped just above could be inside or just after the buffer
+        // delimited by inEnd
+        if ( in >= inEnd )
+            break;
     }
 
-    // conversion failed
-    if ( outLen )
-        *outLen = 0;
+    if ( lenChunk == (size_t)-1 )
+    {
+        // conversion failed
+        lenBuf = 0;
+        wbuf.reset();
+    }
 
-    return wxWCharBuffer();
+    if ( outLen )
+        *outLen = lenBuf;
+
+    return wbuf;
 }
 
 const wxCharBuffer
@@ -1352,7 +1382,9 @@ protected:
 #endif
 
 private:
-    virtual const char *GetMBNul(size_t *nulLen) const;
+    // classify this encoding as explained in wxMBConv::GetMinMBCharWidth()
+    // comment
+    virtual size_t GetMinMBCharWidth() const;
 
     // the name (for iconv_open()) of a wide char charset -- if none is
     // available on this machine, it will remain NULL
@@ -1362,9 +1394,9 @@ private:
     // different endian-ness than the native one
     static bool ms_wcNeedsSwap;
 
-    // NUL representation
-    size_t m_nulLen;
-    char m_nulBuf[8];
+    // cached result of GetMinMBCharWidth(); set to 0 meaning "unknown"
+    // initially
+    size_t m_minMBCharWidth;
 };
 
 // make the constructor available for unit testing
@@ -1384,7 +1416,7 @@ bool wxMBConv_iconv::ms_wcNeedsSwap = false;
 
 wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
 {
-    m_nulLen = (size_t)-2;
+    m_minMBCharWidth = 0;
 
     // iconv operates with chars, not wxChars, but luckily it uses only ASCII
     // names for the charsets
@@ -1642,9 +1674,9 @@ size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     return res;
 }
 
-const char *wxMBConv_iconv::GetMBNul(size_t *nulLen) const
+size_t wxMBConv_iconv::GetMinMBCharWidth() const
 {
-    if ( m_nulLen == (size_t)-2 )
+    if ( m_minMBCharWidth == 0 )
     {
         wxMBConv_iconv * const self = wxConstCast(this, wxMBConv_iconv);
 
@@ -1654,22 +1686,22 @@ const char *wxMBConv_iconv::GetMBNul(size_t *nulLen) const
 #endif
 
         wchar_t *wnul = L"";
+        char buf[8]; // should be enough for NUL in any encoding
         size_t inLen = sizeof(wchar_t),
-               outLen = WXSIZEOF(m_nulBuf);
+               outLen = WXSIZEOF(buf);
         const char *in = (char *)wnul;
-        char *out = self->m_nulBuf;
+        char *out = buf;
         if ( iconv(w2m, &in, &inLen, &out, &outLen) == (size_t)-1 )
         {
-            self->m_nulLen = (size_t)-1;
+            self->m_minMBCharWidth = (size_t)-1;
         }
         else // ok
         {
-            self->m_nulLen = out - m_nulBuf;
+            self->m_minMBCharWidth = out - buf;
         }
     }
 
-    *nulLen = m_nulLen;
-    return m_nulBuf;
+    return m_minMBCharWidth;
 }
 
 #endif // HAVE_ICONV
@@ -1693,20 +1725,20 @@ public:
     wxMBConv_win32()
     {
         m_CodePage = CP_ACP;
-        m_nulLen = (size_t)-2;
+        m_minMBCharWidth = 0;
     }
 
 #if wxUSE_FONTMAP
     wxMBConv_win32(const wxChar* name)
     {
         m_CodePage = wxCharsetToCodepage(name);
-        m_nulLen = (size_t)-2;
+        m_minMBCharWidth = 0;
     }
 
     wxMBConv_win32(wxFontEncoding encoding)
     {
         m_CodePage = wxEncodingToCodepage(encoding);
-        m_nulLen = (size_t)-2;
+        m_minMBCharWidth = 0;
     }
 #endif // wxUSE_FONTMAP
 
@@ -1933,35 +1965,50 @@ private:
 #endif
     }
 
-    virtual const char *GetMBNul(size_t *nulLen) const
+    virtual size_t GetMinMBCharWidth() const
     {
-        if ( m_nulLen == (size_t)-2 )
+        if ( m_minMBCharWidth == 0 )
         {
+            int len = ::WideCharToMultiByte
+                        (
+                            m_CodePage,     // code page
+                            0,              // no flags
+                            L"",            // input string
+                            1,              // translate just the NUL
+                            NULL,           // output buffer
+                            0,              // and its size
+                            NULL,           // no replacement char
+                            NULL            // [out] don't care if it was used
+                        );
+
             wxMBConv_win32 * const self = wxConstCast(this, wxMBConv_win32);
+            switch ( len )
+            {
+                default:
+                    wxLogDebug(_T("Unexpected NUL length %d"), len);
+                    // fall through
 
-            self->m_nulLen = ::WideCharToMultiByte
-                               (
-                                    m_CodePage,         // code page
-                                    0,                  // no flags
-                                    L"",                // input string
-                                    1,                  // translate just NUL
-                                    self->m_nulBuf,     // output buffer
-                                    WXSIZEOF(m_nulBuf), // and its size
-                                    NULL,               // "replacement" char
-                                    NULL                // [out] was it used?
-                               );
+                case 0:
+                    self->m_minMBCharWidth = (size_t)-1;
+                    break;
 
-            if ( m_nulLen == 0 )
-                self->m_nulLen = (size_t)-1;
+                case 1:
+                case 2:
+                case 4:
+                    self->m_minMBCharWidth = len;
+                    break;
+            }
         }
 
-        *nulLen = m_nulLen;
-        return m_nulBuf;
+        return m_minMBCharWidth;
     }
 
+    // the code page we're working with
     long m_CodePage;
-    size_t m_nulLen;
-    char m_nulBuf[8];
+
+    // cached result of GetMinMBCharWidth(), set to 0 initially meaning
+    // "unknown"
+    size_t m_minMBCharWidth;
 };
 
 #endif // wxHAVE_WIN32_MB2WC
@@ -2602,23 +2649,20 @@ public:
     wxEncodingConverter m2w, w2m;
 
 private:
-    virtual const char *GetMBNul(size_t *nulLen) const
+    virtual size_t GetMinMBCharWidth() const
     {
         switch ( m_enc )
         {
             case wxFONTENCODING_UTF16BE:
             case wxFONTENCODING_UTF16LE:
-                *nulLen = 2;
-                return "\0";
+                return 2;
 
             case wxFONTENCODING_UTF32BE:
             case wxFONTENCODING_UTF32LE:
-                *nulLen = 4;
-                return "\0\0\0";
+                return 4;
 
             default:
-                *nulLen = 1;
-                return "";
+                return 1;
         }
     }
 
@@ -3014,18 +3058,17 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     return len;
 }
 
-const char *wxCSConv::GetMBNul(size_t *nulLen) const
+size_t wxCSConv::GetMinMBCharWidth() const
 {
     CreateConvIfNeeded();
 
     if ( m_convReal )
     {
         // cast needed just to call private function of m_convReal
-        return ((wxCSConv *)m_convReal)->GetMBNul(nulLen);
+        return ((wxCSConv *)m_convReal)->GetMinMBCharWidth();
     }
 
-    *nulLen = 1;
-    return "";
+    return 1;
 }
 
 // ----------------------------------------------------------------------------
