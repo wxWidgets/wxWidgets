@@ -255,6 +255,7 @@ void UnicodeTestCase::ConversionUTF16()
 #ifdef wxHAVE_U_ESCAPE
         { "\x04\x1f\x04\x40\x04\x38\x04\x32\x04\x35\x04\x42\0\0",
           L"\u041f\u0440\u0438\u0432\u0435\u0442" },
+        { "\x01\0\0b\x01\0\0a\x01\0\0r\0\0", L"\u0100b\u0100a\u0100r" },
 #endif
         { "\0f\0o\0o\0\0", L"foo" },
     };
