@@ -256,7 +256,7 @@ public:
   virtual ~wxSocketClient();
 
   virtual bool Connect(wxSockAddress& addr, bool wait = true);
-  virtual bool Connect(wxSockAddress& addr, wxSockAddress& local, bool wait = true);
+  bool Connect(wxSockAddress& addr, wxSockAddress& local, bool wait = true);
 
   bool WaitOnConnect(long seconds = -1, long milliseconds = 0);
 
