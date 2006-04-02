@@ -1689,9 +1689,9 @@ size_t wxMBConv_iconv::GetMinMBCharWidth() const
         char buf[8]; // should be enough for NUL in any encoding
         size_t inLen = sizeof(wchar_t),
                outLen = WXSIZEOF(buf);
-        const char *in = (char *)wnul;
+        char *in = (char *)wnul;
         char *out = buf;
-        if ( iconv(w2m, &in, &inLen, &out, &outLen) == (size_t)-1 )
+        if ( iconv(w2m, ICONV_CHAR_CAST(&in), &inLen, &out, &outLen) == (size_t)-1 )
         {
             self->m_minMBCharWidth = (size_t)-1;
         }
