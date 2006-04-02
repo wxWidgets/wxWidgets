@@ -64,6 +64,12 @@ public:                                                                     \
         return p;                                                           \
     }                                                                       \
                                                                             \
+    void reset()                                                            \
+    {                                                                       \
+        free(m_str);                                                        \
+        m_str = NULL;                                                       \
+    }                                                                       \
+                                                                            \
     classname(const classname& src)                                         \
         : m_str(src.release())                                              \
     {                                                                       \
