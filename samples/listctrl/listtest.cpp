@@ -1052,10 +1052,10 @@ void MyListCtrl::InsertItemInReportView(int i)
     SetItemData(tmp, i);
 
     buf.Printf(_T("Col 1, item %d"), i);
-    SetItem(i, 1, buf);
+    SetItem(tmp, 1, buf);
 
     buf.Printf(_T("Item %d in column 2"), i);
-    SetItem(i, 2, buf);
+    SetItem(tmp, 2, buf);
 }
 
 #if USE_CONTEXT_MENU
