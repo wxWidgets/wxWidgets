@@ -57,6 +57,7 @@ private:
         CPPUNIT_TEST( ConversionUTF7 );
         CPPUNIT_TEST( ConversionUTF8 );
         CPPUNIT_TEST( ConversionUTF16 );
+        CPPUNIT_TEST( ConversionUTF32 );
 #endif // wxUSE_WCHAR_T
     CPPUNIT_TEST_SUITE_END();
 
@@ -67,6 +68,7 @@ private:
     void ConversionUTF7();
     void ConversionUTF8();
     void ConversionUTF16();
+    void ConversionUTF32();
 
     // test if converting s using the given encoding gives ws and vice versa
     //
@@ -272,6 +274,30 @@ void UnicodeTestCase::ConversionUTF16()
     // got confused in this case
     size_t len;
     wxWCharBuffer wbuf(conv.cMB2WC("\x01\0\0B\0C" /* A macron BC */, 6, &len));
+    CPPUNIT_ASSERT_EQUAL( 3u, len );
+}
+
+void UnicodeTestCase::ConversionUTF32()
+{
+    static const StringConversionData utf32data[] =
+    {
+#ifdef wxHAVE_U_ESCAPE
+        { "\0\0\x04\x1f\0\0\x04\x40\0\0\x04\x38\0\0\x04\x32\0\0\x04\x35\0\0\x04\x42\0\0",
+          L"\u041f\u0440\u0438\u0432\u0435\u0442" },
+#endif
+        { "\0\0\0f\0\0\0o\0\0\0o\0\0\0\0", L"foo" },
+    };
+
+    wxCSConv conv(wxFONTENCODING_UTF32BE);
+    for ( size_t n = 0; n < WXSIZEOF(utf32data); n++ )
+    {
+        const StringConversionData& d = utf32data[n];
+        DoTestConversion(d.str, d.wcs, conv);
+    }
+
+    size_t len;
+    wxWCharBuffer wbuf(conv.cMB2WC("\0\0\x01\0\0\0\0B\0\0\0C" /* A macron BC */,
+                                   12, &len));
     CPPUNIT_ASSERT_EQUAL( 3u, len );
 }
 
