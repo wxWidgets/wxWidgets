@@ -86,6 +86,7 @@ public:
 private:
     CPPUNIT_TEST_SUITE( FileNameTestCase );
         CPPUNIT_TEST( TestConstruction );
+        CPPUNIT_TEST( TestComparison );
         CPPUNIT_TEST( TestSplit );
         CPPUNIT_TEST( TestSetPath );
         CPPUNIT_TEST( TestStrip );
@@ -95,6 +96,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void TestConstruction();
+    void TestComparison();
     void TestSplit();
     void TestSetPath();
     void TestStrip();
@@ -138,6 +140,13 @@ void FileNameTestCase::TestConstruction()
                                              fni.format) );
         }
     }
+}
+
+void FileNameTestCase::TestComparison()
+{
+    wxFileName fn1(wxT("/tmp"));
+    wxFileName fn2(wxT("/tmp/"));
+    assert(fn1.SameAs(fn2));
 }
 
 void FileNameTestCase::TestSplit()
