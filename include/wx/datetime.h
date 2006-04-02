@@ -1114,6 +1114,10 @@ public:
     // constructors
     // ------------------------------------------------------------------------
 
+        // return the timespan for the given number of milliseconds
+    static wxTimeSpan Milliseconds(wxLongLong ms) { return wxTimeSpan(0, 0, 0, ms); }
+    static wxTimeSpan Millisecond() { return Milliseconds(1); }
+
         // return the timespan for the given number of seconds
     static wxTimeSpan Seconds(wxLongLong sec) { return wxTimeSpan(0, 0, sec); }
     static wxTimeSpan Second() { return Seconds(1); }
