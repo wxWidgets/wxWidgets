@@ -2842,6 +2842,24 @@ PyObject* wxGridCellCoordsArray_helper(const wxGridCellCoordsArray& source)
     return list;
 }
 
+static bool wxGridCellCoords___eq__(wxGridCellCoords *self,PyObject *other){
+            wxGridCellCoords  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxGridCellCoords_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+static bool wxGridCellCoords___ne__(wxGridCellCoords *self,PyObject *other){
+            wxGridCellCoords  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxGridCellCoords_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
 static PyObject *wxGridCellCoords_Get(wxGridCellCoords *self){
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRow()));
@@ -9663,9 +9681,8 @@ static PyObject *_wrap_GridCellCoords_Set(PyObject *, PyObject *args, PyObject *
 static PyObject *_wrap_GridCellCoords___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxGridCellCoords *arg1 = (wxGridCellCoords *) 0 ;
-    wxGridCellCoords *arg2 = 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
     bool result;
-    wxGridCellCoords temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9675,15 +9692,10 @@ static PyObject *_wrap_GridCellCoords___eq__(PyObject *, PyObject *args, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GridCellCoords___eq__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxGridCellCoords, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
+    arg2 = obj1;
     {
-        arg2 = &temp2;
-        if (! wxGridCellCoords_helper(obj1, &arg2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxGridCellCoords const *)arg1)->operator ==((wxGridCellCoords const &)*arg2);
+        result = (bool)wxGridCellCoords___eq__(arg1,arg2);
         
-        wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -9698,9 +9710,8 @@ static PyObject *_wrap_GridCellCoords___eq__(PyObject *, PyObject *args, PyObjec
 static PyObject *_wrap_GridCellCoords___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxGridCellCoords *arg1 = (wxGridCellCoords *) 0 ;
-    wxGridCellCoords *arg2 = 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
     bool result;
-    wxGridCellCoords temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9710,15 +9721,10 @@ static PyObject *_wrap_GridCellCoords___ne__(PyObject *, PyObject *args, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GridCellCoords___ne__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxGridCellCoords, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
+    arg2 = obj1;
     {
-        arg2 = &temp2;
-        if (! wxGridCellCoords_helper(obj1, &arg2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxGridCellCoords const *)arg1)->operator !=((wxGridCellCoords const &)*arg2);
+        result = (bool)wxGridCellCoords___ne__(arg1,arg2);
         
-        wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     {

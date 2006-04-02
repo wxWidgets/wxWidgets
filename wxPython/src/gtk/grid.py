@@ -1263,11 +1263,19 @@ class GridCellCoords(object):
         return _grid.GridCellCoords_Set(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(self, GridCellCoords other) -> bool"""
+        """
+        __eq__(self, PyObject other) -> bool
+
+        Test for equality of GridCellCoords objects.
+        """
         return _grid.GridCellCoords___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(self, GridCellCoords other) -> bool"""
+        """
+        __ne__(self, PyObject other) -> bool
+
+        Test for inequality of GridCellCoords objects.
+        """
         return _grid.GridCellCoords___ne__(*args, **kwargs)
 
     def Get(*args, **kwargs):

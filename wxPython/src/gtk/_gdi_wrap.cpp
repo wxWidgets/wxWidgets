@@ -1810,6 +1810,24 @@ SWIG_Check_unsigned_SS_long(PyObject* obj)
 #define SWIG_From_long PyInt_FromLong
 /*@@*/
 
+static bool wxColour___eq__(wxColour *self,PyObject *other){
+            wxColour  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxColour_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+static bool wxColour___ne__(wxColour *self,PyObject *other){
+            wxColour  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxColour_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
 static PyObject *wxColour_Get(wxColour *self){
             PyObject* rv = PyTuple_New(3);
             int red = -1;
@@ -2865,27 +2883,21 @@ static PyObject *_wrap_Colour_GetPixel(PyObject *, PyObject *args, PyObject *kwa
 static PyObject *_wrap_Colour___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxColour *arg1 = (wxColour *) 0 ;
-    wxColour *arg2 = 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
     bool result;
-    wxColour temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "colour", NULL 
+        (char *) "self",(char *) "other", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Colour___eq__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxColour, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
+    arg2 = obj1;
     {
-        arg2 = &temp2;
-        if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxColour const *)arg1)->operator ==((wxColour const &)*arg2);
+        result = (bool)wxColour___eq__(arg1,arg2);
         
-        wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -2900,27 +2912,21 @@ static PyObject *_wrap_Colour___eq__(PyObject *, PyObject *args, PyObject *kwarg
 static PyObject *_wrap_Colour___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxColour *arg1 = (wxColour *) 0 ;
-    wxColour *arg2 = 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
     bool result;
-    wxColour temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "colour", NULL 
+        (char *) "self",(char *) "other", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Colour___ne__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxColour, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
+    arg2 = obj1;
     {
-        arg2 = &temp2;
-        if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxColour const *)arg1)->operator !=((wxColour const &)*arg2);
+        result = (bool)wxColour___ne__(arg1,arg2);
         
-        wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
