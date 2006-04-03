@@ -116,6 +116,10 @@ public:
     // empty
     virtual bool RestoreState();
 
+    // Returns HTML source inside the element (i.e. between the starting
+    // and ending tag)
+    wxString GetInnerSource(const wxHtmlTag& tag);
+
     // Parses HTML string 'markup' and extracts charset info from <meta> tag
     // if present. Returns empty string if the tag is missing.
     // For wxHTML's internal use.
@@ -223,6 +227,12 @@ protected:
     // m_Parser must be set.
     void ParseInner(const wxHtmlTag& tag)
         { m_Parser->DoParsing(tag.GetBeginPos(), tag.GetEndPos1()); }
+
+    // Parses given source as if it was tag's inner code (see
+    // wxHtmlParser::GetInnerSource).  Unlike ParseInner(), this method lets
+    // you specify the source code to parse. This is useful when you need to
+    // modify the inner text before parsing.
+    void ParseInnerSource(const wxString& source);
 
     wxHtmlParser *m_Parser;
 

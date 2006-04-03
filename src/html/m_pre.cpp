@@ -104,14 +104,8 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
         c->SetAlignHor(wxHTML_ALIGN_LEFT);
         c->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_TOP);
 
-        wxString srcMid =
-            m_WParser->GetSource()->Mid(tag.GetBeginPos(),
-                                        tag.GetEndPos1() - tag.GetBeginPos());
-        // It is safe to temporarily change the source being parsed,
-        // provided we restore the state back after parsing
-        m_Parser->SetSourceAndSaveState(HtmlizeWhitespaces(srcMid));
-        m_Parser->DoParsing();
-        m_Parser->RestoreState();
+        wxString srcMid = m_WParser->GetInnerSource(tag);
+        ParseInnerSource(HtmlizeWhitespaces(srcMid));
 
         m_WParser->CloseContainer();
         m_WParser->CloseContainer();
