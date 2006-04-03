@@ -5785,7 +5785,6 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 m_waitForSlowClick = true;
             }
         }
-
     }
 
 
@@ -5801,7 +5800,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 m_winCapture = NULL;
             }
 
-            if ( coords == m_currentCellCoords && m_waitForSlowClick && CanEnableCellControl())
+            if ( coords == m_currentCellCoords && m_waitForSlowClick && CanEnableCellControl() )
             {
                 ClearSelection();
                 EnableCellEditControl();
@@ -6729,8 +6728,8 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         return;
     }
 
-    wxClientDC dc(m_gridWin);
-    PrepareDC(dc);
+    wxClientDC dc( m_gridWin );
+    PrepareDC( dc );
 
     if ( m_currentCellCoords != wxGridNoCellCoords )
     {
@@ -6739,7 +6738,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         if ( IsVisible( m_currentCellCoords, false ) )
         {
             wxRect r;
-            r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
+            r = BlockToDeviceRect( m_currentCellCoords, m_currentCellCoords );
             if ( !m_gridLinesEnabled )
             {
                 r.x--;
@@ -6753,15 +6752,15 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
             // Otherwise refresh redraws the highlight!
             m_currentCellCoords = coords;
 
-            DrawGridCellArea(dc,cells);
+            DrawGridCellArea( dc, cells );
             DrawAllGridLines( dc, r );
         }
     }
 
     m_currentCellCoords = coords;
 
-    wxGridCellAttr* attr = GetCellAttr(coords);
-    DrawCellHighlight(dc, attr);
+    wxGridCellAttr *attr = GetCellAttr( coords );
+    DrawCellHighlight( dc, attr );
     attr->DecRef();
 }
 
@@ -7883,7 +7882,7 @@ void wxGrid::ShowCellEditControl()
             CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
 
             int nXMove = 0;
-            if(rect.x < 0)
+            if (rect.x < 0)
                 nXMove = rect.x;
 
             // done in PaintBackground()
@@ -7947,33 +7946,34 @@ void wxGrid::ShowCellEditControl()
                     int c_rows, c_cols;
                     GetCellSize( row, i, &c_rows, &c_cols );
                     // looks weird going over a multicell
-                    if (m_table->IsEmptyCell(row,i) &&
+                    if (m_table->IsEmptyCell( row, i ) &&
                             (rect.width < maxWidth) && (c_rows == 1))
-                        rect.width += GetColWidth(i);
+                        rect.width += GetColWidth( i );
                     else
                         break;
                 }
 
                 if (rect.GetRight() > client_right)
-                    rect.SetRight(client_right - 1);
+                    rect.SetRight( client_right - 1 );
             }
 
-            editor->SetCellAttr(attr);
+            editor->SetCellAttr( attr );
             editor->SetSize( rect );
-            editor->GetControl()->Move(editor->GetControl()->GetPosition().x + nXMove, editor->GetControl()->GetPosition().y);
+            editor->GetControl()->Move( editor->GetControl()->GetPosition().x + nXMove, editor->GetControl()->GetPosition().y );
             editor->Show( true, attr );
 
             int colXPos = 0;
             for (int i = 0; i < m_currentCellCoords.GetCol(); i++)
             {
-                colXPos += GetColSize(i);
+                colXPos += GetColSize( i );
             }
-            int xUnit=1, yUnit=1;
-            GetScrollPixelsPerUnit(&xUnit, &yUnit);
+
+            int xUnit = 1, yUnit = 1;
+            GetScrollPixelsPerUnit( &xUnit, &yUnit );
             if (m_currentCellCoords.GetCol() != 0)
-                Scroll(colXPos/xUnit-1, GetScrollPos(wxVERTICAL));
+                Scroll( colXPos / xUnit - 1, GetScrollPos( wxVERTICAL ) );
             else
-                Scroll(colXPos/xUnit, GetScrollPos(wxVERTICAL));
+                Scroll( colXPos / xUnit, GetScrollPos( wxVERTICAL ) );
 
             // recalc dimensions in case we need to
             // expand the scrolled window to account for editor
@@ -7995,7 +7995,7 @@ void wxGrid::HideCellEditControl()
         int row = m_currentCellCoords.GetRow();
         int col = m_currentCellCoords.GetCol();
 
-        wxGridCellAttr* attr = GetCellAttr(row, col);
+        wxGridCellAttr *attr = GetCellAttr(row, col);
         wxGridCellEditor *editor = attr->GetEditor(this, row, col);
         editor->Show( false );
         editor->DecRef();
@@ -8345,7 +8345,7 @@ bool wxGrid::MoveCursorUp( bool expandSelection )
     if ( m_currentCellCoords != wxGridNoCellCoords  &&
          m_currentCellCoords.GetRow() >= 0 )
     {
-        if ( expandSelection)
+        if ( expandSelection )
         {
             if ( m_selectingKeyboard == wxGridNoCellCoords )
                 m_selectingKeyboard = m_currentCellCoords;
