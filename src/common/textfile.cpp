@@ -98,7 +98,7 @@ bool wxTextFile::OnRead(wxMBConv& conv)
     // read and so the conversion would fail) and, as the file contents is kept
     // in memory by wxTextFile anyhow, it shouldn't be a big problem to read
     // the file entirely
-    const size_t bufSize = m_file.Length() + 4 /* for trailing NULs */;
+    const size_t bufSize = (size_t)(m_file.Length() + 4 /* for trailing NULs */ );
     size_t bufPos = 0;
     wxCharBuffer buf(bufSize - 1 /* it adds 1 internally */);
 
@@ -241,4 +241,3 @@ bool wxTextFile::OnWrite(wxTextFileType typeNew, wxMBConv& conv)
 }
 
 #endif // wxUSE_TEXTFILE
-
