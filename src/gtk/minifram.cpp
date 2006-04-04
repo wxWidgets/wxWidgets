@@ -46,11 +46,11 @@ static void DrawFrame( GtkWidget *widget, int x, int y, int w, int h )
     x += org_x;
     y += org_y;
 
-    GdkGC *gc = gdk_gc_new( GDK_ROOT_PARENT() );
+    GdkGC *gc = gdk_gc_new( gdk_get_default_root_window() );
     gdk_gc_set_subwindow( gc, GDK_INCLUDE_INFERIORS );
     gdk_gc_set_function( gc, GDK_INVERT );
 
-    gdk_draw_rectangle( GDK_ROOT_PARENT(), gc, FALSE, x, y, w, h );
+    gdk_draw_rectangle( gdk_get_default_root_window(), gc, FALSE, x, y, w, h );
     g_object_unref (G_OBJECT (gc));
 }
 

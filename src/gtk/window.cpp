@@ -269,7 +269,7 @@ gdk_window_warp_pointer (GdkWindow      *window,
                          gint            y)
 {
   if (!window)
-    window = GDK_ROOT_PARENT();
+    window = gdk_get_default_root_window();
 
   if (!GDK_WINDOW_DESTROYED(window))
   {
@@ -4418,7 +4418,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxWinModule, wxModule)
 
 bool wxWinModule::OnInit()
 {
-    // g_eraseGC = gdk_gc_new( GDK_ROOT_PARENT() );
+    // g_eraseGC = gdk_gc_new( gdk_get_default_root_window() );
     // gdk_gc_set_fill( g_eraseGC, GDK_SOLID );
 
     return true;
