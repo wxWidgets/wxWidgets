@@ -1262,7 +1262,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
         {
             GdkGC *gc = gdk_gc_new( ret.GetPixmap() );
             gdk_draw_drawable( ret.GetPixmap(), gc, GetPixmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
-            gdk_gc_destroy( gc );
+            g_object_unref (G_OBJECT (gc));
         }
         else
         {
@@ -1273,7 +1273,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
             col.pixel = 0;
             gdk_gc_set_background( gc, &col );
             gdk_wx_draw_bitmap( ret.GetBitmap(), gc, GetBitmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
-            gdk_gc_destroy( gc );
+            g_object_unref (G_OBJECT (gc));
         }
     }
 
@@ -1289,7 +1289,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
         col.pixel = 0;
         gdk_gc_set_background( gc, &col );
         gdk_wx_draw_bitmap( mask->m_bitmap, gc, M_BMPDATA->m_mask->m_bitmap, rect.x, rect.y, 0, 0, rect.width, rect.height );
-        gdk_gc_destroy( gc );
+        g_object_unref (G_OBJECT (gc));
 
         ret.SetMask( mask );
     }
