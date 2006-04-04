@@ -185,7 +185,7 @@ void TextFileTestCase::ReadUTF16()
                    "\x40\x04\x38\x04\x32\x04\x35\x04\x42\x04");
 
     wxTextFile f;
-    wxMBConvUTF16 conv;
+    wxMBConvUTF16LE conv;
     CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName()), conv) );
 
     CPPUNIT_ASSERT_EQUAL( (size_t)2, f.GetLineCount() );
