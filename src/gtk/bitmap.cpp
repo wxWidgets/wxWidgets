@@ -261,7 +261,7 @@ wxBitmapRefData::~wxBitmapRefData()
     if (m_bitmap)
         g_object_unref (G_OBJECT (m_bitmap));
     if (m_pixbuf)
-        gdk_pixbuf_unref( m_pixbuf );
+        g_object_unref (G_OBJECT (m_pixbuf));
     delete m_mask;
 #if wxUSE_PALETTE
     delete m_palette;
@@ -1485,7 +1485,7 @@ GdkPixbuf *wxBitmap::GetPixbuf() const
                     }
                 }
 
-                gdk_pixbuf_unref(pmask);
+                g_object_unref (G_OBJECT (pmask));
             }
         }
     }
@@ -1513,7 +1513,7 @@ void wxBitmap::PurgeOtherRepresentations(wxBitmap::Representation keep)
 {
     if (keep == Pixmap && HasPixbuf())
     {
-        gdk_pixbuf_unref( M_BMPDATA->m_pixbuf );
+        g_object_unref (G_OBJECT (M_BMPDATA->m_pixbuf));
         M_BMPDATA->m_pixbuf = NULL;
     }
     if (keep == Pixbuf && HasPixmap())

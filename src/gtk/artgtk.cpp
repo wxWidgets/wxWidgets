@@ -273,7 +273,7 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
                                                 GDK_INTERP_BILINEAR);
         if (p2)
         {
-            gdk_pixbuf_unref(pixbuf);
+            g_object_unref (G_OBJECT (pixbuf));
             pixbuf = p2;
         }
     }
