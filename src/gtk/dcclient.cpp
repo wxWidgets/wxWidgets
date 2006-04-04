@@ -171,7 +171,7 @@ static void wxCleanUpGCPool()
     for (int i = 0; i < wxGCPoolSize; i++)
     {
         if (wxGCPool[i].m_gc)
-            gdk_gc_unref( wxGCPool[i].m_gc );
+            g_object_unref (G_OBJECT (wxGCPool[i].m_gc));
     }
 
     free(wxGCPool);
@@ -1125,7 +1125,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
             gdk_gc_set_fill( gc, GDK_OPAQUE_STIPPLED );
             gdk_gc_set_stipple( gc, mask );
             gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, ww, hh );
-            gdk_gc_unref( gc );
+            g_object_unref (G_OBJECT (gc));
         }
 
         if (is_mono)
@@ -1159,7 +1159,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
         gdk_draw_drawable( m_window, m_textGC, bitmap2, 0, 0, xx, yy, -1, -1 );
 
         g_object_unref (G_OBJECT (bitmap2));
-        gdk_gc_unref( gc );
+        g_object_unref (G_OBJECT (gc));
     }
     else
     {
@@ -1368,7 +1368,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                 gdk_gc_set_fill( gc, GDK_OPAQUE_STIPPLED );
                 gdk_gc_set_stipple( gc, mask );
                 gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, bm_ww, bm_hh );
-                gdk_gc_unref( gc );
+                g_object_unref (G_OBJECT (gc));
             }
 
             if (is_mono)
@@ -1413,7 +1413,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
             gdk_draw_drawable( m_window, m_textGC, bitmap, xsrc, ysrc, cx, cy, cw, ch );
 
             g_object_unref (G_OBJECT (bitmap));
-            gdk_gc_unref( gc );
+            g_object_unref (G_OBJECT (gc));
         }
         else
         {

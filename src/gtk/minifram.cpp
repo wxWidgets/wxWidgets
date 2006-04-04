@@ -51,7 +51,7 @@ static void DrawFrame( GtkWidget *widget, int x, int y, int w, int h )
     gdk_gc_set_function( gc, GDK_INVERT );
 
     gdk_draw_rectangle( GDK_ROOT_PARENT(), gc, FALSE, x, y, w, h );
-    gdk_gc_unref( gc );
+    g_object_unref (G_OBJECT (gc));
 }
 
 //-----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
                             3,
                             win->m_width - 7,
                             height+1 );
-        gdk_gc_unref( gc );
+        g_object_unref (G_OBJECT (gc));
 
         // Hack alert
         dc.m_window = pizza->bin_window;
