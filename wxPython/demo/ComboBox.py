@@ -60,11 +60,13 @@ class TestComboBox(wx.Panel):
     # Capture events every time a user hits a key in the text entry field.
     def EvtText(self, evt):
         self.log.WriteText('EvtText: %s\n' % evt.GetString())
+        evt.Skip()
 
     # Capture events when the user types something into the control then
     # hits ENTER.
     def EvtTextEnter(self, evt):
         self.log.WriteText('EvtTextEnter: %s' % evt.GetString())
+        evt.Skip()
 
 #---------------------------------------------------------------------------
 
