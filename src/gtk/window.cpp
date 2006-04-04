@@ -390,7 +390,7 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
         gdk_draw_rectangle( widget->window, gc, FALSE,
                          dx, dy,
                          widget->allocation.width-dw-1, widget->allocation.height-dh-1 );
-        g_object_unref (G_OBJECT (gc);
+        g_object_unref (G_OBJECT (gc));
         return;
     }
 #endif // __WXUNIVERSAL__
