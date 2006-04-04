@@ -1174,9 +1174,9 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
         else
 #endif
         {
-            gdk_draw_pixmap(m_window, m_penGC,
-                            use_bitmap.GetPixmap(),
-                            0, 0, xx, yy, -1, -1);
+            gdk_draw_drawable(m_window, m_penGC,
+                              use_bitmap.GetPixmap(),
+                              0, 0, xx, yy, -1, -1);
         }
     }
 
@@ -1417,8 +1417,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         }
         else
         {
-            // was: gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), xsrc, ysrc, xx, yy, ww, hh );
-            gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), xsrc, ysrc, cx, cy, cw, ch );
+            // was: gdk_draw_drawable( m_window, m_penGC, use_bitmap.GetPixmap(), xsrc, ysrc, xx, yy, ww, hh );
+            gdk_draw_drawable( m_window, m_penGC, use_bitmap.GetPixmap(), xsrc, ysrc, cx, cy, cw, ch );
         }
 
         // remove mask again if any
@@ -1457,8 +1457,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
             wxBitmap bitmap = memDC->m_selected.Rescale( cx-xx, cy-yy, cw, ch, ww, hh );
 
             // draw scaled bitmap
-            // was: gdk_draw_pixmap( m_window, m_penGC, bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
-            gdk_draw_pixmap( m_window, m_penGC, bitmap.GetPixmap(), 0, 0, cx, cy, -1, -1 );
+            // was: gdk_draw_drawable( m_window, m_penGC, bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
+            gdk_draw_drawable( m_window, m_penGC, bitmap.GetPixmap(), 0, 0, cx, cy, -1, -1 );
         }
         else
         {
@@ -1466,10 +1466,10 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
 
             // copy including child window contents
             gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
-            gdk_draw_pixmap( m_window, m_penGC,
-                             srcDC->GetWindow(),
-                             xsrc, ysrc, xx, yy,
-                             width, height );
+            gdk_draw_drawable( m_window, m_penGC,
+                               srcDC->GetWindow(),
+                               xsrc, ysrc, xx, yy,
+                               width, height );
             gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
         }
     }
