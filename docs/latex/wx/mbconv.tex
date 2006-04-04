@@ -34,6 +34,14 @@ current locale.}
 depends on the system.}
 \end{twocollist}
 
+
+\wxheading{Constants}
+
+\texttt{wxCONV\_FAILED} value is defined as \texttt{(size\_t)$-1$} and is
+returned by the conversion functions instead of the length of the converted
+string if the conversion fails.
+
+
 \wxheading{Derived from}
 
 No base class
@@ -48,6 +56,7 @@ No base class
 \helpref{wxEncodingConverter}{wxencodingconverter}, 
 \helpref{wxMBConv classes overview}{mbconvclasses}
 
+
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
@@ -55,11 +64,14 @@ No base class
 
 \func{}{wxMBConv}{\void}
 
-Constructor.
+Trivial default constructor.
+
 
 \membersection{wxMBConv::MB2WC}\label{wxmbconvmb2wc}
 
 \constfunc{virtual size\_t}{MB2WC}{\param{wchar\_t *}{out}, \param{const char *}{in}, \param{size\_t }{outLen}}
+
+\deprecated{\helpref{ToWChar}{wxmbconvtowchar}}
 
 Converts from a string \arg{in} in multibyte encoding to Unicode putting up to 
 \arg{outLen} characters into the buffer \arg{out}.
@@ -88,6 +100,8 @@ The length of the converted string \emph{excluding} the trailing \NUL.
 \membersection{wxMBConv::WC2MB}\label{wxmbconvwc2mb}
 
 \constfunc{virtual size\_t}{WC2MB}{\param{char* }{buf}, \param{const wchar\_t* }{psz}, \param{size\_t }{n}}
+
+\deprecated{\helpref{FromWChar}{wxmbconvfromwchar}}
 
 Converts from Unicode to multibyte encoding. The semantics of this function
 (including the return value meaning) is the same as for 
@@ -191,6 +205,45 @@ result in a wxWCharBuffer. The macro wxWX2WCbuf is defined as the correct
 return type (without const).
 
 
+\membersection{wxMBConv::FromWChar}\label{wxmbconvfromwchar}
+
+\constfunc{virtual size\_t}{FromWChar}{\param{wchar\_t *}{dst}, \param{size\_t }{dstLen}, \param{const char *}{src}, \param{size\_t }{srcLen = $-1$}}
+
+The most general function for converting a multibyte string to a wide string.
+The main case is when \arg{dst} is not \NULL and \arg{srcLen} is not $-1$: then
+the function converts exactly \arg{srcLen} bytes starting at \arg{src} into
+wide string which it output to \arg{dst}. If the length of the resulting wide
+string is greater than \arg{dstLen}, an error is returned. Note that if 
+\arg{srcLen} bytes don't include \NUL characters, the resulting wide string is
+not \NUL-terminated neither.
+
+If \arg{srcLen} is $-1$, the function supposes that the string is properly
+(i.e. as necessary for the encoding handled by this conversion) \NUL-terminated
+and converts the entire string, including any trailing \NUL bytes. In this case
+the wide string is also \NUL-terminated.
+
+Finally, if \arg{dst} is \NULL, the function returns the length of the needed
+buffer.
+
+\wxheading{Return value}
+
+The number of characters written to \arg{dst} (or the number of characters
+which would have been written to it if it were non-\NULL) on success or 
+\texttt{wxCONV\_FAILED} on error.
+
+
+\membersection{wxMBConv::GetMaxMBNulLen}\label{wxmbconvgetmaxmbnullen}
+
+\func{const size\_t}{GetMaxMBNulLen}{\void}
+
+Returns the maximal value which can be returned by 
+\helpref{GetMBNulLen}{wxmbconvgetmbnullen} for any conversion object. Currently
+this value is $4$.
+
+This method can be used to allocate the buffer with enough space for the
+trailing \NUL characters for any encoding.
+
+
 \membersection{wxMBConv::GetMBNulLen}\label{wxmbconvgetmbnullen}
 
 \constfunc{size\_t}{GetMBNulLen}{\void}
@@ -199,5 +252,13 @@ This function returns $1$ for most of the multibyte encodings in which the
 string is terminated by a single \NUL, $2$ for UTF-16 and $4$ for UTF-32 for
 which the string is terminated with $2$ and $4$ \NUL characters respectively.
 The other cases are not currently supported and $-1$ is returned for them.
+
+
+\membersection{wxMBConv::ToWChar}\label{wxmbconvtowchar}
+
+\constfunc{virtual size\_t}{ToWChar}{\param{char\_t *}{dst}, \param{size\_t }{dstLen}, \param{const wchar\_t *}{src}, \param{size\_t }{srcLen = $-1$}}
+
+This function has the same semantics as \helpref{FromWChar}{wxmbconvfromwchar} 
+except that it converts a wide string to multibyte one.
 
 
