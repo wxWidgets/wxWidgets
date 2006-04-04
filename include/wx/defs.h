@@ -2879,6 +2879,7 @@ typedef GtkWidget *WXWidget;
 #ifdef __WXGTK20__
 #define G_DISABLE_DEPRECATED
 #define PANGO_DISABLE_DEPRECATED
+#define GDK_PIXBUF_DISABLE_DEPRECATED
 #ifndef __VMS
 /* GtkCombo is not defined on VMS if this is defined */
 # define GTK_DISABLE_DEPRECATED
