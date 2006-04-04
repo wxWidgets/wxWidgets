@@ -1054,7 +1054,7 @@ void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)
         GdkWindow *window = gtk_tree_view_get_bin_window(m_treeview);
         if (window)
         {
-            m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
+            m_backgroundColour.CalcPixel( gdk_drawable_get_colormap( window ) );
             gdk_window_set_background( window, m_backgroundColour.GetColor() );
             gdk_window_clear( window );
         }
