@@ -346,7 +346,7 @@ bool wxBitmap::CreateFromXpm( const char **bits )
         M_BMPDATA->m_mask->m_bitmap = mask;
     }
 
-    gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
+    gdk_drawable_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
 
     M_BMPDATA->m_bpp = visual->depth;  // Can we get a different depth from create_from_xpm_d() ?
 
@@ -1339,7 +1339,7 @@ bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
            M_BMPDATA->m_mask->m_bitmap = mask;
         }
 
-        gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
+        gdk_drawable_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
 
         M_BMPDATA->m_bpp = visual->depth;
     }

@@ -797,7 +797,7 @@ void wxDropSource::PrepareIcon( int action, GdkDragContext *context )
     GdkPixmap *pixmap = icon->GetPixmap();
 
     gint width,height;
-    gdk_window_get_size (pixmap, &width, &height);
+    gdk_drawable_get_size (pixmap, &width, &height);
 
     GdkColormap *colormap = gtk_widget_get_colormap( m_widget );
     gtk_widget_push_colormap (colormap);

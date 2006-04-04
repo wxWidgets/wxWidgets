@@ -2326,7 +2326,7 @@ void gtk_wxwindow_size_callback( GtkWidget* WXUNUSED_UNLESS_XIM(widget),
     {
         gint width, height;
 
-        gdk_window_get_size (widget->window, &width, &height);
+        gdk_drawable_get_size (widget->window, &width, &height);
         win->m_icattr->preedit_area.width = width;
         win->m_icattr->preedit_area.height = height;
         gdk_ic_set_attr (win->m_ic, win->m_icattr, GDK_IC_PREEDIT_AREA);
@@ -2397,7 +2397,7 @@ gtk_wxwindow_realized_callback( GtkWidget * WXUNUSED_UNLESS_XIM(widget),
                 break;
             }
 
-            gdk_window_get_size (widget->window, &width, &height);
+            gdk_drawable_get_size (widget->window, &width, &height);
 
             attrmask |= GDK_IC_PREEDIT_POSITION_REQ;
             attr->spot_location.x = 0;
