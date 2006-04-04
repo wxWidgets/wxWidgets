@@ -144,8 +144,8 @@ wxCursor::wxCursor(const char bits[], int width, int  height,
                  data, mask, fg->GetColor(), bg->GetColor(),
                  hotSpotX, hotSpotY );
 
-    gdk_bitmap_unref( data );
-    gdk_bitmap_unref( mask );
+    gdk_drawable_unref( data );
+    gdk_drawable_unref( mask );
 }
 
 #if wxUSE_IMAGE
@@ -296,8 +296,8 @@ wxCursor::wxCursor( const wxImage & image )
                                 hotSpotX, hotSpotY
                              );
 
-    gdk_bitmap_unref( data );
-    gdk_bitmap_unref( mask );
+    gdk_drawable_unref( data );
+    gdk_drawable_unref( mask );
     delete [] bits;
     delete [] maskBits;
 }

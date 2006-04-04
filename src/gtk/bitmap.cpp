@@ -82,7 +82,7 @@ wxMask::wxMask( const wxBitmap& bitmap )
 wxMask::~wxMask()
 {
     if (m_bitmap)
-        gdk_bitmap_unref( m_bitmap );
+        gdk_drawable_unref( m_bitmap );
 }
 
 bool wxMask::Create( const wxBitmap& bitmap,
@@ -90,7 +90,7 @@ bool wxMask::Create( const wxBitmap& bitmap,
 {
     if (m_bitmap)
     {
-        gdk_bitmap_unref( m_bitmap );
+        gdk_drawable_unref( m_bitmap );
         m_bitmap = (GdkBitmap*) NULL;
     }
 
@@ -196,7 +196,7 @@ bool wxMask::Create( const wxBitmap& bitmap )
 {
     if (m_bitmap)
     {
-        gdk_bitmap_unref( m_bitmap );
+        gdk_drawable_unref( m_bitmap );
         m_bitmap = (GdkBitmap*) NULL;
     }
 
@@ -257,9 +257,9 @@ wxBitmapRefData::wxBitmapRefData()
 wxBitmapRefData::~wxBitmapRefData()
 {
     if (m_pixmap)
-        gdk_pixmap_unref( m_pixmap );
+        gdk_drawable_unref( m_pixmap );
     if (m_bitmap)
-        gdk_bitmap_unref( m_bitmap );
+        gdk_drawable_unref( m_bitmap );
     if (m_pixbuf)
         gdk_pixbuf_unref( m_pixbuf );
     delete m_mask;
@@ -1518,7 +1518,7 @@ void wxBitmap::PurgeOtherRepresentations(wxBitmap::Representation keep)
     }
     if (keep == Pixbuf && HasPixmap())
     {
-        gdk_pixmap_unref( M_BMPDATA->m_pixmap );
+        gdk_drawable_unref( M_BMPDATA->m_pixmap );
         M_BMPDATA->m_pixmap = NULL;
     }
 }

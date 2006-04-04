@@ -1158,7 +1158,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
 
         gdk_draw_drawable( m_window, m_textGC, bitmap2, 0, 0, xx, yy, -1, -1 );
 
-        gdk_bitmap_unref( bitmap2 );
+        gdk_drawable_unref( bitmap2 );
         gdk_gc_unref( gc );
     }
     else
@@ -1200,7 +1200,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     }
 
     if (new_mask)
-        gdk_bitmap_unref( new_mask );
+        gdk_drawable_unref( new_mask );
 }
 
 bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
@@ -1412,7 +1412,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
 
             gdk_draw_drawable( m_window, m_textGC, bitmap, xsrc, ysrc, cx, cy, cw, ch );
 
-            gdk_bitmap_unref( bitmap );
+            gdk_drawable_unref( bitmap );
             gdk_gc_unref( gc );
         }
         else
@@ -1441,7 +1441,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         }
 
         if (new_mask)
-            gdk_bitmap_unref( new_mask );
+            gdk_drawable_unref( new_mask );
     }
     else // use_bitmap_method
     {
