@@ -374,11 +374,14 @@ wxString wxEncodingConverter::Convert(const wxString& input) const
 #define STOP wxFONTENCODING_SYSTEM
 
 #define NUM_OF_PLATFORMS  4 /*must conform to enum wxPLATFORM_XXXX !!!*/
-#define ENC_PER_PLATFORM  5
+#define ENC_PER_PLATFORM  3
            // max no. of encodings for one language used on one platform
            // Anybody thinks 5 is not enough? ;-)
 
-static wxFontEncoding
+           // It is too much. Using maximum of everything at the current moment to not
+           // make the library larger than necessary. Make larger only if necessary - MR
+
+static const wxFontEncoding
     EquivalentEncodings[][NUM_OF_PLATFORMS][ENC_PER_PLATFORM+1] = {
 
     // *** Please put more common encodings as first! ***
@@ -477,7 +480,7 @@ wxFontEncodingArray wxEncodingConverter::GetPlatformEquivalents(wxFontEncoding e
     }
 
     int i, clas, e ;
-    wxFontEncoding *f;
+    const wxFontEncoding *f;
     wxFontEncodingArray arr;
 
     clas = 0;
@@ -504,7 +507,7 @@ wxFontEncodingArray wxEncodingConverter::GetPlatformEquivalents(wxFontEncoding e
 wxFontEncodingArray wxEncodingConverter::GetAllEquivalents(wxFontEncoding enc)
 {
     int i, clas, e, j ;
-    wxFontEncoding *f;
+    const wxFontEncoding *f;
     wxFontEncodingArray arr;
 
     arr = GetPlatformEquivalents(enc); // we want them to be first items in array
