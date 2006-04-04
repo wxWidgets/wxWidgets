@@ -38,7 +38,8 @@ wxMSW: Fixed (again) sizing/positioning issues of calling Realize on
 a wx.ToolBar that is not manaaged directly by a frame and that is
 already shown.
 
-
+wxMSW: Fixed wx.Choice/wx.ComboBox so they send events when a new item
+is selected only with the keyboard.
 
 
 
