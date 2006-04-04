@@ -400,7 +400,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
         GdkPixmap *dstpix = NULL;
         if (GetPixmap())
         {
-            GdkVisual *visual = gdk_window_get_visual( GetPixmap() );
+            GdkVisual *visual = gdk_drawable_get_visual( GetPixmap() );
             if (visual == NULL)
                 visual = wxTheApp->GetGdkVisual();
 
@@ -1053,7 +1053,7 @@ wxImage wxBitmap::ConvertToImage() const
 
         if (GetPixmap())
         {
-            GdkVisual *visual = gdk_window_get_visual( GetPixmap() );
+            GdkVisual *visual = gdk_drawable_get_visual( GetPixmap() );
             if (visual == NULL)
                 visual = wxTheApp->GetGdkVisual();
 

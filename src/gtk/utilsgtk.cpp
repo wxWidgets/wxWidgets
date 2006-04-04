@@ -157,7 +157,7 @@ bool wxColourDisplay()
 
 int wxDisplayDepth()
 {
-    return gdk_window_get_visual( wxGetRootWindow()->window )->depth;
+    return gdk_drawable_get_visual( wxGetRootWindow()->window )->depth;
 }
 
 wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()

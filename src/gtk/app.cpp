@@ -543,7 +543,7 @@ GdkVisual *wxApp::GetGdkVisual()
     if (m_glVisualInfo)
         visual = gdkx_visual_get( ((XVisualInfo *) m_glVisualInfo)->visualid );
     else
-        visual = gdk_window_get_visual( wxGetRootWindow()->window );
+        visual = gdk_drawable_get_visual( wxGetRootWindow()->window );
 
     wxASSERT( visual );
 
