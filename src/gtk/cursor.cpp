@@ -40,7 +40,7 @@ wxCursorRefData::wxCursorRefData()
 
 wxCursorRefData::~wxCursorRefData()
 {
-    if (m_cursor) gdk_cursor_destroy( m_cursor );
+    if (m_cursor) gdk_cursor_unref( m_cursor );
 }
 
 //-----------------------------------------------------------------------------
