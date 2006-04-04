@@ -1466,9 +1466,10 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
 
             // copy including child window contents
             gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
-            gdk_window_copy_area( m_window, m_penGC, xx, yy,
-                                  srcDC->GetWindow(),
-                                  xsrc, ysrc, width, height );
+            gdk_draw_pixmap( m_window, m_penGC,
+                             srcDC->GetWindow(),
+                             xsrc, ysrc, xx, yy,
+                             width, height );
             gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
         }
     }
