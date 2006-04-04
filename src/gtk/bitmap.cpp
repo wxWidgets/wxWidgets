@@ -484,7 +484,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
                 dst[h*dstbyteperline+width/8] = outbyte;
         }
 
-        gdk_image_destroy( img );
+        g_object_unref (G_OBJECT (img));
         if (gc) g_object_unref (G_OBJECT (gc));
 
         if ( dst )
@@ -543,7 +543,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
             bmp.SetMask(mask);
 
             free( dst );
-            gdk_image_destroy( img );
+            g_object_unref (G_OBJECT (img));
         }
 
         free( tablex );
@@ -660,7 +660,7 @@ bool wxBitmap::CreateFromImageAsBitmap(const wxImage& img)
 
     gdk_draw_image( GetBitmap(), data_gc, data_image, 0, 0, 0, 0, width, height );
 
-    gdk_image_destroy( data_image );
+    g_object_unref (G_OBJECT (data_image));
     g_object_unref (G_OBJECT (data_gc));
 
     // Blit mask
@@ -671,7 +671,7 @@ bool wxBitmap::CreateFromImageAsBitmap(const wxImage& img)
 
         gdk_draw_image( GetMask()->GetBitmap(), mask_gc, mask_image, 0, 0, 0, 0, width, height );
 
-        gdk_image_destroy( mask_image );
+        g_object_unref (G_OBJECT (mask_image));
         g_object_unref (G_OBJECT (mask_gc));
     }
 
@@ -900,7 +900,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& img)
 
     gdk_draw_image( GetPixmap(), data_gc, data_image, 0, 0, 0, 0, width, height );
 
-    gdk_image_destroy( data_image );
+    g_object_unref (G_OBJECT (data_image));
     g_object_unref (G_OBJECT (data_gc));
 
     // Blit mask
@@ -911,7 +911,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& img)
 
         gdk_draw_image( GetMask()->GetBitmap(), mask_gc, mask_image, 0, 0, 0, 0, width, height );
 
-        gdk_image_destroy( mask_image );
+        g_object_unref (G_OBJECT (mask_image));
         g_object_unref (G_OBJECT (mask_gc));
     }
 
@@ -1136,8 +1136,8 @@ wxImage wxBitmap::ConvertToImage() const
             }
         }
 
-        gdk_image_destroy( gdk_image );
-        if (gdk_image_mask) gdk_image_destroy( gdk_image_mask );
+        g_object_unref (G_OBJECT (gdk_image));
+        if (gdk_image_mask) g_object_unref (G_OBJECT (gdk_image_mask));
     }
 
     return image;
