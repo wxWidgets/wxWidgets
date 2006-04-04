@@ -316,6 +316,30 @@ wxMBConv::FromWChar(char *dst, size_t dstLen,
     return dstWritten;
 }
 
+size_t wxMBConv::MB2WC(wchar_t *out, const char *in, size_t outLen) const
+{
+    size_t rc = ToWChar(out, outLen, in);
+    if ( rc != wxCONV_FAILED )
+    {
+        // ToWChar() returns the buffer length, i.e. including the trailing
+        // NUL, while this method doesn't take it into account
+        rc--;
+    }
+
+    return rc;
+}
+
+size_t wxMBConv::WC2MB(char *out, const wchar_t *in, size_t outLen) const
+{
+    size_t rc = FromWChar(out, outLen, in);
+    if ( rc != wxCONV_FAILED )
+    {
+        rc -= GetMBNulLen();
+    }
+
+    return rc;
+}
+
 wxMBConv::~wxMBConv()
 {
     // nothing to do here (necessary for Darwin linking probably)

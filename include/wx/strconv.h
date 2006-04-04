@@ -35,6 +35,12 @@
 // wxMBConv (abstract base class for conversions)
 // ----------------------------------------------------------------------------
 
+// When deriving a new class from wxMBConv you must reimplement ToWChar() and
+// FromWChar() methods which are not pure virtual only for historical reasons,
+// don't let the fact that the existing classes implement MB2WC/WC2MB() instead
+// confuse you.
+//
+// And you might need to override GetMBNulLen() as well.
 class WXDLLIMPEXP_BASE wxMBConv
 {
 public:
@@ -137,8 +143,8 @@ public:
     // Note that outLen is the length of the output buffer, not the length of
     // the input (which is always supposed to be terminated by one or more
     // NULs, as appropriate for the encoding)!
-    virtual size_t MB2WC(wchar_t *out, const char *in, size_t outLen) const = 0;
-    virtual size_t WC2MB(char *out, const wchar_t *in, size_t outLen) const = 0;
+    virtual size_t MB2WC(wchar_t *out, const char *in, size_t outLen) const;
+    virtual size_t WC2MB(char *out, const wchar_t *in, size_t outLen) const;
 
 
     // virtual dtor for any base class
