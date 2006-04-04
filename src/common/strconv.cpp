@@ -219,7 +219,7 @@ wxMBConv::cMB2WC(const char *in, size_t inLen, size_t *outLen) const
     if ( inLen != (size_t)-1 )
     {
         // we need to know how to find the end of this string
-        nulLen = GetMinMBCharWidth();
+        nulLen = GetMBNulLen();
         if ( nulLen == (size_t)-1 )
             return wbuf;
 
@@ -1368,6 +1368,10 @@ public:
     virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
     virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 
+    // classify this encoding as explained in wxMBConv::GetMBNulLen()
+    // comment
+    virtual size_t GetMBNulLen() const;
+
     bool IsOk() const
         { return (m2w != ICONV_T_INVALID) && (w2m != ICONV_T_INVALID); }
 
@@ -1382,10 +1386,6 @@ protected:
 #endif
 
 private:
-    // classify this encoding as explained in wxMBConv::GetMinMBCharWidth()
-    // comment
-    virtual size_t GetMinMBCharWidth() const;
-
     // the name (for iconv_open()) of a wide char charset -- if none is
     // available on this machine, it will remain NULL
     static wxString ms_wcCharsetName;
@@ -1394,7 +1394,7 @@ private:
     // different endian-ness than the native one
     static bool ms_wcNeedsSwap;
 
-    // cached result of GetMinMBCharWidth(); set to 0 meaning "unknown"
+    // cached result of GetMBNulLen(); set to 0 meaning "unknown"
     // initially
     size_t m_minMBCharWidth;
 };
@@ -1543,7 +1543,7 @@ size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
     // find the string length: notice that must be done differently for
     // NUL-terminated strings and UTF-16/32 which are terminated with 2/4 NULs
     size_t inbuf;
-    const size_t nulLen = GetMinMBCharWidth();
+    const size_t nulLen = GetMBNulLen();
     switch ( nulLen )
     {
         default:
@@ -1697,7 +1697,7 @@ size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     return res;
 }
 
-size_t wxMBConv_iconv::GetMinMBCharWidth() const
+size_t wxMBConv_iconv::GetMBNulLen() const
 {
     if ( m_minMBCharWidth == 0 )
     {
@@ -1930,6 +1930,44 @@ public:
         return len - 1;
     }
 
+    virtual size_t GetMBNulLen() const
+    {
+        if ( m_minMBCharWidth == 0 )
+        {
+            int len = ::WideCharToMultiByte
+                        (
+                            m_CodePage,     // code page
+                            0,              // no flags
+                            L"",            // input string
+                            1,              // translate just the NUL
+                            NULL,           // output buffer
+                            0,              // and its size
+                            NULL,           // no replacement char
+                            NULL            // [out] don't care if it was used
+                        );
+
+            wxMBConv_win32 * const self = wxConstCast(this, wxMBConv_win32);
+            switch ( len )
+            {
+                default:
+                    wxLogDebug(_T("Unexpected NUL length %d"), len);
+                    // fall through
+
+                case 0:
+                    self->m_minMBCharWidth = (size_t)-1;
+                    break;
+
+                case 1:
+                case 2:
+                case 4:
+                    self->m_minMBCharWidth = len;
+                    break;
+            }
+        }
+
+        return m_minMBCharWidth;
+    }
+
     bool IsOk() const { return m_CodePage != -1; }
 
 private:
@@ -1988,48 +2026,11 @@ private:
 #endif
     }
 
-    virtual size_t GetMinMBCharWidth() const
-    {
-        if ( m_minMBCharWidth == 0 )
-        {
-            int len = ::WideCharToMultiByte
-                        (
-                            m_CodePage,     // code page
-                            0,              // no flags
-                            L"",            // input string
-                            1,              // translate just the NUL
-                            NULL,           // output buffer
-                            0,              // and its size
-                            NULL,           // no replacement char
-                            NULL            // [out] don't care if it was used
-                        );
-
-            wxMBConv_win32 * const self = wxConstCast(this, wxMBConv_win32);
-            switch ( len )
-            {
-                default:
-                    wxLogDebug(_T("Unexpected NUL length %d"), len);
-                    // fall through
-
-                case 0:
-                    self->m_minMBCharWidth = (size_t)-1;
-                    break;
-
-                case 1:
-                case 2:
-                case 4:
-                    self->m_minMBCharWidth = len;
-                    break;
-            }
-        }
-
-        return m_minMBCharWidth;
-    }
 
     // the code page we're working with
     long m_CodePage;
 
-    // cached result of GetMinMBCharWidth(), set to 0 initially meaning
+    // cached result of GetMBNulLen(), set to 0 initially meaning
     // "unknown"
     size_t m_minMBCharWidth;
 };
@@ -2665,14 +2666,7 @@ public:
         return inbuf;
     }
 
-    bool IsOk() const { return m_ok; }
-
-public:
-    wxFontEncoding m_enc;
-    wxEncodingConverter m2w, w2m;
-
-private:
-    virtual size_t GetMinMBCharWidth() const
+    virtual size_t GetMBNulLen() const
     {
         switch ( m_enc )
         {
@@ -2689,6 +2683,13 @@ private:
         }
     }
 
+    bool IsOk() const { return m_ok; }
+
+public:
+    wxFontEncoding m_enc;
+    wxEncodingConverter m2w, w2m;
+
+private:
     // were we initialized successfully?
     bool m_ok;
 
@@ -3081,14 +3082,13 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     return len;
 }
 
-size_t wxCSConv::GetMinMBCharWidth() const
+size_t wxCSConv::GetMBNulLen() const
 {
     CreateConvIfNeeded();
 
     if ( m_convReal )
     {
-        // cast needed just to call private function of m_convReal
-        return ((wxCSConv *)m_convReal)->GetMinMBCharWidth();
+        return m_convReal->GetMBNulLen();
     }
 
     return 1;

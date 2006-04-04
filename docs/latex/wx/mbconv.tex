@@ -115,7 +115,8 @@ trailing \NUL character(s). If the string is not \NUL-terminated, a temporary
 \NUL-terminated copy of it suitable for passing to \helpref{MB2WC}{wxmbconvmb2wc} 
 is made, so it is more efficient to ensure that the string is does have the
 appropriate number of \NUL bytes (which is usually $1$ but may be $2$ or $4$
-for UTF-16 or UTF-32), especially for long strings.
+for UTF-16 or UTF-32, see \helpref{GetMBNulLen}{wxmbconvgetmbnullen}),
+especially for long strings.
 
 If \arg{outLen} is not-\NULL, it receives the length of the converted
 string.
@@ -188,4 +189,15 @@ Converts from the current wxChar type to Unicode. If wxChar is wchar\_t,
 it returns the parameter unaltered. If wxChar is char, it returns the
 result in a wxWCharBuffer. The macro wxWX2WCbuf is defined as the correct
 return type (without const).
+
+
+\membersection{wxMBConv::GetMBNulLen}\label{wxmbconvgetmbnullen}
+
+\constfunc{size\_t}{GetMBNulLen}{\void}
+
+This function returns $1$ for most of the multibyte encodings in which the
+string is terminated by a single \NUL, $2$ for UTF-16 and $4$ for UTF-32 for
+which the string is terminated with $2$ and $4$ \NUL characters respectively.
+The other cases are not currently supported and $-1$ is returned for them.
+
 

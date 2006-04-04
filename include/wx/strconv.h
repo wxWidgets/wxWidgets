@@ -81,10 +81,6 @@ public:
     const wxWCharBuffer cWX2WC(const char *psz) const { return cMB2WC(psz); }
 #endif // Unicode/ANSI
 
-    // virtual dtor for any base class
-    virtual ~wxMBConv();
-
-private:
     // this function is used in the implementation of cMB2WC() to distinguish
     // between the following cases:
     //
@@ -96,7 +92,10 @@ private:
     //         4 NULs (UTF-32/UCS-4 and variants): return 4 in this case
     //
     // anything else is not supported currently and -1 should be returned
-    virtual size_t GetMinMBCharWidth() const { return 1; }
+    virtual size_t GetMBNulLen() const { return 1; }
+
+    // virtual dtor for any base class
+    virtual ~wxMBConv();
 };
 
 // ----------------------------------------------------------------------------
@@ -136,14 +135,13 @@ public:
         return m_conv->WC2MB(out, in, outLen);
     }
 
-private:
-    virtual size_t GetMinMBCharWidth() const
+    virtual size_t GetMBNulLen() const
     {
         // cast needed to call a private function
-        return ((wxConvBrokenFileNames *)m_conv)->GetMinMBCharWidth();
+        return m_conv->GetMBNulLen();
     }
 
-
+private:
     // the conversion object we forward to
     wxMBConv *m_conv;
 };
@@ -188,8 +186,8 @@ private:
 
 class WXDLLIMPEXP_BASE wxMBConvUTF16Base : public wxMBConv
 {
-private:
-    virtual size_t GetMinMBCharWidth() const { return 2; }
+public:
+    virtual size_t GetMBNulLen() const { return 2; }
 };
 
 // ----------------------------------------------------------------------------
@@ -220,8 +218,8 @@ public:
 
 class WXDLLIMPEXP_BASE wxMBConvUTF32Base : public wxMBConv
 {
-private:
-    virtual size_t GetMinMBCharWidth() const { return 4; }
+public:
+    virtual size_t GetMBNulLen() const { return 4; }
 };
 
 // ----------------------------------------------------------------------------
@@ -267,6 +265,7 @@ public:
 
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+    virtual size_t GetMBNulLen() const;
 
     void Clear() ;
 
@@ -283,8 +282,6 @@ private:
     // set the name (may be only called when m_name == NULL), makes copy of
     // charset string
     void SetName(const wxChar *charset);
-
-    virtual size_t GetMinMBCharWidth() const;
 
 
     // note that we can't use wxString here because of compilation
