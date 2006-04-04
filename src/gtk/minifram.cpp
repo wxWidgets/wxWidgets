@@ -290,8 +290,8 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
                             );
 
         GtkWidget *pw = gtk_pixmap_new( pixmap, mask );
-        gdk_drawable_unref( mask );
-        gdk_drawable_unref( pixmap );
+        g_object_unref (G_OBJECT (mask));
+        g_object_unref (G_OBJECT (pixmap));
         gtk_widget_show( pw );
 
         GtkWidget *close_button = gtk_button_new();
