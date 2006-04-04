@@ -555,18 +555,8 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     bool init_result;
 
 #if wxUSE_THREADS
-    // GTK 1.2 up to version 1.2.3 has broken threads
-    if ((gtk_major_version == 1) &&
-        (gtk_minor_version == 2) &&
-        (gtk_micro_version < 4))
-    {
-        printf( "wxWidgets warning: GUI threading disabled due to outdated GTK version\n" );
-    }
-    else
-    {
-        if (!g_thread_supported())
-            g_thread_init(NULL);
-    }
+    if (!g_thread_supported())
+        g_thread_init(NULL);
 #endif // wxUSE_THREADS
 
     gtk_set_locale();
