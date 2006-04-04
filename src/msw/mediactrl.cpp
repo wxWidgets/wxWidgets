@@ -51,10 +51,13 @@
 //---------------------------------------------------------------------------
 #include "wx/log.h"         //wxLogDebug
 #include "wx/math.h"        //log10 & pow
-#include "wx/msw/private.h" //user info and wndproc setting/getting
 #include "wx/dcclient.h"
 #include "wx/timer.h"
 #include "wx/dynlib.h"
+#include "wx/settings.h"
+
+#include "wx/msw/private.h" //user info and wndproc setting/getting
+#include "wx/msw/registry.h" //wxRegKey etc. in wxQTMediaBackend
 
 //---------------------------------------------------------------------------
 // Externals (somewhere in src/msw/app.cpp and src/msw/window.cpp)
@@ -68,6 +71,15 @@ extern WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName;
 
 LRESULT WXDLLIMPEXP_CORE APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
                                    WPARAM wParam, LPARAM lParam);
+
+//---------------------------------------------------------------------------
+// Killed MSVC warnings
+//---------------------------------------------------------------------------
+//disable "cast truncates constant value" for VARIANT_BOOL values
+//passed as parameters in VC5 and up
+#ifdef _MSC_VER
+#pragma warning (disable:4310)
+#endif
 
 //===========================================================================
 //  BACKEND DECLARATIONS
@@ -923,6 +935,8 @@ public:
 //---------------------------------------------------------------------------
 //  MCI Includes
 //---------------------------------------------------------------------------
+
+#ifndef __WXWINCE__
 #include <mmsystem.h>
 
 class WXDLLIMPEXP_MEDIA wxMCIMediaBackend : public wxMediaBackendCommonBase
@@ -978,6 +992,7 @@ public:
 
     DECLARE_DYNAMIC_CLASS(wxMCIMediaBackend)
 };
+#endif
 
 //---------------------------------------------------------------------------
 //
@@ -1204,6 +1219,7 @@ public:
     wxDL_VOIDMETHOD_DEFINE(UpdateMovie, (Movie m), (m));
     wxDL_VOIDMETHOD_DEFINE(EndUpdate, (CGrafPtr port), (port));
     wxDL_METHOD_DEFINE( OSErr, GetMoviesStickyError, (), (), -1);
+    wxDL_VOIDMETHOD_DEFINE(ClearMoviesStickyError, (), ());
 };
 
 bool wxQuickTimeLibrary::Initialize()
@@ -1212,11 +1228,35 @@ bool wxQuickTimeLibrary::Initialize()
 
     bool bWasLoggingEnabled = wxLog::EnableLogging(false);    //Turn off the wxDynamicLibrary logging
 
+    //Quicktime 6 and earlier only distributed the dll in the 
+    //Quicktime windows SDK, however....
     if(!m_dll.Load(wxT("qtmlClient.dll")))
     {
-        wxLog::EnableLogging(bWasLoggingEnabled);
-        return false;
-    }
+        //Quicktime 7 distributes the dll with the application
+        //but the dll is probably not in the user's path, so
+        //we do a bit of trickery to find the dll
+	    
+        //(HKEY_LOCAL_MACHINE\\SOFTWARE\\Apple Computer, Inc.\\QuickTime)
+        //Key "QTExtDir"
+        wxRegKey key(wxRegKey::HKLM, wxT("SOFTWARE\\Apple Computer, Inc.\\QuickTime"));
+        if ( key.Exists() )
+        {
+            wxString sQTExtPath;
+            if( key.QueryValue(wxT("QTExtDir"), sQTExtPath) )
+            {
+                m_dll.Load(sQTExtPath + 
+                           wxT("QTMLClient.dll"));
+            }
+        }
+
+        if(!m_dll.IsLoaded()) //Did the registry method fail?
+        {
+		    //OK, now we've REALLY failed to find it :(
+            wxLog::EnableLogging(bWasLoggingEnabled);
+            return false;
+        }//!IsLoaded?
+     }
+ 
 
     wxDL_METHOD_LOAD( m_dll, StartMovie, m_ok );
     wxDL_METHOD_LOAD( m_dll, StopMovie, m_ok );
@@ -1273,7 +1313,8 @@ bool wxQuickTimeLibrary::Initialize()
     wxDL_METHOD_LOAD( m_dll, UpdateMovie, m_ok );
     wxDL_METHOD_LOAD( m_dll, EndUpdate, m_ok );
     wxDL_METHOD_LOAD( m_dll, GetMoviesStickyError, m_ok );
-
+    wxDL_METHOD_LOAD( m_dll, ClearMoviesStickyError, m_ok );
+ 
     wxLog::EnableLogging(bWasLoggingEnabled);
     m_ok = true;
 
@@ -1633,7 +1674,10 @@ wxAMMediaBackend::~wxAMMediaBackend()
 void wxAMMediaBackend::Clear()
 {
     if(m_pTimer)
+    {
         delete m_pTimer;
+        m_pTimer = NULL;
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -1874,33 +1918,7 @@ bool wxAMMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
 //---------------------------------------------------------------------------
 bool wxAMMediaBackend::Play()
 {
-    // if the movie isn't done loading yet
-    // go into an sync getmessage loop until it is :)
-    if(m_pMP)
-    {
-        MPReadyStateConstants nState;
-        m_pMP->get_ReadyState(&nState);
-        while(nState == mpReadyStateLoading && wxYieldIfNeeded())
-        {
-          m_pMP->get_ReadyState(&nState);
-        }
-    }
-    else
-    {
-        IActiveMovie2* pAM2;
-        ReadyStateConstants nState;
-        if(m_pAM->QueryInterface(IID_IActiveMovie2, (void**)&pAM2) == 0 &&
-            pAM2->get_ReadyState(&nState) == 0)
-        {
-            while(nState == amvLoading && wxYieldIfNeeded())
-            {
-                pAM2->get_ReadyState(&nState);
-            }
-            pAM2->Release();
-        }
-    }
-
-    //Actually try to play the movie
+    // Actually try to play the movie, even though it may not be loaded yet.
     HRESULT hr = m_pAM->Run();
     if(SUCCEEDED(hr))
     {
@@ -2177,6 +2195,8 @@ void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
 //---------------------------------------------------------------------------
 // End of wxAMMediaBackend
 //---------------------------------------------------------------------------
+
+#ifndef __WXWINCE__
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
@@ -2703,6 +2723,8 @@ LRESULT CALLBACK wxMCIMediaBackend::OnNotifyWndProc(HWND hWnd, UINT nMsg,
     return DefWindowProc(hWnd, nMsg, wParam, lParam);
 }
 
+#endif
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
 // wxQTMediaBackend
@@ -2865,10 +2887,7 @@ wxQTMediaBackend::~wxQTMediaBackend()
     if(m_lib.IsOk())
     {
         if(m_pMC)
-        {
             m_lib.DisposeMovieController(m_pMC);
-        //    m_pMC = NULL;
-        }
 
         // destroy wxQTMediaEvtHandler we pushed on it
         m_ctrl->PopEventHandler(true);
@@ -2929,9 +2948,12 @@ bool wxQTMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     // can use it as a WindowRef
     m_lib.CreatePortAssociation(m_ctrl->GetHWND(), NULL, 0L);
 
-    //Part of a suggestion from Greg Hazel to repaint
-    //movie when idle
+    // Part of a suggestion from Greg Hazel to repaint
+    // movie when idle
     m_ctrl->PushEventHandler(new wxQTMediaEvtHandler(this, m_ctrl->GetHWND()));
+
+    // Set background color etc. implicitly
+    wxQTMediaBackend::ShowPlayerControls(wxMEDIACTRLPLAYERCONTROLS_NONE);
 
     // done
     return true;
@@ -2953,6 +2975,13 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
 
     short movieResFile = 0; //= 0 because of annoying VC6 warning
     FSSpec sfFile;
+
+    //RN: Clear the movies sticky error that we will check later
+    //as CreateControl() sometimes gives an error in some cases on QT7Win
+    //(-43 for example, which I can't find anywhere...) and to 
+    //make sure that the last error doesn't interfere with this particular
+    //Load() call
+    m_lib.ClearMoviesStickyError();
 
     if (m_lib.NativePathNameToFSSpec ((char*) (const char*) fileName.mb_str(),
                                 &sfFile, 0) != noErr)
@@ -2979,7 +3008,7 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
     //of wxMediaCtrl - so it just does what the QuickTime player does
     if(err == noErr  && m_lib.GetMoviesStickyError() == noErr)
     {
-    m_lib.CloseMovieFile (movieResFile);
+        m_lib.CloseMovieFile (movieResFile);
 
         FinishLoad();
         return true;
@@ -3049,7 +3078,7 @@ bool wxQTMediaBackend::Load(const wxURI& location)
     if (err == noErr)
     {
         long timeNow;
-    Fixed playRate;
+        Fixed playRate;
 
         timeNow = m_lib.GetMovieTime(m_movie, NULL);
         wxASSERT(m_lib.GetMoviesError() == noErr);
@@ -3331,8 +3360,8 @@ void wxQTMediaBackend::Cleanup()
 
     if(m_timer)
     {
-    delete m_timer;
-    m_timer = NULL;
+        delete m_timer;
+        m_timer = NULL;
     }
 
     m_lib.StopMovie(m_movie);
@@ -3417,6 +3446,18 @@ bool wxQTMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
             //set the user data of our window
             wxSetWindowUserData((HWND)m_ctrl->GetHWND(), this);
         }
+
+        // don't erase the background of our control window so that 
+        // resizing is a bit smoother as the movie controller handles it
+        m_ctrl->SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    }
+    else
+    {
+        //Without the controller we don't repaint our own background 
+        //if there isn't a movie so make sure it has one... 
+        m_ctrl->SetBackgroundColour(
+               wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)
+                                   );
     }
 
     NotifyMovieSizeChanged();
@@ -3547,5 +3588,3 @@ FORCE_LINK_ME(basewxmediabackends);
 //  End wxMediaCtrl Compilation Guard and this file
 //---------------------------------------------------------------------------
 #endif //wxUSE_MEDIACTRL
-
-

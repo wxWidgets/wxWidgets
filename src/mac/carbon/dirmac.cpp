@@ -158,10 +158,14 @@ bool wxDirData::Read(wxString *filename)
         UInt32 fetched = 0;
 
         err = FSGetCatalogInfoBulk( m_iterator, 1, &fetched, NULL, kFSCatInfoNodeFlags | kFSCatInfoFinderInfo , &catalogInfo , &fileRef, NULL, &uniname );
+        
+        // expected error codes 
+        
         if ( errFSNoMoreItems == err )
             return false ;
 
-        wxASSERT( noErr == err ) ;
+        if ( afpAccessDenied == err )
+            return false ;
 
         if ( noErr != err )
             break ;

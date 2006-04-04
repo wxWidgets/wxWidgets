@@ -90,27 +90,6 @@ int wxDisplayDepth()
     return g_displayDC->getBitsPerPixel();
 }
 
-wxString wxGetOsDescription()
-{
-    wxString osname(
-
-#if defined(__UNIX__)
-        _T("Unix")
-#elif defined(__OS2__)
-        _T("OS/2")
-#elif defined(__WIN32__)
-        _T("Windows")
-#elif defined(__DOS__)
-        _T("DOS")
-#else
-        _T("unknown")
-#endif
-
-    );
-
-    return osname;
-}
-
 #if wxUSE_GUI
 
 wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()

@@ -17,6 +17,13 @@ import  pprint
 import  wx
 import  images
 
+
+# helper function to make sure we don't convert unicode objects to strings
+# or vice versa when converting lists and None values to text.
+convert = str
+if 'unicode' in wx.PlatformInfo:
+   convert = unicode
+
 #----------------------------------------------------------------------------
 
 class MimeTypesDemoPanel(wx.Panel):
@@ -199,8 +206,16 @@ class MimeTypesDemoPanel(wx.Panel):
             mtypes = wx.TheMimeTypesManager.EnumAllFileTypes()
         except wx.PyAssertionError:
             mtypes = []
+        
+        # TODO: On wxMac, EnumAllFileTypes produces tons of dupes, which
+        # causes quirky behavior because the list control doesn't expect
+        # dupes, and simply wastes space. So remove the dupes for now,
+        # then remove this hack when we fix EnumAllFileTypes on Mac.
+        mimes = []
         for mt in mtypes:
-            self.mimelist.Append(mt)
+            if mt not in mimes:
+                self.mimelist.Append(mt)
+                mimes.append(mt)
 
         # Do a lookup of *.wav for a starting position
         self.OnLookup()
@@ -234,10 +249,10 @@ class MimeTypesDemoPanel(wx.Panel):
 
             # Select the entered value in the list
             if fileType:
-                if self.mimelist.FindString(str(fileType.GetMimeType())) != -1:
+                if self.mimelist.FindString(convert(fileType.GetMimeType())) != -1:
                     # Using CallAfter to ensure that GUI is ready before trying to
                     # select it (otherwise, it's selected but not visible)
-                    wx.CallAfter(self.mimelist.SetSelection, self.mimelist.FindString(str(fileType.GetMimeType())))
+                    wx.CallAfter(self.mimelist.SetSelection, self.mimelist.FindString(convert(fileType.GetMimeType())))
 
 
         if fileType is None:
@@ -264,23 +279,23 @@ class MimeTypesDemoPanel(wx.Panel):
                 bmp = images.getNoIconBitmap()
                 self.icon.SetBitmap(bmp)                
             self.iconsource.SetValue(file)
-            self.iconoffset.SetValue(str(idx))
+            self.iconoffset.SetValue(convert(idx))
 
         #------- MIME type
-        self.mimetype.SetValue(str(ft.GetMimeType()))
+        self.mimetype.SetValue(convert(ft.GetMimeType()))
         #------- MIME types
-        self.mimetypes.SetValue(str(ft.GetMimeTypes()))
+        self.mimetypes.SetValue(convert(ft.GetMimeTypes()))
         #------- Associated extensions
-        self.extensions.SetValue(str(ft.GetExtensions()))
+        self.extensions.SetValue(convert(ft.GetExtensions()))
         #------- Description of file type
-        self.description.SetValue(str(ft.GetDescription()))
+        self.description.SetValue(convert(ft.GetDescription()))
 
         #------- Prep a fake command line command
         extList = ft.GetExtensions()
 
         if extList:
             ext = extList[0]
-            if ext[0] == ".": ext = ext[1:]
+            if len(ext) > 0 and ext[0] == ".": ext = ext[1:]
         else:
             ext = ""
 
@@ -289,11 +304,11 @@ class MimeTypesDemoPanel(wx.Panel):
 
         #------- OPEN command
         cmd = ft.GetOpenCommand(filename, mime)
-        self.opencommand.SetValue(str(cmd))
+        self.opencommand.SetValue(convert(cmd))
 
         #------- PRINT command
         cmd = ft.GetPrintCommand(filename, mime)
-        self.printcommand.SetValue(str(cmd))
+        self.printcommand.SetValue(convert(cmd))
 
         #------- All commands
         all = ft.GetAllCommands(filename, mime)

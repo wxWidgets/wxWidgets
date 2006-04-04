@@ -854,6 +854,7 @@ class Calendar( wx.PyControl ):
 
     def SetDayValue(self, day):
         self.set_day = day
+        self.day = day
 
     def SetMonth(self, month):
         if month >= 1 and month <= 12:

@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 """
@@ -831,6 +831,18 @@ class HtmlWordCell(HtmlCell):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def ConvertToText(*args, **kwargs):
+        """ConvertToText(self, HtmlSelection sel) -> String"""
+        return _html.HtmlWordCell_ConvertToText(*args, **kwargs)
+
+    def IsLinebreakAllowed(*args, **kwargs):
+        """IsLinebreakAllowed(self) -> bool"""
+        return _html.HtmlWordCell_IsLinebreakAllowed(*args, **kwargs)
+
+    def SetPreviousWord(*args, **kwargs):
+        """SetPreviousWord(self, HtmlWordCell cell)"""
+        return _html.HtmlWordCell_SetPreviousWord(*args, **kwargs)
+
 
 class HtmlWordCellPtr(HtmlWordCell):
     def __init__(self, this):
@@ -1550,6 +1562,7 @@ class HtmlSearchStatus(object):
         """GetContentsItem(self) -> HtmlContentsItem"""
         return _html.HtmlSearchStatus_GetContentsItem(*args, **kwargs)
 
+    GetContentsItem = wx._deprecated(GetContentsItem) 
 
 class HtmlSearchStatusPtr(HtmlSearchStatus):
     def __init__(self, this):
@@ -1598,18 +1611,22 @@ class HtmlHelpData(object):
         """GetContents(self) -> HtmlContentsItem"""
         return _html.HtmlHelpData_GetContents(*args, **kwargs)
 
+    GetContents = wx._deprecated(GetContents) 
     def GetContentsCnt(*args, **kwargs):
         """GetContentsCnt(self) -> int"""
         return _html.HtmlHelpData_GetContentsCnt(*args, **kwargs)
 
+    GetContentsCnt = wx._deprecated(GetContentsCnt) 
     def GetIndex(*args, **kwargs):
         """GetIndex(self) -> HtmlContentsItem"""
         return _html.HtmlHelpData_GetIndex(*args, **kwargs)
 
+    GetIndex = wx._deprecated(GetIndex) 
     def GetIndexCnt(*args, **kwargs):
         """GetIndexCnt(self) -> int"""
         return _html.HtmlHelpData_GetIndexCnt(*args, **kwargs)
 
+    GetIndexCnt = wx._deprecated(GetIndexCnt) 
 
 class HtmlHelpDataPtr(HtmlHelpData):
     def __init__(self, this):
@@ -1762,5 +1779,6 @@ class HtmlHelpControllerPtr(HtmlHelpController):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = HtmlHelpController
 _html.HtmlHelpController_swigregister(HtmlHelpControllerPtr)
+
 
 

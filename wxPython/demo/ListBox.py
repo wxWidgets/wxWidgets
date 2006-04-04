@@ -75,8 +75,8 @@ class TestListBox(wx.Panel):
                       'twelve', 'thirteen', 'fourteen']
 
         wx.StaticText(self, -1, "This example uses the wx.ListBox control.", (45, 10))
-        wx.StaticText(self, -1, "Select one:", (15, 50), (65, 18))
-        self.lb1 = wx.ListBox(self, 60, (80, 50), (90, 120), sampleList, wx.LB_SINGLE)
+        wx.StaticText(self, -1, "Select one:", (15, 50))
+        self.lb1 = wx.ListBox(self, 60, (100, 50), (90, 120), sampleList, wx.LB_SINGLE)
         self.Bind(wx.EVT_LISTBOX, self.EvtListBox, self.lb1)
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, self.lb1)
         self.lb1.Bind(wx.EVT_RIGHT_UP, self.EvtRightButton)
@@ -85,8 +85,8 @@ class TestListBox(wx.Panel):
         self.lb1.SetClientData(2, "This one has data");
 
 
-        wx.StaticText(self, -1, "Select many:", (200, 50), (65, 18))
-        self.lb2 = wx.ListBox(self, 70, (300, 50), (90, 120), sampleList, wx.LB_EXTENDED)
+        wx.StaticText(self, -1, "Select many:", (220, 50))
+        self.lb2 = wx.ListBox(self, 70, (320, 50), (90, 120), sampleList, wx.LB_EXTENDED)
         self.Bind(wx.EVT_LISTBOX, self.EvtMultiListBox, self.lb2)
         self.lb2.Bind(wx.EVT_RIGHT_UP, self.EvtRightButton)
         self.lb2.SetSelection(0)
@@ -96,13 +96,16 @@ class TestListBox(wx.Panel):
                                    'test abcd' ]
         sampleList.sort()
         wx.StaticText(self, -1, "Find Prefix:", (15, 250))
-        fp = FindPrefixListBox(self, -1, (80, 250), (90, 120), sampleList, wx.LB_SINGLE)
+        fp = FindPrefixListBox(self, -1, (100, 250), (90, 120), sampleList, wx.LB_SINGLE)
         fp.SetSelection(0)
 
 
     def EvtListBox(self, event):
-        self.log.WriteText('EvtListBox: %s, %s, %s\n' %
-                           (event.GetString(), event.IsSelection(), event.GetSelection()))
+        self.log.WriteText('EvtListBox: %s, %s, %s, %s\n' %
+                           (event.GetString(),
+                            event.IsSelection(),
+                            event.GetSelection(),
+                            event.GetClientData()))
 
         lb = event.GetEventObject()
         data = lb.GetClientData(lb.GetSelection())

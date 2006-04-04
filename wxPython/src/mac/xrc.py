@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 """
@@ -86,6 +86,10 @@ class XmlResource(_core.Object):
     def LoadFromString(*args, **kwargs):
         """LoadFromString(self, String data) -> bool"""
         return _xrc.XmlResource_LoadFromString(*args, **kwargs)
+
+    def Unload(*args, **kwargs):
+        """Unload(self, String filename) -> bool"""
+        return _xrc.XmlResource_Unload(*args, **kwargs)
 
     def InitAllHandlers(*args, **kwargs):
         """InitAllHandlers(self)"""
@@ -732,5 +736,6 @@ class XmlSubclassFactory_Python(XmlSubclassFactory):
 XmlResource_AddSubclassFactory(XmlSubclassFactory_Python())
 
 #----------------------------------------------------------------------------
+
 
 

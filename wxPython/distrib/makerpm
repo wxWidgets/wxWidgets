@@ -184,6 +184,8 @@ if [ -z "${skipcopy}" ]; then
     cleanup "*.pyc"
     cleanup core
     cleanup "core.[0-9]*"
+    rm -f wxPython/samples/embedded/embedded
+    rm -f wxPython/samples/embedded/embedded.o
 
     # ports that are not supported yet
     cleanup cocoa

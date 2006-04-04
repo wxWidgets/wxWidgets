@@ -91,6 +91,9 @@ public:
         }
     }
 
+    // Unload resource from the given XML file (wildcards not allowed)
+    bool Unload(const wxString& filename);
+    
     // Initialize handlers for all supported controls/windows. 
     void InitAllHandlers();
 

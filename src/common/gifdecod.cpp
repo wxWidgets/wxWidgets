@@ -474,6 +474,25 @@ int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
         /* make new entry in alphabet (only if NOT just cleared) */
         if (lastcode != -1)
         {
+            // Normally, after the alphabet is full and can't grow any
+            // further (ab_free == 4096), encoder should (must?) emit CLEAR
+            // to reset it. This checks whether we really got it, otherwise
+            // the GIF is damaged.
+            if (ab_free > ab_max)
+            {
+                delete[] ab_prefix;
+                delete[] ab_tail;
+                delete[] stack;
+                return wxGIF_INVFORMAT;
+            }
+
+            // This assert seems unnecessary since the condition above
+            // eliminates the only case in which it went false. But I really
+            // don't like being forced to ask "Who in .text could have
+            // written there?!" And I wouldn't have been forced to ask if
+            // this line had already been here.
+            wxASSERT(ab_free < allocSize);
+
             ab_prefix[ab_free] = lastcode;
             ab_tail[ab_free]   = code;
             ab_free++;
@@ -679,6 +698,11 @@ int wxGIFDecoder::ReadGIF()
     m_screenw = buf[0] + 256 * buf[1];
     m_screenh = buf[2] + 256 * buf[3];
 
+    if ((m_screenw == 0) || (m_screenh == 0))
+    {
+        return wxGIF_INVFORMAT;
+    }
+
     /* load global color map if available */
     if ((buf[4] & 0x80) == 0x80)
     {
@@ -705,7 +729,7 @@ int wxGIFDecoder::ReadGIF()
 
     bool done = false;
 
-    while(!done)
+    while (!done)
     {
         type = (unsigned char)m_f->GetC();
 
@@ -801,7 +825,7 @@ int wxGIFDecoder::ReadGIF()
             pimg->w = buf[4] + 256 * buf[5];
             pimg->h = buf[6] + 256 * buf[7];
 
-            if (pimg->w == 0 || pimg->h == 0)
+            if ((pimg->w == 0) || (pimg->w > m_screenw) || (pimg->h == 0) || (pimg->h > m_screenh))
             {
                 Destroy();
                 return wxGIF_INVFORMAT;
@@ -847,6 +871,11 @@ int wxGIFDecoder::ReadGIF()
 
             /* get initial code size from first byte in raster data */
             bits = (unsigned char)m_f->GetC();
+            if (bits == 0)
+            {
+                Destroy();
+                return wxGIF_INVFORMAT;
+            }
 
             /* decode image */
             int result = dgif(pimg, interl, bits);
@@ -863,7 +892,7 @@ int wxGIFDecoder::ReadGIF()
         }
     }
 
-    if (m_nimages == 0)
+    if (m_nimages <= 0)
     {
         Destroy();
         return wxGIF_INVFORMAT;

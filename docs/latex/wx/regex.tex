@@ -188,10 +188,24 @@ and only if {\tt wxRE\_NOSUB} was {\bf not} used.
 
 \constfunc{bool}{Matches}{\param{const wxChar* }{text}, \param{int }{flags = 0}}
 
+\constfunc{bool}{Matches}{\param{const wxChar* }{text}, \param{int }{flags}, \param{size\_t }{len}}
+
+\constfunc{bool}{Matches}{\param{const wxString\& }{text}, \param{int }{flags = 0}}
+
 Matches the precompiled regular expression against the string {\it text},
 returns {\tt true} if matches and {\tt false} otherwise.
 
-Flags may be combination of {\tt wxRE\_NOTBOL} and {\tt wxRE\_NOTEOL}.
+{\it Flags} may be combination of {\tt wxRE\_NOTBOL} and {\tt wxRE\_NOTEOL}.
+
+Some regex libraries assume that the text given is null terminated, while
+others require the length be given as a separate parameter. Therefore for
+maximum portability assume that {\it text} cannot contain embedded nulls.
+
+When the {\it Matches(const wxChar *text, int flags = 0)} form is used,
+a {\it wxStrlen()} will be done internally if the regex library requires the
+length. When using {\it Matches()} in a loop
+the {\it Matches(text, flags, len)} form can be used instead, making it
+possible to avoid a {\it wxStrlen()} inside the loop.
 
 May only be called after successful call to \helpref{Compile()}{wxregexcompile}.
 

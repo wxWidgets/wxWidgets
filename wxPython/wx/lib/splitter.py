@@ -17,7 +17,6 @@ more than once.
 """
 
 import wx
-import sys
 
 _RENDER_VER = (2,6,1,1)
 
@@ -29,7 +28,7 @@ class MultiSplitterWindow(wx.PyPanel):
     allows for more than two windows and more than one sash.  Many of
     the same styles, constants, and methods behave the same as in
     wx.SplitterWindow.  The key differences are seen in the methods
-    that deal with the child windows manage by the splitter, and also
+    that deal with the child windows managed by the splitter, and also
     those that deal with the sash positions.  In most cases you will
     need to pass an index value to tell the class which window or sash
     you are refering to.
@@ -38,7 +37,7 @@ class MultiSplitterWindow(wx.PyPanel):
     wx.SplitterWindow.  Since the wx.Splitterwindow has only one sash
     you can think of it's position as either relative to the whole
     splitter window, or as relative to the first window pane managed
-    by the splitter.  Once there are more than one sash then the
+    by the splitter.  Once there is more than one sash then the
     distinciton between the two concepts needs to be clairified.  I've
     chosen to use the second definition, and sash positions are the
     distance (either horizontally or vertically) from the origin of
@@ -130,13 +129,17 @@ class MultiSplitterWindow(wx.PyPanel):
 
     def AppendWindow(self, window, sashPos=-1):
         """
-        Add a new window to the splitter.  If sashPos is given then it is the 
+        Add a new window to the splitter at the right side or bottom
+        of the window stack.  If sashPos is given then it is used to
+        size the new window.
         """
-        self.InsertWindow(sys.maxint, window, sashPos)
+        self.InsertWindow(len(self._windows), window, sashPos)
 
 
     def InsertWindow(self, idx, window, sashPos=-1):
         """
+        Insert a new window into the splitter at the position given in
+        ``idx``.
         """
         assert window not in self._windows, "A window can only be in the splitter once!"
         self._windows.insert(idx, window)

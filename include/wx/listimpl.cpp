@@ -13,7 +13,7 @@
 
     #undef  WX_DEFINE_LIST
     #define WX_DEFINE_LIST(name)                                        \
-        void name::DeleteFunction( const _WX_LIST_ITEM_TYPE_##name X )  \
+        void name::DeleteFunction( _WX_DELETEFUNCTIONCONST _WX_LIST_ITEM_TYPE_##name X )  \
         {                                                               \
             delete X;                                                   \
         }

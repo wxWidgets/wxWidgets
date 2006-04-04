@@ -9,18 +9,15 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_SPLASH_H_
+#define _WX_SPLASH_H_
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "splash.h"
 #endif
 
-#ifndef _WX_SPLASH_H_
-#define _WX_SPLASH_H_
-
-#ifndef WX_PRECOMP
 #include "wx/bitmap.h"
 #include "wx/timer.h"
-#endif
-
 #include "wx/frame.h"
 
 

@@ -571,8 +571,10 @@ void wxWindowBase::InvalidateBestSize()
     m_bestSizeCache = wxDefaultSize;
 
     // parent's best size calculation may depend on its children's
-    // best sizes, so let's invalidate it as well to be safe:
-    if (m_parent)
+    // as long as child window we are in is not top level window itself
+    // (because the TLW size is never resized automatically)
+    // so let's invalidate it as well to be safe:
+    if (m_parent && !IsTopLevel())
         m_parent->InvalidateBestSize();
 }
 
@@ -2284,7 +2286,7 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 
         wxMessageBox(wxString::Format(
                                       _T(
-                                        "       wxWidgets Library (%s port)\nVersion %u.%u.%u%s%s, compiled at %s %s\n   Copyright (c) 1995-2005 wxWidgets team"
+                                        "       wxWidgets Library (%s port)\nVersion %u.%u.%u%s%s, compiled at %s %s\n   Copyright (c) 1995-2006 wxWidgets team"
                                         ),
                                       port.c_str(),
                                       wxMAJOR_VERSION,
@@ -2350,7 +2352,7 @@ wxAccessible* wxWindowBase::CreateAccessible()
 
 #if wxUSE_STL
 
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxWindowList);
 
 #else

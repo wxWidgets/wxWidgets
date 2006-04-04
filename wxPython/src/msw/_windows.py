@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _windows_
@@ -456,6 +456,15 @@ class TopLevelWindow(_core.Window):
         """MacGetMetalAppearance(self) -> bool"""
         return _windows_.TopLevelWindow_MacGetMetalAppearance(*args, **kwargs)
 
+    def CenterOnScreen(*args, **kwargs):
+        """
+        CenterOnScreen(self, int dir=BOTH)
+
+        Center the window on screen
+        """
+        return _windows_.TopLevelWindow_CenterOnScreen(*args, **kwargs)
+
+    CentreOnScreen = CenterOnScreen 
 
 class TopLevelWindowPtr(TopLevelWindow):
     def __init__(self, this):
@@ -496,13 +505,7 @@ class Frame(TopLevelWindow):
         return _windows_.Frame_Create(*args, **kwargs)
 
     def GetClientAreaOrigin(*args, **kwargs):
-        """
-        GetClientAreaOrigin(self) -> Point
-
-        Get the origin of the client area of the window relative to the
-        window's top left corner (the client area may be shifted because of
-        the borders, scrollbars, other decorations...)
-        """
+        """GetClientAreaOrigin(self) -> Point"""
         return _windows_.Frame_GetClientAreaOrigin(*args, **kwargs)
 
     def SendSizeEvent(*args, **kwargs):
@@ -2123,6 +2126,14 @@ class VListBox(VScrolledWindow):
     def SetSelectionBackground(*args, **kwargs):
         """SetSelectionBackground(self, Colour col)"""
         return _windows_.VListBox_SetSelectionBackground(*args, **kwargs)
+
+    def base_OnDrawSeparator(*args, **kwargs):
+        """base_OnDrawSeparator(self, DC dc, Rect rect, size_t n)"""
+        return _windows_.VListBox_base_OnDrawSeparator(*args, **kwargs)
+
+    def base_OnDrawBackground(*args, **kwargs):
+        """base_OnDrawBackground(self, DC dc, Rect rect, size_t n)"""
+        return _windows_.VListBox_base_OnDrawBackground(*args, **kwargs)
 
 
 class VListBoxPtr(VListBox):
@@ -4810,6 +4821,7 @@ class PrintPreview(_core.Object):
     def __init__(self, *args):
         """
         __init__(self, Printout printout, Printout printoutForPrinting, PrintDialogData data=None) -> PrintPreview
+        __init__(self, Printout printout, Printout printoutForPrinting) -> PrintPreview
         __init__(self, Printout printout, Printout printoutForPrinting, PrintData data) -> PrintPreview
         """
         newobj = _windows_.new_PrintPreview(*args)
@@ -4920,6 +4932,7 @@ class PyPrintPreview(PrintPreview):
     def __init__(self, *args):
         """
         __init__(self, Printout printout, Printout printoutForPrinting, PrintDialogData data=None) -> PyPrintPreview
+        __init__(self, Printout printout, Printout printoutForPrinting) -> PyPrintPreview
         __init__(self, Printout printout, Printout printoutForPrinting, PrintData data) -> PyPrintPreview
         """
         newobj = _windows_.new_PyPrintPreview(*args)
@@ -5055,5 +5068,6 @@ class PyPreviewControlBarPtr(PyPreviewControlBar):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PyPreviewControlBar
 _windows_.PyPreviewControlBar_swigregister(PyPreviewControlBarPtr)
+
 
 

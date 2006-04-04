@@ -587,9 +587,9 @@ wxSize wxListBox::DoGetBestSize() const
         int cx = ::TextWidth( "X" , 0 , 1 ) ;
         lbWidth += cx ;
 
-        // don't make the listbox too tall (limit height to around 10 items) but don't
-        // make it too small neither
-        lbHeight = (cy+4) * wxMin(wxMax(GetCount(), 3), 10);
+        // don't make the listbox too tall (limit height to around 10 items)
+        // but don't make it too small neither
+        lbHeight = wxMax( (cy + 4) * wxMin( wxMax( GetCount(), 3 ), 10 ), 70 );
     }
 
     return wxSize(lbWidth, lbHeight);

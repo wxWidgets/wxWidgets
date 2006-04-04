@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        joystick.cpp
+// Name:        src/msw/joystick.cpp
 // Purpose:     wxJoystick class
 // Author:      Julian Smart
 // Modified by:
@@ -20,6 +20,9 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_JOYSTICK
+
+#include "wx/joystick.h"
 #include "wx/string.h"
 #include "wx/window.h"
 #include "wx/msw/private.h"
@@ -35,7 +38,6 @@
 
 #include "wx/window.h"
 #include "wx/msw/registry.h"
-#include "wx/msw/joystick.h"
 
 #include <regstr.h>
 
@@ -297,6 +299,9 @@ int wxJoystick::GetProductId() const
 
 wxString wxJoystick::GetProductName() const
 {
+#ifdef __WINE__
+    return wxEmptyString;
+#else
     JOYCAPS joyCaps;
     if (joyGetDevCaps(m_joystick, &joyCaps, sizeof(joyCaps)) != JOYERR_NOERROR)
         return wxEmptyString;
@@ -314,6 +319,7 @@ wxString wxJoystick::GetProductName() const
     key2.QueryValue(REGSTR_VAL_JOYOEMNAME, str);
 
     return str;
+#endif
 }
 
 int wxJoystick::GetXMin() const
@@ -622,3 +628,4 @@ bool wxJoystick::ReleaseCapture()
     return (res == JOYERR_NOERROR);
 }
 
+#endif // wxUSE_JOYSTICK

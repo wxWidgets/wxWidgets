@@ -272,13 +272,13 @@ class PropPage(ParamPage):
         self.box = wxStaticBox(self, -1, label)
         self.box.SetFont(g.labelFont())
         topSizer = wxStaticBoxSizer(self.box, wxVERTICAL)
-        sizer = wxFlexGridSizer(len(xxx.allParams), 2, 1, 1)
+        sizer = wxFlexGridSizer(len(xxx.allParams), 2, 0, 1)
         sizer.AddGrowableCol(1)
         if xxx.hasName:
             label = wxStaticText(self, -1, 'XML ID:', size=(LABEL_WIDTH,-1))
             control = ParamText(self, 'XML_name', 200)
             sizer.AddMany([ (label, 0, wxALIGN_CENTER_VERTICAL),
-                            (control, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM | wxGROW, 5) ])
+                            (control, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM | wxGROW, 10) ])
             self.controlName = control
         for param in xxx.allParams:
             present = xxx.params.has_key(param)
@@ -345,7 +345,7 @@ class StylePage(ParamPage):
         box = wxStaticBox(self, -1, label)
         box.SetFont(g.labelFont())
         topSizer = wxStaticBoxSizer(box, wxVERTICAL)
-        sizer = wxFlexGridSizer(len(xxx.styles), 2, 1, 1)
+        sizer = wxFlexGridSizer(len(xxx.styles), 2, 0, 1)
         sizer.AddGrowableCol(1)
         for param in xxx.styles:
             present = xxx.params.has_key(param)

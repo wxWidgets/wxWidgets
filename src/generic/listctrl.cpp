@@ -500,6 +500,8 @@ class WXDLLEXPORT wxListTextCtrl: public wxTextCtrl
 public:
     wxListTextCtrl(wxListMainWindow *owner, size_t itemEdit);
 
+    void AcceptChangesAndFinish();
+
 protected:
     void OnChar( wxKeyEvent &event );
     void OnKeyUp( wxKeyEvent &event );
@@ -796,6 +798,8 @@ public:
            m_lineBeforeLastClicked,
            m_lineSelectSingleOnUp;
 
+    wxListTextCtrl*     m_textctrl;
+    
 protected:
     // the total count of items in a virtual list control
     size_t m_countVirt;
@@ -2078,7 +2082,8 @@ void wxListTextCtrl::Finish()
     if ( !m_finished )
     {
         wxPendingDelete.Append(this);
-
+        m_owner->m_textctrl = NULL;
+        
         m_finished = true;
 
         m_owner->SetFocusIgnoringChildren();
@@ -2107,16 +2112,21 @@ bool wxListTextCtrl::AcceptChanges()
     return true;
 }
 
+void wxListTextCtrl::AcceptChangesAndFinish()
+{
+    m_aboutToFinish = true;
+    // Notify the owner about the changes
+    AcceptChanges();
+    // Even if vetoed, close the control (consistent with MSW)
+    Finish();
+}
+
 void wxListTextCtrl::OnChar( wxKeyEvent &event )
 {
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
-            m_aboutToFinish = true;
-            // Notify the owner about the changes
-            AcceptChanges();
-            // Even if vetoed, close the control (consistent with MSW)
-            Finish();
+            AcceptChangesAndFinish();
             break;
 
         case WXK_ESCAPE:
@@ -2208,7 +2218,8 @@ void wxListMainWindow::Init()
 
     m_lastOnSame = false;
     m_renameTimer = new wxListRenameTimer( this );
-
+    m_textctrl = NULL;
+    
     m_current =
     m_lineLastClicked =
     m_lineSelectSingleOnUp =
@@ -2857,9 +2868,8 @@ void wxListMainWindow::EditLabel( long item )
     if ( m_dirty )
         wxSafeYield();
 
-    wxListTextCtrl *text = new wxListTextCtrl(this, itemEdit);
-
-    text->SetFocus();
+    m_textctrl = new wxListTextCtrl(this, itemEdit);
+    m_textctrl->SetFocus();
 }
 
 void wxListMainWindow::OnRenameTimer()
@@ -2904,6 +2914,18 @@ void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
 {
+
+#ifdef __WXMAC__
+    // On wxMac we can't depend on the EVT_KILL_FOCUS event to properly
+    // shutdown the edit control when the mouse is clicked elsewhere on the
+    // listctrl because the order of events is different (or something like
+    // that,) so explicitly end the edit if it is active.
+    if ( event.LeftDown() && m_textctrl)
+    {
+        m_textctrl->AcceptChangesAndFinish();
+    }
+#endif
+    
     event.SetEventObject( GetParent() );
     if ( GetParent()->GetEventHandler()->ProcessEvent( event) )
         return;
@@ -2916,7 +2938,15 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     }
 
     if ( !HasCurrent() || IsEmpty() )
+    {
+        if (event.RightDown())
+        {
+            SendNotify( (size_t)-1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
+            // Allow generation of context menu event
+            event.Skip();
+		}
         return;
+	}
 
     if (m_dirty)
         return;
@@ -2984,11 +3014,17 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         m_dragCount = 0;
     }
 
-    if ( !hitResult )
+	if ( !hitResult )
     {
-        // outside of any item
-        return;
-    }
+        if (event.RightDown())
+        {
+            SendNotify( (size_t) -1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
+            // Allow generation of context menu event
+            event.Skip();
+        }
+
+		return;
+	}
 
     bool forceClick = false;
     if (event.ButtonDClick())
@@ -3298,6 +3334,10 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_PRIOR:
             {
+                // avoid floating point exception
+                if (m_linesPerPage == 0)
+                    m_linesPerPage = 1;
+                    
                 int steps = InReportView() ? m_linesPerPage - 1 : m_current % m_linesPerPage;
 
                 int index = m_current - steps;
@@ -3310,6 +3350,10 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_NEXT:
             {
+                // avoid floating point exception
+                if (m_linesPerPage == 0)
+                    m_linesPerPage = 1;
+                    
                 int steps = InReportView()
                                ? m_linesPerPage - 1
                                : m_linesPerPage - (m_current % m_linesPerPage) - 1;
@@ -4646,7 +4690,13 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
-    // update our idea of which lines are shown when we redraw the window the
+    int cw, ch, vw, vh;
+    GetVirtualSize(&vw, &vh);  
+    GetClientSize(&cw, &ch);
+    if (event.GetOrientation() == wxVERTICAL && ch >= vh)
+        return;
+        
+	// update our idea of which lines are shown when we redraw the window the
     // next time
     ResetVisibleLinesRange();
 
@@ -4769,10 +4819,10 @@ void wxGenericListCtrl::CalculateAndSetHeaderHeight()
         {
             m_headerHeight = h;
 
-            m_headerWin->SetSize(m_headerWin->GetSize().x, m_headerHeight);
-
             if ( HasHeader() )
                 ResizeReportView(true);
+            else    //why is this needed if it doesn't have a header?
+                m_headerWin->SetSize(m_headerWin->GetSize().x, m_headerHeight);
         }
     }
 }
@@ -4995,13 +5045,22 @@ bool wxGenericListCtrl::SetItemState( long item, long state, long stateMask )
 bool
 wxGenericListCtrl::SetItemImage( long item, int image, int WXUNUSED(selImage) )
 {
+    return SetItemColumnImage(item, 0, image);
+}
+
+#if wxABI_VERSION >= 20603
+bool
+wxGenericListCtrl::SetItemColumnImage( long item, long column, int image )
+{
     wxListItem info;
     info.m_image = image;
     info.m_mask = wxLIST_MASK_IMAGE;
     info.m_itemId = item;
+    info.m_col = column;
     m_mainWin->SetItem( info );
     return true;
 }
+#endif
 
 wxString wxGenericListCtrl::GetItemText( long item ) const
 {
@@ -5397,7 +5456,12 @@ void wxGenericListCtrl::ResizeReportView(bool showHeader)
     if ( showHeader )
     {
         m_headerWin->SetSize( 0, 0, cw, m_headerHeight );
-        m_mainWin->SetSize( 0, m_headerHeight + 1, cw, ch - m_headerHeight - 1 );
+        if(ch > m_headerHeight)
+            m_mainWin->SetSize( 0, m_headerHeight + 1, 
+                                   cw, ch - m_headerHeight - 1 );
+        else
+            m_mainWin->SetSize( 0, m_headerHeight + 1, 
+                                   cw, 0);
     }
     else // no header window
     {
@@ -5536,6 +5600,18 @@ bool wxGenericListCtrl::DoPopupMenu( wxMenu *menu, int x, int y )
     return false;
 #endif // wxUSE_MENUS
 }
+
+#if wxABI_VERSION >= 20603
+void wxGenericListCtrl::DoClientToScreen( int *x, int *y ) const
+{
+    m_mainWin->DoClientToScreen(x, y);
+}
+
+void wxGenericListCtrl::DoScreenToClient( int *x, int *y ) const
+{
+    m_mainWin->DoScreenToClient(x, y);
+}
+#endif // 2.6.3
 
 void wxGenericListCtrl::SetFocus()
 {
