@@ -38,7 +38,7 @@
 wxTextInputStream::wxTextInputStream(wxInputStream &s,
                                      const wxString &sep,
                                      const wxMBConv& conv)
-  : m_input(s), m_separators(sep), m_conv(conv)
+  : m_input(s), m_separators(sep), m_conv(conv.Clone())
 {
     memset((void*)m_lastBytes, 0, 10);
 }
@@ -52,6 +52,9 @@ wxTextInputStream::wxTextInputStream(wxInputStream &s, const wxString &sep)
 
 wxTextInputStream::~wxTextInputStream()
 {
+#if wxUSE_UNICODE
+    delete m_conv;
+#endif // wxUSE_UNICODE
 }
 
 void wxTextInputStream::UngetLast()
@@ -76,7 +79,7 @@ wxChar wxTextInputStream::NextChar()
         if(m_input.LastRead() <= 0)
             return wxEOT;
 
-        int retlen = (int) m_conv.MB2WC(wbuf, m_lastBytes, 2); // returns -1 for failure
+        int retlen = (int) m_conv->MB2WC(wbuf, m_lastBytes, 2); // returns -1 for failure
         if(retlen >= 0) // res == 0 could happen for '\0' char
             return wbuf[0];
     }
@@ -303,7 +306,7 @@ wxTextInputStream& wxTextInputStream::operator>>(float& f)
 wxTextOutputStream::wxTextOutputStream(wxOutputStream& s,
                                        wxEOL mode,
                                        const wxMBConv& conv)
-  : m_output(s), m_conv(conv)
+  : m_output(s), m_conv(conv.Clone())
 #else
 wxTextOutputStream::wxTextOutputStream(wxOutputStream& s, wxEOL mode)
   : m_output(s)
@@ -324,6 +327,9 @@ wxTextOutputStream::wxTextOutputStream(wxOutputStream& s, wxEOL mode)
 
 wxTextOutputStream::~wxTextOutputStream()
 {
+#if wxUSE_UNICODE
+    delete m_conv;
+#endif // wxUSE_UNICODE
 }
 
 void wxTextOutputStream::SetMode(wxEOL mode)
@@ -410,7 +416,7 @@ void wxTextOutputStream::WriteString(const wxString& string)
 
     // We must not write the trailing NULL here
 #if wxUSE_UNICODE
-    wxCharBuffer buffer = m_conv.cWC2MB( out );
+    wxCharBuffer buffer = m_conv->cWC2MB( out );
     m_output.Write( (const char*) buffer, strlen( (const char*) buffer ) );
 #else
     m_output.Write(out.c_str(), out.length() );
@@ -420,7 +426,7 @@ void wxTextOutputStream::WriteString(const wxString& string)
 wxTextOutputStream& wxTextOutputStream::PutChar(wxChar c)
 {
 #if wxUSE_UNICODE
-    WriteString( wxString(&c, m_conv, 1) );
+    WriteString( wxString(&c, *m_conv, 1) );
 #else
     WriteString( wxString(&c, wxConvLocal, 1) );
 #endif
@@ -450,7 +456,7 @@ wxTextOutputStream& wxTextOutputStream::operator<<(char c)
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wchar_t wc)
 {
-    WriteString( wxString(&wc, m_conv, 1) );
+    WriteString( wxString(&wc, *m_conv, 1) );
 
     return *this;
 }

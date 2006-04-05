@@ -81,7 +81,7 @@ protected:
     char m_lastBytes[10]; // stores the bytes that were read for the last character
 
 #if wxUSE_UNICODE
-    wxMBConv m_conv;
+    wxMBConv *m_conv;
 #endif
 
     bool   EatEOL(const wxChar &c);
@@ -144,7 +144,7 @@ protected:
     wxEOL           m_mode;
 
 #if wxUSE_UNICODE
-    wxMBConv m_conv;
+    wxMBConv *m_conv;
 #endif
 
     DECLARE_NO_COPY_CLASS(wxTextOutputStream)

@@ -26,7 +26,7 @@ public:
 #else
     wxDataInputStream(wxInputStream& s);
 #endif
-    ~wxDataInputStream(){}
+    ~wxDataInputStream();
 
     bool IsOk() { return m_input->IsOk(); }
 
@@ -83,7 +83,7 @@ protected:
     wxInputStream *m_input;
     bool m_be_order;
 #if wxUSE_UNICODE
-    wxMBConv m_conv;
+    wxMBConv *m_conv;
 #endif
 
     DECLARE_NO_COPY_CLASS(wxDataInputStream)
@@ -97,7 +97,7 @@ public:
 #else
     wxDataOutputStream(wxOutputStream& s);
 #endif
-    ~wxDataOutputStream(){}
+    ~wxDataOutputStream();
 
     bool IsOk() { return m_output->IsOk(); }
 
@@ -157,7 +157,7 @@ protected:
     wxOutputStream *m_output;
     bool m_be_order;
 #if wxUSE_UNICODE
-    wxMBConv m_conv;
+    wxMBConv *m_conv;
 #endif
 
     DECLARE_NO_COPY_CLASS(wxDataOutputStream)

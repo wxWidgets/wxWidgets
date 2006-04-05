@@ -1417,9 +1417,15 @@ public:
     virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
     virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 
-    // classify this encoding as explained in wxMBConv::GetMBNulLen()
-    // comment
+    // classify this encoding as explained in wxMBConv::GetMBNulLen() comment
     virtual size_t GetMBNulLen() const;
+
+    virtual wxMBConv *Clone() const
+    {
+        wxMBConv_iconv *p = new wxMBConv_iconv(m_name);
+        p->m_minMBCharWidth = m_minMBCharWidth;
+        return p;
+    }
 
     bool IsOk() const
         { return (m2w != ICONV_T_INVALID) && (w2m != ICONV_T_INVALID); }
@@ -1443,6 +1449,10 @@ private:
     // different endian-ness than the native one
     static bool ms_wcNeedsSwap;
 
+
+    // name of the encoding handled by this conversion
+    wxString m_name;
+
     // cached result of GetMBNulLen(); set to 0 meaning "unknown"
     // initially
     size_t m_minMBCharWidth;
@@ -1464,6 +1474,7 @@ wxString wxMBConv_iconv::ms_wcCharsetName;
 bool wxMBConv_iconv::ms_wcNeedsSwap = false;
 
 wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
+              : m_name(name)
 {
     m_minMBCharWidth = 0;
 
@@ -1800,6 +1811,12 @@ public:
         m_minMBCharWidth = 0;
     }
 
+    wxMBConv_win32(const wxMBConv_win32& conv)
+    {
+        m_CodePage = conv.m_CodePage;
+        m_minMBCharWidth = conv.m_minMBCharWidth;
+    }
+
 #if wxUSE_FONTMAP
     wxMBConv_win32(const wxChar* name)
     {
@@ -1814,7 +1831,7 @@ public:
     }
 #endif // wxUSE_FONTMAP
 
-    size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const
     {
         // note that we have to use MB_ERR_INVALID_CHARS flag as it without it
         // the behaviour is not compatible with the Unix version (using iconv)
@@ -1890,7 +1907,7 @@ public:
         return len - 1;
     }
 
-    size_t WC2MB(char *buf, const wchar_t *pwz, size_t n) const
+    virtual size_t WC2MB(char *buf, const wchar_t *pwz, size_t n) const
     {
         /*
             we have a problem here: by default, WideCharToMultiByte() may
@@ -2008,6 +2025,8 @@ public:
 
         return m_minMBCharWidth;
     }
+
+    virtual wxMBConv *Clone() const { return new wxMBConv_win32(*this); }
 
     bool IsOk() const { return m_CodePage != -1; }
 
@@ -2356,6 +2375,11 @@ public:
         Init(CFStringGetSystemEncoding()) ;
     }
 
+    wxMBConv_cocoa(const wxMBConv_cocoa& conv)
+    {
+        m_encoding = conv.m_encoding;
+    }
+
 #if wxUSE_FONTMAP
     wxMBConv_cocoa(const wxChar* name)
     {
@@ -2478,6 +2502,10 @@ public:
         return  nRealOutSize - 1;
     }
 
+    virtual wxMBConv *Clone() const { return new wxMBConv_cocoa(*this); }
+
+    bool IsOk() const
+
     bool IsOk() const
     {
         return m_encoding != kCFStringEncodingInvalidId &&
@@ -2502,6 +2530,11 @@ public:
     wxMBConv_mac()
     {
         Init(CFStringGetSystemEncoding()) ;
+    }
+
+    wxMBConv_mac(const wxMBConv_mac& conv)
+    {
+        Init(conv.m_char_encoding);
     }
 
 #if wxUSE_FONTMAP
@@ -2636,6 +2669,9 @@ public:
         return res ;
     }
 
+    virtual wxMBConv *Clone() const { return wxMBConv_mac(*this); }
+
+    bool IsOk() const
     bool IsOk() const
         { return m_MB2WC_converter !=  NULL && m_WC2MB_converter != NULL  ; }
 
@@ -2723,6 +2759,8 @@ public:
                 return 1;
         }
     }
+
+    virtual wxMBConv *Clone() const { return new wxMBConv_wxwin(m_enc); }
 
     bool IsOk() const { return m_ok; }
 

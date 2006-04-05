@@ -40,6 +40,8 @@ public:
 
     virtual size_t GetMBNulLen() const { return m_conv->GetMBNulLen(); }
 
+    virtual wxMBConv *Clone() const { return new wxConvAuto(*this); }
+
 private:
     // all currently recognized BOM values
     enum BOMType

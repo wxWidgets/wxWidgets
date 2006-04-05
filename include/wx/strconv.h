@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WXSTRCONVH__
-#define _WX_WXSTRCONVH__
+#ifndef _WX_STRCONV_H_
+#define _WX_STRCONV_H_
 
 #include "wx/defs.h"
 #include "wx/wxchar.h"
@@ -39,6 +39,9 @@
 // FromWChar() methods which are not pure virtual only for historical reasons,
 // don't let the fact that the existing classes implement MB2WC/WC2MB() instead
 // confuse you.
+//
+// You also have to implement Clone() to allow copying the conversions
+// polymorphically.
 //
 // And you might need to override GetMBNulLen() as well.
 class WXDLLIMPEXP_BASE wxMBConv
@@ -147,6 +150,9 @@ public:
     virtual size_t WC2MB(char *out, const wchar_t *in, size_t outLen) const;
 
 
+    // make a heap-allocated copy of this object
+    virtual wxMBConv *Clone() const = 0;
+
     // virtual dtor for any base class
     virtual ~wxMBConv();
 };
@@ -161,6 +167,8 @@ class WXDLLIMPEXP_BASE wxMBConvLibc : public wxMBConv
 public:
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+
+    virtual wxMBConv *Clone() const { return new wxMBConvLibc; }
 };
 
 #ifdef __UNIX__
@@ -176,6 +184,10 @@ class WXDLLIMPEXP_BASE wxConvBrokenFileNames : public wxMBConv
 {
 public:
     wxConvBrokenFileNames(const wxChar *charset);
+    wxConvBrokenFileNames(const wxConvBrokenFileNames& conv)
+        : m_conv(conv.m_conv ? conv.m_conv->Clone() : NULL)
+    {
+    }
     virtual ~wxConvBrokenFileNames() { delete m_conv; }
 
     virtual size_t MB2WC(wchar_t *out, const char *in, size_t outLen) const
@@ -194,9 +206,13 @@ public:
         return m_conv->GetMBNulLen();
     }
 
+    virtual wxMBConv *Clone() const { return new wxConvBrokenFileNames(*this); }
+
 private:
     // the conversion object we forward to
     wxMBConv *m_conv;
+
+    DECLARE_NO_ASSIGN_CLASS(wxConvBrokenFileNames)
 };
 
 #endif // __UNIX__
@@ -210,6 +226,8 @@ class WXDLLIMPEXP_BASE wxMBConvUTF7 : public wxMBConv
 public:
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+
+    virtual wxMBConv *Clone() const { return new wxMBConvUTF7; }
 };
 
 // ----------------------------------------------------------------------------
@@ -219,7 +237,8 @@ public:
 class WXDLLIMPEXP_BASE wxMBConvUTF8 : public wxMBConv
 {
 public:
-    enum {
+    enum
+    {
         MAP_INVALID_UTF8_NOT = 0,
         MAP_INVALID_UTF8_TO_PUA = 1,
         MAP_INVALID_UTF8_TO_OCTAL = 2
@@ -228,6 +247,8 @@ public:
     wxMBConvUTF8(int options = MAP_INVALID_UTF8_NOT) : m_options(options) { }
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+
+    virtual wxMBConv *Clone() const { return new wxMBConvUTF8(m_options); }
 
 private:
     int m_options;
@@ -252,6 +273,7 @@ class WXDLLIMPEXP_BASE wxMBConvUTF16LE : public wxMBConvUTF16Base
 public:
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+    virtual wxMBConv *Clone() const { return new wxMBConvUTF16LE; }
 };
 
 // ----------------------------------------------------------------------------
@@ -263,6 +285,7 @@ class WXDLLIMPEXP_BASE wxMBConvUTF16BE : public wxMBConvUTF16Base
 public:
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+    virtual wxMBConv *Clone() const { return new wxMBConvUTF16BE; }
 };
 
 // ----------------------------------------------------------------------------
@@ -284,6 +307,7 @@ class WXDLLIMPEXP_BASE wxMBConvUTF32LE : public wxMBConvUTF32Base
 public:
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+    virtual wxMBConv *Clone() const { return new wxMBConvUTF32LE; }
 };
 
 // ----------------------------------------------------------------------------
@@ -295,6 +319,7 @@ class WXDLLIMPEXP_BASE wxMBConvUTF32BE : public wxMBConvUTF32Base
 public:
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+    virtual wxMBConv *Clone() const { return new wxMBConvUTF32BE; }
 };
 
 // ----------------------------------------------------------------------------
@@ -319,8 +344,9 @@ public:
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
     virtual size_t GetMBNulLen() const;
+    virtual wxMBConv *Clone() const { return new wxCSConv(*this); }
 
-    void Clear() ;
+    void Clear();
 
 private:
     // common part of all ctors
@@ -456,6 +482,5 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent;
     #define wxConvertMB2WX(s)   (s)
 #endif // Unicode/ANSI
 
-#endif
-  // _WX_WXSTRCONVH__
+#endif // _WX_STRCONV_H_
 
