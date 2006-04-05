@@ -414,10 +414,10 @@ void wxTextOutputStream::WriteString(const wxString& string)
         out << c;
     }
 
-    // We must not write the trailing NULL here
 #if wxUSE_UNICODE
-    wxCharBuffer buffer = m_conv->cWC2MB( out );
-    m_output.Write( (const char*) buffer, strlen( (const char*) buffer ) );
+    // note that we must not write the trailing NUL here
+    wxCharBuffer buffer = m_conv->cWC2MB(out, out.length(), &len);
+    m_output.Write(buffer, len + 1 - m_conv->GetMBNulLen());
 #else
     m_output.Write(out.c_str(), out.length() );
 #endif
