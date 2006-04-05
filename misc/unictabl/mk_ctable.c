@@ -40,8 +40,8 @@ int main(int argc, char *argv[])
     /* dump it: */
     
     printf("\n\n"
-           "/* \n"
-           " * %s to Unicode recoding table \n"
+           "/*\n"
+           " * %s to Unicode recoding table\n"
            " * based on file %s by Unicode Consortium\n"
            " */\n\n"
            "static wxUint16 encoding_table__%s[128] = {",
@@ -50,10 +50,10 @@ int main(int argc, char *argv[])
     for (i = 128; i < 256; i++)
     { 
         if (i % 8 == 0)
-            printf("\n    ");
-        printf("0x%04X%c ", table[i].u, (i == 255) ? '\n' : ',');
+            printf("\n   ");
+        printf(" 0x%04X%c", table[i].u, (i == 255) ? '\n' : ',');
     }
-    printf("};\n");
+    printf(" };\n");
 
     qsort(table + 128, 128, sizeof(table[0]), cmpt);
 
