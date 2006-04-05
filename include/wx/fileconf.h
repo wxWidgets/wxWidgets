@@ -227,7 +227,7 @@ private:
   wxFileConfigGroup *m_pRootGroup,      // the top (unnamed) group
                     *m_pCurrentGroup;   // the current group
 
-  wxMBConv    m_conv;
+  wxMBConv    *m_conv;
 
 #ifdef __UNIX__
   int m_umask;                          // the umask to use for file creation

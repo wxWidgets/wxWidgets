@@ -394,7 +394,7 @@ void wxFileConfig::Init()
     {
         wxTextFile fileGlobal(m_strGlobalFile);
 
-        if ( fileGlobal.Open(m_conv/*ignored in ANSI build*/) )
+        if ( fileGlobal.Open(*m_conv/*ignored in ANSI build*/) )
         {
             Parse(fileGlobal, false /* global */);
             SetRootPath();
@@ -409,7 +409,7 @@ void wxFileConfig::Init()
     if ( !m_strLocalFile.empty() && wxFile::Exists(m_strLocalFile) )
     {
         wxTextFile fileLocal(m_strLocalFile);
-        if ( fileLocal.Open(m_conv/*ignored in ANSI build*/) )
+        if ( fileLocal.Open(*m_conv/*ignored in ANSI build*/) )
         {
             Parse(fileLocal, true /* local */);
             SetRootPath();
@@ -432,7 +432,7 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
                            strLocal, strGlobal,
                            style),
               m_strLocalFile(strLocal), m_strGlobalFile(strGlobal),
-              m_conv(conv)
+              m_conv(conv.Clone())
 {
     // Make up names for files if empty
     if ( m_strLocalFile.empty() && (style & wxCONFIG_USE_LOCAL_FILE) )
@@ -476,7 +476,7 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
 #if wxUSE_STREAMS
 
 wxFileConfig::wxFileConfig(wxInputStream &inStream, const wxMBConv& conv)
-            : m_conv(conv)
+            : m_conv(conv.Clone())
 {
     // always local_file when this constructor is called (?)
     SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
@@ -1012,7 +1012,7 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   {
     wxString line = p->Text();
     line += wxTextFile::GetEOL();
-    if ( !file.Write(line, m_conv) )
+    if ( !file.Write(line, *m_conv) )
     {
       wxLogError(_("can't write user configuration file."));
       return false;
