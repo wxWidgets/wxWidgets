@@ -361,6 +361,10 @@ SOURCE=.\common\containr.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\convauto.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\cshelp.cpp
 # End Source File
 # Begin Source File
@@ -374,6 +378,10 @@ SOURCE=.\common\ctrlsub.cpp
 # Begin Source File
 
 SOURCE=.\common\datacmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\datavcmn.cpp
 # End Source File
 # Begin Source File
 
@@ -919,6 +927,10 @@ SOURCE=.\generic\choicbkg.cpp
 # Begin Source File
 
 SOURCE=.\generic\choicdgg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\datavgen.cpp
 # End Source File
 # Begin Source File
 
@@ -2123,6 +2135,10 @@ SOURCE=..\include\wx\control.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\convauto.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\cshelp.h
 # End Source File
 # Begin Source File
@@ -2136,6 +2152,14 @@ SOURCE=..\include\wx\cursor.h
 # Begin Source File
 
 SOURCE=..\include\wx\dataobj.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\dataview.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\dataview.h
 # End Source File
 # Begin Source File
 
@@ -2240,6 +2264,10 @@ SOURCE=..\include\wx\dirdlg.h
 # Begin Source File
 
 SOURCE=..\include\wx\display.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\display_impl.h
 # End Source File
 # Begin Source File
 
@@ -3083,6 +3111,10 @@ SOURCE=..\include\wx\wizard.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\wupdlock.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\wx.h
 # End Source File
 # Begin Source File
@@ -3808,6 +3840,10 @@ SOURCE=..\include\wx\generic\choicdgg.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\colrdlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\generic\dataview.h
 # End Source File
 # Begin Source File
 

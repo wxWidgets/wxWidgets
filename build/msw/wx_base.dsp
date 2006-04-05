@@ -472,6 +472,10 @@ SOURCE=..\..\src\common\config.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\convauto.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\datetime.cpp
 # End Source File
 # Begin Source File
@@ -1404,6 +1408,10 @@ SOURCE=..\..\include\wx\config.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\containr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\convauto.h
 # End Source File
 # Begin Source File
 

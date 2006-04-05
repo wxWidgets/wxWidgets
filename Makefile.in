@@ -232,6 +232,7 @@ ALL_BASE_HEADERS =  \
 	wx/cmdline.h \
 	wx/confbase.h \
 	wx/config.h \
+	wx/convauto.h \
 	wx/containr.h \
 	wx/datetime.h \
 	wx/datstrm.h \
@@ -359,6 +360,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/cmdline.h \
 	wx/confbase.h \
 	wx/config.h \
+	wx/convauto.h \
 	wx/containr.h \
 	wx/datetime.h \
 	wx/datstrm.h \
@@ -513,6 +515,7 @@ ALL_BASE_SOURCES =  \
 	src/common/clntdata.cpp \
 	src/common/cmdline.cpp \
 	src/common/config.cpp \
+	src/common/convauto.cpp \
 	src/common/datetime.cpp \
 	src/common/datstrm.cpp \
 	src/common/dircmn.cpp \
@@ -657,6 +660,7 @@ MONODLL_OBJECTS =  \
 	monodll_clntdata.o \
 	monodll_cmdline.o \
 	monodll_config.o \
+	monodll_convauto.o \
 	monodll_datetime.o \
 	monodll_datstrm.o \
 	monodll_dircmn.o \
@@ -746,6 +750,7 @@ MONOLIB_OBJECTS =  \
 	monolib_clntdata.o \
 	monolib_cmdline.o \
 	monolib_config.o \
+	monolib_convauto.o \
 	monolib_datetime.o \
 	monolib_datstrm.o \
 	monolib_dircmn.o \
@@ -837,6 +842,7 @@ BASEDLL_OBJECTS =  \
 	basedll_clntdata.o \
 	basedll_cmdline.o \
 	basedll_config.o \
+	basedll_convauto.o \
 	basedll_datetime.o \
 	basedll_datstrm.o \
 	basedll_dircmn.o \
@@ -911,6 +917,7 @@ BASELIB_OBJECTS =  \
 	baselib_clntdata.o \
 	baselib_cmdline.o \
 	baselib_config.o \
+	baselib_convauto.o \
 	baselib_datetime.o \
 	baselib_datstrm.o \
 	baselib_dircmn.o \
@@ -11136,6 +11143,9 @@ monodll_cmdline.o: $(srcdir)/src/common/cmdline.cpp $(MONODLL_ODEP)
 monodll_config.o: $(srcdir)/src/common/config.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/config.cpp
 
+monodll_convauto.o: $(srcdir)/src/common/convauto.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/convauto.cpp
+
 monodll_datetime.o: $(srcdir)/src/common/datetime.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/datetime.cpp
 
@@ -14918,6 +14928,9 @@ monolib_cmdline.o: $(srcdir)/src/common/cmdline.cpp $(MONOLIB_ODEP)
 
 monolib_config.o: $(srcdir)/src/common/config.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/config.cpp
+
+monolib_convauto.o: $(srcdir)/src/common/convauto.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/convauto.cpp
 
 monolib_datetime.o: $(srcdir)/src/common/datetime.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/datetime.cpp
@@ -18705,6 +18718,9 @@ basedll_cmdline.o: $(srcdir)/src/common/cmdline.cpp $(BASEDLL_ODEP)
 basedll_config.o: $(srcdir)/src/common/config.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/config.cpp
 
+basedll_convauto.o: $(srcdir)/src/common/convauto.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/convauto.cpp
+
 basedll_datetime.o: $(srcdir)/src/common/datetime.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/datetime.cpp
 
@@ -19256,6 +19272,9 @@ baselib_cmdline.o: $(srcdir)/src/common/cmdline.cpp $(BASELIB_ODEP)
 
 baselib_config.o: $(srcdir)/src/common/config.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/config.cpp
+
+baselib_convauto.o: $(srcdir)/src/common/convauto.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/convauto.cpp
 
 baselib_datetime.o: $(srcdir)/src/common/datetime.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/datetime.cpp
@@ -26883,9 +26902,7 @@ DEMOS_DIST: ALL_GUI_DIST
 	$(CP_P) $(DEMODIR)/forty/*.h $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/*.cpp $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/*.xpm $(DISTDIR)/demos/forty
-	$(CP_P) $(DEMODIR)/forty/*.xbm $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/*.htm $(DISTDIR)/demos/forty
-	$(CP_P) $(DEMODIR)/forty/*.bmp $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/*.ico $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/*.rc $(DISTDIR)/demos/forty
 	$(CP_P) $(DEMODIR)/forty/readme.txt $(DISTDIR)/demos/forty
