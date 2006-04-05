@@ -33,10 +33,10 @@ public:
 
     // override the base class virtual function(s) to use our m_conv
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
-                           const char *src, size_t srcLen = -1) const;
+                           const char *src, size_t srcLen = wxNO_LEN) const;
 
     virtual size_t FromWChar(char *dst, size_t dstLen,
-                             const wchar_t *src, size_t srcLen = -1) const;
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const;
 
     virtual size_t GetMBNulLen() const { return m_conv->GetMBNulLen(); }
 

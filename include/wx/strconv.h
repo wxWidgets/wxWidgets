@@ -1,11 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        strconv.h
 // Purpose:     conversion routines for char sets any Unicode
-// Author:      Robert Roebling, Ove Kaaven
+// Author:      Ove Kaaven, Robert Roebling, Vadim Zeitlin
 // Modified by:
 // Created:     29/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Ove Kaaven, Robert Roebling, Vadim Zeitlin
+// Copyright:   (c) 1998 Ove Kaaven, Robert Roebling
+//              (c) 1998-2006 Vadim Zeitlin
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -31,6 +32,10 @@
 // the error value returned by wxMBConv methods
 #define wxCONV_FAILED ((size_t)-1)
 
+// the default value for some length parameters meaning that the string is
+// NUL-terminated
+#define wxNO_LEN ((size_t)-1)
+
 // ----------------------------------------------------------------------------
 // wxMBConv (abstract base class for conversions)
 // ----------------------------------------------------------------------------
@@ -54,12 +59,13 @@ public:
     // characters, not bytes) of the converted string including any trailing
     // L'\0' or (possibly multiple) '\0'(s). If the conversion fails or if
     // there is not enough space for everything, including the trailing NUL
-    // character(s), in the output buffer, (size_t)-1 is returned.
+    // character(s), in the output buffer, wxCONV_FAILED is returned.
     //
     // In the special case when dstLen is 0 (outputBuf may be NULL then) the
     // return value is the length of the needed buffer but nothing happens
-    // otherwise. If srcLen is -1, the entire string, up to and including the
-    // trailing NUL(s), is converted, otherwise exactly srcLen bytes are.
+    // otherwise. If srcLen is wxNO_LEN, the entire string, up to and
+    // including the trailing NUL(s), is converted, otherwise exactly srcLen
+    // bytes are.
     //
     // Typical usage:
     //
@@ -70,10 +76,10 @@ public:
     //          conv.ToWChar(wbuf, dstLen, src);
     //
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
-                           const char *src, size_t srcLen = -1) const;
+                           const char *src, size_t srcLen = wxNO_LEN) const;
 
     virtual size_t FromWChar(char *dst, size_t dstLen,
-                             const wchar_t *src, size_t srcLen = -1) const;
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const;
 
 
     // Convenience functions for translating NUL-terminated strings: returns
@@ -261,7 +267,16 @@ private:
 class WXDLLIMPEXP_BASE wxMBConvUTF16Base : public wxMBConv
 {
 public:
-    virtual size_t GetMBNulLen() const { return 2; }
+    enum { BYTES_PER_CHAR = 2 };
+
+    virtual size_t GetMBNulLen() const { return BYTES_PER_CHAR; }
+
+protected:
+    // return the length of the buffer using srcLen if it's not wxNO_LEN and
+    // computing the length ourselves if it is; also checks that the length is
+    // even if specified as we need an entire number of UTF-16 characters and
+    // returns wxNO_LEN which indicates error if it is odd
+    static size_t GetLength(const char *src, size_t srcLen);
 };
 
 // ----------------------------------------------------------------------------
@@ -271,8 +286,15 @@ public:
 class WXDLLIMPEXP_BASE wxMBConvUTF16LE : public wxMBConvUTF16Base
 {
 public:
+#if SIZEOF_WCHAR_T == 2
+    virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
+                           const char *src, size_t srcLen = wxNO_LEN) const;
+    virtual size_t FromWChar(char *dst, size_t dstLen,
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const;
+#else
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+#endif
     virtual wxMBConv *Clone() const { return new wxMBConvUTF16LE; }
 };
 
@@ -283,8 +305,15 @@ public:
 class WXDLLIMPEXP_BASE wxMBConvUTF16BE : public wxMBConvUTF16Base
 {
 public:
+#if SIZEOF_WCHAR_T == 2
+    virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
+                           const char *src, size_t srcLen = wxNO_LEN) const;
+    virtual size_t FromWChar(char *dst, size_t dstLen,
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const;
+#else
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+#endif
     virtual wxMBConv *Clone() const { return new wxMBConvUTF16BE; }
 };
 
@@ -295,7 +324,15 @@ public:
 class WXDLLIMPEXP_BASE wxMBConvUTF32Base : public wxMBConv
 {
 public:
-    virtual size_t GetMBNulLen() const { return 4; }
+    enum { BYTES_PER_CHAR = 4 };
+
+    virtual size_t GetMBNulLen() const { return BYTES_PER_CHAR; }
+
+protected:
+    // this is similar to wxMBConvUTF16Base method with the same name except
+    // that, of course, it verifies that length is divisible by 4 if given and
+    // not by 2
+    static size_t GetLength(const char *src, size_t srcLen);
 };
 
 // ----------------------------------------------------------------------------
@@ -305,8 +342,15 @@ public:
 class WXDLLIMPEXP_BASE wxMBConvUTF32LE : public wxMBConvUTF32Base
 {
 public:
+#if SIZEOF_WCHAR_T == 2
+    virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
+                           const char *src, size_t srcLen = wxNO_LEN) const;
+    virtual size_t FromWChar(char *dst, size_t dstLen,
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const;
+#else
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+#endif
     virtual wxMBConv *Clone() const { return new wxMBConvUTF32LE; }
 };
 
@@ -317,8 +361,15 @@ public:
 class WXDLLIMPEXP_BASE wxMBConvUTF32BE : public wxMBConvUTF32Base
 {
 public:
+#if SIZEOF_WCHAR_T == 2
+    virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
+                           const char *src, size_t srcLen = wxNO_LEN) const;
+    virtual size_t FromWChar(char *dst, size_t dstLen,
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const;
+#else
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+#endif
     virtual wxMBConv *Clone() const { return new wxMBConvUTF32BE; }
 };
 
