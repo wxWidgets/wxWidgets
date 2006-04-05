@@ -110,7 +110,7 @@ echo "
 
 static struct {
     wxFontEncoding encoding; // encoding identifier
-    wxUint16 *table;         // 8bit to unicode table
+    const wxUint16 *table;         // 8bit to unicode table
 } encodings_list[] = {
 " >> unictabl.inc
 

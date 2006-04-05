@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
            " * %s to Unicode recoding table\n"
            " * based on file %s by Unicode Consortium\n"
            " */\n\n"
-           "static wxUint16 encoding_table__%s[128] = {",
+           "static const wxUint16 encoding_table__%s[128] = {",
            argv[2], argv[1], argv[2]);
            
     for (i = 128; i < 256; i++)

@@ -50,7 +50,7 @@
     #include "wx/msw/wince/missing.h"       // for bsearch()
 #endif
 
-static wxUint16* GetEncTable(wxFontEncoding enc)
+static const wxUint16* GetEncTable(wxFontEncoding enc)
 {
 #ifdef __WXMAC__
     if( enc >= wxFONTENCODING_MACMIN && enc <= wxFONTENCODING_MACMAX )
@@ -98,7 +98,7 @@ CompareCharsetItems(const void *i1, const void *i2)
 }
 
 
-static CharsetItem* BuildReverseTable(wxUint16 *tbl)
+static CharsetItem* BuildReverseTable(const wxUint16 *tbl)
 {
     CharsetItem *rev = new CharsetItem[128];
 
@@ -124,7 +124,8 @@ wxEncodingConverter::wxEncodingConverter()
 bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_enc, int method)
 {
     unsigned i;
-    wxUint16 *in_tbl, *out_tbl = NULL;
+    const wxUint16 *in_tbl;
+    const wxUint16 *out_tbl = NULL;
 
     if (m_Table) {delete[] m_Table; m_Table = NULL;}
 
