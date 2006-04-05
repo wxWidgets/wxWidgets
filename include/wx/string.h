@@ -325,7 +325,9 @@ public:
       { InitWith(psz, 0, npos); }
   wxStringBase(const wxChar *psz, size_t nLength)
       { InitWith(psz, 0, nLength); }
-  wxStringBase(const wxChar *psz, wxMBConv& WXUNUSED(conv), size_t nLength = npos)
+  wxStringBase(const wxChar *psz,
+               const wxMBConv& WXUNUSED(conv),
+               size_t nLength = npos)
       { InitWith(psz, 0, nLength); }
     // take nLen chars starting at nPos
   wxStringBase(const wxStringBase& str, size_t nPos, size_t nLen)
@@ -650,7 +652,9 @@ public:
       : wxStringBase(psz ? psz : wxT("")) { }
   wxString(const wxChar *psz, size_t nLength)
       : wxStringBase(psz, nLength) { }
-  wxString(const wxChar *psz, wxMBConv& WXUNUSED(conv), size_t nLength = npos)
+  wxString(const wxChar *psz,
+           const wxMBConv& WXUNUSED(conv),
+           size_t nLength = npos)
       : wxStringBase(psz, nLength == npos ? wxStrlen(psz) : nLength) { }
 
   // even if we're not built with wxUSE_STL == 1 it is very convenient to allow
@@ -666,7 +670,7 @@ public:
 
 #if wxUSE_UNICODE
     // from multibyte string
-  wxString(const char *psz, wxMBConv& conv, size_t nLength = npos);
+  wxString(const char *psz, const wxMBConv& conv, size_t nLength = npos);
     // from wxWCharBuffer (i.e. return from wxGetString)
   wxString(const wxWCharBuffer& psz) : wxStringBase(psz.data()) { }
 #else // ANSI
@@ -679,7 +683,9 @@ public:
 
 #if wxUSE_WCHAR_T
     // from wide (Unicode) string
-  wxString(const wchar_t *pwz, wxMBConv& conv = wxConvLibc, size_t nLength = npos);
+  wxString(const wchar_t *pwz,
+           const wxMBConv& conv = wxConvLibc,
+           size_t nLength = npos);
 #endif // !wxUSE_WCHAR_T
 
     // from wxCharBuffer
@@ -809,14 +815,14 @@ public:
     // type differs because a function may either return pointer to the buffer
     // directly or have to use intermediate buffer for translation.
 #if wxUSE_UNICODE
-    const wxCharBuffer mb_str(wxMBConv& conv = wxConvLibc) const;
+    const wxCharBuffer mb_str(const wxMBConv& conv = wxConvLibc) const;
 
     const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
 
     const wxChar* wc_str() const { return c_str(); }
 
     // for compatibility with !wxUSE_UNICODE version
-    const wxChar* wc_str(wxMBConv& WXUNUSED(conv)) const { return c_str(); }
+    const wxChar* wc_str(const wxMBConv& WXUNUSED(conv)) const { return c_str(); }
 
 #if wxMBFILES
     const wxCharBuffer fn_str() const { return mb_str(wxConvFile); }
@@ -827,12 +833,12 @@ public:
     const wxChar* mb_str() const { return c_str(); }
 
     // for compatibility with wxUSE_UNICODE version
-    const wxChar* mb_str(wxMBConv& WXUNUSED(conv)) const { return c_str(); }
+    const wxChar* mb_str(const wxMBConv& WXUNUSED(conv)) const { return c_str(); }
 
     const wxWX2MBbuf mbc_str() const { return mb_str(); }
 
 #if wxUSE_WCHAR_T
-    const wxWCharBuffer wc_str(wxMBConv& conv) const;
+    const wxWCharBuffer wc_str(const wxMBConv& conv) const;
 #endif // wxUSE_WCHAR_T
 #ifdef __WXOSX__
     const wxCharBuffer fn_str() const { return wxConvFile.cWC2WX( wc_str( wxConvLocal ) ); }

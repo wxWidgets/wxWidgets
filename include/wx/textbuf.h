@@ -14,6 +14,7 @@
 
 #include "wx/defs.h"
 #include "wx/arrstr.h"
+#include "wx/convauto.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -80,10 +81,10 @@ public:
     bool Create(const wxString& strBufferName);
 
     // Open() also loads buffer in memory on success
-    bool Open(wxMBConv& conv = wxConvUTF8);
+    bool Open(const wxMBConv& conv = wxConvAuto());
 
     // same as Open() but with (another) buffer name
-    bool Open(const wxString& strBufferName, wxMBConv& conv = wxConvUTF8);
+    bool Open(const wxString& strBufferName, const wxMBConv& conv = wxConvAuto());
 
     // closes the buffer and frees memory, losing all changes
     bool Close();
@@ -161,7 +162,7 @@ public:
     // change the buffer (default argument means "don't change type")
     // possibly in another format
     bool Write(wxTextFileType typeNew = wxTextFileType_None,
-               wxMBConv& conv = wxConvUTF8);
+               const wxMBConv& conv = wxConvAuto());
 
     // dtor
     virtual ~wxTextBuffer();
@@ -183,8 +184,8 @@ protected:
     virtual bool OnOpen(const wxString &strBufferName,
                         wxTextBufferOpenMode openmode) = 0;
     virtual bool OnClose() = 0;
-    virtual bool OnRead(wxMBConv& conv) = 0;
-    virtual bool OnWrite(wxTextFileType typeNew, wxMBConv& conv) = 0;
+    virtual bool OnRead(const wxMBConv& conv) = 0;
+    virtual bool OnWrite(wxTextFileType typeNew, const wxMBConv& conv) = 0;
 
     static wxString ms_eof;     // dummy string returned at EOF
     wxString m_strBufferName;   // name of the buffer

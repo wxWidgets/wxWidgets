@@ -426,7 +426,8 @@ void wxFileConfig::Init()
 // constructor supports creation of wxFileConfig objects of any type
 wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
                            const wxString& strLocal, const wxString& strGlobal,
-                           long style, wxMBConv& conv)
+                           long style,
+                           const wxMBConv& conv)
             : wxConfigBase(::GetAppName(appName), vendorName,
                            strLocal, strGlobal,
                            style),
@@ -474,7 +475,7 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
 
 #if wxUSE_STREAMS
 
-wxFileConfig::wxFileConfig(wxInputStream &inStream, wxMBConv& conv)
+wxFileConfig::wxFileConfig(wxInputStream &inStream, const wxMBConv& conv)
             : m_conv(conv)
 {
     // always local_file when this constructor is called (?)
@@ -1036,7 +1037,7 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
 
 #if wxUSE_STREAMS
 
-bool wxFileConfig::Save(wxOutputStream& os, wxMBConv& conv)
+bool wxFileConfig::Save(wxOutputStream& os, const wxMBConv& conv)
 {
     // save unconditionally, even if not dirty
     for ( wxFileConfigLineList *p = m_linesHead; p != NULL; p = p->Next() )

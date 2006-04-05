@@ -203,21 +203,16 @@ wxMBConv::ToWChar(wchar_t *dst, size_t dstLen,
         size_t lenChunk = MB2WC(NULL, src, 0);
         if ( lenChunk == 0 )
         {
-            // nothing left in the input string, conversion succeeded
+            // nothing left in the input string, conversion succeeded; but
+            // still account for the trailing NULL
+            dstWritten++;
             break;
         }
 
         if ( lenChunk == wxCONV_FAILED )
             return wxCONV_FAILED;
 
-        // if we already have a previous chunk, leave the NUL separating it
-        // from this one
-        if ( dstWritten )
-        {
-            dstWritten++;
-            if ( dst )
-                dst++;
-        }
+        lenChunk++; // for trailing NUL
 
         dstWritten += lenChunk;
 
@@ -226,8 +221,7 @@ wxMBConv::ToWChar(wchar_t *dst, size_t dstLen,
             if ( dstWritten > dstLen )
                 return wxCONV_FAILED;
 
-            lenChunk = MB2WC(dst, src, lenChunk + 1 /* for NUL */);
-            if ( lenChunk == wxCONV_FAILED )
+            if ( MB2WC(dst, src, lenChunk) == wxCONV_FAILED )
                 return wxCONV_FAILED;
 
             dst += lenChunk;
@@ -390,11 +384,11 @@ wxMBConv::cMB2WC(const char *in, size_t inLen, size_t *outLen) const
     const size_t dstLen = ToWChar(NULL, 0, in, inLen);
     if ( dstLen != wxCONV_FAILED )
     {
-        wxWCharBuffer wbuf(dstLen);
+        wxWCharBuffer wbuf(dstLen - 1);
         if ( ToWChar(wbuf.data(), dstLen, in, inLen) )
         {
             if ( outLen )
-                *outLen = dstLen;
+                *outLen = dstLen - 1;
             return wbuf;
         }
     }
@@ -411,11 +405,11 @@ wxMBConv::cWC2MB(const wchar_t *in, size_t inLen, size_t *outLen) const
     const size_t dstLen = FromWChar(NULL, 0, in, inLen);
     if ( dstLen != wxCONV_FAILED )
     {
-        wxCharBuffer buf(dstLen);
+        wxCharBuffer buf(dstLen - 1);
         if ( FromWChar(buf.data(), dstLen, in, inLen) )
         {
             if ( outLen )
-                *outLen = dstLen;
+                *outLen = dstLen - 1;
             return buf;
         }
     }
@@ -1825,34 +1819,26 @@ public:
         // wouldn't work if reading an incomplete MB char didn't result in an
         // error
         //
-        // note however that using MB_ERR_INVALID_CHARS with CP_UTF7 results in
-        // an error (tested under Windows Server 2003) and apparently it is
-        // done on purpose, i.e. the function accepts any input in this case
-        // and although I'd prefer to return error on ill-formed output, our
-        // own wxMBConvUTF7 doesn't detect errors (e.g. lone "+" which is
-        // explicitly ill-formed according to RFC 2152) neither so we don't
-        // even have any fallback here...
-        //
         // Moreover, MB_ERR_INVALID_CHARS is only supported on Win 2K SP4 or
-        // Win XP or newer and if it is specified on older versions, conversion
-        // from CP_UTF8 (which can have flags only 0 or MB_ERR_INVALID_CHARS)
-        // fails. So we can only use the flag on newer Windows versions.
-        // Additionally, the flag is not supported by UTF7, symbol and CJK
-        // encodings. See here:
+        // Win XP or newer and it is not supported for UTF-[78] so we always
+        // use our own conversions in this case. See
         //     http://blogs.msdn.com/michkap/archive/2005/04/19/409566.aspx
         //     http://msdn.microsoft.com/library/en-us/intl/unicode_17si.asp
+        if ( m_CodePage == CP_UTF8 )
+        {
+            return wxConvUTF8.MB2WC(buf, psz, n);
+        }
+
+        if ( m_CodePage == CP_UTF7 )
+        {
+            return wxConvUTF7.MB2WC(buf, psz, n);
+        }
+
         int flags = 0;
-        if ( m_CodePage != CP_UTF7 && m_CodePage != CP_SYMBOL &&
-             m_CodePage < 50000 &&
-             IsAtLeastWin2kSP4() )
+        if ( (m_CodePage < 50000 && m_CodePage != CP_SYMBOL) &&
+                IsAtLeastWin2kSP4() )
         {
             flags = MB_ERR_INVALID_CHARS;
-        }
-        else if ( m_CodePage == CP_UTF8 )
-        {
-            // Avoid round-trip in the special case of UTF-8 by using our
-            // own UTF-8 conversion code:
-            return wxMBConvUTF8().MB2WC(buf, psz, n);
         }
 
         const size_t len = ::MultiByteToWideChar

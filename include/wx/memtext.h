@@ -37,11 +37,11 @@ protected:
     virtual bool OnClose()
         { return true; }
 
-    virtual bool OnRead(wxMBConv& WXUNUSED(conv))
+    virtual bool OnRead(const wxMBConv& WXUNUSED(conv))
         { return true; }
 
     virtual bool OnWrite(wxTextFileType WXUNUSED(typeNew),
-                         wxMBConv& WXUNUSED(conv) = wxConvUTF8)
+                         const wxMBConv& WXUNUSED(conv) = wxConvUTF8)
         { return true; }
 
 private:

@@ -103,7 +103,7 @@ bool wxFFile::Close()
 // read/write
 // ----------------------------------------------------------------------------
 
-bool wxFFile::ReadAll(wxString *str, wxMBConv& conv)
+bool wxFFile::ReadAll(wxString *str, const wxMBConv& conv)
 {
     wxCHECK_MSG( str, false, wxT("invalid parameter") );
     wxCHECK_MSG( IsOpened(), false, wxT("can't read from closed file") );

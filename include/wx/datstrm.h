@@ -14,7 +14,7 @@
 
 #include "wx/stream.h"
 #include "wx/longlong.h"
-#include "wx/strconv.h"
+#include "wx/convauto.h"
 
 #if wxUSE_STREAMS
 
@@ -22,7 +22,7 @@ class WXDLLIMPEXP_BASE wxDataInputStream
 {
 public:
 #if wxUSE_UNICODE
-    wxDataInputStream(wxInputStream& s, wxMBConv& conv = wxConvUTF8);
+    wxDataInputStream(wxInputStream& s, const wxMBConv& conv = wxConvAuto());
 #else
     wxDataInputStream(wxInputStream& s);
 #endif
@@ -83,7 +83,7 @@ protected:
     wxInputStream *m_input;
     bool m_be_order;
 #if wxUSE_UNICODE
-    wxMBConv& m_conv;
+    wxMBConv m_conv;
 #endif
 
     DECLARE_NO_COPY_CLASS(wxDataInputStream)
@@ -93,7 +93,7 @@ class WXDLLIMPEXP_BASE wxDataOutputStream
 {
 public:
 #if wxUSE_UNICODE
-    wxDataOutputStream(wxOutputStream& s, wxMBConv& conv = wxConvUTF8);
+    wxDataOutputStream(wxOutputStream& s, const wxMBConv& conv = wxConvAuto());
 #else
     wxDataOutputStream(wxOutputStream& s);
 #endif
@@ -157,7 +157,7 @@ protected:
     wxOutputStream *m_output;
     bool m_be_order;
 #if wxUSE_UNICODE
-    wxMBConv& m_conv;
+    wxMBConv m_conv;
 #endif
 
     DECLARE_NO_COPY_CLASS(wxDataOutputStream)

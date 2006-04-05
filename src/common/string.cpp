@@ -1006,7 +1006,7 @@ int STRINGCLASS::compare(size_t nStart, size_t nLen,
 #if wxUSE_UNICODE
 
 // from multibyte string
-wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
+wxString::wxString(const char *psz, const wxMBConv& conv, size_t nLength)
 {
     // anything to do?
     if ( psz && nLength != 0 )
@@ -1031,7 +1031,7 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 }
 
 //Convert wxString in Unicode mode to a multi-byte string
-const wxCharBuffer wxString::mb_str(wxMBConv& conv) const
+const wxCharBuffer wxString::mb_str(const wxMBConv& conv) const
 {
     return conv.cWC2MB(c_str(), length() + 1 /* size, not length */, NULL);
 }
@@ -1041,7 +1041,7 @@ const wxCharBuffer wxString::mb_str(wxMBConv& conv) const
 #if wxUSE_WCHAR_T
 
 // from wide string
-wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
+wxString::wxString(const wchar_t *pwz, const wxMBConv& conv, size_t nLength)
 {
     // anything to do?
     if ( pwz && nLength != 0 )
@@ -1067,7 +1067,7 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
 
 //Converts this string to a wide character string if unicode
 //mode is not enabled and wxUSE_WCHAR_T is enabled
-const wxWCharBuffer wxString::wc_str(wxMBConv& conv) const
+const wxWCharBuffer wxString::wc_str(const wxMBConv& conv) const
 {
     return conv.cMB2WC(c_str(), length() + 1 /* size, not length */, NULL);
 }

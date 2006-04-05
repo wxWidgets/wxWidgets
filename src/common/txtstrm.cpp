@@ -35,7 +35,9 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_UNICODE
-wxTextInputStream::wxTextInputStream(wxInputStream &s, const wxString &sep, wxMBConv& conv)
+wxTextInputStream::wxTextInputStream(wxInputStream &s,
+                                     const wxString &sep,
+                                     const wxMBConv& conv)
   : m_input(s), m_separators(sep), m_conv(conv)
 {
     memset((void*)m_lastBytes, 0, 10);
@@ -298,7 +300,9 @@ wxTextInputStream& wxTextInputStream::operator>>(float& f)
 
 
 #if wxUSE_UNICODE
-wxTextOutputStream::wxTextOutputStream(wxOutputStream& s, wxEOL mode, wxMBConv& conv)
+wxTextOutputStream::wxTextOutputStream(wxOutputStream& s,
+                                       wxEOL mode,
+                                       const wxMBConv& conv)
   : m_output(s), m_conv(conv)
 #else
 wxTextOutputStream::wxTextOutputStream(wxOutputStream& s, wxEOL mode)

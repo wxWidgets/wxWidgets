@@ -86,7 +86,7 @@ bool wxTextFile::OnClose()
 }
 
 
-bool wxTextFile::OnRead(wxMBConv& conv)
+bool wxTextFile::OnRead(const wxMBConv& conv)
 {
     // file should be opened and we must be in it's beginning
     wxASSERT( m_file.IsOpened() && m_file.Tell() == 0 );
@@ -114,18 +114,8 @@ bool wxTextFile::OnRead(wxMBConv& conv)
             return false;
         }
 
-        eof = nRead == 0;
-        if ( eof )
-        {
-            // append 4 trailing NUL bytes: this is needed to ensure that the
-            // string is going to be NUL-terminated, whatever is the encoding
-            // used (even UTF-32)
-            block[0] =
-            block[1] =
-            block[2] =
-            block[3] = '\0';
-            nRead = 4;
-        }
+        if ( nRead == 0 )
+            break;
 
         // this shouldn't happen but don't overwrite the buffer if it does
         wxCHECK_MSG( bufPos + nRead <= bufSize, false,
@@ -136,7 +126,7 @@ bool wxTextFile::OnRead(wxMBConv& conv)
         bufPos += nRead;
     }
 
-    const wxString str(buf, conv);
+    const wxString str(buf, conv, bufPos);
 
     // this doesn't risk to happen in ANSI build
 #if wxUSE_UNICODE
@@ -211,7 +201,7 @@ bool wxTextFile::OnRead(wxMBConv& conv)
 }
 
 
-bool wxTextFile::OnWrite(wxTextFileType typeNew, wxMBConv& conv)
+bool wxTextFile::OnWrite(wxTextFileType typeNew, const wxMBConv& conv)
 {
     wxFileName fn = m_strBufferName;
 

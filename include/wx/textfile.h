@@ -39,8 +39,8 @@ protected:
     virtual bool OnOpen(const wxString &strBufferName,
                         wxTextBufferOpenMode OpenMode);
     virtual bool OnClose();
-    virtual bool OnRead(wxMBConv& conv);
-    virtual bool OnWrite(wxTextFileType typeNew, wxMBConv& conv);
+    virtual bool OnRead(const wxMBConv& conv);
+    virtual bool OnWrite(wxTextFileType typeNew, const wxMBConv& conv);
 
 private:
 

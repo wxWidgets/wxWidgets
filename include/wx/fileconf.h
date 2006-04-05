@@ -122,11 +122,11 @@ public:
                const wxString& localFilename = wxEmptyString,
                const wxString& globalFilename = wxEmptyString,
                long style = wxCONFIG_USE_LOCAL_FILE | wxCONFIG_USE_GLOBAL_FILE,
-               wxMBConv& conv = wxConvUTF8);
+               const wxMBConv& conv = wxConvAuto());
 
 #if wxUSE_STREAMS
     // ctor that takes an input stream.
-  wxFileConfig(wxInputStream &inStream, wxMBConv& conv = wxConvUTF8);
+  wxFileConfig(wxInputStream &inStream, const wxMBConv& conv = wxConvAuto());
 #endif // wxUSE_STREAMS
 
     // dtor will save unsaved data
@@ -169,7 +169,7 @@ public:
   // save the entire config file text to the given stream, note that the text
   // won't be saved again in dtor when Flush() is called if you use this method
   // as it won't be "changed" any more
-  virtual bool Save(wxOutputStream& os, wxMBConv& conv = wxConvUTF8);
+  virtual bool Save(wxOutputStream& os, const wxMBConv& conv = wxConvAuto());
 #endif // wxUSE_STREAMS
 
 public:
@@ -227,7 +227,7 @@ private:
   wxFileConfigGroup *m_pRootGroup,      // the top (unnamed) group
                     *m_pCurrentGroup;   // the current group
 
-  wxMBConv   &m_conv;
+  wxMBConv    m_conv;
 
 #ifdef __UNIX__
   int m_umask;                          // the umask to use for file creation

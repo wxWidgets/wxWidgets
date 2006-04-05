@@ -26,7 +26,7 @@
 // ---------------------------------------------------------------------------
 
 #if wxUSE_UNICODE
-wxDataInputStream::wxDataInputStream(wxInputStream& s, wxMBConv& conv)
+wxDataInputStream::wxDataInputStream(wxInputStream& s, const wxMBConv& conv)
   : m_input(&s), m_be_order(false), m_conv(conv)
 #else
 wxDataInputStream::wxDataInputStream(wxInputStream& s)
@@ -445,7 +445,7 @@ wxDataInputStream& wxDataInputStream::operator>>(float& f)
 // ---------------------------------------------------------------------------
 
 #if wxUSE_UNICODE
-wxDataOutputStream::wxDataOutputStream(wxOutputStream& s, wxMBConv& conv)
+wxDataOutputStream::wxDataOutputStream(wxOutputStream& s, const wxMBConv& conv)
   : m_output(&s), m_be_order(false), m_conv(conv)
 #else
 wxDataOutputStream::wxDataOutputStream(wxOutputStream& s)

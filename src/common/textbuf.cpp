@@ -181,14 +181,14 @@ bool wxTextBuffer::Create()
     return true;
 }
 
-bool wxTextBuffer::Open(const wxString& strBufferName, wxMBConv& conv)
+bool wxTextBuffer::Open(const wxString& strBufferName, const wxMBConv& conv)
 {
     m_strBufferName = strBufferName;
 
     return Open(conv);
 }
 
-bool wxTextBuffer::Open(wxMBConv& conv)
+bool wxTextBuffer::Open(const wxMBConv& conv)
 {
     // buffer name must be either given in ctor or in Open(const wxString&)
     wxASSERT( !m_strBufferName.empty() );
@@ -276,7 +276,7 @@ bool wxTextBuffer::Close()
     return true;
 }
 
-bool wxTextBuffer::Write(wxTextFileType typeNew, wxMBConv& conv)
+bool wxTextBuffer::Write(wxTextFileType typeNew, const wxMBConv& conv)
 {
     return OnWrite(typeNew, conv);
 }
