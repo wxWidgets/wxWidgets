@@ -2505,8 +2505,6 @@ public:
     virtual wxMBConv *Clone() const { return new wxMBConv_cocoa(*this); }
 
     bool IsOk() const
-
-    bool IsOk() const
     {
         return m_encoding != kCFStringEncodingInvalidId &&
               CFStringIsEncodingAvailable(m_encoding);
@@ -2669,9 +2667,8 @@ public:
         return res ;
     }
 
-    virtual wxMBConv *Clone() const { return wxMBConv_mac(*this); }
+    virtual wxMBConv *Clone() const { return new wxMBConv_mac(*this); }
 
-    bool IsOk() const
     bool IsOk() const
         { return m_MB2WC_converter !=  NULL && m_WC2MB_converter != NULL  ; }
 
