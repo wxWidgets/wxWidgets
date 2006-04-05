@@ -59,6 +59,7 @@ TEST_OBJECTS =  \
 	test_hashes.o \
 	test_lists.o \
 	test_longlongtest.o \
+	test_convautotest.o \
 	test_mbconvtest.o \
 	test_regextest.o \
 	test_wxregextest.o \
@@ -301,6 +302,9 @@ test_lists.o: $(srcdir)/lists/lists.cpp $(TEST_ODEP)
 
 test_longlongtest.o: $(srcdir)/longlong/longlongtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/longlong/longlongtest.cpp
+
+test_convautotest.o: $(srcdir)/mbconv/convautotest.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/mbconv/convautotest.cpp
 
 test_mbconvtest.o: $(srcdir)/mbconv/mbconvtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/mbconv/mbconvtest.cpp

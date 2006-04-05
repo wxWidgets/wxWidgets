@@ -49,6 +49,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_hashes.obj \
 	$(OBJS)\test_lists.obj \
 	$(OBJS)\test_longlongtest.obj \
+	$(OBJS)\test_convautotest.obj \
 	$(OBJS)\test_mbconvtest.obj \
 	$(OBJS)\test_regextest.obj \
 	$(OBJS)\test_wxregextest.obj \
@@ -68,6 +69,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_tempfile.obj \
 	$(OBJS)\test_textstreamtest.obj \
 	$(OBJS)\test_zlibstream.obj \
+	$(OBJS)\test_textfiletest.obj \
 	$(OBJS)\test_uris.obj
 TEST_GUI_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_0) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
@@ -333,6 +335,9 @@ $(OBJS)\test_lists.obj: .\lists\lists.cpp
 $(OBJS)\test_longlongtest.obj: .\longlong\longlongtest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
+$(OBJS)\test_convautotest.obj: .\mbconv\convautotest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
 $(OBJS)\test_mbconvtest.obj: .\mbconv\mbconvtest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
@@ -388,6 +393,9 @@ $(OBJS)\test_textstreamtest.obj: .\streams\textstreamtest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_zlibstream.obj: .\streams\zlibstream.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_textfiletest.obj: .\textfile\textfiletest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_uris.obj: .\uris\uris.cpp

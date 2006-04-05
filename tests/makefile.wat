@@ -239,6 +239,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_hashes.obj &
 	$(OBJS)\test_lists.obj &
 	$(OBJS)\test_longlongtest.obj &
+	$(OBJS)\test_convautotest.obj &
 	$(OBJS)\test_mbconvtest.obj &
 	$(OBJS)\test_regextest.obj &
 	$(OBJS)\test_wxregextest.obj &
@@ -258,6 +259,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_tempfile.obj &
 	$(OBJS)\test_textstreamtest.obj &
 	$(OBJS)\test_zlibstream.obj &
+	$(OBJS)\test_textfiletest.obj &
 	$(OBJS)\test_uris.obj
 TEST_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
@@ -366,6 +368,9 @@ $(OBJS)\test_lists.obj :  .AUTODEPEND .\lists\lists.cpp
 $(OBJS)\test_longlongtest.obj :  .AUTODEPEND .\longlong\longlongtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
+$(OBJS)\test_convautotest.obj :  .AUTODEPEND .\mbconv\convautotest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_mbconvtest.obj :  .AUTODEPEND .\mbconv\mbconvtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
@@ -421,6 +426,9 @@ $(OBJS)\test_textstreamtest.obj :  .AUTODEPEND .\streams\textstreamtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_zlibstream.obj :  .AUTODEPEND .\streams\zlibstream.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_textfiletest.obj :  .AUTODEPEND .\textfile\textfiletest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_uris.obj :  .AUTODEPEND .\uris\uris.cpp

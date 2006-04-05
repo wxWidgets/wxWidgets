@@ -42,6 +42,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_hashes.obj \
 	$(OBJS)\test_lists.obj \
 	$(OBJS)\test_longlongtest.obj \
+	$(OBJS)\test_convautotest.obj \
 	$(OBJS)\test_mbconvtest.obj \
 	$(OBJS)\test_regextest.obj \
 	$(OBJS)\test_wxregextest.obj \
@@ -61,6 +62,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_tempfile.obj \
 	$(OBJS)\test_textstreamtest.obj \
 	$(OBJS)\test_zlibstream.obj \
+	$(OBJS)\test_textfiletest.obj \
 	$(OBJS)\test_uris.obj
 TEST_GUI_CXXFLAGS = /M$(__RUNTIME_LIBS_23)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\test_gui.pdb $(____DEBUGRUNTIME) \
@@ -412,6 +414,9 @@ $(OBJS)\test_lists.obj: .\lists\lists.cpp
 $(OBJS)\test_longlongtest.obj: .\longlong\longlongtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
+$(OBJS)\test_convautotest.obj: .\mbconv\convautotest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
 $(OBJS)\test_mbconvtest.obj: .\mbconv\mbconvtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
@@ -467,6 +472,9 @@ $(OBJS)\test_textstreamtest.obj: .\streams\textstreamtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_zlibstream.obj: .\streams\zlibstream.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_textfiletest.obj: .\textfile\textfiletest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_uris.obj: .\uris\uris.cpp
