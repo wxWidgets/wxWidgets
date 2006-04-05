@@ -1,3 +1,9 @@
+0.1.7-4
+-------
+
+Second fix for Copy/Paste (using expat.native_encoding property).
+Added cellpos,cellspan properties for Spacer in GridBag sizer.
+
 0.1.7-3
 -------
 

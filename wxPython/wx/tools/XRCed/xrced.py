@@ -22,6 +22,7 @@ Options:
 
 from globals import *
 import os, sys, getopt, re, traceback, tempfile, shutil, cPickle
+from xml.parsers import expat
 
 # Local modules
 from tree import *                      # imports xxx which imports params
@@ -418,8 +419,7 @@ class Frame(wxFrame):
             data = wx.CustomDataObject('XRCED')
             # Set encoding in header
             # (False,True)
-            s = (xxx.element.toxml(encoding=g.currentEncoding),
-                 xxx.element.toxml())[not g.currentEncoding] 
+            s = xxx.element.toxml(encoding=expat.native_encoding)
             data.SetData(cPickle.dumps(s))
             wx.TheClipboard.SetData(data)
             wx.TheClipboard.Close()
@@ -593,8 +593,7 @@ class Frame(wxFrame):
             if wx.TheClipboard.Open():
                 data = wx.CustomDataObject('XRCED')
                 # (False, True)
-                s = (elem.toxml(encoding=g.currentEncoding),
-                     elem.toxml())[not g.currentEncoding] 
+                s = elem.toxml(encoding=expat.native_encoding)
                 data.SetData(cPickle.dumps(s))
                 wx.TheClipboard.SetData(data)
                 wx.TheClipboard.Close()

@@ -874,6 +874,11 @@ class xxxSpacer(xxxObject):
     allParams = ['size', 'option', 'flag', 'border']
     paramDict = {'option': ParamInt}
     default = {'size': '0,0'}
+    def __init__(self, parent, element, refElem=None):
+        # For GridBag sizer items, extra parameters added
+        if isinstance(parent, xxxGridBagSizer):
+            self.allParams = self.allParams + ['cellpos', 'cellspan']
+        xxxObject.__init__(self, parent, element, refElem)
 
 class xxxMenuBar(xxxContainer):
     allParams = ['style']
