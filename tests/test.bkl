@@ -37,6 +37,7 @@
             hashes/hashes.cpp
             lists/lists.cpp
             longlong/longlongtest.cpp
+            mbconv/convautotest.cpp
             mbconv/mbconvtest.cpp
             regex/regextest.cpp
             regex/wxregextest.cpp
