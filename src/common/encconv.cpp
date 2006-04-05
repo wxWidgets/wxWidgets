@@ -376,11 +376,9 @@ wxString wxEncodingConverter::Convert(const wxString& input) const
 
 #define NUM_OF_PLATFORMS  4 /*must conform to enum wxPLATFORM_XXXX !!!*/
 #define ENC_PER_PLATFORM  3
-           // max no. of encodings for one language used on one platform
-           // Anybody thinks 5 is not enough? ;-)
-
-           // It is too much. Using maximum of everything at the current moment to not
-           // make the library larger than necessary. Make larger only if necessary - MR
+           // max no. of encodings for one language used on one platform.
+           // Using maximum of everything at the current moment to not make the
+           // library larger than necessary. Make larger only if necessary - MR
 
 static const wxFontEncoding
     EquivalentEncodings[][NUM_OF_PLATFORMS][ENC_PER_PLATFORM+1] = {

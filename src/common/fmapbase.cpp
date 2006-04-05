@@ -155,7 +155,7 @@ static const wxChar* gs_encodingDescs[] =
 };
 
 // and the internal names (these are not translated on purpose!)
-static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][10] =
+static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][9] =
 {
     // names from the columns correspond to these OS:
     //      Linux        Solaris and IRIX       HP-UX             AIX
