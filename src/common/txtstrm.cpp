@@ -415,9 +415,8 @@ void wxTextOutputStream::WriteString(const wxString& string)
     }
 
 #if wxUSE_UNICODE
-    // note that we must not write the trailing NUL here
     wxCharBuffer buffer = m_conv->cWC2MB(out, out.length(), &len);
-    m_output.Write(buffer, len + 1 - m_conv->GetMBNulLen());
+    m_output.Write(buffer, len);
 #else
     m_output.Write(out.c_str(), out.length() );
 #endif
