@@ -144,13 +144,17 @@ static size_t decode_utf16(const wxUint16* input, wxUint32& output)
 }
 
 #ifdef WC_UTF16
+    typedef wchar_t wxDecodeSurrogate_t;
+#else // !WC_UTF16
+    typedef wxUint16 wxDecodeSurrogate_t;
+#endif // WC_UTF16/!WC_UTF16
 
 // returns the next UTF-32 character from the wchar_t buffer and advances the
 // pointer to the character after this one
 //
 // if an invalid character is found, *pSrc is set to NULL, the caller must
 // check for this
-static wxUint32 wxDecodeSurrogate(const wchar_t **pSrc)
+static wxUint32 wxDecodeSurrogate(const wxDecodeSurrogate_t **pSrc)
 {
     wxUint32 out;
     const size_t n = decode_utf16(*pSrc, out);
@@ -161,8 +165,6 @@ static wxUint32 wxDecodeSurrogate(const wchar_t **pSrc)
 
     return out;
 }
-
-#endif // WC_UTF16
 
 // ----------------------------------------------------------------------------
 // wxMBConv
@@ -1071,130 +1073,163 @@ wxMBConvUTF16swap::FromWChar(char *dst, size_t dstLen,
 // conversions without endianness change
 // ----------------------------------------------------------------------------
 
-size_t wxMBConvUTF16straight::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+size_t
+wxMBConvUTF16straight::ToWChar(wchar_t *dst, size_t dstLen,
+                               const char *src, size_t srcLen) const
 {
-    size_t len=0;
+    srcLen = GetLength(src, srcLen);
+    if ( srcLen == wxNO_LEN )
+        return wxCONV_FAILED;
 
-    while (*(wxUint16*)psz && (!buf || len < n))
+    const size_t inLen = srcLen/BYTES_PER_CHAR;
+    if ( !dst )
     {
-        wxUint32 cc;
-        size_t pa=decode_utf16((wxUint16*)psz, cc);
-        if (pa == wxCONV_FAILED)
-            return pa;
-
-        if (buf)
-            *buf++ = (wchar_t)cc;
-        len++;
-        psz += pa * sizeof(wxUint16);
+        // optimization: return maximal space which could be needed for this
+        // string even if the real size could be smaller if the buffer contains
+        // any surrogates
+        return inLen;
     }
-    if (buf && len<n)   *buf=0;
 
-    return len;
+    size_t outLen = 0;
+    const wxUint16 *in = wx_reinterpret_cast(const wxUint16 *, src);
+    for ( const wxUint16 * const inEnd = in + inLen; in < inEnd; )
+    {
+        const wxUint32 ch = wxDecodeSurrogate(&in);
+        if ( !in )
+            return wxCONV_FAILED;
+
+        if ( ++outLen > dstLen )
+            return wxCONV_FAILED;
+
+        *dst++ = ch;
+    }
+
+
+    return outLen;
 }
 
-
-// copy 32bit String to 16bit MB
-size_t wxMBConvUTF16straight::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+size_t
+wxMBConvUTF16straight::FromWChar(char *dst, size_t dstLen,
+                                 const wchar_t *src, size_t srcLen) const
 {
-    size_t len=0;
+    if ( srcLen == wxNO_LEN )
+        srcLen = wxWcslen(src) + 1;
 
-    while (*psz && (!buf || len < n))
+    size_t outLen = 0;
+    wxUint16 *out = wx_reinterpret_cast(wxUint16 *, dst);
+    for ( size_t n = 0; n < srcLen; n++ )
     {
         wxUint16 cc[2];
-        size_t pa=encode_utf16(*psz, cc);
+        const size_t numChars = encode_utf16(*src++, cc);
+        if ( numChars == wxCONV_FAILED )
+            return wxCONV_FAILED;
 
-        if (pa == wxCONV_FAILED)
-            return pa;
-
-        if (buf)
+        outLen += numChars*BYTES_PER_CHAR;
+        if ( out )
         {
-            *(wxUint16*)buf = cc[0];
-            buf += sizeof(wxUint16);
-            if (pa > 1)
+            if ( outLen > dstLen )
+                return wxCONV_FAILED;
+
+            *out++ = cc[0];
+            if ( numChars == 2 )
             {
-                *(wxUint16*)buf = cc[1];
-                buf += sizeof(wxUint16);
+                // second character of a surrogate
+                *out++ = cc[1];
             }
         }
-
-        len += pa*sizeof(wxUint16);
-        psz++;
     }
-    if (buf && len<=n-sizeof(wxUint16))   *(wxUint16*)buf=0;
 
-    return len;
+    return outLen;
 }
 
 // ----------------------------------------------------------------------------
 // endian-reversing conversions
 // ----------------------------------------------------------------------------
 
-// swap 16bit MB to 32bit String
-size_t wxMBConvUTF16swap::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+size_t
+wxMBConvUTF16swap::ToWChar(wchar_t *dst, size_t dstLen,
+                           const char *src, size_t srcLen) const
 {
-    size_t len=0;
+    srcLen = GetLength(src, srcLen);
+    if ( srcLen == wxNO_LEN )
+        return wxCONV_FAILED;
 
-    while (*(wxUint16*)psz && (!buf || len < n))
+    const size_t inLen = srcLen/BYTES_PER_CHAR;
+    if ( !dst )
     {
-        wxUint32 cc;
-        char tmp[4];
-        tmp[0]=psz[1];  tmp[1]=psz[0];
-        tmp[2]=psz[3];  tmp[3]=psz[2];
-
-        size_t pa=decode_utf16((wxUint16*)tmp, cc);
-        if (pa == wxCONV_FAILED)
-            return pa;
-
-        if (buf)
-            *buf++ = (wchar_t)cc;
-
-        len++;
-        psz += pa * sizeof(wxUint16);
+        // optimization: return maximal space which could be needed for this
+        // string even if the real size could be smaller if the buffer contains
+        // any surrogates
+        return inLen;
     }
-    if (buf && len<n)   *buf=0;
 
-    return len;
+    size_t outLen = 0;
+    const wxUint16 *in = wx_reinterpret_cast(const wxUint16 *, src);
+    for ( const wxUint16 * const inEnd = in + inLen; in < inEnd; )
+    {
+        wxUint32 ch;
+        wxUint16 tmp[2];
+        tmp[0] = wxUINT16_SWAP_ALWAYS(*in);
+        in++;
+        tmp[1] = wxUINT16_SWAP_ALWAYS(*in);
+
+        const size_t numChars = decode_utf16(tmp, ch);
+        if ( numChars == wxCONV_FAILED )
+            return wxCONV_FAILED;
+
+        if ( numChars == 2 )
+            in++;
+
+        if ( ++outLen > dstLen )
+            return wxCONV_FAILED;
+
+        *dst++ = ch;
+    }
+
+
+    return outLen;
 }
 
-
-// swap 32bit String to 16bit MB
-size_t wxMBConvUTF16swap::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+size_t
+wxMBConvUTF16swap::FromWChar(char *dst, size_t dstLen,
+                             const wchar_t *src, size_t srcLen) const
 {
-    size_t len=0;
+    if ( srcLen == wxNO_LEN )
+        srcLen = wxWcslen(src) + 1;
 
-    while (*psz && (!buf || len < n))
+    size_t outLen = 0;
+    wxUint16 *out = wx_reinterpret_cast(wxUint16 *, dst);
+    for ( const wchar_t *srcEnd = src + srcLen; src < srcEnd; src++ )
     {
         wxUint16 cc[2];
-        size_t pa=encode_utf16(*psz, cc);
+        const size_t numChars = encode_utf16(*src, cc);
+        if ( numChars == wxCONV_FAILED )
+            return wxCONV_FAILED;
 
-        if (pa == wxCONV_FAILED)
-            return pa;
-
-        if (buf)
+        outLen += numChars*BYTES_PER_CHAR;
+        if ( out )
         {
-            *buf++ = ((char*)cc)[1];
-            *buf++ = ((char*)cc)[0];
-            if (pa > 1)
+            if ( outLen > dstLen )
+                return wxCONV_FAILED;
+
+            *out++ = wxUINT16_SWAP_ALWAYS(cc[0]);
+            if ( numChars == 2 )
             {
-                *buf++ = ((char*)cc)[3];
-                *buf++ = ((char*)cc)[2];
+                // second character of a surrogate
+                *out++ = wxUINT16_SWAP_ALWAYS(cc[1]);
             }
         }
-
-        len += pa*sizeof(wxUint16);
-        psz++;
     }
-    if (buf && len<=n-sizeof(wxUint16))   *(wxUint16*)buf=0;
 
-    return len;
+    return outLen;
 }
 
 #endif // WC_UTF16/!WC_UTF16
 
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // UTF-32
-// ----------------------------------------------------------------------------
+// ============================================================================
 
 #ifdef WORDS_BIGENDIAN
     #define wxMBConvUTF32straight  wxMBConvUTF32BE
@@ -1391,100 +1426,103 @@ wxMBConvUTF32swap::FromWChar(char *dst, size_t dstLen,
 
 #else // !WC_UTF16: wchar_t is UTF-32
 
-// copy 32bit MB to 32bit String
-size_t wxMBConvUTF32straight::MB2WC(wchar_t *buf, const char *psz, size_t n) const
-{
-    size_t len=0;
+// ----------------------------------------------------------------------------
+// conversions without endianness change
+// ----------------------------------------------------------------------------
 
-    while (*(wxUint32*)psz && (!buf || len < n))
+size_t
+wxMBConvUTF32straight::ToWChar(wchar_t *dst, size_t dstLen,
+                               const char *src, size_t srcLen) const
+{
+    // use memcpy() as it should be much faster than hand-written loop
+    srcLen = GetLength(src, srcLen);
+    if ( srcLen == wxNO_LEN )
+        return wxCONV_FAILED;
+
+    const size_t inLen = srcLen/BYTES_PER_CHAR;
+    if ( dst )
     {
-        if (buf)
-            *buf++ = (wchar_t)(*(wxUint32*)psz);
-        len++;
-        psz += sizeof(wxUint32);
+        if ( dstLen < inLen )
+            return wxCONV_FAILED;
+
+        memcpy(dst, src, srcLen);
     }
 
-    if (buf && len<n)
-        *buf=0;
-
-    return len;
+    return inLen;
 }
 
-
-// copy 32bit String to 32bit MB
-size_t wxMBConvUTF32straight::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+size_t
+wxMBConvUTF32straight::FromWChar(char *dst, size_t dstLen,
+                                 const wchar_t *src, size_t srcLen) const
 {
-    size_t len=0;
+    if ( srcLen == wxNO_LEN )
+        srcLen = wxWcslen(src) + 1;
 
-    while (*psz && (!buf || len < n))
+    srcLen *= BYTES_PER_CHAR;
+
+    if ( dst )
     {
-        if (buf)
+        if ( dstLen < srcLen )
+            return wxCONV_FAILED;
+
+        memcpy(dst, src, srcLen);
+    }
+
+    return srcLen;
+}
+
+// ----------------------------------------------------------------------------
+// endian-reversing conversions
+// ----------------------------------------------------------------------------
+
+size_t
+wxMBConvUTF32swap::ToWChar(wchar_t *dst, size_t dstLen,
+                           const char *src, size_t srcLen) const
+{
+    srcLen = GetLength(src, srcLen);
+    if ( srcLen == wxNO_LEN )
+        return wxCONV_FAILED;
+
+    srcLen /= BYTES_PER_CHAR;
+
+    if ( dst )
+    {
+        if ( dstLen < srcLen )
+            return wxCONV_FAILED;
+
+        const wxUint32 *in = wx_reinterpret_cast(const wxUint32 *, src);
+        for ( size_t n = 0; n < srcLen; n++, in++ )
         {
-            *(wxUint32*)buf = *psz;
-            buf += sizeof(wxUint32);
+            *dst++ = wxUINT32_SWAP_ALWAYS(*in);
         }
-
-        len += sizeof(wxUint32);
-        psz++;
     }
 
-    if (buf && len<=n-sizeof(wxUint32))
-        *(wxUint32*)buf=0;
-
-    return len;
+    return srcLen;
 }
 
-
-// swap 32bit MB to 32bit String
-size_t wxMBConvUTF32swap::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+size_t
+wxMBConvUTF32swap::FromWChar(char *dst, size_t dstLen,
+                             const wchar_t *src, size_t srcLen) const
 {
-    size_t len=0;
+    if ( srcLen == wxNO_LEN )
+        srcLen = wxWcslen(src) + 1;
 
-    while (*(wxUint32*)psz && (!buf || len < n))
+    srcLen *= BYTES_PER_CHAR;
+
+    if ( dst )
     {
-        if (buf)
+        if ( dstLen < srcLen )
+            return wxCONV_FAILED;
+
+        wxUint32 *out = wx_reinterpret_cast(wxUint32 *, dst);
+        for ( size_t n = 0; n < srcLen; n += BYTES_PER_CHAR, src++ )
         {
-            ((char *)buf)[0] = psz[3];
-            ((char *)buf)[1] = psz[2];
-            ((char *)buf)[2] = psz[1];
-            ((char *)buf)[3] = psz[0];
-            buf++;
+            *out++ = wxUINT32_SWAP_ALWAYS(*src);
         }
-        len++;
-        psz += sizeof(wxUint32);
     }
 
-    if (buf && len<n)
-        *buf=0;
-
-    return len;
+    return srcLen;
 }
-
-
-// swap 32bit String to 32bit MB
-size_t wxMBConvUTF32swap::WC2MB(char *buf, const wchar_t *psz, size_t n) const
-{
-    size_t len=0;
-
-    while (*psz && (!buf || len < n))
-    {
-        if (buf)
-        {
-            *buf++ = ((char *)psz)[3];
-            *buf++ = ((char *)psz)[2];
-            *buf++ = ((char *)psz)[1];
-            *buf++ = ((char *)psz)[0];
-        }
-        len += sizeof(wxUint32);
-        psz++;
-    }
-
-    if (buf && len<=n-sizeof(wxUint32))
-        *(wxUint32*)buf=0;
-
-    return len;
-}
-
 
 #endif // WC_UTF16/!WC_UTF16
 
