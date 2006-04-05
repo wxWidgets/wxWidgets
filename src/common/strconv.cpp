@@ -991,8 +991,11 @@ size_t wxMBConvUTF16swap::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         psz++;
     }
 
-    if ( buf && len < n )
-        *buf = '\0';
+    if ( buf && len < n - 1 )
+    {
+        buf[0] =
+        buf[1] = '\0';
+    }
 
     return len;
 }
