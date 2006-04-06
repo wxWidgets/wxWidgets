@@ -2887,12 +2887,9 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
 
     wxGenericTreeItem *i = (wxGenericTreeItem*) item.m_pItem;
 
-    int startX, startY;
-    GetViewStart(& startX, & startY);
-
     if ( textOnly )
     {
-        rect.x = i->GetX() - startX*PIXELS_PER_UNIT;
+        rect.x = i->GetX();
         rect.width = i->GetWidth();
 
         if ( m_imageListNormal )
@@ -2908,8 +2905,15 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
         rect.width = GetClientSize().x;
     }
 
-    rect.y = i->GetY() - startY*PIXELS_PER_UNIT;
+    rect.y = i->GetY();
     rect.height = GetLineHeight(i);
+
+    // we have to return the logical coordinates, not physical ones
+    int startX, startY;
+    GetViewStart(& startX, & startY);
+
+    rect.x -= startX*PIXELS_PER_UNIT;
+    rect.y -= startY*PIXELS_PER_UNIT;
 
     return true;
 }

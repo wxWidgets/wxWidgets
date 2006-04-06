@@ -340,8 +340,12 @@ only the rectangle around the item's label will be returned, otherwise the
 item's image is also taken into account.
 
 The return value is {\tt true} if the rectangle was successfully retrieved or {\tt false}
-if it was not (in this case {\it rect} is not changed) - for example, if the
+if it was not (in this case {\it rect} is not changed) -- for example, if the
 item is currently invisible.
+
+Notice that the rectangle coordinates are logical, not physical ones. So, for
+example, the x coordinate may be negative if the tree has a horizontal
+scrollbar and its position is not $0$.
 
 \pythonnote{The wxPython version of this method requires only the
 {\tt item} and {\tt textOnly} parameters.  The return value is either a
