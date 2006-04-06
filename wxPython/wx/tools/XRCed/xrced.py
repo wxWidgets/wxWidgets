@@ -22,6 +22,7 @@ Options:
 
 from globals import *
 import os, sys, getopt, re, traceback, tempfile, shutil, cPickle
+from xml.parsers import expat
 
 # Local modules
 from tree import *                      # imports xxx which imports params
@@ -418,8 +419,7 @@ class Frame(wxFrame):
             data = wx.CustomDataObject('XRCED')
             # Set encoding in header
             # (False,True)
-            s = (xxx.element.toxml(encoding=g.currentEncoding),
-                 xxx.element.toxml())[not g.currentEncoding] 
+            s = xxx.element.toxml(encoding=expat.native_encoding)
             data.SetData(cPickle.dumps(s))
             wx.TheClipboard.SetData(data)
             wx.TheClipboard.Close()
@@ -593,8 +593,7 @@ class Frame(wxFrame):
             if wx.TheClipboard.Open():
                 data = wx.CustomDataObject('XRCED')
                 # (False, True)
-                s = (elem.toxml(encoding=g.currentEncoding),
-                     elem.toxml())[not g.currentEncoding] 
+                s = elem.toxml(encoding=expat.native_encoding)
                 data.SetData(cPickle.dumps(s))
                 wx.TheClipboard.SetData(data)
                 wx.TheClipboard.Close()
@@ -680,7 +679,7 @@ class Frame(wxFrame):
         # We simply perform depth-first traversal, sinse it's too much
         # hassle to deal with all sizer/window combinations
         w = tree.FindNodeObject(item)
-        if w == obj:
+        if w == obj or isinstance(w, wxGBSizerItem) and w.GetWindow() == obj:
             return item
         if tree.ItemHasChildren(item):
             child = tree.GetFirstChild(item)[0]
@@ -696,6 +695,7 @@ class Frame(wxFrame):
         g.testWin.Disconnect(wxID_ANY, wxID_ANY, wxEVT_LEFT_DOWN)
         item = self.FindObject(g.testWin.item, evt.GetEventObject())
         if item:
+            tree.EnsureVisible(item)
             tree.SelectItem(item)
         self.tb.ToggleTool(self.ID_TOOL_LOCATE, False)
         if item:
