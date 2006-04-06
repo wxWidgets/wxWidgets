@@ -2760,7 +2760,7 @@ public:
     {
         OSStatus status = noErr ;
         ByteCount byteOutLen ;
-        ByteCount byteInLen = strlen(psz) ;
+        ByteCount byteInLen = strlen(psz) + 1;
         wchar_t *tbuf = NULL ;
         UniChar* ubuf = NULL ;
         size_t res = 0 ;
