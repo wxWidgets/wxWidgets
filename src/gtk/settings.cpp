@@ -537,7 +537,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
         case wxSYS_ICON_Y:     return 32;
 
         case wxSYS_SCREEN_X:
-#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,2,0)
+#if GTK_CHECK_VERSION(2,2,0)
             if (window && !gtk_check_version(2,2,0))
                 return gdk_screen_get_width(gdk_drawable_get_screen(window));
             else
@@ -545,7 +545,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
                 return gdk_screen_width();
 
         case wxSYS_SCREEN_Y:
-#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,2,0)
+#if GTK_CHECK_VERSION(2,2,0)
             if (window && !gtk_check_version(2,2,0))
                 return gdk_screen_get_height(gdk_drawable_get_screen(window));
             else
