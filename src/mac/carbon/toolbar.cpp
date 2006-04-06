@@ -79,9 +79,8 @@ public:
 
     ~wxToolBarTool()
     {
-        ClearControl() ;
-        if ( m_controlHandle )
-            DisposeControl( m_controlHandle ) ;
+        ClearControl();
+
 #if wxMAC_USE_NATIVE_TOOLBAR
         if ( m_toolbarItemRef )
             CFRelease( m_toolbarItemRef ) ;
@@ -102,7 +101,13 @@ public:
 
     void ClearControl()
     {
-        m_control = NULL ;
+        m_control = NULL;
+        if ( m_controlHandle )
+        {
+            DisposeControl( m_controlHandle );
+            m_controlHandle = NULL ;
+        }
+
 #if wxMAC_USE_NATIVE_TOOLBAR
         m_toolbarItemRef = NULL ;
 #endif
@@ -1273,7 +1278,6 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
         case wxTOOL_STYLE_SEPARATOR:
             if ( tool->GetControlHandle() )
             {
-                DisposeControl( (ControlRef) tool->GetControlHandle() ) ;
 #if wxMAC_USE_NATIVE_TOOLBAR
                 if ( removeIndex != -1 && m_macHIToolbarRef )
                 {
