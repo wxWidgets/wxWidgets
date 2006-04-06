@@ -150,7 +150,7 @@ static size_t decode_utf16(const wxUint16* input, wxUint32& output)
 static wxUint32 wxDecodeSurrogate(const wxDecodeSurrogate_t **pSrc)
 {
     wxUint32 out;
-    const size_t n = decode_utf16(*pSrc, out);
+    const size_t n = decode_utf16(wx_reinterpret_cast(wxUint16 *, *pSrc), out);
     if ( n == wxCONV_FAILED )
         *pSrc = NULL;
     else
