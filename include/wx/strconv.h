@@ -191,7 +191,8 @@ class WXDLLIMPEXP_BASE wxConvBrokenFileNames : public wxMBConv
 public:
     wxConvBrokenFileNames(const wxChar *charset);
     wxConvBrokenFileNames(const wxConvBrokenFileNames& conv)
-        : m_conv(conv.m_conv ? conv.m_conv->Clone() : NULL)
+        : wxMBConv(),
+          m_conv(conv.m_conv ? conv.m_conv->Clone() : NULL)
     {
     }
     virtual ~wxConvBrokenFileNames() { delete m_conv; }

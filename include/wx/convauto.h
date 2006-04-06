@@ -27,7 +27,7 @@ public:
 
     // copy ctor doesn't initialize anything neither as conversion can only be
     // deduced on first use
-    wxConvAuto(const wxConvAuto& WXUNUSED(other)) { m_conv = NULL; }
+    wxConvAuto(const wxConvAuto& WXUNUSED(other)) : wxMBConv() { m_conv = NULL; }
 
     virtual ~wxConvAuto() { if ( m_conv && m_ownsConv ) delete m_conv; }
 
