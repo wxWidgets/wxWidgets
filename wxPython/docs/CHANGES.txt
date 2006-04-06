@@ -116,6 +116,46 @@ wx.StandardPaths.
 
 
 
+2.6.3.2
+-------
+* 3-April-2006
+
+Fixed reference leak in wx.gizmos.TreeListCtrl.GetSelections.
+
+wxMSW: Fixed sizing issue with wx.Choice and wx.ComboBox.  This change
+was implemented by reverting a prior fix for a different problem
+(contiuous painting/resizing when a combobox is used as a widget in a
+wx.html.HtmlWindow) so a method to fix both problems is still being
+investigated.
+
+wxGTK: Fixed potential buffer overrun when pasting from the
+clipboard. 
+
+Fixed problem in wx.lib.splitter when used on 64-bit platforms.  Used
+the current length of the list for specifying an append instead of
+sys.maxint.
+
+wxMSW: Support added for XP themed owner drawn buttons and bitmap
+buttons.  For example, if you change the foreground color of a button
+it will now be drawn with the XP themed style rather than an ugly
+generic button style.
+
+XRCed: Fix for Copy/Paste objects with international characters.
+
+Fixed the equality and inequality operators for some of the basic
+data types (wx.Point, wx.Size, wx.Colour, etc.) to no longer raise a
+TypeError if the compared object is not compatible, but to just return
+a boolean as expected.  For example::
+
+	  wx.Colour(64,0,64) == 123      ==> False
+
+wxMSW: Fixed (again) sizing/positioning issues of calling Realize on
+a wx.ToolBar that is not manaaged directly by a frame and that is
+already shown.
+
+wxMSW: Fixed wx.Choice/wx.ComboBox so they send events when a new item
+is selected only with the keyboard.
+
 
 
 2.6.3.0
