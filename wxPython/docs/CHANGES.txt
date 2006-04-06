@@ -1,6 +1,22 @@
 Recent Changes for wxPython
 =====================================================================
 
+2.6.3.3
+-------
+*
+
+wx.lib.pubsub updates from Oliver Schoenborn:
+    - the hash problem re non-hashable objects
+    - now supports listeners that use *args as an argument
+      (listener(*args) was not passing the validity test)
+    - corrected some mistakes in documentation
+    - added some clarifications (hopefully useful for first time
+      users)
+    - changed the way singleton is implemented since old way prevented
+      pydoc etc from extracting docs for Publisher
+
+
+
 2.6.3.2
 -------
 * 3-April-2006
