@@ -895,9 +895,16 @@ public:
 class wxTimeSpan
 {
 public:
+
+    // TODO:  Need an input typemap for wxLongLong...
+    
+    
+        // return the timespan for the given number of milliseconds
+    static wxTimeSpan Milliseconds(/*wxLongLong*/ long ms);
+    static wxTimeSpan Millisecond(); 
     
         // return the timespan for the given number of seconds
-    static wxTimeSpan Seconds(long sec);
+    static wxTimeSpan Seconds(/*wxLongLong*/ long sec);
     static wxTimeSpan Second();
 
         // return the timespan for the given number of minutes
@@ -924,8 +931,8 @@ public:
         // milliseconds)
     wxTimeSpan(long hours = 0,
                long minutes = 0,
-               long seconds = 0,
-               long milliseconds = 0);
+               /*wxLongLong*/ long seconds = 0,
+               /*wxLongLong*/ long milliseconds = 0);
 
     ~wxTimeSpan();
 

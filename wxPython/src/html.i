@@ -175,6 +175,11 @@ public:
 
     // void AddText(const char* txt) = 0;
     // void AddTag(const wxHtmlTag& tag);
+
+    
+    // Returns HTML source inside the element (i.e. between the starting
+    // and ending tag)
+    wxString GetInnerSource(const wxHtmlTag& tag);   
 };
 
 
