@@ -677,9 +677,6 @@ class XML_Tree(wxTreeCtrl):
             if child.IsWindow(): child = child.GetWindow()
             elif child.IsSizer():
                 child = child.GetSizer()
-                # Test for notebook sizers (deprecated)
-                if isinstance(child, wxNotebookSizer):
-                    child = child.GetNotebook()        
         return child
 
     def OnSelChanged(self, evt):
