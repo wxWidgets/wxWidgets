@@ -62,13 +62,11 @@ wxTopLevelWindowBase::~wxTopLevelWindowBase()
     if ( wxTheApp && wxTheApp->GetTopWindow() == this )
         wxTheApp->SetTopWindow(NULL);
 
-    bool shouldExit = IsLastBeforeExit();
-
     wxTopLevelWindows.DeleteObject(this);
 
-    if ( shouldExit )
+    if ( IsLastBeforeExit() )
     {
-        // then do it
+        // no other (important) windows left, quit the app
         wxTheApp->ExitMainLoop();
     }
 }
@@ -96,11 +94,43 @@ bool wxTopLevelWindowBase::Destroy()
 
 bool wxTopLevelWindowBase::IsLastBeforeExit() const
 {
-    // we exit the application if there are no more top level windows left
-    // normally but wxApp can prevent this from happening
-    return wxTopLevelWindows.GetCount() == 1 &&
-            wxTopLevelWindows.GetFirst()->GetData() == (wxWindow *)this &&
-            wxTheApp && wxTheApp->GetExitOnFrameDelete();
+    // first of all, automatically exiting the app on last window close can be
+    // completely disabled at wxTheApp level
+    if ( !wxTheApp || !wxTheApp->GetExitOnFrameDelete() )
+        return false;
+
+    wxWindowList::const_iterator i;
+    const wxWindowList::const_iterator end = wxTopLevelWindows.end();
+
+    // then decide whether we should exit at all
+    for ( i = wxTopLevelWindows.begin(); i != end; ++i )
+    {
+        wxTopLevelWindow * const win = wx_static_cast(wxTopLevelWindow *, *i);
+        if ( win->ShouldPreventAppExit() )
+        {
+            // there remains at least one important TLW, don't exit
+            return false;
+        }
+    }
+
+    // if yes, close all the other windows: this could still fail
+    for ( i = wxTopLevelWindows.begin(); i != end; ++i )
+    {
+        // don't close twice the windows which are already marked for deletion
+        wxTopLevelWindow * const win = wx_static_cast(wxTopLevelWindow *, *i);
+        if ( !wxPendingDelete.Member(win) && !win->Close() )
+        {
+            // one of the windows refused to close, don't exit
+            //
+            // NB: of course, by now some other windows could have been already
+            //     closed but there is really nothing we can do about it as we
+            //     have no way just to ask the window if it can close without
+            //     forcing it to do it
+            return false;
+        }
+    }
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------

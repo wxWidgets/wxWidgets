@@ -263,6 +263,17 @@ Sets the window title.
 \helpref{wxTopLevelWindow::GetTitle}{wxtoplevelwindowgettitle}
 
 
+\membersection{wxTopLevelWindow::ShouldPreventAppExit}\label{wxtoplevelwindowshouldpreventappexit}
+
+\constfunc{virtual bool}{ShouldPreventAppExit}{\void}
+
+This virtual function is not meant to be called directly but can be overridden
+to return \false (it returns \true by default) to allow the application to
+close even if this, presumably not very important, window is still opened.
+By default, the application stays alive as long as there are any open top level
+windows.
+
+
 \membersection{wxTopLevelWindow::ShowFullScreen}\label{wxtoplevelwindowshowfullscreen}
 
 \func{bool}{ShowFullScreen}{\param{bool}{ show}, \param{long}{ style = wxFULLSCREEN\_ALL}}

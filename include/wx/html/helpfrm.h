@@ -106,6 +106,10 @@ public:
     virtual void AddToolbarButtons(wxToolBar* WXUNUSED(toolBar), int WXUNUSED(style)) {};
 
 protected:
+    // we don't want to prevent the app from closing just because a help window
+    // remains opened
+    virtual bool ShouldPreventAppExit() const { return false; }
+
     void Init(wxHtmlHelpData* data = NULL);
 
     void OnCloseWindow(wxCloseEvent& event);
