@@ -876,6 +876,13 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     int key = event.GetKeyCode() ;
     bool eat_key = false ;
 
+    if ( key == 'a' && event.MetaDown() )
+    {
+        SelectAll() ;     
+        
+        return ;
+    }
+
     if ( key == 'c' && event.MetaDown() )
     {
         if ( CanCopy() )
