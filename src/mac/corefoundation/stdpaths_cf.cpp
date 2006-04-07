@@ -27,6 +27,9 @@
 
 #include "wx/stdpaths.h"
 #include "wx/filename.h"
+#ifdef __WXMAC__
+#include "wx/mac/private.h"
+#endif
 #include "wx/mac/corefoundation/cfstring.h"
 
 #if defined(__DARWIN__)
@@ -109,14 +112,20 @@ wxString wxStandardPathsCF::GetFromFunc(wxCFURLRef (*func)(wxCFBundleRef)) const
 
 wxString wxStandardPathsCF::GetConfigDir() const
 {
-    // TODO: What do we do for pure Carbon?
+#ifdef __WXMAC__
+    return wxMacFindFolder((short)kLocalDomain, kPreferencesFolderType, kCreateFolder);
+#else
     return wxT("/Library/Preferences");
+#endif
 }
 
 wxString wxStandardPathsCF::GetUserConfigDir() const
 {
-    // TODO: What do we do for pure Carbon?
+#ifdef __WXMAC__
+    return wxMacFindFolder((short)kUserDomain, kPreferencesFolderType, kCreateFolder);
+#else
     return wxFileName::GetHomeDir() + wxT("/Library/Preferences");
+#endif
 }
 
 wxString wxStandardPathsCF::GetDataDir() const
@@ -126,12 +135,20 @@ wxString wxStandardPathsCF::GetDataDir() const
 
 wxString wxStandardPathsCF::GetLocalDataDir() const
 {
+#ifdef __WXMAC__
+    return AppendAppName(wxMacFindFolder((short)kLocalDomain, kApplicationSupportFolderType, kCreateFolder));
+#else
     return AppendAppName(wxT("/Library/Application Support"));
+#endif
 }
 
 wxString wxStandardPathsCF::GetUserDataDir() const
 {
+#ifdef __WXMAC__
+    return AppendAppName(wxMacFindFolder((short)kUserDomain, kApplicationSupportFolderType, kCreateFolder));
+#else
     return AppendAppName(wxFileName::GetHomeDir() + _T("/Library/Application Support"));
+#endif
 }
 
 wxString wxStandardPathsCF::GetPluginsDir() const
