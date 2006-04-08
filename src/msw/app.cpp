@@ -48,6 +48,7 @@
 #include "wx/filename.h"
 #include "wx/module.h"
 #include "wx/dynlib.h"
+#include "wx/evtloop.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/ole/oleutils.h"
@@ -218,7 +219,14 @@ bool wxGUIAppTraits::DoMessageFromThreadWait()
 {
     // we should return false only if the app should exit, i.e. only if
     // Dispatch() determines that the main event loop should terminate
-    return !wxTheApp || wxTheApp->Dispatch();
+    wxEventLoop *evtLoop = wxEventLoop::GetActive();
+    if ( !evtLoop || !evtLoop->Pending() )
+    {
+        // no events means no quit event
+        return true;
+    }
+
+    return evtLoop->Dispatch();
 }
 
 wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
@@ -747,8 +755,6 @@ terminate the program,\r\n\
 // ----------------------------------------------------------------------------
 
 #if WXWIN_COMPATIBILITY_2_4
-
-#include "wx/evtloop.h"
 
 void wxApp::DoMessage(WXMSG *pMsg)
 {
