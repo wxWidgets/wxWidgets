@@ -74,8 +74,8 @@ public:
     ~wxHIDJoystick();
     
 	bool Create(int nWhich);
-	virtual void BuildCookies(wxCFArray& Array);
-	void MakeCookies(wxCFArray& Array);
+	virtual void BuildCookies(CFArrayRef Array);
+	void MakeCookies(CFArrayRef Array);
     IOHIDElementCookie* GetCookies();
     IOHIDQueueInterface** GetQueue();
     
@@ -145,7 +145,7 @@ wxJoystick::wxJoystick(int joystick)
 {
     m_hid = new wxHIDJoystick();
 
-    if (m_hid->Create(m_joystick))
+    if (m_hid->Create(m_joystick+1)) //wxHIDDevice is 1-based while this is 0
     {
         m_thread = new wxJoystickThread(m_hid, m_joystick);
         m_thread->Create();
@@ -449,14 +449,18 @@ bool wxHIDJoystick::Create(int nWhich)
     int nJoysticks = GetCount(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
     
     if (nWhich <= nJoysticks)
-        return wxHIDDevice::Create(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick);
+        return wxHIDDevice::Create(kHIDPage_GenericDesktop, 
+                                   kHIDUsage_GD_Joystick, 
+                                   nWhich);
     else
         nWhich -= nJoysticks;
     
     int nGamePads = GetCount(kHIDPage_GenericDesktop, kHIDUsage_GD_GamePad);
     
     if (nWhich <= nGamePads)
-        return wxHIDDevice::Create(kHIDPage_GenericDesktop, kHIDUsage_GD_GamePad);
+        return wxHIDDevice::Create(kHIDPage_GenericDesktop, 
+                                   kHIDUsage_GD_GamePad, 
+                                   nWhich);
     else
     return false;
 }
@@ -471,12 +475,9 @@ bool wxHIDJoystick::Create(int nWhich)
 // MakeCookies is just a recursive function for each array within 
 // BuildCookies.
 //---------------------------------------------------------------------------
-void wxHIDJoystick::BuildCookies(wxCFArray& Array)
+void wxHIDJoystick::BuildCookies(CFArrayRef Array)
 {
-	Array = CFDictionaryGetValue((CFDictionaryRef)Array[0], CFSTR(kIOHIDElementKey));
 	InitCookies(50, true);
-
-    memset(m_pCookies, 0, sizeof(*m_pCookies) * 50);
 
     //
     // I wasted two hours of my life on this line :(
@@ -491,58 +492,76 @@ void wxHIDJoystick::BuildCookies(wxCFArray& Array)
 #endif
 }//end buildcookies
 
-void wxHIDJoystick::MakeCookies(wxCFArray& Array)
+void wxHIDJoystick::MakeCookies(CFArrayRef Array)
 {
 	int i, nUsage, nPage;
 
-	for (i = 0; i < Array.Count(); ++i)
+	for (i = 0; i < CFArrayGetCount(Array); ++i)
     {
-        const void* ref = CFDictionaryGetValue((CFDictionaryRef)Array[i], CFSTR(kIOHIDElementKey));
+        const void* ref = CFDictionaryGetValue(
+                (CFDictionaryRef)CFArrayGetValueAtIndex(Array, i), 
+                CFSTR(kIOHIDElementKey)
+                                              );
 
         if (ref != NULL)
         {
-            wxCFArray newarray(ref);
-            MakeCookies(newarray);
+            MakeCookies((CFArrayRef) ref);
     }
         else
         {
             CFNumberGetValue(
-			(CFNumberRef) CFDictionaryGetValue((CFDictionaryRef) Array[i], CFSTR(kIOHIDElementUsageKey)), 
-				kCFNumberIntType, &nUsage);
+			    (CFNumberRef) 
+			        CFDictionaryGetValue( 
+			            (CFDictionaryRef) CFArrayGetValueAtIndex(Array, i),
+			            CFSTR(kIOHIDElementUsageKey)
+			                            ), 
+		        kCFNumberIntType, 
+				&nUsage    );
 			
             CFNumberGetValue(
-			(CFNumberRef) CFDictionaryGetValue((CFDictionaryRef) Array[i], CFSTR(kIOHIDElementUsagePageKey)), 
-				kCFNumberIntType, &nPage);
+			    (CFNumberRef) 
+			        CFDictionaryGetValue(
+			            (CFDictionaryRef) CFArrayGetValueAtIndex(Array, i), 
+			            CFSTR(kIOHIDElementUsagePageKey)
+			                            ), 
+				kCFNumberIntType, 
+				&nPage     );
 
 #if 0
             wxLogSysError(wxT("[%i][%i]"), nUsage, nPage);
 #endif
             if (nPage == kHIDPage_Button && nUsage <= 40)
-                AddCookieInQueue(Array[i], nUsage-1 );
+                AddCookieInQueue(CFArrayGetValueAtIndex(Array, i), nUsage-1 );
             else if (nPage == kHIDPage_GenericDesktop)
             {
                 //axis...
                 switch(nUsage)
                 {
                     case kHIDUsage_GD_X:
-                        AddCookieInQueue(Array[i], wxJS_AXIS_X);
-                        wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMaxKey),
+                        AddCookieInQueue(CFArrayGetValueAtIndex(Array, i), wxJS_AXIS_X);
+                        wxGetIntFromCFDictionary(CFArrayGetValueAtIndex(Array, i), 
+                                                 CFSTR(kIOHIDElementMaxKey),
                                                  &m_nXMax);
-                        wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMinKey),
+                        wxGetIntFromCFDictionary(CFArrayGetValueAtIndex(Array, i), 
+                                                 CFSTR(kIOHIDElementMinKey),
                                                  &m_nXMin);
                         break;                    
                     case kHIDUsage_GD_Y:
-                        AddCookieInQueue(Array[i], wxJS_AXIS_Y);
-                        wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMaxKey),
+                        AddCookieInQueue(CFArrayGetValueAtIndex(Array, i), wxJS_AXIS_Y);
+                        wxGetIntFromCFDictionary(CFArrayGetValueAtIndex(Array, i), 
+                                                 CFSTR(kIOHIDElementMaxKey),
                                                  &m_nYMax);
-                        wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMinKey),
+                        wxGetIntFromCFDictionary(CFArrayGetValueAtIndex(Array, i), 
+                                                 CFSTR(kIOHIDElementMinKey),
                                                  &m_nYMin);
                         break;
                     case kHIDUsage_GD_Z:
-                        AddCookieInQueue(Array[i], wxJS_AXIS_Z);
-                        wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMaxKey),
+                        AddCookieInQueue(CFArrayGetValueAtIndex(Array, i), wxJS_AXIS_Z);
+                        wxGetIntFromCFDictionary(CFArrayGetValueAtIndex(Array, i), 
+                                                 CFSTR(kIOHIDElementMaxKey),
                                                  &m_nZMax);
-                        wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMinKey),
+                        wxGetIntFromCFDictionary(CFArrayGetValueAtIndex(Array, i), 
+                                                 CFSTR(kIOHIDElementMinKey),
                                                  &m_nZMin);
                         break;
                     default:
@@ -552,10 +571,12 @@ void wxHIDJoystick::MakeCookies(wxCFArray& Array)
             else if (nPage == kHIDPage_Simulation && nUsage == kHIDUsage_Sim_Rudder)
             {
                 //rudder...
-                AddCookieInQueue(Array[i], wxJS_AXIS_RUDDER );
-                wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMaxKey),
+                AddCookieInQueue(CFArrayGetValueAtIndex(Array, i), wxJS_AXIS_RUDDER );
+                wxGetIntFromCFDictionary(CFArrayGetValueAtIndex(Array, i), 
+                                         CFSTR(kIOHIDElementMaxKey),
                                          &m_nRudderMax);
-                wxGetIntFromCFDictionary(Array[i], CFSTR(kIOHIDElementMinKey),
+                wxGetIntFromCFDictionary(CFArrayGetValueAtIndex(Array, i), 
+                                         CFSTR(kIOHIDElementMinKey),
                                          &m_nRudderMin);
             }
         }
