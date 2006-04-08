@@ -122,6 +122,9 @@ class Frame(wxFrame):
         menu.AppendSeparator()
         menu.Append(wxID_SAVE, '&Save\tCtrl-S', 'Save XRC file')
         menu.Append(wxID_SAVEAS, 'Save &As...', 'Save XRC file under different name')
+        self.ID_GENERATE_PYTHON = wxNewId()
+        menu.Append(self.ID_GENERATE_PYTHON, '&Generate Python...', 
+                    'Generate a Python module that uses this XRC')
         menu.AppendSeparator()
         menu.Append(wxID_EXIT, '&Quit\tCtrl-Q', 'Exit application')
 
@@ -222,6 +225,7 @@ class Frame(wxFrame):
         EVT_MENU(self, wxID_OPEN, self.OnOpen)
         EVT_MENU(self, wxID_SAVE, self.OnSaveOrSaveAs)
         EVT_MENU(self, wxID_SAVEAS, self.OnSaveOrSaveAs)
+        EVT_MENU(self, self.ID_GENERATE_PYTHON, self.OnGeneratePython)
         EVT_MENU(self, wxID_EXIT, self.OnExit)
         # Edit
         EVT_MENU(self, wxID_UNDO, self.OnUndo)
@@ -373,6 +377,20 @@ class Frame(wxFrame):
             else:
                 dlg.Destroy()
                 return
+
+            if conf.localconf:
+                # if we already have a localconf then it needs to be
+                # copied to a new config with the new name
+                lc = conf.localconf
+                nc = self.CreateLocalConf(path)
+                flag, key, idx = lc.GetFirstEntry()
+                while flag:
+                    nc.Write(key, lc.Read(key))
+                    flag, key, idx = lc.GetNextEntry(idx)
+                conf.localconf = nc
+            else:
+                # otherwise create a new one
+                conf.localconf = self.CreateLocalConf(path)
         else:
             path = self.dataFile
         self.SetStatusText('Saving...')
@@ -384,6 +402,11 @@ class Frame(wxFrame):
                 self.Save(tmpName) # save temporary file first
                 shutil.move(tmpName, path)
                 self.dataFile = path
+                if conf.localconf.ReadBool("autogenerate", False):
+                    pypath = conf.localconf.Read("filename")
+                    embed = conf.localconf.ReadBool("embedResource", False)
+                    self.GeneratePython(self.dataFile, pypath, embed)
+                    
                 self.SetStatusText('Data saved')
                 self.SaveRecent(path)
             except IOError:
@@ -399,6 +422,28 @@ class Frame(wxFrame):
             EVT_MENU(self, newid, self.OnRecentFile)
             conf.recentfiles[newid] = path
 
+    def GeneratePython(self, dataFile, pypath, embed):
+        try:
+            import wx.tools.pywxrc
+            rescomp = wx.tools.pywxrc.XmlResourceCompiler()
+            rescomp.MakePythonModule(dataFile, pypath, embed)
+        except:
+            inf = sys.exc_info()
+            wxLogError(traceback.format_exception(inf[0], inf[1], None)[-1])
+            wxLogError('Error generating python code : %s' % pypath)
+            raise
+        
+
+    def OnGeneratePython(self, evt):
+        if self.modified or not conf.localconf:
+            wx.MessageBox("Save the XRC file first!", "Error")
+            return
+        
+        dlg = PythonOptions(self, conf.localconf, self.dataFile)
+        dlg.ShowModal()
+        dlg.Destroy()
+
+        
     def OnExit(self, evt):
         self.Close()
 
@@ -1047,8 +1092,16 @@ Homepage: http://xrced.sourceforge.net\
                 conf.panelWidth, conf.panelHeight = self.miniFrame.GetSize()
         evt.Skip()
 
+
+    def CreateLocalConf(self, path):
+        name = os.path.splitext(path)[0]
+        name += '.xcfg'
+        return wx.FileConfig(localFilename=name)
+
+
     def Clear(self):
         self.dataFile = ''
+        conf.localconf = None
         undoMan.Clear()
         self.SetModified(False)
         tree.Clear()
@@ -1094,6 +1147,7 @@ Homepage: http://xrced.sourceforge.net\
             if dir: os.chdir(dir)
             tree.SetData(dom)
             self.SetTitle(progname + ': ' + os.path.basename(path))
+            conf.localconf = self.CreateLocalConf(self.dataFile)
         except:
             # Nice exception printing
             inf = sys.exc_info()
@@ -1146,12 +1200,13 @@ Homepage: http://xrced.sourceforge.net\
             self.domCopy = None
             self.SetModified(False)
             panel.SetModified(False)
+            conf.localconf.Flush()
         except:
             inf = sys.exc_info()
             wxLogError(traceback.format_exception(inf[0], inf[1], None)[-1])
             wxLogError('Error writing file: %s' % path)
             raise
-
+            
     def AskSave(self):
         if not (self.modified or panel.IsModified()): return True
         flags = wxICON_EXCLAMATION | wxYES_NO | wxCANCEL | wxCENTRE
@@ -1173,6 +1228,72 @@ Homepage: http://xrced.sourceforge.net\
     def SaveUndo(self):
         pass                            # !!!
 
+################################################################################
+
+class PythonOptions(wx.Dialog):
+
+    def __init__(self, parent, cfg, dataFile):
+        pre = wx.PreDialog()
+        g.frame.res.LoadOnDialog(pre, parent, "PYTHON_OPTIONS")
+        self.PostCreate(pre)
+
+        self.cfg = cfg
+        self.dataFile = dataFile
+
+        self.AutoGenerateCB = XRCCTRL(self, "AutoGenerateCB")
+        self.EmbedCB = XRCCTRL(self, "EmbedCB")
+        self.GettextCB = XRCCTRL(self, "GettextCB")
+        self.MakeXRSFileCB = XRCCTRL(self, "MakeXRSFileCB")
+        self.FileNameTC = XRCCTRL(self, "FileNameTC")
+        self.BrowseBtn = XRCCTRL(self, "BrowseBtn")
+        self.GenerateBtn = XRCCTRL(self, "GenerateBtn")
+        self.SaveOptsBtn = XRCCTRL(self, "SaveOptsBtn")
+
+        self.Bind(wx.EVT_BUTTON, self.OnBrowse, self.BrowseBtn)
+        self.Bind(wx.EVT_BUTTON, self.OnGenerate, self.GenerateBtn)
+        self.Bind(wx.EVT_BUTTON, self.OnSaveOpts, self.SaveOptsBtn)
+
+        if self.cfg.Read("filename", "") != "":
+            self.FileNameTC.SetValue(self.cfg.Read("filename"))
+        else:
+            name = os.path.splitext(dataFile)[0]
+            name += '_xrc.py'
+            self.FileNameTC.SetValue(name)
+        self.AutoGenerateCB.SetValue(self.cfg.ReadBool("autogenerate", False))
+        self.EmbedCB.SetValue(self.cfg.ReadBool("embedResource", False))
+        self.MakeXRSFileCB.SetValue(self.cfg.ReadBool("makeXRS", False))
+        self.GettextCB.SetValue(self.cfg.ReadBool("genGettext", False))
+        
+                  
+    def OnBrowse(self, evt):
+        path = self.FileNameTC.GetValue()
+        dirname = os.path.abspath(os.path.dirname(path))
+        name = os.path.split(path)[1]
+        dlg = wxFileDialog(self, 'Save As', dirname, name, '*.py',
+                               wxSAVE | wxOVERWRITE_PROMPT)
+        if dlg.ShowModal() == wxID_OK:
+            path = dlg.GetPath()
+            self.FileNameTC.SetValue(path)
+        dlg.Destroy()
+    
+
+    def OnGenerate(self, evt):
+        pypath = self.FileNameTC.GetValue()
+        embed = self.EmbedCB.GetValue()
+        frame.GeneratePython(self.dataFile, pypath, embed)
+        self.OnSaveOpts()
+
+    
+    def OnSaveOpts(self, evt=None):
+        self.cfg.Write("filename", self.FileNameTC.GetValue())
+        self.cfg.WriteBool("autogenerate", self.AutoGenerateCB.GetValue())
+        self.cfg.WriteBool("embedResource", self.EmbedCB.GetValue())
+        self.cfg.WriteBool("makeXRS", self.MakeXRSFileCB.GetValue())
+        self.cfg.WriteBool("genGettext", self.GettextCB.GetValue())
+
+        self.EndModal(wx.ID_OK)
+    
+        
 ################################################################################
 
 def usage():
@@ -1210,6 +1331,7 @@ Please upgrade wxWindows to %d.%d.%d or higher.''' % MinWxVersion)
         # Settings
         global conf
         conf = g.conf = wxConfig(style = wxCONFIG_USE_LOCAL_FILE)
+        conf.localconf = None
         conf.autoRefresh = conf.ReadInt('autorefresh', True)
         pos = conf.ReadInt('x', -1), conf.ReadInt('y', -1)
         size = conf.ReadInt('width', 800), conf.ReadInt('height', 600)
@@ -1246,7 +1368,7 @@ Please upgrade wxWindows to %d.%d.%d or higher.''' % MinWxVersion)
     def OnExit(self):
         # Write config
         global conf
-        wc = wxConfigBase_Get()
+        wc = conf
         wc.WriteInt('autorefresh', conf.autoRefresh)
         wc.WriteInt('x', conf.x)
         wc.WriteInt('y', conf.y)

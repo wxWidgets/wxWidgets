@@ -511,4 +511,104 @@
       </object>
     </object>
   </object>
+  <object class="wxDialog" name="PYTHON_OPTIONS">
+    <title>Python Module Config</title>
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxCheckBox" name="AutoGenerateCB">
+              <label>Autogenerate Python module when saving XRC</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxCheckBox" name="EmbedCB">
+              <label>Embed resource in python module</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxCheckBox" name="GettextCB">
+              <label>Generate gettext strings</label>
+              <enabled>0</enabled>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxCheckBox" name="MakeXRSFileCB">
+              <label>Generate and use compressed XRS file</label>
+              <enabled>0</enabled>
+            </object>
+          </object>
+          <object class="spacer">
+            <size>1,10</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>Filename:</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxBoxSizer">
+              <orient>wxHORIZONTAL</orient>
+              <object class="sizeritem">
+                <object class="wxTextCtrl" name="FileNameTC">
+                  <size>500,-1</size>
+                </object>
+                <flag>wxALIGN_CENTRE_VERTICAL</flag>
+              </object>
+              <object class="spacer">
+                <size>5,0</size>
+              </object>
+              <object class="sizeritem">
+                <object class="wxButton" name="BrowseBtn">
+                  <label>Browse...</label>
+                </object>
+              </object>
+            </object>
+          </object>
+        </object>
+        <flag>wxALL</flag>
+        <border>10</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStaticLine"/>
+        <flag>wxEXPAND</flag>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
+          <object class="spacer">
+            <size>1,10</size>
+            <option>1</option>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="GenerateBtn">
+              <label>Generate module</label>
+              <default>1</default>
+            </object>
+          </object>
+          <object class="spacer">
+            <size>10,1</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="SaveOptsBtn">
+              <label>Save options</label>
+              <style></style>
+            </object>
+          </object>
+          <object class="spacer">
+            <size>10,1</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="wxID_CANCEL">
+              <label></label>
+            </object>
+          </object>
+        </object>
+        <flag>wxALL|wxEXPAND|wxALIGN_CENTRE_HORIZONTAL</flag>
+        <border>10</border>
+      </object>
+    </object>
+  </object>
 </resource>

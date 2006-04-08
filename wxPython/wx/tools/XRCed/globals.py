@@ -21,7 +21,7 @@ MinWxVersion = (2,6,0)
 if wxVERSION[:3] < MinWxVersion:
     print '''\
 ******************************* WARNING **************************************
-  This version of XRCed may not work correctly on your version of wxWindows.
+  This version of XRCed may not work correctly on your version of wxWidgets.
   Please upgrade wxWindows to %d.%d.%d or higher.
 ******************************************************************************''' % MinWxVersion    
 
