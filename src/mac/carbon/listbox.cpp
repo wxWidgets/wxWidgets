@@ -386,48 +386,12 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
 
 int wxListBox::FindString(const wxString& s) const
 {
-
-    if ( s.Right(1) == wxT("*") )
+    for ( size_t i = 0 ; i < m_noItems ; ++ i )
     {
-        wxString search = s.Left( s.Length() - 1 ) ;
-        int len = search.Length() ;
-        Str255 s1 , s2 ;
-        wxMacStringToPascal( search , s2 ) ;
-
-        for ( int i = 0 ; i < m_noItems ; ++ i )
-        {
-            wxMacStringToPascal( m_stringArray[i].Left( len ) , s1 ) ;
-
-            if ( EqualString( s1 , s2 , false , false ) )
-                return i ;
-        }
-        if ( s.Left(1) == wxT("*") && s.Length() > 1 )
-        {
-            wxString st = s ;
-            st.MakeLower() ;
-            for ( int i = 0 ; i < m_noItems ; ++i )
-            {
-                if ( GetString(i).Lower().Matches(st) )
-                    return i ;
-            }
-        }
-
+        if (s.IsSameAs(GetString(i), bCase))
+            return (int)i ;
     }
-    else
-    {
-        Str255 s1 , s2 ;
-
-        wxMacStringToPascal( s , s2 ) ;
-
-        for ( int i = 0 ; i < m_noItems ; ++ i )
-        {
-            wxMacStringToPascal( m_stringArray[i] , s1 ) ;
-
-            if ( EqualString( s1 , s2 , false , false ) )
-                return i ;
-        }
-    }
-    return -1;
+    return wxNOT_FOUND;
 }
 
 void wxListBox::Clear()
