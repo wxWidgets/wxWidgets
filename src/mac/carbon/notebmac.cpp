@@ -322,7 +322,13 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
 #if TARGET_API_MAC_OSX
     const int countPages = GetPageCount();
 
-    HIPoint hipoint = { pt.x , pt.y } ;
+    // we have to convert from Client to Window relative coordinates
+    wxPoint adjustedPt = pt + GetClientAreaOrigin(); 
+    // and now to HIView native ones
+    adjustedPt.x -= MacGetLeftBorderSize() ;
+    adjustedPt.y -= MacGetTopBorderSize() ;
+    
+    HIPoint hipoint= { adjustedPt.x , adjustedPt.y } ;
     HIViewPartCode outPart = 0 ;
     OSStatus err = HIViewGetPartHit( m_peer->GetControlRef(), &hipoint, &outPart );
 
