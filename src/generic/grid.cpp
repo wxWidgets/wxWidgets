@@ -7290,7 +7290,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
     return;
 #endif
 
-    if ( !m_gridLinesEnabled || m_numRows || !m_numCols )
+    if ( !m_gridLinesEnabled || !m_numRows || !m_numCols )
          return;
 
     int top, bottom, left, right;
