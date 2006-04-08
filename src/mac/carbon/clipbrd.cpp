@@ -325,6 +325,16 @@ bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
                 return true ;
             }
         }
+        else if ( dataFormat.GetType() == wxDF_UNICODETEXT )
+        {
+            if (( err = GetScrapFlavorFlags( scrapRef, 'TEXT', &flavorFlags )) == noErr)
+            {
+                if (( err = GetScrapFlavorSize( scrapRef, 'TEXT', &byteCount )) == noErr)
+                {
+                    return true ;
+                }
+            }
+        }
     }
     return false;
 
