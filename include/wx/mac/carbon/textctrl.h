@@ -188,7 +188,7 @@ public:
 
     wxMacTextControl * GetPeer() const
     { return (wxMacTextControl*) m_peer; }
-
+    
 protected:
     // common part of all ctors
     void Init();
@@ -202,6 +202,18 @@ protected:
 
   // need to make this public because of the current implementation via callbacks
     unsigned long  m_maxLength;
+    
+    bool GetTriggerOnSetValue() const 
+    { 
+        return m_triggerOnSetValue; 
+    }
+    
+    void SetTriggerOnSetValue(bool trigger) 
+    { 
+        m_triggerOnSetValue = trigger; 
+    }
+    
+    bool m_triggerOnSetValue ;
 
 private :
   wxMenu  *m_privateContextMenu;

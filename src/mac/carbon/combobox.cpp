@@ -68,6 +68,7 @@ public:
         : wxTextCtrl( cb , 1 )
     {
         m_cb = cb;
+        SetTriggerOnSetValue( false );
     }
 
 protected:

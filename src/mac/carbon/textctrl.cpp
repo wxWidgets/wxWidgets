@@ -435,6 +435,7 @@ void wxTextCtrl::Init()
 
     m_maxLength = 0;
     m_privateContextMenu = NULL;
+    m_triggerOnSetValue = true ;
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -545,10 +546,13 @@ void wxTextCtrl::SetValue(const wxString& str)
 
     GetPeer()->SetStringValue( str ) ;
 
-    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, m_windowId );
-    event.SetString( GetValue() );
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( event );
+    if ( m_triggerOnSetValue )
+    {
+        wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, m_windowId );
+        event.SetString( GetValue() );
+        event.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( event );
+    }
 }
 
 void wxTextCtrl::SetMaxLength(unsigned long len)
