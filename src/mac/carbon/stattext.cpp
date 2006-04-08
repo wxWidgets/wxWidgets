@@ -53,6 +53,16 @@ bool wxStaticText::Create( wxWindow *parent,
         &bounds, str, NULL, m_peer->GetControlRefAddr() );
     verify_noerr( err );
 
+	if (  ( style & wxST_DOTS_END ) || ( style & wxST_DOTS_MIDDLE ) )
+    {
+        TruncCode tCode = truncEnd ;
+        if ( style & wxST_DOTS_MIDDLE )
+            tCode = truncMiddle ;
+        
+        err = m_peer->SetData(kControlStaticTextTruncTag,tCode) ;
+        err = m_peer->SetData(kControlStaticTextIsMultilineTag,(Boolean)0) ;
+    }
+    
     MacPostControlCreate( pos, size );
 
     return true;
