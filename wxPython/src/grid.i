@@ -2064,7 +2064,7 @@ public:
     bool        MetaDown();
     bool        ShiftDown();
     bool        AltDown();
-
+    bool        CmdDown();
 };
 
 
@@ -2081,7 +2081,7 @@ public:
     bool        MetaDown();
     bool        ShiftDown();
     bool        AltDown();
-
+    bool        CmdDown();
 };
 
 
@@ -2106,6 +2106,7 @@ public:
     bool        MetaDown();
     bool        ShiftDown();
     bool        AltDown();
+    bool        CmdDown();
 };
 
 
