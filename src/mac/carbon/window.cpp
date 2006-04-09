@@ -504,19 +504,20 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
     UniChar buf[2] ;
     if ( GetEventParameter( event, kEventParamTextInputSendText, typeUnicodeText, NULL, 0 , &dataSize, NULL ) == noErr )
     {
-        numChars = dataSize / sizeof( UniChar) ;
+        numChars = dataSize / sizeof( UniChar) + 1;
         charBuf = buf ;
 
-        if ( dataSize > sizeof(buf) )
+        if ( numChars * 2 > sizeof(buf) )
             charBuf = new UniChar[ numChars ] ;
         else
             charBuf = buf ;
 
         uniChars = new wchar_t[ numChars ] ;
         GetEventParameter( event, kEventParamTextInputSendText, typeUnicodeText, NULL, dataSize , NULL , charBuf ) ;
+		charBuf[ numChars - 1 ] = 0;
 #if SIZEOF_WCHAR_T == 2
         uniChars = (wchar_t*) charBuf ;
-        memcpy( uniChars , charBuf , dataSize ) ;
+        memcpy( uniChars , charBuf , numChars * 2 ) ;
 #else
         // the resulting string will never have more chars than the utf16 version, so this is safe
         wxMBConvUTF16 converter ;
