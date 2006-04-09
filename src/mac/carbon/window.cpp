@@ -498,7 +498,7 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
     wchar_t* uniChars = NULL ;
     UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
 
-    UniChar* charBuf;
+    UniChar* charBuf = NULL;
     UInt32 dataSize = 0 ;
     int numChars = 0 ;
     UniChar buf[2] ;
