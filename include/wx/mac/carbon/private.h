@@ -618,40 +618,13 @@ public :
     virtual void GetFeatures( UInt32 *features ) ;
     virtual OSStatus GetRegion( ControlPartCode partCode , RgnHandle region ) ;
     virtual OSStatus SetZOrder( bool above , wxMacControl* other ) ;
-    // to be moved into a databrowser subclass
-
-    virtual OSStatus SetSelectionFlags( DataBrowserSelectionFlags ) ;
-    virtual OSStatus AddListViewColumn( DataBrowserListViewColumnDesc *columnDesc,
-        DataBrowserTableViewColumnIndex position ) ;
-    virtual OSStatus AutoSizeListViewColumns() ;
-    virtual OSStatus SetHasScrollBars( bool horiz , bool vert ) ;
-    virtual OSStatus SetTableViewHiliteStyle( DataBrowserTableViewHiliteStyle hiliteStyle ) ;
-    virtual OSStatus SetListViewHeaderBtnHeight(UInt16 height) ;
-    virtual OSStatus SetCallbacks(const DataBrowserCallbacks *  callbacks) ;
-    virtual OSStatus UpdateItems( DataBrowserItemID container, UInt32 numItems,
-            const DataBrowserItemID* items,
-            DataBrowserPropertyID preSortProperty,
-            DataBrowserPropertyID propertyID ) ;
-    virtual OSStatus AddItems( DataBrowserItemID container, UInt32 numItems,
-            const DataBrowserItemID* items,
-            DataBrowserPropertyID preSortProperty ) ;
-    virtual OSStatus RemoveItems( DataBrowserItemID container, UInt32 numItems,
-            const DataBrowserItemID* items,
-            DataBrowserPropertyID preSortProperty ) ;
-    virtual OSStatus RevealItem( DataBrowserItemID item,
-            DataBrowserPropertyID propertyID,
-            DataBrowserRevealOptions options ) ;
-    virtual OSStatus GetSelectionAnchor( DataBrowserItemID * first, DataBrowserItemID * last ) ;
-    virtual bool IsItemSelected( DataBrowserItemID item ) ;
-    virtual OSStatus SetSelectedItems(UInt32 numItems,
-            const DataBrowserItemID * items,
-            DataBrowserSetOption operation ) ;
-
-    // to be moved into a tab control class
-
-    virtual OSStatus SetTabEnabled( SInt16 tabNo , bool enable ) ;
+            
     bool    IsCompositing() { return m_isCompositing ; }
     bool    IsRootControl() { return m_isRootControl ; }
+
+     // to be moved into a tab control class
+
+    virtual OSStatus SetTabEnabled( SInt16 tabNo , bool enable ) ;
 protected :
     ControlRef  m_controlRef ;
     wxFont      m_font ;

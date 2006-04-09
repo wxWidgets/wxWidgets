@@ -21,6 +21,9 @@
 // forward decl for GetSelections()
 class wxArrayInt;
 
+// forward decl for GetPeer() 
+class wxMacListControl ;
+
 // List box item
 
 WX_DEFINE_ARRAY( char * , wxListDataArray ) ;
@@ -90,19 +93,15 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-    // Windows callbacks
-#ifndef __WXMAC_OSX__
-    void OnChar(wxKeyEvent& event);
-#endif
-
-    void*           m_macList ;
     wxArrayString   m_stringArray ;
     wxListDataArray m_dataArray ;
+    
+    wxMacListControl*         GetPeer() const { return (wxMacListControl*) m_peer ; }
 
-    // as we are getting the same events for human and API selection we have to suppress
-    // events in the latter case
-    bool            MacIsSelectionSuppressed() const { return m_suppressSelection ; }
 protected:
+    // internal storage for line n has changed, issue a redraw
+    void  MacUpdateLine( int n ) ;
+    
     virtual void DoSetSelection(int n, bool select);
     virtual int DoAppend(const wxString& item);
     virtual void DoInsertItems(const wxArrayString& items, unsigned int pos);
@@ -135,11 +134,12 @@ protected:
     unsigned int m_noItems;
     int m_selected;
     bool m_suppressSelection ;
-    wxString  m_typeIn ;
-    long      m_lastTypeIn ;
 
     virtual wxSize DoGetBestSize() const;
 
+    // common creation for all databrowser list implementations
+    wxMacListControl* CreateMacListControl(const wxPoint& pos, const wxSize& size, long style) ;
+    
 private:
     DECLARE_DYNAMIC_CLASS(wxListBox)
     DECLARE_EVENT_TABLE()
