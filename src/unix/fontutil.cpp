@@ -333,8 +333,10 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
             info->encoding = wxFONTENCODING_SYSTEM;
             return true;
 
+        case wxFONTENCODING_ISO8859_1:
         case wxFONTENCODING_UTF8:
-            info->encoding = wxFONTENCODING_UTF8;
+            // these are always supported by GTK+ 2
+            info->encoding = encoding;
             return true;
 
         default:
