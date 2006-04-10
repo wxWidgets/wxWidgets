@@ -432,8 +432,18 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         event.GetKeyCode() == WXK_END)
     {
         KeyboardNavigate(event.GetKeyCode(), flags);
+        return;
     }
-    else if (event.GetKeyCode() == WXK_RETURN)
+
+    // all the other keys modify the controls contents which shouldn't be
+    // possible if we're read-only
+    if ( !IsEditable() )
+    {
+        event.Skip();
+        return;
+    }
+
+    if (event.GetKeyCode() == WXK_RETURN)
     {
         BeginBatchUndo(_("Insert Text"));
 
@@ -527,10 +537,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         SetDefaultStyleToCursorStyle();
         ScrollIntoView(m_caretPosition, WXK_RIGHT);
     }
-#if 0
-    else
-        event.Skip();
-#endif
 }
 
 /// Delete content if there is a selection, e.g. when pressing a key.
