@@ -190,7 +190,16 @@ wxCharBuffer wxConvertToGTK(const wxString& s, wxFontEncoding enc)
         return wxCharBuffer(s);
     }
 
-    const wxWCharBuffer wbuf = wxCSConv(enc).cMB2WC(s);
+    wxWCharBuffer wbuf;
+    if ( enc == wxFONTENCODING_SYSTEM || enc == wxFONTENCODING_DEFAULT )
+    {
+        wbuf = wxConvLocal.cMB2WC(s);
+    }
+    else // another encoding, use generic conversion class
+    {
+        wbuf = wxCSConv(enc).cMB2WC(s);
+    }
+
     wxCharBuffer buf;
     if ( wbuf )
         buf = wxConvUTF8.cWC2MB(wbuf);
