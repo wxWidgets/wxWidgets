@@ -2002,11 +2002,15 @@ wxSize wxBookCtrlSizer::CalcMin()
 
 #if wxUSE_NOTEBOOK
 
+#if WXWIN_COMPATIBILITY_2_6
+
 wxNotebookSizer::wxNotebookSizer(wxNotebook *nb)
 {
     wxASSERT_MSG( nb, wxT("wxNotebookSizer needs a control") );
     m_bookctrl = nb;
 }
+
+#endif // WXWIN_COMPATIBILITY_2_6
 
 #endif // wxUSE_NOTEBOOOK
 #endif // wxUSE_BOOKCTRL
