@@ -2955,7 +2955,8 @@ and current pointer position in screen coordinates.
 
 \func{wxWindow *}{wxGetActiveWindow}{\void}
 
-Gets the currently active window (Windows only).
+Gets the currently active window (implemented for MSW and GTK only currently,
+always returns \NULL in the other ports).
 
 \wxheading{Include files}
 
