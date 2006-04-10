@@ -96,7 +96,7 @@ wxColour wxColour::CreateByName(const wxString& name)
     wxColour col;
 
     GdkColor colGDK;
-    if ( gdk_color_parse( wxGTK_CONV( name ), &colGDK ) )
+    if ( gdk_color_parse( wxGTK_CONV_SYS( name ), &colGDK ) )
     {
         wxColourRefData *refData = new wxColourRefData;
         refData->m_color = colGDK;

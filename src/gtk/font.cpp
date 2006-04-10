@@ -116,7 +116,7 @@ private:
                     m_weight;
     bool            m_underlined;
     wxString        m_faceName;
-    wxFontEncoding  m_encoding;  // Unused under GTK 2.0
+    wxFontEncoding  m_encoding;
     bool            m_noAA;      // No anti-aliasing
 
     // The native font info, basicly an XFLD under GTK 1.2 and
@@ -163,7 +163,8 @@ void wxFontRefData::Init(int pointSize,
     // And set its values
     if (!m_faceName.empty())
     {
-       pango_font_description_set_family( m_nativeFontInfo.description, wxGTK_CONV(m_faceName) );
+       pango_font_description_set_family( m_nativeFontInfo.description,
+                                          wxGTK_CONV_SYS(m_faceName) );
     }
     else
     {
@@ -228,8 +229,8 @@ void wxFontRefData::InitFromNative()
     // Pango description are never underlined (?)
     m_underlined = FALSE;
 
-    // Cannot we choose that
-    m_encoding = wxFONTENCODING_SYSTEM;
+    // always with GTK+ 2
+    m_encoding = wxFONTENCODING_UTF8;
 }
 
 wxFontRefData::wxFontRefData( const wxFontRefData& data )
@@ -485,15 +486,14 @@ bool wxFont::GetUnderlined() const
 
 wxFontEncoding wxFont::GetEncoding() const
 {
-    wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), wxFONTENCODING_SYSTEM, wxT("invalid font") );
 
-    // m_encoding is unused in wxGTK2, return encoding that the user set.
     return M_FONTDATA->m_encoding;
 }
 
 bool wxFont::GetNoAntiAliasing() const
 {
-    wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
 
     return M_FONTDATA->m_noAA;
 }

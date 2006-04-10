@@ -163,6 +163,7 @@ wxMSW:
 
 wxGTK:
 
+- Fixed handling of font encoding in non-Unicode build
 - wxEVT_MENU_CLOSE and wxEVT_MENU_OPENED for popup menus are now generated.
 - Implemented wxCURSOR_BLANK support.
 - wxSlider generates all scroll events now and not only wxEVT_SCROLL_THUMBTRACK.

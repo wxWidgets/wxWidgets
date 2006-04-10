@@ -180,6 +180,25 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
     return wxGenericFindWindowAtPoint(pt);
 }
 
+#if !wxUSE_UNICODE
+
+wxCharBuffer wxConvertToGTK(const wxString& s, wxFontEncoding enc)
+{
+    if ( enc == wxFONTENCODING_UTF8 )
+    {
+        // no need for conversion at all
+        return wxCharBuffer(s);
+    }
+
+    const wxWCharBuffer wbuf = wxCSConv(enc).cMB2WC(s);
+    wxCharBuffer buf;
+    if ( wbuf )
+        buf = wxConvUTF8.cWC2MB(wbuf);
+
+    return buf;
+}
+
+#endif // !wxUSE_UNICODE
 
 // ----------------------------------------------------------------------------
 // subprocess routines

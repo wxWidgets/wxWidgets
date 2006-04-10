@@ -747,7 +747,7 @@ void wxMenuItem::SetText( const wxString& str )
     oldLabel.Replace(wxT("_"), wxT(""));
     wxString label1 = wxStripMenuCodes(str);
     wxString oldhotkey = GetHotKey();    // Store the old hotkey in Ctrl-foo format
-    wxCharBuffer oldbuf = wxGTK_CONV( GetGtkHotKey(*this) );  // and as <control>foo
+    wxCharBuffer oldbuf = wxGTK_CONV_SYS( GetGtkHotKey(*this) );  // and as <control>foo
 
     DoSetText(str);
 
@@ -763,7 +763,7 @@ void wxMenuItem::SetText( const wxString& str )
         else
             label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
 
-        gtk_label_set_text_with_mnemonic( GTK_LABEL(label), wxGTK_CONV(m_text) );
+        gtk_label_set_text_with_mnemonic( GTK_LABEL(label), wxGTK_CONV_SYS(m_text) );
     }
 
     guint accel_key;
@@ -777,7 +777,7 @@ void wxMenuItem::SetText( const wxString& str )
                                        accel_mods );
     }
 
-    wxCharBuffer buf = wxGTK_CONV( GetGtkHotKey(*this) );
+    wxCharBuffer buf = wxGTK_CONV_SYS( GetGtkHotKey(*this) );
     gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);
     if (accel_key != 0)
     {
@@ -954,7 +954,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         text = mitem->GetText();
         const wxBitmap *bitmap = &mitem->GetBitmap();
 
-        menuItem = gtk_image_menu_item_new_with_mnemonic( wxGTK_CONV( text ) );
+        menuItem = gtk_image_menu_item_new_with_mnemonic( wxGTK_CONV_SYS( text ) );
 
         GtkWidget *image;
         if (bitmap->HasPixbuf())
@@ -985,7 +985,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         {
             case wxITEM_CHECK:
             {
-                menuItem = gtk_check_menu_item_new_with_mnemonic( wxGTK_CONV( text ) );
+                menuItem = gtk_check_menu_item_new_with_mnemonic( wxGTK_CONV_SYS( text ) );
                 m_prevRadio = NULL;
                 break;
             }
@@ -996,12 +996,14 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
                 if ( m_prevRadio == NULL )
                 {
                     // start of a new radio group
-                    m_prevRadio = menuItem = gtk_radio_menu_item_new_with_mnemonic( group, wxGTK_CONV( text ) );
+                    m_prevRadio = menuItem =
+                        gtk_radio_menu_item_new_with_mnemonic( group, wxGTK_CONV_SYS( text ) );
                 }
                 else // continue the radio group
                 {
                     group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (m_prevRadio));
-                    m_prevRadio = menuItem = gtk_radio_menu_item_new_with_mnemonic( group, wxGTK_CONV( text ) );
+                    m_prevRadio = menuItem =
+                        gtk_radio_menu_item_new_with_mnemonic( group, wxGTK_CONV_SYS( text ) );
                 }
                 break;
             }
@@ -1012,7 +1014,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
 
             case wxITEM_NORMAL:
             {
-                menuItem = gtk_menu_item_new_with_mnemonic( wxGTK_CONV( text ) );
+                menuItem = gtk_menu_item_new_with_mnemonic( wxGTK_CONV_SYS( text ) );
                 m_prevRadio = NULL;
                 break;
             }
@@ -1022,7 +1024,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
 
     guint accel_key;
     GdkModifierType accel_mods;
-    wxCharBuffer buf = wxGTK_CONV( GetGtkHotKey(*mitem) );
+    wxCharBuffer buf = wxGTK_CONV_SYS( GetGtkHotKey(*mitem) );
 
     // wxPrintf( wxT("item: %s hotkey %s\n"), mitem->GetText().c_str(), GetGtkHotKey(*mitem).c_str() );
     gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);

@@ -24,10 +24,24 @@
 
 #if wxUSE_UNICODE
     #define wxGTK_CONV(s) wxConvUTF8.cWX2MB(s)
+    #define wxGTK_CONV_SYS(s, enc) wxGTK_CONV(s)
     #define wxGTK_CONV_BACK(s) wxConvUTF8.cMB2WX(s)
 #else
-    #define wxGTK_CONV(s) wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC(s) )
-    #define wxGTK_CONV_BACK(s)  wxConvLocal.cWC2WX( (wxConvUTF8.cMB2WC( s ) ) )
+    // convert the text in given encoding to UTF-8 used by wxGTK
+    extern wxCharBuffer
+    wxConvertToGTK(const wxString& s,
+                   wxFontEncoding enc = wxFONTENCODING_SYSTEM);
+
+    // helper: use the encoding of the given font if it's valid
+    inline wxCharBuffer wxConvertToGTK(const wxString& s, const wxFont& font)
+    {
+        return wxConvertToGTK(s, font.Ok() ? font.GetEncoding()
+                                           : wxFONTENCODING_SYSTEM);
+    }
+
+    #define wxGTK_CONV(s) wxConvertToGTK((s), m_font)
+    #define wxGTK_CONV_SYS(s) wxConvertToGTK(s)
+    #define wxGTK_CONV_BACK(s)  wxConvLocal.cWC2WX( wxConvUTF8.cMB2WC((s)) )
 #endif
 
 // Some deprecated GTK+ prototypes we still use often

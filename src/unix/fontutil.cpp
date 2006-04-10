@@ -256,7 +256,7 @@ void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
 
 void wxNativeFontInfo::SetFaceName(const wxString& facename)
 {
-    pango_font_description_set_family( description, wxGTK_CONV(facename) );
+    pango_font_description_set_family(description, wxGTK_CONV_SYS(facename));
 }
 
 void wxNativeFontInfo::SetFamily(wxFontFamily WXUNUSED(family))
@@ -276,7 +276,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     if (description)
         pango_font_description_free( description );
 
-    description = pango_font_description_from_string( wxGTK_CONV( s ) );
+    description = pango_font_description_from_string( wxGTK_CONV_SYS( s ) );
 
     return true;
 }
