@@ -744,19 +744,18 @@ wxString wxTextCtrl::GetValue() const
         gtk_text_buffer_get_end_iter( m_buffer, &end );
         gchar *text = gtk_text_buffer_get_text( m_buffer, &start, &end, TRUE );
 
-#if wxUSE_UNICODE
-        wxWCharBuffer buffer( wxConvUTF8.cMB2WX( text ) );
-#else
-        wxCharBuffer buffer( wxConvLocal.cWC2WX( wxConvUTF8.cMB2WC( text ) ) );
-#endif
-        if ( buffer )
-            tmp = buffer;
+        const wxWxCharBuffer buf = wxGTK_CONV_BACK(text);
+        if ( buf )
+            tmp = buf;
 
         g_free( text );
     }
     else
     {
-        tmp = wxGTK_CONV_BACK( gtk_entry_get_text( GTK_ENTRY(m_text) ) );
+        const gchar *text = gtk_entry_get_text( GTK_ENTRY(m_text) );
+        const wxWxCharBuffer buf = wxGTK_CONV_BACK( text );
+        if ( buf )
+            tmp = buf;
     }
 
     return tmp;
@@ -768,19 +767,15 @@ void wxTextCtrl::SetValue( const wxString &value )
 
     if (m_windowStyle & wxTE_MULTILINE)
     {
-#if wxUSE_UNICODE
-        wxCharBuffer buffer( wxConvUTF8.cWX2MB( value) );
-#else
-        wxCharBuffer buffer( wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC( value ) ) );
-#endif
-        if (gtk_text_buffer_get_char_count(m_buffer) != 0)
-            IgnoreNextTextUpdate();
-
+        const wxCharBuffer buffer(wxGTK_CONV(value));
         if ( !buffer )
         {
             // what else can we do? at least don't crash...
             return;
         }
+
+        if (gtk_text_buffer_get_char_count(m_buffer) != 0)
+            IgnoreNextTextUpdate();
 
         gtk_text_buffer_set_text( m_buffer, buffer, strlen(buffer) );
     }
@@ -804,6 +799,13 @@ void wxTextCtrl::WriteText( const wxString &text )
     if ( text.empty() )
         return;
 
+    const wxCharBuffer buffer(wxGTK_CONV(text));
+    if ( !buffer )
+    {
+        // what else can we do? at least don't crash...
+        return;
+    }
+
     // gtk_text_changed_callback() will set m_modified to true but m_modified
     // shouldn't be changed by the program writing to the text control itself,
     // so save the old value and restore when we're done
@@ -811,17 +813,6 @@ void wxTextCtrl::WriteText( const wxString &text )
 
     if ( m_windowStyle & wxTE_MULTILINE )
     {
-#if wxUSE_UNICODE
-        wxCharBuffer buffer( wxConvUTF8.cWX2MB( text ) );
-#else
-        wxCharBuffer buffer( wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC( text ) ) );
-#endif
-        if ( !buffer )
-        {
-            // what else can we do? at least don't crash...
-            return;
-        }
-
         // TODO: Call whatever is needed to delete the selection.
         wxGtkTextInsert( m_text, m_buffer, m_defaultStyle, buffer );
 
@@ -840,17 +831,6 @@ void wxTextCtrl::WriteText( const wxString &text )
 
         // This moves the cursor pos to behind the inserted text.
         gint len = gtk_editable_get_position(GTK_EDITABLE(m_text));
-
-#if wxUSE_UNICODE
-        wxCharBuffer buffer( wxConvUTF8.cWX2MB( text ) );
-#else
-        wxCharBuffer buffer( wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC( text ) ) );
-#endif
-        if ( !buffer )
-        {
-            // what else can we do? at least don't crash...
-            return;
-        }
 
         gtk_editable_insert_text( GTK_EDITABLE(m_text), buffer, strlen(buffer), &len );
 

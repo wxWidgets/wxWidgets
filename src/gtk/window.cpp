@@ -1198,13 +1198,8 @@ gtk_wxwindow_commit_cb (GtkIMContext *context,
                                   window, window->m_imData->lastKeyEvent);
     }
 
-#if wxUSE_UNICODE
-    const wxWCharBuffer data = wxConvUTF8.cMB2WC( (char*)str );
-#else
-    const wxWCharBuffer wdata = wxConvUTF8.cMB2WC( (char*)str );
-    const wxCharBuffer data = wxConvLocal.cWC2MB( wdata );
-#endif // wxUSE_UNICODE
-    if( !(const wxChar*)data )
+    const wxWxCharBuffer data(wxGTK_CONV_BACK(str));
+    if( !data )
         return;
 
     bool ret = false;
@@ -3443,14 +3438,9 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
     PangoLayout *layout = pango_layout_new(context);
     pango_layout_set_font_description(layout, desc);
     {
-#if wxUSE_UNICODE
-        const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
-        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
-#else
-        const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
-        const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
-        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
-#endif
+        const wxCharBuffer data = wxGTK_CONV( string );
+        if ( data )
+            pango_layout_set_text(layout, data, strlen(data));
     }
 
     PangoRectangle rect;

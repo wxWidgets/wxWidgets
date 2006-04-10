@@ -22,6 +22,7 @@
 #include "wx/fontutil.h"
 
 #include "wx/gtk/win_gtk.h"
+#include "wx/gtk/private.h"
 
 #include "wx/math.h" // for floating-point functions
 
@@ -1496,16 +1497,11 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     bool underlined = m_font.Ok() && m_font.GetUnderlined();
 
-#if wxUSE_UNICODE
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( text );
-#else
-    const wxWCharBuffer wdata = wxConvLocal.cMB2WC( text );
-    if ( !wdata )
+    const wxCharBuffer data = wxGTK_CONV( text );
+    if ( !data )
         return;
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
-#endif
-    size_t datalen = strlen((const char*)data);
-    pango_layout_set_text( m_layout, (const char*) data, datalen);
+    const size_t datalen = strlen(data);
+    pango_layout_set_text( m_layout, data, datalen);
 
     if (underlined)
     {
@@ -1709,18 +1705,7 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
         pango_layout_set_font_description( m_layout, theFont->GetNativeFontInfo()->description );
 
     // Set layout's text
-#if wxUSE_UNICODE
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
-    const char *dataUTF8 = (const char *)data;
-#else
-    const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
-    if ( !wdata )
-        return;
-
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
-    const char *dataUTF8 = (const char *)data;
-#endif
-
+    const wxCharBuffer dataUTF8 = wxGTK_CONV(string);
     if ( !dataUTF8 )
     {
         // hardly ideal, but what else can we do if conversion failed?
