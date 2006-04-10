@@ -1947,11 +1947,15 @@ IMPLEMENT_CLASS(wxNotebookSizer, wxBookCtrlSizer)
 
 #if wxUSE_BOOKCTRL
 
+#if WXWIN_COMPATIBILITY_2_6
+
 wxBookCtrlSizer::wxBookCtrlSizer(wxBookCtrlBase *bookctrl)
                : m_bookctrl(bookctrl)
 {
     wxASSERT_MSG( bookctrl, wxT("wxBookCtrlSizer needs a control") );
 }
+
+#endif // WXWIN_COMPATIBILITY_2_6
 
 void wxBookCtrlSizer::RecalcSizes()
 {
