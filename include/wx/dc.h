@@ -876,6 +876,8 @@ private:
 class WXDLLEXPORT wxDCClipper
 {
 public:
+    wxDCClipper(wxDC& dc, const wxRegion& r) : m_dc(dc)
+        { dc.SetClippingRegion(r); }
     wxDCClipper(wxDC& dc, const wxRect& r) : m_dc(dc)
         { dc.SetClippingRegion(r.x, r.y, r.width, r.height); }
     wxDCClipper(wxDC& dc, wxCoord x, wxCoord y, wxCoord w, wxCoord h) : m_dc(dc)
