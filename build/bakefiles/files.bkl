@@ -237,6 +237,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/private.h
     wx/os2/stdpaths.h
     wx/os2/chkconf.h
+    wx/os2/wxrsc.h
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
@@ -3011,6 +3012,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_MACOSX_HDR)</if>
         <if cond="PLATFORM_PALMOS=='1'">$(BASE_PALMOS_HDR)</if>
         <if cond="PLATFORM_MSDOS=='1'">$(BASE_MSDOS_HDR)</if>
+        <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_HDR)</if>
     </set>
 
     <set var="BASE_SRC" hints="files">
