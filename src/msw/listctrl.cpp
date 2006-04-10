@@ -2695,14 +2695,25 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 WXLRESULT
 wxListCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-#ifdef WM_PRINT
-    if ( nMsg == WM_PRINT )
+    switch ( nMsg )
     {
-        // we should bypass our own WM_PRINT handling as we don't handle
-        // PRF_CHILDREN flag, so leave it to the native control itself
-        return MSWDefWindowProc(nMsg, wParam, lParam);
-    }
+#ifdef WM_PRINT
+        case WM_PRINT:
+            // we should bypass our own WM_PRINT handling as we don't handle
+            // PRF_CHILDREN flag, so leave it to the native control itself
+            return MSWDefWindowProc(nMsg, wParam, lParam);
 #endif // WM_PRINT
+
+        case WM_CONTEXTMENU:
+            // because this message is propagated upwards the child-parent
+            // chain, we get it for the right clicks on the header window but
+            // this is confusing in wx as right clicking there already
+            // generates a separate wxEVT_COMMAND_LIST_COL_RIGHT_CLICK event
+            // so just ignore them
+            if ( (HWND)wParam == ListView_GetHeader(GetHwnd()) )
+                return 0;
+            //else: break
+    }
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
