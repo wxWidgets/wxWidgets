@@ -568,11 +568,11 @@ void wxFileConfig::CleanUp()
 
 wxFileConfig::~wxFileConfig()
 {
-    delete m_conv;
-
     Flush();
 
     CleanUp();
+
+    delete m_conv;
 }
 
 // ----------------------------------------------------------------------------
