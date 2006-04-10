@@ -435,9 +435,8 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName;
 // default in a couple of places inside wx (initially same as wxConvLibc)
 extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent;
 
-// ???
+// the conversion corresponding to the current locale
 extern WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvLocal;
-
 
 // ----------------------------------------------------------------------------
 // endianness-dependent conversions
