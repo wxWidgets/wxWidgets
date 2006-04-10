@@ -114,27 +114,12 @@ protected:
     virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
     virtual int DoListHitTest(const wxPoint& point) const;
 
-    void            MacDelete( int n ) ;
-    void            MacInsert( int n , const wxString& item) ;
-    void            MacAppend( const wxString& item) ;
-    void            MacSet( int n , const wxString& item ) ;
-    void            MacClear() ;
-    void            MacDeselectAll() ;
-    void            MacSetSelection( int n , bool select ) ;
-    int             MacGetSelection() const ;
-    int             MacGetSelections(wxArrayInt& aSelections) const ;
-    bool            MacIsSelected( int n ) const ;
-    void            MacScrollTo( int n ) ;
-    bool            MacSuppressSelection( bool suppress ) ;
-
     // free memory (common part of Clear() and dtor)
     // prevent collision with some BSD definitions of macro Free()
     void FreeData();
 
     unsigned int m_noItems;
-    int m_selected;
-    bool m_suppressSelection ;
-
+    
     virtual wxSize DoGetBestSize() const;
 
     // common creation for all databrowser list implementations
