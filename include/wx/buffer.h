@@ -122,11 +122,15 @@ DEFINE_BUFFER(wxWCharBuffer, wchar_t, wxStrdupW);
 #undef DEFINE_BUFFER
 
 #if wxUSE_UNICODE
+    typedef wxWCharBuffer wxWxCharBuffer;
+
     #define wxMB2WXbuf wxWCharBuffer
     #define wxWX2MBbuf wxCharBuffer
     #define wxWC2WXbuf wxChar*
     #define wxWX2WCbuf wxChar*
 #else // ANSI
+    typedef wxCharBuffer wxWxCharBuffer;
+
     #define wxMB2WXbuf wxChar*
     #define wxWX2MBbuf wxChar*
     #define wxWC2WXbuf wxCharBuffer
