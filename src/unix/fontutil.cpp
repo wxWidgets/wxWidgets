@@ -322,27 +322,12 @@ bool wxTestFontEncoding(const wxNativeEncodingInfo& WXUNUSED(info))
 bool wxGetNativeFontEncoding(wxFontEncoding encoding,
                              wxNativeEncodingInfo *info)
 {
+    // all encodings are available in GTK+ 2 because we translate text in any
+    // encoding to UTF-8 internally anyhow
     info->facename.clear();
+    info->encoding = encoding;
 
-    switch ( encoding )
-    {
-        // we *must* return true for default encodings as otherwise wxFontMapper
-        // considers that we can't load any font and aborts with wxLogFatalError!
-        case wxFONTENCODING_DEFAULT:
-        case wxFONTENCODING_SYSTEM:
-            info->encoding = wxFONTENCODING_SYSTEM;
-            return true;
-
-        case wxFONTENCODING_ISO8859_1:
-        case wxFONTENCODING_UTF8:
-            // these are always supported by GTK+ 2
-            info->encoding = encoding;
-            return true;
-
-        default:
-            // everything else must be converted to UTF-8
-            return false;
-    }
+    return true;
 }
 
 #else // GTK+ 1.x
