@@ -24,7 +24,7 @@
 
 #if wxUSE_UNICODE
     #define wxGTK_CONV(s) wxConvUTF8.cWX2MB(s)
-    #define wxGTK_CONV_SYS(s, enc) wxGTK_CONV(s)
+    #define wxGTK_CONV_SYS(s) wxGTK_CONV(s)
     #define wxGTK_CONV_BACK(s) wxConvUTF8.cMB2WX(s)
 #else
     // convert the text in given encoding to UTF-8 used by wxGTK
