@@ -2665,8 +2665,6 @@ void wxDC::DoGradientFillLinear (const wxRect& rect,
         vertices[1 - firstVertex].Blue = (COLOR16)(destColour.Blue() << 8);
         vertices[1 - firstVertex].Alpha = 0;
 
-        if (nDirection == wxWEST ||
-            nDirection == wxEAST)
         if ( (*pfnGradientFill)
              (
                 GetHdc(),
