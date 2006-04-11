@@ -80,12 +80,14 @@ public:
     //virtual int GetSelections(wxArrayInt& aSelections) const;
     %extend {
       PyObject* GetSelections() {
+          wxPyBlock_t blocked = wxPyBeginBlockThreads();
           wxArrayInt lst;
           self->GetSelections(lst);
           PyObject *tup = PyTuple_New(lst.GetCount());
           for(size_t i=0; i<lst.GetCount(); i++) {
               PyTuple_SetItem(tup, i, PyInt_FromLong(lst[i]));
           }
+          wxPyEndBlockThreads(blocked);
           return tup;
       }
     }
