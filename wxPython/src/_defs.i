@@ -521,7 +521,9 @@ enum {
     wxRB_USE_CHECKBOX,
     wxST_SIZEGRIP,
     wxST_NO_AUTORESIZE,
-
+    wxST_DOTS_MIDDLE,
+    wxST_DOTS_END,
+    
     wxFLOOD_SURFACE,
     wxFLOOD_BORDER,
     wxODDEVEN_RULE,

@@ -56,6 +56,8 @@
 %rename(RB_USE_CHECKBOX)                    wxRB_USE_CHECKBOX;
 %rename(ST_SIZEGRIP)                        wxST_SIZEGRIP;
 %rename(ST_NO_AUTORESIZE)                   wxST_NO_AUTORESIZE;
+%rename(ST_DOTS_MIDDLE)                     wxST_DOTS_MIDDLE;
+%rename(ST_DOTS_END)                        wxST_DOTS_END;
 %rename(FLOOD_SURFACE)                      wxFLOOD_SURFACE;
 %rename(FLOOD_BORDER)                       wxFLOOD_BORDER;
 %rename(ODDEVEN_RULE)                       wxODDEVEN_RULE;
