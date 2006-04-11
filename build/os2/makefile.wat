@@ -512,6 +512,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_datavcmn.obj &
 	$(OBJS)\monodll_calctrl.obj &
+	$(OBJS)\monodll_datavgen.obj &
 	$(OBJS)\monodll_datectlg.obj &
 	$(OBJS)\monodll_grid.obj &
 	$(OBJS)\monodll_gridctrl.obj &
@@ -535,6 +536,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_datavcmn.obj &
 	$(OBJS)\monodll_calctrl.obj &
+	$(OBJS)\monodll_datavgen.obj &
 	$(OBJS)\monodll_datectlg.obj &
 	$(OBJS)\monodll_grid.obj &
 	$(OBJS)\monodll_gridctrl.obj &
@@ -985,6 +987,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_datavcmn.obj &
 	$(OBJS)\monolib_calctrl.obj &
+	$(OBJS)\monolib_datavgen.obj &
 	$(OBJS)\monolib_datectlg.obj &
 	$(OBJS)\monolib_grid.obj &
 	$(OBJS)\monolib_gridctrl.obj &
@@ -1008,6 +1011,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_datavcmn.obj &
 	$(OBJS)\monolib_calctrl.obj &
+	$(OBJS)\monolib_datavgen.obj &
 	$(OBJS)\monolib_datectlg.obj &
 	$(OBJS)\monolib_grid.obj &
 	$(OBJS)\monolib_gridctrl.obj &
@@ -1765,6 +1769,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_datavcmn.obj &
 	$(OBJS)\advdll_calctrl.obj &
+	$(OBJS)\advdll_datavgen.obj &
 	$(OBJS)\advdll_datectlg.obj &
 	$(OBJS)\advdll_grid.obj &
 	$(OBJS)\advdll_gridctrl.obj &
@@ -1788,6 +1793,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_datavcmn.obj &
 	$(OBJS)\advdll_calctrl.obj &
+	$(OBJS)\advdll_datavgen.obj &
 	$(OBJS)\advdll_datectlg.obj &
 	$(OBJS)\advdll_grid.obj &
 	$(OBJS)\advdll_gridctrl.obj &
@@ -1821,6 +1827,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_datavcmn.obj &
 	$(OBJS)\advlib_calctrl.obj &
+	$(OBJS)\advlib_datavgen.obj &
 	$(OBJS)\advlib_datectlg.obj &
 	$(OBJS)\advlib_grid.obj &
 	$(OBJS)\advlib_gridctrl.obj &
@@ -1844,6 +1851,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_datavcmn.obj &
 	$(OBJS)\advlib_calctrl.obj &
+	$(OBJS)\advlib_datavgen.obj &
 	$(OBJS)\advlib_datectlg.obj &
 	$(OBJS)\advlib_grid.obj &
 	$(OBJS)\advlib_gridctrl.obj &
@@ -2331,6 +2339,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_clntdata.obj &
 	$(OBJS)\monodll_cmdline.obj &
 	$(OBJS)\monodll_config.obj &
+	$(OBJS)\monodll_convauto.obj &
 	$(OBJS)\monodll_datetime.obj &
 	$(OBJS)\monodll_datstrm.obj &
 	$(OBJS)\monodll_dircmn.obj &
@@ -2426,6 +2435,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_clntdata.obj &
 	$(OBJS)\monolib_cmdline.obj &
 	$(OBJS)\monolib_config.obj &
+	$(OBJS)\monolib_convauto.obj &
 	$(OBJS)\monolib_datetime.obj &
 	$(OBJS)\monolib_datstrm.obj &
 	$(OBJS)\monolib_dircmn.obj &
@@ -2521,6 +2531,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_clntdata.obj &
 	$(OBJS)\basedll_cmdline.obj &
 	$(OBJS)\basedll_config.obj &
+	$(OBJS)\basedll_convauto.obj &
 	$(OBJS)\basedll_datetime.obj &
 	$(OBJS)\basedll_datstrm.obj &
 	$(OBJS)\basedll_dircmn.obj &
@@ -2602,6 +2613,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_clntdata.obj &
 	$(OBJS)\baselib_cmdline.obj &
 	$(OBJS)\baselib_config.obj &
+	$(OBJS)\baselib_convauto.obj &
 	$(OBJS)\baselib_datetime.obj &
 	$(OBJS)\baselib_datstrm.obj &
 	$(OBJS)\baselib_dircmn.obj &
@@ -3958,6 +3970,9 @@ $(OBJS)\monodll_cmdline.obj :  .AUTODEPEND ..\..\src\common\cmdline.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_config.obj :  .AUTODEPEND ..\..\src\common\config.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_convauto.obj :  .AUTODEPEND ..\..\src\common\convauto.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
@@ -5489,6 +5504,11 @@ $(OBJS)\monodll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_datectlg.obj :  .AUTODEPEND ..\..\src\generic\datectlg.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -5591,6 +5611,9 @@ $(OBJS)\monolib_cmdline.obj :  .AUTODEPEND ..\..\src\common\cmdline.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_config.obj :  .AUTODEPEND ..\..\src\common\config.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_convauto.obj :  .AUTODEPEND ..\..\src\common\convauto.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
@@ -7122,6 +7145,11 @@ $(OBJS)\monolib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_datectlg.obj :  .AUTODEPEND ..\..\src\generic\datectlg.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -7224,6 +7252,9 @@ $(OBJS)\basedll_cmdline.obj :  .AUTODEPEND ..\..\src\common\cmdline.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_config.obj :  .AUTODEPEND ..\..\src\common\config.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_convauto.obj :  .AUTODEPEND ..\..\src\common\convauto.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
@@ -7419,6 +7450,9 @@ $(OBJS)\baselib_cmdline.obj :  .AUTODEPEND ..\..\src\common\cmdline.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_config.obj :  .AUTODEPEND ..\..\src\common\config.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_convauto.obj :  .AUTODEPEND ..\..\src\common\convauto.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
@@ -9851,6 +9885,9 @@ $(OBJS)\advdll_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
 $(OBJS)\advdll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_datectlg.obj :  .AUTODEPEND ..\..\src\generic\datectlg.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -9909,6 +9946,9 @@ $(OBJS)\advlib_datavcmn.obj :  .AUTODEPEND ..\..\src\common\datavcmn.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_datavgen.obj :  .AUTODEPEND ..\..\src\generic\datavgen.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_datectlg.obj :  .AUTODEPEND ..\..\src\generic\datectlg.cpp
