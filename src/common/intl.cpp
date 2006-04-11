@@ -885,8 +885,13 @@ public:
               wxPluralFormsCalculatorPtr& rPluralFormsCalculator);
 
     // fills the hash with string-translation pairs
-    void FillHash(wxMessagesHash& hash, const wxString& msgIdCharset,
+    void FillHash(wxMessagesHash& hash,
+                  const wxString& msgIdCharset,
                   bool convertEncoding) const;
+
+    // return the charset of the strings in this catalog or empty string if
+    // none/unknown
+    wxString GetCharset() const { return m_charset; }
 
 private:
     // this implementation is binary compatible with GNU gettext() version 0.10
@@ -921,7 +926,8 @@ private:
     wxMsgTableEntry  *m_pOrigTable,   // pointer to original   strings
                      *m_pTransTable;  //            translated
 
-    wxString m_charset;
+    wxString m_charset;               // from the message catalog header
+
 
     // swap the 2 halves of 32 bit integer if needed
     size_t32 Swap(size_t32 ui) const
@@ -961,6 +967,9 @@ private:
 class wxMsgCatalog
 {
 public:
+    wxMsgCatalog() { m_conv = NULL; }
+    ~wxMsgCatalog();
+
     // load the catalog from disk (szDirPrefix corresponds to language)
     bool Load(const wxChar *szDirPrefix, const wxChar *szName,
               const wxChar *msgIdCharset = NULL, bool bConvertEncoding = false);
@@ -977,6 +986,11 @@ public:
 private:
     wxMessagesHash  m_messages; // all messages in the catalog
     wxString        m_name;     // name of the domain
+
+    // the conversion corresponding to this catalog charset if we installed it
+    // as the global one
+    wxCSConv *m_conv;
+
     wxPluralFormsCalculatorPtr  m_pluralFormsCalculator;
 };
 
@@ -1003,7 +1017,7 @@ wxMsgCatalogFile::wxMsgCatalogFile()
 
 wxMsgCatalogFile::~wxMsgCatalogFile()
 {
-    wxDELETEA(m_pData);
+    delete [] m_pData;
 }
 
 // return the directory to search for message catalogs under the given prefix
@@ -1253,9 +1267,9 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
     // Unicode build
     convertEncoding = true;
 #elif wxUSE_FONTMAP
-    // determine if we need any conversion at all
     if ( convertEncoding )
     {
+        // determine if we need any conversion at all
         wxFontEncoding encCat = wxFontMapperBase::GetEncodingFromName(m_charset);
         if ( encCat == wxLocale::GetSystemEncoding() )
         {
@@ -1392,6 +1406,21 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
 // wxMsgCatalog class
 // ----------------------------------------------------------------------------
 
+wxMsgCatalog::~wxMsgCatalog()
+{
+    if ( m_conv )
+    {
+        if ( wxConvUI == m_conv )
+        {
+            // we only change wxConvUI if it points to wxConvLocal so we reset
+            // it back to it too
+            wxConvUI = &wxConvLocal;
+        }
+
+        delete m_conv;
+    }
+}
+
 bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName,
                         const wxChar *msgIdCharset, bool bConvertEncoding)
 {
@@ -1399,13 +1428,28 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName,
 
     m_name = szName;
 
-    if ( file.Load(szDirPrefix, szName, m_pluralFormsCalculator) )
+    if ( !file.Load(szDirPrefix, szName, m_pluralFormsCalculator) )
+        return false;
+
+    file.FillHash(m_messages, msgIdCharset, bConvertEncoding);
+
+    // we should use a conversion compatible with the message catalog encoding
+    // in the GUI if we don't convert the strings to the current conversion but
+    // as the encoding is global, only change it once, otherwise we could get
+    // into trouble if we use several message catalogs with different encodings
+    //
+    // this is, of course, a hack but it at least allows the program to use
+    // message catalogs in any encodings without asking the user to change his
+    // locale
+    if ( !bConvertEncoding &&
+            !file.GetCharset().empty() &&
+                wxConvUI == &wxConvLocal )
     {
-        file.FillHash(m_messages, msgIdCharset, bConvertEncoding);
-        return true;
+        wxConvUI =
+        m_conv = new wxCSConv(file.GetCharset());
     }
 
-    return false;
+    return true;
 }
 
 const wxChar *wxMsgCatalog::GetString(const wxChar *sz, size_t n) const
