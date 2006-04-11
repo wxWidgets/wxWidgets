@@ -494,12 +494,6 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     wxCHECK_MSG( encodingAlt, false,
                     _T("wxFontEncoding::GetAltForEncoding(): NULL pointer") );
 
-#ifdef __WXGTK20__
-    // in GTK+ 2 we can always use UTF-8 for everything so just do it,
-    // especially as no other font encodings are currently supported
-    *encodingAlt = wxFONTENCODING_UTF8;
-    return true;
-#else // !wxGTK2
     wxNativeEncodingInfo info;
     if ( !GetAltForEncoding(encoding, &info, facename, interactive) )
         return false;
@@ -507,7 +501,6 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     *encodingAlt = info.encoding;
 
     return true;
-#endif // wxGTK2/!wxGTK2
 }
 
 bool wxFontMapper::IsEncodingAvailable(wxFontEncoding encoding,
