@@ -215,6 +215,7 @@ public:
     bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy)
     {   return Load(wxURI(fileName), wxURI(proxy));       }
 #endif
+
 protected:
     static wxClassInfo* NextBackend();
 
@@ -224,6 +225,9 @@ protected:
 
     //FIXME:  This is nasty... find a better way to work around
     //inheritance issues
+#if defined(__WXMAC__)
+    virtual void MacVisibilityChanged();
+#endif
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
     friend class wxQTMediaBackend;
 #endif
@@ -318,7 +322,8 @@ public:
     virtual wxLongLong GetDownloadTotal()
     {    return 0;                      }
 
-    virtual void RESERVED8() {}
+    virtual void MacVisibilityChanged()
+    {                                   }
     virtual void RESERVED9() {}
 
     DECLARE_DYNAMIC_CLASS(wxMediaBackend)

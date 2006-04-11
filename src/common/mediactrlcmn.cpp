@@ -468,6 +468,19 @@ void wxMediaCtrl::DoMoveWindow(int x, int y, int w, int h)
         m_imp->Move(x, y, w, h);
 }
 
+//---------------------------------------------------------------------------
+// wxMediaCtrl::MacVisibilityChanged
+//---------------------------------------------------------------------------
+#ifdef __WXMAC__
+void wxMediaCtrl::MacVisibilityChanged()
+{
+    wxControl::MacVisibilityChanged();
+    
+    if(m_imp)
+        m_imp->MacVisibilityChanged();        
+}
+#endif
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
 //  wxMediaBackendCommonBase
