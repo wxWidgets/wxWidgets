@@ -30,8 +30,14 @@ There are several predefined instances of this class:
 \twocolitem{\textbf{wxConvLibc}}{Uses the standard ANSI C \texttt{mbstowcs()} and
 \texttt{wcstombs()} functions to perform the conversions; thus depends on the
 current locale.}
+\twocolitem{\textbf{wxConvLocal}}{Another conversion corresponding to the
+current locale but this one uses the best available conversion.}
+\twocolitem{\textbf{wxConvISO8859\_1}}{Conversion to and from ISO-8859-1 (Latin I)
+encoding.}
+\twocolitem{\textbf{wxConvUTF8}}{Conversion to and from UTF-8 encoding.}
 \twocolitem{\textbf{wxConvFile}}{The appropriate conversion for the file names,
 depends on the system.}
+% \twocolitem{\textbf{wxConvCurrent}}{Not really clear what is it for...}
 \end{twocollist}
 
 
