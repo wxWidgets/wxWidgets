@@ -32,6 +32,11 @@ There are several predefined instances of this class:
 current locale.}
 \twocolitem{\textbf{wxConvLocal}}{Another conversion corresponding to the
 current locale but this one uses the best available conversion.}
+\twocolitem{\textbf{wxConvUI}}{The conversion used for hte standard UI elements
+such as menu items and buttons. This is a pointer which is initially set to
+\texttt{wxConvLocal} as the program uses the current locale by default but can
+be set to some specific conversion if the program needs to use a specific
+encoding for its UI.}
 \twocolitem{\textbf{wxConvISO8859\_1}}{Conversion to and from ISO-8859-1 (Latin I)
 encoding.}
 \twocolitem{\textbf{wxConvUTF8}}{Conversion to and from UTF-8 encoding.}
