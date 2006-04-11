@@ -104,10 +104,9 @@ public:
     // works for single as well as multiple selection listboxes (unlike
     // GetSelection which only works for listboxes with single selection)
     //virtual int GetSelections(wxArrayInt& aSelections) const;
-    %extend
-    {
-        PyObject* GetSelections()
-        {
+    %extend {
+        PyObject* GetSelections() {
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxArrayInt lst;
             self->GetSelections(lst);
             PyObject *tup = PyTuple_New(lst.GetCount());
@@ -115,6 +114,7 @@ public:
             {
                 PyTuple_SetItem(tup, i, PyInt_FromLong(lst[i]));
             }
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
     }
