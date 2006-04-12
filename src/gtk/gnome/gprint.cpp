@@ -780,10 +780,11 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     gs_lgp->gnome_print_job_close( job );
     if (m_native_preview)
     {
+        const wxCharBuffer title(wxGTK_CONV_SYS(_("Print preview")));
         GtkWidget *preview = gs_lgp->gnome_print_job_preview_new
                                      (
                                         job,
-                                        wxGTK_CONV_SYS(_("Print preview"))
+                                        (const guchar *)title.data()
                                      );
         gtk_widget_show(preview);
     }
