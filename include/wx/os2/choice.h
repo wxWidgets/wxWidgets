@@ -12,14 +12,18 @@
 #ifndef _WX_CHOICE_H_
 #define _WX_CHOICE_H_
 
+// ----------------------------------------------------------------------------
 // Choice item
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxChoice: public wxChoiceBase
 {
   DECLARE_DYNAMIC_CLASS(wxChoice)
 
 public:
     // ctors
-    inline wxChoice() { }
+    inline wxChoice() { Init(); }
+    virtual ~wxChoice();
 
     inline wxChoice( wxWindow*          pParent
                     ,wxWindowID         vId
@@ -32,6 +36,7 @@ public:
                     ,const wxString&    rsName = wxChoiceNameStr
                    )
     {
+        Init();
         Create( pParent
                ,vId
                ,rPos
@@ -54,6 +59,7 @@ public:
                     ,const wxString&      rsName = wxChoiceNameStr
                    )
     {
+        Init();
         Create( pParent
                ,vId
                ,rPos
@@ -89,13 +95,12 @@ public:
     //
     // Implement base class virtuals
     //
-    virtual int      DoAppend(const wxString& rsItem);
-    virtual int      DoInsert(const wxString& rsItem, unsigned int pos);
     virtual void     Delete(unsigned int n);
     virtual void     Clear(void);
 
     virtual unsigned int GetCount() const;
     virtual int      GetSelection(void) const;
+    virtual int      GetCurrentSelection(void) const;
     virtual void     SetSelection(int n);
 
     virtual wxString GetString(unsigned int n) const;
@@ -113,7 +118,12 @@ public:
                                   );
 
 protected:
-    virtual void DoSetItemClientData(unsigned int n, void* pClientData);
+    // common part of all ctors
+    void Init() { m_lastAcceptedSelection = wxID_NONE; }
+
+    virtual int           DoAppend(const wxString& rsItem);
+    virtual int           DoInsert(const wxString& rsItem, unsigned int pos);
+    virtual void          DoSetItemClientData(unsigned int n, void* pClientData);
     virtual void*         DoGetItemClientData(unsigned int n) const;
     virtual void          DoSetItemClientObject(unsigned int n, wxClientData* pClientData);
     virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
@@ -125,6 +135,11 @@ protected:
                                     ,int nsizeFlags = wxSIZE_AUTO
                                    );
     void                  Free(void);
+
+    // last "completed" selection, i.e. not the transient one while the user is
+    // browsing the popup list: this is only used when != wxID_NONE which is
+    // the case while the drop down is opened
+    int m_lastAcceptedSelection;
 }; // end of CLASS wxChoice
 
 #endif // _WX_CHOICE_H_

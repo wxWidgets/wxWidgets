@@ -88,6 +88,8 @@ bool wxChoice::Create(
     // on global settings) rather than inheriting the parent's background colour.
     //
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+
+    // initialize the controls contents
     for (int i = 0; i < n; i++)
     {
         Append(asChoices[i]);
@@ -99,6 +101,11 @@ bool wxChoice::Create(
            );
     return true;
 } // end of wxChoice::Create
+
+wxChoice::~wxChoice()
+{
+    Free();
+}
 
 // ----------------------------------------------------------------------------
 // adding/deleting items to/from the list
@@ -149,6 +156,12 @@ int wxChoice::DoInsert( const wxString& rsItem, unsigned int pos )
 void wxChoice::Delete(unsigned int n)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid item index in wxChoice::Delete") );
+
+    if ( HasClientObjectData() )
+    {
+        delete GetClientObject(n);
+    }
+
     ::WinSendMsg(GetHwnd(), LM_DELETEITEM, (MPARAM)n, (MPARAM)0);
 } // end of wxChoice::Delete
 
@@ -163,6 +176,17 @@ void wxChoice::Clear()
 // ----------------------------------------------------------------------------
 
 int wxChoice::GetSelection() const
+{
+    // if m_lastAcceptedSelection is set, it means that the dropdown is
+    // currently shown and that we want to use the last "permanent" selection
+    // instead of whatever is under the mouse pointer currently
+    //
+    // otherwise, get the selection from the control
+    return m_lastAcceptedSelection == wxID_NONE ? GetCurrentSelection()
+                                                : m_lastAcceptedSelection;
+}
+
+int wxChoice::GetCurrentSelection() const
 {
     return((int)LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYSELECTION, (MPARAM)LIT_FIRST, (MPARAM)0)));
 } // end of wxChoice::GetSelection
