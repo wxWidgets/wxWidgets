@@ -1661,6 +1661,7 @@ public:
     const wxChar       *GetIncludeName() const { return m_unitName ; }
     const wxClassInfo **GetParents() const { return m_parents; }
     int                 GetSize() const { return m_objectSize; }
+    bool                IsDynamic() const { return (NULL != m_objectConstructor); }
 
     wxObjectConstructorFn      GetConstructor() const { return m_objectConstructor; }
     static const wxClassInfo  *GetFirst() { return sm_first; }
