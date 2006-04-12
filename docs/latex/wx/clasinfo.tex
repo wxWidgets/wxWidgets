@@ -28,7 +28,7 @@ class, so there is no need to create such objects explicitly in an application.
 
 \membersection{wxClassInfo::CreateObject}\label{wxclassinfocreateobject}
 
-\func{wxObject*}{CreateObject}{\void}
+\constfunc{wxObject*}{CreateObject}{\void}
 
 Creates an object of the appropriate kind. Returns NULL if the class has not been declared
 dynamically creatable (typically, it is an abstract class).
@@ -69,6 +69,12 @@ Returns the size of the class.
 
 Initializes pointers in the wxClassInfo objects for fast execution
 of IsKindOf. Called in base wxWidgets library initialization.
+
+\membersection{wxClassInfo::IsDynamic}\label{wxclassinfoisdynamic}
+
+\constfunc{bool}{IsDynamic}{\void}
+
+Returns true if this class info can create objects of the associated class.
 
 \membersection{wxClassInfo::IsKindOf}\label{wxclassinfoiskindof}
 
