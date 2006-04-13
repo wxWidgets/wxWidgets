@@ -104,7 +104,8 @@ wxSoundStream& wxSoundStreamESD::Read(void *buffer, wxUint32 len)
         return *this;
     }
     
-    m_lastcount = (wxUint32)ret = read(m_fd_input, buffer, len);
+    ret = read(m_fd_input, buffer, len);
+    m_lastcount = (wxUint32)ret;
     
     if (ret < 0)
         m_snderror = wxSOUND_IOERROR;
@@ -127,7 +128,8 @@ wxSoundStream& wxSoundStreamESD::Write(const void *buffer, wxUint32 len)
         return *this;
     }
     
-    m_lastcount = (wxUint32)ret = write(m_fd_output, buffer, len);
+    ret = write(m_fd_output, buffer, len);
+    m_lastcount = (wxUint32)ret;
     
     if (ret < 0)
         m_snderror = wxSOUND_IOERROR;

@@ -1,3 +1,41 @@
+wxwindows2.4 (2.4.5) unstable; urgency=low
+
+  * Removes Gnome project GPL code from gtk/menu.cpp.  Incorporating
+    it here invalidates the wxWindows licence exception.  If your app
+    depends on it (and is GPL), you'll have to source it from Gnome;
+    if your app wasn't GPL, well, it is now...  You've got some work
+    to do (and nice people to apologise to) as well.  sigh.
+  * Remove the wx-*-config manpage symlinks.  They are obsolete now.
+  * Update fr.po, thanks to Thomas Huriaux and debian-l10n-french.
+    Closes: #329070
+  * Fixes FTBFS with new make.  If this ugly quoting is the tradeoff,
+    I'm itching to learn of the fabulous benefits... Closes: #350696
+    Ack NMU for this from Kurt Roeckx to keep the amd64 transition
+    rolling while my x86 build machine was painfully dying.  Thanks!
+  * Trimmed dependency on pangox.
+  * Use WaitTimeout instead of Wait in threadpsx.cpp.  See wx bts
+    report #1263806 on sf.
+  * Source fix for solaris/sunos/sgi string bug.  Does not affect us.
+  * Source fix for uninitialised variable trouble on ME.  Does not
+    affect us.
+  * Respect the CONCURRENCY_LEVEL environment variable before taking
+    a guess based on DISTCC_HOSTS of how many jobs to load make with.
+    People may have that set for use with make-kpkg, and consistency
+    here is surely a Good Thing.
+  * Fix strange and invalid cast-assignment construct in sndesd.cpp
+    and sndoss.cpp
+  * Update FSF address in copyright file.
+
+ -- Ron Lee <ron@debian.org>  Sat,  13 Apr 2006 03:06:11 +1030
+
+wxwindows2.4 (2.4.4.1.1-0.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Make it build using the new make.  Patch from 
+    Daniel Schepler <schepler@math.berkeley.edu> (Closes: #350696)
+
+ -- Kurt Roeckx <kurt@roeckx.be>  Sun,  9 Apr 2006 12:24:28 +0200
+
 wxwindows2.4 (2.4.4.1.1) unstable; urgency=low
 
   * Disable building of the common packages.  The 2.6 source package

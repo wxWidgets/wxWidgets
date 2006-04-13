@@ -9,18 +9,26 @@
 #export DH_VERBOSE=1
 export DH_OPTIONS
 
-ifdef DISTCC_HOSTS
+ifdef CONCURRENCY_LEVEL
 
- #JOB_COUNT := $(shell set $${DISTCC_HOSTS} > /dev/null 2>&1 ; echo $$(($$\# + $$\#)))
- # Nearly as fast, but doesn't raise the room temperature
- # or saturate the build machines quite so much.
+  # A user who knows what they want, that's like gold...
+  # respect their precious opinion of how much blue smoke to use.
+  JOB_COUNT := $(CONCURRENCY_LEVEL)
+
+else ifdef DISTCC_HOSTS
+
+ # Otherwise, if they have a cluster, try to put it to good use.
   JOB_COUNT := $(shell set $${DISTCC_HOSTS} > /dev/null 2>&1 ; echo $$\#)
+
+ # Not much faster, but it might keep you warm in winter...
+ #JOB_COUNT := $(shell set $${DISTCC_HOSTS} > /dev/null 2>&1 ; echo $$(($$\# + $$\#)))
+
+endif
+
+ifdef JOB_COUNT
   FAST_MAKE  = $(MAKE) -j $(JOB_COUNT)
-
 else
-
   FAST_MAKE = $(MAKE)
-
 endif
 
 -include debian/python-version
@@ -33,7 +41,8 @@ endif
 # target release.
 #
 # for etch:
-DEBIAN_WX_DEFAULT_VERSION = 2.6
+#DEBIAN_WX_DEFAULT_VERSION = 2.6
+# XXX
 
 
 release   := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwindows//p')
@@ -189,55 +198,53 @@ debian/python-version:
 	echo python_ver := python$(shell python -c "import sys;print sys.version[:3]") > $@
 
 debian/control: $(addprefix debian/,control.in python-version)
-	sed -e 's/=V/$(release)/g;     \
-		s/=SOV/$(sorelease)/g; \
-		s/=PY/$(python_ver)/g' \
+	sed -e 's/=V/$(release)/g;s/=SOV/$(sorelease)/g;s/=PY/$(python_ver)/g'\
 		< debian/control.in > debian/control
 
 control-files-stamp: debian/control
 	dh_testdir
-	@for f in links postinst prerm; do                                   \
+	@for f in postinst prerm; do                                         \
 		echo "generating control file $(package_wxbase_dev).$$f";    \
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/libwxbase-dev.$$f                           \
 			> debian/$(package_wxbase_dev).$$f;                  \
 	done;
-	@for f in links postinst prerm; do                                   \
+	@for f in postinst prerm; do                                         \
 		echo "generating control file $(package_wxbase_dbg).$$f";    \
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/libwxbase-dbg.$$f                           \
 			> debian/$(package_wxbase_dbg).$$f;                  \
 	done;
-	@for f in links postinst prerm; do                                   \
+	@for f in postinst prerm; do                                         \
 		echo "generating control file $(package_gtk_dev).$$f";       \
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/libwxgtk-dev.$$f                            \
 			> debian/$(package_gtk_dev).$$f;                     \
 	done;
-	@for f in links postinst prerm; do                                   \
+	@for f in postinst prerm; do                                         \
 		echo "generating control file $(package_gtk_dbg).$$f";       \
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/libwxgtk-dbg.$$f                            \
 			> debian/$(package_gtk_dbg).$$f;                     \
 	done;
 	@for f in docs postinst prerm; do                                    \
 		echo "generating control file $(package_gtk_py_lib).$$f";    \
-		sed -e 's/=PY/$(python_ver)/g;                               \
-			s|=WXPYDIR|$(wxpydir)|g;                             \
-			s/=V/$(release)/g;                                   \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=PY/$(python_ver)/g;                              '\
+'			s|=WXPYDIR|$(wxpydir)|g;                            '\
+'			s/=V/$(release)/g;                                  '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/python-wxgtk.$$f                            \
 			> debian/$(package_gtk_py_lib).$$f;                  \
 	done;
 	@for f in postinst prerm; do                                         \
 		echo "generating control file $(package_gtk_dbg_py).$$f";    \
-		sed -e 's/=PY/$(python_ver)/g;                               \
-			s/=V/$(release)/g;                                   \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=PY/$(python_ver)/g;                              '\
+'			s/=V/$(release)/g;                                  '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/python-wxgtk-dbg.$$f                        \
 			> debian/$(package_gtk_dbg_py).$$f;                  \
 	done;
@@ -253,35 +260,35 @@ control-files-stamp: debian/control
 		echo "generating control file $(package_examples).$$f";      \
 		cp debian/wx-examples.$$f debian/$(package_examples).$$f;    \
 	done;
-	@for f in dirs links postinst prerm; do                              \
+	@for f in dirs postinst prerm; do                                    \
 		echo "generating control file $(package_wxbase_msw_dev).$$f";\
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=H/$(cross_host)/g;                                \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=H/$(cross_host)/g;                               '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/libwxbase-msw-dev.$$f                       \
 			> debian/$(package_wxbase_msw_dev).$$f;              \
 	done;
-	@for f in dirs links postinst prerm; do                              \
+	@for f in dirs postinst prerm; do                                    \
 		echo "generating control file $(package_wxbase_msw_dbg).$$f";\
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=H/$(cross_host)/g;                                \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=H/$(cross_host)/g;                               '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/libwxbase-msw-dbg.$$f                       \
 			> debian/$(package_wxbase_msw_dbg).$$f;              \
 	done;
-	@for f in dirs links postinst prerm; do                              \
+	@for f in dirs postinst prerm; do                                    \
 		echo "generating control file $(package_msw_dev).$$f";       \
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=H/$(cross_host)/g;                                \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=H/$(cross_host)/g;                               '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/libwxmsw-dev.$$f                            \
 			> debian/$(package_msw_dev).$$f;                     \
 	done;
-	@for f in dirs links postinst prerm; do                              \
+	@for f in dirs postinst prerm; do                                    \
 		echo "generating control file $(package_msw_dbg).$$f";       \
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=H/$(cross_host)/g;                                \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=H/$(cross_host)/g;                               '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/libwxmsw-dbg.$$f                            \
 			> debian/$(package_msw_dbg).$$f;                     \
 	done;
@@ -292,8 +299,8 @@ control-files-stamp: debian/control
 			> debian/$(package_headers_msw).$$f;                 \
 	done;
 	@echo "generating control file lintian-override";                    \
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=SOV/$(sorelease)/g'                               \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=SOV/$(sorelease)/g'                               \
 			< debian/lintian-override.in                         \
 			> debian/lintian-override;                           \
 	touch $@
@@ -646,6 +653,8 @@ install-wxbase-dev: build-wxbase-shared-stamp
 	dh_clean -k
 	dh_install $(objdir_wxbase_shared)/wxbase-$(release)-config 	usr/bin
 	dh_install $(objdir_wxbase_shared)/lib/{wx,*.so} 		usr/lib
+	dh_link usr/share/man/man1/wx-xy-config.1.gz		\
+		usr/share/man/man1/wxbase-$(release)-config.1.gz
 
 install-wxbase-dbg: DH_OPTIONS=-p$(package_wxbase_dbg)
 install-wxbase-dbg: build-wxbase-debug-stamp
@@ -656,6 +665,8 @@ install-wxbase-dbg: build-wxbase-debug-stamp
 	dh_install $(objdir_wxbase_debug)/lib 				usr
 	dh_installdirs usr/share/lintian/overrides
 	cp debian/lintian-override debian/$(package_wxbase_dbg)/usr/share/lintian/overrides/$(package_wxbase_dbg)
+	dh_link usr/share/man/man1/wx-xy-config.1.gz		\
+		usr/share/man/man1/wxbased-$(release)-config.1.gz
 
 install-gtk-shared-stamp:
 	dh_testdir
@@ -680,6 +691,8 @@ install-gtk-dev: install-gtk-shared-stamp
 	dh_clean -k
 	dh_install $(objdir_gtk_install)/bin/wxgtk-$(release)-config 	usr/bin
 	dh_install $(objdir_gtk_install)/lib/{wx,*.so} 			usr/lib
+	dh_link usr/share/man/man1/wx-xy-config.1.gz		\
+		usr/share/man/man1/wxgtk-$(release)-config.1.gz
 
 install-gtk-dbg: DH_OPTIONS=-p$(package_gtk_dbg)
 install-gtk-dbg: build-gtk-debug-stamp
@@ -690,6 +703,8 @@ install-gtk-dbg: build-gtk-debug-stamp
 	dh_install $(objdir_gtk_debug)/lib 				usr
 	dh_installdirs usr/share/lintian/overrides
 	cp debian/lintian-override debian/$(package_gtk_dbg)/usr/share/lintian/overrides/$(package_gtk_dbg)
+	dh_link usr/share/man/man1/wx-xy-config.1.gz		\
+		usr/share/man/man1/wxgtkd-$(release)-config.1.gz
 
 install-gtk-contrib-stamp:
 	dh_testdir
@@ -804,6 +819,7 @@ install-headers: install-gtk-shared-stamp
 	dh_clean -k
 
 	dh_install $(objdir_gtk_install)/include 	usr
+	dh_installman debian/wx-xy-config.1
 
 
 install-i18n: DH_OPTIONS=-p$(package_i18n)

@@ -83,7 +83,8 @@ wxSoundStream& wxSoundStreamOSS::Read(void *buffer, wxUint32 len)
         return *this;
     }
     
-    m_lastcount = (wxUint32)ret = read(m_fd, buffer, len);
+    ret = read(m_fd, buffer, len);
+    m_lastcount = (wxUint32)ret;
     m_q_filled  = TRUE;
     
     if (ret < 0)
