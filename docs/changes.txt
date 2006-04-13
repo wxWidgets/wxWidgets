@@ -13,6 +13,11 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
 - wxCHECK family of macros now must be followed by a semicolon
 - wxMBConv::cMB2WC() and cWC2MB() take size of the input buffer and return
   length of the converted string in all cases now.
+- wxHtmlWindow::OnCellClicked() now returns bool.
+- wxHtmlCell::OnMouseClick() was deprecated and replaced with
+  wxHtmlCell::ProcessMouseClick(); old code overriding OnMouseClick() will
+  continue to work with WXWIN_COMPATIBILITY_2_6, but should be rewritten to
+  use ProcessMouseClick().
 
 
 Deprecated methods since 2.6.x and their replacements
@@ -111,6 +116,8 @@ All (GUI):
 - Added wxListBox::HitTest().
 - Added wxDisplay::GetClientArea().
 - Indices and counts in wxControlWithItems derived API are unsigned.
+- Added support for links to wxHtmlListBox; use code has to override
+  wxHtmlListBox::OnLinkClicked() to take advantage of it.
 
 wxMSW:
 

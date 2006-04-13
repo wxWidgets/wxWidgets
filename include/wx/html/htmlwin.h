@@ -38,13 +38,161 @@ class WXDLLIMPEXP_HTML wxHtmlWinAutoScrollTimer;
 
 #define wxHW_DEFAULT_STYLE      wxHW_SCROLLBAR_AUTO
 
-
-// enums for wxHtmlWindow::OnOpeningURL
+/// Enum for wxHtmlWindow::OnOpeningURL and wxHtmlWindowInterface::OnOpeningURL
 enum wxHtmlOpeningStatus
 {
+    /// Open the requested URL
     wxHTML_OPEN,
+    /// Do not open the URL
     wxHTML_BLOCK,
+    /// Redirect to another URL (returned from OnOpeningURL)
     wxHTML_REDIRECT
+};
+
+/**
+    Abstract interface to a HTML rendering window (such as wxHtmlWindow or
+    wxHtmlListBox) that is passed to wxHtmlWinParser. It encapsulates all
+    communication from the parser to the window.
+ */
+class WXDLLIMPEXP_HTML wxHtmlWindowInterface
+{
+public:
+    /// Ctor
+    wxHtmlWindowInterface() {}
+    virtual ~wxHtmlWindowInterface() {}
+
+    /**
+        Called by the parser to set window's title to given text.
+     */
+    virtual void SetHTMLWindowTitle(const wxString& title) = 0;
+
+    /**
+        Called when a link is clicked.
+
+        @param link information about the clicked link
+     */
+    virtual void OnHTMLLinkClicked(const wxHtmlLinkInfo& link) = 0;
+
+    /**
+        Called when the parser needs to open another URL (e.g. an image).
+
+        @param type     Type of the URL request (e.g. image)
+        @param url      URL the parser wants to open
+        @param redirect If the return value is wxHTML_REDIRECT, then the
+                        URL to redirect to will be stored in this variable
+                        (the pointer must never be NULL)
+
+        @return indicator of how to treat the request
+     */
+    virtual wxHtmlOpeningStatus OnHTMLOpeningURL(wxHtmlURLType type,
+                                                 const wxString& url,
+                                                 wxString *redirect) const = 0;
+
+    /**
+        Converts coordinates @a pos relative to given @a cell to
+        physical coordinates in the window.
+     */
+    virtual wxPoint HTMLCoordsToWindow(wxHtmlCell *cell,
+                                       const wxPoint& pos) const = 0;
+
+    /// Returns the window used for rendering (may be NULL).
+    virtual wxWindow* GetHTMLWindow() = 0;
+
+    /// Returns background colour to use by default.
+    virtual wxColour GetHTMLBackgroundColour() const = 0;
+
+    /// Sets window's background to colour @a clr.
+    virtual void SetHTMLBackgroundColour(const wxColour& clr) = 0;
+
+    /// Sets window's background to given bitmap.
+    virtual void SetHTMLBackgroundImage(const wxBitmap& bmpBg) = 0;
+
+    /// Sets status bar text.
+    virtual void SetHTMLStatusText(const wxString& text) = 0;
+};
+
+/**
+    Helper class that implements part of mouse handling for wxHtmlWindow and
+    wxHtmlListBox. Cursor changes and clicking on links are handled, text
+    selection is not.
+ */
+class WXDLLIMPEXP_HTML wxHtmlWindowMouseHelper
+{
+public:
+    /**
+        Ctor.
+
+        @param iface Interface to the owner window.
+     */
+    wxHtmlWindowMouseHelper(wxHtmlWindowInterface *iface);
+
+    /// Returns true if the mouse moved since the last call to HandleIdle
+    bool DidMouseMove() const { return m_tmpMouseMoved; }
+
+    /// Call this from EVT_MOTION event handler
+    void HandleMouseMoved();
+
+    /**
+        Call this from EVT_LEFT_UP handler (or, alternatively, EVT_LEFT_DOWN).
+
+        @param rootCell HTML cell inside which the click occured. This doesn't
+                        have to be the leaf cell, it can be e.g. toplevel
+                        container, but the mouse must be inside the container's
+                        area, otherwise the event would be ignored.
+        @param pos      Mouse position in coordinates relative to @a cell
+        @param event    The event that triggered the call
+     */
+    bool HandleMouseClick(wxHtmlCell *rootCell,
+                          const wxPoint& pos, const wxMouseEvent& event);
+
+    /**
+        Call this from OnInternalIdle of the HTML displaying window. Handles
+        mouse movements and must be used together with HandleMouseMoved.
+
+        @param rootCell HTML cell inside which the click occured. This doesn't
+                        have to be the leaf cell, it can be e.g. toplevel
+                        container, but the mouse must be inside the container's
+                        area, otherwise the event would be ignored.
+        @param pos      Current mouse position in coordinates relative to
+                        @a cell
+     */
+    void HandleIdle(wxHtmlCell *rootCell, const wxPoint& pos);
+
+    /**
+        Called by HandleIdle when the mouse hovers over a cell. Default
+        behaviour is to do nothing.
+
+        @param cell   the cell the mouse is over
+        @param x, y   coordinates of mouse relative to the cell
+     */
+    virtual void OnCellMouseHover(wxHtmlCell *cell, wxCoord x, wxCoord y);
+
+    /**
+        Called by HandleMouseClick when the user clicks on a cell.
+        Default behavior is to call wxHtmlWindowInterface::OnLinkClicked()
+        if this cell corresponds to a hypertext link.
+
+        @param cell   the cell the mouse is over
+        @param x, y   coordinates of mouse relative to the cell
+        @param event    The event that triggered the call
+
+
+        @return true if a link was clicked, false otherwise.
+     */
+    virtual bool OnCellClicked(wxHtmlCell *cell,
+                               wxCoord x, wxCoord y,
+                               const wxMouseEvent& event);
+
+protected:
+    // this flag indicates if the mouse moved (used by HandleIdle)
+    bool m_tmpMouseMoved;
+    // contains last link name
+    wxHtmlLinkInfo *m_tmpLastLink;
+    // contains the last (terminal) cell which contained the mouse
+    wxHtmlCell *m_tmpLastCell;
+
+private:
+    wxHtmlWindowInterface *m_interface;
 };
 
 // ----------------------------------------------------------------------------
@@ -58,18 +206,21 @@ enum wxHtmlOpeningStatus
 //                  SetPage(text) or LoadPage(filename).
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_HTML wxHtmlWindow : public wxScrolledWindow
+class WXDLLIMPEXP_HTML wxHtmlWindow : public wxScrolledWindow,
+                                      public wxHtmlWindowInterface,
+                                      private wxHtmlWindowMouseHelper
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlWindow)
     friend class wxHtmlWinModule;
 
 public:
-    wxHtmlWindow() { Init(); }
+    wxHtmlWindow() : wxHtmlWindowMouseHelper(this) { Init(); }
     wxHtmlWindow(wxWindow *parent, wxWindowID id = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxHW_DEFAULT_STYLE,
                  const wxString& name = wxT("htmlWindow"))
+        : wxHtmlWindowMouseHelper(this)
     {
         Init();
         Create(parent, id, pos, size, style, name);
@@ -178,16 +329,6 @@ public:
     // (depending on the information passed to SetRelatedFrame() method)
     virtual void OnSetTitle(const wxString& title);
 
-    // Called when the mouse hovers over a cell: (x, y) are logical coords
-    // Default behaviour is to do nothing at all
-    virtual void OnCellMouseHover(wxHtmlCell *cell, wxCoord x, wxCoord y);
-
-    // Called when user clicks on a cell. Default behavior is to call
-    // OnLinkClicked() if this cell corresponds to a hypertext link
-    virtual void OnCellClicked(wxHtmlCell *cell,
-                               wxCoord x, wxCoord y,
-                               const wxMouseEvent& event);
-
     // Called when user clicked on hypertext link. Default behavior is to
     // call LoadPage(loc)
     virtual void OnLinkClicked(const wxHtmlLinkInfo& link);
@@ -215,6 +356,7 @@ public:
 #endif // wxUSE_CLIPBOARD
 
     virtual void OnInternalIdle();
+
 
 protected:
     void Init();
@@ -272,6 +414,20 @@ protected:
     wxString DoSelectionToText(wxHtmlSelection *sel);
 
 private:
+    // wxHtmlWindowInterface methods:
+    virtual void SetHTMLWindowTitle(const wxString& title);
+    virtual void OnHTMLLinkClicked(const wxHtmlLinkInfo& link);
+    virtual wxHtmlOpeningStatus OnHTMLOpeningURL(wxHtmlURLType type,
+                                                 const wxString& url,
+                                                 wxString *redirect) const;
+    virtual wxPoint HTMLCoordsToWindow(wxHtmlCell *cell,
+                                       const wxPoint& pos) const;
+    virtual wxWindow* GetHTMLWindow();
+    virtual wxColour GetHTMLBackgroundColour() const;
+    virtual void SetHTMLBackgroundColour(const wxColour& clr);
+    virtual void SetHTMLBackgroundImage(const wxBitmap& bmpBg);
+    virtual void SetHTMLStatusText(const wxString& text);
+
     // implementation of SetPage()
     bool DoSetPage(const wxString& source);
 
@@ -333,10 +489,6 @@ private:
     wxPoint     m_tmpSelFromPos;
     wxHtmlCell *m_tmpSelFromCell;
 
-    // contains last link name
-    wxHtmlLinkInfo *m_tmpLastLink;
-    // contains the last (terminal) cell which contained the mouse
-    wxHtmlCell *m_tmpLastCell;
     // if >0 contents of the window is not redrawn
     // (in order to avoid ugly blinking)
     int m_tmpCanDrawLocks;
@@ -355,10 +507,6 @@ private:
     int m_HistoryPos;
     // if this FLAG is false, items are not added to history
     bool m_HistoryOn;
-
-    // a flag indicated if mouse moved
-    // (if true we will try to change cursor in last call to OnIdle)
-    bool m_tmpMouseMoved;
 
     // a flag set if we need to erase background in OnPaint() (otherwise this
     // is supposed to have been done in OnEraseBackground())

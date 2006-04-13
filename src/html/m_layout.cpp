@@ -289,21 +289,19 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
 
     TAG_HANDLER_PROC(tag)
     {
-        if (m_WParser->GetWindow())
+        wxHtmlWindowInterface *winIface = m_WParser->GetWindowInterface();
+        if (winIface)
         {
-            wxHtmlWindow *wfr = (wxHtmlWindow*)(m_WParser->GetWindow());
-            if (wfr)
-            {
-                wxString title = m_WParser->GetSource()->Mid(
-                                        tag.GetBeginPos(),
-                                        tag.GetEndPos1()-tag.GetBeginPos());
+            wxString title = m_WParser->GetSource()->Mid(
+                                    tag.GetBeginPos(),
+                                    tag.GetEndPos1()-tag.GetBeginPos());
 #if !wxUSE_UNICODE && wxUSE_WCHAR_T
-                wxCSConv conv(m_WParser->GetInputEncoding());
-                title = wxString(title.wc_str(conv), wxConvLocal);
+            wxCSConv conv(m_WParser->GetInputEncoding());
+            title = wxString(title.wc_str(conv), wxConvLocal);
 #endif
-                title = m_WParser->GetEntitiesParser()->Parse(title);
-                wfr->OnSetTitle(title);
-            }
+            title = m_WParser->GetEntitiesParser()->Parse(title);
+
+            winIface->SetHTMLWindowTitle(title);
         }
         return true;
     }
@@ -329,6 +327,11 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
         if (tag.GetParamAsColour(wxT("LINK"), &clr))
             m_WParser->SetLinkColor(clr);
 
+        wxHtmlWindowInterface *winIface = m_WParser->GetWindowInterface();
+        // the rest of this function requires a window:
+        if ( !winIface )
+            return false;
+
         if (tag.HasParam(wxT("BACKGROUND")))
         {
             wxFSFile *fileBgImage = m_WParser->OpenURL
@@ -344,8 +347,8 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
 #if !defined(__WXMSW__) || wxUSE_WXDIB
                     wxImage image(*is);
                     if ( image.Ok() )
-                        m_WParser->GetWindow()->SetBackgroundImage(image);
-#endif                    
+                        winIface->SetHTMLBackgroundImage(image);
+#endif
                 }
             }
         }
@@ -354,8 +357,7 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
         {
             m_WParser->GetContainer()->InsertCell(
                 new wxHtmlColourCell(clr, wxHTML_CLR_BACKGROUND));
-            if (m_WParser->GetWindow() != NULL)
-                m_WParser->GetWindow()->SetBackgroundColour(clr);
+            winIface->SetHTMLBackgroundColour(clr);
         }
 
         return false;

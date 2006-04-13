@@ -77,6 +77,8 @@ protected:
     virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
     virtual wxColour GetSelectedTextColour(const wxColour& colFg) const;
 
+    // override this method to handle mouse clicks
+    virtual void OnLinkClicked(size_t n, const wxHtmlLinkInfo& link);
 
     // flag telling us whether we should use fg colour even for the selected
     // item
@@ -85,6 +87,9 @@ protected:
     // flag which we toggle to update the first items text in OnGetItem()
     bool m_firstItemUpdated;
 
+    // flag which we toggle when the user clicks on the link in 2nd item
+    // to change 2nd item's text
+    bool m_linkClicked;
 
 
 #ifdef USE_HTML_FILE
@@ -423,6 +428,7 @@ MyHtmlListBox::MyHtmlListBox(wxWindow *parent, bool multi)
 {
     m_change = true;
     m_firstItemUpdated = false;
+    m_linkClicked = false;
 
 
     SetMargins(5, 5);
@@ -469,14 +475,23 @@ wxString MyHtmlListBox::OnGetItem(size_t n) const
     return s;
 #else
     int level = n % 6 + 1;
-    return wxString::Format(_T("<h%d><font color=#%2x%2x%2x>")
-                            _T("Item</font> <b>%lu</b>")
-                            _T("</h%d>"),
-                            level,
-                            abs((int)n - 192) % 256,
-                            abs((int)n - 256) % 256,
-                            abs((int)n - 128) % 256,
-                            (unsigned long)n, level);
+    wxString label = wxString::Format(_T("<h%d><font color=#%2x%2x%2x>")
+                                      _T("Item</font> <b>%lu</b>")
+                                      _T("</h%d>"),
+                                      level,
+                                      abs((int)n - 192) % 256,
+                                      abs((int)n - 256) % 256,
+                                      abs((int)n - 128) % 256,
+                                      (unsigned long)n, level);
+    if ( n == 1 )
+    {
+        if ( !m_linkClicked )
+            label += _T("<a href='1'>Click here...</a>");
+        else
+            label += _T("<font color='#9999ff'>Clicked here...</font>");
+    }
+
+    return label;
 #endif
 }
 
@@ -492,3 +507,10 @@ void MyHtmlListBox::UpdateFirstItem()
     RefreshLine(0);
 }
 
+void MyHtmlListBox::OnLinkClicked(size_t WXUNUSED(n),
+                                  const wxHtmlLinkInfo& WXUNUSED(link))
+{
+    m_linkClicked = true;
+
+    RefreshLine(1);
+}

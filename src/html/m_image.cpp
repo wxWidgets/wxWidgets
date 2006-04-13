@@ -286,7 +286,7 @@ const wxHtmlCell *wxHtmlImageMapCell::Find( int cond, const void *param ) const
 class wxHtmlImageCell : public wxHtmlCell
 {
 public:
-    wxHtmlImageCell(wxWindow *window,
+    wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
                     wxFSFile *input, int w = wxDefaultCoord, int h = wxDefaultCoord,
                     double scale = 1.0, int align = wxHTML_ALIGN_BOTTOM,
                     const wxString& mapname = wxEmptyString);
@@ -305,7 +305,7 @@ private:
     wxBitmap           *m_bitmap;
     int                 m_bmpW, m_bmpH;
     bool                m_showFrame:1;
-    wxScrolledWindow   *m_window;
+    wxHtmlWindowInterface *m_windowIface;
 #if wxUSE_GIF && wxUSE_TIMER
     wxGIFDecoder       *m_gifDecoder;
     wxTimer            *m_gifTimer;
@@ -341,11 +341,12 @@ class wxGIFTimer : public wxTimer
 //----------------------------------------------------------------------------
 
 
-wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input,
+wxHtmlImageCell::wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
+                                 wxFSFile *input,
                                  int w, int h, double scale, int align,
                                  const wxString& mapname) : wxHtmlCell()
 {
-    m_window = window ? wxStaticCast(window, wxScrolledWindow) : NULL;
+    m_windowIface = windowIface;
     m_scale = scale;
     m_showFrame = false;
     m_bitmap = NULL;
@@ -370,8 +371,9 @@ wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input,
             {
 #if wxUSE_GIF && wxUSE_TIMER
                 bool readImg = true;
-                if ( (input->GetLocation().Matches(wxT("*.gif")) ||
-                      input->GetLocation().Matches(wxT("*.GIF"))) && m_window )
+                if ( m_windowIface &&
+                     (input->GetLocation().Matches(wxT("*.gif")) ||
+                      input->GetLocation().Matches(wxT("*.GIF"))) )
                 {
                     m_gifDecoder = new wxGIFDecoder(s, true);
                     if ( m_gifDecoder->ReadGIF() == wxGIF_OK )
@@ -492,11 +494,12 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
         }
     }
 
-    int x, y;
-    m_window->CalcScrolledPosition(m_physX, m_physY, &x, &y);
-    wxRect rect(x, y, m_Width, m_Height);
+    wxWindow *win = m_windowIface->GetHTMLWindow();
+    wxPoint pos =
+        m_windowIface->HTMLCoordsToWindow(this, wxPoint(m_physX, m_physY));
+    wxRect rect(pos, wxSize(m_Width, m_Height));
 
-    if ( m_window->GetClientRect().Intersects(rect) &&
+    if ( win->GetClientRect().Intersects(rect) &&
          m_gifDecoder->ConvertToImage(&img) )
     {
 #if !defined(__WXMSW__) || wxUSE_WXDIB
@@ -511,9 +514,9 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
                           true /* use mask */);
         }
         else
-#endif            
+#endif
             SetImage(img);
-        m_window->Refresh(img.HasMask(), &rect);
+        win->Refresh(img.HasMask(), &rect);
     }
 
     timer->Start(m_gifDecoder->GetDelay(), true);
@@ -645,7 +648,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                     }
                 }
                 wxHtmlImageCell *cel = new wxHtmlImageCell(
-                                          m_WParser->GetWindow(),
+                                          m_WParser->GetWindowInterface(),
                                           str, w, h,
                                           m_WParser->GetPixelScale(),
                                           al, mn);

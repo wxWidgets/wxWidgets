@@ -127,3 +127,18 @@ for the given item.
 This function may be overridden to decorate HTML returned by
 \helpref{OnGetItem()}{wxhtmllistboxongetitem}.
 
+\membersection{wxHtmlListBox::OnLinkClicked}\label{wxhtmlistboxonlinkclicked}
+
+\func{virtual void}{OnLinkClicked}{\param{size\_t }{n}, \param{const wxHtmlLinkInfo\& }{link}}
+
+Called when the user clicks on hypertext link. Does nothing by default.
+
+\wxheading{Parameters}
+
+\docparam{n}{Index of the item containing the link.}
+
+\docparam{link}{Description of the link.}
+
+\wxheading{See also}
+
+See also \helpref{wxHtmlLinkInfo}{wxhtmllinkinfo}.

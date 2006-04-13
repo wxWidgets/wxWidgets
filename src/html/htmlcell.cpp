@@ -117,19 +117,85 @@ void wxHtmlCell::SetScriptMode(wxHtmlScriptMode mode, long previousBase)
     m_Descent += m_ScriptBaseline;
 }
 
-void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
-                              const wxMouseEvent& event)
+#if WXWIN_COMPATIBILITY_2_6
+
+struct wxHtmlCellOnMouseClickCompatHelper;
+
+static wxHtmlCellOnMouseClickCompatHelper *gs_helperOnMouseClick = NULL;
+
+// helper for routing calls to new ProcessMouseClick() method to deprecated
+// OnMouseClick() method
+struct wxHtmlCellOnMouseClickCompatHelper
 {
-    wxHtmlLinkInfo *lnk = GetLink(x, y);
-    if (lnk != NULL)
+    wxHtmlCellOnMouseClickCompatHelper(wxHtmlWindowInterface *window_,
+                                       const wxPoint& pos_,
+                                       const wxMouseEvent& event_)
+        : window(window_), pos(pos_), event(event_), retval(false)
+    {
+    }
+
+    bool CallOnMouseClick(wxHtmlCell *cell)
+    {
+        wxHtmlCellOnMouseClickCompatHelper *oldHelper = gs_helperOnMouseClick;
+        gs_helperOnMouseClick = this;
+        cell->OnMouseClick
+              (
+                window ? window->GetHTMLWindow() : NULL,
+                pos.x, pos.y,
+                event
+              );
+        gs_helperOnMouseClick = oldHelper;
+        return retval;
+    }
+
+    wxHtmlWindowInterface *window;
+    const wxPoint& pos;
+    const wxMouseEvent& event;
+    bool retval;
+};
+#endif // WXWIN_COMPATIBILITY_2_6
+
+bool wxHtmlCell::ProcessMouseClick(wxHtmlWindowInterface *window,
+                                   const wxPoint& pos,
+                                   const wxMouseEvent& event)
+{
+    wxCHECK_MSG( window, false, _T("window interface must be provided") );
+
+#if WXWIN_COMPATIBILITY_2_6
+    // NB: this hack puts the body of ProcessMouseClick() into OnMouseClick()
+    //     (for which it has to pass the arguments and return value via a
+    //     helper variable because these two methods have different
+    //     signatures), so that old code overriding OnMouseClick will continue
+    //     to work
+    wxHtmlCellOnMouseClickCompatHelper compat(window, pos, event);
+    return compat.CallOnMouseClick(this);
+}
+
+void wxHtmlCell::OnMouseClick(wxWindow *, int, int, const wxMouseEvent& event)
+{
+    wxCHECK_RET( gs_helperOnMouseClick, _T("unexpected call to OnMouseClick") );
+    wxHtmlWindowInterface *window = gs_helperOnMouseClick->window;
+    const wxPoint& pos = gs_helperOnMouseClick->pos;
+#endif // WXWIN_COMPATIBILITY_2_6
+
+    wxHtmlLinkInfo *lnk = GetLink(pos.x, pos.y);
+    bool retval = false;
+
+    if (lnk)
     {
         wxHtmlLinkInfo lnk2(*lnk);
         lnk2.SetEvent(&event);
         lnk2.SetHtmlCell(this);
 
-        // note : this cast is legal because parent is *always* wxHtmlWindow
-        wxStaticCast(parent, wxHtmlWindow)->OnLinkClicked(lnk2);
+        window->OnHTMLLinkClicked(lnk2);
+        retval = true;
     }
+
+#if WXWIN_COMPATIBILITY_2_6
+    gs_helperOnMouseClick->retval = retval;
+#else
+    return retval;
+#endif // WXWIN_COMPATIBILITY_2_6
 }
 
 
@@ -203,15 +269,24 @@ wxHtmlCell *wxHtmlCell::FindCellByPos(wxCoord x, wxCoord y,
 }
 
 
-wxPoint wxHtmlCell::GetAbsPos() const
+wxPoint wxHtmlCell::GetAbsPos(wxHtmlCell *rootCell) const
 {
     wxPoint p(m_PosX, m_PosY);
-    for (wxHtmlCell *parent = m_Parent; parent; parent = parent->m_Parent)
+    for (wxHtmlCell *parent = m_Parent; parent && parent != rootCell;
+         parent = parent->m_Parent)
     {
         p.x += parent->m_PosX;
         p.y += parent->m_PosY;
     }
     return p;
+}
+
+wxHtmlCell *wxHtmlCell::GetRootCell() const
+{
+    wxHtmlCell *c = wxConstCast(this, wxHtmlCell);
+    while ( c->m_Parent )
+        c = c->m_Parent;
+    return c;
 }
 
 unsigned wxHtmlCell::GetDepth() const
@@ -1150,13 +1225,34 @@ wxHtmlCell *wxHtmlContainerCell::FindCellByPos(wxCoord x, wxCoord y,
 }
 
 
-void wxHtmlContainerCell::OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event)
+bool wxHtmlContainerCell::ProcessMouseClick(wxHtmlWindowInterface *window,
+                                            const wxPoint& pos,
+                                            const wxMouseEvent& event)
 {
-    wxHtmlCell *cell = FindCellByPos(x, y);
-    if ( cell )
-        cell->OnMouseClick(parent, x, y, event);
+#if WXWIN_COMPATIBILITY_2_6
+    wxHtmlCellOnMouseClickCompatHelper compat(window, pos, event);
+    return compat.CallOnMouseClick(this);
 }
 
+void wxHtmlContainerCell::OnMouseClick(wxWindow*,
+                                       int, int, const wxMouseEvent& event)
+{
+    wxCHECK_RET( gs_helperOnMouseClick, _T("unexpected call to OnMouseClick") );
+    wxHtmlWindowInterface *window = gs_helperOnMouseClick->window;
+    const wxPoint& pos = gs_helperOnMouseClick->pos;
+#endif // WXWIN_COMPATIBILITY_2_6
+
+    bool retval = false;
+    wxHtmlCell *cell = FindCellByPos(pos.x, pos.y);
+    if ( cell )
+        retval = cell->ProcessMouseClick(window, pos, event);
+
+#if WXWIN_COMPATIBILITY_2_6
+    gs_helperOnMouseClick->retval = retval;
+#else
+    return retval;
+#endif // WXWIN_COMPATIBILITY_2_6
+}
 
 
 wxHtmlCell *wxHtmlContainerCell::GetFirstTerminal() const

@@ -32,10 +32,12 @@ The product of parsing is a wxHtmlCell (resp. wxHtmlContainer) object.
 
 \func{}{wxHtmlWinParser}{\void}
 
-\func{}{wxHtmlWinParser}{\param{wxHtmlWindow }{*wnd}}
+\func{}{wxHtmlWinParser}{\param{wxHtmlWindowInterface }{*wndIface}}
 
 Constructor. Don't use the default one, use constructor with
-{\it wnd} parameter ({\it wnd} is pointer to associated \helpref{wxHtmlWindow}{wxhtmlwindow})
+{\it wndIface} parameter ({\it wndIface} is a pointer to interface object for
+the associated \helpref{wxHtmlWindow}{wxhtmlwindow} or other HTML rendering
+window such as \helpref{wxHtmlListBox}{wxhtmllistbox}).
 
 \membersection{wxHtmlWinParser::AddModule}\label{wxhtmlwinparseraddmodule}
 

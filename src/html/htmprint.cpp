@@ -45,7 +45,7 @@ wxHtmlDCRenderer::wxHtmlDCRenderer() : wxObject()
     m_DC = NULL;
     m_Width = m_Height = 0;
     m_Cells = NULL;
-    m_Parser = new wxHtmlWinParser(NULL);
+    m_Parser = new wxHtmlWinParser();
     m_FS = new wxFileSystem();
     m_Parser->SetFS(m_FS);
 }

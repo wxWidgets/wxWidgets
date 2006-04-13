@@ -13,6 +13,7 @@
 #define _WX_HTMLLBOX_H_
 
 #include "wx/vlbox.h"               // base class
+#include "wx/html/htmlwin.h"
 
 #if wxUSE_FILESYSTEM
     #include "wx/filesys.h"
@@ -27,7 +28,9 @@ class WXDLLIMPEXP_HTML wxHtmlListBoxStyle;
 // wxHtmlListBox
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_HTML wxHtmlListBox : public wxVListBox
+class WXDLLIMPEXP_HTML wxHtmlListBox : public wxVListBox,
+                                       public wxHtmlWindowInterface,
+                                       private wxHtmlWindowMouseHelper
 {
     DECLARE_ABSTRACT_CLASS(wxHtmlListBox)
 public:
@@ -35,7 +38,7 @@ public:
     // ---------------------
 
     // default constructor, you must call Create() later
-    wxHtmlListBox() { Init(); }
+    wxHtmlListBox();
 
     // normal constructor which calls Create() internally
     wxHtmlListBox(wxWindow *parent,
@@ -43,12 +46,7 @@ public:
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
                   long style = 0,
-                  const wxString& name = wxVListBoxNameStr)
-    {
-        Init();
-
-        (void)Create(parent, id, pos, size, style, name);
-    }
+                  const wxString& name = wxVListBoxNameStr);
 
     // really creates the control and sets the initial number of items in it
     // (which may be changed later with SetItemCount())
@@ -80,6 +78,8 @@ public:
     const wxFileSystem& GetFileSystem() const { return m_filesystem; }
 #endif // wxUSE_FILESYSTEM
 
+    virtual void OnInternalIdle();
+
 protected:
     // this method must be implemented in the derived class and should return
     // the body (i.e. without <html>) of the HTML for the given item
@@ -108,9 +108,15 @@ protected:
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
     virtual wxCoord OnMeasureItem(size_t n) const;
 
+    // This method may be overriden to handle clicking on a link in
+    // the listbox. By default, clicking links is ignored.
+    virtual void OnLinkClicked(size_t WXUNUSED(n),
+                               const wxHtmlLinkInfo& WXUNUSED(link)) {}
 
     // event handlers
     void OnSize(wxSizeEvent& event);
+    void OnMouseMove(wxMouseEvent& event);
+    void OnLeftDown(wxMouseEvent& event);
 
 
     // common part of all ctors
@@ -118,6 +124,38 @@ protected:
 
     // ensure that the given item is cached
     void CacheItem(size_t n) const;
+
+private:
+    // wxHtmlWindowInterface methods:
+    virtual void SetHTMLWindowTitle(const wxString& title);
+    virtual void OnHTMLLinkClicked(const wxHtmlLinkInfo& link);
+    virtual wxHtmlOpeningStatus OnHTMLOpeningURL(wxHtmlURLType type,
+                                                 const wxString& url,
+                                                 wxString *redirect) const;
+    virtual wxPoint HTMLCoordsToWindow(wxHtmlCell *cell,
+                                       const wxPoint& pos) const;
+    virtual wxWindow* GetHTMLWindow();
+    virtual wxColour GetHTMLBackgroundColour() const;
+    virtual void SetHTMLBackgroundColour(const wxColour& clr);
+    virtual void SetHTMLBackgroundImage(const wxBitmap& bmpBg);
+    virtual void SetHTMLStatusText(const wxString& text);
+
+    // returns index of item that contains given HTML cell
+    size_t GetItemForCell(const wxHtmlCell *cell) const;
+
+    // return physical coordinates of root wxHtmlCell of n-th item
+    wxPoint GetRootCellCoords(size_t n) const;
+
+    // Converts physical coordinates stored in @a pos into coordinates
+    // relative to the root cell of the item under mouse cursor, if any. If no
+    // cell is found under the cursor, returns false.  Otherwise stores the new
+    // coordinates back into @a pos and pointer to the cell under cursor into
+    // @a cell and returns true.
+    bool PhysicalCoordsToCell(wxPoint& pos, wxHtmlCell*& cell) const;
+
+    // The opposite of PhysicalCoordsToCell: converts coordinates relative to
+    // given cell to physical coordinates in the window
+    wxPoint CellCoordsToPhysical(const wxPoint& pos, wxHtmlCell *cell) const;
 
 private:
     // this class caches the pre-parsed HTML to speed up display
@@ -137,6 +175,7 @@ private:
 
     // it calls our GetSelectedTextColour() and GetSelectedTextBgColour()
     friend class wxHtmlListBoxStyle;
+    friend class wxHtmlListBoxWinInterface;
 
 
     DECLARE_EVENT_TABLE()

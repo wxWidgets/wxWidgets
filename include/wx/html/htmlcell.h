@@ -20,6 +20,7 @@
 #include "wx/window.h"
 
 
+class WXDLLIMPEXP_HTML wxHtmlWindowInterface;
 class WXDLLIMPEXP_HTML wxHtmlLinkInfo;
 class WXDLLIMPEXP_HTML wxHtmlCell;
 class WXDLLIMPEXP_HTML wxHtmlContainerCell;
@@ -244,12 +245,23 @@ public:
     //   returns pointer to anchor news
     virtual const wxHtmlCell* Find(int condition, const void* param) const;
 
+
     // This function is called when mouse button is clicked over the cell.
+    // Returns true if a link is clicked, false otherwise.
     //
-    // Parent is pointer to wxHtmlWindow that generated the event
+    // 'window' is pointer to wxHtmlWindowInterface of the window which
+    // generated the event.
     // HINT: if this handling is not enough for you you should use
     //       wxHtmlWidgetCell
-    virtual void OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event);
+    virtual bool ProcessMouseClick(wxHtmlWindowInterface *window,
+                                   const wxPoint& pos,
+                                   const wxMouseEvent& event);
+
+#if WXWIN_COMPATIBILITY_2_6
+    // this was replaced by ProcessMouseClick, don't use in new code!
+    virtual void OnMouseClick(wxWindow *window,
+                              int x, int y, const wxMouseEvent& event);
+#endif
 
     // This method used to adjust pagebreak position. The parameter is variable
     // that contains y-coordinate of page break (= horizontal line that should
@@ -283,8 +295,14 @@ public:
     virtual wxHtmlCell *FindCellByPos(wxCoord x, wxCoord y,
                                   unsigned flags = wxHTML_FIND_EXACT) const;
 
-    // Returns absolute position of the cell on HTML canvas
-    wxPoint GetAbsPos() const;
+    // Returns absolute position of the cell on HTML canvas.
+    // If rootCell is provided, then it's considered to be the root of the
+    // hierarchy and the returned value is relative to it.
+    wxPoint GetAbsPos(wxHtmlCell *rootCell = NULL) const;
+
+    // Returns root cell of the hierarchy (i.e. grand-grand-...-parent that
+    // doesn't have a parent itself)
+    wxHtmlCell *GetRootCell() const;
 
     // Returns first (last) terminal cell inside this cell. It may return NULL,
     // but it is rare -- only if there are no terminals in the tree.
@@ -424,7 +442,15 @@ public:
     void SetBorder(const wxColour& clr1, const wxColour& clr2) {m_UseBorder = true; m_BorderColour1 = clr1, m_BorderColour2 = clr2;}
     virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const;
     virtual const wxHtmlCell* Find(int condition, const void* param) const;
-    virtual void OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event);
+
+#if WXWIN_COMPATIBILITY_2_6
+    // this was replaced by ProcessMouseClick, don't use in new code!
+    virtual void OnMouseClick(wxWindow *window,
+                              int x, int y, const wxMouseEvent& event);
+#endif
+    virtual bool ProcessMouseClick(wxHtmlWindowInterface *window,
+                                   const wxPoint& pos,
+                                   const wxMouseEvent& event);
 
     virtual wxHtmlCell* GetFirstChild() const { return m_Cells; }
 #if WXWIN_COMPATIBILITY_2_4

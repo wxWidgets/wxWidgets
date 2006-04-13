@@ -197,7 +197,7 @@ false if an error occurred, true otherwise
 
 \membersection{wxHtmlWindow::OnCellClicked}\label{wxhtmlwindowoncellclicked}
 
-\func{virtual void}{OnCellClicked}{\param{wxHtmlCell }{*cell}, \param{wxCoord }{x}, \param{wxCoord }{y}, \param{const wxMouseEvent\& }{event}}
+\func{virtual bool}{OnCellClicked}{\param{wxHtmlCell }{*cell}, \param{wxCoord }{x}, \param{wxCoord }{y}, \param{const wxMouseEvent\& }{event}}
 
 This method is called when a mouse button is clicked inside wxHtmlWindow.
 The default behaviour is to call 
@@ -212,6 +212,10 @@ hypertext link.
 \docparam{x, y}{The logical coordinates of the click point}
 
 \docparam{event}{The mouse event containing other information about the click}
+
+\wxheading{Return value}
+
+\true if a link was clicked, \false otherwise.
 
 \membersection{wxHtmlWindow::OnCellMouseHover}\label{wxhtmlwindowoncellmousehover}
 

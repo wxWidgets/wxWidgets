@@ -38,11 +38,11 @@ IMPLEMENT_ABSTRACT_CLASS(wxHtmlWinParser, wxHtmlParser)
 
 wxList wxHtmlWinParser::m_Modules;
 
-wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindow *wnd) : wxHtmlParser()
+wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindowInterface *wndIface)
 {
     m_tmpStrBuf = NULL;
     m_tmpStrBufSize = 0;
-    m_Window = wnd;
+    m_windowInterface = wndIface;
     m_Container = NULL;
     m_DC = NULL;
     m_CharHeight = m_CharWidth = 0;
@@ -212,11 +212,18 @@ void wxHtmlWinParser::InitParser(const wxString& source)
 
     m_Container->InsertCell(new wxHtmlColourCell(m_ActualColor));
     wxColour windowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) ;
-    m_Container->InsertCell(
-            new wxHtmlColourCell(GetWindow() ?
-                                     GetWindow()->GetBackgroundColour() :
-                                     windowColour,
-                                 wxHTML_CLR_BACKGROUND));
+
+    m_Container->InsertCell
+                 (
+                   new wxHtmlColourCell
+                       (
+                         m_windowInterface
+                            ? m_windowInterface->GetHTMLBackgroundColour()
+                            : windowColour,
+                         wxHTML_CLR_BACKGROUND
+                       )
+                  );
+
     m_Container->InsertCell(new wxHtmlFontCell(CreateCurrentFont()));
 }
 
@@ -228,6 +235,15 @@ void wxHtmlWinParser::DoneParser()
 #endif
     wxHtmlParser::DoneParser();
 }
+
+#if WXWIN_COMPATIBILITY_2_6
+wxHtmlWindow *wxHtmlWinParser::GetWindow()
+{
+    if (!m_windowInterface)
+        return NULL;
+    return wxDynamicCast(m_windowInterface->GetHTMLWindow(), wxHtmlWindow);
+}
+#endif
 
 wxObject* wxHtmlWinParser::GetProduct()
 {
@@ -246,58 +262,56 @@ wxObject* wxHtmlWinParser::GetProduct()
 wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
                                    const wxString& url) const
 {
-    if ( m_Window )
+    if ( !m_windowInterface )
+        return wxHtmlParser::OpenURL(type, url);
+
+    wxString myurl(url);
+    wxHtmlOpeningStatus status;
+    for (;;)
     {
-        wxString myurl(url);
-        wxHtmlOpeningStatus status;
-        for (;;)
+        wxString myfullurl(myurl);
+
+        // consider url as absolute path first
+        wxURI current(myurl);
+        myfullurl = current.BuildUnescapedURI();
+
+        // if not absolute then ...
+        if( current.IsReference() )
         {
-            wxString myfullurl(myurl);
+            wxString basepath = GetFS()->GetPath();
+            wxURI base(basepath);
 
-            // consider url as absolute path first
-            wxURI current(myurl);
-            myfullurl = current.BuildUnescapedURI();
-
-            // if not absolute then ...
-            if( current.IsReference() )
+            // ... try to apply base path if valid ...
+            if( !base.IsReference() )
             {
-                wxString basepath = GetFS()->GetPath();
-                wxURI base(basepath);
-
-                // ... try to apply base path if valid ...
-                if( !base.IsReference() )
+                wxURI path(myfullurl);
+                path.Resolve( base );
+                myfullurl = path.BuildUnescapedURI();
+            }
+            else
+            {
+                // ... or force such addition if not included already
+                if( !current.GetPath().Contains(base.GetPath()) )
                 {
-                    wxURI path(myfullurl);
-                    path.Resolve( base );
-                    myfullurl = path.BuildUnescapedURI();
-                }
-                else
-                {
-                    // ... or force such addition if not included already
-                    if( !current.GetPath().Contains(base.GetPath()) )
-                    {
-                        basepath += myurl;
-                        wxURI connected( basepath );
-                        myfullurl = connected.BuildUnescapedURI();
-                    }
+                    basepath += myurl;
+                    wxURI connected( basepath );
+                    myfullurl = connected.BuildUnescapedURI();
                 }
             }
-
-            wxString redirect;
-            status = m_Window->OnOpeningURL(type, myfullurl, &redirect);
-            if ( status != wxHTML_REDIRECT )
-                break;
-
-            myurl = redirect;
         }
 
-        if ( status == wxHTML_BLOCK )
-            return NULL;
+        wxString redirect;
+        status = m_windowInterface->OnHTMLOpeningURL(type, myfullurl, &redirect);
+        if ( status != wxHTML_REDIRECT )
+            break;
 
-        return GetFS()->OpenFile(myurl);
+        myurl = redirect;
     }
 
-    return wxHtmlParser::OpenURL(type, url);
+    if ( status == wxHTML_BLOCK )
+        return NULL;
+
+    return GetFS()->OpenFile(myurl);
 }
 
 void wxHtmlWinParser::AddText(const wxChar* txt)

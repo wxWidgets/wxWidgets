@@ -20,9 +20,11 @@
 #include "wx/encconv.h"
 
 class WXDLLIMPEXP_HTML wxHtmlWindow;
+class WXDLLIMPEXP_HTML wxHtmlWindowInterface;
 class WXDLLIMPEXP_HTML wxHtmlWinParser;
 class WXDLLIMPEXP_HTML wxHtmlWinTagHandler;
 class WXDLLIMPEXP_HTML wxHtmlTagsModule;
+
 
 //--------------------------------------------------------------------------------
 // wxHtmlWinParser
@@ -37,7 +39,8 @@ class WXDLLIMPEXP_HTML wxHtmlWinParser : public wxHtmlParser
     friend class wxHtmlWindow;
 
 public:
-    wxHtmlWinParser(wxHtmlWindow *wnd = NULL);
+    wxHtmlWinParser(wxHtmlWindowInterface *wndIface = NULL);
+
     ~wxHtmlWinParser();
 
     virtual void InitParser(const wxString& source);
@@ -62,7 +65,10 @@ public:
     // GetDC()->GetChar...()
 
     // returns associated wxWindow
-    wxHtmlWindow *GetWindow() {return m_Window;}
+    wxHtmlWindowInterface *GetWindowInterface() {return m_windowInterface;}
+#if WXWIN_COMPATIBILITY_2_6
+    wxDEPRECATED( wxHtmlWindow *GetWindow() );
+#endif
 
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
     void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int *sizes = NULL);
@@ -148,7 +154,7 @@ private:
     wxChar *m_tmpStrBuf;
     size_t  m_tmpStrBufSize;
         // temporary variables used by AddText
-    wxHtmlWindow *m_Window;
+    wxHtmlWindowInterface *m_windowInterface;
             // window we're parsing for
     double m_PixelScale;
     wxDC *m_DC;
