@@ -283,7 +283,7 @@ wxgtk_list_store_get_path (GtkTreeModel *tree_model,
   
     GtkTreePath *retval = gtk_tree_path_new ();
     // user_data is just the index
-    int i = (int) iter->user_data;
+    int i = (wxUIntPtr) iter->user_data;
     gtk_tree_path_append_index (retval, i);
     return retval;
 }
@@ -341,7 +341,7 @@ wxgtk_list_store_iter_next (GtkTreeModel  *tree_model,
     
     g_return_val_if_fail (list_store->stamp == iter->stamp, FALSE);
 
-    int n = (int) iter->user_data;
+    int n = (wxUIntPtr) iter->user_data;
     
     if (n == -1)
         return FALSE;
