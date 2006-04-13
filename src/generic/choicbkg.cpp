@@ -30,6 +30,7 @@
 #include "wx/choicebk.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"
+#include "wx/sizer.h"
 
 // ----------------------------------------------------------------------------
 // various wxWidgets macros
