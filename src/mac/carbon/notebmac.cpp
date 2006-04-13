@@ -331,7 +331,7 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
 {
 	int				resultV = wxNOT_FOUND;
 #if TARGET_API_MAC_OSX
-	const int	countPages = GetPageCount();
+	size_t	countPages = GetPageCount();
     
     HIPoint hipoint= { pt.x , pt.y } ;
     HIViewPartCode outPart = 0 ;
