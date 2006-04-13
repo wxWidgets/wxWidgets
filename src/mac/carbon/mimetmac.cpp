@@ -103,10 +103,10 @@ OSErr IsRemoteVolume(short vRefNum, Boolean *isRemote, long *vMAttrib) {
 OSErr BuildVolumeList(Boolean includeRemote, short *vols,
         long *count, long vMAttribMask) {
     HParamBlockRec volPB;
-    Boolean isRemote;
+    Boolean isRemote = false ;
     OSErr err = noErr;
     long nlocal, nremote;
-    long vMAttrib;
+    long vMAttrib = 0;
 
         /* set up and check parameters */
     volPB.volumeParam.ioNamePtr = NULL;
