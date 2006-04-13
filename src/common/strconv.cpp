@@ -179,7 +179,7 @@ wxMBConv::ToWChar(wchar_t *dst, size_t dstLen,
     size_t dstWritten = 0;
 
     // the number of NULs terminating this string
-    size_t nulLen wxDUMMY_INITIALIZE(0);
+    size_t nulLen = 0;  // not really needed, but just to avoid warnings
 
     // if we were not given the input size we just have to assume that the
     // string is properly terminated as we have no way of knowing how long it
