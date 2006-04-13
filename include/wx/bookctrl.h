@@ -132,7 +132,7 @@ public:
     void SetControlMargin(int margin) { m_controlMargin = margin; }
     int GetControlMargin() const { return m_controlMargin; }
 
-    // returns true if we have wxCHB_TOP or wxCHB_BOTTOM style
+    // returns true if we have wxBK_TOP or wxBK_BOTTOM style
     bool IsVertical() const { return HasFlag(wxBK_BOTTOM | wxBK_TOP); }
 
     // set/get option to shrink to fit current page

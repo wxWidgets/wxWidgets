@@ -98,10 +98,10 @@ wxChoicebook::Create(wxWindow *parent,
                  );
 
     wxSizer* mainSizer = new wxBoxSizer(IsVertical() ? wxVERTICAL : wxHORIZONTAL);
-                 
-    if (style & wxCHB_RIGHT || style & wxCHB_BOTTOM)
+
+    if (style & wxBK_RIGHT || style & wxBK_BOTTOM)
         mainSizer->Add(0, 0, 1, wxEXPAND, 0);
-    
+
     m_controlSizer = new wxBoxSizer(IsVertical() ? wxHORIZONTAL : wxVERTICAL);
     m_controlSizer->Add(m_bookctrl, 1, (IsVertical() ? wxALIGN_CENTRE_VERTICAL : wxALIGN_CENTRE) |wxGROW, 0);
     mainSizer->Add(m_controlSizer, 0, wxGROW|wxALL, m_controlMargin);
