@@ -388,7 +388,7 @@ int wxListBox::FindString(const wxString& s) const
 {
     for ( size_t i = 0 ; i < m_noItems ; ++ i )
     {
-        if (s.IsSameAs(GetString(i), bCase))
+        if (s.IsSameAs(GetString(i), false))
             return (int)i ;
     }
     return wxNOT_FOUND;
