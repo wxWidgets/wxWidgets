@@ -20,8 +20,13 @@ identical to wxNotebook (except for the features clearly related to tabs
 only), so please refer to that class documentation for now. You can also
 use the \helpref{notebook sample}{samplenotebook} to see wxChoicebook in action.
 
+wxChoicebook allows the use of wxBookCtrl::GetControlSizer, allowing a program
+to add other controls next to the choice control. This is particularly useful
+when screen space is restricted, as it often is when wxChoicebook is being employed.
+
 \wxheading{Derived from}
 
+wxBookCtrlBase\\
 \helpref{wxControl}{wxcontrol}\\
 \helpref{wxWindow}{wxwindow}\\
 \helpref{wxEvtHandler}{wxevthandler}\\

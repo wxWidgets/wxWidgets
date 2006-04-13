@@ -60,6 +60,9 @@ void wxBookCtrlBase::Init()
 #else
     m_internalBorder = 5;
 #endif
+
+    m_controlMargin = 0;
+    m_controlSizer = NULL;
 }
 
 bool
@@ -264,38 +267,43 @@ void wxBookCtrlBase::DoSize()
         // we're not fully created yet or OnSize() should be hidden by derived class
         return;
     }
-
-    // resize controller and the page area to fit inside our new size
-    const wxSize sizeClient( GetClientSize() ),
-                 sizeBorder( m_bookctrl->GetSize() - m_bookctrl->GetClientSize() ),
-                 sizeCtrl( GetControllerSize() );
-
-    m_bookctrl->SetClientSize( sizeCtrl.x - sizeBorder.x, sizeCtrl.y - sizeBorder.y );
-
-    const wxSize sizeNew = m_bookctrl->GetSize();
-    wxPoint posCtrl;
-    switch ( GetWindowStyle() & wxBK_ALIGN_MASK )
+    
+    if (GetSizer())
+        Layout();
+    else
     {
-        default:
-            wxFAIL_MSG( _T("unexpected alignment") );
-            // fall through
+        // resize controller and the page area to fit inside our new size
+        const wxSize sizeClient( GetClientSize() ),
+                    sizeBorder( m_bookctrl->GetSize() - m_bookctrl->GetClientSize() ),
+                    sizeCtrl( GetControllerSize() );
 
-        case wxBK_TOP:
-        case wxBK_LEFT:
-            // posCtrl is already ok
-            break;
+        m_bookctrl->SetClientSize( sizeCtrl.x - sizeBorder.x, sizeCtrl.y - sizeBorder.y );
 
-        case wxBK_BOTTOM:
-            posCtrl.y = sizeClient.y - sizeNew.y;
-            break;
+        const wxSize sizeNew = m_bookctrl->GetSize();
+        wxPoint posCtrl;
+        switch ( GetWindowStyle() & wxBK_ALIGN_MASK )
+        {
+            default:
+                wxFAIL_MSG( _T("unexpected alignment") );
+                // fall through
 
-        case wxBK_RIGHT:
-            posCtrl.x = sizeClient.x - sizeNew.x;
-            break;
+            case wxBK_TOP:
+            case wxBK_LEFT:
+                // posCtrl is already ok
+                break;
+
+            case wxBK_BOTTOM:
+                posCtrl.y = sizeClient.y - sizeNew.y;
+                break;
+
+            case wxBK_RIGHT:
+                posCtrl.x = sizeClient.x - sizeNew.x;
+                break;
+        }
+
+        if ( m_bookctrl->GetPosition() != posCtrl )
+            m_bookctrl->Move(posCtrl);
     }
-
-    if ( m_bookctrl->GetPosition() != posCtrl )
-        m_bookctrl->Move(posCtrl);
 
     // resize the currently shown page
     if (GetSelection() != wxNOT_FOUND )

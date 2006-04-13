@@ -96,6 +96,15 @@ wxChoicebook::Create(wxWindow *parent,
                     wxDefaultSize
                  );
 
+    wxSizer* mainSizer = new wxBoxSizer(IsVertical() ? wxVERTICAL : wxHORIZONTAL);
+                 
+    if (style & wxCHB_RIGHT || style & wxCHB_BOTTOM)
+        mainSizer->Add(0, 0, 1, wxEXPAND, 0);
+    
+    m_controlSizer = new wxBoxSizer(IsVertical() ? wxHORIZONTAL : wxVERTICAL);
+    m_controlSizer->Add(m_bookctrl, 1, (IsVertical() ? wxALIGN_CENTRE_VERTICAL : wxALIGN_CENTRE) |wxGROW, 0);
+    mainSizer->Add(m_controlSizer, 0, wxGROW|wxALL, m_controlMargin);
+    SetSizer(mainSizer);
     return true;
 }
 
@@ -106,7 +115,8 @@ wxChoicebook::Create(wxWindow *parent,
 wxSize wxChoicebook::GetControllerSize() const
 {
     const wxSize sizeClient = GetClientSize(),
-                 sizeChoice = m_bookctrl->GetBestFittingSize();
+                 // sizeChoice = m_bookctrl->GetBestFittingSize();
+                 sizeChoice = m_controlSizer->CalcMin();
 
     wxSize size;
     if ( IsVertical() )

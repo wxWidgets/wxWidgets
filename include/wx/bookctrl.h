@@ -128,12 +128,19 @@ public:
         m_internalBorder = internalBorder;
     }
 
+    // Sets/gets the margin around the controller
+    void SetControlMargin(int margin) { m_controlMargin = margin; }
+    int GetControlMargin() const { return m_controlMargin; }
+
     // returns true if we have wxCHB_TOP or wxCHB_BOTTOM style
     bool IsVertical() const { return HasFlag(wxBK_BOTTOM | wxBK_TOP); }
 
     // set/get option to shrink to fit current page
     void SetFitToCurrentPage(bool fit) { m_fitToCurrentPage = fit; }
     bool GetFitToCurrentPage() const { return m_fitToCurrentPage; }
+
+    // returns the sizer containing the control, if any
+    wxSizer* GetControlSizer() const { return m_controlSizer; }
 
     // operations
     // ----------
@@ -235,6 +242,12 @@ protected:
 
     // Whether to shrink to fit current page
     bool m_fitToCurrentPage;
+
+    // the sizer containing the choice control
+    wxSizer*    m_controlSizer;
+
+    // the margin around the choice control
+    int         m_controlMargin;
 
 private:
 
