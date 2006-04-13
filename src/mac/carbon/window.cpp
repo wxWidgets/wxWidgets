@@ -191,22 +191,24 @@ static pascal OSStatus wxMacWindowTextInputEventHandler( EventHandlerCallRef han
     wchar_t* uniChars = NULL ;
     UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
 
-    UniChar* charBuf;
+    UniChar* charBuf = NULL;
     UInt32 dataSize = 0 ;
-    int numChars = 0 ;
+    size_t numChars = 0 ;
     UniChar buf[2] ;
     if ( GetEventParameter( event, kEventParamTextInputSendText, typeUnicodeText, NULL, 0 , &dataSize, NULL ) == noErr )
     {
-        numChars = dataSize / sizeof( UniChar) ;
+        numChars = dataSize / sizeof( UniChar) + 1;
         charBuf = buf ;
-
-        if ( dataSize > sizeof(buf) )
+        
+        if ( numChars * 2 > sizeof(buf) )
             charBuf = new UniChar[ numChars ] ;
         else
             charBuf = buf ;
-
+        
         uniChars = new wchar_t[ numChars ] ;
         GetEventParameter( event, kEventParamTextInputSendText, typeUnicodeText, NULL, dataSize , NULL , charBuf ) ;
+		charBuf[ numChars - 1 ] = 0;
+
 #if SIZEOF_WCHAR_T == 2
         uniChars = (wchar_t*) charBuf ;
         memcpy( uniChars , charBuf , dataSize ) ;
@@ -223,7 +225,7 @@ static pascal OSStatus wxMacWindowTextInputEventHandler( EventHandlerCallRef han
             {
                 // An IME input event may return several characters, but we need to send one char at a time to
                 // EVT_CHAR
-                for (int pos=0 ; pos < numChars ; pos++)
+                for (size_t pos=0 ; pos < numChars ; pos++)
                 {
                     WXEVENTREF formerEvent = wxTheApp->MacGetCurrentEvent() ;
                     WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
@@ -257,7 +259,7 @@ static pascal OSStatus wxMacWindowTextInputEventHandler( EventHandlerCallRef han
 
                 // An IME input event may return several characters, but we need to send one char at a time to
                 // EVT_CHAR
-                for (int pos=0 ; pos < numChars ; pos++)
+                for (size_t pos=0 ; pos < numChars ; pos++)
                 {
                     WXEVENTREF formerEvent = wxTheApp->MacGetCurrentEvent() ;
                     WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
