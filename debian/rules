@@ -39,10 +39,7 @@ endif
 # the $(release) that is expected to provide it.  Do not define it at
 # all if this is to be the default (or only) wx source package for the
 # target release.
-#
-# for etch:
-#DEBIAN_WX_DEFAULT_VERSION = 2.6
-# XXX
+DEBIAN_WX_DEFAULT_VERSION = 2.6
 
 
 release   := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwindows//p')
