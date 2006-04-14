@@ -103,13 +103,13 @@ public:
     // event.GetExtraLong())
     void Command(wxCommandEvent& event);
 
+    // returns the item number at a point or wxNOT_FOUND
+    int HitTest(const wxPoint& point) const { return DoListHitTest(point); }
+
 #if WXWIN_COMPATIBILITY_2_6
     // compatibility - these functions are deprecated, use the new ones
     // instead
     wxDEPRECATED( bool Selected(int n) const );
-
-    // returns the item number at a point or wxNOT_FOUND
-    wxDEPRECATED( int HitTest(const wxPoint& point) const );
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
@@ -136,7 +136,6 @@ protected:
 
 #if WXWIN_COMPATIBILITY_2_6
     inline bool wxListBoxBase::Selected(int n) const { return IsSelected(n); }
-    inline int wxListBoxBase::HitTest(const wxPoint& point) const { return DoListHitTest(point); }
 #endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
