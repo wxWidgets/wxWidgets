@@ -18,6 +18,10 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
   wxHtmlCell::ProcessMouseClick(); old code overriding OnMouseClick() will
   continue to work with WXWIN_COMPATIBILITY_2_6, but should be rewritten to
   use ProcessMouseClick().
+- wxHtmlCell::GetCursor() was deprecated and replaced with
+  wxHtmlCell::GetMouseCursor(); old code overriding GetCursor() will
+  continue to work with WXWIN_COMPATIBILITY_2_6, but should be rewritten to
+  use GetMouseCursor().
 
 
 Deprecated methods since 2.6.x and their replacements

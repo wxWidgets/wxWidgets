@@ -109,6 +109,22 @@ public:
 
     /// Sets status bar text.
     virtual void SetHTMLStatusText(const wxString& text) = 0;
+
+    /// Type of mouse cursor
+    enum HTMLCursor
+    {
+        /// Standard mouse cursor (typically an arrow)
+        HTMLCursor_Default,
+        /// Cursor shown over links
+        HTMLCursor_Link,
+        /// Cursor shown over selectable text
+        HTMLCursor_Text
+    };
+
+    /**
+        Returns mouse cursor of given @a type.
+     */
+    virtual wxCursor GetHTMLCursor(HTMLCursor type) const = 0;
 };
 
 /**
@@ -357,6 +373,8 @@ public:
 
     virtual void OnInternalIdle();
 
+    /// Returns standard HTML cursor as used by wxHtmlWindow
+    static wxCursor GetDefaultHTMLCursor(HTMLCursor type);
 
 protected:
     void Init();
@@ -427,6 +445,7 @@ private:
     virtual void SetHTMLBackgroundColour(const wxColour& clr);
     virtual void SetHTMLBackgroundImage(const wxBitmap& bmpBg);
     virtual void SetHTMLStatusText(const wxString& text);
+    virtual wxCursor GetHTMLCursor(HTMLCursor type) const;
 
     // implementation of SetPage()
     bool DoSetPage(const wxString& source);
@@ -511,6 +530,10 @@ private:
     // a flag set if we need to erase background in OnPaint() (otherwise this
     // is supposed to have been done in OnEraseBackground())
     bool m_eraseBgInOnPaint;
+
+    // standard mouse cursors
+    static wxCursor *ms_cursorLink;
+    static wxCursor *ms_cursorText;
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxHtmlWindow)

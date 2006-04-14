@@ -194,9 +194,11 @@ void wxHtmlWindowMouseHelper::HandleIdle(wxHtmlCell *rootCell,
 
         wxCursor cur;
         if (cell)
-            cur = cell->GetCursor();
+            cur = cell->GetMouseCursor(m_interface);
         else
-            cur = *wxSTANDARD_CURSOR;
+            cur = m_interface->GetHTMLCursor(
+                        wxHtmlWindowInterface::HTMLCursor_Default);
+
         m_interface->GetHTMLWindow()->SetCursor(cur);
 
         if (lnk != m_tmpLastLink)
@@ -242,6 +244,22 @@ void wxHtmlWindowMouseHelper::OnCellMouseHover(wxHtmlCell * WXUNUSED(cell),
 // wxHtmlWindow
 //-----------------------------------------------------------------------------
 
+wxList wxHtmlWindow::m_Filters;
+wxHtmlFilter *wxHtmlWindow::m_DefaultFilter = NULL;
+wxHtmlProcessorList *wxHtmlWindow::m_GlobalProcessors = NULL;
+wxCursor *wxHtmlWindow::ms_cursorLink = NULL;
+wxCursor *wxHtmlWindow::ms_cursorText = NULL;
+
+void wxHtmlWindow::CleanUpStatics()
+{
+    wxDELETE(m_DefaultFilter);
+    WX_CLEAR_LIST(wxList, m_Filters);
+    if (m_GlobalProcessors)
+        WX_CLEAR_LIST(wxHtmlProcessorList, *m_GlobalProcessors);
+    wxDELETE(m_GlobalProcessors);
+    wxDELETE(ms_cursorLink);
+    wxDELETE(ms_cursorText);
+}
 
 void wxHtmlWindow::Init()
 {
@@ -812,21 +830,6 @@ void wxHtmlWindow::AddProcessor(wxHtmlProcessor *processor)
         }
     }
     m_GlobalProcessors->Append(processor);
-}
-
-
-
-wxList wxHtmlWindow::m_Filters;
-wxHtmlFilter *wxHtmlWindow::m_DefaultFilter = NULL;
-wxHtmlProcessorList *wxHtmlWindow::m_GlobalProcessors = NULL;
-
-void wxHtmlWindow::CleanUpStatics()
-{
-    wxDELETE(m_DefaultFilter);
-    WX_CLEAR_LIST(wxList, m_Filters);
-    if (m_GlobalProcessors)
-        WX_CLEAR_LIST(wxHtmlProcessorList, *m_GlobalProcessors);
-    wxDELETE(m_GlobalProcessors);
 }
 
 
@@ -1555,6 +1558,32 @@ void wxHtmlWindow::SetHTMLStatusText(const wxString& text)
     if (m_RelatedStatusBar != -1)
         m_RelatedFrame->SetStatusText(text, m_RelatedStatusBar);
 #endif // wxUSE_STATUSBAR
+}
+
+/*static*/
+wxCursor wxHtmlWindow::GetDefaultHTMLCursor(HTMLCursor type)
+{
+    switch (type)
+    {
+        case HTMLCursor_Link:
+            if ( !ms_cursorLink )
+                ms_cursorLink = new wxCursor(wxCURSOR_HAND);
+            return *ms_cursorLink;
+
+        case HTMLCursor_Text:
+            if ( !ms_cursorText )
+                ms_cursorText = new wxCursor(wxCURSOR_IBEAM);
+            return *ms_cursorText;
+
+        case HTMLCursor_Default:
+        default:
+            return *wxSTANDARD_CURSOR;
+    }
+}
+
+wxCursor wxHtmlWindow::GetHTMLCursor(HTMLCursor type) const
+{
+    return GetDefaultHTMLCursor(type);
 }
 
 

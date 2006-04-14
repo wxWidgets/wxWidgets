@@ -171,6 +171,16 @@ See \helpref{wxHtmlLinkInfo}{wxhtmllinkinfo}.
 These coordinates are used e.g. by COLORMAP. Values are relative to the
 upper left corner of THIS cell (i.e. from 0 to m\_Width or m\_Height)}
 
+\membersection{wxHtmlCell::GetMouseCursor}\label{wxhtmlcellgetmousecursor}
+
+\func{virtual wxCursor}{GetMouseCursor}{\param{wxHtmlWindowInterface* }{window}}
+
+Returns cursor to show when mouse pointer is over the cell.
+
+\wxheading{Parameters}
+
+\docparam{window}{interface to the parent HTML window}
+
 \membersection{wxHtmlCell::GetNext}\label{wxhtmlcellgetnext}
 
 \constfunc{wxHtmlCell*}{GetNext}{\void}

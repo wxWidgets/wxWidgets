@@ -32,14 +32,6 @@
 #include <stdlib.h>
 
 //-----------------------------------------------------------------------------
-// Global variables
-//-----------------------------------------------------------------------------
-
-static wxCursor *gs_cursorLink = NULL;
-static wxCursor *gs_cursorText = NULL;
-
-
-//-----------------------------------------------------------------------------
 // Helper classes
 //-----------------------------------------------------------------------------
 
@@ -198,17 +190,34 @@ void wxHtmlCell::OnMouseClick(wxWindow *, int, int, const wxMouseEvent& event)
 #endif // WXWIN_COMPATIBILITY_2_6
 }
 
-
+#if WXWIN_COMPATIBILITY_2_6
 wxCursor wxHtmlCell::GetCursor() const
 {
+    return wxNullCursor;
+}
+#endif // WXWIN_COMPATIBILITY_2_6
+
+wxCursor wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface *window) const
+{
+#if WXWIN_COMPATIBILITY_2_6
+    // NB: Older versions of wx used GetCursor() virtual method in place of
+    //     GetMouseCursor(interface). This code ensures that user code that
+    //     overriden GetCursor() continues to work. The trick is that the base
+    //     wxHtmlCell::GetCursor() method simply returns wxNullCursor, so we
+    //     know that GetCursor() was overriden iff it returns valid cursor.
+    wxCursor cur = GetCursor();
+    if (cur.Ok())
+        return cur;
+#endif // WXWIN_COMPATIBILITY_2_6
+
     if ( GetLink() )
     {
-        if ( !gs_cursorLink )
-            gs_cursorLink = new wxCursor(wxCURSOR_HAND);
-        return *gs_cursorLink;
+        return window->GetHTMLCursor(wxHtmlWindowInterface::HTMLCursor_Link);
     }
     else
-        return *wxSTANDARD_CURSOR;
+    {
+        return window->GetHTMLCursor(wxHtmlWindowInterface::HTMLCursor_Default);
+    }
 }
 
 
@@ -607,16 +616,16 @@ wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *s) const
     return m_Word;
 }
 
-wxCursor wxHtmlWordCell::GetCursor() const
+wxCursor wxHtmlWordCell::GetMouseCursor(wxHtmlWindowInterface *window) const
 {
     if ( !GetLink() )
     {
-        if ( !gs_cursorText )
-            gs_cursorText = new wxCursor(wxCURSOR_IBEAM);
-        return *gs_cursorText;
+        return window->GetHTMLCursor(wxHtmlWindowInterface::HTMLCursor_Text);
     }
     else
-        return wxHtmlCell::GetCursor();
+    {
+        return wxHtmlCell::GetMouseCursor(window);
+    }
 }
 
 
@@ -1557,30 +1566,5 @@ const wxHtmlCell* wxHtmlTerminalCellsInterator::operator++()
 
     return m_pos;
 }
-
-
-
-
-
-
-
-//-----------------------------------------------------------------------------
-// Cleanup
-//-----------------------------------------------------------------------------
-
-class wxHtmlCellModule: public wxModule
-{
-DECLARE_DYNAMIC_CLASS(wxHtmlCellModule)
-public:
-    wxHtmlCellModule() : wxModule() {}
-    bool OnInit() { return true; }
-    void OnExit()
-    {
-        wxDELETE(gs_cursorLink);
-        wxDELETE(gs_cursorText);
-    }
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlCellModule, wxModule)
 
 #endif

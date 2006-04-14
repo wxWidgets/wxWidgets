@@ -438,6 +438,16 @@ void wxHtmlListBox::SetHTMLStatusText(const wxString& WXUNUSED(text))
     // nothing to do
 }
 
+wxCursor wxHtmlListBox::GetHTMLCursor(HTMLCursor type) const
+{
+    // we don't want to show text selection cursor in listboxes
+    if (type == HTMLCursor_Text)
+        return wxHtmlWindow::GetDefaultHTMLCursor(HTMLCursor_Default);
+
+    // in all other cases, use the same cursor as wxHtmlWindow:
+    return wxHtmlWindow::GetDefaultHTMLCursor(type);
+}
+
 // ----------------------------------------------------------------------------
 // wxHtmlListBox handling of HTML links
 // ----------------------------------------------------------------------------

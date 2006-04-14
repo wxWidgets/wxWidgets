@@ -139,6 +139,7 @@ private:
     virtual void SetHTMLBackgroundColour(const wxColour& clr);
     virtual void SetHTMLBackgroundImage(const wxBitmap& bmpBg);
     virtual void SetHTMLStatusText(const wxString& text);
+    virtual wxCursor GetHTMLCursor(HTMLCursor type) const;
 
     // returns index of item that contains given HTML cell
     size_t GetItemForCell(const wxHtmlCell *cell) const;

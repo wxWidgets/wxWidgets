@@ -202,7 +202,12 @@ public:
         { return m_Link; }
 
     // Returns cursor to be used when mouse is over the cell:
+    virtual wxCursor GetMouseCursor(wxHtmlWindowInterface *window) const;
+
+#if WXWIN_COMPATIBILITY_2_6
+    // this was replaced by GetMouseCursor, don't use in new code!
     virtual wxCursor GetCursor() const;
+#endif
 
     // return next cell among parent's cells
     wxHtmlCell *GetNext() const {return m_Next;}
@@ -370,7 +375,7 @@ public:
     wxHtmlWordCell(const wxString& word, const wxDC& dc);
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
               wxHtmlRenderingInfo& info);
-    wxCursor GetCursor() const;
+    virtual wxCursor GetMouseCursor(wxHtmlWindowInterface *window) const;
     wxString ConvertToText(wxHtmlSelection *sel) const;
     bool IsLinebreakAllowed() const { return m_allowLinebreak; }
 
