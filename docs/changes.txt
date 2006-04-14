@@ -64,6 +64,8 @@ All:
   and WXK*PAGEDOWN.  If you have switch statements that use both
   constants from a set then you need to remove the PRIOR/NEXT 
   versions in order to eliminate compiler errors.
+- Fixed bug where wxDateTime::Now() would sometimes return an incorrect value
+  the first time it was called.
 
 
 All (GUI):
