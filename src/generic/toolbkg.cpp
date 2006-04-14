@@ -27,7 +27,10 @@
 #include "wx/imaglist.h"
 #include "wx/sysopt.h"
 #include "wx/toolbook.h"
+
+#if defined(__WXMAC__) && wxUSE_TOOLBAR && wxUSE_BMPBUTTON
 #include "wx/generic/buttonbar.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // various wxWidgets macros
@@ -91,6 +94,7 @@ bool wxToolbook::Create(wxWindow *parent,
 
     // TODO: make more configurable
     
+#if defined(__WXMAC__) && wxUSE_TOOLBAR && wxUSE_BMPBUTTON
     if (style & wxBK_BUTTONBAR)
     {
         m_bookctrl = new wxButtonToolBar
@@ -103,6 +107,7 @@ bool wxToolbook::Create(wxWindow *parent,
                  );
     }
     else
+#endif
     {
         m_bookctrl = new wxToolBar
                  (
@@ -110,7 +115,7 @@ bool wxToolbook::Create(wxWindow *parent,
                     wxID_TOOLBOOKTOOLBAR,
                     wxDefaultPosition,
                     wxDefaultSize,
-                    orient | wxTB_TEXT|wxTB_FLAT|wxTB_NODIVIDER
+                    orient|wxTB_TEXT|wxTB_FLAT|wxTB_NODIVIDER|wxNO_BORDER
                  );
     }
 

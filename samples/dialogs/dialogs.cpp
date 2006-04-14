@@ -369,7 +369,9 @@ bool MyApp::OnInit()
     wxMenu *sheet_menu = new wxMenu;
     sheet_menu->Append(DIALOGS_PROPERTY_SHEET, _T("&Standard property sheet\tShift-Ctrl-P"));
     sheet_menu->Append(DIALOGS_PROPERTY_SHEET_TOOLBOOK, _T("&Toolbook sheet\tShift-Ctrl-T"));
+#ifdef __WXMAC__
     sheet_menu->Append(DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK, _T("Button &Toolbook sheet\tShift-Ctrl-U"));
+#endif
     file_menu->Append(wxID_ANY, _T("&Property sheets"), sheet_menu);
 #endif // USE_SETTINGS_DIALOG
 

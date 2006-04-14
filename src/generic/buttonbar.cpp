@@ -25,7 +25,8 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_TOOLBAR && wxUSE_BMPBUTTON
+// Currently, only for Mac as a toolbar replacement.
+#if defined(__WXMAC__) && wxUSE_TOOLBAR && wxUSE_BMPBUTTON
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
