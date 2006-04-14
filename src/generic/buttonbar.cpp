@@ -119,7 +119,7 @@ void wxButtonToolBar::Init()
     m_labelMargin = 2;
     m_labelHeight = 0;
     
-    SetMargins(8, 4);
+    SetMargins(8, 2);
     SetToolPacking(8);
 }
 
