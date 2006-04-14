@@ -21,6 +21,9 @@
 class WXDLLEXPORT wxToolBarBase;
 class WXDLLEXPORT wxCommandEvent;
 
+// Use wxButtonToolBar
+#define wxBK_BUTTONBAR            0x0100
+
 // ----------------------------------------------------------------------------
 // wxToolbook
 // ----------------------------------------------------------------------------

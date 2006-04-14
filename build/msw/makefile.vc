@@ -1704,6 +1704,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 !if "$(WXUNIV)" == "0"
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavcmn.obj \
+	$(OBJS)\monodll_buttonbar.obj \
 	$(OBJS)\monodll_calctrl.obj \
 	$(OBJS)\monodll_datavgen.obj \
 	$(OBJS)\monodll_datectlg.obj \
@@ -1731,6 +1732,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavcmn.obj \
+	$(OBJS)\monodll_buttonbar.obj \
 	$(OBJS)\monodll_calctrl.obj \
 	$(OBJS)\monodll_datavgen.obj \
 	$(OBJS)\monodll_datectlg.obj \
@@ -2247,6 +2249,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 !if "$(WXUNIV)" == "0"
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavcmn.obj \
+	$(OBJS)\monolib_buttonbar.obj \
 	$(OBJS)\monolib_calctrl.obj \
 	$(OBJS)\monolib_datavgen.obj \
 	$(OBJS)\monolib_datectlg.obj \
@@ -2274,6 +2277,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavcmn.obj \
+	$(OBJS)\monolib_buttonbar.obj \
 	$(OBJS)\monolib_calctrl.obj \
 	$(OBJS)\monolib_datavgen.obj \
 	$(OBJS)\monolib_datectlg.obj \
@@ -3164,6 +3168,7 @@ __RUNTIME_LIBS_195 = $(__THREADSFLAG)
 !if "$(WXUNIV)" == "0"
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datavcmn.obj \
+	$(OBJS)\advdll_buttonbar.obj \
 	$(OBJS)\advdll_calctrl.obj \
 	$(OBJS)\advdll_datavgen.obj \
 	$(OBJS)\advdll_datectlg.obj \
@@ -3191,6 +3196,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datavcmn.obj \
+	$(OBJS)\advdll_buttonbar.obj \
 	$(OBJS)\advdll_calctrl.obj \
 	$(OBJS)\advdll_datavgen.obj \
 	$(OBJS)\advdll_datectlg.obj \
@@ -3227,6 +3233,7 @@ __RUNTIME_LIBS_208 = $(__THREADSFLAG)
 !if "$(WXUNIV)" == "0"
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datavcmn.obj \
+	$(OBJS)\advlib_buttonbar.obj \
 	$(OBJS)\advlib_calctrl.obj \
 	$(OBJS)\advlib_datavgen.obj \
 	$(OBJS)\advlib_datectlg.obj \
@@ -3254,6 +3261,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datavcmn.obj \
+	$(OBJS)\advlib_buttonbar.obj \
 	$(OBJS)\advlib_calctrl.obj \
 	$(OBJS)\advlib_datavgen.obj \
 	$(OBJS)\advlib_datectlg.obj \
@@ -5998,6 +6006,11 @@ $(OBJS)\monodll_datavcmn.obj: ..\..\src\common\datavcmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_buttonbar.obj: ..\..\src\generic\buttonbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_calctrl.obj: ..\..\src\generic\calctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 !endif
@@ -7750,6 +7763,11 @@ $(OBJS)\monolib_vscroll.obj: ..\..\src\generic\vscroll.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_datavcmn.obj: ..\..\src\common\datavcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_buttonbar.obj: ..\..\src\generic\buttonbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -10734,6 +10752,9 @@ $(OBJS)\advdll_datectrl.obj: ..\..\src\msw\datectrl.cpp
 $(OBJS)\advdll_datavcmn.obj: ..\..\src\common\datavcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
 
+$(OBJS)\advdll_buttonbar.obj: ..\..\src\generic\buttonbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
+
 $(OBJS)\advdll_calctrl.obj: ..\..\src\generic\calctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
 
@@ -10807,6 +10828,9 @@ $(OBJS)\advlib_datectrl.obj: ..\..\src\msw\datectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_datavcmn.obj: ..\..\src\common\datavcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
+
+$(OBJS)\advlib_buttonbar.obj: ..\..\src\generic\buttonbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_calctrl.obj: ..\..\src\generic\calctrl.cpp

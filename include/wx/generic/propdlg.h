@@ -66,6 +66,9 @@ class WXDLLEXPORT wxBookCtrlBase;
 // Shrink dialog to fit current page
 #define wxPROPSHEET_SHRINKTOFIT 0x0100
 
+// Use a wxButtonToolBar toolbook
+#define wxPROPSHEET_BUTTONTOOLBOOK    0x0200
+
 class WXDLLIMPEXP_ADV wxPropertySheetDialog : public wxDialog
 {
 public:

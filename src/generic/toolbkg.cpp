@@ -27,6 +27,7 @@
 #include "wx/imaglist.h"
 #include "wx/sysopt.h"
 #include "wx/toolbook.h"
+#include "wx/generic/buttonbar.h"
 
 // ----------------------------------------------------------------------------
 // various wxWidgets macros
@@ -89,7 +90,21 @@ bool wxToolbook::Create(wxWindow *parent,
         orient = wxTB_VERTICAL;
 
     // TODO: make more configurable
-    m_bookctrl = new wxToolBar
+    
+    if (style & wxBK_BUTTONBAR)
+    {
+        m_bookctrl = new wxButtonToolBar
+                 (
+                    this,
+                    wxID_TOOLBOOKTOOLBAR,
+                    wxDefaultPosition,
+                    wxDefaultSize,
+                    orient|wxTB_TEXT|wxTB_FLAT|wxTB_NODIVIDER|wxNO_BORDER
+                 );
+    }
+    else
+    {
+        m_bookctrl = new wxToolBar
                  (
                     this,
                     wxID_TOOLBOOKTOOLBAR,
@@ -97,6 +112,7 @@ bool wxToolbook::Create(wxWindow *parent,
                     wxDefaultSize,
                     orient | wxTB_TEXT|wxTB_FLAT|wxTB_NODIVIDER
                  );
+    }
 
     return true;
 }

@@ -7971,6 +7971,10 @@ SOURCE=..\..\include\wx\generic\busyinfo.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\buttonbar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\calctrl.h
 # End Source File
 # Begin Source File

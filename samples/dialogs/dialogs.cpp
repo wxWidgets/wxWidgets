@@ -196,7 +196,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if USE_SETTINGS_DIALOG
     EVT_MENU(DIALOGS_PROPERTY_SHEET,                MyFrame::OnPropertySheet)
-    EVT_MENU(DIALOGS_PROPERTY_SHEET_TOOLBOOK,       MyFrame::OnPropertySheetToolBook)
+    EVT_MENU(DIALOGS_PROPERTY_SHEET_TOOLBOOK,       MyFrame::OnPropertySheet)
+    EVT_MENU(DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK, MyFrame::OnPropertySheet)
 #endif
 
     EVT_MENU(DIALOGS_REQUEST,                       MyFrame::OnRequestUserAttention)
@@ -368,6 +369,7 @@ bool MyApp::OnInit()
     wxMenu *sheet_menu = new wxMenu;
     sheet_menu->Append(DIALOGS_PROPERTY_SHEET, _T("&Standard property sheet\tShift-Ctrl-P"));
     sheet_menu->Append(DIALOGS_PROPERTY_SHEET_TOOLBOOK, _T("&Toolbook sheet\tShift-Ctrl-T"));
+    sheet_menu->Append(DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK, _T("Button &Toolbook sheet\tShift-Ctrl-U"));
     file_menu->Append(wxID_ANY, _T("&Property sheets"), sheet_menu);
 #endif // USE_SETTINGS_DIALOG
 
@@ -1005,15 +1007,9 @@ void MyFrame::ShowTip(wxCommandEvent& WXUNUSED(event))
 #endif // wxUSE_STARTUP_TIPS
 
 #if USE_SETTINGS_DIALOG
-void MyFrame::OnPropertySheet(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnPropertySheet(wxCommandEvent& event)
 {
-    SettingsDialog dialog(this);
-    dialog.ShowModal();
-}
-
-void MyFrame::OnPropertySheetToolBook(wxCommandEvent& WXUNUSED(event))
-{
-    SettingsDialog dialog(this, true);
+    SettingsDialog dialog(this, event.GetId());
     dialog.ShowModal();
 }
 #endif // USE_SETTINGS_DIALOG
@@ -1414,18 +1410,27 @@ IMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog)
 BEGIN_EVENT_TABLE(SettingsDialog, wxPropertySheetDialog)
 END_EVENT_TABLE()
 
-SettingsDialog::SettingsDialog(wxWindow* win, bool useToolBook)
+SettingsDialog::SettingsDialog(wxWindow* win, int dialogType)
 {
     SetExtraStyle(wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY);
 
     int tabImage1 = -1;
     int tabImage2 = -1;
+    
+    bool useToolBook = (dialogType == DIALOGS_PROPERTY_SHEET_TOOLBOOK || dialogType == DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK);
 
     if (useToolBook)
     {
         tabImage1 = 0;
         tabImage2 = 1;
-        SetSheetStyle(wxPROPSHEET_TOOLBOOK|wxPROPSHEET_SHRINKTOFIT);
+        
+        int sheetStyle = wxPROPSHEET_SHRINKTOFIT;
+        if (dialogType == DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK)
+            sheetStyle |= wxPROPSHEET_BUTTONTOOLBOOK;
+        else
+            sheetStyle |= wxPROPSHEET_TOOLBOOK;
+            
+        SetSheetStyle(sheetStyle);
 
         // create a dummy image list with a few icons
         const wxSize imageSize(32, 32);

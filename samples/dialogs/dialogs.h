@@ -147,7 +147,7 @@ class SettingsDialog: public wxPropertySheetDialog
 {
 DECLARE_CLASS(SettingsDialog)
 public:
-    SettingsDialog(wxWindow* parent, bool useToolBook = false);
+    SettingsDialog(wxWindow* parent, int dialogType);
     ~SettingsDialog();
 
     wxPanel* CreateGeneralSettingsPage(wxWindow* parent);
@@ -263,7 +263,6 @@ public:
 #endif // USE_FONTDLG_GENERIC
 
     void OnPropertySheet(wxCommandEvent& event);
-    void OnPropertySheetToolBook(wxCommandEvent& event);
     void OnRequestUserAttention(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
 
@@ -336,7 +335,8 @@ enum
     DIALOGS_REPLACE,
     DIALOGS_REQUEST,
     DIALOGS_PROPERTY_SHEET,
-    DIALOGS_PROPERTY_SHEET_TOOLBOOK
+    DIALOGS_PROPERTY_SHEET_TOOLBOOK,
+    DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK
 };
 
 #endif
