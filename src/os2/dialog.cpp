@@ -130,6 +130,8 @@ bool wxDialog::Create( wxWindow*       pParent,
     return true;
 } // end of wxDialog::Create
 
+#if WXWIN_COMPATIBILITY_2_6
+
 // deprecated ctor
 wxDialog::wxDialog(wxWindow *parent,
                    const wxString& title,
@@ -146,12 +148,12 @@ wxDialog::wxDialog(wxWindow *parent,
     Create(parent, wxID_ANY, title, wxPoint(x, y), wxSize(w, h), style, name);
 }
 
-void wxDialog::SetModal(
-  bool                              WXUNUSED(bFlag)
-)
+void wxDialog::SetModal(bool WXUNUSED(bFlag))
 {
     // nothing to do, obsolete method
 } // end of wxDialog::SetModal
+
+#endif // WXWIN_COMPATIBILITY_2_6
 
 wxDialog::~wxDialog()
 {
@@ -199,11 +201,14 @@ void wxDialog::OnCharHook(
 // showing the dialogs
 // ----------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_2_6
+
 bool wxDialog::IsModalShowing() const
 {
     return IsModal();
 } // end of wxDialog::IsModalShowing
 
+#endif // WXWIN_COMPATIBILITY_2_6
 
 wxWindow *wxDialog::FindSuitableParent() const
 {
