@@ -371,8 +371,8 @@ void wxVListBox::OnPaint(wxPaintEvent& WXUNUSED(event))
     // the update rectangle
     wxRect rectUpdate = GetUpdateClientRect();
 
-    // Fill it with background colour
-    dc.SetBrush(GetBackgroundColour());
+    // fill it with background colour
+    dc.SetBackground(GetBackgroundColour());
     dc.Clear();
 
     // the bounding rectangle of the current line
