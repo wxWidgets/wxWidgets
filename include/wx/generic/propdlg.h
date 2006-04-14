@@ -106,6 +106,14 @@ public:
     void SetSheetStyle(long sheetStyle) { m_sheetStyle = sheetStyle; }
     long GetSheetStyle() const { return m_sheetStyle ; }
 
+    // Set and get the border around the whole dialog
+    void SetSheetOuterBorder(int border) { m_sheetOuterBorder = border; }
+    int GetSheetOuterBorder() const { return m_sheetOuterBorder ; }
+
+    // Set and get the border around the book control only
+    void SetSheetInnerBorder(int border) { m_sheetInnerBorder = border; }
+    int GetSheetInnerBorder() const { return m_sheetInnerBorder ; }
+
 /// Operations
 
     // Creates the buttons (none on PocketPC)
@@ -136,6 +144,8 @@ protected:
     wxBookCtrlBase* m_bookCtrl;
     wxSizer*        m_innerSizer; // sizer for extra space
     long            m_sheetStyle;
+    int             m_sheetOuterBorder;
+    int             m_sheetInnerBorder;
     int             m_selectedPage;
 
     DECLARE_DYNAMIC_CLASS(wxPropertySheetDialog)

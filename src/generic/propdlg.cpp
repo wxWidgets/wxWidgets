@@ -70,11 +70,10 @@ bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxStri
     // This gives more space around the edges
     m_innerSizer = new wxBoxSizer( wxVERTICAL );
 
-    int extraSpace = 2;
 #if defined(__SMARTPHONE__) || defined(__POCKETPC__)
-    extraSpace=0;
+    m_sheetOuterBorder = 0;
 #endif
-    topSizer->Add(m_innerSizer, 1, wxGROW|wxALL, extraSpace);
+    topSizer->Add(m_innerSizer, 1, wxGROW|wxALL, m_sheetOuterBorder);
 
     m_bookCtrl = CreateBookCtrl();
     AddBookCtrl(m_innerSizer);
@@ -87,6 +86,8 @@ void wxPropertySheetDialog::Init()
     m_sheetStyle = wxPROPSHEET_DEFAULT;
     m_innerSizer = NULL;
     m_bookCtrl = NULL;
+    m_sheetOuterBorder = 2;
+    m_sheetInnerBorder = 5;
 }
 
 // Layout the dialog, to be called after pages have been created
@@ -184,7 +185,7 @@ void wxPropertySheetDialog::AddBookCtrl(wxSizer* sizer)
     int borderSize = -2;
     sizer->Add( m_bookCtrl, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxRIGHT, borderSize );
 #else
-    sizer->Add( m_bookCtrl, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    sizer->Add( m_bookCtrl, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, m_sheetInnerBorder );
 #endif
 }
 
