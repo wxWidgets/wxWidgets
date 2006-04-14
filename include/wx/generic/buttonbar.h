@@ -90,6 +90,9 @@ protected:
     // receives button commands
     void OnCommand(wxCommandEvent& event);
 
+    // paints a border
+    void OnPaint(wxPaintEvent& event);
+
 private:
     // have we calculated the positions of our tools?
     bool m_needsLayout;

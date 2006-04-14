@@ -37,6 +37,8 @@
 #include "wx/frame.h"
 #include "wx/image.h"
 #include "wx/log.h"
+#include "wx/settings.h"
+#include "wx/dcclient.h"
 
 // ----------------------------------------------------------------------------
 // wxButtonToolBarTool: our implementation of wxToolBarToolBase
@@ -96,6 +98,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxButtonToolBar, wxControl)
 
 BEGIN_EVENT_TABLE(wxButtonToolBar, wxControl)
     EVT_BUTTON(wxID_ANY, wxButtonToolBar::OnCommand)
+    EVT_PAINT(wxButtonToolBar::OnPaint)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -111,7 +114,10 @@ void wxButtonToolBar::Init()
     m_widthSeparator = wxDefaultCoord;
 
     m_maxWidth =
-    m_maxHeight = 0;
+        m_maxHeight = 0;
+
+    SetMargins(8, 4);
+    SetToolPacking(5);
 }
 
 bool wxButtonToolBar::Create(wxWindow *parent,
@@ -127,6 +133,9 @@ bool wxButtonToolBar::Create(wxWindow *parent,
         return false;
     }
 
+    // TODO: get the correct colour from the system
+    wxColour lightBackground(240, 240, 240);
+    SetBackgroundColour(lightBackground);
     return true;
 }
 
@@ -362,7 +371,7 @@ void wxButtonToolBar::DoLayout()
             if (!tool->GetButton())
             {
                 wxBitmapButton* bmpButton = new wxBitmapButton(this, tool->GetId(), tool->GetNormalBitmap(), wxPoint(tool->m_x, tool->m_y), wxDefaultSize,
-                    wxBU_AUTODRAW);
+                    wxBU_AUTODRAW|wxBORDER_NONE);
                 
                 tool->SetButton(bmpButton);
             }
@@ -404,6 +413,10 @@ void wxButtonToolBar::DoLayout()
     // calculate the total toolbar size
     m_maxWidth = x + 2*m_xMargin;
     m_maxHeight = maxHeight + 2*m_yMargin;
+
+    if ((GetWindowStyle() & wxTB_NODIVIDER) == 0)
+        m_maxHeight += 2;
+
 }
 
 wxSize wxButtonToolBar::DoGetBestClientSize() const
@@ -421,8 +434,51 @@ void wxButtonToolBar::OnCommand(wxCommandEvent& event)
         return;
     }
 
+    if (tool->CanBeToggled())
+        tool->Toggle(tool->IsToggled());
+
     // TODO: handle toggle items
-    OnLeftClick(event.GetId(), false);    
+    OnLeftClick(event.GetId(), false);
+
+    if (tool->GetKind() == wxITEM_RADIO)
+        UnToggleRadioGroup(tool);
+
+    if (tool->CanBeToggled())
+        Refresh();
+}
+
+// paints a border
+void wxButtonToolBar::OnPaint(wxPaintEvent& event)
+{
+    wxPaintDC dc(this);
+
+    for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxButtonToolBarTool *tool =  (wxButtonToolBarTool*) node->GetData();
+        if (tool->IsToggled())
+        {
+            wxRect rectTool = GetToolRect(tool);
+            rectTool.y = 0; rectTool.height = GetClientSize().y;
+            wxBrush brush(wxColour(220, 220, 220));
+            wxPen pen(*wxLIGHT_GREY);
+            dc.SetBrush(brush);
+            dc.SetPen(pen);
+            dc.DrawRectangle(rectTool);
+        }
+    }
+
+    if ((GetWindowStyle() & wxTB_NODIVIDER) == 0)
+    {
+        wxPen pen(*wxLIGHT_GREY);
+        dc.SetPen(pen);
+        int x1 = 0;
+        int y1 = GetClientSize().y-1;
+        int x2 = GetClientSize().x;
+        int y2 = y1;
+        dc.DrawLine(x1, y1, x2, y2);
+    }
 }
 
 #endif // wxUSE_TOOLBAR && wxUSE_BMPBUTTON

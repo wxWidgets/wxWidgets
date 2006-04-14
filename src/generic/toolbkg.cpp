@@ -103,7 +103,7 @@ bool wxToolbook::Create(wxWindow *parent,
                     wxID_TOOLBOOKTOOLBAR,
                     wxDefaultPosition,
                     wxDefaultSize,
-                    orient|wxTB_TEXT|wxTB_FLAT|wxTB_NODIVIDER|wxNO_BORDER
+                    orient|wxTB_TEXT|wxTB_FLAT|wxNO_BORDER
                  );
     }
     else
@@ -353,7 +353,7 @@ bool wxToolbook::InsertPage(size_t n,
 
     if (bSelect)
     {
-        // GetToolBar()->ToggleTool(n, true);
+        GetToolBar()->ToggleTool(n, true);
         m_selection = n;
     }
     else

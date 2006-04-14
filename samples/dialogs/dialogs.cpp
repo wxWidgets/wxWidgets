@@ -1420,9 +1420,11 @@ SettingsDialog::SettingsDialog(wxWindow* win, int dialogType)
     int tabImage2 = -1;
     
     bool useToolBook = (dialogType == DIALOGS_PROPERTY_SHEET_TOOLBOOK || dialogType == DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK);
+    int resizeBorder = wxRESIZE_BORDER;
 
     if (useToolBook)
     {
+        resizeBorder = 0;
         tabImage1 = 0;
         tabImage2 = 1;
         
@@ -1433,6 +1435,8 @@ SettingsDialog::SettingsDialog(wxWindow* win, int dialogType)
             sheetStyle |= wxPROPSHEET_TOOLBOOK;
             
         SetSheetStyle(sheetStyle);
+        SetSheetInnerBorder(0);
+        SetSheetOuterBorder(0);
 
         // create a dummy image list with a few icons
         const wxSize imageSize(32, 32);
@@ -1453,7 +1457,7 @@ SettingsDialog::SettingsDialog(wxWindow* win, int dialogType)
     Create(win, wxID_ANY, _("Preferences"), wxDefaultPosition, wxDefaultSize,
         wxDEFAULT_DIALOG_STYLE
 #ifndef __WXWINCE__
-        |wxRESIZE_BORDER
+        |resizeBorder
 #endif
     );
 

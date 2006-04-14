@@ -39,7 +39,7 @@
  */
 
 #ifndef wxMAC_USE_NATIVE_TOOLBAR
-    #define wxMAC_USE_NATIVE_TOOLBAR 0
+    #define wxMAC_USE_NATIVE_TOOLBAR 1
 #endif
 
 #endif
