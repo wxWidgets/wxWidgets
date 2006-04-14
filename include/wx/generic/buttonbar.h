@@ -14,6 +14,7 @@
 #define _WX_BUTTONBAR_H_
 
 #include "wx/bmpbuttn.h"
+#include "wx/toolbar.h"
 
 class WXDLLEXPORT wxButtonToolBarTool;
 
