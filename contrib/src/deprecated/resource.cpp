@@ -2225,7 +2225,9 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
     { wxT("wxSYSTEM_MENU"), wxSYSTEM_MENU},
     { wxT("wxMINIMIZE_BOX"), wxMINIMIZE_BOX},
     { wxT("wxMAXIMIZE_BOX"), wxMAXIMIZE_BOX},
+#if WXWIN_COMPATIBILITY_2_6
     { wxT("wxRESIZE_BOX"), wxRESIZE_BOX},
+#endif // WXWIN_COMPATIBILITY_2_6
     { wxT("wxDEFAULT_FRAME_STYLE"), wxDEFAULT_FRAME_STYLE},
     { wxT("wxDEFAULT_FRAME"), wxDEFAULT_FRAME_STYLE},
     { wxT("wxDEFAULT_DIALOG_STYLE"), wxDEFAULT_DIALOG_STYLE},
