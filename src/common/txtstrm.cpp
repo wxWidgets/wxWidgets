@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        txtstrm.cpp
+// Name:        src/common/txtstrm.cpp
 // Purpose:     Text stream classes
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -178,10 +178,14 @@ double wxTextInputStream::ReadDouble()
     return wxStrtod(word.c_str(), 0);
 }
 
+#if WXWIN_COMPATIBILITY_2_6
+
 wxString wxTextInputStream::ReadString()
 {
     return ReadLine();
 }
+
+#endif // WXWIN_COMPATIBILITY_2_6
 
 wxString wxTextInputStream::ReadLine()
 {

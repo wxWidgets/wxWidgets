@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_gauge.cpp
+// Name:        src/xrc/xh_gauge.cpp
 // Purpose:     XRC resource for wxGauge
 // Author:      Bob Mitchell
 // Created:     2000/03/21
@@ -27,7 +27,9 @@ wxGaugeXmlHandler::wxGaugeXmlHandler()
 {
     XRC_ADD_STYLE(wxGA_HORIZONTAL);
     XRC_ADD_STYLE(wxGA_VERTICAL);
+#if WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxGA_PROGRESSBAR);
+#endif // WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxGA_SMOOTH);   // windows only
     AddWindowStyles();
 }

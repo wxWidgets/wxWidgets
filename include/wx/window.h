@@ -1448,8 +1448,11 @@ extern WXDLLEXPORT wxWindow *wxGetActiveWindow();
 // get the (first) top level parent window
 WXDLLEXPORT wxWindow* wxGetTopLevelParent(wxWindow *win);
 
-// deprecated (doesn't start with 'wx' prefix), use wxWindow::NewControlId()
-inline int NewControlId() { return wxWindowBase::NewControlId(); }
+#if WXWIN_COMPATIBILITY_2_6
+    // deprecated (doesn't start with 'wx' prefix), use wxWindow::NewControlId()
+    wxDEPRECATED( int NewControlId() );
+    inline int NewControlId() { return wxWindowBase::NewControlId(); }
+#endif // WXWIN_COMPATIBILITY_2_6
 
 #if wxUSE_ACCESSIBILITY
 // ----------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_split.cpp
+// Name:        src/xrc/xh_split.cpp
 // Purpose:     XRC resource for wxSplitterWindow
 // Author:      panga@freemail.hu, Vaclav Slavik
 // Created:     2003/01/26
@@ -28,7 +28,9 @@ wxSplitterWindowXmlHandler::wxSplitterWindowXmlHandler() : wxXmlResourceHandler(
     XRC_ADD_STYLE(wxSP_3D);
     XRC_ADD_STYLE(wxSP_3DSASH);
     XRC_ADD_STYLE(wxSP_3DBORDER);
+#if WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxSP_FULLSASH);
+#endif // WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxSP_BORDER);
     XRC_ADD_STYLE(wxSP_NOBORDER);
     XRC_ADD_STYLE(wxSP_PERMIT_UNSPLIT);

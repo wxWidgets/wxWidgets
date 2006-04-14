@@ -90,7 +90,6 @@ wxBEGIN_FLAGS( wxGaugeStyle )
 
     wxFLAGS_MEMBER(wxGA_HORIZONTAL)
     wxFLAGS_MEMBER(wxGA_VERTICAL)
-    wxFLAGS_MEMBER(wxGA_PROGRESSBAR)
     wxFLAGS_MEMBER(wxGA_SMOOTH)
 
 wxEND_FLAGS( wxGaugeStyle )
@@ -170,4 +169,3 @@ bool wxGauge::SetBackgroundColour(const wxColour& col)
 }
 
 #endif // wxUSE_GAUGE
-

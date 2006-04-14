@@ -103,12 +103,14 @@ public:
     // event.GetExtraLong())
     void Command(wxCommandEvent& event);
 
+#if WXWIN_COMPATIBILITY_2_6
     // compatibility - these functions are deprecated, use the new ones
     // instead
-    bool Selected(int n) const { return IsSelected(n); }
+    wxDEPRECATED( bool Selected(int n) const );
 
     // returns the item number at a point or wxNOT_FOUND
-    int HitTest(const wxPoint& point) const { return DoListHitTest(point); }
+    wxDEPRECATED( int HitTest(const wxPoint& point) const );
+#endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
     // NB: due to wxGTK implementation details, DoInsert() is implemented
@@ -131,6 +133,11 @@ protected:
 
     DECLARE_NO_COPY_CLASS(wxListBoxBase)
 };
+
+#if WXWIN_COMPATIBILITY_2_6
+    inline bool wxListBoxBase::Selected(int n) const { return IsSelected(n); }
+    inline int wxListBoxBase::HitTest(const wxPoint& point) const { return DoListHitTest(point); }
+#endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
 // include the platform-specific class declaration

@@ -1,7 +1,7 @@
 // wxr2xml.cpp: implementation of the wxr2xml class.
 // 8/30/00  Brian Gavin
 // only tested on wxMSW so far
-//License: wxWindows Liscense
+// License: wxWindows Liscense
 // ////////////////////////////////////////////////////////////////////
 
 /*
@@ -31,12 +31,10 @@ trans->Convert("Myfile.wxr","Myfile.xml");
 
 wxr2xml::wxr2xml()
 {
-
 }
 
 wxr2xml::~wxr2xml()
 {
-
 }
 
 bool wxr2xml::Convert(wxString wxrfile, wxString xmlfile)
@@ -466,8 +464,6 @@ wxString wxr2xml::GetStyles(wxItemResource * res)
             s += _T("wxGA_HORIZONTAL|");
         if (style & wxGA_VERTICAL)
             s += _T("wxGA_VERTICAL|");
-        if (style & wxGA_PROGRESSBAR)
-            s += _T("wxGA_PROGRESSBAR|");
     // windows only
         if (style & wxGA_SMOOTH)
             s += _T("wxGA_SMOOTH|");

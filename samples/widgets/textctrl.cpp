@@ -633,7 +633,7 @@ void TextWidgetsPage::CreateText()
             break;
 
         case WrapStyle_Char:
-            flags |= wxTE_LINEWRAP;
+            flags |= wxTE_CHARWRAP;
             break;
 
         case WrapStyle_Best:

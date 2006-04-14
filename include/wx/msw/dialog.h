@@ -108,9 +108,7 @@ public:
     // Windows callbacks
     WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
-    // obsolete methods
-    // ----------------
-
+#if WXWIN_COMPATIBILITY_2_6
     // use the other ctor
     wxDEPRECATED( wxDialog(wxWindow *parent,
              const wxString& title, bool modal,
@@ -123,6 +121,7 @@ public:
 
     // use IsModal()
     wxDEPRECATED( bool IsModalShowing() const );
+#endif // WXWIN_COMPATIBILITY_2_6
 
     // handle Escape here
     virtual bool MSWProcessMessage(WXMSG* pMsg);

@@ -891,7 +891,7 @@ list below.</value>
 							<value name="proxy-wxTE_CENTRE" type="bool">FALSE</value>
 							<value name="proxy-wxTE_RIGHT" type="bool">FALSE</value>
 							<value name="proxy-wxHSCROLL" type="bool">FALSE</value>
-							<value name="proxy-wxTE_LINEWRAP" type="bool">FALSE</value>
+							<value name="proxy-wxTE_CHARWRAP" type="bool">FALSE</value>
 							<value name="proxy-wxTE_WORDWRAP" type="bool">FALSE</value>
 							<value name="proxy-wxNO_BORDER" type="bool">FALSE</value>
 							<value name="proxy-wxSIMPLE_BORDER" type="bool">FALSE</value>
@@ -1450,7 +1450,7 @@ list below.</value>
 							<value name="proxy-wxTE_CENTRE" type="bool">FALSE</value>
 							<value name="proxy-wxTE_RIGHT" type="bool">FALSE</value>
 							<value name="proxy-wxHSCROLL" type="bool">FALSE</value>
-							<value name="proxy-wxTE_LINEWRAP" type="bool">FALSE</value>
+							<value name="proxy-wxTE_CHARWRAP" type="bool">FALSE</value>
 							<value name="proxy-wxTE_WORDWRAP" type="bool">FALSE</value>
 							<value name="proxy-wxNO_BORDER" type="bool">FALSE</value>
 							<value name="proxy-wxSIMPLE_BORDER" type="bool">FALSE</value>
@@ -2238,7 +2238,7 @@ list below.</value>
 											<value name="proxy-wxTE_CENTRE" type="bool">FALSE</value>
 											<value name="proxy-wxTE_RIGHT" type="bool">FALSE</value>
 											<value name="proxy-wxHSCROLL" type="bool">FALSE</value>
-											<value name="proxy-wxTE_LINEWRAP" type="bool">FALSE</value>
+											<value name="proxy-wxTE_CHARWRAP" type="bool">FALSE</value>
 											<value name="proxy-wxTE_WORDWRAP" type="bool">FALSE</value>
 											<value name="proxy-wxNO_BORDER" type="bool">FALSE</value>
 											<value name="proxy-wxSIMPLE_BORDER" type="bool">FALSE</value>
@@ -2714,7 +2714,6 @@ list below.</value>
 						<value name="proxy-wxSP_3DBORDER" type="bool">TRUE</value>
 						<value name="proxy-wxSP_BORDER" type="bool">FALSE</value>
 						<value name="proxy-wxSP_3DSASH" type="bool">TRUE</value>
-						<value name="proxy-wxSP_FULLSASH" type="bool">FALSE</value>
 						<value name="proxy-wxSP_PERMIT_UNSPLIT" type="bool">FALSE</value>
 						<value name="proxy-wxSP_LIVE_UPDATE " type="bool">FALSE</value>
 						<value name="proxy-wxNO_BORDER" type="bool">TRUE</value>
@@ -3175,7 +3174,7 @@ list below.</value>
 									<value name="proxy-wxTE_CENTRE" type="bool">FALSE</value>
 									<value name="proxy-wxTE_RIGHT" type="bool">FALSE</value>
 									<value name="proxy-wxHSCROLL" type="bool">FALSE</value>
-									<value name="proxy-wxTE_LINEWRAP" type="bool">FALSE</value>
+									<value name="proxy-wxTE_CHARWRAP" type="bool">FALSE</value>
 									<value name="proxy-wxTE_WORDWRAP" type="bool">FALSE</value>
 									<value name="proxy-wxNO_BORDER" type="bool">FALSE</value>
 									<value name="proxy-wxSIMPLE_BORDER" type="bool">FALSE</value>

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        txtstrm.h
+// Name:        wx/txtstrm.h
 // Purpose:     Text stream classes
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -52,7 +52,6 @@ public:
     wxInt16  Read16S(int base = 10);
     wxInt8   Read8S(int base = 10);
     double   ReadDouble();
-    wxString ReadString();  // deprecated: use ReadLine or ReadWord instead
     wxString ReadLine();
     wxString ReadWord();
     wxChar   GetChar() { wxChar c = NextChar(); return (wxChar)(c != wxEOT ? c : 0); }
@@ -74,6 +73,10 @@ public:
     wxTextInputStream& operator>>(float& f);
 
     wxTextInputStream& operator>>( __wxTextInputManip func) { return func(*this); }
+
+#if WXWIN_COMPATIBILITY_2_6
+    wxDEPRECATED( wxString ReadString() );  // use ReadLine or ReadWord instead
+#endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
     wxInputStream &m_input;

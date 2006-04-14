@@ -2683,7 +2683,7 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
                 //else: we can just see it
 
                 // wrap at any character or only at words boundaries?
-                if ( !(GetWindowStyle() & wxTE_LINEWRAP) )
+                if ( !(GetWindowStyle() & wxTE_CHARWRAP) )
                 {
                     // find the (last) not word char before this word
                     wxTextCoord colWordStart;

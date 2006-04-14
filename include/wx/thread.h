@@ -349,15 +349,21 @@ public:
     wxCondError Broadcast();
 
 
+#if WXWIN_COMPATIBILITY_2_6
     // deprecated version, don't use
-    bool Wait(unsigned long milliseconds)
-        { return WaitTimeout(milliseconds) == wxCOND_NO_ERROR; }
+    wxDEPRECATED( bool Wait(unsigned long milliseconds) );
+#endif // WXWIN_COMPATIBILITY_2_6
 
 private:
     wxConditionInternal *m_internal;
 
     DECLARE_NO_COPY_CLASS(wxCondition)
 };
+
+#if WXWIN_COMPATIBILITY_2_6
+    inline bool wxCondition::Wait(unsigned long milliseconds)
+        { return WaitTimeout(milliseconds) == wxCOND_NO_ERROR; }
+#endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
 // wxSemaphore: a counter limiting the number of threads concurrently accessing

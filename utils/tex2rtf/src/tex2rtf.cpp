@@ -955,7 +955,7 @@ bool Go(void)
     frame->SetTitle(buf);
   }
 
-  wxStartTimer();
+  wxLongLong localTime = wxGetLocalTimeMillis();
 #endif
 
   // Find extension-less filename
@@ -1057,8 +1057,8 @@ bool Go(void)
 
     wxString buf;
 #ifndef NO_GUI
-    long tim = wxGetElapsedTime();
-    buf.Printf(_T("Finished PASS #%d in %ld seconds.\n"), passNumber, (long)(tim/1000.0));
+    wxLongLong elapsed = wxGetLocalTimeMillis() - localTime;
+    buf.Printf(_T("Finished PASS #%d in %ld seconds.\n"), passNumber, (long)(elapsed.GetLo()/1000.0));
     OnInform((wxChar *)buf.c_str());
 
     if (errorCount)

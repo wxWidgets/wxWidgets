@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        textctrl.h
+// Name:        wx/textctrl.h
 // Purpose:     wxTextCtrlBase class - the interface of wxTextCtrl
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -116,8 +116,10 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 #define wxTE_WORDWRAP       0x0001  // wrap only at words boundaries
 #define wxTE_BESTWRAP       0x0000  // this is the default
 
-// obsolete synonym
-#define wxTE_LINEWRAP       wxTE_CHARWRAP
+#if WXWIN_COMPATIBILITY_2_6
+    // obsolete synonym
+    #define wxTE_LINEWRAP       wxTE_CHARWRAP
+#endif // WXWIN_COMPATIBILITY_2_6
 
 // force using RichEdit version 2.0 or 3.0 instead of 1.0 (default) for
 // wxTE_RICH controls - can be used together with or instead of wxTE_RICH

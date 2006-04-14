@@ -363,8 +363,10 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
 
+#if WXWIN_COMPATIBILITY_2_6
     // obsolete stuff, for compatibility only -- don't use
     wxDEPRECATED( int GetItemSpacing(bool isSmall) const);
+#endif // WXWIN_COMPATIBILITY_2_6
 
     // convert our styles to Windows
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
@@ -413,7 +415,7 @@ protected:
     virtual wxString OnGetItemText(long item, long column) const;
 
     // return the icon for the given item. In report view, OnGetItemImage will
-    // only be called for the first column. See OnGetItemColumnImage for 
+    // only be called for the first column. See OnGetItemColumnImage for
     // details.
     virtual int OnGetItemImage(long item) const;
 
@@ -435,4 +437,3 @@ private:
 #endif // wxUSE_LISTCTRL
 
 #endif // _WX_LISTCTRL_H_
-

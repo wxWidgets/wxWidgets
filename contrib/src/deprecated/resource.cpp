@@ -2105,7 +2105,9 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
     { wxT("wxCB_SORT"), wxCB_SORT },
 
     /* wxGauge */
+#if WXWIN_COMPATIBILITY_2_6
     { wxT("wxGA_PROGRESSBAR"), wxGA_PROGRESSBAR },
+#endif // WXWIN_COMPATIBILITY_2_6
     { wxT("wxGA_HORIZONTAL"), wxGA_HORIZONTAL },
     { wxT("wxGA_VERTICAL"), wxGA_VERTICAL },
 

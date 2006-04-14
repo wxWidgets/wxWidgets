@@ -33,8 +33,10 @@ public:
 
     wxStreamBuffer *GetInputStreamBuffer() const { return m_i_streambuf; }
 
+#if WXWIN_COMPATIBILITY_2_6
     // deprecated, compatibility only
-    wxStreamBuffer *InputStreamBuffer() const { return m_i_streambuf; }
+    wxDEPRECATED( wxStreamBuffer *InputStreamBuffer() const );
+#endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
     wxStreamBuffer *m_i_streambuf;
@@ -62,8 +64,10 @@ public:
 
     wxStreamBuffer *GetOutputStreamBuffer() const { return m_o_streambuf; }
 
+#if WXWIN_COMPATIBILITY_2_6
     // deprecated, compatibility only
-    wxStreamBuffer *OutputStreamBuffer() const { return m_o_streambuf; }
+    wxDEPRECATED( wxStreamBuffer *OutputStreamBuffer() const );
+#endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
     wxStreamBuffer *m_o_streambuf;
@@ -76,9 +80,13 @@ protected:
     DECLARE_NO_COPY_CLASS(wxMemoryOutputStream)
 };
 
+#if WXWIN_COMPATIBILITY_2_6
+    inline wxStreamBuffer *wxMemoryInputStream::InputStreamBuffer() const { return m_i_streambuf; }
+    inline wxStreamBuffer *wxMemoryOutputStream::OutputStreamBuffer() const { return m_o_streambuf; }
+#endif // WXWIN_COMPATIBILITY_2_6
+
 #endif
   // wxUSE_STREAMS
 
 #endif
   // _WX_WXMMSTREAM_H__
-

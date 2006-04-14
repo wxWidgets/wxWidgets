@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        treebase.h
+// Name:        wx/treebase.h
 // Purpose:     wxTreeCtrl base classes and types
 // Author:      Julian Smart et al
 // Modified by:
@@ -24,6 +24,8 @@
 #include "wx/event.h"
 #include "wx/dynarray.h"
 
+#if WXWIN_COMPATIBILITY_2_6
+
 // flags for deprecated `Expand(int action)', will be removed in next versions
 enum
 {
@@ -32,6 +34,8 @@ enum
     wxTREE_EXPAND_COLLAPSE_RESET,
     wxTREE_EXPAND_TOGGLE
 };
+
+#endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
 // wxTreeItemId identifies an element of the tree. In this implementation, it's
@@ -179,9 +183,11 @@ enum wxTreeItemIcon
 #define wxTR_DEFAULT_STYLE           (wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT)
 #endif
 
+#if WXWIN_COMPATIBILITY_2_6
 // deprecated, don't use
 #define wxTR_MAC_BUTTONS             0
 #define wxTR_AQUA_BUTTONS            0
+#endif // WXWIN_COMPATIBILITY_2_6
 
 
 // values for the `flags' parameter of wxTreeCtrl::HitTest() which determine
@@ -413,4 +419,3 @@ END_DECLARE_EVENT_TYPES()
 #endif // wxUSE_TREECTRL
 
 #endif // _WX_TREEBASE_H_
-

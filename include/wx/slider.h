@@ -40,9 +40,10 @@
 #define wxSL_SELRANGE        0x0800
 #define wxSL_INVERSE         0x1000
 
-// obsolete
-#define wxSL_NOTIFY_DRAG     0x0000
-
+#if WXWIN_COMPATIBILITY_2_6
+    // obsolete
+    #define wxSL_NOTIFY_DRAG     0x0000
+#endif // WXWIN_COMPATIBILITY_2_6
 
 extern WXDLLEXPORT_DATA(const wxChar) wxSliderNameStr[];
 

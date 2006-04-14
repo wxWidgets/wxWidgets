@@ -503,10 +503,12 @@ public:
     // deactivated
     virtual void SetActive(bool isActive, wxWindow *lastFocus);
 
+#if WXWIN_COMPATIBILITY_2_6
     // OBSOLETE: don't use, always returns true
     //
     // returns true if the program is successfully initialized
-    bool Initialized() { return true; }
+    wxDEPRECATED( bool Initialized() );
+#endif // WXWIN_COMPATIBILITY_2_6
 
     // perform standard OnIdle behaviour, ensure that this is always called
     void OnIdle(wxIdleEvent& event);
@@ -548,6 +550,10 @@ protected:
 
     DECLARE_NO_COPY_CLASS(wxAppBase)
 };
+
+#if WXWIN_COMPATIBILITY_2_6
+    inline bool wxAppBase::Initialized() { return true; }
+#endif // WXWIN_COMPATIBILITY_2_6
 
 #endif // wxUSE_GUI
 
@@ -694,4 +700,3 @@ extern wxAppConsole *wxCreateApp();
 extern wxAppInitializer wxTheAppInitializer;
 
 #endif // _WX_APP_H_BASE_
-

@@ -797,7 +797,7 @@ bool wxVariantDataString::Read(wxInputStream& str)
 {
     wxTextInputStream s(str);
 
-    m_value = s.ReadString();
+    m_value = s.ReadLine();
     return true;
 }
 #endif // wxUSE_STREAMS

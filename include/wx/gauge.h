@@ -28,8 +28,10 @@
 // Win32 only, is default (and only) on some other platforms
 #define wxGA_SMOOTH          0x0020
 
-// obsolete style
-#define wxGA_PROGRESSBAR     0
+#if WXWIN_COMPATIBILITY_2_6
+    // obsolete style
+    #define wxGA_PROGRESSBAR     0
+#endif // WXWIN_COMPATIBILITY_2_6
 
 
 extern WXDLLEXPORT_DATA(const wxChar) wxGaugeNameStr[];

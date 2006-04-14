@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/textctrl.cpp
+// Name:        src/msw/textctrl.cpp
 // Purpose:     wxTextCtrl
 // Author:      Julian Smart
 // Modified by:
@@ -206,7 +206,7 @@ wxBEGIN_FLAGS( wxTextCtrlStyle )
     wxFLAGS_MEMBER(wxTE_CENTRE)
     wxFLAGS_MEMBER(wxTE_RIGHT)
     wxFLAGS_MEMBER(wxTE_DONTWRAP)
-    wxFLAGS_MEMBER(wxTE_LINEWRAP)
+    wxFLAGS_MEMBER(wxTE_CHARWRAP)
     wxFLAGS_MEMBER(wxTE_WORDWRAP)
 
 wxEND_FLAGS( wxTextCtrlStyle )
@@ -372,7 +372,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         if (!IsInkEdit())
         {
             if ( m_verRichEdit == 2 )
-            {            
+            {
                 if ( wxRichEditModule::Load(wxRichEditModule::Version_41) )
                 {
                     // yes, class name for version 4.1 really is 5.0
@@ -414,7 +414,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                     m_verRichEdit = 0;
                 }
             }
-        } // !useInkEdit 
+        } // !useInkEdit
     }
 #endif // wxUSE_RICHEDIT
 
@@ -441,12 +441,12 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
             // Pass IEM_InsertText (0) as wParam, in order to have the ink always
             // converted to text.
             ::SendMessage(GetHwnd(), EM_SETINKINSERTMODE, 0, 0);
-            
+
             // Make sure the mouse can be used for input
             ::SendMessage(GetHwnd(), EM_SETUSEMOUSEFORINPUT, 1, 0);
         }
 #endif
-        
+
         // enable the events we're interested in: we want to get EN_CHANGE as
         // for the normal controls
         LPARAM mask = ENM_CHANGE;
@@ -2773,9 +2773,9 @@ bool wxRichEditModule::LoadInkEdit()
     static bool             ms_inkEditLibLoadAttemped;
     if (ms_inkEditLibLoadAttemped)
         ms_inkEditLib.IsLoaded();
-    
+
     ms_inkEditLibLoadAttemped = true;
-    
+
     wxLogNull logNull;
     return ms_inkEditLib.Load(wxT("inked"));
 }

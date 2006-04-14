@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        valgen.cpp
+// Name:        src/common/valgen.cpp
 // Purpose:     wxGenericValidator class
 // Author:      Kevin Smith
 // Modified by:
@@ -131,11 +131,11 @@ bool wxGenericValidator::TransferToWindow(void)
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxToggleButton)) )
     {
         wxToggleButton * pControl = (wxToggleButton *) m_validatorWindow;
-	if (m_pBool)
-	{
-	    pControl->SetValue(*m_pBool);
-	    return true;
-	}
+        if (m_pBool)
+        {
+            pControl->SetValue(*m_pBool);
+            return true;
+        }
     } else
 #endif
 
@@ -375,12 +375,12 @@ bool wxGenericValidator::TransferFromWindow(void)
 #if wxUSE_TOGGLEBTN
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxToggleButton)) )
     {
-	wxToggleButton *pControl = (wxToggleButton *) m_validatorWindow;
-	if (m_pBool)
-	{
-	    *m_pBool = pControl->GetValue() ;
-	    return true;
-	}
+        wxToggleButton *pControl = (wxToggleButton *) m_validatorWindow;
+        if (m_pBool)
+        {
+            *m_pBool = pControl->GetValue() ;
+            return true;
+        }
     } else
 #endif
 
@@ -567,7 +567,7 @@ bool wxGenericValidator::TransferFromWindow(void)
                    count = pControl->GetCount();
             for ( i = 0; i < count; i++ )
             {
-                if (pControl->Selected(i))
+                if (pControl->IsSelected(i))
                     m_pArrayInt->Add(i);
             }
 
@@ -595,4 +595,3 @@ void wxGenericValidator::Initialize()
 
 #endif
   // wxUSE_VALIDATORS
-
