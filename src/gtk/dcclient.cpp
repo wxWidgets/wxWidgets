@@ -1696,16 +1696,24 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
         *externalLeading = 0;
 
     if (string.empty())
-    {
         return;
+
+    // ensure that theFont is always non-NULL
+    if ( !theFont || !theFont->Ok() )
+        theFont = wx_const_cast(wxFont *, &m_font);
+
+    // and use it if it's valid
+    if ( theFont->Ok() )
+    {
+        pango_layout_set_font_description
+        (
+            m_layout,
+            theFont->GetNativeFontInfo()->description
+        );
     }
 
-    // Set new font description
-    if (theFont)
-        pango_layout_set_font_description( m_layout, theFont->GetNativeFontInfo()->description );
-
     // Set layout's text
-    const wxCharBuffer dataUTF8 = wxGTK_CONV(string);
+    const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(string, *theFont);
     if ( !dataUTF8 )
     {
         // hardly ideal, but what else can we do if conversion failed?
