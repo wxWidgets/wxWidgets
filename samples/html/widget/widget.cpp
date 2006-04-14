@@ -47,8 +47,15 @@ TAG_HANDLER_PROC(tag)
 
     if (tag.HasParam(wxT("FLOAT"))) fl = ax;
 
-    wnd = new wxTextCtrl(m_WParser->GetWindow(), wxID_ANY, tag.GetParam(wxT("NAME")),
-        wxPoint(0,0), wxSize(ax, ay), wxTE_MULTILINE);
+    wnd = new wxTextCtrl
+              (
+                m_WParser->GetWindowInterface()->GetHTMLWindow(),
+                wxID_ANY,
+                tag.GetParam(wxT("NAME")),
+                wxPoint(0,0),
+                wxSize(ax, ay),
+                wxTE_MULTILINE
+              );
 
     wnd->Show(true);
 
