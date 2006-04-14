@@ -422,8 +422,10 @@ wxString wxr2xml::GetStyles(wxItemResource * res)
             s += _T("wxCAPTION|");
         if (style & wxRESIZE_BORDER)
             s += _T("wxRESIZE_BORDER|");
+#if WXWIN_COMPATIBILITY_2_6
         if (style & wxRESIZE_BOX)
             s += _T("wxRESIZE_BOX|");
+#endif // WXWIN_COMPATIBILITY_2_6
         if (style & wxRESIZE_BORDER)
             s += _T("wxRESIZE_BORDER|");
         if (style & wxSYSTEM_MENU)
