@@ -23,9 +23,11 @@
 #endif
 
 #if wxUSE_UNICODE
-    #define wxGTK_CONV(s) wxConvUTF8.cWX2MB(s)
-    #define wxGTK_CONV_SYS(s) wxGTK_CONV(s)
-    #define wxGTK_CONV_BACK(s) wxConvUTF8.cMB2WX(s)
+    #define wxGTK_CONV(s) wxConvUTF8.cWX2MB((s))
+    #define wxGTK_CONV_ENC(s, enc) wxGTK_CONV((s))
+    #define wxGTK_CONV_FONT(s, font) wxGTK_CONV((s))
+    #define wxGTK_CONV_SYS(s) wxGTK_CONV((s))
+    #define wxGTK_CONV_BACK(s) wxConvUTF8.cMB2WX((s))
 #else
     #include "wx/font.h"
 
@@ -41,9 +43,11 @@
                                            : wxFONTENCODING_SYSTEM);
     }
 
-    #define wxGTK_CONV(s) wxConvertToGTK((s), m_font)
-    #define wxGTK_CONV_SYS(s) wxConvertToGTK(s)
-    #define wxGTK_CONV_BACK(s)  wxConvLocal.cWC2WX( wxConvUTF8.cMB2WC((s)) )
+    #define wxGTK_CONV_ENC(s, enc) wxConvertToGTK((s), (enc))
+    #define wxGTK_CONV_FONT(s, font) wxConvertToGTK((s), (font))
+    #define wxGTK_CONV(s) wxGTK_CONV_FONT((s), m_font)
+    #define wxGTK_CONV_SYS(s) wxConvertToGTK((s))
+    #define wxGTK_CONV_BACK(s)  wxConvLocal.cWC2WX(wxConvUTF8.cMB2WC((s)))
 #endif
 
 // Some deprecated GTK+ prototypes we still use often
