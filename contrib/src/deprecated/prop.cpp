@@ -1024,15 +1024,14 @@ bool wxPropertySheet::HasProperty(const wxString& name) const
 // Clear all properties
 void wxPropertySheet::Clear(void)
 {
-  wxObjectList::compatibility_iterator node = m_properties.GetFirst();
-  while (node)
-  {
-    wxProperty *prop = (wxProperty *)node->GetData();
-    wxObjectList::compatibility_iterator next = node->GetNext();
-    delete prop;
-    delete node;
-    node = next;
-  }
+    wxObjectList::compatibility_iterator node = m_properties.GetFirst();
+    while (node)
+    {
+        wxProperty *prop = (wxProperty *)node->GetData();
+        delete prop;
+        node = node->GetNext();
+    }
+    m_properties.Clear();
 }
 
 // Sets/clears the modified flag for each property value
