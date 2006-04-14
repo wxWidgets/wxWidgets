@@ -171,6 +171,25 @@ void wxVScrolledWindow::UpdateScrollbar()
         h += OnGetLineHeight(line);
     }
 
+    // if we still have remaining space below, maybe we can fit everything?
+    if ( h < hWindow )
+    {
+        wxCoord hAll = h;
+        for ( size_t lineFirst = m_lineFirst; lineFirst > 0; lineFirst-- )
+        {
+            hAll += OnGetLineHeight(m_lineFirst - 1);
+            if ( hAll > hWindow )
+                break;
+        }
+
+        if ( hAll < hWindow )
+        {
+            // we don't need scrollbar at all
+            m_lineFirst = 0;
+            SetScrollbar(wxVERTICAL, 0, 0, 0);
+        }
+    }
+
     m_nVisible = line - m_lineFirst;
 
     int pageSize = m_nVisible;
