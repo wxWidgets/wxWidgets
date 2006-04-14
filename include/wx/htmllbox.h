@@ -30,7 +30,7 @@ class WXDLLIMPEXP_HTML wxHtmlListBoxStyle;
 
 class WXDLLIMPEXP_HTML wxHtmlListBox : public wxVListBox,
                                        public wxHtmlWindowInterface,
-                                       private wxHtmlWindowMouseHelper
+                                       public wxHtmlWindowMouseHelper
 {
     DECLARE_ABSTRACT_CLASS(wxHtmlListBox)
 public:

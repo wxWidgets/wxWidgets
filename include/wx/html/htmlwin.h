@@ -134,7 +134,7 @@ public:
  */
 class WXDLLIMPEXP_HTML wxHtmlWindowMouseHelper
 {
-public:
+protected:
     /**
         Ctor.
 
@@ -224,7 +224,7 @@ private:
 
 class WXDLLIMPEXP_HTML wxHtmlWindow : public wxScrolledWindow,
                                       public wxHtmlWindowInterface,
-                                      private wxHtmlWindowMouseHelper
+                                      public wxHtmlWindowMouseHelper
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlWindow)
     friend class wxHtmlWinModule;
