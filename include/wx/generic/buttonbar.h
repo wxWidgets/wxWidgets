@@ -93,6 +93,9 @@ protected:
     // paints a border
     void OnPaint(wxPaintEvent& event);
 
+    // detects mouse clicks outside buttons
+    void OnLeftUp(wxMouseEvent& event);
+
 private:
     // have we calculated the positions of our tools?
     bool m_needsLayout;
@@ -103,6 +106,12 @@ private:
     // the total size of all toolbar elements
     wxCoord m_maxWidth,
             m_maxHeight;
+
+    // the height of a label
+    int m_labelHeight;
+
+    // the space above the label
+    int m_labelMargin;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxButtonToolBar)

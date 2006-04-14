@@ -99,6 +99,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxButtonToolBar, wxControl)
 BEGIN_EVENT_TABLE(wxButtonToolBar, wxControl)
     EVT_BUTTON(wxID_ANY, wxButtonToolBar::OnCommand)
     EVT_PAINT(wxButtonToolBar::OnPaint)
+    EVT_LEFT_UP(wxButtonToolBar::OnLeftUp)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -113,11 +114,13 @@ void wxButtonToolBar::Init()
     // unknown widths for the tools and separators
     m_widthSeparator = wxDefaultCoord;
 
-    m_maxWidth =
-        m_maxHeight = 0;
+    m_maxWidth = m_maxHeight = 0;
 
+    m_labelMargin = 2;
+    m_labelHeight = 0;
+    
     SetMargins(8, 4);
-    SetToolPacking(5);
+    SetToolPacking(8);
 }
 
 bool wxButtonToolBar::Create(wxWindow *parent,
@@ -133,9 +136,20 @@ bool wxButtonToolBar::Create(wxWindow *parent,
         return false;
     }
 
-    // TODO: get the correct colour from the system
-    wxColour lightBackground(240, 240, 240);
-    SetBackgroundColour(lightBackground);
+    // wxColour lightBackground(244, 244, 244);
+
+    wxFont font(wxSMALL_FONT->GetPointSize(), wxNORMAL_FONT->GetFamily(), wxNORMAL_FONT->GetStyle(), wxNORMAL);
+    SetFont(font);
+
+    // Calculate the label height if necessary
+    if (GetWindowStyle() & wxTB_TEXT)
+    {
+        wxClientDC dc(this);
+        dc.SetFont(font);
+        int w, h;
+        dc.GetTextExtent(wxT("X"), & w, & h);
+        m_labelHeight = h;
+    }
     return true;
 }
 
@@ -280,8 +294,8 @@ wxRect wxButtonToolBar::GetToolRect(wxToolBarToolBase *toolBase) const
         wxConstCast(this, wxButtonToolBar)->DoLayout();
     }
 
-    rect.x = tool->m_x - m_xMargin;
-    rect.y = tool->m_y - m_yMargin;
+    rect.x = tool->m_x - (m_toolPacking/2);
+    rect.y = tool->m_y;
 
     if ( IsVertical() )
     {
@@ -290,7 +304,7 @@ wxRect wxButtonToolBar::GetToolRect(wxToolBarToolBase *toolBase) const
             rect.width = m_defaultWidth;
             rect.height = m_defaultHeight;
             if (tool->GetButton())
-                rect.SetSize(tool->GetButton()->GetSize());
+                rect.SetSize(wxSize(tool->m_width, tool->m_height));
         }
         else if (tool->IsSeparator())
         {
@@ -310,7 +324,7 @@ wxRect wxButtonToolBar::GetToolRect(wxToolBarToolBase *toolBase) const
             rect.width = m_defaultWidth;
             rect.height = m_defaultHeight;
             if (tool->GetButton())
-                rect.SetSize(tool->GetButton()->GetSize());
+                rect.SetSize(wxSize(tool->m_width, tool->m_height));
         }
         else if (tool->IsSeparator())
         {
@@ -324,8 +338,7 @@ wxRect wxButtonToolBar::GetToolRect(wxToolBarToolBase *toolBase) const
         }
     }
 
-    rect.width += 2*m_xMargin;
-    rect.height += 2*m_yMargin;
+    rect.width += m_toolPacking;
 
     return rect;
 }
@@ -371,7 +384,9 @@ void wxButtonToolBar::DoLayout()
             if (!tool->GetButton())
             {
                 wxBitmapButton* bmpButton = new wxBitmapButton(this, tool->GetId(), tool->GetNormalBitmap(), wxPoint(tool->m_x, tool->m_y), wxDefaultSize,
-                    wxBU_AUTODRAW|wxBORDER_NONE);
+                                                               wxBU_AUTODRAW|wxBORDER_NONE);
+                if (!tool->GetShortHelp().IsEmpty())
+                    bmpButton->SetLabel(tool->GetShortHelp());
                 
                 tool->SetButton(bmpButton);
             }
@@ -386,7 +401,34 @@ void wxButtonToolBar::DoLayout()
                 wxSize sz = tool->GetButton()->GetSize();
                 w = sz.x;
 
+                if (m_labelHeight > 0)
+                {
+                    sz.y += (m_labelHeight + m_labelMargin);
+
+                    if (!tool->GetShortHelp().IsEmpty())
+                    {
+                        wxClientDC dc(this);
+                        dc.SetFont(GetFont());
+                        int tw, th;
+                        dc.GetTextExtent(tool->GetShortHelp(), & tw, & th);
+
+                        // If the label is bigger than the icon, the label width
+                        // becomes the new tool width, and we need to centre the
+                        // the bitmap in this box.
+                        if (tw > sz.x)
+                        {
+                            int newX = int(tool->m_x + (tw - sz.x)/2.0);
+                            tool->GetButton()->Move(newX, tool->m_y);
+                            sz.x = tw;
+                        }
+                    }
+                }
+
                 maxHeight = wxMax(maxHeight, sz.y);
+
+                tool->m_width = sz.x;
+                tool->m_height = sz.y;
+                w = sz.x;
             }
 
             *pCur += (w + GetToolPacking());
@@ -452,32 +494,61 @@ void wxButtonToolBar::OnPaint(wxPaintEvent& event)
 {
     wxPaintDC dc(this);
 
+    dc.SetFont(GetFont());
+    dc.SetBackgroundMode(wxTRANSPARENT);
+
     for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;
           node = node->GetNext() )
     {
         wxButtonToolBarTool *tool =  (wxButtonToolBarTool*) node->GetData();
+        wxRect rectTool = GetToolRect(tool);
         if (tool->IsToggled())
         {
-            wxRect rectTool = GetToolRect(tool);
-            rectTool.y = 0; rectTool.height = GetClientSize().y;
-            wxBrush brush(wxColour(220, 220, 220));
-            wxPen pen(*wxLIGHT_GREY);
+            wxRect backgroundRect = rectTool;
+            backgroundRect.y = -1; backgroundRect.height = GetClientSize().y + 1;
+            wxBrush brush(wxColour(219, 219, 219));
+            wxPen pen(wxColour(159, 159, 159));
             dc.SetBrush(brush);
             dc.SetPen(pen);
-            dc.DrawRectangle(rectTool);
+            dc.DrawRectangle(backgroundRect);
+        }
+
+        if (m_labelHeight > 0 && !tool->GetShortHelp().IsEmpty())
+        {
+            int tw, th;
+            dc.GetTextExtent(tool->GetShortHelp(), & tw, & th);
+
+            int x = tool->m_x;
+            dc.DrawText(tool->GetShortHelp(), x, tool->m_y + tool->GetButton()->GetSize().y + m_labelMargin);
         }
     }
 
     if ((GetWindowStyle() & wxTB_NODIVIDER) == 0)
     {
-        wxPen pen(*wxLIGHT_GREY);
+        wxPen pen(wxColour(159, 159, 159));
         dc.SetPen(pen);
         int x1 = 0;
         int y1 = GetClientSize().y-1;
         int x2 = GetClientSize().x;
         int y2 = y1;
         dc.DrawLine(x1, y1, x2, y2);
+    }
+}
+
+// detects mouse clicks outside buttons
+void wxButtonToolBar::OnLeftUp(wxMouseEvent& event)
+{
+    if (m_labelHeight > 0)
+    {
+        wxButtonToolBarTool* tool = (wxButtonToolBarTool*) FindToolForPosition(event.GetX(), event.GetY());
+        if (tool && tool->GetButton() && (event.GetY() > (tool->m_y + tool->GetButton()->GetSize().y)))
+        {
+            wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, tool->GetId());
+            event.SetEventObject(tool->GetButton());
+            if (!ProcessEvent(event))
+                event.Skip();
+        }
     }
 }
 
