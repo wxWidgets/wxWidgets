@@ -219,257 +219,6 @@ public:
 
 
 
-// //----------------------------------------------------------------------------
-// %newgroup;
-
-// // wxHVScrolledWindow
-
-// // First, the C++ version
-// %{
-// class wxPyHVScrolledWindow : public wxHVScrolledWindow
-// {
-//     DECLARE_ABSTRACT_CLASS(wxPyHVScrolledWindow)
-// public:
-//     wxPyHVScrolledWindow() : wxHVScrolledWindow() {}
-//     wxPyHVScrolledWindow(wxWindow *parent,
-//                          wxWindowID id = wxID_ANY,
-//                          const wxPoint& pos = wxDefaultPosition,
-//                          const wxSize& size = wxDefaultSize,
-//                          long style = 0,
-//                          const wxString& name = wxPyPanelNameStr)
-//         : wxHVScrolledWindow(parent, id, pos, size, style, name) {}
-
-//     // Overridable virtuals
-
-//     // these functions must be overridden in the derived class and they should
-//     // return the width or height of the given line in pixels
-//     DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetRowHeight);
-//     DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetColumnWidth);
-    
-//     // the following functions don't need to be overridden but it may be useful
-//     // to do if calculating the lines widths or heights is a relatively
-//     // expensive operation as it gives the user code a possibility to calculate
-//     // several of them at once
-//     //
-//     // OnGetRowsHeightHint() and OnGetColumnsWidthHint() are normally called
-//     // just before OnGetRowHeight() and OnGetColumnWidth(), respectively, but
-//     // you shouldn't rely on the latter methods being called for all lines in
-//     // the interval specified here. It is also possible that OnGetRowHeight()
-//     // or OnGetColumnWidth() will be called for the lines outside of this
-//     // interval, so this is really just a hint, not a promise.
-//     //
-//     // finally note that min is inclusive, while max is exclusive, as usual
-//     DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetRowsHeightHint);
-//     DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetColumnsWidthHint);
-    
-//     // when the number of lines changes, we try to estimate the total width or
-//     // height of all lines which is a rather expensive operation in terms of
-//     // lines access, so if the user code may estimate the average height
-//     // better/faster than we do, it should override this function to implement
-//     // its own logic
-//     //
-//     // this function should return the best guess for the total height it may
-//     // make
-//     DEC_PYCALLBACK_COORD_const(EstimateTotalHeight);
-//     DEC_PYCALLBACK_COORD_const(EstimateTotalWidth);
-
-
-//     // Also expose some other interesting protected methods
-
-//     // find the index of the horizontal line we need to show at the top of the
-//     // window such that the last (fully or partially) visible line is the given
-//     // one
-//     size_t FindFirstFromRight(size_t columnLast, bool fullyVisible = false)
-//     { return wxHVScrolledWindow::FindFirstFromRight(columnLast, fullyVisible); }
-    
-//     // find the index of the vertical line we need to show at the top of the
-//     // window such that the last (fully or partially) visible line is the given
-//     // one
-//     size_t FindFirstFromBottom(size_t lineLast, bool fullyVisible = false)
-//     { return wxHVScrolledWindow::FindFirstFromBottom(lineLast, fullyVisible); }
-
-    
-//     // get the total width or height of the lines between lineMin (inclusive)
-//     // and lineMax (exclusive)
-//     wxCoord GetRowsHeight(size_t lineMin, size_t lineMax) const
-//     { return wxHVScrolledWindow::GetRowsHeight(lineMin, lineMax); }
-//     wxCoord GetColumnsWidth(size_t columnMin, size_t columnMax) const
-//     { return wxHVScrolledWindow::GetColumnsWidth(columnMin, columnMax); }
-
-//     PYPRIVATE;
-// };
-
- 
-// IMPLEMENT_ABSTRACT_CLASS(wxPyHVScrolledWindow, wxHVScrolledWindow);
-
-// IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyHVScrolledWindow, wxHVScrolledWindow, OnGetRowHeight);
-// IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyHVScrolledWindow, wxHVScrolledWindow, OnGetColumnWidth); 
-// IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyHVScrolledWindow, wxHVScrolledWindow, OnGetRowsHeightHint);
-// IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyHVScrolledWindow, wxHVScrolledWindow, OnGetColumnsWidthHint); 
-// IMP_PYCALLBACK_COORD_const          (wxPyHVScrolledWindow, wxHVScrolledWindow, EstimateTotalHeight);
-// IMP_PYCALLBACK_COORD_const          (wxPyHVScrolledWindow, wxHVScrolledWindow, EstimateTotalWidth); 
-// %}
-
-
-
-
-// // Now define this class for SWIG
-
-// /*
-//    This class is strongly influenced by wxVScrolledWindow. In fact, much of
-//    code is line for line the same except it EXPLICITLY states which axis is
-//    being worked on.  Like wxVScrolledWindow, this class is here to provide
-//    an easy way to implement variable line sizes.  The difference is that
-//    wxVScrolledWindow only works with vertical scrolling.  This class extends
-//    the behavior of wxVScrolledWindow to the horizontal axis in addition to the
-//    vertical axis.
-
-//    The scrolling is also "virtual" in the sense that line widths and heights
-//    only need to be known for lines that are currently visible.
-
-//    Like wxVScrolledWindow, this is a generalization of the wxScrolledWindow
-//    class which can be only used when all horizontal lines have the same width
-//    and all of the vertical lines have the same height. Like wxVScrolledWinow
-//    it lacks some of wxScrolledWindow features such as scrolling another window
-//    or only scrolling a rectangle of the window and not its entire client area.
-
-//    If only vertical scrolling is needed, wxVScrolledWindow is recommended
-//    because it is simpler to use (and you get to type less).
-   
-//    There is no wxHScrolledWindow but horizontal only scrolling is implemented
-//    easily enough with this class.  If someone feels the need for such a class,
-//    implementing it is trivial.
-//  */
-// MustHaveApp(wxPyHVScrolledWindow);
-
-// %rename(HVScrolledWindow) wxPyHVScrolledWindow;
-// class wxPyHVScrolledWindow : public wxPanel
-// {
-// public:
-//     %pythonAppend wxPyHVScrolledWindow         "self._setOORInfo(self); self._setCallbackInfo(self, VScrolledWindow)"
-//     %pythonAppend wxPyHVScrolledWindow()       ""
-
-//     // normal ctor, no need to call Create() after this one
-//     //
-//     // note that wxVSCROLL and wxHSCROLL are always automatically added to our
-//     // style, there is no need to specify them explicitly
-//     wxPyHVScrolledWindow(wxWindow *parent,
-//                          wxWindowID id = wxID_ANY,
-//                          const wxPoint& pos = wxDefaultPosition,
-//                          const wxSize& size = wxDefaultSize,
-//                          long style = 0,
-//                          const wxString& name = wxPyPanelNameStr);
-
-//     %RenameCtor(PreHVScrolledWindow, wxPyHVScrolledWindow());
-//     void _setCallbackInfo(PyObject* self, PyObject* _class);
-
-    
-//     bool Create(wxWindow *parent,
-//                 wxWindowID id = wxID_ANY,
-//                 const wxPoint& pos = wxDefaultPosition,
-//                 const wxSize& size = wxDefaultSize,
-//                 long style = 0,
-//                 const wxString& name = wxPyPanelNameStr);
-
-
-//     // operations
-//     // ----------
-
-//     // set the number of lines the window contains for each axis: the derived
-//     // class must provide the widths and heights for all lines with indices up
-//     // to each of the one given here in its OnGetColumnWidth() and
-//     // OnGetRowHeight()
-//     void SetRowColumnCounts(size_t rowCount, size_t columnCount);
-
-//     // with physical scrolling on, the device origin is changed properly when
-//     // a wxPaintDC is prepared, children are actually moved and layed out
-//     // properly, and the contents of the window (pixels) are actually moved
-//     void EnablePhysicalScrolling(bool scrolling = true);
-
-//     // scroll to the specified line: it will become the first visible line in
-//     // the window
-//     //
-//     // return true if we scrolled the window, false if nothing was done
-//     bool ScrollToRow(size_t row);
-//     bool ScrollToColumn(size_t column);
-//     bool ScrollToRowColumn(size_t row, size_t column);
-
-//     // scroll by the specified number of lines/pages
-//     virtual bool ScrollRows(int rows);
-//     virtual bool ScrollColumns(int columns);
-//     virtual bool ScrollRowsColumns(int rows, int columns);
-//     virtual bool ScrollRowPages(int pages);
-//     virtual bool ScrollColumnPages(int pages);
-//     virtual bool ScrollPages(int rowPages, int columnPages);
-
-//     // redraw the specified line
-//     virtual void RefreshRow(size_t line);
-//     virtual void RefreshColumn(size_t line);
-//     virtual void RefreshRowColumn(size_t row, size_t column);
-
-//     // redraw all lines in the specified range (inclusive)
-//     virtual void RefreshRows(size_t from, size_t to);
-//     virtual void RefreshColumns(size_t from, size_t to);
-//     virtual void RefreshRowsColumns(size_t fromRow, size_t toRow,
-//                                     size_t fromColumn, size_t toColumn);
-
-//     // return the horizontal and vertical line within a wxPoint at the
-//     // specified (in physical coordinates) position or.
-
-//     // wxNOT_FOUND in either or both axes if no line is present at the
-//     // requested coordinates, i.e. if it is past the last lines
-//     %Rename(HitTestXY, wxPoint, HitTest(wxCoord x, wxCoord y) const);
-//     wxPoint HitTest(const wxPoint& pt) const;
-
-//     // recalculate all our parameters and redisplay all lines
-//     virtual void RefreshAll();
-
-
-//     // accessors
-//     // ---------
-
-//     // get the number of lines this window contains (previously set by
-//     // SetLineCount())
-//     size_t GetRowCount() const;
-//     size_t GetColumnCount() const;
-//     wxSize GetRowColumnCounts() const;
-
-//     // get the first currently visible line/lines
-//     size_t GetVisibleRowsBegin() const;
-//     size_t GetVisibleColumnsBegin() const;
-//     wxPoint GetVisibleBegin() const;
-
-//     // get the last currently visible line/lines
-//     size_t GetVisibleRowsEnd() const;
-//     size_t GetVisibleColumnsEnd() const;
-//     wxPoint GetVisibleEnd() const;
-
-//     // is this line currently visible?
-//     bool IsRowVisible(size_t row) const;
-//     bool IsColumnVisible(size_t column) const;
-//     bool IsVisible(size_t row, size_t column) const;
-
-
-//     // find the index of the horizontal line we need to show at the top of the
-//     // window such that the last (fully or partially) visible line is the given
-//     // one
-//     size_t FindFirstFromRight(size_t columnLast, bool fullyVisible = false);
-    
-//     // find the index of the vertical line we need to show at the top of the
-//     // window such that the last (fully or partially) visible line is the given
-//     // one
-//     size_t FindFirstFromBottom(size_t lineLast, bool fullyVisible = false);
-
-    
-//     // get the total width or height of the lines between lineMin (inclusive)
-//     // and lineMax (exclusive)
-//     wxCoord GetRowsHeight(size_t lineMin, size_t lineMax) const;
-//     wxCoord GetColumnsWidth(size_t columnMin, size_t columnMax) const;
-    
-// };
-
-
-
 //---------------------------------------------------------------------------
 // wxVListBox
 
@@ -765,6 +514,11 @@ public:
 //     // globally using SetSelectionBackground()
 //     virtual wxColour GetSelectedTextBgColour(const wxColour& colBg) const;
 
+    
+    // This method may be overriden to handle clicking on a link in
+    // the listbox. By default, clicking links is ignored.
+    virtual void OnLinkClicked(size_t n,
+                               const wxHtmlLinkInfo& link);        
 
     PYPRIVATE;
 };
@@ -777,6 +531,21 @@ IMP_PYCALLBACK_STRING_SIZET     (wxPyHtmlListBox, wxHtmlListBox, OnGetItemMarkup
 IMP_PYCALLBACK__DCRECTSIZET2_const   (wxPyHtmlListBox, wxHtmlListBox, OnDrawSeparator);
 IMP_PYCALLBACK__DCRECTSIZET_const    (wxPyHtmlListBox, wxHtmlListBox, OnDrawBackground);
 
+
+void wxPyHtmlListBox::OnLinkClicked(size_t n,
+                                    const wxHtmlLinkInfo& link) {
+    bool found;
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    if ((found = wxPyCBH_findCallback(m_myInst, "OnLinkClicked"))) {
+        PyObject* obj = wxPyConstructObject((void*)&link, wxT("wxHtmlLinkInfo"), 0);
+        wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iO)", n, obj));
+        Py_DECREF(obj);
+    }
+    wxPyEndBlockThreads(blocked);
+    if (! found)
+        wxPyHtmlListBox::OnLinkClicked(n, link);
+}
+ 
 %}
 
 
@@ -820,6 +589,8 @@ public:
     // retrieve the file system used by the wxHtmlWinParser: if you use
     // relative paths in your HTML, you should use its ChangePathTo() method
     wxFileSystem& GetFileSystem();
+
+    void OnLinkClicked(size_t n, const wxHtmlLinkInfo& link);        
 };
 
 
