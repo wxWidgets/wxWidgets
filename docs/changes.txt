@@ -64,12 +64,13 @@ All:
 - Assert messages now show the function in which assert failed
 - wxApp::OnAssertFailure() should now be used instead the old wxApp::OnAssert()
 - Fixed several bugs in wxDateTime::ParseDate()
-- The WXK*PRIOR and WXK*NEXT constants are now aliases for WXK*PAGEUP 
+- The WXK*PRIOR and WXK*NEXT constants are now aliases for WXK*PAGEUP
   and WXK*PAGEDOWN.  If you have switch statements that use both
-  constants from a set then you need to remove the PRIOR/NEXT 
+  constants from a set then you need to remove the PRIOR/NEXT
   versions in order to eliminate compiler errors.
 - Fixed bug where wxDateTime::Now() would sometimes return an incorrect value
   the first time it was called.
+- Added wxString::rbegin() and rend()
 
 
 All (GUI):
@@ -190,7 +191,7 @@ wxGTK:
 - Fixed focusing with mnemonic accelerator keys on wxStaticText which
   is now able to focus on wxComboBox and possibly other controls
   previously unable to be focused before.
-- Enabled mnemonics and the corresponding accelerator keys for 
+- Enabled mnemonics and the corresponding accelerator keys for
   wxStaticBox and wxRadioBox.
 - Fixed problem trying to print from a preview, whereby wrong printer
   class was used.

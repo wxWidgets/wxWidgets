@@ -299,6 +299,44 @@ public:
   typedef value_type *iterator;
   typedef const value_type *const_iterator;
 
+#define wxSTRING_REVERSE_ITERATOR(name, const_or_not)                         \
+  class name                                                                  \
+  {                                                                           \
+  public:                                                                     \
+      typedef wxChar value_type;                                              \
+      typedef const_or_not value_type& reference;                             \
+      typedef const_or_not value_type *pointer;                               \
+      typedef const_or_not value_type *iterator_type;                         \
+                                                                              \
+      name(iterator_type i) : m_cur(i) { }                                    \
+      name(const name& ri) : m_cur(ri.m_cur) { }                              \
+                                                                              \
+      iterator_type base() const { return m_cur; }                            \
+                                                                              \
+      reference operator*() const { return *(m_cur - 1); }                    \
+      pointer operator->() const { return m_cur - 1; }                        \
+                                                                              \
+      name& operator++() { --m_cur; return *this; }                           \
+      name operator++(int) { name tmp = *this; --m_cur; return tmp; }         \
+      name& operator--() { ++m_cur; return *this; }                           \
+      name operator--(int) { name tmp = *this; ++m_cur; return tmp; }         \
+                                                                              \
+      bool operator==(name ri) const { return m_cur == ri.m_cur; }            \
+      bool operator!=(name ri) const { return !(*this == ri); }               \
+                                                                              \
+  private:                                                                    \
+      iterator_type m_cur;                                                    \
+  }
+
+  wxSTRING_REVERSE_ITERATOR(const_reverse_iterator, const);
+
+  #define wxSTRING_CONST
+  wxSTRING_REVERSE_ITERATOR(reverse_iterator, wxSTRING_CONST);
+  #undef wxSTRING_CONST
+
+  #undef wxSTRING_REVERSE_ITERATOR
+
+
   // constructors and destructor
     // ctor for an empty string
   wxStringBase() { Init(); }
@@ -431,13 +469,17 @@ public:
 
     // first valid index position
   const_iterator begin() const { return m_pchData; }
+  iterator begin();
     // position one after the last valid one
   const_iterator end() const { return m_pchData + length(); }
-
-  // first valid index position
-  iterator begin();
-  // position one after the last valid one
   iterator end();
+
+    // first element of the reversed string
+  const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+  reverse_iterator rbegin() { return reverse_iterator(end()); }
+    // one beyond the end of the reversed string
+  const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
+  reverse_iterator rend() { return reverse_iterator(begin()); }
 
     // insert another string
   wxStringBase& insert(size_t nPos, const wxStringBase& str)
