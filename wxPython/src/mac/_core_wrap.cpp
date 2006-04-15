@@ -2953,6 +2953,24 @@ SWIG_AsVal_int (PyObject * obj, int *val)
   return res;
 }
 
+SWIGINTERN bool wxSize___eq__(wxSize *self,PyObject *other){
+            wxSize  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxSize_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+SWIGINTERN bool wxSize___ne__(wxSize *self,PyObject *other){
+            wxSize  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxSize_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
 SWIGINTERN PyObject *wxSize_Get(wxSize *self){
             wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
@@ -2975,6 +2993,24 @@ SWIG_AsVal_double (PyObject *obj, double* val)
 
   #define SWIG_From_double   PyFloat_FromDouble 
 
+SWIGINTERN bool wxRealPoint___eq__(wxRealPoint *self,PyObject *other){
+            wxRealPoint  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxRealPoint_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+SWIGINTERN bool wxRealPoint___ne__(wxRealPoint *self,PyObject *other){
+            wxRealPoint  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxRealPoint_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
 SWIGINTERN void wxRealPoint_Set(wxRealPoint *self,double x,double y){
             self->x = x;
             self->y = y;
@@ -2987,6 +3023,24 @@ SWIGINTERN PyObject *wxRealPoint_Get(wxRealPoint *self){
             wxPyEndBlockThreads(blocked);
             return tup;
         }
+SWIGINTERN bool wxPoint___eq__(wxPoint *self,PyObject *other){
+            wxPoint  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxPoint_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+SWIGINTERN bool wxPoint___ne__(wxPoint *self,PyObject *other){
+            wxPoint  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxPoint_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
 SWIGINTERN void wxPoint_Set(wxPoint *self,long x,long y){
             self->x = x;
             self->y = y;
@@ -2998,6 +3052,24 @@ SWIGINTERN PyObject *wxPoint_Get(wxPoint *self){
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
             wxPyEndBlockThreads(blocked);
             return tup;
+        }
+SWIGINTERN bool wxRect___eq__(wxRect *self,PyObject *other){
+            wxRect  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxRect_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+SWIGINTERN bool wxRect___ne__(wxRect *self,PyObject *other){
+            wxRect  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxRect_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
         }
 SWIGINTERN void wxRect_Set(wxRect *self,int x=0,int y=0,int width=0,int height=0){
             self->x = x;
@@ -3036,6 +3108,24 @@ SWIGINTERN PyObject *wxRect_Get(wxRect *self){
         return Py_None;
     }
 
+SWIGINTERN bool wxPoint2D___eq__(wxPoint2D *self,PyObject *other){
+            wxPoint2D  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxPoint2D_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+SWIGINTERN bool wxPoint2D___ne__(wxPoint2D *self,PyObject *other){
+            wxPoint2D  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxPoint2D_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
 SWIGINTERN void wxPoint2D_Set(wxPoint2D *self,double x=0,double y=0){
             self->m_x = x;
             self->m_y = y;
@@ -4148,6 +4238,24 @@ bool wxGBSpan_helper(PyObject* source, wxGBSpan** obj)
 }
 
 
+SWIGINTERN bool wxGBPosition___eq__(wxGBPosition *self,PyObject *other){
+            wxGBPosition  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxGBPosition_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+SWIGINTERN bool wxGBPosition___ne__(wxGBPosition *self,PyObject *other){
+            wxGBPosition  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxGBPosition_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
 SWIGINTERN void wxGBPosition_Set(wxGBPosition *self,int row=0,int col=0){
             self->SetRow(row);
             self->SetCol(col);
@@ -4159,6 +4267,24 @@ SWIGINTERN PyObject *wxGBPosition_Get(wxGBPosition *self){
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->GetCol()));
             wxPyEndBlockThreads(blocked);
             return tup;
+        }
+SWIGINTERN bool wxGBSpan___eq__(wxGBSpan *self,PyObject *other){
+            wxGBSpan  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxGBSpan_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+SWIGINTERN bool wxGBSpan___ne__(wxGBSpan *self,PyObject *other){
+            wxGBSpan  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxGBSpan_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
         }
 SWIGINTERN void wxGBSpan_Set(wxGBSpan *self,int rowspan=1,int colspan=1){
             self->SetRowspan(rowspan);
@@ -4498,15 +4624,14 @@ fail:
 SWIGINTERN PyObject *_wrap_Size___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxSize *arg1 = (wxSize *) 0 ;
-  wxSize *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxSize temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "sz", NULL 
+    (char *) "self",(char *) "other", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Size___eq__",kwnames,&obj0,&obj1)) SWIG_fail;
@@ -4515,14 +4640,9 @@ SWIGINTERN PyObject *_wrap_Size___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Size___eq__" "', expected argument " "1"" of type '" "wxSize *""'"); 
   }
   arg1 = reinterpret_cast< wxSize * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->operator ==((wxSize const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxSize___eq__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -4537,15 +4657,14 @@ fail:
 SWIGINTERN PyObject *_wrap_Size___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxSize *arg1 = (wxSize *) 0 ;
-  wxSize *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxSize temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "sz", NULL 
+    (char *) "self",(char *) "other", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Size___ne__",kwnames,&obj0,&obj1)) SWIG_fail;
@@ -4554,14 +4673,9 @@ SWIGINTERN PyObject *_wrap_Size___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Size___ne__" "', expected argument " "1"" of type '" "wxSize *""'"); 
   }
   arg1 = reinterpret_cast< wxSize * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->operator !=((wxSize const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxSize___ne__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -5183,15 +5297,14 @@ fail:
 SWIGINTERN PyObject *_wrap_RealPoint___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxRealPoint *arg1 = (wxRealPoint *) 0 ;
-  wxRealPoint *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxRealPoint temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "pt", NULL 
+    (char *) "self",(char *) "other", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:RealPoint___eq__",kwnames,&obj0,&obj1)) SWIG_fail;
@@ -5200,14 +5313,9 @@ SWIGINTERN PyObject *_wrap_RealPoint___eq__(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RealPoint___eq__" "', expected argument " "1"" of type '" "wxRealPoint *""'"); 
   }
   arg1 = reinterpret_cast< wxRealPoint * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxRealPoint_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->operator ==((wxRealPoint const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxRealPoint___eq__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -5222,15 +5330,14 @@ fail:
 SWIGINTERN PyObject *_wrap_RealPoint___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxRealPoint *arg1 = (wxRealPoint *) 0 ;
-  wxRealPoint *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxRealPoint temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "pt", NULL 
+    (char *) "self",(char *) "other", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:RealPoint___ne__",kwnames,&obj0,&obj1)) SWIG_fail;
@@ -5239,14 +5346,9 @@ SWIGINTERN PyObject *_wrap_RealPoint___ne__(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RealPoint___ne__" "', expected argument " "1"" of type '" "wxRealPoint *""'"); 
   }
   arg1 = reinterpret_cast< wxRealPoint * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxRealPoint_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->operator !=((wxRealPoint const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxRealPoint___ne__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -5598,15 +5700,14 @@ fail:
 SWIGINTERN PyObject *_wrap_Point___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPoint *arg1 = (wxPoint *) 0 ;
-  wxPoint *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxPoint temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "pt", NULL 
+    (char *) "self",(char *) "other", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Point___eq__",kwnames,&obj0,&obj1)) SWIG_fail;
@@ -5615,14 +5716,9 @@ SWIGINTERN PyObject *_wrap_Point___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Point___eq__" "', expected argument " "1"" of type '" "wxPoint *""'"); 
   }
   arg1 = reinterpret_cast< wxPoint * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->operator ==((wxPoint const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxPoint___eq__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -5637,15 +5733,14 @@ fail:
 SWIGINTERN PyObject *_wrap_Point___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPoint *arg1 = (wxPoint *) 0 ;
-  wxPoint *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxPoint temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "pt", NULL 
+    (char *) "self",(char *) "other", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Point___ne__",kwnames,&obj0,&obj1)) SWIG_fail;
@@ -5654,14 +5749,9 @@ SWIGINTERN PyObject *_wrap_Point___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Point___ne__" "', expected argument " "1"" of type '" "wxPoint *""'"); 
   }
   arg1 = reinterpret_cast< wxPoint * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->operator !=((wxPoint const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxPoint___ne__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -7257,31 +7347,25 @@ fail:
 SWIGINTERN PyObject *_wrap_Rect___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxRect *arg1 = (wxRect *) 0 ;
-  wxRect *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxRect temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "rect", NULL 
+    (char *) "self",(char *) "other", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Rect___eq__",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRect, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect___eq__" "', expected argument " "1"" of type '" "wxRect const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect___eq__" "', expected argument " "1"" of type '" "wxRect *""'"); 
   }
   arg1 = reinterpret_cast< wxRect * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxRect const *)arg1)->operator ==((wxRect const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxRect___eq__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -7296,31 +7380,25 @@ fail:
 SWIGINTERN PyObject *_wrap_Rect___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxRect *arg1 = (wxRect *) 0 ;
-  wxRect *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxRect temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "rect", NULL 
+    (char *) "self",(char *) "other", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Rect___ne__",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRect, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect___ne__" "', expected argument " "1"" of type '" "wxRect const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect___ne__" "', expected argument " "1"" of type '" "wxRect *""'"); 
   }
   arg1 = reinterpret_cast< wxRect * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxRect const *)arg1)->operator !=((wxRect const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxRect___ne__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -8536,31 +8614,25 @@ fail:
 SWIGINTERN PyObject *_wrap_Point2D___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPoint2D *arg1 = (wxPoint2D *) 0 ;
-  wxPoint2D *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxPoint2D temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "pt", NULL 
+    (char *) "self",(char *) "other", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Point2D___eq__",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPoint2D, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Point2D___eq__" "', expected argument " "1"" of type '" "wxPoint2D const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Point2D___eq__" "', expected argument " "1"" of type '" "wxPoint2D *""'"); 
   }
   arg1 = reinterpret_cast< wxPoint2D * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxPoint2D_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxPoint2D const *)arg1)->operator ==((wxPoint2D const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxPoint2D___eq__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -8575,31 +8647,25 @@ fail:
 SWIGINTERN PyObject *_wrap_Point2D___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPoint2D *arg1 = (wxPoint2D *) 0 ;
-  wxPoint2D *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxPoint2D temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "pt", NULL 
+    (char *) "self",(char *) "other", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Point2D___ne__",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPoint2D, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Point2D___ne__" "', expected argument " "1"" of type '" "wxPoint2D const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Point2D___ne__" "', expected argument " "1"" of type '" "wxPoint2D *""'"); 
   }
   arg1 = reinterpret_cast< wxPoint2D * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxPoint2D_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxPoint2D const *)arg1)->operator !=((wxPoint2D const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxPoint2D___ne__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -48665,11 +48731,10 @@ fail:
 SWIGINTERN PyObject *_wrap_GBPosition___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxGBPosition *arg1 = (wxGBPosition *) 0 ;
-  wxGBPosition *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxGBPosition temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -48682,14 +48747,9 @@ SWIGINTERN PyObject *_wrap_GBPosition___eq__(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GBPosition___eq__" "', expected argument " "1"" of type '" "wxGBPosition *""'"); 
   }
   arg1 = reinterpret_cast< wxGBPosition * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxGBPosition_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->operator ==((wxGBPosition const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxGBPosition___eq__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -48704,11 +48764,10 @@ fail:
 SWIGINTERN PyObject *_wrap_GBPosition___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxGBPosition *arg1 = (wxGBPosition *) 0 ;
-  wxGBPosition *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxGBPosition temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -48721,14 +48780,9 @@ SWIGINTERN PyObject *_wrap_GBPosition___ne__(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GBPosition___ne__" "', expected argument " "1"" of type '" "wxGBPosition *""'"); 
   }
   arg1 = reinterpret_cast< wxGBPosition * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxGBPosition_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->operator !=((wxGBPosition const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxGBPosition___ne__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -49036,11 +49090,10 @@ fail:
 SWIGINTERN PyObject *_wrap_GBSpan___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxGBSpan *arg1 = (wxGBSpan *) 0 ;
-  wxGBSpan *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxGBSpan temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -49053,14 +49106,9 @@ SWIGINTERN PyObject *_wrap_GBSpan___eq__(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GBSpan___eq__" "', expected argument " "1"" of type '" "wxGBSpan *""'"); 
   }
   arg1 = reinterpret_cast< wxGBSpan * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxGBSpan_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->operator ==((wxGBSpan const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxGBSpan___eq__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -49075,11 +49123,10 @@ fail:
 SWIGINTERN PyObject *_wrap_GBSpan___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxGBSpan *arg1 = (wxGBSpan *) 0 ;
-  wxGBSpan *arg2 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  wxGBSpan temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -49092,14 +49139,9 @@ SWIGINTERN PyObject *_wrap_GBSpan___ne__(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GBSpan___ne__" "', expected argument " "1"" of type '" "wxGBSpan *""'"); 
   }
   arg1 = reinterpret_cast< wxGBSpan * >(argp1);
+  arg2 = obj1;
   {
-    arg2 = &temp2;
-    if ( ! wxGBSpan_helper(obj1, &arg2)) SWIG_fail;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->operator !=((wxGBSpan const &)*arg2);
-    wxPyEndAllowThreads(__tstate);
+    result = (bool)wxGBSpan___ne__(arg1,arg2);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -55399,6 +55441,8 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "RB_USE_CHECKBOX",SWIG_From_int(static_cast< int >(wxRB_USE_CHECKBOX)));
   SWIG_Python_SetConstant(d, "ST_SIZEGRIP",SWIG_From_int(static_cast< int >(wxST_SIZEGRIP)));
   SWIG_Python_SetConstant(d, "ST_NO_AUTORESIZE",SWIG_From_int(static_cast< int >(wxST_NO_AUTORESIZE)));
+  SWIG_Python_SetConstant(d, "ST_DOTS_MIDDLE",SWIG_From_int(static_cast< int >(wxST_DOTS_MIDDLE)));
+  SWIG_Python_SetConstant(d, "ST_DOTS_END",SWIG_From_int(static_cast< int >(wxST_DOTS_END)));
   SWIG_Python_SetConstant(d, "FLOOD_SURFACE",SWIG_From_int(static_cast< int >(wxFLOOD_SURFACE)));
   SWIG_Python_SetConstant(d, "FLOOD_BORDER",SWIG_From_int(static_cast< int >(wxFLOOD_BORDER)));
   SWIG_Python_SetConstant(d, "ODDEVEN_RULE",SWIG_From_int(static_cast< int >(wxODDEVEN_RULE)));

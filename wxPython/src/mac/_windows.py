@@ -1937,6 +1937,10 @@ class HtmlListBox(VListBox):
         """GetFileSystem(self) -> FileSystem"""
         return _windows_.HtmlListBox_GetFileSystem(*args, **kwargs)
 
+    def OnLinkClicked(*args, **kwargs):
+        """OnLinkClicked(self, size_t n, wxHtmlLinkInfo link)"""
+        return _windows_.HtmlListBox_OnLinkClicked(*args, **kwargs)
+
 HtmlListBox_swigregister = _windows_.HtmlListBox_swigregister
 HtmlListBox_swigregister(HtmlListBox)
 

@@ -61,6 +61,7 @@
 %rename(HtmlColourCell)                     wxHtmlColourCell;
 %rename(HtmlFontCell)                       wxHtmlFontCell;
 %rename(HtmlWidgetCell)                     wxHtmlWidgetCell;
+%rename(HtmlWindowInterface)                wxHtmlWindowInterface;
 %rename(HtmlDCRenderer)                     wxHtmlDCRenderer;
 %rename(PAGE_ODD)                           wxPAGE_ODD;
 %rename(PAGE_EVEN)                          wxPAGE_EVEN;

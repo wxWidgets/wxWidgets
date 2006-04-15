@@ -736,6 +736,8 @@ class GridTableBase(_core.Object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    __swig_destroy__ = _grid.delete_GridTableBase
+    __del__ = lambda self : None;
     def _setOORInfo(*args, **kwargs):
         """_setOORInfo(self, PyObject _self)"""
         return _grid.GridTableBase__setOORInfo(*args, **kwargs)
@@ -1094,11 +1096,19 @@ class GridCellCoords(object):
         return _grid.GridCellCoords_Set(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(self, GridCellCoords other) -> bool"""
+        """
+        __eq__(self, PyObject other) -> bool
+
+        Test for equality of GridCellCoords objects.
+        """
         return _grid.GridCellCoords___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(self, GridCellCoords other) -> bool"""
+        """
+        __ne__(self, PyObject other) -> bool
+
+        Test for inequality of GridCellCoords objects.
+        """
         return _grid.GridCellCoords___ne__(*args, **kwargs)
 
     def Get(*args, **kwargs):
@@ -2027,6 +2037,10 @@ class GridEvent(_core.NotifyEvent):
         """AltDown(self) -> bool"""
         return _grid.GridEvent_AltDown(*args, **kwargs)
 
+    def CmdDown(*args, **kwargs):
+        """CmdDown(self) -> bool"""
+        return _grid.GridEvent_CmdDown(*args, **kwargs)
+
 GridEvent_swigregister = _grid.GridEvent_swigregister
 GridEvent_swigregister(GridEvent)
 
@@ -2064,6 +2078,10 @@ class GridSizeEvent(_core.NotifyEvent):
     def AltDown(*args, **kwargs):
         """AltDown(self) -> bool"""
         return _grid.GridSizeEvent_AltDown(*args, **kwargs)
+
+    def CmdDown(*args, **kwargs):
+        """CmdDown(self) -> bool"""
+        return _grid.GridSizeEvent_CmdDown(*args, **kwargs)
 
 GridSizeEvent_swigregister = _grid.GridSizeEvent_swigregister
 GridSizeEvent_swigregister(GridSizeEvent)
@@ -2123,6 +2141,10 @@ class GridRangeSelectEvent(_core.NotifyEvent):
     def AltDown(*args, **kwargs):
         """AltDown(self) -> bool"""
         return _grid.GridRangeSelectEvent_AltDown(*args, **kwargs)
+
+    def CmdDown(*args, **kwargs):
+        """CmdDown(self) -> bool"""
+        return _grid.GridRangeSelectEvent_CmdDown(*args, **kwargs)
 
 GridRangeSelectEvent_swigregister = _grid.GridRangeSelectEvent_swigregister
 GridRangeSelectEvent_swigregister(GridRangeSelectEvent)

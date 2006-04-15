@@ -313,6 +313,7 @@ def EndBusyCursor(*args):
 def GetElapsedTime(*args, **kwargs):
   """GetElapsedTime(bool resetTimer=True) -> long"""
   return _misc_.GetElapsedTime(*args, **kwargs)
+GetElapsedTime = wx._deprecated(GetElapsedTime) 
 
 def IsBusy(*args):
   """IsBusy() -> bool"""
@@ -3834,6 +3835,16 @@ class TimeSpan(object):
     """Proxy of C++ TimeSpan class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
+    def Milliseconds(*args, **kwargs):
+        """Milliseconds(long ms) -> TimeSpan"""
+        return _misc_.TimeSpan_Milliseconds(*args, **kwargs)
+
+    Milliseconds = staticmethod(Milliseconds)
+    def Millisecond(*args, **kwargs):
+        """Millisecond() -> TimeSpan"""
+        return _misc_.TimeSpan_Millisecond(*args, **kwargs)
+
+    Millisecond = staticmethod(Millisecond)
     def Seconds(*args, **kwargs):
         """Seconds(long sec) -> TimeSpan"""
         return _misc_.TimeSpan_Seconds(*args, **kwargs)
@@ -4025,6 +4036,14 @@ class TimeSpan(object):
 
 TimeSpan_swigregister = _misc_.TimeSpan_swigregister
 TimeSpan_swigregister(TimeSpan)
+
+def TimeSpan_Milliseconds(*args, **kwargs):
+  """TimeSpan_Milliseconds(long ms) -> TimeSpan"""
+  return _misc_.TimeSpan_Milliseconds(*args, **kwargs)
+
+def TimeSpan_Millisecond(*args):
+  """TimeSpan_Millisecond() -> TimeSpan"""
+  return _misc_.TimeSpan_Millisecond(*args)
 
 def TimeSpan_Seconds(*args, **kwargs):
   """TimeSpan_Seconds(long sec) -> TimeSpan"""
@@ -4594,6 +4613,17 @@ class DataObjectComposite(DataObject):
         the preferred object if preferred is True.
         """
         return _misc_.DataObjectComposite_Add(*args, **kwargs)
+
+    def GetReceivedFormat(*args, **kwargs):
+        """
+        GetReceivedFormat(self) -> DataFormat
+
+        Report the format passed to the `SetData` method.  This should be the
+        format of the data object within the composite that recieved data from
+        the clipboard or the DnD operation.  You can use this method to find
+        out what kind of data object was recieved.
+        """
+        return _misc_.DataObjectComposite_GetReceivedFormat(*args, **kwargs)
 
 DataObjectComposite_swigregister = _misc_.DataObjectComposite_swigregister
 DataObjectComposite_swigregister(DataObjectComposite)
@@ -5616,14 +5646,13 @@ def Display_GetFromWindow(*args, **kwargs):
 
 class StandardPaths(object):
     """
-    wx.StandardPaths returns the standard locations in the file system and
-    should be used by the programs to find their data files in a portable
-    way.
+    wx.StandardPaths returns standard locations in the file system and
+    should be used by programs to find their data files in a portable way.
 
     In the description of the methods below, the example return values are
     given for the Unix, Windows and Mac OS X systems, however please note
-    that these are just the examples and the actual values may differ. For
-    example, under Windows: the system administrator may change the
+    that these are just  examples and the actual values may differ. For
+    example, under Windows the system administrator may change the
     standard directories locations, i.e. the Windows directory may be
     named W:\Win2003 instead of the default C:\Windows.
 
@@ -5634,7 +5663,7 @@ class StandardPaths(object):
 
     The directories returned by the methods of this class may or may not
     exist. If they don't exist, it's up to the caller to create them,
-    wxStandardPaths doesn't do it.
+    wx.StandardPaths doesn't do it.
 
     Finally note that these functions only work with standardly packaged
     applications. I.e. under Unix you should follow the standard
@@ -5645,6 +5674,9 @@ class StandardPaths(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    ResourceCat_None = _misc_.StandardPaths_ResourceCat_None
+    ResourceCat_Messages = _misc_.StandardPaths_ResourceCat_Messages
+    ResourceCat_Max = _misc_.StandardPaths_ResourceCat_Max
     def Get(*args, **kwargs):
         """
         Get() -> StandardPaths
@@ -5730,6 +5762,32 @@ class StandardPaths(object):
         Contents/Plugins app bundle subdirectory under Mac
         """
         return _misc_.StandardPaths_GetPluginsDir(*args, **kwargs)
+
+    def GetResourcesDir(*args, **kwargs):
+        """
+        GetResourcesDir(self) -> String
+
+        Get resources directory.  Resources are auxiliary files used by the
+        application and include things like image and sound files.
+
+        Same as `GetDataDir` for all platforms except Mac where it returns
+        Contents/Resources subdirectory of the app bundle.
+        """
+        return _misc_.StandardPaths_GetResourcesDir(*args, **kwargs)
+
+    def GetLocalizedResourcesDir(*args, **kwargs):
+        """
+        GetLocalizedResourcesDir(self, String lang, int category=ResourceCat_None) -> String
+
+        Get localized resources directory containing the resource files of the
+        specified category for the given language.
+
+        In general this is just GetResourcesDir()/lang under Windows and Unix
+        and GetResourcesDir()/lang.lproj under Mac but is something quite
+        different under Unix for the message catalog category (namely the
+        standard prefix/share/locale/lang/LC_MESSAGES.)
+        """
+        return _misc_.StandardPaths_GetLocalizedResourcesDir(*args, **kwargs)
 
     def SetInstallPrefix(*args, **kwargs):
         """

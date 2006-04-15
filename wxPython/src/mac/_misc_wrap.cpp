@@ -3531,12 +3531,14 @@ SWIGINTERN void wxPyArtProvider_Destroy(wxPyArtProvider *self){ delete self; }
 
 
     static PyObject* __EnumerationHelper(bool flag, wxString& str, long index) {
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
         PyObject* ret = PyTuple_New(3);
         if (ret) {
             PyTuple_SET_ITEM(ret, 0, PyInt_FromLong(flag));
 	    PyTuple_SET_ITEM(ret, 1, wx2PyString(str));
             PyTuple_SET_ITEM(ret, 2, PyInt_FromLong(index));
         }
+        wxPyEndBlockThreads(blocked);
         return ret;
     }
 
@@ -27290,6 +27292,54 @@ SWIGINTERN PyObject *DateTime_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject 
   return SWIG_Python_InitShadowInstance(args);
 }
 
+SWIGINTERN PyObject *_wrap_TimeSpan_Milliseconds(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  long arg1 ;
+  wxTimeSpan result;
+  long val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "ms", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TimeSpan_Milliseconds",kwnames,&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_long(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "TimeSpan_Milliseconds" "', expected argument " "1"" of type '" "long""'");
+  } 
+  arg1 = static_cast< long >(val1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxTimeSpan::Milliseconds(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxTimeSpan(static_cast< const wxTimeSpan& >(result))), SWIGTYPE_p_wxTimeSpan, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TimeSpan_Millisecond(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxTimeSpan result;
+  
+  if (!SWIG_Python_UnpackTuple(args,"TimeSpan_Millisecond",0,0,0)) SWIG_fail;
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxTimeSpan::Millisecond();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxTimeSpan(static_cast< const wxTimeSpan& >(result))), SWIGTYPE_p_wxTimeSpan, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_TimeSpan_Seconds(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   long arg1 ;
@@ -31298,6 +31348,34 @@ SWIGINTERN PyObject *_wrap_DataObjectComposite_Add(PyObject *SWIGUNUSEDPARM(self
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_DataObjectComposite_GetReceivedFormat(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxDataObjectComposite *arg1 = (wxDataObjectComposite *) 0 ;
+  SwigValueWrapper<wxDataFormat > result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxDataObjectComposite, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DataObjectComposite_GetReceivedFormat" "', expected argument " "1"" of type '" "wxDataObjectComposite const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxDataObjectComposite * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxDataObjectComposite const *)arg1)->GetReceivedFormat();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxDataFormat(static_cast< const wxDataFormat& >(result))), SWIGTYPE_p_wxDataFormat, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -35691,6 +35769,103 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_StandardPaths_GetResourcesDir(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxStandardPaths, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StandardPaths_GetResourcesDir" "', expected argument " "1"" of type '" "wxStandardPaths const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxStandardPaths * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxStandardPaths const *)arg1)->GetResourcesDir();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_StandardPaths_GetLocalizedResourcesDir(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
+  wxString *arg2 = 0 ;
+  wxStandardPaths::ResourceCat arg3 = (wxStandardPaths::ResourceCat) wxStandardPaths::ResourceCat_None ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "lang",(char *) "category", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:StandardPaths_GetLocalizedResourcesDir",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxStandardPaths, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StandardPaths_GetLocalizedResourcesDir" "', expected argument " "1"" of type '" "wxStandardPaths const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxStandardPaths * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  if (obj2) {
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "StandardPaths_GetLocalizedResourcesDir" "', expected argument " "3"" of type '" "wxStandardPaths::ResourceCat""'");
+    } 
+    arg3 = static_cast< wxStandardPaths::ResourceCat >(val3);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxStandardPaths const *)arg1)->GetLocalizedResourcesDir((wxString const &)*arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_StandardPaths_SetInstallPrefix(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
@@ -36414,6 +36589,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DateTime_FormatISOTime", (PyCFunction)_wrap_DateTime_FormatISOTime, METH_O, NULL},
 	 { (char *)"DateTime_swigregister", DateTime_swigregister, METH_VARARGS, NULL},
 	 { (char *)"DateTime_swiginit", DateTime_swiginit, METH_VARARGS, NULL},
+	 { (char *)"TimeSpan_Milliseconds", (PyCFunction) _wrap_TimeSpan_Milliseconds, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TimeSpan_Millisecond", (PyCFunction)_wrap_TimeSpan_Millisecond, METH_NOARGS, NULL},
 	 { (char *)"TimeSpan_Seconds", (PyCFunction) _wrap_TimeSpan_Seconds, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TimeSpan_Second", (PyCFunction)_wrap_TimeSpan_Second, METH_NOARGS, NULL},
 	 { (char *)"TimeSpan_Minutes", (PyCFunction) _wrap_TimeSpan_Minutes, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -36533,6 +36710,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyDataObjectSimple_swiginit", PyDataObjectSimple_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_DataObjectComposite", (PyCFunction)_wrap_new_DataObjectComposite, METH_NOARGS, NULL},
 	 { (char *)"DataObjectComposite_Add", (PyCFunction) _wrap_DataObjectComposite_Add, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DataObjectComposite_GetReceivedFormat", (PyCFunction)_wrap_DataObjectComposite_GetReceivedFormat, METH_O, NULL},
 	 { (char *)"DataObjectComposite_swigregister", DataObjectComposite_swigregister, METH_VARARGS, NULL},
 	 { (char *)"DataObjectComposite_swiginit", DataObjectComposite_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_TextDataObject", (PyCFunction) _wrap_new_TextDataObject, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -36683,6 +36861,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StandardPaths_GetUserDataDir", (PyCFunction)_wrap_StandardPaths_GetUserDataDir, METH_O, NULL},
 	 { (char *)"StandardPaths_GetUserLocalDataDir", (PyCFunction)_wrap_StandardPaths_GetUserLocalDataDir, METH_O, NULL},
 	 { (char *)"StandardPaths_GetPluginsDir", (PyCFunction)_wrap_StandardPaths_GetPluginsDir, METH_O, NULL},
+	 { (char *)"StandardPaths_GetResourcesDir", (PyCFunction)_wrap_StandardPaths_GetResourcesDir, METH_O, NULL},
+	 { (char *)"StandardPaths_GetLocalizedResourcesDir", (PyCFunction) _wrap_StandardPaths_GetLocalizedResourcesDir, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StandardPaths_SetInstallPrefix", (PyCFunction) _wrap_StandardPaths_SetInstallPrefix, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StandardPaths_GetInstallPrefix", (PyCFunction)_wrap_StandardPaths_GetInstallPrefix, METH_O, NULL},
 	 { (char *)"StandardPaths_swigregister", StandardPaths_swigregister, METH_VARARGS, NULL},
@@ -38841,5 +39021,8 @@ SWIGEXPORT void SWIG_init(void) {
   wxPyPtrTypeMap_Add("wxFileDropTarget", "wxPyFileDropTarget");
   
   SWIG_addvarlink(SWIG_globals(),(char*)"DefaultVideoMode",DefaultVideoMode_get, DefaultVideoMode_set);
+  SWIG_Python_SetConstant(d, "StandardPaths_ResourceCat_None",SWIG_From_int(static_cast< int >(wxStandardPaths::ResourceCat_None)));
+  SWIG_Python_SetConstant(d, "StandardPaths_ResourceCat_Messages",SWIG_From_int(static_cast< int >(wxStandardPaths::ResourceCat_Messages)));
+  SWIG_Python_SetConstant(d, "StandardPaths_ResourceCat_Max",SWIG_From_int(static_cast< int >(wxStandardPaths::ResourceCat_Max)));
 }
 

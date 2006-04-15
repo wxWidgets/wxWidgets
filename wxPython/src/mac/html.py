@@ -224,6 +224,10 @@ class HtmlParser(_core.Object):
         """PopTagHandler(self)"""
         return _html.HtmlParser_PopTagHandler(*args, **kwargs)
 
+    def GetInnerSource(*args, **kwargs):
+        """GetInnerSource(self, HtmlTag tag) -> String"""
+        return _html.HtmlParser_GetInnerSource(*args, **kwargs)
+
 HtmlParser_swigregister = _html.HtmlParser_swigregister
 HtmlParser_swigregister(HtmlParser)
 
@@ -253,6 +257,11 @@ class HtmlWinParser(HtmlParser):
     def GetWindow(*args, **kwargs):
         """GetWindow(self) -> HtmlWindow"""
         return _html.HtmlWinParser_GetWindow(*args, **kwargs)
+
+    GetWindow = wx._deprecated(GetWindow) 
+    def GetWindowInterface(*args, **kwargs):
+        """GetWindowInterface(self) -> HtmlWindowInterface"""
+        return _html.HtmlWinParser_GetWindowInterface(*args, **kwargs)
 
     def SetFonts(*args, **kwargs):
         """SetFonts(self, String normal_face, String fixed_face, PyObject sizes=None)"""
@@ -639,10 +648,15 @@ class HtmlCell(_core.Object):
         """GetFirstChild(self) -> HtmlCell"""
         return _html.HtmlCell_GetFirstChild(*args, **kwargs)
 
+    def GetMouseCursor(*args, **kwargs):
+        """GetMouseCursor(self, HtmlWindowInterface window) -> Cursor"""
+        return _html.HtmlCell_GetMouseCursor(*args, **kwargs)
+
     def GetCursor(*args, **kwargs):
         """GetCursor(self) -> Cursor"""
         return _html.HtmlCell_GetCursor(*args, **kwargs)
 
+    GetCursor = wx._deprecated(GetCursor) 
     def IsFormattingCell(*args, **kwargs):
         """IsFormattingCell(self) -> bool"""
         return _html.HtmlCell_IsFormattingCell(*args, **kwargs)
@@ -679,6 +693,10 @@ class HtmlCell(_core.Object):
         """Find(self, int condition, void param) -> HtmlCell"""
         return _html.HtmlCell_Find(*args, **kwargs)
 
+    def ProcessMouseClick(*args, **kwargs):
+        """ProcessMouseClick(self, HtmlWindowInterface window, Point pos, MouseEvent event) -> bool"""
+        return _html.HtmlCell_ProcessMouseClick(*args, **kwargs)
+
     def AdjustPagebreak(*args, **kwargs):
         """AdjustPagebreak(self, int INOUT) -> bool"""
         return _html.HtmlCell_AdjustPagebreak(*args, **kwargs)
@@ -700,8 +718,12 @@ class HtmlCell(_core.Object):
         return _html.HtmlCell_FindCellByPos(*args, **kwargs)
 
     def GetAbsPos(*args, **kwargs):
-        """GetAbsPos(self) -> Point"""
+        """GetAbsPos(self, HtmlCell rootCell=None) -> Point"""
         return _html.HtmlCell_GetAbsPos(*args, **kwargs)
+
+    def GetRootCell(*args, **kwargs):
+        """GetRootCell(self) -> HtmlCell"""
+        return _html.HtmlCell_GetRootCell(*args, **kwargs)
 
     def GetFirstTerminal(*args, **kwargs):
         """GetFirstTerminal(self) -> HtmlCell"""
@@ -870,6 +892,47 @@ class HtmlFilter(_core.Object):
 HtmlFilter_swigregister = _html.HtmlFilter_swigregister
 HtmlFilter_swigregister(HtmlFilter)
 
+class HtmlWindowInterface(object):
+    """Proxy of C++ HtmlWindowInterface class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _html.delete_HtmlWindowInterface
+    __del__ = lambda self : None;
+    def SetHTMLWindowTitle(*args, **kwargs):
+        """SetHTMLWindowTitle(self, String title)"""
+        return _html.HtmlWindowInterface_SetHTMLWindowTitle(*args, **kwargs)
+
+    def HTMLCoordsToWindow(*args, **kwargs):
+        """HTMLCoordsToWindow(self, HtmlCell cell, Point pos) -> Point"""
+        return _html.HtmlWindowInterface_HTMLCoordsToWindow(*args, **kwargs)
+
+    def GetHTMLWindow(*args, **kwargs):
+        """GetHTMLWindow(self) -> Window"""
+        return _html.HtmlWindowInterface_GetHTMLWindow(*args, **kwargs)
+
+    def GetHTMLBackgroundColour(*args, **kwargs):
+        """GetHTMLBackgroundColour(self) -> Colour"""
+        return _html.HtmlWindowInterface_GetHTMLBackgroundColour(*args, **kwargs)
+
+    def SetHTMLBackgroundColour(*args, **kwargs):
+        """SetHTMLBackgroundColour(self, Colour clr)"""
+        return _html.HtmlWindowInterface_SetHTMLBackgroundColour(*args, **kwargs)
+
+    def SetHTMLBackgroundImage(*args, **kwargs):
+        """SetHTMLBackgroundImage(self, Bitmap bmpBg)"""
+        return _html.HtmlWindowInterface_SetHTMLBackgroundImage(*args, **kwargs)
+
+    def SetHTMLStatusText(*args, **kwargs):
+        """SetHTMLStatusText(self, String text)"""
+        return _html.HtmlWindowInterface_SetHTMLStatusText(*args, **kwargs)
+
+    HTMLCursor_Default = _html.HtmlWindowInterface_HTMLCursor_Default
+    HTMLCursor_Link = _html.HtmlWindowInterface_HTMLCursor_Link
+    HTMLCursor_Text = _html.HtmlWindowInterface_HTMLCursor_Text
+HtmlWindowInterface_swigregister = _html.HtmlWindowInterface_swigregister
+HtmlWindowInterface_swigregister(HtmlWindowInterface)
+
 #---------------------------------------------------------------------------
 
 class HtmlWindow(_windows.ScrolledWindow):
@@ -1035,8 +1098,12 @@ class HtmlWindow(_windows.ScrolledWindow):
         return _html.HtmlWindow_OnCellMouseHover(*args, **kwargs)
 
     def OnCellClicked(*args, **kwargs):
-        """OnCellClicked(self, HtmlCell cell, int x, int y, MouseEvent event)"""
+        """OnCellClicked(self, HtmlCell cell, int x, int y, MouseEvent event) -> bool"""
         return _html.HtmlWindow_OnCellClicked(*args, **kwargs)
+
+    def OnOpeningURL(*args, **kwargs):
+        """OnOpeningURL(self, int type, String url, String redirect) -> int"""
+        return _html.HtmlWindow_OnOpeningURL(*args, **kwargs)
 
     def base_OnLinkClicked(*args, **kw):
         return HtmlWindow.OnLinkClicked(*args, **kw)
@@ -1076,6 +1143,14 @@ class HtmlWindow(_windows.ScrolledWindow):
         return _html.HtmlWindow_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    HTMLCursor_Default = _html.HtmlWindow_HTMLCursor_Default
+    HTMLCursor_Link = _html.HtmlWindow_HTMLCursor_Link
+    HTMLCursor_Text = _html.HtmlWindow_HTMLCursor_Text
+    def GetDefaultHTMLCursor(*args, **kwargs):
+        """GetDefaultHTMLCursor(int type) -> Cursor"""
+        return _html.HtmlWindow_GetDefaultHTMLCursor(*args, **kwargs)
+
+    GetDefaultHTMLCursor = staticmethod(GetDefaultHTMLCursor)
 HtmlWindow_swigregister = _html.HtmlWindow_swigregister
 HtmlWindow_swigregister(HtmlWindow)
 
@@ -1104,6 +1179,10 @@ def HtmlWindow_GetClassDefaultAttributes(*args, **kwargs):
     this.
     """
   return _html.HtmlWindow_GetClassDefaultAttributes(*args, **kwargs)
+
+def HtmlWindow_GetDefaultHTMLCursor(*args, **kwargs):
+  """HtmlWindow_GetDefaultHTMLCursor(int type) -> Cursor"""
+  return _html.HtmlWindow_GetDefaultHTMLCursor(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
@@ -1599,7 +1678,7 @@ class HtmlHelpFrame(_windows.Frame):
 
     def KeywordSearch(self, keyword):
         return self.GetHelpWindow().KeywordSearch(keyword)
-         
+
     def UseConfig(self, config, rootpath=""):
         return self.GetHelpWindow().UseConfig(config, rootpath)
     def ReadCustomization(self, config, rootpath=""):

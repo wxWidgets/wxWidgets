@@ -188,17 +188,17 @@ class Colour(_core.Object):
 
     def __eq__(*args, **kwargs):
         """
-        __eq__(self, Colour colour) -> bool
+        __eq__(self, PyObject other) -> bool
 
-        Compare colours for equality
+        Compare colours for equality.
         """
         return _gdi_.Colour___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(self, Colour colour) -> bool
+        __ne__(self, PyObject other) -> bool
 
-        Compare colours for inequality
+        Compare colours for inequality.
         """
         return _gdi_.Colour___ne__(*args, **kwargs)
 

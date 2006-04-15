@@ -133,6 +133,8 @@ SB_VERTICAL = _core_.SB_VERTICAL
 RB_USE_CHECKBOX = _core_.RB_USE_CHECKBOX
 ST_SIZEGRIP = _core_.ST_SIZEGRIP
 ST_NO_AUTORESIZE = _core_.ST_NO_AUTORESIZE
+ST_DOTS_MIDDLE = _core_.ST_DOTS_MIDDLE
+ST_DOTS_END = _core_.ST_DOTS_END
 FLOOD_SURFACE = _core_.FLOOD_SURFACE
 FLOOD_BORDER = _core_.FLOOD_BORDER
 ODDEVEN_RULE = _core_.ODDEVEN_RULE
@@ -804,7 +806,7 @@ class Size(object):
     __del__ = lambda self : None;
     def __eq__(*args, **kwargs):
         """
-        __eq__(self, Size sz) -> bool
+        __eq__(self, PyObject other) -> bool
 
         Test for equality of wx.Size objects.
         """
@@ -812,9 +814,9 @@ class Size(object):
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(self, Size sz) -> bool
+        __ne__(self, PyObject other) -> bool
 
-        Test for inequality.
+        Test for inequality of wx.Size objects.
         """
         return _core_.Size___ne__(*args, **kwargs)
 
@@ -940,7 +942,7 @@ class RealPoint(object):
     __del__ = lambda self : None;
     def __eq__(*args, **kwargs):
         """
-        __eq__(self, RealPoint pt) -> bool
+        __eq__(self, PyObject other) -> bool
 
         Test for equality of wx.RealPoint objects.
         """
@@ -948,7 +950,7 @@ class RealPoint(object):
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(self, RealPoint pt) -> bool
+        __ne__(self, PyObject other) -> bool
 
         Test for inequality of wx.RealPoint objects.
         """
@@ -1025,7 +1027,7 @@ class Point(object):
     __del__ = lambda self : None;
     def __eq__(*args, **kwargs):
         """
-        __eq__(self, Point pt) -> bool
+        __eq__(self, PyObject other) -> bool
 
         Test for equality of wx.Point objects.
         """
@@ -1033,7 +1035,7 @@ class Point(object):
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(self, Point pt) -> bool
+        __ne__(self, PyObject other) -> bool
 
         Test for inequality of wx.Point objects.
         """
@@ -1316,17 +1318,17 @@ class Rect(object):
 
     def __eq__(*args, **kwargs):
         """
-        __eq__(self, Rect rect) -> bool
+        __eq__(self, PyObject other) -> bool
 
-        Test for equality.
+        Test for equality of wx.Rect objects.
         """
         return _core_.Rect___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(self, Rect rect) -> bool
+        __ne__(self, PyObject other) -> bool
 
-        Test for inequality.
+        Test for inequality of wx.Rect objects.
         """
         return _core_.Rect___ne__(*args, **kwargs)
 
@@ -1533,17 +1535,17 @@ class Point2D(object):
 
     def __eq__(*args, **kwargs):
         """
-        __eq__(self, Point2D pt) -> bool
+        __eq__(self, PyObject other) -> bool
 
-        Test for equality
+        Test for equality of wx.Point2D objects.
         """
         return _core_.Point2D___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(self, Point2D pt) -> bool
+        __ne__(self, PyObject other) -> bool
 
-        Test for inequality
+        Test for inequality of wx.Point2D objects.
         """
         return _core_.Point2D___ne__(*args, **kwargs)
 
@@ -11941,11 +11943,19 @@ class GBPosition(object):
         return _core_.GBPosition_SetCol(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(self, GBPosition other) -> bool"""
+        """
+        __eq__(self, PyObject other) -> bool
+
+        Compare GBPosition for equality.
+        """
         return _core_.GBPosition___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(self, GBPosition other) -> bool"""
+        """
+        __ne__(self, PyObject other) -> bool
+
+        Compare GBPosition for inequality.
+        """
         return _core_.GBPosition___ne__(*args, **kwargs)
 
     def Set(*args, **kwargs):
@@ -12014,11 +12024,19 @@ class GBSpan(object):
         return _core_.GBSpan_SetColspan(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(self, GBSpan other) -> bool"""
+        """
+        __eq__(self, PyObject other) -> bool
+
+        Compare wxGBSpan for equality.
+        """
         return _core_.GBSpan___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(self, GBSpan other) -> bool"""
+        """
+        __ne__(self, PyObject other) -> bool
+
+        Compare GBSpan for inequality.
+        """
         return _core_.GBSpan___ne__(*args, **kwargs)
 
     def Set(*args, **kwargs):

@@ -2807,14 +2807,15 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
  static const wxString wxPyStaticTextNameStr(wxStaticTextNameStr); 
 
 #include <wx/checklst.h>
-    
 
  static const wxString wxPyListBoxNameStr(wxListBoxNameStr); 
 SWIGINTERN void wxListBox_Insert(wxListBox *self,wxString const &item,int pos,PyObject *clientData=NULL){
-            if (clientData) {
+            if (clientData)
+            {
                 wxPyClientData* data = new wxPyClientData(clientData);
                 self->Insert(item, pos, data);
-            } else
+            }
+            else
                 self->Insert(item, pos);
         }
 
@@ -2847,12 +2848,15 @@ SWIG_AsVal_unsigned_SS_int (PyObject * obj, unsigned int *val)
 }
 
 SWIGINTERN PyObject *wxListBox_GetSelections(wxListBox *self){
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxArrayInt lst;
             self->GetSelections(lst);
             PyObject *tup = PyTuple_New(lst.GetCount());
-            for(size_t i=0; i<lst.GetCount(); i++) {
+            for (size_t i=0; i<lst.GetCount(); i++)
+            {
                 PyTuple_SetItem(tup, i, PyInt_FromLong(lst[i]));
             }
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
 SWIGINTERN void wxListBox_SetItemForegroundColour(wxListBox *self,int item,wxColour const &c){
@@ -19292,7 +19296,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BookCtrlBase_GetInternalBorder(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxBookCtrlBase *arg1 = (wxBookCtrlBase *) 0 ;
-  size_t result;
+  unsigned int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -19306,11 +19310,11 @@ SWIGINTERN PyObject *_wrap_BookCtrlBase_GetInternalBorder(PyObject *SWIGUNUSEDPA
   arg1 = reinterpret_cast< wxBookCtrlBase * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (size_t)((wxBookCtrlBase const *)arg1)->GetInternalBorder();
+    result = (unsigned int)((wxBookCtrlBase const *)arg1)->GetInternalBorder();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  resultobj = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -19320,10 +19324,10 @@ fail:
 SWIGINTERN PyObject *_wrap_BookCtrlBase_SetInternalBorder(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxBookCtrlBase *arg1 = (wxBookCtrlBase *) 0 ;
-  size_t arg2 ;
+  unsigned int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  unsigned int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -19337,11 +19341,11 @@ SWIGINTERN PyObject *_wrap_BookCtrlBase_SetInternalBorder(PyObject *SWIGUNUSEDPA
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BookCtrlBase_SetInternalBorder" "', expected argument " "1"" of type '" "wxBookCtrlBase *""'"); 
   }
   arg1 = reinterpret_cast< wxBookCtrlBase * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BookCtrlBase_SetInternalBorder" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BookCtrlBase_SetInternalBorder" "', expected argument " "2"" of type '" "unsigned int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< unsigned int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetInternalBorder(arg2);
@@ -19379,6 +19383,72 @@ SWIGINTERN PyObject *_wrap_BookCtrlBase_IsVertical(PyObject *SWIGUNUSEDPARM(self
   {
     resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
   }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BookCtrlBase_SetControlMargin(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxBookCtrlBase *arg1 = (wxBookCtrlBase *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "margin", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:BookCtrlBase_SetControlMargin",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxBookCtrlBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BookCtrlBase_SetControlMargin" "', expected argument " "1"" of type '" "wxBookCtrlBase *""'"); 
+  }
+  arg1 = reinterpret_cast< wxBookCtrlBase * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BookCtrlBase_SetControlMargin" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetControlMargin(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BookCtrlBase_GetControlMargin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxBookCtrlBase *arg1 = (wxBookCtrlBase *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxBookCtrlBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BookCtrlBase_GetControlMargin" "', expected argument " "1"" of type '" "wxBookCtrlBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxBookCtrlBase * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxBookCtrlBase const *)arg1)->GetControlMargin();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -19446,6 +19516,36 @@ SWIGINTERN PyObject *_wrap_BookCtrlBase_GetFitToCurrentPage(PyObject *SWIGUNUSED
   }
   {
     resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BookCtrlBase_GetControlSizer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxBookCtrlBase *arg1 = (wxBookCtrlBase *) 0 ;
+  wxSizer *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxBookCtrlBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BookCtrlBase_GetControlSizer" "', expected argument " "1"" of type '" "wxBookCtrlBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxBookCtrlBase * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxSizer *)((wxBookCtrlBase const *)arg1)->GetControlSizer();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, (bool)0); 
   }
   return resultobj;
 fail:
@@ -25382,56 +25482,6 @@ fail:
     if (temp7)
     delete arg7;
   }
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_ToolBar_FindToolForPosition(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxToolBar *arg1 = (wxToolBar *) 0 ;
-  int arg2 ;
-  int arg3 ;
-  wxToolBarToolBase *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "x",(char *) "y", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ToolBar_FindToolForPosition",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxToolBar, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ToolBar_FindToolForPosition" "', expected argument " "1"" of type '" "wxToolBar *""'"); 
-  }
-  arg1 = reinterpret_cast< wxToolBar * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ToolBar_FindToolForPosition" "', expected argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ToolBar_FindToolForPosition" "', expected argument " "3"" of type '" "int""'");
-  } 
-  arg3 = static_cast< int >(val3);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxToolBarToolBase *)(arg1)->FindToolForPosition(arg2,arg3);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-    resultobj = wxPyMake_wxObject(result, (bool)0); 
-  }
-  return resultobj;
-fail:
   return NULL;
 }
 
@@ -33385,7 +33435,7 @@ fail:
 SWIGINTERN PyObject *_wrap_TreeCtrl_GetCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
-  size_t result;
+  unsigned int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -33399,11 +33449,11 @@ SWIGINTERN PyObject *_wrap_TreeCtrl_GetCount(PyObject *SWIGUNUSEDPARM(self), PyO
   arg1 = reinterpret_cast< wxPyTreeCtrl * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (size_t)((wxPyTreeCtrl const *)arg1)->GetCount();
+    result = (unsigned int)((wxPyTreeCtrl const *)arg1)->GetCount();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  resultobj = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -41241,8 +41291,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"BookCtrlBase_GetInternalBorder", (PyCFunction)_wrap_BookCtrlBase_GetInternalBorder, METH_O, NULL},
 	 { (char *)"BookCtrlBase_SetInternalBorder", (PyCFunction) _wrap_BookCtrlBase_SetInternalBorder, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BookCtrlBase_IsVertical", (PyCFunction)_wrap_BookCtrlBase_IsVertical, METH_O, NULL},
+	 { (char *)"BookCtrlBase_SetControlMargin", (PyCFunction) _wrap_BookCtrlBase_SetControlMargin, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"BookCtrlBase_GetControlMargin", (PyCFunction)_wrap_BookCtrlBase_GetControlMargin, METH_O, NULL},
 	 { (char *)"BookCtrlBase_SetFitToCurrentPage", (PyCFunction) _wrap_BookCtrlBase_SetFitToCurrentPage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BookCtrlBase_GetFitToCurrentPage", (PyCFunction)_wrap_BookCtrlBase_GetFitToCurrentPage, METH_O, NULL},
+	 { (char *)"BookCtrlBase_GetControlSizer", (PyCFunction)_wrap_BookCtrlBase_GetControlSizer, METH_O, NULL},
 	 { (char *)"BookCtrlBase_DeletePage", (PyCFunction) _wrap_BookCtrlBase_DeletePage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BookCtrlBase_RemovePage", (PyCFunction) _wrap_BookCtrlBase_RemovePage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BookCtrlBase_DeleteAllPages", (PyCFunction)_wrap_BookCtrlBase_DeleteAllPages, METH_O, NULL},
@@ -41395,7 +41448,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_ToolBar", (PyCFunction) _wrap_new_ToolBar, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreToolBar", (PyCFunction)_wrap_new_PreToolBar, METH_NOARGS, NULL},
 	 { (char *)"ToolBar_Create", (PyCFunction) _wrap_ToolBar_Create, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"ToolBar_FindToolForPosition", (PyCFunction) _wrap_ToolBar_FindToolForPosition, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ToolBar_GetClassDefaultAttributes", (PyCFunction) _wrap_ToolBar_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ToolBar_swigregister", ToolBar_swigregister, METH_VARARGS, NULL},
 	 { (char *)"ToolBar_swiginit", ToolBar_swiginit, METH_VARARGS, NULL},
@@ -44055,7 +44107,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "GA_HORIZONTAL",SWIG_From_int(static_cast< int >(wxGA_HORIZONTAL)));
   SWIG_Python_SetConstant(d, "GA_VERTICAL",SWIG_From_int(static_cast< int >(wxGA_VERTICAL)));
   SWIG_Python_SetConstant(d, "GA_SMOOTH",SWIG_From_int(static_cast< int >(wxGA_SMOOTH)));
-  SWIG_Python_SetConstant(d, "GA_PROGRESSBAR",SWIG_From_int(static_cast< int >(wxGA_PROGRESSBAR)));
   SWIG_addvarlink(SWIG_globals(),(char*)"StaticBitmapNameStr",StaticBitmapNameStr_get, StaticBitmapNameStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"StaticBoxNameStr",StaticBoxNameStr_get, StaticBoxNameStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"StaticTextNameStr",StaticTextNameStr_get, StaticTextNameStr_set);
@@ -44079,7 +44130,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "TE_CHARWRAP",SWIG_From_int(static_cast< int >(wxTE_CHARWRAP)));
   SWIG_Python_SetConstant(d, "TE_WORDWRAP",SWIG_From_int(static_cast< int >(wxTE_WORDWRAP)));
   SWIG_Python_SetConstant(d, "TE_BESTWRAP",SWIG_From_int(static_cast< int >(wxTE_BESTWRAP)));
-  SWIG_Python_SetConstant(d, "TE_LINEWRAP",SWIG_From_int(static_cast< int >(wxTE_LINEWRAP)));
   SWIG_Python_SetConstant(d, "TE_RICH2",SWIG_From_int(static_cast< int >(wxTE_RICH2)));
   SWIG_Python_SetConstant(d, "TE_CAPITALIZE",SWIG_From_int(static_cast< int >(wxTE_CAPITALIZE)));
   SWIG_Python_SetConstant(d, "TEXT_ALIGNMENT_DEFAULT",SWIG_From_int(static_cast< int >(wxTEXT_ALIGNMENT_DEFAULT)));
@@ -44143,6 +44193,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "BK_LEFT",SWIG_From_int(static_cast< int >(wxBK_LEFT)));
   SWIG_Python_SetConstant(d, "BK_RIGHT",SWIG_From_int(static_cast< int >(wxBK_RIGHT)));
   SWIG_Python_SetConstant(d, "BK_ALIGN_MASK",SWIG_From_int(static_cast< int >(wxBK_ALIGN_MASK)));
+  SWIG_Python_SetConstant(d, "BK_BUTTONBAR",SWIG_From_int(static_cast< int >(wxBK_BUTTONBAR)));
   SWIG_Python_SetConstant(d, "NB_FIXEDWIDTH",SWIG_From_int(static_cast< int >(wxNB_FIXEDWIDTH)));
   SWIG_Python_SetConstant(d, "NB_TOP",SWIG_From_int(static_cast< int >(wxNB_TOP)));
   SWIG_Python_SetConstant(d, "NB_LEFT",SWIG_From_int(static_cast< int >(wxNB_LEFT)));
@@ -44300,8 +44351,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "TR_FULL_ROW_HIGHLIGHT",SWIG_From_int(static_cast< int >(wxTR_FULL_ROW_HIGHLIGHT)));
   SWIG_Python_SetConstant(d, "TR_DEFAULT_STYLE",SWIG_From_int(static_cast< int >(wxTR_DEFAULT_STYLE)));
   SWIG_Python_SetConstant(d, "TR_TWIST_BUTTONS",SWIG_From_int(static_cast< int >(wxTR_TWIST_BUTTONS)));
-  SWIG_Python_SetConstant(d, "TR_MAC_BUTTONS",SWIG_From_int(static_cast< int >(wxTR_MAC_BUTTONS)));
-  SWIG_Python_SetConstant(d, "TR_AQUA_BUTTONS",SWIG_From_int(static_cast< int >(wxTR_AQUA_BUTTONS)));
   SWIG_Python_SetConstant(d, "TreeItemIcon_Normal",SWIG_From_int(static_cast< int >(wxTreeItemIcon_Normal)));
   SWIG_Python_SetConstant(d, "TreeItemIcon_Selected",SWIG_From_int(static_cast< int >(wxTreeItemIcon_Selected)));
   SWIG_Python_SetConstant(d, "TreeItemIcon_Expanded",SWIG_From_int(static_cast< int >(wxTreeItemIcon_Expanded)));

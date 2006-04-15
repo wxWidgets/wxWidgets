@@ -860,7 +860,7 @@ def ComboBox_GetClassDefaultAttributes(*args, **kwargs):
 GA_HORIZONTAL = _controls_.GA_HORIZONTAL
 GA_VERTICAL = _controls_.GA_VERTICAL
 GA_SMOOTH = _controls_.GA_SMOOTH
-GA_PROGRESSBAR = _controls_.GA_PROGRESSBAR
+GA_PROGRESSBAR = 0 # obsolete 
 class Gauge(_core.Control):
     """Proxy of C++ Gauge class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -1491,9 +1491,9 @@ TE_DONTWRAP = _controls_.TE_DONTWRAP
 TE_CHARWRAP = _controls_.TE_CHARWRAP
 TE_WORDWRAP = _controls_.TE_WORDWRAP
 TE_BESTWRAP = _controls_.TE_BESTWRAP
-TE_LINEWRAP = _controls_.TE_LINEWRAP
 TE_RICH2 = _controls_.TE_RICH2
 TE_CAPITALIZE = _controls_.TE_CAPITALIZE
+TE_LINEWRAP = TE_CHARWRAP 
 TEXT_ALIGNMENT_DEFAULT = _controls_.TEXT_ALIGNMENT_DEFAULT
 TEXT_ALIGNMENT_LEFT = _controls_.TEXT_ALIGNMENT_LEFT
 TEXT_ALIGNMENT_CENTRE = _controls_.TEXT_ALIGNMENT_CENTRE
@@ -2754,6 +2754,7 @@ BK_BOTTOM = _controls_.BK_BOTTOM
 BK_LEFT = _controls_.BK_LEFT
 BK_RIGHT = _controls_.BK_RIGHT
 BK_ALIGN_MASK = _controls_.BK_ALIGN_MASK
+BK_BUTTONBAR = _controls_.BK_BUTTONBAR
 class BookCtrlBase(_core.Control):
     """Proxy of C++ BookCtrlBase class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -2812,16 +2813,24 @@ class BookCtrlBase(_core.Control):
         return _controls_.BookCtrlBase_CalcSizeFromPage(*args, **kwargs)
 
     def GetInternalBorder(*args, **kwargs):
-        """GetInternalBorder(self) -> size_t"""
+        """GetInternalBorder(self) -> unsigned int"""
         return _controls_.BookCtrlBase_GetInternalBorder(*args, **kwargs)
 
     def SetInternalBorder(*args, **kwargs):
-        """SetInternalBorder(self, size_t internalBorder)"""
+        """SetInternalBorder(self, unsigned int internalBorder)"""
         return _controls_.BookCtrlBase_SetInternalBorder(*args, **kwargs)
 
     def IsVertical(*args, **kwargs):
         """IsVertical(self) -> bool"""
         return _controls_.BookCtrlBase_IsVertical(*args, **kwargs)
+
+    def SetControlMargin(*args, **kwargs):
+        """SetControlMargin(self, int margin)"""
+        return _controls_.BookCtrlBase_SetControlMargin(*args, **kwargs)
+
+    def GetControlMargin(*args, **kwargs):
+        """GetControlMargin(self) -> int"""
+        return _controls_.BookCtrlBase_GetControlMargin(*args, **kwargs)
 
     def SetFitToCurrentPage(*args, **kwargs):
         """SetFitToCurrentPage(self, bool fit)"""
@@ -2830,6 +2839,10 @@ class BookCtrlBase(_core.Control):
     def GetFitToCurrentPage(*args, **kwargs):
         """GetFitToCurrentPage(self) -> bool"""
         return _controls_.BookCtrlBase_GetFitToCurrentPage(*args, **kwargs)
+
+    def GetControlSizer(*args, **kwargs):
+        """GetControlSizer(self) -> Sizer"""
+        return _controls_.BookCtrlBase_GetControlSizer(*args, **kwargs)
 
     def DeletePage(*args, **kwargs):
         """DeletePage(self, size_t n) -> bool"""
@@ -3824,10 +3837,6 @@ class ToolBar(ToolBarBase):
         """
         return _controls_.ToolBar_Create(*args, **kwargs)
 
-    def FindToolForPosition(*args, **kwargs):
-        """FindToolForPosition(self, int x, int y) -> ToolBarToolBase"""
-        return _controls_.ToolBar_FindToolForPosition(*args, **kwargs)
-
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
@@ -4399,10 +4408,12 @@ class ListCtrl(_core.Control):
         """GetItemSpacing(self) -> Size"""
         return _controls_.ListCtrl_GetItemSpacing(*args, **kwargs)
 
+    GetItemSpacing = wx._deprecated(GetItemSpacing) 
     def SetItemSpacing(*args, **kwargs):
         """SetItemSpacing(self, int spacing, bool isSmall=False)"""
         return _controls_.ListCtrl_SetItemSpacing(*args, **kwargs)
 
+    SetItemSpacing = wx._deprecated(SetItemSpacing) 
     def GetSelectedItemCount(*args, **kwargs):
         """GetSelectedItemCount(self) -> int"""
         return _controls_.ListCtrl_GetSelectedItemCount(*args, **kwargs)
@@ -4759,8 +4770,10 @@ TR_ROW_LINES = _controls_.TR_ROW_LINES
 TR_FULL_ROW_HIGHLIGHT = _controls_.TR_FULL_ROW_HIGHLIGHT
 TR_DEFAULT_STYLE = _controls_.TR_DEFAULT_STYLE
 TR_TWIST_BUTTONS = _controls_.TR_TWIST_BUTTONS
-TR_MAC_BUTTONS = _controls_.TR_MAC_BUTTONS
-TR_AQUA_BUTTONS = _controls_.TR_AQUA_BUTTONS
+# obsolete
+TR_MAC_BUTTONS = 0
+wxTR_AQUA_BUTTONS = 0
+
 TreeItemIcon_Normal = _controls_.TreeItemIcon_Normal
 TreeItemIcon_Selected = _controls_.TreeItemIcon_Selected
 TreeItemIcon_Expanded = _controls_.TreeItemIcon_Expanded
@@ -4991,7 +5004,7 @@ class TreeCtrl(_core.Control):
         return _controls_.TreeCtrl__setCallbackInfo(*args, **kwargs)
 
     def GetCount(*args, **kwargs):
-        """GetCount(self) -> size_t"""
+        """GetCount(self) -> unsigned int"""
         return _controls_.TreeCtrl_GetCount(*args, **kwargs)
 
     def GetIndent(*args, **kwargs):

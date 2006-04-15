@@ -2509,118 +2509,119 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_wxGIFHandler swig_types[47]
 #define SWIGTYPE_p_wxGridBagSizer swig_types[48]
 #define SWIGTYPE_p_wxGridSizer swig_types[49]
-#define SWIGTYPE_p_wxICOHandler swig_types[50]
-#define SWIGTYPE_p_wxIcon swig_types[51]
-#define SWIGTYPE_p_wxIconBundle swig_types[52]
-#define SWIGTYPE_p_wxIconizeEvent swig_types[53]
-#define SWIGTYPE_p_wxIdleEvent swig_types[54]
-#define SWIGTYPE_p_wxImage swig_types[55]
-#define SWIGTYPE_p_wxImageHandler swig_types[56]
-#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[57]
-#define SWIGTYPE_p_wxInitDialogEvent swig_types[58]
-#define SWIGTYPE_p_wxJPEGHandler swig_types[59]
-#define SWIGTYPE_p_wxKeyEvent swig_types[60]
-#define SWIGTYPE_p_wxLayoutAlgorithm swig_types[61]
-#define SWIGTYPE_p_wxLayoutConstraints swig_types[62]
-#define SWIGTYPE_p_wxMDIChildFrame swig_types[63]
-#define SWIGTYPE_p_wxMDIClientWindow swig_types[64]
-#define SWIGTYPE_p_wxMDIParentFrame swig_types[65]
-#define SWIGTYPE_p_wxMaximizeEvent swig_types[66]
-#define SWIGTYPE_p_wxMenu swig_types[67]
-#define SWIGTYPE_p_wxMenuBar swig_types[68]
-#define SWIGTYPE_p_wxMenuEvent swig_types[69]
-#define SWIGTYPE_p_wxMenuItem swig_types[70]
-#define SWIGTYPE_p_wxMessageDialog swig_types[71]
-#define SWIGTYPE_p_wxMiniFrame swig_types[72]
-#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[73]
-#define SWIGTYPE_p_wxMouseEvent swig_types[74]
-#define SWIGTYPE_p_wxMoveEvent swig_types[75]
-#define SWIGTYPE_p_wxMultiChoiceDialog swig_types[76]
-#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[77]
-#define SWIGTYPE_p_wxNcPaintEvent swig_types[78]
-#define SWIGTYPE_p_wxNotifyEvent swig_types[79]
-#define SWIGTYPE_p_wxObject swig_types[80]
-#define SWIGTYPE_p_wxPCXHandler swig_types[81]
-#define SWIGTYPE_p_wxPNGHandler swig_types[82]
-#define SWIGTYPE_p_wxPNMHandler swig_types[83]
-#define SWIGTYPE_p_wxPageSetupDialog swig_types[84]
-#define SWIGTYPE_p_wxPageSetupDialogData swig_types[85]
-#define SWIGTYPE_p_wxPaintEvent swig_types[86]
-#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[87]
-#define SWIGTYPE_p_wxPanel swig_types[88]
-#define SWIGTYPE_p_wxPaperSize swig_types[89]
-#define SWIGTYPE_p_wxPasswordEntryDialog swig_types[90]
-#define SWIGTYPE_p_wxPoint swig_types[91]
-#define SWIGTYPE_p_wxPopupWindow swig_types[92]
-#define SWIGTYPE_p_wxPreviewCanvas swig_types[93]
-#define SWIGTYPE_p_wxPreviewControlBar swig_types[94]
-#define SWIGTYPE_p_wxPreviewFrame swig_types[95]
-#define SWIGTYPE_p_wxPrintData swig_types[96]
-#define SWIGTYPE_p_wxPrintDialog swig_types[97]
-#define SWIGTYPE_p_wxPrintDialogData swig_types[98]
-#define SWIGTYPE_p_wxPrintPreview swig_types[99]
-#define SWIGTYPE_p_wxPrinter swig_types[100]
-#define SWIGTYPE_p_wxProgressDialog swig_types[101]
-#define SWIGTYPE_p_wxPyApp swig_types[102]
-#define SWIGTYPE_p_wxPyCommandEvent swig_types[103]
-#define SWIGTYPE_p_wxPyEvent swig_types[104]
-#define SWIGTYPE_p_wxPyHtmlListBox swig_types[105]
-#define SWIGTYPE_p_wxPyImageHandler swig_types[106]
-#define SWIGTYPE_p_wxPyPanel swig_types[107]
-#define SWIGTYPE_p_wxPyPopupTransientWindow swig_types[108]
-#define SWIGTYPE_p_wxPyPreviewControlBar swig_types[109]
-#define SWIGTYPE_p_wxPyPreviewFrame swig_types[110]
-#define SWIGTYPE_p_wxPyPrintPreview swig_types[111]
-#define SWIGTYPE_p_wxPyPrintout swig_types[112]
-#define SWIGTYPE_p_wxPyScrolledWindow swig_types[113]
-#define SWIGTYPE_p_wxPySizer swig_types[114]
-#define SWIGTYPE_p_wxPyTaskBarIcon swig_types[115]
-#define SWIGTYPE_p_wxPyVListBox swig_types[116]
-#define SWIGTYPE_p_wxPyVScrolledWindow swig_types[117]
-#define SWIGTYPE_p_wxPyValidator swig_types[118]
-#define SWIGTYPE_p_wxPyWindow swig_types[119]
-#define SWIGTYPE_p_wxQueryLayoutInfoEvent swig_types[120]
-#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[121]
-#define SWIGTYPE_p_wxRect swig_types[122]
-#define SWIGTYPE_p_wxRegion swig_types[123]
-#define SWIGTYPE_p_wxSashEvent swig_types[124]
-#define SWIGTYPE_p_wxSashLayoutWindow swig_types[125]
-#define SWIGTYPE_p_wxSashWindow swig_types[126]
-#define SWIGTYPE_p_wxScrollEvent swig_types[127]
-#define SWIGTYPE_p_wxScrollWinEvent swig_types[128]
-#define SWIGTYPE_p_wxScrolledWindow swig_types[129]
-#define SWIGTYPE_p_wxSetCursorEvent swig_types[130]
-#define SWIGTYPE_p_wxShowEvent swig_types[131]
-#define SWIGTYPE_p_wxSingleChoiceDialog swig_types[132]
-#define SWIGTYPE_p_wxSize swig_types[133]
-#define SWIGTYPE_p_wxSizeEvent swig_types[134]
-#define SWIGTYPE_p_wxSizer swig_types[135]
-#define SWIGTYPE_p_wxSizerItem swig_types[136]
-#define SWIGTYPE_p_wxSplashScreen swig_types[137]
-#define SWIGTYPE_p_wxSplashScreenWindow swig_types[138]
-#define SWIGTYPE_p_wxSplitterEvent swig_types[139]
-#define SWIGTYPE_p_wxSplitterWindow swig_types[140]
-#define SWIGTYPE_p_wxStaticBoxSizer swig_types[141]
-#define SWIGTYPE_p_wxStatusBar swig_types[142]
-#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[143]
-#define SWIGTYPE_p_wxString swig_types[144]
-#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[145]
-#define SWIGTYPE_p_wxTIFFHandler swig_types[146]
-#define SWIGTYPE_p_wxTaskBarIcon swig_types[147]
-#define SWIGTYPE_p_wxTaskBarIconEvent swig_types[148]
-#define SWIGTYPE_p_wxTextEntryDialog swig_types[149]
-#define SWIGTYPE_p_wxTipWindow swig_types[150]
-#define SWIGTYPE_p_wxToolBar swig_types[151]
-#define SWIGTYPE_p_wxTopLevelWindow swig_types[152]
-#define SWIGTYPE_p_wxUpdateUIEvent swig_types[153]
-#define SWIGTYPE_p_wxValidator swig_types[154]
-#define SWIGTYPE_p_wxVisualAttributes swig_types[155]
-#define SWIGTYPE_p_wxWindow swig_types[156]
-#define SWIGTYPE_p_wxWindowCreateEvent swig_types[157]
-#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[158]
-#define SWIGTYPE_p_wxXPMHandler swig_types[159]
-static swig_type_info *swig_types[161];
-static swig_module_info swig_module = {swig_types, 160, 0, 0, 0, 0};
+#define SWIGTYPE_p_wxHtmlLinkInfo swig_types[50]
+#define SWIGTYPE_p_wxICOHandler swig_types[51]
+#define SWIGTYPE_p_wxIcon swig_types[52]
+#define SWIGTYPE_p_wxIconBundle swig_types[53]
+#define SWIGTYPE_p_wxIconizeEvent swig_types[54]
+#define SWIGTYPE_p_wxIdleEvent swig_types[55]
+#define SWIGTYPE_p_wxImage swig_types[56]
+#define SWIGTYPE_p_wxImageHandler swig_types[57]
+#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[58]
+#define SWIGTYPE_p_wxInitDialogEvent swig_types[59]
+#define SWIGTYPE_p_wxJPEGHandler swig_types[60]
+#define SWIGTYPE_p_wxKeyEvent swig_types[61]
+#define SWIGTYPE_p_wxLayoutAlgorithm swig_types[62]
+#define SWIGTYPE_p_wxLayoutConstraints swig_types[63]
+#define SWIGTYPE_p_wxMDIChildFrame swig_types[64]
+#define SWIGTYPE_p_wxMDIClientWindow swig_types[65]
+#define SWIGTYPE_p_wxMDIParentFrame swig_types[66]
+#define SWIGTYPE_p_wxMaximizeEvent swig_types[67]
+#define SWIGTYPE_p_wxMenu swig_types[68]
+#define SWIGTYPE_p_wxMenuBar swig_types[69]
+#define SWIGTYPE_p_wxMenuEvent swig_types[70]
+#define SWIGTYPE_p_wxMenuItem swig_types[71]
+#define SWIGTYPE_p_wxMessageDialog swig_types[72]
+#define SWIGTYPE_p_wxMiniFrame swig_types[73]
+#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[74]
+#define SWIGTYPE_p_wxMouseEvent swig_types[75]
+#define SWIGTYPE_p_wxMoveEvent swig_types[76]
+#define SWIGTYPE_p_wxMultiChoiceDialog swig_types[77]
+#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[78]
+#define SWIGTYPE_p_wxNcPaintEvent swig_types[79]
+#define SWIGTYPE_p_wxNotifyEvent swig_types[80]
+#define SWIGTYPE_p_wxObject swig_types[81]
+#define SWIGTYPE_p_wxPCXHandler swig_types[82]
+#define SWIGTYPE_p_wxPNGHandler swig_types[83]
+#define SWIGTYPE_p_wxPNMHandler swig_types[84]
+#define SWIGTYPE_p_wxPageSetupDialog swig_types[85]
+#define SWIGTYPE_p_wxPageSetupDialogData swig_types[86]
+#define SWIGTYPE_p_wxPaintEvent swig_types[87]
+#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[88]
+#define SWIGTYPE_p_wxPanel swig_types[89]
+#define SWIGTYPE_p_wxPaperSize swig_types[90]
+#define SWIGTYPE_p_wxPasswordEntryDialog swig_types[91]
+#define SWIGTYPE_p_wxPoint swig_types[92]
+#define SWIGTYPE_p_wxPopupWindow swig_types[93]
+#define SWIGTYPE_p_wxPreviewCanvas swig_types[94]
+#define SWIGTYPE_p_wxPreviewControlBar swig_types[95]
+#define SWIGTYPE_p_wxPreviewFrame swig_types[96]
+#define SWIGTYPE_p_wxPrintData swig_types[97]
+#define SWIGTYPE_p_wxPrintDialog swig_types[98]
+#define SWIGTYPE_p_wxPrintDialogData swig_types[99]
+#define SWIGTYPE_p_wxPrintPreview swig_types[100]
+#define SWIGTYPE_p_wxPrinter swig_types[101]
+#define SWIGTYPE_p_wxProgressDialog swig_types[102]
+#define SWIGTYPE_p_wxPyApp swig_types[103]
+#define SWIGTYPE_p_wxPyCommandEvent swig_types[104]
+#define SWIGTYPE_p_wxPyEvent swig_types[105]
+#define SWIGTYPE_p_wxPyHtmlListBox swig_types[106]
+#define SWIGTYPE_p_wxPyImageHandler swig_types[107]
+#define SWIGTYPE_p_wxPyPanel swig_types[108]
+#define SWIGTYPE_p_wxPyPopupTransientWindow swig_types[109]
+#define SWIGTYPE_p_wxPyPreviewControlBar swig_types[110]
+#define SWIGTYPE_p_wxPyPreviewFrame swig_types[111]
+#define SWIGTYPE_p_wxPyPrintPreview swig_types[112]
+#define SWIGTYPE_p_wxPyPrintout swig_types[113]
+#define SWIGTYPE_p_wxPyScrolledWindow swig_types[114]
+#define SWIGTYPE_p_wxPySizer swig_types[115]
+#define SWIGTYPE_p_wxPyTaskBarIcon swig_types[116]
+#define SWIGTYPE_p_wxPyVListBox swig_types[117]
+#define SWIGTYPE_p_wxPyVScrolledWindow swig_types[118]
+#define SWIGTYPE_p_wxPyValidator swig_types[119]
+#define SWIGTYPE_p_wxPyWindow swig_types[120]
+#define SWIGTYPE_p_wxQueryLayoutInfoEvent swig_types[121]
+#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[122]
+#define SWIGTYPE_p_wxRect swig_types[123]
+#define SWIGTYPE_p_wxRegion swig_types[124]
+#define SWIGTYPE_p_wxSashEvent swig_types[125]
+#define SWIGTYPE_p_wxSashLayoutWindow swig_types[126]
+#define SWIGTYPE_p_wxSashWindow swig_types[127]
+#define SWIGTYPE_p_wxScrollEvent swig_types[128]
+#define SWIGTYPE_p_wxScrollWinEvent swig_types[129]
+#define SWIGTYPE_p_wxScrolledWindow swig_types[130]
+#define SWIGTYPE_p_wxSetCursorEvent swig_types[131]
+#define SWIGTYPE_p_wxShowEvent swig_types[132]
+#define SWIGTYPE_p_wxSingleChoiceDialog swig_types[133]
+#define SWIGTYPE_p_wxSize swig_types[134]
+#define SWIGTYPE_p_wxSizeEvent swig_types[135]
+#define SWIGTYPE_p_wxSizer swig_types[136]
+#define SWIGTYPE_p_wxSizerItem swig_types[137]
+#define SWIGTYPE_p_wxSplashScreen swig_types[138]
+#define SWIGTYPE_p_wxSplashScreenWindow swig_types[139]
+#define SWIGTYPE_p_wxSplitterEvent swig_types[140]
+#define SWIGTYPE_p_wxSplitterWindow swig_types[141]
+#define SWIGTYPE_p_wxStaticBoxSizer swig_types[142]
+#define SWIGTYPE_p_wxStatusBar swig_types[143]
+#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[144]
+#define SWIGTYPE_p_wxString swig_types[145]
+#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[146]
+#define SWIGTYPE_p_wxTIFFHandler swig_types[147]
+#define SWIGTYPE_p_wxTaskBarIcon swig_types[148]
+#define SWIGTYPE_p_wxTaskBarIconEvent swig_types[149]
+#define SWIGTYPE_p_wxTextEntryDialog swig_types[150]
+#define SWIGTYPE_p_wxTipWindow swig_types[151]
+#define SWIGTYPE_p_wxToolBar swig_types[152]
+#define SWIGTYPE_p_wxTopLevelWindow swig_types[153]
+#define SWIGTYPE_p_wxUpdateUIEvent swig_types[154]
+#define SWIGTYPE_p_wxValidator swig_types[155]
+#define SWIGTYPE_p_wxVisualAttributes swig_types[156]
+#define SWIGTYPE_p_wxWindow swig_types[157]
+#define SWIGTYPE_p_wxWindowCreateEvent swig_types[158]
+#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[159]
+#define SWIGTYPE_p_wxXPMHandler swig_types[160]
+static swig_type_info *swig_types[162];
+static swig_module_info swig_module = {swig_types, 161, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3099,6 +3100,11 @@ public:
 //     // globally using SetSelectionBackground()
 //     virtual wxColour GetSelectedTextBgColour(const wxColour& colBg) const;
 
+    
+    // This method may be overriden to handle clicking on a link in
+    // the listbox. By default, clicking links is ignored.
+    virtual void OnLinkClicked(size_t n,
+                               const wxHtmlLinkInfo& link);        
 
     PYPRIVATE;
 };
@@ -3111,6 +3117,21 @@ IMP_PYCALLBACK_STRING_SIZET     (wxPyHtmlListBox, wxHtmlListBox, OnGetItemMarkup
 IMP_PYCALLBACK__DCRECTSIZET2_const   (wxPyHtmlListBox, wxHtmlListBox, OnDrawSeparator);
 IMP_PYCALLBACK__DCRECTSIZET_const    (wxPyHtmlListBox, wxHtmlListBox, OnDrawBackground);
 
+
+void wxPyHtmlListBox::OnLinkClicked(size_t n,
+                                    const wxHtmlLinkInfo& link) {
+    bool found;
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    if ((found = wxPyCBH_findCallback(m_myInst, "OnLinkClicked"))) {
+        PyObject* obj = wxPyConstructObject((void*)&link, wxT("wxHtmlLinkInfo"), 0);
+        wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iO)", n, obj));
+        Py_DECREF(obj);
+    }
+    wxPyEndBlockThreads(blocked);
+    if (! found)
+        wxPyHtmlListBox::OnLinkClicked(n, link);
+}
+ 
 
 
 
@@ -15450,6 +15471,56 @@ SWIGINTERN PyObject *_wrap_HtmlListBox_GetFileSystem(PyObject *SWIGUNUSEDPARM(se
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxFileSystem, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HtmlListBox_OnLinkClicked(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyHtmlListBox *arg1 = (wxPyHtmlListBox *) 0 ;
+  size_t arg2 ;
+  wxHtmlLinkInfo *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "n",(char *) "link", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HtmlListBox_OnLinkClicked",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyHtmlListBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HtmlListBox_OnLinkClicked" "', expected argument " "1"" of type '" "wxPyHtmlListBox *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyHtmlListBox * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "HtmlListBox_OnLinkClicked" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxHtmlLinkInfo,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "HtmlListBox_OnLinkClicked" "', expected argument " "3"" of type '" "wxHtmlLinkInfo const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "HtmlListBox_OnLinkClicked" "', expected argument " "3"" of type '" "wxHtmlLinkInfo const &""'"); 
+  }
+  arg3 = reinterpret_cast< wxHtmlLinkInfo * >(argp3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->OnLinkClicked(arg2,(wxHtmlLinkInfo const &)*arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -30624,6 +30695,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlListBox_Create", (PyCFunction) _wrap_HtmlListBox_Create, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlListBox_SetItemCount", (PyCFunction) _wrap_HtmlListBox_SetItemCount, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlListBox_GetFileSystem", (PyCFunction)_wrap_HtmlListBox_GetFileSystem, METH_O, NULL},
+	 { (char *)"HtmlListBox_OnLinkClicked", (PyCFunction) _wrap_HtmlListBox_OnLinkClicked, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlListBox_swigregister", HtmlListBox_swigregister, METH_VARARGS, NULL},
 	 { (char *)"HtmlListBox_swiginit", HtmlListBox_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_TaskBarIcon", (PyCFunction)_wrap_new_TaskBarIcon, METH_NOARGS, NULL},
@@ -32147,6 +32219,7 @@ static swig_type_info _swigt__p_wxFont = {"_p_wxFont", "wxFont *", 0, 0, (void*)
 static swig_type_info _swigt__p_wxFontData = {"_p_wxFontData", "wxFontData *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxFontDialog = {"_p_wxFontDialog", "wxFontDialog *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxFrame = {"_p_wxFrame", "wxFrame *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxHtmlLinkInfo = {"_p_wxHtmlLinkInfo", "wxHtmlLinkInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxIcon = {"_p_wxIcon", "wxIcon *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxIconBundle = {"_p_wxIconBundle", "wxIconBundle *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxLayoutAlgorithm = {"_p_wxLayoutAlgorithm", "wxLayoutAlgorithm *", 0, 0, (void*)0, 0};
@@ -32293,6 +32366,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxGIFHandler,
   &_swigt__p_wxGridBagSizer,
   &_swigt__p_wxGridSizer,
+  &_swigt__p_wxHtmlLinkInfo,
   &_swigt__p_wxICOHandler,
   &_swigt__p_wxIcon,
   &_swigt__p_wxIconBundle,
@@ -32471,6 +32545,7 @@ static swig_cast_info _swigc__p_wxFont[] = {  {&_swigt__p_wxFont, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_wxFontData[] = {  {&_swigt__p_wxFontData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxFontDialog[] = {  {&_swigt__p_wxFontDialog, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxFrame[] = {  {&_swigt__p_wxMDIChildFrame, _p_wxMDIChildFrameTo_p_wxFrame, 0, 0},  {&_swigt__p_wxProgressDialog, _p_wxProgressDialogTo_p_wxFrame, 0, 0},  {&_swigt__p_wxTipWindow, _p_wxTipWindowTo_p_wxFrame, 0, 0},  {&_swigt__p_wxPreviewFrame, _p_wxPreviewFrameTo_p_wxFrame, 0, 0},  {&_swigt__p_wxPyPreviewFrame, _p_wxPyPreviewFrameTo_p_wxFrame, 0, 0},  {&_swigt__p_wxMiniFrame, _p_wxMiniFrameTo_p_wxFrame, 0, 0},  {&_swigt__p_wxFrame, 0, 0, 0},  {&_swigt__p_wxSplashScreen, _p_wxSplashScreenTo_p_wxFrame, 0, 0},  {&_swigt__p_wxMDIParentFrame, _p_wxMDIParentFrameTo_p_wxFrame, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxHtmlLinkInfo[] = {  {&_swigt__p_wxHtmlLinkInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxIcon[] = {  {&_swigt__p_wxIcon, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxIconBundle[] = {  {&_swigt__p_wxIconBundle, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxLayoutAlgorithm[] = {  {&_swigt__p_wxLayoutAlgorithm, 0, 0, 0},{0, 0, 0, 0}};
@@ -32617,6 +32692,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxGIFHandler,
   _swigc__p_wxGridBagSizer,
   _swigc__p_wxGridSizer,
+  _swigc__p_wxHtmlLinkInfo,
   _swigc__p_wxICOHandler,
   _swigc__p_wxIcon,
   _swigc__p_wxIconBundle,
