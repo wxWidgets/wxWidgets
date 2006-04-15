@@ -426,7 +426,7 @@ bool wxPlatform::PlatformIs(int platform)
     if (platform == wxOS2)
         return true;
 #endif
-#ifdef __WXCOCA__
+#ifdef __WXCOCOA__
     if (platform == wxCocoa)
         return true;
 #endif
