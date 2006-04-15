@@ -413,10 +413,40 @@ public:
               long style = wxNO_BORDER | wxTB_HORIZONTAL,
               const wxString& name = wxPyToolBarNameStr);
 
-    wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y);
-
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
+//---------------------------------------------------------------------------
+
+#if 0
+%{
+#include <wx/generic/buttonbar.h>
+%}
+
+MustHaveApp(wxToolBar);
+class  wxButtonToolBar : public wxToolBarBase
+{
+public:
+    %pythonAppend wxButtonToolBar         "self._setOORInfo(self)"
+    %pythonAppend wxButtonToolBar()       ""
+
+    wxButtonToolBar(wxWindow *parent,
+                    wxWindowID id=-1,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = 0,
+                    const wxString& name = wxPyToolBarNameStr);
+    %RenameCtor(PreButtonToolBar, wxButtonToolBar());
+
+
+    bool Create(wxWindow *parent,
+              wxWindowID id=-1,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
+              long style = 0,
+              const wxString& name = wxPyToolBarNameStr);
+};
+
+#endif
 //---------------------------------------------------------------------------
