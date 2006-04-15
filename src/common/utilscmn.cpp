@@ -303,6 +303,140 @@ int wxGetOsVersion(int *verMaj, int *verMin)
     return info.os;
 }
 
+/*
+ * Class to make it easier to specify platform-dependent values
+ */
+
+wxArrayInt*  wxPlatform::sm_customPlatforms = NULL;
+
+wxPlatform& wxPlatform::Is(int platform, long value)
+{
+    if (wxPlatformIs(platform))
+        m_longValue = value;
+    return *this;
+}
+
+wxPlatform& wxPlatform::IsNot(int platform, long value)
+{
+    if (!wxPlatformIs(platform))
+        m_longValue = value;
+    return *this;
+}
+
+wxPlatform& wxPlatform::Is(int platform, double value)
+{
+    if (wxPlatformIs(platform))
+        m_doubleValue = value;
+    return *this;
+}
+
+wxPlatform& wxPlatform::IsNot(int platform, double value)
+{
+    if (!wxPlatformIs(platform))
+        m_doubleValue = value;
+    return *this;
+}
+
+wxPlatform& wxPlatform::Is(int platform, const wxString& value)
+{
+    if (wxPlatformIs(platform))
+        m_stringValue = value;
+    return *this;
+}
+
+wxPlatform& wxPlatform::IsNot(int platform, const wxString& value)
+{
+    if (!wxPlatformIs(platform))
+        m_stringValue = value;
+    return *this;
+}
+
+wxPlatform& wxPlatform::Default(long value)
+{
+    m_longValue = value;
+    return *this;
+}
+
+wxPlatform& wxPlatform::Default(double value)
+{
+    m_doubleValue = value;
+    return *this;
+}
+
+wxPlatform& wxPlatform::Default(const wxString& value)
+{
+    m_stringValue = value;
+    return *this;
+}
+
+void wxPlatform::AddPlatform(int platform)
+{
+    if (!sm_customPlatforms)
+        sm_customPlatforms = new wxArrayInt;
+    sm_customPlatforms->Add(platform);
+}
+
+void wxPlatform::ClearPlatforms()
+{
+    delete sm_customPlatforms;
+    sm_customPlatforms = NULL;
+}
+
+/// Function for testing current platform
+
+bool wxPlatform::PlatformIs(int platform)
+{
+#ifdef __WXMSW__
+    if (platform == wxMSW)
+        return true;
+#endif
+#ifdef __WXWINCE__
+    if (platform == wxWinCE)
+        return true;
+#endif
+#if defined(__WXWINCE__) && defined(__POCKETPC__)
+    if (platform == wxWinPocketPC)
+        return true;
+#endif
+#if defined(__WXWINCE__) && defined(__SMARTPHONE__)
+    if (platform == wxWinSmartphone)
+        return true;
+#endif
+#ifdef __WXGTK__
+    if (platform == wxGTK)
+        return true;
+#endif
+#ifdef __WXMAC__
+    if (platform == wxMac)
+        return true;
+#endif
+#ifdef __WXX11__
+    if (platform == wxX11)
+        return true;
+#endif
+#ifdef __UNIX__
+    if (platform == wxUnix)
+        return true;
+#endif
+#ifdef __WXMGL__
+    if (platform == wxMGL)
+        return true;
+#endif
+#ifdef __WXOS2__
+    if (platform == wxOS2)
+        return true;
+#endif
+#ifdef __WXCOCA__
+    if (platform == wxCocoa)
+        return true;
+#endif
+
+    if (sm_customPlatforms && sm_customPlatforms->Index(platform) != wxNOT_FOUND)
+        return true;
+
+    return false;
+}
+
 // ----------------------------------------------------------------------------
 // network and user id functions
 // ----------------------------------------------------------------------------

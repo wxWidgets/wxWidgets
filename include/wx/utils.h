@@ -21,6 +21,7 @@
 #include "wx/filefn.h"
 
 class WXDLLIMPEXP_BASE wxArrayString;
+class WXDLLIMPEXP_BASE wxArrayInt;
 
 // need this for wxGetDiskSpace() as we can't, unfortunately, forward declare
 // wxLongLong
@@ -100,6 +101,75 @@ WXDLLIMPEXP_BASE const wxChar *wxGetInstallPrefix();
 // Return path to wxWin data (/usr/share/wx/%{version}) (Unices)
 WXDLLIMPEXP_BASE wxString wxGetDataDir();
 
+/*
+ * Class to make it easier to specify platform-dependent values
+ *
+ * Examples:
+ *  long val = wxPlatform(3).Is(wxMac, 1).Is(wxGTK, 2).Is(stPDA, 5);
+ *  wxString strVal = wxPlatform(wxT("Hello")).Is(wxMac, wxT("Mac")).Is(wxMSW, wxT("MSW"));
+ *
+ * A custom platform symbol:
+ *
+ *  #define stPDA 100
+ *  #ifdef __WXWINCE__
+ *      wxPlatform::AddPlatform(stPDA);
+ *  #endif
+ *
+ *  long windowStyle = wxCAPTION | (long) wxPlatform().IsNot(stPDA, wxRESIZE_BORDER);
+ *
+ */
+
+class WXDLLIMPEXP_BASE wxPlatform
+{
+public:
+    wxPlatform() { m_longValue = 0; m_doubleValue = 0.0; }
+
+    // Specify an optional default value
+    wxPlatform(long defValue) { m_longValue = defValue; m_doubleValue = 0.0; }
+    wxPlatform(const wxString& defValue) { m_stringValue = defValue; m_longValue = 0; m_doubleValue = 0.0; }
+    wxPlatform(double defValue) { m_longValue = 0; m_doubleValue = defValue; }
+
+    wxPlatform& Is(int platform, long value);
+    wxPlatform& IsNot(int platform, long value);
+
+    wxPlatform& Is(int platform, int value) { return Is(platform, (long) value); }
+    wxPlatform& IsNot(int platform, int value) { return IsNot(platform, (long) value); }
+
+    wxPlatform& Is(int platform, const wxString& value);
+    wxPlatform& IsNot(int platform, const wxString& value);
+
+    wxPlatform& Is(int platform, double value);
+    wxPlatform& IsNot(int platform, double value);
+
+    // This should be specified first to set the default value, or simply
+    // pass the value to the constructor
+    wxPlatform& Default(long value);
+    wxPlatform& Default(const wxString& value);
+    wxPlatform& Default(double value);
+
+    long GetInteger() const { return m_longValue; }
+    const wxString& GetString() const { return m_stringValue; }
+    double GetDouble() const { return m_doubleValue; }
+
+    operator int() const { return (int) GetInteger(); }
+    operator long() const { return GetInteger(); }
+    operator double() const { return GetDouble(); }
+    operator const wxString() const { return GetString(); }
+    operator const wxChar*() const { return (const wxChar*) GetString(); }
+
+    static void AddPlatform(int platform);
+    static bool PlatformIs(int platform);
+    static void ClearPlatforms();
+
+private:
+    long                m_longValue;
+    double              m_doubleValue;
+    wxString            m_stringValue;
+    static wxArrayInt*  sm_customPlatforms;
+};
+
+/// Function for testing current platform
+inline bool wxPlatformIs(int platform) { return wxPlatform::PlatformIs(platform); }
 
 #if wxUSE_GUI
 

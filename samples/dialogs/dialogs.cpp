@@ -369,9 +369,14 @@ bool MyApp::OnInit()
     wxMenu *sheet_menu = new wxMenu;
     sheet_menu->Append(DIALOGS_PROPERTY_SHEET, _T("&Standard property sheet\tShift-Ctrl-P"));
     sheet_menu->Append(DIALOGS_PROPERTY_SHEET_TOOLBOOK, _T("&Toolbook sheet\tShift-Ctrl-T"));
+    
+    if (wxPlatformIs(wxMac))
+        sheet_menu->Append(DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK, _T("Button &Toolbook sheet\tShift-Ctrl-U"));
+/*
 #ifdef __WXMAC__
     sheet_menu->Append(DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK, _T("Button &Toolbook sheet\tShift-Ctrl-U"));
 #endif
+*/
     file_menu->Append(wxID_ANY, _T("&Property sheets"), sheet_menu);
 #endif // USE_SETTINGS_DIALOG
 
@@ -1455,18 +1460,22 @@ SettingsDialog::SettingsDialog(wxWindow* win, int dialogType)
         m_imageList = NULL;
 
     Create(win, wxID_ANY, _("Preferences"), wxDefaultPosition, wxDefaultSize,
-        wxDEFAULT_DIALOG_STYLE
+        wxDEFAULT_DIALOG_STYLE| (int)wxPlatform().IsNot(wxWinCE, resizeBorder)
+/*
 #ifndef __WXWINCE__
         |resizeBorder
 #endif
+*/
     );
 
     // If using a toolbook, also follow Mac style and don't create buttons
     if (!useToolBook)
-        CreateButtons(wxOK|wxCANCEL
+        CreateButtons(wxOK|wxCANCEL| (int)wxPlatform().IsNot(wxWinPocketPC, wxHELP)
+/*
 #ifndef __POCKETPC__
                       |wxHELP
 #endif
+*/
     );
 
     wxBookCtrlBase* notebook = GetBookCtrl();

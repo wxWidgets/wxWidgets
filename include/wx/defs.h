@@ -701,6 +701,24 @@ enum
     wxDOS                     /*  wxBase under MS-DOS */
 };
 
+/* Friendlier platform names */
+enum
+{
+    wxMotif = wxMOTIF_X,
+    wxMac = wxMAC,
+    wxMSW = wxWINDOWS,
+    wxWinCE = wxWINDOWS_CE,
+    wxWinPocketPC = wxWINDOWS_POCKETPC,
+    wxWinSmartPhone = wxWINDOWS_SMARTPHONE,
+    wxWin95= wxWIN95,
+    wxUnix = wxUNIX,                   /*  wxBase under Unix */
+    wxPalmOS = wxPALMOS,               /*  PalmOS */
+    wxOS2 = wxOS2_PM,
+
+    wxMGL = 100,
+    wxCocoa
+};
+
 /*  ---------------------------------------------------------------------------- */
 /*  standard wxWidgets types */
 /*  ---------------------------------------------------------------------------- */
