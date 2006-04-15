@@ -842,19 +842,27 @@ public:
     //wxArrayString* GetFacenames();
     %extend {
         PyObject* GetEncodings() {
+            PyObject* ret;
             wxArrayString* arr = self->GetEncodings();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();            
             if (arr)
-                return wxArrayString2PyList_helper(*arr);
+                ret = wxArrayString2PyList_helper(*arr);
             else
-                return PyList_New(0);
+                ret = PyList_New(0);
+            wxPyEndBlockThreads(blocked);
+            return ret;
         }
 
         PyObject* GetFacenames() {
+            PyObject* ret;
             wxArrayString* arr = self->GetFacenames();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();            
             if (arr)
-                return wxArrayString2PyList_helper(*arr);
+                ret = wxArrayString2PyList_helper(*arr);
             else
-                return PyList_New(0);
+                ret =  PyList_New(0);
+            wxPyEndBlockThreads(blocked);
+            return ret;
         }
     }
 };
