@@ -558,9 +558,11 @@ public:
 
     // get the horizontal and vertical components of the item spacing
     wxSize GetItemSpacing() const;
+    %pythoncode { GetItemSpacing = wx._deprecated(GetItemSpacing) }
 
 #ifndef __WXMSW__
     void SetItemSpacing( int spacing, bool isSmall = false );
+    %pythoncode { SetItemSpacing = wx._deprecated(SetItemSpacing) }
 #endif
 
     // Gets the number of selected items in the list control

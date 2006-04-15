@@ -24,7 +24,6 @@
 %rename(GA_HORIZONTAL)                      wxGA_HORIZONTAL;
 %rename(GA_VERTICAL)                        wxGA_VERTICAL;
 %rename(GA_SMOOTH)                          wxGA_SMOOTH;
-%rename(GA_PROGRESSBAR)                     wxGA_PROGRESSBAR;
 %rename(Gauge)                              wxGauge;
 %rename(StaticBox)                          wxStaticBox;
 %rename(StaticLine)                         wxStaticLine;
@@ -50,7 +49,6 @@
 %rename(TE_CHARWRAP)                        wxTE_CHARWRAP;
 %rename(TE_WORDWRAP)                        wxTE_WORDWRAP;
 %rename(TE_BESTWRAP)                        wxTE_BESTWRAP;
-%rename(TE_LINEWRAP)                        wxTE_LINEWRAP;
 %rename(TE_RICH2)                           wxTE_RICH2;
 %rename(TE_CAPITALIZE)                      wxTE_CAPITALIZE;
 %rename(TEXT_ALIGNMENT_DEFAULT)             wxTEXT_ALIGNMENT_DEFAULT;
@@ -111,6 +109,7 @@
 %rename(BK_LEFT)                            wxBK_LEFT;
 %rename(BK_RIGHT)                           wxBK_RIGHT;
 %rename(BK_ALIGN_MASK)                      wxBK_ALIGN_MASK;
+%rename(BK_BUTTONBAR)                       wxBK_BUTTONBAR;
 %rename(BookCtrlBase)                       wxBookCtrlBase;
 %rename(BookCtrlBaseEvent)                  wxBookCtrlBaseEvent;
 %rename(NB_FIXEDWIDTH)                      wxNB_FIXEDWIDTH;
@@ -249,8 +248,6 @@
 %rename(TR_FULL_ROW_HIGHLIGHT)              wxTR_FULL_ROW_HIGHLIGHT;
 %rename(TR_DEFAULT_STYLE)                   wxTR_DEFAULT_STYLE;
 %rename(TR_TWIST_BUTTONS)                   wxTR_TWIST_BUTTONS;
-%rename(TR_MAC_BUTTONS)                     wxTR_MAC_BUTTONS;
-%rename(TR_AQUA_BUTTONS)                    wxTR_AQUA_BUTTONS;
 %rename(TreeItemIcon_Normal)                wxTreeItemIcon_Normal;
 %rename(TreeItemIcon_Selected)              wxTreeItemIcon_Selected;
 %rename(TreeItemIcon_Expanded)              wxTreeItemIcon_Expanded;

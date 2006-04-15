@@ -27,7 +27,8 @@ enum {
     wxBK_BOTTOM,
     wxBK_LEFT,
     wxBK_RIGHT,
-    wxBK_ALIGN_MASK
+    wxBK_ALIGN_MASK,
+    wxBK_BUTTONBAR
 };
 
 
@@ -106,9 +107,16 @@ public:
     // returns true if we have wxCHB_TOP or wxCHB_BOTTOM style
     bool IsVertical() const;
 
+    // Sets/gets the margin around the controller
+    void SetControlMargin(int margin);
+    int GetControlMargin() const;
+
     // set/get option to shrink to fit current page
     void SetFitToCurrentPage(bool fit);
     bool GetFitToCurrentPage() const;
+
+    // returns the sizer containing the control, if any
+    wxSizer* GetControlSizer() const;
 
 
     // remove one page from the control and delete it

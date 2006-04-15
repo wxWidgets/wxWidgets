@@ -23,8 +23,8 @@ enum {
     wxGA_HORIZONTAL,
     wxGA_VERTICAL,
     wxGA_SMOOTH,
-    wxGA_PROGRESSBAR   // obsolete
 };
+%pythoncode { GA_PROGRESSBAR = 0 %# obsolete }
 
 //---------------------------------------------------------------------------
 

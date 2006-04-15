@@ -46,10 +46,13 @@ enum {
     wxTR_DEFAULT_STYLE,
 
     wxTR_TWIST_BUTTONS,
-    wxTR_MAC_BUTTONS,
-    wxTR_AQUA_BUTTONS,
 };
 
+%pythoncode {
+    %# obsolete
+    TR_MAC_BUTTONS = 0
+    wxTR_AQUA_BUTTONS = 0
+}
 
 enum wxTreeItemIcon
 {

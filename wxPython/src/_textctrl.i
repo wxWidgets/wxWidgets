@@ -61,15 +61,15 @@ enum {
     wxTE_WORDWRAP,
     wxTE_BESTWRAP,
 
-    // obsolete synonym
-    wxTE_LINEWRAP,
-
     // force using RichEdit version 2.0 or 3.0 instead of 1.0 (default) for
     // wxTE_RICH controls - can be used together with or instead of wxTE_RICH
     wxTE_RICH2,
 
     wxTE_CAPITALIZE,
 };
+
+%pythoncode { TE_LINEWRAP = TE_CHARWRAP }
+
 
 
 enum wxTextAttrAlignment
