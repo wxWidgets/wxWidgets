@@ -457,6 +457,11 @@ build-examples-stamp: build-gtk-shared-stamp
 
 	cp -a wxPython/demo $(objdir_examples)/wxPython
 
+	echo "generating install_examples.sh script";
+	sed -e 's/=V/$(release)/g' < debian/unpack_examples.sh.in	\
+				   > debian/unpack_examples.sh
+	chmod 755 debian/unpack_examples.sh
+
 	touch $@
 
 build-i18n-stamp: build-gtk-shared-stamp
@@ -629,6 +634,7 @@ clean: debian/control clean-py
 	rm -f debian/$(package_msw_dbg).*
 	rm -f debian/$(package_headers_msw).*
 	rm -f debian/lintian-override
+	rm -f debian/unpack_examples.sh
 
 install_arch: build_arch $(install_all_arch)
 
@@ -733,7 +739,7 @@ install-gtk-py-lib: build-gtk-py-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	dh_installdirs usr/lib/wx/config
+	dh_installdirs usr/lib/wx/python
 	cd wxPython 								 \
 		&& $(python_ver) ./setup.py install 				 \
 			      --prefix=`pwd`/../debian/$(package_gtk_py_lib)/usr \
@@ -743,7 +749,7 @@ install-gtk-py-lib: build-gtk-py-stamp
 	rm debian/$(package_gtk_py_lib)/$(wxpydir).pth
 
 	mv debian/$(package_gtk_py_lib)/$(pydir)/wx.pth 			\
-	   debian/$(package_gtk_py_lib)/usr/lib/wx/config/wx$(release).pth
+	   debian/$(package_gtk_py_lib)/usr/lib/wx/python/wx$(release).pth
 
 	find debian/$(package_gtk_py_lib)/$(pydir) -name '*.py?' -exec rm '{}' ';'
 
@@ -801,7 +807,7 @@ install-common: install-gtk-shared-stamp
 	dh_testroot
 	dh_clean -k
 
-	dh_install $(objdir_gtk_install)/share/aclocal 		usr/share
+	dh_install $(objdir_gtk_install)/share/aclocal 	usr/share
 	dh_installman debian/wx-config.1
 
 	dh_install $(objdir_gtk_shared)/contrib/utils/wxrc/wxrc	usr/bin
@@ -832,6 +838,11 @@ install-doc: build-doc-stamp
 	dh_testroot
 	dh_clean -k
 
+	@# Link this monstrosity with an overly obfuscated name
+	@# to something that both people and browsers can expect to find.
+	dh_link usr/share/doc/$(package_doc)/wx-manual.html/wx-$(release)-manual_contents.html \
+		usr/share/doc/$(package_doc)/wx-manual.html/index.html
+
 install-examples: DH_OPTIONS=-p$(package_examples)
 install-examples: build-examples-stamp
 	dh_testdir
@@ -852,7 +863,7 @@ install-gtk-dbg-py: build-gtk-dbg-py-stamp
 	rm debian/$(package_gtk_py_lib)/$(wxpydir).pth
 
 	mv debian/$(package_gtk_py_lib)/$(pydir)/wx.pth 			\
-	   debian/$(package_gtk_py_lib)/usr/lib/wx/config/wx$(release)-dbg.pth
+	   debian/$(package_gtk_py_lib)/usr/lib/wx/python/wx$(release)-dbg.pth
 
 	find debian/$(package_gtk_dbg_py)/$(pydir) -name '*.py?' -exec rm '{}' ';'
 

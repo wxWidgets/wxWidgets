@@ -25,6 +25,8 @@ wxwindows2.4 (2.4.5) unstable; urgency=low
   * Fix strange and invalid cast-assignment construct in sndesd.cpp
     and sndoss.cpp
   * Update FSF address in copyright file.
+  * Add an index.html link to the doc contents page.
+  * Include the unpack_examples script here too.
 
  -- Ron Lee <ron@debian.org>  Sat,  13 Apr 2006 03:06:11 +1030
 
