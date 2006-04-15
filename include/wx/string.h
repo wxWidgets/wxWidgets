@@ -314,7 +314,6 @@ public:
       iterator_type base() const { return m_cur; }                            \
                                                                               \
       reference operator*() const { return *(m_cur - 1); }                    \
-      pointer operator->() const { return m_cur - 1; }                        \
                                                                               \
       name& operator++() { --m_cur; return *this; }                           \
       name operator++(int) { name tmp = *this; --m_cur; return tmp; }         \
