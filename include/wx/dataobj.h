@@ -273,6 +273,12 @@ public:
     // one if preferred == true
     void Add(wxDataObjectSimple *dataObject, bool preferred = false);
 
+    // Report the format passed to the SetData method.  This should be the
+    // format of the data object within the composite that recieved data from
+    // the clipboard or the DnD operation.  You can use this method to find
+    // out what kind of data object was recieved.
+    wxDataFormat GetReceivedFormat() const;
+
     // implement base class pure virtuals
     // ----------------------------------
     virtual wxDataFormat GetPreferredFormat(wxDataObjectBase::Direction dir = Get) const;
@@ -300,6 +306,8 @@ private:
     // the index of the preferred one (0 initially, so by default the first
     // one is the preferred)
     size_t m_preferred;
+
+    wxDataFormat m_receivedFormat;
 
     DECLARE_NO_COPY_CLASS(wxDataObjectComposite)
 };

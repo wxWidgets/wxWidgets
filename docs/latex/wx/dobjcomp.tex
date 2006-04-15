@@ -63,3 +63,12 @@ Adds the {\it dataObject} to the list of supported objects and it becomes the
 preferred object if {\it preferred} is true.
 
 
+\membersection{wxDataObjectComposite::GetReceivedFormat}\label{wxdataobjectcompositegetreceivedformat}
+
+\constfunc{wxDataFormat}{GetReceivedFormat}{}
+
+Report the format passed to the SetData method.  This should be the
+format of the data object within the composite that recieved data from
+the clipboard or the DnD operation.  You can use this method to find
+out what kind of data object was recieved.
+

@@ -524,6 +524,14 @@ public:
 the preferred object if preferred is True.", "");
     
     %cleardisown( wxDataObjectSimple *dataObject );
+
+    DocDeclStr(
+        wxDataFormat , GetReceivedFormat() const,
+        "Report the format passed to the `SetData` method.  This should be the
+format of the data object within the composite that recieved data from
+the clipboard or the DnD operation.  You can use this method to find
+out what kind of data object was recieved.", "");
+    
 };
 
 //---------------------------------------------------------------------------

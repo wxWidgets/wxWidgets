@@ -86,6 +86,7 @@ bool wxDataObjectBase::IsSupported(const wxDataFormat& format,
 wxDataObjectComposite::wxDataObjectComposite()
 {
     m_preferred = 0;
+    m_receivedFormat = wxFormatInvalid;
 }
 
 wxDataObjectComposite::~wxDataObjectComposite()
@@ -118,6 +119,11 @@ void wxDataObjectComposite::Add(wxDataObjectSimple *dataObject, bool preferred)
         m_preferred = m_dataObjects.GetCount();
 
     m_dataObjects.Append( dataObject );
+}
+
+wxDataFormat wxDataObjectComposite::GetReceivedFormat() const
+{
+    return m_receivedFormat;
 }
 
 wxDataFormat
@@ -219,6 +225,7 @@ bool wxDataObjectComposite::SetData(const wxDataFormat& format,
     wxCHECK_MSG( dataObj, false,
                  wxT("unsupported format in wxDataObjectComposite"));
 
+    m_receivedFormat = format;
     return dataObj->SetData( len, buf );
 }
 
