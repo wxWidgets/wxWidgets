@@ -257,7 +257,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     // It shall return the time which was used to set the data.
     if (selection_data->target == g_timestampAtom)
     {
-        uint timestamp = GPOINTER_TO_UINT (signal_data);
+        guint timestamp = GPOINTER_TO_UINT (signal_data);
         gtk_selection_data_set(selection_data,
                                GDK_SELECTION_TYPE_INTEGER,
                                32,
