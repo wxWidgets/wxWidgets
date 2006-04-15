@@ -1753,10 +1753,39 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
     }
 
     SIZE sizeRect;
-    TEXTMETRIC tm;
+    const size_t len = string.length();
+    if ( !::GetTextExtentPoint32(GetHdc(), string, len, &sizeRect) )
+    {
+        wxLogLastError(_T("GetTextExtentPoint32()"));
+    }
 
-    ::GetTextExtentPoint32(GetHdc(), string, string.length(), &sizeRect);
-    GetTextMetrics(GetHdc(), &tm);
+    // the result computed by GetTextExtentPoint32() may be too small as it
+    // accounts for under/overhang of the first/last character while we want
+    // just the bounding rect for this string so adjust the width as needed
+    if ( len > 0 )
+    {
+        ABC width;
+        const wxChar chFirst = *string.begin();
+        if ( ::GetCharABCWidths(GetHdc(), chFirst, chFirst, &width) )
+        {
+            if ( width.abcA < 0 )
+                sizeRect.cx -= width.abcA;
+
+            if ( len > 1 )
+            {
+                const wxChar chLast = *string.rbegin();
+                ::GetCharABCWidths(GetHdc(), chLast, chLast, &width);
+            }
+            //else: we already have the width of the last character
+
+            if ( width.abcC < 0 )
+                sizeRect.cx -= width.abcC;
+        }
+        //else: GetCharABCWidths() failed, not a TrueType font?
+    }
+
+    TEXTMETRIC tm;
+    ::GetTextMetrics(GetHdc(), &tm);
 
     if (x)
         *x = sizeRect.cx;
