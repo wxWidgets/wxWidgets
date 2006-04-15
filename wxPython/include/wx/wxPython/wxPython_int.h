@@ -1468,7 +1468,7 @@ extern wxPyApp *wxPythonApp;
 #define IMP_PYCALLBACK__COLOUR(CLASS, PCLASS, CBNAME)                           \
     void CLASS::CBNAME(const wxColour& c) {                                     \
         bool found;                                                             \
-        wxPyBlock_t blocked = wxPyBeginBlockThreads();                                 \
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();                          \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
             PyObject* obj = wxPyConstructObject((void*)&c, wxT("wxColour"), 0); \
             wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(O)",obj));        \
@@ -1481,24 +1481,25 @@ extern wxPyApp *wxPythonApp;
 
 //---------------------------------------------------------------------------
 
-#define DEC_PYCALLBACK__CELLINTINTME(CBNAME)                                    \
-    void CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y, const wxMouseEvent& e)
+#define DEC_PYCALLBACK_BOOL_CELLINTINTME(CBNAME)                                    \
+    bool CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y, const wxMouseEvent& e)
 
-#define IMP_PYCALLBACK__CELLINTINTME(CLASS, PCLASS, CBNAME)                             \
-    void CLASS::CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y, const wxMouseEvent& e) { \
-        bool found;                                                                     \
-        wxPyBlock_t blocked = wxPyBeginBlockThreads();                                         \
+#define IMP_PYCALLBACK_BOOL_CELLINTINTME(CLASS, PCLASS, CBNAME)                         \
+    bool CLASS::CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y, const wxMouseEvent& e) { \
+        bool rval=false, found;                                                         \
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();                                  \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                        \
             PyObject* obj = wxPyMake_wxObject(cell, 0);                                 \
             PyObject* o2  = wxPyConstructObject((void*)&e, wxT("wxMouseEvent"), 0);     \
-            wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OiiO)",obj,x,y,o2));      \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OiiO)",obj,x,y,o2));  \
             Py_DECREF(obj);                                                             \
             Py_DECREF(o2);                                                              \
         }                                                                               \
         wxPyEndBlockThreads(blocked);                                                   \
         if (! found)                                                                    \
-            PCLASS::CBNAME(cell, x, y, e);                                              \
-    }                                                                         
+            rval = PCLASS::CBNAME(cell, x, y, e);                                       \
+        return rval;                                                                    \
+    }  
 
 
 //---------------------------------------------------------------------------
