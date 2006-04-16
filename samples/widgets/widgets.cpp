@@ -59,6 +59,8 @@ enum
     Widgets_ClearLog = 100,
     Widgets_Quit,
 
+    Widgets_BookCtrl,
+
 #if wxUSE_TOOLTIPS
     Widgets_SetTooltip,
 #endif // wxUSE_TOOLTIPS
@@ -73,7 +75,10 @@ enum
     Widgets_BorderRaised,
     Widgets_BorderSunken,
     Widgets_BorderDouble,
-    Widgets_BorderDefault
+    Widgets_BorderDefault,
+
+    Widgets_GoToPage,
+    Widgets_GoToPageLast = Widgets_GoToPage + 100
 };
 
 // ----------------------------------------------------------------------------
@@ -109,6 +114,9 @@ protected:
     void OnExit(wxCommandEvent& event);
 
 #if wxUSE_MENUS
+    void OnPageChanged(wxBookCtrlEvent& event);
+    void OnGoToPage(wxCommandEvent& event);
+
 #if wxUSE_TOOLTIPS
     void OnSetTooltip(wxCommandEvent& event);
 #endif // wxUSE_TOOLTIPS
@@ -233,6 +241,11 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
     EVT_MENU(Widgets_SetTooltip, WidgetsFrame::OnSetTooltip)
 #endif // wxUSE_TOOLTIPS
 
+#if wxUSE_MENUS
+    EVT_BOOKCTRL_PAGE_CHANGED(Widgets_BookCtrl, WidgetsFrame::OnPageChanged)
+    EVT_MENU_RANGE(Widgets_GoToPage, Widgets_GoToPageLast,
+                   WidgetsFrame::OnGoToPage)
+
     EVT_MENU(Widgets_SetFgColour, WidgetsFrame::OnSetFgCol)
     EVT_MENU(Widgets_SetBgColour, WidgetsFrame::OnSetBgCol)
     EVT_MENU(Widgets_SetFont,     WidgetsFrame::OnSetFont)
@@ -242,6 +255,7 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
                    WidgetsFrame::OnSetBorder)
 
     EVT_MENU(wxID_EXIT, WidgetsFrame::OnExit)
+#endif // wxUSE_MENUS
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -350,7 +364,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     // Uncomment to suppress page theme (draw in solid colour)
     //style |= wxNB_NOPAGETHEME;
 
-    m_book = new wxBookCtrl(m_panel, wxID_ANY, wxDefaultPosition,
+    m_book = new wxBookCtrl(m_panel, Widgets_BookCtrl, wxDefaultPosition,
 #ifdef __WXMOTIF__
         wxSize(500, wxDefaultCoord), // under Motif, height is a function of the width...
 #else
@@ -416,18 +430,30 @@ void WidgetsFrame::InitBook()
     ArrayWidgetsPage pages;
     wxArrayString labels;
 
+    wxMenu *menuPages = new wxMenu;
+    unsigned nPage = 0;
+
     // we need to first create all pages and only then add them to the book
     // as we need the image list first
-    WidgetsPageInfo *info = WidgetsPage::ms_widgetPages;
-    while ( info )
+    //
+    // we also construct the pages menu during this first iteration
+    for ( WidgetsPageInfo *info = WidgetsPage::ms_widgetPages;
+          info;
+          info = info->GetNext(), nPage++ )
     {
         WidgetsPage *page = (*info->GetCtor())(m_book, m_imaglist);
         pages.Add(page);
 
         labels.Add(info->GetLabel());
-
-        info = info->GetNext();
+        menuPages->AppendRadioItem
+                   (
+                    Widgets_GoToPage + nPage,
+                    wxString::Format("%s\tF%u",
+                                     info->GetLabel().c_str(), nPage + 1)
+                   );
     }
+
+    GetMenuBar()->Append(menuPages, _T("&Page"));
 
     m_book->SetImageList(m_imaglist);
 
@@ -469,6 +495,17 @@ void WidgetsFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
 #endif // USE_LOG
 
 #if wxUSE_MENUS
+
+void WidgetsFrame::OnPageChanged(wxBookCtrlEvent& event)
+{
+    GetMenuBar()->Check(Widgets_GoToPage + event.GetSelection(), true);
+    event.Skip();
+}
+
+void WidgetsFrame::OnGoToPage(wxCommandEvent& event)
+{
+    m_book->SetSelection(event.GetId() - Widgets_GoToPage);
+}
 
 #if wxUSE_TOOLTIPS
 
@@ -636,7 +673,7 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
     m_next = NULL;
 
     // dummy sorting: add and immediately sort in the list according to label
-    if(WidgetsPage::ms_widgetPages)
+    if ( WidgetsPage::ms_widgetPages )
     {
         WidgetsPageInfo *node_prev = WidgetsPage::ms_widgetPages;
         if ( wxStrcmp(label, node_prev->GetLabel().c_str()) < 0 )
