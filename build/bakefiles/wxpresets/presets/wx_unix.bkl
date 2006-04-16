@@ -55,10 +55,6 @@ Format-specific notes:
             <default-value>`$(DOLLAR)(WX_CONFIG) --cppflags`</default-value>
             <description>C preprocessor flags to use with wxWidgets code</description>
         </option>
-        <option name="WX_LIBS">
-            <default-value>`$(DOLLAR)(WX_CONFIG) --libs`</default-value>
-            <description>wxWidgets libraries to link against</description>
-        </option>
         <option name="WX_RESCOMP">
             <default-value>`$(DOLLAR)(WX_CONFIG) --rescomp`</default-value>
             <description>wxWidgets resource compiler and flags</description>
@@ -113,10 +109,26 @@ Format-specific notes:
         -->
     </template>
 
-    <!-- not used together with wx-config: -->
+    <!-- VERY IMPORTANT: <wx-lib>base</wx-lib> must be the last wx-lib tag
+                         in all your bakefiles !!
+    -->
     <define-tag name="wx-lib" rules="exe,dll,module">
-        <if cond="value=='base'">
+        <if cond="FORMAT=='autoconf' and value=='base'">
+            <!-- all wx-dependent libraries should have been already listed
+                 thus we can now add WX_LIBS to the linker line -->
             <ldlibs>$(WX_LIBS)</ldlibs>
+        </if>
+        <if cond="FORMAT=='gnu' and value=='base'">
+            <!-- all wx libraries should have been already specified, thus
+                  $(__liblist) should contain the full list... -->
+            <set var="__liblist" append="1">base</set>
+            <ldlibs>`$(WX_CONFIG) --libs $(','.join(__liblist.split()))`</ldlibs>
+        </if>
+        <if cond="FORMAT=='gnu' and value!='base'">
+            <set var="__liblist" append="1">$(value)</set>
+        </if>
+        <if cond="value not in ALLLIB_LIST.split()">
+            <error>Unknown wxWidgets library given in the wx-lib tag</error>
         </if>
     </define-tag>
 

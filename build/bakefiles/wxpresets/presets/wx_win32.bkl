@@ -292,15 +292,6 @@ FIXME: this template has (at least) the following bugs:
     <!--    libraries required by the platform, the libraries       -->
     <!--    we want for our stuff, and the wxWindows libs.          -->
 
-
-    <!-- list of known libraries used by wx-lib tag below -->
-    <set var="LIB_LIST">base core net xml odbc xrc html adv media gl dbgrid qa</set>
-
-    <!-- NOTE: refer to the NET contrib using NETUTILS instead of NET
-               (which is already in LIB_LIST) -->
-    <set var="CONTRIBLIB_LIST">animate applet deprecated fl foldbar gizmos mmedia netutils ogl plot stc svg</set>
-    <set var="ALLLIB_LIST">$(LIB_LIST) $(CONTRIBLIB_LIST)</set>
-
     <!-- this tag is used to include wx libraries: -->
     <define-tag name="wx-lib" rules="exe,dll,module">
         <if cond="value=='base'"><sys-lib>$(WXLIB_BASE_NAME)</sys-lib></if>
