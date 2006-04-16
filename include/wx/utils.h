@@ -105,8 +105,8 @@ WXDLLIMPEXP_BASE wxString wxGetDataDir();
  * Class to make it easier to specify platform-dependent values
  *
  * Examples:
- *  long val = wxPlatform(3).Is(wxMac, 1).Is(wxGTK, 2).Is(stPDA, 5);
- *  wxString strVal = wxPlatform(wxT("Hello")).Is(wxMac, wxT("Mac")).Is(wxMSW, wxT("MSW"));
+ *  long val = wxPlatform::If(wxMac, 1).ElseIf(wxGTK, 2).ElseIf(stPDA, 5).Else(3);
+ *  wxString strVal = wxPlatform::If(wxMac, wxT("Mac")).ElseIf(wxMSW, wxT("MSW")).Else(wxT("Other"));
  *
  * A custom platform symbol:
  *
@@ -115,37 +115,47 @@ WXDLLIMPEXP_BASE wxString wxGetDataDir();
  *      wxPlatform::AddPlatform(stPDA);
  *  #endif
  *
- *  long windowStyle = wxCAPTION | (long) wxPlatform().IsNot(stPDA, wxRESIZE_BORDER);
+ *  long windowStyle = wxCAPTION | (long) wxPlatform::IfNot(stPDA, wxRESIZE_BORDER);
  *
  */
 
 class WXDLLIMPEXP_BASE wxPlatform
 {
 public:
-    wxPlatform() { m_longValue = 0; m_doubleValue = 0.0; }
+    wxPlatform() { Init(); }
+    wxPlatform(const wxPlatform& platform) { Copy(platform); }
+    void operator = (const wxPlatform& platform) { Copy(platform); }
+    void Copy(const wxPlatform& platform);
+    void Init() { m_longValue = 0; m_doubleValue = 0.0; }
 
     // Specify an optional default value
     wxPlatform(long defValue) { m_longValue = defValue; m_doubleValue = 0.0; }
     wxPlatform(const wxString& defValue) { m_stringValue = defValue; m_longValue = 0; m_doubleValue = 0.0; }
     wxPlatform(double defValue) { m_longValue = 0; m_doubleValue = defValue; }
 
-    wxPlatform& Is(int platform, long value);
-    wxPlatform& IsNot(int platform, long value);
+    static wxPlatform If(int platform, long value);
+    static wxPlatform IfNot(int platform, long value);
+    wxPlatform& ElseIf(int platform, long value);
+    wxPlatform& ElseIfNot(int platform, long value);
+    wxPlatform& Else(long value);
 
-    wxPlatform& Is(int platform, int value) { return Is(platform, (long) value); }
-    wxPlatform& IsNot(int platform, int value) { return IsNot(platform, (long) value); }
+    static wxPlatform If(int platform, int value);
+    static wxPlatform IfNot(int platform, int value) { return IfNot(platform, (long)value); }
+    wxPlatform& ElseIf(int platform, int value) { return ElseIf(platform, (long) value); }
+    wxPlatform& ElseIfNot(int platform, int value) { return ElseIfNot(platform, (long) value); }
+    wxPlatform& Else(int value) { return Else((long) value); }
 
-    wxPlatform& Is(int platform, const wxString& value);
-    wxPlatform& IsNot(int platform, const wxString& value);
+    static wxPlatform If(int platform, double value);
+    static wxPlatform IfNot(int platform, double value);
+    wxPlatform& ElseIf(int platform, double value);
+    wxPlatform& ElseIfNot(int platform, double value);
+    wxPlatform& Else(double value);
 
-    wxPlatform& Is(int platform, double value);
-    wxPlatform& IsNot(int platform, double value);
-
-    // This should be specified first to set the default value, or simply
-    // pass the value to the constructor
-    wxPlatform& Default(long value);
-    wxPlatform& Default(const wxString& value);
-    wxPlatform& Default(double value);
+    static wxPlatform If(int platform, const wxString& value);
+    static wxPlatform IfNot(int platform, const wxString& value);
+    wxPlatform& ElseIf(int platform, const wxString& value);
+    wxPlatform& ElseIfNot(int platform, const wxString& value);
+    wxPlatform& Else(const wxString& value);
 
     long GetInteger() const { return m_longValue; }
     const wxString& GetString() const { return m_stringValue; }
@@ -158,7 +168,7 @@ public:
     operator const wxChar*() const { return (const wxChar*) GetString(); }
 
     static void AddPlatform(int platform);
-    static bool PlatformIs(int platform);
+    static bool Is(int platform);
     static void ClearPlatforms();
 
 private:
@@ -169,7 +179,7 @@ private:
 };
 
 /// Function for testing current platform
-inline bool wxPlatformIs(int platform) { return wxPlatform::PlatformIs(platform); }
+inline bool wxPlatformIs(int platform) { return wxPlatform::Is(platform); }
 
 #if wxUSE_GUI
 

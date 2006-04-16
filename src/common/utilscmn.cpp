@@ -309,61 +309,116 @@ int wxGetOsVersion(int *verMaj, int *verMin)
 
 wxArrayInt*  wxPlatform::sm_customPlatforms = NULL;
 
-wxPlatform& wxPlatform::Is(int platform, long value)
+void wxPlatform::Copy(const wxPlatform& platform)
 {
-    if (wxPlatformIs(platform))
+    m_longValue = platform.m_longValue;
+    m_doubleValue = platform.m_doubleValue;
+    m_stringValue = platform.m_stringValue;
+}
+
+wxPlatform wxPlatform::If(int platform, long value)
+{
+    if (Is(platform))
+        return wxPlatform(value);
+    else
+        return wxPlatform();
+}
+
+wxPlatform wxPlatform::IfNot(int platform, long value)
+{
+    if (!Is(platform))
+        return wxPlatform(value);
+    else
+        return wxPlatform();
+}
+
+wxPlatform& wxPlatform::ElseIf(int platform, long value)
+{
+    if (Is(platform))
         m_longValue = value;
     return *this;
 }
 
-wxPlatform& wxPlatform::IsNot(int platform, long value)
+wxPlatform& wxPlatform::ElseIfNot(int platform, long value)
 {
-    if (!wxPlatformIs(platform))
+    if (!Is(platform))
         m_longValue = value;
     return *this;
 }
 
-wxPlatform& wxPlatform::Is(int platform, double value)
+wxPlatform wxPlatform::If(int platform, double value)
 {
-    if (wxPlatformIs(platform))
+    if (Is(platform))
+        return wxPlatform(value);
+    else
+        return wxPlatform();
+}
+
+wxPlatform wxPlatform::IfNot(int platform, double value)
+{
+    if (!Is(platform))
+        return wxPlatform(value);
+    else
+        return wxPlatform();
+}
+
+wxPlatform& wxPlatform::ElseIf(int platform, double value)
+{
+    if (Is(platform))
         m_doubleValue = value;
     return *this;
 }
 
-wxPlatform& wxPlatform::IsNot(int platform, double value)
+wxPlatform& wxPlatform::ElseIfNot(int platform, double value)
 {
-    if (!wxPlatformIs(platform))
+    if (!Is(platform))
         m_doubleValue = value;
     return *this;
 }
 
-wxPlatform& wxPlatform::Is(int platform, const wxString& value)
+wxPlatform wxPlatform::If(int platform, const wxString& value)
 {
-    if (wxPlatformIs(platform))
+    if (Is(platform))
+        return wxPlatform(value);
+    else
+        return wxPlatform();
+}
+
+wxPlatform wxPlatform::IfNot(int platform, const wxString& value)
+{
+    if (!Is(platform))
+        return wxPlatform(value);
+    else
+        return wxPlatform();
+}
+
+wxPlatform& wxPlatform::ElseIf(int platform, const wxString& value)
+{
+    if (Is(platform))
         m_stringValue = value;
     return *this;
 }
 
-wxPlatform& wxPlatform::IsNot(int platform, const wxString& value)
+wxPlatform& wxPlatform::ElseIfNot(int platform, const wxString& value)
 {
-    if (!wxPlatformIs(platform))
+    if (!Is(platform))
         m_stringValue = value;
     return *this;
 }
 
-wxPlatform& wxPlatform::Default(long value)
+wxPlatform& wxPlatform::Else(long value)
 {
     m_longValue = value;
     return *this;
 }
 
-wxPlatform& wxPlatform::Default(double value)
+wxPlatform& wxPlatform::Else(double value)
 {
     m_doubleValue = value;
     return *this;
 }
 
-wxPlatform& wxPlatform::Default(const wxString& value)
+wxPlatform& wxPlatform::Else(const wxString& value)
 {
     m_stringValue = value;
     return *this;
@@ -384,7 +439,7 @@ void wxPlatform::ClearPlatforms()
 
 /// Function for testing current platform
 
-bool wxPlatform::PlatformIs(int platform)
+bool wxPlatform::Is(int platform)
 {
 #ifdef __WXMSW__
     if (platform == wxMSW)

@@ -1460,7 +1460,7 @@ SettingsDialog::SettingsDialog(wxWindow* win, int dialogType)
         m_imageList = NULL;
 
     Create(win, wxID_ANY, _("Preferences"), wxDefaultPosition, wxDefaultSize,
-        wxDEFAULT_DIALOG_STYLE| (int)wxPlatform().IsNot(wxWinCE, resizeBorder)
+        wxDEFAULT_DIALOG_STYLE| (int)wxPlatform::IfNot(wxWinCE, resizeBorder)
 /*
 #ifndef __WXWINCE__
         |resizeBorder
@@ -1470,7 +1470,7 @@ SettingsDialog::SettingsDialog(wxWindow* win, int dialogType)
 
     // If using a toolbook, also follow Mac style and don't create buttons
     if (!useToolBook)
-        CreateButtons(wxOK|wxCANCEL| (int)wxPlatform().IsNot(wxWinPocketPC, wxHELP)
+        CreateButtons(wxOK|wxCANCEL| (int)wxPlatform::IfNot(wxWinPocketPC, wxHELP)
 /*
 #ifndef __POCKETPC__
                       |wxHELP
