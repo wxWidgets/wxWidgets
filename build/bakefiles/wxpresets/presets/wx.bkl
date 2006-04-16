@@ -22,6 +22,26 @@
     <set var="CONTRIBLIB_LIST">animate applet deprecated fl foldbar gizmos mmedia netutils ogl plot stc svg</set>
     <set var="ALLLIB_LIST">$(LIB_LIST) $(CONTRIBLIB_LIST)</set>
 
+    <!-- this is a temporary variable until there is non general    -->
+    <!-- function in bakefiles for returning native markup for      -->
+    <!-- reading envrionment variables                              -->
+    <set var="ENV_VAR">
+        <if cond="FORMAT=='watcom'">%</if>
+        <if cond="FORMAT!='watcom'"></if>
+    </set>
+
+
+    <!-- The directory where wxWidgets is installed: -->
+    <if cond="not isdefined('WX_DIR')">
+        <set var="WX_DIR_DEFAULT" overwrite="0">$(DOLLAR)($(ENV_VAR)WXWIN)</set>
+        <option name="WX_DIR" category="path">
+            <default-value>$(WX_DIR_DEFAULT)</default-value>
+            <description>
+                The directory where wxWidgets library is installed
+            </description>
+        </option>
+    </if>
+
 
 
     <!-- this is just a wrapper that includes the real implementation: -->
