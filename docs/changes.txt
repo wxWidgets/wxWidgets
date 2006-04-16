@@ -126,6 +126,7 @@ All (GUI):
 - Indices and counts in wxControlWithItems derived API are unsigned.
 - Added support for links to wxHtmlListBox; use code has to override
   wxHtmlListBox::OnLinkClicked() to take advantage of it.
+- Added an easier to use wxMenu::AppendSubMenu()
 
 wxMSW:
 

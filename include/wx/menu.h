@@ -87,12 +87,11 @@ public:
     }
 
     // append a submenu
-    wxMenuItem* Append(int itemid,
-                       const wxString& text,
-                       wxMenu *submenu,
-                       const wxString& help = wxEmptyString)
+    wxMenuItem* AppendSubMenu(wxMenu *submenu,
+                              const wxString& text,
+                              const wxString& help = wxEmptyString)
     {
-        return DoAppend(wxMenuItem::New((wxMenu *)this, itemid, text, help,
+        return DoAppend(wxMenuItem::New((wxMenu *)this, wxID_ANY, text, help,
                                         wxITEM_NORMAL, submenu));
     }
 
@@ -307,6 +306,16 @@ public:
                 bool isCheckable)
     {
         Append(itemid, text, help, isCheckable ? wxITEM_CHECK : wxITEM_NORMAL);
+    }
+
+    // use more readable and not requiring unused itemid AppendSubMenu() instead
+    wxMenuItem* Append(int itemid,
+                       const wxString& text,
+                       wxMenu *submenu,
+                       const wxString& help = wxEmptyString)
+    {
+        return DoAppend(wxMenuItem::New((wxMenu *)this, itemid, text, help,
+                                        wxITEM_NORMAL, submenu));
     }
 
     void Insert(size_t pos,
