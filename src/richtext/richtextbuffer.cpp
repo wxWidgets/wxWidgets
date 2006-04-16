@@ -3854,7 +3854,7 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
                 wxTextDataObject data;
                 wxTheClipboard->GetData(data);
                 wxString text(data.GetText());
-                 text.Replace(_T("\r\n"), _T("\n"));
+                text.Replace(_T("\r\n"), _T("\n"));
 
                 InsertTextWithUndo(position+1, text, GetRichTextCtrl());
 

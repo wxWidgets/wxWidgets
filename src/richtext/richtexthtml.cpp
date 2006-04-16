@@ -122,6 +122,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
                 
                 node2 = node2->GetNext();
             }
+            str << wxT("\n");
             //OutputParagraphFormatting(currentParaStyle, para->GetAttributes(), stream, false);
         }
         node = node->GetNext();
@@ -485,6 +486,9 @@ void wxRichTextHTMLHandler::Image_to_Base64(wxRichTextImage* image, wxOutputStre
     str << wxT("data:");
     str << GetMimeType(image->GetImageBlock().GetImageType());
     str << wxT(";base64,");
+    
+    if (image->GetImage().Ok() && !image->GetImageBlock().GetData())
+        image->MakeBlock();
     
     wxChar* data = b64enc( image->GetImageBlock().GetData(), image->GetImageBlock().GetDataSize() );
     str << data;
