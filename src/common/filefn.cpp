@@ -1634,44 +1634,11 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
 
 time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
 {
-#if defined(__WXPALMOS__)
-    return 0;
-#elif defined(__WXWINCE__)
-    FILETIME ftLastWrite;
-    AutoHANDLE hFile(::CreateFile(filename, GENERIC_READ, FILE_SHARE_READ,
-                                    NULL, 0, FILE_ATTRIBUTE_NORMAL, 0));
+    wxDateTime mtime;
+    if ( !wxFileName(filename).GetTimes(NULL, &mtime, NULL) )
+        return (time_t)-1;
 
-    if ( !hFile.IsOk() )
-        return 0;
-
-    if ( !::GetFileTime(hFile, NULL, NULL, &ftLastWrite) )
-        return 0;
-
-    // sure we want to translate to local time here?
-    FILETIME ftLocal;
-    if ( !::FileTimeToLocalFileTime(&ftLastWrite, &ftLocal) )
-    {
-        wxLogLastError(_T("FileTimeToLocalFileTime"));
-    }
-
-    // FILETIME is a counted in 100-ns since 1601-01-01, convert it to
-    // number of seconds since 1970-01-01
-    ULARGE_INTEGER uli;
-    uli.LowPart = ftLocal.dwLowDateTime;
-    uli.HighPart = ftLocal.dwHighDateTime;
-
-    ULONGLONG ull = uli.QuadPart;
-    ull /= wxULL(10000000);     // number of 100ns intervals in 1s
-    ull -= wxULL(11644473600);  // 1970-01-01 - 1601-01-01 in seconds
-
-    return wx_static_cast(time_t, ull);
-#else
-    wxStructStat buf;
-    if ( wxStat( filename, &buf) != 0 )
-        return 0;
-
-    return buf.st_mtime;
-#endif
+    return mtime.GetTicks();
 }
 
 
