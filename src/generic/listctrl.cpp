@@ -2034,7 +2034,7 @@ wxListTextCtrlWrapper::wxListTextCtrlWrapper(wxListMainWindow *owner,
                    wxPoint(rectLabel.x-4,rectLabel.y-4),
                    wxSize(rectLabel.width+11,rectLabel.height+8));
     m_text->SetFocus();
-    
+
     m_text->PushEventHandler(this);
 }
 
@@ -2127,7 +2127,7 @@ void wxListTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
     {
         if ( !AcceptChanges() )
             m_owner->OnRenameCancelled( m_itemEdited );
-            
+
         Finish();
     }
 
@@ -2969,7 +2969,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             // reset the selection and bail out
             HighlightAll(false);
         }
-        
+
         return;
     }
 
@@ -3259,7 +3259,11 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         return;
     }
 
-    switch (event.GetKeyCode())
+    // don't use m_linesPerPage directly as it might not be computed yet
+    const int pageSize = GetCountPerPage();
+    wxCHECK_RET( pageSize, _T("should have non zero page size") );
+
+    switch ( event.GetKeyCode() )
     {
         case WXK_UP:
             if ( m_current > 0 )
@@ -3283,11 +3287,8 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_PAGEUP:
             {
-                // we get a floating point exception without this
-                if (m_linesPerPage == 0)
-                    m_linesPerPage = 1;
-                    
-                int steps = InReportView() ? m_linesPerPage - 1 : m_current % m_linesPerPage;
+                int steps = InReportView() ? pageSize - 1
+                                           : m_current % pageSize;
 
                 int index = m_current - steps;
                 if (index < 0)
@@ -3299,13 +3300,9 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_PAGEDOWN:
             {
-                // we get a floating point exception without this
-                if (m_linesPerPage == 0)
-                    m_linesPerPage = 1;
-                    
                 int steps = InReportView()
-                               ? m_linesPerPage - 1
-                               : m_linesPerPage - (m_current % m_linesPerPage) - 1;
+                                ? pageSize - 1
+                                : pageSize - (m_current % pageSize) - 1;
 
                 size_t index = m_current + steps;
                 size_t count = GetItemCount();
@@ -3319,7 +3316,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         case WXK_LEFT:
             if ( !InReportView() )
             {
-                int index = m_current - m_linesPerPage;
+                int index = m_current - pageSize;
                 if (index < 0)
                     index = 0;
 
@@ -3330,7 +3327,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         case WXK_RIGHT:
             if ( !InReportView() )
             {
-                size_t index = m_current + m_linesPerPage;
+                size_t index = m_current + pageSize;
 
                 size_t count = GetItemCount();
                 if ( index >= count )
@@ -4615,13 +4612,14 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
-	int cw, ch, vw, vh;
-	GetVirtualSize(&vw, &vh);  
-	GetClientSize(&cw, &ch);
+    int cw, ch, vw, vh;
+    GetVirtualSize(&vw, &vh);
+    GetClientSize(&cw, &ch);
 
-	if( event.GetOrientation() == wxVERTICAL && ch >= vh)
-		return;
-	// update our idea of which lines are shown when we redraw the window the
+    if ( event.GetOrientation() == wxVERTICAL && ch >= vh )
+        return;
+
+    // update our idea of which lines are shown when we redraw the window the
     // next time
     ResetVisibleLinesRange();
 
