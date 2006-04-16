@@ -1000,6 +1000,11 @@ void wxListBox::DoSetFirstItem( int n )
 
 int wxListBox::DoListHitTest(const wxPoint& point) const
 {
+    // gtk_tree_view_get_path_at_pos() also gets items that are not visible and
+    // we only want visible items we need to check for it manually here
+    if ( !GetClientRect().Inside(point) )
+        return wxNOT_FOUND;
+
     // need to translate from master window since it is in client coords
     gint binx, biny;
     gdk_window_get_geometry(gtk_tree_view_get_bin_window(m_treeview),
