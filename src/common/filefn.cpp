@@ -1106,8 +1106,19 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 }
 
 bool
-wxRenameFile (const wxString& file1, const wxString& file2)
+wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
 {
+    if ( !overwrite && wxFileExists(file2) )
+    {
+        wxLogSysError
+        (
+            _("Failed to rename the file '%s' to '%s' because the destination file already exists."),
+            file1.c_str(), file2.c_str()
+        );
+
+        return false;
+    }
+
 #if !defined(__WXWINCE__) && !defined(__WXPALMOS__)
     // Normal system call
   if ( wxRename (file1, file2) == 0 )
@@ -1115,7 +1126,7 @@ wxRenameFile (const wxString& file1, const wxString& file2)
 #endif
 
   // Try to copy
-  if (wxCopyFile(file1, file2)) {
+  if (wxCopyFile(file1, file2, overwrite)) {
     wxRemoveFile(file1);
     return true;
   }

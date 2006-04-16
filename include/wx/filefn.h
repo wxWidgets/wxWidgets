@@ -436,7 +436,7 @@ WXDLLIMPEXP_BASE bool wxCopyFile(const wxString& file1, const wxString& file2,
 WXDLLIMPEXP_BASE bool wxRemoveFile(const wxString& file);
 
 // Rename file
-WXDLLIMPEXP_BASE bool wxRenameFile(const wxString& file1, const wxString& file2);
+WXDLLIMPEXP_BASE bool wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite = true);
 
 // Get current working directory.
 #if WXWIN_COMPATIBILITY_2_6
