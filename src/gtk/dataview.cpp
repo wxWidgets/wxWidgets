@@ -1407,7 +1407,8 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     }
 
     m_widget = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (m_widget), GTK_SHADOW_IN);
+
+    GtkScrolledWindowSetBorder(m_widget, style);
 
     m_treeview = gtk_tree_view_new();
     gtk_container_add (GTK_CONTAINER (m_widget), m_treeview);

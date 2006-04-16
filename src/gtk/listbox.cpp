@@ -467,6 +467,9 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
     }
 
+
+    GtkScrolledWindowSetBorder(m_widget, style);
+
     m_treeview = GTK_TREE_VIEW( gtk_tree_view_new( ) );
 
     //wxListBox doesn't have a header :)

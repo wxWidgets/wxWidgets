@@ -4334,6 +4334,29 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     m_clipPaintRegion = false;
 }
 
+void wxWindowGTK::GtkScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
+{
+    //RN: Note that static controls usually have no border on gtk, so maybe
+    //it makes sense to treat that as simply no border at the wx level 
+    //as well...
+    if (!(wxstyle & wxNO_BORDER) && !(wxstyle & wxBORDER_STATIC))
+    {
+        GtkShadowType gtkstyle;
+        
+        if(wxstyle & wxBORDER_RAISED)
+            gtkstyle = GTK_SHADOW_OUT;
+        else if (wxstyle & wxBORDER_SUNKEN)
+            gtkstyle = GTK_SHADOW_IN;
+        else if (wxstyle & wxBORDER_DOUBLE)
+            gtkstyle = GTK_SHADOW_ETCHED_IN;
+        else //default
+            gtkstyle = GTK_SHADOW_IN;
+
+        gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW(w), 
+                                             gtkstyle );
+    }
+}
+
 void wxWindowGTK::SetWindowStyleFlag( long style )
 {
     // Updates the internal variable. NB: Now m_windowStyle bits carry the _new_ style values already

@@ -277,6 +277,9 @@ protected:
     // ApplyWidgetStyle -- override this, not ApplyWidgetStyle
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
 
+    // sets the border of a given GtkScrolledWindow from a wx style
+    static void GtkScrolledWindowSetBorder(GtkWidget* w, int style);
+
 protected:
     // GtkAdjustment to be used by Scroll{Lines,Pages}
     void SetVScrollAdjustment(GtkAdjustment* adj);
