@@ -86,6 +86,12 @@ public:
 
     wxBitmap  *colorized_horse_jpeg;
 
+    wxBitmap my_toucan;
+    wxBitmap my_toucan_flipped_horiz;
+    wxBitmap my_toucan_flipped_vert;
+    wxBitmap my_toucan_flipped_both;
+    wxBitmap my_toucan_head;
+
     int xH, yH ;
     int m_ani_images ;
 
@@ -305,7 +311,7 @@ public:
         // setting alpha in the loop below then)
         typedef wxAlphaPixelData Data;
         // typedef wxNativePixelData Data;
-        
+
         // First, clear the whole bitmap by making it alpha
         {
             Data data( m_bitmap, wxPoint(0,0), wxSize(SIZE, SIZE) );
@@ -487,6 +493,14 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         wxLogError(wxT("Can't load PNG image"));
     else
         my_horse_png = new wxBitmap( image );
+
+    image = wxImage(wxT("toucan.png"));
+    my_toucan = wxBitmap(image);
+    my_toucan_flipped_horiz = wxBitmap(image.Mirror(true));
+    my_toucan_flipped_vert = wxBitmap(image.Mirror(false));
+    my_toucan_flipped_both = wxBitmap(image.Mirror(true).Mirror(false));
+    my_toucan_head = wxBitmap(image.GetSubImage(wxRect(40, 7, 80, 60)));
+
 #endif // wxUSE_LIBPNG
 
 #if wxUSE_LIBJPEG
@@ -708,8 +722,8 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawBitmap( *my_horse_png, 30, 150 );
         wxRect rect(0,0,100,100);
         wxBitmap sub( my_horse_png->GetSubBitmap(rect) );
-        dc.DrawText( _T("GetSubBitmap()"), 280, 190 );
-        dc.DrawBitmap( sub, 280, 210 );
+        dc.DrawText( _T("GetSubBitmap()"), 280, 175 );
+        dc.DrawBitmap( sub, 280, 195 );
     }
 
     dc.DrawText( _T("JPEG handler"), 30, 365 );
@@ -752,6 +766,25 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if (my_horse_xpm && my_horse_xpm->Ok())
         dc.DrawBitmap( *my_horse_xpm, 30, 1760 );
 
+    {
+        int x = 200, y = 300, yy = 170;;
+
+        dc.DrawText(wxT("Original toucan"), x+50, y);
+        dc.DrawBitmap(my_toucan, x, y+15);
+        y += yy;
+        dc.DrawText(wxT("Flipped horizontally"), x+50, y);
+        dc.DrawBitmap(my_toucan_flipped_horiz, x, y+15);
+        y += yy;
+        dc.DrawText(wxT("Flipped vertically"), x+50, y);
+        dc.DrawBitmap(my_toucan_flipped_vert, x, y+15);
+        y += yy;
+        dc.DrawText(wxT("Flipped both h&v"), x+50, y);
+        dc.DrawBitmap(my_toucan_flipped_both, x, y+15);
+
+        y += yy;
+        dc.DrawText(wxT("Toucan's head"), x+50, y);
+        dc.DrawBitmap(my_toucan_head, x, y+15);
+    }
 
     if (my_smile_xbm && my_smile_xbm->Ok())
     {
@@ -903,12 +936,12 @@ void MyCanvas::CreateAntiAliasedBitmap()
 
   dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL) );
   dc.SetTextForeground( wxT("RED") );
-  dc.DrawText( _T("This is anti-aliased Text."), 20, 20 );
-  dc.DrawText( _T("And a Rectangle."), 20, 60 );
+  dc.DrawText( _T("This is anti-aliased Text."), 20, 5 );
+  dc.DrawText( _T("And a Rectangle."), 20, 45 );
 
   dc.SetBrush( *wxRED_BRUSH );
   dc.SetPen( *wxTRANSPARENT_PEN );
-  dc.DrawRoundedRectangle( 20, 100, 200, 180, 20 );
+  dc.DrawRoundedRectangle( 20, 85, 200, 180, 20 );
 
   wxImage original= bitmap.ConvertToImage();
   wxImage anti( 150, 150 );
