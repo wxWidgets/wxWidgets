@@ -45,6 +45,14 @@ public:
     // some pages show 2 controls, in this case override this one as well
     virtual wxControl *GetWidget2() const { return NULL; }
 
+    // recreate the control shown by this page
+    //
+    // this is currently used only to take into account the border flags
+    virtual void RecreateWidget() = 0;
+
+    // the default flags for the widget, currently only contains border flags
+    static int ms_defaultFlags;
+
 protected:
     // several helper functions for page creation
 

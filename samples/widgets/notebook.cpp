@@ -90,6 +90,7 @@ public:
     virtual ~NotebookWidgetsPage();
 
     virtual wxControl *GetWidget() const { return m_notebook; }
+    virtual void RecreateWidget() { CreateNotebook(); }
 
 protected:
     // event handlers
@@ -344,7 +345,7 @@ void NotebookWidgetsPage::CreateImageList()
 
 void NotebookWidgetsPage::CreateNotebook()
 {
-    int flags;
+    int flags = ms_defaultFlags;
     switch ( m_radioOrient->GetSelection() )
     {
         default:
@@ -352,19 +353,19 @@ void NotebookWidgetsPage::CreateNotebook()
             // fall through
 
         case Orient_Top:
-            flags = wxBK_TOP;
+            flags |= wxBK_TOP;
             break;
 
         case Orient_Bottom:
-            flags = wxBK_BOTTOM;
+            flags |= wxBK_BOTTOM;
             break;
 
         case Orient_Left:
-            flags = wxBK_LEFT;
+            flags |= wxBK_LEFT;
             break;
 
         case Orient_Right:
-            flags = wxBK_RIGHT;
+            flags |= wxBK_RIGHT;
             break;
     }
 

@@ -93,6 +93,7 @@ public:
     virtual ~SliderWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_slider; }
+    virtual void RecreateWidget() { CreateSlider(); }
 
 protected:
     // event handlers
@@ -333,7 +334,7 @@ void SliderWidgetsPage::Reset()
 
 void SliderWidgetsPage::CreateSlider()
 {
-    int flags = 0;
+    int flags = ms_defaultFlags;
 
     if ( m_chkInverse->GetValue() )
     {

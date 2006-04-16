@@ -83,6 +83,7 @@ public:
     virtual ~ButtonWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_button; }
+    virtual void RecreateWidget() { CreateButton(); }
 
 protected:
     // event handlers
@@ -311,7 +312,7 @@ void ButtonWidgetsPage::CreateButton()
         label = m_textLabel->GetValue();
     }
 
-    int flags = 0;
+    int flags = ms_defaultFlags;
     switch ( m_radioHAlign->GetSelection() )
     {
         case ButtonHAlign_Left:

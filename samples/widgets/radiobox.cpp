@@ -87,6 +87,7 @@ public:
     virtual ~RadioWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_radio; }
+    virtual void RecreateWidget() { CreateRadio(); }
 
 protected:
     // event handlers
@@ -355,6 +356,8 @@ void RadioWidgetsPage::CreateRadio()
 
     int flags = m_chkVert->GetValue() ? wxRA_VERTICAL
                                       : wxRA_HORIZONTAL;
+
+    flags |= ms_defaultFlags;
 
 #ifdef wxRA_LEFTTORIGHT
     switch ( m_radioDir->GetSelection() )

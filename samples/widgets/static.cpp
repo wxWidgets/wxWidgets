@@ -143,6 +143,7 @@ public:
     virtual ~StaticWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_statText; }
+    virtual void RecreateWidget() { CreateStatic(); }
 
 protected:
     // event handlers
@@ -333,7 +334,7 @@ void StaticWidgetsPage::CreateStatic()
     }
 
     int flagsBox = 0,
-        flagsText = 0;
+        flagsText = ms_defaultFlags;
 
     if ( !m_chkAutoResize->GetValue() )
     {

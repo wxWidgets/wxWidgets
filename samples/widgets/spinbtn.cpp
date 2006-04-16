@@ -78,6 +78,7 @@ public:
 
     virtual wxControl *GetWidget() const { return m_spinbtn; }
     virtual wxControl *GetWidget2() const { return m_spinctrl; }
+    virtual void RecreateWidget() { CreateSpin(); }
 
 protected:
     // event handlers
@@ -268,7 +269,7 @@ void SpinBtnWidgetsPage::Reset()
 
 void SpinBtnWidgetsPage::CreateSpin()
 {
-    int flags = 0;
+    int flags = ms_defaultFlags;
 
     bool isVert = m_chkVert->GetValue();
     if ( isVert )

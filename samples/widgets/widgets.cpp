@@ -58,13 +58,22 @@ enum
 {
     Widgets_ClearLog = 100,
     Widgets_Quit,
+
 #if wxUSE_TOOLTIPS
     Widgets_SetTooltip,
 #endif // wxUSE_TOOLTIPS
     Widgets_SetFgColour,
     Widgets_SetBgColour,
     Widgets_SetFont,
-    Widgets_Enable
+    Widgets_Enable,
+
+    Widgets_BorderNone,
+    Widgets_BorderStatic,
+    Widgets_BorderSimple,
+    Widgets_BorderRaised,
+    Widgets_BorderSunken,
+    Widgets_BorderDouble,
+    Widgets_BorderDefault
 };
 
 // ----------------------------------------------------------------------------
@@ -107,6 +116,7 @@ protected:
     void OnSetBgCol(wxCommandEvent& event);
     void OnSetFont(wxCommandEvent& event);
     void OnEnable(wxCommandEvent& event);
+    void OnSetBorder(wxCommandEvent& event);
 #endif // wxUSE_MENUS
 
     // initialize the book: add all pages to it
@@ -228,6 +238,9 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
     EVT_MENU(Widgets_SetFont,     WidgetsFrame::OnSetFont)
     EVT_MENU(Widgets_Enable,      WidgetsFrame::OnEnable)
 
+    EVT_MENU_RANGE(Widgets_BorderNone, Widgets_BorderDefault,
+                   WidgetsFrame::OnSetBorder)
+
     EVT_MENU(wxID_EXIT, WidgetsFrame::OnExit)
 END_EVENT_TABLE()
 
@@ -305,6 +318,17 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     menuWidget->Append(Widgets_SetBgColour, _T("Set &background...\tCtrl-B"));
     menuWidget->Append(Widgets_SetFont,     _T("Set f&ont...\tCtrl-O"));
     menuWidget->AppendCheckItem(Widgets_Enable,  _T("&Enable/disable\tCtrl-E"));
+
+    wxMenu *menuBorders = new wxMenu;
+    menuBorders->AppendRadioItem(Widgets_BorderDefault, _T("De&fault\tCtrl-Shift-9"));
+    menuBorders->AppendRadioItem(Widgets_BorderNone,   _T("&None\tCtrl-Shift-0"));
+    menuBorders->AppendRadioItem(Widgets_BorderSimple, _T("&Simple\tCtrl-Shift-1"));
+    menuBorders->AppendRadioItem(Widgets_BorderDouble, _T("&Double\tCtrl-Shift-2"));
+    menuBorders->AppendRadioItem(Widgets_BorderStatic, _T("Stati&c\tCtrl-Shift-3"));
+    menuBorders->AppendRadioItem(Widgets_BorderRaised, _T("&Raised\tCtrl-Shift-4"));
+    menuBorders->AppendRadioItem(Widgets_BorderSunken, _T("S&unken\tCtrl-Shift-5"));
+    menuWidget->AppendSubMenu(menuBorders, _T("Set &border"));
+
     menuWidget->AppendSeparator();
     menuWidget->Append(wxID_EXIT, _T("&Quit\tCtrl-Q"));
     mbar->Append(menuWidget, _T("&Widget"));
@@ -577,13 +601,37 @@ void WidgetsFrame::OnEnable(wxCommandEvent& event)
     page->GetWidget()->Enable(event.IsChecked());
 }
 
+void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
+{
+    int border;
+    switch ( event.GetId() )
+    {
+        case Widgets_BorderNone:   border = wxBORDER_NONE;   break;
+        case Widgets_BorderStatic: border = wxBORDER_STATIC; break;
+        case Widgets_BorderSimple: border = wxBORDER_SIMPLE; break;
+        case Widgets_BorderRaised: border = wxBORDER_RAISED; break;
+        case Widgets_BorderSunken: border = wxBORDER_SUNKEN; break;
+        case Widgets_BorderDouble: border = wxBORDER_DOUBLE; break;
+
+        default:
+            wxFAIL_MSG( _T("unknown border style") );
+            // fall through
+
+        case Widgets_BorderDefault: border = wxBORDER_DEFAULT; break;
+    }
+
+    WidgetsPage::ms_defaultFlags &= ~wxBORDER_MASK;
+    WidgetsPage::ms_defaultFlags |= border;
+
+    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+    page->RecreateWidget();
+}
+
 #endif // wxUSE_MENUS
 
 // ----------------------------------------------------------------------------
 // WidgetsPageInfo
 // ----------------------------------------------------------------------------
-
-WidgetsPageInfo *WidgetsPage::ms_widgetPages = NULL;
 
 WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
                : m_label(label)
@@ -643,6 +691,9 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
 // ----------------------------------------------------------------------------
 // WidgetsPage
 // ----------------------------------------------------------------------------
+
+int WidgetsPage::ms_defaultFlags = wxBORDER_DEFAULT;
+WidgetsPageInfo *WidgetsPage::ms_widgetPages = NULL;
 
 WidgetsPage::WidgetsPage(wxBookCtrlBase *book)
            : wxPanel(book, wxID_ANY,

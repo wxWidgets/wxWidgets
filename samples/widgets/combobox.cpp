@@ -88,6 +88,7 @@ public:
     ComboboxWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist);
 
     virtual wxControl *GetWidget() const { return m_combobox; }
+    virtual void RecreateWidget() { CreateCombo(); }
 
 protected:
     // event handlers
@@ -334,7 +335,7 @@ void ComboboxWidgetsPage::Reset()
 
 void ComboboxWidgetsPage::CreateCombo()
 {
-    int flags = 0;
+    int flags = ms_defaultFlags;
 
     if ( m_chkSort->GetValue() )
         flags |= wxCB_SORT;
