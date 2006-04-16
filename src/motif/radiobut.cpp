@@ -140,7 +140,8 @@ void wxRadioButton::ChangeBackgroundColour()
     wxWindow::ChangeBackgroundColour();
 
     // What colour should this be?
-    int selectPixel = wxBLACK->AllocColour(XtDisplay((Widget)m_mainWidget));
+    wxColour colour = *wxBLACK;
+    int selectPixel = colour.AllocColour(XtDisplay((Widget)m_mainWidget));
 
     XtVaSetValues ((Widget) GetMainWidget(),
           XmNselectColor, selectPixel,

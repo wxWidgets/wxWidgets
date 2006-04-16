@@ -157,7 +157,7 @@ extern HCURSOR wxGetCurrentBusyCursor()
 }
 
 // Set the cursor to the busy cursor for all windows
-void wxBeginBusyCursor(wxCursor *cursor)
+void wxBeginBusyCursor(const wxCursor *cursor)
 {
     if ( gs_wxBusyCursorCount++ == 0 )
     {

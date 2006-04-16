@@ -1211,7 +1211,7 @@ void wxCalendarCtrl::RefreshDate(const wxDateTime& date)
     Refresh(true, &rect);
 }
 
-void wxCalendarCtrl::HighlightRange(wxPaintDC* pDC, const wxDateTime& fromdate, const wxDateTime& todate, wxPen* pPen, wxBrush* pBrush)
+void wxCalendarCtrl::HighlightRange(wxPaintDC* pDC, const wxDateTime& fromdate, const wxDateTime& todate, const wxPen* pPen, const wxBrush* pBrush)
 {
     // Highlights the given range using pen and brush
     // Does nothing if todate < fromdate

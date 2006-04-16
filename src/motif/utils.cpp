@@ -909,7 +909,7 @@ void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour)
         NULL);
 }
 
-void wxDoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour)
+void wxDoChangeBackgroundColour(WXWidget widget, const wxColour& backgroundColour, bool changeArmColour)
 {
     wxComputeColours (XtDisplay((Widget) widget), & backgroundColour,
         (wxColour*) NULL);

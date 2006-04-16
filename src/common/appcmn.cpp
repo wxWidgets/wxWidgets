@@ -104,7 +104,6 @@ bool wxAppBase::Initialize(int& argcOrig, wxChar **argvOrig)
 #endif
 
     wxInitializeStockLists();
-    wxInitializeStockObjects();
 
     wxBitmap::InitStandardHandlers();
 
@@ -137,7 +136,7 @@ void wxAppBase::CleanUp()
     // undo everything we did in Initialize() above
     wxBitmap::CleanUpHandlers();
 
-    wxDeleteStockObjects();
+    wxStockGDI::DeleteAll();
 
     wxDeleteStockLists();
 

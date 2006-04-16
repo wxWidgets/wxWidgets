@@ -424,7 +424,7 @@ void wxSetCursor(const wxCursor& cursor)
 static int wxBusyCursorCount = 0;
 
 // Set the cursor to the busy cursor for all windows
-void wxBeginBusyCursor(wxCursor *cursor)
+void wxBeginBusyCursor(const wxCursor *cursor)
 {
   wxBusyCursorCount ++;
   if (wxBusyCursorCount == 1)

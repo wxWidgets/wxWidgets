@@ -347,7 +347,8 @@ void wxRadioBox::ChangeBackgroundColour()
 {
     wxWindow::ChangeBackgroundColour();
 
-    int selectPixel = wxBLACK->AllocColour(XtDisplay((Widget)m_mainWidget));
+    wxColour colour = *wxBLACK;
+    int selectPixel = colour.AllocColour(XtDisplay((Widget)m_mainWidget));
 
     for (unsigned int i = 0; i < m_noItems; i++)
     {

@@ -261,7 +261,7 @@ private:
     // OnPaint helper-methods
 
     // Highlight the [fromdate : todate] range using pen and brush
-    void HighlightRange(wxPaintDC* dc, const wxDateTime& fromdate, const wxDateTime& todate, wxPen* pen, wxBrush* brush);
+    void HighlightRange(wxPaintDC* dc, const wxDateTime& fromdate, const wxDateTime& todate, const wxPen* pen, const wxBrush* brush);
 
     // Get the "coordinates" for the date relative to the month currently displayed.
     // using (day, week): upper left coord is (1, 1), lower right coord is (7, 6)

@@ -289,9 +289,7 @@ HCURSOR gs_wxBusyCursorOld = 0;  // old cursor
 static int gs_wxBusyCursorCount = 0;
 
 // Set the cursor to the busy cursor for all windows
-void wxBeginBusyCursor(
-  wxCursor*                         pCursor
-)
+void wxBeginBusyCursor(const wxCursor* pCursor)
 {
     if ( gs_wxBusyCursorCount++ == 0 )
     {

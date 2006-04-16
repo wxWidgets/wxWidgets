@@ -148,10 +148,10 @@ public:
   inline wxColour GetShadowColour(void) const { return m_shadowColour; }
   inline wxColour GetBackgroundColour(void) const { return m_backgroundColour; }
   inline wxColour GetTextColour(void) const { return m_textColour; }
-  inline wxPen *GetHighlightPen(void) const { return m_highlightPen; }
-  inline wxPen *GetShadowPen(void) const { return m_shadowPen; }
-  inline wxPen *GetBackgroundPen(void) const { return m_backgroundPen; }
-  inline wxBrush *GetBackgroundBrush(void) const { return m_backgroundBrush; }
+  inline const wxPen *GetHighlightPen(void) const { return m_highlightPen; }
+  inline const wxPen *GetShadowPen(void) const { return m_shadowPen; }
+  inline const wxPen *GetBackgroundPen(void) const { return m_backgroundPen; }
+  inline const wxBrush *GetBackgroundBrush(void) const { return m_backgroundBrush; }
 
   inline void SetViewRect(const wxRect& rect) { m_tabViewRect = rect; }
   inline wxRect GetViewRect(void) const { return m_tabViewRect; }
@@ -253,10 +253,10 @@ protected:
    wxColour         m_textColour;
 
    // Pen and brush cache
-   wxPen*           m_highlightPen;
-   wxPen*           m_shadowPen;
-   wxPen*           m_backgroundPen;
-   wxBrush*         m_backgroundBrush;
+   const wxPen*     m_highlightPen;
+   const wxPen*     m_shadowPen;
+   const wxPen*     m_backgroundPen;
+   const wxBrush*   m_backgroundBrush;
 
    wxFont           m_tabFont;
    wxFont           m_tabSelectedFont;

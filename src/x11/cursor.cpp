@@ -186,7 +186,7 @@ void wxEndBusyCursor()
         wxTheApp->ProcessIdle();
 }
 
-void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
+void wxBeginBusyCursor( const wxCursor *WXUNUSED(cursor) )
 {
     if (gs_busyCount++ > 0)
         return;

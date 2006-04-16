@@ -243,7 +243,7 @@ void wxEndBusyCursor()
     gs_savedCursor = wxNullCursor;
 }
 
-void wxBeginBusyCursor(wxCursor *cursor)
+void wxBeginBusyCursor(const wxCursor *cursor)
 {
     if ( gs_busyCount++ > 0 ) return;
 

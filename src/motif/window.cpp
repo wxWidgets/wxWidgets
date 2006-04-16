@@ -693,7 +693,7 @@ bool wxWindow::SetCursor(const wxCursor& cursor)
 
     //    wxASSERT_MSG( m_cursor.Ok(),
     //                  wxT("cursor must be valid after call to the base version"));
-    wxCursor* cursor2 = NULL;
+    const wxCursor* cursor2 = NULL;
     if (m_cursor.Ok())
         cursor2 = & m_cursor;
     else
@@ -2377,7 +2377,7 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win,
 
 #define YAllocColor XAllocColor
 XColor g_itemColors[5];
-int wxComputeColours (Display *display, wxColour * back, wxColour * fore)
+int wxComputeColours (Display *display, const wxColour * back, const wxColour * fore)
 {
     int result;
     static XmColorProc colorProc;

@@ -12,7 +12,50 @@
 #include "wx/wxprec.h"
 
 #include "wx/gdiobj.h"
+#include "wx/gdicmn.h"
+#include "wx/mac/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
 
-// TODO: Nothing to do, unless you want to.
+class wxStockGDIMac: public wxStockGDI
+{
+public:
+    wxStockGDIMac();
+
+    virtual const wxFont* GetFont(Item item);
+
+private:
+    typedef wxStockGDI super;
+};
+
+static wxStockGDIMac gs_wxStockGDIMac_instance;
+
+wxStockGDIMac::wxStockGDIMac()
+{
+    // Override default instance
+    ms_instance = this;
+}
+
+const wxFont* wxStockGDIMac::GetFont(Item item)
+{
+    wxFont* font = static_cast<wxFont*>(ms_stockObject[item]);
+    if (font == NULL)
+    {
+        switch (item)
+        {
+        case FONT_NORMAL:
+            font = new wxFont;
+            font->MacCreateThemeFont(kThemeSystemFont);
+            break;
+        case FONT_SMALL:
+            font = new wxFont;
+            font->MacCreateThemeFont(kThemeSmallSystemFont);
+            break;
+        default:
+            font = const_cast<wxFont*>(super::GetFont(item));
+            break;
+        }
+        ms_stockObject[item] = font;
+    }
+    return font;
+}

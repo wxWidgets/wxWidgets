@@ -19,6 +19,9 @@
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/filefn.h"
+#if wxUSE_GUI
+    #include "wx/gdicmn.h"
+#endif
 
 class WXDLLIMPEXP_BASE wxArrayString;
 class WXDLLIMPEXP_BASE wxArrayInt;
@@ -44,7 +47,6 @@ class WXDLLIMPEXP_CORE wxProcess;
 class WXDLLIMPEXP_CORE wxFrame;
 class WXDLLIMPEXP_CORE wxWindow;
 class WXDLLIMPEXP_CORE wxWindowList;
-class WXDLLIMPEXP_CORE wxPoint;
 
 // ----------------------------------------------------------------------------
 // Macros
@@ -614,9 +616,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // Set the cursor to the busy cursor for all windows
-class WXDLLEXPORT wxCursor;
-extern WXDLLEXPORT_DATA(wxCursor*) wxHOURGLASS_CURSOR;
-WXDLLEXPORT void wxBeginBusyCursor(wxCursor *cursor = wxHOURGLASS_CURSOR);
+WXDLLIMPEXP_CORE void wxBeginBusyCursor(const wxCursor *cursor = wxHOURGLASS_CURSOR);
 
 // Restore cursor to normal
 WXDLLEXPORT void wxEndBusyCursor();
@@ -628,7 +628,7 @@ WXDLLEXPORT bool wxIsBusy();
 class WXDLLEXPORT wxBusyCursor
 {
 public:
-    wxBusyCursor(wxCursor* cursor = wxHOURGLASS_CURSOR)
+    wxBusyCursor(const wxCursor* cursor = wxHOURGLASS_CURSOR)
         { wxBeginBusyCursor(cursor); }
     ~wxBusyCursor()
         { wxEndBusyCursor(); }

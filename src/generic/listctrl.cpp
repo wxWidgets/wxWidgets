@@ -412,8 +412,8 @@ class WXDLLEXPORT wxListHeaderWindow : public wxWindow
 {
 protected:
     wxListMainWindow  *m_owner;
-    wxCursor          *m_currentCursor;
-    wxCursor          *m_resizeCursor;
+    const wxCursor    *m_currentCursor;
+    const wxCursor    *m_resizeCursor;
     bool               m_isDragging;
 
     // column being resized or -1

@@ -38,10 +38,6 @@
 #include "wx/log.h"
 #include <string.h>
 
-#if defined(__WXMSW__)
-#include "wx/msw/wrapwin.h"
-#endif
-
 #ifdef __WXMOTIF__
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -54,11 +50,6 @@
 
 #ifdef __WXX11__
 #include "X11/Xlib.h"
-#endif
-
-#ifdef __WXMAC__
-#include "wx/mac/private.h"
-#include "wx/mac/uma.h"
 #endif
 
 #if wxUSE_EXTENDED_RTTI
@@ -523,6 +514,204 @@ wxColour *wxColourDatabase::FindColour(const wxString& name)
 // stock objects
 // ============================================================================
 
+static wxStockGDI gs_wxStockGDI_instance;
+wxStockGDI* wxStockGDI::ms_instance = &gs_wxStockGDI_instance;
+wxObject* wxStockGDI::ms_stockObject[ITEMCOUNT];
+
+wxStockGDI::wxStockGDI()
+{
+}
+
+wxStockGDI::~wxStockGDI()
+{
+}
+
+void wxStockGDI::DeleteAll()
+{
+    for (unsigned i = 0; i < ITEMCOUNT; i++)
+    {
+        delete ms_stockObject[i];
+        ms_stockObject[i] = NULL;
+    }
+}
+
+const wxBrush* wxStockGDI::GetBrush(Item item)
+{
+    wxBrush* brush = wx_static_cast(wxBrush*, ms_stockObject[item]);
+    if (brush == NULL)
+    {
+        switch (item)
+        {
+        case BRUSH_BLACK:
+            brush = new wxBrush(*GetColour(COLOUR_BLACK), wxSOLID);
+            break;
+        case BRUSH_BLUE:
+            brush = new wxBrush(*GetColour(COLOUR_BLUE), wxSOLID);
+            break;
+        case BRUSH_CYAN:
+            brush = new wxBrush(*GetColour(COLOUR_CYAN), wxSOLID);
+            break;
+        case BRUSH_GREEN:
+            brush = new wxBrush(*GetColour(COLOUR_GREEN), wxSOLID);
+            break;
+        case BRUSH_GREY:
+            brush = new wxBrush(wxColour(wxT("GREY")), wxSOLID);
+            break;
+        case BRUSH_LIGHTGREY:
+            brush = new wxBrush(*GetColour(COLOUR_LIGHTGREY), wxSOLID);
+            break;
+        case BRUSH_MEDIUMGREY:
+            brush = new wxBrush(wxColour(wxT("MEDIUM GREY")), wxSOLID);
+            break;
+        case BRUSH_RED:
+            brush = new wxBrush(*GetColour(COLOUR_RED), wxSOLID);
+            break;
+        case BRUSH_TRANSPARENT:
+            brush = new wxBrush(*GetColour(COLOUR_BLACK), wxTRANSPARENT);
+            break;
+        case BRUSH_WHITE:
+            brush = new wxBrush(*GetColour(COLOUR_WHITE), wxSOLID);
+            break;
+        default:
+            wxFAIL;
+        }
+        ms_stockObject[item] = brush;
+    }
+    return brush;
+}
+
+const wxColour* wxStockGDI::GetColour(Item item)
+{
+    wxColour* colour = wx_static_cast(wxColour*, ms_stockObject[item]);
+    if (colour == NULL)
+    {
+        switch (item)
+        {
+        case COLOUR_BLACK:
+            colour = new wxColour(0, 0, 0);
+            break;
+        case COLOUR_BLUE:
+            colour = new wxColour(0, 0, 255);
+            break;
+        case COLOUR_CYAN:
+            colour = new wxColour(wxT("CYAN"));
+            break;
+        case COLOUR_GREEN:
+            colour = new wxColour(0, 255, 0);
+            break;
+        case COLOUR_LIGHTGREY:
+            colour = new wxColour(wxT("LIGHT GREY"));
+            break;
+        case COLOUR_RED:
+            colour = new wxColour(255, 0, 0);
+            break;
+        case COLOUR_WHITE:
+            colour = new wxColour(255, 255, 255);
+            break;
+        default:
+            wxFAIL;
+        }
+        ms_stockObject[item] = colour;
+    }
+    return colour;
+}
+
+const wxCursor* wxStockGDI::GetCursor(Item item)
+{
+    wxCursor* cursor = wx_static_cast(wxCursor*, ms_stockObject[item]);
+    if (cursor == NULL)
+    {
+        switch (item)
+        {
+        case CURSOR_CROSS:
+            cursor = new wxCursor(wxCURSOR_CROSS);
+            break;
+        case CURSOR_HOURGLASS:
+            cursor = new wxCursor(wxCURSOR_WAIT);
+            break;
+        case CURSOR_STANDARD:
+            cursor = new wxCursor(wxCURSOR_ARROW);
+            break;
+        default:
+            wxFAIL;
+        }
+        ms_stockObject[item] = cursor;
+    }
+    return cursor;
+}
+
+const wxFont* wxStockGDI::GetFont(Item item)
+{
+    wxFont* font = wx_static_cast(wxFont*, ms_stockObject[item]);
+    if (font == NULL)
+    {
+        switch (item)
+        {
+        case FONT_ITALIC:
+            font = new wxFont(GetFont(FONT_NORMAL)->GetPointSize(), wxROMAN, wxITALIC, wxNORMAL);
+            break;
+        case FONT_NORMAL:
+            font = new wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+            break;
+        case FONT_SMALL:
+            font = new wxFont(GetFont(FONT_NORMAL)->GetPointSize() - 2, wxSWISS, wxNORMAL, wxNORMAL);
+            break;
+        case FONT_SWISS:
+            font = new wxFont(GetFont(FONT_NORMAL)->GetPointSize(), wxSWISS, wxNORMAL, wxNORMAL);
+            break;
+        default:
+            wxFAIL;
+        }
+        ms_stockObject[item] = font;
+    }
+    return font;
+}
+
+const wxPen* wxStockGDI::GetPen(Item item)
+{
+    wxPen* pen = wx_static_cast(wxPen*, ms_stockObject[item]);
+    if (pen == NULL)
+    {
+        switch (item)
+        {
+        case PEN_BLACK:
+            pen = new wxPen(*GetColour(COLOUR_BLACK), 1, wxSOLID);
+            break;
+        case PEN_BLACKDASHED:
+            pen = new wxPen(*GetColour(COLOUR_BLACK), 1, wxSHORT_DASH);
+            break;
+        case PEN_CYAN:
+            pen = new wxPen(*GetColour(COLOUR_CYAN), 1, wxSOLID);
+            break;
+        case PEN_GREEN:
+            pen = new wxPen(*GetColour(COLOUR_GREEN), 1, wxSOLID);
+            break;
+        case PEN_GREY:
+            pen = new wxPen(wxColour(wxT("GREY")), 1, wxSOLID);
+            break;
+        case PEN_LIGHTGREY:
+            pen = new wxPen(*GetColour(COLOUR_LIGHTGREY), 1, wxSOLID);
+            break;
+        case PEN_MEDIUMGREY:
+            pen = new wxPen(wxColour(wxT("MEDIUM GREY")), 1, wxSOLID);
+            break;
+        case PEN_RED:
+            pen = new wxPen(*GetColour(COLOUR_RED), 1, wxSOLID);
+            break;
+        case PEN_TRANSPARENT:
+            pen = new wxPen(*GetColour(COLOUR_BLACK), 1, wxTRANSPARENT);
+            break;
+        case PEN_WHITE:
+            pen = new wxPen(*GetColour(COLOUR_WHITE), 1, wxSOLID);
+            break;
+        default:
+            wxFAIL;
+        }
+        ms_stockObject[item] = pen;
+    }
+    return pen;
+}
+
 void wxInitializeStockLists()
 {
     wxTheColourDatabase = new wxColourDatabase;
@@ -531,147 +720,6 @@ void wxInitializeStockLists()
     wxThePenList = new wxPenList;
     wxTheFontList = new wxFontList;
     wxTheBitmapList = new wxBitmapList;
-}
-
-void wxInitializeStockObjects ()
-{
-#ifdef __WXMOTIF__
-#endif
-#ifdef __X__
-  // TODO
-  //  wxFontPool = new XFontPool;
-#endif
-
-  // why under MSW fonts shouldn't have the standard system size?
-/*
-#ifdef __WXMSW__
-  static const int sizeFont = 10;
-#else
-#endif
-*/
-#if defined(__WXMAC__)
-    // retrieve size of system font for all stock fonts
-    int sizeFont = 12;
-
-    Str255 fontName ;
-    SInt16 fontSize ;
-    Style fontStyle ;
-
-    GetThemeFont(kThemeSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
-    sizeFont = fontSize ;
-#ifdef __WXMAC_CLASSIC__
-    wxNORMAL_FONT = new wxFont (fontSize, wxMODERN, wxNORMAL, wxNORMAL , false , wxMacMakeStringFromPascal(fontName) );
-#else
-    wxNORMAL_FONT = new wxFont () ;
-    wxNORMAL_FONT->MacCreateThemeFont( kThemeSystemFont );
-#endif
-#elif defined(__WXPM__)
-    static const int sizeFont = 12;
-#else
-    wxNORMAL_FONT = new wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-    static const int sizeFont = wxNORMAL_FONT->GetPointSize();
-#endif
-
-#if defined(__WXPM__)
-    /*
-    // Basic OS/2 has a fairly limited number of fonts and these are as good
-    // as I can do to get something that looks halfway "wx" normal
-    */
-    wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxBOLD);
-    wxSMALL_FONT = new wxFont (sizeFont - 4, wxSWISS, wxNORMAL, wxNORMAL); /* Helv */
-    wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
-    wxSWISS_FONT = new wxFont (sizeFont, wxSWISS, wxNORMAL, wxNORMAL); /* Helv */
-#elif defined(__WXMAC__)
-    wxSWISS_FONT = new wxFont (sizeFont, wxSWISS, wxNORMAL, wxNORMAL); /* Helv */
-    wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
-#ifdef __WXMAC_CLASSIC__
-  GetThemeFont(kThemeSmallSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
-    wxSMALL_FONT = new wxFont (fontSize, wxSWISS, wxNORMAL, wxNORMAL , false , wxMacMakeStringFromPascal( fontName ) );
-#else
-    wxSMALL_FONT = new wxFont () ;
-    wxSMALL_FONT->MacCreateThemeFont( kThemeSmallSystemFont );
-#endif
-#else
-    wxSMALL_FONT = new wxFont (sizeFont - 2, wxSWISS, wxNORMAL, wxNORMAL);
-    wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
-    wxSWISS_FONT = new wxFont (sizeFont, wxSWISS, wxNORMAL, wxNORMAL);
-#endif
-
-    wxRED_PEN = new wxPen (wxT("RED"), 1, wxSOLID);
-    wxCYAN_PEN = new wxPen (wxT("CYAN"), 1, wxSOLID);
-    wxGREEN_PEN = new wxPen (wxT("GREEN"), 1, wxSOLID);
-    wxBLACK_PEN = new wxPen (wxT("BLACK"), 1, wxSOLID);
-    wxWHITE_PEN = new wxPen (wxT("WHITE"), 1, wxSOLID);
-    wxTRANSPARENT_PEN = new wxPen (wxT("BLACK"), 1, wxTRANSPARENT);
-    wxBLACK_DASHED_PEN = new wxPen (wxT("BLACK"), 1, wxSHORT_DASH);
-    wxGREY_PEN = new wxPen (wxT("GREY"), 1, wxSOLID);
-    wxMEDIUM_GREY_PEN = new wxPen (wxT("MEDIUM GREY"), 1, wxSOLID);
-    wxLIGHT_GREY_PEN = new wxPen (wxT("LIGHT GREY"), 1, wxSOLID);
-
-    wxBLUE_BRUSH = new wxBrush (wxT("BLUE"), wxSOLID);
-    wxGREEN_BRUSH = new wxBrush (wxT("GREEN"), wxSOLID);
-    wxWHITE_BRUSH = new wxBrush (wxT("WHITE"), wxSOLID);
-    wxBLACK_BRUSH = new wxBrush (wxT("BLACK"), wxSOLID);
-    wxTRANSPARENT_BRUSH = new wxBrush (wxT("BLACK"), wxTRANSPARENT);
-    wxCYAN_BRUSH = new wxBrush (wxT("CYAN"), wxSOLID);
-    wxRED_BRUSH = new wxBrush (wxT("RED"), wxSOLID);
-    wxGREY_BRUSH = new wxBrush (wxT("GREY"), wxSOLID);
-    wxMEDIUM_GREY_BRUSH = new wxBrush (wxT("MEDIUM GREY"), wxSOLID);
-    wxLIGHT_GREY_BRUSH = new wxBrush (wxT("LIGHT GREY"), wxSOLID);
-
-    wxBLACK = new wxColour (wxT("BLACK"));
-    wxWHITE = new wxColour (wxT("WHITE"));
-    wxRED = new wxColour (wxT("RED"));
-    wxBLUE = new wxColour (wxT("BLUE"));
-    wxGREEN = new wxColour (wxT("GREEN"));
-    wxCYAN = new wxColour (wxT("CYAN"));
-    wxLIGHT_GREY = new wxColour (wxT("LIGHT GREY"));
-
-    wxSTANDARD_CURSOR = new wxCursor (wxCURSOR_ARROW);
-    wxHOURGLASS_CURSOR = new wxCursor (wxCURSOR_WAIT);
-    wxCROSS_CURSOR = new wxCursor (wxCURSOR_CROSS);
-}
-
-void wxDeleteStockObjects ()
-{
-    wxDELETE(wxNORMAL_FONT);
-    wxDELETE(wxSMALL_FONT);
-    wxDELETE(wxITALIC_FONT);
-    wxDELETE(wxSWISS_FONT);
-
-    wxDELETE(wxRED_PEN);
-    wxDELETE(wxCYAN_PEN);
-    wxDELETE(wxGREEN_PEN);
-    wxDELETE(wxBLACK_PEN);
-    wxDELETE(wxWHITE_PEN);
-    wxDELETE(wxTRANSPARENT_PEN);
-    wxDELETE(wxBLACK_DASHED_PEN);
-    wxDELETE(wxGREY_PEN);
-    wxDELETE(wxMEDIUM_GREY_PEN);
-    wxDELETE(wxLIGHT_GREY_PEN);
-
-    wxDELETE(wxBLUE_BRUSH);
-    wxDELETE(wxGREEN_BRUSH);
-    wxDELETE(wxWHITE_BRUSH);
-    wxDELETE(wxBLACK_BRUSH);
-    wxDELETE(wxTRANSPARENT_BRUSH);
-    wxDELETE(wxCYAN_BRUSH);
-    wxDELETE(wxRED_BRUSH);
-    wxDELETE(wxGREY_BRUSH);
-    wxDELETE(wxMEDIUM_GREY_BRUSH);
-    wxDELETE(wxLIGHT_GREY_BRUSH);
-
-    wxDELETE(wxBLACK);
-    wxDELETE(wxWHITE);
-    wxDELETE(wxRED);
-    wxDELETE(wxBLUE);
-    wxDELETE(wxGREEN);
-    wxDELETE(wxCYAN);
-    wxDELETE(wxLIGHT_GREY);
-
-    wxDELETE(wxSTANDARD_CURSOR);
-    wxDELETE(wxHOURGLASS_CURSOR);
-    wxDELETE(wxCROSS_CURSOR);
 }
 
 void wxDeleteStockLists()

@@ -2323,7 +2323,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
 
     if (IsExposed(exposed_x, exposed_y, 10000, h))  // 10000 = very much
     {
-        wxPen *pen =
+        const wxPen *pen =
 #ifndef __WXMAC__
             // don't draw rect outline if we already have the
             // background color under Mac

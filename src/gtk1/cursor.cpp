@@ -128,7 +128,7 @@ extern GtkWidget *wxGetRootWindow();
 
 wxCursor::wxCursor(const char bits[], int width, int  height,
                    int hotSpotX, int hotSpotY,
-                   const char maskBits[], wxColour *fg, wxColour *bg)
+                   const char maskBits[], const wxColour *fg, const wxColour *bg)
 {
     if (!maskBits)
         maskBits = bits;
@@ -364,7 +364,7 @@ void wxEndBusyCursor()
         wxTheApp->ProcessIdle();
 }
 
-void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
+void wxBeginBusyCursor( const wxCursor *WXUNUSED(cursor) )
 {
     if (gs_busyCount++ > 0)
         return;

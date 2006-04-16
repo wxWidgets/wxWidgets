@@ -4135,7 +4135,7 @@ void wxWindowGTK::DoCaptureMouse()
 
     wxCHECK_RET( window, _T("CaptureMouse() failed") );
 
-    wxCursor* cursor = & m_cursor;
+    const wxCursor* cursor = &m_cursor;
     if (!cursor->Ok())
         cursor = wxSTANDARD_CURSOR;
 

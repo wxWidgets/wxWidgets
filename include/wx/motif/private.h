@@ -99,7 +99,7 @@ extern bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win,
 extern void wxDoChangeForegroundColour(WXWidget widget,
                                        wxColour& foregroundColour);
 extern void wxDoChangeBackgroundColour(WXWidget widget,
-                                       wxColour& backgroundColour,
+                                       const wxColour& backgroundColour,
                                        bool changeArmColour = false);
 extern void wxDoChangeFont(WXWidget widget, const wxFont& font);
 extern void wxGetTextExtent(WXDisplay* display, const wxFont& font,

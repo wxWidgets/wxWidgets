@@ -42,7 +42,7 @@ int wxGetBestMatchingPixel(Display *display, XColor *desiredColor, Colormap cmap
 Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
 
 extern XColor g_itemColors[];
-extern int wxComputeColours (Display *display, wxColour * back, wxColour * fore);
+extern int wxComputeColours (Display *display, const wxColour * back, const wxColour * fore);
 
 // For convenience
 inline Display* wxGlobalDisplay() { return (Display*) wxGetDisplay(); }

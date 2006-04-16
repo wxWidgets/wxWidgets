@@ -88,7 +88,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
 static int gs_wxBusyCursorCount = 0;
 
 // Set the cursor to the busy cursor for all windows
-void wxBeginBusyCursor(wxCursor *cursor)
+void wxBeginBusyCursor(const wxCursor *cursor)
 {
 }
 

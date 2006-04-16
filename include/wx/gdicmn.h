@@ -553,41 +553,116 @@ extern WXDLLEXPORT_DATA(wxBrushList*)   wxTheBrushList;
 extern WXDLLEXPORT_DATA(wxFontList*)    wxTheFontList;
 extern WXDLLEXPORT_DATA(wxBitmapList*)  wxTheBitmapList;
 
-// Stock objects
-extern WXDLLEXPORT_DATA(wxFont*)      wxNORMAL_FONT;
-extern WXDLLEXPORT_DATA(wxFont*)      wxSMALL_FONT;
-extern WXDLLEXPORT_DATA(wxFont*)      wxITALIC_FONT;
-extern WXDLLEXPORT_DATA(wxFont*)      wxSWISS_FONT;
+/* Stock objects
 
-extern WXDLLEXPORT_DATA(wxPen*)      wxRED_PEN;
-extern WXDLLEXPORT_DATA(wxPen*)      wxCYAN_PEN;
-extern WXDLLEXPORT_DATA(wxPen*)      wxGREEN_PEN;
-extern WXDLLEXPORT_DATA(wxPen*)      wxBLACK_PEN;
-extern WXDLLEXPORT_DATA(wxPen*)      wxWHITE_PEN;
-extern WXDLLEXPORT_DATA(wxPen*)      wxTRANSPARENT_PEN;
-extern WXDLLEXPORT_DATA(wxPen*)      wxBLACK_DASHED_PEN;
-extern WXDLLEXPORT_DATA(wxPen*)      wxGREY_PEN;
-extern WXDLLEXPORT_DATA(wxPen*)      wxMEDIUM_GREY_PEN;
-extern WXDLLEXPORT_DATA(wxPen*)      wxLIGHT_GREY_PEN;
+  wxStockGDI creates the stock GDI objects on demand.  Pointers to the
+  created objects are stored in the ms_stockObject array, which is indexed
+  by the Item enum values.  Platorm-specific fonts can be created by
+  implementing a derived class with an override for the GetFont function.
+  wxStockGDI operates as a singleton, accessed through the ms_instance
+  pointer.  By default this pointer is set to an instance of wxStockGDI.
+  A derived class must arrange to set this pointer to an instance of itself.
+*/
+class WXDLLIMPEXP_CORE wxStockGDI
+{
+public:
+    enum Item {
+        BRUSH_BLACK,
+        BRUSH_BLUE,
+        BRUSH_CYAN,
+        BRUSH_GREEN,
+        BRUSH_GREY,
+        BRUSH_LIGHTGREY,
+        BRUSH_MEDIUMGREY,
+        BRUSH_RED,
+        BRUSH_TRANSPARENT,
+        BRUSH_WHITE,
+        COLOUR_BLACK,
+        COLOUR_BLUE,
+        COLOUR_CYAN,
+        COLOUR_GREEN,
+        COLOUR_LIGHTGREY,
+        COLOUR_RED,
+        COLOUR_WHITE,
+        CURSOR_CROSS,
+        CURSOR_HOURGLASS,
+        CURSOR_STANDARD,
+        FONT_ITALIC,
+        FONT_NORMAL,
+        FONT_SMALL,
+        FONT_SWISS,
+        PEN_BLACK,
+        PEN_BLACKDASHED,
+        PEN_CYAN,
+        PEN_GREEN,
+        PEN_GREY,
+        PEN_LIGHTGREY,
+        PEN_MEDIUMGREY,
+        PEN_RED,
+        PEN_TRANSPARENT,
+        PEN_WHITE,
+        ITEMCOUNT
+    };
 
-extern WXDLLEXPORT_DATA(wxBrush*)    wxBLUE_BRUSH;
-extern WXDLLEXPORT_DATA(wxBrush*)    wxGREEN_BRUSH;
-extern WXDLLEXPORT_DATA(wxBrush*)    wxWHITE_BRUSH;
-extern WXDLLEXPORT_DATA(wxBrush*)    wxBLACK_BRUSH;
-extern WXDLLEXPORT_DATA(wxBrush*)    wxGREY_BRUSH;
-extern WXDLLEXPORT_DATA(wxBrush*)    wxMEDIUM_GREY_BRUSH;
-extern WXDLLEXPORT_DATA(wxBrush*)    wxLIGHT_GREY_BRUSH;
-extern WXDLLEXPORT_DATA(wxBrush*)    wxTRANSPARENT_BRUSH;
-extern WXDLLEXPORT_DATA(wxBrush*)    wxCYAN_BRUSH;
-extern WXDLLEXPORT_DATA(wxBrush*)    wxRED_BRUSH;
+    wxStockGDI();
+    virtual ~wxStockGDI();
+    static void DeleteAll();
 
-extern WXDLLEXPORT_DATA(wxColour*)    wxBLACK;
-extern WXDLLEXPORT_DATA(wxColour*)    wxWHITE;
-extern WXDLLEXPORT_DATA(wxColour*)    wxRED;
-extern WXDLLEXPORT_DATA(wxColour*)    wxBLUE;
-extern WXDLLEXPORT_DATA(wxColour*)    wxGREEN;
-extern WXDLLEXPORT_DATA(wxColour*)    wxCYAN;
-extern WXDLLEXPORT_DATA(wxColour*)    wxLIGHT_GREY;
+    static wxStockGDI& instance() { return *ms_instance; }
+
+    static const wxBrush* GetBrush(Item item);
+    static const wxColour* GetColour(Item item);
+    static const wxCursor* GetCursor(Item item);
+    // Can be overridden by platform-specific derived classes
+    virtual const wxFont* GetFont(Item item);
+    static const wxPen* GetPen(Item item);
+
+protected:
+    static wxStockGDI* ms_instance;
+
+    static wxObject* ms_stockObject[ITEMCOUNT];
+
+    DECLARE_NO_COPY_CLASS(wxStockGDI)
+};
+
+#define wxITALIC_FONT  wxStockGDI::instance().GetFont(wxStockGDI::FONT_ITALIC)
+#define wxNORMAL_FONT  wxStockGDI::instance().GetFont(wxStockGDI::FONT_NORMAL)
+#define wxSMALL_FONT   wxStockGDI::instance().GetFont(wxStockGDI::FONT_SMALL)
+#define wxSWISS_FONT   wxStockGDI::instance().GetFont(wxStockGDI::FONT_SWISS)
+
+#define wxBLACK_DASHED_PEN  wxStockGDI::GetPen(wxStockGDI::PEN_BLACKDASHED)
+#define wxBLACK_PEN         wxStockGDI::GetPen(wxStockGDI::PEN_BLACK)
+#define wxCYAN_PEN          wxStockGDI::GetPen(wxStockGDI::PEN_CYAN)
+#define wxGREEN_PEN         wxStockGDI::GetPen(wxStockGDI::PEN_GREEN)
+#define wxGREY_PEN          wxStockGDI::GetPen(wxStockGDI::PEN_GREY)
+#define wxLIGHT_GREY_PEN    wxStockGDI::GetPen(wxStockGDI::PEN_LIGHTGREY)
+#define wxMEDIUM_GREY_PEN   wxStockGDI::GetPen(wxStockGDI::PEN_MEDIUMGREY)
+#define wxRED_PEN           wxStockGDI::GetPen(wxStockGDI::PEN_RED)
+#define wxTRANSPARENT_PEN   wxStockGDI::GetPen(wxStockGDI::PEN_TRANSPARENT)
+#define wxWHITE_PEN         wxStockGDI::GetPen(wxStockGDI::PEN_WHITE)
+
+#define wxBLACK_BRUSH        wxStockGDI::GetBrush(wxStockGDI::BRUSH_BLACK)
+#define wxBLUE_BRUSH         wxStockGDI::GetBrush(wxStockGDI::BRUSH_BLUE)
+#define wxCYAN_BRUSH         wxStockGDI::GetBrush(wxStockGDI::BRUSH_CYAN)
+#define wxGREEN_BRUSH        wxStockGDI::GetBrush(wxStockGDI::BRUSH_GREEN)
+#define wxGREY_BRUSH         wxStockGDI::GetBrush(wxStockGDI::BRUSH_GREY)
+#define wxLIGHT_GREY_BRUSH   wxStockGDI::GetBrush(wxStockGDI::BRUSH_LIGHTGREY)
+#define wxMEDIUM_GREY_BRUSH  wxStockGDI::GetBrush(wxStockGDI::BRUSH_MEDIUMGREY)
+#define wxRED_BRUSH          wxStockGDI::GetBrush(wxStockGDI::BRUSH_RED)
+#define wxTRANSPARENT_BRUSH  wxStockGDI::GetBrush(wxStockGDI::BRUSH_TRANSPARENT)
+#define wxWHITE_BRUSH        wxStockGDI::GetBrush(wxStockGDI::BRUSH_WHITE)
+
+#define wxBLACK       wxStockGDI::GetColour(wxStockGDI::COLOUR_BLACK)
+#define wxBLUE        wxStockGDI::GetColour(wxStockGDI::COLOUR_BLUE)
+#define wxCYAN        wxStockGDI::GetColour(wxStockGDI::COLOUR_CYAN)
+#define wxGREEN       wxStockGDI::GetColour(wxStockGDI::COLOUR_GREEN)
+#define wxLIGHT_GREY  wxStockGDI::GetColour(wxStockGDI::COLOUR_LIGHTGREY)
+#define wxRED         wxStockGDI::GetColour(wxStockGDI::COLOUR_RED)
+#define wxWHITE       wxStockGDI::GetColour(wxStockGDI::COLOUR_WHITE)
+
+#define wxCROSS_CURSOR      wxStockGDI::GetCursor(wxStockGDI::CURSOR_CROSS)
+#define wxHOURGLASS_CURSOR  wxStockGDI::GetCursor(wxStockGDI::CURSOR_HOURGLASS)
+#define wxSTANDARD_CURSOR   wxStockGDI::GetCursor(wxStockGDI::CURSOR_STANDARD)
 
 // 'Null' objects
 extern WXDLLEXPORT_DATA(wxBitmap)     wxNullBitmap;
@@ -598,11 +673,6 @@ extern WXDLLEXPORT_DATA(wxBrush)      wxNullBrush;
 extern WXDLLEXPORT_DATA(wxPalette)     wxNullPalette;
 extern WXDLLEXPORT_DATA(wxFont)       wxNullFont;
 extern WXDLLEXPORT_DATA(wxColour)     wxNullColour;
-
-// Stock cursors types
-extern WXDLLEXPORT_DATA(wxCursor*)    wxSTANDARD_CURSOR;
-extern WXDLLEXPORT_DATA(wxCursor*)    wxHOURGLASS_CURSOR;
-extern WXDLLEXPORT_DATA(wxCursor*)    wxCROSS_CURSOR;
 
 extern WXDLLEXPORT_DATA(wxColourDatabase*)  wxTheColourDatabase;
 
@@ -619,9 +689,7 @@ extern WXDLLEXPORT_DATA(wxList) wxPendingDelete;
 // ---------------------------------------------------------------------------
 
 // resource management
-extern void WXDLLEXPORT wxInitializeStockObjects();
 extern void WXDLLEXPORT wxInitializeStockLists();
-extern void WXDLLEXPORT wxDeleteStockObjects();
 extern void WXDLLEXPORT wxDeleteStockLists();
 
 // is the display colour (or monochrome)?
