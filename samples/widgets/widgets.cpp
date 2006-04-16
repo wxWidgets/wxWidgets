@@ -441,11 +441,6 @@ void WidgetsFrame::InitBook()
                         false, // don't select
                         n // image id
                        );
-
-/*
-        wxColour colour = m_book->MSWGetBgColourForChild(pages[n]);
-        pages[n]->SetBackgroundColour(colour);
-*/
     }
 }
 
@@ -640,12 +635,11 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
 
     m_next = NULL;
 
-    // dummy sorting: add and immediately sort on list according to label
-
+    // dummy sorting: add and immediately sort in the list according to label
     if(WidgetsPage::ms_widgetPages)
     {
         WidgetsPageInfo *node_prev = WidgetsPage::ms_widgetPages;
-        if(wxStrcmp(label,node_prev->GetLabel().c_str())<0)
+        if ( wxStrcmp(label, node_prev->GetLabel().c_str()) < 0 )
         {
             // add as first
             m_next = node_prev;
@@ -657,10 +651,10 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
             do
             {
                 node_next = node_prev->GetNext();
-                if(node_next)
+                if ( node_next )
                 {
                     // add if between two
-                    if(wxStrcmp(label,node_next->GetLabel().c_str())<0)
+                    if ( wxStrcmp(label, node_next->GetLabel().c_str()) < 0 )
                     {
                         node_prev->SetNext(this);
                         m_next = node_next;
@@ -675,17 +669,15 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
                     m_next = node_next;
                 }
                 node_prev = node_next;
-            }while(node_next);
+            }
+            while ( node_next );
         }
     }
     else
     {
         // add when first
-
         WidgetsPage::ms_widgetPages = this;
-
     }
-
 }
 
 // ----------------------------------------------------------------------------
