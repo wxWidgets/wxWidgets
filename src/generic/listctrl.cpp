@@ -4612,13 +4612,6 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
-    int cw, ch, vw, vh;
-    GetVirtualSize(&vw, &vh);
-    GetClientSize(&cw, &ch);
-
-    if ( event.GetOrientation() == wxVERTICAL && ch >= vh )
-        return;
-
     // update our idea of which lines are shown when we redraw the window the
     // next time
     ResetVisibleLinesRange();
