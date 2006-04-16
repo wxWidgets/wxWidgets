@@ -73,19 +73,22 @@ state and \helpref{IsOk}{wxfilenameisok} returns {\tt false} for it.
 File names can be case-sensitive or not, the function\rtfsp
 \helpref{IsCaseSensitive}{wxfilenameiscasesensitive} allows to determine this.
 
-The rules for determining if the file name is absolute or relative also depends
-on the file name format and the only portable way to answer to this question is
-to use \helpref{IsAbsolute}{wxfilenameisabsolute} method. To ensure that the
-filename is absolute you may use \helpref{MakeAbsolute}{wxfilenamemakeabsolute}.
-There is also an inverse function 
-\helpref{MakeRelativeTo}{wxfilenamemakerelativeto} which undoes what
-\helpref{Normalize(wxPATH\_NORM\_DOTS)}{wxfilenamenormalize} does.
+The rules for determining whether the file name is absolute or relative also
+depend on the file name format and the only portable way to answer this
+question is to use \helpref{IsAbsolute}{wxfilenameisabsolute} or\rtfsp
+\helpref{IsRelative}{wxfilenameisrelative} method. Note that on Windows, "X:"
+refers to the current working directory on drive X. Therefore, a wxFileName
+instance constructed from for example "X:dir/file.ext" treats the portion 
+beyond drive separator as being relative to that directory.
+
+To ensure that the filename is absolute, you may use\rtfsp
+\helpref{MakeAbsolute}{wxfilenamemakeabsolute}. There is also an inverse
+function \helpref{MakeRelativeTo}{wxfilenamemakerelativeto} which undoes
+what \helpref{Normalize(wxPATH\_NORM\_DOTS)}{wxfilenamenormalize} does.
 
 Other functions returning information about the file format provided by this
 class are \helpref{GetVolumeSeparator}{wxfilenamegetvolumeseparator},\rtfsp
 \helpref{IsPathSeparator}{wxfilenameispathseparator}.
-
-\helpref{IsRelative}{wxfilenameisrelative}
 
 
 \membersection{File name construction}\label{filenameconstruction}
@@ -95,11 +98,11 @@ TODO.
 
 \membersection{File tests}\label{filetests}
 
-Before doing the other tests you should use \helpref{IsOk}{wxfilenameisok} to
-verify that the filename is well defined. If it is, 
-\helpref{FileExists}{wxfilenamefileexists} can be used to test if a file with
-such name exists and \helpref{DirExists}{wxfilenamedirexists} - if a directory
-with this name exists.
+Before doing other tests, you should use \helpref{IsOk}{wxfilenameisok} to
+verify that the filename is well defined. If it is,\rtfsp
+\helpref{FileExists}{wxfilenamefileexists} can be used to test whether a file
+with such name exists and \helpref{DirExists}{wxfilenamedirexists} can be used
+to test for directory existence.
 
 File names should be compared using \helpref{SameAs}{wxfilenamesameas} method
 or \helpref{$==$}{wxfilenameoperatorequal}.
