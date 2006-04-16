@@ -1685,7 +1685,7 @@ enum
 
 #define wxDL_METHOD_LOAD( lib, name, success ) \
     pfn_ ## name = (name ## Type) lib.GetSymbol( wxT(#name), &success ); \
-    if (!success) { wxLog::EnableLogging(bWasLoggingEnabled); return false; }
+    if (!success) return false
 
 
 class WXDLLIMPEXP_MEDIA wxQuickTimeLibrary
@@ -1799,12 +1799,12 @@ bool wxQuickTimeLibrary::Initialize()
 {
     m_ok = false;
 
-    // Turn off the wxDynamicLibrary logging
-    bool bWasLoggingEnabled = wxLog::EnableLogging(false);
+    // Turn off the wxDynamicLibrary logging as we're prepared to handle the
+    // errors
+    wxLogNull nolog;
 
     if (!m_dll.Load(wxT("qtmlClient.dll")))
     {
-        wxLog::EnableLogging(bWasLoggingEnabled);
         return false;
     }
 
@@ -1864,7 +1864,6 @@ bool wxQuickTimeLibrary::Initialize()
     wxDL_METHOD_LOAD( m_dll, EndUpdate, m_ok );
     wxDL_METHOD_LOAD( m_dll, GetMoviesStickyError, m_ok );
 
-    wxLog::EnableLogging(bWasLoggingEnabled);
     m_ok = true;
 
     return true;

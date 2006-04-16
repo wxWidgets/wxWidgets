@@ -117,7 +117,7 @@ static inline wxUint32 CrackUint32(const char *m)
 //
 static wxFileOffset QuietSeek(wxInputStream& stream, wxFileOffset pos)
 {
-#ifdef __WXDEBUG__
+#if defined(__WXDEBUG__) && wxUSE_LOG
     wxLogLevel level = wxLog::GetLogLevel();
     wxLog::SetLogLevel(wxLOG_Debug - 1);
     wxFileOffset result = stream.SeekI(pos);
