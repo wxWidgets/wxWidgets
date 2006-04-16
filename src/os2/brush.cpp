@@ -54,14 +54,10 @@ wxBrushRefData::~wxBrushRefData()
 //
 wxBrush::wxBrush()
 {
-    if ( wxTheBrushList )
-        wxTheBrushList->AddBrush(this);
 } // end of wxBrush::wxBrush
 
 wxBrush::~wxBrush()
 {
-    if ( wxTheBrushList )
-        wxTheBrushList->RemoveBrush(this);
 } // end of wxBrush::~wxBrush
 
 wxBrush::wxBrush(
@@ -77,9 +73,6 @@ wxBrush::wxBrush(
     memset(&M_BRUSHDATA->m_vBundle, '\0', sizeof(AREABUNDLE));
 
     RealizeResource();
-
-    if ( wxTheBrushList )
-        wxTheBrushList->AddBrush(this);
 } // end of wxBrush::wxBrush
 
 wxBrush::wxBrush(
@@ -94,9 +87,6 @@ wxBrush::wxBrush(
     memset(&M_BRUSHDATA->m_vBundle, '\0', sizeof(AREABUNDLE));
 
     RealizeResource();
-
-    if ( wxTheBrushList )
-        wxTheBrushList->AddBrush(this);
 } // end of wxBrush::wxBrush
 
 bool wxBrush::RealizeResource()

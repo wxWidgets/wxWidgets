@@ -97,8 +97,6 @@ bool wxFont::Create(int pointSize, int family, int style, int weight, bool under
 
 wxFont::~wxFont()
 {
-    if (wxTheFontList)
-        wxTheFontList->DeleteObject(this);
 }
 
 bool wxFont::RealizeResource()

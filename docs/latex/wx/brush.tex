@@ -371,13 +371,6 @@ Constructor. The application should not construct its own brush list:
 use the object pointer {\bf wxTheBrushList}.
 
 
-\membersection{wxBrushList::AddBrush}\label{wxbrushlistaddbrush}
-
-\func{void}{AddBrush}{\param{wxBrush *}{brush}}
-
-Used internally by wxWidgets to add a brush to the list.
-
-
 \membersection{wxBrushList::FindOrCreateBrush}\label{wxbrushlistfindorcreatebrush}
 
 \func{wxBrush *}{FindOrCreateBrush}{\param{const wxColour\& }{colour}, \param{int}{ style = wxSOLID}}
@@ -390,12 +383,5 @@ to the brush list, and returns it.
 \docparam{colour}{Colour object.}
 
 \docparam{style}{Brush style. See \helpref{wxBrush::SetStyle}{wxbrushsetstyle} for a list of styles.}
-
-
-\membersection{wxBrushList::RemoveBrush}\label{wxbrushlistremovebrush}
-
-\func{void}{RemoveBrush}{\param{wxBrush *}{brush}}
-
-Used by wxWidgets to remove a brush from the list.
 
 

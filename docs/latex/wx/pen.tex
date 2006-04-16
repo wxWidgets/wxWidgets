@@ -390,12 +390,6 @@ backward compatibility with earlier versions of wxWidgets.
 Constructor. The application should not construct its own pen list:
 use the object pointer {\bf wxThePenList}.
 
-\membersection{wxPenList::AddPen}\label{wxpenlistaddpen}
-
-\func{void}{AddPen}{\param{wxPen*}{ pen}}
-
-Used internally by wxWidgets to add a pen to the list.
-
 \membersection{wxPenList::FindOrCreatePen}\label{wxpenlistfindorcreatepen}
 
 \func{wxPen*}{FindOrCreatePen}{\param{const wxColour\& }{colour}, \param{int}{ width}, \param{int}{ style}}
@@ -417,9 +411,3 @@ to the pen list, and returns it.
 \docparam{width}{Width of pen.}
 
 \docparam{style}{Pen style. See \helpref{wxPen::wxPen}{wxpenctor} for a list of styles.}
-
-\membersection{wxPenList::RemovePen}\label{wxpenlistremovepen}
-
-\func{void}{RemovePen}{\param{wxPen*}{ pen}}
-
-Used by wxWidgets to remove a pen from the list.

@@ -719,7 +719,6 @@ void wxInitializeStockLists()
     wxTheBrushList = new wxBrushList;
     wxThePenList = new wxPenList;
     wxTheFontList = new wxFontList;
-    wxTheBitmapList = new wxBitmapList;
 }
 
 void wxDeleteStockLists()
@@ -727,57 +726,30 @@ void wxDeleteStockLists()
     wxDELETE(wxTheBrushList);
     wxDELETE(wxThePenList);
     wxDELETE(wxTheFontList);
-    wxDELETE(wxTheBitmapList);
 }
 
 // ============================================================================
 // wxTheXXXList stuff (semi-obsolete)
 // ============================================================================
 
-wxBitmapList::~wxBitmapList ()
+wxGDIObjListBase::wxGDIObjListBase()
 {
-    wxList::compatibility_iterator node = GetFirst ();
-    while (node)
+}
+
+wxGDIObjListBase::~wxGDIObjListBase()
+{
+    for (wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext())
     {
-        wxBitmap *bitmap = (wxBitmap *) node->GetData ();
-        wxList::compatibility_iterator next = node->GetNext ();
-        if (bitmap->GetVisible())
-            delete bitmap;
-        node = next;
+        delete wx_static_cast(wxObject*, node->GetData());
     }
-}
-
-// Pen and Brush lists
-wxPenList::~wxPenList ()
-{
-    wxList::compatibility_iterator node = GetFirst ();
-    while (node)
-    {
-        wxPen *pen = (wxPen *) node->GetData ();
-        wxList::compatibility_iterator next = node->GetNext ();
-        if (pen->GetVisible())
-            delete pen;
-        node = next;
-    }
-}
-
-void wxPenList::AddPen (wxPen * pen)
-{
-    Append (pen);
-}
-
-void wxPenList::RemovePen (wxPen * pen)
-{
-    DeleteObject (pen);
 }
 
 wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
 {
-    for (wxList::compatibility_iterator node = GetFirst (); node; node = node->GetNext ())
+    for (wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext())
     {
         wxPen *each_pen = (wxPen *) node->GetData ();
-        if (each_pen &&
-                each_pen->GetVisible() &&
+        if (
                 each_pen->GetWidth () == width &&
                 each_pen->GetStyle () == style &&
                 each_pen->GetColour ().Red () == colour.Red () &&
@@ -786,48 +758,23 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
             return each_pen;
     }
 
-    wxPen *pen = new wxPen (colour, width, style);
-    if ( !pen->Ok() )
+    wxPen* pen = NULL;
+    wxPen penTmp(colour, width, style);
+    if (penTmp.Ok())
     {
-        // don't save the invalid pens in the list
-        delete pen;
-
-        return NULL;
+        pen = new wxPen(penTmp);
+        list.Append(pen);
     }
-
-    AddPen(pen);
-
-    // we'll delete it ourselves later
-    pen->SetVisible(true);
 
     return pen;
 }
 
-wxBrushList::~wxBrushList ()
-{
-    wxList::compatibility_iterator node = GetFirst ();
-    while (node)
-    {
-        wxBrush *brush = (wxBrush *) node->GetData ();
-        wxList::compatibility_iterator next = node->GetNext ();
-        if (brush && brush->GetVisible())
-            delete brush;
-        node = next;
-    }
-}
-
-void wxBrushList::AddBrush (wxBrush * brush)
-{
-    Append (brush);
-}
-
 wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, int style)
 {
-    for (wxList::compatibility_iterator node = GetFirst (); node; node = node->GetNext ())
+    for (wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext())
     {
         wxBrush *each_brush = (wxBrush *) node->GetData ();
-        if (each_brush &&
-                each_brush->GetVisible() &&
+        if (
                 each_brush->GetStyle () == style &&
                 each_brush->GetColour ().Red () == colour.Red () &&
                 each_brush->GetColour ().Green () == colour.Green () &&
@@ -835,54 +782,15 @@ wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, int style)
             return each_brush;
     }
 
-    wxBrush *brush = new wxBrush (colour, style);
-
-    if ( !brush->Ok() )
+    wxBrush* brush = NULL;
+    wxBrush brushTmp(colour, style);
+    if (brushTmp.Ok())
     {
-        // don't put the brushes we failed to create into the list
-        delete brush;
-
-        return NULL;
+        brush = new wxBrush(brushTmp);
+        list.Append(brush);
     }
-
-    AddBrush(brush);
-
-    // we'll delete it ourselves later
-    brush->SetVisible(true);
 
     return brush;
-}
-
-void wxBrushList::RemoveBrush (wxBrush * brush)
-{
-    DeleteObject (brush);
-}
-
-wxFontList::~wxFontList ()
-{
-    wxList::compatibility_iterator node = GetFirst ();
-    while (node)
-    {
-        // Only delete objects that are 'visible', i.e.
-        // that have been created using FindOrCreate...,
-        // where the pointers are expected to be shared
-        // (and therefore not deleted by any one part of an app).
-        wxFont *font = (wxFont *) node->GetData ();
-        wxList::compatibility_iterator next = node->GetNext ();
-        if (font->GetVisible())
-            delete font;
-        node = next;
-    }
-}
-
-void wxFontList::AddFont (wxFont * font)
-{
-    Append (font);
-}
-
-void wxFontList::RemoveFont (wxFont * font)
-{
-    DeleteObject (font);
 }
 
 wxFont *wxFontList::FindOrCreateFont(int pointSize,
@@ -893,13 +801,12 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
                                      const wxString& facename,
                                      wxFontEncoding encoding)
 {
-    wxFont *font = (wxFont *)NULL;
+    wxFont *font;
     wxList::compatibility_iterator node;
-    for ( node = GetFirst(); node; node = node->GetNext() )
+    for (node = list.GetFirst(); node; node = node->GetNext())
     {
         font = (wxFont *)node->GetData();
-        if ( font->GetVisible() &&
-             font->Ok() &&
+        if (
              font->GetPointSize () == pointSize &&
              font->GetStyle () == style &&
              font->GetWeight () == weight &&
@@ -944,30 +851,26 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
         }
     }
 
-    if ( !node )
+    // font not found, create the new one
+    font = NULL;
+    wxFont fontTmp(pointSize, family, style, weight, underline, facename, encoding);
+    if (fontTmp.Ok())
     {
-        // font not found, create the new one
-        font = new wxFont(pointSize, family, style, weight,
-                          underline, facename, encoding);
-
-        AddFont(font);
-
-        // and mark it as being cacheable
-        font->SetVisible(true);
+        font = new wxFont(fontTmp);
+        list.Append(font);
     }
 
     return font;
 }
 
-void wxBitmapList::AddBitmap(wxBitmap *bitmap)
-{
-    Append(bitmap);
-}
-
-void wxBitmapList::RemoveBitmap(wxBitmap *bitmap)
-{
-    DeleteObject(bitmap);
-}
+#if WXWIN_COMPATIBILITY_2_6
+void wxBrushList::AddBrush(wxBrush*) { }
+void wxBrushList::RemoveBrush(wxBrush*) { }
+void wxFontList::AddFont(wxFont*) { }
+void wxFontList::RemoveFont(wxFont*) { }
+void wxPenList::AddPen(wxPen*) { }
+void wxPenList::RemovePen(wxPen*) { }
+#endif
 
 wxSize wxGetDisplaySize()
 {

@@ -60,14 +60,10 @@ wxPenRefData::~wxPenRefData()
 //
 wxPen::wxPen()
 {
-    if ( wxThePenList )
-        wxThePenList->AddPen(this);
 } // end of wxPen::wxPen
 
 wxPen::~wxPen()
 {
-    if (wxThePenList)
-        wxThePenList->RemovePen(this);
 } // end of wxPen::wxPen
 
 // Should implement Create
@@ -87,9 +83,6 @@ wxPen::wxPen(
     M_PENDATA->m_hPen    = 0L;
 
     RealizeResource();
-
-    if ( wxThePenList )
-        wxThePenList->AddPen(this);
 } // end of wxPen::wxPen
 
 wxPen::wxPen(
@@ -107,9 +100,6 @@ wxPen::wxPen(
     M_PENDATA->m_hPen     = 0;
 
     RealizeResource();
-
-    if ( wxThePenList )
-        wxThePenList->AddPen(this);
 } // end of wxPen::wxPen
 
 int wx2os2PenStyle(

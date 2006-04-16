@@ -452,40 +452,46 @@ public:
 
 typedef wxInt8 wxDash;
 
-class WXDLLEXPORT wxPenList : public wxList
+class WXDLLIMPEXP_CORE wxGDIObjListBase {
+public:
+    wxGDIObjListBase();
+    ~wxGDIObjListBase();
+
+protected:
+    wxList list;
+};
+
+class WXDLLIMPEXP_CORE wxPenList: public wxGDIObjListBase
 {
 public:
-    wxPenList() { }
-    ~wxPenList();
-
-    void AddPen(wxPen *pen);
-    void RemovePen(wxPen *pen);
     wxPen *FindOrCreatePen(const wxColour& colour, int width, int style);
+#if WXWIN_COMPATIBILITY_2_6
+    wxDEPRECATED( void AddPen(wxPen*) );
+    wxDEPRECATED( void RemovePen(wxPen*) );
+#endif
 };
 
-class WXDLLEXPORT wxBrushList : public wxList
+class WXDLLIMPEXP_CORE wxBrushList: public wxGDIObjListBase
 {
 public:
-    wxBrushList() { }
-    ~wxBrushList();
-
-    void AddBrush(wxBrush *brush);
-    void RemoveBrush(wxBrush *brush);
     wxBrush *FindOrCreateBrush(const wxColour& colour, int style = wxSOLID);
+#if WXWIN_COMPATIBILITY_2_6
+    wxDEPRECATED( void AddBrush(wxBrush*) );
+    wxDEPRECATED( void RemoveBrush(wxBrush*) );
+#endif
 };
 
-class WXDLLEXPORT wxFontList : public wxList
+class WXDLLIMPEXP_CORE wxFontList: public wxGDIObjListBase
 {
 public:
-    wxFontList() { }
-    ~wxFontList();
-
-    void AddFont(wxFont *font);
-    void RemoveFont(wxFont *font);
     wxFont *FindOrCreateFont(int pointSize, int family, int style, int weight,
                              bool underline = false,
                              const wxString& face = wxEmptyString,
                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+#if WXWIN_COMPATIBILITY_2_6
+    wxDEPRECATED( void AddFont(wxFont*) );
+    wxDEPRECATED( void RemoveFont(wxFont*) );
+#endif
 };
 
 WX_DECLARE_STRING_HASH_MAP( wxColour *, wxStringToColourHashMap );
@@ -523,16 +529,6 @@ private:
     wxStringToColourHashMap *m_map;
 };
 
-class WXDLLEXPORT wxBitmapList : public wxList
-{
-public:
-    wxBitmapList(){}
-    ~wxBitmapList();
-
-    void AddBitmap(wxBitmap *bitmap);
-    void RemoveBitmap(wxBitmap *bitmap);
-};
-
 class WXDLLEXPORT wxResourceCache: public wxList
 {
 public:
@@ -551,7 +547,6 @@ public:
 extern WXDLLEXPORT_DATA(wxPenList*)   wxThePenList;
 extern WXDLLEXPORT_DATA(wxBrushList*)   wxTheBrushList;
 extern WXDLLEXPORT_DATA(wxFontList*)    wxTheFontList;
-extern WXDLLEXPORT_DATA(wxBitmapList*)  wxTheBitmapList;
 
 /* Stock objects
 

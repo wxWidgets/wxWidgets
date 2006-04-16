@@ -898,7 +898,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/dcscreen.h
     wx/gtk/dnd.h
     wx/gtk/font.h
-    wx/gtk/gdiobj.h
     wx/gtk/icon.h
     wx/gtk/minifram.h
     wx/gtk/pen.h
@@ -1069,7 +1068,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk1/dcscreen.h
     wx/gtk1/dnd.h
     wx/gtk1/font.h
-    wx/gtk1/gdiobj.h
     wx/gtk1/icon.h
     wx/gtk1/minifram.h
     wx/gtk1/pen.h
@@ -1300,7 +1298,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/motif/font.h
     wx/motif/frame.h
     wx/motif/gauge.h
-    wx/motif/gdiobj.h
     wx/motif/icon.h
     wx/motif/listbox.h
     wx/motif/mdi.h
@@ -1385,7 +1382,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/x11/dcscreen.h
     wx/x11/dnd.h
     wx/x11/font.h
-    wx/x11/gdiobj.h
     wx/x11/icon.h
     wx/x11/minifram.h
     wx/x11/palette.h
@@ -1551,7 +1547,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/frame.h
     wx/msw/gauge95.h
     wx/msw/gdiimage.h
-    wx/msw/gdiobj.h
     wx/msw/icon.h
     wx/msw/imaglist.h
     wx/msw/iniconf.h
@@ -1731,7 +1726,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mgl/dcscreen.h
     wx/mgl/font.h
     wx/mgl/fontutil.h
-    wx/mgl/gdiobj.h
     wx/mgl/icon.h
     wx/mgl/palette.h
     wx/mgl/pen.h
@@ -1874,7 +1868,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/frame.h
     wx/os2/gauge.h
     wx/os2/gdiimage.h
-    wx/os2/gdiobj.h
     wx/os2/helpwin.h
     wx/os2/icon.h
     wx/os2/iniconf.h
@@ -2069,7 +2062,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/fontdlg.h
     wx/mac/frame.h
     wx/mac/gauge.h
-    wx/mac/gdiobj.h
     wx/mac/glcanvas.h
     wx/mac/gsockmac.h
     wx/mac/helpxxxx.h
@@ -2156,7 +2148,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/carbon/fontdlg.h
     wx/mac/carbon/frame.h
     wx/mac/carbon/gauge.h
-    wx/mac/carbon/gdiobj.h
     wx/mac/carbon/gsockmac.h
     wx/mac/carbon/helpxxxx.h
     wx/mac/carbon/icon.h
@@ -2361,7 +2352,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/fontdlg.h
     wx/cocoa/frame.h
     wx/cocoa/gauge.h
-    wx/cocoa/gdiobj.h
     wx/cocoa/icon.h
     wx/cocoa/listbox.h
     wx/cocoa/log.h

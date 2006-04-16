@@ -48,7 +48,6 @@ int wxPageNumber;
 wxFontList   *wxTheFontList = NULL;
 wxPenList    *wxThePenList = NULL;
 wxBrushList  *wxTheBrushList = NULL;
-wxBitmapList *wxTheBitmapList = NULL;
 wxColourDatabase *wxTheColourDatabase = NULL;
 
 // 'Null' objects
