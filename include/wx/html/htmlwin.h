@@ -142,6 +142,14 @@ protected:
      */
     wxHtmlWindowMouseHelper(wxHtmlWindowInterface *iface);
 
+    /**
+        Virtual dtor.
+
+        It is not really needed in this case but at leats it prevents gcc from
+        complaining about its absence.
+     */
+    virtual ~wxHtmlWindowMouseHelper() { }
+
     /// Returns true if the mouse moved since the last call to HandleIdle
     bool DidMouseMove() const { return m_tmpMouseMoved; }
 
