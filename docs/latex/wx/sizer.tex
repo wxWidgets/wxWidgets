@@ -93,7 +93,7 @@ horizontal boxes on the level beneath).}
 \docparam{width and height}{The dimension of a spacer to be added to the sizer. Adding spacers to sizers
 gives more flexibility in the design of dialogs; imagine for example a horizontal box with two buttons at the
 bottom of a dialog: you might want to insert a space between the two buttons and make that space stretchable
-using the {\it proportion} flag and the result will be that the left button will be aligned with the left
+using the \arg{proportion} flag and the result will be that the left button will be aligned with the left
 side of the dialog and the right button with the right side - the space in between will shrink and grow with
 the dialog.}
 
@@ -107,7 +107,7 @@ value of 1 each to make them grow and shrink equally with the sizer's horizontal
 \docparam{flag}{This parameter can be used to set a number of flags
 which can be combined using the binary OR operator |. Two main
 behaviours are defined using these flags. One is the border around a
-window: the {\it border} parameter determines the border width whereas
+window: the \arg{border} parameter determines the border width whereas
 the flags given here determine which side(s) of the item that the
 border will be added.  The other flags determine how the sizer item
 behaves when the space allotted to the sizer changes, and is somewhat
@@ -120,7 +120,7 @@ dependent on the specific kind of sizer used.
 \windowstyle{wxLEFT}\\
 \windowstyle{wxRIGHT}\\
 \windowstyle{wxALL}}{These flags are used to specify which side(s) of
-  the sizer item the {\it border} width will apply to. }
+  the sizer item the \arg{border} width will apply to. }
 
 \twocolitem{\windowstyle{wxEXPAND}}{The item will be expanded to fill
 the space assigned to the item.}
@@ -130,7 +130,7 @@ as possible while also maintaining its aspect ratio}
 \helpref{GetAdjustedBestSize}{wxwindowgetadjustedbestsize} to
 determine what the minimal size of window items should be, and will
 use that size to calculate the layout. This allows layouts to
-adjust when an item changes and its {\it best size} becomes
+adjust when an item changes and its \arg{best size} becomes
 different. If you would rather have a window item stay the size it
 started with then use wxFIXED\_MINSIZE.}
 \twocolitem{\windowstyle{wxALIGN\_CENTER}\\
@@ -145,12 +145,12 @@ the sizer, adjusted for the border if any.}
 \end{twocollist}
 }
 
-\docparam{border}{Determines the border width, if the {\it flag}
+\docparam{border}{Determines the border width, if the \arg{flag}
   parameter is set to include any border flag.}
 
 \docparam{userData}{Allows an extra object to be attached to the sizer
 item, for use in derived classes when sizing information is more
-complex than the {\it proportion} and {\it flag} will allow for.}
+complex than the \arg{proportion} and \arg{flag} will allow for.}
 
 \docparam{flags}{A \helpref{wxSizerFlags}{wxsizerflags} object that 
 enables you to specify most of the above parameters more conveniently.}
@@ -179,6 +179,13 @@ This method is abstract and has to be overwritten by any derived class.
 Here, the sizer will do the actual calculation of its children minimal sizes.
 
 
+\membersection{wxSizer::Clear}\label{wxsizerclear}
+
+\func{void}{Clear}{\param{bool }{delete\_windows = false}}
+
+Detaches all children from the sizer. If \arg{delete\_windows} is \true then child windows will also be deleted.
+
+
 \membersection{wxSizer::Detach}\label{wxsizerdetach}
 
 \func{bool}{Detach}{\param{wxWindow* }{window}}
@@ -187,8 +194,8 @@ Here, the sizer will do the actual calculation of its children minimal sizes.
 
 \func{bool}{Detach}{\param{size\_t }{index}}
 
-Detach a child from the sizer without destroying it. {\it window} is the window to be
-detached, {\it sizer} is the equivalent sizer and {\it index} is the position of
+Detach a child from the sizer without destroying it. \arg{window} is the window to be
+detached, \arg{sizer} is the equivalent sizer and \arg{index} is the position of
 the child in the sizer, typically 0 for the first item. This method does not
 cause any layout or resizing to take place, call \helpref{wxSizer::Layout}{wxsizerlayout}
 to update the layout "on screen" after detaching a child from the sizer.
@@ -204,7 +211,7 @@ Returns true if the child item was found and detached, false otherwise.
 
 \func{wxSize}{Fit}{\param{wxWindow* }{window}}
 
-Tell the sizer to resize the {\it window} to match the sizer's minimal size. This
+Tell the sizer to resize the \arg{window} to match the sizer's minimal size. This
 is commonly done in the constructor of the window itself, see sample in the description
 of \helpref{wxBoxSizer}{wxboxsizer}. Returns the new size.
 
@@ -215,7 +222,7 @@ For a top level window this is the total window size, not client size.
 
 \func{void}{FitInside}{\param{wxWindow* }{window}}
 
-Tell the sizer to resize the virtual size of the {\it window} to match the sizer's
+Tell the sizer to resize the virtual size of the \arg{window} to match the sizer's
 minimal size.  This will not alter the on screen size of the window, but may cause
 the addition/removal/alteration of scrollbars required to view the virtual area in
 windows which manage it.
@@ -234,9 +241,9 @@ windows which manage it.
 
 \func{wxSizerItem *}{GetItem}{\param{size\_t }{index}}
 
-Finds item of the sizer which holds given {\it window}, {\it sizer} or is located
-in sizer at position {\it index}.
-Use parameter {\it recursive} to search in subsizers too.
+Finds item of the sizer which holds given \arg{window}, \arg{sizer} or is located
+in sizer at position \arg{index}.
+Use parameter \arg{recursive} to search in subsizers too.
 
 Returns pointer to item or NULL.
 
@@ -264,6 +271,26 @@ size of all the children and their borders or the minimal size set by
 \helpref{SetMinSize}{wxsizersetminsize}, depending on which is bigger.
 
 
+\membersection{wxSizer::Hide}\label{wxsizerhide}
+
+\func{bool}{Hide}{\param{wxWindow* }{window}, \param{bool }{recursive = false}}
+
+\func{bool}{Hide}{\param{wxSizer* }{sizer}, \param{bool }{recursive = false}}
+
+\func{bool}{Hide}{\param{size\_t }{index}}
+
+Hides the \arg{window}, \arg{sizer}, or item at \arg{index}.
+To make a sizer item disappear, use Hide() followed by \helpref{Layout()}{wxsizerlayout}.
+Use parameter \arg{recursive} to hide elements found in subsizers.
+
+Returns \true if the child item was found, \false otherwise.
+
+\wxheading{See also}
+
+\helpref{wxSizer::IsShown}{wxsizerisshown},\rtfsp
+\helpref{wxSizer::Show}{wxsizershow}
+
+
 \membersection{wxSizer::Insert}\label{wxsizerinsert}
 
 \func{wxSizerItem*}{Insert}{\param{size\_t }{index}, \param{wxWindow* }{window}, \param{const wxSizerFlags\& }{flags}}
@@ -276,7 +303,7 @@ size of all the children and their borders or the minimal size set by
 
 \func{wxSizerItem*}{Insert}{\param{size\_t }{index}, \param{int }{width}, \param{int }{height}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-Insert a child into the sizer before any existing item at {\it index}.
+Insert a child into the sizer before any existing item at \arg{index}.
 
 \docparam{index}{The position this child should assume in the sizer.}
 
@@ -297,6 +324,22 @@ Inserts non-stretchable space to the sizer. More readable way of calling
 
 Inserts stretchable space to the sizer. More readable way of calling
 \helpref{Insert}{wxsizerinsert}(0, 0, prop).
+
+
+\membersection{wxSizer::IsShown}\label{wxsizerisshown}
+
+\constfunc{bool}{IsShown}{\param{wxWindow* }{window}}
+
+\constfunc{bool}{IsShown}{\param{wxSizer* }{sizer}}
+
+\constfunc{bool}{IsShown}{\param{size\_t }{index}}
+
+Returns \true if the \arg{window}, \arg{sizer}, or item at \arg{index} is shown.
+
+\wxheading{See also}
+
+\helpref{wxSizer::Hide}{wxsizerhide},\rtfsp
+\helpref{wxSizer::Show}{wxsizershow}
 
 
 \membersection{wxSizer::Layout}\label{wxsizerlayout}
@@ -357,8 +400,8 @@ and sizes.
 
 \func{bool}{Remove}{\param{size\_t }{index}}
 
-Removes a child from the sizer and destroys it.  {\it sizer} is the wxSizer to be removed,
-{\it index} is the position of the child in the sizer, typically 0 for the first item.
+Removes a child from the sizer and destroys it.  \arg{sizer} is the wxSizer to be removed,
+\arg{index} is the position of the child in the sizer, typically 0 for the first item.
 This method does not cause any layout or resizing to take place, call
 \helpref{wxSizer::Layout}{wxsizerlayout} to update the layout "on screen" after removing a
 child from the sizer.
@@ -410,7 +453,7 @@ after initial creation.
 
 \func{void}{SetSizeHints}{\param{wxWindow* }{window}}
 
-Tell the sizer to set (and \helpref{Fit}{wxsizerfit}) the minimal size of the {\it window} to
+Tell the sizer to set (and \helpref{Fit}{wxsizerfit}) the minimal size of the \arg{window} to
 match the sizer's minimal size.  This is commonly done in the constructor of the window itself,
 see sample in the description of \helpref{wxBoxSizer}{wxboxsizer} if the window is resizable
 (as are many dialogs under Unix and frames on probably all platforms).
@@ -420,7 +463,7 @@ see sample in the description of \helpref{wxBoxSizer}{wxboxsizer} if the window 
 
 \func{void}{SetVirtualSizeHints}{\param{wxWindow* }{window}}
 
-Tell the sizer to set the minimal size of the {\it window} virtual area to match the sizer's
+Tell the sizer to set the minimal size of the \arg{window} virtual area to match the sizer's
 minimal size. For windows with managed scrollbars this will set them appropriately.
 
 \wxheading{See also}
@@ -436,14 +479,16 @@ minimal size. For windows with managed scrollbars this will set them appropriate
 
 \func{bool}{Show}{\param{size\_t }{index}, \param{bool }{show = true}}
 
-Shows or hides the {\it window}, {\it sizer}, or item at {\it index}.
-To make a sizer item disappear or reappear, use Show() followed by Layout().
-Use parameter {\it recursive} to show or hide elements found in subsizers.
+Shows or hides the \arg{window}, \arg{sizer}, or item at \arg{index}.
+To make a sizer item disappear or reappear, use Show() followed by \helpref{Layout()}{wxsizerlayout}.
+Use parameter \arg{recursive} to show or hide elements found in subsizers.
 
 Returns true if the child item was found, false otherwise.
 
-Note that this only works with wxBoxSizer and wxFlexGridSizer, since they
-are the only two sizer classes that can size rows/columns independently.
+\wxheading{See also}
+
+\helpref{wxSizer::Hide}{wxsizerhide},\rtfsp
+\helpref{wxSizer::IsShown}{wxsizerisshown}
 
 
 
