@@ -81,7 +81,7 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkAdjustment *adj,
                                              int *lines,
                                              int *linesPerPage)
 {
-    if ( pixelsPerLine == 0 )
+    if ( pixelsPerLine == 0 || winSize >= virtSize )
     {
         adj->upper = 1.0;
         adj->page_increment = 1.0;
@@ -89,19 +89,15 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkAdjustment *adj,
     }
     else // we do have scrollbar
     {
+        // round because we need to show all the items
         adj->upper = (virtSize + pixelsPerLine - 1) / pixelsPerLine;
-        adj->page_size = winSize / pixelsPerLine;
+
+        // truncate here as we want to show visible lines entirely
+        adj->page_size =
         adj->page_increment = winSize / pixelsPerLine;
-
-        // Special case. When client and virtual size are very close but
-        // the client is big enough, kill scrollbar.
-
-        if ((adj->page_size < adj->upper) && (winSize >= virtSize))
-            adj->page_size += 1.0;
 
         // If the scrollbar hits the right side, move the window
         // right to keep it from over extending.
-
         if ( !wxIsNullDouble(adj->value) &&
                 (adj->value + adj->page_size > adj->upper) )
         {
