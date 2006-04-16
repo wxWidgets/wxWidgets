@@ -232,6 +232,21 @@ A reference to the selected state bitmap.
 \helpref{wxBitmapButton::SetBitmapSelected}{wxbitmapbuttonsetbitmapselected}
 
 
+\membersection{wxBitmapButton::GetBitmapSelected}\label{wxbitmapbuttongetbitmapselected}
+
+\constfunc{wxBitmap\&}{GetBitmapSelected}{\void}
+
+Returns the bitmap for the selected state.
+
+\wxheading{Return value}
+
+A reference to the selected state bitmap.
+
+\wxheading{See also}
+
+\helpref{wxBitmapButton::SetBitmapSelected}{wxbitmapbuttonsetbitmapselected}
+
+
 \membersection{wxBitmapButton::SetBitmapDisabled}\label{wxbitmapbuttonsetbitmapdisabled}
 
 \func{void}{SetBitmapDisabled}{\param{const wxBitmap\& }{bitmap}}
@@ -298,6 +313,24 @@ if no other bitmaps are provided.
 \wxheading{See also}
 
 \helpref{wxBitmapButton::GetBitmapLabel}{wxbitmapbuttongetbitmaplabel}
+
+
+\membersection{wxBitmapButton::SetBitmapSelected}\label{wxbitmapbuttonsetbitmapselected}
+
+\func{void}{SetBitmapSelected}{\param{const wxBitmap\& }{bitmap}}
+
+Sets the bitmap for the selected (depressed) button appearance.
+
+\wxheading{Parameters}
+
+\docparam{bitmap}{The bitmap to set.}
+
+\wxheading{See also}
+
+\helpref{wxBitmapButton::GetBitmapSelected}{wxbitmapbuttongetbitmapselected},\rtfsp
+\helpref{wxBitmapButton::SetBitmapLabel}{wxbitmapbuttonsetbitmaplabel},\rtfsp
+\helpref{wxBitmapButton::SetBitmapFocus}{wxbitmapbuttonsetbitmapfocus},\rtfsp
+\helpref{wxBitmapButton::SetBitmapDisabled}{wxbitmapbuttonsetbitmapdisabled}
 
 
 \membersection{wxBitmapButton::SetBitmapSelected}\label{wxbitmapbuttonsetbitmapselected}
