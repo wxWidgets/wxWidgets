@@ -106,6 +106,7 @@ All (GUI):
 - wxCalendarCtrl positioning and hit-testing fixes for dimensions other than
   best size.
 - wxCalendarCtrl colour schema changed and adjusted to system settings.
+- wxImage::Mirror() and GetSubBitmap() now support alpha (Mickey Rose)
 - More checking of image validity before loading into wxImage.
 - Added wxImage::ConvertToGreyscale.
 - Added ability to use templates with static event tables

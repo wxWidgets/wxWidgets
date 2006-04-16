@@ -250,9 +250,9 @@ wxImage wxImage::Copy() const
     image.SetMask( M_IMGDATA->m_hasMask );
 
     memcpy( data, GetData(), M_IMGDATA->m_width*M_IMGDATA->m_height*3 );
-    
+
     wxImageRefData *imgData = (wxImageRefData *)image.m_refData;
-    
+
     // also copy the alpha channel
     if (HasAlpha())
     {
@@ -260,7 +260,7 @@ wxImage wxImage::Copy() const
         unsigned char* alpha = image.GetAlpha();
         memcpy( alpha, GetAlpha(), M_IMGDATA->m_width*M_IMGDATA->m_height );
     }
-    
+
     // also copy the image options
     imgData->m_optionNames = M_IMGDATA->m_optionNames;
     imgData->m_optionValues = M_IMGDATA->m_optionValues;
@@ -549,8 +549,15 @@ wxImage wxImage::Mirror( bool horizontally ) const
     image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height, false );
 
     unsigned char *data = image.GetData();
+    unsigned char *alpha = NULL;
 
     wxCHECK_MSG( data, image, wxT("unable to create image") );
+
+    if (M_IMGDATA->m_alpha != NULL) {
+        image.SetAlpha();
+        alpha = image.GetAlpha();
+        wxCHECK_MSG( alpha, image, wxT("unable to create alpha channel") );
+    }
 
     if (M_IMGDATA->m_hasMask)
         image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
@@ -574,6 +581,25 @@ wxImage wxImage::Mirror( bool horizontally ) const
                 target_data -= 3;
             }
         }
+
+        if (alpha != NULL)
+        {
+            // src_alpha starts at the first pixel and increases by 1 after each step
+            // (a step here is the copy of the alpha value of one pixel)
+            const unsigned char *src_alpha = M_IMGDATA->m_alpha;
+            // dest_alpha starts just beyond the first line, decreases before each step,
+            // and after each line is finished, increases by 2 widths (skipping the line
+            // just copied and the line that will be copied next)
+            unsigned char *dest_alpha = alpha + width;
+
+            for (long jj = 0; jj < height; ++jj)
+            {
+                for (long i = 0; i < width; ++i) {
+                    *(--dest_alpha) = *(src_alpha++); // copy one pixel
+                }
+                dest_alpha += 2 * width; // advance beyond the end of the next line
+            }
+        }
     }
     else
     {
@@ -582,6 +608,23 @@ wxImage wxImage::Mirror( bool horizontally ) const
             target_data = data + 3*width*(height-1-i);
             memcpy( target_data, source_data, (size_t)3*width );
             source_data += 3*width;
+        }
+
+        if (alpha != NULL)
+        {
+            // src_alpha starts at the first pixel and increases by 1 width after each step
+            // (a step here is the copy of the alpha channel of an entire line)
+            const unsigned char *src_alpha = M_IMGDATA->m_alpha;
+            // dest_alpha starts just beyond the last line (beyond the whole image)
+            // and decreases by 1 width before each step
+            unsigned char *dest_alpha = alpha + width * height;
+
+            for (long jj = 0; jj < height; ++jj)
+            {
+                dest_alpha -= width;
+                memcpy( dest_alpha, src_alpha, (size_t)width );
+                src_alpha += width;
+            }
         }
     }
 
@@ -594,32 +637,47 @@ wxImage wxImage::GetSubImage( const wxRect &rect ) const
 
     wxCHECK_MSG( Ok(), image, wxT("invalid image") );
 
-    wxCHECK_MSG( (rect.GetLeft()>=0) && (rect.GetTop()>=0) && (rect.GetRight()<=GetWidth()) && (rect.GetBottom()<=GetHeight()),
+    wxCHECK_MSG( (rect.GetLeft()>=0) && (rect.GetTop()>=0) &&
+                 (rect.GetRight()<=GetWidth()) && (rect.GetBottom()<=GetHeight()),
                  image, wxT("invalid subimage size") );
 
-    int subwidth=rect.GetWidth();
-    const int subheight=rect.GetHeight();
+    const int subwidth = rect.GetWidth();
+    const int subheight = rect.GetHeight();
 
     image.Create( subwidth, subheight, false );
 
-    unsigned char *subdata = image.GetData(), *data=GetData();
+    const unsigned char *src_data = GetData();
+    const unsigned char *src_alpha = M_IMGDATA->m_alpha;
+    unsigned char *subdata = image.GetData();
+    unsigned char *subalpha = NULL;
 
     wxCHECK_MSG( subdata, image, wxT("unable to create image") );
+
+    if (src_alpha != NULL) {
+        image.SetAlpha();
+        subalpha = image.GetAlpha();
+        wxCHECK_MSG( subalpha, image, wxT("unable to create alpha channel"));
+    }
 
     if (M_IMGDATA->m_hasMask)
         image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
 
-    const int subleft=3*rect.GetLeft();
-    const int width=3*GetWidth();
-    subwidth*=3;
+    const int width = GetWidth();
+    const int pixsoff = rect.GetLeft() + width * rect.GetTop();
 
-    data+=rect.GetTop()*width+subleft;
+    src_data += 3 * pixsoff;
+    src_alpha += pixsoff; // won't be used if was NULL, so this is ok
 
     for (long j = 0; j < subheight; ++j)
     {
-        memcpy( subdata, data, subwidth);
-        subdata+=subwidth;
-        data+=width;
+        memcpy( subdata, src_data, 3 * subwidth );
+        subdata += 3 * subwidth;
+        src_data += 3 * width;
+        if (subalpha != NULL) {
+            memcpy( subalpha, src_alpha, subwidth );
+            subalpha += subwidth;
+            src_alpha += width;
+        }
     }
 
     return image;
