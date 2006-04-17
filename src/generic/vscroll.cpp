@@ -24,6 +24,10 @@
 #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/sizer.h"
+#endif
+
 #include "wx/vscroll.h"
 
 // ----------------------------------------------------------------------------
