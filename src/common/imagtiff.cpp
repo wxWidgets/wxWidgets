@@ -393,7 +393,13 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     int compression = image->GetOptionInt(wxIMAGE_OPTION_COMPRESSION);
     if ( !compression )
-        compression=COMPRESSION_LZW;
+    {
+        // we can't use COMPRESSION_LZW because current version of libtiff
+        // doesn't implement it ("no longer implemented due to Unisys patent
+        // enforcement") and other compression methods are lossy so we
+        // shouldn't use them by default -- and the only remaining one is none
+        compression = COMPRESSION_NONE;
+    }
 
     TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, spp);
     TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bpp);
