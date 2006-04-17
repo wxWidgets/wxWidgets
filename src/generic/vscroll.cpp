@@ -282,6 +282,27 @@ void wxVScrolledWindow::RefreshAll()
     Refresh();
 }
 
+bool wxVScrolledWindow::Layout()
+{
+    if ( GetSizer() )
+    {
+        // adjust the sizer dimensions/position taking into account the
+        // virtual size and scrolled position of the window.
+
+        int w, h;
+        GetVirtualSize(&w, &h);
+
+        // x is always 0 so no variable needed
+        int y = -GetLinesHeight(0, GetFirstVisibleLine());
+
+        GetSizer()->SetDimension(0, y, w, h);
+        return true;
+    }
+
+    // fall back to default for LayoutConstraints
+    return wxPanel::Layout();
+}
+
 int wxVScrolledWindow::HitTest(wxCoord WXUNUSED(x), wxCoord y) const
 {
     const size_t lineMax = GetVisibleEnd();

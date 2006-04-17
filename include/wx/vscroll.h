@@ -135,6 +135,8 @@ public:
     // is kept for backwards compatibility
     size_t GetLastVisibleLine() const { return GetVisibleEnd() - 1; }
 
+    // layout the children (including the sizer if needed)
+    virtual bool Layout();
 
 protected:
     // this function must be overridden in the derived class and it should
