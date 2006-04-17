@@ -70,16 +70,14 @@ gtk_mdi_page_change_callback( GtkNotebook *WXUNUSED(widget),
     child = (wxMDIChildFrame*) NULL;
 
     wxWindowList::compatibility_iterator node = client_window->GetChildren().GetFirst();
-    while (node)
+    while ( node )
     {
         wxMDIChildFrame *child_frame = wxDynamicCast( node->GetData(), wxMDIChildFrame );
-        // CE: we come here in the destructor with a null child_frame - I think because
-        // g_signal_connect (m_widget, "switch_page", (see below)
-        // isn't deleted early enough
-        if (!child_frame)
-          return ;
 
-        if (child_frame->m_page == page)
+        // child_frame can be NULL when this is called from dtor, probably
+        // because g_signal_connect (m_widget, "switch_page", (see below)
+        // isn't deleted early enough
+        if ( child_frame && child_frame->m_page == page )
         {
             child = child_frame;
             break;
