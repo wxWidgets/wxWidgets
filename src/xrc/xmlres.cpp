@@ -625,7 +625,18 @@ static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
         }
 
         if ( !dnode )
-            dest.AddChild(new wxXmlNode(*node));
+        {
+            static const wxChar *AT_END = wxT("end");
+            wxString insert_pos = node->GetPropVal(wxT("insert_at"), AT_END);
+            if ( insert_pos == AT_END )
+            {
+                dest.AddChild(new wxXmlNode(*node));
+            }
+            else if ( insert_pos == wxT("begin") )
+            {
+                dest.InsertChild(new wxXmlNode(*node), dest.GetChildren());
+            }
+        }
     }
 
     if ( dest.GetType() == wxXML_TEXT_NODE && with.GetContent().Length() )
