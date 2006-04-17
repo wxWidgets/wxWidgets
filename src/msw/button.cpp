@@ -855,8 +855,8 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 
     COLORREF colFg = wxColourToRGB(GetForegroundColour());
     DrawButtonText(hdc, &rectBtn,
-                   state & ODS_NOACCEL ? wxStripMenuCodes(GetLabel())
-                                        : GetLabel(),
+                   (state & ODS_NOACCEL ? wxStripMenuCodes(GetLabel())
+                                        : GetLabel()),
                    state & ODS_DISABLED ? GetSysColor(COLOR_GRAYTEXT)
                                         : colFg);
 
