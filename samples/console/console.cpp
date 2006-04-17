@@ -2684,6 +2684,7 @@ static void TestStandardPaths()
     wxPrintf(_T("Data dir (sys local):\t%s\n"), stdp.GetLocalDataDir().c_str());
     wxPrintf(_T("Data dir (user):\t%s\n"), stdp.GetUserDataDir().c_str());
     wxPrintf(_T("Data dir (user local):\t%s\n"), stdp.GetUserLocalDataDir().c_str());
+    wxPrintf(_T("Documents dir:\t\t%s\n"), stdp.GetDocumentsDir().c_str());
     wxPrintf(_T("Plugins dir:\t\t%s\n"), stdp.GetPluginsDir().c_str());
     wxPrintf(_T("Resources dir:\t\t%s\n"), stdp.GetResourcesDir().c_str());
     wxPrintf(_T("Localized res. dir:\t%s\n"),

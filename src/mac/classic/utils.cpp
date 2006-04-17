@@ -372,7 +372,7 @@ bool wxIsBusy()
 
 #if wxUSE_BASE
 
-wxString wxMacFindFolder( short        vol,
+wxString wxMacFindFolderNoSeparator( short        vol,
               OSType       folderType,
               Boolean      createFolder)
 {
@@ -385,10 +385,17 @@ wxString wxMacFindFolder( short        vol,
         FSSpec file ;
         if ( FSMakeFSSpec( vRefNum , dirID , "\p" , &file ) == noErr )
         {
-            strDir = wxMacFSSpec2MacFilename( &file ) + wxFILE_SEP_PATH ;
+            strDir = wxMacFSSpec2MacFilename( &file );
         }
     }
     return strDir ;
+}
+
+wxString wxMacFindFolder( short        vol,
+              OSType       folderType,
+              Boolean      createFolder)
+{
+    return wxMacFindFolderNoSeparator(vol, folderType, createFolder) + wxFILE_SEP_PATH;
 }
 
 #endif // wxUSE_BASE

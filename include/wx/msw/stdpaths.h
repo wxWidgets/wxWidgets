@@ -26,6 +26,7 @@ public:
     virtual wxString GetUserDataDir() const;
     virtual wxString GetUserLocalDataDir() const;
     virtual wxString GetPluginsDir() const;
+    virtual wxString GetDocumentsDir() const;
 
 protected:
     // get the path corresponding to the given standard CSIDL_XXX constant

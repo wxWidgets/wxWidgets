@@ -196,6 +196,9 @@ WXDLLEXPORT wxString wxMacFSSpec2MacFilename( const FSSpec *spec ) ;
 WXDLLEXPORT void wxMacFilename2FSSpec( const wxString &path , FSSpec *spec ) ;
 
 // utils.h
+WXDLLEXPORT wxString wxMacFindFolderNoSeparator(short vRefNum,
+                                                OSType folderType,
+                                                Boolean createFolder);
 WXDLLEXPORT wxString wxMacFindFolder(short vRefNum,
                                      OSType folderType,
                                      Boolean createFolder);

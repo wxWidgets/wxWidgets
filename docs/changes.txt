@@ -40,6 +40,7 @@ All:
 - Many fixes for UTF-16/32 handling in Unicode builds
 - wxLaunchDefaultBrowser() now supports wxBROWSER_NEW_WINDOW flag.
 - Added wxStandardPaths::GetResourcesDir() and GetLocalizedResourcesDir()
+- Added wxStandardPaths::GetDocumentsDir() (Ken Thomases)
 - Added wxStringTokenizer::GetLastDelimiter(); improved documentation.
 - Fixed wxTextFile in Unicode build
 - Speed improvements to wxRegEx when matching is done in a loop such as

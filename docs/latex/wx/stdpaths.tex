@@ -95,6 +95,20 @@ Example return values:
 \helpref{GetLocalDataDir}{wxstandardpathsgetlocaldatadir}
 
 
+\membersection{wxStandardPaths::GetDocumentsDir}\label{wxstandardpathsgetdocumentsdir}
+
+\func{wxString}{GetDocumentsDir}{\void}
+
+Return the directory containing the current user's documents.
+
+Example return values:
+\begin{itemize}
+    \item Unix: \tt{~} (the home directory)
+    \item Windows: \texttt{C:$\backslash$Documents and Settings$\backslash$\textit{username}$\backslash$Documents}
+    \item Mac: \texttt{~/Documents}
+\end{itemize}
+
+
 \membersection{wxStandardPaths::GetInstallPrefix}\label{wxstandardpathsgetinstallprefix}
 
 \func{wxString}{GetInstallPrefix}{\void}

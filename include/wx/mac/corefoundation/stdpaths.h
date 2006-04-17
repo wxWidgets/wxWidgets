@@ -42,6 +42,7 @@ public:
     virtual wxString GetResourcesDir() const;
     virtual wxString GetLocalizedResourcesDir(const wxChar *lang,
                                               ResourceCat category) const;
+    virtual wxString GetDocumentsDir() const;
 
 protected:
     // this function can be called with any of CFBundleCopyXXXURL function

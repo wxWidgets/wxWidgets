@@ -111,6 +111,12 @@ public:
         return GetResourcesDir() + wxFILE_SEP_PATH + lang;
     }
 
+    // return the "Documents" directory for the current user
+    //
+    // C:\Documents and Settings\username\Documents under Windows,
+    // $HOME under Unix and ~/Documents under Mac
+    virtual wxString GetDocumentsDir() const;
+
 
     // virtual dtor for the base class
     virtual ~wxStandardPathsBase();
@@ -149,6 +155,7 @@ public:
     virtual wxString GetLocalDataDir() const { return m_prefix; }
     virtual wxString GetUserDataDir() const { return m_prefix; }
     virtual wxString GetPluginsDir() const { return m_prefix; }
+    virtual wxString GetDocumentsDir() const { return m_prefix; }
 
 private:
     wxString m_prefix;

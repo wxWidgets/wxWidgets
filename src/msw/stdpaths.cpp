@@ -68,6 +68,10 @@ static const wxChar *TRACE_MASK = _T("stdpaths");
     #define CSIDL_PROGRAM_FILES   0x0026
 #endif
 
+#ifndef CSIDL_PERSONAL
+    #define CSIDL_PERSONAL        0x0005
+#endif
+
 #ifndef SHGFP_TYPE_CURRENT
     #define SHGFP_TYPE_CURRENT 0
 #endif
@@ -75,7 +79,6 @@ static const wxChar *TRACE_MASK = _T("stdpaths");
 #ifndef SHGFP_TYPE_DEFAULT
     #define SHGFP_TYPE_DEFAULT 1
 #endif
-
 // ----------------------------------------------------------------------------
 // module globals
 // ----------------------------------------------------------------------------
@@ -260,6 +263,11 @@ wxString wxStandardPaths::GetAppDir()
 #endif // __WXDEBUG__
 
     return fn.GetPath();
+}
+
+wxString wxStandardPaths::GetDocumentsDir() const
+{
+    return DoGetDirectory(CSIDL_PERSONAL);
 }
 
 // ----------------------------------------------------------------------------

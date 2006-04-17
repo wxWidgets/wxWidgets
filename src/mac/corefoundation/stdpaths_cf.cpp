@@ -31,6 +31,7 @@
 #include "wx/mac/private.h"
 #endif
 #include "wx/mac/corefoundation/cfstring.h"
+#include "wx/mac/private.h"
 
 #if defined(__DARWIN__)
 #include <CoreFoundation/CFBundle.h>
@@ -104,6 +105,20 @@ wxString wxStandardPathsCF::GetFromFunc(wxCFURLRef (*func)(wxCFBundleRef)) const
     wxString ret(BundleRelativeURLToPath(relativeURL));
     CFRelease(relativeURL);
     return ret;
+}
+
+wxString wxStandardPathsCF::GetDocumentsDir() const
+{
+    return wxMacFindFolderNoSeparator
+        (
+#if TARGET_API_MAC_OSX
+        kUserDomain,
+#else
+        kOnSystemDisk,
+#endif
+        kDocumentsFolderType,
+        kCreateFolder
+        );
 }
 
 // ----------------------------------------------------------------------------
