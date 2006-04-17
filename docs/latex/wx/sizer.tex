@@ -400,16 +400,18 @@ and sizes.
 
 \func{bool}{Remove}{\param{size\_t }{index}}
 
-Removes a child from the sizer and destroys it.  \arg{sizer} is the wxSizer to be removed,
-\arg{index} is the position of the child in the sizer, typically 0 for the first item.
+Removes a child from the sizer and destroys it if it is a sizer or a spacer,
+but not if it is a window (because windows are owned by their parent window,
+not the sizer).  \arg{sizer} is the wxSizer to be removed,
+\arg{index} is the position of the child in the sizer, e.g. $0$ for the first item.
 This method does not cause any layout or resizing to take place, call
 \helpref{wxSizer::Layout}{wxsizerlayout} to update the layout "on screen" after removing a
 child from the sizer.
 
-{\bf NB:} The method taking a wxWindow* parameter is deprecated.  For historical reasons
-it does not destroy the window as would usually be expected from Remove.  You should use
-\helpref{wxSizer::Detach}{wxsizerdetach} in new code instead.  There is currently no wxSizer
-method that will both detach and destroy a wxWindow item.
+{\bf NB:} The method taking a wxWindow* parameter is deprecated as it does not
+destroy the window as would usually be expected from Remove.  You should use 
+\helpref{wxSizer::Detach}{wxsizerdetach} in new code instead.  There is
+currently no wxSizer method that will both detach and destroy a wxWindow item.
 
 Returns true if the child item was found and removed, false otherwise.
 
