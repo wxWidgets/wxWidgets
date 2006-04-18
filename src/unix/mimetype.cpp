@@ -58,8 +58,10 @@
 
 #include "wx/unix/mimetype.h"
 
-// Not GUI dependent
-#include "wx/gtk/gnome/gvfs.h"
+#if wxUSE_LIBGNOMEVFS
+    // Not GUI dependent
+    #include "wx/gtk/gnome/gvfs.h"
+#endif
 
 // other standard headers
 #include <ctype.h>
