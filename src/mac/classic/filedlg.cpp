@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filedlg.cpp
+// Name:        src/mac/classic/filedlg.cpp
 // Purpose:     wxFileDialog
 // Author:      Stefan Csomor
 // Modified by:
@@ -9,7 +9,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #include "wx/app.h"
 #include "wx/utils.h"
 #include "wx/dialog.h"
@@ -183,7 +188,7 @@ void MakeUserDataRec(OpenUserDataRec    *myData , const wxString& filter )
         // an explanatory text, in that case the first part is name and extension at the same time
 
         wxASSERT_MSG( filterIndex == 0 || !isName , wxT("incorrect format of format string") ) ;
-        if ( current.IsEmpty() )
+        if ( current.empty() )
             myData->extensions.Add( myData->name[filterIndex] ) ;
         else
             myData->extensions.Add( current.MakeUpper() ) ;
@@ -200,21 +205,21 @@ void MakeUserDataRec(OpenUserDataRec    *myData , const wxString& filter )
             wxString extension = myData->extensions[i];
 
             if (extension.GetChar(0) == '*')
-                extension = extension.Mid(1);	// Remove leading *
+                extension = extension.Mid(1);  // Remove leading *
 
             if (extension.GetChar(0) == '.')
             {
-                extension = extension.Mid(1);	// Remove leading .
+                extension = extension.Mid(1);  // Remove leading .
             }
-       
+
             if (wxFileName::MacFindDefaultTypeAndCreator( extension, &fileType, &creator ))
             {
                 myData->filtermactypes.Add( (OSType)fileType );
             }
             else
             {
-                myData->filtermactypes.Add( '****' ) ;		// We'll fail safe if it's not recognized
-        	}
+                myData->filtermactypes.Add( '****' ) ;   // We'll fail safe if it's not recognized
+            }
         }
     }
 }
@@ -319,16 +324,16 @@ pascal Boolean CrossPlatformFilterCallback (
 
 
 
-            	CFURLRef fullURLRef;
+                CFURLRef fullURLRef;
                 fullURLRef = ::CFURLCreateFromFSRef(NULL, &fsref);
 #ifdef __UNIX__
-            	CFURLPathStyle pathstyle = kCFURLPOSIXPathStyle;
+                CFURLPathStyle pathstyle = kCFURLPOSIXPathStyle;
 #else
-            	CFURLPathStyle pathstyle = kCFURLHFSPathStyle;
+                CFURLPathStyle pathstyle = kCFURLHFSPathStyle;
 #endif
-            	CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, pathstyle);
-            	::CFRelease( fullURLRef ) ;
-            	wxString file = wxMacCFStringHolder(cfString).AsString(wxFont::GetDefaultEncoding());
+                CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, pathstyle);
+                ::CFRelease( fullURLRef ) ;
+                wxString file = wxMacCFStringHolder(cfString).AsString(wxFont::GetDefaultEncoding());
 
                 display = CheckFile( file , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
             }
@@ -615,7 +620,7 @@ int wxFileDialog::ShowModal()
             OSErr err = ::AEGetNthDesc( &mNavReply.selection , i , typeFSS, &keyWord , &specDesc);
             if ( err != noErr )
             {
-                m_path = wxT("") ;
+                m_path = wxEmptyString ;
                 return wxID_CANCEL ;
             }
             outFileSpec = **(FSSpec**) specDesc.dataHandle;
@@ -638,4 +643,3 @@ int wxFileDialog::ShowModal()
     return wxID_CANCEL;
 #endif // TARGET_CARBON
 }
-

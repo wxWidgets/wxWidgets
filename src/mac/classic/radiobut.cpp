@@ -1,15 +1,19 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobut.cpp
+// Name:        src/mac/classic/radiobut.cpp
 // Purpose:     wxRadioButton
 // Author:      AUTHOR
 // Modified by: JS Lair (99/11/15) adding the cyclic groupe notion for radiobox
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 #include "wx/radiobut.h"
 
@@ -29,38 +33,38 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
     Rect bounds ;
     Str255 title ;
-    
+
     MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1,
           kControlRadioButtonProc , (long) this ) ;
-    
+
     MacPostControlCreate() ;
 
-  m_cycle = this ;
-  
-  if (HasFlag(wxRB_GROUP))
-  {
-      AddInCycle( NULL ) ;
-  }
-  else
-  {
-    /* search backward for last group start */
-    wxRadioButton *chief = (wxRadioButton*) NULL;
-    wxWindowList::Node *node = parent->GetChildren().GetLast();
-    while (node)
+    m_cycle = this ;
+
+    if (HasFlag(wxRB_GROUP))
     {
-      wxWindow *child = node->GetData();
-      if (child->IsKindOf( CLASSINFO( wxRadioButton ) ) )
-      {
-          chief = (wxRadioButton*) child;
-         if (child->HasFlag(wxRB_GROUP)) break;
-      }
-      node = node->GetPrevious();
+        AddInCycle( NULL ) ;
     }
-    AddInCycle( chief ) ;
-  }
-    return TRUE;
+    else
+    {
+        /* search backward for last group start */
+        wxRadioButton *chief = (wxRadioButton*) NULL;
+        wxWindowList::Node *node = parent->GetChildren().GetLast();
+        while (node)
+        {
+            wxWindow *child = node->GetData();
+            if (child->IsKindOf( CLASSINFO( wxRadioButton ) ) )
+            {
+                chief = (wxRadioButton*) child;
+                if (child->HasFlag(wxRB_GROUP)) break;
+            }
+            node = node->GetPrevious();
+        }
+        AddInCycle( chief ) ;
+    }
+    return true;
 }
 
 void wxRadioButton::SetValue(bool val)
@@ -68,9 +72,9 @@ void wxRadioButton::SetValue(bool val)
     wxRadioButton *cycle;
       if ( GetControl32BitValue( (ControlHandle) m_macControl ) == val )
         return ;
-        
+
    ::SetControl32BitValue( (ControlHandle) m_macControl , val ) ;
-   if (val) 
+   if (val)
    {
            cycle=this->NextInCycle();
           if (cycle!=NULL) {
@@ -94,12 +98,12 @@ void wxRadioButton::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
-void wxRadioButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown)) 
+void wxRadioButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown))
 {
     if ( GetValue() )
-      return ;
-      
-      wxRadioButton *cycle, *old = NULL ;
+        return ;
+
+    wxRadioButton *cycle, *old = NULL ;
     cycle=this->NextInCycle();
     if (cycle!=NULL) {
           while (cycle!=this) {
@@ -128,17 +132,17 @@ void wxRadioButton::MacHandleControlClick( WXWidget control , wxInt16 controlpar
 wxRadioButton *wxRadioButton::AddInCycle(wxRadioButton *cycle)
 {
     wxRadioButton *next,*current;
-        
+
     if (cycle==NULL) {
         m_cycle=this;
         return(this);
         }
     else {
         current=cycle;
-          while ((next=current->m_cycle)!=cycle) 
+          while ((next=current->m_cycle)!=cycle)
             current=current->m_cycle;
           m_cycle=cycle;
           current->m_cycle=this;
           return(cycle);
       }
-}  
+}

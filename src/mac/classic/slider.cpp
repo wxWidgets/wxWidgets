@@ -1,15 +1,19 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        slider.cpp
+// Name:        src/mac/classic/slider.cpp
 // Purpose:     wxSlider
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 #if wxUSE_SLIDER
 

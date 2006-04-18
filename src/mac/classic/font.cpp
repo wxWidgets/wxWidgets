@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        font.cpp
+// Name:        src/mac/classic/font.cpp
 // Purpose:     wxFont class
 // Author:      Stefan Csomor
 // Modified by:
@@ -9,7 +9,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #include "wx/string.h"
 #include "wx/font.h"
 #include "wx/fontutil.h"
@@ -33,7 +38,7 @@ public:
         , m_family(wxDEFAULT)
         , m_style(wxNORMAL)
         , m_weight(wxNORMAL)
-        , m_underlined(FALSE)
+        , m_underlined(false)
         , m_faceName(wxT("Geneva"))
         , m_encoding(wxFONTENCODING_DEFAULT)
         , m_macFontNum(0)
@@ -41,7 +46,7 @@ public:
         , m_macFontStyle(0)
         , m_macATSUFontID()
     {
-        Init(10, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE,
+        Init(10, wxDEFAULT, wxNORMAL, wxNORMAL, false,
              wxT("Geneva"), wxFONTENCODING_DEFAULT);
     }
 
@@ -88,9 +93,9 @@ public:
     }
 
     virtual ~wxFontRefData();
-    void SetNoAntiAliasing( bool no = TRUE ) { m_noAA = no; }
+    void SetNoAntiAliasing( bool no = true ) { m_noAA = no; }
     bool GetNoAntiAliasing() const { return m_noAA; }
-    
+
 protected:
     // common part of all ctors
     void Init(int size,
@@ -110,8 +115,8 @@ protected:
     bool           m_underlined;
     wxString       m_faceName;
     wxFontEncoding m_encoding;
-    bool            m_noAA;      // No anti-aliasing
-    
+    bool           m_noAA;      // No anti-aliasing
+
 public:
     short       m_macFontNum;
     short       m_macFontSize;
@@ -152,7 +157,7 @@ void wxFontRefData::Init(int pointSize,
     m_macFontSize = 0;
     m_macFontStyle = 0;
     m_fontId = 0;
-    m_noAA = FALSE;
+    m_noAA = false;
 }
 
 wxFontRefData::~wxFontRefData()
@@ -205,19 +210,19 @@ void wxFontRefData::MacFindFont()
     m_macFontStyle = 0;
     if (m_weight == wxBOLD)
          m_macFontStyle |= bold;
-    if (m_style == wxITALIC || m_style == wxSLANT) 
+    if (m_style == wxITALIC || m_style == wxSLANT)
         m_macFontStyle |= italic;
-    if (m_underlined) 
+    if (m_underlined)
         m_macFontStyle |= underline;
     m_macFontSize = m_pointSize ;
-    
+
     //TODO:if we supply the style as an additional parameter we must make a testing
     //sequence in order to degrade gracefully while trying to maintain most of the style
     //information, meanwhile we just take the normal font and apply the features after
 #ifdef __WXDEBUG__
     OSStatus status =
 #endif // __WXDEBUG__
-        ::ATSUFONDtoFontID(m_macFontNum, normal /*qdStyle*/, (UInt32*)&m_macATSUFontID); 
+        ::ATSUFONDtoFontID(m_macFontNum, normal /*qdStyle*/, (UInt32*)&m_macATSUFontID);
     /*
     status = ATSUFindFontFromName ( (Ptr) m_faceName , strlen( m_faceName ) ,
         kFontFullName,    kFontMacintoshPlatform, kFontRomanScript , kFontNoLanguage  ,  (UInt32*)&m_macATSUFontID ) ;
@@ -257,7 +262,7 @@ bool wxFont::Create(int pointSize,
 
     RealizeResource();
 
-    return TRUE;
+    return true;
 }
 
 wxFont::~wxFont()
@@ -267,7 +272,7 @@ wxFont::~wxFont()
 bool wxFont::RealizeResource()
 {
     M_FONTDATA->MacFindFont() ;
-    return TRUE;
+    return true;
 }
 
 void wxFont::SetEncoding(wxFontEncoding encoding)
@@ -434,4 +439,3 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 
     return &(M_FONTDATA->m_info);
 }
-

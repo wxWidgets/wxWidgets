@@ -1,21 +1,20 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        generic/imaglist.cpp
+// Name:        src/mac/carbon/imaglist.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $id$
+// RCS_ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
-#if wxUSE_IMAGLIST
-
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
+#if wxUSE_IMAGLIST
+
 #include "wx/imaglist.h"
 #include "wx/icon.h"
 #include "wx/image.h"
@@ -262,4 +261,3 @@ bool wxImageList::Draw(
 }
 
 #endif // wxUSE_IMAGLIST
-

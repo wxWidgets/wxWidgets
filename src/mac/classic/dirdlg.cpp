@@ -1,15 +1,20 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dirdlg.cpp
+// Name:        src/mac/classic/dirdlg.cpp
 // Purpose:     wxDirDialog
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/dirdlg.h"
@@ -49,7 +54,7 @@ int wxDirDialog::ShowModal()
     NavReplyRecord            mNavReply;
     AEDesc*                    mDefaultLocation = NULL ;
     bool                    mSelectDefault = false ;
-    
+
     ::NavGetDefaultDialogOptions(&mNavOptions);
 
     mNavFilterUPP    = nil;
@@ -63,20 +68,20 @@ int wxDirDialog::ShowModal()
     mNavReply.selection.dataHandle        = nil;
     mNavReply.keyScript                    = smSystemScript;
     mNavReply.fileTranslation            = nil;
-    
+
     // Set default location, the location
     //   that's displayed when the dialog
     //   first appears
-    
+
     if ( mDefaultLocation ) {
-        
+
         if (mSelectDefault) {
             mNavOptions.dialogOptionFlags |= kNavSelectDefaultLocation;
         } else {
             mNavOptions.dialogOptionFlags &= ~kNavSelectDefaultLocation;
         }
     }
-    
+
     OSErr err = ::NavChooseFolder(
                         mDefaultLocation,
                         &mNavReply,
@@ -84,36 +89,36 @@ int wxDirDialog::ShowModal()
                         NULL,
                         mNavFilterUPP,
                         0L);                            // User Data
-    
+
     if ( (err != noErr) && (err != userCanceledErr) ) {
-        m_path = wxT("") ;
+        m_path = wxEmptyString ;
         return wxID_CANCEL ;
     }
 
     if (mNavReply.validRecord) {        // User chose a folder
-    
+
         FSSpec    folderInfo;
         FSSpec  outFileSpec ;
         AEDesc specDesc ;
-        
+
         OSErr err = ::AECoerceDesc( &mNavReply.selection , typeFSS, &specDesc);
         if ( err != noErr ) {
-            m_path = wxT("") ;
+            m_path = wxEmptyString ;
             return wxID_CANCEL ;
-        }            
+        }
         folderInfo = **(FSSpec**) specDesc.dataHandle;
         if (specDesc.dataHandle != nil) {
             ::AEDisposeDesc(&specDesc);
         }
 
 //            mNavReply.GetFileSpec(folderInfo);
-        
+
             // The FSSpec from NavChooseFolder is NOT the file spec
             // for the folder. The parID field is actually the DirID
             // of the folder itself, not the folder's parent, and
             // the name field is empty. We must call PBGetCatInfo
             // to get the parent DirID and folder name
-        
+
         Str255        name;
         CInfoPBRec    thePB;            // Directory Info Parameter Block
         thePB.dirInfo.ioCompletion    = nil;
@@ -121,20 +126,19 @@ int wxDirDialog::ShowModal()
         thePB.dirInfo.ioDrDirID        = folderInfo.parID;        // Folder's DirID
         thePB.dirInfo.ioNamePtr        = name;
         thePB.dirInfo.ioFDirIndex    = -1;    // Lookup using Volume and DirID
-        
+
         err = ::PBGetCatInfoSync(&thePB);
         if ( err != noErr ) {
-            m_path = wxT("")  ;
+            m_path = wxEmptyString;
             return wxID_CANCEL ;
-        }            
+        }
                                             // Create cannonical FSSpec
         ::FSMakeFSSpec(thePB.dirInfo.ioVRefNum, thePB.dirInfo.ioDrParID,
                        name, &outFileSpec);
-                        
+
         // outFolderDirID = thePB.dirInfo.ioDrDirID;
         m_path = wxMacFSSpec2MacFilename( &outFileSpec ) ;
         return wxID_OK ;
     }
     return wxID_CANCEL;
 }
-

@@ -19,7 +19,6 @@
 
 #include "wx/app.h"
 #include "wx/apptrait.h"
-#include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/timer.h"
@@ -2301,4 +2300,3 @@ IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)
 
 #endif
   // wxUSE_SOCKETS
-

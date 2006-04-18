@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mac/mimetype.cpp
+// Name:        src/mac/classic/mimetype.cpp
 // Purpose:     classes and functions to manage MIME types
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -14,10 +14,6 @@
 
 #ifdef __BORLANDC__
   #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
 #endif
 
 #ifndef WX_PRECOMP

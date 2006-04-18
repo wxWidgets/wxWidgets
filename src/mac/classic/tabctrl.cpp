@@ -1,15 +1,19 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tabctrl.cpp
+// Name:        src/mac/classic/tabctrl.cpp
 // Purpose:     wxTabCtrl
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 #if wxUSE_TAB_DIALOG
 
@@ -36,16 +40,16 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 
     Rect bounds ;
     Str255 title ;
-    
+
     m_imageList = NULL;
-    
+
     MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
-    
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1,
         kControlTabSmallProc , (long) this ) ;
-    
+
     MacPostControlCreate() ;
-    return TRUE ;
+    return true ;
 }
 
 wxTabCtrl::~wxTabCtrl()
@@ -60,14 +64,14 @@ void wxTabCtrl::Command(wxCommandEvent& event)
 bool wxTabCtrl::DeleteAllItems()
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 // Delete an item
 bool wxTabCtrl::DeleteItem(int item)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 // Get the selection
@@ -101,7 +105,7 @@ int wxTabCtrl::GetItemCount() const
 bool wxTabCtrl::GetItemRect(int item, wxRect& wxrect) const
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 // Get the number of rows
@@ -143,7 +147,7 @@ int wxTabCtrl::HitTest(const wxPoint& pt, long& flags)
 bool wxTabCtrl::InsertItem(int item, const wxString& text, int imageId, void* data)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 // Set the selection
@@ -163,21 +167,21 @@ void wxTabCtrl::SetImageList(wxImageList* imageList)
 bool wxTabCtrl::SetItemText(int item, const wxString& text)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 // Set the image for an item
 bool wxTabCtrl::SetItemImage(int item, int image)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 // Set the data for an item
 bool wxTabCtrl::SetItemData(int item, void* data)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 // Set the size for a fixed-width tab control

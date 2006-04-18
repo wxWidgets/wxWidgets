@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/tglbtn.cpp
+// Name:        src/mac/classic/tglbtn.cpp
 // Purpose:     Definition of the wxToggleButton class, which implements a
 //              toggle button under wxMac.
 // Author:      Stefan Csomor
@@ -10,6 +10,12 @@
 // License:     Rocketeer license
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 // ============================================================================
 // declatations
 // ============================================================================
@@ -18,7 +24,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/defs.h"
 #include "wx/tglbtn.h"
 
 #if wxUSE_TOGGLEBTN
@@ -63,25 +68,25 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
         m_macHorizontalBorder = kMacOSXHorizontalBorder;
         m_macVerticalBorder = kMacOSXVerticalBorder;
     }
-    
+
     MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , kControlBehaviorToggles , 1, 
+    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , kControlBehaviorToggles , 1,
           kControlBevelButtonNormalBevelProc  , (long) this ) ;
     wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
-    
+
     MacPostControlCreate() ;
-    
-  return TRUE;
+
+    return true;
 }
 
 wxSize wxToggleButton::DoGetBestSize() const
 {
-    int wBtn = 70 ; 
+    int wBtn = 70 ;
     int hBtn = 20 ;
 
     int lBtn = m_label.Length() * 8 + 12 ;
-    if (lBtn > wBtn) 
+    if (lBtn > wBtn)
         wBtn = lBtn;
 
     if ( UMAHasAquaLayout() )
@@ -108,7 +113,7 @@ void wxToggleButton::Command(wxCommandEvent & event)
    ProcessCommand(event);
 }
 
-void wxToggleButton::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16 controlpart , bool WXUNUSED(mouseStillDown) ) 
+void wxToggleButton::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16 controlpart , bool WXUNUSED(mouseStillDown) )
 {
     if ( controlpart != kControlNoPart )
     {
@@ -120,4 +125,3 @@ void wxToggleButton::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16
 }
 
 #endif // wxUSE_TOGGLEBTN
-
