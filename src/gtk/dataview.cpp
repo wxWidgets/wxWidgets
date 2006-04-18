@@ -1340,8 +1340,8 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
-wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell,
-    size_t model_column, int flags ) :
+wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column,
+    int fixed_width, wxDataViewColumnSizing sizing, int flags ) :
     wxDataViewColumnBase( title, cell, model_column, flags )
 {
     GtkCellRenderer *renderer = (GtkCellRenderer *) cell->GetGtkHandle();
@@ -1349,7 +1349,17 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell,
     GtkTreeViewColumn *column = gtk_tree_view_column_new();
 
     gtk_tree_view_column_set_title( column, wxGTK_CONV(title) );
-
+    
+    if (sizing == wxDATAVIEW_COL_WIDTH_FIXED)
+        gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_FIXED );
+    else if (sizing == wxDATAVIEW_COL_WIDTH_GROW)
+        gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_GROW_ONLY );
+    else
+        gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_AUTOSIZE );
+        
+    if (fixed_width > 0)
+        gtk_tree_view_column_set_fixed_width( column, fixed_width );
+    
     gtk_tree_view_column_pack_start( column, renderer, TRUE );
 
     gtk_tree_view_column_set_cell_data_func( column, renderer,
@@ -1368,6 +1378,21 @@ void wxDataViewColumn::SetTitle( const wxString &title )
 
     GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
     gtk_tree_view_column_set_title( column, wxGTK_CONV(title) );
+}
+
+int wxDataViewColumn::GetWidth()
+{
+    return gtk_tree_view_column_get_width( (GtkTreeViewColumn *)m_column );
+}
+
+void wxDataViewColumn::SetFixedWidth( int width )
+{
+    gtk_tree_view_column_set_fixed_width( (GtkTreeViewColumn *)m_column, width );
+}
+
+int wxDataViewColumn::GetFixedWidth()
+{
+    return gtk_tree_view_column_get_fixed_width( (GtkTreeViewColumn *)m_column );
 }
 
 //-----------------------------------------------------------------------------

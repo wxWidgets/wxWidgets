@@ -503,11 +503,14 @@ bool wxDataViewDateCell::Activate( wxRect WXUNUSED(cell), wxDataViewListModel *m
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
-wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell,
-    size_t model_column, int flags ) :
+wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column, 
+        int fixed_width, wxDataViewColumnSizing sizing, int flags ) :
     wxDataViewColumnBase( title, cell, model_column, flags )
 {
-    m_width = 80;
+    m_sizing = sizing;
+    
+    m_width = fixed_width;
+    m_fixedWidth = fixed_width;
 }
 
 wxDataViewColumn::~wxDataViewColumn()
@@ -518,6 +521,27 @@ void wxDataViewColumn::SetTitle( const wxString &title )
 {
     wxDataViewColumnBase::SetTitle( title );
 
+}
+
+int wxDataViewColumn::GetWidth()
+{
+    return m_width;
+}
+
+void wxDataViewColumn::SetFixedWidth( int width )
+{
+    m_fixedWidth = width;
+    
+    if (m_sizing == wxDATAVIEW_COL_WIDTH_FIXED)
+    {
+        m_width = width;
+        // Set dirty
+    }
+}
+
+int wxDataViewColumn::GetFixedWidth()
+{
+    return m_fixedWidth;
 }
 
 //-----------------------------------------------------------------------------
@@ -948,8 +972,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     wxDataViewListModel *model = GetOwner()->GetModel();
 
-    size_t item_start = wxMax( 0, update.y / m_lineHeight );
-    size_t item_count = wxMin( (update.height / m_lineHeight) + 1, 
+    size_t item_start = wxMax( 0, (update.y / m_lineHeight) - 1 );
+    size_t item_count = wxMin( (update.height / m_lineHeight) + 2, 
                                 (int)(model->GetNumberOfRows()-item_start) );
 
     wxRect cell_rect;

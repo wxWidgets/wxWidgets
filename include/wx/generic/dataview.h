@@ -189,16 +189,21 @@ protected:
 class WXDLLIMPEXP_CORE wxDataViewColumn: public wxDataViewColumnBase
 {
 public:
-    wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column, int flags = 0 );
+    wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column, 
+        int fixed_width = 80, wxDataViewColumnSizing sizing = wxDATAVIEW_COL_WIDTH_FIXED, int flags = 0 );
     virtual ~wxDataViewColumn();
 
     virtual void SetTitle( const wxString &title );
 
-    void SetWidth( int width ) { m_width = width; }
-    int GetWidth() { return m_width; }
+    virtual int GetWidth();
 
+    virtual void SetFixedWidth( int width );
+    virtual int GetFixedWidth();
+    
 private:
-    int     m_width;
+    int                      m_width;
+    wxDataViewColumnSizing   m_sizing;
+    int                      m_fixedWidth;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumn)

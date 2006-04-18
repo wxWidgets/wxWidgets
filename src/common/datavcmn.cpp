@@ -515,7 +515,8 @@ wxDataViewCellBase::wxDataViewCellBase( const wxString &varianttype, wxDataViewC
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumnBase, wxObject)
 
-wxDataViewColumnBase::wxDataViewColumnBase( const wxString &title, wxDataViewCell *cell, size_t model_column, int flags)
+wxDataViewColumnBase::wxDataViewColumnBase( const wxString &title, wxDataViewCell *cell, size_t model_column, 
+        int fixed_width, wxDataViewColumnSizing sizing, int flags )
 {
     m_cell = cell;
     m_model_column = model_column;
@@ -581,12 +582,12 @@ bool wxDataViewCtrlBase::AppendTextColumn( const wxString &label, size_t model_c
 
 bool wxDataViewCtrlBase::AppendToggleColumn( const wxString &label, size_t model_column )
 {
-    return AppendColumn( new wxDataViewColumn( label, new wxDataViewToggleCell(), model_column ) );
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewToggleCell(), model_column, 30 ) );
 }
 
 bool wxDataViewCtrlBase::AppendProgressColumn( const wxString &label, size_t model_column )
 {
-    return AppendColumn( new wxDataViewColumn( label, new wxDataViewProgressCell(), model_column ) );
+    return AppendColumn( new wxDataViewColumn( label, new wxDataViewProgressCell(), model_column, 70 ) );
 }
 
 bool wxDataViewCtrlBase::AppendDateColumn( const wxString &label, size_t model_column )
