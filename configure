@@ -27490,15 +27490,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                     ;;
         esac
 
-        ac_ext=cc
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
         if test "$WXGTK20" = 1; then
-            save_CFLAGS="$CFLAGS"
+            save_CXXFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
             CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
             LIBS="$LIBS $wx_cv_libs_gtk"
@@ -27533,7 +27526,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -27596,7 +27589,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -27636,6 +27629,13 @@ echo "$as_me: WARNING: Unicode configuration not supported with GTK+ 1.x" >&2;}
                 wxUSE_UNICODE=no
             fi
         fi
+
+        ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
 
                         if test "$USE_DARWIN" != 1; then
 
@@ -29702,9 +29702,9 @@ echo "$as_me: WARNING: pangoxft library not found, library will be compiled with
 
   fi
 
-                save_CFLAGS="$CFLAGS"
+                save_CXXFLAGS="$CXXFLAGS"
                 save_LIBS="$LIBS"
-                CFLAGS="$PANGOX_CFLAGS $CFLAGS"
+                CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
                 LIBS="$LIBS $PANGOX_LIBS"
 
 for ac_func in pango_font_family_is_monospace
@@ -29807,7 +29807,7 @@ _ACEOF
 fi
 done
 
-                CFLAGS="$save_CFLAGS"
+                CXXFLAGS="$save_CXXFLAGS"
                 LIBS="$save_LIBS"
         fi
 
@@ -29862,8 +29862,8 @@ echo "${ECHO_T}found in $ac_find_includes" >&6
 
             TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
         else
-            save_CFLAGS=$CFLAGS
-            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+            save_CXXFLAGS=$CXXFLAGS
+            CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
 
             cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -29926,7 +29926,7 @@ echo "$as_me: error: please set CPPFLAGS to contain the location of Xm/Xm.h" >&2
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
-            CFLAGS=$save_CFLAGS
+            CXXFLAGS=$save_CXXFLAGS
         fi
 
 
@@ -29964,8 +29964,8 @@ echo "${ECHO_T}found in $ac_find_libraries" >&6
 
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
         else
-                                                save_CFLAGS=$CFLAGS
-            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+                                                save_CXXFLAGS=$CXXFLAGS
+            CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
             save_LIBS="$LIBS"
             LIBS="$GUI_TK_LIBRARY -lXm -lXmu -lXext -lX11"
 
@@ -30031,7 +30031,7 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
-            CFLAGS=$save_CFLAGS
+            CXXFLAGS=$save_CXXFLAGS
             LIBS="$save_LIBS"
         fi
 
@@ -30046,8 +30046,8 @@ echo $ECHO_N "checking if we need -lXp and/or -lSM -lICE... $ECHO_C" >&6
                     if test "$libs_found" = "0"; then
                         save_LIBS="$LIBS"
                         LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
-                        save_CFLAGS=$CFLAGS
-                        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+                        save_CXXFLAGS=$CXXFLAGS
+                        CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
 
                         cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -30111,7 +30111,7 @@ rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
                         LIBS="$save_LIBS"
-                        CFLAGS=$save_CFLAGS
+                        CXXFLAGS=$save_CXXFLAGS
                     fi
                 done
             fi
@@ -30193,8 +30193,8 @@ if test $ac_cv_lib_Sgm_SgCreateList = yes; then
 fi
 
 
-        save_CFLAGS=$CFLAGS
-        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+        save_CXXFLAGS=$CXXFLAGS
+        CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
 
         echo "$as_me:$LINENO: checking for Motif 2" >&5
 echo $ECHO_N "checking for Motif 2... $ECHO_C" >&6
@@ -30337,7 +30337,7 @@ _ACEOF
 
         fi
 
-        CFLAGS=$save_CFLAGS
+        CXXFLAGS=$save_CXXFLAGS
 
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY${libsgm_link} -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
         TOOLKIT=MOTIF
@@ -30384,8 +30384,8 @@ if test "${wx_cv_x11_xpm_h+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
-                        save_CFLAGS=$CFLAGS
-                        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+                        save_CXXFLAGS=$CXXFLAGS
+                        CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
 
                         cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -30438,7 +30438,7 @@ wx_cv_x11_xpm_h=no
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
-                        CFLAGS=$save_CFLAGS
+                        CXXFLAGS=$save_CXXFLAGS
 
 
 fi
@@ -30531,8 +30531,8 @@ fi
 
 
         if test "$wxHAVE_XEXT_LIB" = 1; then
-            save_CFLAGS="$CFLAGS"
-            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+            save_CXXFLAGS="$CXXFLAGS"
+            CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
 
             echo "$as_me:$LINENO: checking for X11/extensions/shape.h" >&5
 echo $ECHO_N "checking for X11/extensions/shape.h... $ECHO_C" >&6
@@ -30597,7 +30597,7 @@ echo "${ECHO_T}not found" >&6
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-            CFLAGS="$save_CFLAGS"
+            CXXFLAGS="$save_CXXFLAGS"
 
         fi
     fi
@@ -36944,7 +36944,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
 
 
     THREADS_LINK=
-    THREADS_CFLAGS=
+    THREADS_CXXFLAGS=
 
     if test "$wxUSE_THREADS" = "yes" ; then
         if test "$USE_BEOS" = 1; then
@@ -37010,7 +37010,7 @@ echo $ECHO_N "checking whether pthreads work without any flags... $ECHO_C" >&6
                 -*)
                     echo "$as_me:$LINENO: checking whether pthreads work with $flag" >&5
 echo $ECHO_N "checking whether pthreads work with $flag... $ECHO_C" >&6
-                    THREADS_CFLAGS="$flag"
+                    THREADS_CXXFLAGS="$flag"
                     ;;
 
                 *)
@@ -37021,9 +37021,9 @@ echo $ECHO_N "checking for the pthreads library -l$flag... $ECHO_C" >&6
               esac
 
               save_LIBS="$LIBS"
-              save_CFLAGS="$CFLAGS"
+              save_CXXFLAGS="$CXXFLAGS"
               LIBS="$THREADS_LINK $LIBS"
-              CFLAGS="$THREADS_CFLAGS $CFLAGS"
+              CXXFLAGS="$THREADS_CXXFLAGS $CXXFLAGS"
 
               cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -37071,7 +37071,7 @@ rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
               LIBS="$save_LIBS"
-              CFLAGS="$save_CFLAGS"
+              CXXFLAGS="$save_CXXFLAGS"
 
               echo "$as_me:$LINENO: result: $THREADS_OK" >&5
 echo "${ECHO_T}$THREADS_OK" >&6
@@ -37080,7 +37080,7 @@ echo "${ECHO_T}$THREADS_OK" >&6
               fi
 
               THREADS_LINK=""
-              THREADS_CFLAGS=""
+              THREADS_CXXFLAGS=""
       done
 
       if test "x$THREADS_OK" != "xyes"; then
@@ -37088,7 +37088,7 @@ echo "${ECHO_T}$THREADS_OK" >&6
           { echo "$as_me:$LINENO: WARNING: No thread support on this system... disabled" >&5
 echo "$as_me: WARNING: No thread support on this system... disabled" >&2;}
       else
-                              LDFLAGS="$THREADS_CFLAGS $LDFLAGS"
+                              LDFLAGS="$THREADS_CXXFLAGS $LDFLAGS"
           LIBS="$THREADS_LINK $LIBS"
 
           echo "$as_me:$LINENO: checking if more special flags are required for pthreads" >&5
@@ -37115,10 +37115,10 @@ echo $ECHO_N "checking if more special flags are required for pthreads... $ECHO_
           echo "$as_me:$LINENO: result: ${flag}" >&5
 echo "${ECHO_T}${flag}" >&6
           if test "x$flag" != xno; then
-              THREADS_CFLAGS="$THREADS_CFLAGS $flag"
+              THREADS_CXXFLAGS="$THREADS_CXXFLAGS $flag"
           fi
 
-                    WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS $THREADS_CFLAGS"
+                    WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS $THREADS_CXXFLAGS"
       fi
     fi
 
@@ -38397,8 +38397,8 @@ if test "${wx_cv_cflags_mthread+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
-                    CFLAGS_OLD="$CFLAGS"
-                    CFLAGS="-mthreads $CFLAGS"
+                    CXXFLAGS_OLD="$CXXFLAGS"
+                    CXXFLAGS="-mthreads $CXXFLAGS"
                     cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -38451,10 +38451,10 @@ echo "$as_me:$LINENO: result: $wx_cv_cflags_mthread" >&5
 echo "${ECHO_T}$wx_cv_cflags_mthread" >&6
 
             if test "$wx_cv_cflags_mthread" = "yes"; then
-                                WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS -mthreads"
+                                WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -mthreads"
                 LDFLAGS="$LDFLAGS -mthreads"
             else
-                                CFLAGS="$CFLAGS_OLD"
+                                CXXFLAGS="$CXXFLAGS_OLD"
             fi
         ;;
         *-pc-os2*emx )

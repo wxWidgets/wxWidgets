@@ -2919,10 +2919,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                     ;;
         esac
 
-        AC_LANG_POP
-
         if test "$WXGTK20" = 1; then
-            save_CFLAGS="$CFLAGS"
+            save_CXXFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
             CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
             LIBS="$LIBS $wx_cv_libs_gtk"
@@ -2972,6 +2970,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 wxUSE_UNICODE=no
             fi
         fi
+
+        AC_LANG_POP
 
         dnl we need poll() in src/gtk/app.cpp (we know that Darwin doesn't
         dnl have it but we do the check for the others)
@@ -3175,12 +3175,12 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                         AC_MSG_WARN([pangoxft library not found, library will be compiled without anti-aliasing support])
                     ]
                 )
-                save_CFLAGS="$CFLAGS"
+                save_CXXFLAGS="$CXXFLAGS"
                 save_LIBS="$LIBS"
-                CFLAGS="$PANGOX_CFLAGS $CFLAGS"
+                CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
                 LIBS="$LIBS $PANGOX_LIBS"
                 AC_CHECK_FUNCS([pango_font_family_is_monospace])
-                CFLAGS="$save_CFLAGS"
+                CXXFLAGS="$save_CXXFLAGS"
                 LIBS="$save_LIBS"
         fi
 
@@ -3210,8 +3210,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
             TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
         else
-            save_CFLAGS=$CFLAGS
-            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+            save_CXXFLAGS=$CXXFLAGS
+            CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
 
             AC_TRY_COMPILE(
                 [
@@ -3231,7 +3231,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 ]
             )
 
-            CFLAGS=$save_CFLAGS
+            CXXFLAGS=$save_CXXFLAGS
         fi
 
 
@@ -3247,8 +3247,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             dnl it might happen that we found headers in one of the standard
             dnl paths but the libs are elsewhere but still in default (linker)
             dnl path -- try to compile a test program to check for this
-            save_CFLAGS=$CFLAGS
-            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+            save_CXXFLAGS=$CXXFLAGS
+            CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
             save_LIBS="$LIBS"
             LIBS="$GUI_TK_LIBRARY -lXm -lXmu -lXext -lX11"
 
@@ -3270,7 +3270,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 ]
             )
 
-            CFLAGS=$save_CFLAGS
+            CXXFLAGS=$save_CXXFLAGS
             LIBS="$save_LIBS"
         fi
 
@@ -3284,8 +3284,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                     if test "$libs_found" = "0"; then
                         save_LIBS="$LIBS"
                         LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
-                        save_CFLAGS=$CFLAGS
-                        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+                        save_CXXFLAGS=$CXXFLAGS
+                        CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
 
                         AC_TRY_LINK(
                             [
@@ -3308,7 +3308,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                         )
 
                         LIBS="$save_LIBS"
-                        CFLAGS=$save_CFLAGS
+                        CXXFLAGS=$save_CXXFLAGS
                     fi
                 done
             fi
@@ -3323,8 +3323,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         dnl elsewhere
         AC_CHECK_LIB(Sgm, [SgCreateList], [libsgm_link=" -lSgm"])
 
-        save_CFLAGS=$CFLAGS
-        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+        save_CXXFLAGS=$CXXFLAGS
+        CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
 
         AC_CACHE_CHECK([for Motif 2],
             wx_cv_lib_motif2,
@@ -3363,7 +3363,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             AC_DEFINE(__WXLESSTIF__,0)
         fi
 
-        CFLAGS=$save_CFLAGS
+        CXXFLAGS=$save_CXXFLAGS
 
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY${libsgm_link} -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
         TOOLKIT=MOTIF
@@ -3384,8 +3384,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 AC_CACHE_CHECK([for X11/xpm.h],
                     wx_cv_x11_xpm_h,
                     [
-                        save_CFLAGS=$CFLAGS
-                        CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+                        save_CXXFLAGS=$CXXFLAGS
+                        CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
 
                         AC_TRY_COMPILE(
                             [
@@ -3399,7 +3399,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                             wx_cv_x11_xpm_h=no
                         )
 
-                        CFLAGS=$save_CFLAGS
+                        CXXFLAGS=$save_CXXFLAGS
                     ]
                 )
 
@@ -3422,8 +3422,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                      [], [$GUI_TK_LIBRARY -lX11])
 
         if test "$wxHAVE_XEXT_LIB" = 1; then
-            save_CFLAGS="$CFLAGS"
-            CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
+            save_CXXFLAGS="$CXXFLAGS"
+            CXXFLAGS="$TOOLKIT_INCLUDE $CXXFLAGS"
 
             AC_MSG_CHECKING([for X11/extensions/shape.h])
             AC_TRY_COMPILE([
@@ -3442,7 +3442,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                            [
                             AC_MSG_RESULT([not found])
                            ])
-            CFLAGS="$save_CFLAGS"
+            CXXFLAGS="$save_CXXFLAGS"
 
         fi
     fi
@@ -4636,14 +4636,14 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
 
     dnl the code below:
     dnl
-    dnl   defines THREADS_LINK and THREADS_CFLAGS which are the options
+    dnl   defines THREADS_LINK and THREADS_CXXFLAGS which are the options
     dnl   necessary to build the MT programs for the linker and compiler
     dnl   respectively
     dnl
     dnl   sets wxUSE_THREADS=1 if thread support is activated
 
     THREADS_LINK=
-    THREADS_CFLAGS=
+    THREADS_CXXFLAGS=
 
     if test "$wxUSE_THREADS" = "yes" ; then
         if test "$USE_BEOS" = 1; then
@@ -4734,7 +4734,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
 
                 -*)
                     AC_MSG_CHECKING([whether pthreads work with $flag])
-                    THREADS_CFLAGS="$flag"
+                    THREADS_CXXFLAGS="$flag"
                     ;;
 
                 *)
@@ -4744,16 +4744,16 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
               esac
 
               save_LIBS="$LIBS"
-              save_CFLAGS="$CFLAGS"
+              save_CXXFLAGS="$CXXFLAGS"
               LIBS="$THREADS_LINK $LIBS"
-              CFLAGS="$THREADS_CFLAGS $CFLAGS"
+              CXXFLAGS="$THREADS_CXXFLAGS $CXXFLAGS"
 
               AC_TRY_LINK([#include <pthread.h>],
                           [pthread_create(0,0,0,0);],
                           THREADS_OK=yes)
 
               LIBS="$save_LIBS"
-              CFLAGS="$save_CFLAGS"
+              CXXFLAGS="$save_CXXFLAGS"
 
               AC_MSG_RESULT($THREADS_OK)
               if test "x$THREADS_OK" = "xyes"; then
@@ -4761,7 +4761,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
               fi
 
               THREADS_LINK=""
-              THREADS_CFLAGS=""
+              THREADS_CXXFLAGS=""
       done
 
       if test "x$THREADS_OK" != "xyes"; then
@@ -4770,7 +4770,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
       else
           dnl yes, these special compiler flags should be used with the
           dnl linker as well
-          LDFLAGS="$THREADS_CFLAGS $LDFLAGS"
+          LDFLAGS="$THREADS_CXXFLAGS $LDFLAGS"
           LIBS="$THREADS_LINK $LIBS"
 
           AC_MSG_CHECKING([if more special flags are required for pthreads])
@@ -4802,11 +4802,11 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
           esac
           AC_MSG_RESULT(${flag})
           if test "x$flag" != xno; then
-              THREADS_CFLAGS="$THREADS_CFLAGS $flag"
+              THREADS_CXXFLAGS="$THREADS_CXXFLAGS $flag"
           fi
 
           dnl don't add these options to CPPFLAGS as cpp might not know them
-          WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS $THREADS_CFLAGS"
+          WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS $THREADS_CXXFLAGS"
       fi
     fi
 
@@ -4957,8 +4957,8 @@ else
             AC_CACHE_CHECK([if compiler supports -mthreads],
                 wx_cv_cflags_mthread,
                 [
-                    CFLAGS_OLD="$CFLAGS"
-                    CFLAGS="-mthreads $CFLAGS"
+                    CXXFLAGS_OLD="$CXXFLAGS"
+                    CXXFLAGS="-mthreads $CXXFLAGS"
                     AC_TRY_COMPILE([], [],
                         wx_cv_cflags_mthread=yes,
                         wx_cv_cflags_mthread=no
@@ -4968,11 +4968,11 @@ else
 
             if test "$wx_cv_cflags_mthread" = "yes"; then
                 dnl it does, use it
-                WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS -mthreads"
+                WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -mthreads"
                 LDFLAGS="$LDFLAGS -mthreads"
             else
                 dnl it doesn't
-                CFLAGS="$CFLAGS_OLD"
+                CXXFLAGS="$CXXFLAGS_OLD"
             fi
         ;;
         *-pc-os2*emx )
