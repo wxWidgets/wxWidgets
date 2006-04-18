@@ -55,6 +55,9 @@ public:
                                            wxMenu *submenu,
                                            const wxString& help = wxPyEmptyString));
 
+    wxMenuItem* AppendSubMenu(wxMenu *submenu,
+                              const wxString& text,
+                              const wxString& help = wxPyEmptyString);
 
     %disownarg(wxMenuItem*);
     // the most generic form of Append() - append anything
