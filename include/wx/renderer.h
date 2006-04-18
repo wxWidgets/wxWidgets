@@ -170,6 +170,15 @@ public:
                                const wxRect& rect,
                                int flags = 0) = 0;
 
+
+    // draw check button
+    //
+    // flags may use wxCONTROL_CHECKED, wxCONTROL_UNDETERMINED and wxCONTROL_CURRENT
+    virtual void DrawCheckButton(wxWindow *win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags = 0) = 0;
+                                 
     // geometry functions
     // ------------------
 
@@ -272,6 +281,12 @@ public:
                                int flags = 0)
         { m_rendererNative.DrawDropArrow(win, dc, rect, flags); }
 
+    virtual void DrawCheckButton(wxWindow *win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags = 0 )
+        { m_rendererNative.DrawCheckButton( win, dc, rect, flags ); }
+        
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }
 

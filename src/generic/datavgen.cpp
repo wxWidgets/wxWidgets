@@ -315,26 +315,23 @@ bool wxDataViewToggleCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
     // User wxRenderer here
 
-    if (GetMode() == wxDATAVIEW_CELL_ACTIVATABLE)
-        dc->SetPen( *wxBLACK_PEN );
-    else
-        dc->SetPen( *wxGREY_PEN );
-    dc->SetBrush( *wxTRANSPARENT_BRUSH );
     wxRect rect;
     rect.x = cell.x + cell.width/2 - 10;
     rect.width = 20;
     rect.y = cell.y + cell.height/2 - 10;
     rect.height = 20;
-    dc->DrawRectangle( rect );
+    
+    int flags = 0;
     if (m_toggle)
-    {
-        rect.x += 2;
-        rect.y += 2;
-        rect.width -= 4;
-        rect.height -= 4;
-        dc->DrawLine( rect.x, rect.y, rect.x+rect.width, rect.y+rect.height );
-        dc->DrawLine( rect.x+rect.width, rect.y, rect.x, rect.y+rect.height );
-    }
+        flags |= wxCONTROL_CHECKED;
+    if (GetMode() != wxDATAVIEW_CELL_ACTIVATABLE)
+        flags |= wxCONTROL_DISABLED;
+
+    wxRendererNative::Get().DrawCheckButton(
+            GetOwner()->GetOwner(),
+            *dc,
+            rect,
+            flags );
 
     return true;
 }

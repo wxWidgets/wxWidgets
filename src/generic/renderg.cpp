@@ -78,6 +78,11 @@ public:
                                const wxRect& rect,
                                int flags = 0);
 
+    virtual void DrawCheckButton(wxWindow *win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags = 0);
+                                 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
     virtual wxRendererVersion GetVersion() const
@@ -393,6 +398,30 @@ wxRendererGeneric::DrawDropArrow(wxWindow *win,
     dc.SetBrush(wxBrush(win->GetForegroundColour()));
     dc.SetPen(wxPen(win->GetForegroundColour()));
     dc.DrawPolygon(WXSIZEOF(pt), pt, rect.x, rect.y);
+}
+
+void 
+wxRendererGeneric::DrawCheckButton(wxWindow *win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int flags)
+{
+    if (flags & wxCONTROL_DISABLED)
+        dc.SetPen( *wxGREY_PEN );
+    else
+        dc.SetPen( *wxBLACK_PEN );
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    wxRect my_rect = rect;
+    dc.DrawRectangle( my_rect );
+    if (flags & wxCONTROL_CHECKED)
+    {
+        my_rect.x += 2;
+        my_rect.y += 2;
+        my_rect.width -= 4;
+        my_rect.height -= 4;
+        dc.DrawLine( my_rect.x, my_rect.y, my_rect.x+my_rect.width, my_rect.y+my_rect.height );
+        dc.DrawLine( my_rect.x+my_rect.width, my_rect.y, my_rect.x, my_rect.y+my_rect.height );
+    }
 }
 
 // ----------------------------------------------------------------------------

@@ -78,6 +78,11 @@ public:
                                const wxRect& rect,
                                int flags = 0);
 
+    virtual void DrawCheckButton(wxWindow *win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags = 0);
+                                 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
 private:
@@ -88,6 +93,9 @@ private:
 
     // used by DrawTreeItemButton()
     static GtkWidget *GetTreeWidget();
+    
+    // used by DrawCheckButton()
+    static GtkWidget *GetCheckButtonWidget();
 };
 
 // ============================================================================
@@ -117,6 +125,24 @@ wxRendererGTK::GetButtonWidget()
         s_window = gtk_window_new( GTK_WINDOW_POPUP );
         gtk_widget_realize( s_window );
         s_button = gtk_button_new();
+        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        gtk_widget_realize( s_button );
+    }
+
+    return s_button;
+}
+
+GtkWidget *
+wxRendererGTK::GetCheckButtonWidget()
+{
+    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_window = NULL;
+
+    if ( !s_button )
+    {
+        s_window = gtk_window_new( GTK_WINDOW_POPUP );
+        gtk_widget_realize( s_window );
+        s_button = gtk_check_button_new();
         gtk_container_add( GTK_CONTAINER(s_window), s_button );
         gtk_widget_realize( s_button );
     }
@@ -431,3 +457,38 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
 
 }
 
+void 
+wxRendererGTK::DrawCheckButton(wxWindow *win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags )
+{
+    GtkWidget *button = GetCheckButtonWidget();
+
+    // for reason why we do this, see DrawDropArrow
+    wxWindowDC& wdc = (wxWindowDC&)dc;
+    wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
+    
+    GtkStateType state;
+
+    if ( flags & wxCONTROL_PRESSED )
+        state = GTK_STATE_ACTIVE;
+    else if ( flags & wxCONTROL_DISABLED )
+        state = GTK_STATE_INSENSITIVE;
+    else if ( flags & wxCONTROL_CURRENT )
+        state = GTK_STATE_PRELIGHT;
+    else
+        state = GTK_STATE_NORMAL;
+    
+    gtk_paint_check
+    (
+        button->style,
+        wdc.m_window,
+        state,
+        flags & wxCONTROL_CHECKED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
+        NULL,
+        button,
+        "cellcheck",
+        rect.x, rect.y, 13, 13
+    );
+}
