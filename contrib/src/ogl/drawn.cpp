@@ -361,12 +361,12 @@ void wxDrawnShape::DestroyClippingRect()
     m_metafiles[m_currentAngle].DestroyClippingRect();
 }
 
-void wxDrawnShape::SetDrawnPen(wxPen* pen, bool isOutline)
+void wxDrawnShape::SetDrawnPen(const wxPen* pen, bool isOutline)
 {
     m_metafiles[m_currentAngle].SetPen(pen, isOutline);
 }
 
-void wxDrawnShape::SetDrawnBrush(wxBrush* brush, bool isFill)
+void wxDrawnShape::SetDrawnBrush(const wxBrush* brush, bool isFill)
 {
     m_metafiles[m_currentAngle].SetBrush(brush, isFill);
 }
@@ -2417,9 +2417,9 @@ void wxPseudoMetaFile::DestroyClippingRect()
     m_ops.Append(theOp);
 }
 
-void wxPseudoMetaFile::SetPen(wxPen* pen, bool isOutline)
+void wxPseudoMetaFile::SetPen(const wxPen* pen, bool isOutline)
 {
-    m_gdiObjects.Append(pen);
+    m_gdiObjects.Append(wx_const_cast(wxPen*, pen));
     int n = m_gdiObjects.GetCount();
 
     wxOpSetGDI* theOp = new wxOpSetGDI(DRAWOP_SET_PEN, this, n - 1);
@@ -2432,9 +2432,9 @@ void wxPseudoMetaFile::SetPen(wxPen* pen, bool isOutline)
     }
 }
 
-void wxPseudoMetaFile::SetBrush(wxBrush* brush, bool isFill)
+void wxPseudoMetaFile::SetBrush(const wxBrush* brush, bool isFill)
 {
-    m_gdiObjects.Append(brush);
+    m_gdiObjects.Append(wx_const_cast(wxBrush*, brush));
     int n = m_gdiObjects.GetCount();
 
     wxOpSetGDI* theOp = new wxOpSetGDI(DRAWOP_SET_BRUSH, this, n - 1);

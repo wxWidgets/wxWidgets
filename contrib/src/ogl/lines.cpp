@@ -836,7 +836,7 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
 
 void wxLineShape::OnErase(wxDC& dc)
 {
-    wxPen *old_pen = m_pen;
+    const wxPen *old_pen = m_pen;
     const wxBrush *old_brush = m_brush;
     wxPen bg_pen = GetBackgroundPen();
     wxBrush bg_brush = GetBackgroundBrush();
@@ -957,7 +957,7 @@ void wxLineShape::FindNth(wxShape *image, int *nth, int *no_arcs, bool incoming)
 
 void wxLineShape::OnDrawOutline(wxDC& dc, double WXUNUSED(x), double WXUNUSED(y), double WXUNUSED(w), double WXUNUSED(h))
 {
-  wxPen *old_pen = m_pen;
+  const wxPen *old_pen = m_pen;
   const wxBrush *old_brush = m_brush;
 
   wxPen dottedPen(*wxBLACK, 1, wxDOT);
@@ -1741,7 +1741,7 @@ void wxLineShape::OnSizingDragLeft(wxControlPoint* pt, bool WXUNUSED(draw), doub
 
     wxLineShape *lineShape = (wxLineShape *)this;
 
-    wxPen *old_pen = lineShape->GetPen();
+    const wxPen *old_pen = lineShape->GetPen();
     const wxBrush *old_brush = lineShape->GetBrush();
 
     wxPen dottedPen(*wxBLACK, 1, wxDOT);
@@ -1789,7 +1789,7 @@ void wxLineShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, 
     lpt->m_xpos = x; lpt->m_ypos = y;
     lpt->m_point->x = x; lpt->m_point->y = y;
 
-    wxPen *old_pen = lineShape->GetPen();
+    const wxPen *old_pen = lineShape->GetPen();
     const wxBrush *old_brush = lineShape->GetBrush();
 
     wxPen dottedPen(*wxBLACK, 1, wxDOT);

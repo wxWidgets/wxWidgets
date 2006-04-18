@@ -684,7 +684,7 @@ bool wxShape::GetPerimeterPoint(double WXUNUSED(x1), double WXUNUSED(y1),
   return false;
 }
 
-void wxShape::SetPen(wxPen *the_pen)
+void wxShape::SetPen(const wxPen *the_pen)
 {
   m_pen = the_pen;
 }

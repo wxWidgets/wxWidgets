@@ -154,7 +154,7 @@ class DiagramCommand: public wxCommand
   bool deleteShape;
 
   // Storage for property commands
-  wxBrush *shapeBrush;
+  const wxBrush *shapeBrush;
   wxPen *shapePen;
   wxString shapeLabel;
  public:

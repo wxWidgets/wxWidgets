@@ -233,8 +233,8 @@ bool DiagramCommand::Do(void)
         theShape->AssignNewIds();
         theShape->SetEventHandler(new MyEvtHandler(theShape, theShape, wxEmptyString));
         theShape->SetCentreResize(false);
-        theShape->SetPen(*wxBLACK_PEN);
-        theShape->SetBrush(*wxCYAN_BRUSH);
+        theShape->SetPen(wxBLACK_PEN);
+        theShape->SetBrush(wxCYAN_BRUSH);
 
         theShape->SetSize(60, 60);
       }

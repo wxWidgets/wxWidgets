@@ -300,7 +300,7 @@ class WXDLLIMPEXP_OGL wxShape: public wxShapeEvtHandler
   inline void SetId(long i) { m_id = i; }
   inline long GetId() const { return m_id; }
 
-  void SetPen(wxPen *pen);
+  void SetPen(const wxPen *pen);
   void SetBrush(const wxBrush *brush);
 
   virtual void Show(bool show);
@@ -329,7 +329,7 @@ class WXDLLIMPEXP_OGL wxShape: public wxShapeEvtHandler
 
   void AddText(const wxString& string);
 
-  inline wxPen *GetPen() const { return m_pen; }
+  inline const wxPen *GetPen() const { return m_pen; }
   inline const wxBrush *GetBrush() const { return m_brush; }
 
   /*
@@ -527,7 +527,7 @@ class WXDLLIMPEXP_OGL wxShape: public wxShapeEvtHandler
   wxShapeEvtHandler*    m_eventHandler;
   bool                  m_formatted;
   double                m_xpos, m_ypos;
-  wxPen*                m_pen;
+  const wxPen*          m_pen;
   const wxBrush*        m_brush;
   wxFont*               m_font;
   wxColour              m_textColour;
