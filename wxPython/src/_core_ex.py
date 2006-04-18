@@ -280,10 +280,5 @@ from _windows import *
 from _controls import *
 from _misc import *
 
-
-# Fixup the stock objects since they can't be used yet.  (They will be
-# restored in wx.PyApp.OnInit.)
-_core_._wxPyFixStockObjects()
-
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------

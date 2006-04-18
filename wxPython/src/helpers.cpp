@@ -457,10 +457,6 @@ void wxPyApp::_BootstrapApp()
 
 //        wxSystemOptions::SetOption(wxT("mac.textcontrol-use-mlte"), 1);
         
-        // The stock objects were all NULL when they were loaded into
-        // SWIG generated proxies, so re-init those now...
-        wxPy_ReinitStockObjects(3);
-
         wxPyEndBlockThreads(blocked);
         haveInitialized = true;
     }
@@ -588,9 +584,6 @@ void __wxPyPreStart(PyObject* moduleDict)
     // Ensure that the build options in the DLL (or whatever) match this build
     wxApp::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE, "wxPython");
 
-    // Init the stock objects to a non-NULL value so SWIG doesn't create them as None
-    wxPy_ReinitStockObjects(1);
-
     wxInitAllImageHandlers();
 }
 
@@ -716,163 +709,6 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
 }
 
 
-
-//---------------------------------------------------------------------------
-
-// The stock objects are no longer created when the wx._core_ module is
-// imported, but only after the app object has been created.  The
-// wxPy_ReinitStockObjects function will be called 3 times to pass the stock
-// objects though various stages of evolution:
-//
-//   pass 1: Set all the pointers to a non-NULL value so the Python proxy
-//           object will be created (otherwise SWIG will just use None.)
-//
-//   pass 2: After the module has been imported and the python proxys have
-//           been created, then set the __class__ to be _wxPyUnbornObject so
-//           it will catch any access to the object and will raise an exception.
-//
-//   pass 3: Finally, from BootstrapApp patch things up so the stock objects
-//           can be used.
-
-
-PyObject* __wxPyFixStockObjects(PyObject* /* self */, PyObject* args)
-{
-    wxPy_ReinitStockObjects(2);
-    RETURN_NONE();
-}
-
-
-static void rsoPass2(const char* name)
-{
-    static PyObject* unbornObjectClass = NULL;
-    PyObject* obj;
-
-    if (unbornObjectClass == NULL) {
-        unbornObjectClass = PyDict_GetItemString(wxPython_dict, "_wxPyUnbornObject");
-        Py_INCREF(unbornObjectClass);
-    }
-
-    // Find the object instance
-    obj = PyDict_GetItemString(wxPython_dict, (char*)dropwx(name));
-    wxCHECK_RET(obj != NULL, wxT("Unable to find stock object"));
-    wxCHECK_RET(wxPySwigInstance_Check(obj), wxT("Not a swig instance"));
-
-    // Change its class
-    PyObject_SetAttrString(obj, "__class__",  unbornObjectClass);
-
-}
-
-static void rsoPass3(const char* name, const char* classname, void* ptr)
-{
-    PyObject* obj;
-    PyObject* classobj;
-    PyObject* ptrobj;
-
-    // Find the object instance
-    obj = PyDict_GetItemString(wxPython_dict, (char*)dropwx(name));
-    wxCHECK_RET(obj != NULL, wxT("Unable to find stock object"));
-    wxCHECK_RET(wxPySwigInstance_Check(obj), wxT("Not a swig instance"));
-
-    // Find the class object and put it back in the instance
-    classobj = PyDict_GetItemString(wxPython_dict, (char*)dropwx(classname));
-    wxCHECK_RET(classobj != NULL, wxT("Unable to find stock class object"));
-    PyObject_SetAttrString(obj, "__class__",  classobj);
-
-    // Rebuild the .this swigified pointer with the new value of the C++ pointer
-    ptrobj = wxPyMakeSwigPtr(ptr, wxString(classname, *wxConvCurrent));
-    PyObject_SetAttrString(obj, "this", ptrobj);
-    Py_DECREF(ptrobj);
-}
-
-
-
-void wxPy_ReinitStockObjects(int pass)
-{
-
-    // If there is already an App object then wxPython is probably embedded in
-    // a wx C++ application, so there is no need to do all this.
-    static bool embedded = false;
-    if ((pass == 1 || pass == 2) && wxTheApp) {
-        embedded = true;
-        return;
-    }
-    if (pass == 3 && embedded)
-        return;
-
-
-#define REINITOBJ(name, classname) \
-    if (pass == 1) { name = (classname*)0xC0C0C0C0; } \
-    else if (pass == 2) { rsoPass2(#name); } \
-    else if (pass == 3) { rsoPass3(#name, #classname, (void*)name); }
-
-
-#define REINITOBJ2(name, classname) \
-    if (pass == 1) { } \
-    else if (pass == 2) { rsoPass2(#name); } \
-    else if (pass == 3) { rsoPass3(#name, #classname, (void*)&name); }
-
-
-    REINITOBJ(wxNORMAL_FONT, wxFont);
-    REINITOBJ(wxSMALL_FONT, wxFont);
-    REINITOBJ(wxITALIC_FONT, wxFont);
-    REINITOBJ(wxSWISS_FONT, wxFont);
-
-    REINITOBJ(wxRED_PEN, wxPen);
-    REINITOBJ(wxCYAN_PEN, wxPen);
-    REINITOBJ(wxGREEN_PEN, wxPen);
-    REINITOBJ(wxBLACK_PEN, wxPen);
-    REINITOBJ(wxWHITE_PEN, wxPen);
-    REINITOBJ(wxTRANSPARENT_PEN, wxPen);
-    REINITOBJ(wxBLACK_DASHED_PEN, wxPen);
-    REINITOBJ(wxGREY_PEN, wxPen);
-    REINITOBJ(wxMEDIUM_GREY_PEN, wxPen);
-    REINITOBJ(wxLIGHT_GREY_PEN, wxPen);
-
-    REINITOBJ(wxBLUE_BRUSH, wxBrush);
-    REINITOBJ(wxGREEN_BRUSH, wxBrush);
-    REINITOBJ(wxWHITE_BRUSH, wxBrush);
-    REINITOBJ(wxBLACK_BRUSH, wxBrush);
-    REINITOBJ(wxTRANSPARENT_BRUSH, wxBrush);
-    REINITOBJ(wxCYAN_BRUSH, wxBrush);
-    REINITOBJ(wxRED_BRUSH, wxBrush);
-    REINITOBJ(wxGREY_BRUSH, wxBrush);
-    REINITOBJ(wxMEDIUM_GREY_BRUSH, wxBrush);
-    REINITOBJ(wxLIGHT_GREY_BRUSH, wxBrush);
-
-    REINITOBJ(wxBLACK, wxColour);
-    REINITOBJ(wxWHITE, wxColour);
-    REINITOBJ(wxRED, wxColour);
-    REINITOBJ(wxBLUE, wxColour);
-    REINITOBJ(wxGREEN, wxColour);
-    REINITOBJ(wxCYAN, wxColour);
-    REINITOBJ(wxLIGHT_GREY, wxColour);
-
-    REINITOBJ(wxSTANDARD_CURSOR, wxCursor);
-    REINITOBJ(wxHOURGLASS_CURSOR, wxCursor);
-    REINITOBJ(wxCROSS_CURSOR, wxCursor);
-
-    REINITOBJ2(wxNullBitmap, wxBitmap);
-    REINITOBJ2(wxNullIcon, wxIcon);
-    REINITOBJ2(wxNullCursor, wxCursor);
-    REINITOBJ2(wxNullPen, wxPen);
-    REINITOBJ2(wxNullBrush, wxBrush);
-    REINITOBJ2(wxNullPalette, wxPalette);
-    REINITOBJ2(wxNullFont, wxFont);
-    REINITOBJ2(wxNullColour, wxColour);
-
-    REINITOBJ(wxTheFontList, wxFontList);
-    REINITOBJ(wxThePenList, wxPenList);
-    REINITOBJ(wxTheBrushList, wxBrushList);
-    REINITOBJ(wxTheColourDatabase, wxColourDatabase);
-
-
-    REINITOBJ2(wxDefaultValidator, wxValidator);
-    REINITOBJ2(wxNullImage, wxImage);
-    REINITOBJ2(wxNullAcceleratorTable, wxAcceleratorTable);
-
-#undef REINITOBJ
-#undef REINITOBJ2
-}
 
 //---------------------------------------------------------------------------
 

@@ -28,7 +28,6 @@
 %include __core_rename.i
 
 %native(_wxPySetDictionary)   __wxPySetDictionary;
-%native(_wxPyFixStockObjects) __wxPyFixStockObjects;
 
 
 %pythoncode {

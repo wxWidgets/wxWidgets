@@ -112,7 +112,7 @@ class  wxTreeListHeaderWindow : public wxWindow
 {
 protected:
     wxTreeListMainWindow *m_owner;
-    wxCursor             *m_currentCursor;
+    const wxCursor       *m_currentCursor;
     wxCursor             *m_resizeCursor;
     bool                 m_isDragging;
 

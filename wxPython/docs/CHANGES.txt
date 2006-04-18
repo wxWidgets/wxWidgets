@@ -114,6 +114,22 @@ not a top-level window.
 Added GetResourcesDir and GetLocalizedResourcesDir to
 wx.StandardPaths. 
 
+Added a GetReceivedFormat method to wx.DataObjectComposite.  You can
+use this to find out what format of data object was recieved from the
+source of the clipboard or DnD operation, and then you'll know which
+of the component data objects to use to access the data.
+
+Changed how the stock objects (wx.RED, wx.RED_PEN, wx.RED_BRUSH, etc.)
+are initialized.  They are now created as a wrapper object that
+initializes itself on first use (when an attribute of the object is
+requested.)  This was needed because of similar delayed initialization
+functionality that was implemented in wxWidgets, but the end result is
+cleaner for wxPython as well, and allowed me to remove some ugly code
+under the covers.
+
+
+
+
 
 
 2.6.3.2
@@ -183,7 +199,8 @@ need to modify any of the \*.i files or to add your own, then you will
 want to be sure to use a matching SWIG.  See wxPython/SWIG/README.txt
 in the source tarball for details.
 
-wx.Image.Copy now also copies the alpha channel.
+wx.Image.Copy, Mirror, and GetSubImage now also do the right thing
+with  the alpha channel.
 
 wxMSW: Fixed problem in wx.TextCtrl where using SetValue and
 wx.TE_RICH2 would cause the control to be shown if it was hidden. 
@@ -239,6 +256,10 @@ scrollbars when the plot is zoomed in, and also the ability to grab a
 zoomed plot and move it around with a mouse drag.
 
 XRCed updated to allow wxMenuBar to be created inside a wxFrame.
+
+Added wx.StandardPaths.GetDocumentsDir() (patch 1214360)
+
+
 
 
 

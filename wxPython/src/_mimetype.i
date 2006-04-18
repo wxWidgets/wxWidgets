@@ -295,7 +295,6 @@ public:
 
 //---------------------------------------------------------------------------
 
-// See also wxPy_ReinitStockObjects in helpers.cpp
 wxMimeTypesManager* const wxTheMimeTypesManager;
 
 

@@ -1013,7 +1013,6 @@ range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees", "");
 
 
 
-// See also wxPy_ReinitStockObjects in helpers.cpp
 %immutable;
 const wxImage    wxNullImage;
 %mutable;
