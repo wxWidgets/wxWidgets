@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmlpars.cpp
+// Name:        src/html/htmlpars.cpp
 // Purpose:     wxHtmlParser class (generic parser)
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -9,12 +9,11 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-#if wxUSE_HTML && wxUSE_STREAMS
-
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WXPRECOMP
     #include "wx/log.h"
@@ -135,7 +134,7 @@ void wxHtmlParser::CreateDOMTree()
 {
     wxHtmlTagsCache cache(m_Source);
     m_TextPieces = new wxHtmlTextPieces;
-    CreateDOMSubTree(NULL, 0, m_Source.Length(), &cache);
+    CreateDOMSubTree(NULL, 0, m_Source.length(), &cache);
     m_CurTextPiece = 0;
 }
 
@@ -272,7 +271,7 @@ void wxHtmlParser::DoParsing()
 {
     m_CurTag = m_Tags;
     m_CurTextPiece = 0;
-    DoParsing(0, m_Source.Length());
+    DoParsing(0, m_Source.length());
 }
 
 void wxHtmlParser::DoParsing(int begin_pos, int end_pos)

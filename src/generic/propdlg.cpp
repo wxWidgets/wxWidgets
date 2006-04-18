@@ -13,10 +13,8 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
-
-#include "wx/defs.h"
 
 #if wxUSE_BOOKCTRL
 
@@ -145,7 +143,7 @@ wxBookCtrlBase* wxPropertySheetDialog::CreateBookCtrl()
 #endif
 
     wxBookCtrlBase* bookCtrl = NULL;
-    
+
 #if wxUSE_NOTEBOOK
     if (GetSheetStyle() & wxPROPSHEET_NOTEBOOK)
         bookCtrl = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
@@ -169,10 +167,10 @@ wxBookCtrlBase* wxPropertySheetDialog::CreateBookCtrl()
 #endif
     if (!bookCtrl)
         bookCtrl = new wxBookCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
-    
+
     if (GetSheetStyle() & wxPROPSHEET_SHRINKTOFIT)
         bookCtrl->SetFitToCurrentPage(true);
-    
+
     return bookCtrl;
 }
 
@@ -211,7 +209,7 @@ void wxPropertySheetDialog::OnActivate(wxActivateEvent& event)
 void wxPropertySheetDialog::OnIdle(wxIdleEvent& event)
 {
     event.Skip();
-    
+
     if ((GetSheetStyle() & wxPROPSHEET_SHRINKTOFIT) && GetBookCtrl())
     {
         int sel = GetBookCtrl()->GetSelection();
@@ -228,4 +226,3 @@ void wxPropertySheetDialog::OnIdle(wxIdleEvent& event)
 }
 
 #endif // wxUSE_BOOKCTRL
-

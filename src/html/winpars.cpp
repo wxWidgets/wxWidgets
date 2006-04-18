@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        winpars.cpp
+// Name:        src/html/winpars.cpp
 // Purpose:     wxHtmlParser class (generic parser)
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -9,12 +9,11 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-#if wxUSE_HTML && wxUSE_STREAMS
-
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WXPRECOMP
     #include "wx/intl.h"
@@ -602,4 +601,3 @@ void wxHtmlTagsModule::OnExit()
 }
 
 #endif
-

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        m_layout.cpp
+// Name:        src/html/m_layout.cpp
 // Purpose:     wxHtml module for basic paragraphs/layout handling
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -9,13 +9,11 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-
-#if wxUSE_HTML && wxUSE_STREAMS
-
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WXPRECOMP
 #endif

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmprint.cpp
+// Name:        src/html/htmprint.cpp
 // Purpose:     html printing classes
 // Author:      Vaclav Slavik
 // Created:     25/09/99
@@ -11,19 +11,17 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_HTML && wxUSE_PRINTING_ARCHITECTURE && wxUSE_STREAMS
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/dc.h"
 #endif
-
-#if wxUSE_HTML && wxUSE_PRINTING_ARCHITECTURE && wxUSE_STREAMS
 
 #include "wx/dc.h"
 #include "wx/print.h"

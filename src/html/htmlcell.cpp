@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmlcell.cpp
+// Name:        src/html/htmlcell.cpp
 // Purpose:     wxHtmlCell - basic element of HTML output
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -9,13 +9,11 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WXPRECOMP
     #include "wx/brush.h"
@@ -1149,7 +1147,7 @@ void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag, double pixel_scale
         int wdi;
         wxString wd = tag.GetParam(wxT("WIDTH"));
 
-        if (wd[wd.Length()-1] == wxT('%'))
+        if (wd[wd.length()-1] == wxT('%'))
         {
             wxSscanf(wd.c_str(), wxT("%i%%"), &wdi);
             SetWidthFloat(wdi, wxHTML_UNITS_PERCENT);

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/bmpbuttn.cpp
+// Name:        src/gtk1/bmpbuttn.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -9,8 +9,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/defs.h"
 
 #if wxUSE_BMPBUTTON
 
@@ -275,4 +273,3 @@ void wxBitmapButton::EndSelect()
 }
 
 #endif // wxUSE_BMPBUTTON
-

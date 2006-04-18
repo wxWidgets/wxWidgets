@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        m_fonts.cpp
+// Name:        src/html/m_fonts.cpp
 // Purpose:     wxHtml module for fonts & colors of fonts
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -9,12 +9,11 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-#if wxUSE_HTML && wxUSE_STREAMS
-
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WXPRECOMP
 #endif

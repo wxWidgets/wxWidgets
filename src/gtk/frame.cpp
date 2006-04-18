@@ -1,11 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        frame.cpp
+// Name:        src/gtk/frame.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
 // ============================================================================
 // declarations
@@ -14,11 +17,6 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-
-// For compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
-
-#include "wx/defs.h"
 
 #include "wx/frame.h"
 #include "wx/dialog.h"

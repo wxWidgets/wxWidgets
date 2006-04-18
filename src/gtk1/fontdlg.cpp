@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/fontdlg.cpp
+// Name:        src/gtk1/fontdlg.cpp
 // Purpose:     wxFontDialog
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -9,8 +9,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/defs.h"
 
 #if wxUSE_FONTDLG
 
@@ -52,7 +50,7 @@ bool gtk_fontdialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUN
 
     win->Close();
 
-    return TRUE;
+    return true;
 }
 }
 
@@ -114,14 +112,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
 bool wxFontDialog::DoCreate(wxWindow *parent)
 {
-    m_needParent = FALSE;
+    m_needParent = false;
 
     if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
         !CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE,
                      wxDefaultValidator, wxT("fontdialog") ))
     {
         wxFAIL_MSG( wxT("wxFontDialog creation failed") );
-        return FALSE;
+        return false;
     }
 
     wxString m_message( _("Choose font") );
@@ -169,7 +167,7 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 wxFontDialog::~wxFontDialog()
@@ -184,4 +182,3 @@ void wxFontDialog::SetChosenFont(const char *fontname)
 #endif // wxUSE_FONTDLG
 
 #endif // GPE
-

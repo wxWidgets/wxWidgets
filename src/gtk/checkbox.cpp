@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        checkbox.cpp
+// Name:        src/gtk/checkbox.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -9,8 +9,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/defs.h"
 
 #if wxUSE_CHECKBOX
 
@@ -113,15 +111,15 @@ bool wxCheckBox::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString &name )
 {
-    m_needParent = TRUE;
-    m_acceptsFocus = TRUE;
-    m_blockEvent = FALSE;
+    m_needParent = true;
+    m_acceptsFocus = true;
+    m_blockEvent = false;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxCheckBox creation failed") );
-        return FALSE;
+        return false;
     }
 
     wxASSERT_MSG( (style & wxCHK_ALLOW_3RD_STATE_FOR_USER) == 0 ||
@@ -161,7 +159,7 @@ bool wxCheckBox::Create(wxWindow *parent,
 
     PostCreation(size);
 
-    return TRUE;
+    return true;
 }
 
 void wxCheckBox::SetValue( bool state )
@@ -171,16 +169,16 @@ void wxCheckBox::SetValue( bool state )
     if (state == GetValue())
         return;
 
-    m_blockEvent = TRUE;
+    m_blockEvent = true;
 
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(m_widgetCheckbox), state );
 
-    m_blockEvent = FALSE;
+    m_blockEvent = false;
 }
 
 bool wxCheckBox::GetValue() const
 {
-    wxCHECK_MSG( m_widgetCheckbox != NULL, FALSE, wxT("invalid checkbox") );
+    wxCHECK_MSG( m_widgetCheckbox != NULL, false, wxT("invalid checkbox") );
 
     return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_widgetCheckbox));
 }
@@ -214,11 +212,11 @@ void wxCheckBox::SetLabel( const wxString& label )
 bool wxCheckBox::Enable( bool enable )
 {
     if ( !wxControl::Enable( enable ) )
-        return FALSE;
+        return false;
 
     gtk_widget_set_sensitive( m_widgetLabel, enable );
 
-    return TRUE;
+    return true;
 }
 
 void wxCheckBox::DoApplyWidgetStyle(GtkRcStyle *style)

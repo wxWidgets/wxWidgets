@@ -10,7 +10,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
 
 #include "wx/bitmap.h"
 #include "wx/palette.h"
@@ -18,7 +20,6 @@
 #include "wx/filefn.h"
 #include "wx/image.h"
 #include "wx/dcmemory.h"
-#include "wx/app.h"
 
 #include "wx/rawbmp.h"
     // need this to get gdk_image_new_bitmap()

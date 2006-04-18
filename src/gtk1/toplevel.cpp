@@ -7,6 +7,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -15,14 +18,9 @@
 // headers
 // ----------------------------------------------------------------------------
 
-// For compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
-
 #ifdef __VMS
 #define XIconifyWindow XICONIFYWINDOW
 #endif
-
-#include "wx/defs.h"
 
 #include "wx/toplevel.h"
 #include "wx/log.h"

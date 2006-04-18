@@ -12,8 +12,6 @@
 // For compilers that support precompilatixon, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -3180,7 +3178,7 @@ bool wxGridTableBase::DeleteCols( size_t WXUNUSED(pos),
 wxString wxGridTableBase::GetRowLabelValue( int row )
 {
     wxString s;
- 
+
     // RD: Starting the rows at zero confuses users,
     // no matter how much it makes sense to us geeks.
     s << row + 1;

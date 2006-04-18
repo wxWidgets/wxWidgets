@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// Name:        generic/gridsel.cpp
+// Name:        src/generic/gridsel.cpp
 // Purpose:     wxGridSelection
 // Author:      Stefan Neis
 // Modified by:
@@ -9,6 +9,13 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -16,15 +23,6 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#include "wx/defs.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GRID
 

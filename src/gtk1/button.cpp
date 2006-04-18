@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        button.cpp
+// Name:        src/gtk1/button.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -9,8 +9,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/defs.h"
 
 #if wxUSE_BUTTON
 
@@ -107,14 +105,14 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos, const wxSize &size,
       long style, const wxValidator& validator, const wxString &name )
 {
-    m_needParent = TRUE;
-    m_acceptsFocus = TRUE;
+    m_needParent = true;
+    m_acceptsFocus = true;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxButton creation failed") );
-        return FALSE;
+        return false;
     }
 
     m_widget = gtk_button_new_with_label("");
@@ -193,11 +191,11 @@ void wxButton::SetLabel( const wxString &lbl )
 bool wxButton::Enable( bool enable )
 {
     if ( !wxControl::Enable( enable ) )
-        return FALSE;
+        return false;
 
     gtk_widget_set_sensitive( BUTTON_CHILD(m_widget), enable );
 
-    return TRUE;
+    return true;
 }
 
 bool wxButton::IsOwnGtkWindow( GdkWindow *window )
@@ -253,4 +251,3 @@ wxButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 }
 
 #endif // wxUSE_BUTTON
-

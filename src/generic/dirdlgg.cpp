@@ -13,10 +13,8 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
-
-#include "wx/defs.h"
 
 #if wxUSE_DIRDLG
 

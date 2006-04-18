@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        m_tables.cpp
+// Name:        src/html/m_tables.cpp
 // Purpose:     wxHtml module for tables
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -9,11 +9,11 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-#if wxUSE_HTML && wxUSE_STREAMS
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WXPRECOMP
 #endif
@@ -275,7 +275,7 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
         {
             wxString wd = tag.GetParam(wxT("WIDTH"));
 
-            if (wd[wd.Length()-1] == wxT('%'))
+            if (wd[wd.length()-1] == wxT('%'))
             {
                 wxSscanf(wd.c_str(), wxT("%i%%"), &m_ColsInfo[c].width);
                 m_ColsInfo[c].units = wxHTML_UNITS_PERCENT;
@@ -680,7 +680,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                 {
                     wxString wd = tag.GetParam(wxT("WIDTH"));
 
-                    if (wd[wd.Length()-1] == wxT('%'))
+                    if (wd[wd.length()-1] == wxT('%'))
                     {
                         int width = 0;
                         wxSscanf(wd.c_str(), wxT("%i%%"), &width);
