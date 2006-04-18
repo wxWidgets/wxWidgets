@@ -1,18 +1,19 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gdiobj.cpp
+// Name:        src/os2/gdiobj.cpp
 // Purpose:     wxGDIObject class
 // Author:      AUTHOR
 // Modified by:
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
+#include "wx/font.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
 
