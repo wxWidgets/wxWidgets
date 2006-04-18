@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        generic/renderg.cpp
+// Name:        src/generic/renderg.cpp
 // Purpose:     generic implementation of wxRendererNative (for any platform)
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -401,7 +401,7 @@ wxRendererGeneric::DrawDropArrow(wxWindow *win,
 }
 
 void 
-wxRendererGeneric::DrawCheckButton(wxWindow *win,
+wxRendererGeneric::DrawCheckButton(wxWindow *WXUNUSED(win),
                                    wxDC& dc,
                                    const wxRect& rect,
                                    int flags)
@@ -438,4 +438,3 @@ public:
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericRendererModule, wxModule)
-
