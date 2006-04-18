@@ -1413,6 +1413,10 @@ dnl is -traditional needed for correct compilations
 dnl   adds -traditional for gcc if needed
 AC_PROG_GCC_TRADITIONAL
 
+dnl do all checks from now on using the C++ compiler: this saves us a lot of
+dnl problems with various functions which may be available in libc but not
+dnl declared in the header and various pointer conversions which compile with
+dnl the C compiler but not in C++
 AC_LANG_PUSH(C++)
 
 dnl C++-compiler checks
@@ -1424,8 +1428,6 @@ dnl
 dnl see CFLAGS line above
 CXXFLAGS=${CXXFLAGS:=}
 AC_BAKEFILE_PROG_CXX
-
-AC_LANG_POP
 
 dnl ranlib command
 dnl   defines RANLIB with the appropriate command
@@ -1680,8 +1682,6 @@ case "${host}" in
       dnl ---------------------------------------------------------------------
       dnl (non-OS/2-only piece)
 
-      AC_LANG_PUSH(C++)
-
       AC_CACHE_CHECK([for strcasecmp() in string.h], ac_cv_string_strcasecmp, [
           AC_TRY_LINK([
               #include <string.h>
@@ -1716,7 +1716,6 @@ case "${host}" in
           fi
       fi
 
-      AC_LANG_POP
       dnl (end of non-OS/2-only piece)
   ;;
 esac
@@ -1906,7 +1905,6 @@ if test "x$wx_largefile" = "xyes"; then
                 [if -D__STDC_EXT__ is required],
                 wx_cv_STDC_EXT_required,
                 [
-                    AC_LANG_PUSH(C++)
                     AC_TRY_COMPILE(
                         [],
                         [
@@ -1917,7 +1915,6 @@ if test "x$wx_largefile" = "xyes"; then
                         wx_cv_STDC_EXT_required=no,
                         wx_cv_STDC_EXT_required=yes
                     )
-                    AC_LANG_POP
                 ]
             )
             if test "x$wx_cv_STDC_EXT_required" = "xyes"; then
@@ -2009,8 +2006,6 @@ fi
 
 dnl check for std::string or std::wstring
 if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
-    AC_LANG_PUSH(C++)
-
     if test "$wxUSE_UNICODE" = "yes"; then
         std_string="std::wstring"
         char_type="wchar_t"
@@ -2055,13 +2050,9 @@ if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
                         ]
                     )
                     ])
-
-    AC_LANG_POP
 fi
 
 if test "$wxUSE_STD_IOSTREAM" = "yes"; then
-    AC_LANG_PUSH(C++)
-
     AC_CHECK_TYPES([std::istream, std::ostream],,
                    [wxUSE_STD_IOSTREAM=no],
                    [#include <iostream>])
@@ -2073,13 +2064,9 @@ if test "$wxUSE_STD_IOSTREAM" = "yes"; then
             AC_MSG_WARN([No std::iostreams, switching to --disable-std_iostreams])
         fi
     fi
-
-    AC_LANG_POP
 fi
 
 if test "$wxUSE_STL" = "yes"; then
-    AC_LANG_PUSH(C++)
-
     dnl check for basic STL functionality
     AC_MSG_CHECKING([for basic STL functionality])
     AC_TRY_COMPILE([#include <string>
@@ -2134,8 +2121,6 @@ if test "$wxUSE_STL" = "yes"; then
                                      AC_DEFINE(HAVE_GNU_CXX_HASH_MAP)],
                                     [AC_MSG_RESULT(no)])
                      ])
-
-    AC_LANG_POP
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -2329,6 +2314,47 @@ dnl  2. for Unicode functions
 if test "x$wx_cv_lib_glibc21" = "xyes"; then
     if test "$wxUSE_UNICODE" = "yes" -o "$wxUSE_THREADS" = "yes"; then
         AC_DEFINE(_GNU_SOURCE)
+    fi
+fi
+
+dnl Only add the -lm library if floating point functions cannot be used
+dnl without it.  This check is important on cygwin because of the bizarre
+dnl way that they have organized functions into libraries.  On cygwin, both
+dnl libc.a and libm.a are symbolic links to a single lib libcygwin.a.  This
+dnl means that
+dnl   1) linking with -lm is not necessary, and
+dnl   2) linking with -lm is dangerous if the order of libraries is wrong
+dnl In particular, if you compile any program with -mno-cygwin and link with
+dnl -lm, it will crash instantly when it is run.  This happens because the
+dnl linker incorrectly links the Cygwin libm.a (==libcygwin.a), which replaces
+dnl the ___main function instead of allowing it to be defined by
+dnl /usr/lib/mingw/libmingw32.a as it should be.
+dnl
+dnl On MacOS X, this test will find that -lm is unnecessary and leave it out.
+dnl
+dnl Just check a few floating point functions. If they are all found without
+dnl -lm, then we must not need -lm.
+have_cos=0
+have_floor=0
+AC_CHECK_FUNCS(cos, have_cos=1)
+AC_CHECK_FUNCS(floor, have_floor=1)
+AC_MSG_CHECKING(if floating point functions link without -lm)
+if test "$have_cos" = 1 -a "$have_floor" = 1; then
+    AC_MSG_RESULT(yes)
+else
+    AC_MSG_RESULT(no)
+    LIBS="$LIBS -lm"
+    # use different functions to avoid configure caching
+    have_sin=0
+    have_ceil=0
+    AC_CHECK_FUNCS(sin, have_sin=1)
+    AC_CHECK_FUNCS(ceil, have_ceil=1)
+    AC_MSG_CHECKING(if floating point functions link with -lm)
+    if test "$have_sin" = 1 -a "$have_ceil" = 1; then
+        AC_MSG_RESULT(yes)
+    else
+        AC_MSG_RESULT(no)
+        # not sure we should warn the user, crash, etc.
     fi
 fi
 
@@ -2651,12 +2677,10 @@ if test "$wxUSE_EXPAT" != "no"; then
             AC_CACHE_CHECK([if expat.h is valid C++ header],
                 wx_cv_expat_is_not_broken,
                 [
-                AC_LANG_PUSH(C++)
                 AC_TRY_COMPILE([#include <expat.h>],[],
                     wx_cv_expat_is_not_broken=yes,
                     wx_cv_expat_is_not_broken=no
                 )
-                AC_LANG_POP
                 ]
             )
             if test "$wx_cv_expat_is_not_broken" = "yes" ; then
@@ -3973,7 +3997,6 @@ AC_CHECK_TYPES(ssize_t)
 
 dnl check what exactly size_t is on this machine - this is necessary to avoid
 dnl ambiguous overloads in several places, notably wx/string.h and wx/array.h
-AC_LANG_PUSH(C++)
 AC_CACHE_CHECK([if size_t is unsigned int],
     wx_cv_size_t_is_uint,
     [
@@ -4019,8 +4042,6 @@ else
         AC_DEFINE(wxSIZE_T_IS_ULONG)
     fi
 fi
-
-AC_LANG_POP
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for structures
@@ -4095,11 +4116,6 @@ if test "$wxUSE_WCHAR_T" = "yes"; then
 else
     AC_MSG_WARN([Wide character support is unavailable])
 fi
-
-dnl *printf() functions sometimes are available in the library but not
-dnl prototyped -- if this is the case, we can't use them from C++ code, but to
-dnl detect this we have to use C++ compiler for testing
-AC_LANG_PUSH(C++)
 
 dnl check for vsnprintf() -- a safe version of vsprintf())
 dnl
@@ -4253,8 +4269,6 @@ if test "$wxUSE_UNICODE" = yes; then
                    [AC_MSG_RESULT([no])]);
 fi
 
-AC_LANG_POP
-
 if test "x$ac_cv_header_fnmatch_h" = "xyes"; then
     AC_CHECK_FUNCS(fnmatch)
 fi
@@ -4269,10 +4283,8 @@ if test "$TOOLKIT" != "MSW"; then
 
 dnl check for available version of iconv()
 
-AC_LANG_PUSH(C++)
 AM_ICONV
 LIBS="$LIBICONV $LIBS"
-AC_LANG_POP
 
 dnl check for POSIX signals if we need them
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes" -a "$wxUSE_UNIX" = "yes"; then
@@ -4284,8 +4296,6 @@ if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     fi
 
     if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
-      AC_LANG_PUSH(C++)
-
       AC_CACHE_CHECK([for sa_handler type], wx_cv_type_sa_handler,
       [
         AC_TRY_COMPILE([#include <signal.h>],
@@ -4301,16 +4311,12 @@ if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes" -a "$wxUSE_UNIX" = "yes"; then
                      ])
       ])
 
-      AC_LANG_POP
-
       AC_DEFINE_UNQUOTED(wxTYPE_SA_HANDLER, $wx_cv_type_sa_handler)
     fi
 fi
 
 dnl backtrace() and backtrace_symbols() for wxStackWalker
 if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
-    AC_LANG_PUSH(C++)
-
     AC_CACHE_CHECK([for backtrace() in <execinfo.h>], wx_cv_func_backtrace,
         [
             AC_TRY_COMPILE([#include <execinfo.h>],
@@ -4349,8 +4355,6 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
             AC_DEFINE(HAVE_CXA_DEMANGLE)
         fi
     fi
-
-    AC_LANG_POP
 fi
 
 if test "$wxUSE_STACKWALKER" = "yes" -a "$USE_WIN32" != "1" -a "$USE_UNIX" != "1"; then
@@ -4389,7 +4393,6 @@ AC_CACHE_CHECK(for statfs, wx_cv_func_statfs,
 
 if test "$wx_cv_func_statfs" = "yes"; then
     dnl check whether we have its dcelaration too: some systems (AIX 4) lack it
-    AC_LANG_PUSH(C++)
     AC_CACHE_CHECK(for statfs declaration, wx_cv_func_statfs_decl,
         AC_TRY_COMPILE(
             [
@@ -4408,7 +4411,6 @@ if test "$wx_cv_func_statfs" = "yes"; then
             wx_cv_func_statfs_decl=no
         )
     )
-    AC_LANG_POP
 
     if test "$wx_cv_func_statfs_decl" = "yes"; then
         AC_DEFINE(HAVE_STATFS_DECL)
@@ -4439,8 +4441,6 @@ else
         dnl
         dnl for this check C++ compiler has to be used as passing incompatible
         dnl pointers is just a warning and not an error in C
-        AC_LANG_PUSH(C++)
-
         AC_CACHE_CHECK(for statvfs argument type, wx_cv_type_statvfs_t,
             AC_TRY_COMPILE(
                 [
@@ -4474,8 +4474,6 @@ else
                 ]
             )
         )
-
-        AC_LANG_POP
 
         if test "$wx_cv_type_statvfs_t" != "unknown"; then
             AC_DEFINE(HAVE_STATVFS)
@@ -4549,13 +4547,7 @@ fi
 dnl check for uname (POSIX) and gethostname (BSD)
 AC_CHECK_FUNCS(uname gethostname, break)
 
-dnl check for MT-safe version of strtok (on DEC Alpha, it's ok for C compiler
-dnl but not for C++ one - hence change language)
-AC_LANG_PUSH(C++)
-
 AC_CHECK_FUNCS(strtok_r)
-
-AC_LANG_POP
 
 dnl check for inet_addr and inet_aton (these may live either in libc, or in
 dnl libnsl or libresolv or libsocket)
@@ -4995,7 +4987,6 @@ dnl safety issues and supports IPv6, however there currently is no code
 dnl for it, so testing for it is temporarily disabled and we are restricted
 dnl to gethostbyname_r/gethostbyaddr_r  and getservbyname_r
 
-AC_LANG_PUSH(C++)
 dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
     dnl no getaddrinfo, so check for gethostbyname_r and
     dnl related functions (taken from python's configure.in)
@@ -5023,7 +5014,6 @@ dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
       dnl  check to fit this case, if it's really needed.                - SN )
 dnl    ]
 dnl )
-AC_LANG_POP
 
 if test "$wxUSE_THREADS" = "yes"; then
   AC_DEFINE(wxUSE_THREADS)
@@ -5600,7 +5590,6 @@ if test "$wxUSE_DATETIME" = "yes"; then
     if test "$ac_cv_func_strptime" = "yes"; then
         AC_CACHE_CHECK([for strptime declaration], wx_cv_func_strptime_decl,
             [
-                AC_LANG_PUSH(C++)
                 AC_TRY_COMPILE(
                     [
                         #include <time.h>
@@ -5612,7 +5601,6 @@ if test "$wxUSE_DATETIME" = "yes"; then
                     wx_cv_func_strptime_decl=yes,
                     wx_cv_func_strptime_decl=no
                 )
-                AC_LANG_POP
             ]
         )
     fi
@@ -5714,8 +5702,6 @@ if test "$wxUSE_DATETIME" = "yes"; then
                        wx_cv_func_gettimeofday_has_2_args,
         [
             dnl on some _really_ old systems it takes only 1 argument
-            AC_LANG_PUSH(C++)
-
             AC_TRY_COMPILE(
                 [
                     #include <sys/time.h>
@@ -5742,7 +5728,6 @@ if test "$wxUSE_DATETIME" = "yes"; then
                     ]
                 )
             )
-            AC_LANG_POP
         ])
 
         if test "$wx_cv_func_gettimeofday_has_2_args" != "yes"; then
@@ -5794,7 +5779,6 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
         dnl This test needs to be done in C++ mode since gsocket.cpp now
         dnl is C++ code and pointer cast that are possible even without
         dnl warning in C still fail in C++.
-        AC_LANG_PUSH(C++)
         AC_CACHE_CHECK([what is the type of the third argument of getsockname],
                        wx_cv_type_getsockname3,
             [
@@ -5916,7 +5900,6 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
         else
             AC_DEFINE_UNQUOTED(SOCKOPTLEN_T, $wx_cv_type_getsockopt5)
         fi
-        AC_LANG_POP
     fi
 fi
 
@@ -5981,14 +5964,12 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
         if test "$USE_DARWIN" = 1; then
             dnl check for a bug in the headers, some have bad setEventCallout
             AC_MSG_CHECKING([headers have declarations needed for joystick support])
-            AC_LANG_PUSH(C++)
             AC_TRY_COMPILE( [ #include <IOKit/hid/IOHIDLib.h> ],
                             [ IOHIDQueueInterface *qi = NULL;
                               IOHIDCallbackFunction cb = NULL;
                               qi->setEventCallout(NULL, cb, NULL, NULL); ],
                             [ wxUSE_JOYSTICK=yes ]
                           )
-            AC_LANG_POP
             AC_MSG_RESULT($wxUSE_JOYSTICK)
         fi
 
@@ -6134,8 +6115,6 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
 
     if test "$ac_cv_header_ole2_h" = "yes" ; then
         if test "$GCC" = yes ; then
-            AC_LANG_PUSH(C++)
-
             AC_MSG_CHECKING([if g++ requires -fvtable-thunks])
             AC_TRY_COMPILE([#include <windows.h>
                             #include <ole2.h>],
@@ -6143,7 +6122,6 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
                            [AC_MSG_RESULT(no)],
                            [AC_MSG_RESULT(yes)
                             WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fvtable-thunks"])
-            AC_LANG_POP
             LIBS=" -lrpcrt4 -loleaut32 -lole32 -luuid$LIBS"
             if test "$wxUSE_OLE" = "yes" ; then
                 AC_DEFINE(wxUSE_OLE)
@@ -6915,10 +6893,10 @@ dnl ---------------------------------------------------------------------------
 dnl Output the makefiles and such from the results found above
 dnl ---------------------------------------------------------------------------
 
-dnl all additional libraries (except wxWidgets itself) we link with
+dnl no more tests from here
+AC_LANG_POP
 
-dnl note that we always link with -lm except for Mac OS X
-dnl extended.c uses floor() and is always linked in
+dnl all additional libraries (except wxWidgets itself) we link with
 
 if test "$wxUSE_MAC" = 1 ; then
     if test "$wxUSE_SOUND" = "yes" || test "$wxUSE_MEDIACTRL" = "yes"; then
@@ -6944,52 +6922,7 @@ if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_COCOA" != 1 ; then
     LDFLAGS="$LDFLAGS -framework IOKit -framework CoreServices -framework System -framework ApplicationServices"
 fi
 
-dnl FIXME: should this be covered by the conditional above
-dnl given the -lm comment there?  Or should that comment (and
-dnl this one) be removed..   [ 7 Nov 2001 ]
-
 LIBS="$ZLIB_LINK $POSIX4_LINK $INET_LINK $WCHAR_LINK $DL_LINK $LIBS"
-
-dnl Only add the -lm library if floating point functions cannot be used
-dnl without it.  This check is important on cygwin because of the bizarre
-dnl way that they have organized functions into libraries.  On cygwin, both
-dnl libc.a and libm.a are symbolic links to a single lib libcygwin.a.  This
-dnl means that
-dnl   1) linking with -lm is not necessary, and
-dnl   2) linking with -lm is dangerous if the order of libraries is wrong
-dnl In particular, if you compile any program with -mno-cygwin and link with
-dnl -lm, it will crash instantly when it is run.  This happens because the
-dnl linker incorrectly links the Cygwin libm.a (==libcygwin.a), which replaces
-dnl the ___main function instead of allowing it to be defined by
-dnl /usr/lib/mingw/libmingw32.a as it should be.
-dnl
-dnl On MacOS X, this test will find that -lm is unnecessary and leave it out.
-dnl
-dnl Just check a few floating point functions. If they are all found without
-dnl -lm, then we must not need -lm.
-have_cos=0
-have_floor=0
-AC_CHECK_FUNCS(cos, have_cos=1)
-AC_CHECK_FUNCS(floor, have_floor=1)
-AC_MSG_CHECKING(if floating point functions link without -lm)
-if test "$have_cos" = 1 -a "$have_floor" = 1; then
-    AC_MSG_RESULT(yes)
-else
-    AC_MSG_RESULT(no)
-    LIBS="$LIBS -lm"
-    # use different functions to avoid configure caching
-    have_sin=0
-    have_ceil=0
-    AC_CHECK_FUNCS(sin, have_sin=1)
-    AC_CHECK_FUNCS(ceil, have_ceil=1)
-    AC_MSG_CHECKING(if floating point functions link with -lm)
-    if test "$have_sin" = 1 -a "$have_ceil" = 1; then
-        AC_MSG_RESULT(yes)
-    else
-        AC_MSG_RESULT(no)
-        # not sure we should warn the user, crash, etc.
-    fi
-fi
 
 if test "$wxUSE_GUI" = "yes"; then
 
