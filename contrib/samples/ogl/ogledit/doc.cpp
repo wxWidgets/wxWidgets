@@ -233,8 +233,8 @@ bool DiagramCommand::Do(void)
         theShape->AssignNewIds();
         theShape->SetEventHandler(new MyEvtHandler(theShape, theShape, wxEmptyString));
         theShape->SetCentreResize(false);
-        theShape->SetPen(wxBLACK_PEN);
-        theShape->SetBrush(wxCYAN_BRUSH);
+        theShape->SetPen(*wxBLACK_PEN);
+        theShape->SetBrush(*wxCYAN_BRUSH);
 
         theShape->SetSize(60, 60);
       }
@@ -302,7 +302,7 @@ bool DiagramCommand::Do(void)
         wxClientDC dc(shape->GetCanvas());
         shape->GetCanvas()->PrepareDC(dc);
 
-        wxBrush *oldBrush = shape->GetBrush();
+        const wxBrush *oldBrush = shape->GetBrush();
         shape->SetBrush(shapeBrush);
         shapeBrush = oldBrush;
         shape->Draw(dc);
@@ -388,7 +388,7 @@ bool DiagramCommand::Undo(void)
         wxClientDC dc(shape->GetCanvas());
         shape->GetCanvas()->PrepareDC(dc);
 
-        wxBrush *oldBrush = shape->GetBrush();
+        const wxBrush *oldBrush = shape->GetBrush();
         shape->SetBrush(shapeBrush);
         shapeBrush = oldBrush;
         shape->Draw(dc);
