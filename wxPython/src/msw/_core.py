@@ -724,7 +724,6 @@ class Object(object):
 Object_swigregister = _core_.Object_swigregister
 Object_swigregister(Object)
 _wxPySetDictionary = _core_._wxPySetDictionary
-_wxPyFixStockObjects = _core_._wxPyFixStockObjects
 cvar = _core_.cvar
 EmptyString = cvar.EmptyString
 
@@ -9837,6 +9836,10 @@ class Menu(EvtHandler):
         """AppendMenu(self, int id, String text, Menu submenu, String help=EmptyString) -> MenuItem"""
         return _core_.Menu_AppendMenu(*args, **kwargs)
 
+    def AppendSubMenu(*args, **kwargs):
+        """AppendSubMenu(self, Menu submenu, String text, String help=EmptyString) -> MenuItem"""
+        return _core_.Menu_AppendSubMenu(*args, **kwargs)
+
     def AppendItem(*args, **kwargs):
         """AppendItem(self, MenuItem item) -> MenuItem"""
         return _core_.Menu_AppendItem(*args, **kwargs)
@@ -12925,11 +12928,6 @@ from _gdi import *
 from _windows import *
 from _controls import *
 from _misc import *
-
-
-# Fixup the stock objects since they can't be used yet.  (They will be
-# restored in wx.PyApp.OnInit.)
-_core_._wxPyFixStockObjects()
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------

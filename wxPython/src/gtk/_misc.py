@@ -5789,6 +5789,17 @@ class StandardPaths(object):
         """
         return _misc_.StandardPaths_GetLocalizedResourcesDir(*args, **kwargs)
 
+    def GetDocumentsDir(*args, **kwargs):
+        """
+        GetDocumentsDir(self) -> String
+
+        Return the Documents directory for the current user.
+
+        C:\Documents and Settings\username\Documents under Windows,
+        $HOME under Unix and ~/Documents under Mac
+        """
+        return _misc_.StandardPaths_GetDocumentsDir(*args, **kwargs)
+
     def SetInstallPrefix(*args, **kwargs):
         """
         SetInstallPrefix(self, String prefix)

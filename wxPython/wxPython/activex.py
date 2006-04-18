@@ -20,26 +20,16 @@ del sys, _wx
 
 # Now assign all the reverse-renamed names:
 CLSID = wx.activex.CLSID
-CLSIDPtr = wx.activex.CLSIDPtr
 wxParamX = wx.activex.ParamX
-wxParamXPtr = wx.activex.ParamXPtr
 wxFuncX = wx.activex.FuncX
-wxFuncXPtr = wx.activex.FuncXPtr
 wxPropX = wx.activex.PropX
-wxPropXPtr = wx.activex.PropXPtr
 wxParamXArray = wx.activex.ParamXArray
-wxParamXArrayPtr = wx.activex.ParamXArrayPtr
 wxFuncXArray = wx.activex.FuncXArray
-wxFuncXArrayPtr = wx.activex.FuncXArrayPtr
 wxPropXArray = wx.activex.PropXArray
-wxPropXArrayPtr = wx.activex.PropXArrayPtr
 wxActiveXWindow = wx.activex.ActiveXWindow
-wxActiveXWindowPtr = wx.activex.ActiveXWindowPtr
 RegisterActiveXEvent = wx.activex.RegisterActiveXEvent
 wxActiveXEvent = wx.activex.ActiveXEvent
-wxActiveXEventPtr = wx.activex.ActiveXEventPtr
 wxIEHtmlWindowBase = wx.activex.IEHtmlWindowBase
-wxIEHtmlWindowBasePtr = wx.activex.IEHtmlWindowBasePtr
 
 
 d = globals()
