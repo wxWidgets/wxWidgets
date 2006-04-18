@@ -158,6 +158,13 @@ and GetResourcesDir()/lang.lproj under Mac but is something quite
 different under Unix for the message catalog category (namely the
 standard prefix/share/locale/lang/LC_MESSAGES.)", "");
     
+    DocDeclStr(
+        virtual wxString , GetDocumentsDir() const,
+        "Return the Documents directory for the current user.
+
+C:\Documents and Settings\username\Documents under Windows,
+$HOME under Unix and ~/Documents under Mac", "");
+    
        
     
     DocStr(SetInstallPrefix,

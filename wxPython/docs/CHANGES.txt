@@ -127,6 +127,8 @@ functionality that was implemented in wxWidgets, but the end result is
 cleaner for wxPython as well, and allowed me to remove some ugly code
 under the covers.
 
+Added wx.StandardPaths.GetDocumentsDir.
+
 
 
 

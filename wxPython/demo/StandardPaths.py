@@ -8,14 +8,14 @@ class TestPanel(wx.Panel):
         self.log = log
         wx.Panel.__init__(self, parent, -1)
 
-        sizer = wx.FlexGridSizer(0, 3, 4, 4)
+        sizer = wx.FlexGridSizer(0, 3, 2, 2)
         box = wx.BoxSizer(wx.VERTICAL)
         fs = self.GetFont().GetPointSize()
         bf = wx.Font(fs+4, wx.SWISS, wx.NORMAL, wx.BOLD)
 
         t = wx.StaticText(self, -1, "StandardPaths")
         t.SetFont(bf)
-        box.Add(t, 0, wx.CENTER|wx.ALL, 5)
+        box.Add(t, 0, wx.CENTER|wx.ALL, 4)
         box.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
 
         # get the global (singleton) instance of wx.StandardPaths
@@ -37,7 +37,8 @@ class TestPanel(wx.Panel):
             sizer.Add(wx.StaticText(self, -1, "%s%s:" %(name, repr(args))),
                       0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
             sizer.Add(wx.TextCtrl(self, -1, func(*args),
-                                  size=(275,-1), style=wx.TE_READONLY))
+                                  size=(275,-1), style=wx.TE_READONLY),
+                      0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 
             btn = wx.Button(self, wx.ID_HELP)
             sizer.Add(btn)
@@ -49,6 +50,7 @@ class TestPanel(wx.Panel):
                   'GetLocalDataDir',
                   'GetUserDataDir',
                   'GetUserLocalDataDir',
+                  'GetDocumentsDir',
                   'GetPluginsDir',
                   'GetInstallPrefix',
                   'GetResourcesDir',
@@ -60,7 +62,7 @@ class TestPanel(wx.Panel):
                  wx.StandardPaths.ResourceCat_Messages )
 
         self.Bind(wx.EVT_BUTTON, self.OnShowDoc, id=wx.ID_HELP)
-        box.Add(sizer, 0, wx.CENTER|wx.ALL, 20)
+        box.Add(sizer, 0, wx.CENTER|wx.ALL, 10)
         self.SetSizer(box)
 
 
