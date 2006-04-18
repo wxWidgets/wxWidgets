@@ -183,7 +183,16 @@ you need. ``flags`` may have the ``wx.CONTROL_PRESSED`` or
 ``wx.CONTROL_CURRENT`` bit set.", "");
     
 
+    DocDeclStr(
+        virtual void , DrawCheckButton(wxWindow *win,
+                                       wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags = 0),
+        "Draw a check button.  Flags may use wx.CONTROL_CHECKED,
+wx.CONTROL_UNDETERMINED and wx.CONTROL_CURRENT.", "");
+    
 
+    
     DocDeclStr(
         virtual wxSplitterRenderParams , GetSplitterParams(const wxWindow *win),
         "Get the splitter parameters, see `wx.SplitterRenderParams`.", "");

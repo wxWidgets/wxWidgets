@@ -129,6 +129,7 @@ under the covers.
 
 Added wx.StandardPaths.GetDocumentsDir.
 
+Added wx.RendererNative.DrawCheckButton.
 
 
 
