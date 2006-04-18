@@ -81,8 +81,14 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkAdjustment *adj,
                                              int *lines,
                                              int *linesPerPage)
 {
-    if ( pixelsPerLine == 0 || winSize >= virtSize )
+    if ( pixelsPerLine == 0 || winSize >= virtSize)
     {
+        if ( !wxIsNullDouble(adj->value) )
+        {
+            adj->value = 0.0;
+            g_signal_emit_by_name (adj, "value_changed");
+        }
+        
         adj->upper = 1.0;
         adj->page_increment = 1.0;
         adj->page_size = 1.0;
@@ -105,16 +111,7 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkAdjustment *adj,
             if (adj->value < 0.0)
                 adj->value = 0.0;
 
-            if ( m_win->GetChildren().empty() )
-            {
-                // This is enough without child windows
-                *pos = (int)adj->value;
-            }
-            else
-            {
-                // We need to actually scroll window
-                g_signal_emit_by_name (adj, "value_changed");
-            }
+            g_signal_emit_by_name (adj, "value_changed");
         }
     }
 
