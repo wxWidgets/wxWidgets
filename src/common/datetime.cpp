@@ -337,17 +337,16 @@ static int GetTimeZone()
         // just call wxLocaltime_r() instead of figuring out whether this
         // system supports tzset(), _tzset() or something else
         time_t t = 0;
-        struct tm *tm;
-        struct tm tmstruct;
+        struct tm tm;
 
-        tm = wxLocaltime_r(&t, &tmstruct);
+        wxLocaltime_r(&t, &tm);
         s_timezoneSet = true;
 
 #ifdef WX_GMTOFF_IN_TM
         // note that GMT offset is the opposite of time zone and so to return
         // consistent results in both WX_GMTOFF_IN_TM and !WX_GMTOFF_IN_TM
         // cases we have to negate it
-        gmtoffset = -tm->tm_gmtoff;
+        gmtoffset = -tm.tm_gmtoff;
 #else // !WX_GMTOFF_IN_TM
         gmtoffset = WX_TIMEZONE;
 #endif // WX_GMTOFF_IN_TM/!WX_GMTOFF_IN_TM
