@@ -18,7 +18,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_LISTCTRL
@@ -413,7 +413,7 @@ class WXDLLEXPORT wxListHeaderWindow : public wxWindow
 protected:
     wxListMainWindow  *m_owner;
     const wxCursor    *m_currentCursor;
-    const wxCursor    *m_resizeCursor;
+    wxCursor          *m_resizeCursor;
     bool               m_isDragging;
 
     // column being resized or -1
