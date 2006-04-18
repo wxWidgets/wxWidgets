@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        string.cpp
+// Name:        src/common/string.cpp
 // Purpose:     wxString class
 // Author:      Vadim Zeitlin, Ryan Norton
 // Modified by:
@@ -25,14 +25,13 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-  #include "wx/defs.h"
-  #include "wx/string.h"
-  #include "wx/intl.h"
-  #include "wx/thread.h"
+    #include "wx/string.h"
+    #include "wx/intl.h"
+    #include "wx/thread.h"
 #endif
 
 #include <ctype.h>
@@ -40,7 +39,7 @@
 #include <stdlib.h>
 
 #ifdef __SALFORDC__
-  #include <clib.h>
+    #include <clib.h>
 #endif
 
 // allocating extra space for each string consumes more memory but speeds up

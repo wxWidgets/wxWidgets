@@ -14,15 +14,16 @@
 #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
-
 #if wxUSE_IMAGE && wxUSE_LIBJPEG
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/app.h"
+#endif
 
 #include "wx/imagjpeg.h"
 #include "wx/bitmap.h"
 #include "wx/debug.h"
-#include "wx/log.h"
-#include "wx/app.h"
 
 // NB: Some compilers define boolean type in Windows headers
 //     (e.g. Watcom C++, but not Open Watcom).

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        archive.cpp
+// Name:        src/common/archive.cpp
 // Purpose:     Streams for archive formats
 // Author:      Mike Wetherell
 // RCS-ID:      $Id$
@@ -11,14 +11,13 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS
+
+#ifndef WX_PRECOMP
+#endif
 
 #include "wx/archive.h"
 #include "wx/link.h"

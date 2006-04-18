@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////
-// File:        taskbarcmn.cpp
+// File:        src/common/taskbarcmn.cpp
 // Purpose:     Common parts of wxTaskBarIcon class
 // Author:      Julian Smart
 // Modified by:
@@ -12,12 +12,17 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 #ifdef wxHAS_TASK_BAR_ICON
 
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 // DLL options compatibility check:
-#include "wx/app.h"
 WX_CHECK_BUILD_OPTIONS("wxAdvanced")
 
 

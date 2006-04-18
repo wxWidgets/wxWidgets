@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        paper.cpp
+// Name:        src/common/paper.cpp
 // Purpose:     Paper size classes
 // Author:      Julian Smart
 // Modified by:
@@ -13,18 +13,16 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
-
-#include "wx/defs.h"
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
 
 #ifndef WX_PRECOMP
-#include "wx/utils.h"
-#include "wx/settings.h"
-#include "wx/intl.h"
+    #include "wx/utils.h"
+    #include "wx/settings.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/paper.h"
@@ -162,7 +160,7 @@ void wxPrintPaperDatabase::CreateDatabase()
     WXADDPAPER(wxPAPER_A2,                 DMPAPER_A2,                 wxTRANSLATE("A2 420 x 594 mm"), 4200, 5940);
     WXADDPAPER(wxPAPER_A3_TRANSVERSE,      DMPAPER_A3_TRANSVERSE,      wxTRANSLATE("A3 Transverse 297 x 420 mm"), 2970, 4200);
     WXADDPAPER(wxPAPER_A3_EXTRA_TRANSVERSE,DMPAPER_A3_EXTRA_TRANSVERSE,wxTRANSLATE("A3 Extra Transverse 322 x 445 mm"), 3220, 4450);
-    
+
     WXADDPAPER(wxPAPER_DBL_JAPANESE_POSTCARD, 69,                       wxTRANSLATE("Japanese Double Postcard 200 x 148 mm"), 2000, 1480);
     WXADDPAPER(wxPAPER_A6,                  70,                         wxTRANSLATE("A6 105 x 148 mm"), 1050, 1480);
     WXADDPAPER(wxPAPER_JENV_KAKU2,          71,                         wxTRANSLATE("Japanese Envelope Kaku #2"), 2400, 3320);
@@ -372,4 +370,3 @@ void wxPrintPaperModule::OnExit()
 }
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
-

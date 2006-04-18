@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpbase.cpp
+// Name:        src/common/helpbase.cpp
 // Purpose:     Help system base classes
 // Author:      Julian Smart
 // Modified by:
@@ -13,14 +13,13 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/defs.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_HELP
+
+#ifndef WX_PRECOMP
+#endif
 
 #include "wx/helpbase.h"
 

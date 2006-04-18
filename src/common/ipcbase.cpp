@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        ipcbase.cpp
+// Name:        src/common/ipcbase.cpp
 // Purpose:     IPC base classes
 // Author:      Julian Smart
 // Modified by:
@@ -13,11 +13,10 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
 #endif
 
 #include "wx/ipcbase.h"
@@ -87,4 +86,3 @@ wxChar *wxConnectionBase::GetBufferAtLeast( size_t bytes )
       return NULL;
   }
 }
-

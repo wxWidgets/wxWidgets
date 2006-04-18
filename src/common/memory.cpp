@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        memory.cpp
+// Name:        src/common/memory.cpp
 // Purpose:     Memory checking implementation
 // Author:      Arthur Seaton, Julian Smart
 // Modified by:
@@ -13,23 +13,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/defs.h"
+    #pragma hdrstop
 #endif
 
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
 #ifndef WX_PRECOMP
-#include "wx/utils.h"
-#include "wx/app.h"
-#include "wx/hash.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+    #include "wx/hash.h"
 #endif
 
 #if wxUSE_THREADS
-#include "wx/thread.h"
+    #include "wx/thread.h"
 #endif
 
 #include "wx/log.h"
@@ -1160,4 +1156,3 @@ void wxDebugContextDumpDelayCounter::DoDump()
 static wxDebugContextDumpDelayCounter wxDebugContextDumpDelayCounter_One;
 
 #endif // (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-

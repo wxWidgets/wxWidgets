@@ -11,18 +11,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
-
 #if wxUSE_IMAGE && wxUSE_LIBTIFF
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/app.h"
+#endif
 
 #include "wx/imagtiff.h"
 #include "wx/bitmap.h"
 #include "wx/debug.h"
-#include "wx/log.h"
-#include "wx/app.h"
 extern "C"
 {
     #include "tiff.h"

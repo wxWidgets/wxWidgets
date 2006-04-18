@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        validate.cpp
+// Name:        src/common/validate.cpp
 // Purpose:     wxValidator
 // Author:      Julian Smart
 // Modified by:
@@ -13,24 +13,20 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_VALIDATORS
 
 #ifndef WX_PRECOMP
-  #include "wx/window.h"
+    #include "wx/window.h"
 #endif
 
 #include "wx/validate.h"
 
 const wxValidator wxDefaultValidator;
 
-    IMPLEMENT_DYNAMIC_CLASS(wxValidator, wxEvtHandler)
+IMPLEMENT_DYNAMIC_CLASS(wxValidator, wxEvtHandler)
 
 // VZ: personally, I think true would be more appropriate - these bells are
 //     _annoying_

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imaggif.cpp
+// Name:        src/common/imaggif.cpp
 // Purpose:     wxGIFHandler
 // Author:      Vaclav Slavik & Guillermo Rodriguez Garcia
 // RCS-ID:      $Id$
@@ -11,20 +11,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#  pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#  include "wx/defs.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_IMAGE && wxUSE_GIF
 
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/log.h"
+#endif
+
 #include "wx/imaggif.h"
 #include "wx/gifdecod.h"
 #include "wx/wfstream.h"
-#include "wx/log.h"
-#include "wx/intl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
 

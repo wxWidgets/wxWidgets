@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xpmdecod.cpp
+// Name:        src/common/xpmdecod.cpp
 // Purpose:     wxXPMDecoder
 // Author:      John Cristy, Vaclav Slavik
 // RCS-ID:      $Id$
@@ -94,21 +94,20 @@ license is as follows:
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#  pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#  include "wx/defs.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_IMAGE && wxUSE_XPM
 
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/log.h"
+#endif
+
 #include "wx/stream.h"
 #include "wx/image.h"
 #include "wx/utils.h"
-#include "wx/log.h"
 #include "wx/hashmap.h"
-#include "wx/intl.h"
 #include <string.h>
 
 #include <ctype.h>

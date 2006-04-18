@@ -22,20 +22,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_STREAMS
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
 
 #include <ctype.h>
 #include "wx/stream.h"
 #include "wx/datstrm.h"
 #include "wx/textfile.h"
-#include "wx/log.h"
 
 // ----------------------------------------------------------------------------
 // constants

@@ -29,7 +29,6 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/frame.h"
-    #include "wx/defs.h"
     #include "wx/window.h"
     #include "wx/control.h"
     #include "wx/checkbox.h"

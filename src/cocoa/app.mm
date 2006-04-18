@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/app.mm
+// Name:        src/cocoa/app.mm
 // Purpose:     wxApp
 // Author:      David Elliott
 // Modified by:
@@ -10,8 +10,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
     #include "wx/app.h"
     #include "wx/dc.h"
     #include "wx/intl.h"
@@ -77,12 +77,12 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
     If nil is returned then idle event processing occurs until the user
     does not request anymore idle events or until a real event comes through.
 
-    RN: Even though Apple documentation states that nil can be passed in place 
+    RN: Even though Apple documentation states that nil can be passed in place
     of [NSDate distantPast] in the untilDate parameter, this causes Jaguar (10.2)
-    to get stuck in some kind of loop deep within nextEventMatchingMask:, thus we 
+    to get stuck in some kind of loop deep within nextEventMatchingMask:, thus we
     need to explicitly pass [NSDate distantPast] instead.
 */
-   
+
 - (NSEvent *)nextEventMatchingMask:(unsigned int)mask untilDate:(NSDate *)expiration inMode:(NSString *)mode dequeue:(BOOL)flag
 {
     // Get the same events except don't block
@@ -233,7 +233,7 @@ wxApp::wxApp()
     m_topWindow = NULL;
 
 #ifdef __WXDEBUG__
-    m_isInAssert = FALSE;
+    m_isInAssert = false;
 #endif // __WXDEBUG__
 
     argc = 0;
@@ -263,7 +263,7 @@ bool wxApp::OnInitGui()
 {
     wxAutoNSAutoreleasePool pool;
     if(!wxAppBase::OnInitGui())
-        return FALSE;
+        return false;
 
     // Create the app using the sharedApplication method
     m_cocoaApp = [NSApplication sharedApplication];
@@ -276,7 +276,7 @@ bool wxApp::OnInitGui()
     wxMenuBarManager::CreateInstance();
 
     wxDC::CocoaInitializeTextSystem();
-    return TRUE;
+    return true;
 }
 
 bool wxApp::CallOnInit()
@@ -288,9 +288,9 @@ bool wxApp::CallOnInit()
 bool wxApp::OnInit()
 {
     if(!wxAppBase::OnInit())
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 void wxApp::Exit()
@@ -359,9 +359,8 @@ void wxApp::WakeUpIdle()
 #ifdef __WXDEBUG__
 void wxApp::OnAssert(const wxChar *file, int line, const wxChar* cond, const wxChar *msg)
 {
-    m_isInAssert = TRUE;
+    m_isInAssert = true;
     wxAppBase::OnAssert(file, line, cond, msg);
-    m_isInAssert = FALSE;
+    m_isInAssert = false;
 }
 #endif // __WXDEBUG__
-

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imagbmp.cpp
+// Name:        src/common/imagbmp.cpp
 // Purpose:     wxImage BMP,ICO and CUR handlers
 // Author:      Robert Roebling, Chris Elliott
 // RCS-ID:      $Id$
@@ -11,18 +11,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
-
 #if wxUSE_IMAGE
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/app.h"
+#endif
 
 #include "wx/imagbmp.h"
 #include "wx/bitmap.h"
 #include "wx/debug.h"
-#include "wx/log.h"
-#include "wx/app.h"
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/intl.h"

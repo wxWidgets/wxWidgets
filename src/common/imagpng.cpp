@@ -19,20 +19,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_IMAGE && wxUSE_LIBPNG
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/app.h"
+#endif
+
 #include "wx/imagpng.h"
 #include "wx/bitmap.h"
 #include "wx/debug.h"
-#include "wx/log.h"
-#include "wx/app.h"
 #include "png.h"
 #include "wx/filefn.h"
 #include "wx/wfstream.h"

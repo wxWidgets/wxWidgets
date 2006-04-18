@@ -11,18 +11,17 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_ZLIB && wxUSE_STREAMS && wxUSE_ZIPSTREAM
 
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/log.h"
+#endif
+
 #include "wx/zipstrm.h"
-#include "wx/log.h"
-#include "wx/intl.h"
 #include "wx/datstrm.h"
 #include "wx/zstream.h"
 #include "wx/mstream.h"

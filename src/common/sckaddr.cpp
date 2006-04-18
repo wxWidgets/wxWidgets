@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sckaddr.cpp
+// Name:        src/common/sckaddr.cpp
 // Purpose:     Network address manager
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -13,13 +13,12 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_SOCKETS
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
     #include "wx/object.h"
     #include "wx/log.h"
     #include "wx/intl.h"

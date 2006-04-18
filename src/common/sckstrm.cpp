@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sckstrm.h
+// Name:        src/common/sckstrm.cpp
 // Purpose:     wxSocket*Stream
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -13,14 +13,13 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_SOCKETS && wxUSE_STREAMS
+
+#ifndef WX_PRECOMP
+#endif
 
 #include "wx/stream.h"
 #include "wx/socket.h"
@@ -41,11 +40,11 @@ wxSocketOutputStream::~wxSocketOutputStream()
 
 size_t wxSocketOutputStream::OnSysWrite(const void *buffer, size_t size)
 {
-  size_t ret = m_o_socket->Write((const char *)buffer, size).LastCount();
+    size_t ret = m_o_socket->Write((const char *)buffer, size).LastCount();
 
-  m_lasterror = m_o_socket->Error() ? wxSTREAM_WRITE_ERROR : wxSTREAM_NO_ERROR;
+    m_lasterror = m_o_socket->Error() ? wxSTREAM_WRITE_ERROR : wxSTREAM_NO_ERROR;
 
-  return ret;
+    return ret;
 }
 
 // ---------------------------------------------------------------------------
@@ -63,11 +62,11 @@ wxSocketInputStream::~wxSocketInputStream()
 
 size_t wxSocketInputStream::OnSysRead(void *buffer, size_t size)
 {
-  size_t ret = m_i_socket->Read((char *)buffer, size).LastCount();
+    size_t ret = m_i_socket->Read((char *)buffer, size).LastCount();
 
-  m_lasterror = m_i_socket->Error() ? wxSTREAM_READ_ERROR : wxSTREAM_NO_ERROR;
+    m_lasterror = m_i_socket->Error() ? wxSTREAM_READ_ERROR : wxSTREAM_NO_ERROR;
 
-  return ret;
+    return ret;
 }
 
 // ---------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/settcmn.cpp
+// Name:        src/common/settcmn.cpp
 // Purpose:     common (to all ports) wxWindow functions
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
@@ -23,7 +23,6 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
     #include "wx/utils.h"
     #include "wx/settings.h"
 #endif //WX_PRECOMP

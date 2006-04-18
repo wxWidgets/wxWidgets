@@ -14,15 +14,16 @@
     #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
-
 #if wxUSE_IMAGE
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/app.h"
+#endif
 
 #include "wx/image.h"
 #include "wx/bitmap.h"
 #include "wx/debug.h"
-#include "wx/log.h"
-#include "wx/app.h"
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/intl.h"

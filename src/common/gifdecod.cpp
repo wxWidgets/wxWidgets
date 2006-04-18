@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gifdecod.cpp
+// Name:        src/common/gifdecod.cpp
 // Purpose:     wxGIFDecoder, GIF reader for wxImage and wxAnimation
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
 // Version:     3.04
@@ -12,15 +12,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#  pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#  include "wx/defs.h"
-#  include "wx/palette.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_STREAMS && wxUSE_GIF
+
+#ifndef WX_PRECOMP
+    #include "wx/palette.h"
+#endif
 
 #include <stdlib.h>
 #include <string.h>

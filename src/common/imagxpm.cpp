@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imagxpm.cpp
+// Name:        src/common/imagxpm.cpp
 // Purpose:     wxXPMHandler
 // Author:      Vaclav Slavik, Robert Roebling
 // RCS-ID:      $Id$
@@ -66,19 +66,18 @@ license is as follows:
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#  pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#  include "wx/defs.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_XPM
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/intl.h"
+#endif
+
 #include "wx/imagxpm.h"
 #include "wx/wfstream.h"
-#include "wx/log.h"
-#include "wx/intl.h"
 #include "wx/utils.h"
 #include "wx/xpmdecod.h"
 
@@ -145,7 +144,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
         sName << wxT("_xpm");
     }
 
-    if ( !sName.IsEmpty() )
+    if ( !sName.empty() )
         sName = wxString(wxT("/* XPM */\nstatic char *")) + sName;
     else
         sName = wxT("/* XPM */\nstatic char *xpm_data");
@@ -211,7 +210,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
     }
 
     tmp = wxT("/* pixels */\n");
-    stream.Write( (const char*) tmp.ToAscii(), tmp.Length() );
+    stream.Write( (const char*) tmp.ToAscii(), tmp.length() );
 
     unsigned char *data = image->GetData();
     for (j = 0; j < image->GetHeight(); j++)

@@ -19,14 +19,16 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-#include "wx/defs.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/utils.h"
-#include "wx/intl.h"
 #include "wx/file.h" // This does include filefn.h
 #include "wx/filename.h"
 #include "wx/dir.h"

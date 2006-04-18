@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        matrix.cpp
+// Name:        src/common/matrix.cpp
 // Purpose:     wxTransformMatrix class
 // Author:      Chris Breeze, Julian Smart
 // Modified by: Klaas Holwerda
@@ -20,8 +20,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
-#include "wx/math.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/matrix.h"
@@ -600,4 +599,3 @@ void wxTransformMatrix::SetRotation(double rotation)
     Rotate(-GetRotation(), x, y);
     Rotate(rotation, x, y);
 }
-

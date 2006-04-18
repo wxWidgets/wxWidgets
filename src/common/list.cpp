@@ -29,7 +29,6 @@
 #include <string.h>
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
     #include "wx/list.h"
 #endif
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imagpcx.cpp
+// Name:        src/common/imagpcx.cpp
 // Purpose:     wxImage PCX handler
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
 // Version:     1.1
@@ -12,21 +12,20 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#  include "wx/defs.h"
-#  include "wx/palette.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_IMAGE && wxUSE_PCX
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/intl.h"
+    #include "wx/palette.h"
+#endif
+
 #include "wx/imagpcx.h"
 #include "wx/wfstream.h"
 #include "wx/module.h"
-#include "wx/log.h"
-#include "wx/intl.h"
 
 #include "wx/hash.h"
 #include "wx/list.h"
@@ -500,4 +499,3 @@ bool wxPCXHandler::DoCanRead( wxInputStream& stream )
 #endif // wxUSE_STREAMS
 
 #endif // wxUSE_IMAGE && wxUSE_PCX
-

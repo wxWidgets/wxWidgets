@@ -1,17 +1,17 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/control.mm
+// Name:        src/cocoa/control.mm
 // Purpose:     wxControl class
 // Author:      David Elliiott
 // Modified by:
 // Created:     2003/02/15
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWidgets licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
     #include "wx/control.h"
     #include "wx/log.h"
 #endif
@@ -123,4 +123,3 @@ void wxControl::CocoaSetEnabled(bool enable)
 {
     [GetNSControl() setEnabled: enable];
 }
-

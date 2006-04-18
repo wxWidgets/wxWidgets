@@ -13,27 +13,25 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
-
-#include "wx/defs.h"
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
 #ifndef WX_PRECOMP
-#include "wx/utils.h"
-#include "wx/dc.h"
-#include "wx/app.h"
-#include "wx/msgdlg.h"
-#include "wx/layout.h"
-#include "wx/choice.h"
-#include "wx/button.h"
-#include "wx/settings.h"
-#include "wx/dcmemory.h"
-#include "wx/stattext.h"
-#include "wx/intl.h"
-#include "wx/textdlg.h"
-#include "wx/sizer.h"
+    #include "wx/utils.h"
+    #include "wx/dc.h"
+    #include "wx/app.h"
+    #include "wx/msgdlg.h"
+    #include "wx/layout.h"
+    #include "wx/choice.h"
+    #include "wx/button.h"
+    #include "wx/settings.h"
+    #include "wx/dcmemory.h"
+    #include "wx/stattext.h"
+    #include "wx/intl.h"
+    #include "wx/textdlg.h"
+    #include "wx/sizer.h"
 #endif // !WX_PRECOMP
 
 #include "wx/prntbase.h"

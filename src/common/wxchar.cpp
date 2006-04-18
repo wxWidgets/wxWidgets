@@ -17,7 +17,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #define _ISOC9X_SOURCE 1 // to get vsscanf()
@@ -28,24 +28,23 @@
 #include <string.h>
 
 #ifndef __WXWINCE__
-#include <time.h>
-#include <locale.h>
+    #include <time.h>
+    #include <locale.h>
 #else
-#include "wx/msw/wince/time.h"
+    #include "wx/msw/wince/time.h"
 #endif
 
 #ifndef WX_PRECOMP
-  #include "wx/defs.h"
-  #include "wx/wxchar.h"
-  #include "wx/string.h"
-  #include "wx/hash.h"
+    #include "wx/wxchar.h"
+    #include "wx/string.h"
+    #include "wx/hash.h"
 #endif
 
 #if defined(__WIN32__) && defined(wxNEED_WX_CTYPE_H)
   #include <windef.h>
-  #include <winbase.h>
-  #include <winnls.h>
-  #include <winnt.h>
+    #include <winbase.h>
+    #include <winnls.h>
+    #include <winnt.h>
 #endif
 
 #if defined(__MWERKS__) && __MSL__ >= 0x6000
