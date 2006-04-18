@@ -524,10 +524,6 @@ WXLRESULT wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         {
             Refresh();
         }
-        else if ( nMsg == WM_LBUTTONDOWN )
-        {
-            ::SetCapture(GetHwnd());
-        }
     }
 #endif // wxUSE_UXTHEME
 
