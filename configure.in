@@ -2820,6 +2820,9 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
 
     if test "$wxUSE_GTK" = 1; then
+        dnl GTK+ test program must be compiled with C compiler
+        AC_LANG_PUSH(C)
+
         AC_MSG_CHECKING([for GTK+ version])
 
         gtk_version_cached=1
@@ -2915,6 +2918,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                             ])
                     ;;
         esac
+
+        AC_LANG_POP
 
         if test "$WXGTK20" = 1; then
             save_CFLAGS="$CFLAGS"
