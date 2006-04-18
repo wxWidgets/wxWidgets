@@ -24,8 +24,6 @@
 #define XtParent XTPARENT
 #endif
 
-#include "wx/defs.h"
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <ctype.h>
@@ -488,7 +486,7 @@ void wxTextCtrl::ShowPosition(long pos)
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
     wxString str = GetLineText (lineNo);
-    return (int) str.Length();
+    return (int) str.length();
 }
 
 wxString wxTextCtrl::GetLineText(long lineNo) const

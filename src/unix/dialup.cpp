@@ -15,10 +15,9 @@
 #if wxUSE_DIALUP_MANAGER
 
 #ifndef  WX_PRECOMP
-#   include "wx/defs.h"
+    #include "wx/string.h"
 #endif // !PCH
 
-#include "wx/string.h"
 #include "wx/event.h"
 #include "wx/dialup.h"
 #include "wx/timer.h"

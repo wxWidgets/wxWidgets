@@ -24,11 +24,10 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/defs.h"
-#endif
-
 #if wxUSE_GAUGE
+
+#ifndef WX_PRECOMP
+#endif
 
 #include "wx/gauge.h"
 #include "wx/palmos/private.h"

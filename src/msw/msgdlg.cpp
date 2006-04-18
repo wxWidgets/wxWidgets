@@ -13,12 +13,11 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/defs.h"
     #include "wx/utils.h"
     #include "wx/dialog.h"
     #include "wx/msgdlg.h"
@@ -126,4 +125,3 @@ int wxMessageDialog::ShowModal()
     }
     return ans;
 }
-

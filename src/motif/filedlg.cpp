@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filedlg.cpp
+// Name:        src/motif/filedlg.cpp
 // Purpose:     wxFileDialog
 // Author:      Julian Smart
 // Modified by:
@@ -18,7 +18,6 @@
 #define XtWindow XTWINDOW
 #endif
 
-#include "wx/defs.h"
 #include "wx/utils.h"
 #include "wx/filedlg.h"
 #include "wx/intl.h"

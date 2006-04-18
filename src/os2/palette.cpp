@@ -13,12 +13,11 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/defs.h"
-#include "wx/string.h"
-#include "wx/os2/private.h"
-#include "wx/palette.h"
-#include "wx/app.h"
+    #include <stdio.h>
+    #include "wx/string.h"
+    #include "wx/os2/private.h"
+    #include "wx/palette.h"
+    #include "wx/app.h"
 #endif
 
 #define INCL_PM

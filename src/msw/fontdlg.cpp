@@ -27,7 +27,6 @@
 #if wxUSE_FONTDLG
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
     #include "wx/utils.h"
     #include "wx/dialog.h"
 #endif

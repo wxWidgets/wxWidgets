@@ -14,7 +14,6 @@
     #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
 #include "wx/cursor.h"
 
 /* Current cursor, in order to hang on to

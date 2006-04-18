@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.cpp
+// Name:        src/x11/dc.cpp
 // Purpose:     wxDC class
 // Author:      Julian Smart
 // Modified by:
@@ -9,9 +9,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/dc.h"
 #include "wx/dcmemory.h"
-#include "wx/defs.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 
@@ -21,7 +23,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 
 wxDC::wxDC()
 {
-    m_ok = FALSE;
+    m_ok = false;
 
 #if 1
     m_mm_to_pix_x = 1.0;
@@ -33,8 +35,8 @@ wxDC::wxDC()
                     (double)wxGetDisplaySizeMM().GetHeight();
 #endif
 
-    m_needComputeScaleX = FALSE; /* not used yet */
-    m_needComputeScaleY = FALSE; /* not used yet */
+    m_needComputeScaleX = false; /* not used yet */
+    m_needComputeScaleY = false; /* not used yet */
 
     m_logicalFunction = wxCOPY;
 
@@ -44,12 +46,12 @@ wxDC::wxDC()
 
     m_backgroundMode = wxTRANSPARENT;
 
-    m_isInteractive = FALSE;  // ???
+    m_isInteractive = false;  // ???
 }
 
 void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
-    m_clipping = TRUE;
+    m_clipping = true;
     m_clipX1 = x;
     m_clipY1 = y;
     m_clipX2 = x + width;
@@ -97,8 +99,8 @@ void wxDC::SetMapMode( int mode )
     }
     if (mode != wxMM_TEXT)
     {
-        m_needComputeScaleX = TRUE;
-        m_needComputeScaleY = TRUE;
+        m_needComputeScaleX = true;
+        m_needComputeScaleY = true;
     }
 }
 
@@ -185,4 +187,3 @@ void wxDC::ComputeScaleAndOrigin()
     m_scaleX = m_logicalScaleX * m_userScaleX;
     m_scaleY = m_logicalScaleY * m_userScaleY;
 }
-

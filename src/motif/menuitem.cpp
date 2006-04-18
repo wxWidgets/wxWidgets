@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        menuitem.cpp
+// Name:        src/motif/menuitem.cpp
 // Purpose:     wxMenuItem implementation
 // Author:      Julian Smart
 // Modified by:
@@ -19,8 +19,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/defs.h"
 
 #include "wx/menu.h"
 #include "wx/menuitem.h"
@@ -171,7 +169,7 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar,
             (wxStripMenuCodes(m_text),
             xmLabelGadgetClass, (Widget) menu, NULL);
     }
-    else if ((!m_text.IsNull() && m_text != "") && (!m_subMenu))
+    else if (!m_text.empty() && !m_subMenu)
     {
         wxString strName = wxStripMenuCodes(m_text);
         if (IsCheckable())
@@ -258,7 +256,7 @@ void wxMenuItem::DestroyItem(bool full)
         ;      // Nothing
 
     }
-    else if ((!m_text.IsNull() && (m_text != "")) && !m_subMenu)
+    else if (!m_text.empty() && !m_subMenu)
     {
         if (m_buttonWidget)
         {
@@ -412,4 +410,3 @@ wxMenuItemDisarmCallback (Widget WXUNUSED(w), XtPointer clientData,
         }
     }
 }
-

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.cpp
+// Name:        src/motif/dc.cpp
 // Purpose:     wxDC class
 // Author:      Julian Smart
 // Modified by:
@@ -14,9 +14,8 @@
 
 #include "wx/dc.h"
 #include "wx/dcmemory.h"
-#include "wx/defs.h"
 
-    IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 
 //-----------------------------------------------------------------------------
 // wxDC
@@ -212,4 +211,3 @@ void wxDC::ComputeScaleAndOrigin()
     m_scaleX = m_logicalScaleX * m_userScaleX;
     m_scaleY = m_logicalScaleY * m_userScaleY;
 }
-

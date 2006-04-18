@@ -14,8 +14,6 @@
 //
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-
 #if wxUSE_JOYSTICK
 
 #include "wx/string.h"

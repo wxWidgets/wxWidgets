@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        unix/utilsunx.cpp
+// Name:        src/unix/utilsunx.cpp
 // Purpose:     generic Unix implementation of many wx functions
 // Author:      Vadim Zeitlin
 // Id:          $Id$
@@ -18,8 +18,9 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-#include "wx/string.h"
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
 
 #include "wx/intl.h"
 #include "wx/log.h"
@@ -280,7 +281,7 @@ long wxExecute( const wxString& command, int flags, wxProcess *process )
     // split the command line in arguments
     do
     {
-        argument=wxT("");
+        argument = wxEmptyString;
         quotechar = wxT('\0');
 
         // eat leading whitespace:
@@ -884,7 +885,7 @@ wxString wxGetOsDescription()
         return wxString::FromAscii( buf );
     }
     wxFAIL_MSG( _T("uname failed") );
-    return _T("");
+    return wxEmptyString;
 }
 
 #endif // !__WXMAC__

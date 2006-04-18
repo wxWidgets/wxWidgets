@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bmpbuttn.cpp
+// Name:        src/motif/bmpbuttn.cpp
 // Purpose:     wxBitmapButton
 // Author:      Julian Smart
 // Modified by:
@@ -15,8 +15,6 @@
 #ifdef __VMS
 #define XtScreen XTSCREEN
 #endif
-
-#include "wx/defs.h"
 
 #include "wx/bmpbuttn.h"
 
@@ -77,7 +75,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
         xmPushButtonWidgetClass, parentWidget,
 #endif
         // See comment for wxButton::SetDefault
-        // XmNdefaultButtonShadowThickness, 1, 
+        // XmNdefaultButtonShadowThickness, 1,
         XmNrecomputeSize, False,
         NULL);
 
@@ -265,4 +263,3 @@ wxSize wxBitmapButton::DoGetBestSize() const
 
     return ret;
 }
-

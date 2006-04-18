@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dirdlg.cpp
+// Name:        src/os2/dirdlg.cpp
 // Purpose:     wxDirDialog
 // Author:      David Webster
 // Modified by:
@@ -13,11 +13,10 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/defs.h"
-#include "wx/utils.h"
-#include "wx/dialog.h"
-#include "wx/dirdlg.h"
+    #include <stdio.h>
+    #include "wx/utils.h"
+    #include "wx/dialog.h"
+    #include "wx/dirdlg.h"
 #endif
 
 #include "wx/os2/private.h"
@@ -46,4 +45,3 @@ int wxDirDialog::ShowModal()
     // TODO
     return wxID_CANCEL;
 }
-

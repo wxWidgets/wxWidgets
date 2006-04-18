@@ -20,8 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-
 #include "wx/menu.h"
 #include "wx/menuitem.h"
 #include "wx/log.h"
@@ -731,4 +729,3 @@ bool wxMenuBar::SetFont(const wxFont& font)
 
     return true;
 }
-

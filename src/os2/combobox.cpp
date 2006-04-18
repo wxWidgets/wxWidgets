@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        combobox.cpp
+// Name:        src/os2/combobox.cpp
 // Purpose:     wxComboBox class
 // Author:      David Webster
 // Modified by:
@@ -12,12 +12,11 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_COMBOBOX
+
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
     #include "wx/settings.h"
 #endif
-
-#if wxUSE_COMBOBOX
 
 #include "wx/combobox.h"
 #include "wx/clipbrd.h"

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/mslu.cpp
+// Name:        src/msw/mslu.cpp
 // Purpose:     Fixes for bugs in MSLU
 // Author:      Vaclav Slavik
 // Modified by:
@@ -13,12 +13,11 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
-#include <dir.h>
+    #pragma hdrstop
+    #include <dir.h>
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
     #include "wx/utils.h"
 #endif
 
@@ -223,7 +222,7 @@ WXDLLIMPEXP_BASE int wxMSLU__wstat(const wxChar *name, struct _stat *buffer)
 }
 
 #ifdef __BORLANDC__
-//here _stati64 is defined as stati64, see msw/mslu.h line 62 
+//here _stati64 is defined as stati64, see msw/mslu.h line 62
 #undef _stati64
 WXDLLIMPEXP_BASE int wxMSLU__wstati64(const wxChar *name, struct _stati64 *buffer)
  {

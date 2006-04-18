@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        button.cpp
+// Name:        src/motif/button.cpp
 // Purpose:     wxButton
 // Author:      Julian Smart
 // Modified by:
@@ -15,8 +15,6 @@
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #endif
-
-#include "wx/defs.h"
 
 #include "wx/button.h"
 
@@ -51,7 +49,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& lbl,
     wxString label(lbl);
     if (label.empty() && wxIsStockID(id))
         label = wxGetStockLabel(id);
-    
+
     if( !CreateControl( parent, id, pos, size, style, validator, name ) )
         return false;
 
@@ -76,7 +74,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& lbl,
         XmNlabelString, text(),
         XmNrecomputeSize, False,
         // See comment for wxButton::SetDefault
-        // XmNdefaultButtonShadowThickness, 1, 
+        // XmNdefaultButtonShadowThickness, 1,
         NULL);
 
     XtAddCallback ((Widget) m_mainWidget,

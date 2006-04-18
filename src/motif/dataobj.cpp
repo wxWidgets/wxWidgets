@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dataobj.cpp
+// Name:        src/motif/dataobj.cpp
 // Purpose:     wxDataObject class
 // Author:      Julian Smart
 // Id:          $Id$
@@ -9,8 +9,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/defs.h"
 
 #if wxUSE_CLIPBOARD
 
@@ -106,7 +104,7 @@ wxString wxDataFormat::GetId() const
 {
     char *t = XGetAtomName ((Display*) wxGetDisplay(), m_format);
     wxString ret( t );  // this will convert from ascii to Unicode
-    if (t) 
+    if (t)
         XFree( t );
     return ret;
 }

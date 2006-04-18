@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -26,7 +29,6 @@
 #pragma message enable nosimpint
 #endif
 
-#include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/font.h"
 #include "wx/gdicmn.h"
@@ -95,7 +97,7 @@ public:
                   int family = wxDEFAULT,
                   int style = wxDEFAULT,
                   int weight = wxDEFAULT,
-                  bool underlined = FALSE,
+                  bool underlined = false,
                   const wxString& faceName = wxEmptyString,
                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
@@ -118,7 +120,7 @@ public:
     void SetFaceName(const wxString& facename);
     void SetEncoding(wxFontEncoding encoding);
 
-    void SetNoAntiAliasing( bool no = TRUE ) { m_noAA = no; }
+    void SetNoAntiAliasing( bool no = true ) { m_noAA = no; }
     bool GetNoAntiAliasing() const { return m_noAA; }
 
     // and this one also modifies all the other font data fields
@@ -213,7 +215,7 @@ void wxFontRefData::Init(int pointSize,
 
 void wxFontRefData::InitFromNative()
 {
-    m_noAA = FALSE;
+    m_noAA = false;
 
 #if wxUSE_UNICODE
     // Get native info
@@ -273,7 +275,7 @@ void wxFontRefData::InitFromNative()
     }
 
     // Pango description are never underlined (?)
-    m_underlined = FALSE;
+    m_underlined = false;
 
     // Cannot we choose that
     m_encoding = wxFONTENCODING_SYSTEM;
@@ -343,7 +345,7 @@ void wxFontRefData::InitFromNative()
     }
 
     // X fonts are never underlined...
-    m_underlined = FALSE;
+    m_underlined = false;
 
     // deal with font encoding
     wxString
@@ -550,7 +552,7 @@ bool wxFont::Create(int pointSize,
     m_refData = new wxFontRefData(pointSize, family, style, weight,
                                   underlined, faceName, encoding);
 
-    return TRUE;
+    return true;
 }
 
 #if !wxUSE_UNICODE
@@ -560,7 +562,7 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
     if( !fontname )
     {
         *this = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT);
-        return TRUE;
+        return true;
     }
 
     m_refData = new wxFontRefData();
@@ -653,9 +655,9 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
         }
         //else: unknown encoding - may be give a warning here?
         else
-            return FALSE;
+            return false;
     }
-    return TRUE;
+    return true;
 }
 #endif // !wxUSE_UNICODE
 
@@ -695,7 +697,7 @@ int wxFont::GetPointSize() const
 
 wxString wxFont::GetFaceName() const
 {
-    wxCHECK_MSG( Ok(), wxT(""), wxT("invalid font") );
+    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
 
     return M_FONTDATA->m_faceName;
 }
@@ -723,7 +725,7 @@ int wxFont::GetWeight() const
 
 bool wxFont::GetUnderlined() const
 {
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
 
     return M_FONTDATA->m_underlined;
 }
@@ -757,13 +759,13 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 
 bool wxFont::IsFixedWidth() const
 {
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
 
 #if wxUSE_UNICODE
    return wxFontBase::IsFixedWidth();
 #else
     // Robert, is this right? HasNativeFont doesn't exist.
-    if ( TRUE )
+    if ( true )
     //    if ( M_FONTDATA->HasNativeFont() )
     {
         // the monospace fonts are supposed to have "M" in the spacing field
@@ -877,7 +879,7 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
     if (xFontName == "-*-*-*-*-*--*-*-*-*-*-*-*-*")
       // wxFont constructor not called with native font info parameter => take M_FONTDATA values
       xFontName.Clear();
-    
+
     // not found, create a new one
     XFontStruct *font = (XFontStruct *)
                         wxLoadQueryNearestFont(pointSize,

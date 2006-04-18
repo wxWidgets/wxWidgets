@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bitmap.cpp
+// Name:        src/motif/bmpmotif.cpp
 // Purpose:     wxBitmap
 // Author:      Julian Smart, originally in bitmap.cpp
 // Modified by:
@@ -17,7 +17,6 @@
 #define XtDisplay XTDISPLAY
 #endif
 
-#include "wx/defs.h"
 #include "wx/motif/bmpmotif.h"
 
 #ifdef __VMS__

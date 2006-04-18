@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filefn.cpp
+// Name:        src/msw/wince/filefn.cpp
 // Purpose:     File- and directory-related functions
 // Author:      Julian Smart
 // Modified by:
@@ -19,12 +19,12 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-#include "wx/defs.h"
-#include "wx/file.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#include "wx/file.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -123,12 +123,12 @@ int wxEof(int fd)
     DWORD off0 = SetFilePointer((HANDLE) fd, 0, &high0, FILE_CURRENT);
     if (off0 == 0xFFFFFFFF && GetLastError() != NO_ERROR)
         return -1;
-    
+
     LONG high1 = 0;
     DWORD off1 = SetFilePointer((HANDLE) fd, 0, &high0, FILE_END);
     if (off1 == 0xFFFFFFFF && GetLastError() != NO_ERROR)
         return -1;
-    
+
     if (off0 == off1 && high0 == high1)
         return 1;
     else

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        unix/mimetype.cpp
+// Name:        src/unix/mimetype.cpp
 // Purpose:     classes and functions to manage MIME types
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -33,17 +33,13 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_MIMETYPE && wxUSE_FILE && wxUSE_TEXTFILE
 
 #ifndef WX_PRECOMP
-  #include "wx/string.h"
+    #include "wx/string.h"
 #endif
 
 #include "wx/log.h"
@@ -311,7 +307,7 @@ void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename,
 
             wxLogTrace(TRACE_MIME, wxT("--- Reading from Gnome file %s '%s' ---"),
                     filename.c_str(), pc);
-            
+
             // trim trailing space and tab
             while ((*pc == wxT(' ')) || (*pc == wxT('\t')))
                 pc++;
@@ -322,18 +318,18 @@ void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename,
             {
                 wxString left_of_equal = sTmp.Left( equal_pos );
                 const wxChar *right_of_equal = pc;
-                right_of_equal += equal_pos+1; 
-                
+                right_of_equal += equal_pos+1;
+
                 if (left_of_equal == wxT("icon_filename"))
                 {
                     // GNOME 2:
                     curIconFile = right_of_equal;
-                    
+
                     wxFileName newFile( curIconFile );
                     if (newFile.IsRelative() || newFile.FileExists())
                     {
                         size_t nDirs = search_dirs.GetCount();
-                        
+
                         for (size_t nDir = 0; nDir < nDirs; nDir++)
                         {
                             newFile.SetPath( search_dirs[nDir] );
@@ -1309,7 +1305,7 @@ void wxMimeTypesManagerImpl::InitIfNeeded()
     {
         // set the flag first to prevent recursion
         m_initialized = true;
-    
+
     wxString wm = wxGetenv( wxT("WINDOWMANAGER") );
 
     if (wm.Find( wxT("kde") ) != wxNOT_FOUND)
@@ -1764,7 +1760,7 @@ bool wxMimeTypesManagerImpl::DoAssociation(const wxString& strType,
                                            const wxString& strDesc)
 {
     int nIndex = AddToMimeData(strType, strIcon, entry, strExtensions, strDesc, true);
-    
+
     if ( nIndex == wxNOT_FOUND )
         return false;
 
@@ -2703,4 +2699,3 @@ static bool IsKnownUnimportantField(const wxString& fieldAll)
 
 #endif
   // wxUSE_MIMETYPE && wxUSE_FILE && wxUSE_TEXTFILE
-

@@ -25,7 +25,6 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
     #include "wx/intl.h"
 #endif
 

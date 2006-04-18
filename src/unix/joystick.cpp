@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        joystick.cpp
+// Name:        src/unix/joystick.cpp
 // Purpose:     wxJoystick class
 // Author:      Ported to Linux by Guilhem Lavaux
 // Modified by:
@@ -11,8 +11,6 @@
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/defs.h"
 
 #if wxUSE_JOYSTICK
 
@@ -188,7 +186,7 @@ wxJoystick::wxJoystick(int joystick)
     if (m_device == -1)
     {
         dev_name.Printf( wxT("/dev/input/js%d"), joystick);
-        m_device = open(dev_name.fn_str(), O_RDONLY);             
+        m_device = open(dev_name.fn_str(), O_RDONLY);
     }
 
     if (m_device != -1)
@@ -295,7 +293,7 @@ int wxJoystick::GetNumberJoysticks()
             break;
         close(fd);
     }
-    
+
     if (j == 0) {
         for (j=0; j<4; j++) {
             dev_name.Printf(wxT("/dev/input/js%d"), j);
@@ -305,7 +303,7 @@ int wxJoystick::GetNumberJoysticks()
             close(fd);
         }
     }
-    
+
     return j;
 }
 
@@ -489,4 +487,3 @@ bool wxJoystick::ReleaseCapture()
     return false;
 }
 #endif  // wxUSE_JOYSTICK
-

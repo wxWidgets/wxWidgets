@@ -16,11 +16,10 @@
 #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#include "wx/defs.h"
-#endif
-
 #if wxUSE_HELP
+
+#ifndef WX_PRECOMP
+#endif
 
 #include "wx/filefn.h"
 

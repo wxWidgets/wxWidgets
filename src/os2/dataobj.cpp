@@ -20,13 +20,12 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_DATAOBJ
+
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
     #include "wx/intl.h"
     #include "wx/log.h"
 #endif
-
-#if wxUSE_DATAOBJ
 
 #include "wx/dataobj.h"
 #include "wx/mstream.h"

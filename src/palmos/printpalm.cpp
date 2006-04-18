@@ -24,8 +24,6 @@
     #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
-
 // Don't use the Windows printer if we're in wxUniv mode and using
 // the PostScript architecture
 #if wxUSE_PRINTING_ARCHITECTURE && (!defined(__WXUNIVERSAL__) || !wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)

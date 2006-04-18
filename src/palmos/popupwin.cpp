@@ -24,11 +24,10 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#include "wx/defs.h"
-#endif //WX_PRECOMP
-
 #if wxUSE_POPUPWIN
+
+#ifndef WX_PRECOMP
+#endif //WX_PRECOMP
 
 #include "wx/popupwin.h"
 
@@ -65,4 +64,3 @@ bool wxPopupWindow::Show(bool show)
 }
 
 #endif // #if wxUSE_POPUPWIN
-

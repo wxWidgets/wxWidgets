@@ -13,10 +13,8 @@
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
-#pragma hdrstop
+    #pragma hdrstop
 #endif
-
-#include "wx/defs.h"
 
 // Watcom C++ gives a linker error if this is compiled in.
 // With Borland C++, all samples crash if this is compiled in.
@@ -595,11 +593,11 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
     {
         wxDateTime date( variant.GetDateTime() );
         oleVariant.vt = VT_DATE;
-        
+
         long dosDateTime = date.GetAsDOS();
         short dosDate = short((dosDateTime & 0xFFFF0000) >> 16);
         short dosTime = short(dosDateTime & 0xFFFF);
-        
+
         DosDateTimeToVariantTime(dosDate, dosTime, & oleVariant.date);
     }
 #endif
@@ -682,7 +680,7 @@ WXDLLEXPORT bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& 
             unsigned short dosDate = 0;
             unsigned short dosTime = 0;
             VariantTimeToDosDateTime(oleVariant.date, & dosDate, & dosTime);
-            
+
             long dosDateTime = (dosDate << 16) || dosTime;
             wxDateTime date;
             date.SetFromDOS(dosDateTime);

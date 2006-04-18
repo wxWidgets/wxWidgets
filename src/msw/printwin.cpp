@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        printwin.cpp
+// Name:        src/msw/printwin.cpp
 // Purpose:     wxWindowsPrinter framework
 // Author:      Julian Smart
 // Modified by:
@@ -23,8 +23,6 @@
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
-
-#include "wx/defs.h"
 
 // Don't use the Windows printer if we're in wxUniv mode and using
 // the PostScript architecture

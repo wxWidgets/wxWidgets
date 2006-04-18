@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gauge.cpp
+// Name:        src/os2/gauge.cpp
 // Purpose:     wxGauge class
 // Author:      David Webster
 // Modified by:
@@ -12,9 +12,8 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
-#include "wx/utils.h"
-#include "wx/scrolwin.h"
+    #include "wx/utils.h"
+    #include "wx/scrolwin.h"
 #endif
 
 #include "wx/os2/private.h"
@@ -241,12 +240,10 @@ int wxGauge::GetValue() const
     return m_nGaugePos;
 } // end of wxGauge::GetValue
 
-bool wxGauge::SetBackgroundColour(
-  const wxColour&                   rColour
-)
+bool wxGauge::SetBackgroundColour( const wxColour& rColour )
 {
     if (!wxControl::SetBackgroundColour(rColour))
-        return FALSE;
+        return false;
 
     LONG                            lColor = (LONG)rColour.GetPixel();
 
@@ -255,7 +252,7 @@ bool wxGauge::SetBackgroundColour(
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
-    return TRUE;
+    return true;
 } // end of wxGauge::SetBackgroundColour
 
 void wxGauge::SetBezelFace(
@@ -264,14 +261,12 @@ void wxGauge::SetBezelFace(
 {
 } // end of wxGauge::SetBezelFace
 
-bool wxGauge::SetForegroundColour(
-  const wxColour&                   rColour
-)
+bool wxGauge::SetForegroundColour( const wxColour& rColour )
 {
     if (!wxControl::SetForegroundColour(rColour))
-        return FALSE;
+        return false;
 
-    LONG                            lColor = (LONG)rColour.GetPixel();
+    LONG lColor = (LONG)rColour.GetPixel();
 
     ::WinSetPresParam( GetHwnd()
                       ,PP_FOREGROUNDCOLOR
@@ -279,7 +274,7 @@ bool wxGauge::SetForegroundColour(
                       ,(PVOID)&lColor
                      );
 
-    return TRUE;
+    return true;
 } // end of wxGauge::SetForegroundColour
 
 void wxGauge::SetRange(

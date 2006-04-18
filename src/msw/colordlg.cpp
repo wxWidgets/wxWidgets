@@ -26,7 +26,6 @@
 
 #ifndef WX_PRECOMP
     #include <stdio.h>
-    #include "wx/defs.h"
     #include "wx/colour.h"
     #include "wx/gdicmn.h"
     #include "wx/utils.h"

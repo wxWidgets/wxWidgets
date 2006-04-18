@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        slider.cpp
+// Name:        src/motif/slider.cpp
 // Purpose:     wxSlider
 // Author:      Julian Smart
 // Modified by:
@@ -11,8 +11,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/defs.h"
 
 #if wxUSE_SLIDER
 

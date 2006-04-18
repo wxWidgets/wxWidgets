@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////
-// File:        taskbar.cpp
+// File:        src/palmos/taskbar.cpp
 // Purpose:     Implements wxTaskBarIcon class for manipulating icons on
 //              the task bar.
 // Author:      Julian Smart
@@ -14,15 +14,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
-#include "wx/window.h"
-#include "wx/frame.h"
-#include "wx/utils.h"
-#include "wx/menu.h"
+    #include "wx/window.h"
+    #include "wx/frame.h"
+    #include "wx/utils.h"
+    #include "wx/menu.h"
 #endif
 
 #if defined(__WIN95__)
@@ -107,4 +106,3 @@ long wxTaskBarIcon::WindowProc(unsigned int msg,
 }
 
 #endif // __WIN95__
-

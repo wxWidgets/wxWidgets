@@ -20,8 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-
 #ifdef __VMS
 #pragma message disable nosimpint
 #include "wx/vms_x_fix.h"
@@ -434,7 +432,7 @@ int wxFont::GetPointSize() const
 
 wxString wxFont::GetFaceName() const
 {
-    wxCHECK_MSG( Ok(), wxT(""), wxT("invalid font") );
+    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
 
     return M_FONTDATA->m_faceName ;
 }
@@ -478,7 +476,7 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( Ok(), (wxNativeFontInfo *)NULL, wxT("invalid font") );
 
-    if(M_FONTDATA->m_nativeFontInfo.GetXFontName().IsEmpty())
+    if(M_FONTDATA->m_nativeFontInfo.GetXFontName().empty())
         GetInternalFont();
 
     return &(M_FONTDATA->m_nativeFontInfo);
@@ -536,7 +534,7 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
 #endif
     f->m_display = ( display ? display : wxGetDisplay() );
     f->m_scale = intScale;
-    
+
 #if wxMOTIF_USE_RENDER_TABLE
     XmRendition rendition;
     XmRenderTable renderTable;
@@ -652,13 +650,13 @@ void wxGetTextExtent(WXDisplay* display, const wxFont& font, double scale,
 {
     XRectangle ink, logical;
     WXFontSet fset = font.GetFontSet(scale, display);
-    
+
     XmbTextExtents( (XFontSet)fset, str.c_str(), str.length(), &ink, &logical);
 
     if( width ) *width = logical.width;
     if( height ) *height = logical.height;
-    if( ascent ) *ascent = -logical.y;    
-    if( descent ) *descent = logical.height + logical.y;    
+    if( ascent ) *ascent = -logical.y;
+    if( descent ) *descent = logical.height + logical.y;
 }
 
 #else // if !wxMOTIF_NEW_FONT_HANDLING

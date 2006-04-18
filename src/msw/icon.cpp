@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/icon.cpp
+// Name:        src/msw/icon.cpp
 // Purpose:     wxIcon class
 // Author:      Julian Smart
 // Modified by: 20.11.99 (VZ): don't derive from wxBitmap any more
@@ -151,4 +151,3 @@ bool wxIcon::LoadFile(const wxString& filename,
 
     return handler->Load(this, filename, type, desiredWidth, desiredHeight);
 }
-

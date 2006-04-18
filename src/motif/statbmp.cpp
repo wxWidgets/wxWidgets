@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbmp.cpp
+// Name:        src/motif/statbmp.cpp
 // Purpose:     wxStaticBitmap
 // Author:      Julian Smart
 // Modified by:
@@ -11,8 +11,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/defs.h"
 
 #include "wx/statbmp.h"
 
@@ -131,7 +129,7 @@ void wxStaticBitmap::DoSetBitmap()
             XmNlabelType, XmSTRING,
             XmNlabelPixmap, XmUNSPECIFIED_PIXMAP,
             NULL);
-    }    
+    }
 }
 
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
@@ -156,4 +154,3 @@ void wxStaticBitmap::ChangeForegroundColour()
     m_bitmapCache.SetColoursChanged();
     wxWindow::ChangeForegroundColour();
 }
-

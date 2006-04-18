@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dataobj.cpp
+// Name:        src/x11/dataobj.cpp
 // Purpose:     wxDataObject class
 // Author:      Julian Smart
 // Id:          $Id$
@@ -7,7 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
 #if wxUSE_DATAOBJ
 
@@ -101,7 +102,7 @@ wxString wxDataFormat::GetId() const
 #else
     char *t = XGetAtomName ((Display*) wxGetDisplay(), m_format);
     wxString ret = wxString::FromAscii( t );
-    if (t) 
+    if (t)
         XFree( t );
     return ret;
 #endif
@@ -130,7 +131,7 @@ void wxDataFormat::SetId( const wxChar *id )
     PrepareFormats();
     m_type = wxDF_PRIVATE;
     wxString tmp( id );
-    m_format = XInternAtom( (Display*) wxGetDisplay(), tmp.ToAscii(), FALSE ); 
+    m_format = XInternAtom( (Display*) wxGetDisplay(), tmp.ToAscii(), FALSE );
 #endif
 }
 
@@ -157,17 +158,17 @@ wxDataObject::wxDataObject()
 bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) const
 {
     size_t nFormatCount = GetFormatCount(dir);
-    if ( nFormatCount == 1 ) 
+    if ( nFormatCount == 1 )
     {
         return format == GetPreferredFormat();
     }
-    else 
+    else
     {
         wxDataFormat *formats = new wxDataFormat[nFormatCount];
         GetAllFormats(formats,dir);
 
         size_t n;
-        for ( n = 0; n < nFormatCount; n++ ) 
+        for ( n = 0; n < nFormatCount; n++ )
         {
             if ( formats[n] == format )
                 break;
@@ -196,7 +197,7 @@ bool wxFileDataObject::GetDataHere(void *buf) const
 
     memcpy( buf, filenames.mbc_str(), filenames.Len() + 1 );
 
-    return TRUE;
+    return true;
 }
 
 size_t wxFileDataObject::GetDataSize() const
@@ -278,7 +279,7 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
     }
 #endif // 0/1
 
-    return TRUE;
+    return true;
 }
 
 void wxFileDataObject::AddFile( const wxString &filename )
@@ -323,12 +324,12 @@ bool wxBitmapDataObject::GetDataHere(void *buf) const
     {
         wxFAIL_MSG( wxT("attempt to copy empty bitmap failed") );
 
-        return FALSE;
+        return false;
     }
 
     memcpy(buf, m_pngData, m_pngSize);
 
-    return TRUE;
+    return true;
 }
 
 bool wxBitmapDataObject::SetData(size_t size, const void *buf)
@@ -346,14 +347,14 @@ bool wxBitmapDataObject::SetData(size_t size, const void *buf)
     wxPNGHandler handler;
     if ( !handler.LoadFile( &image, mstream ) )
     {
-        return FALSE;
+        return false;
     }
 
     m_bitmap = image;
 
     return m_bitmap.Ok();
 #else
-    return FALSE;
+    return false;
 #endif
 }
 
@@ -378,4 +379,3 @@ void wxBitmapDataObject::DoConvertToPng()
 }
 
 #endif // wxUSE_DATAOBJ
-

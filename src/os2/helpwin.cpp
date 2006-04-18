@@ -12,13 +12,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_HELP
+
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
 #endif
 
 #include "wx/os2/helpwin.h"
 
-#if wxUSE_HELP
 #include <time.h>
 
 #include "wx/os2/private.h"
@@ -150,4 +150,5 @@ bool wxWinHelpController::Quit()
 void wxWinHelpController::OnQuit()
 {
 }
+
 #endif // wxUSE_HELP

@@ -13,14 +13,13 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/defs.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_HELP
+
+#ifndef WX_PRECOMP
+#endif
 
 #include "wx/filefn.h"
 #include "wx/msw/helpwin.h"
@@ -53,14 +52,14 @@ bool wxWinHelpController::Initialize(const wxString& filename)
 
 bool wxWinHelpController::LoadFile(const wxString& file)
 {
-    if (!file.IsEmpty())
+    if (!file.empty())
         m_helpFile = file;
     return true;
 }
 
 bool wxWinHelpController::DisplayContents(void)
 {
-    if (m_helpFile.IsEmpty()) return false;
+    if (m_helpFile.empty()) return false;
 
     wxString str = GetValidFilename(m_helpFile);
 
@@ -70,7 +69,7 @@ bool wxWinHelpController::DisplayContents(void)
 bool wxWinHelpController::DisplaySection(int section)
 {
     // Use context number
-    if (m_helpFile.IsEmpty()) return false;
+    if (m_helpFile.empty()) return false;
 
     wxString str = GetValidFilename(m_helpFile);
 
@@ -79,7 +78,7 @@ bool wxWinHelpController::DisplaySection(int section)
 
 bool wxWinHelpController::DisplayContextPopup(int contextId)
 {
-    if (m_helpFile.IsEmpty()) return false;
+    if (m_helpFile.empty()) return false;
 
     wxString str = GetValidFilename(m_helpFile);
 
@@ -95,7 +94,7 @@ bool wxWinHelpController::DisplayBlock(long block)
 bool wxWinHelpController::KeywordSearch(const wxString& k,
                                         wxHelpSearchMode WXUNUSED(mode))
 {
-    if (m_helpFile.IsEmpty()) return false;
+    if (m_helpFile.empty()) return false;
 
     wxString str = GetValidFilename(m_helpFile);
 
@@ -115,7 +114,7 @@ wxString wxWinHelpController::GetValidFilename(const wxString& file) const
     wxSplitPath(file, & path, & name, & ext);
 
     wxString fullName;
-    if (path.IsEmpty())
+    if (path.empty())
         fullName = name + wxT(".hlp");
     else if (path.Last() == wxT('\\'))
         fullName = path + name + wxT(".hlp");

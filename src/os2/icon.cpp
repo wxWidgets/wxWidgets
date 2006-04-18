@@ -13,11 +13,10 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
     #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"

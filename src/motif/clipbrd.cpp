@@ -21,8 +21,6 @@
 #define XtDisplay XTDISPLAY
 #endif
 
-#include "wx/defs.h"
-
 #if wxUSE_CLIPBOARD
 
 #include "wx/app.h"

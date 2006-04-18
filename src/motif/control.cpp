@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        control.cpp
+// Name:        src/motif/control.cpp
 // Purpose:     wxControl class
 // Author:      Julian Smart
 // Modified by:
@@ -11,8 +11,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/defs.h"
 
 #include "wx/control.h"
 #include "wx/panel.h"

@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        checkbox.cpp
+// Name:        src/motif/checkbox.cpp
 // Purpose:     wxCheckBox
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -15,8 +15,6 @@
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #endif
-
-#include "wx/defs.h"
 
 #include "wx/checkbox.h"
 #include "wx/tglbtn.h"
@@ -63,7 +61,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
     wxString label1(wxStripMenuCodes(label));
     wxXmString text( label1 );
-    
+
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget ("toggle",
@@ -77,7 +75,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
         XmNtoggleMode, Is3State() ? XmTOGGLE_INDETERMINATE : XmTOGGLE_BOOLEAN,
 #endif
         NULL);
-    
+
     XtAddCallback( (Widget)m_mainWidget,
                    XmNvalueChangedCallback, (XtCallbackProc)wxCheckBoxCallback,
                    (XtPointer)this );

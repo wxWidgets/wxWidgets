@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbox.cpp
+// Name:        src/motif/statbox.cpp
 // Purpose:     wxStaticBox
 // Author:      Julian Smart
 // Modified by:
@@ -15,8 +15,6 @@
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #endif
-
-#include "wx/defs.h"
 
 #include "wx/statbox.h"
 #include "wx/utils.h"
@@ -101,8 +99,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
             // XmNshadowType, XmSHADOW_IN,
             NULL);
 
-    bool hasLabel = (!label.IsNull() && !label.IsEmpty()) ;
-    if (hasLabel)
+    if (!label.empty())
     {
         wxString label1(wxStripMenuCodes(label));
         wxXmString text(label1);
@@ -115,11 +112,11 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
 #if wxCHECK_MOTIF_VERSION( 2, 0 )
                 XmNframeChildType, XmFRAME_TITLE_CHILD,
 #else
-                XmNchildType, XmFRAME_TITLE_CHILD,          
+                XmNchildType, XmFRAME_TITLE_CHILD,
 #endif
                 NULL);
     }
-    
+
     AttachWidget (parent, m_mainWidget, NULL, pos.x, pos.y, size.x, size.y);
     ChangeBackgroundColour();
 

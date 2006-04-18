@@ -17,11 +17,10 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/filefn.h"
-#include "wx/log.h"
 
 #if wxUSE_HELP && wxUSE_MS_HTML_HELP \
     && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)

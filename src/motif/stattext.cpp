@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        stattext.cpp
+// Name:        src/motif/stattext.cpp
 // Purpose:     wxStaticText
 // Author:      Julian Smart
 // Modified by:
@@ -15,8 +15,6 @@
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #endif
-
-#include "wx/defs.h"
 
 #if wxUSE_STATTEXT
 

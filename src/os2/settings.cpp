@@ -13,11 +13,10 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/defs.h"
-#include "wx/pen.h"
-#include "wx/brush.h"
-#include "wx/gdicmn.h"
+    #include <stdio.h>
+    #include "wx/pen.h"
+    #include "wx/brush.h"
+    #include "wx/gdicmn.h"
 #endif
 
 #include "wx/module.h"
