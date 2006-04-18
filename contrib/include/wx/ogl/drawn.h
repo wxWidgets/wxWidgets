@@ -58,7 +58,7 @@ class WXDLLIMPEXP_OGL wxPseudoMetaFile: public wxObject
   inline void SetSize(double w, double h) { m_width = w; m_height = h; }
 
   inline void SetFillBrush(wxBrush* brush) { m_fillBrush = brush; }
-  inline wxBrush* GetFillBrush() const { return m_fillBrush; }
+  inline const wxBrush* GetFillBrush() const { return m_fillBrush; }
 
   inline void SetOutlinePen(wxPen* pen) { m_outlinePen = pen; }
   inline wxPen* GetOutlinePen() const { return m_outlinePen; }
@@ -114,7 +114,7 @@ public:
   // Pen/brush specifying outline/fill colours
   // to override operations.
   wxPen*            m_outlinePen;
-  wxBrush*          m_fillBrush;
+  const wxBrush*    m_fillBrush;
   wxList            m_outlineColours; // List of the GDI operations that comprise the outline
   wxList            m_fillColours; // List of the GDI operations that fill the shape
   double             m_currentRotation;
@@ -219,4 +219,3 @@ private:
 
 #endif
     // _DRAWN_H_
-

@@ -301,7 +301,7 @@ class WXDLLIMPEXP_OGL wxShape: public wxShapeEvtHandler
   inline long GetId() const { return m_id; }
 
   void SetPen(wxPen *pen);
-  void SetBrush(wxBrush *brush);
+  void SetBrush(const wxBrush *brush);
 
   virtual void Show(bool show);
   virtual bool IsShown() const { return m_visible; }
@@ -330,7 +330,7 @@ class WXDLLIMPEXP_OGL wxShape: public wxShapeEvtHandler
   void AddText(const wxString& string);
 
   inline wxPen *GetPen() const { return m_pen; }
-  inline wxBrush *GetBrush() const { return m_brush; }
+  inline const wxBrush *GetBrush() const { return m_brush; }
 
   /*
    * Region-specific functions (defaults to the default region
@@ -528,7 +528,7 @@ class WXDLLIMPEXP_OGL wxShape: public wxShapeEvtHandler
   bool                  m_formatted;
   double                m_xpos, m_ypos;
   wxPen*                m_pen;
-  wxBrush*              m_brush;
+  const wxBrush*        m_brush;
   wxFont*               m_font;
   wxColour              m_textColour;
   wxString              m_textColourName;
@@ -558,7 +558,7 @@ class WXDLLIMPEXP_OGL wxShape: public wxShapeEvtHandler
   wxShape*              m_parent;      // In case it's a child
   int                   m_formatMode;
   int                   m_shadowMode;
-  wxBrush*              m_shadowBrush;
+  const wxBrush*        m_shadowBrush;
   int                   m_shadowOffsetX;
   int                   m_shadowOffsetY;
   int                   m_textMarginX;    // Gap between text and border

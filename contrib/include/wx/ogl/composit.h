@@ -189,9 +189,9 @@ class WXDLLIMPEXP_OGL wxDivisionShape: public wxCompositeShape
   inline int GetHandleSide() const { return m_handleSide; }
 
   inline void SetLeftSidePen(wxPen *pen) { m_leftSidePen = pen; }
-  inline wxPen *GetLeftSidePen() const { return m_leftSidePen; }
+  inline const wxPen *GetLeftSidePen() const { return m_leftSidePen; }
   inline void SetTopSidePen(wxPen *pen) { m_topSidePen = pen; }
-  inline wxPen *GetTopSidePen() const { return m_topSidePen; }
+  inline const wxPen *GetTopSidePen() const { return m_topSidePen; }
 
   void SetLeftSideColour(const wxString& colour);
   void SetTopSideColour(const wxString& colour);
@@ -214,8 +214,8 @@ class WXDLLIMPEXP_OGL wxDivisionShape: public wxCompositeShape
 
   int                   m_handleSide;       // Side at which handle is legal
 
-  wxPen*                m_leftSidePen;
-  wxPen*                m_topSidePen;
+  const wxPen*          m_leftSidePen;
+  const wxPen*          m_topSidePen;
   wxString              m_leftSideColour;
   wxString              m_topSideColour;
   wxString              m_leftSideStyle;

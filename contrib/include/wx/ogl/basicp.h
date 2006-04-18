@@ -63,12 +63,12 @@ class WXDLLIMPEXP_OGL wxControlPoint: public wxRectangleShape
   inline void SetEraseObject(bool er) { m_eraseObject = er; }
 
 public:
-  int           m_type;
-  double         m_xoffset;
-  double         m_yoffset;
-  wxShape*      m_shape;
-  wxCursor*     m_oldCursor;
-  bool          m_eraseObject; // If true, erases object before dragging handle.
+  int             m_type;
+  double          m_xoffset;
+  double          m_yoffset;
+  wxShape*        m_shape;
+  const wxCursor* m_oldCursor;
+  bool            m_eraseObject; // If true, erases object before dragging handle.
 
 /*
  * Store original top-left, bottom-right coordinates

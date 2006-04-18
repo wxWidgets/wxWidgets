@@ -689,7 +689,7 @@ void wxShape::SetPen(wxPen *the_pen)
   m_pen = the_pen;
 }
 
-void wxShape::SetBrush(wxBrush *the_brush)
+void wxShape::SetBrush(const wxBrush *the_brush)
 {
   m_brush = the_brush;
 }
@@ -3284,4 +3284,3 @@ wxBrush wxShape::GetBackgroundBrush()
     }
     return * g_oglWhiteBackgroundBrush;
 }
-

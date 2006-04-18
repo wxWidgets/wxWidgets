@@ -113,7 +113,7 @@ private:
     int m_maxWeights;
     wxSize m_defaultCellSize;
     wxWindow *m_win; // usually used for debugging
-    wxPen *m_pen;
+    const wxPen *m_pen;
 
     void DrawGridLines(wxDC& dc);
     void Initialize(wxSize size);
