@@ -515,8 +515,12 @@ wxDataViewCellBase::wxDataViewCellBase( const wxString &varianttype, wxDataViewC
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumnBase, wxObject)
 
-wxDataViewColumnBase::wxDataViewColumnBase( const wxString &title, wxDataViewCell *cell, size_t model_column, 
-        int fixed_width, wxDataViewColumnSizing sizing, int flags )
+wxDataViewColumnBase::wxDataViewColumnBase(const wxString& title,
+                                           wxDataViewCell *cell,
+                                           size_t model_column,
+                                           int WXUNUSED(fixed_width),
+                                           wxDataViewColumnSizing WXUNUSED(sizing),
+                                           int flags )
 {
     m_cell = cell;
     m_model_column = model_column;
