@@ -724,12 +724,13 @@ void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
 void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
                            wxCoord width, wxCoord height)
 {
-    WXMICROWIN_CHECK_HDC
-
+    // cases when we don't have DrawFrameControl()
+#if defined(__SYMANTEC__) || defined(__WXMICROWIN__)
+    return wxDCBase::DoDrawCheckMark(x1, y1, width, height);
+#else // normal case
     wxCoord x2 = x1 + width,
             y2 = y1 + height;
 
-#if defined(__WIN32__) && !defined(__SYMANTEC__) && !defined(__WXMICROWIN__)
     RECT rect;
     rect.left   = x1;
     rect.top    = y1;
@@ -741,25 +742,10 @@ void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
 #else
     DrawFrameControl(GetHdc(), &rect, DFC_MENU, DFCS_MENUCHECK);
 #endif
-#else // Symantec-MicroWin
-    // draw a cross
-    HPEN blackPen = ::CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
-    HPEN whiteBrush = (HPEN)::GetStockObject(WHITE_BRUSH);
-    HPEN hPenOld = (HPEN)::SelectObject(GetHdc(), blackPen);
-    HPEN hBrushOld = (HPEN)::SelectObject(GetHdc(), whiteBrush);
-    ::SetROP2(GetHdc(), R2_COPYPEN);
-    Rectangle(GetHdc(), x1, y1, x2, y2);
-    MoveToEx(GetHdc(), x1, y1, NULL);
-    LineTo(GetHdc(), x2, y2);
-    MoveToEx(GetHdc(), x2, y1, NULL);
-    LineTo(GetHdc(), x1, y2);
-    ::SelectObject(GetHdc(), hPenOld);
-    ::SelectObject(GetHdc(), hBrushOld);
-    ::DeleteObject(blackPen);
-#endif // Win32/Symantec-MicroWin
 
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
+#endif // Microwin/Normal
 }
 
 void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
