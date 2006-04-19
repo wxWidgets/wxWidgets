@@ -9,21 +9,39 @@
 #export DH_VERBOSE=1
 export DH_OPTIONS
 
-ifdef DISTCC_HOSTS
+ifdef CONCURRENCY_LEVEL
 
- #JOB_COUNT := $(shell set $${DISTCC_HOSTS} > /dev/null 2>&1 ; echo $$(($$\# + $$\#)))
- # Nearly as fast, but doesn't raise the room temperature
- # or saturate the build machines quite so much.
+  # A user who knows what they want, that's like gold...
+  # respect their precious opinion of how much blue smoke to use.
+  JOB_COUNT := $(CONCURRENCY_LEVEL)
+
+else ifdef DISTCC_HOSTS
+
+ # Otherwise, if they have a cluster, try to put it to good use.
   JOB_COUNT := $(shell set $${DISTCC_HOSTS} > /dev/null 2>&1 ; echo $$\#)
-  FAST_MAKE  = $(MAKE) -j $(JOB_COUNT)
 
-else
-
-  FAST_MAKE = $(MAKE)
+ # Not much faster, but it might keep you warm in winter...
+ #JOB_COUNT := $(shell set $${DISTCC_HOSTS} > /dev/null 2>&1 ; echo $$(($$\# + $$\#)))
 
 endif
 
+ifdef JOB_COUNT
+  FAST_MAKE  = $(MAKE) -j $(JOB_COUNT)
+else
+  FAST_MAKE = $(MAKE)
+endif
+
 -include debian/python-version
+
+
+# If another source package is to supply the common binary packages
+# for a particular Debian release, then define this variable to indicate
+# the $(release) that is expected to provide it.  Do not define it at
+# all if this is to be the default (or only) wx source package for the
+# target release.
+#
+# for etch:
+#DEBIAN_WX_DEFAULT_VERSION = 2.6
 
 
 # This will extract a flavour out of the name of the source directory
@@ -56,33 +74,62 @@ pytoolkit := gtk2
 pydir     := usr/lib/$(python_ver)/site-packages
 wxpydir   := $(pydir)/wx-$(release)-$(pytoolkit)-unicode
 
-cross_host  = i586-mingw32msvc
-cross_build = $(shell ./config.guess)
+cross_host  := i586-mingw32msvc
+cross_build := $(shell ./config.guess)
 
 config_cache       = ../config_deb.cache
 config_cache_cross = ../config_deb_cross.cache
 
+
 # Packages to build:
-package_gtk_lib         = libwxgtk$(sorelease)
-package_gtk_dev         = libwxgtk$(release)-dev
-package_gtk_dbg         = libwxgtk$(release)-dbg
+package_wxbase_lib      := libwxbase$(sorelease)
+package_wxbase_dev      := libwxbase$(release)-dev
+package_wxbase_dbg      := libwxbase$(release)-dbg
 
-package_gtk_py_lib      = python-wxgtk$(release)
-package_gtk_py_ver      = python-wxversion
-package_gtk_py_tools    = python-wxtools
+package_gtk_lib         := libwxgtk$(sorelease)
+package_gtk_dev         := libwxgtk$(release)-dev
+package_gtk_dbg         := libwxgtk$(release)-dbg
 
-package_common          = wx-common
-package_headers         = wx$(release)-headers
-package_i18n            = wx$(release)-i18n
-package_doc             = wx$(release)-doc
-package_examples        = wx$(release)-examples
 
-package_gtk_dbg_py      = python-wxgtk$(release)-dbg
-package_msw_dev         = libwxmsw$(release)-dev
-package_msw_dbg         = libwxmsw$(release)-dbg
-package_headers_msw     = wx$(release)-headers-msw
+
+
+package_gtk_py_lib      := python-wxgtk$(release)
+package_gtk_py_ver       = python-wxversion
+package_gtk_py_tools     = python-wxtools
+
+package_headers         := wx$(release)-headers
+package_i18n            := wx$(release)-i18n
+package_doc             := wx$(release)-doc
+package_examples        := wx$(release)-examples
+package_common           = wx-common
+
+# The packages listed here are common to all wx versions, and may be provided
+# by another source package if more than one is in the release simultaneously.
+common_packages	:= $(package_common) $(package_gtk_py_ver) $(package_gtk_py_tools)
+
+
+package_gtk_dbg_py      := python-wxgtk$(release)-dbg
+
+
+
+package_msw_dev         := libwxmsw$(release)-dev
+package_msw_dbg         := libwxmsw$(release)-dbg
+package_headers_msw     := wx$(release)-headers-msw
+
+# The packages listed here will not be built by default.
+extra_packages := $(package_gtk_dbg_py)                                      \
+		  $(package_msw_dev) $(package_msw_dbg) $(package_headers_msw)
+
+ifdef DEBIAN_WX_DEFAULT_VERSION
+
+  extra_packages += $(common_packages)
+
+endif
+
 
 # Build directories:
+objdir_wxbase_shared       = objs_wxbase_sh
+objdir_wxbase_debug        = objs_wxbase_d
 objdir_gtk_shared          = objs_gtk_sh
 objdir_gtk_debug           = objs_gtk_d
 objdir_gtk_install         = objs_gtk_install
@@ -96,10 +143,11 @@ objdir_msw_static          = objs_msw_st
 objdir_msw_dbg             = objs_msw_d
 objdir_msw_install         = objs_msw_install
 
-objdirs = $(objdir_gtk_shared) $(objdir_gtk_debug) $(objdir_gtk_install)  \
-	  $(objdir_doc_cruft) $(objdir_doc) $(objdir_examples)            \
-	  $(objdir_msw_shared) $(objdir_msw_static) $(objdir_msw_dbg)     \
-	  $(objdir_msw_install)
+objdirs := $(objdir_wxbase_shared) $(objdir_wxbase_debug)                  \
+	   $(objdir_gtk_shared) $(objdir_gtk_debug) $(objdir_gtk_install)  \
+	   $(objdir_doc_cruft) $(objdir_doc) $(objdir_examples)            \
+	   $(objdir_msw_shared) $(objdir_msw_static) $(objdir_msw_dbg)     \
+	   $(objdir_msw_install)
 
 #	note that the i18n package is actually arch indep (once built)
 #	but must be built (and installed) during the arch any phase as
@@ -110,32 +158,39 @@ objdirs = $(objdir_gtk_shared) $(objdir_gtk_debug) $(objdir_gtk_install)  \
 
 
 # Build stamps:
-build_arch_stamps = build-gtk-shared-stamp build-gtk-shared-contrib-stamp \
+build_arch_stamps = build-wxbase-shared-stamp build-wxbase-debug-stamp    \
+                    build-gtk-shared-stamp build-gtk-shared-contrib-stamp \
                     build-gtk-debug-stamp build-gtk-debug-contrib-stamp   \
                     build-i18n-stamp build-gtk-py-stamp
 
+build_indep_stamps = build-examples-stamp build-doc-stamp
 
-build_indep_stamps  = build-examples-stamp build-doc-stamp
+build_cross_stamps = build-msw-shared-stamp build-msw-static-stamp build-msw-dbg-stamp
 
-build_cross_stamps  = build-msw-shared-stamp build-msw-static-stamp build-msw-dbg-stamp
+build_stamps_native := $(build_arch_stamps) $(build_indep_stamps)
 
-build_stamps_native = $(build_arch_stamps) $(build_indep_stamps)
-
-build_stamps = $(build_stamps_native) $(build_cross_stamps)
+build_stamps := $(build_stamps_native) $(build_cross_stamps)
 
 
 # Install targets:
-install_all_arch = install-gtk-lib install-gtk-dev install-gtk-dbg        \
-                   install-common install-headers install-i18n            \
+install_all_arch = install-wxbase-lib install-wxbase-dev install-wxbase-dbg  \
+                   install-gtk-lib install-gtk-dev install-gtk-dbg        \
+                   install-headers install-i18n            \
                    install-gtk-py
 
-install_all_indep  = install-examples install-doc
+ifndef DEBIAN_WX_DEFAULT_VERSION
 
-install_all_cross  = install-msw-dev install-msw-dbg install-headers-msw
+  install_all_arch += install-common
 
-install_all_native = $(install_all_arch) $(install_all_indep)
+endif
 
-install_all = $(install_all_native) $(install_all_cross)
+install_all_indep = install-examples install-doc
+
+install_all_cross = install-msw-dev install-msw-dbg install-headers-msw
+
+install_all_native := $(install_all_arch) $(install_all_indep)
+
+install_all := $(install_all_native) $(install_all_cross)
 
 
 # wxPython uses this to build in-tree
@@ -158,41 +213,53 @@ debian/python-version:
 	echo python_ver := python$(shell python -c "import sys;print sys.version[:3]") > $@
 
 debian/control: $(addprefix debian/,control.in python-version)
-	sed -e 's/=V/$(release)/g;     \
-		s/=SOV/$(sorelease)/g; \
-		s/=PY/$(python_ver)/g' \
+	sed -e 's/=V/$(release)/g;s/=SOV/$(sorelease)/g;s/=PY/$(python_ver)/g'\
 		< debian/control.in > debian/control
 
 control-files-stamp: debian/control
 	dh_testdir
 	@for f in postinst prerm; do                                         \
+		echo "generating control file $(package_wxbase_dev).$$f";    \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=PRIO/$(alt_prio)/g'                               \
+			< debian/libwxbase-dev.$$f                           \
+			> debian/$(package_wxbase_dev).$$f;                  \
+	done;
+	@for f in postinst prerm; do                                         \
+		echo "generating control file $(package_wxbase_dbg).$$f";    \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=PRIO/$(alt_prio)/g'                               \
+			< debian/libwxbase-dbg.$$f                           \
+			> debian/$(package_wxbase_dbg).$$f;                  \
+	done;
+	@for f in postinst prerm; do                                         \
 		echo "generating control file $(package_gtk_dev).$$f";       \
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/libwxgtk-dev.$$f                            \
 			> debian/$(package_gtk_dev).$$f;                     \
 	done;
 	@for f in postinst prerm; do                                         \
 		echo "generating control file $(package_gtk_dbg).$$f";       \
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/libwxgtk-dbg.$$f                            \
 			> debian/$(package_gtk_dbg).$$f;                     \
 	done;
 	@for f in docs postinst prerm; do                                    \
 		echo "generating control file $(package_gtk_py_lib).$$f";    \
-		sed -e 's/=PY/$(python_ver)/g;                               \
-			s|=WXPYDIR|$(wxpydir)|g;                             \
-			s/=V/$(release)/g;                                   \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=PY/$(python_ver)/g;                              '\
+'			s|=WXPYDIR|$(wxpydir)|g;                            '\
+'			s/=V/$(release)/g;                                  '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/python-wxgtk.$$f                            \
 			> debian/$(package_gtk_py_lib).$$f;                  \
 	done;
 	@for f in postinst prerm; do                                         \
 		echo "generating control file $(package_gtk_dbg_py).$$f";    \
-		sed -e 's/=PY/$(python_ver)/g;                               \
-			s/=V/$(release)/g;                                   \
-			s/=PRIO/$(alt_prio)/g'                               \
+		sed -e 's/=PY/$(python_ver)/g;                              '\
+'			s/=V/$(release)/g;                                  '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/python-wxgtk-dbg.$$f                        \
 			> debian/$(package_gtk_dbg_py).$$f;                  \
 	done;
@@ -209,17 +276,17 @@ control-files-stamp: debian/control
 	done;
 	@for f in postinst prerm; do                                         \
 		echo "generating control file $(package_msw_dev).$$f";       \
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=PRIO/$(alt_prio)/g;                               \
-			s/=H/$(cross_host)/g'                                \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=H/$(cross_host)/g;                               '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/libwxmsw-dev.$$f                            \
 			> debian/$(package_msw_dev).$$f;                     \
 	done;
 	@for f in postinst prerm; do                                         \
 		echo "generating control file $(package_msw_dbg).$$f";       \
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=PRIO/$(alt_prio)/g;                               \
-			s/=H/$(cross_host)/g'                                \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=H/$(cross_host)/g;                               '\
+'			s/=PRIO/$(alt_prio)/g'                               \
 			< debian/libwxmsw-dbg.$$f                            \
 			> debian/$(package_msw_dbg).$$f;                     \
 	done;
@@ -227,8 +294,8 @@ control-files-stamp: debian/control
 #		sed -e 's/=V/$(release)/g' < debian/wx-common.menu           \
 #			> debian/$(package_common).menu;
 	@echo "generating control file lintian-override";                    \
-		sed -e 's/=V/$(release)/g;                                   \
-			s/=SOV/$(sorelease)/g'                               \
+		sed -e 's/=V/$(release)/g;                                  '\
+'			s/=SOV/$(sorelease)/g'                               \
 			< debian/lintian-override.in                         \
 			> debian/lintian-override;                           \
 	touch $@
@@ -245,6 +312,51 @@ build_all: control-files-stamp $(build_stamps_native)
 build: build_arch
 
 
+# The wx2.6 build system makes us run around in circles to get a separate
+# libwxbase.  We need to configure it here in order to get the correct
+# config files to use it alone, but there is no point building it as the
+# wxgtk build is going to do that again anyway.  We'll move the relevant
+# files out when that is done.
+
+configure-wxbase-shared-stamp:
+	dh_testdir
+	mkdir -p $(objdir_wxbase_shared)
+	cd $(objdir_wxbase_shared) 					\
+		&& ../configure --prefix=/usr 				\
+				--cache-file=$(config_cache) 		\
+				--with-flavour=$(DEBIAN_WXFLAVOUR)	\
+				--disable-gui 				\
+				--with-zlib=sys				\
+				--enable-unicode			\
+				--disable-reserved_virtual
+	touch $@
+
+build-wxbase-shared-stamp: configure-wxbase-shared-stamp
+	dh_testdir
+	# Nothing to build here, move along...
+	#cd $(objdir_wxbase_shared) && $(FAST_MAKE)
+	touch $@
+
+configure-wxbase-debug-stamp:
+	dh_testdir
+	mkdir -p $(objdir_wxbase_debug)
+	cd $(objdir_wxbase_debug) 					\
+		&& ../configure --prefix=/usr 				\
+				--cache-file=$(config_cache) 		\
+				--with-flavour=$(DEBIAN_WXFLAVOUR)	\
+				--disable-gui 				\
+				--enable-debug 				\
+				--with-zlib=sys				\
+				--enable-unicode			\
+				--disable-reserved_virtual
+	touch $@
+
+build-wxbase-debug-stamp: configure-wxbase-debug-stamp
+	dh_testdir
+	# Nothing to build here, move along...
+	#cd $(objdir_wxbase_debug) && $(FAST_MAKE)
+	touch $@
+
 configure-gtk-shared-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_shared)
@@ -259,7 +371,8 @@ configure-gtk-shared-stamp:
 				--with-libjpeg=sys			\
 				--with-libpng=sys			\
 				--with-libtiff=sys			\
-				--enable-unicode
+				--enable-unicode			\
+				--disable-reserved_virtual
 	touch $@
 
 build-gtk-shared-stamp: configure-gtk-shared-stamp
@@ -283,7 +396,8 @@ configure-gtk-debug-stamp:
 				--with-libpng=sys			\
 				--with-libtiff=sys			\
 				--enable-debug				\
-				--enable-unicode
+				--enable-unicode			\
+				--disable-reserved_virtual
 	touch $@
 
 build-gtk-debug-stamp: configure-gtk-debug-stamp
@@ -358,6 +472,11 @@ build-examples-stamp: build-gtk-shared-stamp
 		done							\
 
 	cp -a wxPython/demo $(objdir_examples)/wxPython
+
+	echo "generating install_examples.sh script";
+	sed -e 's/=V/$(release)/g' < debian/unpack_examples.sh.in	\
+				   > debian/unpack_examples.sh
+	chmod 755 debian/unpack_examples.sh
 
 	touch $@
 
@@ -460,6 +579,9 @@ clean: debian/control clean-py
 	rm -f $(objdir_i18n)/*.mo
 
 	dh_clean
+	rm -f debian/$(package_wxbase_lib).*
+	rm -f debian/$(package_wxbase_dev).*
+	rm -f debian/$(package_wxbase_dbg).*
 	rm -f debian/$(package_gtk_lib).*
 	rm -f debian/$(package_gtk_dev).*
 	rm -f debian/$(package_gtk_dbg).*
@@ -472,10 +594,44 @@ clean: debian/control clean-py
 	rm -f debian/$(package_msw_dev).*
 	rm -f debian/$(package_msw_dbg).*
 	rm -f debian/lintian-override
+	rm -f debian/unpack_examples.sh
 
 install_arch: build_arch $(install_all_arch)
 
 install: build_all $(install_all_native)
+
+
+install-wxbase-lib: DH_OPTIONS=-p$(package_wxbase_lib)
+install-wxbase-lib: build-wxbase-shared-stamp install-gtk-shared-stamp
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	@# No, this is not a typo, we steal these libs from the gtk build.
+	dh_install $(objdir_gtk_install)/lib/libwx_base*.so.*	usr/lib
+	dh_installdirs usr/share/lintian/overrides
+	cp debian/lintian-override debian/$(package_wxbase_lib)/usr/share/lintian/overrides/$(package_wxbase_lib)
+
+install-wxbase-dev: DH_OPTIONS=-p$(package_wxbase_dev)
+install-wxbase-dev: build-wxbase-shared-stamp install-gtk-shared-stamp
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	@# No, this is not a typo, we steal these libs from the gtk build.
+	dh_install $(objdir_gtk_install)/lib/libwx_base*.so 	usr/lib
+	dh_install $(objdir_wxbase_shared)/lib/wx/include 	usr/lib/wx
+	dh_install $(objdir_wxbase_shared)/lib/wx/config/base*	usr/lib/wx/config
+
+install-wxbase-dbg: DH_OPTIONS=-p$(package_wxbase_dbg)
+install-wxbase-dbg: build-wxbase-debug-stamp
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	@# No, this is not a typo, we steal these libs from the gtk debug build.
+	dh_install $(objdir_gtk_debug)/lib/libwx_base*		usr/lib
+	dh_install $(objdir_wxbase_debug)/lib/wx/include	usr/lib/wx
+	dh_install $(objdir_wxbase_debug)/lib/wx/config/base*	usr/lib/wx/config
+	dh_installdirs usr/share/lintian/overrides
+	cp debian/lintian-override debian/$(package_wxbase_dbg)/usr/share/lintian/overrides/$(package_wxbase_dbg)
 
 install-gtk-shared-stamp: build-gtk-shared-stamp build-gtk-shared-contrib-stamp
 	dh_testdir
@@ -491,7 +647,7 @@ install-gtk-lib: install-gtk-shared-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	dh_install $(objdir_gtk_install)/lib/libwx_*.so.*	usr/lib
+	dh_install $(objdir_gtk_install)/lib/libwx_gtk*.so.*	usr/lib
 	dh_installdirs usr/share/lintian/overrides
 	cp debian/lintian-override debian/$(package_gtk_lib)/usr/share/lintian/overrides/$(package_gtk_lib)
 
@@ -500,7 +656,7 @@ install-gtk-dev: install-gtk-shared-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	dh_install $(objdir_gtk_install)/lib/libwx_*.so 	usr/lib
+	dh_install $(objdir_gtk_install)/lib/libwx_gtk*.so 	usr/lib
 	dh_install $(objdir_gtk_install)/lib/wx/include 	usr/lib/wx
 	dh_install $(objdir_gtk_install)/lib/wx/config/gtk* 	usr/lib/wx/config
 
@@ -509,7 +665,7 @@ install-gtk-dbg: build-gtk-debug-stamp build-gtk-debug-contrib-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	dh_install $(objdir_gtk_debug)/lib/libwx_*		usr/lib
+	dh_install $(objdir_gtk_debug)/lib/libwx_gtk*		usr/lib
 	dh_install $(objdir_gtk_debug)/lib/wx/include		usr/lib/wx
 	dh_install $(objdir_gtk_debug)/lib/wx/config/gtk*	usr/lib/wx/config
 	dh_installdirs usr/share/lintian/overrides
@@ -545,7 +701,12 @@ install-gtk-py-ver: install-gtk-py-lib
 	dh_testroot
 	dh_clean -k
 
+ifndef DEBIAN_WX_DEFAULT_VERSION
+
 	dh_movefiles --sourcedir=debian/$(package_gtk_py_lib) $(pydir)/wxversion.py
+else
+	rm debian/$(package_gtk_py_lib)/$(pydir)/wxversion.py
+endif
 
 install-gtk-py-tools: DH_OPTIONS=-p$(package_gtk_py_tools)
 install-gtk-py-tools: install-gtk-py-ver
@@ -553,8 +714,9 @@ install-gtk-py-tools: install-gtk-py-ver
 	dh_testroot
 	dh_clean -k
 
+ifndef DEBIAN_WX_DEFAULT_VERSION
+
 	dh_movefiles --sourcedir=debian/$(package_gtk_py_lib) usr/bin
-	rm -r debian/$(package_gtk_py_lib)/usr/bin
 
 	dh_installman debian/wxPython-tools.1
 	dh_link usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2py.1     \
@@ -571,6 +733,8 @@ install-gtk-py-tools: install-gtk-py-ver
 
 	dh_installdirs usr/share/lintian/overrides
 	cp debian/lintian-override debian/$(package_gtk_py_tools)/usr/share/lintian/overrides/$(package_gtk_py_tools)
+endif
+	rm -r debian/$(package_gtk_py_lib)/usr/bin
 
 install-gtk-py: install-gtk-py-tools
 
@@ -617,6 +781,11 @@ install-doc: build-doc-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
+
+	@# Link this monstrosity with an overly obfuscated name
+	@# to something that both people and browsers can expect to find.
+	dh_link usr/share/doc/$(package_doc)/wx-manual.html/wx-$(release)-manual_contents.html \
+		usr/share/doc/$(package_doc)/wx-manual.html/index.html
 
 install-examples: DH_OPTIONS=-p$(package_examples)
 install-examples: build-examples-stamp
@@ -725,7 +894,8 @@ binary-common:
 
 	@# Don't strip debug libs at all, and strip cross libs elsewhere
 	@# with the cross host tools until dh_strip gets smarter.
-	dh_strip -N$(package_gtk_dbg) -N$(package_msw_dev) -N$(package_msw_dbg)
+	dh_strip -N$(package_gtk_dbg) -N$(package_wxbase_dbg) \
+		 -N$(package_msw_dev) -N$(package_msw_dbg)
 
 	dh_compress
 	dh_fixperms
@@ -748,13 +918,13 @@ binary-common:
 # building the arch specific package files needed to create them.
 binary-indep: build_all install
 	$(MAKE) -f debian/rules \
-		DH_OPTIONS="-i -N$(package_gtk_dbg_py) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
+		DH_OPTIONS="-i $(addprefix -N,$(extra_packages))" \
 		binary-common
 
 # Build just the architecture-dependent files here.
 binary-arch: build_arch install_arch
 	$(MAKE) -f debian/rules \
-		DH_OPTIONS="-a -N$(package_gtk_dbg_py) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
+		DH_OPTIONS="-a $(addprefix -N,$(extra_packages))" \
 		binary-common
 
 # Build all packages target.
@@ -810,7 +980,9 @@ binary-fast:control-files-stamp install-gtk-dbg install-msw-dev install-headers 
 .PHONY: build build_all build_arch					\
 	clean clean-py purge-release-py purge-dbg-py			\
 	binary-indep binary-arch binary binary-common 			\
-        binary-gtk binary-gtk-dev binary-gtk-dbg binary-doc binary-cross \
+	binary-gtk binary-gtk-dev binary-gtk-dbg			\
+	binary-wxbase binary-wxbase-dev binary-wxbase-dbg		\
+	binary-doc binary-cross binary-dbg-py				\
 	install install_arch install-gtk-lib install-gtk-dev 		\
         install-gtk-dbg                                             	\
 	install-gtk-py install-gtk-py-tools install-gtk-py-ver		\

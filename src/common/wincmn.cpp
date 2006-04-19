@@ -217,8 +217,10 @@ wxWindowBase::wxWindowBase()
     // VZ: this one shouldn't exist...
     m_isBeingDeleted = false;
 
+#if WX_USE_RESERVED_VIRTUALS
     // Reserved for future use
     m_windowReserved = NULL;
+#endif
 }
 
 // common part of window creation process

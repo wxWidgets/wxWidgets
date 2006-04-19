@@ -631,6 +631,7 @@ public:
         if (h) *h = hh;
     }
 
+#if WX_USE_RESERVED_VIRTUALS
     // Reserved for future use
     virtual void ReservedDCFunc1() {}
     virtual void ReservedDCFunc2() {}
@@ -641,6 +642,7 @@ public:
     virtual void ReservedDCFunc7() {}
     virtual void ReservedDCFunc8() {}
     virtual void ReservedDCFunc9() {}
+#endif
 
 protected:
     // the pure virtual functions which should be implemented by wxDC

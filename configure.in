@@ -857,6 +857,9 @@ WX_ARG_ENABLE(universal_binary, [  --enable-universal_binary create Mac PowerPC 
 WX_ARG_ENABLE(compat22,      [  --enable-compat22       enable wxWidgets 2.2 compatibility], WXWIN_COMPATIBILITY_2_2)
 WX_ARG_ENABLE(compat24,      [  --disable-compat24      disable wxWidgets 2.4 compatibility], WXWIN_COMPATIBILITY_2_4, disable)
 
+DEFAULT_WX_USE_RESERVED_VIRTUALS=yes
+WX_ARG_ENABLE(reserved_virtual, [  --disable-reserved_virtual do not create unused vtable entries], WX_USE_RESERVED_VIRTUALS, disable)
+
 WX_ARG_ENABLE(rpath,         [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
 
 
@@ -5071,6 +5074,11 @@ fi
 
 if test "x$WXWIN_COMPATIBILITY_2_4" != "xno"; then
     AC_DEFINE(WXWIN_COMPATIBILITY_2_4)
+fi
+
+dnl This one is enabled by default in setup.h, it must be turned off manually.
+if test "x$WX_USE_RESERVED_VIRTUALS" = "xno"; then
+    AC_DEFINE(WX_USE_RESERVED_VIRTUALS,0)
 fi
 
 dnl ---------------------------------------------------------------------------

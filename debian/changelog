@@ -1,3 +1,38 @@
+wxwidgets2.6 (2.6.3.2) unstable; urgency=low
+
+  * Next try for an upload candidate.
+  * Fixes FTBFS on GNU/kFreeBSD. Closes: #327638
+  * Update fr.po, thanks to Thomas Huriaux and debian-l10n-french.
+    Closes: #328966
+  * Split wxbase back into its own package, after all these years
+    and just after I drop it, someone finally has a use for it.
+    Such is life.  Closes: #333944
+  * Fixes FTBFS with new make.  If this ugly quoting is the tradeoff,
+    I'm itching to learn of the fabulous benefits...
+    Ack NMU for this from Kurt Roeckx to keep the amd64 transition
+    rolling while my x86 build machine was painfully dying.  Thanks!
+    Closes: #350695, #361443
+  * New FSF address in copyright file.
+  * Add an index.html link to the doc contents page.  Closes: #328896
+  * Fixes declarations for friends, as required by C++, and now gcc4.1.
+    Closes: #358219
+  * Add an unpack_examples script, loosely based on one submitted
+    by Richard Esplin.  Closes: #342761
+  * Disable the reserved vtable entries (again, but this time its
+    optional) to retain compatibility with the existing release
+    in the distro.
+  * Update build-deps for xorg7.
+
+ -- Ron Lee <ron@debian.org>  Fri, 14 Apr 2006 16:50:24 +0930
+
+wxwidgets2.6 (2.6.1.2-0.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Make it build using the new make.  Patch from
+    Daniel Schepler <schepler@math.berkeley.edu> (Closes: #350695)
+
+ -- Kurt Roeckx <kurt@roeckx.be>  Sun,  9 Apr 2006 14:04:34 +0200
+
 wxwidgets2.6 (2.6.1.2) unstable; urgency=low
 
   * Fix the build_options.py created by the in tree build.

@@ -1195,6 +1195,11 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	rm -rf $(DISTDIR)/wxPython/contrib/iewin
 	find $(DISTDIR)/wxPython \( -name "mac" -o -name "msw" \) -print0 | xargs -0 rm -rf
 
+	@# copy the bakefiles goop that make install doesn't handle robustly
+	mkdir -p $(DISTDIR)/build/bakefiles/wxpresets/presets
+	cp $(WXDIR)/build/bakefiles/wxpresets/presets/*.bkl	\
+	   $(DISTDIR)/build/bakefiles/wxpresets/presets
+
 	rm -rf $(DEBIAN_SOURCE_DIR)
 	mv $(DISTDIR) $(DEBIAN_SOURCE_DIR)
 
