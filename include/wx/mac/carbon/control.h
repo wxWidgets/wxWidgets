@@ -21,16 +21,16 @@ class WXDLLEXPORT wxControl : public wxControlBase
 
 public:
    wxControl();
-   wxControl(wxWindow *parent, wxWindowID id,
+   wxControl(wxWindow *parent, wxWindowID winid,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize, long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxControlNameStr)
     {
-        Create(parent, id, pos, size, style, validator, name);
+        Create(parent, winid, pos, size, style, validator, name);
     }
 
-    bool Create(wxWindow *parent, wxWindowID id,
+    bool Create(wxWindow *parent, wxWindowID winid,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
