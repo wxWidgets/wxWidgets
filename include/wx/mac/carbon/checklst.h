@@ -13,6 +13,13 @@
 #ifndef _WX_CHECKLST_H_
 #define _WX_CHECKLST_H_
 
+class wxMacCheckListControl 
+{
+public :
+    virtual bool            MacIsChecked(unsigned int n) const = 0;
+    virtual void            MacCheck(unsigned int n, bool bCheck = true) = 0;
+};
+
 class WXDLLEXPORT wxCheckListBox : public wxCheckListBoxBase
 {
   DECLARE_DYNAMIC_CLASS(wxCheckListBox)
@@ -69,19 +76,9 @@ public:
     bool  IsChecked(unsigned int uiIndex) const;
     void  Check(unsigned int uiIndex, bool bCheck = true);
 
-
-    // override all methods which add/delete items to update m_checks array as
-    // well
-    virtual void Delete(unsigned int n);
-    // the array containing the checked status of the items
-    wxArrayInt m_checks;
+    wxMacCheckListControl* GetPeer() const;
 
 protected:
-    virtual int DoAppend(const wxString& item);
-    virtual void DoInsertItems(const wxArrayString& items, unsigned int pos);
-    virtual void DoSetItems(const wxArrayString& items, void **clientData);
-    virtual void DoClear();
-    // common part of all ctors
     void Init();
 private:
 
