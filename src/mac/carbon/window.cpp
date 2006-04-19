@@ -507,7 +507,7 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
         numChars = dataSize / sizeof( UniChar) + 1;
         charBuf = buf ;
 
-        if ( numChars * 2 > sizeof(buf) )
+        if ( (size_t) numChars * 2 > sizeof(buf) )
             charBuf = new UniChar[ numChars ] ;
         else
             charBuf = buf ;
