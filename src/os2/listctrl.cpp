@@ -1549,14 +1549,26 @@ bool wxListCtrl::SetItemImage (
 , int                               nImage
 , int                               WXUNUSED(nSelImage))
 {
+    return SetItemColumnInfo(lItem, 0, nImage);
+} // end of wxListCtrl::SetItemImage
+
+#if wxABI_VERSION >= 20603
+// Sets the item image
+bool wxListCtrl::SetItemColumnImage (
+  long                              lItem
+, long                              lColumn
+, int                               nImage
+{
     wxListItem                      vInfo;
 
     vInfo.m_mask   = wxLIST_MASK_IMAGE;
     vInfo.m_image  = nImage;
     vInfo.m_itemId = lItem;
+    vInfo.m_col    = lColumn;
     return SetItem(vInfo);
-} // end of wxListCtrl::SetItemImage
-
+} // end of wxListCtrl::SetItemColumnImage
+#endif
+  
 // Gets the item text
 wxString wxListCtrl::GetItemText (
   long                              lItem

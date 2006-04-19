@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _core_
@@ -161,6 +161,7 @@ SIZE_AUTO_HEIGHT = _core_.SIZE_AUTO_HEIGHT
 SIZE_AUTO = _core_.SIZE_AUTO
 SIZE_USE_EXISTING = _core_.SIZE_USE_EXISTING
 SIZE_ALLOW_MINUS_ONE = _core_.SIZE_ALLOW_MINUS_ONE
+SIZE_FORCE = _core_.SIZE_FORCE
 PORTRAIT = _core_.PORTRAIT
 LANDSCAPE = _core_.LANDSCAPE
 PRINT_QUALITY_HIGH = _core_.PRINT_QUALITY_HIGH
@@ -169,6 +170,7 @@ PRINT_QUALITY_LOW = _core_.PRINT_QUALITY_LOW
 PRINT_QUALITY_DRAFT = _core_.PRINT_QUALITY_DRAFT
 ID_ANY = _core_.ID_ANY
 ID_SEPARATOR = _core_.ID_SEPARATOR
+ID_NONE = _core_.ID_NONE
 ID_LOWEST = _core_.ID_LOWEST
 ID_OPEN = _core_.ID_OPEN
 ID_CLOSE = _core_.ID_CLOSE
@@ -776,8 +778,8 @@ CURSOR_MAX = _core_.CURSOR_MAX
 class Size(object):
     """
     wx.Size is a useful data structure used to represent the size of
-    something.  It simply contians integer width and height
-    proprtites.  In most places in wxPython where a wx.Size is
+    something.  It simply contains integer width and height
+    properties.  In most places in wxPython where a wx.Size is
     expected a (width, height) tuple can be used instead.
     """
     def __repr__(self):
@@ -803,7 +805,7 @@ class Size(object):
 
     def __eq__(*args, **kwargs):
         """
-        __eq__(self, Size sz) -> bool
+        __eq__(self, PyObject other) -> bool
 
         Test for equality of wx.Size objects.
         """
@@ -811,9 +813,9 @@ class Size(object):
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(self, Size sz) -> bool
+        __ne__(self, PyObject other) -> bool
 
-        Test for inequality.
+        Test for inequality of wx.Size objects.
         """
         return _core_.Size___ne__(*args, **kwargs)
 
@@ -951,7 +953,7 @@ class RealPoint(object):
 
     def __eq__(*args, **kwargs):
         """
-        __eq__(self, RealPoint pt) -> bool
+        __eq__(self, PyObject other) -> bool
 
         Test for equality of wx.RealPoint objects.
         """
@@ -959,7 +961,7 @@ class RealPoint(object):
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(self, RealPoint pt) -> bool
+        __ne__(self, PyObject other) -> bool
 
         Test for inequality of wx.RealPoint objects.
         """
@@ -1048,7 +1050,7 @@ class Point(object):
 
     def __eq__(*args, **kwargs):
         """
-        __eq__(self, Point pt) -> bool
+        __eq__(self, PyObject other) -> bool
 
         Test for equality of wx.Point objects.
         """
@@ -1056,7 +1058,7 @@ class Point(object):
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(self, Point pt) -> bool
+        __ne__(self, PyObject other) -> bool
 
         Test for inequality of wx.Point objects.
         """
@@ -1351,17 +1353,17 @@ class Rect(object):
 
     def __eq__(*args, **kwargs):
         """
-        __eq__(self, Rect rect) -> bool
+        __eq__(self, PyObject other) -> bool
 
-        Test for equality.
+        Test for equality of wx.Rect objects.
         """
         return _core_.Rect___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(self, Rect rect) -> bool
+        __ne__(self, PyObject other) -> bool
 
-        Test for inequality.
+        Test for inequality of wx.Rect objects.
         """
         return _core_.Rect___ne__(*args, **kwargs)
 
@@ -1569,17 +1571,17 @@ class Point2D(object):
 
     def __eq__(*args, **kwargs):
         """
-        __eq__(self, Point2D pt) -> bool
+        __eq__(self, PyObject other) -> bool
 
-        Test for equality
+        Test for equality of wx.Point2D objects.
         """
         return _core_.Point2D___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(self, Point2D pt) -> bool
+        __ne__(self, PyObject other) -> bool
 
-        Test for inequality
+        Test for inequality of wx.Point2D objects.
         """
         return _core_.Point2D___ne__(*args, **kwargs)
 
@@ -1741,6 +1743,10 @@ class OutputStream(object):
     def write(*args, **kwargs):
         """write(self, PyObject obj)"""
         return _core_.OutputStream_write(*args, **kwargs)
+
+    def LastWrite(*args, **kwargs):
+        """LastWrite(self) -> size_t"""
+        return _core_.OutputStream_LastWrite(*args, **kwargs)
 
 
 class OutputStreamPtr(OutputStream):
@@ -2145,6 +2151,82 @@ class ImageHandlerPtr(ImageHandler):
         self.__class__ = ImageHandler
 _core_.ImageHandler_swigregister(ImageHandlerPtr)
 
+class PyImageHandler(ImageHandler):
+    """
+    This is the base class for implementing image file loading/saving, and
+    image creation from data, all written in Python.  To create a custom
+    image handler derive a new class from wx.PyImageHandler and provide
+    the following methods::
+
+        def DoCanRead(self, stream) --> bool
+            '''Check if this handler can read the image on the stream'''
+
+        def LoadFile(self, image, stream, verbose, index) --> bool
+            '''Load image data from the stream and load it into image.'''
+
+        def SaveFile(self, image, stream, verbose) --> bool
+            '''Save the iamge data in image to the stream using
+               this handler's image file format.'''
+
+        def GetImageCount(self, stream) --> int
+            '''If this image format can hold more than one image,
+               how many does the image on the stream have?'''
+
+    To activate your handler create an instance of it and pass it to
+    `wx.Image_AddHandler`.  Be sure to call `SetName`, `SetType`, and
+    `SetExtension` from your constructor.
+
+
+    """
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxPyImageHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self) -> PyImageHandler
+
+        This is the base class for implementing image file loading/saving, and
+        image creation from data, all written in Python.  To create a custom
+        image handler derive a new class from wx.PyImageHandler and provide
+        the following methods::
+
+            def DoCanRead(self, stream) --> bool
+                '''Check if this handler can read the image on the stream'''
+
+            def LoadFile(self, image, stream, verbose, index) --> bool
+                '''Load image data from the stream and load it into image.'''
+
+            def SaveFile(self, image, stream, verbose) --> bool
+                '''Save the iamge data in image to the stream using
+                   this handler's image file format.'''
+
+            def GetImageCount(self, stream) --> int
+                '''If this image format can hold more than one image,
+                   how many does the image on the stream have?'''
+
+        To activate your handler create an instance of it and pass it to
+        `wx.Image_AddHandler`.  Be sure to call `SetName`, `SetType`, and
+        `SetExtension` from your constructor.
+
+
+        """
+        newobj = _core_.new_PyImageHandler(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._SetSelf(self)
+
+    def _SetSelf(*args, **kwargs):
+        """_SetSelf(self, PyObject self)"""
+        return _core_.PyImageHandler__SetSelf(*args, **kwargs)
+
+
+class PyImageHandlerPtr(PyImageHandler):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = PyImageHandler
+_core_.PyImageHandler_swigregister(PyImageHandlerPtr)
+
 class ImageHistogram(object):
     """Proxy of C++ ImageHistogram class"""
     def __repr__(self):
@@ -2214,6 +2296,66 @@ def ImageHistogram_MakeKey(*args, **kwargs):
     Get the key in the histogram for the given RGB values
     """
     return _core_.ImageHistogram_MakeKey(*args, **kwargs)
+
+class Image_RGBValue(object):
+    """
+    An object that contains values for red, green and blue which represent
+    the value of a color. It is used by `wx.Image.HSVtoRGB` and
+    `wx.Image.RGBtoHSV`, which converts between HSV color space and RGB
+    color space.
+    """
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxImage_RGBValue instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, byte r=0, byte g=0, byte b=0) -> Image_RGBValue
+
+        Constructor.
+        """
+        newobj = _core_.new_Image_RGBValue(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    red = property(_core_.Image_RGBValue_red_get, _core_.Image_RGBValue_red_set)
+    green = property(_core_.Image_RGBValue_green_get, _core_.Image_RGBValue_green_set)
+    blue = property(_core_.Image_RGBValue_blue_get, _core_.Image_RGBValue_blue_set)
+
+class Image_RGBValuePtr(Image_RGBValue):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = Image_RGBValue
+_core_.Image_RGBValue_swigregister(Image_RGBValuePtr)
+
+class Image_HSVValue(object):
+    """
+    An object that contains values for hue, saturation and value which
+    represent the value of a color.  It is used by `wx.Image.HSVtoRGB` and
+    `wx.Image.RGBtoHSV`, which +converts between HSV color space and RGB
+    color space.
+    """
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxImage_HSVValue instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, double h=0.0, double s=0.0, double v=0.0) -> Image_HSVValue
+
+        Constructor.
+        """
+        newobj = _core_.new_Image_HSVValue(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    hue = property(_core_.Image_HSVValue_hue_get, _core_.Image_HSVValue_hue_set)
+    saturation = property(_core_.Image_HSVValue_saturation_get, _core_.Image_HSVValue_saturation_set)
+    value = property(_core_.Image_HSVValue_value_get, _core_.Image_HSVValue_value_set)
+
+class Image_HSVValuePtr(Image_HSVValue):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = Image_HSVValue
+_core_.Image_HSVValue_swigregister(Image_HSVValuePtr)
 
 class Image(Object):
     """
@@ -2873,6 +3015,11 @@ class Image(Object):
         return _core_.Image_RemoveHandler(*args, **kwargs)
 
     RemoveHandler = staticmethod(RemoveHandler)
+    def GetHandlers(*args, **kwargs):
+        """GetHandlers() -> PyObject"""
+        return _core_.Image_GetHandlers(*args, **kwargs)
+
+    GetHandlers = staticmethod(GetHandlers)
     def GetImageExtWildcard(*args, **kwargs):
         """
         GetImageExtWildcard() -> String
@@ -2892,6 +3039,33 @@ class Image(Object):
         """ConvertToMonoBitmap(self, byte red, byte green, byte blue) -> Bitmap"""
         return _core_.Image_ConvertToMonoBitmap(*args, **kwargs)
 
+    def RotateHue(*args, **kwargs):
+        """
+        RotateHue(self, double angle)
+
+        Rotates the hue of each pixel of the image. Hue is a double in the
+        range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees
+        """
+        return _core_.Image_RotateHue(*args, **kwargs)
+
+    def RGBtoHSV(*args, **kwargs):
+        """
+        RGBtoHSV(Image_RGBValue rgb) -> Image_HSVValue
+
+        Converts a color in RGB color space to HSV color space.
+        """
+        return _core_.Image_RGBtoHSV(*args, **kwargs)
+
+    RGBtoHSV = staticmethod(RGBtoHSV)
+    def HSVtoRGB(*args, **kwargs):
+        """
+        HSVtoRGB(Image_HSVValue hsv) -> Image_RGBValue
+
+        Converts a color in HSV color space to RGB color space.
+        """
+        return _core_.Image_HSVtoRGB(*args, **kwargs)
+
+    HSVtoRGB = staticmethod(HSVtoRGB)
     def __nonzero__(self): return self.Ok() 
 
 class ImagePtr(Image):
@@ -3020,6 +3194,10 @@ def Image_RemoveHandler(*args, **kwargs):
     """Image_RemoveHandler(String name) -> bool"""
     return _core_.Image_RemoveHandler(*args, **kwargs)
 
+def Image_GetHandlers(*args, **kwargs):
+    """Image_GetHandlers() -> PyObject"""
+    return _core_.Image_GetHandlers(*args, **kwargs)
+
 def Image_GetImageExtWildcard(*args, **kwargs):
     """
     Image_GetImageExtWildcard() -> String
@@ -3029,6 +3207,22 @@ def Image_GetImageExtWildcard(*args, **kwargs):
     dialog boxes.
     """
     return _core_.Image_GetImageExtWildcard(*args, **kwargs)
+
+def Image_RGBtoHSV(*args, **kwargs):
+    """
+    Image_RGBtoHSV(Image_RGBValue rgb) -> Image_HSVValue
+
+    Converts a color in RGB color space to HSV color space.
+    """
+    return _core_.Image_RGBtoHSV(*args, **kwargs)
+
+def Image_HSVtoRGB(*args, **kwargs):
+    """
+    Image_HSVtoRGB(Image_HSVValue hsv) -> Image_RGBValue
+
+    Converts a color in HSV color space to RGB color space.
+    """
+    return _core_.Image_HSVtoRGB(*args, **kwargs)
 
 def InitAllImageHandlers():
     """
@@ -4142,6 +4336,25 @@ class CommandEvent(Event):
         deselection), or a boolean value representing the value of a checkbox.
         """
         return _core_.CommandEvent_GetInt(*args, **kwargs)
+
+    def GetClientData(*args, **kwargs):
+        """
+        GetClientData(self) -> PyObject
+
+        Returns the client data object for a listbox or choice selection event, (if any.)
+        """
+        return _core_.CommandEvent_GetClientData(*args, **kwargs)
+
+    def SetClientData(*args, **kwargs):
+        """
+        SetClientData(self, PyObject clientData)
+
+        Associate the given client data with the item at position n.
+        """
+        return _core_.CommandEvent_SetClientData(*args, **kwargs)
+
+    GetClientObject = GetClientData
+    SetClientObject = SetClientData
 
     def Clone(*args, **kwargs):
         """Clone(self) -> Event"""
@@ -6399,8 +6612,15 @@ _core_.WindowCreateEvent_swigregister(WindowCreateEventPtr)
 
 class WindowDestroyEvent(CommandEvent):
     """
-    The EVT_WINDOW_DESTROY event is sent right before the window is
-    destroyed.
+    The EVT_WINDOW_DESTROY event is sent from the `wx.Window` destructor
+    when the GUI window is destroyed.
+
+    When a class derived from `wx.Window` is destroyed its destructor will
+    have already run by the time this event is sent. Therefore this event
+    will not usually be received at all by the window itself.  Since it is
+    received after the destructor has run, an object should not try to
+    handle its own wx.WindowDestroyEvent, but it can be used to get
+    notification of the destruction of another window.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindowDestroyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -6408,8 +6628,15 @@ class WindowDestroyEvent(CommandEvent):
         """
         __init__(self, Window win=None) -> WindowDestroyEvent
 
-        The EVT_WINDOW_DESTROY event is sent right before the window is
-        destroyed.
+        The EVT_WINDOW_DESTROY event is sent from the `wx.Window` destructor
+        when the GUI window is destroyed.
+
+        When a class derived from `wx.Window` is destroyed its destructor will
+        have already run by the time this event is sent. Therefore this event
+        will not usually be received at all by the window itself.  Since it is
+        received after the destructor has run, an object should not try to
+        handle its own wx.WindowDestroyEvent, but it can be used to get
+        notification of the destruction of another window.
         """
         newobj = _core_.new_WindowDestroyEvent(*args, **kwargs)
         self.this = newobj.this
@@ -8092,8 +8319,8 @@ class Window(EvtHandler):
         """
         Raise(self)
 
-        Raises the window to the top of the window hierarchy if it is a
-        managed window (dialog or frame).
+        Raises the window to the top of the window hierarchy.  In current
+        version of wxWidgets this works both for manage and child windows.
         """
         return _core_.Window_Raise(*args, **kwargs)
 
@@ -8101,8 +8328,8 @@ class Window(EvtHandler):
         """
         Lower(self)
 
-        Lowers the window to the bottom of the window hierarchy if it is a
-        managed window (dialog or frame).
+        Lowers the window to the bottom of the window hierarchy.  In current
+        version of wxWidgets this works both for manage and child windows.
         """
         return _core_.Window_Lower(*args, **kwargs)
 
@@ -8310,6 +8537,7 @@ class Window(EvtHandler):
         """
         return _core_.Window_CenterOnScreen(*args, **kwargs)
 
+    CenterOnScreen = wx._deprecated(CenterOnScreen) 
     CentreOnScreen = CenterOnScreen 
     def CenterOnParent(*args, **kwargs):
         """
@@ -9942,6 +10170,9 @@ class Window(EvtHandler):
         if hasattr(self, '_setCallbackInfo'):
             self._setCallbackInfo(self, self.__class__)
 
+    def SendSizeEvent(self):
+        self.GetEventhandler().ProcessEvent(wx.SizeEvent((-1,-1)))
+
 
 class WindowPtr(Window):
     def __init__(self, this):
@@ -10690,6 +10921,14 @@ class MenuItem(Object):
         """SetAccel(self, AcceleratorEntry accel)"""
         return _core_.MenuItem_SetAccel(*args, **kwargs)
 
+    def SetBitmap(*args, **kwargs):
+        """SetBitmap(self, Bitmap bitmap)"""
+        return _core_.MenuItem_SetBitmap(*args, **kwargs)
+
+    def GetBitmap(*args, **kwargs):
+        """GetBitmap(self) -> Bitmap"""
+        return _core_.MenuItem_GetBitmap(*args, **kwargs)
+
     def SetFont(*args, **kwargs):
         """SetFont(self, Font font)"""
         return _core_.MenuItem_SetFont(*args, **kwargs)
@@ -10750,14 +10989,6 @@ class MenuItem(Object):
     def ResetOwnerDrawn(*args, **kwargs):
         """ResetOwnerDrawn(self)"""
         return _core_.MenuItem_ResetOwnerDrawn(*args, **kwargs)
-
-    def SetBitmap(*args, **kwargs):
-        """SetBitmap(self, Bitmap bitmap)"""
-        return _core_.MenuItem_SetBitmap(*args, **kwargs)
-
-    def GetBitmap(*args, **kwargs):
-        """GetBitmap(self) -> Bitmap"""
-        return _core_.MenuItem_GetBitmap(*args, **kwargs)
 
 
 class MenuItemPtr(MenuItem):
@@ -11383,6 +11614,14 @@ class SizerItem(Object):
         isn't any.
         """
         return _core_.SizerItem_GetUserData(*args, **kwargs)
+
+    def SetUserData(*args, **kwargs):
+        """
+        SetUserData(self, PyObject userData)
+
+        Associate a Python object with this sizer item.
+        """
+        return _core_.SizerItem_SetUserData(*args, **kwargs)
 
 
 class SizerItemPtr(SizerItem):
@@ -12068,7 +12307,7 @@ class GridSizer(Sizer):
         """
         GetCols(self) -> int
 
-        Returns the number of columns in the sizer.
+        Returns the number of columns in the sizer, as specified in the constructor.
         """
         return _core_.GridSizer_GetCols(*args, **kwargs)
 
@@ -12076,7 +12315,7 @@ class GridSizer(Sizer):
         """
         GetRows(self) -> int
 
-        Returns the number of rows in the sizer.
+        Returns the number of rows in the sizer, as specified in the constructor.
         """
         return _core_.GridSizer_GetRows(*args, **kwargs)
 
@@ -12095,6 +12334,24 @@ class GridSizer(Sizer):
         Returns the horizontal gap (in pixels) between cells in the sizer.
         """
         return _core_.GridSizer_GetHGap(*args, **kwargs)
+
+    def CalcRowsCols(self):
+        """
+        CalcRowsCols() -> (rows, cols)
+
+        Calculates how many rows and columns will be in the sizer based
+        on the current number of items and also the rows, cols specified
+        in the constructor.
+        """
+        nitems = len(self.GetChildren())
+        rows = self.GetRows()
+        cols = self.GetCols()
+        assert rows != 0 or cols != 0, "Grid sizer must have either rows or columns fixed"
+        if cols != 0:
+            rows = (nitems + cols - 1) / cols
+        elif rows != 0:
+            cols = (nitems + rows - 1) / rows
+        return (rows, cols)
 
 
 class GridSizerPtr(GridSizer):
@@ -12398,11 +12655,19 @@ class GBPosition(object):
         return _core_.GBPosition_SetCol(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(self, GBPosition other) -> bool"""
+        """
+        __eq__(self, PyObject other) -> bool
+
+        Compare GBPosition for equality.
+        """
         return _core_.GBPosition___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(self, GBPosition other) -> bool"""
+        """
+        __ne__(self, PyObject other) -> bool
+
+        Compare GBPosition for inequality.
+        """
         return _core_.GBPosition___ne__(*args, **kwargs)
 
     def Set(*args, **kwargs):
@@ -12477,11 +12742,19 @@ class GBSpan(object):
         return _core_.GBSpan_SetColspan(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(self, GBSpan other) -> bool"""
+        """
+        __eq__(self, PyObject other) -> bool
+
+        Compare wxGBSpan for equality.
+        """
         return _core_.GBSpan___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(self, GBSpan other) -> bool"""
+        """
+        __ne__(self, PyObject other) -> bool
+
+        Compare GBSpan for inequality.
+        """
         return _core_.GBSpan___ne__(*args, **kwargs)
 
     def Set(*args, **kwargs):
@@ -13411,5 +13684,6 @@ _core_._wxPyFixStockObjects()
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
+
 
 

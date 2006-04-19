@@ -57,6 +57,10 @@ b) Cygwin
 
    Please refer to the Unix section below
 
+   Note that gcc's precompiled headers do not work on current versions of
+   Cygwin. If your version of Cygwin is affected you will need to use the
+   --disable-precomp-headers configure option.
+
 ** the instructions may be out of date as for wxWidgets 2.5.2+ **
 
 c) Other compilers

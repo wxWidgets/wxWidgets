@@ -9,6 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_MAC_TOOLTIP_H_
+#define _WX_MAC_TOOLTIP_H_
 
 class wxToolTip : public wxObject
 {
@@ -46,3 +48,4 @@ private:
     DECLARE_ABSTRACT_CLASS(wxToolTip)
 };
 
+#endif // _WX_MAC_TOOLTIP_H_

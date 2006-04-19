@@ -308,7 +308,7 @@ wxString wxNativeFontInfo::ToUserString() const
 // wxNativeEncodingInfo
 // ----------------------------------------------------------------------------
 
-bool wxNativeEncodingInfo::FromString(const wxString& s)
+bool wxNativeEncodingInfo::FromString(const wxString& WXUNUSED(s))
 {
     return FALSE;
 }
@@ -318,7 +318,7 @@ wxString wxNativeEncodingInfo::ToString() const
     return wxEmptyString;
 }
 
-bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
+bool wxTestFontEncoding(const wxNativeEncodingInfo& WXUNUSED(info))
 {
     return TRUE;
 }
@@ -326,17 +326,26 @@ bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
 bool wxGetNativeFontEncoding(wxFontEncoding encoding,
                              wxNativeEncodingInfo *info)
 {
-    // we *must* return true for default encoding as otherwise wxFontMapper
-    // considers that we can't load any font and aborts with wxLogFatalError!
-    if ( encoding == wxFONTENCODING_SYSTEM )
-    {
-        info->facename.clear();
-        info->encoding = wxFONTENCODING_SYSTEM;
-    }
+    info->facename.clear();
 
-    // pretend that we support everything, it's better than to always return
-    // false as the old code did
-    return true;
+    switch ( encoding )
+    {
+        // we *must* return true for default encodings as otherwise wxFontMapper
+        // considers that we can't load any font and aborts with wxLogFatalError!
+        case wxFONTENCODING_DEFAULT:
+        case wxFONTENCODING_SYSTEM:
+            info->encoding = wxFONTENCODING_SYSTEM;
+            return true;
+
+        case wxFONTENCODING_ISO8859_1:
+        case wxFONTENCODING_UTF8:
+            info->encoding = encoding;
+            return true;
+
+        default:
+            // everything else must be converted to UTF-8
+            return false;
+    }
 }
 
 #else // GTK+ 1.x

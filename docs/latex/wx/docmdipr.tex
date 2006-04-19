@@ -28,6 +28,8 @@ See the example application in {\tt samples/docview}.
 
 \membersection{wxDocMDIParentFrame::wxDocMDIParentFrame}\label{wxdocmdiparentframector}
 
+\func{}{wxDocMDIParentFrame}{\void}
+
 \func{}{wxDocMDIParentFrame}{\param{wxDocManager*}{ manager}, \param{wxFrame *}{parent}, \param{wxWindowID}{ id},
  \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
  \param{const wxSize\&}{ size = wxDefaultSize},
@@ -40,6 +42,15 @@ Constructor.
 \func{}{\destruct{wxDocMDIParentFrame}}{\void}
 
 Destructor.
+
+\membersection{wxDocMDIParentFrame::wxDocMDIParentFrame}\label{wxdocmdiparentframecreate}
+
+\func{bool}{Create}{\param{wxDocManager*}{ manager}, \param{wxFrame *}{parent}, \param{wxWindowID}{ id},
+ \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
+ \param{const wxSize\&}{ size = wxDefaultSize},
+ \param{long}{ style = wxDEFAULT\_FRAME\_STYLE}, \param{const wxString\& }{name = "frame"}}
+
+Creates the window.
 
 \membersection{wxDocMDIParentFrame::OnCloseWindow}\label{wxdocmdiparentframeonclosewindow}
 

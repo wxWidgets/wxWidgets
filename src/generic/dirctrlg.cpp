@@ -121,6 +121,14 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
         path.Printf(wxT("%c:\\"), driveBuffer[i]);
         name.Printf(wxT("%c:"), driveBuffer[i]);
 
+#if !defined(__WXWINCE__)
+        wxChar pname[52];
+        if (GetVolumeInformation( path.c_str(), pname, 52, NULL, NULL, NULL, NULL, 0 ))
+        {
+            name << _T(' ') << pname;
+        }
+#endif // __WXWINCE__
+
         int imageId;
         int driveType = ::GetDriveType(path);
         switch (driveType)
@@ -1186,22 +1194,6 @@ void wxGenericDirCtrl::DoResize()
         wxSize filterSz ;
         if (m_filterListCtrl)
         {
-#ifdef __WXMSW__
-            // For some reason, this is required in order for the
-            // correct control height to always be returned, rather
-            // than the drop-down list height which is sometimes returned.
-            wxSize oldSize = m_filterListCtrl->GetSize();
-            m_filterListCtrl->SetSize(wxDefaultCoord,
-                                      wxDefaultCoord,
-                                      oldSize.x+10,
-                                      wxDefaultCoord,
-                                      wxSIZE_USE_EXISTING);
-            m_filterListCtrl->SetSize(wxDefaultCoord,
-                                      wxDefaultCoord,
-                                      oldSize.x,
-                                      wxDefaultCoord,
-                                      wxSIZE_USE_EXISTING);
-#endif
             filterSz = m_filterListCtrl->GetSize();
             sz.y -= (filterSz.y + verticalSpacing);
         }
@@ -1487,7 +1479,7 @@ wxImageList *wxFileIconsTable::GetSmallImageList()
     return m_smallImageList;
 }
 
-#if wxUSE_MIMETYPE && wxUSE_IMAGE
+#if wxUSE_MIMETYPE && wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
 // VS: we don't need this function w/o wxMimeTypesManager because we'll only have
 //     one icon and we won't resize it
 
@@ -1647,7 +1639,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     {
         m_smallImageList->Add(bmp);
     }
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
     else
     {
         wxImage img = bmp.ConvertToImage();

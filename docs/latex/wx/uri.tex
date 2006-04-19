@@ -75,6 +75,12 @@ if(myuri.HasScheme())
    protocol = myuri.GetScheme();
 \end{verbatim}
 
+\membersection{Deviations from the RFC}\label{deviationsfromrfc}
+
+Note that on URIs with a "file" scheme wxURI does not
+parse the userinfo, server, or port portion.  This is to keep 
+compatability with wxFileSystem, the old wxURL, and older url specifications.
+
 \membersection{wxURI::wxURI}\label{wxuriwxuri}
 
 \func{}{wxURI}{\void}

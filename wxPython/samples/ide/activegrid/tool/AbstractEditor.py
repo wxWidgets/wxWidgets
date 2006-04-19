@@ -23,6 +23,19 @@ SHAPE_BRUSH = wx.Brush("WHEAT", wx.SOLID)
 LINE_BRUSH = wx.BLACK_BRUSH
 INACTIVE_SELECT_BRUSH = wx.Brush("LIGHT BLUE", wx.SOLID)
 
+NORMALFONT = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
+SLANTFONT = wx.Font(NORMALFONT.GetPointSize(), NORMALFONT.GetFamily(), wx.SLANT, NORMALFONT.GetWeight())
+BOLDFONT = wx.Font(NORMALFONT.GetPointSize(), NORMALFONT.GetFamily(), NORMALFONT.GetStyle(), wx.BOLD)
+
+DEFAULT_BACKGROUND_COLOR = wx.Colour(0xEE, 0xEE, 0xEE)
+HEADER_BRUSH = wx.Brush(wx.Colour(0xDB, 0xEB, 0xFF), wx.SOLID)
+BODY_BRUSH = wx.Brush(wx.WHITE, wx.SOLID)
+
+
+PARKING_VERTICAL = 1
+PARKING_HORIZONTAL = 2
+PARKING_OFFSET = 30    # space between shapes
+
 
 def GetRawModel(model):
     if hasattr(model, "GetRawModel"):
@@ -30,6 +43,27 @@ def GetRawModel(model):
     else:
         rawModel = model
     return rawModel
+
+
+def GetLabel(model):
+    model = GetRawModel(model)
+    if hasattr(model, "__xmlname__"):
+        label = model.__xmlname__
+        try:
+            if (len(label) > 0):
+                label = label[0].upper() + label[1:]
+            if (hasattr(model, "complexType")):
+                label += ': %s/%s' % (model.complexType.name, model.name)
+            else:
+                if model.name:
+                    label += ': %s' % model.name
+                elif model.ref:
+                    label += ': %s' % model.ref
+        except AttributeError:
+            pass
+    else:
+        label = str(model)
+    return label
 
 
 class CanvasView(wx.lib.docview.View):
@@ -40,9 +74,10 @@ class CanvasView(wx.lib.docview.View):
     #----------------------------------------------------------------------------
 
 
-    def __init__(self, brush = SHAPE_BRUSH):
+    def __init__(self, brush=SHAPE_BRUSH, background=DEFAULT_BACKGROUND_COLOR):
         wx.lib.docview.View.__init__(self)
         self._brush = brush
+        self._backgroundColor = background
         self._canvas = None
         self._pt1 = None
         self._pt2 = None
@@ -68,6 +103,7 @@ class CanvasView(wx.lib.docview.View):
         frame.SetSizer(sizer)
         frame.Layout()        
         self.Activate()
+        wx.EVT_RIGHT_DOWN(self._canvas, self.OnRightClick)
         return True
         
 
@@ -145,11 +181,19 @@ class CanvasView(wx.lib.docview.View):
 
         self._canvas.SetScrollbars(20, 20, self._maxWidth / 20, self._maxHeight / 20)
         
-        self._canvas.SetBackgroundColour(wx.WHITE)
+        self._canvas.SetBackgroundColour(self._backgroundColor)
         self._diagram = ogl.Diagram()
         self._canvas.SetDiagram(self._diagram)
         self._diagram.SetCanvas(self._canvas)
+        self._canvas.SetFont(NORMALFONT)
 
+
+    def OnClear(self, event):
+        """ Deletion of selected objects from view.
+        *Must Override*
+        """
+        self.SetPropertyModel(None)
+                  
 
     def OnKeyPressed(self, event):
         key = event.KeyCode()
@@ -159,7 +203,42 @@ class CanvasView(wx.lib.docview.View):
             event.Skip()
 
 
+    def OnRightClick(self, event):
+        """ force selection underneath right click position. """
+        self.Activate()
+        self._canvas.SetFocus()
+
+        dc = wx.ClientDC(self._canvas)
+        self._canvas.PrepareDC(dc)
+        x, y = event.GetLogicalPosition(dc)  # this takes into account scrollbar offset
+        shape = self._canvas.FindShape(x, y)[0]
+        
+        model = None
+        if not shape:
+            self.SetSelection(None)
+            self.SetPropertyShape(None)
+        elif hasattr(shape, "GetModel"):
+            self.BringToFront(shape)
+            self.SetPropertyShape(shape)
+            self.SetSelection(shape)
+            shape.Select(True, dc)
+            model = shape.GetModel()
+        elif shape.GetParent() and isinstance(shape.GetParent(), ogl.CompositeShape):  # ComplexTypeHeader for ComplexTypeShape
+            self.BringToFront(shape)
+            self.SetPropertyShape(shape.GetParent())
+            self.SetSelection(shape.GetParent())
+            shape.GetParent().Select(True, dc)
+            model = shape.GetParent().GetModel()
+
+        self.SetPropertyModel(model)
+        
+        return (shape, model)
+
+
     def OnLeftClick(self, event):
+        self.Activate()
+        self._canvas.SetFocus()
+        
         self.EraseRubberBand()
 
         dc = wx.ClientDC(self._canvas)
@@ -322,21 +401,24 @@ class CanvasView(wx.lib.docview.View):
         dc.EndDrawing()
 
 
-    def FindParkingSpot(self, width, height):
+    def FindParkingSpot(self, width, height, parking=PARKING_HORIZONTAL, x=PARKING_OFFSET, y=PARKING_OFFSET):
         """ given a width and height, find a upper left corner where shape can be parked without overlapping other shape """
-        offset = 30  # space between shapes
-        x = offset
-        y = offset
-        maxX = 700  # max distance to the right where we'll place tables
+        max = 700  # max distance to the right where we'll place tables
         noParkingSpot = True
 
         while noParkingSpot:
             point = self.isSpotOccupied(x, y, width, height)
             if point:
-                x = point[0] + offset
-                if x > maxX:
-                    x = offset
-                    y = point[1] + offset
+                if parking == PARKING_HORIZONTAL:
+                    x = point[0] + PARKING_OFFSET
+                    if x > max:
+                        x = PARKING_OFFSET
+                        y = point[1] + PARKING_OFFSET
+                else:  # parking == PARKING_VERTICAL:
+                    y = point[1] + PARKING_OFFSET
+                    if y > max:
+                        y = PARKING_OFFSET
+                        x = point[0] + PARKING_OFFSET
             else:
                 noParkingSpot = False
 
@@ -351,7 +433,7 @@ class CanvasView(wx.lib.docview.View):
         y2 = y + height
 
         for shape in self._diagram.GetShapeList():
-            if isinstance(shape, ogl.RectangleShape) or isinstance(shape, ogl.EllipseShape):
+            if isinstance(shape, ogl.RectangleShape) or isinstance(shape, ogl.EllipseShape) or isinstance(shape, ogl.PolygonShape):
                 if shape.GetParent() and isinstance(shape.GetParent(), ogl.CompositeShape):
                     # skip, part of a composite shape
                     continue
@@ -381,7 +463,7 @@ class CanvasView(wx.lib.docview.View):
     # Canvas methods
     #----------------------------------------------------------------------------
 
-    def AddShape(self, shape, x = None, y = None, pen = None, brush = None, text = None, eventHandler = None):
+    def AddShape(self, shape, x = None, y = None, pen = None, brush = None, text = None, eventHandler = None, shown=True):
         if isinstance(shape, ogl.CompositeShape):
             dc = wx.ClientDC(self._canvas)
             self._canvas.PrepareDC(dc)
@@ -403,7 +485,7 @@ class CanvasView(wx.lib.docview.View):
             shape.AddText(text)
         shape.SetShadowMode(ogl.SHADOW_NONE)
         self._diagram.AddShape(shape)
-        shape.Show(True)
+        shape.Show(shown)
         if not eventHandler:
             eventHandler = EditorCanvasShapeEvtHandler(self)
         eventHandler.SetShape(shape)
@@ -424,16 +506,21 @@ class CanvasView(wx.lib.docview.View):
             for line in shape.GetLines():
                 shape.RemoveLine(line)
                 self._diagram.RemoveShape(line)
+                line.Delete()
             for obj in self._diagram.GetShapeList():
                 for line in obj.GetLines():
                     if self.IsShapeContained(shape, line.GetTo()) or self.IsShapeContained(shape, line.GetFrom()):
                         obj.RemoveLine(line)
                         self._diagram.RemoveShape(line)
+                        line.Delete()
                     if line == shape:
                         obj.RemoveLine(line)
+                        self._diagram.RemoveShape(line)
+                        line.Delete()
                     
             shape.RemoveFromCanvas(self._canvas)
             self._diagram.RemoveShape(shape)
+            shape.Delete()
 
 
     def IsShapeContained(self, parent, shape):
@@ -448,29 +535,22 @@ class CanvasView(wx.lib.docview.View):
     def UpdateShape(self, model):
         for shape in self._diagram.GetShapeList():
             if hasattr(shape, "GetModel") and shape.GetModel() == model:
+                oldw, oldh = shape.GetBoundingBoxMax()
+                oldx = shape.GetX()
+                oldy = shape.GetY()
+
                 x, y, w, h = model.getEditorBounds()
                 newX = x + w / 2
                 newY = y + h / 2
-                changed = False
-                if isinstance(shape, ogl.CompositeShape):
-                    if shape.GetX() != newX or shape.GetY() != newY:
-                        dc = wx.ClientDC(self._canvas)
-                        self._canvas.PrepareDC(dc)
-                        shape.SetSize(w, h, True)  # wxBug: SetSize must be before Move because links won't go to the right place
-                        shape.Move(dc, newX, newY)  # wxBug: Move must be before SetSize because links won't go to the right place
-                        changed = True
-                else:
-                    oldw, oldh = shape.GetBoundingBoxMax()
-                    oldx = shape.GetX()
-                    oldy = shape.GetY()
-                    if oldw != w or oldh != h or oldx != newX or oldy != newY:
-                        shape.SetSize(w, h)
-                        shape.SetX(newX)
-                        shape.SetY(newY)
-                        changed = True
-                if changed:
+                
+                if oldw != w or oldh != h or oldx != newX or oldy != newY:
+                    dc = wx.ClientDC(self._canvas)
+                    self._canvas.PrepareDC(dc)
+                    shape.SetSize(w, h, True)   # wxBug: SetSize must be before Move because links won't go to the right place
+                    shape.Move(dc, newX, newY)  # wxBug: Move must be after SetSize because links won't go to the right place
                     shape.ResetControlPoints()
                     self._canvas.Refresh()
+                    
                 break
 
 
@@ -479,6 +559,10 @@ class CanvasView(wx.lib.docview.View):
             if hasattr(shape, "GetModel") and shape.GetModel() == model:
                 return shape
         return None
+
+
+    def GetShapeCount(self):
+        return self._diagram.GetCount()
 
 
     def GetSelection(self):
@@ -526,7 +610,10 @@ class CanvasView(wx.lib.docview.View):
 
 
     def ScrollVisible(self, shape):
-        xUnit, yUnit = shape._canvas.GetScrollPixelsPerUnit()
+        if not shape:
+            return
+            
+        xUnit, yUnit = self._canvas.GetScrollPixelsPerUnit()
         scrollX, scrollY = self._canvas.GetViewStart()  # in scroll units
         scrollW, scrollH = self._canvas.GetSize()  # in pixels
         w, h = shape.GetBoundingBoxMax() # in pixels
@@ -564,7 +651,10 @@ class CanvasView(wx.lib.docview.View):
 
         # erase old selection if it still exists
         if self._propShape and self._propShape in self._diagram.GetShapeList():
-            self._propShape.SetBrush(self._brush)
+            if hasattr(self._propShape, "DEFAULT_BRUSH"):
+                self._propShape.SetBrush(self._propShape.DEFAULT_BRUSH)
+            else:
+                self._propShape.SetBrush(self._brush)
             if (self._propShape._textColourName in ["BLACK", "WHITE"]):  # Would use GetTextColour() but it is broken
                 self._propShape.SetTextColour("BLACK", 0)
             self._propShape.Draw(dc)
@@ -667,9 +757,10 @@ class EditorCanvasShapeEvtHandler(ogl.ShapeEvtHandler):
             if shape:
                 model = shape.GetModel()
 
-        self._view.SetSelection(model, keys == self.SHIFT_KEY or keys == self.CONTROL_KEY)
-        self._view.SetPropertyShape(shape)
-        self._view.SetPropertyModel(model)
+        if model:
+            self._view.SetSelection(model, keys == self.SHIFT_KEY or keys == self.CONTROL_KEY)
+            self._view.SetPropertyShape(shape)
+            self._view.SetPropertyModel(model)
 
 
     def OnEndDragLeft(self, x, y, keys = 0, attachment = 0):
@@ -686,7 +777,7 @@ class EditorCanvasShapeEvtHandler(ogl.ShapeEvtHandler):
 
     def OnMovePre(self, dc, x, y, oldX, oldY, display):
         """ Prevent objects from being dragged outside of viewable area """
-        if (x > self._view._maxWidth) or (y > self._view._maxHeight):
+        if (x < 0) or (y < 0) or (x > self._view._maxWidth) or (y > self._view._maxHeight):
             return False
 
         return ogl.ShapeEvtHandler.OnMovePre(self, dc, x, y, oldX, oldY, display)

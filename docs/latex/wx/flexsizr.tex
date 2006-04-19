@@ -9,7 +9,7 @@ the \helpref{wxGridSizer}{wxgridsizer}.
 Since wxWidgets 2.5.0, wxFlexGridSizer can also size items equally in one
 direction but unequally ("flexibly") in the other. If the sizer is only
 flexible in one direction (this can be changed using 
-\helpref{SetFlexibleDrection}{wxflexgridsizersetflexibledirection}),
+\helpref{SetFlexibleDirection}{wxflexgridsizersetflexibledirection}),
 it needs to be decided how the sizer should grow in the other ("non flexible")
 direction in order to fill the available space. The 
 \helpref{SetNonFlexibleGrowMode}{wxflexgridsizersetnonflexiblegrowmode} method
@@ -84,7 +84,7 @@ One of the following values:
 
 \wxheading{See also}
 
-\helpref{SetFlexibleDrection}{wxflexgridsizersetflexibledirection}
+\helpref{SetFlexibleDirection}{wxflexgridsizersetflexibledirection}
 
 
 \membersection{wxFlexGridSizer::GetNonFlexibleGrowMode}\label{wxflexgridsizergetnonflexiblegrowmode}
@@ -112,7 +112,7 @@ direction.}
 
 \wxheading{See also}
 
-\helpref{SetFlexibleDrection}{wxflexgridsizersetflexibledirection}, 
+\helpref{SetFlexibleDirection}{wxflexgridsizersetflexibledirection}, 
 \helpref{SetNonFlexibleGrowMode}{wxflexgridsizersetnonflexiblegrowmode}
 
 
@@ -132,7 +132,7 @@ Specifies that row idx is no longer growable.
 
 \membersection{wxFlexGridSizer::SetFlexibleDirection}\label{wxflexgridsizersetflexibledirection}
 
-\func{void}{SetFlexibleDirections}{\param{int }{direction}}
+\func{void}{SetFlexibleDirection}{\param{int }{direction}}
 
 Specifies whether the sizer should flexibly resize its columns, rows, or
 both. Argument {\tt direction} can be {\tt wxVERTICAL}, {\tt wxHORIZONTAL} 
@@ -149,7 +149,7 @@ Note that this method does not trigger relayout.
 
 Specifies how the sizer should grow in the non flexible direction if
 there is one (so
-\helpref{SetFlexibleDirections()}{wxflexgridsizersetflexibledirection} must have
+\helpref{SetFlexibleDirection()}{wxflexgridsizersetflexibledirection} must have
 been called previously). Argument {\it mode} can be one of those documented in
 \helpref{GetNonFlexibleGrowMode}{wxflexgridsizergetnonflexiblegrowmode}, please
 see there for their explanation.

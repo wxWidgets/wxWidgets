@@ -58,7 +58,13 @@ public:
         m_name        = name;
         m_description = description;
         m_rules       = wxEmptyString;
-        m_shape.Add( wxString::Format(_T("%i %i"), -width/2, -height/2) );
+
+        // TODO: add the positions later, since the formatting command
+        // causes a crash due to conversion objects not being available
+        // during initialisation.
+#ifndef __WXMAC__
+        m_shape.Add( wxString::Format(_T("%i %i"), int(-width/2), int(-height/2)) );
+#endif
         for(int j = 0; j < height; j++)
         {
             wxString tmp;

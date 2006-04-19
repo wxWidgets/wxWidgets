@@ -17,15 +17,26 @@ class App(wx.App):
     """PyCrust standalone application."""
 
     def OnInit(self):
+        import os
         import wx
         from wx import py
-        wx.InitAllImageHandlers()
-        self.frame = py.crust.CrustFrame()
-        self.frame.SetSize((800, 600))
+        
+        self.SetAppName("pycrust")
+        confDir = wx.StandardPaths.Get().GetUserDataDir()
+        if not os.path.exists(confDir):
+            os.mkdir(confDir)
+        fileName = os.path.join(confDir, 'config')
+        self.config = wx.FileConfig(localFilename=fileName)
+        self.config.SetRecordDefaults(True)
+        
+        self.frame = py.crust.CrustFrame(config=self.config, dataDir=confDir)
+##        self.frame.startupFileName = os.path.join(confDir,'pycrust_startup')
+##        self.frame.historyFileName = os.path.join(confDir,'pycrust_history')
         self.frame.Show()
         self.SetTopWindow(self.frame)
         return True
-
+    
+    
 '''
 The main() function needs to handle being imported, such as with the
 pycrust script that wxPython installs:

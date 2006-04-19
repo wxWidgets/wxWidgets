@@ -305,8 +305,6 @@ wxActiveX::~wxActiveX()
 
 void wxActiveX::CreateActiveX(REFCLSID clsid)
 {
-    SetTransparent();
-
     HRESULT hret;
 
     ////////////////////////////////////////////////////////
@@ -1172,9 +1170,35 @@ void wxActiveX::GetTypeInfo(ITypeInfo *ti, bool defInterface, bool defEventSink)
             ConnectAdvise(ta->guid, disp);
         };
 
+        // Get properties
+        // See bug #1280715 in the wxActiveX SF project
+        int i;
+        for (i = 0; i < ta->cVars; i++) {
+            VARDESC FAR *vd = NULL;
+
+            typeInfo->GetVarDesc(i, &vd) ;
+            BSTR bstrProperty = NULL;
+            typeInfo->GetDocumentation(vd->memid, &bstrProperty,
+                                       NULL, NULL, NULL);
+            wxString propName(bstrProperty);
+            m_props.push_back(PropX());
+            int idx = m_props.size() - 1;
+            m_propNames[propName] = idx;
+            m_props[idx].name = propName;
+            m_props[idx].memid = vd->memid;
+
+            ParamX param;
+            param.isSafeArray = false;
+            param.isPtr = false;
+            param.flags = vd->elemdescVar.idldesc.wIDLFlags;
+            param.vt = vd->elemdescVar.tdesc.vt;
+
+            m_props[idx].arg = param;
+            m_props[idx].type = param;
+        }        
 
         // Get Function Names
-        for (int i = 0; i < ta->cFuncs; i++)
+        for (i = 0; i < ta->cFuncs; i++)
         {
             FUNCDESC FAR *fd = NULL;
 
@@ -1775,6 +1799,16 @@ void wxActiveX::OnMouse(wxMouseEvent& event)
     };
 
     wxLogTrace(wxT(""),wxT("msg sent"));
+}
+
+bool wxActiveX::MSWTranslateMessage(WXMSG *msg){
+	
+	if (msg->message == WM_KEYDOWN){		
+		HRESULT result = m_oleInPlaceActiveObject->TranslateAccelerator(msg);
+		return (result == S_OK);
+	}
+	
+	return wxWindow::MSWTranslateMessage(msg);
 }
 
 long wxActiveX::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)

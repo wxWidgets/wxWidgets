@@ -178,44 +178,24 @@ wxMenu* wxTaskBarIcon::DoCreatePopupMenu()
 // Operations:
 bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 {
+    // Convert the wxIcon into a wxBitmap so we can perform some
+    // wxBitmap operations with it
     wxBitmap bmp( icon ) ;
     OSStatus err = noErr ;
 
-    CGImageRef pImage;
-    
-#if 0 // is always available under OSX now -- crashes on 10.2 in CFRetain() - RN
-    pImage = (CGImageRef) bmp.CGImageCreate() ;
-#else
-    WXHBITMAP iconport ;
-    WXHBITMAP maskport ;
-    iconport = bmp.GetHBITMAP( &maskport ) ;
+    //Get the CGImageRef for the wxBitmap (OSX builds only, but then the dock
+    //only exists in OSX :))
+    CGImageRef pImage = 
+        (CGImageRef) bmp.CGImageCreate() ; 
 
-    if (!maskport)
-    {
-        // Make a mask with no transparent pixels
-        wxBitmap   mbmp(icon.GetWidth(), icon.GetHeight());
-        wxMemoryDC dc;
-        dc.SelectObject(mbmp);
-        dc.SetBackground(*wxBLACK_BRUSH);
-        dc.Clear();
-        dc.SelectObject(wxNullBitmap);
-        bmp.SetMask( new wxMask(mbmp, *wxWHITE) ) ;
-        iconport = bmp.GetHBITMAP( &maskport ) ;
-    } 
-    
-    //create the icon from the bitmap and mask bitmap contained within
-    err = CreateCGImageFromPixMaps(
-                                            GetGWorldPixMap(MAC_WXHBITMAP(iconport)),
-                                            GetGWorldPixMap(MAC_WXHBITMAP(maskport)),
-                                            &pImage
-                                            );    
-    wxASSERT(err == 0);
-#endif
     wxASSERT(pImage != NULL );
+
+    // Actually set the dock image    
     err = SetApplicationDockTileImage(pImage);
     
     wxASSERT(err == 0);
     
+    // Free the CGImage
     if (pImage != NULL)
         CGImageRelease(pImage);
     

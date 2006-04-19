@@ -102,6 +102,8 @@ Source: "wx\_xrc.pyd";                         DestDir: "{app}\%(PKGDIR)s\wx"; C
 Source: "wx\*.py";                             DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 Source: "wx\build\*.py";                       DestDir: "{app}\%(PKGDIR)s\wx\build"; Components: core
 Source: "wx\lib\*.py";                         DestDir: "{app}\%(PKGDIR)s\wx\lib"; Components: core
+Source: "wx\lib\analogclock\*.py";             DestDir: "{app}\%(PKGDIR)s\wx\lib\analogclock"; Components: core
+Source: "wx\lib\analogclock\lib_setup\*.py";   DestDir: "{app}\%(PKGDIR)s\wx\lib\analogclock\lib_setup"; Components: core
 Source: "wx\lib\colourchooser\*.py";           DestDir: "{app}\%(PKGDIR)s\wx\lib\colourchooser"; Components: core
 Source: "wx\lib\editor\*.py";                  DestDir: "{app}\%(PKGDIR)s\wx\lib\editor"; Components: core
 Source: "wx\lib\editor\*.txt";                 DestDir: "{app}\%(PKGDIR)s\wx\lib\editor"; Components: core
@@ -185,6 +187,10 @@ Type: files; Name: "{app}\%(PKGDIR)s\wx\build\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\build\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\*.pyo";
+Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\analogclock\*.pyc";
+Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\analogclock\*.pyo";
+Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\analogclock\lib_setup\*.pyc";
+Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\analogclock\lib_setup\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\colourchooser\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\colourchooser\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\editor\*.pyc";
@@ -220,6 +226,9 @@ Type: files; Name: "{app}\%(PKGDIR)s\wxPython\lib\mixins\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wxPython\lib\mixins\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wxPython\tools\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wxPython\tools\*.pyo";
+
+Type: files; Name: "{app}\wxversion.pyc";
+Type: files; Name: "{app}\wxversion.pyo";
 
 %(UNINSTALL_BATCH)s
 
@@ -361,7 +370,8 @@ LicenseFile = licence\licence.txt
 Source: "demo\demo.py";                     DestDir: "{app}\demo"; DestName: "demo.pyw"; 
 Source: "demo\*.py";                        DestDir: "{app}\demo"; 
 Source: "demo\*.xml";                       DestDir: "{app}\demo"; 
-Source: "demo\*.txt";                       DestDir: "{app}\demo"; 
+Source: "demo\*.txt";                       DestDir: "{app}\demo";
+Source: "demo\*.ico";                       DestDir: "{app}\demo";
 
 Source: "demo\bitmaps\*.bmp";               DestDir: "{app}\demo\bitmaps"; 
 Source: "demo\bitmaps\*.gif";               DestDir: "{app}\demo\bitmaps"; 

@@ -248,8 +248,7 @@ in the given direction.", "");
             for (size_t i=0; i<count; i++) {
                 wxDataFormat* format = new wxDataFormat(formats[i]);
                 PyObject* obj = wxPyConstructObject((void*)format, wxT("wxDataFormat"), true);
-                PyList_Append(list, obj);
-                Py_DECREF(obj);
+                PyList_SET_ITEM(list, i, obj); // PyList_SET_ITEM steals a reference
             }            
             wxPyEndBlockThreads(blocked);
             delete [] formats;
@@ -804,7 +803,7 @@ public:
 DocStr(wxURLDataObject,
 "This data object holds a URL in a format that is compatible with some
 browsers such that it is able to be dragged to or from them.", "");
-class wxURLDataObject : public wxDataObjectComposite {
+class wxURLDataObject : public wxDataObject/*Composite*/ {
 public:
     wxURLDataObject();
 

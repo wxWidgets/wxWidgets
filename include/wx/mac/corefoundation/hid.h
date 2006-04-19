@@ -39,7 +39,14 @@
 #include <IOKit/hid/IOHIDKeys.h>
 #include <Kernel/IOKit/hidsystem/IOHIDUsageTables.h>
 
-#include <mach/mach.h>
+//Darn apple - doesn't properly wrap their headers in extern "C"!
+//http://www.macosx.com/forums/archive/index.php/t-68069.html
+//Needed for codewarrior link error with mach_port_deallocate()
+extern "C" {
+#include <mach/mach_port.h>
+}
+
+#include <mach/mach.h> //this actually includes mach_port.h (see above)
 
 //Utility wrapper around CFArray
 class wxCFArray

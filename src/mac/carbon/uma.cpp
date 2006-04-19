@@ -382,6 +382,14 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
                     macKey = kDownArrowCharCode ;
                     glyph = kMenuDownArrowGlyph ;
                     break ;
+                case WXK_HOME :
+                    macKey = kHomeCharCode ;
+                    glyph = kMenuNorthwestArrowGlyph ;
+                    break ;
+                case WXK_END :
+                    macKey = kEndCharCode ;
+                    glyph = kMenuSoutheastArrowGlyph ;
+                    break ;
                 default :
                     macKey = toupper( key ) ;
                     break ;
@@ -394,7 +402,7 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
 
         // 1d and 1e have special meaning to SetItemCmd, so
         // do not use for these character codes.
-        if (key != WXK_UP && key != WXK_RIGHT)
+        if (key != WXK_UP && key != WXK_RIGHT && key != WXK_DOWN && key != WXK_LEFT)
             SetItemCmd( menu, item , macKey );
 
         SetMenuItemModifiers(menu, item , modifiers ) ;

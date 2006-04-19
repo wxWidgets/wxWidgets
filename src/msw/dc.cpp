@@ -44,7 +44,7 @@
 #include "wx/sysopt.h"
 #include "wx/dcprint.h"
 #include "wx/module.h"
-#include "wx/dynload.h"
+#include "wx/dynlib.h"
 
 #ifdef wxHAVE_RAW_BITMAP
 #include "wx/rawbmp.h"
@@ -470,6 +470,14 @@ void wxDC::DestroyClippingRegion()
 
     if (m_clipping && m_hDC)
     {
+#ifdef __WXWINCE__
+        // On a PocketPC device (not necessarily emulator), resetting
+        // the clip region as per the old method causes bad display
+        // problems. In fact setting a null region is probably OK
+        // on desktop WIN32 also, since the WIN32 docs imply that the user
+        // clipping region is independent from the paint clipping region.
+        ::SelectClipRgn(GetHdc(), 0);
+#else        
         // TODO: this should restore the previous clipping region,
         //       so that OnPaint processing works correctly, and the update
         //       clipping region doesn't get destroyed after the first
@@ -477,6 +485,7 @@ void wxDC::DestroyClippingRegion()
         HRGN rgn = CreateRectRgn(0, 0, 32000, 32000);
         ::SelectClipRgn(GetHdc(), rgn);
         ::DeleteObject(rgn);
+#endif
     }
 
     wxDCBase::DestroyClippingRegion();
@@ -2571,7 +2580,7 @@ wxAlphaBlend(HDC hdcDst, int xDst, int yDst, int w, int h, int srcX, int srcY, c
     MemoryHDC hdcMem;
     SelectInHDC select(hdcMem, GetHbitmapOf(bmpDst));
 
-    if ( !::BitBlt(hdcMem, 0, 0, w, h, hdcDst, 0, 0, SRCCOPY) )
+    if ( !::BitBlt(hdcMem, 0, 0, w, h, hdcDst, xDst, yDst, SRCCOPY) )
     {
         wxLogLastError(_T("BitBlt"));
     }

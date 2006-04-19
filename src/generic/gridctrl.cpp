@@ -394,7 +394,7 @@ wxGridCellAutoWrapStringRenderer::GetBestSize(wxGrid& grid,
     {
         width+=10;
         rect.SetWidth(width);
-        height = y *( GetTextLines(grid,dc,attr,rect,row,col).GetCount());
+        height = y * (wx_truncate_cast(wxCoord, GetTextLines(grid,dc,attr,rect,row,col).GetCount()));
         count--;
     // Search for a shape no taller than the golden ratio.
     } while (count && (width  < (height*1.68)) );

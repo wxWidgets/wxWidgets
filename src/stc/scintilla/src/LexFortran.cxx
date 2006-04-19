@@ -273,9 +273,11 @@ static void FoldFortranDoc(unsigned int startPos, int length, int initStyle,
 	int style = initStyle;
 	/***************************************/
 	int lastStart = 0;
-	char prevWord[32] = "", Label[6] = "";
+	char prevWord[32] = "";
+	char Label[6] = "";
 	// Variables for do label folding.
-	static int doLabels[100], posLabel=-1;
+	static int doLabels[100];
+	static int posLabel=-1;
 	/***************************************/
 	for (unsigned int i = startPos; i < endPos; i++) {
 		char ch = chNext;
