@@ -6,21 +6,23 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
+#endif
+
 #include "wx/timer.h"
 
 #ifdef __WXMAC__
-#include "wx/mac/private.h"
+    #include "wx/mac/private.h"
 #endif
 
-#include "wx/dynarray.h"
-
 #ifndef __DARWIN__
-#include <Timer.h>
+    #include <Timer.h>
 #endif
 
 IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)

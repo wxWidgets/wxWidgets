@@ -14,21 +14,22 @@
 // headers
 // ----------------------------------------------------------------------------
 
+// For compilers that support precompilation, includes "wx.h".
 #include  "wx/wxprec.h"
 
 #ifdef    __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif  //__BORLANDC__
 
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
 
 #ifndef   WX_PRECOMP
-  #include  "wx/string.h"
-  #include  "wx/intl.h"
+    #include  "wx/dynarray.h"
+    #include  "wx/string.h"
+    #include  "wx/intl.h"
 #endif  //WX_PRECOMP
 
 #include  "wx/app.h"
-#include  "wx/dynarray.h"
 #include  "wx/file.h"
 #include  "wx/log.h"
 #include  "wx/textfile.h"

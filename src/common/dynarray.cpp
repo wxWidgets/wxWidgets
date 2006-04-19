@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dynarray.cpp
+// Name:        src/common/dynarray.cpp
 // Purpose:     implementation of wxBaseArray class
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -13,13 +13,17 @@
 // headers
 // ============================================================================
 
+// For compilers that support precompilation, includes "wx.h".
 #include  "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
-#include "wx/dynarray.h"
+#ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
+#endif //WX_PRECOMP
+
 #include "wx/intl.h"
 
 #include <stdlib.h>

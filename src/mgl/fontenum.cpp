@@ -22,7 +22,10 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/dynarray.h"
+#ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
+#endif
+
 #include "wx/string.h"
 #include "wx/utils.h"
 

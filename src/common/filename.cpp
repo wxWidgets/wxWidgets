@@ -68,9 +68,10 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/intl.h"
-#include "wx/log.h"
-#include "wx/file.h"
+    #include "wx/dynarray.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
+    #include "wx/file.h"
 #endif
 
 #include "wx/filename.h"
@@ -2047,7 +2048,6 @@ public :
   OSType m_creator ;
 }  ;
 
-#include "wx/dynarray.h"
 WX_DECLARE_OBJARRAY(MacDefaultExtensionRecord, MacDefaultExtensionArray) ;
 
 bool gMacDefaultExtensionsInited = false ;

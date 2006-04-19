@@ -13,12 +13,13 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_MIMETYPE
 
 #ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
     #include "wx/string.h"
     #if wxUSE_GUI
         #include "wx/icon.h"
@@ -30,7 +31,6 @@
 #include "wx/file.h"
 #include "wx/iconloc.h"
 #include "wx/intl.h"
-#include "wx/dynarray.h"
 #include "wx/confbase.h"
 
 #ifdef __WXMSW__

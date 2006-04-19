@@ -12,8 +12,11 @@
 
 #if wxUSE_LISTBOX
 
+#ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
+#endif
+
 #include "wx/listbox.h"
-#include "wx/dynarray.h"
 #include "wx/arrstr.h"
 #include "wx/utils.h"
 #include "wx/intl.h"

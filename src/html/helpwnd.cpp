@@ -21,6 +21,7 @@
 
 #ifndef WXPRECOMP
     #include "wx/object.h"
+    #include "wx/dynarray.h"
     #include "wx/intl.h"
     #include "wx/log.h"
 
@@ -54,7 +55,6 @@
 #include "wx/filedlg.h"
 #include "wx/artprov.h"
 #include "wx/spinctrl.h"
-#include "wx/dynarray.h"
 #include "wx/choicdlg.h"
 #include "wx/settings.h"
 

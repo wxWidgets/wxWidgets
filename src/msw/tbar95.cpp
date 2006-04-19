@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/tbar95.cpp
+// Name:        src/msw/tbar95.cpp
 // Purpose:     wxToolBar
 // Author:      Julian Smart
 // Modified by:
@@ -24,18 +24,18 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && !defined(__SMARTPHONE__)
+
 #ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
     #include "wx/frame.h"
     #include "wx/log.h"
     #include "wx/intl.h"
-    #include "wx/dynarray.h"
     #include "wx/settings.h"
     #include "wx/bitmap.h"
     #include "wx/dcmemory.h"
     #include "wx/control.h"
 #endif
-
-#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && !defined(__SMARTPHONE__)
 
 #include "wx/toolbar.h"
 #include "wx/sysopt.h"
@@ -1659,4 +1659,3 @@ WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
 #endif // wxREMAP_BUTTON_COLOURS
 
 #endif // wxUSE_TOOLBAR
-

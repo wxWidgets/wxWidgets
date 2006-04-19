@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/treectrl.cpp
+// Name:        src/os2/treectrl.cpp
 // Purpose:     wxTreeCtrl
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin to be less MSW-specific on 10.10.98
@@ -26,11 +26,14 @@
 
 #if wxUSE_TREECTRL
 
+#ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
+#endif
+
 #include "wx/os2/private.h"
 
 #include "wx/app.h"
 #include "wx/log.h"
-#include "wx/dynarray.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"
 #include "wx/os2/treectrl.h"

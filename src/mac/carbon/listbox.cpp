@@ -13,12 +13,15 @@
 
 #if wxUSE_LISTBOX
 
+#ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/listbox.h"
 #include "wx/button.h"
 #include "wx/settings.h"
 #include "wx/toplevel.h"
-#include "wx/dynarray.h"
 #include "wx/log.h"
 
 #include "wx/utils.h"
@@ -29,8 +32,8 @@ BEGIN_EVENT_TABLE(wxListBox, wxControl)
 END_EVENT_TABLE()
 
 #include "wx/mac/uma.h"
-#include  "wx/dynarray.h"
-#include  "wx/arrstr.h"
+#include "wx/dynarray.h"
+#include "wx/arrstr.h"
 
 // ============================================================================
 // list box control implementation
@@ -57,9 +60,9 @@ bool wxListBox::Create(
         style, validator, name );
 }
 
-wxMacListControl* wxListBox::GetPeer() const 
-{ 
-    return dynamic_cast<wxMacListControl*>(m_peer); 
+wxMacListControl* wxListBox::GetPeer() const
+{
+    return dynamic_cast<wxMacListControl*>(m_peer);
 }
 
 bool wxListBox::Create(
@@ -80,7 +83,7 @@ bool wxListBox::Create(
 
     if ( !wxListBoxBase::Create( parent, id, pos, size, style & ~(wxHSCROLL | wxVSCROLL), validator, name ) )
         return false;
-    
+
     wxMacDataBrowserListControl* control = new wxMacDataBrowserListControl( this, pos, size, style );
     control->SetClientDataType( m_clientDataItemsType );
     m_peer = control;
@@ -133,7 +136,7 @@ int wxListBox::DoAppend(const wxString& item)
 void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
 {
     Clear();
-    
+
     unsigned int n = choices.GetCount();
 
     for ( size_t i = 0; i < n; ++i )
@@ -450,22 +453,22 @@ wxMacListBoxItem::~wxMacListBoxItem()
 {
 }
 
-void wxMacListBoxItem::SetOrder( SInt32 order ) 
+void wxMacListBoxItem::SetOrder( SInt32 order )
 {
     m_order = order;
 }
 
-SInt32 wxMacListBoxItem::GetOrder() const 
+SInt32 wxMacListBoxItem::GetOrder() const
 {
     return m_order;
 }
 
-void wxMacListBoxItem::SetData( void* data) 
+void wxMacListBoxItem::SetData( void* data)
 {
     m_data = data;
 }
 
-void* wxMacListBoxItem::GetData() const 
+void* wxMacListBoxItem::GetData() const
 {
     return m_data;
 }
@@ -481,8 +484,8 @@ const wxString& wxMacListBoxItem::GetLabel() const
     return m_label;
 }
 
-bool wxMacListBoxItem::IsLessThan(wxMacDataItemBrowserControl *owner , 
-    const wxMacDataItem* rhs, 
+bool wxMacListBoxItem::IsLessThan(wxMacDataItemBrowserControl *owner ,
+    const wxMacDataItem* rhs,
     DataBrowserPropertyID sortProperty) const
 {
     const wxMacListBoxItem* otherItem = dynamic_cast<const wxMacListBoxItem*>(rhs);
@@ -507,7 +510,7 @@ bool wxMacListBoxItem::IsLessThan(wxMacDataItemBrowserControl *owner ,
 OSStatus wxMacListBoxItem::GetSetData( wxMacDataItemBrowserControl *owner ,
     DataBrowserPropertyID property,
     DataBrowserItemDataRef itemData,
-    bool changeValue ) 
+    bool changeValue )
 {
     OSStatus err = errDataBrowserPropertyNotSupported;
     wxListBox *list = wxDynamicCast( owner->GetPeer() , wxListBox );
@@ -545,14 +548,14 @@ OSStatus wxMacListBoxItem::GetSetData( wxMacDataItemBrowserControl *owner ,
     return err;
 }
 
-void wxMacListBoxItem::Notification(wxMacDataItemBrowserControl *owner , 
+void wxMacListBoxItem::Notification(wxMacDataItemBrowserControl *owner ,
     DataBrowserItemNotification message,
     DataBrowserItemDataRef itemData ) const
 {
     wxMacDataBrowserListControl *lb = dynamic_cast<wxMacDataBrowserListControl*>(owner);
 
     // we want to depend on as little as possible to make sure tear-down of controls is safe
-            
+
     if ( message == kDataBrowserItemRemoved)
     {
         if ( lb != NULL && lb->GetClientDataType() == wxClientData_Object )
@@ -563,7 +566,7 @@ void wxMacListBoxItem::Notification(wxMacDataItemBrowserControl *owner ,
         delete this;
         return;
     }
-    
+
     wxListBox *list = wxDynamicCast( owner->GetPeer() , wxListBox );
     wxCHECK_RET( list != NULL , wxT("Listbox expected"));
 
@@ -612,7 +615,7 @@ wxMacDataBrowserListControl::wxMacDataBrowserListControl( wxListBox *peer, const
     OSStatus err = noErr;
     m_clientDataItemsType = wxClientData_None;
     m_stringSorted = style & wxLB_SORT;
-    
+
     DataBrowserSelectionFlags  options = kDataBrowserDragSelect;
     if ( style & wxLB_MULTIPLE )
     {
@@ -628,7 +631,7 @@ wxMacDataBrowserListControl::wxMacDataBrowserListControl( wxListBox *peer, const
     }
     err = SetSelectionFlags( options );
     verify_noerr( err );
-    
+
     DataBrowserListViewColumnDesc columnDesc;
     columnDesc.headerBtnDesc.titleOffset = 0;
     columnDesc.headerBtnDesc.version = kDataBrowserListViewLatestHeaderDesc;
@@ -693,26 +696,26 @@ wxMacDataBrowserListControl::~wxMacDataBrowserListControl()
 }
 
 
-wxMacListBoxItem* wxMacDataBrowserListControl::CreateItem() 
+wxMacListBoxItem* wxMacDataBrowserListControl::CreateItem()
 {
     return new wxMacListBoxItem();
 }
 
 wxListBox * wxMacDataBrowserListControl::GetPeer() const
-{ 
-    return wxDynamicCast( wxMacControl::GetPeer() , wxListBox ); 
+{
+    return wxDynamicCast( wxMacControl::GetPeer() , wxListBox );
 }
 
-wxClientDataType wxMacDataBrowserListControl::GetClientDataType() const 
+wxClientDataType wxMacDataBrowserListControl::GetClientDataType() const
 {
      return m_clientDataItemsType;
 }
-void wxMacDataBrowserListControl::SetClientDataType(wxClientDataType clientDataItemsType) 
+void wxMacDataBrowserListControl::SetClientDataType(wxClientDataType clientDataItemsType)
 {
     m_clientDataItemsType = clientDataItemsType;
 }
 
-unsigned int wxMacDataBrowserListControl::MacGetCount() const 
+unsigned int wxMacDataBrowserListControl::MacGetCount() const
 {
     return GetItemCount(wxMacDataBrowserRootContainer,false,kDataBrowserItemNoState);
 }
@@ -737,7 +740,7 @@ void wxMacDataBrowserListControl::MacInsert( unsigned int n, const wxString& tex
             wxMacListBoxItem* iter = (wxMacListBoxItem*) GetItemFromLine(i);
             iter->SetOrder( iter->GetOrder() + 1 );
         }
-        
+
         SInt32 frontLineOrder = 0;
         if ( n > 0 )
         {
@@ -746,7 +749,7 @@ void wxMacDataBrowserListControl::MacInsert( unsigned int n, const wxString& tex
         }
         newItem->SetOrder( frontLineOrder + 1 );
     }
-    
+
     AddItem( wxMacDataBrowserRootContainer, newItem );
 }
 
@@ -755,9 +758,9 @@ void wxMacDataBrowserListControl::MacInsert( unsigned int n, const wxArrayString
     size_t itemsCount = items.GetCount();
     if ( itemsCount == 0 )
         return;
-    
+
     SInt32 frontLineOrder = 0;
-    
+
     if ( !m_stringSorted )
     {
         // increase the order of the lines to be shifted
@@ -887,17 +890,17 @@ wxString wxMacDataBrowserListControl::MacGetString( unsigned int n ) const
     return item->GetLabel();
 }
 
-void wxMacDataBrowserListControl::MacSetClientData( unsigned int n, void * data) 
+void wxMacDataBrowserListControl::MacSetClientData( unsigned int n, void * data)
 {
     wxMacListBoxItem* item = (wxMacListBoxItem*) GetItemFromLine( n);
     item->SetData( data );
     // not displayed, therefore no Update infos to DataBrowser
 }
 
-void * wxMacDataBrowserListControl::MacGetClientData( unsigned int n) const 
+void * wxMacDataBrowserListControl::MacGetClientData( unsigned int n) const
 {
     wxMacListBoxItem * item = (wxMacListBoxItem*) GetItemFromLine( n );
-    return item->GetData();    
+    return item->GetData();
 }
 
 void wxMacDataBrowserListControl::MacScrollTo( unsigned int n )

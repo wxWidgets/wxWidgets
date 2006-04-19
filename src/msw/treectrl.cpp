@@ -26,6 +26,10 @@
 
 #if wxUSE_TREECTRL
 
+#ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
+#endif
+
 #include "wx/msw/private.h"
 
 // include <commctrl.h> "properly"
@@ -39,7 +43,6 @@
 
 #include "wx/app.h"
 #include "wx/log.h"
-#include "wx/dynarray.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"
 #include "wx/treectrl.h"

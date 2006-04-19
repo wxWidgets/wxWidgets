@@ -16,6 +16,7 @@
 #if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WXPRECOMP
+    #include "wx/dynarray.h"
     #include "wx/dc.h"
     #include "wx/scrolwin.h"
     #include "wx/timer.h"
@@ -28,7 +29,6 @@
 
 #include "wx/image.h"
 #include "wx/gifdecod.h"
-#include "wx/dynarray.h"
 #include "wx/log.h"
 #include "wx/artprov.h"
 #include "wx/math.h"

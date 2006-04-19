@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/mimecmn.cpp
+// Name:        src/common/mimecmn.cpp
 // Purpose:     classes and functions to manage MIME types
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -28,7 +28,8 @@
 #if wxUSE_MIMETYPE
 
 #ifndef WX_PRECOMP
-  #include "wx/string.h"
+    #include "wx/dynarray.h"
+    #include "wx/string.h"
 #endif //WX_PRECOMP
 
 #include "wx/module.h"
@@ -36,7 +37,6 @@
 #include "wx/file.h"
 #include "wx/iconloc.h"
 #include "wx/intl.h"
-#include "wx/dynarray.h"
 #include "wx/confbase.h"
 
 #include "wx/mimetype.h"
@@ -459,7 +459,7 @@ bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
 
 wxMimeTypesManagerFactory *wxMimeTypesManagerFactory::m_factory = NULL;
 
-/* static */ 
+/* static */
 void wxMimeTypesManagerFactory::SetFactory( wxMimeTypesManagerFactory *factory )
 {
     if (wxMimeTypesManagerFactory::m_factory)
@@ -468,7 +468,7 @@ void wxMimeTypesManagerFactory::SetFactory( wxMimeTypesManagerFactory *factory )
     wxMimeTypesManagerFactory::m_factory = factory;
 }
 
-/* static */ 
+/* static */
 wxMimeTypesManagerFactory *wxMimeTypesManagerFactory::GetFactory()
 {
     if (!wxMimeTypesManagerFactory::m_factory)

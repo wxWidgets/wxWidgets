@@ -27,8 +27,8 @@
 #if wxUSE_LISTBOX
 
 #ifndef WX_PRECOMP
-    #include "wx/listbox.h"
     #include "wx/dynarray.h"
+    #include "wx/listbox.h"
     #include "wx/arrstr.h"
 #endif
 

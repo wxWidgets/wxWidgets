@@ -39,27 +39,25 @@
 
 #if wxUSE_INTL
 
-// standard headers
-
-#ifndef __WXWINCE__
-#include <locale.h>
-#endif
-
-#include <ctype.h>
-#include <stdlib.h>
-#ifdef HAVE_LANGINFO_H
-  #include <langinfo.h>
-#endif
-
-// wxWidgets
 #ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/debug.h"
     #include "wx/utils.h"
-    #include "wx/dynarray.h"
 #endif // WX_PRECOMP
+
+#ifndef __WXWINCE__
+    #include <locale.h>
+#endif
+
+// standard headers
+#include <ctype.h>
+#include <stdlib.h>
+#ifdef HAVE_LANGINFO_H
+  #include <langinfo.h>
+#endif
 
 #ifdef __WIN32__
     #include "wx/msw/private.h"

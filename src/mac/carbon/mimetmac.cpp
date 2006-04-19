@@ -27,23 +27,23 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_MIMETYPE
 
 #ifndef WX_PRECOMP
-  #include "wx/string.h"
+    #include "wx/dynarray.h"
+    #include "wx/string.h"
 
-  #if wxUSE_GUI
-    #include "wx/icon.h"
-  #endif
+    #if wxUSE_GUI
+        #include "wx/icon.h"
+    #endif
 #endif
 
 #include "wx/log.h"
 #include "wx/file.h"
 #include "wx/intl.h"
-#include "wx/dynarray.h"
 #include "wx/confbase.h"
 
 #include "wx/mac/mimetype.h"

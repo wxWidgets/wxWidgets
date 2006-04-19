@@ -26,8 +26,8 @@
 #if wxUSE_DISPLAY
 
 #ifndef WX_PRECOMP
-   #include "wx/dynarray.h"
-   #include "wx/log.h"
+    #include "wx/dynarray.h"
+    #include "wx/log.h"
 #endif
 
 #ifdef __DARWIN__

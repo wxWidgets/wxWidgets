@@ -12,19 +12,20 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_CONFIG
+
 #ifndef   WX_PRECOMP
-  #include  "wx/string.h"
-  #include  "wx/intl.h"
-  #include  "wx/event.h"
-  #include  "wx/app.h"
-  #include  "wx/utils.h"
+    #include  "wx/dynarray.h"
+    #include  "wx/string.h"
+    #include  "wx/intl.h"
+    #include  "wx/event.h"
+    #include  "wx/app.h"
+    #include  "wx/utils.h"
 #endif  //WX_PRECOMP
 
-#include  "wx/dynarray.h"
 #include  "wx/log.h"
 
 #include  "wx/config.h"
-#if wxUSE_CONFIG
 
 #include  "wx/os2/iniconf.h"
 

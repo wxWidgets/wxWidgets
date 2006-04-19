@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        threadpsx.cpp
+// Name:        src/unix/threadpsx.cpp
 // Purpose:     wxThread (Posix) Implementation
 // Author:      Original from Wolfram Gloger/Guilhem Lavaux
 // Modified by: K. S. Sreeram (2002): POSIXified wxCondition, added wxSemaphore
@@ -26,12 +26,15 @@
 
 #if wxUSE_THREADS
 
+#ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
+#endif
+
 #include "wx/thread.h"
 #include "wx/module.h"
 #include "wx/utils.h"
 #include "wx/log.h"
 #include "wx/intl.h"
-#include "wx/dynarray.h"
 #include "wx/timer.h"
 #include "wx/stopwatch.h"
 
@@ -481,7 +484,7 @@ wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
     {
         wxFAIL_MSG( _T("wxSemaphore: invalid initial or maximal count") );
 
-        m_isOk = FALSE;
+        m_isOk = false;
     }
     else
     {
@@ -649,7 +652,7 @@ public:
     pthread_t GetId() const { return m_threadId; }
     pthread_t *GetIdPtr() { return &m_threadId; }
         // "cancelled" flag
-    void SetCancelFlag() { m_cancelled = TRUE; }
+    void SetCancelFlag() { m_cancelled = true; }
     bool WasCancelled() const { return m_cancelled; }
         // exit code
     void SetExitCode(wxThread::ExitCode exitcode) { m_exitcode = exitcode; }
@@ -664,8 +667,8 @@ public:
     {
         wxCriticalSectionLocker lock(m_csJoinFlag);
 
-        m_shouldBeJoined = FALSE;
-        m_isDetached = TRUE;
+        m_shouldBeJoined = false;
+        m_isDetached = true;
     }
 
 #ifdef wxHAVE_PTHREAD_CLEANUP
@@ -841,17 +844,17 @@ void wxThreadInternal::Cleanup(wxThread *thread)
 wxThreadInternal::wxThreadInternal()
 {
     m_state = STATE_NEW;
-    m_cancelled = FALSE;
+    m_cancelled = false;
     m_prio = WXTHREAD_DEFAULT_PRIORITY;
     m_threadId = 0;
     m_exitcode = 0;
 
-    // set to TRUE only when the thread starts waiting on m_semSuspend
-    m_isPaused = FALSE;
+    // set to true only when the thread starts waiting on m_semSuspend
+    m_isPaused = false;
 
     // defaults for joinable threads
-    m_shouldBeJoined = TRUE;
-    m_isDetached = FALSE;
+    m_shouldBeJoined = true;
+    m_isDetached = false;
 }
 
 wxThreadInternal::~wxThreadInternal()
@@ -904,7 +907,7 @@ void wxThreadInternal::Wait()
                 wxLogError(_("Failed to join a thread, potential memory leak detected - please restart the program"));
             }
 
-            m_shouldBeJoined = FALSE;
+            m_shouldBeJoined = false;
         }
     }
 
@@ -943,7 +946,7 @@ void wxThreadInternal::Resume()
         m_semSuspend.Post();
 
         // reset the flag
-        SetReallyPaused(FALSE);
+        SetReallyPaused(false);
     }
     else
     {
@@ -1507,7 +1510,7 @@ bool wxThread::TestDestroy()
 
     if ( m_internal->GetState() == STATE_PAUSED )
     {
-        m_internal->SetReallyPaused(TRUE);
+        m_internal->SetReallyPaused(true);
 
         // leave the crit section or the other threads will stop too if they
         // try to call any of (seemingly harmless) IsXXX() functions while we
@@ -1566,10 +1569,10 @@ bool wxThread::IsAlive() const
     {
         case STATE_RUNNING:
         case STATE_PAUSED:
-            return TRUE;
+            return true;
 
         default:
-            return FALSE;
+            return false;
     }
 }
 
@@ -1603,7 +1606,7 @@ bool wxThreadModule::OnInit()
     {
         wxLogSysError(rc, _("Thread module initialization failed: failed to create thread key"));
 
-        return FALSE;
+        return false;
     }
 
     gs_tidMain = pthread_self();
@@ -1614,7 +1617,7 @@ bool wxThreadModule::OnInit()
     gs_mutexDeleteThread = new wxMutex();
     gs_condAllDeleted = new wxCondition( *gs_mutexDeleteThread );
 
-    return TRUE;
+    return true;
 }
 
 void wxThreadModule::OnExit()
@@ -1720,4 +1723,3 @@ void wxMutexGuiLeave()
 #include "wx/thrimpl.cpp"
 
 #endif // wxUSE_THREADS
-

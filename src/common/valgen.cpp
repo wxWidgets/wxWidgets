@@ -19,9 +19,9 @@
 #if wxUSE_VALIDATORS
 
 #ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
     #include "wx/utils.h"
     #include "wx/intl.h"
-    #include "wx/dynarray.h"
     #include "wx/choice.h"
     #include "wx/combobox.h"
     #include "wx/radiobox.h"
@@ -39,13 +39,13 @@
 #include "wx/spinctrl.h"
 
 #if wxUSE_SPINBTN
-  #include "wx/spinbutt.h"
+    #include "wx/spinbutt.h"
 #endif
 #if wxUSE_CHECKLISTBOX
-  #include "wx/checklst.h"
+    #include "wx/checklst.h"
 #endif
 #if wxUSE_TOGGLEBTN
-  #include "wx/tglbtn.h"
+    #include "wx/tglbtn.h"
 #endif
 
 #include "wx/valgen.h"

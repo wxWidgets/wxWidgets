@@ -28,9 +28,9 @@
 #if wxUSE_DISPLAY
 
 #ifndef WX_PRECOMP
-   #include "wx/app.h"
-   #include "wx/dynarray.h"
-   #include "wx/frame.h"
+    #include "wx/dynarray.h"
+    #include "wx/app.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/dynload.h"
@@ -69,7 +69,7 @@
         #define MONITOR_DEFAULTTONULL       0x00000000
         #define MONITOR_DEFAULTTOPRIMARY    0x00000001
         #define MONITOR_DEFAULTTONEAREST    0x00000002
-        #define MONITORINFOF_PRIMARY        0x00000001        
+        #define MONITORINFOF_PRIMARY        0x00000001
         #define HMONITOR_DECLARED
     #endif
 #endif // !__WXWINCE__

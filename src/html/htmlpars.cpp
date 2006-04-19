@@ -16,6 +16,7 @@
 #if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WXPRECOMP
+    #include "wx/dynarray.h"
     #include "wx/log.h"
     #include "wx/intl.h"
 #endif
@@ -26,7 +27,6 @@
 #include "wx/fontmap.h"
 #include "wx/html/htmldefs.h"
 #include "wx/html/htmlpars.h"
-#include "wx/dynarray.h"
 #include "wx/arrimpl.cpp"
 
 #ifdef __WXWINCE__

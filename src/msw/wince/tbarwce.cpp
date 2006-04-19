@@ -24,20 +24,20 @@
     #pragma hdrstop
 #endif
 
+// Use the WinCE-specific toolbar only if we're either compiling
+// with a WinCE earlier than 4, or we wish to emulate a PocketPC-style UI
+#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+
 #ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
     #include "wx/frame.h"
     #include "wx/log.h"
     #include "wx/intl.h"
-    #include "wx/dynarray.h"
     #include "wx/settings.h"
     #include "wx/bitmap.h"
     #include "wx/dcmemory.h"
     #include "wx/control.h"
 #endif
-
-// Use the WinCE-specific toolbar only if we're either compiling
-// with a WinCE earlier than 4, or we wish to emulate a PocketPC-style UI
-#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
 
 #include "wx/toolbar.h"
 

@@ -24,8 +24,8 @@
 #if wxUSE_LISTCTRL
 
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
     #include "wx/dynarray.h"
+    #include "wx/app.h"
     #include "wx/dcscreen.h"
     #include "wx/textctrl.h"
 #endif

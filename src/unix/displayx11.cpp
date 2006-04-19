@@ -21,22 +21,22 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_DISPLAY
+
+#ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
+    #include "wx/gdicmn.h"
+    #include "wx/string.h"
+    #include "wx/utils.h"
+#endif /* WX_PRECOMP */
 
 #include "wx/display.h"
 #include "wx/display_impl.h"
 #include "wx/intl.h"
 #include "wx/log.h"
-
-#ifndef WX_PRECOMP
-  #include "wx/dynarray.h"
-  #include "wx/gdicmn.h"
-  #include "wx/string.h"
-  #include "wx/utils.h"
-#endif /* WX_PRECOMP */
-
-#if wxUSE_DISPLAY
 
 /* These must be included after the wx files.  Otherwise the Data macro in
  * Xlibint.h conflicts with a function declaration in wx/list.h.  */

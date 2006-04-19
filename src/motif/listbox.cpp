@@ -14,14 +14,17 @@
 
 #if wxUSE_LISTBOX
 
+#ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
+#endif
+
 #ifdef __VMS
 #define XtParent XTPARENT
 #define XtDisplay XTDISPLAY
 #endif
 
-# include "wx/listbox.h"
+#include "wx/listbox.h"
 #include "wx/settings.h"
-#include "wx/dynarray.h"
 #include "wx/log.h"
 #include "wx/utils.h"
 #include "wx/arrstr.h"

@@ -26,11 +26,14 @@
 
 #if wxUSE_TREECTRL
 
+#ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
+#endif
+
 #include "wx/palmos/private.h"
 
 #include "wx/app.h"
 #include "wx/log.h"
-#include "wx/dynarray.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"
 
@@ -722,4 +725,3 @@ int wxTreeCtrl::GetState(const wxTreeItemId& node)
 }
 
 #endif // wxUSE_TREECTRL
-

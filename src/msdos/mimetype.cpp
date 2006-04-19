@@ -19,6 +19,7 @@
 #if wxUSE_MIMETYPE
 
 #ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
     #include "wx/string.h"
     #if wxUSE_GUI
         #include "wx/icon.h"
@@ -28,7 +29,6 @@
 #include "wx/log.h"
 #include "wx/file.h"
 #include "wx/intl.h"
-#include "wx/dynarray.h"
 #include "wx/confbase.h"
 
 #include "wx/msdos/mimetype.h"
@@ -65,7 +65,7 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& WXUNUSED(extensions))
 
 bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
 {
-    if ( m_strFileType.Length() > 0 )
+    if ( !m_strFileType.empty() )
     {
         *mimeType = m_strFileType ;
         return true ;

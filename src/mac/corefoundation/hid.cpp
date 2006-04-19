@@ -27,6 +27,10 @@
 //DARWIN _ONLY_
 #ifdef __DARWIN__
 
+#ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
+#endif
+
 #include "wx/mac/corefoundation/hid.h"
 #include "wx/string.h"
 #include "wx/log.h"
@@ -34,7 +38,6 @@
 
 #include "wx/utils.h"
 #include "wx/module.h"
-#include "wx/dynarray.h"
 
 // ============================================================================
 // implementation
@@ -49,12 +52,12 @@
 // ----------------------------------------------------------------------------
 // wxHIDDevice::Create
 //
-//  nClass is the HID Page such as 
+//  nClass is the HID Page such as
 //      kHIDPage_GenericDesktop
 //  nType is the HID Usage such as
 //      kHIDUsage_GD_Joystick,kHIDUsage_GD_Mouse,kHIDUsage_GD_Keyboard
 //  nDev is the device number to use
-// 
+//
 // ----------------------------------------------------------------------------
 bool wxHIDDevice::Create (int nClass, int nType, int nDev)
 {
@@ -97,13 +100,13 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
 
     //Now get the maching services
     io_iterator_t pIterator;
-    if( IOServiceGetMatchingServices(m_pPort, 
+    if( IOServiceGetMatchingServices(m_pPort,
                         pDictionary, &pIterator) != kIOReturnSuccess )
     {
         wxLogSysError(_T("No Matching HID Services"));
         return false;
     }
-    
+
     //Were there any devices matched?
     if(pIterator == 0)
         return false; // No devices found
@@ -134,15 +137,15 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
         //
 
         //Get [product] name
-        CFStringRef cfsProduct = (CFStringRef) 
+        CFStringRef cfsProduct = (CFStringRef)
             CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductKey));
-        m_szProductName = 
-            wxMacCFStringHolder( cfsProduct, 
-                                    false 
+        m_szProductName =
+            wxMacCFStringHolder( cfsProduct,
+                                    false
                                ).AsString();
 
         //Get the Product ID Key
-        CFNumberRef cfnProductId = (CFNumberRef) 
+        CFNumberRef cfnProductId = (CFNumberRef)
             CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductIDKey));
         if (cfnProductId)
         {
@@ -150,7 +153,7 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
         }
 
         //Get the Vendor ID Key
-        CFNumberRef cfnVendorId = (CFNumberRef) 
+        CFNumberRef cfnVendorId = (CFNumberRef)
             CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDVendorIDKey));
         if (cfnVendorId)
         {
@@ -164,9 +167,9 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
         //Create the interface (good grief - long function names!)
         SInt32 nScore;
         IOCFPlugInInterface** ppPlugin;
-        if(IOCreatePlugInInterfaceForService(pObject, 
+        if(IOCreatePlugInInterfaceForService(pObject,
                                              kIOHIDDeviceUserClientTypeID,
-                                             kIOCFPlugInInterfaceID, &ppPlugin, 
+                                             kIOCFPlugInInterfaceID, &ppPlugin,
                                              &nScore) !=  kIOReturnSuccess)
         {
             wxLogSysError(wxT("Could not create HID Interface for product"));
@@ -179,7 +182,7 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
 
         //Get the HID interface from the plugin to the mach port
         if((*ppPlugin)->QueryInterface(ppPlugin,
-                               CFUUIDGetUUIDBytes(kIOHIDDeviceInterfaceID), 
+                               CFUUIDGetUUIDBytes(kIOHIDDeviceInterfaceID),
                                (void**) &m_ppDevice) != S_OK)
         {
             wxLogSysError(wxT("Could not get device interface from HID interface"));
@@ -194,12 +197,12 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
             wxLogDebug(_T("HID device: open failed"));
 
         //
-        //Now the hard part - in order to scan things we need "cookies" 
+        //Now the hard part - in order to scan things we need "cookies"
         //
-        CFArrayRef cfaCookies = (CFArrayRef)CFDictionaryGetValue(pDictionary, 
+        CFArrayRef cfaCookies = (CFArrayRef)CFDictionaryGetValue(pDictionary,
                                  CFSTR(kIOHIDElementKey));
         BuildCookies(cfaCookies);
-        
+
         //cleanup
         CFRelease(pDictionary);
         IOObjectRelease(pObject);
@@ -209,7 +212,7 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
 
         return true;
     }
-    
+
     //iterator cleanup
     IOObjectRelease(pIterator);
 
@@ -231,7 +234,7 @@ size_t wxHIDDevice::GetCount (int nClass, int nType)
         wxLogSysError(wxT("Could not create mach port"));
         return false;
     }
-    
+
     //Dictionary that will hold first
     //the matching dictionary for determining which kind of devices we want,
     //then later some registry properties from an iterator (see below)
@@ -260,14 +263,14 @@ size_t wxHIDDevice::GetCount (int nClass, int nType)
 
     //Now get the maching services
     io_iterator_t pIterator;
-    if( IOServiceGetMatchingServices(pPort, 
+    if( IOServiceGetMatchingServices(pPort,
                                      pDictionary, &pIterator) != kIOReturnSuccess )
     {
         wxLogSysError(_T("No Matching HID Services"));
         return false;
     }
-    
-    //If the iterator doesn't exist there are no devices :)    
+
+    //If the iterator doesn't exist there are no devices :)
     if ( !pIterator )
         return 0;
 
@@ -279,11 +282,11 @@ size_t wxHIDDevice::GetCount (int nClass, int nType)
         ++nCount;
         IOObjectRelease(pObject);
     }
-    
+
     //cleanup
     IOObjectRelease(pIterator);
     mach_port_deallocate(mach_task_self(), pPort);
-    
+
     return nCount;
 }//end Create()
 
@@ -341,7 +344,7 @@ void wxHIDDevice::InitCookies(size_t dwSize, bool bQueue)
             wxLogDebug(_T("HID device: create failed"));
         }
     }
-    
+
     //make sure that cookie array is clear
     memset(m_pCookies, 0, sizeof(*m_pCookies) * dwSize);
 }
@@ -361,7 +364,7 @@ bool wxHIDDevice::IsActive(int nIndex)
         //check here
         return false;
     }
-    
+
     IOHIDEventStruct Event;
     (*m_ppDevice)->getElementValue(m_ppDevice, m_pCookies[nIndex], &Event);
     return !!Event.value;
@@ -426,7 +429,7 @@ enum
 // ----------------------------------------------------------------------------
 int wxHIDKeyboard::GetCount()
 {
-    return wxHIDDevice::GetCount(kHIDPage_GenericDesktop, 
+    return wxHIDDevice::GetCount(kHIDPage_GenericDesktop,
                                kHIDUsage_GD_Keyboard);
 }
 
@@ -437,7 +440,7 @@ int wxHIDKeyboard::GetCount()
 // ----------------------------------------------------------------------------
 bool wxHIDKeyboard::Create(int nDev /* = 1*/)
 {
-    return wxHIDDevice::Create(kHIDPage_GenericDesktop, 
+    return wxHIDDevice::Create(kHIDPage_GenericDesktop,
                                kHIDUsage_GD_Keyboard,
                                nDev);
 }
@@ -445,7 +448,7 @@ bool wxHIDKeyboard::Create(int nDev /* = 1*/)
 // ----------------------------------------------------------------------------
 // wxHIDKeyboard::AddCookie
 //
-// Overloaded version of wxHIDDevice::AddCookie that simply does not 
+// Overloaded version of wxHIDDevice::AddCookie that simply does not
 // add a cookie if a duplicate is found
 // ----------------------------------------------------------------------------
 void wxHIDKeyboard::AddCookie(CFTypeRef Data, int i)
@@ -462,9 +465,9 @@ void wxHIDKeyboard::AddCookie(CFTypeRef Data, int i)
 // ----------------------------------------------------------------------------
 void wxHIDKeyboard::BuildCookies(CFArrayRef Array)
 {
-    //Create internal cookie array 
+    //Create internal cookie array
     InitCookies(500);
-    
+
     //Begin recursing in array
     DoBuildCookies(Array);
 }
@@ -478,7 +481,7 @@ void wxHIDKeyboard::DoBuildCookies(CFArrayRef Array)
     for (i = 0; i < CFArrayGetCount(Array); ++i)
     {
         const void* ref = CFDictionaryGetValue(
-                (CFDictionaryRef)CFArrayGetValueAtIndex(Array, i), 
+                (CFDictionaryRef)CFArrayGetValueAtIndex(Array, i),
                 CFSTR(kIOHIDElementKey)
                                               );
 
@@ -493,17 +496,17 @@ void wxHIDKeyboard::DoBuildCookies(CFArrayRef Array)
             // Get the usage #
             //
         CFNumberGetValue(
-                (CFNumberRef) 
-                    CFDictionaryGetValue((CFDictionaryRef) 
-                        CFArrayGetValueAtIndex(Array, i), 
+                (CFNumberRef)
+                    CFDictionaryGetValue((CFDictionaryRef)
+                        CFArrayGetValueAtIndex(Array, i),
                         CFSTR(kIOHIDElementUsageKey)
                                         ),
-                              kCFNumberLongType, 
+                              kCFNumberLongType,
                               &nUsage);
 
             //
             // Now translate the usage # into a wx keycode
-            // 
+            //
 
         //
         // OK, this is strange - basically this kind of strange -
@@ -524,7 +527,7 @@ void wxHIDKeyboard::DoBuildCookies(CFArrayRef Array)
         //    bEOTriggered = true;
         //}
         //Instead of that though we now just don't add duplicate keys
-            
+
         if (nUsage >= kHIDUsage_KeyboardA && nUsage <= kHIDUsage_KeyboardZ)
             AddCookie(CFArrayGetValueAtIndex(Array, i), 'A' + (nUsage - kHIDUsage_KeyboardA) );
         else if (nUsage >= kHIDUsage_Keyboard1 && nUsage <= kHIDUsage_Keyboard9)
@@ -670,7 +673,7 @@ bool wxGetKeyState (wxKeyCode key)
     if (wxHIDModule::sm_keyboards.GetCount() == 0)
     {
         int nKeyboards = wxHIDKeyboard::GetCount();
-        
+
         for(int i = 1; i <= nKeyboards; ++i)
         {
             wxHIDKeyboard* keyboard = new wxHIDKeyboard();
@@ -693,7 +696,7 @@ bool wxGetKeyState (wxKeyCode key)
     {
         wxHIDKeyboard* keyboard = (wxHIDKeyboard*)
                                 wxHIDModule::sm_keyboards[i];
-        
+
     switch(key)
     {
     case WXK_SHIFT:
@@ -732,7 +735,7 @@ bool wxGetKeyState (wxKeyCode key)
         break;
     }
     }
-    
+
     return false; //not down/error
 }
 

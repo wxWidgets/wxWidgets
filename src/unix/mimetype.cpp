@@ -39,13 +39,13 @@
 #if wxUSE_MIMETYPE && wxUSE_FILE && wxUSE_TEXTFILE
 
 #ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
     #include "wx/string.h"
 #endif
 
 #include "wx/log.h"
 #include "wx/file.h"
 #include "wx/intl.h"
-#include "wx/dynarray.h"
 #include "wx/confbase.h"
 
 #include "wx/ffile.h"

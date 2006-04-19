@@ -25,6 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
     #include "wx/frame.h"
     #include "wx/app.h"
     #include "wx/utils.h"
@@ -38,7 +39,6 @@
     #include "wx/dialog.h"
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
-    #include "wx/dynarray.h"
     #include "wx/wxchar.h"
     #include "wx/icon.h"
     #include "wx/log.h"
@@ -313,7 +313,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     // fails to find a device.
     SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
 #endif
-    
+
     wxOleInitialize();
 
     RegisterWindowClasses();
@@ -591,7 +591,7 @@ int wxApp::GetComCtl32Version()
 
         // we're prepared to handle the errors
         wxLogNull noLog;
-        
+
 #if wxUSE_DYNLIB_CLASS
         // do we have it?
         wxDynamicLibrary dllComCtl32(_T("comctl32.dll"), wxDL_VERBATIM);
@@ -650,7 +650,7 @@ int wxApp::GetComCtl32Version()
                 }
             }
         }
-#endif        
+#endif
     }
 
     return s_verComCtl32;

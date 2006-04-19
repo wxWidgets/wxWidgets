@@ -19,12 +19,13 @@
 #if wxUSE_LISTBOX
 
 #ifndef WX_PRECOMP
-#include "wx/listbox.h"
-#include "wx/settings.h"
-#include "wx/brush.h"
-#include "wx/font.h"
-#include "wx/dc.h"
-#include "wx/utils.h"
+    #include "wx/dynarray.h"
+    #include "wx/listbox.h"
+    #include "wx/settings.h"
+    #include "wx/brush.h"
+    #include "wx/font.h"
+    #include "wx/dc.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/window.h"
@@ -32,7 +33,6 @@
 
 #include <windowsx.h>
 
-#include "wx/dynarray.h"
 #include "wx/log.h"
 
 #if wxUSE_OWNER_DRAWN

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/cmdline.cpp
+// Name:        src/common/cmdline.cpp
 // Purpose:     wxCmdLineParser implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -24,17 +24,17 @@
     #pragma hdrstop
 #endif
 
-#include "wx/cmdline.h"
-
-#if wxUSE_CMDLINE_PARSER
-
 #ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/app.h"
-    #include "wx/dynarray.h"
 #endif //WX_PRECOMP
+
+#include "wx/cmdline.h"
+
+#if wxUSE_CMDLINE_PARSER
 
 #include <ctype.h>
 
