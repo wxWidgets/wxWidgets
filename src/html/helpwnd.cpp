@@ -14,16 +14,16 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_WXHTML_HELP
 
 #ifndef WXPRECOMP
+    #include "wx/object.h"
     #include "wx/intl.h"
     #include "wx/log.h"
 
-    #include "wx/object.h"
     #include "wx/sizer.h"
 
     #include "wx/bmpbuttn.h"

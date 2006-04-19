@@ -1,19 +1,25 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sound.cpp
+// Name:        src/mac/classic/sound.cpp
 // Purpose:     wxSound class implementation: optional
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/object.h"
-#include "wx/string.h"
-#include "wx/sound.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
 #if wxUSE_SOUND
+
+#ifndef WX_PRECOMP
+    #include "wx/object.h"
+#endif
+
+#include "wx/string.h"
+#include "wx/sound.h"
 
 #ifdef __WXMAC__
 #include "wx/mac/private.h"
@@ -135,14 +141,14 @@ bool wxSound::DoPlay(unsigned flags) const
 
     if (m_isResource)
     {
-    	Str255 snd ;
-    	wxMacStringToPascal( m_sndname , snd ) ;
-      	SndListHandle hSnd;
+        Str255 snd ;
+        wxMacStringToPascal( m_sndname , snd ) ;
+        SndListHandle hSnd;
 
-      	hSnd = (SndListHandle) GetNamedResource('snd ', snd);
+        hSnd = (SndListHandle) GetNamedResource('snd ', snd);
 
-      	if ((hSnd != NULL) && (SndPlay((SndChannelPtr)m_sndChan, (SndListHandle) hSnd, (flags & wxSOUND_ASYNC)) == noErr))
-        	ret = true;
+        if ((hSnd != NULL) && (SndPlay((SndChannelPtr)m_sndChan, (SndListHandle) hSnd, (flags & wxSOUND_ASYNC)) == noErr))
+            ret = true;
     }
 
     return ret;
@@ -235,5 +241,4 @@ void TimerCallBack(HWND hwnd,UINT uMsg,UINT idEvent,DWORD dwTime)
     KillTimer(0,timerID);
 }*/
 
-
-#endif
+#endif // wxUSE_SOUND

@@ -13,19 +13,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
+#if wxUSE_EXTENDED_RTTI
+
 #ifndef WX_PRECOMP
-#include "wx/hash.h"
-#include "wx/object.h"
+    #include "wx/object.h"
+    #include "wx/hash.h"
 #endif
 
 #include "wx/tokenzr.h"
 #include "wx/txtstrm.h"
 #include "wx/event.h"
-
-#if wxUSE_EXTENDED_RTTI
 
 #include "wx/xtistrm.h"
 
@@ -844,4 +844,4 @@ void wxCodeDepersister::SetConnect(int eventSourceObjectID,
 
 WX_DEFINE_OBJARRAY(wxxVariantArray);
 
-#endif
+#endif // wxUSE_EXTENDED_RTTI

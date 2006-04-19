@@ -14,15 +14,15 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/hash.h"
-#include "wx/object.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_EXTENDED_RTTI
+
+#ifndef WX_PRECOMP
+    #include "wx/object.h"
+    #include "wx/hash.h"
+#endif
 
 #include "wx/xti.h"
 #include "wx/xml/xml.h"
@@ -763,4 +763,5 @@ void wxGenericPropertyAccessor::GetProperty(const wxObject *object, wxxVariant& 
     wxASSERT_MSG( dynobj , wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") ) ;
     value = dynobj->GetProperty( m_propertyName ) ;
 }
-#endif
+
+#endif // wxUSE_EXTENDED_RTTI

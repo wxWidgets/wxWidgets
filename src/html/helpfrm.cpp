@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpfrm.cpp
+// Name:        src/html/helpfrm.cpp
 // Purpose:     wxHtmlHelpFrame
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
@@ -14,16 +14,16 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_WXHTML_HELP
 
 #ifndef WXPRECOMP
+    #include "wx/object.h"
     #include "wx/intl.h"
     #include "wx/log.h"
 
-    #include "wx/object.h"
     #include "wx/sizer.h"
 
     #include "wx/bmpbuttn.h"
@@ -90,14 +90,14 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 {
     m_HtmlHelpWin = new wxHtmlHelpWindow(m_Data);
 
-    wxFrame::Create(parent, id, _("Help"), 
+    wxFrame::Create(parent, id, _("Help"),
                     wxPoint(m_HtmlHelpWin->GetCfgData().x, m_HtmlHelpWin->GetCfgData().y),
-                    wxSize(m_HtmlHelpWin->GetCfgData().w, m_HtmlHelpWin->GetCfgData().h), 
+                    wxSize(m_HtmlHelpWin->GetCfgData().w, m_HtmlHelpWin->GetCfgData().h),
                     wxDEFAULT_FRAME_STYLE, wxT("wxHtmlHelp"));
 #if wxUSE_STATUSBAR
     CreateStatusBar();
 #endif
-    m_HtmlHelpWin->Create(this, -1, wxDefaultPosition, wxDefaultSize,
+    m_HtmlHelpWin->Create(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
         wxTAB_TRAVERSAL|wxNO_BORDER, style);
 
     GetPosition(& (m_HtmlHelpWin->GetCfgData().x), & (m_HtmlHelpWin->GetCfgData()).y);
@@ -194,8 +194,8 @@ void wxHtmlHelpFrame::AddGrabIfNeeded()
 {
     // So far, wxGTK only
 #ifdef __WXGTK__
-    bool needGrab = FALSE;
-    
+    bool needGrab = false;
+
     // Check if there are any modal windows present,
     // in which case we need to add a grab.
     for ( wxWindowList::iterator it = wxTopLevelWindows.begin();
@@ -206,7 +206,7 @@ void wxHtmlHelpFrame::AddGrabIfNeeded()
         wxDialog *dialog = wxDynamicCast(win, wxDialog);
 
         if (dialog && dialog->IsModal())
-            needGrab = TRUE;
+            needGrab = true;
     }
 
     if (needGrab)

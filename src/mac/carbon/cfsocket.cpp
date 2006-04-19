@@ -12,14 +12,17 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_SOCKETS
 
+#ifndef WX_PRECOMP
+    #include "wx/object.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/apptrait.h"
-#include "wx/object.h"
 #include "wx/string.h"
 #include "wx/timer.h"
 #include "wx/utils.h"

@@ -10,7 +10,10 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/object.h"
+#ifndef WX_PRECOMP
+    #include "wx/object.h"
+#endif
+
 #include "wx/window.h"
 #include "wx/dc.h"
 #include "wx/cursor.h"

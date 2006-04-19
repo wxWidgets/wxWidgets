@@ -6,14 +6,17 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
-#include "wx/object.h"
+#ifndef WXPRECOMP
+    #include "wx/object.h"
+#endif
+
 #include "wx/printdlg.h"
 #include "wx/mac/printdlg.h"
 #include "wx/dcprint.h"

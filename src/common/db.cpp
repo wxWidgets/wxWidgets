@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        db.cpp
+// Name:        src/common/db.cpp
 // Purpose:     Implementation of the wxDb class.  The wxDb class represents a connection
 //              to an ODBC data source.  The wxDb class allows operations on the data
 //              source such as opening and closing the data source.
@@ -21,32 +21,28 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-/*
-// SYNOPSIS START
-// SYNOPSIS STOP
-*/
-
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 
-#ifdef DBDEBUG_CONSOLE
-    #include "wx/ioswrap.h"
-#endif
+#if wxUSE_ODBC
 
 #ifndef WX_PRECOMP
-    #include "wx/string.h"
     #include "wx/object.h"
+    #include "wx/string.h"
     #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/log.h"
 #endif
+
+#ifdef DBDEBUG_CONSOLE
+    #include "wx/ioswrap.h"
+#endif
+
 #include "wx/filefn.h"
 #include "wx/wxchar.h"
-
-#if wxUSE_ODBC
 
 #include <stdio.h>
 #include <string.h>
@@ -201,7 +197,7 @@ void wxDbConnectInf::FreeHenv()
 
 void wxDbConnectInf::SetDsn(const wxString &dsn)
 {
-    wxASSERT(dsn.Length() < WXSIZEOF(Dsn));
+    wxASSERT(dsn.length() < WXSIZEOF(Dsn));
 
     wxStrncpy(Dsn, dsn, WXSIZEOF(Dsn)-1);
     Dsn[WXSIZEOF(Dsn)-1] = 0;  // Prevent buffer overrun
@@ -210,7 +206,7 @@ void wxDbConnectInf::SetDsn(const wxString &dsn)
 
 void wxDbConnectInf::SetUserID(const wxString &uid)
 {
-    wxASSERT(uid.Length() < WXSIZEOF(Uid));
+    wxASSERT(uid.length() < WXSIZEOF(Uid));
     wxStrncpy(Uid, uid, WXSIZEOF(Uid)-1);
     Uid[WXSIZEOF(Uid)-1] = 0;  // Prevent buffer overrun
 }  // wxDbConnectInf::SetUserID()
@@ -218,7 +214,7 @@ void wxDbConnectInf::SetUserID(const wxString &uid)
 
 void wxDbConnectInf::SetPassword(const wxString &password)
 {
-    wxASSERT(password.Length() < WXSIZEOF(AuthStr));
+    wxASSERT(password.length() < WXSIZEOF(AuthStr));
 
     wxStrncpy(AuthStr, password, WXSIZEOF(AuthStr)-1);
     AuthStr[WXSIZEOF(AuthStr)-1] = 0;  // Prevent buffer overrun
@@ -226,7 +222,7 @@ void wxDbConnectInf::SetPassword(const wxString &password)
 
 void wxDbConnectInf::SetConnectionStr(const wxString &connectStr)
 {
-    wxASSERT(connectStr.Length() < WXSIZEOF(ConnectionStr));
+    wxASSERT(connectStr.length() < WXSIZEOF(ConnectionStr));
 
     useConnectionStr = wxStrlen(connectStr) > 0;
 
@@ -287,7 +283,7 @@ int wxDbColFor::Format(int Nation, int dbDataType, SWORD sqlDataType,
         if ((i_sqlDataType == SQL_VARCHAR)
 #if wxUSE_UNICODE
     #if defined(SQL_WCHAR)
-            || (i_sqlDataType == SQL_WCHAR) 
+            || (i_sqlDataType == SQL_WCHAR)
     #endif
     #if defined(SQL_WVARCHAR)
             || (i_sqlDataType == SQL_WVARCHAR)
@@ -658,7 +654,7 @@ bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
 
     // These are the possible SQL types we check for use agains the datasource we are connected
     // to for the purpose of determining which data type to use for the MEMO column types
-	// (a type which allow to store large strings; like VARCHAR just with a bigger precision)
+    // (a type which allow to store large strings; like VARCHAR just with a bigger precision)
     //
     // NOTE: The first type in this enumeration that is determined to be supported by the
     //       datasource/driver is the one that will be used.
@@ -826,15 +822,15 @@ bool wxDb::open(bool failOnDataTypeUnsupported)
 
 bool wxDb::Open(const wxString& inConnectStr, bool failOnDataTypeUnsupported)
 {
-    wxASSERT(inConnectStr.Length());
+    wxASSERT(inConnectStr.length());
     return Open(inConnectStr, NULL, failOnDataTypeUnsupported);
 }
 
 bool wxDb::Open(const wxString& inConnectStr, SQLHWND parentWnd, bool failOnDataTypeUnsupported)
 {
-    dsn        = wxT("");
-    uid        = wxT("");
-    authStr    = wxT("");
+    dsn        = wxEmptyString;
+    uid        = wxEmptyString;
+    authStr    = wxEmptyString;
 
     RETCODE retcode;
 
@@ -861,7 +857,7 @@ bool wxDb::Open(const wxString& inConnectStr, SQLHWND parentWnd, bool failOnData
     inConnectionStr = inConnectStr;
 
     retcode = SQLDriverConnect(hdbc, parentWnd, (SQLTCHAR FAR *)inConnectionStr.c_str(),
-                        (SWORD)inConnectionStr.Length(), (SQLTCHAR FAR *)outConnectBuffer,
+                        (SWORD)inConnectionStr.length(), (SQLTCHAR FAR *)outConnectBuffer,
                         sizeof(outConnectBuffer), &outConnectBufferLen, SQL_DRIVER_COMPLETE );
 
     if ((retcode != SQL_SUCCESS) &&
@@ -878,13 +874,13 @@ bool wxDb::Open(const wxString& inConnectStr, SQLHWND parentWnd, bool failOnData
 /********** wxDb::Open() **********/
 bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr, bool failOnDataTypeUnsupported)
 {
-    wxASSERT(Dsn.Length());
+    wxASSERT(!Dsn.empty());
     dsn        = Dsn;
     uid        = Uid;
     authStr    = AuthStr;
 
-    inConnectionStr = wxT("");
-    outConnectionStr = wxT("");
+    inConnectionStr = wxEmptyString;
+    outConnectionStr = wxEmptyString;
 
     RETCODE retcode;
 
@@ -966,7 +962,7 @@ bool wxDb::Open(wxDb *copyDb)
         inConnectionStr = copyDb->GetConnectionInStr();
 
         retcode = SQLDriverConnect(hdbc, NULL, (SQLTCHAR FAR *)inConnectionStr.c_str(),
-                            (SWORD)inConnectionStr.Length(), (SQLTCHAR FAR *)outConnectBuffer,
+                            (SWORD)inConnectionStr.length(), (SQLTCHAR FAR *)outConnectBuffer,
                             sizeof(outConnectBuffer), &outConnectBufferLen, SQL_DRIVER_COMPLETE);
 
         if ((retcode != SQL_SUCCESS) &&
@@ -1889,7 +1885,7 @@ void wxDb::DispNextError(void)
 /********** wxDb::logError() **********/
 void wxDb::logError(const wxString &errMsg, const wxString &SQLState)
 {
-    wxASSERT(errMsg.Length());
+    wxASSERT(errMsg.length());
 
     static int pLast = -1;
     int dbStatus;
@@ -1905,7 +1901,7 @@ void wxDb::logError(const wxString &errMsg, const wxString &SQLState)
     wxStrncpy(errorList[pLast], errMsg, DB_MAX_ERROR_MSG_LEN);
     errorList[pLast][DB_MAX_ERROR_MSG_LEN] = 0;
 
-    if (SQLState.Length())
+    if (SQLState.length())
         if ((dbStatus = TranslateSqlState(SQLState)) != DB_ERR_FUNCTION_SEQUENCE_ERROR)
             DB_STATUS = dbStatus;
 
@@ -2170,7 +2166,7 @@ bool wxDb::CreateView(const wxString &viewName, const wxString &colList,
     sqlStmt  = wxT("CREATE VIEW ");
     sqlStmt += viewName;
 
-    if (colList.Length())
+    if (colList.length())
     {
         sqlStmt += wxT(" (");
         sqlStmt += colList;
@@ -2323,7 +2319,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
                 break;
             case SQL_LONGVARCHAR:
                 pColInf[colNum].dbDataType = DB_DATA_TYPE_MEMO;
-				break;
+                break;
             case SQL_TINYINT:
             case SQL_SMALLINT:
             case SQL_INTEGER:
@@ -3107,9 +3103,9 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
                         case SQL_CHAR:
                             colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
                         break;
-                        case SQL_LONGVARCHAR:                        
+                        case SQL_LONGVARCHAR:
                             colInf[colNo].dbDataType = DB_DATA_TYPE_MEMO;
-							break;
+                            break;
                         case SQL_TINYINT:
                         case SQL_SMALLINT:
                         case SQL_INTEGER:
@@ -3452,7 +3448,7 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
  *       to avoid undesired unbinding of columns.
  */
 {
-    wxASSERT(fileName.Length());
+    wxASSERT(fileName.length());
 
     RETCODE   retcode;
     SQLLEN    cb;
@@ -3572,14 +3568,14 @@ bool wxDb::TableExists(const wxString &tableName, const wxChar *userID, const wx
  *        userID != ""    ... UserID set equal to 'userID'
  */
 {
-    wxASSERT(tableName.Length());
+    wxASSERT(tableName.length());
 
     wxString TableName;
 
     if (Dbms() == dbmsDBASE)
     {
         wxString dbName;
-        if (tablePath.Length())
+        if (tablePath.length())
             dbName.Printf(wxT("%s/%s.dbf"), tablePath.c_str(), tableName.c_str());
         else
             dbName.Printf(wxT("%s.dbf"), tableName.c_str());
@@ -3649,7 +3645,7 @@ bool wxDb::TableExists(const wxString &tableName, const wxChar *userID, const wx
 bool wxDb::TablePrivileges(const wxString &tableName, const wxString &priv, const wxChar *userID,
                             const wxChar *schema, const wxString &WXUNUSED(tablePath))
 {
-    wxASSERT(tableName.Length());
+    wxASSERT(tableName.length());
 
     wxDbTablePrivilegeInfo  result;
     SQLLEN  cbRetVal;
@@ -3798,7 +3794,7 @@ const wxString wxDb::SQLColumnName(const wxChar *colName)
 bool wxDb::SetSqlLogging(wxDbSqlLogState state, const wxString &filename, bool append)
 {
     wxASSERT(state == sqlLogON  || state == sqlLogOFF);
-    wxASSERT(state == sqlLogOFF || filename.Length());
+    wxASSERT(state == sqlLogOFF || filename.length());
 
     if (state == sqlLogON)
     {
@@ -3828,7 +3824,7 @@ bool wxDb::SetSqlLogging(wxDbSqlLogState state, const wxString &filename, bool a
 /********** wxDb::WriteSqlLog() **********/
 bool wxDb::WriteSqlLog(const wxString &logMsg)
 {
-    wxASSERT(logMsg.Length());
+    wxASSERT(logMsg.length());
 
     if (fpSqlLog == 0 || sqlLogState == sqlLogOFF)
         return false;
@@ -4000,8 +3996,8 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
                         int dataType, ULONG columnLength,
                         const wxString &optionalParam)
 {
-    wxASSERT(tableName.Length());
-    wxASSERT(columnName.Length());
+    wxASSERT(tableName.length());
+    wxASSERT(columnName.length());
     wxASSERT((dataType == DB_DATA_TYPE_VARCHAR && columnLength > 0) ||
              dataType != DB_DATA_TYPE_VARCHAR);
 
@@ -4079,7 +4075,7 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
     }
 
     // for passing things like "NOT NULL"
-    if (optionalParam.Length())
+    if (optionalParam.length())
     {
         sqlStmt += wxT(" ");
         sqlStmt += optionalParam;

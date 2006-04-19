@@ -10,7 +10,10 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/object.h"
+#ifndef WX_PRECOMP
+    #include "wx/object.h"
+#endif
+
 #include "wx/window.h"
 #include "wx/dc.h"
 #include "wx/cursor.h"
@@ -31,4 +34,3 @@ int g_openDialogs = 0;
 /* true when the message queue is empty. this gets set to
    false by all event callbacks before anything else is done */
 bool g_isIdle = false;
-

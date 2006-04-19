@@ -14,12 +14,12 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/hash.h"
     #include "wx/object.h"
+    #include "wx/hash.h"
 #endif
 
 #include <string.h>

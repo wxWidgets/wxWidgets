@@ -18,7 +18,10 @@
 
 #if wxUSE_CHECKLISTBOX && wxUSE_OWNER_DRAWN
 
-#include "wx/object.h"
+#ifndef WX_PRECOMP
+    #include "wx/object.h"
+#endif
+
 #include "wx/colour.h"
 #include "wx/font.h"
 #include "wx/bitmap.h"

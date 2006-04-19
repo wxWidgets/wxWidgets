@@ -17,14 +17,17 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_SOCKETS
 
+#ifndef WX_PRECOMP
+    #include "wx/object.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/apptrait.h"
-#include "wx/object.h"
 #include "wx/string.h"
 #include "wx/timer.h"
 #include "wx/utils.h"
@@ -710,7 +713,7 @@ bool wxSocketBase::_Wait(long seconds,
   bool done = false;
   bool valid_result = false;
 
-  if (!has_event_loop) 
+  if (!has_event_loop)
   {
     // This is used to avoid a busy loop on wxBase - having a select
     // timeout of 50 ms per iteration should be enough.
@@ -756,11 +759,11 @@ bool wxSocketBase::_Wait(long seconds,
       done = true;
     else
     {
-      if (has_event_loop) 
+      if (has_event_loop)
       {
           PROCESS_EVENTS();
       }
-      else 
+      else
       {
         // If there's less than 50 ms left, just call select with that timeout.
         if (time_left < 50)
@@ -1193,7 +1196,7 @@ bool wxSocketBase::SetOption(int level, int optname, const void *optval,
                               int optlen)
 {
     wxASSERT_MSG( m_socket, _T("Socket not initialised") );
-    
+
     if (m_socket->SetSockOpt(level, optname, optval, optlen)
         != GSOCK_NOERROR)
     {
@@ -1379,7 +1382,7 @@ wxDatagramSocket& wxDatagramSocket::SendTo( const wxSockAddress& addr,
                                             wxUint32 nBytes )
 {
     wxASSERT_MSG( m_socket, _T("Socket not initialised") );
-    
+
     m_socket->SetPeer(addr.GetAddress());
     Write(buf, nBytes);
     return (*this);

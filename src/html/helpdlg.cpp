@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpdlg.cpp
+// Name:        src/html/helpdlg.cpp
 // Purpose:     wxHtmlHelpDialog
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
@@ -13,16 +13,16 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_WXHTML_HELP
 
 #ifndef WXPRECOMP
+    #include "wx/object.h"
     #include "wx/intl.h"
     #include "wx/log.h"
 
-    #include "wx/object.h"
     #include "wx/sizer.h"
 
     #include "wx/bmpbuttn.h"
@@ -67,11 +67,11 @@ bool wxHtmlHelpDialog::Create(wxWindow* parent, wxWindowID id,
 {
     m_HtmlHelpWin = new wxHtmlHelpWindow(m_Data);
 
-    wxDialog::Create(parent, id, _("Help"), 
+    wxDialog::Create(parent, id, _("Help"),
                     wxPoint(m_HtmlHelpWin->GetCfgData().x, m_HtmlHelpWin->GetCfgData().y),
-                    wxSize(m_HtmlHelpWin->GetCfgData().w, m_HtmlHelpWin->GetCfgData().h), 
+                    wxSize(m_HtmlHelpWin->GetCfgData().w, m_HtmlHelpWin->GetCfgData().h),
                     wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER, wxT("wxHtmlHelp"));
-    m_HtmlHelpWin->Create(this, -1, wxDefaultPosition, GetClientSize(),
+    m_HtmlHelpWin->Create(this, wxID_ANY, wxDefaultPosition, GetClientSize(),
         wxTAB_TRAVERSAL|wxNO_BORDER, style);
 
     GetPosition(& (m_HtmlHelpWin->GetCfgData().x), & (m_HtmlHelpWin->GetCfgData()).y);
@@ -97,7 +97,7 @@ bool wxHtmlHelpDialog::Create(wxWindow* parent, wxWindowID id,
     // Add some space for the resize handle
     item4->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL, 0);
 #endif
-    
+
     Layout();
     Centre();
 
@@ -133,4 +133,3 @@ void wxHtmlHelpDialog::OnCloseWindow(wxCloseEvent& evt)
 }
 
 #endif // wxUSE_WXHTML_HELP
-

@@ -11,11 +11,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-/*
-// SYNOPSIS START
-// SYNOPSIS STOP
-*/
-
 #include  "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -23,6 +18,14 @@
 #endif
 
 #if wxUSE_ODBC
+
+#ifndef WX_PRECOMP
+    #include "wx/object.h"
+    #include "wx/string.h"
+    #include "wx/list.h"
+    #include "wx/utils.h"
+    #include "wx/log.h"
+#endif
 
 #ifdef DBDEBUG_CONSOLE
 #if wxUSE_IOSTREAMH
@@ -33,13 +36,6 @@
     #include "wx/ioswrap.h"
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/string.h"
-    #include "wx/object.h"
-    #include "wx/list.h"
-    #include "wx/utils.h"
-    #include "wx/log.h"
-#endif
 #include "wx/filefn.h"
 
 #include <stdio.h>

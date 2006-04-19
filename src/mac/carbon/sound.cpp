@@ -1,25 +1,29 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sound.cpp
+// Name:        src/mac/carbon/sound.cpp
 // Purpose:     wxSound class implementation: optional
 // Author:      Ryan Norton
 // Modified by: Stefan Csomor
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/object.h"
+#if wxUSE_SOUND
+
+#ifndef WX_PRECOMP
+    #include "wx/object.h"
+#endif
+
 #include "wx/string.h"
 #include "wx/log.h"
 #include "wx/file.h"
 #include "wx/sound.h"
 #include "wx/timer.h"
 #include "wx/intl.h"
-
-#if wxUSE_SOUND
 
 // Carbon QT Implementation Details -
 //
@@ -384,11 +388,11 @@ bool wxSound::DoPlay(unsigned flags) const
 //NB:  RN: Stefan - I think the 10.3 path functions are broken if kQTNativeDefaultPathStyle is
 //going to trigger a warning every time it is used - where its _supposed to be used_!!
 //(kQTNativePathStyle is negative but the function argument is unsigned!)
-//../src/mac/carbon/sound.cpp: In member function `virtual bool 
+//../src/mac/carbon/sound.cpp: In member function `virtual bool
 //   wxSound::DoPlay(unsigned int) const':
 //../src/mac/carbon/sound.cpp:387: warning: passing negative value `
-//   kQTNativeDefaultPathStyle' for argument passing 2 of `OSErr 
-//   QTNewDataReferenceFromFullPathCFString(const __CFString*, long unsigned int, 
+//   kQTNativeDefaultPathStyle' for argument passing 2 of `OSErr
+//   QTNewDataReferenceFromFullPathCFString(const __CFString*, long unsigned int,
 //   long unsigned int, char***, OSType*)'
 //../src/mac/carbon/sound.cpp:387: warning: argument of negative value `
 //   kQTNativeDefaultPathStyle' to `long unsigned int'
@@ -396,17 +400,17 @@ bool wxSound::DoPlay(unsigned flags) const
             if ( UMAGetSystemVersion() >= 0x1030 )
             {
                 Handle dataRef = NULL;
-                OSType dataRefType;            
-                
+                OSType dataRefType;
+
                 err = QTNewDataReferenceFromFullPathCFString(wxMacCFStringHolder(m_sndname,wxLocale::GetSystemEncoding()),
                     //FIXME: Why does this have to be casted?
-                    (unsigned int)kQTNativeDefaultPathStyle, 
+                    (unsigned int)kQTNativeDefaultPathStyle,
                     //FIXME: End
                     0, &dataRef, &dataRefType);
 
                 wxASSERT(err == noErr);
-                
-                if (NULL != dataRef || err != noErr) 
+
+                if (NULL != dataRef || err != noErr)
                 {
                     err = NewMovieFromDataRef( &movie, newMovieDontAskUnresolvedDataRefs , NULL, dataRef, dataRefType );
                     wxASSERT(err == noErr);
@@ -449,7 +453,7 @@ bool wxSound::DoPlay(unsigned flags) const
 
                 CloseMovieFile (movieResFile);
             }
-            
+
             if (err != noErr)
             {
                 wxLogSysError(
@@ -480,7 +484,7 @@ bool wxSound::DoPlay(unsigned flags) const
         wxASSERT_MSG(!(flags & wxSOUND_LOOP), wxT("Can't loop and play syncronously at the same time"));
 
         //Play movie until it ends, then exit
-        //Note that due to quicktime caching this may not always 
+        //Note that due to quicktime caching this may not always
         //work 100% correctly
         while (!IsMovieDone(movie))
             MoviesTask(movie, 1);
