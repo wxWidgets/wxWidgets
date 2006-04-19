@@ -681,8 +681,10 @@ wxString wxMacCFStringHolder::AsString(wxFontEncoding encoding)
     unibuf[cflen] = 0 ;
     wxMBConvUTF16 converter ;
     noChars = converter.MB2WC( NULL , (const char*)unibuf , 0 ) ;
+    wxASSERT_MSG( noChars != wxCONV_FAILED, _T("Unable to count the number of characters in this string!") );
     buf = new wxChar[ noChars + 1 ] ;
-    converter.MB2WC( buf , (const char*)unibuf , noChars ) ;
+    noChars = converter.MB2WC( buf , (const char*)unibuf , noChars + 1 ) ;
+    wxASSERT_MSG( noChars != wxCONV_FAILED, _T("Conversion of string failed!") );
     delete[] unibuf ;
 #endif
 #else

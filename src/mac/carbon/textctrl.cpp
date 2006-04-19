@@ -1574,9 +1574,11 @@ wxString wxMacMLTEControl::GetStringValue() const
                 (((UniChar*)*theText)[actualSize]) = 0 ;
                 wxMBConvUTF16 converter ;
                 size_t noChars = converter.MB2WC( NULL , (const char*)*theText , 0 ) ;
+ 				wxASSERT_MSG( noChars != wxCONV_FAILED, _T("Unable to count the number of characters in this string!") );
                 ptr = new wxChar[noChars + 1] ;
 
-                noChars = converter.MB2WC( ptr , (const char*)*theText , noChars ) ;
+                noChars = converter.MB2WC( ptr , (const char*)*theText , noChars + 1 ) ;
+ 				wxASSERT_MSG( noChars != wxCONV_FAILED, _T("Conversion of string failed!") );
                 ptr[noChars] = 0 ;
                 HUnlock( theText ) ;
 #endif

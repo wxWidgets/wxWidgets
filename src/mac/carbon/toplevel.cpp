@@ -122,7 +122,10 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
         focus = (wxTopLevelWindowMac*) data ;
 
     unsigned char charCode ;
-    wxChar uniChar = 0 ;
+    wxChar uniChar[2] ;
+	uniChar[0] = 0;
+	uniChar[1] = 0;
+	
     UInt32 keyCode ;
     UInt32 modifiers ;
     Point point ;
@@ -133,21 +136,23 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
     if ( GetEventParameter( event, kEventParamKeyUnicodes, typeUnicodeText, NULL, 0 , &dataSize, NULL ) == noErr )
     {
         UniChar buf[2] ;
+        int numChars = dataSize / sizeof( UniChar) + 1;
 
         UniChar* charBuf = buf ;
 
-        if ( dataSize > 4 )
-            charBuf = new UniChar[ dataSize / sizeof( UniChar) ] ;
+        if ( numChars * 2 > 4 )
+            charBuf = new UniChar[ numChars ] ;
         GetEventParameter( event, kEventParamKeyUnicodes, typeUnicodeText, NULL, dataSize , NULL , charBuf ) ;
+		charBuf[ numChars - 1 ] = 0;
 
 #if SIZEOF_WCHAR_T == 2
         uniChar = charBuf[0] ;
 #else
         wxMBConvUTF16 converter ;
-        converter.MB2WC( &uniChar , (const char*)charBuf , 1 ) ;
+        converter.MB2WC( &uniChar , (const char*)charBuf , 2 ) ;
 #endif
 
-        if ( dataSize > 4 )
+        if ( numChars * 2 > 4 )
             delete[] charBuf ;
     }
 #endif
@@ -167,7 +172,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
                 wxTheApp->MacSetCurrentEvent( event , handler ) ;
                 if ( /* focus && */ wxTheApp->MacSendKeyDownEvent(
-                    focus , message , modifiers , when , point.h , point.v , uniChar ) )
+                    focus , message , modifiers , when , point.h , point.v , uniChar[0] ) )
                 {
                     result = noErr ;
                 }
@@ -177,7 +182,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 
         case kEventRawKeyUp :
             if ( /* focus && */ wxTheApp->MacSendKeyUpEvent(
-                focus , message , modifiers , when , point.h , point.v , uniChar ) )
+                focus , message , modifiers , when , point.h , point.v , uniChar[0] ) )
             {
                 result = noErr ;
             }
