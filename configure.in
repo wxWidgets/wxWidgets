@@ -5076,7 +5076,6 @@ if test "x$WXWIN_COMPATIBILITY_2_4" != "xno"; then
     AC_DEFINE(WXWIN_COMPATIBILITY_2_4)
 fi
 
-dnl This one is enabled by default in setup.h, it must be turned off manually.
 if test "x$WX_USE_RESERVED_VIRTUALS" != "xno"; then
     AC_DEFINE(WX_USE_RESERVED_VIRTUALS)
 fi
