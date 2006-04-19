@@ -406,21 +406,13 @@ wxRendererGeneric::DrawCheckButton(wxWindow *WXUNUSED(win),
                                    const wxRect& rect,
                                    int flags)
 {
-    if (flags & wxCONTROL_DISABLED)
-        dc.SetPen( *wxGREY_PEN );
-    else
-        dc.SetPen( *wxBLACK_PEN );
+    dc.SetPen(*(flags & wxCONTROL_DISABLED ? wxGREY_PEN : wxBLACK_PEN));
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
-    wxRect my_rect = rect;
-    dc.DrawRectangle( my_rect );
-    if (flags & wxCONTROL_CHECKED)
+    dc.DrawRectangle(rect);
+
+    if ( flags & wxCONTROL_CHECKED )
     {
-        my_rect.x += 2;
-        my_rect.y += 2;
-        my_rect.width -= 4;
-        my_rect.height -= 4;
-        dc.DrawLine( my_rect.x, my_rect.y, my_rect.x+my_rect.width, my_rect.y+my_rect.height );
-        dc.DrawLine( my_rect.x+my_rect.width, my_rect.y, my_rect.x, my_rect.y+my_rect.height );
+        dc.DrawCheckMark(rect.Deflate(2, 2));
     }
 }
 
