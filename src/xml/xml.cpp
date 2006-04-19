@@ -365,29 +365,30 @@ bool wxXmlDocument::Save(const wxString& filename) const
        - process all elements, including CDATA
  */
 
-// converts Expat-produced string in UTF-8 into wxString.
-inline static wxString CharToString(wxMBConv *conv,
+// converts Expat-produced string in UTF-8 into wxString using the specified
+// conv or keep in UTF-8 if conv is NULL
+static wxString CharToString(wxMBConv *conv,
                                     const char *s, size_t len = wxSTRING_MAXLEN)
 {
 #if wxUSE_UNICODE
-    (void)conv;
+    wxUnusedVar(conv);
+
     return wxString(s, wxConvUTF8, len);
-#else
+#else // !wxUSE_UNICODE
     if ( conv )
     {
-        size_t nLen = (len != wxSTRING_MAXLEN) ? len :
-                          wxConvUTF8.MB2WC((wchar_t*) NULL, s, 0);
+        // there can be no embedded NULs in this string so we don't need the
+        // output length, it will be NUL-terminated
+        const wxWCharBuffer wbuf(
+            wxConvUTF8.cMB2WC(s, len == wxSTRING_MAXLEN ? wxNO_LEN : len, NULL));
 
-        wchar_t *buf = new wchar_t[nLen+1];
-        wxConvUTF8.MB2WC(buf, s, nLen);
-        buf[nLen] = 0;
-        wxString str(buf, *conv, len);
-        delete[] buf;
-        return str;
+        return wxString(wbuf, conv);
     }
-    else
+    else // already in UTF-8, no conversion needed
+    {
         return wxString(s, len != wxSTRING_MAXLEN ? len : strlen(s));
-#endif
+    }
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
 
 struct wxXmlParsingContext
