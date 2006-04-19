@@ -557,6 +557,7 @@
 #define wxUSE_CHECKLISTBOX 1    // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
 #define wxUSE_CHOICE       1    // wxChoice
 #define wxUSE_COMBOBOX     1    // wxComboBox
+#define wxUSE_DATAVIEWCTRL 1    // wxDataViewCtrl
 #define wxUSE_DATEPICKCTRL 1    // wxDatePickerCtrl
 #define wxUSE_GAUGE        1    // wxGauge
 #define wxUSE_LISTBOX      1    // wxListBox
@@ -574,7 +575,6 @@
 #define wxUSE_TEXTCTRL     1    // wxTextCtrl
 #define wxUSE_TOGGLEBTN    1    // requires wxButton
 #define wxUSE_TREECTRL     1    // wxTreeCtrl
-#define wxUSE_DATAVIEWCTRL 1    // wxDataViewCtrl
 
 // Use a status bar class? Depending on the value of wxUSE_NATIVE_STATUSBAR
 // below either wxStatusBar95 or a generic wxStatusBar will be used.
