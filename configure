@@ -38057,9 +38057,9 @@ _ACEOF
 
 fi
 
-if test "x$WX_USE_RESERVED_VIRTUALS" = "xno"; then
+if test "x$WX_USE_RESERVED_VIRTUALS" != "xno"; then
     cat >>confdefs.h <<\_ACEOF
-#define WX_USE_RESERVED_VIRTUALS 0
+#define WX_USE_RESERVED_VIRTUALS 1
 _ACEOF
 
 fi
