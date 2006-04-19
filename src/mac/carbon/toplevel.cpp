@@ -149,7 +149,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
         uniChar = charBuf[0] ;
 #else
         wxMBConvUTF16 converter ;
-        converter.MB2WC( &uniChar , (const char*)charBuf , 2 ) ;
+        converter.MB2WC( uniChar , (const char*)charBuf , 2 ) ;
 #endif
 
         if ( numChars * 2 > 4 )
@@ -200,7 +200,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 event.m_y = point.v;
 
 #if wxUSE_UNICODE
-                event.m_uniChar = uniChar ;
+                event.m_uniChar = uniChar[0] ;
 #endif
 
                 event.SetTimestamp(when);
