@@ -972,9 +972,9 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     wxDataViewListModel *model = GetOwner()->GetModel();
 
-    size_t item_start = wxMax( 0, (update.y / m_lineHeight) - 1 );
-    size_t item_count = wxMin( (update.height / m_lineHeight) + 2, 
-                                (int)(model->GetNumberOfRows()-item_start) );
+    size_t item_start = wxMax( 0, (update.y / m_lineHeight) );
+    size_t item_count = wxMin( ((update.y + update.height) / m_lineHeight) - item_start + 1, 
+                               (int)(model->GetNumberOfRows()-item_start) );
 
     wxRect cell_rect;
     cell_rect.x = 0;
