@@ -7588,10 +7588,6 @@ SOURCE=..\..\include\wx\msw\gdiimage.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\gdiobj.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"

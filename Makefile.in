@@ -1600,7 +1600,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION__LOWLEVEL_HDR =  \
 	wx/gtk1/dcscreen.h \
 	wx/gtk1/dnd.h \
 	wx/gtk1/font.h \
-	wx/gtk1/gdiobj.h \
 	wx/gtk1/icon.h \
 	wx/gtk1/minifram.h \
 	wx/gtk1/pen.h \
@@ -1632,7 +1631,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR =  \
 	wx/gtk/dcscreen.h \
 	wx/gtk/dnd.h \
 	wx/gtk/font.h \
-	wx/gtk/gdiobj.h \
 	wx/gtk/icon.h \
 	wx/gtk/minifram.h \
 	wx/gtk/pen.h \
@@ -1661,7 +1659,6 @@ COND_TOOLKIT_MGL_LOWLEVEL_HDR =  \
 	wx/mgl/dcscreen.h \
 	wx/mgl/font.h \
 	wx/mgl/fontutil.h \
-	wx/mgl/gdiobj.h \
 	wx/mgl/icon.h \
 	wx/mgl/palette.h \
 	wx/mgl/pen.h \
@@ -1715,7 +1712,6 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/x11/dcscreen.h \
 	wx/x11/dnd.h \
 	wx/x11/font.h \
-	wx/x11/gdiobj.h \
 	wx/x11/icon.h \
 	wx/x11/minifram.h \
 	wx/x11/palette.h \
@@ -1775,7 +1771,6 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/cocoa/fontdlg.h \
 	wx/cocoa/frame.h \
 	wx/cocoa/gauge.h \
-	wx/cocoa/gdiobj.h \
 	wx/cocoa/icon.h \
 	wx/cocoa/listbox.h \
 	wx/cocoa/log.h \
@@ -1935,7 +1930,6 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/fontdlg.h \
 	wx/mac/frame.h \
 	wx/mac/gauge.h \
-	wx/mac/gdiobj.h \
 	wx/mac/glcanvas.h \
 	wx/mac/gsockmac.h \
 	wx/mac/helpxxxx.h \
@@ -2019,7 +2013,6 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/carbon/fontdlg.h \
 	wx/mac/carbon/frame.h \
 	wx/mac/carbon/gauge.h \
-	wx/mac/carbon/gdiobj.h \
 	wx/mac/carbon/gsockmac.h \
 	wx/mac/carbon/helpxxxx.h \
 	wx/mac/carbon/icon.h \
@@ -2113,7 +2106,6 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/motif/font.h \
 	wx/motif/frame.h \
 	wx/motif/gauge.h \
-	wx/motif/gdiobj.h \
 	wx/motif/icon.h \
 	wx/motif/listbox.h \
 	wx/motif/mdi.h \
@@ -2172,7 +2164,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/frame.h \
 	wx/msw/gauge95.h \
 	wx/msw/gdiimage.h \
-	wx/msw/gdiobj.h \
 	wx/msw/icon.h \
 	wx/msw/imaglist.h \
 	wx/msw/iniconf.h \
@@ -2295,7 +2286,6 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/os2/frame.h \
 	wx/os2/gauge.h \
 	wx/os2/gdiimage.h \
-	wx/os2/gdiobj.h \
 	wx/os2/helpwin.h \
 	wx/os2/icon.h \
 	wx/os2/iniconf.h \
@@ -2365,7 +2355,6 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/frame.h \
 	wx/msw/gauge95.h \
 	wx/msw/gdiimage.h \
-	wx/msw/gdiobj.h \
 	wx/msw/icon.h \
 	wx/msw/imaglist.h \
 	wx/msw/iniconf.h \

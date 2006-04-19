@@ -918,6 +918,10 @@ SOURCE=.\generic\busyinfo.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\buttonbar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\calctrl.cpp
 # End Source File
 # Begin Source File
@@ -3515,10 +3519,6 @@ SOURCE=..\include\wx\msw\gdiimage.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\msw\gdiobj.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\msw\glcanvas.h
 # End Source File
 # Begin Source File
@@ -3828,6 +3828,10 @@ SOURCE=..\include\wx\generic\accel.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\busyinfo.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\generic\buttonbar.h
 # End Source File
 # Begin Source File
 
