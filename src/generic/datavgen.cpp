@@ -616,7 +616,7 @@ void wxDataViewHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                                 (
                                     this,
                                     dc,
-                                    wxRect(xpos, 0, cw, ch),
+                                    wxRect(xpos+1, 1, cw-1, ch-1),
                                     m_parent->IsEnabled() ? 0
                                                           : (int)wxCONTROL_DISABLED
                                 );
