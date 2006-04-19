@@ -64,14 +64,6 @@ class GDIObject(_core.Object):
         _gdi_.GDIObject_swiginit(self,_gdi_.new_GDIObject(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_GDIObject
     __del__ = lambda self : None;
-    def GetVisible(*args, **kwargs):
-        """GetVisible(self) -> bool"""
-        return _gdi_.GDIObject_GetVisible(*args, **kwargs)
-
-    def SetVisible(*args, **kwargs):
-        """SetVisible(self, bool visible)"""
-        return _gdi_.GDIObject_SetVisible(*args, **kwargs)
-
     def IsNull(*args, **kwargs):
         """IsNull(self) -> bool"""
         return _gdi_.GDIObject_IsNull(*args, **kwargs)
@@ -4369,64 +4361,192 @@ ImageList_swigregister(ImageList)
 
 #---------------------------------------------------------------------------
 
-class PenList(_core.Object):
-    """Proxy of C++ PenList class"""
+class StockGDI(object):
+    """Proxy of C++ StockGDI class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
-    def AddPen(*args, **kwargs):
-        """AddPen(self, Pen pen)"""
-        return _gdi_.PenList_AddPen(*args, **kwargs)
+    BRUSH_BLACK = _gdi_.StockGDI_BRUSH_BLACK
+    BRUSH_BLUE = _gdi_.StockGDI_BRUSH_BLUE
+    BRUSH_CYAN = _gdi_.StockGDI_BRUSH_CYAN
+    BRUSH_GREEN = _gdi_.StockGDI_BRUSH_GREEN
+    BRUSH_GREY = _gdi_.StockGDI_BRUSH_GREY
+    BRUSH_LIGHTGREY = _gdi_.StockGDI_BRUSH_LIGHTGREY
+    BRUSH_MEDIUMGREY = _gdi_.StockGDI_BRUSH_MEDIUMGREY
+    BRUSH_RED = _gdi_.StockGDI_BRUSH_RED
+    BRUSH_TRANSPARENT = _gdi_.StockGDI_BRUSH_TRANSPARENT
+    BRUSH_WHITE = _gdi_.StockGDI_BRUSH_WHITE
+    COLOUR_BLACK = _gdi_.StockGDI_COLOUR_BLACK
+    COLOUR_BLUE = _gdi_.StockGDI_COLOUR_BLUE
+    COLOUR_CYAN = _gdi_.StockGDI_COLOUR_CYAN
+    COLOUR_GREEN = _gdi_.StockGDI_COLOUR_GREEN
+    COLOUR_LIGHTGREY = _gdi_.StockGDI_COLOUR_LIGHTGREY
+    COLOUR_RED = _gdi_.StockGDI_COLOUR_RED
+    COLOUR_WHITE = _gdi_.StockGDI_COLOUR_WHITE
+    CURSOR_CROSS = _gdi_.StockGDI_CURSOR_CROSS
+    CURSOR_HOURGLASS = _gdi_.StockGDI_CURSOR_HOURGLASS
+    CURSOR_STANDARD = _gdi_.StockGDI_CURSOR_STANDARD
+    FONT_ITALIC = _gdi_.StockGDI_FONT_ITALIC
+    FONT_NORMAL = _gdi_.StockGDI_FONT_NORMAL
+    FONT_SMALL = _gdi_.StockGDI_FONT_SMALL
+    FONT_SWISS = _gdi_.StockGDI_FONT_SWISS
+    PEN_BLACK = _gdi_.StockGDI_PEN_BLACK
+    PEN_BLACKDASHED = _gdi_.StockGDI_PEN_BLACKDASHED
+    PEN_CYAN = _gdi_.StockGDI_PEN_CYAN
+    PEN_GREEN = _gdi_.StockGDI_PEN_GREEN
+    PEN_GREY = _gdi_.StockGDI_PEN_GREY
+    PEN_LIGHTGREY = _gdi_.StockGDI_PEN_LIGHTGREY
+    PEN_MEDIUMGREY = _gdi_.StockGDI_PEN_MEDIUMGREY
+    PEN_RED = _gdi_.StockGDI_PEN_RED
+    PEN_TRANSPARENT = _gdi_.StockGDI_PEN_TRANSPARENT
+    PEN_WHITE = _gdi_.StockGDI_PEN_WHITE
+    ITEMCOUNT = _gdi_.StockGDI_ITEMCOUNT
+    def __init__(self, *args, **kwargs): 
+        """__init__(self) -> StockGDI"""
+        _gdi_.StockGDI_swiginit(self,_gdi_.new_StockGDI(*args, **kwargs))
+    __swig_destroy__ = _gdi_.delete_StockGDI
+    __del__ = lambda self : None;
+    def DeleteAll(*args, **kwargs):
+        """DeleteAll()"""
+        return _gdi_.StockGDI_DeleteAll(*args, **kwargs)
 
-    def FindOrCreatePen(*args, **kwargs):
-        """FindOrCreatePen(self, Colour colour, int width, int style) -> Pen"""
-        return _gdi_.PenList_FindOrCreatePen(*args, **kwargs)
+    DeleteAll = staticmethod(DeleteAll)
+    def instance(*args, **kwargs):
+        """instance() -> StockGDI"""
+        return _gdi_.StockGDI_instance(*args, **kwargs)
 
-    def RemovePen(*args, **kwargs):
-        """RemovePen(self, Pen pen)"""
-        return _gdi_.PenList_RemovePen(*args, **kwargs)
+    instance = staticmethod(instance)
+    def GetBrush(*args, **kwargs):
+        """GetBrush(int item) -> Brush"""
+        return _gdi_.StockGDI_GetBrush(*args, **kwargs)
 
-    def GetCount(*args, **kwargs):
-        """GetCount(self) -> int"""
-        return _gdi_.PenList_GetCount(*args, **kwargs)
+    GetBrush = staticmethod(GetBrush)
+    def GetColour(*args, **kwargs):
+        """GetColour(int item) -> Colour"""
+        return _gdi_.StockGDI_GetColour(*args, **kwargs)
 
-PenList_swigregister = _gdi_.PenList_swigregister
-PenList_swigregister(PenList)
+    GetColour = staticmethod(GetColour)
+    def GetCursor(*args, **kwargs):
+        """GetCursor(int item) -> Cursor"""
+        return _gdi_.StockGDI_GetCursor(*args, **kwargs)
+
+    GetCursor = staticmethod(GetCursor)
+    def GetPen(*args, **kwargs):
+        """GetPen(int item) -> Pen"""
+        return _gdi_.StockGDI_GetPen(*args, **kwargs)
+
+    GetPen = staticmethod(GetPen)
+    def GetFont(*args, **kwargs):
+        """GetFont(self, int item) -> Font"""
+        return _gdi_.StockGDI_GetFont(*args, **kwargs)
+
+StockGDI_swigregister = _gdi_.StockGDI_swigregister
+StockGDI_swigregister(StockGDI)
+
+def StockGDI_DeleteAll(*args):
+  """StockGDI_DeleteAll()"""
+  return _gdi_.StockGDI_DeleteAll(*args)
+
+def StockGDI_instance(*args):
+  """StockGDI_instance() -> StockGDI"""
+  return _gdi_.StockGDI_instance(*args)
+
+def StockGDI_GetBrush(*args, **kwargs):
+  """StockGDI_GetBrush(int item) -> Brush"""
+  return _gdi_.StockGDI_GetBrush(*args, **kwargs)
+
+def StockGDI_GetColour(*args, **kwargs):
+  """StockGDI_GetColour(int item) -> Colour"""
+  return _gdi_.StockGDI_GetColour(*args, **kwargs)
+
+def StockGDI_GetCursor(*args, **kwargs):
+  """StockGDI_GetCursor(int item) -> Cursor"""
+  return _gdi_.StockGDI_GetCursor(*args, **kwargs)
+
+def StockGDI_GetPen(*args, **kwargs):
+  """StockGDI_GetPen(int item) -> Pen"""
+  return _gdi_.StockGDI_GetPen(*args, **kwargs)
+
+# This function makes a class used to do delayed initialization of some
+# stock wx objects.  When they are used the first time then an init function
+# is called to make the real instance, which is then used to replace the
+# original instance and class seen by the programmer.
+def _wxPyMakeDelayedInitWrapper(initFunc):
+    class _wxPyStockObjectWrapper(object):
+        def __init__(self, *args):
+            self._args = args
+        def __getattr__(self, name):
+            obj = initFunc(*self._args)
+            self.__class__ = obj.__class__
+            self.__dict__ = obj.__dict__
+            return getattr(self, name)
+        def __str__(self):
+            return self.__getattr__("__str__")()
+        def __repr__(self):
+            return self.__getattr__("__repr__")()
+    return _wxPyStockObjectWrapper
+    
+def _wxPyFontInit(id):
+    return StockGDI.instance().GetFont(id)
+                                              
+_wxPyStockPen    = _wxPyMakeDelayedInitWrapper(StockGDI.GetPen)
+_wxPyStockBrush  = _wxPyMakeDelayedInitWrapper(StockGDI.GetBrush)
+_wxPyStockCursor = _wxPyMakeDelayedInitWrapper(StockGDI.GetCursor)
+_wxPyStockColour = _wxPyMakeDelayedInitWrapper(StockGDI.GetColour)                    
+_wxPyStockFont   = _wxPyMakeDelayedInitWrapper(_wxPyFontInit)
+
+
+ITALIC_FONT  = _wxPyStockCursor(StockGDI.FONT_ITALIC)
+NORMAL_FONT  = _wxPyStockCursor(StockGDI.FONT_NORMAL)
+SMALL_FONT   = _wxPyStockCursor(StockGDI.FONT_SMALL)
+SWISS_FONT   = _wxPyStockCursor(StockGDI.FONT_SWISS)
+                                              
+BLACK_DASHED_PEN  = _wxPyStockPen(StockGDI.PEN_BLACKDASHED)
+BLACK_PEN         = _wxPyStockPen(StockGDI.PEN_BLACK)
+CYAN_PEN          = _wxPyStockPen(StockGDI.PEN_CYAN)
+GREEN_PEN         = _wxPyStockPen(StockGDI.PEN_GREEN)
+GREY_PEN          = _wxPyStockPen(StockGDI.PEN_GREY)
+LIGHT_GREY_PEN    = _wxPyStockPen(StockGDI.PEN_LIGHTGREY)
+MEDIUM_GREY_PEN   = _wxPyStockPen(StockGDI.PEN_MEDIUMGREY)
+RED_PEN           = _wxPyStockPen(StockGDI.PEN_RED)
+TRANSPARENT_PEN   = _wxPyStockPen(StockGDI.PEN_TRANSPARENT)
+WHITE_PEN         = _wxPyStockPen(StockGDI.PEN_WHITE)
+
+BLACK_BRUSH        = _wxPyStockBrush(StockGDI.BRUSH_BLACK)
+BLUE_BRUSH         = _wxPyStockBrush(StockGDI.BRUSH_BLUE)
+CYAN_BRUSH         = _wxPyStockBrush(StockGDI.BRUSH_CYAN)
+GREEN_BRUSH        = _wxPyStockBrush(StockGDI.BRUSH_GREEN)
+GREY_BRUSH         = _wxPyStockBrush(StockGDI.BRUSH_GREY)
+LIGHT_GREY_BRUSH   = _wxPyStockBrush(StockGDI.BRUSH_LIGHTGREY)
+MEDIUM_GREY_BRUSH  = _wxPyStockBrush(StockGDI.BRUSH_MEDIUMGREY)
+RED_BRUSH          = _wxPyStockBrush(StockGDI.BRUSH_RED)
+TRANSPARENT_BRUSH  = _wxPyStockBrush(StockGDI.BRUSH_TRANSPARENT)
+WHITE_BRUSH        = _wxPyStockBrush(StockGDI.BRUSH_WHITE)
+
+BLACK       = _wxPyStockColour(StockGDI.COLOUR_BLACK)
+BLUE        = _wxPyStockColour(StockGDI.COLOUR_BLUE)
+CYAN        = _wxPyStockColour(StockGDI.COLOUR_CYAN)
+GREEN       = _wxPyStockColour(StockGDI.COLOUR_GREEN)
+LIGHT_GREY  = _wxPyStockColour(StockGDI.COLOUR_LIGHTGREY)
+RED         = _wxPyStockColour(StockGDI.COLOUR_RED)
+WHITE       = _wxPyStockColour(StockGDI.COLOUR_WHITE)
+    
+CROSS_CURSOR      = _wxPyStockCursor(StockGDI.CURSOR_CROSS)
+HOURGLASS_CURSOR  = _wxPyStockCursor(StockGDI.CURSOR_HOURGLASS)
+STANDARD_CURSOR   = _wxPyStockCursor(StockGDI.CURSOR_STANDARD)
+    
+
+class GDIObjListBase(object):
+    """Proxy of C++ GDIObjListBase class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self) -> GDIObjListBase"""
+        _gdi_.GDIObjListBase_swiginit(self,_gdi_.new_GDIObjListBase(*args, **kwargs))
+    __swig_destroy__ = _gdi_.delete_GDIObjListBase
+    __del__ = lambda self : None;
+GDIObjListBase_swigregister = _gdi_.GDIObjListBase_swigregister
+GDIObjListBase_swigregister(GDIObjListBase)
 cvar = _gdi_.cvar
-NORMAL_FONT = cvar.NORMAL_FONT
-SMALL_FONT = cvar.SMALL_FONT
-ITALIC_FONT = cvar.ITALIC_FONT
-SWISS_FONT = cvar.SWISS_FONT
-RED_PEN = cvar.RED_PEN
-CYAN_PEN = cvar.CYAN_PEN
-GREEN_PEN = cvar.GREEN_PEN
-BLACK_PEN = cvar.BLACK_PEN
-WHITE_PEN = cvar.WHITE_PEN
-TRANSPARENT_PEN = cvar.TRANSPARENT_PEN
-BLACK_DASHED_PEN = cvar.BLACK_DASHED_PEN
-GREY_PEN = cvar.GREY_PEN
-MEDIUM_GREY_PEN = cvar.MEDIUM_GREY_PEN
-LIGHT_GREY_PEN = cvar.LIGHT_GREY_PEN
-BLUE_BRUSH = cvar.BLUE_BRUSH
-GREEN_BRUSH = cvar.GREEN_BRUSH
-WHITE_BRUSH = cvar.WHITE_BRUSH
-BLACK_BRUSH = cvar.BLACK_BRUSH
-TRANSPARENT_BRUSH = cvar.TRANSPARENT_BRUSH
-CYAN_BRUSH = cvar.CYAN_BRUSH
-RED_BRUSH = cvar.RED_BRUSH
-GREY_BRUSH = cvar.GREY_BRUSH
-MEDIUM_GREY_BRUSH = cvar.MEDIUM_GREY_BRUSH
-LIGHT_GREY_BRUSH = cvar.LIGHT_GREY_BRUSH
-BLACK = cvar.BLACK
-WHITE = cvar.WHITE
-RED = cvar.RED
-BLUE = cvar.BLUE
-GREEN = cvar.GREEN
-CYAN = cvar.CYAN
-LIGHT_GREY = cvar.LIGHT_GREY
-STANDARD_CURSOR = cvar.STANDARD_CURSOR
-HOURGLASS_CURSOR = cvar.HOURGLASS_CURSOR
-CROSS_CURSOR = cvar.CROSS_CURSOR
 NullBitmap = cvar.NullBitmap
 NullIcon = cvar.NullIcon
 NullCursor = cvar.NullCursor
@@ -4436,31 +4556,80 @@ NullPalette = cvar.NullPalette
 NullFont = cvar.NullFont
 NullColour = cvar.NullColour
 
-class BrushList(_core.Object):
+class PenList(GDIObjListBase):
+    """Proxy of C++ PenList class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def FindOrCreatePen(*args, **kwargs):
+        """FindOrCreatePen(self, Colour colour, int width, int style) -> Pen"""
+        return _gdi_.PenList_FindOrCreatePen(*args, **kwargs)
+
+    def AddPen(*args, **kwargs):
+        """AddPen(self, Pen pen)"""
+        return _gdi_.PenList_AddPen(*args, **kwargs)
+
+    def RemovePen(*args, **kwargs):
+        """RemovePen(self, Pen pen)"""
+        return _gdi_.PenList_RemovePen(*args, **kwargs)
+
+    AddPen = wx._deprecated(AddPen)
+    RemovePen = wx._deprecated(RemovePen)
+
+PenList_swigregister = _gdi_.PenList_swigregister
+PenList_swigregister(PenList)
+
+class BrushList(GDIObjListBase):
     """Proxy of C++ BrushList class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
-    def AddBrush(*args, **kwargs):
-        """AddBrush(self, Brush brush)"""
-        return _gdi_.BrushList_AddBrush(*args, **kwargs)
-
     def FindOrCreateBrush(*args, **kwargs):
         """FindOrCreateBrush(self, Colour colour, int style=SOLID) -> Brush"""
         return _gdi_.BrushList_FindOrCreateBrush(*args, **kwargs)
+
+    def AddBrush(*args, **kwargs):
+        """AddBrush(self, Brush brush)"""
+        return _gdi_.BrushList_AddBrush(*args, **kwargs)
 
     def RemoveBrush(*args, **kwargs):
         """RemoveBrush(self, Brush brush)"""
         return _gdi_.BrushList_RemoveBrush(*args, **kwargs)
 
-    def GetCount(*args, **kwargs):
-        """GetCount(self) -> int"""
-        return _gdi_.BrushList_GetCount(*args, **kwargs)
+    AddBrush = wx._deprecated(AddBrush)
+    RemoveBrush = wx._deprecated(RemoveBrush)
 
 BrushList_swigregister = _gdi_.BrushList_swigregister
 BrushList_swigregister(BrushList)
 
-class ColourDatabase(_core.Object):
+class FontList(GDIObjListBase):
+    """Proxy of C++ FontList class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def FindOrCreateFont(*args, **kwargs):
+        """
+        FindOrCreateFont(self, int point_size, int family, int style, int weight, 
+            bool underline=False, String facename=EmptyString, 
+            int encoding=FONTENCODING_DEFAULT) -> Font
+        """
+        return _gdi_.FontList_FindOrCreateFont(*args, **kwargs)
+
+    def AddFont(*args, **kwargs):
+        """AddFont(self, Font font)"""
+        return _gdi_.FontList_AddFont(*args, **kwargs)
+
+    def RemoveFont(*args, **kwargs):
+        """RemoveFont(self, Font font)"""
+        return _gdi_.FontList_RemoveFont(*args, **kwargs)
+
+    AddFont = wx._deprecated(AddFont)
+    RemoveFont = wx._deprecated(RemoveFont)
+
+FontList_swigregister = _gdi_.FontList_swigregister
+FontList_swigregister(FontList)
+
+class ColourDatabase(object):
     """Proxy of C++ ColourDatabase class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -4489,35 +4658,28 @@ class ColourDatabase(_core.Object):
 ColourDatabase_swigregister = _gdi_.ColourDatabase_swigregister
 ColourDatabase_swigregister(ColourDatabase)
 
-class FontList(_core.Object):
-    """Proxy of C++ FontList class"""
-    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self): raise AttributeError, "No constructor defined"
-    __repr__ = _swig_repr
-    def AddFont(*args, **kwargs):
-        """AddFont(self, Font font)"""
-        return _gdi_.FontList_AddFont(*args, **kwargs)
-
-    def FindOrCreateFont(*args, **kwargs):
-        """
-        FindOrCreateFont(self, int point_size, int family, int style, int weight, 
-            bool underline=False, String facename=EmptyString, 
-            int encoding=FONTENCODING_DEFAULT) -> Font
-        """
-        return _gdi_.FontList_FindOrCreateFont(*args, **kwargs)
-
-    def RemoveFont(*args, **kwargs):
-        """RemoveFont(self, Font font)"""
-        return _gdi_.FontList_RemoveFont(*args, **kwargs)
-
-    def GetCount(*args, **kwargs):
-        """GetCount(self) -> int"""
-        return _gdi_.FontList_GetCount(*args, **kwargs)
-
-FontList_swigregister = _gdi_.FontList_swigregister
-FontList_swigregister(FontList)
-
 #---------------------------------------------------------------------------
+
+
+def _wxPyInitTheFontList(*args):
+  """_wxPyInitTheFontList() -> FontList"""
+  return _gdi_._wxPyInitTheFontList(*args)
+
+def _wxPyInitThePenList(*args):
+  """_wxPyInitThePenList() -> PenList"""
+  return _gdi_._wxPyInitThePenList(*args)
+
+def _wxPyInitTheBrushList(*args):
+  """_wxPyInitTheBrushList() -> BrushList"""
+  return _gdi_._wxPyInitTheBrushList(*args)
+
+def _wxPyInitTheColourDatabase(*args):
+  """_wxPyInitTheColourDatabase() -> ColourDatabase"""
+  return _gdi_._wxPyInitTheColourDatabase(*args)
+wxTheFontList       = _wxPyMakeDelayedInitWrapper(_wxPyInitTheFontList)()
+wxThePenList        = _wxPyMakeDelayedInitWrapper(_wxPyInitThePenList)()
+wxTheBrushList      = _wxPyMakeDelayedInitWrapper(_wxPyInitTheBrushList)()
+wxTheColourDatabase = _wxPyMakeDelayedInitWrapper(_wxPyInitTheColourDatabase)()
 
 NullColor = NullColour 
 #---------------------------------------------------------------------------
@@ -4586,10 +4748,6 @@ class Effects(_core.Object):
 
 Effects_swigregister = _gdi_.Effects_swigregister
 Effects_swigregister(Effects)
-TheFontList = cvar.TheFontList
-ThePenList = cvar.ThePenList
-TheBrushList = cvar.TheBrushList
-TheColourDatabase = cvar.TheColourDatabase
 
 #---------------------------------------------------------------------------
 
@@ -4758,6 +4916,15 @@ class RendererNative(object):
         ``wx.CONTROL_CURRENT`` bit set.
         """
         return _gdi_.RendererNative_DrawDropArrow(*args, **kwargs)
+
+    def DrawCheckButton(*args, **kwargs):
+        """
+        DrawCheckButton(self, Window win, DC dc, Rect rect, int flags=0)
+
+        Draw a check button.  Flags may use wx.CONTROL_CHECKED,
+        wx.CONTROL_UNDETERMINED and wx.CONTROL_CURRENT.
+        """
+        return _gdi_.RendererNative_DrawCheckButton(*args, **kwargs)
 
     def GetSplitterParams(*args, **kwargs):
         """

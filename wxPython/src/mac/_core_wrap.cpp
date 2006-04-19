@@ -38411,6 +38411,82 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Menu_AppendSubMenu(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxMenu *arg1 = (wxMenu *) 0 ;
+  wxMenu *arg2 = (wxMenu *) 0 ;
+  wxString *arg3 = 0 ;
+  wxString const &arg4_defvalue = wxPyEmptyString ;
+  wxString *arg4 = (wxString *) &arg4_defvalue ;
+  wxMenuItem *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  bool temp3 = false ;
+  bool temp4 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "submenu",(char *) "text",(char *) "help", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:Menu_AppendSubMenu",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxMenu, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Menu_AppendSubMenu" "', expected argument " "1"" of type '" "wxMenu *""'"); 
+  }
+  arg1 = reinterpret_cast< wxMenu * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxMenu, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Menu_AppendSubMenu" "', expected argument " "2"" of type '" "wxMenu *""'"); 
+  }
+  arg2 = reinterpret_cast< wxMenu * >(argp2);
+  {
+    arg3 = wxString_in_helper(obj2);
+    if (arg3 == NULL) SWIG_fail;
+    temp3 = true;
+  }
+  if (obj3) {
+    {
+      arg4 = wxString_in_helper(obj3);
+      if (arg4 == NULL) SWIG_fail;
+      temp4 = true;
+    }
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxMenuItem *)(arg1)->AppendSubMenu(arg2,(wxString const &)*arg3,(wxString const &)*arg4);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, (bool)0); 
+  }
+  {
+    if (temp3)
+    delete arg3;
+  }
+  {
+    if (temp4)
+    delete arg4;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp3)
+    delete arg3;
+  }
+  {
+    if (temp4)
+    delete arg4;
+  }
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Menu_AppendItem(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxMenu *arg1 = (wxMenu *) 0 ;
@@ -52392,7 +52468,6 @@ SWIGINTERN PyObject *LayoutConstraints_swiginit(PyObject *SWIGUNUSEDPARM(self), 
 
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"_wxPySetDictionary", __wxPySetDictionary, METH_VARARGS, NULL},
-	 { (char *)"_wxPyFixStockObjects", __wxPyFixStockObjects, METH_VARARGS, NULL},
 	 { (char *)"Object_GetClassName", (PyCFunction)_wrap_Object_GetClassName, METH_O, NULL},
 	 { (char *)"Object_Destroy", (PyCFunction)_wrap_Object_Destroy, METH_O, NULL},
 	 { (char *)"Object_swigregister", Object_swigregister, METH_VARARGS, NULL},
@@ -53465,6 +53540,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Menu_AppendCheckItem", (PyCFunction) _wrap_Menu_AppendCheckItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Menu_AppendRadioItem", (PyCFunction) _wrap_Menu_AppendRadioItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Menu_AppendMenu", (PyCFunction) _wrap_Menu_AppendMenu, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Menu_AppendSubMenu", (PyCFunction) _wrap_Menu_AppendSubMenu, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Menu_AppendItem", (PyCFunction) _wrap_Menu_AppendItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Menu_InsertItem", (PyCFunction) _wrap_Menu_InsertItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Menu_PrependItem", (PyCFunction) _wrap_Menu_PrependItem, METH_VARARGS | METH_KEYWORDS, NULL},
