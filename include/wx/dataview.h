@@ -290,6 +290,9 @@ protected:
 // wxDataViewCtrlBase
 // ---------------------------------------------------------
 
+#define wxDV_SINGLE                  0x0000     // for convenience
+#define wxDV_MULTIPLE                0x0020     // can select multiple items
+
 class wxDataViewCtrlBase: public wxControl
 {
 public:
