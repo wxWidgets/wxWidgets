@@ -4287,15 +4287,15 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
 
         if (m_ownTable)
         {
-            wxGridTableBase *t=m_table;
-            m_table=0;
+            wxGridTableBase *t = m_table;
+            m_table = NULL;
             delete t;
         }
 
         delete m_selection;
 
-        m_table = 0;
-        m_selection = 0;
+        m_table = NULL;
+        m_selection = NULL;
         m_numRows = 0;
         m_numCols = 0;
     }
@@ -6118,7 +6118,7 @@ bool wxGrid::ProcessTableMessage( wxGridTableMessage& msg )
 }
 
 // The behaviour of this function depends on the grid table class
-// Clear() function.  For the default wxGridStringTable class the
+// Clear() function. For the default wxGridStringTable class the
 // behavious is to replace all cell contents with wxEmptyString but
 // not to change the number of rows or cols.
 //
@@ -6130,7 +6130,7 @@ void wxGrid::ClearGrid()
             DisableCellEditControl();
 
         m_table->Clear();
-        if ( !GetBatchCount() 
+        if (!GetBatchCount())
             m_gridWin->Refresh();
     }
 }
