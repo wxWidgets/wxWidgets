@@ -4244,7 +4244,7 @@ echo "${ECHO_T}no" >&6
 
 DEFAULT_WX_USE_RESERVED_VIRTUALS=yes
 
-	  enablestring=disable
+	  enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-reserved_virtual" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-reserved_virtual... $ECHO_C" >&6
           no_cache=0
