@@ -197,6 +197,7 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
             continue;
         }
 
+        // coverity[returned_null]
         char *dash = strchr(font + 1, '-');
         char *family = dash + 1;
         dash = strchr(family, '-');
