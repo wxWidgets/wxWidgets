@@ -119,7 +119,7 @@ class HtmlCtrl(CodeEditor.CodeCtrl):
 
 
     def SetViewDefaults(self):
-        CodeEditor.CodeCtrl.SetViewDefaults(self, configPrefix = "Html", hasWordWrap = True, hasTabs = True)
+        CodeEditor.CodeCtrl.SetViewDefaults(self, configPrefix = "Html", hasWordWrap = True, hasTabs = True, hasFolding=True)
 
 
     def GetFontAndColorFromConfig(self):
@@ -156,7 +156,7 @@ class HtmlCtrl(CodeEditor.CodeCtrl):
 class HtmlOptionsPanel(STCTextEditor.TextOptionsPanel):
 
     def __init__(self, parent, id):
-        STCTextEditor.TextOptionsPanel.__init__(self, parent, id, configPrefix = "Html", label = "HTML", hasWordWrap = True, hasTabs = True)
+        STCTextEditor.TextOptionsPanel.__init__(self, parent, id, configPrefix = "Html", label = "HTML", hasWordWrap = True, hasTabs = True, hasFolding=True)
 
 
     def GetIcon(self):

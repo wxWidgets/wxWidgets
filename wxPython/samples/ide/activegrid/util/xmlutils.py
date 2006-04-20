@@ -22,35 +22,44 @@ import activegrid.util.aglogging as aglogging
 
 xmlLogger = logging.getLogger("activegrid.util.xml")
     
-def load(fileName, knownTypes=None, knownNamespaces=None):
+def load(fileName, knownTypes=None, knownNamespaces=None, createGenerics=False):
     loadedObject = None
     fileObject = file(fileName)
     timeStart = time.time()
+    xml = ""
     try:
         xml = fileObject.read()
-        loadedObject = unmarshal(xml, knownTypes=knownTypes, knownNamespaces=knownNamespaces, xmlSource=fileName)
+        loadedObject = unmarshal(xml, knownTypes=knownTypes, knownNamespaces=knownNamespaces, xmlSource=fileName, createGenerics=createGenerics)
         loadedObject.fileName = os.path.abspath(fileName)
         if hasattr(loadedObject, 'initialize'):
             loadedObject.initialize()
     finally:
         fileObject.close()
-        timeDone = time.time()
-        aglogging.info(xmlLogger, ('Load statistics for file %s: elapsed time = %f secs' % (fileName, timeDone-timeStart)))
+        if xmlLogger.isEnabledFor(aglogging.LEVEL_INFO):
+            timeDone = time.time()
+            aglogging.info(xmlLogger, ('Load statistics for file %s (%d bytes): elapsed time = %f secs' % (fileName, len(xml), timeDone-timeStart)))
     return loadedObject
 
-def loadURI(uri, knownTypes=None, knownNamespaces=None, xmlSource=None):
+def loadURI(uri, knownTypes=None, knownNamespaces=None, xmlSource=None, createGenerics=False):
     loadedObject = None
-    xml = urllib.urlopen(uri).read()
-    loadedObject = unmarshal(xml, knownTypes=knownTypes, knownNamespaces=knownNamespaces, xmlSource=xmlSource)
-    loadedObject.fileName = uri
-    if hasattr(loadedObject, 'initialize'):
-        loadedObject.initialize()
+    timeStart = time.time()
+    xml = ""
+    try:
+        xml = urllib.urlopen(uri).read()
+        loadedObject = unmarshal(xml, knownTypes=knownTypes, knownNamespaces=knownNamespaces, xmlSource=xmlSource, createGenerics=createGenerics)
+        loadedObject.fileName = uri
+        if hasattr(loadedObject, 'initialize'):
+            loadedObject.initialize()
+    finally:
+        if xmlLogger.isEnabledFor(aglogging.LEVEL_INFO):
+            timeDone = time.time()
+            aglogging.info(xmlLogger, ('Load statistics for URI %s (%d bytes): elapsed time = %f secs' % (uri, len(xml), timeDone-timeStart)))
     return loadedObject
 
-def unmarshal(xml, knownTypes=None, knownNamespaces=None, xmlSource=None):
+def unmarshal(xml, knownTypes=None, knownNamespaces=None, xmlSource=None, createGenerics=False):
     if (knownTypes == None): 
         knownTypes, knownNamespaces = getAgKnownTypes()
-    return xmlmarshaller.unmarshal(xml, knownTypes=knownTypes, knownNamespaces=knownNamespaces, xmlSource=xmlSource)    
+    return xmlmarshaller.unmarshal(xml, knownTypes=knownTypes, knownNamespaces=knownNamespaces, xmlSource=xmlSource, createGenerics=createGenerics)    
 
 def save(fileName, objectToSave, prettyPrint=True, marshalType=True, knownTypes=None, knownNamespaces=None, encoding='utf-8'):
     if hasattr(objectToSave, '_xmlReadOnly') and objectToSave._xmlReadOnly == True:
@@ -155,41 +164,6 @@ def getAgVersion(fileName):
             version = xml[i+1:j]
     return version
 
-def escape(data):
-    """Escape ', ", &, <, and > in a string of data.
-
-    Basically, everything that saxutils.escape does (and this calls that, at
-    least for now), but with " added as well.
-
-    XXX TODO make this faster; saxutils.escape() is really slow
-    """
-
-    import xml.sax.saxutils as saxutils
-
-    data=saxutils.escape(data)
-    data=data.replace("\"", "&quot;")
-
-    # IE doesn't support &apos;
-    # data=data.replace("\'", "&apos;")
-    data=data.replace("\'", "&#039;")
-
-    return data
-
-def unescape(data):
-    """Unescape ', ", &, <, and > in a string of data.
-
-    Basically, everything that saxutils.unescape does (and this calls that, at
-    least for now), but with " added as well.
-
-    XXX TODO make this faster; saxutils.unescape() is really slow
-    """
-
-    import xml.sax.saxutils as saxutils
-
-    data=data.replace("&quot;", "\"")
-    data=data.replace("&apos;", "\'")
-    return saxutils.unescape(data)
-
     
 AG_NS_URL = "http://www.activegrid.com/ag.xsd"
 BPEL_NS_URL = "http://schemas.xmlsoap.org/ws/2003/03/business-process"
@@ -197,7 +171,9 @@ HTTP_WSDL_NS_URL = "http://schemas.xmlsoap.org/wsdl/http/"
 MIME_WSDL_NS_URL = "http://schemas.xmlsoap.org/wsdl/mime/"
 SOAP_NS_URL = "http://schemas.xmlsoap.org/wsdl/soap/"
 SOAP12_NS_URL = "http://schemas.xmlsoap.org/wsdl/soap12/"
+SOAP_NS_ENCODING = "http://schemas.xmlsoap.org/soap/encoding/"
 WSDL_NS_URL = "http://schemas.xmlsoap.org/wsdl/"
+WSSE_NS_URL = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
 XFORMS_NS_URL = "http://www.w3c.org/xform.xsd"
 XMLSCHEMA_NS_URL = "http://www.w3.org/2001/XMLSchema"
 XSI_NS_URL = "http://www.w3.org/2001/XMLSchema-instance"
@@ -209,7 +185,8 @@ KNOWN_NAMESPACES = { AG_NS_URL          :  "ag",
                      MIME_WSDL_NS_URL   :  "mime",
                      SOAP_NS_URL        :  "soap",
                      SOAP12_NS_URL      :  "soap12",
-                     WSDL_NS_URL        :  "wsdl", 
+                     WSDL_NS_URL        :  "wsdl",
+                     WSSE_NS_URL        :  "wsse", 
                      XFORMS_NS_URL      :  "xforms",                             
                      XMLSCHEMA_NS_URL   :  "xs",
                      XACML_NS_URL       :  "xacml",
@@ -226,19 +203,23 @@ def getAgXsdToClassName():
             "ag:body"            : "activegrid.model.processmodel.Body",
             "ag:category_substitutions"    : "activegrid.server.layoutrenderer.CategorySubstitutions",
             "ag:command"         : "activegrid.model.wsdl.Command",
+            "ag:setElement"      : "activegrid.model.processmodel.SetElementOperation",
             "ag:css"             : "activegrid.server.layoutrenderer.CSS", 
-            "ag:cssRule"         : "activegrid.model.processmodel.CssRule",
             "ag:databaseService" : "activegrid.server.deployment.DatabaseService",
             "ag:datasource"      : "activegrid.data.dataservice.DataSource",
             "ag:dataObjectList"  : "activegrid.data.datalang.DataObjectList",
             "ag:debug"           : "activegrid.model.processmodel.DebugOperation",
             "ag:deployment"      : "activegrid.server.deployment.Deployment",
+            "ag:formData"        : "activegrid.model.processmodel.FormData",
+            "ag:formVar"         : "activegrid.model.processmodel.FormVar",
             "ag:generator"       : "activegrid.server.layoutrenderer.SerializableGenerator", 
             "ag:head"            : "activegrid.server.layoutrenderer.Head", 
             "ag:hr"              : "activegrid.model.processmodel.HorizontalRow",
             "ag:identity"        : "activegrid.model.identitymodel.Identity",
             "ag:identityref"     : "activegrid.server.deployment.IdentityRef",
             "ag:image"           : "activegrid.model.processmodel.Image",
+            "ag:inputPart"       : "activegrid.model.processmodel.InputPart",
+            "ag:keystore"        : "activegrid.model.identitymodel.KeyStore",
             "ag:label"           : "activegrid.model.processmodel.Label",
             "ag:layout"          : "activegrid.server.layoutrenderer.Layout", 
             "ag:layouts"         : "activegrid.server.layoutrenderer.Layouts", 
@@ -246,9 +227,11 @@ def getAgXsdToClassName():
             "ag:localService"    : "activegrid.server.deployment.LocalService",
             "ag:parameter"       : "activegrid.server.layoutrenderer.Parameter",
             "ag:parameters"      : "activegrid.server.layoutrenderer.Parameters",
+            "ag:postInitialize"  : "activegrid.model.processmodel.PostInitialize",
             "ag:processref"      : "activegrid.server.deployment.ProcessRef",
             "ag:query"           : "activegrid.model.processmodel.Query",
             "ag:soapService"     : "activegrid.server.deployment.SoapService",
+            "ag:redirect"        : "activegrid.server.layoutrenderer.Redirect", 
             "ag:requiredFile"    : "activegrid.server.layoutrenderer.RequiredFile", 
             "ag:resource"        : "activegrid.model.identitymodel.IDResource",
             "ag:restService"     : "activegrid.server.deployment.RestService",
@@ -355,27 +338,38 @@ def getAgXsdToClassName():
             "xforms:xforms"      : "activegrid.model.processmodel.XFormsRoot",
             "xs:all"             : "activegrid.model.schema.XsdSequence",
             "xs:any"             : "activegrid.model.schema.XsdAny",
+            "xs:anyAttribute"    : "activegrid.model.schema.XsdAnyAttribute",
             "xs:attribute"       : "activegrid.model.schema.XsdAttribute",
+            "xs:choice"          : "activegrid.model.schema.XsdChoice",
             "xs:complexContent"  : "activegrid.model.schema.XsdComplexContent",
             "xs:complexType"     : "activegrid.model.schema.XsdComplexType",
+            "xs:documentation"   : "activegrid.model.schema.XsdDocumentation",
             "xs:element"         : "activegrid.model.schema.XsdElement",
-            "xs:enumeration"     : "activegrid.model.schema.XsdEnumeration",
+            "xs:enumeration"     : "activegrid.model.schema.XsdFacetEnumeration",
             "xs:extension"       : "activegrid.model.schema.XsdExtension",
+            "xs:fractionDigits"  : "activegrid.model.schema.XsdFacetFractionDigits",
             "xs:field"           : "activegrid.model.schema.XsdKeyField",
             "xs:import"          : "activegrid.model.schema.XsdInclude",
             "xs:include"         : "activegrid.model.schema.XsdInclude",
             "xs:key"             : "activegrid.model.schema.XsdKey",
             "xs:keyref"          : "activegrid.model.schema.XsdKeyRef",
-            "xs:length"          : "activegrid.model.schema.XsdLength",
+            "xs:length"          : "activegrid.model.schema.XsdFacetLength",
             "xs:list"            : "activegrid.model.schema.XsdList",
-            "xs:maxLength"       : "activegrid.model.schema.XsdMaxLength",
+            "xs:maxExclusive"    : "activegrid.model.schema.XsdFacetMaxExclusive",
+            "xs:maxInclusive"    : "activegrid.model.schema.XsdFacetMaxInclusive",
+            "xs:maxLength"       : "activegrid.model.schema.XsdFacetMaxLength",
+            "xs:minExclusive"    : "activegrid.model.schema.XsdFacetMinExclusive",
+            "xs:minInclusive"    : "activegrid.model.schema.XsdFacetMinInclusive",
+            "xs:minLength"       : "activegrid.model.schema.XsdFacetMinLength",
+            "xs:pattern"         : "activegrid.model.schema.XsdFacetPattern",
             "xs:restriction"     : "activegrid.model.schema.XsdRestriction",
             "xs:schema"          : "activegrid.model.schema.Schema",
             "xs:selector"        : "activegrid.model.schema.XsdKeySelector",              
             "xs:sequence"        : "activegrid.model.schema.XsdSequence",
             "xs:simpleContent"   : "activegrid.model.schema.XsdSimpleContent",
             "xs:simpleType"      : "activegrid.model.schema.XsdSimpleType",
-            "xs:totalDigits"     : "activegrid.model.schema.XsdTotalDigits",
+            "xs:totalDigits"     : "activegrid.model.schema.XsdFacetTotalDigits",
+            "xs:whiteSpace"      : "activegrid.model.schema.XsdFacetWhiteSpace",
         }
     return agXsdToClassName
     

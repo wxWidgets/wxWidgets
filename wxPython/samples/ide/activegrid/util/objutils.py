@@ -16,7 +16,8 @@ import sys
 import os
 import __builtin__
 import types
-import xml.sax.saxutils as saxutils
+import activegrid.util.utillang as utillang
+import activegrid.util.datetimeparser as datetimeparser
 from types import *
 from activegrid.util.lang import *
 
@@ -64,6 +65,18 @@ def setStaticAttr(obj, attr, value):
     else:
         classDesc = obj.__class__
     setattr(classDesc, attr, value)
+
+def hasAttrFast(obj, name):
+    if hasRawAttr(obj, name):
+        return True
+    if hasattr(obj, '_complexType'):
+        complexType=obj._complexType
+        element=complexType.findElement(name)
+        if element:
+            return True
+    if hasattr(obj, name):
+        return True
+    return False
 
 def moduleForName(moduleName):
     module = None
@@ -114,15 +127,22 @@ def newInstance(className, objargs=None):
         if ((len(objargs) < 1) or (objargs[0].lower() == "false") or (not objargs[0])):
             return False
         return True
-    if className == "str" or className == "unicode": # don"t strip: blanks are significant
+    if className == "str" or className == "unicode": # don't strip: blanks are significant
         if len(objargs) > 0:
             try:
-                return saxutils.unescape(objargs[0]).encode()
+                return utillang.unescape(objargs[0]).encode()
             except:
                 return "?"
         else:
             return ""
-
+            
+    if className == "date":
+        return datetimeparser.parse(objargs[0], asdate=True)
+    if className == "datetime":
+        return datetimeparser.parse(objargs[0])
+    if className == "time":
+        return datetimeparser.parse(objargs[0], astime=True)
+        
     classtype = classForName(className)
     if (classtype == None):
         raise Exception("Could not find class %s" % className)
@@ -135,23 +155,35 @@ def newInstance(className, objargs=None):
 def getClassProperty(classType, propertyName):
     return getattr(classType, propertyName)
     
-def toDiffableRepr(value, exclude=None):
+def toDiffableRepr(value, maxLevel=None):
     if (value == None):
         return "None"
+    if (maxLevel == None):
+        maxLevel = 8
+    maxLevel -= 1
+    if (maxLevel < 0):
+        return typeToString(value, PRINT_OBJ_DIFFABLE)
+##    if ((exclude != None) and not isinstance(value, (basestring, int))):
+##        for v in exclude:
+##            if (v is value):
+##                return "<recursive reference>"
+##        exclude.append(value)
 ##    elif (isinstance(value, ObjectType) and hasattr(value, "__dict__")):
 ##        if (exclude == None):
 ##            exclude = []
 ##        s = "%s(%s)" % (type(value), toDiffableString(value.__dict__, exclude))
-    elif (not isinstance(value, (BooleanType, ClassType, ComplexType, DictType, DictionaryType, 
+    if (not isinstance(value, (BooleanType, ClassType, ComplexType, DictType, DictionaryType, 
                                FloatType, IntType, ListType, LongType, StringType, TupleType, 
                                UnicodeType, BufferType, BuiltinFunctionType, BuiltinMethodType,
                                CodeType, FrameType, FunctionType, GeneratorType, InstanceType,
                                LambdaType, MethodType, ModuleType, SliceType, TracebackType,
                                TypeType, XRangeType))):
-        if (hasattr(value, "__str__")):
+        if (hasattr(value, "_toDiffableString")):
+            s = value._toDiffableString(maxLevel)
+        elif (hasattr(value, "__str__")):
             s = str(value)
         elif (hasattr(value, "__dict__")):
-            s = "%s(%s)" % (type(value), toDiffableString(value.__dict__, exclude))
+            s = "%s(%s)" % (type(value), toDiffableString(value.__dict__, maxLevel))
         else:
             s = str(type(value))
         ix2 = s.find(" object at 0x")
@@ -173,33 +205,31 @@ def toDiffableRepr(value, exclude=None):
                 else:
                     items.append("'%s'" % v)
             else:
-                items.append(toDiffableString(v, exclude))
+                items.append(toDiffableString(v, maxLevel))
         s = "[" + ", ".join(items) + "]"
     elif (isinstance(value, dict)):
-        if (exclude == None):
-            exclude = []
         items = []
         for key, val in value.iteritems():
             if (isinstance(val, UnicodeType)):
-                items.append("'%s': u'%s'" % (key, toDiffableString(val, exclude)))
+                items.append("'%s': u'%s'" % (key, toDiffableString(val, maxLevel)))
             elif (isinstance(val, basestring)):
-                items.append("'%s': '%s'" % (key, toDiffableString(val, exclude)))
+                items.append("'%s': '%s'" % (key, toDiffableString(val, maxLevel)))
             else:
-                items.append("'%s': %s" % (key, toDiffableString(val, exclude)))
+                items.append("'%s': %s" % (key, toDiffableString(val, maxLevel)))
         s = "{" + ", ".join(items) + "}"
     else:
         s = str(value)
     return s
     
-def toDiffableString(value, exclude=None):
-    if (value == None):
-        return "None"
-    if ((exclude != None) and not isinstance(value, (basestring, int))):
-        for v in exclude:
-            if (v is value):
-                return "<recursive reference>"
-        exclude.append(value)
-    s = toDiffableRepr(value)
+def toDiffableString(value, maxLevel=None):
+##    if (value == None):
+##        return "None"
+##    if ((exclude != None) and not isinstance(value, (basestring, int))):
+##        for v in exclude:
+##            if (v is value):
+##                return "<recursive reference>"
+##        exclude.append(value)
+    s = toDiffableRepr(value, maxLevel)
     ds = ""
     i = s.find(" at 0x") 
     start = 0

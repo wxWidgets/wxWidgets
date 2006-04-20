@@ -25,6 +25,7 @@ import keyword # for GetAutoCompleteKeywordList
 import sys # for GetAutoCompleteKeywordList
 import MessageService # for OnCheckCode
 import OutlineService
+import FindInDirService
 from UICommon import CaseInsensitiveCompare
 try:
     import checker # for pychecker
@@ -143,11 +144,13 @@ class PythonView(CodeEditor.CodeView):
         # Set cursor to Wait cursor
         wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
 
-        # This takes a while for involved code
-        checker.checkSyntax(self.GetDocument().GetFilename(), view)
+        try:
+            # This takes a while for involved code
+            checker.checkSyntax(self.GetDocument().GetFilename(), view)
 
-        # Set cursor to Default cursor
-        wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
+        finally:
+            # Set cursor to Default cursor
+            wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
 
 
     def OnJumpToFoundLine(self, event):
@@ -369,8 +372,42 @@ class PythonCtrl(CodeEditor.CodeCtrl):
         self.SetKeyWords(0, string.join(keyword.kwlist))
 
 
+    def CreatePopupMenu(self):
+        FINDCLASS_ID = wx.NewId()
+        FINDDEF_ID = wx.NewId()
+
+        menu = CodeEditor.CodeCtrl.CreatePopupMenu(self)
+
+        self.Bind(wx.EVT_MENU, self.OnPopFindDefinition, id=FINDDEF_ID)
+        menu.Insert(1, FINDDEF_ID, _("Find 'def'"))
+
+        self.Bind(wx.EVT_MENU, self.OnPopFindClass, id=FINDCLASS_ID)
+        menu.Insert(2, FINDCLASS_ID, _("Find 'class'"))
+
+        return menu
+
+
+    def OnPopFindDefinition(self, event):
+        view = wx.GetApp().GetDocumentManager().GetCurrentView()
+        if hasattr(view, "GetCtrl") and view.GetCtrl() and hasattr(view.GetCtrl(), "GetSelectedText"):
+            pattern = view.GetCtrl().GetSelectedText().strip()
+            if pattern:
+                searchPattern = "def\s+%s" % pattern
+                wx.GetApp().GetService(FindInDirService.FindInDirService).FindInProject(searchPattern)
+
+
+    def OnPopFindClass(self, event):
+        view = wx.GetApp().GetDocumentManager().GetCurrentView()
+        if hasattr(view, "GetCtrl") and view.GetCtrl() and hasattr(view.GetCtrl(), "GetSelectedText"):
+            definition = "class\s+%s"
+            pattern = view.GetCtrl().GetSelectedText().strip()
+            if pattern:
+                searchPattern = definition % pattern
+                wx.GetApp().GetService(FindInDirService.FindInDirService).FindInProject(searchPattern)
+
+
     def SetViewDefaults(self):
-        CodeEditor.CodeCtrl.SetViewDefaults(self, configPrefix = "Python", hasWordWrap = True, hasTabs = True)
+        CodeEditor.CodeCtrl.SetViewDefaults(self, configPrefix="Python", hasWordWrap=True, hasTabs=True, hasFolding=True)
 
 
     def GetFontAndColorFromConfig(self):
@@ -567,7 +604,7 @@ class PythonOptionsPanel(wx.Panel):
         mainSizer = wx.BoxSizer(wx.VERTICAL)                
         mainSizer.Add(pathSizer, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, SPACE)
 
-        self._otherOptions = STCTextEditor.TextOptionsPanel(self, -1, configPrefix = "Python", label = "Python", hasWordWrap = True, hasTabs = True, addPage=False)
+        self._otherOptions = STCTextEditor.TextOptionsPanel(self, -1, configPrefix = "Python", label = "Python", hasWordWrap = True, hasTabs = True, addPage=False, hasFolding=True)
         mainSizer.Add(self._otherOptions, 0, wx.EXPAND|wx.BOTTOM, SPACE)
         self.SetSizer(mainSizer)
         parent.AddPage(self, _("Python"))
@@ -577,7 +614,7 @@ class PythonOptionsPanel(wx.Panel):
         defaultDir = os.path.dirname(self._pathTextCtrl.GetValue().strip())
         defaultFile = os.path.basename(self._pathTextCtrl.GetValue().strip())
         if _WINDOWS:
-            wildcard = _("Executable (*.exe)|*.exe|All (*.*)|*.*")
+            wildcard = _("Executable (*.exe)|*.exe|All|*.*")
             if not defaultFile:
                 defaultFile = "python.exe"
         else:

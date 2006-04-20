@@ -6,7 +6,7 @@
 #
 # Created:      5/23/05
 # CVS-ID:       $ID:$
-# Copyright:    (c) 2005 ActiveGrid, Inc.
+# Copyright:    (c) 2005-2006 ActiveGrid, Inc.
 # License:      wxWindows License
 #----------------------------------------------------------------------------
 
@@ -17,19 +17,14 @@ import ProjectEditor
 import os
 import os.path
 import activegrid.util.xmlutils as xmlutils
-
 _ = wx.GetTranslation
 
 
+#----------------------------------------------------------------------------
+# Constants
+#----------------------------------------------------------------------------
 SPACE = 10
 HALF_SPACE = 5
-
-
-EXTENSIONS_CONFIG_STRING = "Extensions"
-
-
-
-# TODO: Redo extensions menu on OK, or provide alert that it won't happen until restart
 
 
 #----------------------------------------------------------------------------
@@ -37,7 +32,7 @@ EXTENSIONS_CONFIG_STRING = "Extensions"
 #----------------------------------------------------------------------------
 
 class Extension:
-    
+
 
     def __init__(self, menuItemName=None):
         self.menuItemName = menuItemName
@@ -48,7 +43,7 @@ class Extension:
         self.commandPostArgs = ''
         self.fileExt = None
         self.opOnSelectedFile = True
-        
+
 
 class ExtensionService(wx.lib.pydocview.DocService):
 
@@ -60,8 +55,8 @@ class ExtensionService(wx.lib.pydocview.DocService):
 
     def __getExtensionKeyName(extensionName):
         return "%s/%s" % (ExtensionService.EXTENSIONS_KEY, extensionName)
-      
-  
+
+
     __getExtensionKeyName = staticmethod(__getExtensionKeyName)
 
 
@@ -79,7 +74,7 @@ class ExtensionService(wx.lib.pydocview.DocService):
                 cont, value, index = config.GetNextEntry(index)
         finally:
             config.SetPath(path)
-                    
+
         for extensionName in extensionNames:
             extensionData = config.Read(self.__getExtensionKeyName(extensionName))
             if extensionData:
@@ -112,10 +107,10 @@ class ExtensionService(wx.lib.pydocview.DocService):
             toolsMenu = menuBar.GetMenu(toolsMenuIndex)
         else:
             toolsMenu = wx.Menu()
-        
+
         if self._extensions:
             if toolsMenu.GetMenuItems():
-                toolsMenu.AppendSeparator()            
+                toolsMenu.AppendSeparator()
             for ext in self._extensions:
                 # Append a tool menu item for each extension
                 ext.id = wx.NewId()
@@ -192,7 +187,7 @@ class ExtensionService(wx.lib.pydocview.DocService):
             if extension.commandPostArgs:
                 cmds.append(extension.commandPostArgs)
             os.spawnv(os.P_NOWAIT, extension.command, cmds)
-                      
+
         else:
             cmd = extension.command
             if extension.commandPreArgs:
@@ -207,24 +202,24 @@ class ExtensionService(wx.lib.pydocview.DocService):
                 view.AddLines(line)
             view.GetControl().EnsureCaretVisible()
             f.close()
-            
+
 
 class ExtensionOptionsPanel(wx.Panel):
 
 
     def __init__(self, parent, id):
         wx.Panel.__init__(self, parent, id)
-        
+
         extOptionsPanelBorderSizer = wx.BoxSizer(wx.VERTICAL)
-        
+
         extOptionsPanelSizer = wx.BoxSizer(wx.HORIZONTAL)
-        
+
         extCtrlSizer = wx.BoxSizer(wx.VERTICAL)
         extCtrlSizer.Add(wx.StaticText(self, -1, _("External Tools:")), 0, wx.BOTTOM, HALF_SPACE)
-        self._extListBox = wx.ListBox(self, -1, size=(-1,160), style=wx.LB_SINGLE)
+        self._extListBox = wx.ListBox(self, -1, style=wx.LB_SINGLE)
         self.Bind(wx.EVT_LISTBOX, self.OnListBoxSelect, self._extListBox)
-        extCtrlSizer.Add(self._extListBox, 1, wx.BOTTOM | wx.EXPAND, SPACE)        
-        buttonSizer = wx.GridSizer(cols=2, vgap=5, hgap=10)
+        extCtrlSizer.Add(self._extListBox, 1, wx.BOTTOM | wx.EXPAND, SPACE)
+        buttonSizer = wx.GridSizer(cols=2, vgap=HALF_SPACE, hgap=HALF_SPACE)
         self._moveUpButton = wx.Button(self, -1, _("Move Up"))
         self.Bind(wx.EVT_BUTTON, self.OnMoveUp, self._moveUpButton)
         buttonSizer.Add(self._moveUpButton, 1, wx.EXPAND)
@@ -243,21 +238,21 @@ class ExtensionOptionsPanel(wx.Panel):
         self._extDetailPanel = wx.Panel(self)
         staticBox = wx.StaticBox(self, label=_("Selected External Tool"))
         staticBoxSizer = wx.StaticBoxSizer(staticBox, wx.VERTICAL)
-        
-        extDetailSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=3)
+
+        extDetailSizer = wx.FlexGridSizer(cols=2, vgap=5, hgap=5)
         extDetailSizer.AddGrowableCol(1,1)
 
-        extDetailSizer.Add(wx.StaticText(self._extDetailPanel, -1, _("Menu Item Name:")))
+        extDetailSizer.Add(wx.StaticText(self._extDetailPanel, -1, _("Menu Item Name:")), flag=wx.ALIGN_CENTER_VERTICAL)
         self._menuItemNameTextCtrl = wx.TextCtrl(self._extDetailPanel, -1, size = (-1, -1))
         extDetailSizer.Add(self._menuItemNameTextCtrl, 0, wx.EXPAND)
-        self.Bind(wx.EVT_TEXT, self.SaveCurrentItem, self._menuItemNameTextCtrl)        
+        self.Bind(wx.EVT_TEXT, self.SaveCurrentItem, self._menuItemNameTextCtrl)
 
-        extDetailSizer.Add(wx.StaticText(self._extDetailPanel, -1, _("Menu Item Description:")))
+        extDetailSizer.Add(wx.StaticText(self._extDetailPanel, -1, _("Menu Item Description:")), flag=wx.ALIGN_CENTER_VERTICAL)
         self._menuItemDescTextCtrl = wx.TextCtrl(self._extDetailPanel, -1, size = (-1, -1))
         extDetailSizer.Add(self._menuItemDescTextCtrl, 0, wx.EXPAND)
 
-        extDetailSizer.Add(wx.StaticText(self._extDetailPanel, -1, _("Command Path:")))
-        self._commandTextCtrl = wx.TextCtrl(self._extDetailPanel, -1, size = (-1, -1))        
+        extDetailSizer.Add(wx.StaticText(self._extDetailPanel, -1, _("Command Path:")), flag=wx.ALIGN_CENTER_VERTICAL)
+        self._commandTextCtrl = wx.TextCtrl(self._extDetailPanel, -1, size = (-1, -1))
         findFileButton = wx.Button(self._extDetailPanel, -1, _("Browse..."))
         def OnBrowseButton(event):
             fileDlg = wx.FileDialog(self, _("Choose an Executable:"), style=wx.OPEN|wx.FILE_MUST_EXIST|wx.HIDE_READONLY|wx.CHANGE_DIR)
@@ -276,26 +271,26 @@ class ExtensionOptionsPanel(wx.Panel):
         hsizer.Add(findFileButton, 0, wx.LEFT, HALF_SPACE)
         extDetailSizer.Add(hsizer, 0, wx.EXPAND)
 
-        extDetailSizer.Add(wx.StaticText(self._extDetailPanel, -1, _("Command Pre Args:")))
+        extDetailSizer.Add(wx.StaticText(self._extDetailPanel, -1, _("Command Pre Args:")), flag=wx.ALIGN_CENTER_VERTICAL)
         self._commandPreArgsTextCtrl = wx.TextCtrl(self._extDetailPanel, -1, size = (-1, -1))
         extDetailSizer.Add(self._commandPreArgsTextCtrl, 0, wx.EXPAND)
 
-        extDetailSizer.Add(wx.StaticText(self._extDetailPanel, -1, _("Command Post Args:")))
+        extDetailSizer.Add(wx.StaticText(self._extDetailPanel, -1, _("Command Post Args:")), flag=wx.ALIGN_CENTER_VERTICAL)
         self._commandPostArgsTextCtrl = wx.TextCtrl(self._extDetailPanel, -1, size = (-1, -1))
         extDetailSizer.Add(self._commandPostArgsTextCtrl, 0, wx.EXPAND)
 
-        extDetailSizer.Add(wx.StaticText(self._extDetailPanel, -1, _("File Extensions:")))
+        extDetailSizer.Add(wx.StaticText(self._extDetailPanel, -1, _("File Extensions:")), flag=wx.ALIGN_CENTER_VERTICAL)
         self._fileExtTextCtrl = wx.TextCtrl(self._extDetailPanel, -1, size = (-1, -1))
         self._fileExtTextCtrl.SetToolTipString(_("""For example: "txt, text" (comma separated) or "*" for all files"""))
         extDetailSizer.Add(self._fileExtTextCtrl, 0, wx.EXPAND)
 
         self._selFileCtrl = wx.CheckBox(self._extDetailPanel, -1, _("Operate on Selected File"))
-        extDetailSizer.Add(self._selFileCtrl)
+        extDetailSizer.Add(self._selFileCtrl, 0, wx.ALIGN_CENTER_VERTICAL|wx.TOP, SPACE)
         self._selFileCtrl.SetToolTipString(_("If focus is in the project, instead of operating on the project file, operate on the selected file."))
 
         self._extDetailPanel.SetSizer(extDetailSizer)
         staticBoxSizer.Add(self._extDetailPanel, 1, wx.ALL|wx.EXPAND, SPACE)
-        
+
         extOptionsPanelSizer.Add(staticBoxSizer, 1, wx.LEFT|wx.EXPAND, SPACE)
 
         extOptionsPanelBorderSizer.Add(extOptionsPanelSizer, 1, wx.ALL|wx.EXPAND, SPACE)
@@ -306,8 +301,8 @@ class ExtensionOptionsPanel(wx.Panel):
         self.OnListBoxSelect()
 
         self.Layout()
-        
-        parent.AddPage(self, _("External Tools"))        
+
+        parent.AddPage(self, _("External Tools"))
 
 
     def OnOK(self, optionsDialog):
@@ -323,7 +318,7 @@ class ExtensionOptionsPanel(wx.Panel):
                           msgTitle,
                           wx.OK | wx.ICON_INFORMATION,
                           self.GetParent())
-        
+
 
     def PopulateItems(self):
         extensionsService = wx.GetApp().GetService(ExtensionService)
@@ -335,7 +330,7 @@ class ExtensionOptionsPanel(wx.Panel):
         self._currentItem = None
         self._currentItemIndex = -1
         return len(self._extensions)
-      
+
 
     def OnListBoxSelect(self, event=None):
         self.SaveCurrentItem()
@@ -370,7 +365,7 @@ class ExtensionOptionsPanel(wx.Panel):
             else:
                 extension.fileExt = fileExt.split(',')
             extension.opOnSelectedFile = self._selFileCtrl.GetValue()
-            
+
 
     def LoadItem(self, extension):
         if extension:
@@ -401,8 +396,8 @@ class ExtensionOptionsPanel(wx.Panel):
             self._fileExtTextCtrl.SetValue('')
             self._selFileCtrl.SetValue(True)
             self._extDetailPanel.Enable(False)
-            
-      
+
+
     def OnAdd(self, event):
         self.SaveCurrentItem()
         name = _("Untitled")
@@ -417,11 +412,11 @@ class ExtensionOptionsPanel(wx.Panel):
         self.OnListBoxSelect()
         self._menuItemNameTextCtrl.SetFocus()
         self._menuItemNameTextCtrl.SetSelection(-1, -1)
-        
+
 
     def OnDelete(self, event):
         self._extListBox.Delete(self._currentItemIndex)
-        self._extensions.remove(self._currentItem)    
+        self._extensions.remove(self._currentItem)
         self._currentItemIndex = min(self._currentItemIndex, self._extListBox.GetCount() - 1)
         if self._currentItemIndex > -1:
             self._extListBox.SetSelection(self._currentItemIndex)

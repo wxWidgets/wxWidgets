@@ -124,6 +124,7 @@ class MessageView(Service.ServiceView):
 
 
     def AddLines(self, text):
+        self.GetControl().SetCurrentPos(self.GetControl().GetTextLength())
         self.GetControl().SetReadOnly(False)
         self.GetControl().AddText(text)
         self.GetControl().SetReadOnly(True)

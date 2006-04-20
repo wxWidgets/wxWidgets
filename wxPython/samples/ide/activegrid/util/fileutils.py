@@ -19,6 +19,7 @@ import zipfile
 
 import activegrid.util.aglogging as aglogging
 import activegrid.util.sysutils as sysutils
+import activegrid.util.utillang as utillang
 from activegrid.util.lang import *
 
 global fileutilsLogger
@@ -31,6 +32,65 @@ fileutilsLogger = logging.getLogger("activegrid.util.fileutils")
 aglogging.setLevelFatal(fileutilsLogger)
 #logging.getLogger().addHandler(logging.StreamHandler(sys.stderr))
 
+def addRef(varname):
+    return "${%s}" % varname
+
+AG_SYSTEM_VAR_NAMES = [] # all AG System vars, with ${} syntax
+
+AG_SYSTEM_VAR = "AG_SYSTEM"
+AG_SYSTEM_VAR_REF = addRef(AG_SYSTEM_VAR)
+AG_SYSTEM_VAR_NAMES.append(AG_SYSTEM_VAR_REF)
+
+AG_SYSTEM_STATIC_VAR = "AG_SYSTEM_STATIC"
+AG_SYSTEM_STATIC_VAR_REF = addRef(AG_SYSTEM_STATIC_VAR)
+AG_SYSTEM_VAR_NAMES.append(AG_SYSTEM_STATIC_VAR_REF)
+
+AG_APP_VAR = "AG_APP"
+AG_APP_STATIC_VAR = "AG_APP_STATIC"
+
+# _initAGSystemVars needs to be called to initialize the following two
+# containers:
+EXPANDED_AG_SYSTEM_VARS = {} # ${varname} -> value (path)
+# ${varname}, ordered from longest to shortest path value
+AG_SYSTEM_VARS_LENGTH_ORDER = [] 
+
+def _initAGSystemVars():
+    if (len(EXPANDED_AG_SYSTEM_VARS) > 0):
+        return
+    
+    for v in AG_SYSTEM_VAR_NAMES:
+        EXPANDED_AG_SYSTEM_VARS[v] = os.path.abspath(expandVars(v))
+        AG_SYSTEM_VARS_LENGTH_ORDER.append(v)
+        
+    AG_SYSTEM_VARS_LENGTH_ORDER.sort(_sortByValLength)
+
+
+def parameterizePathWithAGSystemVar(inpath):
+    """Returns parameterized path if path starts with a known AG directory. Otherwise returns path as it was passed in."""
+    _initAGSystemVars()
+    path = inpath
+    if not sysutils.isWindows():
+        # ensure we have forward slashes
+        path = path.replace("\\", "/")
+        
+    path = os.path.abspath(path)
+
+    for varname in AG_SYSTEM_VARS_LENGTH_ORDER:
+        varval = EXPANDED_AG_SYSTEM_VARS[varname]
+        if path.startswith(varval):
+            return path.replace(varval, varname)
+        
+    return inpath
+
+def startsWithAgSystemVar(path):
+    """Returns True if path starts with a known AG system env var, False otherwise."""
+    for varname in AG_SYSTEM_VAR_NAMES:
+        if path.startswith(varname):
+            return True
+    return False
+        
+def _sortByValLength(v1, v2):
+    return len(EXPANDED_AG_SYSTEM_VARS[v2]) - len(EXPANDED_AG_SYSTEM_VARS[v1])
 
 def makeDirsForFile(filename):
     d = os.path.dirname(filename)
@@ -44,7 +104,7 @@ def createFile(filename, mode='w'):
     f = file(filename, mode)
     return f
 
-def compareFiles(file1, file2):
+def compareFiles(file1, file2, ignore=None):
 ##    result = filecmp.cmp(file1, file2)
 ##    if result:
 ##        return 0
@@ -62,6 +122,9 @@ def compareFiles(file1, file2):
         elif (len(line2) == 0):
             return -1
         elif (line1 != line2):
+            if (ignore != None):
+                if (line1.startswith(ignore) or line2.startswith(ignore)):
+                    continue
             line1 = line1.replace(" ", "")
             line2 = line2.replace(" ", "")
             if (line1 != line2):
@@ -81,7 +144,10 @@ def compareFiles(file1, file2):
                         continue
                 return -1
 
-def expandVars(value):
+def expandKnownAGVars(value):
+    return expandVars(value, includeEnv=False)
+
+def expandVars(value, includeEnv=True):
     """Syntax: ${myvar,default="default value"}"""
     import activegrid.runtime as runtime
     sx = value.find("${")
@@ -97,16 +163,19 @@ def expandVars(value):
                     defaultValue = value[defsx+10:endx-1]
             if (defaultValue == None):
                 varname = value[sx+2:endx]
-            if (varname == "AG_SYSTEM"):
+            if (varname == AG_SYSTEM_VAR):
                 varval = runtime.appInfo.getSystemDir()
-            elif (varname == "AG_SYSTEM_STATIC"):
+            elif (varname == AG_SYSTEM_STATIC_VAR):
                 varval = runtime.appInfo.getSystemStaticDir()
-            elif (varname == "AG_APP"):
+            elif (varname == AG_APP_VAR):
                 varval = runtime.appInfo.getAppDir()
-            elif (varname == "AG_APP_STATIC"):
+            elif (varname == AG_APP_STATIC_VAR):
                 varval = runtime.appInfo.getAppStaticDir()
             else:
-                varval = os.getenv(varname)
+                if (includeEnv):
+                    varval = os.getenv(varname)
+                else:
+                    varval = None
             if ((varval == None) and (defaultValue != None)):
                 varval = defaultValue
             if (varval == None):
@@ -148,22 +217,21 @@ def convertSourcePath(path, to, otherdir=None):
         return otherdir + path[ix+7:]
 
 
-def visit(directory, files, extension):
+def visit(directory, files, extension, maxLevel=None, level=1):
     testdirs = os.listdir(directory)
     for thing in testdirs:
         fullpath = os.path.join(directory, thing)
-        if (os.path.isdir(fullpath)):
-            visit(fullpath, files, extension)
+        if (os.path.isdir(fullpath) and (maxLevel == None or level < maxLevel)):
+            visit(fullpath, files, extension, maxLevel, level+1)
         elif thing.endswith(extension):
             fullname = os.path.normpath(os.path.join(directory, thing))
             if not fullname in files:
                 files.append(fullname)
  
-def listFilesByExtensionInPath(path=[], extension='.lyt'):
-    #Collect input and output arguments into one bunch
+def listFilesByExtensionInPath(path=[], extension='.lyt', maxLevel=None):
     retval = []
     for directory in path:
-        visit(directory, retval, extension)
+        visit(directory, retval, extension, maxLevel)
     return retval
 
 def getFileLastModificationTime(fileName):
@@ -310,6 +378,21 @@ def remove(file):
     elif os.path.isdir(file):
         shutil.rmtree(file)
 endIfDef()
+
+def getUserTempDir():
+    systemTempDir = utillang.getSystemTempDir()
+    userName = sysutils.getUserName()
+    userNameNoSpace = userName.replace('_','__').replace(' ','_')
+    userTempDir = systemTempDir + os.sep + "activegrid_" + userNameNoSpace
+    return userTempDir
+
+def createUserTempDir():
+    userTempDir = getUserTempDir()
+    if not os.path.exists(userTempDir):
+        os.makedirs(userTempDir)
+        os.chmod(userTempDir, 0700)
+
+createUserTempDir()
 
 ifDefPy()
 import warnings

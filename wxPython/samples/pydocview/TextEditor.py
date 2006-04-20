@@ -17,44 +17,44 @@ import FindService
 _ = wx.GetTranslation
 
 class TextDocument(wx.lib.docview.Document):
+    
+    def __init__(self):
+        wx.lib.docview.Document .__init__(self)
+        self._inModify = False
 
 
-    def OnSaveDocument(self, filename):
+    def SaveObject(self, fileObject):
         view = self.GetFirstView()
-        if not view.GetTextCtrl().SaveFile(filename):
-            return False
-        self.Modify(False)
-        self.SetDocumentSaved(True)
-        #if wx.Platform == "__WXMAC__":
-        #    fn = wx.Filename(filename)
-        #    fn.MacSetDefaultTypeAndCreator()
+        fileObject.write(view.GetTextCtrl().GetValue())
         return True
 
 
-    def OnOpenDocument(self, filename):
+    def LoadObject(self, fileObject):
         view = self.GetFirstView()
-        if not view.GetTextCtrl().LoadFile(filename):
-            return False
-        self.SetFilename(filename, True)
-        self.Modify(False)
-        self.UpdateAllViews()
-        self._savedYet = True
+        data = fileObject.read()
+        view.GetTextCtrl().SetValue(data)
         return True
 
 
     def IsModified(self):
         view = self.GetFirstView()
         if view and view.GetTextCtrl():
-            return wx.lib.docview.Document.IsModified(self) or view.GetTextCtrl().IsModified()
-        else:
-            return wx.lib.docview.Document.IsModified(self)
+            return view.GetTextCtrl().IsModified()
+        return False
 
 
-    def Modify(self, mod):
+    def Modify(self, modify):
+        if self._inModify:
+            return
+        self._inModify = True
+        
         view = self.GetFirstView()
-        wx.lib.docview.Document.Modify(self, mod)
-        if not mod and view and view.GetTextCtrl():
+        if not modify and view and view.GetTextCtrl():
             view.GetTextCtrl().DiscardEdits()
+
+        wx.lib.docview.Document.Modify(self, modify)  # this must called be after the DiscardEdits call above.
+
+        self._inModify = False
 
 
 class TextView(wx.lib.docview.View):
@@ -75,12 +75,17 @@ class TextView(wx.lib.docview.View):
         sizer = wx.BoxSizer()
         font, color = self._GetFontAndColorFromConfig()
         self._textCtrl = self._BuildTextCtrl(frame, font, color = color)
+        self._textCtrl.Bind(wx.EVT_TEXT, self.OnModify)
         sizer.Add(self._textCtrl, 1, wx.EXPAND, 0)
         frame.SetSizer(sizer)
         frame.Layout()
         frame.Show(True)
         self.Activate()
         return True
+
+
+    def OnModify(self, event):
+        self.GetDocument().Modify(True)
 
 
     def _BuildTextCtrl(self, parent, font, color = wx.BLACK, value = "", selection = [0, 0]):
@@ -131,6 +136,9 @@ class TextView(wx.lib.docview.View):
 
 
     def OnUpdate(self, sender = None, hint = None):
+        if wx.lib.docview.View.OnUpdate(self, sender, hint):
+            return
+
         if hint == "Word Wrap":
             self.SetWordWrap(wx.ConfigBase_Get().ReadInt("TextEditorWordWrap", True))
         elif hint == "Font":

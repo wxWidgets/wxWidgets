@@ -19,6 +19,7 @@ import logging.config
 from activegrid.util.lang import *
 import activegrid.util.objutils as objutils
 import activegrid.util.sysutils as sysutils
+import activegrid.util.appdirs as appdirs
 
 LEVEL_FATAL = logging.FATAL
 LEVEL_ERROR = logging.ERROR
@@ -27,38 +28,47 @@ LEVEL_INFO = logging.INFO
 LEVEL_DEBUG = logging.DEBUG
 
 EXCEPTION_INFO = 'exceptionInfo'
+loggingInitialized = False
 
 LOG_MODE_IDE = 1
 LOG_MODE_TESTRUN = 2
 LOG_MODE_RUN = 3
-def initLogging(mode):
-    configFile = None
-    if (mode == LOG_MODE_IDE):
-        configFile = os.getenv("AG_LOGCONFIG_IDE")
-    elif (mode == LOG_MODE_TESTRUN):
-        configFile = os.getenv("AG_LOGCONFIG_TESTRUN")
-    else:
-        configFile = os.getenv("AG_LOGCONFIG_RUN")
-    if ((configFile == None) or not os.path.exists(configFile)):
+def initLogging(mode, force=False):
+    global ag_debugLogger, loggingInitialized
+    if (force or not loggingInitialized):
+        loggingInitialized = True
+        configFile = None
         if (mode == LOG_MODE_IDE):
-            configFile = "IDELog"
+            configFile = os.getenv("AG_LOGCONFIG_IDE")
         elif (mode == LOG_MODE_TESTRUN):
-            configFile = "TestRunLog"
+            configFile = os.getenv("AG_LOGCONFIG_PYTESTRUN")
         else:
-            configFile = "RunLog"
-        configFile = sysutils.mainModuleDir + "/py" + configFile + ".ini"
-    if (os.path.exists(configFile)):
-        fileConfig(configFile)
-    else:
-        defaultStream = sys.stderr
-        if (mode == LOG_MODE_RUN):
-            defaultStream = sys.stdout
-        handler = logging.StreamHandler(defaultStream)
-        handler.setLevel(logging.INFO)
-        handler.setFormatter(logging.Formatter("%(asctime)s %(name)s %(levelname)s: %(message)s"))
-        logging.getLogger().addHandler(handler)
-    return configFile
-
+            configFile = os.getenv("AG_LOGCONFIG_RUN")
+        if ((configFile == None) or not os.path.exists(configFile)):
+            if (mode == LOG_MODE_IDE):
+                configFile = "IDELog"
+            elif (mode == LOG_MODE_TESTRUN):
+                configFile = "TestRunLog"
+            else:
+                configFile = "RunLog"
+            configFile = os.path.join(appdirs.getSystemDir(appdirs.AG_LOGS_DIR), "py" + configFile + ".ini")
+        if (os.path.exists(configFile)):
+            print "Using logging configuration file: %s" % configFile
+            fileConfig(configFile)
+        else:
+            print "*** Cannot find logging configuration file (%s) -- setting default logging level to WARN ***" % (configFile)
+            defaultStream = sys.stderr
+            if (mode == LOG_MODE_RUN):
+                defaultStream = sys.stdout
+            handler = logging.StreamHandler(defaultStream)
+            handler.setLevel(logging.DEBUG)
+            handler.setFormatter(logging.Formatter("%(asctime)s %(name)s %(levelname)s: %(message)s"))
+            logging.getLogger().addHandler(handler)
+            logging.getLogger().setLevel(logging.WARN)
+        ag_debugLogger = logging.getLogger("activegrid.debug")
+        ag_debugLogger.setLevel(logging.DEBUG)
+        return configFile
+    
 ag_debugLogger = logging.getLogger("activegrid.debug")
 
 def log(logger, level, msg, *params):
@@ -181,21 +191,18 @@ def addExceptionInfo(e, key, value):
     if not e.exceptionInfo.has_key(key): # Never overwrite exception info since we assume earlier info is more specific
         e.exceptionInfo[key] = value
             
-def reportException(out=None, stacktrace=False, diffable=False, exception=None):
+def reportException(exception, out=None, stacktrace=False, diffable=False):
     exstr = exceptionToString(exception, stacktrace, diffable)
     if (out == None):
         print exstr
     else:
         print >> out, exstr
 
-def exceptionToString(exception=None, stacktrace=False, diffable=False):
-    if (exception == None):
-        extype, val, t = sys.exc_info()
-    else:
-        extype = objutils.typeToString(exception)
-        val = exception
-        if (stacktrace):
-            e,v,t = sys.exc_info()
+def exceptionToString(exception, stacktrace=False, diffable=False):
+    extype = objutils.typeToString(exception)
+    val = exception
+    if (stacktrace):
+        e,v,t = sys.exc_info()
     if (diffable):
         exstr = removeFileRefs(str(val))
     else:

@@ -6,7 +6,7 @@
 #
 # Created:      8/15/03
 # CVS-ID:       $Id$
-# Copyright:    (c) 2003, 2004, 2005 ActiveGrid, Inc.
+# Copyright:    (c) 2003-2006 ActiveGrid, Inc.
 # License:      wxWindows License
 #----------------------------------------------------------------------------
 
@@ -25,6 +25,7 @@ import time
 import types
 import activegrid.util.appdirs as appdirs
 import activegrid.util.fileutils as fileutils
+import activegrid.util.aglogging as aglogging
 import UICommon
 import Wizard
 import SVNService
@@ -36,14 +37,19 @@ if not ACTIVEGRID_BASE_IDE:
     import activegrid.server.deployment as deploymentlib
     import ProcessModelEditor
     import DataModelEditor
+    import DeploymentGeneration
     import WsdlAgEditor
+    import WsdlAgModel
     APP_LAST_LANGUAGE = "LastLanguage"
     import activegrid.model.basedocmgr as basedocmgr
     import activegrid.model.basemodel as basemodel
+    import activegrid.model.projectmodel as projectmodel
     import PropertyService
     from activegrid.server.toolsupport import GetTemplate
     import activegrid.util.xmlutils as xmlutils
     import activegrid.util.sysutils as sysutils
+    DataServiceExistenceException = DeploymentGeneration.DataServiceExistenceException
+    import WebBrowserService
 
 from SVNService import SVN_INSTALLED
 
@@ -61,6 +67,10 @@ SPACE = 10
 HALF_SPACE = 5
 PROJECT_EXTENSION = ".agp"
 
+if not ACTIVEGRID_BASE_IDE:
+    PRE_17_TMP_DPL_NAME = "RunTime_tmp" + deploymentlib.DEPLOYMENT_EXTENSION
+    _17_TMP_DPL_NAME = ".tmp" + deploymentlib.DEPLOYMENT_EXTENSION
+
 # wxBug: the wxTextCtrl and wxChoice controls on Mac do not correctly size
 # themselves with sizers, so we need to add a right border to the sizer to
 # get the control to shrink itself to fit in the sizer.
@@ -72,70 +82,85 @@ if wx.Platform == "__WXMAC__":
 PROJECT_KEY = "/AG_Projects"
 PROJECT_DIRECTORY_KEY = "NewProjectDirectory"
 
-NEW_PROJECT_DIRECTORY_DEFAULT = appdirs.documents_folder
+NEW_PROJECT_DIRECTORY_DEFAULT = appdirs.getSystemDir()
 
 #----------------------------------------------------------------------------
 # Methods
 #----------------------------------------------------------------------------
 
-def getProjectKeyName(projectName, mode):
-    return "%s/%s/%s" % (PROJECT_KEY, projectName.replace(os.sep, '|'), mode)
+def AddProjectMapping(doc, projectDoc=None, hint=None):
+    projectService = wx.GetApp().GetService(ProjectService)
+    if projectService:
+        if not projectDoc:
+            if not hint:
+                hint = doc.GetFilename()
+            projectDocs = projectService.FindProjectByFile(hint)
+            if projectDocs:
+                projectDoc = projectDocs[0]
+                
+        projectService.AddProjectMapping(doc, projectDoc)
+        if hasattr(doc, "GetModel"):
+            projectService.AddProjectMapping(doc.GetModel(), projectDoc)
+
+
+def getProjectKeyName(projectName, mode=None):
+    if mode:
+        return "%s/%s/%s" % (PROJECT_KEY, projectName.replace(os.sep, '|'), mode)
+    else:
+        return "%s/%s" % (PROJECT_KEY, projectName.replace(os.sep, '|'))
 
 
 def GetDocCallback(filepath):
     """ Get the Document used by the IDE and the in-memory document model used by runtime engine """
     docMgr = wx.GetApp().GetDocumentManager()
     
-    doc = docMgr.CreateDocument(filepath, docMgr.GetFlags()|wx.lib.docview.DOC_SILENT|wx.lib.docview.DOC_OPEN_ONCE|wx.lib.docview.DOC_NO_VIEW)
-    if (doc == None):  # already open
-        for d in docMgr.GetDocuments():
-            if os.path.normcase(d.GetFilename()) == os.path.normcase(filepath):
-                doc = d
-                break
-    else:
-        projectService = wx.GetApp().GetService(ProjectService)
-        if projectService:
-            projectDocs = projectService.FindProjectByFile(filepath)
-            if projectDocs:
-                projectDoc = projectDocs[0]
-                projectService.AddProjectMapping(doc, projectDoc)
-                if hasattr(doc, "GetModel"):
-                    projectService.AddProjectMapping(doc.GetModel(), projectDoc)
-                
-            
-    if doc and doc.GetDocumentTemplate().GetDocumentType() == WsdlAgEditor.WsdlAgDocument:
-        # get referenced wsdl doc instead
-        if os.path.isabs(doc.GetModel().filePath):  # if absolute path, leave it alone
-            filepath = doc.GetModel().filePath
-        else:
-            filepath = doc.GetAppDocMgr().fullPath(doc.GetModel().filePath)  # check relative to project homeDir
-    
-            if not os.path.isfile(filepath):
-                filepath = os.path.normpath(os.path.join(os.path.dirname(doc.GetFilename()), doc.GetModel().filePath))  # check relative to wsdlag file
-                
-                if not os.path.isfile(filepath):
-                    filename = os.sep + os.path.basename(doc.GetModel().filePath)  # check to see if in project file
-                    filePaths = findDocumentMgr(doc).filePaths
-                    for fp in filePaths:
-                        if fp.endswith(filename):
-                            filepath = fp
-                            break
-                
+    try:
         doc = docMgr.CreateDocument(filepath, docMgr.GetFlags()|wx.lib.docview.DOC_SILENT|wx.lib.docview.DOC_OPEN_ONCE|wx.lib.docview.DOC_NO_VIEW)
-        if (doc == None):  # already open
+        if doc:
+            AddProjectMapping(doc)
+        else:  # already open
             for d in docMgr.GetDocuments():
                 if os.path.normcase(d.GetFilename()) == os.path.normcase(filepath):
                     doc = d
                     break
+    except Exception,e:
+        doc = None            
+        aglogging.reportException(e, stacktrace=True)
+            
+    if doc and doc.GetDocumentTemplate().GetDocumentType() == WsdlAgEditor.WsdlAgDocument:
+        # get referenced wsdl doc instead
+        if doc.GetModel().filePath:
+            if os.path.isabs(doc.GetModel().filePath):  # if absolute path, leave it alone
+                filepath = doc.GetModel().filePath
+            else:
+                filepath = doc.GetAppDocMgr().fullPath(doc.GetModel().filePath)  # check relative to project homeDir
+        
+                if not os.path.isfile(filepath):
+                    filepath = os.path.normpath(os.path.join(os.path.dirname(doc.GetFilename()), doc.GetModel().filePath))  # check relative to wsdlag file
+                    
+                    if not os.path.isfile(filepath):
+                        filename = os.sep + os.path.basename(doc.GetModel().filePath)  # check to see if in project file
+                        filePaths = findDocumentMgr(doc).filePaths
+                        for fp in filePaths:
+                            if fp.endswith(filename):
+                                filepath = fp
+                                break
+        
+            try:
+                doc = docMgr.CreateDocument(filepath, docMgr.GetFlags()|wx.lib.docview.DOC_SILENT|wx.lib.docview.DOC_OPEN_ONCE|wx.lib.docview.DOC_NO_VIEW)
+            except Exception,e:
+                doc = None
+                aglogging.reportException(e, stacktrace=True)
+                
+            if doc: 
+                AddProjectMapping(doc)
+            else:  # already open
+                for d in docMgr.GetDocuments():
+                    if os.path.normcase(d.GetFilename()) == os.path.normcase(filepath):
+                        doc = d
+                        break
         else:
-            projectService = wx.GetApp().GetService(ProjectService)
-            if projectService:
-                projectDocs = projectService.FindProjectByFile(filepath)
-                if projectDocs:
-                    projectDoc = projectDocs[0]
-                    projectService.AddProjectMapping(doc, projectDoc)
-                    if hasattr(doc, "GetModel"):
-                        projectService.AddProjectMapping(doc.GetModel(), projectDoc)
+            doc = None
 
     if doc:
         docModel = doc.GetModel()
@@ -202,8 +227,82 @@ if not ACTIVEGRID_BASE_IDE:
 # Classes
 #----------------------------------------------------------------------------
 
-class ProjectDocument(wx.lib.docview.Document):
+if not ACTIVEGRID_BASE_IDE:
+    class IDEResourceFactory(DeploymentGeneration.DeploymentResourceFactory):
+        
+        def __init__(self, openDocs, dataSourceService, projectDir,
+                     preview=False, deployFilepath=None):
 
+            self.openDocs = openDocs
+            self.dataSourceService = dataSourceService
+            self.projectDir = projectDir
+            self.preview = preview
+            self.deployFilepath = deployFilepath
+            
+            self.defaultFlagsNoView = (
+                wx.GetApp().GetDocumentManager().GetFlags()|
+                wx.lib.docview.DOC_SILENT|
+                wx.lib.docview.DOC_OPEN_ONCE|
+                wx.lib.docview.DOC_NO_VIEW)
+            
+        def getModel(self, projectFile):
+            doc = wx.GetApp().GetDocumentManager().CreateDocument(
+                projectFile.filePath, flags=self.defaultFlagsNoView)
+            if (doc == None):  # already open
+                doc = self._findOpenDoc(projectFile.filePath)
+            else:
+                AddProjectMapping(doc)
+            if (doc != None):
+                return doc.GetModel()
+
+        def getDataSource(self, dataSourceName):
+            # in preview mode, runtime needs the generated Deployment
+            # to contain the requried data source. But runtime doesn't
+            # actually need to communicate to db. So here is the logic to
+            # make preview works if the required data soruce has not
+            # yet been defined.            
+            dataSource = self.dataSourceService.getDataSource(dataSourceName)
+            if (dataSource != None):
+                return dataSource
+            elif not self.preview:
+                raise DataServiceExistenceException(dataSourceName)
+            else:
+                # first to see if an existing dpl file is there, if so,
+                # use the data source in dpl file
+                if (self.deployFilepath != None):
+                    tempDply = None
+                    try:
+                        tempDply = xmlutils.load(deployFilepath)
+                    except:
+                        pass
+                    if (tempDply != None):
+                        for tempDataSource in tempDply.dataSources:
+                            if (tempDataSource.name == dataSourceName):
+                                return tempDataSource
+
+                # if unable to use dpl file, then create a dummy data source
+                import activegrid.data.dataservice as dataservice
+                return dataservice.DataSource(
+                    name=dataSourceName, dbtype=dataservice.DB_TYPE_SQLITE)
+
+        def initDocumentRef(self, projectFile, documentRef, dpl):
+            doc = self._findOpenDoc(projectFile.filePath)
+            if (doc and hasattr(doc, 'GetModel')):
+                documentRef.document = doc.GetModel()
+                if isinstance(documentRef, deploymentlib.XFormRef):
+                    doc.GetModel().linkDeployment(dpl, dpl.loader)
+
+        def _findOpenDoc(self, filePath):
+            for openDoc in self.openDocs:
+                if openDoc.GetFilename() == filePath:
+                    return openDoc
+            return None
+
+        def getProjectDir(self):
+            return self.projectDir
+
+
+class ProjectDocument(wx.lib.docview.Document):
 
     def __init__(self, model=None):
         wx.lib.docview.Document.__init__(self)
@@ -482,24 +581,22 @@ class ProjectDocument(wx.lib.docview.Document):
 
         return [fileRef.filePath for fileRef in invalidFileRefs]
 
+
     def SetStageProjectFile(self):
         self._stageProjectFile = True
 
-    def ArchiveProject(self, zipdest, tmpdir=None, stagedir=None):
-        """Stages the application files in tmpdir, and zips the stagedir, creating a zipfile that has the projectname, in zipdest. Returns path to zipfile. Optionally, pass in stagedir and we assume the app is already staged at stagedir (we don't stage again in that case)."""
-        if not stagedir:
-            if not tmpdir:
-                raise AssertionError("'tmpdir' must be set when not passing 'stagedir' so we know where to stage the app")
-            stagedir = self.StageProject(tmpdir)
+
+    def ArchiveProject(self, zipdest, stagedir):
+        """Zips stagedir, creates a zipfile that has as name the projectname, in zipdest. Returns path to zipfile."""
         if os.path.exists(zipdest):
             raise AssertionError("Cannot archive project, %s already exists" % zipdest)
         fileutils.zip(zipdest, stagedir)
 
         return zipdest
 
-        
-    def StageProject(self, tmpdir):
-        """ Copies all files that project knows about into staging location. Files that live outside of the project dir are copied into the root of the stage dir, and their recorded file path is updated. Files that live inside of the project dir keep their relative path. Generates .dpl file into staging dir. Returns path to staging dir."""
+
+    def StageProject(self, tmpdir, targetDataSourceMapping={}):
+        """ Copies all files this project knows about into staging location. Files that live outside of the project dir are copied into the root of the stage dir, and their recorded file path is updated. Files that live inside of the project dir keep their relative path. Generates .dpl file into staging dir. Returns path to staging dir."""
 
         projname = self.GetProjectName()
         stagedir = os.path.join(tmpdir, projname)
@@ -523,6 +620,9 @@ class ProjectDocument(wx.lib.docview.Document):
         # copy files to staging dir
         self._StageFiles(fileDict)
 
+        # set target data source for schemas
+        self._SetSchemaTargetDataSource(fileDict, targetDataSourceMapping)
+
         # it is unfortunate we require this. it would be nice if filepaths
         # were only in the project
         self._FixWsdlAgFiles(stagedir)
@@ -530,19 +630,27 @@ class ProjectDocument(wx.lib.docview.Document):
         # generate .dpl file
         dplfilename = projname + deploymentlib.DEPLOYMENT_EXTENSION
         dplfilepath = os.path.join(stagedir, dplfilename)
-        self.GenerateDeployment(dplfilepath, productionDeployment=True)
+        self.GenerateDeployment(dplfilepath)
 
         if self._stageProjectFile:
             # save project so we get the .agp file. not required for deployment
             # but convenient if user wants to open the deployment in the IDE
             agpfilename = projname + PROJECT_EXTENSION
-            agpfilepath = os.path.join(stagedir, agpfilename)        
+            agpfilepath = os.path.join(stagedir, agpfilename)
+
+            # if this project has deployment data sources configured, remove
+            # them. changing the project is fine, since this is a clone of
+            # the project the IDE has.
+            self.GetModel().GetAppInfo().ResetDeploymentDataSources()
+            
             f = None
             try:
                 f = open(agpfilepath, "w")
+                
                 # setting homeDir correctly is required for the "figuring out
                 # relative paths" logic when saving the project
                 self.GetModel().homeDir = stagedir
+                
                 projectlib.save(f, self.GetModel(), productionDeployment=True)
             finally:
                 try:
@@ -551,24 +659,36 @@ class ProjectDocument(wx.lib.docview.Document):
 
         return stagedir
 
-
     def _FixWsdlAgFiles(self, stagedir):
-        """For each wsdlag file in the stagedir:
-           Ensure the referenced wsdl file lives in root of stagedir. This
-           should be the case if wsdl is part of project (and staging has run).
-           If it is not at root of stagedir, copy it. Then update path in
-           wsdlag."""
+        """For each wsdlag file in the stagedir: if referenced artifact (wsdl or code file) is a known product file (such as securityservice.wsdl), make sure patch to it is parameterized with special env var. We do not want to copy those files. For user artifacts, ensure the file lives in root of stagedir. This should be the case if it is part of project (since staging has run). If it is not at root of stagedir, copy it. Then update path in wsdlag."""
         files = os.listdir(stagedir)
         for f in files:
-            if f.endswith(WsdlAgEditor.WsdlAgDocument.WSDL_AG_EXT):
+            if (f.endswith(WsdlAgEditor.WsdlAgDocument.WSDL_AG_EXT)):
                 wsdlagpath = os.path.join(stagedir, f)
                 fileObject = None
-                mod = False
+                modified = False
                 try:
                     fileObject = open(wsdlagpath)
                     serviceref = WsdlAgEditor.load(fileObject)
-                    if hasattr(serviceref, "filePath") and serviceref.filePath:
-                        mod = self.UpdateServiceRefFilePath(stagedir,serviceref)
+
+                    # referenced wsdl
+                    if (hasattr(serviceref, WsdlAgModel.WSDL_FILE_ATTR)):
+                        modified = (modified |
+                                    self._UpdateServiceRefPathAttr(
+                                        stagedir, serviceref,
+                                        WsdlAgModel.WSDL_FILE_ATTR))
+
+                    # referenced code file
+                    if (hasattr(serviceref, WsdlAgModel.LOCAL_SERVICE_ELEMENT)):
+                        lse = getattr(serviceref,
+                                      WsdlAgModel.LOCAL_SERVICE_ELEMENT)
+                        if (hasattr(lse, WsdlAgModel.LOCAL_SERVICE_FILE_ATTR)):
+                            modified = (modified |
+                                        self._UpdateServiceRefPathAttr(
+                                            stagedir, lse,
+                                            WsdlAgModel.LOCAL_SERVICE_FILE_ATTR))
+
+                    
                 finally:
                     try:
                         fileObject.close()
@@ -576,7 +696,7 @@ class ProjectDocument(wx.lib.docview.Document):
                         pass
 
                 # no need to save the file if we did not change anything
-                if not mod: continue
+                if not modified: continue
 
                 # write the wsdlag file
                 fileObject = open(wsdlagpath)
@@ -589,31 +709,81 @@ class ProjectDocument(wx.lib.docview.Document):
                         pass
                     
 
-    def UpdateServiceRefFilePath(self, stagedir, serviceref):
-        """Returns True if serviceref.filePath has been updated, False otherwise."""
-        if not os.path.exists(serviceref.filePath):
-            # should be an error? wrong place to
-            # validate that referenced file exists
-            # could print warning
+    def _UpdateServiceRefPathAttr(self, stagedir, serviceref, attrName):
+        """Returns True if serviceref path has been updated, False otherwise."""
+
+        filePath = getattr(serviceref, attrName)
+
+        if (filePath == None):
+            return False
+
+        filePath = filePath.strip()
+
+        if (len(filePath) == 0):
+            return False
+            
+
+        # if filePath starts with one of the AG systems vars, we don't
+        # have to do anything
+        if (fileutils.startsWithAgSystemVar(filePath)):
+            return False
+
+        # remove any known env var refs (we'll put them back a little below)
+        # we remove them here so that paths that do not have env vars also
+        # get parameterized correctly below
+        filePath = fileutils.expandKnownAGVars(filePath)
+
+        # make sure we have forward slashes. this is a workaround, which
+        # would not be necessary if we only write paths with forward slashes
+        # into our files
+        filePath = filePath.replace("\\", "/")
+        
+        filePath = os.path.abspath(filePath)        
+
+        if (not os.path.exists(filePath)):
+            # Wrong place to validate that referenced file exists, so just
+            # give up
             return False
             
         # If the referenced file is in stagedir already, there's nothing to do
-        if fileutils.hasAncestorDir(serviceref.filePath, stagedir):
+        if (fileutils.hasAncestorDir(filePath, stagedir)):
             return False
 
         # The path points outside of stagedir.
 
         # Check if we already have the referenced wsdl file at root, should be
-        # the case if the referenced wsdl is part of project
-        # Copy it if we don't have it
-        relPath = os.path.basename(serviceref.filePath)
-        stagepath = os.path.join(stagedir, relPath)
-        if not os.path.exists(stagepath):
-            fileutils.copyFile(serviceref.filePath, stagepath)
+        # the case if the referenced wsdl is part of project.
+        # Copy it if we don't have it, unless it lives in one of the known
+        # product directories - in which case we parameterize the known path
+        # with one of our AG system vars
+        relPath = os.path.basename(filePath)
+        stagePath = os.path.join(stagedir, relPath)
 
-        serviceref.filePath = relPath
+        if (not os.path.exists(stagePath)):
+            pFilePath = fileutils.parameterizePathWithAGSystemVar(filePath)
+            if pFilePath == filePath: # no parameterization happened, copy
+                fileutils.copyFile(filePath, stagePath)
+                setattr(serviceref, attrName, relPath)
+            else:
+                setattr(serviceref, attrName, pFilePath.replace("\\", "/"))
+        else:
+            setattr(serviceref, attrName, relPath)
 
         return True
+
+
+    def _SetSchemaTargetDataSource(self, projectFiles, dsmapping):
+        """Update schema's default data source, if necessary."""
+
+        for projectFile in projectFiles:
+            if (projectFile.type == basedocmgr.FILE_TYPE_SCHEMA):
+                name = os.path.basename(projectFile.filePath)
+                if (dsmapping.has_key(name)):
+                    schema = xmlutils.load(projectFile.filePath)
+                    defaultName = schema.getDefaultDataSourceName()
+                    if (defaultName != dsmapping[name]):
+                        schema.setDefaultDataSourceName(dsmapping[name])
+                        xmlutils.save(projectFile.filePath, schema)
         
         
     def _StageFiles(self, fileDict):
@@ -664,11 +834,6 @@ class ProjectDocument(wx.lib.docview.Document):
         for filename in foreignFiles:
             if filename in projectRootFiles:
                 raise IOError("File outside of project, \"%s\", cannot have same name as file at project root" % filename)
-
-        # REVIEW stoens@activegrid.com 19-Oct-05 --
-        # We could also validate that user does not already have a .dpl file
-        # since we're going to generate one...
-        
         return rtn
     
                             
@@ -680,7 +845,19 @@ class ProjectDocument(wx.lib.docview.Document):
         self.Modify(True)
         return True
 
+    def GetSchemas(self):
+        """Returns list of schema models (activegrid.model.schema.schema) for all schemas in this project."""
+        
+        rtn = []
+        resourceFactory = self._GetResourceFactory()
+        for projectFile in self.GetModel().projectFiles:
+            if (projectFile.type == basedocmgr.FILE_TYPE_SCHEMA):
+                schema = resourceFactory.getModel(projectFile)
+                if (schema != None):
+                    rtn.append(schema)
 
+        return rtn
+        
     def GetFiles(self):
         return self.GetModel().filePaths
 
@@ -709,199 +886,117 @@ class ProjectDocument(wx.lib.docview.Document):
         return os.path.splitext(os.path.basename(self.GetFilename()))[0]
 
 
-    def GetDeploymentFilepath(self):
-        projectName = self.GetProjectName()
-        return os.path.join(self.GetModel().homeDir, projectName + "RunTime_tmp" + deploymentlib.DEPLOYMENT_EXTENSION)
-        
+    def GetDeploymentFilepath(self, pre17=False):
+        if (pre17):
+            name = self.GetProjectName() + PRE_17_TMP_DPL_NAME
+        else:
+            name = self.GetProjectName() + _17_TMP_DPL_NAME
+        return os.path.join(self.GetModel().homeDir, name)
+    
 
-    def GenerateDeployment(self, deployFilepath=None, preview=False, productionDeployment=False):
+    def _GetResourceFactory(self, preview=False, deployFilepath=None):
+        return IDEResourceFactory(
+            openDocs=wx.GetApp().GetDocumentManager().GetDocuments(),
+            dataSourceService=wx.GetApp().GetService(DataModelEditor.DataSourceService),
+            projectDir=os.path.dirname(self.GetFilename()),
+            preview=preview,
+            deployFilepath=deployFilepath)
+
+    def GenerateDeployment(self, deployFilepath=None, preview=False):
+        
         if ACTIVEGRID_BASE_IDE:
             return
-        
-        def FindOpenDoc(filePath):
-            openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
-            for openDoc in openDocs:
-                if openDoc.GetFilename() == filePath:
-                    return openDoc
-            return None
 
         if not deployFilepath:
             deployFilepath = self.GetDeploymentFilepath()
-            
-        deployment = deploymentlib.Deployment(deployFilepath)
 
-        defaultFlagsNoView = wx.GetApp().GetDocumentManager().GetFlags()|wx.lib.docview.DOC_SILENT|wx.lib.docview.DOC_OPEN_ONCE|wx.lib.docview.DOC_NO_VIEW
-        self.GetAppInfo().CopyToDeployment(deployment)
+        d = DeploymentGeneration.DeploymentGenerator(
+            self.GetModel(), self._GetResourceFactory(preview,
+                                                      deployFilepath))
+                
+        dpl = d.getDeployment(deployFilepath)
 
-        for file in self.GetModel()._files:
-            if not file.type:
-                continue
-            elif file.type == basedocmgr.FILE_TYPE_SERVICE:  # set serviceRefs
-                doc = wx.GetApp().GetDocumentManager().CreateDocument(file.filePath, flags=defaultFlagsNoView)
-                if (doc == None):  # already open
-                    doc = FindOpenDoc(file.filePath)
-                if doc:
-                    serviceRef = doc.GetModel()
-                    if serviceRef:
-                        documentRef = copy.copy(serviceRef)
-                        deployment.serviceRefs.append(documentRef)
-
-                        if not productionDeployment:
-                            # filePath should point to location of wsdl file
-                            # wsdlag filePath points to relative path to wsdl file from wsdlag location
-                            # but deployment needs relative path from deployment location, so here's the conversion
-                            curDir = os.path.dirname(self.GetFilename()) + os.sep
-                            filePath = file.document.fileName
-                            if (filePath == None):
-                                raise Exception("Cannot find file \"%s\"" % file.filePath)
-                            if filePath.startswith(curDir):
-                                filePath = filePath[len(curDir):]
-                            if os.sep != '/':
-                                filePath = filePath.replace(os.sep, "/")
-                            documentRef.filePath = filePath
-                        
-                            documentRef.document = file.document
-                            
-                        if serviceRef.serviceType == deploymentlib.SERVICE_DATABASE and serviceRef.databaseService:
-                            dataSourceService = wx.GetApp().GetService(DataModelEditor.DataSourceService)
-                            ds = dataSourceService.getDataSource(serviceRef.databaseService.datasourceName)
-                            if ds:
-                                found = False
-                                for d in deployment.dataSources:
-                                    if d.name == ds.name:
-                                        found = True
-                                        break
-                                if not found:
-                                    deployment.dataSources.append(ds)
-            else:
-                curDir = os.path.dirname(self.GetFilename()) + os.sep
-                filePath = file.filePath
-                if filePath.startswith(curDir):
-                    filePath = filePath[len(curDir):]
-                if os.sep != '/':
-                    filePath = filePath.replace(os.sep, "/")
-                    
-                if file.type == basedocmgr.FILE_TYPE_XFORM:
-                    documentRef = deploymentlib.XFormRef()
-                    deployment.xformRefs.append(documentRef)
-                elif file.type == basedocmgr.FILE_TYPE_PROCESS:
-                    documentRef = deploymentlib.ProcessRef()
-                    deployment.processRefs.append(documentRef)
-                elif file.type == basedocmgr.FILE_TYPE_SCHEMA:
-                    # set schemaRefs
-                    documentRef = deploymentlib.SchemaRef()
-                    deployment.schemaRefs.append(documentRef)
-
-                    # set dataSources
-                    doc = wx.GetApp().GetDocumentManager().CreateDocument(file.filePath, flags=defaultFlagsNoView)
-                    if (doc == None):  # already open
-                        doc = FindOpenDoc(file.filePath)
-                    if doc:
-                        dataSourceService = wx.GetApp().GetService(DataModelEditor.DataSourceService)
-                        ds = dataSourceService.getDataSource(doc.GetModel().getDefaultDataSourceName())
-                        if ds:
-                            found = False
-                            for d in deployment.dataSources:
-                                if d.name == ds.name:
-                                    found = True
-                                    break
-                            if not found:
-                                deployment.dataSources.append(ds)
-                                
-                        # set keyServices
-                        keyServices = doc.GetModel().keyServices
-                        for keyService in keyServices:        
-                            # add default key service to deployment
-                            if not productionDeployment:
-                                mainModuleDir = sysutils.mainModuleDir
-                            else:
-                                mainModuleDir = sysutils.MAINMODULE_DIR_VAR
-                            wsdlFullPath = os.path.join(mainModuleDir, "..", "wsdl", DataModelEditor.DEFAULT_KEYSERVICE_WSDL_FILENAME)
-                            keyServiceRef = deploymentlib.ServiceRef(filePath=wsdlFullPath)
-                            deployment.serviceRefs.append(keyServiceRef)
-                            
-                            keyServiceRef.name = keyService
-                            keyServiceRef.serviceType = deploymentlib.SERVICE_LOCAL
-                            keyServiceRef.localService = deploymentlib.LocalService()
-                            if keyService == DataModelEditor.DEFAULT_KEYSERVICE:
-                                keyServiceRef.filePath = wsdlFullPath
-                                keyServiceRef.localServiceClassName = DataModelEditor.DEFAULT_KEYSERVICE_CLASSNAME
-                            
-
-                elif file.type == basedocmgr.FILE_TYPE_SKIN:
-                    documentRef = deploymentlib.SkinRef(deployment)
-                    deployment.skinref = documentRef
-                elif file.type == basedocmgr.FILE_TYPE_IDENTITY:
-                    documentRef = deploymentlib.IdentityRef()
-                    deployment.identityRefs.append(documentRef)
-                else:
-                    continue
-                        
-                documentRef.name = file.name
-                documentRef.filePath = filePath
-                doc = FindOpenDoc(file.filePath)
-                if doc and hasattr(doc, 'GetModel'):
-                    documentRef.document = doc.GetModel()
-                    if isinstance(documentRef, deploymentlib.XFormRef):
-                        doc.GetModel().linkDeployment(deployment, deployment.loader)
-       
         if preview:
-            deployment.initialize()  # used in preview only
-            
-        if 0: # preview:  # setPrototype not working, commented this out
-            deploymentlib._deploymentCache.setPrototype(deployment.fileName, deployment)
-        else:
-            deploymentlib.saveThroughCache(deployment.fileName, deployment)
+            dpl.initialize()  # used in preview only
 
-        return deployFilepath        
+        # REVIEW 07-Apr-06 stoens@activegrid.com -- Check if there's a
+        # tmp dpl file with pre 17 name, if so, delete it, so user doesn't end
+        # up with unused file in project dir. We should probably remove this
+        # check after 1.7 goes out.
+        fileutils.remove(self.GetDeploymentFilepath(pre17=True))
+
+        deploymentlib.saveThroughCache(dpl.fileName, dpl)
+        return deployFilepath
         
-
     def AddNameSpaces(self, filePaths):
-        """ Add any new wsdl namespaces to bpel files """
+        """ Add any new wsdl and schema namespaces to bpel files """
         """ Add any new schema namespaces to wsdl files """
         if ACTIVEGRID_BASE_IDE:
             return
 
-        serviceRefs = self.GetAppDocMgr().allServiceRefs  # wsdl
-
         processRefs = self.GetAppDocMgr().findRefsByFileType(basedocmgr.FILE_TYPE_PROCESS) # bpel
-        if processRefs and serviceRefs:
+        schemaRefs = self.GetAppDocMgr().findRefsByFileType(basedocmgr.FILE_TYPE_SCHEMA) # xsd
+        serviceRefs = self.GetAppDocMgr().allServiceRefs  # wsdl
+        
+        # update bpel files
+        if processRefs and (serviceRefs or schemaRefs):
             for processRef in processRefs:
-                processDoc = processRef._GetDoc()
+                processDoc = processRef.ideDocument
                 process = processDoc.GetModel()
                 
-                modified = False
-                for serviceRef in serviceRefs:
-                    wsdl = serviceRef.document
-                    if (wsdl.fileName in filePaths
-                    or serviceRef.filePath in filePaths):
-                        wsdlLongNS = wsdl.targetNamespace
-                        wsdlShortNS = self.GetAppDocMgr().findShortNS(wsdlLongNS)
-                        if not wsdlShortNS:
-                            wsdlShortNS = xmlutils.genShortNS(process, wsdlLongNS)
-                        xmlutils.addNSAttribute(process, wsdlShortNS, wsdlLongNS)
-                        modified = True
-                if modified:
-                    processDoc.OnSaveDocument(processDoc.GetFilename())
+                if processDoc and process:
+                    modified = False
+                    
+                    # add wsdl namespaces to bpel file
+                    for serviceRef in serviceRefs:
+                        wsdl = serviceRef.document
+                        if (wsdl
+                        and (wsdl.fileName in filePaths
+                        or serviceRef.filePath in filePaths)):
+                            wsdlLongNS = wsdl.targetNamespace
+                            wsdlShortNS = self.GetAppDocMgr().findShortNS(wsdlLongNS)
+                            if not wsdlShortNS:
+                                wsdlShortNS = xmlutils.genShortNS(process, wsdlLongNS)
+                            xmlutils.addNSAttribute(process, wsdlShortNS, wsdlLongNS)
+                            modified = True
+                            
+                    # add schema namespaces to bpel file
+                    for schemaRef in schemaRefs:
+                        schema = schemaRef.document
+                        if schema and schema.fileName in filePaths:
+                            schemaLongNS = schema.targetNamespace
+                            schemaShortNS = self.GetAppDocMgr().findShortNS(schemaLongNS)
+                            if not schemaShortNS:
+                                schemaShortNS = xmlutils.genShortNS(process, schemaLongNS)
+                            xmlutils.addNSAttribute(process, schemaShortNS, schemaLongNS)
+                            modified = True
+    
+                    if modified:
+                        processDoc.OnSaveDocument(processDoc.GetFilename())
 
-        schemaRefs = self.GetAppDocMgr().findRefsByFileType(basedocmgr.FILE_TYPE_SCHEMA)
-        if schemaRefs and serviceRefs:
+
+        # update wsdl files
+        if serviceRefs and schemaRefs:
             for serviceRef in serviceRefs:
                 wsdl = serviceRef.document
                 wsdlDoc = serviceRef.ideDocument
                 
-                modified = False
-                for schemaRef in schemaRefs:
-                    schema = schemaRef.document
-                    if schema.fileName in filePaths:
-                        schemaLongNS = schema.targetNamespace
-                        schemaShortNS = self.GetAppDocMgr().findShortNS(schemaLongNS)
-                        if not schemaShortNS:
-                            schemaShortNS = xmlutils.genShortNS(process, schemaLongNS)
-                        xmlutils.addNSAttribute(wsdl, schemaShortNS, schemaLongNS)
-                        modified = True
-                if modified:
-                    wsdlDoc.OnSaveDocument(wsdlDoc.GetFilename())
+                if wsdl and wsdlDoc:
+                    modified = False
+                    
+                    # add schema namespace to wsdl file
+                    for schemaRef in schemaRefs:
+                        schema = schemaRef.document
+                        if schema and schema.fileName in filePaths:
+                            schemaLongNS = schema.targetNamespace
+                            schemaShortNS = self.GetAppDocMgr().findShortNS(schemaLongNS)
+                            if not schemaShortNS:
+                                schemaShortNS = xmlutils.genShortNS(wsdl, schemaLongNS)
+                            xmlutils.addNSAttribute(wsdl, schemaShortNS, schemaLongNS)
+                            modified = True
+                            
+                    if modified:
+                        wsdlDoc.OnSaveDocument(wsdlDoc.GetFilename())
 
 
 class NewProjectWizard(Wizard.BaseWizard):
@@ -918,10 +1013,10 @@ class NewProjectWizard(Wizard.BaseWizard):
 
 
     def CreateProjectLocation(self,wizard):
-        page = Wizard.TitledWizardPage(wizard, _("Project File Location"))
+        page = Wizard.TitledWizardPage(wizard, _("Name and Location"))
 
-        page.GetSizer().Add(wx.StaticText(page, -1, _("\nSelect the directory and filename for the project.\n\n")))
-        self._projectName, self._dirCtrl, sizer, self._fileValidation = UICommon.CreateDirectoryControl(page, fileExtension="agp", appDirDefaultStartDir=True)
+        page.GetSizer().Add(wx.StaticText(page, -1, _("\nEnter the name and location for the project.\n")))
+        self._projectName, self._dirCtrl, sizer, self._fileValidation = UICommon.CreateDirectoryControl(page, fileExtension="agp", appDirDefaultStartDir=True, fileLabel=_("Name:"), dirLabel=_("Location:"))
         page.GetSizer().Add(sizer, 1, flag=wx.EXPAND)
 
         wizard.Layout()
@@ -930,7 +1025,7 @@ class NewProjectWizard(Wizard.BaseWizard):
 
 
     def RunWizard(self, existingTables = None, existingRelationships = None):
-        status = wx.wizard.Wizard.RunWizard(self, self._projectLocationPage)
+        status = Wizard.BaseWizard.RunWizard(self, self._projectLocationPage)
         if status:
             wx.ConfigBase_Get().Write(PROJECT_DIRECTORY_KEY, self._dirCtrl.GetValue())
             docManager = wx.GetApp().GetTopWindow().GetDocumentManager()
@@ -959,7 +1054,7 @@ class NewProjectWizard(Wizard.BaseWizard):
     def OnWizPageChanging(self, event):
         if event.GetDirection():  # It's going forwards
             if event.GetPage() == self._projectLocationPage:
-                if not self._fileValidation(noFirstCharDigit=True):
+                if not self._fileValidation(validClassName=True):
                     event.Veto()
                     return
                 self._fullProjectPath = os.path.join(self._dirCtrl.GetValue(),UICommon.MakeNameEndInExtension(self._projectName.GetValue(), PROJECT_EXTENSION))
@@ -1473,8 +1568,6 @@ class ProjectView(wx.lib.docview.View):
 
         self._treeCtrl = ProjectTreeCtrl(panel, -1, style = wx.TR_HIDE_ROOT | wx.TR_HAS_BUTTONS | wx.TR_EDIT_LABELS | wx.TR_DEFAULT_STYLE | wx.TR_MULTIPLE | wx.TR_EXTENDED)
         self._treeCtrl.AddRoot(_("Projects"))
-        wx.EVT_TREE_BEGIN_DRAG(self._treeCtrl, self._treeCtrl.GetId(), self.OnBeginDrag)
-        wx.EVT_TREE_END_DRAG(self._treeCtrl, self._treeCtrl.GetId(), self.OnEndDrag)
         if self._embeddedWindow:
             sizer.Add(self._treeCtrl, 1, wx.EXPAND|wx.BOTTOM, HALF_SPACE)  # allow space for embedded window resize-sash
         else:
@@ -1484,7 +1577,7 @@ class ProjectView(wx.lib.docview.View):
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         if wx.GetApp().IsMDI():
-            sizer.Add(panel, 1, wx.EXPAND|wx.BOTTOM, 1) # wx.Bug: without bottom margin, can't resize embedded window
+            sizer.Add(panel, 1, wx.EXPAND|wx.BOTTOM, 3) # wxBug: without bottom margin, can't resize embedded window
         else:
             sizer.Add(panel, 1, wx.EXPAND)
             
@@ -1503,16 +1596,17 @@ class ProjectView(wx.lib.docview.View):
         wx.EVT_TREE_BEGIN_LABEL_EDIT(self._treeCtrl, self._treeCtrl.GetId(), self.OnBeginLabelEdit)
         wx.EVT_TREE_END_LABEL_EDIT(self._treeCtrl, self._treeCtrl.GetId(), self.OnEndLabelEdit)
         wx.EVT_RIGHT_DOWN(self._treeCtrl, self.OnRightClick)
-        wx.EVT_LEFT_DOWN(self._treeCtrl, self.OnLeftClick)
         wx.EVT_KEY_DOWN(self._treeCtrl, self.OnKeyPressed)
         wx.EVT_TREE_ITEM_COLLAPSED(self._treeCtrl, self._treeCtrl.GetId(), self.SaveFolderState)
         wx.EVT_TREE_ITEM_EXPANDED(self._treeCtrl, self._treeCtrl.GetId(), self.SaveFolderState)
-        # wx.EVT_COMMAND_RIGHT_CLICK(self._treeCtrl, self._treeCtrl.GetId(), self.OnRightClick) # wxBug: This isn't working for some reason
+        wx.EVT_TREE_BEGIN_DRAG(self._treeCtrl, self._treeCtrl.GetId(), self.OnBeginDrag)
+        wx.EVT_TREE_END_DRAG(self._treeCtrl, self._treeCtrl.GetId(), self.OnEndDrag)
+        wx.EVT_LEFT_DOWN(self._treeCtrl, self.OnLeftClick)
 
         # drag-and-drop support
         dt = ProjectFileDropTarget(self)
         self._treeCtrl.SetDropTarget(dt)
-
+        
         return True
 
 
@@ -1625,9 +1719,11 @@ class ProjectView(wx.lib.docview.View):
         else:
             # need this to accelerate closing down app if treeCtrl has lots of items
             self._treeCtrl.Freeze()
-            rootItem = self._treeCtrl.GetRootItem()
-            self._treeCtrl.DeleteChildren(rootItem)
-            self._treeCtrl.Thaw()
+            try:
+                rootItem = self._treeCtrl.GetRootItem()
+                self._treeCtrl.DeleteChildren(rootItem)
+            finally:
+                self._treeCtrl.Thaw()
 
         # We don't need to delete the window since it is a floater/embedded
         return True
@@ -1638,7 +1734,8 @@ class ProjectView(wx.lib.docview.View):
 
 
     def OnUpdate(self, sender = None, hint = None):
-        wx.lib.docview.View.OnUpdate(self, sender, hint)
+        if wx.lib.docview.View.OnUpdate(self, sender, hint):
+            return
         
         if hint:
             if hint[0] == "add":
@@ -1648,54 +1745,56 @@ class ProjectView(wx.lib.docview.View):
                     
                 self._treeCtrl.Freeze()
 
-                newFilePaths = hint[2]  # need to be added and selected, and sorted
-                oldFilePaths = hint[3]  # need to be selected
-                self._treeCtrl.UnselectAll()
-                
-                mode = self.GetMode()
-                
-                project = projectDoc.GetModel()
-                projectDir = project.homeDir
-                rootItem = self._treeCtrl.GetRootItem()
+                try:
+                    newFilePaths = hint[2]  # need to be added and selected, and sorted
+                    oldFilePaths = hint[3]  # need to be selected
+                    self._treeCtrl.UnselectAll()
                     
-                # add new folders and new items
-                addList = []                    
-                for filePath in newFilePaths:
-                    file = project.FindFile(filePath)
-                    if file:
-                        if mode == ProjectView.LOGICAL_MODE:
-                            folderPath = file.logicalFolder
-                        else:  # ProjectView.PHYSICAL_MODE
-                            folderPath = file.GetRelativeFolder(projectDir)
-                        if folderPath:
-                            self._treeCtrl.AddFolder(folderPath)
-                            folder = self._treeCtrl.FindFolder(folderPath)
-                        else:
-                            folder = rootItem
-                        item = self._treeCtrl.AppendItem(folder, os.path.basename(file.filePath), file)
-                        addList.append(item)
-
-                # sort folders with new items
-                parentList = []
-                for item in addList:
-                    parentItem = self._treeCtrl.GetItemParent(item)
-                    if parentItem not in parentList:
-                        parentList.append(parentItem)
-                for parentItem in parentList:
-                    self._treeCtrl.SortChildren(parentItem)
-
-                # select all the items user wanted to add
-                lastItem = None
-                for filePath in (oldFilePaths + newFilePaths):
-                    item = self._treeCtrl.FindItem(filePath)
-                    if item:
-                        self._treeCtrl.SelectItem(item)
-                        lastItem = item
+                    mode = self.GetMode()
+                    
+                    project = projectDoc.GetModel()
+                    projectDir = project.homeDir
+                    rootItem = self._treeCtrl.GetRootItem()
                         
-                if lastItem:        
-                    self._treeCtrl.EnsureVisible(lastItem)
+                    # add new folders and new items
+                    addList = []                    
+                    for filePath in newFilePaths:
+                        file = project.FindFile(filePath)
+                        if file:
+                            if mode == ProjectView.LOGICAL_MODE:
+                                folderPath = file.logicalFolder
+                            else:  # ProjectView.PHYSICAL_MODE
+                                folderPath = file.physicalFolder
+                            if folderPath:
+                                self._treeCtrl.AddFolder(folderPath)
+                                folder = self._treeCtrl.FindFolder(folderPath)
+                            else:
+                                folder = rootItem
+                            item = self._treeCtrl.AppendItem(folder, os.path.basename(file.filePath), file)
+                            addList.append(item)
+    
+                    # sort folders with new items
+                    parentList = []
+                    for item in addList:
+                        parentItem = self._treeCtrl.GetItemParent(item)
+                        if parentItem not in parentList:
+                            parentList.append(parentItem)
+                    for parentItem in parentList:
+                        self._treeCtrl.SortChildren(parentItem)
+    
+                    # select all the items user wanted to add
+                    lastItem = None
+                    for filePath in (oldFilePaths + newFilePaths):
+                        item = self._treeCtrl.FindItem(filePath)
+                        if item:
+                            self._treeCtrl.SelectItem(item)
+                            lastItem = item
+                            
+                    if lastItem:        
+                        self._treeCtrl.EnsureVisible(lastItem)
 
-                self._treeCtrl.Thaw()
+                finally:
+                    self._treeCtrl.Thaw()
                 return
 
             elif hint[0] == "remove":
@@ -1705,17 +1804,19 @@ class ProjectView(wx.lib.docview.View):
                     
                 self._treeCtrl.Freeze()
 
-                filePaths = hint[2]
-                self._treeCtrl.UnselectAll()
+                try:
+                    filePaths = hint[2]
+                    self._treeCtrl.UnselectAll()
+                    
+                    for filePath in filePaths:
+                        item = self._treeCtrl.FindItem(filePath)
+                        if item:
+                            self._treeCtrl.Delete(item)
+    
+                    self._treeCtrl.UnselectAll()  # wxBug: even though we unselected earlier, an item still gets selected after the delete
                 
-                for filePath in filePaths:
-                    item = self._treeCtrl.FindItem(filePath)
-                    if item:
-                        self._treeCtrl.Delete(item)
-
-                self._treeCtrl.UnselectAll()  # wxBug: even though we unselected earlier, an item still gets selected after the delete
-                
-                self._treeCtrl.Thaw()
+                finally:
+                    self._treeCtrl.Thaw()
                 return
                 
             elif hint[0] == "rename":
@@ -1724,10 +1825,12 @@ class ProjectView(wx.lib.docview.View):
                     return
                     
                 self._treeCtrl.Freeze()
-                item = self._treeCtrl.FindItem(hint[2])
-                self._treeCtrl.SetItemText(item, os.path.basename(hint[3]))
-                self._treeCtrl.EnsureVisible(item)
-                self._treeCtrl.Thaw()
+                try:
+                    item = self._treeCtrl.FindItem(hint[2])
+                    self._treeCtrl.SetItemText(item, os.path.basename(hint[3]))
+                    self._treeCtrl.EnsureVisible(item)
+                finally:
+                    self._treeCtrl.Thaw()
                 return
                 
             elif hint[0] == "rename folder":
@@ -1736,14 +1839,16 @@ class ProjectView(wx.lib.docview.View):
                     return
                     
                 self._treeCtrl.Freeze()
-                item = self._treeCtrl.FindFolder(hint[2])
-                if item:
-                    self._treeCtrl.UnselectAll()
-                    self._treeCtrl.SetItemText(item, os.path.basename(hint[3]))
-                    self._treeCtrl.SortChildren(self._treeCtrl.GetItemParent(item))
-                    self._treeCtrl.SelectItem(item)
-                    self._treeCtrl.EnsureVisible(item)
-                self._treeCtrl.Thaw()
+                try:
+                    item = self._treeCtrl.FindFolder(hint[2])
+                    if item:
+                        self._treeCtrl.UnselectAll()
+                        self._treeCtrl.SetItemText(item, os.path.basename(hint[3]))
+                        self._treeCtrl.SortChildren(self._treeCtrl.GetItemParent(item))
+                        self._treeCtrl.SelectItem(item)
+                        self._treeCtrl.EnsureVisible(item)
+                finally:
+                    self._treeCtrl.Thaw()
                 return
      
 
@@ -1776,9 +1881,23 @@ class ProjectView(wx.lib.docview.View):
     def ProcessEvent(self, event):
         id = event.GetId()
         if id == ProjectService.CLOSE_PROJECT_ID:
-            document = self.GetDocument()
-            if document:
-                if self.GetDocumentManager().CloseDocument(document, False):
+            projectDoc = self.GetDocument()
+            if projectDoc:
+                projectService = wx.GetApp().GetService(ProjectService)
+                if projectService:
+                    openDocs = wx.GetApp().GetDocumentManager().GetDocuments()
+                    for openDoc in openDocs[:]:  # need to make a copy, as each file closes we're off by one
+                        if projectDoc == openDoc:  # close project last
+                            continue
+                            
+                        if projectDoc == projectService.FindProjectFromMapping(openDoc):
+                            self.GetDocumentManager().CloseDocument(openDoc, False)
+                            
+                            projectService.RemoveProjectMapping(openDoc)
+                            if hasattr(openDoc, "GetModel"):
+                                projectService.RemoveProjectMapping(openDoc.GetModel())
+                    
+                if self.GetDocumentManager().CloseDocument(projectDoc, False):
                     self.RemoveCurrentDocumentUpdate()
             return True
         elif id == ProjectService.ADD_FILES_TO_PROJECT_ID:
@@ -1881,6 +2000,19 @@ class ProjectView(wx.lib.docview.View):
             return True
         elif (id == wx.ID_CLEAR
         or id == ProjectService.RENAME_ID):
+            items = self._treeCtrl.GetSelections()
+            if items:
+                hasViewSelected = False
+                for item in items:
+                    if self._IsItemFile(item):
+                        file = self._GetItemFile(item)
+                        if file.type == 'xform':
+                            hasViewSelected = True
+                            break
+                if hasViewSelected:
+                    event.Enable(False)
+                    return True
+
             event.Enable(self._HasFilesSelected() or (self.GetDocument() != None and self.GetMode() == ProjectView.LOGICAL_MODE and self._HasFoldersSelected()))
             return True
         elif id == wx.ID_PASTE:
@@ -1979,61 +2111,70 @@ class ProjectView(wx.lib.docview.View):
         wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
         self._treeCtrl.Freeze()
 
-        rootItem = self._treeCtrl.GetRootItem()
-        self._treeCtrl.DeleteChildren(rootItem)
+        try:
+            rootItem = self._treeCtrl.GetRootItem()
+            self._treeCtrl.DeleteChildren(rootItem)
             
-        if document:
-            mode = self.GetMode()
-            docFilePath = document.GetFilename()
-            
-            if mode == ProjectView.LOGICAL_MODE:
-                folders = document.GetModel().logicalFolders
-            else:
-                folders = document.GetModel().GetRelativeFolders()
+            if document:
+                mode = self.GetMode()
+                docFilePath = document.GetFilename()
                 
-            folders.sort()
-            folderItems = []
-            for folderPath in folders:
-                folderItems = folderItems + self._treeCtrl.AddFolder(folderPath)
-                                        
-            for file in document.GetModel()._files:
                 if mode == ProjectView.LOGICAL_MODE:
-                    folder = file.logicalFolder
+                    folders = document.GetModel().logicalFolders
                 else:
-                    folder = file.GetRelativeFolder(document.GetModel().homeDir)
-                if folder:
-                    folderTree = folder.split('/')
-                
-                    item = rootItem
-                    for folderName in folderTree:
-                        found = False
-                        (child, cookie) = self._treeCtrl.GetFirstChild(item)
-                        while child.IsOk():
-                            if self._treeCtrl.GetItemText(child) == folderName:
-                                item = child 
-                                found = True
-                                break
-                            (child, cookie) = self._treeCtrl.GetNextChild(item, cookie)
-                            
-                        if not found:
-                            print "error folder '%s' not found for %s" % (folder, file.filePath)
-                            break
-                else:
-                    item = rootItem
+                    folders = document.GetModel().physicalFolders
                     
-                fileItem = self._treeCtrl.AppendItem(item, os.path.basename(file.filePath), file)
+                folders.sort()
+                folderItems = []
+                for folderPath in folders:
+                    folderItems = folderItems + self._treeCtrl.AddFolder(folderPath)
+                                            
+                for file in document.GetModel()._files:
+                    if mode == ProjectView.LOGICAL_MODE:
+                        folder = file.logicalFolder
+                    else:
+                        folder = file.physicalFolder
+                    if folder:
+                        folderTree = folder.split('/')
+                    
+                        item = rootItem
+                        for folderName in folderTree:
+                            found = False
+                            (child, cookie) = self._treeCtrl.GetFirstChild(item)
+                            while child.IsOk():
+                                if self._treeCtrl.GetItemText(child) == folderName:
+                                    item = child 
+                                    found = True
+                                    break
+                                (child, cookie) = self._treeCtrl.GetNextChild(item, cookie)
+                                
+                            if not found:
+                                print "error folder '%s' not found for %s" % (folder, file.filePath)
+                                break
+                    else:
+                        item = rootItem
+                        
+                    fileItem = self._treeCtrl.AppendItem(item, os.path.basename(file.filePath), file)
+                    
+                self._treeCtrl.SortChildren(rootItem)
+                for item in folderItems:
+                    self._treeCtrl.SortChildren(item)
+    
+                self.LoadFolderState()
+    
+                self._treeCtrl.SetFocus()
+                (child, cookie) = self._treeCtrl.GetFirstChild(self._treeCtrl.GetRootItem())
+                if child.IsOk():
+                    self._treeCtrl.UnselectAll()
+                    self._treeCtrl.SelectItem(child)
+                    self._treeCtrl.ScrollTo(child)
                 
-            self._treeCtrl.SortChildren(rootItem)
-            for item in folderItems:
-                self._treeCtrl.SortChildren(item)
+                if self._embeddedWindow:
+                    document.GetCommandProcessor().SetEditMenu(wx.GetApp().GetEditMenu(self._GetParentFrame()))
 
-            self.LoadFolderState()
-
-            if self._embeddedWindow:
-                document.GetCommandProcessor().SetEditMenu(wx.GetApp().GetEditMenu(self._GetParentFrame()))
-
-        self._treeCtrl.Thaw()
-        wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
+        finally:
+            self._treeCtrl.Thaw()
+            wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
 
 
     def ProjectHasFocus(self):
@@ -2053,6 +2194,11 @@ class ProjectView(wx.lib.docview.View):
         return False
 
 
+    def ClearFolderState(self):
+        config = wx.ConfigBase_Get()
+        config.DeleteGroup(getProjectKeyName(self.GetDocument().GetFilename()))
+        
+
     def SaveFolderState(self, event=None):
         """ Save the open/close state of folders """
 
@@ -2070,25 +2216,32 @@ class ProjectView(wx.lib.docview.View):
 
 
     def LoadFolderState(self):
-        """ Load the open/close state of folders """
+        """ Load the open/close state of folders. """
         self._loading = True
-        
+      
         config = wx.ConfigBase_Get()
-        openFolderData = config.Read(getProjectKeyName(self.GetDocument().GetFilename(), self.GetMode()))
+        openFolderData = config.Read(getProjectKeyName(self.GetDocument().GetFilename(), self.GetMode()), "")
         if openFolderData:
             folderList = eval(openFolderData)
                 
             folderItemList = self._GetFolderItems(self._treeCtrl.GetRootItem())
             for item in folderItemList:
-                f = self._GetItemFolderPath(item)
-                if f in folderList:
+                folderPath = self._GetItemFolderPath(item)
+                if folderPath in folderList:
                     self._treeCtrl.Expand(item)
-##                else:  # not needed, initial state is collapsed
-##                    self._treeCtrl.Collapse(item)
-        else:  # default is to open all folders    
+                else:
+                    self._treeCtrl.Collapse(item)
+
+        else:
+            projectService = wx.GetApp().GetService(ProjectService)
+            
             folderItemList = self._GetFolderItems(self._treeCtrl.GetRootItem())
             for item in folderItemList:
-                self._treeCtrl.Expand(item)
+                folderPath = self._GetItemFolderPath(item)
+                if projectService.FindLogicalViewFolderCollapsedDefault(folderPath):  # get default initial state
+                    self._treeCtrl.Collapse(item)
+                else:
+                    self._treeCtrl.Expand(item)
             
         self._loading = False
 
@@ -2190,7 +2343,7 @@ class ProjectView(wx.lib.docview.View):
                     if len(descr) > 0:
                         descr = descr + _('|')
                     descr = descr + temp.GetDescription() + _(" (") + temp.GetFileFilter() + _(") |") + temp.GetFileFilter()  # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
-            descr = _("All (*.*)|*.*|%s") % descr # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
+            descr = _("All|*.*|%s") % descr # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
         else:
             descr = _("*.*")
 
@@ -2254,7 +2407,7 @@ class ProjectView(wx.lib.docview.View):
                 descr = descr + _('|')
             descr = template.GetDescription() + _(" (") + template.GetFileFilter() + _(")")
             choices.append(descr)
-        choices.insert(0, _("All (*.*)"))  # first item
+        choices.insert(0, _("All"))  # first item
         filterChoice = wx.Choice(frame, -1, size=(250, -1), choices=choices)
         filterChoice.SetSelection(0)
         filterChoice.SetToolTipString(_("Select file type filter."))
@@ -2301,63 +2454,54 @@ class ProjectView(wx.lib.docview.View):
         if status == wx.ID_OK:
             wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
 
-            doc = self.GetDocument()
-            searchSubfolders = subfolderCtrl.IsChecked()
-            dirString = dirCtrl.GetValue()
-
-            if os.path.isfile(dirString):
-                # If they pick a file explicitly, we won't prevent them from adding it even if it doesn't match the filter.
-                # We'll assume they know what they're doing.
-                paths = [dirString]
-            else:
-                paths = []
-
-                index = filterChoice.GetSelection()
-                lastIndex = filterChoice.GetCount()-1
-                if index and index != lastIndex:  # if not All or Any
-                    template = visibleTemplates[index-1]
-
-                # do search in files on disk
-                for root, dirs, files in os.walk(dirString):
-                    if not searchSubfolders and root != dirString:
-                        break
-
-                    for name in files:
-                        if index == 0:  # All
-                            for template in visibleTemplates:
-                                if template.FileMatchesTemplate(name):
-                                    filename = os.path.join(root, name)
-
-                                    # if already in project, don't add it, otherwise undo will remove it from project even though it was already in it.
-                                    if doc.IsFileInProject(filename):
-                                        break
-
-                                    paths.append(filename)
-                                    break
-                        elif index == lastIndex:  # Any
-                            filename = os.path.join(root, name)
-                            # if already in project, don't add it, otherwise undo will remove it from project even though it was already in it.
-                            if not doc.IsFileInProject(filename):
-                                paths.append(filename)
-                        else:  # use selected filter
-                            if template.FileMatchesTemplate(name):
+            try:
+                doc = self.GetDocument()
+                searchSubfolders = subfolderCtrl.IsChecked()
+                dirString = dirCtrl.GetValue()
+    
+                if os.path.isfile(dirString):
+                    # If they pick a file explicitly, we won't prevent them from adding it even if it doesn't match the filter.
+                    # We'll assume they know what they're doing.
+                    paths = [dirString]
+                else:
+                    paths = []
+    
+                    index = filterChoice.GetSelection()
+                    lastIndex = filterChoice.GetCount()-1
+                    if index and index != lastIndex:  # if not All or Any
+                        template = visibleTemplates[index-1]
+    
+                    # do search in files on disk
+                    for root, dirs, files in os.walk(dirString):
+                        if not searchSubfolders and root != dirString:
+                            break
+    
+                        for name in files:
+                            if index == 0:  # All
                                 filename = os.path.join(root, name)
                                 # if already in project, don't add it, otherwise undo will remove it from project even though it was already in it.
                                 if not doc.IsFileInProject(filename):
                                     paths.append(filename)
+                            else:  # use selected filter
+                                if template.FileMatchesTemplate(name):
+                                    filename = os.path.join(root, name)
+                                    # if already in project, don't add it, otherwise undo will remove it from project even though it was already in it.
+                                    if not doc.IsFileInProject(filename):
+                                        paths.append(filename)
+    
+                folderPath = None
+                if self.GetMode() == ProjectView.LOGICAL_MODE:
+                    selections = self._treeCtrl.GetSelections()
+                    if selections:
+                        item = selections[0]
+                        if not self._IsItemFile(item):
+                            folderPath = self._GetItemFolderPath(item)
 
-            folderPath = None
-            if self.GetMode() == ProjectView.LOGICAL_MODE:
-                selections = self._treeCtrl.GetSelections()
-                if selections:
-                    item = selections[0]
-                    if not self._IsItemFile(item):
-                        folderPath = self._GetItemFolderPath(item)
-
-            wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
-
-            doc.GetCommandProcessor().Submit(ProjectAddFilesCommand(doc, paths, folderPath=folderPath))
-            self.Activate()  # after add, should put focus on project editor
+                doc.GetCommandProcessor().Submit(ProjectAddFilesCommand(doc, paths, folderPath=folderPath))
+                self.Activate()  # after add, should put focus on project editor
+                
+            finally:
+                wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
 
 
     def DoAddFilesToProject(self, filePaths, folderPath):
@@ -2385,23 +2529,19 @@ class ProjectView(wx.lib.docview.View):
 
 
     def OnLeftClick(self, event):
-        """ wxBug: If tree has selection, but focus is in another window, single click in tree should do
-            single selection of item at mouse position.  But what it does is just put focus back into the
-            window and all items go from inactive selection to active selection.  Another click on the item
-            either activates double-click or edit for that item.  This behavior is odd.
-            
-            This fix makes gives the tree view the focus and makes the item under the mouse position the
-            only active selection, as expected.
-        """
-        if not self.ProjectHasFocus() and not self.FilesHasFocus() and not event.ShiftDown() and not event.ControlDown() and not event.MetaDown():
-            self._treeCtrl.UnselectAll()
-            event.Skip()
+        """ 
+            wxBug: We also spurious drag events on a single click of on item that is already selected,
+            so the solution was to consume the left click event.  But his broke the single click expand/collapse
+            of a folder, so if it is a folder, we do an event.Skip() to allow the expand/collapse,
+            otherwise we consume the event.
+        """            
+        # if folder let it collapse/expand
+        if wx.Platform == '__WXMSW__':
             item, flags = self._treeCtrl.HitTest(event.GetPosition())
-            self._treeCtrl.SelectItem(item)
-            return
-            
-        event.Skip()
-
+            if item.IsOk() and self._treeCtrl.GetChildrenCount(item, False):
+                event.Skip()
+        else:
+            event.Skip()
 
     def OnRightClick(self, event):
         self.Activate()
@@ -2444,17 +2584,39 @@ class ProjectView(wx.lib.docview.View):
             if not itemID:
                 menu.AppendSeparator()
             else:
-                if itemID == ProjectService.RUN_SELECTED_PM_ID:
-                    menu.Append(ProjectService.RUN_SELECTED_PM_ID, _("Run Process"))
-                    wx.EVT_MENU(self._GetParentFrame(), ProjectService.RUN_SELECTED_PM_ID, self.OnRunSelectedPM)
+                if itemID == ProjectService.RUN_SELECTED_PM_ID and not ACTIVEGRID_BASE_IDE:
+                    webBrowserService = wx.GetApp().GetService(WebBrowserService.WebBrowserService)
+                    if webBrowserService:
+                        if wx.Platform == '__WXMSW__':
+                            menu.Append(ProjectService.RUN_SELECTED_PM_ID, _("Run Process"))
+                            wx.EVT_MENU(self._GetParentFrame(), ProjectService.RUN_SELECTED_PM_ID, self.ProjectServiceProcessEvent)
+
+                        if wx.Platform == '__WXMSW__':
+                            menuLabel = _("Run Process in External Browser")
+                        else:
+                            menuLabel = _("Run Process")
+                        menu.Append(ProjectService.RUN_SELECTED_PM_EXTERNAL_BROWSER_ID, menuLabel)
+                        wx.EVT_MENU(self._GetParentFrame(), ProjectService.RUN_SELECTED_PM_EXTERNAL_BROWSER_ID, self.ProjectServiceProcessEvent)
+                        
+                        if wx.Platform == '__WXMSW__':
+    
+                            if wx.GetApp().GetUseTabbedMDI():
+                                menuLabel = _("Run Process in new Tab")
+                            else:
+                                menuLabel = _("Run Process in new Window")
+                            menu.Append(ProjectService.RUN_SELECTED_PM_INTERNAL_WINDOW_ID, menuLabel)
+                            wx.EVT_MENU(self._GetParentFrame(), ProjectService.RUN_SELECTED_PM_INTERNAL_WINDOW_ID, self.ProjectServiceProcessEvent)
+                        
                 elif itemID == ProjectService.REMOVE_FROM_PROJECT:
                     menu.Append(ProjectService.REMOVE_FROM_PROJECT, _("Remove Selected Files from Project"))
                     wx.EVT_MENU(self._GetParentFrame(), ProjectService.REMOVE_FROM_PROJECT, self.OnClear)
                     wx.EVT_UPDATE_UI(self._GetParentFrame(), ProjectService.REMOVE_FROM_PROJECT, self._GetParentFrame().ProcessUpdateUIEvent)
                 else:
-                    svnService = wx.GetApp().GetService(SVNService.SVNService)
                     item = menuBar.FindItemById(itemID)
                     if item:
+                        if SVN_INSTALLED:
+                            svnService = wx.GetApp().GetService(SVNService.SVNService)
+                            
                         if itemID in svnIDs:
                             if SVN_INSTALLED and svnService:
                                 wx.EVT_MENU(self._GetParentFrame(), itemID, svnService.ProcessEvent)
@@ -2467,21 +2629,35 @@ class ProjectView(wx.lib.docview.View):
         menu.Destroy()
 
 
-    def OnRunSelectedPM(self, event):
+    def ProjectServiceProcessEvent(self, event):
         projectService = wx.GetApp().GetService(ProjectService)
         if projectService:
-            projectService.OnRunProcessModel(event, runSelected=True)
+            projectService.ProcessEvent(event)
 
 
     def OnRename(self, event=None):
         items = self._treeCtrl.GetSelections()
-        if items:
-            self._treeCtrl.EditLabel(items[0])
+        if not items:
+            return
+        item = items[0]
+        if wx.Platform == "__WXGTK__":
+            dlg = wx.TextEntryDialog(self.GetFrame(), _("Enter New Name"), _("Enter New Name"))
+            dlg.CenterOnParent()
+            if dlg.ShowModal() == wx.ID_OK:
+                text = dlg.GetValue()
+                self.ChangeLabel(item, text)
+        else:
+            if items:
+                self._treeCtrl.EditLabel(item)
 
 
     def OnBeginLabelEdit(self, event):
         self._editingSoDontKillFocus = True
         item = event.GetItem()
+        if self._IsItemFile(item):
+            file = self._GetItemFile(item)
+            if file.type == 'xform':
+                event.Veto()
         if (self.GetMode() == ProjectView.PHYSICAL_MODE) and not self._IsItemFile(item):
             event.Veto()
 
@@ -2490,16 +2666,19 @@ class ProjectView(wx.lib.docview.View):
         self._editingSoDontKillFocus = False
         item = event.GetItem()
         newName = event.GetLabel()
-        if not newName:
+        if not self.ChangeLabel(item, newName):
             event.Veto()
-            return
+            
+
+    def ChangeLabel(self, item, newName):
+        if not newName:
+            return False
         if self._IsItemFile(item):
             oldFilePath = self._GetItemFilePath(item)
             newFilePath = os.path.join(os.path.dirname(oldFilePath), newName)
             doc = self.GetDocument()
             if not doc.GetCommandProcessor().Submit(ProjectRenameFileCommand(doc, oldFilePath, newFilePath)):
-                event.Veto()
-                return
+                return False
             self._treeCtrl.SortChildren(self._treeCtrl.GetItemParent(item))
         else:
             oldFolderPath = self._GetItemFolderPath(item)
@@ -2512,26 +2691,25 @@ class ProjectView(wx.lib.docview.View):
                             "Rename Folder",
                             wx.OK | wx.ICON_EXCLAMATION,
                             self.GetFrame())
-                event.Veto()
-                return
+                return False
             doc = self.GetDocument()
             if not doc.GetCommandProcessor().Submit(ProjectRenameFolderCommand(doc, oldFolderPath, newFolderPath)):
-                event.Veto()
-                return
+                return False
             self._treeCtrl.SortChildren(self._treeCtrl.GetItemParent(item))
 
+        return True
+        
 
     def CanPaste(self):
         # wxBug: Should be able to use IsSupported/IsSupportedFormat here
         #fileDataObject = wx.FileDataObject()
         #hasFilesInClipboard = wx.TheClipboard.IsSupportedFormat(wx.FileDataObject)
+        hasFilesInClipboard = False
         if not wx.TheClipboard.IsOpened():
             if wx.TheClipboard.Open():
                 fileDataObject = wx.FileDataObject()
                 hasFilesInClipboard = wx.TheClipboard.GetData(fileDataObject)
                 wx.TheClipboard.Close()
-        else:
-            hasFilesInClipboard = False
         return hasFilesInClipboard
 
 
@@ -2660,7 +2838,12 @@ class ProjectView(wx.lib.docview.View):
 
         if closeFiles or delFiles:
             filesInProject = doc.GetFiles()
-            filesInProject.append(self.GetDocument().GetDeploymentFilepath())  # remove deployment file also.
+            deploymentFilePath = self.GetDocument().GetDeploymentFilepath()
+            if deploymentFilePath:
+                filesInProject.append(deploymentFilePath)  # remove deployment file also.
+                import activegrid.server.secutils as secutils
+                keystoreFilePath = os.path.join(os.path.dirname(deploymentFilePath), secutils.AGKEYSTORE_FILENAME)
+                filesInProject.append(keystoreFilePath)  # remove keystore file also.
                 
             # don't remove self prematurely
             filePath = doc.GetFilename()
@@ -2705,8 +2888,10 @@ class ProjectView(wx.lib.docview.View):
                                       
         filePath = doc.GetFilename()
         
+        self.ClearFolderState()  # remove from registry folder settings
+
         # close project
-        if doc:
+        if doc:            
             doc.Modify(False)  # make sure it doesn't ask to save the project
             if self.GetDocumentManager().CloseDocument(doc, True):
                 self.RemoveCurrentDocumentUpdate()
@@ -2813,11 +2998,7 @@ class ProjectView(wx.lib.docview.View):
                     if not doc and filepath.endswith(PROJECT_EXTENSION):  # project already open
                         self.SetProject(filepath)
                     elif doc:
-                        projectService = wx.GetApp().GetService(ProjectService)
-                        if projectService:
-                            projectService.AddProjectMapping(doc)
-                            if hasattr(doc, "GetModel"):
-                                projectService.AddProjectMapping(doc.GetModel())
+                        AddProjectMapping(doc)
                         
 
         except IOError, (code, message):
@@ -3056,18 +3237,20 @@ class ProjectPropertiesDialog(wx.Dialog):
         tab.SetSizer(spacerGrid)
         notebook.AddPage(tab, _("Physical View"))
 
+        if wx.Platform == "__WXMSW__":
+            notebook.SetPageSize((310,300))
+
         if not ACTIVEGRID_BASE_IDE:
             tab = wx.Panel(notebook, -1)
             self._appInfoCtrl = PropertyService.PropertyCtrl(tab, header=False)
             self._appInfoCtrl.SetDocument(document)
             self._appInfoCtrl.SetModel(document.GetAppInfo())
             sizer = wx.BoxSizer(wx.HORIZONTAL)
-            sizer.Add(self._appInfoCtrl, 1, wx.EXPAND)
+            sizer.Add(self._appInfoCtrl, 1, wx.EXPAND|wx.ALL, PropertyService.LEAVE_MARGIN)
             tab.SetSizer(sizer)
             notebook.AddPage(tab, _("App Info"))
+            self._appInfoCtrl._grid.AutoSizeColumns()
 
-        if wx.Platform == "__WXMSW__":
-            notebook.SetPageSize((310,300))
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(notebook, 0, wx.ALL | wx.EXPAND, SPACE)
@@ -3092,13 +3275,13 @@ class ProjectOptionsPanel(wx.Panel):
         projectSizer.Add(self._projSaveDocsCheckBox, 0, wx.ALL, HALF_SPACE)
         if not ACTIVEGRID_BASE_IDE:
             self._projShowWelcomeCheckBox = wx.CheckBox(self, -1, _("Show Welcome Dialog"))
-            self._projShowWelcomeCheckBox.SetValue(config.ReadInt("RunWelcomeDialog", True))
+            self._projShowWelcomeCheckBox.SetValue(config.ReadInt("RunWelcomeDialog2", True))
             projectSizer.Add(self._projShowWelcomeCheckBox, 0, wx.ALL, HALF_SPACE)
             
             sizer = wx.BoxSizer(wx.HORIZONTAL)
             sizer.Add(wx.StaticText(self, -1, _("Default language for projects:")), 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT, HALF_SPACE)
-            self._langCtrl = wx.Choice(self, -1, choices=deploymentlib.LANGUAGE_LIST)            
-            self._langCtrl.SetStringSelection(config.Read(APP_LAST_LANGUAGE, deploymentlib.LANGUAGE_DEFAULT))
+            self._langCtrl = wx.Choice(self, -1, choices=projectmodel.LANGUAGE_LIST)            
+            self._langCtrl.SetStringSelection(config.Read(APP_LAST_LANGUAGE, projectmodel.LANGUAGE_DEFAULT))
             self._langCtrl.SetToolTipString(_("Programming language to be used throughout the project."))
             sizer.Add(self._langCtrl, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT, MAC_RIGHT_BORDER)
             projectSizer.Add(sizer, 0, wx.ALL, HALF_SPACE)
@@ -3125,7 +3308,7 @@ class ProjectOptionsPanel(wx.Panel):
         config = wx.ConfigBase_Get()
         config.WriteInt("ProjectSaveDocs", self._projSaveDocsCheckBox.GetValue())
         if not ACTIVEGRID_BASE_IDE:
-            config.WriteInt("RunWelcomeDialog", self._projShowWelcomeCheckBox.GetValue())
+            config.WriteInt("RunWelcomeDialog2", self._projShowWelcomeCheckBox.GetValue())
             config.Write(APP_LAST_LANGUAGE, self._langCtrl.GetStringSelection())
 
 
@@ -3140,7 +3323,11 @@ class ProjectService(Service.Service):
     #----------------------------------------------------------------------------
     SHOW_WINDOW = wx.NewId()  # keep this line for each subclass, need unique ID for each Service
     RUN_SELECTED_PM_ID = wx.NewId()
+    RUN_SELECTED_PM_INTERNAL_WINDOW_ID = wx.NewId()
+    RUN_SELECTED_PM_EXTERNAL_BROWSER_ID = wx.NewId()
     RUN_CURRENT_PM_ID = wx.NewId()
+    RUN_CURRENT_PM_INTERNAL_WINDOW_ID = wx.NewId()
+    RUN_CURRENT_PM_EXTERNAL_BROWSER_ID = wx.NewId()
     RENAME_ID = wx.NewId()
     OPEN_SELECTION_ID = wx.NewId()
     REMOVE_FROM_PROJECT = wx.NewId()
@@ -3163,6 +3350,7 @@ class ProjectService(Service.Service):
         self._runHandlers = []
         self._suppressOpenProjectMessages = False
         self._logicalViewDefaults = []
+        self._logicalViewOpenDefaults = []
         self._fileTypeDefaults = []
         self._nameDefaults = []
         self._mapToProject = dict()
@@ -3230,7 +3418,7 @@ class ProjectService(Service.Service):
                 wx.EVT_MENU(frame, ProjectService.ADD_CURRENT_FILE_TO_PROJECT_ID, frame.ProcessEvent)
                 wx.EVT_UPDATE_UI(frame, ProjectService.ADD_CURRENT_FILE_TO_PROJECT_ID, frame.ProcessUpdateUIEvent)
             if not menuBar.FindItemById(ProjectService.ADD_FOLDER_ID):
-                projectMenu.Append(ProjectService.ADD_FOLDER_ID, _("Add Folder to Project"), _("Adds a new folder"))
+                projectMenu.Append(ProjectService.ADD_FOLDER_ID, _("New Folder"), _("Creates a new folder"))
                 wx.EVT_MENU(frame, ProjectService.ADD_FOLDER_ID, frame.ProcessEvent)
                 wx.EVT_UPDATE_UI(frame, ProjectService.ADD_FOLDER_ID, frame.ProcessUpdateUIEvent)
             if not menuBar.FindItemById(ProjectService.CLOSE_PROJECT_ID):
@@ -3309,6 +3497,12 @@ class ProjectService(Service.Service):
         self._mapToProject[key] = projectDoc
         
 
+    def RemoveProjectMapping(self, key):
+        """ Remove mapping from model or document to project.  """
+        if self._mapToProject.has_key(key):
+            del self._mapToProject[key]
+        
+
     #----------------------------------------------------------------------------
     # Default Logical View Folder Methods
     #----------------------------------------------------------------------------
@@ -3322,6 +3516,18 @@ class ProjectService(Service.Service):
             if filename.endswith(pattern):
                 return folder
         return None
+
+
+    def AddLogicalViewFolderCollapsedDefault(self, folderName, collapsed=True):
+        # default is collapsed, don't add to list if collapse is True
+        if not collapsed:
+            self._logicalViewOpenDefaults.append(folderName)
+        
+
+    def FindLogicalViewFolderCollapsedDefault(self, folderName):
+        if folderName in self._logicalViewOpenDefaults:
+            return False
+        return True
 
 
     #----------------------------------------------------------------------------
@@ -3406,8 +3612,20 @@ class ProjectService(Service.Service):
         if id == ProjectService.RUN_SELECTED_PM_ID:
             self.OnRunProcessModel(event, runSelected=True)
             return True
+        elif id == ProjectService.RUN_SELECTED_PM_INTERNAL_WINDOW_ID:
+            self.OnRunProcessModel(event, runSelected=True, newWindow=True, forceInternal=True)
+            return True
+        elif id == ProjectService.RUN_SELECTED_PM_EXTERNAL_BROWSER_ID:
+            self.OnRunProcessModel(event, runSelected=True, newWindow=True, forceExternal=True)
+            return True
         elif id == ProjectService.RUN_CURRENT_PM_ID:
             self.OnRunProcessModel(event, runCurrentFile=True)
+            return True
+        elif id == ProjectService.RUN_CURRENT_PM_INTERNAL_WINDOW_ID:
+            self.OnRunProcessModel(event, runCurrentFile=True, newWindow=True, forceInternal=True)
+            return True
+        elif id == ProjectService.RUN_CURRENT_PM_EXTERNAL_BROWSER_ID:
+            self.OnRunProcessModel(event, runCurrentFile=True, newWindow=True, forceExternal=True)
             return True
         elif id == ProjectService.ADD_CURRENT_FILE_TO_PROJECT_ID:
             self.OnAddCurrentFileToProject(event)
@@ -3430,27 +3648,31 @@ class ProjectService(Service.Service):
             return True
 
         id = event.GetId()
-        if (id == ProjectService.RUN_SELECTED_PM_ID
-        or id == ProjectService.RUN_CURRENT_PM_ID):
+        if id in [ProjectService.RUN_SELECTED_PM_ID,
+        ProjectService.RUN_SELECTED_PM_INTERNAL_WINDOW_ID,
+        ProjectService.RUN_SELECTED_PM_EXTERNAL_BROWSER_ID,
+        ProjectService.RUN_CURRENT_PM_ID,
+        ProjectService.RUN_CURRENT_PM_INTERNAL_WINDOW_ID,
+        ProjectService.RUN_CURRENT_PM_EXTERNAL_BROWSER_ID]:
             event.Enable(True)
             return True
         elif id == ProjectService.ADD_CURRENT_FILE_TO_PROJECT_ID:
             event.Enable(self._CanAddCurrentFileToProject())
             return True
-        elif (id == ProjectService.ADD_FILES_TO_PROJECT_ID
-        or id == ProjectService.ADD_DIR_FILES_TO_PROJECT_ID
-        or id == ProjectService.RENAME_ID
-        or id == ProjectService.OPEN_SELECTION_ID
-        or id == ProjectService.DELETE_FILE_ID):
+        elif id in [ProjectService.ADD_FILES_TO_PROJECT_ID,
+        ProjectService.ADD_DIR_FILES_TO_PROJECT_ID,
+        ProjectService.RENAME_ID,
+        ProjectService.OPEN_SELECTION_ID,
+        ProjectService.DELETE_FILE_ID]:
             event.Enable(False)
             return True
         elif id == ProjectService.PROJECT_PROPERTIES_ID:
             event.Enable(self._HasOpenedProjects())
             return True
-        elif (id == wx.lib.pydocview.FilePropertiesService.PROPERTIES_ID
-        or id == ProjectService.ADD_FOLDER_ID
-        or id == ProjectService.DELETE_PROJECT_ID
-        or id == ProjectService.CLOSE_PROJECT_ID):
+        elif id in [wx.lib.pydocview.FilePropertiesService.PROPERTIES_ID,
+        ProjectService.ADD_FOLDER_ID,
+        ProjectService.DELETE_PROJECT_ID,
+        ProjectService.CLOSE_PROJECT_ID]:
             if self.GetView():
                 return self.GetView().ProcessUpdateUIEvent(event)
             else:
@@ -3459,7 +3681,7 @@ class ProjectService(Service.Service):
             return False
 
 
-    def OnRunProcessModel(self, event, runSelected=False, runCurrentFile=False):
+    def OnRunProcessModel(self, event, runSelected=False, runCurrentFile=False, newWindow=False, forceExternal=False, forceInternal=False):
         project = self.GetCurrentProject()
 
         if runCurrentFile:
@@ -3537,14 +3759,19 @@ class ProjectService(Service.Service):
                 fileToRun = files[res]
             else:
                 fileToRun = files[0]
+                
+            try:
+                deployFilePath = project.GenerateDeployment()
+            except DataServiceExistenceException, e:
+                dataSourceName = str(e)
+                self.PromptForMissingDataSource(dataSourceName)
+                return
+            self.RunProcessModel(fileToRun, project.GetAppInfo().language, deployFilePath, newWindow, forceExternal, forceInternal)
 
-            deployFilePath = project.GenerateDeployment()
-            self.RunProcessModel(fileToRun, project.GetAppInfo().language, deployFilePath)
 
-
-    def RunProcessModel(self, fileToRun, language, deployFilePath):
+    def RunProcessModel(self, fileToRun, language, deployFilePath, newWindow=True, forceExternal=False, forceInternal=False):
         for runHandler in self.GetRunHandlers():
-            if runHandler.RunProjectFile(fileToRun, language, deployFilePath):
+            if runHandler.RunProjectFile(fileToRun, language, deployFilePath, newWindow, forceExternal, forceInternal):
                 return
         os.system('"' + fileToRun + '"')
 
@@ -3623,13 +3850,24 @@ class ProjectService(Service.Service):
                     retval.append(document)
                 elif document.IsFileInProject(filename):
                     retval.append(document)
+                    
+        # make sure current project is first in list
+        currProject = self.GetCurrentProject()
+        if currProject and currProject in retval:
+            retval.remove(currProject)
+            retval.insert(0, currProject)
+                
         return retval
 
 
     def OnAddCurrentFileToProject(self, event):
-        file = self.GetDocumentManager().GetCurrentDocument().GetFilename()
-        document = self.GetView().GetDocument()
-        document.GetCommandProcessor().Submit(ProjectAddFilesCommand(document, [file]))
+        doc = self.GetDocumentManager().GetCurrentDocument()
+        file = doc.GetFilename()
+        projectDoc = self.GetView().GetDocument()
+        projectDoc.GetCommandProcessor().Submit(ProjectAddFilesCommand(projectDoc, [file]))
+
+        AddProjectMapping(doc, projectDoc)
+
         self.GetView().Activate()  # after add, should put focus on project editor
 
 
@@ -3649,10 +3887,13 @@ class ProjectService(Service.Service):
             if docString:
                 doc = None
                 docList = eval(docString)
+                self.GetView()._treeCtrl.Freeze()
+
                 for fileName in docList:
                     if isinstance(fileName, types.StringTypes):
                         if os.path.exists(fileName):
                             doc = self.GetDocumentManager().CreateDocument(fileName, wx.lib.docview.DOC_SILENT|wx.lib.docview.DOC_OPEN_ONCE)
+                self.GetView()._treeCtrl.Thaw()
 
                 if doc:
                     openedDocs = True
@@ -3662,6 +3903,38 @@ class ProjectService(Service.Service):
                     self.GetView().SetProject(currProject)
 
         return openedDocs
+
+
+    def PromptForMissingDataSource(self, dataSourceName):
+        prompt = "A required Data Source '%s' was not found.  The process cannot be run without this Data Source.\n\nWould you like to configure this Data Source now?" % dataSourceName
+        msgTitle = "Unknown Data Source"
+        dataSourceMissingDlg = wx.MessageDialog(self.GetView().GetFrame(), prompt, msgTitle, wx.YES_NO|wx.ICON_QUESTION)
+        dataSourceMissingDlg.CenterOnParent()
+        if dataSourceMissingDlg.ShowModal() == wx.ID_YES:
+            dataSourceMissingDlg.Destroy()
+            self._AddDataSource(dataSourceName)
+        else:
+            dataSourceMissingDlg.Destroy()
+
+
+    def _AddDataSource(self, defaultDataSourceName=None):
+        dataSourceService = wx.GetApp().GetService(DataModelEditor.DataSourceService)
+        dsChoices = dataSourceService.getDataSourceNames()
+        dlg = DataModelEditor.AddDataSourceDialog(self.GetView().GetFrame(), 'Add Data Source', dsChoices, defaultDataSourceName)
+        dlg.CenterOnParent()
+        if dlg.ShowModal() == wx.ID_OK:
+            dataSource = dlg.GetDataSource()
+            dlg.Destroy()
+        else:
+            dlg.Destroy()
+            return False
+        if (dataSource == None):
+            wx.MessageBox(_("Error getting data source."), self._title)
+        dataSourceService.updateDataSource(dataSource)
+        if ((dsChoices == None) or (len(dsChoices) <= 0)):
+            wx.ConfigBase_Get().Write(DataModelEditor.SchemaOptionsPanel.DEFAULT_DATASOURCE_KEY, dataSource.name)
+        dataSourceService.save()
+        return True
 
 
 #----------------------------------------------------------------------------
