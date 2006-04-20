@@ -812,7 +812,14 @@ void wxTextCtrl::WriteText( const wxString &text )
 
     if ( m_windowStyle & wxTE_MULTILINE )
     {
-        // TODO: Call whatever is needed to delete the selection.
+        // First remove the selection if there is one
+        // TODO:  Is there an easier GTK specific way to do this?
+        long from, to;
+        GetSelection(&from, &to);
+        if (from != to)
+            Remove(from, to);
+
+        // Insert the text
         wxGtkTextInsert( m_text, m_buffer, m_defaultStyle, buffer );
 
         GtkAdjustment *adj = gtk_scrolled_window_get_vadjustment( GTK_SCROLLED_WINDOW(m_widget) );
