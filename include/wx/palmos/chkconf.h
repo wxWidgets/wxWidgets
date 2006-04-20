@@ -262,6 +262,9 @@
 #undef wxUSE_STATLINE
 #define wxUSE_STATLINE 0
 
+#undef wxUSE_TEXTBUFFER
+#define wxUSE_TEXTBUFFER 0
+
 #undef wxUSE_TEXTCTRL
 #define wxUSE_TEXTCTRL 0
 
