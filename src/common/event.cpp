@@ -25,8 +25,8 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
     #include "wx/list.h"
+    #include "wx/app.h"
 
     #if wxUSE_GUI
         #include "wx/control.h"

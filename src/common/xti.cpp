@@ -21,13 +21,13 @@
 
 #ifndef WX_PRECOMP
     #include "wx/object.h"
+    #include "wx/list.h"
     #include "wx/hash.h"
 #endif
 
 #include "wx/xti.h"
 #include "wx/xml/xml.h"
 #include "wx/tokenzr.h"
-#include "wx/list.h"
 #include <string.h>
 
 #include "wx/beforestd.h"

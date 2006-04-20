@@ -16,6 +16,7 @@
 #if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WXPRECOMP
+    #include "wx/list.h"
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/dcclient.h"
@@ -24,7 +25,6 @@
 
 #include "wx/html/htmlwin.h"
 #include "wx/html/htmlproc.h"
-#include "wx/list.h"
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
 #include "wx/timer.h"
@@ -1612,4 +1612,3 @@ IMPLEMENT_DYNAMIC_CLASS(wxHtmlWinModule, wxModule)
 FORCE_WXHTML_MODULES()
 
 #endif // wxUSE_HTML
-

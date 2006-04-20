@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        generic/accel.cpp
+// Name:        src/generic/accel.cpp
 // Purpose:     generic implementation of wxAcceleratorTable class
 // Author:      Robert Roebling
 // Modified:    VZ pn 31.05.01: use typed lists, Unicode cleanup, Add/Remove
@@ -26,8 +26,8 @@
 #if wxUSE_ACCEL
 
 #ifndef WX_PRECOMP
-    #include "wx/event.h"
     #include "wx/list.h"
+    #include "wx/event.h"
 #endif // WX_PRECOMP
 
 #include "wx/accel.h"
@@ -218,4 +218,3 @@ wxObjectRefData *wxAcceleratorTable::CloneRefData(const wxObjectRefData *data) c
 }
 
 #endif // wxUSE_ACCEL
-

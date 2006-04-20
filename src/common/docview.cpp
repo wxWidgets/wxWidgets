@@ -21,19 +21,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_DOC_VIEW_ARCHITECTURE
 
 #ifndef WX_PRECOMP
+    #include "wx/list.h"
     #include "wx/string.h"
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/dc.h"
     #include "wx/dialog.h"
     #include "wx/menu.h"
-    #include "wx/list.h"
     #include "wx/filedlg.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -50,8 +50,8 @@
 #endif
 
 #if wxUSE_PRINTING_ARCHITECTURE
-  #include "wx/prntbase.h"
-  #include "wx/printdlg.h"
+    #include "wx/prntbase.h"
+    #include "wx/printdlg.h"
 #endif
 
 #include "wx/msgdlg.h"
@@ -66,14 +66,14 @@
 #include <string.h>
 
 #if wxUSE_STD_IOSTREAM
-  #include "wx/ioswrap.h"
-  #if wxUSE_IOSTREAMH
-    #include <fstream.h>
-  #else
-    #include <fstream>
-  #endif
+    #include "wx/ioswrap.h"
+    #if wxUSE_IOSTREAMH
+        #include <fstream.h>
+    #else
+        #include <fstream>
+    #endif
 #else
-  #include "wx/wfstream.h"
+    #include "wx/wfstream.h"
 #endif
 
 // ----------------------------------------------------------------------------

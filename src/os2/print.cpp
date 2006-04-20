@@ -11,14 +11,14 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #ifndef WX_PRECOMP
     #include <stdio.h>
     #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
 #endif
-
-#if wxUSE_PRINTING_ARCHITECTURE
 
 #include "wx/os2/printos2.h"
 #include "wx/generic/prntdlgg.h"

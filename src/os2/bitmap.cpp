@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bitmap.cpp
+// Name:        src/os2/bitmap.cpp
 // Purpose:     wxBitmap
 // Author:      David Webster
 // Modified by:
@@ -27,7 +27,6 @@
 #include "wx/os2/private.h"
 #include "wx/log.h"
 
-//#include "wx/msw/dib.h"
 #include "wx/image.h"
 #include "wx/xpmdecod.h"
 
@@ -90,9 +89,7 @@ void wxBitmap::Init()
     //
 } // end of wxBitmap::Init
 
-bool wxBitmap::CopyFromIconOrCursor(
-  const wxGDIImage&                 rIcon
-)
+bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& rIcon)
 {
     HPOINTER                        hIcon = (HPOINTER)rIcon.GetHandle();
     POINTERINFO                     SIconInfo;

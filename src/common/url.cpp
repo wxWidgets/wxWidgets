@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        url.cpp
+// Name:        src/common/url.cpp
 // Purpose:     URL parser
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -13,13 +13,16 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_URL
 
+#ifndef WX_PRECOMP
+    #include "wx/list.h"
+#endif
+
 #include "wx/string.h"
-#include "wx/list.h"
 #include "wx/utils.h"
 #include "wx/module.h"
 #include "wx/url.h"
@@ -328,7 +331,7 @@ void wxURL::SetDefaultProxy(const wxString& url_proxy)
             return;
 
         wxString hostname = tmp_str(0, pos),
-        port = tmp_str(pos+1, tmp_str.Length()-pos);
+        port = tmp_str(pos+1, tmp_str.length()-pos);
         wxIPV4address addr;
 
         if (!addr.Hostname(hostname))
@@ -371,7 +374,7 @@ void wxURL::SetProxy(const wxString& url_proxy)
             return;
 
         hostname = tmp_str(0, pos);
-        port = tmp_str(pos+1, tmp_str.Length()-pos);
+        port = tmp_str(pos+1, tmp_str.length()-pos);
 
         addr.Hostname(hostname);
         addr.Service(port);

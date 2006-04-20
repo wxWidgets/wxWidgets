@@ -21,11 +21,11 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/list.h"
+    #include "wx/list.h"
 #endif
 
 #include "wx/hash.h"

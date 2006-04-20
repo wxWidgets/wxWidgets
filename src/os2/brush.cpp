@@ -13,12 +13,12 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/list.h"
-#include "wx/utils.h"
-#include "wx/app.h"
-#include "wx/brush.h"
-#include "wx/log.h"
+    #include <stdio.h>
+    #include "wx/list.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+    #include "wx/brush.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/os2/private.h"
@@ -34,9 +34,7 @@ wxBrushRefData::wxBrushRefData()
     memset(&m_vBundle, '\0', sizeof(AREABUNDLE));
 } // end of wxBrushRefData::wxBrushRefData
 
-wxBrushRefData::wxBrushRefData(
-  const wxBrushRefData&             rData
-)
+wxBrushRefData::wxBrushRefData(const wxBrushRefData& rData)
 {
     m_nStyle   = rData.m_nStyle;
     m_vStipple = rData.m_vStipple;
@@ -75,9 +73,7 @@ wxBrush::wxBrush(
     RealizeResource();
 } // end of wxBrush::wxBrush
 
-wxBrush::wxBrush(
-  const wxBitmap&                   rStipple
-)
+wxBrush::wxBrush(const wxBitmap& rStipple)
 {
     m_refData = new wxBrushRefData;
 

@@ -18,9 +18,9 @@
 #if wxUSE_HELP && !defined(__WXWINCE__) && (!defined(__WXMAC__) || defined(__WXMAC_OSX__))
 
 #ifndef WX_PRECOMP
+    #include "wx/list.h"
     #include "wx/string.h"
     #include "wx/utils.h"
-    #include "wx/list.h"
     #include "wx/intl.h"
     #include "wx/msgdlg.h"
     #include "wx/choicdlg.h"

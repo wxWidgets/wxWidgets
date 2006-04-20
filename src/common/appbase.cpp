@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/base/appbase.cpp
+// Name:        src/common/appbase.cpp
 // Purpose:     implements wxAppConsole class
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -25,9 +25,9 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/list.h"
     #include "wx/app.h"
     #include "wx/intl.h"
-    #include "wx/list.h"
     #include "wx/log.h"
 #endif //WX_PRECOMP
 
@@ -269,7 +269,7 @@ void wxAppConsole::ProcessPendingEvents()
     if ( !wxPendingEventsLocker )
         return;
 #endif
-    
+
     // ensure that we're the only thread to modify the pending events list
     wxENTER_CRIT_SECT( *wxPendingEventsLocker );
 
@@ -289,7 +289,7 @@ void wxAppConsole::ProcessPendingEvents()
         // In ProcessPendingEvents(), new handlers might be add
         // and we can safely leave the critical section here.
         wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
-        
+
         handler->ProcessPendingEvents();
 
         wxENTER_CRIT_SECT( *wxPendingEventsLocker );
@@ -839,4 +839,3 @@ void ShowAssertDialog(const wxChar *szFile,
 }
 
 #endif // __WXDEBUG__
-

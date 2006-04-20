@@ -323,10 +323,10 @@ void wxFontRefData::Init(
     m_vEncoding   = vEncoding;
     m_hFont       = 0;
 
-    m_bNativeFontInfoOk = FALSE;
+    m_bNativeFontInfoOk = false;
 
     m_nFontId     = 0;
-    m_bTemporary  = FALSE;
+    m_bTemporary  = false;
     m_pFM         = (PFONTMETRICS)NULL;
     m_hPS         = NULLHANDLE;
     m_nNumFonts   = 0;
@@ -359,7 +359,7 @@ void wxFontRefData::Init(
         m_hPS = (HPS)hPS;
 
     m_nFontId     = 0;
-    m_bTemporary  = FALSE;
+    m_bTemporary  = false;
     m_pFM         = (PFONTMETRICS)NULL;
     m_nNumFonts   = 0;
 } // end of wxFontRefData::Init
@@ -782,56 +782,56 @@ bool wxNativeFontInfo::FromString( const wxString& rsStr )
     wxString                        sToken = vTokenizer.GetNextToken();
 
     if (sToken != _T('0'))
-        return FALSE;
+        return false;
 
     sToken = vTokenizer.GetNextToken();
     if (!sToken.ToLong(&lVal))
-        return FALSE;
+        return false;
     fm.lEmHeight = lVal;
 
     sToken = vTokenizer.GetNextToken();
     if (!sToken.ToLong(&lVal))
-        return FALSE;
+        return false;
     fa.lAveCharWidth = lVal;
 
     sToken = vTokenizer.GetNextToken();
     if (!sToken.ToLong(&lVal))
-        return FALSE;
+        return false;
     fa.fsSelection = (USHORT)lVal;
 
     sToken = vTokenizer.GetNextToken();
     if (!sToken.ToLong(&lVal))
-        return FALSE;
+        return false;
     fa.fsType = (USHORT)lVal;
 
     sToken = vTokenizer.GetNextToken();
     if (!sToken.ToLong(&lVal))
-        return FALSE;
+        return false;
     fa.fsFontUse = (USHORT)lVal;
 
     sToken = vTokenizer.GetNextToken();
     if (!sToken.ToLong(&lVal))
-        return FALSE;
+        return false;
     fa.idRegistry = (USHORT)lVal;
 
     sToken = vTokenizer.GetNextToken();
     if (!sToken.ToLong(&lVal))
-        return FALSE;
+        return false;
     fa.usCodePage = (USHORT)lVal;
 
     sToken = vTokenizer.GetNextToken();
     if (!sToken.ToLong(&lVal))
-        return FALSE;
+        return false;
     fa.lMatch = lVal;
 
     sToken = vTokenizer.GetNextToken();
     if (!sToken.ToLong(&lVal))
-        return FALSE;
+        return false;
     fn.usWeightClass = (USHORT)lVal;
 
     sToken = vTokenizer.GetNextToken();
     if(!sToken)
-        return FALSE;
+        return false;
     wxStrcpy((wxChar*)fa.szFacename, sToken.c_str());
     return true;
 } // end of wxNativeFontInfo::FromString
@@ -1103,7 +1103,7 @@ int wxFont::GetWeight() const
 
 bool wxFont::GetUnderlined() const
 {
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
 
     return M_FONTDATA->GetUnderlined();
 } // end of wxFont::GetUnderlined

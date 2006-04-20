@@ -19,8 +19,8 @@
 #if wxUSE_TIMER
 
 #ifndef WX_PRECOMP
-    #include "wx/window.h"
     #include "wx/list.h"
+    #include "wx/window.h"
     #include "wx/event.h"
     #include "wx/app.h"
     #include "wx/intl.h"
@@ -98,4 +98,3 @@ void WINAPI wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
 }
 
 #endif // wxUSE_TIMER
-

@@ -18,6 +18,10 @@
 
 #if wxUSE_URL_NATIVE
 
+#ifndef WX_PRECOMP
+    #include "wx/list.h"
+#endif
+
 #if !wxUSE_PROTOCOL_HTTP
 #include "wx/protocol/protocol.h"
 
@@ -60,7 +64,6 @@ USE_PROTOCOL(wxHTTPDummyProto)
 #endif
 
 #include "wx/string.h"
-#include "wx/list.h"
 #include "wx/utils.h"
 #include "wx/module.h"
 #include "wx/url.h"

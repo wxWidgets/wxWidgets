@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        artprov.cpp
+// Name:        src/common/artprov.cpp
 // Purpose:     wxArtProvider class
 // Author:      Vaclav Slavik
 // Modified by:
@@ -21,15 +21,16 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/log.h"
     #include "wx/list.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/artprov.h"
 #include "wx/hashmap.h"
 #include "wx/module.h"
+
 #if wxUSE_IMAGE
-#include "wx/image.h"
+    #include "wx/image.h"
 #endif
 
 // ===========================================================================
@@ -240,7 +241,7 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
     else if (client == wxART_BUTTON)
         return wxSize(16, 15);
     else // wxART_OTHER or perhaps a user's client, no specified size
-        return wxDefaultSize;      
+        return wxDefaultSize;
 #endif // GTK+ 2/else
 }
 

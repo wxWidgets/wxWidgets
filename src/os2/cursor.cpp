@@ -13,12 +13,12 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/list.h"
-#include "wx/utils.h"
-#include "wx/app.h"
-#include "wx/cursor.h"
-#include "wx/icon.h"
+    #include <stdio.h>
+    #include "wx/list.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+    #include "wx/cursor.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/os2/private.h"

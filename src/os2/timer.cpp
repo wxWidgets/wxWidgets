@@ -13,8 +13,8 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/window.h"
     #include "wx/list.h"
+    #include "wx/window.h"
     #include "wx/event.h"
     #include "wx/app.h"
 #endif
@@ -96,18 +96,13 @@ void wxTimer::Notify()
     (void)m_owner->ProcessEvent(vEvent);
 } // end of wxTimer::Notify
 
-bool wxTimer::Start(
-  int                               nMilliseconds
-, bool                              bOneShot
-)
+bool wxTimer::Start( int nMilliseconds, bool bOneShot )
 {
-    (void)wxTimerBase::Start( nMilliseconds
-                             ,bOneShot
-                            );
+    (void)wxTimerBase::Start( nMilliseconds, bOneShot );
 
-    wxCHECK_MSG( m_milli > 0L, FALSE, wxT("invalid value for timer") );
+    wxCHECK_MSG( m_milli > 0L, false, wxT("invalid value for timer") );
 
-    wxWindow*                       pWin = NULL;
+    wxWindow* pWin = NULL;
 
     if (m_owner)
     {
@@ -148,7 +143,7 @@ bool wxTimer::Start(
     {
         wxLogSysError(_("Couldn't create a timer"));
 
-        return(FALSE);
+        return false;
     }
 }
 

@@ -12,13 +12,17 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/list.h"
+#endif
+
 #include "wx/cursor.h"
 #include "wx/app.h"
 #include "wx/utils.h"
-#include "wx/list.h"
 #include "wx/window.h"
+
 #if wxUSE_IMAGE
-#include "wx/image.h"
+    #include "wx/image.h"
 #endif
 
 #ifdef __VMS__

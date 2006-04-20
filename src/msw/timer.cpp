@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/timer.cpp
+// Name:        src/msw/timer.cpp
 // Purpose:     wxTimer implementation
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin (use hash map instead of list, global rewrite)
@@ -19,8 +19,8 @@
 #if wxUSE_TIMER
 
 #ifndef WX_PRECOMP
-    #include "wx/window.h"
     #include "wx/list.h"
+    #include "wx/window.h"
     #include "wx/event.h"
     #include "wx/app.h"
     #include "wx/intl.h"
@@ -162,4 +162,3 @@ wxTimerProc(HWND WXUNUSED(hwnd),
 }
 
 #endif // wxUSE_TIMER
-

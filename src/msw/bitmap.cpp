@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////
-// Name:        bitmap.cpp
+// Name:        src/msw/bitmap.cpp
 // Purpose:     wxBitmap
 // Author:      Julian Smart
 // Modified by:
