@@ -36,6 +36,7 @@ PARKING_VERTICAL = 1
 PARKING_HORIZONTAL = 2
 PARKING_OFFSET = 30    # space between shapes
 
+FORCE_REDRAW_METHOD = "ForceRedraw"
 
 def GetRawModel(model):
     if hasattr(model, "GetRawModel"):
@@ -85,6 +86,7 @@ class CanvasView(wx.lib.docview.View):
         self._propShape = None
         self._maxWidth = 2000
         self._maxHeight = 16000
+        self._valetParking = False
 
 
     def OnDraw(self, dc):
@@ -195,6 +197,16 @@ class CanvasView(wx.lib.docview.View):
         self.SetPropertyModel(None)
                   
 
+    def SetLastRightClick(self, x, y):
+        self._lastRightClick = (x,y)
+        
+
+    def GetLastRightClick(self):
+        if hasattr(self, "_lastRightClick"):
+            return self._lastRightClick
+        return (-1,-1)
+        
+
     def OnKeyPressed(self, event):
         key = event.KeyCode()
         if key == wx.WXK_DELETE:
@@ -211,6 +223,7 @@ class CanvasView(wx.lib.docview.View):
         dc = wx.ClientDC(self._canvas)
         self._canvas.PrepareDC(dc)
         x, y = event.GetLogicalPosition(dc)  # this takes into account scrollbar offset
+        self.SetLastRightClick(x, y)
         shape = self._canvas.FindShape(x, y)[0]
         
         model = None
@@ -260,12 +273,15 @@ class CanvasView(wx.lib.docview.View):
             pass
         else:
             # click on empty part of canvas, deselect everything
+            forceRedrawShapes = []
             needRefresh = False
             for shape in self._diagram.GetShapeList():
                 if hasattr(shape, "GetModel"):
                     if shape.Selected():
                         needRefresh = True
                         shape.Select(False, dc)
+                        if hasattr(shape, FORCE_REDRAW_METHOD):
+                            forceRedrawShapes.append(shape)
             if needRefresh:
                 self._canvas.Redraw(dc)
 
@@ -274,7 +290,8 @@ class CanvasView(wx.lib.docview.View):
         if len(self.GetSelection()) == 0:
             self.SetPropertyShape(None)
 
-
+        for shape in forceRedrawShapes:
+            shape.ForceRedraw()
 
     def OnLeftDoubleClick(self, event):
         propertyService = wx.GetApp().GetService(PropertyService.PropertyService)
@@ -401,8 +418,20 @@ class CanvasView(wx.lib.docview.View):
         dc.EndDrawing()
 
 
+    def SetValetParking(self, enable=True):
+        """ If valet parking is enabled, remember last parking spot and try for a spot near it """
+        self._valetParking = enable
+        if enable:
+            self._valetPosition = None
+        
+
     def FindParkingSpot(self, width, height, parking=PARKING_HORIZONTAL, x=PARKING_OFFSET, y=PARKING_OFFSET):
-        """ given a width and height, find a upper left corner where shape can be parked without overlapping other shape """
+        """
+            Given a width and height, find a upper left corner where shape can be parked without overlapping other shape
+        """
+        if self._valetParking and self._valetPosition:
+            x, y = self._valetPosition
+        
         max = 700  # max distance to the right where we'll place tables
         noParkingSpot = True
 
@@ -422,6 +451,9 @@ class CanvasView(wx.lib.docview.View):
             else:
                 noParkingSpot = False
 
+        if self._valetParking:
+            self._valetPosition = (x, y)
+            
         return x, y
 
 
@@ -518,7 +550,8 @@ class CanvasView(wx.lib.docview.View):
                         self._diagram.RemoveShape(line)
                         line.Delete()
                     
-            shape.RemoveFromCanvas(self._canvas)
+            if self._canvas:
+                shape.RemoveFromCanvas(self._canvas)
             self._diagram.RemoveShape(shape)
             shape.Delete()
 
@@ -697,6 +730,9 @@ class CanvasView(wx.lib.docview.View):
             if (self._propShape._textColourName in ["BLACK", "WHITE"]):  # Would use GetTextColour() but it is broken
                 self._propShape.SetTextColour("WHITE", 0)
             self._propShape.Draw(dc)
+
+            if hasattr(self._propShape, FORCE_REDRAW_METHOD):
+                self._propShape.ForceRedraw()
 
         dc.EndDrawing()
 

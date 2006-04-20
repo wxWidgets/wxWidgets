@@ -147,7 +147,11 @@ class OutlineView(Service.ServiceView):
             return
 
         treeCtrl = self.GetControl()
+        
         parentItem = treeCtrl.GetRootItem()
+        if not parentItem:
+            return
+            
         if expanded[0] != treeCtrl.GetItemText(parentItem):
             return
 
@@ -157,8 +161,7 @@ class OutlineView(Service.ServiceView):
                 treeCtrl.Expand(child)
             (child, cookie) = treeCtrl.GetNextChild(parentItem, cookie)
 
-        if parentItem:
-            treeCtrl.EnsureVisible(parentItem)
+        treeCtrl.EnsureVisible(parentItem)
 
 
 class OutlineTreeCtrl(wx.TreeCtrl):
@@ -267,7 +270,7 @@ class OutlineTreeCtrl(wx.TreeCtrl):
 
         if self.ItemHasChildren(item):
             child, cookie = self.GetFirstChild(item)
-            while child and child.IsOk():
+            while child.IsOk():
                 self.FindDistanceToTreeItems(child, position, distances, items)
                 child, cookie = self.GetNextChild(item, cookie)
         return False

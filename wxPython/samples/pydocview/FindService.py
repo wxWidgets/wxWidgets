@@ -121,6 +121,7 @@ class FindService(wx.lib.pydocview.DocService):
                 self._findDialog = None
 
             self._replaceDialog = FindReplaceDialog(self.GetDocumentManager().FindSuitableParent(), -1, _("Replace"), size=(320,200), findString=findString)
+            self._replaceDialog.CenterOnParent()
             self._replaceDialog.Show(True)
         else:
             if self._replaceDialog != None:
@@ -129,6 +130,7 @@ class FindService(wx.lib.pydocview.DocService):
                 self._replaceDialog = None
 
             self._findDialog = FindDialog(self.GetDocumentManager().FindSuitableParent(), -1, _("Find"), size=(320,200), findString=findString)
+            self._findDialog.CenterOnParent()
             self._findDialog.Show(True)
 
 
@@ -152,6 +154,7 @@ class FindService(wx.lib.pydocview.DocService):
         """ Display Goto Line Number dialog box """
         line = -1
         dialog = wx.TextEntryDialog(parent, _("Enter line number to go to:"), _("Go to Line"))
+        dialog.CenterOnParent()
         if dialog.ShowModal() == wx.ID_OK:
             try:
                 line = int(dialog.GetValue())
@@ -356,7 +359,10 @@ class FindDialog(wx.Dialog):
         wx.EVT_BUTTON(self, FindService.FINDONE_ID, self.OnActionEvent)
         cancelBtn = wx.Button(self, wx.ID_CANCEL)
         wx.EVT_BUTTON(self, wx.ID_CANCEL, self.OnClose)
-        buttonSizer.Add(findBtn, 0, wx.BOTTOM, HALF_SPACE)
+        BTM_SPACE = HALF_SPACE
+        if wx.Platform == "__WXMAC__":
+            BTM_SPACE = SPACE
+        buttonSizer.Add(findBtn, 0, wx.BOTTOM, BTM_SPACE)
         buttonSizer.Add(cancelBtn, 0)
         gridSizer.Add(buttonSizer, pos=(0,2), span=(3,1))
 
@@ -455,9 +461,14 @@ class FindReplaceDialog(FindDialog):
         wx.EVT_BUTTON(self, FindService.REPLACEONE_ID, self.OnActionEvent)
         replaceAllBtn = wx.Button(self, FindService.REPLACEALL_ID, _("Replace All"))
         wx.EVT_BUTTON(self, FindService.REPLACEALL_ID, self.OnActionEvent)
-        buttonSizer.Add(findBtn, 0, wx.BOTTOM, HALF_SPACE)
-        buttonSizer.Add(replaceBtn, 0, wx.BOTTOM, HALF_SPACE)
-        buttonSizer.Add(replaceAllBtn, 0, wx.BOTTOM, HALF_SPACE)
+        
+        BTM_SPACE = HALF_SPACE
+        if wx.Platform == "__WXMAC__":
+            BTM_SPACE = SPACE
+            
+        buttonSizer.Add(findBtn, 0, wx.BOTTOM, BTM_SPACE)
+        buttonSizer.Add(replaceBtn, 0, wx.BOTTOM, BTM_SPACE)
+        buttonSizer.Add(replaceAllBtn, 0, wx.BOTTOM, BTM_SPACE)
         buttonSizer.Add(cancelBtn, 0)
         gridSizer.Add(buttonSizer, pos=(0,2), span=(3,1))
 
@@ -495,12 +506,24 @@ def getFindData():
     return \
 '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00\x81IDAT8\x8d\xa5S\xc1\x16\xc0\x10\x0ckk\xff\xff\xc7d\x87\xad^U\r\
-\x93S\xe5U$\n\xb3$:\xc1e\x17(\x19Z\xb3$\x9e\xf1DD\xe2\x15\x01x\xea\x93\xef\
-\x04\x989\xea\x1b\xf2U\xc0\xda\xb4\xeb\x11\x1f:\xd8\xb5\xff8\x93\xd4\xa9\xae\
-@/S\xaaUwJ3\x85\xc0\x81\xee\xeb.q\x17C\x81\xd5XU \x1a\x93\xc6\x18\x8d\x90\
-\xe8}\x89\x00\x9a&\x9b_k\x94\x0c\xdf\xd78\xf8\x0b\x99Y\xb4\x08c\x9e\xfe\xc6\
-\xe3\x087\xf9\xd0D\x180\xf1#\x8e\x00\x00\x00\x00IEND\xaeB`\x82' 
+\x00\x01\xb1IDAT8\x8d\xa5\x93=o\xd3P\x14\x86\x1f\xa7\x11\x95<\xdc\xc6\xecN+5\
+[\x86B\x99\xacLQ2Zr[\x89\xa1\xfd\x0b%\x95\x90\x00\xf1\x03\x80\x01\x98\x80\
+\x19G\xac\x0cm\xff@Y\xd9:\xd9Ck\x94\xd6\xddb\x94\x9b\x98\xc8\xd2e1C\xe5\x8b\
+\xdd\x14\x96\xbe\xdb=\x1f\xefy\xef\xf90\x8c\xda\x12wA\xbd\xfc\x18\xfa\x9fs\
+\x80\xf9|\x0e\xc0\x93\xc1\x81\x01\xf0\xe6\xf5\xab\x1c`:\x9d\x02\xf0\xf6\xdd{\
+\xa3\xc8\xa9\xddd\xec\xf5z\xb4Z\xeb\x00\x1c\x1f\x1d\xe6\x85\xdd\xf3<\x06\x83\
+\xc1\x82\xbd\xa2 \x0cCL\xd3d<\x1e\x13\xc71\xb6m\x030\x1a\x8d\x08\x82\x00\x80\
+\xb3\xb3s:\x9d\x8e\xce\xa9(h6\x9b8\x8e\x83m\xdb4\x1a\r\x82 \xe0\xc5\xf3g\xb9\
+eY\xb4\xdbm\x1c\xc7Y\xe8\x81&\xf8\xf4\xf1C\xde\xedv+\xce\x97Owx\xfc\xe8k\xc5\
+\xb6\xb7\xb7\x8b\xef\x0foW \x84\xe0\xea\xea\x02\xa5\x94n\x18\x80\x94\x92\xd9\
+l\x02@\x96e\x95>\xd4nVO\xd3\xb9\x0e\xba\r\xa6i\xd2\xef\xf7\xf0\xfd!\xc7G\x87\
+y\xed:)\xd5\x01J\xfd\xd6c\xfc~\x9a\xfc\x93\xe8\xf2\xf2\x02(Ma6\x9b \x84@)\
+\xa5\t}\xff\x0b\xd0\'I~R\x14\xca\xb2L\xfb\x97\x97\xef-\xeeA!_J\x89\xeb\xba\
+\xb8\xae\xab\xbf\x06\x7f\x97\xacP[\x87\xeb9\x0b!H\x92\ta\x18"\xa5\xd4U\xbd\
+\xadm\xe3\xe1\x83\x8d<\x8a~\x90\xa6\xbf\x88\xe3\x18)\xa5&\xa9\x03X\x96E\xab\
+\xb5\x8em7\xf5\xc2\x94\xb1\xba\xba\xc6\xe6\xe6\x06++\xf7\x89\xa2\xa8\xe2\xd3\
+=89\xf9Va.\x14\x14\xd8\xdf?X VJa\x14\xd7X\xde\xef2\xbc\xadm\xe3\x7f~\xe3\xae\
+\xe7\xfc\x07\x84;\xc5\x82\xa1m&\x95\x00\x00\x00\x00IEND\xaeB`\x82' 
 
 
 def getFindBitmap():

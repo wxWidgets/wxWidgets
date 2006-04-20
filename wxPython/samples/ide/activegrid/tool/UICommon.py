@@ -6,7 +6,7 @@
 #
 # Created:      3/10/05
 # CVS-ID:       $Id$
-# Copyright:    (c) 2005 ActiveGrid, Inc.
+# Copyright:    (c) 2005-2006 ActiveGrid, Inc.
 # License:      wxWindows License
 #----------------------------------------------------------------------------
 
@@ -15,12 +15,14 @@ import os.path
 import wx
 import string
 import ProjectEditor
-import activegrid.util.sysutils as sysutils
-import activegrid.util.strutils as strutils
 import activegrid.util.appdirs as appdirs
+import activegrid.util.fileutils as fileutils
+import activegrid.util.strutils as strutils
+import activegrid.util.sysutils as sysutils
+import activegrid.util.xmlutils as xmlutils
 _ = wx.GetTranslation
 
-def CreateDirectoryControl( parent, fileLabel=_("File Name:"), dirLabel=_("Directory"), fileExtension="*", startingName="", startingDirectory=None, choiceDirs=None, appDirDefaultStartDir=False, returnAll=False):
+def CreateDirectoryControl( parent, fileLabel=_("File Name:"), dirLabel=_("Directory:"), fileExtension="*", startingName="", startingDirectory=None, choiceDirs=None, appDirDefaultStartDir=False, returnAll=False, useDirDialog=False):
 
     if not choiceDirs:
         choiceDirs = []
@@ -61,8 +63,8 @@ def CreateDirectoryControl( parent, fileLabel=_("File Name:"), dirLabel=_("Direc
             
         if os.getcwd() not in choiceDirs:
             choiceDirs.append(os.getcwd())                
-        if appdirs.documents_folder not in choiceDirs:
-            choiceDirs.append(appdirs.documents_folder) 
+        if appdirs.getSystemDir() not in choiceDirs:
+            choiceDirs.append(appdirs.getSystemDir()) 
 
     if not startingDirectory:
         startingDirectory = os.getcwd()
@@ -85,12 +87,18 @@ def CreateDirectoryControl( parent, fileLabel=_("File Name:"), dirLabel=_("Direc
             else:
                 name = _("%s.%s") % (nameCtrlValue, fileExtension)
                 
-        dlg = wx.FileDialog(parent, _("Choose a filename and directory"),
+        if not useDirDialog:
+            dlg = wx.FileDialog(parent, _("Choose a filename and directory"),
                        defaultDir = dirControl.GetValue().strip(),
                        defaultFile = name,
                        wildcard= "*.%s" % fileExtension,
                        style=wx.SAVE|wx.CHANGE_DIR)
-
+        else:
+            dlg = wx.DirDialog(wx.GetApp().GetTopWindow(),
+                        _("Choose a directory:"),
+                        defaultPath=dirControl.GetValue().strip(),
+                        style=wx.DD_DEFAULT_STYLE|wx.DD_NEW_DIR_BUTTON)
+            
         if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
             return
@@ -98,49 +106,78 @@ def CreateDirectoryControl( parent, fileLabel=_("File Name:"), dirLabel=_("Direc
         dlg.Destroy()
         
         if path:
-            dir, filename = os.path.split(path)
-            if dirControl.FindString(dir) == wx.NOT_FOUND:
-                dirControl.Insert(dir, 0)
-            dirControl.SetValue(dir)
-            dirControl.SetToolTipString(dir)
-            nameControl.SetValue(filename)
+            if not useDirDialog:
+                dir, filename = os.path.split(path)
+                if dirControl.FindString(dir) == wx.NOT_FOUND:
+                    dirControl.Insert(dir, 0)
+                dirControl.SetValue(dir)
+                dirControl.SetToolTipString(dir)
+                nameControl.SetValue(filename)
+            else:
+                dirControl.SetValue(path)
+                dirControl.SetToolTipString(path)
 
     parent.Bind(wx.EVT_BUTTON, OnFindDirClick, button)
     
-    def Validate(allowOverwriteOnPrompt=False, infoString='', noFirstCharDigit=False):
+    def Validate(allowOverwriteOnPrompt=False, infoString='', validClassName=False, ignoreFileConflicts=False):
         projName = nameControl.GetValue().strip()
         if projName == "":
             wx.MessageBox(_("Please provide a %sfile name.") % infoString, _("Provide a File Name"))            
             return False
-        if noFirstCharDigit and projName[0].isdigit():
-            wx.MessageBox(_("File name cannot start with a number.  Please enter a different name."), _("Invalid File Name"))            
-            return False
         if projName.find(' ') != -1:
             wx.MessageBox(_("Please provide a %sfile name that does not contains spaces.") % infoString, _("Spaces in File Name"))            
             return False
-        if not os.path.exists(dirControl.GetValue()):
-            wx.MessageBox(_("That %sdirectory does not exist. Please choose an existing directory.") % infoString, _("Provide a Valid Directory"))            
+        if validClassName:
+            if projName[0].isdigit():
+                wx.MessageBox(_("File name cannot start with a number.  Please enter a different name."), _("Invalid File Name"))            
+                return False
+            if projName.endswith(".agp"):
+                projName2 = projName[:-4]
+            else:
+                projName2 = projName
+            if not projName2.replace("_", "a").isalnum():  # [a-zA-Z0-9_]  note '_' is allowed and ending '.agp'.
+                wx.MessageBox(_("Name must be alphanumeric ('_' allowed).  Please enter a valid name."), _("Project Name"))
+                return False
+
+        dirName = dirControl.GetValue().strip()
+        if dirName == "":
+            wx.MessageBox(_("No directory.  Please provide a directory."), _("Provide a Directory"))            
             return False
-        
-        filePath = os.path.join(dirControl.GetValue(), MakeNameEndInExtension(projName, "." + fileExtension))
-        if os.path.exists(filePath):
-            if allowOverwriteOnPrompt:
-                res = wx.MessageBox(_("That %sfile already exists. Would you like to overwrite it.") % infoString, "File Exists", style=wx.YES_NO|wx.NO_DEFAULT)
-                return (res == wx.YES)  
-            else:                
-                wx.MessageBox(_("That %sfile already exists. Please choose a different name.") % infoString, "File Exists")
-                return False                  
+        if os.sep == "\\" and dirName.find("/") != -1:
+            wx.MessageBox(_("Wrong delimiter '/' found in directory path.  Use '%s' as delimiter.") % os.sep, _("Provide a Valid Directory"))            
+            return False
+        if not os.path.exists(dirName):
+            wx.MessageBox(_("That %sdirectory does not exist.  Please choose an existing directory.") % infoString, _("Provide a Valid Directory"))            
+            return False
+        if not ignoreFileConflicts:
+            filePath = os.path.join(dirName, MakeNameEndInExtension(projName, "." + fileExtension))
+            if os.path.exists(filePath):
+                if allowOverwriteOnPrompt:
+                    res = wx.MessageBox(_("That %sfile already exists. Would you like to overwrite it.") % infoString, "File Exists", style=wx.YES_NO|wx.NO_DEFAULT)
+                    return (res == wx.YES)  
+                else:                
+                    wx.MessageBox(_("That %sfile already exists. Please choose a different name.") % infoString, "File Exists")
+                    return False
+
         return True    
     HALF_SPACE = 5
     flexGridSizer = wx.FlexGridSizer(cols = 3, vgap = HALF_SPACE, hgap = HALF_SPACE)
     flexGridSizer.AddGrowableCol(1,1)
-    flexGridSizer.Add(nameLabelText, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
-    flexGridSizer.Add(nameControl, 2, flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
-    flexGridSizer.Add(button, flag=wx.ALIGN_RIGHT|wx.LEFT, border=HALF_SPACE)
+    if not useDirDialog:
+        flexGridSizer.Add(nameLabelText, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
+        flexGridSizer.Add(nameControl, 2, flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
+        flexGridSizer.Add(button, flag=wx.ALIGN_RIGHT|wx.LEFT, border=HALF_SPACE)        
+        flexGridSizer.Add(dirLabelText, flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
+        flexGridSizer.Add(dirControl, 2, flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
+        flexGridSizer.Add(wx.StaticText(parent, -1, ""), 0)
+    else:
+        flexGridSizer.Add(nameLabelText, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
+        flexGridSizer.Add(nameControl, 2, flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
+        flexGridSizer.Add(wx.StaticText(parent, -1, ""), 0)
+        flexGridSizer.Add(dirLabelText, flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
+        flexGridSizer.Add(dirControl, 2, flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
+        flexGridSizer.Add(button, flag=wx.ALIGN_RIGHT|wx.LEFT, border=HALF_SPACE)        
         
-    flexGridSizer.Add(dirLabelText, flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
-    flexGridSizer.Add(dirControl, 2, flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
-    flexGridSizer.Add(wx.StaticText(parent, -1, ""), 0)
     if returnAll:
         return nameControl, dirControl, flexGridSizer, Validate, allControls
     else:
@@ -188,8 +225,8 @@ def CreateDirectoryOnlyControl( parent, dirLabel=_("Location:"), startingDirecto
 
         if os.getcwd() not in choiceDirs:
             choiceDirs.append(os.getcwd())                
-        if appdirs.documents_folder not in choiceDirs:
-            choiceDirs.append(appdirs.documents_folder)                
+        if appdirs.getSystemDir() not in choiceDirs:
+            choiceDirs.append(appdirs.getSystemDir())                
             
 
     if not startingDirectory:
@@ -221,6 +258,9 @@ def CreateDirectoryOnlyControl( parent, dirLabel=_("Location:"), startingDirecto
         if dirName == "":
             wx.MessageBox(_("Please provide a directory."), _("Provide a Directory"))            
             return False
+        if os.sep == "\\" and dirName.find("/") != -1:
+            wx.MessageBox(_("Wrong delimiter '/' found in directory path.  Use '%s' as delimiter.") % os.sep, _("Provide a Valid Directory"))            
+            return False
         if not os.path.exists(dirName):
             wx.MessageBox(_("That directory does not exist. Please choose an existing directory."), _("Provide a Valid Directory"))            
             return False
@@ -241,17 +281,25 @@ def CreateNameOnlyControl( parent, fileLabel, startingName="", startingDirectory
     fileLabelText = wx.StaticText(parent, -1, fileLabel)
     nameControl = wx.TextCtrl(parent, -1, startingName, size=(-1,-1))
         
-    def Validate(allowOverwriteOnPrompt=False, noFirstCharDigit=False):
+    def Validate(allowOverwriteOnPrompt=False, validClassName=False):
         projName = nameControl.GetValue().strip()
         if projName == "":
             wx.MessageBox(_("Blank name.  Please enter a valid name."), _("Project Name"))            
             return False
-        if noFirstCharDigit and projName[0].isdigit():
-            wx.MessageBox(_("Name cannot start with a number.  Please enter a valid name."), _("Project Name"))            
-            return False
         if projName.find(' ') != -1:
-            wx.MessageBox(_("Spaces in name.  Name cannot have spaces.") % infoString, _("Project Name"))            
+            wx.MessageBox(_("Spaces in name.  Name cannot have spaces."), _("Project Name"))            
             return False
+        if validClassName:
+            if projName[0].isdigit():
+                wx.MessageBox(_("Name cannot start with a number.  Please enter a valid name."), _("Project Name"))            
+                return False
+            if projName.endswith(".agp"):
+                projName2 = projName[:-4]
+            else:
+                projName2 = projName
+            if not projName2.replace("_", "a").isalnum():  # [a-zA-Z0-9_]  note '_' is allowed and ending '.agp'.
+                wx.MessageBox(_("Name must be alphanumeric ('_' allowed).  Please enter a valid name."), _("Project Name"))
+                return False
         path = os.path.join(startingDirectoryControl.GetValue().strip(), projName)
         if os.path.exists(path):
             if os.path.isdir(path):
@@ -279,6 +327,29 @@ def CreateNameOnlyControl( parent, fileLabel, startingName="", startingDirectory
         
     return nameControl, flexGridSizer, Validate
     
+
+def ValidateName(name, ext=None, hint="name"):
+    """ Returns an error string if there is something wrong with the name.
+        Otherwise it returns None
+    """
+    if name == "":
+        return _("Blank %s.  Please enter a valid %s.") % (hint, hint)
+
+    if name.find(' ') != -1:
+        return _("Spaces in %s.  %s cannot have spaces.") % (hint, hint.title())
+
+    if name[0].isdigit():
+        return _("%s cannot start with a number.  Please enter a valid %s.") % (hint.title(), hint)
+
+    if ext and name.endswith(ext):  # strip extension if provided
+        lenExt = len(ext)
+        name = name[:-lenExt]
+        
+    if not name.replace("_", "a").isalnum():  # [a-zA-Z0-9_]  note '_' is allowed and ext ending.
+        return _("%s must be alphanumeric ('_' allowed).  Please enter a valid %s.") % (hint.title(), hint)
+
+    return None
+
 
 def GetCurrentProject():
     projectDocument = None
@@ -330,6 +401,16 @@ def GetPythonExecPath():
     return pythonExecPath
     
 
+def GetPHPExecPath():
+    PHPExecPath = wx.ConfigBase_Get().Read("ActiveGridPHPLocation")
+    return PHPExecPath
+
+
+def GetPHPINIPath():
+    PHPINIPath = wx.ConfigBase_Get().Read("ActiveGridPHPINILocation")
+    return PHPINIPath
+
+
 def _DoRemoveRecursive(path, skipFile=None, skipped=False):
     if path == skipFile:
         skipped = True
@@ -362,14 +443,60 @@ def CaseInsensitiveCompare(s1, s2):
 
 def GetAnnotation(model, elementName):
     """ Get an object's annotation used for tooltips """
-    if hasattr(model, "__xsdcomplextype__"):
+    if hasattr(model, "_complexType"):
+        ct = model._complexType
+    elif hasattr(model, "__xsdcomplextype__"):
         ct = model.__xsdcomplextype__
-        if ct:
-            el = ct.findElement(elementName)
-            if el and el.annotation:
-                return el.annotation
+    else:
+        ct = None
+            
+    if ct:
+        el = ct.findElement(elementName)
+        if el and el.annotation:
+            return el.annotation
             
     return ""
+
+
+def GetDisplayName(doc, name):
+    if name:
+        appDocMgr = doc.GetAppDocMgr()
+        if appDocMgr:
+            name = appDocMgr.toDisplayTypeName(name)
+        else:
+            namespace, name = xmlutils.splitType(name)
+            if namespace and hasattr(doc.GetModel(), "getXmlNamespaces"):
+                for xmlkey, xmlval in doc.GetModel().getXmlNamespaces().iteritems():
+                    if xmlval == namespace:
+                        name = "%s:%s" % (xmlkey, name)
+                        break                    
+    
+        if name:
+            import activegrid.model.schema as schemalib
+            baseTypeName = schemalib.mapXsdType(name)
+            if baseTypeName:
+                name = baseTypeName
+
+    return name
+
+
+def GetInternalName(doc, name):
+    if name:
+        appDocMgr = doc.GetAppDocMgr()
+        if appDocMgr:
+            name = appDocMgr.toInternalTypeName(name)
+        else:
+            namespace, name = xmlutils.splitType(name)
+            if namespace and hasattr(doc.GetModel(), "getXmlNamespaces"):
+                for xmlkey, xmlval in doc.GetModel().getXmlNamespaces().iteritems():
+                    if xmlkey == namespace:
+                        name = "%s:%s" % (xmlval, name)
+                        break  
+                                          
+        import activegrid.model.schema as schemalib
+        name = schemalib.mapAGType(name)
+
+    return name
 
 
 #----------------------------------------------------------------------------
@@ -435,7 +562,8 @@ def GetAppDocMgrForDoc(doc):
 
 
 def GetAppInfoLanguage(doc=None):
-    from activegrid.server.deployment import LANGUAGE_DEFAULT
+    from activegrid.server.projectmodel import LANGUAGE_DEFAULT
+    
     if doc:
         language = doc.GetAppInfo().language
     else:
@@ -449,3 +577,159 @@ def GetAppInfoLanguage(doc=None):
             doc.GetAppInfo().language = language  # once it is selected, it must be set.
         
     return language
+
+def AddWsdlAgToProjectFromWsdlRegistration(wsdlRegistration):
+    """Add wsdl ag for registry entry."""
+
+    wsdlPath = wsdlRegistration.path
+    rootPath = None
+    serviceRefName = wsdlRegistration.name
+    
+    agwsDoc = _InitWsdlAg(wsdlPath, rootPath, serviceRefName)
+
+    if (agwsDoc == None):
+        return
+
+    serviceRef = agwsDoc.GetModel()    
+    
+    serviceRef.serviceType = wsdlRegistration.type
+
+    import activegrid.server.deployment as deployment
+
+    if (serviceRef.serviceType == deployment.SERVICE_LOCAL):
+        serviceRef.localService = deployment.LocalService(
+            wsdlRegistration.codeFile)
+        
+    elif (serviceRef.serviceType == deployment.SERVICE_DATABASE):
+        serviceRef.databaseService = deployment.DatabaseService(
+            wsdlRegistration.datasourceName)
+        
+    elif (serviceRef.serviceType == deployment.SERVICE_SOAP):
+        pass
+    
+    elif (serviceRef.serviceType == deployment.SERVICE_RSS):
+        serviceRef.rssService = deployment.RssService(wsdlRegistration.feedUrl)
+        
+    elif (serviceRef.serviceType == deployment.SERVICE_REST):
+        serviceRef.restService = deployment.RestService(
+            wsdlRegistration.baseUrl)
+    else:
+        raise AssertionError("Unknown service type")
+
+    _AddToProject(agwsDoc, addWsdl=True)
+    
+
+def AddWsdlAgToProject(wsdlPath, rootPath=fileutils.AG_SYSTEM_STATIC_VAR_REF,
+                       serviceRefName=None, className=None, serviceType=None,
+                       dataSourceName=None):
+    """
+       wsdlPath: path to wsdl from rootPath. If wsdlPath is absolute, rootPath
+       is ignored. rootPath is also ignored when rootPath is set to None. 
+       rootPath: defaults to ${AG_SYSTEM_STATIC}.
+       serviceRefName: If None, it will be set to the wsdl file name without
+       the .wsdl file extension.
+       className: if not None, will be used for the the wsdlag's ClassName.
+       serviceType: defaults to local.
+       dataSourceName: if serviceType is deployment.DATABASE, the ds must be
+       provided.
+    """
+    import WsdlAgEditor
+    import XFormWizard
+    import activegrid.model.basedocmgr as basedocmgr
+    import activegrid.server.deployment as deployment
+
+    if (serviceType == None):
+        serviceType = deployment.SERVICE_LOCAL
+
+
+    agwsDoc = _InitWsdlAg(wsdlPath, rootPath, serviceRefName)
+
+    if (agwsDoc == None):
+        return
+
+    serviceRef = agwsDoc.GetModel()    
+    
+    serviceRef.serviceType = serviceType
+
+    if (serviceType == deployment.SERVICE_DATABASE and dataSourceName != None):
+        serviceRef.databaseService = deployment.DatabaseService(dataSourceName)
+    else:
+        serviceRef.localService = deployment.LocalService(className=className)
+
+    _AddToProject(agwsDoc)
+        
+
+def _AddToProject(agwsDoc, addWsdl=False):
+    import activegrid.model.basedocmgr as basedocmgr    
+    projectDoc = GetCurrentProject()
+    agwsDoc.OnSaveDocument(agwsDoc.GetFilename())
+
+    files = [agwsDoc.fileName]
+    types = [basedocmgr.FILE_TYPE_SERVICE]
+    names = [agwsDoc.GetModel().name]
+    if (addWsdl):
+        m = agwsDoc.GetModel()        
+        wsdlName = os.path.splitext(os.path.basename(m.filePath))[0]
+        appDocMgr = projectDoc.GetAppDocMgr()
+        if (appDocMgr.findService(wsdlName) == None):
+            m = agwsDoc.GetModel()            
+            files.append(m.filePath)
+            types.append(None)
+            names.append(wsdlName)
+    
+    ProjectEditor.ProjectAddFilesCommand(projectDoc, files, types=types,
+                                         names=names).Do()
+    
+
+def _InitWsdlAg(wsdlPath, rootPath=fileutils.AG_SYSTEM_STATIC_VAR_REF,
+                serviceRefName=None):
+
+    projectDoc = GetCurrentProject()
+    appDocMgr = projectDoc.GetAppDocMgr()
+
+    if (serviceRefName == None):
+        serviceRefName = os.path.splitext(os.path.basename(wsdlPath))[0]
+    
+    if (appDocMgr.findServiceRef(serviceRefName) != None):
+        return None
+
+    import WsdlAgEditor
+    import XFormWizard
+    import activegrid.server.deployment as deployment
+
+    template = XFormWizard.GetTemplate(WsdlAgEditor.WsdlAgDocument)
+    ext = template.GetDefaultExtension()
+    fullPath = os.path.join(appDocMgr.homeDir, serviceRefName + ext)
+
+    agwsDoc = template.CreateDocument(
+        fullPath, flags=(wx.lib.docview.DOC_NO_VIEW|wx.lib.docview.DOC_NEW|
+                         wx.lib.docview.DOC_OPEN_ONCE))
+    
+    serviceRef = agwsDoc.GetModel()
+    serviceRef.name = serviceRefName
+
+    if (rootPath == None or os.path.isabs(wsdlPath)):
+        serviceRef.filePath = wsdlPath
+    else:
+        # make sure to use forward slashes for the path to the .wsdl
+        wsdlPath = wsdlPath.replace("\\", "/")
+        
+        if not wsdlPath.startswith("/"):
+            wsdlPath = "/%s" % wsdlPath
+        serviceRef.filePath = "%s%s" % (rootPath, wsdlPath)
+
+    agwsDoc.fileName = fullPath        
+
+    return agwsDoc
+
+
+def GetSchemaName(schema):
+    return os.path.basename(schema.fileName)
+
+
+class AGChoice(wx.Choice):
+    """Extension to wx.Choice that fixes linux bug where first item of choices
+    passed into ctor would be visible, but not selected."""
+    def __init__(self, parent, id, choices=[]):
+        super(AGChoice, self).__init__(parent=parent, id=id)
+        self.AppendItems(choices)

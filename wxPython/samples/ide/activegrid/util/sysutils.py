@@ -12,6 +12,7 @@
 
 import sys
 import os
+import time
 
 # this will be set to true in IDE.py when we are running release builds.
 isRelease = False
@@ -26,6 +27,12 @@ isRelease = False
 
 MAINMODULE_DIR = "AG_MAINMODULE_DIR"
 IS_RELEASE = "AG_IS_RELEASE"
+IS_COMMERCIAL = "AG_IS_COMMERCIAL"
+AG_SYSTEM_START_TIME_ENV_NAME = "AG_SYSTEM_START_TIME"
+
+def isCommercial():
+    
+    return os.path.exists(os.path.join(mainModuleDir,"commercial.txt")) or 'true' == (str(os.getenv(IS_COMMERCIAL)).lower())
  
 def isRelease():
     return 'true' == (str(os.getenv(IS_RELEASE)).lower())
@@ -39,7 +46,16 @@ def setRelease(value):
 def isWindows():
     return os.name == 'nt'
 
+__isServer = False
 
+def setServerMode(isServer):
+    global __isServer
+    __isServer = isServer
+    
+def isServer():
+    global __isServer
+    return __isServer
+    
 def _generateMainModuleDir():
     mainModuleDir = os.getenv(MAINMODULE_DIR)
     if mainModuleDir:  # if environment variable set, return it
@@ -85,3 +101,16 @@ def getCommandNameForExecPath(execPath):
         return '"%s"' % execPath
     return execPath
 
+def getUserName():
+    if isWindows():
+        return os.getenv('USERNAME')
+    else:
+        # 06-Feb-06 stoens@activegrid.com --
+        # this blows up the linux cc runs with "Inappropriate ioctl for device"
+        #return os.getlogin()
+        return os.getenv('USER')        
+
+def getCurrentTimeAsFloat():
+    return time.time()
+
+systemStartTime = getCurrentTimeAsFloat()

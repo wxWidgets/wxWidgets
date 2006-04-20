@@ -6,7 +6,7 @@
 #
 # Created:      8/10/03
 # CVS-ID:       $Id$
-# Copyright:    (c) 2003-2005 ActiveGrid, Inc.
+# Copyright:    (c) 2003-2006 ActiveGrid, Inc.
 # License:      wxWindows License
 #----------------------------------------------------------------------------
 
@@ -47,9 +47,15 @@ TEXT_STATUS_BAR_ID = wx.NewId()
 class TextDocument(wx.lib.docview.Document):
 
 
+    def __init__(self):
+        wx.lib.docview.Document .__init__(self)
+        self._inModify = False
+
+
     def SaveObject(self, fileObject):
         view = self.GetFirstView()
         fileObject.write(view.GetValue())
+        view.SetModifyFalse()
         return True
         
 
@@ -57,24 +63,31 @@ class TextDocument(wx.lib.docview.Document):
         view = self.GetFirstView()
         data = fileObject.read()
         view.SetValue(data)
+        view.SetModifyFalse()
         return True
 
 
     def IsModified(self):
         view = self.GetFirstView()
         if view:
-            return wx.lib.docview.Document.IsModified(self) or view.IsModified()
-        else:
-            return wx.lib.docview.Document.IsModified(self)
+            return view.IsModified()
+        return False
 
 
-    def Modify(self, mod):
+    def Modify(self, modify):
+        if self._inModify:
+            return
+        self._inModify = True
+        
         view = self.GetFirstView()
-        wx.lib.docview.Document.Modify(self, mod)
-        if not mod and view:
+        if not modify and view:
             view.SetModifyFalse()
 
+        wx.lib.docview.Document.Modify(self, modify)  # this must called be after the SetModifyFalse call above.
 
+        self._inModify = False
+        
+    
     def OnCreateCommandProcessor(self):
         # Don't create a command processor, it has its own
         pass
@@ -142,12 +155,18 @@ class TextView(wx.lib.docview.View):
             self._dynSash._view = self
             self._textEditor = self.GetCtrlClass()(self._dynSash, -1, style=wx.NO_BORDER)
         wx.EVT_LEFT_DOWN(self._textEditor, self.OnLeftClick)
+        self._textEditor.Bind(wx.stc.EVT_STC_MODIFIED, self.OnModify)
+        
         self._CreateSizer(frame)
         self.Activate()
         frame.Show(True)
         frame.Layout()
         return True
 
+
+    def OnModify(self, event):
+        self.GetDocument().Modify(self._textEditor.GetModify())
+        
 
     def _CreateSizer(self, frame):
         sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -161,6 +180,9 @@ class TextView(wx.lib.docview.View):
 
 
     def OnUpdate(self, sender = None, hint = None):
+        if wx.lib.docview.View.OnUpdate(self, sender, hint):
+            return
+
         if hint == "ViewStuff":
             self.GetCtrl().SetViewDefaults()
         elif hint == "Font":
@@ -571,8 +593,10 @@ class TextView(wx.lib.docview.View):
     def EnsureVisible(self, line):
         self.GetCtrl().EnsureVisible(line-1)  # line numbering for editor is 0 based, we are 1 based.
 
+
     def EnsureVisibleEnforcePolicy(self, line):
         self.GetCtrl().EnsureVisibleEnforcePolicy(line-1)  # line numbering for editor is 0 based, we are 1 based.
+
 
     def LineFromPosition(self, pos):
         return self.GetCtrl().LineFromPosition(pos)+1  # line numbering for editor is 0 based, we are 1 based.
@@ -813,11 +837,12 @@ class TextStatusBar(wx.StatusBar):
 class TextOptionsPanel(wx.Panel):
 
 
-    def __init__(self, parent, id, configPrefix = "Text", label = "Text", hasWordWrap = True, hasTabs = False, addPage=True):
+    def __init__(self, parent, id, configPrefix = "Text", label = "Text", hasWordWrap = True, hasTabs = False, addPage=True, hasFolding=False):
         wx.Panel.__init__(self, parent, id)
         self._configPrefix = configPrefix
         self._hasWordWrap = hasWordWrap
         self._hasTabs = hasTabs
+        self._hasFolding = hasFolding
         SPACE = 10
         HALF_SPACE   = 5
         config = wx.ConfigBase_Get()
@@ -854,6 +879,9 @@ class TextOptionsPanel(wx.Panel):
         self._viewRightEdgeCheckBox.SetValue(config.ReadInt(self._configPrefix + "EditorViewRightEdge", False))
         self._viewLineNumbersCheckBox = wx.CheckBox(self, -1, _("Show line numbers"))
         self._viewLineNumbersCheckBox.SetValue(config.ReadInt(self._configPrefix + "EditorViewLineNumbers", True))
+        if self._hasFolding:
+            self._viewFoldingCheckBox = wx.CheckBox(self, -1, _("Show folding"))
+            self._viewFoldingCheckBox.SetValue(config.ReadInt(self._configPrefix + "EditorViewFolding", True))
         if self._hasTabs:
             self._hasTabsCheckBox = wx.CheckBox(self, -1, _("Use spaces instead of tabs"))
             self._hasTabsCheckBox.SetValue(not wx.ConfigBase_Get().ReadInt(self._configPrefix + "EditorUseTabs", False))
@@ -874,6 +902,8 @@ class TextOptionsPanel(wx.Panel):
         textPanelSizer.Add(self._viewIndentationGuideCheckBox, 0, wx.ALL, HALF_SPACE)
         textPanelSizer.Add(self._viewRightEdgeCheckBox, 0, wx.ALL, HALF_SPACE)
         textPanelSizer.Add(self._viewLineNumbersCheckBox, 0, wx.ALL, HALF_SPACE)
+        if self._hasFolding:
+            textPanelSizer.Add(self._viewFoldingCheckBox, 0, wx.ALL, HALF_SPACE)
         if self._hasTabs:
             textPanelSizer.Add(self._hasTabsCheckBox, 0, wx.ALL, HALF_SPACE)
             textIndentWidthSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -947,6 +977,9 @@ class TextOptionsPanel(wx.Panel):
         config.WriteInt(self._configPrefix + "EditorViewRightEdge", self._viewRightEdgeCheckBox.GetValue())
         doViewStuffUpdate = doViewStuffUpdate or config.ReadInt(self._configPrefix + "EditorViewLineNumbers", True) != self._viewLineNumbersCheckBox.GetValue()
         config.WriteInt(self._configPrefix + "EditorViewLineNumbers", self._viewLineNumbersCheckBox.GetValue())
+        if self._hasFolding:
+            doViewStuffUpdate = doViewStuffUpdate or config.ReadInt(self._configPrefix + "EditorViewFolding", True) != self._viewFoldingCheckBox.GetValue()
+            config.WriteInt(self._configPrefix + "EditorViewFolding", self._viewFoldingCheckBox.GetValue())
         if self._hasWordWrap:
             doViewStuffUpdate = doViewStuffUpdate or config.ReadInt(self._configPrefix + "EditorWordWrap", False) != self._wordWrapCheckBox.GetValue()
             config.WriteInt(self._configPrefix + "EditorWordWrap", self._wordWrapCheckBox.GetValue())
@@ -1062,13 +1095,15 @@ class TextCtrl(wx.stc.StyledTextCtrl):
         event.Skip()
         
 
-    def SetViewDefaults(self, configPrefix = "Text", hasWordWrap = True, hasTabs = False):
+    def SetViewDefaults(self, configPrefix="Text", hasWordWrap=True, hasTabs=False, hasFolding=False):
         config = wx.ConfigBase_Get()
         self.SetViewWhiteSpace(config.ReadInt(configPrefix + "EditorViewWhitespace", False))
         self.SetViewEOL(config.ReadInt(configPrefix + "EditorViewEOL", False))
         self.SetIndentationGuides(config.ReadInt(configPrefix + "EditorViewIndentationGuides", False))
         self.SetViewRightEdge(config.ReadInt(configPrefix + "EditorViewRightEdge", False))
         self.SetViewLineNumbers(config.ReadInt(configPrefix + "EditorViewLineNumbers", True))
+        if hasFolding:
+            self.SetViewFolding(config.ReadInt(configPrefix + "EditorViewFolding", True))
         if hasWordWrap:
             self.SetWordWrap(config.ReadInt(configPrefix + "EditorWordWrap", False))
         if hasTabs:  # These methods do not exist in STCTextEditor and are meant for subclasses
@@ -1235,6 +1270,17 @@ class TextCtrl(wx.stc.StyledTextCtrl):
             self.SetMarginWidth(1, self.EstimatedLineNumberMarginWidth())
         else:
             self.SetMarginWidth(1, 0)
+
+
+    def GetViewFolding(self):
+        return self.GetMarginWidth(2) > 0
+
+
+    def SetViewFolding(self, viewFolding = True):
+        if viewFolding:
+            self.SetMarginWidth(2, 12)
+        else:
+            self.SetMarginWidth(2, 0)
 
 
     def CanWordWrap(self):

@@ -78,7 +78,7 @@ class XmlCtrl(CodeEditor.CodeCtrl):
 
 
     def SetViewDefaults(self):
-        CodeEditor.CodeCtrl.SetViewDefaults(self, configPrefix = "Xml", hasWordWrap = True, hasTabs = True)
+        CodeEditor.CodeCtrl.SetViewDefaults(self, configPrefix = "Xml", hasWordWrap = True, hasTabs = True, hasFolding=True)
 
 
     def GetFontAndColorFromConfig(self):
@@ -115,7 +115,7 @@ class XmlCtrl(CodeEditor.CodeCtrl):
 class XmlOptionsPanel(STCTextEditor.TextOptionsPanel):
 
     def __init__(self, parent, id):
-        STCTextEditor.TextOptionsPanel.__init__(self, parent, id, configPrefix = "Xml", label = "XML", hasWordWrap = True, hasTabs = True)
+        STCTextEditor.TextOptionsPanel.__init__(self, parent, id, configPrefix = "Xml", label = "XML", hasWordWrap = True, hasTabs = True, hasFolding=True)
 
 
     def GetIcon(self):

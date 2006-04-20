@@ -73,7 +73,7 @@ class PerlCtrl(CodeEditor.CodeCtrl):
 
 
     def SetViewDefaults(self):
-        CodeEditor.CodeCtrl.SetViewDefaults(self, configPrefix = "Perl", hasWordWrap = True, hasTabs = True)
+        CodeEditor.CodeCtrl.SetViewDefaults(self, configPrefix = "Perl", hasWordWrap = True, hasTabs = True, hasFolding=True)
 
 
     def GetFontAndColorFromConfig(self):
@@ -130,7 +130,7 @@ class PerlCtrl(CodeEditor.CodeCtrl):
 class PerlOptionsPanel(STCTextEditor.TextOptionsPanel):
 
     def __init__(self, parent, id):
-        STCTextEditor.TextOptionsPanel.__init__(self, parent, id, configPrefix = "Perl", label = "Perl", hasWordWrap = True, hasTabs = True)
+        STCTextEditor.TextOptionsPanel.__init__(self, parent, id, configPrefix = "Perl", label = "Perl", hasWordWrap = True, hasTabs = True, hasFolding=True)
 
 
     def GetIcon(self):

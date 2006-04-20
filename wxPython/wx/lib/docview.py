@@ -6,7 +6,7 @@
 #
 # Created:      5/15/03
 # CVS-ID:       $Id$
-# Copyright:    (c) 2003-2005 ActiveGrid, Inc. (Port of wxWindows classes by Julian Smart et al)
+# Copyright:    (c) 2003-2006 ActiveGrid, Inc. (Port of wxWindows classes by Julian Smart et al)
 # License:      wxWindows license
 #----------------------------------------------------------------------------
 
@@ -214,8 +214,10 @@ class Document(wx.EvtHandler):
         false otherwise. You may need to override this if your document view
         maintains its own record of being modified (for example if using
         xTextWindow to view and edit the document).
+        This method has been extended to notify its views that the dirty flag has changed.
         """
         self._documentModified = modify
+        self.UpdateAllViews(hint=("modify", self, self._documentModified))
 
 
     def SetDocumentModificationDate(self):
@@ -234,6 +236,16 @@ class Document(wx.EvtHandler):
         This method has been added to wxPython and is not in wxWindows.
         """
         return self._documentModificationDate
+
+
+    def IsDocumentModificationDateCorrect(self):
+        """
+        Returns False if the file has been modified outside of the application.
+        This method has been added to wxPython and is not in wxWindows.
+        """
+        if not os.path.exists(self.GetFilename()):  # document must be in memory only and can't be out of date
+            return True
+        return self._documentModificationDate == os.path.getmtime(self.GetFilename())
 
 
     def GetViews(self):
@@ -271,6 +283,7 @@ class Document(wx.EvtHandler):
         Destructor. Removes itself from the document manager.
         """
         self.DeleteContents()
+        self._documentModificationDate = None
         if self.GetDocumentManager():
             self.GetDocumentManager().RemoveDocument(self)
         wx.EvtHandler.Destroy(self)
@@ -364,7 +377,7 @@ class Document(wx.EvtHandler):
             return True
 
         """ check for file modification outside of application """
-        if os.path.exists(self.GetFilename()) and os.path.getmtime(self.GetFilename()) != self.GetDocumentModificationDate():
+        if not self.IsDocumentModificationDateCorrect():
             msgTitle = wx.GetApp().GetAppName()
             if not msgTitle:
                 msgTitle = _("Application")
@@ -485,9 +498,9 @@ class Document(wx.EvtHandler):
                           self.GetDocumentWindow())
             return False
 
+        self.SetDocumentModificationDate()
         self.SetFilename(filename, True)
         self.Modify(False)
-        self.SetDocumentModificationDate()
         self.SetDocumentSaved(True)
         #if wx.Platform == '__WXMAC__':  # Not yet implemented in wxPython
         #    wx.FileName(file).MacSetDefaultTypeAndCreator()
@@ -529,9 +542,9 @@ class Document(wx.EvtHandler):
                           self.GetDocumentWindow())
             return False
 
+        self.SetDocumentModificationDate()
         self.SetFilename(filename, True)
         self.Modify(False)
-        self.SetDocumentModificationDate()
         self.SetDocumentSaved(True)
         self.UpdateAllViews()
         return True
@@ -614,7 +627,7 @@ class Document(wx.EvtHandler):
             return True
 
         """ check for file modification outside of application """
-        if os.path.exists(self.GetFilename()) and os.path.getmtime(self.GetFilename()) != self.GetDocumentModificationDate():
+        if not self.IsDocumentModificationDateCorrect():
             msgTitle = wx.GetApp().GetAppName()
             if not msgTitle:
                 msgTitle = _("Warning")
@@ -844,8 +857,14 @@ class View(wx.EvtHandler):
         unused but may in future contain application-specific information for
         making updating more efficient.
         """
-        pass
-
+        if hint:
+            if hint[0] == "modify":  # if dirty flag changed, update the view's displayed title
+                frame = self.GetFrame()
+                if frame and hasattr(frame, "OnTitleIsModified"):
+                    frame.OnTitleIsModified()
+                    return True
+        return False
+        
 
     def OnChangeFilename(self):
         """
@@ -1865,7 +1884,7 @@ class DocManager(wx.EvtHandler):
             for document in self._docs:
                 if document.GetFilename() and os.path.normcase(document.GetFilename()) == os.path.normcase(path):
                     """ check for file modification outside of application """
-                    if os.path.exists(path) and os.path.getmtime(path) != document.GetDocumentModificationDate():
+                    if not document.IsDocumentModificationDateCorrect():
                         msgTitle = wx.GetApp().GetAppName()
                         if not msgTitle:
                             msgTitle = _("Warning")
@@ -2148,7 +2167,7 @@ class DocManager(wx.EvtHandler):
                     if len(descr) > 0:
                         descr = descr + _('|')
                     descr = descr + temp.GetDescription() + _(" (") + temp.GetFileFilter() + _(") |") + temp.GetFileFilter()  # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
-            descr = _("All (*.*)|*.*|%s") % descr  # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
+            descr = _("All|*.*|%s") % descr  # spacing is important, make sure there is no space after the "|", it causes a bug on wx_gtk
         else:
             descr = _("*.*")
 
@@ -2791,6 +2810,7 @@ class DocMDIChildFrame(wx.MDIChildFrame):
             self._childView.Activate(event.GetActive())
         self._activated = 0
 
+
     def OnCloseWindow(self, event):
         """
         Closes and deletes the current view and document.
@@ -2846,6 +2866,28 @@ class DocMDIChildFrame(wx.MDIChildFrame):
         self._childView = view
 
 
+    def OnTitleIsModified(self):
+        """
+        Add/remove to the frame's title an indication that the document is dirty.
+        If the document is dirty, an '*' is appended to the title
+        This method has been added to wxPython and is not in wxWindows.
+        """
+        title = self.GetTitle()
+        if title:
+            if self.GetDocument().IsModified():
+                if title.endswith("*"):
+                    return
+                else:
+                    title = title + "*"
+                    self.SetTitle(title)
+            else:
+                if title.endswith("*"):
+                    title = title[:-1]
+                    self.SetTitle(title)                
+                else:
+                    return
+
+
 class DocPrintout(wx.Printout):
     """
     DocPrintout is a default Printout that prints the first page of a document
@@ -2890,15 +2932,6 @@ class DocPrintout(wx.Printout):
         Indicates that the DocPrintout only has a single page.
         """
         return pageNum == 1
-
-
-    def OnBeginDocument(self, startPage, endPage):
-        """
-        Not quite sure why this was overridden, but it was in wxWindows! :)
-        """
-        if not wx.Printout.base_OnBeginDocument(self, startPage, endPage):
-            return False
-        return True
 
 
     def GetPageInfo(self):

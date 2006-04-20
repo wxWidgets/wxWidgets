@@ -14,7 +14,16 @@ import copy
 import os
 import os.path
 import activegrid.util.xmlutils as xmlutils
-from IDE import ACTIVEGRID_BASE_IDE
+import activegrid.util.aglogging as aglogging
+
+# REVIEW 07-Mar-06 stoens@activegrid.com -- Ideally move the pieces required
+# to generate the .dpl file out of this module so there's no dependency on wx,
+# instead of doing this try/catch (IDE drags in wx).
+try:
+    from IDE import ACTIVEGRID_BASE_IDE
+except:
+    ACTIVEGRID_BASE_IDE = False
+    
 if not ACTIVEGRID_BASE_IDE:
     import activegrid.model.basedocmgr as basedocmgr
     import AppInfo
@@ -27,64 +36,6 @@ if not ACTIVEGRID_BASE_IDE:
 PROJECT_VERSION_050730 = '10'
 PROJECT_VERSION_050826 = '11'
 
-    
-#----------------------------------------------------------------------------
-# XML Marshalling Methods
-#----------------------------------------------------------------------------
-
-def load(fileObject):
-    version = xmlutils.getAgVersion(fileObject.name)
-    # most current versions on top
-    if version == PROJECT_VERSION_050826:
-        fileObject.seek(0)
-        if ACTIVEGRID_BASE_IDE:
-            KNOWNTYPES = {"ag:project" : Project, "ag:file" : ProjectFile}
-        else:
-            KNOWNTYPES = {"ag:project" : Project, "ag:file" : ProjectFile, "ag:appInfo" : AppInfo.AppInfo}
-        project = xmlutils.load(fileObject.name, knownTypes=KNOWNTYPES, knownNamespaces=xmlutils.KNOWN_NAMESPACES)
-    elif version == PROJECT_VERSION_050730:
-        fileObject.seek(0)
-        project = xmlutils.load(fileObject.name, knownTypes={"project" : Project_10})
-        project = project.upgradeVersion()
-    else:
-        # assume it is old version without version number
-        fileObject.seek(0)
-        project = xmlutils.load(fileObject.name, knownTypes={"project" : Project_10})
-        if project:
-            project = project.upgradeVersion()
-        else:
-            print "Project, unknown version:", version
-            return None
-            
-    if project:
-        project._projectDir = os.path.dirname(fileObject.name)
-        project.RelativeToAbsPath()
-        
-    return project
-
-
-def save(fileObject, project, productionDeployment=False):
-    if not project._projectDir:
-        project._projectDir = os.path.dirname(fileObject.name)
-    project.AbsToRelativePath()  # temporarily change it to relative paths for saving
-    if ACTIVEGRID_BASE_IDE:
-        KNOWNTYPES = {"ag:project" : Project, "ag:file" : ProjectFile}
-    else:
-        KNOWNTYPES = {"ag:project" : Project, "ag:file" : ProjectFile, "ag:appInfo" : AppInfo.AppInfo}
-
-    savedHomeDir = project.homeDir        
-    if productionDeployment:
-        # for deployments, we don't want an abs path in homeDir since that
-        # would tie the app to the current filesystem. So unset it.
-        project.homeDir = None
-        
-    xmlutils.save(fileObject.name, project, prettyPrint=True, knownTypes=KNOWNTYPES, knownNamespaces=xmlutils.KNOWN_NAMESPACES)
-
-    if productionDeployment:
-        project.homeDir = savedHomeDir
-    
-    project.RelativeToAbsPath()  # swap it back to absolute path
-
 
 #----------------------------------------------------------------------------
 # Classes
@@ -93,7 +44,7 @@ def save(fileObject, project, productionDeployment=False):
 class BaseProject(object):
 
     __xmlname__ = "project"
-    __xmlexclude__ = ('fileName', '_projectDir', '_getDocCallback')
+    __xmlexclude__ = ('fileName', '_projectDir', '_getDocCallback', '_cacheEnabled')
     __xmlattributes__ = ("_homeDir", "version")
     __xmlrename__ = { "_homeDir":"homeDir", "_appInfo":"appInfo" }
     __xmlflattensequence__ = { "_files":("file",) }
@@ -107,9 +58,15 @@ class BaseProject(object):
         self._files = []
         self._projectDir = None  # default for homeDir, set on load
         self._homeDir = None         # user set homeDir for use in calculating relative path
+        self._cacheEnabled = 0
         if not ACTIVEGRID_BASE_IDE:
             self._appInfo = AppInfo.AppInfo()
-        
+
+
+    def initialize(self):
+        for file in self._files:
+            file._parentProj = self
+
 
     def __copy__(self):
         clone = Project()
@@ -117,18 +74,13 @@ class BaseProject(object):
         clone._projectDir = self._projectDir
         clone._homeDir = self._homeDir
         if not ACTIVEGRID_BASE_IDE:
-            clone._appInfo = self._appInfo
+            clone._appInfo = copy.copy(self._appInfo)
         return clone
-
-    
-    def initialize(self):
-        """ Required method for xmlmarshaller """
-        pass
 
 
     def GetAppInfo(self):
         return self._appInfo
-        
+
 
     def AddFile(self, filePath=None, logicalFolder=None, type=None, name=None, file=None):
         """ Usage: self.AddFile(filePath, logicalFolder, type, name)  # used for initial generation of object
@@ -138,7 +90,7 @@ class BaseProject(object):
         if file:
             self._files.append(file)
         else:
-            self._files.append(ProjectFile(filePath, logicalFolder, type, name, getDocCallback=self._getDocCallback))
+            self._files.append(ProjectFile(self, filePath, logicalFolder, type, name, getDocCallback=self._getDocCallback))
 
 
     def RemoveFile(self, file):
@@ -150,7 +102,7 @@ class BaseProject(object):
             for file in self._files:
                 if file.filePath == filePath:
                     return file
-                
+
         return None
 
 
@@ -159,6 +111,10 @@ class BaseProject(object):
 
 
     filePaths = property(_GetFilePaths)
+
+    def _GetProjectFiles(self):
+        return self._files
+    projectFiles = property(_GetProjectFiles)
 
 
     def _GetLogicalFolders(self):
@@ -170,7 +126,7 @@ class BaseProject(object):
 
 
     logicalFolders = property(_GetLogicalFolders)
-    
+
 
     def _GetPhysicalFolders(self):
         physicalFolders = []
@@ -189,11 +145,11 @@ class BaseProject(object):
             return self._homeDir
         else:
             return self._projectDir
-        
+
 
     def _SetHomeDir(self, parentPath):
         self._homeDir = parentPath
-        
+
 
     def _IsDefaultHomeDir(self):
         return (self._homeDir == None)
@@ -212,7 +168,7 @@ class BaseProject(object):
             if relFolder and relFolder not in relativeFolders:
                 relativeFolders.append(relFolder)
         return relativeFolders
-        
+
 
     def AbsToRelativePath(self):
         for file in self._files:
@@ -224,6 +180,33 @@ class BaseProject(object):
             file.RelativeToAbsPath(self.homeDir)
 
 
+    def _SetCache(self, enable):
+        """
+            Only turn this on if your operation assumes files on disk won't change.
+            Once your operation is done, turn this back off.
+            Nested enables are allowed, only the last disable will disable the cache.
+            
+            This bypasses the IsDocumentModificationDateCorrect call because the modification date check is too costly, it hits the disk and takes too long.
+        """
+        if enable:
+            if self._cacheEnabled == 0:
+                # clear old cache, don't want to accidentally return stale value
+                for file in self._files:
+                    file.ClearCache()        
+
+            self._cacheEnabled += 1
+        else:
+            self._cacheEnabled -= 1
+            
+
+
+    def _GetCache(self):
+        return (self._cacheEnabled > 0)
+
+
+    cacheEnabled = property(_GetCache, _SetCache)
+
+
     #----------------------------------------------------------------------------
     # BaseDocumentMgr methods
     #----------------------------------------------------------------------------
@@ -231,7 +214,7 @@ class BaseProject(object):
 
     def fullPath(self, fileName):
         fileName = super(BaseProject, self).fullPath(fileName)
-        
+
         if os.path.isabs(fileName):
             absPath = fileName
         elif self.homeDir:
@@ -242,7 +225,7 @@ class BaseProject(object):
 
 
     def documentRefFactory(self, name, fileType, filePath):
-        return ProjectFile(filePath=self.fullPath(filePath), type=fileType, name=name, getDocCallback=self._getDocCallback)
+        return ProjectFile(self, filePath=self.fullPath(filePath), type=fileType, name=name, getDocCallback=self._getDocCallback)
 
 
     def findAllRefs(self):
@@ -256,8 +239,8 @@ class BaseProject(object):
         if not xformdir:
             xformdir = self.homeDir
         return xformdir
-         
-   
+
+
     def setRefs(self, files):
         self._files = files
 
@@ -295,16 +278,17 @@ if ACTIVEGRID_BASE_IDE:
 else:
     class Project(BaseProject, basedocmgr.BaseDocumentMgr):
         pass
-        
+
 
 class ProjectFile(object):
     __xmlname__ = "file"
-    __xmlexclude__ = ('_getDocCallback', '_docCallbackCacheReturnValue', '_docModelCallbackCacheReturnValue', '_doc',)
+    __xmlexclude__ = ('_parentProj', '_getDocCallback', '_docCallbackCacheReturnValue', '_docModelCallbackCacheReturnValue', '_doc',)
     __xmlattributes__ = ["filePath", "logicalFolder", "type", "name"]
     __xmldefaultnamespace__ = xmlutils.AG_NS_URL
 
 
-    def __init__(self, filePath=None, logicalFolder=None, type=None, name=None, getDocCallback=None):
+    def __init__(self, parent=None, filePath=None, logicalFolder=None, type=None, name=None, getDocCallback=None):
+        self._parentProj = parent
         self.filePath = filePath
         self.logicalFolder = logicalFolder
         self.type = type
@@ -316,35 +300,44 @@ class ProjectFile(object):
 
 
     def _GetDocumentModel(self):
-        # possible bug is if document gets replaced outside of IDE, where we'll return previous doc.
-        # originally added a timestamp check but that increased the time again to 4x
-        if self._docModelCallbackCacheReturnValue:  # accelerator for caching document, got 4x speed up.
+        if (self._docCallbackCacheReturnValue
+        and (self._parentProj.cacheEnabled or self._docCallbackCacheReturnValue.IsDocumentModificationDateCorrect())):
             return self._docModelCallbackCacheReturnValue
-            
+
         if self._getDocCallback:
             self._docCallbackCacheReturnValue, self._docModelCallbackCacheReturnValue = self._getDocCallback(self.filePath)
             return self._docModelCallbackCacheReturnValue
-            
+
         return None
 
-        
+
     document = property(_GetDocumentModel)
-    
+
 
     def _GetDocument(self):
-        # Hack, just return the IDE document wrapper that corresponds to the runtime document model
-        # callers should have called ".document" before calling ".ideDocument"
-        if self._docCallbackCacheReturnValue:  # accelerator for caching document, got 4x speed up.
+        # Return the IDE document wrapper that corresponds to the runtime document model
+        if (self._docCallbackCacheReturnValue
+        and (self._parentProj.cacheEnabled or self._docCallbackCacheReturnValue.IsDocumentModificationDateCorrect())):
             return self._docCallbackCacheReturnValue
+
+        if self._getDocCallback:
+            self._docCallbackCacheReturnValue, self._docModelCallbackCacheReturnValue = self._getDocCallback(self.filePath)
+            return self._docCallbackCacheReturnValue
+
         return None
-    
+
 
     ideDocument = property(_GetDocument)
 
 
+    def ClearCache(self):
+        self._docCallbackCacheReturnValue = None
+        self._docModelCallbackCacheReturnValue = None
+
+
     def _typeEnumeration(self):
         return basedocmgr.FILE_TYPE_LIST
-        
+
 
     def _GetPhysicalFolder(self):
         dir = None
@@ -356,7 +349,7 @@ class ProjectFile(object):
 
 
     physicalFolder = property(_GetPhysicalFolder)
-    
+
 
     def GetRelativeFolder(self, parentPath):
         parentPathLen = len(parentPath)
@@ -364,7 +357,7 @@ class ProjectFile(object):
         dir = None
         if self.filePath:
             dir = os.path.dirname(self.filePath)
-            if dir.startswith(parentPath):
+            if dir.startswith(parentPath + os.sep):
                 dir = "." + dir[parentPathLen:]  # convert to relative path
             if os.sep != '/':
                 dir = dir.replace(os.sep, '/')  # always save out with '/' as path separator for cross-platform compatibility.
@@ -375,7 +368,7 @@ class ProjectFile(object):
         """ Used to convert path to relative path for saving (disk format) """
         parentPathLen = len(parentPath)
 
-        if self.filePath.startswith(parentPath):
+        if self.filePath.startswith(parentPath + os.sep):
             self.filePath = "." + self.filePath[parentPathLen:]  # convert to relative path
             if os.sep != '/':
                 self.filePath = self.filePath.replace(os.sep, '/')  # always save out with '/' as path separator for cross-platform compatibility.
@@ -385,8 +378,8 @@ class ProjectFile(object):
 
     def RelativeToAbsPath(self, parentPath):
         """ Used to convert path to absolute path (for any necessary disk access) """
-        if self.filePath.startswith("."):  # relative to project file
-            self.filePath = os.path.normpath(os.path.join(parentPath, self.filePath))
+        if self.filePath.startswith("./"):  # relative to project file
+            self.filePath = os.path.normpath(os.path.join(parentPath, self.filePath))  # also converts '/' to os.sep
 
 
     #----------------------------------------------------------------------------
@@ -399,21 +392,29 @@ class ProjectFile(object):
         import wx.lib.docview
         if not self._doc:
             docMgr = wx.GetApp().GetDocumentManager()
-            
-            doc = docMgr.CreateDocument(self.filePath, docMgr.GetFlags()|wx.lib.docview.DOC_SILENT|wx.lib.docview.DOC_OPEN_ONCE|wx.lib.docview.DOC_NO_VIEW)
-            if (doc == None):  # already open
-                docs = docMgr.GetDocuments()
-                for d in docs:
-                    if d.GetFilename() == self.filePath:
-                        doc = d
-                        break
-            self._doc = doc
+
+            try:
+                doc = docMgr.CreateDocument(self.filePath, docMgr.GetFlags()|wx.lib.docview.DOC_SILENT|wx.lib.docview.DOC_OPEN_ONCE|wx.lib.docview.DOC_NO_VIEW)
+                if (doc == None):  # already open
+                    docs = docMgr.GetDocuments()
+                    for d in docs:
+                        if d.GetFilename() == self.filePath:
+                            doc = d
+                            break
+                self._doc = doc
+            except Exception,e:
+                aglogging.reportException(e, stacktrace=True)
+                
         return self._doc
-        
+
 
     def _GetLocalServiceProcessName(self):
         # HACK: temporary solution to getting process name from wsdlag file.
-        return self._GetDoc().GetModel().processName
+        doc = self._GetDoc()
+        if doc:
+            return doc.GetModel().processName
+        else:
+            return None
 
 
     processName = property(_GetLocalServiceProcessName)
@@ -458,33 +459,39 @@ class ProjectFile(object):
     localServiceClassName = property(_GetLocalServiceClassName, _SetLocalServiceClassName)
 
 
+    def getServiceParameter(self, message, part):
+        return self._GetDoc().GetModel().getServiceParameter(message, part)
+
 
 # only activate this code if we programatically need to access these values
 ##    def _GetRssServiceBaseURL(self):
 ##        return self._GetDoc().GetModel().rssServiceBaseURL
 ##
-##        
+##
 ##    def _SetRssServiceBaseURL(self, baseURL):
 ##        self._GetDoc().GetModel().rssServiceBaseURL = baseURL
-##         
-##   
+##
+##
 ##    rssServiceBaseURL = property(_GetRssServiceBaseURL, _SetRssServiceBaseURL)
 ##
 ##
 ##    def _GetRssServiceRssVersion(self):
 ##        return self._GetDoc().GetModel().rssServiceRssVersion
-##        
+##
 ##
 ##    def _SetRssServiceRssVersion(self, rssVersion):
 ##        self._GetDoc().GetModel().rssServiceRssVersion = rssVersion
-##            
+##
 ##
 ##    rssServiceRssVersion = property(_GetRssServiceRssVersion, _SetRssServiceRssVersion)
 
 
     def _GetServiceRefServiceType(self):
         # HACK: temporary solution to getting service type from wsdlag file.
-        model = self._GetDoc().GetModel()
+        doc = self._GetDoc()
+        if not doc:
+            return None
+        model = doc.GetModel()
         if hasattr(model, 'serviceType'):
             return model.serviceType
         else:
@@ -494,25 +501,27 @@ class ProjectFile(object):
     def _SetServiceRefServiceType(self, serviceType):
         # HACK: temporary solution to getting service type from wsdlag file.
         self._GetDoc().GetModel().serviceType = serviceType
-        
+
 
     serviceType = property(_GetServiceRefServiceType, _SetServiceRefServiceType)
 
 
     def getExternalPackage(self):
         # HACK: temporary solution to getting custom code filename from wsdlag file.
-        import activegrid.server.deployment as deploymentlib    
-        
+        import activegrid.model.projectmodel as projectmodel
+        import wx
+        import ProjectEditor
+
         appInfo = self._GetDoc().GetAppInfo()
 
         if appInfo.language == None:
-            language = deploymentlib.LANGUAGE_DEFAULT
+            language = wx.ConfigBase_Get().Read(ProjectEditor.APP_LAST_LANGUAGE, projectmodel.LANGUAGE_DEFAULT)
         else:
             language = appInfo.language
-            
-        if language == deploymentlib.LANGUAGE_PYTHON:
+
+        if language == projectmodel.LANGUAGE_PYTHON:
             suffix = ".py"
-        elif language == deploymentlib.LANGUAGE_PHP:
+        elif language == projectmodel.LANGUAGE_PHP:
             suffix = ".php"
         pyFilename = self.name + suffix
         return self._GetDoc().GetAppDocMgr().fullPath(pyFilename)
@@ -543,7 +552,63 @@ class Project_10:
     def upgradeVersion(self):
         currModel = Project()
         for file in self._files:
-            currModel._files.append(ProjectFile(file))
+            currModel._files.append(ProjectFile(currModel, file))
         return currModel
 
+
+#----------------------------------------------------------------------------
+# XML Marshalling Methods
+#----------------------------------------------------------------------------
+
+if ACTIVEGRID_BASE_IDE:
+    KNOWNTYPES = {"ag:project" : Project, "ag:file" : ProjectFile}
+else:
+    KNOWNTYPES = {"ag:project" : Project, "ag:file" : ProjectFile,
+                  "ag:appInfo" : AppInfo.AppInfo,
+                  "ag:deploymentDataSource" : AppInfo.DeploymentDataSource,
+                  "ag:dataSourceBinding" : AppInfo.DataSourceBinding}
+
+def load(fileObject):
+    version = xmlutils.getAgVersion(fileObject.name)
+    # most current versions on top
+    if version == PROJECT_VERSION_050826:
+        fileObject.seek(0)
+        project = xmlutils.load(fileObject.name, knownTypes=KNOWNTYPES, knownNamespaces=xmlutils.KNOWN_NAMESPACES, createGenerics=True)
+    elif version == PROJECT_VERSION_050730:
+        fileObject.seek(0)
+        project = xmlutils.load(fileObject.name, knownTypes={"project" : Project_10}, createGenerics=True)
+        project = project.upgradeVersion()
+    else:
+        # assume it is old version without version number
+        fileObject.seek(0)
+        project = xmlutils.load(fileObject.name, knownTypes={"project" : Project_10}, createGenerics=True)
+        if project:
+            project = project.upgradeVersion()
+        else:
+            print "Project, unknown version:", version
+            return None
+
+    if project:
+        project._projectDir = os.path.dirname(fileObject.name)
+        project.RelativeToAbsPath()
+
+    return project
+
+
+def save(fileObject, project, productionDeployment=False):
+    if not project._projectDir:
+        project._projectDir = os.path.dirname(fileObject.name)
+    project.AbsToRelativePath()  # temporarily change it to relative paths for saving
+    savedHomeDir = project.homeDir
+    if productionDeployment:
+        # for deployments, we don't want an abs path in homeDir since that
+        # would tie the app to the current filesystem. So unset it.
+        project.homeDir = None
+
+    xmlutils.save(fileObject.name, project, prettyPrint=True, knownTypes=KNOWNTYPES, knownNamespaces=xmlutils.KNOWN_NAMESPACES)
+
+    if productionDeployment:
+        project.homeDir = savedHomeDir
+
+    project.RelativeToAbsPath()  # swap it back to absolute path
 
