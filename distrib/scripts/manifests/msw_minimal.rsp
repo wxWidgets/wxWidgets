@@ -202,8 +202,6 @@ src/makeprog.sl
 src/makelib.sl
 src/salford.lnk
 src/maketwin.env
-src/makeprog.twn
-src/makelib.twn
 src/makefile.bcc
 src/makefile.dos
 src/makefile.vc
