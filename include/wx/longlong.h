@@ -140,6 +140,8 @@ public:
         { m_ll = l; return *this; }
     wxLongLongNative& operator=(long l)
         { m_ll = l; return *this; }
+    wxLongLongNative& operator=(unsigned int l)
+        { m_ll = l; return *this; }
     wxLongLongNative& operator=(unsigned long l)
         { m_ll = l; return *this; }
 #if wxUSE_LONGLONG_WX
@@ -374,6 +376,8 @@ public:
     wxULongLongNative& operator=(int l)
         { m_ll = l; return *this; }
     wxULongLongNative& operator=(long l)
+        { m_ll = l; return *this; }
+    wxULongLongNative& operator=(unsigned int l)
         { m_ll = l; return *this; }
     wxULongLongNative& operator=(unsigned long l)
         { m_ll = l; return *this; }
@@ -633,6 +637,12 @@ public:
 
         return *this;
     }
+
+    wxLongLongWx& operator=(unsigned int l)
+    {
+        return operator=((unsigned long)l);
+    }
+
     wxLongLongWx& operator=(const class wxULongLongWx &ll);
 
     // from double
