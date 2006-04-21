@@ -696,8 +696,8 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 #endif
                  );
 
-    dialog.SetDirectory(wxGetHomeDir());
     dialog.CentreOnParent();
+    dialog.SetDirectory(wxGetHomeDir());
 
     if (dialog.ShowModal() == wxID_OK)
     {
@@ -968,7 +968,7 @@ void MyFrame::DlgCenteredScreen(wxCommandEvent& WXUNUSED(event))
 {
     wxDialog dlg(this, wxID_ANY, _T("Dialog centered on screen"),
                  wxDefaultPosition, wxSize(200, 100));
-    new wxButton(&dlg, wxID_OK, _T("Close"), wxPoint(10, 10));
+    (new wxButton(&dlg, wxID_OK, _T("Close")))->Centre();
     dlg.CentreOnScreen();
     dlg.ShowModal();
 }
@@ -977,7 +977,7 @@ void MyFrame::DlgCenteredParent(wxCommandEvent& WXUNUSED(event))
 {
     wxDialog dlg(this, wxID_ANY, _T("Dialog centered on parent"),
                  wxDefaultPosition, wxSize(200, 100));
-    new wxButton(&dlg, wxID_OK, _T("Close"), wxPoint(10, 10));
+    (new wxButton(&dlg, wxID_OK, _T("Close")))->Centre();
     dlg.CentreOnParent();
     dlg.ShowModal();
 }
