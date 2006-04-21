@@ -64,9 +64,10 @@ public:
     // for this DC. If you want actual values, call
     // GetDC()->GetChar...()
 
-    // returns associated wxWindow
+    // returns interface to the rendering window
     wxHtmlWindowInterface *GetWindowInterface() {return m_windowInterface;}
 #if WXWIN_COMPATIBILITY_2_6
+    // deprecated, use GetWindowInterface()->GetHTMLWindow() instead
     wxDEPRECATED( wxHtmlWindow *GetWindow() );
 #endif
 
