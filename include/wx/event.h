@@ -546,7 +546,7 @@ public:
     long GetExtraLong() const { return m_extraLong; }
 
     void SetInt(int i) { m_commandInt = i; }
-    long GetInt() const { return m_commandInt; }
+    int GetInt() const { return m_commandInt; }
 
     virtual wxEvent *Clone() const { return new wxCommandEvent(*this); }
 
