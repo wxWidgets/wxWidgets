@@ -230,6 +230,40 @@ static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
     return false;
 }
 
+// Basically, the problem is that we need to use the "new" size of the
+// OPENFILENAME structure
+// (OPENFILENAME_SIZE_VERSION_400 + void* + DWORD + DWORD)
+// in Windows 2000 and XP so that the new-style file dialog with the
+// "Places Bar" shows up. Unfortunately, there seems to be no reliable way
+// to test for it in the headers, so we need to always make one
+// with the extra bytes.
+//
+// We don't do this on Windows CE, however.
+#ifdef __WXWINCE__
+    typedef OPENFILENAME wxOPENFILENAME;
+
+    static const DWORD wxOPENFILENAME_V5_SIZE = sizeof(OPENFILENAME);
+#else // !__WXWINCE__
+    struct wxOPENFILENAME : public OPENFILENAME
+    {
+        // fields added in Windows 2000/XP comdlg32.dll version
+        void *pVoid;
+        DWORD dw1;
+        DWORD dw2;
+    };
+
+    // hardcoded sizeof(OPENFILENAME) in the Platform SDK: we have to do it
+    // because sizeof(OPENFILENAME) in the headers we use when compiling the
+    // library could be less if _WIN32_WINNT is not >= 0x500
+    static const DWORD wxOPENFILENAME_V5_SIZE = 88;
+
+    // this is hardcoded sizeof(OPENFILENAME_NT4) from Platform SDK
+    static const DWORD wxOPENFILENAME_V4_SIZE = 76;
+#endif // __WXWINCE__/!__WXWINCE__
+
+// always try the new one first
+static DWORD gs_ofStructSize = wxOPENFILENAME_V5_SIZE;
+
 int wxFileDialog::ShowModal()
 {
     HWND hWnd = 0;
@@ -259,12 +293,7 @@ int wxFileDialog::ShowModal()
         or hook function so that we can actually adjust the position.
         Without moving or centering the dlg, it will just stay
         in the upper left of the frame, it does not center
-        automatically..  One additional note, when the hook is
-        enabled, the PLACES BAR in the dlg (shown on later versions
-        of windows (2000 and XP) will automatically be turned off
-        according to the MSDN docs.  This is normal.  If the
-        programmer needs the PLACES BAR (left side of dlg) they
-        just shouldn't move or center the dlg.
+        automatically.
     */
     if (m_bMovedWindow) // we need these flags.
     {
@@ -293,24 +322,14 @@ int wxFileDialog::ShowModal()
         msw_flags |= OFN_OVERWRITEPROMPT;
     }
 
-    OPENFILENAME of;
+    wxOPENFILENAME of;
     wxZeroMemory(of);
 
-    // the OPENFILENAME struct has been extended in newer version of
-    // comcdlg32.dll, but as we don't use the extended fields anyhow, set
-    // the struct size to the old value - otherwise, the programs compiled
-    // with new headers will not work with the old libraries
-#if !defined(__WXWINCE__) && defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0500)
-    of.lStructSize       = sizeof(OPENFILENAME) -
-                           (sizeof(void *) + 2*sizeof(DWORD));
-#else // old headers
-    of.lStructSize       = sizeof(OPENFILENAME);
-#endif
-
+    of.lStructSize       = gs_ofStructSize;
     of.hwndOwner         = hWnd;
     of.lpstrTitle        = WXSTRINGCAST m_message;
     of.lpstrFileTitle    = titleBuffer;
-    of.nMaxFileTitle     = wxMAXFILE + 1 + wxMAXEXT;    // Windows 3.0 and 3.1
+    of.nMaxFileTitle     = wxMAXFILE + 1 + wxMAXEXT;
 
     // Convert forward slashes to backslashes (file selector doesn't like
     // forward slashes) and also squeeze multiple consecutive slashes into one
@@ -420,28 +439,27 @@ int wxFileDialog::ShowModal()
     DWORD errCode;
     bool success = DoShowCommFileDialog(&of, m_dialogStyle, &errCode);
 
-    // sometimes we may have a mismatch between the headers used to compile the
-    // library and the run-time version of comdlg32.dll, try to account for it
 #ifndef __WXWINCE__
-    if ( !success && errCode == CDERR_STRUCTSIZE )
+    // the system might be too old to support the new version file dialog
+    // boxes, try with the old size
+    if ( !success && errCode == CDERR_STRUCTSIZE &&
+            of.lStructSize != wxOPENFILENAME_V4_SIZE )
     {
-        // The struct size has changed so try a smaller or bigger size
-        const int oldStructSize = of.lStructSize;
-        of.lStructSize = oldStructSize - (sizeof(void *) + 2*sizeof(DWORD));
+        of.lStructSize = wxOPENFILENAME_V4_SIZE;
+
         success = DoShowCommFileDialog(&of, m_dialogStyle, &errCode);
 
-        if ( !success && (errCode == CDERR_STRUCTSIZE) )
+        if ( success || !errCode )
         {
-            // try to adjust in the other direction
-            of.lStructSize = oldStructSize + (sizeof(void *) + 2*sizeof(DWORD));
-            success = DoShowCommFileDialog(&of, m_dialogStyle, &errCode);
+            // use this struct size for subsequent dialogs
+            gs_ofStructSize = of.lStructSize;
         }
     }
 #endif // !__WXWINCE__
 
     if ( success )
     {
-        // GetOpenFileName will always change the current working directory on 
+        // GetOpenFileName will always change the current working directory on
         // (according to MSDN) "Windows NT 4.0/2000/XP" because the flag
         // OFN_NOCHANGEDIR has no effect.  If the user did not specify
         // wxCHANGE_DIR let's restore the current working directory to what it
