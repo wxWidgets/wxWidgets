@@ -1249,7 +1249,7 @@ void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
                              int sizeFlags, bool fromCtor)
 {
     // A bit of optimization to help sort out the flickers.
-    int oldX = oldY = oldW = oldH = -1;
+    int oldX = -1, oldY = -1, oldW = -1, oldH = -1;
 
     if( !fromCtor )
     {
