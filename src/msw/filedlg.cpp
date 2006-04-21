@@ -229,20 +229,20 @@ static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
     return false;
 }
 
-// Basically, the problem is that we need to use the "new" size of the
-// OPENFILENAME structure
-// (OPENFILENAME_SIZE_VERSION_400 + void* + DWORD + DWORD)
-// in Windows 2000 and XP so that the new-style file dialog with the
-// "Places Bar" shows up. Unfortunately, there seems to be no reliable way
-// to test for it in the headers, so we need to always make one
-// with the extra bytes.
+// We want to use OPENFILENAME struct version 5 (Windows 2000/XP) but we don't
+// know if the OPENFILENAME declared in the currently used headers is a V5 or
+// V4 (smaller) one so we try to manually extend the struct in case it is the
+// old one.
 //
-// We don't do this on Windows CE, however.
-#ifdef __WXWINCE__
+// We don't do this on Windows CE nor under Win64, however, as there are no
+// compilers with old headers for these architectures
+#if defined(__WXWINCE__) || defined(__WIN64__)
     typedef OPENFILENAME wxOPENFILENAME;
 
-    static const DWORD wxOPENFILENAME_V5_SIZE = sizeof(OPENFILENAME);
-#else // !__WXWINCE__
+    static const DWORD gs_ofStructSize = sizeof(OPENFILENAME);
+#else // !__WXWINCE__ || __WIN64__
+    #define wxTRY_SMALLER_OPENFILENAME
+
     struct wxOPENFILENAME : public OPENFILENAME
     {
         // fields added in Windows 2000/XP comdlg32.dll version
@@ -258,10 +258,10 @@ static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
 
     // this is hardcoded sizeof(OPENFILENAME_NT4) from Platform SDK
     static const DWORD wxOPENFILENAME_V4_SIZE = 76;
-#endif // __WXWINCE__/!__WXWINCE__
 
-// always try the new one first
-static DWORD gs_ofStructSize = wxOPENFILENAME_V5_SIZE;
+    // always try the new one first
+    static DWORD gs_ofStructSize = wxOPENFILENAME_V5_SIZE;
+#endif // __WXWINCE__ || __WIN64__/!...
 
 int wxFileDialog::ShowModal()
 {
@@ -438,7 +438,7 @@ int wxFileDialog::ShowModal()
     DWORD errCode;
     bool success = DoShowCommFileDialog(&of, m_dialogStyle, &errCode);
 
-#ifndef __WXWINCE__
+#ifdef wxTRY_SMALLER_OPENFILENAME
     // the system might be too old to support the new version file dialog
     // boxes, try with the old size
     if ( !success && errCode == CDERR_STRUCTSIZE &&
@@ -454,7 +454,7 @@ int wxFileDialog::ShowModal()
             gs_ofStructSize = of.lStructSize;
         }
     }
-#endif // !__WXWINCE__
+#endif // wxTRY_SMALLER_OPENFILENAME
 
     if ( success )
     {
