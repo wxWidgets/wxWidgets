@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        module.cpp
+// Name:        src/common/module.cpp
 // Purpose:     Modules initialization/destruction
 // Author:      Wolfram Gloger/adapted by Guilhem Lavaux
 // Modified by:
@@ -13,11 +13,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/hash.h"
 #endif
 
 #include "wx/module.h"
-#include "wx/hash.h"
 #include "wx/intl.h"
 #include "wx/log.h"
 #include "wx/listimpl.cpp"
@@ -104,4 +107,3 @@ void wxModule::CleanUpModules()
 
     WX_CLEAR_LIST(wxModuleList, m_modules);
 }
-

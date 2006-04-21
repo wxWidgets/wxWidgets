@@ -26,9 +26,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/list.h"
+    #include "wx/hash.h"
 #endif
-
-#include "wx/hash.h"
 
 #if wxUSE_OLD_HASH_TABLE
 

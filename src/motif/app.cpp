@@ -17,6 +17,10 @@
 #define XtDisplay XTDISPLAY
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/hash.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/utils.h"
 #include "wx/module.h"
@@ -24,7 +28,6 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/evtloop.h"
-#include "wx/hash.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"

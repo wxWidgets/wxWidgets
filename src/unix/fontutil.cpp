@@ -27,12 +27,12 @@
 #ifndef WX_PRECOMP
     #include "wx/font.h" // wxFont enums
     #include "wx/encinfo.h"
+    #include "wx/hash.h"
 #endif // PCH
 
 #include "wx/fontutil.h"
 #include "wx/fontmap.h"
 #include "wx/tokenzr.h"
-#include "wx/hash.h"
 #include "wx/module.h"
 
 #if wxUSE_PANGO

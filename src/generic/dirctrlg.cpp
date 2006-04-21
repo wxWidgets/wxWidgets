@@ -13,10 +13,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_DIRDLG || wxUSE_FILEDLG
+
+#ifndef WX_PRECOMP
+    #include "wx/hash.h"
+#endif
 
 #include "wx/generic/dirctrlg.h"
 #include "wx/module.h"
@@ -38,7 +42,6 @@
 #include "wx/dir.h"
 #include "wx/settings.h"
 #include "wx/artprov.h"
-#include "wx/hash.h"
 #include "wx/mimetype.h"
 #include "wx/image.h"
 #include "wx/choice.h"
@@ -48,7 +51,7 @@
 #endif
 
 #if defined(__WXMAC__)
-  #include  "wx/mac/private.h"  // includes mac headers
+    #include  "wx/mac/private.h"  // includes mac headers
 #endif
 
 #ifdef __WXMSW__
@@ -60,10 +63,10 @@
 //         accordingly.
 #if !defined(__GNUWIN32__) || (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
 #if !defined(__WXWINCE__)
-  #include <direct.h>
+    #include <direct.h>
 #endif
-  #include <stdlib.h>
-  #include <ctype.h>
+    #include <stdlib.h>
+    #include <ctype.h>
 #endif
 
 #endif
@@ -82,11 +85,11 @@
 #endif // __OS2__
 
 #if defined(__WXMAC__)
-# include "MoreFilesX.h"
+    #include "MoreFilesX.h"
 #endif
 
 #ifdef __BORLANDC__
-#include "dos.h"
+    #include "dos.h"
 #endif
 
 // If compiled under Windows, this macro can cause problems

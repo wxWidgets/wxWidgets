@@ -23,13 +23,12 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/palette.h"
+    #include "wx/hash.h"
 #endif
 
 #include "wx/imagpcx.h"
 #include "wx/wfstream.h"
 #include "wx/module.h"
-
-#include "wx/hash.h"
 
 //-----------------------------------------------------------------------------
 // wxPCXHandler

@@ -12,6 +12,10 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/hash.h"
+#endif
+
 #include "wx/frame.h"
 #include "wx/app.h"
 #include "wx/utils.h"
@@ -26,7 +30,6 @@
 #include "wx/evtloop.h"
 #include "wx/timer.h"
 #include "wx/filename.h"
-#include "wx/hash.h"
 
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"

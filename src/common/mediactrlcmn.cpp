@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/mediactrl.cpp
+// Name:        src/common/mediactrl.cpp
 // Purpose:     wxMediaCtrl common code
 // Author:      Ryan Norton <wxprojects@comcast.net>
 // Modified by:
@@ -22,19 +22,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
+#endif
+
+#if wxUSE_MEDIACTRL
+
+#ifndef WX_PRECOMP
+    #include "wx/hash.h"
 #endif
 
 //---------------------------------------------------------------------------
 // Includes
 //---------------------------------------------------------------------------
 #include "wx/mediactrl.h"
-#include "wx/hash.h"
-
-//---------------------------------------------------------------------------
-// Compilation guard
-//---------------------------------------------------------------------------
-#if wxUSE_MEDIACTRL
 
 //===========================================================================
 //
@@ -417,21 +417,21 @@ wxSize wxMediaCtrl::DoGetBestSize() const
     return wxSize(0,0);
 }
 
-double wxMediaCtrl::GetVolume() 
+double wxMediaCtrl::GetVolume()
 {
     if(m_imp && m_bLoaded)
         return m_imp->GetVolume();
     return 0.0;
 }
 
-bool wxMediaCtrl::SetVolume(double dVolume) 
+bool wxMediaCtrl::SetVolume(double dVolume)
 {
     if(m_imp && m_bLoaded)
         return m_imp->SetVolume(dVolume);
     return false;
 }
 
-bool wxMediaCtrl::ShowPlayerControls(wxMediaCtrlPlayerControls flags) 
+bool wxMediaCtrl::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
 {
     if(m_imp)
         return m_imp->ShowPlayerControls(flags);
@@ -475,9 +475,9 @@ void wxMediaCtrl::DoMoveWindow(int x, int y, int w, int h)
 void wxMediaCtrl::MacVisibilityChanged()
 {
     wxControl::MacVisibilityChanged();
-    
+
     if(m_imp)
-        m_imp->MacVisibilityChanged();        
+        m_imp->MacVisibilityChanged();
 }
 #endif
 
@@ -555,9 +555,5 @@ FORCE_LINK(wxmediabackend_wmp10)
 #else
 FORCE_LINK(basewxmediabackends)
 #endif
-//---------------------------------------------------------------------------
-// End of compilation guard and of file
-//---------------------------------------------------------------------------
+
 #endif //wxUSE_MEDIACTRL
-
-

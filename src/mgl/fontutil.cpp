@@ -15,12 +15,15 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/hash.h"
+#endif
+
 #include "wx/log.h"
 #include "wx/fontutil.h"
 #include "wx/encinfo.h"
 #include "wx/fontmap.h"
 #include "wx/tokenzr.h"
-#include "wx/hash.h"
 
 #include "wx/listimpl.cpp"
 #include "wx/sysopt.h"

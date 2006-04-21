@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        x11/evtloop.cpp
+// Name:        src/x11/evtloop.cpp
 // Purpose:     implements wxEventLoop for X11
 // Author:      Julian Smart
 // Modified by:
@@ -17,19 +17,26 @@
 // headers
 // ----------------------------------------------------------------------------
 
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/hash.h"
+#endif
+
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/evtloop.h"
 #include "wx/tooltip.h"
-#if wxUSE_THREADS
-#include "wx/thread.h"
-#endif
 #include "wx/timer.h"
-#include "wx/hash.h"
 #include "wx/module.h"
 #include "wx/unix/private.h"
 #include "wx/x11/private.h"
 #include "X11/Xlib.h"
+
+#if wxUSE_THREADS
+    #include "wx/thread.h"
+#endif
 
 #include <sys/time.h>
 #include <unistd.h>
@@ -159,10 +166,10 @@ bool wxSocketTable::CallCallback(int fd, wxSocketTableType socketType)
                 (entry->m_callbackOutput) (entry->m_fdOutput, entry->m_dataOutput);
             }
         }
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 void wxSocketTable::FillSets(fd_set* readset, fd_set* writeset, int* highest)
@@ -220,7 +227,7 @@ class wxSocketTableModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxSocketTableModule)
 public:
     wxSocketTableModule() {}
-    bool OnInit() { wxTheSocketTable = new wxSocketTable; return TRUE; };
+    bool OnInit() { wxTheSocketTable = new wxSocketTable; return true; };
     void OnExit() { delete wxTheSocketTable; wxTheSocketTable = NULL; };
 };
 
@@ -254,12 +261,12 @@ class WXDLLEXPORT wxEventLoopImpl
 {
 public:
     // ctor
-    wxEventLoopImpl() { SetExitCode(0); m_keepGoing = FALSE; }
+    wxEventLoopImpl() { SetExitCode(0); m_keepGoing = false; }
 
-    // process an XEvent, return TRUE if it was processed
+    // process an XEvent, return true if it was processed
     bool ProcessEvent(XEvent* event);
 
-    // generate an idle message, return TRUE if more idle time requested
+    // generate an idle message, return true if more idle time requested
     bool SendIdleEvent();
 
     // set/get the exit code
@@ -267,7 +274,7 @@ public:
     int GetExitCode() const { return m_exitcode; }
 
 public:
-    // preprocess an event, return TRUE if processed (i.e. no further
+    // preprocess an event, return true if processed (i.e. no further
     // dispatching required)
     bool PreProcessEvent(XEvent* event);
 
@@ -289,13 +296,13 @@ bool wxEventLoopImpl::ProcessEvent(XEvent *event)
 {
     // give us the chance to preprocess the message first
     if ( PreProcessEvent(event) )
-        return TRUE;
+        return true;
 
     // if it wasn't done, dispatch it to the corresponding window
     if (wxTheApp)
         return wxTheApp->ProcessXEvent((WXEvent*) event);
 
-    return FALSE;
+    return false;
 }
 
 bool wxEventLoopImpl::PreProcessEvent(XEvent *event)
@@ -312,18 +319,18 @@ bool wxEventLoopImpl::PreProcessEvent(XEvent *event)
     for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
     {
         if ( wnd->MSWTranslateMessage((WXMSG *)msg) )
-            return TRUE;
+            return true;
     }
 
     // Anyone for a non-translation message? Try youngest descendants first.
     for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
     {
         if ( wnd->MSWProcessMessage((WXMSG *)msg) )
-            return TRUE;
+            return true;
     }
 #endif
 
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -357,7 +364,7 @@ int wxEventLoop::Run()
 
     wxEventLoopActivator activate(this);
 
-    m_impl->m_keepGoing = TRUE;
+    m_impl->m_keepGoing = true;
     while ( m_impl->m_keepGoing )
     {
 #if 0 // wxUSE_THREADS
@@ -405,7 +412,7 @@ void wxEventLoop::Exit(int rc)
     wxCHECK_RET( IsRunning(), _T("can't call Exit() if not running") );
 
     m_impl->SetExitCode(rc);
-    m_impl->m_keepGoing = FALSE;
+    m_impl->m_keepGoing = false;
 }
 
 // ----------------------------------------------------------------------------
@@ -464,7 +471,7 @@ bool wxEventLoop::Dispatch()
         if (select( highest+1, &readset, &writeset, NULL, &tv ) == 0)
         {
             // Timed out, so no event to process
-            return TRUE;
+            return true;
         }
         else
         {
@@ -488,6 +495,5 @@ bool wxEventLoop::Dispatch()
 
 
     (void) m_impl->ProcessEvent( &event );
-    return TRUE;
+    return true;
 }
-

@@ -19,6 +19,7 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/hash.h"
 #endif
 
 #include "wx/image.h"
@@ -28,12 +29,11 @@
 #include "wx/wfstream.h"
 #include "wx/intl.h"
 #include "wx/module.h"
-#include "wx/hash.h"
 #include "wx/utils.h"
 #include "wx/math.h"
 
 #if wxUSE_XPM
-#include "wx/xpmdecod.h"
+    #include "wx/xpmdecod.h"
 #endif
 
 // For memcpy

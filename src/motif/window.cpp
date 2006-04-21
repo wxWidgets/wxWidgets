@@ -26,6 +26,10 @@
 #define XtScreen XTSCREEN
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/hash.h"
+#endif
+
 #include "wx/menu.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
@@ -40,7 +44,6 @@
 #include "wx/menuitem.h"
 #include "wx/log.h"
 #include "wx/evtloop.h"
-#include "wx/hash.h"
 
 #if  wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
@@ -1246,7 +1249,8 @@ void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
                              int sizeFlags, bool fromCtor)
 {
     // A bit of optimization to help sort out the flickers.
-    int oldX = -1, oldY = -1, oldW = -1, oldH = -1;
+    int oldX = oldY = oldW = oldH = -1;
+
     if( !fromCtor )
     {
         GetSize(& oldW, & oldH);

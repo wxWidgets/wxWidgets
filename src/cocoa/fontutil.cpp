@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        unix/fontutil.cpp
+// Name:        src/cocoa/fontutil.cpp
 // Purpose:     Font helper functions for X11 (GDK/X)
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -25,12 +25,12 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/hash.h"
 #endif // PCH
 
 #include "wx/fontutil.h"
 #include "wx/fontmap.h"
 #include "wx/tokenzr.h"
-#include "wx/hash.h"
 #include "wx/module.h"
 #include "wx/encinfo.h"
 
@@ -68,7 +68,7 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
             m_style = wxFONTSTYLE_SLANT;
             break;
     }
-    
+
     return m_style;
 }
 
@@ -97,19 +97,19 @@ wxFontWeight wxNativeFontInfo::GetWeight() const
             m_weight = wxFONTWEIGHT_BOLD;
             break;
     }
-    
+
     return m_weight;
 }
 
 bool wxNativeFontInfo::GetUnderlined() const
 {
-    return FALSE;
+    return false;
 }
 
 wxString wxNativeFontInfo::GetFaceName() const
 {
     wxString tmp = wxGTK_CONV_BACK( pango_font_description_get_family( description ) );
-    
+
     return tmp;
 }
 
@@ -129,7 +129,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
 
 bool wxNativeEncodingInfo::FromString(const wxString& s)
 {
-    return FALSE;
+    return false;
 }
 
 wxString wxNativeEncodingInfo::ToString() const
@@ -139,16 +139,16 @@ wxString wxNativeEncodingInfo::ToString() const
 
 bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
 {
-    return TRUE;
+    return true;
 }
 
 bool wxGetNativeFontEncoding(wxFontEncoding encoding,
                              wxNativeEncodingInfo *info)
 {
-    return FALSE;
+    return false;
 }
 
-#else 
+#else
    // __WXGTK20__
 
 #ifdef __X__
@@ -211,7 +211,7 @@ return wxEmptyString;
 bool wxGetNativeFontEncoding(wxFontEncoding encoding,
                              wxNativeEncodingInfo *info)
 {
-    return FALSE;
+    return false;
 }
 
 bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
@@ -243,7 +243,7 @@ bool wxFontModule::OnInit()
 {
     g_fontHash = new wxHashTable( wxKEY_STRING );
 
-    return TRUE;
+    return true;
 }
 
 void wxFontModule::OnExit()
