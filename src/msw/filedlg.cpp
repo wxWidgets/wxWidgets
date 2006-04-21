@@ -84,35 +84,34 @@ wxFileDialogHookFunction(HWND      hDlg,
                          WPARAM    WXUNUSED(wParam),
                          LPARAM    lParam)
 {
-    HWND   hwndDialog;
-    hwndDialog = ::GetParent( hDlg );
-    switch (iMsg)
+    switch ( iMsg )
     {
-        case WM_DESTROY:
+        case WM_NOTIFY:
             {
-                RECT dlgRect;
-                GetWindowRect( hwndDialog, & dlgRect );
-                gs_rectDialog.x = dlgRect.left;
-                gs_rectDialog.y = dlgRect.top;
-                gs_rectDialog.width = dlgRect.right - dlgRect.left;
-                gs_rectDialog.height = dlgRect.bottom - dlgRect.top;
+                OFNOTIFY *pNotifyCode = wx_reinterpret_cast(OFNOTIFY *, lParam);
+                if ( pNotifyCode->hdr.code == CDN_INITDONE )
+                {
+                    // note that we need to move the parent window: hDlg is a
+                    // child of it when OFN_EXPLORER is used
+                    ::SetWindowPos
+                      (
+                        ::GetParent(hDlg),
+                        HWND_TOP,
+                        gs_rectDialog.x, gs_rectDialog.y,
+                        0, 0,
+                        SWP_NOZORDER | SWP_NOSIZE
+                      );
+                 }
             }
             break;
 
-        case WM_NOTIFY:
-            {
-                OFNOTIFY *   pNotifyCode;
-                pNotifyCode = (LPOFNOTIFY) lParam;
-                if (CDN_INITDONE == (pNotifyCode->hdr).code)
-                {
-                    SetWindowPos( hwndDialog, HWND_TOP,
-                                  gs_rectDialog.x,
-                                  gs_rectDialog.y,
-                                  gs_rectDialog.width,
-                                  gs_rectDialog.height,
-                                  SWP_NOZORDER|SWP_NOSIZE);
-                 }
-            }
+        case WM_DESTROY:
+            // reuse the position used for the dialog the next time by default
+            //
+            // NB: at least under Windows 2003 this is useless as after the
+            //     first time it's shown the dialog always remembers its size
+            //     and position itself and ignores any later SetWindowPos calls
+            wxCopyRECTToRect(wxGetWindowRect(::GetParent(hDlg)), gs_rectDialog);
             break;
     }
 
@@ -178,32 +177,32 @@ void wxFileDialog::SetPath(const wxString& path)
         m_fileName << _T('.') << ext;
 }
 
-void wxFileDialog::DoGetPosition( int *x, int *y ) const
+void wxFileDialog::DoGetPosition(int *x, int *y) const
 {
-    *x = gs_rectDialog.x;
-    *y = gs_rectDialog.y;
+    if ( x )
+        *x = gs_rectDialog.x;
+    if ( y )
+        *y = gs_rectDialog.y;
 }
 
 
 void wxFileDialog::DoGetSize(int *width, int *height) const
 {
-    *width  = gs_rectDialog.width;
-    *height = gs_rectDialog.height;
+    if ( width )
+        *width = gs_rectDialog.width;
+    if ( height )
+        *height = gs_rectDialog.height;
 }
 
-void wxFileDialog::DoMoveWindow(int x, int y, int WXUNUSED(width), int WXUNUSED(height))
+void wxFileDialog::DoMoveWindow(int x, int y, int WXUNUSED(w), int WXUNUSED(h))
 {
     m_bMovedWindow = true;
 
     gs_rectDialog.x = x;
     gs_rectDialog.y = y;
 
-    /*
-        The width and height can not be set by the programmer
-        its just not possible.  But the program can get the
-        size of the Dlg after it has been shown, in case they need
-        that data.
-    */
+    // size of the dialog can't be changed because the controls are not laid
+    // out correctly then
 }
 
 // helper used below in ShowModal(): style is used to determine whether to show
