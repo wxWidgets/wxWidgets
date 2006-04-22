@@ -46,8 +46,10 @@
 IMPLEMENT_DYNAMIC_CLASS(wxChoicebook, wxBookCtrlBase)
 IMPLEMENT_DYNAMIC_CLASS(wxChoicebookEvent, wxNotifyEvent)
 
+#if !WXWIN_COMPATIBILITY_EVENT_TYPES
 const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED = wxNewEventType();
+#endif
 const int wxID_CHOICEBOOKCHOICE = wxNewId();
 
 BEGIN_EVENT_TABLE(wxChoicebook, wxBookCtrlBase)

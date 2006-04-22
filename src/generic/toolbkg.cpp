@@ -46,8 +46,10 @@
 IMPLEMENT_DYNAMIC_CLASS(wxToolbook, wxBookCtrlBase)
 IMPLEMENT_DYNAMIC_CLASS(wxToolbookEvent, wxNotifyEvent)
 
+#if !WXWIN_COMPATIBILITY_EVENT_TYPES
 const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED = wxNewEventType();
+#endif
 const int wxID_TOOLBOOKTOOLBAR = wxNewId();
 
 BEGIN_EVENT_TABLE(wxToolbook, wxBookCtrlBase)

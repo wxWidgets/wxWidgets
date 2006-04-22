@@ -46,8 +46,10 @@
 IMPLEMENT_DYNAMIC_CLASS(wxListbook, wxBookCtrlBase)
 IMPLEMENT_DYNAMIC_CLASS(wxListbookEvent, wxNotifyEvent)
 
+#if !WXWIN_COMPATIBILITY_EVENT_TYPES
 const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED = wxNewEventType();
+#endif
 const int wxID_LISTBOOKLISTVIEW = wxNewId();
 
 BEGIN_EVENT_TABLE(wxListbook, wxBookCtrlBase)

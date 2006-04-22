@@ -44,10 +44,12 @@
 IMPLEMENT_DYNAMIC_CLASS(wxTreebook, wxBookCtrlBase)
 IMPLEMENT_DYNAMIC_CLASS(wxTreebookEvent, wxNotifyEvent)
 
+#if !WXWIN_COMPATIBILITY_EVENT_TYPES
 const wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED = wxNewEventType();
 const wxEventType wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED = wxNewEventType();
 const wxEventType wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED = wxNewEventType();
+#endif
 const int wxID_TREEBOOKTREEVIEW = wxNewId();
 
 BEGIN_EVENT_TABLE(wxTreebook, wxBookCtrlBase)
