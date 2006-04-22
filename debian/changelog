@@ -1,3 +1,9 @@
+wxwindows2.4 (2.4.5.1) unstable; urgency=low
+
+  * Fix the wx.pth alternative path.  Closes: #364096
+
+ -- Ron Lee <ron@debian.org>  Sun, 23 Apr 2006 00:54:55 +0930
+
 wxwindows2.4 (2.4.5) unstable; urgency=low
 
   * Removes Gnome project GPL code from gtk/menu.cpp.  Incorporating

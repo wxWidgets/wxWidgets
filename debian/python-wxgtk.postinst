@@ -10,7 +10,7 @@ if [ "$1" = "configure" ]; then
 fi
 
 update-alternatives --install /usr/lib/=PY/site-packages/wx.pth  wx.pth	\
-			      /usr/lib/wx/config/wx=V.pth 	 =PRIO
+			      /usr/lib/wx/python/wx=V.pth 	 =PRIO
 
 #DEBHELPER#
 
