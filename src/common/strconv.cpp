@@ -1637,14 +1637,27 @@ public:
         // wouldn't work if reading an incomplete MB char didn't result in an
         // error
         //
-        // note however that using MB_ERR_INVALID_CHARS with CP_UTF7 results in
-        // an error (tested under Windows Server 2003) and apparently it is
-        // done on purpose, i.e. the function accepts any input in this case
-        // and although I'd prefer to return error on ill-formed output, our
-        // own wxMBConvUTF7 doesn't detect errors (e.g. lone "+" which is
-        // explicitly ill-formed according to RFC 2152) neither so we don't
-        // even have any fallback here...
-        int flags = m_CodePage == CP_UTF7 ? 0 : MB_ERR_INVALID_CHARS;
+        // Moreover, MB_ERR_INVALID_CHARS is only supported on Win 2K SP4 or
+        // Win XP or newer and it is not supported for UTF-[78] so we always
+        // use our own conversions in this case. See
+        //     http://blogs.msdn.com/michkap/archive/2005/04/19/409566.aspx
+        //     http://msdn.microsoft.com/library/en-us/intl/unicode_17si.asp
+        if ( m_CodePage == CP_UTF8 )
+        {
+            return wxConvUTF8.MB2WC(buf, psz, n);
+        }
+
+        if ( m_CodePage == CP_UTF7 )
+        {
+            return wxConvUTF7.MB2WC(buf, psz, n);
+        }
+
+        int flags = 0;
+        if ( (m_CodePage < 50000 && m_CodePage != CP_SYMBOL) &&
+                IsAtLeastWin2kSP4() )
+        {
+            flags = MB_ERR_INVALID_CHARS;
+        }
 
         const size_t len = ::MultiByteToWideChar
                              (
@@ -1656,10 +1669,41 @@ public:
                                 buf ? n : 0     // size of output buffer
                              );
 
+        if ( !len )
+        {
+            // function totally failed
+            return (size_t)-1;
+        }
+
+        // if we were really converting and didn't use MB_ERR_INVALID_CHARS,
+        // check if we succeeded, by doing a double trip:
+        if ( !flags && buf )
+        {
+            const size_t mbLen = strlen(psz);
+            wxCharBuffer mbBuf(mbLen);
+            if ( ::WideCharToMultiByte
+                   (
+                      m_CodePage,
+                      0,
+                      buf,
+                      -1,
+                      mbBuf.data(),
+                      mbLen + 1,        // size in bytes, not length
+                      NULL,
+                      NULL
+                   ) == 0 ||
+                  strcmp(mbBuf, psz) != 0 )
+            {
+                // we didn't obtain the same thing we started from, hence
+                // the conversion was lossy and we consider that it failed
+                return (size_t)-1;
+            }
+        }
+
         // note that it returns count of written chars for buf != NULL and size
         // of the needed buffer for buf == NULL so in either case the length of
         // the string (which never includes the terminating NUL) is one less
-        return len ? len - 1 : (size_t)-1;
+        return len - 1;
     }
 
     size_t WC2MB(char *buf, const wchar_t *pwz, size_t n) const
@@ -1772,6 +1816,33 @@ private:
         }
 
         return s_isWin98Or2k == 1;
+    }
+
+    static bool IsAtLeastWin2kSP4()
+    {
+#ifdef __WXWINCE__
+        return false;
+#else
+        static int s_isAtLeastWin2kSP4 = -1;
+
+        if ( s_isAtLeastWin2kSP4 == -1 )
+        {
+            OSVERSIONINFOEX ver;
+
+            memset(&ver, 0, sizeof(ver));
+            ver.dwOSVersionInfoSize = sizeof(ver);
+            GetVersionEx((OSVERSIONINFO*)&ver);
+
+            s_isAtLeastWin2kSP4 =
+              ((ver.dwMajorVersion > 5) || // Vista+
+               (ver.dwMajorVersion == 5 && ver.dwMinorVersion > 0) || // XP/2003
+               (ver.dwMajorVersion == 5 && ver.dwMinorVersion == 0 &&
+               ver.wServicePackMajor >= 4)) // 2000 SP4+
+              ? 1 : 0;
+        }
+
+        return s_isAtLeastWin2kSP4 == 1;
+#endif
     }
 
     long m_CodePage;
