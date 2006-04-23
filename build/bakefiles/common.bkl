@@ -493,9 +493,6 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
     <!-- for both GUI and wxBase libs/samples: -->
     <template id="wx_append_base_nomono">
         <!-- link against builtin 3rd party libs, if needed: -->
-        <sys-lib>$(LIB_TIFF)</sys-lib>
-        <sys-lib>$(LIB_JPEG)</sys-lib>
-        <sys-lib>$(LIB_PNG)</sys-lib>
         <sys-lib>$(LIB_ZLIB)</sys-lib>
         <sys-lib>$(LIB_ODBC)</sys-lib>
         <sys-lib>$(LIB_REGEX)</sys-lib>
@@ -558,7 +555,10 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
 
 
     <!-- for GUI libs/samples: -->
-    <template id="wx_append_nomono" template="wx_append_base_nomono">
+    <template id="wx_append_nomono" template_append="wx_append_base_nomono">
+        <sys-lib>$(LIB_TIFF)</sys-lib>
+        <sys-lib>$(LIB_JPEG)</sys-lib>
+        <sys-lib>$(LIB_PNG)</sys-lib>
         <ldlibs>$(EXTRALIBS_FOR_GUI)</ldlibs>
     </template>
 
