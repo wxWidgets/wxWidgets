@@ -79,7 +79,6 @@
 
     <if cond="FORMAT=='msvc'">
         <option name="TARGET_CPU">
-            <values>AMD64,IA64</values>
             <default-value>$(DOLLAR)(CPU)</default-value>
             <description>
 The target processor architecture must be specified when it is not X86.
@@ -87,6 +86,8 @@ This does not affect the compiler output, so you still need to make sure
 your environment is set up appropriately with the correct compiler in the
 PATH. Rather it affects some options passed to some of the common build
 utilities such as the resource compiler and the linker.
+
+Accepted values: AMD64, IA64.
             </description>
         </option>
     </if>
