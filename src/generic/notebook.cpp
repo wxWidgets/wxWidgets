@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_NOTEBOOK
+
 #include  "wx/notebook.h"
 
 #ifndef WX_PRECOMP
@@ -75,16 +77,16 @@ class WXDLLEXPORT wxNotebookTabView: public wxTabView
 {
 DECLARE_DYNAMIC_CLASS(wxNotebookTabView)
 public:
-  wxNotebookTabView(wxNotebook* notebook, long style = wxTAB_STYLE_DRAW_BOX | wxTAB_STYLE_COLOUR_INTERIOR);
-  ~wxNotebookTabView(void);
+    wxNotebookTabView(wxNotebook* notebook, long style = wxTAB_STYLE_DRAW_BOX | wxTAB_STYLE_COLOUR_INTERIOR);
+    ~wxNotebookTabView(void);
 
-  // Called when a tab is activated
-  virtual void OnTabActivate(int activateId, int deactivateId);
-  // Allows vetoing
-  virtual bool OnTabPreActivate(int activateId, int deactivateId);
+    // Called when a tab is activated
+    virtual void OnTabActivate(int activateId, int deactivateId);
+    // Allows vetoing
+    virtual bool OnTabPreActivate(int activateId, int deactivateId);
 
 protected:
-   wxNotebook*      m_notebook;
+    wxNotebook*      m_notebook;
 };
 
 // ----------------------------------------------------------------------------
@@ -264,17 +266,17 @@ bool wxNotebook::DeletePage(size_t nPage)
 
     if (m_pages.GetCount() == 0)
     {
-      m_nSelection = -1;
-      m_tabView->SetTabSelection(-1, false);
+        m_nSelection = -1;
+        m_tabView->SetTabSelection(-1, false);
     }
     else if (m_nSelection > -1)
     {
-      m_nSelection = -1;
+        m_nSelection = -1;
 
-      m_tabView->SetTabSelection((int) (long) GetPage(0), false);
+        m_tabView->SetTabSelection((int) (long) GetPage(0), false);
 
-      if (m_nSelection != 0)
-        ChangePage(-1, 0);
+        if (m_nSelection != 0)
+            ChangePage(-1, 0);
     }
 
     RefreshLayout(false);
@@ -713,3 +715,5 @@ bool wxNotebookTabView::OnTabPreActivate(int activateId, int deactivateId)
   }
   return retval;
 }
+
+#endif // wxUSE_NOTEBOOK
