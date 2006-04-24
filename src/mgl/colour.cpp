@@ -12,12 +12,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/colour.h"
+
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #include "wx/gdicmn.h"
-#include "wx/colour.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
@@ -50,27 +51,11 @@ wxColour& wxColour::operator =(const wxColour& col)
     return *this;
 }
 
-void wxColour::InitFromName(const wxString& name)
-{
-    if ( wxTheColourDatabase )
-    {
-        wxColour col = wxTheColourDatabase->Find(name);
-        if ( col.Ok() )
-        {
-            *this = col;
-            return;
-        }
-    }
-
-    // leave invalid
-    Init();
-}
-
 wxColour::~wxColour()
 {
 }
 
-void wxColour::Set(unsigned char r, unsigned char g, unsigned char b)
+void wxColour::InitWith(unsigned char r, unsigned char g, unsigned char b)
 {
     m_red = r;
     m_green = g;

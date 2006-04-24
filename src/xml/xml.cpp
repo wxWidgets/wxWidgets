@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xml.cpp
+// Name:        src/xml/xml.cpp
 // Purpose:     wxXmlDocument - XML parser & data holder class
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
@@ -15,9 +15,9 @@
     #pragma hdrstop
 #endif
 
-#include "wx/xml/xml.h"
-
 #if wxUSE_XML
+
+#include "wx/xml/xml.h"
 
 #include "wx/wfstream.h"
 #include "wx/datstrm.h"

@@ -12,8 +12,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/colour.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/colour.h"
 #endif
 
 #include "wx/gdicmn.h"
@@ -69,15 +70,8 @@ void wxColour::InitFromName(
   const wxString&                   sCol
 )
 {
-    if ( wxTheColourDatabase )
-    {
-        wxColour col = wxTheColourDatabase->Find(sCol);
-        if ( col.Ok() )
-        {
-            *this = col;
+    if ( wxString2Colour(sCol, this) )
             return;
-        }
-    }
 
     // leave invalid
     Init();

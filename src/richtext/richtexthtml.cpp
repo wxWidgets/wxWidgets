@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtext/richtexthtml.cpp
+// Name:        src/richtext/richtexthtml.cpp
 // Purpose:     HTML I/O for wxRichTextCtrl
 // Author:      Julian Smart
 // Modified by:
@@ -13,7 +13,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_RICHTEXT
@@ -21,7 +21,7 @@
 #include "wx/richtext/richtexthtml.h"
 
 #ifndef WX_PRECOMP
-  #include "wx/wx.h"
+    #include "wx/wx.h"
 #endif
 
 #include "wx/filename.h"
@@ -53,55 +53,54 @@ bool wxRichTextHTMLHandler::DoLoadFile(wxRichTextBuffer *WXUNUSED(buffer), wxInp
 bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream)
 {
     buffer->Defragment();
-    
+
     wxTextOutputStream str(stream);
-    
+
     wxTextAttrEx currentParaStyle = buffer->GetAttributes();
     wxTextAttrEx currentCharStyle = buffer->GetAttributes();
-    
+
     str << wxT("<html><head></head><body>\n");
-    
+
     /*
     wxRichText may be support paper formats like a1/a2/a3/a4
     when this widget grown enough, i should turn back and support its new features
     but not yet
-    
+
       str << wxT("<table border=0 cellpadding=0 cellspacing=0><tr><td>");
-      
+
         wxString left_indent = SymbolicIndent(currentParaStyle.GetLeftIndent());
         wxString right_indent = SymbolicIndent(currentParaStyle.GetRightIndent());
-        
+
           str << wxString::Format(wxT("%s</td><td></td><td>%s</td></tr><tr>"),
           left_indent.c_str(), //Document-Wide Left Indent
           right_indent.c_str()); //Document-Wide Right Indent
-          
+
             str << wxT("<td></td><td width=\"100%\">");
     */
-    
+
     str << wxT("<table border=0 cellpadding=0 cellspacing=0><tr><td width=\"100%\">");
-    
-    str << wxString::Format(wxT("<font face=\"%s\" size=\"%ld\" color=\"#%02X%02X%02X\" >"),
-        currentParaStyle.GetFont().GetFaceName().c_str(), Pt_To_Size( currentParaStyle.GetFont().GetPointSize() ), 
-        currentParaStyle.GetTextColour().Red(), currentParaStyle.GetTextColour().Green(),
-        currentParaStyle.GetTextColour().Blue());
-    
+
+    str << wxString::Format(wxT("<font face=\"%s\" size=\"%ld\" color=\"%s\" >"),
+        currentParaStyle.GetFont().GetFaceName().c_str(), Pt_To_Size( currentParaStyle.GetFont().GetPointSize() ),
+        currentParaStyle.GetTextColour().GetAsString(wxC2S_HTML_SYNTAX).c_str());
+
     //wxString align = GetAlignment( currentParaStyle.GetAlignment() );
     //str << wxString::Format(wxT("<p align=\"%s\">"), align );
-    
+
     m_font = false;
     m_indent = 0;
     m_list = false;
-    
+
     wxRichTextObjectList::compatibility_iterator node = buffer->GetChildren().GetFirst();
     while (node)
     {
         wxRichTextParagraph* para = wxDynamicCast(node->GetData(), wxRichTextParagraph);
         wxASSERT (para != NULL);
-        
+
         if (para)
         {
             OutputParagraphFormatting(currentParaStyle, para->GetAttributes(), stream);
-            
+
             wxRichTextObjectList::compatibility_iterator node2 = para->GetChildren().GetFirst();
             while (node2)
             {
@@ -110,16 +109,16 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
                 if (textObj && !textObj->IsEmpty())
                 {
                     BeginCharacterFormatting(currentCharStyle, obj->GetAttributes(), stream);
-                    
+
                     str << textObj->GetText();
-                    
+
                     EndCharacterFormatting(currentCharStyle, obj->GetAttributes(), stream);
                 }
-                
+
                 wxRichTextImage* image = wxDynamicCast(obj, wxRichTextImage);
                 if( image && !image->IsEmpty())
                     Image_to_Base64( image, stream );
-                
+
                 node2 = node2->GetNext();
             }
             str << wxT("\n");
@@ -127,16 +126,16 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
         }
         node = node->GetNext();
     }
-    
+
     str << wxT("</font></td></tr></table></body></html>\n");
-    
+
     return true;
 }
 
 void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& currentStyle, const wxTextAttrEx& thisStyle, wxOutputStream& stream)
 {
     wxTextOutputStream str(stream);
-    
+
     //Is the item bulleted one?
     if( thisStyle.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE )
     {
@@ -144,7 +143,7 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
         if( m_list )
         {
             //Yes there is
-            
+
             //Is the item among the previous ones
             //Is the item one of the previous list tag's child items
             if( (thisStyle.GetLeftIndent() == (m_indent + 100)) || (thisStyle.GetLeftIndent() < 100) )
@@ -152,14 +151,14 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
             else
             {
                 //No it isn't
-                
+
                 //So we should close the list tag
                 str << (m_is_ul ? wxT("</ul>") : wxT("</ol>"));
-                
+
                 //And renavigate to new list's horizontal position
                 NavigateToListPosition(thisStyle, str);
                 //Ok it's done
-                
+
                 //Get the appropriate tag, an ol for numerical values, an ul for dot, square etc.
                 wxString tag;
                 TypeOfList(thisStyle, tag);
@@ -169,29 +168,29 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
         else
         {
             //No there isn't a list
-            
+
             //navigate to new list's horizontal position(indent)
-            NavigateToListPosition(thisStyle, str);				
-            
+            NavigateToListPosition(thisStyle, str);
+
             //Get the appropriate tag, an ol for numerical values, an ul for dot, square etc.
             wxString tag;
             TypeOfList(thisStyle, tag);
             str << tag << wxT("<li>");
-            
+
             //Now we have a list, mark it.
             m_list = true;
-        }			
+        }
     }
     else if( m_list )
     {
-        //The item is not bulleted and there is a list what should be closed now.        
+        //The item is not bulleted and there is a list what should be closed now.
         //So close the list
 
         str << (m_is_ul ? wxT("</ul>") : wxT("</ol>"));
         //And mark as there is no an opened list
         m_list = false;
     }
-    
+
     // does the item have an indentation ?
     if( thisStyle.GetLeftIndent() )
     {
@@ -224,7 +223,7 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
                                 Indent(thisStyle, str);
                                 m_indent = thisStyle.GetLeftIndent() + thisStyle.GetLeftSubIndent();
                                 m_indents.Add( m_indent );
-                                
+
                                 break;
                             }
                             else if( m_indent == (thisStyle.GetLeftIndent() + thisStyle.GetLeftSubIndent()) )
@@ -238,9 +237,9 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
                             else
                             {
                                 str << wxT("</td></tr></table>");
-                                
+
                                 m_indents.RemoveAt(i);
-                                
+
                                 if( i < 1 ){m_indent=0; break;}
                                 m_indent = m_indents[i-1];
                             }
@@ -259,33 +258,32 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
     else if( m_indent )
     {
         //The item is not indented and there is a table(s) what should be closed now.
-        
+
         //So close them
         for(unsigned int i = 0; i < m_indents.size(); i++ )
             str << wxT("</td></tr></table>");
-        
+
         m_indent = 0;
         m_indents.Clear();
     }
-    
-    
+
+
     wxString style;
-    
+
     //Is there any change on the font properties of the item
     if( thisStyle.GetFont().GetFaceName() != currentStyle.GetFont().GetFaceName() )
         style += wxString::Format(wxT(" face=\"%s\""), thisStyle.GetFont().GetFaceName().c_str());
     if( thisStyle.GetFont().GetPointSize() != currentStyle.GetFont().GetPointSize() )
         style += wxString::Format(wxT(" size=\"%ld\""), Pt_To_Size(thisStyle.GetFont().GetPointSize()) );
     if( thisStyle.GetTextColour() != currentStyle.GetTextColour() )
-        style += wxString::Format(wxT(" color=\"#%02X%02X%02X\""), thisStyle.GetTextColour().Red(), 
-        thisStyle.GetTextColour().Green(), thisStyle.GetTextColour().Blue());
-    
+        style += wxString::Format(wxT(" color=\"%s\""), thisStyle.GetTextColour().GetAsString(wxC2S_HTML_SYNTAX).c_str());
+
     if( style.size() )
     {
         str << wxString::Format(wxT("<font %s >"), style.c_str());
         m_font = true;
     }
-    
+
     if( thisStyle.GetFont().GetWeight() == wxBOLD )
         str << wxT("<b>");
     if( thisStyle.GetFont().GetStyle() == wxITALIC )
@@ -297,14 +295,14 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
 void wxRichTextHTMLHandler::EndCharacterFormatting(const wxTextAttrEx& WXUNUSED(currentStyle), const wxTextAttrEx& thisStyle, wxOutputStream& stream)
 {
     wxTextOutputStream str(stream);
-    
+
     if( thisStyle.GetFont().GetUnderlined() )
         str << wxT("</u>");
     if( thisStyle.GetFont().GetStyle() == wxITALIC )
         str << wxT("</i>");
     if( thisStyle.GetFont().GetWeight() == wxBOLD )
         str << wxT("</b>");
-    
+
     if( m_font )
     {
         m_font = false;
@@ -328,8 +326,8 @@ void wxRichTextHTMLHandler::NavigateToListPosition(const wxTextAttrEx& thisStyle
 {
     //indenting an item using an ul/ol tag is equal to inserting 5 x &nbsp; on its left side.
     //so we should start from 100 point left
-    
-    //Is the second td's left wall of the current indentaion table at the 100+ point-left-side 
+
+    //Is the second td's left wall of the current indentaion table at the 100+ point-left-side
     //of the item, horizontally?
     if( m_indent + 100 < thisStyle.GetLeftIndent() )
     {
@@ -340,11 +338,11 @@ void wxRichTextHTMLHandler::NavigateToListPosition(const wxTextAttrEx& thisStyle
         return;
     }
     //No it isn't
-    
+
     int i = m_indents.size() - 1;
     for(; i > -1; i--)
     {
-        //Is the second td's left wall of the current indentaion table at the 100+ point-left-side 
+        //Is the second td's left wall of the current indentaion table at the 100+ point-left-side
         //of the item ?
         if( m_indent + 100 < thisStyle.GetLeftIndent() )
         {
@@ -361,9 +359,9 @@ void wxRichTextHTMLHandler::NavigateToListPosition(const wxTextAttrEx& thisStyle
             //No it is not, the second td's left wall of the current indentaion table is at the
             //right side of the current item horizontally, so close it.
             str << wxT("</td></tr></table>");
-            
+
             m_indents.RemoveAt(i);
-            
+
             if( i < 1 ){m_indent=0; break;}
             m_indent = m_indents[i-1];
         }
@@ -373,14 +371,14 @@ void wxRichTextHTMLHandler::Indent( const wxTextAttrEx& thisStyle, wxTextOutputS
 {
     //As a five year experienced web developer i assure you there is no way to indent an item
     //in html way, but we can use tables.
-    
-    
-    
+
+
+
     //Item -> "Hello world"
     //Its Left Indentation -> 100
     //Its Left Sub-Indentation ->40
     //A typical indentation-table for the item will be construct as the following
-    
+
     //3 x nbsp = 60
     //2 x nbsp = 40
     //LSI = Left Sub Indent
@@ -388,17 +386,17 @@ void wxRichTextHTMLHandler::Indent( const wxTextAttrEx& thisStyle, wxTextOutputS
     //
     //-------------------------------------------
     //|&nbsp;&nbsp;nbsp;|nbsp;nbsp;Hello World  |
-    //|		   |        |    |                  | 
+    //|      |          |    |                  |
     //|        V        |    V                  |
     //|      --LI--     | --LSI--               |
     //-------------------------------------------
-    
+
     str << wxT("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
-    
+
     wxString symbolic_indent = SymbolicIndent( (thisStyle.GetLeftIndent() + thisStyle.GetLeftSubIndent()) - m_indent );
     str << wxString::Format( wxT("<td>%s</td>"), symbolic_indent.c_str() );
     str << wxT("<td width=\"100%\">");
-    
+
     if( thisStyle.GetLeftSubIndent() < 0 )
     {
         str << SymbolicIndent(~thisStyle.GetLeftSubIndent());
@@ -418,21 +416,21 @@ void wxRichTextHTMLHandler::LIndent( const wxTextAttrEx& thisStyle, wxTextOutput
     //r.EndNumberedBullet();
     //
     //A typical indentation-table for the item will be construct as the following
-    
+
     //1 x nbsp = 20 point
     //ULI -> 100pt (UL/OL tag indents its sub element by 100 point)
     //<--------- 100 pt ---------->|
     //------------------------------------------------------
     //|&nbsp;&nbsp;nbsp;&nbsp;nbsp;|<ul>                   |
-    //|		                       |<-ULI-><li>first item  | 
+    //|                            |<-ULI-><li>first item  |
     //|                            |<-ULI-><li>second item |
     //|                            |</ul>                  |
     //------------------------------------------------------
-    //                             |<-100->|	
-    
-    
+    //                             |<-100->|
+
+
     str << wxT("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
-    
+
     wxString symbolic_indent = SymbolicIndent( (thisStyle.GetLeftIndent() - m_indent) - 100);
     str << wxString::Format( wxT("<td>%s</td>"), symbolic_indent.c_str() );
     str << wxT("<td width=\"100%\">");
@@ -440,9 +438,9 @@ void wxRichTextHTMLHandler::LIndent( const wxTextAttrEx& thisStyle, wxTextOutput
 
 void wxRichTextHTMLHandler::TypeOfList( const wxTextAttrEx& thisStyle, wxString& tag )
 {
-    //We can use number attribute of li tag but not all the browsers support it. 
+    //We can use number attribute of li tag but not all the browsers support it.
     //also wxHtmlWindow doesn't support type attribute.
-    
+
     m_is_ul = false;
     if( thisStyle.GetBulletStyle() == (wxTEXT_ATTR_BULLET_STYLE_ARABIC|wxTEXT_ATTR_BULLET_STYLE_PERIOD))
         tag = wxT("<ol type=\"1\">");
@@ -481,20 +479,20 @@ wxString wxRichTextHTMLHandler::GetAlignment( const wxTextAttrEx& thisStyle )
 void wxRichTextHTMLHandler::Image_to_Base64(wxRichTextImage* image, wxOutputStream& stream)
 {
     wxTextOutputStream str(stream);
-    
+
     str << wxT("<img src=\"");
     str << wxT("data:");
     str << GetMimeType(image->GetImageBlock().GetImageType());
     str << wxT(";base64,");
-    
+
     if (image->GetImage().Ok() && !image->GetImageBlock().GetData())
         image->MakeBlock();
-    
+
     wxChar* data = b64enc( image->GetImageBlock().GetData(), image->GetImageBlock().GetDataSize() );
     str << data;
-    
+
     delete[] data;
-    
+
     str << wxT("\" />");
 }
 
@@ -543,19 +541,19 @@ wxChar* wxRichTextHTMLHandler::b64enc( unsigned char* input, size_t in_len )
     //elements of enc64 array must be 8 bit values
     //otherwise encoder will fail
     //hmmm.. Does wxT macro define a char as 16 bit value
-    //when compiling with UNICODE option? 
+    //when compiling with UNICODE option?
     static const wxChar enc64[] = wxT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
     wxChar* output = new wxChar[4*((in_len+2)/3)+1];
     wxChar* p = output;
-    
+
     while( in_len-- > 0 )
     {
         register wxChar a, b;
-        
+
         a = *input++;
-        
+
         *p++ = enc64[ (a >> 2) & 0x3f ];
-        
+
         if( in_len-- <= 0 )
         {
             *p++ = enc64[ (a << 4 ) & 0x30 ];
@@ -563,26 +561,26 @@ wxChar* wxRichTextHTMLHandler::b64enc( unsigned char* input, size_t in_len )
             *p++ = '=';
             break;
         }
-        
+
         b = *input++;
-        
+
         *p++ = enc64[(( a << 4 ) | ((b >> 4) &0xf )) & 0x3f];
-        
+
         if( in_len-- <= 0 )
         {
             *p++ = enc64[ (b << 2) & 0x3f ];
             *p++ = '=';
             break;
         }
-        
+
         a = *input++;
-        
+
         *p++ = enc64[ ((( b << 2 ) & 0x3f ) | ((a >> 6)& 0x3)) & 0x3f ];
-        
+
         *p++ = enc64[ a & 0x3f ];
     }
     *p = 0;
-    
+
     return output;
 }
 #endif
@@ -590,4 +588,3 @@ wxChar* wxRichTextHTMLHandler::b64enc( unsigned char* input, size_t in_len )
 
 #endif
 // wxUSE_RICHTEXT
-

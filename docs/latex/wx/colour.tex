@@ -2,7 +2,7 @@
 %% Name:        colour.tex
 %% Purpose:     wxColour docs
 %% Author:
-%% Modified by:
+%% Modified by: Francesco Montorsi
 %% Created:
 %% RCS-ID:      $Id$
 %% Copyright:   (c) wxWidgets
@@ -64,8 +64,7 @@ Constructs a colour from red, green and blue values.
 
 \func{}{wxColour}{\param{const wxString\& }{colourNname}}
 
-Constructs a colour object using a colour name
-listed in {\bf wxTheColourDatabase}.
+Constructs a colour using the given string. See \helpref{Set}{wxcolourset3} for more info.
 
 \func{}{wxColour}{\param{const wxColour\&}{ colour}}
 
@@ -101,6 +100,23 @@ Copy constructor.
 \constfunc{unsigned char}{Blue}{\void}
 
 Returns the blue intensity.
+
+
+\membersection{wxColour::GetAsString}\label{wxcolourgetasstring}
+
+\constfunc{wxString}{GetAsString}{\param{long}{ flags}}
+
+Converts this colour to a \helpref{wxString}{wxstring}
+using the given {\it flags}.
+
+The supported flags are {\bf wxC2S_NAME}, to obtain the colour
+name (e.g. wxColour(255,0,0) -> \texttt{``red"}), {\bf wxC2S_CSS_SYNTAX}, to obtain
+the colour in the \texttt{``rgb(r,g,b)"} syntax
+(e.g. wxColour(255,0,0) -> \texttt{``rgb(255,0,0)"}), and {\bf wxC2S_HTML_SYNTAX}, to obtain
+the colour as  \texttt{``\#"} followed by 6 hexadecimal digits
+(e.g. wxColour(255,0,0) -> \texttt{``\#FF0000"}).
+
+This function never fails and always returns a non-empty string.
 
 
 \membersection{wxColour::GetPixel}\label{wxcolourgetpixel}
@@ -139,6 +155,23 @@ Returns the red intensity.
 \func{void}{Set}{\param{unsigned char}{ red}, \param{unsigned char}{ green}, \param{unsigned char}{ blue}}
 
 Sets the RGB intensity values.
+
+
+\membersection{wxColour::Set}\label{wxcolourset2}
+
+\func{void}{Set}{\param{unsigned long}{ RGB}}
+
+Sets the RGB intensity values extracting them from the packed long.
+
+
+\membersection{wxColour::Set}\label{wxcolourset3}
+
+\func{bool}{Set}{\param{const wxString \&}{ str}}
+
+Sets the colour using the given string.
+Accepts colour names (those listed in \helpref{wxTheColourDatabase}{wxcolourdatabase}), the CSS-like \texttt{``RGB(r,g,b)"} syntax (case insensitive) and the HTML-like syntax (i.e. \texttt{``\#"} followed by 6 hexadecimal digits for red, green, blue components).
+
+Returns \true if the conversion was successful, \false otherwise.
 
 
 \membersection{wxColour::operator $=$}\label{wxcolourassign}
@@ -352,5 +385,3 @@ found in the database.
 
 Finds a colour name given the colour. Returns an empty string if the colour is
 not found in the database.
-
-

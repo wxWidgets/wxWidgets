@@ -15,24 +15,15 @@
 #include "wx/object.h"
 
 // Colour
-class WXDLLEXPORT wxColour: public wxObject
+class WXDLLEXPORT wxColour: public wxColourBase
 {
 public:
     // constructors
     // ------------
 
     // default
-    wxColour();
-
-    // from separate RGB
-    wxColour( unsigned char cRed, unsigned char cGreen, unsigned char cBlue );
-
-    // from packed RGB
-    wxColour( unsigned long colRGB ) { Set(colRGB); }
-
-    // Implicit conversion from the colour name
-    wxColour(const wxString& rColourName) { InitFromName(rColourName); }
-    wxColour(const wxChar *zColourName) { InitFromName(zColourName); }
+    wxColour() { Init(); }
+    DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
     // Copy ctors and assignment operators
     wxColour(const wxColour& rCol);
@@ -41,22 +32,6 @@ public:
 
     // Dtor
     ~wxColour();
-
-    // Set functions
-    void Set( unsigned char cRed, unsigned char cGreen, unsigned char cBlue);
-    void Set( unsigned long lColRGB)
-    {
-        // We don't need to know sizeof(long) here because we assume that the three
-        // least significant bytes contain the R, G and B values
-        Set( (unsigned char)lColRGB
-            ,(unsigned char)(lColRGB >> 8)
-            ,(unsigned char)(lColRGB >> 16)
-           );
-    }
-    void Set(const wxString& rsColour)
-    {
-        InitFromName(rsColour);
-    }
 
     // Accessors
     bool Ok(void) const {return m_bIsInit; }
@@ -79,17 +54,18 @@ public:
 
     WXCOLORREF GetPixel(void) const { return m_vPixel; };
 
-    void InitFromName(const wxString& rCol);
 
 private:
 
     // Helper function
     void Init();
 
-    bool                            m_bIsInit;
-    unsigned char                   m_cRed;
-    unsigned char                   m_cBlue;
-    unsigned char                   m_cGreen;
+    bool           m_bIsInit;
+    unsigned char  m_cRed;
+    unsigned char  m_cBlue;
+    unsigned char  m_cGreen;
+
+    virtual void InitWith( unsigned char cRed, unsigned char cGreen, unsigned char cBlue);
 
 public:
     WXCOLORREF                      m_vPixel ;

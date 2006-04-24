@@ -15,10 +15,11 @@
 
 #if wxUSE_HTML
 
+#include "wx/html/htmltag.h"
+
 #ifndef WXPRECOMP
 #endif
 
-#include "wx/html/htmltag.h"
 #include "wx/html/htmlpars.h"
 #include "wx/colour.h"
 #include <stdio.h> // for vsscanf
@@ -410,20 +411,13 @@ int wxHtmlTag::ScanParam(const wxString& par,
 
 bool wxHtmlTag::GetParamAsColour(const wxString& par, wxColour *clr) const
 {
+    wxASSERT(clr);
     wxString str = GetParam(par);
 
-    if (str.empty()) return false;
-    if (str.GetChar(0) == wxT('#'))
-    {
-        unsigned long tmp;
-        if (ScanParam(par, wxT("#%lX"), &tmp) != 1)
-            return false;
-        *clr = wxColour((unsigned char)((tmp & 0xFF0000) >> 16),
-                        (unsigned char)((tmp & 0x00FF00) >> 8),
-                        (unsigned char)(tmp & 0x0000FF));
+    if (clr->Set(str))
         return true;
-    }
-    else
+
+    if (!str.empty())
     {
         // Handle colours defined in HTML 4.0:
         #define HTML_COLOUR(name,r,g,b)                 \

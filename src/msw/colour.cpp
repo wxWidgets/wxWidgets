@@ -12,13 +12,14 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/colour.h"
+
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #include "wx/gdicmn.h"
 #include "wx/msw/private.h"
-#include "wx/colour.h"
 
 #include <string.h>
 
@@ -26,28 +27,17 @@
 
 template<> void wxStringReadValue(const wxString &s , wxColour &data )
 {
-    // copied from VS xrc
-    unsigned long tmp = 0;
-
-    if (s.Length() != 7 || s[0u] != wxT('#')
-        || wxSscanf(s.c_str(), wxT("#%lX"), &tmp) != 1)
+    if ( !data.Set(s) )
     {
         wxLogError(_("String To Colour : Incorrect colour specification : %s"),
             s.c_str() );
         data = wxNullColour;
     }
-    else
-    {
-        data = wxColour((unsigned char) ((tmp & 0xFF0000) >> 16) ,
-            (unsigned char) ((tmp & 0x00FF00) >> 8),
-            (unsigned char) ((tmp & 0x0000FF)));
-    }
 }
 
 template<> void wxStringWriteValue(wxString &s , const wxColour &data )
 {
-    s = wxString::Format(wxT("#%02X%02X%02X"),
-        data.Red(), data.Green(), data.Blue() );
+    s = data.GetAsString(wxC2S_HTML_SYNTAX);
 }
 
 wxTO_STRING_IMP( wxColour )
@@ -80,27 +70,11 @@ void wxColour::Init()
     m_green = 0;
 }
 
-void wxColour::InitFromName(const wxString& name)
-{
-    if ( wxTheColourDatabase )
-    {
-        wxColour col = wxTheColourDatabase->Find(name);
-        if ( col.Ok() )
-        {
-            *this = col;
-            return;
-        }
-    }
-
-    // leave invalid
-    Init();
-}
-
 wxColour::~wxColour()
 {
 }
 
-void wxColour::Set(unsigned char r, unsigned char g, unsigned char b)
+void wxColour::InitWith(unsigned char r, unsigned char g, unsigned char b)
 {
     m_red = r;
     m_green = g;

@@ -128,6 +128,7 @@ All (GUI):
 - Added support for links to wxHtmlListBox; use code has to override
   wxHtmlListBox::OnLinkClicked() to take advantage of it.
 - Added an easier to use wxMenu::AppendSubMenu()
+- wxString <-> wxColour conversions in wxColour class (Francesco Montorsi).
 
 wxMSW:
 

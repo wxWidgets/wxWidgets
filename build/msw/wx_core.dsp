@@ -492,6 +492,10 @@ SOURCE=..\..\src\common\cmndata.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\colourcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\containr.cpp
 # End Source File
 # Begin Source File

@@ -11,6 +11,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/colour.h"
+
 #include "wx/gtk/private.h"
 
 #include <gdk/gdk.h>
@@ -81,51 +82,6 @@ void wxColourRefData::AllocColour( GdkColormap *cmap )
 
 IMPLEMENT_DYNAMIC_CLASS(wxColour,wxGDIObject)
 
-wxColour::wxColour( unsigned char red, unsigned char green, unsigned char blue )
-{
-    m_refData = new wxColourRefData;
-    M_COLDATA->m_color.red = ((unsigned short)red) << SHIFT;
-    M_COLDATA->m_color.green = ((unsigned short)green) << SHIFT;
-    M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
-    M_COLDATA->m_color.pixel = 0;
-}
-
-/* static */
-wxColour wxColour::CreateByName(const wxString& name)
-{
-    wxColour col;
-
-    GdkColor colGDK;
-    if ( gdk_color_parse( wxGTK_CONV_SYS( name ), &colGDK ) )
-    {
-        wxColourRefData *refData = new wxColourRefData;
-        refData->m_color = colGDK;
-        col.m_refData = refData;
-    }
-
-    return col;
-}
-
-
-void wxColour::InitFromName( const wxString &colourName )
-{
-    // check the cache first
-    if ( wxTheColourDatabase )
-    {
-        *this = wxTheColourDatabase->Find(colourName);
-    }
-
-    if ( !Ok() )
-    {
-        *this = CreateByName(colourName);
-    }
-
-    if ( !Ok() )
-    {
-        wxFAIL_MSG( wxT("wxColour: couldn't find colour") );
-    }
-}
-
 wxColour::~wxColour()
 {
 }
@@ -155,7 +111,7 @@ wxObjectRefData *wxColour::CloneRefData(const wxObjectRefData *data) const
     return new wxColourRefData(*(wxColourRefData *)data);
 }
 
-void wxColour::Set( unsigned char red, unsigned char green, unsigned char blue )
+void wxColour::InitWith( unsigned char red, unsigned char green, unsigned char blue )
 {
     AllocExclusive();
 
@@ -208,4 +164,19 @@ GdkColor *wxColour::GetColor() const
     wxCHECK_MSG( Ok(), NULL, wxT("invalid colour") );
 
     return &M_COLDATA->m_color;
+}
+
+bool wxColour::FromString(const wxChar *str)
+{
+    GdkColor colGDK;
+    if ( gdk_color_parse( wxGTK_CONV_SYS( str ), &colGDK ) )
+    {
+        UnRef();
+
+        m_refData = new wxColourRefData;
+        M_COLDATA->m_color = colGDK;
+        return true;
+    }
+
+    return wxColourBase::FromString(str);
 }

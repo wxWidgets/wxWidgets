@@ -16,7 +16,7 @@
 #include "wx/string.h"
 
 // Colour
-class WXDLLEXPORT wxColour : public wxObject
+class WXDLLEXPORT wxColour : public wxColourBase
 {
     DECLARE_DYNAMIC_CLASS(wxColour)
 public:
@@ -24,18 +24,8 @@ public:
     // ------------
 
     // default
-    wxColour();
-
-    // from separate RGB
-    wxColour( unsigned char red, unsigned char green, unsigned char blue )
-        { Set(red, green, blue); }
-
-    // from packed RGB
-    wxColour( unsigned long colRGB ) { Set(colRGB); }
-
-    // implicit conversion from the colour name
-    wxColour( const wxString &colourName ) { InitFromName(colourName); }
-    wxColour( const char *colourName ) { InitFromName(colourName); }
+    wxColour() { Init(); }
+    DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
     // copy ctors and assignment operators
     wxColour( const wxColour& col );
@@ -44,16 +34,6 @@ public:
     // dtor
     ~wxColour();
 
-    // Set() functions
-    void Set( unsigned char red, unsigned char green, unsigned char blue );
-    void Set( unsigned long colRGB )
-    {
-        // we don't need to know sizeof(long) here because we assume that the three
-        // least significant bytes contain the R, G and B values
-        Set((unsigned char)colRGB,
-            (unsigned char)(colRGB >> 8),
-            (unsigned char)(colRGB >> 16));
-    }
 
     // accessors
     bool Ok() const {return m_isInit; }
@@ -68,9 +48,6 @@ public:
 
     inline bool operator != (const wxColour& colour) const { return (!(m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue)); }
 
-    // Get colour from name or wxNullColour
-    static wxColour CreateByName(const wxString& name);
-
     // Allocate a colour, or nearest colour, using the given display.
     // If realloc is true, ignore the existing pixel, otherwise just return
     // the existing one.
@@ -81,11 +58,11 @@ public:
 
     int AllocColour(WXDisplay* display, bool realloc = false);
 
-    void InitFromName(const wxString& col);
-
 protected:
     // Helper function
     void Init();
+
+    virtual void InitWith( unsigned char red, unsigned char green, unsigned char blue );
 
 private:
     bool          m_isInit;

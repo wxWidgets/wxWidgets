@@ -353,6 +353,10 @@ SOURCE=.\common\cmndata.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\colourcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\config.cpp
 # End Source File
 # Begin Source File

@@ -10,11 +10,13 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#include "wx/colour.h"
+
 #ifndef WX_PRECOMP
 #endif //WX_PRECOMP
 
 #include "wx/gdicmn.h"
-#include "wx/colour.h"
 
 #include "wx/cocoa/autorelease.h"
 
@@ -55,28 +57,12 @@ wxColour& wxColour::operator =(const wxColour& col)
     return *this;
 }
 
-void wxColour::InitFromName(const wxString& name)
-{
-    if ( wxTheColourDatabase )
-    {
-        wxColour col = wxTheColourDatabase->Find(name);
-        if ( col.Ok() )
-        {
-            *this = col;
-            return;
-        }
-    }
-
-    // leave invalid
-    Init();
-}
-
 wxColour::~wxColour ()
 {
     [m_cocoaNSColor release];
 }
 
-void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
+void wxColour::InitWith (unsigned char r, unsigned char g, unsigned char b)
 {
     wxAutoNSAutoreleasePool pool;
     [m_cocoaNSColor release];

@@ -33,47 +33,23 @@ class WXDLLIMPEXP_CORE wxColour;
 // wxColour
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxColour: public wxGDIObject
+class WXDLLEXPORT wxColour : public wxColourBase
 {
 public:
     // constructors
     // ------------
 
-    // default
-    wxColour() { }
-
-    // from separate RGB
-    wxColour( unsigned char red, unsigned char green, unsigned char blue );
-
-    // from packed RGB
-    wxColour( unsigned long colRGB ) { Set(colRGB); }
-
-    // Implicit conversion from the colour name
-    wxColour( const wxString &colourName ) { InitFromName(colourName); }
-    wxColour( const char *colourName ) { InitFromName( wxString::FromAscii(colourName) ); }
-#if wxUSE_UNICODE
-    wxColour( const wxChar *colourName ) { InitFromName( wxString(colourName) ); }
-#endif
-
-    // Get colour from name or wxNullColour
-    static wxColour CreateByName(const wxString& name);
+    wxColour() {}
+    DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
     ~wxColour();
+
+    virtual bool FromString(const wxChar *str);
 
     bool Ok() const { return m_refData != NULL; }
 
     bool operator == ( const wxColour& col ) const;
     bool operator != ( const wxColour& col ) const { return !(*this == col); }
-
-    void Set( unsigned char red, unsigned char green, unsigned char blue );
-    void Set( unsigned long colRGB )
-    {
-        // We don't need to know sizeof(long) here because we assume that the three
-        // least significant bytes contain the R, G and B values
-        Set((unsigned char)colRGB,
-            (unsigned char)(colRGB >> 8),
-            (unsigned char)(colRGB >> 16));
-    }
 
     unsigned char Red() const;
     unsigned char Green() const;
@@ -85,13 +61,12 @@ public:
     unsigned long GetPixel() const;
     WXColor *GetColor() const;
 
-    void InitFromName(const wxString& colourName);
-
 protected:
     // ref counting code
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
+    virtual void InitWith( unsigned char red, unsigned char green, unsigned char blue );
 
 private:
     DECLARE_DYNAMIC_CLASS(wxColour)

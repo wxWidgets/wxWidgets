@@ -11,8 +11,9 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/gdicmn.h"
 #include "wx/colour.h"
+
+#include "wx/gdicmn.h"
 
 #include "wx/mac/private.h"
 
@@ -37,27 +38,11 @@ void wxColour::Init()
     wxComposeRGBColor( &m_pixel, m_red, m_blue, m_green );
 }
 
-void wxColour::InitFromName(const wxString& name)
-{
-    if ( wxTheColourDatabase )
-    {
-        wxColour col = wxTheColourDatabase->Find( name );
-        if ( col.Ok() )
-        {
-            *this = col;
-            return;
-        }
-    }
-
-    // leave invalid
-    Init();
-}
-
 wxColour::~wxColour ()
 {
 }
 
-void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
+void wxColour::InitWith (unsigned char r, unsigned char g, unsigned char b)
 {
     m_red = r;
     m_green = g;

@@ -400,8 +400,6 @@ wxColour wxColourDatabase::Find(const wxString& colour) const
     wxColourDatabase * const self = wxConstCast(this, wxColourDatabase);
     self->Initialize();
 
-    // first look among the existing colours
-
     // make the comparaison case insensitive and also match both grey and gray
     wxString colName = colour;
     colName.MakeUpper();
@@ -415,48 +413,12 @@ wxColour wxColourDatabase::Find(const wxString& colour) const
     if ( it != m_map->end() )
         return *(it->second);
 
-    // if we didn't find it, query the system, maybe it knows about it
-#if defined(__WXGTK__) || defined(__X__)
-    wxColour col = wxColour::CreateByName(colour);
-
-    if ( col.Ok() )
-    {
-        // cache it
-        self->AddColour(colour, col);
-    }
-
-    return col;
-#elif defined(__X__)
-    // TODO: move this to wxColour::CreateByName()
-    XColor xcolour;
-
-#ifdef __WXMOTIF__
-    Display *display = XtDisplay((Widget) wxTheApp->GetTopLevelWidget()) ;
-#endif
-#ifdef __WXX11__
-    Display* display = (Display*) wxGetDisplay();
-#endif
-    /* MATTHEW: [4] Use wxGetMainColormap */
-    if (!XParseColor(display, (Colormap) wxTheApp->GetMainColormap((WXDisplay*) display), colour.ToAscii() ,&xcolour))
-        return NULL;
-
-#if wxUSE_NANOX
-    unsigned char r = (unsigned char)(xcolour.red);
-    unsigned char g = (unsigned char)(xcolour.green);
-    unsigned char b = (unsigned char)(xcolour.blue);
-#else
-    unsigned char r = (unsigned char)(xcolour.red >> 8);
-    unsigned char g = (unsigned char)(xcolour.green >> 8);
-    unsigned char b = (unsigned char)(xcolour.blue >> 8);
-#endif
-
-    wxColour col(r, g, b);
-    AddColour(colour, col);
-
-    return col;
-#else // other platform
+    // we did not find any result in existing colours:
+    // we won't use wxString -> wxColour conversion because the
+    // wxColour::Set(const wxString &) function which does that conversion
+    // internally uses this function (wxColourDatabase::Find) and we want
+    // to avoid infinite recursion !
     return wxNullColour;
-#endif // platforms
 }
 
 wxString wxColourDatabase::FindName(const wxColour& colour) const
