@@ -52,6 +52,14 @@ public:
     {
     }
 
+    // draw blank button
+    virtual void DrawPushButton(wxWindow *win,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags = 0)
+    {
+    }
+
     // draw the border for sash window: this border must be such that the sash
     // drawn by DrawSash() blends into it well
     virtual void DrawSplitterBorder(wxWindow *win,
