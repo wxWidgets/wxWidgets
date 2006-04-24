@@ -443,7 +443,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
 
 
     // Left wxDataViewCtrl
-    dataview_left = new wxDataViewCtrl( this, wxID_ANY );
+    dataview_left = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_MULTIPLE );
 
     MyUnsortedTextModel *model = new MyUnsortedTextModel;
     dataview_left->AssociateModel( model );

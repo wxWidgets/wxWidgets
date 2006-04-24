@@ -168,11 +168,13 @@ public:
     void ScrollWindow( int dx, int dy, const wxRect *rect );
     
     bool HasCurrentRow() { return m_currentRow != (size_t)-1; }
+    void ChangeCurrentRow( size_t row );
     
     bool IsSingleSel() const { return !GetParent()->HasFlag(wxDV_MULTIPLE); };
     bool IsEmpty() { return GetRowCount() == 0; }
     
     int GetCountPerPage();
+    int GetEndOfLastCol();
     int GetRowCount();
     
     void SelectAllRows( bool on );
@@ -202,6 +204,13 @@ private:
                                *m_highlightUnfocusedBrush;
     bool                        m_hasFocus;
 
+    int                         m_dragCount;
+    wxPoint                     m_dragStart;
+
+    // for double click logic
+    size_t m_lineLastClicked,
+           m_lineBeforeLastClicked,
+           m_lineSelectSingleOnUp;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewMainWindow)
@@ -865,6 +874,12 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     // TODO: we need to calculate this smartly
     m_lineHeight = 20;
+
+    m_dragCount = 0;
+    m_dragStart = wxPoint(0,0);
+    m_lineLastClicked = (size_t) -1;
+    m_lineBeforeLastClicked = (size_t) -1;
+    m_lineSelectSingleOnUp = (size_t) -1;
     
     m_highlightBrush = new wxBrush
                            (
@@ -1054,7 +1069,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         if (m_selection.Index( item ) != wxNOT_FOUND)
         {
-            wxRect rect( 0, item*m_lineHeight+1, 10000, m_lineHeight-2 );
+            wxRect rect( 0, item*m_lineHeight+1, GetEndOfLastCol(), m_lineHeight-2 );
             dc.DrawRectangle( rect );
         }
     }
@@ -1063,7 +1078,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.SetPen( *wxBLACK_PEN );
     if (HasCurrentRow())
     {
-        wxRect rect( 0, m_currentRow*m_lineHeight+1, 10000, m_lineHeight-2 );
+        wxRect rect( 0, m_currentRow*m_lineHeight+1, GetEndOfLastCol(), m_lineHeight-2 );
         dc.DrawRectangle( rect );
     }
 
@@ -1109,9 +1124,28 @@ int wxDataViewMainWindow::GetCountPerPage()
     return size.y / m_lineHeight;
 }
 
+int wxDataViewMainWindow::GetEndOfLastCol()
+{
+    int width = 0;
+    size_t i;
+    for (i = 0; i < GetOwner()->GetNumberOfColumns(); i++)
+    {
+        wxDataViewColumn *c = GetOwner()->GetColumn( i );
+        width += c->GetWidth();
+    }
+    return width;
+}
+
 int wxDataViewMainWindow::GetRowCount()
 {
     return GetOwner()->GetModel()->GetNumberOfRows();
+}
+
+void wxDataViewMainWindow::ChangeCurrentRow( size_t row )
+{
+    m_currentRow = row;
+    
+    // send event
 }
 
 void wxDataViewMainWindow::SelectAllRows( bool on )
@@ -1188,7 +1222,7 @@ bool wxDataViewMainWindow::IsRowSelected( size_t row )
 
 void wxDataViewMainWindow::RefreshRow( size_t row )
 {
-    wxRect rect( 0, row*m_lineHeight, 10000, m_lineHeight );
+    wxRect rect( 0, row*m_lineHeight, GetEndOfLastCol(), m_lineHeight );
     m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
     
     wxSize client_size = GetClientSize();
@@ -1207,7 +1241,7 @@ void wxDataViewMainWindow::RefreshRows( size_t from, size_t to )
         from = tmp;
     }
 
-    wxRect rect( 0, from*m_lineHeight, 10000, (to-from+1) * m_lineHeight );
+    wxRect rect( 0, from*m_lineHeight, GetEndOfLastCol(), (to-from+1) * m_lineHeight );
     m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
     
     wxSize client_size = GetClientSize();
@@ -1222,7 +1256,7 @@ void wxDataViewMainWindow::RefreshRowsAfter( size_t firstRow )
     size_t count = GetRowCount();
     if (firstRow > count) return;
     
-    wxRect rect( 0, firstRow*m_lineHeight, 10000, count * m_lineHeight );
+    wxRect rect( 0, firstRow*m_lineHeight, GetEndOfLastCol(), count * m_lineHeight );
     m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
     
     wxSize client_size = GetClientSize();
@@ -1245,11 +1279,11 @@ void wxDataViewMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& even
 
     // in single selection we just ignore Shift as we can't select several
     // items anyhow
-    if ( event.ShiftDown() /* && !IsSingleSel() */ )
+    if ( event.ShiftDown() && !IsSingleSel() )
     {
         RefreshRow( oldCurrent );
     
-        m_currentRow = newCurrent;
+        ChangeCurrentRow( newCurrent );
 
         // select all the items between the old and the new one
         if ( oldCurrent > newCurrent )
@@ -1268,7 +1302,7 @@ void wxDataViewMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& even
         if ( !event.ControlDown() )
             SelectAllRows(false);
 
-        m_currentRow = newCurrent;
+        ChangeCurrentRow( newCurrent );
 
         if ( !event.ControlDown() )
             SelectRow( m_currentRow, true );
@@ -1353,6 +1387,13 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
 
 void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 {
+    if (event.GetEventType() == wxEVT_MOUSEWHEEL)
+    {
+        // let the base handle mouse wheel events.
+        event.Skip();
+        return;
+    }
+
     int x = event.GetX();
     int y = event.GetY();
     m_owner->CalcUnscrolledPosition( x, y, &x, &y );
@@ -1376,9 +1417,43 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         return;
     wxDataViewCell *cell = col->GetCell();
 
-    size_t row = y / m_lineHeight;
+    size_t current = y / m_lineHeight;
+    
+    if ((current > GetRowCount()) || (x > GetEndOfLastCol()))
+    {
+        // Unselect all if below the last row ?
+        return;
+    }
 
     wxDataViewListModel *model = GetOwner()->GetModel();
+
+    if (event.Dragging())
+    {
+        if (m_dragCount == 0)
+        {
+            // we have to report the raw, physical coords as we want to be
+            // able to call HitTest(event.m_pointDrag) from the user code to
+            // get the item being dragged
+            m_dragStart = event.GetPosition();
+        }
+
+        m_dragCount++;
+
+        if (m_dragCount != 3)
+            return;
+
+        if (event.LeftIsDown())
+        {
+            // Notify cell about drag
+        }
+        return;
+    }
+    else
+    {
+        m_dragCount = 0;
+    }
+
+    bool forceClick = false;
 
     if (event.ButtonDClick())
     {
@@ -1388,22 +1463,38 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
     if (event.LeftDClick())
     {
-        if (cell->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE)
+        if ( current == m_lineLastClicked )
         {
-            wxVariant value;
-            model->GetValue( value, col->GetModelColumn(), row );
-            cell->SetValue( value );
-            wxRect cell_rect( xpos, row * m_lineHeight, col->GetWidth(), m_lineHeight );
-            cell->Activate( cell_rect, model, col->GetModelColumn(), row );
+            if (cell->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE)
+            {
+                wxVariant value;
+                model->GetValue( value, col->GetModelColumn(), current );
+                cell->SetValue( value );
+                wxRect cell_rect( xpos, current * m_lineHeight, col->GetWidth(), m_lineHeight );
+                cell->Activate( cell_rect, model, col->GetModelColumn(), current );
+            }
+            return;
         }
+        else
+        {
+            // The first click was on another item, so don't interpret this as
+            // a double click, but as a simple click instead
+            forceClick = true;
+        }
+    } 
 
-        return;
-    } else
     if (event.LeftUp())
     {
+        if (m_lineSelectSingleOnUp != (size_t)-1)
+        {
+            // select single line
+            SelectAllRows( false );
+            SelectRow( m_lineSelectSingleOnUp, true );
+        }
+        
         if (m_lastOnSame)
         {
-            if ((col == m_currentCol) & (row == m_currentRow) &&
+            if ((col == m_currentCol) & (current == m_currentRow) &&
                 (cell->GetMode() == wxDATAVIEW_CELL_EDITABLE) )
             {
                 m_renameTimer->Start( 100, true );
@@ -1411,24 +1502,109 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         }
 
         m_lastOnSame = false;
-    } else
-    if (event.LeftDown())
+        m_lineSelectSingleOnUp = (size_t)-1;
+    } 
+    else
     {
+        // This is necessary, because after a DnD operation in
+        // from and to ourself, the up event is swallowed by the
+        // DnD code. So on next non-up event (which means here and
+        // now) m_lineSelectSingleOnUp should be reset.
+        m_lineSelectSingleOnUp = (size_t)-1;
+    }
+
+    if (event.RightDown())
+    {
+        m_lineBeforeLastClicked = m_lineLastClicked;
+        m_lineLastClicked = current;
+
+        // If the item is already selected, do not update the selection.
+        // Multi-selections should not be cleared if a selected item is clicked.
+        if (!IsRowSelected(current))
+        {
+            SelectAllRows(false);
+            ChangeCurrentRow(current);
+            SelectRow(m_currentRow,true);
+        }
+
+        // notify cell about right click
+        // cell->...
+        
+        // Allow generation of context menu event
+        event.Skip();
+    }
+    else if (event.MiddleDown())
+    {
+        // notify cell about middle click
+        // cell->...
+    }
+    if (event.LeftDown() || forceClick)
+    {
+        m_lineBeforeLastClicked = m_lineLastClicked;
+        m_lineLastClicked = current;
+
+        size_t oldCurrent = m_currentRow;
+        bool oldWasSelected = IsRowSelected(m_currentRow);
+
+        bool cmdModifierDown = event.CmdDown();
+        if ( IsSingleSel() || !(cmdModifierDown || event.ShiftDown()) )
+        {
+            if ( IsSingleSel() || !IsRowSelected(current) )
+            {
+                SelectAllRows( false );
+
+                ChangeCurrentRow(current);
+
+                SelectRow(m_currentRow,true);
+            }
+            else // multi sel & current is highlighted & no mod keys
+            {
+                m_lineSelectSingleOnUp = current;
+                ChangeCurrentRow(current); // change focus
+            }
+        }
+        else // multi sel & either ctrl or shift is down
+        {
+            if (cmdModifierDown)
+            {
+                ChangeCurrentRow(current);
+
+                ReverseRowSelection(m_currentRow);
+            }
+            else if (event.ShiftDown())
+            {
+                ChangeCurrentRow(current);
+
+                size_t lineFrom = oldCurrent,
+                       lineTo = current;
+
+                if ( lineTo < lineFrom )
+                {
+                    lineTo = lineFrom;
+                    lineFrom = m_currentRow;
+                }
+
+                SelectRows(lineFrom, lineTo, true);
+            }
+            else // !ctrl, !shift
+            {
+                // test in the enclosing if should make it impossible
+                wxFAIL_MSG( _T("how did we get here?") );
+            }
+        }
+
+        if (m_currentRow != oldCurrent)
+            RefreshRow( oldCurrent );
+
         wxDataViewColumn *oldCurrentCol = m_currentCol;
         size_t oldCurrentRow = m_currentRow;
         
         // Update selection here...
         m_currentCol = col;
-        m_currentRow = row;
-        RefreshRow( oldCurrentRow );
-        RefreshRow( m_currentRow );
+        m_currentRow = current;
     
-        m_lastOnSame = (col == oldCurrentCol) && (row == oldCurrentRow);
-        
-        return;
+        m_lastOnSame = !forceClick && ((col == oldCurrentCol) && (current == oldCurrentRow)) && oldWasSelected;
     }
-
-    event.Skip();
 }
 
 void wxDataViewMainWindow::OnSetFocus( wxFocusEvent &event )
