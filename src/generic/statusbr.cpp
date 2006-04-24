@@ -367,8 +367,8 @@ void wxStatusBarGeneric::InitColours()
     vColour.Set(wxString(_T("BLACK")));
     SetForegroundColour(vColour);
 #else
-    m_mediumShadowPen = wxPen("GREY", 1, wxSOLID);
-    m_hilightPen = wxPen("WHITE", 1, wxSOLID);
+    m_mediumShadowPen = wxPen(_T("GREY"), 1, wxSOLID);
+    m_hilightPen = wxPen(_T("WHITE"), 1, wxSOLID);
 #endif
 }
 
