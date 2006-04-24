@@ -136,7 +136,7 @@ private:
 #endif // defined( __VISUALC__ )
 
 /*
-    Note: the outer helper class _WX_LIST_HELPER_##liT below is a workaround
+    Note 1: the outer helper class _WX_LIST_HELPER_##liT below is a workaround
     for mingw 3.2.3 compiler bug that prevents a static function of liT class
     from being exported into dll. A minimal code snippet reproducing the bug:
 
@@ -155,6 +155,13 @@ private:
 
     The program does not link under mingw_gcc 3.2.3 producing undefined
     reference to Foo::Bar() function
+
+
+    Note 2: the EmptyList is needed to allow having a NULL pointer-like
+    invalid iterator. We used to use just an uninitialized iterator object
+    instead but this fails with some debug/checked versions of STL, notably the
+    glibc version activated with _GLIBCXX_DEBUG, so we need to have a separate
+    invalid iterator.
  */
 
 // the real wxList-class declaration
@@ -170,6 +177,9 @@ private:
     decl liT : public std::list<elT>                                          \
     {                                                                         \
     private:                                                                  \
+        typedef std::list<elT> BaseListType;                                  \
+        static BaseListType EmptyList;                                        \
+                                                                              \
         bool m_destroy;                                                       \
     public:                                                                   \
         decl compatibility_iterator                                           \
@@ -183,7 +193,7 @@ private:
             liT * m_list;                                                     \
         public:                                                               \
             compatibility_iterator()                                          \
-                : m_iter(), m_list( NULL ) {}                                 \
+                : m_iter(EmptyList.end()), m_list( NULL ) {}                  \
             compatibility_iterator( liT* li, iterator i )                     \
                 : m_iter( i ), m_list( li ) {}                                \
             compatibility_iterator( const liT* li, iterator i )               \
