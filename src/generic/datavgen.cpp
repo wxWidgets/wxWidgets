@@ -27,6 +27,7 @@
 #include "wx/popupwin.h"
 #include "wx/renderer.h"
 #include "wx/timer.h"
+#include "wx/settings.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/wrapwin.h"
@@ -125,6 +126,8 @@ private:
 // wxDataViewMainWindow
 //-----------------------------------------------------------------------------
 
+WX_DEFINE_SORTED_ARRAY_SIZE_T( size_t, wxDataViewSelection );
+
 class wxDataViewMainWindow: public wxWindow
 {
 public:
@@ -149,8 +152,11 @@ public:
     wxDataViewCtrl *GetOwner() { return m_owner; }
 
     void OnPaint( wxPaintEvent &event );
+    void OnArrowChar(size_t newCurrent, const wxKeyEvent& event);
+    void OnChar( wxKeyEvent &event );
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
+    void OnKillFocus( wxFocusEvent &event );
 
     void UpdateDisplay();
     void RecalculateDisplay();
@@ -160,6 +166,25 @@ public:
     void FinishEditing( wxTextCtrl *text );
 
     void ScrollWindow( int dx, int dy, const wxRect *rect );
+    
+    bool HasCurrentRow() { return m_currentRow != (size_t)-1; }
+    
+    bool IsSingleSel() const { return !GetParent()->HasFlag(wxDV_MULTIPLE); };
+    bool IsEmpty() { return GetRowCount() == 0; }
+    
+    int GetCountPerPage();
+    int GetRowCount();
+    
+    void SelectAllRows( bool on );
+    void SelectRow( size_t row, bool on );
+    void SelectRows( size_t from, size_t to, bool on );
+    void ReverseRowSelection( size_t row );
+    bool IsRowSelected( size_t row );
+    
+    void RefreshRow( size_t row );
+    void RefreshRows( size_t from, size_t to );
+    void RefreshRowsAfter( size_t firstRow );
+    
 private:
     wxDataViewCtrl             *m_owner;
     int                         m_lineHeight;
@@ -167,10 +192,16 @@ private:
     
     wxDataViewColumn           *m_currentCol;
     size_t                      m_currentRow;
+    wxDataViewSelection         m_selection;
     
     wxDataViewRenameTimer      *m_renameTimer;
     wxDataViewTextCtrlWrapper  *m_textctrlWrapper;
     bool                        m_lastOnSame;
+
+    wxBrush                    *m_highlightBrush,
+                               *m_highlightUnfocusedBrush;
+    bool                        m_hasFocus;
+
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewMainWindow)
@@ -633,6 +664,7 @@ void wxDataViewHeaderWindow::OnMouse( wxMouseEvent &WXUNUSED(event) )
 
 void wxDataViewHeaderWindow::OnSetFocus( wxFocusEvent &event )
 {
+    GetParent()->SetFocus();
     event.Skip();
 }
 
@@ -797,17 +829,29 @@ void wxDataViewTextCtrlWrapper::Finish()
 // wxDataViewMainWindow
 //-----------------------------------------------------------------------------
 
+int LINKAGEMODE wxDataViewSelectionCmp( size_t row1, size_t row2 )
+{
+    if (row1 > row2) return 1;
+    if (row1 == row2) return 0;
+    return -1;
+}
+
+
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewMainWindow, wxWindow)
 
 BEGIN_EVENT_TABLE(wxDataViewMainWindow,wxWindow)
     EVT_PAINT         (wxDataViewMainWindow::OnPaint)
     EVT_MOUSE_EVENTS  (wxDataViewMainWindow::OnMouse)
     EVT_SET_FOCUS     (wxDataViewMainWindow::OnSetFocus)
+    EVT_KILL_FOCUS    (wxDataViewMainWindow::OnKillFocus)
+    EVT_CHAR          (wxDataViewMainWindow::OnChar)
 END_EVENT_TABLE()
 
 wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID id,
     const wxPoint &pos, const wxSize &size, const wxString &name ) :
-    wxWindow( parent, id, pos, size, 0, name )
+    wxWindow( parent, id, pos, size, 0, name ),
+    m_selection( wxDataViewSelectionCmp )
+    
 {
     SetOwner( parent );
 
@@ -821,6 +865,26 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     // TODO: we need to calculate this smartly
     m_lineHeight = 20;
+    
+    m_highlightBrush = new wxBrush
+                           (
+                            wxSystemSettings::GetColour
+                            (
+                                wxSYS_COLOUR_HIGHLIGHT
+                            ),
+                            wxSOLID
+                           );
+
+    m_highlightUnfocusedBrush = new wxBrush
+                                    (
+                                       wxSystemSettings::GetColour
+                                       (
+                                           wxSYS_COLOUR_BTNSHADOW
+                                       ),
+                                       wxSOLID
+                                    );
+    
+    m_hasFocus = false;
 
     UpdateDisplay();
 }
@@ -828,6 +892,8 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 wxDataViewMainWindow::~wxDataViewMainWindow()
 {
     delete m_renameTimer;
+    delete m_highlightBrush;
+    delete m_highlightUnfocusedBrush;
 }
 
 void wxDataViewMainWindow::OnRenameTimer()
@@ -973,8 +1039,33 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxDataViewListModel *model = GetOwner()->GetModel();
 
     size_t item_start = wxMax( 0, (update.y / m_lineHeight) );
-    size_t item_count = wxMin( ((update.y + update.height) / m_lineHeight) - item_start + 1, 
+    size_t item_count = wxMin( (int)(((update.y + update.height) / m_lineHeight) - item_start + 1), 
                                (int)(model->GetNumberOfRows()-item_start) );
+
+
+    if (m_hasFocus)
+        dc.SetBrush( *m_highlightBrush );
+    else
+        dc.SetBrush( *m_highlightUnfocusedBrush );
+    dc.SetPen( *wxTRANSPARENT_PEN );
+            
+    size_t item;
+    for (item = item_start; item < item_start+item_count; item++)
+    {
+        if (m_selection.Index( item ) != wxNOT_FOUND)
+        {
+            wxRect rect( 0, item*m_lineHeight+1, 10000, m_lineHeight-2 );
+            dc.DrawRectangle( rect );
+        }
+    }
+    
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    dc.SetPen( *wxBLACK_PEN );
+    if (HasCurrentRow())
+    {
+        wxRect rect( 0, m_currentRow*m_lineHeight+1, 10000, m_lineHeight-2 );
+        dc.DrawRectangle( rect );
+    }
 
     wxRect cell_rect;
     cell_rect.x = 0;
@@ -987,7 +1078,6 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxDataViewCell *cell = col->GetCell();
         cell_rect.width = col->GetWidth();
 
-        size_t item;
         for (item = item_start; item < item_start+item_count; item++)
         {
             cell_rect.y = item*m_lineHeight;
@@ -1010,6 +1100,254 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
 
         cell_rect.x += cell_rect.width;
+    }
+}
+
+int wxDataViewMainWindow::GetCountPerPage()
+{
+    wxSize size = GetClientSize();
+    return size.y / m_lineHeight;
+}
+
+int wxDataViewMainWindow::GetRowCount()
+{
+    return GetOwner()->GetModel()->GetNumberOfRows();
+}
+
+void wxDataViewMainWindow::SelectAllRows( bool on )
+{
+    m_selection.Clear();
+    if (on)
+    {
+        size_t i;
+        for (i = 0; i < m_selection.GetCount(); i++)
+            m_selection.Add( i );
+    }
+    Refresh();
+}
+
+void wxDataViewMainWindow::SelectRow( size_t row, bool on )
+{
+    if (m_selection.Index( row ) == wxNOT_FOUND)
+    {
+        if (on)
+        {
+            m_selection.Add( row );
+            RefreshRow( row );
+        }
+    }
+    else
+    {
+        if (!on)
+        {
+            m_selection.Remove( row );
+            RefreshRow( row );
+        }
+    }
+}
+
+void wxDataViewMainWindow::SelectRows( size_t from, size_t to, bool on )
+{
+    if (from > to)
+    {
+        size_t tmp = from;
+        from = to;
+        to = tmp;
+    }
+
+    size_t i;
+    for (i = from; i <= to; i++)
+    {
+        if (m_selection.Index( i ) == wxNOT_FOUND)
+        {
+            if (on)
+                m_selection.Add( i );
+        }
+        else
+        {
+            if (!on)
+                m_selection.Remove( i );
+        }
+    }
+    RefreshRows( from, to );
+}
+
+void wxDataViewMainWindow::ReverseRowSelection( size_t row )
+{
+    if (m_selection.Index( row ) == wxNOT_FOUND)
+        m_selection.Add( row );
+    else
+        m_selection.Remove( row );
+    Refresh( row );
+}
+
+bool wxDataViewMainWindow::IsRowSelected( size_t row )
+{
+    return (m_selection.Index( row ) != wxNOT_FOUND);
+}
+
+void wxDataViewMainWindow::RefreshRow( size_t row )
+{
+    wxRect rect( 0, row*m_lineHeight, 10000, m_lineHeight );
+    m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+    
+    wxSize client_size = GetClientSize();
+    wxRect client_rect( 0, 0, client_size.x, client_size.y );
+    wxRect intersect_rect = client_rect.Intersect( rect );
+    if (intersect_rect.width > 0)
+        Refresh( true, &intersect_rect );
+}
+
+void wxDataViewMainWindow::RefreshRows( size_t from, size_t to )
+{
+    if (from > to)
+    {
+        size_t tmp = to;
+        to = from;
+        from = tmp;
+    }
+
+    wxRect rect( 0, from*m_lineHeight, 10000, (to-from+1) * m_lineHeight );
+    m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+    
+    wxSize client_size = GetClientSize();
+    wxRect client_rect( 0, 0, client_size.x, client_size.y );
+    wxRect intersect_rect = client_rect.Intersect( rect );
+    if (intersect_rect.width > 0)
+        Refresh( true, &intersect_rect );
+}
+
+void wxDataViewMainWindow::RefreshRowsAfter( size_t firstRow )
+{
+    size_t count = GetRowCount();
+    if (firstRow > count) return;
+    
+    wxRect rect( 0, firstRow*m_lineHeight, 10000, count * m_lineHeight );
+    m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+    
+    wxSize client_size = GetClientSize();
+    wxRect client_rect( 0, 0, client_size.x, client_size.y );
+    wxRect intersect_rect = client_rect.Intersect( rect );
+    if (intersect_rect.width > 0)
+        Refresh( true, &intersect_rect );
+}
+
+void wxDataViewMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
+{
+    wxCHECK_RET( newCurrent < (size_t)GetRowCount(),
+                 _T("invalid item index in OnArrowChar()") );
+
+    // if there is no selection, we cannot move it anywhere
+    if (!HasCurrentRow())
+        return;
+
+    size_t oldCurrent = m_currentRow;
+
+    // in single selection we just ignore Shift as we can't select several
+    // items anyhow
+    if ( event.ShiftDown() /* && !IsSingleSel() */ )
+    {
+        RefreshRow( oldCurrent );
+    
+        m_currentRow = newCurrent;
+
+        // select all the items between the old and the new one
+        if ( oldCurrent > newCurrent )
+        {
+            newCurrent = oldCurrent;
+            oldCurrent = m_currentRow;
+        }
+
+        SelectRows( oldCurrent, newCurrent, true );
+    }
+    else // !shift
+    {
+        Refresh( oldCurrent );
+    
+        // all previously selected items are unselected unless ctrl is held
+        if ( !event.ControlDown() )
+            SelectAllRows(false);
+
+        m_currentRow = newCurrent;
+
+        if ( !event.ControlDown() )
+            SelectRow( m_currentRow, true );
+    }
+
+    // MoveToFocus();
+}
+
+void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
+{
+    if (event.GetKeyCode() == WXK_TAB)
+    {
+        wxNavigationKeyEvent nevent;
+        nevent.SetWindowChange( event.ControlDown() );
+        nevent.SetDirection( !event.ShiftDown() );
+        nevent.SetEventObject( GetParent()->GetParent() );
+        nevent.SetCurrentFocus( m_parent );
+        if (GetParent()->GetParent()->GetEventHandler()->ProcessEvent( nevent ))
+            return;
+    }
+
+    // no item -> nothing to do
+    if (!HasCurrentRow())
+    {
+        event.Skip();
+        return;
+    }
+    
+    // don't use m_linesPerPage directly as it might not be computed yet
+    const int pageSize = GetCountPerPage();
+    wxCHECK_RET( pageSize, _T("should have non zero page size") );
+
+    switch ( event.GetKeyCode() )
+    {
+        case WXK_UP:
+            if ( m_currentRow > 0 )
+                OnArrowChar( m_currentRow - 1, event );
+            break;
+
+        case WXK_DOWN:
+            if ( m_currentRow < (size_t)GetRowCount() - 1 )
+                OnArrowChar( m_currentRow + 1, event );
+            break;
+
+        case WXK_END:
+            if (!IsEmpty())
+                OnArrowChar( GetRowCount() - 1, event );
+            break;
+
+        case WXK_HOME:
+            if (!IsEmpty())
+                OnArrowChar( 0, event );
+            break;
+
+        case WXK_PAGEUP:
+            {
+                int steps = pageSize - 1;
+                int index = m_currentRow - steps;
+                if (index < 0)
+                    index = 0;
+
+                OnArrowChar( index, event );
+            }
+            break;
+
+        case WXK_PAGEDOWN:
+            {
+                int steps = pageSize - 1;
+                size_t index = m_currentRow + steps;
+                size_t count = GetRowCount();
+                if ( index >= count )
+                    index = count - 1;
+
+                OnArrowChar( index, event );
+            }
+            break;
+
+        default:
+            event.Skip();
     }
 }
 
@@ -1082,6 +1420,8 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         // Update selection here...
         m_currentCol = col;
         m_currentRow = row;
+        RefreshRow( oldCurrentRow );
+        RefreshRow( m_currentRow );
     
         m_lastOnSame = (col == oldCurrentCol) && (row == oldCurrentRow);
         
@@ -1093,6 +1433,21 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
 void wxDataViewMainWindow::OnSetFocus( wxFocusEvent &event )
 {
+    m_hasFocus = true;
+    
+    if (HasCurrentRow())
+        Refresh();
+        
+    event.Skip();
+}
+
+void wxDataViewMainWindow::OnKillFocus( wxFocusEvent &event )
+{
+    m_hasFocus = false;
+    
+    if (HasCurrentRow())
+        Refresh();
+        
     event.Skip();
 }
 
