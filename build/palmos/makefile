@@ -223,6 +223,7 @@ GUI_CMN_SRC = \
 ../../src/common/bookctrl.cpp \
 ../../src/common/choiccmn.cpp \
 ../../src/common/clipcmn.cpp \
+../../src/common/colourcmn.cpp \
 ../../src/common/cmdproc.cpp \
 ../../src/common/cmndata.cpp \
 ../../src/common/containr.cpp \
