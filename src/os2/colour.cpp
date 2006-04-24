@@ -22,7 +22,7 @@
 #define INCL_PM
 #include<os2.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxColour, wxGDIObject)
 
 // Colour
 
@@ -38,25 +38,12 @@ wxColour::wxColour ()
     Init();
 } // end of wxColour::wxColour
 
-wxColour::wxColour (
-  unsigned char                     cRed
-, unsigned char                     cGreen
-, unsigned char                     cBlue
-)
-{
-    Set(cRed, cGreen, cBlue);
-} // end of wxColour::wxColour
-
-wxColour::wxColour(
-  const wxColour&                   rCol
-)
+wxColour::wxColour( const wxColour& rCol )
 {
     *this = rCol;
 } // end of wxColour::wxColour
 
-wxColour& wxColour::operator =(
-  const wxColour&                   rCol
-)
+wxColour& wxColour::operator= (const wxColour& rCol)
 {
     m_cRed    = rCol.m_cRed;
     m_cGreen  = rCol.m_cGreen;
@@ -66,27 +53,13 @@ wxColour& wxColour::operator =(
     return *this;
 } // end of wxColour& wxColour::operator =
 
-void wxColour::InitFromName(
-  const wxString&                   sCol
-)
-{
-    if ( wxString2Colour(sCol, this) )
-            return;
-
-    // leave invalid
-    Init();
-
-} // end of wxColour::InitFromName
-
 wxColour::~wxColour()
 {
 } // end of wxColour::~wxColour
 
-void wxColour::Set(
-  unsigned char                     cRed
-, unsigned char                     cGreen
-, unsigned char                     cBlue
-)
+void wxColour::InitWith( unsigned char cRed,
+                         unsigned char cGreen,
+                         unsigned char cBlue )
 {
     m_cRed    = cRed;
     m_cGreen  = cGreen;

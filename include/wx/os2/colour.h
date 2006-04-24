@@ -22,7 +22,7 @@ public:
     // ------------
 
     // default
-    wxColour() { Init(); }
+    wxColour();
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
     // Copy ctors and assignment operators
