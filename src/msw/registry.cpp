@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/registry.cpp
+// Name:        src/msw/registry.cpp
 // Purpose:     implementation of registry classes and functions
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -16,11 +16,13 @@
 #include  "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
-// other wxWidgets headers
-#include  "wx/string.h"
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #include  "wx/intl.h"
 #include  "wx/log.h"
 #include  "wx/file.h"
@@ -1413,4 +1415,3 @@ void RemoveTrailingSeparator(wxString& str)
   if ( !str.empty() && str.Last() == REG_SEPARATOR )
     str.Truncate(str.Len() - 1);
 }
-

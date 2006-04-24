@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/sysopt.cpp
+// Name:        src/common/sysopt.cpp
 // Purpose:     wxSystemOptions
 // Author:      Julian Smart
 // Modified by:
@@ -26,12 +26,13 @@
 
 #if wxUSE_SYSTEM_OPTIONS
 
+#include "wx/sysopt.h"
+
 #ifndef WX_PRECOMP
     #include "wx/list.h"
+    #include "wx/string.h"
 #endif
 
-#include "wx/string.h"
-#include "wx/sysopt.h"
 #include "wx/arrstr.h"
 
 // ----------------------------------------------------------------------------
@@ -86,4 +87,3 @@ bool wxSystemOptions::HasOption(const wxString& name)
 }
 
 #endif // wxUSE_SYSTEM_OPTIONS
-

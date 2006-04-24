@@ -9,14 +9,17 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-//
 // For compilers that support precompilation, includes "wx.h".
-//
 #include "wx/wxprec.h"
 
 #if wxUSE_JOYSTICK
 
-#include "wx/string.h"
+#include "wx/joystick.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #define INCL_PM
 #define INCL_DOS
 #include "wx/os2/private.h"
@@ -24,7 +27,6 @@
 #define NO_JOYGETPOSEX
 
 #include "wx/window.h"
-#include "wx/joystick.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
 
@@ -287,4 +289,5 @@ bool wxJoystick::ReleaseCapture()
     // TODO
     return false;
 }
+
 #endif  // wxUSE_JOYSTICK

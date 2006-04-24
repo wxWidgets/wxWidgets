@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        font.cpp
+// Name:        src/mac/carbon/font.cpp
 // Purpose:     wxFont class
 // Author:      Stefan Csomor
 // Modified by:
@@ -11,8 +11,12 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/string.h"
 #include "wx/font.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #include "wx/fontutil.h"
 #include "wx/gdicmn.h"
 #include "wx/utils.h"
@@ -39,7 +43,7 @@ public:
         , m_family(wxDEFAULT)
         , m_style(wxNORMAL)
         , m_weight(wxNORMAL)
-        , m_underlined(FALSE)
+        , m_underlined(false)
         , m_faceName(wxT("applicationfont"))
         , m_encoding(wxFONTENCODING_DEFAULT)
         , m_macFontNum(0)
@@ -216,7 +220,7 @@ void wxFontRefData::MacFindFont()
     }
     else
     {
-        if ( m_faceName.Length() == 0 )
+        if ( m_faceName.empty() )
         {
             switch ( m_family )
             {
@@ -637,4 +641,3 @@ const wxNativeFontInfo * wxFont::GetNativeFontInfo() const
 
     return &(M_FONTDATA->m_info);
 }
-

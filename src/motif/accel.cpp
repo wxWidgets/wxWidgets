@@ -13,7 +13,11 @@
 #include "wx/wxprec.h"
 
 #include "wx/accel.h"
-#include "wx/string.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #include "wx/utils.h"
 #include <ctype.h>
 

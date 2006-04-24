@@ -26,9 +26,12 @@
 
 #if wxUSE_DISPLAY
 
+#include "wx/display.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/log.h"
+    #include "wx/string.h"
 #endif
 
 #ifdef __DARWIN__
@@ -41,10 +44,8 @@
     #include <FixMath.h>
 #endif
 
-#include "wx/display.h"
 #include "wx/display_impl.h"
 #include "wx/gdicmn.h"
-#include "wx/string.h"
 
 // ----------------------------------------------------------------------------
 // display implementation classes

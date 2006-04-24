@@ -10,12 +10,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/utils.h"
+
 #ifndef WX_PRECOMP
     #include "wx/list.h"
+    #include "wx/string.h"
 #endif
 
-#include "wx/utils.h"
-#include "wx/string.h"
 #include "wx/log.h"
 #include "wx/config.h"
 #include "wx/app.h"

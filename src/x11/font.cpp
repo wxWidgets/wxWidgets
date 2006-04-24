@@ -29,8 +29,12 @@
 #pragma message enable nosimpint
 #endif
 
-#include "wx/string.h"
 #include "wx/font.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #include "wx/gdicmn.h"
 #include "wx/utils.h"       // for wxGetDisplay()
 #include "wx/fontutil.h"    // for wxNativeFontInfo

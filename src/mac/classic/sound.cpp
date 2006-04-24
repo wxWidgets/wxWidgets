@@ -14,12 +14,12 @@
 
 #if wxUSE_SOUND
 
+#include "wx/sound.h"
+
 #ifndef WX_PRECOMP
     #include "wx/object.h"
+    #include "wx/string.h"
 #endif
-
-#include "wx/string.h"
-#include "wx/sound.h"
 
 #ifdef __WXMAC__
 #include "wx/mac/private.h"

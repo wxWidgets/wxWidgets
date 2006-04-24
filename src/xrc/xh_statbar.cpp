@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_statbar.cpp
+// Name:        src/xrc/xh_statbar.cpp
 // Purpose:     XRC resource for wxStatusBar
 // Author:      Brian Ravnsgaard Riis
 // Created:     2004/01/21
@@ -17,11 +17,15 @@
 
 #if wxUSE_XRC && wxUSE_STATUSBAR
 
+#include "wx/xrc/xh_statbar.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #include "wx/frame.h"
-#include "wx/string.h"
 #include "wx/log.h"
 
-#include "wx/xrc/xh_statbar.h"
 #include "wx/statusbr.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBarXmlHandler, wxXmlResourceHandler)
@@ -62,7 +66,7 @@ wxObject *wxStatusBarXmlHandler::DoCreateResource()
     else
         statbar->SetFieldsCount(fields);
 
-    if (!styles.IsEmpty())
+    if (!styles.empty())
     {
         int *style = new int[fields];
         for (int i = 0; i < fields; ++i)
@@ -77,7 +81,7 @@ wxObject *wxStatusBarXmlHandler::DoCreateResource()
             else if (first == wxT("wxSB_RAISED"))
                 style[i] = wxSB_RAISED;
 
-            if (!first.IsEmpty())
+            if (!first.empty())
                 wxLogError(wxT("Error in resource, unknown statusbar field style: ") + first);
             if(styles.Find(wxT(',')))
                 styles.Remove(0, styles.Find(wxT(',')) + 1);
@@ -102,4 +106,3 @@ bool wxStatusBarXmlHandler::CanHandle(wxXmlNode *node)
 }
 
 #endif // wxUSE_XRC && wxUSE_STATUSBAR
-

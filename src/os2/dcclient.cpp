@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcclient.cpp
+// Name:        src/os2/dcclient.cpp
 // Purpose:     wxClientDC class
 // Author:      David Webster
 // Modified by:
@@ -20,14 +20,17 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/string.h"
+#include "wx/dcclient.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #include "wx/log.h"
 #include "wx/window.h"
 #include "wx/app.h"
 
 #include "wx/os2/private.h"
-
-#include "wx/dcclient.h"
 
 // ----------------------------------------------------------------------------
 // array/list types
@@ -362,7 +365,7 @@ wxPaintDC::wxPaintDC(
                                 );
         }
 
-        m_bIsPaintTime   = TRUE;
+        m_bIsPaintTime   = true;
         ms_cache.Add(new wxPaintDCInfo(m_pCanvas, this));
     }
     InitDC();
@@ -383,7 +386,7 @@ wxPaintDC::~wxPaintDC()
         {
             ::WinEndPaint(m_hPS);
             m_hPS          = m_hOldPS;
-            m_bIsPaintTime = FALSE;
+            m_bIsPaintTime = false;
             ms_cache.RemoveAt(nIndex);
         }
         //else: cached DC entry is still in use
@@ -431,4 +434,3 @@ WXHDC wxPaintDC::FindDCInCache(
     }
     return 0;
 } // end of wxPaintDC::FindInCache
-

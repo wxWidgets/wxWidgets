@@ -13,13 +13,17 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_JOYSTICK
 
 #include "wx/joystick.h"
-#include "wx/string.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #include "wx/window.h"
 #include "wx/msw/private.h"
 

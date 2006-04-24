@@ -24,11 +24,14 @@
     #pragma hdrstop
 #endif
 
-#include "wx/string.h"
+#include "wx/dcclient.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #include "wx/log.h"
 #include "wx/window.h"
-
-#include "wx/dcclient.h"
 
 // ----------------------------------------------------------------------------
 // array/list types
@@ -156,4 +159,3 @@ wxPaintDCEx::wxPaintDCEx(wxWindow *canvas, WXHDC dc) : saveState(0)
 wxPaintDCEx::~wxPaintDCEx()
 {
 }
-

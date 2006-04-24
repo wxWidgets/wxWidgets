@@ -22,14 +22,15 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include "wx/fontenum.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
+    #include "wx/string.h"
 #endif
 
-#include "wx/string.h"
 #include "wx/utils.h"
 
-#include "wx/fontenum.h"
 #include "wx/encinfo.h"
 #include "wx/fontutil.h"
 

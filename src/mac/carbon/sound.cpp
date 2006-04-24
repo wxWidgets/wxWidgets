@@ -14,14 +14,15 @@
 
 #if wxUSE_SOUND
 
+#include "wx/sound.h"
+
 #ifndef WX_PRECOMP
     #include "wx/object.h"
+    #include "wx/string.h"
 #endif
 
-#include "wx/string.h"
 #include "wx/log.h"
 #include "wx/file.h"
-#include "wx/sound.h"
 #include "wx/timer.h"
 #include "wx/intl.h"
 

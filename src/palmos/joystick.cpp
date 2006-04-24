@@ -12,13 +12,15 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
+#if wxUSE_JOYSTICK
+
+#include "wx/joystick.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
 #endif
 
-#include "wx/string.h"
 #include "wx/window.h"
-#include "wx/palmos/joystick.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
 
@@ -27,7 +29,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
 
 wxJoystick::wxJoystick(int joystick)
 {
-};
+}
 
 wxPoint wxJoystick::GetPosition() const
 {
@@ -245,3 +247,4 @@ bool wxJoystick::ReleaseCapture()
     return false;
 }
 
+#endif  // wxUSE_JOYSTICK

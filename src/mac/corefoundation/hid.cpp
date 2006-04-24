@@ -27,12 +27,13 @@
 //DARWIN _ONLY_
 #ifdef __DARWIN__
 
+#include "wx/mac/corefoundation/hid.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
+    #include "wx/string.h"
 #endif
 
-#include "wx/mac/corefoundation/hid.h"
-#include "wx/string.h"
 #include "wx/log.h"
 #include "wx/mac/corefoundation/cfstring.h"
 

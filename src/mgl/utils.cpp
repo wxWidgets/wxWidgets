@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        utils.cpp
+// Name:        src/mgl/utils.cpp
 // Purpose:
 // Author:      Vaclav Slavik
 // Id:          $Id$
@@ -15,7 +15,10 @@
 #endif
 
 #include "wx/utils.h"
-#include "wx/string.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
 
 #include "wx/intl.h"
 #include "wx/apptrait.h"

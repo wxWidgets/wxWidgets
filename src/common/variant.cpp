@@ -16,6 +16,12 @@
     #pragma hdrstop
 #endif
 
+#include "wx/variant.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #if wxUSE_STD_IOSTREAM
     #if wxUSE_IOSTREAMH
         #include <fstream.h>
@@ -37,8 +43,6 @@ using namespace std ;
 #include "wx/string.h"
 #include "wx/tokenzr.h"
 #include "wx/math.h"
-
-#include "wx/variant.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxVariantData, wxObject)
 

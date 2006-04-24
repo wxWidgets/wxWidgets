@@ -22,13 +22,15 @@
 
 #if wxUSE_SOCKETS
 
+#include "wx/socket.h"
+
 #ifndef WX_PRECOMP
     #include "wx/object.h"
+    #include "wx/string.h"
 #endif
 
 #include "wx/app.h"
 #include "wx/apptrait.h"
-#include "wx/string.h"
 #include "wx/timer.h"
 #include "wx/utils.h"
 #include "wx/module.h"
@@ -37,7 +39,6 @@
 #include "wx/event.h"
 
 #include "wx/sckaddr.h"
-#include "wx/socket.h"
 #include "wx/datetime.h"
 
 // DLL options compatibility check:

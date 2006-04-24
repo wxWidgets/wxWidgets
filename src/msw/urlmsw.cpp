@@ -20,6 +20,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/list.h"
+    #include "wx/string.h"
 #endif
 
 #if !wxUSE_PROTOCOL_HTTP
@@ -63,7 +64,6 @@ USE_PROTOCOL(wxHTTPDummyProto)
     #pragma comment(lib, "wininet.lib")
 #endif
 
-#include "wx/string.h"
 #include "wx/utils.h"
 #include "wx/module.h"
 #include "wx/url.h"

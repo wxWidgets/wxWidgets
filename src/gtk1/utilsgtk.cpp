@@ -11,7 +11,10 @@
 #include "wx/wxprec.h"
 
 #include "wx/utils.h"
-#include "wx/string.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
 
 #include "wx/apptrait.h"
 #include "wx/intl.h"
@@ -70,12 +73,12 @@ bool wxSetDetectableAutoRepeat( bool flag )
 {
     Bool result;
     XkbSetDetectableAutoRepeat( GDK_DISPLAY(), flag, &result );
-    return result;       /* TRUE if keyboard hardware supports this mode */
+    return result;       /* true if keyboard hardware supports this mode */
 }
 #else
 bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 {
-    return FALSE;
+    return false;
 }
 #endif
 
@@ -118,7 +121,7 @@ void wxGetMousePosition( int* x, int* y )
 
 bool wxColourDisplay()
 {
-    return TRUE;
+    return true;
 }
 
 int wxDisplayDepth()
@@ -194,4 +197,3 @@ int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
 
     return tag;
 }
-

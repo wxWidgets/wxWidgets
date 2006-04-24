@@ -12,7 +12,10 @@
 #include "wx/wxprec.h"
 
 #include "wx/accel.h"
-#include "wx/string.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)
 
@@ -47,7 +50,7 @@ wxAcceleratorRefData::wxAcceleratorRefData()
 
 wxAcceleratorRefData::~wxAcceleratorRefData()
 {
-    m_accels.DeleteContents( TRUE );
+    m_accels.DeleteContents( true );
 }
 
 wxAcceleratorTable::wxAcceleratorTable()

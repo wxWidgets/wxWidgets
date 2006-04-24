@@ -15,8 +15,12 @@
     #pragma hdrstop
 #endif
 
-#include "wx/string.h"
 #include "wx/font.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #include "wx/fontutil.h"
 #include "wx/gdicmn.h"
 #include "wx/utils.h"
@@ -166,7 +170,7 @@ wxFontRefData::~wxFontRefData()
 
 void wxFontRefData::MacFindFont()
 {
-    if( m_faceName.Length() == 0 )
+    if( m_faceName.empty() )
     {
         switch( m_family )
         {

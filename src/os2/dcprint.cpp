@@ -12,23 +12,24 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #define INCL_DEV
 #define INCL_GPI
 #define INCL_PM
 #include<os2.h>
 
+#include "wx/dcprint.h"
+
 #ifndef WX_PRECOMP
-#include "wx/app.h"
-#include "wx/math.h"
+    #include "wx/app.h"
+    #include "wx/math.h"
+    #include "wx/string.h"
 #endif
 
-#include "wx/string.h"
 #include "wx/log.h"
 #include "wx/window.h"
 #include "wx/os2/private.h"
-#include "wx/dcprint.h"
-
-#if wxUSE_PRINTING_ARCHITECTURE
 
 IMPLEMENT_CLASS(wxPrinterDC, wxDC)
 

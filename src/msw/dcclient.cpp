@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcclient.cpp
+// Name:        src/msw/dcclient.cpp
 // Purpose:     wxClientDC class
 // Author:      Julian Smart
 // Modified by:
@@ -24,13 +24,16 @@
     #pragma hdrstop
 #endif
 
-#include "wx/string.h"
+#include "wx/dcclient.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #include "wx/log.h"
 #include "wx/window.h"
 
 #include "wx/msw/private.h"
-
-#include "wx/dcclient.h"
 
 // ----------------------------------------------------------------------------
 // array/list types
@@ -353,4 +356,3 @@ wxPaintDCEx::~wxPaintDCEx()
     // prevent the base class dtor from ReleaseDC()ing it again
     m_hDC = 0;
 }
-

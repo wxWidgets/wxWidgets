@@ -20,16 +20,17 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/fontenum.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
+    #include "wx/string.h"
 #endif
 
-#include "wx/string.h"
 #include "wx/regex.h"
 #include "wx/utils.h"
 #include "wx/app.h"
 #include "wx/fontmap.h"
-#include "wx/fontenum.h"
 #include "wx/fontutil.h"
 #include "wx/encinfo.h"
 

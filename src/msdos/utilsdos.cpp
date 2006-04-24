@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        utils.cpp
+// Name:        src/msdos/utils.cpp
 // Purpose:     DOS implementations of utility functions
 // Author:      Vaclav Slavik, M.J.Wetherell
 // Id:          $Id$
@@ -16,7 +16,10 @@
 #endif
 
 #include "wx/utils.h"
-#include "wx/string.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
 
 #include "wx/intl.h"
 #include "wx/apptrait.h"
@@ -85,12 +88,12 @@ bool wxGetEnv(const wxString& var, wxString *value)
     // wxGetenv is defined as getenv()
     wxChar *p = wxGetenv(var);
     if ( !p )
-        return FALSE;
+        return false;
 
     if ( value )
         *value = p;
 
-    return TRUE;
+    return true;
 }
 
 bool wxSetEnv(const wxString& variable, const wxChar *value)
@@ -233,7 +236,7 @@ bool wxGetUserName(wxChar *buf, int n)
 bool wxGetHostName(wxChar *buf, int n)
 {
     const wxChar *host = wxGetenv(_T("ComputerName"));
-    
+
     if (!host)
         host = wxGetenv(_T("HOSTNAME"));
 
@@ -318,7 +321,7 @@ long wxExecute(const wxString& command, int flags, wxProcess *process)
 #if wxUSE_STREAMS
 
 // A wxFFileInputStream that deletes the file in it's destructor
-// 
+//
 class wxTempFileInStream : public wxFFileInputStream
 {
 public:

@@ -13,12 +13,17 @@
 
 #if wxUSE_NOTEBOOK
 
+#include "wx/notebook.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/string.h"
 #include "wx/log.h"
 #include "wx/imaglist.h"
 #include "wx/image.h"
-#include "wx/notebook.h"
 #include "wx/mac/uma.h"
 
 
@@ -96,18 +101,18 @@ bool wxNotebook::Create( wxWindow *parent,
     ControlTabSize tabsize;
     switch (GetWindowVariant())
     {
-    	case wxWINDOW_VARIANT_MINI:
+        case wxWINDOW_VARIANT_MINI:
             if ( UMAGetSystemVersion() >= 0x1030 )
                 tabsize = 3 ;
             else
                 tabsize = kControlSizeSmall;
             break;
 
-    	case wxWINDOW_VARIANT_SMALL:
+        case wxWINDOW_VARIANT_SMALL:
             tabsize = kControlTabSizeSmall;
             break;
 
-    	default:
+        default:
             tabsize = kControlTabSizeLarge;
             break;
     }
@@ -323,11 +328,11 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
     const int countPages = GetPageCount();
 
     // we have to convert from Client to Window relative coordinates
-    wxPoint adjustedPt = pt + GetClientAreaOrigin(); 
+    wxPoint adjustedPt = pt + GetClientAreaOrigin();
     // and now to HIView native ones
     adjustedPt.x -= MacGetLeftBorderSize() ;
     adjustedPt.y -= MacGetTopBorderSize() ;
-    
+
     HIPoint hipoint= { adjustedPt.x , adjustedPt.y } ;
     HIViewPartCode outPart = 0 ;
     OSStatus err = HIViewGetPartHit( m_peer->GetControlRef(), &hipoint, &outPart );

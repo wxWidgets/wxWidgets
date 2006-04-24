@@ -21,16 +21,18 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
-#ifndef __WXPALMOS__
+#include  "wx/notebook.h"
 
-#include  "wx/string.h"
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
+
 #include  "wx/log.h"
 #include  "wx/settings.h"
 #include  "wx/generic/imaglist.h"
-#include  "wx/notebook.h"
 #include  "wx/dcclient.h"
 #include  "wx/generic/tabg.h"
 
@@ -711,5 +713,3 @@ bool wxNotebookTabView::OnTabPreActivate(int activateId, int deactivateId)
   }
   return retval;
 }
-
-#endif // __WXPALMOS__

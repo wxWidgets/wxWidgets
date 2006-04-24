@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        accel.cpp
+// Name:        src/mac/carbon/accel.cpp
 // Purpose:     wxAcceleratorTable
 // Author:      Stefan Csomor
 // Modified by:
@@ -12,7 +12,10 @@
 #include "wx/wxprec.h"
 
 #include "wx/accel.h"
-#include "wx/string.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)
 
@@ -99,5 +102,3 @@ int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
 
     return -1;
 }
-
-
