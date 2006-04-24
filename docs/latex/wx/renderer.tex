@@ -68,7 +68,8 @@ enum
     wxCONTROL_CURRENT    = 0x00000010,  // mouse is currently over the control
     wxCONTROL_SELECTED   = 0x00000020,  // selected item in e.g. listbox
     wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
-    wxCONTROL_CHECKABLE  = 0x00000080   // (menu) item can be checked
+    wxCONTROL_CHECKABLE  = 0x00000080,  // (menu) item can be checked
+    wxCONTROL_UNDETERMINED = wxCONTROL_CHECKABLE  // (check) undetermined state
 };
 \end{verbatim}
 
@@ -89,6 +90,16 @@ No base class
 \func{}{\destruct{wxRendererNative}}{\void}
 
 Virtual destructor as for any base class.
+
+
+\membersection{wxRendererNative::DrawCheckButton}\label{wxrenderernativedrawcheckbutton}
+
+\func{void}{DrawCheckButton}{\param{wxWindow *}{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags}}
+
+Draw a check box (used by wxDataViewCtrl).
+
+\arg{flags} may have the \texttt{wxCONTROL\_CHECKED}, \texttt{wxCONTROL\_CURRENT} or
+\texttt{wxCONTROL\_UNDETERMINED} bit set.
 
 
 \membersection{wxRendererNative::DrawComboBoxDropButton}\label{wxrenderernativedrawcomboboxdropbutton}
@@ -118,6 +129,16 @@ rectangle of a drop down button which arrow matches the size you need.
 \func{void}{DrawHeaderButton}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}}
 
 Draw the header control button (used by \helpref{wxListCtrl}{wxlistctrl}).
+
+
+\membersection{wxRendererNative::DrawPushButton}\label{wxrenderernativedrawpushbutton}
+
+\func{void}{DrawPushButton}{\param{wxWindow *}{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags}}
+
+Draw a blank push button that looks very similar to \helpref{wxButton}{wxbutton}.
+
+\arg{flags} may have the \texttt{wxCONTROL\_PRESSED}, \texttt{wxCONTROL\_CURRENT} or
+\texttt{wxCONTROL\_ISDEFAULT} bit set.
 
 
 \membersection{wxRendererNative::DrawSplitterBorder}\label{wxrenderernativedrawsplitterborder}

@@ -39,10 +39,17 @@
 // tmschema.h is in Win32 Platform SDK and might not be available with earlier
 // compilers
 #ifndef CP_DROPDOWNBUTTON
+    #define BP_PUSHBUTTON      1
     #define BP_CHECKBOX        3
     #define CBS_UNCHECKEDNORMAL 1
     #define CBS_CHECKEDNORMAL   (CBS_UNCHECKEDNORMAL + 4)
     #define CBS_MIXEDNORMAL     (CBS_CHECKEDNORMAL + 4)
+
+    #define PBS_NORMAL          1
+    #define PBS_HOT             2
+    #define PBS_PRESSED         3
+    #define PBS_DISABLED        4
+    #define PBS_DEFAULTED       5
 
     #define CP_DROPDOWNBUTTON  1
 
@@ -82,6 +89,11 @@ public:
                                         wxDC& dc,
                                         const wxRect& rect,
                                         int flags = 0);
+
+    virtual void DrawPushButton(wxWindow *win,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags = 0);
 
 private:
     DECLARE_NO_COPY_CLASS(wxRendererMSW)
@@ -126,6 +138,11 @@ public:
                                  wxDC& dc,
                                  const wxRect& rect,
                                  int flags = 0);
+
+    virtual void DrawPushButton(wxWindow *win,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags = 0);
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 private:
@@ -177,6 +194,27 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
         style |= DFCS_PUSHED | DFCS_FLAT;
 
     ::DrawFrameControl(GetHdcOf(dc), &r, DFC_SCROLL, style);
+}
+
+void
+wxRendererMSW::DrawPushButton(wxWindow * WXUNUSED(win),
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags)
+{
+    RECT r;
+    r.left = rect.GetLeft();
+    r.top = rect.GetTop();
+    r.bottom = rect.y + rect.height;
+    r.right = rect.x + rect.width;
+
+    int style = DFCS_BUTTONPUSH;
+    if ( flags & wxCONTROL_DISABLED )
+        style |= DFCS_INACTIVE;
+    if ( flags & wxCONTROL_PRESSED )
+        style |= DFCS_PUSHED | DFCS_FLAT;
+
+    ::DrawFrameControl(GetHdcOf(dc), &r, DFC_BUTTON, style);
 }
 
 // ============================================================================
@@ -337,6 +375,46 @@ wxRendererXP::DrawCheckButton(wxWindow *win,
                                 &r,
                                 NULL
                             );
+}
+
+void
+wxRendererXP::DrawPushButton(wxWindow * win,
+                             wxDC& dc,
+                             const wxRect& rect,
+                             int flags)
+{
+    wxUxThemeHandle hTheme(win, L"BUTTON");
+    if ( !hTheme )
+    {
+        m_rendererNative.DrawPushButton(win, dc, rect, flags);
+        return;
+    }
+
+    RECT r;
+    wxCopyRectToRECT(rect, r);
+
+    int state;
+    if ( flags & wxCONTROL_PRESSED )
+        state = PBS_PRESSED;
+    else if ( flags & wxCONTROL_CURRENT )
+        state = PBS_HOT;
+    else if ( flags & wxCONTROL_DISABLED )
+        state = PBS_DISABLED;
+    else if ( flags & wxCONTROL_ISDEFAULT )
+        state = PBS_DEFAULTED;
+    else
+        state = PBS_NORMAL;
+
+    wxUxThemeEngine::Get()->DrawThemeBackground
+                            (
+                                hTheme,
+                                GetHdcOf(dc),
+                                BP_PUSHBUTTON,
+                                state,
+                                &r,
+                                NULL
+                            );
+
 }
 
 // ----------------------------------------------------------------------------

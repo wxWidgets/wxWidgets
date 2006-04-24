@@ -170,7 +170,6 @@ public:
                                const wxRect& rect,
                                int flags = 0) = 0;
 
-
     // draw check button
     //
     // flags may use wxCONTROL_CHECKED, wxCONTROL_UNDETERMINED and wxCONTROL_CURRENT
@@ -178,7 +177,15 @@ public:
                                  wxDC& dc,
                                  const wxRect& rect,
                                  int flags = 0) = 0;
-                                 
+
+    // draw blank button
+    //
+    // flags may use wxCONTROL_PRESSED, wxCONTROL_CURRENT and wxCONTROL_ISDEFAULT
+    virtual void DrawPushButton(wxWindow *win,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags = 0) = 0;
+
     // geometry functions
     // ------------------
 
@@ -286,7 +293,13 @@ public:
                                  const wxRect& rect,
                                  int flags = 0 )
         { m_rendererNative.DrawCheckButton( win, dc, rect, flags ); }
-        
+
+    virtual void DrawPushButton(wxWindow *win,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags = 0 )
+        { m_rendererNative.DrawPushButton( win, dc, rect, flags ); }
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }
 

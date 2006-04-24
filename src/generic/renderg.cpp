@@ -82,7 +82,12 @@ public:
                                  wxDC& dc,
                                  const wxRect& rect,
                                  int flags = 0);
-                                 
+
+    virtual void DrawPushButton(wxWindow *win,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags = 0);
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
     virtual wxRendererVersion GetVersion() const
@@ -360,20 +365,11 @@ void
 wxRendererGeneric::DrawComboBoxDropButton(wxWindow *win,
                                           wxDC& dc,
                                           const wxRect& rect,
-                                          int WXUNUSED(flags))
+                                          int flags)
 {
-    // Creating a generic button background that would actually be
-    // useful is rather difficult to accomplish. Best compromise
-    // is to use window's background colour to achieve transparent'
-    // ish appearance that should look decent in combo box style
-    // controls.
-    wxColour col = win->GetBackgroundColour();
-    dc.SetBrush(wxBrush(col));
-    dc.SetPen(wxPen(col));
-    dc.DrawRectangle(rect);
-    DrawDropArrow(win,dc,rect);
+    DrawPushButton(win,dc,rect,flags);
+    DrawDropArrow(win,dc,rect,flags);
 }
-
 
 void
 wxRendererGeneric::DrawDropArrow(wxWindow *win,
@@ -414,6 +410,22 @@ wxRendererGeneric::DrawCheckButton(wxWindow *WXUNUSED(win),
     {
         dc.DrawCheckMark(rect.Deflate(2, 2));
     }
+}
+
+void
+wxRendererGeneric::DrawPushButton(wxWindow *win,
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  int flags)
+{
+    // Don't try anything too fancy. It'll just turn out looking
+    // out-of-place on most platforms.
+    wxColour bgCol = flags & wxCONTROL_DISABLED ?
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE) :
+                        win->GetBackgroundColour();
+    dc.SetBrush(wxBrush(bgCol));
+    dc.SetPen(wxPen(bgCol));
+    dc.DrawRectangle(rect);
 }
 
 // ----------------------------------------------------------------------------

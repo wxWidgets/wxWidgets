@@ -82,13 +82,18 @@ public:
                                  wxDC& dc,
                                  const wxRect& rect,
                                  int flags = 0);
-                                 
+
+    virtual void DrawPushButton(wxWindow *win,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags = 0);
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
 private:
     // FIXME: shouldn't we destroy these windows somewhere?
 
-    // used by DrawHeaderButton and DrawComboBoxDropButton
+    // used by DrawHeaderButton and DrawPushButton
     static GtkWidget *GetButtonWidget();
 
     // used by DrawTreeItemButton()
@@ -185,7 +190,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     (
         button->style,
         // FIXME: I suppose GTK_PIZZA(win->m_wxwindow)->bin_window doesn't work with wxMemoryDC.
-        //   Maybe use code similar as in DrawComboBoxDropButton below?
+        //   Maybe use code similar as in DrawPushButton below?
         GTK_PIZZA(win->m_wxwindow)->bin_window,
         flags & wxCONTROL_DISABLED ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL,
         GTK_SHADOW_OUT,
@@ -422,39 +427,8 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
                                       const wxRect& rect,
                                       int flags)
 {
-    GtkWidget *button = GetButtonWidget();
-
-    // for reason why we do this, see DrawDropArrow
-    wxWindowDC& wdc = (wxWindowDC&)dc;
-    wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
-
-    // draw button
-    GtkStateType state;
-
-    if ( flags & wxCONTROL_PRESSED )
-        state = GTK_STATE_ACTIVE;
-    else if ( flags & wxCONTROL_DISABLED )
-        state = GTK_STATE_INSENSITIVE;
-    else if ( flags & wxCONTROL_CURRENT )
-        state = GTK_STATE_PRELIGHT;
-    else
-        state = GTK_STATE_NORMAL;
-
-    gtk_paint_box
-    (
-        button->style,
-        wdc.m_window,
-        state,
-        flags & wxCONTROL_PRESSED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
-        NULL,
-        button,
-        "button",
-        rect.x, rect.y, rect.width, rect.height
-    );
-
-    // draw arrow on button
-    DrawDropArrow(win,dc,rect,flags);
-
+    DrawPushButton(win,dc,rect,flags);
+    DrawDropArrow(win,dc,rect);
 }
 
 void 
@@ -490,5 +464,42 @@ wxRendererGTK::DrawCheckButton(wxWindow *win,
         button,
         "cellcheck",
         rect.x, rect.y, 13, 13
+    );
+}
+
+void
+wxRendererGTK::DrawPushButton(wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags)
+{
+    GtkWidget *button = GetButtonWidget();
+
+    // for reason why we do this, see DrawDropArrow
+    wxWindowDC& wdc = (wxWindowDC&)dc;
+    wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
+
+    // draw button
+    GtkStateType state;
+
+    if ( flags & wxCONTROL_PRESSED )
+        state = GTK_STATE_ACTIVE;
+    else if ( flags & wxCONTROL_DISABLED )
+        state = GTK_STATE_INSENSITIVE;
+    else if ( flags & wxCONTROL_CURRENT )
+        state = GTK_STATE_PRELIGHT;
+    else
+        state = GTK_STATE_NORMAL;
+
+    gtk_paint_box
+    (
+        button->style,
+        wdc.m_window,
+        state,
+        flags & wxCONTROL_PRESSED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
+        NULL,
+        button,
+        "button",
+        rect.x, rect.y, rect.width, rect.height
     );
 }
