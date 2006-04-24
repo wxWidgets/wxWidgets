@@ -76,7 +76,6 @@ samples/xrc/*.ico
 samples/xrc/*.bmp
 samples/xrc/*.xpm
 samples/xrc/xrcdemo.dsp
-samples/xrc/xrcdemo.dsw
 samples/xrc/xrcdemo.bkl
 samples/xrc/rc/*.bmp
 samples/xrc/rc/*.gif
@@ -102,8 +101,7 @@ contrib/utils/convertrc/*.txt
 contrib/utils/convertrc/*.ico
 contrib/utils/convertrc/*.bmp
 contrib/utils/convertrc/*.xpm
-contrib/utils/convertrc/ConvertVC.dsp
-contrib/utils/convertrc/ConvertVC.dsw
+contrib/utils/convertrc/convertrc.dsp
 
 utils/wxrc/*.cpp
 utils/wxrc/*.h
@@ -116,7 +114,6 @@ utils/wxrc/*.ico
 utils/wxrc/*.bmp
 utils/wxrc/*.xpm
 utils/wxrc/wxrc.dsp
-utils/wxrc/wxrc.dsw
 utils/wxrc/*.bkl
 
 distrib/msw/xml.rsp

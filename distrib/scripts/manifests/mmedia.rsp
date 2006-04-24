@@ -33,6 +33,5 @@ contrib/samples/mmedia/*.txt
 contrib/samples/mmedia/*.rc
 contrib/samples/mmedia/*.def
 contrib/samples/mmedia/mmboard.dsp
-contrib/samples/mmedia/mmboard.dsw
 contrib/samples/mmedia/*.bkl
 

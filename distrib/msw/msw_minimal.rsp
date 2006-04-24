@@ -263,13 +263,10 @@ src/regex/regex.dsw
 samples/samples.dsw
 
 samples/dialogs/dialogs.dsp
-samples/dialogs/dialogs.dsw
 
 samples/minimal/minimal.dsp
-samples/minimal/minimal.dsw
 samples/minimal/minimalUniv.dsp
 
 samples/widgets/widgets.dsp
-samples/widgets/widgets.dsw
 samples/widgets/widgetsUniv.dsp
 

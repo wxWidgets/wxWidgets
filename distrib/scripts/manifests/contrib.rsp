@@ -72,7 +72,6 @@ contrib/samples/animate/*.bmp
 contrib/samples/animate/*.rc
 contrib/samples/animate/*.gif
 contrib/samples/animate/anitest.dsp
-contrib/samples/animate/anitest.dsw
 contrib/samples/animate/*.bkl
 
 contrib/src/applet/*.cpp
@@ -113,7 +112,6 @@ contrib/samples/deprecated/proplist/*.bmp
 contrib/samples/deprecated/proplist/*.rc
 contrib/samples/deprecated/proplist/*.gif
 contrib/samples/deprecated/proplist/proplist.dsp
-contrib/samples/deprecated/proplist/proplist.dsw
 contrib/samples/deprecated/proplist/*.bkl
 
 contrib/samples/deprecated/resource/*.cpp
@@ -127,7 +125,6 @@ contrib/samples/deprecated/resource/*.bmp
 contrib/samples/deprecated/resource/*.rc
 contrib/samples/deprecated/resource/*.gif
 contrib/samples/deprecated/resource/resource.dsp
-contrib/samples/deprecated/resource/resource.dsw
 contrib/samples/deprecated/resource/*.bkl
 
 contrib/samples/deprecated/treelay/*.cpp
@@ -141,7 +138,6 @@ contrib/samples/deprecated/treelay/*.bmp
 contrib/samples/deprecated/treelay/*.rc
 contrib/samples/deprecated/treelay/*.gif
 contrib/samples/deprecated/treelay/treelay.dsp
-contrib/samples/deprecated/treelay/treelay.dsw
 contrib/samples/deprecated/treelay/*.bkl
 
 contrib/src/fl/*.cpp
@@ -161,7 +157,6 @@ contrib/samples/fl/*.ico
 contrib/samples/fl/*.bmp
 contrib/samples/fl/*.rc
 contrib/samples/fl/*.dsp
-contrib/samples/fl/*.dsw
 contrib/samples/fl/*.bkl
 
 contrib/src/gizmos/*.cpp
@@ -180,7 +175,6 @@ contrib/samples/gizmos/dynsash/*.ico
 contrib/samples/gizmos/dynsash/*.bmp
 contrib/samples/gizmos/dynsash/*.rc
 contrib/samples/gizmos/dynsash/dynsash.dsp
-contrib/samples/gizmos/dynsash/dynsash.dsw
 contrib/samples/gizmos/dynsash/*.bkl
 
 contrib/samples/gizmos/dynsash_switch/*.cpp
@@ -193,7 +187,6 @@ contrib/samples/gizmos/dynsash_switch/*.ico
 contrib/samples/gizmos/dynsash_switch/*.bmp
 contrib/samples/gizmos/dynsash_switch/*.rc
 contrib/samples/gizmos/dynsash_switch/dynsash_switch.dsp
-contrib/samples/gizmos/dynsash_switch/dynsash_switch.dsw
 contrib/samples/gizmos/dynsash_switch/*.bkl
 
 contrib/samples/gizmos/editlbox/*.cpp
@@ -206,7 +199,6 @@ contrib/samples/gizmos/editlbox/*.ico
 contrib/samples/gizmos/editlbox/*.bmp
 contrib/samples/gizmos/editlbox/*.rc
 contrib/samples/gizmos/editlbox/editlbox.dsp
-contrib/samples/gizmos/editlbox/editlbox.dsw
 contrib/samples/gizmos/editlbox/*.bkl
 
 contrib/samples/gizmos/led/*.cpp
@@ -219,7 +211,6 @@ contrib/samples/gizmos/led/*.ico
 contrib/samples/gizmos/led/*.bmp
 contrib/samples/gizmos/led/*.rc
 contrib/samples/gizmos/led/led.dsp
-contrib/samples/gizmos/led/led.dsw
 contrib/samples/gizmos/led/*.bkl
 
 contrib/samples/gizmos/multicell/*.cpp
@@ -232,7 +223,6 @@ contrib/samples/gizmos/multicell/*.ico
 contrib/samples/gizmos/multicell/*.bmp
 contrib/samples/gizmos/multicell/*.rc
 contrib/samples/gizmos/multicell/multicell.dsp
-contrib/samples/gizmos/multicell/multicell.dsw
 contrib/samples/gizmos/multicell/*.bkl
 
 contrib/samples/gizmos/splittree/*.cpp
@@ -245,7 +235,6 @@ contrib/samples/gizmos/splittree/*.ico
 contrib/samples/gizmos/splittree/*.bmp
 contrib/samples/gizmos/splittree/*.rc
 contrib/samples/gizmos/splittree/splittree.dsp
-contrib/samples/gizmos/splittree/splittree.dsw
 contrib/samples/gizmos/splittree/*.bkl
 
 contrib/src/plot/*.cpp
@@ -265,7 +254,6 @@ contrib/samples/plot/*.ico
 contrib/samples/plot/*.bmp
 contrib/samples/plot/*.rc
 contrib/samples/plot/plot.dsp
-contrib/samples/plot/plot.dsw
 contrib/samples/plot/*.bkl
 
 contrib/src/net/*.cpp
@@ -283,7 +271,6 @@ contrib/samples/svg/*.xpm
 contrib/samples/svg/*.bmp
 contrib/samples/svg/*.rc
 contrib/samples/svg/svgtest.dsp
-contrib/samples/svg/svgtest.dsw
 contrib/samples/svg/*.bkl
 contrib/samples/svg/bitmaps/*.xpm
 

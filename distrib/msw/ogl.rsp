@@ -56,8 +56,7 @@ contrib/samples/ogl/ogledit/*.txt
 contrib/samples/ogl/ogledit/*.ico
 contrib/samples/ogl/ogledit/*.bmp
 contrib/samples/ogl/ogledit/*.xpm
-contrib/samples/ogl/ogledit/OGLEditVC.dsp
-contrib/samples/ogl/ogledit/OGLEditVC.dsw
+contrib/samples/ogl/ogledit/*.dsp
 contrib/samples/ogl/ogledit/bitmaps/*.bmp
 contrib/samples/ogl/ogledit/bitmaps/*.gif
 contrib/samples/ogl/ogledit/bitmaps/*.xbm
@@ -82,8 +81,7 @@ contrib/samples/ogl/studio/*.ico
 contrib/samples/ogl/studio/*.bmp
 contrib/samples/ogl/studio/*.xpm
 contrib/samples/ogl/studio/*.wxr
-contrib/samples/ogl/studio/StudioVC.dsp
-contrib/samples/ogl/studio/StudioVC.dsw
+contrib/samples/ogl/studio/*.dsp
 contrib/samples/ogl/studio/bitmaps/*.bmp
 contrib/samples/ogl/studio/bitmaps/*.gif
 contrib/samples/ogl/studio/bitmaps/*.xbm

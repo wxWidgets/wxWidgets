@@ -47,7 +47,6 @@ contrib/samples/stc/*.ico
 contrib/samples/stc/*.bmp
 contrib/samples/stc/*.xpm
 contrib/samples/stc/*.wxr
-contrib/samples/stc/stctest.dsp
-contrib/samples/stc/stctest.dsw
+contrib/samples/stc/*.dsp
 contrib/samples/stc/*.bkl
 
