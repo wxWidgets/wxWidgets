@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filedlgg.h
+// Name:        wx/generic/filedlgg.h
 // Purpose:     wxGenericFileDialog
 // Author:      Robert Roebling
 // Modified by:
@@ -15,6 +15,7 @@
 #include "wx/listctrl.h"
 #include "wx/datetime.h"
 #include "wx/filefn.h"
+#include "wx/filedlg.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -304,4 +305,3 @@ private:
 };
 
 #endif // _WX_FILEDLGG_H_
-
