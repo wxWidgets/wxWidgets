@@ -51,7 +51,7 @@ bool wxDataViewListModel::RowAppended()
 {
     bool ret = true;
 
-    wxNode *node = m_notifiers.GetFirst();
+    wxList::compatibility_iterator node = m_notifiers.GetFirst();
     while (node)
     {
         wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
@@ -67,7 +67,7 @@ bool wxDataViewListModel::RowPrepended()
 {
     bool ret = true;
 
-    wxNode *node = m_notifiers.GetFirst();
+    wxList::compatibility_iterator node = m_notifiers.GetFirst();
     while (node)
     {
         wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
@@ -83,7 +83,7 @@ bool wxDataViewListModel::RowInserted( size_t before )
 {
     bool ret = true;
 
-    wxNode *node = m_notifiers.GetFirst();
+    wxList::compatibility_iterator node = m_notifiers.GetFirst();
     while (node)
     {
         wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
@@ -99,7 +99,7 @@ bool wxDataViewListModel::RowDeleted( size_t row )
 {
     bool ret = true;
 
-    wxNode *node = m_notifiers.GetFirst();
+    wxList::compatibility_iterator node = m_notifiers.GetFirst();
     while (node)
     {
         wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
@@ -115,7 +115,7 @@ bool wxDataViewListModel::RowChanged( size_t row )
 {
     bool ret = true;
 
-    wxNode *node = m_notifiers.GetFirst();
+    wxList::compatibility_iterator node = m_notifiers.GetFirst();
     while (node)
     {
         wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
@@ -131,7 +131,7 @@ bool wxDataViewListModel::ValueChanged( size_t col, size_t row )
 {
     bool ret = true;
 
-    wxNode *node = m_notifiers.GetFirst();
+    wxList::compatibility_iterator node = m_notifiers.GetFirst();
     while (node)
     {
         wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
@@ -147,7 +147,7 @@ bool wxDataViewListModel::RowsReordered( size_t *new_order )
 {
     bool ret = true;
 
-    wxNode *node = m_notifiers.GetFirst();
+    wxList::compatibility_iterator node = m_notifiers.GetFirst();
     while (node)
     {
         wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
@@ -163,7 +163,7 @@ bool wxDataViewListModel::Cleared()
 {
     bool ret = true;
 
-    wxNode *node = m_notifiers.GetFirst();
+    wxList::compatibility_iterator node = m_notifiers.GetFirst();
     while (node)
     {
         wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
@@ -182,7 +182,7 @@ void wxDataViewListModel::AddViewingColumn( wxDataViewColumn *view_column, size_
 
 void wxDataViewListModel::RemoveViewingColumn( wxDataViewColumn *column )
 {
-    wxNode *node = m_viewingColumns.GetFirst();
+    wxList::compatibility_iterator node = m_viewingColumns.GetFirst();
     while (node)
     {
         wxDataViewViewingColumn* tmp = (wxDataViewViewingColumn*) node->GetData();
