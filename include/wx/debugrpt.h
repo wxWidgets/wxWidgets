@@ -16,6 +16,7 @@
 #if wxUSE_DEBUGREPORT && wxUSE_XML
 
 #include "wx/string.h"
+#include "wx/arrstr.h"
 
 class WXDLLIMPEXP_XML wxXmlNode;
 
