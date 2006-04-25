@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filedlg.cpp
+// Name:        src/mac/carbon/filedlg.cpp
 // Purpose:     wxFileDialog
 // Author:      Stefan Csomor
 // Modified by:
@@ -11,11 +11,15 @@
 
 #include "wx/wxprec.h"
 
+#include "wx/filedlg.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/utils.h"
 #include "wx/dialog.h"
-#include "wx/filedlg.h"
-#include "wx/intl.h"
 #include "wx/tokenzr.h"
 #include "wx/filename.h"
 
@@ -157,7 +161,7 @@ void MakeUserDataRec(OpenUserDataRec *myData , const wxString& filter )
         // an explanatory text, in that case the first part is name and extension at the same time
 
         wxASSERT_MSG( filterIndex == 0 || !isName , wxT("incorrect format of format string") ) ;
-        if ( current.IsEmpty() )
+        if ( current.empty() )
             myData->extensions.Add( myData->name[filterIndex] ) ;
         else
             myData->extensions.Add( current.MakeUpper() ) ;
@@ -179,7 +183,7 @@ void MakeUserDataRec(OpenUserDataRec *myData , const wxString& filter )
             // Remove leading '.'
             if (extension.length() && (extension.GetChar(0) == '.'))
                 extension = extension.Mid( 1 );
-       
+
             if (wxFileName::MacFindDefaultTypeAndCreator( extension, &fileType, &creator ))
                 myData->filtermactypes.Add( (OSType)fileType );
             else
@@ -364,7 +368,7 @@ int wxFileDialog::ShowModal()
     {
         // let the user select bundles/programs in dialogs
         dialogCreateOptions.optionFlags |= kNavSupportPackages;
-    
+
         navFilterUPP = NewNavObjectFilterUPP(CrossPlatformFilterCallback);
         err = ::NavCreateGetFileDialog(
             &dialogCreateOptions,
@@ -413,7 +417,7 @@ int wxFileDialog::ShowModal()
                 thePath = wxMacFSRefToPath( &theFSRef, navReply.saveFileName );
             else
                 thePath = wxMacFSRefToPath( &theFSRef );
-                
+
             if (!thePath)
             {
                 ::NavDisposeReply(&navReply);
@@ -436,4 +440,3 @@ int wxFileDialog::ShowModal()
 
     return (err == noErr) ? wxID_OK : wxID_CANCEL;
 }
-

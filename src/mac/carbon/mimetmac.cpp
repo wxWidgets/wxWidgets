@@ -32,9 +32,12 @@
 
 #if wxUSE_MIMETYPE
 
+#include "wx/mac/mimetype.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/string.h"
+    #include "wx/intl.h"
 
     #if wxUSE_GUI
         #include "wx/icon.h"
@@ -43,10 +46,8 @@
 
 #include "wx/log.h"
 #include "wx/file.h"
-#include "wx/intl.h"
 #include "wx/confbase.h"
 
-#include "wx/mac/mimetype.h"
 #include "wx/mac/private.h"
 
 // other standard headers
@@ -818,7 +819,6 @@ pascal  OSStatus  MoreProcGetProcessTypeSignature(
 //
 
 #include "wx/mac/corefoundation/cfstring.h"
-#include "wx/intl.h" //wxLocale for wxCFString
 
 #define wxCF_RELEASE true
 #define wxCF_RETAIN  false

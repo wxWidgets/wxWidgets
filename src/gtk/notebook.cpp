@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        notebook.cpp
+// Name:        src/gtk/notebook.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -10,14 +10,17 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_NOTEBOOK
+
 #include "wx/notebook.h"
 
-#if wxUSE_NOTEBOOK
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
 
 #include "wx/panel.h"
 #include "wx/utils.h"
 #include "wx/imaglist.h"
-#include "wx/intl.h"
 #include "wx/log.h"
 #include "wx/bitmap.h"
 #include "wx/fontutil.h"
@@ -383,13 +386,13 @@ int wxNotebook::GetSelection() const
 
 wxString wxNotebook::GetPageText( size_t page ) const
 {
-    wxCHECK_MSG( m_widget != NULL, wxT(""), wxT("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, wxEmptyString, wxT("invalid notebook") );
 
     wxGtkNotebookPage* nb_page = GetNotebookPage(page);
     if (nb_page)
         return nb_page->m_text;
     else
-        return wxT("");
+        return wxEmptyString;
 }
 
 int wxNotebook::GetPageImage( size_t page ) const
@@ -691,7 +694,7 @@ bool wxNotebook::InsertPage( size_t position,
     /* set the label text */
 
     nb_page->m_text = text;
-    if (nb_page->m_text.IsEmpty()) nb_page->m_text = wxT("");
+    if (nb_page->m_text.empty()) nb_page->m_text = wxT("");
 
     nb_page->m_label = GTK_LABEL( gtk_label_new(wxGTK_CONV(nb_page->m_text)) );
     gtk_box_pack_end( GTK_BOX(nb_page->m_box), GTK_WIDGET(nb_page->m_label), FALSE, FALSE, m_padding );

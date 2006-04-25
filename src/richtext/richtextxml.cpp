@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtext/richtextxml.cpp
+// Name:        src/richtext/richtextxml.cpp
 // Purpose:     XML and HTML I/O for wxRichTextCtrl
 // Author:      Julian Smart
 // Modified by:
@@ -21,7 +21,8 @@
 #include "wx/richtext/richtextxml.h"
 
 #ifndef WX_PRECOMP
-  #include "wx/wx.h"
+    #include "wx/wx.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/filename.h"
@@ -31,7 +32,6 @@
 #include "wx/module.h"
 #include "wx/txtstrm.h"
 #include "wx/xml/xml.h"
-#include "wx/intl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextXMLHandler, wxRichTextFileHandler)
 
@@ -123,13 +123,13 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node)
                         wxString text2 = textChild->GetContent();
 
                         // Strip whitespace from end
-                        if (text2.Length() > 0 && text2[text2.Length()-1] == wxT('\n'))
-                            text2 = text2.Mid(0, text2.Length()-1);
+                        if (!text2.empty() && text2[text2.length()-1] == wxT('\n'))
+                            text2 = text2.Mid(0, text2.length()-1);
 
-                        if (text2.Length() > 0 && text2[0] == wxT('"'))
+                        if (!text2.empty() && text2[0] == wxT('"'))
                             text2 = text2.Mid(1);
-                        if (text2.Length() > 0 && text2[text2.Length()-1] == wxT('"'))
-                            text2 = text2.Mid(0, text2.Length() - 1);
+                        if (!text2.empty() && text2[text2.length()-1] == wxT('"'))
+                            text2 = text2.Mid(0, text2.length() - 1);
 
                         text += text2;
                     }
@@ -175,7 +175,7 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node)
 
                     wxStringInputStream strStream(data);
 
-                    imageObj->GetImageBlock().ReadHex(strStream, data.Length(), imageType);
+                    imageObj->GetImageBlock().ReadHex(strStream, data.length(), imageType);
                 }
             }
             child = child->GetNext();
@@ -307,7 +307,7 @@ static void OutputStringEnt(wxOutputStream& stream, const wxString& str,
     for (i = 0; i < len; i++)
     {
         c = str.GetChar(i);
-        
+
         // Original code excluded "&amp;" but we _do_ want to convert
         // the ampersand beginning &amp; because otherwise when read in,
         // the original "&amp;" becomes "&".
@@ -388,7 +388,7 @@ bool wxRichTextXMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& 
 #endif
 
     // If SetEncoding has been called, change the output encoding.
-    if (!m_encoding.IsEmpty() && m_encoding.Lower() != fileEncoding.Lower())
+    if (!m_encoding.empty() && m_encoding.Lower() != fileEncoding.Lower())
     {
         if (m_encoding == wxT("<System>"))
         {
@@ -400,7 +400,7 @@ bool wxRichTextXMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& 
         }
 
         // GetSystemEncodingName may not have returned a name
-        if (fileEncoding.IsEmpty())
+        if (fileEncoding.empty())
 #if wxUSE_UNICODE
             fileEncoding = wxT("UTF-8");
 #else
@@ -430,7 +430,7 @@ bool wxRichTextXMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& 
 
     if (deleteConvFile)
         delete convFile;
-    
+
     return success;
 }
 
@@ -461,7 +461,7 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
         OutputString(stream, style + wxT(">"), convMem, convFile);
 
         wxString str = text.GetText();
-        if (str.Length() > 0 && (str[0] == wxT(' ') || str[str.Length()-1] == wxT(' ')))
+        if (!str.empty() && (str[0] == wxT(' ') || str[str.length()-1] == wxT(' ')))
         {
             OutputString(stream, wxT("\""), convMem, convFile);
             OutputStringEnt(stream, str, convMem, convFile);
@@ -683,6 +683,6 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
 
 #endif
     // wxUSE_STREAMS
-    
+
 #endif
     // wxUSE_RICHTEXT && wxUSE_XML

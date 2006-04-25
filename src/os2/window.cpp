@@ -43,6 +43,7 @@
     #include "wx/statusbr.h"
     #include "wx/toolbar.h"
     #include "wx/settings.h"
+    #include "wx/intl.h"
     #include <stdio.h>
 #endif
 
@@ -71,7 +72,6 @@
     #include "wx/caret.h"
 #endif // wxUSE_CARET
 
-#include "wx/intl.h"
 #include "wx/log.h"
 
 

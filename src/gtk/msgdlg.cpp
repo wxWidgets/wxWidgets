@@ -13,16 +13,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_MSGDLG && defined(__WXGTK20__) && !defined(__WXGPE__)
 
 #include "wx/msgdlg.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/gtk/private.h"
 #include <gtk/gtk.h>
-
-#include "wx/intl.h"
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 
@@ -126,5 +129,4 @@ int wxMessageDialog::ShowModal()
 }
 
 
-#endif // wxUSE_MSGDLG && defined(__WXGTK20__)
-
+#endif // wxUSE_MSGDLG && defined(__WXGTK20__) && !defined(__WXGPE__)

@@ -33,9 +33,13 @@
 #pragma message enable nosimpint
 #endif
 
-#include "wx/app.h"
-#include "wx/intl.h"
 #include "wx/msgdlg.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
+#include "wx/app.h"
 #include "wx/motif/private.h"
 #include "wx/settings.h"
 

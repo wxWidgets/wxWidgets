@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_combo.cpp
+// Name:        src/xrc/xh_combo.cpp
 // Purpose:     XRC resource for wxRadioBox
 // Author:      Bob Mitchell
 // Created:     2000/03/21
@@ -18,8 +18,12 @@
 #if wxUSE_XRC && wxUSE_COMBOBOX
 
 #include "wx/xrc/xh_combo.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/combobox.h"
-#include "wx/intl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBoxXmlHandler, wxXmlResourceHandler)
 

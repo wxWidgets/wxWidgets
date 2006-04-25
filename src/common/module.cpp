@@ -16,12 +16,13 @@
     #pragma hdrstop
 #endif
 
+#include "wx/module.h"
+
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
+    #include "wx/intl.h"
 #endif
 
-#include "wx/module.h"
-#include "wx/intl.h"
 #include "wx/log.h"
 #include "wx/listimpl.cpp"
 

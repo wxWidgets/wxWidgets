@@ -11,17 +11,18 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
+    #pragma hdrstop
 #endif
 
 #if wxUSE_IMAGE && wxUSE_PNM
 
 #include "wx/imagpnm.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/log.h"
-#include "wx/intl.h"
 #include "wx/txtstrm.h"
 
 //-----------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        app.cpp
+// Name:        src/mac/carbon/app.cpp
 // Purpose:     wxApp
 // Author:      Stefan Csomor
 // Modified by:
@@ -11,16 +11,20 @@
 
 #include "wx/wxprec.h"
 
+#include "wx/app.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/window.h"
 #include "wx/frame.h"
 #include "wx/button.h"
-#include "wx/app.h"
 #include "wx/utils.h"
 #include "wx/gdicmn.h"
 #include "wx/pen.h"
 #include "wx/brush.h"
 #include "wx/cursor.h"
-#include "wx/intl.h"
 #include "wx/icon.h"
 #include "wx/palette.h"
 #include "wx/dc.h"
@@ -359,7 +363,7 @@ struct IdPair
     int wxId ;
 } ;
 
-IdPair gCommandIds [] = 
+IdPair gCommandIds [] =
 {
     { kHICommandCut ,           wxID_CUT } ,
     { kHICommandCopy ,          wxID_COPY } ,
@@ -370,10 +374,10 @@ IdPair gCommandIds [] =
     { kHICommandRedo ,          wxID_REDO } ,
 } ;
 
-int wxMacCommandToId( UInt32 macCommandId ) 
+int wxMacCommandToId( UInt32 macCommandId )
 {
     int wxid = 0 ;
-    
+
     switch ( macCommandId )
     {
         case kHICommandPreferences :
@@ -408,10 +412,10 @@ int wxMacCommandToId( UInt32 macCommandId )
     return wxid ;
 }
 
-UInt32 wxIdToMacCommand( int wxId ) 
+UInt32 wxIdToMacCommand( int wxId )
 {
     UInt32 macId = 0 ;
-    
+
     if ( wxId == wxApp::s_macPreferencesMenuItemId )
         macId = kHICommandPreferences ;
     else if (wxId == wxApp::s_macExitMenuItemId)
@@ -436,7 +440,7 @@ UInt32 wxIdToMacCommand( int wxId )
     return macId ;
 }
 
-wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item ) 
+wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
 {
     wxMenu* itemMenu = NULL ;
     int id = 0 ;
@@ -581,7 +585,7 @@ static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler 
     if ( item )
     {
         wxASSERT( itemMenu != NULL ) ;
-        
+
         switch ( cEvent.GetKind() )
         {
             case kEventProcessCommand :
@@ -598,16 +602,16 @@ static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler 
             {
                 wxUpdateUIEvent event(id);
                 event.SetEventObject( itemMenu );
-                                
+
                 bool processed = false;
-                
+
                 // Try the menu's event handler
                 {
                     wxEvtHandler *handler = itemMenu->GetEventHandler();
                     if ( handler )
                         processed = handler->ProcessEvent(event);
                 }
-                
+
                 // Try the window the menu was popped up from
                 // (and up through the hierarchy)
                 if ( !processed )
@@ -621,11 +625,11 @@ static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler 
                             processed = win->GetEventHandler()->ProcessEvent(event);
                             break;
                         }
-                        
+
                         menu = menu->GetParent();
                     }
                 }
-                
+
                 if ( processed )
                 {
                     // if anything changed, update the changed attribute
@@ -1473,10 +1477,10 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     if ( !focus )
         return false ;
 
-    bool handled; 
+    bool handled;
     wxKeyEvent event(wxEVT_KEY_DOWN) ;
     MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
-        
+
     handled = focus->GetEventHandler()->ProcessEvent( event ) ;
     if ( handled && event.GetSkipped() )
         handled = false ;
@@ -1515,7 +1519,7 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     wxKeyEvent event( wxEVT_KEY_UP ) ;
     MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
     handled = focus->GetEventHandler()->ProcessEvent( event ) ;
-    
+
     return handled ;
 }
 
@@ -1523,7 +1527,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
 {
     if ( !focus )
         return false ;
-    
+
     wxKeyEvent event(wxEVT_CHAR) ;
     MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
     long keyval = event.m_keyCode ;
@@ -1531,7 +1535,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
     bool handled = false ;
 
     wxTopLevelWindowMac *tlw = focus->MacGetTopLevelWindow() ;
-        
+
     if (tlw)
     {
         event.SetEventType( wxEVT_CHAR_HOOK );
@@ -1546,7 +1550,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
         event.Skip( false ) ;
         handled = focus->GetEventHandler()->ProcessEvent( event ) ;
     }
-        
+
     if ( !handled && (keyval == WXK_TAB) )
     {
         wxWindow* iter = focus->GetParent() ;
@@ -1601,7 +1605,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
     return handled ;
 }
 
-// This method handles common code for SendKeyDown, SendKeyUp, and SendChar events. 
+// This method handles common code for SendKeyDown, SendKeyUp, and SendChar events.
 void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
 {
     short keycode, keychar ;

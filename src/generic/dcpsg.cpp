@@ -15,20 +15,19 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
+
+#include "wx/generic/dcpsg.h"
+
 #ifndef WX_PRECOMP
+    #include "wx/intl.h"
 #endif // WX_PRECOMP
-
-#if wxUSE_PRINTING_ARCHITECTURE
-
-#if wxUSE_POSTSCRIPT
 
 #include "wx/dcmemory.h"
 #include "wx/utils.h"
-#include "wx/intl.h"
 #include "wx/app.h"
 #include "wx/image.h"
 #include "wx/log.h"
-#include "wx/generic/dcpsg.h"
 #include "wx/prntbase.h"
 #include "wx/generic/prntdlgg.h"
 #include "wx/paper.h"
@@ -1048,8 +1047,8 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
                 PsPrint( buffer );
             }
             PsPrint ("] 0 setdash\n");
-            psdash = 0; 
-        } 
+            psdash = 0;
+        }
         break;
         case wxSOLID:
         case wxTRANSPARENT:
@@ -1258,7 +1257,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     }
 
     CalcBoundingBox( x, y );
-    CalcBoundingBox( x + size * text.Length() * 2/3 , y );
+    CalcBoundingBox( x + size * text.length() * 2/3 , y );
 }
 
 void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord y, double angle )
@@ -1383,7 +1382,7 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
     }
 
     CalcBoundingBox( x, y );
-    CalcBoundingBox( x + size * text.Length() * 2/3 , y );
+    CalcBoundingBox( x + size * text.length() * 2/3 , y );
 }
 
 void wxPostScriptDC::SetBackground (const wxBrush& brush)
@@ -2258,11 +2257,6 @@ void wxPostScriptDC::PsPrint( int ch )
     }
 }
 
-#endif
-  // wxUSE_POSTSCRIPT
-
-#endif
-  // wxUSE_PRINTING_ARCHITECTURE
-
+#endif // wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
 
 // vi:sts=4:sw=4:et

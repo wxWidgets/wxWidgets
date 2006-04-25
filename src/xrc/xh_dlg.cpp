@@ -18,10 +18,14 @@
 #if wxUSE_XRC
 
 #include "wx/xrc/xh_dlg.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/dialog.h"
 #include "wx/frame.h"
 #include "wx/log.h"
-#include "wx/intl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxDialogXmlHandler, wxXmlResourceHandler)
 

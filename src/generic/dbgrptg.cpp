@@ -23,17 +23,17 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/sizer.h"
-    #include "wx/checklst.h"
-    #include "wx/textctrl.h"
-#endif // WX_PRECOMP
-
 #if wxUSE_DEBUGREPORT && wxUSE_XML
 
 #include "wx/debugrpt.h"
 
-#include "wx/intl.h"
+#ifndef WX_PRECOMP
+    #include "wx/sizer.h"
+    #include "wx/checklst.h"
+    #include "wx/textctrl.h"
+    #include "wx/intl.h"
+#endif // WX_PRECOMP
+
 #include "wx/filename.h"
 #include "wx/ffile.h"
 #include "wx/mimetype.h"
@@ -512,4 +512,4 @@ bool wxDebugReportPreviewStd::Show(wxDebugReport& dbgrpt) const
     return dlg.ShowModal() == wxID_OK && dbgrpt.GetFilesCount() != 0;
 }
 
-#endif // wxUSE_DEBUGREPORT
+#endif // wxUSE_DEBUGREPORT && wxUSE_XML

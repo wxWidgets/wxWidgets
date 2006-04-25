@@ -6,12 +6,17 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #include "wx/utils.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/apptrait.h"
 
@@ -19,8 +24,6 @@
     #include "wx/mac/uma.h"
     #include "wx/font.h"
     #include "wx/toplevel.h"
-#else
-    #include "wx/intl.h"
 #endif
 
 #include <ctype.h>
@@ -174,7 +177,7 @@ Boolean IsMetroNubInstalled()
                         kMetroNubUserAPIVersion <= block->apiHiVersion)
                     {
                         // success!
-                        gMetroNubEntry = block; 
+                        gMetroNubEntry = block;
                     }
                 }
             }
@@ -744,7 +747,7 @@ void wxMacWakeUp()
         }
         if ( err == noErr )
         {
-            
+
             if ( IsEventInQueue( GetMainEventQueue() , s_wakeupEvent ) )
                 return;
             s_wakeupEvent.SetCurrentTime();
@@ -1425,14 +1428,14 @@ void wxMacControl::ScrollRect( wxRect *r , int dx , int dy )
 OSType wxMacCreator = 'WXMC';
 OSType wxMacControlProperty = 'MCCT';
 
-void wxMacControl::SetReferenceInNativeControl() 
+void wxMacControl::SetReferenceInNativeControl()
 {
     void * data = this;
     verify_noerr( SetControlProperty ( m_controlRef ,
         wxMacCreator,wxMacControlProperty, sizeof(data), &data ) );
 }
 
-wxMacControl* wxMacControl::GetReferenceFromNativeControl(ControlRef control) 
+wxMacControl* wxMacControl::GetReferenceFromNativeControl(ControlRef control)
 {
     wxMacControl* ctl = NULL;
     UInt32 actualSize;
@@ -1482,10 +1485,10 @@ pascal OSStatus wxMacDataBrowserControl::DataBrowserGetSetItemDataProc(
 }
 
 pascal Boolean wxMacDataBrowserControl::DataBrowserCompareProc(
-    ControlRef browser, 
-    DataBrowserItemID itemOneID, 
-    DataBrowserItemID itemTwoID, 
-    DataBrowserPropertyID sortProperty) 
+    ControlRef browser,
+    DataBrowserItemID itemOneID,
+    DataBrowserItemID itemTwoID,
+    DataBrowserPropertyID sortProperty)
 {
     wxMacDataBrowserControl* ctl = dynamic_cast<wxMacDataBrowserControl*>( wxMacControl::GetReferenceFromNativeControl( browser ) );
     if ( ctl != 0 )
@@ -1500,7 +1503,7 @@ DataBrowserItemNotificationUPP gDataBrowserItemNotificationUPP = NULL;
 DataBrowserItemCompareUPP gDataBrowserItemCompareUPP = NULL;
 
 wxMacDataBrowserControl::wxMacDataBrowserControl( wxWindow* peer, const wxPoint& pos, const wxSize& size, long style) : wxMacControl( peer )
-{       
+{
     Rect bounds = wxMacGetBoundsForControl( peer, pos, size );
     OSStatus err = ::CreateDataBrowserControl(
         MAC_WXHWND(peer->MacGetTopLevelWindowRef()),
@@ -1534,17 +1537,17 @@ wxMacDataBrowserControl::wxMacDataBrowserControl( wxWindow* peer, const wxPoint&
 OSStatus wxMacDataBrowserControl::GetItemCount( DataBrowserItemID container,
     Boolean recurse,
     DataBrowserItemState state,
-    UInt32 *numItems) const 
+    UInt32 *numItems) const
 {
-    return GetDataBrowserItemCount( m_controlRef, container, recurse, state, numItems );    
+    return GetDataBrowserItemCount( m_controlRef, container, recurse, state, numItems );
 }
 
 OSStatus wxMacDataBrowserControl::GetItems( DataBrowserItemID container,
     Boolean recurse,
     DataBrowserItemState state,
-    Handle items) const 
+    Handle items) const
 {
-    return GetDataBrowserItems( m_controlRef, container, recurse, state, items );    
+    return GetDataBrowserItems( m_controlRef, container, recurse, state, items );
 }
 
 OSStatus wxMacDataBrowserControl::SetSelectionFlags( DataBrowserSelectionFlags options )
@@ -1588,7 +1591,7 @@ OSStatus wxMacDataBrowserControl::SetCallbacks(const DataBrowserCallbacks *callb
     return SetDataBrowserCallbacks( m_controlRef, callbacks );
 }
 
-OSStatus wxMacDataBrowserControl::UpdateItems( 
+OSStatus wxMacDataBrowserControl::UpdateItems(
     DataBrowserItemID container,
     UInt32 numItems,
     const DataBrowserItemID *items,
@@ -1652,166 +1655,166 @@ OSStatus wxMacDataBrowserControl::GetItemRow( DataBrowserItemID item, DataBrowse
     return GetDataBrowserTableViewItemRow( m_controlRef, item, row );
 }
 
-OSStatus wxMacDataBrowserControl::SetDefaultRowHeight( UInt16 height ) 
+OSStatus wxMacDataBrowserControl::SetDefaultRowHeight( UInt16 height )
 {
-    return SetDataBrowserTableViewRowHeight( m_controlRef , height );   
+    return SetDataBrowserTableViewRowHeight( m_controlRef , height );
 }
 
-OSStatus wxMacDataBrowserControl::GetDefaultRowHeight( UInt16 * height ) const 
+OSStatus wxMacDataBrowserControl::GetDefaultRowHeight( UInt16 * height ) const
 {
-    return GetDataBrowserTableViewRowHeight( m_controlRef, height );   
+    return GetDataBrowserTableViewRowHeight( m_controlRef, height );
 }
-    
-OSStatus wxMacDataBrowserControl::SetRowHeight( DataBrowserItemID item , UInt16 height) 
+
+OSStatus wxMacDataBrowserControl::SetRowHeight( DataBrowserItemID item , UInt16 height)
 {
     return SetDataBrowserTableViewItemRowHeight( m_controlRef, item , height );
 }
 
-OSStatus wxMacDataBrowserControl::GetRowHeight( DataBrowserItemID item , UInt16 *height) const 
+OSStatus wxMacDataBrowserControl::GetRowHeight( DataBrowserItemID item , UInt16 *height) const
 {
     return GetDataBrowserTableViewItemRowHeight( m_controlRef, item , height);
 }
 
-OSStatus wxMacDataBrowserControl::GetColumnWidth( DataBrowserPropertyID column , UInt16 *width ) const 
+OSStatus wxMacDataBrowserControl::GetColumnWidth( DataBrowserPropertyID column , UInt16 *width ) const
 {
     return GetDataBrowserTableViewNamedColumnWidth( m_controlRef , column , width );
 }
 
-OSStatus wxMacDataBrowserControl::SetColumnWidth( DataBrowserPropertyID column , UInt16 width ) 
+OSStatus wxMacDataBrowserControl::SetColumnWidth( DataBrowserPropertyID column , UInt16 width )
 {
     return SetDataBrowserTableViewNamedColumnWidth( m_controlRef , column , width );
 }
 
-OSStatus wxMacDataBrowserControl::GetDefaultColumnWidth( UInt16 *width ) const 
+OSStatus wxMacDataBrowserControl::GetDefaultColumnWidth( UInt16 *width ) const
 {
     return GetDataBrowserTableViewColumnWidth( m_controlRef , width );
 }
 
-OSStatus wxMacDataBrowserControl::SetDefaultColumnWidth( UInt16 width ) 
+OSStatus wxMacDataBrowserControl::SetDefaultColumnWidth( UInt16 width )
 {
     return SetDataBrowserTableViewColumnWidth( m_controlRef , width );
 }
 
-OSStatus wxMacDataBrowserControl::GetColumnCount(UInt32* numColumns) const 
+OSStatus wxMacDataBrowserControl::GetColumnCount(UInt32* numColumns) const
 {
     return GetDataBrowserTableViewColumnCount( m_controlRef, numColumns);
 }
 
-OSStatus wxMacDataBrowserControl::GetColumnPosition( DataBrowserPropertyID column, 
+OSStatus wxMacDataBrowserControl::GetColumnPosition( DataBrowserPropertyID column,
     UInt32 *position) const
 {
     return GetDataBrowserTableViewColumnPosition( m_controlRef , column , position);
 }
 
-OSStatus wxMacDataBrowserControl::SetColumnPosition( DataBrowserPropertyID column, UInt32 position) 
+OSStatus wxMacDataBrowserControl::SetColumnPosition( DataBrowserPropertyID column, UInt32 position)
 {
     return SetDataBrowserTableViewColumnPosition( m_controlRef , column , position);
 }
 
-OSStatus wxMacDataBrowserControl::GetScrollPosition( UInt32 *top , UInt32 *left ) const 
+OSStatus wxMacDataBrowserControl::GetScrollPosition( UInt32 *top , UInt32 *left ) const
 {
     return GetDataBrowserScrollPosition( m_controlRef , top , left );
 }
 
-OSStatus wxMacDataBrowserControl::SetScrollPosition( UInt32 top , UInt32 left ) 
+OSStatus wxMacDataBrowserControl::SetScrollPosition( UInt32 top , UInt32 left )
 {
     return SetDataBrowserScrollPosition( m_controlRef , top , left );
 }
 
-OSStatus wxMacDataBrowserControl::GetSortProperty( DataBrowserPropertyID *column ) const 
+OSStatus wxMacDataBrowserControl::GetSortProperty( DataBrowserPropertyID *column ) const
 {
     return GetDataBrowserSortProperty( m_controlRef , column );
 }
 
-OSStatus wxMacDataBrowserControl::SetSortProperty( DataBrowserPropertyID column ) 
+OSStatus wxMacDataBrowserControl::SetSortProperty( DataBrowserPropertyID column )
 {
     return SetDataBrowserSortProperty( m_controlRef , column );
 }
-     
-OSStatus wxMacDataBrowserControl::GetSortOrder( DataBrowserSortOrder *order ) const 
+
+OSStatus wxMacDataBrowserControl::GetSortOrder( DataBrowserSortOrder *order ) const
 {
     return GetDataBrowserSortOrder( m_controlRef , order );
 }
 
-OSStatus wxMacDataBrowserControl::SetSortOrder( DataBrowserSortOrder order ) 
+OSStatus wxMacDataBrowserControl::SetSortOrder( DataBrowserSortOrder order )
 {
     return SetDataBrowserSortOrder( m_controlRef , order );
 }
 
-OSStatus wxMacDataBrowserControl::GetPropertyFlags( DataBrowserPropertyID property, 
-    DataBrowserPropertyFlags *flags ) const 
+OSStatus wxMacDataBrowserControl::GetPropertyFlags( DataBrowserPropertyID property,
+    DataBrowserPropertyFlags *flags ) const
 {
     return GetDataBrowserPropertyFlags( m_controlRef , property , flags );
 }
 
-OSStatus wxMacDataBrowserControl::SetPropertyFlags( DataBrowserPropertyID property, 
-    DataBrowserPropertyFlags flags ) 
+OSStatus wxMacDataBrowserControl::SetPropertyFlags( DataBrowserPropertyID property,
+    DataBrowserPropertyFlags flags )
 {
     return SetDataBrowserPropertyFlags( m_controlRef , property , flags );
 }
 
-OSStatus wxMacDataBrowserControl::GetHeaderDesc( DataBrowserPropertyID property, 
-    DataBrowserListViewHeaderDesc *desc ) const 
+OSStatus wxMacDataBrowserControl::GetHeaderDesc( DataBrowserPropertyID property,
+    DataBrowserListViewHeaderDesc *desc ) const
 {
     return GetDataBrowserListViewHeaderDesc( m_controlRef , property , desc );
 }
 
-OSStatus wxMacDataBrowserControl::SetHeaderDesc( DataBrowserPropertyID property, 
-    DataBrowserListViewHeaderDesc *desc ) 
+OSStatus wxMacDataBrowserControl::SetHeaderDesc( DataBrowserPropertyID property,
+    DataBrowserListViewHeaderDesc *desc )
 {
-    return SetDataBrowserListViewHeaderDesc( m_controlRef , property , desc );    
+    return SetDataBrowserListViewHeaderDesc( m_controlRef , property , desc );
 }
 
-OSStatus wxMacDataBrowserControl::SetDisclosureColumn( DataBrowserPropertyID property , 
-    Boolean expandableRows ) 
+OSStatus wxMacDataBrowserControl::SetDisclosureColumn( DataBrowserPropertyID property ,
+    Boolean expandableRows )
 {
     return SetDataBrowserListViewDisclosureColumn( m_controlRef, property, expandableRows);
 }
 
 // ============================================================================
-// Higher-level Databrowser 
+// Higher-level Databrowser
 // ============================================================================
 //
 // basing on data item objects
 //
 
 wxMacDataItem::wxMacDataItem()
-{    
+{
 }
 
-wxMacDataItem::~wxMacDataItem() 
-{   
+wxMacDataItem::~wxMacDataItem()
+{
 }
-    
-bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *owner , 
-    const wxMacDataItem*, 
+
+bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *owner ,
+    const wxMacDataItem*,
     DataBrowserPropertyID property) const
 {
     return false;
 }
 
-OSStatus wxMacDataItem::GetSetData(wxMacDataItemBrowserControl *owner , 
+OSStatus wxMacDataItem::GetSetData(wxMacDataItemBrowserControl *owner ,
     DataBrowserPropertyID property,
     DataBrowserItemDataRef itemData,
-    bool changeValue ) 
+    bool changeValue )
 {
     return errDataBrowserPropertyNotSupported;
 }
 
-void wxMacDataItem::Notification(wxMacDataItemBrowserControl *owner , 
+void wxMacDataItem::Notification(wxMacDataItemBrowserControl *owner ,
     DataBrowserItemNotification message,
     DataBrowserItemDataRef itemData ) const
 {
 }
 
 
-wxMacDataItemBrowserControl::wxMacDataItemBrowserControl( wxWindow* peer , const wxPoint& pos, const wxSize& size, long style) : 
+wxMacDataItemBrowserControl::wxMacDataItemBrowserControl( wxWindow* peer , const wxPoint& pos, const wxSize& size, long style) :
     wxMacDataBrowserControl( peer, pos, size, style )
-{       
+{
     m_suppressSelection = false;
 }
-    
-wxMacDataItemBrowserSelectionSuppressor::wxMacDataItemBrowserSelectionSuppressor(wxMacDataItemBrowserControl *browser) 
+
+wxMacDataItemBrowserSelectionSuppressor::wxMacDataItemBrowserSelectionSuppressor(wxMacDataItemBrowserControl *browser)
 {
     m_former = browser->SuppressSelection(true);
     m_browser = browser;
@@ -1830,18 +1833,18 @@ bool  wxMacDataItemBrowserControl::SuppressSelection( bool suppress )
     return former;
 }
 
-Boolean wxMacDataItemBrowserControl::CompareItems(DataBrowserItemID itemOneID, 
-    DataBrowserItemID itemTwoID, 
-    DataBrowserPropertyID sortProperty) 
+Boolean wxMacDataItemBrowserControl::CompareItems(DataBrowserItemID itemOneID,
+    DataBrowserItemID itemTwoID,
+    DataBrowserPropertyID sortProperty)
 {
     wxMacDataItem* itemOne = (wxMacDataItem*) itemOneID;
     wxMacDataItem* itemTwo = (wxMacDataItem*) itemTwoID;
     return CompareItems( itemOne , itemTwo , sortProperty );
 }
 
-Boolean wxMacDataItemBrowserControl::CompareItems(const wxMacDataItem*  itemOne, 
-    const wxMacDataItem*  itemTwo, 
-    DataBrowserPropertyID sortProperty) 
+Boolean wxMacDataItemBrowserControl::CompareItems(const wxMacDataItem*  itemOne,
+    const wxMacDataItem*  itemTwo,
+    DataBrowserPropertyID sortProperty)
 {
     Boolean retval = false;
     if ( itemOne != NULL )
@@ -1853,7 +1856,7 @@ OSStatus wxMacDataItemBrowserControl::GetSetItemData(
     DataBrowserItemID itemID,
     DataBrowserPropertyID property,
     DataBrowserItemDataRef itemData,
-    Boolean changeValue ) 
+    Boolean changeValue )
 {
     wxMacDataItem* item = (wxMacDataItem*) itemID;
     return GetSetItemData(item, property, itemData , changeValue );
@@ -1863,7 +1866,7 @@ OSStatus wxMacDataItemBrowserControl::GetSetItemData(
     wxMacDataItem* item,
     DataBrowserPropertyID property,
     DataBrowserItemDataRef itemData,
-    Boolean changeValue ) 
+    Boolean changeValue )
 {
     OSStatus err = errDataBrowserPropertyNotSupported;
     switch( property )
@@ -1877,7 +1880,7 @@ OSStatus wxMacDataItemBrowserControl::GetSetItemData(
             if ( item != NULL )
                 err = item->GetSetData( this, property , itemData , changeValue );
             break;
-        
+
     }
     return err;
 }
@@ -1885,36 +1888,36 @@ OSStatus wxMacDataItemBrowserControl::GetSetItemData(
 void wxMacDataItemBrowserControl::ItemNotification(
     DataBrowserItemID itemID,
     DataBrowserItemNotification message,
-    DataBrowserItemDataRef itemData) 
+    DataBrowserItemDataRef itemData)
 {
-    wxMacDataItem* item = (wxMacDataItem*) itemID;    
+    wxMacDataItem* item = (wxMacDataItem*) itemID;
     ItemNotification( item , message, itemData);
 }
 
 void wxMacDataItemBrowserControl::ItemNotification(
     const wxMacDataItem* item,
     DataBrowserItemNotification message,
-    DataBrowserItemDataRef itemData) 
+    DataBrowserItemDataRef itemData)
 {
     if (item != NULL)
         item->Notification( this, message, itemData);
 }
 
-unsigned int wxMacDataItemBrowserControl::GetItemCount(const wxMacDataItem* container, 
-        bool recurse , DataBrowserItemState state) const 
+unsigned int wxMacDataItemBrowserControl::GetItemCount(const wxMacDataItem* container,
+        bool recurse , DataBrowserItemState state) const
 {
     UInt32 numItems = 0;
-    verify_noerr( wxMacDataBrowserControl::GetItemCount( (DataBrowserItemID)container, 
-        recurse, state, &numItems ) );    
+    verify_noerr( wxMacDataBrowserControl::GetItemCount( (DataBrowserItemID)container,
+        recurse, state, &numItems ) );
     return numItems;
 }
 
-void wxMacDataItemBrowserControl::GetItems(const wxMacDataItem* container, 
-    bool recurse , DataBrowserItemState state, wxArrayMacDataItemPtr &items) const 
+void wxMacDataItemBrowserControl::GetItems(const wxMacDataItem* container,
+    bool recurse , DataBrowserItemState state, wxArrayMacDataItemPtr &items) const
 {
     Handle handle = NewHandle(0);
-    verify_noerr( wxMacDataBrowserControl::GetItems( (DataBrowserItemID)container , 
-        recurse , state, handle) );    
+    verify_noerr( wxMacDataBrowserControl::GetItems( (DataBrowserItemID)container ,
+        recurse , state, handle) );
 
     int itemCount = GetHandleSize(handle)/sizeof(DataBrowserItemID);
     HLock( handle );
@@ -1940,17 +1943,17 @@ wxMacDataItem*  wxMacDataItemBrowserControl::GetItemFromLine(unsigned int n) con
     DataBrowserItemID id;
     OSStatus err =  GetItemID( (DataBrowserTableViewRowIndex) n , &id);
     wxASSERT( err == noErr);
-    return (wxMacDataItem*) id;    
+    return (wxMacDataItem*) id;
 }
 
-void wxMacDataItemBrowserControl::UpdateItem(const wxMacDataItem *container, 
+void wxMacDataItemBrowserControl::UpdateItem(const wxMacDataItem *container,
         const wxMacDataItem *item , DataBrowserPropertyID property) const
 {
-    verify_noerr( wxMacDataBrowserControl::UpdateItems((DataBrowserItemID)container, 1, 
+    verify_noerr( wxMacDataBrowserControl::UpdateItems((DataBrowserItemID)container, 1,
         (DataBrowserItemID*) &item, kDataBrowserItemNoProperty /* notSorted */, property ) );
 }
 
-void wxMacDataItemBrowserControl::UpdateItems(const wxMacDataItem *container, 
+void wxMacDataItemBrowserControl::UpdateItems(const wxMacDataItem *container,
         wxArrayMacDataItemPtr &itemArray , DataBrowserPropertyID property) const
 {
     unsigned int noItems = itemArray.GetCount();
@@ -1958,66 +1961,66 @@ void wxMacDataItemBrowserControl::UpdateItems(const wxMacDataItem *container,
     for ( unsigned int i = 0; i < noItems; ++i )
         items[i] = (DataBrowserItemID) itemArray[i];
 
-    verify_noerr( wxMacDataBrowserControl::UpdateItems((DataBrowserItemID)container, noItems,  
+    verify_noerr( wxMacDataBrowserControl::UpdateItems((DataBrowserItemID)container, noItems,
         items, kDataBrowserItemNoProperty /* notSorted */, property ) );
     delete [] items;
 }
 
 void wxMacDataItemBrowserControl::AddItem(wxMacDataItem *container, wxMacDataItem *item)
 {
-    verify_noerr( wxMacDataBrowserControl::AddItems( (DataBrowserItemID)container, 1,  
+    verify_noerr( wxMacDataBrowserControl::AddItems( (DataBrowserItemID)container, 1,
         (DataBrowserItemID*) &item, kDataBrowserItemNoProperty ) );
 }
 
-void wxMacDataItemBrowserControl::AddItems(wxMacDataItem *container, wxArrayMacDataItemPtr &itemArray ) 
+void wxMacDataItemBrowserControl::AddItems(wxMacDataItem *container, wxArrayMacDataItemPtr &itemArray )
 {
     unsigned int noItems = itemArray.GetCount();
     DataBrowserItemID *items = new DataBrowserItemID[noItems];
     for ( unsigned int i = 0; i < noItems; ++i )
         items[i] = (DataBrowserItemID) itemArray[i];
 
-    verify_noerr( wxMacDataBrowserControl::AddItems( (DataBrowserItemID)container, noItems,  
+    verify_noerr( wxMacDataBrowserControl::AddItems( (DataBrowserItemID)container, noItems,
         (DataBrowserItemID*) items, kDataBrowserItemNoProperty ) );
     delete [] items;
 }
 
-void wxMacDataItemBrowserControl::RemoveItem(wxMacDataItem *container, wxMacDataItem* item) 
+void wxMacDataItemBrowserControl::RemoveItem(wxMacDataItem *container, wxMacDataItem* item)
 {
-    OSStatus err = wxMacDataBrowserControl::RemoveItems( (DataBrowserItemID)container, 1, 
+    OSStatus err = wxMacDataBrowserControl::RemoveItems( (DataBrowserItemID)container, 1,
         (UInt32*) &item, kDataBrowserItemNoProperty );
     verify_noerr( err );
 }
 
-void wxMacDataItemBrowserControl::RemoveItems(wxMacDataItem *container, wxArrayMacDataItemPtr &itemArray) 
+void wxMacDataItemBrowserControl::RemoveItems(wxMacDataItem *container, wxArrayMacDataItemPtr &itemArray)
 {
     unsigned int noItems = itemArray.GetCount();
     DataBrowserItemID *items = new DataBrowserItemID[noItems];
     for ( unsigned int i = 0; i < noItems; ++i )
         items[i] = (DataBrowserItemID) itemArray[i];
 
-    OSStatus err = wxMacDataBrowserControl::RemoveItems( (DataBrowserItemID)container, noItems, 
+    OSStatus err = wxMacDataBrowserControl::RemoveItems( (DataBrowserItemID)container, noItems,
         (UInt32*) items, kDataBrowserItemNoProperty );
     verify_noerr( err );
     delete [] items;
 }
 
-void wxMacDataItemBrowserControl::RemoveAllItems(wxMacDataItem *container) 
+void wxMacDataItemBrowserControl::RemoveAllItems(wxMacDataItem *container)
 {
     OSStatus err = wxMacDataBrowserControl::RemoveItems( (DataBrowserItemID)container, 0 , NULL , kDataBrowserItemNoProperty );
     verify_noerr( err );
 }
 
-void wxMacDataItemBrowserControl::SetSelectedItem(wxMacDataItem* item , DataBrowserSetOption option) 
+void wxMacDataItemBrowserControl::SetSelectedItem(wxMacDataItem* item , DataBrowserSetOption option)
 {
     verify_noerr(wxMacDataBrowserControl::SetSelectedItems( 1, (DataBrowserItemID*) &item, option ));
 }
 
-void wxMacDataItemBrowserControl::SetSelectedAllItems(DataBrowserSetOption option) 
+void wxMacDataItemBrowserControl::SetSelectedAllItems(DataBrowserSetOption option)
 {
     verify_noerr(wxMacDataBrowserControl::SetSelectedItems( 0 , NULL , option ));
 }
 
-void wxMacDataItemBrowserControl::SetSelectedItems(wxArrayMacDataItemPtr &itemArray , DataBrowserSetOption option) 
+void wxMacDataItemBrowserControl::SetSelectedItems(wxArrayMacDataItemPtr &itemArray , DataBrowserSetOption option)
 {
     unsigned int noItems = itemArray.GetCount();
     DataBrowserItemID *items = new DataBrowserItemID[noItems];
@@ -2033,17 +2036,17 @@ Boolean wxMacDataItemBrowserControl::IsItemSelected( const wxMacDataItem* item) 
     return wxMacDataBrowserControl::IsItemSelected( (DataBrowserItemID) item);
 }
 
-void wxMacDataItemBrowserControl::RevealItem( wxMacDataItem* item, DataBrowserRevealOptions options) 
+void wxMacDataItemBrowserControl::RevealItem( wxMacDataItem* item, DataBrowserRevealOptions options)
 {
     verify_noerr(wxMacDataBrowserControl::RevealItem( (DataBrowserItemID) item, kDataBrowserNoItem , options ) );
 }
 
-void wxMacDataItemBrowserControl::GetSelectionAnchor( wxMacDataItemPtr* first , wxMacDataItemPtr* last) const 
+void wxMacDataItemBrowserControl::GetSelectionAnchor( wxMacDataItemPtr* first , wxMacDataItemPtr* last) const
 {
-    verify_noerr(wxMacDataBrowserControl::GetSelectionAnchor( (DataBrowserItemID*) first, (DataBrowserItemID*) last) );    
+    verify_noerr(wxMacDataBrowserControl::GetSelectionAnchor( (DataBrowserItemID*) first, (DataBrowserItemID*) last) );
 }
 
-    
+
 
 //
 // Tab Control
@@ -2121,7 +2124,7 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
                 wxASSERT_MSG( genericRGBColorSpace != NULL, wxT("couldn't create the generic RGB color space") );
 
                 // we opened the profile so it is up to us to close it
-                CMCloseProfile(genericRGBProfile); 
+                CMCloseProfile(genericRGBProfile);
             }
         }
     }

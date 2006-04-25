@@ -18,9 +18,12 @@
 
 #if wxUSE_MIMETYPE
 
+#include "wx/msdos/mimetype.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/string.h"
+    #include "wx/intl.h"
     #if wxUSE_GUI
         #include "wx/icon.h"
     #endif
@@ -28,10 +31,7 @@
 
 #include "wx/log.h"
 #include "wx/file.h"
-#include "wx/intl.h"
 #include "wx/confbase.h"
-
-#include "wx/msdos/mimetype.h"
 
 // other standard headers
 #include <ctype.h>

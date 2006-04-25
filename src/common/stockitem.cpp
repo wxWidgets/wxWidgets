@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/stockitem.cpp
+// Name:        src/common/stockitem.cpp
 // Purpose:     Stock buttons, menu and toolbar items labels
 // Author:      Vaclav Slavik
 // Modified by:
@@ -25,7 +25,11 @@
 #endif
 
 #include "wx/stockitem.h"
-#include "wx/intl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/utils.h" // for wxStripMenuCodes()
 
 bool wxIsStockID(wxWindowID id)

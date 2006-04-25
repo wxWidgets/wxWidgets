@@ -38,14 +38,16 @@
 
 #if wxUSE_MIMETYPE && wxUSE_FILE && wxUSE_TEXTFILE
 
+#include "wx/unix/mimetype.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/string.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/log.h"
 #include "wx/file.h"
-#include "wx/intl.h"
 #include "wx/confbase.h"
 
 #include "wx/ffile.h"
@@ -55,8 +57,6 @@
 #include "wx/tokenzr.h"
 #include "wx/iconloc.h"
 #include "wx/filename.h"
-
-#include "wx/unix/mimetype.h"
 
 #if wxUSE_LIBGNOMEVFS
     // Not GUI dependent

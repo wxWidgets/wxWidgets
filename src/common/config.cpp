@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        config.cpp
+// Name:        src/common/config.cpp
 // Purpose:     implementation of wxConfigBase class
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -16,8 +16,8 @@
 
 #include "wx/wxprec.h"
 
-#ifdef    __BORLANDC__
-  #pragma hdrstop
+#ifdef __BORLANDC__
+    #pragma hdrstop
 #endif  //__BORLANDC__
 
 #ifndef wxUSE_CONFIG_NATIVE
@@ -25,7 +25,11 @@
 #endif
 
 #include "wx/config.h"
-#include "wx/intl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif //WX_PRECOMP
+
 #include "wx/log.h"
 #include "wx/arrstr.h"
 
@@ -447,5 +451,3 @@ void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
     pc++;
   }
 }
-
-

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xmlres.cpp
+// Name:        src/xrc/xmlres.cpp
 // Purpose:     XRC resources
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
@@ -17,8 +17,14 @@
 
 #if wxUSE_XRC
 
+#include "wx/xrc/xmlres.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #ifndef __WXWINCE__
-#include <locale.h>
+    #include <locale.h>
 #endif
 
 #include "wx/dialog.h"
@@ -28,7 +34,6 @@
 #include "wx/filesys.h"
 #include "wx/filename.h"
 #include "wx/log.h"
-#include "wx/intl.h"
 #include "wx/tokenzr.h"
 #include "wx/fontenum.h"
 #include "wx/module.h"
@@ -39,7 +44,6 @@
 #include "wx/settings.h"
 
 #include "wx/xml/xml.h"
-#include "wx/xrc/xmlres.h"
 
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxXmlResourceDataRecords)
@@ -1045,7 +1049,7 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param)
     // find colour using HTML syntax (#RRGGBB)
     unsigned long tmp = 0;
 
-    if (v.Length() != 7 || v[0u] != wxT('#') ||
+    if (v.length() != 7 || v[0u] != wxT('#') ||
         wxSscanf(v.c_str(), wxT("#%lX"), &tmp) != 1)
     {
         // the colour doesn't use #RRGGBB format, check if it is symbolic
@@ -1183,7 +1187,7 @@ wxSize wxXmlResourceHandler::GetSize(const wxString& param,
     bool is_dlg;
     long sx, sy = 0;
 
-    is_dlg = s[s.Length()-1] == wxT('d');
+    is_dlg = s[s.length()-1] == wxT('d');
     if (is_dlg) s.RemoveLast();
 
     if (!s.BeforeFirst(wxT(',')).ToLong(&sx) ||
@@ -1232,7 +1236,7 @@ wxCoord wxXmlResourceHandler::GetDimension(const wxString& param,
     bool is_dlg;
     long sx;
 
-    is_dlg = s[s.Length()-1] == wxT('d');
+    is_dlg = s[s.length()-1] == wxT('d');
     if (is_dlg) s.RemoveLast();
 
     if (!s.ToLong(&sx))

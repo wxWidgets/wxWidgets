@@ -15,6 +15,11 @@
 #endif
 
 #include "wx/window.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/dcclient.h"
 #include "wx/frame.h"
 #include "wx/app.h"
@@ -46,7 +51,6 @@
 
 #include "wx/menu.h"
 #include "wx/statusbr.h"
-#include "wx/intl.h"
 #include "wx/settings.h"
 #include "wx/log.h"
 #include "wx/fontutil.h"
@@ -4281,12 +4285,12 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 void wxWindowGTK::GtkScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
 {
     //RN: Note that static controls usually have no border on gtk, so maybe
-    //it makes sense to treat that as simply no border at the wx level 
+    //it makes sense to treat that as simply no border at the wx level
     //as well...
     if (!(wxstyle & wxNO_BORDER) && !(wxstyle & wxBORDER_STATIC))
     {
         GtkShadowType gtkstyle;
-        
+
         if(wxstyle & wxBORDER_RAISED)
             gtkstyle = GTK_SHADOW_OUT;
         else if (wxstyle & wxBORDER_SUNKEN)
@@ -4296,7 +4300,7 @@ void wxWindowGTK::GtkScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
         else //default
             gtkstyle = GTK_SHADOW_IN;
 
-        gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW(w), 
+        gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW(w),
                                              gtkstyle );
     }
 }

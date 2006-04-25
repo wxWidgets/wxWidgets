@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fontdlg.cpp
+// Name:        src/mac/carbon/fontdlgosx.cpp
 // Purpose:     wxFontDialog class.
 // Author:      Ryan Norton
 // Modified by:
@@ -9,6 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/wxprec.h"
+
 // ===========================================================================
 // declarations
 // ===========================================================================
@@ -17,11 +19,16 @@
 // headers
 // ---------------------------------------------------------------------------
 
-#include "wx/cmndata.h"
 #include "wx/fontdlg.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
+#include "wx/cmndata.h"
 #include "wx/fontutil.h"
 #include "wx/log.h"
-    
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -36,10 +43,9 @@
 #import <AppKit/AppKit.h>
 
 #include "wx/mac/uma.h"
-#include "wx/intl.h"
 
 @interface wxMacFontPanelAccView : NSView
-{   
+{
     BOOL m_okPressed ;
     BOOL m_shouldClose ;
     NSButton* m_cancelButton ;
@@ -58,13 +64,13 @@
 - (id)initWithFrame:(NSRect)rectBox
 {
     [super initWithFrame:rectBox];
-    
+
     wxMacCFStringHolder cfOkString( wxT("OK"), wxLocale::GetSystemEncoding() );
     wxMacCFStringHolder cfCancelString( wxT("Cancel"), wxLocale::GetSystemEncoding() );
 
     NSRect rectCancel = NSMakeRect( 10.0 , 10.0 , 82  , 24 );
     NSRect rectOK = NSMakeRect( 100.0 , 10.0 , 82  , 24 );
-    
+
     NSButton* cancelButton = [[NSButton alloc] initWithFrame:rectCancel];
     [cancelButton setTitle:(NSString*)cfCancelString.Detach()];
     [cancelButton setBezelStyle:NSRoundedBezelStyle];
@@ -72,7 +78,7 @@
     [cancelButton setAction:@selector(cancelPressed:)];
     [cancelButton setTarget:self];
     m_cancelButton = cancelButton ;
-    
+
     NSButton* okButton = [[NSButton alloc] initWithFrame:rectOK];
     [okButton setTitle:(NSString*)cfOkString.Detach()];
     [okButton setBezelStyle:NSRoundedBezelStyle];
@@ -86,7 +92,7 @@
 
     [self addSubview:cancelButton];
     [self addSubview:okButton];
-    
+
     [self resetFlags];
     return self;
 }
@@ -94,7 +100,7 @@
 - (void)resetFlags
 {
     m_okPressed = NO ;
-    m_shouldClose = NO ;    
+    m_shouldClose = NO ;
 }
 
 - (IBAction)cancelPressed:(id)sender
@@ -145,22 +151,22 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     WindowRef carbonWindowRef = (WindowRef)[fontPanel windowRef] ;
     SetWindowModality(carbonWindowRef, kWindowModalityAppModal , 0) ;
     SetWindowGroup(carbonWindowRef , GetWindowGroupOfClass(kMovableModalWindowClass));
-    
+
     [fontPanel setFloatingPanel:NO] ;
     [[fontPanel standardWindowButton:NSWindowCloseButton] setEnabled:NO] ;
-    
+
     wxMacFontPanelAccView* accessoryView = (wxMacFontPanelAccView*) [fontPanel accessoryView] ;
     if ( accessoryView == nil)
     {
         NSRect rectBox = NSMakeRect( 0 , 0 , 192 , 40 );
         accessoryView = [[wxMacFontPanelAccView alloc] initWithFrame:rectBox];
         [fontPanel setAccessoryView:accessoryView];
-        
+
         [fontPanel setDefaultButtonCell:[[accessoryView okButton] cell]] ;
     }
 
     [accessoryView resetFlags];
-    
+
     NSModalSession session = [NSApp beginModalSessionForWindow:fontPanel];
 
     [NSApp runModalSession:session];
@@ -171,7 +177,7 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     [[fontPanel standardWindowButton:NSWindowCloseButton] setEnabled:YES] ;
     if( FPIsFontPanelVisible())
         FPShowHideFontPanel() ;
-    
+
     if ( [accessoryView closedWithOk])
     {
         retval = wxID_OK ;
@@ -223,7 +229,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 - (BOOL)windowShouldClose:(id)sender
 {
     m_bIsClosed = true;
-    
+
     [NSApp abortModal];
     [NSApp stopModal];
     return YES;
@@ -269,7 +275,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 {
     m_bIsClosed = true;
     m_bIsOpen = false;
-    
+
     [NSApp abortModal];
     [NSApp stopModal];
     return YES;
@@ -321,14 +327,14 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
     m_fontData = data;
 
     //
-    //	This is the key call - this initializes
-    //	events and window stuff for cocoa for carbon
-    //	applications.
+    //  This is the key call - this initializes
+    //  events and window stuff for cocoa for carbon
+    //  applications.
     //
-    //	This is also the only call here that is 
-    //	10.2+ specific (the rest is OSX only),
-    //	which, ironically, the carbon font
-    //	panel requires.
+    //  This is also the only call here that is
+    //  10.2+ specific (the rest is OSX only),
+    //  which, ironically, the carbon font
+    //  panel requires.
     //
     bool bOK = NSApplicationLoad();
 
@@ -338,20 +344,20 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
 
     //Get the initial wx font
     wxFont& thewxfont = m_fontData.m_initialFont;
-    
-    //if the font is valid set the default (selected) font of the 
+
+    //if the font is valid set the default (selected) font of the
     //NSFontDialog to that font
     if (thewxfont.Ok())
     {
         NSFontTraitMask theMask = 0;
-    
+
         if(thewxfont.GetStyle() == wxFONTSTYLE_ITALIC)
             theMask |= NSItalicFontMask;
-    
+
         if(thewxfont.IsFixedWidth())
             theMask |= NSFixedPitchFontMask;
 
-        NSFont* theDefaultFont = 
+        NSFont* theDefaultFont =
             [[NSFontManager sharedFontManager] fontWithFamily:
                                                     wxNSStringWithWxString(thewxfont.GetFaceName())
                                             traits:theMask
@@ -359,7 +365,7 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
                                                     thewxfont.GetWeight() == wxLIGHT ? 0 : 5
                                             size: (float)(thewxfont.GetPointSize())
             ];
-            
+
         wxASSERT_MSG(theDefaultFont, wxT("Invalid default font for wxCocoaFontDialog!"));
 
         //Apple docs say to call NSFontManager::setSelectedFont
@@ -377,17 +383,17 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
                                         alpha:1.0]
         ];
     else
-        [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];   
-        
+        [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];
+
     //We're done - free up the pool
     [thePool release];
-    
+
     return bOK;
 }
 
 int wxFontDialog::ShowModal()
-{    
-    //Start the pool.  Required for carbon interaction 
+{
+    //Start the pool.  Required for carbon interaction
     //(For those curious, the only thing that happens
     //if you don't do this is a bunch of error
     //messages about leaks on the console,
@@ -396,7 +402,7 @@ int wxFontDialog::ShowModal()
     thePool = [[NSAutoreleasePool alloc] init];
 
     //Get the shared color and font panel
-    NSFontPanel* theFontPanel 	= [NSFontPanel sharedFontPanel];
+    NSFontPanel* theFontPanel = [NSFontPanel sharedFontPanel];
     NSColorPanel* theColorPanel = [NSColorPanel sharedColorPanel];
 
     //Create and assign the delegates (cocoa event handlers) so
@@ -406,17 +412,17 @@ int wxFontDialog::ShowModal()
 
     wxWCODelegate* theCPDelegate = [[wxWCODelegate alloc] init];
     [theColorPanel setDelegate:theCPDelegate];
-      
+
     //
-    //	Begin the modal loop for the font and color panels
+    //  Begin the modal loop for the font and color panels
     //
-    //	The idea is that we first make the font panel modal,
+    //  The idea is that we first make the font panel modal,
     //  but if the color panel is opened, unless we stop the
     //  modal loop the color panel opens behind the font panel
     //  with no input acceptable to it - which makes it useless.
     //
-    //	So we set up delegates for both the color and font panels,
-    //  and the if the font panel opens the color panel, we 
+    //  So we set up delegates for both the color and font panels,
+    //  and the if the font panel opens the color panel, we
     //  stop the modal loop, and start a separate modal loop for
     //  the color panel until the color panel closes, switching
     //  back to the font panel modal loop once it does close.
@@ -424,31 +430,31 @@ int wxFontDialog::ShowModal()
     do
     {
         //
-        //	Start the font panel modal loop
+        //  Start the font panel modal loop
         //
         NSModalSession session = [NSApp beginModalSessionForWindow:theFontPanel];
-        for (;;) 
+        for (;;)
         {
             [NSApp runModalSession:session];
-            
+
             //If the font panel is closed or the font panel
             //opened the color panel, break
             if ([theFPDelegate isClosed] || [theCPDelegate isOpen])
                 break;
         }
         [NSApp endModalSession:session];
-        
+
         //is the color panel open?
         if ([theCPDelegate isOpen])
         {
             //
-            //	Start the color panel modal loop
+            //  Start the color panel modal loop
             //
             NSModalSession session = [NSApp beginModalSessionForWindow:theColorPanel];
-            for (;;) 
+            for (;;)
             {
                 [NSApp runModalSession:session];
-                
+
                 //If the color panel is closed, return the font panel modal loop
                 if ([theCPDelegate isClosed])
                     break;
@@ -459,50 +465,50 @@ int wxFontDialog::ShowModal()
         //out of its modal loop because the color panel was
         //opened) return the font panel modal loop
     }while([theFPDelegate isClosed] == NO);
-    
+
     //free up the memory for the delegates - we don't need them anymore
     [theFPDelegate release];
     [theCPDelegate release];
-    
+
     //Get the font the user selected
-    NSFont* theFont = [theFontPanel panelConvertFont:[NSFont userFontOfSize:0]];      
-    
+    NSFont* theFont = [theFontPanel panelConvertFont:[NSFont userFontOfSize:0]];
+
     //Get more information about the user's chosen font
     NSFontTraitMask theTraits = [[NSFontManager sharedFontManager] traitsOfFont:theFont];
     int theFontWeight = [[NSFontManager sharedFontManager] weightOfFont:theFont];
     int theFontSize = (int) [theFont pointSize];
-    
+
     //Set the wx font to the appropriate data
     if(theTraits & NSFixedPitchFontMask)
         m_fontData.m_chosenFont.SetFamily(wxTELETYPE);
-       
+
     m_fontData.m_chosenFont.SetFaceName(wxStringWithNSString([theFont familyName]));
     m_fontData.m_chosenFont.SetPointSize(theFontSize);
     m_fontData.m_chosenFont.SetStyle(theTraits & NSItalicFontMask ? wxFONTSTYLE_ITALIC : 0);
     m_fontData.m_chosenFont.SetWeight(theFontWeight < 5 ? wxLIGHT :
-                                    theFontWeight >= 9 ? wxBOLD : wxNORMAL);    
-                                        
+                                    theFontWeight >= 9 ? wxBOLD : wxNORMAL);
+
     //Get the shared color panel along with the chosen color and set the chosen color
     NSColor* theColor = [[theColorPanel color] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-                                    
+
     m_fontData.m_fontColour.Set((unsigned char) ([theColor redComponent] * 255.0),
                                 (unsigned char) ([theColor greenComponent] * 255.0),
                                 (unsigned char) ([theColor blueComponent] * 255.0));
 
     //Friendly debug stuff
 #ifdef FONTDLGDEBUG
-    wxPrintf(wxT("---Font Panel---\n--NS--\nSize:%f\nWeight:%i\nTraits:%i\n--WX--\nFaceName:%s\nPointSize:%i\nStyle:%i\nWeight:%i\nColor:%i,%i,%i\n---END Font Panel---\n"), 
-    
+    wxPrintf(wxT("---Font Panel---\n--NS--\nSize:%f\nWeight:%i\nTraits:%i\n--WX--\nFaceName:%s\nPointSize:%i\nStyle:%i\nWeight:%i\nColor:%i,%i,%i\n---END Font Panel---\n"),
+
                 (float) theFontSize,
                 theFontWeight,
                 theTraits,
-                
+
                 m_fontData.m_chosenFont.GetFaceName().c_str(),
                 m_fontData.m_chosenFont.GetPointSize(),
                 m_fontData.m_chosenFont.GetStyle(),
                 m_fontData.m_chosenFont.GetWeight(),
-                    m_fontData.m_fontColour.Red(), 
-                    m_fontData.m_fontColour.Green(), 
+                    m_fontData.m_fontColour.Red(),
+                    m_fontData.m_fontColour.Green(),
                     m_fontData.m_fontColour.Blue() );
 #endif
 

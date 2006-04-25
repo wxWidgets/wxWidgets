@@ -23,8 +23,9 @@
     #pragma hdrstop
 #endif
 
+#include "wx/window.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/window.h"
     #include "wx/msgdlg.h"
     #include "wx/accel.h"
     #include "wx/dc.h"
@@ -32,6 +33,7 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/panel.h"
+    #include "wx/intl.h"
 #endif
 
 #if wxUSE_DRAG_AND_DROP
@@ -41,7 +43,6 @@
 #include "wx/log.h"
 #include "wx/sysopt.h"
 #include "wx/mgl/private.h"
-#include "wx/intl.h"
 #include "wx/dcscreen.h"
 #include "wx/caret.h"
 

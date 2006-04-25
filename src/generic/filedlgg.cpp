@@ -23,6 +23,13 @@
 #error wxGenericFileDialog currently only supports Unix, win32 and DOS
 #endif
 
+#include "wx/generic/filedlgg.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/hash.h"
+    #include "wx/intl.h"
+#endif
+
 #include "wx/checkbox.h"
 #include "wx/textctrl.h"
 #include "wx/choice.h"
@@ -31,7 +38,6 @@
 #include "wx/debug.h"
 #include "wx/log.h"
 #include "wx/longlong.h"
-#include "wx/intl.h"
 #include "wx/msgdlg.h"
 #include "wx/sizer.h"
 #include "wx/bmpbuttn.h"
@@ -44,7 +50,6 @@
 #include "wx/filefn.h"
 #include "wx/file.h"        // for wxS_IXXX constants only
 #include "wx/filedlg.h"     // wxOPEN, wxSAVE...
-#include "wx/generic/filedlgg.h"
 #include "wx/generic/dirctrlg.h" // for wxFileIconsTable
 
 #if wxUSE_TOOLTIPS

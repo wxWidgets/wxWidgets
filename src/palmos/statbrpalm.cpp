@@ -16,17 +16,18 @@
   #pragma hdrstop
 #endif
 
+#if wxUSE_NATIVE_STATUSBAR
+
+#include "wx/statusbr.h"
+
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
     #include "wx/settings.h"
     #include "wx/dcclient.h"
+    #include "wx/intl.h"
 #endif
 
-#if wxUSE_NATIVE_STATUSBAR
-
-#include "wx/intl.h"
 #include "wx/log.h"
-#include "wx/statusbr.h"
 
 #include <StatusBar.h>
 

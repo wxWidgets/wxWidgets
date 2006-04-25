@@ -16,12 +16,14 @@
 
 #if wxUSE_IMAGE && wxUSE_LIBTIFF
 
+#include "wx/imagtiff.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/intl.h"
 #endif
 
-#include "wx/imagtiff.h"
 #include "wx/bitmap.h"
 #include "wx/debug.h"
 extern "C"
@@ -31,7 +33,6 @@ extern "C"
 }
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
-#include "wx/intl.h"
 #include "wx/module.h"
 
 #ifndef TIFFLINKAGEMODE

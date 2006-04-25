@@ -18,9 +18,13 @@
 #define XtWindow XTWINDOW
 #endif
 
-#include "wx/utils.h"
 #include "wx/filedlg.h"
-#include "wx/intl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
+#include "wx/utils.h"
 #include "wx/app.h"
 #include "wx/settings.h"
 #include "wx/tokenzr.h"

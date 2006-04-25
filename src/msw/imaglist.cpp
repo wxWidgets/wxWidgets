@@ -30,12 +30,12 @@
     #include "wx/dc.h"
     #include "wx/string.h"
     #include "wx/dcmemory.h"
+    #include "wx/intl.h"
 
     #include <stdio.h>
 #endif
 
 #include "wx/log.h"
-#include "wx/intl.h"
 #include "wx/image.h"
 
 #include "wx/msw/imaglist.h"

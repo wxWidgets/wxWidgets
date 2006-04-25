@@ -15,10 +15,14 @@
 #endif
 
 #include "wx/cursor.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/module.h"
 #include "wx/utils.h"
 #include "wx/log.h"
-#include "wx/intl.h"
 #include "wx/hashmap.h"
 
 #include "wx/mgl/private.h"

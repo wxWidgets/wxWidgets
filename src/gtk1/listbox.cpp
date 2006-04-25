@@ -12,20 +12,21 @@
 
 #if wxUSE_LISTBOX
 
+#include "wx/listbox.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
+    #include "wx/intl.h"
 #endif
 
-#include "wx/listbox.h"
 #include "wx/arrstr.h"
 #include "wx/utils.h"
-#include "wx/intl.h"
 #include "wx/checklst.h"
 #include "wx/settings.h"
 #include "wx/gtk1/private.h"
 
 #if wxUSE_TOOLTIPS
-#include "wx/tooltip.h"
+    #include "wx/tooltip.h"
 #endif
 
 #include <gdk/gdk.h>

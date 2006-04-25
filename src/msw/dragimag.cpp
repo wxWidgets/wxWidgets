@@ -21,23 +21,23 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_DRAGIMAGE
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/window.h"
-#include "wx/dcclient.h"
-#include "wx/dcscreen.h"
-#include "wx/dcmemory.h"
-#include "wx/settings.h"
+    #include <stdio.h>
+    #include "wx/window.h"
+    #include "wx/dcclient.h"
+    #include "wx/dcscreen.h"
+    #include "wx/dcmemory.h"
+    #include "wx/settings.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/msw/private.h"
 #include "wx/log.h"
-#include "wx/intl.h"
 #include "wx/frame.h"
 #include "wx/image.h"
 
@@ -298,8 +298,8 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
         if (!m_hCursorImageList)
         {
 #ifndef SM_CXCURSOR
-			// Smartphone may not have these metric symbol
-			int cxCursor = 16;
+            // Smartphone may not have these metric symbol
+            int cxCursor = 16;
             int cyCursor = 16;
 #else
             int cxCursor = ::GetSystemMetrics(SM_CXCURSOR);

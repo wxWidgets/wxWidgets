@@ -30,10 +30,10 @@
     #include "wx/dc.h"
     #include "wx/string.h"
     #include "wx/dcmemory.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/log.h"
-#include "wx/intl.h"
 
 #include "wx/palmos/imaglist.h"
 #include "wx/palmos/private.h"
@@ -135,4 +135,3 @@ bool wxImageList::Draw(int index,
 {
     return false;
 }
-

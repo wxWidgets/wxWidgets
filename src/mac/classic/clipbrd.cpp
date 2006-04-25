@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        clipbrd.cpp
+// Name:        src/mac/classic/clipbrd.cpp
 // Purpose:     Clipboard functionality
 // Author:      Stefan Csomor
 // Modified by:
@@ -9,13 +9,19 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/wxprec.h"
+
+#include "wx/clipbrd.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/frame.h"
 #include "wx/bitmap.h"
 #include "wx/utils.h"
 #include "wx/metafile.h"
-#include "wx/clipbrd.h"
-#include "wx/intl.h"
 #include "wx/log.h"
 
 #ifndef __DARWIN__
@@ -240,7 +246,7 @@ bool wxClipboard::AddData( wxDataObject *data )
         size_t sz = data->GetDataSize( array[i] ) ;
         void* buf = malloc( sz + 1 ) ;
         if ( buf )
-        {        
+        {
             data->GetDataHere( array[i] , buf ) ;
             OSType mactype = 0 ;
             switch ( array[i].GetType() )
@@ -281,15 +287,15 @@ void wxClipboard::Close()
     wxCHECK_RET( m_open, wxT("clipboard not open") );
 
     m_open = false ;
-    
- 	// Get rid of cached object.  If this is not done copying from another application will
- 	// only work once
+
+    // Get rid of cached object.  If this is not done copying from another application will
+    // only work once
     if (m_data)
     {
         delete m_data;
         m_data = (wxDataObject*) NULL;
-    }    
-	    
+    }
+
 }
 
 bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )

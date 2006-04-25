@@ -6,7 +6,6 @@
 // Created:     04/22/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Neis (2003)
-//
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -19,15 +18,19 @@
 
 #if wxUSE_THREADS
 
-#include <stdio.h>
+#include "wx/thread.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif //WX_PRECOMP
 
 #include "wx/app.h"
 #include "wx/apptrait.h"
 #include "wx/module.h"
-#include "wx/intl.h"
 #include "wx/utils.h"
 #include "wx/log.h"
-#include "wx/thread.h"
+
+#include <stdio.h>
 
 #define INCL_DOSSEMAPHORES
 #define INCL_DOSPROCESS

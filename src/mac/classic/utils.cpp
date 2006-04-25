@@ -6,20 +6,23 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #include "wx/utils.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/apptrait.h"
 
 #if wxUSE_GUI
     #include "wx/mac/uma.h"
     #include "wx/font.h"
-#else
-    #include "wx/intl.h"
 #endif
 
 #include <ctype.h>
@@ -1218,7 +1221,7 @@ void wxMacConvertNewlines10To13( char * data )
 
 void wxMacConvertNewlines13To10( wxString * data )
 {
-    size_t len = data->Length() ;
+    size_t len = data->length() ;
 
     if ( len == 0 || wxStrchr(data->c_str(),0x0d)==NULL)
         return ;
@@ -1232,9 +1235,9 @@ void wxMacConvertNewlines13To10( wxString * data )
 
 void wxMacConvertNewlines10To13( wxString * data )
 {
-    size_t len = data->Length() ;
+    size_t len = data->length() ;
 
-    if ( data->Length() == 0 || wxStrchr(data->c_str(),0x0a)==NULL)
+    if ( data->empty() || wxStrchr(data->c_str(),0x0a)==NULL)
         return ;
 
     wxString temp(*data) ;

@@ -41,6 +41,7 @@
     #include "wx/msgdlg.h"
     #include "wx/settings.h"
     #include "wx/statbox.h"
+    #include "wx/intl.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
@@ -72,7 +73,6 @@
     #include "wx/spinctrl.h"
 #endif // wxUSE_SPINCTRL
 
-#include "wx/intl.h"
 #include "wx/log.h"
 
 #include "wx/textctrl.h"

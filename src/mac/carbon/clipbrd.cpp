@@ -14,13 +14,17 @@
 
 #if wxUSE_CLIPBOARD
 
+#include "wx/clipbrd.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/frame.h"
 #include "wx/bitmap.h"
 #include "wx/utils.h"
 #include "wx/metafile.h"
-#include "wx/clipbrd.h"
-#include "wx/intl.h"
 #include "wx/log.h"
 
 #ifndef __DARWIN__

@@ -18,9 +18,12 @@
 
 #if wxUSE_MIMETYPE
 
+#include "wx/msw/mimetype.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/string.h"
+    #include "wx/intl.h"
     #if wxUSE_GUI
         #include "wx/icon.h"
         #include "wx/msgdlg.h"
@@ -30,15 +33,12 @@
 #include "wx/log.h"
 #include "wx/file.h"
 #include "wx/iconloc.h"
-#include "wx/intl.h"
 #include "wx/confbase.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/registry.h"
     #include "wx/msw/private.h"
 #endif // OS
-
-#include "wx/msw/mimetype.h"
 
 // other standard headers
 #include <ctype.h>

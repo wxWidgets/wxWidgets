@@ -21,23 +21,23 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_DRAGIMAGE
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/window.h"
-#include "wx/frame.h"
-#include "wx/dcclient.h"
-#include "wx/dcscreen.h"
-#include "wx/dcmemory.h"
-#include "wx/settings.h"
+    #include <stdio.h>
+    #include "wx/window.h"
+    #include "wx/frame.h"
+    #include "wx/dcclient.h"
+    #include "wx/dcscreen.h"
+    #include "wx/dcmemory.h"
+    #include "wx/settings.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/log.h"
-#include "wx/intl.h"
 
 #define wxUSE_IMAGE_IN_DRAGIMAGE 1
 

@@ -10,14 +10,16 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_FONTDLG
-
-#ifndef __WXGPE__
+#if wxUSE_FONTDLG && !defined(__WXGPE__)
 
 #include "wx/fontdlg.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/fontutil.h"
 #include "wx/utils.h"
-#include "wx/intl.h"
 #include "wx/debug.h"
 #include "wx/msgdlg.h"
 
@@ -154,6 +156,4 @@ void wxFontDialog::SetChosenFont(const char *fontname)
     m_fontData.SetChosenFont(wxFont( wxString::FromAscii(fontname) ));
 }
 
-#endif // wxUSE_FONTDLG
-
-#endif // GPE
+#endif // wxUSE_FONTDLG && !__WXGPE__

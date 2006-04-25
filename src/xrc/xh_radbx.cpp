@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_radbx.cpp
+// Name:        src/xrc/xh_radbx.cpp
 // Purpose:     XRC resource for wxRadioBox
 // Author:      Bob Mitchell
 // Created:     2000/03/21
@@ -18,8 +18,12 @@
 #if wxUSE_XRC && wxUSE_RADIOBOX
 
 #include "wx/xrc/xh_radbx.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/radiobox.h"
-#include "wx/intl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBoxXmlHandler, wxXmlResourceHandler)
 

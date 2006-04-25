@@ -15,10 +15,10 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
+    #include "wx/intl.h"
 #endif  //WX_PRECOMP
 
 #include "wx/os2/private.h"
-#include "wx/intl.h"
 #include "wx/apptrait.h"
 
 #include <ctype.h>

@@ -10,14 +10,17 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/mdi.h"
-#include "wx/notebook.h"
-
 #if wxUSE_MDI
 
+#include "wx/mdi.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
+#include "wx/notebook.h"
 #include "wx/dialog.h"
 #include "wx/menu.h"
-#include "wx/intl.h"
 #include "wx/gtk1/private.h"
 
 #include <glib.h>

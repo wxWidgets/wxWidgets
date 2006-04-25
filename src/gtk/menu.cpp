@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        menu.cpp
+// Name:        src/gtk/menu.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -11,8 +11,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/menu.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/log.h"
-#include "wx/intl.h"
 #include "wx/app.h"
 #include "wx/bitmap.h"
 
@@ -1514,4 +1518,3 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 }
 
 #endif // wxUSE_MENUS_NATIVE
-

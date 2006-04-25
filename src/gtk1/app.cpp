@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        app.cpp
+// Name:        src/gtk1/app.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -17,9 +17,13 @@
 #include "wx/wxprec.h"
 
 #include "wx/app.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/gdicmn.h"
 #include "wx/utils.h"
-#include "wx/intl.h"
 #include "wx/log.h"
 #include "wx/memory.h"
 #include "wx/font.h"

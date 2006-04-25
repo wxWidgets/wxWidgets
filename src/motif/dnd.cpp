@@ -13,10 +13,14 @@
 #if wxUSE_DRAG_AND_DROP
 
 #include "wx/dnd.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/gdicmn.h"
-#include "wx/intl.h"
 #include "wx/utils.h"
 #include "wx/log.h"
 

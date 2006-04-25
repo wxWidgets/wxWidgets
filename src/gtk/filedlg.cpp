@@ -14,6 +14,10 @@
 
 #include "wx/filedlg.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #ifdef __WXGTK24__
 
 #include <gtk/gtk.h>
@@ -21,7 +25,6 @@
 
 #include <unistd.h> // chdir
 
-#include "wx/intl.h"
 #include "wx/filename.h" // wxFilename
 #include "wx/tokenzr.h" // wxStringTokenizer
 #include "wx/filefn.h" // ::wxGetCwd

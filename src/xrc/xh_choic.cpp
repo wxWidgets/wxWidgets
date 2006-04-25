@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_choic.cpp
+// Name:        src/xrc/xh_choic.cpp
 // Purpose:     XRC resource for wxChoice
 // Author:      Bob Mitchell
 // Created:     2000/03/21
@@ -18,8 +18,12 @@
 #if wxUSE_XRC
 
 #include "wx/xrc/xh_choic.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/choice.h"
-#include "wx/intl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxChoiceXmlHandler, wxXmlResourceHandler)
 

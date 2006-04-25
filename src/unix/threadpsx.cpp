@@ -26,15 +26,16 @@
 
 #if wxUSE_THREADS
 
+#include "wx/thread.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
+    #include "wx/intl.h"
 #endif
 
-#include "wx/thread.h"
 #include "wx/module.h"
 #include "wx/utils.h"
 #include "wx/log.h"
-#include "wx/intl.h"
 #include "wx/timer.h"
 #include "wx/stopwatch.h"
 

@@ -19,12 +19,12 @@
 #ifndef WX_PRECOMP
     #include "wx/object.h"
     #include "wx/string.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/log.h"
 #include "wx/file.h"
 #include "wx/timer.h"
-#include "wx/intl.h"
 
 // Carbon QT Implementation Details -
 //

@@ -15,16 +15,20 @@
     #pragma hdrstop
 #endif
 
+#include "wx/app.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/window.h"
 #include "wx/frame.h"
 #include "wx/button.h"
-#include "wx/app.h"
 #include "wx/utils.h"
 #include "wx/gdicmn.h"
 #include "wx/pen.h"
 #include "wx/brush.h"
 #include "wx/cursor.h"
-#include "wx/intl.h"
 #include "wx/icon.h"
 #include "wx/palette.h"
 #include "wx/dc.h"

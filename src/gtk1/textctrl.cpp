@@ -11,8 +11,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/textctrl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/utils.h"
-#include "wx/intl.h"
 #include "wx/log.h"
 #include "wx/math.h"
 #include "wx/settings.h"

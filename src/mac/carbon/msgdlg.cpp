@@ -11,9 +11,13 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/app.h"
 #include "wx/msgdlg.h"
-#include "wx/intl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
+#include "wx/app.h"
 #include "wx/mac/uma.h"
 
 
@@ -294,4 +298,3 @@ int wxMessageDialog::ShowModal()
 
     return resultbutton;
 }
-

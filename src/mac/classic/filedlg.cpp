@@ -15,11 +15,15 @@
     #pragma hdrstop
 #endif
 
+#include "wx/filedlg.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/utils.h"
 #include "wx/dialog.h"
-#include "wx/filedlg.h"
-#include "wx/intl.h"
 #include "wx/tokenzr.h"
 #include "wx/filename.h"
 

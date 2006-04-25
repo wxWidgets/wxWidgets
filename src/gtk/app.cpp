@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        app.cpp
+// Name:        src/gtk/app.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -17,9 +17,13 @@
 #include "wx/wxprec.h"
 
 #include "wx/app.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/gdicmn.h"
 #include "wx/utils.h"
-#include "wx/intl.h"
 #include "wx/log.h"
 #include "wx/memory.h"
 #include "wx/font.h"
@@ -33,7 +37,7 @@
 #include "wx/thread.h"
 
 #ifdef __WXGPE__
-#include <gpe/init.h>
+    #include <gpe/init.h>
 #endif
 
 #ifdef __WXUNIVERSAL__
@@ -113,7 +117,7 @@ static wxMutex gs_idleTagsMutex;
 // not static because used by textctrl.cpp
 //
 // MT-FIXME
-bool wxIsInsideYield = FALSE;
+bool wxIsInsideYield = false;
 
 bool wxApp::Yield(bool onlyIfNeeded)
 {
@@ -124,18 +128,18 @@ bool wxApp::Yield(bool onlyIfNeeded)
             wxFAIL_MSG( wxT("wxYield called recursively" ) );
         }
 
-        return FALSE;
+        return false;
     }
 
 #if wxUSE_THREADS
     if ( !wxThread::IsMain() )
     {
         // can't call gtk_main_iteration() from other threads like this
-        return TRUE;
+        return true;
     }
 #endif // wxUSE_THREADS
 
-    wxIsInsideYield = TRUE;
+    wxIsInsideYield = true;
 
     // We need to remove idle callbacks or the loop will
     // never finish.
@@ -163,9 +167,9 @@ bool wxApp::Yield(bool onlyIfNeeded)
     wxLog::Resume();
 #endif
 
-    wxIsInsideYield = FALSE;
+    wxIsInsideYield = false;
 
-    return TRUE;
+    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -483,7 +487,7 @@ bool wxApp::OnInitGui()
     }
 
     // Nothing to do for 15, 16, 24, 32 bit displays
-    if (visual->depth > 8) return TRUE;
+    if (visual->depth > 8) return true;
 
     // initialize color cube for 8-bit color reduction dithering
 
@@ -533,7 +537,7 @@ bool wxApp::OnInitGui()
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 GdkVisual *wxApp::GetGdkVisual()
@@ -680,7 +684,7 @@ void wxApp::CleanUp()
 
 void wxApp::OnAssert(const wxChar *file, int line, const wxChar* cond, const wxChar *msg)
 {
-    m_isInAssert = TRUE;
+    m_isInAssert = true;
 
     wxAppBase::OnAssert(file, line, cond, msg);
 

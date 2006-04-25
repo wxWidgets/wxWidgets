@@ -14,13 +14,17 @@
 #endif
 
 #include "wx/bitmap.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/icon.h"
 #include "wx/filefn.h"
 #include "wx/image.h"
 #include "wx/dcmemory.h"
 #include "wx/utils.h"
 #include "wx/log.h"
-#include "wx/intl.h"
 #include "wx/image.h"
 #include "wx/xpmdecod.h"
 

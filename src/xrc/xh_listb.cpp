@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_listb.cpp
+// Name:        src/xrc/xh_listb.cpp
 // Purpose:     XRC resource for wxListBox
 // Author:      Bob Mitchell & Vaclav Slavik
 // Created:     2000/07/29
@@ -18,8 +18,12 @@
 #if wxUSE_XRC
 
 #include "wx/xrc/xh_listb.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/listbox.h"
-#include "wx/intl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBoxXmlHandler, wxXmlResourceHandler)
 

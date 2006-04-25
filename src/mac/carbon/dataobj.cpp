@@ -14,12 +14,13 @@
 
 #if wxUSE_DATAOBJ
 
+#include "wx/dataobj.h"
+
 #ifndef WX_PRECOMP
-#include "wx/intl.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/log.h"
-#include "wx/dataobj.h"
 #include "wx/dcmemory.h"
 #include "wx/mstream.h"
 #include "wx/image.h"

@@ -14,19 +14,20 @@
 
 #if wxUSE_DIALUP_MANAGER
 
+#include "wx/dialup.h"
+
 #ifndef  WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/intl.h"
 #endif // !PCH
 
 #include "wx/event.h"
-#include "wx/dialup.h"
 #include "wx/timer.h"
 #include "wx/filefn.h"
 #include "wx/utils.h"
 #include "wx/log.h"
 #include "wx/ffile.h"
 #include "wx/process.h"
-#include "wx/intl.h"
 #include "wx/app.h"
 #include "wx/wxchar.h"
 

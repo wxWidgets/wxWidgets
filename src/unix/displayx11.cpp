@@ -26,16 +26,17 @@
 
 #if wxUSE_DISPLAY
 
+#include "wx/display.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/gdicmn.h"
     #include "wx/string.h"
     #include "wx/utils.h"
+    #include "wx/intl.h"
 #endif /* WX_PRECOMP */
 
-#include "wx/display.h"
 #include "wx/display_impl.h"
-#include "wx/intl.h"
 #include "wx/log.h"
 
 /* These must be included after the wx files.  Otherwise the Data macro in

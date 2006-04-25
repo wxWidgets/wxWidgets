@@ -18,10 +18,14 @@
 #if wxUSE_XRC && wxUSE_MDI
 
 #include "wx/xrc/xh_mdi.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/mdi.h"
 #include "wx/dialog.h" // to get wxDEFAULT_DIALOG_STYLE
 #include "wx/log.h"
-#include "wx/intl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxMdiXmlHandler, wxXmlResourceHandler)
 
@@ -133,4 +137,4 @@ bool wxMdiXmlHandler::CanHandle(wxXmlNode *node)
             IsOfClass(node, wxT("wxMDIChildFrame")));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_MDI

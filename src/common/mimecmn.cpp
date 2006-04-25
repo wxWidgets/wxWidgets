@@ -27,19 +27,19 @@
 
 #if wxUSE_MIMETYPE
 
+#include "wx/mimetype.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/string.h"
+    #include "wx/intl.h"
 #endif //WX_PRECOMP
 
 #include "wx/module.h"
 #include "wx/log.h"
 #include "wx/file.h"
 #include "wx/iconloc.h"
-#include "wx/intl.h"
 #include "wx/confbase.h"
-
-#include "wx/mimetype.h"
 
 // other standard headers
 #include <ctype.h>

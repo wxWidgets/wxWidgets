@@ -18,11 +18,13 @@
 
 #if wxUSE_DIRDLG || wxUSE_FILEDLG
 
+#include "wx/generic/dirctrlg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
+    #include "wx/intl.h"
 #endif
 
-#include "wx/generic/dirctrlg.h"
 #include "wx/module.h"
 #include "wx/utils.h"
 #include "wx/button.h"
@@ -33,7 +35,6 @@
 #include "wx/filefn.h"
 #include "wx/cmndata.h"
 #include "wx/gdicmn.h"
-#include "wx/intl.h"
 #include "wx/imaglist.h"
 #include "wx/icon.h"
 #include "wx/log.h"

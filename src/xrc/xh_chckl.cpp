@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_chckl.cpp
+// Name:        src/xrc/xh_chckl.cpp
 // Purpose:     XRC resource for wxCheckList
 // Author:      Bob Mitchell
 // Created:     2000/03/21
@@ -15,13 +15,15 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
-
-#if wxUSE_CHECKLISTBOX
+#if wxUSE_XRC && wxUSE_CHECKLISTBOX
 
 #include "wx/xrc/xh_chckl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/checklst.h"
-#include "wx/intl.h"
 #include "wx/log.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBoxXmlHandler, wxXmlResourceHandler)
@@ -37,7 +39,7 @@ wxCheckListBoxXmlHandler::wxCheckListBoxXmlHandler()
     XRC_ADD_STYLE(wxLB_ALWAYS_SB);
     XRC_ADD_STYLE(wxLB_NEEDED_SB);
     XRC_ADD_STYLE(wxLB_SORT);
-    
+
     AddWindowStyles();
 }
 
@@ -127,6 +129,4 @@ bool wxCheckListBoxXmlHandler::CanHandle(wxXmlNode *node)
            (m_insideBox && node->GetName() == wxT("item")));
 }
 
-#endif // wxUSE_CHECKLISTBOX
-
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_CHECKLISTBOX

@@ -21,9 +21,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include  "wx/intl.h"
 #endif
 
-#include  "wx/intl.h"
 #include  "wx/log.h"
 #include  "wx/file.h"
 #include  "wx/wfstream.h"

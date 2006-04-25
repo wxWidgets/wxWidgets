@@ -15,6 +15,11 @@
 #endif
 
 #include "wx/window.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/dcclient.h"
 #include "wx/frame.h"
 #include "wx/app.h"
@@ -43,7 +48,6 @@
 
 #include "wx/menu.h"
 #include "wx/statusbr.h"
-#include "wx/intl.h"
 #include "wx/settings.h"
 #include "wx/log.h"
 #include "wx/fontutil.h"

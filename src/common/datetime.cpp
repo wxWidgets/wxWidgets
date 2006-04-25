@@ -68,9 +68,9 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
+    #include "wx/intl.h"
 #endif // WX_PRECOMP
 
-#include "wx/intl.h"
 #include "wx/thread.h"
 #include "wx/tokenzr.h"
 #include "wx/module.h"
@@ -2403,40 +2403,42 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                         {
                             nLostWeekDays += year++ % 4 ? 1 : 2;
                         }
-			
-			// Keep year below 2000 so the 2digit year number
-			// can never match the month or day of the month
-			if (year>=2000) year-=28;
+
+                        // Keep year below 2000 so the 2digit year number
+                        // can never match the month or day of the month
+                        if (year>=2000) year-=28;
                         // at any rate, we couldn't go further than 1988 + 9 + 28!
                         wxASSERT_MSG( year < 2030,
                                       _T("logic error in wxDateTime::Format") );
 
-			wxString strYear, strYear2;
+                        wxString strYear, strYear2;
                         strYear.Printf(_T("%d"), year);
                         strYear2.Printf(_T("%d"), year % 100);
-	
+
                         // find four strings not occurring in format (this is surely
                         // not the optimal way of doing it... improvements welcome!)
                         wxString fmt2 = format;
-			wxString replacement,replacement2,replacement3,replacement4;
-			for (int rnr=1; rnr<5 ; rnr++) {
-                        	wxString r = (wxChar)-rnr;
-	                        while ( fmt2.Find(r) != wxNOT_FOUND )
-        	                {
-                	            r << (wxChar)-rnr;
-                        	}
+                        wxString replacement,replacement2,replacement3,replacement4;
+                        for (int rnr=1; rnr<5 ; rnr++)
+                        {
+                            wxString r = (wxChar)-rnr;
+                            while ( fmt2.Find(r) != wxNOT_FOUND )
+                            {
+                                r << (wxChar)-rnr;
+                            }
 
-			        switch (rnr) {
-					case 1: replacement=r; break;
-					case 2: replacement2=r; break;
-					case 3: replacement3=r; break;
-					case 4: replacement4=r; break;
-				}
-			}
+                            switch (rnr)
+                            {
+                                case 1: replacement=r; break;
+                                case 2: replacement2=r; break;
+                                case 3: replacement3=r; break;
+                                case 4: replacement4=r; break;
+                            }
+                        }
                         // replace all occurrences of year with it
                         bool wasReplaced = fmt2.Replace(strYear, replacement) > 0;
                         // evaluation order ensures we always attempt the replacement.
-			wasReplaced = (fmt2.Replace(strYear2, replacement2) > 0) | wasReplaced ;
+                        wasReplaced = (fmt2.Replace(strYear2, replacement2) > 0) | wasReplaced ;
 
                         // use strftime() to format the same date but in supported
                         // year
@@ -2461,10 +2463,10 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                                                     &tmAdjusted);
 
                         // now replace the occurrence of 1999 with the real year
-			// we do this in two stages to stop the 2 digit year
-			// matching any substring of the 4 digit year.
-			// Any day,month hours and minutes components should be safe due
-			// to ensuring the range of the years.
+                        // we do this in two stages to stop the 2 digit year
+                        // matching any substring of the 4 digit year.
+                        // Any day,month hours and minutes components should be safe due
+                        // to ensuring the range of the years.
                         wxString strYearReal, strYearReal2;
                         strYearReal.Printf(_T("%04d"), yearReal);
                         strYearReal2.Printf(_T("%02d"), yearReal % 100);

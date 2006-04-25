@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dnd.cpp
+// Name:        src/gtk/dnd.cpp
 // Purpose:     wxDropTarget class
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -10,16 +10,18 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/dnd.h"
-#include "wx/log.h"
-
-
 #if wxUSE_DRAG_AND_DROP
+
+#include "wx/dnd.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
 
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/gdicmn.h"
-#include "wx/intl.h"
+#include "wx/log.h"
 #include "wx/utils.h"
 
 #include "wx/gtk/private.h"

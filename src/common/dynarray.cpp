@@ -22,9 +22,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
+    #include "wx/intl.h"
 #endif //WX_PRECOMP
-
-#include "wx/intl.h"
 
 #include <stdlib.h>
 #include <string.h> // for memmove

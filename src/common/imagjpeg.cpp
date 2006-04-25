@@ -11,17 +11,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_IMAGE && wxUSE_LIBJPEG
 
+#include "wx/imagjpeg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/intl.h"
 #endif
 
-#include "wx/imagjpeg.h"
 #include "wx/bitmap.h"
 #include "wx/debug.h"
 
@@ -45,7 +47,6 @@ extern "C"
 
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
-#include "wx/intl.h"
 #include "wx/module.h"
 
 // For memcpy

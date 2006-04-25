@@ -17,16 +17,17 @@
 #define XtDisplay XTDISPLAY
 #endif
 
+#include "wx/app.h"
+
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
+    #include "wx/intl.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/utils.h"
 #include "wx/module.h"
 #include "wx/memory.h"
 #include "wx/log.h"
-#include "wx/intl.h"
 #include "wx/evtloop.h"
 
 #if wxUSE_THREADS

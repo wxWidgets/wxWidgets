@@ -14,16 +14,17 @@
 
 #if wxUSE_FONTMAP
 
+#include "wx/fontenum.h"
+
 #ifndef WX_PRECOMP
-  #include "wx/font.h"
+    #include "wx/font.h"
+    #include "wx/intl.h"
 #endif
 
-#include "wx/fontenum.h"
 #include "wx/fontutil.h"
 #include "wx/fontmap.h"
 #include "wx/fontutil.h"
 #include "wx/encinfo.h"
-#include "wx/intl.h"
 
 #include "wx/mac/private.h"
 
@@ -161,4 +162,4 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
     return true;
 }
 
-#endif
+#endif // wxUSE_FONTMAP

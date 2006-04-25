@@ -11,8 +11,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/menu.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/log.h"
-#include "wx/intl.h"
 #include "wx/app.h"
 #include "wx/bitmap.h"
 
@@ -984,7 +988,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         text = mitem->GetText();
         const wxBitmap *bitmap = &mitem->GetBitmap();
 
-	// TODO
+        // TODO
         wxUnusedVar(bitmap);
         menuItem = gtk_menu_item_new_with_label( wxGTK_CONV( text ) );
         label = GTK_LABEL( GTK_BIN(menuItem)->child );

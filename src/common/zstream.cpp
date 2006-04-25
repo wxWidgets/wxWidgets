@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// Name:        zstream.cpp
+// Name:        src/common/zstream.cpp
 // Purpose:     Compressed stream classes
 // Author:      Guilhem Lavaux
 // Modified by: Mike Wetherell
@@ -13,14 +13,18 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_ZLIB && wxUSE_STREAMS
 
 #include "wx/zstream.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/utils.h"
-#include "wx/intl.h"
 #include "wx/log.h"
 
 // normally, the compiler options should contain -I../zlib, but it is
@@ -331,4 +335,3 @@ size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
 
 #endif
   // wxUSE_ZLIB && wxUSE_STREAMS
-

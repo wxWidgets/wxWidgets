@@ -13,12 +13,17 @@
 
 #if wxUSE_TEXTCTRL
 
+#include "wx/textctrl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
 
 #ifdef __DARWIN__
-  #include <sys/types.h>
-  #include <sys/stat.h>
+    #include <sys/types.h>
+    #include <sys/stat.h>
 #else
-  #include <stat.h>
+    #include <stat.h>
 #endif
 
 #include "wx/msgdlg.h"
@@ -35,13 +40,11 @@
 #include "wx/dc.h"
 #include "wx/button.h"
 #include "wx/toplevel.h"
-#include "wx/textctrl.h"
 #include "wx/settings.h"
 #include "wx/filefn.h"
 #include "wx/utils.h"
 #include "wx/sysopt.h"
 #include "wx/menu.h"
-#include "wx/intl.h"
 
 #if defined(__BORLANDC__) && !defined(__WIN32__)
   #include <alloc.h>
@@ -882,8 +885,8 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
     if ( key == 'a' && event.MetaDown() )
     {
-        SelectAll() ;     
-        
+        SelectAll() ;
+
         return ;
     }
 
@@ -1574,11 +1577,11 @@ wxString wxMacMLTEControl::GetStringValue() const
                 (((UniChar*)*theText)[actualSize]) = 0 ;
                 wxMBConvUTF16 converter ;
                 size_t noChars = converter.MB2WC( NULL , (const char*)*theText , 0 ) ;
- 				wxASSERT_MSG( noChars != wxCONV_FAILED, _T("Unable to count the number of characters in this string!") );
+                wxASSERT_MSG( noChars != wxCONV_FAILED, _T("Unable to count the number of characters in this string!") );
                 ptr = new wxChar[noChars + 1] ;
 
                 noChars = converter.MB2WC( ptr , (const char*)*theText , noChars + 1 ) ;
- 				wxASSERT_MSG( noChars != wxCONV_FAILED, _T("Conversion of string failed!") );
+                wxASSERT_MSG( noChars != wxCONV_FAILED, _T("Conversion of string failed!") );
                 ptr[noChars] = 0 ;
                 HUnlock( theText ) ;
 #endif

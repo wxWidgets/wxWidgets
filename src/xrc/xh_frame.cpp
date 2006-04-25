@@ -18,10 +18,14 @@
 #if wxUSE_XRC
 
 #include "wx/xrc/xh_frame.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+#endif
+
 #include "wx/frame.h"
 #include "wx/dialog.h" // to get wxDEFAULT_DIALOG_STYLE
 #include "wx/log.h"
-#include "wx/intl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrameXmlHandler, wxXmlResourceHandler)
 
