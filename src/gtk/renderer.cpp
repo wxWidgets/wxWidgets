@@ -197,7 +197,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         NULL,
         button,
         "button",
-        dc.XLOG2DEV(rect.x) -1, rect.y -1, rect.width +2, rect.height +2
+        dc.XLOG2DEV(rect.x), rect.y, rect.width, rect.height
     );
 }
 
@@ -463,7 +463,9 @@ wxRendererGTK::DrawCheckButton(wxWindow *win,
         NULL,
         button,
         "cellcheck",
-        rect.x, rect.y, 13, 13
+        dc.LogicalToDeviceX(rect.x)+2, 
+        dc.LogicalToDeviceY(rect.y)+3, 
+        13, 13
     );
 }
 
