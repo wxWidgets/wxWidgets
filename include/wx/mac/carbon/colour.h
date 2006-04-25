@@ -16,7 +16,7 @@
 #include "wx/string.h"
 
 // Colour
-class WXDLLEXPORT wxColour: public wxObject
+class WXDLLEXPORT wxColour: public wxColourBase
 {
 public:
     // constructors
@@ -24,34 +24,10 @@ public:
 
     // default
     wxColour() { Init(); }
-
-    // from separate RGB
-    wxColour( unsigned char red, unsigned char green, unsigned char blue )
-        { Set(red, green, blue); }
-
-    // from packed RGB
-    wxColour( unsigned long colRGB )
-        { Set(colRGB); }
-
-    // implicit conversion from the colour name
-    wxColour( const wxString &colourName )
-        { InitFromName(colourName); }
-    wxColour( const wxChar *colourName )
-        { InitFromName(colourName); }
+    DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
     // dtor
     ~wxColour();
-
-    // Set() functions
-    void Set( unsigned char red, unsigned char green, unsigned char blue );
-    void Set( unsigned long colRGB )
-    {
-        // we don't need to know sizeof(long) here because we assume that the three
-        // least significant bytes contain the R, G and B values
-        Set((unsigned char)colRGB,
-            (unsigned char)(colRGB >> 8),
-            (unsigned char)(colRGB >> 16));
-    }
 
     // accessors
     bool Ok() const {return m_isInit; }
@@ -72,12 +48,12 @@ public:
 
     const WXCOLORREF& GetPixel() const { return m_pixel; };
 
-    void InitFromName(const wxString& col);
-
 protected :
 
     // Helper function
     void Init();
+
+    void InitWith( unsigned char red, unsigned char green, unsigned char blue );
 
 private:
     bool          m_isInit;
