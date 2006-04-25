@@ -1045,16 +1045,14 @@ static wxColour GetSystemColour(const wxString& name)
 wxColour wxXmlResourceHandler::GetColour(const wxString& param)
 {
     wxString v = GetParamValue(param);
+    wxColour clr;
 
-    // find colour using HTML syntax (#RRGGBB)
-    unsigned long tmp = 0;
-
-    if (v.length() != 7 || v[0u] != wxT('#') ||
-        wxSscanf(v.c_str(), wxT("#%lX"), &tmp) != 1)
+    // wxString -> wxColour conversion
+    if (!clr.Set(v))
     {
         // the colour doesn't use #RRGGBB format, check if it is symbolic
         // colour name:
-        wxColour clr = GetSystemColour(v);
+        clr = GetSystemColour(v);
         if (clr.Ok())
             return clr;
 
@@ -1063,9 +1061,7 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param)
         return wxNullColour;
     }
 
-    return wxColour((unsigned char) ((tmp & 0xFF0000) >> 16) ,
-                    (unsigned char) ((tmp & 0x00FF00) >> 8),
-                    (unsigned char) ((tmp & 0x0000FF)));
+    return clr;
 }
 
 
