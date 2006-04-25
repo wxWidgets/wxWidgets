@@ -25,6 +25,104 @@
 #include "wx/sizer.h"
 #include "wx/log.h"
 
+const long ID_QUIT       = wxID_EXIT;
+const long ID_ABOUT      = wxID_ABOUT;
+const long ID_DELETE_ALL = 100;
+const long ID_INSERT_NEW = 101;
+
+// ----------------------------------------------------------------------
+// a trivial example
+// ----------------------------------------------------------------------
+
+class MySimpleFrame;
+class MySimpleCanvas;
+
+// MySimpleCanvas
+
+class MySimpleCanvas: public wxScrolledWindow
+{
+public:
+    MySimpleCanvas() { }
+    MySimpleCanvas( wxWindow *parent, wxWindowID, const wxPoint &pos, const wxSize &size );
+
+    void OnPaint( wxPaintEvent &event );
+
+private:
+    DECLARE_DYNAMIC_CLASS(MyCanvas)
+    DECLARE_EVENT_TABLE()
+};
+
+IMPLEMENT_DYNAMIC_CLASS(MySimpleCanvas, wxScrolledWindow)
+
+BEGIN_EVENT_TABLE(MySimpleCanvas, wxScrolledWindow)
+  EVT_PAINT(      MySimpleCanvas::OnPaint)
+END_EVENT_TABLE()
+
+MySimpleCanvas::MySimpleCanvas( wxWindow *parent, wxWindowID id,
+                    const wxPoint &pos, const wxSize &size )
+    : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER, _T("test canvas") )
+{
+    SetScrollRate( 10, 10 );
+    SetVirtualSize( 92, 97 );
+    SetBackgroundColour( *wxWHITE );
+}
+
+void MySimpleCanvas::OnPaint( wxPaintEvent &event )
+{
+    wxPaintDC dc(this);
+    PrepareDC( dc );
+    
+    dc.SetPen( *wxRED_PEN );
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    dc.DrawRectangle( 0,0,92,97 );
+}
+
+// MySimpleFrame
+
+class MySimpleFrame: public wxFrame
+{
+public:
+    MySimpleFrame();
+
+    void OnQuit( wxCommandEvent &event );
+
+    MySimpleCanvas         *m_canvas;
+
+private:
+    DECLARE_DYNAMIC_CLASS(MySimpleFrame)
+    DECLARE_EVENT_TABLE()
+};
+
+
+IMPLEMENT_DYNAMIC_CLASS( MySimpleFrame, wxFrame )
+
+BEGIN_EVENT_TABLE(MySimpleFrame,wxFrame)
+  EVT_MENU    (ID_QUIT,  MySimpleFrame::OnQuit)
+END_EVENT_TABLE()
+
+MySimpleFrame::MySimpleFrame()
+       : wxFrame( (wxFrame *)NULL, wxID_ANY, _T("wxScrolledWindow sample"),
+                  wxPoint(120,120), wxSize(150,150) )
+{
+    wxMenu *file_menu = new wxMenu();
+    file_menu->Append( ID_QUIT,       _T("E&xit\tAlt-X"));
+
+    wxMenuBar *menu_bar = new wxMenuBar();
+    menu_bar->Append(file_menu, _T("&File"));
+
+    SetMenuBar( menu_bar );
+
+    m_canvas = new MySimpleCanvas( this, wxID_ANY, wxPoint(0,0), wxSize(100,100) );
+}
+
+void MySimpleFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
+{
+  Close( true );
+}
+
+// ----------------------------------------------------------------------
+// a complex example
+// ----------------------------------------------------------------------
 
 // derived classes
 
@@ -485,11 +583,6 @@ void MyAutoScrollWindow::OnResizeClick( wxCommandEvent &WXUNUSED( event ) )
 // MyFrame
 // ----------------------------------------------------------------------------
 
-const long ID_QUIT       = wxID_EXIT;
-const long ID_ABOUT      = wxID_ABOUT;
-const long ID_DELETE_ALL = 100;
-const long ID_INSERT_NEW = 101;
-
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 
 BEGIN_EVENT_TABLE(MyFrame,wxFrame)
@@ -579,10 +672,13 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 
 bool MyApp::OnInit()
 {
-  wxFrame *frame = new MyFrame();
-  frame->Show( true );
+    wxFrame *frame = new MyFrame();
+    frame->Show( true );
 
-  return true;
+    frame = new MySimpleFrame();
+    frame->Show();
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------
