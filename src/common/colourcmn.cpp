@@ -59,7 +59,10 @@ bool wxColourBase::FromString(const wxChar *str)
         // because this place can be called from constructor
         // and 'this' could not be available yet
         wxColour clr = wxTheColourDatabase->Find(str);
-        Set((unsigned char)clr.Red(), (unsigned char)clr.Green(), (unsigned char)clr.Blue());
+        if (clr.Ok())
+            Set((unsigned char)clr.Red(),
+                (unsigned char)clr.Green(),
+                (unsigned char)clr.Blue());
     }
 
     if (Ok())
