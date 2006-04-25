@@ -347,9 +347,11 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
 
     CreateStatusBar();
 
+    wxPanel *panel = new wxPanel( this, -1 );
+
 
     // Left wxDataViewCtrl
-    dataview_left = new wxDataViewCtrl( this, wxID_ANY );
+    dataview_left = new wxDataViewCtrl( panel, wxID_ANY );
 
     MyTextModel *model = new MyTextModel;
     dataview_left->AssociateModel( model );
@@ -372,7 +374,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     dataview_left->AppendDateColumn( wxT("date"), 6 );
 
     // Right wxDataViewCtrl using the same model
-    dataview_right = new wxDataViewCtrl( this, wxID_ANY );
+    dataview_right = new wxDataViewCtrl( panel, wxID_ANY );
     dataview_right->AssociateModel( model );
 
     text_cell = new wxDataViewTextCell( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
@@ -392,7 +394,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     sizer->Add( dataview_left, 3, wxGROW );
     sizer->Add(10,10);
     sizer->Add( dataview_right, 2, wxGROW );
-    SetSizer( sizer );
+    panel->SetSizer( sizer );
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
