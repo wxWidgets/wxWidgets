@@ -60,10 +60,10 @@ int wxMessageDialog::ShowModal()
     wxMacCFStringHolder cfTitle( m_caption, m_font.GetEncoding() );
     wxMacCFStringHolder cfText( m_message, m_font.GetEncoding() );
 
-    wxMacCFStringHolder cfNoString( wxT("No"), m_font.GetEncoding() );
-    wxMacCFStringHolder cfYesString( wxT("Yes"), m_font.GetEncoding() );
+    wxMacCFStringHolder cfNoString( _("No"), m_font.GetEncoding() );
+    wxMacCFStringHolder cfYesString( _("Yes"), m_font.GetEncoding() );
     wxMacCFStringHolder cfOKString( _("OK") , m_font.GetEncoding()) ;    
-    wxMacCFStringHolder cfCancelString( wxT("Cancel"), m_font.GetEncoding() );
+    wxMacCFStringHolder cfCancelString( _("Cancel"), m_font.GetEncoding() );
 
     int buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };
 
@@ -116,8 +116,8 @@ int wxMessageDialog::ShowModal()
     if ( UMAGetSystemVersion() >= 0x1000 )
     {
         AlertStdCFStringAlertParamRec param;
-        wxMacCFStringHolder cfNoString( wxT("No"), m_font.GetEncoding() );
-        wxMacCFStringHolder cfYesString( wxT("Yes"), m_font.GetEncoding() );
+        wxMacCFStringHolder cfNoString( _("No"), m_font.GetEncoding() );
+        wxMacCFStringHolder cfYesString( _("Yes"), m_font.GetEncoding() );
 
         wxMacCFStringHolder cfTitle( m_caption, m_font.GetEncoding() );
         wxMacCFStringHolder cfText( m_message, m_font.GetEncoding() );
@@ -199,8 +199,8 @@ int wxMessageDialog::ShowModal()
         Str255 pascalTitle, pascalText;
 
         wxMacStringToPascal( m_caption, pascalTitle );
-        wxMacStringToPascal( wxT("Yes"), yesPString );
-        wxMacStringToPascal( wxT("No"), noPString );
+        wxMacStringToPascal( _("Yes"), yesPString );
+        wxMacStringToPascal( _("No"), noPString );
         wxMacStringToPascal( m_message, pascalText );
 
         param.movable = true;
