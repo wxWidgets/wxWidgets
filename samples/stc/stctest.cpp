@@ -85,6 +85,8 @@ wxPageSetupData *g_pageSetupData = (wxPageSetupData*) NULL;
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
 
+class AppFrame;
+
 //----------------------------------------------------------------------------
 //! application APP_VENDOR-APP_NAME.
 class App: public wxApp {
