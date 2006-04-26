@@ -57,11 +57,11 @@ class WXDLLIMPEXP_OGL wxPseudoMetaFile: public wxObject
 
   inline void SetSize(double w, double h) { m_width = w; m_height = h; }
 
-  inline void SetFillBrush(wxBrush* brush) { m_fillBrush = brush; }
-  inline const wxBrush* GetFillBrush() const { return m_fillBrush; }
+  inline void SetFillBrush(const wxBrush* brush) { m_fillBrush = brush; }
+  inline wxBrush* GetFillBrush() const { return wx_const_cast(wxBrush*, m_fillBrush); }
 
-  inline void SetOutlinePen(wxPen* pen) { m_outlinePen = pen; }
-  inline const wxPen* GetOutlinePen() const { return m_outlinePen; }
+  inline void SetOutlinePen(const wxPen* pen) { m_outlinePen = pen; }
+  inline wxPen* GetOutlinePen() const { return wx_const_cast(wxPen*, m_outlinePen); }
 
   inline void SetOutlineOp(int op) { m_outlineOp = op; }
   inline int GetOutlineOp() const { return m_outlineOp; }

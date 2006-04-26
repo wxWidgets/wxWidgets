@@ -329,8 +329,8 @@ class WXDLLIMPEXP_OGL wxShape: public wxShapeEvtHandler
 
   void AddText(const wxString& string);
 
-  inline const wxPen *GetPen() const { return m_pen; }
-  inline const wxBrush *GetBrush() const { return m_brush; }
+  inline wxPen *GetPen() const { return wx_const_cast(wxPen*, m_pen); }
+  inline wxBrush *GetBrush() const { return wx_const_cast(wxBrush*, m_brush); }
 
   /*
    * Region-specific functions (defaults to the default region

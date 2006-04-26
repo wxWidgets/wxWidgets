@@ -188,10 +188,10 @@ class WXDLLIMPEXP_OGL wxDivisionShape: public wxCompositeShape
   inline void SetHandleSide(int side) { m_handleSide = side; }
   inline int GetHandleSide() const { return m_handleSide; }
 
-  inline void SetLeftSidePen(wxPen *pen) { m_leftSidePen = pen; }
-  inline const wxPen *GetLeftSidePen() const { return m_leftSidePen; }
-  inline void SetTopSidePen(wxPen *pen) { m_topSidePen = pen; }
-  inline const wxPen *GetTopSidePen() const { return m_topSidePen; }
+  inline void SetLeftSidePen(const wxPen *pen) { m_leftSidePen = pen; }
+  inline wxPen *GetLeftSidePen() const { return wx_const_cast(wxPen*, m_leftSidePen); }
+  inline void SetTopSidePen(const wxPen *pen) { m_topSidePen = pen; }
+  inline wxPen *GetTopSidePen() const { return wx_const_cast(wxPen*, m_topSidePen); }
 
   void SetLeftSideColour(const wxString& colour);
   void SetTopSideColour(const wxString& colour);
