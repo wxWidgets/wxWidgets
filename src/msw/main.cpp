@@ -30,14 +30,11 @@
 #include "wx/scopeguard.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/seh.h"
 
 #if wxUSE_ON_FATAL_EXCEPTION
     #include "wx/datetime.h"
     #include "wx/msw/crashrpt.h"
-
-    #ifdef __VISUALC__
-        #include <eh.h>
-    #endif // __VISUALC__
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
 #ifdef __WXWINCE__
@@ -118,16 +115,11 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
         wxGlobalSEInformation = pExcPtrs;
 
         // give the user a chance to do something special about this
-        __try
+        wxSEH_TRY
         {
             wxTheApp->OnFatalException();
         }
-        __except ( EXCEPTION_EXECUTE_HANDLER )
-        {
-            // nothing to do here, just ignore the exception inside the
-            // exception handler
-            ;
-        }
+        wxSEH_IGNORE      // ignore any exceptions inside the exception handler
 
         wxGlobalSEInformation = NULL;
 
@@ -140,7 +132,7 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
 
 #ifdef __VISUALC__
 
-static void wxSETranslator(unsigned int WXUNUSED(code), EXCEPTION_POINTERS *ep)
+void wxSETranslator(unsigned int WXUNUSED(code), EXCEPTION_POINTERS *ep)
 {
     switch ( wxGlobalSEHandler(ep) )
     {
@@ -208,20 +200,11 @@ int wxEntry(int& argc, wxChar **argv)
 {
     DisableAutomaticSETranslator();
 
-    __try
+    wxSEH_TRY
     {
         return wxEntryReal(argc, argv);
     }
-    __except ( wxGlobalSEHandler(GetExceptionInformation()) )
-    {
-        wxFatalExit();
-
-#if !defined(_MSC_VER) || defined(__WXDEBUG__) || (defined(_MSC_VER) && _MSC_VER <= 1200)
-        // this code is unreachable but put it here to suppress warnings in some compilers
-        // and disable for others to supress warnings too
-        return -1;
-#endif // !__VISUALC__ in release build
-    }
+    wxSEH_HANDLE(-1)
 }
 
 #else // !wxUSE_ON_FATAL_EXCEPTION

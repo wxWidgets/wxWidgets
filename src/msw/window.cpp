@@ -1970,7 +1970,7 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 #if defined(__WXWINCE__)
     UINT flags = 0;
 #else
-    UINT flags = TPM_RIGHTBUTTON | TPM_RECURSE;
+    UINT flags = TPM_RIGHTBUTTON;
 #endif
     ::TrackPopupMenu(hMenu, flags, point.x, point.y, 0, hWnd, NULL);
 

@@ -119,6 +119,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/private.h
     wx/msw/regconf.h
     wx/msw/registry.h
+    wx/msw/seh.h
     wx/msw/stackwalk.h
     wx/msw/stdpaths.h
     wx/msw/winundef.h
