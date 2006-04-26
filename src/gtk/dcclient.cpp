@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/dcclient.cpp
+// Name:        src/gtk/dcclient.cpp
 // Purpose:
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
@@ -15,10 +15,14 @@
 #endif
 
 #include "wx/dcclient.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/dcmemory.h"
 #include "wx/image.h"
 #include "wx/module.h"
-#include "wx/log.h"
 #include "wx/fontutil.h"
 
 #include "wx/gtk/win_gtk.h"

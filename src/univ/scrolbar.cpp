@@ -25,12 +25,13 @@
 
 #if wxUSE_SCROLLBAR
 
+#include "wx/scrolbar.h"
+
 #ifndef WX_PRECOMP
     #include "wx/timer.h"
-
     #include "wx/dcclient.h"
-    #include "wx/scrolbar.h"
     #include "wx/validate.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/univ/scrtimer.h"
@@ -38,7 +39,6 @@
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
-#include "wx/log.h"
 
 #define WXDEBUG_SCROLLBAR
 

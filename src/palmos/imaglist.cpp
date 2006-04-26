@@ -31,9 +31,8 @@
     #include "wx/string.h"
     #include "wx/dcmemory.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
-
-#include "wx/log.h"
 
 #include "wx/palmos/imaglist.h"
 #include "wx/palmos/private.h"

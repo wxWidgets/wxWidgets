@@ -13,8 +13,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/bitmap.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/icon.h"
-#include "wx/log.h"
 #include "wx/image.h"
 #include "wx/app.h"
 #if wxUSE_NANOX

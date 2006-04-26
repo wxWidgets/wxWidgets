@@ -19,7 +19,10 @@
 
 #include "wx/xrc/xh_notbk.h"
 
-#include "wx/log.h"
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/notebook.h"
 #include "wx/imaglist.h"
 #include "wx/sizer.h"

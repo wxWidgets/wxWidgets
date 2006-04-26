@@ -18,9 +18,13 @@
 #if wxUSE_XRC
 
 #include "wx/xrc/xh_sizer.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/sizer.h"
 #include "wx/gbsizer.h"
-#include "wx/log.h"
 #include "wx/statbox.h"
 #include "wx/notebook.h"
 #include "wx/panel.h"

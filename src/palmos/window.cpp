@@ -24,8 +24,9 @@
     #pragma hdrstop
 #endif
 
+#include "wx/window.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/window.h"
     #include "wx/accel.h"
     #include "wx/menu.h"
     #include "wx/dc.h"
@@ -42,6 +43,7 @@
     #include "wx/settings.h"
     #include "wx/statbox.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
@@ -59,7 +61,6 @@
 #endif
 
 #include "wx/menuitem.h"
-#include "wx/log.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -72,8 +73,6 @@
 #if wxUSE_SPINCTRL
     #include "wx/spinctrl.h"
 #endif // wxUSE_SPINCTRL
-
-#include "wx/log.h"
 
 #include "wx/textctrl.h"
 #include "wx/notebook.h"

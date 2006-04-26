@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/clipbrd.cpp
+// Name:        src/gtk/clipbrd.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -10,22 +10,18 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_CLIPBOARD
+
 #include "wx/clipbrd.h"
 
-#if wxUSE_CLIPBOARD
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
 
 #include "wx/dataobj.h"
 #include "wx/utils.h"
-#include "wx/log.h"
 
 #include "wx/gtk/private.h"
-
-//-----------------------------------------------------------------------------
-// thread system
-//-----------------------------------------------------------------------------
-
-#if wxUSE_THREADS
-#endif
 
 //-----------------------------------------------------------------------------
 // data
@@ -120,8 +116,8 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
 
             if (format == clipboard->m_targetRequested)
             {
-                clipboard->m_waiting = FALSE;
-                clipboard->m_formatSupported = TRUE;
+                clipboard->m_waiting = false;
+                clipboard->m_formatSupported = true;
                 return;
             }
         }
@@ -184,7 +180,7 @@ selection_received( GtkWidget *WXUNUSED(widget),
 
     data_object->SetData( format, (size_t) selection_data->length, (const char*) selection_data->data );
 
-    wxTheClipboard->m_formatSupported = TRUE;
+    wxTheClipboard->m_formatSupported = true;
     clipboard->m_waiting = FALSE;
 }
 }
@@ -197,20 +193,20 @@ extern "C" {
 static gint
 selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
 {
-    if (!wxTheClipboard) return TRUE;
+    if (!wxTheClipboard) return true;
 
     if (event->selection == GDK_SELECTION_PRIMARY)
     {
-        wxTheClipboard->m_ownsPrimarySelection = FALSE;
+        wxTheClipboard->m_ownsPrimarySelection = false;
     }
     else
     if (event->selection == g_clipboardAtom)
     {
-        wxTheClipboard->m_ownsClipboard = FALSE;
+        wxTheClipboard->m_ownsClipboard = false;
     }
     else
     {
-        wxTheClipboard->m_waiting = FALSE;
+        wxTheClipboard->m_waiting = false;
         return FALSE;
     }
 
@@ -227,7 +223,7 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
         }
     }
 
-    wxTheClipboard->m_waiting = FALSE;
+    wxTheClipboard->m_waiting = false;
     return TRUE;
 }
 }
@@ -382,7 +378,7 @@ void wxClipboard::Clear()
         //  it, clear_selection is called which will set m_data to zero
         if (gdk_selection_owner_get( g_clipboardAtom ) == m_clipboardWidget->window)
         {
-            m_waiting = TRUE;
+            m_waiting = true;
 
             gtk_selection_owner_set( (GtkWidget*) NULL, g_clipboardAtom,
                                      (guint32) GDK_CURRENT_TIME );

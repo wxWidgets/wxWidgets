@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        menuitem.cpp
+// Name:        src/msw/menuitem.cpp
 // Purpose:     wxMenuItem implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -26,6 +26,8 @@
 
 #if wxUSE_MENUS
 
+#include "wx/menu.h"
+
 #ifndef WX_PRECOMP
     #include "wx/font.h"
     #include "wx/bitmap.h"
@@ -33,12 +35,11 @@
     #include "wx/font.h"
     #include "wx/window.h"
     #include "wx/accel.h"
-    #include "wx/menu.h"
     #include "wx/string.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/menuitem.h"
-#include "wx/log.h"
 
 #if wxUSE_ACCEL
     #include "wx/accel.h"
@@ -399,7 +400,7 @@ void wxMenuItem::SetText(const wxString& text)
         info.cbSize = sizeof(info);
         info.fMask = MIIM_TYPE;
         info.fType = MFT_STRING;
-        info.cch = text.Length();
+        info.cch = text.length();
         info.dwTypeData = (LPTSTR) data ;
         if ( !::SetMenuItemInfo(hMenu, id, FALSE, & info) )
         {

@@ -21,11 +21,15 @@
     defined(__WXMOTIF__) || \
     defined(__WXX11__)
 
+#include "wx/bitmap.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif // WX_PRECOMP
+
 #include "wx/utils.h"
 #include "wx/palette.h"
-#include "wx/bitmap.h"
 #include "wx/icon.h"
-#include "wx/log.h"
 #include "wx/image.h"
 #include "wx/module.h"
 

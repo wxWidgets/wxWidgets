@@ -26,14 +26,13 @@
     #include "wx/font.h"
     #include "wx/dc.h"
     #include "wx/utils.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/window.h"
 #include "wx/msw/private.h"
 
 #include <windowsx.h>
-
-#include "wx/log.h"
 
 #if wxUSE_OWNER_DRAWN
     #include  "wx/ownerdrw.h"

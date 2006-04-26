@@ -17,6 +17,7 @@
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/frame.h"
@@ -24,10 +25,8 @@
 #include "wx/gdicmn.h"
 #include "wx/icon.h"
 #include "wx/dialog.h"
-#include "wx/log.h"
 #include "wx/module.h"
 #include "wx/memory.h"
-#include "wx/log.h"
 #include "wx/evtloop.h"
 #include "wx/timer.h"
 #include "wx/filename.h"

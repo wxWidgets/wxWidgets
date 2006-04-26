@@ -24,8 +24,9 @@
     #pragma hdrstop
 #endif
 
+#include "wx/frame.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/frame.h"
     #include "wx/app.h"
     #include "wx/menu.h"
     #include "wx/utils.h"
@@ -34,6 +35,7 @@
     #include "wx/dcclient.h"
     #include "wx/mdi.h"
     #include "wx/panel.h"
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #if wxUSE_STATUSBAR
@@ -46,7 +48,6 @@
 #endif // wxUSE_TOOLBAR
 
 #include "wx/menuitem.h"
-#include "wx/log.h"
 
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/theme.h"

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/clipbrd.cpp
+// Name:        src/gtk1/clipbrd.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -10,24 +10,20 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_CLIPBOARD
+
 #include "wx/clipbrd.h"
 
-#if wxUSE_CLIPBOARD
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
 
 #include "wx/dataobj.h"
 #include "wx/utils.h"
-#include "wx/log.h"
 
 #include <glib.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
-
-//-----------------------------------------------------------------------------
-// thread system
-//-----------------------------------------------------------------------------
-
-#if wxUSE_THREADS
-#endif
 
 //-----------------------------------------------------------------------------
 // data
@@ -642,4 +638,3 @@ bool wxClipboard::GetData( wxDataObject& data )
 
 #endif
   // wxUSE_CLIPBOARD
-

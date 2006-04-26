@@ -35,9 +35,8 @@
     #include "wx/dcmemory.h"
     #include "wx/settings.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
-
-#include "wx/log.h"
 
 #define wxUSE_IMAGE_IN_DRAGIMAGE 1
 

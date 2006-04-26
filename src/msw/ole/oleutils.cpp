@@ -21,12 +21,14 @@
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
-#include  "wx/log.h"
-
 #if wxUSE_OLE
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
 
 #ifndef __CYGWIN10__
 

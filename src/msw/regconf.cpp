@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/regconf.cpp
+// Name:        src/msw/regconf.cpp
 // Purpose:
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -13,21 +13,21 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
-
-#ifndef WX_PRECOMP
-  #include  "wx/string.h"
-  #include  "wx/intl.h"
-#endif //WX_PRECOMP
-
-#include "wx/event.h"
-#include "wx/app.h"
-#include "wx/log.h"
 
 #if wxUSE_CONFIG
 
 #include "wx/config.h"
+
+#ifndef WX_PRECOMP
+    #include  "wx/string.h"
+    #include  "wx/intl.h"
+    #include "wx/log.h"
+#endif //WX_PRECOMP
+
+#include "wx/event.h"
+#include "wx/app.h"
 
 #include "wx/msw/registry.h"
 #include "wx/msw/regconf.h"
@@ -76,9 +76,9 @@ wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
   // the convention is to put the programs keys under <vendor>\<appname>
   // (but it can be overriden by specifying the pathes explicitly in strLocal
   // and/or strGlobal)
-  if ( strLocal.IsEmpty() || (strGlobal.IsEmpty() && bDoUseGlobal) )
+  if ( strLocal.empty() || (strGlobal.empty() && bDoUseGlobal) )
   {
-    if ( vendorName.IsEmpty() )
+    if ( vendorName.empty() )
     {
       if ( wxTheApp )
         strRoot = wxTheApp->GetVendorName();
@@ -89,12 +89,12 @@ wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
     }
 
     // no '\\' needed if no vendor name
-    if ( !strRoot.IsEmpty() )
+    if ( !strRoot.empty() )
     {
       strRoot += '\\';
     }
 
-    if ( appName.IsEmpty() )
+    if ( appName.empty() )
     {
       wxCHECK_RET( wxTheApp, wxT("No application name in wxRegConfig ctor!") );
       strRoot << wxTheApp->GetAppName();
@@ -106,7 +106,7 @@ wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
   }
   //else: we don't need to do all the complicated stuff above
 
-  wxString str = strLocal.IsEmpty() ? strRoot : strLocal;
+  wxString str = strLocal.empty() ? strRoot : strLocal;
 
   // as we're going to change the name of these keys fairly often and as
   // there are only few of wxRegConfig objects (usually 1), we can allow
@@ -122,7 +122,7 @@ wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
 
   if ( bDoUseGlobal )
   {
-    str = strGlobal.IsEmpty() ? strRoot : strGlobal;
+    str = strGlobal.empty() ? strRoot : strGlobal;
 
     m_keyGlobalRoot.ReserveMemoryForName(MEMORY_PREALLOC);
     m_keyGlobal.ReserveMemoryForName(MEMORY_PREALLOC);
@@ -171,7 +171,7 @@ void wxRegConfig::SetPath(const wxString& strPath)
 
         // because GetPath() returns "" when we're at root, we must understand
         // empty string as "/"
-        if ( strPath.IsEmpty() || (strPath[0] == wxCONFIG_PATH_SEPARATOR) ) {
+        if ( strPath.empty() || (strPath[0] == wxCONFIG_PATH_SEPARATOR) ) {
             // absolute path
             wxSplitPath(aParts, strPath);
         }

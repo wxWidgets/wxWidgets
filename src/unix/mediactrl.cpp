@@ -12,9 +12,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/mediactrl.h"
-
 #if wxUSE_MEDIACTRL
+
+#include "wx/mediactrl.h"
 
 #if wxUSE_GSTREAMER
 
@@ -28,7 +28,10 @@
 #   include <gst/gconf/gconf.h>        // gstreamer glib configuration
 #endif
 
-#include "wx/log.h"                 // wxLogDebug/wxLogSysError/wxLogTrace
+#ifndef  WX_PRECOMP
+    #include "wx/log.h"             // wxLogDebug/wxLogSysError/wxLogTrace
+#endif
+
 #include "wx/app.h"                 // wxTheApp->argc, wxTheApp->argv
 #include "wx/thread.h"              // wxMutex/wxMutexLocker
 #include "wx/timer.h"               // wxTimer
@@ -1033,7 +1036,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
         if(error)
         {
             wxLogSysError(wxT("Could not initialize GStreamer\n")
-                          wxT("Error Message:%s"), 
+                          wxT("Error Message:%s"),
                           (const wxChar*) wxConvUTF8.cMB2WX(error->message)
                          );
             g_error_free(error);
@@ -1051,7 +1054,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 
 #ifdef __WXGTK__
     // We handle our own GTK expose events
-    m_ctrl->m_noExpose = TRUE;
+    m_ctrl->m_noExpose = true;
 #endif
 
     if( !m_ctrl->wxControl::Create(parent, id, pos, size,
@@ -1196,11 +1199,11 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
 
         //Workaround GstURI leading "//" problem and make sure it leads
         //with that
-        return DoLoad(wxString(wxT("file://")) + 
-                      uristring.Right(uristring.Length() - 5)
+        return DoLoad(wxString(wxT("file://")) +
+                      uristring.Right(uristring.length() - 5)
                      );
     }
-    else 
+    else
         return DoLoad(location.BuildURI());
 }
 
@@ -1357,7 +1360,7 @@ wxMediaState wxGStreamerMediaBackend::GetState()
 // NB: whether we have paused or not and keep track of the time after the
 // NB: pause and whenever the user seeks while paused
 // NB:
-// 
+//
 // THREAD-UNSAFE, at least if not paused. Requires media to be at least paused.
 //-----------------------------------------------------------------------------
 wxLongLong wxGStreamerMediaBackend::GetPosition()

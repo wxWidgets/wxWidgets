@@ -30,9 +30,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/log.h"
 #endif
 
-#include  "wx/log.h"
 #include  "wx/settings.h"
 #include  "wx/generic/imaglist.h"
 #include  "wx/dcclient.h"

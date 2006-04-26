@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mgl/timer.cpp
+// Name:        src/generic/timer.cpp
 // Purpose:     wxTimer implementation
 // Author:      Vaclav Slavik
 // Id:          $Id$
@@ -20,11 +20,14 @@
 //     is in wxEventLoop::Dispatch().
 // ----------------------------------------------------------------------------
 
-#include "wx/timer.h"
-
 #if wxUSE_TIMER
 
-#include "wx/log.h"
+#include "wx/timer.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/module.h"
 
 // ----------------------------------------------------------------------------

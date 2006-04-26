@@ -18,13 +18,13 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/arrstr.h"
 #include "wx/utils.h"
 #include "wx/checklst.h"
 #include "wx/settings.h"
-#include "wx/log.h"
 #include "wx/gtk/private.h"
 #include "wx/gtk/treeentry_gtk.h"
 

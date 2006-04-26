@@ -20,11 +20,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/gdicmn.h"
 #include "wx/utils.h"
-#include "wx/log.h"
 #include "wx/memory.h"
 #include "wx/font.h"
 #include "wx/settings.h"

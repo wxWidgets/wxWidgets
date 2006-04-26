@@ -19,11 +19,14 @@
 
 #if wxUSE_MIMETYPE && wxUSE_LIBGNOMEVFS
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/mimetype.h"
 #include "wx/gtk/private.h"
 #include "wx/module.h"
 #include "wx/dynlib.h"
-#include "wx/log.h"
 
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
@@ -62,7 +65,7 @@ public:
         (), (), FALSE )
     wxDL_METHOD_DEFINE( void, gnome_vfs_shutdown,
         (), (), /**/ )
-        
+
     wxDL_METHOD_DEFINE( GnomeVFSResult, gnome_vfs_mime_set_icon,
         (const char *mime_type, const char *filename), (mime_type, filename), GNOME_VFS_OK )
 };
@@ -98,7 +101,7 @@ void wxGnomeVFSLibrary::InitializeMethods()
 
     wxDL_METHOD_LOAD( m_gnome_vfs_lib, gnome_vfs_init, success )
     wxDL_METHOD_LOAD( m_gnome_vfs_lib, gnome_vfs_shutdown, success )
-    
+
     m_ok = true;
 }
 
@@ -125,7 +128,7 @@ bool wxGnomeVFSMimeTypesManagerImpl::DoAssociation(const wxString& strType,
                        const wxString& strDesc)
 {
     int nIndex = AddToMimeData(strType, strIcon, entry, strExtensions, strDesc, true);
-    
+
     if ( nIndex == wxNOT_FOUND )
         return false;
 
@@ -134,7 +137,7 @@ bool wxGnomeVFSMimeTypesManagerImpl::DoAssociation(const wxString& strType,
         // User modificationt to the MIME database
         // are not supported :-)
     }
-        
+
     return false;
 }
 
@@ -168,7 +171,7 @@ void wxGnomeVFSModule::OnExit()
 {
     if (gs_lgvfs->IsOk())
         gs_lgvfs->gnome_vfs_shutdown();
-        
+
     delete gs_lgvfs;
 }
 

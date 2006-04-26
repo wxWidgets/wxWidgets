@@ -24,14 +24,14 @@
   #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/window.h"
-#endif
-
 #if wxUSE_OLE && wxUSE_ACCESSIBILITY
 
-#include "wx/log.h"
 #include "wx/access.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+    #include "wx/log.h"
+#endif
 
 #include "wx/msw/wrapwin.h"
 
@@ -1991,4 +1991,4 @@ wxAccSelectionFlags wxConvertFromWindowsSelFlag(int sel)
 }
 
 
-#endif  //USE_ACCESSIBILITY
+#endif  // wxUSE_OLE && wxUSE_ACCESSIBILITY

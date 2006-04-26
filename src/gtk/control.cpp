@@ -12,8 +12,12 @@
 
 #if wxUSE_CONTROLS
 
-#include "wx/log.h"
 #include "wx/control.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/fontutil.h"
 #include "wx/settings.h"
 #include "wx/gtk/private.h"
@@ -126,7 +130,7 @@ GtkWidget* wxControl::GTKCreateFrame(const wxString& label)
     GtkWidget* framewidget = gtk_frame_new(NULL);
     gtk_frame_set_label_widget(GTK_FRAME(framewidget), labelwidget);
 
-    return framewidget; //note that the label is already set so you'll 
+    return framewidget; //note that the label is already set so you'll
                         //only need to call wxControl::SetLabel afterwards
 }
 
@@ -363,4 +367,3 @@ wxControl::GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromAdj_t widget_new,
 }
 
 #endif // wxUSE_CONTROLS
-

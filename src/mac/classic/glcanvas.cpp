@@ -6,25 +6,26 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_GLCANVAS
 
+#include "wx/glcanvas.h"
+
 #ifndef WX_PRECOMP
-#include "wx/frame.h"
+    #include "wx/frame.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/settings.h"
-#include "wx/log.h"
 
-#include "wx/glcanvas.h"
 #include "wx/mac/uma.h"
 
 // DLL options compatibility check:

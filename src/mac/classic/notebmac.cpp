@@ -23,10 +23,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/app.h"
-#include "wx/log.h"
 #include "wx/imaglist.h"
 #include "wx/image.h"
 #include "wx/mac/uma.h"

@@ -16,10 +16,6 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/hash.h"
-#endif
-
 // ============================================================================
 // declarations
 // ============================================================================
@@ -27,6 +23,13 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
+#include "wx/window.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/hash.h"
+    #include "wx/log.h"
+#endif
 
 #include "wx/menu.h"
 #include "wx/dc.h"
@@ -45,7 +48,6 @@
 #include "wx/scrolbar.h"
 #include "wx/module.h"
 #include "wx/menuitem.h"
-#include "wx/log.h"
 #include "wx/fontutil.h"
 #include "wx/univ/renderer.h"
 

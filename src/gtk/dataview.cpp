@@ -16,12 +16,15 @@
 
 #ifndef wxUSE_GENERICDATAVIEWCTRL
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/stockitem.h"
 #include "wx/dcclient.h"
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
 #include "wx/sizer.h"
-#include "wx/log.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
@@ -1349,17 +1352,17 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell,
     GtkTreeViewColumn *column = gtk_tree_view_column_new();
 
     gtk_tree_view_column_set_title( column, wxGTK_CONV(title) );
-    
+
     if (sizing == wxDATAVIEW_COL_WIDTH_FIXED)
         gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_FIXED );
     else if (sizing == wxDATAVIEW_COL_WIDTH_GROW)
         gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_GROW_ONLY );
     else
         gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_AUTOSIZE );
-        
+
     if (fixed_width > 0)
         gtk_tree_view_column_set_fixed_width( column, fixed_width );
-    
+
     gtk_tree_view_column_pack_start( column, renderer, TRUE );
 
     gtk_tree_view_column_set_cell_data_func( column, renderer,

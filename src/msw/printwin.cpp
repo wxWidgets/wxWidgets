@@ -36,12 +36,12 @@
     #include "wx/app.h"
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/msw/printwin.h"
 #include "wx/dcprint.h"
 #include "wx/printdlg.h"
-#include "wx/log.h"
 #include "wx/msw/private.h"
 
 #include <stdlib.h>

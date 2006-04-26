@@ -20,11 +20,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/gdicmn.h"
 #include "wx/utils.h"
-#include "wx/log.h"
 #include "wx/memory.h"
 #include "wx/font.h"
 #include "wx/settings.h"
@@ -257,7 +257,7 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 #if wxUSE_THREADS
         wxMutexLocker lock(gs_idleTagsMutex);
 #endif
-        g_isIdle = TRUE;
+        g_isIdle = true;
         wxTheApp->m_idleTag = 0;
     }
 
@@ -348,7 +348,7 @@ static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
     gdk_threads_enter();
 
     wxMutexGuiLeave();
-    g_mainThreadLocked = TRUE;
+    g_mainThreadLocked = true;
 
     // we rely on the fact that glib GPollFD struct is really just pollfd but
     // I wonder how wise is this in the long term (VZ)
@@ -428,7 +428,7 @@ wxApp::wxApp()
 #endif // __WXDEBUG__
 
     m_idleTag = 0;
-    g_isIdle = TRUE;
+    g_isIdle = true;
     wxapp_install_idle_handler();
 
 #if wxUSE_THREADS
@@ -664,7 +664,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         return false;
     }
 
-    wxSetDetectableAutoRepeat( TRUE );
+    wxSetDetectableAutoRepeat( true );
 
 #if wxUSE_INTL
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
@@ -702,6 +702,6 @@ void wxApp::RemoveIdleTag()
     {
         g_source_remove( wxTheApp->m_idleTag );
         wxTheApp->m_idleTag = 0;
-        g_isIdle = TRUE;
+        g_isIdle = true;
     }
 }

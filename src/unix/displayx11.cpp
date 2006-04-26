@@ -34,10 +34,10 @@
     #include "wx/string.h"
     #include "wx/utils.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif /* WX_PRECOMP */
 
 #include "wx/display_impl.h"
-#include "wx/log.h"
 
 /* These must be included after the wx files.  Otherwise the Data macro in
  * Xlibint.h conflicts with a function declaration in wx/list.h.  */

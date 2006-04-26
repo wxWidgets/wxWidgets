@@ -12,9 +12,12 @@
 
 #if wxUSE_POPUPWIN
 
-#include "wx/log.h"
-
 #include "wx/popupwin.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/settings.h"
 

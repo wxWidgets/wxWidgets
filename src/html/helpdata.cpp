@@ -31,7 +31,6 @@
 #include "wx/busyinfo.h"
 #include "wx/encconv.h"
 #include "wx/fontmap.h"
-#include "wx/log.h"
 #include "wx/html/htmlpars.h"
 #include "wx/html/htmldefs.h"
 #include "wx/html/htmlfilt.h"

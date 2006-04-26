@@ -25,9 +25,9 @@
     #include "wx/app.h"
     #include "wx/math.h"
     #include "wx/string.h"
+    #include "wx/log.h"
 #endif
 
-#include "wx/log.h"
 #include "wx/window.h"
 #include "wx/os2/private.h"
 

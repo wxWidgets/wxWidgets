@@ -12,10 +12,12 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/utils.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif  //WX_PRECOMP
 
 #include "wx/os2/private.h"
@@ -26,7 +28,6 @@
 #include <dirent.h>
 #endif
 
-#include "wx/log.h"
 
 #include <io.h>
 
@@ -135,19 +136,17 @@ int wxKill(long         lPid,
 //
 // Execute a program in an Interactive Shell
 //
-bool wxShell(
-  const wxString&                   rCommand
-)
+bool wxShell( const wxString& rCommand )
 {
-    wxChar*                         zShell = _T("CMD.EXE");
-    wxString                        sInputs;
-    STARTDATA                       SData = {0};
-    PSZ                             PgmTitle = "Command Shell";
-    APIRET                          rc;
-    PID                             vPid = 0;
-    ULONG                           ulSessID = 0;
-    UCHAR                           achObjBuf[256] = {0}; //error data if DosStart fails
-    RESULTCODES                     vResult;
+    wxChar*     zShell = _T("CMD.EXE");
+    wxString    sInputs;
+    STARTDATA   SData = {0};
+    PSZ         PgmTitle = "Command Shell";
+    APIRET      rc;
+    PID         vPid = 0;
+    ULONG       ulSessID = 0;
+    UCHAR       achObjBuf[256] = {0}; //error data if DosStart fails
+    RESULTCODES vResult;
 
     SData.Length   = sizeof(STARTDATA);
     SData.Related  = SSF_RELATED_INDEPENDENT;

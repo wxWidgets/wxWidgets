@@ -19,9 +19,11 @@
 
 #include "wx/colour.h"
 
-#include "wx/gdicmn.h"
-#include "wx/log.h"
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
 
+#include "wx/gdicmn.h"
 
 
 // ============================================================================

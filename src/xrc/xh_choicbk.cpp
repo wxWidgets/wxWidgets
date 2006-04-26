@@ -19,7 +19,10 @@
 
 #include "wx/xrc/xh_choicbk.h"
 
-#include "wx/log.h"
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/choicebk.h"
 #include "wx/imaglist.h"
 #include "wx/sizer.h"

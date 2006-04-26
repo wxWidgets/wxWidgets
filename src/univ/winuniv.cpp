@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        univ/window.cpp
+// Name:        src/univ/window.cpp
 // Purpose:     implementation of extra wxWindow methods for wxUniv port
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -24,18 +24,19 @@
     #pragma hdrstop
 #endif
 
+#include "wx/window.h"
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/window.h"
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/event.h"
     #include "wx/scrolbar.h"
     #include "wx/menu.h"
     #include "wx/frame.h"
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
-#include "wx/log.h"
 #include "wx/univ/colschem.h"
 #include "wx/univ/renderer.h"
 #include "wx/univ/theme.h"
@@ -1364,4 +1365,3 @@ WXLRESULT wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
 }
 
 #endif // __WXMSW__
-

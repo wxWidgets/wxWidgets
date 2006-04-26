@@ -18,8 +18,11 @@
 
 #if wxUSE_CHECKLISTBOX && wxUSE_OWNER_DRAWN
 
+#include "wx/checklst.h"
+
 #ifndef WX_PRECOMP
     #include "wx/object.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/colour.h"
@@ -31,8 +34,6 @@
 #include "wx/settings.h"
 #include "wx/dcmemory.h"
 #include "wx/dcscreen.h"
-#include "wx/checklst.h"
-#include "wx/log.h"
 
 #define INCL_PM
 #include <os2.h>

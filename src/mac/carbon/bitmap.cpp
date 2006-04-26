@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bitmap.cpp
+// Name:        src/mac/carbon/bitmap.cpp
 // Purpose:     wxBitmap
 // Author:      Stefan Csomor
 // Modified by:
@@ -12,8 +12,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/bitmap.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/icon.h"
-#include "wx/log.h"
 #include "wx/image.h"
 #include "wx/metafile.h"
 #include "wx/xpmdecod.h"

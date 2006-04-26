@@ -21,6 +21,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #ifndef __WXWINCE__
@@ -33,7 +34,6 @@
 #include "wx/wfstream.h"
 #include "wx/filesys.h"
 #include "wx/filename.h"
-#include "wx/log.h"
 #include "wx/tokenzr.h"
 #include "wx/fontenum.h"
 #include "wx/module.h"

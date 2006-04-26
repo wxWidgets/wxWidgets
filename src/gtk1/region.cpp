@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/region.cpp
+// Name:        src/gtk1/region.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Modified:    VZ at 05.10.00: use AllocExclusive(), comparison fixed
@@ -20,7 +20,11 @@
 #include "wx/wxprec.h"
 
 #include "wx/region.h"
-#include "wx/log.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/gtk1/private.h"
 
 
@@ -568,4 +572,3 @@ wxRect wxRegionIterator::GetRect() const
 
     return r;
 }
-

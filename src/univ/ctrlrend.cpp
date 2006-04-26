@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        univ/ctrlrend.cpp
+// Name:        src/univ/ctrlrend.cpp
 // Purpose:     wxControlRenderer implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -31,17 +31,17 @@
     #include "wx/listbox.h"
     #include "wx/scrolbar.h"
     #include "wx/dc.h"
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #include "wx/image.h"
-#include "wx/log.h"
 
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
 #include "wx/univ/colschem.h"
 
 #if wxUSE_GAUGE
-#include "wx/gauge.h"
+    #include "wx/gauge.h"
 #endif
 
 // ============================================================================

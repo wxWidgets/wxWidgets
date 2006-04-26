@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        log.cpp
+// Name:        src/common/log.cpp
 // Purpose:     Assorted wxLogXXX functions, and wxLog (sink for logs)
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -28,6 +28,7 @@
 
 // wxWidgets
 #ifndef WX_PRECOMP
+    #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/arrstr.h"
     #include "wx/intl.h"
@@ -36,7 +37,6 @@
 
 #include "wx/apptrait.h"
 #include "wx/file.h"
-#include "wx/log.h"
 #include "wx/msgout.h"
 #include "wx/textfile.h"
 #include "wx/thread.h"
@@ -833,4 +833,3 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
 }
 
 #endif // wxUSE_LOG
-

@@ -34,13 +34,13 @@
     #include "wx/app.h"
     #include "wx/panel.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
 #endif
 
-#include "wx/log.h"
 #include "wx/sysopt.h"
 #include "wx/mgl/private.h"
 #include "wx/dcscreen.h"

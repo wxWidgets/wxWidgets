@@ -32,9 +32,9 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/string.h"
+    #include "wx/log.h"
 #endif
 
-#include "wx/log.h"
 #include "wx/mac/corefoundation/cfstring.h"
 
 #include "wx/utils.h"

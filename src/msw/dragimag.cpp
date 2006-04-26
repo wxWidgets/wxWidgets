@@ -34,10 +34,10 @@
     #include "wx/dcmemory.h"
     #include "wx/settings.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/msw/private.h"
-#include "wx/log.h"
 #include "wx/frame.h"
 #include "wx/image.h"
 

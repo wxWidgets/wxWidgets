@@ -20,8 +20,11 @@
 // With Borland C++, all samples crash if this is compiled in.
 #if wxUSE_OLE && !(defined(__BORLANDC__) && (__BORLANDC__ < 0x520)) && !defined(__CYGWIN10__)
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #define _FORCENAMELESSUNION
-#include "wx/log.h"
 #include "wx/msw/private.h"
 #include "wx/msw/ole/oleutils.h"
 #include "wx/msw/ole/automtn.h"
@@ -88,7 +91,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     {
         // Use dot notation to get the next object
         wxString member2(nonConstMember.Left((size_t) ch));
-        wxString rest(nonConstMember.Right(nonConstMember.Length() - ch - 1));
+        wxString rest(nonConstMember.Right(nonConstMember.length() - ch - 1));
         wxAutomationObject obj;
         if (!GetObject(obj, member2))
             return false;

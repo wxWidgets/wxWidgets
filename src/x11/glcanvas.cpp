@@ -20,9 +20,13 @@
 #if wxUSE_GLCANVAS
 
 #include "wx/glcanvas.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/utils.h"
 #include "wx/app.h"
-#include "wx/log.h"
 
 #ifdef __VMS
 # pragma message disable nosimpint

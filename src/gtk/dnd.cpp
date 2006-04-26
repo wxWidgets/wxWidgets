@@ -16,12 +16,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/gdicmn.h"
-#include "wx/log.h"
 #include "wx/utils.h"
 
 #include "wx/gtk/private.h"

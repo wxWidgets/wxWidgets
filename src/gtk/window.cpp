@@ -18,6 +18,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/dcclient.h"
@@ -52,7 +53,6 @@
 #include "wx/menu.h"
 #include "wx/statusbr.h"
 #include "wx/settings.h"
-#include "wx/log.h"
 #include "wx/fontutil.h"
 
 #ifdef __WXDEBUG__

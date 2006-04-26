@@ -24,8 +24,9 @@
     #pragma hdrstop
 #endif
 
+#include "wx/dialog.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/dialog.h"
     #include "wx/utils.h"
     #include "wx/frame.h"
     #include "wx/app.h"
@@ -34,7 +35,6 @@
     #include "wx/log.h"
 #endif
 
-#include "wx/log.h"
 #include "wx/evtloop.h"
 #include "wx/ptr_scpd.h"
 

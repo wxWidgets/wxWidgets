@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_unkwn.cpp
+// Name:        src/xrc/xh_unkwn.cpp
 // Purpose:     XRC resource for unknown widget
 // Author:      Vaclav Slavik
 // Created:     2000/09/09
@@ -18,8 +18,12 @@
 #if wxUSE_XRC
 
 #include "wx/xrc/xh_unkwn.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/window.h"
-#include "wx/log.h"
 #include "wx/sizer.h"
 #include "wx/panel.h"
 

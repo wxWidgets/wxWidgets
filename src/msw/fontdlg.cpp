@@ -29,13 +29,13 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dialog.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/fontdlg.h"
 #include "wx/msw/wrapcdlg.h"
 
 #include "wx/cmndata.h"
-#include "wx/log.h"
 #include "wx/math.h"
 
 #include <stdlib.h>

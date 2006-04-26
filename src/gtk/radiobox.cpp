@@ -14,9 +14,12 @@
 
 #include "wx/radiobox.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/dialog.h"
 #include "wx/frame.h"
-#include "wx/log.h"
 
 #include "wx/gtk/private.h"
 #include <gdk/gdkkeysyms.h>

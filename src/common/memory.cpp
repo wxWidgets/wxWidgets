@@ -18,17 +18,19 @@
 
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
+#include "wx/memory.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/hash.h"
+    #include "wx/log.h"
 #endif
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
 #endif
 
-#include "wx/log.h"
 #include <stdlib.h>
 
 #include "wx/ioswrap.h"
@@ -53,8 +55,6 @@
 #endif
 
 #endif
-
-#include "wx/memory.h"
 
 #if wxUSE_THREADS && defined(__WXDEBUG__)
 #define USE_THREADSAFE_MEMORY_ALLOCATION 1

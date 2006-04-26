@@ -11,8 +11,13 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/menu.h"
 #include "wx/window.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
+#include "wx/menu.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
 #include "wx/utils.h"
@@ -33,7 +38,6 @@
 #include "wx/statusbr.h"
 #include "wx/menuitem.h"
 #include "wx/spinctrl.h"
-#include "wx/log.h"
 #include "wx/geometry.h"
 
 #if wxUSE_CARET

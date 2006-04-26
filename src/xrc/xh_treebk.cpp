@@ -19,9 +19,12 @@
 
 #include "wx/xrc/xh_treebk.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/treebook.h"
 #include "wx/imaglist.h"
-#include "wx/log.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxTreebookXmlHandler, wxXmlResourceHandler)
 

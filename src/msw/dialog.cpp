@@ -36,7 +36,6 @@
 #endif
 
 #include "wx/msw/private.h"
-#include "wx/log.h"
 #include "wx/evtloop.h"
 #include "wx/ptr_scpd.h"
 

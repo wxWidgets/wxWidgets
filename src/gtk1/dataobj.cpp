@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dataobj.cpp
+// Name:        src/gtk1/dataobj.cpp
 // Purpose:     wxDataObject class
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -10,15 +10,18 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_DATAOBJ
+
 #include "wx/dataobj.h"
 
-#if wxUSE_DATAOBJ
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
 
 #include "wx/app.h"
 #include "wx/debug.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
-#include "wx/log.h"
 #include "wx/uri.h"
 
 #include <gdk/gdk.h>

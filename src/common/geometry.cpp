@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/geometry.cpp
+// Name:        src/common/geometry.cpp
 // Purpose:     Common Geometry Classes
 // Author:      Stefan Csomor
 // Modified by:
@@ -12,17 +12,20 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_GEOMETRY
 
-#include "wx/log.h"
+#include "wx/geometry.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include <string.h>
 
-#include "wx/geometry.h"
 #include "wx/datstrm.h"
 
 //

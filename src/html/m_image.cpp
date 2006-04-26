@@ -21,6 +21,7 @@
     #include "wx/scrolwin.h"
     #include "wx/timer.h"
     #include "wx/dcmemory.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/html/forcelnk.h"
@@ -29,7 +30,6 @@
 
 #include "wx/image.h"
 #include "wx/gifdecod.h"
-#include "wx/log.h"
 #include "wx/artprov.h"
 #include "wx/math.h"
 

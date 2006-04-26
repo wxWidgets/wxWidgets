@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        menu.cpp
+// Name:        src/mac/carbon/menu.cpp
 // Purpose:     wxMenu, wxMenuBar, wxMenuItem
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -18,8 +18,13 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/app.h"
 #include "wx/menu.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
+#include "wx/app.h"
 #include "wx/menuitem.h"
 #include "wx/window.h"
 #include "wx/log.h"
@@ -198,7 +203,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 UMAInsertMenuItem(MAC_WXHMENU(m_hMenu), wxT("a"), wxFont::GetDefaultEncoding(), pos);
                 pos += 1 ;
             }
-            
+
             SetMenuItemCommandID( MAC_WXHMENU(m_hMenu) , pos , wxIdToMacCommand ( pItem->GetId() ) ) ;
             SetMenuItemRefCon( MAC_WXHMENU(m_hMenu) , pos , (UInt32) pItem ) ;
             pItem->UpdateItemText() ;

@@ -14,9 +14,10 @@
 
 #if wxUSE_LISTBOX
 
+#include "wx/listbox.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
-    #include "wx/listbox.h"
     #include "wx/settings.h"
     #include "wx/brush.h"
     #include "wx/font.h"
@@ -24,6 +25,7 @@
     #include "wx/dcscreen.h"
     #include "wx/utils.h"
     #include "wx/scrolwin.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/window.h"
@@ -31,8 +33,6 @@
 
 #define INCL_M
 #include <os2.h>
-
-#include "wx/log.h"
 
 #if wxUSE_OWNER_DRAWN
     #include  "wx/ownerdrw.h"

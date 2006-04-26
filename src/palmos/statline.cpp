@@ -24,12 +24,15 @@
     #pragma hdrstop
 #endif
 
-#include "wx/statline.h"
-
 #if wxUSE_STATLINE
 
+#include "wx/statline.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/palmos/private.h"
-#include "wx/log.h"
 
 #ifndef SS_SUNKEN
     #define SS_SUNKEN 0x00001000L
@@ -119,4 +122,3 @@ WXDWORD wxStaticLine::MSWGetStyle(long style, WXDWORD *exstyle) const
 }
 
 #endif // wxUSE_STATLINE
-

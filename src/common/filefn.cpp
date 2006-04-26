@@ -26,6 +26,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/utils.h"
@@ -51,8 +52,6 @@
 #if defined(__WXMAC__)
     #include  "wx/mac/private.h"  // includes mac headers
 #endif
-
-#include "wx/log.h"
 
 #ifdef __WINDOWS__
     #include "wx/msw/private.h"

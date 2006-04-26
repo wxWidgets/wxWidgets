@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        threadsgi.cpp
+// Name:        src/gtk1/threadsgi.cpp
 // Purpose:     wxThread (SGI) Implementation
 // Author:      Original from Wolfram Gloger/Guilhem Lavaux
 // Modified by:
@@ -13,6 +13,11 @@
 #include "wx/wxprec.h"
 
 #include "wx/thread.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include <stdio.h>
 #include <unistd.h>
 
@@ -21,7 +26,6 @@
 #include <sys/prctl.h>
 #include "wx/module.h"
 #include "wx/utils.h"
-#include "wx/log.h"
 
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"

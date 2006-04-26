@@ -6,7 +6,7 @@
 // Created:     2006-04-13
 // Id:          $Id$
 // Copyright:   (c) Julian Smart, Robert Roebling, Vadim Zeitlin,
-//              SciTech Software, Inc. 
+//              SciTech Software, Inc.
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -28,15 +28,16 @@
 // Currently, only for Mac as a toolbar replacement.
 #if defined(__WXMAC__) && wxUSE_TOOLBAR && wxUSE_BMPBUTTON
 
+#include "wx/generic/buttonbar.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
+    #include "wx/log.h"
 #endif
 
-#include "wx/generic/buttonbar.h"
 #include "wx/frame.h"
 #include "wx/image.h"
-#include "wx/log.h"
 #include "wx/settings.h"
 #include "wx/dcclient.h"
 
@@ -62,7 +63,7 @@ public:
         m_x = m_y = wxDefaultCoord;
         m_width =
         m_height = 0;
-        
+
         m_button = NULL;
     }
 
@@ -118,7 +119,7 @@ void wxButtonToolBar::Init()
 
     m_labelMargin = 2;
     m_labelHeight = 0;
-    
+
     SetMargins(8, 2);
     SetToolPacking(8);
 }
@@ -347,10 +348,10 @@ bool wxButtonToolBar::Realize()
 {
     if ( !wxToolBarBase::Realize() )
         return false;
-    
+
     m_needsLayout = true;
     DoLayout();
-    
+
     SetBestSize(wxSize(m_maxWidth, m_maxHeight));
 
     return true;
@@ -378,7 +379,7 @@ void wxButtonToolBar::DoLayout()
 
         tool->m_x = x;
         tool->m_y = y;
-        
+
         if (tool->IsButton())
         {
             if (!tool->GetButton())
@@ -387,14 +388,14 @@ void wxButtonToolBar::DoLayout()
                                                                wxBU_AUTODRAW|wxBORDER_NONE);
                 if (!tool->GetShortHelp().IsEmpty())
                     bmpButton->SetLabel(tool->GetShortHelp());
-                
+
                 tool->SetButton(bmpButton);
             }
             else
             {
                 tool->GetButton()->Move(wxPoint(tool->m_x, tool->m_y));
             }
-            
+
             int w = widthTool;
             if (tool->GetButton())
             {
@@ -553,4 +554,3 @@ void wxButtonToolBar::OnLeftUp(wxMouseEvent& event)
 }
 
 #endif // wxUSE_TOOLBAR && wxUSE_BMPBUTTON
-

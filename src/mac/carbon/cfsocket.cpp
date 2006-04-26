@@ -23,6 +23,7 @@
     #include "wx/object.h"
     #include "wx/string.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/app.h"
@@ -30,7 +31,6 @@
 #include "wx/timer.h"
 #include "wx/utils.h"
 #include "wx/module.h"
-#include "wx/log.h"
 #include "wx/event.h"
 
 #include "wx/sckaddr.h"

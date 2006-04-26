@@ -47,7 +47,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 // disable "cast truncates constant value" for VARIANT_BOOL values
@@ -56,20 +56,14 @@
 #pragma warning (disable:4310)
 #endif
 
-//---------------------------------------------------------------------------
-// MediaCtrl include
-//---------------------------------------------------------------------------
-#include "wx/mediactrl.h"
-
-//---------------------------------------------------------------------------
-// Compilation guard
-//---------------------------------------------------------------------------
 #if wxUSE_MEDIACTRL
 
-//---------------------------------------------------------------------------
-// WX Includes
-//---------------------------------------------------------------------------
-#include "wx/log.h"         // wxLogDebug
+#include "wx/mediactrl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/math.h"        // log10 & pow
 #include "wx/msw/private.h" // user info and wndproc setting/getting
 #include "wx/dcclient.h"
@@ -2263,7 +2257,4 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
 #include "wx/html/forcelnk.h"
 FORCE_LINK_ME(wxmediabackend_am)
 
-//---------------------------------------------------------------------------
-//  End wxMediaCtrl Compilation Guard and this file
-//---------------------------------------------------------------------------
 #endif // wxUSE_MEDIACTRL

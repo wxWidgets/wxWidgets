@@ -11,8 +11,13 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/menu.h"
 #include "wx/window.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
+#include "wx/menu.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
 #include "wx/utils.h"
@@ -30,7 +35,6 @@
 #include "wx/statusbr.h"
 #include "wx/menuitem.h"
 #include "wx/spinctrl.h"
-#include "wx/log.h"
 #include "wx/geometry.h"
 #include "wx/textctrl.h"
 
@@ -514,7 +518,7 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
 
         uniChars = new wchar_t[ numChars ] ;
         GetEventParameter( event, kEventParamTextInputSendText, typeUnicodeText, NULL, dataSize , NULL , charBuf ) ;
-		charBuf[ numChars - 1 ] = 0;
+        charBuf[ numChars - 1 ] = 0;
 #if SIZEOF_WCHAR_T == 2
         uniChars = (wchar_t*) charBuf ;
         memcpy( uniChars , charBuf , numChars * 2 ) ;

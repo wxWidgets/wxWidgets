@@ -1,22 +1,28 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.cpp
+// Name:        src/mac/classic/dc.cpp
 // Purpose:     wxDC class
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/wxprec.h"
+
 #include "wx/dc.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/mac/uma.h"
 #include "wx/dcmemory.h"
 #include "wx/dcprint.h"
 #include "wx/region.h"
 #include "wx/image.h"
-#include "wx/log.h"
 
 #if __MSL__ >= 0x6000
 namespace std {}
@@ -1349,7 +1355,7 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
         return;
     }
 
-    if ( str.Length() == 0 )
+    if ( str.length() == 0 )
         return ;
 
     wxMacFastPortSetter helper(this) ;
@@ -1363,9 +1369,9 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     }
     OSStatus status = noErr ;
     ATSUTextLayout atsuLayout ;
-    UniCharCount chars = str.Length() ;
+    UniCharCount chars = str.length() ;
 #if wxUSE_UNICODE
-    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) (const wxChar*) str , 0 , str.Length() , str.Length() , 1 ,
+    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) (const wxChar*) str , 0 , str.length() , str.length() , 1 ,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 #else
     wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
@@ -1454,7 +1460,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
     {
         ::TextMode( srcCopy ) ;
     }
-    int length = strtext.Length() ;
+    int length = strtext.length() ;
 
     int laststop = 0 ;
     int i = 0 ;
@@ -1604,7 +1610,7 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
         *descent =YDEV2LOGREL( fi.descent );
     if ( externalLeading )
         *externalLeading = YDEV2LOGREL( fi.leading ) ;
-    int length = strtext.Length() ;
+    int length = strtext.length() ;
 
     int laststop = 0 ;
     int i = 0 ;
@@ -1687,9 +1693,9 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
     wxCHECK_MSG(Ok(), false, wxT("Invalid DC"));
 
     widths.Empty();
-    widths.Add(0, text.Length());
+    widths.Add(0, text.length());
 
-    if (text.Length() == 0)
+    if (text.length() == 0)
         return false;
 
     wxMacFastPortSetter helper(this) ;
@@ -1706,7 +1712,7 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
         // fonts, please change it.  Currently it is measuring from the
         // begining of the string for each succeding substring, which is much
         // slower than this should be.
-        for (size_t i=0; i<text.Length(); i++)
+        for (size_t i=0; i<text.length(); i++)
         {
             wxString str(text.Left(i+1));
             Point bounds = {0,0};
@@ -1732,7 +1738,7 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
         // Copy to widths, starting at measurements[1]
         // NOTE: this doesn't take into account any multi-byte characters
         // in buff, it probabkly should...
-        for (size_t i=0; i<text.Length(); i++)
+        for (size_t i=0; i<text.length(); i++)
             widths[i] = XDEV2LOGREL(measurements[i+1]);
 
         delete [] measurements;

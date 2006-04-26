@@ -19,6 +19,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/window.h"
@@ -34,7 +35,6 @@
 #include "wx/dc.h"
 #include "wx/dialog.h"
 #include "wx/msgdlg.h"
-#include "wx/log.h"
 #include "wx/module.h"
 #include "wx/memory.h"
 #include "wx/tooltip.h"

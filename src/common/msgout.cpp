@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/msgout.cpp
+// Name:        src/common/msgout.cpp
 // Purpose:     wxMessageOutput implementation
 // Author:      Mattia Barbon
 // Modified by:
@@ -29,6 +29,7 @@
     #include "wx/ffile.h"
     #include "wx/app.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
     #if wxUSE_GUI
         #include "wx/msgdlg.h"
     #endif // wxUSE_GUI
@@ -36,8 +37,6 @@
 
 #include "wx/msgout.h"
 #include "wx/apptrait.h"
-#include "wx/log.h"
-
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -221,4 +220,3 @@ void wxMessageOutputMessageBox::Printf(const wxChar* format, ...)
 }
 
 #endif // wxUSE_GUI
-

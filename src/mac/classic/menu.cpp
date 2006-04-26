@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        menu.cpp
+// Name:        src/mac/classic/menu.cpp
 // Purpose:     wxMenu, wxMenuBar, wxMenuItem
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -16,11 +16,17 @@
 // wxWidgets headers
 // -----------------
 
-#include "wx/app.h"
+#include "wx/wxprec.h"
+
 #include "wx/menu.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
+#include "wx/app.h"
 #include "wx/menuitem.h"
 #include "wx/window.h"
-#include "wx/log.h"
 #include "wx/utils.h"
 #include "wx/frame.h"
 
@@ -71,7 +77,7 @@ void wxMenu::Init()
     }
 
     // if we have a title, insert it in the beginning of the menu
-    if ( !!m_title )
+    if ( !m_title.empty() )
     {
         Append(idMenuTitle, m_title) ;
         AppendSeparator() ;
@@ -870,5 +876,3 @@ wxMenuItem *wxMenuBar::FindItem(int id, wxMenu **itemMenu) const
 
     return item;
 }
-
-

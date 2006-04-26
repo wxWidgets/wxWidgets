@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////
-// File:        taskbar.cpp
+// File:        src/gtk/taskbar.cpp
 // Purpose:     wxTaskBarIcon (src/unix/taskbarx11.cpp) helper for GTK2
 // Author:      Vaclav Slavik
 // Modified by:
@@ -13,7 +13,11 @@
 #include "wx/wxprec.h"
 
 #include "wx/gtk/taskbarpriv.h"
-#include "wx/log.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/frame.h"
 #include "wx/menu.h"
 

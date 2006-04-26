@@ -20,8 +20,13 @@
 #pragma hdrstop
 #endif
 
-#include "wx/event.h"
 #include "wx/gdicmn.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
+#include "wx/event.h"
 #include "wx/brush.h"
 #include "wx/pen.h"
 #include "wx/bitmap.h"
@@ -35,7 +40,6 @@
 #include "wx/settings.h"
 #include "wx/hashmap.h"
 
-#include "wx/log.h"
 #include <string.h>
 
 #ifdef __WXMOTIF__

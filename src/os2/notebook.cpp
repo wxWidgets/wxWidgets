@@ -14,19 +14,20 @@
 
 #if wxUSE_NOTEBOOK
 
+#include  "wx/notebook.h"
+
 // wxWidgets
 #ifndef WX_PRECOMP
-  #include "wx/app.h"
-  #include "wx/dcclient.h"
-  #include "wx/string.h"
-  #include "wx/settings.h"
+    #include "wx/app.h"
+    #include "wx/dcclient.h"
+    #include "wx/string.h"
+    #include "wx/settings.h"
+    #include  "wx/log.h"
 #endif  // WX_PRECOMP
 
-#include  "wx/log.h"
 #include  "wx/imaglist.h"
 #include  "wx/event.h"
 #include  "wx/control.h"
-#include  "wx/notebook.h"
 
 #include  "wx/os2/private.h"
 

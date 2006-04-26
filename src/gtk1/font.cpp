@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/font.cpp
+// Name:        src/gtk/font.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -19,10 +19,14 @@
 #include "wx/wxprec.h"
 
 #include "wx/font.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/fontutil.h"
 #include "wx/cmndata.h"
 #include "wx/utils.h"
-#include "wx/log.h"
 #include "wx/gdicmn.h"
 #include "wx/tokenzr.h"
 #include "wx/settings.h"
@@ -546,7 +550,7 @@ int wxFont::GetPointSize() const
 
 wxString wxFont::GetFaceName() const
 {
-    wxCHECK_MSG( Ok(), wxT(""), wxT("invalid font") );
+    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
 
 #if wxUSE_PANGO
     return M_FONTDATA->HasNativeFont() ? M_FONTDATA->m_nativeFontInfo.GetFaceName()

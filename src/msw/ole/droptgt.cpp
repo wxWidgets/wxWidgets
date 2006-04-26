@@ -21,13 +21,16 @@
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/msw/private.h"
-#include "wx/log.h"
 
 #ifdef __WXWINCE__
     #include <winreg.h>
@@ -544,5 +547,4 @@ static DWORD ConvertDragResultToEffect(wxDragResult result)
     }
 }
 
-#endif
- // wxUSE_DRAG_AND_DROP
+#endif // wxUSE_OLE && wxUSE_DRAG_AND_DROP

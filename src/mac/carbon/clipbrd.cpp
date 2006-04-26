@@ -18,6 +18,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/app.h"
@@ -25,7 +26,6 @@
 #include "wx/bitmap.h"
 #include "wx/utils.h"
 #include "wx/metafile.h"
-#include "wx/log.h"
 
 #ifndef __DARWIN__
 #include <Scrap.h>

@@ -22,10 +22,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/utils.h"
-#include "wx/log.h"
 
 // normally, the compiler options should contain -I../zlib, but it is
 // apparently not the case for all MSW makefiles and so, unless we use

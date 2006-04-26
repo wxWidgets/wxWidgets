@@ -1,16 +1,22 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        utilsexec.cpp
+// Name:        src/mac/classic/utilsexec.cpp
 // Purpose:     Execution-related utilities
 // Author:      Stefan Csomor
 // Modified by: David Elliott
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/log.h"
+#include "wx/wxprec.h"
+
 #include "wx/utils.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #ifdef __DARWIN__
 #include "wx/unix/execute.h"
 #include <unistd.h>
@@ -133,20 +139,20 @@ long wxExecute(const wxString& command, int flags, wxProcess *WXUNUSED(handler))
 #ifdef __DARWIN__
 void wxMAC_MachPortEndProcessDetect(CFMachPortRef port, void *data)
 {
-	wxEndProcessData *proc_data = (wxEndProcessData*)data;
-	wxLogDebug(wxT("Wow.. this actually worked!"));
-	int status = 0;
-	int rc = waitpid(abs(proc_data->pid), &status, WNOHANG);
-	if(!rc)
-	{
-		wxLogDebug(wxT("Mach port was invalidated, but process hasn't terminated!"));
-		return;
-	}
-	if((rc != -1) && WIFEXITED(status))
-		proc_data->exitcode = WEXITSTATUS(status);
-	else
-		proc_data->exitcode = -1;
-	wxHandleProcessTermination(proc_data);
+    wxEndProcessData *proc_data = (wxEndProcessData*)data;
+    wxLogDebug(wxT("Wow.. this actually worked!"));
+    int status = 0;
+    int rc = waitpid(abs(proc_data->pid), &status, WNOHANG);
+    if(!rc)
+    {
+        wxLogDebug(wxT("Mach port was invalidated, but process hasn't terminated!"));
+        return;
+    }
+    if((rc != -1) && WIFEXITED(status))
+        proc_data->exitcode = WEXITSTATUS(status);
+    else
+        proc_data->exitcode = -1;
+    wxHandleProcessTermination(proc_data);
 }
 
 int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
@@ -208,7 +214,7 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
         wxLogDebug(wxT("Couldn't create runloopsource"));
         return -1;
     }
-    
+
     CFRelease(CFMachPortForProcess);
 
     CFRunLoopAddSource(CFRunLoopGetCurrent(),runloopsource,kCFRunLoopDefaultMode);

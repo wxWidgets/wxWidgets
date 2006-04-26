@@ -27,17 +27,18 @@
 
 #if wxUSE_TOOLBAR
 
+#include "wx/toolbar.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/univ/renderer.h"
 
 #include "wx/frame.h"
-#include "wx/toolbar.h"
 #include "wx/image.h"
-#include "wx/log.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -649,14 +650,14 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
         PerformAction( wxACTION_BUTTON_RELEASE, numArg );
 
         PerformAction( wxACTION_BUTTON_CLICK, numArg );
-                        
-        // Write by Danny Raynor to change state again.                
+
+        // Write by Danny Raynor to change state again.
         // Check button still pressed or not
         if( tool->IsInverted() )
-        {        
-            PerformAction( wxACTION_TOOLBAR_RELEASE, numArg );      
+        {
+            PerformAction( wxACTION_TOOLBAR_RELEASE, numArg );
         }
-    
+
         // Set mouse leave toolbar button range (If still in the range,
         // toolbar button would get focus again
         PerformAction( wxACTION_TOOLBAR_LEAVE, numArg );
@@ -882,4 +883,3 @@ bool wxStdToolbarInputHandler::HandleActivation(wxInputConsumer *consumer,
 }
 
 #endif // wxUSE_TOOLBAR
-

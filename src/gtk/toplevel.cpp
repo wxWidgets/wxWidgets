@@ -23,7 +23,11 @@
 #endif
 
 #include "wx/toplevel.h"
-#include "wx/log.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/dialog.h"
 #include "wx/control.h"
 #include "wx/app.h"

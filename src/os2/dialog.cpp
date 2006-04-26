@@ -12,18 +12,18 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifndef WX_PRECOMP
 #include "wx/dialog.h"
-#include "wx/utils.h"
-#include "wx/frame.h"
-#include "wx/app.h"
-#include "wx/settings.h"
-#include "wx/intl.h"
-#include "wx/log.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+    #include "wx/frame.h"
+    #include "wx/app.h"
+    #include "wx/settings.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/os2/private.h"
-#include "wx/log.h"
 #include "wx/evtloop.h"
 #include "wx/ptr_scpd.h"
 

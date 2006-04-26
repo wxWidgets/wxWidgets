@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cmndata.cpp
+// Name:        src/common/cmndata.cpp
 // Purpose:     Common GDI data
 // Author:      Julian Smart
 // Modified by:
@@ -24,16 +24,17 @@
     #pragma hdrstop
 #endif
 
+#include "wx/cmndata.h"
+
 #ifndef WX_PRECOMP
     #include <stdio.h>
     #include "wx/string.h"
     #include "wx/utils.h"
     #include "wx/app.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/gdicmn.h"
-#include "wx/cmndata.h"
-#include "wx/log.h"
 #include "wx/prntbase.h"
 #include "wx/printdlg.h"
 

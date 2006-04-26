@@ -17,9 +17,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
+    #include "wx/log.h"
 #endif
 
-#include "wx/log.h"
 #include "wx/fontutil.h"
 #include "wx/encinfo.h"
 #include "wx/fontmap.h"

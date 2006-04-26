@@ -18,17 +18,17 @@
 
 #if wxUSE_NOTEBOOK
 
-// wxWidgets
+#include  "wx/notebook.h"
+
 #ifndef WX_PRECOMP
-  #include  "wx/string.h"
-  #include  "wx/dc.h"
+    #include  "wx/string.h"
+    #include  "wx/dc.h"
+    #include  "wx/log.h"
 #endif  // WX_PRECOMP
 
-#include  "wx/log.h"
 #include  "wx/imaglist.h"
 #include  "wx/event.h"
 #include  "wx/control.h"
-#include  "wx/notebook.h"
 #include  "wx/app.h"
 #include  "wx/sysopt.h"
 #include  "wx/dcclient.h"
@@ -275,7 +275,7 @@ bool wxNotebook::Create(wxWindow *parent,
         style |= wxBORDER_SUNKEN;
 #endif
 
-#if !wxUSE_UXTHEME 
+#if !wxUSE_UXTHEME
     // ComCtl32 notebook tabs simply don't work unless they're on top if we have uxtheme, we can
     // work around it later (after control creation), but if we don't have uxtheme, we have to clear
     // those styles
@@ -345,14 +345,14 @@ bool wxNotebook::Create(wxWindow *parent,
         // create backing store
         UpdateBgBrush();
     }
-    
+
     // comctl32.dll 6.0 doesn't support non-top tabs with visual styles (the
     // control is simply not rendered correctly), so we disable themes
     // if possible, otherwise we simply clear the styles.
     // It's probably not possible to have UXTHEME without ComCtl32 6 or better, but lets
     // check it anyway.
     const int verComCtl32 = wxApp::GetComCtl32Version();
-    if ( verComCtl32 == 600 ) 
+    if ( verComCtl32 == 600 )
     {
         // check if we use themes at all -- if we don't, we're still okay
         if ( wxUxThemeEngine::GetIfActive() && (style & (wxBK_BOTTOM|wxBK_LEFT|wxBK_RIGHT)))
@@ -861,7 +861,7 @@ void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
     HBRUSH hbr = (HBRUSH)m_hbrBackground;
 #else
     HBRUSH hbr = 0;
-#endif    
+#endif
     wxBrush brush;
     if ( !hbr )
     {

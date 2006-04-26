@@ -22,13 +22,13 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif //WX_PRECOMP
 
 #include "wx/app.h"
 #include "wx/apptrait.h"
 #include "wx/module.h"
 #include "wx/utils.h"
-#include "wx/log.h"
 
 #include <stdio.h>
 

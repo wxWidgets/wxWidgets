@@ -1,17 +1,22 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcclient.cpp
+// Name:        src/mac/carbon/dcclient.cpp
 // Purpose:     wxClientDC class
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #include "wx/dcclient.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/dcmemory.h"
 #include "wx/region.h"
 #include "wx/window.h"
@@ -19,7 +24,6 @@
 #include "wx/settings.h"
 #include "wx/math.h"
 #include "wx/mac/private.h"
-#include "wx/log.h"
 
 //-----------------------------------------------------------------------------
 // constants
@@ -42,7 +46,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
 #include "wx/mac/uma.h"
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
-    
+
 
 static wxBrush MacGetBackgroundBrush( wxWindow* window )
 {
@@ -83,11 +87,11 @@ static wxBrush MacGetBackgroundBrush( wxWindow* window )
                 extent.top-- ;
                 extent.right = x + size.x ;
                 extent.bottom = y + size.y ;
-                bkdBrush.MacSetThemeBackground( kThemeBackgroundTabPane , (WXRECTPTR) &extent ) ; 
+                bkdBrush.MacSetThemeBackground( kThemeBackgroundTabPane , (WXRECTPTR) &extent ) ;
                 break ;
             }
-            
-            parent = parent->GetParent() ;  
+
+            parent = parent->GetParent() ;
         }
     }
 
@@ -99,14 +103,14 @@ static wxBrush MacGetBackgroundBrush( wxWindow* window )
 #endif
 
     return bkdBrush ;
-}    
+}
 
-wxWindowDC::wxWindowDC() 
+wxWindowDC::wxWindowDC()
 {
     m_window = NULL ;
 }
 
-wxWindowDC::wxWindowDC(wxWindow *window) 
+wxWindowDC::wxWindowDC(wxWindow *window)
 {
     m_window = window ;
     wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
@@ -137,7 +141,7 @@ wxWindowDC::wxWindowDC(wxWindow *window)
         // situations
         m_macLocalOrigin.x = x ;
         m_macLocalOrigin.y = y ;
-        
+
         m_graphicContext = new wxMacCGContext( (CGrafPtr) m_macPort ) ;
         m_graphicContext->SetPen( m_pen ) ;
         m_graphicContext->SetBrush( m_brush ) ;

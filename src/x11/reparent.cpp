@@ -27,8 +27,12 @@
 #if !wxUSE_NANOX
 
 #include "wx/x11/reparent.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/evtloop.h"
-#include "wx/log.h"
 #include "wx/app.h"
 #include "wx/timer.h"
 
@@ -284,4 +288,4 @@ WXWindow wxReparenter::FindAClientWindow(WXWindow window, const wxString& name)
     } return (WXWindow) result;
 }
 
-#endif
+#endif // !wxUSE_NANOX

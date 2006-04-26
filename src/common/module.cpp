@@ -21,9 +21,9 @@
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
-#include "wx/log.h"
 #include "wx/listimpl.cpp"
 
 #define TRACE_MODULE _T("module")

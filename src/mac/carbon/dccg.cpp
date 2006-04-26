@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.cpp
+// Name:        src/mac/carbon/dccg.cpp
 // Purpose:     wxDC class
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
@@ -15,13 +15,16 @@
 
 #if wxMAC_USE_CORE_GRAPHICS
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/mac/uma.h"
 #include "wx/dcmemory.h"
 #include "wx/dcprint.h"
 #include "wx/region.h"
 #include "wx/image.h"
-#include "wx/log.h"
 
 
 #ifdef __MSL__
@@ -1720,14 +1723,14 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     wxCHECK_RET( Ok(), wxT("wxDC(cg)::DoDrawRotatedText - invalid DC") );
     wxCHECK_RET( m_macATSUIStyle != NULL, wxT("wxDC(cg)::DoDrawRotatedText - no valid font set") );
 
-    if ( str.Length() == 0 )
+    if ( str.length() == 0 )
         return ;
     if ( m_logicalFunction != wxCOPY )
         return ;
 
     OSStatus status = noErr ;
     ATSUTextLayout atsuLayout ;
-    UniCharCount chars = str.Length() ;
+    UniCharCount chars = str.length() ;
     UniChar* ubuf = NULL ;
 
 #if SIZEOF_WCHAR_T == 4
@@ -1885,14 +1888,14 @@ void wxDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *height
         MacInstallFont() ;
     }
 
-    if ( str.Length() == 0 )
+    if ( str.empty() )
         return ;
 
     wxCHECK_RET( m_macATSUIStyle != NULL, wxT("wxDC(cg)::DoGetTextExtent - no valid font set") ) ;
 
     OSStatus status = noErr ;
     ATSUTextLayout atsuLayout ;
-    UniCharCount chars = str.Length() ;
+    UniCharCount chars = str.length() ;
     UniChar* ubuf = NULL ;
 
 #if SIZEOF_WCHAR_T == 4
@@ -1957,13 +1960,13 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
     wxCHECK_MSG( Ok(), false, wxT("wxDC(cg)::DoGetPartialTextExtents - invalid DC") );
 
     widths.Empty();
-    widths.Add(0, text.Length());
+    widths.Add(0, text.length());
 
-    if (text.Length() == 0)
+    if (text.empty())
         return false;
 
     ATSUTextLayout atsuLayout ;
-    UniCharCount chars = text.Length() ;
+    UniCharCount chars = text.length() ;
     UniChar* ubuf = NULL ;
 
 #if SIZEOF_WCHAR_T == 4
@@ -2198,4 +2201,3 @@ wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 }
 
 #endif // wxMAC_USE_CORE_GRAPHICS
-

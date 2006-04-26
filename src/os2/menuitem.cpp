@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        menuitem.cpp
+// Name:        src/os2/menuitem.cpp
 // Purpose:     wxMenuItem implementation
 // Author:      David Webster
 // Modified by:
@@ -16,6 +16,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/menuitem.h"
+
 #ifndef WX_PRECOMP
     #include "wx/font.h"
     #include "wx/bitmap.h"
@@ -25,10 +27,8 @@
     #include "wx/accel.h"
     #include "wx/menu.h"
     #include "wx/string.h"
+    #include "wx/log.h"
 #endif
-
-#include "wx/menuitem.h"
-#include "wx/log.h"
 
 #if wxUSE_ACCEL
     #include "wx/accel.h"

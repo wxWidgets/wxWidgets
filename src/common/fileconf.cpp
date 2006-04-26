@@ -27,11 +27,11 @@
     #include  "wx/dynarray.h"
     #include  "wx/string.h"
     #include  "wx/intl.h"
+    #include  "wx/log.h"
 #endif  //WX_PRECOMP
 
 #include  "wx/app.h"
 #include  "wx/file.h"
-#include  "wx/log.h"
 #include  "wx/textfile.h"
 #include  "wx/memtext.h"
 #include  "wx/config.h"

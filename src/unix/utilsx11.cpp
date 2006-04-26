@@ -15,10 +15,14 @@
 #include "wx/wxprec.h"
 
 #include "wx/unix/utilsx11.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/iconbndl.h"
 #include "wx/image.h"
 #include "wx/icon.h"
-#include "wx/log.h"
 
 #ifdef __VMS
 #pragma message disable nosimpint

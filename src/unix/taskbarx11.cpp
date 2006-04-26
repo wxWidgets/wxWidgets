@@ -22,12 +22,16 @@
 #include "wx/wxprec.h"
 
 #include "wx/taskbar.h"
+
+#ifndef  WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/frame.h"
 #include "wx/bitmap.h"
 #include "wx/statbmp.h"
 #include "wx/sizer.h"
 #include "wx/dcclient.h"
-#include "wx/log.h"
 #include "wx/image.h"
 
 #ifdef __VMS

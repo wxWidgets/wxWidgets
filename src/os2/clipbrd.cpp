@@ -14,6 +14,8 @@
 
 #if wxUSE_CLIPBOARD
 
+#include "wx/clipbrd.h"
+
 #ifndef WX_PRECOMP
     #include "wx/object.h"
     #include "wx/event.h"
@@ -22,14 +24,12 @@
     #include "wx/bitmap.h"
     #include "wx/utils.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #if wxUSE_METAFILE
     #include "wx/metafile.h"
 #endif
-
-#include "wx/log.h"
-#include "wx/clipbrd.h"
 
 #include <string.h>
 

@@ -20,9 +20,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
-#include "wx/log.h"
 #include "wx/txtstrm.h"
 
 //-----------------------------------------------------------------------------
@@ -184,4 +184,4 @@ bool wxPNMHandler::DoCanRead( wxInputStream& stream )
 
 #endif // wxUSE_STREAMS
 
-#endif // wxUSE_PNM
+#endif // wxUSE_IMAGE && wxUSE_PNM

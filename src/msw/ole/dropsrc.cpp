@@ -24,13 +24,13 @@
   #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/window.h"
-#endif
-
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
 
-#include "wx/log.h"
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+    #include "wx/log.h"
+#endif
+
 #include "wx/dnd.h"
 
 #include "wx/msw/private.h"
@@ -245,4 +245,4 @@ bool wxDropSource::GiveFeedback(wxDragResult effect)
     }
 }
 
-#endif  //USE_DRAG_AND_DROP
+#endif  // wxUSE_OLE && wxUSE_DRAG_AND_DROP

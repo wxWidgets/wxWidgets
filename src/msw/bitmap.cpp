@@ -34,10 +34,10 @@
     #include "wx/dcmemory.h"
     #include "wx/bitmap.h"
     #include "wx/icon.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/msw/private.h"
-#include "wx/log.h"
 
 #if wxUSE_WXDIB
 #include "wx/msw/dib.h"

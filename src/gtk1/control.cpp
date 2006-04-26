@@ -12,8 +12,12 @@
 
 #if wxUSE_CONTROLS
 
-#include "wx/log.h"
 #include "wx/control.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/fontutil.h"
 #include "wx/settings.h"
 #include "wx/gtk1/private.h"
@@ -260,4 +264,3 @@ wxControl::GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromAdj_t widget_new,
 }
 
 #endif // wxUSE_CONTROLS
-

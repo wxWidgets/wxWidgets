@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        treectrl.cpp
+// Name:        src/gtk1/treectrl.cpp
 // Purpose:     wxTreeCtrl
 // Author:      Denis Pershin
 // Modified by:
@@ -13,16 +13,16 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/gtk1/treectrl.h"
 #include "wx/textctrl.h"
-#include "wx/log.h"
 
 #include <gtk/gtk.h>
 
@@ -186,16 +186,17 @@ void wxTreeCtrl::SetStateImageList(wxImageList *imageList) {
   m_imageListState = imageList;
 }
 
-wxString wxTreeCtrl::GetItemText(const wxTreeItemId &item) const {
-  char *t;
+wxString wxTreeCtrl::GetItemText(const wxTreeItemId &item) const
+{
+    char *t;
 
-  if (!item.IsOk())
-    return wxString("");
+    if (!item.IsOk())
+        return wxEmptyString;
 
-  GtkLabel *l = GTK_LABEL(gtk_object_get_data(GTK_OBJECT((GtkTreeItem *)item), "w_label"));
-  gtk_label_get(l, &t);
+    GtkLabel *l = GTK_LABEL(gtk_object_get_data(GTK_OBJECT((GtkTreeItem *)item), "w_label"));
+    gtk_label_get(l, &t);
 
-  return t;
+    return t;
 }
 
 int wxTreeCtrl::GetItemImage(const wxTreeItemId& item) const {

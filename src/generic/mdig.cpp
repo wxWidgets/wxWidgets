@@ -24,13 +24,15 @@
     #pragma hdrstop
 #endif
 
+#include "wx/generic/mdig.h"
+
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
     #include "wx/menu.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif //WX_PRECOMP
 
-#include "wx/generic/mdig.h"
 #include "wx/stockitem.h"
 
 enum MDI_MENU_ID
@@ -399,7 +401,6 @@ wxGenericMDIChildFrame::wxGenericMDIChildFrame( wxGenericMDIParentFrame *parent,
     Create( parent, id, title, wxDefaultPosition, size, style, name );
 }
 
-#include "wx/log.h"
 wxGenericMDIChildFrame::~wxGenericMDIChildFrame()
 {
     wxGenericMDIParentFrame *pParentFrame = GetMDIParentFrame();
@@ -812,4 +813,3 @@ IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxGenericMDIChildFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxGenericMDIClientWindow)
 
 #endif
-

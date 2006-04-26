@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        os2/evtloop.cpp
+// Name:        src/os2/evtloop.cpp
 // Purpose:     implements wxEventLoop for PM
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -28,10 +28,10 @@
     #include "wx/window.h"
     #include "wx/app.h"
     #include "wx/timer.h"
+    #include "wx/log.h"
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
-#include "wx/log.h"
 #include "wx/tooltip.h"
 #include "wx/ptr_scpd.h"
 
@@ -164,11 +164,11 @@ bool wxEventLoopImpl::PreProcessMessage(QMSG *pMsg)
            {
                if((bRc = pWnd->OS2TranslateMessage((WXMSG*)pMsg)) == TRUE)
                    break;
-	    // stop at first top level window, i.e. don't try to process the
-	    // key strokes originating in a dialog using the accelerators of
-	    // the parent frame - this doesn't make much sense
-	    if ( pWnd->IsTopLevel() )
-	        break;
+               // stop at first top level window, i.e. don't try to process the
+               // key strokes originating in a dialog using the accelerators of
+               // the parent frame - this doesn't make much sense
+               if ( pWnd->IsTopLevel() )
+                   break;
            }
 
             if(!bRc)    // untranslated, should restore original value
@@ -259,20 +259,20 @@ int wxEventLoop::Run()
         // generate and process idle events for as long as we don't have
         // anything else to do
         while ( !Pending() && m_impl->SendIdleMessage() )
-	{
-	    wxTheApp->HandleSockets();
-	    wxMilliSleep(10);
-	}
+        {
+            wxTheApp->HandleSockets();
+            wxMilliSleep(10);
+        }
 
         wxTheApp->HandleSockets();
         if (Pending())
-	{
-	    if ( !Dispatch() )
-	    {
-		// we got WM_QUIT
-		break;
-	    }
-	}
+        {
+            if ( !Dispatch() )
+            {
+                // we got WM_QUIT
+                break;
+            }
+        }
         else
             wxMilliSleep(10);
     }
@@ -301,7 +301,7 @@ bool wxEventLoop::Pending() const
 
 bool wxEventLoop::Dispatch()
 {
-    wxCHECK_MSG( IsRunning(), FALSE, _T("can't call Dispatch() if not running") );
+    wxCHECK_MSG( IsRunning(), false, _T("can't call Dispatch() if not running") );
 
     QMSG msg;
     BOOL bRc = ::WinGetMsg(vHabmain, &msg, (HWND) NULL, 0, 0);
@@ -309,14 +309,14 @@ bool wxEventLoop::Dispatch()
     if ( bRc == 0 )
     {
         // got WM_QUIT
-        return FALSE;
+        return false;
     }
 
 #if wxUSE_THREADS
     wxASSERT_MSG( wxThread::IsMain(),
                   wxT("only the main thread can process Windows messages") );
 
-    static bool s_hadGuiLock = TRUE;
+    static bool s_hadGuiLock = true;
     static wxMsgArray s_aSavedMessages;
 
     // if a secondary thread owning the mutex is doing GUI calls, save all
@@ -324,7 +324,7 @@ bool wxEventLoop::Dispatch()
     // it will lead to recursive library calls (and we're not reentrant)
     if ( !wxGuiOwnedByMainThread() )
     {
-        s_hadGuiLock = FALSE;
+        s_hadGuiLock = false;
 
         // leave out WM_COMMAND messages: too dangerous, sometimes
         // the message will be processed twice
@@ -333,7 +333,7 @@ bool wxEventLoop::Dispatch()
             s_aSavedMessages.Add(msg);
         }
 
-        return TRUE;
+        return true;
     }
     else
     {
@@ -344,7 +344,7 @@ bool wxEventLoop::Dispatch()
         //       messages normally - expect some things to break...
         if ( !s_hadGuiLock )
         {
-            s_hadGuiLock = TRUE;
+            s_hadGuiLock = true;
 
             size_t count = s_aSavedMessages.Count();
             for ( size_t n = 0; n < count; n++ )
@@ -360,6 +360,5 @@ bool wxEventLoop::Dispatch()
 
     m_impl->ProcessMessage(&msg);
 
-    return TRUE;
+    return true;
 }
-

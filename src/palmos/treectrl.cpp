@@ -26,14 +26,16 @@
 
 #if wxUSE_TREECTRL
 
+#include "wx/treectrl.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/palmos/private.h"
 
 #include "wx/app.h"
-#include "wx/log.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"
 

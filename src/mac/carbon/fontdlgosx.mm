@@ -23,11 +23,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/cmndata.h"
 #include "wx/fontutil.h"
-#include "wx/log.h"
 
 // ============================================================================
 // implementation

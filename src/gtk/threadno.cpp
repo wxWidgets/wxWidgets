@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        thread.cpp
+// Name:        src/gtk/thread.cpp
 // Purpose:     Solaris thread support
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -13,9 +13,13 @@
 #include "wx/wxprec.h"
 
 #include "wx/thread.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/wx.h"
 #include "wx/module.h"
-#include "wx/log.h"
 
 wxMutex::wxMutex()
 {

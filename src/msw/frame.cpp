@@ -34,6 +34,7 @@
     #include "wx/dcclient.h"
     #include "wx/mdi.h"
     #include "wx/panel.h"
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"
@@ -58,7 +59,6 @@
 #endif // wxUSE_TOOLBAR
 
 #include "wx/menuitem.h"
-#include "wx/log.h"
 
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/theme.h"

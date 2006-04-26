@@ -22,10 +22,14 @@
 #endif
 
 #include "wx/font.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/fontutil.h"
 #include "wx/cmndata.h"
 #include "wx/utils.h"
-#include "wx/log.h"
 #include "wx/gdicmn.h"
 #include "wx/tokenzr.h"
 #include "wx/settings.h"
@@ -184,7 +188,7 @@ struct font_t *wxFont::GetMGLfont_t(float scale, bool antialiased)
             old->DecRef();
     }
 
-    wxMGLFontInstance *instance = 
+    wxMGLFontInstance *instance =
         M_FONTDATA->m_library->GetFontInstance(this, scale, antialiased);
 
     return instance->GetMGLfont_t();

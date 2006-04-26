@@ -43,7 +43,6 @@
 #endif // wxUSE_TOOLBAR
 
 #include "wx/menuitem.h"
-#include "wx/log.h"
 
 // ----------------------------------------------------------------------------
 // globals

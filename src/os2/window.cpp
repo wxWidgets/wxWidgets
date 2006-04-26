@@ -14,11 +14,12 @@
 //
 #include "wx/wxprec.h"
 
+#include "wx/window.h"
+
 #ifndef WX_PRECOMP
     #define INCL_DOS
     #define INCL_PM
     #include <os2.h>
-    #include "wx/window.h"
     #include "wx/accel.h"
     #include "wx/menu.h"
     #include "wx/dc.h"
@@ -44,6 +45,7 @@
     #include "wx/toolbar.h"
     #include "wx/settings.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
     #include <stdio.h>
 #endif
 
@@ -56,7 +58,6 @@
 #endif
 
 #include "wx/menuitem.h"
-#include "wx/log.h"
 
 #include "wx/os2/private.h"
 
@@ -71,8 +72,6 @@
 #if wxUSE_CARET
     #include "wx/caret.h"
 #endif // wxUSE_CARET
-
-#include "wx/log.h"
 
 
 #include "wx/textctrl.h"

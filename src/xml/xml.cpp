@@ -21,12 +21,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/wfstream.h"
 #include "wx/datstrm.h"
 #include "wx/zstream.h"
-#include "wx/log.h"
 #include "wx/strconv.h"
 
 #include "expat.h" // from Expat

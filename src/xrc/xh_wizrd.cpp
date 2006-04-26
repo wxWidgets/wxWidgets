@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_wizrd.cpp
+// Name:        src/xrc/xh_wizrd.cpp
 // Purpose:     XRC resource for wxWizard
 // Author:      Vaclav Slavik
 // Created:     2003/03/01
@@ -18,7 +18,11 @@
 #if wxUSE_XRC && wxUSE_WIZARDDLG
 
 #include "wx/xrc/xh_wizrd.h"
-#include "wx/log.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/wizard.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxWizardXmlHandler, wxXmlResourceHandler)

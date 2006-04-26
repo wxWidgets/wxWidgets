@@ -16,12 +16,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/panel.h"
 #include "wx/utils.h"
 #include "wx/imaglist.h"
-#include "wx/log.h"
 #include "wx/bitmap.h"
 #include "wx/fontutil.h"
 

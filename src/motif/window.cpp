@@ -28,6 +28,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/menu.h"
@@ -42,7 +43,6 @@
 #include "wx/scrolwin.h"
 #include "wx/module.h"
 #include "wx/menuitem.h"
-#include "wx/log.h"
 #include "wx/evtloop.h"
 
 #if  wxUSE_DRAG_AND_DROP

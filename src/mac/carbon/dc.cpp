@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.cpp
+// Name:        src/mac/carbon/dc.cpp
 // Purpose:     wxDC class
 // Author:      Stefan Csomor
 // Modified by:
@@ -14,13 +14,17 @@
 #include "wx/dc.h"
 
 #if !wxMAC_USE_CORE_GRAPHICS
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/app.h"
 #include "wx/mac/uma.h"
 #include "wx/dcmemory.h"
 #include "wx/dcprint.h"
 #include "wx/region.h"
 #include "wx/image.h"
-#include "wx/log.h"
 
 #ifdef __MSL__
     #if __MSL__ >= 0x6000
@@ -1008,7 +1012,7 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[],
 
     if ( m_brush.GetStyle() == wxTRANSPARENT && m_pen.GetStyle() == wxTRANSPARENT )
         return ;
-    
+
     wxMacFastPortSetter helper(this) ;
 
     wxCoord x1, x2 , y1 , y2 ;
@@ -1147,7 +1151,7 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     // CMB: draw nothing if transformed w or h is 0
     if (ww == 0 || hh == 0)
         return;
-    
+
     // CMB: handle -ve width and/or height
     if (ww < 0)
     {
@@ -1473,7 +1477,7 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     // TODO: support text background color (only possible by hand, ATSUI does not support it)
     wxCHECK_RET( Ok(), wxT("wxDC::DoDrawRotatedText - invalid DC") );
 
-    if ( str.Length() == 0 )
+    if ( str.empty() )
         return ;
 
     wxMacFastPortSetter helper(this) ;
@@ -1490,7 +1494,7 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 
     OSStatus status = noErr ;
     ATSUTextLayout atsuLayout ;
-    UniCharCount chars = str.Length() ;
+    UniCharCount chars = str.length() ;
     UniChar* ubuf = NULL ;
 
 #if SIZEOF_WCHAR_T == 4
@@ -1734,9 +1738,9 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
     wxCHECK_MSG(Ok(), false, wxT("wxDC::DoGetPartialTextExtents - invalid DC"));
 
     widths.Empty();
-    widths.Add(0, text.Length());
+    widths.Add(0, text.length());
 
-    if (text.Length() == 0)
+    if (text.length() == 0)
         return false;
 
     wxMacFastPortSetter helper(this) ;
@@ -1754,7 +1758,7 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
         // fonts, please change it.  Currently it is measuring from the
         // beginning of the string for each succeeding substring, which is much
         // slower than this should be.
-        for (size_t i=0; i<text.Length(); i++)
+        for (size_t i=0; i<text.length(); i++)
         {
             wxString str(text.Left(i + 1));
             Point bounds = {0, 0};
@@ -1781,7 +1785,7 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
         // Copy to widths, starting at measurements[1]
         // NOTE: this doesn't take into account any multi-byte characters
         // in buff, it probably should...
-        for (size_t i=0; i<text.Length(); i++)
+        for (size_t i=0; i<text.length(); i++)
             widths[i] = XDEV2LOGREL(measurements[i + 1]);
 
         delete [] measurements;
@@ -2162,13 +2166,13 @@ void wxDC::MacInstallBrush() const
                     Pattern whiteColor ;
                     ::BackPat(GetQDGlobalsWhite(&whiteColor));
                     ::SetThemePen( m_brush.MacGetTheme() , wxDisplayDepth() , true ) ;
-                }   
+                }
             break ;
-        
+
             default :
                 ::PenPat(GetQDGlobalsBlack(&blackColor));
                 break ;
-                
+
         }
     }
     else if (m_brush.IsHatch())

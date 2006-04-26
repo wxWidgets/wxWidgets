@@ -14,8 +14,11 @@
 
 #if wxUSE_LISTBOX
 
+#include "wx/listbox.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
+    #include "wx/log.h"
 #endif
 
 #ifdef __VMS
@@ -23,9 +26,7 @@
 #define XtDisplay XTDISPLAY
 #endif
 
-#include "wx/listbox.h"
 #include "wx/settings.h"
-#include "wx/log.h"
 #include "wx/utils.h"
 #include "wx/arrstr.h"
 

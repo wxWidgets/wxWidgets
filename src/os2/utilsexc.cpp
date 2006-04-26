@@ -16,9 +16,8 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
-
-#include "wx/log.h"
 
 #include "wx/process.h"
 

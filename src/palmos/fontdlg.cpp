@@ -26,17 +26,18 @@
 
 #if wxUSE_FONTDLG
 
+#include "wx/fontdlg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dialog.h"
     #include "wx/math.h"
+    #include "wx/log.h"
 #endif
 
-#include "wx/fontdlg.h"
 #include "wx/palmos/private.h"
 
 #include "wx/cmndata.h"
-#include "wx/log.h"
 
 #include <stdlib.h>
 #include <string.h>

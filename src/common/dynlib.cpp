@@ -24,15 +24,19 @@
 #include  "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_DYNLIB_CLASS
 
 #include "wx/dynlib.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/log.h"
+#endif //WX_PRECOMP
+
 #include "wx/filefn.h"
-#include "wx/intl.h"
-#include "wx/log.h"
 #include "wx/utils.h"
 #include "wx/filename.h"        // for SplitPath()
 #include "wx/app.h"
@@ -245,7 +249,7 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
     {
         wxAppTraits *traits = wxAppConsole::GetInstance() ?
                               wxAppConsole::GetInstance()->GetTraits() : NULL;
-        wxCHECK_MSG( traits, _T(""),
+        wxCHECK_MSG( traits, wxEmptyString,
                      _("can't query for GUI plugins name in console applications") );
         suffix = traits->GetToolkitInfo().shortName;
     }

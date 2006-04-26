@@ -16,8 +16,12 @@
 #endif
 
 #include "wx/bitmap.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/icon.h"
-#include "wx/log.h"
 #include "wx/image.h"
 #include "wx/xpmdecod.h"
 
@@ -1433,4 +1437,3 @@ void wxBitmap::UseAlpha()
     // mask in UngetRawData()
     M_BITMAPDATA->m_hasAlpha = true;
 }
-

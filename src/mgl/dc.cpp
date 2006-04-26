@@ -26,13 +26,13 @@
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/dcmemory.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/fontutil.h"
 #include "wx/encinfo.h"
 #include "wx/fontmap.h"
 #include "wx/mgl/private.h"
-#include "wx/log.h"
 
 #include <string.h>
 #include <mgraph.hpp>
