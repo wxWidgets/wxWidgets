@@ -147,7 +147,7 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     m_icon = icon;
     m_strTooltip = tooltip;
 
-    NotifyIconData notifyData((HWND)m_win->GetHWND());
+    NotifyIconData notifyData(GetHwndOf(m_win));
 
     if (icon.Ok())
     {
@@ -178,7 +178,7 @@ bool wxTaskBarIcon::RemoveIcon()
 
     m_iconAdded = false;
 
-    NotifyIconData notifyData((HWND)m_win->GetHWND());
+    NotifyIconData notifyData(GetHwndOf(m_win));
 
     return Shell_NotifyIcon(NIM_DELETE, &notifyData) != 0;
 }
@@ -203,13 +203,14 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 
     menu->UpdateUI();
 
-    // Work around a WIN32 bug
-    ::SetForegroundWindow((HWND)m_win->GetHWND());
+    // the SetForegroundWindow() and PostMessage() calls are needed to work
+    // around Win32 bug with the popup menus shown for the notifications as
+    // documented at http://support.microsoft.com/kb/q135788/
+    ::SetForegroundWindow(GetHwndOf(m_win));
 
     bool rval = m_win->PopupMenu(menu, 0, 0);
 
-    // Work around a WIN32 bug
-    ::PostMessage((HWND)m_win->GetHWND(), WM_NULL, 0, 0L);
+    ::PostMessage(GetHwndOf(m_win), WM_NULL, 0, 0L);
 
     m_win->PopEventHandler(false);
 
