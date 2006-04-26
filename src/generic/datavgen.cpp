@@ -202,8 +202,6 @@ private:
     wxDataViewTextCtrlWrapper  *m_textctrlWrapper;
     bool                        m_lastOnSame;
 
-    wxBrush                    *m_highlightBrush,
-                               *m_highlightUnfocusedBrush;
     bool                        m_hasFocus;
 
     int                         m_dragCount;
@@ -876,24 +874,6 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_lineBeforeLastClicked = (size_t) -1;
     m_lineSelectSingleOnUp = (size_t) -1;
     
-    m_highlightBrush = new wxBrush
-                           (
-                            wxSystemSettings::GetColour
-                            (
-                                wxSYS_COLOUR_HIGHLIGHT
-                            ),
-                            wxSOLID
-                           );
-
-    m_highlightUnfocusedBrush = new wxBrush
-                                    (
-                                       wxSystemSettings::GetColour
-                                       (
-                                           wxSYS_COLOUR_BTNSHADOW
-                                       ),
-                                       wxSOLID
-                                    );
-    
     m_hasFocus = false;
 
     SetBackgroundColour( *wxWHITE );
@@ -904,8 +884,6 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 wxDataViewMainWindow::~wxDataViewMainWindow()
 {
     delete m_renameTimer;
-    delete m_highlightBrush;
-    delete m_highlightUnfocusedBrush;
 }
 
 void wxDataViewMainWindow::OnRenameTimer()
@@ -1054,31 +1032,47 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     size_t item_count = wxMin( (int)(((update.y + update.height) / m_lineHeight) - item_start + 1), 
                                (int)(model->GetNumberOfRows()-item_start) );
 
+    
 
-    if (m_hasFocus)
-        dc.SetBrush( *m_highlightBrush );
-    else
-        dc.SetBrush( *m_highlightUnfocusedBrush );
-    dc.SetPen( *wxTRANSPARENT_PEN );
-            
     size_t item;
     for (item = item_start; item < item_start+item_count; item++)
     {
         if (m_selection.Index( item ) != wxNOT_FOUND)
         {
+            int flags = wxCONTROL_SELECTED;
+            if (item == m_currentRow)
+                flags |= wxCONTROL_CURRENT;
+            if (m_hasFocus)
+                flags |= wxCONTROL_FOCUSED;
             wxRect rect( 0, item*m_lineHeight+1, GetEndOfLastCol(), m_lineHeight-2 );
-            dc.DrawRectangle( rect );
+            wxRendererNative::Get().DrawItemSelectionRect
+                                (
+                                    this,
+                                    dc,
+                                    rect,
+                                    flags
+                                );
+        }
+        else
+        {
+            if (item == m_currentRow)
+            {
+                int flags = wxCONTROL_CURRENT;
+                if (m_hasFocus)
+                    flags |= wxCONTROL_FOCUSED;  // should have no effect
+                wxRect rect( 0, item*m_lineHeight+1, GetEndOfLastCol(), m_lineHeight-2 );
+                wxRendererNative::Get().DrawItemSelectionRect
+                                (
+                                    this,
+                                    dc,
+                                    rect,
+                                    flags
+                                );
+                
+            }
         }
     }
     
-    dc.SetBrush( *wxTRANSPARENT_BRUSH );
-    dc.SetPen( *wxBLACK_PEN );
-    if (HasCurrentRow())
-    {
-        wxRect rect( 0, m_currentRow*m_lineHeight+1, GetEndOfLastCol(), m_lineHeight-2 );
-        dc.DrawRectangle( rect );
-    }
-
     wxRect cell_rect;
     cell_rect.x = 0;
     cell_rect.height = m_lineHeight;

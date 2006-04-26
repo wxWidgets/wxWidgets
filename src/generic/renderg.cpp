@@ -88,6 +88,11 @@ public:
                                 const wxRect& rect,
                                 int flags = 0);
 
+    virtual void DrawItemSelectionRect(wxWindow *win,
+                                       wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags = 0);
+                                       
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
     virtual wxRendererVersion GetVersion() const
@@ -427,6 +432,52 @@ wxRendererGeneric::DrawPushButton(wxWindow *win,
     dc.SetPen(wxPen(bgCol));
     dc.DrawRectangle(rect);
 }
+
+void 
+wxRendererGeneric::DrawItemSelectionRect(wxWindow *win,
+                                       wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags )
+{
+    if (flags & wxCONTROL_SELECTED)
+    {
+        if (flags & wxCONTROL_FOCUSED)
+        {
+            wxBrush brush( 
+                            wxSystemSettings::GetColour
+                            (
+                                wxSYS_COLOUR_HIGHLIGHT
+                            ),
+                            wxSOLID
+                        );
+            dc.SetBrush( brush );
+        }
+        else
+        {
+            wxBrush brush( 
+                            wxSystemSettings::GetColour
+                            (
+                                wxSYS_COLOUR_BTNSHADOW
+                            ),
+                            wxSOLID
+                        );
+            dc.SetBrush( brush );
+        }
+    }
+    else
+    {
+        dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    }
+    
+    
+    if (flags & wxCONTROL_CURRENT)
+        dc.SetPen( *wxBLACK_PEN );
+    else
+        dc.SetPen( *wxTRANSPARENT_PEN );
+        
+    dc.DrawRectangle( rect );    
+}
+
 
 // ----------------------------------------------------------------------------
 // A module to allow cleanup of generic renderer.

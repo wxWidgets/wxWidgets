@@ -88,6 +88,11 @@ public:
                                 const wxRect& rect,
                                 int flags = 0);
 
+    virtual void DrawItemSelectionRect(wxWindow *win,
+                                       wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags = 0);
+                                       
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
 private:
@@ -505,3 +510,43 @@ wxRendererGTK::DrawPushButton(wxWindow *win,
         rect.x, rect.y, rect.width, rect.height
     );
 }
+
+void 
+wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
+                                       wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags )
+{
+    // for reason why we do this, see DrawDropArrow
+    wxWindowDC& wdc = (wxWindowDC&)dc;
+    wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
+
+    GtkStateType state;
+	if (flags & wxCONTROL_SELECTED)
+    {
+        if (flags & wxCONTROL_FOCUSED)
+    	    state = GTK_STATE_SELECTED;
+        else
+    	    state = GTK_STATE_INSENSITIVE;
+
+        gtk_paint_flat_box( win->m_wxwindow->style,
+                        GTK_PIZZA(win->m_wxwindow)->bin_window,
+                        state,
+                        GTK_SHADOW_NONE,
+                        NULL, 
+                        win->m_wxwindow,
+                        "treeview",
+                        dc.LogicalToDeviceX(rect.x),
+                        dc.LogicalToDeviceY(rect.y),
+                        rect.width,
+                        rect.height );
+    }
+    
+    if (flags & wxCONTROL_CURRENT)
+    {
+        dc.SetPen( *wxBLACK_PEN );
+        dc.SetBrush( *wxTRANSPARENT_BRUSH );
+        dc.DrawRectangle( rect );
+    }
+}
+

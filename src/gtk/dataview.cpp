@@ -1437,6 +1437,12 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
 
     m_treeview = gtk_tree_view_new();
     gtk_container_add (GTK_CONTAINER (m_widget), m_treeview);
+    
+    if (style & wxDV_MULTIPLE)
+    {
+        GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+        gtk_tree_selection_set_mode( selection, GTK_SELECTION_MULTIPLE );
+    }
 
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (m_widget),
         GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);

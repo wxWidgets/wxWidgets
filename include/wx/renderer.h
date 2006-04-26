@@ -186,6 +186,18 @@ public:
                                 const wxRect& rect,
                                 int flags = 0) = 0;
 
+    // draw rectangle indicating that an item in e.g. a list control
+    // has been selected or focused
+    //
+    // flags may use 
+    // wxCONTROL_SELECTED (item is selected, e.g. draw background)
+    // wxCONTROL_CURRENT (item is the current item, e.g. dotted border)
+    // wxCONTROL_FOCUSED (the whole control has focus, e.g. blue background vs. grey otherwise)
+    virtual void DrawItemSelectionRect(wxWindow *win,
+                                       wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags = 0) = 0;
+
     // geometry functions
     // ------------------
 
@@ -299,6 +311,12 @@ public:
                                 const wxRect& rect,
                                 int flags = 0 )
         { m_rendererNative.DrawPushButton( win, dc, rect, flags ); }
+
+    virtual void DrawItemSelectionRect(wxWindow *win,
+                                       wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags = 0 )
+        { m_rendererNative.DrawItemSelectionRect( win, dc, rect, flags ); }
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }
