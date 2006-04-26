@@ -160,6 +160,13 @@ size_t wxVScrolledWindow::FindFirstFromBottom(size_t lineLast, bool full)
     return lineFirst;
 }
 
+void wxVScrolledWindow::RemoveScrollbar()
+{
+    m_lineFirst = 0;
+    m_nVisible = m_lineMax;
+    SetScrollbar(wxVERTICAL, 0, 0, 0);
+}
+
 void wxVScrolledWindow::UpdateScrollbar()
 {
     // see how many lines can we fit on screen
@@ -189,8 +196,8 @@ void wxVScrolledWindow::UpdateScrollbar()
         if ( hAll < hWindow )
         {
             // we don't need scrollbar at all
-            m_lineFirst = 0;
-            SetScrollbar(wxVERTICAL, 0, 0, 0);
+            RemoveScrollbar();
+            return;
         }
     }
 
@@ -222,8 +229,15 @@ void wxVScrolledWindow::SetLineCount(size_t count)
     m_heightTotal = EstimateTotalHeight();
 
     // recalculate the scrollbars parameters
-    m_lineFirst = 1;    // make sure it is != 0
-    ScrollToLine(0);
+    if ( count )
+    {
+        m_lineFirst = 1;    // make sure it is != 0
+        ScrollToLine(0);
+    }
+    else // no items
+    {
+        RemoveScrollbar();
+    }
 }
 
 void wxVScrolledWindow::RefreshLine(size_t line)

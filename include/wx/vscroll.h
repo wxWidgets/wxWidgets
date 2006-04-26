@@ -188,6 +188,9 @@ protected:
     // update the thumb size shown by the scrollbar
     void UpdateScrollbar();
 
+    // remove the scrollbar completely because we don't need it
+    void RemoveScrollbar();
+
 private:
     // common part of all ctors
     void Init();
