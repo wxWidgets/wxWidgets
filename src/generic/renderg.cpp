@@ -92,7 +92,7 @@ public:
                                        wxDC& dc,
                                        const wxRect& rect,
                                        int flags = 0);
-                                       
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
     virtual wxRendererVersion GetVersion() const
@@ -401,7 +401,7 @@ wxRendererGeneric::DrawDropArrow(wxWindow *win,
     dc.DrawPolygon(WXSIZEOF(pt), pt, rect.x, rect.y);
 }
 
-void 
+void
 wxRendererGeneric::DrawCheckButton(wxWindow *WXUNUSED(win),
                                    wxDC& dc,
                                    const wxRect& rect,
@@ -433,49 +433,33 @@ wxRendererGeneric::DrawPushButton(wxWindow *win,
     dc.DrawRectangle(rect);
 }
 
-void 
-wxRendererGeneric::DrawItemSelectionRect(wxWindow *win,
-                                       wxDC& dc,
-                                       const wxRect& rect,
-                                       int flags )
+void
+wxRendererGeneric::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
+                                         wxDC& dc,
+                                         const wxRect& rect,
+                                         int flags)
 {
-    if (flags & wxCONTROL_SELECTED)
+    wxBrush brush;
+    if ( flags & wxCONTROL_SELECTED )
     {
-        if (flags & wxCONTROL_FOCUSED)
+        if ( flags & wxCONTROL_FOCUSED )
         {
-            wxBrush brush( 
-                            wxSystemSettings::GetColour
-                            (
-                                wxSYS_COLOUR_HIGHLIGHT
-                            ),
-                            wxSOLID
-                        );
-            dc.SetBrush( brush );
+            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
         }
-        else
+        else // !focused
         {
-            wxBrush brush( 
-                            wxSystemSettings::GetColour
-                            (
-                                wxSYS_COLOUR_BTNSHADOW
-                            ),
-                            wxSOLID
-                        );
-            dc.SetBrush( brush );
+            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
         }
     }
-    else
+    else // !selected
     {
-        dc.SetBrush( *wxTRANSPARENT_BRUSH );
+        brush = *wxTRANSPARENT_BRUSH;
     }
-    
-    
-    if (flags & wxCONTROL_CURRENT)
-        dc.SetPen( *wxBLACK_PEN );
-    else
-        dc.SetPen( *wxTRANSPARENT_PEN );
-        
-    dc.DrawRectangle( rect );    
+
+    dc.SetBrush(brush);
+    dc.SetPen(flags & wxCONTROL_CURRENT ? *wxBLACK_PEN : *wxTRANSPARENT_PEN);
+
+    dc.DrawRectangle( rect );
 }
 
 
