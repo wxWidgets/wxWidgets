@@ -380,8 +380,8 @@ void wxVListBox::OnPaint(wxPaintEvent& WXUNUSED(event))
     rectLine.width = clientSize.x;
 
     // iterate over all visible lines
-    const size_t lineMax = GetLastVisibleLine();
-    for ( size_t line = GetFirstVisibleLine(); line <= lineMax; line++ )
+    const size_t lineMax = GetVisibleEnd();
+    for ( size_t line = GetFirstVisibleLine(); line < lineMax; line++ )
     {
         const wxCoord hLine = OnGetLineHeight(line);
 
