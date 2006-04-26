@@ -62,6 +62,7 @@ int wxMessageDialog::ShowModal()
 
     wxMacCFStringHolder cfNoString( wxT("No"), m_font.GetEncoding() );
     wxMacCFStringHolder cfYesString( wxT("Yes"), m_font.GetEncoding() );
+    wxMacCFStringHolder cfOKString( _("OK") , m_font.GetEncoding()) ;    
     wxMacCFStringHolder cfCancelString( wxT("Cancel"), m_font.GetEncoding() );
 
     int buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };
@@ -92,6 +93,8 @@ int wxMessageDialog::ShowModal()
     {
         // the MSW implementation even shows an OK button if it is not specified, we'll do the same
         buttonId[0] = wxID_OK;
+        // using null as default title does not work on earlier systems
+        defaultButtonTitle = cfOKString;
         if (style & wxCANCEL)
         {
             alternateButtonTitle = cfCancelString;
