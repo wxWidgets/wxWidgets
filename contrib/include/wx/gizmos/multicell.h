@@ -96,7 +96,7 @@ public:
     bool SetColumnWidth(int column, int colSize = 5, bool expandable = false);
     bool SetRowHeight(int row, int rowSize = 5, bool expandable = false);
     bool EnableGridLines(wxWindow *win);
-    bool SetGridPen(wxPen *pen);
+    bool SetGridPen(const wxPen *pen);
     void OnPaint(wxDC& dc);
 
 private:

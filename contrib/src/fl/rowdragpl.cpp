@@ -1044,7 +1044,7 @@ void cbRowDragPlugin::DrawRombShades( wxPoint& p1, wxPoint& p2,
     dc.DrawLine( p4.x, p4.y, p1.x, p1.y );
 }
 
-void cbRowDragPlugin::DrawOrtoRomb( wxRect& inRect, wxDC& dc, wxBrush& bkBrush )
+void cbRowDragPlugin::DrawOrtoRomb( wxRect& inRect, wxDC& dc, const wxBrush& bkBrush )
 {
     dc.SetBrush( bkBrush );
     dc.SetPen( mpLayout->mBlackPen );
@@ -1105,7 +1105,7 @@ void cbRowDragPlugin::DrawOrtoRomb( wxRect& inRect, wxDC& dc, wxBrush& bkBrush )
     dc.SetBrush( wxNullBrush );
 }
 
-void cbRowDragPlugin::DrawRomb( wxRect& inRect, wxDC& dc, wxBrush& bkBrush )
+void cbRowDragPlugin::DrawRomb( wxRect& inRect, wxDC& dc, const wxBrush& bkBrush )
 {
     wxPoint points[4];
 
@@ -1167,7 +1167,7 @@ void cbRowDragPlugin::DrawRomb( wxRect& inRect, wxDC& dc, wxBrush& bkBrush )
 }
 
 void cbRowDragPlugin::DrawRectShade( wxRect& inRect, wxDC& dc, 
-                                     int level, wxPen& upperPen, wxPen& lowerPen )
+                                     int level, const wxPen& upperPen, const wxPen& lowerPen )
 {
     // upper shade
     dc.SetPen( upperPen );
@@ -1192,7 +1192,7 @@ void cbRowDragPlugin::DrawRectShade( wxRect& inRect, wxDC& dc,
     dc.SetBrush( wxNullBrush );
 }
 
-void cbRowDragPlugin::Draw3DRect( wxRect& inRect, wxDC& dc, wxBrush& bkBrush )
+void cbRowDragPlugin::Draw3DRect( wxRect& inRect, wxDC& dc, const wxBrush& bkBrush )
 {
     dc.SetPen( mpLayout->mNullPen );
     dc.SetBrush( bkBrush );

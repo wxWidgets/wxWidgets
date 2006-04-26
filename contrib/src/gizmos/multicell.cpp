@@ -198,7 +198,7 @@ bool wxMultiCellSizer::EnableGridLines(wxWindow *win)
     return true;
 }
 //---------------------------------------------------------------------------
-bool wxMultiCellSizer::SetGridPen(wxPen *pen)
+bool wxMultiCellSizer::SetGridPen(const wxPen *pen)
 {
     m_pen = pen;
     return true;
