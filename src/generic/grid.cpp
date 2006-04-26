@@ -3822,7 +3822,7 @@ END_EVENT_TABLE()
 wxGridCornerLabelWindow::wxGridCornerLabelWindow( wxGrid *parent,
                                                   wxWindowID id,
                                                   const wxPoint &pos, const wxSize &size )
-  : wxWindow( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE|wxFULL_REPAINT_ON_RESIZE )
+  : wxWindow( parent, id, pos, size, wxWANTS_CHARS | wxBORDER_NONE | wxFULL_REPAINT_ON_RESIZE )
 {
     m_owner = parent;
 }
@@ -4909,7 +4909,8 @@ wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg )
 #if defined(__WXMOTIF__)
         int cw, ch;
         m_gridWin->GetClientSize( &cw, &ch );
-        if ( r.GetTop() > ch ) r.SetTop( 0 );
+        if ( r.GetTop() > ch )
+            r.SetTop( 0 );
         r.SetBottom( wxMin( r.GetBottom(), ch ) );
 #endif
 
@@ -4959,7 +4960,8 @@ wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg )
 #if defined(__WXMOTIF__)
         int cw, ch;
         m_gridWin->GetClientSize( &cw, &ch );
-        if ( r.GetLeft() > cw ) r.SetLeft( 0 );
+        if ( r.GetLeft() > cw )
+            r.SetLeft( 0 );
         r.SetRight( wxMin( r.GetRight(), cw ) );
 #endif
 
@@ -6945,9 +6947,9 @@ bool wxGrid::SetModelValues()
 
     if ( m_table )
     {
-        for ( row = 0;  row < m_numRows;  row++ )
+        for ( row = 0; row < m_numRows; row++ )
         {
-            for ( col = 0;  col < m_numCols;  col++ )
+            for ( col = 0; col < m_numCols; col++ )
             {
                 m_table->SetValue( row, col, GetCellValue(row, col) );
             }
@@ -6983,7 +6985,7 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
         {
             wxGridCellCoords cell( row + cell_rows, col + cell_cols );
             bool marked = false;
-            for ( int j = 0;  j < numCells; j++ )
+            for ( int j = 0; j < numCells; j++ )
             {
                 if ( cell == cells[j] )
                 {
@@ -7017,7 +7019,7 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
         {
             for ( int l = 0; l < cell_rows; l++ )
             {
-                // find a cell in this row to left alreay marked for repaint
+                // find a cell in this row to leave already marked for repaint
                 int left = col;
                 for (int k = 0; k < int(redrawCells.GetCount()); k++)
                     if ((redrawCells[k].GetCol() < left) &&
@@ -7073,7 +7075,7 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
 
     numCells = redrawCells.GetCount();
 
-    for ( i = numCells - 1; i >= 0;  i-- )
+    for ( i = numCells - 1; i >= 0; i-- )
     {
         DrawCell( dc, redrawCells[i] );
     }
@@ -7173,10 +7175,10 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
 
     if (penWidth > 0)
     {
-        // The center of th drawn line is where the position/width/height of
-        // the rectangle is actually at, (on wxMSW at least,) so we will
-        // reduce the size of the rectangle to compensate for the thickness of
-        // the line. If this is too strange on non wxMSW platforms then
+        // The center of the drawn line is where the position/width/height of
+        // the rectangle is actually at (on wxMSW at least), so the
+        // size of the rectangle is reduced to compensate for the thickness of
+        // the line. If this is too strange on non-wxMSW platforms then
         // please #ifdef this appropriately.
         rect.x += penWidth / 2;
         rect.y += penWidth / 2;
@@ -7477,7 +7479,7 @@ void wxGrid::DrawColLabels( wxDC& dc,const wxArrayInt& cols )
     size_t i;
     size_t numLabels = cols.GetCount();
 
-    for ( i = 0;  i < numLabels;  i++ )
+    for ( i = 0; i < numLabels; i++ )
     {
         DrawColLabel( dc, cols[i] );
     }
@@ -7689,7 +7691,7 @@ void wxGrid::GetTextBoxSize( const wxDC& dc,
     long lineW = 0, lineH = 0;
 
     size_t i;
-    for ( i = 0;  i < lines.GetCount();  i++ )
+    for ( i = 0; i < lines.GetCount(); i++ )
     {
         dc.GetTextExtent( lines[i], &lineW, &lineH );
         w = wxMax( w, lineW );
@@ -8276,7 +8278,7 @@ void wxGrid::MakeCellVisible( int row, int col )
         {
             int h = r.GetHeight();
             ypos = r.GetTop();
-            for ( i = row - 1;  i >= 0;  i-- )
+            for ( i = row - 1; i >= 0; i-- )
             {
                 int rowHeight = GetRowHeight(i);
                 if ( h + rowHeight > ch )
@@ -8287,11 +8289,11 @@ void wxGrid::MakeCellVisible( int row, int col )
             }
 
             // we divide it later by GRID_SCROLL_LINE, make sure that we don't
-            // have rounding errors (this is important, because if we do, we
-            // might not scroll at all and some cells won't be redrawn)
+            // have rounding errors (this is important, because if we do,
+            // we might not scroll at all and some cells won't be redrawn)
             //
-            // Sometimes GRID_SCROLL_LINE/2 is not enough, so just add a full
-            // scroll unit...
+            // Sometimes GRID_SCROLL_LINE / 2 is not enough,
+            // so just add a full scroll unit...
             ypos += m_scrollLineY;
         }
 
@@ -9776,7 +9778,7 @@ void wxGrid::SetRowSize( int row, int height )
 
     m_rowHeights[row] = h;
     int i;
-    for ( i = row;  i < m_numRows;  i++ )
+    for ( i = row; i < m_numRows; i++ )
     {
         m_rowBottoms[i] += diff;
     }
@@ -9823,16 +9825,16 @@ void wxGrid::SetColSize( int col, int width )
         InitColWidths();
     }
 
-    // if < 0 calc new width from label
+    // if < 0 then calculate new width from label
     if ( width < 0 )
     {
-      long w, h;
-      wxArrayString lines;
-      wxClientDC dc(m_colLabelWin);
-      dc.SetFont(GetLabelFont());
-      StringToLines(GetColLabelValue(col), lines);
-      GetTextBoxSize(dc, lines, &w, &h);
-      width = w + 6;
+        long w, h;
+        wxArrayString lines;
+        wxClientDC dc(m_colLabelWin);
+        dc.SetFont(GetLabelFont());
+        StringToLines(GetColLabelValue(col), lines);
+        GetTextBoxSize(dc, lines, &w, &h);
+        width = w + 6;
     }
 
     int w = wxMax( 0, width );
@@ -9840,7 +9842,7 @@ void wxGrid::SetColSize( int col, int width )
     m_colWidths[col] = w;
 
     int i;
-    for ( i = col;  i < m_numCols;  i++ )
+    for ( i = col; i < m_numCols; i++ )
     {
         m_colRights[i] += diff;
     }
@@ -9945,9 +9947,7 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
             wxSize size = renderer->GetBestSize(*this, *attr, dc, row, col);
             extent = column ? size.x : size.y;
             if ( extent > extentMax )
-            {
                 extentMax = extent;
-            }
 
             renderer->DecRef();
         }
@@ -9970,9 +9970,7 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
 
     extent = column ? w : h;
     if ( extent > extentMax )
-    {
         extentMax = extent;
-    }
 
     if ( !extentMax )
     {
@@ -10039,9 +10037,7 @@ int wxGrid::SetOrCalcColumnSizes(bool calcOnly, bool setAsMin)
     for ( int col = 0; col < m_numCols; col++ )
     {
         if ( !calcOnly )
-        {
             AutoSizeColumn(col, setAsMin);
-        }
 
         width += GetColWidth(col);
     }
