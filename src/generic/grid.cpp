@@ -4330,10 +4330,10 @@ void wxGrid::Init()
     }
     else
     {
-        m_labelBackgroundColour = wxColour( wxT("WHITE") );
+        m_labelBackgroundColour = *wxWHITE;
     }
 
-    m_labelTextColour = wxColour( wxT("BLACK") );
+    m_labelTextColour = *wxBLACK;
 
     // init attr cache
     m_attrCache.row = -1;
