@@ -137,6 +137,10 @@ public:
     // return true if the frame is maximized
     virtual bool IsMaximized() const = 0;
 
+    // return true if the frame is always maximized
+    // due to native guidelines or current policy
+    virtual bool IsAlwaysMaximized() const;
+
     // return true if the frame is iconized
     virtual bool IsIconized() const = 0;
 

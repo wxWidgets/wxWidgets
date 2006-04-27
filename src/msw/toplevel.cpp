@@ -724,11 +724,11 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
 
 bool wxTopLevelWindowMSW::IsMaximized() const
 {
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
-    return true;
-#else
-    return m_maximizeOnShow || ::IsZoomed(GetHwnd()) != 0;
+    return IsAlwaysMaximized() ||
+#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
+           (::IsZoomed(GetHwnd()) != 0) ||
 #endif
+           m_maximizeOnShow;
 }
 
 void wxTopLevelWindowMSW::Iconize(bool iconize)

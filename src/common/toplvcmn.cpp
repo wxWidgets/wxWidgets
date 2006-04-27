@@ -185,6 +185,11 @@ wxSize wxTopLevelWindowBase::GetDefaultSize()
 
 void wxTopLevelWindowBase::DoCentre(int dir)
 {
+    // on some platforms centering top level windows is impossible
+    // because they are always maximized by guidelines or limitations
+    if(IsAlwaysMaximized())
+        return;
+
     // we need the display rect anyhow so store it first
     int nDisplay = wxDisplay::GetFromWindow(this);
     wxDisplay dpy(nDisplay == wxNOT_FOUND ? 0 : nDisplay);
@@ -286,6 +291,14 @@ void wxTopLevelWindowBase::DoClientToScreen(int *x, int *y) const
     wxWindow::DoClientToScreen(x, y);
 }
 
+bool wxTopLevelWindowBase::IsAlwaysMaximized() const
+{
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+    return true;
+#else
+    return false;
+#endif
+}
 
 // ----------------------------------------------------------------------------
 // event handlers
