@@ -686,6 +686,17 @@ void wxWindowMac::MacControlUserPaneDrawProc(wxInt16 part)
     GetClip( rgn ) ;
     int x = 0 , y = 0;
     MacWindowToRootWindow( &x,&y ) ;
+    
+    if ( UMAGetSystemVersion() < 0x1000)
+    {
+        // under classic we get a cliprgn that is 16-bit 'endless' ie -32767 to 32767 in both directions, 
+        // such a region cannot be offset anymore, therefore we clip at an arbitrarily large region
+        RgnHandle maxbox = NewRgn() ;
+        MacSetRectRgn (maxbox , - 10000 , -10000 , 10000 , 10000 ) ;
+        SectRgn( rgn , maxbox , rgn ) ;
+        DisposeRgn(maxbox) ;
+    }
+    
     OffsetRgn( rgn , -x , -y ) ;
     wxMacWindowStateSaver sv( this ) ;
     SectRgn( rgn , (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , rgn ) ;
