@@ -21,7 +21,9 @@
     #include "wx/dc.h"
 #endif
 
-class MyDllRenderer : public wxRendererNative
+// derive from wxDelegateRendererNative and not wxRendererNative itself to be
+// able to only reimplement the methods we want to show and not all of them
+class MyDllRenderer : public wxDelegateRendererNative
 {
 public:
     // draw the header control button (used by wxListCtrl)
@@ -34,76 +36,6 @@ public:
         dc.SetTextForeground(*wxRED);
         dc.DrawRoundedRectangle(rect, 10);
         dc.DrawLabel(_T("MyDllRenderer"), wxNullBitmap, rect, wxALIGN_CENTER);
-    }
-
-    // draw the expanded/collapsed icon for a tree control item
-    virtual void DrawTreeItemButton(wxWindow *win,
-                                    wxDC& dc,
-                                    const wxRect& rect,
-                                    int flags = 0)
-    {
-    }
-
-    // draw check button
-    virtual void DrawCheckButton(wxWindow *win,
-                                 wxDC& dc,
-                                 const wxRect& rect,
-                                 int flags = 0)
-    {
-    }
-
-    // draw blank button
-    virtual void DrawPushButton(wxWindow *win,
-                                wxDC& dc,
-                                const wxRect& rect,
-                                int flags = 0)
-    {
-    }
-
-    // draw the border for sash window: this border must be such that the sash
-    // drawn by DrawSash() blends into it well
-    virtual void DrawSplitterBorder(wxWindow *win,
-                                    wxDC& dc,
-                                    const wxRect& rect,
-                                    int flags = 0)
-    {
-    }
-
-    // draw a (vertical) sash
-    virtual void DrawSplitterSash(wxWindow *win,
-                                  wxDC& dc,
-                                  const wxSize& size,
-                                  wxCoord position,
-                                  wxOrientation orient,
-                                  int flags = 0)
-    {
-    }
-
-    // draw a combobox dropdown button
-    //
-    // flags may only use wxCONTROL_PRESSED
-    virtual void DrawComboBoxDropButton(wxWindow *win,
-                                        wxDC& dc,
-                                        const wxRect& rect,
-                                        int flags = 0)
-    {
-    }
-
-    // draw a dropdown arrow
-    //
-    // flags may use wxCONTROL_PRESSED and wxCONTROL_CURRENT
-    virtual void DrawDropArrow(wxWindow *win,
-                               wxDC& dc,
-                               const wxRect& rect,
-                               int flags = 0)
-    {
-    }
-
-    // get the splitter parameters: the x field of the returned point is the
-    // sash width and the y field is the border width
-    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
-    {
-        return wxSplitterRenderParams(0, 0, 0);
     }
 
     virtual wxRendererVersion GetVersion() const
