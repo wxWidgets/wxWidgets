@@ -29,10 +29,13 @@
 #if wxUSE_THREADS
 
 #include "wx/apptrait.h"
+#include "wx/scopeguard.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h"
+#include "wx/msw/seh.h"
 
+#include "wx/except.h"
 #include "wx/module.h"
 #include "wx/thread.h"
 
@@ -427,8 +430,11 @@ public:
     HANDLE GetHandle() const { return m_hThread; }
     DWORD  GetId() const { return m_tid; }
 
-    // thread function
+    // the thread function forwarding to DoThreadStart
     static THREAD_RETVAL THREAD_CALLCONV WinThreadStart(void *thread);
+
+    // really start the thread (if it's not already dead)
+    static THREAD_RETVAL DoThreadStart(wxThread *thread);
 
     void KeepAlive()
     {
@@ -471,45 +477,63 @@ private:
     wxThreadInternal& m_thrImpl;
 };
 
-
-THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
+THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
 {
-    THREAD_RETVAL rc;
+    THREAD_RETVAL rc = (THREAD_RETVAL)-1;
 
-    wxThread * const thread = (wxThread *)param;
-
-    // first of all, check whether we hadn't been cancelled already and don't
-    // start the user code at all then
-    const bool hasExited = thread->m_internal->GetState() == STATE_EXITED;
-
-    if ( hasExited )
+    wxTRY
     {
-        rc = (THREAD_RETVAL)-1;
-    }
-    else // do run thread
-    {
+        wxON_BLOCK_EXIT_OBJ0(*thread, wxThread::OnExit);
+
         // store the thread object in the TLS
         if ( !::TlsSetValue(gs_tlsThisThread, thread) )
         {
             wxLogSysError(_("Can not start thread: error writing TLS."));
 
-            return (DWORD)-1;
+            return (THREAD_RETVAL)-1;
         }
 
         rc = (THREAD_RETVAL)thread->Entry();
     }
+    wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 
-    thread->OnExit();
+    return rc;
+}
 
-    // save IsDetached because thread object can be deleted by joinable
-    // threads after state is changed to STATE_EXITED.
-    bool isDetached = thread->IsDetached();
+THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
+{
+    THREAD_RETVAL rc = (THREAD_RETVAL)-1;
+
+    wxThread * const thread = (wxThread *)param;
+
+    // each thread has its own SEH translator so install our own a.s.a.p.
+    DisableAutomaticSETranslator();
+
+    // first of all, check whether we hadn't been cancelled already and don't
+    // start the user code at all then
+    const bool hasExited = thread->m_internal->GetState() == STATE_EXITED;
 
     if ( !hasExited )
     {
+        wxSEH_TRY
+        {
+            rc = DoThreadStart(thread);
+        }
+        wxSEH_HANDLE((THREAD_RETVAL)-1)
+    }
+
+    // save IsDetached because thread object can be deleted by joinable
+    // threads after state is changed to STATE_EXITED.
+    const bool isDetached = thread->IsDetached();
+    if ( !hasExited )
+    {
         // enter m_critsect before changing the thread state
-        wxCriticalSectionLocker lock(thread->m_critsect);
+        //
+        // NB: can't use wxCriticalSectionLocker here as we use SEH and it's
+        //     incompatible with C++ object dtors
+        thread->m_critsect.Enter();
         thread->m_internal->SetState(STATE_EXITED);
+        thread->m_critsect.Leave();
     }
 
     // the thread may delete itself now if it wants, we don't need it any more
