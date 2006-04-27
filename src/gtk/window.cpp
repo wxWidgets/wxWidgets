@@ -1591,6 +1591,10 @@ gtk_window_button_press_callback( GtkWidget *widget,
     if ( !g_captureWindow )
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
+    // reset the event object and id in case win changed.
+    event.SetEventObject( win );
+    event.SetId( win->GetId() );
+    
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
         g_signal_stop_emission_by_name (widget, "button_press_event");
@@ -1671,6 +1675,10 @@ gtk_window_button_release_callback( GtkWidget *widget,
     if ( !g_captureWindow )
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
+    // reset the event object and id in case win changed.
+    event.SetEventObject( win );
+    event.SetId( win->GetId() );
+
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
         g_signal_stop_emission_by_name (widget, "button_release_event");
@@ -1746,6 +1754,10 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
     else // no capture
     {
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
+
+        // reset the event object and id in case win changed.
+        event.SetEventObject( win );
+        event.SetId( win->GetId() );
     }
 
     if ( !g_captureWindow )
