@@ -436,6 +436,10 @@ public:
     // really start the thread (if it's not already dead)
     static THREAD_RETVAL DoThreadStart(wxThread *thread);
 
+    // call OnExit() on the thread
+    static void DoThreadOnExit(wxThread *thread);
+
+
     void KeepAlive()
     {
         if ( m_thread->IsDetached() )
@@ -477,14 +481,25 @@ private:
     wxThreadInternal& m_thrImpl;
 };
 
+/* static */
+void wxThreadInternal::DoThreadOnExit(wxThread *thread)
+{
+    wxTRY
+    {
+        thread->OnExit();
+    }
+    wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
+}
+
+/* static */
 THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
 {
+    wxON_BLOCK_EXIT1(DoThreadOnExit, thread);
+
     THREAD_RETVAL rc = (THREAD_RETVAL)-1;
 
     wxTRY
     {
-        wxON_BLOCK_EXIT_OBJ0(*thread, wxThread::OnExit);
-
         // store the thread object in the TLS
         if ( !::TlsSetValue(gs_tlsThisThread, thread) )
         {
@@ -500,6 +515,7 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
     return rc;
 }
 
+/* static */
 THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
 {
     THREAD_RETVAL rc = (THREAD_RETVAL)-1;
@@ -513,14 +529,16 @@ THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
     // start the user code at all then
     const bool hasExited = thread->m_internal->GetState() == STATE_EXITED;
 
-    if ( !hasExited )
+    // run the thread function itself inside a SEH try/except block
+    wxSEH_TRY
     {
-        wxSEH_TRY
-        {
+        if ( hasExited )
+            DoThreadOnExit(thread);
+        else
             rc = DoThreadStart(thread);
-        }
-        wxSEH_HANDLE((THREAD_RETVAL)-1)
     }
+    wxSEH_HANDLE((THREAD_RETVAL)-1)
+
 
     // save IsDetached because thread object can be deleted by joinable
     // threads after state is changed to STATE_EXITED.
