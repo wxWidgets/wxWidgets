@@ -114,7 +114,7 @@ private:
     wxTextCtrl             *m_text;
     wxString                m_startValue;
     wxDataViewListModel    *m_model;
-    size_t                  m_col; 
+    size_t                  m_col;
     size_t                  m_row;
     bool                    m_finished;
     bool                    m_aboutToFinish;
@@ -166,38 +166,38 @@ public:
     void FinishEditing( wxTextCtrl *text );
 
     void ScrollWindow( int dx, int dy, const wxRect *rect );
-    
+
     bool HasCurrentRow() { return m_currentRow != (size_t)-1; }
     void ChangeCurrentRow( size_t row );
-    
+
     bool IsSingleSel() const { return !GetParent()->HasFlag(wxDV_MULTIPLE); };
     bool IsEmpty() { return GetRowCount() == 0; }
-    
+
     int GetCountPerPage();
     int GetEndOfLastCol();
     size_t GetFirstVisibleRow();
     size_t GetLastVisibleRow();
     int GetRowCount();
-    
+
     void SelectAllRows( bool on );
     void SelectRow( size_t row, bool on );
     void SelectRows( size_t from, size_t to, bool on );
     void ReverseRowSelection( size_t row );
     bool IsRowSelected( size_t row );
-    
+
     void RefreshRow( size_t row );
     void RefreshRows( size_t from, size_t to );
     void RefreshRowsAfter( size_t firstRow );
-    
+
 private:
     wxDataViewCtrl             *m_owner;
     int                         m_lineHeight;
     bool                        m_dirty;
-    
+
     wxDataViewColumn           *m_currentCol;
     size_t                      m_currentRow;
     wxDataViewSelection         m_selection;
-    
+
     wxDataViewRenameTimer      *m_renameTimer;
     wxDataViewTextCtrlWrapper  *m_textctrlWrapper;
     bool                        m_lastOnSame;
@@ -360,7 +360,7 @@ bool wxDataViewToggleCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
     rect.width = 20;
     rect.y = cell.y + cell.height/2 - 10;
     rect.height = 20;
-    
+
     int flags = 0;
     if (m_toggle)
         flags |= wxCONTROL_CHECKED;
@@ -543,12 +543,12 @@ bool wxDataViewDateCell::Activate( wxRect WXUNUSED(cell), wxDataViewListModel *m
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
-wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column, 
+wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column,
         int fixed_width, wxDataViewColumnSizing sizing, int flags ) :
     wxDataViewColumnBase( title, cell, model_column, flags )
 {
     m_sizing = sizing;
-    
+
     m_width = fixed_width;
     m_fixedWidth = fixed_width;
 }
@@ -571,7 +571,7 @@ int wxDataViewColumn::GetWidth()
 void wxDataViewColumn::SetFixedWidth( int width )
 {
     m_fixedWidth = width;
-    
+
     if (m_sizing == wxDATAVIEW_COL_WIDTH_FIXED)
     {
         m_width = width;
@@ -705,15 +705,15 @@ wxDataViewTextCtrlWrapper::wxDataViewTextCtrlWrapper(
     m_model = model;
     m_row = row;
     m_col = col;
-    m_text = text; 
-    
+    m_text = text;
+
     m_finished = false;
     m_aboutToFinish = false;
-    
+
     wxVariant value;
     model->GetValue( value, col, row );
     m_startValue = value.GetString();
-    
+
     m_owner->GetOwner()->CalcScrolledPosition(
         rectLabel.x, rectLabel.y, &rectLabel.x, &rectLabel.y );
 
@@ -721,7 +721,7 @@ wxDataViewTextCtrlWrapper::wxDataViewTextCtrlWrapper(
                     wxPoint(rectLabel.x-2,rectLabel.y-2),
                     wxSize(rectLabel.width+7,rectLabel.height+4) );
     m_text->SetFocus();
-                       
+
     m_text->PushEventHandler(this);
 }
 
@@ -784,7 +784,7 @@ void wxDataViewTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
         AcceptChanges();
         //if ( !AcceptChanges() )
         //    m_owner->OnRenameCancelled( m_itemEdited );
-        
+
         Finish();
     }
 
@@ -853,14 +853,14 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     const wxPoint &pos, const wxSize &size, const wxString &name ) :
     wxWindow( parent, id, pos, size, wxWANTS_CHARS, name ),
     m_selection( wxDataViewSelectionCmp )
-    
+
 {
     SetOwner( parent );
 
     m_lastOnSame = false;
     m_renameTimer = new wxDataViewRenameTimer( this );
     m_textctrlWrapper = NULL;
-    
+
     // TODO: user better initial values/nothing selected
     m_currentCol = NULL;
     m_currentRow = 0;
@@ -873,7 +873,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_lineLastClicked = (size_t) -1;
     m_lineBeforeLastClicked = (size_t) -1;
     m_lineSelectSingleOnUp = (size_t) -1;
-    
+
     m_hasFocus = false;
 
     SetBackgroundColour( *wxWHITE );
@@ -909,7 +909,7 @@ void wxDataViewMainWindow::OnRenameTimer()
     wxClassInfo *textControlClass = CLASSINFO(wxTextCtrl);
 
     wxTextCtrl * const text = (wxTextCtrl *)textControlClass->CreateObject();
-    m_textctrlWrapper = new wxDataViewTextCtrlWrapper(this, text, GetOwner()->GetModel(), 
+    m_textctrlWrapper = new wxDataViewTextCtrlWrapper(this, text, GetOwner()->GetModel(),
         m_currentCol->GetModelColumn(), m_currentRow, labelRect );
 }
 
@@ -958,7 +958,7 @@ bool wxDataViewMainWindow::ValueChanged( size_t WXUNUSED(col), size_t row )
 bool wxDataViewMainWindow::RowsReordered( size_t *WXUNUSED(new_order) )
 {
     Refresh();
-    
+
     return true;
 }
 
@@ -1029,10 +1029,10 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxDataViewListModel *model = GetOwner()->GetModel();
 
     size_t item_start = wxMax( 0, (update.y / m_lineHeight) );
-    size_t item_count = wxMin( (int)(((update.y + update.height) / m_lineHeight) - item_start + 1), 
+    size_t item_count = wxMin( (int)(((update.y + update.height) / m_lineHeight) - item_start + 1),
                                (int)(model->GetNumberOfRows()-item_start) );
 
-    
+
 
     size_t item;
     for (item = item_start; item < item_start+item_count; item++)
@@ -1068,11 +1068,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                                     rect,
                                     flags
                                 );
-                
+
             }
         }
     }
-    
+
     wxRect cell_rect;
     cell_rect.x = 0;
     cell_rect.height = m_lineHeight;
@@ -1132,7 +1132,7 @@ size_t wxDataViewMainWindow::GetFirstVisibleRow()
     int x = 0;
     int y = 0;
     m_owner->CalcUnscrolledPosition( x, y, &x, &y );
-    
+
     return y / m_lineHeight;
 }
 
@@ -1152,14 +1152,14 @@ int wxDataViewMainWindow::GetRowCount()
 void wxDataViewMainWindow::ChangeCurrentRow( size_t row )
 {
     m_currentRow = row;
-    
+
     // send event
 }
 
 void wxDataViewMainWindow::SelectAllRows( bool on )
 {
     if (GetRowCount() == 0) return;
-    
+
     if (on)
     {
         m_selection.Clear();
@@ -1174,7 +1174,7 @@ void wxDataViewMainWindow::SelectAllRows( bool on )
         size_t last_visible = GetLastVisibleRow();
         size_t i;
         for (i = 0; i < m_selection.GetCount(); i++)
-        {    
+        {
             size_t row = m_selection[i];
             if ((row >= first_visible) && (row <= last_visible))
                 RefreshRow( row );
@@ -1235,7 +1235,7 @@ void wxDataViewMainWindow::ReverseRowSelection( size_t row )
         m_selection.Add( row );
     else
         m_selection.Remove( row );
-    Refresh( row );
+    RefreshRow( row );
 }
 
 bool wxDataViewMainWindow::IsRowSelected( size_t row )
@@ -1247,7 +1247,7 @@ void wxDataViewMainWindow::RefreshRow( size_t row )
 {
     wxRect rect( 0, row*m_lineHeight, GetEndOfLastCol(), m_lineHeight );
     m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-    
+
     wxSize client_size = GetClientSize();
     wxRect client_rect( 0, 0, client_size.x, client_size.y );
     wxRect intersect_rect = client_rect.Intersect( rect );
@@ -1266,7 +1266,7 @@ void wxDataViewMainWindow::RefreshRows( size_t from, size_t to )
 
     wxRect rect( 0, from*m_lineHeight, GetEndOfLastCol(), (to-from+1) * m_lineHeight );
     m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-    
+
     wxSize client_size = GetClientSize();
     wxRect client_rect( 0, 0, client_size.x, client_size.y );
     wxRect intersect_rect = client_rect.Intersect( rect );
@@ -1278,10 +1278,10 @@ void wxDataViewMainWindow::RefreshRowsAfter( size_t firstRow )
 {
     size_t count = GetRowCount();
     if (firstRow > count) return;
-    
+
     wxRect rect( 0, firstRow*m_lineHeight, GetEndOfLastCol(), count * m_lineHeight );
     m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-    
+
     wxSize client_size = GetClientSize();
     wxRect client_rect( 0, 0, client_size.x, client_size.y );
     wxRect intersect_rect = client_rect.Intersect( rect );
@@ -1305,7 +1305,7 @@ void wxDataViewMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& even
     if ( event.ShiftDown() && !IsSingleSel() )
     {
         RefreshRow( oldCurrent );
-    
+
         ChangeCurrentRow( newCurrent );
 
         // select all the items between the old and the new one
@@ -1320,7 +1320,7 @@ void wxDataViewMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& even
     else // !shift
     {
         RefreshRow( oldCurrent );
-    
+
         // all previously selected items are unselected unless ctrl is held
         if ( !event.ControlDown() )
             SelectAllRows(false);
@@ -1355,7 +1355,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
         event.Skip();
         return;
     }
-    
+
     // don't use m_linesPerPage directly as it might not be computed yet
     const int pageSize = GetCountPerPage();
     wxCHECK_RET( pageSize, _T("should have non zero page size") );
@@ -1443,7 +1443,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     wxDataViewCell *cell = col->GetCell();
 
     size_t current = y / m_lineHeight;
-    
+
     if ((current > GetRowCount()) || (x > GetEndOfLastCol()))
     {
         // Unselect all if below the last row ?
@@ -1506,7 +1506,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             // a double click, but as a simple click instead
             forceClick = true;
         }
-    } 
+    }
 
     if (event.LeftUp())
     {
@@ -1516,7 +1516,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             SelectAllRows( false );
             SelectRow( m_lineSelectSingleOnUp, true );
         }
-        
+
         if (m_lastOnSame)
         {
             if ((col == m_currentCol) & (current == m_currentRow) &&
@@ -1528,7 +1528,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
         m_lastOnSame = false;
         m_lineSelectSingleOnUp = (size_t)-1;
-    } 
+    }
     else
     {
         // This is necessary, because after a DnD operation in
@@ -1554,7 +1554,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
         // notify cell about right click
         // cell->...
-        
+
         // Allow generation of context menu event
         event.Skip();
     }
@@ -1568,7 +1568,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 #ifdef __WXMSW__
         SetFocus();
 #endif
-    
+
         m_lineBeforeLastClicked = m_lineLastClicked;
         m_lineLastClicked = current;
 
@@ -1626,10 +1626,10 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             RefreshRow( oldCurrentRow );
 
         wxDataViewColumn *oldCurrentCol = m_currentCol;
-        
+
         // Update selection here...
         m_currentCol = col;
-    
+
         m_lastOnSame = !forceClick && ((col == oldCurrentCol) && (current == oldCurrentRow)) && oldWasSelected;
     }
 }
@@ -1637,20 +1637,20 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 void wxDataViewMainWindow::OnSetFocus( wxFocusEvent &event )
 {
     m_hasFocus = true;
-    
+
     if (HasCurrentRow())
         Refresh();
-        
+
     event.Skip();
 }
 
 void wxDataViewMainWindow::OnKillFocus( wxFocusEvent &event )
 {
     m_hasFocus = false;
-    
+
     if (HasCurrentRow())
         Refresh();
-        
+
     event.Skip();
 }
 
@@ -1693,7 +1693,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     m_headerArea = new wxDataViewHeaderWindow( this, wxID_ANY, wxDefaultPosition, wxSize(wxDefaultCoord,22) );
 #else
     m_headerArea = new wxDataViewHeaderWindow( this, wxID_ANY, wxDefaultPosition, wxSize(wxDefaultCoord,25) );
-#endif 
+#endif
 
     SetTargetWindow( m_clientArea );
 
@@ -1767,4 +1767,3 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
 
 #endif
     // wxUSE_DATAVIEWCTRL
-
