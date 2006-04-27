@@ -24,9 +24,9 @@
     #include  "wx/string.h"
     #include  "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/event.h"
 #endif //WX_PRECOMP
 
-#include "wx/event.h"
 #include "wx/app.h"
 
 #include "wx/msw/registry.h"

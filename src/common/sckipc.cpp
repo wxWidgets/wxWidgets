@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sckipc.cpp
+// Name:        src/common/sckipc.cpp
 // Purpose:     Interprocess communication implementation (wxSocket version)
 // Author:      Julian Smart
 // Modified by: Guilhem Lavaux (big rewrite) May 1997, 1998
@@ -26,23 +26,24 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx/log.h"
+    #pragma hdrstop
 #endif
 
 #if wxUSE_SOCKETS && wxUSE_IPC && wxUSE_STREAMS
+
+#include "wx/sckipc.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/event.h"
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
 
 #include "wx/socket.h"
-#include "wx/sckipc.h"
 #include "wx/module.h"
-#include "wx/event.h"
 
 // --------------------------------------------------------------------------
 // macros and constants
@@ -752,4 +753,4 @@ IMPLEMENT_DYNAMIC_CLASS(wxTCPEventHandlerModule, wxModule)
 
 
 #endif
-    // wxUSE_SOCKETS && wxUSE_IPC
+   // wxUSE_SOCKETS && wxUSE_IPC && wxUSE_STREAMS

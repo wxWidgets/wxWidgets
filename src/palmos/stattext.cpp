@@ -13,18 +13,18 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_STATTEXT
 
-#ifndef WX_PRECOMP
-#include "wx/event.h"
-#include "wx/app.h"
-#include "wx/brush.h"
-#endif
-
 #include "wx/stattext.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/event.h"
+    #include "wx/app.h"
+    #include "wx/brush.h"
+#endif
 
 #include <Field.h>
 

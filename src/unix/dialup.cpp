@@ -20,9 +20,9 @@
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/event.h"
 #endif // !PCH
 
-#include "wx/event.h"
 #include "wx/timer.h"
 #include "wx/filefn.h"
 #include "wx/utils.h"

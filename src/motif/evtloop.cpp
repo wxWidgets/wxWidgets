@@ -26,10 +26,10 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/event.h"
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
-#include "wx/event.h"
 #include "wx/app.h"
 #include "wx/window.h"
 
@@ -477,4 +477,3 @@ bool wxAddIdleCallback()
 
     return true;
 }
-

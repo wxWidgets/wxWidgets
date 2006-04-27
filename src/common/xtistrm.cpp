@@ -18,16 +18,16 @@
 
 #if wxUSE_EXTENDED_RTTI
 
+#include "wx/xtistrm.h"
+
 #ifndef WX_PRECOMP
     #include "wx/object.h"
     #include "wx/hash.h"
+    #include "wx/event.h"
 #endif
 
 #include "wx/tokenzr.h"
 #include "wx/txtstrm.h"
-#include "wx/event.h"
-
-#include "wx/xtistrm.h"
 
 #include "wx/beforestd.h"
 #include <map>

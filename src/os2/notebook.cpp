@@ -22,11 +22,11 @@
     #include "wx/dcclient.h"
     #include "wx/string.h"
     #include "wx/settings.h"
-    #include  "wx/log.h"
+    #include "wx/log.h"
+    #include "wx/event.h"
 #endif  // WX_PRECOMP
 
 #include  "wx/imaglist.h"
-#include  "wx/event.h"
 #include  "wx/control.h"
 
 #include  "wx/os2/private.h"

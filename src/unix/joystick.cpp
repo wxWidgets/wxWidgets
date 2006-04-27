@@ -16,6 +16,10 @@
 
 #include "wx/joystick.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/event.h"
+#endif //WX_PRECOMP
+
 #include <linux/joystick.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -24,7 +28,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "wx/event.h"
 #include "wx/window.h"
 #include "wx/unix/private.h"
 

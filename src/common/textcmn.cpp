@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/textcmn.cpp
+// Name:        src/common/textcmn.cpp
 // Purpose:     implementation of platform-independent functions of wxTextCtrl
 // Author:      Julian Smart
 // Modified by:
@@ -20,12 +20,17 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/event.h"
+#endif // WX_PRECOMP
+
 #if wxUSE_TEXTCTRL
+
+#include "wx/textctrl.h"
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
 #include "wx/ffile.h"
@@ -517,7 +522,6 @@ wxTextCtrlBase::HitTest(const wxPoint& WXUNUSED(pt),
 
 // define this one even if !wxUSE_TEXTCTRL because it is also used by other
 // controls (wxComboBox and wxSpinCtrl)
-#include "wx/event.h"
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_UPDATED)
 

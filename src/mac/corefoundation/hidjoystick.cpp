@@ -33,9 +33,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/event.h"   //joystick wxEvents
 #endif
 
-#include "wx/event.h"       //joystick wxEvents
 #include "wx/joystick.h"    //...
 #include "wx/thread.h"      //wxThread for polling thread/ wxCriticalSection
 #include "wx/window.h"      //for wxWindow to "capture" joystick

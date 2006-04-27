@@ -24,9 +24,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/event.h"
 #endif
 
-#include "wx/event.h"
 #include "wx/brush.h"
 #include "wx/pen.h"
 #include "wx/bitmap.h"

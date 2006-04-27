@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#include "wx/event.h"
+
 #ifndef WX_PRECOMP
     #include "wx/list.h"
     #include "wx/app.h"
@@ -36,7 +38,6 @@
     #endif // wxUSE_GUI
 #endif
 
-#include "wx/event.h"
 #include "wx/module.h"
 
 #if wxUSE_GUI

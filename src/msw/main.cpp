@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/main.cpp
+// Name:        src/msw/main.cpp
 // Purpose:     WinMain/DllMain
 // Author:      Julian Smart
 // Modified by:
@@ -24,7 +24,10 @@
     #pragma hdrstop
 #endif
 
-#include "wx/event.h"
+#ifndef WX_PRECOMP
+    #include "wx/event.h"
+#endif //WX_PRECOMP
+
 #include "wx/app.h"
 #include "wx/cmdline.h"
 #include "wx/scopeguard.h"
@@ -247,7 +250,7 @@ static bool wxIsUnicodeAvailable()
     if ( wxGetOsVersion() != wxWINDOWS_NT )
     {
         // we need to be built with MSLU support
-#if !wxUSE_UNICODE_MSLU 
+#if !wxUSE_UNICODE_MSLU
         // note that we can use MessageBoxW() as it's implemented even under
         // Win9x - OTOH, we can't use wxGetTranslation() because the file APIs
         // used by wxLocale are not
@@ -403,4 +406,3 @@ void wxSetInstance(HINSTANCE hInst)
 }
 
 #endif // wxUSE_BASE
-

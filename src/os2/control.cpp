@@ -13,12 +13,13 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include "wx/event.h"
-#include "wx/app.h"
-#include "wx/dcclient.h"
-#include "wx/scrolwin.h"
-#include "wx/log.h"
+    #include "wx/event.h"
+    #include "wx/app.h"
+    #include "wx/dcclient.h"
+    #include "wx/scrolwin.h"
+    #include "wx/log.h"
 #endif
+
 #include "wx/os2/private.h"
 #include "wx/control.h"
 
@@ -33,15 +34,13 @@ wxControl::wxControl()
 {
 } // end of wxControl::wxControl
 
-bool wxControl::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, const wxValidator&                rValidator
-, const wxString&                   rsName
-)
+bool wxControl::Create( wxWindow*           pParent,
+                        wxWindowID          vId,
+                        const wxPoint&      rPos,
+                        const wxSize&       rSize,
+                        long                lStyle,
+                        const wxValidator&  rValidator,
+                        const wxString&     rsName )
 {
     bool                            bRval = wxWindow::Create( pParent
                                                              ,vId

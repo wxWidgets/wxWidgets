@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_cald.cpp
+// Name:        src/xrc/xh_cald.cpp
 // Purpose:     XRC resource for wxCalendarCtrl
 // Author:      Brian Gavin
 // Created:     2000/09/09
@@ -18,7 +18,11 @@
 #if wxUSE_XRC && wxUSE_CALENDARCTRL
 
 #include "wx/xrc/xh_cald.h"
-#include "wx/event.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/event.h"
+#endif //WX_PRECOMP
+
 #include "wx/calctrl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrlXmlHandler, wxXmlResourceHandler)

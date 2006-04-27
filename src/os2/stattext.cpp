@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        stattext.cpp
+// Name:        src/os2/stattext.cpp
 // Purpose:     wxStaticText
 // Author:      David Webster
 // Modified by:
@@ -13,10 +13,10 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include "wx/event.h"
-#include "wx/app.h"
-#include "wx/brush.h"
-#include "wx/scrolwin.h"
+    #include "wx/event.h"
+    #include "wx/app.h"
+    #include "wx/brush.h"
+    #include "wx/scrolwin.h"
 #endif
 
 #include "wx/stattext.h"
@@ -25,15 +25,13 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
 
-bool wxStaticText::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxString&                   rsLabel
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, const wxString&                   rsName
-)
+bool wxStaticText::Create( wxWindow*        pParent,
+                           wxWindowID       vId,
+                           const wxString&  rsLabel,
+                           const wxPoint&   rPos,
+                           const wxSize&    rSize,
+                           long             lStyle,
+                           const wxString&  rsName )
 {
     SetName(rsName);
     if (pParent)
@@ -42,19 +40,19 @@ bool wxStaticText::Create(
     SetBackgroundColour(pParent->GetBackgroundColour()) ;
     SetForegroundColour(pParent->GetForegroundColour()) ;
 
-    if ( vId == -1 )
+    if ( vId == wxID_ANY )
         m_windowId = (int)NewControlId();
     else
         m_windowId = vId;
 
-    int                             nX      = rPos.x;
-    int                             nY      = rPos.y;
-    int                             nWidth  = rSize.x;
-    int                             nHeight = rSize.y;
+    int nX      = rPos.x;
+    int nY      = rPos.y;
+    int nWidth  = rSize.x;
+    int nHeight = rSize.y;
 
     m_windowStyle = lStyle;
 
-    long                            lSstyle = 0L;
+    long lSstyle = 0L;
 
     // Used to have DT_VCENTER but that doesn't work correctly with
     // multiline strings and DT_WORDBREAK. Accept a reasonable
@@ -67,7 +65,7 @@ bool wxStaticText::Create(
     else
         lSstyle |= DT_LEFT;
 
-    wxString                        sLabel = ::wxPMTextToLabel(rsLabel);
+    wxString sLabel = ::wxPMTextToLabel(rsLabel);
 
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                        ,WC_STATIC                // Window class
@@ -81,13 +79,9 @@ bool wxStaticText::Create(
                                        ,NULL                     // no Presentation parameters
                                       );
 
-    wxCHECK_MSG(m_hWnd, FALSE, wxT("Failed to create static ctrl"));
+    wxCHECK_MSG(m_hWnd, false, wxT("Failed to create static ctrl"));
 
-    wxColour                        vColour;
-
-    vColour.Set(wxString(wxT("BLACK")));
-
-    LONG                            lColor = (LONG)vColour.GetPixel();
+    LONG lColor = (LONG)wxBLACK->GetPixel();
 
     ::WinSetPresParam( m_hWnd
                       ,PP_FOREGROUNDCOLOR
@@ -106,24 +100,21 @@ bool wxStaticText::Create(
     SetFont(*wxSMALL_FONT);
     SetXComp(0);
     SetYComp(0);
-    SetSize( nX
-            ,nY
-            ,nWidth
-            ,nHeight
-           );
-    return TRUE;
+    SetSize( nX, nY, nWidth, nHeight );
+
+    return true;
 } // end of wxStaticText::Create
 
 wxSize wxStaticText::DoGetBestSize() const
 {
-    wxString                        sText(wxGetWindowText(GetHWND()));
-    int                             nWidthTextMax = 0;
-    int                             nWidthLine = 0;
-    int                             nHeightTextTotal = 0;
-    int                             nHeightLineDefault = 0;
-    int                             nHeightLine = 0;
-    wxString                        sCurLine;
-    bool                            bLastWasTilde = FALSE;
+    wxString sText(wxGetWindowText(GetHWND()));
+    int      nWidthTextMax = 0;
+    int      nWidthLine = 0;
+    int      nHeightTextTotal = 0;
+    int      nHeightLineDefault = 0;
+    int      nHeightLine = 0;
+    wxString sCurLine;
+    bool     bLastWasTilde = false;
 
     for (const wxChar *pc = sText; ; pc++)
     {
@@ -174,7 +165,7 @@ wxSize wxStaticText::DoGetBestSize() const
             {
                 if (!bLastWasTilde)
                 {
-                    bLastWasTilde = TRUE;
+                    bLastWasTilde = true;
 
                     //
                     // Skip the statement adding pc to curLine below
@@ -185,7 +176,7 @@ wxSize wxStaticText::DoGetBestSize() const
                 //
                 // It is a literal tilde
                 //
-                bLastWasTilde = FALSE;
+                bLastWasTilde = false;
             }
             sCurLine += *pc;
         }
