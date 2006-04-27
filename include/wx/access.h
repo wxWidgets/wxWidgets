@@ -16,6 +16,8 @@
 // headers we have to include here
 // ----------------------------------------------------------------------------
 
+#include "wx/defs.h"
+
 #include "wx/variant.h"
 
 typedef enum
@@ -363,20 +365,7 @@ private:
 
 #if defined(__WXMSW__)
     #include "wx/msw/ole/access.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/generic/access.h"
-#elif defined(__WXMGL__)
-    #include "wx/generic/access.h"
-#elif defined(__WXGTK__)
-    #include "wx/generic/access.h"
-#elif defined(__WXX11__)
-    #include "wx/generic/access.h"
-#elif defined(__WXMAC__)
-    #include "wx/generic/access.h"
-#elif defined(__WXPM__)
-    #include "wx/generic/access.h"
 #endif
 
 #endif
     // _WX_ACCESSBASE_H_
-

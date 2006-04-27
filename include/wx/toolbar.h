@@ -63,8 +63,6 @@ enum
        #include "wx/msw/tbar95.h"
     #elif defined(__WXWINCE__)
        #include "wx/msw/wince/tbarwce.h"
-    #elif defined(__WXMSW__)
-       #include "wx/msw/tbarmsw.h"
     #elif defined(__WXMOTIF__)
        #include "wx/motif/toolbar.h"
     #elif defined(__WXGTK20__)
