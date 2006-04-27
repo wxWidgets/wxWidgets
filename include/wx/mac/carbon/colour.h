@@ -63,7 +63,8 @@ private:
 
 public:
     WXCOLORREF m_pixel ;
-    void Set( const WXCOLORREF* color ) ;
+    void FromRGBColor( const WXCOLORREF* color ) ;
+    
 
 private:
     DECLARE_DYNAMIC_CLASS(wxColour)

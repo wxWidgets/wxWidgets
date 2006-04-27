@@ -52,7 +52,7 @@ void wxColour::InitWith (unsigned char r, unsigned char g, unsigned char b)
     wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green );
 }
 
-void wxColour::Set( const WXCOLORREF* color )
+void wxColour::FromRGBColor( const WXCOLORREF* color )
 {
     RGBColor* col = (RGBColor*) color;
     memcpy( &m_pixel, color, 6 );
