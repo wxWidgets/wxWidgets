@@ -448,7 +448,7 @@ void WidgetsFrame::InitBook()
         menuPages->AppendRadioItem
                    (
                     Widgets_GoToPage + nPage,
-                    wxString::Format("%s\tF%u",
+                    wxString::Format(wxT("%s\tF%u"),
                                      info->GetLabel().c_str(), nPage + 1)
                    );
     }
