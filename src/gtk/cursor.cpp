@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.cpp
+// Name:        src/gtk/cursor.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -11,8 +11,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/cursor.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/utils.h"
-#include "wx/app.h"
 
 #include "wx/gtk/private.h" //for idle stuff
 

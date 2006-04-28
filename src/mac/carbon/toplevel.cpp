@@ -38,7 +38,6 @@
 
 #include "wx/mac/uma.h"
 #include "wx/mac/aga.h"
-#include "wx/app.h"
 #include "wx/tooltip.h"
 #include "wx/dnd.h"
 
@@ -123,9 +122,9 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 
     unsigned char charCode ;
     wxChar uniChar[2] ;
-	uniChar[0] = 0;
-	uniChar[1] = 0;
-	
+    uniChar[0] = 0;
+    uniChar[1] = 0;
+
     UInt32 keyCode ;
     UInt32 modifiers ;
     Point point ;
@@ -143,7 +142,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
         if ( numChars * 2 > 4 )
             charBuf = new UniChar[ numChars ] ;
         GetEventParameter( event, kEventParamKeyUnicodes, typeUnicodeText, NULL, dataSize , NULL , charBuf ) ;
-		charBuf[ numChars - 1 ] = 0;
+        charBuf[ numChars - 1 ] = 0;
 
 #if SIZEOF_WCHAR_T == 2
         uniChar = charBuf[0] ;
@@ -1789,4 +1788,3 @@ static pascal long wxShapedMacWindowDef(short varCode, WindowRef window, SInt16 
 
     return 0;
 }
-

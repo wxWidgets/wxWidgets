@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/dialup.cpp
+// Name:        src/msw/dialup.cpp
 // Purpose:     MSW implementation of network/dialup classes and functions
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -26,18 +26,19 @@
 
 #if wxUSE_DIALUP_MANAGER
 
+#include "wx/dialup.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/event.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/timer.h"
-#include "wx/app.h"
 #include "wx/generic/choicdgg.h"
 
 #include "wx/dynlib.h"
-#include "wx/dialup.h"
 #include "wx/module.h"
 
 DEFINE_EVENT_TYPE(wxEVT_DIALUP_CONNECTED)
@@ -1329,4 +1330,3 @@ static void WINAPI wxRasDialFunc(UINT WXUNUSED(unMsg),
 #endif // __BORLANDC__
 
 #endif // wxUSE_DIALUP_MANAGER
-

@@ -25,11 +25,11 @@
     #include  "wx/dc.h"
     #include  "wx/log.h"
     #include  "wx/event.h"
+    #include  "wx/app.h"
 #endif  // WX_PRECOMP
 
 #include  "wx/imaglist.h"
 #include  "wx/control.h"
-#include  "wx/app.h"
 #include  "wx/sysopt.h"
 #include  "wx/dcclient.h"
 #include  "wx/dcmemory.h"

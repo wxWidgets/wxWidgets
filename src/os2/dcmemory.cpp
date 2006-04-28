@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcmemory.cpp
+// Name:        src/os2/dcmemory.cpp
 // Purpose:     wxMemoryDC class
 // Author:      David Webster
 // Modified by:
@@ -13,9 +13,9 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include "wx/utils.h"
-#include "wx/app.h"
-#include "wx/log.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/os2/private.h"
@@ -98,16 +98,16 @@ bool wxMemoryDC::CreateCompatible( wxDC* WXUNUSED(pDC) )
         {
             m_hPS = NULLHANDLE;
             m_hDC = NULLHANDLE;
-            m_ok  = FALSE;
-            m_bOwnsDC = FALSE;
+            m_ok  = false;
+            m_bOwnsDC = false;
         }
     }
     else
     {
         m_hPS = NULLHANDLE;
         m_hDC = NULLHANDLE;
-        m_ok  = FALSE;
-        m_bOwnsDC = FALSE;
+        m_ok  = false;
+        m_bOwnsDC = false;
     }
 
     //

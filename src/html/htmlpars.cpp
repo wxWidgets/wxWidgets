@@ -19,6 +19,7 @@
     #include "wx/dynarray.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/tokenzr.h"
@@ -34,7 +35,6 @@
 #endif
 
 // DLL options compatibility check:
-#include "wx/app.h"
 WX_CHECK_BUILD_OPTIONS("wxHTML")
 
 const wxChar *wxTRACE_HTML_DEBUG = _T("htmldebug");

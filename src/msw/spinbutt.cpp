@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/spinbutt.cpp
+// Name:        src/msw/spinbutt.cpp
 // Purpose:     wxSpinButton
 // Author:      Julian Smart
 // Modified by:
@@ -25,7 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/app.h"
+    #include "wx/app.h"
 #endif
 
 #if wxUSE_SPINBTN

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbox.cpp
+// Name:        src/os2/statbox.cpp
 // Purpose:     wxStaticBox
 // Author:      David Webster
 // Modified by:
@@ -12,27 +12,25 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/statbox.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/dcclient.h"
+#endif
+
 #include "wx/window.h"
 #include "wx/os2/private.h"
 
-#ifndef WX_PRECOMP
-#include "wx/app.h"
-#include "wx/dcclient.h"
-#endif
-
-#include "wx/statbox.h"
-
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
 
-bool wxStaticBox::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxString&                   rsLabel
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, const wxString&                   rsName
-)
+bool wxStaticBox::Create( wxWindow*       pParent,
+                          wxWindowID      vId,
+                          const wxString& rsLabel,
+                          const wxPoint&  rPos,
+                          const wxSize&   rSize,
+                          long            lStyle,
+                          const wxString& rsName )
 {
     if(!CreateControl( pParent
                       ,vId
@@ -43,11 +41,11 @@ bool wxStaticBox::Create(
                       ,rsName
                      ))
     {
-        return FALSE;
+        return false;
     }
 
-    wxPoint                         vPos(0,0);
-    wxSize                          vSize(0,0);
+    wxPoint  vPos(0,0);
+    wxSize   vSize(0,0);
 
     if (!OS2CreateControl( wxT("STATIC")
                           ,SS_GROUPBOX
@@ -56,7 +54,7 @@ bool wxStaticBox::Create(
                           ,rsLabel
                          ))
     {
-        return FALSE;
+        return false;
     }
 
     //
@@ -84,7 +82,7 @@ bool wxStaticBox::Create(
             ,rSize.x
             ,rSize.y
            );
-    return TRUE;
+    return true;
 } // end of wxStaticBox::Create
 
 wxSize wxStaticBox::DoGetBestSize() const
@@ -108,13 +106,9 @@ wxSize wxStaticBox::DoGetBestSize() const
                  );
 } // end of wxStaticBox::DoGetBestSize
 
-MRESULT wxStaticBox::OS2WindowProc(
-  WXUINT                            nMsg
-, WXWPARAM                          wParam
-, WXLPARAM                          lParam
-)
+MRESULT wxStaticBox::OS2WindowProc( WXUINT    nMsg,
+                                    WXWPARAM  wParam,
+                                    WXLPARAM  lParam )
 {
     return wxControl::OS2WindowProc(nMsg, wParam, lParam);
 } // end of wxStaticBox::OS2WindowProc
-
-

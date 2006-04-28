@@ -6,13 +6,17 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
-#include "wx/app.h"
 #include "wx/cursor.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/icon.h"
 #include "wx/image.h"
 #include "wx/xpmdecod.h"

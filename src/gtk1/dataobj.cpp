@@ -16,9 +16,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/debug.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
@@ -227,7 +227,7 @@ bool wxFileDataObject::GetDataHere(void *buf) const
 
     memcpy( buf, filenames.mbc_str(), filenames.Len() + 1 );
 
-    return TRUE;
+    return true;
 }
 
 size_t wxFileDataObject::GetDataSize() const
@@ -291,7 +291,7 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxFileDataObject::AddFile( const wxString &filename )
@@ -336,12 +336,12 @@ bool wxBitmapDataObject::GetDataHere(void *buf) const
     {
         wxFAIL_MSG( wxT("attempt to copy empty bitmap failed") );
 
-        return FALSE;
+        return false;
     }
 
     memcpy(buf, m_pngData, m_pngSize);
 
-    return TRUE;
+    return true;
 }
 
 bool wxBitmapDataObject::SetData(size_t size, const void *buf)
@@ -349,7 +349,7 @@ bool wxBitmapDataObject::SetData(size_t size, const void *buf)
     Clear();
 
     wxCHECK_MSG( wxImage::FindHandler(wxBITMAP_TYPE_PNG) != NULL,
-                 FALSE, wxT("You must call wxImage::AddHandler(new wxPNGHandler); to be able to use clipboard with bitmaps!") );
+                 false, wxT("You must call wxImage::AddHandler(new wxPNGHandler); to be able to use clipboard with bitmaps!") );
 
     m_pngSize = size;
     m_pngData = malloc(m_pngSize);
@@ -360,7 +360,7 @@ bool wxBitmapDataObject::SetData(size_t size, const void *buf)
     wxImage image;
     if ( !image.LoadFile( mstream, wxBITMAP_TYPE_PNG ) )
     {
-        return FALSE;
+        return false;
     }
 
     m_bitmap = wxBitmap(image);

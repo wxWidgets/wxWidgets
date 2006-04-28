@@ -1,19 +1,26 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcscreen.cpp
+// Name:        src/x11/dcscreen.cpp
 // Purpose:     wxScreenDC class
 // Author:      Julian Smart, Robert Roebling
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart, Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#include "wx/dcscreen.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
 
 #include "wx/window.h"
 #include "wx/frame.h"
-#include "wx/dcscreen.h"
 #include "wx/utils.h"
-#include "wx/app.h"
 #include "wx/fontutil.h"
 
 #include "wx/x11/private.h"
@@ -34,16 +41,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC,wxPaintDC)
 
 wxScreenDC::wxScreenDC()
 {
-    m_ok = FALSE;
-    
+    m_ok = false;
+
     m_display = (WXDisplay *) wxGlobalDisplay();
-    
+
     int screen = DefaultScreen( (Display*) m_display );
     m_cmap = (WXColormap) DefaultColormap( (Display*) m_display, screen );
-    
+
     m_window = (WXWindow) RootWindow( (Display*) m_display, screen );
 
-    m_isScreenDC = TRUE;
+    m_isScreenDC = true;
 
 #if wxUSE_UNICODE
     m_context = wxTheApp->GetPangoContext();
@@ -107,12 +114,12 @@ bool wxScreenDC::StartDrawingOnTop( wxRect *rectIn )
     }
 #endif // 0
 
-    return TRUE;
+    return true;
 }
 
 bool wxScreenDC::EndDrawingOnTop()
 {
-    return TRUE;
+    return true;
 }
 
 void wxScreenDC::DoGetSize(int *width, int *height) const

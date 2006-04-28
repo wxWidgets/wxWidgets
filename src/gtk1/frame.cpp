@@ -19,9 +19,13 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/frame.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/dialog.h"
 #include "wx/control.h"
-#include "wx/app.h"
 #include "wx/menu.h"
 #if wxUSE_TOOLBAR
     #include "wx/toolbar.h"

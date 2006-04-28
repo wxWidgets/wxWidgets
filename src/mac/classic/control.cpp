@@ -16,8 +16,12 @@
 #endif
 
 #include "wx/control.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/panel.h"
-#include "wx/app.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
 #include "wx/notebook.h"
@@ -435,13 +439,13 @@ void wxControl::MacAdjustControlRect()
         {
             if ( IsKindOf( CLASSINFO( wxButton ) ) )
             {
-                m_width = m_label.Length() * 8 + 12 ;
+                m_width = m_label.length() * 8 + 12 ;
                 if ( m_width < 70 )
                   m_width = 70 ;
             }
             else if ( IsKindOf( CLASSINFO( wxStaticText ) ) )
             {
-                m_width = m_label.Length() * 8 ;
+                m_width = m_label.length() * 8 ;
             }
             else
                 m_width = bestsize.right - bestsize.left ;

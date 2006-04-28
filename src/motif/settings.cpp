@@ -17,8 +17,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/settings.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/gdicmn.h"
-#include "wx/app.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

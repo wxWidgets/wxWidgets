@@ -18,9 +18,13 @@
 #if wxUSE_DRAG_AND_DROP
 
 #include "wx/dnd.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/window.h"
 #include "wx/toplevel.h"
-#include "wx/app.h"
 #include "wx/gdicmn.h"
 #include "wx/mac/private.h"
 
@@ -207,7 +211,7 @@ bool wxDropTarget::GetData()
                         {
                             theData[dataSize]=0 ;
                             wxString convert( theData , wxConvLocal ) ;
-                            m_dataObject->SetData( format, convert.Length() * sizeof(wxChar), (const wxChar*) convert );
+                            m_dataObject->SetData( format, convert.length() * sizeof(wxChar), (const wxChar*) convert );
                         }
                         else if ( theType == kDragFlavorTypeHFS )
                         {

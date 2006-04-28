@@ -20,8 +20,12 @@
 #endif
 
 #include "wx/dialog.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/utils.h"
-#include "wx/app.h"
 #include "wx/settings.h"
 #include "wx/evtloop.h"
 

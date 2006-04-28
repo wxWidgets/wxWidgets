@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tooltip.cpp
+// Name:        src/mac/carbon/tooltip.cpp
 // Purpose:     wxToolTip implementation
 // Author:      Stefan Csomor
 // Id:          $Id$
@@ -11,10 +11,14 @@
 
 #if wxUSE_TOOLTIPS
 
-#include "wx/app.h"
+#include "wx/tooltip.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/dc.h"
 #include "wx/window.h"
-#include "wx/tooltip.h"
 #include "wx/timer.h"
 #include "wx/geometry.h"
 #include "wx/mac/uma.h"
@@ -30,7 +34,7 @@ class wxMacToolTip
 public :
     wxMacToolTip() ;
     ~wxMacToolTip() ;
-    
+
     void Setup( WindowRef window , const wxString& text , const wxPoint& localPosition ) ;
     void Draw() ;
     void Clear() ;
@@ -45,7 +49,7 @@ private :
     wxString    m_label ;
     wxPoint m_position ;
     Rect            m_rect ;
-    WindowRef    m_window ;    
+    WindowRef    m_window ;
     PicHandle    m_backpict ;
     bool        m_shown ;
     long        m_mark ;
@@ -66,7 +70,7 @@ public:
     void Notify()
     {
         if ( m_mark == m_tip->GetMark() )
-            m_tip->Draw() ;    
+            m_tip->Draw() ;
     }
 
 protected:
@@ -100,15 +104,15 @@ wxToolTip::~wxToolTip()
 void wxToolTip::SetTip( const wxString &tip )
 {
     m_text = tip;
-    
+
     if ( m_window )
     {
 #if 0
     // update it immediately
     wxToolInfo ti(GetHwndOf(m_window));
     ti.lpszText = (wxChar *)m_text.c_str();
-    
-      (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, 0, &ti);
+
+    (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, 0, &ti);
 #endif
     }
 }
@@ -123,7 +127,7 @@ void wxToolTip::Enable( bool flag )
     if ( s_ShowToolTips != flag )
     {
         s_ShowToolTips = flag ;
- 
+
         if ( s_ShowToolTips )
         {
         }
@@ -158,7 +162,7 @@ void wxToolTip::RelayEvent( wxWindow *win , wxMouseEvent &event )
                 s_ToolTip.Clear() ;
                 s_ToolTipArea = wxRect2DInt( event.m_x - 2 , event.m_y - 2 , 4 , 4 ) ;
                 s_LastWindowEntered = win ;
-                
+
                 WindowRef window = MAC_WXHWND( win->MacGetTopLevelWindowRef() ) ;
                 int x = event.m_x ;
                 int y = event.m_y ;
@@ -194,7 +198,7 @@ wxMacToolTip::wxMacToolTip()
     m_shown = false ;
 }
 
-void wxMacToolTip::Setup( WindowRef win  , const wxString& text , const wxPoint& localPosition ) 
+void wxMacToolTip::Setup( WindowRef win  , const wxString& text , const wxPoint& localPosition )
 {
     m_mark++ ;
 
@@ -211,7 +215,7 @@ void wxMacToolTip::Setup( WindowRef win  , const wxString& text , const wxPoint&
     m_timer = new wxMacToolTipTimer( this , s_ToolTipDelay ) ;
 }
 
-wxMacToolTip::~wxMacToolTip() 
+wxMacToolTip::~wxMacToolTip()
 {
     if ( m_timer )
     {
@@ -219,7 +223,7 @@ wxMacToolTip::~wxMacToolTip()
         m_timer = NULL;
     }
 
-    if ( m_backpict ) 
+    if ( m_backpict )
         Clear() ;
 }
 
@@ -228,9 +232,9 @@ const short kTipOffset = 5 ;
 
 void wxMacToolTip::Draw()
 {
-    if ( m_label.Length() == 0 )
+    if ( m_label.empty() )
         return ;
-    
+
     if ( m_window == s_ToolTipWindowRef )
     {
         m_shown = true ;
@@ -267,7 +271,7 @@ void wxMacToolTip::Draw()
         short height = 0 ;
 
         int i = 0 ;
-        int length = m_label.Length() ;
+        int length = m_label.length() ;
         int width = 0 ;
         int thiswidth = 0 ;
         int laststop = 0 ;
@@ -325,9 +329,9 @@ void wxMacToolTip::Draw()
             m_rect.bottom = r.bottom ;
         }
 
-        GWorldPtr port ;            
-        CGrafPtr    origPort ;
-        GDHandle    origDevice ;
+        GWorldPtr port ;
+        CGrafPtr  origPort ;
+        GDHandle  origDevice ;
 
         ClipRect( &m_rect ) ;
         BackColor( whiteColor ) ;
@@ -339,11 +343,11 @@ void wxMacToolTip::Draw()
 
         m_backpict = OpenPicture(&m_rect);
 
-        CopyBits(GetPortBitMapForCopyBits(GetWindowPort(m_window)), 
-            GetPortBitMapForCopyBits(port), 
-            &m_rect, 
-            &m_rect, 
-            srcCopy, 
+        CopyBits(GetPortBitMapForCopyBits(GetWindowPort(m_window)),
+            GetPortBitMapForCopyBits(port),
+            &m_rect,
+            &m_rect,
+            srcCopy,
             NULL);
         ClosePicture();
         SetGWorld( origPort , origDevice ) ;
@@ -359,11 +363,11 @@ void wxMacToolTip::Draw()
         FrameRect( &m_rect ) ;
         SetThemeTextColor(kThemeTextColorNotification,wxDisplayDepth(),true) ;
         ::MoveTo( m_rect.left + kTipBorder , m_rect.top + fontInfo.ascent + kTipBorder);
-        
+
         i = 0 ;
         laststop = 0 ;
         height = 0 ;
-        
+
         while ( i < length )
         {
             if ( text[i] == 13 || text[i] == 10)
@@ -378,12 +382,12 @@ void wxMacToolTip::Draw()
         }
 
         ::DrawText( text , laststop , i - laststop ) ;
-        ::TextMode( srcOr ) ;        
+        ::TextMode( srcOr ) ;
 #endif
     }
 }
 
-void wxToolTip::NotifyWindowDelete( WXHWND win ) 
+void wxToolTip::NotifyWindowDelete( WXHWND win )
 {
     if ( win == s_ToolTipWindowRef )
         s_ToolTipWindowRef = NULL ;
@@ -401,11 +405,11 @@ void wxMacToolTip::Clear()
 
     if ( !m_shown )
         return ;
-    
+
 #if TARGET_CARBON
     HMHideTag() ;
     m_helpTextRef.Release() ;
-#else         
+#else
     if ( m_window == s_ToolTipWindowRef && m_backpict )
     {
         wxMacPortStateHelper help( (GrafPtr)GetWindowPort( m_window ) ) ;
@@ -422,4 +426,3 @@ void wxMacToolTip::Clear()
 }
 
 #endif
-

@@ -13,7 +13,7 @@
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 // ============================================================================
@@ -25,7 +25,11 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/utils.h"
-#include "wx/app.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/apptrait.h"
 #include "wx/msgdlg.h"
 #include "wx/cursor.h"
@@ -79,8 +83,8 @@ void wxFlushEvents()
 
 bool wxCheckForInterrupt(wxWindow *wnd)
 {
-    wxASSERT_MSG(FALSE, wxT("wxCheckForInterrupt not yet implemented."));
-    return FALSE;
+    wxFAIL_MSG(wxT("wxCheckForInterrupt not yet implemented."));
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -142,7 +146,7 @@ void wxGetMousePosition( int* x, int* y )
 #endif
 };
 
-// Return TRUE if we have a colour display
+// Return true if we have a colour display
 bool wxColourDisplay()
 {
     return wxDisplayDepth() > 1;
@@ -220,7 +224,7 @@ bool wxSetDisplay(const wxString& display_name)
             return true;
         }
         else
-            return FALSE;
+            return false;
     }
 }
 

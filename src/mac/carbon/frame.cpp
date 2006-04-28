@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        frame.cpp
+// Name:        src/mac/carbon/frame.cpp
 // Purpose:     wxFrame
 // Author:      Stefan Csomor
 // Modified by:
@@ -12,6 +12,11 @@
 #include "wx/wxprec.h"
 
 #include "wx/frame.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/statusbr.h"
 #include "wx/toolbar.h"
 #include "wx/menuitem.h"
@@ -19,7 +24,6 @@
 #include "wx/dcclient.h"
 #include "wx/dialog.h"
 #include "wx/settings.h"
-#include "wx/app.h"
 
 #include "wx/mac/uma.h"
 
@@ -398,4 +402,3 @@ void wxFrame::PositionBars()
 }
 
 #endif
-

@@ -17,10 +17,10 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/window.h"
-#include "wx/app.h"
 #include "wx/gdicmn.h"
 #include "wx/utils.h"
 
@@ -338,7 +338,7 @@ static gboolean target_drag_drop( GtkWidget *widget,
     }
     else
     {
-        wxLogTrace(TRACE_DND, wxT( "Drop target: OnDrop returned TRUE") );
+        wxLogTrace(TRACE_DND, wxT( "Drop target: OnDrop returned true") );
 
 #if wxUSE_THREADS
         /* disable GUI threads */
@@ -416,7 +416,7 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 
     if ( wxIsDragResultOk( drop_target->OnData( x, y, result ) ) )
     {
-        wxLogTrace(TRACE_DND, wxT( "Drop target: OnData returned TRUE") );
+        wxLogTrace(TRACE_DND, wxT( "Drop target: OnData returned true") );
 
         /* tell GTK that data transfer was successful */
         gtk_drag_finish( context, TRUE, FALSE, time );

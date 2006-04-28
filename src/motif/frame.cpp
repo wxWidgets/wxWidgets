@@ -30,6 +30,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/statusbr.h"
@@ -37,7 +38,6 @@
 #include "wx/menu.h"
 #include "wx/settings.h"
 #include "wx/utils.h"
-#include "wx/app.h"
 #include "wx/icon.h"
 
 #ifdef __VMS__

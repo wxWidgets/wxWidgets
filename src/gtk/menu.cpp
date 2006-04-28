@@ -15,9 +15,9 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/bitmap.h"
 
 #if wxUSE_ACCEL
@@ -151,7 +151,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
 void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long style)
 {
     // the parent window is known after wxFrame::SetMenu()
-    m_needParent = FALSE;
+    m_needParent = false;
     m_style = style;
     m_invokingWindow = (wxWindow*) NULL;
 
@@ -286,7 +286,7 @@ void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
 bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
 {
     if ( !wxMenuBarBase::Append( menu, title ) )
-        return FALSE;
+        return false;
 
     return GtkAppend(menu, title);
 }
@@ -332,20 +332,20 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
             frame->UpdateMenuBarSize();
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
-        return FALSE;
+        return false;
 
     // TODO
 
     if ( !GtkAppend(menu, title, (int)pos) )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
@@ -884,9 +884,9 @@ void wxMenuItem::Enable( bool enable )
 
 bool wxMenuItem::IsChecked() const
 {
-    wxCHECK_MSG( m_menuItem, FALSE, wxT("invalid menu item") );
+    wxCHECK_MSG( m_menuItem, false, wxT("invalid menu item") );
 
-    wxCHECK_MSG( IsCheckable(), FALSE,
+    wxCHECK_MSG( IsCheckable(), false,
                  wxT("can't get state of uncheckable item!") );
 
     return ((GtkCheckMenuItem*)m_menuItem)->active != 0;
@@ -1086,7 +1086,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         // gtk_widget_lock_accelerators(mitem->GetMenuItem());
     }
 
-    return TRUE;
+    return true;
 }
 
 wxMenuItem* wxMenu::DoAppend(wxMenuItem *mitem)
@@ -1415,7 +1415,7 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
 extern "C" WXDLLIMPEXP_CORE
 void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
 {
-    *is_waiting = FALSE;
+    *is_waiting = false;
 }
 
 WXDLLIMPEXP_CORE void SetInvokingWindow( wxMenu *menu, wxWindow* win )

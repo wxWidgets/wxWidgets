@@ -28,9 +28,9 @@
     #include  "wx/string.h"
     #include  "wx/intl.h"
     #include  "wx/log.h"
+    #include  "wx/app.h"
 #endif  //WX_PRECOMP
 
-#include  "wx/app.h"
 #include  "wx/file.h"
 #include  "wx/textfile.h"
 #include  "wx/memtext.h"
@@ -45,16 +45,16 @@
 #include  "wx/utils.h"    // for wxGetHomeDir
 
 #if defined(__WXMAC__)
-  #include  "wx/mac/private.h"  // includes mac headers
-  #include  "wx/filename.h"     // for MacSetTypeAndCreator
+    #include  "wx/mac/private.h"  // includes mac headers
+    #include  "wx/filename.h"     // for MacSetTypeAndCreator
 #endif
 
 #if defined(__WXMSW__)
-  #include "wx/msw/private.h"
+    #include "wx/msw/private.h"
 #endif  //windows.h
 #if defined(__WXPM__)
-  #define INCL_DOS
-  #include <os2.h>
+    #define INCL_DOS
+    #include <os2.h>
 #endif
 
 #include  <stdlib.h>
@@ -70,7 +70,7 @@
 // ----------------------------------------------------------------------------
 
 #ifndef MAX_PATH
-  #define MAX_PATH 512
+    #define MAX_PATH 512
 #endif
 
 #define FILECONF_TRACE_MASK _T("fileconf")
@@ -1902,20 +1902,20 @@ void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
 
 int CompareEntries(wxFileConfigEntry *p1, wxFileConfigEntry *p2)
 {
-  #if wxCONFIG_CASE_SENSITIVE
+#if wxCONFIG_CASE_SENSITIVE
     return wxStrcmp(p1->Name(), p2->Name());
-  #else
+#else
     return wxStricmp(p1->Name(), p2->Name());
-  #endif
+#endif
 }
 
 int CompareGroups(wxFileConfigGroup *p1, wxFileConfigGroup *p2)
 {
-  #if wxCONFIG_CASE_SENSITIVE
+#if wxCONFIG_CASE_SENSITIVE
     return wxStrcmp(p1->Name(), p2->Name());
-  #else
+#else
     return wxStricmp(p1->Name(), p2->Name());
-  #endif
+#endif
 }
 
 // ----------------------------------------------------------------------------

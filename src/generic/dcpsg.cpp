@@ -22,11 +22,11 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif // WX_PRECOMP
 
 #include "wx/dcmemory.h"
 #include "wx/utils.h"
-#include "wx/app.h"
 #include "wx/image.h"
 #include "wx/prntbase.h"
 #include "wx/generic/prntdlgg.h"
@@ -1601,20 +1601,20 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
     const wxChar *paper;
     switch (m_printData.GetPaperId())
     {
-       case wxPAPER_LETTER: paper = wxT("Letter"); break;             // Letter: paper ""; 8 1/2 by 11 inches
-       case wxPAPER_LEGAL: paper = wxT("Legal"); break;              // Legal, 8 1/2 by 14 inches
-       case wxPAPER_A4: paper = wxT("A4"); break;          // A4 Sheet, 210 by 297 millimeters
+       case wxPAPER_LETTER: paper = wxT("Letter"); break;       // Letter: paper ""; 8 1/2 by 11 inches
+       case wxPAPER_LEGAL: paper = wxT("Legal"); break;         // Legal, 8 1/2 by 14 inches
+       case wxPAPER_A4: paper = wxT("A4"); break;               // A4 Sheet, 210 by 297 millimeters
        case wxPAPER_TABLOID: paper = wxT("Tabloid"); break;     // Tabloid, 11 by 17 inches
-       case wxPAPER_LEDGER: paper = wxT("Ledger"); break;      // Ledger, 17 by 11 inches
-       case wxPAPER_STATEMENT: paper = wxT("Statement"); break;   // Statement, 5 1/2 by 8 1/2 inches
-       case wxPAPER_EXECUTIVE: paper = wxT("Executive"); break;   // Executive, 7 1/4 by 10 1/2 inches
-       case wxPAPER_A3: paper = wxT("A3"); break;          // A3 sheet, 297 by 420 millimeters
-       case wxPAPER_A5: paper = wxT("A5"); break;          // A5 sheet, 148 by 210 millimeters
-       case wxPAPER_B4: paper = wxT("B4"); break;          // B4 sheet, 250 by 354 millimeters
-       case wxPAPER_B5: paper = wxT("B5"); break;          // B5 sheet, 182-by-257-millimeter paper
-       case wxPAPER_FOLIO: paper = wxT("Folio"); break;       // Folio, 8-1/2-by-13-inch paper
-       case wxPAPER_QUARTO: paper = wxT("Quaro"); break;      // Quarto, 215-by-275-millimeter paper
-       case wxPAPER_10X14: paper = wxT("10x14"); break;       // 10-by-14-inch sheet
+       case wxPAPER_LEDGER: paper = wxT("Ledger"); break;       // Ledger, 17 by 11 inches
+       case wxPAPER_STATEMENT: paper = wxT("Statement"); break; // Statement, 5 1/2 by 8 1/2 inches
+       case wxPAPER_EXECUTIVE: paper = wxT("Executive"); break; // Executive, 7 1/4 by 10 1/2 inches
+       case wxPAPER_A3: paper = wxT("A3"); break;               // A3 sheet, 297 by 420 millimeters
+       case wxPAPER_A5: paper = wxT("A5"); break;               // A5 sheet, 148 by 210 millimeters
+       case wxPAPER_B4: paper = wxT("B4"); break;               // B4 sheet, 250 by 354 millimeters
+       case wxPAPER_B5: paper = wxT("B5"); break;               // B5 sheet, 182-by-257-millimeter paper
+       case wxPAPER_FOLIO: paper = wxT("Folio"); break;         // Folio, 8-1/2-by-13-inch paper
+       case wxPAPER_QUARTO: paper = wxT("Quaro"); break;        // Quarto, 215-by-275-millimeter paper
+       case wxPAPER_10X14: paper = wxT("10x14"); break;         // 10-by-14-inch sheet
        default: paper = wxT("A4");
     }
     PsPrintf( wxT("%%%%DocumentPaperSizes: %s\n"), paper );

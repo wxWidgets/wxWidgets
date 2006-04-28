@@ -1,18 +1,25 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.cpp
+// Name:        src/x11/cursor.cpp
 // Purpose:     wxCursor class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/cursor.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/gdicmn.h"
 #include "wx/icon.h"
-#include "wx/app.h"
 #include "wx/utils.h"
 
 #include "wx/x11/private.h"
@@ -65,14 +72,14 @@ wxCursor::wxCursor( int cursorId )
 
 #if wxUSE_NANOX
     // TODO Create some standard cursors from bitmaps.
-    
-    
+
+
 #else
     // !wxUSE_NANOX
-    
+
     M_CURSORDATA->m_display = wxGlobalDisplay();
     wxASSERT_MSG( M_CURSORDATA->m_display, wxT("No display") );
-    
+
     int x_cur = XC_left_ptr;
     switch (cursorId)
     {

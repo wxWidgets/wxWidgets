@@ -30,10 +30,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/evtloop.h"
-#include "wx/app.h"
 #include "wx/timer.h"
 
 #include "wx/x11/private.h"
@@ -62,11 +62,11 @@ wxAdoptedWindow::~wxAdoptedWindow()
 
 static bool Xerror;
 static Atom WM_STATE = 0;
-bool wxReparenter::sm_done = FALSE;
+bool wxReparenter::sm_done = false;
 wxAdoptedWindow* wxReparenter::sm_toReparent = NULL;
 wxWindow* wxReparenter::sm_newParent = NULL;
 wxString wxReparenter::sm_name;
-bool wxReparenter::sm_exactMatch = FALSE;
+bool wxReparenter::sm_exactMatch = false;
 
 static int ErrorHandler(Display* dpy, XErrorEvent* event)
 {
@@ -131,7 +131,7 @@ bool wxReparenter::Reparent(wxWindow* newParent, wxAdoptedWindow* toReparent)
 }
 
 // Wait for an appropriate window to be created.
-// If exactMatch is FALSE, a substring match is OK.
+// If exactMatch is false, a substring match is OK.
 // If windowName is empty, then wait for the next overrideRedirect window.
 bool wxReparenter::WaitAndReparent(wxWindow* newParent, wxAdoptedWindow* toReparent,
                                    const wxString& windowName,
@@ -155,7 +155,7 @@ bool wxReparenter::WaitAndReparent(wxWindow* newParent, wxAdoptedWindow* toRepar
         wxLogDebug(_T("Waiting for window %s"), windowName.c_str());
 #endif
 
-    sm_done = FALSE;
+    sm_done = false;
 
     wxEventLoop eventLoop;
     while (!sm_done)
@@ -216,7 +216,7 @@ bool wxReparenter::ProcessXEvent(WXEvent* event)
             return sm_done;
         }
     }
-    return FALSE;
+    return false;
 }
 
 WXWindow wxReparenter::FindAClientWindow(WXWindow window, const wxString& name)

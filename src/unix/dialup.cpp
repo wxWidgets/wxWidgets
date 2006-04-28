@@ -21,6 +21,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/event.h"
+    #include "wx/app.h"
 #endif // !PCH
 
 #include "wx/timer.h"
@@ -28,7 +29,6 @@
 #include "wx/utils.h"
 #include "wx/ffile.h"
 #include "wx/process.h"
-#include "wx/app.h"
 #include "wx/wxchar.h"
 
 #include <stdlib.h>

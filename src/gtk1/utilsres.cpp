@@ -16,10 +16,10 @@
     #include "wx/list.h"
     #include "wx/string.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/config.h"
-#include "wx/app.h"
 
 //-----------------------------------------------------------------------------
 // resource functions

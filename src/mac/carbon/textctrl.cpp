@@ -17,6 +17,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/app.h"
 #endif
 
 #ifdef __DARWIN__
@@ -36,7 +37,6 @@
     #endif
 #endif
 
-#include "wx/app.h"
 #include "wx/dc.h"
 #include "wx/button.h"
 #include "wx/toplevel.h"
@@ -47,9 +47,9 @@
 #include "wx/menu.h"
 
 #if defined(__BORLANDC__) && !defined(__WIN32__)
-  #include <alloc.h>
+    #include <alloc.h>
 #elif !defined(__MWERKS__) && !defined(__GNUWIN32) && !defined(__DARWIN__)
-  #include <malloc.h>
+    #include <malloc.h>
 #endif
 
 #ifndef __DARWIN__

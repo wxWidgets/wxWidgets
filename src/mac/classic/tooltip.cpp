@@ -15,10 +15,14 @@
 
 #if wxUSE_TOOLTIPS
 
-#include "wx/app.h"
+#include "wx/tooltip.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/dc.h"
 #include "wx/window.h"
-#include "wx/tooltip.h"
 #include "wx/timer.h"
 #include "wx/geometry.h"
 #include "wx/mac/uma.h"
@@ -217,7 +221,7 @@ const short kTipOffset = 5 ;
 
 void wxMacToolTip::Draw()
 {
-    if ( m_label.Length() == 0 )
+    if ( m_label.empty() )
         return ;
 
     if ( m_window == s_ToolTipWindowRef )
@@ -258,7 +262,7 @@ void wxMacToolTip::Draw()
         short height = 0 ;
 
         int i = 0 ;
-        int length = m_label.Length() ;
+        int length = m_label.length() ;
         int width = 0 ;
         int thiswidth = 0 ;
         int laststop = 0 ;

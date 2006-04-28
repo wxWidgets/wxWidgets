@@ -24,13 +24,13 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#include "wx/app.h"
-#endif
-
 #if wxUSE_SPINBTN
 
 #include "wx/spinbutt.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
@@ -148,4 +148,3 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 
 #endif
     // wxUSE_SPINCTN
-

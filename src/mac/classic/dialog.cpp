@@ -1,18 +1,24 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dialog.cpp
+// Name:        src/mac/classic/dialog.cpp
 // Purpose:     wxDialog class
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/wxprec.h"
+
 #include "wx/dialog.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/utils.h"
 #include "wx/frame.h"
-#include "wx/app.h"
 #include "wx/settings.h"
 
 #include "wx/mac/uma.h"
@@ -54,14 +60,14 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
 
 
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
-        return FALSE;
+        return false;
 
     MacCreateRealWindow( title , pos , size , MacRemoveBordersFromStyle(style) & ~(wxYES|wxOK|wxNO|wxCANCEL) , name ) ;
 
     m_macWindowBackgroundTheme = kThemeBrushDialogBackgroundActive ;
     SetThemeWindowBackground( (WindowRef) m_macWindow , m_macWindowBackgroundTheme , false ) ;
 
-    return TRUE;
+    return true;
 }
 
 void wxDialog::SetModal(bool flag)
@@ -85,8 +91,8 @@ void wxDialog::SetModal(bool flag)
 
 wxDialog::~wxDialog()
 {
-    m_isBeingDeleted = TRUE;
-    Show(FALSE);
+    m_isBeingDeleted = true;
+    Show(false);
 }
 
 // By default, pressing escape cancels the dialog , on mac command-stop does the same thing
@@ -124,7 +130,7 @@ bool wxDialog::Show(bool show)
     if ( !wxDialogBase::Show(show) )
     {
         // nothing to do
-        return FALSE;
+        return false;
     }
 
     if ( show )
@@ -141,13 +147,13 @@ bool wxDialog::Show(bool show)
         }
         else // end of modal dialog
         {
-            // this will cause IsModalShowing() return FALSE and our local
+            // this will cause IsModalShowing() return false and our local
             // message loop will terminate
             wxModalDialogs.DeleteObject(this);
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 #if !TARGET_CARBON
@@ -182,15 +188,15 @@ void wxDialog::DoShowModal()
 }
 
 
-// Replacement for Show(TRUE) for modal dialogs - returns return code
+// Replacement for Show(true) for modal dialogs - returns return code
 int wxDialog::ShowModal()
 {
     if ( !IsModal() )
     {
-        SetModal(TRUE);
+        SetModal(true);
     }
 
-    Show(TRUE);
+    Show(true);
     return GetReturnCode();
 }
 
@@ -198,8 +204,8 @@ int wxDialog::ShowModal()
 //     dialogs and should work for both of them
 void wxDialog::EndModal(int retCode)
 {
-  SetReturnCode(retCode);
-  Show(FALSE);
+    SetReturnCode(retCode);
+    Show(false);
 }
 
 // Standard buttons
@@ -258,4 +264,3 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
   SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
   Refresh();
 }
-

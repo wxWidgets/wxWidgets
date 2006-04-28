@@ -19,11 +19,11 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/dcclient.h"
 #include "wx/frame.h"
-#include "wx/app.h"
 #include "wx/layout.h"
 #include "wx/utils.h"
 #include "wx/dialog.h"

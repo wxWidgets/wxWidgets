@@ -23,10 +23,14 @@
 
 #if wxUSE_CLIPBOARD
 
-#include "wx/app.h"
+#include "wx/clipbrd.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/bitmap.h"
 #include "wx/utils.h"
-#include "wx/clipbrd.h"
 #include "wx/dataobj.h"
 #include "wx/ptr_scpd.h"
 

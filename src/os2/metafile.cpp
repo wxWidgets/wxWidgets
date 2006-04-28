@@ -15,8 +15,8 @@
 #if wxUSE_METAFILE
 
 #ifndef WX_PRECOMP
-#include "wx/utils.h"
-#include "wx/app.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/metafile.h"
@@ -80,7 +80,7 @@ bool wxMetafile::SetClipboard(int width, int height)
     if (!alreadyOpen)
     {
         wxOpenClipboard();
-        if (!wxEmptyClipboard()) return FALSE;
+        if (!wxEmptyClipboard()) return false;
     }
     bool success = wxSetClipboardData(wxDF_METAFILE, this, width,height);
     if (!alreadyOpen) wxCloseClipboard();
@@ -91,7 +91,7 @@ bool wxMetafile::SetClipboard(int width, int height)
 bool wxMetafile::Play(wxDC *dc)
 {
     if (!m_refData)
-        return FALSE;
+        return false;
 
  //   if (dc->GetHDC() && M_METAFILEDATA->m_metafile)
  //       PlayMetaFile((HDC) dc->GetHDC(), (HMETAFILE) M_METAFILEDATA->m_metafile);
@@ -354,13 +354,13 @@ bool wxMakeMetafilePlaceable(const wxString& WXUNUSED(filename),
 
     FILE *fd = fopen(filename.fn_str(), "rb");
     if (!fd)
-        return FALSE;
+        return false;
 
     wxChar tempFileBuf[256];
     wxGetTempFileName(wxT("mf"), tempFileBuf);
     FILE *fHandle = fopen(wxConvFile.cWX2MB(tempFileBuf), "wb");
     if (!fHandle)
-        return FALSE;
+        return false;
     fwrite((void *)&header, sizeof(unsigned char), sizeof(mfPLACEABLEHEADER), fHandle);
 
     // Calculate origin and extent

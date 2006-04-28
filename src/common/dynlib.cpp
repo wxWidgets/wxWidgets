@@ -34,12 +34,12 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif //WX_PRECOMP
 
 #include "wx/filefn.h"
 #include "wx/utils.h"
 #include "wx/filename.h"        // for SplitPath()
-#include "wx/app.h"
 #include "wx/apptrait.h"
 
 #include "wx/arrimpl.cpp"
@@ -119,7 +119,7 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
     }
 
 #elif defined(__WXPM__) || defined(__EMX__)
-    char    err[256] = "";
+    char err[256] = "";
     DosLoadModule(err, sizeof(err), (PSZ)libname.c_str(), &m_handle);
 #else // this should be the only remaining branch eventually
     m_handle = RawLoad(libname, flags);

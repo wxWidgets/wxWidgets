@@ -21,12 +21,14 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_THREADS
+
+#include "wx/thread.h"
+
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/app.h"
 #endif
-
-#if wxUSE_THREADS
 
 #include "wx/apptrait.h"
 #include "wx/scopeguard.h"
@@ -37,7 +39,6 @@
 
 #include "wx/except.h"
 #include "wx/module.h"
-#include "wx/thread.h"
 
 // must have this symbol defined to get _beginthread/_endthread declarations
 #ifndef _MT
@@ -1381,4 +1382,3 @@ bool WXDLLIMPEXP_BASE wxIsWaitingForThread()
 #include "wx/thrimpl.cpp"
 
 #endif // wxUSE_THREADS
-

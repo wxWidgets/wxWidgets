@@ -26,9 +26,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/event.h"
+    #include "wx/app.h"
 #endif //WX_PRECOMP
 
-#include "wx/app.h"
 #include "wx/cmdline.h"
 #include "wx/scopeguard.h"
 

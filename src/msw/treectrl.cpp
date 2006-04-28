@@ -31,6 +31,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -44,7 +45,6 @@
 // comctl32.dll versions
 #define wxUSE_COMCTL32_SAFELY 0
 
-#include "wx/app.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"
 #include "wx/msw/dragimag.h"

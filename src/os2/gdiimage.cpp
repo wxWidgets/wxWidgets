@@ -23,10 +23,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/app.h"
 #endif // WX_PRECOMP
 
 #include "wx/os2/private.h"
-#include "wx/app.h"
 #include "wx/os2/gdiimage.h"
 
 #include "wx/listimpl.cpp"

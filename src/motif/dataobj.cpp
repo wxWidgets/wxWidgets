@@ -13,7 +13,11 @@
 #if wxUSE_CLIPBOARD
 
 #include "wx/dataobj.h"
-#include "wx/app.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/utils.h"
 
 #ifdef __VMS__

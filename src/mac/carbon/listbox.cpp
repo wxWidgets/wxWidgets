@@ -18,9 +18,9 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/button.h"
 #include "wx/settings.h"
 #include "wx/toplevel.h"

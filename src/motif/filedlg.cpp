@@ -22,10 +22,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/utils.h"
-#include "wx/app.h"
 #include "wx/settings.h"
 #include "wx/tokenzr.h"
 #include "wx/stockitem.h"

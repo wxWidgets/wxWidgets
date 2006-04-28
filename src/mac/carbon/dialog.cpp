@@ -1,20 +1,24 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dialog.cpp
+// Name:        src/mac/carbon/dialog.cpp
 // Purpose:     wxDialog class
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #include "wx/dialog.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/utils.h"
 #include "wx/frame.h"
-#include "wx/app.h"
 #include "wx/settings.h"
 
 #include "wx/mac/uma.h"
@@ -64,7 +68,7 @@ bool wxDialog::Create( wxWindow *parent,
 
     if ( !wxTopLevelWindow::Create( parent, id, title, pos, size, style, name ) )
         return false;
-   
+
 #if TARGET_API_MAC_OSX
     HIViewRef growBoxRef = 0 ;
     OSStatus err = HIViewFindByID( HIViewGetRoot( (WindowRef)m_macWindow ), kHIViewWindowGrowBoxID, &growBoxRef  );
@@ -171,7 +175,7 @@ void wxDialog::DoShowModal()
     wxModalDialogs.Append(this);
 
     SetFocus() ;
-    
+
 #if TARGET_CARBON
     BeginAppModalStateForWindow(  (WindowRef) MacGetWindowRef()) ;
 #else
@@ -270,4 +274,3 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
   SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
   Refresh();
 }
-

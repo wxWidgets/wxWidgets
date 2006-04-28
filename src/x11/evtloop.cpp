@@ -20,13 +20,14 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/evtloop.h"
+
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/window.h"
-#include "wx/app.h"
-#include "wx/evtloop.h"
 #include "wx/tooltip.h"
 #include "wx/timer.h"
 #include "wx/module.h"

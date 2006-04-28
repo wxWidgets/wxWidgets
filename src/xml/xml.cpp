@@ -22,6 +22,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/wfstream.h"
@@ -32,7 +33,6 @@
 #include "expat.h" // from Expat
 
 // DLL options compatibility check:
-#include "wx/app.h"
 WX_CHECK_BUILD_OPTIONS("wxXML")
 
 

@@ -15,9 +15,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/mac/uma.h"
 
 
@@ -62,7 +62,7 @@ int wxMessageDialog::ShowModal()
 
     wxMacCFStringHolder cfNoString( _("No"), m_font.GetEncoding() );
     wxMacCFStringHolder cfYesString( _("Yes"), m_font.GetEncoding() );
-    wxMacCFStringHolder cfOKString( _("OK") , m_font.GetEncoding()) ;    
+    wxMacCFStringHolder cfOKString( _("OK") , m_font.GetEncoding()) ;
     wxMacCFStringHolder cfCancelString( _("Cancel"), m_font.GetEncoding() );
 
     int buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };

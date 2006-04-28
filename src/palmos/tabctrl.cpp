@@ -13,19 +13,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_TAB_DIALOG
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
+    #include "wx/app.h"
 #endif
 
 #if defined(__WIN95__)
 
 #include "wx/tabctrl.h"
-#include "wx/app.h"
 #include "wx/palmos/imaglist.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)

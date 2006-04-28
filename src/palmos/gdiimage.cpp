@@ -27,9 +27,8 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif // WX_PRECOMP
-
-#include "wx/app.h"
 
 #include "wx/bitmap.h"
 #include "wx/palmos/gdiimage.h"
@@ -111,5 +110,3 @@ void wxGDIImage::CleanUpHandlers()
 void wxGDIImage::InitStandardHandlers()
 {
 }
-
-

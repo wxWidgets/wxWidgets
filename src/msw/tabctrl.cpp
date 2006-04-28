@@ -13,13 +13,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_TAB_DIALOG
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -28,7 +29,6 @@
 #include "wx/msw/wrapcctl.h"
 
 #include "wx/tabctrl.h"
-#include "wx/app.h"
 #include "wx/msw/imaglist.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)

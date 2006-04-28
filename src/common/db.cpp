@@ -35,6 +35,7 @@
     #include "wx/string.h"
     #include "wx/utils.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #ifdef DBDEBUG_CONSOLE
@@ -53,7 +54,6 @@
 #include "wx/db.h"
 
 // DLL options compatibility check:
-#include "wx/app.h"
 WX_CHECK_BUILD_OPTIONS("wxODBC")
 
 WXDLLIMPEXP_DATA_ODBC(wxDbList*) PtrBegDbList = 0;

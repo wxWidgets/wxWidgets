@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/evtloop.cpp
+// Name:        src/gtk/evtloop.cpp
 // Purpose:     implements wxEventLoop for GTK+
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -25,7 +25,10 @@
 #endif
 
 #include "wx/evtloop.h"
-#include "wx/app.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
 
 #include <gtk/gtk.h>
 
@@ -106,10 +109,9 @@ bool wxEventLoop::Pending() const
 
 bool wxEventLoop::Dispatch()
 {
-    wxCHECK_MSG( IsRunning(), FALSE, _T("can't call Dispatch() if not running") );
+    wxCHECK_MSG( IsRunning(), false, _T("can't call Dispatch() if not running") );
 
     gtk_main_iteration();
 
-    return TRUE;
+    return true;
 }
-

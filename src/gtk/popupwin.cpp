@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        popupwin.cpp
+// Name:        src/gtk/popupwin.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -13,8 +13,12 @@
 #if wxUSE_POPUPWIN
 
 #include "wx/popupwin.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/frame.h"
-#include "wx/app.h"
 #include "wx/cursor.h"
 
 #include <gdk/gdk.h>
@@ -165,13 +169,13 @@ wxPopupWindow::~wxPopupWindow()
 
 bool wxPopupWindow::Create( wxWindow *parent, int style )
 {
-    m_needParent = FALSE;
+    m_needParent = false;
 
     if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
         !CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("popup") ))
     {
         wxFAIL_MSG( wxT("wxPopupWindow creation failed") );
-        return FALSE;
+        return false;
     }
 
     // Unlike windows, top level windows are created hidden by default.
@@ -216,7 +220,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     g_signal_connect (m_widget, "button_press_event",
                       G_CALLBACK (gtk_popup_button_press), this);
 
-    return TRUE;
+    return true;
 }
 
 void wxPopupWindow::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(width), int WXUNUSED(height) )
@@ -230,7 +234,7 @@ void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlag
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid dialog") );
 
     if (m_resizing) return; /* I don't like recursions */
-    m_resizing = TRUE;
+    m_resizing = true;
 
     int old_x = m_x;
     int old_y = m_y;
@@ -292,11 +296,11 @@ void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlag
 
         /* actual resizing is deferred to GtkOnSize in idle time and
            when showing the dialog */
-        m_sizeSet = FALSE;
+        m_sizeSet = false;
 
     }
 
-    m_resizing = FALSE;
+    m_resizing = false;
 }
 
 void wxPopupWindow::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
@@ -330,7 +334,7 @@ void wxPopupWindow::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int 
                                    (GdkWindowHints) flag );
 
 
-    m_sizeSet = TRUE;
+    m_sizeSet = true;
 
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
     event.SetEventObject( this );

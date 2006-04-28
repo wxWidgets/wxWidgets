@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// File:      region.cpp
+// File:      src/os2/region.cpp
 // Purpose:   Region class
 // Author:    David Webster
 // Modified by:
@@ -12,15 +12,18 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/app.h"
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/os2/region.h"
 #include "wx/gdicmn.h"
 
 #include "wx/window.h"
 #include "wx/os2/private.h"
 
-    IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
-    IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
+IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
 
 //-----------------------------------------------------------------------------
 // wxRegionRefData implementation
@@ -236,15 +239,12 @@ wxObjectRefData *wxRegion::CloneData(const wxObjectRefData *data) const
 //# Modify region
 //-----------------------------------------------------------------------------
 
-bool wxRegion::Offset(
-  wxCoord                           x
-, wxCoord                           y
-)
+bool wxRegion::Offset( wxCoord x, wxCoord y )
 {
     if ( !x && !y )
     {
         // nothing to do
-        return TRUE;
+        return true;
     }
 
     AllocExclusive();
@@ -254,10 +254,10 @@ bool wxRegion::Offset(
     {
         wxLogLastError(_T("OffsetRgn"));
 
-        return FALSE;
+        return false;
     }
 #endif
-    return TRUE;
+    return true;
 }
 
 //
@@ -285,10 +285,7 @@ bool wxRegion::Combine(
 //
 // Union region with this.
 //
-bool wxRegion::Combine(
-  const wxRegion&                   rRegion
-, wxRegionOp                        eOp
-)
+bool wxRegion::Combine( const wxRegion& rRegion, wxRegionOp eOp )
 {
     //
     // We can't use the API functions if we don't have a valid region handle
@@ -312,7 +309,7 @@ bool wxRegion::Combine(
             case wxRGN_AND:
             case wxRGN_DIFF:
                 // leave empty/invalid
-                return FALSE;
+                return false;
         }
     }
     else // we have a valid region
@@ -350,7 +347,7 @@ bool wxRegion::Combine(
                                    ,lMode
                                   ) != RGN_ERROR);
     }
-    return TRUE;
+    return true;
 } // end of wxRegion::Combine
 
 bool wxRegion::Combine(
@@ -412,13 +409,13 @@ wxRect wxRegion::GetBox() const
 //
 bool wxRegion::Empty() const
 {
-    wxCoord                         x;
-    wxCoord                         y;
-    wxCoord                         vWidth;
-    wxCoord                         vHeight;
+    wxCoord x;
+    wxCoord y;
+    wxCoord vWidth;
+    wxCoord vHeight;
 
     if (M_REGION == 0)
-        return TRUE;
+        return true;
 
     GetBox( x
            ,y
@@ -733,4 +730,3 @@ wxCoord wxRegionIterator::GetH() const
         return m_pRects[m_lCurrent].height;
     return 0L;
 } // end of wxRegionIterator::GetH
-

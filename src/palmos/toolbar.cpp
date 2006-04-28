@@ -26,6 +26,8 @@
 
 #if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE
 
+#include "wx/toolbar.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/frame.h"
@@ -35,16 +37,14 @@
     #include "wx/bitmap.h"
     #include "wx/dcmemory.h"
     #include "wx/control.h"
+    #include "wx/app.h"         // for GetComCtl32Version
 #endif
 
-#include "wx/toolbar.h"
 #include "wx/sysopt.h"
 
 #include "wx/palmos/private.h"
 
 #include "wx/palmos/wrapcctl.h"
-
-#include "wx/app.h"         // for GetComCtl32Version
 
 // ----------------------------------------------------------------------------
 // conditional compilation

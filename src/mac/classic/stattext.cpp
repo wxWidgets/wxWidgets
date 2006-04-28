@@ -9,8 +9,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
+#include "wx/wxprec.h"
+
 #include "wx/stattext.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 #include "wx/dc.h"

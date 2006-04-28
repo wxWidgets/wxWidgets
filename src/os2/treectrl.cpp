@@ -31,11 +31,11 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/os2/private.h"
 
-#include "wx/app.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"
 

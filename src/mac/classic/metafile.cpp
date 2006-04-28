@@ -6,24 +6,25 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_METAFILE
 
+#include "wx/metafile.h"
+
 #ifndef WX_PRECOMP
-#include "wx/utils.h"
-#include "wx/app.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/metafile.h"
 #include "wx/clipbrd.h"
 
 #include "wx/mac/private.h"

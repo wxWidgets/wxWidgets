@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        mac/carbon/evtloop.cpp
+// Name:        src/mac/carbon/evtloop.cpp
 // Purpose:     implementation of wxEventLoop for wxMac
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -25,7 +25,10 @@
 #endif
 
 #include "wx/evtloop.h"
-#include "wx/app.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
 
 #ifdef __DARWIN__
     #include <Carbon/Carbon.h>
@@ -104,4 +107,3 @@ bool wxEventLoop::Dispatch()
     wxTheApp->MacDoOneEvent();
     return true;
 }
-

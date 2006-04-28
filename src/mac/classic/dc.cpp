@@ -15,9 +15,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/mac/uma.h"
 #include "wx/dcmemory.h"
 #include "wx/dcprint.h"

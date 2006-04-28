@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dialog.cpp
+// Name:        src/gtk1/dialog.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -11,8 +11,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/dialog.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/frame.h"
-#include "wx/app.h"
 #include "wx/cursor.h"
 #include "wx/evtloop.h"
 

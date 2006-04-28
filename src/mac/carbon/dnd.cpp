@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dnd.cpp
+// Name:        src/mac/carbon/dnd.cpp
 // Purpose:     wxDropTarget, wxDropSource implementations
 // Author:      Stefan Csomor
 // Modified by:
@@ -14,9 +14,13 @@
 #if wxUSE_DRAG_AND_DROP
 
 #include "wx/dnd.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/window.h"
 #include "wx/toplevel.h"
-#include "wx/app.h"
 #include "wx/gdicmn.h"
 #include "wx/mac/private.h"
 
@@ -265,7 +269,7 @@ bool wxDropTarget::GetData()
                                 HFSFlavor* theFile = (HFSFlavor*)theData;
                                 wxString name = wxMacFSSpec2MacFilename( &theFile->fileSpec );
 
-                                if (!name.IsEmpty())
+                                if (!name.empty())
                                     filenamesPassed += name + wxT("\n");
                             }
                             break;

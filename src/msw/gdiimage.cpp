@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/gdiimage.cpp
+// Name:        src/msw/gdiimage.cpp
 // Purpose:     wxGDIImage implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -27,11 +27,10 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"
-
-#include "wx/app.h"
 
 #include "wx/bitmap.h"
 #include "wx/msw/gdiimage.h"
@@ -603,4 +602,3 @@ wxSize wxGetHiconSize(HICON WXUNUSED_IN_WINCE(hicon))
 }
 
 #endif // __WXMICROWIN__
-

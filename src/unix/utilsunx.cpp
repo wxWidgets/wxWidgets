@@ -24,9 +24,9 @@
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/apptrait.h"
 
 #include "wx/process.h"

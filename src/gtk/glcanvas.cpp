@@ -16,10 +16,13 @@
 
 #include "wx/glcanvas.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/frame.h"
 #include "wx/colour.h"
 #include "wx/module.h"
-#include "wx/app.h"
 
 extern "C"
 {
@@ -216,7 +219,7 @@ gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
         event.SetEventObject( win );
         win->GetEventHandler()->ProcessEvent( event );
 
-        win->m_exposed = FALSE;
+        win->m_exposed = false;
         win->GetUpdateRegion().Clear();
     }
 
@@ -235,7 +238,7 @@ gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_e
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    win->m_exposed = TRUE;
+    win->m_exposed = true;
 
     win->GetUpdateRegion().Union( gdk_event->area.x,
                                   gdk_event->area.y,
@@ -318,9 +321,9 @@ bool wxGLCanvas::Create( wxWindow *parent,
     m_sharedContextOf = (wxGLCanvas*)shared_context_of;  // const_cast
     m_glContext = (wxGLContext*) NULL;
 
-    m_exposed = FALSE;
-    m_noExpose = TRUE;
-    m_nativeSizeEvent = TRUE;
+    m_exposed = false;
+    m_noExpose = true;
+    m_nativeSizeEvent = true;
     m_fbc = NULL;
     m_vi = NULL;
 
@@ -334,22 +337,22 @@ bool wxGLCanvas::Create( wxWindow *parent,
         if (wxTheApp->m_glFBCInfo != NULL)
         {
             fbc = (GLXFBConfig *) wxTheApp->m_glFBCInfo;
-            m_canFreeFBC = FALSE; // owned by wxTheApp - don't free upon destruction
+            m_canFreeFBC = false; // owned by wxTheApp - don't free upon destruction
         }
         else
         {
             fbc = (GLXFBConfig *) wxGLCanvas::ChooseGLFBC(attribList);
-            m_canFreeFBC = TRUE;
+            m_canFreeFBC = true;
         }
         m_fbc = fbc;  // save for later use
-        wxCHECK_MSG( m_fbc, FALSE, _T("required FBConfig couldn't be found") );
+        wxCHECK_MSG( m_fbc, false, _T("required FBConfig couldn't be found") );
     }
 
     XVisualInfo *vi = NULL;
     if (wxTheApp->m_glVisualInfo != NULL)
     {
         vi = (XVisualInfo *)wxTheApp->m_glVisualInfo;
-        m_canFreeVi = FALSE; // owned by wxTheApp - don't free upon destruction
+        m_canFreeVi = false; // owned by wxTheApp - don't free upon destruction
     }
     else
     {
@@ -360,12 +363,12 @@ bool wxGLCanvas::Create( wxWindow *parent,
             // GLX <= 1.2
             vi = (XVisualInfo *) ChooseGLVisual(attribList);
 
-        m_canFreeVi = TRUE;
+        m_canFreeVi = true;
     }
 
     m_vi = vi;  // save for later use
 
-    wxCHECK_MSG( m_vi, FALSE, _T("required visual couldn't be found") );
+    wxCHECK_MSG( m_vi, false, _T("required visual couldn't be found") );
     GdkVisual *visual;
     GdkColormap *colormap;
 
@@ -432,7 +435,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
     if (GTK_WIDGET_MAPPED(m_wxwindow))
         gtk_glwindow_map_callback( m_wxwindow, this );
 
-    return TRUE;
+    return true;
 }
 
 wxGLCanvas::~wxGLCanvas()
@@ -630,7 +633,7 @@ void wxGLCanvas::OnInternalIdle()
         event.SetEventObject( this );
         GetEventHandler()->ProcessEvent( event );
 
-        m_exposed = FALSE;
+        m_exposed = false;
         GetUpdateRegion().Clear();
     }
 

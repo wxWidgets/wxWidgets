@@ -34,9 +34,16 @@ recommended; only the window manager should do this...  Also, it is
 not the functionality that wxPalette::Create() aims to provide.
  */
 
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/palette.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/window.h"
-#include "wx/app.h"
 #include "wx/utils.h"
 
 #ifdef __VMS__

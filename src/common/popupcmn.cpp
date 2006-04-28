@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/popupcmn.cpp
+// Name:        src/common/popupcmn.cpp
 // Purpose:     implementation of wxPopupTransientWindow
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -32,7 +32,6 @@
     #include "wx/combobox.h"        // wxComboControl
     #include "wx/app.h"             // wxPostEvent
     #include "wx/log.h"
-    #include "wx/app.h"
 #endif //WX_PRECOMP
 
 #ifdef __WXUNIVERSAL__
@@ -570,4 +569,3 @@ void wxPopupFocusHandler::OnKeyDown(wxKeyEvent& event)
 }
 
 #endif // wxUSE_POPUPWIN
-

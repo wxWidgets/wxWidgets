@@ -15,9 +15,9 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/bitmap.h"
 
 #if wxUSE_ACCEL
@@ -1450,7 +1450,7 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
 extern "C" WXDLLIMPEXP_CORE
 void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
 {
-    *is_waiting = FALSE;
+    *is_waiting = false;
 }
 
 WXDLLIMPEXP_CORE void SetInvokingWindow( wxMenu *menu, wxWindow* win )

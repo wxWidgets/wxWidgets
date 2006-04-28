@@ -21,12 +21,12 @@
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/apptrait.h"
 #include "wx/process.h"
 #include "wx/confbase.h"        // for wxExpandEnvVars()
-#include "wx/app.h"
 #include "wx/cmdline.h"
 #include "wx/filename.h"
 #include "wx/wfstream.h"

@@ -29,9 +29,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/dynlib.h"
 
 #define _WX_DEFINE_DATE_EVENTS_

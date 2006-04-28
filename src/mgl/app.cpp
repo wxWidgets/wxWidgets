@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        app.cpp
+// Name:        src/mgl/app.cpp
 // Author:      Vaclav Slavik
 //              based on GTK and MSW implementations
 // Id:          $Id$
@@ -14,6 +14,7 @@
     #pragma hdrstop
 #endif
 
+#include "wx/app.h"
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
@@ -23,7 +24,6 @@
     #include "wx/intl.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/evtloop.h"
 #include "wx/module.h"
 #include "wx/fontutil.h"
@@ -329,4 +329,3 @@ void wxApp::CleanUp()
 
     wxModule::RegisterModule(new wxMGLFinalCleanup);
 }
-

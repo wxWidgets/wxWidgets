@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        control.cpp
+// Name:        src/mac/carbon/control.cpp
 // Purpose:     wxControl class
 // Author:      Stefan Csomor
 // Modified by:
@@ -12,8 +12,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/control.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/panel.h"
-#include "wx/app.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
 #include "wx/notebook.h"
@@ -91,4 +95,3 @@ void  wxControl::OnKeyDown( wxKeyEvent &event )
 
     m_peer->HandleKey( keyCode, charCode, modifiers );
 }
-

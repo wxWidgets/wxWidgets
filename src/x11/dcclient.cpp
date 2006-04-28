@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        x11/dcclient.cpp
+// Name:        src/x11/dcclient.cpp
 // Purpose:     wxClientDC class
 // Author:      Julian Smart, Robert Roebling
 // Modified by:
@@ -9,10 +9,17 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/dcclient.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/dcmemory.h"
 #include "wx/window.h"
-#include "wx/app.h"
 #include "wx/image.h"
 #include "wx/module.h"
 #include "wx/fontutil.h"
@@ -1189,7 +1196,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
             GC gc = XCreateGC( xdisplay, new_pixmap, 0, NULL );
 
             XSetForeground( xdisplay, gc, BlackPixel(xdisplay,xscreen) );
-        
+
             XSetFillStyle( xdisplay, gc, FillSolid );
             XFillRectangle( xdisplay, new_pixmap, gc, 0, 0, ww, hh );
 
@@ -1685,10 +1692,10 @@ wxCoord wxWindowDC::GetCharWidth() const
     PangoLayout *layout = pango_layout_new( m_context );
 
     if (m_fontdesc)
-	pango_layout_set_font_description(layout, m_fontdesc);
+        pango_layout_set_font_description(layout, m_fontdesc);
     else
-	pango_layout_set_font_description(layout, this->GetFont().GetNativeFontInfo()->description);
-	
+        pango_layout_set_font_description(layout, this->GetFont().GetNativeFontInfo()->description);
+
     pango_layout_set_text(layout, "H", 1 );
     int w,h;
     pango_layout_get_pixel_size(layout, &w, &h);
@@ -1719,10 +1726,10 @@ wxCoord wxWindowDC::GetCharHeight() const
     PangoLayout *layout = pango_layout_new( m_context );
 
     if (m_fontdesc)
-	pango_layout_set_font_description(layout, m_fontdesc);
+        pango_layout_set_font_description(layout, m_fontdesc);
     else
-	pango_layout_set_font_description(layout, this->GetFont().GetNativeFontInfo()->description);
-	
+        pango_layout_set_font_description(layout, this->GetFont().GetNativeFontInfo()->description);
+
     pango_layout_set_text(layout, "H", 1 );
     int w,h;
     pango_layout_get_pixel_size(layout, &w, &h);
@@ -1780,9 +1787,9 @@ void wxWindowDC::SetFont( const wxFont &font )
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
     m_font = font;
-    
+
     return;
-    
+
 #if wxUSE_UNICODE
     m_fontdesc = font.GetNativeFontInfo()->description;
 #endif

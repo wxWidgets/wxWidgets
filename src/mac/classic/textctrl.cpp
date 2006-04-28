@@ -17,11 +17,17 @@
 
 #if wxUSE_TEXTCTRL
 
+#include "wx/textctrl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #ifdef __DARWIN__
-  #include <sys/types.h>
-  #include <sys/stat.h>
+    #include <sys/types.h>
+    #include <sys/stat.h>
 #else
-  #include <stat.h>
+    #include <stat.h>
 #endif
 
 #include "wx/msgdlg.h"
@@ -34,11 +40,9 @@
     #endif
 #endif
 
-#include "wx/app.h"
 #include "wx/dc.h"
 #include "wx/button.h"
 #include "wx/toplevel.h"
-#include "wx/textctrl.h"
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 #include "wx/settings.h"
@@ -46,9 +50,9 @@
 #include "wx/utils.h"
 
 #if defined(__BORLANDC__) && !defined(__WIN32__)
-  #include <alloc.h>
+    #include <alloc.h>
 #elif !defined(__MWERKS__) && !defined(__GNUWIN32) && !defined(__DARWIN__)
-  #include <malloc.h>
+    #include <malloc.h>
 #endif
 
 #ifndef __DARWIN__

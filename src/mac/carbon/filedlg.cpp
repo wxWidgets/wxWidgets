@@ -15,9 +15,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/tokenzr.h"
@@ -26,8 +26,8 @@
 #include "wx/mac/private.h"
 
 #ifndef __DARWIN__
-   #include <Navigation.h>
-   #include "PLStringFuncs.h"
+    #include <Navigation.h>
+    #include "PLStringFuncs.h"
 #endif
 
 #include "MoreFilesX.h"

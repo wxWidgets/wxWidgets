@@ -12,14 +12,14 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/window.h"
-#include "wx/app.h"
-#include "wx/frame.h"
-#endif
+#include "wx/accel.h"
 
-#include "wx/os2/accel.h"
+#ifndef WX_PRECOMP
+    #include <stdio.h>
+    #include "wx/window.h"
+    #include "wx/app.h"
+    #include "wx/frame.h"
+#endif
 
 #include "wx/os2/private.h"
 
@@ -43,7 +43,7 @@ protected:
 
 wxAcceleratorRefData::wxAcceleratorRefData()
 {
-    m_ok = FALSE;
+    m_ok = false;
     m_hAccel = 0;
 } // end of wxAcceleratorRefData::wxAcceleratorRefData
 
@@ -188,13 +188,11 @@ WXHACCEL wxAcceleratorTable::GetHACCEL() const
     return (WXHACCEL) M_ACCELDATA->m_hAccel;
 }
 
-bool wxAcceleratorTable::Translate(
-  WXHWND                            hWnd
-, WXMSG*                            pWxmsg
-) const
+bool wxAcceleratorTable::Translate( WXHWND  hWnd,
+                                    WXMSG*  pWxmsg ) const
 {
-    PQMSG                           pMsg = (PQMSG)pWxmsg;
-    BOOL                            rc = FALSE;
+    PQMSG pMsg = (PQMSG)pWxmsg;
+    BOOL  rc = FALSE;
 
     rc = ::WinTranslateAccel( vHabmain
                              ,(HWND)hWnd

@@ -15,9 +15,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/apptrait.h"
 
 #if wxUSE_GUI

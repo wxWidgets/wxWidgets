@@ -19,11 +19,11 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/dcclient.h"
 #include "wx/frame.h"
-#include "wx/app.h"
 #include "wx/layout.h"
 #include "wx/utils.h"
 #include "wx/dialog.h"
@@ -1594,7 +1594,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
     // reset the event object and id in case win changed.
     event.SetEventObject( win );
     event.SetId( win->GetId() );
-    
+
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
         g_signal_stop_emission_by_name (widget, "button_press_event");

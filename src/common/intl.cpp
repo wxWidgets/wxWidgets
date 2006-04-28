@@ -46,6 +46,7 @@
     #include "wx/log.h"
     #include "wx/debug.h"
     #include "wx/utils.h"
+    #include "wx/app.h"
 #endif // WX_PRECOMP
 
 #ifndef __WXWINCE__
@@ -56,7 +57,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #ifdef HAVE_LANGINFO_H
-  #include <langinfo.h>
+    #include <langinfo.h>
 #endif
 
 #ifdef __WIN32__
@@ -73,12 +74,11 @@
 #include "wx/encconv.h"
 #include "wx/hashmap.h"
 #include "wx/ptr_scpd.h"
-#include "wx/app.h"
 #include "wx/apptrait.h"
 #include "wx/stdpaths.h"
 
 #if defined(__WXMAC__)
-  #include  "wx/mac/private.h"  // includes mac headers
+    #include  "wx/mac/private.h"  // includes mac headers
 #endif
 
 // ----------------------------------------------------------------------------

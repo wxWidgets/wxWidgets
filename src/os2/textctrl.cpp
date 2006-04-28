@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textctrl.cpp
+// Name:        src/os2/textctrl.cpp
 // Purpose:     wxTextCtrl
 // Author:      David Webster
 // Modified by:
@@ -16,16 +16,16 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/textctrl.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/textctrl.h"
     #include "wx/scrolwin.h"
     #include "wx/settings.h"
     #include "wx/brush.h"
     #include "wx/utils.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
-
-#include "wx/app.h"
 
 #if wxUSE_CLIPBOARD
     #include "wx/clipbrd.h"

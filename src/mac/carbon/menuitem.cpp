@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        menuitem.cpp
+// Name:        src/mac/carbon/menuitem.cpp
 // Purpose:     wxMenuItem implementation
 // Author:      Stefan Csomor
 // Modified by:
@@ -11,9 +11,13 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/app.h"
-#include "wx/menu.h"
 #include "wx/menuitem.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
+#include "wx/menu.h"
 
 #include "wx/mac/uma.h"
 

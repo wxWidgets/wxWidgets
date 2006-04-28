@@ -16,9 +16,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/settings.h"
 
 #include "wx/x11/private.h"

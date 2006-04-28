@@ -15,13 +15,13 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/menu.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
 #include "wx/utils.h"
-#include "wx/app.h"
 #include "wx/panel.h"
 #include "wx/layout.h"
 #include "wx/dialog.h"

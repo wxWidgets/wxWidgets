@@ -1,19 +1,23 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        timer.cpp
+// Name:        src/motif/timer.cpp
 // Purpose:     wxTimer implementation
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #include "wx/timer.h"
-#include "wx/app.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/hashmap.h"
 
 #ifdef __VMS__
@@ -39,7 +43,7 @@ void wxTimerCallback (wxTimer * timer)
     return;
 
   if (timer->m_id == 0)
-    return;			// Avoid to process spurious timer events
+    return;            // Avoid to process spurious timer events
 
   if (!timer->m_oneShot)
     timer->m_id = XtAppAddTimeOut((XtAppContext) wxTheApp->GetAppContext(),
@@ -89,5 +93,3 @@ void wxTimer::Stop()
     }
     m_milli = 0 ;
 }
-
-

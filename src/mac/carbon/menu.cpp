@@ -22,9 +22,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/menuitem.h"
 #include "wx/window.h"
 #include "wx/log.h"

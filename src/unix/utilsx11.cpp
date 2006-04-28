@@ -18,6 +18,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/iconbndl.h"
@@ -773,8 +774,6 @@ KeySym wxCharCodeWXToX(int id)
 // ----------------------------------------------------------------------------
 // check current state of a key
 // ----------------------------------------------------------------------------
-
-#include "wx/app.h"
 
 bool wxGetKeyState(wxKeyCode key)
 {

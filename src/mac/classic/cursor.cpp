@@ -15,8 +15,12 @@
     #pragma hdrstop
 #endif
 
-#include "wx/app.h"
 #include "wx/cursor.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/icon.h"
 #include "wx/image.h"
 #include "wx/xpmdecod.h"

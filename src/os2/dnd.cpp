@@ -14,10 +14,14 @@
 
 #if wxUSE_DRAG_AND_DROP
 
-#include "wx/window.h"
-#include "wx/app.h"
-#include "wx/gdicmn.h"
 #include "wx/dnd.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
+#include "wx/window.h"
+#include "wx/gdicmn.h"
 
 #define INCL_PM
 #define INCL_DOS

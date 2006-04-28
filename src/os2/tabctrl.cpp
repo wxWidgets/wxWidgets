@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tabctrl.cpp
+// Name:        src/os2/tabctrl.cpp
 // Purpose:     wxTabCtrl
 // Author:      David Webster
 // Modified by:
@@ -15,7 +15,8 @@
 #if wxUSE_TAB_DIALOG
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
+    #include "wx/app.h"
 #endif
 
 #include "malloc.h"
@@ -25,7 +26,6 @@
 
 //#include "wx/msw/dib.h"
 #include "wx/os2/tabctrl.h"
-#include "wx/app.h"
 #include "wx/os2/private.h"
 #include "wx/generic/imaglist.h"
 
@@ -81,7 +81,7 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 
     SubclassWin((WXHWND) hWndTabCtrl);
 
-    return FALSE;
+    return false;
 }
 
 wxTabCtrl::~wxTabCtrl()

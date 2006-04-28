@@ -35,7 +35,6 @@
 
 #include "wx/mac/uma.h"
 #include "wx/mac/aga.h"
-#include "wx/app.h"
 #include "wx/tooltip.h"
 #include "wx/dnd.h"
 #if wxUSE_SYSTEM_OPTIONS
@@ -510,7 +509,7 @@ void wxTopLevelWindowMac::Init()
     m_macUsesCompositing = false ;
 #if TARGET_CARBON
     m_macEventHandler = NULL ;
- #endif
+#endif
 }
 
 class wxMacDeferredWindowDeleter : public wxObject

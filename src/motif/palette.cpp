@@ -38,8 +38,12 @@ not the functionality that wxPalette::Create() aims to provide.
 #include "wx/wxprec.h"
 
 #include "wx/palette.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/window.h"
-#include "wx/app.h"
 #include "wx/utils.h"
 
 #ifdef __VMS__

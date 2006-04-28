@@ -13,8 +13,12 @@
 
 #if wxUSE_STATTEXT
 
-#include "wx/app.h"
 #include "wx/stattext.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif // WX_PRECOMP
+
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 #include "wx/dc.h"
@@ -81,7 +85,7 @@ wxSize wxStaticText::DoGetBestSize() const
     if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
     {
         err = GetThemeTextDimensions(
-            (m_label.Length() > 0 ? (CFStringRef)str : CFSTR(" ")),
+            (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
             m_font.MacGetThemeFontID(), kThemeStateActive, false, &bounds, &baseline );
         verify_noerr( err );
     }
@@ -93,12 +97,12 @@ wxSize wxStaticText::DoGetBestSize() const
         ::TextFace( m_font.MacGetFontStyle() );
 
         err = GetThemeTextDimensions(
-            (m_label.Length() > 0 ? (CFStringRef)str : CFSTR(" ")),
+            (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
             kThemeCurrentPortFont, kThemeStateActive, false, &bounds, &baseline );
         verify_noerr( err );
     }
 
-    if ( m_label.Length() == 0 )
+    if ( m_label.empty() )
         bounds.h = 0;
 
     bounds.h += MacGetLeftBorderSize() + MacGetRightBorderSize();
@@ -145,4 +149,3 @@ bool wxStaticText::SetFont(const wxFont& font)
 }
 
 #endif //if wxUSE_STATTEXT
-

@@ -18,9 +18,9 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/string.h"
 #include "wx/imaglist.h"
 #include "wx/image.h"

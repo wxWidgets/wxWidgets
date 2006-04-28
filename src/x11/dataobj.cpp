@@ -16,10 +16,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/mstream.h"
-#include "wx/app.h"
 #include "wx/image.h"
 
 #include "wx/utils.h"

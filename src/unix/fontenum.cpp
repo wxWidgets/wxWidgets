@@ -25,11 +25,11 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/string.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/regex.h"
 #include "wx/utils.h"
-#include "wx/app.h"
 #include "wx/fontmap.h"
 #include "wx/fontutil.h"
 #include "wx/encinfo.h"

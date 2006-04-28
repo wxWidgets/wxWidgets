@@ -14,7 +14,7 @@
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_GLCANVAS
@@ -23,10 +23,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/utils.h"
-#include "wx/app.h"
 
 #ifdef __VMS
 # pragma message disable nosimpint
@@ -315,7 +315,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
       attribList = (int*) data;
       // Get an appropriate visual
       vi = glXChooseVisual(display, DefaultScreen(display), attribList);
-      if(!vi) return FALSE;
+      if(!vi) return false;
 
       // Here we should make sure that vi is the same visual as the
       // one used by the xwindow drawable in wxCanvas.  However,
@@ -326,9 +326,9 @@ bool wxGLCanvas::Create( wxWindow *parent,
       XGetWindowAttributes(display, (Window)wxGetClientAreaWindow(this), &xwa);
       vi_templ.visualid = XVisualIDFromVisual(xwa.visual);
       vi = XGetVisualInfo(display, VisualIDMask, &vi_templ, &n);
-      if(!vi) return FALSE;
+      if(!vi) return false;
       glXGetConfig(display, vi, GLX_USE_GL, &val);
-      if(!val) return FALSE;
+      if(!val) return false;
       // Basically, this is it.  It should be possible to use vi
       // in glXCreateContext() below.  But this fails with Mesa.
       // I notified the Mesa author about it; there may be a fix.
@@ -355,13 +355,13 @@ bool wxGLCanvas::Create( wxWindow *parent,
       a_list[n] = None;
       // XFree(vi);
       vi = glXChooseVisual(display, DefaultScreen(display), a_list);
-      if(!vi) return FALSE;
+      if(!vi) return false;
 #endif /* OLD_MESA */
     }
 
     m_vi = vi;  // safe for later use
 
-    wxCHECK_MSG( m_vi, FALSE, wxT("required visual couldn't be found") );
+    wxCHECK_MSG( m_vi, false, wxT("required visual couldn't be found") );
 
     // Create the GLX context and make it current
 

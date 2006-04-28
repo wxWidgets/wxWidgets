@@ -35,6 +35,7 @@
     #include "wx/bitmap.h"
     #include "wx/dcmemory.h"
     #include "wx/control.h"
+    #include "wx/app.h"         // for GetComCtl32Version
 #endif
 
 #include "wx/toolbar.h"
@@ -49,8 +50,6 @@
 
 // include <commctrl.h> "properly"
 #include "wx/msw/wrapcctl.h"
-
-#include "wx/app.h"         // for GetComCtl32Version
 
 // this define controls whether the code for button colours remapping (only
 // useful for 16 or 256 colour images) is active at all, it's always turned off

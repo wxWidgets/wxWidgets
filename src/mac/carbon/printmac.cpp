@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        printwin.cpp
+// Name:        src/mac/carbon/printwin.cpp
 // Purpose:     wxMacPrinter framework
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -15,14 +15,14 @@
 #if wxUSE_PRINTING_ARCHITECTURE
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/utils.h"
-#include "wx/dc.h"
-#include "wx/app.h"
-#include "wx/msgdlg.h"
+    #include "wx/utils.h"
+    #include "wx/dc.h"
+    #include "wx/app.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/math.h"
@@ -41,7 +41,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMacCarbonPrintData, wxPrintNativeDataBase)
 IMPLEMENT_DYNAMIC_CLASS(wxMacPrinter, wxPrinterBase)
 IMPLEMENT_CLASS(wxMacPrintPreview, wxPrintPreviewBase)
 
-bool wxMacCarbonPrintData::Ok() const 
+bool wxMacCarbonPrintData::Ok() const
 {
     return (m_macPageFormat != kPMNoPageFormat) && (m_macPrintSettings != kPMNoPrintSettings) && (m_macPrintSession != kPMNoReference);
 }
@@ -66,7 +66,7 @@ wxMacCarbonPrintData::~wxMacCarbonPrintData()
         (void)PMRelease(m_macPrintSettings);
         m_macPrintSettings = kPMNoPrintSettings;
     }
-    
+
     if ( m_macPrintSession != kPMNoReference )
     {
         (void)PMRelease(m_macPrintSession);
@@ -74,7 +74,7 @@ wxMacCarbonPrintData::~wxMacCarbonPrintData()
     }
 }
 
-void wxMacCarbonPrintData::ValidateOrCreate() 
+void wxMacCarbonPrintData::ValidateOrCreate()
 {
     OSStatus err = noErr ;
     if ( m_macPrintSession == kPMNoReference )
@@ -85,7 +85,7 @@ void wxMacCarbonPrintData::ValidateOrCreate()
     if ( m_macPageFormat == kPMNoPageFormat)
     {
         err = PMCreatePageFormat((PMPageFormat *) &m_macPageFormat);
-        
+
         //  Note that PMPageFormat is not session-specific, but calling
         //  PMSessionDefaultPageFormat assigns values specific to the printer
         //  associated with the current printing session.
@@ -102,12 +102,12 @@ void wxMacCarbonPrintData::ValidateOrCreate()
             (PMPageFormat) m_macPageFormat,
             kPMDontWantBoolean);
     }
-    
+
     //  Set up a valid PrintSettings object.
     if ( m_macPrintSettings == kPMNoPrintSettings)
     {
         err = PMCreatePrintSettings((PMPrintSettings *) &m_macPrintSettings);
-        
+
         //  Note that PMPrintSettings is not session-specific, but calling
         //  PMSessionDefaultPrintSettings assigns values specific to the printer
         //  associated with the current printing session.
@@ -134,7 +134,7 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
         kPMLandscape : kPMPortrait , false ) ;
     // collate cannot be set
 #if 0 // not yet tested
-    if ( m_printerName.Length() > 0 )
+    if ( !m_printerName.empty() )
         PMSessionSetCurrentPrinter( (PMPrintSession) m_macPrintSession , wxMacCFStringHolder( m_printerName , wxFont::GetDefaultEncoding() ) ) ;
 #endif
     PMColorMode color ;
@@ -146,7 +146,7 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
     }
     else
         PMSetColorMode( (PMPrintSettings) m_macPrintSettings, kPMBlackAndWhite ) ;
-    
+
     // PMDuplexMode not yet accessible via API
     // PMQualityMode not yet accessible via API
     // todo paperSize
@@ -163,12 +163,12 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
 bool wxMacCarbonPrintData::TransferTo( wxPrintData &data )
 {
     OSStatus err = noErr ;
-    
+
     UInt32 copies ;
     err = PMGetCopies( m_macPrintSettings , &copies ) ;
     if ( err == noErr )
-        data.SetNoCopies( copies ) ; 
-          
+        data.SetNoCopies( copies ) ;
+
     PMOrientation orientation ;
     err = PMGetOrientation(  m_macPageFormat , &orientation ) ;
     if ( err == noErr )
@@ -189,16 +189,16 @@ bool wxMacCarbonPrintData::TransferTo( wxPrintData &data )
         m_printerName = name.AsString() ;
     }
 #endif
-    
+
     PMColorMode color ;
     err = PMGetColorMode( m_macPrintSettings, &color ) ;
     if ( err == noErr )
         data.SetColour( !(color == kPMBlackAndWhite) ) ;
-        
+
     // PMDuplexMode not yet accessible via API
     // PMQualityMode not yet accessible via API
     // todo paperSize
-	PMRect rPaper;
+    PMRect rPaper;
     err = PMGetUnadjustedPaperRect( m_macPageFormat, &rPaper);
     if ( err == noErr )
     {
@@ -227,10 +227,10 @@ void wxMacCarbonPrintData::TransferTo( wxPageSetupData* data )
         if ( err == noErr )
         {
             data->SetMinMarginTopLeft( wxPoint (
-	            (int)(((double) rPage.left - rPaper.left ) * pt2mm) ,
-	            (int)(((double) rPage.top - rPaper.top ) * pt2mm) ) ) ;
-	        
-	    data->SetMinMarginBottomRight( wxPoint (
+                (int)(((double) rPage.left - rPaper.left ) * pt2mm) ,
+                (int)(((double) rPage.top - rPaper.top ) * pt2mm) ) ) ;
+
+            data->SetMinMarginBottomRight( wxPoint (
                 (wxCoord)(((double) rPaper.right - rPage.right ) * pt2mm),
                 (wxCoord)(((double) rPaper.bottom - rPage.bottom ) * pt2mm)) ) ;
 
@@ -248,8 +248,8 @@ void wxMacCarbonPrintData::TransferTo( wxPageSetupData* data )
             if ( data->GetMarginBottomRight().y < data->GetMinMarginBottomRight().y )
                 data->SetMarginBottomRight( wxPoint( data->GetMarginBottomRight().x ,
                     data->GetMinMarginBottomRight().y) );
-	    }
-	}
+        }
+    }
 }
 
 void wxMacCarbonPrintData::TransferTo( wxPrintDialogData* data )
@@ -318,7 +318,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     if (m_printDialogData.GetMaxPage() < 1)
         m_printDialogData.SetMaxPage(9999);
 
-    // Create a suitable device context  
+    // Create a suitable device context
     wxDC *dc = NULL;
     if (prompt)
     {
@@ -414,7 +414,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
             break;
 
         int pn;
-        for (pn = m_printDialogData.GetFromPage(); 
+        for (pn = m_printDialogData.GetFromPage();
         keepGoing && (pn <= m_printDialogData.GetToPage()) && printout->HasPage(pn);
         pn++)
         {
@@ -441,36 +441,36 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         }
         printout->OnEndDocument();
     }
-    
+
     printout->OnEndPrinting();
-    
+
     if (sm_abortWindow)
     {
         sm_abortWindow->Show(false);
         delete sm_abortWindow;
         sm_abortWindow = NULL;
     }
-    
+
     wxEndBusyCursor();
-    
+
     delete dc;
-    
+
     return true;
 }
 
 wxDC* wxMacPrinter::PrintDialog(wxWindow *parent)
 {
     wxDC* dc = (wxDC*) NULL;
-    
+
     wxPrintDialog dialog(parent, & m_printDialogData);
     int ret = dialog.ShowModal();
-    
+
     if (ret == wxID_OK)
     {
         dc = dialog.GetPrintDC();
         m_printDialogData = dialog.GetPrintDialogData();
     }
-    
+
     return dc;
 }
 
@@ -479,12 +479,12 @@ bool wxMacPrinter::Setup(wxWindow *parent)
 #if 0
     wxPrintDialog dialog(parent, & m_printDialogData);
     dialog.GetPrintDialogData().SetSetupDialog(true);
-    
+
     int ret = dialog.ShowModal();
-    
+
     if (ret == wxID_OK)
         m_printDialogData = dialog.GetPrintDialogData();
-    
+
     return (ret == wxID_OK);
 #endif
 
@@ -526,7 +526,7 @@ void wxMacPrintPreview::DetermineScaling(void)
 {
     int screenWidth , screenHeight ;
     wxDisplaySize( &screenWidth , &screenHeight ) ;
-    
+
     m_previewPrintout->SetPPIScreen( 72 , 72 ) ;
     m_previewPrintout->SetPPIPrinter( 72 , 72 ) ;
     m_previewPrintout->SetPageSizeMM( (int) (8.0 * 25.6), (int) (11.0 * 25.6) );
@@ -534,7 +534,7 @@ void wxMacPrintPreview::DetermineScaling(void)
     m_pageWidth = 8 * 72 ;
     m_pageHeight = 11 * 72 ;
     m_previewScale = 1 ;
-    
+
     // Get a device context for the currently selected printer
     wxPrinterDC printerDC(m_printDialogData.GetPrintData());
     if (printerDC.Ok())
@@ -558,7 +558,7 @@ void wxMacPrintPreview::DetermineScaling(void)
     // m_previewScale = (float)((float)screenWidth/(float)printerWidth);
     // m_previewScale = m_previewScale * (float)((float)screenXRes/(float)printerXRes);
 
-    m_previewScale = 1 ; 
+    m_previewScale = 1 ;
 }
 
 #endif

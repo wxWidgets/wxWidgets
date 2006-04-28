@@ -21,7 +21,10 @@
 #include "wx/wxprec.h"
 
 #include "wx/toplevel.h"
-#include "wx/app.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
 
 #ifdef __VMS__
 #define XtDisplay XTDISPLAY

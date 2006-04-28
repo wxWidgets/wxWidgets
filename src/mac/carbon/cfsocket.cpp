@@ -25,9 +25,9 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/event.h"
+    #include "wx/app.h"
 #endif
 
-#include "wx/app.h"
 #include "wx/apptrait.h"
 #include "wx/timer.h"
 #include "wx/utils.h"

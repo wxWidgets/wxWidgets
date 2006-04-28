@@ -30,9 +30,9 @@
 
 #ifndef  WX_PRECOMP
     #include "wx/log.h"             // wxLogDebug/wxLogSysError/wxLogTrace
+    #include "wx/app.h"             // wxTheApp->argc, wxTheApp->argv
 #endif
 
-#include "wx/app.h"                 // wxTheApp->argc, wxTheApp->argv
 #include "wx/thread.h"              // wxMutex/wxMutexLocker
 #include "wx/timer.h"               // wxTimer
 
