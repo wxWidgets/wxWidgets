@@ -177,9 +177,8 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     // WS_POPUP in a few cases just to avoid having caption/border which we
     // don't want
 
-#if !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
     // border and caption styles
-    if ( style & wxRESIZE_BORDER )
+    if ( ( style & wxRESIZE_BORDER ) && !IsAlwaysMaximized())
         msflags |= WS_THICKFRAME;
     else if ( exflags && ((style & wxBORDER_DOUBLE) || (style & wxBORDER_RAISED)) )
         *exflags |= WS_EX_DLGMODALFRAME;
@@ -188,7 +187,6 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
 #ifndef __POCKETPC__
     else
         msflags |= WS_POPUP;
-#endif
 #endif
 
     // normally we consider that all windows without a caption must be popups,
@@ -223,10 +221,8 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     if ( style & wxMINIMIZE )
         msflags |= WS_MINIMIZE;
 
-#if !defined(__POCKETPC__)
     if ( style & wxMAXIMIZE )
         msflags |= WS_MAXIMIZE;
-#endif
 
     // Keep this here because it saves recoding this function in wxTinyFrame
     if ( style & (wxTINY_CAPTION_VERT | wxTINY_CAPTION_HORIZ) )
@@ -495,15 +491,16 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
     WXDWORD exflags;
     WXDWORD flags = MSWGetCreateWindowFlags(&exflags);
 
-#if !defined(__HANDHELDPC__) && ((defined(_WIN32_WCE) && _WIN32_WCE < 400) || \
-    defined(__POCKETPC__) || \
-    defined(__SMARTPHONE__))
-    // Always expand to fit the screen in PocketPC or SmartPhone
-    wxSize sz(wxDefaultSize);
-    wxUnusedVar(size);
-#else // other (including normal desktop) Windows
-    wxSize sz(size);
-#endif
+    wxSize sz;
+
+    if (IsAlwaysMaximized())
+    {
+        sz = wxDefaultSize;
+    }
+    else
+    {
+        sz = size;
+    }
 
     bool result = MSWCreate(wxCanvasClassName, title, pos, sz, flags, exflags);
 
@@ -596,14 +593,10 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         MSWUpdateUIState(UIS_INITIALIZE);
     }
 
-    // Note: if we include PocketPC in this test, dialogs can fail to show up,
-    // for example the text entry dialog in the dialogs sample. Problem with Maximise()?
-#if defined(__WXWINCE__) && (defined(__SMARTPHONE__) || defined(__WINCE_STANDARDSDK__))
-    if ( style & wxMAXIMIZE )
+    if ( ( style & wxMAXIMIZE ) || IsAlwaysMaximized() )
     {
         this->Maximize();
     }
-#endif
 
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     SetRightMenu(); // to nothing for initialization
