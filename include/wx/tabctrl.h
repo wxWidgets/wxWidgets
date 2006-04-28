@@ -22,14 +22,11 @@ BEGIN_DECLARE_EVENT_TYPES()
 END_DECLARE_EVENT_TYPES()
 
 #if defined(__WXMSW__)
-#include "wx/msw/tabctrl.h"
-#elif defined(__WXMOTIF__)
-#include "wx/motif/tabctrl.h"
-#elif defined(__WXGTK__)
+    #include "wx/msw/tabctrl.h"
 #elif defined(__WXMAC__)
-#include "wx/mac/tabctrl.h"
+    #include "wx/mac/tabctrl.h"
 #elif defined(__WXPM__)
-#include "wx/os2/tabctrl.h"
+    #include "wx/os2/tabctrl.h"
 #endif
 
 #endif // wxUSE_TAB_DIALOG
