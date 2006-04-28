@@ -16,7 +16,7 @@
 #include "wx/gdiobj.h"
 
 
-// the standard wxColour constructor.
+// the standard wxColour constructors;
 // this macro avoids to repeat these lines across all colour.h files, since
 // Set() is a virtual function and thus cannot be called by wxColourBase
 // constructors
@@ -28,7 +28,7 @@
     wxColour(const wxChar *colourName) { Set(colourName); }
 
 
-// for wxString <-> wxColour
+// flags for wxColour -> wxString conversion (see wxColour::GetAsString)
 #define wxC2S_NAME              1   // return colour name, when possible
 #define wxC2S_CSS_SYNTAX        2   // return colour in rgb(r,g,b) syntax
 #define wxC2S_HTML_SYNTAX       4   // return colour in #rrggbb syntax
@@ -95,9 +95,10 @@ public:
     // old, deprecated
     // ---------------
 
-    static wxColour CreateByName(const wxString& name);
-    void InitFromName(const wxString& col)
-        { Set(col); }
+#if WXWIN_COMPATIBILITY_2_6
+    wxDEPRECATED( static wxColour CreateByName(const wxString& name) );
+    wxDEPRECATED( void InitFromName(const wxString& col) );
+#endif
 };
 
 

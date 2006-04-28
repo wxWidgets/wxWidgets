@@ -101,7 +101,17 @@ wxString wxColourBase::GetAsString(long flags) const
     return colName;
 }
 
+#if WXWIN_COMPATIBILITY_2_6
+
+// static
 wxColour wxColourBase::CreateByName(const wxString& name)
 {
     return wxColour(name);
 }
+
+void wxColourBase::InitFromName(const wxString& col)
+{
+    Set(col);
+}
+
+#endif // WXWIN_COMPATIBILITY_2_6
