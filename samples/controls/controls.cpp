@@ -1498,7 +1498,7 @@ void MyPanel::OnSpinCtrl(wxSpinEvent& event)
     if ( m_spinctrl )
     {
         wxString s;
-        s.Printf( _T("Spin ctrl changed: now %d (from event: %ld)\n"),
+        s.Printf( _T("Spin ctrl changed: now %d (from event: %d)\n"),
                  m_spinctrl->GetValue(), event.GetInt() );
         m_text->AppendText(s);
     }
@@ -1509,7 +1509,7 @@ void MyPanel::OnSpinCtrlUp(wxSpinEvent& event)
     if ( m_spinctrl )
     {
         m_text->AppendText( wxString::Format(
-            _T("Spin up: %d (from event: %ld)\n"),
+            _T("Spin up: %d (from event: %d)\n"),
             m_spinctrl->GetValue(), event.GetInt() ) );
     }
 }
@@ -1519,7 +1519,7 @@ void MyPanel::OnSpinCtrlDown(wxSpinEvent& event)
     if ( m_spinctrl )
     {
         m_text->AppendText( wxString::Format(
-            _T("Spin down: %d (from event: %ld)\n"),
+            _T("Spin down: %d (from event: %d)\n"),
             m_spinctrl->GetValue(), event.GetInt() ) );
     }
 }

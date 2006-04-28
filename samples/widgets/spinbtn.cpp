@@ -409,13 +409,13 @@ void SpinBtnWidgetsPage::OnSpinBtn(wxSpinEvent& event)
 
 void SpinBtnWidgetsPage::OnSpinBtnUp(wxSpinEvent& event)
 {
-    wxLogMessage( _T("Spin button value incremented, will be %ld (was %d)"),
+    wxLogMessage( _T("Spin button value incremented, will be %d (was %d)"),
                   event.GetInt(), m_spinbtn->GetValue() );
 }
 
 void SpinBtnWidgetsPage::OnSpinBtnDown(wxSpinEvent& event)
 {
-    wxLogMessage( _T("Spin button value decremented, will be %ld (was %d)"),
+    wxLogMessage( _T("Spin button value decremented, will be %d (was %d)"),
                   event.GetInt(), m_spinbtn->GetValue() );
 }
 

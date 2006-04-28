@@ -516,12 +516,12 @@ void ListboxWidgetsPage::OnListbox(wxCommandEvent& event)
 
 void ListboxWidgetsPage::OnListboxDClick(wxCommandEvent& event)
 {
-    wxLogMessage( _T("Listbox item %ld double clicked"), event.GetInt() );
+    wxLogMessage( _T("Listbox item %d double clicked"), event.GetInt() );
 }
 
 void ListboxWidgetsPage::OnCheckListbox(wxCommandEvent& event)
 {
-    wxLogMessage( _T("Listbox item %ld toggled"), event.GetInt() );
+    wxLogMessage( _T("Listbox item %d toggled"), event.GetInt() );
 }
 
 void ListboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
