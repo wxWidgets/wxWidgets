@@ -80,45 +80,47 @@ public:
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxComboBoxNameStr);
 
-    void Clear();
-    void Delete(unsigned int n);
-
-    virtual int FindString(const wxString& s, bool bCase = false) const;
-    int GetSelection() const;
-    int GetCurrentSelection() const;
-    virtual wxString GetString(unsigned int n) const;
-    wxString GetStringSelection() const;
+    // From wxItemContainerImmutable:
     virtual unsigned int GetCount() const;
-    virtual void SetSelection(int n);
+    virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString &text);
+    virtual int FindString(const wxString& s, bool bCase = false) const;
+    virtual void SetSelection(int n);
+    virtual int GetSelection() const;
+    wxString GetStringSelection() const; // not a virtual in parent class
 
-    wxString GetValue() const;
-    void SetValue(const wxString& value);
+    // From wxItemContainer:
+    virtual void Clear();
+    virtual void Delete(unsigned int n);
 
-    void Copy();
-    void Cut();
-    void Paste();
-    bool CanCopy() const;
-    bool CanCut() const;
-    bool CanPaste() const;
-    void SetInsertionPoint( long pos );
-    void SetInsertionPointEnd() { SetInsertionPoint( -1 ); }
-    long GetInsertionPoint() const;
+    // From wxBomboBoxBase:
+    virtual wxString GetValue() const;
+    virtual void SetValue(const wxString& value);
+    virtual void Copy();
+    virtual void Cut();
+    virtual void Paste();
+    virtual void SetInsertionPoint( long pos );
+    virtual long GetInsertionPoint() const;
     virtual wxTextPos GetLastPosition() const;
-    void Remove(long from, long to) { Replace(from, to, wxEmptyString); }
-    void Replace( long from, long to, const wxString& value );
-    void SetSelection( long from, long to );
-    void GetSelection( long* from, long* to ) const;
-    void SetEditable( bool editable );
-    void Undo() ;
-    void Redo() ;
-    bool CanUndo() const;
-    bool CanRedo() const;
-    void SelectAll();
-    bool IsEditable() const ;
-    bool HasSelection() const ;
+    virtual void Replace( long from, long to, const wxString& value );
+    virtual void SetSelection( long from, long to );
+    virtual void SetEditable( bool editable );
+    virtual void SetInsertionPointEnd() { SetInsertionPoint( -1 ); }
+    virtual void Remove(long from, long to) { Replace(from, to, wxEmptyString); }
+    virtual bool IsEditable() const;
+    virtual void Undo();
+    virtual void Redo();
+    virtual void SelectAll();
+    virtual bool CanCopy() const;
+    virtual bool CanCut() const;
+    virtual bool CanPaste() const;
+    virtual bool CanUndo() const;
+    virtual bool CanRedo() const;
 
     // implementation
+    bool HasSelection() const;
+    void GetSelection( long* from, long* to ) const;
+    int GetCurrentSelection() const;
 
     virtual void SetFocus();
 
@@ -158,7 +160,10 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
 protected:
+    // From wxWindowGTK:
     void DoApplyWidgetStyle(GtkRcStyle *style);
+
+    // From wxItemContainer:
     virtual int DoAppend(const wxString& item);
     virtual int DoInsert(const wxString& item, unsigned int pos);
 
@@ -167,6 +172,7 @@ protected:
     virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
     virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
 
+    // From wxControl:
     virtual wxSize DoGetBestSize() const;
 
     // Widgets that use the style->base colour for the BG colour should
