@@ -516,7 +516,6 @@ OSStatus wxMacListBoxItem::GetSetData( wxMacDataItemBrowserControl *owner ,
     OSStatus err = errDataBrowserPropertyNotSupported;
     wxListBox *list = wxDynamicCast( owner->GetPeer() , wxListBox );
     wxCHECK_MSG( list != NULL , errDataBrowserPropertyNotSupported , wxT("Listbox expected"));
-    wxCheckListBox *checklist = wxDynamicCast( list , wxCheckListBox );
 
     if ( !changeValue )
     {
