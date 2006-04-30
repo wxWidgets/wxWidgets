@@ -84,10 +84,12 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     Create(parent, title, defaultPath, style, pos, sz, name);
 }
 
-bool wxGenericDirDialog::Create(wxWindow* parent, const wxString& title,
-                                       const wxString& defaultPath, long style,
-                                       const wxPoint& pos, const wxSize& sz,
-                                       const wxString& name)
+bool wxGenericDirDialog::Create(wxWindow* WXUNUSED(parent),
+                                const wxString& WXUNUSED(title),
+                                const wxString& defaultPath, long style,
+                                const wxPoint& WXUNUSED(pos),
+                                const wxSize& WXUNUSED(sz),
+                                const wxString& WXUNUSED(name))
 {
     wxBusyCursor cursor;
 

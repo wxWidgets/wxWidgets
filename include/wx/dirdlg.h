@@ -47,7 +47,9 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& sz = wxDefaultSize,
                     const wxString& name = wxDirDialogNameStr)
-        : wxDialog(parent, wxID_ANY, title, pos, sz, style, name) {}
+        : wxDialog(parent, wxID_ANY, title, pos, sz, style, name)
+        , m_path(defaultPath)
+    {}
     wxDirDialogBase() {}
 
     virtual ~wxDirDialogBase() {}
