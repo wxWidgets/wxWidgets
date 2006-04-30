@@ -33,31 +33,38 @@ extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[];
         (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON)
 #endif
 
-/*
-    The interface (TODO: make the other classes really derive from it!) is
-    something like this:
+//-------------------------------------------------------------------------
+// wxDirDialogBase
+//-------------------------------------------------------------------------
 
 class WXDLLEXPORT wxDirDialogBase : public wxDialog
 {
 public:
     wxDirDialogBase(wxWindow *parent,
-                    const wxString& title = wxFileSelectorPromptStr,
+                    const wxString& title = wxDirSelectorPromptStr,
                     const wxString& defaultPath = wxEmptyString,
                     long style = wxDD_DEFAULT_STYLE,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& sz = wxDefaultSize,
-                    const wxString& name = _T("dirdialog"));
+                    const wxString& name = wxDirDialogNameStr)
+        : wxDialog(parent, wxID_ANY, title, pos, sz, style, name) {}
+    wxDirDialogBase() {}
 
-    void SetMessage(const wxString& message);
-    void SetPath(const wxString& path);
-    void SetStyle(long style);
+    virtual ~wxDirDialogBase() {}
 
-    wxString GetMessage() const;
-    wxString GetPath() const;
-    long GetStyle() const;
+    virtual void SetMessage(const wxString& message) { m_message = message; }
+    virtual void SetPath(const wxString& path) { m_path = path; }
+    virtual void SetStyle(long style) { SetWindowStyle(style); }
+
+    virtual wxString GetMessage() const { return m_message; }
+    virtual wxString GetPath() const { return m_path; }
+    virtual long GetStyle() const { return GetWindowStyle(); }
+
+protected:
+    wxString m_message;
+    wxString m_path;
 };
 
-*/
 
 // Universal and non-port related switches with need for generic implementation
 #if defined(__WXMSW__) && (defined(__WXUNIVERSAL__) || \
@@ -79,6 +86,12 @@ public:
 
     #include "wx/msw/dirdlg.h"
 
+// Native GTK
+#elif defined(__WXGTK__)
+
+    #include "wx/gtk/dirdlg.h"
+    #define wxDirDialog wxDirDialogGTK
+
 // Native Mac
 #elif defined(__WXMAC__)
 
@@ -91,7 +104,6 @@ public:
 
 // Other ports use generic implementation
 #elif defined(__WXMOTIF__) || \
-      defined(__WXGTK__)   || \
       defined(__WXX11__)   || \
       defined(__WXMGL__)   || \
       defined(__WXCOCOA__) || \

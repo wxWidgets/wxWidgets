@@ -39,25 +39,31 @@ extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[];
 // wxGenericDirDialog
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericDirDialog : public wxDialog
+class WXDLLEXPORT wxGenericDirDialog : public wxDirDialogBase
 {
 public:
-    wxGenericDirDialog() : wxDialog() { }
+    wxGenericDirDialog() : wxDirDialogBase() { }
 
     wxGenericDirDialog(wxWindow* parent,
                        const wxString& title = wxDirSelectorPromptStr,
                        const wxString& defaultPath = wxEmptyString,
                        long style = wxDD_DEFAULT_STYLE,
                        const wxPoint& pos = wxDefaultPosition,
-                       const wxSize& sz = wxSize(450, 550),
+                       const wxSize& sz = wxDefaultSize,//Size(450, 550),
+                       const wxString& name = wxDirDialogNameStr);
+
+    bool Create(wxWindow* parent,
+                const wxString& title = wxDirSelectorPromptStr,
+                const wxString& defaultPath = wxEmptyString,
+                long style = wxDD_DEFAULT_STYLE,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& sz = wxDefaultSize,//Size(450, 550),
                        const wxString& name = wxDirDialogNameStr);
 
     //// Accessors
-    void SetMessage(const wxString& message) { m_message = message; }
     void SetPath(const wxString& path);
     void SetStyle(long style) { m_dialogStyle = style; }
 
-    wxString GetMessage() const { return m_message; }
     wxString GetPath() const;
     long GetStyle() const { return m_dialogStyle; }
 
@@ -77,9 +83,7 @@ protected:
     void OnGoHome(wxCommandEvent& event);
     void OnShowHidden(wxCommandEvent& event);
 
-    wxString          m_message;
     long              m_dialogStyle;
-    wxString          m_path;
     wxGenericDirCtrl* m_dirCtrl;
     wxTextCtrl*       m_input;
 

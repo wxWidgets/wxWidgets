@@ -19,7 +19,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSSavePanel);
 // wxDirDialog
 //-------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDirDialog: public wxDialog
+class WXDLLEXPORT wxDirDialog: public wxDirDialogBase
 {
     DECLARE_DYNAMIC_CLASS(wxDirDialog)
     DECLARE_NO_COPY_CLASS(wxDirDialog)
@@ -33,8 +33,6 @@ public:
                 const wxString& name = wxDirDialogNameStr);
     ~wxDirDialog();
 
-    wxString GetMessage() const { return m_message; }
-    wxString GetPath() const { return m_path; }
     long GetStyle() const { return m_dialogStyle; }
 
     virtual int ShowModal();
@@ -43,11 +41,9 @@ public:
     {   return (WX_NSSavePanel)m_cocoaNSWindow; }
 
 protected:
-    wxString    m_message;
     long        m_dialogStyle;
     wxString    m_dir;
     wxWindow *  m_parent;
-    wxString    m_path;
     wxString    m_fileName;
 
 private:
