@@ -454,7 +454,7 @@ bool wxPlatform::Is(int platform)
         return true;
 #endif
 #if defined(__WXWINCE__) && defined(__SMARTPHONE__)
-    if (platform == wxWinSmartphone)
+    if (platform == wxWinSmartPhone)
         return true;
 #endif
 #ifdef __WXGTK__
