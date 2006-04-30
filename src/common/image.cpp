@@ -708,6 +708,10 @@ wxImage wxImage::Size( const wxSize& size, const wxPoint& pos,
 
     wxRect subRect(pos.x, pos.y, width, height);
     wxRect finalRect(0, 0, size.GetWidth(), size.GetHeight());
+    if (pos.x < 0)
+        finalRect.width -= pos.x;
+    if (pos.y < 0)
+        finalRect.height -= pos.y;
 
     subRect.Intersect(finalRect);
 
