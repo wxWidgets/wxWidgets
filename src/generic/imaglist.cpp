@@ -169,6 +169,42 @@ bool wxGenericImageList::Replace( int index, const wxBitmap &bitmap )
     return true;
 }
 
+bool wxGenericImageList::Replace( int index, const wxBitmap &bitmap, const wxBitmap &mask )
+{
+    wxList::compatibility_iterator node = m_images.Item( index );
+
+    wxCHECK_MSG( node, false, wxT("wrong index in image list") );
+
+    wxBitmap* newBitmap = (bitmap.IsKindOf(CLASSINFO(wxIcon))) ?
+                             #if defined(__VISAGECPP__)
+                               //just can't do this in VisualAge now, with all this new Bitmap-Icon stuff
+                               //so construct it from a bitmap object until I can figure this nonsense out. (DW)
+                               new wxBitmap(bitmap)
+                             #else
+                               new wxBitmap( (const wxIcon&) bitmap )
+                             #endif
+                               : new wxBitmap(bitmap) ;
+
+    if (index == (int) m_images.GetCount() - 1)
+    {
+        delete node->GetData();
+        m_images.Erase( node );
+        m_images.Append( newBitmap );
+    }
+    else
+    {
+        wxList::compatibility_iterator next = node->GetNext();
+        delete node->GetData();
+        m_images.Erase( node );
+        m_images.Insert( next, newBitmap );
+    }
+    
+    if (mask.Ok())
+        newBitmap->SetMask(new wxMask(mask));
+
+    return true;
+}
+
 bool wxGenericImageList::Remove( int index )
 {
     wxList::compatibility_iterator node = m_images.Item( index );
