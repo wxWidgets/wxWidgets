@@ -51,11 +51,11 @@ Constructor specifying the image size, whether image masks should be created, an
 
 \func{int}{Add}{\param{const wxBitmap\&}{ bitmap}, \param{const wxBitmap\&}{ mask = wxNullBitmap}}
 
-Adds a new image using a bitmap and optional mask bitmap.
+Adds a new image or images using a bitmap and optional mask bitmap.
 
 \func{int}{Add}{\param{const wxBitmap\&}{ bitmap}, \param{const wxColour\&}{ maskColour}}
 
-Adds a new image using a bitmap and mask colour.
+Adds a new image or images using a bitmap and mask colour.
 
 \func{int}{Add}{\param{const wxIcon\&}{ icon}}
 
@@ -78,6 +78,8 @@ The new zero-based image index.
 \wxheading{Remarks}
 
 The original bitmap or icon is not affected by the {\bf Add} operation, and can be deleted afterwards.
+
+If the bitmap is wider than the images in the list, then the bitmap will automatically be split into smaller images, each matching the dimensions of the image list.  This does not apply when adding icons.
 
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par

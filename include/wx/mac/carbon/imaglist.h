@@ -70,6 +70,7 @@ public:
     wxIcon GetIcon(int index) const;
     bool Replace( int index, const wxIcon &bitmap );
     bool Replace( int index, const wxBitmap &bitmap );
+    bool Replace( int index, const wxBitmap &bitmap, const wxBitmap &mask );
     bool Remove( int index );
     bool RemoveAll();
     

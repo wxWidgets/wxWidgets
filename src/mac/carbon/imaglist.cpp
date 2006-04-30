@@ -71,19 +71,34 @@ int wxImageList::Add( const wxIcon &bitmap )
 
 int wxImageList::Add( const wxBitmap &bitmap )
 {
-    wxASSERT_MSG( (bitmap.GetWidth() == m_width && bitmap.GetHeight() == m_height)
+    wxASSERT_MSG( (bitmap.GetWidth() >= m_width && bitmap.GetHeight() == m_height)
                   || (m_width == 0 && m_height == 0),
                   _T("invalid bitmap size in wxImageList: this might work ")
                   _T("on this platform but definitely won't under Windows.") );
-
-    m_images.Append( new wxBitmap( bitmap ) );
+                  
+    // Mimic behavior of Windows ImageList_Add that automatically breaks up the added
+    // bitmap into sub-images of the correct size
+    if (m_width > 0 && bitmap.GetWidth() > m_width && bitmap.GetHeight() >= m_height)
+    {
+        int numImages = bitmap.GetWidth() / m_width;
+        for (int subIndex = 0; subIndex < numImages; subIndex++)
+        {
+            wxRect rect(m_width * subIndex, 0, m_width, m_height);
+            wxBitmap tmpBmp = bitmap.GetSubBitmap(rect);
+            m_images.Append( new wxBitmap(tmpBmp) );
+        }
+    }
+    else
+    {
+        m_images.Append( new wxBitmap(bitmap) );
+    }
 
     if (m_width == 0 && m_height == 0)
     {
         m_width = bitmap.GetWidth();
         m_height = bitmap.GetHeight();
     }
-
+    
     return m_images.GetCount() - 1;
 }
 
@@ -187,6 +202,34 @@ bool wxImageList::Replace( int index, const wxIcon &bitmap )
         m_images.Erase( node );
         m_images.Insert( next, newBitmap );
     }
+
+    return true;
+}
+
+bool wxImageList::Replace( int index, const wxBitmap &bitmap, const wxBitmap &mask )
+{
+    wxList::compatibility_iterator node = m_images.Item( index );
+
+    wxCHECK_MSG( node, false, wxT("wrong index in image list") );
+
+    wxBitmap* newBitmap = new wxBitmap(bitmap);
+
+    if (index == (int) m_images.GetCount() - 1)
+    {
+        delete node->GetData();
+        m_images.Erase( node );
+        m_images.Append( newBitmap );
+    }
+    else
+    {
+        wxList::compatibility_iterator next = node->GetNext();
+        delete node->GetData();
+        m_images.Erase( node );
+        m_images.Insert( next, newBitmap );
+    }
+    
+    if (mask.Ok())
+        newBitmap->SetMask(new wxMask(mask));
 
     return true;
 }

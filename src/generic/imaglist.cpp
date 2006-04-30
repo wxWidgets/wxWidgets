@@ -69,15 +69,34 @@ bool wxGenericImageList::Create()
 
 int wxGenericImageList::Add( const wxBitmap &bitmap )
 {
-    wxASSERT_MSG( (bitmap.GetWidth() == m_width && bitmap.GetHeight() == m_height)
+    wxASSERT_MSG( (bitmap.GetWidth() >= m_width && bitmap.GetHeight() == m_height)
                   || (m_width == 0 && m_height == 0),
                   _T("invalid bitmap size in wxImageList: this might work ")
                   _T("on this platform but definitely won't under Windows.") );
 
     if (bitmap.IsKindOf(CLASSINFO(wxIcon)))
+    {
         m_images.Append( new wxIcon( (const wxIcon&) bitmap ) );
+    }
     else
-        m_images.Append( new wxBitmap(bitmap) );
+    {
+        // Mimic behavior of Windows ImageList_Add that automatically breaks up the added
+        // bitmap into sub-images of the correct size
+        if (m_width > 0 && bitmap.GetWidth() > m_width && bitmap.GetHeight() >= m_height)
+        {
+            int numImages = bitmap.GetWidth() / m_width;
+            for (int subIndex = 0; subIndex < numImages; subIndex++)
+            {
+                wxRect rect(m_width * subIndex, 0, m_width, m_height);
+                wxBitmap tmpBmp = bitmap.GetSubBitmap(rect);
+                m_images.Append( new wxBitmap(tmpBmp) );
+            }
+        }
+        else
+        {
+            m_images.Append( new wxBitmap(bitmap) );
+        }
+    }
 
     if (m_width == 0 && m_height == 0)
     {
