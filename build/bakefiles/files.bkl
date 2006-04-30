@@ -937,6 +937,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/combobox.cpp
     src/gtk/control.cpp
     src/gtk/dialog.cpp
+    src/gtk/dirdlg.cpp
     src/gtk/filedlg.cpp
     src/gtk/fontdlg.cpp
     src/gtk/frame.cpp
@@ -982,6 +983,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/combobox.h
     wx/gtk/control.h
     wx/gtk/dialog.h
+    wx/gtk/dirdlg.h
     wx/gtk/filedlg.h
     wx/gtk/fontdlg.h
     wx/gtk/frame.h
