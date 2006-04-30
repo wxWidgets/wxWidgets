@@ -1,3 +1,13 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        xmlnode.tex
+%% Purpose:     wxXmlNode documentation
+%% Author:      Francesco Montorsi
+%% Created:     2006-04-18
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Francesco Montorsi
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxXmlNode}}\label{wxxmlnode}
 
 Represents a node in an XML document. See \helpref{wxXmlDocument}{wxxmldocument}.
@@ -8,8 +18,8 @@ properties are irrelevant) and {\tt wxXML\_ELEMENT\_NODE} (e.g. in {\tt <title>h
 an element with name="title", irrelevant content and one child ({\tt wxXML\_TEXT\_NODE}
 with content="hi").
 
-If wxUSE\_UNICODE is 0, all strings are encoded in the encoding given to Load
-(default is UTF-8).
+If \texttt{wxUSE\_UNICODE} is 0, all strings are encoded in the encoding given to
+\helpref{wxXmlDocument::Load}{wxxmldocumentload} (default is UTF-8).
 
 
 \wxheading{Derived from}
@@ -22,7 +32,7 @@ No base class
 
 \wxheading{Constants}
 
-The following are the node types supported by wxXmlNode:
+The following are the node types supported by \helpref{wxXmlNode}{wxxmlnode}:
 
 {\small
 \begin{verbatim}
@@ -56,23 +66,23 @@ enum wxXmlNodeType
 \membersection{wxXmlNode::wxXmlNode}\label{wxxmlnodewxxmlnode}
 
 
-\func{}{wxXmlNode}{\param{wxXmlNode* }{parent}, \param{wxXmlNodeType }{type}, \param{const wxString\& }{name}, \param{const wxString\& }{content = wxEmptyString}, \param{wxXmlProperty* }{props = NULL}, \param{wxXmlNode* }{next = NULL}}
+\func{}{wxXmlNode}{\param{wxXmlNode* }{parent}, \param{wxXmlNodeType }{type}, \param{const wxString\& }{name}, \param{const wxString\& }{content = wxEmptyString}, \param{wxXmlProperty* }{props = \NULL}, \param{wxXmlNode* }{next = \NULL}}
 
 \wxheading{Parameters}
 
-\docparam{parent}{The parent node. Can be NULL.}
+\docparam{parent}{The parent node. Can be \NULL.}
 \docparam{type}{One of the wxXmlNodeType enumeration value.}
 \docparam{name}{The name of the node. This is the string which appears between angular brackets.}
 \docparam{content}{The content of the node. Only meaningful when {\it type} is {\tt wxXML\_TEXT\_NODE} or {\tt wxXML\_CDATA\_SECTION\_NODE}.}
-\docparam{props}{If not NULL, this wxXmlProperty object and its eventual siblings are attached to
+\docparam{props}{If not \NULL, this wxXmlProperty object and its eventual siblings are attached to
 the node.}
-\docparam{next}{If not NULL, this node and its eventual siblings are attached to
+\docparam{next}{If not \NULL, this node and its eventual siblings are attached to
 the node.}
 
 \func{}{wxXmlNode}{\param{const wxXmlNode\& }{node}}
 
 Copy constructor. Note that this does NOT copy syblings
-and parent pointer, i.e. \helpref{GetParent()}{wxxmlnodegetparent} and \helpref{GetNext()}{wxxmlnodegetnext} will return NULL
+and parent pointer, i.e. \helpref{GetParent()}{wxxmlnodegetparent} and \helpref{GetNext()}{wxxmlnodegetnext} will return \NULL
 after using copy ctor and are never unmodified by operator=.
 
 On the other hand, it DOES copy children and properties.
@@ -114,7 +124,7 @@ Removes the first properties which has the given {\it name} from the list of pro
 
 \membersection{wxXmlNode::GetChildren}\label{wxxmlnodegetchildren}
 
-\constfunc{wxXmlNode*}{GetChildren}{\void}
+\constfunc{wxXmlNode*}{GetChildren}{\param{void}{}}
 
 Returns the first child of this node.
 To get a pointer to the second child of this node (if it does exist), use the
@@ -125,6 +135,32 @@ To get a pointer to the second child of this node (if it does exist), use the
 \constfunc{wxString}{GetContent}{\void}
 
 Returns the content of this node. Can be an empty string.
+Be aware that for nodes of type \texttt{wxXML_ELEMENT_NODE} (the most used node type) the
+content is an empty string. See \helpref{GetNodeContent()}{wxxmlnodegetnodecontent} for more details.
+
+
+\membersection{wxXmlNode::GetNodeContent}\label{wxxmlnodegetnodecontent}
+
+\constfunc{wxString}{GetNodeContent}{\void}
+
+Returns the content of the first child node of type \texttt{wxXML_TEXT_NODE} or \texttt{wxXML_CDATA_SECTION_NODE}.
+This function is very useful since the XML snippet \texttt{``<tagname>tagcontent</tagname>"} is represented by
+expat with the following tag tree:
+
+\begin{verbatim}
+wxXML_ENTITY_NODE name="tagname", content=""
+|-- wxXML_TEXT_NODE name="", content="tagcontent"
+\end{verbatim}
+
+or eventually:
+
+\begin{verbatim}
+wxXML_ENTITY_NODE name="tagname", content=""
+|-- wxXML_CDATA_SECTION_NODE name="", content="tagcontent"
+\end{verbatim}
+
+An empty string is returned if the node has no children of type \texttt{wxXML_TEXT_NODE} or \texttt{wxXML_CDATA_SECTION_NODE}, or if the content of the first child of such types is empty.
+
 
 \membersection{wxXmlNode::GetName}\label{wxxmlnodegetname}
 
@@ -136,20 +172,20 @@ Returns the name of this node. Can be an empty string (e.g. for nodes of type {\
 
 \constfunc{wxXmlNode*}{GetNext}{\void}
 
-Returns a pointer to the sibling of this node or NULL if there are no siblings.
+Returns a pointer to the sibling of this node or \NULL if there are no siblings.
 
 \membersection{wxXmlNode::GetParent}\label{wxxmlnodegetparent}
 
 \constfunc{wxXmlNode*}{GetParent}{\void}
 
-Returns a pointer to the parent of this node or NULL if this node has no parent.
+Returns a pointer to the parent of this node or \NULL if this node has no parent.
 
 \membersection{wxXmlNode::GetPropVal}\label{wxxmlnodegetpropval}
 
 \constfunc{bool}{GetPropVal}{\param{const wxString\& }{propName}, \param{wxString* }{value}}
 
 Returns \true if a property named {\it propName} could be found.
-If the {\it value} pointer is not NULL, the value of that property is saved there.
+If the {\it value} pointer is not \NULL, the value of that property is saved there.
 
 \constfunc{wxString}{GetPropVal}{\param{const wxString\& }{propName}, \param{const wxString\& }{defaultVal}}
 
@@ -158,7 +194,7 @@ If it does not exist, the {\it defaultVal} is returned.
 
 \membersection{wxXmlNode::GetProperties}\label{wxxmlnodegetproperties}
 
-\constfunc{wxXmlProperty*}{GetProperties}{\void}
+\constfunc{wxXmlProperty *}{GetProperties}{\void}
 
 Return a pointer to the first property of this node.
 
@@ -236,7 +272,7 @@ Sets the type of this node.
 
 \membersection{wxXmlNode::operator=}\label{wxxmlnodeoperatorassign}
 
-\func{wxXmlNode\& operator}{operator=}{\param{const wxXmlNode\& }{node}}
+\func{wxXmlNode\&}{operator=}{\param{const wxXmlNode\& }{node}}
 
 See the copy constructor for more info.
 
