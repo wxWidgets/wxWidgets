@@ -490,7 +490,7 @@ void wxDC::DestroyClippingRegion()
         // on desktop WIN32 also, since the WIN32 docs imply that the user
         // clipping region is independent from the paint clipping region.
         ::SelectClipRgn(GetHdc(), 0);
-#else        
+#else
         // TODO: this should restore the previous clipping region,
         //       so that OnPaint processing works correctly, and the update
         //       clipping region doesn't get destroyed after the first
@@ -498,7 +498,7 @@ void wxDC::DestroyClippingRegion()
         HRGN rgn = CreateRectRgn(0, 0, 32000, 32000);
         ::SelectClipRgn(GetHdc(), rgn);
         ::DeleteObject(rgn);
-#endif        
+#endif
     }
 
     wxDCBase::DestroyClippingRegion();
@@ -1745,9 +1745,11 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
         wxLogLastError(_T("GetTextExtentPoint32()"));
     }
 
+#if !defined(_WIN32_WCE) || (_WIN32_WCE >= 400)
     // the result computed by GetTextExtentPoint32() may be too small as it
     // accounts for under/overhang of the first/last character while we want
     // just the bounding rect for this string so adjust the width as needed
+    // (using API not available in 2002 SDKs of WinCE)
     if ( len > 0 )
     {
         ABC width;
@@ -1769,6 +1771,7 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
         }
         //else: GetCharABCWidths() failed, not a TrueType font?
     }
+#endif // !defined(_WIN32_WCE) || (_WIN32_WCE >= 400)
 
     TEXTMETRIC tm;
     ::GetTextMetrics(GetHdc(), &tm);
