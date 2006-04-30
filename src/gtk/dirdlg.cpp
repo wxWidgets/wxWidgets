@@ -73,7 +73,10 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxDirDialog *dialog)
             wxMessageDialog dlg(dialog, msg, _("Confirm"),
                                wxYES_NO | wxICON_QUESTION);
             if (dlg.ShowModal() != wxID_YES)
+            {
+                g_free(filename);
                 return;
+            }
         }
     }
 
