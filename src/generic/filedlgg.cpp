@@ -1002,10 +1002,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
         return true;
 
     if (!wxDialog::Create( parent, wxID_ANY, message, pos, wxDefaultSize,
-                           wxDEFAULT_DIALOG_STYLE
-#if !(defined(__PDA__) || defined(__SMARTPHONE__))
-                           | wxRESIZE_BORDER
-#endif
+                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER
                            ))
     {
         return false;

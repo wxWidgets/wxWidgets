@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        tipdlg.cpp
+// Name:        src/generic/tipdlg.cpp
 // Purpose:     implementation of wxTipDialog
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -218,10 +218,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
                          bool showAtStartup)
            : wxDialog(parent, wxID_ANY, _("Tip of the Day"),
                       wxDefaultPosition, wxDefaultSize,
-                      wxDEFAULT_DIALOG_STYLE
-#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
-                      | wxRESIZE_BORDER
-#endif
+                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER
                       )
 {
     m_tipProvider = tipProvider;
@@ -319,12 +316,10 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 
     SetSizer( topsizer );
 
-#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
     Centre(wxBOTH | wxCENTER_FRAME);
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -348,4 +343,3 @@ bool wxShowTip(wxWindow *parent,
 }
 
 #endif // wxUSE_STARTUP_TIPS
-

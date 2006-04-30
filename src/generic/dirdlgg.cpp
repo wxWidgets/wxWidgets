@@ -193,12 +193,10 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     SetAutoLayout( true );
     SetSizer( topsizer );
 
-#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
     Centre( wxBOTH );
-#endif
 }
 
 void wxGenericDirDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))

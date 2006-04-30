@@ -141,12 +141,10 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     SetSizer( topsizer );
     SetAutoLayout( true );
 
-#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
     Centre( wxBOTH );
-#endif
 
     m_spinctrl->SetSelection(-1, -1);
     m_spinctrl->SetFocus();

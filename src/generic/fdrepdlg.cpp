@@ -89,10 +89,7 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
 {
     if ( !wxDialog::Create(parent, wxID_ANY, title,
                            wxDefaultPosition, wxDefaultSize,
-                           wxDEFAULT_DIALOG_STYLE
-#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
-                           | wxRESIZE_BORDER
-#endif                           
+                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER
                            | style) )
     {
         return false;
@@ -104,7 +101,7 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
                  _T("can't create dialog without data") );
 
     bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
-    
+
     wxBoxSizer *leftsizer = new wxBoxSizer( wxVERTICAL );
 
     // 3 columns because there is a spacer in the middle
@@ -158,7 +155,7 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
         rbStyle = wxRA_SPECIFY_ROWS;
     else
         rbStyle = wxRA_SPECIFY_COLS;
-    
+
     m_radioDir = new wxRadioBox(this, wxID_ANY, _("Search direction"),
                                 wxDefaultPosition, wxDefaultSize,
                                 WXSIZEOF(searchDirections), searchDirections,
@@ -212,12 +209,10 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
     SetAutoLayout( true );
     SetSizer( topsizer );
 
-#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
     Centre( wxBOTH );
-#endif
 
     m_textFind->SetFocus();
 
@@ -294,4 +289,3 @@ void wxGenericFindReplaceDialog::OnCloseWindow(wxCloseEvent &)
 }
 
 #endif // wxUSE_FINDREPLDLG
-

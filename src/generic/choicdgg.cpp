@@ -255,11 +255,6 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
                                const wxPoint& pos,
                                long styleLbox)
 {
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
-    styleDlg &= ~wxBORDER_MASK;
-    styleDlg &= ~wxRESIZE_BORDER;
-    styleDlg &= ~wxCAPTION;
-#endif
 #ifdef __WXMAC__
     if ( !wxDialog::Create(parent, wxID_ANY, caption, pos, wxDefaultSize, styleDlg & (~wxCANCEL) ) )
         return false;
@@ -299,13 +294,11 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 
     SetSizer( topsizer );
 
-#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
     if ( styleDlg & wxCENTRE )
         Centre(wxBOTH);
-#endif
 
     m_listbox->SetFocus();
 

@@ -124,13 +124,11 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
     SetAutoLayout( true );
     SetSizer( topsizer );
 
-#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
     if ( style & wxCENTRE )
         Centre( wxBOTH );
-#endif
 
     m_textctrl->SetSelection(-1, -1);
     m_textctrl->SetFocus();

@@ -108,12 +108,8 @@ wxGetOsVersion will return these values:
 
 \subsubsection{Window sizing in wxWinCE}
 
-When creating frames and dialogs, create them with wxDefaultPosition and
-wxDefaultSize, which will tell WinCE to create them full-screen.
-
-Don't call Fit() and Centre(), so the content sizes to
-the window rather than fitting the window to the content. (We really need a single API call
-that will do the right thing on each platform.)
+Top level windows (dialogs, frames) are created always full-screen. Fit() of sizers will not rescale top
+level windows but instead will scale window content.
 
 If the screen orientation changes, the windows will automatically be resized
 so no further action needs to be taken (unless you want to change the layout

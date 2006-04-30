@@ -593,10 +593,14 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         MSWUpdateUIState(UIS_INITIALIZE);
     }
 
+    // Note: if we include PocketPC in this test, dialogs can fail to show up,
+    // for example the text entry dialog in the dialogs sample. Problem with Maximise()?
+#if defined(__WXWINCE__) && (defined(__SMARTPHONE__) || defined(__WINCE_STANDARDSDK__))
     if ( ( style & wxMAXIMIZE ) || IsAlwaysMaximized() )
     {
         this->Maximize();
     }
+#endif
 
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     SetRightMenu(); // to nothing for initialization

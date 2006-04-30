@@ -732,6 +732,15 @@ wxSize wxSizer::GetMinWindowSize( wxWindow *window )
 // Return a window size that will fit within the screens dimensions
 wxSize wxSizer::FitSize( wxWindow *window )
 {
+    if ( window->IsTopLevel() )
+    {
+        wxTopLevelWindow *tlw = wxDynamicCast(window, wxTopLevelWindow);
+        if ( tlw && tlw->IsAlwaysMaximized() )
+        {
+            return tlw->GetClientSize();
+        }
+    }
+
     wxSize size     = GetMinWindowSize( window );
     wxSize sizeMax  = GetMaxWindowSize( window );
 
