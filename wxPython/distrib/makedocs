@@ -17,14 +17,16 @@ DEST=wxPython-$VERSION/docs
 mkdir -p _build_docs/$DEST
 cd _build_docs
 mkdir $DEST/wx
+DEST=`abspath.py $DEST`
 
-WXDIR=../..
-INI=$WXDIR/docs/latex/wx/tex2rtf.ini
+WXDIR=`abspath.py ../..`
+INI=$WXDIR/docs/latex/wx/tex2rtf_css.ini
 
 # **** Build the main docs using tex2rtf
 echo "****" main "****"
 cp $WXDIR/docs/latex/wx/*.gif $DEST/wx
 cp $WXDIR/docs/latex/wx/*.css $DEST/wx
+echo tex2rtf $WXDIR/docs/latex/wx/manual.tex $DEST/wx/wx.html -twice -html -macros $INI
 tex2rtf $WXDIR/docs/latex/wx/manual.tex $DEST/wx/wx.html -twice -html -macros $INI
 cp $DEST/wx/wx_contents.html $DEST/wx/index.html
 cp $DEST/wx/* $WXDIR/docs/html/wx
@@ -35,7 +37,8 @@ for c in $CONTRIBS; do
     mkdir $DEST/$c
     cp $WXDIR/contrib/docs/latex/$c/*.gif $DEST/$c
     cp $WXDIR/contrib/docs/latex/$c/*.bmp $DEST/$c
-    tex2rtf $WXDIR/contrib/docs/latex/$c/$c.tex $DEST/$c/$c.html -twice -html -macros $INI
+    tex2rtf $WXDIR/contrib/docs/latex/$c/$c.tex $DEST/$c/$c.html -twice -html -macros $INI      
+    #tex2rtf $WXDIR/contrib/docs/latex/$c/manual.tex $DEST/$c/$c.html -twice -html -macros $INI 
     cp $DEST/$c/$c.html $DEST/$c/index.html || cp $DEST/$c/${c}_contents.html $DEST/$c/index.html
 done
 
@@ -60,7 +63,7 @@ cp ../distrib/README.viewdocs.txt $DEST/README.txt
 ##cp ../docs/xml/wxPython-metadata.xml $DEST
 
 rm -f ../dist/wxPython-docs-$VERSION.tar.gz
-tar cvf ../dist/wxPython-docs-$VERSION.tar $DEST
+tar cvf ../dist/wxPython-docs-$VERSION.tar wxPython-$VERSION
 gzip -9 ../dist/wxPython-docs-$VERSION.tar
 
 
