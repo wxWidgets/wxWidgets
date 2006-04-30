@@ -367,7 +367,7 @@ bool wxDataViewToggleCell::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
     if (GetMode() != wxDATAVIEW_CELL_ACTIVATABLE)
         flags |= wxCONTROL_DISABLED;
 
-    wxRendererNative::Get().DrawCheckButton(
+    wxRendererNative::Get().DrawCheckBox(
             GetOwner()->GetOwner(),
             *dc,
             rect,

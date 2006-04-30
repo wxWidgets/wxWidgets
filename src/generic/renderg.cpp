@@ -78,10 +78,10 @@ public:
                                const wxRect& rect,
                                int flags = 0);
 
-    virtual void DrawCheckButton(wxWindow *win,
-                                 wxDC& dc,
-                                 const wxRect& rect,
-                                 int flags = 0);
+    virtual void DrawCheckBox(wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0);
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
@@ -402,10 +402,10 @@ wxRendererGeneric::DrawDropArrow(wxWindow *win,
 }
 
 void
-wxRendererGeneric::DrawCheckButton(wxWindow *WXUNUSED(win),
-                                   wxDC& dc,
-                                   const wxRect& rect,
-                                   int flags)
+wxRendererGeneric::DrawCheckBox(wxWindow *WXUNUSED(win),
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags)
 {
     dc.SetPen(*(flags & wxCONTROL_DISABLED ? wxGREY_PEN : wxBLACK_PEN));
     dc.SetBrush( *wxTRANSPARENT_BRUSH );

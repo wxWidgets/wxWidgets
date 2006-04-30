@@ -173,10 +173,10 @@ public:
     // draw check button
     //
     // flags may use wxCONTROL_CHECKED, wxCONTROL_UNDETERMINED and wxCONTROL_CURRENT
-    virtual void DrawCheckButton(wxWindow *win,
-                                 wxDC& dc,
-                                 const wxRect& rect,
-                                 int flags = 0) = 0;
+    virtual void DrawCheckBox(wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0) = 0;
 
     // draw blank button
     //
@@ -300,11 +300,11 @@ public:
                                int flags = 0)
         { m_rendererNative.DrawDropArrow(win, dc, rect, flags); }
 
-    virtual void DrawCheckButton(wxWindow *win,
-                                 wxDC& dc,
-                                 const wxRect& rect,
-                                 int flags = 0 )
-        { m_rendererNative.DrawCheckButton( win, dc, rect, flags ); }
+    virtual void DrawCheckBox(wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0 )
+        { m_rendererNative.DrawCheckBox( win, dc, rect, flags ); }
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
@@ -346,4 +346,3 @@ wxRendererNative& wxRendererNative::GetDefault()
 #endif // !wxHAS_NATIVE_RENDERER
 
 #endif // _WX_RENDERER_H_
-

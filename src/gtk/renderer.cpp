@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/renderer.cpp
+// Name:        src/gtk/renderer.cpp
 // Purpose:     implementation of wxRendererNative for wxGTK
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -78,10 +78,10 @@ public:
                                const wxRect& rect,
                                int flags = 0);
 
-    virtual void DrawCheckButton(wxWindow *win,
-                                 wxDC& dc,
-                                 const wxRect& rect,
-                                 int flags = 0);
+    virtual void DrawCheckBox(wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0);
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
@@ -92,7 +92,7 @@ public:
                                        wxDC& dc,
                                        const wxRect& rect,
                                        int flags = 0);
-                                       
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
 private:
@@ -103,8 +103,8 @@ private:
 
     // used by DrawTreeItemButton()
     static GtkWidget *GetTreeWidget();
-    
-    // used by DrawCheckButton()
+
+    // used by DrawCheckBox()
     static GtkWidget *GetCheckButtonWidget();
 };
 
@@ -437,17 +437,17 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
 }
 
 void 
-wxRendererGTK::DrawCheckButton(wxWindow *win,
-                                 wxDC& dc,
-                                 const wxRect& rect,
-                                 int flags )
+wxRendererGTK::DrawCheckBox(wxWindow *win,
+                            wxDC& dc,
+                            const wxRect& rect,
+                            int flags )
 {
     GtkWidget *button = GetCheckButtonWidget();
 
     // for reason why we do this, see DrawDropArrow
     wxWindowDC& wdc = (wxWindowDC&)dc;
     wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
-    
+
     GtkStateType state;
 
     if ( flags & wxCONTROL_PRESSED )
@@ -458,7 +458,7 @@ wxRendererGTK::DrawCheckButton(wxWindow *win,
         state = GTK_STATE_PRELIGHT;
     else
         state = GTK_STATE_NORMAL;
-    
+
     gtk_paint_check
     (
         button->style,
@@ -522,12 +522,12 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
     wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
 
     GtkStateType state;
-	if (flags & wxCONTROL_SELECTED)
+    if (flags & wxCONTROL_SELECTED)
     {
         if (flags & wxCONTROL_FOCUSED)
-    	    state = GTK_STATE_SELECTED;
+            state = GTK_STATE_SELECTED;
         else
-    	    state = GTK_STATE_INSENSITIVE;
+            state = GTK_STATE_INSENSITIVE;
 
         gtk_paint_flat_box( win->m_wxwindow->style,
                         GTK_PIZZA(win->m_wxwindow)->bin_window,
@@ -541,7 +541,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
                         rect.width,
                         rect.height );
     }
-    
+
     if (flags & wxCONTROL_CURRENT)
     {
         dc.SetPen( *wxBLACK_PEN );
@@ -549,4 +549,3 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
         dc.DrawRectangle( rect );
     }
 }
-

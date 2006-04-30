@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/renderer.cpp
+// Name:        src/msw/renderer.cpp
 // Purpose:     implementation of wxRendererNative for Windows
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -134,10 +134,10 @@ public:
                                         wxDC& dc,
                                         const wxRect& rect,
                                         int flags = 0);
-    virtual void DrawCheckButton(wxWindow *win,
-                                 wxDC& dc,
-                                 const wxRect& rect,
-                                 int flags = 0);
+    virtual void DrawCheckBox(wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0);
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
@@ -335,15 +335,15 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
 }
 
 void
-wxRendererXP::DrawCheckButton(wxWindow *win,
-                              wxDC& dc,
-                              const wxRect& rect,
-                              int flags)
+wxRendererXP::DrawCheckBox(wxWindow *win,
+                           wxDC& dc,
+                           const wxRect& rect,
+                           int flags)
 {
     wxUxThemeHandle hTheme(win, L"BUTTON");
     if ( !hTheme )
     {
-        m_rendererNative.DrawCheckButton(win, dc, rect, flags);
+        m_rendererNative.DrawCheckBox(win, dc, rect, flags);
         return;
     }
 
@@ -473,4 +473,3 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
 }
 
 #endif // wxUSE_UXTHEME
-
