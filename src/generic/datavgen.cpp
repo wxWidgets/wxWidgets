@@ -343,7 +343,7 @@ bool wxDataViewToggleCell::SetValue( const wxVariant &value )
 {
     m_toggle = value.GetBool();
 
-    return true;;
+    return true;
 }
 
 bool wxDataViewToggleCell::GetValue( wxVariant &WXUNUSED(value) )
@@ -460,16 +460,17 @@ public:
         sizer->Fit( this );
     }
 
-    virtual void OnDismiss()
-    {
-    }
-
     void OnCalendar( wxCalendarEvent &event );
 
     wxCalendarCtrl      *m_cal;
     wxDataViewListModel *m_model;
     size_t               m_col;
     size_t               m_row;
+
+protected:
+    virtual void OnDismiss()
+    {
+    }
 
 private:
     DECLARE_EVENT_TABLE()
@@ -1519,7 +1520,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
         if (m_lastOnSame)
         {
-            if ((col == m_currentCol) & (current == m_currentRow) &&
+            if ((col == m_currentCol) && (current == m_currentRow) &&
                 (cell->GetMode() == wxDATAVIEW_CELL_EDITABLE) )
             {
                 m_renameTimer->Start( 100, true );
