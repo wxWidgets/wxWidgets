@@ -396,9 +396,14 @@ IconRef wxBitmapRefData::GetIconRef()
             PicHandle pic = GetPictHandle() ;
             SetIconFamilyData( iconFamily, 'PICT' , (Handle) pic ) ;
         }
-
         // transform into IconRef
-
+#ifdef __WXMAC_OSX__
+        // cleaner version existing from 10.3 upwards
+        HLock((Handle) iconFamily);
+        OSStatus err = GetIconRefFromIconFamilyPtr( *iconFamily, GetHandleSize((Handle) iconFamily), &m_iconRef );
+        HUnlock((Handle) iconFamily);
+        wxASSERT_MSG( err == noErr , wxT("Error when constructing icon ref") );
+#else
         static int iconCounter = 2 ;
 
         OSStatus err = RegisterIconRefFromIconFamily( 'WXNG' , (OSType) iconCounter, iconFamily, &m_iconRef ) ;
@@ -407,8 +412,9 @@ IconRef wxBitmapRefData::GetIconRef()
         // we have to retain a reference, as Unregister will decrement it
         AcquireIconRef( m_iconRef ) ;
         UnregisterIconRef( 'WXNG' , (OSType) iconCounter ) ;
-        DisposeHandle( (Handle) iconFamily ) ;
         ++iconCounter ;
+#endif
+        DisposeHandle( (Handle) iconFamily ) ;
     }
 
     return m_iconRef ;
