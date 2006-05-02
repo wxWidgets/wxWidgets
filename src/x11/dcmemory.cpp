@@ -1,17 +1,24 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcmemory.cpp
+// Name:        src/x11/dcmemory.cpp
 // Purpose:     wxMemoryDC class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/dcmemory.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
+
 #include "wx/settings.h"
-#include "wx/utils.h"
 
 #include "wx/x11/private.h"
 
@@ -19,8 +26,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxWindowDC)
 
 wxMemoryDC::wxMemoryDC() : wxWindowDC()
 {
-    m_ok = FALSE;
-    
+    m_ok = false;
+
     m_display = (WXDisplay *) wxGlobalDisplay();
 
     int screen = DefaultScreen( wxGlobalDisplay() );
@@ -30,10 +37,10 @@ wxMemoryDC::wxMemoryDC() : wxWindowDC()
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
   : wxWindowDC()
 {
-    m_ok = FALSE;
+    m_ok = false;
 
     m_display = (WXDisplay *) wxGlobalDisplay();
-    
+
     int screen = DefaultScreen( wxGlobalDisplay() );
     m_cmap = (WXColormap) DefaultColormap( wxGlobalDisplay(), screen );
 }
@@ -45,7 +52,7 @@ wxMemoryDC::~wxMemoryDC()
 void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 {
     Destroy();
-    
+
     m_selected = bitmap;
     if (m_selected.Ok())
     {
@@ -58,13 +65,13 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
             m_window = m_selected.GetBitmap();
         }
 
-        m_isMemDC = TRUE;
+        m_isMemDC = true;
 
         SetUpDC();
     }
     else
     {
-        m_ok = FALSE;
+        m_ok = false;
         m_window = NULL;
     }
 }

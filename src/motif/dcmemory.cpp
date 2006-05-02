@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcmemory.cpp
+// Name:        src/motif/dcmemory.cpp
 // Purpose:     wxMemoryDC class
 // Author:      Julian Smart
 // Modified by:
@@ -13,8 +13,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/dcmemory.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
+
 #include "wx/settings.h"
-#include "wx/utils.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

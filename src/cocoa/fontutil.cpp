@@ -26,6 +26,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
+    #include "wx/utils.h"
 #endif // PCH
 
 #include "wx/fontutil.h"
@@ -162,7 +163,6 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
         #pragma message enable nosimpint
     #endif
 
-    #include "wx/utils.h"       // for wxGetDisplay()
 #elif defined(__WXGTK__)
     // we have to declare struct tm to avoid problems with first forward
     // declaring it in C code (glib.h included from gdk.h does it) and then

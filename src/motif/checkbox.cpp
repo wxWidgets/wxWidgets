@@ -17,8 +17,12 @@
 #endif
 
 #include "wx/checkbox.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
+
 #include "wx/tglbtn.h"
-#include "wx/utils.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

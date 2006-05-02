@@ -22,11 +22,11 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/window.h"
 #include "wx/gdicmn.h"
-#include "wx/utils.h"
 
 #include <X11/Xlib.h>
 

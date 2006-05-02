@@ -16,9 +16,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/utils.h"
 #endif
 
-#include "wx/utils.h"
 #include <ctype.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)

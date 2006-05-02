@@ -14,7 +14,10 @@
 
 #include "wx/scrolbar.h"
 
-#include "wx/utils.h"
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
+
 #include "wx/math.h"
 #include "wx/gtk1/private.h"
 
@@ -362,4 +365,4 @@ wxScrollBar::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return GetDefaultAttributesFromGTKWidget(gtk_vscrollbar_new);
 }
 
-#endif
+#endif // wxUSE_SCROLLBAR

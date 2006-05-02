@@ -26,6 +26,7 @@
     #include "wx/log.h"
     #include "wx/event.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/brush.h"
@@ -36,7 +37,6 @@
 #include "wx/font.h"
 #include "wx/palette.h"
 #include "wx/dc.h"
-#include "wx/utils.h"
 #include "wx/settings.h"
 #include "wx/hashmap.h"
 

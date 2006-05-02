@@ -28,9 +28,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/utils.h" // for wxStripMenuCodes()
 #endif
-
-#include "wx/utils.h" // for wxStripMenuCodes()
 
 bool wxIsStockID(wxWindowID id)
 {

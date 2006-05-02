@@ -29,9 +29,13 @@
 #include <ctype.h>
 
 #include "wx/textctrl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
+
 #include "wx/settings.h"
 #include "wx/filefn.h"
-#include "wx/utils.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -163,8 +167,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
 #if 0
         // TODO: Is this relevant? What does it do?
         int noCols = 2;
-        if (!value.IsNull() && (value.Length() > (unsigned int) noCols))
-            noCols = value.Length();
+        if (!value.IsNull() && (value.length() > (unsigned int) noCols))
+            noCols = value.length();
         XtVaSetValues((Widget) m_mainWidget,
                       XmNcolumns, noCols,
                       NULL);

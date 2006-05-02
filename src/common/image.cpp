@@ -20,6 +20,7 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/hash.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/image.h"
@@ -29,7 +30,6 @@
 #include "wx/wfstream.h"
 #include "wx/intl.h"
 #include "wx/module.h"
-#include "wx/utils.h"
 #include "wx/math.h"
 
 #if wxUSE_XPM

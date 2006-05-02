@@ -20,12 +20,12 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/dcclient.h"
 #include "wx/frame.h"
 #include "wx/layout.h"
-#include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/msgdlg.h"
 #include "wx/module.h"
@@ -1352,7 +1352,7 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
 static void AdjustEventButtonState(wxMouseEvent& event)
 {
     // GDK reports the old state of the button for a button press event, but
-    // for compatibility with MSW and common sense we want m_leftDown be TRUE
+    // for compatibility with MSW and common sense we want m_leftDown be true
     // for a LEFT_DOWN event, not FALSE, so we will invert
     // left/right/middleDown for the corresponding click events
 

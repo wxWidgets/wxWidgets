@@ -21,6 +21,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif
 
 #ifdef __DARWIN__
@@ -47,7 +48,6 @@
 #include "wx/tabctrl.h"
 #include "wx/settings.h"
 #include "wx/filefn.h"
-#include "wx/utils.h"
 
 #if defined(__BORLANDC__) && !defined(__WIN32__)
     #include <alloc.h>

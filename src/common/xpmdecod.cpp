@@ -102,11 +102,11 @@ license is as follows:
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/stream.h"
 #include "wx/image.h"
-#include "wx/utils.h"
 #include "wx/hashmap.h"
 #include <string.h>
 

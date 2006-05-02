@@ -23,12 +23,12 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/menuitem.h"
 #include "wx/window.h"
 #include "wx/log.h"
-#include "wx/utils.h"
 #include "wx/frame.h"
 
 #include "wx/mac/uma.h"

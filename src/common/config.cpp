@@ -30,6 +30,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif //WX_PRECOMP
 
 #include "wx/arrstr.h"
@@ -37,7 +38,6 @@
 #if wxUSE_CONFIG && ((wxUSE_FILE && wxUSE_TEXTFILE) || wxUSE_CONFIG_NATIVE)
 
 #include "wx/file.h"
-#include "wx/utils.h"
 #include "wx/math.h"
 
 #include <stdlib.h>

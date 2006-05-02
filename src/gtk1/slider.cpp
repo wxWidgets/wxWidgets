@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/slider.cpp
+// Name:        src/gtk1/slider.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -10,11 +10,14 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/slider.h"
-
 #if wxUSE_SLIDER
 
-#include "wx/utils.h"
+#include "wx/slider.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
+
 #include "wx/math.h"
 #include "wx/gtk1/private.h"
 
@@ -136,14 +139,14 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
         const wxPoint& pos, const wxSize& size,
         long style, const wxValidator& validator, const wxString& name )
 {
-    m_acceptsFocus = TRUE;
-    m_needParent = TRUE;
+    m_acceptsFocus = true;
+    m_needParent = true;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxSlider creation failed") );
-        return FALSE;
+        return false;
     }
 
     m_oldPos = 0.0;
@@ -201,7 +204,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
     PostCreation(size);
 
-    return TRUE;
+    return true;
 }
 
 int wxSlider::GetValue() const
@@ -339,4 +342,4 @@ wxSlider::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return GetDefaultAttributesFromGTKWidget(gtk_vscale_new);
 }
 
-#endif
+#endif // wxUSE_SLIDER

@@ -18,6 +18,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif
 
 #ifdef __DARWIN__
@@ -42,7 +43,6 @@
 #include "wx/toplevel.h"
 #include "wx/settings.h"
 #include "wx/filefn.h"
-#include "wx/utils.h"
 #include "wx/sysopt.h"
 #include "wx/menu.h"
 

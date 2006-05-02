@@ -17,11 +17,11 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/frame.h"
 #include "wx/bitmap.h"
-#include "wx/utils.h"
 #include "wx/metafile.h"
 
 #ifndef __DARWIN__

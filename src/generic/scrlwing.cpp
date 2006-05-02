@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        generic/scrolwin.cpp
+// Name:        src/generic/scrolwin.cpp
 // Purpose:     wxScrolledWindow implementation
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin on 31.08.00: wxScrollHelper allows to implement.
@@ -29,10 +29,14 @@
     #pragma hdrstop
 #endif
 
-#include "wx/utils.h"
+#include "wx/scrolwin.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
+
 #include "wx/dcclient.h"
 
-#include "wx/scrolwin.h"
 #include "wx/panel.h"
 #if wxUSE_TIMER
 #include "wx/timer.h"
@@ -1339,4 +1343,3 @@ WXLRESULT wxScrolledWindow::MSWWindowProc(WXUINT nMsg,
 }
 
 #endif // __WXMSW__
-

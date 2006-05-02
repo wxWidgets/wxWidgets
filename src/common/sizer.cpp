@@ -21,10 +21,10 @@
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/math.h"
+    #include "wx/utils.h"
 #endif // WX_PRECOMP
 
 #include "wx/sizer.h"
-#include "wx/utils.h"
 #include "wx/statbox.h"
 #include "wx/settings.h"
 #include "wx/listimpl.cpp"

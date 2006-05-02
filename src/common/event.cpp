@@ -29,10 +29,10 @@
 #ifndef WX_PRECOMP
     #include "wx/list.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 
     #if wxUSE_GUI
         #include "wx/control.h"
-        #include "wx/utils.h"
         #include "wx/dc.h"
         #include "wx/textctrl.h"
     #endif // wxUSE_GUI

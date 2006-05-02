@@ -15,9 +15,13 @@
     #pragma hdrstop
 #endif
 
-#include "wx/utils.h"
-#include "wx/dialog.h"
 #include "wx/dirdlg.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif // WX_PRECOMP
+
+#include "wx/dialog.h"
 
 #include "wx/cmndata.h"
 

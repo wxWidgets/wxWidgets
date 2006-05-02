@@ -22,11 +22,11 @@
     #include "wx/log.h"
     #include "wx/event.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif // !PCH
 
 #include "wx/timer.h"
 #include "wx/filefn.h"
-#include "wx/utils.h"
 #include "wx/ffile.h"
 #include "wx/process.h"
 #include "wx/wxchar.h"

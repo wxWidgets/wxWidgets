@@ -17,10 +17,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/dataobj.h"
-#include "wx/utils.h"
 
 #include "wx/x11/private.h"
 
@@ -88,7 +88,7 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
                 wxLogTrace( TRACE_CLIPBOARD,
                             _T("got unsupported clipboard target") );
 
-                clipboard->m_waiting = FALSE;
+                clipboard->m_waiting = false;
                 return;
             }
         }
@@ -113,14 +113,14 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
 
             if (format == clipboard->m_targetRequested)
             {
-                clipboard->m_waiting = FALSE;
+                clipboard->m_waiting = false;
                 clipboard->m_formatSupported = true;
                 return;
             }
         }
     }
 
-    clipboard->m_waiting = FALSE;
+    clipboard->m_waiting = false;
 }
 
 //-----------------------------------------------------------------------------
@@ -137,7 +137,7 @@ selection_received( GtkWidget *WXUNUSED(widget),
 {
     if (!wxTheClipboard)
     {
-        clipboard->m_waiting = FALSE;
+        clipboard->m_waiting = false;
         return;
     }
 
@@ -145,13 +145,13 @@ selection_received( GtkWidget *WXUNUSED(widget),
 
     if (!data_object)
     {
-        clipboard->m_waiting = FALSE;
+        clipboard->m_waiting = false;
         return;
     }
 
     if (selection_data->length <= 0)
     {
-        clipboard->m_waiting = FALSE;
+        clipboard->m_waiting = false;
         return;
     }
 
@@ -160,7 +160,7 @@ selection_received( GtkWidget *WXUNUSED(widget),
     /* make sure we got the data in the correct format */
     if (!data_object->IsSupportedFormat( format ) )
     {
-        clipboard->m_waiting = FALSE;
+        clipboard->m_waiting = false;
         return;
     }
 
@@ -168,14 +168,14 @@ selection_received( GtkWidget *WXUNUSED(widget),
        if so, copy data to target object */
     if (selection_data->type != GDK_SELECTION_TYPE_STRING)
     {
-        clipboard->m_waiting = FALSE;
+        clipboard->m_waiting = false;
         return;
     }
 
     data_object->SetData( format, (size_t) selection_data->length, (const char*) selection_data->data );
 
     wxTheClipboard->m_formatSupported = true;
-    clipboard->m_waiting = FALSE;
+    clipboard->m_waiting = false;
 }
 
 //-----------------------------------------------------------------------------
@@ -189,16 +189,16 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
 
     if (event->selection == GDK_SELECTION_PRIMARY)
     {
-        wxTheClipboard->m_ownsPrimarySelection = FALSE;
+        wxTheClipboard->m_ownsPrimarySelection = false;
     }
     else
     if (event->selection == g_clipboardAtom)
     {
-        wxTheClipboard->m_ownsClipboard = FALSE;
+        wxTheClipboard->m_ownsClipboard = false;
     }
     else
     {
-        wxTheClipboard->m_waiting = FALSE;
+        wxTheClipboard->m_waiting = false;
         return FALSE;
     }
 
@@ -215,7 +215,7 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
         }
     }
 
-    wxTheClipboard->m_waiting = FALSE;
+    wxTheClipboard->m_waiting = false;
     return TRUE;
 }
 
@@ -283,10 +283,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
 
 wxClipboard::wxClipboard()
 {
-    m_open = FALSE;
+    m_open = false;
 
-    m_ownsClipboard = FALSE;
-    m_ownsPrimarySelection = FALSE;
+    m_ownsClipboard = false;
+    m_ownsPrimarySelection = false;
 
     m_data = (wxDataObject*) NULL;
     m_receivedData = (wxDataObject*) NULL;
@@ -299,10 +299,10 @@ wxClipboard::wxClipboard()
     if (!g_targetsAtom) g_targetsAtom = XInternAtom( (Display*) wxGetDisplay(), "TARGETS", False );
 #endif
 
-    m_formatSupported = FALSE;
+    m_formatSupported = false;
     m_targetRequested = 0;
 
-    m_usePrimary = FALSE;
+    m_usePrimary = false;
 }
 
 wxClipboard::~wxClipboard()
@@ -371,9 +371,9 @@ bool wxClipboard::Open()
 
 bool wxClipboard::SetData( wxDataObject *data )
 {
-    wxCHECK_MSG( m_open, FALSE, wxT("clipboard not open") );
+    wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
 
-    wxCHECK_MSG( data, FALSE, wxT("data is invalid") );
+    wxCHECK_MSG( data, false, wxT("data is invalid") );
 
     Clear();
 
@@ -383,11 +383,11 @@ bool wxClipboard::SetData( wxDataObject *data )
 bool wxClipboard::AddData( wxDataObject *data )
 {
 #if wxUSE_NANOX
-    return FALSE;
+    return false;
 #else
-    wxCHECK_MSG( m_open, FALSE, wxT("clipboard not open") );
+    wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
 
-    wxCHECK_MSG( data, FALSE, wxT("data is invalid") );
+    wxCHECK_MSG( data, false, wxT("data is invalid") );
 
     /* we can only store one wxDataObject */
     Clear();
@@ -432,7 +432,7 @@ bool wxClipboard::AddData( wxDataObject *data )
     /* disable GUI threads */
 #endif
 
-    bool res = FALSE;
+    bool res = false;
 #if 0
     /* Tell the world we offer clipboard data */
     res = (gtk_selection_owner_set( m_clipboardWidget,
@@ -457,7 +457,7 @@ void wxClipboard::Close()
 {
     wxCHECK_RET( m_open, wxT("clipboard not open") );
 
-    m_open = FALSE;
+    m_open = false;
 }
 
 bool wxClipboard::IsOpened() const
@@ -539,7 +539,7 @@ bool wxClipboard::GetData( wxDataObject& data )
           clipboard owner which is an asynchronous process.
           therefore we set m_waiting = true here and wait
           until the callback "targets_selection_received"
-          sets it to FALSE */
+          sets it to false */
 
         m_waiting = true;
 
@@ -591,7 +591,7 @@ bool wxClipboard::GetData( wxDataObject& data )
 #endif
 
         /* this is a true error as we checked for the presence of such data before */
-        wxCHECK_MSG( m_formatSupported, FALSE, wxT("error retrieving data from clipboard") );
+        wxCHECK_MSG( m_formatSupported, false, wxT("error retrieving data from clipboard") );
 
         /* return success */
         delete[] array;

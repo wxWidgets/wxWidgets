@@ -25,9 +25,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif // WX_PRECOMP
 
-#include "wx/utils.h"
 #include "wx/palette.h"
 #include "wx/icon.h"
 #include "wx/image.h"

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        generic/region.cpp
+// Name:        src/generic/region.cpp
 // Purpose:     generic wxRegion class
 // Author:      David Elliott
 // Modified by:
@@ -9,8 +9,19 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #include "wx/generic/region.h"
-#include "wx/utils.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
 
 // ========================================================================
 // Classes to interface with X.org code
@@ -1953,4 +1964,3 @@ XRectInRegion(
     return(partIn ? ((ry < prect->y2) ? wxPartRegion : wxInRegion) :
                 wxOutRegion);
 }
-

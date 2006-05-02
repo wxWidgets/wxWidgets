@@ -33,6 +33,7 @@
     #include "wx/arrstr.h"
     #include "wx/intl.h"
     #include "wx/string.h"
+    #include "wx/utils.h"
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"
@@ -40,7 +41,6 @@
 #include "wx/msgout.h"
 #include "wx/textfile.h"
 #include "wx/thread.h"
-#include "wx/utils.h"
 #include "wx/wxchar.h"
 
 // other standard headers

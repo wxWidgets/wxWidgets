@@ -20,9 +20,9 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif
 
-#include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/tokenzr.h"
 #include "wx/filename.h"
@@ -98,7 +98,7 @@ NavEventProc(
     else if ( inSelector == kNavCBStart )
     {
 #if TARGET_CARBON
-        if (data && !(data->defaultLocation).IsEmpty())
+        if (data && !(data->defaultLocation).empty())
         {
             // Set default location for the modern Navigation APIs
             // Apple Technical Q&A 1151

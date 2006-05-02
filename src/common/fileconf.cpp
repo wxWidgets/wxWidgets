@@ -29,6 +29,7 @@
     #include  "wx/intl.h"
     #include  "wx/log.h"
     #include  "wx/app.h"
+    #include  "wx/utils.h"    // for wxGetHomeDir
 #endif  //WX_PRECOMP
 
 #include  "wx/file.h"
@@ -42,7 +43,6 @@
     #include  "wx/stream.h"
 #endif // wxUSE_STREAMS
 
-#include  "wx/utils.h"    // for wxGetHomeDir
 
 #if defined(__WXMAC__)
     #include  "wx/mac/private.h"  // includes mac headers

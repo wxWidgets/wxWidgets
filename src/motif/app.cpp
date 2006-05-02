@@ -23,9 +23,9 @@
     #include "wx/hash.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
-#include "wx/utils.h"
 #include "wx/module.h"
 #include "wx/memory.h"
 #include "wx/evtloop.h"

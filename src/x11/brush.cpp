@@ -12,8 +12,12 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/utils.h"
 #include "wx/brush.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
+
 #include "wx/bitmap.h"
 #include "wx/colour.h"
 

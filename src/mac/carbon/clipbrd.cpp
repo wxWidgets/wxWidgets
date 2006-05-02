@@ -2,7 +2,7 @@
 // Name:        src/mac/carbon/clipbrd.cpp
 // Purpose:     Clipboard functionality
 // Author:      Stefan Csomor;
-//                   Generalized clipboard implementation by Matthew Flatt
+//              Generalized clipboard implementation by Matthew Flatt
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
@@ -20,11 +20,11 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/frame.h"
 #include "wx/bitmap.h"
-#include "wx/utils.h"
 #include "wx/metafile.h"
 
 #ifndef __DARWIN__

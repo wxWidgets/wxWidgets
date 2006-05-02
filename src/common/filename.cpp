@@ -72,12 +72,12 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/file.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
 #include "wx/config.h"          // for wxExpandEnvVars
-#include "wx/utils.h"
 #include "wx/file.h"
 #include "wx/dynlib.h"
 

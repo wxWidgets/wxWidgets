@@ -33,6 +33,7 @@
     #include "wx/msgdlg.h"
     #include "wx/bitmap.h"
     #include "wx/confbase.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/apptrait.h"
@@ -40,7 +41,6 @@
 #include "wx/evtloop.h"
 #include "wx/msgout.h"
 #include "wx/thread.h"
-#include "wx/utils.h"
 #include "wx/ptr_scpd.h"
 
 #if defined(__WXMSW__)

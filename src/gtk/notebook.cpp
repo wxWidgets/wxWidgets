@@ -17,10 +17,10 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/panel.h"
-#include "wx/utils.h"
 #include "wx/imaglist.h"
 #include "wx/bitmap.h"
 #include "wx/fontutil.h"
@@ -99,7 +99,7 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
     wxCHECK_RET( !notebook->m_inSwitchPage,
                  _T("gtk_notebook_page_change_callback reentered") );
 
-    notebook->m_inSwitchPage = TRUE;
+    notebook->m_inSwitchPage = true;
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -129,7 +129,7 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
         notebook->GetEventHandler()->ProcessEvent( eventChanged );
     }
 
-    notebook->m_inSwitchPage = FALSE;
+    notebook->m_inSwitchPage = false;
 }
 }
 
@@ -292,11 +292,11 @@ END_EVENT_TABLE()
 void wxNotebook::Init()
 {
     m_padding = 0;
-    m_inSwitchPage = FALSE;
+    m_inSwitchPage = false;
 
     m_imageList = (wxImageList *) NULL;
     m_selection = -1;
-    m_themeEnabled = TRUE;
+    m_themeEnabled = true;
 }
 
 wxNotebook::wxNotebook()
@@ -321,15 +321,15 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
                         const wxPoint& pos, const wxSize& size,
                         long style, const wxString& name )
 {
-    m_needParent = TRUE;
-    m_acceptsFocus = TRUE;
+    m_needParent = true;
+    m_acceptsFocus = true;
     m_insertCallback = (wxInsertChildFunction)wxInsertChildInNotebook;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxNoteBook creation failed") );
-        return FALSE;
+        return false;
     }
 
 
@@ -357,7 +357,7 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
     g_signal_connect (m_widget, "realize",
                       G_CALLBACK (gtk_notebook_realized_callback), this);
 
-    return TRUE;
+    return true;
 }
 
 int wxNotebook::GetSelection() const
@@ -436,17 +436,17 @@ int wxNotebook::SetSelection( size_t page )
 
 bool wxNotebook::SetPageText( size_t page, const wxString &text )
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, wxT("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid notebook") );
 
     wxGtkNotebookPage* nb_page = GetNotebookPage(page);
 
-    wxCHECK_MSG( nb_page, FALSE, wxT("SetPageText: invalid page index") );
+    wxCHECK_MSG( nb_page, false, wxT("SetPageText: invalid page index") );
 
     nb_page->m_text = text;
 
     gtk_label_set_text( nb_page->m_label, wxGTK_CONV( nb_page->m_text ) );
 
-    return TRUE;
+    return true;
 }
 
 bool wxNotebook::SetPageImage( size_t page, int image )
@@ -455,13 +455,13 @@ bool wxNotebook::SetPageImage( size_t page, int image )
 
     wxGtkNotebookPage* nb_page = GetNotebookPage(page);
 
-    if (!nb_page) return FALSE;
+    if (!nb_page) return false;
 
     /* Optimization posibility: return immediately if image unchanged.
      * Not enabled because it may break existing (stupid) code that
      * manipulates the imagelist to cycle images */
 
-    /* if (image == nb_page->m_image) return TRUE; */
+    /* if (image == nb_page->m_image) return true; */
 
     /* For different cases:
        1) no image -> no image
@@ -470,7 +470,7 @@ bool wxNotebook::SetPageImage( size_t page, int image )
        4) image -> image */
 
     if (image == -1 && nb_page->m_image == -1)
-        return TRUE; /* Case 1): Nothing to do. */
+        return true; /* Case 1): Nothing to do. */
 
     GtkWidget *pixmapwid = (GtkWidget*) NULL;
 
@@ -498,7 +498,7 @@ bool wxNotebook::SetPageImage( size_t page, int image )
             gtk_container_remove(GTK_CONTAINER(nb_page->m_box), pixmapwid);
             nb_page->m_image = -1;
 
-            return TRUE; /* Case 2) */
+            return true; /* Case 2) */
         }
     }
 
@@ -531,7 +531,7 @@ bool wxNotebook::SetPageImage( size_t page, int image )
 
     nb_page->m_image = image;
 
-    return TRUE;
+    return true;
 }
 
 void wxNotebook::SetPageSize( const wxSize &WXUNUSED(size) )
@@ -573,7 +573,7 @@ void wxNotebook::SetTabSize(const wxSize& WXUNUSED(sz))
 
 bool wxNotebook::DeleteAllPages()
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, wxT("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid notebook") );
 
     while (m_pagesData.GetCount() > 0)
         DeletePage( m_pagesData.GetCount()-1 );
@@ -625,12 +625,12 @@ bool wxNotebook::InsertPage( size_t position,
                              bool select,
                              int imageId )
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, wxT("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid notebook") );
 
-    wxCHECK_MSG( win->GetParent() == this, FALSE,
+    wxCHECK_MSG( win->GetParent() == this, false,
                wxT("Can't add a page whose parent is not the notebook!") );
 
-    wxCHECK_MSG( position <= GetPageCount(), FALSE,
+    wxCHECK_MSG( position <= GetPageCount(), false,
                  _T("invalid page index in wxNotebookPage::InsertPage()") );
 
     // Hack Alert! (Part II): See above in wxInsertChildInNotebook callback
@@ -646,7 +646,7 @@ bool wxNotebook::InsertPage( size_t position,
                                           this);
 
     if (m_themeEnabled)
-        win->SetThemeEnabled(TRUE);
+        win->SetThemeEnabled(true);
 
     GtkNotebook *notebook = GTK_NOTEBOOK(m_widget);
 
@@ -718,7 +718,7 @@ bool wxNotebook::InsertPage( size_t position,
                       G_CALLBACK (gtk_notebook_page_change_callback), this);
 
     InvalidateBestSize();
-    return TRUE;
+    return true;
 }
 
 // helper for HitTest(): check if the point lies inside the given widget which
@@ -812,12 +812,12 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 void wxNotebook::SetConstraintSizes( bool WXUNUSED(recurse) )
 {
     // don't set the sizes of the pages - their correct size is not yet known
-    wxControl::SetConstraintSizes(FALSE);
+    wxControl::SetConstraintSizes(false);
 }
 
 bool wxNotebook::DoPhase( int WXUNUSED(nPhase) )
 {
-    return TRUE;
+    return true;
 }
 
 #endif

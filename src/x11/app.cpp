@@ -18,10 +18,10 @@
     #include "wx/hash.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/frame.h"
-#include "wx/utils.h"
 #include "wx/gdicmn.h"
 #include "wx/icon.h"
 #include "wx/dialog.h"

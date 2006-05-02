@@ -25,11 +25,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/fontutil.h"
 #include "wx/cmndata.h"
-#include "wx/utils.h"
 #include "wx/gdicmn.h"
 #include "wx/tokenzr.h"
 #include "wx/settings.h"
@@ -46,7 +46,7 @@ public:
                   int family = wxDEFAULT,
                   int style = wxDEFAULT,
                   int weight = wxDEFAULT,
-                  bool underlined = FALSE,
+                  bool underlined = false,
                   const wxString& faceName = wxEmptyString,
                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     wxFontRefData(const wxFontRefData& data);
@@ -121,7 +121,7 @@ void wxFontRefData::Init(int pointSize,
     m_encoding = encoding;
 
     m_library = NULL;
-    m_valid = FALSE;
+    m_valid = false;
 }
 
 wxFontRefData::wxFontRefData(const wxFontRefData& data)
@@ -174,7 +174,7 @@ bool wxFont::Create(int pointSize,
 {
     m_refData = new wxFontRefData(pointSize, family, style, weight,
                                   underlined, face, encoding);
-    return TRUE;
+    return true;
 }
 
 struct font_t *wxFont::GetMGLfont_t(float scale, bool antialiased)
@@ -246,7 +246,7 @@ int wxFont::GetWeight() const
 
 bool wxFont::GetUnderlined() const
 {
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
 
     return M_FONTDATA->m_underlined;
 }
@@ -261,7 +261,7 @@ wxFontEncoding wxFont::GetEncoding() const
 
 bool wxFont::IsFixedWidth() const
 {
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
 
     return (bool)(M_FONTDATA->m_library->GetFamily()->GetInfo()->isFixed);
 }
@@ -284,7 +284,7 @@ void wxFont::SetPointSize(int pointSize)
     AllocExclusive();
 
     M_FONTDATA->m_pointSize = pointSize;
-    M_FONTDATA->m_valid = FALSE;
+    M_FONTDATA->m_valid = false;
 }
 
 void wxFont::SetFamily(int family)
@@ -292,7 +292,7 @@ void wxFont::SetFamily(int family)
     AllocExclusive();
 
     M_FONTDATA->m_family = family;
-    M_FONTDATA->m_valid = FALSE;
+    M_FONTDATA->m_valid = false;
 }
 
 void wxFont::SetStyle(int style)
@@ -300,7 +300,7 @@ void wxFont::SetStyle(int style)
     AllocExclusive();
 
     M_FONTDATA->m_style = style;
-    M_FONTDATA->m_valid = FALSE;
+    M_FONTDATA->m_valid = false;
 }
 
 void wxFont::SetWeight(int weight)
@@ -308,7 +308,7 @@ void wxFont::SetWeight(int weight)
     AllocExclusive();
 
     M_FONTDATA->m_weight = weight;
-    M_FONTDATA->m_valid = FALSE;
+    M_FONTDATA->m_valid = false;
 }
 
 void wxFont::SetFaceName(const wxString& faceName)
@@ -316,7 +316,7 @@ void wxFont::SetFaceName(const wxString& faceName)
     AllocExclusive();
 
     M_FONTDATA->m_faceName = faceName;
-    M_FONTDATA->m_valid = FALSE;
+    M_FONTDATA->m_valid = false;
 }
 
 void wxFont::SetUnderlined(bool underlined)
@@ -331,5 +331,5 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
     AllocExclusive();
 
     M_FONTDATA->m_encoding = encoding;
-    M_FONTDATA->m_valid = FALSE;
+    M_FONTDATA->m_valid = false;
 }

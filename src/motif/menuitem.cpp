@@ -20,9 +20,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/menu.h"
 #include "wx/menuitem.h"
-#include "wx/utils.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
+
+#include "wx/menu.h"
 #include "wx/frame.h"
 
 #ifdef __VMS__

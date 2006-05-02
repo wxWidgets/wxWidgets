@@ -23,9 +23,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif
 
-#include "wx/utils.h"
 #include "wx/settings.h"
 #include "wx/evtloop.h"
 

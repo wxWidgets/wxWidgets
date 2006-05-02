@@ -17,7 +17,10 @@
 #endif
 
 #include "wx/statbox.h"
-#include "wx/utils.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
 
 #ifdef __VMS__
 #pragma message disable nosimpint

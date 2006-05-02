@@ -31,11 +31,11 @@
     #include "wx/log.h"
     #include "wx/event.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/apptrait.h"
 #include "wx/timer.h"
-#include "wx/utils.h"
 #include "wx/module.h"
 
 #include "wx/sckaddr.h"

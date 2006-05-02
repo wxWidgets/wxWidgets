@@ -17,12 +17,12 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/mstream.h"
 #include "wx/image.h"
 
-#include "wx/utils.h"
 #include "wx/x11/private.h"
 
 //-------------------------------------------------------------------------

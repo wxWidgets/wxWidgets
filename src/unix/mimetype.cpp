@@ -45,6 +45,7 @@
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/file.h"
@@ -53,7 +54,6 @@
 #include "wx/ffile.h"
 #include "wx/textfile.h"
 #include "wx/dir.h"
-#include "wx/utils.h"
 #include "wx/tokenzr.h"
 #include "wx/iconloc.h"
 #include "wx/filename.h"

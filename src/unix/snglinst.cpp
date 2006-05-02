@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        unix/snglinst.cpp
+// Name:        src/unix/snglinst.cpp
 // Purpose:     implements wxSingleInstanceChecker class for Unix using
 //              lock files with fcntl(2) or flock(2)
 // Author:      Vadim Zeitlin
@@ -31,10 +31,10 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/utils.h"           // wxGetHomeDir()
 #endif //WX_PRECOMP
 
 #include "wx/file.h"
-#include "wx/utils.h"           // wxGetHomeDir()
 
 #include "wx/snglinst.h"
 
@@ -183,7 +183,7 @@ LockResult wxSingleInstanceCheckerImpl::CreateLockFile()
                               m_nameLock.c_str());
 
                 Unlock();
-                
+
                 return LOCK_ERROR;
             }
 
@@ -226,11 +226,11 @@ bool wxSingleInstanceCheckerImpl::Create(const wxString& name)
 
         case LOCK_CREATED:
             // nothing more to do
-            return TRUE;
+            return true;
 
         case LOCK_ERROR:
             // oops...
-            return FALSE;
+            return false;
     }
 
     // Check if the file is owned by current user and has 0600 permissions.
@@ -269,7 +269,7 @@ bool wxSingleInstanceCheckerImpl::Create(const wxString& name)
         // rarely in practice that we don't care
         wxLogError(_("Failed to access lock file."));
 
-        return FALSE;
+        return false;
     }
 
     char buf[256];
@@ -289,7 +289,7 @@ bool wxSingleInstanceCheckerImpl::Create(const wxString& name)
                     wxLogError(_("Failed to remove stale lock file '%s'."),
                                name.c_str());
 
-                    // return TRUE in this case for now...
+                    // return true in this case for now...
                 }
                 else
                 {
@@ -308,7 +308,7 @@ bool wxSingleInstanceCheckerImpl::Create(const wxString& name)
         }
     }
 
-    // return TRUE if we could get the PID of the process owning the lock file
+    // return true if we could get the PID of the process owning the lock file
     // (whether it is still running or not), FALSE otherwise as it is
     // unexpected
     return m_pidLocker != 0;
@@ -373,7 +373,7 @@ bool wxSingleInstanceChecker::Create(const wxString& name,
 
 bool wxSingleInstanceChecker::IsAnotherRunning() const
 {
-    wxCHECK_MSG( m_impl, FALSE, _T("must call Create() first") );
+    wxCHECK_MSG( m_impl, false, _T("must call Create() first") );
 
     // if another instance is running, it must own the lock file - otherwise
     // we have it and the locker PID is ours one
@@ -386,4 +386,3 @@ wxSingleInstanceChecker::~wxSingleInstanceChecker()
 }
 
 #endif // wxUSE_SNGLINST_CHECKER
-

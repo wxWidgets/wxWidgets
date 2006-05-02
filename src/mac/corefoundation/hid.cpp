@@ -33,11 +33,11 @@
     #include "wx/dynarray.h"
     #include "wx/string.h"
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/mac/corefoundation/cfstring.h"
 
-#include "wx/utils.h"
 #include "wx/module.h"
 
 // ============================================================================

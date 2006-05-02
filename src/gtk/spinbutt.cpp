@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        spinbutt.cpp
+// Name:        src/gtk/spinbutt.cpp
 // Purpose:     wxSpinButton
 // Author:      Robert
 // Modified by:
@@ -11,11 +11,14 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/spinbutt.h"
-
 #if wxUSE_SPINBTN
 
-#include "wx/utils.h"
+#include "wx/spinbutt.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
+
 #include "wx/math.h"
 #include "wx/gtk/private.h"
 
@@ -105,7 +108,7 @@ bool wxSpinButton::Create(wxWindow *parent,
                           long style,
                           const wxString& name)
 {
-    m_needParent = TRUE;
+    m_needParent = true;
 
     wxSize new_size = size,
            sizeBest = DoGetBestSize();
@@ -117,7 +120,7 @@ bool wxSpinButton::Create(wxWindow *parent,
         !CreateBase( parent, id, pos, new_size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxXX creation failed") );
-        return FALSE;
+        return false;
     }
 
     m_oldPos = 0.0;
@@ -136,7 +139,7 @@ bool wxSpinButton::Create(wxWindow *parent,
 
     PostCreation(new_size);
 
-    return TRUE;
+    return true;
 }
 
 int wxSpinButton::GetMin() const

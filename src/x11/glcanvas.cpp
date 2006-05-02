@@ -24,9 +24,8 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif
-
-#include "wx/utils.h"
 
 #ifdef __VMS
 # pragma message disable nosimpint

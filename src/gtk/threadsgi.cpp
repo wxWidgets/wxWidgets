@@ -16,6 +16,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #include <stdio.h>
@@ -25,7 +26,6 @@
 #include <sys/wait.h>
 #include <sys/prctl.h>
 #include "wx/module.h"
-#include "wx/utils.h"
 
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
@@ -261,7 +261,7 @@ bool wxThreadModule::OnInit()
     wxThreadGuiInit();
     p_mainid = (int)getpid();
     wxMainMutex->Lock();
-    return TRUE;
+    return true;
 }
 
 void wxThreadModule::OnExit()

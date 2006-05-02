@@ -35,10 +35,10 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif //WX_PRECOMP
 
 #include "wx/filefn.h"
-#include "wx/utils.h"
 #include "wx/filename.h"        // for SplitPath()
 #include "wx/apptrait.h"
 

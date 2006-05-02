@@ -19,7 +19,11 @@
 #endif
 
 #include "wx/radiobox.h"
-#include "wx/utils.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
+
 #include "wx/arrstr.h"
 
 #ifdef __VMS__

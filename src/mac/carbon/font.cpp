@@ -15,11 +15,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/fontutil.h"
 #include "wx/gdicmn.h"
-#include "wx/utils.h"
 #include "wx/fontutil.h"
 
 #include "wx/mac/private.h"
@@ -202,7 +202,7 @@ wxFontRefData::~wxFontRefData()
 void wxFontRefData::MacFindFont()
 {
     OSStatus status ;
-    
+
     Str255 qdFontName ;
     if ( m_macThemeFontID != kThemeCurrentPortFont )
     {
@@ -219,7 +219,7 @@ void wxFontRefData::MacFindFont()
         if ( m_macFontStyle & underline )
             m_underlined = true ;
         m_pointSize = m_macFontSize ;
-        
+
         m_macFontFamily = FMGetFontFamilyFromName( qdFontName );
     }
     else
@@ -291,7 +291,7 @@ void wxFontRefData::MacFindFont()
     wxASSERT_MSG( status == noErr , wxT("couldn't get an ATSUFont from font family") );
 
     m_macATSUAdditionalQDStyles = m_macFontStyle & (~intrinsicStyle );
-    
+
     if ( m_macATSUStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUStyle);

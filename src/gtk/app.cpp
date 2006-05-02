@@ -21,10 +21,10 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/gdicmn.h"
-#include "wx/utils.h"
 #include "wx/memory.h"
 #include "wx/font.h"
 #include "wx/settings.h"
@@ -95,7 +95,7 @@ FORCE_LINK(gnome_vfs)
 // global data
 //-----------------------------------------------------------------------------
 
-bool   g_mainThreadLocked = FALSE;
+bool   g_mainThreadLocked = false;
 gint   g_pendingTag = 0;
 
 static GtkWidget *gs_RootWindow = (GtkWidget*) NULL;
@@ -355,7 +355,7 @@ static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
     gint res = wxPoll( (wxPollFd *) ufds, nfds, timeout );
 
     wxMutexGuiEnter();
-    g_mainThreadLocked = FALSE;
+    g_mainThreadLocked = false;
 
     gdk_threads_leave();
 
@@ -384,7 +384,7 @@ void wxapp_install_idle_handler()
 
     wxASSERT_MSG( wxTheApp->m_idleTag == 0, wxT("attempt to install idle handler twice") );
 
-    g_isIdle = FALSE;
+    g_isIdle = false;
 
     if (g_pendingTag == 0)
         g_pendingTag = g_idle_add_full( 900, wxapp_pending_callback, NULL, NULL );
@@ -424,7 +424,7 @@ END_EVENT_TABLE()
 wxApp::wxApp()
 {
 #ifdef __WXDEBUG__
-    m_isInAssert = FALSE;
+    m_isInAssert = false;
 #endif // __WXDEBUG__
 
     m_idleTag = 0;
@@ -454,7 +454,7 @@ wxApp::~wxApp()
 bool wxApp::OnInitGui()
 {
     if ( !wxAppBase::OnInitGui() )
-        return FALSE;
+        return false;
 
     GdkVisual *visual = gdk_visual_get_system();
 
@@ -688,7 +688,7 @@ void wxApp::OnAssert(const wxChar *file, int line, const wxChar* cond, const wxC
 
     wxAppBase::OnAssert(file, line, cond, msg);
 
-    m_isInAssert = FALSE;
+    m_isInAssert = false;
 }
 
 #endif // __WXDEBUG__

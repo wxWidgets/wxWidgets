@@ -21,10 +21,10 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/gdicmn.h"
-#include "wx/utils.h"
 #include "wx/memory.h"
 #include "wx/font.h"
 #include "wx/settings.h"
@@ -85,7 +85,7 @@
 // global data
 //-----------------------------------------------------------------------------
 
-bool   g_mainThreadLocked = FALSE;
+bool   g_mainThreadLocked = false;
 gint   g_pendingTag = 0;
 
 static GtkWidget *gs_RootWindow = (GtkWidget*) NULL;
@@ -109,7 +109,7 @@ static wxMutex gs_idleTagsMutex;
 // not static because used by textctrl.cpp
 //
 // MT-FIXME
-bool wxIsInsideYield = FALSE;
+bool wxIsInsideYield = false;
 
 bool wxApp::Yield(bool onlyIfNeeded)
 {
@@ -120,18 +120,18 @@ bool wxApp::Yield(bool onlyIfNeeded)
             wxFAIL_MSG( wxT("wxYield called recursively" ) );
         }
 
-        return FALSE;
+        return false;
     }
 
 #if wxUSE_THREADS
     if ( !wxThread::IsMain() )
     {
         // can't call gtk_main_iteration() from other threads like this
-        return TRUE;
+        return true;
     }
 #endif // wxUSE_THREADS
 
-    wxIsInsideYield = TRUE;
+    wxIsInsideYield = true;
 
     // We need to remove idle callbacks or the loop will
     // never finish.
@@ -159,9 +159,9 @@ bool wxApp::Yield(bool onlyIfNeeded)
     wxLog::Resume();
 #endif
 
-    wxIsInsideYield = FALSE;
+    wxIsInsideYield = false;
 
-    return TRUE;
+    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -353,14 +353,14 @@ static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
     gdk_threads_enter();
 
     wxMutexGuiLeave();
-    g_mainThreadLocked = TRUE;
+    g_mainThreadLocked = true;
 
     // we rely on the fact that glib GPollFD struct is really just pollfd but
     // I wonder how wise is this in the long term (VZ)
     gint res = wxPoll( (wxPollFd *) ufds, nfds, timeout );
 
     wxMutexGuiEnter();
-    g_mainThreadLocked = FALSE;
+    g_mainThreadLocked = false;
 
     gdk_threads_leave();
 
@@ -389,7 +389,7 @@ void wxapp_install_idle_handler()
 
     wxASSERT_MSG( wxTheApp->m_idleTag == 0, wxT("attempt to install idle handler twice") );
 
-    g_isIdle = FALSE;
+    g_isIdle = false;
 
     if (g_pendingTag == 0)
         g_pendingTag = gtk_idle_add_priority( 900, wxapp_pending_callback, (gpointer) NULL );
@@ -429,7 +429,7 @@ END_EVENT_TABLE()
 wxApp::wxApp()
 {
 #ifdef __WXDEBUG__
-    m_isInAssert = FALSE;
+    m_isInAssert = false;
 #endif // __WXDEBUG__
 
     m_idleTag = 0;
@@ -457,7 +457,7 @@ wxApp::~wxApp()
 bool wxApp::OnInitGui()
 {
     if ( !wxAppBase::OnInitGui() )
-        return FALSE;
+        return false;
 
     GdkVisual *visual = gdk_visual_get_system();
 
@@ -541,7 +541,7 @@ bool wxApp::OnInitGui()
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 GdkVisual *wxApp::GetGdkVisual()
@@ -671,11 +671,11 @@ void wxApp::CleanUp()
 
 void wxApp::OnAssert(const wxChar *file, int line, const wxChar* cond, const wxChar *msg)
 {
-    m_isInAssert = TRUE;
+    m_isInAssert = true;
 
     wxAppBase::OnAssert(file, line, cond, msg);
 
-    m_isInAssert = FALSE;
+    m_isInAssert = false;
 }
 
 #endif // __WXDEBUG__
@@ -689,6 +689,6 @@ void wxApp::RemoveIdleTag()
     {
         gtk_idle_remove( wxTheApp->m_idleTag );
         wxTheApp->m_idleTag = 0;
-        g_isIdle = TRUE;
+        g_isIdle = true;
     }
 }

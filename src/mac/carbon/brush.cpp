@@ -11,8 +11,11 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/utils.h"
 #include "wx/brush.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
 
 #include "wx/mac/private.h"
 
@@ -230,4 +233,3 @@ wxMacBrushKind wxBrush::MacGetBrushKind() const
 {
     return (M_BRUSHDATA ? M_BRUSHDATA->m_macBrushKind : kwxMacBrushColour);
 }
-

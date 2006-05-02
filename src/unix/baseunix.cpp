@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        unix/baseunix.cpp
+// Name:        src/unix/baseunix.cpp
 // Purpose:     misc stuff only used in console applications under Unix
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -27,10 +27,10 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/utils.h"
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"
-#include "wx/utils.h"
 #include "wx/unix/execute.h"
 
 // for waitpid()
@@ -123,4 +123,3 @@ wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
 }
 
 #endif // __WXMAC__
-

@@ -15,9 +15,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/utils.h"
 #endif // WX_PRECOMP
 
-#include "wx/utils.h"
 #include "wx/frame.h"
 #include "wx/settings.h"
 

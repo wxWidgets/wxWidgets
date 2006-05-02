@@ -33,10 +33,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/utils.h"       // for wxGetDisplay()
 #endif
 
 #include "wx/gdicmn.h"
-#include "wx/utils.h"       // for wxGetDisplay()
 #include "wx/fontutil.h"    // for wxNativeFontInfo
 #include "wx/tokenzr.h"
 #include "wx/settings.h"

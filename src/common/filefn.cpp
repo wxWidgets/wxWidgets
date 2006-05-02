@@ -27,9 +27,9 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
-#include "wx/utils.h"
 #include "wx/file.h" // This does include filefn.h
 #include "wx/filename.h"
 #include "wx/dir.h"

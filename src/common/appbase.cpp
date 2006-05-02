@@ -29,9 +29,9 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif //WX_PRECOMP
 
-#include "wx/utils.h"
 #include "wx/apptrait.h"
 #include "wx/cmdline.h"
 #include "wx/confbase.h"

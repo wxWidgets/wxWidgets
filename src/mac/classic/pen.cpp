@@ -11,8 +11,11 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/utils.h"
 #include "wx/pen.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
 

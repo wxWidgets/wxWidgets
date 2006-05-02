@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        settings.cpp
+// Name:        src/mac/carbon/settings.cpp
 // Purpose:     wxSettings
 // Author:      Stefan Csomor
 // Modified by:
@@ -12,8 +12,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/settings.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+#endif
+
 #include "wx/gdicmn.h"
-#include "wx/utils.h"
 
 #include "wx/mac/uma.h"
 

@@ -19,6 +19,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #ifdef __VMS
@@ -27,7 +28,6 @@
 #endif
 
 #include "wx/settings.h"
-#include "wx/utils.h"
 #include "wx/arrstr.h"
 
 #ifdef __VMS__

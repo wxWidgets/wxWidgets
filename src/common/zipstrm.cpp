@@ -19,13 +19,13 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/zipstrm.h"
 #include "wx/datstrm.h"
 #include "wx/zstream.h"
 #include "wx/mstream.h"
-#include "wx/utils.h"
 #include "wx/buffer.h"
 #include "wx/ptr_scpd.h"
 #include "wx/wfstream.h"

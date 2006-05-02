@@ -16,10 +16,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/utils.h"
 #include "wx/debug.h"
 #include "wx/msgdlg.h"
 
