@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        generic/vlbox.cpp
+// Name:        src/generic/vlbox.cpp
 // Purpose:     implementation of wxVListBox
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -231,7 +231,7 @@ bool wxVListBox::DoSetCurrent(int current)
             // it is, indeed, only partly visible, so scroll it into view to
             // make it entirely visible
             while ( (size_t)m_current == GetLastVisibleLine() &&
-                    ScrollToLine(GetVisibleBegin()+1) );
+                    ScrollToLine(GetVisibleBegin()+1) ) ;
 
             // but in any case refresh it as even if it was only partly visible
             // before we need to redraw it entirely as its background changed
@@ -636,7 +636,7 @@ void wxVListBox::OnLeftDClick(wxMouseEvent& eventMouse)
         {
             OnLeftDown(eventMouse);
         }
-    
+
     }
 }
 
