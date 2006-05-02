@@ -235,6 +235,7 @@ protected:
 // this macro can be used in a wxScrollHelper-derived class to forward wxWindow
 // methods to corresponding wxScrollHelper methods
 #define WX_FORWARD_TO_SCROLL_HELPER()                                         \
+public:                                                                       \
     virtual void PrepareDC(wxDC& dc) { DoPrepareDC(dc); }                     \
     virtual bool Layout() { return ScrollLayout(); }                          \
     virtual void DoSetVirtualSize(int x, int y)                               \

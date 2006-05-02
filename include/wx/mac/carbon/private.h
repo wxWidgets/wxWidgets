@@ -870,7 +870,14 @@ public :
                         const wxMacDataItem* itemID,
                         DataBrowserItemNotification message,
                         DataBrowserItemDataRef itemData);
-    
+
+    // as we are getting the same events for human and API selection we have to suppress
+    // events in the latter case, since this will be used from many subclasses we keep it here
+
+    bool            IsSelectionSuppressed() const { return m_suppressSelection; }
+    bool            SuppressSelection( bool suppress );
+
+protected:
     // ID aware base methods, should be 'final' ie not changed in subclasses
     
     virtual Boolean CompareItems(DataBrowserItemID itemOneID, 
@@ -887,12 +894,6 @@ public :
                         DataBrowserItemNotification message,
                         DataBrowserItemDataRef itemData);
 
-    // as we are getting the same events for human and API selection we have to suppress
-    // events in the latter case, since this will be used from many subclasses we keep it here
-    
-    bool            IsSelectionSuppressed() const { return m_suppressSelection; }
-    bool            SuppressSelection( bool suppress );
-    
 private :
 
     bool m_suppressSelection;
