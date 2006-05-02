@@ -25,7 +25,7 @@ wxToolBarBase\\
 
 You may also create a toolbar that is managed by the frame, by
 calling \helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}. Under Pocket PC,
-you should {\it always} use this function for creating the toolbar
+you should \arg{always} use this function for creating the toolbar
 to be managed by the frame, so that wxWidgets can use a combined
 menubar and toolbar. Where you manage your own toolbars, create a wxToolBar
 as usual.
@@ -110,6 +110,7 @@ Pass the id of the toolbar itself. The value of wxCommandEvent::GetSelection is 
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxToolBar::wxToolBar}\label{wxtoolbarconstr}
 
 \func{}{wxToolBar}{\void}
@@ -151,11 +152,13 @@ tools.
 You may also create a toolbar that is managed by the frame, by
 calling \helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}.
 
+
 \membersection{wxToolBar::\destruct{wxToolBar}}\label{wxtoolbardtor}
 
 \func{void}{\destruct{wxToolBar}}{\void}
 
 Toolbar destructor.
+
 
 \membersection{wxToolBar::AddControl}\label{wxtoolbaraddcontrol}
 
@@ -164,6 +167,7 @@ Toolbar destructor.
 Adds any control to the toolbar, typically e.g. a combobox.
 
 \docparam{control}{The control to be added.}
+
 
 \membersection{wxToolBar::AddSeparator}\label{wxtoolbaraddseparator}
 
@@ -174,6 +178,7 @@ Adds a separator for spacing groups of tools.
 \wxheading{See also}
 
 \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}, \helpref{wxToolBar::SetToolSeparation}{wxtoolbarsettoolseparation}
+
 
 \membersection{wxToolBar::AddTool}\label{wxtoolbaraddtool}
 
@@ -190,7 +195,7 @@ Adds a separator for spacing groups of tools.
 \param{wxItemKind}{ kind = wxITEM\_NORMAL},\rtfsp
 \param{const wxString\& }{shortHelpString = ""},
 \param{const wxString\& }{longHelpString = ""},\rtfsp
-\param{wxObject* }{clientData = NULL}}
+\param{wxObject* }{clientData = \NULL}}
 
 \func{wxToolBarToolBase*}{AddTool}{\param{wxToolBarToolBase* }{tool}}
 
@@ -240,6 +245,7 @@ order to have the tools appear.
 \helpref{wxToolBar::DeleteTool}{wxtoolbardeletetool},\rtfsp
 \helpref{wxToolBar::Realize}{wxtoolbarrealize}
 
+
 \membersection{wxToolBar::AddCheckTool}\label{wxtoolbaraddchecktool}
 
 \func{wxToolBarToolBase*}{AddCheckTool}{\param{int}{ toolId},\rtfsp
@@ -248,7 +254,7 @@ order to have the tools appear.
 \param{const wxBitmap\&}{ bitmap2},\rtfsp
 \param{const wxString\& }{shortHelpString = ""},\rtfsp
 \param{const wxString\& }{longHelpString = ""},\rtfsp
-\param{wxObject* }{clientData = NULL}}
+\param{wxObject* }{clientData = \NULL}}
 
 Adds a new check (or toggle) tool to the toolbar. The parameters are the same
 as in \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}.
@@ -256,6 +262,7 @@ as in \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}.
 \wxheading{See also}
 
 \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}
+
 
 \membersection{wxToolBar::AddRadioTool}\label{wxtoolbaraddradiotool}
 
@@ -265,7 +272,7 @@ as in \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}.
 \param{const wxBitmap\&}{ bitmap2},\rtfsp
 \param{const wxString\& }{shortHelpString = ""},\rtfsp
 \param{const wxString\& }{longHelpString = ""},\rtfsp
-\param{wxObject* }{clientData = NULL}}
+\param{wxObject* }{clientData = \NULL}}
 
 Adds a new radio tool to the toolbar. Consecutive radio tools form a radio
 group such that exactly one button in the group is pressed at any moment, in
@@ -279,6 +286,7 @@ others are not.
 \wxheading{See also}
 
 \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}
+
 
 \membersection{wxToolBar::DeleteTool}\label{wxtoolbardeletetool}
 
@@ -297,12 +305,14 @@ Returns true if the tool was deleted, false otherwise.
 
 \helpref{DeleteToolByPos}{wxtoolbardeletetoolbypos}
 
+
 \membersection{wxToolBar::DeleteToolByPos}\label{wxtoolbardeletetoolbypos}
 
 \func{bool}{DeleteToolByPos}{\param{size\_t }{pos}}
 
 This function behaves like \helpref{DeleteTool}{wxtoolbardeletetool} but it
 deletes the tool at the specified position and not the one with the given id.
+
 
 \membersection{wxToolBar::EnableTool}\label{wxtoolbarenabletool}
 
@@ -328,19 +338,22 @@ Some implementations will change the visible state of the tool to indicate that 
 \helpref{wxToolBar::GetToolEnabled}{wxtoolbargettoolenabled},\rtfsp
 \helpref{wxToolBar::ToggleTool}{wxtoolbartoggletool}
 
+
 \membersection{wxToolBar::FindById}\label{wxtoolbarfindbyid}
 
 \func{wxToolBarToolBase*}{FindById}{\param{int }{id}}
 
-Returns a pointer to the tool identified by {\it id} or
-NULL if no corresponding tool is found.
+Returns a pointer to the tool identified by \arg{id} or
+\NULL if no corresponding tool is found.
+
 
 \membersection{wxToolBar::FindControl}\label{wxtoolbarfindcontrol}
 
 \func{wxControl*}{FindControl}{\param{int }{id}}
 
-Returns a pointer to the control identified by {\it id} or
-NULL if no corresponding control is found.
+Returns a pointer to the control identified by \arg{id} or 
+\NULL if no corresponding control is found.
+
 
 \membersection{wxToolBar::FindToolForPosition}\label{wxtoolbarfindtoolforposition}
 
@@ -356,11 +369,12 @@ Finds a tool for the given mouse position.
 
 \wxheading{Return value}
 
-A pointer to a tool if a tool is found, or NULL otherwise.
+A pointer to a tool if a tool is found, or \NULL otherwise.
 
 \wxheading{Remarks}
 
-Used internally, and should not need to be used by the programmer.
+Currently not implemented in wxGTK (always returns \NULL there).
+
 
 \membersection{wxToolBar::GetToolSize}\label{wxtoolbargettoolsize}
 
@@ -373,6 +387,7 @@ of added 3D effects.
 
 \helpref{wxToolBar::SetToolBitmapSize}{wxtoolbarsettoolbitmapsize},\rtfsp
 \helpref{wxToolBar::GetToolBitmapSize}{wxtoolbargettoolbitmapsize}
+
 
 \membersection{wxToolBar::GetToolBitmapSize}\label{wxtoolbargettoolbitmapsize}
 
@@ -390,6 +405,7 @@ and not the eventual size of the tool button.
 \helpref{wxToolBar::SetToolBitmapSize}{wxtoolbarsettoolbitmapsize},\rtfsp
 \helpref{wxToolBar::GetToolSize}{wxtoolbargettoolsize}
 
+
 \membersection{wxToolBar::GetMargins}\label{wxtoolbargetmargins}
 
 \constfunc{wxSize}{GetMargins}{\void}
@@ -399,6 +415,7 @@ Returns the left/right and top/bottom margins, which are also used for inter-too
 \wxheading{See also}
 
 \helpref{wxToolBar::SetMargins}{wxtoolbarsetmargins}
+
 
 \membersection{wxToolBar::GetToolClientData}\label{wxtoolbargettoolclientdata}
 
@@ -412,7 +429,8 @@ Get any client data associated with the tool.
 
 \wxheading{Return value}
 
-Client data, or NULL if there is none.
+Client data, or \NULL if there is none.
+
 
 \membersection{wxToolBar::GetToolEnabled}\label{wxtoolbargettoolenabled}
 
@@ -432,6 +450,7 @@ true if the tool is enabled, false otherwise.
 
 \helpref{wxToolBar::EnableTool}{wxtoolbarenabletool}
 
+
 \membersection{wxToolBar::GetToolLongHelp}\label{wxtoolbargettoollonghelp}
 
 \constfunc{wxString}{GetToolLongHelp}{\param{int }{toolId}}
@@ -447,6 +466,7 @@ Returns the long help for the given tool.
 \helpref{wxToolBar::SetToolLongHelp}{wxtoolbarsettoollonghelp},\rtfsp
 \helpref{wxToolBar::SetToolShortHelp}{wxtoolbarsettoolshorthelp}\rtfsp
 
+
 \membersection{wxToolBar::GetToolPacking}\label{wxtoolbargettoolpacking}
 
 \constfunc{int}{GetToolPacking}{\void}
@@ -457,11 +477,13 @@ Returns the value used for packing tools.
 
 \helpref{wxToolBar::SetToolPacking}{wxtoolbarsettoolpacking}
 
+
 \membersection{wxToolBar::GetToolPos}\label{wxtoolbargettoolpos}
 
 \constfunc{int}{GetToolPos}{\param{int }{toolId}}
 
 Returns the tool position in the toolbar, or {\tt wxNOT\_FOUND} if the tool is not found.
+
 
 \membersection{wxToolBar::GetToolSeparation}\label{wxtoolbargettoolseparation}
 
@@ -472,6 +494,7 @@ Returns the default separator size.
 \wxheading{See also}
 
 \helpref{wxToolBar::SetToolSeparation}{wxtoolbarsettoolseparation}
+
 
 \membersection{wxToolBar::GetToolShortHelp}\label{wxtoolbargettoolshorthelp}
 
@@ -487,6 +510,7 @@ Returns the short help for the given tool.
 
 \helpref{wxToolBar::GetToolLongHelp}{wxtoolbargettoollonghelp},\rtfsp
 \helpref{wxToolBar::SetToolShortHelp}{wxtoolbarsettoolshorthelp}\rtfsp
+
 
 \membersection{wxToolBar::GetToolState}\label{wxtoolbargettoolstate}
 
@@ -506,6 +530,7 @@ true if the tool is toggled on, false otherwise.
 
 \helpref{wxToolBar::ToggleTool}{wxtoolbartoggletool}
 
+
 \membersection{wxToolBar::InsertControl}\label{wxtoolbarinsertcontrol}
 
 \func{wxToolBarToolBase *}{InsertControl}{\param{size\_t }{pos}, \param{wxControl *}{control}}
@@ -518,6 +543,7 @@ You must call \helpref{Realize}{wxtoolbarrealize} for the change to take place.
 
 \helpref{AddControl}{wxtoolbaraddcontrol},\\
 \helpref{InsertTool}{wxtoolbarinserttool}
+
 
 \membersection{wxToolBar::InsertSeparator}\label{wxtoolbarinsertseparator}
 
@@ -532,12 +558,13 @@ You must call \helpref{Realize}{wxtoolbarrealize} for the change to take place.
 \helpref{AddSeparator}{wxtoolbaraddseparator},\\
 \helpref{InsertTool}{wxtoolbarinserttool}
 
+
 \membersection{wxToolBar::InsertTool}\label{wxtoolbarinserttool}
 
 \func{wxToolBarToolBase *}{InsertTool}{\param{size\_t }{pos},\rtfsp
 \param{int}{ toolId}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
 \param{const wxBitmap\&}{ bitmap2 = wxNullBitmap}, \param{bool}{ isToggle = false},\rtfsp
-\param{wxObject* }{clientData = NULL}, \param{const wxString\& }{shortHelpString = ""}, \param{const wxString\& }{longHelpString = ""}}
+\param{wxObject* }{clientData = \NULL}, \param{const wxString\& }{shortHelpString = ""}, \param{const wxString\& }{longHelpString = ""}}
 
 \func{wxToolBarToolBase *}{InsertTool}{\param{size\_t }{pos},\rtfsp
 \param{wxToolBarToolBase* }{tool}}
@@ -552,6 +579,7 @@ You must call \helpref{Realize}{wxtoolbarrealize} for the change to take place.
 \helpref{AddTool}{wxtoolbaraddtool},\\
 \helpref{InsertControl}{wxtoolbarinsertcontrol},\\
 \helpref{InsertSeparator}{wxtoolbarinsertseparator}
+
 
 \membersection{wxToolBar::OnLeftClick}\label{wxtoolbaronleftclick}
 
@@ -579,6 +607,7 @@ specifying that toggle operations are not permitted in some circumstances.
 \helpref{wxToolBar::OnMouseEnter}{wxtoolbaronmouseenter},\rtfsp
 \helpref{wxToolBar::OnRightClick}{wxtoolbaronrightclick}
 
+
 \membersection{wxToolBar::OnMouseEnter}\label{wxtoolbaronmouseenter}
 
 \func{void}{OnMouseEnter}{\param{int}{ toolId}}
@@ -600,6 +629,7 @@ such as a short description on the status line.}
 
 With some derived toolbar classes, if the mouse moves quickly out of the toolbar, wxWidgets may not be able to
 detect it. Therefore this function may not always be called when expected.
+
 
 \membersection{wxToolBar::OnRightClick}\label{wxtoolbaronrightclick}
 
@@ -628,11 +658,13 @@ A typical use of this member might be to pop up a menu.
 \helpref{wxToolBar::OnMouseEnter}{wxtoolbaronmouseenter},\rtfsp
 \helpref{wxToolBar::OnLeftClick}{wxtoolbaronleftclick}
 
+
 \membersection{wxToolBar::Realize}\label{wxtoolbarrealize}
 
 \func{bool}{Realize}{\void}
 
 This function should be called after you have added tools.
+
 
 \membersection{wxToolBar::RemoveTool}\label{wxtoolbarremovetool}
 
@@ -648,12 +680,14 @@ change to take place, it will happen immediately.
 
 \helpref{DeleteTool}{wxtoolbardeletetool}
 
+
 \membersection{wxToolBar::SetBitmapResource}\label{wxtoolbarsetbitmapresource}
 
 \func{void}{SetBitmapResource}{\param{int }{resourceId}}
 
 Sets the bitmap resource identifier for specifying tool bitmaps as indices
 into a custom bitmap. Windows CE only.
+
 
 \membersection{wxToolBar::SetMargins}\label{wxtoolbarsetmargins}
 
@@ -680,6 +714,7 @@ default (zero-size) margins are to be overridden.
 
 \helpref{wxToolBar::GetMargins}{wxtoolbargetmargins}, \helpref{wxSize}{wxsize}
 
+
 \membersection{wxToolBar::SetToolBitmapSize}\label{wxtoolbarsettoolbitmapsize}
 
 \func{void}{SetToolBitmapSize}{\param{const wxSize\&}{ size}}
@@ -703,11 +738,13 @@ and not the eventual size of the tool button.
 \helpref{wxToolBar::GetToolBitmapSize}{wxtoolbargettoolbitmapsize},\rtfsp
 \helpref{wxToolBar::GetToolSize}{wxtoolbargettoolsize}
 
+
 \membersection{wxToolBar::SetToolClientData}\label{wxtoolbarsettoolclientdata}
 
 \func{void}{SetToolClientData}{\param{int }{id}, \param{wxObject* }{clientData}}
 
 Sets the client data associated with the tool.
+
 
 \membersection{wxToolBar::SetToolLongHelp}\label{wxtoolbarsettoollonghelp}
 
@@ -730,6 +767,7 @@ You might use the long help for displaying the tool purpose on the status line.
 \helpref{wxToolBar::GetToolLongHelp}{wxtoolbargettoollonghelp},\rtfsp
 \helpref{wxToolBar::SetToolShortHelp}{wxtoolbarsettoolshorthelp},\rtfsp
 
+
 \membersection{wxToolBar::SetToolPacking}\label{wxtoolbarsettoolpacking}
 
 \func{void}{SetToolPacking}{\param{int}{ packing}}
@@ -748,6 +786,7 @@ and for spacing in the horizontal direction if the toolbar is vertical.
 \wxheading{See also}
 
 \helpref{wxToolBar::GetToolPacking}{wxtoolbargettoolpacking}
+
 
 \membersection{wxToolBar::SetToolShortHelp}\label{wxtoolbarsettoolshorthelp}
 
@@ -769,6 +808,7 @@ An application might use short help for identifying the tool purpose in a toolti
 
 \helpref{wxToolBar::GetToolShortHelp}{wxtoolbargettoolshorthelp}, \helpref{wxToolBar::SetToolLongHelp}{wxtoolbarsettoollonghelp}
 
+
 \membersection{wxToolBar::SetToolSeparation}\label{wxtoolbarsettoolseparation}
 
 \func{void}{SetToolSeparation}{\param{int}{ separation}}
@@ -782,6 +822,7 @@ Sets the default separator size. The default value is 5.
 \wxheading{See also}
 
 \helpref{wxToolBar::AddSeparator}{wxtoolbaraddseparator}
+
 
 \membersection{wxToolBar::ToggleTool}\label{wxtoolbartoggletool}
 
