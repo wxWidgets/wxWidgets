@@ -27,11 +27,6 @@ class WXDLLEXPORT wxApp ;
 class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
 
-#define wxPRINT_WINDOWS         1
-#define wxPRINT_POSTSCRIPT      2
-
-WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
-
 // Force an exit from main loop
 void WXDLLEXPORT wxExit();
 
