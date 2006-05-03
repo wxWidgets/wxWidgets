@@ -443,7 +443,7 @@ public:
         { return GetPath(withSep ? wxPATH_GET_SEPARATOR : 0, format); }
 #endif
     wxString GetPathWithSep(wxPathFormat format = wxPATH_NATIVE ) const
-        { return GetPath(wxPATH_GET_SEPARATOR, format); }
+        { return GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR, format); }
 
 private:
     // check whether this dir is valid for Append/Prepend/InsertDir()
