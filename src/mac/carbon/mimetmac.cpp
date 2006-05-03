@@ -630,7 +630,7 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles, const wxString& extra
     if (status != noErr)
     {
         wxLogDebug(wxT("Could not initialize wxMimeTypesManager!"));
-        wxASSERT( false );
+        wxFAIL;
         m_hIC = NULL;
 
         return;

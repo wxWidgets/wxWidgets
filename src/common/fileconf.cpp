@@ -284,7 +284,7 @@ wxString wxFileConfig::GetGlobalDir()
         strDir.Printf(wxT("%c:\\OS2\\"), 'A'+drive-1);
     }
 #elif defined(__WXSTUBS__)
-    wxASSERT_MSG( false, wxT("TODO") ) ;
+    wxFAIL_MSG( wxT("TODO") );
 #elif defined(__DOS__)
     // There's no such thing as global cfg dir in MS-DOS, let's return
     // current directory (FIXME_MGL?)

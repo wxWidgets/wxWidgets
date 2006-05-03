@@ -1434,7 +1434,7 @@ bool wxMimeTypesManagerImpl::WriteToMimeTypes(int index, bool delete_index)
         nIndex = file.pIndexOf(wxT("#--Netscape"));
         if (nIndex != wxNOT_FOUND)
         {
-            wxASSERT_MSG(false,wxT("Error in .mime.types \nTrying to mix Netscape and Metamail formats\nFile not modiifed"));
+            wxFAIL_MSG(wxT("Error in .mime.types\nTrying to mix Netscape and Metamail formats\nFile not modified"));
             return false;
         }
 
@@ -1501,7 +1501,7 @@ bool wxMimeTypesManagerImpl::WriteToNSMimeTypes(int index, bool delete_index)
             // metamail entreies
             if (file.GetLineCount() > 0)
             {
-                wxASSERT_MSG(false, wxT(".mime.types File not in Netscape format\nNo entries written to\n.mime.types or to .mailcap"));
+                wxFAIL_MSG(wxT(".mime.types File not in Netscape format\nNo entries written to\n.mime.types or to .mailcap"));
                 return false;
             }
 

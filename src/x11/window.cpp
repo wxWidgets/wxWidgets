@@ -484,7 +484,7 @@ void wxWindowX11::DoCaptureMouse()
 {
     if ((g_captureWindow != NULL) && (g_captureWindow != this))
     {
-        wxASSERT_MSG(false, wxT("Trying to capture before mouse released."));
+        wxFAIL_MSG(wxT("Trying to capture before mouse released."));
 
         // Core dump now
         int *tmp = NULL;

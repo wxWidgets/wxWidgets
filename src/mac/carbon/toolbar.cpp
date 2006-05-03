@@ -907,7 +907,7 @@ bool wxToolBar::Realize()
                         if (err != noErr)
                         {
                             wxString errMsg = wxString::Format( wxT("HIToolbarRemoveItemAtIndex failed [%ld]"), (long)err );
-                            wxASSERT_MSG( 0, errMsg.c_str() );
+                            wxFAIL_MSG( errMsg.c_str() );
                         }
                     }
 
@@ -915,7 +915,7 @@ bool wxToolBar::Realize()
                     if (err != noErr)
                     {
                         wxString errMsg = wxString::Format( wxT("HIToolbarInsertItemAtIndex failed [%ld]"), (long)err );
-                        wxASSERT_MSG( 0, errMsg.c_str() );
+                        wxFAIL_MSG( errMsg.c_str() );
                     }
 
                     tool->SetIndex( currentPosition );
@@ -1265,7 +1265,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
     else
     {
         wxString errMsg = wxString::Format( wxT("wxToolBar::DoInsertTool - failure [%ld]"), (long)err );
-        wxASSERT_MSG( false, errMsg.c_str() );
+        wxFAIL_MSG( errMsg.c_str() );
     }
 
     return (err == noErr);
