@@ -1,0 +1,44 @@
+#!/bin/sh
+
+HOMEDIR="$PWD"
+
+BUILDDIR_ROOT="$PWD/builds"
+
+BUILDDIR_CARBON="$BUILDDIR_ROOT/carbon"
+BUILDDIR_COCOA="$BUILDDIR_ROOT/cocoa"
+
+mkdir -p $BUILDDIR_CARBON
+mkdir -p $BUILDDIR_COCOA
+
+cd $BUILDDIR_CARBON
+BUILDDIR=$BUILDDIR_CARBON
+
+export WXROOT="$HOMEDIR/../../.."
+export INSTALLDIR="$BUILDDIR/install-ansi"
+$HOMEDIR/macbuild
+
+export INSTALLDIR="$BUILDDIR/install-unicode"
+$HOMEDIR/macbuild unicode
+
+export INSTALLDIR="$BUILDDIR/install-static-ansi"
+$HOMEDIR/macbuild static
+
+export INSTALLDIR="$BUILDDIR/install-static-unicode"
+$HOMEDIR/macbuild static unicode
+
+cd $BUILDDIR_COCOA
+BUILDDIR=$BUILDDIR_COCOA
+
+export INSTALLDIR="$BUILDDIR/install-ansi"
+$HOMEDIR/macbuild cocoa
+
+export INSTALLDIR="$BUILDDIR/install-unicode"
+$HOMEDIR/macbuild cocoa unicode
+
+export INSTALLDIR="$BUILDDIR/install-static-ansi"
+$HOMEDIR/macbuild cocoa static
+
+export INSTALLDIR="$BUILDDIR/install-static-unicode"
+$HOMEDIR/macbuild cocoa static unicode
+
+cd $HOMEDIR
