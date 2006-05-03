@@ -312,8 +312,9 @@ class GenButton(wx.PyControl):
             if not self.up:    # if the button was down when the mouse was released...
                 self.Notify()
             self.up = True
-            self.Refresh()
-            event.Skip()
+            if self:           # in case the button was destroyed in the eventhandler
+                self.Refresh()
+                event.Skip()
 
 
     def OnMotion(self, event):
