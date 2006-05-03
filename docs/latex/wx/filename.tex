@@ -495,6 +495,17 @@ same as \helpref{GetPathSeparators}{wxfilenamegetpathseparators} except for VMS
 path format where $]$ is used at the end of the path part.
 
 
+\membersection{wxFileName::GetPathWithSep}\label{wxfilenamegetpathwithsep}
+
+\constfunc{wxString}{GetPathWithSep}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
+
+Returns the path with the trailing separator, useful for appending the name to
+the given path.
+
+This is the same as calling \helpref{GetPath}{wxfilenamegetpath}
+\texttt{(wxPATH\_GET\_VOLUME | wxPATH\_GET\_SEPARATOR, format)}.
+
+
 \membersection{wxFileName::GetShortPath}\label{wxfilenamegetshortpath}
 
 \constfunc{wxString}{GetShortPath}{\void}
