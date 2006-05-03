@@ -6,7 +6,7 @@ Recent Changes for wxPython
 *
 
 wx.lib.pubsub updates from Oliver Schoenborn:
-    - the hash problem re non-hashable objects
+    - fixed the hash problem with non-hashable objects
     - now supports listeners that use *args as an argument
       (listener(*args) was not passing the validity test)
     - corrected some mistakes in documentation
@@ -14,6 +14,13 @@ wx.lib.pubsub updates from Oliver Schoenborn:
       users)
     - changed the way singleton is implemented since old way prevented
       pydoc etc from extracting docs for Publisher
+
+DocView and ActiveGrid IDE updates from Morgan Hua:
+    New Features: In Tab-View mode, Ctrl-number will take the user to
+    the numbered tab view.  Modified files now show an '*' astrisk in
+    the view title.  Debugger framework can now support PHP debugging.
+    Not important for python development, but at least that means the
+    debugger framework is more generalized.
 
 
 
