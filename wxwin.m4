@@ -289,7 +289,6 @@ dnl     AC_ARG_ENABLE(...)
 dnl     AC_ARG_WITH(...)
 dnl        ...
 dnl     AM_OPTIONS_WXCONFIG
-dnl     AM_OPTIONS_WXRC
 dnl        ...
 dnl     AM_PATH_WXCONFIG(2.6.0, wxWin=1)
 dnl     if test "$wxWin" != 1; then
