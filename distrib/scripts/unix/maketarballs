@@ -1,6 +1,15 @@
 #!/bin/sh
 # Makes the wxWidgets tarballs with 'make dist'
 
+PROGNAME=$0
+WXSRC=$1
+WXDEST=$2
+WXVER=$3
+
+# for docopyreadmefiles and docopysetup_h
+SCRIPTDIR=$WXSRC/distrib/scripts
+. $SCRIPTDIR/utils.inc
+
 doupdatecvs()
 {
   cd $WXSRC
@@ -143,26 +152,6 @@ dospinwxmotif()
 #  rm -f -r $WXDEST/wxmotif
 }
 
-docopydocs()
-{
-  cp $WXSRC/docs/readme.txt $WXDEST/readme-${WXVER}.txt
-  cp $WXSRC/docs/changes.txt $WXDEST/changes-${WXVER}.txt
-  cp $WXSRC/docs/mgl/readme.txt $WXDEST/readme-mgl-${WXVER}.txt
-  cp $WXSRC/docs/mgl/install.txt $WXDEST/install-mgl-${WXVER}.txt
-  cp $WXSRC/docs/x11/readme.txt $WXDEST/readme-x11-${WXVER}.txt
-  cp $WXSRC/docs/x11/readme-nanox.txt $WXDEST/readme-nanox-${WXVER}.txt
-  cp $WXSRC/docs/x11/install.txt $WXDEST/install-x11-${WXVER}.txt
-  cp $WXSRC/docs/motif/readme.txt $WXDEST/readme-motif-${WXVER}.txt
-  cp $WXSRC/docs/motif/install.txt $WXDEST/install-motif-${WXVER}.txt
-  cp $WXSRC/docs/msw/readme.txt $WXDEST/readme-msw-${WXVER}.txt
-  cp $WXSRC/docs/msw/install.txt $WXDEST/install-msw-${WXVER}.txt
-  cp $WXSRC/docs/gtk/readme.txt $WXDEST/readme-gtk-${WXVER}.txt
-  cp $WXSRC/docs/gtk/install.txt $WXDEST/install-gtk-${WXVER}.txt
-  cp $WXSRC/docs/mac/readme.txt $WXDEST/readme-mac-${WXVER}.txt
-  cp $WXSRC/docs/mac/install.txt $WXDEST/install-mac-${WXVER}.txt
-  cp $WXSRC/docs/os2/install.txt $WXDEST/install-os2-${WXVER}.txt
-}
-
 dospindocs()
 {
   mkdir -p $WXSRC/docs/html/wx
@@ -188,11 +177,6 @@ dospindocs()
 
   echo Done making manuals.
 }
-
-PROGNAME=$0
-WXSRC=$1
-WXDEST=$2
-WXVER=$3
 
 SPINWXX11=0
 SPINWXGTK=0
