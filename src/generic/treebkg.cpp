@@ -614,18 +614,18 @@ int wxTreebook::DoSetSelection(size_t pagePos)
             // find the next page suitable to be shown: the first (grand)child
             // of this one with a non-NULL associated page
             wxTreeItemId childId = m_treeIds[pagePos];
-            m_actualSelection = pagePos;
+            int actualPagePos = pagePos;
             while ( !page && childId.IsOk() )
             {
                 wxTreeItemIdValue cookie;
                 childId = tree->GetFirstChild( childId, cookie );
                 if ( childId.IsOk() )
                 {
-                    page = wxBookCtrlBase::GetPage(++m_actualSelection);
+                    page = wxBookCtrlBase::GetPage(++actualPagePos);
                 }
             }
 
-            wxASSERT_MSG( page, wxT("no page to show found!") );
+            m_actualSelection = page ? actualPagePos : m_selection;
         }
 
         if ( page )
