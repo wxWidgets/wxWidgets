@@ -203,8 +203,6 @@ bool wxTreebook::DoInsertPage(size_t pagePos,
 
     DoUpdateSelection(bSelect, pagePos);
 
-    m_bookctrl->InvalidateBestSize();
-
     return true;
 }
 
@@ -258,8 +256,6 @@ bool wxTreebook::DoInsertSubPage(size_t pagePos,
 
     DoUpdateSelection(bSelect, newPos);
 
-    m_bookctrl->InvalidateBestSize();
-
     return true;
 }
 
@@ -308,7 +304,6 @@ wxTreebookPage *wxTreebook::DoRemovePage(size_t pagePos)
 
     tree->DeleteChildren( pageId );
     tree->Delete( pageId );
-    tree->InvalidateBestSize();
 
     return oldPage;
 }
@@ -629,10 +624,7 @@ int wxTreebook::DoSetSelection(size_t pagePos)
         }
 
         if ( page )
-        {
-            page->SetSize(GetPageRect());
             page->Show();
-        }
 
         tree->SelectItem(DoInternalGetPage(pagePos));
 
