@@ -405,7 +405,8 @@ class Frame(wxFrame):
                 if conf.localconf.ReadBool("autogenerate", False):
                     pypath = conf.localconf.Read("filename")
                     embed = conf.localconf.ReadBool("embedResource", False)
-                    self.GeneratePython(self.dataFile, pypath, embed)
+                    genGettext = conf.localconf.ReadBool("genGettext", False)
+                    self.GeneratePython(self.dataFile, pypath, embed, genGettext)
                     
                 self.SetStatusText('Data saved')
                 self.SaveRecent(path)
@@ -422,11 +423,11 @@ class Frame(wxFrame):
             EVT_MENU(self, newid, self.OnRecentFile)
             conf.recentfiles[newid] = path
 
-    def GeneratePython(self, dataFile, pypath, embed):
+    def GeneratePython(self, dataFile, pypath, embed, genGettext):
         try:
             import wx.tools.pywxrc
             rescomp = wx.tools.pywxrc.XmlResourceCompiler()
-            rescomp.MakePythonModule(dataFile, pypath, embed)
+            rescomp.MakePythonModule(dataFile, pypath, embed, genGettext)
         except:
             inf = sys.exc_info()
             wxLogError(traceback.format_exception(inf[0], inf[1], None)[-1])
@@ -1280,7 +1281,8 @@ class PythonOptions(wx.Dialog):
     def OnGenerate(self, evt):
         pypath = self.FileNameTC.GetValue()
         embed = self.EmbedCB.GetValue()
-        frame.GeneratePython(self.dataFile, pypath, embed)
+        genGettext = self.GettextCB.GetValue()
+        frame.GeneratePython(self.dataFile, pypath, embed, genGettext)
         self.OnSaveOpts()
 
     

@@ -16,12 +16,14 @@
 
 """
 pywxrc -- Python XML resource compiler
+          (see http://wiki.wxpython.org/index.cgi/pywxrc for more info)
 
 Usage: python pywxrc.py -h
-       python pywxrc.py <resource.xrc> [-e] [-o filename]
+       python pywxrc.py <resource.xrc> [-e] [-g] [-o filename]
        
   -h, --help    show help message
-  -e, --embed   embed resources in output file
+  -e, --embed   embed resources in the output file
+  -g, --gettext embed list of translatable strings in the output file
   -o, --output  output filename, or - for stdout
 """
 
@@ -51,7 +53,7 @@ def get_resources():
 """
 
     CLASS_HEADER = """\
-class %(windowName)sBase(wx.%(windowClass)s):
+class xrc%(windowName)s(wx.%(windowClass)s):
     def PreCreate(self):
         \"\"\" This function is called during the class's initialization.
         
@@ -74,9 +76,7 @@ class %(windowName)sBase(wx.%(windowClass)s):
 """
 
     INIT_RESOURE_HEADER = """\
-# -------------------------------------------------------------
 # ------------------------ Resource data ----------------------
-# -------------------------------------------------------------
 
 def __init_resources():
 """
@@ -109,6 +109,21 @@ def __init_resources():
     __res.Load('memory:XRC/%(memoryPath)s/%(resourceFilename)s')
 """
 
+    GETTEXT_DUMMY_FUNC = """\
+# ----------------------- Gettext strings ---------------------
+
+def __gettext_strings():
+    # This is a dummy function that lists all the strings that are used in
+    # the XRC file in the _("a string") format to be recognized by GNU
+    # gettext utilities (specificaly the xgettext utility) and the
+    # mki18n.py script.  For more information see:
+    # http://wiki.wxpython.org/index.cgi/Internationalization 
+    
+    def _(str): pass
+    
+%(gettextStrings)s
+"""
+
 #----------------------------------------------------------------------
 
 class XmlResourceCompiler:
@@ -117,7 +132,8 @@ class XmlResourceCompiler:
 
     """This class generates Python code from XML resource files (XRC)."""
 
-    def MakePythonModule(self, resourceFilename, outputFilename, embedResources=False):
+    def MakePythonModule(self, resourceFilename, outputFilename,
+                         embedResources=False, generateGetText=False):
         if outputFilename == "-":
             outputFile = sys.stdout
         else:
@@ -134,6 +150,9 @@ class XmlResourceCompiler:
             print >>outputFile, self.GenerateInitResourcesEmbedded(resourceFilename, resourceDocument)
         else:
             print >>outputFile, self.GenerateInitResourcesFile(resourceFilename, resourceDocument)
+
+        if generateGetText:
+            print >>outputFile, self.GenerateGetText(resourceDocument)
 
     #-------------------------------------------------------------------
 
@@ -165,6 +184,15 @@ class XmlResourceCompiler:
             outputList.append('\n\n')
                     
         return "".join(outputList)
+
+    #-------------------------------------------------------------------
+
+    def GenerateGetText(self, resourceDocument):
+        resource = resourceDocument.firstChild
+        strings = self.FindStringsInNode(resource)
+        strings = ['    _("%s")\n' % s for s in strings]
+        gettextStrings = "".join(strings)
+        return self.templates.GETTEXT_DUMMY_FUNC % locals()
 
     #-------------------------------------------------------------------
 
@@ -203,6 +231,8 @@ class XmlResourceCompiler:
     #-------------------------------------------------------------------
 
     def GenerateInitResourcesFile(self, resourceFilename, resourceDocument):
+        # take only the filename portion out of resourceFilename
+        resourceFilename = os.path.split(resourceFilename)[1]
         outputList = []
         outputList.append(self.templates.INIT_RESOURE_HEADER)
         outputList.append(self.templates.LOAD_RES_FILE % locals())
@@ -308,16 +338,97 @@ class XmlResourceCompiler:
             if n.nodeType == minidom.Document.ELEMENT_NODE:
                 self.ReplaceFilenamesInXRC(n, files, resourcePath);
 
+    #-------------------------------------------------------------------
+
+    def FindStringsInNode(self, parent):
+        def is_number(st):
+            try:
+                i = int(st)
+                return True
+            except ValueError:
+                return False
+            
+        strings = []
+        if parent is None:
+            return strings;
+
+        for child in parent.childNodes:
+            if ((parent.nodeType == parent.ELEMENT_NODE) and
+                # parent is an element, i.e. has subnodes...
+                (child.nodeType == child.TEXT_NODE or
+                child.nodeType == child.CDATA_SECTION_NODE) and
+                # ...it is textnode...
+                (
+                    parent.tagName == "label" or
+                    (parent.tagName == "value" and
+                                   not is_number(child.nodeValue)) or
+                    parent.tagName == "help" or
+                    parent.tagName == "longhelp" or
+                    parent.tagName == "tooltip" or
+                    parent.tagName == "htmlcode" or
+                    parent.tagName == "title" or
+                    parent.tagName == "item"
+                )):
+                # ...and known to contain translatable string
+                if (parent.getAttribute("translate") != "0"):
+                    strings.append(self.ConvertText(child.nodeValue))
+
+            # subnodes:
+            if child.nodeType == child.ELEMENT_NODE:
+                strings += self.FindStringsInNode(child)
+
+        return strings
+
+    #-------------------------------------------------------------------
+
+    def ConvertText(self, st):
+        st2 = ""
+        dt = list(st)
+
+        skipNext = False
+        for i in range(len(dt)):
+            if skipNext:
+                skipNext = False
+                continue
+            
+            if dt[i] == '_':
+                if dt[i+1] == '_':
+                    st2 += '_'
+                    skipNext = True
+                else:
+                    st2 += '&'
+            elif dt[i] == '\n':
+                st2 += '\\n'
+            elif dt[i] == '\t':
+                st2 += '\\t'
+            elif dt[i] == '\r':
+                st2 += '\\r'
+            elif dt[i] == '\\':
+                if dt[i+1] not in ['n', 't', 'r']:
+                    st2 += '\\\\'
+                else:
+                    st2 += '\\'
+            elif dt[i] == '"':
+                st2 += '\\"'
+            else:            
+                st2 += dt[i]
+
+        return st2                
+
+
+
 #---------------------------------------------------------------------------
 
 def main(args):
     resourceFilename = ""
     outputFilename = ""
     embedResources = False
+    generateGetText = False
 
     try:
-        opts, args = getopt.gnu_getopt(args, "heo:", "help embed output=".split())
-    except getopt.GetoptError:
+        opts, args = getopt.gnu_getopt(args, "hego:", "help embed gettext output=".split())
+    except getopt.GetoptError, e:
+        print "\nError : %s\n" % str(e)
         print __doc__
         sys.exit(1)
 
@@ -340,13 +451,16 @@ def main(args):
         if opt in ["-e", "--embed"]:
             embedResources = True
 
+        if opt in ["-g", "--gettext"]:
+            generateGetText = True
+
     if outputFilename is None or outputFilename == "":
         outputFilename = os.path.splitext(resourceFilename)[0] + "_xrc.py"
 
     comp = XmlResourceCompiler()
     
     try:
-        comp.MakePythonModule(resourceFilename, outputFilename, embedResources)
+        comp.MakePythonModule(resourceFilename, outputFilename, embedResources, generateGetText)
     except IOError, e:
         print >>sys.stderr, "%s." % str(e)
     else:

@@ -522,31 +522,38 @@
             <object class="wxCheckBox" name="AutoGenerateCB">
               <label>Autogenerate Python module when saving XRC</label>
             </object>
+            <flag>wxBOTTOM|wxLEFT|wxRIGHT</flag>
+            <border>5</border>
           </object>
           <object class="sizeritem">
             <object class="wxCheckBox" name="EmbedCB">
-              <label>Embed resource in python module</label>
+              <label>Embed resources in the Python module</label>
             </object>
+            <flag>wxBOTTOM|wxLEFT|wxRIGHT</flag>
+            <border>5</border>
           </object>
           <object class="sizeritem">
             <object class="wxCheckBox" name="GettextCB">
               <label>Generate gettext strings</label>
-              <enabled>0</enabled>
             </object>
+            <flag>wxBOTTOM|wxLEFT|wxRIGHT</flag>
+            <border>5</border>
           </object>
           <object class="sizeritem">
             <object class="wxCheckBox" name="MakeXRSFileCB">
               <label>Generate and use compressed XRS file</label>
               <enabled>0</enabled>
+              <hidden>1</hidden>
             </object>
-          </object>
-          <object class="spacer">
-            <size>1,10</size>
+            <flag>wxBOTTOM|wxLEFT|wxRIGHT</flag>
+            <border>5</border>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText">
               <label>Filename:</label>
             </object>
+            <flag>wxALL</flag>
+            <border>5</border>
           </object>
           <object class="sizeritem">
             <object class="wxBoxSizer">
@@ -555,17 +562,18 @@
                 <object class="wxTextCtrl" name="FileNameTC">
                   <size>500,-1</size>
                 </object>
-                <flag>wxALIGN_CENTRE_VERTICAL</flag>
-              </object>
-              <object class="spacer">
-                <size>5,0</size>
+                <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTRE_VERTICAL</flag>
+                <border>5</border>
               </object>
               <object class="sizeritem">
                 <object class="wxButton" name="BrowseBtn">
                   <label>Browse...</label>
                 </object>
+                <flag>wxBOTTOM|wxRIGHT</flag>
+                <border>5</border>
               </object>
             </object>
+            <flag>wxEXPAND</flag>
           </object>
         </object>
         <flag>wxALL</flag>
