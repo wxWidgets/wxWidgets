@@ -27,12 +27,13 @@
 
 #if wxUSE_STREAMS
 
+#include "wx/stream.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
 #endif
 
 #include <ctype.h>
-#include "wx/stream.h"
 #include "wx/datstrm.h"
 #include "wx/textfile.h"
 

@@ -24,6 +24,9 @@
     #include "wx/dynarray.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #if wxUSE_STREAMS
+        #include "wx/stream.h"
+    #endif
 
     #include "wx/sizer.h"
 
@@ -51,7 +54,6 @@
 #include "wx/progdlg.h"
 #include "wx/toolbar.h"
 #include "wx/fontenum.h"
-#include "wx/stream.h"
 #include "wx/filedlg.h"
 #include "wx/artprov.h"
 #include "wx/spinctrl.h"

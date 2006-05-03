@@ -29,9 +29,11 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #if wxUSE_STREAMS
+        #include "wx/stream.h"
+    #endif
 #endif
 
-#include "wx/stream.h"
 #include "wx/process.h"
 
 #include "wx/apptrait.h"
@@ -95,4 +97,3 @@ long wxExecute(wxChar **argv, int flags, wxProcess *handler)
 {
     return 0;
 }
-

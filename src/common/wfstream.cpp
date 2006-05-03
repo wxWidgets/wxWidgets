@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fstream.cpp
+// Name:        src/common/fstream.cpp
 // Purpose:     "File stream" classes
 // Author:      Julian Smart
 // Modified by:
@@ -13,14 +13,18 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_STREAMS
 
-#include <stdio.h>
-#include "wx/stream.h"
 #include "wx/wfstream.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/stream.h"
+#endif
+
+#include <stdio.h>
 
 #if wxUSE_FILE
 
@@ -380,4 +384,3 @@ wxFFileStream::wxFFileStream(const wxString& fileName)
 #endif //wxUSE_FFILE
 
 #endif // wxUSE_STREAMS
-

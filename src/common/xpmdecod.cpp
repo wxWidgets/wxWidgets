@@ -103,9 +103,11 @@ license is as follows:
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #if wxUSE_STREAMS
+        #include "wx/stream.h"
+    #endif
 #endif
 
-#include "wx/stream.h"
 #include "wx/image.h"
 #include "wx/hashmap.h"
 #include <string.h>

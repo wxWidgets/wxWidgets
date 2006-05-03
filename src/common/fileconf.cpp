@@ -30,6 +30,9 @@
     #include  "wx/log.h"
     #include  "wx/app.h"
     #include  "wx/utils.h"    // for wxGetHomeDir
+    #if wxUSE_STREAMS
+        #include  "wx/stream.h"
+    #endif // wxUSE_STREAMS
 #endif  //WX_PRECOMP
 
 #include  "wx/file.h"
@@ -38,11 +41,6 @@
 #include  "wx/config.h"
 #include  "wx/fileconf.h"
 #include  "wx/filefn.h"
-
-#if wxUSE_STREAMS
-    #include  "wx/stream.h"
-#endif // wxUSE_STREAMS
-
 
 #if defined(__WXMAC__)
     #include  "wx/mac/private.h"  // includes mac headers

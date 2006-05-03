@@ -18,12 +18,13 @@
 
 #if wxUSE_SOCKETS && wxUSE_STREAMS
 
+#include "wx/sckstrm.h"
+
 #ifndef WX_PRECOMP
+    #include "wx/stream.h"
 #endif
 
-#include "wx/stream.h"
 #include "wx/socket.h"
-#include "wx/sckstrm.h"
 
 // ---------------------------------------------------------------------------
 // wxSocketOutputStream

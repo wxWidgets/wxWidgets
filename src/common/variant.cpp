@@ -20,6 +20,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #if wxUSE_STREAMS
+        #include "wx/stream.h"
+    #endif
 #endif
 
 #if wxUSE_STD_IOSTREAM
@@ -36,8 +39,7 @@ using namespace std ;
 #endif
 
 #if wxUSE_STREAMS
-#include "wx/stream.h"
-#include "wx/txtstrm.h"
+    #include "wx/txtstrm.h"
 #endif
 
 #include "wx/string.h"

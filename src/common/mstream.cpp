@@ -21,14 +21,18 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_STREAMS
 
-#include <stdlib.h>
-#include "wx/stream.h"
 #include "wx/mstream.h"
+
+#ifndef   WX_PRECOMP
+    #include  "wx/stream.h"
+#endif  //WX_PRECOMP
+
+#include <stdlib.h>
 
 // ============================================================================
 // implementation

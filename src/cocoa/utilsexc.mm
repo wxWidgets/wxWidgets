@@ -21,8 +21,13 @@
 
 #if 0
 
+#ifndef   WX_PRECOMP
+    #if wxUSE_STREAMS
+        #include  "wx/stream.h"
+    #endif // wxUSE_STREAMS
+#endif  //WX_PRECOMP
+
 #include "wx/process.h"
-#include "wx/stream.h"
 
 #include "wx/cocoa/string.h"
 
