@@ -26,6 +26,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/filedlg.h"
 #endif
 
 #ifdef __WXGTK24__
