@@ -147,7 +147,7 @@ wxSize wxBookCtrlBase::DoGetBestSize() const
                 bestSize.y = childBestSize.y;
         }
     }
-    
+
     if (m_fitToCurrentPage && GetCurrentPage())
         bestSize = GetCurrentPage()->GetBestSize();
 
@@ -175,6 +175,9 @@ wxBookCtrlBase::InsertPage(size_t nPage,
                  _T("invalid page index in wxBookCtrlBase::InsertPage()") );
 
     m_pages.Insert(page, nPage);
+    if ( page )
+        page->SetSize(GetPageRect());
+
     InvalidateBestSize();
 
     return true;
@@ -267,7 +270,7 @@ void wxBookCtrlBase::DoSize()
         // we're not fully created yet or OnSize() should be hidden by derived class
         return;
     }
-    
+
     if (GetSizer())
         Layout();
     else
@@ -305,19 +308,27 @@ void wxBookCtrlBase::DoSize()
             m_bookctrl->Move(posCtrl);
     }
 
-    // resize the currently shown page
-    if (GetSelection() != wxNOT_FOUND )
+    // resize all pages to fit the new control size
+    const wxRect pageRect = GetPageRect();
+    const unsigned pagesCount = m_pages.Count();
+    for ( unsigned int i = 0; i < pagesCount; ++i )
     {
-        wxWindow *page = m_pages[GetSelection()];
-        wxCHECK_RET( page, _T("NULL page?") );
-        page->SetSize(GetPageRect());
+        wxWindow * const page = m_pages[i];
+        if ( !page )
+        {
+            wxASSERT_MSG( AllowNullPage(),
+                _T("Null page in a control that does not allow null pages?") );
+            continue;
+        }
+
+        page->SetSize(pageRect);
     }
 }
 
 void wxBookCtrlBase::OnSize(wxSizeEvent& event)
 {
     event.Skip();
-    
+
     DoSize();
 }
 
