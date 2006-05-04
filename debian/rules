@@ -55,7 +55,7 @@ config_cache_cross = ../config_deb_cross.cache
 package_gtk_lib         = libwxgtk$(sorelease)
 package_gtk_dev         = libwxgtk$(release)-dev
 package_gtk_dbg         = libwxgtk$(release)-dbg
-package_gtk_py_lib      = libwxgtk$(sorelease)-python
+package_gtk_py_lib      = python-wxgtk$(sorelease)
 package_gtk_py          = wxpython$(sorelease)
 package_common          = wx$(release)-common
 package_headers         = wx$(release)-headers
@@ -63,7 +63,7 @@ package_i18n            = wx$(release)-i18n
 package_doc             = wx$(release)-doc
 package_examples        = wx$(release)-examples
 
-package_gtk_dbg_py      = libwxgtk$(sorelease)-dbg-python
+package_gtk_dbg_py      = python-wxgtk$(sorelease)-dbg
 package_msw_dev         = libwxmsw$(release)-dev
 package_msw_dbg         = libwxmsw$(release)-dbg
 package_headers_msw     = wx$(release)-headers-msw
@@ -150,24 +150,22 @@ control-files-stamp: debian/control
 	done;
 	@for f in docs postinst prerm; do                                    \
 		echo "generating control file $(package_gtk_py_lib).$$f";    \
-		sed -e 's/=PY/$(python_ver)/g;                               \
-			s|=WXPYDIR|$(wxpydir)|g;                             \
-			s/=V/$(release)/g;                                   \
-			s/=SOV/$(sorelease)/g'                               \
-			< debian/libwxgtk-python.$$f                         \
+		sed -e 's/=PY/$(python_ver)/g;s|=WXPYDIR|$(wxpydir)|g;'      \
+		    -e 's/=V/$(release)/g;s/=SOV/$(sorelease)/g'             \
+			< debian/python-wxgtk.$$f                            \
 			> debian/$(package_gtk_py_lib).$$f;                  \
 	done;
 	@echo "generating control file $(package_gtk_py).menu";              \
-		sed -e 's/=SOV/$(sorelease)/g' < debian/wxpython.menu        \
+		sed -e 's/=SOV/$(sorelease)/g' < debian/python-wxtools.menu  \
 			> debian/$(package_gtk_py).menu;
 	@for f in docs postinst; do                                          \
 		echo "generating control file $(package_gtk_dbg_py).$$f";    \
 		sed -e 's/=PY/$(python_ver)/g;s/=V/$(release)/g;s/=SOV/$(sorelease)/g' \
-			< debian/libwxgtk-python.$$f                         \
+			< debian/python-wxgtk.$$f                            \
 			> debian/$(package_gtk_dbg_py).$$f;                  \
 	done;
 	@echo "generating control file $(package_gtk_dbg_py).prerm";         \
-		sed 's/=SOV/$(sorelease)/g' < debian/libwxgtk-dbg-python.prerm \
+		sed 's/=SOV/$(sorelease)/g' < debian/python-wxgtk-dbg.prerm  \
 		    > debian/$(package_gtk_dbg_py).prerm
 	@for f in docs doc-base; do                                          \
 		echo "generating control file $(package_doc).$$f";           \
