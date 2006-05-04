@@ -80,6 +80,13 @@ public:
     // return the item above/below/to the left/right of the given one
     int GetNextItem(int item, wxDirection dir, long style) const;
 
+    // set the tooltip text for a radio item, empty string unsets any tooltip
+    void SetItemToolTip(unsigned int item, const wxString& text);
+
+    // get the individual items tooltip; returns NULL if none
+    wxToolTip *GetItemToolTip(unsigned int item) const;
+
+    
 //    bool IsValid(int n) const;  ** not public
         
     static wxVisualAttributes
