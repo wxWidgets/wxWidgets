@@ -16,6 +16,16 @@
 
 #include "wx/ctrlsub.h"
 
+#if wxUSE_TOOLTIPS
+
+#include "wx/dynarray.h"
+
+class WXDLLEXPORT wxToolTip;
+
+WX_DEFINE_EXPORTED_ARRAY_PTR(wxToolTip *, wxToolTipArray);
+
+#endif // wxUSE_TOOLTIPS
+
 extern WXDLLEXPORT_DATA(const wxChar) wxRadioBoxNameStr[];
 
 // ----------------------------------------------------------------------------
@@ -27,6 +37,8 @@ extern WXDLLEXPORT_DATA(const wxChar) wxRadioBoxNameStr[];
 class WXDLLEXPORT wxRadioBoxBase : public wxItemContainerImmutable
 {
 public:
+    virtual ~wxRadioBoxBase();
+
     // change/query the individual radio button state
     virtual bool Enable(unsigned int n, bool enable = true) = 0;
     virtual bool Show(unsigned int n, bool show = true) = 0;
@@ -40,6 +52,14 @@ public:
     // return the item above/below/to the left/right of the given one
     int GetNextItem(int item, wxDirection dir, long style) const;
 
+#if wxUSE_TOOLTIPS
+    // set the tooltip text for a radio item, empty string unsets any tooltip
+    void SetItemToolTip(unsigned int item, const wxString& text);
+
+    // get the individual items tooltip; returns NULL if none
+    wxToolTip *GetItemToolTip(unsigned int item) const
+        { return m_itemsTooltips ? (*m_itemsTooltips)[item] : NULL; }
+#endif // wxUSE_TOOLTIPS
 
     // deprecated functions
     // --------------------
@@ -53,6 +73,10 @@ protected:
     wxRadioBoxBase()
     {
         m_majorDim = 0;
+
+#if wxUSE_TOOLTIPS
+        m_itemsTooltips = NULL;
+#endif // wxUSE_TOOLTIPS
     }
 
     // return the number of items in major direction (which depends on whether
@@ -64,6 +88,18 @@ protected:
     // the style parameter should be the style of the radiobox itself
     void SetMajorDim(unsigned int majorDim, long style);
 
+#if wxUSE_TOOLTIPS
+    // called from SetItemToolTip() to really set the tooltip for the specified
+    // item in the box (or, if tooltip is NULL, to remove any existing one).
+    //
+    // NB: this function should really be pure virtual but to avoid breaking
+    //     the build of the ports for which it's not implemented yet we provide
+    //     an empty stub in the base class for now
+    virtual void DoSetItemToolTip(unsigned int item, wxToolTip *tooltip);
+
+    // returns true if we have any item tooltips
+    bool HasItemToolTips() const { return m_itemsTooltips != NULL; }
+#endif // wxUSE_TOOLTIPS
 
 private:
     // the number of elements in major dimension (i.e. number of columns if
@@ -72,6 +108,13 @@ private:
     unsigned int m_majorDim,
                  m_numCols,
                  m_numRows;
+
+#if wxUSE_TOOLTIPS
+    // array of tooltips for the individual items
+    //
+    // this array is initially NULL and initialized on first use
+    wxToolTipArray *m_itemsTooltips;
+#endif
 };
 
 #if defined(__WXUNIVERSAL__)

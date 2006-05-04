@@ -808,12 +808,21 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     };
 
     panel = new wxPanel(m_book);
-    (void)new MyRadioBox( panel, ID_RADIOBOX, _T("&That"), wxPoint(10,160), wxDefaultSize, WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
+    wxRadioBox *radio2 = new MyRadioBox( panel, ID_RADIOBOX, _T("&That"), wxPoint(10,160), wxDefaultSize, WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
     m_radio = new wxRadioBox( panel, ID_RADIOBOX, _T("T&his"), wxPoint(10,10), wxDefaultSize, WXSIZEOF(choices), choices, 1, wxRA_SPECIFY_COLS );
 
 #if wxUSE_TOOLTIPS
     m_combo->SetToolTip(_T("This is a natural\ncombobox - can you believe me?"));
-    m_radio->SetToolTip(_T("Ever seen a radiobox?"));
+    radio2->SetToolTip(_T("Ever seen a radiobox?"));
+
+    //m_radio->SetToolTip(_T("Tooltip for the entire radiobox"));
+    for ( unsigned int nb = 0; nb < WXSIZEOF(choices); nb++ )
+    {
+        m_radio->SetItemToolTip(nb, _T("tooltip for\n") + choices[nb]);
+    }
+
+    // remove the tooltip for one of the items
+    m_radio->SetItemToolTip(2, _T(""));
 #endif // wxUSE_TOOLTIPS
 
     (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, _T("Select #&2"), wxPoint(180,30), wxSize(140,30) );

@@ -78,6 +78,7 @@ All (GUI):
 
 - Added wxTreebook (uses a wxTreeCtrl to control pages).
 - Added wxDC::GradientFillLinear/Concentric()
+- Added wxRadioBox::SetItemToolTip()
 - Added wxKeyEvent::GetModifiers()
 - Added wxDialog::SetEscapeId().
 - wxItemContainerImmutable::FindString unified (affects wxRadioBox, wxListBox,

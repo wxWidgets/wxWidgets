@@ -99,6 +99,9 @@ public:
     virtual void SetFocus();
     virtual bool SetFont(const wxFont& font);
     virtual bool ContainsHWND(WXHWND hWnd) const;
+#if wxUSE_TOOLTIPS
+    virtual bool HasToolTips() const;
+#endif // wxUSE_TOOLTIPS
 
     // we inherit a version always returning false from wxStaticBox, override
     // it to behave normally
@@ -136,6 +139,10 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
     virtual wxSize DoGetBestSize() const;
+
+#if wxUSE_TOOLTIPS
+    virtual void DoSetItemToolTip(unsigned int n, wxToolTip * tooltip);
+#endif
 
 #ifndef __WXWINCE__
     virtual WXHRGN MSWGetRegionWithoutChildren();

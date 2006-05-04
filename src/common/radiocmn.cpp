@@ -30,6 +30,10 @@
     #include "wx/radiobox.h"
 #endif //WX_PRECOMP
 
+#if wxUSE_TOOLTIPS
+    #include "wx/tooltip.h"
+#endif // wxUSE_TOOLTIPS
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -149,6 +153,78 @@ int wxRadioBoxBase::GetNextItem(int item, wxDirection dir, long style) const
 
     return item;
 }
+
+#if wxUSE_TOOLTIPS
+
+void wxRadioBoxBase::SetItemToolTip(unsigned int item, const wxString& text)
+{
+    wxASSERT_MSG( item < GetCount(), _T("Invalid item index") );
+
+    // extend the array to have entries for all our items on first use
+    if ( !m_itemsTooltips )
+    {
+        m_itemsTooltips = new wxToolTipArray;
+        m_itemsTooltips->resize(GetCount());
+    }
+
+    wxToolTip *tooltip = (*m_itemsTooltips)[item];
+
+    bool changed = true;
+    if ( text.empty() )
+    {
+        if ( tooltip )
+        {
+            // delete the tooltip
+            delete tooltip;
+            tooltip = NULL;
+        }
+        else // nothing to do
+        {
+            changed = false;
+        }
+    }
+    else // non empty tooltip text
+    {
+        if ( tooltip )
+        {
+            // just change the existing tooltip text, don't change the tooltip
+            tooltip->SetTip(text);
+            changed = false;
+        }
+        else // no tooltip yet
+        {
+            // create the new one
+            tooltip = new wxToolTip(text);
+        }
+    }
+
+    if ( changed )
+    {
+        (*m_itemsTooltips)[item] = tooltip;
+        DoSetItemToolTip(item, tooltip);
+    }
+}
+
+void
+wxRadioBoxBase::DoSetItemToolTip(unsigned int WXUNUSED(item),
+                                 wxToolTip * WXUNUSED(tooltip))
+{
+    // per-item tooltips not implemented by default
+}
+
+wxRadioBoxBase::~wxRadioBoxBase()
+{
+    if ( m_itemsTooltips )
+    {
+        const size_t n = m_itemsTooltips->size();
+        for ( size_t i = 0; i < n; i++ )
+            delete (*m_itemsTooltips)[i];
+
+        delete m_itemsTooltips;
+    }
+}
+
+#endif // wxUSE_TOOLTIPS
 
 #if WXWIN_COMPATIBILITY_2_4
 

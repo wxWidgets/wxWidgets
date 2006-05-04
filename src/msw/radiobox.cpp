@@ -37,9 +37,6 @@
 #include "wx/msw/subwin.h"
 
 #if wxUSE_TOOLTIPS
-    #if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
-        #include <commctrl.h>
-    #endif
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
@@ -420,6 +417,25 @@ bool wxRadioBox::IsItemShown(unsigned int item) const
     return (::GetWindowLong((*m_radioButtons)[item],
                             GWL_STYLE) & WS_VISIBLE) != 0;
 }
+
+#if wxUSE_TOOLTIPS
+
+bool wxRadioBox::HasToolTips() const
+{
+    return wxStaticBox::HasToolTips() || wxRadioBoxBase::HasItemToolTips();
+}
+
+void wxRadioBox::DoSetItemToolTip(unsigned int item, wxToolTip *tooltip)
+{
+    // we have already checked for the item to be valid in wxRadioBoxBase
+    const HWND hwndRbtn = (*m_radioButtons)[item];
+    if ( tooltip != NULL )
+        tooltip->Add(hwndRbtn);
+    else // unset the tooltip
+        wxToolTip::Remove(hwndRbtn);
+}
+
+#endif // wxUSE_TOOLTIPS
 
 WX_FORWARD_STD_METHODS_TO_SUBWINDOWS(wxRadioBox, wxStaticBox, m_radioButtons)
 

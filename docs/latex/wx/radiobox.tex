@@ -193,6 +193,18 @@ Finds a button matching the given string, returning the position if found, or
 Returns the number of columns in the radiobox.
 
 
+\membersection{wxRadioBox::GetItemToolTip}\label{wxradioboxgetitemtooltip}
+
+\constfunc{wxToolTip *}{GetItemToolTip}{\param{unsigned int}{ item}}
+
+Returns the tooltip associated with the specified \arg{item} if any or \NULL.
+
+\wxheading{See also}
+
+\helpref{SetItemToolTip}{wxradioboxsetitemtooltip},\\
+\helpref{wxWindow::GetToolTip}{wxwindowgettooltip}
+
+
 \membersection{wxRadioBox::GetLabel}\label{wxradioboxgetlabel}
 
 \constfunc{wxString}{GetLabel}{\void}
@@ -325,6 +337,24 @@ a wxEVT\_COMMAND\_RADIOBOX\_SELECTED event to get emitted.
 \wxheading{Parameters}
 
 \docparam{string}{The label of the button to select.}
+
+
+\membersection{wxRadioBox::SetItemToolTip}\label{wxradioboxsetitemtooltip}
+
+\func{void}{SetItemToolTip}{\param{unsigned int}{ item}, \param{const wxString\& }{text}}
+
+Sets the tooltip text for the specified item in the radio group.
+
+\wxheading{Parameters}
+
+\docparam{item}{Index of the item the tooltip will be shown for.}
+
+\docparam{text}{Tooltip text for the item, the tooltip is removed if empty.}
+
+\wxheading{See also}
+
+\helpref{GetItemToolTip}{wxradioboxgetitemtooltip},\\
+\helpref{wxWindow::SetToolTip}{wxwindowsettooltip}
 
 
 \membersection{wxRadioBox::Show}\label{wxradioboxshow}
