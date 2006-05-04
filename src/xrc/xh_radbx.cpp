@@ -39,7 +39,7 @@ wxRadioBoxXmlHandler::wxRadioBoxXmlHandler()
 
 wxObject *wxRadioBoxXmlHandler::DoCreateResource()
 {
-    if( m_class == wxT("wxRadioBox"))
+    if ( m_class == wxT("wxRadioBox"))
     {
         // find the selection
         long selection = GetLong( wxT("selection"), -1 );
@@ -47,13 +47,18 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
         // need to build the list of strings from children
         m_insideBox = true;
         CreateChildrenPrivately( NULL, GetParamNode(wxT("content")));
-        wxString *strings = (wxString *) NULL;
-        if( strList.GetCount() > 0 )
+
+        wxString *strings;
+        if ( !labels.empty() )
         {
-            strings = new wxString[strList.GetCount()];
-            int count = strList.GetCount();
-            for( int i = 0; i < count; i++ )
-                strings[i]=strList[i];
+            strings = new wxString[labels.size()];
+            const unsigned count = labels.size();
+            for( unsigned i = 0; i < count; i++ )
+                strings[i] = labels[i];
+        }
+        else
+        {
+            strings = NULL;
         }
 
         XRC_MAKE_INSTANCE(control, wxRadioBox)
@@ -62,34 +67,49 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
                         GetID(),
                         GetText(wxT("label")),
                         GetPosition(), GetSize(),
-                        strList.GetCount(),
+                        labels.size(),
                         strings,
                         GetLong(wxT("dimension"), 1),
                         GetStyle(),
                         wxDefaultValidator,
                         GetName());
 
+        delete[] strings;
+
         if (selection != -1)
             control->SetSelection(selection);
 
         SetupWindow(control);
 
-        if (strings != NULL)
-            delete[] strings;
-        strList.Clear();    // dump the strings
+        const unsigned count = labels.size();
+        for( unsigned i = 0; i < count; i++ )
+        {
+            if ( !tooltips[i].empty() )
+                control->SetItemToolTip(i, tooltips[i]);
+        }
+
+        labels.clear();    // dump the strings
+        tooltips.clear();    // dump the tooltips
 
         return control;
     }
-    else
+    else // inside the radiobox element
     {
-        // on the inside now.
-        // handle <item selected="boolean">Label</item>
+        // we handle <item tooltip="...">Label</item> constructs here
 
-        // add to the list
         wxString str = GetNodeContent(m_node);
+        wxString tooltip;
+        m_node->GetPropVal(wxT("tooltip"), &tooltip);
+
         if (m_resource->GetFlags() & wxXRC_USE_LOCALE)
+        {
             str = wxGetTranslation(str);
-        strList.Add(str);
+            if ( !tooltip.empty() )
+                tooltip = wxGetTranslation(tooltip);
+        }
+
+        labels.push_back(str);
+        tooltips.push_back(tooltip);
 
         return NULL;
     }

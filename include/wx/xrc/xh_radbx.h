@@ -24,9 +24,14 @@ public:
     virtual bool CanHandle(wxXmlNode *node);
 private:
     bool m_insideBox;
-    wxArrayString strList;
+
+    // the items labels
+    wxArrayString labels;
+
+    // the items tooltips (some or all elements may be empty)
+    wxArrayString tooltips;
 };
 
-#endif
+#endif // wxUSE_RADIOBOX
 
 #endif // _WX_XH_RADBX_H_

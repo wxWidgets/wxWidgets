@@ -74,6 +74,7 @@
                             <object class="sizeritem">
                                 <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
+                                <size>300,60</size>
                                 <object class="wxToolBar">
                                     <style>wxTB_FLAT|wxTB_NODIVIDER</style>
                                     <margins>2,2</margins>
@@ -117,6 +118,13 @@
                                         <tooltip>Variable Expansion Example</tooltip>
                                         <bitmap>variable.xpm</bitmap>
                                         <longhelp>Replace variables in the XRC file at runtime</longhelp>
+                                    </object>
+                                    <object class="wxComboBox">
+                                        <content>
+                                            <item>Just</item>
+                                            <item>a combobox</item>
+                                            <item>in the toolbar</item>
+                                        </content>
                                     </object>
                                 </object>
                             </object>
@@ -174,6 +182,13 @@
                                         <tooltip>Variable Expansion Example</tooltip>
                                         <bitmap>variable.xpm</bitmap>
                                         <longhelp>Replace variables in the XRC file at runtime</longhelp>
+                                    </object>
+                                    <object class="wxComboBox">
+                                        <content>
+                                            <item>Just</item>
+                                            <item>a combobox</item>
+                                            <item>in the toolbar</item>
+                                        </content>
                                     </object>
                                 </object>
                             </object>
@@ -618,9 +633,9 @@
                                     <dimension>1</dimension>
                                     <selection>0</selection>
                                     <content>
-                                        <item>Power 108</item>
-                                        <item>WMMS 100.7</item>
-                                        <item>Energy 98.3</item>
+                                        <item tooltip="Powerful radio station">Power 108</item>
+                                        <item tooltip="">WMMS 100.7</item>
+                                        <item tooltip="E=mc^2">Energy 98.3</item>
                                         <item>CHUM FM</item>
                                         <item>92FM</item>
                                     </content>
