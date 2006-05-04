@@ -118,6 +118,8 @@ class wxBusyInfo : public wxObject {
 public:
     wxBusyInfo(const wxString& message);
     ~wxBusyInfo();
+
+    %pythoncode { def Destroy(self): pass }
 };
 
 
