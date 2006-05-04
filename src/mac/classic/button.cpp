@@ -16,7 +16,11 @@
 #endif
 
 #include "wx/button.h"
-#include "wx/panel.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/panel.h"
+#endif
+
 #include "wx/stockitem.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
@@ -90,7 +94,7 @@ wxSize wxButton::DoGetBestSize() const
 {
     wxSize sz = GetDefaultSize() ;
 
-    int wBtn = m_label.Length() * 8 + 12 + 2 * kMacOSXHorizontalBorder ;
+    int wBtn = m_label.length() * 8 + 12 + 2 * kMacOSXHorizontalBorder ;
 
     if (wBtn > sz.x) sz.x = wBtn;
 

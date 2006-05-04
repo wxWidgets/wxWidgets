@@ -21,13 +21,13 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/panel.h"
 #endif
 
 #include "wx/sizer.h"
 #include "wx/gbsizer.h"
 #include "wx/statbox.h"
 #include "wx/notebook.h"
-#include "wx/panel.h"
 #include "wx/tokenzr.h"
 
 

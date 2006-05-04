@@ -16,10 +16,10 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/panel.h"
 #endif
 
 #include "wx/settings.h"
-#include "wx/panel.h"
 #include "wx/clipbrd.h"
 #include "wx/tokenzr.h"
 #include "wx/dcclient.h"

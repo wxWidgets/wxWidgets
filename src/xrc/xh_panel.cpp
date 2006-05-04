@@ -18,7 +18,11 @@
 #if wxUSE_XRC
 
 #include "wx/xrc/xh_panel.h"
-#include "wx/panel.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/panel.h"
+#endif
+
 #include "wx/frame.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxPanelXmlHandler, wxXmlResourceHandler)

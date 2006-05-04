@@ -30,10 +30,10 @@
     #include "wx/colour.h"
     #include "wx/settings.h"
     #include "wx/log.h"
+    #include "wx/panel.h"
 #endif
 
 #include "wx/containr.h"
-#include "wx/panel.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -179,4 +179,3 @@ void wxPanel::OnSize(wxSizeEvent& event)
 
     event.Skip();
 }
-

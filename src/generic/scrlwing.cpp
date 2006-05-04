@@ -33,11 +33,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
+    #include "wx/panel.h"
 #endif
 
 #include "wx/dcclient.h"
 
-#include "wx/panel.h"
 #if wxUSE_TIMER
 #include "wx/timer.h"
 #endif

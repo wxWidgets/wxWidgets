@@ -1,18 +1,22 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        button.cpp
+// Name:        src/mac/carbon/button.cpp
 // Purpose:     wxButton
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #include "wx/button.h"
-#include "wx/panel.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/panel.h"
+#endif
+
 #include "wx/stockitem.h"
 
 #include "wx/mac/uma.h"
@@ -143,11 +147,11 @@ wxSize wxButton::DoGetBestSize() const
 
     Rect    bestsize = { 0 , 0 , 0 , 0 } ;
     m_peer->GetBestRect( &bestsize ) ;
-  
+
     int wBtn;
     if ( EmptyRect( &bestsize ) )
     {
-        wBtn = m_label.Length() * charspace + 12 ;
+        wBtn = m_label.length() * charspace + 12 ;
     }
     else
     {
@@ -155,7 +159,7 @@ wxSize wxButton::DoGetBestSize() const
         sz.y = bestsize.bottom - bestsize.top ;
     }
 
-    if ((wBtn > sz.x) || ( GetWindowStyle() & wxBU_EXACTFIT)) 
+    if ((wBtn > sz.x) || ( GetWindowStyle() & wxBU_EXACTFIT))
         sz.x = wBtn;
 
     return sz ;
@@ -163,7 +167,7 @@ wxSize wxButton::DoGetBestSize() const
 
 wxSize wxButton::GetDefaultSize()
 {
-    int wBtn = 70 ; 
+    int wBtn = 70 ;
     int hBtn = 20 ;
 
     return wxSize(wBtn, hBtn);
@@ -175,7 +179,7 @@ void wxButton::Command (wxCommandEvent & event)
     ProcessCommand(event);
 }
 
-wxInt32 wxButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
+wxInt32 wxButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )
 {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId);
     event.SetEventObject(this);
@@ -183,4 +187,3 @@ wxInt32 wxButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF
 
     return noErr;
 }
-

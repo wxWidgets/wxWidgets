@@ -18,9 +18,9 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/panel.h"
 #endif
 
-#include "wx/panel.h"
 #include "wx/imaglist.h"
 #include "wx/bitmap.h"
 #include "wx/fontutil.h"
@@ -692,7 +692,7 @@ bool wxNotebook::InsertPage( size_t position,
     /* set the label text */
 
     nb_page->m_text = text;
-    if (nb_page->m_text.empty()) nb_page->m_text = wxT("");
+    if (nb_page->m_text.empty()) nb_page->m_text = wxEmptyString;
 
     nb_page->m_label = GTK_LABEL( gtk_label_new(wxGTK_CONV(nb_page->m_text)) );
     gtk_box_pack_end( GTK_BOX(nb_page->m_box), GTK_WIDGET(nb_page->m_label), FALSE, FALSE, m_padding );

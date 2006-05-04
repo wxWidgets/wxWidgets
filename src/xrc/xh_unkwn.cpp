@@ -22,10 +22,10 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/window.h"
+    #include "wx/panel.h"
 #endif
 
 #include "wx/sizer.h"
-#include "wx/panel.h"
 
 
 class wxUnknownControlContainer : public wxPanel

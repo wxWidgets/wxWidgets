@@ -31,12 +31,12 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/panel.h"
 #endif
 
 #include "wx/menu.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
-#include "wx/panel.h"
 #include "wx/layout.h"
 #include "wx/dialog.h"
 #include "wx/listbox.h"

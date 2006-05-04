@@ -22,6 +22,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/panel.h"
 #endif
 
 #ifndef __WXWINCE__
@@ -29,7 +30,6 @@
 #endif
 
 #include "wx/dialog.h"
-#include "wx/panel.h"
 #include "wx/frame.h"
 #include "wx/wfstream.h"
 #include "wx/filesys.h"
