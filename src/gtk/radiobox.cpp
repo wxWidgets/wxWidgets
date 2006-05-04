@@ -21,6 +21,10 @@
 #include "wx/dialog.h"
 #include "wx/frame.h"
 
+#if wxUSE_TOOLTIPS
+    #include "wx/tooltip.h"
+#endif
+
 #include "wx/gtk/private.h"
 #include <gdk/gdkkeysyms.h>
 
@@ -558,16 +562,33 @@ void wxRadioBox::GTKWidgetDoSetMnemonic(GtkWidget* w)
 }
 
 #if wxUSE_TOOLTIPS
-void wxRadioBox::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
+void wxRadioBox::ApplyToolTip(GtkTooltips * WXUNUSED(tips), const wxChar *tip)
 {
-    wxList::compatibility_iterator node = m_buttons.GetFirst();
-    while (node)
+    // set this tooltip for all radiobuttons which don't have their own tips
+    unsigned n = 0;
+    for ( wxList::compatibility_iterator node = m_buttons.GetFirst();
+          node;
+          node = node->GetNext(), n++ )
     {
-        GtkWidget *widget = GTK_WIDGET( node->GetData() );
-        gtk_tooltips_set_tip( tips, widget, wxConvCurrent->cWX2MB(tip), (gchar*) NULL );
-        node = node->GetNext();
+        if ( !GetItemToolTip(n) )
+        {
+            wxToolTip::Apply(GTK_WIDGET(node->GetData()),
+                             wxConvCurrent->cWX2MB(tip));
+        }
     }
 }
+
+void wxRadioBox::DoSetItemToolTip(unsigned int n, wxToolTip *tooltip)
+{
+    wxCharBuffer buf;
+    if ( !tooltip )
+        tooltip = GetToolTip();
+    if ( tooltip )
+        buf = wxGTK_CONV(tooltip->GetTip());
+
+    wxToolTip::Apply(GTK_WIDGET(m_buttons[n]), buf);
+}
+
 #endif // wxUSE_TOOLTIPS
 
 bool wxRadioBox::IsOwnGtkWindow( GdkWindow *window )

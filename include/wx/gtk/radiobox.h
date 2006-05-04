@@ -125,6 +125,10 @@ public:
     wxList           m_buttons;
 
 protected:
+#if wxUSE_TOOLTIPS
+    virtual void DoSetItemToolTip(unsigned int n, wxToolTip *tooltip);
+#endif
+
     void DoApplyWidgetStyle(GtkRcStyle *style);
 
     virtual bool GTKWidgetNeedsMnemonic() const;
