@@ -18,9 +18,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/window.h"
 #endif
-
-#include "wx/window.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
 

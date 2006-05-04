@@ -26,9 +26,9 @@
     #include "wx/utils.h"
     #include "wx/scrolwin.h"
     #include "wx/log.h"
+    #include "wx/window.h"
 #endif
 
-#include "wx/window.h"
 #include "wx/os2/private.h"
 
 #define INCL_M

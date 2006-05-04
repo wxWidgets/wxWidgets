@@ -18,6 +18,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/event.h"
+    #include "wx/window.h"
 #endif //WX_PRECOMP
 
 #include <linux/joystick.h>
@@ -28,7 +29,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "wx/window.h"
 #include "wx/unix/private.h"
 
 enum {

@@ -17,9 +17,9 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/window.h"
 #endif
 
-#include "wx/window.h"
 #include "wx/frame.h"
 #include "wx/fontutil.h"
 

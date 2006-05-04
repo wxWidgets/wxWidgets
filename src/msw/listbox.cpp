@@ -27,9 +27,9 @@
     #include "wx/dc.h"
     #include "wx/utils.h"
     #include "wx/log.h"
+    #include "wx/window.h"
 #endif
 
-#include "wx/window.h"
 #include "wx/msw/private.h"
 
 #include <windowsx.h>

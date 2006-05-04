@@ -28,9 +28,9 @@
     #include "wx/dc.h"
     #include "wx/utils.h"
     #include "wx/log.h"
+    #include "wx/window.h"
 #endif
 
-#include "wx/window.h"
 #include "wx/palmos/private.h"
 
 #if wxUSE_OWNER_DRAWN

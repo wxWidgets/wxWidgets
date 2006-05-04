@@ -17,9 +17,9 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/dcclient.h"
+    #include "wx/window.h"
 #endif
 
-#include "wx/window.h"
 #include "wx/os2/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)

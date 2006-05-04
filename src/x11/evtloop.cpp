@@ -25,9 +25,9 @@
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
     #include "wx/app.h"
+    #include "wx/window.h"
 #endif
 
-#include "wx/window.h"
 #include "wx/tooltip.h"
 #include "wx/timer.h"
 #include "wx/module.h"

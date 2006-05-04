@@ -15,10 +15,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/window.h"
 #endif // WX_PRECOMP
 
 #include "wx/dc.h"
-#include "wx/window.h"
 #include "wx/timer.h"
 #include "wx/geometry.h"
 #include "wx/mac/uma.h"

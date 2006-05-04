@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbmp.cpp
+// Name:        src/msw/statbmp.cpp
 // Purpose:     wxStaticBitmap
 // Author:      Julian Smart
 // Modified by:
@@ -26,13 +26,14 @@
 
 #if wxUSE_STATBMP
 
-#include "wx/window.h"
-#include "wx/msw/private.h"
+#include "wx/statbmp.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/window.h"
     #include "wx/icon.h"
-    #include "wx/statbmp.h"
 #endif
+
+#include "wx/msw/private.h"
 
 #include "wx/sysopt.h"
 
@@ -276,9 +277,9 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
     if (m_currentHandle != 0 && oldHandle != (HGDIOBJ) m_currentHandle)
     {
         // the static control made a copy and we are responsible for deleting it
-        DeleteObject((HGDIOBJ) oldHandle);      
+        DeleteObject((HGDIOBJ) oldHandle);
     }
-    m_currentHandle = (WXHANDLE)handle;                  	
+    m_currentHandle = (WXHANDLE)handle;
 #endif // Win32
 
     if ( ImageIsOk() )
@@ -303,4 +304,3 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
 }
 
 #endif // wxUSE_STATBMP
-

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbmp.cpp
+// Name:        src/os2/statbmp.cpp
 // Purpose:     wxStaticBitmap
 // Author:      David Webster
 // Modified by:
@@ -12,14 +12,15 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/dcclient.h"
-#include "wx/window.h"
-#include "wx/os2/private.h"
+#include "wx/statbmp.h"
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
-    #include "wx/statbmp.h"
+    #include "wx/window.h"
 #endif
+
+#include "wx/dcclient.h"
+#include "wx/os2/private.h"
 
 #include <stdio.h>
 
@@ -119,7 +120,7 @@ bool wxStaticBitmap::Create( wxWindow*         pParent,
         sError = wxPMErrorToStr(vError);
         return false;
     }
-    wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create static bitmap") );
+    wxCHECK_MSG( m_hWnd, false, wxT("Failed to create static bitmap") );
     m_pImage = ConvertImage(rBitmap);
     ::WinSendMsg(   m_hWnd,
                     SM_SETHANDLE,
@@ -154,12 +155,10 @@ wxSize wxStaticBitmap::DoGetBestSize() const
     return wxWindow::DoGetBestSize();
 }
 
-void wxStaticBitmap::OnPaint (
-  wxPaintEvent&                     WXUNUSED(rEvent)
-)
+void wxStaticBitmap::OnPaint ( wxPaintEvent& WXUNUSED(rEvent) )
 {
-    wxPaintDC                       vDc(this);
-    wxBitmap*                       pBitmap;
+    wxPaintDC vDc(this);
+    wxBitmap* pBitmap;
 
     if (m_pImage->IsKindOf(CLASSINFO(wxIcon)))
     {
@@ -177,14 +176,12 @@ void wxStaticBitmap::OnPaint (
     }
 } // end of wxStaticBitmap::OnPaint
 
-void wxStaticBitmap::SetImage(
-  const wxGDIImage&                 rBitmap
-)
+void wxStaticBitmap::SetImage( const wxGDIImage& rBitmap )
 {
-    int                             nX = 0;
-    int                             nY = 0;
-    int                             nWidth = 0;
-    int                             nHeight = 0;
+    int nX = 0;
+    int nY = 0;
+    int nWidth = 0;
+    int nHeight = 0;
 
     Free();
     ::WinSendMsg( GetHwnd()

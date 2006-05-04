@@ -44,10 +44,10 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/window.h"
 #endif
 
 #include "wx/dcmemory.h"
-#include "wx/window.h"
 #include "wx/image.h"
 #include "wx/math.h"
 

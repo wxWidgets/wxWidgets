@@ -26,13 +26,14 @@
 
 #if wxUSE_STATBMP
 
-#include "wx/window.h"
-#include "wx/palmos/private.h"
+#include "wx/statbmp.h"
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
-    #include "wx/statbmp.h"
+    #include "wx/window.h"
 #endif
+
+#include "wx/palmos/private.h"
 
 // ---------------------------------------------------------------------------
 // macors

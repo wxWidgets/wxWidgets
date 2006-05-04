@@ -77,7 +77,6 @@
 #include "wx/textctrl.h"
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
-#include "wx/window.h"
 
 #include <Window.h>
 

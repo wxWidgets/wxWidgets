@@ -23,12 +23,12 @@
 #ifndef WX_PRECOMP
     #include "wx/object.h"
     #include "wx/log.h"
+    #include "wx/window.h"
 #endif
 
 #include "wx/colour.h"
 #include "wx/font.h"
 #include "wx/bitmap.h"
-#include "wx/window.h"
 #include "wx/listbox.h"
 #include "wx/ownerdrw.h"
 #include "wx/settings.h"

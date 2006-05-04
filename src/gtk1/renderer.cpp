@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/renderer.cpp
+// Name:        src/gtk1/renderer.cpp
 // Purpose:     implementation of wxRendererNative for wxGTK
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -25,10 +25,14 @@
 #endif
 
 #include "wx/renderer.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+#endif
+
 #include <gtk/gtk.h>
 #include "wx/gtk1/win_gtk.h"
 
-#include "wx/window.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
 

@@ -13,7 +13,10 @@
 #if wxUSE_TOOLTIPS
 
 #include "wx/tooltip.h"
-#include "wx/window.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+#endif
 
 #include "wx/gtk/private.h"
 
@@ -52,7 +55,7 @@ void wxToolTip::Apply( wxWindow *win )
 
     m_window = win;
 
-    if (m_text.IsEmpty())
+    if (m_text.empty())
         m_window->ApplyToolTip( ss_tooltips, (wxChar*) NULL );
     else
         m_window->ApplyToolTip( ss_tooltips, m_text );
@@ -83,4 +86,4 @@ void wxToolTip::SetDelay( long msecs )
     gtk_tooltips_set_delay( ss_tooltips, (int)msecs );
 }
 
-#endif
+#endif // wxUSE_TOOLTIPS

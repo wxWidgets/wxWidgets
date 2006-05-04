@@ -1,16 +1,22 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        icon.cpp
+// Name:        src/x11/icon.cpp
 // Purpose:     wxIcon class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/icon.h"
-#include "wx/window.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+#endif
 
 #include "wx/x11/private.h"
 

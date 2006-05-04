@@ -28,10 +28,10 @@
 #ifndef WX_PRECOMP
     #include "wx/event.h"
     #include "wx/app.h"
+    #include "wx/window.h"
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
-#include "wx/window.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

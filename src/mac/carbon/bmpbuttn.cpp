@@ -13,8 +13,11 @@
 
 #if wxUSE_BMPBUTTON
 
-#include "wx/window.h"
 #include "wx/bmpbuttn.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 
@@ -22,12 +25,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 #include "wx/bitmap.h"
 
 bool wxBitmapButton::Create( wxWindow *parent,
-    wxWindowID id, const wxBitmap& bitmap,
-    const wxPoint& pos,
-    const wxSize& size,
-    long style,
-    const wxValidator& validator,
-    const wxString& name )
+                             wxWindowID id, const wxBitmap& bitmap,
+                             const wxPoint& pos,
+                             const wxSize& size,
+                             long style,
+                             const wxValidator& validator,
+                             const wxString& name )
 {
     m_macIsUserPane = false;
 
@@ -55,9 +58,9 @@ bool wxBitmapButton::Create( wxWindow *parent,
     if ( bitmap.Ok() )
     {
         wxSize newSize = DoGetBestSize();
-        if ( width == -1 )
+        if ( width == wxDefaultCoord )
             width = newSize.x;
-        if ( height == -1 )
+        if ( height == wxDefaultCoord )
             height = newSize.y;
     }
 

@@ -17,9 +17,9 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/window.h"
 #endif
 
-#include "wx/window.h"
 #include "wx/frame.h"
 #include "wx/button.h"
 #include "wx/gdicmn.h"

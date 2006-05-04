@@ -18,6 +18,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/window.h"
 #endif
 
 #define INCL_PM
@@ -25,8 +26,6 @@
 #include "wx/os2/private.h"
 
 #define NO_JOYGETPOSEX
-
-#include "wx/window.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
 

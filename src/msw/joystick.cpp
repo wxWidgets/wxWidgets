@@ -22,9 +22,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/window.h"
 #endif
 
-#include "wx/window.h"
 #include "wx/msw/private.h"
 
 #if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
@@ -36,7 +36,6 @@
 #define NO_JOYGETPOSEX
 #endif
 
-#include "wx/window.h"
 #include "wx/msw/registry.h"
 
 #include <regstr.h>

@@ -21,9 +21,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/window.h"
 #endif
 
-#include "wx/window.h"
 #include "wx/sizer.h"
 #include "wx/panel.h"
 

@@ -21,9 +21,8 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/window.h"
 #endif
-
-#include "wx/window.h"
 
 #if wxUSE_IMAGE
     #include "wx/image.h"

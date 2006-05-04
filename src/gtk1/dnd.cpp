@@ -19,9 +19,9 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/window.h"
 #endif
 
-#include "wx/window.h"
 #include "wx/gdicmn.h"
 
 #include "wx/gtk1/private.h"

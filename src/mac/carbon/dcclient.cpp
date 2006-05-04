@@ -15,11 +15,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/window.h"
 #endif
 
 #include "wx/dcmemory.h"
 #include "wx/region.h"
-#include "wx/window.h"
 #include "wx/toplevel.h"
 #include "wx/settings.h"
 #include "wx/math.h"

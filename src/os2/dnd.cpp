@@ -18,9 +18,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/window.h"
 #endif
 
-#include "wx/window.h"
 #include "wx/gdicmn.h"
 
 #define INCL_PM

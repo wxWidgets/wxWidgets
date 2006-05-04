@@ -28,12 +28,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/window.h" // for wxTopLevelWindows
 #endif
 
 #include "wx/apptrait.h"
 #include "wx/msgdlg.h"
 #include "wx/cursor.h"
-#include "wx/window.h" // for wxTopLevelWindows
 
 #include <ctype.h>
 #include <stdarg.h>

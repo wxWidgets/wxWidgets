@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcscreen.cpp
+// Name:        src/gtk/dcscreen.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -11,7 +11,10 @@
 #include "wx/wxprec.h"
 
 #include "wx/dcscreen.h"
-#include "wx/window.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+#endif
 
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
@@ -33,7 +36,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC,wxPaintDC)
 
 wxScreenDC::wxScreenDC()
 {
-    m_ok = FALSE;
+    m_ok = false;
     m_cmap = gdk_colormap_get_system();
     m_window = gdk_get_default_root_window();
 
@@ -44,7 +47,7 @@ wxScreenDC::wxScreenDC()
     m_layout = pango_layout_new( m_context );
 //    m_fontdesc = pango_font_description_copy( widget->style->font_desc );
 
-    m_isScreenDC = TRUE;
+    m_isScreenDC = true;
 
     SetUpDC();
 

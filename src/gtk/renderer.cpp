@@ -25,10 +25,14 @@
 #endif
 
 #include "wx/renderer.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+#endif
+
 #include <gtk/gtk.h>
 #include "wx/gtk/win_gtk.h"
 
-#include "wx/window.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
 #include "wx/settings.h"
@@ -436,7 +440,7 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     DrawDropArrow(win,dc,rect);
 }
 
-void 
+void
 wxRendererGTK::DrawCheckBox(wxWindow *win,
                             wxDC& dc,
                             const wxRect& rect,
@@ -468,8 +472,8 @@ wxRendererGTK::DrawCheckBox(wxWindow *win,
         NULL,
         button,
         "cellcheck",
-        dc.LogicalToDeviceX(rect.x)+2, 
-        dc.LogicalToDeviceY(rect.y)+3, 
+        dc.LogicalToDeviceX(rect.x)+2,
+        dc.LogicalToDeviceY(rect.y)+3,
         13, 13
     );
 }
@@ -511,11 +515,11 @@ wxRendererGTK::DrawPushButton(wxWindow *win,
     );
 }
 
-void 
+void
 wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
-                                       wxDC& dc,
-                                       const wxRect& rect,
-                                       int flags )
+                                     wxDC& dc,
+                                     const wxRect& rect,
+                                     int flags )
 {
     // for reason why we do this, see DrawDropArrow
     wxWindowDC& wdc = (wxWindowDC&)dc;
@@ -533,7 +537,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
                         GTK_PIZZA(win->m_wxwindow)->bin_window,
                         state,
                         GTK_SHADOW_NONE,
-                        NULL, 
+                        NULL,
                         win->m_wxwindow,
                         "treeview",
                         dc.LogicalToDeviceX(rect.x),
