@@ -513,34 +513,26 @@ void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
 {
     static wxString s_tip = _T("This is a tooltip");
 
-    wxString s = wxGetTextFromUser
-                 (
-                    _T("Tooltip text: "),
-                    _T("Widgets sample"),
-                    s_tip,
-                    this
-                 );
+    wxTextEntryDialog dialog
+                      (
+                        this,
+                        _T("Tooltip text (may use \\n, leave empty to remove): "),
+                        _T("Widgets sample"),
+                        s_tip
+                      );
 
-    if ( s.empty() )
+    if ( dialog.ShowModal() != wxID_OK )
         return;
 
-    s_tip = s;
-
-    if( wxMessageBox( _T("Test multiline tooltip text?"),
-                      _T("Widgets sample"),
-                      wxYES_NO,
-                      this
-                    ) == wxYES )
-    {
-        s = _T("#1 ") + s_tip + _T("\n") + _T("#2 ") + s_tip;
-    }
+    s_tip = dialog.GetValue();
+    s_tip.Replace("\\n", "\n");
 
     WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
-    page->GetWidget()->SetToolTip(s);
+    page->GetWidget()->SetToolTip(s_tip);
 
     wxControl *ctrl2 = page->GetWidget2();
     if ( ctrl2 )
-        ctrl2->SetToolTip(s);
+        ctrl2->SetToolTip(s_tip);
 }
 
 #endif // wxUSE_TOOLTIPS
