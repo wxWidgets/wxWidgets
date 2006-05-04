@@ -282,5 +282,3 @@ fi
 if [ "$SPINDOCS" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
   dospindocs
 fi
-
-docopydocs
