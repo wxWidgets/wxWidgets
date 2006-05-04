@@ -219,7 +219,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     unsigned int num_of_cols = GetColumnCount();
     unsigned int num_of_rows = GetRowCount();
 
-    GtkRadioButton *m_radio = (GtkRadioButton*) NULL;
+    GtkRadioButton *rbtn = (GtkRadioButton*) NULL;
 
     GtkWidget *table = gtk_table_new( num_of_rows, num_of_cols, FALSE );
     gtk_table_set_col_spacings( GTK_TABLE(table), 1 );
@@ -232,7 +232,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     for (unsigned int i = 0; i < (unsigned int)n; i++)
     {
         if ( i != 0 )
-            radio_button_group = gtk_radio_button_get_group( GTK_RADIO_BUTTON(m_radio) );
+            radio_button_group = gtk_radio_button_get_group( GTK_RADIO_BUTTON(rbtn) );
 
         label.Empty();
         for ( const wxChar *pc = choices[i]; *pc; pc++ )
@@ -241,13 +241,13 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
                 label += *pc;
         }
 
-        m_radio = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, wxGTK_CONV( label ) ) );
-        gtk_widget_show( GTK_WIDGET(m_radio) );
+        rbtn = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, wxGTK_CONV( label ) ) );
+        gtk_widget_show( GTK_WIDGET(rbtn) );
 
-        g_signal_connect (m_radio, "key_press_event",
+        g_signal_connect (rbtn, "key_press_event",
                           G_CALLBACK (gtk_radiobox_keypress_callback), this);
 
-        m_boxes.Append( (wxObject*) m_radio );
+        m_boxes.Append( (wxObject*) rbtn );
 
         if (HasFlag(wxRA_SPECIFY_COLS))
         {
@@ -255,7 +255,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
             int right = (i%num_of_cols) + 1;
             int top = i/num_of_cols;
             int bottom = (i/num_of_cols)+1;
-            gtk_table_attach( GTK_TABLE(table), GTK_WIDGET(m_radio), left, right, top, bottom,
+            gtk_table_attach( GTK_TABLE(table), GTK_WIDGET(rbtn), left, right, top, bottom,
                   GTK_FILL, GTK_FILL, 1, 1 );
         }
         else
@@ -264,20 +264,20 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
             int right = (i/num_of_rows) + 1;
             int top = i%num_of_rows;
             int bottom = (i%num_of_rows)+1;
-            gtk_table_attach( GTK_TABLE(table), GTK_WIDGET(m_radio), left, right, top, bottom,
+            gtk_table_attach( GTK_TABLE(table), GTK_WIDGET(rbtn), left, right, top, bottom,
                   GTK_FILL, GTK_FILL, 1, 1 );
         }
 
-        ConnectWidget( GTK_WIDGET(m_radio) );
+        ConnectWidget( GTK_WIDGET(rbtn) );
 
         if (!i)
-            gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(m_radio), TRUE );
+            gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(rbtn), TRUE );
 
-        g_signal_connect (m_radio, "clicked",
+        g_signal_connect (rbtn, "clicked",
                           G_CALLBACK (gtk_radiobutton_clicked_callback), this);
-        g_signal_connect (m_radio, "focus_in_event",
+        g_signal_connect (rbtn, "focus_in_event",
                           G_CALLBACK (gtk_radiobutton_focus_in), this);
-        g_signal_connect (m_radio, "focus_out_event",
+        g_signal_connect (rbtn, "focus_out_event",
                           G_CALLBACK (gtk_radiobutton_focus_out), this);
     }
 
