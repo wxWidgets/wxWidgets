@@ -16,6 +16,7 @@
 #include "wx/wxPython/wxPython_int.h"
 #include "wx/wxPython/pyistream.h"
 #include "wx/wxPython/swigver.h"
+#include "wx/wxPython/twoitem.h"
 
 #ifdef __WXMSW__
 #include <wx/msw/private.h>
@@ -469,8 +470,19 @@ void wxPyApp::_BootstrapApp()
     // It's now ok to generate exceptions for assertion errors.
     wxPythonApp->SetStartupComplete(true);
 
-    // Call the Python wxApp's OnInit function
+   
+    // Call the Python wxApp's OnPreInit and OnInit functions
     blocked = wxPyBeginBlockThreads();
+    if (wxPyCBH_findCallback(m_myInst, "OnPreInit")) {
+        PyObject* method = m_myInst.GetLastFound();
+        PyObject* argTuple = PyTuple_New(0);
+        retval = PyEval_CallObject(method, argTuple);
+        m_myInst.clearRecursionGuard(method);
+        Py_DECREF(argTuple);
+        Py_DECREF(method);
+        if (retval == NULL)
+            goto error;
+    }
     if (wxPyCBH_findCallback(m_myInst, "OnInit")) {
 
         PyObject* method = m_myInst.GetLastFound();

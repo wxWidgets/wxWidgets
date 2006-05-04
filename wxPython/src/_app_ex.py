@@ -173,6 +173,15 @@ your Mac."""
         self._BootstrapApp()
 
 
+    def OnPreInit(self):
+        """
+        Things that must be done after _BootstrapApp has done its
+        thing, but would be nice if they were already done by the time
+        that OnInit is called.
+        """
+        wx.StockGDI._initStockObjects()
+        
+
     def __del__(self, destroy=wx.PyApp.__del__):
         self.RestoreStdio()  # Just in case the MainLoop was overridden
         destroy(self)

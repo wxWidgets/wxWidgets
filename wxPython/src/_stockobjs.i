@@ -70,80 +70,52 @@ public:
     static const wxPen* GetPen(Item item);
 
     virtual const wxFont* GetFont(Item item);
+
+    %pythoncode {
+    def _initStockObjects():
+        import wx
+        wx.ITALIC_FONT  = StockGDI.instance().GetFont(StockGDI.FONT_ITALIC)
+        wx.NORMAL_FONT  = StockGDI.instance().GetFont(StockGDI.FONT_NORMAL)
+        wx.SMALL_FONT   = StockGDI.instance().GetFont(StockGDI.FONT_SMALL)
+        wx.SWISS_FONT   = StockGDI.instance().GetFont(StockGDI.FONT_SWISS)
+                                              
+        wx.BLACK_DASHED_PEN  = StockGDI.GetPen(StockGDI.PEN_BLACKDASHED)
+        wx.BLACK_PEN         = StockGDI.GetPen(StockGDI.PEN_BLACK)
+        wx.CYAN_PEN          = StockGDI.GetPen(StockGDI.PEN_CYAN)
+        wx.GREEN_PEN         = StockGDI.GetPen(StockGDI.PEN_GREEN)
+        wx.GREY_PEN          = StockGDI.GetPen(StockGDI.PEN_GREY)
+        wx.LIGHT_GREY_PEN    = StockGDI.GetPen(StockGDI.PEN_LIGHTGREY)
+        wx.MEDIUM_GREY_PEN   = StockGDI.GetPen(StockGDI.PEN_MEDIUMGREY)
+        wx.RED_PEN           = StockGDI.GetPen(StockGDI.PEN_RED)
+        wx.TRANSPARENT_PEN   = StockGDI.GetPen(StockGDI.PEN_TRANSPARENT)
+        wx.WHITE_PEN         = StockGDI.GetPen(StockGDI.PEN_WHITE)
+
+        wx.BLACK_BRUSH        = StockGDI.GetBrush(StockGDI.BRUSH_BLACK)
+        wx.BLUE_BRUSH         = StockGDI.GetBrush(StockGDI.BRUSH_BLUE)
+        wx.CYAN_BRUSH         = StockGDI.GetBrush(StockGDI.BRUSH_CYAN)
+        wx.GREEN_BRUSH        = StockGDI.GetBrush(StockGDI.BRUSH_GREEN)
+        wx.GREY_BRUSH         = StockGDI.GetBrush(StockGDI.BRUSH_GREY)
+        wx.LIGHT_GREY_BRUSH   = StockGDI.GetBrush(StockGDI.BRUSH_LIGHTGREY)
+        wx.MEDIUM_GREY_BRUSH  = StockGDI.GetBrush(StockGDI.BRUSH_MEDIUMGREY)
+        wx.RED_BRUSH          = StockGDI.GetBrush(StockGDI.BRUSH_RED)
+        wx.TRANSPARENT_BRUSH  = StockGDI.GetBrush(StockGDI.BRUSH_TRANSPARENT)
+        wx.WHITE_BRUSH        = StockGDI.GetBrush(StockGDI.BRUSH_WHITE)
+
+        wx.BLACK       = StockGDI.GetColour(StockGDI.COLOUR_BLACK)
+        wx.BLUE        = StockGDI.GetColour(StockGDI.COLOUR_BLUE)
+        wx.CYAN        = StockGDI.GetColour(StockGDI.COLOUR_CYAN)
+        wx.GREEN       = StockGDI.GetColour(StockGDI.COLOUR_GREEN)
+        wx.LIGHT_GREY  = StockGDI.GetColour(StockGDI.COLOUR_LIGHTGREY)
+        wx.RED         = StockGDI.GetColour(StockGDI.COLOUR_RED)
+        wx.WHITE       = StockGDI.GetColour(StockGDI.COLOUR_WHITE)
+    
+        wx.CROSS_CURSOR      = StockGDI.GetCursor(StockGDI.CURSOR_CROSS)
+        wx.HOURGLASS_CURSOR  = StockGDI.GetCursor(StockGDI.CURSOR_HOURGLASS)
+        wx.STANDARD_CURSOR   = StockGDI.GetCursor(StockGDI.CURSOR_STANDARD)
+        
+    _initStockObjects = staticmethod(_initStockObjects)
+    }
 };
-
-
-%pythoncode {
-%# This function makes a class used to do delayed initialization of some
-%# stock wx objects.  When they are used the first time then an init function
-%# is called to make the real instance, which is then used to replace the
-%# original instance and class seen by the programmer.
-def _wxPyMakeDelayedInitWrapper(initFunc):
-    class _wxPyStockObjectWrapper(object):
-        def __init__(self, *args):
-            self._args = args
-        def __getattr__(self, name):
-            obj = initFunc(*self._args)
-            self.__class__ = obj.__class__
-            self.__dict__ = obj.__dict__
-            return getattr(self, name)
-        def __str__(self):
-            return self.__getattr__("__str__")()
-        def __repr__(self):
-            return self.__getattr__("__repr__")()
-    return _wxPyStockObjectWrapper
-    
-def _wxPyFontInit(id):
-    return StockGDI.instance().GetFont(id)
-                                              
-_wxPyStockPen    = _wxPyMakeDelayedInitWrapper(StockGDI.GetPen)
-_wxPyStockBrush  = _wxPyMakeDelayedInitWrapper(StockGDI.GetBrush)
-_wxPyStockCursor = _wxPyMakeDelayedInitWrapper(StockGDI.GetCursor)
-_wxPyStockColour = _wxPyMakeDelayedInitWrapper(StockGDI.GetColour)                    
-_wxPyStockFont   = _wxPyMakeDelayedInitWrapper(_wxPyFontInit)
-
-
-ITALIC_FONT  = _wxPyStockCursor(StockGDI.FONT_ITALIC)
-NORMAL_FONT  = _wxPyStockCursor(StockGDI.FONT_NORMAL)
-SMALL_FONT   = _wxPyStockCursor(StockGDI.FONT_SMALL)
-SWISS_FONT   = _wxPyStockCursor(StockGDI.FONT_SWISS)
-                                              
-BLACK_DASHED_PEN  = _wxPyStockPen(StockGDI.PEN_BLACKDASHED)
-BLACK_PEN         = _wxPyStockPen(StockGDI.PEN_BLACK)
-CYAN_PEN          = _wxPyStockPen(StockGDI.PEN_CYAN)
-GREEN_PEN         = _wxPyStockPen(StockGDI.PEN_GREEN)
-GREY_PEN          = _wxPyStockPen(StockGDI.PEN_GREY)
-LIGHT_GREY_PEN    = _wxPyStockPen(StockGDI.PEN_LIGHTGREY)
-MEDIUM_GREY_PEN   = _wxPyStockPen(StockGDI.PEN_MEDIUMGREY)
-RED_PEN           = _wxPyStockPen(StockGDI.PEN_RED)
-TRANSPARENT_PEN   = _wxPyStockPen(StockGDI.PEN_TRANSPARENT)
-WHITE_PEN         = _wxPyStockPen(StockGDI.PEN_WHITE)
-
-BLACK_BRUSH        = _wxPyStockBrush(StockGDI.BRUSH_BLACK)
-BLUE_BRUSH         = _wxPyStockBrush(StockGDI.BRUSH_BLUE)
-CYAN_BRUSH         = _wxPyStockBrush(StockGDI.BRUSH_CYAN)
-GREEN_BRUSH        = _wxPyStockBrush(StockGDI.BRUSH_GREEN)
-GREY_BRUSH         = _wxPyStockBrush(StockGDI.BRUSH_GREY)
-LIGHT_GREY_BRUSH   = _wxPyStockBrush(StockGDI.BRUSH_LIGHTGREY)
-MEDIUM_GREY_BRUSH  = _wxPyStockBrush(StockGDI.BRUSH_MEDIUMGREY)
-RED_BRUSH          = _wxPyStockBrush(StockGDI.BRUSH_RED)
-TRANSPARENT_BRUSH  = _wxPyStockBrush(StockGDI.BRUSH_TRANSPARENT)
-WHITE_BRUSH        = _wxPyStockBrush(StockGDI.BRUSH_WHITE)
-
-BLACK       = _wxPyStockColour(StockGDI.COLOUR_BLACK)
-BLUE        = _wxPyStockColour(StockGDI.COLOUR_BLUE)
-CYAN        = _wxPyStockColour(StockGDI.COLOUR_CYAN)
-GREEN       = _wxPyStockColour(StockGDI.COLOUR_GREEN)
-LIGHT_GREY  = _wxPyStockColour(StockGDI.COLOUR_LIGHTGREY)
-RED         = _wxPyStockColour(StockGDI.COLOUR_RED)
-WHITE       = _wxPyStockColour(StockGDI.COLOUR_WHITE)
-    
-CROSS_CURSOR      = _wxPyStockCursor(StockGDI.CURSOR_CROSS)
-HOURGLASS_CURSOR  = _wxPyStockCursor(StockGDI.CURSOR_HOURGLASS)
-STANDARD_CURSOR   = _wxPyStockCursor(StockGDI.CURSOR_STANDARD)
-    
-}
-
 
 
 
@@ -161,29 +133,6 @@ const wxColour wxNullColour;
 
 %threadWrapperOn;
 %mutable;
-
-
-// %inline {
-//     const wxBitmap& _wxPyInitNullBitmap() { return wxNullBitmap; }
-//     const wxIcon&   _wxPyInitNullIcon() { return wxNullIcon; }
-//     const wxCursor& _wxPyInitNullCursor() { return wxNullCursor; }
-//     const wxPen&    _wxPyInitNullPen() { return wxNullPen; }
-//     const wxBrush&  _wxPyInitNullBrush() { return wxNullBrush; }
-//     const wxPalette& _wxPyInitNullPalette() { return wxNullPalette; }
-//     const wxFont&   _wxPyInitNullFont() { return wxNullFont; }
-//     const wxColour& _wxPyInitNullColour() { return wxNullColour; }
-// }
-
-// %pythoncode {
-// NullBitmap   = _wxPyMakeDelayedInitWrapper(_wxPyInitNullBitmap)()
-// NullIcon     = _wxPyMakeDelayedInitWrapper(_wxPyInitNullIcon)()
-// NullCursor   = _wxPyMakeDelayedInitWrapper(_wxPyInitNullCursor)()
-// NullPen      = _wxPyMakeDelayedInitWrapper(_wxPyInitNullPen)()
-// NullBrush    = _wxPyMakeDelayedInitWrapper(_wxPyInitNullBrush)()
-// NullPalette  = _wxPyMakeDelayedInitWrapper(_wxPyInitNullPalette)()
-// NullFont     = _wxPyMakeDelayedInitWrapper(_wxPyInitNullFont)()
-// NullColour   = _wxPyMakeDelayedInitWrapper(_wxPyInitNullColour)()   
-// }
 
 
 //---------------------------------------------------------------------------
@@ -280,6 +229,25 @@ public:
 }
 
 %pythoncode {
+%# This function makes a class used to do delayed initialization of some
+%# stock wx objects.  When they are used the first time then an init function
+%# is called to make the real instance, which is then used to replace the
+%# original instance and class seen by the programmer.
+def _wxPyMakeDelayedInitWrapper(initFunc):
+    class _wxPyStockObjectWrapper(object):
+        def __init__(self, *args):
+            self._args = args
+        def __getattr__(self, name):
+            obj = initFunc(*self._args)
+            self.__class__ = obj.__class__
+            self.__dict__ = obj.__dict__
+            return getattr(self, name)
+        def __str__(self):
+            return self.__getattr__("__str__")()
+        def __repr__(self):
+            return self.__getattr__("__repr__")()
+    return _wxPyStockObjectWrapper
+    
 wxTheFontList       = _wxPyMakeDelayedInitWrapper(_wxPyInitTheFontList)()
 wxThePenList        = _wxPyMakeDelayedInitWrapper(_wxPyInitThePenList)()
 wxTheBrushList      = _wxPyMakeDelayedInitWrapper(_wxPyInitTheBrushList)()

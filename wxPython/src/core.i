@@ -15,6 +15,7 @@
 %{
 #include "wx/wxPython/wxPython_int.h"
 #include "wx/wxPython/pyclasses.h"
+#include "wx/wxPython/twoitem.h"
 %}
 
 
