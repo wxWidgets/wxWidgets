@@ -665,7 +665,13 @@ Window Styles
     wx.PD_CAN_ABORT          This flag tells the dialog that it should have
                              a \"Cancel\" button which the user may press. If
                              this happens, the next call to Update() will
-                             return false.
+                             return False in the first component of its return
+                             value.
+
+    wx.PD_CAN_SKIP           This flag tells the dialog that it should have a
+                             \"Skip\" button which the user may press. If this
+                             happens, the next call to Update() will return
+                             True in the second component of its return value.
 
     wx.PD_ELAPSED_TIME       This flag tells the dialog that it should show
                              elapsed time (since creating the dialog).
@@ -703,17 +709,22 @@ parent window only.", "");
     // TODO: support getting the skipped value back in the return value, but
     // only if style is set.  This is so the API doesn't change for existing
     // users...
-    DocDeclStr(
-        virtual bool , Update(int value, const wxString& newmsg = wxPyEmptyString),
+    DocDeclAStr(
+        virtual bool , Update(int value, const wxString& newmsg = wxPyEmptyString,
+                              bool *OUTPUT),
+        "Update(self, int value, String newmsg) --> (continue, skip)",
         "Updates the dialog, setting the progress bar to the new value and, if
 given changes the message above it. The value given should be less
 than or equal to the maximum value given to the constructor and the
-dialog is closed if it is equal to the maximum.  Returns True unless
-the Cancel button has been pressed.
+dialog is closed if it is equal to the maximum.  Returns a tuple of
+boolean values, ``(continue, skip)`` where ``continue`` is ``True``
+unless the Cancel button has been pressed, and ``skip`` is ``False``
+unless the Skip button (if any) has been pressed.
 
-If false is returned, the application can either immediately destroy
-the dialog or ask the user for the confirmation and if the abort is
-not confirmed the dialog may be resumed with Resume function.", "");
+If the ``continue`` return value is ``false``, the application can either
+immediately destroy the dialog or ask the user for confirmation, and if the
+abort is not confirmed the dialog may be resumed with `Resume` function.
+", "");
     
     DocDeclStr(
         void , Resume(),
