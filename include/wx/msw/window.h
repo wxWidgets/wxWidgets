@@ -187,6 +187,11 @@ public:
     // MSW only: true if this control is part of the main control
     virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return false; };
 
+#if wxUSE_TOOLTIPS
+    // MSW only: true if this window or any of its children have a tooltip
+    virtual bool HasToolTips() const { return GetToolTip() != NULL; }
+#endif // wxUSE_TOOLTIPS
+
     // translate wxWidgets style flags for this control into the Windows style
     // and optional extended style for the corresponding native control
     //

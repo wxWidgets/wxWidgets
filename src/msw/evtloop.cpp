@@ -141,11 +141,10 @@ bool wxEventLoop::PreProcessMessage(WXMSG *msg)
     // popup the tooltip bubbles
     if ( msg->message == WM_MOUSEMOVE )
     {
-        wxToolTip *tt = wndThis->GetToolTip();
-        if ( tt )
-        {
-            tt->RelayEvent((WXMSG *)msg);
-        }
+        // we should do it if one of window children has an associated tooltip
+        // (and not just if the window has a tooltip itself)
+        if ( wndThis->HasToolTips() )
+            wxToolTip::RelayEvent((WXMSG *)msg);
     }
 #endif // wxUSE_TOOLTIPS
 
