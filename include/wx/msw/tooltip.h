@@ -45,6 +45,9 @@ public:
     // add a window to the tooltip control
     void Add(WXHWND hwnd);
 
+    // remove any tooltip from the window
+    static void Remove(WXHWND hwnd);
+
 private:
     // the one and only one tooltip control we use - never access it directly
     // but use GetToolTipCtrl() which will create it when needed

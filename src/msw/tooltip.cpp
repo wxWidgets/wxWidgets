@@ -103,23 +103,20 @@ public:
 // private functions
 // ----------------------------------------------------------------------------
 
-// send a message to the tooltip control
-inline LRESULT SendTooltipMessage(WXHWND hwnd,
-                                  UINT msg,
-                                  WPARAM wParam,
-                                  void *lParam)
+// send a message to the tooltip control if it exists
+//
+// NB: wParam is always 0 for the TTM_XXX messages we use
+static inline LRESULT SendTooltipMessage(WXHWND hwnd, UINT msg, void *lParam)
 {
-    return hwnd ? ::SendMessage((HWND)hwnd, msg, wParam, (LPARAM)lParam)
-                : 0;
+    return hwnd ? ::SendMessage((HWND)hwnd, msg, 0, (LPARAM)lParam) : 0;
 }
 
 // send a message to all existing tooltip controls
-static void SendTooltipMessageToAll(WXHWND hwnd,
-                                    UINT msg,
-                                    WPARAM wParam,
-                                    LPARAM lParam)
+static inline void
+SendTooltipMessageToAll(WXHWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    (void)SendTooltipMessage((WXHWND)hwnd, msg, wParam, (void *)lParam);
+    if ( hwnd )
+        ::SendMessage((HWND)hwnd, msg, wParam, lParam);
 }
 
 // ============================================================================
@@ -227,7 +224,7 @@ WXHWND wxToolTip::GetToolTipCtrl()
 
 void wxToolTip::RelayEvent(WXMSG *msg)
 {
-    (void)SendTooltipMessage(GetToolTipCtrl(), TTM_RELAYEVENT, 0, msg);
+    (void)SendTooltipMessage(GetToolTipCtrl(), TTM_RELAYEVENT, msg);
 }
 
 // ----------------------------------------------------------------------------
@@ -253,13 +250,18 @@ wxToolTip::~wxToolTip()
 // others
 // ----------------------------------------------------------------------------
 
+void wxToolTip::Remove(WXHWND hWnd)
+{
+    wxToolInfo ti((HWND)hWnd);
+    (void)SendTooltipMessage(GetToolTipCtrl(), TTM_DELTOOL, &ti);
+}
+
 void wxToolTip::Remove()
 {
     // remove this tool from the tooltip control
     if ( m_window )
     {
-        wxToolInfo ti(GetHwndOf(m_window));
-        (void)SendTooltipMessage(GetToolTipCtrl(), TTM_DELTOOL, 0, &ti);
+        Remove(m_window->GetHWND());
     }
 }
 
@@ -278,7 +280,7 @@ void wxToolTip::Add(WXHWND hWnd)
     ti.hwnd = hwnd;
     ti.lpszText = (wxChar *)m_text.c_str(); // const_cast
 
-    if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, 0, &ti) )
+    if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
     {
         wxLogDebug(_T("Failed to create the tooltip '%s'"), m_text.c_str());
     }
@@ -294,9 +296,9 @@ void wxToolTip::Add(WXHWND hWnd)
             {
                 // use TTM_SETMAXTIPWIDTH to make tooltip multiline using the
                 // extent of its first line as max value
-                HFONT hfont = (HFONT)SendTooltipMessage(GetToolTipCtrl(),
-                                                        WM_GETFONT,
-                                                        0, 0);
+                HFONT hfont = (HFONT)
+                    SendTooltipMessage(GetToolTipCtrl(), WM_GETFONT, 0);
+
                 if ( !hfont )
                 {
                     hfont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
@@ -324,7 +326,7 @@ void wxToolTip::Add(WXHWND hWnd)
                 }
 
                 SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
-                                   0, (void *)sz.cx);
+                                        (void *)sz.cx);
             }
             else
 #endif // comctl32.dll >= 4.70
@@ -334,7 +336,7 @@ void wxToolTip::Add(WXHWND hWnd)
                 m_text.Replace(_T("\n"), _T(" "));
                 ti.lpszText = (wxChar *)m_text.c_str(); // const_cast
 
-                if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, 0, &ti) )
+                if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
                 {
                     wxLogDebug(_T("Failed to create the tooltip '%s'"), m_text.c_str());
                 }
@@ -408,7 +410,7 @@ void wxToolTip::SetTip(const wxString& tip)
         wxToolInfo ti(GetHwndOf(m_window));
         ti.lpszText = (wxChar *)m_text.c_str();
 
-        (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, 0, &ti);
+        (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
     }
 }
 
