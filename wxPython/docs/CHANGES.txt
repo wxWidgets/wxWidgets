@@ -120,16 +120,23 @@ source of the clipboard or DnD operation, and then you'll know which
 of the component data objects to use to access the data.
 
 Changed how the stock objects (wx.RED, wx.RED_PEN, wx.RED_BRUSH, etc.)
-are initialized.  They are now created as a wrapper object that
-initializes itself on first use (when an attribute of the object is
-requested.)  This was needed because of similar delayed initialization
+are initialized.  They are now created after the wx.App has been
+created, but before OnInit is called, so if you use any of these
+objects before the wx.App is created you will need to adjust your
+code.  This was needed because of some delayed initialization
 functionality that was implemented in wxWidgets, but the end result is
 cleaner for wxPython as well, and allowed me to remove some ugly code
-under the covers.
+previously hidden under the covers.
 
 Added wx.StandardPaths.GetDocumentsDir.
 
 Added wx.RendererNative.DrawCheckButton.
+
+wx.ProgressDialog.Update now returns a tuple of two values.  The first
+is a continue flag (what was returned before) and the second is a skip
+flag.  If the dialog has the wx.PD_CAN_SKIP flag and if the Skip
+button is clicked, then the skip flag is set to True the next time
+Update is called.
 
 
 
