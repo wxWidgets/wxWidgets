@@ -194,6 +194,7 @@ void wxToolTip::SetDelay(long milliseconds)
 // ---------------------------------------------------------------------------
 
 // create the tooltip ctrl for our parent frame if it doesn't exist yet
+/* static */
 WXHWND wxToolTip::GetToolTipCtrl()
 {
     if ( !ms_hwndTT )
@@ -222,6 +223,7 @@ WXHWND wxToolTip::GetToolTipCtrl()
     return ms_hwndTT;
 }
 
+/* static */
 void wxToolTip::RelayEvent(WXMSG *msg)
 {
     (void)SendTooltipMessage(GetToolTipCtrl(), TTM_RELAYEVENT, msg);
