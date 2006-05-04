@@ -24,7 +24,7 @@
 // global data
 //-----------------------------------------------------------------------------
 
-static GtkTooltips *ss_tooltips = (GtkTooltips*) NULL;
+static GtkTooltips *gs_tooltips = (GtkTooltips*) NULL;
 
 //-----------------------------------------------------------------------------
 // wxToolTip
@@ -48,27 +48,27 @@ void wxToolTip::Apply( wxWindow *win )
 {
     if (!win) return;
 
-    if (!ss_tooltips)
+    if (!gs_tooltips)
     {
-        ss_tooltips = gtk_tooltips_new();
+        gs_tooltips = gtk_tooltips_new();
     }
 
     m_window = win;
 
     if (m_text.empty())
-        m_window->ApplyToolTip( ss_tooltips, (wxChar*) NULL );
+        m_window->ApplyToolTip( gs_tooltips, (wxChar*) NULL );
     else
-        m_window->ApplyToolTip( ss_tooltips, m_text );
+        m_window->ApplyToolTip( gs_tooltips, m_text );
 }
 
 void wxToolTip::Enable( bool flag )
 {
-    if (!ss_tooltips) return;
+    if (!gs_tooltips) return;
 
     if (flag)
-        gtk_tooltips_enable( ss_tooltips );
+        gtk_tooltips_enable( gs_tooltips );
     else
-        gtk_tooltips_disable( ss_tooltips );
+        gtk_tooltips_disable( gs_tooltips );
 }
 
 G_BEGIN_DECLS
@@ -78,12 +78,12 @@ G_END_DECLS
 
 void wxToolTip::SetDelay( long msecs )
 {
-    if (!ss_tooltips)
+    if (!gs_tooltips)
         return;
 
     // FIXME: This is a deprecated function and might not even have an effect.
     // Try to not use it, after which remove the prototype above.
-    gtk_tooltips_set_delay( ss_tooltips, (int)msecs );
+    gtk_tooltips_set_delay( gs_tooltips, (int)msecs );
 }
 
 #endif // wxUSE_TOOLTIPS
