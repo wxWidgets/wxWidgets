@@ -184,14 +184,41 @@ you need. ``flags`` may have the ``wx.CONTROL_PRESSED`` or
     
 
     DocDeclStr(
-        virtual void , DrawCheckButton(wxWindow *win,
-                                       wxDC& dc,
-                                       const wxRect& rect,
-                                       int flags = 0),
+        virtual void , DrawCheckBox(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0),
         "Draw a check button.  Flags may use wx.CONTROL_CHECKED,
 wx.CONTROL_UNDETERMINED and wx.CONTROL_CURRENT.", "");
     
 
+    DocDeclStr(
+        virtual void , DrawPushButton(wxWindow *win,
+                                      wxDC& dc,
+                                      const wxRect& rect,
+                                      int flags = 0),
+        "Draw a blank button.  Flags may be wx.CONTROL_PRESSED, wx.CONTROL_CURRENT and
+wx.CONTROL_ISDEFAULT", "");
+    
+
+    DocDeclStr(
+        virtual void , DrawItemSelectionRect(wxWindow *win,
+                                             wxDC& dc,
+                                             const wxRect& rect,
+                                             int flags = 0),
+        "Draw rectangle indicating that an item in e.g. a list control has been
+selected or focused
+
+The flags parameter may be:
+
+    ====================  ============================================
+    wx.CONTROL_SELECTED   item is selected, e.g. draw background
+    wx.CONTROL_CURRENT    item is the current item, e.g. dotted border
+    wx.CONTROL_FOCUSED    the whole control has focus, e.g. blue
+                          background vs. grey otherwise
+    ====================  ============================================
+", "");
+    
     
     DocDeclStr(
         virtual wxSplitterRenderParams , GetSplitterParams(const wxWindow *win),
