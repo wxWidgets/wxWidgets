@@ -226,7 +226,8 @@ protected:                                                          \
   void pop_back() { RemoveAt(size() - 1); }                         \
   void push_back(const value_type& v) { Add(v); }                   \
   void reserve(size_type n) { if(n > m_nSize) Realloc(n); }         \
-  void resize(size_type n, value_type v = value_type());            \
+  void resize(size_type n, value_type v = value_type())             \
+    { SetCount(n, v); }                                             \
                                                                     \
   iterator begin() { return m_pItems; }                             \
   iterator end() { return m_pItems + m_nCount; }                    \
@@ -472,7 +473,8 @@ public:                                                               \
   reverse_iterator rend() { return reverse_iterator(begin() - 1); }   \
   const_reverse_iterator rend() const;                                \
   void reserve(size_type n) { base::reserve(n); };                    \
-  void resize(size_type n, value_type v = value_type());              \
+  void resize(size_type n, value_type v = value_type())               \
+    { base::resize(n, v); }                                           \
 }
 
 #define _WX_PTROP pointer operator->() const { return m_ptr; }
