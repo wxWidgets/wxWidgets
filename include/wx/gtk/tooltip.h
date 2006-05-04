@@ -28,11 +28,11 @@ class WXDLLIMPEXP_CORE wxWindow;
 class WXDLLIMPEXP_CORE wxToolTip : public wxObject
 {
 public:
+    wxToolTip( const wxString &tip );
+
     // globally change the tooltip parameters
     static void Enable( bool flag );
     static void SetDelay( long msecs );
-
-    wxToolTip( const wxString &tip );
 
     // get/set the tooltip text
     void SetTip( const wxString &tip );
@@ -41,8 +41,16 @@ public:
     wxWindow *GetWindow() const { return m_window; }
     bool IsOk() const { return m_window != NULL; }
 
-    // implementation
+
+    // wxGTK-only from now on
+
+    // this forwards back to wxWindow::ApplyToolTip()
     void Apply( wxWindow *win );
+
+    // this just sets the given tooltip for the specified widget
+    //
+    // tip must be already UTF-8 encoded
+    static void Apply(GtkWidget *w, const wxCharBuffer& tip);
 
 private:
     wxString     m_text;

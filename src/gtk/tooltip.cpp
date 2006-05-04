@@ -46,12 +46,11 @@ void wxToolTip::SetTip( const wxString &tip )
 
 void wxToolTip::Apply( wxWindow *win )
 {
-    if (!win) return;
+    if (!win)
+        return;
 
-    if (!gs_tooltips)
-    {
+    if ( !gs_tooltips )
         gs_tooltips = gtk_tooltips_new();
-    }
 
     m_window = win;
 
@@ -61,9 +60,19 @@ void wxToolTip::Apply( wxWindow *win )
         m_window->ApplyToolTip( gs_tooltips, m_text );
 }
 
+/* static */
+void wxToolTip::Apply(GtkWidget *w, const wxCharBuffer& tip)
+{
+    if ( !gs_tooltips )
+        gs_tooltips = gtk_tooltips_new();
+
+    gtk_tooltips_set_tip(gs_tooltips, w, tip, NULL);
+}
+
 void wxToolTip::Enable( bool flag )
 {
-    if (!gs_tooltips) return;
+    if (!gs_tooltips)
+        return;
 
     if (flag)
         gtk_tooltips_enable( gs_tooltips );
