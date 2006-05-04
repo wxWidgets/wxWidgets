@@ -122,7 +122,7 @@ public:
 
     bool             m_hasFocus,
                      m_lostFocus;
-    wxList           m_boxes;
+    wxList           m_buttons;
 
 protected:
     void DoApplyWidgetStyle(GtkRcStyle *style);
