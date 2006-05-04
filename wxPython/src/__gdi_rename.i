@@ -4,6 +4,9 @@
 #ifndef BUILDING_RENAMERS
 
 %rename(GDIObject)                          wxGDIObject;
+%rename(C2S_NAME)                           wxC2S_NAME;
+%rename(C2S_CSS_SYNTAX)                     wxC2S_CSS_SYNTAX;
+%rename(C2S_HTML_SYNTAX)                    wxC2S_HTML_SYNTAX;
 %rename(Colour)                             wxColour;
 %rename(Palette)                            wxPalette;
 %rename(Pen)                                wxPen;

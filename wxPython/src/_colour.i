@@ -17,6 +17,13 @@
 %newgroup;
 
 
+enum {
+    wxC2S_NAME,             // return colour name, when possible
+    wxC2S_CSS_SYNTAX,       // return colour in rgb(r,g,b) syntax
+    wxC2S_HTML_SYNTAX,      // return colour in #rrggbb syntax     
+};
+
+
 DocStr(wxColour,
 "A colour is an object representing a combination of Red, Green, and
 Blue (RGB) intensity values, and is used to determine drawing colours,
@@ -97,6 +104,16 @@ initialised with RGB values).", "");
         "Sets the RGB intensity values using a colour name listed in
 ``wx.TheColourDatabase``.", "",
         SetFromName);
+    
+    DocDeclStr(
+        wxString , GetAsString(long flags = wxC2S_NAME | wxC2S_CSS_SYNTAX) const,
+        "Return the colour as a string.  Acceptable flags are:
+
+            =================== ==================================
+            wx.C2S_NAME          return colour name, when possible
+            wx.C2S_CSS_SYNTAX    return colour in rgb(r,g,b) syntax
+            wx.C2S_HTML_SYNTAX   return colour in #rrggbb syntax     
+            =================== ==================================", "");
     
     
     DocDeclStr(
