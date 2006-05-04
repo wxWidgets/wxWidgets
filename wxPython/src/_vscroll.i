@@ -95,6 +95,11 @@ public:
     wxCoord GetLinesHeight(size_t lineMin, size_t lineMax) const
     { return wxVScrolledWindow::GetLinesHeight(lineMin, lineMax); }
 
+    // update the thumb size shown by the scrollbar
+    void UpdateScrollbar() { wxVScrolledWindow::UpdateScrollbar(); }
+
+    // remove the scrollbar completely because we don't need it
+    void RemoveScrollbar() { wxVScrolledWindow::RemoveScrollbar(); }
 
     PYPRIVATE;
 };
