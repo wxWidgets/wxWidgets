@@ -338,7 +338,7 @@ void wxTopLevelWindowBase::DoLayout()
         }
 
         // do we have any children at all?
-        if ( child )
+        if ( child && child->IsShown() )
         {
             // exactly one child - set it's size to fill the whole frame
             int clientW, clientH;
