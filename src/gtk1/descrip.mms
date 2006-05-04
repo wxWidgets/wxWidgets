@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.stm.tudelft.nl)                              *
-# Date : 2 March 2000                                                        *
+# Date : 2 May 2006                                                          *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -39,6 +39,7 @@ OBJECTS = \
 	dcclient.obj,\
 	dcmemory.obj,\
 	dcscreen.obj,\
+	dirdlg.obj,\
         dnd.obj,\
         evtloop.obj,\
 	filedlg.obj,\
@@ -115,6 +116,7 @@ SOURCES =\
 	dcmemory.cpp,\
 	dcscreen.cpp,\
 	dialog.cpp,\
+	dirdlg.cpp,\
         dnd.cpp,\
         evtloop.cpp,\
 	filedlg.cpp,\
@@ -236,3 +238,4 @@ utilsgtk.obj : utilsgtk.cpp
 utilsres.obj : utilsres.cpp
 win_gtk.obj : win_gtk.c
 window.obj : window.cpp
+dirdlg.obj : dirdlg.cpp

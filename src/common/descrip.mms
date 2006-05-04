@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 19 January 2006                                                     *
+# Date : 3 May 2006                                                          *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -64,6 +64,8 @@ OBJECTS = \
 		cmndata.obj,\
 		config.obj,\
 		containr.obj,\
+		convauto.obj,\
+		colourcmn.obj,\
 		cshelp.obj,\
 		ctrlcmn.obj,\
 		ctrlsub.obj,\
@@ -207,6 +209,8 @@ SOURCES = \
 		cmndata.cpp,\
 		config.cpp,\
 		containr.cpp,\
+		convauto.cpp,\
+		colourcmn.cpp,\
 		cshelp.cpp,\
 		ctrlcmn.cpp,\
 		ctrlsub.cpp,\
@@ -390,6 +394,8 @@ cmdproc.obj : cmdproc.cpp
 cmndata.obj : cmndata.cpp
 config.obj : config.cpp
 containr.obj : containr.cpp
+convauto.obj : convauto.cpp
+colourcmn.obj : colourcmn.cpp
 cshelp.obj : cshelp.cpp
 ctrlcmn.obj : ctrlcmn.cpp
 ctrlsub.obj : ctrlsub.cpp
