@@ -561,7 +561,7 @@ listbox must be examined by the application.", "");
 
     void SetInt(int i);
     DocDeclStr(
-        long , GetInt() const,
+        int , GetInt() const,
         "Returns the integer identifier corresponding to a listbox, choice or
 radiobox selection (only if the event was a selection, not a
 deselection), or a boolean value representing the value of a checkbox.", "");
