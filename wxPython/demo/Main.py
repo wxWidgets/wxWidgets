@@ -458,7 +458,7 @@ try:
                                   'fore:#000000,back:#FFFFFF,face:Courier New,size:9')
             else:
                 self.StyleSetSpec(stc.STC_STYLE_DEFAULT, 
-                                  'fore:#000000,back:#FFFFFF,face:Courier,size:12')
+                                  'fore:#000000,back:#FFFFFF,face:Courier,size:9')
     
             # Clear styles and revert to default.
             self.StyleClearAll()
