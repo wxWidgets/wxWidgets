@@ -403,6 +403,12 @@ wxMDIChildFrame
 Supports same attributes and children nodes as wxFrame.
 
 
+wxRadioBox
+----------
+
+This control may have "dimension" (major dimension) and (initial) "selection"
+Integer subelements and a composite "content" element similar to wxCheckList.
+
 wxScrolledWindow
 ----------------
 pos                        Position                -1,-1
