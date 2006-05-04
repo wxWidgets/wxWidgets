@@ -88,11 +88,16 @@ protected:
 
     #include "wx/msw/dirdlg.h"
 
-// Native GTK
+// Native GTK for gtk2.x and generic for gtk1.x
 #elif defined(__WXGTK__)
 
+#if defined( __WXGTK20__ )
     #include "wx/gtk/dirdlg.h"
     #define wxDirDialog wxDirDialogGTK
+#else
+    #include "wx/generic/dirdlgg.h"
+    #define wxDirDialog wxGenericDirDialog
+#endif
 
 // Native Mac
 #elif defined(__WXMAC__)
