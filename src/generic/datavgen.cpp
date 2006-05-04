@@ -177,7 +177,7 @@ public:
     int GetEndOfLastCol();
     size_t GetFirstVisibleRow();
     size_t GetLastVisibleRow();
-    int GetRowCount();
+    size_t GetRowCount();
 
     void SelectAllRows( bool on );
     void SelectRow( size_t row, bool on );
@@ -1145,7 +1145,7 @@ size_t wxDataViewMainWindow::GetLastVisibleRow()
     return wxMin( GetRowCount()-1, (client_size.y/m_lineHeight)+1 );
 }
 
-int wxDataViewMainWindow::GetRowCount()
+size_t wxDataViewMainWindow::GetRowCount()
 {
     return GetOwner()->GetModel()->GetNumberOfRows();
 }
@@ -1159,13 +1159,13 @@ void wxDataViewMainWindow::ChangeCurrentRow( size_t row )
 
 void wxDataViewMainWindow::SelectAllRows( bool on )
 {
-    if (GetRowCount() == 0) return;
+    if (IsEmpty())
+        return;
 
     if (on)
     {
         m_selection.Clear();
-        size_t i;
-        for (i = 0; i < GetRowCount(); i++)
+        for (size_t i = 0; i < GetRowCount(); i++)
             m_selection.Add( i );
         Refresh();
     }
@@ -1278,7 +1278,8 @@ void wxDataViewMainWindow::RefreshRows( size_t from, size_t to )
 void wxDataViewMainWindow::RefreshRowsAfter( size_t firstRow )
 {
     size_t count = GetRowCount();
-    if (firstRow > count) return;
+    if (firstRow > count)
+        return;
 
     wxRect rect( 0, firstRow*m_lineHeight, GetEndOfLastCol(), count * m_lineHeight );
     m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
@@ -1292,7 +1293,7 @@ void wxDataViewMainWindow::RefreshRowsAfter( size_t firstRow )
 
 void wxDataViewMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
 {
-    wxCHECK_RET( newCurrent < (size_t)GetRowCount(),
+    wxCHECK_RET( newCurrent < GetRowCount(),
                  _T("invalid item index in OnArrowChar()") );
 
     // if there is no selection, we cannot move it anywhere
@@ -1369,7 +1370,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_DOWN:
-            if ( m_currentRow < (size_t)GetRowCount() - 1 )
+            if ( m_currentRow < GetRowCount() - 1 )
                 OnArrowChar( m_currentRow + 1, event );
             break;
 
