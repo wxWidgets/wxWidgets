@@ -81,12 +81,14 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
 
         SetupWindow(control);
 
+#if wxUSE_TOOLTIPS
         const unsigned count = labels.size();
         for( unsigned i = 0; i < count; i++ )
         {
             if ( !tooltips[i].empty() )
                 control->SetItemToolTip(i, tooltips[i]);
         }
+#endif // wxUSE_TOOLTIPS
 
         labels.clear();    // dump the strings
         tooltips.clear();    // dump the tooltips
