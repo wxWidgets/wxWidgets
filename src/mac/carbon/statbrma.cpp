@@ -12,7 +12,11 @@
 #include "wx/wxprec.h"
 
 #include "wx/statusbr.h"
-#include "wx/dc.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/dc.h"
+#endif
+
 #include "wx/dcclient.h"
 
 #include "wx/mac/private.h"

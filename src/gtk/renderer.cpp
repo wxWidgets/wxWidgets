@@ -28,12 +28,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
+    #include "wx/dc.h"
 #endif
 
 #include <gtk/gtk.h>
 #include "wx/gtk/win_gtk.h"
 
-#include "wx/dc.h"
 #include "wx/dcclient.h"
 #include "wx/settings.h"
 

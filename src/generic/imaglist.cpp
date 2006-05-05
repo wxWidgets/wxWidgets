@@ -20,9 +20,12 @@
 
 #include "wx/generic/imaglist.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/dc.h"
+#endif
+
 #include "wx/icon.h"
 #include "wx/image.h"
-#include "wx/dc.h"
 
 //-----------------------------------------------------------------------------
 //  wxImageList
@@ -217,7 +220,7 @@ bool wxGenericImageList::Replace( int index, const wxBitmap &bitmap, const wxBit
         m_images.Erase( node );
         m_images.Insert( next, newBitmap );
     }
-    
+
     if (mask.Ok())
         newBitmap->SetMask(new wxMask(mask));
 
@@ -277,5 +280,6 @@ bool wxGenericImageList::Draw( int index, wxDC &dc, int x, int y,
     return true;
 }
 
-#endif // wxUSE_IMAGLIST
 #endif // __WXPALMOS__
+
+#endif // wxUSE_IMAGLIST

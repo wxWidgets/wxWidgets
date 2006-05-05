@@ -19,6 +19,7 @@
     #include "wx/utils.h"
     #include "wx/window.h"
     #include "wx/frame.h"
+    #include "wx/dc.h"
 #endif
 
 #include "wx/button.h"
@@ -28,7 +29,6 @@
 #include "wx/cursor.h"
 #include "wx/icon.h"
 #include "wx/palette.h"
-#include "wx/dc.h"
 #include "wx/dialog.h"
 #include "wx/msgdlg.h"
 #include "wx/module.h"

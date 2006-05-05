@@ -24,18 +24,19 @@
     #pragma hdrstop
 #endif
 
+#include "wx/renderer.h"
+
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/dc.h"
 #endif //WX_PRECOMP
 
 #include "wx/gdicmn.h"
-#include "wx/dc.h"
 
 #include "wx/settings.h"
 #include "wx/splitter.h"
 #include "wx/dcmirror.h"
 #include "wx/module.h"
-#include "wx/renderer.h"
 
 // ----------------------------------------------------------------------------
 // wxRendererGeneric: our wxRendererNative implementation

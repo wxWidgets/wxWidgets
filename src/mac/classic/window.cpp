@@ -19,10 +19,10 @@
     #include "wx/utils.h"
     #include "wx/panel.h"
     #include "wx/frame.h"
+    #include "wx/dc.h"
 #endif
 
 #include "wx/menu.h"
-#include "wx/dc.h"
 #include "wx/dcclient.h"
 #include "wx/layout.h"
 #include "wx/dialog.h"

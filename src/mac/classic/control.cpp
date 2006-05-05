@@ -20,9 +20,9 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/panel.h"
+    #include "wx/dc.h"
 #endif // WX_PRECOMP
 
-#include "wx/dc.h"
 #include "wx/dcclient.h"
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"

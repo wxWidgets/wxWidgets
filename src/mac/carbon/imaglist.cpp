@@ -16,9 +16,13 @@
 #if wxUSE_IMAGLIST
 
 #include "wx/imaglist.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/dc.h"
+#endif
+
 #include "wx/icon.h"
 #include "wx/image.h"
-#include "wx/dc.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxImageList, wxObject)
 
@@ -75,7 +79,7 @@ int wxImageList::Add( const wxBitmap &bitmap )
                   || (m_width == 0 && m_height == 0),
                   _T("invalid bitmap size in wxImageList: this might work ")
                   _T("on this platform but definitely won't under Windows.") );
-                  
+
     // Mimic behavior of Windows ImageList_Add that automatically breaks up the added
     // bitmap into sub-images of the correct size
     if (m_width > 0 && bitmap.GetWidth() > m_width && bitmap.GetHeight() >= m_height)
@@ -98,7 +102,7 @@ int wxImageList::Add( const wxBitmap &bitmap )
         m_width = bitmap.GetWidth();
         m_height = bitmap.GetHeight();
     }
-    
+
     return m_images.GetCount() - 1;
 }
 
@@ -227,7 +231,7 @@ bool wxImageList::Replace( int index, const wxBitmap &bitmap, const wxBitmap &ma
         m_images.Erase( node );
         m_images.Insert( next, newBitmap );
     }
-    
+
     if (mask.Ok())
         newBitmap->SetMask(new wxMask(mask));
 

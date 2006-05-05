@@ -10,11 +10,13 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/window.h"
     #include "wx/dc.h"
 #endif //WX_PRECOMP
+
 #include "wx/tooltip.h"
 
 #include "wx/cocoa/autorelease.h"

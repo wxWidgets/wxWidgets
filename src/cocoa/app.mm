@@ -11,8 +11,9 @@
 
 #include "wx/wxprec.h"
 
+#include "wx/app.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
     #include "wx/dc.h"
     #include "wx/intl.h"
     #include "wx/log.h"

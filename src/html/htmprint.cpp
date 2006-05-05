@@ -23,7 +23,6 @@
     #include "wx/dc.h"
 #endif
 
-#include "wx/dc.h"
 #include "wx/print.h"
 #include "wx/printdlg.h"
 #include "wx/html/htmprint.h"

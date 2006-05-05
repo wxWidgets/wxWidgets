@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/fontcmn.cpp
+// Name:        src/common/fontcmn.cpp
 // Purpose:     implementation of wxFontBase methods
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -21,12 +21,13 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#include "wx/font.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
-    #include "wx/font.h"
     #include "wx/intl.h"
     #include "wx/dcscreen.h"
 #endif // WX_PRECOMP
@@ -686,4 +687,3 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
 }
 
 #endif // generic or wxMSW or wxOS2
-
