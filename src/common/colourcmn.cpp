@@ -21,6 +21,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/gdicmn.h"
@@ -38,12 +39,16 @@ bool wxColourBase::FromString(const wxChar *str)
     if ( wxStrncmp(str, wxT("RGB"), 3) == 0 ||
          wxStrncmp(str, wxT("rgb"), 3) == 0 )
     {
-        // RGB specification CSS-like
+        // CSS-like RGB specification
+        // according to http://www.w3.org/TR/REC-CSS2/syndata.html#color-units
+        // values outside 0-255 range are allowed but should be clipped
         int red, green, blue;
         if (wxSscanf(&str[3], wxT("(%d, %d, %d)"), &red, &green, &blue) != 3)
             return false;
 
-        Set((unsigned char)red, (unsigned char)green, (unsigned char)blue);
+        Set((unsigned char)wxClip(red,0,255),
+            (unsigned char)wxClip(green,0,255),
+            (unsigned char)wxClip(blue,0,255));
     }
     else if ( str[0] == wxT('#') && wxStrlen(str) == 7 )
     {
