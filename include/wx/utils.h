@@ -54,6 +54,7 @@ class WXDLLIMPEXP_CORE wxWindowList;
 
 #define wxMax(a,b)            (((a) > (b)) ? (a) : (b))
 #define wxMin(a,b)            (((a) < (b)) ? (a) : (b))
+#define wxClip(a,b,c)         (((a) < (b)) ? (b) : (((a) > (c)) ? (c) : (a)))
 
 // wxGetFreeMemory can return huge amount of memory on 32-bit platforms as well
 // so to always use long long for its result type on all platforms which
