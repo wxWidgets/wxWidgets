@@ -525,7 +525,7 @@ void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
         return;
 
     s_tip = dialog.GetValue();
-    s_tip.Replace("\\n", "\n");
+    s_tip.Replace(_T("\\n"), _T("\n"));
 
     WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
     page->GetWidget()->SetToolTip(s_tip);
