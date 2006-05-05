@@ -43,8 +43,6 @@ public:
 
     ~wxColour();
 
-    virtual bool FromString(const wxChar *str);
-
     bool Ok() const { return m_refData != NULL; }
 
     bool operator == ( const wxColour& col ) const;
@@ -64,6 +62,7 @@ protected:
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
+    virtual bool FromString(const wxChar *str);
     virtual void InitWith( unsigned char red, unsigned char green, unsigned char blue );
 
 private:
