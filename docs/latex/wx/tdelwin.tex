@@ -110,8 +110,9 @@ dialog, using the EVT\_CLOSE macro. The event handler function might look like t
 
 \wxheading{How do I exit the application gracefully?}
 
-A wxWidgets application automatically exits when the designated top window, or the
-last frame or dialog, is destroyed. Put any application-wide cleanup code in \helpref{wxApp::OnExit}{wxapponexit} (this
+A wxWidgets application automatically exits when the last top level window
+(\helpref{wxFrame}{wxframe} or \helpref{wxDialog}{wxdialog}), is destroyed. Put
+any application-wide cleanup code in \helpref{wxApp::OnExit}{wxapponexit} (this
 is a virtual function, not an event handler).
 
 \wxheading{Do child windows get deleted automatically?}
