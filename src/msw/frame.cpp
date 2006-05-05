@@ -24,8 +24,9 @@
     #pragma hdrstop
 #endif
 
+#include "wx/frame.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/frame.h"
     #include "wx/app.h"
     #include "wx/menu.h"
     #include "wx/utils.h"

@@ -16,9 +16,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/frame.h"
 #endif
 
-#include "wx/frame.h"
 #include "wx/menu.h"
 
 #include <gdk/gdkx.h>

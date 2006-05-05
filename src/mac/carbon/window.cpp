@@ -18,6 +18,7 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/panel.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/menu.h"
@@ -30,7 +31,6 @@
 #include "wx/button.h"
 #include "wx/settings.h"
 #include "wx/msgdlg.h"
-#include "wx/frame.h"
 #include "wx/tooltip.h"
 #include "wx/statusbr.h"
 #include "wx/menuitem.h"

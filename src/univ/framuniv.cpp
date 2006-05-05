@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        univ/frame.cpp
+// Name:        src/univ/frame.cpp
 // Purpose:     wxFrame class for wxUniversal
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -24,9 +24,10 @@
     #pragma hdrstop
 #endif
 
-    #include "wx/menu.h"
+#include "wx/frame.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/frame.h"
+    #include "wx/menu.h"
     #include "wx/statusbr.h"
     #include "wx/settings.h"
     #include "wx/toolbar.h"

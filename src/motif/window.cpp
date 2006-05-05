@@ -31,6 +31,7 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/menu.h"
@@ -39,7 +40,6 @@
 #include "wx/layout.h"
 #include "wx/button.h"
 #include "wx/settings.h"
-#include "wx/frame.h"
 #include "wx/scrolwin.h"
 #include "wx/module.h"
 #include "wx/menuitem.h"

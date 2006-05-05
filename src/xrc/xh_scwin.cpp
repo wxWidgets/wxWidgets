@@ -18,8 +18,12 @@
 #if wxUSE_XRC
 
 #include "wx/xrc/xh_scwin.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/frame.h"
+#endif
+
 #include "wx/scrolwin.h"
-#include "wx/frame.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindowXmlHandler, wxXmlResourceHandler)
 

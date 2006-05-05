@@ -19,9 +19,9 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/frame.h"
 #endif
 
-#include "wx/frame.h"
 #include "wx/gdicmn.h"
 #include "wx/icon.h"
 #include "wx/dialog.h"

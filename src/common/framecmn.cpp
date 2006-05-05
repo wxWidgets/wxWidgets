@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/framecmn.cpp
+// Name:        src/common/framecmn.cpp
 // Purpose:     common (for all platforms) wxFrame functions
 // Author:      Julian Smart, Vadim Zeitlin
 // Created:     01/02/97
@@ -23,8 +23,9 @@
     #pragma hdrstop
 #endif
 
+#include "wx/frame.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/frame.h"
     #include "wx/menu.h"
     #include "wx/menuitem.h"
     #include "wx/dcclient.h"

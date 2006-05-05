@@ -18,9 +18,9 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/window.h"
+    #include "wx/frame.h"
 #endif
 
-#include "wx/frame.h"
 #include "wx/fontutil.h"
 
 #include "wx/x11/private.h"

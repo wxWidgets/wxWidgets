@@ -35,10 +35,10 @@
     #include "wx/settings.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/msw/private.h"
-#include "wx/frame.h"
 #include "wx/image.h"
 
 #include "wx/msw/dragimag.h"

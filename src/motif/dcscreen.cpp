@@ -17,9 +17,8 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/window.h"
+    #include "wx/frame.h"
 #endif
-
-#include "wx/frame.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

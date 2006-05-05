@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_toolb.cpp
+// Name:        src/xrc/xh_toolb.cpp
 // Purpose:     XRC resource for wxBoxSizer
 // Author:      Vaclav Slavik
 // Created:     2000/08/11
@@ -18,8 +18,12 @@
 #if wxUSE_XRC && wxUSE_TOOLBAR
 
 #include "wx/xrc/xh_toolb.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/frame.h"
+#endif
+
 #include "wx/toolbar.h"
-#include "wx/frame.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarXmlHandler, wxXmlResourceHandler)
 

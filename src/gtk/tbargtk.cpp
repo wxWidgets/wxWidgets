@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tbargtk.cpp
+// Name:        src/gtk/tbargtk.cpp
 // Purpose:     GTK toolbar
 // Author:      Robert Roebling
 // Modified:    13.12.99 by VZ to derive from wxToolBarBase
@@ -23,7 +23,9 @@
 
 #if wxUSE_TOOLBAR_NATIVE
 
-#include "wx/frame.h"
+#ifndef WX_PRECOMP
+    #include "wx/frame.h"
+#endif
 
 // FIXME: Use GtkImage instead of GtkPixmap. Use the new toolbar API for when gtk runtime is new enough?
 // Beware that the new and old toolbar API may not be mixed in usage.

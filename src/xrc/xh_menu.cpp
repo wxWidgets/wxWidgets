@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_menu.cpp
+// Name:        src/xrc/xh_menu.cpp
 // Purpose:     XRC resource for menus and menubars
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
@@ -18,8 +18,12 @@
 #if wxUSE_XRC
 
 #include "wx/xrc/xh_menu.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/frame.h"
+#endif
+
 #include "wx/menu.h"
-#include "wx/frame.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuXmlHandler, wxXmlResourceHandler)
 
@@ -75,7 +79,7 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
             wxString label = GetText(wxT("label"));
             wxString accel = GetText(wxT("accel"), false);
             wxString fullLabel = label;
-            if (!accel.IsEmpty())
+            if (!accel.empty())
                 fullLabel << wxT("\t") << accel;
 
             wxItemKind kind = wxITEM_NORMAL;

@@ -72,7 +72,6 @@
     #include "wx/colordlg.h"
     #include "wx/fontdlg.h"
     #include "wx/notebook.h"
-    #include "wx/frame.h"
     #include "wx/statusbr.h"
 #endif // wxUSE_GUI
 
@@ -819,7 +818,7 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
         {
             ConstStr255Param hint = 0;
             startSel = 0;
-            endSel = url.Length();
+            endSel = url.length();
             err = ICLaunchURL(inst, hint, url.fn_str(), endSel, &startSel, &endSel);
             if (err != noErr)
                 wxLogDebug(wxT("ICLaunchURL error %d"), (int) err);
@@ -1193,7 +1192,7 @@ wxColour wxGetColourFromUser(wxWindow *parent, const wxColour& colInit, const wx
 
     wxColour colRet;
     wxColourDialog dialog(parent, &data);
-    if (!caption.IsEmpty())
+    if (!caption.empty())
         dialog.SetTitle(caption);
     if ( dialog.ShowModal() == wxID_OK )
     {
@@ -1218,7 +1217,7 @@ wxFont wxGetFontFromUser(wxWindow *parent, const wxFont& fontInit, const wxStrin
 
     wxFont fontRet;
     wxFontDialog dialog(parent, data);
-    if (!caption.IsEmpty())
+    if (!caption.empty())
         dialog.SetTitle(caption);
     if ( dialog.ShowModal() == wxID_OK )
     {

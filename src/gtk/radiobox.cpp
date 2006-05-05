@@ -16,10 +16,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/dialog.h"
-#include "wx/frame.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"

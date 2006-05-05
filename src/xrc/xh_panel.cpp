@@ -21,9 +21,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
+    #include "wx/frame.h"
 #endif
-
-#include "wx/frame.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxPanelXmlHandler, wxXmlResourceHandler)
 

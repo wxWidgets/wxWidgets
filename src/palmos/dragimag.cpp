@@ -21,7 +21,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_DRAGIMAGE
@@ -35,9 +35,9 @@
     #include "wx/settings.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/frame.h"
 #endif
 
-#include "wx/frame.h"
 #include "wx/image.h"
 
 #include "wx/palmos/dragimag.h"

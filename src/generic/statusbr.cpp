@@ -13,15 +13,15 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_STATUSBAR
 
 #ifndef WX_PRECOMP
-#include "wx/frame.h"
-#include "wx/settings.h"
-#include "wx/dcclient.h"
+    #include "wx/frame.h"
+    #include "wx/settings.h"
+    #include "wx/dcclient.h"
 #endif
 
 #ifdef __WXGTK20__

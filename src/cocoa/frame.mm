@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/frame.mm
+// Name:        src/cocoa/frame.mm
 // Purpose:     wxFrame
 // Author:      David Elliott
 // Modified by:
@@ -10,10 +10,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#include "wx/frame.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
-    #include "wx/frame.h"
     #include "wx/menu.h"
     #include "wx/toolbar.h"
     #include "wx/statusbr.h"
@@ -287,4 +289,3 @@ wxToolBar* wxFrame::CreateToolBar(long style,
 void wxFrame::PositionStatusBar()
 {
 }
-

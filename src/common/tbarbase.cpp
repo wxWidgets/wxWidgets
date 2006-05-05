@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/tbarbase.cpp
+// Name:        src/common/tbarbase.cpp
 // Purpose:     wxToolBarBase implementation
 // Author:      Julian Smart
 // Modified by: VZ at 11.12.99 (wxScrollableToolBar split off)
@@ -26,18 +26,17 @@
 
 #if wxUSE_TOOLBAR
 
+#include "wx/toolbar.h"
+
 #ifndef WX_PRECOMP
     #include "wx/control.h"
+    #include "wx/frame.h"
 #endif
-
-#include "wx/frame.h"
 
 #if wxUSE_IMAGE
     #include "wx/image.h"
     #include "wx/settings.h"
 #endif // wxUSE_IMAGE
-
-#include "wx/toolbar.h"
 
 // ----------------------------------------------------------------------------
 // wxWidgets macros

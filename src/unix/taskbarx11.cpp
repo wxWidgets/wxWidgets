@@ -25,9 +25,9 @@
 
 #ifndef  WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/frame.h"
 #endif
 
-#include "wx/frame.h"
 #include "wx/bitmap.h"
 #include "wx/statbmp.h"
 #include "wx/sizer.h"

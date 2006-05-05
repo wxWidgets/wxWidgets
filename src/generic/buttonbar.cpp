@@ -34,9 +34,9 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/log.h"
+    #include "wx/frame.h"
 #endif
 
-#include "wx/frame.h"
 #include "wx/image.h"
 #include "wx/settings.h"
 #include "wx/dcclient.h"
@@ -386,7 +386,7 @@ void wxButtonToolBar::DoLayout()
             {
                 wxBitmapButton* bmpButton = new wxBitmapButton(this, tool->GetId(), tool->GetNormalBitmap(), wxPoint(tool->m_x, tool->m_y), wxDefaultSize,
                                                                wxBU_AUTODRAW|wxBORDER_NONE);
-                if (!tool->GetShortHelp().IsEmpty())
+                if (!tool->GetShortHelp().empty())
                     bmpButton->SetLabel(tool->GetShortHelp());
 
                 tool->SetButton(bmpButton);
@@ -406,7 +406,7 @@ void wxButtonToolBar::DoLayout()
                 {
                     sz.y += (m_labelHeight + m_labelMargin);
 
-                    if (!tool->GetShortHelp().IsEmpty())
+                    if (!tool->GetShortHelp().empty())
                     {
                         wxClientDC dc(this);
                         dc.SetFont(GetFont());
@@ -515,7 +515,7 @@ void wxButtonToolBar::OnPaint(wxPaintEvent& event)
             dc.DrawRectangle(backgroundRect);
         }
 
-        if (m_labelHeight > 0 && !tool->GetShortHelp().IsEmpty())
+        if (m_labelHeight > 0 && !tool->GetShortHelp().empty())
         {
             int tw, th;
             dc.GetTextExtent(tool->GetShortHelp(), & tw, & th);

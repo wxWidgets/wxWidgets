@@ -33,11 +33,11 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/log.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/univ/renderer.h"
 
-#include "wx/frame.h"
 #include "wx/image.h"
 
 // ----------------------------------------------------------------------------

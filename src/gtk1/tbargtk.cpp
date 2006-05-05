@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tbargtk.cpp
+// Name:        src/gtk1/tbargtk.cpp
 // Purpose:     GTK toolbar
 // Author:      Robert Roebling
 // Modified:    13.12.99 by VZ to derive from wxToolBarBase
@@ -23,7 +23,9 @@
 
 #if wxUSE_TOOLBAR_NATIVE
 
-#include "wx/frame.h"
+#ifndef WX_PRECOMP
+    #include "wx/frame.h"
+#endif
 
 #include <glib.h>
 #include "wx/gtk1/private.h"

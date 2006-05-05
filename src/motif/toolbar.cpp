@@ -28,11 +28,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/settings.h"
 #include "wx/timer.h"
-#include "wx/frame.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
