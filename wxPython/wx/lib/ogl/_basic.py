@@ -2178,7 +2178,7 @@ class Shape(ShapeEvtHandler):
         dc.SetLogicalFunction(OGLRBLF)
 
         bound_x, bound_y = self.GetBoundingBoxMin()
-        self.GetEventHandler().OnEndSize(bound_x, bound_y)
+        self.GetEventHandler().OnBeginSize(bound_x, bound_y)
 
         # Choose the 'opposite corner' of the object as the stationary
         # point in case this is non-centring resizing.
