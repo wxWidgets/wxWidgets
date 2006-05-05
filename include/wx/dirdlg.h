@@ -69,10 +69,14 @@ protected:
 
 
 // Universal and non-port related switches with need for generic implementation
-#if defined(__WXMSW__) && (defined(__WXUNIVERSAL__) || \
-                           defined(__SALFORDC__)    || \
-                           !wxUSE_OLE               || \
-                           (defined (__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS))
+#if defined(__WXUNIVERSAL__)
+
+    #include "wx/generic/dirdlgg.h"
+    #define wxDirDialog wxGenericDirDialog
+
+#elif defined(__WXMSW__) && (defined(__SALFORDC__)    || \
+                             !wxUSE_OLE               || \
+                             (defined (__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS))
 
     #include "wx/generic/dirdlgg.h"
     #define wxDirDialog wxGenericDirDialog
