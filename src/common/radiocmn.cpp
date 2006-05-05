@@ -212,8 +212,11 @@ wxRadioBoxBase::DoSetItemToolTip(unsigned int WXUNUSED(item),
     // per-item tooltips not implemented by default
 }
 
+#endif // wxUSE_TOOLTIPS
+
 wxRadioBoxBase::~wxRadioBoxBase()
 {
+#if wxUSE_TOOLTIPS
     if ( m_itemsTooltips )
     {
         const size_t n = m_itemsTooltips->size();
@@ -222,9 +225,8 @@ wxRadioBoxBase::~wxRadioBoxBase()
 
         delete m_itemsTooltips;
     }
-}
-
 #endif // wxUSE_TOOLTIPS
+}
 
 #if WXWIN_COMPATIBILITY_2_4
 
