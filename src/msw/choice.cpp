@@ -741,10 +741,7 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
                 if ( n > -1 )
                 {
                     event.SetString(GetStringSelection());
-                    if ( HasClientObjectData() )
-                        event.SetClientObject( GetClientObject(n) );
-                    else if ( HasClientUntypedData() )
-                        event.SetClientData( GetClientData(n) );
+                    InitCommandEventWithItems(event, n);
                 }
 
                 ProcessCommand(event);

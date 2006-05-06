@@ -144,6 +144,7 @@ protected:
     virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData) = 0;
     virtual wxClientData* DoGetItemClientObject(unsigned int n) const = 0;
 
+
     // the type of the client data for the items
     wxClientDataType m_clientDataItemsType;
 };
@@ -196,6 +197,12 @@ protected:
     // of course, all derived classes *must* call SetBestSize() from their
     // ctors for this to work!
     virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) { }
+
+    // fill in the client object or data field of the event as appropriate
+    //
+    // calls InitCommandEvent() and, if n != wxNOT_FOUND, also sets the per
+    // item client data
+    void InitCommandEventWithItems(wxCommandEvent& event, int n);
 
 private:
     DECLARE_ABSTRACT_CLASS(wxControlWithItems)

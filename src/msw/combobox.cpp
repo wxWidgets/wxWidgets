@@ -259,9 +259,12 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
             if ( wParam == VK_RETURN )
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
-                InitCommandEvent(event);
+
+                const int sel = GetSelection();
+                event.SetInt(sel);
                 event.SetString(GetValue());
-                event.SetInt(GetSelection());
+                InitCommandEventWithItems(event, sel);
+
                 if ( ProcessCommand(event) )
                 {
                     // don't let the event through to the native control
@@ -313,9 +316,10 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
             value = GetStringSelection();
             {
                 wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, GetId());
-                event.SetEventObject(this);
                 event.SetInt(sel);
                 event.SetString(value);
+                InitCommandEventWithItems(event, sel);
+
                 ProcessCommand(event);
             }
 
@@ -326,7 +330,6 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
         case CBN_EDITCHANGE:
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
-                event.SetEventObject(this);
 
                 // if sel != -1, value was already initialized above
                 if ( sel == -1 )
@@ -335,6 +338,8 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
                 }
 
                 event.SetString(value);
+                InitCommandEventWithItems(event, sel);
+
                 ProcessCommand(event);
             }
             break;
