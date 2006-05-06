@@ -425,13 +425,9 @@ wxMBConv::cWC2MB(const wchar_t *inBuff, size_t inLen, size_t *outLen) const
     size_t dstLen = FromWChar(NULL, 0, inBuff, inLen);
     if ( dstLen != wxCONV_FAILED )
     {
-        if ( !dstLen )
-        {
-            // special case: can't allocate 0 size buffer below
-            dstLen++;
-        }
-
-        wxCharBuffer buf(dstLen - 1);
+        // special case of empty input: can't allocate 0 size buffer below as
+        // wxCharBuffer insists on NUL-terminating it
+        wxCharBuffer buf(dstLen ? dstLen - 1 : 1);
         if ( FromWChar(buf.data(), dstLen, inBuff, inLen) != wxCONV_FAILED )
         {
             if ( outLen )
