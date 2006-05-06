@@ -1042,6 +1042,10 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
         // simply check m_oldWndProc
         m_oldWndProc = NULL;
     }
+
+    // we're officially created now, send the event
+    wxWindowCreateEvent event((wxWindow *)this);
+    (void)GetEventHandler()->ProcessEvent(event);
 }
 
 void wxWindowMSW::UnsubclassWin()
@@ -3500,10 +3504,6 @@ bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT WXUNUSED_IN_WINCE(cs),
     if ( ((CREATESTRUCT *)cs)->dwExStyle & WS_EX_CONTROLPARENT )
         EnsureParentHasControlParentStyle(GetParent());
 #endif // !__WXWINCE__
-
-    // TODO: should generate this event from WM_NCCREATE
-    wxWindowCreateEvent event((wxWindow *)this);
-    (void)GetEventHandler()->ProcessEvent(event);
 
     *mayCreate = true;
 
