@@ -7551,32 +7551,32 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
         textOrientation );
 }
 
-void wxGrid::DrawTextRectangle( wxDC& dc,
+// VZ: this should be replaced with wxDC::DrawLabel() to which we just have to
+//     add textOrientation support
+void wxGrid::DrawTextRectangle(wxDC& dc,
                                const wxArrayString& lines,
                                const wxRect& rect,
                                int horizAlign,
                                int vertAlign,
-                               int textOrientation )
+                               int textOrientation)
 {
-    long textWidth = 0, textHeight = 0;
-    long lineWidth = 0, lineHeight = 0;
-    int nLines;
+    if ( lines.empty() )
+        return;
 
-    dc.SetClippingRegion( rect );
+    wxDCClipper clip(dc, rect);
 
-    nLines = lines.GetCount();
-    if ( nLines > 0 )
+    long textWidth,
+         textHeight;
+
+    if ( textOrientation == wxHORIZONTAL )
+        GetTextBoxSize( dc, lines, &textWidth, &textHeight );
+    else
+        GetTextBoxSize( dc, lines, &textHeight, &textWidth );
+
+    int x = 0,
+        y = 0;
+    switch ( vertAlign )
     {
-        int l;
-        float x = 0.0, y = 0.0;
-
-        if ( textOrientation == wxHORIZONTAL )
-            GetTextBoxSize( dc, lines, &textWidth, &textHeight );
-        else
-            GetTextBoxSize( dc, lines, &textHeight, &textWidth );
-
-        switch ( vertAlign )
-        {
         case wxALIGN_BOTTOM:
             if ( textOrientation == wxHORIZONTAL )
                 y = rect.y + (rect.height - textHeight - 1);
@@ -7598,15 +7598,20 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
             else
                 x = rect.x + 1;
             break;
-        }
+    }
 
-        // Align each line of a multi-line label
-        for ( l = 0; l < nLines; l++ )
+    // Align each line of a multi-line label
+    size_t nLines = lines.GetCount();
+    for ( size_t l = 0; l < nLines; l++ )
+    {
+        const wxString& line = lines[l];
+
+        long lineWidth,
+             lineHeight;
+        dc.GetTextExtent(line, &lineWidth, &lineHeight);
+
+        switch ( horizAlign )
         {
-            dc.GetTextExtent(lines[l], &lineWidth, &lineHeight);
-
-            switch ( horizAlign )
-            {
             case wxALIGN_RIGHT:
                 if ( textOrientation == wxHORIZONTAL )
                     x = rect.x + (rect.width - lineWidth - 1);
@@ -7628,22 +7633,19 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
                 else
                     y = rect.y + rect.height - 1;
                 break;
-            }
+        }
 
-            if ( textOrientation == wxHORIZONTAL )
-            {
-                dc.DrawText( lines[l], (int)x, (int)y );
-                y += lineHeight;
-            }
-            else
-            {
-                dc.DrawRotatedText( lines[l], (int)x, (int)y, 90.0 );
-                x += lineHeight;
-            }
+        if ( textOrientation == wxHORIZONTAL )
+        {
+            dc.DrawText( line, x, y );
+            y += lineHeight;
+        }
+        else
+        {
+            dc.DrawRotatedText( line, x, y, 90.0 );
+            x += lineHeight;
         }
     }
-
-    dc.DestroyClippingRegion();
 }
 
 // Split multi-line text up into an array of strings.
