@@ -168,10 +168,13 @@ public:
     bool AttachUnknownControl(const wxString& name, wxWindow *control,
                               wxWindow *parent = NULL);
 
-    // Returns numeric ID that is equivalent to string id used in XML
-    // resource. To be used in event tables
-    // Macro XMLID is provided for convenience
-    static int GetXRCID(const wxString& str_id);
+    // Returns a numeric ID that is equivalent to the string ID used in an XML
+    // resource. If an unknown str_id is requested (i.e. other than wxID_XXX
+    // or integer), a new record is created which associates the given string
+    // with a number. If value_if_not_found == wxID_NONE, the number is obtained via
+    // wxNewId(). Otherwise value_if_not_found is used.
+    // Macro XRCID(name) is provided for convenient use in event tables.
+    static int GetXRCID(const wxChar *str_id, int value_if_not_found = wxID_NONE);
 
     // Returns version info (a.b.c.d = d+ 256*c + 256^2*b + 256^3*a)
     long GetVersion() const;
@@ -197,8 +200,8 @@ public:
 //----------------------------------------------------------------------
 
 %pythoncode {
-def XRCID(str_id):
-    return XmlResource_GetXRCID(str_id)
+def XRCID(str_id, value_if_not_found = wx.ID_NONE):
+    return XmlResource_GetXRCID(str_id, value_if_not_found)
 
 def XRCCTRL(window, str_id, *ignoreargs):
     return window.FindWindowById(XRCID(str_id))
