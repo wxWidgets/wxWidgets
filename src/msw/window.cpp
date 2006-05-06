@@ -2779,6 +2779,16 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     case VK_SUBTRACT:
                     case VK_MULTIPLY:
                     case VK_DIVIDE:
+                    case VK_NUMPAD0:
+                    case VK_NUMPAD1:
+                    case VK_NUMPAD2:
+                    case VK_NUMPAD3:
+                    case VK_NUMPAD4:
+                    case VK_NUMPAD5:
+                    case VK_NUMPAD6:
+                    case VK_NUMPAD7:
+                    case VK_NUMPAD8:
+                    case VK_NUMPAD9:
                     case VK_OEM_1:
                     case VK_OEM_2:
                     case VK_OEM_3:
