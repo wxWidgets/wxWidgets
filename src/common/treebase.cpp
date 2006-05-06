@@ -120,6 +120,8 @@ wxSize wxTreeCtrlBase::DoGetBestSize() const
     // need some minimal size even for empty tree
     if ( !size.x || !size.y )
         size = wxControl::DoGetBestSize();
+    else
+        CacheBestSize(size);
 
     return size;
 }
