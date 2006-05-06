@@ -124,7 +124,8 @@ length of the prefix then.
 \helpref{CmpNoCase}{wxstringcmpnocase}\\
 \helpref{IsSameAs}{wxstringissameas}\\
 \helpref{Matches}{wxstringmatches}\\
-\helpref{StartsWith}{wxstringstartswith}
+\helpref{StartsWith}{wxstringstartswith}\\
+\helpref{EndsWith}{wxstringendswith}
 
 \membersection{Substring extraction}\label{substringextractioninwxstring}
 
@@ -140,7 +141,9 @@ substring.
 \helpref{BeforeLast}{wxstringbeforelast}\\
 \helpref{AfterFirst}{wxstringafterfirst}\\
 \helpref{AfterLast}{wxstringafterlast}\\
-\helpref{StartsWith}{wxstringstartswith}
+\helpref{StartsWith}{wxstringstartswith}\\
+\helpref{EndsWith}{wxstringendswith}
+
 
 \membersection{Case conversion}\label{caseconversioninwxstring}
 
@@ -966,6 +969,16 @@ This function can be used to test if the string starts with the specified
 of the string (i.e. after the prefix) into {\it rest} string if it is not 
 {\tt NULL}. Otherwise, the function returns {\tt false} and doesn't modify the 
 {\it rest}.
+
+\membersection{wxString::EndsWith}\label{wxstringendswith}
+
+\constfunc{bool}{EndsWith}{\param{const wxChar }{*suffix}, \param{wxString }{*rest = NULL}}
+
+This function can be used to test if the string ends with the specified 
+{\it suffix}. If it does, the function will return {\tt true} and put the
+beginning of the string before the suffix into {\it rest} string if it is not 
+{\tt NULL}. Otherwise, the function returns {\tt false} and doesn't
+modify the {\it rest}.
 
 \membersection{wxString::Strip}\label{wxstringstrip}
 

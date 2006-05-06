@@ -72,6 +72,7 @@ All:
 - Fixed bug where wxDateTime::Now() would sometimes return an incorrect value
   the first time it was called.
 - Added wxString::rbegin() and rend()
+- Added wxString::EndsWith()
 
 
 All (GUI):

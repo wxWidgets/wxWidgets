@@ -1394,6 +1394,27 @@ bool wxString::StartsWith(const wxChar *prefix, wxString *rest) const
     return true;
 }
 
+
+// check that the string ends with suffix and return the rest of it in the
+// provided pointer if it is not NULL, otherwise return false
+bool wxString::EndsWith(const wxChar *suffix, wxString *rest) const
+{
+    wxASSERT_MSG( suffix, _T("invalid parameter in wxString::EndssWith") );
+
+    int start = length() - wxStrlen(suffix);
+    if ( start < 0 || wxStrcmp(c_str() + start, suffix) != 0 )
+        return false;
+
+    if ( rest )
+    {
+        // put the rest of the string into provided pointer
+        rest->assign(*this, 0, start);
+    }
+
+    return true;
+}
+
+
 // extract nCount last (rightmost) characters
 wxString wxString::Right(size_t nCount) const
 {

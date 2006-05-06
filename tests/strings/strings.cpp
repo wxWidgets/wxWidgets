@@ -165,11 +165,10 @@ void StringTestCase::Extraction()
 
     wxString rest;
 
-    #define TEST_STARTS_WITH( prefix , correct_rest, result ) \
-        CPPUNIT_ASSERT( \
-            ( s.StartsWith( prefix, &rest ) == result ) && \
-            ( ( result == false ) || ( wxStrcmp( correct_rest , rest ) == 0 ) ) \
-        )
+    #define TEST_STARTS_WITH(prefix, correct_rest, result)                    \
+        CPPUNIT_ASSERT_EQUAL(result, s.StartsWith(prefix, &rest));            \
+        if ( result )                                                         \
+            CPPUNIT_ASSERT_EQUAL(wxString(correct_rest), rest)
 
     TEST_STARTS_WITH( _T("Hello"),           _T(", world!"),      true  );
     TEST_STARTS_WITH( _T("Hello, "),         _T("world!"),        true  );
@@ -180,6 +179,23 @@ void StringTestCase::Extraction()
     TEST_STARTS_WITH( _T("Hi"),              _T(""),              false );
 
     #undef TEST_STARTS_WITH
+
+    #define TEST_ENDS_WITH(suffix, correct_rest, result)                      \
+        CPPUNIT_ASSERT_EQUAL(result, s.EndsWith(suffix, &rest));              \
+        if ( result )                                                         \
+            CPPUNIT_ASSERT_EQUAL(wxString(correct_rest), rest)
+
+    TEST_ENDS_WITH( _T(""),                 _T("Hello, world!"), true  );
+    TEST_ENDS_WITH( _T("!"),                _T("Hello, world"),  true  );
+    TEST_ENDS_WITH( _T(", world!"),         _T("Hello"),         true  );
+    TEST_ENDS_WITH( _T("ello, world!"),     _T("H"),             true  );
+    TEST_ENDS_WITH( _T("Hello, world!"),    _T(""),              true  );
+    TEST_ENDS_WITH( _T("very long string"), _T(""),              false );
+    TEST_ENDS_WITH( _T("?"),                _T(""),              false );
+    TEST_ENDS_WITH( _T("Hello, world"),     _T(""),              false );
+    TEST_ENDS_WITH( _T("Gello, world!"),    _T(""),              false );
+
+    #undef TEST_ENDS_WITH
 }
 
 void StringTestCase::Find()
