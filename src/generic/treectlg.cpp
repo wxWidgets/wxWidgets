@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        treectlg.cpp
+// Name:        src/generic/treectlg.cpp
 // Purpose:     generic tree control implementation
 // Author:      Robert Roebling
 // Created:     01/02/97
@@ -26,14 +26,17 @@
 
 #if wxUSE_TREECTRL
 
-#include "wx/treebase.h"
 #include "wx/treectrl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
+#endif
+
 #include "wx/generic/treectlg.h"
 #include "wx/timer.h"
 #include "wx/textctrl.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"
-#include "wx/dcclient.h"
 
 #include "wx/renderer.h"
 

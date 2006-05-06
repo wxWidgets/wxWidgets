@@ -16,7 +16,10 @@
 #endif
 
 #include "wx/statbmp.h"
-#include "wx/dcclient.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
 
@@ -49,7 +52,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     m_foregroundColour = parent->GetForegroundColour() ;
 
     m_bitmap = bitmap;
-    if ( id == -1 )
+    if ( id == wxID_ANY )
           m_windowId = (int)NewControlId();
     else
         m_windowId = id;

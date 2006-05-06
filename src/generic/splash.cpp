@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        splash.cpp
+// Name:        src/generic/splash.cpp
 // Purpose:     wxSplashScreen class
 // Author:      Julian Smart
 // Modified by:
@@ -13,7 +13,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_SPLASH
@@ -22,13 +22,12 @@
     #include <gtk/gtk.h>
 #endif
 
-#ifndef WX_PRECOMP
-#include "wx/dcmemory.h"
-#include "wx/dcclient.h"
-#endif
-
 #include "wx/splash.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/dcmemory.h"
+    #include "wx/dcclient.h"
+#endif
 
 /*
  * wxSplashScreen

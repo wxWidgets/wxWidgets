@@ -31,12 +31,12 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/settings.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/textctrl.h"
 #include "wx/imaglist.h"
 #include "wx/listctrl.h"
-#include "wx/dcclient.h"
 
 #include "wx/msw/private.h"
 

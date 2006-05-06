@@ -29,12 +29,11 @@
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/dc.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include <gtk/gtk.h>
 #include "wx/gtk1/win_gtk.h"
-
-#include "wx/dcclient.h"
 
 // RR: After a correction to the orientation of the sash
 //     this doesn't seem to be required anymore and it

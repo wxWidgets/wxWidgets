@@ -31,11 +31,11 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
+    #include  "wx/dcclient.h"
 #endif
 
 #include  "wx/settings.h"
 #include  "wx/generic/imaglist.h"
-#include  "wx/dcclient.h"
 #include  "wx/generic/tabg.h"
 
 // ----------------------------------------------------------------------------

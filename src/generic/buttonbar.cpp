@@ -35,11 +35,11 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/frame.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/image.h"
 #include "wx/settings.h"
-#include "wx/dcclient.h"
 
 // ----------------------------------------------------------------------------
 // wxButtonToolBarTool: our implementation of wxToolBarToolBase

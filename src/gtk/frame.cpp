@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/dcclient.h"
 #endif // WX_PRECOMP
 
 #include "wx/dialog.h"
@@ -33,7 +34,6 @@
 #if wxUSE_STATUSBAR
     #include "wx/statusbr.h"
 #endif
-#include "wx/dcclient.h"
 
 #include <glib.h>
 #include "wx/gtk/private.h"

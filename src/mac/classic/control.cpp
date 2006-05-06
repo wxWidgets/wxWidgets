@@ -21,9 +21,9 @@
     #include "wx/app.h"
     #include "wx/panel.h"
     #include "wx/dc.h"
+    #include "wx/dcclient.h"
 #endif // WX_PRECOMP
 
-#include "wx/dcclient.h"
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 #include "wx/radiobox.h"

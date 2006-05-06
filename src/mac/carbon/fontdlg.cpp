@@ -39,7 +39,6 @@
 #endif
 
 #include "wx/fontdlg.h"
-#include "wx/dcclient.h"
 
 #if wxMAC_USE_EXPERIMENTAL_FONTDIALOG
 

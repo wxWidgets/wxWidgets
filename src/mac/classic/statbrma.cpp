@@ -17,16 +17,15 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
+    #include "wx/dcclient.h"
 #endif
-
-#include "wx/dcclient.h"
 
 BEGIN_EVENT_TABLE(wxStatusBarMac, wxStatusBarGeneric)
     EVT_PAINT(wxStatusBarMac::OnPaint)
 END_EVENT_TABLE()
 
 #ifdef __WXMAC__
-#include "wx/mac/private.h"
+    #include "wx/mac/private.h"
 #endif
 
 // ============================================================================

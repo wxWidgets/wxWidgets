@@ -33,11 +33,11 @@
     #include "wx/accel.h"
     #include "wx/log.h"
     #include "wx/frame.h"
+    #include "wx/dcclient.h"
 #endif // WX_PRECOMP
 
 #include "wx/popupwin.h"
 #include "wx/evtloop.h"
-#include "wx/dcclient.h"
 
 #include "wx/univ/renderer.h"
 

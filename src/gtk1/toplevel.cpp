@@ -27,11 +27,11 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/dialog.h"
 #include "wx/control.h"
-#include "wx/dcclient.h"
 #include "wx/gtk1/private.h"
 #include "wx/timer.h"
 #include "wx/settings.h"

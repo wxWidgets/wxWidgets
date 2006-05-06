@@ -26,12 +26,12 @@
 #ifndef  WX_PRECOMP
     #include "wx/log.h"
     #include "wx/frame.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/bitmap.h"
 #include "wx/statbmp.h"
 #include "wx/sizer.h"
-#include "wx/dcclient.h"
 #include "wx/image.h"
 
 #ifdef __VMS

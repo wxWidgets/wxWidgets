@@ -21,11 +21,11 @@
     #include "wx/dc.h"
     #include "wx/bitmap.h"
     #include "wx/settings.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/renderer.h"
 #include "wx/toplevel.h"
-#include "wx/dcclient.h"
 #include "wx/mac/uma.h"
 
 
@@ -359,4 +359,3 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
         }
     }
 }
-

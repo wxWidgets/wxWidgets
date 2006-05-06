@@ -15,9 +15,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
+    #include "wx/dcclient.h"
 #endif
-
-#include "wx/dcclient.h"
 
 #include "wx/mac/private.h"
 #include "wx/toplevel.h"

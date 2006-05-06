@@ -17,9 +17,9 @@
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
     #include "wx/window.h"
+    #include "wx/dcclient.h"
 #endif
 
-#include "wx/dcclient.h"
 #include "wx/os2/private.h"
 
 #include <stdio.h>

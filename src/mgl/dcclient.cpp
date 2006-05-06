@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcclient.cpp
+// Name:        src/mgl/dcclient.cpp
 // Purpose:
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -14,8 +14,9 @@
     #pragma hdrstop
 #endif
 
+#include "wx/dcclient.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/dcclient.h"
     #include "wx/window.h"
 #endif
 
@@ -39,7 +40,7 @@ wxWindowDC::wxWindowDC(wxWindow *win) : m_wnd(win)
     else
     {
         m_inPaintHandler = FALSE;
-        
+
         dc = new MGLDevCtx(MGL_wmBeginPaint(win->GetHandle()));
 
         MGLRegion clip;

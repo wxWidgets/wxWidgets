@@ -17,12 +17,12 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/panel.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/settings.h"
 #include "wx/clipbrd.h"
 #include "wx/tokenzr.h"
-#include "wx/dcclient.h"
 
 #include "wx/univ/inphand.h"
 #include "wx/univ/renderer.h"

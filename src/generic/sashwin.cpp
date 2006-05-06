@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sashwin.cpp
+// Name:        src/generic/sashwin.cpp
 // Purpose:     wxSashWindow implementation. A sash window has an optional
 //              sash on each edge, allowing it to be dragged. An event
 //              is generated when the sash is released.
@@ -15,7 +15,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_SASH
@@ -24,6 +24,7 @@
     #include "wx/dialog.h"
     #include "wx/frame.h"
     #include "wx/settings.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/math.h"
@@ -31,7 +32,6 @@
 #include <stdlib.h>
 
 #include "wx/dcscreen.h"
-#include "wx/dcclient.h"
 #include "wx/sashwin.h"
 #include "wx/laywin.h"
 
@@ -46,7 +46,7 @@ BEGIN_EVENT_TABLE(wxSashWindow, wxWindow)
     EVT_MOUSE_EVENTS(wxSashWindow::OnMouseEvent)
 #if defined( __WXMSW__ ) || defined( __WXMAC__)
     EVT_SET_CURSOR(wxSashWindow::OnSetCursor)
-#endif // wxMSW
+#endif // __WXMSW__ || __WXMAC__
 
 END_EVENT_TABLE()
 
@@ -703,6 +703,6 @@ void wxSashWindow::OnSetCursor(wxSetCursorEvent& event)
     //else: do nothing, in particular, don't call Skip()
 }
 
-#endif // wxMSW
+#endif // __WXMSW__ || __WXMAC__
 
 #endif // wxUSE_SASH

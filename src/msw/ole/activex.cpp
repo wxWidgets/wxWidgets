@@ -23,7 +23,10 @@
     #pragma hdrstop
 #endif
 
-#include "wx/dcclient.h"
+#ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
+#endif
+
 #include "wx/math.h"
 
 // I don't know why members of tagVARIANT aren't found when compiling

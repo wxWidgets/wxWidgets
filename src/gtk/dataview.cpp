@@ -18,10 +18,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/stockitem.h"
-#include "wx/dcclient.h"
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
 #include "wx/sizer.h"
@@ -1437,7 +1437,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
 
     m_treeview = gtk_tree_view_new();
     gtk_container_add (GTK_CONTAINER (m_widget), m_treeview);
-    
+
     if (style & wxDV_MULTIPLE)
     {
         GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
