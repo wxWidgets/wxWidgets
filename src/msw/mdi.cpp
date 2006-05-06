@@ -772,7 +772,13 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
   m_hWnd = (WXHWND)::SendMessage(GetWinHwnd(parent->GetClientWindow()),
                                  WM_MDICREATE, 0, (LONG)(LPSTR)&mcs);
 
-  wxAssociateWinWithHandle((HWND) GetHWND(), this);
+  if ( !m_hWnd )
+  {
+      wxLogLastError(_T("WM_MDICREATE"));
+      return false;
+  }
+
+  SubclassWin(m_hWnd);
 
   return true;
 }
