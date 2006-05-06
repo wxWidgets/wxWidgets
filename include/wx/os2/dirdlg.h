@@ -18,19 +18,15 @@ WXDLLEXPORT_DATA(extern const wxChar) wxFileSelectorPromptStr[];
 
 class WXDLLEXPORT wxDirDialog: public wxDirDialogBase
 {
-DECLARE_DYNAMIC_CLASS(wxDirDialog)
+    DECLARE_DYNAMIC_CLASS(wxDirDialog)
 public:
     wxDirDialog(wxWindow *parent, const wxString& message = wxFileSelectorPromptStr,
         const wxString& defaultPath = "",
         long style = 0, const wxPoint& pos = wxDefaultPosition);
 
-    inline void SetStyle(long style) { m_dialogStyle = style; }
-    inline long GetStyle() const { return m_dialogStyle; }
-
     int ShowModal();
 
 protected:
-    long        m_dialogStyle;
     wxWindow *  m_parent;
 };
 

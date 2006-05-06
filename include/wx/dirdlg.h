@@ -40,6 +40,7 @@ extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[];
 class WXDLLEXPORT wxDirDialogBase : public wxDialog
 {
 public:
+    wxDirDialogBase() {}
     wxDirDialogBase(wxWindow *parent,
                     const wxString& title = wxDirSelectorPromptStr,
                     const wxString& defaultPath = wxEmptyString,
@@ -47,20 +48,34 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& sz = wxDefaultSize,
                     const wxString& name = wxDirDialogNameStr)
-        : wxDialog(parent, wxID_ANY, title, pos, sz, style, name)
-        , m_path(defaultPath)
-    {}
-    wxDirDialogBase() {}
+    {
+        Create(parent, title, defaultPath, style, pos, sz, name);
+    }
 
     virtual ~wxDirDialogBase() {}
 
+
+    bool Create(wxWindow *parent,
+                const wxString& title = wxDirSelectorPromptStr,
+                const wxString& defaultPath = wxEmptyString,
+                long style = wxDD_DEFAULT_STYLE,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& sz = wxDefaultSize,
+                const wxString& name = wxDirDialogNameStr)
+    {
+        if (!wxDialog::Create(parent, wxID_ANY, title, pos, sz, style, name))
+            return false;
+        m_path = defaultPath;
+        m_message = title;
+        return true;
+    }
+
+
     virtual void SetMessage(const wxString& message) { m_message = message; }
     virtual void SetPath(const wxString& path) { m_path = path; }
-    virtual void SetStyle(long style) { SetWindowStyle(style); }
 
     virtual wxString GetMessage() const { return m_message; }
     virtual wxString GetPath() const { return m_path; }
-    virtual long GetStyle() const { return GetWindowStyle(); }
 
 protected:
     wxString m_message;

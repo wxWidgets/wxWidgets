@@ -23,13 +23,9 @@ public:
                 const wxSize& size = wxDefaultSize,
                 const wxString& name = wxDirDialogNameStr);
 
-    void SetStyle(long style) { m_dialogStyle = style; }
-    long GetStyle() const { return m_dialogStyle; }
-
     virtual int ShowModal();
 
 protected:
-    long        m_dialogStyle;
     wxWindow *  m_parent;
 
     DECLARE_DYNAMIC_CLASS(wxDirDialog)

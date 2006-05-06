@@ -78,20 +78,22 @@ END_EVENT_TABLE()
 wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
                                        const wxString& defaultPath, long style,
                                        const wxPoint& pos, const wxSize& sz,
-                                       const wxString& name):
-                wxDirDialogBase(parent, title, defaultPath, style, pos, sz, name)
+                                       const wxString& name)
 {
     Create(parent, title, defaultPath, style, pos, sz, name);
 }
 
-bool wxGenericDirDialog::Create(wxWindow* WXUNUSED(parent),
-                                const wxString& WXUNUSED(title),
+bool wxGenericDirDialog::Create(wxWindow* parent,
+                                const wxString& title,
                                 const wxString& defaultPath, long style,
-                                const wxPoint& WXUNUSED(pos),
-                                const wxSize& WXUNUSED(sz),
-                                const wxString& WXUNUSED(name))
+                                const wxPoint& pos,
+                                const wxSize& sz,
+                                const wxString& name)
 {
     wxBusyCursor cursor;
+
+    if (!wxDirDialogBase::Create(parent, title, defaultPath, style, pos, sz, name))
+        return false;
 
     m_path = defaultPath;
     if (m_path == wxT("~"))
@@ -211,6 +213,15 @@ bool wxGenericDirDialog::Create(wxWindow* WXUNUSED(parent),
     return true;
 }
 
+void wxGenericDirDialog::EndModal(int retCode)
+{
+    // before proceeding, change the current working directory if user asked so
+    if (retCode == wxID_OK && HasFlag(wxDD_CHANGE_DIR))
+        wxSetWorkingDirectory(m_path);
+
+    wxDialog::EndModal(retCode);
+}
+
 void wxGenericDirDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     EndModal(wxID_CANCEL);
@@ -219,12 +230,15 @@ void wxGenericDirDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 void wxGenericDirDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
     m_path = m_input->GetValue();
+
     // Does the path exist? (User may have typed anything in m_input)
-    if (wxDirExists(m_path)) {
+    if (wxDirExists(m_path))
+    {
         // OK, path exists, we're done.
         EndModal(wxID_OK);
         return;
     }
+
     // Interact with user, find out if the dir is a typo or to be created
     wxString msg;
     msg.Printf(_("The directory '%s' does not exist\nCreate it now?"),
@@ -232,15 +246,18 @@ void wxGenericDirDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     wxMessageDialog dialog(this, msg, _("Directory does not exist"),
                            wxYES_NO | wxICON_WARNING);
 
-    if ( dialog.ShowModal() == wxID_YES ) {
+    if ( dialog.ShowModal() == wxID_YES )
+    {
         // Okay, let's make it
         wxLogNull log;
-        if (wxMkdir(m_path)) {
+        if (wxMkdir(m_path))
+        {
             // The new dir was created okay.
             EndModal(wxID_OK);
             return;
         }
-        else {
+        else
+        {
             // Trouble...
             msg.Printf(_("Failed to create directory '%s'\n(Do you have the required permissions?)"),
                        m_path.c_str());

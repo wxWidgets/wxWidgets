@@ -22,8 +22,8 @@ class WXDLLEXPORT wxTreeEvent;
 // we may be included directly as well as from wx/dirdlg.h (FIXME)
 extern WXDLLEXPORT_DATA(const wxChar) wxDirDialogNameStr[];
 extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[];
-#ifndef wxDD_DEFAULT_STYLE
 
+#ifndef wxDD_DEFAULT_STYLE
 #ifdef __WXWINCE__
     #define wxDD_DEFAULT_STYLE \
         (wxDEFAULT_DIALOG_STYLE | wxDD_NEW_DIR_BUTTON)
@@ -62,13 +62,11 @@ public:
 
     //// Accessors
     void SetPath(const wxString& path);
-    void SetStyle(long style) { m_dialogStyle = style; }
-
     wxString GetPath() const;
-    long GetStyle() const { return m_dialogStyle; }
 
     //// Overrides
     virtual int ShowModal();
+    virtual void EndModal(int retCode);
 
     // this one is specific to wxGenericDirDialog
     wxTextCtrl* GetInputCtrl() const { return m_input; }
@@ -83,7 +81,6 @@ protected:
     void OnGoHome(wxCommandEvent& event);
     void OnShowHidden(wxCommandEvent& event);
 
-    long              m_dialogStyle;
     wxGenericDirCtrl* m_dirCtrl;
     wxTextCtrl*       m_input;
 

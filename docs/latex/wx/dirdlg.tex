@@ -12,17 +12,16 @@ This class represents the directory chooser dialog.
 \wxheading{Include files}
 
 <wx/dirdlg.h>
-<wx/generic/dirdlgg.h>
 
 \wxheading{Window styles}
 
-\twocolwidtha{5cm}
-\begin{twocollist}
+\begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxDD\_DEFAULT\_STYLE}}{Equivalent to a combination of wxDEFAULT\_DIALOG\_STYLE, wxDD\_NEW\_DIR\_BUTTON and wxRESIZE\_BORDER (the last one is not used under wxWinCE).}
 \twocolitem{\windowstyle{wxDD\_NEW\_DIR\_BUTTON}}{Add "Create new
 directory" button and allow directory names to be editable.  On
 Windows the new directory button is only available with recent
 versions of the common dialogs.}
+\twocolitem{\windowstyle{wxDD\_CHANGE\_DIR}}{Change the current working directory to the directory chosen by the user.}
 \end{twocollist}
 
 See also \helpref{Generic window styles}{windowstyles}.
@@ -78,12 +77,6 @@ Returns the default or user-selected path.
 
 Returns the message that will be displayed on the dialog.
 
-\membersection{wxDirDialog::GetStyle}\label{wxdirdialoggetstyle}
-
-\constfunc{long}{GetStyle}{\void}
-
-Returns the dialog style.
-
 \membersection{wxDirDialog::SetMessage}\label{wxdirdialogsetmessage}
 
 \func{void}{SetMessage}{\param{const wxString\& }{message}}
@@ -95,12 +88,6 @@ Sets the message that will be displayed on the dialog.
 \func{void}{SetPath}{\param{const wxString\& }{path}}
 
 Sets the default path.
-
-\membersection{wxDirDialog::SetStyle}\label{wxdirdialogsetstyle}
-
-\func{void}{SetStyle}{\param{long }{style}}
-
-Sets the dialog style. This is currently unused.
 
 \membersection{wxDirDialog::ShowModal}\label{wxdirdialogshowmodal}
 

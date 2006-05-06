@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/gtk/dirdlg.cpp
-// Purpose:     native implementation of wxDirDialog
+// Purpose:     native implementation of wxDirDialogGTK
 // Author:      Robert Roebling, Zbigniew Zagorski, Mart Raudsepp, Francesco Montorsi
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, 2004 Zbigniew Zagorski, 2005 Mart Raudsepp
@@ -13,7 +13,7 @@
 
 
 /*
-  NOTE: the GtkFileChooser interface can be used both for wxFileDialog and for wxDirDialog.
+  NOTE: the GtkFileChooser interface can be used both for wxFileDialog and for wxDirDialogGTK.
         Thus following code is very similar (even if not identic) to src/gtk/filedlg.cpp
         If you find a problem in this code, remember to check also that file !
 */
@@ -29,17 +29,13 @@
     #include "wx/filedlg.h"
 #endif
 
-#ifdef __WXGTK24__
+#ifdef __WXGTK24__      // only for GTK+ > 2.4 there is GtkFileChooserDialog
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 #include <unistd.h> // chdir
 
-#include "wx/filename.h" // wxFilename
-#include "wx/tokenzr.h" // wxStringTokenizer
-#include "wx/filefn.h" // ::wxGetCwd
-#include "wx/msgdlg.h" // wxMessageDialog
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -52,43 +48,13 @@ extern void wxapp_install_idle_handler();
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_filedialog_ok_callback(GtkWidget *widget, wxDirDialog *dialog)
+static void gtk_filedialog_ok_callback(GtkWidget *widget, wxDirDialogGTK *dialog)
 {
-    int style = dialog->GetStyle();
     gchar* filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
 
-    // gtk version numbers must be identical with the one in ctor (that calls set_do_overwrite_confirmation)
-#if GTK_CHECK_VERSION(2,7,3)
-    if(gtk_check_version(2,7,3) != NULL)
-#endif
-    if ((style & wxSAVE) && (style & wxOVERWRITE_PROMPT))
-    {
-        if ( g_file_test(filename, G_FILE_TEST_EXISTS) )
-        {
-            wxString msg;
-
-            msg.Printf(
-                _("File '%s' already exists, do you really want to overwrite it?"),
-                wxString(wxConvFileName->cMB2WX(filename)).c_str());
-
-            wxMessageDialog dlg(dialog, msg, _("Confirm"),
-                               wxYES_NO | wxICON_QUESTION);
-            if (dlg.ShowModal() != wxID_YES)
-            {
-                g_free(filename);
-                return;
-            }
-        }
-    }
-
     // change to the directory where the user went if asked
-    if (style & wxCHANGE_DIR)
-    {
-        // Use chdir to not care about filename encodings
-        gchar* folder = g_path_get_dirname(filename);
-        chdir(folder);
-        g_free(folder);
-    }
+    if (dialog->HasFlag(wxDD_CHANGE_DIR))
+        chdir(filename);
 
     g_free(filename);
 
@@ -104,7 +70,7 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxDirDialog *dialog)
 
 extern "C" {
 static void gtk_filedialog_cancel_callback(GtkWidget *WXUNUSED(w),
-                                           wxDirDialog *dialog)
+                                           wxDirDialogGTK *dialog)
 {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     event.SetEventObject(dialog);
@@ -115,7 +81,7 @@ static void gtk_filedialog_cancel_callback(GtkWidget *WXUNUSED(w),
 extern "C" {
 static void gtk_filedialog_response_callback(GtkWidget *w,
                                              gint response,
-                                             wxDirDialog *dialog)
+                                             wxDirDialogGTK *dialog)
 {
     wxapp_install_idle_handler();
 
@@ -134,16 +100,16 @@ static void gtk_filedialog_response_callback(GtkWidget *w,
 #endif // __WXGTK24__
 
 //-----------------------------------------------------------------------------
-// wxDirDialog
+// wxDirDialogGTK
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxDirDialog,wxGenericDirDialog)
+IMPLEMENT_DYNAMIC_CLASS(wxDirDialogGTK,wxGenericDirDialog)
 
-BEGIN_EVENT_TABLE(wxDirDialog,wxGenericDirDialog)
-    EVT_BUTTON(wxID_OK, wxDirDialog::OnFakeOk)
+BEGIN_EVENT_TABLE(wxDirDialogGTK,wxGenericDirDialog)
+    EVT_BUTTON(wxID_OK, wxDirDialogGTK::OnFakeOk)
 END_EVENT_TABLE()
 
-wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
+wxDirDialogGTK::wxDirDialogGTK(wxWindow* parent, const wxString& title,
                         const wxString& defaultPath, long style,
                         const wxPoint& pos, const wxSize& sz,
                         const wxString& name)
@@ -159,7 +125,7 @@ wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
             !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
                     wxDefaultValidator, wxT("filedialog")))
         {
-            wxFAIL_MSG( wxT("wxDirDialog creation failed") );
+            wxFAIL_MSG( wxT("wxDirDialogGTK creation failed") );
             return;
         }
 
@@ -199,7 +165,7 @@ wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
         wxGenericDirDialog::Create(parent, title, defaultPath, style, pos, sz, name);
 }
 
-wxDirDialog::~wxDirDialog()
+wxDirDialogGTK::~wxDirDialogGTK()
 {
 #ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
@@ -210,7 +176,7 @@ wxDirDialog::~wxDirDialog()
 #endif
 }
 
-void wxDirDialog::OnFakeOk( wxCommandEvent &event )
+void wxDirDialogGTK::OnFakeOk( wxCommandEvent &event )
 {
 #ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
@@ -220,7 +186,7 @@ void wxDirDialog::OnFakeOk( wxCommandEvent &event )
         wxGenericDirDialog::OnOK( event );
 }
 
-int wxDirDialog::ShowModal()
+int wxDirDialogGTK::ShowModal()
 {
 #ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
@@ -230,7 +196,7 @@ int wxDirDialog::ShowModal()
         return wxGenericDirDialog::ShowModal();
 }
 
-bool wxDirDialog::Show( bool show )
+bool wxDirDialogGTK::Show( bool show )
 {
 #ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
@@ -240,7 +206,7 @@ bool wxDirDialog::Show( bool show )
         return wxGenericDirDialog::Show( show );
 }
 
-void wxDirDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags )
+void wxDirDialogGTK::DoSetSize(int x, int y, int width, int height, int sizeFlags )
 {
     if (!m_wxwindow)
         return;
@@ -248,7 +214,7 @@ void wxDirDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags )
         wxGenericDirDialog::DoSetSize( x, y, width, height, sizeFlags );
 }
 
-void wxDirDialog::SetPath(const wxString& dir)
+void wxDirDialogGTK::SetPath(const wxString& dir)
 {
 #ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
@@ -263,7 +229,7 @@ void wxDirDialog::SetPath(const wxString& dir)
         wxGenericDirDialog::SetPath( dir );
 }
 
-wxString wxDirDialog::GetPath() const
+wxString wxDirDialogGTK::GetPath() const
 {
 #ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))

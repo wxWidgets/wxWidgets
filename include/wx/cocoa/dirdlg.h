@@ -33,15 +33,12 @@ public:
                 const wxString& name = wxDirDialogNameStr);
     ~wxDirDialog();
 
-    long GetStyle() const { return m_dialogStyle; }
-
     virtual int ShowModal();
     
     inline WX_NSSavePanel GetNSSavePanel()
     {   return (WX_NSSavePanel)m_cocoaNSWindow; }
 
 protected:
-    long        m_dialogStyle;
     wxString    m_dir;
     wxWindow *  m_parent;
     wxString    m_fileName;

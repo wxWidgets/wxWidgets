@@ -26,7 +26,8 @@
 
 #if wxUSE_DIRDLG
 
-#if wxUSE_OLE && !defined(__GNUWIN32_OLD__) && (!defined(__WXWINCE__) || (defined(__HANDHELDPC__) && (_WIN32_WCE >= 500)))
+#if wxUSE_OLE && !defined(__GNUWIN32_OLD__) && (!defined(__WXWINCE__) || \
+    (defined(__HANDHELDPC__) && (_WIN32_WCE >= 500)))
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -89,7 +90,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
     m_message = message;
     m_parent = parent;
 
-    SetStyle(style);
+    SetWindowStyle(style);
     SetPath(defaultPath);
 }
 
@@ -180,6 +181,10 @@ int wxDirDialog::ShowModal()
     }
 
     m_path = pidl.GetPath();
+
+    // change current working directory if asked so
+    if (HasFlag(wxDD_CHANGE_DIR))
+        wxSetWorkingDirectory(m_path);
 
     return m_path.empty() ? wxID_CANCEL : wxID_OK;
 }

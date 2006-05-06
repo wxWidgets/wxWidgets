@@ -23,7 +23,7 @@ public:
 
     wxDirDialogGTK(wxWindow *parent,
                 const wxString& message = wxDirSelectorPromptStr,
-                const wxString& defaultPath = _T(""),
+                const wxString& defaultPath = wxEmptyString,
                 long style = wxDD_DEFAULT_STYLE,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
