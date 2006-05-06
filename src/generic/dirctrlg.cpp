@@ -700,6 +700,9 @@ void wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent &event)
 
 void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
 {
+    if (event.IsEditCancelled())
+        return;
+
     if ((event.GetLabel().empty()) ||
         (event.GetLabel() == _(".")) ||
         (event.GetLabel() == _("..")) ||
