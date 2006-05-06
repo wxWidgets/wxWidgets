@@ -1142,7 +1142,7 @@ size_t wxDataViewMainWindow::GetLastVisibleRow()
     wxSize client_size = GetClientSize();
     m_owner->CalcUnscrolledPosition( client_size.x, client_size.y, &client_size.x, &client_size.y );
 
-    return wxMin( GetRowCount()-1, (client_size.y/m_lineHeight)+1 );
+    return wxMin( GetRowCount()-1, ((unsigned)client_size.y/m_lineHeight)+1 );
 }
 
 size_t wxDataViewMainWindow::GetRowCount()
