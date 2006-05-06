@@ -143,7 +143,8 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
     if ( !family_name )
         return ret;
 
-    char *family_text = g_ascii_strdown( family_name, strlen( family_name ) );
+    wxGtkString family_text(g_ascii_strdown(family_name, strlen(family_name)));
+
     // Check for some common fonts, to salvage what we can from the current win32 centric wxFont API:
     if (strncmp( family_text, "monospace", 9 ) == 0)
         ret = wxFONTFAMILY_TELETYPE; // begins with "Monospace"
@@ -201,7 +202,6 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
             ret = wxFONTFAMILY_DECORATIVE; // Begins with "Old" - "Old English", "Old Town"
     }
 
-    free(family_text);
     return ret;
 }
 
@@ -312,11 +312,9 @@ bool wxNativeFontInfo::FromString(const wxString& s)
 
 wxString wxNativeFontInfo::ToString() const
 {
-    char *str = pango_font_description_to_string( description );
-    wxString tmp = wxGTK_CONV_BACK(  str );
-    g_free( str );
+    wxGtkString str(pango_font_description_to_string( description ));
 
-    return tmp;
+    return wxGTK_CONV_BACK(str);
 }
 
 bool wxNativeFontInfo::FromUserString(const wxString& s)
