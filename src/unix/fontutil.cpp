@@ -292,7 +292,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         wxString sizeStr;
         if ( size < 1 )
             sizeStr = _T("1");
-        else if ( n >= 1E6 )
+        else if ( size >= 1E6 )
             sizeStr = _T("1E6");
 
         if ( !sizeStr.empty() )
