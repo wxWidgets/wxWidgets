@@ -706,32 +706,6 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                 return lDlgCode | DLGC_WANTARROWS;
             }
 
-#if wxUSE_TOOLTIPS
-        case WM_NOTIFY:
-            {
-                NMHDR* hdr = (NMHDR *)lParam;
-                if ( hdr->code == TTN_NEEDTEXT )
-                {
-                    wxRadioBox *
-                        radiobox = (wxRadioBox *)wxGetWindowUserData(hwnd);
-
-                    wxCHECK_MSG( radiobox, 0,
-                                 wxT("radio button without radio box?") );
-
-                    wxToolTip *tooltip = radiobox->GetToolTip();
-                    if ( tooltip )
-                    {
-                        TOOLTIPTEXT *ttt = (TOOLTIPTEXT *)lParam;
-                        ttt->lpszText = (wxChar *)tooltip->GetTip().c_str();
-                    }
-
-                    // processed
-                    return 0;
-                }
-            }
-            break;
-#endif // wxUSE_TOOLTIPS
-
         case WM_KEYDOWN:
             {
                 wxRadioBox *radiobox = (wxRadioBox *)wxGetWindowUserData(hwnd);

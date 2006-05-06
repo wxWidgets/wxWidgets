@@ -207,29 +207,6 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
                 }
             }
             break;
-
-        // deal with tooltips here
-#if wxUSE_TOOLTIPS && defined(TTN_NEEDTEXT)
-        case WM_NOTIFY:
-            {
-                wxCHECK_MSG( win, 0, _T("should have a parent") );
-
-                NMHDR* hdr = (NMHDR *)lParam;
-                if ( hdr->code == TTN_NEEDTEXT )
-                {
-                    wxToolTip *tooltip = win->GetToolTip();
-                    if ( tooltip )
-                    {
-                        TOOLTIPTEXT *ttt = (TOOLTIPTEXT *)lParam;
-                        ttt->lpszText = (wxChar *)tooltip->GetTip().c_str();
-                    }
-
-                    // processed
-                    return 0;
-                }
-            }
-            break;
-#endif // wxUSE_TOOLTIPS
     }
 
     return ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, hWnd, message, wParam, lParam);
