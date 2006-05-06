@@ -125,6 +125,8 @@ void wxScrollHelperNative::AdjustScrollbars()
     int w, h;
     int vw, vh;
 
+    m_targetWindow->m_hasScrolling = m_xScrollPixelsPerLine != 0 || m_yScrollPixelsPerLine != 0;
+
     m_targetWindow->GetClientSize( &w, &h );
     m_targetWindow->GetVirtualSize( &vw, &vh );
 
