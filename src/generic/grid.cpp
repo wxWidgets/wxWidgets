@@ -7606,6 +7606,12 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
     {
         const wxString& line = lines[l];
 
+        if ( line.empty() )
+        {
+            *(textOrientation == wxHORIZONTAL ? &y : &x) += dc.GetCharHeight();
+            continue;
+        }
+
         long lineWidth,
              lineHeight;
         dc.GetTextExtent(line, &lineWidth, &lineHeight);
