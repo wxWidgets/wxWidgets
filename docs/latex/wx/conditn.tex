@@ -172,7 +172,8 @@ Waits until the condition is signalled.
 This method atomically releases the lock on the mutex associated with this
 condition (this is why it must be locked prior to calling Wait) and puts the
 thread to sleep until \helpref{Signal}{wxconditionsignal} or 
-\helpref{Broadcast}{wxconditionbroadcast} is called.
+\helpref{Broadcast}{wxconditionbroadcast} is called. It then locks the mutex
+again and returns.
 
 Note that even if \helpref{Signal}{wxconditionsignal} had been called before
 Wait without waking up any thread, the thread would still wait for another one
