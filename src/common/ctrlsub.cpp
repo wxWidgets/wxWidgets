@@ -172,6 +172,23 @@ void *wxItemContainer::GetClientData(unsigned int n) const
     return DoGetItemClientData(n);
 }
 
+// ============================================================================
+// wxControlWithItems implementation
+// ============================================================================
+
+void wxControlWithItems::InitCommandEventWithItems(wxCommandEvent& event, int n)
+{
+    InitCommandEvent(event);
+
+    if ( n != wxNOT_FOUND )
+    {
+        if ( HasClientObjectData() )
+            event.SetClientObject(GetClientObject(n));
+        else if ( HasClientUntypedData() )
+            event.SetClientData(GetClientData(n));
+    }
+}
+
 wxControlWithItems::~wxControlWithItems()
 {
     // this destructor is required for Darwin
