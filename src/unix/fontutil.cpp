@@ -277,7 +277,32 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     if (description)
         pango_font_description_free( description );
 
-    description = pango_font_description_from_string( wxGTK_CONV_SYS( s ) );
+    // there is a bug in at least pango <= 1.13 which makes it (or its backends)
+    // segfault for very big point sizes and for negative point sizes.
+    // To workaround that bug for pango <= 1.13
+    // (see http://bugzilla.gnome.org/show_bug.cgi?id=340229)
+    // we do the check on the size here using same (arbitrary) limits used by
+    // pango > 1.13. Note that the segfault could happen also for pointsize
+    // smaller than this limit !!
+    wxString str(s);
+    const size_t pos = str.find_last_of(_T(" "));
+    double size;
+    if ( pos != wxString::npos && wxString(str, pos + 1).ToDouble(&size) )
+    {
+        wxString sizeStr;
+        if ( size < 1 )
+            sizeStr = _T("1");
+        else if ( n >= 1E6 )
+            sizeStr = _T("1E6");
+
+        if ( !sizeStr.empty() )
+        {
+            // replace the old size with the adjusted one
+            str = wxString(s, 0, pos) + sizeStr;
+        }
+    }
+
+    description = pango_font_description_from_string( wxGTK_CONV_SYS( str ) );
 
     return true;
 }
