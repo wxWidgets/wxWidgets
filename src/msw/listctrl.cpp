@@ -3053,7 +3053,7 @@ static void wxConvertToMSWListCol(HWND hwndList,
 #ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
-        if ( wxTheApp->GetComCtl32Version() >= 470 )
+        if ( wxApp::GetComCtl32Version() >= 470 )
         {
             lvCol.mask |= LVCF_IMAGE;
 

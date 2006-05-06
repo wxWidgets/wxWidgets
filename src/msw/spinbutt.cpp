@@ -221,7 +221,7 @@ int wxSpinButton::GetValue() const
 {
     int n;
 #ifdef UDM_GETPOS32
-    if ( wxTheApp->GetComCtl32Version() >= 580 )
+    if ( wxApp::GetComCtl32Version() >= 580 )
     {
         // use the full 32 bit range if available
         n = ::SendMessage(GetHwnd(), UDM_GETPOS32, 0, 0);
@@ -244,7 +244,7 @@ void wxSpinButton::SetValue(int val)
     // wxSpinButtonBase::SetValue(val); -- no, it is pure virtual
 
 #ifdef UDM_SETPOS32
-    if ( wxTheApp->GetComCtl32Version() >= 580 )
+    if ( wxApp::GetComCtl32Version() >= 580 )
     {
         // use the full 32 bit range if available
         ::SendMessage(GetHwnd(), UDM_SETPOS32, 0, val);

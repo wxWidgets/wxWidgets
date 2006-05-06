@@ -4259,7 +4259,7 @@ void wxTextCtrl::CreateCaret()
         // FIXME use renderer
         caret = new wxCaret(this, 1, GetLineHeight());
 #ifndef __WXMSW__
-        caret->SetBlinkTime(0);
+        wxCaret::SetBlinkTime(0);
 #endif // __WXMSW__
     }
     else

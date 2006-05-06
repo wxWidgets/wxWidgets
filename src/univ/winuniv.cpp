@@ -471,8 +471,7 @@ bool wxWindow::Enable(bool enable)
 
 bool wxWindow::IsFocused() const
 {
-    wxWindow *self = wxConstCast(this, wxWindow);
-    return self->FindFocus() == self;
+    return FindFocus() == this;
 }
 
 bool wxWindow::IsPressed() const

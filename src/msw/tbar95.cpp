@@ -509,7 +509,7 @@ void wxToolBar::CreateDisabledImageList()
 
     // as we can't use disabled image list with older versions of comctl32.dll,
     // don't even bother creating it
-    if ( wxTheApp->GetComCtl32Version() >= 470 )
+    if ( wxApp::GetComCtl32Version() >= 470 )
     {
         // search for the first disabled button img in the toolbar, if any
         for ( wxToolBarToolsList::compatibility_iterator
