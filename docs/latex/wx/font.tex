@@ -306,10 +306,23 @@ family identifiers.
 
 Returns the platform-dependent string completely describing this font or an
 empty string if the font wasn't constructed using the native font description.
+Note that the returned string is not meant to be shown or edited by the user: a typical
+use of this function is for serializing in string-form a wxFont object.
 
 \wxheading{See also}
 
-\helpref{wxFont::SetNativeFontInfo}{wxfontsetnativefontinfo}
+\helpref{wxFont::SetNativeFontInfo}{wxfontsetnativefontinfo},\helpref{wxFont::GetNativeFontInfoUserDesc}{wxfontgetnativefontinfouserdesc}
+
+
+\membersection{wxFont::GetNativeFontInfoUserDesc}\label{wxfontgetnativefontinfouserdesc}
+
+\func{wxString}{GetNativeFontInfoUserDesc}{\void}
+
+Returns a user-friendly string for this font object. Some examples of the formats of returned strings (which are platform-dependent) are in \helpref{SetNativeFontInfoUserDesc}{wxfontsetnativefontinfouserdesc}.
+
+\wxheading{See also}
+
+\helpref{wxFont::GetNativeFontInfoDesc}{wxfontgetnativefontinfodesc}
 
 
 \membersection{wxFont::GetPointSize}\label{wxfontgetpointsize}
@@ -457,7 +470,37 @@ Sets the font family.
 Creates the font corresponding to the given native font description string
 which must have been previously returned by
 \helpref{GetNativeFontInfoDesc}{wxfontgetnativefontinfodesc}. If the string is
-invalid, font is unchanged.
+invalid, font is unchanged. This function is typically used for de-serializing a wxFont
+object previously saved in a string-form.
+
+\wxheading{See also}
+
+\helpref{wxFont::SetNativeFontInfoUserDesc}{wxfontsetnativefontinfouserdesc}
+
+
+\membersection{wxFont::SetNativeFontInfoUserDesc}\label{wxfontsetnativefontinfouserdesc}
+
+\func{void}{SetNativeFontInfoUserDesc}{\param{const wxString\& }{info}}
+
+Creates the font corresponding to the given native font description string.
+Unlike \helpref{SetNativeFontInfo}{wxfontsetnativefontinfo}, this function accepts
+strings which are user-friendly.
+Examples of accepted string formats are:
+
+\twocolwidtha{15cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{Generic syntax}{Example}
+\twocolitem{on {\bf wxGTK2}: {\tt $[FACE-NAME]$ $[bold]$ $[oblique|italic]$ $[POINTSIZE]$}}{Monospace bold 10}
+\twocolitem{on {\bf wxMSW}: {\tt $[light|bold]$ $[italic]$ $[FACE-NAME]$ $[POINTSIZE]$ $[ENCODING]$}}{Tahoma 10 WINDOWS-1252}
+\twocolitem{on {\bf wxMac}: FIXME}{FIXME}
+\end{twocollist}
+
+For more detailed information about the allowed syntaxes you can look at the documentation of the native API used for font-rendering (e.g. \urlref{pango_font_description_from_string}{http://developer.gnome.org/doc/API/2.0/pango/pango-Fonts.html\#pango-font-description-from-string}).
+
+\wxheading{See also}
+
+\helpref{wxFont::SetNativeFontInfo}{wxfontsetnativefontinfo}
+
 
 
 \membersection{wxFont::SetPointSize}\label{wxfontsetpointsize}
