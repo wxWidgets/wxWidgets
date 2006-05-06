@@ -140,7 +140,10 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
     // around a bug in the 64-bit glib shipped with solaris 10, -1 causes it
     // to try to allocate 2^32 bytes.
     const char *family_name = pango_font_description_get_family( description );
-    char *family_text = g_ascii_strdown( family_name, family_name ? strlen( family_name ) : 0 );
+    if ( !family_name )
+        return ret;
+
+    char *family_text = g_ascii_strdown( family_name, strlen( family_name ) );
     // Check for some common fonts, to salvage what we can from the current win32 centric wxFont API:
     if (strncmp( family_text, "monospace", 9 ) == 0)
         ret = wxFONTFAMILY_TELETYPE; // begins with "Monospace"
