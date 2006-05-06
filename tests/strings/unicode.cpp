@@ -53,6 +53,7 @@ private:
         CPPUNIT_TEST( ToFromAscii );
 #if wxUSE_WCHAR_T
         CPPUNIT_TEST( ConstructorsWithConversion );
+        CPPUNIT_TEST( ConversionEmpty );
         CPPUNIT_TEST( ConversionWithNULs );
         CPPUNIT_TEST( ConversionUTF7 );
         CPPUNIT_TEST( ConversionUTF8 );
@@ -64,6 +65,7 @@ private:
     void ToFromAscii();
 #if wxUSE_WCHAR_T
     void ConstructorsWithConversion();
+    void ConversionEmpty();
     void ConversionWithNULs();
     void ConversionUTF7();
     void ConversionUTF8();
@@ -139,33 +141,46 @@ void UnicodeTestCase::ConstructorsWithConversion()
 #endif
 }
 
+void UnicodeTestCase::ConversionEmpty()
+{
+    size_t len;
+
+#if wxUSE_UNICODE
+    wxCharBuffer buf = wxConvLibc.cWC2MB(L"", 0, &len);
+#else // !wxUSE_UNICODE
+    wxWCharBuffer wbuf = wxConvLibc.cMB2WC("", 0, &len);
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+
+    CPPUNIT_ASSERT_EQUAL(0u, len);
+}
+
 void UnicodeTestCase::ConversionWithNULs()
 {
 #if wxUSE_UNICODE
-        static const size_t lenNulString = 10;
+    static const size_t lenNulString = 10;
 
-        wxString szTheString(L"The\0String", wxConvLibc, lenNulString);
-        wxCharBuffer theBuffer = szTheString.mb_str();
+    wxString szTheString(L"The\0String", wxConvLibc, lenNulString);
+    wxCharBuffer theBuffer = szTheString.mb_str();
 
-        CPPUNIT_ASSERT( memcmp(theBuffer.data(), "The\0String",
-                        lenNulString + 1) == 0 );
+    CPPUNIT_ASSERT( memcmp(theBuffer.data(), "The\0String",
+                    lenNulString + 1) == 0 );
 
-        wxString szTheString2("The\0String", wxConvLocal, lenNulString);
-        CPPUNIT_ASSERT_EQUAL( lenNulString, szTheString2.length() );
-        CPPUNIT_ASSERT( wxTmemcmp(szTheString2.c_str(), L"The\0String",
-                        lenNulString + 1) == 0 );
+    wxString szTheString2("The\0String", wxConvLocal, lenNulString);
+    CPPUNIT_ASSERT_EQUAL( lenNulString, szTheString2.length() );
+    CPPUNIT_ASSERT( wxTmemcmp(szTheString2.c_str(), L"The\0String",
+                    lenNulString + 1) == 0 );
 #else // !wxUSE_UNICODE
-        wxString szTheString(wxT("TheString"));
-        szTheString.insert(3, 1, '\0');
-        wxWCharBuffer theBuffer = szTheString.wc_str(wxConvLibc);
+    wxString szTheString(wxT("TheString"));
+    szTheString.insert(3, 1, '\0');
+    wxWCharBuffer theBuffer = szTheString.wc_str(wxConvLibc);
 
-        CPPUNIT_ASSERT( memcmp(theBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 );
+    CPPUNIT_ASSERT( memcmp(theBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 );
 
-        wxString szLocalTheString(wxT("TheString"));
-        szLocalTheString.insert(3, 1, '\0');
-        wxWCharBuffer theLocalBuffer = szLocalTheString.wc_str(wxConvLocal);
+    wxString szLocalTheString(wxT("TheString"));
+    szLocalTheString.insert(3, 1, '\0');
+    wxWCharBuffer theLocalBuffer = szLocalTheString.wc_str(wxConvLocal);
 
-        CPPUNIT_ASSERT( memcmp(theLocalBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 );
+    CPPUNIT_ASSERT( memcmp(theLocalBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 );
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
 
