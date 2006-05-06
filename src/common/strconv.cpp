@@ -422,9 +422,15 @@ wxMBConv::cMB2WC(const char *inBuff, size_t inLen, size_t *outLen) const
 const wxCharBuffer
 wxMBConv::cWC2MB(const wchar_t *inBuff, size_t inLen, size_t *outLen) const
 {
-    const size_t dstLen = FromWChar(NULL, 0, inBuff, inLen);
+    size_t dstLen = FromWChar(NULL, 0, inBuff, inLen);
     if ( dstLen != wxCONV_FAILED )
     {
+        if ( !dstLen )
+        {
+            // special case: can't allocate 0 size buffer below
+            dstLen++;
+        }
+
         wxCharBuffer buf(dstLen - 1);
         if ( FromWChar(buf.data(), dstLen, inBuff, inLen) != wxCONV_FAILED )
         {
@@ -433,11 +439,12 @@ wxMBConv::cWC2MB(const wchar_t *inBuff, size_t inLen, size_t *outLen) const
                 *outLen = dstLen;
 
                 const size_t nulLen = GetMBNulLen();
-                if ( !NotAllNULs(buf.data() + dstLen - nulLen, nulLen) )
+                if ( dstLen >= nulLen &&
+                        !NotAllNULs(buf.data() + dstLen - nulLen, nulLen) )
                 {
                     // in this case the output is NUL-terminated and we're not
                     // supposed to count NUL
-                    (*outLen) -= nulLen;
+                    *outLen -= nulLen;
                 }
             }
 
