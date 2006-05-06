@@ -699,7 +699,8 @@ enum {
 
     wxDD_NEW_DIR_BUTTON,
     wxDD_DEFAULT_STYLE,
-
+    wxDD_CHANGE_DIR,
+    
     wxMENU_TEAROFF,
     wxMB_DOCKABLE,
     wxNO_FULL_REPAINT_ON_RESIZE,
