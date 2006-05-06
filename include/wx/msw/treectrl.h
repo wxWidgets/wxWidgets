@@ -247,11 +247,6 @@ protected:
     // end edit label
     void DoEndEditLabel(bool discardChanges = false);
 
-
-    // data used only while editing the item label:
-    wxTextCtrl  *m_textCtrl;        // text control in which it is edited
-    wxTreeItemId m_idEdited;        // the item being edited
-
     virtual wxTreeItemId DoInsertItem(const wxTreeItemId& parent,
                                       size_t pos,
                                       const wxString& text,
@@ -264,6 +259,14 @@ protected:
                                        wxTreeItemData *data = NULL);
     virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags);
 
+    // obtain the user data for the lParam member of TV_ITEM
+    class wxTreeItemParam *GetItemParam(const wxTreeItemId& item) const;
+
+
+    // data used only while editing the item label:
+    wxTextCtrl  *m_textCtrl;        // text control in which it is edited
+    wxTreeItemId m_idEdited;        // the item being edited
+
 private:
     // the common part of all ctors
     void Init();
@@ -274,22 +277,7 @@ private:
 
     inline void DoExpand(const wxTreeItemId& item, int flag);
 
-    int DoGetItemImageFromData(const wxTreeItemId& item,
-                               wxTreeItemIcon which) const;
-    void DoSetItemImageFromData(const wxTreeItemId& item,
-                                int image,
-                                wxTreeItemIcon which) const;
-    void DoSetItemImages(const wxTreeItemId& item, int image, int imageSel);
-
     void DeleteTextCtrl();
-
-    // support for additional item images which we implement using
-    // wxTreeItemIndirectData technique - see the comments in msw/treectrl.cpp
-    void SetIndirectItemData(const wxTreeItemId& item,
-                             class wxTreeItemIndirectData *data);
-    bool HasIndirectData(const wxTreeItemId& item) const;
-    bool IsDataIndirect(wxTreeItemData *data) const
-        { return data && data->GetId().m_pItem == 0; }
 
     // the hash storing the items attributes (indexed by item ids)
     wxMapTreeAttr m_attrs;
