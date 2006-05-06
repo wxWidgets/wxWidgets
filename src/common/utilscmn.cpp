@@ -93,6 +93,13 @@
 #include "wx/msw/wince/time.h"
 #endif
 
+#ifdef __WXMAC__
+#include "wx/mac/private.h"
+#ifndef __DARWIN__
+#include "InternetConfig.h"
+#endif
+#endif
+
 #if !defined(__MWERKS__) && !defined(__WXWINCE__)
     #include <sys/types.h>
     #include <sys/stat.h>
@@ -100,6 +107,7 @@
 
 #if defined(__WXMSW__)
     #include "wx/msw/private.h"
+    #include "wx/msw/registry.h"
 #endif
 
 #if wxUSE_BASE
