@@ -716,7 +716,7 @@ void wxMacDataBrowserListControl::SetClientDataType(wxClientDataType clientDataI
 
 unsigned int wxMacDataBrowserListControl::MacGetCount() const
 {
-    return GetItemCount(wxMacDataBrowserRootContainer,false,kDataBrowserItemNoState);
+    return GetItemCount(wxMacDataBrowserRootContainer,false,kDataBrowserItemAnyState);
 }
 
 void wxMacDataBrowserListControl::MacDelete( unsigned int n )
