@@ -37,7 +37,9 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
 {
     if (m_class == wxT("wxMenu"))
     {
-        wxMenu *menu = new wxMenu(GetStyle());
+        wxMenu *menu = m_instance ? wxStaticCast(m_instance, wxMenu)
+                                  : new wxMenu(GetStyle());
+
         wxString title = GetText(wxT("label"));
         wxString help = GetText(wxT("help"));
 
