@@ -110,7 +110,7 @@ static inline bool IsLoggingEnabled()
 // ----------------------------------------------------------------------------
 
 // wrapper for wxVsnprintf(s_szBuf) which always NULL-terminates it
-static inline void PrintfInLogBug(const wxChar *szFormat, va_list argptr)
+static inline void PrintfInLogBuf(const wxChar *szFormat, va_list argptr)
 {
     if ( wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr) < 0 )
     {
@@ -126,7 +126,7 @@ void wxVLogGeneric(wxLogLevel level, const wxChar *szFormat, va_list argptr)
     if ( IsLoggingEnabled() ) {
         wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
 
-        PrintfInLogBug(szFormat, argptr);
+        PrintfInLogBuf(szFormat, argptr);
 
         wxLog::OnLog(level, s_szBuf, time(NULL));
     }
@@ -146,7 +146,7 @@ void wxLogGeneric(wxLogLevel level, const wxChar *szFormat, ...)
     if ( IsLoggingEnabled() ) {                                     \
       wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);                      \
                                                                     \
-      PrintfInLogBug(szFormat, argptr);                             \
+      PrintfInLogBuf(szFormat, argptr);                             \
                                                                     \
       wxLog::OnLog(wxLOG_##level, s_szBuf, time(NULL));             \
     }                                                               \
