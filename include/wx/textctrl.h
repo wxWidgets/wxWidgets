@@ -197,6 +197,22 @@ public:
     // operations
     void Init();
 
+    // merges the attributes of the base and the overlay objects and returns
+    // the result; the parameter attributes take precedence
+    //
+    // WARNING: the order of arguments is the opposite of Combine()
+    static wxTextAttr Merge(const wxTextAttr& base, const wxTextAttr& overlay)
+    {
+        return Combine(overlay, base, NULL);
+    }
+
+    // merges the attributes of this object and overlay
+    void Merge(const wxTextAttr& overlay)
+    {
+        *this = Merge(*this, overlay);
+    }
+
+
     // operators
     void operator= (const wxTextAttr& attr);
 

@@ -197,6 +197,20 @@ Returns a bitlist indicating which attributes will be set.
 Returns {\tt true} if this style specifies any non-default attributes.
 
 
+\membersection{wxTextAttr::Merge}\label{wxtextattrmerge}
+
+\func{void}{Merge}{\param{const wxTextAttr\&}{ overlay}}
+
+Copies all defined/valid properties from \arg{overlay} to current object.
+
+\func{static wxTextAttr}{Merge}{\param{const wxTextAttr\&}{ base}, \param{const wxTextAttr\&}{ overlay}}
+
+Creates a new {\tt wxTextAttr} which is a merge of \arg{base} and 
+\arg{overlay}. Properties defined in \arg{overlay} take precedence over those
+in \arg{base}. Properties undefined/invalid in both are undefined in the
+result.
+
+
 \membersection{wxTextAttr::SetAlignment}\label{wxtextattrsetalignment}
 
 \func{void}{SetAlignment}{\param{wxTextAttrAlignment}{ alignment}}
