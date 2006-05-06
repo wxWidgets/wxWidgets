@@ -217,7 +217,7 @@ static bool DoCommonPreInit()
     // initialization simply disappear under Windows
     //
     // note that we will delete this log target below
-    wxLog::SetActiveTarget(new wxLogBuffer);
+    delete wxLog::SetActiveTarget(new wxLogBuffer);
 #endif // wxUSE_LOG
 
     return true;
