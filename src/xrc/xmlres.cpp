@@ -1497,7 +1497,7 @@ struct XRCID_record
 
 static XRCID_record *XRCID_Records[XRCID_TABLE_SIZE] = {NULL};
 
-static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = -2)
+static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = wxID_NONE)
 {
     int index = 0;
 
@@ -1521,7 +1521,7 @@ static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = -2)
     (*rec_var)->next = NULL;
 
     wxChar *end;
-    if (value_if_not_found != -2)
+    if (value_if_not_found != wxID_NONE)
         (*rec_var)->id = value_if_not_found;
     else
     {
@@ -1542,7 +1542,8 @@ static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = -2)
 
 static void AddStdXRCID_Records();
 
-/*static*/ int wxXmlResource::GetXRCID(const wxChar *str_id)
+/*static*/
+int wxXmlResource::GetXRCID(const wxChar *str_id, int value_if_not_found)
 {
     static bool s_stdIDsAdded = false;
 
@@ -1552,7 +1553,7 @@ static void AddStdXRCID_Records();
         AddStdXRCID_Records();
     }
 
-    return XRCID_Lookup(str_id);
+    return XRCID_Lookup(str_id, value_if_not_found);
 }
 
 

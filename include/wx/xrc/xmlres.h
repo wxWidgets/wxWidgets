@@ -211,10 +211,13 @@ public:
     bool AttachUnknownControl(const wxString& name, wxWindow *control,
                               wxWindow *parent = NULL);
 
-    // Returns a numeric ID that is equivalent to the string id used in an XML
-    // resource. To be used in event tables.
-    // Macro XRCID is provided for convenience
-    static int GetXRCID(const wxChar *str_id);
+    // Returns a numeric ID that is equivalent to the string ID used in an XML
+    // resource. If an unknown str_id is requested (i.e. other than wxID_XXX
+    // or integer), a new record is created which associates the given string
+    // with a number. If value_if_not_found == wxID_NONE, the number is obtained via
+    // wxNewId(). Otherwise value_if_not_found is used.
+    // Macro XRCID(name) is provided for convenient use in event tables.
+    static int GetXRCID(const wxChar *str_id, int value_if_not_found = wxID_NONE);
 
     // Returns version information (a.b.c.d = d+ 256*c + 256^2*b + 256^3*a).
     long GetVersion() const { return m_version; }
