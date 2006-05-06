@@ -125,7 +125,8 @@ MustHaveApp(wxDirDialog);
 class wxDirDialog : public wxDialog {
 public:
     %pythonAppend wxDirDialog   "self._setOORInfo(self)"
-    
+    %pythonAppend wxDirDialog() ""
+   
     DocCtorStr(
         wxDirDialog(wxWindow* parent,
                     const wxString& message = wxPyDirSelectorPromptStr,
@@ -136,6 +137,15 @@ public:
                     const wxString& name = wxPyDirDialogNameStr),
         "Constructor.  Use ShowModal method to show the dialog.", "");
 
+    %RenameCtor(PreDirDialog, wxDirDialog());
+
+    bool Create(wxWindow *parent,
+                const wxString& title = wxDirSelectorPromptStr,
+                const wxString& defaultPath = wxEmptyString,
+                long style = wxDD_DEFAULT_STYLE,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& sz = wxDefaultSize,
+                const wxString& name = wxPyDirDialogNameStr);
 
     DocDeclStr(
         wxString , GetPath(),
@@ -144,10 +154,6 @@ public:
     DocDeclStr(
         wxString , GetMessage(),
         "Returns the message that will be displayed on the dialog.", "");
-    
-    DocDeclStr(
-        long , GetStyle(),
-        "Returns the dialog style.", "");
     
     DocDeclStr(
         void , SetMessage(const wxString& message),
