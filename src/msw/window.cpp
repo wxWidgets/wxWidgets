@@ -4962,16 +4962,8 @@ bool wxWindowMSW::HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam)
         id = wParam;
     }
 
-    if ( id != -1 ) // VZ: does this ever happen (FIXME)?
-    {
-        wxKeyEvent event(CreateKeyEvent(wxEVT_KEY_DOWN, id, lParam, wParam));
-        if ( GetEventHandler()->ProcessEvent(event) )
-        {
-            return true;
-        }
-    }
-
-    return false;
+    wxKeyEvent event(CreateKeyEvent(wxEVT_KEY_DOWN, id, lParam, wParam));
+    return GetEventHandler()->ProcessEvent(event);
 }
 
 bool wxWindowMSW::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
@@ -4984,14 +4976,8 @@ bool wxWindowMSW::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
         id = wParam;
     }
 
-    if ( id != -1 ) // VZ: does this ever happen (FIXME)?
-    {
-        wxKeyEvent event(CreateKeyEvent(wxEVT_KEY_UP, id, lParam, wParam));
-        if ( GetEventHandler()->ProcessEvent(event) )
-            return true;
-    }
-
-    return false;
+    wxKeyEvent event(CreateKeyEvent(wxEVT_KEY_UP, id, lParam, wParam));
+    return GetEventHandler()->ProcessEvent(event);
 }
 
 int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
