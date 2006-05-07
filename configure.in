@@ -1613,6 +1613,7 @@ case "${host}" in
       dnl not "g++/c++".
       dnl ---------------------------------------------------------------------
       dnl (OS/2-only piece)
+      AC_LANG_PUSH(C)
       if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
           dnl More complete Unix emulation for unix-like ports
           dnl by linking in POSIX/2's cExt (if available).
@@ -1656,6 +1657,7 @@ case "${host}" in
               wx_cv_gccversion="EMX2"
           )
       ])
+      AC_LANG_POP
       if test "$wx_cv_gccversion" = "EMX2"; then
           LIBS="$LIBS -lstdcpp"
           LDFLAGS="$LDFLAGS -Zsysv-signals"
