@@ -4925,7 +4925,10 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
     }
     else // we're called from WM_KEYDOWN
     {
-        id = wxCharCodeMSWToWX(wParam, lParam);
+        // don't pass lParam to wxCharCodeMSWToWX() here because we don't want
+        // to get numpad key codes: CHAR events should use the logical keys
+        // such as WXK_HOME instead of WXK_NUMPAD_HOME which is for KEY events
+        id = wxCharCodeMSWToWX(wParam);
         if ( id == 0 )
         {
             // it's ASCII and will be processed here only when called from
