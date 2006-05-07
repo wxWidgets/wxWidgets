@@ -2267,7 +2267,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
         // relay mouse move events to the tooltip control
         MSG *msg = (MSG *)pMsg;
         if ( msg->message == WM_MOUSEMOVE )
-            m_tooltip->RelayEvent(pMsg);
+            wxToolTip::RelayEvent(pMsg);
     }
 #endif // wxUSE_TOOLTIPS
 
