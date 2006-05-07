@@ -63,10 +63,7 @@ extern wxMenu *wxCurrentPopupMenu;
 extern const wxChar *wxMDIFrameClassName;   // from app.cpp
 extern const wxChar *wxMDIChildFrameClassName;
 extern const wxChar *wxMDIChildFrameClassNameNoRedraw;
-extern void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win);
 extern void wxRemoveHandleAssociation(wxWindow *win);
-
-static HWND invalidHandle = 0;
 
 // ---------------------------------------------------------------------------
 // constants
@@ -1176,8 +1173,6 @@ bool wxMDIChildFrame::MSWTranslateMessage(WXMSG* msg)
 
 void wxMDIChildFrame::MSWDestroyWindow()
 {
-    invalidHandle = GetHwnd();
-
     wxMDIParentFrame *parent = (wxMDIParentFrame *)GetParent();
 
     // Must make sure this handle is invalidated (set to NULL) since all sorts
@@ -1190,8 +1185,6 @@ void wxMDIChildFrame::MSWDestroyWindow()
 
     if (parent->GetActiveChild() == (wxMDIChildFrame*) NULL)
         ResetWindowStyle((void*) NULL);
-
-    invalidHandle = 0;
 
     if (m_hMenu)
     {

@@ -2815,8 +2815,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 //     with many items is just too slow)
                 NM_TREEVIEW *tv = (NM_TREEVIEW *)lParam;
 
-                wxTreeItemId item = event.m_item;
-
                 wxTreeItemParam *param =
                         (wxTreeItemParam *)tv->itemOld.lParam;
                 delete param;
