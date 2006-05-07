@@ -55,8 +55,6 @@ public:
     virtual wxToolBar* CreateToolBar(long style = -1,
                                      wxWindowID id = wxID_ANY,
                                      const wxString& name = wxToolBarNameStr);
-
-    virtual void PositionToolBar();
 #endif // wxUSE_TOOLBAR
 
     // Status bar
@@ -65,8 +63,6 @@ public:
                                            long style = wxST_SIZEGRIP,
                                            wxWindowID id = 0,
                                            const wxString& name = wxStatusLineNameStr);
-
-    virtual void PositionStatusBar();
 
     // Hint to tell framework which status bar to use: the default is to use
     // native one for the platforms which support it (Win32), the generic one
@@ -102,6 +98,17 @@ public:
 
     virtual wxPoint GetClientAreaOrigin() const;
 
+    // override base class version to add menu bar accel processing
+    virtual bool MSWTranslateMessage(WXMSG *msg)
+    {
+        return MSWDoTranslateMessage(this, msg);
+    }
+
+    // window proc for the frames
+    virtual WXLRESULT MSWWindowProc(WXUINT message,
+                                    WXWPARAM wParam,
+                                    WXLPARAM lParam);
+
 protected:
     // common part of all ctors
     void Init();
@@ -122,20 +129,9 @@ protected:
     // propagate our state change to all child frames
     void IconizeChildFrames(bool bIconize);
 
-    // override base class version to add menu bar accel processing
-    virtual bool MSWTranslateMessage(WXMSG *msg)
-    {
-        return MSWDoTranslateMessage(this, msg);
-    }
-
     // the real implementation of MSWTranslateMessage(), also used by
     // wxMDIChildFrame
     bool MSWDoTranslateMessage(wxFrame *frame, WXMSG *msg);
-
-    // window proc for the frames
-    virtual WXLRESULT MSWWindowProc(WXUINT message,
-                                    WXWPARAM wParam,
-                                    WXLPARAM lParam);
 
     // handle WM_INITMENUPOPUP message to generate wxEVT_MENU_OPEN
     bool HandleInitMenuPopup(WXHMENU hMenu);
@@ -145,7 +141,13 @@ protected:
     // get default (wxWidgets) icon for the frame
     virtual WXHICON GetDefaultIcon() const;
 
+#if wxUSE_TOOLBAR
+    virtual void PositionToolBar();
+#endif // wxUSE_TOOLBAR
+
 #if wxUSE_STATUSBAR
+    virtual void PositionStatusBar();
+
     static bool           m_useNativeStatusBar;
 #endif // wxUSE_STATUSBAR
 
