@@ -4921,31 +4921,7 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
     int id;
     if ( isASCII )
     {
-        // If 1 -> 26, translate to either special keycode or just set
-        // ctrlDown.  IOW, Ctrl-C should result in keycode == 3 and
-        // ControlDown() == true.
         id = wParam;
-        if ( (id > 0) && (id < 27) )
-        {
-            switch (id)
-            {
-                case 13:
-                    id = WXK_RETURN;
-                    break;
-
-                case 8:
-                    id = WXK_BACK;
-                    break;
-
-                case 9:
-                    id = WXK_TAB;
-                    break;
-
-                default:
-                    //ctrlDown = true;
-                    break;
-            }
-        }
     }
     else // we're called from WM_KEYDOWN
     {
