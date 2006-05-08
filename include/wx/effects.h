@@ -19,6 +19,7 @@
 
 #include "wx/object.h"
 #include "wx/colour.h"
+#include "wx/gdicmn.h"
 
 class WXDLLEXPORT wxEffects: public wxObject
 {
