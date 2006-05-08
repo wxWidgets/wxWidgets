@@ -202,6 +202,7 @@ public: \
     { \
     public: \
         const_iterator() : Iterator() {} \
+        const_iterator(iterator i) : Iterator(i) {} \
         const_iterator( Node* node, const Self* ht ) \
             : Iterator( node, (Self*)ht ) {} \
         const_iterator& operator++() { PlusPlus();return *this; } \
