@@ -262,6 +262,11 @@ private:
             std::advance( i, idx );                                           \
             return compatibility_iterator( this, i );                         \
         }                                                                     \
+        compatibility_iterator operator[](size_t idx) const                   \
+        {                                                                     \
+            return Item(idx);                                                 \
+        }                                                                     \
+                                                                              \
         compatibility_iterator GetFirst() const                               \
         {                                                                     \
             return compatibility_iterator( this,                              \
