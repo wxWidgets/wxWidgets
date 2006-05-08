@@ -731,11 +731,6 @@ pascal OSStatus wxMacAppEventHandler( EventHandlerCallRef handler , EventRef eve
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacAppEventHandler )
 
-#if defined(WXMAKINGDLL_CORE) && !defined(__DARWIN__)
-// we know it's there ;-)
-WXIMPORT char std::__throws_bad_alloc ;
-#endif
-
 #ifdef __WXDEBUG__
 
 pascal static void wxMacAssertOutputHandler(OSType componentSignature, UInt32 options,
