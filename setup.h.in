@@ -298,6 +298,7 @@
 #define wxUSE_CHECKLISTBOX 0
 #define wxUSE_CHOICE       0
 #define wxUSE_COMBOBOX     0
+#define wxUSE_DATAVIEWCTRL 0
 #define wxUSE_DATEPICKCTRL 0
 #define wxUSE_GAUGE        0
 #define wxUSE_LISTBOX      0
@@ -337,9 +338,11 @@
 
 #define wxUSE_GRID         0
 
-#define wxUSE_DATAVIEWCTRL   0
-
 #define wxUSE_MINIFRAME 0
+
+#define wxUSE_COMBOCONTROL 0
+
+#define wxUSE_OWNERDRAWNCOMBOBOX 0
 
 
 #define wxUSE_ACCEL 0
