@@ -23,19 +23,19 @@
     #include "wx/log.h"
     #include "wx/icon.h"
     #include "wx/msgdlg.h"
+    #include "wx/dcprint.h"
 #if wxUSE_STATUSBAR
     #include "wx/statusbr.h"
 #endif
 #endif
 
 #include "wx/module.h"
-#include "wx/dcprint.h"
 
 #include <string.h>
 
 #include "wx/os2/private.h"
 
-    IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 
 //
 // wxWidgets uses the Microsoft convention that the origin is the UPPER left.

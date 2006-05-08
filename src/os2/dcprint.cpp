@@ -14,12 +14,12 @@
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
+#include "wx/dcprint.h"
+
 #define INCL_DEV
 #define INCL_GPI
 #define INCL_PM
 #include<os2.h>
-
-#include "wx/dcprint.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -278,7 +278,7 @@ static bool wxGetDefaultDeviceName( wxString& rsDeviceName, wxString& rsPortName
         GlobalFree(pd.hDevMode);
         pd.hDevMode=NULL;
     }
-    return ( deviceName != wxT("") );
+    return !deviceName.empty();
 */
     return true;
 } // end of wxGetDefaultDeviceName

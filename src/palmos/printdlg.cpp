@@ -30,10 +30,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/dcprint.h"
 #endif
 
 #include "wx/printdlg.h"
-#include "wx/dcprint.h"
 
 #include "wx/palmos/private.h"
 

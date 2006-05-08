@@ -23,6 +23,7 @@
     #include "wx/dc.h"
     #include "wx/app.h"
     #include "wx/msgdlg.h"
+    #include "wx/dcprint.h"
 #endif
 
 #include "wx/math.h"
@@ -31,7 +32,6 @@
 #include "wx/mac/printmac.h"
 #include "wx/mac/private/print.h"
 
-#include "wx/dcprint.h"
 #include "wx/printdlg.h"
 #include "wx/mac/printdlg.h"
 

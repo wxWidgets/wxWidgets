@@ -15,11 +15,11 @@
 
 #ifndef WXPRECOMP
     #include "wx/object.h"
+    #include "wx/dcprint.h"
 #endif
 
 #include "wx/printdlg.h"
 #include "wx/mac/printdlg.h"
-#include "wx/dcprint.h"
 #include "wx/msgdlg.h"
 #include "wx/mac/private/print.h"
 

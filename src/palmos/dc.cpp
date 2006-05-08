@@ -34,10 +34,10 @@
     #include "wx/dcmemory.h"
     #include "wx/log.h"
     #include "wx/icon.h"
+    #include "wx/dcprint.h"
 #endif
 
 #include "wx/sysopt.h"
-#include "wx/dcprint.h"
 #include "wx/module.h"
 #include "wx/dynload.h"
 
@@ -497,4 +497,3 @@ private:
 IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
 
 #endif // wxUSE_DC_CACHEING
-

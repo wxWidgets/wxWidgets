@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcprint.cpp
+// Name:        src/mac/carbon/dcprint.cpp
 // Purpose:     wxPrinterDC class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -15,13 +15,14 @@
 #if wxUSE_PRINTING_ARCHITECTURE
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#include "wx/dcprint.h"
 
 #ifndef WX_PRECOMP
 #endif
 
-#include "wx/dcprint.h"
 #include "wx/msgdlg.h"
 #include "wx/math.h"
 #include "wx/mac/uma.h"
@@ -207,7 +208,7 @@ void wxMacCarbonPrinterDC::EndPage( wxPrinterDC* dc )
 
 wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 {
-    m_ok = FALSE ;
+    m_ok = false ;
     m_printData = printdata ;
     m_printData.ConvertToNative() ;
     m_nativePrinterDC = wxNativePrinterDC::Create( &m_printData ) ;
@@ -238,7 +239,7 @@ wxPrinterDC::~wxPrinterDC(void)
 }
 
 #if wxMAC_USE_CORE_GRAPHICS
-void wxPrinterDC::MacSetCGContext( void * cg ) 
+void wxPrinterDC::MacSetCGContext( void * cg )
 {
     ((wxMacCGContext*)(m_graphicContext))->SetNativeContext( (CGContextRef) cg ) ;
     m_graphicContext->SetPen( m_pen ) ;

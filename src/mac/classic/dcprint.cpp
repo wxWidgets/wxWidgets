@@ -1,25 +1,26 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcprint.cpp
+// Name:        src/mac/classic/dcprint.cpp
 // Purpose:     wxPrinterDC class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#include "wx/dcprint.h"
 
 #ifndef WX_PRECOMP
 #endif
 
-#include "wx/dcprint.h"
 #include "wx/msgdlg.h"
 #include "wx/math.h"
 #include "wx/mac/uma.h"
@@ -300,7 +301,7 @@ void wxMacClassicPrinterDC::EndPage( wxPrinterDC* dc )
 
 wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 {
-    m_ok = FALSE ;
+    m_ok = false ;
     m_printData = printdata ;
     m_printData.ConvertToNative() ;
     m_nativePrinterDC = wxNativePrinterDC::Create( &m_printData ) ;
@@ -406,5 +407,3 @@ void wxPrinterDC::DoGetSize(int *width, int *height) const
     if ( height )
         * height = m_nativePrinterDC->GetMaxY() ;
 }
-
-

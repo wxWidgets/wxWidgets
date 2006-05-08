@@ -37,10 +37,10 @@
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/dcprint.h"
 #endif
 
 #include "wx/msw/printwin.h"
-#include "wx/dcprint.h"
 #include "wx/printdlg.h"
 #include "wx/msw/private.h"
 

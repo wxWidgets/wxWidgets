@@ -18,6 +18,8 @@
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
+#include "wx/dcprint.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dc.h"
@@ -35,7 +37,6 @@
 #endif // !WX_PRECOMP
 
 #include "wx/prntbase.h"
-#include "wx/dcprint.h"
 #include "wx/printdlg.h"
 #include "wx/print.h"
 #include "wx/module.h"

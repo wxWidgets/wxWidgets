@@ -24,6 +24,10 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
+#include "wx/dcprint.h"
+
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
@@ -32,15 +36,12 @@
     #include "wx/math.h"
 #endif
 
-#if wxUSE_PRINTING_ARCHITECTURE
-
 #include "wx/palmos/private.h"
 
 #if wxUSE_WXDIB
 #include "wx/palmos/dib.h"
 #endif
 
-#include "wx/dcprint.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros

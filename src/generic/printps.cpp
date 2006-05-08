@@ -34,10 +34,10 @@
     #include "wx/intl.h"
     #include "wx/progdlg.h"
     #include "wx/log.h"
+    #include "wx/dcprint.h"
 #endif
 
 #include "wx/generic/printps.h"
-#include "wx/dcprint.h"
 #include "wx/printdlg.h"
 #include "wx/generic/prntdlgg.h"
 #include "wx/generic/progdlgg.h"

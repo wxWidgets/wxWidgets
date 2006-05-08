@@ -21,6 +21,7 @@
     #include "wx/dc.h"
     #include "wx/app.h"
     #include "wx/msgdlg.h"
+    #include "wx/dcprint.h"
 #endif
 
 #include "wx/mac/uma.h"
@@ -31,7 +32,6 @@
 #define mm2pt            2.83464566929
 #define pt2mm            0.352777777778
 
-#include "wx/dcprint.h"
 #include "wx/printdlg.h"
 
 #include <stdlib.h>
@@ -135,7 +135,7 @@ void wxMacCarbonPrintData::TransferFrom( wxPrintData* data )
         kPMLandscape : kPMPortrait , false ) ;
     // collate cannot be set
 #if 0 // not yet tested
-    if ( m_printerName.Length() > 0 )
+    if ( !m_printerName.empty() )
         PMSessionSetCurrentPrinter( (PMPrintSession) m_macPrintSession , wxMacCFStringHolder( m_printerName , wxFont::GetDefaultEncoding() ) ) ;
 #endif
     PMColorMode color ;

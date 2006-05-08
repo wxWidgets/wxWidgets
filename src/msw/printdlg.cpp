@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        printdlg.cpp
+// Name:        src/msw/printdlg.cpp
 // Purpose:     wxPrintDialog, wxPageSetupDialog
 // Author:      Julian Smart
 // Modified by:
@@ -30,12 +30,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/dcprint.h"
 #endif
 
 #include "wx/cmndata.h"
 #include "wx/printdlg.h"
 #include "wx/msw/printdlg.h"
-#include "wx/dcprint.h"
 #include "wx/paper.h"
 
 #include <stdlib.h>
@@ -95,19 +95,19 @@ static HGLOBAL wxCreateDevNames(const wxString& driverName, const wxString& prin
     else
     {
         hDev = GlobalAlloc(GPTR, 4*sizeof(WORD)+
-                           ( driverName.Length() + 1 +
-            printerName.Length() + 1 +
-                             portName.Length()+1 ) * sizeof(wxChar) );
+                           ( driverName.length() + 1 +
+            printerName.length() + 1 +
+                             portName.length()+1 ) * sizeof(wxChar) );
         LPDEVNAMES lpDev = (LPDEVNAMES)GlobalLock(hDev);
         lpDev->wDriverOffset = sizeof(WORD) * 4 / sizeof(wxChar);
         wxStrcpy((wxChar*)lpDev + lpDev->wDriverOffset, driverName);
 
         lpDev->wDeviceOffset = (WORD)( lpDev->wDriverOffset +
-                                       driverName.Length() + 1 );
+                                       driverName.length() + 1 );
         wxStrcpy((wxChar*)lpDev + lpDev->wDeviceOffset, printerName);
 
         lpDev->wOutputOffset = (WORD)( lpDev->wDeviceOffset +
-                                       printerName.Length() + 1 );
+                                       printerName.length() + 1 );
         wxStrcpy((wxChar*)lpDev + lpDev->wOutputOffset, portName);
 
         lpDev->wDefault = 0;
