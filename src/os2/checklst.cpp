@@ -24,6 +24,7 @@
     #include "wx/object.h"
     #include "wx/log.h"
     #include "wx/window.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #include "wx/colour.h"
@@ -32,7 +33,6 @@
 #include "wx/listbox.h"
 #include "wx/ownerdrw.h"
 #include "wx/settings.h"
-#include "wx/dcmemory.h"
 #include "wx/dcscreen.h"
 
 #define INCL_PM

@@ -12,6 +12,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #include "wx/bitmap.h"
@@ -19,7 +20,6 @@
 #include "wx/icon.h"
 #include "wx/filefn.h"
 #include "wx/image.h"
-#include "wx/dcmemory.h"
 
 #include "wx/rawbmp.h"
     // need this to get gdk_image_new_bitmap()

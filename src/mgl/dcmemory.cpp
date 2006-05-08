@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcmemory.cpp
+// Name:        src/mgl/dcmemory.cpp
 // Purpose:
 // Author:      Robert Roebling, Vaclav Slavik
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Robert Roebling, 
+// Copyright:   (c) 1998 Robert Roebling,
 //                  2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -26,12 +26,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxWindowDC)
 
 wxMemoryDC::wxMemoryDC() : wxDC()
 {
-    m_isMemDC = TRUE;
+    m_isMemDC = true;
 }
 
 wxMemoryDC::wxMemoryDC(wxDC *WXUNUSED(dc)) : wxDC()
 {
-    m_isMemDC = TRUE;
+    m_isMemDC = true;
 }
 
 wxMemoryDC::~wxMemoryDC()

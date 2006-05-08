@@ -19,12 +19,12 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #include "wx/icon.h"
 #include "wx/filefn.h"
 #include "wx/image.h"
-#include "wx/dcmemory.h"
 #include "wx/image.h"
 #include "wx/xpmdecod.h"
 

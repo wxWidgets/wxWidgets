@@ -15,6 +15,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #include "wx/icon.h"
@@ -35,7 +36,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 #endif
 
 #include "wx/mac/uma.h"
-#include "wx/dcmemory.h"
 
 // Implementation Notes
 // --------------------

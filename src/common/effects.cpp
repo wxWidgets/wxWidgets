@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        effects.cpp
+// Name:        src/common/effects.cpp
 // Purpose:     wxEffects implementation
 // Author:      Julian Smart
 // Modified by:
@@ -13,14 +13,18 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#include "wx/effects.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/dcmemory.h"
+#endif //WX_PRECOMP
 
 #include "wx/gdicmn.h"
 #include "wx/pen.h"
-#include "wx/dcmemory.h"
 #include "wx/settings.h"
-#include "wx/effects.h"
 
 /*
  * wxEffects: various 3D effects

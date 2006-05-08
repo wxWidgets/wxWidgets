@@ -1,17 +1,18 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcmemory.cpp
+// Name:        src/mac/carbon/dcmemory.cpp
 // Purpose:     wxMemoryDC class
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #include "wx/dcmemory.h"
+
 #include "wx/mac/private.h"
 
 //-----------------------------------------------------------------------------
@@ -86,7 +87,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
         int h = bitmap.GetHeight() ;
 
         // TODO: should this be kCGImageAlphaPremultiplied[First,Last] ?
-        CGImageAlphaInfo a = kCGImageAlphaNoneSkipFirst ; 
+        CGImageAlphaInfo a = kCGImageAlphaNoneSkipFirst ;
 
         CGColorSpaceRef genericColorSpace  = wxMacGetGenericRGBColorSpace();
         CGContextRef bmCtx = CGBitmapContextCreate( data , w, h, bitsPerComp , bytesPerPixel * w , genericColorSpace, a );
@@ -94,15 +95,15 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 
         if ( bmCtx )
         {
-            CGContextSetFillColorSpace( bmCtx, genericColorSpace ); 
-            CGContextSetStrokeColorSpace( bmCtx, genericColorSpace ); 
+            CGContextSetFillColorSpace( bmCtx, genericColorSpace );
+            CGContextSetStrokeColorSpace( bmCtx, genericColorSpace );
 
             CGContextTranslateCTM( bmCtx , 0 ,  m_selected.GetHeight() ) ;
             CGContextScaleCTM( bmCtx , 1 , -1 ) ;
 
-            m_graphicContext = new wxMacCGContext( bmCtx ) ;  
+            m_graphicContext = new wxMacCGContext( bmCtx ) ;
             m_graphicContext->SetPen( m_pen ) ;
-            m_graphicContext->SetBrush( m_brush ) ;     
+            m_graphicContext->SetBrush( m_brush ) ;
         }
         m_ok = (m_graphicContext != NULL) ;
 

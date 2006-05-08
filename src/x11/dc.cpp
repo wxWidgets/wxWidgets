@@ -13,7 +13,10 @@
 #include "wx/wxprec.h"
 
 #include "wx/dc.h"
-#include "wx/dcmemory.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/dcmemory.h"
+#endif
 
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 

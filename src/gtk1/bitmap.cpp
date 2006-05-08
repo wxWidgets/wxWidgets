@@ -14,13 +14,13 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/dcmemory.h"
 #endif // WX_PRECOMP
 
 #include "wx/palette.h"
 #include "wx/icon.h"
 #include "wx/filefn.h"
 #include "wx/image.h"
-#include "wx/dcmemory.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>

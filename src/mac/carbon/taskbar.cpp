@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/mac/carbon/taskbar.cpp
-// Purpose:    wxTaskBarIcon
+// Purpose:     wxTaskBarIcon
 // Author:      Ryan Norton
 // Modified by:
 // Created:     09/25/2004
@@ -13,12 +13,16 @@
 
 #ifdef wxHAS_TASK_BAR_ICON
 
+#include "wx/taskbar.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/dcmemory.h"
+#endif
+
 #include "wx/mac/private.h"
 
-#include "wx/taskbar.h"
 #include "wx/menu.h"
 #include "wx/icon.h"
-#include "wx/dcmemory.h"
 
 
 class wxTaskBarIconImpl
@@ -54,7 +58,7 @@ class wxTaskBarIconWindow : public wxTopLevelWindow
 {
 public:
     wxTaskBarIconWindow(wxTaskBarIconImpl *impl)
-        : wxTopLevelWindow(NULL, -1, wxT("")), m_impl(impl)
+        : wxTopLevelWindow(NULL, wxID_ANY, wxEmptyString), m_impl(impl)
     {
         Connect(
             -1, wxEVT_COMMAND_MENU_SELECTED,

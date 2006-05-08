@@ -13,16 +13,16 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-  #include "wx/window.h"
-  #include "wx/font.h"
-  #include "wx/bitmap.h"
-  #include "wx/dcmemory.h"
-  #include "wx/menu.h"
-  #include "wx/utils.h"
+    #include "wx/window.h"
+    #include "wx/font.h"
+    #include "wx/bitmap.h"
+    #include "wx/dcmemory.h"
+    #include "wx/menu.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/settings.h"
@@ -108,4 +108,3 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
 
 #endif // wxUSE_OWNER_DRAWN
-

@@ -24,9 +24,9 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/dcmemory.h"
 #endif // WX_PRECOMP
 
-#include "wx/dcmemory.h"
 #include "wx/image.h"
 #include "wx/prntbase.h"
 #include "wx/generic/prntdlgg.h"

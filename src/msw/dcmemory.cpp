@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcmemory.cpp
+// Name:        src/msw/dcmemory.cpp
 // Purpose:     wxMemoryDC class
 // Author:      Julian Smart
 // Modified by:
@@ -24,14 +24,14 @@
     #pragma hdrstop
 #endif
 
+#include "wx/dcmemory.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/log.h"
 #endif
 
 #include "wx/msw/private.h"
-
-#include "wx/dcmemory.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -199,4 +199,3 @@ void wxMemoryDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord he
         wxDC::DoDrawRectangle(x, y, width, height);
     }
 }
-

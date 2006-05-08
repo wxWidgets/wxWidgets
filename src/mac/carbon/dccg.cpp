@@ -18,10 +18,10 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #include "wx/mac/uma.h"
-#include "wx/dcmemory.h"
 #include "wx/dcprint.h"
 #include "wx/region.h"
 #include "wx/image.h"

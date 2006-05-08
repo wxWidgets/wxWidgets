@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/ownerdrw.cpp
+// Name:        src/os2/ownerdrw.cpp
 // Purpose:     implementation of wxOwnerDrawn class
 // Author:      David Webster
 // Modified by:
@@ -12,17 +12,17 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifndef WX_PRECOMP
-  #include "wx/window.h"
-  #include "wx/os2/private.h"
-  #include "wx/font.h"
-  #include "wx/bitmap.h"
-  #include "wx/dcmemory.h"
-  #include "wx/menu.h"
-  #include "wx/utils.h"
-#endif
-
 #if wxUSE_OWNER_DRAWN
+
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+    #include "wx/os2/private.h"
+    #include "wx/font.h"
+    #include "wx/bitmap.h"
+    #include "wx/dcmemory.h"
+    #include "wx/menu.h"
+    #include "wx/utils.h"
+#endif
 
 #include "wx/settings.h"
 #include "wx/ownerdrw.h"
@@ -74,7 +74,7 @@ bool wxOwnerDrawn::OnMeasureItem( size_t* pWidth,
     // placed on top of each other.
     if (!m_strAccel.empty() )
     {
-        sStr.Pad(sStr.Length()%8);
+        sStr.Pad(sStr.length()%8);
         sStr += m_strAccel;
     }
     vDC.SetFont(GetFont());

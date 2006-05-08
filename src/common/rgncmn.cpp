@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        rgncmn.cpp
+// Name:        src/common/rgncmn.cpp
 // Purpose:     Methods of wxRegion that have a generic implementation
 // Author:      Robin Dunn
 // Modified by:
@@ -13,15 +13,20 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #include "wx/region.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/dcmemory.h"
+#endif //WX_PRECOMP
+
 #include "wx/bitmap.h"
+
 #if wxUSE_IMAGE
-#include "wx/image.h"
+    #include "wx/image.h"
 #endif
-#include "wx/dcmemory.h"
 
 
 //---------------------------------------------------------------------------
@@ -131,7 +136,7 @@ bool wxRegion::Union(const wxBitmap& bmp,
                          tolerance);
 #else
     return false;
-#endif                         
+#endif
 }
 
 #else

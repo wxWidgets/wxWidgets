@@ -17,13 +17,11 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #include "wx/icon.h"
 #include "wx/image.h"
-#if wxUSE_NANOX
-#include "wx/dcmemory.h"
-#endif
 
 #include "wx/x11/private.h"
 

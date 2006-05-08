@@ -25,10 +25,14 @@
 
 #if wxUSE_NOTEBOOK
 
-#include "wx/imaglist.h"
 #include "wx/notebook.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/dcmemory.h"
+#endif
+
+#include "wx/imaglist.h"
 #include "wx/spinbutt.h"
-#include "wx/dcmemory.h"
 
 #include "wx/univ/renderer.h"
 

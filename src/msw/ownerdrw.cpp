@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/ownerdrw.cpp
+// Name:        src/msw/ownerdrw.cpp
 // Purpose:     implementation of wxOwnerDrawn class
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -11,20 +11,19 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-#include "wx/msw/private.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-  #include "wx/window.h"
-  #include "wx/msw/private.h"
-  #include "wx/font.h"
-  #include "wx/bitmap.h"
-  #include "wx/dcmemory.h"
-  #include "wx/menu.h"
-  #include "wx/utils.h"
+    #include "wx/window.h"
+    #include "wx/msw/private.h"
+    #include "wx/font.h"
+    #include "wx/bitmap.h"
+    #include "wx/dcmemory.h"
+    #include "wx/menu.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/settings.h"
@@ -192,7 +191,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
         // placed on top of each other.
         if ( !m_strAccel.empty() )
         {
-            str.Pad(str.Length()%8);
+            str.Pad(str.length()%8);
             str += m_strAccel;
         }
 
@@ -353,7 +352,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
         xText += 3; // separate text from the highlight rectangle
 
         SIZE sizeRect;
-        ::GetTextExtentPoint32(hdc, strMenuText.c_str(), strMenuText.Length(), &sizeRect);
+        ::GetTextExtentPoint32(hdc, strMenuText.c_str(), strMenuText.length(), &sizeRect);
         ::DrawState(hdc, NULL, NULL,
                     (LPARAM)strMenuText.c_str(), strMenuText.length(),
                     xText, rc.y + (int) ((rc.GetHeight()-sizeRect.cy)/2.0), // centre text vertically
@@ -465,4 +464,3 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
 
 #endif // wxUSE_OWNER_DRAWN
-

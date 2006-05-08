@@ -24,12 +24,12 @@
     #pragma hdrstop
 #endif
 
+#include "wx/dcmemory.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/log.h"
 #endif
-
-#include "wx/dcmemory.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -88,4 +88,3 @@ static void wxDrawRectangle(wxDC& dc, wxCoord x, wxCoord y, wxCoord width, wxCoo
 void wxMemoryDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
 }
-

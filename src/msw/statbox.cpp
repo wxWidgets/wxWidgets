@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/statbox.cpp
+// Name:        src/msw/statbox.cpp
 // Purpose:     wxStaticBox
 // Author:      Julian Smart
 // Modified by:
@@ -26,16 +26,17 @@
 
 #if wxUSE_STATBOX
 
+#include "wx/statbox.h"
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
 #endif
 
-#include "wx/statbox.h"
 #include "wx/notebook.h"
 #include "wx/sysopt.h"
 #include "wx/image.h"
-#include "wx/dcmemory.h"
 #include "wx/sysopt.h"
 
 #include "wx/msw/uxtheme.h"
@@ -447,4 +448,3 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
 #endif // !__WXWINCE__
 
 #endif // wxUSE_STATBOX
-

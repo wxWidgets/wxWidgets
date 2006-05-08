@@ -18,9 +18,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/dcmemory.h"
 #endif
 
-#include "wx/dcmemory.h"
 #include "wx/image.h"
 #include "wx/module.h"
 #include "wx/fontutil.h"

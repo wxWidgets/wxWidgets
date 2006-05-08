@@ -12,6 +12,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/dcmemory.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
@@ -19,8 +21,6 @@
 #endif
 
 #include "wx/os2/private.h"
-
-#include "wx/dcmemory.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 
