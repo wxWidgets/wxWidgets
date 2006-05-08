@@ -436,7 +436,7 @@ void wxPopupComboWindow::PositionNearCombo()
 
 void wxPopupComboWindow::OnDismiss()
 {
-    m_combo->OnDismiss();
+    m_combo->OnPopupDismiss();
 }
 
 void wxPopupComboWindow::OnKeyDown(wxKeyEvent& event)

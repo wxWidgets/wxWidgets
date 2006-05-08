@@ -496,6 +496,10 @@ SOURCE=..\..\src\common\colourcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\combocmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\containr.cpp
 # End Source File
 # Begin Source File
@@ -1305,6 +1309,69 @@ SOURCE=..\..\src\msw\colordlg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\colour.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\combo.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
 # End Source File
 # Begin Source File
 
@@ -4086,6 +4153,10 @@ SOURCE=..\..\src\generic\colrdlgg.cpp
 
 !ENDIF
 
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\combog.cpp
 # End Source File
 # Begin Source File
 
@@ -7484,6 +7555,10 @@ SOURCE=..\..\include\wx\msw\colour.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\combo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\combobox.h
 # End Source File
 # Begin Source File
@@ -7987,6 +8062,10 @@ SOURCE=..\..\include\wx\generic\colrdlgg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\combo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\dataview.h
 # End Source File
 # Begin Source File
@@ -8439,6 +8518,10 @@ SOURCE=..\..\include\wx\colour.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\combo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\combobox.h
 # End Source File
 # Begin Source File
@@ -8768,6 +8851,10 @@ SOURCE=..\..\include\wx\notebook.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\numdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\odcombo.h
 # End Source File
 # Begin Source File
 

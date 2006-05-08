@@ -553,6 +553,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/choiccmn.cpp
     src/common/clipcmn.cpp
     src/common/colourcmn.cpp
+    src/common/combocmn.cpp
     src/common/cmdproc.cpp
     src/common/cmndata.cpp
     src/common/containr.cpp
@@ -623,6 +624,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/busyinfo.cpp
     src/generic/choicdgg.cpp
     src/generic/choicbkg.cpp
+    src/generic/combog.cpp
     src/generic/dcpsg.cpp
     src/generic/dirctrlg.cpp
     src/generic/dragimgg.cpp
@@ -654,6 +656,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/choicdlg.h
     wx/choice.h
     wx/cmndata.h
+    wx/combo.h
     wx/combobox.h
     wx/control.h
     wx/ctrlsub.h
@@ -675,6 +678,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/accel.h
     wx/generic/choicdgg.h
     wx/generic/colrdlgg.h
+    wx/generic/combo.h
     wx/generic/dcpsg.h
     wx/generic/dirctrlg.h
     wx/generic/dragimgg.h
@@ -1481,6 +1485,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/checkbox.cpp
     src/msw/choice.cpp
     src/msw/colordlg.cpp
+    src/msw/combo.cpp
     src/msw/combobox.cpp
     src/msw/control.cpp
     src/msw/dialog.cpp
@@ -1532,6 +1537,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/clipbrd.h
     wx/msw/colordlg.h
     wx/msw/colour.h
+    wx/msw/combo.h
     wx/msw/combobox.h
     wx/msw/control.h
     wx/msw/cursor.h
@@ -2518,6 +2524,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/gridsel.cpp
     src/generic/helpext.cpp
     src/generic/laywin.cpp
+    src/generic/odcombo.cpp
     src/generic/propdlg.cpp
     src/generic/sashwin.cpp
     src/generic/splash.cpp
@@ -2551,6 +2558,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/grid.h
     wx/joystick.h
     wx/laywin.h
+    wx/odcombo.h
     wx/propdlg.h
     wx/sashwin.h
     wx/sound.h

@@ -357,6 +357,10 @@ SOURCE=.\common\colourcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\combocmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\config.cpp
 # End Source File
 # Begin Source File
@@ -938,6 +942,10 @@ SOURCE=.\generic\choicdgg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\combog.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\datavgen.cpp
 # End Source File
 # Begin Source File
@@ -995,6 +1003,10 @@ SOURCE=.\generic\logg.cpp
 # Begin Source File
 
 SOURCE=.\generic\numdlgg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\odcombo.cpp
 # End Source File
 # Begin Source File
 
@@ -1235,6 +1247,10 @@ SOURCE=.\msw\colordlg.cpp
 # Begin Source File
 
 SOURCE=.\msw\colour.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\combo.cpp
 # End Source File
 # Begin Source File
 
@@ -2123,6 +2139,10 @@ SOURCE=..\include\wx\colour.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\combo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\combobox.h
 # End Source File
 # Begin Source File
@@ -2688,6 +2708,10 @@ SOURCE=..\include\wx\numdlg.h
 # Begin Source File
 
 SOURCE=..\include\wx\object.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\odcombo.h
 # End Source File
 # Begin Source File
 
@@ -3419,6 +3443,10 @@ SOURCE=..\include\wx\msw\colour.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msw\combo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\msw\combobox.h
 # End Source File
 # Begin Source File
@@ -3711,6 +3739,10 @@ SOURCE=..\include\wx\msw\scrolbar.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msw\seh.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\msw\setup0.h
 # End Source File
 # Begin Source File
@@ -3848,6 +3880,10 @@ SOURCE=..\include\wx\generic\choicdgg.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\colrdlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\generic\combo.h
 # End Source File
 # Begin Source File
 

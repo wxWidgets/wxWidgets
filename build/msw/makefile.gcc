@@ -1214,6 +1214,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_checkbox.o \
 	$(OBJS)\monodll_choice.o \
 	$(OBJS)\monodll_colordlg.o \
+	$(OBJS)\monodll_combo.o \
 	$(OBJS)\monodll_combobox.o \
 	$(OBJS)\monodll_control.o \
 	$(OBJS)\monodll_dialog.o \
@@ -1263,6 +1264,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_choiccmn.o \
 	$(OBJS)\monodll_clipcmn.o \
 	$(OBJS)\monodll_colourcmn.o \
+	$(OBJS)\monodll_combocmn.o \
 	$(OBJS)\monodll_cmdproc.o \
 	$(OBJS)\monodll_cmndata.o \
 	$(OBJS)\monodll_containr.o \
@@ -1333,6 +1335,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_busyinfo.o \
 	$(OBJS)\monodll_choicdgg.o \
 	$(OBJS)\monodll_choicbkg.o \
+	$(OBJS)\monodll_combog.o \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
@@ -1465,6 +1468,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_choiccmn.o \
 	$(OBJS)\monodll_clipcmn.o \
 	$(OBJS)\monodll_colourcmn.o \
+	$(OBJS)\monodll_combocmn.o \
 	$(OBJS)\monodll_cmdproc.o \
 	$(OBJS)\monodll_cmndata.o \
 	$(OBJS)\monodll_containr.o \
@@ -1535,6 +1539,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_busyinfo.o \
 	$(OBJS)\monodll_choicdgg.o \
 	$(OBJS)\monodll_choicbkg.o \
+	$(OBJS)\monodll_combog.o \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
@@ -1570,6 +1575,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_gridsel.o \
 	$(OBJS)\monodll_helpext.o \
 	$(OBJS)\monodll_laywin.o \
+	$(OBJS)\monodll_odcombo.o \
 	$(OBJS)\monodll_propdlg.o \
 	$(OBJS)\monodll_sashwin.o \
 	$(OBJS)\monodll_splash.o \
@@ -1598,6 +1604,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_gridsel.o \
 	$(OBJS)\monodll_helpext.o \
 	$(OBJS)\monodll_laywin.o \
+	$(OBJS)\monodll_odcombo.o \
 	$(OBJS)\monodll_propdlg.o \
 	$(OBJS)\monodll_sashwin.o \
 	$(OBJS)\monodll_splash.o \
@@ -1761,6 +1768,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_checkbox.o \
 	$(OBJS)\monolib_choice.o \
 	$(OBJS)\monolib_colordlg.o \
+	$(OBJS)\monolib_combo.o \
 	$(OBJS)\monolib_combobox.o \
 	$(OBJS)\monolib_control.o \
 	$(OBJS)\monolib_dialog.o \
@@ -1810,6 +1818,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_choiccmn.o \
 	$(OBJS)\monolib_clipcmn.o \
 	$(OBJS)\monolib_colourcmn.o \
+	$(OBJS)\monolib_combocmn.o \
 	$(OBJS)\monolib_cmdproc.o \
 	$(OBJS)\monolib_cmndata.o \
 	$(OBJS)\monolib_containr.o \
@@ -1880,6 +1889,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_busyinfo.o \
 	$(OBJS)\monolib_choicdgg.o \
 	$(OBJS)\monolib_choicbkg.o \
+	$(OBJS)\monolib_combog.o \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
@@ -2012,6 +2022,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_choiccmn.o \
 	$(OBJS)\monolib_clipcmn.o \
 	$(OBJS)\monolib_colourcmn.o \
+	$(OBJS)\monolib_combocmn.o \
 	$(OBJS)\monolib_cmdproc.o \
 	$(OBJS)\monolib_cmndata.o \
 	$(OBJS)\monolib_containr.o \
@@ -2082,6 +2093,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_busyinfo.o \
 	$(OBJS)\monolib_choicdgg.o \
 	$(OBJS)\monolib_choicbkg.o \
+	$(OBJS)\monolib_combog.o \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
@@ -2117,6 +2129,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_gridsel.o \
 	$(OBJS)\monolib_helpext.o \
 	$(OBJS)\monolib_laywin.o \
+	$(OBJS)\monolib_odcombo.o \
 	$(OBJS)\monolib_propdlg.o \
 	$(OBJS)\monolib_sashwin.o \
 	$(OBJS)\monolib_splash.o \
@@ -2145,6 +2158,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_gridsel.o \
 	$(OBJS)\monolib_helpext.o \
 	$(OBJS)\monolib_laywin.o \
+	$(OBJS)\monolib_odcombo.o \
 	$(OBJS)\monolib_propdlg.o \
 	$(OBJS)\monolib_sashwin.o \
 	$(OBJS)\monolib_splash.o \
@@ -2251,6 +2265,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_checkbox.o \
 	$(OBJS)\coredll_choice.o \
 	$(OBJS)\coredll_colordlg.o \
+	$(OBJS)\coredll_combo.o \
 	$(OBJS)\coredll_combobox.o \
 	$(OBJS)\coredll_control.o \
 	$(OBJS)\coredll_dialog.o \
@@ -2300,6 +2315,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_choiccmn.o \
 	$(OBJS)\coredll_clipcmn.o \
 	$(OBJS)\coredll_colourcmn.o \
+	$(OBJS)\coredll_combocmn.o \
 	$(OBJS)\coredll_cmdproc.o \
 	$(OBJS)\coredll_cmndata.o \
 	$(OBJS)\coredll_containr.o \
@@ -2370,6 +2386,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_busyinfo.o \
 	$(OBJS)\coredll_choicdgg.o \
 	$(OBJS)\coredll_choicbkg.o \
+	$(OBJS)\coredll_combog.o \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
@@ -2502,6 +2519,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_choiccmn.o \
 	$(OBJS)\coredll_clipcmn.o \
 	$(OBJS)\coredll_colourcmn.o \
+	$(OBJS)\coredll_combocmn.o \
 	$(OBJS)\coredll_cmdproc.o \
 	$(OBJS)\coredll_cmndata.o \
 	$(OBJS)\coredll_containr.o \
@@ -2572,6 +2590,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_busyinfo.o \
 	$(OBJS)\coredll_choicdgg.o \
 	$(OBJS)\coredll_choicbkg.o \
+	$(OBJS)\coredll_combog.o \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
@@ -2662,6 +2681,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_checkbox.o \
 	$(OBJS)\corelib_choice.o \
 	$(OBJS)\corelib_colordlg.o \
+	$(OBJS)\corelib_combo.o \
 	$(OBJS)\corelib_combobox.o \
 	$(OBJS)\corelib_control.o \
 	$(OBJS)\corelib_dialog.o \
@@ -2711,6 +2731,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_choiccmn.o \
 	$(OBJS)\corelib_clipcmn.o \
 	$(OBJS)\corelib_colourcmn.o \
+	$(OBJS)\corelib_combocmn.o \
 	$(OBJS)\corelib_cmdproc.o \
 	$(OBJS)\corelib_cmndata.o \
 	$(OBJS)\corelib_containr.o \
@@ -2781,6 +2802,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_busyinfo.o \
 	$(OBJS)\corelib_choicdgg.o \
 	$(OBJS)\corelib_choicbkg.o \
+	$(OBJS)\corelib_combog.o \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
@@ -2913,6 +2935,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_choiccmn.o \
 	$(OBJS)\corelib_clipcmn.o \
 	$(OBJS)\corelib_colourcmn.o \
+	$(OBJS)\corelib_combocmn.o \
 	$(OBJS)\corelib_cmdproc.o \
 	$(OBJS)\corelib_cmndata.o \
 	$(OBJS)\corelib_containr.o \
@@ -2983,6 +3006,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_busyinfo.o \
 	$(OBJS)\corelib_choicdgg.o \
 	$(OBJS)\corelib_choicbkg.o \
+	$(OBJS)\corelib_combog.o \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
@@ -3026,6 +3050,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_gridsel.o \
 	$(OBJS)\advdll_helpext.o \
 	$(OBJS)\advdll_laywin.o \
+	$(OBJS)\advdll_odcombo.o \
 	$(OBJS)\advdll_propdlg.o \
 	$(OBJS)\advdll_sashwin.o \
 	$(OBJS)\advdll_splash.o \
@@ -3054,6 +3079,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_gridsel.o \
 	$(OBJS)\advdll_helpext.o \
 	$(OBJS)\advdll_laywin.o \
+	$(OBJS)\advdll_odcombo.o \
 	$(OBJS)\advdll_propdlg.o \
 	$(OBJS)\advdll_sashwin.o \
 	$(OBJS)\advdll_splash.o \
@@ -3089,6 +3115,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_gridsel.o \
 	$(OBJS)\advlib_helpext.o \
 	$(OBJS)\advlib_laywin.o \
+	$(OBJS)\advlib_odcombo.o \
 	$(OBJS)\advlib_propdlg.o \
 	$(OBJS)\advlib_sashwin.o \
 	$(OBJS)\advlib_splash.o \
@@ -3117,6 +3144,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_gridsel.o \
 	$(OBJS)\advlib_helpext.o \
 	$(OBJS)\advlib_laywin.o \
+	$(OBJS)\advlib_odcombo.o \
 	$(OBJS)\advlib_propdlg.o \
 	$(OBJS)\advlib_sashwin.o \
 	$(OBJS)\advlib_splash.o \
@@ -4438,6 +4466,9 @@ $(OBJS)\monodll_urlmsw.o: ../../src/msw/urlmsw.cpp
 $(OBJS)\monodll_colordlg.o: ../../src/msw/colordlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_combo.o: ../../src/msw/combo.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_dirdlg.o: ../../src/msw/dirdlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -5454,6 +5485,11 @@ $(OBJS)\monodll_colourcmn.o: ../../src/common/colourcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_combocmn.o: ../../src/common/combocmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_cmdproc.o: ../../src/common/cmdproc.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -5804,6 +5840,11 @@ $(OBJS)\monodll_choicbkg.o: ../../src/generic/choicbkg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_combog.o: ../../src/generic/combog.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_dcpsg.o: ../../src/generic/dcpsg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -5955,6 +5996,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_laywin.o: ../../src/generic/laywin.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_odcombo.o: ../../src/generic/odcombo.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -6302,6 +6348,9 @@ $(OBJS)\monolib_urlmsw.o: ../../src/msw/urlmsw.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_colordlg.o: ../../src/msw/colordlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_combo.o: ../../src/msw/combo.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_dirdlg.o: ../../src/msw/dirdlg.cpp
@@ -7320,6 +7369,11 @@ $(OBJS)\monolib_colourcmn.o: ../../src/common/colourcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_combocmn.o: ../../src/common/combocmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_cmdproc.o: ../../src/common/cmdproc.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7670,6 +7724,11 @@ $(OBJS)\monolib_choicbkg.o: ../../src/generic/choicbkg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_combog.o: ../../src/generic/combog.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_dcpsg.o: ../../src/generic/dcpsg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7821,6 +7880,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_laywin.o: ../../src/generic/laywin.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_odcombo.o: ../../src/generic/odcombo.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8480,6 +8544,9 @@ $(OBJS)\coredll_volume.o: ../../src/msw/volume.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_colordlg.o: ../../src/msw/colordlg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\coredll_combo.o: ../../src/msw/combo.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_dirdlg.o: ../../src/msw/dirdlg.cpp
@@ -9255,6 +9322,11 @@ $(OBJS)\coredll_colourcmn.o: ../../src/common/colourcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_combocmn.o: ../../src/common/combocmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_cmdproc.o: ../../src/common/cmdproc.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9605,6 +9677,11 @@ $(OBJS)\coredll_choicbkg.o: ../../src/generic/choicbkg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_combog.o: ../../src/generic/combog.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_dcpsg.o: ../../src/generic/dcpsg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9734,6 +9811,9 @@ $(OBJS)\corelib_volume.o: ../../src/msw/volume.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_colordlg.o: ../../src/msw/colordlg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\corelib_combo.o: ../../src/msw/combo.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_dirdlg.o: ../../src/msw/dirdlg.cpp
@@ -10509,6 +10589,11 @@ $(OBJS)\corelib_colourcmn.o: ../../src/common/colourcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_combocmn.o: ../../src/common/combocmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_cmdproc.o: ../../src/common/cmdproc.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10859,6 +10944,11 @@ $(OBJS)\corelib_choicbkg.o: ../../src/generic/choicbkg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_combog.o: ../../src/generic/combog.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_dcpsg.o: ../../src/generic/dcpsg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11002,6 +11092,9 @@ $(OBJS)\advdll_helpext.o: ../../src/generic/helpext.cpp
 $(OBJS)\advdll_laywin.o: ../../src/generic/laywin.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_odcombo.o: ../../src/generic/odcombo.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_propdlg.o: ../../src/generic/propdlg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11078,6 +11171,9 @@ $(OBJS)\advlib_helpext.o: ../../src/generic/helpext.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_laywin.o: ../../src/generic/laywin.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_odcombo.o: ../../src/generic/odcombo.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_propdlg.o: ../../src/generic/propdlg.cpp

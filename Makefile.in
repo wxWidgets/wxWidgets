@@ -2148,6 +2148,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/clipbrd.h \
 	wx/msw/colordlg.h \
 	wx/msw/colour.h \
+	wx/msw/combo.h \
 	wx/msw/combobox.h \
 	wx/msw/control.h \
 	wx/msw/cursor.h \
@@ -2247,7 +2248,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/checklst.h \
 	wx/msw/fdrepdlg.h \
 	wx/msw/fontdlg.h \
-	wx/msw/helpbest.h \
 	wx/msw/ole/automtn.h \
 	wx/msw/ole/uuid.h
 @COND_TOOLKIT_MSW@GUI_HDR = $(COND_TOOLKIT_MSW_GUI_HDR)
@@ -2339,6 +2339,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/clipbrd.h \
 	wx/msw/colordlg.h \
 	wx/msw/colour.h \
+	wx/msw/combo.h \
 	wx/msw/combobox.h \
 	wx/msw/control.h \
 	wx/msw/cursor.h \
@@ -2491,6 +2492,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/grid.h \
 	wx/joystick.h \
 	wx/laywin.h \
+	wx/odcombo.h \
 	wx/propdlg.h \
 	wx/sashwin.h \
 	wx/sound.h \
@@ -2529,6 +2531,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/grid.h \
 	wx/joystick.h \
 	wx/laywin.h \
+	wx/odcombo.h \
 	wx/propdlg.h \
 	wx/sashwin.h \
 	wx/sound.h \
@@ -2608,6 +2611,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/choicdlg.h \
 	wx/choice.h \
 	wx/cmndata.h \
+	wx/combo.h \
 	wx/combobox.h \
 	wx/control.h \
 	wx/ctrlsub.h \
@@ -2629,6 +2633,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/accel.h \
 	wx/generic/choicdgg.h \
 	wx/generic/colrdlgg.h \
+	wx/generic/combo.h \
 	wx/generic/dcpsg.h \
 	wx/generic/dirctrlg.h \
 	wx/generic/dragimgg.h \
@@ -2796,6 +2801,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/html/winpars.h \
 	wx/wxhtml.h \
 	wx/htmllbox.h \
+	wx/msw/helpbest.h \
 	$(OPENGL_HDR) \
 	wx/debugrpt.h \
 	wx/dbgrid.h \
@@ -3139,6 +3145,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_choiccmn.o \
 	monodll_clipcmn.o \
 	monodll_colourcmn.o \
+	monodll_combocmn.o \
 	monodll_cmdproc.o \
 	monodll_cmndata.o \
 	monodll_containr.o \
@@ -3209,6 +3216,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_busyinfo.o \
 	monodll_choicdgg.o \
 	monodll_choicbkg.o \
+	monodll_combog.o \
 	monodll_dcpsg.o \
 	monodll_dirctrlg.o \
 	monodll_dragimgg.o \
@@ -3291,6 +3299,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_choiccmn.o \
 	monodll_clipcmn.o \
 	monodll_colourcmn.o \
+	monodll_combocmn.o \
 	monodll_cmdproc.o \
 	monodll_cmndata.o \
 	monodll_containr.o \
@@ -3361,6 +3370,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_busyinfo.o \
 	monodll_choicdgg.o \
 	monodll_choicbkg.o \
+	monodll_combog.o \
 	monodll_dcpsg.o \
 	monodll_dirctrlg.o \
 	monodll_dragimgg.o \
@@ -3989,6 +3999,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_checkbox.o \
 	monodll_choice.o \
 	monodll_colordlg.o \
+	monodll_combo.o \
 	monodll_combobox.o \
 	monodll_control.o \
 	monodll_dialog.o \
@@ -4122,6 +4133,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_checkbox.o \
 	monodll_choice.o \
 	monodll_colordlg.o \
+	monodll_combo.o \
 	monodll_combobox.o \
 	monodll_control.o \
 	monodll_dialog.o \
@@ -4450,6 +4462,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_gridsel.o \
 	monodll_helpext.o \
 	monodll_laywin.o \
+	monodll_odcombo.o \
 	monodll_propdlg.o \
 	monodll_sashwin.o \
 	monodll_splash.o \
@@ -4474,6 +4487,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_gridsel.o \
 	monodll_helpext.o \
 	monodll_laywin.o \
+	monodll_odcombo.o \
 	monodll_propdlg.o \
 	monodll_sashwin.o \
 	monodll_splash.o \
@@ -4766,6 +4780,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_choiccmn.o \
 	monolib_clipcmn.o \
 	monolib_colourcmn.o \
+	monolib_combocmn.o \
 	monolib_cmdproc.o \
 	monolib_cmndata.o \
 	monolib_containr.o \
@@ -4836,6 +4851,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_busyinfo.o \
 	monolib_choicdgg.o \
 	monolib_choicbkg.o \
+	monolib_combog.o \
 	monolib_dcpsg.o \
 	monolib_dirctrlg.o \
 	monolib_dragimgg.o \
@@ -4918,6 +4934,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_choiccmn.o \
 	monolib_clipcmn.o \
 	monolib_colourcmn.o \
+	monolib_combocmn.o \
 	monolib_cmdproc.o \
 	monolib_cmndata.o \
 	monolib_containr.o \
@@ -4988,6 +5005,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_busyinfo.o \
 	monolib_choicdgg.o \
 	monolib_choicbkg.o \
+	monolib_combog.o \
 	monolib_dcpsg.o \
 	monolib_dirctrlg.o \
 	monolib_dragimgg.o \
@@ -5617,6 +5635,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_checkbox.o \
 	monolib_choice.o \
 	monolib_colordlg.o \
+	monolib_combo.o \
 	monolib_combobox.o \
 	monolib_control.o \
 	monolib_dialog.o \
@@ -5750,6 +5769,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_checkbox.o \
 	monolib_choice.o \
 	monolib_colordlg.o \
+	monolib_combo.o \
 	monolib_combobox.o \
 	monolib_control.o \
 	monolib_dialog.o \
@@ -6079,6 +6099,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_gridsel.o \
 	monolib_helpext.o \
 	monolib_laywin.o \
+	monolib_odcombo.o \
 	monolib_propdlg.o \
 	monolib_sashwin.o \
 	monolib_splash.o \
@@ -6103,6 +6124,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_gridsel.o \
 	monolib_helpext.o \
 	monolib_laywin.o \
+	monolib_odcombo.o \
 	monolib_propdlg.o \
 	monolib_sashwin.o \
 	monolib_splash.o \
@@ -6627,6 +6649,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_choiccmn.o \
 	coredll_clipcmn.o \
 	coredll_colourcmn.o \
+	coredll_combocmn.o \
 	coredll_cmdproc.o \
 	coredll_cmndata.o \
 	coredll_containr.o \
@@ -6697,6 +6720,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_busyinfo.o \
 	coredll_choicdgg.o \
 	coredll_choicbkg.o \
+	coredll_combog.o \
 	coredll_dcpsg.o \
 	coredll_dirctrlg.o \
 	coredll_dragimgg.o \
@@ -6779,6 +6803,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_choiccmn.o \
 	coredll_clipcmn.o \
 	coredll_colourcmn.o \
+	coredll_combocmn.o \
 	coredll_cmdproc.o \
 	coredll_cmndata.o \
 	coredll_containr.o \
@@ -6849,6 +6874,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_busyinfo.o \
 	coredll_choicdgg.o \
 	coredll_choicbkg.o \
+	coredll_combog.o \
 	coredll_dcpsg.o \
 	coredll_dirctrlg.o \
 	coredll_dragimgg.o \
@@ -7478,6 +7504,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_checkbox.o \
 	coredll_choice.o \
 	coredll_colordlg.o \
+	coredll_combo.o \
 	coredll_combobox.o \
 	coredll_control.o \
 	coredll_dialog.o \
@@ -7611,6 +7638,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_checkbox.o \
 	coredll_choice.o \
 	coredll_colordlg.o \
+	coredll_combo.o \
 	coredll_combobox.o \
 	coredll_control.o \
 	coredll_dialog.o \
@@ -7960,6 +7988,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_choiccmn.o \
 	corelib_clipcmn.o \
 	corelib_colourcmn.o \
+	corelib_combocmn.o \
 	corelib_cmdproc.o \
 	corelib_cmndata.o \
 	corelib_containr.o \
@@ -8030,6 +8059,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_busyinfo.o \
 	corelib_choicdgg.o \
 	corelib_choicbkg.o \
+	corelib_combog.o \
 	corelib_dcpsg.o \
 	corelib_dirctrlg.o \
 	corelib_dragimgg.o \
@@ -8112,6 +8142,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_choiccmn.o \
 	corelib_clipcmn.o \
 	corelib_colourcmn.o \
+	corelib_combocmn.o \
 	corelib_cmdproc.o \
 	corelib_cmndata.o \
 	corelib_containr.o \
@@ -8182,6 +8213,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_busyinfo.o \
 	corelib_choicdgg.o \
 	corelib_choicbkg.o \
+	corelib_combog.o \
 	corelib_dcpsg.o \
 	corelib_dirctrlg.o \
 	corelib_dragimgg.o \
@@ -8811,6 +8843,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_checkbox.o \
 	corelib_choice.o \
 	corelib_colordlg.o \
+	corelib_combo.o \
 	corelib_combobox.o \
 	corelib_control.o \
 	corelib_dialog.o \
@@ -8944,6 +8977,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_checkbox.o \
 	corelib_choice.o \
 	corelib_colordlg.o \
+	corelib_combo.o \
 	corelib_combobox.o \
 	corelib_control.o \
 	corelib_dialog.o \
@@ -9319,6 +9353,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_gridsel.o \
 	advdll_helpext.o \
 	advdll_laywin.o \
+	advdll_odcombo.o \
 	advdll_propdlg.o \
 	advdll_sashwin.o \
 	advdll_splash.o \
@@ -9343,6 +9378,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_gridsel.o \
 	advdll_helpext.o \
 	advdll_laywin.o \
+	advdll_odcombo.o \
 	advdll_propdlg.o \
 	advdll_sashwin.o \
 	advdll_splash.o \
@@ -9382,6 +9418,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_gridsel.o \
 	advlib_helpext.o \
 	advlib_laywin.o \
+	advlib_odcombo.o \
 	advlib_propdlg.o \
 	advlib_sashwin.o \
 	advlib_splash.o \
@@ -9406,6 +9443,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_gridsel.o \
 	advlib_helpext.o \
 	advlib_laywin.o \
+	advlib_odcombo.o \
 	advlib_propdlg.o \
 	advlib_sashwin.o \
 	advlib_splash.o \
@@ -14328,6 +14366,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@monodll_toolbar.o: $(srcdir)/src/univ/toolbar.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/toolbar.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_combo.o: $(srcdir)/src/msw/combo.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/combo.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_combo.o: $(srcdir)/src/msw/combo.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/combo.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_dragimag.o: $(srcdir)/src/msw/dragimag.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/dragimag.cpp
 
@@ -14486,6 +14530,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_colourcmn.o: $(srcdir)/src/common/colourcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/colourcmn.cpp
+
+@COND_USE_GUI_1@monodll_combocmn.o: $(srcdir)/src/common/combocmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/combocmn.cpp
 
 @COND_USE_GUI_1@monodll_cmdproc.o: $(srcdir)/src/common/cmdproc.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/cmdproc.cpp
@@ -14697,6 +14744,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_choicbkg.o: $(srcdir)/src/generic/choicbkg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/choicbkg.cpp
 
+@COND_USE_GUI_1@monodll_combog.o: $(srcdir)/src/generic/combog.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/combog.cpp
+
 @COND_USE_GUI_1@monodll_dcpsg.o: $(srcdir)/src/generic/dcpsg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/dcpsg.cpp
 
@@ -14789,6 +14839,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_laywin.o: $(srcdir)/src/generic/laywin.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
+
+@COND_USE_GUI_1@monodll_odcombo.o: $(srcdir)/src/generic/odcombo.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/odcombo.cpp
 
 @COND_USE_GUI_1@monodll_propdlg.o: $(srcdir)/src/generic/propdlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/propdlg.cpp
@@ -18123,6 +18176,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@monolib_toolbar.o: $(srcdir)/src/univ/toolbar.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/toolbar.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_combo.o: $(srcdir)/src/msw/combo.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/combo.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_combo.o: $(srcdir)/src/msw/combo.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/combo.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_dragimag.o: $(srcdir)/src/msw/dragimag.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/dragimag.cpp
 
@@ -18281,6 +18340,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_colourcmn.o: $(srcdir)/src/common/colourcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/colourcmn.cpp
+
+@COND_USE_GUI_1@monolib_combocmn.o: $(srcdir)/src/common/combocmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/combocmn.cpp
 
 @COND_USE_GUI_1@monolib_cmdproc.o: $(srcdir)/src/common/cmdproc.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/cmdproc.cpp
@@ -18492,6 +18554,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_choicbkg.o: $(srcdir)/src/generic/choicbkg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/choicbkg.cpp
 
+@COND_USE_GUI_1@monolib_combog.o: $(srcdir)/src/generic/combog.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/combog.cpp
+
 @COND_USE_GUI_1@monolib_dcpsg.o: $(srcdir)/src/generic/dcpsg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/dcpsg.cpp
 
@@ -18584,6 +18649,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_laywin.o: $(srcdir)/src/generic/laywin.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
+
+@COND_USE_GUI_1@monolib_odcombo.o: $(srcdir)/src/generic/odcombo.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/odcombo.cpp
 
 @COND_USE_GUI_1@monolib_propdlg.o: $(srcdir)/src/generic/propdlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/propdlg.cpp
@@ -22338,6 +22406,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@coredll_toolbar.o: $(srcdir)/src/univ/toolbar.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/toolbar.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_combo.o: $(srcdir)/src/msw/combo.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/combo.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_combo.o: $(srcdir)/src/msw/combo.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/combo.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_dragimag.o: $(srcdir)/src/msw/dragimag.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/dragimag.cpp
 
@@ -22463,6 +22537,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_colourcmn.o: $(srcdir)/src/common/colourcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/colourcmn.cpp
+
+@COND_USE_GUI_1@coredll_combocmn.o: $(srcdir)/src/common/combocmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/combocmn.cpp
 
 @COND_USE_GUI_1@coredll_cmdproc.o: $(srcdir)/src/common/cmdproc.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/cmdproc.cpp
@@ -22673,6 +22750,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_choicbkg.o: $(srcdir)/src/generic/choicbkg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/choicbkg.cpp
+
+@COND_USE_GUI_1@coredll_combog.o: $(srcdir)/src/generic/combog.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/combog.cpp
 
 @COND_USE_GUI_1@coredll_dcpsg.o: $(srcdir)/src/generic/dcpsg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/dcpsg.cpp
@@ -25113,6 +25193,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@corelib_toolbar.o: $(srcdir)/src/univ/toolbar.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/toolbar.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_combo.o: $(srcdir)/src/msw/combo.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/combo.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_combo.o: $(srcdir)/src/msw/combo.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/combo.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_dragimag.o: $(srcdir)/src/msw/dragimag.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/dragimag.cpp
 
@@ -25238,6 +25324,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_colourcmn.o: $(srcdir)/src/common/colourcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/colourcmn.cpp
+
+@COND_USE_GUI_1@corelib_combocmn.o: $(srcdir)/src/common/combocmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/combocmn.cpp
 
 @COND_USE_GUI_1@corelib_cmdproc.o: $(srcdir)/src/common/cmdproc.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/cmdproc.cpp
@@ -25449,6 +25538,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_choicbkg.o: $(srcdir)/src/generic/choicbkg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/choicbkg.cpp
 
+@COND_USE_GUI_1@corelib_combog.o: $(srcdir)/src/generic/combog.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/combog.cpp
+
 @COND_USE_GUI_1@corelib_dcpsg.o: $(srcdir)/src/generic/dcpsg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/dcpsg.cpp
 
@@ -25547,6 +25639,9 @@ advdll_helpext.o: $(srcdir)/src/generic/helpext.cpp $(ADVDLL_ODEP)
 
 advdll_laywin.o: $(srcdir)/src/generic/laywin.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
+
+advdll_odcombo.o: $(srcdir)/src/generic/odcombo.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/odcombo.cpp
 
 advdll_propdlg.o: $(srcdir)/src/generic/propdlg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/propdlg.cpp
@@ -25724,6 +25819,9 @@ advlib_helpext.o: $(srcdir)/src/generic/helpext.cpp $(ADVLIB_ODEP)
 
 advlib_laywin.o: $(srcdir)/src/generic/laywin.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
+
+advlib_odcombo.o: $(srcdir)/src/generic/odcombo.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/odcombo.cpp
 
 advlib_propdlg.o: $(srcdir)/src/generic/propdlg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/propdlg.cpp
