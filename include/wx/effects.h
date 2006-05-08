@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        effects.h
+// Name:        wx/effects.h
 // Purpose:     wxEffects class
 //              Draws 3D effects.
 // Author:      Julian Smart et al
@@ -16,6 +16,9 @@
 /*
  * wxEffects: various 3D effects
  */
+
+#include "wx/object.h"
+#include "wx/colour.h"
 
 class WXDLLEXPORT wxEffects: public wxObject
 {
@@ -68,4 +71,3 @@ protected:
 };
 
 #endif
-
