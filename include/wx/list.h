@@ -262,9 +262,9 @@ private:
             std::advance( i, idx );                                           \
             return compatibility_iterator( this, i );                         \
         }                                                                     \
-        compatibility_iterator operator[](size_t idx) const                   \
+        elT operator[](size_t idx) const                                      \
         {                                                                     \
-            return Item(idx);                                                 \
+            return Item(idx).GetData();                                       \
         }                                                                     \
                                                                               \
         compatibility_iterator GetFirst() const                               \
