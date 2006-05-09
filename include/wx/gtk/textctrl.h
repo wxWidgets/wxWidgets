@@ -186,10 +186,8 @@ private:
     void ChangeFontGlobally();
 
     GtkWidget  *m_text;
-    GtkWidget  *m_vScrollbar;
 
     bool        m_modified:1;
-    bool        m_vScrollbarVisible:1;
     bool        m_ignoreNextUpdate:1;
 
     // Our text buffer. Convenient, and holds the buffer while using

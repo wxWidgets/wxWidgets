@@ -513,8 +513,7 @@ void wxTextCtrl::Init()
     m_ignoreNextUpdate =
     m_modified = false;
     SetUpdateFont(false);
-    m_text =
-    m_vScrollbar = (GtkWidget *)NULL;
+    m_text = NULL;
     m_frozenness = 0;
     m_gdkHandCursor = NULL;
     m_gdkXTermCursor = NULL;
@@ -560,9 +559,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
         wxFAIL_MSG( wxT("wxTextCtrl creation failed") );
         return false;
     }
-
-
-    m_vScrollbarVisible = false;
 
     bool multi_line = (style & wxTE_MULTILINE) != 0;
 
