@@ -1780,29 +1780,25 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
 }
 
 //-----------------------------------------------------------------------------
-// "mouse_wheel_event"
+// "scroll_event", (mouse wheel event)
 //-----------------------------------------------------------------------------
 
 extern "C" {
 static gboolean
-gtk_window_wheel_callback (GtkWidget * widget,
-                           GdkEventScroll * gdk_event,
-                           wxWindowGTK * win)
+window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
 {
     DEBUG_MAIN_THREAD
 
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    wxEventType event_type = wxEVT_NULL;
-    if (gdk_event->direction == GDK_SCROLL_UP)
-        event_type = wxEVT_MOUSEWHEEL;
-    else if (gdk_event->direction == GDK_SCROLL_DOWN)
-        event_type = wxEVT_MOUSEWHEEL;
-    else
-        return FALSE;
+    if (gdk_event->direction != GDK_SCROLL_UP &&
+        gdk_event->direction != GDK_SCROLL_DOWN)
+    {
+        return false;
+    }
 
-    wxMouseEvent event( event_type );
+    wxMouseEvent event(wxEVT_MOUSEWHEEL);
     // Can't use InitMouse macro because scroll events don't have button
     event.SetTimestamp( gdk_event->time );
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
@@ -1827,13 +1823,7 @@ gtk_window_wheel_callback (GtkWidget * widget,
     event.SetId( win->GetId() );
     event.SetTimestamp( gdk_event->time );
 
-    if (win->GetEventHandler()->ProcessEvent( event ))
-    {
-        g_signal_stop_emission_by_name (widget, "scroll_event");
-        return TRUE;
-    }
-
-    return FALSE;
+    return win->GetEventHandler()->ProcessEvent(event);
 }
 }
 
@@ -2878,7 +2868,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
     g_signal_connect (widget, "motion_notify_event",
                       G_CALLBACK (gtk_window_motion_notify_callback), this);
     g_signal_connect (widget, "scroll_event",
-                      G_CALLBACK (gtk_window_wheel_callback), this);
+                      G_CALLBACK (window_scroll_event), this);
     g_signal_connect (widget, "popup_menu",
                      G_CALLBACK (wxgtk_window_popup_menu_callback), this);
     g_signal_connect (widget, "enter_notify_event",
