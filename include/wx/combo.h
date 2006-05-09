@@ -65,7 +65,7 @@ enum
     wxCC_ALT_KEYS                   = 0x0200,
 
     // Dropbutton acts like standard push button.
-    wxCC_STD_BUTTON                 = 0x0400,
+    wxCC_STD_BUTTON                 = 0x0400
 };
 
 
@@ -89,14 +89,14 @@ enum
     // Internal use: SetTextIndent has been called
     wxCC_IFLAG_INDENT_SET           = 0x0400,
     // Internal use: Set wxTAB_TRAVERSAL to parent when popup is dismissed
-    wxCC_IFLAG_PARENT_TAB_TRAVERSAL = 0x0800,
+    wxCC_IFLAG_PARENT_TAB_TRAVERSAL = 0x0800
 };
 
 
 // Flags used by PreprocessMouseEvent and HandleButtonMouseEvent
 enum
 {
-    wxCC_MF_ON_BUTTON               =   0x0001, // cursor is on dropbutton area
+    wxCC_MF_ON_BUTTON               =   0x0001 // cursor is on dropbutton area
 };
 
 
@@ -123,7 +123,7 @@ struct wxComboControlFeatures
         All                 = MovableButton|BitmapButton|
                               ButtonSpacing|TextIndent|
                               PaintControl|PaintWritable|
-                              Borderless,
+                              Borderless
     };
 };
 
@@ -534,7 +534,8 @@ private:
 // wxComboPopup internal flags
 enum
 {
-    wxCP_IFLAG_CREATED      = 0x0001, // Set by wxComboControlBase after Create is called
+    // Set by wxComboControlBase after Create is called
+    wxCP_IFLAG_CREATED = 0x0001
 };
 
 
