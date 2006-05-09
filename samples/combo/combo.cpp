@@ -163,8 +163,15 @@ class ListViewComboPopup : public wxListView, public wxComboPopup
 {
 public:
 
+/*
     ListViewComboPopup(wxComboControlBase* combo)
         : wxListView(), wxComboPopup(combo)
+    {
+        m_value = -1;
+        m_itemHere = -1; // hot item in list
+    }
+*/
+    virtual void Init()
     {
         m_value = -1;
         m_itemHere = -1; // hot item in list
@@ -258,8 +265,14 @@ class TreeCtrlComboPopup : public wxTreeCtrl, public wxComboPopup
 {
 public:
 
+/*
     TreeCtrlComboPopup(wxComboControlBase* combo)
         : wxTreeCtrl(), wxComboPopup(combo)
+    {
+    }
+*/
+
+    virtual void Init()
     {
     }
 
@@ -383,7 +396,7 @@ END_EVENT_TABLE()
 // ----------------------------------------------------------------------------
 // wxOwnerDrawnComboBox with custom paint list items
 // ----------------------------------------------------------------------------
-
+/*
 class wxPenStyleComboBox : public wxOwnerDrawnComboBox
 {
 public:
@@ -422,7 +435,7 @@ public:
         // Get text colour as pen colour
         dc.SetPen ( pen );
 
-        if ( !(flags & wxCC_PAINTING_CONTROL) )
+        if ( !(flags & wxCP_PAINTING_CONTROL) )
         {
             dc.DrawText(GetString( item ),
                         r.x + 3,
@@ -430,16 +443,6 @@ public:
                        );
 
             dc.DrawLine( r.x+5, r.y+((r.height/4)*3), r.x+r.width - 5, r.y+((r.height/4)*3) );
-
-            /*
-            dc.SetBrush( *wxTRANSPARENT_BRUSH );
-            dc.DrawRectangle( r );
-
-            dc.DrawText(GetString( item ),
-                        r.x + 3,
-                        (r.y + 0) + ( (r.height) - dc.GetCharHeight() )/2
-                       );
-            */
         }
         else
         {
@@ -455,6 +458,75 @@ public:
     }
 
     virtual wxCoord OnMeasureListItemWidth( int WXUNUSED(item) )
+    {
+        return -1; // default - will be measured from text width
+    }
+
+};
+*/
+
+class wxPenStylePopup : public wxVListBoxComboPopup
+{
+public:
+    virtual void OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const
+    {
+        if ( item == wxNOT_FOUND )
+            return;
+
+        wxRect r(rect);
+        r.Deflate(3);
+        r.height -= 2;
+
+        int pen_style = wxSOLID;
+        if ( item == 1 )
+            pen_style = wxTRANSPARENT;
+        else if ( item == 2 )
+            pen_style = wxDOT;
+        else if ( item == 3 )
+            pen_style = wxLONG_DASH;
+        else if ( item == 4 )
+            pen_style = wxSHORT_DASH;
+        else if ( item == 5 )
+            pen_style = wxDOT_DASH;
+        else if ( item == 6 )
+            pen_style = wxBDIAGONAL_HATCH;
+        else if ( item == 7 )
+            pen_style = wxCROSSDIAG_HATCH;
+        else if ( item == 8 )
+            pen_style = wxFDIAGONAL_HATCH;
+        else if ( item == 9 )
+            pen_style = wxCROSS_HATCH;
+        else if ( item == 10 )
+            pen_style = wxHORIZONTAL_HATCH;
+        else if ( item == 11 )
+            pen_style = wxVERTICAL_HATCH;
+
+        wxPen pen( dc.GetTextForeground(), 3, pen_style );
+
+        // Get text colour as pen colour
+        dc.SetPen ( pen );
+
+        if ( !(flags & wxCP_PAINTING_CONTROL) )
+        {
+            dc.DrawText(GetString( item ),
+                        r.x + 3,
+                        (r.y + 0) + ( (r.height/2) - dc.GetCharHeight() )/2
+                       );
+
+            dc.DrawLine( r.x+5, r.y+((r.height/4)*3), r.x+r.width - 5, r.y+((r.height/4)*3) );
+        }
+        else
+        {
+            dc.DrawLine( r.x+5, r.y+r.height/2, r.x+r.width - 5, r.y+r.height/2 );
+        }
+    }
+
+    virtual wxCoord OnMeasureItem( size_t WXUNUSED(item) ) const
+    {
+        return 24;
+    }
+
+    virtual wxCoord OnMeasureItemWidth( size_t WXUNUSED(item) ) const
     {
         return -1; // default - will be measured from text width
     }
@@ -634,10 +706,10 @@ MyFrame::MyFrame(const wxString& title)
                      wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, border );
 
     odc = new wxOwnerDrawnComboBox(panel,wxID_ANY,wxEmptyString,
-                                     wxDefaultPosition, wxDefaultSize,
-                                     arrItems,
-                                     wxCB_SORT // wxNO_BORDER|wxCB_READONLY
-                                     );
+                                   wxDefaultPosition, wxDefaultSize,
+                                   arrItems,
+                                   wxCB_SORT // wxNO_BORDER|wxCB_READONLY
+                                  );
 
     odc->Append(wxT("H - Appended Item")); // test sorting in append
 
@@ -651,12 +723,13 @@ MyFrame::MyFrame(const wxString& title)
                      wxALIGN_CENTER_VERTICAL|wxRIGHT, border );
 
     odc = new wxOwnerDrawnComboBox(panel,wxID_ANY,wxEmptyString,
-                                     wxDefaultPosition, wxDefaultSize,
-                                     arrItems,
-                                     wxCB_SORT|wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
-                                     );
+                                   wxDefaultPosition, wxDefaultSize,
+                                   arrItems,
+                                   wxCB_SORT|wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
+                                  );
 
     odc->SetValue(wxT("Dot Dash"));
+    odc->SetText(wxT("Dot Dash (Testing SetText)"));
 
     groupSizer->Add( odc, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
 
@@ -751,12 +824,13 @@ MyFrame::MyFrame(const wxString& title)
     // When defining derivative class for callbacks, we need
     // to use two-stage creation (or redefine the common wx
     // constructor).
-    odc = new wxPenStyleComboBox();
-    odc->Create(panel,wxID_ANY,wxEmptyString,
-                wxDefaultPosition, wxDefaultSize,
-                arrItems,
-                wxCB_READONLY //wxNO_BORDER | wxCB_READONLY
-               );
+    odc = new wxOwnerDrawnComboBox(panel,wxID_ANY,wxEmptyString,
+                                   wxDefaultPosition, wxDefaultSize,
+                                   arrItems,
+                                   wxCB_READONLY //wxNO_BORDER | wxCB_READONLY
+                                  );
+
+    odc->SetPopupControl( new wxPenStylePopup() );
 
     //m_odc->SetCustomPaintWidth( 60 );
     odc->SetSelection(0);
@@ -788,7 +862,7 @@ MyFrame::MyFrame(const wxString& title)
 
     cc->SetPopupMinWidth(300);
 
-    ListViewComboPopup* iface = new ListViewComboPopup(cc);
+    ListViewComboPopup* iface = new ListViewComboPopup();
     cc->SetPopupControl(iface);
 
     iface->AddSelection( wxT("Cabbage") );
@@ -823,7 +897,7 @@ MyFrame::MyFrame(const wxString& title)
 
     // Set popup interface right away, otherwise some of the calls
     // below may fail
-    TreeCtrlComboPopup* tcPopup = new TreeCtrlComboPopup(gcc);
+    TreeCtrlComboPopup* tcPopup = new TreeCtrlComboPopup();
     gcc->SetPopupControl(tcPopup);
 
     // Add items using wxTreeCtrl methods directly

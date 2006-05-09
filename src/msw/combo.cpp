@@ -454,7 +454,7 @@ void wxComboControl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     DrawButton(dc,rectb,drawButBg);
 
     // paint required portion on the control
-    if ( !m_text || m_widthCustomPaint )
+    if ( (!m_text || m_widthCustomPaint) )
     {
         wxASSERT( m_widthCustomPaint >= 0 );
 
@@ -466,7 +466,10 @@ void wxComboControl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         dc.SetFont( GetFont() );
 
         dc.SetClippingRegion(rect);
-        m_popupInterface->PaintComboControl(dc,rect);
+        if ( m_popupInterface )
+            m_popupInterface->PaintComboControl(dc,rect);
+        else
+            wxComboPopup::DefaultPaintComboControl(this,dc,rect);
     }
 }
 

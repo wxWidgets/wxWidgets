@@ -157,16 +157,14 @@ public:
     bool IsPopupShown() const { return m_isPopupShown; }
 
     // set interface class instance derived from wxComboPopup
-    void SetPopupControl( wxComboPopup* iface );
+    // NULL popup can be used to indicate default in a derived class
+    virtual void SetPopupControl( wxComboPopup* popup );
 
     // get interface class instance derived from wxComboPopup
-    wxComboPopup* GetPopup() const { return m_popupInterface; }
+    wxComboPopup* GetPopupControl() const { return m_popupInterface; }
 
     // get the popup window containing the popup control
     wxWindow *GetPopupWindow() const { return m_winPopup; }
-
-    // get the popup control/panel in window
-    wxWindow *GetPopupControl() const { return m_popup; }
 
     // Get the text control which is part of the combobox.
     wxTextCtrl *GetTextCtrl() const { return m_text; }
@@ -198,6 +196,10 @@ public:
     virtual void Remove(long from, long to);
     virtual void SetSelection(long from, long to);
     virtual void Undo();
+
+    // This method sets the text without affecting list selection
+    // (ie. wxComboPopup::SetStringValue doesn't get called).
+    void SetText(const wxString& value);
 
     //
     // Popup customization methods
@@ -254,23 +256,25 @@ public:
     //   spacingX: empty space on sides of the button. Default is 0.
     // Remarks:
     //   There is no spacingY - the button will be centered vertically.
-    void SetButtonPosition( int width = 0, int height = 0, int side = wxRIGHT,
-                            int spacingX = 0 /*, int spacingY = 0*/ );
+    void SetButtonPosition( int width = 0,
+                            int height = 0,
+                            int side = wxRIGHT,
+                            int spacingX = 0 );
 
 
     //
     // Sets dropbutton to be drawn with custom bitmaps.
     //
     //  bmpNormal: drawn when cursor is not on button
-    //  blankButtonBg: Draw blank button background below the image.
-    //                 NOTE! This is only properly supported on platforms with appropriate
-    //                       method in wxRendererNative.
+    //  pushButtonBg: Draw push button background below the image.
+    //                NOTE! This is usually only properly supported on platforms with appropriate
+    //                      method in wxRendererNative.
     //  bmpPressed: drawn when button is depressed
     //  bmpHover: drawn when cursor hovers on button. This is ignored on platforms
     //            that do not generally display hover differently.
     //  bmpDisabled: drawn when combobox is disabled.
     void SetButtonBitmaps( const wxBitmap& bmpNormal,
-                           bool blankButtonBg = false,
+                           bool pushButtonBg = false,
                            const wxBitmap& bmpPressed = wxNullBitmap,
                            const wxBitmap& bmpHover = wxNullBitmap,
                            const wxBitmap& bmpDisabled = wxNullBitmap );
@@ -303,7 +307,7 @@ public:
     //                                wxCONTROL_DISABLED: control/item is disabled
     virtual void DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags );
 
-    // Returns true if focus indicator should be drawn.
+    // Returns true if focus indicator should be drawn in the control.
     bool ShouldDrawFocus() const
     {
         const wxWindow* curFocus = FindFocus();
@@ -323,25 +327,6 @@ public:
 
     // Return true if Create has finished
     bool IsCreated() const { return m_iFlags & wxCC_IFLAG_CREATED ? true : false; }
-
-    // Popup may use these as callbacks to measure and draw list items.
-    // (wxOwnerDrawnComboBox uses these, obviously)
-    // item: -1 means item is the combo control itself
-    // flags: wxCC_PAINTING_CONTROL is set if painting to combo control instead of list
-    // return value: OnDrawListItem must return true if it did anything
-    virtual bool OnDrawListItem( wxDC& dc, const wxRect& rect, int item, int flags );
-
-    // Return item height, or -1 for text height (default)
-    virtual wxCoord OnMeasureListItem( int item );
-
-    // Return item width, or -1 for calculating from text extent (default)
-    virtual wxCoord OnMeasureListItemWidth( int item );
-
-    // NOTE:
-    // I basicly needed to add callback methods into wxComboControlBase - otherwise it
-    // will not be easily possible to use wxVListBoxComboPopup from simultaneously existing
-    // wxComboControl and wxGenericComboControl (since some native implementations
-    // might not have all the features, I really would like to have this options).
 
     // common code to be called on popup hide/dismiss
     void OnPopupDismiss();
@@ -395,6 +380,9 @@ protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
 
+    // ensures there is atleast the default popup
+    void EnsurePopupControl();
+
     // Recalculates button and textctrl areas. Called when size or button setup change.
     //   btnWidth: default/calculated width of the dropbutton. 0 means unchanged,
     //             just recalculate.
@@ -433,7 +421,7 @@ protected:
     wxWindow*               m_popup;
 
     // popup interface
-    wxComboPopup*         m_popupInterface;
+    wxComboPopup*           m_popupInterface;
 
     // this is for this control itself
     wxEvtHandler*           m_extraEvtHandler;
@@ -534,8 +522,7 @@ private:
 // wxComboPopup internal flags
 enum
 {
-    // Set by wxComboControlBase after Create is called
-    wxCP_IFLAG_CREATED = 0x0001
+    wxCP_IFLAG_CREATED      = 0x0001 // Set by wxComboControlBase after Create is called
 };
 
 
@@ -543,11 +530,17 @@ class WXDLLEXPORT wxComboPopup
 {
     friend class wxComboControlBase;
 public:
-    wxComboPopup(wxComboControlBase *combo)
+    wxComboPopup()
     {
-        m_combo = combo;
+        m_combo = (wxComboControlBase*) NULL;
         m_iFlags = 0;
     }
+
+    // This is called immediately after construction finishes. m_combo member
+    // variable has been initialized before the call.
+    // NOTE: It is not in constructor so the derived class doesn't need to redefine
+    //       a default constructor of its own.
+    virtual void Init() { };
 
     virtual ~wxComboPopup();
 
@@ -609,9 +602,21 @@ public:
         return (m_iFlags & wxCP_IFLAG_CREATED) ? true : false;
     }
 
+    // Default PaintComboControl behaviour
+    static void DefaultPaintComboControl( wxComboControlBase* combo,
+                                          wxDC& dc,
+                                          const wxRect& rect );
+
 protected:
     wxComboControlBase* m_combo;
     wxUint32            m_iFlags;
+
+private:
+    // Called in wxComboControlBase::SetPopupControl
+    void InitBase(wxComboControlBase *combo)
+    {
+        m_combo = combo;
+    }
 };
 
 

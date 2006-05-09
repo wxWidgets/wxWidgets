@@ -381,16 +381,22 @@ wxSize wxComboPopup::GetAdjustedSize( int minWidth,
     return wxSize(minWidth,prefHeight);
 }
 
+void wxComboPopup::DefaultPaintComboControl( wxComboControlBase* combo,
+                                             wxDC& dc, const wxRect& rect )
+{
+    if ( combo->GetWindowStyle() & wxCB_READONLY ) // ie. no textctrl
+    {
+        combo->DrawFocusBackground(dc,rect,0);
+
+        dc.DrawText( combo->GetValue(),
+                     rect.x + combo->GetTextIndent(),
+                     (rect.height-dc.GetCharHeight())/2 + rect.y );
+    }
+}
+
 void wxComboPopup::PaintComboControl( wxDC& dc, const wxRect& rect )
 {
-    if ( m_combo->GetWindowStyle() & wxCB_READONLY ) // ie. no textctrl
-    {
-        m_combo->DrawFocusBackground(dc,rect,0);
-
-        dc.DrawText( GetStringValue(),
-                     rect.x + m_combo->GetTextIndent(),
-                     (rect.height-dc.GetCharHeight())/2 + m_combo->m_widthCustomBorder );
-    }
+    DefaultPaintComboControl(m_combo,dc,rect);
 }
 
 void wxComboPopup::OnComboKeyEvent( wxKeyEvent& event )
@@ -469,12 +475,12 @@ void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
     if ( m_combo->IsPopupShown() )
     {
         // pass it to the popped up control
-        m_combo->GetPopupControl()->AddPendingEvent(event);
+        m_combo->GetPopupControl()->GetControl()->AddPendingEvent(event);
     }
     else // no popup
     {
         int comboStyle = m_combo->GetWindowStyle();
-        wxComboPopup* popupInterface = m_combo->GetPopup();
+        wxComboPopup* popupInterface = m_combo->GetPopupControl();
 
         if ( !popupInterface )
         {
@@ -494,6 +500,8 @@ void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
                     m_combo->OnButtonClick();
                     return;
                 }
+                else
+                    event.Skip();
             }
             else
                 popupInterface->OnComboKeyEvent(event);
@@ -502,7 +510,6 @@ void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
             event.Skip();
     }
 }
-
 
 void wxComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
 {
@@ -515,6 +522,18 @@ void wxComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
         else
             m_combo->SetSelection(-1,-1);
     }
+
+    if ( event.GetId() != m_combo->GetId() )
+    {
+        // Add textctrl set focus events as combo set focus events
+        // NOTE: Simply changing the event and skipping didn't seem
+        // to do the trick.
+        wxFocusEvent evt2(wxEVT_SET_FOCUS,m_combo->GetId());
+        evt2.SetEventObject(m_combo);
+        m_combo->GetEventHandler()->ProcessEvent(evt2);
+    }
+    else
+        event.Skip();
 
     event.Skip();
 }
@@ -538,7 +557,7 @@ public:
 
     void OnMouseEvent( wxMouseEvent& event );
 
-    // Called from wxPGComboControlBase::OnPopupDismiss
+    // Called from wxComboControlBase::OnPopupDismiss
     void OnPopupDismiss()
     {
         m_beenInside = false;
@@ -547,7 +566,7 @@ public:
 protected:
     wxComboControlBase*     m_combo;
 
-    bool                            m_beenInside;
+    bool                    m_beenInside;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -562,7 +581,7 @@ END_EVENT_TABLE()
 void wxComboPopupExtraEventHandler::OnMouseEvent( wxMouseEvent& event )
 {
     wxPoint pt = event.GetPosition();
-    wxSize sz = m_combo->GetPopupControl()->GetClientSize();
+    wxSize sz = m_combo->GetPopupControl()->GetControl()->GetClientSize();
     int evtType = event.GetEventType();
     bool isInside = pt.x >= 0 && pt.y >= 0 && pt.x < sz.x && pt.y < sz.y;
 
@@ -1238,25 +1257,6 @@ wxBitmap& wxComboControlBase::GetBufferBitmap( const wxSize& sz ) const
     return *gs_doubleBuffer;
 }
 
-
-bool wxComboControlBase::OnDrawListItem( wxDC& WXUNUSED(dc),
-                                         const wxRect& WXUNUSED(rect),
-                                         int WXUNUSED(item),
-                                         int WXUNUSED(flags) )
-{
-    return false; // signals caller to make default drawing
-}
-
-wxCoord wxComboControlBase::OnMeasureListItem( int WXUNUSED(item) )
-{
-    return -1; // signals caller to use default
-}
-
-wxCoord wxComboControlBase::OnMeasureListItemWidth( int WXUNUSED(item) )
-{
-    return -1; // signals caller to use default
-}
-
 // ----------------------------------------------------------------------------
 // miscellaneous event handlers
 // ----------------------------------------------------------------------------
@@ -1519,8 +1519,13 @@ void wxComboControlBase::CreatePopup()
 
 void wxComboControlBase::SetPopupControl( wxComboPopup* iface )
 {
+    wxCHECK_RET( iface, wxT("no popup interface set for wxComboControl") );
+
     delete m_popupInterface;
     delete m_winPopup;
+
+    iface->InitBase(this);
+    iface->Init();
 
     m_popupInterface = iface;
 
@@ -1533,10 +1538,19 @@ void wxComboControlBase::SetPopupControl( wxComboPopup* iface )
         m_popup = (wxWindow*) NULL;
     }
 
-    // This must be after creation
-    if ( m_valueString )
+    // This must be done after creation
+    if ( m_valueString.length() )
+    {
         iface->SetStringValue(m_valueString);
+        //Refresh();
+    }
+}
 
+// Ensures there is atleast the default popup
+void wxComboControlBase::EnsurePopupControl()
+{
+    if ( !m_popupInterface )
+        SetPopupControl(NULL);
 }
 
 void wxComboControlBase::OnButtonClick()
@@ -1548,7 +1562,7 @@ void wxComboControlBase::OnButtonClick()
 
 void wxComboControlBase::ShowPopup()
 {
-    wxCHECK_RET( m_popupInterface, wxT("no popup interface set for wxComboControl") );
+    EnsurePopupControl();
     wxCHECK_RET( !IsPopupShown(), wxT("popup window already shown") );
 
     SetFocus();
@@ -1663,7 +1677,6 @@ void wxComboControlBase::ShowPopup()
     else
     {
         // This is neede since focus/selection indication may change when popup is shown
-        // FIXME: But in that case, would m_isPopupShown need to go before this?
         Refresh();
     }
 
@@ -1859,12 +1872,24 @@ void wxComboControlBase::SetValue(const wxString& value)
             m_text->SelectAll();
     }
 
+    m_valueString = value;
+
+    Refresh();
+
     // Since wxComboPopup may want to paint the combo as well, we need
     // to set the string value here (as well as sometimes in ShowPopup).
     if ( m_valueString != value && m_popupInterface )
     {
         m_popupInterface->SetStringValue(value);
     }
+}
+
+// In this SetValue variant wxComboPopup::SetStringValue is not called
+void wxComboControlBase::SetText(const wxString& value)
+{
+    // Unlike in SetValue(), this must be called here or
+    // the behaviour will no be consistent in readonlys.
+    EnsurePopupControl();
 
     m_valueString = value;
 

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/univ/combobox.cpp
-// Purpose:     wxComboControl and wxComboBox implementation
+// Purpose:     wxComboBox implementation
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     15.12.00
