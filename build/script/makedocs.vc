@@ -30,19 +30,19 @@ allhlp: wxhlp
         cd $(WXDIR)\utils\tex2rtf\docs
         nmake -f makefile.vc hlp
         cd $(WXDIR)\contrib\src\fl
-        -nmake -f makefile.vc hlp
+        -nmake -f makedocs.vc hlp
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\ogl
-        -nmake -f makefile.vc hlp
+        -nmake -f makedocs.vc hlp
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\svg
-        -nmake -f makefile.vc hlp
+        -nmake -f makedocs.vc hlp
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\gizmos
-        -nmake -f makefile.vc hlp
+        -nmake -f makedocs.vc hlp
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\mmedia
-        -nmake -f makefile.vc hlp
+        -nmake -f makedocs.vc hlp
         cd $(THISDIR)
 
 
@@ -58,16 +58,16 @@ allhtml: wxhtml
         cd $(WXDIR)\contrib\src\fl
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\ogl
-        nmake -f makefile.vc html
+        nmake -f makedocs.vc html
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\svg
-        nmake -f makefile.vc html
+        nmake -f makedocs.vc html
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\gizmos
-        nmake -f makefile.vc html
+        nmake -f makedocs.vc html
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\mmedia
-        nmake -f makefile.vc html
+        nmake -f makedocs.vc html
         cd $(THISDIR)
 
 allhtmlhelp: htmlhelp
@@ -76,19 +76,19 @@ allhtmlhelp: htmlhelp
         cd $(WXDIR)\utils\tex2rtf\docs
         -nmake -f makefile.vc htmlhelp
         cd $(WXDIR)\contrib\src\fl
-        -nmake -f makefile.vc htmlhelp
+        -nmake -f makedocs.vc htmlhelp
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\ogl
-        -nmake -f makefile.vc htmlhelp
+        -nmake -f makedocs.vc htmlhelp
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\svg
-        -nmake -f makefile.vc htmlhelp
+        -nmake -f makedocs.vc htmlhelp
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\gizmos
-        -nmake -f makefile.vc htmlhelp
+        -nmake -f makedocs.vc htmlhelp
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\mmedia
-        -nmake -f makefile.vc htmlhelp
+        -nmake -f makedocs.vc htmlhelp
         cd $(THISDIR)
 
 
