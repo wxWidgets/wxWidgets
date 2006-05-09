@@ -10,11 +10,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/minifram.h"
-
 #if wxUSE_MINIFRAME
 
-#include "wx/dcscreen.h"
+#include "wx/minifram.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/dcscreen.h"
+#endif
 
 #include "gtk/gtk.h"
 #include "wx/gtk1/win_gtk.h"
@@ -219,7 +221,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 
     if (!win->m_isDragging) return TRUE;
 
-    win->m_isDragging = FALSE;
+    win->m_isDragging = false;
 
     int x = (int)gdk_event->x;
     int y = (int)gdk_event->y;
@@ -400,4 +402,4 @@ void wxMiniFrame::SetTitle( const wxString &title )
     gtk_widget_draw( m_mainWidget, (GdkRectangle*) NULL );
 }
 
-#endif
+#endif // wxUSE_MINIFRAME

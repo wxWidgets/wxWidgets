@@ -20,19 +20,20 @@
 
 #if wxUSE_SASH
 
+#include "wx/sashwin.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dialog.h"
     #include "wx/frame.h"
     #include "wx/settings.h"
     #include "wx/dcclient.h"
+    #include "wx/dcscreen.h"
 #endif
 
 #include "wx/math.h"
 
 #include <stdlib.h>
 
-#include "wx/dcscreen.h"
-#include "wx/sashwin.h"
 #include "wx/laywin.h"
 
 DEFINE_EVENT_TYPE(wxEVT_SASH_DRAGGED)

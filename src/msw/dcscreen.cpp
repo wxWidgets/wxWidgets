@@ -13,8 +13,10 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#include "wx/dcscreen.h"
 
 #ifndef WX_PRECOMP
    #include "wx/string.h"
@@ -22,8 +24,6 @@
 #endif
 
 #include "wx/msw/private.h"
-
-#include "wx/dcscreen.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxDC)
 
@@ -36,4 +36,3 @@ wxScreenDC::wxScreenDC()
     // DrawText() to OPAQUE as required, otherwise always TRANSPARENT
     ::SetBkMode( GetHdc(), TRANSPARENT );
 }
-
