@@ -313,9 +313,38 @@ public:
 
         // do we have such image?
     bool HasImage(wxTreeItemIcon which) const { return m_images[which] != -1; }
-        // get image
-    int GetImage(wxTreeItemIcon which) const { return m_images[which]; }
-        // change it
+        // get image, falling back to the other images if this one is not
+        // specified
+    int GetImage(wxTreeItemIcon which) const
+    {
+        int image = m_images[which];
+        if ( image == -1 )
+        {
+            switch ( which )
+            {
+                case wxTreeItemIcon_SelectedExpanded:
+                    image = GetImage(wxTreeItemIcon_Expanded);
+                    if ( image != -1 )
+                        break;
+                    //else: fall through
+
+                case wxTreeItemIcon_Selected:
+                case wxTreeItemIcon_Expanded:
+                    image = GetImage(wxTreeItemIcon_Normal);
+                    break;
+
+                case wxTreeItemIcon_Normal:
+                    // no fallback
+                    break;
+
+                default:
+                    wxFAIL_MSG( _T("unsupported wxTreeItemIcon value") );
+            }
+        }
+
+        return image;
+    }
+        // change the given image
     void SetImage(int image, wxTreeItemIcon which) { m_images[which] = image; }
 
         // get item
@@ -961,7 +990,7 @@ int wxTreeCtrl::GetItemImage(const wxTreeItemId& item,
 
     wxTreeItemParam *param = GetItemParam(item);
 
-    return param ? param->GetImage(which) : -1;
+    return param && param->HasImage(which) ? param->GetImage(which) : -1;
 }
 
 void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image,
@@ -984,19 +1013,6 @@ void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image,
         return;
 
     data->SetImage(image, which);
-
-    // make sure that we have selected images as well
-    if ( which == wxTreeItemIcon_Normal &&
-         !data->HasImage(wxTreeItemIcon_Selected) )
-    {
-        data->SetImage(image, wxTreeItemIcon_Selected);
-    }
-
-    if ( which == wxTreeItemIcon_Expanded &&
-         !data->HasImage(wxTreeItemIcon_SelectedExpanded) )
-    {
-        data->SetImage(image, wxTreeItemIcon_SelectedExpanded);
-    }
 }
 
 wxTreeItemParam *wxTreeCtrl::GetItemParam(const wxTreeItemId& item) const
@@ -1486,27 +1502,23 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
         tvIns.item.cchTextMax = 0;
     }
 
-    // we use the wxTreeItemParam of the LPARAM to return the image
+    // create the param which will store the other item parameters
+    wxTreeItemParam *param = new wxTreeItemParam;
+
+    // we return the images on demand as they depend on whether the item is
+    // expanded or collapsed too in our case
     mask |= TVIF_IMAGE | TVIF_SELECTEDIMAGE;
     tvIns.item.iImage = I_IMAGECALLBACK;
     tvIns.item.iSelectedImage = I_IMAGECALLBACK;
 
-    // create the param and setup the initial image numbers
-    wxTreeItemParam *param = new wxTreeItemParam;
-
     param->SetImage(image, wxTreeItemIcon_Normal);
-
-    // take the same image for selected icon if not specified
-    if ( selectedImage == -1 )
-        param->SetImage(image, wxTreeItemIcon_Selected);
-    else
-        param->SetImage(selectedImage, wxTreeItemIcon_Selected);
+    param->SetImage(selectedImage, wxTreeItemIcon_Selected);
 
     mask |= TVIF_PARAM;
     tvIns.item.lParam = (LPARAM)param;
     tvIns.item.mask = mask;
 
-    HTREEITEM id = (HTREEITEM) TreeView_InsertItem(GetHwnd(), &tvIns);
+    HTREEITEM id = TreeView_InsertItem(GetHwnd(), &tvIns);
     if ( id == 0 )
     {
         wxLogLastError(wxT("TreeView_InsertItem"));
@@ -2916,7 +2928,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 wxTreeItemId item = event.m_item;
                 TV_DISPINFO *info = (TV_DISPINFO *)lParam;
 
-                wxTreeItemParam *param = GetItemParam(item);
+                const wxTreeItemParam * const param = GetItemParam(item);
                 if ( !param )
                     break;
 
