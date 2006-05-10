@@ -10543,6 +10543,51 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_TextAttr_Merge(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxTextAttr *arg1 = 0 ;
+  wxTextAttr *arg2 = 0 ;
+  wxTextAttr result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "base",(char *) "overlay", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TextAttr_Merge",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_wxTextAttr,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TextAttr_Merge" "', expected argument " "1"" of type '" "wxTextAttr const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TextAttr_Merge" "', expected argument " "1"" of type '" "wxTextAttr const &""'"); 
+  }
+  arg1 = reinterpret_cast< wxTextAttr * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTextAttr,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TextAttr_Merge" "', expected argument " "2"" of type '" "wxTextAttr const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TextAttr_Merge" "', expected argument " "2"" of type '" "wxTextAttr const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxTextAttr * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxTextAttr::Merge((wxTextAttr const &)*arg1,(wxTextAttr const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxTextAttr(static_cast< const wxTextAttr& >(result))), SWIGTYPE_p_wxTextAttr, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_TextAttr_SetTextColour(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxTextAttr *arg1 = (wxTextAttr *) 0 ;
@@ -16761,6 +16806,101 @@ SWIGINTERN PyObject *_wrap_RadioBox_GetNextItem(PyObject *SWIGUNUSEDPARM(self), 
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RadioBox_SetItemToolTip(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxRadioBox *arg1 = (wxRadioBox *) 0 ;
+  unsigned int arg2 ;
+  wxString *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int val2 ;
+  int ecode2 = 0 ;
+  bool temp3 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item",(char *) "text", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:RadioBox_SetItemToolTip",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRadioBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RadioBox_SetItemToolTip" "', expected argument " "1"" of type '" "wxRadioBox *""'"); 
+  }
+  arg1 = reinterpret_cast< wxRadioBox * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RadioBox_SetItemToolTip" "', expected argument " "2"" of type '" "unsigned int""'");
+  } 
+  arg2 = static_cast< unsigned int >(val2);
+  {
+    arg3 = wxString_in_helper(obj2);
+    if (arg3 == NULL) SWIG_fail;
+    temp3 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetItemToolTip(arg2,(wxString const &)*arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp3)
+    delete arg3;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp3)
+    delete arg3;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RadioBox_GetItemToolTip(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxRadioBox *arg1 = (wxRadioBox *) 0 ;
+  unsigned int arg2 ;
+  wxToolTip *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:RadioBox_GetItemToolTip",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRadioBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RadioBox_GetItemToolTip" "', expected argument " "1"" of type '" "wxRadioBox const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxRadioBox * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RadioBox_GetItemToolTip" "', expected argument " "2"" of type '" "unsigned int""'");
+  } 
+  arg2 = static_cast< unsigned int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxToolTip *)((wxRadioBox const *)arg1)->GetItemToolTip(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, (bool)0); 
+  }
   return resultobj;
 fail:
   return NULL;
@@ -40861,6 +41001,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_TextAttr", (PyCFunction) _wrap_new_TextAttr, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_TextAttr", (PyCFunction)_wrap_delete_TextAttr, METH_O, NULL},
 	 { (char *)"TextAttr_Init", (PyCFunction)_wrap_TextAttr_Init, METH_O, NULL},
+	 { (char *)"TextAttr_Merge", (PyCFunction) _wrap_TextAttr_Merge, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TextAttr_SetTextColour", (PyCFunction) _wrap_TextAttr_SetTextColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TextAttr_SetBackgroundColour", (PyCFunction) _wrap_TextAttr_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TextAttr_SetFont", (PyCFunction) _wrap_TextAttr_SetFont, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -41015,6 +41156,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RadioBox_GetColumnCount", (PyCFunction)_wrap_RadioBox_GetColumnCount, METH_O, NULL},
 	 { (char *)"RadioBox_GetRowCount", (PyCFunction)_wrap_RadioBox_GetRowCount, METH_O, NULL},
 	 { (char *)"RadioBox_GetNextItem", (PyCFunction) _wrap_RadioBox_GetNextItem, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RadioBox_SetItemToolTip", (PyCFunction) _wrap_RadioBox_SetItemToolTip, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RadioBox_GetItemToolTip", (PyCFunction) _wrap_RadioBox_GetItemToolTip, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RadioBox_GetClassDefaultAttributes", (PyCFunction) _wrap_RadioBox_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RadioBox_swigregister", RadioBox_swigregister, METH_VARARGS, NULL},
 	 { (char *)"RadioBox_swiginit", RadioBox_swiginit, METH_VARARGS, NULL},

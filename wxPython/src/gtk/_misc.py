@@ -908,6 +908,7 @@ class BusyInfo(_core.Object):
         _misc_.BusyInfo_swiginit(self,_misc_.new_BusyInfo(*args, **kwargs))
     __swig_destroy__ = _misc_.delete_BusyInfo
     __del__ = lambda self : None;
+    def Destroy(self): pass 
 BusyInfo_swigregister = _misc_.BusyInfo_swigregister
 BusyInfo_swigregister(BusyInfo)
 

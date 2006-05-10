@@ -127,6 +127,7 @@ wxTE_HT_BEYOND = wx._controls.TE_HT_BEYOND
 wxOutOfRangeTextCoord = wx._controls.OutOfRangeTextCoord
 wxInvalidTextCoord = wx._controls.InvalidTextCoord
 wxTextAttr = wx._controls.TextAttr
+wxTextAttr_Merge = wx._controls.TextAttr_Merge
 wxTextAttr_Combine = wx._controls.TextAttr_Combine
 wxTextCtrl = wx._controls.TextCtrl
 wxPreTextCtrl = wx._controls.PreTextCtrl

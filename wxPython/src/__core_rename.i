@@ -215,6 +215,7 @@
 %rename(PD_CAN_SKIP)                        wxPD_CAN_SKIP;
 %rename(DD_NEW_DIR_BUTTON)                  wxDD_NEW_DIR_BUTTON;
 %rename(DD_DEFAULT_STYLE)                   wxDD_DEFAULT_STYLE;
+%rename(DD_CHANGE_DIR)                      wxDD_CHANGE_DIR;
 %rename(MENU_TEAROFF)                       wxMENU_TEAROFF;
 %rename(MB_DOCKABLE)                        wxMB_DOCKABLE;
 %rename(NO_FULL_REPAINT_ON_RESIZE)          wxNO_FULL_REPAINT_ON_RESIZE;

@@ -186,6 +186,7 @@ wxColourData = wx._windows.ColourData
 wxColourDialog = wx._windows.ColourDialog
 wxGetColourFromUser = wx._windows.GetColourFromUser
 wxDirDialog = wx._windows.DirDialog
+wxPreDirDialog = wx._windows.PreDirDialog
 wxFileDialog = wx._windows.FileDialog
 wxCHOICEDLG_STYLE = wx._windows.CHOICEDLG_STYLE
 wxMultiChoiceDialog = wx._windows.MultiChoiceDialog

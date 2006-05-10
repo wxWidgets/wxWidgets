@@ -20,6 +20,9 @@ del sys, _wx
 
 # Now assign all the reverse-renamed names:
 wxGDIObject = wx._gdi.GDIObject
+wxC2S_NAME = wx._gdi.C2S_NAME
+wxC2S_CSS_SYNTAX = wx._gdi.C2S_CSS_SYNTAX
+wxC2S_HTML_SYNTAX = wx._gdi.C2S_HTML_SYNTAX
 wxColour = wx._gdi.Colour
 wxNamedColour = wx._gdi.NamedColour
 wxColourRGB = wx._gdi.ColourRGB

@@ -1535,6 +1535,11 @@ class TextAttr(object):
         """Init(self)"""
         return _controls_.TextAttr_Init(*args, **kwargs)
 
+    def Merge(*args, **kwargs):
+        """Merge(TextAttr base, TextAttr overlay) -> TextAttr"""
+        return _controls_.TextAttr_Merge(*args, **kwargs)
+
+    Merge = staticmethod(Merge)
     def SetTextColour(*args, **kwargs):
         """SetTextColour(self, Colour colText)"""
         return _controls_.TextAttr_SetTextColour(*args, **kwargs)
@@ -1647,6 +1652,10 @@ class TextAttr(object):
 TextAttr_swigregister = _controls_.TextAttr_swigregister
 TextAttr_swigregister(TextAttr)
 TextCtrlNameStr = cvar.TextCtrlNameStr
+
+def TextAttr_Merge(*args, **kwargs):
+  """TextAttr_Merge(TextAttr base, TextAttr overlay) -> TextAttr"""
+  return _controls_.TextAttr_Merge(*args, **kwargs)
 
 def TextAttr_Combine(*args, **kwargs):
   """TextAttr_Combine(TextAttr attr, TextAttr attrDef, TextCtrl text) -> TextAttr"""
@@ -2376,6 +2385,14 @@ class RadioBox(_core.Control):
     def GetNextItem(*args, **kwargs):
         """GetNextItem(self, int item, int dir, long style) -> int"""
         return _controls_.RadioBox_GetNextItem(*args, **kwargs)
+
+    def SetItemToolTip(*args, **kwargs):
+        """SetItemToolTip(self, unsigned int item, String text)"""
+        return _controls_.RadioBox_SetItemToolTip(*args, **kwargs)
+
+    def GetItemToolTip(*args, **kwargs):
+        """GetItemToolTip(self, unsigned int item) -> ToolTip"""
+        return _controls_.RadioBox_GetItemToolTip(*args, **kwargs)
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """

@@ -356,6 +356,10 @@ class TopLevelWindow(_core.Window):
         """IsMaximized(self) -> bool"""
         return _windows_.TopLevelWindow_IsMaximized(*args, **kwargs)
 
+    def IsAlwaysMaximized(*args, **kwargs):
+        """IsAlwaysMaximized(self) -> bool"""
+        return _windows_.TopLevelWindow_IsAlwaysMaximized(*args, **kwargs)
+
     def IsIconized(*args, **kwargs):
         """IsIconized(self) -> bool"""
         return _windows_.TopLevelWindow_IsIconized(*args, **kwargs)
@@ -2181,6 +2185,15 @@ class DirDialog(Dialog):
         _windows_.DirDialog_swiginit(self,_windows_.new_DirDialog(*args, **kwargs))
         self._setOORInfo(self)
 
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, String title=wxDirSelectorPromptStr, 
+            String defaultPath=wxEmptyString, long style=DD_DEFAULT_STYLE, 
+            Point pos=DefaultPosition, 
+            Size sz=DefaultSize, String name=DirDialogNameStr) -> bool
+        """
+        return _windows_.DirDialog_Create(*args, **kwargs)
+
     def GetPath(*args, **kwargs):
         """
         GetPath(self) -> String
@@ -2196,14 +2209,6 @@ class DirDialog(Dialog):
         Returns the message that will be displayed on the dialog.
         """
         return _windows_.DirDialog_GetMessage(*args, **kwargs)
-
-    def GetStyle(*args, **kwargs):
-        """
-        GetStyle(self) -> long
-
-        Returns the dialog style.
-        """
-        return _windows_.DirDialog_GetStyle(*args, **kwargs)
 
     def SetMessage(*args, **kwargs):
         """
@@ -2223,6 +2228,16 @@ class DirDialog(Dialog):
 
 DirDialog_swigregister = _windows_.DirDialog_swigregister
 DirDialog_swigregister(DirDialog)
+
+def PreDirDialog(*args, **kwargs):
+    """
+    PreDirDialog() -> DirDialog
+
+    wx.DirDialog allows the user to select a directory by browising the
+    file system.
+    """
+    val = _windows_.new_PreDirDialog(*args, **kwargs)
+    return val
 
 class FileDialog(Dialog):
     """
@@ -2743,17 +2758,20 @@ class ProgressDialog(Frame):
 
     def Update(*args, **kwargs):
         """
-        Update(self, int value, String newmsg=EmptyString) -> bool
+        Update(self, int value, String newmsg) --> (continue, skip)
 
         Updates the dialog, setting the progress bar to the new value and, if
         given changes the message above it. The value given should be less
         than or equal to the maximum value given to the constructor and the
-        dialog is closed if it is equal to the maximum.  Returns True unless
-        the Cancel button has been pressed.
+        dialog is closed if it is equal to the maximum.  Returns a tuple of
+        boolean values, ``(continue, skip)`` where ``continue`` is ``True``
+        unless the Cancel button has been pressed, and ``skip`` is ``False``
+        unless the Skip button (if any) has been pressed.
 
-        If false is returned, the application can either immediately destroy
-        the dialog or ask the user for the confirmation and if the abort is
-        not confirmed the dialog may be resumed with Resume function.
+        If the ``continue`` return value is ``false``, the application can either
+        immediately destroy the dialog or ask the user for confirmation, and if the
+        abort is not confirmed the dialog may be resumed with `Resume` function.
+
         """
         return _windows_.ProgressDialog_Update(*args, **kwargs)
 
