@@ -40,10 +40,11 @@ import  sys
 import  wx
 import  img2img
 
-
+app = None
 def main():
     # some bitmap related things need to have a wxApp initialized...
     if wx.GetApp() is None:
+        global app
         app = wx.PySimpleApp()
     img2img.main(sys.argv[1:], wx.BITMAP_TYPE_PNG, ".png", __doc__)
 

@@ -124,7 +124,7 @@ def crunch_data(data, compressed):
     return fp.getvalue()
 
 
-
+app = None
 def main(args):
     if not args or ("-h" in args):
         print __doc__
@@ -132,6 +132,7 @@ def main(args):
 
     # some bitmap related things need to have a wxApp initialized...
     if wx.GetApp() is None:
+        global app
         app = wx.PySimpleApp()
 
     append = 0
