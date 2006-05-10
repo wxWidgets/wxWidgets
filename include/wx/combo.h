@@ -177,9 +177,6 @@ public:
     virtual bool Enable(bool enable = true);
     virtual bool Show(bool show = true);
     virtual bool SetFont(const wxFont& font);
-#if wxUSE_TOOLTIPS
-    virtual void DoSetToolTip( wxToolTip *tip );
-#endif
 
     // wxTextCtrl methods - for readonly combo they should return
     // without errors.
@@ -403,6 +400,10 @@ protected:
 
     // Dispatches size event and refreshes
     void RecalcAndRefresh();
+
+#if wxUSE_TOOLTIPS
+    virtual void DoSetToolTip( wxToolTip *tip );
+#endif
 
     // Used by OnPaints of derived classes
     wxBitmap& GetBufferBitmap(const wxSize& sz) const;

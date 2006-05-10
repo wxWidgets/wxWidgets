@@ -90,9 +90,6 @@ public:
     // flags: wxCP_PAINTING_CONTROL is set if painting to combo control instead of list
     virtual void OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const;
 
-    // Return item height
-    virtual wxCoord OnMeasureItem( size_t item ) const;
-
     // Return item width, or -1 for calculating from text extent (default)
     virtual wxCoord OnMeasureItemWidth( size_t item ) const;
 
@@ -138,6 +135,9 @@ protected:
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
     //virtual wxCoord OnMeasureItem(size_t n) const;
     void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
+
+    // Return item height
+    virtual wxCoord OnMeasureItem( size_t item ) const;
 
     // filter mouse move events happening outside the list box
     // move selection with cursor
