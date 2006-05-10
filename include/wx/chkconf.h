@@ -388,6 +388,14 @@
 #   endif
 #endif /* !defined(wxUSE_COMBOBOX) */
 
+#ifndef wxUSE_COMBOCONTROL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_COMBOCONTROL must be defined."
+#   else
+#       define wxUSE_COMBOCONTROL 0
+#   endif
+#endif /* !defined(wxUSE_COMBOBOX) */
+
 #ifndef wxUSE_DATAOBJ
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DATAOBJ must be defined."
@@ -616,6 +624,14 @@
 #       define wxUSE_NOTEBOOK 0
 #   endif
 #endif /* !defined(wxUSE_NOTEBOOK) */
+
+#ifndef wxUSE_OWNERDRAWNCOMBOBOX
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_OWNERDRAWNCOMBOBOX must be defined."
+#   else
+#       define wxUSE_OWNERDRAWNCOMBOBOX 0
+#   endif
+#endif /* !defined(wxUSE_COMBOBOX) */
 
 #ifndef wxUSE_PALETTE
 #   ifdef wxABORT_ON_CONFIG_ERROR
