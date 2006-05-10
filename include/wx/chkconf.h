@@ -71,6 +71,8 @@
 
 /*
    tests for non GUI features
+
+   please keep the options in alphabetical order!
  */
 
 #ifndef wxUSE_CRASHREPORT
@@ -276,6 +278,8 @@
 
 /*
    all these tests are for GUI only
+
+   please keep the options in alphabetical order!
  */
 #if wxUSE_GUI
 
@@ -394,7 +398,7 @@
 #   else
 #       define wxUSE_COMBOCONTROL 0
 #   endif
-#endif /* !defined(wxUSE_COMBOBOX) */
+#endif /* !defined(wxUSE_COMBOCONTROL) */
 
 #ifndef wxUSE_DATAOBJ
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -403,6 +407,14 @@
 #       define wxUSE_DATAOBJ 0
 #   endif
 #endif /* !defined(wxUSE_DATAOBJ) */
+
+#ifndef wxUSE_DATAVIEWCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DATAVIEWCTRL must be defined."
+#   else
+#       define wxUSE_DATAVIEWCTRL 0
+#   endif
+#endif /* !defined(wxUSE_DATAVIEWCTRL) */
 
 #ifndef wxUSE_DATEPICKCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -483,14 +495,6 @@
 #       define wxUSE_HTML 0
 #   endif
 #endif /* !defined(wxUSE_HTML) */
-
-#ifndef wxUSE_XRC
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_XRC must be defined."
-#   else
-#       define wxUSE_XRC 0
-#   endif
-#endif /* !defined(wxUSE_XRC) */
 
 #ifndef wxUSE_LIBMSPACK
 #   ifndef __UNIX__
@@ -631,7 +635,7 @@
 #   else
 #       define wxUSE_OWNERDRAWNCOMBOBOX 0
 #   endif
-#endif /* !defined(wxUSE_COMBOBOX) */
+#endif /* !defined(wxUSE_OWNERDRAWNCOMBOBOX) */
 
 #ifndef wxUSE_PALETTE
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -840,6 +844,14 @@
 #       define wxUSE_WXHTML_HELP 0
 #   endif
 #endif /* !defined(wxUSE_WXHTML_HELP) */
+
+#ifndef wxUSE_XRC
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_XRC must be defined."
+#   else
+#       define wxUSE_XRC 0
+#   endif
+#endif /* !defined(wxUSE_XRC) */
 
 #endif /* wxUSE_GUI */
 
