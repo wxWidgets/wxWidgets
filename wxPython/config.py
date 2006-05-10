@@ -363,11 +363,6 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args,
     if USE_SWIG and not os.path.exists(os.path.join(dir, gendir)):
         os.mkdir(os.path.join(dir, gendir))
 
-    if USE_SWIG and not os.path.exists(os.path.join("docs", "xml-raw")):
-        if not os.path.exists("docs"):
-            os.mkdir("docs")
-        os.mkdir(os.path.join("docs", "xml-raw"))
-
     sources = []
 
     if add_under:  pre = '_'
@@ -378,7 +373,6 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args,
         i_file   = os.path.join(dir, file)
         py_file  = os.path.join(dir, gendir, pre+basefile+'.py')
         cpp_file = os.path.join(dir, gendir, pre+basefile+'_wrap.cpp')
-        xml_file = os.path.join("docs", "xml-raw", basefile+pre+'_swig.xml')
 
         if add_under:
             interface = ['-interface', '_'+basefile+'_']
@@ -422,7 +416,7 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args,
 
                 # Then run swig for real
                 cmd = [ swig_cmd ] + swig_args + interface + \
-                      ['-I'+dir, '-o', cpp_file, '-xmlout', xml_file, i_file]
+                      ['-I'+dir, '-o', cpp_file, i_file]
                 msg(' '.join(cmd))
                 spawn(cmd)
 
