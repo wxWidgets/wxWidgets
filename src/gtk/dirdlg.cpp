@@ -146,6 +146,8 @@ wxDirDialogGTK::wxDirDialogGTK(wxWindow* parent, const wxString& title,
                        GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
                        NULL);
 
+        gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
+
         // local-only property could be set to false to allow non-local files to be loaded.
         // In that case get/set_uri(s) should be used instead of get/set_filename(s) everywhere
         // and the GtkFileChooserDialog should probably also be created with a backend,
