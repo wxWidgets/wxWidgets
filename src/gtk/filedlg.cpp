@@ -177,6 +177,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                        ok_btn_stock, GTK_RESPONSE_ACCEPT,
                        NULL);
 
+        gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
+
         if ( style & wxMULTIPLE )
             gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(m_widget), true);
 
