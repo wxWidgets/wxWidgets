@@ -29,21 +29,14 @@
 #include <gdk/gdkkeysyms.h>
 
 // FIXME: is this right? somehow I don't think so (VZ)
-#ifdef __WXGTK20__
-    #include <glib-object.h>
 
-    #define gtk_accel_group_attach(g, o) gtk_window_add_accel_group((o), (g))
-    #define gtk_accel_group_detach(g, o) gtk_window_remove_accel_group((o), (g))
-    #define gtk_menu_ensure_uline_accel_group(m) gtk_menu_get_accel_group(m)
+#define gtk_accel_group_attach(g, o) gtk_window_add_accel_group((o), (g))
+//#define gtk_accel_group_detach(g, o) gtk_window_remove_accel_group((o), (g))
+//#define gtk_menu_ensure_uline_accel_group(m) gtk_menu_get_accel_group(m)
 
-    #define ACCEL_OBJECT        GtkWindow
-    #define ACCEL_OBJECTS(a)    (a)->acceleratables
-    #define ACCEL_OBJ_CAST(obj) ((GtkWindow*) obj)
-#else // GTK+ 1.x
-    #define ACCEL_OBJECT        GtkObject
-    #define ACCEL_OBJECTS(a)    (a)->attach_objects
-    #define ACCEL_OBJ_CAST(obj) GTK_OBJECT(obj)
-#endif
+#define ACCEL_OBJECT        GtkWindow
+#define ACCEL_OBJECTS(a)    (a)->acceleratables
+#define ACCEL_OBJ_CAST(obj) ((GtkWindow*) obj)
 
 // we use normal item but with a special id for the menu title
 static const int wxGTK_TITLE_ID = -3;
