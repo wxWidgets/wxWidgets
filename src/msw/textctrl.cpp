@@ -258,9 +258,48 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_SET_FOCUS(wxTextCtrl::OnSetFocus)
 END_EVENT_TABLE()
 
+// ----------------------------------------------------------------------------
+// function prototypes
+// ----------------------------------------------------------------------------
+
+LRESULT APIENTRY _EXPORT wxTextCtrlWndProc(HWND hWnd,
+                                           UINT message,
+                                           WPARAM wParam,
+                                           LPARAM lParam);
+
+// ---------------------------------------------------------------------------
+// global vars
+// ---------------------------------------------------------------------------
+
+// the pointer to standard text control wnd proc
+static WNDPROC gs_wndprocEdit = (WNDPROC)NULL;
+
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// wnd proc for subclassed edit control
+// ----------------------------------------------------------------------------
+
+LRESULT APIENTRY _EXPORT wxTextCtrlWndProc(HWND hWnd,
+                                           UINT message,
+                                           WPARAM wParam,
+                                           LPARAM lParam)
+{
+    wxWindow *win = wxFindWinFromHandle((WXHWND)hWnd);
+
+    switch ( message )
+    {
+        case WM_CUT:
+        case WM_COPY:
+        case WM_PASTE:
+            if( win->HandleClipboardEvent( message ) )
+                return 0;
+            break;
+    }
+    return ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, hWnd, message, wParam, lParam);
+}
 
 // ----------------------------------------------------------------------------
 // creation
@@ -478,6 +517,9 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         ::SendMessage(GetHwnd(), EM_SETEVENTMASK, 0, mask);
     }
 #endif // wxUSE_RICHEDIT
+
+    gs_wndprocEdit = wxSetWindowProc((HWND)GetHwnd(),
+                                     wxTextCtrlWndProc);
 
     return true;
 }

@@ -92,6 +92,7 @@
     IMPLEMENT_DYNAMIC_CLASS(wxHelpEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxContextMenuEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureChangedEvent, wxEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxClipboardTextEvent, wxCommandEvent)
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
@@ -287,6 +288,11 @@ DEFINE_EVENT_TYPE(wxEVT_MEASURE_ITEM)
 DEFINE_EVENT_TYPE(wxEVT_COMPARE_ITEM)
 DEFINE_EVENT_TYPE(wxEVT_INIT_DIALOG)
 DEFINE_EVENT_TYPE(wxEVT_UPDATE_UI)
+
+// Clipboard events
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_COPY)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_CUT)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_PASTE)
 
 // Generic command events
 // Note: a click is a higher-level event than button down/up

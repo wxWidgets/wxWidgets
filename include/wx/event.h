@@ -267,6 +267,11 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_MOVING, 442)
     DECLARE_EVENT_TYPE(wxEVT_HIBERNATE, 443)
 
+        // Clipboard events
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_COPY, 444)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_CUT, 445)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_PASTE, 446)
+
         // Generic command events
         // Note: a click is a higher-level event than button down/up
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_LEFT_CLICK, 500)
@@ -2014,6 +2019,34 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHelpEvent)
 };
 
+// A Clipboard Text event is sent when a window intercepts text copy/cut/paste
+// message, i.e. the user has cut/copied/pasted data from/into a text control
+// via ctrl-C/X/V, ctrl/shift-del/insert, a popup menu command, etc.
+// NOTE : under windows these events are *NOT* generated automatically
+// for a Rich Edit text control.
+/*
+wxEVT_COMMAND_TEXT_COPY
+wxEVT_COMMAND_TEXT_CUT
+wxEVT_COMMAND_TEXT_PASTE
+*/
+
+class WXDLLIMPEXP_CORE wxClipboardTextEvent : public wxCommandEvent
+{
+public:
+    wxClipboardTextEvent(wxEventType type = wxEVT_NULL,
+                     wxWindowID winid = 0)
+        : wxCommandEvent(type, winid)
+    { }
+    wxClipboardTextEvent(const wxClipboardTextEvent & event)
+        : wxCommandEvent(event)
+    { }
+
+    virtual wxEvent *Clone() const { return new wxClipboardTextEvent(*this); }
+
+private:
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxClipboardTextEvent)
+};
+
 // A Context event is sent when the user right clicks on a window or
 // presses Shift-F10
 // NOTE : Under windows this is a repackaged WM_CONTETXMENU message
@@ -2531,6 +2564,7 @@ typedef void (wxEvtHandler::*wxNotifyEventFunction)(wxNotifyEvent&);
 typedef void (wxEvtHandler::*wxHelpEventFunction)(wxHelpEvent&);
 typedef void (wxEvtHandler::*wxContextMenuEventFunction)(wxContextMenuEvent&);
 typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureChangedEvent&);
+typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&);
 
 // these typedefs don't have the same name structure as the others, keep for
 // backwards compatibility only
@@ -2611,6 +2645,8 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxContextMenuEventFunction, &func)
 #define wxMouseCaptureChangedEventHandler(func) \
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxMouseCaptureChangedEventFunction, &func)
+#define wxClipboardTextEventHandler(func) \
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxClipboardTextEventFunction, &func)
 
 #endif // wxUSE_GUI
 
@@ -3001,6 +3037,11 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
 // Context Menu Events
 #define EVT_CONTEXT_MENU(func) wx__DECLARE_EVT0(wxEVT_CONTEXT_MENU, wxContextMenuEventHandler(func))
 #define EVT_COMMAND_CONTEXT_MENU(winid, func) wx__DECLARE_EVT1(wxEVT_CONTEXT_MENU, winid, wxContextMenuEventHandler(func))
+
+// Clipboard text Events
+#define EVT_TEXT_CUT(winid, func) wx__DECLARE_EVT1(wxEVT_COMMAND_TEXT_CUT, winid, wxClipboardTextEventHandler(func))
+#define EVT_TEXT_COPY(winid, func) wx__DECLARE_EVT1(wxEVT_COMMAND_TEXT_COPY, winid, wxClipboardTextEventHandler(func))
+#define EVT_TEXT_PASTE(winid, func) wx__DECLARE_EVT1(wxEVT_COMMAND_TEXT_PASTE, winid, wxClipboardTextEventHandler(func))
 
 // ----------------------------------------------------------------------------
 // Global data

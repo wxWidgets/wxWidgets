@@ -75,6 +75,10 @@ public:
     void OnTextURL(wxTextUrlEvent& event);
     void OnTextMaxLen(wxCommandEvent& event);
 
+    void OnTextCut(wxClipboardTextEvent & event);
+    void OnTextCopy(wxClipboardTextEvent & event);
+    void OnTextPaste(wxClipboardTextEvent & event);
+
     void OnMouseEvent(wxMouseEvent& event);
 
     void OnSetFocus(wxFocusEvent& event);
@@ -85,10 +89,13 @@ public:
     static bool ms_logMouse;
     static bool ms_logText;
     static bool ms_logFocus;
+    static bool ms_logClip;
 
 private:
     static inline wxChar GetChar(bool on, wxChar c) { return on ? c : _T('-'); }
+
     void LogKeyEvent(const wxChar *name, wxKeyEvent& event) const;
+    void LogClipEvent(const wxChar *what, wxClipboardTextEvent& event);
 
     bool m_hasCapture;
 
@@ -282,6 +289,11 @@ public:
         MyTextCtrl::ms_logFocus = event.IsChecked();
     }
 
+    void OnLogClip(wxCommandEvent& event)
+    {
+        MyTextCtrl::ms_logClip = event.IsChecked();
+    }
+
     void OnSetText(wxCommandEvent& WXUNUSED(event))
     {
         m_panel->m_text->SetValue(_T("Hello, world (what else did you expect)?"));
@@ -366,6 +378,7 @@ enum
     // clipboard menu
     TEXT_CLIPBOARD_COPY = 200,
     TEXT_CLIPBOARD_PASTE,
+    TEXT_CLIPBOARD_VETO,
 
     // tooltip menu
     TEXT_TOOLTIPS_SETDELAY = 300,
@@ -397,6 +410,7 @@ enum
     TEXT_LOG_MOUSE,
     TEXT_LOG_TEXT,
     TEXT_LOG_FOCUS,
+    TEXT_LOG_CLIP,
 
     TEXT_END
 };
@@ -441,6 +455,9 @@ bool MyApp::OnInit()
                           _T("Copy the selection to the clipboard"));
     menuClipboard->Append(TEXT_CLIPBOARD_PASTE, _T("&Paste\tCtrl-Shift-V"),
                           _T("Paste from clipboard to the text control"));
+    menuClipboard->AppendSeparator();
+    menuClipboard->AppendCheckItem(TEXT_CLIPBOARD_VETO, _T("Vet&o\tCtrl-Shift-O"),
+                                   _T("Veto all clipboard operations"));
     menu_bar->Append(menuClipboard, _T("&Clipboard"));
 #endif // wxUSE_CLIPBOARD
 
@@ -475,13 +492,13 @@ bool MyApp::OnInit()
     menuLog->AppendCheckItem(TEXT_LOG_MOUSE, _T("Log &mouse events"));
     menuLog->AppendCheckItem(TEXT_LOG_TEXT, _T("Log &text events"));
     menuLog->AppendCheckItem(TEXT_LOG_FOCUS, _T("Log &focus events"));
+    menuLog->AppendCheckItem(TEXT_LOG_CLIP, _T("Log clip&board events"));
     menuLog->AppendSeparator();
     menuLog->Append(TEXT_CLEAR, _T("&Clear the log\tCtrl-L"),
                     _T("Clear the log window contents"));
 
     // select only the interesting events by default
-    MyTextCtrl::ms_logKey =
-    MyTextCtrl::ms_logChar = false;
+    MyTextCtrl::ms_logClip =
     MyTextCtrl::ms_logText = true;
 
     menuLog->Check(TEXT_LOG_KEY, MyTextCtrl::ms_logKey);
@@ -514,6 +531,9 @@ BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
     EVT_TEXT_ENTER(wxID_ANY, MyTextCtrl::OnTextEnter)
     EVT_TEXT_URL(wxID_ANY, MyTextCtrl::OnTextURL)
     EVT_TEXT_MAXLEN(wxID_ANY, MyTextCtrl::OnTextMaxLen)
+    EVT_TEXT_CUT(wxID_ANY,   MyTextCtrl::OnTextCut)
+    EVT_TEXT_COPY(wxID_ANY,  MyTextCtrl::OnTextCopy)
+    EVT_TEXT_PASTE(wxID_ANY, MyTextCtrl::OnTextPaste)
 
     EVT_MOUSE_EVENTS(MyTextCtrl::OnMouseEvent)
 
@@ -526,6 +546,7 @@ bool MyTextCtrl::ms_logChar = false;
 bool MyTextCtrl::ms_logMouse = false;
 bool MyTextCtrl::ms_logText = false;
 bool MyTextCtrl::ms_logFocus = false;
+bool MyTextCtrl::ms_logClip = false;
 
 void MyTextCtrl::LogKeyEvent(const wxChar *name, wxKeyEvent& event) const
 {
@@ -794,6 +815,39 @@ void MyTextCtrl::OnTextMaxLen(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("You can't enter more characters into this control."));
 }
+
+
+void MyTextCtrl::OnTextCut(wxClipboardTextEvent& event)
+{
+    LogClipEvent(_T("cut to"), event);
+}
+
+void MyTextCtrl::OnTextCopy(wxClipboardTextEvent& event)
+{
+    LogClipEvent(_T("copied to"), event);
+}
+
+void MyTextCtrl::OnTextPaste(wxClipboardTextEvent& event)
+{
+    LogClipEvent(_T("pasted from"), event);
+}
+
+void MyTextCtrl::LogClipEvent(const wxChar *what, wxClipboardTextEvent& event)
+{
+    wxFrame *frame = wxDynamicCast(wxGetTopLevelParent(this), wxFrame);
+    wxCHECK_RET( frame, _T("no parent frame?") );
+
+    const bool veto = frame->GetMenuBar()->IsChecked(TEXT_CLIPBOARD_VETO);
+    if ( !veto )
+        event.Skip();
+
+    if ( ms_logClip )
+    {
+        wxLogMessage(_T("Text %s%s the clipboard."),
+                     veto ? _T("not ") : _T(""), what);
+    }
+}
+
 
 void MyTextCtrl::OnTextURL(wxTextUrlEvent& event)
 {
@@ -1237,6 +1291,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_LOG_MOUSE,MyFrame::OnLogMouse)
     EVT_MENU(TEXT_LOG_TEXT, MyFrame::OnLogText)
     EVT_MENU(TEXT_LOG_FOCUS,MyFrame::OnLogFocus)
+    EVT_MENU(TEXT_LOG_CLIP, MyFrame::OnLogClip)
 #if wxUSE_LOG
     EVT_MENU(TEXT_CLEAR,    MyFrame::OnLogClear)
 #endif // wxUSE_LOG

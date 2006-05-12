@@ -207,6 +207,13 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
                 }
             }
             break;
+
+        case WM_CUT:
+        case WM_COPY:
+        case WM_PASTE:
+            if( win->HandleClipboardEvent( message ) )
+                return 0;
+            break;
     }
 
     return ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, hWnd, message, wParam, lParam);
