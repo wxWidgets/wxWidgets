@@ -59,7 +59,8 @@ enum
 // ----------------------------------------------------------------------------
 
 
-class WXDLLEXPORT wxVListBoxComboPopup : public wxVListBox, public wxComboPopup
+class WXDLLIMPEXP_ADV wxVListBoxComboPopup : public wxVListBox,
+                                             public wxComboPopup
 {
     friend class wxOwnerDrawnComboBox;
 public:
@@ -177,7 +178,8 @@ private:
 // the wxComboControl.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxOwnerDrawnComboBox : public wxComboControl, public wxItemContainer
+class WXDLLIMPEXP_ADV wxOwnerDrawnComboBox : public wxComboControl,
+                                             public wxItemContainer
 {
     friend class wxComboPopupWindow;
     friend class wxComboControlBase;
