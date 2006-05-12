@@ -36,7 +36,6 @@
 // data
 //-----------------------------------------------------------------------------
 
-extern wxCursor   g_globalCursor;
 extern wxWindowGTK *g_delayedFocus;
 
 // ----------------------------------------------------------------------------
@@ -1612,9 +1611,6 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 
 void wxTextCtrl::OnInternalIdle()
 {
-    wxCursor cursor = m_cursor;
-    if (g_globalCursor.Ok()) cursor = g_globalCursor;
-
     if (g_delayedFocus == this)
     {
         if (GTK_WIDGET_REALIZED(m_widget))
