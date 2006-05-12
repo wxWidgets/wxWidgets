@@ -1527,10 +1527,13 @@ void wxWindowBase::SetToolTip( const wxString &tip )
 
 void wxWindowBase::DoSetToolTip(wxToolTip *tooltip)
 {
-    if ( m_tooltip )
-        delete m_tooltip;
+    if ( m_tooltip != tooltip )
+    {
+        if ( m_tooltip )
+            delete m_tooltip;
 
-    m_tooltip = tooltip;
+        m_tooltip = tooltip;
+    }
 }
 
 #endif // wxUSE_TOOLTIPS
