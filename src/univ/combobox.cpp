@@ -54,7 +54,7 @@ class wxComboListBox : public wxListBox, public wxComboPopup
 {
 public:
     // ctor and dtor
-    wxComboListBox(wxComboControlBase *combo);
+    wxComboListBox();
     virtual ~wxComboListBox();
 
     // implement wxComboPopup methods
@@ -100,9 +100,7 @@ IMPLEMENT_DYNAMIC_CLASS2(wxComboBox, wxControl, wxComboControl)
 // wxComboListBox
 // ----------------------------------------------------------------------------
 
-wxComboListBox::wxComboListBox(wxComboControlBase *combo)
-              : wxListBox(),
-                wxComboPopup(combo)
+wxComboListBox::wxComboListBox() : wxListBox(), wxComboPopup()
 {
 }
 
@@ -136,25 +134,6 @@ void wxComboListBox::SetStringValue(const wxString& value)
         wxListBox::SetStringSelection(value);
     else
         wxListBox::SetSelection(-1);
-
-    /*
-    // PRE-GLOBAL WXCOMBOCONTROL CODE:
-
-    // FindItem() would just find the current item for an empty string (it
-    // always matches), but we want to show the first one in such case
-    if ( value.empty() )
-    {
-        if ( GetCount() > 0 )
-        {
-            wxListBox::SetSelection(0);
-        }
-        //else: empty listbox - nothing to do
-    }
-    else if ( !FindItem(value) )
-    {
-        // no match att all
-    }
-    */
 }
 
 void wxComboListBox::OnPopup()
@@ -259,7 +238,7 @@ bool wxComboBox::Create(wxWindow *parent,
         return false;
     }
 
-    wxComboListBox *combolbox = new wxComboListBox(this);
+    wxComboListBox *combolbox = new wxComboListBox();
     SetPopupControl(combolbox);
 
     m_lbox = combolbox;
