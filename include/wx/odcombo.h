@@ -208,7 +208,7 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxString& value = wxEmptyString,
+                const wxString& value,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -260,7 +260,7 @@ public:
     virtual int FindString(const wxString& s) const;
     virtual void Select(int n);
     virtual int GetSelection() const;
-    void SetSelection(int n) { Select(n); }
+    virtual void SetSelection(int n) { Select(n); }
 
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 

@@ -56,8 +56,6 @@ END_EVENT_TABLE()
 
 
 void wxVListBoxComboPopup::Init()
-/*                                           : wxVListBox(),
-                                             wxComboPopup(combo)*/
 {
     m_widestWidth = 0;
     m_avgCharWidth = 0;
@@ -132,11 +130,6 @@ void wxVListBoxComboPopup::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) co
 
 wxCoord wxVListBoxComboPopup::OnMeasureItem(size_t WXUNUSED(n)) const
 {
-    /*
-    int itemHeight = m_combo->OnMeasureListItem(n);
-    if ( itemHeight < 0 )
-        itemHeight = m_itemHeight;
-    */
     return m_itemHeight;
 }
 
@@ -234,16 +227,6 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate )
     {
         value-=10;
     }
-    /*
-    else if ( keycode == WXK_END )
-    {
-        value = itemCount-1;
-    }
-    else if ( keycode == WXK_HOME )
-    {
-        value = 0;
-    }
-    */
     else
         return false;
 
@@ -700,7 +683,7 @@ void wxOwnerDrawnComboBox::Clear()
 
 void wxOwnerDrawnComboBox::Delete(unsigned int n)
 {
-    wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid index in wxOwnerDrawnComboBox::Delete") );
+    wxCHECK_RET( n < GetCount(), _T("invalid index in wxOwnerDrawnComboBox::Delete") );
 
     if ( GetSelection() == (int) n )
         SetValue(wxEmptyString);
@@ -716,13 +699,13 @@ unsigned int wxOwnerDrawnComboBox::GetCount() const
 
 wxString wxOwnerDrawnComboBox::GetString(unsigned int n) const
 {
-    wxCHECK_MSG( (n >= 0) && (n < GetCount()), wxEmptyString, _T("invalid index in wxOwnerDrawnComboBox::GetString") );
+    wxCHECK_MSG( n < GetCount(), wxEmptyString, _T("invalid index in wxOwnerDrawnComboBox::GetString") );
     return m_popupInterface->GetString(n);
 }
 
 void wxOwnerDrawnComboBox::SetString(unsigned int n, const wxString& s)
 {
-    wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid index in wxOwnerDrawnComboBox::SetString") );
+    wxCHECK_RET( n < GetCount(), _T("invalid index in wxOwnerDrawnComboBox::SetString") );
     m_popupInterface->SetString(n,s);
 }
 
@@ -768,7 +751,7 @@ int wxOwnerDrawnComboBox::DoAppend(const wxString& item)
 int wxOwnerDrawnComboBox::DoInsert(const wxString& item, unsigned int pos)
 {
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
-    wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
+    wxCHECK_MSG(pos<=GetCount(), -1, wxT("invalid index"));
 
     EnsurePopupControl();
     m_popupInterface->Insert(item,pos);
