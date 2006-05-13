@@ -761,6 +761,10 @@ bool wxListCtrl::GetItem(wxListItem& info) const
 // Sets information about the item
 bool wxListCtrl::SetItem(wxListItem& info)
 {
+    const long id = info.GetId();
+    wxCHECK_MSG( id >= 0 && id < GetItemCount(), false,
+                 _T("invalid item index in SetItem") );
+
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
 
@@ -773,7 +777,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
     {
         // get internal item data
         // perhaps a cache here ?
-        wxListItemInternalData *data = wxGetInternalData(this, info.m_itemId);
+        wxListItemInternalData *data = wxGetInternalData(this, id);
 
         if (! data)
         {
