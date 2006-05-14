@@ -4495,6 +4495,18 @@ int wxCharCodeWXToOS2( int nId,
     return nKeySym;
 } // end of wxCharCodeWXToOS2
 
+
+bool wxGetKeyState(wxKeyCode key)
+{
+    wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
+        WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
+
+    // TODO
+
+    return false;
+}
+
+
 wxWindow* wxGetActiveWindow()
 {
     HWND                            hWnd = ::WinQueryActiveWindow(HWND_DESKTOP);
