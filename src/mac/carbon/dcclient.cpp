@@ -75,7 +75,11 @@ static wxBrush MacGetBackgroundBrush( wxWindow* window )
                 break ;
             }
 
-            if ( parent->IsKindOf( CLASSINFO( wxNotebook ) ) || parent->IsKindOf( CLASSINFO( wxTabCtrl ) ) )
+            if ( parent->IsKindOf( CLASSINFO( wxNotebook ) )
+#if wxUSE_TAB_DIALOG
+                 || parent->IsKindOf( CLASSINFO( wxTabCtrl ) )
+#endif // wxUSE_TAB_DIALOG 
+                )
             {
                 Rect extent = { 0 , 0 , 0 , 0 } ;
                 int x , y ;
