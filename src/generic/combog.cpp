@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        combog.cpp
+// Name:        src/generic/combog.cpp
 // Purpose:     Generic wxComboControl
 // Author:      Jaakko Salli
 // Modified by:
@@ -25,6 +25,8 @@
 
 #if wxUSE_COMBOCONTROL
 
+#include "wx/combo.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/combobox.h"
@@ -33,9 +35,6 @@
 #endif
 
 #include "wx/dcbuffer.h"
-
-#include "wx/combo.h"
-
 
 // ----------------------------------------------------------------------------
 // Some constant adjustments to make the generic more bearable
