@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- $Id: -->
+<!-- $Id$ -->
 
 <makefile>
 
@@ -10,7 +10,14 @@
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <wx-lib>adv</wx-lib>
-        <uid type="creatorid">wx06</uid>
     </exe>
+
+    <wx-data id="data">
+        <files>
+            dropbuth.png
+            dropbutn.png
+            dropbutp.png
+        </files>
+    </wx-data>
 
 </makefile>
