@@ -330,11 +330,9 @@ wxUint32 wxSocketBase::_Read(void* buffer, wxUint32 nbytes)
 
   // Return now in one of the following cases:
   // - the socket is invalid,
-  // - we got all the data,
-  // - we got *some* data and we are not using wxSOCKET_WAITALL.
+  // - we got all the data
   if ( !m_socket ||
-       !nbytes ||
-       ((total != 0) && !(m_flags & wxSOCKET_WAITALL)) )
+       !nbytes )
     return total;
 
   // Possible combinations (they are checked in this order)

@@ -73,7 +73,8 @@ All:
   the first time it was called.
 - Added wxString::rbegin() and rend()
 - Added wxString::EndsWith()
-
+- wxSocket::_Read continues reading from socket after exhausting pushback buffer.
+  Previously, only the buffer would be returned, even if more data was requested.
 
 All (GUI):
 
