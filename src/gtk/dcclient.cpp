@@ -176,7 +176,7 @@ static void wxCleanUpGCPool()
     for (int i = 0; i < wxGCPoolSize; i++)
     {
         if (wxGCPool[i].m_gc)
-            g_object_unref (G_OBJECT (wxGCPool[i].m_gc));
+            g_object_unref (wxGCPool[i].m_gc);
     }
 
     free(wxGCPool);
@@ -332,7 +332,7 @@ wxWindowDC::~wxWindowDC()
     Destroy();
 
     if (m_layout)
-        g_object_unref( G_OBJECT( m_layout ) );
+        g_object_unref (m_layout);
     if (m_fontdesc)
         pango_font_description_free( m_fontdesc );
 }
@@ -1130,7 +1130,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
             gdk_gc_set_fill( gc, GDK_OPAQUE_STIPPLED );
             gdk_gc_set_stipple( gc, mask );
             gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, ww, hh );
-            g_object_unref (G_OBJECT (gc));
+            g_object_unref (gc);
         }
 
         if (is_mono)
@@ -1163,8 +1163,8 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
 
         gdk_draw_drawable( m_window, m_textGC, bitmap2, 0, 0, xx, yy, -1, -1 );
 
-        g_object_unref (G_OBJECT (bitmap2));
-        g_object_unref (G_OBJECT (gc));
+        g_object_unref (bitmap2);
+        g_object_unref (gc);
     }
     else
     {
@@ -1205,7 +1205,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     }
 
     if (new_mask)
-        g_object_unref (G_OBJECT (new_mask));
+        g_object_unref (new_mask);
 }
 
 bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
@@ -1373,7 +1373,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
                 gdk_gc_set_fill( gc, GDK_OPAQUE_STIPPLED );
                 gdk_gc_set_stipple( gc, mask );
                 gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, bm_ww, bm_hh );
-                g_object_unref (G_OBJECT (gc));
+                g_object_unref (gc);
             }
 
             if (is_mono)
@@ -1417,8 +1417,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
 
             gdk_draw_drawable( m_window, m_textGC, bitmap, xsrc, ysrc, cx, cy, cw, ch );
 
-            g_object_unref (G_OBJECT (bitmap));
-            g_object_unref (G_OBJECT (gc));
+            g_object_unref (bitmap);
+            g_object_unref (gc);
         }
         else
         {
@@ -1446,7 +1446,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         }
 
         if (new_mask)
-            g_object_unref (G_OBJECT (new_mask));
+            g_object_unref (new_mask);
     }
     else // use_bitmap_method
     {
@@ -1826,7 +1826,7 @@ void wxWindowDC::SetFont( const wxFont &font )
             if (oldContext != m_context)
             {
                 if (m_layout)
-                    g_object_unref( G_OBJECT( m_layout ) );
+                    g_object_unref (m_layout);
 
                 m_layout = pango_layout_new( m_context );
             }

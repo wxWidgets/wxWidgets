@@ -53,7 +53,7 @@ static void DrawFrame( GtkWidget *widget, int x, int y, int w, int h )
     gdk_gc_set_function( gc, GDK_INVERT );
 
     gdk_draw_rectangle( gdk_get_default_root_window(), gc, FALSE, x, y, w, h );
-    g_object_unref (G_OBJECT (gc));
+    g_object_unref (gc);
 }
 
 //-----------------------------------------------------------------------------
@@ -94,7 +94,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
                             3,
                             win->m_width - 7,
                             height+1 );
-        g_object_unref (G_OBJECT (gc));
+        g_object_unref (gc);
 
         // Hack alert
         dc.m_window = pizza->bin_window;
@@ -292,8 +292,8 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
                             );
 
         GtkWidget *pw = gtk_pixmap_new( pixmap, mask );
-        g_object_unref (G_OBJECT (mask));
-        g_object_unref (G_OBJECT (pixmap));
+        g_object_unref (mask);
+        g_object_unref (pixmap);
         gtk_widget_show( pw );
 
         GtkWidget *close_button = gtk_button_new();

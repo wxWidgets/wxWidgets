@@ -106,7 +106,7 @@ gtk_listbox_row_activated_callback(GtkTreeView        *treeview,
                     (wxClientData*) gtk_tree_entry_get_userdata(entry) );
                 else if ( listbox->HasClientUntypedData() )
                     event.SetClientData( gtk_tree_entry_get_userdata(entry) );
-                g_object_unref(G_OBJECT(entry));
+                g_object_unref (entry);
             }
             else
             {
@@ -320,7 +320,7 @@ static gboolean gtk_listitem_select_cb( GtkTreeSelection* selection,
 
         listbox->GetEventHandler()->ProcessEvent( event );
 
-        g_object_unref(G_OBJECT(entry));
+        g_object_unref (entry);
         return FALSE;  //We handled it/did it manually
     }
 
@@ -374,8 +374,8 @@ static gint gtk_listbox_sort_callback(GtkTreeModel *model,
     int ret = strcasecmp(gtk_tree_entry_get_collate_key(entry),
                          gtk_tree_entry_get_collate_key(entry2));
 
-    g_object_unref(G_OBJECT(entry));
-    g_object_unref(G_OBJECT(entry2));
+    g_object_unref (entry);
+    g_object_unref (entry2);
 
     return ret;
 }
@@ -405,7 +405,7 @@ static gboolean gtk_listbox_searchequal_callback(GtkTreeModel* model,
                          gtk_tree_entry_get_collate_key(entry));
 
     g_free(keycollatekey);
-    g_object_unref(G_OBJECT(entry));
+    g_object_unref (entry);
 
     return ret != 0;
 }
@@ -502,7 +502,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     gtk_tree_view_set_model(m_treeview, GTK_TREE_MODEL(m_liststore));
 
-    g_object_unref(G_OBJECT(m_liststore)); //free on treeview destruction
+    g_object_unref (m_liststore); //free on treeview destruction
 
     // Disable the pop-up textctrl that enables searching - note that
     // the docs specify that even if this disabled (which we are doing)
@@ -663,7 +663,7 @@ void wxListBox::GtkInsertItems(const wxArrayString& items,
             gtk_list_store_set(m_liststore, &itercur,
                                  0, entry, -1);
 
-        g_object_unref(G_OBJECT(entry)); //liststore always refs :)
+        g_object_unref (entry); //liststore always refs :)
     }
 }
 
@@ -765,7 +765,7 @@ void* wxListBox::DoGetItemClientData(unsigned int n) const
     wxCHECK_MSG(entry, NULL, wxT("could not get entry"));
 
     void* userdata = gtk_tree_entry_get_userdata( entry );
-    g_object_unref(G_OBJECT(entry));
+    g_object_unref (entry);
     return userdata;
 }
 
@@ -783,7 +783,7 @@ void wxListBox::DoSetItemClientData(unsigned int n, void* clientData)
     wxCHECK_RET(entry, wxT("could not get entry"));
 
     gtk_tree_entry_set_userdata( entry, clientData );
-    g_object_unref(G_OBJECT(entry));
+    g_object_unref (entry);
 }
 
 void wxListBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
@@ -816,7 +816,7 @@ void wxListBox::SetString(unsigned int n, const wxString &string)
     // notification function...
     void* userdata = gtk_tree_entry_get_userdata(entry);
     gtk_tree_entry_set_userdata(entry, NULL); //don't delete on destroy
-    g_object_unref(G_OBJECT(entry));
+    g_object_unref (entry);
 
     bool bWasSelected = wxListBox::IsSelected(n);
     wxListBox::Delete(n);
@@ -845,7 +845,7 @@ wxString wxListBox::GetString(unsigned int n) const
         label.erase(0, 4);
 #endif // wxUSE_CHECKLISTBOX
 
-    g_object_unref(G_OBJECT(entry));
+    g_object_unref (entry);
     return label;
 }
 

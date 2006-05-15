@@ -206,7 +206,7 @@ static GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
         GtkWidget *widget = gtk_button_new();
         gs_gtkStyle = gtk_rc_get_style(widget);
         wxASSERT( gs_gtkStyle != NULL );
-        g_object_ref(G_OBJECT(gs_gtkStyle));
+        g_object_ref(gs_gtkStyle);
         gtk_widget_destroy(widget);
     }
 
@@ -273,7 +273,7 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
                                                 GDK_INTERP_BILINEAR);
         if (p2)
         {
-            g_object_unref (G_OBJECT (pixbuf));
+            g_object_unref (pixbuf);
             pixbuf = p2;
         }
     }
@@ -301,7 +301,7 @@ public:
     {
         if (gs_gtkStyle)
         {
-            g_object_unref(G_OBJECT(gs_gtkStyle));
+            g_object_unref(gs_gtkStyle);
             gs_gtkStyle = NULL;
         }
     }

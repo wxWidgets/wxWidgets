@@ -280,7 +280,7 @@ wxGnomePrintNativeData::wxGnomePrintNativeData()
 
 wxGnomePrintNativeData::~wxGnomePrintNativeData()
 {
-    g_object_unref (G_OBJECT (m_config));
+    g_object_unref (m_config);
 }
 
 bool wxGnomePrintNativeData::TransferTo( wxPrintData &data )
@@ -707,7 +707,7 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     if (!dc)
     {
         gs_lgp->gnome_print_job_close( job );
-        g_object_unref (G_OBJECT (job));
+        g_object_unref (job);
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
@@ -738,7 +738,7 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     if (maxPage == 0)
     {
         gs_lgp->gnome_print_job_close( job );
-        g_object_unref (G_OBJECT (job));
+        g_object_unref (job);
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
@@ -796,7 +796,7 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
         gs_lgp->gnome_print_job_print( job );
     }
 
-    g_object_unref (G_OBJECT (job));
+    g_object_unref (job);
     delete dc;
 
     return (sm_lastError == wxPRINTER_NO_ERROR);

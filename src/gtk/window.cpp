@@ -397,7 +397,7 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
         gdk_draw_rectangle( widget->window, gc, FALSE,
                          dx, dy,
                          widget->allocation.width-dw-1, widget->allocation.height-dh-1 );
-        g_object_unref (G_OBJECT (gc));
+        g_object_unref (gc);
         return;
     }
 #endif // __WXUNIVERSAL__
@@ -973,7 +973,7 @@ struct wxGtkIMData
     }
     ~wxGtkIMData()
     {
-        g_object_unref(context);
+        g_object_unref (context);
     }
 };
 
@@ -3320,7 +3320,7 @@ int wxWindowGTK::GetCharHeight() const
     PangoRectangle rect;
     pango_layout_line_get_extents(line, NULL, &rect);
 
-    g_object_unref( G_OBJECT( layout ) );
+    g_object_unref (layout);
 
     return (int) PANGO_PIXELS(rect.height);
 }
@@ -3348,7 +3348,7 @@ int wxWindowGTK::GetCharWidth() const
     PangoRectangle rect;
     pango_layout_line_get_extents(line, NULL, &rect);
 
-    g_object_unref( G_OBJECT( layout ) );
+    g_object_unref (layout);
 
     return (int) PANGO_PIXELS(rect.width);
 }
@@ -3405,7 +3405,7 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
     }
     if (externalLeading) (*externalLeading) = 0;  // ??
 
-    g_object_unref( G_OBJECT( layout ) );
+    g_object_unref (layout);
 }
 
 void wxWindowGTK::SetFocus()
@@ -4388,5 +4388,5 @@ bool wxWinModule::OnInit()
 void wxWinModule::OnExit()
 {
     if (g_eraseGC)
-        g_object_unref (G_OBJECT (g_eraseGC));
+        g_object_unref (g_eraseGC);
 }

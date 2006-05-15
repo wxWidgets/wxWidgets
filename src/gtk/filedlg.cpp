@@ -189,8 +189,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         // Currently local-only is kept as the default - true:
         // gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(m_widget), true);
 
-        g_signal_connect(G_OBJECT(m_widget), "response",
-            GTK_SIGNAL_FUNC(gtk_filedialog_response_callback), (gpointer)this);
+        g_signal_connect (m_widget, "response",
+            G_CALLBACK (gtk_filedialog_response_callback), this);
 
         SetWildcard(wildCard);
 
