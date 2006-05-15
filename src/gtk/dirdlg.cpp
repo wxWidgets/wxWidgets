@@ -48,7 +48,7 @@ extern void wxapp_install_idle_handler();
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_filedialog_ok_callback(GtkWidget *widget, wxDirDialogGTK *dialog)
+static void gtk_dirdialog_ok_callback(GtkWidget *widget, wxDirDialogGTK *dialog)
 {
     gchar* filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
 
@@ -69,7 +69,7 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxDirDialogGTK *dialog
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_filedialog_cancel_callback(GtkWidget *WXUNUSED(w),
+static void gtk_dirdialog_cancel_callback(GtkWidget *WXUNUSED(w),
                                            wxDirDialogGTK *dialog)
 {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
@@ -79,19 +79,19 @@ static void gtk_filedialog_cancel_callback(GtkWidget *WXUNUSED(w),
 }
 
 extern "C" {
-static void gtk_filedialog_response_callback(GtkWidget *w,
+static void gtk_dirdialog_response_callback(GtkWidget *w,
                                              gint response,
                                              wxDirDialogGTK *dialog)
 {
     wxapp_install_idle_handler();
 
     if (response == GTK_RESPONSE_ACCEPT)
-        gtk_filedialog_ok_callback(w, dialog);
+        gtk_dirdialog_ok_callback(w, dialog);
     else if (response == GTK_RESPONSE_CANCEL)
-        gtk_filedialog_cancel_callback(w, dialog);
+        gtk_dirdialog_cancel_callback(w, dialog);
     else // "delete"
     {
-        gtk_filedialog_cancel_callback(w, dialog);
+        gtk_dirdialog_cancel_callback(w, dialog);
         dialog->m_destroyed_by_delete = true;
     }
 }
@@ -123,7 +123,7 @@ wxDirDialogGTK::wxDirDialogGTK(wxWindow* parent, const wxString& title,
 
         if (!PreCreation(parent, pos, wxDefaultSize) ||
             !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
-                    wxDefaultValidator, wxT("filedialog")))
+                    wxDefaultValidator, wxT("dirdialog")))
         {
             wxFAIL_MSG( wxT("wxDirDialogGTK creation failed") );
             return;
@@ -156,7 +156,7 @@ wxDirDialogGTK::wxDirDialogGTK(wxWindow* parent, const wxString& title,
         // gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(m_widget), true);
 
         g_signal_connect (m_widget, "response",
-            G_CALLBACK (gtk_filedialog_response_callback), this);
+            G_CALLBACK (gtk_dirdialog_response_callback), this);
 
         if ( !defaultPath.empty() )
             gtk_file_chooser_set_current_folder( GTK_FILE_CHOOSER(m_widget),
