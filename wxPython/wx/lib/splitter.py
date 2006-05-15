@@ -209,6 +209,16 @@ class MultiSplitterWindow(wx.PyPanel):
         return self._sashes[idx]
 
 
+    def SetSashPosition(self, idx, pos):
+        """
+        Set the psition of the idx'th sash, measured from the left/top
+        of the window preceding the sash.
+        """
+        assert idx < len(self._sashes)
+        self._sashes[idx] = pos
+        self._SizeWindows()
+        
+
     def SizeWindows(self):
         """
         Reposition and size the windows managed by the splitter.
