@@ -137,15 +137,15 @@ public:
                     const wxString& name = wxPyDirDialogNameStr),
         "Constructor.  Use ShowModal method to show the dialog.", "");
 
-    %RenameCtor(PreDirDialog, wxDirDialog());
+//     %RenameCtor(PreDirDialog, wxDirDialog());
 
-    bool Create(wxWindow *parent,
-                const wxString& title = wxDirSelectorPromptStr,
-                const wxString& defaultPath = wxEmptyString,
-                long style = wxDD_DEFAULT_STYLE,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& sz = wxDefaultSize,
-                const wxString& name = wxPyDirDialogNameStr);
+//     bool Create(wxWindow *parent,
+//                 const wxString& title = wxDirSelectorPromptStr,
+//                 const wxString& defaultPath = wxEmptyString,
+//                 long style = wxDD_DEFAULT_STYLE,
+//                 const wxPoint& pos = wxDefaultPosition,
+//                 const wxSize& sz = wxDefaultSize,
+//                 const wxString& name = wxPyDirDialogNameStr);
 
     DocDeclStr(
         wxString , GetPath(),
