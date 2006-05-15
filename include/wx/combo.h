@@ -47,6 +47,7 @@
 #include "wx/button.h"
 #include "wx/combobox.h"
 #include "wx/renderer.h" // this is needed for wxCONTROL_XXX flags
+#include "wx/bitmap.h" // wxBitmap used by-value
 
 
 class WXDLLEXPORT wxComboPopup;
