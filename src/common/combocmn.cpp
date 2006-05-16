@@ -748,6 +748,7 @@ void wxComboControlBase::CreateTextCtrl( int extraStyle, const wxValidator& vali
                                 // wxTAB_TRAVERSAL. The navigation event is then sent to
                                 // the wrong window.
                                 wxTE_PROCESS_TAB |
+                                wxTE_PROCESS_ENTER |
                                 extraStyle,
                                 validator);
 
