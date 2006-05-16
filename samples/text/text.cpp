@@ -782,15 +782,16 @@ void MyTextCtrl::OnText(wxCommandEvent& event)
         return;
 
     MyTextCtrl *win = (MyTextCtrl *)event.GetEventObject();
+    const wxChar *changeVerb = win->IsModified() ? _T("changed")
+                                                 : _T("set by program");
     const wxChar *data = (const wxChar *)(win->GetClientData());
     if ( data )
     {
-        wxLogMessage(_T("Text changed in control '%s'"), data);
+        wxLogMessage(_T("Text %s in control \"%s\""), changeVerb, data);
     }
     else
     {
-        // wxLogMessage( event.GetString() );
-        wxLogMessage(_T("Text changed in some control"));
+        wxLogMessage(_T("Text %s in some control"), changeVerb);
     }
 }
 
