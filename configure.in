@@ -509,7 +509,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_CHOICE=no
   DEFAULT_wxUSE_CHOICEBOOK=no
   DEFAULT_wxUSE_COMBOBOX=no
-  DEFAULT_wxUSE_COMBOCONTROL=no
+  DEFAULT_wxUSE_COMBOCTRL=no
   DEFAULT_wxUSE_DATEPICKCTRL=no
   DEFAULT_wxUSE_DISPLAY=no
   DEFAULT_wxUSE_GAUGE=no
@@ -520,7 +520,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LISTBOX=no
   DEFAULT_wxUSE_LISTCTRL=no
   DEFAULT_wxUSE_NOTEBOOK=no
-  DEFAULT_wxUSE_OWNERDRAWNCOMBOBOX=no
+  DEFAULT_wxUSE_ODCOMBOBOX=no
   DEFAULT_wxUSE_RADIOBOX=no
   DEFAULT_wxUSE_RADIOBTN=no
   DEFAULT_wxUSE_SASH=no
@@ -715,7 +715,7 @@ else
   DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_CHOICEBOOK=yes
   DEFAULT_wxUSE_COMBOBOX=yes
-  DEFAULT_wxUSE_COMBOCONTROL=yes
+  DEFAULT_wxUSE_COMBOCTRL=yes
   DEFAULT_wxUSE_DATEPICKCTRL=yes
   DEFAULT_wxUSE_DISPLAY=yes
   DEFAULT_wxUSE_GAUGE=yes
@@ -726,7 +726,7 @@ else
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
   DEFAULT_wxUSE_NOTEBOOK=yes
-  DEFAULT_wxUSE_OWNERDRAWNCOMBOBOX=yes
+  DEFAULT_wxUSE_ODCOMBOBOX=yes
   DEFAULT_wxUSE_RADIOBOX=yes
   DEFAULT_wxUSE_RADIOBTN=yes
   DEFAULT_wxUSE_SASH=yes
@@ -1116,7 +1116,7 @@ WX_ARG_ENABLE(checklst,    [  --enable-checklst       use wxCheckListBox (listbo
 WX_ARG_ENABLE(choice,      [  --enable-choice         use wxChoice class], wxUSE_CHOICE)
 WX_ARG_ENABLE(choicebook,  [  --enable-choicebook     use wxChoicebook class], wxUSE_CHOICEBOOK)
 WX_ARG_ENABLE(combobox,    [  --enable-combobox       use wxComboBox class], wxUSE_COMBOBOX)
-WX_ARG_ENABLE(combocontrol,[  --enable-combocontrol   use wxComboControl class], wxUSE_COMBOCONTROL)
+WX_ARG_ENABLE(comboctrl,   [  --enable-comboctrl      use wxComboCtrl class], wxUSE_COMBOCTRL)
 WX_ARG_ENABLE(datepick,    [  --enable-datepick       use wxDatePickerCtrl class], wxUSE_DATEPICKCTRL)
 WX_ARG_ENABLE(display,     [  --enable-display        use wxDisplay class], wxUSE_DISPLAY)
 WX_ARG_ENABLE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
@@ -1127,7 +1127,7 @@ WX_ARG_ENABLE(listbook,    [  --enable-listbook       use wxListbook class], wxU
 WX_ARG_ENABLE(listbox,     [  --enable-listbox        use wxListBox class], wxUSE_LISTBOX)
 WX_ARG_ENABLE(listctrl,    [  --enable-listctrl       use wxListCtrl class], wxUSE_LISTCTRL)
 WX_ARG_ENABLE(notebook,    [  --enable-notebook       use wxNotebook class], wxUSE_NOTEBOOK)
-WX_ARG_ENABLE(odcombo,     [  --enable-odcombo        use wxOwnerDrawnComboBox class], wxUSE_OWNERDRAWNCOMBOBOX)
+WX_ARG_ENABLE(odcombobox,  [  --enable-odcombobox     use wxOwnerDrawnComboBox class], wxUSE_ODCOMBOBOX)
 WX_ARG_ENABLE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
 WX_ARG_ENABLE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
 WX_ARG_ENABLE(sash,        [  --enable-sash           use wxSashWindow class], wxUSE_SASH)
@@ -6281,8 +6281,8 @@ if test "$wxUSE_COMBOBOX" = "yes"; then
   USES_CONTROLS=1
 fi
 
-if test "$wxUSE_COMBOCONTROL" = "yes"; then
-  AC_DEFINE(wxUSE_COMBOCONTROL)
+if test "$wxUSE_COMBOCTRL" = "yes"; then
+  AC_DEFINE(wxUSE_COMBOCTRL)
   USES_CONTROLS=1
 fi
 
@@ -6365,8 +6365,8 @@ if test "$wxUSE_NOTEBOOK" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS notebook"
 fi
 
-if test "$wxUSE_OWNERDRAWNCOMBOBOX" = "yes"; then
-  AC_DEFINE(wxUSE_OWNERDRAWNCOMBOBOX)
+if test "$wxUSE_ODCOMBOBOX" = "yes"; then
+  AC_DEFINE(wxUSE_ODCOMBOBOX)
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS combo"
 fi

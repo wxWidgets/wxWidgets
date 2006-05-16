@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/generic/combog.cpp
-// Purpose:     Generic wxComboControl
+// Purpose:     Generic wxComboCtrl
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     Apr-30-2006
@@ -23,7 +23,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_COMBOCONTROL
+#if wxUSE_COMBOCTRL
 
 #include "wx/combo.h"
 
@@ -89,13 +89,13 @@
 // wxGenericComboControl
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxGenericComboControl, wxComboControlBase)
+BEGIN_EVENT_TABLE(wxGenericComboControl, wxComboCtrlBase)
     EVT_PAINT(wxGenericComboControl::OnPaintEvent)
     EVT_MOUSE_EVENTS(wxGenericComboControl::OnMouseEvent)
 END_EVENT_TABLE()
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericComboControl, wxComboControlBase)
+IMPLEMENT_DYNAMIC_CLASS(wxGenericComboControl, wxComboCtrlBase)
 
 void wxGenericComboControl::Init()
 {
@@ -147,7 +147,7 @@ bool wxGenericComboControl::Create(wxWindow *parent,
         m_iFlags |= wxCC_POPUP_ON_MOUSE_UP;
 
     // create main window
-    if ( !wxComboControlBase::Create(parent,
+    if ( !wxComboCtrlBase::Create(parent,
                                      id,
                                      value,
                                      wxDefaultPosition,
@@ -362,12 +362,12 @@ bool wxGenericComboControl::PerformAction(const wxControlAction& action,
 
 #endif // __WXUNIVERSAL__
 
-// If native wxComboControl was not defined, then prepare a simple
+// If native wxComboCtrl was not defined, then prepare a simple
 // front-end so that wxRTTI works as expected.
 #ifndef _WX_COMBOCONTROL_H_
-IMPLEMENT_DYNAMIC_CLASS(wxComboControl, wxGenericComboControl)
+IMPLEMENT_DYNAMIC_CLASS(wxComboCtrl, wxGenericComboControl)
 #endif
 
 #endif // !wxCOMBOCONTROL_FULLY_FEATURED
 
-#endif // wxUSE_COMBOCONTROL
+#endif // wxUSE_COMBOCTRL

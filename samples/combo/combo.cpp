@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        combo.cpp
-// Purpose:     wxComboControl sample
+// Purpose:     wxComboCtrl sample
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     Apr-30-2006
@@ -30,8 +30,8 @@
     #include "wx/wx.h"
 #endif
 
-#if !wxUSE_COMBOCONTROL
-    #error "Please set wxUSE_COMBOCONTROL to 1 and rebuild the library."
+#if !wxUSE_COMBOCTRL
+    #error "Please set wxUSE_COMBOCTRL to 1 and rebuild the library."
 #endif
 
 #include "wx/image.h"
@@ -78,7 +78,7 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
-    // log wxComboControl events
+    // log wxComboCtrl events
     void OnComboBoxUpdate( wxCommandEvent& event );
 
 protected:
@@ -140,7 +140,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("wxComboControl Sample"));
+    MyFrame *frame = new MyFrame(_T("wxComboCtrl Sample"));
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -164,7 +164,7 @@ class ListViewComboPopup : public wxListView, public wxComboPopup
 public:
 
 /*
-    ListViewComboPopup(wxComboControlBase* combo)
+    ListViewComboPopup(wxComboCtrlBase* combo)
         : wxListView(), wxComboPopup(combo)
     {
         m_value = -1;
@@ -266,7 +266,7 @@ class TreeCtrlComboPopup : public wxTreeCtrl, public wxComboPopup
 public:
 
 /*
-    TreeCtrlComboPopup(wxComboControlBase* combo)
+    TreeCtrlComboPopup(wxComboCtrlBase* combo)
         : wxTreeCtrl(), wxComboPopup(combo)
     {
     }
@@ -534,13 +534,13 @@ public:
 };
 
 // ----------------------------------------------------------------------------
-// wxComboControl with entirely custom button action (opens file dialog)
+// wxComboCtrl with entirely custom button action (opens file dialog)
 // ----------------------------------------------------------------------------
 
-class wxFileSelectorCombo : public wxComboControl
+class wxFileSelectorCombo : public wxComboCtrl
 {
 public:
-    wxFileSelectorCombo() : wxComboControl() { Init(); }
+    wxFileSelectorCombo() : wxComboCtrl() { Init(); }
 
     wxFileSelectorCombo(wxWindow *parent,
                         wxWindowID id = wxID_ANY,
@@ -550,7 +550,7 @@ public:
                         long style = 0,
                         const wxValidator& validator = wxDefaultValidator,
                         const wxString& name = wxComboBoxNameStr)
-        : wxComboControl()
+        : wxComboCtrl()
     {
         Init();
         Create(parent,id,value,
@@ -667,13 +667,13 @@ MyFrame::MyFrame(const wxString& title)
 
 
     // Make sure GetFeatures is implemented
-    int features = wxComboControl::GetFeatures();
-    wxLogDebug(wxT("wxComboControl features: 0x%X (all features: 0x%X)"),
-               features,wxComboControlFeatures::All);
+    int features = wxComboCtrl::GetFeatures();
+    wxLogDebug(wxT("wxComboCtrl features: 0x%X (all features: 0x%X)"),
+               features,wxComboCtrlFeatures::All);
 
 
     wxComboBox* cb;
-    wxComboControl* cc;
+    wxComboCtrl* cc;
     wxGenericComboControl* gcc;
     wxOwnerDrawnComboBox* odc;
 
@@ -846,18 +846,18 @@ MyFrame::MyFrame(const wxString& title)
 
 
     //
-    // List View wxComboControl
+    // List View wxComboCtrl
     //
 
     rowSizer = new wxBoxSizer ( wxHORIZONTAL );
-    rowSizer->Add( new wxStaticText(panel,wxID_ANY,wxT("List View wxComboControl:")), 1,
+    rowSizer->Add( new wxStaticText(panel,wxID_ANY,wxT("List View wxComboCtrl:")), 1,
                    wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,wxT("Tree Ctrl wxGenericComboControl:")), 1,
                    wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
     colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
 
     rowSizer = new wxBoxSizer ( wxHORIZONTAL );
-    cc = new wxComboControl(panel,2,wxEmptyString,
+    cc = new wxComboCtrl(panel,2,wxEmptyString,
                             wxDefaultPosition, wxDefaultSize);
 
     cc->SetPopupMinWidth(300);
@@ -888,7 +888,7 @@ MyFrame::MyFrame(const wxString& title)
 
 
     //
-    // Tree Ctrl wxComboControl
+    // Tree Ctrl wxComboCtrl
     //
 
     // Note that we test that wxGenericComboControl works
@@ -989,11 +989,11 @@ MyFrame::MyFrame(const wxString& title)
 
 
     //
-    // wxComboControl with totally custom button action (open file dialog)
+    // wxComboCtrl with totally custom button action (open file dialog)
     //
     rowSizer = new wxBoxSizer ( wxHORIZONTAL );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,
-                        wxT("wxComboControl with custom button action:")), 1,
+                        wxT("wxComboCtrl with custom button action:")), 1,
                    wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
 
 
@@ -1053,12 +1053,12 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(wxString::Format(
                     _T("Welcome to %s!\n")
                     _T("\n")
-                    _T("This is the wxWidgets wxComboControl sample\n")
+                    _T("This is the wxWidgets wxComboCtrl sample\n")
                     _T("running under %s."),
                     wxVERSION_STRING,
                     wxGetOsDescription().c_str()
                  ),
-                 _T("About wxComboControl sample"),
+                 _T("About wxComboCtrl sample"),
                  wxOK | wxICON_INFORMATION,
                  this);
 }

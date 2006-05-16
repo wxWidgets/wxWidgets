@@ -78,7 +78,7 @@ All:
 
 All (GUI):
 
-- Added wxComboControl and wxOwnerDrawnComboBox (Jaakko Salli)
+- Added wxComboCtrl and wxOwnerDrawnComboBox (Jaakko Salli)
 - Added wxTreebook (uses a wxTreeCtrl to control pages).
 - Added wxDC::GradientFillLinear/Concentric()
 - Added wxRadioBox::SetItemToolTip()

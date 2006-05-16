@@ -29,7 +29,7 @@
 #include "wx/popupwin.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/combobox.h"        // wxComboControl
+    #include "wx/combobox.h"        // wxComboCtrl
     #include "wx/app.h"             // wxPostEvent
     #include "wx/log.h"
 #endif //WX_PRECOMP
@@ -402,13 +402,13 @@ BEGIN_EVENT_TABLE(wxPopupComboWindow, wxPopupTransientWindow)
     EVT_KEY_DOWN(wxPopupComboWindow::OnKeyDown)
 END_EVENT_TABLE()
 
-wxPopupComboWindow::wxPopupComboWindow(wxComboControl *parent)
+wxPopupComboWindow::wxPopupComboWindow(wxComboCtrl *parent)
                   : wxPopupTransientWindow(parent)
 {
     m_combo = parent;
 }
 
-bool wxPopupComboWindow::Create(wxComboControl *parent)
+bool wxPopupComboWindow::Create(wxComboCtrl *parent)
 {
     m_combo = parent;
 

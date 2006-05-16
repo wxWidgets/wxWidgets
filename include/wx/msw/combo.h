@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/combo.h
-// Purpose:     wxComboControl class
+// Purpose:     wxComboCtrl class
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     Apr-30-2006
@@ -13,25 +13,25 @@
 #define _WX_COMBOCONTROL_H_
 
 // NB: Definition of _WX_COMBOCONTROL_H_ is used in wx/generic/combo.h to
-//     determine whether there is native wxComboControl, so make sure you
-//     use it in all native wxComboControls.
+//     determine whether there is native wxComboCtrl, so make sure you
+//     use it in all native wxComboCtrls.
 
-#if wxUSE_COMBOCONTROL
+#if wxUSE_COMBOCTRL
 
 // ----------------------------------------------------------------------------
-// Native wxComboControl
+// Native wxComboCtrl
 // ----------------------------------------------------------------------------
 
 // Define this only if native implementation includes all features
 #define wxCOMBOCONTROL_FULLY_FEATURED
 
-class WXDLLEXPORT wxComboControl : public wxComboControlBase
+class WXDLLEXPORT wxComboCtrl : public wxComboCtrlBase
 {
 public:
     // ctors and such
-    wxComboControl() : wxComboControlBase() { Init(); }
+    wxComboCtrl() : wxComboCtrlBase() { Init(); }
 
-    wxComboControl(wxWindow *parent,
+    wxComboCtrl(wxWindow *parent,
                    wxWindowID id = wxID_ANY,
                    const wxString& value = wxEmptyString,
                    const wxPoint& pos = wxDefaultPosition,
@@ -39,7 +39,7 @@ public:
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxComboBoxNameStr)
-        : wxComboControlBase()
+        : wxComboCtrlBase()
     {
         Init();
 
@@ -55,11 +55,11 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
 
-    virtual ~wxComboControl();
+    virtual ~wxComboCtrl();
 
     virtual void DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags );
 
-    static int GetFeatures() { return wxComboControlFeatures::All; }
+    static int GetFeatures() { return wxComboCtrlFeatures::All; }
 
 protected:
 
@@ -77,10 +77,10 @@ private:
 
     DECLARE_EVENT_TABLE()
 
-    DECLARE_DYNAMIC_CLASS(wxComboControl)
+    DECLARE_DYNAMIC_CLASS(wxComboCtrl)
 };
 
 
-#endif // wxUSE_COMBOCONTROL
+#endif // wxUSE_COMBOCTRL
 #endif
     // _WX_COMBOCONTROL_H_

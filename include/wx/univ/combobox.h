@@ -31,7 +31,7 @@ class WXDLLEXPORT wxListBox;
 // wxComboBox: a combination of text control and a listbox
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxComboBox : public wxComboControl, public wxComboBoxBase
+class WXDLLEXPORT wxComboBox : public wxComboCtrl, public wxComboBoxBase
 {
 public:
     // ctors and such
@@ -129,7 +129,7 @@ public:
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
     // we have our own input handler and our own actions
-    // (but wxComboControl already handled Popup/Dismiss)
+    // (but wxComboCtrl already handled Popup/Dismiss)
     /*
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = 0l,

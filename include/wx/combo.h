@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/combo.h
-// Purpose:     wxComboControl declaration
+// Purpose:     wxComboCtrl declaration
 // Author:      Jaakko Salli
 // Modified by: 
 // Created:     Apr-30-2006
@@ -15,7 +15,7 @@
 
 /*
    A few words about all the classes defined in this file are probably in
-   order: why do we need extra wxComboControl and wxComboPopup classes?
+   order: why do we need extra wxComboCtrl and wxComboPopup classes?
 
    This is because a traditional combobox is a combination of a text control
    (with a button allowing to open the pop down list) with a listbox and
@@ -23,9 +23,9 @@
    combinations - in fact, we want to allow anything at all to be used as pop
    down list, not just a wxListBox.
 
-   So we define a base wxComboControl which can use any control as pop down
+   So we define a base wxComboCtrl which can use any control as pop down
    list and wxComboBox deriving from it which implements the standard wxWidgets
-   combobox API. wxComboControl needs to be told somehow which control to use
+   combobox API. wxComboCtrl needs to be told somehow which control to use
    and this is done by SetPopupControl(). However, we need something more than
    just a wxControl in this method as, for example, we need to call
    SetSelection("initial text value") and wxControl doesn't have such method.
@@ -40,7 +40,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_COMBOCONTROL
+#if wxUSE_COMBOCTRL
 
 
 #include "wx/textctrl.h"
@@ -53,7 +53,7 @@
 class WXDLLEXPORT wxComboPopup;
 
 //
-// New window styles for wxComboControlBase
+// New window styles for wxComboCtrlBase
 //
 enum
 {
@@ -70,7 +70,7 @@ enum
 };
 
 
-// wxComboControl internal flags
+// wxComboCtrl internal flags
 enum
 {
     // First those that can be passed to Customize.
@@ -101,8 +101,8 @@ enum
 };
 
 
-// Namespace for wxComboControl feature flags
-struct wxComboControlFeatures
+// Namespace for wxComboCtrl feature flags
+struct wxComboCtrlFeatures
 {
     enum
     {
@@ -129,12 +129,12 @@ struct wxComboControlFeatures
 };
 
 
-class WXDLLEXPORT wxComboControlBase : public wxControl
+class WXDLLEXPORT wxComboCtrlBase : public wxControl
 {
     friend class wxComboPopup;
 public:
     // ctors and such
-    wxComboControlBase() : wxControl() { Init(); }
+    wxComboCtrlBase() : wxControl() { Init(); }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -145,7 +145,7 @@ public:
                 const wxValidator& validator,
                 const wxString& name);
 
-    virtual ~wxComboControlBase();
+    virtual ~wxComboCtrlBase();
 
     // show/hide popup window
     virtual void ShowPopup();
@@ -396,7 +396,7 @@ protected:
     void OnTextCtrlEvent(wxCommandEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
-    // Set customization flags (directs how wxComboControlBase helpers behave)
+    // Set customization flags (directs how wxComboCtrlBase helpers behave)
     void Customize( wxUint32 flags ) { m_iFlags |= flags; }
 
     // Dispatches size event and refreshes
@@ -511,30 +511,30 @@ private:
 
     DECLARE_EVENT_TABLE()
 
-    DECLARE_ABSTRACT_CLASS(wxComboControlBase)
+    DECLARE_ABSTRACT_CLASS(wxComboCtrlBase)
 };
 
 
 // ----------------------------------------------------------------------------
 // wxComboPopup is the interface which must be implemented by a control to be
-// used as a popup by wxComboControl
+// used as a popup by wxComboCtrl
 // ----------------------------------------------------------------------------
 
 
 // wxComboPopup internal flags
 enum
 {
-    wxCP_IFLAG_CREATED      = 0x0001 // Set by wxComboControlBase after Create is called
+    wxCP_IFLAG_CREATED      = 0x0001 // Set by wxComboCtrlBase after Create is called
 };
 
 
 class WXDLLEXPORT wxComboPopup
 {
-    friend class wxComboControlBase;
+    friend class wxComboCtrlBase;
 public:
     wxComboPopup()
     {
-        m_combo = (wxComboControlBase*) NULL;
+        m_combo = (wxComboCtrlBase*) NULL;
         m_iFlags = 0;
     }
 
@@ -570,12 +570,12 @@ public:
     // Default implementation draws value as string.
     virtual void PaintComboControl( wxDC& dc, const wxRect& rect );
 
-    // Receives key events from the parent wxComboControl.
+    // Receives key events from the parent wxComboCtrl.
     // Events not handled should be skipped, as usual.
     virtual void OnComboKeyEvent( wxKeyEvent& event );
 
     // Implement if you need to support special action when user
-    // double-clicks on the parent wxComboControl.
+    // double-clicks on the parent wxComboCtrl.
     virtual void OnComboDoubleClick();
 
     // Return final size of popup. Called on every popup, just prior to OnShow.
@@ -605,17 +605,17 @@ public:
     }
 
     // Default PaintComboControl behaviour
-    static void DefaultPaintComboControl( wxComboControlBase* combo,
+    static void DefaultPaintComboControl( wxComboCtrlBase* combo,
                                           wxDC& dc,
                                           const wxRect& rect );
 
 protected:
-    wxComboControlBase* m_combo;
+    wxComboCtrlBase* m_combo;
     wxUint32            m_iFlags;
 
 private:
-    // Called in wxComboControlBase::SetPopupControl
-    void InitBase(wxComboControlBase *combo)
+    // Called in wxComboCtrlBase::SetPopupControl
+    void InitBase(wxComboCtrlBase *combo)
     {
         m_combo = combo;
     }
@@ -635,7 +635,7 @@ private:
 // Any ports may need generic as an alternative
 #include "wx/generic/combo.h"
 
-#endif // wxUSE_COMBOCONTROL
+#endif // wxUSE_COMBOCTRL
 
 #endif
     // _WX_COMBOCONTROL_H_BASE_

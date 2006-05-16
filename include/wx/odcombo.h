@@ -14,7 +14,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_OWNERDRAWNCOMBOBOX
+#if wxUSE_ODCOMBOBOX
 
 #include "wx/combo.h"
 #include "wx/ctrlsub.h"
@@ -52,7 +52,7 @@ enum
 //
 // Notes:
 //   wxOwnerDrawnComboBox uses this as its popup. However, it always derives
-//   from native wxComboControl. If you need to use this popup with
+//   from native wxComboCtrl. If you need to use this popup with
 //   wxGenericComboControl, then remember that vast majority of item manipulation
 //   functionality is implemented in the wxVListBoxComboPopup class itself.
 //
@@ -175,18 +175,18 @@ private:
 // ----------------------------------------------------------------------------
 // wxOwnerDrawnComboBox: a generic wxComboBox that allows custom paint items
 // in addition to many other types of customization already allowed by
-// the wxComboControl.
+// the wxComboCtrl.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxOwnerDrawnComboBox : public wxComboControl,
+class WXDLLIMPEXP_ADV wxOwnerDrawnComboBox : public wxComboCtrl,
                                              public wxItemContainer
 {
     friend class wxComboPopupWindow;
-    friend class wxComboControlBase;
+    friend class wxComboCtrlBase;
 public:
 
     // ctors and such
-    wxOwnerDrawnComboBox() : wxComboControl() { Init(); }
+    wxOwnerDrawnComboBox() : wxComboCtrl() { Init(); }
 
     wxOwnerDrawnComboBox(wxWindow *parent,
                          wxWindowID id,
@@ -198,7 +198,7 @@ public:
                          long style = 0,
                          const wxValidator& validator = wxDefaultValidator,
                          const wxString& name = wxComboBoxNameStr)
-        : wxComboControl()
+        : wxComboCtrl()
     {
         Init();
 
@@ -293,6 +293,6 @@ private:
 };
 
 
-#endif // wxUSE_OWNERDRAWNCOMBOBOX
+#endif // wxUSE_ODCOMBOBOX
 #endif
     // _WX_ODCOMBO_H_

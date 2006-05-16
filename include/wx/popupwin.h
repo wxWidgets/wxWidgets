@@ -156,15 +156,15 @@ protected:
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxComboBox;
-class WXDLLEXPORT wxComboControl;
+class WXDLLEXPORT wxComboCtrl;
 
 class WXDLLEXPORT wxPopupComboWindow : public wxPopupTransientWindow
 {
 public:
     wxPopupComboWindow() { m_combo = NULL; }
-    wxPopupComboWindow(wxComboControl *parent);
+    wxPopupComboWindow(wxComboCtrl *parent);
 
-    bool Create(wxComboControl *parent);
+    bool Create(wxComboCtrl *parent);
 
     // position the window correctly relatively to the combo
     void PositionNearCombo();
@@ -177,7 +177,7 @@ protected:
     void OnKeyDown(wxKeyEvent& event);
 
     // the parent combobox
-    wxComboControl *m_combo;
+    wxComboCtrl *m_combo;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxPopupComboWindow)

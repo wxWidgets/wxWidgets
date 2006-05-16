@@ -90,7 +90,7 @@ BEGIN_EVENT_TABLE(wxComboListBox, wxListBox)
     EVT_LEFT_UP(wxComboListBox::OnLeftUp)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS2(wxComboBox, wxControl, wxComboControl)
+IMPLEMENT_DYNAMIC_CLASS2(wxComboBox, wxControl, wxComboCtrl)
 
 // ============================================================================
 // implementation
@@ -149,7 +149,7 @@ bool wxComboListBox::PerformAction(const wxControlAction& action,
     {
         // we don't let the listbox handle this as instead of just using the
         // single key presses, as usual, we use the text ctrl value as prefix
-        // and this is done by wxComboControl itself
+        // and this is done by wxComboCtrl itself
         return true;
     }
 
@@ -232,7 +232,7 @@ bool wxComboBox::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString& name)
 {
-    if ( !wxComboControl::Create(parent, id, value, pos, size, style,
+    if ( !wxComboCtrl::Create(parent, id, value, pos, size, style,
                                  validator, name) )
     {
         return false;
@@ -257,12 +257,12 @@ wxComboBox::~wxComboBox()
 
 wxString wxComboBox::GetValue() const
 {
-    return wxComboControl::GetValue();
+    return wxComboCtrl::GetValue();
 }
 
 void wxComboBox::SetValue(const wxString& value)
 {
-    wxComboControl::SetValue(value);
+    wxComboCtrl::SetValue(value);
 }
 
 void wxComboBox::Copy()

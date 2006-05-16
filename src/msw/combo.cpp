@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        combo.cpp
-// Purpose:     wxMSW wxComboControl
+// Purpose:     wxMSW wxComboCtrl
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     Apr-30-2006
@@ -23,7 +23,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_COMBOCONTROL
+#if wxUSE_COMBOCTRL
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -76,19 +76,19 @@
 // ============================================================================
 
 
-BEGIN_EVENT_TABLE(wxComboControl, wxComboControlBase)
-    EVT_PAINT(wxComboControl::OnPaintEvent)
-    EVT_MOUSE_EVENTS(wxComboControl::OnMouseEvent)
+BEGIN_EVENT_TABLE(wxComboCtrl, wxComboCtrlBase)
+    EVT_PAINT(wxComboCtrl::OnPaintEvent)
+    EVT_MOUSE_EVENTS(wxComboCtrl::OnMouseEvent)
 END_EVENT_TABLE()
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboControl, wxComboControlBase)
+IMPLEMENT_DYNAMIC_CLASS(wxComboCtrl, wxComboCtrlBase)
 
-void wxComboControl::Init()
+void wxComboCtrl::Init()
 {
 }
 
-bool wxComboControl::Create(wxWindow *parent,
+bool wxComboCtrl::Create(wxWindow *parent,
                             wxWindowID id,
                             const wxString& value,
                             const wxPoint& pos,
@@ -118,7 +118,7 @@ bool wxComboControl::Create(wxWindow *parent,
     }
 
     // create main window
-    if ( !wxComboControlBase::Create(parent,
+    if ( !wxComboCtrlBase::Create(parent,
                             id,
                             value,
                             wxDefaultPosition,
@@ -146,11 +146,11 @@ bool wxComboControl::Create(wxWindow *parent,
     return true;
 }
 
-wxComboControl::~wxComboControl()
+wxComboCtrl::~wxComboCtrl()
 {
 }
 
-void wxComboControl::OnThemeChange()
+void wxComboCtrl::OnThemeChange()
 {
     wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
     if ( theme )
@@ -170,7 +170,7 @@ void wxComboControl::OnThemeChange()
     }
 }
 
-void wxComboControl::OnResize()
+void wxComboCtrl::OnResize()
 {
     //
     // Recalculates button and textctrl areas
@@ -239,7 +239,7 @@ static void wxMSWDrawFocusRect( wxDC& dc, const wxRect& rect )
 }
 
 // draw focus background on area in a way typical on platform
-void wxComboControl::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags )
+void wxComboCtrl::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags )
 {
     wxUxThemeEngine* theme = (wxUxThemeEngine*) NULL;
     wxUxThemeHandle hTheme(this, L"COMBOBOX");
@@ -369,7 +369,7 @@ void wxComboControl::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flag
 
 }
 
-void wxComboControl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
+void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 {
     // TODO: Convert drawing in this function to Windows API Code
 
@@ -473,7 +473,7 @@ void wxComboControl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     }
 }
 
-void wxComboControl::OnMouseEvent( wxMouseEvent& event )
+void wxComboCtrl::OnMouseEvent( wxMouseEvent& event )
 {
     bool isOnButtonArea = m_btnArea.Inside(event.m_x,event.m_y);
     int handlerFlags = isOnButtonArea ? wxCC_MF_ON_BUTTON : 0;
@@ -513,7 +513,7 @@ void wxComboControl::OnMouseEvent( wxMouseEvent& event )
 
 }
 
-wxCoord wxComboControl::GetNativeTextIndent() const
+wxCoord wxComboCtrl::GetNativeTextIndent() const
 {
     if ( wxUxThemeEngine::GetIfActive() )
         return NATIVE_TEXT_INDENT_XP;
@@ -521,4 +521,4 @@ wxCoord wxComboControl::GetNativeTextIndent() const
 }
 
 
-#endif // wxUSE_COMBOCONTROL
+#endif // wxUSE_COMBOCTRL

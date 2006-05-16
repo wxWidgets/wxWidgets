@@ -674,14 +674,14 @@
 // Recommended setting: 1 (it doesn't cost almost anything)
 #define wxUSE_MINIFRAME 1
 
-// wxComboControl and related classes: combobox with custom popup window and
+// wxComboCtrl and related classes: combobox with custom popup window and
 // not necessarily a listbox.
 //
 // Default is 1.
 //
 // Recommended setting: 1 but can be safely set to 0 except for wxUniv where it
 //                      it used by wxComboBox
-#define wxUSE_COMBOCONTROL 1
+#define wxUSE_COMBOCTRL 1
 
 // wxOwnerDrawnComboBox is a custom combobox allowing to paint the combobox
 // items.
@@ -689,7 +689,7 @@
 // Default is 1.
 //
 // Recommended setting: 1 but can be safely set to 0
-#define wxUSE_OWNERDRAWNCOMBOBOX 1
+#define wxUSE_ODCOMBOBOX 1
 
 // ----------------------------------------------------------------------------
 // Miscellaneous GUI stuff

@@ -340,9 +340,9 @@
 
 #define wxUSE_MINIFRAME 0
 
-#define wxUSE_COMBOCONTROL 0
+#define wxUSE_COMBOCTRL 0
 
-#define wxUSE_OWNERDRAWNCOMBOBOX 0
+#define wxUSE_ODCOMBOBOX 0
 
 
 #define wxUSE_ACCEL 0

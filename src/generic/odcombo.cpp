@@ -23,7 +23,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_OWNERDRAWNCOMBOBOX
+#if wxUSE_ODCOMBOBOX
 
 #include "wx/odcombo.h"
 
@@ -557,11 +557,11 @@ void wxVListBoxComboPopup::Populate( const wxArrayString& choices )
 // ----------------------------------------------------------------------------
 
 
-BEGIN_EVENT_TABLE(wxOwnerDrawnComboBox, wxComboControl)
+BEGIN_EVENT_TABLE(wxOwnerDrawnComboBox, wxComboCtrl)
 END_EVENT_TABLE()
 
 
-IMPLEMENT_DYNAMIC_CLASS2(wxOwnerDrawnComboBox, wxComboControl, wxControlWithItems)
+IMPLEMENT_DYNAMIC_CLASS2(wxOwnerDrawnComboBox, wxComboCtrl, wxControlWithItems)
 
 void wxOwnerDrawnComboBox::Init()
 {
@@ -577,7 +577,7 @@ bool wxOwnerDrawnComboBox::Create(wxWindow *parent,
                                   const wxValidator& validator,
                                   const wxString& name)
 {
-    return wxComboControl::Create(parent,id,value,pos,size,style,validator,name);
+    return wxComboCtrl::Create(parent,id,value,pos,size,style,validator,name);
 }
 
 wxOwnerDrawnComboBox::wxOwnerDrawnComboBox(wxWindow *parent,
@@ -589,7 +589,7 @@ wxOwnerDrawnComboBox::wxOwnerDrawnComboBox(wxWindow *parent,
                                            long style,
                                            const wxValidator& validator,
                                            const wxString& name)
-    : wxComboControl()
+    : wxComboCtrl()
 {
     Init();
 
@@ -653,7 +653,7 @@ void wxOwnerDrawnComboBox::SetPopupControl( wxComboPopup* popup )
         popup = new wxVListBoxComboPopup();
     }
 
-    wxComboControl::SetPopupControl(popup);
+    wxComboCtrl::SetPopupControl(popup);
 
     wxASSERT(popup);
     m_popupInterface = (wxVListBoxComboPopup*) popup;
@@ -780,4 +780,4 @@ wxClientData* wxOwnerDrawnComboBox::DoGetItemClientObject(unsigned int n) const
     return (wxClientData*) DoGetItemClientData(n);
 }
 
-#endif // wxUSE_OWNERDRAWNCOMBOBOX
+#endif // wxUSE_ODCOMBOBOX
