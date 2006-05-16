@@ -807,9 +807,13 @@ void wxComboControlBase::CalculateAreas( int btnWidth )
     bool buttonOutside;
     int btnBorder; // border for button only
 
-    if ( ( (m_iFlags & wxCC_BUTTON_OUTSIDE_BORDER) || m_blankButtonBg ) &&
-         m_btnSpacingX == 0 && m_btnWid == 0 && m_btnHei == 0 &&
-         (!m_bmpNormal.Ok() || m_blankButtonBg) )
+    // check if button should really be outside the border: we'll do it it if
+    // its platform default or bitmap+pushbutton background is used, but not if
+    // there is vertical size adjustment or horizontal spacing.
+    if ( ( (m_iFlags & wxCC_BUTTON_OUTSIDE_BORDER) ||
+                (m_bmpNormal.Ok() && m_blankButtonBg) ) &&
+         m_btnSpacingX == 0 &&
+         m_btnHei == 0 )
     {
         buttonOutside = true;
         m_iFlags |= wxCC_IFLAG_BUTTON_OUTSIDE;
