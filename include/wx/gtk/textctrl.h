@@ -144,8 +144,6 @@ public:
 
     void SetUpdateFont(bool WXUNUSED(update)) { }
 
-    void SetModified() { m_modified = true; }
-
     // GTK+ textctrl is so dumb that you need to freeze/thaw it manually to
     // avoid horrible flicker/scrolling back and forth
     virtual void Freeze();

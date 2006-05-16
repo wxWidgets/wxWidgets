@@ -454,7 +454,7 @@ gtk_text_changed_callback( GtkWidget *widget, wxTextCtrl *win )
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    win->SetModified();
+    win->MarkDirty();
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
     event.SetEventObject( win );
