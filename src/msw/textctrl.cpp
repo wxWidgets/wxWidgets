@@ -791,20 +791,24 @@ void wxTextCtrl::SetValue(const wxString& value)
     {
         DoWriteText(value, false /* not selection only */);
 
+        // mark the control as being not dirty - we changed its text, not the
+        // user
+        DiscardEdits();
+
         // for compatibility, don't move the cursor when doing SetValue()
         SetInsertionPoint(0);
     }
     else // same text
     {
+        // still reset the modified flag even if the value didn't really change
+        // because now it comes from the program and not the user (and do it
+        // before generating the event so that the event handler could get the
+        // expected value from IsModified())
+        DiscardEdits();
+
         // still send an event for consistency
         SendUpdateEvent();
     }
-
-    // we should reset the modified flag even if the value didn't really change
-
-    // mark the control as being not dirty - we changed its text, not the
-    // user
-    DiscardEdits();
 }
 
 #if wxUSE_RICHEDIT && (!wxUSE_UNICODE || wxUSE_UNICODE_MSLU)
