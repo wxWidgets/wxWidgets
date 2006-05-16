@@ -72,7 +72,6 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
 {
     wxASSERT_MSG( NavServicesAvailable() , wxT("Navigation Services are not running") ) ;
     m_message = message;
-    m_dialogStyle = style;
     m_parent = parent;
     m_path = defaultPath;
 }
