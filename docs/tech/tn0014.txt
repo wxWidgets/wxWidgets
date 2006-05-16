@@ -291,6 +291,20 @@ attribute name             attribute type          default value, if any
                            [(optional remarks....................
                            ...................................)]
 
+Common attributes
+-----------------
+These attributes are supported by all windows:
+
+exstyle                    Int
+bg                         Colour
+fg                         Colour
+enabled                    Boolean                 true
+focused                    Boolean                 false
+hidden                     Boolean                 false
+tooltip                    I18nString
+font                       Font
+help                       I18nString
+
 wxBitmap
 --------
 This is a special case, because it does not create a wxWindow instance but
