@@ -74,7 +74,10 @@ public:
         for ( size_t n = 0; n < WXSIZEOF(m_fds); n++ )
         {
             if ( m_fds[n] != INVALID_FD )
+            {
                 close(m_fds[n]);
+                m_fds[n] = INVALID_FD;
+            }
         }
     }
 
