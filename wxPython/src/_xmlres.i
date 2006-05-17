@@ -174,7 +174,7 @@ public:
     // with a number. If value_if_not_found == wxID_NONE, the number is obtained via
     // wxNewId(). Otherwise value_if_not_found is used.
     // Macro XRCID(name) is provided for convenient use in event tables.
-    static int GetXRCID(const wxChar *str_id, int value_if_not_found = wxID_NONE);
+    static int GetXRCID(const wxString& str_id, int value_if_not_found = wxID_NONE);
 
     // Returns version info (a.b.c.d = d+ 256*c + 256^2*b + 256^3*a)
     long GetVersion() const;
