@@ -99,7 +99,7 @@ USE_SWIG = 0       # Should we actually execute SWIG, or just use the
 
 SWIG = "swig"      # The swig executable to use.
 
-BUILD_RENAMERS = 1 # Should we build the renamer modules too?
+BUILD_RENAMERS = 0 # Should we build the renamer modules too?
 
 FULL_DOCS = 0      # Some docstrings are split into a basic docstring and a
                    # details string.  Setting this flag to 1 will
