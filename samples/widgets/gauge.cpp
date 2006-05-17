@@ -71,7 +71,7 @@ enum
 class GaugeWidgetsPage : public WidgetsPage
 {
 public:
-    GaugeWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist);
+    GaugeWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~GaugeWidgetsPage();
 
     virtual wxControl *GetWidget() const { return m_gauge; }
@@ -157,9 +157,11 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(GaugeWidgetsPage, _T("Gauge"));
+IMPLEMENT_WIDGETS_PAGE(GaugeWidgetsPage, _T("Gauge"),
+                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
+                       );
 
-GaugeWidgetsPage::GaugeWidgetsPage(wxBookCtrlBase *book,
+GaugeWidgetsPage::GaugeWidgetsPage(WidgetsBookCtrl *book,
                                    wxImageList *imaglist)
                  :WidgetsPage(book)
 {

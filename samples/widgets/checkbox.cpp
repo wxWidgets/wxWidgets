@@ -73,7 +73,7 @@ enum
 class CheckBoxWidgetsPage : public WidgetsPage
 {
 public:
-    CheckBoxWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist);
+    CheckBoxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~CheckBoxWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_checkbox; }
@@ -148,9 +148,11 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(CheckBoxWidgetsPage, wxT("CheckBox"));
+IMPLEMENT_WIDGETS_PAGE(CheckBoxWidgetsPage, wxT("CheckBox"),
+                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
+                       );
 
-CheckBoxWidgetsPage::CheckBoxWidgetsPage(wxBookCtrlBase *book,
+CheckBoxWidgetsPage::CheckBoxWidgetsPage(WidgetsBookCtrl *book,
                                          wxImageList *imaglist)
                   : WidgetsPage(book)
 {

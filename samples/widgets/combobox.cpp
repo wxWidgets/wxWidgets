@@ -85,7 +85,7 @@ enum
 class ComboboxWidgetsPage : public WidgetsPage
 {
 public:
-    ComboboxWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist);
+    ComboboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
     virtual wxControl *GetWidget() const { return m_combobox; }
     virtual void RecreateWidget() { CreateCombo(); }
@@ -192,9 +192,12 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(ComboboxWidgetsPage, _T("Combobox"));
+IMPLEMENT_WIDGETS_PAGE(ComboboxWidgetsPage, _T("Combobox"),
+                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
+                       | WITH_ITEMS_CTRLS | COMBO_CTRLS
+                       );
 
-ComboboxWidgetsPage::ComboboxWidgetsPage(wxBookCtrlBase *book,
+ComboboxWidgetsPage::ComboboxWidgetsPage(WidgetsBookCtrl *book,
                                          wxImageList *imaglist)
                   : WidgetsPage(book)
 {

@@ -89,7 +89,7 @@ enum
 class SliderWidgetsPage : public WidgetsPage
 {
 public:
-    SliderWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist);
+    SliderWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~SliderWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_slider; }
@@ -198,9 +198,11 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(SliderWidgetsPage, _T("Slider"));
+IMPLEMENT_WIDGETS_PAGE(SliderWidgetsPage, _T("Slider"),
+                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
+                       );
 
-SliderWidgetsPage::SliderWidgetsPage(wxBookCtrlBase *book,
+SliderWidgetsPage::SliderWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)
                   : WidgetsPage(book)
 {

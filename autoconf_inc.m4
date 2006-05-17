@@ -206,7 +206,7 @@ dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_1_USE_XRC_1[wx.bkl] ###
         COND_MONOLITHIC_0_SHARED_1_USE_XRC_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_XRC_1)
-dnl ### begin block 20_COND_MONOLITHIC_0_USE_MEDIA_1[../../samples/dialup/dialup.bkl,../../samples/mediaplayer/mediaplayer.bkl,../../samples/splash/splash.bkl,../../tests/test.bkl,wx.bkl] ###
+dnl ### begin block 20_COND_MONOLITHIC_0_USE_MEDIA_1[../../samples/dialup/dialup.bkl,../../samples/mediaplayer/mediaplayer.bkl,../../samples/splash/splash.bkl,../../samples/widgets/widgets.bkl,../../tests/test.bkl,wx.bkl] ###
     COND_MONOLITHIC_0_USE_MEDIA_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$USE_MEDIA" = "x1" ; then
         COND_MONOLITHIC_0_USE_MEDIA_1=""

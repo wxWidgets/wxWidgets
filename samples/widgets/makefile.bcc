@@ -37,6 +37,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_button.obj \
 	$(OBJS)\widgets_checkbox.obj \
 	$(OBJS)\widgets_combobox.obj \
+	$(OBJS)\widgets_datepick.obj \
 	$(OBJS)\widgets_gauge.obj \
 	$(OBJS)\widgets_listbox.obj \
 	$(OBJS)\widgets_notebook.obj \
@@ -167,6 +168,14 @@ __DLLFLAG_p = -DWXUSINGDLL
 __DLLFLAG_p_1 = -dWXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"
+__WXLIB_ADV_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib
+!endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_HTML_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib
+!endif
+!if "$(MONOLITHIC)" == "0"
 __WXLIB_CORE_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
 !endif
@@ -223,9 +232,9 @@ clean:
 	-if exist $(OBJS)\widgets.ilf del $(OBJS)\widgets.ilf
 	-if exist $(OBJS)\widgets.ils del $(OBJS)\widgets.ils
 
-$(OBJS)\widgets.exe: $(WIDGETS_OBJECTS)  $(OBJS)\widgets_widgets.res
+$(OBJS)\widgets.exe: $(WIDGETS_OBJECTS)  $(OBJS)\widgets_sample.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(WIDGETS_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,, $(OBJS)\widgets_widgets.res
+	c0w32.obj $(WIDGETS_OBJECTS),$@,, $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,, $(OBJS)\widgets_sample.res
 |
 
 $(OBJS)\widgets_button.obj: .\button.cpp
@@ -235,6 +244,9 @@ $(OBJS)\widgets_checkbox.obj: .\checkbox.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_combobox.obj: .\combobox.cpp
+	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
+
+$(OBJS)\widgets_datepick.obj: .\datepick.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_gauge.obj: .\gauge.cpp
@@ -264,6 +276,6 @@ $(OBJS)\widgets_textctrl.obj: .\textctrl.cpp
 $(OBJS)\widgets_widgets.obj: .\widgets.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
 
-$(OBJS)\widgets_widgets.res: .\widgets.rc
+$(OBJS)\widgets_sample.res: .\..\sample.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) -i$(SETUPHDIR) -i.\..\..\include -i. $(__DLLFLAG_p_1) -i.\..\..\samples -dNOPCH $**
 

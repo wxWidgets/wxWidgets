@@ -76,7 +76,7 @@ enum
 class ListboxWidgetsPage : public WidgetsPage
 {
 public:
-    ListboxWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist);
+    ListboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
     virtual wxControl *GetWidget() const { return m_lbox; }
     virtual void RecreateWidget() { CreateLbox(); }
@@ -193,9 +193,12 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(ListboxWidgetsPage, _T("Listbox"));
+IMPLEMENT_WIDGETS_PAGE(ListboxWidgetsPage, _T("Listbox"),
+                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
+                       | WITH_ITEMS_CTRLS
+                       );
 
-ListboxWidgetsPage::ListboxWidgetsPage(wxBookCtrlBase *book,
+ListboxWidgetsPage::ListboxWidgetsPage(WidgetsBookCtrl *book,
                                        wxImageList *imaglist)
                   : WidgetsPage(book)
 {

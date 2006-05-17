@@ -83,7 +83,7 @@ static const int TEST_BUTTON = 1;
 class RadioWidgetsPage : public WidgetsPage
 {
 public:
-    RadioWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist);
+    RadioWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~RadioWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_radio; }
@@ -173,9 +173,12 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(RadioWidgetsPage, _T("Radio"));
+IMPLEMENT_WIDGETS_PAGE(RadioWidgetsPage, _T("Radio"),
+                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
+                       | WITH_ITEMS_CTRLS
+                       );
 
-RadioWidgetsPage::RadioWidgetsPage(wxBookCtrlBase *book,
+RadioWidgetsPage::RadioWidgetsPage(WidgetsBookCtrl *book,
                                    wxImageList *imaglist)
                   : WidgetsPage(book)
 {

@@ -79,7 +79,7 @@ enum
 class ButtonWidgetsPage : public WidgetsPage
 {
 public:
-    ButtonWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist);
+    ButtonWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~ButtonWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_button; }
@@ -154,9 +154,11 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(ButtonWidgetsPage, _T("Button"));
+IMPLEMENT_WIDGETS_PAGE(ButtonWidgetsPage, _T("Button"),
+                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
+                       );
 
-ButtonWidgetsPage::ButtonWidgetsPage(wxBookCtrlBase *book,
+ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)
                   : WidgetsPage(book)
 {

@@ -139,7 +139,7 @@ END_EVENT_TABLE()
 class StaticWidgetsPage : public WidgetsPage
 {
 public:
-    StaticWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist);
+    StaticWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~StaticWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_statText; }
@@ -204,9 +204,11 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(StaticWidgetsPage, _T("Static"));
+IMPLEMENT_WIDGETS_PAGE(StaticWidgetsPage, _T("Static"),
+                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
+                       );
 
-StaticWidgetsPage::StaticWidgetsPage(wxBookCtrlBase *book,
+StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)
                   : WidgetsPage(book)
 {

@@ -42,12 +42,15 @@
 
 #include "wx/sysopt.h"
 #include "wx/bookctrl.h"
+#include "wx/treebook.h"
 #include "wx/sizer.h"
 #include "wx/colordlg.h"
 #include "wx/fontdlg.h"
 #include "wx/textdlg.h"
 
 #include "widgets.h"
+
+#include "../sample.xpm"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -79,6 +82,17 @@ enum
 
     Widgets_GoToPage,
     Widgets_GoToPageLast = Widgets_GoToPage + 100
+};
+
+const wxChar *WidgetsCategories[MAX_PAGES] = {
+    wxT("Native"),
+    wxT("Generic"),
+    wxT("Pickers"),
+    wxT("Comboboxes"),
+    wxT("With items"),
+    wxT("Editable"),
+    wxT("Books"),
+    wxT("All controls")
 };
 
 // ----------------------------------------------------------------------------
@@ -114,7 +128,7 @@ protected:
     void OnExit(wxCommandEvent& event);
 
 #if wxUSE_MENUS
-    void OnPageChanged(wxBookCtrlEvent& event);
+    void OnPageChanged(WidgetsBookCtrlEvent& event);
     void OnGoToPage(wxCommandEvent& event);
 
 #if wxUSE_TOOLTIPS
@@ -130,6 +144,9 @@ protected:
     // initialize the book: add all pages to it
     void InitBook();
 
+    // finding current page assuming book inside book
+    WidgetsPage *CurrentPage();
+
 private:
     // the panel containing everything
     wxPanel *m_panel;
@@ -143,10 +160,7 @@ private:
 #endif // USE_LOG
 
     // the book containing the test pages
-    wxBookCtrlBase *m_book;
-
-    // and the image list for it
-    wxImageList *m_imaglist;
+    WidgetsBookCtrl *m_book;
 
 #if wxUSE_MENUS
     // last chosen fg/bg colours and font
@@ -242,7 +256,7 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
 #endif // wxUSE_TOOLTIPS
 
 #if wxUSE_MENUS
-    EVT_BOOKCTRL_PAGE_CHANGED(Widgets_BookCtrl, WidgetsFrame::OnPageChanged)
+    EVT_WIDGETS_PAGE_CHANGED(wxID_ANY, WidgetsFrame::OnPageChanged)
     EVT_MENU_RANGE(Widgets_GoToPage, Widgets_GoToPageLast,
                    WidgetsFrame::OnGoToPage)
 
@@ -312,13 +326,15 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
                       wxCLIP_CHILDREN |
                       wxTAB_TRAVERSAL)
 {
+    // set the frame icon
+    SetIcon(wxICON(sample));
+
     // init everything
 #if USE_LOG
     m_lboxLog = (wxListBox *)NULL;
     m_logTarget = (wxLog *)NULL;
 #endif // USE_LOG
-    m_book = (wxBookCtrlBase *)NULL;
-    m_imaglist = (wxImageList *)NULL;
+    m_book = (WidgetsBookCtrl *)NULL;
 
 #if wxUSE_MENUS
     // create the menubar
@@ -364,7 +380,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     // Uncomment to suppress page theme (draw in solid colour)
     //style |= wxNB_NOPAGETHEME;
 
-    m_book = new wxBookCtrl(m_panel, Widgets_BookCtrl, wxDefaultPosition,
+    m_book = new WidgetsBookCtrl(m_panel, Widgets_BookCtrl, wxDefaultPosition,
 #ifdef __WXMOTIF__
         wxSize(500, wxDefaultCoord), // under Motif, height is a function of the width...
 #else
@@ -425,49 +441,121 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
 void WidgetsFrame::InitBook()
 {
-    m_imaglist = new wxImageList(32, 32);
+    wxImageList *imageList = new wxImageList(32, 32);
 
-    ArrayWidgetsPage pages;
-    wxArrayString labels;
+    imageList->Add(wxBitmap(sample_xpm));
+
+#if !USE_TREEBOOK
+    WidgetsBookCtrl *books[MAX_PAGES];
+#endif
+
+    ArrayWidgetsPage pages[MAX_PAGES];
+    wxArrayString labels[MAX_PAGES];
 
     wxMenu *menuPages = new wxMenu;
-    unsigned nPage = 0;
+    unsigned int nPage = 0, nFKey = 0;
+    int cat, imageId = 1;
 
     // we need to first create all pages and only then add them to the book
     // as we need the image list first
     //
     // we also construct the pages menu during this first iteration
-    for ( WidgetsPageInfo *info = WidgetsPage::ms_widgetPages;
-          info;
-          info = info->GetNext(), nPage++ )
+    for ( cat = 0; cat < MAX_PAGES; cat++ )
     {
-        WidgetsPage *page = (*info->GetCtor())(m_book, m_imaglist);
-        pages.Add(page);
+#if USE_TREEBOOK
+        nPage++; // increase for parent page
+#else
+        books[cat] = new WidgetsBookCtrl( m_book, wxID_ANY );
+#endif
 
-        labels.Add(info->GetLabel());
-        menuPages->AppendRadioItem
-                   (
-                    Widgets_GoToPage + nPage,
-                    wxString::Format(wxT("%s\tF%u"),
-                                     info->GetLabel().c_str(), nPage + 1)
-                   );
+        for ( WidgetsPageInfo *info = WidgetsPage::ms_widgetPages;
+              info;
+              info = info->GetNext() )
+        {
+            if( (info->GetCategories() & ( 1 << cat )) == 0)
+                continue;
+
+            WidgetsPage *page = (*info->GetCtor())(
+#if USE_TREEBOOK
+                                 m_book
+#else
+                                 books[cat]
+#endif
+                                 , imageList);
+            pages[cat].Add(page);
+
+            labels[cat].Add(info->GetLabel());
+            if ( cat == ALL_PAGE )
+            {
+                wxString radioLabel(info->GetLabel());
+                nFKey++;
+                if ( nFKey <= 12 )
+                {
+                    radioLabel << wxT("\tF" ) << nFKey;
+                }
+
+                menuPages->AppendRadioItem(
+                            Widgets_GoToPage + nPage,
+                            radioLabel
+                           );
+#if !USE_TREEBOOK
+                // consider only for book in book architecture
+                nPage++;
+#endif
+            }
+
+#if USE_TREEBOOK
+            // consider only for treebook architecture (with subpages)
+            nPage++;
+#endif
+        }
     }
 
     GetMenuBar()->Append(menuPages, _T("&Page"));
 
-    m_book->SetImageList(m_imaglist);
+    m_book->AssignImageList(imageList);
 
-    // now do add them
-    size_t count = pages.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( cat = 0; cat < MAX_PAGES; cat++ )
     {
-        m_book->AddPage(
-                        pages[n],
-                        labels[n],
-                        false, // don't select
-                        n // image id
-                       );
+#if USE_TREEBOOK
+        m_book->AddPage(NULL,WidgetsCategories[cat],false,0);
+#else
+        m_book->AddPage(books[cat],WidgetsCategories[cat],false,0);
+        books[cat]->SetImageList(imageList);
+#endif
+
+        // now do add them
+        size_t count = pages[cat].GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+#if USE_TREEBOOK
+            m_book->AddSubPage(
+#else
+            books[cat]->AddPage(
+#endif
+                            pages[cat][n],
+                            labels[cat][n],
+                            false, // don't select
+                            imageId++
+                           );
+        }
     }
+
+#if USE_TREEBOOK
+    // for treebook page #0 is empty parent page only
+    m_book->SetSelection(1);
+#endif
+}
+
+WidgetsPage *WidgetsFrame::CurrentPage()
+{
+#if USE_TREEBOOK
+    return wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+#else
+    WidgetsBookCtrl *book = wxStaticCast(m_book->GetCurrentPage(), WidgetsBookCtrl);
+    if (!book) return NULL;
+    return wxStaticCast(book->GetCurrentPage(), WidgetsPage);
+#endif
 }
 
 WidgetsFrame::~WidgetsFrame()
@@ -475,7 +563,6 @@ WidgetsFrame::~WidgetsFrame()
 #if USE_LOG
     delete m_logTarget;
 #endif // USE_LOG
-    delete m_imaglist;
 }
 
 // ----------------------------------------------------------------------------
@@ -496,15 +583,22 @@ void WidgetsFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
 
 #if wxUSE_MENUS
 
-void WidgetsFrame::OnPageChanged(wxBookCtrlEvent& event)
+void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
 {
-    GetMenuBar()->Check(Widgets_GoToPage + event.GetSelection(), true);
+    wxMenuItem *item = GetMenuBar()->FindItem(Widgets_GoToPage + event.GetSelection());
+    if (item) item->Check();
     event.Skip();
 }
 
 void WidgetsFrame::OnGoToPage(wxCommandEvent& event)
 {
+#if USE_TREEBOOK
     m_book->SetSelection(event.GetId() - Widgets_GoToPage);
+#else
+    m_book->SetSelection(m_book->GetPageCount()-1);
+    WidgetsBookCtrl *book = wxStaticCast(m_book->GetCurrentPage(), WidgetsBookCtrl);
+    book->SetSelection(event.GetId() - Widgets_GoToPage);
+#endif
 }
 
 #if wxUSE_TOOLTIPS
@@ -527,7 +621,7 @@ void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
     s_tip = dialog.GetValue();
     s_tip.Replace(_T("\\n"), _T("\n"));
 
-    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+    WidgetsPage *page = CurrentPage();
     page->GetWidget()->SetToolTip(s_tip);
 
     wxControl *ctrl2 = page->GetWidget2();
@@ -541,7 +635,7 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_COLOURDLG
     // allow for debugging the default colour the first time this is called
-    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+    WidgetsPage *page = CurrentPage();
     if (!m_colFg.Ok())
         m_colFg = page->GetForegroundColour();
 
@@ -568,7 +662,7 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
 void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_COLOURDLG
-    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+    WidgetsPage *page = CurrentPage();
     if ( !m_colBg.Ok() )
         m_colBg = page->GetBackgroundColour();
 
@@ -595,7 +689,7 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_FONTDLG
-    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+    WidgetsPage *page = CurrentPage();
     if (!m_font.Ok())
         m_font = page->GetFont();
 
@@ -621,7 +715,7 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 
 void WidgetsFrame::OnEnable(wxCommandEvent& event)
 {
-    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+    WidgetsPage *page = CurrentPage();
     page->GetWidget()->Enable(event.IsChecked());
 }
 
@@ -647,7 +741,7 @@ void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
     WidgetsPage::ms_defaultFlags &= ~wxBORDER_MASK;
     WidgetsPage::ms_defaultFlags |= border;
 
-    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+    WidgetsPage *page = CurrentPage();
     page->RecreateWidget();
 }
 
@@ -657,8 +751,9 @@ void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
 // WidgetsPageInfo
 // ----------------------------------------------------------------------------
 
-WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
+WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label, int categories)
                : m_label(label)
+               , m_categories(categories)
 {
     m_ctor = ctor;
 
@@ -716,7 +811,7 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
 int WidgetsPage::ms_defaultFlags = wxBORDER_DEFAULT;
 WidgetsPageInfo *WidgetsPage::ms_widgetPages = NULL;
 
-WidgetsPage::WidgetsPage(wxBookCtrlBase *book)
+WidgetsPage::WidgetsPage(WidgetsBookCtrl *book)
            : wxPanel(book, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
                      wxNO_FULL_REPAINT_ON_RESIZE |

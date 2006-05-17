@@ -132,7 +132,7 @@ class TextWidgetsPage : public WidgetsPage
 {
 public:
     // ctor(s) and dtor
-    TextWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist);
+    TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~TextWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_text; }
@@ -329,13 +329,16 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(TextWidgetsPage, _T("Text"));
+IMPLEMENT_WIDGETS_PAGE(TextWidgetsPage, _T("Text"),
+                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
+                       | EDITABLE_CTRLS
+                       );
 
 // ----------------------------------------------------------------------------
 // TextWidgetsPage creation
 // ----------------------------------------------------------------------------
 
-TextWidgetsPage::TextWidgetsPage(wxBookCtrlBase *book, wxImageList *imaglist)
+TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
                : WidgetsPage(book)
 {
     imaglist->Add(wxBitmap(text_xpm));

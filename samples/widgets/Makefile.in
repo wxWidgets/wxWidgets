@@ -29,7 +29,9 @@ TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
 TOOLKIT_VERSION = @TOOLKIT_VERSION@
 TOOLCHAIN_FULLNAME = @TOOLCHAIN_FULLNAME@
 EXTRALIBS = @EXTRALIBS@
+EXTRALIBS_HTML = @EXTRALIBS_HTML@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
+EXTRALIBS_SDL = @EXTRALIBS_SDL@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
 SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
@@ -48,6 +50,7 @@ WIDGETS_OBJECTS =  \
 	widgets_button.o \
 	widgets_checkbox.o \
 	widgets_combobox.o \
+	widgets_datepick.o \
 	widgets_gauge.o \
 	widgets_listbox.o \
 	widgets_notebook.o \
@@ -63,6 +66,7 @@ WIDGETS_OBJECTS =  \
 
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
 @COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
+@COND_USE_PLUGINS_0@PLUGIN_ADV_EXTRALIBS = $(EXTRALIBS_SDL)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -106,13 +110,19 @@ COND_PLATFORM_OS2_1___widgets___os2_emxbindcmd = $(NM) widgets$(EXEEXT) | if \
 @COND_TOOLKIT_COCOA@	widgets.app/Contents/PkgInfo
 @COND_TOOLKIT_MAC@____widgets_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_MAC@	widgets.app/Contents/PkgInfo
+COND_MONOLITHIC_0___WXLIB_ADV_p = \
+	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_ADV_p = $(COND_MONOLITHIC_0___WXLIB_ADV_p)
+COND_MONOLITHIC_0___WXLIB_HTML_p = \
+	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_HTML_p = $(COND_MONOLITHIC_0___WXLIB_HTML_p)
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
-@COND_PLATFORM_WIN32_1@__widgets___win32rc = widgets_widgets_rc.o
+@COND_PLATFORM_WIN32_1@__widgets___win32rc = widgets_sample_rc.o
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -161,7 +171,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 widgets$(EXEEXT): $(WIDGETS_OBJECTS) $(__widgets___win32rc)
-	$(CXX) -o $@ $(WIDGETS_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI)
+	$(CXX) -o $@ $(WIDGETS_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	$(__widgets___mac_rezcmd)
 	$(__widgets___mac_setfilecmd)
 	$(__widgets___os2_emxbindcmd)
@@ -198,6 +208,9 @@ widgets_checkbox.o: $(srcdir)/checkbox.cpp
 widgets_combobox.o: $(srcdir)/combobox.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/combobox.cpp
 
+widgets_datepick.o: $(srcdir)/datepick.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/datepick.cpp
+
 widgets_gauge.o: $(srcdir)/gauge.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/gauge.cpp
 
@@ -225,7 +238,7 @@ widgets_textctrl.o: $(srcdir)/textctrl.cpp
 widgets_widgets.o: $(srcdir)/widgets.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/widgets.cpp
 
-widgets_widgets_rc.o: $(srcdir)/widgets.rc
+widgets_sample_rc.o: $(srcdir)/../sample.rc
 	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 
