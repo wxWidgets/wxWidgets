@@ -31,6 +31,10 @@
 %feature("nodefaultdtor");
 #endif
 
+// For all items that don't have a %rename already, give them a %rename that
+// removes the leading 'wx' (except for wxEVT_* items.)
+%rename("%(wxpy)s") "";
+
 // For now, just supress the warning about using Python keywords as parameter
 // names.  Will need to come back later and correct these rather than just
 // hide them...
