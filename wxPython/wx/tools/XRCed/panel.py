@@ -6,21 +6,21 @@
 
 from xxx import *                       # xxx imports globals and params
 from undo import *
-from wxPython.html import wxHtmlWindow
+from wx.html import HtmlWindow
 
 # Properties panel containing notebook
-class Panel(wxNotebook):
+class Panel(wx.Notebook):
     def __init__(self, parent, id = -1):
-        if wxPlatform != '__WXMAC__':   # some problems with this style on macs
-            wxNotebook.__init__(self, parent, id, style=wxNB_BOTTOM)
+        if wx.Platform != '__WXMAC__':   # some problems with this style on macs
+            wx.Notebook.__init__(self, parent, id, style=wx.NB_BOTTOM)
         else:
-            wxNotebook.__init__(self, parent, id)
+            wx.Notebook.__init__(self, parent, id)
         global panel
         g.panel = panel = self
         self.modified = False
 
         # Set common button size for parameter buttons
-        bTmp = wxButton(self, -1, '')
+        bTmp = wx.Button(self, -1, '')
         import params
         params.buttonSize = (self.DLG_SZE(buttonSize)[0], bTmp.GetSize()[1])
         bTmp.Destroy()
@@ -29,17 +29,17 @@ class Panel(wxNotebook):
         # List of child windows
         self.pages = []
         # Create scrolled windows for pages
-        self.page1 = wxScrolledWindow(self, -1)
-        sizer = wxBoxSizer()
-        sizer.Add(wxBoxSizer())         # dummy sizer
+        self.page1 = wx.ScrolledWindow(self, -1)
+        sizer = wx.BoxSizer()
+        sizer.Add(wx.BoxSizer())         # dummy sizer
         self.page1.SetAutoLayout(True)
         self.page1.SetSizer(sizer)
         self.AddPage(self.page1, 'Properties')
         # Second page
-        self.page2 = wxScrolledWindow(self, -1)
+        self.page2 = wx.ScrolledWindow(self, -1)
         self.page2.Hide()
-        sizer = wxBoxSizer()
-        sizer.Add(wxBoxSizer())         # dummy sizer
+        sizer = wx.BoxSizer()
+        sizer.Add(wx.BoxSizer())         # dummy sizer
         self.page2.SetAutoLayout(True)
         self.page2.SetSizer(sizer)
         # Cache for already used panels
@@ -59,12 +59,12 @@ class Panel(wxNotebook):
                 w.Destroy()
         topSizer.Remove(sizer)
         # Create new windows
-        sizer = wxBoxSizer(wxVERTICAL)
+        sizer = wx.BoxSizer(wx.VERTICAL)
         # Special case - resize html window
         if g.conf.panic:
-            topSizer.Add(sizer, 1, wxEXPAND)
+            topSizer.Add(sizer, 1, wx.EXPAND)
         else:
-            topSizer.Add(sizer, 0, wxALL, 5)
+            topSizer.Add(sizer, 0, wx.ALL, 5)
         return sizer
 
     def SetData(self, xxx):
@@ -74,17 +74,17 @@ class Panel(wxNotebook):
         sizer = self.ResetPage(self.page1)
         if not xxx or (not xxx.allParams and not xxx.hasName and not xxx.hasChild):
             if g.tree.selection:
-                sizer.Add(wxStaticText(self.page1, -1, 'This item has no properties.'))
+                sizer.Add(wx.StaticText(self.page1, -1, 'This item has no properties.'))
             else:                       # nothing selected
                 # If first time, show some help
                 if g.conf.panic:
-                    html = wxHtmlWindow(self.page1, -1, wxDefaultPosition,
-                                        wxDefaultSize, wxSUNKEN_BORDER)
+                    html = HtmlWindow(self.page1, -1, wx.DefaultPosition,
+                                        wx.DefaultSize, wx.SUNKEN_BORDER)
                     html.SetPage(g.helpText)
-                    sizer.Add(html, 1, wxEXPAND)
+                    sizer.Add(html, 1, wx.EXPAND)
                     g.conf.panic = False
                 else:
-                    sizer.Add(wxStaticText(self.page1, -1, 'Select a tree item.'))
+                    sizer.Add(wx.StaticText(self.page1, -1, 'Select a tree item.'))
         else:
             g.currentXXX = xxx.treeObject()
             # Normal or SizerItem page
@@ -99,7 +99,7 @@ class Panel(wxNotebook):
                 self.pageCache[cacheID] = page
             page.SetValues(xxx)
             self.pages.append(page)
-            sizer.Add(page, 1, wxEXPAND)
+            sizer.Add(page, 1, wx.EXPAND)
             if xxx.hasChild:
                 # Special label for child objects - they may have different GUI
                 cacheID = (xxx.child.__class__, xxx.__class__)
@@ -112,7 +112,7 @@ class Panel(wxNotebook):
                     self.pageCache[cacheID] = page
                 page.SetValues(xxx.child)
                 self.pages.append(page)
-                sizer.Add(page, 0, wxEXPAND | wxTOP, 5)
+                sizer.Add(page, 0, wx.EXPAND | wx.TOP, 5)
         self.page1.Layout()
         size = self.page1.GetSizer().GetMinSize()
         self.page1.SetScrollbars(1, 1, size.width, size.height, 0, 0, True)
@@ -131,7 +131,7 @@ class Panel(wxNotebook):
                 self.stylePageCache[xxx.__class__] = page
             page.SetValues(xxx)
             self.pages.append(page)
-            sizer.Add(page, 0, wxEXPAND)
+            sizer.Add(page, 0, wx.EXPAND)
             # Add page if not exists
             if not self.GetPageCount() == 2:
                 self.AddPage(self.page2, 'Style')
@@ -168,13 +168,13 @@ class Panel(wxNotebook):
 ################################################################################
 
 # General class for notebook pages
-class ParamPage(wxPanel):
+class ParamPage(wx.Panel):
     def __init__(self, parent, xxx):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.xxx = xxx
         # Register event handlers
         for id in paramIDs.values():
-            EVT_CHECKBOX(self, id, self.OnCheckParams)
+            wx.EVT_CHECKBOX(self, id, self.OnCheckParams)
         self.checks = {}
         self.controls = {}              # save python objects
         self.controlName = None
@@ -269,27 +269,27 @@ LABEL_WIDTH = 125
 class PropPage(ParamPage):
     def __init__(self, parent, label, xxx):
         ParamPage.__init__(self, parent, xxx)
-        self.box = wxStaticBox(self, -1, label)
+        self.box = wx.StaticBox(self, -1, label)
         self.box.SetFont(g.labelFont())
-        topSizer = wxStaticBoxSizer(self.box, wxVERTICAL)
-        sizer = wxFlexGridSizer(len(xxx.allParams), 2, 0, 1)
+        topSizer = wx.StaticBoxSizer(self.box, wx.VERTICAL)
+        sizer = wx.FlexGridSizer(len(xxx.allParams), 2, 0, 1)
         sizer.AddGrowableCol(1)
         if xxx.hasName:
-            label = wxStaticText(self, -1, 'XML ID:', size=(LABEL_WIDTH,-1))
+            label = wx.StaticText(self, -1, 'XML ID:', size=(LABEL_WIDTH,-1))
             control = ParamText(self, 'XML_name', 200)
-            sizer.AddMany([ (label, 0, wxALIGN_CENTER_VERTICAL),
-                            (control, 0, wxALIGN_CENTER_VERTICAL | wxBOTTOM | wxGROW, 10) ])
+            sizer.AddMany([ (label, 0, wx.ALIGN_CENTER_VERTICAL),
+                            (control, 0, wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.GROW, 10) ])
             self.controlName = control
         for param in xxx.allParams:
             present = xxx.params.has_key(param)
             if param in xxx.required:
-                label = wxStaticText(self, paramIDs[param], param + ':',
+                label = wx.StaticText(self, paramIDs[param], param + ':',
                                      size = (LABEL_WIDTH,-1), name = param)
             else:
                 # Notebook has one very loooooong parameter
                 if param == 'usenotebooksizer': sParam = 'usesizer:'
                 else: sParam = param + ':'
-                label = wxCheckBox(self, paramIDs[param], sParam,
+                label = wx.CheckBox(self, paramIDs[param], sParam,
                                    size = (LABEL_WIDTH,-1), name = param)
                 self.checks[param] = label
             try:
@@ -303,10 +303,10 @@ class PropPage(ParamPage):
                     typeClass = ParamText
             control = typeClass(self, param)
             control.Enable(present)
-            sizer.AddMany([ (label, 0, wxALIGN_CENTER_VERTICAL),
-                            (control, 0, wxALIGN_CENTER_VERTICAL | wxGROW) ])
+            sizer.AddMany([ (label, 0, wx.ALIGN_CENTER_VERTICAL),
+                            (control, 0, wx.ALIGN_CENTER_VERTICAL | wx.GROW) ])
             self.controls[param] = control
-        topSizer.Add(sizer, 1, wxALL | wxEXPAND, 3)
+        topSizer.Add(sizer, 1, wx.ALL | wx.EXPAND, 3)
         self.SetAutoLayout(True)
         self.SetSizer(topSizer)
         topSizer.Fit(self)
@@ -342,23 +342,23 @@ class PropPage(ParamPage):
 class StylePage(ParamPage):
     def __init__(self, parent, label, xxx):
         ParamPage.__init__(self, parent, xxx)
-        box = wxStaticBox(self, -1, label)
+        box = wx.StaticBox(self, -1, label)
         box.SetFont(g.labelFont())
-        topSizer = wxStaticBoxSizer(box, wxVERTICAL)
-        sizer = wxFlexGridSizer(len(xxx.styles), 2, 0, 1)
+        topSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        sizer = wx.FlexGridSizer(len(xxx.styles), 2, 0, 1)
         sizer.AddGrowableCol(1)
         for param in xxx.styles:
             present = xxx.params.has_key(param)
-            check = wxCheckBox(self, paramIDs[param],
+            check = wx.CheckBox(self, paramIDs[param],
                                param + ':', size = (LABEL_WIDTH,-1), name = param)
             check.SetValue(present)
             control = paramDict[param](self, name = param)
             control.Enable(present)
-            sizer.AddMany([ (check, 0, wxALIGN_CENTER_VERTICAL),
-                            (control, 0, wxALIGN_CENTER_VERTICAL | wxGROW) ])
+            sizer.AddMany([ (check, 0, wx.ALIGN_CENTER_VERTICAL),
+                            (control, 0, wx.ALIGN_CENTER_VERTICAL | wx.GROW) ])
             self.checks[param] = check
             self.controls[param] = control
-        topSizer.Add(sizer, 1, wxALL | wxEXPAND, 3)
+        topSizer.Add(sizer, 1, wx.ALL | wx.EXPAND, 3)
         self.SetAutoLayout(True)
         self.SetSizer(topSizer)
         topSizer.Fit(self)

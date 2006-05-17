@@ -18,16 +18,16 @@ GROUP_WINDOWS, GROUP_MENUS, GROUP_SIZERS, GROUP_CONTROLS = range(GROUPNUM)
 STATE_ROOT, STATE_MENUBAR, STATE_TOOLBAR, STATE_MENU, STATE_STDDLGBTN, STATE_ELSE = range(6)
 
 # Left toolbar for GUI elements
-class Tools(wxPanel):
+class Tools(wx.Panel):
     TOOL_SIZE = (30, 30)
     def __init__(self, parent):
-        if wxPlatform == '__WXGTK__':
-            wxPanel.__init__(self, parent, -1,
-                             style=wxRAISED_BORDER|wxWANTS_CHARS)
+        if wx.Platform == '__WXGTK__':
+            wx.Panel.__init__(self, parent, -1,
+                             style=wx.RAISED_BORDER|wx.WANTS_CHARS)
         else:
-            wxPanel.__init__(self, parent, -1, style=wxWANTS_CHARS)
+            wx.Panel.__init__(self, parent, -1, style=wx.WANTS_CHARS)
         # Create sizer for groups
-        self.sizer = wxBoxSizer(wxVERTICAL)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
         # Data to create buttons
         pullDownMenu = g.pullDownMenu
         self.groups = []
@@ -96,31 +96,31 @@ class Tools(wxPanel):
         # Allow to be resized in vertical direction only
         self.SetSizeHints(self.GetSize()[0], -1)
         # Events
-        EVT_COMMAND_RANGE(self, ID_NEW.PANEL, ID_NEW.LAST,
-                          wxEVT_COMMAND_BUTTON_CLICKED, g.frame.OnCreate)
-        EVT_KEY_DOWN(self, self.OnKeyDown)
-        EVT_KEY_UP(self, self.OnKeyUp)
+        wx.EVT_COMMAND_RANGE(self, ID_NEW.PANEL, ID_NEW.LAST,
+                          wx.wxEVT_COMMAND_BUTTON_CLICKED, g.frame.OnCreate)
+        wx.EVT_KEY_DOWN(self, self.OnKeyDown)
+        wx.EVT_KEY_UP(self, self.OnKeyUp)
 
     def AddButton(self, id, image, text):
-        from wxPython.lib import buttons
-        button = buttons.wxGenBitmapButton(self, id, image, size=self.TOOL_SIZE,
-                                           style=wxNO_BORDER|wxWANTS_CHARS)
+        from wx.lib import buttons
+        button = buttons.GenBitmapButton(self, id, image, size=self.TOOL_SIZE,
+                                           style=wx.NO_BORDER|wx.WANTS_CHARS)
         button.SetBezelWidth(0)
-        EVT_KEY_DOWN(button, self.OnKeyDown)
-        EVT_KEY_UP(button, self.OnKeyUp)
+        wx.EVT_KEY_DOWN(button, self.OnKeyDown)
+        wx.EVT_KEY_UP(button, self.OnKeyUp)
         button.SetToolTipString(text)
         self.curSizer.Add(button)
         self.groups[-1][1][id] = button
 
     def AddGroup(self, name):
         # Each group is inside box
-        box = wxStaticBox(self, -1, name, style=wxWANTS_CHARS)
+        box = wx.StaticBox(self, -1, name, style=wx.WANTS_CHARS)
         box.SetFont(g.smallerFont())
-        boxSizer = wxStaticBoxSizer(box, wxVERTICAL)
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         boxSizer.Add((0, 4))
-        self.curSizer = wxGridSizer(0, 3)
+        self.curSizer = wx.GridSizer(0, 3)
         boxSizer.Add(self.curSizer)
-        self.sizer.Add(boxSizer, 0, wxTOP | wxLEFT | wxRIGHT, 4)
+        self.sizer.Add(boxSizer, 0, wx.TOP | wx.LEFT | wx.RIGHT, 4)
         self.groups.append((box,{}))
 
     # Enable/disable group
@@ -142,17 +142,17 @@ class Tools(wxPanel):
 
     # Process key events
     def OnKeyDown(self, evt):
-        if evt.GetKeyCode() == WXK_CONTROL:
+        if evt.GetKeyCode() == wx.WXK_CONTROL:
             g.tree.ctrl = True
-        elif evt.GetKeyCode() == WXK_SHIFT:
+        elif evt.GetKeyCode() == wx.WXK_SHIFT:
             g.tree.shift = True
         self.UpdateIfNeeded()
         evt.Skip()
 
     def OnKeyUp(self, evt):
-        if evt.GetKeyCode() == WXK_CONTROL:
+        if evt.GetKeyCode() == wx.WXK_CONTROL:
             g.tree.ctrl = False
-        elif evt.GetKeyCode() == WXK_SHIFT:
+        elif evt.GetKeyCode() == wx.WXK_SHIFT:
             g.tree.shift = False
         self.UpdateIfNeeded()
         evt.Skip()
