@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mac/carbon/mediactrl.cpp
+// Name:        src/mac/carbon/mediactrl.cpp
 // Purpose:     Built-in Media Backends for Mac
 // Author:      Ryan Norton <wxprojects@comcast.net>
 // Modified by:
@@ -36,12 +36,17 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_MEDIACTRL
+
 #include "wx/mediactrl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
 
 // uma is for wxMacFSSpec
 #include "wx/mac/uma.h"
 #include "wx/timer.h"
-#include "wx/log.h"
 
 // standard QT stuff
 #ifndef __DARWIN__
@@ -51,8 +56,6 @@
 #else
 #include <QuickTime/QuickTimeComponents.h>
 #endif
-
-#if wxUSE_MEDIACTRL
 
 //---------------------------------------------------------------------------
 // Height and Width of movie controller in the movie control (apple samples)
@@ -147,13 +150,13 @@ public:
     wxMediaCtrlPlayerControls m_interfaceflags; // Saved interface flags
 
     // Event handlers and UPPs/Callbacks
-    EventHandlerRef             m_windowEventHandler; 
+    EventHandlerRef             m_windowEventHandler;
     EventHandlerUPP             m_windowUPP;
 
     MoviePrePrerollCompleteUPP  m_preprerollupp;
     MCActionFilterWithRefConUPP m_mcactionupp;
 
-    GWorldPtr m_movieWorld;						//Offscreen movie GWorld
+    GWorldPtr m_movieWorld;  //Offscreen movie GWorld
 
     friend class wxQTMediaEvtHandler;
 
@@ -321,7 +324,7 @@ wxQTMediaBackend::~wxQTMediaBackend()
         ::DisposeMovieController(m_mc);
         m_mc = NULL;
         DisposeMCActionFilterWithRefConUPP(m_mcactionupp);
-        
+
         // Dispose of offscreen GWorld
         ::DisposeGWorld(m_movieWorld);
     }
@@ -406,9 +409,9 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
     if (m_movie)
         Cleanup();
 
-    ::ClearMoviesStickyError(); // clear previous errors so 
+    ::ClearMoviesStickyError(); // clear previous errors so
                                 // GetMoviesStickyError is useful
-    
+
     OSErr err = noErr;
     short movieResFile;
     FSSpec sfFile;
@@ -464,7 +467,7 @@ bool wxQTMediaBackend::Load(const wxURI& location)
     if (m_movie)
         Cleanup();
 
-    ::ClearMoviesStickyError(); // clear previous errors so 
+    ::ClearMoviesStickyError(); // clear previous errors so
                                 // GetMoviesStickyError is useful
 
     wxString theURI = location.BuildURI();
@@ -518,9 +521,9 @@ bool wxQTMediaBackend::Load(const wxURI& location)
         //  require it if you don't use a Movie Controller,
         //  which we don't by default.
         //
-        m_preprerollupp = 
+        m_preprerollupp =
             NewMoviePrePrerollCompleteUPP( wxQTMediaBackend::PPRMProc );
-        ::PrePrerollMovie( m_movie, timeNow, playRate, 
+        ::PrePrerollMovie( m_movie, timeNow, playRate,
                            m_preprerollupp, (void*)this);
 
         return true;
@@ -564,7 +567,7 @@ void wxQTMediaBackend::DoNewMovieController()
 
         // Setup a callback so we can tell when the user presses
         // play on the player controls
-        m_mcactionupp = 
+        m_mcactionupp =
             NewMCActionFilterWithRefConUPP( wxQTMediaBackend::MCFilterProc );
         ::MCSetActionFilterWithRefCon( m_mc, m_mcactionupp, (long)this );
         wxASSERT(::GetMoviesError() == noErr);
@@ -593,13 +596,13 @@ void wxQTMediaBackend::DoNewMovieController()
             { kEventClassWindow,    kEventWindowActivated },
             { kEventClassWindow,    kEventWindowDeactivated }
         };
-        m_windowUPP = 
+        m_windowUPP =
             NewEventHandlerUPP( wxQTMediaBackend::WindowEventHandler );
         InstallWindowEventHandler(
             wrTLW,
             m_windowUPP,
             GetEventTypeCount( theWindowEventTypes ), theWindowEventTypes,
-            this, 
+            this,
             &m_windowEventHandler );
     }
     else
@@ -975,7 +978,7 @@ void wxQTMediaBackend::DoSetControllerVisible(
                        | ((flags & wxMEDIACTRLPLAYERCONTROLS_VOLUME)
                           ? 0 : (1 << 2)/*mcFlagSuppressSpeakerButton*/)
                           //if we take care of repainting ourselves
-         //              | (1 << 4) /*mcFlagDontInvalidate*/ 
+         //              | (1 << 4) /*mcFlagDontInvalidate*/
                           );
 
             ::MCDoAction(m_mc, 38/*mcActionSetFlags*/, (void*)mcFlags);
@@ -1071,8 +1074,8 @@ wxLongLong wxQTMediaBackend::GetDownloadProgress()
 //---------------------------------------------------------------------------
 wxLongLong wxQTMediaBackend::GetDownloadTotal()
 {
-    return wxQTMediaBackend::GetDataSizeFromStart( 
-                    ::GetMovieDuration(m_movie) 
+    return wxQTMediaBackend::GetDataSizeFromStart(
+                    ::GetMovieDuration(m_movie)
                                                  );
 }
 
@@ -1099,12 +1102,12 @@ void wxQTMediaBackend::MacVisibilityChanged()
 {
     if(!m_mc || !m_ctrl->m_bLoaded)
         return; //not initialized yet
-        
+
     if(m_ctrl->MacIsReallyShown())
     {
         //The window is being shown again, so set the GWorld of the
         //controller back to the port of the parent WindowRef
-        WindowRef wrTLW = 
+        WindowRef wrTLW =
             (WindowRef) m_ctrl->MacGetTopLevelWindowRef();
 
         ::MCSetControllerPort(m_mc, (CGrafPtr) GetWindowPort(wrTLW));
@@ -1115,7 +1118,7 @@ void wxQTMediaBackend::MacVisibilityChanged()
         //We are being hidden - set the GWorld of the controller
         //to the offscreen GWorld
         ::MCSetControllerPort(m_mc, m_movieWorld);
-        wxASSERT(::GetMoviesError() == noErr);        
+        wxASSERT(::GetMoviesError() == noErr);
     }
 }
 
@@ -1205,13 +1208,13 @@ pascal OSStatus wxQTMediaBackend::WindowEventHandler(
     void *inUserData)
 {
     wxQTMediaBackend* be = (wxQTMediaBackend*) inUserData;
-    
+
     // Only process keyboard messages on this window if it actually
     // has focus, otherwise it will steal keystrokes from other windows!
     // As well as when it is not loaded properly as it
     // will crash in MCIsPlayerEvent
     if((GetEventClass(inEvent) == kEventClassKeyboard &&
-        wxWindow::FindFocus() != be->m_ctrl)  
+        wxWindow::FindFocus() != be->m_ctrl)
         || !be->m_ctrl->m_bLoaded)
             return eventNotHandledErr;
 
@@ -1220,7 +1223,7 @@ pascal OSStatus wxQTMediaBackend::WindowEventHandler(
     ConvertEventRefToEventRecord( inEvent, &theEvent );
     OSStatus err;
 
-    // TODO: Apple says MCIsPlayerEvent is depreciated and 
+    // TODO: Apple says MCIsPlayerEvent is depreciated and
     // MCClick, MCKey, MCIdle etc. should be used
     // (RN: Of course that's what they say about
     //  CreateMovieControl and HIMovieView as well, LOL!)

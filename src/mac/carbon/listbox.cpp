@@ -18,6 +18,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/log.h"
+    #include "wx/intl.h"
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/button.h"
@@ -25,7 +26,6 @@
 
 #include "wx/settings.h"
 #include "wx/toplevel.h"
-#include "wx/intl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 
@@ -957,4 +957,4 @@ static pascal void ListBoxDrawProc(
 #endif
 
 
-#endif
+#endif // wxUSE_LISTBOX
