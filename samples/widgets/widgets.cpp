@@ -544,6 +544,7 @@ void WidgetsFrame::InitBook()
 #if USE_TREEBOOK
     // for treebook page #0 is empty parent page only
     m_book->SetSelection(1);
+    m_book->SetSelection(0);
 #endif
 }
 
