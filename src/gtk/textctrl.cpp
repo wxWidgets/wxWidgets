@@ -454,7 +454,8 @@ gtk_text_changed_callback( GtkWidget *widget, wxTextCtrl *win )
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    win->MarkDirty();
+    if ( win->MarkDirtyOnChange() )
+        win->MarkDirty();
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
     event.SetEventObject( win );
@@ -551,9 +552,12 @@ END_EVENT_TABLE()
 
 void wxTextCtrl::Init()
 {
+    m_dontMarkDirty =
     m_ignoreNextUpdate =
     m_modified = false;
+
     SetUpdateFont(false);
+
     m_text = NULL;
     m_frozenness = 0;
     m_gdkHandCursor = NULL;
@@ -812,6 +816,13 @@ void wxTextCtrl::SetValue( const wxString &value )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
+    // the control won't be modified any more as we programmatically replace
+    // all the existing text, so reset the flag and don't set it again (and do
+    // it now, before the text event handler is ran so that IsModified() called
+    // from there returns the expected value)
+    m_modified = false;
+    DontMarkDirtyOnNextChange();
+
     if (m_windowStyle & wxTE_MULTILINE)
     {
         const wxCharBuffer buffer(wxGTK_CONV(value));
@@ -840,8 +851,6 @@ void wxTextCtrl::SetValue( const wxString &value )
     //   the lists. wxWidgets 2.2 will have a set of flags to
     //   customize this behaviour.
     SetInsertionPoint(0);
-
-    m_modified = false;
 }
 
 void wxTextCtrl::WriteText( const wxString &text )
@@ -858,10 +867,8 @@ void wxTextCtrl::WriteText( const wxString &text )
         return;
     }
 
-    // gtk_text_changed_callback() will set m_modified to true but m_modified
-    // shouldn't be changed by the program writing to the text control itself,
-    // so save the old value and restore when we're done
-    bool oldModified = m_modified;
+    // we're changing the text programmatically
+    DontMarkDirtyOnNextChange();
 
     if ( m_windowStyle & wxTE_MULTILINE )
     {
@@ -896,8 +903,6 @@ void wxTextCtrl::WriteText( const wxString &text )
         // Bring entry's cursor uptodate.
         gtk_editable_set_position( GTK_EDITABLE(m_text), len );
     }
-
-    m_modified = oldModified;
 }
 
 void wxTextCtrl::AppendText( const wxString &text )
@@ -1139,11 +1144,6 @@ void wxTextCtrl::DiscardEdits()
 // max text length support
 // ----------------------------------------------------------------------------
 
-void wxTextCtrl::IgnoreNextTextUpdate()
-{
-    m_ignoreNextUpdate = true;
-}
-
 bool wxTextCtrl::IgnoreTextUpdate()
 {
     if ( m_ignoreNextUpdate )
@@ -1154,6 +1154,18 @@ bool wxTextCtrl::IgnoreTextUpdate()
     }
 
     return false;
+}
+
+bool wxTextCtrl::MarkDirtyOnChange()
+{
+    if ( m_dontMarkDirty )
+    {
+        m_dontMarkDirty = false;
+
+        return false;
+    }
+
+    return true;
 }
 
 void wxTextCtrl::SetMaxLength(unsigned long len)

@@ -157,10 +157,18 @@ public:
     virtual void OnParentEnable( bool enable ) ;
 
     // tell the control to ignore next text changed signal
-    void IgnoreNextTextUpdate();
+    void IgnoreNextTextUpdate() { m_ignoreNextUpdate = true; }
 
     // should we ignore the changed signal? always resets the flag
     bool IgnoreTextUpdate();
+
+    // call this to indicate that the control is about to be changed
+    // programmatically and so m_modified flag shouldn't be set
+    void DontMarkDirtyOnNextChange() { m_dontMarkDirty = true; }
+
+    // should we mark the control as dirty? always resets the flag
+    bool MarkDirtyOnChange();
+
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -187,6 +195,7 @@ private:
 
     bool        m_modified:1;
     bool        m_ignoreNextUpdate:1;
+    bool        m_dontMarkDirty:1;
 
     // Our text buffer. Convenient, and holds the buffer while using
     // a dummy one when m_frozenness > 0
