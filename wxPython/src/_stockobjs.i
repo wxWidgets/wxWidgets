@@ -248,10 +248,10 @@ def _wxPyMakeDelayedInitWrapper(initFunc):
             return self.__getattr__("__repr__")()
     return _wxPyStockObjectWrapper
     
-wxTheFontList       = _wxPyMakeDelayedInitWrapper(_wxPyInitTheFontList)()
-wxThePenList        = _wxPyMakeDelayedInitWrapper(_wxPyInitThePenList)()
-wxTheBrushList      = _wxPyMakeDelayedInitWrapper(_wxPyInitTheBrushList)()
-wxTheColourDatabase = _wxPyMakeDelayedInitWrapper(_wxPyInitTheColourDatabase)()
+TheFontList       = _wxPyMakeDelayedInitWrapper(_wxPyInitTheFontList)()
+ThePenList        = _wxPyMakeDelayedInitWrapper(_wxPyInitThePenList)()
+TheBrushList      = _wxPyMakeDelayedInitWrapper(_wxPyInitTheBrushList)()
+TheColourDatabase = _wxPyMakeDelayedInitWrapper(_wxPyInitTheColourDatabase)()
 }
 
 //---------------------------------------------------------------------------
