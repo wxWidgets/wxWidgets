@@ -175,6 +175,10 @@ wxEventType wxNewEventType();
 %constant wxEventType wxEVT_MOVING;
 %constant wxEventType wxEVT_HIBERNATE;
 
+%constant wxEventType wxEVT_COMMAND_TEXT_COPY;
+%constant wxEventType wxEVT_COMMAND_TEXT_CUT;
+%constant wxEventType wxEVT_COMMAND_TEXT_PASTE;
+
 
 // Generic command events
 // Note: a click is a higher-level event than button down/up
@@ -366,6 +370,9 @@ EVT_UPDATE_UI_RANGE = wx.PyEventBinder( wxEVT_UPDATE_UI, 2)
 
 EVT_CONTEXT_MENU = wx.PyEventBinder( wxEVT_CONTEXT_MENU )
 
+EVT_TEXT_CUT   =  wx.PyEventBinder( wxEVT_COMMAND_TEXT_CUT )
+EVT_TEXT_COPY  =  wx.PyEventBinder( wxEVT_COMMAND_TEXT_COPY )
+EVT_TEXT_PASTE =  wx.PyEventBinder( wxEVT_COMMAND_TEXT_PASTE )
 
 }
 
@@ -2428,6 +2435,25 @@ wx.IDLE_PROCESS_ALL. You can change the mode to only send idle events
 to windows with the wx.WS_EX_PROCESS_IDLE extra window style set.", "");
     
 };
+
+//---------------------------------------------------------------------------
+%newgroup;
+
+
+DocStr(wxClipboardTextEvent,
+"A Clipboard Text event is sent when a window intercepts a text
+copy/cut/paste message, i.e. the user has cut/copied/pasted data
+from/into a text control via ctrl-C/X/V, ctrl/shift-del/insert, a
+popup menu command, etc.  NOTE : under windows these events are *NOT*
+generated automatically for a Rich Edit text control.", "");
+
+class wxClipboardTextEvent : public wxCommandEvent
+{
+public:
+    wxClipboardTextEvent(wxEventType type = wxEVT_NULL,
+                         wxWindowID winid = 0);
+};
+
 
 //---------------------------------------------------------------------------
 %newgroup;
