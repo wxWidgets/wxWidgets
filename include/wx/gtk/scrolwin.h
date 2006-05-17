@@ -31,17 +31,15 @@ public:
 
 protected:
     // this does (each) half of AdjustScrollbars() work
-    void DoAdjustScrollbar(GtkAdjustment *adj,
+    void DoAdjustScrollbar(GtkRange* range,
                            int pixelsPerLine,
                            int winSize,
                            int virtSize,
-                           int *pos,
                            int *lines,
                            int *linesPerPage);
 
     // and this does the same for Scroll()
     void DoScroll(int orient,
-                  GtkAdjustment *adj,
                   int pos,
                   int pixelsPerLine,
                   int *posOld);

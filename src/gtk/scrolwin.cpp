@@ -50,8 +50,10 @@ void wxScrollHelperNative::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
     m_xScrollPixelsPerLine = pixelsPerUnitX;
     m_yScrollPixelsPerLine = pixelsPerUnitY;
 
-    m_win->m_hAdjust->value = m_xScrollPosition = xPos;
-    m_win->m_vAdjust->value = m_yScrollPosition = yPos;
+    m_win->m_scrollBar[0]->adjustment->value =
+    m_xScrollPosition = xPos;
+    m_win->m_scrollBar[1]->adjustment->value =
+    m_yScrollPosition = yPos;
 
     // Setting hints here should arguably be deprecated, but without it
     // a sizer might override this manual scrollbar setting in old code.
@@ -62,6 +64,14 @@ void wxScrollHelperNative::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
     m_targetWindow->SetVirtualSize( w ? w : wxDefaultCoord,
                                     h ? h : wxDefaultCoord);
 
+    // If the target is not the same as the window with the scrollbars,
+    // then we need to update the scrollbars here, since they won't have
+    // been updated by SetVirtualSize().
+    if (m_targetWindow != m_win)
+    {
+        AdjustScrollbars();
+    }
+
     if (!noRefresh)
     {
         int new_x = m_xScrollPixelsPerLine * m_xScrollPosition;
@@ -69,55 +79,33 @@ void wxScrollHelperNative::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
 
         m_targetWindow->ScrollWindow( old_x - new_x, old_y - new_y );
     }
-
-    m_targetWindow->m_hasScrolling = pixelsPerUnitX || pixelsPerUnitY;
 }
 
-void wxScrollHelperNative::DoAdjustScrollbar(GtkAdjustment *adj,
+void wxScrollHelperNative::DoAdjustScrollbar(GtkRange* range,
                                              int pixelsPerLine,
                                              int winSize,
                                              int virtSize,
-                                             int *pos,
                                              int *lines,
                                              int *linesPerPage)
 {
-    if ( pixelsPerLine == 0 || winSize >= virtSize)
+    // GtkRange won't allow upper == lower, so for disabled state use [0,1]
+    //   with a page size of 1. This will also clamp position to 0.
+    int upper = 1;
+    int page_size = 1;
+    if (pixelsPerLine > 0 && winSize < virtSize)
     {
-        if ( !wxIsNullDouble(adj->value) )
-        {
-            adj->value = 0.0;
-            g_signal_emit_by_name (adj, "value_changed");
-        }
-        
-        adj->upper = 1.0;
-        adj->page_increment = 1.0;
-        adj->page_size = 1.0;
-    }
-    else // we do have scrollbar
-    {
-        // round because we need to show all the items
-        adj->upper = (virtSize + pixelsPerLine - 1) / pixelsPerLine;
-
-        // truncate here as we want to show visible lines entirely
-        adj->page_size =
-        adj->page_increment = winSize / pixelsPerLine;
-
-        // If the scrollbar hits the right side, move the window
-        // right to keep it from over extending.
-        if ( !wxIsNullDouble(adj->value) &&
-                (adj->value + adj->page_size > adj->upper) )
-        {
-            adj->value = adj->upper - adj->page_size;
-            if (adj->value < 0.0)
-                adj->value = 0.0;
-
-            g_signal_emit_by_name (adj, "value_changed");
-        }
+        upper = (virtSize + pixelsPerLine - 1) / pixelsPerLine;
+        page_size = winSize / pixelsPerLine;
     }
 
-    *lines = (int)(adj->upper + 0.5);
-    *linesPerPage = (int)(adj->page_increment + 0.5);
-    g_signal_emit_by_name (adj, "changed");
+    *lines = upper;
+    *linesPerPage = page_size;
+
+    GtkAdjustment* adj = range->adjustment;
+    adj->step_increment = 1;
+    adj->page_increment =
+    adj->page_size = page_size;
+    gtk_range_set_range(range, 0, upper);
 }
 
 void wxScrollHelperNative::AdjustScrollbars()
@@ -130,37 +118,27 @@ void wxScrollHelperNative::AdjustScrollbars()
     m_targetWindow->GetClientSize( &w, &h );
     m_targetWindow->GetVirtualSize( &vw, &vh );
 
-    DoAdjustScrollbar(m_win->m_hAdjust, m_xScrollPixelsPerLine, w, vw,
-                      &m_xScrollPosition, &m_xScrollLines, &m_xScrollLinesPerPage);
-    DoAdjustScrollbar(m_win->m_vAdjust, m_yScrollPixelsPerLine, h, vh,
-                      &m_yScrollPosition, &m_yScrollLines, &m_yScrollLinesPerPage);
+    DoAdjustScrollbar(m_win->m_scrollBar[0], m_xScrollPixelsPerLine, w, vw,
+                      &m_xScrollLines, &m_xScrollLinesPerPage);
+    DoAdjustScrollbar(m_win->m_scrollBar[1], m_yScrollPixelsPerLine, h, vh,
+                      &m_yScrollLines, &m_yScrollLinesPerPage);
 }
 
 void wxScrollHelperNative::DoScroll(int orient,
-                                    GtkAdjustment *adj,
                                     int pos,
                                     int pixelsPerLine,
                                     int *posOld)
 {
     if ( pos != -1 && pos != *posOld && pixelsPerLine )
     {
-        int max = (int)(adj->upper - adj->page_size + 0.5);
-        if (max < 0)
-            max = 0;
-        if (pos > max)
-            pos = max;
-        if (pos < 0)
-            pos = 0;
-
-        adj->value = pos;
+        m_win->SetScrollPos(orient, pos);
+        pos = m_win->GetScrollPos(orient);
 
         int diff = (*posOld - pos)*pixelsPerLine;
         m_targetWindow->ScrollWindow(orient == wxHORIZONTAL ? diff : 0,
                                      orient == wxHORIZONTAL ? 0 : diff);
 
         *posOld = pos;
-
-        m_win->GtkUpdateScrollbar(orient);
     }
 }
 
@@ -168,9 +146,6 @@ void wxScrollHelperNative::Scroll( int x_pos, int y_pos )
 {
     wxCHECK_RET( m_targetWindow != 0, _T("No target window") );
 
-    DoScroll(wxHORIZONTAL, m_win->m_hAdjust, x_pos, m_xScrollPixelsPerLine,
-                &m_xScrollPosition);
-    DoScroll(wxVERTICAL, m_win->m_vAdjust, y_pos, m_yScrollPixelsPerLine,
-                &m_yScrollPosition);
+    DoScroll(wxHORIZONTAL, x_pos, m_xScrollPixelsPerLine, &m_xScrollPosition);
+    DoScroll(wxVERTICAL, y_pos, m_yScrollPixelsPerLine, &m_yScrollPosition);
 }
-

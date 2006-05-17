@@ -618,6 +618,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
         m_widget = gtk_scrolled_window_new( NULL, NULL );
         gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( m_widget ),
                                         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
+        // for ScrollLines/Pages
+        m_scrollBar[1] = (GtkRange*)((GtkScrolledWindow*)m_widget)->vscrollbar;
 
         // Insert view into scrolled window
         gtk_container_add( GTK_CONTAINER(m_widget), m_text );
@@ -670,7 +672,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if (multi_line)
     {
         gtk_widget_show(m_text);
-        SetVScrollAdjustment(gtk_scrolled_window_get_vadjustment((GtkScrolledWindow*)m_widget));
     }
 
     if (!value.empty())

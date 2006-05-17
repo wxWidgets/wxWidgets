@@ -172,10 +172,6 @@ public:
     virtual void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
 #endif // wxUSE_TOOLTIPS
 
-    // Call after modifing the value of m_hAdjust or m_vAdjust to bring the
-    // scrolbar in sync (this does not generate any wx events)
-    void GtkUpdateScrollbar(int orient);
-
     // Called from GTK signal handlers. it indicates that
     // the layouting functions have to be called later on
     // (i.e. in idle time, implemented in OnInternalIdle() ).
@@ -192,6 +188,9 @@ public:
     // is this a radiobutton (used by radiobutton code itself only)?
     virtual bool IsRadioButton() const { return false; }
 
+    // Common scroll event handling code for wxWindow and wxScrollBar
+    wxEventType GetScrollEventType(GtkRange* range);
+
     // position and size of the window
     int                  m_x, m_y;
     int                  m_width, m_height;
@@ -206,10 +205,10 @@ public:
 
     wxGtkIMData         *m_imData;
 
-    // scrolling stuff
-    GtkAdjustment       *m_hAdjust,*m_vAdjust;
-    float                m_oldHorizontalPos;
-    float                m_oldVerticalPos;
+    // horizontal/vertical scroll bar
+    GtkRange* m_scrollBar[2];
+    // horizontal/vertical scroll position
+    double m_scrollPos[2];
 
     // extra (wxGTK-specific) flags
     bool                 m_needParent:1;        // ! wxFrame, wxDialog, wxNotebookPage ?
@@ -227,6 +226,8 @@ public:
                                                 // chain needs update
     bool                 m_needsStyleChange:1;  // May not be able to change
                                                 // background style until OnIdle
+    bool                 m_mouseButtonDown:1;
+    bool                 m_blockScrollEvent:1;
 
     // C++ has no virtual methods in the constrcutor of any class but we need
     // different methods of inserting a child window into a wxFrame,
@@ -282,9 +283,8 @@ protected:
     // sets the border of a given GtkScrolledWindow from a wx style
     static void GtkScrolledWindowSetBorder(GtkWidget* w, int style);
 
-protected:
-    // GtkAdjustment to be used by Scroll{Lines,Pages}
-    void SetVScrollAdjustment(GtkAdjustment* adj);
+    void BlockScrollEvent();
+    void UnblockScrollEvent();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)

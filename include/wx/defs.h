@@ -2896,6 +2896,7 @@ typedef struct _GtkAccelGroup     GtkAccelGroup;
 typedef struct _GtkItemFactory    GtkItemFactory;
 typedef struct _GtkSelectionData  GtkSelectionData;
 typedef struct _GtkTextBuffer     GtkTextBuffer;
+typedef struct _GtkRange          GtkRange;
 
 typedef GtkWidget *WXWidget;
 

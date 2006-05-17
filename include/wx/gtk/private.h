@@ -101,47 +101,6 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// GTK+ scroll types -> wxEventType
-//-----------------------------------------------------------------------------
-
-// translate a GTK+ scroll type to a wxEventType
-inline wxEventType GtkScrollTypeToWx(guint scrollType)
-{
-    wxEventType command;
-    switch ( scrollType )
-    {
-        case GTK_SCROLL_STEP_BACKWARD:
-            command = wxEVT_SCROLL_LINEUP;
-            break;
-
-        case GTK_SCROLL_STEP_FORWARD:
-            command = wxEVT_SCROLL_LINEDOWN;
-            break;
-
-        case GTK_SCROLL_PAGE_BACKWARD:
-            command = wxEVT_SCROLL_PAGEUP;
-            break;
-
-        case GTK_SCROLL_PAGE_FORWARD:
-            command = wxEVT_SCROLL_PAGEDOWN;
-            break;
-
-        default:
-            command = wxEVT_SCROLL_THUMBTRACK;
-    }
-
-    return command;
-}
-
-inline wxEventType GtkScrollWinTypeToWx(guint scrollType)
-{
-    // GtkScrollTypeToWx() returns SCROLL_XXX, not SCROLLWIN_XXX as we need
-    return GtkScrollTypeToWx(scrollType) +
-            wxEVT_SCROLLWIN_TOP - wxEVT_SCROLL_TOP;
-}
-
-
-//-----------------------------------------------------------------------------
 // Misc. functions
 //-----------------------------------------------------------------------------
 
