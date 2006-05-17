@@ -27,7 +27,7 @@ class PyOnDemandOutputWindow:
                                  style=wx.TE_MULTILINE|wx.TE_READONLY)
         self.text.AppendText(st)
         self.frame.Show(True)
-        EVT_CLOSE(self.frame, self.OnCloseWindow)
+        self.frame.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         
 
     def OnCloseWindow(self, event):
