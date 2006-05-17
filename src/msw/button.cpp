@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/button.cpp
+// Name:        src/msw/button.cpp
 // Purpose:     wxButton
 // Author:      Julian Smart
 // Modified by:
@@ -26,9 +26,10 @@
 
 #if wxUSE_BUTTON
 
+#include "wx/button.h"
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/button.h"
     #include "wx/brush.h"
     #include "wx/panel.h"
     #include "wx/bmpbuttn.h"
@@ -132,16 +133,16 @@ bool wxButton::Create(wxWindow *parent,
     {
         // On Windows, some buttons aren't supposed to have
         // mnemonics, so strip them out.
-        
-        label = wxGetStockLabel(id 
+
+        label = wxGetStockLabel(id
 #if defined(__WXMSW__) || defined(__WXWINCE__)
                                         , ( id != wxID_OK &&
                                             id != wxID_CANCEL &&
                                             id != wxID_CLOSE )
 #endif
                                 );
-     }
-    
+    }
+
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
 
@@ -729,4 +730,3 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 #endif // __WIN32__
 
 #endif // wxUSE_BUTTON
-

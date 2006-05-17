@@ -26,6 +26,8 @@
 
 #if wxUSE_TOGGLEBTN
 
+#include "wx/tglbtn.h"
+
 #ifndef WX_PRECOMP
     #include "wx/button.h"
     #include "wx/brush.h"
@@ -34,8 +36,6 @@
 
     #include "wx/log.h"
 #endif // WX_PRECOMP
-
-#include "wx/tglbtn.h"
 
 #include <Control.h>
 
@@ -101,4 +101,3 @@ void wxToggleButton::Command(wxCommandEvent & event)
 }
 
 #endif // wxUSE_TOGGLEBTN
-

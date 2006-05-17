@@ -9,8 +9,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/wxprec.h"
+
 #include "wx/combobox.h"
-#include "wx/button.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/button.h"
+#endif
+
 #include "wx/menu.h"
 #include "wx/mac/uma.h"
 

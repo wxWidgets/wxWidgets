@@ -20,9 +20,9 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/button.h"
 #endif
 
-#include "wx/button.h"
 #include "wx/settings.h"
 #include "wx/toplevel.h"
 

@@ -11,8 +11,9 @@
 
 #include "wx/wxprec.h"
 
+#include "wx/button.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/button.h"
     #include "wx/log.h"
 #endif
 

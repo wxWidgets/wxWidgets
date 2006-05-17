@@ -32,11 +32,11 @@
     #include "wx/dcclient.h"
     #include "wx/log.h"
     #include "wx/settings.h"
+    #include "wx/button.h"
 #endif
 
 #include "wx/control.h"
 #include "wx/toplevel.h"
-#include "wx/button.h"
 #include "wx/checkbox.h"
 #include "wx/tglbtn.h"
 #include "wx/radiobut.h"
@@ -390,7 +390,7 @@ void wxControl::SetFieldLabel(const wxString& label)
     if(field==NULL)
         return;
 
-    uint16_t newSize = label.Length() + 1;
+    uint16_t newSize = label.length() + 1;
     MemHandle strHandle = FldGetTextHandle(field);
     FldSetTextHandle(field, NULL );
     if (strHandle)

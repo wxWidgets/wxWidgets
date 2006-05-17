@@ -20,9 +20,9 @@
     #include "wx/window.h"
     #include "wx/frame.h"
     #include "wx/dc.h"
+    #include "wx/button.h"
 #endif
 
-#include "wx/button.h"
 #include "wx/gdicmn.h"
 #include "wx/pen.h"
 #include "wx/brush.h"

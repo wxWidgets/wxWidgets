@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/tglbtn.cpp
+// Name:        src/gtk/tglbtn.cpp
 // Purpose:     Definition of the wxToggleButton class, which implements a
 //              toggle button under wxGTK.
 // Author:      John Norris, minor changes by Axel Schlueter
@@ -13,10 +13,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/tglbtn.h"
-#include "wx/button.h"
-
 #if wxUSE_TOGGLEBTN
+
+#include "wx/tglbtn.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/button.h"
+#endif
 
 // FIXME: Use GtkImage instead of GtkPixmap.
 #include <gtk/gtkversion.h>
@@ -362,4 +365,3 @@ wxToggleButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 }
 
 #endif // wxUSE_TOGGLEBTN
-

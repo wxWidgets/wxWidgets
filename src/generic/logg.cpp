@@ -22,7 +22,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
@@ -37,7 +37,6 @@
     #include "wx/textctrl.h"
     #include "wx/sizer.h"
     #include "wx/statbmp.h"
-    #include "wx/button.h"
     #include "wx/settings.h"
 #endif // WX_PRECOMP
 
@@ -49,12 +48,12 @@
 #include "wx/artprov.h"
 
 #ifdef  __WXMSW__
-  // for OutputDebugString()
-  #include  "wx/msw/private.h"
+    // for OutputDebugString()
+    #include  "wx/msw/private.h"
 #endif // Windows
 
 #ifdef  __WXPM__
-  #include <time.h>
+    #include <time.h>
 #endif
 
 #if wxUSE_LOG_DIALOG
@@ -1217,4 +1216,3 @@ void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 }
 
 #endif // wxUSE_LOG && wxUSE_TEXTCTRL
-

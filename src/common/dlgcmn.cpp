@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/dlgcmn.cpp
+// Name:        src/common/dlgcmn.cpp
 // Purpose:     common (to all ports) wxDialog functions
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -32,7 +32,6 @@
     #include "wx/settings.h"
     #include "wx/stattext.h"
     #include "wx/sizer.h"
-    #include "wx/button.h"
     #include "wx/containr.h"
 #endif
 

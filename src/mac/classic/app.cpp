@@ -24,9 +24,9 @@
     #include "wx/window.h"
     #include "wx/frame.h"
     #include "wx/dc.h"
+    #include "wx/button.h"
 #endif
 
-#include "wx/button.h"
 #include "wx/gdicmn.h"
 #include "wx/pen.h"
 #include "wx/brush.h"
@@ -346,7 +346,7 @@ MenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
             // VZ: we could find the menu from its handle here by examining all
             //     the menus in the menu bar recursively but knowing that neither
             //     wxMSW nor wxGTK do it why bother...
- #if 0
+#if 0
             MenuRef menuRef;
 
             GetEventParameter(event,
@@ -354,7 +354,7 @@ MenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
                               typeMenuRef, NULL,
                               sizeof(menuRef), NULL,
                               &menuRef);
- #endif // 0
+#endif // 0
 
             wxEventType type=0;
             MenuCommand cmd=0;

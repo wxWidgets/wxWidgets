@@ -18,6 +18,7 @@
     #include "wx/panel.h"
     #include "wx/dc.h"
     #include "wx/dcclient.h"
+    #include "wx/button.h"
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
@@ -25,7 +26,6 @@
 #include "wx/radiobox.h"
 #include "wx/spinbutt.h"
 #include "wx/scrolbar.h"
-#include "wx/button.h"
 #include "wx/dialog.h"
 #include "wx/statbox.h"
 #include "wx/sizer.h"

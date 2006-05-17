@@ -21,6 +21,7 @@
     #include "wx/frame.h"
     #include "wx/dc.h"
     #include "wx/dcclient.h"
+    #include "wx/button.h"
 #endif
 
 #include "wx/menu.h"
@@ -28,7 +29,6 @@
 #include "wx/dialog.h"
 #include "wx/scrolbar.h"
 #include "wx/statbox.h"
-#include "wx/button.h"
 #include "wx/settings.h"
 #include "wx/msgdlg.h"
 #include "wx/tooltip.h"

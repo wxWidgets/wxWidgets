@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_bttn.cpp
+// Name:        src/xrc/xh_bttn.cpp
 // Purpose:     XRC resource for buttons
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
@@ -18,7 +18,10 @@
 #if wxUSE_XRC
 
 #include "wx/xrc/xh_bttn.h"
-#include "wx/button.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/button.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxButtonXmlHandler, wxXmlResourceHandler)
 

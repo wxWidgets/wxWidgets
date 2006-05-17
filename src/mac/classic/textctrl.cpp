@@ -23,6 +23,7 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/dc.h"
+    #include "wx/button.h"
 #endif
 
 #ifdef __DARWIN__
@@ -42,7 +43,6 @@
     #endif
 #endif
 
-#include "wx/button.h"
 #include "wx/toplevel.h"
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"

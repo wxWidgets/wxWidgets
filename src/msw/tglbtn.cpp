@@ -2,8 +2,8 @@
 // Name:        src/msw/tglbtn.cpp
 // Purpose:     Definition of the wxToggleButton class, which implements a
 //              toggle button under wxMSW.
-// Author: John Norris, minor changes by Axel Schlueter
-// and William Gallafent.
+// Author:      John Norris, minor changes by Axel Schlueter
+//              and William Gallafent.
 // Modified by:
 // Created:     08.02.01
 // RCS-ID:      $Id$
@@ -25,9 +25,9 @@
     #pragma hdrstop
 #endif
 
-#include "wx/tglbtn.h"
-
 #if wxUSE_TOGGLEBTN
+
+#include "wx/tglbtn.h"
 
 #ifndef WX_PRECOMP
     #include "wx/button.h"
@@ -164,4 +164,3 @@ void wxToggleButton::Command(wxCommandEvent & event)
 }
 
 #endif // wxUSE_TOGGLEBTN
-
