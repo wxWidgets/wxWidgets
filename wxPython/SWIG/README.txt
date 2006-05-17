@@ -39,6 +39,8 @@ swig-1.3.29.patch
     Changed the exception message used for TypeErrors to make a little
     more sense.
 
+    Added support for dropping the leading wx from wxNames using
+    %rename("%(wxpy)s") ""; 
 
 
 ------------------------------------------------------------------------

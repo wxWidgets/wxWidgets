@@ -1,10 +1,39 @@
+Index: Makefile.in
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Makefile.in,v
+retrieving revision 1.103
+diff -u -4 -r1.103 Makefile.in
+--- Makefile.in	10 Mar 2006 22:54:02 -0000	1.103
++++ Makefile.in	14 May 2006 18:29:39 -0000
+@@ -21,9 +21,9 @@
+ 
+ source:
+ 	@cd $(SOURCE) && $(MAKE)
+ 
+-libfiles: Lib/swigwarn.swg
++libfiles: $(srcdir)/Lib/swigwarn.swg
+ 
+ .PHONY: source libfiles
+ 
+ #####################################################################
+@@ -339,9 +339,9 @@
+ #####################################################################
+ # Update the Lib/swigwarn.swg file
+ #####################################################################
+ 
+-Lib/swigwarn.swg: Source/Include/swigwarn.h
++$(srcdir)/Lib/swigwarn.swg: $(srcdir)/Source/Include/swigwarn.h
+ 	echo "/* Automatically generated file containing all the swig warning codes.  */" > $@
+ 	echo "/* Do not modify this file by hand, change 'Source/Include/swigwarn.h'  */" >> $@
+ 	echo  "/* and use the command 'make Lib/swigwarn.swg' instead.                 */" >> $@
+ 	echo >> $@; echo >> $@
 Index: Lib/typemaps/exception.swg
 ===================================================================
 RCS file: /cvsroot/swig/SWIG/Lib/typemaps/exception.swg,v
 retrieving revision 1.8
 diff -u -4 -r1.8 exception.swg
 --- Lib/typemaps/exception.swg	7 Mar 2006 00:14:10 -0000	1.8
-+++ Lib/typemaps/exception.swg	17 Mar 2006 00:10:52 -0000
++++ Lib/typemaps/exception.swg	14 May 2006 18:29:39 -0000
 @@ -12,9 +12,9 @@
  
  /* macros for error manipulation */
@@ -22,7 +51,7 @@ RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
 retrieving revision 1.203
 diff -u -4 -r1.203 python.cxx
 --- Source/Modules/python.cxx	16 Mar 2006 01:46:50 -0000	1.203
-+++ Source/Modules/python.cxx	17 Mar 2006 00:10:52 -0000
++++ Source/Modules/python.cxx	14 May 2006 18:29:39 -0000
 @@ -39,9 +39,8 @@
  static  File         *f_directors_h = 0;
  static  File         *f_init = 0;
@@ -92,3 +121,49 @@ diff -u -4 -r1.203 python.cxx
        }
  
        if (name) {
+Index: Source/Swig/misc.c
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Source/Swig/misc.c,v
+retrieving revision 1.57
+diff -u -4 -r1.57 misc.c
+--- Source/Swig/misc.c	6 Mar 2006 22:51:00 -0000	1.57
++++ Source/Swig/misc.c	14 May 2006 18:29:39 -0000
+@@ -899,8 +899,26 @@
+ }
+ #endif
+ 
+ 
++
++/* -----------------------------------------------------------------------------
++ * Swig_string_wxpy()
++ *
++ * Drop a leading 'wx' for all wxNames, except for wxEVT*
++ * ----------------------------------------------------------------------------- */
++String *Swig_string_wxpy(String *s) {
++  String* ns = NewStringEmpty();
++  char* cptr = Char(s);
++  if (cptr[0] == 'w' && cptr[1] == 'x') {
++    if ( ! (cptr[2] == 'E' && cptr[3] == 'V' && cptr[4] == 'T')) {
++      ns = NewString(&cptr[2]);
++    }
++  }
++  return ns;
++}
++
++
+ /* -----------------------------------------------------------------------------
+  * Swig_init()
+  *
+  * Initialize the SWIG core
+@@ -928,8 +946,11 @@
+   DohEncoding("undercase", Swig_string_ucase);
+   DohEncoding("firstuppercase", Swig_string_first_upper);
+   DohEncoding("firstlowercase", Swig_string_first_lower);
+ 
++  /* wxPython's rename encoder */
++  DohEncoding("wxpy", Swig_string_wxpy);
++
+   /* Initialize the swig keys */
+   Swig_keys_init();
+ 
+   /* Initialize typemaps */
