@@ -49,11 +49,11 @@ wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
         button->SetDefault();
     SetupWindow(button);
 
-    if (!GetParamValue(wxT("selected")).IsEmpty())
+    if (GetParamNode(wxT("selected")))
         button->SetBitmapSelected(GetBitmap(wxT("selected")));
-    if (!GetParamValue(wxT("focus")).IsEmpty())
+    if (GetParamNode(wxT("focus")))
         button->SetBitmapFocus(GetBitmap(wxT("focus")));
-    if (!GetParamValue(wxT("disabled")).IsEmpty())
+    if (GetParamNode(wxT("disabled")))
         button->SetBitmapDisabled(GetBitmap(wxT("disabled")));
 
     return button;
