@@ -640,7 +640,7 @@ void wxHtmlWindow::CreateLayout()
 
     if (m_Style & wxHW_SCROLLBAR_NEVER)
     {
-        SetScrollbars(wxHTML_SCROLL_STEP, 1, m_Cell->GetWidth() / wxHTML_SCROLL_STEP, 0); // always off
+        SetScrollbars(1, 1, 0, 0); // always off
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell->Layout(ClientWidth);
     }
