@@ -1358,6 +1358,9 @@ void MyPanel::OnChoiceButtons( wxCommandEvent &event )
 
 void MyPanel::OnCombo( wxCommandEvent &event )
 {
+    if (!m_combo)
+        return;
+    
     wxLogMessage(_T("EVT_COMBOBOX: item %d/%d (event/control), string \"%s\"/\"%s\""),
                  (int)event.GetInt(),
                  m_combo->GetSelection(),
