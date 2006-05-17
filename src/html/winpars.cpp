@@ -196,7 +196,11 @@ void wxHtmlWinParser::InitParser(const wxString& source)
     m_tmpLastWasSpace = false;
     m_lastWordCell = NULL;
 
+    // open the toplevel container that contains everything else and that
+    // is never closed (this makes parser's life easier):
     OpenContainer();
+
+    // then open the first container into which page's content will go:
     OpenContainer();
 
 #if !wxUSE_UNICODE
