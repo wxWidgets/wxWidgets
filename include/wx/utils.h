@@ -129,12 +129,12 @@ public:
     wxPlatform(const wxPlatform& platform) { Copy(platform); }
     void operator = (const wxPlatform& platform) { Copy(platform); }
     void Copy(const wxPlatform& platform);
-    void Init() { m_longValue = 0; m_doubleValue = 0.0; }
 
     // Specify an optional default value
-    wxPlatform(long defValue) { m_longValue = defValue; m_doubleValue = 0.0; }
-    wxPlatform(const wxString& defValue) { m_stringValue = defValue; m_longValue = 0; m_doubleValue = 0.0; }
-    wxPlatform(double defValue) { m_longValue = 0; m_doubleValue = defValue; }
+    wxPlatform(int defValue) { Init(); m_longValue = (long)defValue; }
+    wxPlatform(long defValue) { Init(); m_longValue = defValue; }
+    wxPlatform(const wxString& defValue) { Init(); m_stringValue = defValue; }
+    wxPlatform(double defValue) { Init(); m_doubleValue = defValue; }
 
     static wxPlatform If(int platform, long value);
     static wxPlatform IfNot(int platform, long value);
@@ -142,7 +142,7 @@ public:
     wxPlatform& ElseIfNot(int platform, long value);
     wxPlatform& Else(long value);
 
-    static wxPlatform If(int platform, int value);
+    static wxPlatform If(int platform, int value) { return If(platform, (long)value); }
     static wxPlatform IfNot(int platform, int value) { return IfNot(platform, (long)value); }
     wxPlatform& ElseIf(int platform, int value) { return ElseIf(platform, (long) value); }
     wxPlatform& ElseIfNot(int platform, int value) { return ElseIfNot(platform, (long) value); }
@@ -175,6 +175,9 @@ public:
     static void ClearPlatforms();
 
 private:
+
+    void Init() { m_longValue = 0; m_doubleValue = 0.0; }
+
     long                m_longValue;
     double              m_doubleValue;
     wxString            m_stringValue;
@@ -216,12 +219,12 @@ public:
     bool        LeftDown()    { return m_leftDown; }
     bool        MiddleDown()  { return m_middleDown; }
     bool        RightDown()   { return m_rightDown; }
-    
+
     bool        ControlDown() { return m_controlDown; }
     bool        ShiftDown()   { return m_shiftDown; }
     bool        AltDown()     { return m_altDown; }
     bool        MetaDown()    { return m_metaDown; }
-    bool        CmdDown() 
+    bool        CmdDown()
     {
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
         return MetaDown();
@@ -241,7 +244,7 @@ public:
     void        SetShiftDown(bool down)   { m_shiftDown = down; }
     void        SetAltDown(bool down)     { m_altDown = down; }
     void        SetMetaDown(bool down)    { m_metaDown = down; }
-        
+
 private:
     wxCoord     m_x;
     wxCoord     m_y;
