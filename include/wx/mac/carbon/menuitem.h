@@ -17,6 +17,7 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/defs.h"
+#include "wx/bitmap.h"
 
 // ----------------------------------------------------------------------------
 // wxMenuItem: an item in the menu, optionally implements owner-drawn behaviour

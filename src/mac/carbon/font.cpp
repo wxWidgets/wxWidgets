@@ -21,6 +21,7 @@
 #include "wx/fontutil.h"
 #include "wx/gdicmn.h"
 #include "wx/fontutil.h"
+#include "wx/intl.h"
 
 #include "wx/mac/private.h"
 

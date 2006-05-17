@@ -25,6 +25,7 @@
 
 #include "wx/settings.h"
 #include "wx/toplevel.h"
+#include "wx/intl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 

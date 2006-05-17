@@ -41,6 +41,7 @@
 // uma is for wxMacFSSpec
 #include "wx/mac/uma.h"
 #include "wx/timer.h"
+#include "wx/log.h"
 
 // standard QT stuff
 #ifndef __DARWIN__
