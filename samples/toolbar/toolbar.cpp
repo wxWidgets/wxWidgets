@@ -679,10 +679,6 @@ void MyFrame::OnToolLeftClick(wxCommandEvent& event)
     {
         DoDeletePrint();
     }
-    if (event.GetId() == IDM_TOOLBAR_OTHER_1)
-    {
-        m_tbar->Realize();
-    }
 }
 
 void MyFrame::OnToolRightClick(wxCommandEvent& event)
