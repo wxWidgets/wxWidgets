@@ -564,9 +564,10 @@ public :
     {
         T value;
         OSStatus err = GetData<T>( inPartCode , inTag , &value );
-        
-        wxASSERT_MSG(err == noErr, wxString::Format(wxT("GetData Failed for Part [%i] and Tag [%i]"),
-            inPartCode, inTag));
+
+        wxASSERT_MSG( err == noErr,
+                      wxString::Format(wxT("GetData Failed for Part [%i] and Tag [%i]"),
+                                       inPartCode, (int)inTag) );
         return value;
     }
     template <typename T> OSStatus GetData( ResType inTag , T *data ) const
@@ -578,7 +579,7 @@ public :
     {
         return GetData<T>( kControlEntireControl , inTag );
     }
-    
+
     // Flash the control for the specified amount of time
     virtual void Flash( ControlPartCode part , UInt32 ticks = 8 );
 
@@ -628,10 +629,10 @@ public :
     virtual void GetFeatures( UInt32 *features );
     virtual OSStatus GetRegion( ControlPartCode partCode , RgnHandle region );
     virtual OSStatus SetZOrder( bool above , wxMacControl* other );
-            
+
     bool    IsCompositing() { return m_isCompositing; }
     bool    IsRootControl() { return m_isRootControl; }
-    
+
     wxWindow* GetPeer() const
     {
          return m_peer;
@@ -663,26 +664,26 @@ public :
     wxMacDataBrowserControl( wxWindow* peer, const wxPoint& pos, const wxSize& size, long style);
 
     OSStatus SetCallbacks( const DataBrowserCallbacks *callbacks );
-    
+
     OSStatus GetItemCount( DataBrowserItemID container,
             Boolean recurse,
             DataBrowserItemState state,
             UInt32 *numItems) const;
-    
+
     OSStatus GetItems( DataBrowserItemID container,
             Boolean recurse,
             DataBrowserItemState state,
             Handle items) const;
-    
+
 
     OSStatus AddColumn( DataBrowserListViewColumnDesc *columnDesc,
         DataBrowserTableViewColumnIndex position );
-        
+
     OSStatus AutoSizeColumns();
-    
+
     OSStatus SetHasScrollBars( bool horiz, bool vert );
     OSStatus SetHiliteStyle( DataBrowserTableViewHiliteStyle hiliteStyle );
-    
+
     OSStatus SetHeaderButtonHeight( UInt16 height );
     OSStatus GetHeaderButtonHeight( UInt16 *height );
 
@@ -690,7 +691,7 @@ public :
             const DataBrowserItemID *items,
             DataBrowserPropertyID preSortProperty,
             DataBrowserPropertyID propertyID ) const;
-            
+
     OSStatus AddItems( DataBrowserItemID container, UInt32 numItems,
             const DataBrowserItemID *items,
             DataBrowserPropertyID preSortProperty );
@@ -708,46 +709,46 @@ public :
             const DataBrowserItemID *items,
             DataBrowserSetOption operation );
 
-    OSStatus GetItemID( DataBrowserTableViewRowIndex row, 
+    OSStatus GetItemID( DataBrowserTableViewRowIndex row,
             DataBrowserItemID * item ) const;
-    OSStatus GetItemRow( DataBrowserItemID item, 
+    OSStatus GetItemRow( DataBrowserItemID item,
             DataBrowserTableViewRowIndex * row ) const;
-            
+
     OSStatus SetDefaultRowHeight( UInt16 height );
     OSStatus GetDefaultRowHeight( UInt16 * height ) const;
-    
+
     OSStatus SetRowHeight( DataBrowserItemID item , UInt16 height);
     OSStatus GetRowHeight( DataBrowserItemID item , UInt16 *height) const;
-    
+
     OSStatus GetColumnWidth( DataBrowserPropertyID column , UInt16 *width ) const;
     OSStatus SetColumnWidth( DataBrowserPropertyID column , UInt16 width );
-     
+
     OSStatus GetDefaultColumnWidth( UInt16 *width ) const;
     OSStatus SetDefaultColumnWidth( UInt16 width );
-    
+
     OSStatus GetColumnCount( UInt32* numColumns) const;
 
     OSStatus GetColumnPosition( DataBrowserPropertyID column, UInt32 *position) const;
     OSStatus SetColumnPosition( DataBrowserPropertyID column, UInt32 position);
-    
+
     OSStatus GetScrollPosition( UInt32 *top , UInt32 *left ) const;
     OSStatus SetScrollPosition( UInt32 top , UInt32 left );
-    
+
     OSStatus GetSortProperty( DataBrowserPropertyID *column ) const;
     OSStatus SetSortProperty( DataBrowserPropertyID column );
-     
+
     OSStatus GetSortOrder( DataBrowserSortOrder *order ) const;
     OSStatus SetSortOrder( DataBrowserSortOrder order );
-     
+
     OSStatus GetPropertyFlags( DataBrowserPropertyID property, DataBrowserPropertyFlags *flags ) const;
     OSStatus SetPropertyFlags( DataBrowserPropertyID property, DataBrowserPropertyFlags flags );
-    
+
     OSStatus GetHeaderDesc( DataBrowserPropertyID property, DataBrowserListViewHeaderDesc *desc ) const;
     OSStatus SetHeaderDesc( DataBrowserPropertyID property, DataBrowserListViewHeaderDesc *desc );
-    
+
     OSStatus SetDisclosureColumn( DataBrowserPropertyID property , Boolean expandableRows );
 protected :
-    
+
     static pascal void DataBrowserItemNotificationProc(
         ControlRef browser,
         DataBrowserItemID itemID,
@@ -773,18 +774,18 @@ protected :
         Boolean changeValue ) = 0;
 
     static pascal Boolean DataBrowserCompareProc(
-	    ControlRef browser, 
-	    DataBrowserItemID itemOneID, 
-	    DataBrowserItemID itemTwoID, 
+	    ControlRef browser,
+	    DataBrowserItemID itemOneID,
+	    DataBrowserItemID itemTwoID,
 	    DataBrowserPropertyID sortProperty);
-	    
-	virtual Boolean CompareItems(DataBrowserItemID itemOneID, 
-	    DataBrowserItemID itemTwoID, 
+
+	virtual Boolean CompareItems(DataBrowserItemID itemOneID,
+	    DataBrowserItemID itemTwoID,
 	    DataBrowserPropertyID sortProperty) = 0;
 };
 
 // ============================================================================
-// Higher-level Databrowser 
+// Higher-level Databrowser
 // ============================================================================
 //
 // basing on data item objects
@@ -801,18 +802,18 @@ class wxMacDataItem
 public :
     wxMacDataItem();
     virtual ~wxMacDataItem();
-    
-    virtual bool IsLessThan(wxMacDataItemBrowserControl *owner , 
-        const wxMacDataItem*, 
+
+    virtual bool IsLessThan(wxMacDataItemBrowserControl *owner ,
+        const wxMacDataItem*,
         DataBrowserPropertyID property) const;
-    
+
     // returns true if access was successful, otherwise false
-    virtual OSStatus GetSetData(wxMacDataItemBrowserControl *owner , 
+    virtual OSStatus GetSetData(wxMacDataItemBrowserControl *owner ,
         DataBrowserPropertyID property,
         DataBrowserItemDataRef itemData,
         bool changeValue );
 
-    virtual void Notification(wxMacDataItemBrowserControl *owner , 
+    virtual void Notification(wxMacDataItemBrowserControl *owner ,
         DataBrowserItemNotification message,
         DataBrowserItemDataRef itemData ) const;
 };
@@ -826,39 +827,39 @@ class wxMacDataItemBrowserControl : public wxMacDataBrowserControl
 {
 public :
     wxMacDataItemBrowserControl( wxWindow* peer , const wxPoint& pos, const wxSize& size, long style);
-    
+
     unsigned int    GetItemCount(const wxMacDataItem* container, bool recurse , DataBrowserItemState state) const;
-    void            GetItems(const wxMacDataItem* container, bool recurse , 
+    void            GetItems(const wxMacDataItem* container, bool recurse ,
                         DataBrowserItemState state, wxArrayMacDataItemPtr &items ) const;
-                        
+
     unsigned int    GetLineFromItem(const wxMacDataItem *item) const;
     wxMacDataItem * GetItemFromLine(unsigned int n) const;
-    
-    void            UpdateItem(const wxMacDataItem *container, const wxMacDataItem *item, 
+
+    void            UpdateItem(const wxMacDataItem *container, const wxMacDataItem *item,
                         DataBrowserPropertyID property) const;
-    void            UpdateItems(const wxMacDataItem *container, wxArrayMacDataItemPtr &items, 
+    void            UpdateItems(const wxMacDataItem *container, wxArrayMacDataItemPtr &items,
                         DataBrowserPropertyID property) const;
-    
+
     void            AddItem(wxMacDataItem *container, wxMacDataItem *item);
     void            AddItems(wxMacDataItem *container, wxArrayMacDataItemPtr &items );
 
     void            RemoveAllItems(wxMacDataItem *container);
     void            RemoveItem(wxMacDataItem *container, wxMacDataItem* item);
     void            RemoveItems(wxMacDataItem *container, wxArrayMacDataItemPtr &items);
-    
+
     void            SetSelectedItem( wxMacDataItem* item , DataBrowserSetOption option);
     void            SetSelectedItems( wxArrayMacDataItemPtr &items , DataBrowserSetOption option);
     void            SetSelectedAllItems( DataBrowserSetOption option);
     Boolean         IsItemSelected( const wxMacDataItem* item) const;
-    
+
     void            RevealItem( wxMacDataItem* item, DataBrowserRevealOptions options);
-    
+
     void            GetSelectionAnchor( wxMacDataItemPtr* first , wxMacDataItemPtr* last) const;
-    
+
     // item aware methods, to be used in subclasses
-    
-    virtual Boolean CompareItems(const wxMacDataItem* itemOneID, 
-                        const wxMacDataItem* itemTwoID, 
+
+    virtual Boolean CompareItems(const wxMacDataItem* itemOneID,
+                        const wxMacDataItem* itemTwoID,
                         DataBrowserPropertyID sortProperty);
 
     virtual OSStatus GetSetItemData(wxMacDataItem* itemID,
@@ -879,9 +880,9 @@ public :
 
 protected:
     // ID aware base methods, should be 'final' ie not changed in subclasses
-    
-    virtual Boolean CompareItems(DataBrowserItemID itemOneID, 
-                        DataBrowserItemID itemTwoID, 
+
+    virtual Boolean CompareItems(DataBrowserItemID itemOneID,
+                        DataBrowserItemID itemTwoID,
                         DataBrowserPropertyID sortProperty);
 
     virtual OSStatus GetSetItemData(DataBrowserItemID itemID,
@@ -904,7 +905,7 @@ class wxMacDataItemBrowserSelectionSuppressor
 public :
     wxMacDataItemBrowserSelectionSuppressor(wxMacDataItemBrowserControl *browser);
     ~wxMacDataItemBrowserSelectionSuppressor();
-    
+
 private :
 
     bool m_former;
@@ -921,14 +922,14 @@ class wxMacListBoxItem : public wxMacDataItem
 {
 public :
     wxMacListBoxItem();
-    
+
     virtual ~wxMacListBoxItem();
-    
+
     void SetLabel( const wxString& str);
     const wxString& GetLabel() const;
-    
-    virtual bool IsLessThan(wxMacDataItemBrowserControl *owner , 
-        const wxMacDataItem* rhs, 
+
+    virtual bool IsLessThan(wxMacDataItemBrowserControl *owner ,
+        const wxMacDataItem* rhs,
         DataBrowserPropertyID sortProperty) const;
 
     virtual OSStatus GetSetData( wxMacDataItemBrowserControl *owner ,
@@ -936,13 +937,13 @@ public :
         DataBrowserItemDataRef itemData,
         bool changeValue );
 
-    virtual void Notification(wxMacDataItemBrowserControl *owner , 
+    virtual void Notification(wxMacDataItemBrowserControl *owner ,
         DataBrowserItemNotification message,
         DataBrowserItemDataRef itemData ) const;
-        
+
     void SetOrder( SInt32 order );
     SInt32 GetOrder() const;
-    
+
     void SetData( void* data);
     void* GetData() const;
 
@@ -964,7 +965,7 @@ public:
     virtual wxMacListBoxItem* CreateItem();
 
     // add and remove
-    
+
     void            MacDelete( unsigned int n );
     void            MacInsert( unsigned int n, const wxString& item );
     void            MacInsert( unsigned int n, const wxArrayString& items );
@@ -972,7 +973,7 @@ public:
     void            MacClear();
 
     // selecting
-    
+
     void            MacDeselectAll();
     void            MacSetSelection( unsigned int n, bool select );
     int             MacGetSelection() const;
@@ -984,7 +985,7 @@ public:
     void            MacScrollTo( unsigned int n );
 
     // accessing content
-    
+
     void            MacSetString( unsigned int n, const wxString& item );
     void            MacSetClientData( unsigned int n, void * data);
     wxString        MacGetString( unsigned int n) const;
@@ -1177,14 +1178,14 @@ private :
 ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, const Point& location , WindowRef window , ControlPartCode *outPart );
 
 #ifdef WORDS_BIGENDIAN
-    inline Rect* wxMacGetPictureBounds( PicHandle pict , Rect* rect ) 
-    { 
-       *rect = (**pict).picFrame; 
+    inline Rect* wxMacGetPictureBounds( PicHandle pict , Rect* rect )
+    {
+       *rect = (**pict).picFrame;
         return rect;
     }
 #else
-    inline Rect* wxMacGetPictureBounds( PicHandle pict , Rect* rect ) 
-    {   
+    inline Rect* wxMacGetPictureBounds( PicHandle pict , Rect* rect )
+    {
         return QDGetPictureBounds( pict , rect );
     }
 #endif
