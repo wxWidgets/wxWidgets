@@ -18,7 +18,7 @@
 class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase
 {
 public:
-    wxSpinButton() { }
+    wxSpinButton();
     wxSpinButton(wxWindow *parent,
                  wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -50,8 +50,7 @@ public:
 
     bool IsOwnGtkWindow( GdkWindow *window );
 
-    GtkAdjustment  *m_adjust;
-    float           m_oldPos;
+    int m_pos;
 
 protected:
     virtual wxSize DoGetBestSize() const;

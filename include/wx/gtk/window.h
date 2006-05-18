@@ -191,6 +191,9 @@ public:
     // Common scroll event handling code for wxWindow and wxScrollBar
     wxEventType GetScrollEventType(GtkRange* range);
 
+    void BlockScrollEvent();
+    void UnblockScrollEvent();
+
     // position and size of the window
     int                  m_x, m_y;
     int                  m_width, m_height;
@@ -282,9 +285,6 @@ protected:
 
     // sets the border of a given GtkScrolledWindow from a wx style
     static void GtkScrolledWindowSetBorder(GtkWidget* w, int style);
-
-    void BlockScrollEvent();
-    void UnblockScrollEvent();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)

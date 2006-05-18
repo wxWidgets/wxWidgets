@@ -19,7 +19,6 @@
     #include "wx/utils.h"
 #endif
 
-#include "wx/math.h"
 #include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
@@ -28,65 +27,46 @@
 
 extern bool   g_blockEventsOnDrag;
 
-static const float sensitivity = 0.02;
-
 //-----------------------------------------------------------------------------
 // "value_changed"
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *win )
+static void
+gtk_value_changed(GtkSpinButton* spinbutton, wxSpinButton* win)
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->m_hasVMT) return;
-    if (g_blockEventsOnDrag) return;
+    const double value = gtk_spin_button_get_value(spinbutton);
+    const int pos = int(value);
+    const int oldPos = win->m_pos;
+    if (!win->m_hasVMT || g_blockEventsOnDrag || win->m_blockScrollEvent || pos == oldPos)
+    {
+        win->m_pos = pos;
+        return;
+    }
 
-    float diff = win->m_adjust->value - win->m_oldPos;
-    if (fabs(diff) < sensitivity) return;
-
-    wxEventType command = wxEVT_NULL;
-
-    float line_step = win->m_adjust->step_increment;
-
-    if (fabs(diff-line_step) < sensitivity) command = wxEVT_SCROLL_LINEUP;
-    else if (fabs(diff+line_step) < sensitivity) command = wxEVT_SCROLL_LINEDOWN;
-    else command = wxEVT_SCROLL_THUMBTRACK;
-
-    int value = (int)ceil(win->m_adjust->value);
-
-    wxSpinEvent event( command, win->GetId());
-    event.SetPosition( value );
-    event.SetEventObject( win );
+    wxSpinEvent event(pos > oldPos ? wxEVT_SCROLL_LINEUP : wxEVT_SCROLL_LINEDOWN, win->GetId());
+    event.SetPosition(pos);
+    event.SetEventObject(win);
 
     if ((win->GetEventHandler()->ProcessEvent( event )) &&
         !event.IsAllowed() )
     {
         /* program has vetoed */
-        win->m_adjust->value = win->m_oldPos;
-
-        g_signal_handlers_disconnect_by_func (win->m_adjust,
-                                              (gpointer) gtk_spinbutt_callback,
-                                              win);
-
-        g_signal_emit_by_name (win->m_adjust, "value_changed");
-
-        g_signal_connect (win->m_adjust, "value_changed",
-                          G_CALLBACK (gtk_spinbutt_callback), win);
+        win->BlockScrollEvent();
+        gtk_spin_button_set_value(spinbutton, oldPos);
+        win->UnblockScrollEvent();
         return;
     }
 
-    win->m_oldPos = win->m_adjust->value;
+    win->m_pos = pos;
 
     /* always send a thumbtrack event */
-    if (command != wxEVT_SCROLL_THUMBTRACK)
-    {
-        command = wxEVT_SCROLL_THUMBTRACK;
-        wxSpinEvent event2( command, win->GetId());
-        event2.SetPosition( value );
-        event2.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( event2 );
-    }
+    wxSpinEvent event2(wxEVT_SCROLL_THUMBTRACK, win->GetId());
+    event2.SetPosition(pos);
+    event2.SetEventObject(win);
+    win->GetEventHandler()->ProcessEvent(event2);
 }
 }
 
@@ -100,6 +80,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 BEGIN_EVENT_TABLE(wxSpinButton, wxControl)
     EVT_SIZE(wxSpinButton::OnSize)
 END_EVENT_TABLE()
+
+wxSpinButton::wxSpinButton()
+{
+    m_pos = 0;
+}
 
 bool wxSpinButton::Create(wxWindow *parent,
                           wxWindowID id,
@@ -119,21 +104,19 @@ bool wxSpinButton::Create(wxWindow *parent,
     if (!PreCreation( parent, pos, new_size ) ||
         !CreateBase( parent, id, pos, new_size, style, wxDefaultValidator, name ))
     {
-        wxFAIL_MSG( wxT("wxXX creation failed") );
+        wxFAIL_MSG( wxT("wxSpinButton creation failed") );
         return false;
     }
 
-    m_oldPos = 0.0;
+    m_pos = 0;
 
-    m_adjust = (GtkAdjustment*) gtk_adjustment_new( 0.0, 0.0, 100.0, 1.0, 5.0, 0.0);
-
-    m_widget = gtk_spin_button_new( m_adjust, 0, 0 );
+    m_widget = gtk_spin_button_new_with_range(0, 100, 1);
 
     gtk_spin_button_set_wrap( GTK_SPIN_BUTTON(m_widget),
                               (int)(m_windowStyle & wxSP_WRAP) );
 
-    g_signal_connect (m_adjust, "value_changed",
-                      G_CALLBACK (gtk_spinbutt_callback), this);
+    g_signal_connect_after(
+        m_widget, "value_changed", G_CALLBACK(gtk_value_changed), this);
 
     m_parent->DoAddChild( this );
 
@@ -146,57 +129,43 @@ int wxSpinButton::GetMin() const
 {
     wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
 
-    return (int)ceil(m_adjust->lower);
+    double min;
+    gtk_spin_button_get_range((GtkSpinButton*)m_widget, &min, NULL);
+    return int(min);
 }
 
 int wxSpinButton::GetMax() const
 {
     wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
 
-    return (int)ceil(m_adjust->upper);
+    double max;
+    gtk_spin_button_get_range((GtkSpinButton*)m_widget, NULL, &max);
+    return int(max);
 }
 
 int wxSpinButton::GetValue() const
 {
     wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
 
-    return (int)ceil(m_adjust->value);
+    return m_pos;
 }
 
 void wxSpinButton::SetValue( int value )
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
 
-    float fpos = (float)value;
-    m_oldPos = fpos;
-    if (fabs(fpos-m_adjust->value) < sensitivity) return;
-
-    m_adjust->value = fpos;
-
-    g_signal_emit_by_name (m_adjust, "value_changed");
+    BlockScrollEvent();
+    gtk_spin_button_set_value((GtkSpinButton*)m_widget, value);
+    UnblockScrollEvent();
 }
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
 
-    float fmin = (float)minVal;
-    float fmax = (float)maxVal;
-
-    if ((fabs(fmin-m_adjust->lower) < sensitivity) &&
-        (fabs(fmax-m_adjust->upper) < sensitivity))
-    {
-        return;
-    }
-
-    m_adjust->lower = fmin;
-    m_adjust->upper = fmax;
-
-    g_signal_emit_by_name (m_adjust, "changed");
-
-    // these two calls are required due to some bug in GTK
-    Refresh();
-    SetFocus();
+    BlockScrollEvent();
+    gtk_spin_button_set_range((GtkSpinButton*)m_widget, minVal, maxVal);
+    UnblockScrollEvent();
 }
 
 void wxSpinButton::OnSize( wxSizeEvent &WXUNUSED(event) )
