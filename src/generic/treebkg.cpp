@@ -100,7 +100,9 @@ wxTreebook::Create(wxWindow *parent,
                     wxID_TREEBOOKTREEVIEW,
                     wxDefaultPosition,
                     wxDefaultSize,
-                    wxBORDER_SIMPLE |
+#ifndef __WXMSW__
+                    wxBORDER_SIMPLE | // On wxMSW this produces a black border which is wrong
+#endif
                     wxTR_DEFAULT_STYLE |
                     wxTR_HIDE_ROOT |
                     wxTR_SINGLE
