@@ -622,6 +622,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/wincmn.cpp
     src/common/xpmdecod.cpp
     src/generic/busyinfo.cpp
+    src/generic/buttonbar.cpp
     src/generic/choicdgg.cpp
     src/generic/choicbkg.cpp
     src/generic/combog.cpp
@@ -676,6 +677,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gbsizer.h
     wx/gdicmn.h
     wx/generic/accel.h
+    wx/generic/buttonbar.h
     wx/generic/choicdgg.h
     wx/generic/colrdlgg.h
     wx/generic/combo.h
@@ -2515,7 +2517,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_CMN_SRC" hints="files">
     src/common/datavcmn.cpp
-    src/generic/buttonbar.cpp
     src/generic/calctrl.cpp
     src/generic/datavgen.cpp
     src/generic/datectlg.cpp
@@ -2542,7 +2543,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dataview.h
     wx/dateevt.h
     wx/dcbuffer.h
-    wx/generic/buttonbar.h
     wx/generic/calctrl.h
     wx/generic/datectrl.h
     wx/generic/dataview.h

@@ -2476,7 +2476,6 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/dataview.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
-	wx/generic/buttonbar.h \
 	wx/generic/calctrl.h \
 	wx/generic/datectrl.h \
 	wx/generic/dataview.h \
@@ -2515,7 +2514,6 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/dataview.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
-	wx/generic/buttonbar.h \
 	wx/generic/calctrl.h \
 	wx/generic/datectrl.h \
 	wx/generic/dataview.h \
@@ -2631,6 +2629,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/gbsizer.h \
 	wx/gdicmn.h \
 	wx/generic/accel.h \
+	wx/generic/buttonbar.h \
 	wx/generic/choicdgg.h \
 	wx/generic/colrdlgg.h \
 	wx/generic/combo.h \
@@ -3214,6 +3213,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_wincmn.o \
 	monodll_xpmdecod.o \
 	monodll_busyinfo.o \
+	monodll_buttonbar.o \
 	monodll_choicdgg.o \
 	monodll_choicbkg.o \
 	monodll_combog.o \
@@ -3368,6 +3368,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_wincmn.o \
 	monodll_xpmdecod.o \
 	monodll_busyinfo.o \
+	monodll_buttonbar.o \
 	monodll_choicdgg.o \
 	monodll_choicbkg.o \
 	monodll_combog.o \
@@ -4453,7 +4454,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1)
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_datavcmn.o \
-	monodll_buttonbar.o \
 	monodll_calctrl.o \
 	monodll_datavgen.o \
 	monodll_datectlg.o \
@@ -4478,7 +4478,6 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_datavcmn.o \
-	monodll_buttonbar.o \
 	monodll_calctrl.o \
 	monodll_datavgen.o \
 	monodll_datectlg.o \
@@ -4849,6 +4848,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_wincmn.o \
 	monolib_xpmdecod.o \
 	monolib_busyinfo.o \
+	monolib_buttonbar.o \
 	monolib_choicdgg.o \
 	monolib_choicbkg.o \
 	monolib_combog.o \
@@ -5003,6 +5003,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_wincmn.o \
 	monolib_xpmdecod.o \
 	monolib_busyinfo.o \
+	monolib_buttonbar.o \
 	monolib_choicdgg.o \
 	monolib_choicbkg.o \
 	monolib_combog.o \
@@ -6090,7 +6091,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3)
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_datavcmn.o \
-	monolib_buttonbar.o \
 	monolib_calctrl.o \
 	monolib_datavgen.o \
 	monolib_datectlg.o \
@@ -6115,7 +6115,6 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_datavcmn.o \
-	monolib_buttonbar.o \
 	monolib_calctrl.o \
 	monolib_datavgen.o \
 	monolib_datectlg.o \
@@ -6718,6 +6717,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_wincmn.o \
 	coredll_xpmdecod.o \
 	coredll_busyinfo.o \
+	coredll_buttonbar.o \
 	coredll_choicdgg.o \
 	coredll_choicbkg.o \
 	coredll_combog.o \
@@ -6872,6 +6872,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_wincmn.o \
 	coredll_xpmdecod.o \
 	coredll_busyinfo.o \
+	coredll_buttonbar.o \
 	coredll_choicdgg.o \
 	coredll_choicbkg.o \
 	coredll_combog.o \
@@ -8057,6 +8058,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_wincmn.o \
 	corelib_xpmdecod.o \
 	corelib_busyinfo.o \
+	corelib_buttonbar.o \
 	corelib_choicdgg.o \
 	corelib_choicbkg.o \
 	corelib_combog.o \
@@ -8211,6 +8213,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_wincmn.o \
 	corelib_xpmdecod.o \
 	corelib_busyinfo.o \
+	corelib_buttonbar.o \
 	corelib_choicdgg.o \
 	corelib_choicbkg.o \
 	corelib_combog.o \
@@ -9344,7 +9347,6 @@ COND_USE_SOSYMLINKS_1___advdll___so_symlinks_inst_cmd = rm -f \
 @COND_PLATFORM_WIN32_1@__advdll___win32rc = advdll_version_rc.o
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_datavcmn.o \
-	advdll_buttonbar.o \
 	advdll_calctrl.o \
 	advdll_datavgen.o \
 	advdll_datectlg.o \
@@ -9369,7 +9371,6 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_datavcmn.o \
-	advdll_buttonbar.o \
 	advdll_calctrl.o \
 	advdll_datavgen.o \
 	advdll_datectlg.o \
@@ -9409,7 +9410,6 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
 @COND_USE_PCH_1@	= .pch/wxprec_advlib/wx/wxprec.h.gch
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_datavcmn.o \
-	advlib_buttonbar.o \
 	advlib_calctrl.o \
 	advlib_datavgen.o \
 	advlib_datectlg.o \
@@ -9434,7 +9434,6 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_datavcmn.o \
-	advlib_buttonbar.o \
 	advlib_calctrl.o \
 	advlib_datavgen.o \
 	advlib_datectlg.o \
@@ -14738,6 +14737,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_busyinfo.o: $(srcdir)/src/generic/busyinfo.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/busyinfo.cpp
 
+@COND_USE_GUI_1@monodll_buttonbar.o: $(srcdir)/src/generic/buttonbar.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/buttonbar.cpp
+
 @COND_USE_GUI_1@monodll_choicdgg.o: $(srcdir)/src/generic/choicdgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/choicdgg.cpp
 
@@ -14812,9 +14814,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
-
-@COND_USE_GUI_1@monodll_buttonbar.o: $(srcdir)/src/generic/buttonbar.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/buttonbar.cpp
 
 @COND_USE_GUI_1@monodll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
@@ -18548,6 +18547,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_busyinfo.o: $(srcdir)/src/generic/busyinfo.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/busyinfo.cpp
 
+@COND_USE_GUI_1@monolib_buttonbar.o: $(srcdir)/src/generic/buttonbar.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/buttonbar.cpp
+
 @COND_USE_GUI_1@monolib_choicdgg.o: $(srcdir)/src/generic/choicdgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/choicdgg.cpp
 
@@ -18622,9 +18624,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
-
-@COND_USE_GUI_1@monolib_buttonbar.o: $(srcdir)/src/generic/buttonbar.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/buttonbar.cpp
 
 @COND_USE_GUI_1@monolib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
@@ -22745,6 +22744,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_busyinfo.o: $(srcdir)/src/generic/busyinfo.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/busyinfo.cpp
 
+@COND_USE_GUI_1@coredll_buttonbar.o: $(srcdir)/src/generic/buttonbar.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/buttonbar.cpp
+
 @COND_USE_GUI_1@coredll_choicdgg.o: $(srcdir)/src/generic/choicdgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/choicdgg.cpp
 
@@ -25532,6 +25534,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_busyinfo.o: $(srcdir)/src/generic/busyinfo.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/busyinfo.cpp
 
+@COND_USE_GUI_1@corelib_buttonbar.o: $(srcdir)/src/generic/buttonbar.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/buttonbar.cpp
+
 @COND_USE_GUI_1@corelib_choicdgg.o: $(srcdir)/src/generic/choicdgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/choicdgg.cpp
 
@@ -25612,9 +25617,6 @@ advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 
 advdll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
-
-advdll_buttonbar.o: $(srcdir)/src/generic/buttonbar.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/buttonbar.cpp
 
 advdll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
@@ -25792,9 +25794,6 @@ advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
 
 advlib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
-
-advlib_buttonbar.o: $(srcdir)/src/generic/buttonbar.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/buttonbar.cpp
 
 advlib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
