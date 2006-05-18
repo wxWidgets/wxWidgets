@@ -42,6 +42,8 @@ swig-1.3.29.patch
     Added support for dropping the leading wx from wxNames using
     %rename("%(wxpy)s") ""; 
 
+    Don't set a module attribute for the *_swigregister functions,
+    just call the one in the extension module directly.
 
 ------------------------------------------------------------------------
 
