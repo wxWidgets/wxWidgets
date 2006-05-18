@@ -4057,7 +4057,16 @@ void wxWindowGTK::SetScrollbar( int orient, int pos, int thumbVisible,
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
     wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
 
-    m_hasScrolling = true;
+    if (range > 0)
+    {
+        m_hasScrolling = true;
+    }
+    else
+    {
+        // GtkRange requires upper > lower
+        range =
+        thumbVisible = 1;
+    }
 
     const int i = orient == wxVERTICAL;
     GtkAdjustment* adj = m_scrollBar[i]->adjustment;

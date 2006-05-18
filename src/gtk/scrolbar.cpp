@@ -182,6 +182,12 @@ void wxScrollBar::SetThumbPosition( int viewStart )
 
 void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageSize, bool)
 {
+    if (range == 0)
+    {
+        // GtkRange requires upper > lower
+        range =
+        thumbSize = 1;
+    }
     GtkAdjustment* adj = ((GtkRange*)m_widget)->adjustment;
     adj->value = position;
     adj->step_increment = 1;
