@@ -45,7 +45,7 @@ public:
     virtual void            MacSetClientData( unsigned int n, void * data) = 0;
     virtual void *          MacGetClientData( unsigned int) const = 0;
 
-    virtual wxMacListControl() { }
+    virtual ~wxMacListControl() { }
 };
 
 // List box item
