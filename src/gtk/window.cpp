@@ -2541,8 +2541,6 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if (!win->m_hasScrolling) return;
-
     int client_width = 0;
     int client_height = 0;
     win->GetClientSize( &client_width, &client_height );
