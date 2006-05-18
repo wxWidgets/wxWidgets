@@ -41,9 +41,11 @@ public:
     virtual void            MacScrollTo( unsigned int n ) = 0;
     virtual wxString        MacGetString( unsigned int n) const = 0;
     virtual unsigned int    MacGetCount() const = 0;
-    
+
     virtual void            MacSetClientData( unsigned int n, void * data) = 0;
     virtual void *          MacGetClientData( unsigned int) const = 0;
+
+    virtual wxMacListControl() { }
 };
 
 // List box item
@@ -128,11 +130,11 @@ public:
     // wxCheckListBox support
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     wxMacListControl* GetPeer() const;
 
 protected:
-    // from wxItemContainer    
+    // from wxItemContainer
     virtual int DoAppend(const wxString& item);
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
     virtual void* DoGetItemClientData(unsigned int n) const;
