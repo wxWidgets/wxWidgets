@@ -10,21 +10,22 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CHECKLST_H_
-#define _WX_CHECKLST_H_
+#ifndef _WX_MAC_CHECKLST_H_
+#define _WX_MAC_CHECKLST_H_
 
-class wxMacCheckListControl 
+class wxMacCheckListControl
 {
 public :
     virtual bool            MacIsChecked(unsigned int n) const = 0;
     virtual void            MacCheck(unsigned int n, bool bCheck = true) = 0;
+
+    virtual ~wxMacCheckListControl() { }
 };
 
 class WXDLLEXPORT wxCheckListBox : public wxCheckListBoxBase
 {
-  DECLARE_DYNAMIC_CLASS(wxCheckListBox)
 public:
-  // ctors
+    // ctors
     wxCheckListBox() { Init(); }
     wxCheckListBox(wxWindow *parent,
                    wxWindowID id,
@@ -80,10 +81,10 @@ public:
 
 protected:
     void Init();
-private:
 
+private:
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxCheckListBox)
 };
 
-#endif
-    // _WX_CHECKLST_H_
+#endif // _WX_MAC_CHECKLST_H_
