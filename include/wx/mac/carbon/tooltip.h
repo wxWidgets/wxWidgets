@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        mac/tooltip.h
+// Name:        wx/mac/carbon/tooltip.h
 // Purpose:     wxToolTip class - tooltip control
 // Author:      Stefan Csomor
 // Modified by:
@@ -11,6 +11,9 @@
 
 #ifndef _WX_MAC_TOOLTIP_H_
 #define _WX_MAC_TOOLTIP_H_
+
+#include "wx/string.h"
+#include "wx/event.h"
 
 class wxToolTip : public wxObject
 {
