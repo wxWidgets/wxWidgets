@@ -595,6 +595,18 @@ Returns an invalid tree item if there are no further children.
 Returns the previous visible item.
 
 
+\membersection{wxTreeCtrl::GetQuickBestSize}\label{wxtreectrlgetquickbestsize}
+
+\constfunc{bool}{GetQuickBestSize}{\void}
+
+Returns true if the control will use a quick calculation for the best size,
+looking only at the first and last items. The default is false.
+
+\wxheading{See also}
+
+\helpref{wxTreeCtrl::SetQuickBestSize}{wxtreectrlsetquickbestsize}
+
+
 \membersection{wxTreeCtrl::GetRootItem}\label{wxtreectrlgetrootitem}
 
 \constfunc{wxTreeItemId}{GetRootItem}{\void}
@@ -909,6 +921,19 @@ Sets the item label.
 Sets the colour of the item's text.
 
 
+\membersection{wxTreeCtrl::SetQuickBestSize}\label{wxtreectrlsetquickbestsize}
+
+\func{void}{SetQuickBestSize}{\param{bool}{ quickBestSize}}
+
+If true is passed, specifies that the control will use a quick calculation for the best size,
+looking only at the first and last items. Otherwise, it will look at all items.
+The default is false.
+
+\wxheading{See also}
+
+\helpref{wxTreeCtrl::GetQuickBestSize}{wxtreectrlgetquickbestsize}
+
+
 \membersection{wxTreeCtrl::SetStateImageList}\label{wxtreectrlsetstateimagelist}
 
 \func{void}{SetStateImageList}{\param{wxImageList*}{ imageList}}
@@ -978,3 +1003,4 @@ all items if it does have this style.
 \func{void}{UnselectItem}{\param{const wxTreeItemId\& }{item}}
 
 Unselects the given item. This works in multiselection controls only.
+
