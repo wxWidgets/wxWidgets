@@ -21,6 +21,7 @@
     #include "wx/utils.h"
     #include "wx/dc.h"
     #include "wx/button.h"
+    #include "wx/menu.h"
 #endif
 
 #ifdef __DARWIN__
@@ -44,7 +45,6 @@
 #include "wx/settings.h"
 #include "wx/filefn.h"
 #include "wx/sysopt.h"
-#include "wx/menu.h"
 
 #if defined(__BORLANDC__) && !defined(__WIN32__)
     #include <alloc.h>

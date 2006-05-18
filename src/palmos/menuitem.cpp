@@ -26,7 +26,7 @@
 
 #if wxUSE_MENUS
 
-#include "wx/menu.h"
+#include "wx/menuitem.h"
 
 #ifndef WX_PRECOMP
     #include "wx/font.h"
@@ -37,9 +37,8 @@
     #include "wx/accel.h"
     #include "wx/string.h"
     #include "wx/log.h"
+    #include "wx/menu.h"
 #endif
-
-#include "wx/menuitem.h"
 
 #if wxUSE_ACCEL
     #include "wx/accel.h"

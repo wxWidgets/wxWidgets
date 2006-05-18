@@ -36,6 +36,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/dcscreen.h"
+    #include "wx/menu.h"
 #endif
 
 #if wxUSE_DRAG_AND_DROP
@@ -1095,7 +1096,6 @@ void wxWindowMGL::Clear()
     dc.Clear();
 }
 
-#include "wx/menu.h"
 void wxWindowMGL::Refresh(bool eraseBack, const wxRect *rect)
 {
     if ( m_eraseBackground == -1 )

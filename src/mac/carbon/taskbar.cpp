@@ -17,11 +17,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
+    #include "wx/menu.h"
 #endif
 
 #include "wx/mac/private.h"
 
-#include "wx/menu.h"
 #include "wx/icon.h"
 
 

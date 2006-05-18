@@ -33,10 +33,10 @@
     #include "wx/bmpbuttn.h"
     #include "wx/statbox.h"
     #include "wx/radiobox.h"
+    #include "wx/menu.h"
 #endif // WXPRECOMP
 
 #ifdef __WXMAC__
-    #include "wx/menu.h"
     #include "wx/msgdlg.h"
 #endif
 

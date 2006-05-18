@@ -21,6 +21,7 @@
     #include "wx/frame.h"
     #include "wx/dc.h"
     #include "wx/button.h"
+    #include "wx/menu.h"
 #endif
 
 #include "wx/gdicmn.h"
@@ -35,7 +36,6 @@
 #include "wx/memory.h"
 #include "wx/tooltip.h"
 #include "wx/textctrl.h"
-#include "wx/menu.h"
 #include "wx/docview.h"
 #include "wx/filename.h"
 

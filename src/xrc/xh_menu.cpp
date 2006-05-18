@@ -21,9 +21,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
+    #include "wx/menu.h"
 #endif
-
-#include "wx/menu.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuXmlHandler, wxXmlResourceHandler)
 

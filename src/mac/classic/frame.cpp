@@ -16,12 +16,12 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/dcclient.h"
+    #include "wx/menu.h"
 #endif // WX_PRECOMP
 
 #include "wx/statusbr.h"
 #include "wx/toolbar.h"
 #include "wx/menuitem.h"
-#include "wx/menu.h"
 #include "wx/dialog.h"
 #include "wx/settings.h"
 

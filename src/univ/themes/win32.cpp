@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        univ/themes/win32.cpp
+// Name:        src/univ/themes/win32.cpp
 // Purpose:     wxUniversal theme implementing Win32-like LNF
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -48,12 +48,12 @@
         // for COLOR_* constants
         #include "wx/msw/private.h"
     #endif
+    #include "wx/menu.h"
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
 #include "wx/settings.h"
-#include "wx/menu.h"
 #include "wx/artprov.h"
 #include "wx/toplevel.h"
 #include "wx/image.h"

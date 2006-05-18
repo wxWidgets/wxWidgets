@@ -15,9 +15,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/menu.h"
 #endif // WX_PRECOMP
 
-#include "wx/menu.h"
 #include "wx/mac/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)

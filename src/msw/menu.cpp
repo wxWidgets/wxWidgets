@@ -26,9 +26,10 @@
 
 #if wxUSE_MENUS
 
+#include "wx/menu.h"
+
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
-    #include "wx/menu.h"
     #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -875,7 +876,7 @@ WXHMENU wxMenuBar::Create()
     HWND hCommandBar = (HWND) GetToolBar()->GetHWND();
     HMENU hMenu = (HMENU)::SendMessage(hCommandBar, SHCMBM_GETMENU, (WPARAM)0, (LPARAM)0);
 
-	// hMenu may be zero on Windows Mobile 5. So add the menus anyway.
+    // hMenu may be zero on Windows Mobile 5. So add the menus anyway.
     if (1) // (hMenu)
     {
         TBBUTTON tbButton;

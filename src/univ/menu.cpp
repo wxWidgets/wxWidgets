@@ -25,10 +25,11 @@
 
 #if wxUSE_MENUS
 
+#include "wx/menu.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/control.h"      // for FindAccelIndex()
-    #include "wx/menu.h"
     #include "wx/settings.h"
     #include "wx/accel.h"
     #include "wx/log.h"

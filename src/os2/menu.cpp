@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        menu.cpp
+// Name:        src/os2/menu.cpp
 // Purpose:     wxMenu, wxMenuBar, wxMenuItem
 // Author:      David Webster
 // Modified by:
@@ -12,10 +12,11 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/menu.h"
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/frame.h"
-    #include "wx/menu.h"
     #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -70,7 +71,7 @@ USHORT                              wxMenu::m_nextMenuId = 0;
 //
 void wxMenu::Init()
 {
-    m_bDoBreak = FALSE;
+    m_bDoBreak = false;
     m_nStartRadioGroup = -1;
 
     //
@@ -265,7 +266,7 @@ bool wxMenu::DoInsertOrAppend( wxMenuItem* pItem,
     if (m_bDoBreak)
     {
         rItem.afStyle |= MIS_BREAK;
-        m_bDoBreak = FALSE;
+        m_bDoBreak = false;
     }
 
     //
@@ -594,10 +595,8 @@ void wxMenu::SetTitle( const wxString& rLabel )
 // event processing
 // ---------------------------------------------------------------------------
 
-bool wxMenu::OS2Command(
-  WXUINT                            WXUNUSED(uParam)
-, WXWORD                            vId
-)
+bool wxMenu::OS2Command( WXUINT WXUNUSED(uParam),
+                         WXWORD vId )
 {
     //
     // Ignore commands from the menu title
@@ -613,7 +612,7 @@ bool wxMenu::OS2Command(
                                     )
                  );
     }
-    return TRUE;
+    return true;
 } // end of wxMenu::OS2Command
 
 // ---------------------------------------------------------------------------
@@ -738,7 +737,7 @@ void wxMenuBar::Refresh()
 
 WXHMENU wxMenuBar::Create()
 {
-    HWND                            hFrame;
+    HWND hFrame;
 
     if (m_hMenu != 0 )
         return m_hMenu;
@@ -974,19 +973,17 @@ bool wxMenuBar::Insert( size_t          nPos,
     return true;
 } // end of wxMenuBar::Insert
 
-bool wxMenuBar::Append(
-  wxMenu*                           pMenu
-, const wxString&                   rsTitle
-)
+bool wxMenuBar::Append( wxMenu* pMenu,
+                        const wxString& rsTitle )
 {
-    WXHMENU                         hSubmenu = pMenu ? pMenu->GetHMenu() : 0;
+    WXHMENU hSubmenu = pMenu ? pMenu->GetHMenu() : 0;
 
-    wxCHECK_MSG(hSubmenu, FALSE, wxT("can't append invalid menu to menubar"));
+    wxCHECK_MSG(hSubmenu, false, wxT("can't append invalid menu to menubar"));
 
-    wxString                        sTitle = wxPMTextToLabel(rsTitle);
+    wxString sTitle = wxPMTextToLabel(rsTitle);
 
     if (!wxMenuBarBase::Append(pMenu, sTitle))
-        return FALSE;
+        return false;
 
     m_titles.Add(sTitle);
 
@@ -1005,7 +1002,7 @@ bool wxMenuBar::Append(
 #endif // wxUSE_ACCEL
         Refresh();
     }
-    return TRUE;
+    return true;
 } // end of wxMenuBar::Append
 
 wxMenu* wxMenuBar::Remove(

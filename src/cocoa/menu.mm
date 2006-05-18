@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/menu.cpp
+// Name:        src/cocoa/menu.cpp
 // Purpose:     wxMenu and wxMenuBar implementation
 // Author:      David Elliott
 // Modified by:
 // Created:     2002/12/09
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) 2002 David Elliott
 // Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
@@ -18,8 +18,10 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/wxprec.h"
+
+#include "wx/menu.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/menu.h"
     #include "wx/log.h"
 #endif // WX_PRECOMP
 

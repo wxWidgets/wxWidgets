@@ -19,9 +19,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/menu.h"
 #endif
-
-#include "wx/menu.h"
 
 #include "wx/mac/uma.h"
 // ============================================================================

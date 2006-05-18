@@ -20,13 +20,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/menu.h"
 #endif
 
 // DLL options compatibility check:
 WX_CHECK_BUILD_OPTIONS("wxAdvanced")
 
-
-#include "wx/menu.h"
 #include "wx/taskbar.h"
 
 DEFINE_EVENT_TYPE( wxEVT_TASKBAR_MOVE )

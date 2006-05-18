@@ -14,7 +14,11 @@
 #if wxUSE_CHOICE
 
 #include "wx/choice.h"
-#include "wx/menu.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/menu.h"
+#endif
+
 #include "wx/mac/uma.h"
 
 extern MenuHandle NewUniqueMenu() ;

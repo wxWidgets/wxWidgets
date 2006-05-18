@@ -26,7 +26,7 @@
 
 #if wxUSE_MENUS
 
-#include "wx/menu.h"
+#include "wx/menuitem.h"
 
 #ifndef WX_PRECOMP
     #include "wx/font.h"
@@ -37,9 +37,8 @@
     #include "wx/accel.h"
     #include "wx/string.h"
     #include "wx/log.h"
+    #include "wx/menu.h"
 #endif
-
-#include "wx/menuitem.h"
 
 #if wxUSE_ACCEL
     #include "wx/accel.h"
@@ -79,7 +78,7 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags) ;
 bool wxMenuItemStreamingCallback( const wxObject *object, wxWriter * , wxPersister * , wxxVariantArray & )
 {
     const wxMenuItem * mitem = dynamic_cast<const wxMenuItem*>(object) ;
-    if ( mitem->GetMenu() && !mitem->GetMenu()->GetTitle().IsEmpty() )
+    if ( mitem->GetMenu() && !mitem->GetMenu()->GetTitle().empty() )
     {
         // we don't stream out the first two items for menus with a title, they will be reconstructed
         if ( mitem->GetMenu()->FindItemByPosition(0) == mitem || mitem->GetMenu()->FindItemByPosition(1) == mitem )

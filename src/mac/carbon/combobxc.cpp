@@ -15,9 +15,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/button.h"
+    #include "wx/menu.h"
 #endif
 
-#include "wx/menu.h"
 #include "wx/mac/uma.h"
 #if TARGET_API_MAC_OSX
 #ifndef __HIVIEW__

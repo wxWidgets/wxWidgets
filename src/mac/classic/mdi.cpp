@@ -15,9 +15,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/menu.h"
 #endif
 
-#include "wx/menu.h"
 #include "wx/settings.h"
 
 #include "wx/mac/private.h"
@@ -60,16 +60,16 @@ wxMDIParentFrame::wxMDIParentFrame()
     m_clientWindow = NULL;
     m_currentChild = NULL;
     m_windowMenu = (wxMenu*) NULL;
-    m_parentFrameActive = TRUE;
+    m_parentFrameActive = true;
 }
 
 bool wxMDIParentFrame::Create(wxWindow *parent,
-           wxWindowID id,
-           const wxString& title,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name)
+                              wxWindowID id,
+                              const wxString& title,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              long style,
+                              const wxString& name)
 {
     m_clientWindow = NULL;
     m_currentChild = NULL;
@@ -94,11 +94,11 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     }
 
     wxFrame::Create( parent , id , title , pos , size , style , name ) ;
-    m_parentFrameActive = TRUE;
+    m_parentFrameActive = true;
 
     OnCreateClient();
 
-    return TRUE;
+    return true;
 }
 
 wxMDIParentFrame::~wxMDIParentFrame()
@@ -252,7 +252,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 {
     SetName(name);
 
-    if ( id > -1 )
+    if ( id != wxID_ANY )
         m_windowId = id;
     else
         m_windowId = (int)NewControlId();
@@ -265,7 +265,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     SetThemeWindowBackground( (WindowRef) m_macWindow , m_macWindowBackgroundTheme , false ) ;
 
     wxModelessWindows.Append(this);
-    return FALSE;
+    return false;
 }
 
 wxMDIChildFrame::~wxMDIChildFrame()
@@ -378,7 +378,7 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
 
     wxModelessWindows.Append(this);
-    return TRUE;
+    return true;
 }
 
 // Get size *available for subwindows* i.e. excluding menu bar.

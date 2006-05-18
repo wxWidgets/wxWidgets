@@ -17,9 +17,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/button.h"
+    #include "wx/menu.h"
 #endif
 
-#include "wx/menu.h"
 #include "wx/containr.h"
 #include "wx/mac/uma.h"
 

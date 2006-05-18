@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mdi.cpp
+// Name:        src/motif/mdi.cpp
 // Purpose:     MDI classes
 // Author:      Julian Smart
 // Modified by:
@@ -18,7 +18,11 @@
 #endif
 
 #include "wx/mdi.h"
-#include "wx/menu.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/menu.h"
+#endif
+
 #include "wx/settings.h"
 #include "wx/icon.h"
 
@@ -299,7 +303,7 @@ void wxMDIParentFrame::OnMenuHighlight(wxMenuEvent& event)
     if (GetStatusBar())
     {
         if (event.GetMenuId() == -1)
-            SetStatusText("");
+            SetStatusText(wxEmptyString);
         else
         {
             wxMenuBar *menuBar = (wxMenuBar*) NULL;
@@ -310,7 +314,7 @@ void wxMDIParentFrame::OnMenuHighlight(wxMenuEvent& event)
             if (menuBar)
             {
                 wxString helpString(menuBar->GetHelpString(event.GetMenuId()));
-                if (helpString != "")
+                if (!helpString.empty())
                     SetStatusText(helpString);
             }
         }

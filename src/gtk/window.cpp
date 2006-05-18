@@ -23,6 +23,7 @@
     #include "wx/utils.h"
     #include "wx/frame.h"
     #include "wx/dcclient.h"
+    #include "wx/menu.h"
 #endif
 
 #include "wx/layout.h"
@@ -50,7 +51,6 @@
     #include "wx/textctrl.h"
 #endif
 
-#include "wx/menu.h"
 #include "wx/statusbr.h"
 #include "wx/settings.h"
 #include "wx/fontutil.h"

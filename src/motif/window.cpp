@@ -35,9 +35,9 @@
     #include "wx/dc.h"
     #include "wx/dcclient.h"
     #include "wx/button.h"
+    #include "wx/menu.h"
 #endif
 
-#include "wx/menu.h"
 #include "wx/layout.h"
 #include "wx/settings.h"
 #include "wx/scrolwin.h"

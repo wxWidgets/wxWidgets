@@ -26,9 +26,10 @@
 
 #if wxUSE_MENUS
 
+#include "wx/menu.h"
+
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
-    #include "wx/menu.h"
     #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/log.h"

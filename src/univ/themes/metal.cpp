@@ -1,4 +1,5 @@
-// Name:        univ/themes/metal.cpp
+///////////////////////////////////////////////////////////////////////////////
+// Name:        src/univ/themes/metal.cpp
 // Purpose:     wxUniversal theme implementing Win32-like LNF
 // Author:      Vadim Zeitlin, Robert Roebling
 // Modified by:
@@ -44,12 +45,12 @@
         // for COLOR_* constants
         #include "wx/msw/private.h"
     #endif
+    #include "wx/menu.h"
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
 #include "wx/settings.h"
-#include "wx/menu.h"
 #include "wx/artprov.h"
 #include "wx/toplevel.h"
 
