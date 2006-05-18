@@ -55,8 +55,6 @@ demo item so you can learn how to use the classes yourself.</p>
                            py_version
                            )
         html.SetPage(txt)
-        f = file('c:/tmp/about.html', 'w')
-        f.write(txt)
         btn = html.FindWindowById(wx.ID_OK)
         ir = html.GetInternalRepresentation()
         html.SetSize( (ir.GetWidth()+25, ir.GetHeight()+25) )
