@@ -155,7 +155,18 @@ END_EVENT_TABLE()
 // ============================================================================
 
 IMPLEMENT_WIDGETS_PAGE(ButtonWidgetsPage, _T("Button"),
-                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
+#if defined(__WXUNIVERSAL__)
+                       UNIVERSAL_CTRLS
+#elif defined(__WXMSW__)    || \
+      defined(__WXMOTIF__)  || \
+      defined(__WXGTK__)    || \
+      defined(__WXMAC__)    || \
+      defined(__WXPM__)     || \
+      defined(__WXPALMOS__)
+                       NATIVE_CTRLS
+#else
+                       GENERIC_CTRLS
+#endif
                        );
 
 ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,

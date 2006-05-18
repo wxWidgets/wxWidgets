@@ -137,17 +137,17 @@ DatePickerWidgetsPage::DatePickerWidgetsPage(WidgetsBookCtrl *book,
 
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
-    sizerLeft->Add( CreateSizerWithTextAndLabel( wxT("&Day"), DatePickerPage_Day , &m_day ),
-                    wxALL | wxALIGN_LEFT , 5 );
+    sizerLeft->Add( CreateSizerWithTextAndLabel( wxT("&Day:"), DatePickerPage_Day , &m_day ),
+                    0, wxALL | wxALIGN_RIGHT , 5 );
 
-    sizerLeft->Add( CreateSizerWithTextAndLabel( wxT("&Month"), DatePickerPage_Month , &m_month ),
-                    wxALL | wxALIGN_LEFT , 5 );
+    sizerLeft->Add( CreateSizerWithTextAndLabel( wxT("&Month:"), DatePickerPage_Month , &m_month ),
+                    0, wxALL | wxALIGN_RIGHT , 5 );
 
-    sizerLeft->Add( CreateSizerWithTextAndLabel( wxT("&Year"), DatePickerPage_Year , &m_year ),
-                    wxALL | wxALIGN_LEFT , 5 );
+    sizerLeft->Add( CreateSizerWithTextAndLabel( wxT("&Year:"), DatePickerPage_Year , &m_year ),
+                    0, wxALL | wxALIGN_RIGHT , 5 );
 
     sizerLeft->Add( new wxButton( this, wxID_ANY, wxT("&Set date") ),
-                    wxALL , 5 );
+                    0, wxALL , 5 );
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);

@@ -85,7 +85,11 @@ enum
 };
 
 const wxChar *WidgetsCategories[MAX_PAGES] = {
+#if defined(__WXUNIVERSAL__)
+    wxT("Universal"),
+#else
     wxT("Native"),
+#endif
     wxT("Generic"),
     wxT("Pickers"),
     wxT("Comboboxes"),

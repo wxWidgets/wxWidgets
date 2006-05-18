@@ -47,7 +47,10 @@ class WidgetsPageInfo;
 // INTRODUCING NEW PAGES DON'T FORGET TO ADD ENTRIES TO 'WidgetsCategories'
 enum
 {
+    // On wxUniversal-based build (wxX11, wxMGL, wxMSWUniv, wxGTKUniv, etc.)
+    // 'native' means 'made with wxUniv port renderer'
     NATIVE_PAGE = 0,
+    UNIVERSAL_PAGE = NATIVE_PAGE,
     GENERIC_PAGE,
     PICKER_PAGE,
     COMBO_PAGE,
@@ -61,6 +64,7 @@ enum
 enum
 {
     NATIVE_CTRLS     = 1 << NATIVE_PAGE,
+    UNIVERSAL_CTRLS  = NATIVE_CTRLS,
     GENERIC_CTRLS    = 1 << GENERIC_PAGE,
     PICKER_CTRLS     = 1 << PICKER_PAGE,
     COMBO_CTRLS      = 1 << COMBO_PAGE,
