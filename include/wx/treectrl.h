@@ -42,6 +42,9 @@ public:
 
         // arbitrary default
         m_spacing = 18;
+
+        // quick DoGetBestSize calculation
+        m_quickBestSize = true;
     }
 
     virtual ~wxTreeCtrlBase();
@@ -366,6 +369,10 @@ public:
 
     virtual bool ShouldInheritColours() const { return false; }
 
+    // hint whether to calculate best size quickly or accurately
+    void SetQuickBestSize(bool q) { m_quickBestSize = q; }
+    bool GetQuickBestSize() const { return m_quickBestSize; }
+
 protected:
     virtual wxSize DoGetBestSize() const;
 
@@ -401,6 +408,9 @@ protected:
 
     // spacing between left border and the text
     unsigned int m_spacing;
+
+    // whether full or quick calculation is done in DoGetBestSize
+    bool        m_quickBestSize;
 
 
     DECLARE_NO_COPY_CLASS(wxTreeCtrlBase)

@@ -105,6 +105,7 @@ wxTreebook::Create(wxWindow *parent,
                     wxTR_HIDE_ROOT |
                     wxTR_SINGLE
                  );
+    GetTreeCtrl()->SetQuickBestSize(false); // do full size calculation
     GetTreeCtrl()->AddRoot(wxEmptyString); // label doesn't matter, it's hidden
 
 #ifdef __WXMSW__
@@ -243,6 +244,8 @@ bool wxTreebook::DoInsertSubPage(size_t pagePos,
         return false;
 
     wxTreeItemId newId = tree->AppendItem(parentId, text, imageId);
+
+    tree->InvalidateBestSize();
 
     if ( !newId.IsOk() )
     {

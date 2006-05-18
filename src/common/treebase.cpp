@@ -92,6 +92,27 @@ wxTreeCtrlBase::~wxTreeCtrlBase()
         delete m_imageListState;
 }
 
+static void wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, const wxTreeItemId& id, wxSize& size)
+{
+    wxRect rect;
+    
+    if ( treeCtrl->GetBoundingRect(id, rect, true) )
+    {
+        if ( size.x < rect.x + rect.width )
+            size.x = rect.x + rect.width;
+        if ( size.y < rect.y + rect.height )
+            size.y = rect.y + rect.height;
+    }
+
+    wxTreeItemIdValue cookie;
+    for ( wxTreeItemId item = treeCtrl->GetFirstChild(id, cookie);
+          item.IsOk();
+          item = treeCtrl->GetNextChild(item, cookie) )
+    {
+        wxGetBestTreeSize(treeCtrl, item, size);
+    }
+}
+
 wxSize wxTreeCtrlBase::DoGetBestSize() const
 {
     wxSize size;
@@ -99,23 +120,29 @@ wxSize wxTreeCtrlBase::DoGetBestSize() const
     // this doesn't really compute the total bounding rectangle of all items
     // but a not too bad guess of it which has the advantage of not having to
     // examine all (potentially hundreds or thousands) items in the control
-    for ( wxTreeItemId item = GetRootItem();
-          item.IsOk();
-          item = GetLastChild(item) )
+    
+    if (GetQuickBestSize())
     {
-        wxRect rect;
-
-        // last parameter is "true" to get only the dimensions of the text
-        // label, we don't want to get the entire item width as it's determined
-        // by the current size
-        if ( GetBoundingRect(item, rect, true) )
+        for ( wxTreeItemId item = GetRootItem();
+              item.IsOk();
+              item = GetLastChild(item) )
         {
-            if ( size.x < rect.x + rect.width )
-                size.x = rect.x + rect.width;
-            if ( size.y < rect.y + rect.height )
-                size.y = rect.y + rect.height;
+            wxRect rect;
+
+            // last parameter is "true" to get only the dimensions of the text
+            // label, we don't want to get the entire item width as it's determined
+            // by the current size
+            if ( GetBoundingRect(item, rect, true) )
+            {
+                if ( size.x < rect.x + rect.width )
+                    size.x = rect.x + rect.width;
+                if ( size.y < rect.y + rect.height )
+                    size.y = rect.y + rect.height;
+            }
         }
     }
+    else
+        wxGetBestTreeSize(this, GetRootItem(), size);
 
     // need some minimal size even for empty tree
     if ( !size.x || !size.y )
