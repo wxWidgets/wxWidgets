@@ -736,6 +736,10 @@ value is set to a bitmask of wxTREE_HITTEST_xxx constants.
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    void SetQuickBestSize(bool q);
+    bool GetQuickBestSize() const;
+
 };
 
 
