@@ -269,6 +269,7 @@ void wxFontRefData::MacFindFont()
             {
                 wxMacCFStringHolder cf( m_faceName, wxLocale::GetSystemEncoding() );
                 ATSFontFamilyRef atsfamily = ATSFontFamilyFindFromName( cf , kATSOptionFlagsDefault );
+                wxASSERT_MSG( atsfamily != (ATSFontFamilyRef) -1 , wxT("ATSFontFamilyFindFromName failed") );
                 m_macFontFamily = FMGetFontFamilyFromATSFontFamilyRef( atsfamily );
             }
         }
