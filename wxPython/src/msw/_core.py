@@ -292,6 +292,7 @@ PD_SMOOTH = _core_.PD_SMOOTH
 PD_CAN_SKIP = _core_.PD_CAN_SKIP
 DD_NEW_DIR_BUTTON = _core_.DD_NEW_DIR_BUTTON
 DD_DEFAULT_STYLE = _core_.DD_DEFAULT_STYLE
+DD_CHANGE_DIR = _core_.DD_CHANGE_DIR
 MENU_TEAROFF = _core_.MENU_TEAROFF
 MB_DOCKABLE = _core_.MB_DOCKABLE
 NO_FULL_REPAINT_ON_RESIZE = _core_.NO_FULL_REPAINT_ON_RESIZE
@@ -3330,7 +3331,7 @@ class EvtHandler(Object):
         return _core_.EvtHandler_Connect(*args, **kwargs)
 
     def Disconnect(*args, **kwargs):
-        """Disconnect(self, int id, int lastId=-1, wxEventType eventType=wxEVT_NULL) -> bool"""
+        """Disconnect(self, int id, int lastId=-1, EventType eventType=wxEVT_NULL) -> bool"""
         return _core_.EvtHandler_Disconnect(*args, **kwargs)
 
     def _setOORInfo(*args, **kwargs):
@@ -3454,7 +3455,7 @@ EVENT_PROPAGATE_NONE = _core_.EVENT_PROPAGATE_NONE
 EVENT_PROPAGATE_MAX = _core_.EVENT_PROPAGATE_MAX
 
 def NewEventType(*args):
-  """NewEventType() -> wxEventType"""
+  """NewEventType() -> EventType"""
   return _core_.NewEventType(*args)
 wxEVT_NULL = _core_.wxEVT_NULL
 wxEVT_FIRST = _core_.wxEVT_FIRST
@@ -3766,7 +3767,7 @@ class Event(Object):
     __del__ = lambda self : None;
     def SetEventType(*args, **kwargs):
         """
-        SetEventType(self, wxEventType typ)
+        SetEventType(self, EventType typ)
 
         Sets the specific type of the event.
         """
@@ -3774,7 +3775,7 @@ class Event(Object):
 
     def GetEventType(*args, **kwargs):
         """
-        GetEventType(self) -> wxEventType
+        GetEventType(self) -> EventType
 
         Returns the identifier of the given event type, such as
         ``wxEVT_COMMAND_BUTTON_CLICKED``.
@@ -3954,7 +3955,7 @@ class CommandEvent(Event):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int winid=0) -> CommandEvent
+        __init__(self, EventType commandType=wxEVT_NULL, int winid=0) -> CommandEvent
 
         This event class contains information about command events, which
         originate from a variety of simple controls, as well as menus and
@@ -4028,7 +4029,7 @@ class CommandEvent(Event):
 
     def GetInt(*args, **kwargs):
         """
-        GetInt(self) -> long
+        GetInt(self) -> int
 
         Returns the integer identifier corresponding to a listbox, choice or
         radiobox selection (only if the event was a selection, not a
@@ -4075,7 +4076,7 @@ class NotifyEvent(CommandEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int winid=0) -> NotifyEvent
+        __init__(self, EventType commandType=wxEVT_NULL, int winid=0) -> NotifyEvent
 
         An instance of this class (or one of its derived classes) is sent from
         a control when the control's state is being changed and the control
@@ -4131,7 +4132,7 @@ class ScrollEvent(CommandEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int winid=0, int pos=0, 
+        __init__(self, EventType commandType=wxEVT_NULL, int winid=0, int pos=0, 
             int orient=0) -> ScrollEvent
         """
         _core_.ScrollEvent_swiginit(self,_core_.new_ScrollEvent(*args, **kwargs))
@@ -4174,7 +4175,7 @@ class ScrollWinEvent(Event):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int pos=0, int orient=0) -> ScrollWinEvent
+        __init__(self, EventType commandType=wxEVT_NULL, int pos=0, int orient=0) -> ScrollWinEvent
 
         A wx.ScrollWinEvent holds information about scrolling and is sent from
         scrolling windows.
@@ -4243,7 +4244,7 @@ class MouseEvent(Event):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType mouseType=wxEVT_NULL) -> MouseEvent
+        __init__(self, EventType mouseType=wxEVT_NULL) -> MouseEvent
 
         Constructs a wx.MouseEvent.  Valid event types are:
 
@@ -4757,7 +4758,7 @@ class KeyEvent(Event):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType eventType=wxEVT_NULL) -> KeyEvent
+        __init__(self, EventType eventType=wxEVT_NULL) -> KeyEvent
 
         Construct a new `wx.KeyEvent`.  Valid event types are:
             * 
@@ -5118,7 +5119,7 @@ class FocusEvent(Event):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType type=wxEVT_NULL, int winid=0) -> FocusEvent
+        __init__(self, EventType type=wxEVT_NULL, int winid=0) -> FocusEvent
 
         Constructor
         """
@@ -5193,7 +5194,7 @@ class ActivateEvent(Event):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType type=wxEVT_NULL, bool active=True, int Id=0) -> ActivateEvent
+        __init__(self, EventType type=wxEVT_NULL, bool active=True, int Id=0) -> ActivateEvent
 
         Constructor
         """
@@ -5247,7 +5248,7 @@ class MenuEvent(Event):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType type=wxEVT_NULL, int winid=0, Menu menu=None) -> MenuEvent
+        __init__(self, EventType type=wxEVT_NULL, int winid=0, Menu menu=None) -> MenuEvent
 
         Constructor
         """
@@ -5312,7 +5313,7 @@ class CloseEvent(Event):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType type=wxEVT_NULL, int winid=0) -> CloseEvent
+        __init__(self, EventType type=wxEVT_NULL, int winid=0) -> CloseEvent
 
         Constructor.
         """
@@ -6166,7 +6167,7 @@ class ContextMenuEvent(CommandEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType type=wxEVT_NULL, int winid=0, Point pt=DefaultPosition) -> ContextMenuEvent
+        __init__(self, EventType type=wxEVT_NULL, int winid=0, Point pt=DefaultPosition) -> ContextMenuEvent
 
         Constructor.
         """
@@ -6357,7 +6358,7 @@ class PyEvent(Event):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, int winid=0, wxEventType eventType=wxEVT_NULL) -> PyEvent"""
+        """__init__(self, int winid=0, EventType eventType=wxEVT_NULL) -> PyEvent"""
         _core_.PyEvent_swiginit(self,_core_.new_PyEvent(*args, **kwargs))
         self._SetSelf(self)
 
@@ -6389,7 +6390,7 @@ class PyCommandEvent(CommandEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType eventType=wxEVT_NULL, int id=0) -> PyCommandEvent"""
+        """__init__(self, EventType eventType=wxEVT_NULL, int id=0) -> PyCommandEvent"""
         _core_.PyCommandEvent_swiginit(self,_core_.new_PyCommandEvent(*args, **kwargs))
         self._SetSelf(self)
 
@@ -6416,7 +6417,7 @@ class DateEvent(CommandEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, Window win, DateTime dt, wxEventType type) -> DateEvent"""
+        """__init__(self, Window win, DateTime dt, EventType type) -> DateEvent"""
         _core_.DateEvent_swiginit(self,_core_.new_DateEvent(*args, **kwargs))
     def GetDate(*args, **kwargs):
         """
@@ -7136,6 +7137,15 @@ your Mac."""
         # the OnInit that should be present in the derived class
         self._BootstrapApp()
 
+
+    def OnPreInit(self):
+        """
+        Things that must be done after _BootstrapApp has done its
+        thing, but would be nice if they were already done by the time
+        that OnInit is called.
+        """
+        wx.StockGDI._initStockObjects()
+        
 
     def __del__(self, destroy=wx.PyApp.__del__):
         self.RestoreStdio()  # Just in case the MainLoop was overridden
@@ -10678,10 +10688,13 @@ ControlWithItems_swigregister(ControlWithItems)
 class SizerItem(Object):
     """
     The wx.SizerItem class is used to track the position, size and other
-    attributes of each item managed by a `wx.Sizer`. In normal usage user
-    code should never need to deal directly with a wx.SizerItem, but
-    custom classes derived from `wx.PySizer` will probably need to use the
-    collection of wx.SizerItems held by wx.Sizer when calculating layout.
+    attributes of each item managed by a `wx.Sizer`. It is not usually
+    necessary to use this class because the sizer elements can also be
+    identified by their positions or window or sizer references but
+    sometimes it may be more convenient to use wx.SizerItem directly.
+    Also, custom classes derived from `wx.PySizer` will probably need to
+    use the collection of wx.SizerItems held by wx.Sizer when calculating
+    layout.
 
     :see: `wx.Sizer`, `wx.GBSizerItem`
     """

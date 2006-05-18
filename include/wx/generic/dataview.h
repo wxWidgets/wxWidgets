@@ -20,15 +20,15 @@
 // classes
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDataViewCtrl;
-class WXDLLIMPEXP_CORE wxDataViewMainWindow;
-class WXDLLIMPEXP_CORE wxDataViewHeaderWindow;
+class WXDLLIMPEXP_ADV wxDataViewCtrl;
+class WXDLLIMPEXP_ADV wxDataViewMainWindow;
+class WXDLLIMPEXP_ADV wxDataViewHeaderWindow;
 
 // ---------------------------------------------------------
 // wxDataViewCell
 // ---------------------------------------------------------
 
-class wxDataViewCell: public wxDataViewCellBase
+class WXDLLIMPEXP_ADV wxDataViewCell: public wxDataViewCellBase
 {
 public:
     wxDataViewCell( const wxString &varianttype, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
@@ -76,7 +76,7 @@ protected:
 // wxDataViewCustomCell
 // ---------------------------------------------------------
 
-class wxDataViewCustomCell: public wxDataViewCell
+class WXDLLIMPEXP_ADV wxDataViewCustomCell: public wxDataViewCell
 {
 public:
     wxDataViewCustomCell( const wxString &varianttype = wxT("string"),
@@ -90,7 +90,7 @@ protected:
 // wxDataViewTextCell
 // ---------------------------------------------------------
 
-class wxDataViewTextCell: public wxDataViewCustomCell
+class WXDLLIMPEXP_ADV wxDataViewTextCell: public wxDataViewCustomCell
 {
 public:
     wxDataViewTextCell( const wxString &varianttype = wxT("string"),
@@ -113,7 +113,7 @@ protected:
 // wxDataViewToggleCell
 // ---------------------------------------------------------
 
-class wxDataViewToggleCell: public wxDataViewCustomCell
+class WXDLLIMPEXP_ADV wxDataViewToggleCell: public wxDataViewCustomCell
 {
 public:
     wxDataViewToggleCell( const wxString &varianttype = wxT("bool"),
@@ -137,7 +137,7 @@ protected:
 // wxDataViewProgressCell
 // ---------------------------------------------------------
 
-class wxDataViewProgressCell: public wxDataViewCustomCell
+class WXDLLIMPEXP_ADV wxDataViewProgressCell: public wxDataViewCustomCell
 {
 public:
     wxDataViewProgressCell( const wxString &label = wxEmptyString,
@@ -162,7 +162,7 @@ protected:
 // wxDataViewDateCell
 // ---------------------------------------------------------
 
-class wxDataViewDateCell: public wxDataViewCustomCell
+class WXDLLIMPEXP_ADV wxDataViewDateCell: public wxDataViewCustomCell
 {
 public:
     wxDataViewDateCell( const wxString &varianttype = wxT("datetime"),
@@ -186,7 +186,7 @@ protected:
 // wxDataViewColumn
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDataViewColumn: public wxDataViewColumnBase
+class WXDLLIMPEXP_ADV wxDataViewColumn: public wxDataViewColumnBase
 {
 public:
     wxDataViewColumn( const wxString &title, wxDataViewCell *cell, size_t model_column, 
@@ -213,7 +213,7 @@ protected:
 // wxDataViewCtrl
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDataViewCtrl: public wxDataViewCtrlBase,
+class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase,
                                        public wxScrollHelperNative
 {
 public:

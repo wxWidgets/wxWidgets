@@ -1613,7 +1613,7 @@ class HtmlWindowEvent(_core.NotifyEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType commandType=wxEVT_NULL, int id=0) -> HtmlWindowEvent"""
+        """__init__(self, EventType commandType=wxEVT_NULL, int id=0) -> HtmlWindowEvent"""
         _html.HtmlWindowEvent_swiginit(self,_html.new_HtmlWindowEvent(*args, **kwargs))
     def SetURL(*args, **kwargs):
         """SetURL(self, String url)"""

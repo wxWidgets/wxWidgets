@@ -2689,6 +2689,7 @@ namespace swig {
 
 #include "wx/wxPython/wxPython_int.h"
 #include "wx/wxPython/pyclasses.h"
+#include "wx/wxPython/twoitem.h"
 
 
 #ifndef wxPyUSE_EXPORT
@@ -19071,7 +19072,7 @@ fail:
 SWIGINTERN PyObject *_wrap_CommandEvent_GetInt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxCommandEvent *arg1 = (wxCommandEvent *) 0 ;
-  long result;
+  int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -19085,11 +19086,11 @@ SWIGINTERN PyObject *_wrap_CommandEvent_GetInt(PyObject *SWIGUNUSEDPARM(self), P
   arg1 = reinterpret_cast< wxCommandEvent * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (long)((wxCommandEvent const *)arg1)->GetInt();
+    result = (int)((wxCommandEvent const *)arg1)->GetInt();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_From_long(static_cast< long >(result));
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -55703,6 +55704,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "PD_CAN_SKIP",SWIG_From_int(static_cast< int >(wxPD_CAN_SKIP)));
   SWIG_Python_SetConstant(d, "DD_NEW_DIR_BUTTON",SWIG_From_int(static_cast< int >(wxDD_NEW_DIR_BUTTON)));
   SWIG_Python_SetConstant(d, "DD_DEFAULT_STYLE",SWIG_From_int(static_cast< int >(wxDD_DEFAULT_STYLE)));
+  SWIG_Python_SetConstant(d, "DD_CHANGE_DIR",SWIG_From_int(static_cast< int >(wxDD_CHANGE_DIR)));
   SWIG_Python_SetConstant(d, "MENU_TEAROFF",SWIG_From_int(static_cast< int >(wxMENU_TEAROFF)));
   SWIG_Python_SetConstant(d, "MB_DOCKABLE",SWIG_From_int(static_cast< int >(wxMB_DOCKABLE)));
   SWIG_Python_SetConstant(d, "NO_FULL_REPAINT_ON_RESIZE",SWIG_From_int(static_cast< int >(wxNO_FULL_REPAINT_ON_RESIZE)));

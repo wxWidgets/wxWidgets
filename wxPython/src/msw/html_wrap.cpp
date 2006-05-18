@@ -11804,7 +11804,7 @@ SWIGINTERN PyObject *_wrap_HtmlDCRenderer_Render(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj6 = 0 ;
   PyObject * obj7 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "x",(char *) "y",(char *) "_from",(char *) "dont_render",(char *) "maxHeight",(char *) "choices",(char *) "LCOUNT", NULL 
+    (char *) "self",(char *) "x",(char *) "y",(char *) "from",(char *) "dont_render",(char *) "maxHeight",(char *) "choices",(char *) "LCOUNT", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOOO:HtmlDCRenderer_Render",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;

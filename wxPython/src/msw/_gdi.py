@@ -73,6 +73,9 @@ GDIObject_swigregister(GDIObject)
 
 #---------------------------------------------------------------------------
 
+C2S_NAME = _gdi_.C2S_NAME
+C2S_CSS_SYNTAX = _gdi_.C2S_CSS_SYNTAX
+C2S_HTML_SYNTAX = _gdi_.C2S_HTML_SYNTAX
 class Colour(_core.Object):
     """
     A colour is an object representing a combination of Red, Green, and
@@ -167,6 +170,20 @@ class Colour(_core.Object):
         ``wx.TheColourDatabase``.
         """
         return _gdi_.Colour_SetFromName(*args, **kwargs)
+
+    def GetAsString(*args, **kwargs):
+        """
+        GetAsString(self, long flags=wxC2S_NAME|wxC2S_CSS_SYNTAX) -> String
+
+        Return the colour as a string.  Acceptable flags are:
+
+                    =================== ==================================
+                    wx.C2S_NAME          return colour name, when possible
+                    wx.C2S_CSS_SYNTAX    return colour in rgb(r,g,b) syntax
+                    wx.C2S_HTML_SYNTAX   return colour in #rrggbb syntax     
+                    =================== ==================================
+        """
+        return _gdi_.Colour_GetAsString(*args, **kwargs)
 
     def GetPixel(*args, **kwargs):
         """
@@ -4535,6 +4552,49 @@ class StockGDI(object):
         """GetFont(self, int item) -> Font"""
         return _gdi_.StockGDI_GetFont(*args, **kwargs)
 
+    def _initStockObjects():
+        import wx
+        wx.ITALIC_FONT  = StockGDI.instance().GetFont(StockGDI.FONT_ITALIC)
+        wx.NORMAL_FONT  = StockGDI.instance().GetFont(StockGDI.FONT_NORMAL)
+        wx.SMALL_FONT   = StockGDI.instance().GetFont(StockGDI.FONT_SMALL)
+        wx.SWISS_FONT   = StockGDI.instance().GetFont(StockGDI.FONT_SWISS)
+                                              
+        wx.BLACK_DASHED_PEN  = StockGDI.GetPen(StockGDI.PEN_BLACKDASHED)
+        wx.BLACK_PEN         = StockGDI.GetPen(StockGDI.PEN_BLACK)
+        wx.CYAN_PEN          = StockGDI.GetPen(StockGDI.PEN_CYAN)
+        wx.GREEN_PEN         = StockGDI.GetPen(StockGDI.PEN_GREEN)
+        wx.GREY_PEN          = StockGDI.GetPen(StockGDI.PEN_GREY)
+        wx.LIGHT_GREY_PEN    = StockGDI.GetPen(StockGDI.PEN_LIGHTGREY)
+        wx.MEDIUM_GREY_PEN   = StockGDI.GetPen(StockGDI.PEN_MEDIUMGREY)
+        wx.RED_PEN           = StockGDI.GetPen(StockGDI.PEN_RED)
+        wx.TRANSPARENT_PEN   = StockGDI.GetPen(StockGDI.PEN_TRANSPARENT)
+        wx.WHITE_PEN         = StockGDI.GetPen(StockGDI.PEN_WHITE)
+
+        wx.BLACK_BRUSH        = StockGDI.GetBrush(StockGDI.BRUSH_BLACK)
+        wx.BLUE_BRUSH         = StockGDI.GetBrush(StockGDI.BRUSH_BLUE)
+        wx.CYAN_BRUSH         = StockGDI.GetBrush(StockGDI.BRUSH_CYAN)
+        wx.GREEN_BRUSH        = StockGDI.GetBrush(StockGDI.BRUSH_GREEN)
+        wx.GREY_BRUSH         = StockGDI.GetBrush(StockGDI.BRUSH_GREY)
+        wx.LIGHT_GREY_BRUSH   = StockGDI.GetBrush(StockGDI.BRUSH_LIGHTGREY)
+        wx.MEDIUM_GREY_BRUSH  = StockGDI.GetBrush(StockGDI.BRUSH_MEDIUMGREY)
+        wx.RED_BRUSH          = StockGDI.GetBrush(StockGDI.BRUSH_RED)
+        wx.TRANSPARENT_BRUSH  = StockGDI.GetBrush(StockGDI.BRUSH_TRANSPARENT)
+        wx.WHITE_BRUSH        = StockGDI.GetBrush(StockGDI.BRUSH_WHITE)
+
+        wx.BLACK       = StockGDI.GetColour(StockGDI.COLOUR_BLACK)
+        wx.BLUE        = StockGDI.GetColour(StockGDI.COLOUR_BLUE)
+        wx.CYAN        = StockGDI.GetColour(StockGDI.COLOUR_CYAN)
+        wx.GREEN       = StockGDI.GetColour(StockGDI.COLOUR_GREEN)
+        wx.LIGHT_GREY  = StockGDI.GetColour(StockGDI.COLOUR_LIGHTGREY)
+        wx.RED         = StockGDI.GetColour(StockGDI.COLOUR_RED)
+        wx.WHITE       = StockGDI.GetColour(StockGDI.COLOUR_WHITE)
+
+        wx.CROSS_CURSOR      = StockGDI.GetCursor(StockGDI.CURSOR_CROSS)
+        wx.HOURGLASS_CURSOR  = StockGDI.GetCursor(StockGDI.CURSOR_HOURGLASS)
+        wx.STANDARD_CURSOR   = StockGDI.GetCursor(StockGDI.CURSOR_STANDARD)
+        
+    _initStockObjects = staticmethod(_initStockObjects)
+
 StockGDI_swigregister = _gdi_.StockGDI_swigregister
 StockGDI_swigregister(StockGDI)
 
@@ -4561,75 +4621,6 @@ def StockGDI_GetCursor(*args, **kwargs):
 def StockGDI_GetPen(*args, **kwargs):
   """StockGDI_GetPen(int item) -> Pen"""
   return _gdi_.StockGDI_GetPen(*args, **kwargs)
-
-# This function makes a class used to do delayed initialization of some
-# stock wx objects.  When they are used the first time then an init function
-# is called to make the real instance, which is then used to replace the
-# original instance and class seen by the programmer.
-def _wxPyMakeDelayedInitWrapper(initFunc):
-    class _wxPyStockObjectWrapper(object):
-        def __init__(self, *args):
-            self._args = args
-        def __getattr__(self, name):
-            obj = initFunc(*self._args)
-            self.__class__ = obj.__class__
-            self.__dict__ = obj.__dict__
-            return getattr(self, name)
-        def __str__(self):
-            return self.__getattr__("__str__")()
-        def __repr__(self):
-            return self.__getattr__("__repr__")()
-    return _wxPyStockObjectWrapper
-    
-def _wxPyFontInit(id):
-    return StockGDI.instance().GetFont(id)
-                                              
-_wxPyStockPen    = _wxPyMakeDelayedInitWrapper(StockGDI.GetPen)
-_wxPyStockBrush  = _wxPyMakeDelayedInitWrapper(StockGDI.GetBrush)
-_wxPyStockCursor = _wxPyMakeDelayedInitWrapper(StockGDI.GetCursor)
-_wxPyStockColour = _wxPyMakeDelayedInitWrapper(StockGDI.GetColour)                    
-_wxPyStockFont   = _wxPyMakeDelayedInitWrapper(_wxPyFontInit)
-
-
-ITALIC_FONT  = _wxPyStockCursor(StockGDI.FONT_ITALIC)
-NORMAL_FONT  = _wxPyStockCursor(StockGDI.FONT_NORMAL)
-SMALL_FONT   = _wxPyStockCursor(StockGDI.FONT_SMALL)
-SWISS_FONT   = _wxPyStockCursor(StockGDI.FONT_SWISS)
-                                              
-BLACK_DASHED_PEN  = _wxPyStockPen(StockGDI.PEN_BLACKDASHED)
-BLACK_PEN         = _wxPyStockPen(StockGDI.PEN_BLACK)
-CYAN_PEN          = _wxPyStockPen(StockGDI.PEN_CYAN)
-GREEN_PEN         = _wxPyStockPen(StockGDI.PEN_GREEN)
-GREY_PEN          = _wxPyStockPen(StockGDI.PEN_GREY)
-LIGHT_GREY_PEN    = _wxPyStockPen(StockGDI.PEN_LIGHTGREY)
-MEDIUM_GREY_PEN   = _wxPyStockPen(StockGDI.PEN_MEDIUMGREY)
-RED_PEN           = _wxPyStockPen(StockGDI.PEN_RED)
-TRANSPARENT_PEN   = _wxPyStockPen(StockGDI.PEN_TRANSPARENT)
-WHITE_PEN         = _wxPyStockPen(StockGDI.PEN_WHITE)
-
-BLACK_BRUSH        = _wxPyStockBrush(StockGDI.BRUSH_BLACK)
-BLUE_BRUSH         = _wxPyStockBrush(StockGDI.BRUSH_BLUE)
-CYAN_BRUSH         = _wxPyStockBrush(StockGDI.BRUSH_CYAN)
-GREEN_BRUSH        = _wxPyStockBrush(StockGDI.BRUSH_GREEN)
-GREY_BRUSH         = _wxPyStockBrush(StockGDI.BRUSH_GREY)
-LIGHT_GREY_BRUSH   = _wxPyStockBrush(StockGDI.BRUSH_LIGHTGREY)
-MEDIUM_GREY_BRUSH  = _wxPyStockBrush(StockGDI.BRUSH_MEDIUMGREY)
-RED_BRUSH          = _wxPyStockBrush(StockGDI.BRUSH_RED)
-TRANSPARENT_BRUSH  = _wxPyStockBrush(StockGDI.BRUSH_TRANSPARENT)
-WHITE_BRUSH        = _wxPyStockBrush(StockGDI.BRUSH_WHITE)
-
-BLACK       = _wxPyStockColour(StockGDI.COLOUR_BLACK)
-BLUE        = _wxPyStockColour(StockGDI.COLOUR_BLUE)
-CYAN        = _wxPyStockColour(StockGDI.COLOUR_CYAN)
-GREEN       = _wxPyStockColour(StockGDI.COLOUR_GREEN)
-LIGHT_GREY  = _wxPyStockColour(StockGDI.COLOUR_LIGHTGREY)
-RED         = _wxPyStockColour(StockGDI.COLOUR_RED)
-WHITE       = _wxPyStockColour(StockGDI.COLOUR_WHITE)
-    
-CROSS_CURSOR      = _wxPyStockCursor(StockGDI.CURSOR_CROSS)
-HOURGLASS_CURSOR  = _wxPyStockCursor(StockGDI.CURSOR_HOURGLASS)
-STANDARD_CURSOR   = _wxPyStockCursor(StockGDI.CURSOR_STANDARD)
-    
 
 class GDIObjListBase(object):
     """Proxy of C++ GDIObjListBase class"""
@@ -4772,6 +4763,25 @@ def _wxPyInitTheBrushList(*args):
 def _wxPyInitTheColourDatabase(*args):
   """_wxPyInitTheColourDatabase() -> ColourDatabase"""
   return _gdi_._wxPyInitTheColourDatabase(*args)
+# This function makes a class used to do delayed initialization of some
+# stock wx objects.  When they are used the first time then an init function
+# is called to make the real instance, which is then used to replace the
+# original instance and class seen by the programmer.
+def _wxPyMakeDelayedInitWrapper(initFunc):
+    class _wxPyStockObjectWrapper(object):
+        def __init__(self, *args):
+            self._args = args
+        def __getattr__(self, name):
+            obj = initFunc(*self._args)
+            self.__class__ = obj.__class__
+            self.__dict__ = obj.__dict__
+            return getattr(self, name)
+        def __str__(self):
+            return self.__getattr__("__str__")()
+        def __repr__(self):
+            return self.__getattr__("__repr__")()
+    return _wxPyStockObjectWrapper
+    
 wxTheFontList       = _wxPyMakeDelayedInitWrapper(_wxPyInitTheFontList)()
 wxThePenList        = _wxPyMakeDelayedInitWrapper(_wxPyInitThePenList)()
 wxTheBrushList      = _wxPyMakeDelayedInitWrapper(_wxPyInitTheBrushList)()
@@ -5013,14 +5023,42 @@ class RendererNative(object):
         """
         return _gdi_.RendererNative_DrawDropArrow(*args, **kwargs)
 
-    def DrawCheckButton(*args, **kwargs):
+    def DrawCheckBox(*args, **kwargs):
         """
-        DrawCheckButton(self, Window win, DC dc, Rect rect, int flags=0)
+        DrawCheckBox(self, Window win, DC dc, Rect rect, int flags=0)
 
         Draw a check button.  Flags may use wx.CONTROL_CHECKED,
         wx.CONTROL_UNDETERMINED and wx.CONTROL_CURRENT.
         """
-        return _gdi_.RendererNative_DrawCheckButton(*args, **kwargs)
+        return _gdi_.RendererNative_DrawCheckBox(*args, **kwargs)
+
+    def DrawPushButton(*args, **kwargs):
+        """
+        DrawPushButton(self, Window win, DC dc, Rect rect, int flags=0)
+
+        Draw a blank button.  Flags may be wx.CONTROL_PRESSED, wx.CONTROL_CURRENT and
+        wx.CONTROL_ISDEFAULT
+        """
+        return _gdi_.RendererNative_DrawPushButton(*args, **kwargs)
+
+    def DrawItemSelectionRect(*args, **kwargs):
+        """
+        DrawItemSelectionRect(self, Window win, DC dc, Rect rect, int flags=0)
+
+        Draw rectangle indicating that an item in e.g. a list control has been
+        selected or focused
+
+        The flags parameter may be:
+
+            ====================  ============================================
+            wx.CONTROL_SELECTED   item is selected, e.g. draw background
+            wx.CONTROL_CURRENT    item is the current item, e.g. dotted border
+            wx.CONTROL_FOCUSED    the whole control has focus, e.g. blue
+                                  background vs. grey otherwise
+            ====================  ============================================
+
+        """
+        return _gdi_.RendererNative_DrawItemSelectionRect(*args, **kwargs)
 
     def GetSplitterParams(*args, **kwargs):
         """

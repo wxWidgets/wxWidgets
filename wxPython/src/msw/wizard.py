@@ -78,7 +78,7 @@ class WizardEvent(_core.NotifyEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType type=wxEVT_NULL, int id=-1, bool direction=True, 
+        __init__(self, EventType type=wxEVT_NULL, int id=-1, bool direction=True, 
             WizardPage page=None) -> WizardEvent
         """
         _wizard.WizardEvent_swiginit(self,_wizard.new_WizardEvent(*args, **kwargs))

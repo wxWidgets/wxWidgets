@@ -357,6 +357,8 @@ class TreeListColumnInfo(_core.Object):
             bool shown=True, int alignment=TL_ALIGN_LEFT) -> TreeListColumnInfo
         """
         _gizmos.TreeListColumnInfo_swiginit(self,_gizmos.new_TreeListColumnInfo(*args, **kwargs))
+    __swig_destroy__ = _gizmos.delete_TreeListColumnInfo
+    __del__ = lambda self : None;
     def GetShown(*args, **kwargs):
         """GetShown(self) -> bool"""
         return _gizmos.TreeListColumnInfo_GetShown(*args, **kwargs)

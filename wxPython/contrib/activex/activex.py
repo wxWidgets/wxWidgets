@@ -354,7 +354,7 @@ ActiveXWindow_swigregister(ActiveXWindow)
 
 def RegisterActiveXEvent(*args, **kwargs):
   """
-    RegisterActiveXEvent(String eventName) -> wxEventType
+    RegisterActiveXEvent(String eventName) -> EventType
 
     Creates a standard wx event ID for the given eventName.
     """

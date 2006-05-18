@@ -1535,6 +1535,11 @@ class TextAttr(object):
         """Init(self)"""
         return _controls_.TextAttr_Init(*args, **kwargs)
 
+    def Merge(*args, **kwargs):
+        """Merge(TextAttr base, TextAttr overlay) -> TextAttr"""
+        return _controls_.TextAttr_Merge(*args, **kwargs)
+
+    Merge = staticmethod(Merge)
     def SetTextColour(*args, **kwargs):
         """SetTextColour(self, Colour colText)"""
         return _controls_.TextAttr_SetTextColour(*args, **kwargs)
@@ -1647,6 +1652,10 @@ class TextAttr(object):
 TextAttr_swigregister = _controls_.TextAttr_swigregister
 TextAttr_swigregister(TextAttr)
 TextCtrlNameStr = cvar.TextCtrlNameStr
+
+def TextAttr_Merge(*args, **kwargs):
+  """TextAttr_Merge(TextAttr base, TextAttr overlay) -> TextAttr"""
+  return _controls_.TextAttr_Merge(*args, **kwargs)
 
 def TextAttr_Combine(*args, **kwargs):
   """TextAttr_Combine(TextAttr attr, TextAttr attrDef, TextCtrl text) -> TextAttr"""
@@ -2274,7 +2283,7 @@ class SpinEvent(_core.NotifyEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType commandType=wxEVT_NULL, int winid=0) -> SpinEvent"""
+        """__init__(self, EventType commandType=wxEVT_NULL, int winid=0) -> SpinEvent"""
         _controls_.SpinEvent_swiginit(self,_controls_.new_SpinEvent(*args, **kwargs))
     def GetPosition(*args, **kwargs):
         """GetPosition(self) -> int"""
@@ -2384,6 +2393,14 @@ class RadioBox(_core.Control):
     def GetNextItem(*args, **kwargs):
         """GetNextItem(self, int item, int dir, long style) -> int"""
         return _controls_.RadioBox_GetNextItem(*args, **kwargs)
+
+    def SetItemToolTip(*args, **kwargs):
+        """SetItemToolTip(self, unsigned int item, String text)"""
+        return _controls_.RadioBox_SetItemToolTip(*args, **kwargs)
+
+    def GetItemToolTip(*args, **kwargs):
+        """GetItemToolTip(self, unsigned int item) -> ToolTip"""
+        return _controls_.RadioBox_GetItemToolTip(*args, **kwargs)
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """
@@ -2928,7 +2945,7 @@ class BookCtrlBaseEvent(_core.NotifyEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
+        __init__(self, EventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
             int nOldSel=-1) -> BookCtrlBaseEvent
         """
         _controls_.BookCtrlBaseEvent_swiginit(self,_controls_.new_BookCtrlBaseEvent(*args, **kwargs))
@@ -3062,7 +3079,7 @@ class NotebookEvent(BookCtrlBaseEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
+        __init__(self, EventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
             int nOldSel=-1) -> NotebookEvent
         """
         _controls_.NotebookEvent_swiginit(self,_controls_.new_NotebookEvent(*args, **kwargs))
@@ -3150,7 +3167,7 @@ class ListbookEvent(BookCtrlBaseEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
+        __init__(self, EventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
             int nOldSel=-1) -> ListbookEvent
         """
         _controls_.ListbookEvent_swiginit(self,_controls_.new_ListbookEvent(*args, **kwargs))
@@ -3205,7 +3222,7 @@ class ChoicebookEvent(BookCtrlBaseEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
+        __init__(self, EventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
             int nOldSel=-1) -> ChoicebookEvent
         """
         _controls_.ChoicebookEvent_swiginit(self,_controls_.new_ChoicebookEvent(*args, **kwargs))
@@ -3285,7 +3302,7 @@ class TreebookEvent(BookCtrlBaseEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=NOT_FOUND, 
+        __init__(self, EventType commandType=wxEVT_NULL, int id=0, int nSel=NOT_FOUND, 
             int nOldSel=NOT_FOUND) -> TreebookEvent
         """
         _controls_.TreebookEvent_swiginit(self,_controls_.new_TreebookEvent(*args, **kwargs))
@@ -3345,7 +3362,7 @@ class ToolbookEvent(BookCtrlBaseEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=NOT_FOUND, 
+        __init__(self, EventType commandType=wxEVT_NULL, int id=0, int nSel=NOT_FOUND, 
             int nOldSel=NOT_FOUND) -> ToolbookEvent
         """
         _controls_.ToolbookEvent_swiginit(self,_controls_.new_ToolbookEvent(*args, **kwargs))
@@ -4169,7 +4186,7 @@ class ListEvent(_core.NotifyEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType commandType=wxEVT_NULL, int id=0) -> ListEvent"""
+        """__init__(self, EventType commandType=wxEVT_NULL, int id=0) -> ListEvent"""
         _controls_.ListEvent_swiginit(self,_controls_.new_ListEvent(*args, **kwargs))
     m_code = property(_controls_.ListEvent_m_code_get, _controls_.ListEvent_m_code_set)
     m_oldItemIndex = property(_controls_.ListEvent_m_oldItemIndex_get, _controls_.ListEvent_m_oldItemIndex_set)
@@ -4914,7 +4931,7 @@ class TreeEvent(_core.NotifyEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType commandType=wxEVT_NULL, int id=0) -> TreeEvent"""
+        """__init__(self, EventType commandType=wxEVT_NULL, int id=0) -> TreeEvent"""
         _controls_.TreeEvent_swiginit(self,_controls_.new_TreeEvent(*args, **kwargs))
     def GetItem(*args, **kwargs):
         """GetItem(self) -> TreeItemId"""
@@ -5734,7 +5751,7 @@ class HelpEvent(_core.CommandEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType type=wxEVT_NULL, int winid=0, Point pt=DefaultPosition) -> HelpEvent"""
+        """__init__(self, EventType type=wxEVT_NULL, int winid=0, Point pt=DefaultPosition) -> HelpEvent"""
         _controls_.HelpEvent_swiginit(self,_controls_.new_HelpEvent(*args, **kwargs))
     def GetPosition(*args, **kwargs):
         """

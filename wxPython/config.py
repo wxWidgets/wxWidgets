@@ -178,7 +178,7 @@ CONTRIBS_INC = ""  # A dir to add as an -I flag when compiling the contribs
 
 # Some MSW build settings
 
-MONOLITHIC = 1     # The core wxWidgets lib can be built as either a
+MONOLITHIC = 0     # The core wxWidgets lib can be built as either a
                    # single monolithic DLL or as a collection of DLLs.
                    # This flag controls which set of libs will be used
                    # on Windows.  (For other platforms it is automatic

@@ -18906,7 +18906,7 @@ SWIGINTERN PyObject *_wrap_StyledTextCtrl_DoDragOver(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "x",(char *) "y",(char *) "_def", NULL 
+    (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:StyledTextCtrl_DoDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;

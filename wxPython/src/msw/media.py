@@ -70,7 +70,7 @@ class MediaEvent(_core.NotifyEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType commandType=wxEVT_NULL, int id=0) -> MediaEvent"""
+        """__init__(self, EventType commandType=wxEVT_NULL, int id=0) -> MediaEvent"""
         _media.MediaEvent_swiginit(self,_media.new_MediaEvent(*args, **kwargs))
 MediaEvent_swigregister = _media.MediaEvent_swigregister
 MediaEvent_swigregister(MediaEvent)

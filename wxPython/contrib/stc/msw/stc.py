@@ -5176,7 +5176,7 @@ class StyledTextEvent(_core.CommandEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType commandType=0, int id=0) -> StyledTextEvent"""
+        """__init__(self, EventType commandType=0, int id=0) -> StyledTextEvent"""
         _stc.StyledTextEvent_swiginit(self,_stc.new_StyledTextEvent(*args, **kwargs))
     __swig_destroy__ = _stc.delete_StyledTextEvent
     __del__ = lambda self : None;

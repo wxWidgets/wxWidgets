@@ -516,9 +516,9 @@ void MyFrame::InitWithIconItems(bool withText, bool sameIcon)
     m_listCtrl->SetImageList(m_imageListNormal, wxIMAGE_LIST_NORMAL);
     m_listCtrl->SetImageList(m_imageListSmall, wxIMAGE_LIST_SMALL);
 
-    for ( int i = 0; i < NUM_ICONS; i++ )
+    for ( int i = 0; i < NUM_ICONS*20; i++ )
     {
-        int image = sameIcon ? 0 : i;
+        int image = i % (NUM_ICONS);
 
         if ( withText )
         {

@@ -173,7 +173,7 @@ class XmlResource(_core.Object):
         return _xrc.XmlResource_AttachUnknownControl(*args, **kwargs)
 
     def GetXRCID(*args, **kwargs):
-        """GetXRCID(String str_id) -> int"""
+        """GetXRCID(wxChar str_id, int value_if_not_found=ID_NONE) -> int"""
         return _xrc.XmlResource_GetXRCID(*args, **kwargs)
 
     GetXRCID = staticmethod(GetXRCID)
@@ -225,7 +225,7 @@ def XmlResource_AddSubclassFactory(*args, **kwargs):
   return _xrc.XmlResource_AddSubclassFactory(*args, **kwargs)
 
 def XmlResource_GetXRCID(*args, **kwargs):
-  """XmlResource_GetXRCID(String str_id) -> int"""
+  """XmlResource_GetXRCID(wxChar str_id, int value_if_not_found=ID_NONE) -> int"""
   return _xrc.XmlResource_GetXRCID(*args, **kwargs)
 
 def XmlResource_Get(*args):
@@ -236,8 +236,8 @@ def XmlResource_Set(*args, **kwargs):
   """XmlResource_Set(XmlResource res) -> XmlResource"""
   return _xrc.XmlResource_Set(*args, **kwargs)
 
-def XRCID(str_id):
-    return XmlResource_GetXRCID(str_id)
+def XRCID(str_id, value_if_not_found = wx.ID_NONE):
+    return XmlResource_GetXRCID(str_id, value_if_not_found)
 
 def XRCCTRL(window, str_id, *ignoreargs):
     return window.FindWindowById(XRCID(str_id))

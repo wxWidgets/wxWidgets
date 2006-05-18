@@ -2701,6 +2701,16 @@ namespace swig {
 
  static const wxString wxPyEmptyString(wxEmptyString); 
 
+  #define SWIG_From_long   PyInt_FromLong 
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_int  (int value)
+{    
+  return SWIG_From_long  (value);
+}
+
+
 #include <limits.h>
 #ifndef LLONG_MIN
 # define LLONG_MIN	LONG_LONG_MIN
@@ -2751,9 +2761,6 @@ SWIG_AsVal_unsigned_SS_char (PyObject * obj, unsigned char *val)
   }  
   return res;
 }
-
-
-  #define SWIG_From_long   PyInt_FromLong 
 
 
 SWIGINTERNINLINE PyObject* 
@@ -2820,13 +2827,6 @@ SWIG_AsVal_int (PyObject * obj, int *val)
     }
   }  
   return res;
-}
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_int  (int value)
-{    
-  return SWIG_From_long  (value);
 }
 
 SWIGINTERN PyObject *wxPen_GetDashes(wxPen *self){
@@ -3732,6 +3732,53 @@ fail:
     if (temp2)
     delete arg2;
   }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Colour_GetAsString(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxColour *arg1 = (wxColour *) 0 ;
+  long arg2 = (long) wxC2S_NAME|wxC2S_CSS_SYNTAX ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "flags", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Colour_GetAsString",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxColour, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Colour_GetAsString" "', expected argument " "1"" of type '" "wxColour const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxColour * >(argp1);
+  if (obj1) {
+    ecode2 = SWIG_AsVal_long(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Colour_GetAsString" "', expected argument " "2"" of type '" "long""'");
+    } 
+    arg2 = static_cast< long >(val2);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxColour const *)arg1)->GetAsString(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
   return NULL;
 }
 
@@ -25373,7 +25420,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_RendererNative_DrawCheckButton(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_RendererNative_DrawCheckBox(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxRendererNative *arg1 = (wxRendererNative *) 0 ;
   wxWindow *arg2 = (wxWindow *) 0 ;
@@ -25398,23 +25445,23 @@ SWIGINTERN PyObject *_wrap_RendererNative_DrawCheckButton(PyObject *SWIGUNUSEDPA
     (char *) "self",(char *) "win",(char *) "dc",(char *) "rect",(char *) "flags", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:RendererNative_DrawCheckButton",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:RendererNative_DrawCheckBox",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRendererNative, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RendererNative_DrawCheckButton" "', expected argument " "1"" of type '" "wxRendererNative *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RendererNative_DrawCheckBox" "', expected argument " "1"" of type '" "wxRendererNative *""'"); 
   }
   arg1 = reinterpret_cast< wxRendererNative * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RendererNative_DrawCheckButton" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RendererNative_DrawCheckBox" "', expected argument " "2"" of type '" "wxWindow *""'"); 
   }
   arg2 = reinterpret_cast< wxWindow * >(argp2);
   res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxDC,  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "RendererNative_DrawCheckButton" "', expected argument " "3"" of type '" "wxDC &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "RendererNative_DrawCheckBox" "', expected argument " "3"" of type '" "wxDC &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RendererNative_DrawCheckButton" "', expected argument " "3"" of type '" "wxDC &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RendererNative_DrawCheckBox" "', expected argument " "3"" of type '" "wxDC &""'"); 
   }
   arg3 = reinterpret_cast< wxDC * >(argp3);
   {
@@ -25424,13 +25471,149 @@ SWIGINTERN PyObject *_wrap_RendererNative_DrawCheckButton(PyObject *SWIGUNUSEDPA
   if (obj4) {
     ecode5 = SWIG_AsVal_int(obj4, &val5);
     if (!SWIG_IsOK(ecode5)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "RendererNative_DrawCheckButton" "', expected argument " "5"" of type '" "int""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "RendererNative_DrawCheckBox" "', expected argument " "5"" of type '" "int""'");
     } 
     arg5 = static_cast< int >(val5);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->DrawCheckButton(arg2,*arg3,(wxRect const &)*arg4,arg5);
+    (arg1)->DrawCheckBox(arg2,*arg3,(wxRect const &)*arg4,arg5);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RendererNative_DrawPushButton(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxRendererNative *arg1 = (wxRendererNative *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  wxDC *arg3 = 0 ;
+  wxRect *arg4 = 0 ;
+  int arg5 = (int) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  wxRect temp4 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "win",(char *) "dc",(char *) "rect",(char *) "flags", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:RendererNative_DrawPushButton",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRendererNative, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RendererNative_DrawPushButton" "', expected argument " "1"" of type '" "wxRendererNative *""'"); 
+  }
+  arg1 = reinterpret_cast< wxRendererNative * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RendererNative_DrawPushButton" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxDC,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "RendererNative_DrawPushButton" "', expected argument " "3"" of type '" "wxDC &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RendererNative_DrawPushButton" "', expected argument " "3"" of type '" "wxDC &""'"); 
+  }
+  arg3 = reinterpret_cast< wxDC * >(argp3);
+  {
+    arg4 = &temp4;
+    if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
+  }
+  if (obj4) {
+    ecode5 = SWIG_AsVal_int(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "RendererNative_DrawPushButton" "', expected argument " "5"" of type '" "int""'");
+    } 
+    arg5 = static_cast< int >(val5);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DrawPushButton(arg2,*arg3,(wxRect const &)*arg4,arg5);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RendererNative_DrawItemSelectionRect(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxRendererNative *arg1 = (wxRendererNative *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  wxDC *arg3 = 0 ;
+  wxRect *arg4 = 0 ;
+  int arg5 = (int) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  wxRect temp4 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "win",(char *) "dc",(char *) "rect",(char *) "flags", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:RendererNative_DrawItemSelectionRect",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRendererNative, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RendererNative_DrawItemSelectionRect" "', expected argument " "1"" of type '" "wxRendererNative *""'"); 
+  }
+  arg1 = reinterpret_cast< wxRendererNative * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RendererNative_DrawItemSelectionRect" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxDC,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "RendererNative_DrawItemSelectionRect" "', expected argument " "3"" of type '" "wxDC &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RendererNative_DrawItemSelectionRect" "', expected argument " "3"" of type '" "wxDC &""'"); 
+  }
+  arg3 = reinterpret_cast< wxDC * >(argp3);
+  {
+    arg4 = &temp4;
+    if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
+  }
+  if (obj4) {
+    ecode5 = SWIG_AsVal_int(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "RendererNative_DrawItemSelectionRect" "', expected argument " "5"" of type '" "int""'");
+    } 
+    arg5 = static_cast< int >(val5);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DrawItemSelectionRect(arg2,*arg3,(wxRect const &)*arg4,arg5);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -25625,6 +25808,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Colour_Set", (PyCFunction) _wrap_Colour_Set, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Colour_SetRGB", (PyCFunction) _wrap_Colour_SetRGB, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Colour_SetFromName", (PyCFunction) _wrap_Colour_SetFromName, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Colour_GetAsString", (PyCFunction) _wrap_Colour_GetAsString, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Colour_GetPixel", (PyCFunction)_wrap_Colour_GetPixel, METH_O, NULL},
 	 { (char *)"Colour___eq__", (PyCFunction) _wrap_Colour___eq__, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Colour___ne__", (PyCFunction) _wrap_Colour___ne__, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -26236,7 +26420,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RendererNative_DrawSplitterSash", (PyCFunction) _wrap_RendererNative_DrawSplitterSash, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RendererNative_DrawComboBoxDropButton", (PyCFunction) _wrap_RendererNative_DrawComboBoxDropButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RendererNative_DrawDropArrow", (PyCFunction) _wrap_RendererNative_DrawDropArrow, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"RendererNative_DrawCheckButton", (PyCFunction) _wrap_RendererNative_DrawCheckButton, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_DrawCheckBox", (PyCFunction) _wrap_RendererNative_DrawCheckBox, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_DrawPushButton", (PyCFunction) _wrap_RendererNative_DrawPushButton, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RendererNative_DrawItemSelectionRect", (PyCFunction) _wrap_RendererNative_DrawItemSelectionRect, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RendererNative_GetSplitterParams", (PyCFunction) _wrap_RendererNative_GetSplitterParams, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RendererNative_Get", (PyCFunction)_wrap_RendererNative_Get, METH_NOARGS, NULL},
 	 { (char *)"RendererNative_GetGeneric", (PyCFunction)_wrap_RendererNative_GetGeneric, METH_NOARGS, NULL},
@@ -27703,6 +27889,9 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_InstallConstants(d,swig_const_table);
   
   
+  SWIG_Python_SetConstant(d, "C2S_NAME",SWIG_From_int(static_cast< int >(wxC2S_NAME)));
+  SWIG_Python_SetConstant(d, "C2S_CSS_SYNTAX",SWIG_From_int(static_cast< int >(wxC2S_CSS_SYNTAX)));
+  SWIG_Python_SetConstant(d, "C2S_HTML_SYNTAX",SWIG_From_int(static_cast< int >(wxC2S_HTML_SYNTAX)));
   SWIG_Python_SetConstant(d, "OutRegion",SWIG_From_int(static_cast< int >(wxOutRegion)));
   SWIG_Python_SetConstant(d, "PartRegion",SWIG_From_int(static_cast< int >(wxPartRegion)));
   SWIG_Python_SetConstant(d, "InRegion",SWIG_From_int(static_cast< int >(wxInRegion)));

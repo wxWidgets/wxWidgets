@@ -5664,7 +5664,7 @@ SWIGINTERN PyObject *_wrap_IEHtmlWindowBase_LoadStream(PyObject *SWIGUNUSEDPARM(
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "_is", NULL 
+    (char *) "self",(char *) "is", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:IEHtmlWindowBase_LoadStream",kwnames,&obj0,&obj1)) SWIG_fail;

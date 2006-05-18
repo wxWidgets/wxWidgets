@@ -5225,7 +5225,7 @@ SWIGINTERN PyObject *_wrap_StripMenuCodes(PyObject *SWIGUNUSEDPARM(self), PyObje
   bool temp1 = false ;
   PyObject * obj0 = 0 ;
   char *  kwnames[] = {
-    (char *) "_in", NULL 
+    (char *) "in", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StripMenuCodes",kwnames,&obj0)) SWIG_fail;
@@ -32929,7 +32929,7 @@ SWIGINTERN PyObject *_wrap_DropTarget_OnEnter(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "x",(char *) "y",(char *) "_def", NULL 
+    (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DropTarget_OnEnter",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
@@ -32986,7 +32986,7 @@ SWIGINTERN PyObject *_wrap_DropTarget_OnDragOver(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "x",(char *) "y",(char *) "_def", NULL 
+    (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DropTarget_OnDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
@@ -33346,7 +33346,7 @@ SWIGINTERN PyObject *_wrap_TextDropTarget_OnEnter(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "x",(char *) "y",(char *) "_def", NULL 
+    (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:TextDropTarget_OnEnter",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
@@ -33403,7 +33403,7 @@ SWIGINTERN PyObject *_wrap_TextDropTarget_OnDragOver(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "x",(char *) "y",(char *) "_def", NULL 
+    (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:TextDropTarget_OnDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
@@ -33537,7 +33537,7 @@ SWIGINTERN PyObject *_wrap_TextDropTarget_OnData(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "x",(char *) "y",(char *) "_def", NULL 
+    (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:TextDropTarget_OnData",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
@@ -33734,7 +33734,7 @@ SWIGINTERN PyObject *_wrap_FileDropTarget_OnEnter(PyObject *SWIGUNUSEDPARM(self)
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "x",(char *) "y",(char *) "_def", NULL 
+    (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FileDropTarget_OnEnter",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
@@ -33791,7 +33791,7 @@ SWIGINTERN PyObject *_wrap_FileDropTarget_OnDragOver(PyObject *SWIGUNUSEDPARM(se
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "x",(char *) "y",(char *) "_def", NULL 
+    (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FileDropTarget_OnDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
@@ -33925,7 +33925,7 @@ SWIGINTERN PyObject *_wrap_FileDropTarget_OnData(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "x",(char *) "y",(char *) "_def", NULL 
+    (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FileDropTarget_OnData",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;

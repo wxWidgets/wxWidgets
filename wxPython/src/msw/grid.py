@@ -1149,15 +1149,15 @@ class Grid(_windows.ScrolledWindow):
         """
         return _grid.Grid_Create(*args, **kwargs)
 
-    wxGridSelectCells = _grid.Grid_wxGridSelectCells
-    wxGridSelectRows = _grid.Grid_wxGridSelectRows
-    wxGridSelectColumns = _grid.Grid_wxGridSelectColumns
+    GridSelectCells = _grid.Grid_GridSelectCells
+    GridSelectRows = _grid.Grid_GridSelectRows
+    GridSelectColumns = _grid.Grid_GridSelectColumns
     SelectCells =   wxGridSelectCells
     SelectRows =    wxGridSelectRows
     SelectColumns = wxGridSelectColumns
 
     def CreateGrid(*args, **kwargs):
-        """CreateGrid(self, int numRows, int numCols, WXGRIDSELECTIONMODES selmode=wxGridSelectCells) -> bool"""
+        """CreateGrid(self, int numRows, int numCols, WXGRIDSELECTIONMODES selmode=GridSelectCells) -> bool"""
         return _grid.Grid_CreateGrid(*args, **kwargs)
 
     def SetSelectionMode(*args, **kwargs):
@@ -1185,7 +1185,7 @@ class Grid(_windows.ScrolledWindow):
         return _grid.Grid_GetTable(*args, **kwargs)
 
     def SetTable(*args, **kwargs):
-        """SetTable(self, GridTableBase table, bool takeOwnership=False, WXGRIDSELECTIONMODES selmode=wxGridSelectCells) -> bool"""
+        """SetTable(self, GridTableBase table, bool takeOwnership=False, WXGRIDSELECTIONMODES selmode=GridSelectCells) -> bool"""
         return _grid.Grid_SetTable(*args, **kwargs)
 
     def ClearGrid(*args, **kwargs):
@@ -1999,7 +1999,7 @@ class GridEvent(_core.NotifyEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, int id, wxEventType type, Grid obj, int row=-1, int col=-1, 
+        __init__(self, int id, EventType type, Grid obj, int row=-1, int col=-1, 
             int x=-1, int y=-1, bool sel=True, bool control=False, 
             bool shift=False, bool alt=False, 
             bool meta=False) -> GridEvent
@@ -2050,7 +2050,7 @@ class GridSizeEvent(_core.NotifyEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, int id, wxEventType type, Grid obj, int rowOrCol=-1, 
+        __init__(self, int id, EventType type, Grid obj, int rowOrCol=-1, 
             int x=-1, int y=-1, bool control=False, bool shift=False, 
             bool alt=False, bool meta=False) -> GridSizeEvent
         """
@@ -2092,10 +2092,10 @@ class GridRangeSelectEvent(_core.NotifyEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, int id, wxEventType type, Grid obj, GridCellCoords topLeft, 
+        __init__(self, int id, EventType type, Grid obj, GridCellCoords topLeft, 
             GridCellCoords bottomRight, bool sel=True, 
-            bool control=False, bool shift=False, 
-            bool alt=False, bool meta=False) -> GridRangeSelectEvent
+            bool control=False, bool shift=False, bool alt=False, 
+            bool meta=False) -> GridRangeSelectEvent
         """
         _grid.GridRangeSelectEvent_swiginit(self,_grid.new_GridRangeSelectEvent(*args, **kwargs))
     def GetTopLeftCoords(*args, **kwargs):
@@ -2155,7 +2155,7 @@ class GridEditorCreatedEvent(_core.CommandEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, int id, wxEventType type, Object obj, int row, int col, 
+        __init__(self, int id, EventType type, Object obj, int row, int col, 
             Control ctrl) -> GridEditorCreatedEvent
         """
         _grid.GridEditorCreatedEvent_swiginit(self,_grid.new_GridEditorCreatedEvent(*args, **kwargs))

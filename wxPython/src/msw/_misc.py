@@ -908,6 +908,7 @@ class BusyInfo(_core.Object):
         _misc_.BusyInfo_swiginit(self,_misc_.new_BusyInfo(*args, **kwargs))
     __swig_destroy__ = _misc_.delete_BusyInfo
     __del__ = lambda self : None;
+    def Destroy(self): pass 
 BusyInfo_swigregister = _misc_.BusyInfo_swigregister
 BusyInfo_swigregister(BusyInfo)
 
@@ -1224,7 +1225,7 @@ class Log(object):
 
     EnableLogging = staticmethod(EnableLogging)
     def OnLog(*args, **kwargs):
-        """OnLog(wxLogLevel level, wxChar szString, time_t t)"""
+        """OnLog(LogLevel level, wxChar szString, time_t t)"""
         return _misc_.Log_OnLog(*args, **kwargs)
 
     OnLog = staticmethod(OnLog)
@@ -1263,7 +1264,7 @@ class Log(object):
 
     SetVerbose = staticmethod(SetVerbose)
     def SetLogLevel(*args, **kwargs):
-        """SetLogLevel(wxLogLevel logLevel)"""
+        """SetLogLevel(LogLevel logLevel)"""
         return _misc_.Log_SetLogLevel(*args, **kwargs)
 
     SetLogLevel = staticmethod(SetLogLevel)
@@ -1273,7 +1274,7 @@ class Log(object):
 
     DontCreateOnDemand = staticmethod(DontCreateOnDemand)
     def SetTraceMask(*args, **kwargs):
-        """SetTraceMask(wxTraceMask ulMask)"""
+        """SetTraceMask(TraceMask ulMask)"""
         return _misc_.Log_SetTraceMask(*args, **kwargs)
 
     SetTraceMask = staticmethod(SetTraceMask)
@@ -1308,7 +1309,7 @@ class Log(object):
 
     GetVerbose = staticmethod(GetVerbose)
     def GetTraceMask(*args, **kwargs):
-        """GetTraceMask() -> wxTraceMask"""
+        """GetTraceMask() -> TraceMask"""
         return _misc_.Log_GetTraceMask(*args, **kwargs)
 
     GetTraceMask = staticmethod(GetTraceMask)
@@ -1318,7 +1319,7 @@ class Log(object):
 
     IsAllowedTraceMask = staticmethod(IsAllowedTraceMask)
     def GetLogLevel(*args, **kwargs):
-        """GetLogLevel() -> wxLogLevel"""
+        """GetLogLevel() -> LogLevel"""
         return _misc_.Log_GetLogLevel(*args, **kwargs)
 
     GetLogLevel = staticmethod(GetLogLevel)
@@ -1350,7 +1351,7 @@ def Log_EnableLogging(*args, **kwargs):
   return _misc_.Log_EnableLogging(*args, **kwargs)
 
 def Log_OnLog(*args, **kwargs):
-  """Log_OnLog(wxLogLevel level, wxChar szString, time_t t)"""
+  """Log_OnLog(LogLevel level, wxChar szString, time_t t)"""
   return _misc_.Log_OnLog(*args, **kwargs)
 
 def Log_FlushActive(*args):
@@ -1378,7 +1379,7 @@ def Log_SetVerbose(*args, **kwargs):
   return _misc_.Log_SetVerbose(*args, **kwargs)
 
 def Log_SetLogLevel(*args, **kwargs):
-  """Log_SetLogLevel(wxLogLevel logLevel)"""
+  """Log_SetLogLevel(LogLevel logLevel)"""
   return _misc_.Log_SetLogLevel(*args, **kwargs)
 
 def Log_DontCreateOnDemand(*args):
@@ -1386,7 +1387,7 @@ def Log_DontCreateOnDemand(*args):
   return _misc_.Log_DontCreateOnDemand(*args)
 
 def Log_SetTraceMask(*args, **kwargs):
-  """Log_SetTraceMask(wxTraceMask ulMask)"""
+  """Log_SetTraceMask(TraceMask ulMask)"""
   return _misc_.Log_SetTraceMask(*args, **kwargs)
 
 def Log_AddTraceMask(*args, **kwargs):
@@ -1414,7 +1415,7 @@ def Log_GetVerbose(*args):
   return _misc_.Log_GetVerbose(*args)
 
 def Log_GetTraceMask(*args):
-  """Log_GetTraceMask() -> wxTraceMask"""
+  """Log_GetTraceMask() -> TraceMask"""
   return _misc_.Log_GetTraceMask(*args)
 
 def Log_IsAllowedTraceMask(*args, **kwargs):
@@ -1422,7 +1423,7 @@ def Log_IsAllowedTraceMask(*args, **kwargs):
   return _misc_.Log_IsAllowedTraceMask(*args, **kwargs)
 
 def Log_GetLogLevel(*args):
-  """Log_GetLogLevel() -> wxLogLevel"""
+  """Log_GetLogLevel() -> LogLevel"""
   return _misc_.Log_GetLogLevel(*args)
 
 def Log_GetTimestamp(*args):
@@ -1980,7 +1981,7 @@ class JoystickEvent(_core.Event):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType type=wxEVT_NULL, int state=0, int joystick=JOYSTICK1, 
+        __init__(self, EventType type=wxEVT_NULL, int state=0, int joystick=JOYSTICK1, 
             int change=0) -> JoystickEvent
         """
         _misc_.JoystickEvent_swiginit(self,_misc_.new_JoystickEvent(*args, **kwargs))

@@ -7957,23 +7957,24 @@ void wxGrid::ShowCellEditControl()
 
             editor->SetCellAttr( attr );
             editor->SetSize( rect );
-            editor->GetControl()->Move(
-                editor->GetControl()->GetPosition().x + nXMove,
-                editor->GetControl()->GetPosition().y );
+            if (nXMove != 0)
+                editor->GetControl()->Move(
+                    editor->GetControl()->GetPosition().x + nXMove,
+                    editor->GetControl()->GetPosition().y );
             editor->Show( true, attr );
 
-            int colXPos = 0;
-            for (int i = 0; i < m_currentCellCoords.GetCol(); i++)
-            {
-                colXPos += GetColSize( i );
-            }
+            int colXPos = GetColLeft(col);
+//            for (int i = 0; i < m_currentCellCoords.GetCol(); i++)
+//            {
+//                colXPos += GetColSize( i );
+//            }
 
-            int xUnit = 1, yUnit = 1;
-            GetScrollPixelsPerUnit( &xUnit, &yUnit );
-            if (m_currentCellCoords.GetCol() != 0)
-                Scroll( colXPos / xUnit - 1, GetScrollPos( wxVERTICAL ) );
-            else
-                Scroll( colXPos / xUnit, GetScrollPos( wxVERTICAL ) );
+//             int xUnit = 1, yUnit = 1;
+//             GetScrollPixelsPerUnit( &xUnit, &yUnit );
+//             if (col != 0)
+//                 Scroll( colXPos / xUnit - 1, GetScrollPos( wxVERTICAL ) );
+//             else
+//                 Scroll( colXPos / xUnit, GetScrollPos( wxVERTICAL ) );
 
             // recalc dimensions in case we need to
             // expand the scrolled window to account for editor

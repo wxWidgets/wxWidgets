@@ -167,7 +167,7 @@ class CalendarEvent(_core.DateEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, CalendarCtrl cal, wxEventType type) -> CalendarEvent"""
+        """__init__(self, CalendarCtrl cal, EventType type) -> CalendarEvent"""
         _calendar.CalendarEvent_swiginit(self,_calendar.new_CalendarEvent(*args, **kwargs))
     def SetWeekDay(*args, **kwargs):
         """SetWeekDay(self, int wd)"""

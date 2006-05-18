@@ -5137,6 +5137,34 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_delete_TreeListColumnInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxTreeListColumnInfo *arg1 = (wxTreeListColumnInfo *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxTreeListColumnInfo, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_TreeListColumnInfo" "', expected argument " "1"" of type '" "wxTreeListColumnInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxTreeListColumnInfo * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_TreeListColumnInfo_GetShown(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxTreeListColumnInfo *arg1 = (wxTreeListColumnInfo *) 0 ;
@@ -7482,7 +7510,6 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_SetItemData(PyObject *SWIGUNUSEDPARM(sel
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  void *argp3 = 0 ;
   int res3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -7505,11 +7532,10 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_SetItemData(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeListCtrl_SetItemData" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
   }
   arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_wxPyTreeItemData, 0 |  0 );
+  res3 = SWIG_ConvertPtr(obj2, SWIG_as_voidptrptr(&arg3), SWIGTYPE_p_wxPyTreeItemData, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "TreeListCtrl_SetItemData" "', expected argument " "3"" of type '" "wxPyTreeItemData *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "TreeListCtrl_SetItemData" "', expected argument " "3"" of type '" "wxPyTreeItemData *""'");
   }
-  arg3 = reinterpret_cast< wxPyTreeItemData * >(argp3);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxPyTreeListCtrl_SetItemData(arg1,(wxTreeItemId const &)*arg2,arg3);
@@ -8817,7 +8843,6 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_AddRoot(PyObject *SWIGUNUSEDPARM(self), 
   int ecode3 = 0 ;
   int val4 ;
   int ecode4 = 0 ;
-  void *argp5 = 0 ;
   int res5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -8854,11 +8879,10 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_AddRoot(PyObject *SWIGUNUSEDPARM(self), 
     arg4 = static_cast< int >(val4);
   }
   if (obj4) {
-    res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_wxPyTreeItemData, 0 |  0 );
+    res5 = SWIG_ConvertPtr(obj4, SWIG_as_voidptrptr(&arg5), SWIGTYPE_p_wxPyTreeItemData, SWIG_POINTER_DISOWN |  0 );
     if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "TreeListCtrl_AddRoot" "', expected argument " "5"" of type '" "wxPyTreeItemData *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "TreeListCtrl_AddRoot" "', expected argument " "5"" of type '" "wxPyTreeItemData *""'");
     }
-    arg5 = reinterpret_cast< wxPyTreeItemData * >(argp5);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8899,7 +8923,6 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_PrependItem(PyObject *SWIGUNUSEDPARM(sel
   int ecode4 = 0 ;
   int val5 ;
   int ecode5 = 0 ;
-  void *argp6 = 0 ;
   int res6 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -8945,11 +8968,10 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_PrependItem(PyObject *SWIGUNUSEDPARM(sel
     arg5 = static_cast< int >(val5);
   }
   if (obj5) {
-    res6 = SWIG_ConvertPtr(obj5, &argp6,SWIGTYPE_p_wxPyTreeItemData, 0 |  0 );
+    res6 = SWIG_ConvertPtr(obj5, SWIG_as_voidptrptr(&arg6), SWIGTYPE_p_wxPyTreeItemData, SWIG_POINTER_DISOWN |  0 );
     if (!SWIG_IsOK(res6)) {
-      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "TreeListCtrl_PrependItem" "', expected argument " "6"" of type '" "wxPyTreeItemData *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "TreeListCtrl_PrependItem" "', expected argument " "6"" of type '" "wxPyTreeItemData *""'");
     }
-    arg6 = reinterpret_cast< wxPyTreeItemData * >(argp6);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8993,7 +9015,6 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_InsertItem(PyObject *SWIGUNUSEDPARM(self
   int ecode5 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
-  void *argp7 = 0 ;
   int res7 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9048,11 +9069,10 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_InsertItem(PyObject *SWIGUNUSEDPARM(self
     arg6 = static_cast< int >(val6);
   }
   if (obj6) {
-    res7 = SWIG_ConvertPtr(obj6, &argp7,SWIGTYPE_p_wxPyTreeItemData, 0 |  0 );
+    res7 = SWIG_ConvertPtr(obj6, SWIG_as_voidptrptr(&arg7), SWIGTYPE_p_wxPyTreeItemData, SWIG_POINTER_DISOWN |  0 );
     if (!SWIG_IsOK(res7)) {
-      SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "TreeListCtrl_InsertItem" "', expected argument " "7"" of type '" "wxPyTreeItemData *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "TreeListCtrl_InsertItem" "', expected argument " "7"" of type '" "wxPyTreeItemData *""'");
     }
-    arg7 = reinterpret_cast< wxPyTreeItemData * >(argp7);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9096,7 +9116,6 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_InsertItemBefore(PyObject *SWIGUNUSEDPAR
   int ecode5 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
-  void *argp7 = 0 ;
   int res7 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9148,11 +9167,10 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_InsertItemBefore(PyObject *SWIGUNUSEDPAR
     arg6 = static_cast< int >(val6);
   }
   if (obj6) {
-    res7 = SWIG_ConvertPtr(obj6, &argp7,SWIGTYPE_p_wxPyTreeItemData, 0 |  0 );
+    res7 = SWIG_ConvertPtr(obj6, SWIG_as_voidptrptr(&arg7), SWIGTYPE_p_wxPyTreeItemData, SWIG_POINTER_DISOWN |  0 );
     if (!SWIG_IsOK(res7)) {
-      SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "TreeListCtrl_InsertItemBefore" "', expected argument " "7"" of type '" "wxPyTreeItemData *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "TreeListCtrl_InsertItemBefore" "', expected argument " "7"" of type '" "wxPyTreeItemData *""'");
     }
-    arg7 = reinterpret_cast< wxPyTreeItemData * >(argp7);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9193,7 +9211,6 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_AppendItem(PyObject *SWIGUNUSEDPARM(self
   int ecode4 = 0 ;
   int val5 ;
   int ecode5 = 0 ;
-  void *argp6 = 0 ;
   int res6 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9239,11 +9256,10 @@ SWIGINTERN PyObject *_wrap_TreeListCtrl_AppendItem(PyObject *SWIGUNUSEDPARM(self
     arg5 = static_cast< int >(val5);
   }
   if (obj5) {
-    res6 = SWIG_ConvertPtr(obj5, &argp6,SWIGTYPE_p_wxPyTreeItemData, 0 |  0 );
+    res6 = SWIG_ConvertPtr(obj5, SWIG_as_voidptrptr(&arg6), SWIGTYPE_p_wxPyTreeItemData, SWIG_POINTER_DISOWN |  0 );
     if (!SWIG_IsOK(res6)) {
-      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "TreeListCtrl_AppendItem" "', expected argument " "6"" of type '" "wxPyTreeItemData *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "TreeListCtrl_AppendItem" "', expected argument " "6"" of type '" "wxPyTreeItemData *""'");
     }
-    arg6 = reinterpret_cast< wxPyTreeItemData * >(argp6);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10868,6 +10884,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LEDNumberCtrl_swigregister", LEDNumberCtrl_swigregister, METH_VARARGS, NULL},
 	 { (char *)"LEDNumberCtrl_swiginit", LEDNumberCtrl_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_TreeListColumnInfo", (PyCFunction) _wrap_new_TreeListColumnInfo, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_TreeListColumnInfo", (PyCFunction)_wrap_delete_TreeListColumnInfo, METH_O, NULL},
 	 { (char *)"TreeListColumnInfo_GetShown", (PyCFunction)_wrap_TreeListColumnInfo_GetShown, METH_O, NULL},
 	 { (char *)"TreeListColumnInfo_GetAlignment", (PyCFunction)_wrap_TreeListColumnInfo_GetAlignment, METH_O, NULL},
 	 { (char *)"TreeListColumnInfo_GetText", (PyCFunction)_wrap_TreeListColumnInfo_GetText, METH_O, NULL},

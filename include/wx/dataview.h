@@ -39,19 +39,19 @@
 // wxDataViewCtrl globals
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDataViewModel;
-class WXDLLIMPEXP_CORE wxDataViewListModel;
-class WXDLLIMPEXP_CORE wxDataViewCtrl;
-class WXDLLIMPEXP_CORE wxDataViewColumn;
-class WXDLLIMPEXP_CORE wxDataViewCell;
+class WXDLLIMPEXP_ADV wxDataViewModel;
+class WXDLLIMPEXP_ADV wxDataViewListModel;
+class WXDLLIMPEXP_ADV wxDataViewCtrl;
+class WXDLLIMPEXP_ADV wxDataViewColumn;
+class WXDLLIMPEXP_ADV wxDataViewCell;
 
-extern WXDLLEXPORT_DATA(const wxChar) wxDataViewCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[];
 
 // ---------------------------------------------------------
 // wxDataViewModel
 // ---------------------------------------------------------
 
-class wxDataViewModel: public wxObject
+class WXDLLIMPEXP_ADV wxDataViewModel: public wxObject
 {
 public:
     wxDataViewModel() { }
@@ -66,7 +66,7 @@ protected:
 // ---------------------------------------------------------
 
 
-class wxDataViewListModelNotifier: public wxObject
+class WXDLLIMPEXP_ADV wxDataViewListModelNotifier: public wxObject
 {
 public:
     wxDataViewListModelNotifier() { }
@@ -92,7 +92,7 @@ private:
 // wxDataViewListModel
 // ---------------------------------------------------------
 
-class wxDataViewViewingColumn: public wxObject
+class WXDLLIMPEXP_ADV wxDataViewViewingColumn: public wxObject
 {
 public:
     wxDataViewViewingColumn( wxDataViewColumn *view_column, size_t model_column )
@@ -105,7 +105,7 @@ public:
     size_t              m_modelColumn;
 };
 
-class wxDataViewListModel: public wxDataViewModel
+class WXDLLIMPEXP_ADV wxDataViewListModel: public wxDataViewModel
 {
 public:
     wxDataViewListModel();
@@ -151,9 +151,9 @@ protected:
 typedef int (wxCALLBACK *wxDataViewListModelCompare)
     (size_t row1, size_t row2, size_t col, wxDataViewListModel* model );
 
-WX_DEFINE_SORTED_EXPORTED_ARRAY_SIZE_T(size_t, wxDataViewSortedIndexArray );
+WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SIZE_T(size_t, wxDataViewSortedIndexArray, WXDLLIMPEXP_ADV);
 
-class wxDataViewSortedListModel: public wxDataViewListModel
+class WXDLLIMPEXP_ADV wxDataViewSortedListModel: public wxDataViewListModel
 {
 public:
     wxDataViewSortedListModel( wxDataViewListModel *child );
@@ -210,7 +210,7 @@ enum wxDataViewCellRenderState
     wxDATAVIEW_CELL_FOCUSED     = 8
 };
 
-class wxDataViewCellBase: public wxObject
+class WXDLLIMPEXP_ADV wxDataViewCellBase: public wxObject
 {
 public:
     wxDataViewCellBase( const wxString &varianttype, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
@@ -252,7 +252,7 @@ enum wxDataViewColumnSizing
     wxDATAVIEW_COL_WIDTH_GROW
 };
 
-class wxDataViewColumnBase: public wxObject
+class WXDLLIMPEXP_ADV wxDataViewColumnBase: public wxObject
 {
 public:
     wxDataViewColumnBase( const wxString &title, wxDataViewCell *cell, size_t model_column,
@@ -293,7 +293,7 @@ protected:
 #define wxDV_SINGLE                  0x0000     // for convenience
 #define wxDV_MULTIPLE                0x0020     // can select multiple items
 
-class wxDataViewCtrlBase: public wxControl
+class WXDLLIMPEXP_ADV wxDataViewCtrlBase: public wxControl
 {
 public:
     wxDataViewCtrlBase();
