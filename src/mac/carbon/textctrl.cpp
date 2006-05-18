@@ -1785,6 +1785,8 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
     if ( style.HasFont() )
     {
         const wxFont &font = style.GetFont() ;
+                
+#if 0 // old version
         wxMacStringToPascal( font.GetFaceName() , fontName ) ;
         fontSize = font.GetPointSize() ;
         if ( font.GetUnderlined() )
@@ -1808,6 +1810,12 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
         typeAttr[attrCount].size = kTXNQDFontStyleAttributeSize ;
         typeAttr[attrCount].data.dataValue = fontStyle ;
         attrCount++ ;
+#else
+        typeAttr[attrCount].tag = kTXNATSUIStyle ;
+        typeAttr[attrCount].size = kTXNATSUIStyleSize ;
+        typeAttr[attrCount].data.dataValue = (UInt32)font.MacGetATSUStyle() ;
+        attrCount++ ;
+#endif
     }
 
     if ( style.HasTextColour() )
