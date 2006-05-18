@@ -911,7 +911,7 @@ class PrintTable:
         printout2 = SetPrintout(self)
         self.preview = wx.PrintPreview(printout, printout2, data)
         if not self.preview.Ok():
-            wxMessageBox("There was a problem printing!", "Printing", wx.OK)
+            wx.MessageBox("There was a problem printing!", "Printing", wx.OK)
             return
 
         self.preview.SetZoom(60)        # initial zoom value
