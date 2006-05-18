@@ -67,14 +67,21 @@ pascal OSStatus wxMacCarbonFontPanelHandler(EventHandlerCallRef nextHandler, Eve
     {
         case kEventFontSelection :
         {
-            FMFont fontId = 0 ;
+            ATSUFontID fontId = 0 ;
             if ( cEvent.GetParameter<ATSUFontID>(kEventParamATSUFontID, &fontId) == noErr )
             {
                 FMFontStyle fontStyle = cEvent.GetParameter<FMFontStyle>(kEventParamFMFontStyle);
                 FMFontSize fontSize = cEvent.GetParameter<FMFontSize>(kEventParamFMFontSize);
 
-                ByteCount actualLength = 0;
                 CFStringRef cfName = NULL;
+#if 1
+                FMFontFamily fontFamily = cEvent.GetParameter<FMFontFamily>(kEventParamFMFontFamily);
+                ATSFontFamilyRef atsfontfamilyref = FMGetATSFontFamilyRefFromFontFamily( fontFamily ) ;
+                OSStatus err = ATSFontFamilyGetName( atsfontfamilyref , kATSOptionFlagsDefault , &cfName ) ;
+                wxASSERT_MSG( err == noErr , wxT("ATSFontFamilyGetName failed") );
+#else
+                // we don't use the ATSU naming anymore
+                ByteCount actualLength = 0;
                 char *c = NULL;
                 OSStatus err = ATSUFindFontName(fontId , kFontFamilyName, kFontUnicodePlatform, kFontNoScriptCode,
                     kFontNoLanguageCode , 0 , NULL , &actualLength , NULL );
@@ -102,7 +109,8 @@ pascal OSStatus wxMacCarbonFontPanelHandler(EventHandlerCallRef nextHandler, Eve
                 }
                 if ( c!=NULL )
                     free(c);
-
+#endif
+                 
                 if ( cfName!=NULL )
                 {
                     fontdata.m_chosenFont.SetFaceName(wxMacCFStringHolder(cfName).AsString(wxLocale::GetSystemEncoding()));
