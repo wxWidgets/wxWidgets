@@ -54,10 +54,12 @@ bool wxColourBase::FromString(const wxChar *str)
     {
         // hexadecimal prefixed with # (HTML syntax)
         unsigned long tmp;
-        if (wxSscanf(&str[1], wxT("%lX"), &tmp) != 1)
+        if (wxSscanf(&str[1], wxT("%lx"), &tmp) != 1)
             return false;
 
-        Set(tmp);   // set from packed long
+        Set((unsigned char)(tmp >> 16),
+            (unsigned char)(tmp >> 8),
+            (unsigned char)tmp);
     }
     else if (wxTheColourDatabase) // a colour name ?
     {
