@@ -301,7 +301,14 @@ wxListbook::InsertPage(size_t n,
         SetSelection(selNew);
 
     InvalidateBestSize();
+    // GetListView()->InvalidateBestSize();
     GetListView()->Arrange();
+    
+    if (GetPageCount() == 1)
+    {
+        wxSizeEvent sz(GetSize(), GetId());
+        ProcessEvent(sz);
+    }
     return true;
 }
 
@@ -331,6 +338,11 @@ wxWindow *wxListbook::DoRemovePage(size_t page)
         }
 
         GetListView()->Arrange();
+        if (GetPageCount() == 0)
+        {
+            wxSizeEvent sz(GetSize(), GetId());
+            ProcessEvent(sz);
+        }
     }
 
     return win;
@@ -340,7 +352,15 @@ wxWindow *wxListbook::DoRemovePage(size_t page)
 bool wxListbook::DeleteAllPages()
 {
     GetListView()->DeleteAllItems();
-    return wxBookCtrlBase::DeleteAllPages();
+    if (!wxBookCtrlBase::DeleteAllPages())
+        return false;
+    
+    m_selection = -1;
+
+    wxSizeEvent sz(GetSize(), GetId());
+    ProcessEvent(sz);
+    
+    return true;
 }
 
 // ----------------------------------------------------------------------------
