@@ -24,7 +24,7 @@
 class WXDLLIMPEXP_CORE wxSpinCtrl : public wxControl
 {
 public:
-    wxSpinCtrl() {}
+    wxSpinCtrl();
     wxSpinCtrl(wxWindow *parent,
                wxWindowID id = -1,
                const wxString& value = wxEmptyString,
@@ -65,8 +65,7 @@ public:
     void GtkDisableEvents();
     void GtkEnableEvents();
 
-    GtkAdjustment  *m_adjust;
-    float           m_oldPos;
+    int m_pos;
 
 protected:
     virtual wxSize DoGetBestSize() const;
