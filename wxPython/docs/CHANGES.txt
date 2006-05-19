@@ -138,6 +138,9 @@ flag.  If the dialog has the wx.PD_CAN_SKIP flag and if the Skip
 button is clicked, then the skip flag is set to True the next time
 Update is called.
 
+A DeprecationWarning is now issued when the old wxPython package is
+imported.  If you are still using the old namespace please convert
+your code to use the new wx package instead.
 
 
 

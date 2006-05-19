@@ -1,5 +1,10 @@
 # The "old" wxPython package
 
+import warnings
+warnings.warn(
+    "The wxPython compatibility package is no longer automatically generated "
+    "or activly maintained.  Please switch to the wx package as soon as possible.",
+    DeprecationWarning, stacklevel=2)
 
 # We need to be able to import from the wx package, but there is also
 # a wxPython.wx module and that would normally be chosen first by
