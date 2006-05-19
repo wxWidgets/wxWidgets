@@ -44,8 +44,6 @@ MAKE_CONST_WXSTRING2(IconString,   wxT("icon"));
 MAKE_CONST_WXSTRING2(FontString,   wxT("font"));
 
 
-%include _xrc_rename.i
-
 
 // Include all the files that make up this module
 %include _xmlres.i

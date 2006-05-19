@@ -26,7 +26,6 @@
 %include my_typemaps.i
 
 %include _core_api.i
-%include __core_rename.i
 
 %native(_wxPySetDictionary)   __wxPySetDictionary;
 

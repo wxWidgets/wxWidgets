@@ -24,8 +24,6 @@
 %import core.i
 %pythoncode { wx = _core }
 
-%include __controls_rename.i
-
 MAKE_CONST_WXSTRING_NOSWIG(PanelNameStr);
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 MAKE_CONST_WXSTRING_NOSWIG(ControlNameStr);

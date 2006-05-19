@@ -39,8 +39,6 @@ of 2D objects.  (This version is deprecated, please use wx.lib.ogl instead.)"
 
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 
-%include _ogl_rename.i
-
 %include _ogldefs.i
 %include _oglbasic.i
 %include _oglshapes.i

@@ -29,8 +29,6 @@
 
 MAKE_CONST_WXSTRING_NOSWIG(PanelNameStr);
 
-%include _activex_rename.i
-
 
 //---------------------------------------------------------------------------
 

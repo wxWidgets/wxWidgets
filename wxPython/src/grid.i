@@ -35,8 +35,6 @@
 %pythoncode { __docfilter__ = wx.__DocFilter(globals()) }
 
 
-%include _grid_rename.i
-
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 MAKE_CONST_WXSTRING_NOSWIG(PanelNameStr);
 MAKE_CONST_WXSTRING_NOSWIG(DefaultDateTimeFormat);

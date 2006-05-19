@@ -38,7 +38,6 @@ languages are built-in."
 MAKE_CONST_WXSTRING(STCNameStr);
 
 
-%include _stc_rename.i
 %include _stc_docstrings.i
 
 enum wxFontEncoding;  // forward declare

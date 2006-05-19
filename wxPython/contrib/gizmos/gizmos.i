@@ -52,9 +52,6 @@ MAKE_CONST_WXSTRING(StaticPictureNameStr);
     
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 
-
-%include _gizmos_rename.i
-
 //---------------------------------------------------------------------------
 
 enum {

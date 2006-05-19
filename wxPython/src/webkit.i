@@ -38,8 +38,6 @@
 %pythoncode { __docfilter__ = wx.__DocFilter(globals()) }
 
 
-%include _webkit_rename.i
-
 //---------------------------------------------------------------------------
 
 // Put some wx default wxChar* values into wxStrings.

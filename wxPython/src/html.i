@@ -38,9 +38,6 @@
 %pythoncode { wx = _core }
 %pythoncode { __docfilter__ = wx.__DocFilter(globals()) }
 
-%include _html_rename.i
-
-
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 MAKE_CONST_WXSTRING2(HtmlWindowNameStr,    wxT("htmlWindow"))
 MAKE_CONST_WXSTRING2(HtmlPrintoutTitleStr, wxT("Printout"))

@@ -32,8 +32,6 @@ or pages."
 %pythoncode { wx = _core }
 %pythoncode { __docfilter__ = wx.__DocFilter(globals()) }
 
-%include _wizard_rename.i
-
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 
 //----------------------------------------------------------------------

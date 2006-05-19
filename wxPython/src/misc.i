@@ -25,8 +25,6 @@
 %import core.i
 %pythoncode { wx = _core }
 
-%include __misc_rename.i
-
 
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 

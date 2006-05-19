@@ -35,8 +35,6 @@ animated GIF files
 MAKE_CONST_WXSTRING2(AnimationControlNameStr,     wxT("animationControl"));
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 
-%include _animate_rename.i
-
 //---------------------------------------------------------------------------
 
 
