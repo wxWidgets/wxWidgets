@@ -24,11 +24,12 @@
     #pragma hdrstop
 #endif
 
+#include "wx/brush.h"
+
 #ifndef WX_PRECOMP
     #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
-    #include "wx/brush.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"

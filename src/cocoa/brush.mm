@@ -10,10 +10,13 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#include "wx/brush.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
-    #include "wx/brush.h"
 #endif //WX_PRECOMP
+
 #include "wx/colour.h"
 
 #import <AppKit/NSColor.h>

@@ -26,15 +26,16 @@
 
 #if wxUSE_COMBOBOX
 
+#include "wx/combobox.h"
+
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/log.h"
     // for wxEVT_COMMAND_TEXT_ENTER
     #include "wx/textctrl.h"
+    #include "wx/brush.h"
 #endif
 
-#include "wx/combobox.h"
-#include "wx/brush.h"
 #include "wx/clipbrd.h"
 #include "wx/palmos/private.h"
 
@@ -280,4 +281,3 @@ bool wxComboBox::CanRedo() const
 
 
 #endif // wxUSE_COMBOBOX
-

@@ -34,9 +34,9 @@
     // for wxEVT_COMMAND_TEXT_ENTER
     #include "wx/textctrl.h"
     #include "wx/app.h"
+    #include "wx/brush.h"
 #endif
 
-#include "wx/brush.h"
 #include "wx/clipbrd.h"
 #include "wx/msw/private.h"
 
