@@ -78,7 +78,7 @@ class WizardEvent(_core.NotifyEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType type=wxEVT_NULL, int id=-1, bool direction=True, 
+        __init__(self, EventType type=wxEVT_NULL, int id=-1, bool direction=True, 
             WizardPage page=None) -> WizardEvent
         """
         _wizard.WizardEvent_swiginit(self,_wizard.new_WizardEvent(*args, **kwargs))
@@ -90,8 +90,7 @@ class WizardEvent(_core.NotifyEvent):
         """GetPage(self) -> WizardPage"""
         return _wizard.WizardEvent_GetPage(*args, **kwargs)
 
-WizardEvent_swigregister = _wizard.WizardEvent_swigregister
-WizardEvent_swigregister(WizardEvent)
+_wizard.WizardEvent_swigregister(WizardEvent)
 
 class WizardPage(_windows.Panel):
     """Proxy of C++ WizardPage class"""
@@ -114,8 +113,7 @@ class WizardPage(_windows.Panel):
         """GetBitmap(self) -> Bitmap"""
         return _wizard.WizardPage_GetBitmap(*args, **kwargs)
 
-WizardPage_swigregister = _wizard.WizardPage_swigregister
-WizardPage_swigregister(WizardPage)
+_wizard.WizardPage_swigregister(WizardPage)
 
 class PyWizardPage(WizardPage):
     """Proxy of C++ PyWizardPage class"""
@@ -283,8 +281,7 @@ class PyWizardPage(WizardPage):
     base_OnInternalIdle = wx._deprecated(base_OnInternalIdle,
                                    "Please use PyWizardPage.OnInternalIdle instead.")
 
-PyWizardPage_swigregister = _wizard.PyWizardPage_swigregister
-PyWizardPage_swigregister(PyWizardPage)
+_wizard.PyWizardPage_swigregister(PyWizardPage)
 
 def PrePyWizardPage(*args, **kwargs):
     """PrePyWizardPage() -> PyWizardPage"""
@@ -323,8 +320,7 @@ class WizardPageSimple(WizardPage):
         return _wizard.WizardPageSimple_Chain(*args, **kwargs)
 
     Chain = staticmethod(Chain)
-WizardPageSimple_swigregister = _wizard.WizardPageSimple_swigregister
-WizardPageSimple_swigregister(WizardPageSimple)
+_wizard.WizardPageSimple_swigregister(WizardPageSimple)
 
 def PreWizardPageSimple(*args, **kwargs):
     """PreWizardPageSimple() -> WizardPageSimple"""
@@ -403,8 +399,7 @@ class Wizard(_windows.Dialog):
         """HasPrevPage(self, WizardPage page) -> bool"""
         return _wizard.Wizard_HasPrevPage(*args, **kwargs)
 
-Wizard_swigregister = _wizard.Wizard_swigregister
-Wizard_swigregister(Wizard)
+_wizard.Wizard_swigregister(Wizard)
 
 def PreWizard(*args, **kwargs):
     """PreWizard() -> Wizard"""

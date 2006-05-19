@@ -5161,8 +5161,7 @@ class StyledTextCtrl(_core.Control):
         self.AppendTextRaw(text)
 
 
-StyledTextCtrl_swigregister = _stc.StyledTextCtrl_swigregister
-StyledTextCtrl_swigregister(StyledTextCtrl)
+_stc.StyledTextCtrl_swigregister(StyledTextCtrl)
 cvar = _stc.cvar
 STCNameStr = cvar.STCNameStr
 
@@ -5176,7 +5175,7 @@ class StyledTextEvent(_core.CommandEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType commandType=0, int id=0) -> StyledTextEvent"""
+        """__init__(self, EventType commandType=0, int id=0) -> StyledTextEvent"""
         _stc.StyledTextEvent_swiginit(self,_stc.new_StyledTextEvent(*args, **kwargs))
     __swig_destroy__ = _stc.delete_StyledTextEvent
     __del__ = lambda self : None;
@@ -5352,8 +5351,7 @@ class StyledTextEvent(_core.CommandEvent):
         """GetAlt(self) -> bool"""
         return _stc.StyledTextEvent_GetAlt(*args, **kwargs)
 
-StyledTextEvent_swigregister = _stc.StyledTextEvent_swigregister
-StyledTextEvent_swigregister(StyledTextEvent)
+_stc.StyledTextEvent_swigregister(StyledTextEvent)
 
 wxEVT_STC_CHANGE = _stc.wxEVT_STC_CHANGE
 wxEVT_STC_STYLENEEDED = _stc.wxEVT_STC_STYLENEEDED

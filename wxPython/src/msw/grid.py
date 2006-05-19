@@ -101,8 +101,7 @@ class GridCellWorker(object):
         """DecRef(self)"""
         return _grid.GridCellWorker_DecRef(*args, **kwargs)
 
-GridCellWorker_swigregister = _grid.GridCellWorker_swigregister
-GridCellWorker_swigregister(GridCellWorker)
+_grid.GridCellWorker_swigregister(GridCellWorker)
 cvar = _grid.cvar
 GridNoCellCoords = cvar.GridNoCellCoords
 GridNoCellRect = cvar.GridNoCellRect
@@ -112,8 +111,7 @@ class GridCellRenderer(GridCellWorker):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
-GridCellRenderer_swigregister = _grid.GridCellRenderer_swigregister
-GridCellRenderer_swigregister(GridCellRenderer)
+_grid.GridCellRenderer_swigregister(GridCellRenderer)
 
 class PyGridCellRenderer(GridCellRenderer):
     """Proxy of C++ PyGridCellRenderer class"""
@@ -137,8 +135,7 @@ class PyGridCellRenderer(GridCellRenderer):
     base_SetParameters = wx._deprecated(base_SetParameters,
                                    "Please use PyGridCellRenderer.SetParameters instead.")
 
-PyGridCellRenderer_swigregister = _grid.PyGridCellRenderer_swigregister
-PyGridCellRenderer_swigregister(PyGridCellRenderer)
+_grid.PyGridCellRenderer_swigregister(PyGridCellRenderer)
 
 class GridCellStringRenderer(GridCellRenderer):
     """Proxy of C++ GridCellStringRenderer class"""
@@ -149,8 +146,7 @@ class GridCellStringRenderer(GridCellRenderer):
         _grid.GridCellStringRenderer_swiginit(self,_grid.new_GridCellStringRenderer(*args, **kwargs))
         self._setOORInfo(self)
 
-GridCellStringRenderer_swigregister = _grid.GridCellStringRenderer_swigregister
-GridCellStringRenderer_swigregister(GridCellStringRenderer)
+_grid.GridCellStringRenderer_swigregister(GridCellStringRenderer)
 
 class GridCellNumberRenderer(GridCellStringRenderer):
     """Proxy of C++ GridCellNumberRenderer class"""
@@ -161,8 +157,7 @@ class GridCellNumberRenderer(GridCellStringRenderer):
         _grid.GridCellNumberRenderer_swiginit(self,_grid.new_GridCellNumberRenderer(*args, **kwargs))
         self._setOORInfo(self)
 
-GridCellNumberRenderer_swigregister = _grid.GridCellNumberRenderer_swigregister
-GridCellNumberRenderer_swigregister(GridCellNumberRenderer)
+_grid.GridCellNumberRenderer_swigregister(GridCellNumberRenderer)
 
 class GridCellFloatRenderer(GridCellStringRenderer):
     """Proxy of C++ GridCellFloatRenderer class"""
@@ -189,8 +184,7 @@ class GridCellFloatRenderer(GridCellStringRenderer):
         """SetPrecision(self, int precision)"""
         return _grid.GridCellFloatRenderer_SetPrecision(*args, **kwargs)
 
-GridCellFloatRenderer_swigregister = _grid.GridCellFloatRenderer_swigregister
-GridCellFloatRenderer_swigregister(GridCellFloatRenderer)
+_grid.GridCellFloatRenderer_swigregister(GridCellFloatRenderer)
 
 class GridCellBoolRenderer(GridCellRenderer):
     """Proxy of C++ GridCellBoolRenderer class"""
@@ -201,8 +195,7 @@ class GridCellBoolRenderer(GridCellRenderer):
         _grid.GridCellBoolRenderer_swiginit(self,_grid.new_GridCellBoolRenderer(*args, **kwargs))
         self._setOORInfo(self)
 
-GridCellBoolRenderer_swigregister = _grid.GridCellBoolRenderer_swigregister
-GridCellBoolRenderer_swigregister(GridCellBoolRenderer)
+_grid.GridCellBoolRenderer_swigregister(GridCellBoolRenderer)
 
 class GridCellDateTimeRenderer(GridCellStringRenderer):
     """Proxy of C++ GridCellDateTimeRenderer class"""
@@ -213,8 +206,7 @@ class GridCellDateTimeRenderer(GridCellStringRenderer):
         _grid.GridCellDateTimeRenderer_swiginit(self,_grid.new_GridCellDateTimeRenderer(*args, **kwargs))
         self._setOORInfo(self)
 
-GridCellDateTimeRenderer_swigregister = _grid.GridCellDateTimeRenderer_swigregister
-GridCellDateTimeRenderer_swigregister(GridCellDateTimeRenderer)
+_grid.GridCellDateTimeRenderer_swigregister(GridCellDateTimeRenderer)
 
 class GridCellEnumRenderer(GridCellStringRenderer):
     """Proxy of C++ GridCellEnumRenderer class"""
@@ -225,8 +217,7 @@ class GridCellEnumRenderer(GridCellStringRenderer):
         _grid.GridCellEnumRenderer_swiginit(self,_grid.new_GridCellEnumRenderer(*args, **kwargs))
         self._setOORInfo(self)
 
-GridCellEnumRenderer_swigregister = _grid.GridCellEnumRenderer_swigregister
-GridCellEnumRenderer_swigregister(GridCellEnumRenderer)
+_grid.GridCellEnumRenderer_swigregister(GridCellEnumRenderer)
 
 class GridCellAutoWrapStringRenderer(GridCellStringRenderer):
     """Proxy of C++ GridCellAutoWrapStringRenderer class"""
@@ -237,8 +228,7 @@ class GridCellAutoWrapStringRenderer(GridCellStringRenderer):
         _grid.GridCellAutoWrapStringRenderer_swiginit(self,_grid.new_GridCellAutoWrapStringRenderer(*args, **kwargs))
         self._setOORInfo(self)
 
-GridCellAutoWrapStringRenderer_swigregister = _grid.GridCellAutoWrapStringRenderer_swigregister
-GridCellAutoWrapStringRenderer_swigregister(GridCellAutoWrapStringRenderer)
+_grid.GridCellAutoWrapStringRenderer_swigregister(GridCellAutoWrapStringRenderer)
 
 class GridCellEditor(GridCellWorker):
     """Proxy of C++ GridCellEditor class"""
@@ -319,8 +309,7 @@ class GridCellEditor(GridCellWorker):
         args[0].thisown = 0
         return val
 
-GridCellEditor_swigregister = _grid.GridCellEditor_swigregister
-GridCellEditor_swigregister(GridCellEditor)
+_grid.GridCellEditor_swigregister(GridCellEditor)
 
 class PyGridCellEditor(GridCellEditor):
     """Proxy of C++ PyGridCellEditor class"""
@@ -384,8 +373,7 @@ class PyGridCellEditor(GridCellEditor):
     base_SetParameters = wx._deprecated(base_SetParameters,
                                    "Please use PyGridCellEditor.SetParameters instead.")
 
-PyGridCellEditor_swigregister = _grid.PyGridCellEditor_swigregister
-PyGridCellEditor_swigregister(PyGridCellEditor)
+_grid.PyGridCellEditor_swigregister(PyGridCellEditor)
 
 class GridCellTextEditor(GridCellEditor):
     """Proxy of C++ GridCellTextEditor class"""
@@ -400,8 +388,7 @@ class GridCellTextEditor(GridCellEditor):
         """GetValue(self) -> String"""
         return _grid.GridCellTextEditor_GetValue(*args, **kwargs)
 
-GridCellTextEditor_swigregister = _grid.GridCellTextEditor_swigregister
-GridCellTextEditor_swigregister(GridCellTextEditor)
+_grid.GridCellTextEditor_swigregister(GridCellTextEditor)
 
 class GridCellNumberEditor(GridCellTextEditor):
     """Proxy of C++ GridCellNumberEditor class"""
@@ -412,8 +399,7 @@ class GridCellNumberEditor(GridCellTextEditor):
         _grid.GridCellNumberEditor_swiginit(self,_grid.new_GridCellNumberEditor(*args, **kwargs))
         self._setOORInfo(self)
 
-GridCellNumberEditor_swigregister = _grid.GridCellNumberEditor_swigregister
-GridCellNumberEditor_swigregister(GridCellNumberEditor)
+_grid.GridCellNumberEditor_swigregister(GridCellNumberEditor)
 
 class GridCellFloatEditor(GridCellTextEditor):
     """Proxy of C++ GridCellFloatEditor class"""
@@ -424,8 +410,7 @@ class GridCellFloatEditor(GridCellTextEditor):
         _grid.GridCellFloatEditor_swiginit(self,_grid.new_GridCellFloatEditor(*args, **kwargs))
         self._setOORInfo(self)
 
-GridCellFloatEditor_swigregister = _grid.GridCellFloatEditor_swigregister
-GridCellFloatEditor_swigregister(GridCellFloatEditor)
+_grid.GridCellFloatEditor_swigregister(GridCellFloatEditor)
 
 class GridCellBoolEditor(GridCellEditor):
     """Proxy of C++ GridCellBoolEditor class"""
@@ -440,8 +425,7 @@ class GridCellBoolEditor(GridCellEditor):
         """GetValue(self) -> String"""
         return _grid.GridCellBoolEditor_GetValue(*args, **kwargs)
 
-GridCellBoolEditor_swigregister = _grid.GridCellBoolEditor_swigregister
-GridCellBoolEditor_swigregister(GridCellBoolEditor)
+_grid.GridCellBoolEditor_swigregister(GridCellBoolEditor)
 
 class GridCellChoiceEditor(GridCellEditor):
     """Proxy of C++ GridCellChoiceEditor class"""
@@ -456,8 +440,7 @@ class GridCellChoiceEditor(GridCellEditor):
         """GetValue(self) -> String"""
         return _grid.GridCellChoiceEditor_GetValue(*args, **kwargs)
 
-GridCellChoiceEditor_swigregister = _grid.GridCellChoiceEditor_swigregister
-GridCellChoiceEditor_swigregister(GridCellChoiceEditor)
+_grid.GridCellChoiceEditor_swigregister(GridCellChoiceEditor)
 
 class GridCellEnumEditor(GridCellChoiceEditor):
     """Proxy of C++ GridCellEnumEditor class"""
@@ -468,8 +451,7 @@ class GridCellEnumEditor(GridCellChoiceEditor):
         _grid.GridCellEnumEditor_swiginit(self,_grid.new_GridCellEnumEditor(*args, **kwargs))
         self._setOORInfo(self)
 
-GridCellEnumEditor_swigregister = _grid.GridCellEnumEditor_swigregister
-GridCellEnumEditor_swigregister(GridCellEnumEditor)
+_grid.GridCellEnumEditor_swigregister(GridCellEnumEditor)
 
 class GridCellAutoWrapStringEditor(GridCellTextEditor):
     """Proxy of C++ GridCellAutoWrapStringEditor class"""
@@ -480,8 +462,7 @@ class GridCellAutoWrapStringEditor(GridCellTextEditor):
         _grid.GridCellAutoWrapStringEditor_swiginit(self,_grid.new_GridCellAutoWrapStringEditor(*args, **kwargs))
         self._setOORInfo(self)
 
-GridCellAutoWrapStringEditor_swigregister = _grid.GridCellAutoWrapStringEditor_swigregister
-GridCellAutoWrapStringEditor_swigregister(GridCellAutoWrapStringEditor)
+_grid.GridCellAutoWrapStringEditor_swigregister(GridCellAutoWrapStringEditor)
 
 class GridCellAttr(object):
     """Proxy of C++ GridCellAttr class"""
@@ -636,8 +617,7 @@ class GridCellAttr(object):
         """SetDefAttr(self, GridCellAttr defAttr)"""
         return _grid.GridCellAttr_SetDefAttr(*args, **kwargs)
 
-GridCellAttr_swigregister = _grid.GridCellAttr_swigregister
-GridCellAttr_swigregister(GridCellAttr)
+_grid.GridCellAttr_swigregister(GridCellAttr)
 
 class GridCellAttrProvider(object):
     """Proxy of C++ GridCellAttrProvider class"""
@@ -676,8 +656,7 @@ class GridCellAttrProvider(object):
         """UpdateAttrCols(self, size_t pos, int numCols)"""
         return _grid.GridCellAttrProvider_UpdateAttrCols(*args, **kwargs)
 
-GridCellAttrProvider_swigregister = _grid.GridCellAttrProvider_swigregister
-GridCellAttrProvider_swigregister(GridCellAttrProvider)
+_grid.GridCellAttrProvider_swigregister(GridCellAttrProvider)
 
 class PyGridCellAttrProvider(GridCellAttrProvider):
     """Proxy of C++ PyGridCellAttrProvider class"""
@@ -728,8 +707,7 @@ class PyGridCellAttrProvider(GridCellAttrProvider):
     base_SetColAttr = wx._deprecated(base_SetColAttr,
                                    "Please use PyGridCellAttrProvider.SetColAttr instead.")
 
-PyGridCellAttrProvider_swigregister = _grid.PyGridCellAttrProvider_swigregister
-PyGridCellAttrProvider_swigregister(PyGridCellAttrProvider)
+_grid.PyGridCellAttrProvider_swigregister(PyGridCellAttrProvider)
 
 class GridTableBase(_core.Object):
     """Proxy of C++ GridTableBase class"""
@@ -878,8 +856,7 @@ class GridTableBase(_core.Object):
         """SetColAttr(self, GridCellAttr attr, int col)"""
         return _grid.GridTableBase_SetColAttr(*args, **kwargs)
 
-GridTableBase_swigregister = _grid.GridTableBase_swigregister
-GridTableBase_swigregister(GridTableBase)
+_grid.GridTableBase_swigregister(GridTableBase)
 
 class PyGridTableBase(GridTableBase):
     """Proxy of C++ PyGridTableBase class"""
@@ -999,8 +976,7 @@ class PyGridTableBase(GridTableBase):
     base_SetColAttr = wx._deprecated(base_SetColAttr,
                                    "Please use PyGridTableBase.SetColAttr instead.")
 
-PyGridTableBase_swigregister = _grid.PyGridTableBase_swigregister
-PyGridTableBase_swigregister(PyGridTableBase)
+_grid.PyGridTableBase_swigregister(PyGridTableBase)
 
 class GridStringTable(GridTableBase):
     """Proxy of C++ GridStringTable class"""
@@ -1011,8 +987,7 @@ class GridStringTable(GridTableBase):
         _grid.GridStringTable_swiginit(self,_grid.new_GridStringTable(*args, **kwargs))
         self._setOORInfo(self)
 
-GridStringTable_swigregister = _grid.GridStringTable_swigregister
-GridStringTable_swigregister(GridStringTable)
+_grid.GridStringTable_swigregister(GridStringTable)
 
 GRIDTABLE_REQUEST_VIEW_GET_VALUES = _grid.GRIDTABLE_REQUEST_VIEW_GET_VALUES
 GRIDTABLE_REQUEST_VIEW_SEND_VALUES = _grid.GRIDTABLE_REQUEST_VIEW_SEND_VALUES
@@ -1063,8 +1038,7 @@ class GridTableMessage(object):
         """GetCommandInt2(self) -> int"""
         return _grid.GridTableMessage_GetCommandInt2(*args, **kwargs)
 
-GridTableMessage_swigregister = _grid.GridTableMessage_swigregister
-GridTableMessage_swigregister(GridTableMessage)
+_grid.GridTableMessage_swigregister(GridTableMessage)
 
 class GridCellCoords(object):
     """Proxy of C++ GridCellCoords class"""
@@ -1125,8 +1099,7 @@ class GridCellCoords(object):
         elif index == 1: self.SetCol(val)
         else: raise IndexError
 
-GridCellCoords_swigregister = _grid.GridCellCoords_swigregister
-GridCellCoords_swigregister(GridCellCoords)
+_grid.GridCellCoords_swigregister(GridCellCoords)
 
 class Grid(_windows.ScrolledWindow):
     """Proxy of C++ Grid class"""
@@ -1968,8 +1941,7 @@ class Grid(_windows.ScrolledWindow):
         return _grid.Grid_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-Grid_swigregister = _grid.Grid_swigregister
-Grid_swigregister(Grid)
+_grid.Grid_swigregister(Grid)
 
 def PreGrid(*args, **kwargs):
     """PreGrid() -> Grid"""
@@ -2041,8 +2013,7 @@ class GridEvent(_core.NotifyEvent):
         """CmdDown(self) -> bool"""
         return _grid.GridEvent_CmdDown(*args, **kwargs)
 
-GridEvent_swigregister = _grid.GridEvent_swigregister
-GridEvent_swigregister(GridEvent)
+_grid.GridEvent_swigregister(GridEvent)
 
 class GridSizeEvent(_core.NotifyEvent):
     """Proxy of C++ GridSizeEvent class"""
@@ -2083,8 +2054,7 @@ class GridSizeEvent(_core.NotifyEvent):
         """CmdDown(self) -> bool"""
         return _grid.GridSizeEvent_CmdDown(*args, **kwargs)
 
-GridSizeEvent_swigregister = _grid.GridSizeEvent_swigregister
-GridSizeEvent_swigregister(GridSizeEvent)
+_grid.GridSizeEvent_swigregister(GridSizeEvent)
 
 class GridRangeSelectEvent(_core.NotifyEvent):
     """Proxy of C++ GridRangeSelectEvent class"""
@@ -2146,8 +2116,7 @@ class GridRangeSelectEvent(_core.NotifyEvent):
         """CmdDown(self) -> bool"""
         return _grid.GridRangeSelectEvent_CmdDown(*args, **kwargs)
 
-GridRangeSelectEvent_swigregister = _grid.GridRangeSelectEvent_swigregister
-GridRangeSelectEvent_swigregister(GridRangeSelectEvent)
+_grid.GridRangeSelectEvent_swigregister(GridRangeSelectEvent)
 
 class GridEditorCreatedEvent(_core.CommandEvent):
     """Proxy of C++ GridEditorCreatedEvent class"""
@@ -2183,8 +2152,7 @@ class GridEditorCreatedEvent(_core.CommandEvent):
         """SetControl(self, Control ctrl)"""
         return _grid.GridEditorCreatedEvent_SetControl(*args, **kwargs)
 
-GridEditorCreatedEvent_swigregister = _grid.GridEditorCreatedEvent_swigregister
-GridEditorCreatedEvent_swigregister(GridEditorCreatedEvent)
+_grid.GridEditorCreatedEvent_swigregister(GridEditorCreatedEvent)
 
 wxEVT_GRID_CELL_LEFT_CLICK = _grid.wxEVT_GRID_CELL_LEFT_CLICK
 wxEVT_GRID_CELL_RIGHT_CLICK = _grid.wxEVT_GRID_CELL_RIGHT_CLICK

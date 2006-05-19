@@ -72,8 +72,7 @@ class DynamicSashSplitEvent(_core.CommandEvent):
     def __init__(self, *args, **kwargs): 
         """__init__(self, Object target) -> DynamicSashSplitEvent"""
         _gizmos.DynamicSashSplitEvent_swiginit(self,_gizmos.new_DynamicSashSplitEvent(*args, **kwargs))
-DynamicSashSplitEvent_swigregister = _gizmos.DynamicSashSplitEvent_swigregister
-DynamicSashSplitEvent_swigregister(DynamicSashSplitEvent)
+_gizmos.DynamicSashSplitEvent_swigregister(DynamicSashSplitEvent)
 cvar = _gizmos.cvar
 DynamicSashNameStr = cvar.DynamicSashNameStr
 EditableListBoxNameStr = cvar.EditableListBoxNameStr
@@ -87,8 +86,7 @@ class DynamicSashUnifyEvent(_core.CommandEvent):
     def __init__(self, *args, **kwargs): 
         """__init__(self, Object target) -> DynamicSashUnifyEvent"""
         _gizmos.DynamicSashUnifyEvent_swiginit(self,_gizmos.new_DynamicSashUnifyEvent(*args, **kwargs))
-DynamicSashUnifyEvent_swigregister = _gizmos.DynamicSashUnifyEvent_swigregister
-DynamicSashUnifyEvent_swigregister(DynamicSashUnifyEvent)
+_gizmos.DynamicSashUnifyEvent_swigregister(DynamicSashUnifyEvent)
 
 class DynamicSashWindow(_core.Window):
     """Proxy of C++ DynamicSashWindow class"""
@@ -119,8 +117,7 @@ class DynamicSashWindow(_core.Window):
         """GetVScrollBar(self, Window child) -> ScrollBar"""
         return _gizmos.DynamicSashWindow_GetVScrollBar(*args, **kwargs)
 
-DynamicSashWindow_swigregister = _gizmos.DynamicSashWindow_swigregister
-DynamicSashWindow_swigregister(DynamicSashWindow)
+_gizmos.DynamicSashWindow_swigregister(DynamicSashWindow)
 
 def PreDynamicSashWindow(*args, **kwargs):
     """PreDynamicSashWindow() -> DynamicSashWindow"""
@@ -179,8 +176,7 @@ class EditableListBox(_windows.Panel):
         """GetEditButton(self) -> BitmapButton"""
         return _gizmos.EditableListBox_GetEditButton(*args, **kwargs)
 
-EditableListBox_swigregister = _gizmos.EditableListBox_swigregister
-EditableListBox_swigregister(EditableListBox)
+_gizmos.EditableListBox_swigregister(EditableListBox)
 
 class RemotelyScrolledTreeCtrl(_controls.TreeCtrl):
     """Proxy of C++ RemotelyScrolledTreeCtrl class"""
@@ -218,8 +214,7 @@ class RemotelyScrolledTreeCtrl(_controls.TreeCtrl):
         """GetCompanionWindow(self) -> Window"""
         return _gizmos.RemotelyScrolledTreeCtrl_GetCompanionWindow(*args, **kwargs)
 
-RemotelyScrolledTreeCtrl_swigregister = _gizmos.RemotelyScrolledTreeCtrl_swigregister
-RemotelyScrolledTreeCtrl_swigregister(RemotelyScrolledTreeCtrl)
+_gizmos.RemotelyScrolledTreeCtrl_swigregister(RemotelyScrolledTreeCtrl)
 
 class TreeCompanionWindow(_core.Window):
     """Proxy of C++ TreeCompanionWindow class"""
@@ -245,8 +240,7 @@ class TreeCompanionWindow(_core.Window):
         """SetTreeCtrl(self, RemotelyScrolledTreeCtrl treeCtrl)"""
         return _gizmos.TreeCompanionWindow_SetTreeCtrl(*args, **kwargs)
 
-TreeCompanionWindow_swigregister = _gizmos.TreeCompanionWindow_swigregister
-TreeCompanionWindow_swigregister(TreeCompanionWindow)
+_gizmos.TreeCompanionWindow_swigregister(TreeCompanionWindow)
 
 class ThinSplitterWindow(_windows.SplitterWindow):
     """Proxy of C++ ThinSplitterWindow class"""
@@ -260,8 +254,7 @@ class ThinSplitterWindow(_windows.SplitterWindow):
         _gizmos.ThinSplitterWindow_swiginit(self,_gizmos.new_ThinSplitterWindow(*args, **kwargs))
         self._setOORInfo(self)
 
-ThinSplitterWindow_swigregister = _gizmos.ThinSplitterWindow_swigregister
-ThinSplitterWindow_swigregister(ThinSplitterWindow)
+_gizmos.ThinSplitterWindow_swigregister(ThinSplitterWindow)
 
 class SplitterScrolledWindow(_windows.ScrolledWindow):
     """Proxy of C++ SplitterScrolledWindow class"""
@@ -275,8 +268,7 @@ class SplitterScrolledWindow(_windows.ScrolledWindow):
         _gizmos.SplitterScrolledWindow_swiginit(self,_gizmos.new_SplitterScrolledWindow(*args, **kwargs))
         self._setOORInfo(self)
 
-SplitterScrolledWindow_swigregister = _gizmos.SplitterScrolledWindow_swigregister
-SplitterScrolledWindow_swigregister(SplitterScrolledWindow)
+_gizmos.SplitterScrolledWindow_swigregister(SplitterScrolledWindow)
 
 LED_ALIGN_LEFT = _gizmos.LED_ALIGN_LEFT
 LED_ALIGN_RIGHT = _gizmos.LED_ALIGN_RIGHT
@@ -328,8 +320,7 @@ class LEDNumberCtrl(_core.Control):
         """SetValue(self, String Value, bool Redraw=True)"""
         return _gizmos.LEDNumberCtrl_SetValue(*args, **kwargs)
 
-LEDNumberCtrl_swigregister = _gizmos.LEDNumberCtrl_swigregister
-LEDNumberCtrl_swigregister(LEDNumberCtrl)
+_gizmos.LEDNumberCtrl_swigregister(LEDNumberCtrl)
 
 def PreLEDNumberCtrl(*args, **kwargs):
     """PreLEDNumberCtrl() -> LEDNumberCtrl"""
@@ -407,8 +398,7 @@ class TreeListColumnInfo(_core.Object):
         """SetWidth(self, size_t with)"""
         return _gizmos.TreeListColumnInfo_SetWidth(*args, **kwargs)
 
-TreeListColumnInfo_swigregister = _gizmos.TreeListColumnInfo_swigregister
-TreeListColumnInfo_swigregister(TreeListColumnInfo)
+_gizmos.TreeListColumnInfo_swigregister(TreeListColumnInfo)
 
 class TreeListCtrl(_core.Control):
     """Proxy of C++ TreeListCtrl class"""
@@ -841,8 +831,7 @@ class TreeListCtrl(_core.Control):
         """GetMainWindow(self) -> ScrolledWindow"""
         return _gizmos.TreeListCtrl_GetMainWindow(*args, **kwargs)
 
-TreeListCtrl_swigregister = _gizmos.TreeListCtrl_swigregister
-TreeListCtrl_swigregister(TreeListCtrl)
+_gizmos.TreeListCtrl_swigregister(TreeListCtrl)
 
 def PreTreeListCtrl(*args, **kwargs):
     """PreTreeListCtrl() -> TreeListCtrl"""
@@ -914,8 +903,7 @@ class StaticPicture(_core.Control):
         """GetCustomScale(self, float OUTPUT, float OUTPUT)"""
         return _gizmos.StaticPicture_GetCustomScale(*args, **kwargs)
 
-StaticPicture_swigregister = _gizmos.StaticPicture_swigregister
-StaticPicture_swigregister(StaticPicture)
+_gizmos.StaticPicture_swigregister(StaticPicture)
 
 def PreStaticPicture(*args, **kwargs):
     """PreStaticPicture() -> StaticPicture"""

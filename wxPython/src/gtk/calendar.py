@@ -159,15 +159,14 @@ class CalendarDateAttr(object):
         """GetBorder(self) -> int"""
         return _calendar.CalendarDateAttr_GetBorder(*args, **kwargs)
 
-CalendarDateAttr_swigregister = _calendar.CalendarDateAttr_swigregister
-CalendarDateAttr_swigregister(CalendarDateAttr)
+_calendar.CalendarDateAttr_swigregister(CalendarDateAttr)
 
 class CalendarEvent(_core.DateEvent):
     """Proxy of C++ CalendarEvent class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, CalendarCtrl cal, wxEventType type) -> CalendarEvent"""
+        """__init__(self, CalendarCtrl cal, EventType type) -> CalendarEvent"""
         _calendar.CalendarEvent_swiginit(self,_calendar.new_CalendarEvent(*args, **kwargs))
     def SetWeekDay(*args, **kwargs):
         """SetWeekDay(self, int wd)"""
@@ -185,8 +184,7 @@ class CalendarEvent(_core.DateEvent):
         """returns datetime.date object"""
         return _wxdate2pydate(self.GetDate())
 
-CalendarEvent_swigregister = _calendar.CalendarEvent_swigregister
-CalendarEvent_swigregister(CalendarEvent)
+_calendar.CalendarEvent_swigregister(CalendarEvent)
 
 wxEVT_CALENDAR_DOUBLECLICKED = _calendar.wxEVT_CALENDAR_DOUBLECLICKED
 wxEVT_CALENDAR_SEL_CHANGED = _calendar.wxEVT_CALENDAR_SEL_CHANGED
@@ -525,8 +523,7 @@ class CalendarCtrl(_core.Control):
         """returns datetime.date object"""
         return _wxdate2pydate(self.GetUpperDateLimit())
 
-CalendarCtrl_swigregister = _calendar.CalendarCtrl_swigregister
-CalendarCtrl_swigregister(CalendarCtrl)
+_calendar.CalendarCtrl_swigregister(CalendarCtrl)
 cvar = _calendar.cvar
 CalendarNameStr = cvar.CalendarNameStr
 

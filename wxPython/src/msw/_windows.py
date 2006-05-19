@@ -106,8 +106,7 @@ class Panel(_core.Window):
         return _windows_.Panel_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-Panel_swigregister = _windows_.Panel_swigregister
-Panel_swigregister(Panel)
+_windows_.Panel_swigregister(Panel)
 
 def PrePanel(*args, **kwargs):
     """PrePanel() -> Panel"""
@@ -279,8 +278,7 @@ class ScrolledWindow(Panel):
         return _windows_.ScrolledWindow_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-ScrolledWindow_swigregister = _windows_.ScrolledWindow_swigregister
-ScrolledWindow_swigregister(ScrolledWindow)
+_windows_.ScrolledWindow_swigregister(ScrolledWindow)
 
 def PreScrolledWindow(*args, **kwargs):
     """PreScrolledWindow() -> ScrolledWindow"""
@@ -429,8 +427,7 @@ class TopLevelWindow(_core.Window):
         return _windows_.TopLevelWindow_CenterOnScreen(*args, **kwargs)
 
     CentreOnScreen = CenterOnScreen 
-TopLevelWindow_swigregister = _windows_.TopLevelWindow_swigregister
-TopLevelWindow_swigregister(TopLevelWindow)
+_windows_.TopLevelWindow_swigregister(TopLevelWindow)
 cvar = _windows_.cvar
 FrameNameStr = cvar.FrameNameStr
 DialogNameStr = cvar.DialogNameStr
@@ -554,8 +551,7 @@ class Frame(TopLevelWindow):
         return _windows_.Frame_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-Frame_swigregister = _windows_.Frame_swigregister
-Frame_swigregister(Frame)
+_windows_.Frame_swigregister(Frame)
 
 def PreFrame(*args, **kwargs):
     """PreFrame() -> Frame"""
@@ -669,8 +665,7 @@ class Dialog(TopLevelWindow):
         return _windows_.Dialog_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-Dialog_swigregister = _windows_.Dialog_swigregister
-Dialog_swigregister(Dialog)
+_windows_.Dialog_swigregister(Dialog)
 
 def PreDialog(*args, **kwargs):
     """PreDialog() -> Dialog"""
@@ -717,8 +712,7 @@ class MiniFrame(Frame):
         """
         return _windows_.MiniFrame_Create(*args, **kwargs)
 
-MiniFrame_swigregister = _windows_.MiniFrame_swigregister
-MiniFrame_swigregister(MiniFrame)
+_windows_.MiniFrame_swigregister(MiniFrame)
 
 def PreMiniFrame(*args, **kwargs):
     """PreMiniFrame() -> MiniFrame"""
@@ -752,8 +746,7 @@ class SplashScreenWindow(_core.Window):
         """GetBitmap(self) -> Bitmap"""
         return _windows_.SplashScreenWindow_GetBitmap(*args, **kwargs)
 
-SplashScreenWindow_swigregister = _windows_.SplashScreenWindow_swigregister
-SplashScreenWindow_swigregister(SplashScreenWindow)
+_windows_.SplashScreenWindow_swigregister(SplashScreenWindow)
 
 class SplashScreen(Frame):
     """Proxy of C++ SplashScreen class"""
@@ -780,8 +773,7 @@ class SplashScreen(Frame):
         """GetTimeout(self) -> int"""
         return _windows_.SplashScreen_GetTimeout(*args, **kwargs)
 
-SplashScreen_swigregister = _windows_.SplashScreen_swigregister
-SplashScreen_swigregister(SplashScreen)
+_windows_.SplashScreen_swigregister(SplashScreen)
 
 #---------------------------------------------------------------------------
 
@@ -870,8 +862,7 @@ class StatusBar(_core.Window):
         return _windows_.StatusBar_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-StatusBar_swigregister = _windows_.StatusBar_swigregister
-StatusBar_swigregister(StatusBar)
+_windows_.StatusBar_swigregister(StatusBar)
 
 def PreStatusBar(*args, **kwargs):
     """PreStatusBar() -> StatusBar"""
@@ -1194,8 +1185,7 @@ class SplitterWindow(_core.Window):
         return _windows_.SplitterWindow_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-SplitterWindow_swigregister = _windows_.SplitterWindow_swigregister
-SplitterWindow_swigregister(SplitterWindow)
+_windows_.SplitterWindow_swigregister(SplitterWindow)
 SplitterNameStr = cvar.SplitterNameStr
 
 def PreSplitterWindow(*args, **kwargs):
@@ -1284,8 +1274,7 @@ class SplitterEvent(_core.NotifyEvent):
         """
         return _windows_.SplitterEvent_GetY(*args, **kwargs)
 
-SplitterEvent_swigregister = _windows_.SplitterEvent_swigregister
-SplitterEvent_swigregister(SplitterEvent)
+_windows_.SplitterEvent_swigregister(SplitterEvent)
 
 wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED = _windows_.wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED
 wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING = _windows_.wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING
@@ -1409,8 +1398,7 @@ class SashWindow(_core.Window):
         """SizeWindows(self)"""
         return _windows_.SashWindow_SizeWindows(*args, **kwargs)
 
-SashWindow_swigregister = _windows_.SashWindow_swigregister
-SashWindow_swigregister(SashWindow)
+_windows_.SashWindow_swigregister(SashWindow)
 SashNameStr = cvar.SashNameStr
 SashLayoutNameStr = cvar.SashLayoutNameStr
 
@@ -1452,8 +1440,7 @@ class SashEvent(_core.CommandEvent):
         """GetDragStatus(self) -> int"""
         return _windows_.SashEvent_GetDragStatus(*args, **kwargs)
 
-SashEvent_swigregister = _windows_.SashEvent_swigregister
-SashEvent_swigregister(SashEvent)
+_windows_.SashEvent_swigregister(SashEvent)
 
 wxEVT_SASH_DRAGGED = _windows_.wxEVT_SASH_DRAGGED
 EVT_SASH_DRAGGED = wx.PyEventBinder( wxEVT_SASH_DRAGGED, 1 )
@@ -1521,8 +1508,7 @@ class QueryLayoutInfoEvent(_core.Event):
         """GetAlignment(self) -> int"""
         return _windows_.QueryLayoutInfoEvent_GetAlignment(*args, **kwargs)
 
-QueryLayoutInfoEvent_swigregister = _windows_.QueryLayoutInfoEvent_swigregister
-QueryLayoutInfoEvent_swigregister(QueryLayoutInfoEvent)
+_windows_.QueryLayoutInfoEvent_swigregister(QueryLayoutInfoEvent)
 
 class CalculateLayoutEvent(_core.Event):
     """Proxy of C++ CalculateLayoutEvent class"""
@@ -1547,8 +1533,7 @@ class CalculateLayoutEvent(_core.Event):
         """GetRect(self) -> Rect"""
         return _windows_.CalculateLayoutEvent_GetRect(*args, **kwargs)
 
-CalculateLayoutEvent_swigregister = _windows_.CalculateLayoutEvent_swigregister
-CalculateLayoutEvent_swigregister(CalculateLayoutEvent)
+_windows_.CalculateLayoutEvent_swigregister(CalculateLayoutEvent)
 
 EVT_QUERY_LAYOUT_INFO = wx.PyEventBinder( wxEVT_QUERY_LAYOUT_INFO )
 EVT_CALCULATE_LAYOUT = wx.PyEventBinder( wxEVT_CALCULATE_LAYOUT )
@@ -1594,8 +1579,7 @@ class SashLayoutWindow(SashWindow):
         """SetOrientation(self, int orientation)"""
         return _windows_.SashLayoutWindow_SetOrientation(*args, **kwargs)
 
-SashLayoutWindow_swigregister = _windows_.SashLayoutWindow_swigregister
-SashLayoutWindow_swigregister(SashLayoutWindow)
+_windows_.SashLayoutWindow_swigregister(SashLayoutWindow)
 
 def PreSashLayoutWindow(*args, **kwargs):
     """PreSashLayoutWindow() -> SashLayoutWindow"""
@@ -1623,8 +1607,7 @@ class LayoutAlgorithm(_core.Object):
         """LayoutWindow(self, Window parent, Window mainWindow=None) -> bool"""
         return _windows_.LayoutAlgorithm_LayoutWindow(*args, **kwargs)
 
-LayoutAlgorithm_swigregister = _windows_.LayoutAlgorithm_swigregister
-LayoutAlgorithm_swigregister(LayoutAlgorithm)
+_windows_.LayoutAlgorithm_swigregister(LayoutAlgorithm)
 
 #---------------------------------------------------------------------------
 
@@ -1645,8 +1628,7 @@ class PopupWindow(_core.Window):
         """Position(self, Point ptOrigin, Size size)"""
         return _windows_.PopupWindow_Position(*args, **kwargs)
 
-PopupWindow_swigregister = _windows_.PopupWindow_swigregister
-PopupWindow_swigregister(PopupWindow)
+_windows_.PopupWindow_swigregister(PopupWindow)
 
 def PrePopupWindow(*args, **kwargs):
     """PrePopupWindow() -> PopupWindow"""
@@ -1676,8 +1658,7 @@ class PopupTransientWindow(PopupWindow):
         """Dismiss(self)"""
         return _windows_.PopupTransientWindow_Dismiss(*args, **kwargs)
 
-PopupTransientWindow_swigregister = _windows_.PopupTransientWindow_swigregister
-PopupTransientWindow_swigregister(PopupTransientWindow)
+_windows_.PopupTransientWindow_swigregister(PopupTransientWindow)
 
 def PrePopupTransientWindow(*args, **kwargs):
     """PrePopupTransientWindow() -> PopupTransientWindow"""
@@ -1710,8 +1691,7 @@ class TipWindow(PopupTransientWindow):
         """
         return _windows_.TipWindow_Close(*args, **kwargs)
 
-TipWindow_swigregister = _windows_.TipWindow_swigregister
-TipWindow_swigregister(TipWindow)
+_windows_.TipWindow_swigregister(TipWindow)
 
 #---------------------------------------------------------------------------
 
@@ -1806,8 +1786,7 @@ class VScrolledWindow(Panel):
         """GetLinesHeight(self, size_t lineMin, size_t lineMax) -> int"""
         return _windows_.VScrolledWindow_GetLinesHeight(*args, **kwargs)
 
-VScrolledWindow_swigregister = _windows_.VScrolledWindow_swigregister
-VScrolledWindow_swigregister(VScrolledWindow)
+_windows_.VScrolledWindow_swigregister(VScrolledWindow)
 
 def PreVScrolledWindow(*args, **kwargs):
     """PreVScrolledWindow() -> VScrolledWindow"""
@@ -1929,8 +1908,7 @@ class VListBox(VScrolledWindow):
         """OnDrawBackground(self, DC dc, Rect rect, size_t n)"""
         return _windows_.VListBox_OnDrawBackground(*args, **kwargs)
 
-VListBox_swigregister = _windows_.VListBox_swigregister
-VListBox_swigregister(VListBox)
+_windows_.VListBox_swigregister(VListBox)
 VListBoxNameStr = cvar.VListBoxNameStr
 
 def PreVListBox(*args, **kwargs):
@@ -1973,8 +1951,7 @@ class HtmlListBox(VListBox):
         """OnLinkClicked(self, size_t n, wxHtmlLinkInfo link)"""
         return _windows_.HtmlListBox_OnLinkClicked(*args, **kwargs)
 
-HtmlListBox_swigregister = _windows_.HtmlListBox_swigregister
-HtmlListBox_swigregister(HtmlListBox)
+_windows_.HtmlListBox_swigregister(HtmlListBox)
 
 def PreHtmlListBox(*args, **kwargs):
     """PreHtmlListBox() -> HtmlListBox"""
@@ -2029,12 +2006,7 @@ class TaskBarIcon(_core.EvtHandler):
         """PopupMenu(self, Menu menu) -> bool"""
         return _windows_.TaskBarIcon_PopupMenu(*args, **kwargs)
 
-    def GetHandle(*args, **kwargs):
-        """GetHandle(self) -> long"""
-        return _windows_.TaskBarIcon_GetHandle(*args, **kwargs)
-
-TaskBarIcon_swigregister = _windows_.TaskBarIcon_swigregister
-TaskBarIcon_swigregister(TaskBarIcon)
+_windows_.TaskBarIcon_swigregister(TaskBarIcon)
 
 class TaskBarIconEvent(_core.Event):
     """Proxy of C++ TaskBarIconEvent class"""
@@ -2043,8 +2015,7 @@ class TaskBarIconEvent(_core.Event):
     def __init__(self, *args, **kwargs): 
         """__init__(self, EventType evtType, wxTaskBarIcon tbIcon) -> TaskBarIconEvent"""
         _windows_.TaskBarIconEvent_swiginit(self,_windows_.new_TaskBarIconEvent(*args, **kwargs))
-TaskBarIconEvent_swigregister = _windows_.TaskBarIconEvent_swigregister
-TaskBarIconEvent_swigregister(TaskBarIconEvent)
+_windows_.TaskBarIconEvent_swigregister(TaskBarIconEvent)
 
 wxEVT_TASKBAR_MOVE = _windows_.wxEVT_TASKBAR_MOVE
 wxEVT_TASKBAR_LEFT_DOWN = _windows_.wxEVT_TASKBAR_LEFT_DOWN
@@ -2136,8 +2107,7 @@ class ColourData(_core.Object):
         """
         return _windows_.ColourData_SetCustomColour(*args, **kwargs)
 
-ColourData_swigregister = _windows_.ColourData_swigregister
-ColourData_swigregister(ColourData)
+_windows_.ColourData_swigregister(ColourData)
 FileSelectorPromptStr = cvar.FileSelectorPromptStr
 DirSelectorPromptStr = cvar.DirSelectorPromptStr
 DirDialogNameStr = cvar.DirDialogNameStr
@@ -2168,8 +2138,7 @@ class ColourDialog(Dialog):
         """
         return _windows_.ColourDialog_GetColourData(*args, **kwargs)
 
-ColourDialog_swigregister = _windows_.ColourDialog_swigregister
-ColourDialog_swigregister(ColourDialog)
+_windows_.ColourDialog_swigregister(ColourDialog)
 
 
 def GetColourFromUser(*args, **kwargs):
@@ -2229,8 +2198,7 @@ class DirDialog(Dialog):
         """
         return _windows_.DirDialog_SetPath(*args, **kwargs)
 
-DirDialog_swigregister = _windows_.DirDialog_swigregister
-DirDialog_swigregister(DirDialog)
+_windows_.DirDialog_swigregister(DirDialog)
 
 class FileDialog(Dialog):
     """
@@ -2391,8 +2359,7 @@ class FileDialog(Dialog):
         """
         return _windows_.FileDialog_GetPaths(*args, **kwargs)
 
-FileDialog_swigregister = _windows_.FileDialog_swigregister
-FileDialog_swigregister(FileDialog)
+_windows_.FileDialog_swigregister(FileDialog)
 
 CHOICEDLG_STYLE = _windows_.CHOICEDLG_STYLE
 class MultiChoiceDialog(Dialog):
@@ -2440,8 +2407,7 @@ class MultiChoiceDialog(Dialog):
         """
         return _windows_.MultiChoiceDialog_GetSelections(*args, **kwargs)
 
-MultiChoiceDialog_swigregister = _windows_.MultiChoiceDialog_swigregister
-MultiChoiceDialog_swigregister(MultiChoiceDialog)
+_windows_.MultiChoiceDialog_swigregister(MultiChoiceDialog)
 
 class SingleChoiceDialog(Dialog):
     """A simple dialog with a single selection listbox."""
@@ -2482,8 +2448,7 @@ class SingleChoiceDialog(Dialog):
         """
         return _windows_.SingleChoiceDialog_SetSelection(*args, **kwargs)
 
-SingleChoiceDialog_swigregister = _windows_.SingleChoiceDialog_swigregister
-SingleChoiceDialog_swigregister(SingleChoiceDialog)
+_windows_.SingleChoiceDialog_swigregister(SingleChoiceDialog)
 
 TextEntryDialogStyle = _windows_.TextEntryDialogStyle
 class TextEntryDialog(Dialog):
@@ -2518,8 +2483,7 @@ class TextEntryDialog(Dialog):
         """
         return _windows_.TextEntryDialog_SetValue(*args, **kwargs)
 
-TextEntryDialog_swigregister = _windows_.TextEntryDialog_swigregister
-TextEntryDialog_swigregister(TextEntryDialog)
+_windows_.TextEntryDialog_swigregister(TextEntryDialog)
 
 class PasswordEntryDialog(TextEntryDialog):
     """Proxy of C++ PasswordEntryDialog class"""
@@ -2532,8 +2496,7 @@ class PasswordEntryDialog(TextEntryDialog):
             long style=TextEntryDialogStyle, Point pos=DefaultPosition) -> PasswordEntryDialog
         """
         _windows_.PasswordEntryDialog_swiginit(self,_windows_.new_PasswordEntryDialog(*args, **kwargs))
-PasswordEntryDialog_swigregister = _windows_.PasswordEntryDialog_swigregister
-PasswordEntryDialog_swigregister(PasswordEntryDialog)
+_windows_.PasswordEntryDialog_swigregister(PasswordEntryDialog)
 GetPasswordFromUserPromptStr = cvar.GetPasswordFromUserPromptStr
 
 class FontData(_core.Object):
@@ -2669,8 +2632,7 @@ class FontData(_core.Object):
         """
         return _windows_.FontData_SetShowHelp(*args, **kwargs)
 
-FontData_swigregister = _windows_.FontData_swigregister
-FontData_swigregister(FontData)
+_windows_.FontData_swigregister(FontData)
 
 class FontDialog(Dialog):
     """
@@ -2702,8 +2664,7 @@ class FontDialog(Dialog):
         """
         return _windows_.FontDialog_GetFontData(*args, **kwargs)
 
-FontDialog_swigregister = _windows_.FontDialog_swigregister
-FontDialog_swigregister(FontDialog)
+_windows_.FontDialog_swigregister(FontDialog)
 
 
 def GetFontFromUser(*args, **kwargs):
@@ -2727,8 +2688,7 @@ class MessageDialog(Dialog):
         _windows_.MessageDialog_swiginit(self,_windows_.new_MessageDialog(*args, **kwargs))
         self._setOORInfo(self)
 
-MessageDialog_swigregister = _windows_.MessageDialog_swigregister
-MessageDialog_swigregister(MessageDialog)
+_windows_.MessageDialog_swigregister(MessageDialog)
 
 class ProgressDialog(Frame):
     """
@@ -2777,8 +2737,7 @@ class ProgressDialog(Frame):
         """
         return _windows_.ProgressDialog_Resume(*args, **kwargs)
 
-ProgressDialog_swigregister = _windows_.ProgressDialog_swigregister
-ProgressDialog_swigregister(ProgressDialog)
+_windows_.ProgressDialog_swigregister(ProgressDialog)
 
 FR_DOWN = _windows_.FR_DOWN
 FR_WHOLEWORD = _windows_.FR_WHOLEWORD
@@ -2862,8 +2821,7 @@ class FindDialogEvent(_core.CommandEvent):
         """SetReplaceString(self, String str)"""
         return _windows_.FindDialogEvent_SetReplaceString(*args, **kwargs)
 
-FindDialogEvent_swigregister = _windows_.FindDialogEvent_swigregister
-FindDialogEvent_swigregister(FindDialogEvent)
+_windows_.FindDialogEvent_swigregister(FindDialogEvent)
 
 class FindReplaceData(_core.Object):
     """
@@ -2935,8 +2893,7 @@ class FindReplaceData(_core.Object):
         """
         return _windows_.FindReplaceData_SetReplaceString(*args, **kwargs)
 
-FindReplaceData_swigregister = _windows_.FindReplaceData_swigregister
-FindReplaceData_swigregister(FindReplaceData)
+_windows_.FindReplaceData_swigregister(FindReplaceData)
 
 class FindReplaceDialog(Dialog):
     """
@@ -2986,8 +2943,7 @@ class FindReplaceDialog(Dialog):
         """
         return _windows_.FindReplaceDialog_SetData(*args, **kwargs)
 
-FindReplaceDialog_swigregister = _windows_.FindReplaceDialog_swigregister
-FindReplaceDialog_swigregister(FindReplaceDialog)
+_windows_.FindReplaceDialog_swigregister(FindReplaceDialog)
 
 def PreFindReplaceDialog(*args, **kwargs):
     """
@@ -3072,8 +3028,7 @@ class MDIParentFrame(Frame):
         """Tile(self, int orient=HORIZONTAL)"""
         return _windows_.MDIParentFrame_Tile(*args, **kwargs)
 
-MDIParentFrame_swigregister = _windows_.MDIParentFrame_swigregister
-MDIParentFrame_swigregister(MDIParentFrame)
+_windows_.MDIParentFrame_swigregister(MDIParentFrame)
 
 def PreMDIParentFrame(*args, **kwargs):
     """PreMDIParentFrame() -> MDIParentFrame"""
@@ -3107,8 +3062,7 @@ class MDIChildFrame(Frame):
         """Activate(self)"""
         return _windows_.MDIChildFrame_Activate(*args, **kwargs)
 
-MDIChildFrame_swigregister = _windows_.MDIChildFrame_swigregister
-MDIChildFrame_swigregister(MDIChildFrame)
+_windows_.MDIChildFrame_swigregister(MDIChildFrame)
 
 def PreMDIChildFrame(*args, **kwargs):
     """PreMDIChildFrame() -> MDIChildFrame"""
@@ -3128,8 +3082,7 @@ class MDIClientWindow(_core.Window):
         """Create(self, MDIParentFrame parent, long style=0) -> bool"""
         return _windows_.MDIClientWindow_Create(*args, **kwargs)
 
-MDIClientWindow_swigregister = _windows_.MDIClientWindow_swigregister
-MDIClientWindow_swigregister(MDIClientWindow)
+_windows_.MDIClientWindow_swigregister(MDIClientWindow)
 
 def PreMDIClientWindow(*args, **kwargs):
     """PreMDIClientWindow() -> MDIClientWindow"""
@@ -3311,8 +3264,7 @@ class PyWindow(_core.Window):
     base_OnInternalIdle = wx._deprecated(base_OnInternalIdle,
                                    "Please use PyWindow.OnInternalIdle instead.")
 
-PyWindow_swigregister = _windows_.PyWindow_swigregister
-PyWindow_swigregister(PyWindow)
+_windows_.PyWindow_swigregister(PyWindow)
 
 def PrePyWindow(*args, **kwargs):
     """PrePyWindow() -> PyWindow"""
@@ -3492,8 +3444,7 @@ class PyPanel(Panel):
     base_OnInternalIdle = wx._deprecated(base_OnInternalIdle,
                                    "Please use PyPanel.OnInternalIdle instead.")
 
-PyPanel_swigregister = _windows_.PyPanel_swigregister
-PyPanel_swigregister(PyPanel)
+_windows_.PyPanel_swigregister(PyPanel)
 
 def PrePyPanel(*args, **kwargs):
     """PrePyPanel() -> PyPanel"""
@@ -3673,8 +3624,7 @@ class PyScrolledWindow(ScrolledWindow):
     base_OnInternalIdle = wx._deprecated(base_OnInternalIdle,
                                    "Please use PyScrolledWindow.OnInternalIdle instead.")
 
-PyScrolledWindow_swigregister = _windows_.PyScrolledWindow_swigregister
-PyScrolledWindow_swigregister(PyScrolledWindow)
+_windows_.PyScrolledWindow_swigregister(PyScrolledWindow)
 
 def PrePyScrolledWindow(*args, **kwargs):
     """PrePyScrolledWindow() -> PyScrolledWindow"""
@@ -3824,8 +3774,7 @@ class PrintData(_core.Object):
         """SetPrivData(self, PyObject data)"""
         return _windows_.PrintData_SetPrivData(*args, **kwargs)
 
-PrintData_swigregister = _windows_.PrintData_swigregister
-PrintData_swigregister(PrintData)
+_windows_.PrintData_swigregister(PrintData)
 PrintoutTitleStr = cvar.PrintoutTitleStr
 PreviewCanvasNameStr = cvar.PreviewCanvasNameStr
 
@@ -3967,8 +3916,7 @@ class PageSetupDialogData(_core.Object):
         return _windows_.PageSetupDialogData_CalculatePaperSizeFromId(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
-PageSetupDialogData_swigregister = _windows_.PageSetupDialogData_swigregister
-PageSetupDialogData_swigregister(PageSetupDialogData)
+_windows_.PageSetupDialogData_swigregister(PageSetupDialogData)
 
 class PageSetupDialog(_core.Object):
     """Proxy of C++ PageSetupDialog class"""
@@ -3989,8 +3937,7 @@ class PageSetupDialog(_core.Object):
         """ShowModal(self) -> int"""
         return _windows_.PageSetupDialog_ShowModal(*args, **kwargs)
 
-PageSetupDialog_swigregister = _windows_.PageSetupDialog_swigregister
-PageSetupDialog_swigregister(PageSetupDialog)
+_windows_.PageSetupDialog_swigregister(PageSetupDialog)
 
 class PrintDialogData(_core.Object):
     """Proxy of C++ PrintDialogData class"""
@@ -4122,8 +4069,7 @@ class PrintDialogData(_core.Object):
         return _windows_.PrintDialogData_SetPrintData(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
-PrintDialogData_swigregister = _windows_.PrintDialogData_swigregister
-PrintDialogData_swigregister(PrintDialogData)
+_windows_.PrintDialogData_swigregister(PrintDialogData)
 
 class PrintDialog(_core.Object):
     """Proxy of C++ PrintDialog class"""
@@ -4148,8 +4094,7 @@ class PrintDialog(_core.Object):
         """GetPrintDC(self) -> DC"""
         return _windows_.PrintDialog_GetPrintDC(*args, **kwargs)
 
-PrintDialog_swigregister = _windows_.PrintDialog_swigregister
-PrintDialog_swigregister(PrintDialog)
+_windows_.PrintDialog_swigregister(PrintDialog)
 
 PRINTER_NO_ERROR = _windows_.PRINTER_NO_ERROR
 PRINTER_CANCELLED = _windows_.PRINTER_CANCELLED
@@ -4196,8 +4141,7 @@ class Printer(_core.Object):
         return _windows_.Printer_GetLastError(*args, **kwargs)
 
     GetLastError = staticmethod(GetLastError)
-Printer_swigregister = _windows_.Printer_swigregister
-Printer_swigregister(Printer)
+_windows_.Printer_swigregister(Printer)
 
 def Printer_GetLastError(*args):
   """Printer_GetLastError() -> int"""
@@ -4328,8 +4272,7 @@ class Printout(_core.Object):
     base_GetPageInfo = wx._deprecated(base_GetPageInfo,
                                    "Please use Printout.GetPageInfo instead.")
 
-Printout_swigregister = _windows_.Printout_swigregister
-Printout_swigregister(Printout)
+_windows_.Printout_swigregister(Printout)
 
 class PreviewCanvas(ScrolledWindow):
     """Proxy of C++ PreviewCanvas class"""
@@ -4344,8 +4287,7 @@ class PreviewCanvas(ScrolledWindow):
         _windows_.PreviewCanvas_swiginit(self,_windows_.new_PreviewCanvas(*args, **kwargs))
         self._setOORInfo(self)
 
-PreviewCanvas_swigregister = _windows_.PreviewCanvas_swigregister
-PreviewCanvas_swigregister(PreviewCanvas)
+_windows_.PreviewCanvas_swigregister(PreviewCanvas)
 
 class PreviewFrame(Frame):
     """Proxy of C++ PreviewFrame class"""
@@ -4376,8 +4318,7 @@ class PreviewFrame(Frame):
         """GetControlBar(self) -> PreviewControlBar"""
         return _windows_.PreviewFrame_GetControlBar(*args, **kwargs)
 
-PreviewFrame_swigregister = _windows_.PreviewFrame_swigregister
-PreviewFrame_swigregister(PreviewFrame)
+_windows_.PreviewFrame_swigregister(PreviewFrame)
 
 PREVIEW_PRINT = _windows_.PREVIEW_PRINT
 PREVIEW_PREVIOUS = _windows_.PREVIEW_PREVIOUS
@@ -4440,8 +4381,7 @@ class PreviewControlBar(Panel):
         """OnGoto(self)"""
         return _windows_.PreviewControlBar_OnGoto(*args, **kwargs)
 
-PreviewControlBar_swigregister = _windows_.PreviewControlBar_swigregister
-PreviewControlBar_swigregister(PreviewControlBar)
+_windows_.PreviewControlBar_swigregister(PreviewControlBar)
 
 class PrintPreview(_core.Object):
     """Proxy of C++ PrintPreview class"""
@@ -4544,8 +4484,7 @@ class PrintPreview(_core.Object):
         return _windows_.PrintPreview_DetermineScaling(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
-PrintPreview_swigregister = _windows_.PrintPreview_swigregister
-PrintPreview_swigregister(PrintPreview)
+_windows_.PrintPreview_swigregister(PrintPreview)
 
 class PyPrintPreview(PrintPreview):
     """Proxy of C++ PyPrintPreview class"""
@@ -4598,8 +4537,7 @@ class PyPrintPreview(PrintPreview):
     base_DetermineScaling = wx._deprecated(base_DetermineScaling,
                                    "Please use PyPrintPreview.DetermineScaling instead.")
 
-PyPrintPreview_swigregister = _windows_.PyPrintPreview_swigregister
-PyPrintPreview_swigregister(PyPrintPreview)
+_windows_.PyPrintPreview_swigregister(PyPrintPreview)
 
 class PyPreviewFrame(PreviewFrame):
     """Proxy of C++ PyPreviewFrame class"""
@@ -4653,8 +4591,7 @@ class PyPreviewFrame(PreviewFrame):
     base_CreateControlBar = wx._deprecated(base_CreateControlBar,
                                    "Please use PyPreviewFrame.CreateControlBar instead.")
 
-PyPreviewFrame_swigregister = _windows_.PyPreviewFrame_swigregister
-PyPreviewFrame_swigregister(PyPreviewFrame)
+_windows_.PyPreviewFrame_swigregister(PyPreviewFrame)
 
 class PyPreviewControlBar(PreviewControlBar):
     """Proxy of C++ PyPreviewControlBar class"""
@@ -4695,8 +4632,7 @@ class PyPreviewControlBar(PreviewControlBar):
     base_SetZoomControl = wx._deprecated(base_SetZoomControl,
                                    "Please use PreviewControlBar.SetZoomControl instead.")
 
-PyPreviewControlBar_swigregister = _windows_.PyPreviewControlBar_swigregister
-PyPreviewControlBar_swigregister(PyPreviewControlBar)
+_windows_.PyPreviewControlBar_swigregister(PyPreviewControlBar)
 
 
 

@@ -722,8 +722,7 @@ class Object(object):
         args[0].thisown = 0
         return val
 
-Object_swigregister = _core_.Object_swigregister
-Object_swigregister(Object)
+_core_.Object_swigregister(Object)
 _wxPySetDictionary = _core_._wxPySetDictionary
 cvar = _core_.cvar
 EmptyString = cvar.EmptyString
@@ -916,8 +915,7 @@ class Size(object):
     __safe_for_unpickling__ = True
     def __reduce__(self):                return (wx.Size, self.Get())
 
-Size_swigregister = _core_.Size_swigregister
-Size_swigregister(Size)
+_core_.Size_swigregister(Size)
 
 #---------------------------------------------------------------------------
 
@@ -1001,8 +999,7 @@ class RealPoint(object):
     __safe_for_unpickling__ = True
     def __reduce__(self):                return (wx.RealPoint, self.Get())
 
-RealPoint_swigregister = _core_.RealPoint_swigregister
-RealPoint_swigregister(RealPoint)
+_core_.RealPoint_swigregister(RealPoint)
 
 #---------------------------------------------------------------------------
 
@@ -1102,8 +1099,7 @@ class Point(object):
     __safe_for_unpickling__ = True
     def __reduce__(self):                return (wx.Point, self.Get())
 
-Point_swigregister = _core_.Point_swigregister
-Point_swigregister(Point)
+_core_.Point_swigregister(Point)
 
 #---------------------------------------------------------------------------
 
@@ -1401,8 +1397,7 @@ class Rect(object):
     __safe_for_unpickling__ = True
     def __reduce__(self):                return (wx.Rect, self.Get())
 
-Rect_swigregister = _core_.Rect_swigregister
-Rect_swigregister(Rect)
+_core_.Rect_swigregister(Rect)
 
 def RectPP(*args, **kwargs):
     """
@@ -1576,8 +1571,7 @@ class Point2D(object):
     __safe_for_unpickling__ = True
     def __reduce__(self):                return (wx.Point2D, self.Get())
 
-Point2D_swigregister = _core_.Point2D_swigregister
-Point2D_swigregister(Point2D)
+_core_.Point2D_swigregister(Point2D)
 
 def Point2DCopy(*args, **kwargs):
     """
@@ -1675,8 +1669,7 @@ class InputStream(object):
         """TellI(self) -> long"""
         return _core_.InputStream_TellI(*args, **kwargs)
 
-InputStream_swigregister = _core_.InputStream_swigregister
-InputStream_swigregister(InputStream)
+_core_.InputStream_swigregister(InputStream)
 DefaultPosition = cvar.DefaultPosition
 DefaultSize = cvar.DefaultSize
 
@@ -1693,8 +1686,7 @@ class OutputStream(object):
         """LastWrite(self) -> size_t"""
         return _core_.OutputStream_LastWrite(*args, **kwargs)
 
-OutputStream_swigregister = _core_.OutputStream_swigregister
-OutputStream_swigregister(OutputStream)
+_core_.OutputStream_swigregister(OutputStream)
 
 #---------------------------------------------------------------------------
 
@@ -1732,8 +1724,7 @@ class FSFile(Object):
         """GetModificationTime(self) -> DateTime"""
         return _core_.FSFile_GetModificationTime(*args, **kwargs)
 
-FSFile_swigregister = _core_.FSFile_swigregister
-FSFile_swigregister(FSFile)
+_core_.FSFile_swigregister(FSFile)
 
 class CPPFileSystemHandler(object):
     """Proxy of C++ CPPFileSystemHandler class"""
@@ -1742,8 +1733,7 @@ class CPPFileSystemHandler(object):
     __repr__ = _swig_repr
     __swig_destroy__ = _core_.delete_CPPFileSystemHandler
     __del__ = lambda self : None;
-CPPFileSystemHandler_swigregister = _core_.CPPFileSystemHandler_swigregister
-CPPFileSystemHandler_swigregister(CPPFileSystemHandler)
+_core_.CPPFileSystemHandler_swigregister(CPPFileSystemHandler)
 
 class FileSystemHandler(CPPFileSystemHandler):
     """Proxy of C++ FileSystemHandler class"""
@@ -1794,8 +1784,7 @@ class FileSystemHandler(CPPFileSystemHandler):
         """GetMimeTypeFromExt(self, String location) -> String"""
         return _core_.FileSystemHandler_GetMimeTypeFromExt(*args, **kwargs)
 
-FileSystemHandler_swigregister = _core_.FileSystemHandler_swigregister
-FileSystemHandler_swigregister(FileSystemHandler)
+_core_.FileSystemHandler_swigregister(FileSystemHandler)
 
 class FileSystem(Object):
     """Proxy of C++ FileSystem class"""
@@ -1846,8 +1835,7 @@ class FileSystem(Object):
         return _core_.FileSystem_URLToFileName(*args, **kwargs)
 
     URLToFileName = staticmethod(URLToFileName)
-FileSystem_swigregister = _core_.FileSystem_swigregister
-FileSystem_swigregister(FileSystem)
+_core_.FileSystem_swigregister(FileSystem)
 
 def FileSystem_AddHandler(*args, **kwargs):
   """FileSystem_AddHandler(CPPFileSystemHandler handler)"""
@@ -1880,8 +1868,7 @@ class InternetFSHandler(CPPFileSystemHandler):
         """OpenFile(self, FileSystem fs, String location) -> FSFile"""
         return _core_.InternetFSHandler_OpenFile(*args, **kwargs)
 
-InternetFSHandler_swigregister = _core_.InternetFSHandler_swigregister
-InternetFSHandler_swigregister(InternetFSHandler)
+_core_.InternetFSHandler_swigregister(InternetFSHandler)
 
 class ZipFSHandler(CPPFileSystemHandler):
     """Proxy of C++ ZipFSHandler class"""
@@ -1906,8 +1893,7 @@ class ZipFSHandler(CPPFileSystemHandler):
         """FindNext(self) -> String"""
         return _core_.ZipFSHandler_FindNext(*args, **kwargs)
 
-ZipFSHandler_swigregister = _core_.ZipFSHandler_swigregister
-ZipFSHandler_swigregister(ZipFSHandler)
+_core_.ZipFSHandler_swigregister(ZipFSHandler)
 
 
 def __wxMemoryFSHandler_AddFile_wxImage(*args, **kwargs):
@@ -1967,8 +1953,7 @@ class MemoryFSHandler(CPPFileSystemHandler):
         """FindNext(self) -> String"""
         return _core_.MemoryFSHandler_FindNext(*args, **kwargs)
 
-MemoryFSHandler_swigregister = _core_.MemoryFSHandler_swigregister
-MemoryFSHandler_swigregister(MemoryFSHandler)
+_core_.MemoryFSHandler_swigregister(MemoryFSHandler)
 
 def MemoryFSHandler_RemoveFile(*args, **kwargs):
   """MemoryFSHandler_RemoveFile(String filename)"""
@@ -2024,8 +2009,7 @@ class ImageHandler(Object):
         """SetMimeType(self, String mimetype)"""
         return _core_.ImageHandler_SetMimeType(*args, **kwargs)
 
-ImageHandler_swigregister = _core_.ImageHandler_swigregister
-ImageHandler_swigregister(ImageHandler)
+_core_.ImageHandler_swigregister(ImageHandler)
 
 class PyImageHandler(ImageHandler):
     """
@@ -2090,8 +2074,7 @@ class PyImageHandler(ImageHandler):
         """_SetSelf(self, PyObject self)"""
         return _core_.PyImageHandler__SetSelf(*args, **kwargs)
 
-PyImageHandler_swigregister = _core_.PyImageHandler_swigregister
-PyImageHandler_swigregister(PyImageHandler)
+_core_.PyImageHandler_swigregister(PyImageHandler)
 
 class ImageHistogram(object):
     """Proxy of C++ ImageHistogram class"""
@@ -2144,8 +2127,7 @@ class ImageHistogram(object):
         """
         return _core_.ImageHistogram_GetCountColour(*args, **kwargs)
 
-ImageHistogram_swigregister = _core_.ImageHistogram_swigregister
-ImageHistogram_swigregister(ImageHistogram)
+_core_.ImageHistogram_swigregister(ImageHistogram)
 
 def ImageHistogram_MakeKey(*args, **kwargs):
   """
@@ -2174,8 +2156,7 @@ class Image_RGBValue(object):
     red = property(_core_.Image_RGBValue_red_get, _core_.Image_RGBValue_red_set)
     green = property(_core_.Image_RGBValue_green_get, _core_.Image_RGBValue_green_set)
     blue = property(_core_.Image_RGBValue_blue_get, _core_.Image_RGBValue_blue_set)
-Image_RGBValue_swigregister = _core_.Image_RGBValue_swigregister
-Image_RGBValue_swigregister(Image_RGBValue)
+_core_.Image_RGBValue_swigregister(Image_RGBValue)
 
 class Image_HSVValue(object):
     """
@@ -2196,8 +2177,7 @@ class Image_HSVValue(object):
     hue = property(_core_.Image_HSVValue_hue_get, _core_.Image_HSVValue_hue_set)
     saturation = property(_core_.Image_HSVValue_saturation_get, _core_.Image_HSVValue_saturation_set)
     value = property(_core_.Image_HSVValue_value_get, _core_.Image_HSVValue_value_set)
-Image_HSVValue_swigregister = _core_.Image_HSVValue_swigregister
-Image_HSVValue_swigregister(Image_HSVValue)
+_core_.Image_HSVValue_swigregister(Image_HSVValue)
 
 class Image(Object):
     """
@@ -2914,8 +2894,7 @@ class Image(Object):
 
     HSVtoRGB = staticmethod(HSVtoRGB)
     def __nonzero__(self): return self.Ok() 
-Image_swigregister = _core_.Image_swigregister
-Image_swigregister(Image)
+_core_.Image_swigregister(Image)
 
 def ImageFromMime(*args, **kwargs):
     """
@@ -3091,8 +3070,7 @@ class BMPHandler(ImageHandler):
         A `wx.ImageHandler` for \*.bmp bitmap files.
         """
         _core_.BMPHandler_swiginit(self,_core_.new_BMPHandler(*args, **kwargs))
-BMPHandler_swigregister = _core_.BMPHandler_swigregister
-BMPHandler_swigregister(BMPHandler)
+_core_.BMPHandler_swigregister(BMPHandler)
 NullImage = cvar.NullImage
 IMAGE_OPTION_FILENAME = cvar.IMAGE_OPTION_FILENAME
 IMAGE_OPTION_BMP_FORMAT = cvar.IMAGE_OPTION_BMP_FORMAT
@@ -3121,8 +3099,7 @@ class ICOHandler(BMPHandler):
         A `wx.ImageHandler` for \*.ico icon files.
         """
         _core_.ICOHandler_swiginit(self,_core_.new_ICOHandler(*args, **kwargs))
-ICOHandler_swigregister = _core_.ICOHandler_swigregister
-ICOHandler_swigregister(ICOHandler)
+_core_.ICOHandler_swigregister(ICOHandler)
 
 class CURHandler(ICOHandler):
     """A `wx.ImageHandler` for \*.cur cursor files."""
@@ -3135,8 +3112,7 @@ class CURHandler(ICOHandler):
         A `wx.ImageHandler` for \*.cur cursor files.
         """
         _core_.CURHandler_swiginit(self,_core_.new_CURHandler(*args, **kwargs))
-CURHandler_swigregister = _core_.CURHandler_swigregister
-CURHandler_swigregister(CURHandler)
+_core_.CURHandler_swigregister(CURHandler)
 
 class ANIHandler(CURHandler):
     """A `wx.ImageHandler` for \*.ani animated cursor files."""
@@ -3149,8 +3125,7 @@ class ANIHandler(CURHandler):
         A `wx.ImageHandler` for \*.ani animated cursor files.
         """
         _core_.ANIHandler_swiginit(self,_core_.new_ANIHandler(*args, **kwargs))
-ANIHandler_swigregister = _core_.ANIHandler_swigregister
-ANIHandler_swigregister(ANIHandler)
+_core_.ANIHandler_swigregister(ANIHandler)
 
 class PNGHandler(ImageHandler):
     """A `wx.ImageHandler` for PNG image files."""
@@ -3163,8 +3138,7 @@ class PNGHandler(ImageHandler):
         A `wx.ImageHandler` for PNG image files.
         """
         _core_.PNGHandler_swiginit(self,_core_.new_PNGHandler(*args, **kwargs))
-PNGHandler_swigregister = _core_.PNGHandler_swigregister
-PNGHandler_swigregister(PNGHandler)
+_core_.PNGHandler_swigregister(PNGHandler)
 
 class GIFHandler(ImageHandler):
     """A `wx.ImageHandler` for GIF image files."""
@@ -3177,8 +3151,7 @@ class GIFHandler(ImageHandler):
         A `wx.ImageHandler` for GIF image files.
         """
         _core_.GIFHandler_swiginit(self,_core_.new_GIFHandler(*args, **kwargs))
-GIFHandler_swigregister = _core_.GIFHandler_swigregister
-GIFHandler_swigregister(GIFHandler)
+_core_.GIFHandler_swigregister(GIFHandler)
 
 class PCXHandler(ImageHandler):
     """A `wx.ImageHandler` for PCX imager files."""
@@ -3191,8 +3164,7 @@ class PCXHandler(ImageHandler):
         A `wx.ImageHandler` for PCX imager files.
         """
         _core_.PCXHandler_swiginit(self,_core_.new_PCXHandler(*args, **kwargs))
-PCXHandler_swigregister = _core_.PCXHandler_swigregister
-PCXHandler_swigregister(PCXHandler)
+_core_.PCXHandler_swigregister(PCXHandler)
 
 class JPEGHandler(ImageHandler):
     """A `wx.ImageHandler` for JPEG/JPG image files."""
@@ -3205,8 +3177,7 @@ class JPEGHandler(ImageHandler):
         A `wx.ImageHandler` for JPEG/JPG image files.
         """
         _core_.JPEGHandler_swiginit(self,_core_.new_JPEGHandler(*args, **kwargs))
-JPEGHandler_swigregister = _core_.JPEGHandler_swigregister
-JPEGHandler_swigregister(JPEGHandler)
+_core_.JPEGHandler_swigregister(JPEGHandler)
 
 class PNMHandler(ImageHandler):
     """A `wx.ImageHandler` for PNM image files."""
@@ -3219,8 +3190,7 @@ class PNMHandler(ImageHandler):
         A `wx.ImageHandler` for PNM image files.
         """
         _core_.PNMHandler_swiginit(self,_core_.new_PNMHandler(*args, **kwargs))
-PNMHandler_swigregister = _core_.PNMHandler_swigregister
-PNMHandler_swigregister(PNMHandler)
+_core_.PNMHandler_swigregister(PNMHandler)
 
 class XPMHandler(ImageHandler):
     """A `wx.ImageHandler` for XPM image."""
@@ -3233,8 +3203,7 @@ class XPMHandler(ImageHandler):
         A `wx.ImageHandler` for XPM image.
         """
         _core_.XPMHandler_swiginit(self,_core_.new_XPMHandler(*args, **kwargs))
-XPMHandler_swigregister = _core_.XPMHandler_swigregister
-XPMHandler_swigregister(XPMHandler)
+_core_.XPMHandler_swigregister(XPMHandler)
 
 class TIFFHandler(ImageHandler):
     """A `wx.ImageHandler` for TIFF image files."""
@@ -3247,8 +3216,7 @@ class TIFFHandler(ImageHandler):
         A `wx.ImageHandler` for TIFF image files.
         """
         _core_.TIFFHandler_swiginit(self,_core_.new_TIFFHandler(*args, **kwargs))
-TIFFHandler_swigregister = _core_.TIFFHandler_swigregister
-TIFFHandler_swigregister(TIFFHandler)
+_core_.TIFFHandler_swigregister(TIFFHandler)
 
 QUANTIZE_INCLUDE_WINDOWS_COLOURS = _core_.QUANTIZE_INCLUDE_WINDOWS_COLOURS
 QUANTIZE_FILL_DESTINATION_IMAGE = _core_.QUANTIZE_FILL_DESTINATION_IMAGE
@@ -3268,8 +3236,7 @@ class Quantize(object):
         return _core_.Quantize_Quantize(*args, **kwargs)
 
     Quantize = staticmethod(Quantize)
-Quantize_swigregister = _core_.Quantize_swigregister
-Quantize_swigregister(Quantize)
+_core_.Quantize_swigregister(Quantize)
 
 def Quantize_Quantize(*args, **kwargs):
   """
@@ -3379,8 +3346,7 @@ class EvtHandler(Object):
             id  = source.GetId()
         return event.Unbind(self, id, id2)              
 
-EvtHandler_swigregister = _core_.EvtHandler_swigregister
-EvtHandler_swigregister(EvtHandler)
+_core_.EvtHandler_swigregister(EvtHandler)
 
 #---------------------------------------------------------------------------
 
@@ -3566,6 +3532,9 @@ wxEVT_UPDATE_UI = _core_.wxEVT_UPDATE_UI
 wxEVT_SIZING = _core_.wxEVT_SIZING
 wxEVT_MOVING = _core_.wxEVT_MOVING
 wxEVT_HIBERNATE = _core_.wxEVT_HIBERNATE
+wxEVT_COMMAND_TEXT_COPY = _core_.wxEVT_COMMAND_TEXT_COPY
+wxEVT_COMMAND_TEXT_CUT = _core_.wxEVT_COMMAND_TEXT_CUT
+wxEVT_COMMAND_TEXT_PASTE = _core_.wxEVT_COMMAND_TEXT_PASTE
 wxEVT_COMMAND_LEFT_CLICK = _core_.wxEVT_COMMAND_LEFT_CLICK
 wxEVT_COMMAND_LEFT_DCLICK = _core_.wxEVT_COMMAND_LEFT_DCLICK
 wxEVT_COMMAND_RIGHT_CLICK = _core_.wxEVT_COMMAND_RIGHT_CLICK
@@ -3750,6 +3719,9 @@ EVT_UPDATE_UI_RANGE = wx.PyEventBinder( wxEVT_UPDATE_UI, 2)
 
 EVT_CONTEXT_MENU = wx.PyEventBinder( wxEVT_CONTEXT_MENU )
 
+EVT_TEXT_CUT   =  wx.PyEventBinder( wxEVT_COMMAND_TEXT_CUT )
+EVT_TEXT_COPY  =  wx.PyEventBinder( wxEVT_COMMAND_TEXT_COPY )
+EVT_TEXT_PASTE =  wx.PyEventBinder( wxEVT_COMMAND_TEXT_PASTE )
 
 
 #---------------------------------------------------------------------------
@@ -3894,8 +3866,7 @@ class Event(Object):
         """Clone(self) -> Event"""
         return _core_.Event_Clone(*args, **kwargs)
 
-Event_swigregister = _core_.Event_swigregister
-Event_swigregister(Event)
+_core_.Event_swigregister(Event)
 
 #---------------------------------------------------------------------------
 
@@ -3918,8 +3889,7 @@ class PropagationDisabler(object):
         _core_.PropagationDisabler_swiginit(self,_core_.new_PropagationDisabler(*args, **kwargs))
     __swig_destroy__ = _core_.delete_PropagationDisabler
     __del__ = lambda self : None;
-PropagationDisabler_swigregister = _core_.PropagationDisabler_swigregister
-PropagationDisabler_swigregister(PropagationDisabler)
+_core_.PropagationDisabler_swigregister(PropagationDisabler)
 
 class PropagateOnce(object):
     """
@@ -3940,8 +3910,7 @@ class PropagateOnce(object):
         _core_.PropagateOnce_swiginit(self,_core_.new_PropagateOnce(*args, **kwargs))
     __swig_destroy__ = _core_.delete_PropagateOnce
     __del__ = lambda self : None;
-PropagateOnce_swigregister = _core_.PropagateOnce_swigregister
-PropagateOnce_swigregister(PropagateOnce)
+_core_.PropagateOnce_swigregister(PropagateOnce)
 
 #---------------------------------------------------------------------------
 
@@ -4060,8 +4029,7 @@ class CommandEvent(Event):
         """Clone(self) -> Event"""
         return _core_.CommandEvent_Clone(*args, **kwargs)
 
-CommandEvent_swigregister = _core_.CommandEvent_swigregister
-CommandEvent_swigregister(CommandEvent)
+_core_.CommandEvent_swigregister(CommandEvent)
 
 #---------------------------------------------------------------------------
 
@@ -4116,8 +4084,7 @@ class NotifyEvent(CommandEvent):
         """
         return _core_.NotifyEvent_IsAllowed(*args, **kwargs)
 
-NotifyEvent_swigregister = _core_.NotifyEvent_swigregister
-NotifyEvent_swigregister(NotifyEvent)
+_core_.NotifyEvent_swigregister(NotifyEvent)
 
 #---------------------------------------------------------------------------
 
@@ -4161,8 +4128,7 @@ class ScrollEvent(CommandEvent):
         """SetPosition(self, int pos)"""
         return _core_.ScrollEvent_SetPosition(*args, **kwargs)
 
-ScrollEvent_swigregister = _core_.ScrollEvent_swigregister
-ScrollEvent_swigregister(ScrollEvent)
+_core_.ScrollEvent_swigregister(ScrollEvent)
 
 #---------------------------------------------------------------------------
 
@@ -4208,8 +4174,7 @@ class ScrollWinEvent(Event):
         """SetPosition(self, int pos)"""
         return _core_.ScrollWinEvent_SetPosition(*args, **kwargs)
 
-ScrollWinEvent_swigregister = _core_.ScrollWinEvent_swigregister
-ScrollWinEvent_swigregister(ScrollWinEvent)
+_core_.ScrollWinEvent_swigregister(ScrollWinEvent)
 
 #---------------------------------------------------------------------------
 
@@ -4624,8 +4589,7 @@ class MouseEvent(Event):
     m_wheelRotation = property(_core_.MouseEvent_m_wheelRotation_get, _core_.MouseEvent_m_wheelRotation_set)
     m_wheelDelta = property(_core_.MouseEvent_m_wheelDelta_get, _core_.MouseEvent_m_wheelDelta_set)
     m_linesPerAction = property(_core_.MouseEvent_m_linesPerAction_get, _core_.MouseEvent_m_linesPerAction_set)
-MouseEvent_swigregister = _core_.MouseEvent_swigregister
-MouseEvent_swigregister(MouseEvent)
+_core_.MouseEvent_swigregister(MouseEvent)
 
 #---------------------------------------------------------------------------
 
@@ -4686,8 +4650,7 @@ class SetCursorEvent(Event):
         """
         return _core_.SetCursorEvent_HasCursor(*args, **kwargs)
 
-SetCursorEvent_swigregister = _core_.SetCursorEvent_swigregister
-SetCursorEvent_swigregister(SetCursorEvent)
+_core_.SetCursorEvent_swigregister(SetCursorEvent)
 
 #---------------------------------------------------------------------------
 
@@ -4930,8 +4893,7 @@ class KeyEvent(Event):
     m_scanCode = property(_core_.KeyEvent_m_scanCode_get, _core_.KeyEvent_m_scanCode_set)
     m_rawCode = property(_core_.KeyEvent_m_rawCode_get, _core_.KeyEvent_m_rawCode_set)
     m_rawFlags = property(_core_.KeyEvent_m_rawFlags_get, _core_.KeyEvent_m_rawFlags_set)
-KeyEvent_swigregister = _core_.KeyEvent_swigregister
-KeyEvent_swigregister(KeyEvent)
+_core_.KeyEvent_swigregister(KeyEvent)
 
 #---------------------------------------------------------------------------
 
@@ -4985,8 +4947,7 @@ class SizeEvent(Event):
 
     m_size = property(_core_.SizeEvent_m_size_get, _core_.SizeEvent_m_size_set)
     m_rect = property(_core_.SizeEvent_m_rect_get, _core_.SizeEvent_m_rect_set)
-SizeEvent_swigregister = _core_.SizeEvent_swigregister
-SizeEvent_swigregister(SizeEvent)
+_core_.SizeEvent_swigregister(SizeEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5027,8 +4988,7 @@ class MoveEvent(Event):
     m_pos =  property(GetPosition, SetPosition)
     m_rect = property(GetRect, SetRect)
 
-MoveEvent_swigregister = _core_.MoveEvent_swigregister
-MoveEvent_swigregister(MoveEvent)
+_core_.MoveEvent_swigregister(MoveEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5053,8 +5013,7 @@ class PaintEvent(Event):
     def __init__(self, *args, **kwargs): 
         """__init__(self, int Id=0) -> PaintEvent"""
         _core_.PaintEvent_swiginit(self,_core_.new_PaintEvent(*args, **kwargs))
-PaintEvent_swigregister = _core_.PaintEvent_swigregister
-PaintEvent_swigregister(PaintEvent)
+_core_.PaintEvent_swigregister(PaintEvent)
 
 class NcPaintEvent(Event):
     """Proxy of C++ NcPaintEvent class"""
@@ -5063,8 +5022,7 @@ class NcPaintEvent(Event):
     def __init__(self, *args, **kwargs): 
         """__init__(self, int winid=0) -> NcPaintEvent"""
         _core_.NcPaintEvent_swiginit(self,_core_.new_NcPaintEvent(*args, **kwargs))
-NcPaintEvent_swigregister = _core_.NcPaintEvent_swigregister
-NcPaintEvent_swigregister(NcPaintEvent)
+_core_.NcPaintEvent_swigregister(NcPaintEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5099,8 +5057,7 @@ class EraseEvent(Event):
         """
         return _core_.EraseEvent_GetDC(*args, **kwargs)
 
-EraseEvent_swigregister = _core_.EraseEvent_swigregister
-EraseEvent_swigregister(EraseEvent)
+_core_.EraseEvent_swigregister(EraseEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5140,8 +5097,7 @@ class FocusEvent(Event):
         """SetWindow(self, Window win)"""
         return _core_.FocusEvent_SetWindow(*args, **kwargs)
 
-FocusEvent_swigregister = _core_.FocusEvent_swigregister
-FocusEvent_swigregister(FocusEvent)
+_core_.FocusEvent_swigregister(FocusEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5168,8 +5124,7 @@ class ChildFocusEvent(CommandEvent):
         """
         return _core_.ChildFocusEvent_GetWindow(*args, **kwargs)
 
-ChildFocusEvent_swigregister = _core_.ChildFocusEvent_swigregister
-ChildFocusEvent_swigregister(ChildFocusEvent)
+_core_.ChildFocusEvent_swigregister(ChildFocusEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5208,8 +5163,7 @@ class ActivateEvent(Event):
         """
         return _core_.ActivateEvent_GetActive(*args, **kwargs)
 
-ActivateEvent_swigregister = _core_.ActivateEvent_swigregister
-ActivateEvent_swigregister(ActivateEvent)
+_core_.ActivateEvent_swigregister(ActivateEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5230,8 +5184,7 @@ class InitDialogEvent(Event):
         Constructor
         """
         _core_.InitDialogEvent_swiginit(self,_core_.new_InitDialogEvent(*args, **kwargs))
-InitDialogEvent_swigregister = _core_.InitDialogEvent_swigregister
-InitDialogEvent_swigregister(InitDialogEvent)
+_core_.InitDialogEvent_swigregister(InitDialogEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5281,8 +5234,7 @@ class MenuEvent(Event):
         """
         return _core_.MenuEvent_GetMenu(*args, **kwargs)
 
-MenuEvent_swigregister = _core_.MenuEvent_swigregister
-MenuEvent_swigregister(MenuEvent)
+_core_.MenuEvent_swigregister(MenuEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5371,8 +5323,7 @@ class CloseEvent(Event):
         """
         return _core_.CloseEvent_CanVeto(*args, **kwargs)
 
-CloseEvent_swigregister = _core_.CloseEvent_swigregister
-CloseEvent_swigregister(CloseEvent)
+_core_.CloseEvent_swigregister(CloseEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5395,8 +5346,7 @@ class ShowEvent(Event):
         """GetShow(self) -> bool"""
         return _core_.ShowEvent_GetShow(*args, **kwargs)
 
-ShowEvent_swigregister = _core_.ShowEvent_swigregister
-ShowEvent_swigregister(ShowEvent)
+_core_.ShowEvent_swigregister(ShowEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5424,8 +5374,7 @@ class IconizeEvent(Event):
         """
         return _core_.IconizeEvent_Iconized(*args, **kwargs)
 
-IconizeEvent_swigregister = _core_.IconizeEvent_swigregister
-IconizeEvent_swigregister(IconizeEvent)
+_core_.IconizeEvent_swigregister(IconizeEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5440,8 +5389,7 @@ class MaximizeEvent(Event):
         An EVT_MAXIMIZE event is sent when a frame is maximized or restored.
         """
         _core_.MaximizeEvent_swiginit(self,_core_.new_MaximizeEvent(*args, **kwargs))
-MaximizeEvent_swigregister = _core_.MaximizeEvent_swigregister
-MaximizeEvent_swigregister(MaximizeEvent)
+_core_.MaximizeEvent_swigregister(MaximizeEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5488,8 +5436,7 @@ class DropFilesEvent(Event):
         """
         return _core_.DropFilesEvent_GetFiles(*args, **kwargs)
 
-DropFilesEvent_swigregister = _core_.DropFilesEvent_swigregister
-DropFilesEvent_swigregister(DropFilesEvent)
+_core_.DropFilesEvent_swigregister(DropFilesEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5748,8 +5695,7 @@ class UpdateUIEvent(CommandEvent):
         return _core_.UpdateUIEvent_GetMode(*args, **kwargs)
 
     GetMode = staticmethod(GetMode)
-UpdateUIEvent_swigregister = _core_.UpdateUIEvent_swigregister
-UpdateUIEvent_swigregister(UpdateUIEvent)
+_core_.UpdateUIEvent_swigregister(UpdateUIEvent)
 
 def UpdateUIEvent_SetUpdateInterval(*args, **kwargs):
   """
@@ -5860,8 +5806,7 @@ class SysColourChangedEvent(Event):
         Constructor
         """
         _core_.SysColourChangedEvent_swiginit(self,_core_.new_SysColourChangedEvent(*args, **kwargs))
-SysColourChangedEvent_swigregister = _core_.SysColourChangedEvent_swigregister
-SysColourChangedEvent_swigregister(SysColourChangedEvent)
+_core_.SysColourChangedEvent_swigregister(SysColourChangedEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5893,8 +5838,7 @@ class MouseCaptureChangedEvent(Event):
         """
         return _core_.MouseCaptureChangedEvent_GetCapturedWindow(*args, **kwargs)
 
-MouseCaptureChangedEvent_swigregister = _core_.MouseCaptureChangedEvent_swigregister
-MouseCaptureChangedEvent_swigregister(MouseCaptureChangedEvent)
+_core_.MouseCaptureChangedEvent_swigregister(MouseCaptureChangedEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5910,8 +5854,7 @@ class DisplayChangedEvent(Event):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> DisplayChangedEvent"""
         _core_.DisplayChangedEvent_swiginit(self,_core_.new_DisplayChangedEvent(*args, **kwargs))
-DisplayChangedEvent_swigregister = _core_.DisplayChangedEvent_swigregister
-DisplayChangedEvent_swigregister(DisplayChangedEvent)
+_core_.DisplayChangedEvent_swigregister(DisplayChangedEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5944,8 +5887,7 @@ class PaletteChangedEvent(Event):
         """GetChangedWindow(self) -> Window"""
         return _core_.PaletteChangedEvent_GetChangedWindow(*args, **kwargs)
 
-PaletteChangedEvent_swigregister = _core_.PaletteChangedEvent_swigregister
-PaletteChangedEvent_swigregister(PaletteChangedEvent)
+_core_.PaletteChangedEvent_swigregister(PaletteChangedEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5977,8 +5919,7 @@ class QueryNewPaletteEvent(Event):
         """GetPaletteRealized(self) -> bool"""
         return _core_.QueryNewPaletteEvent_GetPaletteRealized(*args, **kwargs)
 
-QueryNewPaletteEvent_swigregister = _core_.QueryNewPaletteEvent_swigregister
-QueryNewPaletteEvent_swigregister(QueryNewPaletteEvent)
+_core_.QueryNewPaletteEvent_swigregister(QueryNewPaletteEvent)
 
 #---------------------------------------------------------------------------
 
@@ -6085,8 +6026,7 @@ class NavigationKeyEvent(Event):
     IsForward = _core_.NavigationKeyEvent_IsForward
     WinChange = _core_.NavigationKeyEvent_WinChange
     FromTab = _core_.NavigationKeyEvent_FromTab
-NavigationKeyEvent_swigregister = _core_.NavigationKeyEvent_swigregister
-NavigationKeyEvent_swigregister(NavigationKeyEvent)
+_core_.NavigationKeyEvent_swigregister(NavigationKeyEvent)
 
 #---------------------------------------------------------------------------
 
@@ -6113,8 +6053,7 @@ class WindowCreateEvent(CommandEvent):
         """
         return _core_.WindowCreateEvent_GetWindow(*args, **kwargs)
 
-WindowCreateEvent_swigregister = _core_.WindowCreateEvent_swigregister
-WindowCreateEvent_swigregister(WindowCreateEvent)
+_core_.WindowCreateEvent_swigregister(WindowCreateEvent)
 
 class WindowDestroyEvent(CommandEvent):
     """
@@ -6153,8 +6092,7 @@ class WindowDestroyEvent(CommandEvent):
         """
         return _core_.WindowDestroyEvent_GetWindow(*args, **kwargs)
 
-WindowDestroyEvent_swigregister = _core_.WindowDestroyEvent_swigregister
-WindowDestroyEvent_swigregister(WindowDestroyEvent)
+_core_.WindowDestroyEvent_swigregister(WindowDestroyEvent)
 
 #---------------------------------------------------------------------------
 
@@ -6189,8 +6127,7 @@ class ContextMenuEvent(CommandEvent):
         """
         return _core_.ContextMenuEvent_SetPosition(*args, **kwargs)
 
-ContextMenuEvent_swigregister = _core_.ContextMenuEvent_swigregister
-ContextMenuEvent_swigregister(ContextMenuEvent)
+_core_.ContextMenuEvent_swigregister(ContextMenuEvent)
 
 #---------------------------------------------------------------------------
 
@@ -6293,8 +6230,7 @@ class IdleEvent(Event):
         return _core_.IdleEvent_CanSend(*args, **kwargs)
 
     CanSend = staticmethod(CanSend)
-IdleEvent_swigregister = _core_.IdleEvent_swigregister
-IdleEvent_swigregister(IdleEvent)
+_core_.IdleEvent_swigregister(IdleEvent)
 
 def IdleEvent_SetMode(*args, **kwargs):
   """
@@ -6344,6 +6280,31 @@ def IdleEvent_CanSend(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
+class ClipboardTextEvent(CommandEvent):
+    """
+    A Clipboard Text event is sent when a window intercepts a text
+    copy/cut/paste message, i.e. the user has cut/copied/pasted data
+    from/into a text control via ctrl-C/X/V, ctrl/shift-del/insert, a
+    popup menu command, etc.  NOTE : under windows these events are *NOT*
+    generated automatically for a Rich Edit text control.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, EventType type=wxEVT_NULL, int winid=0) -> ClipboardTextEvent
+
+        A Clipboard Text event is sent when a window intercepts a text
+        copy/cut/paste message, i.e. the user has cut/copied/pasted data
+        from/into a text control via ctrl-C/X/V, ctrl/shift-del/insert, a
+        popup menu command, etc.  NOTE : under windows these events are *NOT*
+        generated automatically for a Rich Edit text control.
+        """
+        _core_.ClipboardTextEvent_swiginit(self,_core_.new_ClipboardTextEvent(*args, **kwargs))
+_core_.ClipboardTextEvent_swigregister(ClipboardTextEvent)
+
+#---------------------------------------------------------------------------
+
 class PyEvent(Event):
     """
     wx.PyEvent can be used as a base class for implementing custom event
@@ -6372,8 +6333,7 @@ class PyEvent(Event):
         """_GetSelf(self) -> PyObject"""
         return _core_.PyEvent__GetSelf(*args, **kwargs)
 
-PyEvent_swigregister = _core_.PyEvent_swigregister
-PyEvent_swigregister(PyEvent)
+_core_.PyEvent_swigregister(PyEvent)
 
 class PyCommandEvent(CommandEvent):
     """
@@ -6404,8 +6364,7 @@ class PyCommandEvent(CommandEvent):
         """_GetSelf(self) -> PyObject"""
         return _core_.PyCommandEvent__GetSelf(*args, **kwargs)
 
-PyCommandEvent_swigregister = _core_.PyCommandEvent_swigregister
-PyCommandEvent_swigregister(PyCommandEvent)
+_core_.PyCommandEvent_swigregister(PyCommandEvent)
 
 class DateEvent(CommandEvent):
     """
@@ -6436,8 +6395,7 @@ class DateEvent(CommandEvent):
         """
         return _core_.DateEvent_SetDate(*args, **kwargs)
 
-DateEvent_swigregister = _core_.DateEvent_swigregister
-DateEvent_swigregister(DateEvent)
+_core_.DateEvent_swigregister(DateEvent)
 
 wxEVT_DATE_CHANGED = _core_.wxEVT_DATE_CHANGED
 EVT_DATE_CHANGED = wx.PyEventBinder( wxEVT_DATE_CHANGED, 1 )
@@ -6804,8 +6762,7 @@ class PyApp(EvtHandler):
         return _core_.PyApp_GetComCtl32Version(*args, **kwargs)
 
     GetComCtl32Version = staticmethod(GetComCtl32Version)
-PyApp_swigregister = _core_.PyApp_swigregister
-PyApp_swigregister(PyApp)
+_core_.PyApp_swigregister(PyApp)
 
 def PyApp_IsMainLoopRunning(*args):
   """
@@ -6992,7 +6949,7 @@ class PyOnDemandOutputWindow:
                                  style=wx.TE_MULTILINE|wx.TE_READONLY)
         self.text.AppendText(st)
         self.frame.Show(True)
-        EVT_CLOSE(self.frame, self.OnCloseWindow)
+        self.frame.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         
 
     def OnCloseWindow(self, event):
@@ -7319,8 +7276,7 @@ class EventLoop(object):
         return _core_.EventLoop_SetActive(*args, **kwargs)
 
     SetActive = staticmethod(SetActive)
-EventLoop_swigregister = _core_.EventLoop_swigregister
-EventLoop_swigregister(EventLoop)
+_core_.EventLoop_swigregister(EventLoop)
 
 def EventLoop_GetActive(*args):
   """EventLoop_GetActive() -> EventLoop"""
@@ -7339,8 +7295,7 @@ class EventLoopActivator(object):
         _core_.EventLoopActivator_swiginit(self,_core_.new_EventLoopActivator(*args, **kwargs))
     __swig_destroy__ = _core_.delete_EventLoopActivator
     __del__ = lambda self : None;
-EventLoopActivator_swigregister = _core_.EventLoopActivator_swigregister
-EventLoopActivator_swigregister(EventLoopActivator)
+_core_.EventLoopActivator_swigregister(EventLoopActivator)
 
 #---------------------------------------------------------------------------
 
@@ -7397,8 +7352,7 @@ class AcceleratorEntry(object):
         """
         return _core_.AcceleratorEntry_GetCommand(*args, **kwargs)
 
-AcceleratorEntry_swigregister = _core_.AcceleratorEntry_swigregister
-AcceleratorEntry_swigregister(AcceleratorEntry)
+_core_.AcceleratorEntry_swigregister(AcceleratorEntry)
 
 class AcceleratorTable(Object):
     """
@@ -7425,8 +7379,7 @@ class AcceleratorTable(Object):
         """Ok(self) -> bool"""
         return _core_.AcceleratorTable_Ok(*args, **kwargs)
 
-AcceleratorTable_swigregister = _core_.AcceleratorTable_swigregister
-AcceleratorTable_swigregister(AcceleratorTable)
+_core_.AcceleratorTable_swigregister(AcceleratorTable)
 
 
 def GetAccelFromString(*args, **kwargs):
@@ -7450,8 +7403,7 @@ class VisualAttributes(object):
     font = property(_core_.VisualAttributes_font_get, _core_.VisualAttributes_font_set)
     colFg = property(_core_.VisualAttributes_colFg_get, _core_.VisualAttributes_colFg_set)
     colBg = property(_core_.VisualAttributes_colBg_get, _core_.VisualAttributes_colBg_set)
-VisualAttributes_swigregister = _core_.VisualAttributes_swigregister
-VisualAttributes_swigregister(VisualAttributes)
+_core_.VisualAttributes_swigregister(VisualAttributes)
 NullAcceleratorTable = cvar.NullAcceleratorTable
 PanelNameStr = cvar.PanelNameStr
 
@@ -9596,8 +9548,7 @@ class Window(EvtHandler):
     def SendSizeEvent(self):
         self.GetEventhandler().ProcessEvent(wx.SizeEvent((-1,-1)))
 
-Window_swigregister = _core_.Window_swigregister
-Window_swigregister(Window)
+_core_.Window_swigregister(Window)
 
 def PreWindow(*args, **kwargs):
     """
@@ -9786,8 +9737,7 @@ class Validator(EvtHandler):
         return _core_.Validator_SetBellOnError(*args, **kwargs)
 
     SetBellOnError = staticmethod(SetBellOnError)
-Validator_swigregister = _core_.Validator_swigregister
-Validator_swigregister(Validator)
+_core_.Validator_swigregister(Validator)
 
 def Validator_IsSilent(*args):
   """Validator_IsSilent() -> bool"""
@@ -9812,8 +9762,7 @@ class PyValidator(Validator):
         """_setCallbackInfo(self, PyObject self, PyObject _class, int incref=True)"""
         return _core_.PyValidator__setCallbackInfo(*args, **kwargs)
 
-PyValidator_swigregister = _core_.PyValidator_swigregister
-PyValidator_swigregister(PyValidator)
+_core_.PyValidator_swigregister(PyValidator)
 
 #---------------------------------------------------------------------------
 
@@ -10063,8 +10012,7 @@ class Menu(EvtHandler):
         """GetParent(self) -> Menu"""
         return _core_.Menu_GetParent(*args, **kwargs)
 
-Menu_swigregister = _core_.Menu_swigregister
-Menu_swigregister(Menu)
+_core_.Menu_swigregister(Menu)
 DefaultValidator = cvar.DefaultValidator
 
 #---------------------------------------------------------------------------
@@ -10188,8 +10136,7 @@ class MenuBar(Window):
         return _core_.MenuBar_GetAutoWindowMenu(*args, **kwargs)
 
     GetAutoWindowMenu = staticmethod(GetAutoWindowMenu)
-MenuBar_swigregister = _core_.MenuBar_swigregister
-MenuBar_swigregister(MenuBar)
+_core_.MenuBar_swigregister(MenuBar)
 
 def MenuBar_SetAutoWindowMenu(*args, **kwargs):
   """MenuBar_SetAutoWindowMenu(bool enable)"""
@@ -10384,8 +10331,7 @@ class MenuItem(Object):
         """ResetOwnerDrawn(self)"""
         return _core_.MenuItem_ResetOwnerDrawn(*args, **kwargs)
 
-MenuItem_swigregister = _core_.MenuItem_swigregister
-MenuItem_swigregister(MenuItem)
+_core_.MenuItem_swigregister(MenuItem)
 
 def MenuItem_GetLabelFromText(*args, **kwargs):
   """MenuItem_GetLabelFromText(String text) -> String"""
@@ -10465,8 +10411,7 @@ class Control(Window):
         return _core_.Control_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-Control_swigregister = _core_.Control_swigregister
-Control_swigregister(Control)
+_core_.Control_swigregister(Control)
 ControlNameStr = cvar.ControlNameStr
 
 def PreControl(*args, **kwargs):
@@ -10666,8 +10611,7 @@ class ItemContainer(object):
         """
         return _core_.ItemContainer_Select(*args, **kwargs)
 
-ItemContainer_swigregister = _core_.ItemContainer_swigregister
-ItemContainer_swigregister(ItemContainer)
+_core_.ItemContainer_swigregister(ItemContainer)
 
 #---------------------------------------------------------------------------
 
@@ -10680,8 +10624,7 @@ class ControlWithItems(Control,ItemContainer):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
-ControlWithItems_swigregister = _core_.ControlWithItems_swigregister
-ControlWithItems_swigregister(ControlWithItems)
+_core_.ControlWithItems_swigregister(ControlWithItems)
 
 #---------------------------------------------------------------------------
 
@@ -10987,8 +10930,7 @@ class SizerItem(Object):
         """
         return _core_.SizerItem_SetUserData(*args, **kwargs)
 
-SizerItem_swigregister = _core_.SizerItem_swigregister
-SizerItem_swigregister(SizerItem)
+_core_.SizerItem_swigregister(SizerItem)
 
 def SizerItemWindow(*args, **kwargs):
     """
@@ -11424,8 +11366,7 @@ class Sizer(Object):
         """
         return _core_.Sizer_ShowItems(*args, **kwargs)
 
-Sizer_swigregister = _core_.Sizer_swigregister
-Sizer_swigregister(Sizer)
+_core_.Sizer_swigregister(Sizer)
 
 class PySizer(Sizer):
     """
@@ -11485,8 +11426,7 @@ class PySizer(Sizer):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _core_.PySizer__setCallbackInfo(*args, **kwargs)
 
-PySizer_swigregister = _core_.PySizer_swigregister
-PySizer_swigregister(PySizer)
+_core_.PySizer_swigregister(PySizer)
 
 #---------------------------------------------------------------------------
 
@@ -11527,8 +11467,7 @@ class BoxSizer(Sizer):
         """
         return _core_.BoxSizer_SetOrientation(*args, **kwargs)
 
-BoxSizer_swigregister = _core_.BoxSizer_swigregister
-BoxSizer_swigregister(BoxSizer)
+_core_.BoxSizer_swigregister(BoxSizer)
 
 #---------------------------------------------------------------------------
 
@@ -11560,8 +11499,7 @@ class StaticBoxSizer(BoxSizer):
         """
         return _core_.StaticBoxSizer_GetStaticBox(*args, **kwargs)
 
-StaticBoxSizer_swigregister = _core_.StaticBoxSizer_swigregister
-StaticBoxSizer_swigregister(StaticBoxSizer)
+_core_.StaticBoxSizer_swigregister(StaticBoxSizer)
 
 #---------------------------------------------------------------------------
 
@@ -11679,8 +11617,7 @@ class GridSizer(Sizer):
             cols = (nitems + rows - 1) / rows
         return (rows, cols)
 
-GridSizer_swigregister = _core_.GridSizer_swigregister
-GridSizer_swigregister(GridSizer)
+_core_.GridSizer_swigregister(GridSizer)
 
 #---------------------------------------------------------------------------
 
@@ -11846,8 +11783,7 @@ class FlexGridSizer(GridSizer):
         """
         return _core_.FlexGridSizer_GetColWidths(*args, **kwargs)
 
-FlexGridSizer_swigregister = _core_.FlexGridSizer_swigregister
-FlexGridSizer_swigregister(FlexGridSizer)
+_core_.FlexGridSizer_swigregister(FlexGridSizer)
 
 class StdDialogButtonSizer(BoxSizer):
     """
@@ -11914,8 +11850,7 @@ class StdDialogButtonSizer(BoxSizer):
         """GetHelpButton(self) -> wxButton"""
         return _core_.StdDialogButtonSizer_GetHelpButton(*args, **kwargs)
 
-StdDialogButtonSizer_swigregister = _core_.StdDialogButtonSizer_swigregister
-StdDialogButtonSizer_swigregister(StdDialogButtonSizer)
+_core_.StdDialogButtonSizer_swigregister(StdDialogButtonSizer)
 
 #---------------------------------------------------------------------------
 
@@ -11998,8 +11933,7 @@ class GBPosition(object):
     row = property(GetRow, SetRow)
     col = property(GetCol, SetCol)
 
-GBPosition_swigregister = _core_.GBPosition_swigregister
-GBPosition_swigregister(GBPosition)
+_core_.GBPosition_swigregister(GBPosition)
 
 class GBSpan(object):
     """
@@ -12079,8 +12013,7 @@ class GBSpan(object):
     rowspan = property(GetRowspan, SetRowspan)
     colspan = property(GetColspan, SetColspan)
 
-GBSpan_swigregister = _core_.GBSpan_swigregister
-GBSpan_swigregister(GBSpan)
+_core_.GBSpan_swigregister(GBSpan)
 
 class GBSizerItem(SizerItem):
     """
@@ -12186,8 +12119,7 @@ class GBSizerItem(SizerItem):
         """
         return _core_.GBSizerItem_SetGBSizer(*args, **kwargs)
 
-GBSizerItem_swigregister = _core_.GBSizerItem_swigregister
-GBSizerItem_swigregister(GBSizerItem)
+_core_.GBSizerItem_swigregister(GBSizerItem)
 DefaultSpan = cvar.DefaultSpan
 
 def GBSizerItemWindow(*args, **kwargs):
@@ -12389,8 +12321,7 @@ class GridBagSizer(FlexGridSizer):
         """
         return _core_.GridBagSizer_CheckForIntersectionPos(*args, **kwargs)
 
-GridBagSizer_swigregister = _core_.GridBagSizer_swigregister
-GridBagSizer_swigregister(GridBagSizer)
+_core_.GridBagSizer_swigregister(GridBagSizer)
 
 #---------------------------------------------------------------------------
 
@@ -12599,8 +12530,7 @@ class IndividualLayoutConstraint(Object):
         """
         return _core_.IndividualLayoutConstraint_GetEdge(*args, **kwargs)
 
-IndividualLayoutConstraint_swigregister = _core_.IndividualLayoutConstraint_swigregister
-IndividualLayoutConstraint_swigregister(IndividualLayoutConstraint)
+_core_.IndividualLayoutConstraint_swigregister(IndividualLayoutConstraint)
 
 class LayoutConstraints(Object):
     """
@@ -12657,8 +12587,7 @@ class LayoutConstraints(Object):
         """AreSatisfied(self) -> bool"""
         return _core_.LayoutConstraints_AreSatisfied(*args, **kwargs)
 
-LayoutConstraints_swigregister = _core_.LayoutConstraints_swigregister
-LayoutConstraints_swigregister(LayoutConstraints)
+_core_.LayoutConstraints_swigregister(LayoutConstraints)
 
 #----------------------------------------------------------------------------
 

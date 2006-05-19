@@ -129,8 +129,7 @@ class WebKitCtrl(_core.Control):
         """GetPageTitle(self) -> String"""
         return _webkit.WebKitCtrl_GetPageTitle(*args, **kwargs)
 
-WebKitCtrl_swigregister = _webkit.WebKitCtrl_swigregister
-WebKitCtrl_swigregister(WebKitCtrl)
+_webkit.WebKitCtrl_swigregister(WebKitCtrl)
 cvar = _webkit.cvar
 WebKitNameStr = cvar.WebKitNameStr
 
@@ -169,8 +168,7 @@ class WebKitStateChangedEvent(_core.CommandEvent):
         """SetURL(self, String url)"""
         return _webkit.WebKitStateChangedEvent_SetURL(*args, **kwargs)
 
-WebKitStateChangedEvent_swigregister = _webkit.WebKitStateChangedEvent_swigregister
-WebKitStateChangedEvent_swigregister(WebKitStateChangedEvent)
+_webkit.WebKitStateChangedEvent_swigregister(WebKitStateChangedEvent)
 
 EVT_WEBKIT_STATE_CHANGED = wx.PyEventBinder(wxEVT_WEBKIT_STATE_CHANGED)
 

@@ -86,8 +86,7 @@ class GLContext(_core.Object):
         """GetWindow(self) -> Window"""
         return _glcanvas.GLContext_GetWindow(*args, **kwargs)
 
-GLContext_swigregister = _glcanvas.GLContext_swigregister
-GLContext_swigregister(GLContext)
+_glcanvas.GLContext_swigregister(GLContext)
 cvar = _glcanvas.cvar
 GLCanvasNameStr = cvar.GLCanvasNameStr
 
@@ -152,8 +151,7 @@ class GLCanvas(_core.Window):
         """GetPalette(self) -> Palette"""
         return _glcanvas.GLCanvas_GetPalette(*args, **kwargs)
 
-GLCanvas_swigregister = _glcanvas.GLCanvas_swigregister
-GLCanvas_swigregister(GLCanvas)
+_glcanvas.GLCanvas_swigregister(GLCanvas)
 
 def GLCanvasWithContext(*args, **kwargs):
     """

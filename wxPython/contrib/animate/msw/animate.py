@@ -233,8 +233,7 @@ class AnimationPlayer(_core.Object):
         """GetBackingStore(self) -> Bitmap"""
         return _animate.AnimationPlayer_GetBackingStore(*args, **kwargs)
 
-AnimationPlayer_swigregister = _animate.AnimationPlayer_swigregister
-AnimationPlayer_swigregister(AnimationPlayer)
+_animate.AnimationPlayer_swigregister(AnimationPlayer)
 cvar = _animate.cvar
 AnimationControlNameStr = cvar.AnimationControlNameStr
 
@@ -285,8 +284,7 @@ class AnimationBase(_core.Object):
         """LoadFile(self, String filename) -> bool"""
         return _animate.AnimationBase_LoadFile(*args, **kwargs)
 
-AnimationBase_swigregister = _animate.AnimationBase_swigregister
-AnimationBase_swigregister(AnimationBase)
+_animate.AnimationBase_swigregister(AnimationBase)
 
 class GIFAnimation(AnimationBase):
     """Proxy of C++ GIFAnimation class"""
@@ -297,8 +295,7 @@ class GIFAnimation(AnimationBase):
         _animate.GIFAnimation_swiginit(self,_animate.new_GIFAnimation(*args, **kwargs))
     __swig_destroy__ = _animate.delete_GIFAnimation
     __del__ = lambda self : None;
-GIFAnimation_swigregister = _animate.GIFAnimation_swigregister
-GIFAnimation_swigregister(GIFAnimation)
+_animate.GIFAnimation_swigregister(GIFAnimation)
 
 AN_FIT_ANIMATION = _animate.AN_FIT_ANIMATION
 class GIFAnimationCtrl(_core.Control):
@@ -360,8 +357,7 @@ class GIFAnimationCtrl(_core.Control):
         """SetFilename(self, String filename)"""
         return _animate.GIFAnimationCtrl_SetFilename(*args, **kwargs)
 
-GIFAnimationCtrl_swigregister = _animate.GIFAnimationCtrl_swigregister
-GIFAnimationCtrl_swigregister(GIFAnimationCtrl)
+_animate.GIFAnimationCtrl_swigregister(GIFAnimationCtrl)
 
 def PreGIFAnimationCtrl(*args, **kwargs):
     """PreGIFAnimationCtrl() -> GIFAnimationCtrl"""

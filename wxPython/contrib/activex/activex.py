@@ -88,8 +88,7 @@ class CLSID(object):
         return _activex.CLSID_GetProgIDString(*args, **kwargs)
 
     def __str__(self):   return self.GetCLSIDString() 
-CLSID_swigregister = _activex.CLSID_swigregister
-CLSID_swigregister(CLSID)
+_activex.CLSID_swigregister(CLSID)
 
 #---------------------------------------------------------------------------
 
@@ -112,8 +111,7 @@ class ParamX(object):
 
     isRetVal = property(_activex.ParamX_IsRetVal)
 
-ParamX_swigregister = _activex.ParamX_swigregister
-ParamX_swigregister(ParamX)
+_activex.ParamX_swigregister(ParamX)
 
 class FuncX(object):
     """Proxy of C++ FuncX class"""
@@ -125,8 +123,7 @@ class FuncX(object):
     hasOut = property(_activex.FuncX_hasOut_get)
     retType = property(_activex.FuncX_retType_get)
     params = property(_activex.FuncX_params_get)
-FuncX_swigregister = _activex.FuncX_swigregister
-FuncX_swigregister(FuncX)
+_activex.FuncX_swigregister(FuncX)
 
 class PropX(object):
     """Proxy of C++ PropX class"""
@@ -142,8 +139,7 @@ class PropX(object):
 
     canSet = property(_activex.PropX_CanSet)
 
-PropX_swigregister = _activex.PropX_swigregister
-PropX_swigregister(PropX)
+_activex.PropX_swigregister(PropX)
 
 class ParamXArray(object):
     """Proxy of C++ ParamXArray class"""
@@ -162,8 +158,7 @@ class ParamXArray(object):
         """__getitem__(self, int idx) -> ParamX"""
         return _activex.ParamXArray___getitem__(*args, **kwargs)
 
-ParamXArray_swigregister = _activex.ParamXArray_swigregister
-ParamXArray_swigregister(ParamXArray)
+_activex.ParamXArray_swigregister(ParamXArray)
 
 class FuncXArray(object):
     """Proxy of C++ FuncXArray class"""
@@ -182,8 +177,7 @@ class FuncXArray(object):
         """__getitem__(self, int idx) -> FuncX"""
         return _activex.FuncXArray___getitem__(*args, **kwargs)
 
-FuncXArray_swigregister = _activex.FuncXArray_swigregister
-FuncXArray_swigregister(FuncXArray)
+_activex.FuncXArray_swigregister(FuncXArray)
 
 class PropXArray(object):
     """Proxy of C++ PropXArray class"""
@@ -202,8 +196,7 @@ class PropXArray(object):
         """__getitem__(self, int idx) -> PropX"""
         return _activex.PropXArray___getitem__(*args, **kwargs)
 
-PropXArray_swigregister = _activex.PropXArray_swigregister
-PropXArray_swigregister(PropXArray)
+_activex.PropXArray_swigregister(PropXArray)
 
 #---------------------------------------------------------------------------
 
@@ -346,8 +339,7 @@ class ActiveXWindow(_core.Window):
         """
         return self._CallAXMethod(name, args)
 
-ActiveXWindow_swigregister = _activex.ActiveXWindow_swigregister
-ActiveXWindow_swigregister(ActiveXWindow)
+_activex.ActiveXWindow_swigregister(ActiveXWindow)
 
 #---------------------------------------------------------------------------
 
@@ -380,8 +372,7 @@ class ActiveXEvent(_core.CommandEvent):
         """_postCallCleanup(self, PyObject pyself)"""
         return _activex.ActiveXEvent__postCallCleanup(*args, **kwargs)
 
-ActiveXEvent_swigregister = _activex.ActiveXEvent_swigregister
-ActiveXEvent_swigregister(ActiveXEvent)
+_activex.ActiveXEvent_swigregister(ActiveXEvent)
 
 #---------------------------------------------------------------------------
 
@@ -397,8 +388,7 @@ class IEHtmlWindowBase(ActiveXWindow):
     def LoadStream(*args, **kwargs): return _activex.IEHtmlWindowBase_LoadStream(*args, **kwargs)
     def GetStringSelection(*args, **kwargs): return _activex.IEHtmlWindowBase_GetStringSelection(*args, **kwargs)
     def GetText(*args, **kwargs): return _activex.IEHtmlWindowBase_GetText(*args, **kwargs)
-IEHtmlWindowBase_swigregister = _activex.IEHtmlWindowBase_swigregister
-IEHtmlWindowBase_swigregister(IEHtmlWindowBase)
+_activex.IEHtmlWindowBase_swigregister(IEHtmlWindowBase)
 
 #---------------------------------------------------------------------------
 # Some helper and utility functions for ActiveX

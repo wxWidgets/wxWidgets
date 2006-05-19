@@ -128,8 +128,7 @@ class HtmlLinkInfo(_core.Object):
         """SetHtmlCell(self, HtmlCell e)"""
         return _html.HtmlLinkInfo_SetHtmlCell(*args, **kwargs)
 
-HtmlLinkInfo_swigregister = _html.HtmlLinkInfo_swigregister
-HtmlLinkInfo_swigregister(HtmlLinkInfo)
+_html.HtmlLinkInfo_swigregister(HtmlLinkInfo)
 cvar = _html.cvar
 HtmlWindowNameStr = cvar.HtmlWindowNameStr
 HtmlPrintoutTitleStr = cvar.HtmlPrintoutTitleStr
@@ -172,8 +171,7 @@ class HtmlTag(_core.Object):
         """GetEndPos2(self) -> int"""
         return _html.HtmlTag_GetEndPos2(*args, **kwargs)
 
-HtmlTag_swigregister = _html.HtmlTag_swigregister
-HtmlTag_swigregister(HtmlTag)
+_html.HtmlTag_swigregister(HtmlTag)
 
 class HtmlParser(_core.Object):
     """Proxy of C++ HtmlParser class"""
@@ -228,8 +226,7 @@ class HtmlParser(_core.Object):
         """GetInnerSource(self, HtmlTag tag) -> String"""
         return _html.HtmlParser_GetInnerSource(*args, **kwargs)
 
-HtmlParser_swigregister = _html.HtmlParser_swigregister
-HtmlParser_swigregister(HtmlParser)
+_html.HtmlParser_swigregister(HtmlParser)
 
 class HtmlWinParser(HtmlParser):
     """Proxy of C++ HtmlWinParser class"""
@@ -366,8 +363,7 @@ class HtmlWinParser(HtmlParser):
         """GetLink(self) -> HtmlLinkInfo"""
         return _html.HtmlWinParser_GetLink(*args, **kwargs)
 
-HtmlWinParser_swigregister = _html.HtmlWinParser_swigregister
-HtmlWinParser_swigregister(HtmlWinParser)
+_html.HtmlWinParser_swigregister(HtmlWinParser)
 
 class HtmlTagHandler(_core.Object):
     """Proxy of C++ HtmlTagHandler class"""
@@ -394,8 +390,7 @@ class HtmlTagHandler(_core.Object):
         """ParseInner(self, HtmlTag tag)"""
         return _html.HtmlTagHandler_ParseInner(*args, **kwargs)
 
-HtmlTagHandler_swigregister = _html.HtmlTagHandler_swigregister
-HtmlTagHandler_swigregister(HtmlTagHandler)
+_html.HtmlTagHandler_swigregister(HtmlTagHandler)
 
 class HtmlWinTagHandler(HtmlTagHandler):
     """Proxy of C++ HtmlWinTagHandler class"""
@@ -422,8 +417,7 @@ class HtmlWinTagHandler(HtmlTagHandler):
         """ParseInner(self, HtmlTag tag)"""
         return _html.HtmlWinTagHandler_ParseInner(*args, **kwargs)
 
-HtmlWinTagHandler_swigregister = _html.HtmlWinTagHandler_swigregister
-HtmlWinTagHandler_swigregister(HtmlWinTagHandler)
+_html.HtmlWinTagHandler_swigregister(HtmlWinTagHandler)
 
 
 def HtmlWinParser_AddTagHandler(*args, **kwargs):
@@ -488,8 +482,7 @@ class HtmlSelection(object):
         """IsEmpty(self) -> bool"""
         return _html.HtmlSelection_IsEmpty(*args, **kwargs)
 
-HtmlSelection_swigregister = _html.HtmlSelection_swigregister
-HtmlSelection_swigregister(HtmlSelection)
+_html.HtmlSelection_swigregister(HtmlSelection)
 
 HTML_SEL_OUT = _html.HTML_SEL_OUT
 HTML_SEL_IN = _html.HTML_SEL_IN
@@ -527,8 +520,7 @@ class HtmlRenderingState(object):
         """GetBgColour(self) -> Colour"""
         return _html.HtmlRenderingState_GetBgColour(*args, **kwargs)
 
-HtmlRenderingState_swigregister = _html.HtmlRenderingState_swigregister
-HtmlRenderingState_swigregister(HtmlRenderingState)
+_html.HtmlRenderingState_swigregister(HtmlRenderingState)
 
 class HtmlRenderingStyle(object):
     """Proxy of C++ HtmlRenderingStyle class"""
@@ -543,16 +535,14 @@ class HtmlRenderingStyle(object):
         """GetSelectedTextBgColour(self, Colour clr) -> Colour"""
         return _html.HtmlRenderingStyle_GetSelectedTextBgColour(*args, **kwargs)
 
-HtmlRenderingStyle_swigregister = _html.HtmlRenderingStyle_swigregister
-HtmlRenderingStyle_swigregister(HtmlRenderingStyle)
+_html.HtmlRenderingStyle_swigregister(HtmlRenderingStyle)
 
 class DefaultHtmlRenderingStyle(HtmlRenderingStyle):
     """Proxy of C++ DefaultHtmlRenderingStyle class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
-DefaultHtmlRenderingStyle_swigregister = _html.DefaultHtmlRenderingStyle_swigregister
-DefaultHtmlRenderingStyle_swigregister(DefaultHtmlRenderingStyle)
+_html.DefaultHtmlRenderingStyle_swigregister(DefaultHtmlRenderingStyle)
 
 class HtmlRenderingInfo(object):
     """Proxy of C++ HtmlRenderingInfo class"""
@@ -583,8 +573,7 @@ class HtmlRenderingInfo(object):
         """GetState(self) -> HtmlRenderingState"""
         return _html.HtmlRenderingInfo_GetState(*args, **kwargs)
 
-HtmlRenderingInfo_swigregister = _html.HtmlRenderingInfo_swigregister
-HtmlRenderingInfo_swigregister(HtmlRenderingInfo)
+_html.HtmlRenderingInfo_swigregister(HtmlRenderingInfo)
 
 #---------------------------------------------------------------------------
 
@@ -745,8 +734,7 @@ class HtmlCell(_core.Object):
         """ConvertToText(self, HtmlSelection sel) -> String"""
         return _html.HtmlCell_ConvertToText(*args, **kwargs)
 
-HtmlCell_swigregister = _html.HtmlCell_swigregister
-HtmlCell_swigregister(HtmlCell)
+_html.HtmlCell_swigregister(HtmlCell)
 
 class HtmlWordCell(HtmlCell):
     """Proxy of C++ HtmlWordCell class"""
@@ -767,8 +755,7 @@ class HtmlWordCell(HtmlCell):
         """SetPreviousWord(self, HtmlWordCell cell)"""
         return _html.HtmlWordCell_SetPreviousWord(*args, **kwargs)
 
-HtmlWordCell_swigregister = _html.HtmlWordCell_swigregister
-HtmlWordCell_swigregister(HtmlWordCell)
+_html.HtmlWordCell_swigregister(HtmlWordCell)
 
 class HtmlContainerCell(HtmlCell):
     """Proxy of C++ HtmlContainerCell class"""
@@ -841,8 +828,7 @@ class HtmlContainerCell(HtmlCell):
         """GetFirstChild(self) -> HtmlCell"""
         return _html.HtmlContainerCell_GetFirstChild(*args, **kwargs)
 
-HtmlContainerCell_swigregister = _html.HtmlContainerCell_swigregister
-HtmlContainerCell_swigregister(HtmlContainerCell)
+_html.HtmlContainerCell_swigregister(HtmlContainerCell)
 
 class HtmlColourCell(HtmlCell):
     """Proxy of C++ HtmlColourCell class"""
@@ -851,8 +837,7 @@ class HtmlColourCell(HtmlCell):
     def __init__(self, *args, **kwargs): 
         """__init__(self, Colour clr, int flags=HTML_CLR_FOREGROUND) -> HtmlColourCell"""
         _html.HtmlColourCell_swiginit(self,_html.new_HtmlColourCell(*args, **kwargs))
-HtmlColourCell_swigregister = _html.HtmlColourCell_swigregister
-HtmlColourCell_swigregister(HtmlColourCell)
+_html.HtmlColourCell_swigregister(HtmlColourCell)
 
 class HtmlFontCell(HtmlCell):
     """Proxy of C++ HtmlFontCell class"""
@@ -861,8 +846,7 @@ class HtmlFontCell(HtmlCell):
     def __init__(self, *args, **kwargs): 
         """__init__(self, Font font) -> HtmlFontCell"""
         _html.HtmlFontCell_swiginit(self,_html.new_HtmlFontCell(*args, **kwargs))
-HtmlFontCell_swigregister = _html.HtmlFontCell_swigregister
-HtmlFontCell_swigregister(HtmlFontCell)
+_html.HtmlFontCell_swigregister(HtmlFontCell)
 
 class HtmlWidgetCell(HtmlCell):
     """Proxy of C++ HtmlWidgetCell class"""
@@ -871,8 +855,7 @@ class HtmlWidgetCell(HtmlCell):
     def __init__(self, *args, **kwargs): 
         """__init__(self, Window wnd, int w=0) -> HtmlWidgetCell"""
         _html.HtmlWidgetCell_swiginit(self,_html.new_HtmlWidgetCell(*args, **kwargs))
-HtmlWidgetCell_swigregister = _html.HtmlWidgetCell_swigregister
-HtmlWidgetCell_swigregister(HtmlWidgetCell)
+_html.HtmlWidgetCell_swigregister(HtmlWidgetCell)
 
 #---------------------------------------------------------------------------
 
@@ -889,8 +872,7 @@ class HtmlFilter(_core.Object):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _html.HtmlFilter__setCallbackInfo(*args, **kwargs)
 
-HtmlFilter_swigregister = _html.HtmlFilter_swigregister
-HtmlFilter_swigregister(HtmlFilter)
+_html.HtmlFilter_swigregister(HtmlFilter)
 
 class HtmlWindowInterface(object):
     """Proxy of C++ HtmlWindowInterface class"""
@@ -930,8 +912,7 @@ class HtmlWindowInterface(object):
     HTMLCursor_Default = _html.HtmlWindowInterface_HTMLCursor_Default
     HTMLCursor_Link = _html.HtmlWindowInterface_HTMLCursor_Link
     HTMLCursor_Text = _html.HtmlWindowInterface_HTMLCursor_Text
-HtmlWindowInterface_swigregister = _html.HtmlWindowInterface_swigregister
-HtmlWindowInterface_swigregister(HtmlWindowInterface)
+_html.HtmlWindowInterface_swigregister(HtmlWindowInterface)
 
 #---------------------------------------------------------------------------
 
@@ -1151,8 +1132,7 @@ class HtmlWindow(_windows.ScrolledWindow):
         return _html.HtmlWindow_GetDefaultHTMLCursor(*args, **kwargs)
 
     GetDefaultHTMLCursor = staticmethod(GetDefaultHTMLCursor)
-HtmlWindow_swigregister = _html.HtmlWindow_swigregister
-HtmlWindow_swigregister(HtmlWindow)
+_html.HtmlWindow_swigregister(HtmlWindow)
 
 def PreHtmlWindow(*args, **kwargs):
     """PreHtmlWindow() -> HtmlWindow"""
@@ -1226,8 +1206,7 @@ class HtmlDCRenderer(_core.Object):
         """GetTotalHeight(self) -> int"""
         return _html.HtmlDCRenderer_GetTotalHeight(*args, **kwargs)
 
-HtmlDCRenderer_swigregister = _html.HtmlDCRenderer_swigregister
-HtmlDCRenderer_swigregister(HtmlDCRenderer)
+_html.HtmlDCRenderer_swigregister(HtmlDCRenderer)
 
 PAGE_ODD = _html.PAGE_ODD
 PAGE_EVEN = _html.PAGE_EVEN
@@ -1280,8 +1259,7 @@ class HtmlPrintout(_windows.Printout):
         return _html.HtmlPrintout_CleanUpStatics(*args, **kwargs)
 
     CleanUpStatics = staticmethod(CleanUpStatics)
-HtmlPrintout_swigregister = _html.HtmlPrintout_swigregister
-HtmlPrintout_swigregister(HtmlPrintout)
+_html.HtmlPrintout_swigregister(HtmlPrintout)
 
 def HtmlPrintout_AddFilter(*args, **kwargs):
   """HtmlPrintout_AddFilter(wxHtmlFilter filter)"""
@@ -1344,8 +1322,7 @@ class HtmlEasyPrinting(_core.Object):
         """GetPageSetupData(self) -> PageSetupDialogData"""
         return _html.HtmlEasyPrinting_GetPageSetupData(*args, **kwargs)
 
-HtmlEasyPrinting_swigregister = _html.HtmlEasyPrinting_swigregister
-HtmlEasyPrinting_swigregister(HtmlEasyPrinting)
+_html.HtmlEasyPrinting_swigregister(HtmlEasyPrinting)
 
 #---------------------------------------------------------------------------
 
@@ -1400,8 +1377,7 @@ class HtmlBookRecord(object):
         """GetFullPath(self, String page) -> String"""
         return _html.HtmlBookRecord_GetFullPath(*args, **kwargs)
 
-HtmlBookRecord_swigregister = _html.HtmlBookRecord_swigregister
-HtmlBookRecord_swigregister(HtmlBookRecord)
+_html.HtmlBookRecord_swigregister(HtmlBookRecord)
 
 class HtmlSearchStatus(object):
     """Proxy of C++ HtmlSearchStatus class"""
@@ -1428,8 +1404,7 @@ class HtmlSearchStatus(object):
         """GetName(self) -> String"""
         return _html.HtmlSearchStatus_GetName(*args, **kwargs)
 
-HtmlSearchStatus_swigregister = _html.HtmlSearchStatus_swigregister
-HtmlSearchStatus_swigregister(HtmlSearchStatus)
+_html.HtmlSearchStatus_swigregister(HtmlSearchStatus)
 
 class HtmlHelpData(object):
     """Proxy of C++ HtmlHelpData class"""
@@ -1460,8 +1435,7 @@ class HtmlHelpData(object):
         """GetBookRecArray(self) -> wxHtmlBookRecArray"""
         return _html.HtmlHelpData_GetBookRecArray(*args, **kwargs)
 
-HtmlHelpData_swigregister = _html.HtmlHelpData_swigregister
-HtmlHelpData_swigregister(HtmlHelpData)
+_html.HtmlHelpData_swigregister(HtmlHelpData)
 
 HF_TOOLBAR = _html.HF_TOOLBAR
 HF_CONTENTS = _html.HF_CONTENTS
@@ -1599,8 +1573,7 @@ class HtmlHelpWindow(_core.Window):
         """GetTreeCtrl(self) -> wxTreeCtrl"""
         return _html.HtmlHelpWindow_GetTreeCtrl(*args, **kwargs)
 
-HtmlHelpWindow_swigregister = _html.HtmlHelpWindow_swigregister
-HtmlHelpWindow_swigregister(HtmlHelpWindow)
+_html.HtmlHelpWindow_swigregister(HtmlHelpWindow)
 
 def PreHtmlHelpWindow(*args, **kwargs):
     """PreHtmlHelpWindow(HtmlHelpData data=None) -> HtmlHelpWindow"""
@@ -1623,8 +1596,7 @@ class HtmlWindowEvent(_core.NotifyEvent):
         """GetURL(self) -> String"""
         return _html.HtmlWindowEvent_GetURL(*args, **kwargs)
 
-HtmlWindowEvent_swigregister = _html.HtmlWindowEvent_swigregister
-HtmlWindowEvent_swigregister(HtmlWindowEvent)
+_html.HtmlWindowEvent_swigregister(HtmlWindowEvent)
 
 class HtmlHelpFrame(_windows.Frame):
     """Proxy of C++ HtmlHelpFrame class"""
@@ -1686,8 +1658,7 @@ class HtmlHelpFrame(_windows.Frame):
     def WriteCustomization(self, config, rootpath=""):
         return self.GetHelpWindow().WriteCustomization(config, rootpath)
 
-HtmlHelpFrame_swigregister = _html.HtmlHelpFrame_swigregister
-HtmlHelpFrame_swigregister(HtmlHelpFrame)
+_html.HtmlHelpFrame_swigregister(HtmlHelpFrame)
 
 def PreHtmlHelpFrame(*args, **kwargs):
     """PreHtmlHelpFrame(HtmlHelpData data=None) -> HtmlHelpFrame"""
@@ -1731,8 +1702,7 @@ class HtmlHelpDialog(_windows.Dialog):
         """SetTitleFormat(self, String format)"""
         return _html.HtmlHelpDialog_SetTitleFormat(*args, **kwargs)
 
-HtmlHelpDialog_swigregister = _html.HtmlHelpDialog_swigregister
-HtmlHelpDialog_swigregister(HtmlHelpDialog)
+_html.HtmlHelpDialog_swigregister(HtmlHelpDialog)
 
 def PreHtmlHelpDialog(*args, **kwargs):
     """PreHtmlHelpDialog(HtmlHelpData data=None) -> HtmlHelpDialog"""
@@ -1814,8 +1784,7 @@ class HelpControllerBase(_core.Object):
         """GetParentWindow(self) -> Window"""
         return _html.HelpControllerBase_GetParentWindow(*args, **kwargs)
 
-HelpControllerBase_swigregister = _html.HelpControllerBase_swigregister
-HelpControllerBase_swigregister(HelpControllerBase)
+_html.HelpControllerBase_swigregister(HelpControllerBase)
 
 class HtmlHelpController(HelpControllerBase):
     """Proxy of C++ HtmlHelpController class"""
@@ -1894,8 +1863,7 @@ class HtmlHelpController(HelpControllerBase):
         """FindTopLevelWindow(self) -> Window"""
         return _html.HtmlHelpController_FindTopLevelWindow(*args, **kwargs)
 
-HtmlHelpController_swigregister = _html.HtmlHelpController_swigregister
-HtmlHelpController_swigregister(HtmlHelpController)
+_html.HtmlHelpController_swigregister(HtmlHelpController)
 
 class HtmlModalHelp(object):
     """Proxy of C++ HtmlModalHelp class"""
@@ -1907,8 +1875,7 @@ class HtmlModalHelp(object):
             int style=wxHF_DEFAULT_STYLE|wxHF_DIALOG|wxHF_MODAL) -> HtmlModalHelp
         """
         _html.HtmlModalHelp_swiginit(self,_html.new_HtmlModalHelp(*args, **kwargs))
-HtmlModalHelp_swigregister = _html.HtmlModalHelp_swigregister
-HtmlModalHelp_swigregister(HtmlModalHelp)
+_html.HtmlModalHelp_swigregister(HtmlModalHelp)
 
 
 

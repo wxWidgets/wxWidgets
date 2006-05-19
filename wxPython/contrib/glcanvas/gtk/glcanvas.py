@@ -64,7 +64,7 @@ class GLContext(_core.Object):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, bool isRGB, GLCanvas win, wxPalette palette=wxNullPalette, 
+        __init__(self, bool isRGB, GLCanvas win, Palette palette=wxNullPalette, 
             GLContext other=None) -> GLContext
         """
         _glcanvas.GLContext_swiginit(self,_glcanvas.new_GLContext(*args, **kwargs))
@@ -87,23 +87,22 @@ class GLContext(_core.Object):
         return _glcanvas.GLContext_SetupPixelFormat(*args, **kwargs)
 
     def SetupPalette(*args, **kwargs):
-        """SetupPalette(self, wxPalette palette)"""
+        """SetupPalette(self, Palette palette)"""
         return _glcanvas.GLContext_SetupPalette(*args, **kwargs)
 
     def CreateDefaultPalette(*args, **kwargs):
-        """CreateDefaultPalette(self) -> wxPalette"""
+        """CreateDefaultPalette(self) -> Palette"""
         return _glcanvas.GLContext_CreateDefaultPalette(*args, **kwargs)
 
     def GetPalette(*args, **kwargs):
-        """GetPalette(self) -> wxPalette"""
+        """GetPalette(self) -> Palette"""
         return _glcanvas.GLContext_GetPalette(*args, **kwargs)
 
     def GetWindow(*args, **kwargs):
         """GetWindow(self) -> Window"""
         return _glcanvas.GLContext_GetWindow(*args, **kwargs)
 
-GLContext_swigregister = _glcanvas.GLContext_swigregister
-GLContext_swigregister(GLContext)
+_glcanvas.GLContext_swigregister(GLContext)
 cvar = _glcanvas.cvar
 GLCanvasNameStr = cvar.GLCanvasNameStr
 
@@ -131,7 +130,7 @@ class GLCanvas(_core.Window):
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, String name=GLCanvasNameStr, 
-            int attribList=None, wxPalette palette=wxNullPalette) -> GLCanvas
+            int attribList=None, Palette palette=wxNullPalette) -> GLCanvas
         """
         _glcanvas.GLCanvas_swiginit(self,_glcanvas.new_GLCanvas(*args, **kwargs))
         self._setOORInfo(self)
@@ -152,15 +151,14 @@ class GLCanvas(_core.Window):
         """GetContext(self) -> GLContext"""
         return _glcanvas.GLCanvas_GetContext(*args, **kwargs)
 
-GLCanvas_swigregister = _glcanvas.GLCanvas_swigregister
-GLCanvas_swigregister(GLCanvas)
+_glcanvas.GLCanvas_swigregister(GLCanvas)
 
 def GLCanvasWithContext(*args, **kwargs):
     """
     GLCanvasWithContext(Window parent, GLContext shared=None, int id=-1, Point pos=DefaultPosition, 
         Size size=DefaultSize, 
         long style=0, String name=GLCanvasNameStr, 
-        int attribList=None, wxPalette palette=wxNullPalette) -> GLCanvas
+        int attribList=None, Palette palette=wxNullPalette) -> GLCanvas
     """
     val = _glcanvas.new_GLCanvasWithContext(*args, **kwargs)
     val._setOORInfo(val)

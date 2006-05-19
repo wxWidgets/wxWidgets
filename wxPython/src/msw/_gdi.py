@@ -68,8 +68,7 @@ class GDIObject(_core.Object):
         """IsNull(self) -> bool"""
         return _gdi_.GDIObject_IsNull(*args, **kwargs)
 
-GDIObject_swigregister = _gdi_.GDIObject_swigregister
-GDIObject_swigregister(GDIObject)
+_gdi_.GDIObject_swigregister(GDIObject)
 
 #---------------------------------------------------------------------------
 
@@ -234,8 +233,7 @@ class Colour(_core.Object):
     __safe_for_unpickling__ = True
     def __reduce__(self):               return (Colour, self.Get())
 
-Colour_swigregister = _gdi_.Colour_swigregister
-Colour_swigregister(Colour)
+_gdi_.Colour_swigregister(Colour)
 
 def NamedColour(*args, **kwargs):
     """
@@ -286,8 +284,7 @@ class Palette(GDIObject):
         return _gdi_.Palette_Ok(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
-Palette_swigregister = _gdi_.Palette_swigregister
-Palette_swigregister(Palette)
+_gdi_.Palette_swigregister(Palette)
 
 #---------------------------------------------------------------------------
 
@@ -383,8 +380,7 @@ class Pen(GDIObject):
         return _gdi_.Pen___ne__(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
-Pen_swigregister = _gdi_.Pen_swigregister
-Pen_swigregister(Pen)
+_gdi_.Pen_swigregister(Pen)
 
 #---------------------------------------------------------------------------
 
@@ -473,8 +469,7 @@ class Brush(GDIObject):
         return _gdi_.Brush_Ok(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
-Brush_swigregister = _gdi_.Brush_swigregister
-Brush_swigregister(Brush)
+_gdi_.Brush_swigregister(Brush)
 
 def BrushFromBitmap(*args, **kwargs):
     """
@@ -676,8 +671,7 @@ class Bitmap(GDIObject):
         """__ne__(self, Bitmap other) -> bool"""
         return _gdi_.Bitmap___ne__(*args, **kwargs)
 
-Bitmap_swigregister = _gdi_.Bitmap_swigregister
-Bitmap_swigregister(Bitmap)
+_gdi_.Bitmap_swigregister(Bitmap)
 
 def EmptyBitmap(*args, **kwargs):
     """
@@ -762,8 +756,7 @@ class Mask(_core.Object):
         _gdi_.Mask_swiginit(self,_gdi_.new_Mask(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_Mask
     __del__ = lambda self : None;
-Mask_swigregister = _gdi_.Mask_swigregister
-Mask_swigregister(Mask)
+_gdi_.Mask_swigregister(Mask)
 
 MaskColour = wx._deprecated(Mask, "wx.MaskColour is deprecated, use `wx.Mask` instead.") 
 class Icon(GDIObject):
@@ -824,8 +817,7 @@ class Icon(GDIObject):
         return _gdi_.Icon_CopyFromBitmap(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
-Icon_swigregister = _gdi_.Icon_swigregister
-Icon_swigregister(Icon)
+_gdi_.Icon_swigregister(Icon)
 
 def EmptyIcon(*args, **kwargs):
     """EmptyIcon() -> Icon"""
@@ -877,8 +869,7 @@ class IconLocation(object):
         """GetIndex(self) -> int"""
         return _gdi_.IconLocation_GetIndex(*args, **kwargs)
 
-IconLocation_swigregister = _gdi_.IconLocation_swigregister
-IconLocation_swigregister(IconLocation)
+_gdi_.IconLocation_swigregister(IconLocation)
 
 class IconBundle(object):
     """Proxy of C++ IconBundle class"""
@@ -901,8 +892,7 @@ class IconBundle(object):
         """GetIcon(self, Size size) -> Icon"""
         return _gdi_.IconBundle_GetIcon(*args, **kwargs)
 
-IconBundle_swigregister = _gdi_.IconBundle_swigregister
-IconBundle_swigregister(IconBundle)
+_gdi_.IconBundle_swigregister(IconBundle)
 
 def IconBundleFromFile(*args, **kwargs):
     """IconBundleFromFile(String file, long type) -> IconBundle"""
@@ -988,8 +978,7 @@ class Cursor(GDIObject):
         """SetSize(self, Size size)"""
         return _gdi_.Cursor_SetSize(*args, **kwargs)
 
-Cursor_swigregister = _gdi_.Cursor_swigregister
-Cursor_swigregister(Cursor)
+_gdi_.Cursor_swigregister(Cursor)
 
 def StockCursor(*args, **kwargs):
     """
@@ -1117,8 +1106,7 @@ class Region(GDIObject):
         """UnionBitmapColour(self, Bitmap bmp, Colour transColour, int tolerance=0) -> bool"""
         return _gdi_.Region_UnionBitmapColour(*args, **kwargs)
 
-Region_swigregister = _gdi_.Region_swigregister
-Region_swigregister(Region)
+_gdi_.Region_swigregister(Region)
 
 def RegionFromBitmap(*args, **kwargs):
     """RegionFromBitmap(Bitmap bmp) -> Region"""
@@ -1188,8 +1176,7 @@ class RegionIterator(_core.Object):
         """__nonzero__(self) -> bool"""
         return _gdi_.RegionIterator___nonzero__(*args, **kwargs)
 
-RegionIterator_swigregister = _gdi_.RegionIterator_swigregister
-RegionIterator_swigregister(RegionIterator)
+_gdi_.RegionIterator_swigregister(RegionIterator)
 
 #---------------------------------------------------------------------------
 
@@ -1420,8 +1407,7 @@ class NativeFontInfo(object):
         """ToUserString(self) -> String"""
         return _gdi_.NativeFontInfo_ToUserString(*args, **kwargs)
 
-NativeFontInfo_swigregister = _gdi_.NativeFontInfo_swigregister
-NativeFontInfo_swigregister(NativeFontInfo)
+_gdi_.NativeFontInfo_swigregister(NativeFontInfo)
 
 class NativeEncodingInfo(object):
     """Proxy of C++ NativeEncodingInfo class"""
@@ -1442,8 +1428,7 @@ class NativeEncodingInfo(object):
         """ToString(self) -> String"""
         return _gdi_.NativeEncodingInfo_ToString(*args, **kwargs)
 
-NativeEncodingInfo_swigregister = _gdi_.NativeEncodingInfo_swigregister
-NativeEncodingInfo_swigregister(NativeEncodingInfo)
+_gdi_.NativeEncodingInfo_swigregister(NativeEncodingInfo)
 
 
 def GetNativeFontEncoding(*args, **kwargs):
@@ -1528,8 +1513,7 @@ class FontMapper(object):
         """SetDialogTitle(self, String title)"""
         return _gdi_.FontMapper_SetDialogTitle(*args, **kwargs)
 
-FontMapper_swigregister = _gdi_.FontMapper_swigregister
-FontMapper_swigregister(FontMapper)
+_gdi_.FontMapper_swigregister(FontMapper)
 
 def FontMapper_Get(*args):
   """FontMapper_Get() -> FontMapper"""
@@ -1889,8 +1873,7 @@ class Font(GDIObject):
         return _gdi_.Font_SetDefaultEncoding(*args, **kwargs)
 
     SetDefaultEncoding = staticmethod(SetDefaultEncoding)
-Font_swigregister = _gdi_.Font_swigregister
-Font_swigregister(Font)
+_gdi_.Font_swigregister(Font)
 
 def FontFromNativeInfo(*args, **kwargs):
     """
@@ -2022,8 +2005,7 @@ class FontEnumerator(object):
         """GetFacenames(self) -> PyObject"""
         return _gdi_.FontEnumerator_GetFacenames(*args, **kwargs)
 
-FontEnumerator_swigregister = _gdi_.FontEnumerator_swigregister
-FontEnumerator_swigregister(FontEnumerator)
+_gdi_.FontEnumerator_swigregister(FontEnumerator)
 
 #---------------------------------------------------------------------------
 
@@ -2266,8 +2248,7 @@ class LanguageInfo(object):
     Language = property(_gdi_.LanguageInfo_Language_get, _gdi_.LanguageInfo_Language_set)
     CanonicalName = property(_gdi_.LanguageInfo_CanonicalName_get, _gdi_.LanguageInfo_CanonicalName_set)
     Description = property(_gdi_.LanguageInfo_Description_get, _gdi_.LanguageInfo_Description_set)
-LanguageInfo_swigregister = _gdi_.LanguageInfo_swigregister
-LanguageInfo_swigregister(LanguageInfo)
+_gdi_.LanguageInfo_swigregister(LanguageInfo)
 
 LOCALE_CAT_NUMBER = _gdi_.LOCALE_CAT_NUMBER
 LOCALE_CAT_DATE = _gdi_.LOCALE_CAT_DATE
@@ -2382,8 +2363,7 @@ class Locale(object):
         """GetName(self) -> String"""
         return _gdi_.Locale_GetName(*args, **kwargs)
 
-Locale_swigregister = _gdi_.Locale_swigregister
-Locale_swigregister(Locale)
+_gdi_.Locale_swigregister(Locale)
 
 def Locale_GetSystemLanguage(*args):
   """Locale_GetSystemLanguage() -> int"""
@@ -2463,8 +2443,7 @@ class EncodingConverter(_core.Object):
 
     CanConvert = staticmethod(CanConvert)
     def __nonzero__(self): return self.IsOk() 
-EncodingConverter_swigregister = _gdi_.EncodingConverter_swigregister
-EncodingConverter_swigregister(EncodingConverter)
+_gdi_.EncodingConverter_swigregister(EncodingConverter)
 
 def GetTranslation(*args):
   """
@@ -3961,8 +3940,7 @@ class DC(_core.Object):
            raise ValueError('backgrounds and coords must have same length')
         return  self._DrawTextList(textList, coords, foregrounds, backgrounds)
 
-DC_swigregister = _gdi_.DC_swigregister
-DC_swigregister(DC)
+_gdi_.DC_swigregister(DC)
 
 #---------------------------------------------------------------------------
 
@@ -4011,8 +3989,7 @@ class MemoryDC(DC):
         """
         return _gdi_.MemoryDC_SelectObject(*args, **kwargs)
 
-MemoryDC_swigregister = _gdi_.MemoryDC_swigregister
-MemoryDC_swigregister(MemoryDC)
+_gdi_.MemoryDC_swigregister(MemoryDC)
 
 def MemoryDCFromDC(*args, **kwargs):
     """
@@ -4064,8 +4041,7 @@ class BufferedDC(MemoryDC):
         """
         return _gdi_.BufferedDC_UnMask(*args, **kwargs)
 
-BufferedDC_swigregister = _gdi_.BufferedDC_swigregister
-BufferedDC_swigregister(BufferedDC)
+_gdi_.BufferedDC_swigregister(BufferedDC)
 
 class BufferedPaintDC(BufferedDC):
     """
@@ -4104,8 +4080,7 @@ class BufferedPaintDC(BufferedDC):
 
         """
         _gdi_.BufferedPaintDC_swiginit(self,_gdi_.new_BufferedPaintDC(*args, **kwargs))
-BufferedPaintDC_swigregister = _gdi_.BufferedPaintDC_swigregister
-BufferedPaintDC_swigregister(BufferedPaintDC)
+_gdi_.BufferedPaintDC_swigregister(BufferedPaintDC)
 
 #---------------------------------------------------------------------------
 
@@ -4169,8 +4144,7 @@ class ScreenDC(DC):
         """
         return _gdi_.ScreenDC_EndDrawingOnTop(*args, **kwargs)
 
-ScreenDC_swigregister = _gdi_.ScreenDC_swigregister
-ScreenDC_swigregister(ScreenDC)
+_gdi_.ScreenDC_swigregister(ScreenDC)
 
 #---------------------------------------------------------------------------
 
@@ -4197,8 +4171,7 @@ class ClientDC(DC):
         Constructor. Pass the window on which you wish to paint.
         """
         _gdi_.ClientDC_swiginit(self,_gdi_.new_ClientDC(*args, **kwargs))
-ClientDC_swigregister = _gdi_.ClientDC_swigregister
-ClientDC_swigregister(ClientDC)
+_gdi_.ClientDC_swigregister(ClientDC)
 
 #---------------------------------------------------------------------------
 
@@ -4228,8 +4201,7 @@ class PaintDC(DC):
         Constructor. Pass the window on which you wish to paint.
         """
         _gdi_.PaintDC_swiginit(self,_gdi_.new_PaintDC(*args, **kwargs))
-PaintDC_swigregister = _gdi_.PaintDC_swigregister
-PaintDC_swigregister(PaintDC)
+_gdi_.PaintDC_swigregister(PaintDC)
 
 #---------------------------------------------------------------------------
 
@@ -4249,8 +4221,7 @@ class WindowDC(DC):
         Constructor. Pass the window on which you wish to paint.
         """
         _gdi_.WindowDC_swiginit(self,_gdi_.new_WindowDC(*args, **kwargs))
-WindowDC_swigregister = _gdi_.WindowDC_swigregister
-WindowDC_swigregister(WindowDC)
+_gdi_.WindowDC_swigregister(WindowDC)
 
 #---------------------------------------------------------------------------
 
@@ -4274,8 +4245,7 @@ class MirrorDC(DC):
         *mirror* is True.
         """
         _gdi_.MirrorDC_swiginit(self,_gdi_.new_MirrorDC(*args, **kwargs))
-MirrorDC_swigregister = _gdi_.MirrorDC_swigregister
-MirrorDC_swigregister(MirrorDC)
+_gdi_.MirrorDC_swigregister(MirrorDC)
 
 #---------------------------------------------------------------------------
 
@@ -4318,8 +4288,7 @@ class PostScriptDC(DC):
         return _gdi_.PostScriptDC_GetResolution(*args, **kwargs)
 
     GetResolution = staticmethod(GetResolution)
-PostScriptDC_swigregister = _gdi_.PostScriptDC_swigregister
-PostScriptDC_swigregister(PostScriptDC)
+_gdi_.PostScriptDC_swigregister(PostScriptDC)
 
 def PostScriptDC_SetResolution(*args, **kwargs):
   """
@@ -4374,8 +4343,7 @@ class MetaFile(_core.Object):
         return _gdi_.MetaFile_GetFileName(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
-MetaFile_swigregister = _gdi_.MetaFile_swigregister
-MetaFile_swigregister(MetaFile)
+_gdi_.MetaFile_swigregister(MetaFile)
 
 class MetaFileDC(DC):
     """Proxy of C++ MetaFileDC class"""
@@ -4391,8 +4359,7 @@ class MetaFileDC(DC):
         """Close(self) -> MetaFile"""
         return _gdi_.MetaFileDC_Close(*args, **kwargs)
 
-MetaFileDC_swigregister = _gdi_.MetaFileDC_swigregister
-MetaFileDC_swigregister(MetaFileDC)
+_gdi_.MetaFileDC_swigregister(MetaFileDC)
 
 class PrinterDC(DC):
     """Proxy of C++ PrinterDC class"""
@@ -4401,8 +4368,7 @@ class PrinterDC(DC):
     def __init__(self, *args, **kwargs): 
         """__init__(self, wxPrintData printData) -> PrinterDC"""
         _gdi_.PrinterDC_swiginit(self,_gdi_.new_PrinterDC(*args, **kwargs))
-PrinterDC_swigregister = _gdi_.PrinterDC_swigregister
-PrinterDC_swigregister(PrinterDC)
+_gdi_.PrinterDC_swigregister(PrinterDC)
 
 #---------------------------------------------------------------------------
 
@@ -4469,8 +4435,7 @@ class ImageList(_core.Object):
         """GetSize() -> (width,height)"""
         return _gdi_.ImageList_GetSize(*args, **kwargs)
 
-ImageList_swigregister = _gdi_.ImageList_swigregister
-ImageList_swigregister(ImageList)
+_gdi_.ImageList_swigregister(ImageList)
 
 #---------------------------------------------------------------------------
 
@@ -4595,8 +4560,7 @@ class StockGDI(object):
         
     _initStockObjects = staticmethod(_initStockObjects)
 
-StockGDI_swigregister = _gdi_.StockGDI_swigregister
-StockGDI_swigregister(StockGDI)
+_gdi_.StockGDI_swigregister(StockGDI)
 
 def StockGDI_DeleteAll(*args):
   """StockGDI_DeleteAll()"""
@@ -4631,8 +4595,7 @@ class GDIObjListBase(object):
         _gdi_.GDIObjListBase_swiginit(self,_gdi_.new_GDIObjListBase(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_GDIObjListBase
     __del__ = lambda self : None;
-GDIObjListBase_swigregister = _gdi_.GDIObjListBase_swigregister
-GDIObjListBase_swigregister(GDIObjListBase)
+_gdi_.GDIObjListBase_swigregister(GDIObjListBase)
 cvar = _gdi_.cvar
 NullBitmap = cvar.NullBitmap
 NullIcon = cvar.NullIcon
@@ -4663,8 +4626,7 @@ class PenList(GDIObjListBase):
     AddPen = wx._deprecated(AddPen)
     RemovePen = wx._deprecated(RemovePen)
 
-PenList_swigregister = _gdi_.PenList_swigregister
-PenList_swigregister(PenList)
+_gdi_.PenList_swigregister(PenList)
 
 class BrushList(GDIObjListBase):
     """Proxy of C++ BrushList class"""
@@ -4686,8 +4648,7 @@ class BrushList(GDIObjListBase):
     AddBrush = wx._deprecated(AddBrush)
     RemoveBrush = wx._deprecated(RemoveBrush)
 
-BrushList_swigregister = _gdi_.BrushList_swigregister
-BrushList_swigregister(BrushList)
+_gdi_.BrushList_swigregister(BrushList)
 
 class FontList(GDIObjListBase):
     """Proxy of C++ FontList class"""
@@ -4713,8 +4674,7 @@ class FontList(GDIObjListBase):
     AddFont = wx._deprecated(AddFont)
     RemoveFont = wx._deprecated(RemoveFont)
 
-FontList_swigregister = _gdi_.FontList_swigregister
-FontList_swigregister(FontList)
+_gdi_.FontList_swigregister(FontList)
 
 class ColourDatabase(object):
     """Proxy of C++ ColourDatabase class"""
@@ -4742,8 +4702,7 @@ class ColourDatabase(object):
         """Append(self, String name, int red, int green, int blue)"""
         return _gdi_.ColourDatabase_Append(*args, **kwargs)
 
-ColourDatabase_swigregister = _gdi_.ColourDatabase_swigregister
-ColourDatabase_swigregister(ColourDatabase)
+_gdi_.ColourDatabase_swigregister(ColourDatabase)
 
 #---------------------------------------------------------------------------
 
@@ -4782,10 +4741,10 @@ def _wxPyMakeDelayedInitWrapper(initFunc):
             return self.__getattr__("__repr__")()
     return _wxPyStockObjectWrapper
     
-wxTheFontList       = _wxPyMakeDelayedInitWrapper(_wxPyInitTheFontList)()
-wxThePenList        = _wxPyMakeDelayedInitWrapper(_wxPyInitThePenList)()
-wxTheBrushList      = _wxPyMakeDelayedInitWrapper(_wxPyInitTheBrushList)()
-wxTheColourDatabase = _wxPyMakeDelayedInitWrapper(_wxPyInitTheColourDatabase)()
+TheFontList       = _wxPyMakeDelayedInitWrapper(_wxPyInitTheFontList)()
+ThePenList        = _wxPyMakeDelayedInitWrapper(_wxPyInitThePenList)()
+TheBrushList      = _wxPyMakeDelayedInitWrapper(_wxPyInitTheBrushList)()
+TheColourDatabase = _wxPyMakeDelayedInitWrapper(_wxPyInitTheColourDatabase)()
 
 NullColor = NullColour 
 #---------------------------------------------------------------------------
@@ -4852,8 +4811,7 @@ class Effects(_core.Object):
         """TileBitmap(self, Rect rect, DC dc, Bitmap bitmap) -> bool"""
         return _gdi_.Effects_TileBitmap(*args, **kwargs)
 
-Effects_swigregister = _gdi_.Effects_swigregister
-Effects_swigregister(Effects)
+_gdi_.Effects_swigregister(Effects)
 
 #---------------------------------------------------------------------------
 
@@ -4906,8 +4864,7 @@ class SplitterRenderParams(object):
     widthSash = property(_gdi_.SplitterRenderParams_widthSash_get)
     border = property(_gdi_.SplitterRenderParams_border_get)
     isHotSensitive = property(_gdi_.SplitterRenderParams_isHotSensitive_get)
-SplitterRenderParams_swigregister = _gdi_.SplitterRenderParams_swigregister
-SplitterRenderParams_swigregister(SplitterRenderParams)
+_gdi_.SplitterRenderParams_swigregister(SplitterRenderParams)
 
 class RendererVersion(object):
     """
@@ -4937,8 +4894,7 @@ class RendererVersion(object):
     IsCompatible = staticmethod(IsCompatible)
     version = property(_gdi_.RendererVersion_version_get)
     age = property(_gdi_.RendererVersion_age_get)
-RendererVersion_swigregister = _gdi_.RendererVersion_swigregister
-RendererVersion_swigregister(RendererVersion)
+_gdi_.RendererVersion_swigregister(RendererVersion)
 
 def RendererVersion_IsCompatible(*args, **kwargs):
   """RendererVersion_IsCompatible(RendererVersion ver) -> bool"""
@@ -5120,8 +5076,7 @@ class RendererNative(object):
         """
         return _gdi_.RendererNative_GetVersion(*args, **kwargs)
 
-RendererNative_swigregister = _gdi_.RendererNative_swigregister
-RendererNative_swigregister(RendererNative)
+_gdi_.RendererNative_swigregister(RendererNative)
 
 def RendererNative_Get(*args):
   """

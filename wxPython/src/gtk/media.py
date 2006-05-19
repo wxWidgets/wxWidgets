@@ -70,10 +70,9 @@ class MediaEvent(_core.NotifyEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType commandType=wxEVT_NULL, int id=0) -> MediaEvent"""
+        """__init__(self, EventType commandType=wxEVT_NULL, int id=0) -> MediaEvent"""
         _media.MediaEvent_swiginit(self,_media.new_MediaEvent(*args, **kwargs))
-MediaEvent_swigregister = _media.MediaEvent_swigregister
-MediaEvent_swigregister(MediaEvent)
+_media.MediaEvent_swigregister(MediaEvent)
 cvar = _media.cvar
 MEDIABACKEND_DIRECTSHOW = cvar.MEDIABACKEND_DIRECTSHOW
 MEDIABACKEND_MCI = cvar.MEDIABACKEND_MCI
@@ -176,8 +175,7 @@ class MediaCtrl(_core.Control):
         """GetDownloadTotal(self) -> wxFileOffset"""
         return _media.MediaCtrl_GetDownloadTotal(*args, **kwargs)
 
-MediaCtrl_swigregister = _media.MediaCtrl_swigregister
-MediaCtrl_swigregister(MediaCtrl)
+_media.MediaCtrl_swigregister(MediaCtrl)
 MediaCtrlNameStr = cvar.MediaCtrlNameStr
 
 def PreMediaCtrl(*args, **kwargs):

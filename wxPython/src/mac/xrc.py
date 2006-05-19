@@ -173,7 +173,7 @@ class XmlResource(_core.Object):
         return _xrc.XmlResource_AttachUnknownControl(*args, **kwargs)
 
     def GetXRCID(*args, **kwargs):
-        """GetXRCID(String str_id) -> int"""
+        """GetXRCID(String str_id, int value_if_not_found=ID_NONE) -> int"""
         return _xrc.XmlResource_GetXRCID(*args, **kwargs)
 
     GetXRCID = staticmethod(GetXRCID)
@@ -203,8 +203,7 @@ class XmlResource(_core.Object):
         """SetFlags(self, int flags)"""
         return _xrc.XmlResource_SetFlags(*args, **kwargs)
 
-XmlResource_swigregister = _xrc.XmlResource_swigregister
-XmlResource_swigregister(XmlResource)
+_xrc.XmlResource_swigregister(XmlResource)
 cvar = _xrc.cvar
 UTF8String = cvar.UTF8String
 StyleString = cvar.StyleString
@@ -225,7 +224,7 @@ def XmlResource_AddSubclassFactory(*args, **kwargs):
   return _xrc.XmlResource_AddSubclassFactory(*args, **kwargs)
 
 def XmlResource_GetXRCID(*args, **kwargs):
-  """XmlResource_GetXRCID(String str_id) -> int"""
+  """XmlResource_GetXRCID(String str_id, int value_if_not_found=ID_NONE) -> int"""
   return _xrc.XmlResource_GetXRCID(*args, **kwargs)
 
 def XmlResource_Get(*args):
@@ -236,8 +235,8 @@ def XmlResource_Set(*args, **kwargs):
   """XmlResource_Set(XmlResource res) -> XmlResource"""
   return _xrc.XmlResource_Set(*args, **kwargs)
 
-def XRCID(str_id):
-    return XmlResource_GetXRCID(str_id)
+def XRCID(str_id, value_if_not_found = wx.ID_NONE):
+    return XmlResource_GetXRCID(str_id, value_if_not_found)
 
 def XRCCTRL(window, str_id, *ignoreargs):
     return window.FindWindowById(XRCID(str_id))
@@ -257,8 +256,7 @@ class XmlSubclassFactory(object):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _xrc.XmlSubclassFactory__setCallbackInfo(*args, **kwargs)
 
-XmlSubclassFactory_swigregister = _xrc.XmlSubclassFactory_swigregister
-XmlSubclassFactory_swigregister(XmlSubclassFactory)
+_xrc.XmlSubclassFactory_swigregister(XmlSubclassFactory)
 
 #---------------------------------------------------------------------------
 
@@ -309,8 +307,7 @@ class XmlProperty(object):
         """SetNext(self, XmlProperty next)"""
         return _xrc.XmlProperty_SetNext(*args, **kwargs)
 
-XmlProperty_swigregister = _xrc.XmlProperty_swigregister
-XmlProperty_swigregister(XmlProperty)
+_xrc.XmlProperty_swigregister(XmlProperty)
 
 class XmlNode(object):
     """Proxy of C++ XmlNode class"""
@@ -413,8 +410,7 @@ class XmlNode(object):
         """SetProperties(self, XmlProperty prop)"""
         return _xrc.XmlNode_SetProperties(*args, **kwargs)
 
-XmlNode_swigregister = _xrc.XmlNode_swigregister
-XmlNode_swigregister(XmlNode)
+_xrc.XmlNode_swigregister(XmlNode)
 
 def XmlNodeEasy(*args, **kwargs):
     """XmlNodeEasy(int type, String name, String content=EmptyString) -> XmlNode"""
@@ -474,8 +470,7 @@ class XmlDocument(_core.Object):
         """SetFileEncoding(self, String encoding)"""
         return _xrc.XmlDocument_SetFileEncoding(*args, **kwargs)
 
-XmlDocument_swigregister = _xrc.XmlDocument_swigregister
-XmlDocument_swigregister(XmlDocument)
+_xrc.XmlDocument_swigregister(XmlDocument)
 
 def XmlDocumentFromStream(*args, **kwargs):
     """XmlDocumentFromStream(InputStream stream, String encoding=UTF8String) -> XmlDocument"""
@@ -640,8 +635,7 @@ class XmlResourceHandler(_core.Object):
         """GetCurFileSystem(self) -> FileSystem"""
         return _xrc.XmlResourceHandler_GetCurFileSystem(*args, **kwargs)
 
-XmlResourceHandler_swigregister = _xrc.XmlResourceHandler_swigregister
-XmlResourceHandler_swigregister(XmlResourceHandler)
+_xrc.XmlResourceHandler_swigregister(XmlResourceHandler)
 
 #----------------------------------------------------------------------------
 # The global was removed  in favor of static accessor functions.  This is for

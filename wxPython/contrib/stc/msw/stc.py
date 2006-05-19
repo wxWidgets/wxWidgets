@@ -5161,8 +5161,7 @@ class StyledTextCtrl(_core.Control):
         self.AppendTextRaw(text)
 
 
-StyledTextCtrl_swigregister = _stc.StyledTextCtrl_swigregister
-StyledTextCtrl_swigregister(StyledTextCtrl)
+_stc.StyledTextCtrl_swigregister(StyledTextCtrl)
 cvar = _stc.cvar
 STCNameStr = cvar.STCNameStr
 
@@ -5352,8 +5351,7 @@ class StyledTextEvent(_core.CommandEvent):
         """GetAlt(self) -> bool"""
         return _stc.StyledTextEvent_GetAlt(*args, **kwargs)
 
-StyledTextEvent_swigregister = _stc.StyledTextEvent_swigregister
-StyledTextEvent_swigregister(StyledTextEvent)
+_stc.StyledTextEvent_swigregister(StyledTextEvent)
 
 wxEVT_STC_CHANGE = _stc.wxEVT_STC_CHANGE
 wxEVT_STC_STYLENEEDED = _stc.wxEVT_STC_STYLENEEDED

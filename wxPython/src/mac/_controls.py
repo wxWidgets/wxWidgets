@@ -132,8 +132,7 @@ class Button(_core.Control):
         return _controls_.Button_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-Button_swigregister = _controls_.Button_swigregister
-Button_swigregister(Button)
+_controls_.Button_swigregister(Button)
 cvar = _controls_.cvar
 ButtonNameStr = cvar.ButtonNameStr
 
@@ -298,8 +297,7 @@ class BitmapButton(Button):
         """GetMarginY(self) -> int"""
         return _controls_.BitmapButton_GetMarginY(*args, **kwargs)
 
-BitmapButton_swigregister = _controls_.BitmapButton_swigregister
-BitmapButton_swigregister(BitmapButton)
+_controls_.BitmapButton_swigregister(BitmapButton)
 
 def PreBitmapButton(*args, **kwargs):
     """
@@ -436,8 +434,7 @@ class CheckBox(_core.Control):
         return _controls_.CheckBox_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-CheckBox_swigregister = _controls_.CheckBox_swigregister
-CheckBox_swigregister(CheckBox)
+_controls_.CheckBox_swigregister(CheckBox)
 CheckBoxNameStr = cvar.CheckBoxNameStr
 
 def PreCheckBox(*args, **kwargs):
@@ -528,8 +525,7 @@ class Choice(_core.ControlWithItems):
         return _controls_.Choice_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-Choice_swigregister = _controls_.Choice_swigregister
-Choice_swigregister(Choice)
+_controls_.Choice_swigregister(Choice)
 ChoiceNameStr = cvar.ChoiceNameStr
 
 def PreChoice(*args, **kwargs):
@@ -816,8 +812,7 @@ class ComboBox(_core.Control,_core.ItemContainer):
         return _controls_.ComboBox_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-ComboBox_swigregister = _controls_.ComboBox_swigregister
-ComboBox_swigregister(ComboBox)
+_controls_.ComboBox_swigregister(ComboBox)
 ComboBoxNameStr = cvar.ComboBoxNameStr
 
 def PreComboBox(*args, **kwargs):
@@ -929,8 +924,7 @@ class Gauge(_core.Control):
         return _controls_.Gauge_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-Gauge_swigregister = _controls_.Gauge_swigregister
-Gauge_swigregister(Gauge)
+_controls_.Gauge_swigregister(Gauge)
 GaugeNameStr = cvar.GaugeNameStr
 
 def PreGauge(*args, **kwargs):
@@ -996,8 +990,7 @@ class StaticBox(_core.Control):
         return _controls_.StaticBox_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-StaticBox_swigregister = _controls_.StaticBox_swigregister
-StaticBox_swigregister(StaticBox)
+_controls_.StaticBox_swigregister(StaticBox)
 StaticBitmapNameStr = cvar.StaticBitmapNameStr
 StaticBoxNameStr = cvar.StaticBoxNameStr
 StaticTextNameStr = cvar.StaticTextNameStr
@@ -1074,8 +1067,7 @@ class StaticLine(_core.Control):
         return _controls_.StaticLine_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-StaticLine_swigregister = _controls_.StaticLine_swigregister
-StaticLine_swigregister(StaticLine)
+_controls_.StaticLine_swigregister(StaticLine)
 
 def PreStaticLine(*args, **kwargs):
     """PreStaticLine() -> StaticLine"""
@@ -1155,8 +1147,7 @@ class StaticText(_core.Control):
         return _controls_.StaticText_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-StaticText_swigregister = _controls_.StaticText_swigregister
-StaticText_swigregister(StaticText)
+_controls_.StaticText_swigregister(StaticText)
 
 def PreStaticText(*args, **kwargs):
     """PreStaticText() -> StaticText"""
@@ -1233,8 +1224,7 @@ class StaticBitmap(_core.Control):
         return _controls_.StaticBitmap_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-StaticBitmap_swigregister = _controls_.StaticBitmap_swigregister
-StaticBitmap_swigregister(StaticBitmap)
+_controls_.StaticBitmap_swigregister(StaticBitmap)
 
 def PreStaticBitmap(*args, **kwargs):
     """PreStaticBitmap() -> StaticBitmap"""
@@ -1391,8 +1381,7 @@ class ListBox(_core.ControlWithItems):
         return _controls_.ListBox_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-ListBox_swigregister = _controls_.ListBox_swigregister
-ListBox_swigregister(ListBox)
+_controls_.ListBox_swigregister(ListBox)
 ListBoxNameStr = cvar.ListBoxNameStr
 
 def PreListBox(*args, **kwargs):
@@ -1450,8 +1439,7 @@ class CheckListBox(ListBox):
         """Check(self, unsigned int index, int check=True)"""
         return _controls_.CheckListBox_Check(*args, **kwargs)
 
-CheckListBox_swigregister = _controls_.CheckListBox_swigregister
-CheckListBox_swigregister(CheckListBox)
+_controls_.CheckListBox_swigregister(CheckListBox)
 
 def PreCheckListBox(*args, **kwargs):
     """PreCheckListBox() -> CheckListBox"""
@@ -1522,6 +1510,11 @@ class TextAttr(object):
         """Init(self)"""
         return _controls_.TextAttr_Init(*args, **kwargs)
 
+    def Merge(*args, **kwargs):
+        """Merge(TextAttr base, TextAttr overlay) -> TextAttr"""
+        return _controls_.TextAttr_Merge(*args, **kwargs)
+
+    Merge = staticmethod(Merge)
     def SetTextColour(*args, **kwargs):
         """SetTextColour(self, Colour colText)"""
         return _controls_.TextAttr_SetTextColour(*args, **kwargs)
@@ -1631,9 +1624,12 @@ class TextAttr(object):
         return _controls_.TextAttr_Combine(*args, **kwargs)
 
     Combine = staticmethod(Combine)
-TextAttr_swigregister = _controls_.TextAttr_swigregister
-TextAttr_swigregister(TextAttr)
+_controls_.TextAttr_swigregister(TextAttr)
 TextCtrlNameStr = cvar.TextCtrlNameStr
+
+def TextAttr_Merge(*args, **kwargs):
+  """TextAttr_Merge(TextAttr base, TextAttr overlay) -> TextAttr"""
+  return _controls_.TextAttr_Merge(*args, **kwargs)
 
 def TextAttr_Combine(*args, **kwargs):
   """TextAttr_Combine(TextAttr attr, TextAttr attrDef, TextCtrl text) -> TextAttr"""
@@ -1900,8 +1896,7 @@ class TextCtrl(_core.Control):
         return _controls_.TextCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-TextCtrl_swigregister = _controls_.TextCtrl_swigregister
-TextCtrl_swigregister(TextCtrl)
+_controls_.TextCtrl_swigregister(TextCtrl)
 
 def PreTextCtrl(*args, **kwargs):
     """PreTextCtrl() -> TextCtrl"""
@@ -1948,8 +1943,7 @@ class TextUrlEvent(_core.CommandEvent):
         """GetURLEnd(self) -> long"""
         return _controls_.TextUrlEvent_GetURLEnd(*args, **kwargs)
 
-TextUrlEvent_swigregister = _controls_.TextUrlEvent_swigregister
-TextUrlEvent_swigregister(TextUrlEvent)
+_controls_.TextUrlEvent_swigregister(TextUrlEvent)
 
 EVT_TEXT        = wx.PyEventBinder( wxEVT_COMMAND_TEXT_UPDATED, 1)
 EVT_TEXT_ENTER  = wx.PyEventBinder( wxEVT_COMMAND_TEXT_ENTER, 1)
@@ -2024,8 +2018,7 @@ class ScrollBar(_core.Control):
         return _controls_.ScrollBar_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-ScrollBar_swigregister = _controls_.ScrollBar_swigregister
-ScrollBar_swigregister(ScrollBar)
+_controls_.ScrollBar_swigregister(ScrollBar)
 ScrollBarNameStr = cvar.ScrollBarNameStr
 
 def PreScrollBar(*args, **kwargs):
@@ -2127,8 +2120,7 @@ class SpinButton(_core.Control):
         return _controls_.SpinButton_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-SpinButton_swigregister = _controls_.SpinButton_swigregister
-SpinButton_swigregister(SpinButton)
+_controls_.SpinButton_swigregister(SpinButton)
 SPIN_BUTTON_NAME = cvar.SPIN_BUTTON_NAME
 SpinCtrlNameStr = cvar.SpinCtrlNameStr
 
@@ -2223,8 +2215,7 @@ class SpinCtrl(_core.Control):
         return _controls_.SpinCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-SpinCtrl_swigregister = _controls_.SpinCtrl_swigregister
-SpinCtrl_swigregister(SpinCtrl)
+_controls_.SpinCtrl_swigregister(SpinCtrl)
 
 def PreSpinCtrl(*args, **kwargs):
     """PreSpinCtrl() -> SpinCtrl"""
@@ -2253,7 +2244,7 @@ class SpinEvent(_core.NotifyEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType commandType=wxEVT_NULL, int winid=0) -> SpinEvent"""
+        """__init__(self, EventType commandType=wxEVT_NULL, int winid=0) -> SpinEvent"""
         _controls_.SpinEvent_swiginit(self,_controls_.new_SpinEvent(*args, **kwargs))
     def GetPosition(*args, **kwargs):
         """GetPosition(self) -> int"""
@@ -2263,8 +2254,7 @@ class SpinEvent(_core.NotifyEvent):
         """SetPosition(self, int pos)"""
         return _controls_.SpinEvent_SetPosition(*args, **kwargs)
 
-SpinEvent_swigregister = _controls_.SpinEvent_swigregister
-SpinEvent_swigregister(SpinEvent)
+_controls_.SpinEvent_swigregister(SpinEvent)
 
 wxEVT_COMMAND_SPINCTRL_UPDATED = _controls_.wxEVT_COMMAND_SPINCTRL_UPDATED
 EVT_SPIN_UP   = wx.PyEventBinder( wx.wxEVT_SCROLL_LINEUP, 1)
@@ -2364,6 +2354,14 @@ class RadioBox(_core.Control):
         """GetNextItem(self, int item, int dir, long style) -> int"""
         return _controls_.RadioBox_GetNextItem(*args, **kwargs)
 
+    def SetItemToolTip(*args, **kwargs):
+        """SetItemToolTip(self, unsigned int item, String text)"""
+        return _controls_.RadioBox_SetItemToolTip(*args, **kwargs)
+
+    def GetItemToolTip(*args, **kwargs):
+        """GetItemToolTip(self, unsigned int item) -> ToolTip"""
+        return _controls_.RadioBox_GetItemToolTip(*args, **kwargs)
+
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
@@ -2382,8 +2380,7 @@ class RadioBox(_core.Control):
         return _controls_.RadioBox_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-RadioBox_swigregister = _controls_.RadioBox_swigregister
-RadioBox_swigregister(RadioBox)
+_controls_.RadioBox_swigregister(RadioBox)
 RadioBoxNameStr = cvar.RadioBoxNameStr
 RadioButtonNameStr = cvar.RadioButtonNameStr
 
@@ -2460,8 +2457,7 @@ class RadioButton(_core.Control):
         return _controls_.RadioButton_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-RadioButton_swigregister = _controls_.RadioButton_swigregister
-RadioButton_swigregister(RadioButton)
+_controls_.RadioButton_swigregister(RadioButton)
 
 def PreRadioButton(*args, **kwargs):
     """PreRadioButton() -> RadioButton"""
@@ -2627,8 +2623,7 @@ class Slider(_core.Control):
         return _controls_.Slider_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-Slider_swigregister = _controls_.Slider_swigregister
-Slider_swigregister(Slider)
+_controls_.Slider_swigregister(Slider)
 SliderNameStr = cvar.SliderNameStr
 
 def PreSlider(*args, **kwargs):
@@ -2707,8 +2702,7 @@ class ToggleButton(_core.Control):
         return _controls_.ToggleButton_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-ToggleButton_swigregister = _controls_.ToggleButton_swigregister
-ToggleButton_swigregister(ToggleButton)
+_controls_.ToggleButton_swigregister(ToggleButton)
 ToggleButtonNameStr = cvar.ToggleButtonNameStr
 
 def PreToggleButton(*args, **kwargs):
@@ -2880,8 +2874,7 @@ class BookCtrlBase(_core.Control):
         return _controls_.BookCtrlBase_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-BookCtrlBase_swigregister = _controls_.BookCtrlBase_swigregister
-BookCtrlBase_swigregister(BookCtrlBase)
+_controls_.BookCtrlBase_swigregister(BookCtrlBase)
 NotebookNameStr = cvar.NotebookNameStr
 
 def BookCtrlBase_GetClassDefaultAttributes(*args, **kwargs):
@@ -2907,7 +2900,7 @@ class BookCtrlBaseEvent(_core.NotifyEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
+        __init__(self, EventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
             int nOldSel=-1) -> BookCtrlBaseEvent
         """
         _controls_.BookCtrlBaseEvent_swiginit(self,_controls_.new_BookCtrlBaseEvent(*args, **kwargs))
@@ -2932,8 +2925,7 @@ class BookCtrlBaseEvent(_core.NotifyEvent):
         """SetOldSelection(self, int nOldSel)"""
         return _controls_.BookCtrlBaseEvent_SetOldSelection(*args, **kwargs)
 
-BookCtrlBaseEvent_swigregister = _controls_.BookCtrlBaseEvent_swigregister
-BookCtrlBaseEvent_swigregister(BookCtrlBaseEvent)
+_controls_.BookCtrlBaseEvent_swigregister(BookCtrlBaseEvent)
 
 #---------------------------------------------------------------------------
 
@@ -3010,8 +3002,7 @@ class Notebook(BookCtrlBase):
         return _controls_.Notebook_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-Notebook_swigregister = _controls_.Notebook_swigregister
-Notebook_swigregister(Notebook)
+_controls_.Notebook_swigregister(Notebook)
 
 def PreNotebook(*args, **kwargs):
     """PreNotebook() -> Notebook"""
@@ -3041,12 +3032,11 @@ class NotebookEvent(BookCtrlBaseEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
+        __init__(self, EventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
             int nOldSel=-1) -> NotebookEvent
         """
         _controls_.NotebookEvent_swiginit(self,_controls_.new_NotebookEvent(*args, **kwargs))
-NotebookEvent_swigregister = _controls_.NotebookEvent_swigregister
-NotebookEvent_swigregister(NotebookEvent)
+_controls_.NotebookEvent_swigregister(NotebookEvent)
 
 wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED = _controls_.wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
 wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING = _controls_.wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
@@ -3115,8 +3105,7 @@ class Listbook(BookCtrlBase):
         """GetListView(self) -> ListView"""
         return _controls_.Listbook_GetListView(*args, **kwargs)
 
-Listbook_swigregister = _controls_.Listbook_swigregister
-Listbook_swigregister(Listbook)
+_controls_.Listbook_swigregister(Listbook)
 
 def PreListbook(*args, **kwargs):
     """PreListbook() -> Listbook"""
@@ -3129,12 +3118,11 @@ class ListbookEvent(BookCtrlBaseEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
+        __init__(self, EventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
             int nOldSel=-1) -> ListbookEvent
         """
         _controls_.ListbookEvent_swiginit(self,_controls_.new_ListbookEvent(*args, **kwargs))
-ListbookEvent_swigregister = _controls_.ListbookEvent_swigregister
-ListbookEvent_swigregister(ListbookEvent)
+_controls_.ListbookEvent_swigregister(ListbookEvent)
 
 wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED = _controls_.wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED
 wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING = _controls_.wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING
@@ -3170,8 +3158,7 @@ class Choicebook(BookCtrlBase):
         """GetChoiceCtrl(self) -> Choice"""
         return _controls_.Choicebook_GetChoiceCtrl(*args, **kwargs)
 
-Choicebook_swigregister = _controls_.Choicebook_swigregister
-Choicebook_swigregister(Choicebook)
+_controls_.Choicebook_swigregister(Choicebook)
 
 def PreChoicebook(*args, **kwargs):
     """PreChoicebook() -> Choicebook"""
@@ -3184,12 +3171,11 @@ class ChoicebookEvent(BookCtrlBaseEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
+        __init__(self, EventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
             int nOldSel=-1) -> ChoicebookEvent
         """
         _controls_.ChoicebookEvent_swiginit(self,_controls_.new_ChoicebookEvent(*args, **kwargs))
-ChoicebookEvent_swigregister = _controls_.ChoicebookEvent_swigregister
-ChoicebookEvent_swigregister(ChoicebookEvent)
+_controls_.ChoicebookEvent_swigregister(ChoicebookEvent)
 
 wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED = _controls_.wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED
 wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING = _controls_.wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING
@@ -3250,8 +3236,7 @@ class Treebook(BookCtrlBase):
         """GetTreeCtrl(self) -> wxTreeCtrl"""
         return _controls_.Treebook_GetTreeCtrl(*args, **kwargs)
 
-Treebook_swigregister = _controls_.Treebook_swigregister
-Treebook_swigregister(Treebook)
+_controls_.Treebook_swigregister(Treebook)
 
 def PreTreebook(*args, **kwargs):
     """PreTreebook() -> Treebook"""
@@ -3264,12 +3249,11 @@ class TreebookEvent(BookCtrlBaseEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=NOT_FOUND, 
+        __init__(self, EventType commandType=wxEVT_NULL, int id=0, int nSel=NOT_FOUND, 
             int nOldSel=NOT_FOUND) -> TreebookEvent
         """
         _controls_.TreebookEvent_swiginit(self,_controls_.new_TreebookEvent(*args, **kwargs))
-TreebookEvent_swigregister = _controls_.TreebookEvent_swigregister
-TreebookEvent_swigregister(TreebookEvent)
+_controls_.TreebookEvent_swigregister(TreebookEvent)
 
 wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED = _controls_.wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED
 wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING = _controls_.wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING
@@ -3310,8 +3294,7 @@ class Toolbook(BookCtrlBase):
         """Realize(self)"""
         return _controls_.Toolbook_Realize(*args, **kwargs)
 
-Toolbook_swigregister = _controls_.Toolbook_swigregister
-Toolbook_swigregister(Toolbook)
+_controls_.Toolbook_swigregister(Toolbook)
 
 def PreToolbook(*args, **kwargs):
     """PreToolbook() -> Toolbook"""
@@ -3324,12 +3307,11 @@ class ToolbookEvent(BookCtrlBaseEvent):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=NOT_FOUND, 
+        __init__(self, EventType commandType=wxEVT_NULL, int id=0, int nSel=NOT_FOUND, 
             int nOldSel=NOT_FOUND) -> ToolbookEvent
         """
         _controls_.ToolbookEvent_swiginit(self,_controls_.new_ToolbookEvent(*args, **kwargs))
-ToolbookEvent_swigregister = _controls_.ToolbookEvent_swigregister
-ToolbookEvent_swigregister(ToolbookEvent)
+_controls_.ToolbookEvent_swigregister(ToolbookEvent)
 
 wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED = _controls_.wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED
 wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING = _controls_.wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING
@@ -3478,8 +3460,7 @@ class ToolBarToolBase(_core.Object):
     SetBitmap1 = SetNormalBitmap
     SetBitmap2 = SetDisabledBitmap
 
-ToolBarToolBase_swigregister = _controls_.ToolBarToolBase_swigregister
-ToolBarToolBase_swigregister(ToolBarToolBase)
+_controls_.ToolBarToolBase_swigregister(ToolBarToolBase)
 
 class ToolBarBase(_core.Control):
     """Proxy of C++ ToolBarBase class"""
@@ -3800,8 +3781,7 @@ class ToolBarBase(_core.Control):
         """GetToolsCount(self) -> size_t"""
         return _controls_.ToolBarBase_GetToolsCount(*args, **kwargs)
 
-ToolBarBase_swigregister = _controls_.ToolBarBase_swigregister
-ToolBarBase_swigregister(ToolBarBase)
+_controls_.ToolBarBase_swigregister(ToolBarBase)
 
 class ToolBar(ToolBarBase):
     """Proxy of C++ ToolBar class"""
@@ -3842,8 +3822,7 @@ class ToolBar(ToolBarBase):
         return _controls_.ToolBar_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-ToolBar_swigregister = _controls_.ToolBar_swigregister
-ToolBar_swigregister(ToolBar)
+_controls_.ToolBar_swigregister(ToolBar)
 
 def PreToolBar(*args, **kwargs):
     """PreToolBar() -> ToolBar"""
@@ -3997,8 +3976,7 @@ class ListItemAttr(object):
         args[0].thisown = 0
         return val
 
-ListItemAttr_swigregister = _controls_.ListItemAttr_swigregister
-ListItemAttr_swigregister(ListItemAttr)
+_controls_.ListItemAttr_swigregister(ListItemAttr)
 ListCtrlNameStr = cvar.ListCtrlNameStr
 
 #---------------------------------------------------------------------------
@@ -4138,8 +4116,7 @@ class ListItem(_core.Object):
     m_data = property(_controls_.ListItem_m_data_get, _controls_.ListItem_m_data_set)
     m_format = property(_controls_.ListItem_m_format_get, _controls_.ListItem_m_format_set)
     m_width = property(_controls_.ListItem_m_width_get, _controls_.ListItem_m_width_set)
-ListItem_swigregister = _controls_.ListItem_swigregister
-ListItem_swigregister(ListItem)
+_controls_.ListItem_swigregister(ListItem)
 
 #---------------------------------------------------------------------------
 
@@ -4148,7 +4125,7 @@ class ListEvent(_core.NotifyEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType commandType=wxEVT_NULL, int id=0) -> ListEvent"""
+        """__init__(self, EventType commandType=wxEVT_NULL, int id=0) -> ListEvent"""
         _controls_.ListEvent_swiginit(self,_controls_.new_ListEvent(*args, **kwargs))
     m_code = property(_controls_.ListEvent_m_code_get, _controls_.ListEvent_m_code_set)
     m_oldItemIndex = property(_controls_.ListEvent_m_oldItemIndex_get, _controls_.ListEvent_m_oldItemIndex_set)
@@ -4214,8 +4191,7 @@ class ListEvent(_core.NotifyEvent):
         """SetEditCanceled(self, bool editCancelled)"""
         return _controls_.ListEvent_SetEditCanceled(*args, **kwargs)
 
-ListEvent_swigregister = _controls_.ListEvent_swigregister
-ListEvent_swigregister(ListEvent)
+_controls_.ListEvent_swigregister(ListEvent)
 
 wxEVT_COMMAND_LIST_BEGIN_DRAG = _controls_.wxEVT_COMMAND_LIST_BEGIN_DRAG
 wxEVT_COMMAND_LIST_BEGIN_RDRAG = _controls_.wxEVT_COMMAND_LIST_BEGIN_RDRAG
@@ -4651,8 +4627,7 @@ class ListCtrl(_core.Control):
         return _controls_.ListCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-ListCtrl_swigregister = _controls_.ListCtrl_swigregister
-ListCtrl_swigregister(ListCtrl)
+_controls_.ListCtrl_swigregister(ListCtrl)
 
 def PreListCtrl(*args, **kwargs):
     """PreListCtrl() -> ListCtrl"""
@@ -4733,8 +4708,7 @@ class ListView(ListCtrl):
         """ClearColumnImage(self, int col)"""
         return _controls_.ListView_ClearColumnImage(*args, **kwargs)
 
-ListView_swigregister = _controls_.ListView_swigregister
-ListView_swigregister(ListView)
+_controls_.ListView_swigregister(ListView)
 
 def PreListView(*args, **kwargs):
     """PreListView() -> ListView"""
@@ -4806,8 +4780,7 @@ class TreeItemId(object):
     m_pItem = property(_controls_.TreeItemId_m_pItem_get, _controls_.TreeItemId_m_pItem_set)
     Ok = IsOk
     def __nonzero__(self): return self.IsOk() 
-TreeItemId_swigregister = _controls_.TreeItemId_swigregister
-TreeItemId_swigregister(TreeItemId)
+_controls_.TreeItemId_swigregister(TreeItemId)
 TreeCtrlNameStr = cvar.TreeCtrlNameStr
 
 class TreeItemData(object):
@@ -4841,8 +4814,7 @@ class TreeItemData(object):
         args[0].thisown = 0
         return val
 
-TreeItemData_swigregister = _controls_.TreeItemData_swigregister
-TreeItemData_swigregister(TreeItemData)
+_controls_.TreeItemData_swigregister(TreeItemData)
 
 #---------------------------------------------------------------------------
 
@@ -4894,7 +4866,7 @@ class TreeEvent(_core.NotifyEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType commandType=wxEVT_NULL, int id=0) -> TreeEvent"""
+        """__init__(self, EventType commandType=wxEVT_NULL, int id=0) -> TreeEvent"""
         _controls_.TreeEvent_swiginit(self,_controls_.new_TreeEvent(*args, **kwargs))
     def GetItem(*args, **kwargs):
         """GetItem(self) -> TreeItemId"""
@@ -4956,8 +4928,7 @@ class TreeEvent(_core.NotifyEvent):
         """GetToolTip(self) -> String"""
         return _controls_.TreeEvent_GetToolTip(*args, **kwargs)
 
-TreeEvent_swigregister = _controls_.TreeEvent_swigregister
-TreeEvent_swigregister(TreeEvent)
+_controls_.TreeEvent_swigregister(TreeEvent)
 
 #---------------------------------------------------------------------------
 
@@ -5309,8 +5280,15 @@ class TreeCtrl(_core.Control):
         return _controls_.TreeCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
-TreeCtrl_swigregister = _controls_.TreeCtrl_swigregister
-TreeCtrl_swigregister(TreeCtrl)
+    def SetQuickBestSize(*args, **kwargs):
+        """SetQuickBestSize(self, bool q)"""
+        return _controls_.TreeCtrl_SetQuickBestSize(*args, **kwargs)
+
+    def GetQuickBestSize(*args, **kwargs):
+        """GetQuickBestSize(self) -> bool"""
+        return _controls_.TreeCtrl_GetQuickBestSize(*args, **kwargs)
+
+_controls_.TreeCtrl_swigregister(TreeCtrl)
 
 def PreTreeCtrl(*args, **kwargs):
     """PreTreeCtrl() -> TreeCtrl"""
@@ -5446,8 +5424,7 @@ class GenericDirCtrl(_core.Control):
         """ReCreateTree(self)"""
         return _controls_.GenericDirCtrl_ReCreateTree(*args, **kwargs)
 
-GenericDirCtrl_swigregister = _controls_.GenericDirCtrl_swigregister
-GenericDirCtrl_swigregister(GenericDirCtrl)
+_controls_.GenericDirCtrl_swigregister(GenericDirCtrl)
 DirDialogDefaultFolderStr = cvar.DirDialogDefaultFolderStr
 
 def PreGenericDirCtrl(*args, **kwargs):
@@ -5478,8 +5455,7 @@ class DirFilterListCtrl(Choice):
         """FillFilterList(self, String filter, int defaultFilter)"""
         return _controls_.DirFilterListCtrl_FillFilterList(*args, **kwargs)
 
-DirFilterListCtrl_swigregister = _controls_.DirFilterListCtrl_swigregister
-DirFilterListCtrl_swigregister(DirFilterListCtrl)
+_controls_.DirFilterListCtrl_swigregister(DirFilterListCtrl)
 
 def PreDirFilterListCtrl(*args, **kwargs):
     """PreDirFilterListCtrl() -> DirFilterListCtrl"""
@@ -5662,8 +5638,7 @@ class PyControl(_core.Control):
     base_OnInternalIdle = wx._deprecated(base_OnInternalIdle,
                                    "Please use PyScrolledWindow.OnInternalIdle instead.")
 
-PyControl_swigregister = _controls_.PyControl_swigregister
-PyControl_swigregister(PyControl)
+_controls_.PyControl_swigregister(PyControl)
 
 def PrePyControl(*args, **kwargs):
     """PrePyControl() -> PyControl"""
@@ -5702,7 +5677,7 @@ class HelpEvent(_core.CommandEvent):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, wxEventType type=wxEVT_NULL, int winid=0, Point pt=DefaultPosition) -> HelpEvent"""
+        """__init__(self, EventType type=wxEVT_NULL, int winid=0, Point pt=DefaultPosition) -> HelpEvent"""
         _controls_.HelpEvent_swiginit(self,_controls_.new_HelpEvent(*args, **kwargs))
     def GetPosition(*args, **kwargs):
         """
@@ -5754,8 +5729,7 @@ class HelpEvent(_core.CommandEvent):
         """
         return _controls_.HelpEvent_SetTarget(*args, **kwargs)
 
-HelpEvent_swigregister = _controls_.HelpEvent_swigregister
-HelpEvent_swigregister(HelpEvent)
+_controls_.HelpEvent_swigregister(HelpEvent)
 
 class ContextHelp(_core.Object):
     """
@@ -5818,8 +5792,7 @@ class ContextHelp(_core.Object):
         """
         return _controls_.ContextHelp_EndContextHelp(*args, **kwargs)
 
-ContextHelp_swigregister = _controls_.ContextHelp_swigregister
-ContextHelp_swigregister(ContextHelp)
+_controls_.ContextHelp_swigregister(ContextHelp)
 
 class ContextHelpButton(BitmapButton):
     """
@@ -5848,8 +5821,7 @@ class ContextHelpButton(BitmapButton):
         _controls_.ContextHelpButton_swiginit(self,_controls_.new_ContextHelpButton(*args, **kwargs))
         self._setOORInfo(self)
 
-ContextHelpButton_swigregister = _controls_.ContextHelpButton_swigregister
-ContextHelpButton_swigregister(ContextHelpButton)
+_controls_.ContextHelpButton_swigregister(ContextHelpButton)
 
 class HelpProvider(object):
     """
@@ -5940,8 +5912,7 @@ class HelpProvider(object):
         args[0].thisown = 0
         return val
 
-HelpProvider_swigregister = _controls_.HelpProvider_swigregister
-HelpProvider_swigregister(HelpProvider)
+_controls_.HelpProvider_swigregister(HelpProvider)
 
 def HelpProvider_Set(*args, **kwargs):
   """
@@ -5978,8 +5949,7 @@ class SimpleHelpProvider(HelpProvider):
         with the control (if any) in a tooltip.
         """
         _controls_.SimpleHelpProvider_swiginit(self,_controls_.new_SimpleHelpProvider(*args, **kwargs))
-SimpleHelpProvider_swigregister = _controls_.SimpleHelpProvider_swigregister
-SimpleHelpProvider_swigregister(SimpleHelpProvider)
+_controls_.SimpleHelpProvider_swigregister(SimpleHelpProvider)
 
 #---------------------------------------------------------------------------
 
@@ -6039,8 +6009,7 @@ class DragImage(_core.Object):
         """RedrawImage(self, Point oldPos, Point newPos, bool eraseOld, bool drawNew) -> bool"""
         return _controls_.DragImage_RedrawImage(*args, **kwargs)
 
-DragImage_swigregister = _controls_.DragImage_swigregister
-DragImage_swigregister(DragImage)
+_controls_.DragImage_swigregister(DragImage)
 
 def DragIcon(*args, **kwargs):
     """DragIcon(Icon image, Cursor cursor=wxNullCursor) -> DragImage"""
@@ -6160,8 +6129,7 @@ class DatePickerCtrl(_core.Control):
         """
         return _controls_.DatePickerCtrl_GetUpperLimit(*args, **kwargs)
 
-DatePickerCtrl_swigregister = _controls_.DatePickerCtrl_swigregister
-DatePickerCtrl_swigregister(DatePickerCtrl)
+_controls_.DatePickerCtrl_swigregister(DatePickerCtrl)
 DatePickerCtrlNameStr = cvar.DatePickerCtrlNameStr
 
 def PreDatePickerCtrl(*args, **kwargs):

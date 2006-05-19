@@ -182,8 +182,7 @@ class SystemSettings(object):
         return _misc_.SystemSettings_SetScreenType(*args, **kwargs)
 
     SetScreenType = staticmethod(SetScreenType)
-SystemSettings_swigregister = _misc_.SystemSettings_swigregister
-SystemSettings_swigregister(SystemSettings)
+_misc_.SystemSettings_swigregister(SystemSettings)
 
 def SystemSettings_GetColour(*args, **kwargs):
   """SystemSettings_GetColour(int index) -> Colour"""
@@ -246,8 +245,7 @@ class SystemOptions(_core.Object):
         return _misc_.SystemOptions_IsFalse(*args, **kwargs)
 
     IsFalse = staticmethod(IsFalse)
-SystemOptions_swigregister = _misc_.SystemOptions_swigregister
-SystemOptions_swigregister(SystemOptions)
+_misc_.SystemOptions_swigregister(SystemOptions)
 cvar = _misc_.cvar
 WINDOW_DEFAULT_VARIANT = cvar.WINDOW_DEFAULT_VARIANT
 
@@ -693,8 +691,7 @@ class MouseState(object):
     metaDown = property(MetaDown, SetMetaDown)
     cmdDown = property(CmdDown)
 
-MouseState_swigregister = _misc_.MouseState_swigregister
-MouseState_swigregister(MouseState)
+_misc_.MouseState_swigregister(MouseState)
 FileSelectorPromptStr = cvar.FileSelectorPromptStr
 FileSelectorDefaultWildcardStr = cvar.FileSelectorDefaultWildcardStr
 DirSelectorPromptStr = cvar.DirSelectorPromptStr
@@ -731,8 +728,7 @@ class MutexGuiLocker(object):
         _misc_.MutexGuiLocker_swiginit(self,_misc_.new_MutexGuiLocker(*args, **kwargs))
     __swig_destroy__ = _misc_.delete_MutexGuiLocker
     __del__ = lambda self : None;
-MutexGuiLocker_swigregister = _misc_.MutexGuiLocker_swigregister
-MutexGuiLocker_swigregister(MutexGuiLocker)
+_misc_.MutexGuiLocker_swigregister(MutexGuiLocker)
 
 
 def Thread_IsMain(*args):
@@ -771,8 +767,7 @@ class ToolTip(_core.Object):
         return _misc_.ToolTip_SetDelay(*args, **kwargs)
 
     SetDelay = staticmethod(SetDelay)
-ToolTip_swigregister = _misc_.ToolTip_swigregister
-ToolTip_swigregister(ToolTip)
+_misc_.ToolTip_swigregister(ToolTip)
 
 def ToolTip_Enable(*args, **kwargs):
   """ToolTip_Enable(bool flag)"""
@@ -864,8 +859,7 @@ class Caret(object):
         return _misc_.Caret_SetBlinkTime(*args, **kwargs)
 
     SetBlinkTime = staticmethod(SetBlinkTime)
-Caret_swigregister = _misc_.Caret_swigregister
-Caret_swigregister(Caret)
+_misc_.Caret_swigregister(Caret)
 
 def Caret_GetBlinkTime(*args):
   """Caret_GetBlinkTime() -> int"""
@@ -884,8 +878,7 @@ class BusyCursor(object):
         _misc_.BusyCursor_swiginit(self,_misc_.new_BusyCursor(*args, **kwargs))
     __swig_destroy__ = _misc_.delete_BusyCursor
     __del__ = lambda self : None;
-BusyCursor_swigregister = _misc_.BusyCursor_swigregister
-BusyCursor_swigregister(BusyCursor)
+_misc_.BusyCursor_swigregister(BusyCursor)
 
 class WindowDisabler(object):
     """Proxy of C++ WindowDisabler class"""
@@ -896,8 +889,7 @@ class WindowDisabler(object):
         _misc_.WindowDisabler_swiginit(self,_misc_.new_WindowDisabler(*args, **kwargs))
     __swig_destroy__ = _misc_.delete_WindowDisabler
     __del__ = lambda self : None;
-WindowDisabler_swigregister = _misc_.WindowDisabler_swigregister
-WindowDisabler_swigregister(WindowDisabler)
+_misc_.WindowDisabler_swigregister(WindowDisabler)
 
 class BusyInfo(_core.Object):
     """Proxy of C++ BusyInfo class"""
@@ -909,8 +901,7 @@ class BusyInfo(_core.Object):
     __swig_destroy__ = _misc_.delete_BusyInfo
     __del__ = lambda self : None;
     def Destroy(self): pass 
-BusyInfo_swigregister = _misc_.BusyInfo_swigregister
-BusyInfo_swigregister(BusyInfo)
+_misc_.BusyInfo_swigregister(BusyInfo)
 
 class StopWatch(object):
     """Proxy of C++ StopWatch class"""
@@ -935,8 +926,7 @@ class StopWatch(object):
         """Time(self) -> long"""
         return _misc_.StopWatch_Time(*args, **kwargs)
 
-StopWatch_swigregister = _misc_.StopWatch_swigregister
-StopWatch_swigregister(StopWatch)
+_misc_.StopWatch_swigregister(StopWatch)
 
 class FileHistory(_core.Object):
     """Proxy of C++ FileHistory class"""
@@ -992,8 +982,7 @@ class FileHistory(_core.Object):
         return _misc_.FileHistory_GetCount(*args, **kwargs)
 
     GetNoHistoryFiles = GetCount 
-FileHistory_swigregister = _misc_.FileHistory_swigregister
-FileHistory_swigregister(FileHistory)
+_misc_.FileHistory_swigregister(FileHistory)
 
 class SingleInstanceChecker(object):
     """Proxy of C++ SingleInstanceChecker class"""
@@ -1012,8 +1001,7 @@ class SingleInstanceChecker(object):
         """IsAnotherRunning(self) -> bool"""
         return _misc_.SingleInstanceChecker_IsAnotherRunning(*args, **kwargs)
 
-SingleInstanceChecker_swigregister = _misc_.SingleInstanceChecker_swigregister
-SingleInstanceChecker_swigregister(SingleInstanceChecker)
+_misc_.SingleInstanceChecker_swigregister(SingleInstanceChecker)
 
 def PreSingleInstanceChecker(*args, **kwargs):
     """PreSingleInstanceChecker() -> SingleInstanceChecker"""
@@ -1045,8 +1033,7 @@ class TipProvider(object):
         """PreprocessTip(self, String tip) -> String"""
         return _misc_.TipProvider_PreprocessTip(*args, **kwargs)
 
-TipProvider_swigregister = _misc_.TipProvider_swigregister
-TipProvider_swigregister(TipProvider)
+_misc_.TipProvider_swigregister(TipProvider)
 
 class PyTipProvider(TipProvider):
     """Proxy of C++ PyTipProvider class"""
@@ -1061,8 +1048,7 @@ class PyTipProvider(TipProvider):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.PyTipProvider__setCallbackInfo(*args, **kwargs)
 
-PyTipProvider_swigregister = _misc_.PyTipProvider_swigregister
-PyTipProvider_swigregister(PyTipProvider)
+_misc_.PyTipProvider_swigregister(PyTipProvider)
 
 
 def ShowTip(*args, **kwargs):
@@ -1132,8 +1118,7 @@ class Timer(_core.EvtHandler):
         """NO-OP: Timers must be destroyed by normal reference counting"""
         pass
 
-Timer_swigregister = _misc_.Timer_swigregister
-Timer_swigregister(Timer)
+_misc_.Timer_swigregister(Timer)
 
 # For backwards compatibility with 2.4
 class PyTimer(Timer):
@@ -1160,8 +1145,7 @@ class TimerEvent(_core.Event):
         """GetInterval(self) -> int"""
         return _misc_.TimerEvent_GetInterval(*args, **kwargs)
 
-TimerEvent_swigregister = _misc_.TimerEvent_swigregister
-TimerEvent_swigregister(TimerEvent)
+_misc_.TimerEvent_swigregister(TimerEvent)
 
 class TimerRunner(object):
     """Proxy of C++ TimerRunner class"""
@@ -1179,8 +1163,7 @@ class TimerRunner(object):
         """Start(self, int milli, bool oneShot=False)"""
         return _misc_.TimerRunner_Start(*args, **kwargs)
 
-TimerRunner_swigregister = _misc_.TimerRunner_swigregister
-TimerRunner_swigregister(TimerRunner)
+_misc_.TimerRunner_swigregister(TimerRunner)
 
 #---------------------------------------------------------------------------
 
@@ -1225,7 +1208,7 @@ class Log(object):
 
     EnableLogging = staticmethod(EnableLogging)
     def OnLog(*args, **kwargs):
-        """OnLog(wxLogLevel level, wxChar szString, time_t t)"""
+        """OnLog(LogLevel level, wxChar szString, time_t t)"""
         return _misc_.Log_OnLog(*args, **kwargs)
 
     OnLog = staticmethod(OnLog)
@@ -1264,7 +1247,7 @@ class Log(object):
 
     SetVerbose = staticmethod(SetVerbose)
     def SetLogLevel(*args, **kwargs):
-        """SetLogLevel(wxLogLevel logLevel)"""
+        """SetLogLevel(LogLevel logLevel)"""
         return _misc_.Log_SetLogLevel(*args, **kwargs)
 
     SetLogLevel = staticmethod(SetLogLevel)
@@ -1274,7 +1257,7 @@ class Log(object):
 
     DontCreateOnDemand = staticmethod(DontCreateOnDemand)
     def SetTraceMask(*args, **kwargs):
-        """SetTraceMask(wxTraceMask ulMask)"""
+        """SetTraceMask(TraceMask ulMask)"""
         return _misc_.Log_SetTraceMask(*args, **kwargs)
 
     SetTraceMask = staticmethod(SetTraceMask)
@@ -1309,7 +1292,7 @@ class Log(object):
 
     GetVerbose = staticmethod(GetVerbose)
     def GetTraceMask(*args, **kwargs):
-        """GetTraceMask() -> wxTraceMask"""
+        """GetTraceMask() -> TraceMask"""
         return _misc_.Log_GetTraceMask(*args, **kwargs)
 
     GetTraceMask = staticmethod(GetTraceMask)
@@ -1319,7 +1302,7 @@ class Log(object):
 
     IsAllowedTraceMask = staticmethod(IsAllowedTraceMask)
     def GetLogLevel(*args, **kwargs):
-        """GetLogLevel() -> wxLogLevel"""
+        """GetLogLevel() -> LogLevel"""
         return _misc_.Log_GetLogLevel(*args, **kwargs)
 
     GetLogLevel = staticmethod(GetLogLevel)
@@ -1339,8 +1322,7 @@ class Log(object):
         args[0].thisown = 0
         return val
 
-Log_swigregister = _misc_.Log_swigregister
-Log_swigregister(Log)
+_misc_.Log_swigregister(Log)
 
 def Log_IsEnabled(*args):
   """Log_IsEnabled() -> bool"""
@@ -1351,7 +1333,7 @@ def Log_EnableLogging(*args, **kwargs):
   return _misc_.Log_EnableLogging(*args, **kwargs)
 
 def Log_OnLog(*args, **kwargs):
-  """Log_OnLog(wxLogLevel level, wxChar szString, time_t t)"""
+  """Log_OnLog(LogLevel level, wxChar szString, time_t t)"""
   return _misc_.Log_OnLog(*args, **kwargs)
 
 def Log_FlushActive(*args):
@@ -1379,7 +1361,7 @@ def Log_SetVerbose(*args, **kwargs):
   return _misc_.Log_SetVerbose(*args, **kwargs)
 
 def Log_SetLogLevel(*args, **kwargs):
-  """Log_SetLogLevel(wxLogLevel logLevel)"""
+  """Log_SetLogLevel(LogLevel logLevel)"""
   return _misc_.Log_SetLogLevel(*args, **kwargs)
 
 def Log_DontCreateOnDemand(*args):
@@ -1387,7 +1369,7 @@ def Log_DontCreateOnDemand(*args):
   return _misc_.Log_DontCreateOnDemand(*args)
 
 def Log_SetTraceMask(*args, **kwargs):
-  """Log_SetTraceMask(wxTraceMask ulMask)"""
+  """Log_SetTraceMask(TraceMask ulMask)"""
   return _misc_.Log_SetTraceMask(*args, **kwargs)
 
 def Log_AddTraceMask(*args, **kwargs):
@@ -1415,7 +1397,7 @@ def Log_GetVerbose(*args):
   return _misc_.Log_GetVerbose(*args)
 
 def Log_GetTraceMask(*args):
-  """Log_GetTraceMask() -> wxTraceMask"""
+  """Log_GetTraceMask() -> TraceMask"""
   return _misc_.Log_GetTraceMask(*args)
 
 def Log_IsAllowedTraceMask(*args, **kwargs):
@@ -1423,7 +1405,7 @@ def Log_IsAllowedTraceMask(*args, **kwargs):
   return _misc_.Log_IsAllowedTraceMask(*args, **kwargs)
 
 def Log_GetLogLevel(*args):
-  """Log_GetLogLevel() -> wxLogLevel"""
+  """Log_GetLogLevel() -> LogLevel"""
   return _misc_.Log_GetLogLevel(*args)
 
 def Log_GetTimestamp(*args):
@@ -1441,8 +1423,7 @@ class LogStderr(Log):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> LogStderr"""
         _misc_.LogStderr_swiginit(self,_misc_.new_LogStderr(*args, **kwargs))
-LogStderr_swigregister = _misc_.LogStderr_swigregister
-LogStderr_swigregister(LogStderr)
+_misc_.LogStderr_swigregister(LogStderr)
 
 class LogTextCtrl(Log):
     """Proxy of C++ LogTextCtrl class"""
@@ -1451,8 +1432,7 @@ class LogTextCtrl(Log):
     def __init__(self, *args, **kwargs): 
         """__init__(self, wxTextCtrl pTextCtrl) -> LogTextCtrl"""
         _misc_.LogTextCtrl_swiginit(self,_misc_.new_LogTextCtrl(*args, **kwargs))
-LogTextCtrl_swigregister = _misc_.LogTextCtrl_swigregister
-LogTextCtrl_swigregister(LogTextCtrl)
+_misc_.LogTextCtrl_swigregister(LogTextCtrl)
 
 class LogGui(Log):
     """Proxy of C++ LogGui class"""
@@ -1461,8 +1441,7 @@ class LogGui(Log):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> LogGui"""
         _misc_.LogGui_swiginit(self,_misc_.new_LogGui(*args, **kwargs))
-LogGui_swigregister = _misc_.LogGui_swigregister
-LogGui_swigregister(LogGui)
+_misc_.LogGui_swigregister(LogGui)
 
 class LogWindow(Log):
     """Proxy of C++ LogWindow class"""
@@ -1491,8 +1470,7 @@ class LogWindow(Log):
         """PassMessages(self, bool bDoPass)"""
         return _misc_.LogWindow_PassMessages(*args, **kwargs)
 
-LogWindow_swigregister = _misc_.LogWindow_swigregister
-LogWindow_swigregister(LogWindow)
+_misc_.LogWindow_swigregister(LogWindow)
 
 class LogChain(Log):
     """Proxy of C++ LogChain class"""
@@ -1517,8 +1495,7 @@ class LogChain(Log):
         """GetOldLog(self) -> Log"""
         return _misc_.LogChain_GetOldLog(*args, **kwargs)
 
-LogChain_swigregister = _misc_.LogChain_swigregister
-LogChain_swigregister(LogChain)
+_misc_.LogChain_swigregister(LogChain)
 
 class LogBuffer(Log):
     """Proxy of C++ LogBuffer class"""
@@ -1531,8 +1508,7 @@ class LogBuffer(Log):
         """GetBuffer(self) -> String"""
         return _misc_.LogBuffer_GetBuffer(*args, **kwargs)
 
-LogBuffer_swigregister = _misc_.LogBuffer_swigregister
-LogBuffer_swigregister(LogBuffer)
+_misc_.LogBuffer_swigregister(LogBuffer)
 
 
 def SysErrorCode(*args):
@@ -1599,8 +1575,7 @@ class LogNull(object):
         _misc_.LogNull_swiginit(self,_misc_.new_LogNull(*args, **kwargs))
     __swig_destroy__ = _misc_.delete_LogNull
     __del__ = lambda self : None;
-LogNull_swigregister = _misc_.LogNull_swigregister
-LogNull_swigregister(LogNull)
+_misc_.LogNull_swigregister(LogNull)
 
 def LogTrace(*args):
   """
@@ -1622,8 +1597,7 @@ class PyLog(Log):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.PyLog__setCallbackInfo(*args, **kwargs)
 
-PyLog_swigregister = _misc_.PyLog_swigregister
-PyLog_swigregister(PyLog)
+_misc_.PyLog_swigregister(PyLog)
 
 #---------------------------------------------------------------------------
 
@@ -1730,8 +1704,7 @@ class Process(_core.EvtHandler):
         """IsErrorAvailable(self) -> bool"""
         return _misc_.Process_IsErrorAvailable(*args, **kwargs)
 
-Process_swigregister = _misc_.Process_swigregister
-Process_swigregister(Process)
+_misc_.Process_swigregister(Process)
 
 def Process_Kill(*args, **kwargs):
   """Process_Kill(int pid, int sig=SIGTERM, int flags=KILL_NOCHILDREN) -> int"""
@@ -1762,8 +1735,7 @@ class ProcessEvent(_core.Event):
 
     m_pid = property(_misc_.ProcessEvent_m_pid_get, _misc_.ProcessEvent_m_pid_set)
     m_exitcode = property(_misc_.ProcessEvent_m_exitcode_get, _misc_.ProcessEvent_m_exitcode_set)
-ProcessEvent_swigregister = _misc_.ProcessEvent_swigregister
-ProcessEvent_swigregister(ProcessEvent)
+_misc_.ProcessEvent_swigregister(ProcessEvent)
 
 wxEVT_END_PROCESS = _misc_.wxEVT_END_PROCESS
 EVT_END_PROCESS = wx.PyEventBinder( wxEVT_END_PROCESS, 1 )
@@ -1968,8 +1940,7 @@ class Joystick(object):
         return _misc_.Joystick_ReleaseCapture(*args, **kwargs)
 
     def __nonzero__(self): return self.IsOk() 
-Joystick_swigregister = _misc_.Joystick_swigregister
-Joystick_swigregister(Joystick)
+_misc_.Joystick_swigregister(Joystick)
 
 wxEVT_JOY_BUTTON_DOWN = _misc_.wxEVT_JOY_BUTTON_DOWN
 wxEVT_JOY_BUTTON_UP = _misc_.wxEVT_JOY_BUTTON_UP
@@ -1981,7 +1952,7 @@ class JoystickEvent(_core.Event):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxEventType type=wxEVT_NULL, int state=0, int joystick=JOYSTICK1, 
+        __init__(self, EventType type=wxEVT_NULL, int state=0, int joystick=JOYSTICK1, 
             int change=0) -> JoystickEvent
         """
         _misc_.JoystickEvent_swiginit(self,_misc_.new_JoystickEvent(*args, **kwargs))
@@ -2055,8 +2026,7 @@ class JoystickEvent(_core.Event):
     m_buttonState = property(GetButtonState, SetButtonState)
     m_joyStick = property(GetJoystick, SetJoystick)
 
-JoystickEvent_swigregister = _misc_.JoystickEvent_swigregister
-JoystickEvent_swigregister(JoystickEvent)
+_misc_.JoystickEvent_swigregister(JoystickEvent)
 
 EVT_JOY_BUTTON_DOWN = wx.PyEventBinder( wxEVT_JOY_BUTTON_DOWN )
 EVT_JOY_BUTTON_UP = wx.PyEventBinder( wxEVT_JOY_BUTTON_UP )
@@ -2111,8 +2081,7 @@ class Sound(object):
 
     Stop = staticmethod(Stop)
     def __nonzero__(self): return self.IsOk() 
-Sound_swigregister = _misc_.Sound_swigregister
-Sound_swigregister(Sound)
+_misc_.Sound_swigregister(Sound)
 
 def SoundFromData(*args, **kwargs):
     """SoundFromData(PyObject data) -> Sound"""
@@ -2189,8 +2158,7 @@ class FileTypeInfo(object):
         """GetIconIndex(self) -> int"""
         return _misc_.FileTypeInfo_GetIconIndex(*args, **kwargs)
 
-FileTypeInfo_swigregister = _misc_.FileTypeInfo_swigregister
-FileTypeInfo_swigregister(FileTypeInfo)
+_misc_.FileTypeInfo_swigregister(FileTypeInfo)
 
 def FileTypeInfoSequence(*args, **kwargs):
     """FileTypeInfoSequence(wxArrayString sArray) -> FileTypeInfo"""
@@ -2264,8 +2232,7 @@ class FileType(object):
         return _misc_.FileType_ExpandCommand(*args, **kwargs)
 
     ExpandCommand = staticmethod(ExpandCommand)
-FileType_swigregister = _misc_.FileType_swigregister
-FileType_swigregister(FileType)
+_misc_.FileType_swigregister(FileType)
 
 def FileType_ExpandCommand(*args, **kwargs):
   """FileType_ExpandCommand(String command, String filename, String mimetype=EmptyString) -> String"""
@@ -2325,8 +2292,7 @@ class MimeTypesManager(object):
 
     __swig_destroy__ = _misc_.delete_MimeTypesManager
     __del__ = lambda self : None;
-MimeTypesManager_swigregister = _misc_.MimeTypesManager_swigregister
-MimeTypesManager_swigregister(MimeTypesManager)
+_misc_.MimeTypesManager_swigregister(MimeTypesManager)
 TheMimeTypesManager = cvar.TheMimeTypesManager
 
 def MimeTypesManager_IsOfType(*args, **kwargs):
@@ -2454,8 +2420,7 @@ class ArtProvider(object):
         args[0].thisown = 0
         return val
 
-ArtProvider_swigregister = _misc_.ArtProvider_swigregister
-ArtProvider_swigregister(ArtProvider)
+_misc_.ArtProvider_swigregister(ArtProvider)
 ART_TOOLBAR = cvar.ART_TOOLBAR
 ART_MENU = cvar.ART_MENU
 ART_FRAME_ICON = cvar.ART_FRAME_ICON
@@ -2938,8 +2903,7 @@ class ConfigBase(object):
         """GetStyle(self) -> long"""
         return _misc_.ConfigBase_GetStyle(*args, **kwargs)
 
-ConfigBase_swigregister = _misc_.ConfigBase_swigregister
-ConfigBase_swigregister(ConfigBase)
+_misc_.ConfigBase_swigregister(ConfigBase)
 
 def ConfigBase_Set(*args, **kwargs):
   """
@@ -2993,8 +2957,7 @@ class Config(ConfigBase):
         _misc_.Config_swiginit(self,_misc_.new_Config(*args, **kwargs))
     __swig_destroy__ = _misc_.delete_Config
     __del__ = lambda self : None;
-Config_swigregister = _misc_.Config_swigregister
-Config_swigregister(Config)
+_misc_.Config_swigregister(Config)
 
 class FileConfig(ConfigBase):
     """This config class will use a file for storage on all platforms."""
@@ -3009,8 +2972,7 @@ class FileConfig(ConfigBase):
         _misc_.FileConfig_swiginit(self,_misc_.new_FileConfig(*args, **kwargs))
     __swig_destroy__ = _misc_.delete_FileConfig
     __del__ = lambda self : None;
-FileConfig_swigregister = _misc_.FileConfig_swigregister
-FileConfig_swigregister(FileConfig)
+_misc_.FileConfig_swigregister(FileConfig)
 
 class ConfigPathChanger(object):
     """
@@ -3034,8 +2996,7 @@ class ConfigPathChanger(object):
         """
         return _misc_.ConfigPathChanger_Name(*args, **kwargs)
 
-ConfigPathChanger_swigregister = _misc_.ConfigPathChanger_swigregister
-ConfigPathChanger_swigregister(ConfigPathChanger)
+_misc_.ConfigPathChanger_swigregister(ConfigPathChanger)
 
 
 def ExpandEnvVars(*args, **kwargs):
@@ -3715,8 +3676,7 @@ class DateTime(object):
         else:
             return "INVALID DateTime"
 
-DateTime_swigregister = _misc_.DateTime_swigregister
-DateTime_swigregister(DateTime)
+_misc_.DateTime_swigregister(DateTime)
 DefaultDateTimeFormat = cvar.DefaultDateTimeFormat
 DefaultTimeSpanFormat = cvar.DefaultTimeSpanFormat
 
@@ -4035,8 +3995,7 @@ class TimeSpan(object):
     def __str__(self):
         return self.Format().encode(wx.GetDefaultPyEncoding())
 
-TimeSpan_swigregister = _misc_.TimeSpan_swigregister
-TimeSpan_swigregister(TimeSpan)
+_misc_.TimeSpan_swigregister(TimeSpan)
 
 def TimeSpan_Milliseconds(*args, **kwargs):
   """TimeSpan_Milliseconds(long ms) -> TimeSpan"""
@@ -4227,8 +4186,7 @@ class DateSpan(object):
         """__ne__(self, DateSpan other) -> bool"""
         return _misc_.DateSpan___ne__(*args, **kwargs)
 
-DateSpan_swigregister = _misc_.DateSpan_swigregister
-DateSpan_swigregister(DateSpan)
+_misc_.DateSpan_swigregister(DateSpan)
 
 def DateSpan_Days(*args, **kwargs):
   """DateSpan_Days(int days) -> DateSpan"""
@@ -4369,8 +4327,7 @@ class DataFormat(object):
         """
         return _misc_.DataFormat_SetId(*args, **kwargs)
 
-DataFormat_swigregister = _misc_.DataFormat_swigregister
-DataFormat_swigregister(DataFormat)
+_misc_.DataFormat_swigregister(DataFormat)
 DefaultDateTime = cvar.DefaultDateTime
 
 def CustomDataFormat(*args, **kwargs):
@@ -4467,8 +4424,7 @@ class DataObject(object):
         """
         return _misc_.DataObject_SetData(*args, **kwargs)
 
-DataObject_swigregister = _misc_.DataObject_swigregister
-DataObject_swigregister(DataObject)
+_misc_.DataObject_swigregister(DataObject)
 FormatInvalid = cvar.FormatInvalid
 
 class DataObjectSimple(DataObject):
@@ -4536,8 +4492,7 @@ class DataObjectSimple(DataObject):
         """
         return _misc_.DataObjectSimple_SetData(*args, **kwargs)
 
-DataObjectSimple_swigregister = _misc_.DataObjectSimple_swigregister
-DataObjectSimple_swigregister(DataObjectSimple)
+_misc_.DataObjectSimple_swigregister(DataObjectSimple)
 
 class PyDataObjectSimple(DataObjectSimple):
     """
@@ -4568,8 +4523,7 @@ class PyDataObjectSimple(DataObjectSimple):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.PyDataObjectSimple__setCallbackInfo(*args, **kwargs)
 
-PyDataObjectSimple_swigregister = _misc_.PyDataObjectSimple_swigregister
-PyDataObjectSimple_swigregister(PyDataObjectSimple)
+_misc_.PyDataObjectSimple_swigregister(PyDataObjectSimple)
 
 class DataObjectComposite(DataObject):
     """
@@ -4626,8 +4580,7 @@ class DataObjectComposite(DataObject):
         """
         return _misc_.DataObjectComposite_GetReceivedFormat(*args, **kwargs)
 
-DataObjectComposite_swigregister = _misc_.DataObjectComposite_swigregister
-DataObjectComposite_swigregister(DataObjectComposite)
+_misc_.DataObjectComposite_swigregister(DataObjectComposite)
 
 class TextDataObject(DataObjectSimple):
     """
@@ -4685,8 +4638,7 @@ class TextDataObject(DataObjectSimple):
         """
         return _misc_.TextDataObject_SetText(*args, **kwargs)
 
-TextDataObject_swigregister = _misc_.TextDataObject_swigregister
-TextDataObject_swigregister(TextDataObject)
+_misc_.TextDataObject_swigregister(TextDataObject)
 
 class PyTextDataObject(TextDataObject):
     """
@@ -4717,8 +4669,7 @@ class PyTextDataObject(TextDataObject):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.PyTextDataObject__setCallbackInfo(*args, **kwargs)
 
-PyTextDataObject_swigregister = _misc_.PyTextDataObject_swigregister
-PyTextDataObject_swigregister(PyTextDataObject)
+_misc_.PyTextDataObject_swigregister(PyTextDataObject)
 
 class BitmapDataObject(DataObjectSimple):
     """
@@ -4759,8 +4710,7 @@ class BitmapDataObject(DataObjectSimple):
         """
         return _misc_.BitmapDataObject_SetBitmap(*args, **kwargs)
 
-BitmapDataObject_swigregister = _misc_.BitmapDataObject_swigregister
-BitmapDataObject_swigregister(BitmapDataObject)
+_misc_.BitmapDataObject_swigregister(BitmapDataObject)
 
 class PyBitmapDataObject(BitmapDataObject):
     """
@@ -4787,8 +4737,7 @@ class PyBitmapDataObject(BitmapDataObject):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.PyBitmapDataObject__setCallbackInfo(*args, **kwargs)
 
-PyBitmapDataObject_swigregister = _misc_.PyBitmapDataObject_swigregister
-PyBitmapDataObject_swigregister(PyBitmapDataObject)
+_misc_.PyBitmapDataObject_swigregister(PyBitmapDataObject)
 
 class FileDataObject(DataObjectSimple):
     """
@@ -4820,8 +4769,7 @@ class FileDataObject(DataObjectSimple):
         """
         return _misc_.FileDataObject_AddFile(*args, **kwargs)
 
-FileDataObject_swigregister = _misc_.FileDataObject_swigregister
-FileDataObject_swigregister(FileDataObject)
+_misc_.FileDataObject_swigregister(FileDataObject)
 
 class CustomDataObject(DataObjectSimple):
     """
@@ -4871,8 +4819,7 @@ class CustomDataObject(DataObjectSimple):
         """
         return _misc_.CustomDataObject_GetData(*args, **kwargs)
 
-CustomDataObject_swigregister = _misc_.CustomDataObject_swigregister
-CustomDataObject_swigregister(CustomDataObject)
+_misc_.CustomDataObject_swigregister(CustomDataObject)
 
 class URLDataObject(DataObject):
     """
@@ -4905,8 +4852,7 @@ class URLDataObject(DataObject):
         """
         return _misc_.URLDataObject_SetURL(*args, **kwargs)
 
-URLDataObject_swigregister = _misc_.URLDataObject_swigregister
-URLDataObject_swigregister(URLDataObject)
+_misc_.URLDataObject_swigregister(URLDataObject)
 
 class MetafileDataObject(DataObjectSimple):
     """Proxy of C++ MetafileDataObject class"""
@@ -4915,8 +4861,7 @@ class MetafileDataObject(DataObjectSimple):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> MetafileDataObject"""
         _misc_.MetafileDataObject_swiginit(self,_misc_.new_MetafileDataObject(*args, **kwargs))
-MetafileDataObject_swigregister = _misc_.MetafileDataObject_swigregister
-MetafileDataObject_swigregister(MetafileDataObject)
+_misc_.MetafileDataObject_swigregister(MetafileDataObject)
 
 #---------------------------------------------------------------------------
 
@@ -4976,8 +4921,7 @@ class DropSource(object):
     base_GiveFeedback = wx._deprecated(base_GiveFeedback,
                                    "Please use DropSource.GiveFeedback instead.")
 
-DropSource_swigregister = _misc_.DropSource_swigregister
-DropSource_swigregister(DropSource)
+_misc_.DropSource_swigregister(DropSource)
 
 def DROP_ICON(filename):
     """
@@ -5062,8 +5006,7 @@ class DropTarget(object):
         """GetDefaultAction(self) -> int"""
         return _misc_.DropTarget_GetDefaultAction(*args, **kwargs)
 
-DropTarget_swigregister = _misc_.DropTarget_swigregister
-DropTarget_swigregister(DropTarget)
+_misc_.DropTarget_swigregister(DropTarget)
 
 PyDropTarget = DropTarget 
 class TextDropTarget(DropTarget):
@@ -5133,8 +5076,7 @@ class TextDropTarget(DropTarget):
     base_OnData = wx._deprecated(base_OnData,
                                    "Please use TextDropTarget.OnData instead.")
 
-TextDropTarget_swigregister = _misc_.TextDropTarget_swigregister
-TextDropTarget_swigregister(TextDropTarget)
+_misc_.TextDropTarget_swigregister(TextDropTarget)
 
 class FileDropTarget(DropTarget):
     """Proxy of C++ FileDropTarget class"""
@@ -5203,8 +5145,7 @@ class FileDropTarget(DropTarget):
     base_OnData = wx._deprecated(base_OnData,
                                    "Please use FileDropTarget.OnData instead.")
 
-FileDropTarget_swigregister = _misc_.FileDropTarget_swigregister
-FileDropTarget_swigregister(FileDropTarget)
+_misc_.FileDropTarget_swigregister(FileDropTarget)
 
 #---------------------------------------------------------------------------
 
@@ -5340,8 +5281,7 @@ class Clipboard(_core.Object):
         return _misc_.Clipboard_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
-Clipboard_swigregister = _misc_.Clipboard_swigregister
-Clipboard_swigregister(Clipboard)
+_misc_.Clipboard_swigregister(Clipboard)
 
 def Clipboard_Get(*args):
   """
@@ -5395,8 +5335,7 @@ class ClipboardLocker(object):
         """
         return _misc_.ClipboardLocker___nonzero__(*args, **kwargs)
 
-ClipboardLocker_swigregister = _misc_.ClipboardLocker_swigregister
-ClipboardLocker_swigregister(ClipboardLocker)
+_misc_.ClipboardLocker_swigregister(ClipboardLocker)
 
 #---------------------------------------------------------------------------
 
@@ -5469,8 +5408,7 @@ class VideoMode(object):
     h = property(_misc_.VideoMode_h_get, _misc_.VideoMode_h_set)
     bpp = property(_misc_.VideoMode_bpp_get, _misc_.VideoMode_bpp_set)
     refresh = property(_misc_.VideoMode_refresh_get, _misc_.VideoMode_refresh_set)
-VideoMode_swigregister = _misc_.VideoMode_swigregister
-VideoMode_swigregister(VideoMode)
+_misc_.VideoMode_swigregister(VideoMode)
 
 class Display(object):
     """Represents a display/monitor attached to the system"""
@@ -5613,8 +5551,7 @@ class Display(object):
         """
         return _misc_.Display_ResetMode(*args, **kwargs)
 
-Display_swigregister = _misc_.Display_swigregister
-Display_swigregister(Display)
+_misc_.Display_swigregister(Display)
 DefaultVideoMode = cvar.DefaultVideoMode
 
 def Display_GetCount(*args):
@@ -5821,8 +5758,7 @@ class StandardPaths(object):
         """
         return _misc_.StandardPaths_GetInstallPrefix(*args, **kwargs)
 
-StandardPaths_swigregister = _misc_.StandardPaths_swigregister
-StandardPaths_swigregister(StandardPaths)
+_misc_.StandardPaths_swigregister(StandardPaths)
 
 def StandardPaths_Get(*args):
   """
