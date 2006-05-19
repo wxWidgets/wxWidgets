@@ -154,20 +154,20 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(ButtonWidgetsPage, _T("Button"),
 #if defined(__WXUNIVERSAL__)
-                       UNIVERSAL_CTRLS
+    #define FAMILY_CTRLS UNIVERSAL_CTRLS
 #elif defined(__WXMSW__)    || \
       defined(__WXMOTIF__)  || \
       defined(__WXGTK__)    || \
       defined(__WXMAC__)    || \
       defined(__WXPM__)     || \
       defined(__WXPALMOS__)
-                       NATIVE_CTRLS
+    #define FAMILY_CTRLS NATIVE_CTRLS
 #else
-                       GENERIC_CTRLS
+    #define FAMILY_CTRLS GENERIC_CTRLS
 #endif
-                       );
+
+IMPLEMENT_WIDGETS_PAGE(ButtonWidgetsPage, _T("Button"), FAMILY_CTRLS );
 
 ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)
