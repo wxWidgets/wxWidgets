@@ -578,6 +578,7 @@
 #define wxUSE_CHECKLISTBOX 1    // wxCheckListBox
 #define wxUSE_CHOICE       1    // wxChoice
 #define wxUSE_COMBOBOX     1    // wxComboBox
+#define wxUSE_DATAVIEWCTRL 1    // wxDataViewCtrl
 #define wxUSE_DATEPICKCTRL 1    // wxDatePickerCtrl
 #define wxUSE_GAUGE        1    // wxGauge
 #define wxUSE_LISTBOX      1    // wxListBox
@@ -657,6 +658,14 @@
 // Recommended setting: 1
 #define wxUSE_TREEBOOK 1
 
+// wxToolbook control is similar to wxNotebook but uses wxToolBar instead of
+// tabs
+//
+// Default is 1.
+//
+// Recommended setting: 1
+#define wxUSE_TOOLBOOK 1
+
 // wxTabDialog is a generic version of wxNotebook but it is incompatible with
 // the new class. It shouldn't be used in new code.
 //
@@ -665,13 +674,34 @@
 // Recommended setting: 0 (use wxNotebook)
 #define wxUSE_TAB_DIALOG 0
 
-// wxGrid class.
+// wxGrid class
 //
-// Default is 1.
+// Default is 1, set to 0 to cut down compilation time and binaries size if you
+// don't use it.
+//
+// Recommended setting: 1
+//
 #define wxUSE_GRID 1
 
 // wxProperty[Value/Form/List] classes, used by Dialog Editor
 #define wxUSE_PROPSHEET 1
+
+// wxComboCtrl and related classes: combobox with custom popup window and
+// not necessarily a listbox.
+//
+// Default is 1.
+//
+// Recommended setting: 1 but can be safely set to 0 except for wxUniv where it
+//                      it used by wxComboBox
+#define wxUSE_COMBOCTRL 1
+
+// wxOwnerDrawnComboBox is a custom combobox allowing to paint the combobox
+// items.
+//
+// Default is 1.
+//
+// Recommended setting: 1 but can be safely set to 0
+#define wxUSE_ODCOMBOBOX 1
 
 // ----------------------------------------------------------------------------
 // Miscellaneous GUI stuff
