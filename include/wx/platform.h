@@ -516,10 +516,13 @@
         ... no gcc at all or gcc < 3.1 ...
 #    endif
 */
-#define wxCHECK_GCC_VERSION( major, minor ) \
-    ( defined(__GNUC__) && defined(__GNUC_MINOR__) \
-    && ( ( __GNUC__ > (major) ) \
-        || ( __GNUC__ == (major) && __GNUC_MINOR__ >= (minor) ) ) )
+#if defined(__GNUC__) && defined(__GNUC_MINOR__)
+    #define wxCHECK_GCC_VERSION( major, minor ) \
+        ( ( __GNUC__ > (major) ) \
+            || ( __GNUC__ == (major) && __GNUC_MINOR__ >= (minor) ) )
+#else
+    #define wxCHECK_GCC_VERSION( major, minor ) 0
+#endif
 
 /*
    This macro can be used to check that the version of mingw32 compiler is
