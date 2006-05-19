@@ -204,7 +204,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                 wxConvFileName->cWX2MB(defaultFileName));
 
 #if GTK_CHECK_VERSION(2,7,3)
-            if (!gtk_check_version(2,7,3))
+            if ((style & wxOVERWRITE_PROMPT) && !gtk_check_version(2,7,3))
                 gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(m_widget), TRUE);
 #endif
         }
