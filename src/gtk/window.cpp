@@ -4135,7 +4135,7 @@ static inline bool IsScrollIncrement(double increment, double x)
     return fabs(increment - fabs(x)) < tolerance;
 }
 
-wxEventType wxWindow::GetScrollEventType(GtkRange* range)
+wxEventType wxWindowGTK::GetScrollEventType(GtkRange* range)
 {
     DEBUG_MAIN_THREAD
 
