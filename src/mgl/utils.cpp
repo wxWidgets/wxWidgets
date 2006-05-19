@@ -47,6 +47,16 @@ void wxBell()
     // FIXME_MGL
 }
 
+bool wxGetKeyState(wxKeyCode key)
+{
+    wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
+        WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
+
+    // TODO
+
+    return false;
+}
+
 // ----------------------------------------------------------------------------
 // display characterstics
 // ----------------------------------------------------------------------------
