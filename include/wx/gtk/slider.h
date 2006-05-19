@@ -17,7 +17,7 @@
 class WXDLLIMPEXP_CORE wxSlider : public wxSliderBase
 {
 public:
-    wxSlider() { }
+    wxSlider();
     wxSlider(wxWindow *parent,
              wxWindowID id,
              int value, int minValue, int maxValue,
@@ -64,8 +64,9 @@ public:
     void GtkDisableEvents();
     void GtkEnableEvents();
 
-    GtkAdjustment  *m_adjust;
-    float           m_oldPos;
+    double m_pos;
+    int m_scrollEventType;
+    bool m_needThumbRelease;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxSlider)
