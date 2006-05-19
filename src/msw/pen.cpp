@@ -16,12 +16,13 @@
     #pragma hdrstop
 #endif
 
+#include "wx/pen.h"
+
 #ifndef WX_PRECOMP
     #include <stdio.h>
     #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
-    #include "wx/pen.h"
 #endif
 
 #include "wx/msw/private.h"

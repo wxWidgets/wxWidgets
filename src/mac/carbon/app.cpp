@@ -22,10 +22,10 @@
     #include "wx/dc.h"
     #include "wx/button.h"
     #include "wx/menu.h"
+    #include "wx/pen.h"
 #endif
 
 #include "wx/gdicmn.h"
-#include "wx/pen.h"
 #include "wx/brush.h"
 #include "wx/cursor.h"
 #include "wx/icon.h"

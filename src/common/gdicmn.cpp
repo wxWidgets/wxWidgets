@@ -28,10 +28,10 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/dc.h"
+    #include "wx/pen.h"
 #endif
 
 #include "wx/brush.h"
-#include "wx/pen.h"
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #include "wx/cursor.h"
