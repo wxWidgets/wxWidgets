@@ -115,9 +115,9 @@ pascal OSStatus wxMacCarbonFontPanelHandler(EventHandlerCallRef nextHandler, Eve
                 {
                     fontdata.m_chosenFont.SetFaceName(wxMacCFStringHolder(cfName).AsString(wxLocale::GetSystemEncoding()));
                     fontdata.m_chosenFont.SetPointSize(fontSize);
-                    fontdata.m_chosenFont.SetStyle(fontStyle & italic ? wxFONTSTYLE_ITALIC : 0);
-                    fontdata.m_chosenFont.SetUnderlined(fontStyle & underline ? wxFONTSTYLE_ITALIC : 0);
-                    fontdata.m_chosenFont.SetWeight(fontStyle & bold ? wxBOLD : wxNORMAL);
+                    fontdata.m_chosenFont.SetStyle(fontStyle & italic ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL);
+                    fontdata.m_chosenFont.SetUnderlined((fontStyle & underline)!=0);
+                    fontdata.m_chosenFont.SetWeight(fontStyle & bold ? wxFONTWEIGHT_BOLD : wxFONTWEIGHT_NORMAL);
                 }
             }
 
