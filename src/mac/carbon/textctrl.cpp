@@ -202,7 +202,7 @@ public :
 
     virtual bool SetupCursor( const wxPoint& pt )
     { return false ; }
-
+    
     virtual void Clear() ;
     virtual bool CanUndo() const;
     virtual void Undo() ;
@@ -285,6 +285,7 @@ public :
     virtual wxString GetLineText(long lineNo) const ;
 
     void SetTXNData( const wxString& st , TXNOffset start , TXNOffset end ) ;
+    TXNObject GetTXNObject() { return m_txn ; }
 
 protected :
     void TXNSetAttribute( const wxTextAttr& style , long from , long to ) ;
@@ -305,6 +306,8 @@ public :
                              const wxString& str,
                              const wxPoint& pos,
                              const wxSize& size, long style ) ;
+    ~wxMacMLTEHIViewControl() ;
+    
     virtual OSStatus SetFocus( ControlFocusPart focusPart ) ;
     virtual bool HasFocus() const ;
     virtual void SetBackground( const wxBrush &brush) ;
@@ -312,6 +315,7 @@ public :
 protected :
     HIViewRef m_scrollView ;
     HIViewRef m_textView ;
+    EventHandlerRef m_textEventHandlerRef ;
 };
 
 #endif
@@ -1756,7 +1760,7 @@ void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, boo
                 | kTXNSupportSpellCheckCommandUpdating
                 | kTXNSupportFontCommandProcessing
                 | kTXNSupportFontCommandUpdating;
-
+            
             TXNSetCommandEventSupport( m_txn , options ) ;
         }
     }
@@ -1776,9 +1780,6 @@ void wxMacMLTEControl::SetBackground( const wxBrush &brush )
 void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , long to )
 {
     TXNTypeAttributes typeAttr[4] ;
-    Str255 fontName = "\pMonaco" ;
-    SInt16 fontSize = 12 ;
-    Style fontStyle = normal ;
     RGBColor color ;
     int attrCount = 0 ;
 
@@ -1787,6 +1788,9 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
         const wxFont &font = style.GetFont() ;
                 
 #if 0 // old version
+        Str255 fontName = "\pMonaco" ;
+        SInt16 fontSize = 12 ;
+        Style fontStyle = normal ;
         wxMacStringToPascal( font.GetFaceName() , fontName ) ;
         fontSize = font.GetPointSize() ;
         if ( font.GetUnderlined() )
@@ -1831,6 +1835,8 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
     if ( attrCount > 0 )
     {
         verify_noerr( TXNSetTypeAttributes( m_txn , attrCount , typeAttr, from , to ) );
+        // unfortunately the relayout is not automatic
+        TXNRecalcTextLayout( m_txn );
     }
 }
 
@@ -2910,6 +2916,61 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
 
+// tiger multi-line textcontrols with no CR in the entire content
+// don't scroll automatically, so we need a hack. 
+// This attempt only works 'before' the key (ie before CallNextEventHandler)
+// is processed, thus the scrolling always occurs one character too late, but
+// better than nothing ...
+
+static const EventTypeSpec eventList[] =
+{
+    { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
+} ;
+    
+static pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    wxMacMLTEHIViewControl* focus = (wxMacMLTEHIViewControl*) data ;
+    
+    switch ( GetEventKind( event ) )
+    {
+        case kEventTextInputUnicodeForKeyEvent :
+        {
+            if ( UMAGetSystemVersion() >= 0x1040 )
+            {
+                TXNOffset from , to ;
+                TXNGetSelection( focus->GetTXNObject() , &from , &to ) ;
+                if ( from == to )
+                    TXNShowSelection( focus->GetTXNObject() , kTXNShowStart );
+            }
+            result = CallNextEventHandler(handler,event);
+            break;
+        }
+        default:
+            break ;
+    }
+    
+    return result ;
+}
+
+static pascal OSStatus wxMacTextControlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    
+    switch ( GetEventClass( event ) )
+    {
+        case kEventClassTextInput :
+            result = wxMacUnicodeTextEventHandler( handler , event , data ) ;
+            break ;
+            
+        default :
+            break ;
+    }
+    return result ;
+}
+
+DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacTextControlEventHandler )
+
 wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxTextCtrl *wxPeer,
     const wxString& str,
     const wxPoint& pos,
@@ -2961,6 +3022,15 @@ wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxTextCtrl *wxPeer,
 
     TXNSetSelection( m_txn, 0, 0 );
     TXNShowSelection( m_txn, kTXNShowStart );
+
+    InstallControlEventHandler( m_textView , GetwxMacTextControlEventHandlerUPP(),
+                                GetEventTypeCount(eventList), eventList, this,
+                                &m_textEventHandlerRef);
+}
+
+wxMacMLTEHIViewControl::~wxMacMLTEHIViewControl()
+{
+    ::RemoveEventHandler( m_textEventHandlerRef ) ;
 }
 
 OSStatus wxMacMLTEHIViewControl::SetFocus( ControlFocusPart focusPart )
