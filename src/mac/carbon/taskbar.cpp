@@ -18,6 +18,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
     #include "wx/menu.h"
+    #include "wx/toplevel.h"
 #endif
 
 #include "wx/mac/private.h"
