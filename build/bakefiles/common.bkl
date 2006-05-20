@@ -306,6 +306,7 @@
         <if cond="FORMAT=='msvc'">
             <ldflags>$(LINK_TARGET_CPU)</ldflags>
         </if>
+        <include cond="FORMAT=='msevc4prj'">$(TOP_SRCDIR)build/wince/missing</include>
     </template>
 
     <template id="anylib">
