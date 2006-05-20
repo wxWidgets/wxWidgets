@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        quantize.h
+// Name:        wx/quantize.h
 // Purpose:     wxQuantizer class
 // Author:      Julian Smart
 // Modified by:
@@ -12,6 +12,8 @@
 #ifndef _WX_QUANTIZE_H_
 #define _WX_QUANTIZE_H_
 
+#include "wx/object.h"
+
 /*
  * From jquant2.c
  *
@@ -21,6 +23,7 @@
  */
 
 class WXDLLEXPORT wxImage;
+class WXDLLEXPORT wxPalette;
 
 /*
  * wxQuantize
@@ -71,4 +74,3 @@ DECLARE_DYNAMIC_CLASS(wxQuantize)
 
 #endif
     // _WX_QUANTIZE_H_
-
