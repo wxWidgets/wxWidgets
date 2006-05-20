@@ -52,10 +52,6 @@ namespace std {}
 using namespace std ;
 #endif
 
-#ifdef __WXMAC__
-    #include "wx/mac/private.h"
-#endif
-
 #if wxUSE_WCHAR_T
 size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {

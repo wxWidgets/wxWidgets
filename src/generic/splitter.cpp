@@ -12,11 +12,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_SPLITTER
-
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#if wxUSE_SPLITTER
+
+#include "wx/splitter.h"
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -33,13 +35,7 @@
     #include "wx/settings.h"
 #endif
 
-#ifdef __WXMAC__
-    #include "wx/mac/private.h"
-#endif
-
 #include "wx/renderer.h"
-
-#include "wx/splitter.h"
 
 #include <stdlib.h>
 
