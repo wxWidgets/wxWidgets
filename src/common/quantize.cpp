@@ -37,14 +37,15 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_IMAGE
+
+#include "wx/quantize.h"
+
 #ifndef WX_PRECOMP
     #include "wx/palette.h"
 #endif
 
-#if wxUSE_IMAGE
-
 #include "wx/image.h"
-#include "wx/quantize.h"
 
 #ifdef __WXMSW__
 #include "wx/msw/private.h"

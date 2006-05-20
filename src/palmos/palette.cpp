@@ -18,8 +18,9 @@
 
 #if wxUSE_PALETTE
 
+#include "wx/palette.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/palette.h"
 #endif
 
 #include "wx/palmos/private.h"

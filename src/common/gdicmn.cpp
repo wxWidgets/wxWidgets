@@ -30,13 +30,13 @@
     #include "wx/dc.h"
     #include "wx/pen.h"
     #include "wx/brush.h"
+    #include "wx/palette.h"
 #endif
 
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #include "wx/cursor.h"
 #include "wx/font.h"
-#include "wx/palette.h"
 #include "wx/settings.h"
 #include "wx/hashmap.h"
 
