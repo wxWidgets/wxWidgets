@@ -96,6 +96,19 @@ static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
                                               NULL );
         gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
         g_free (font_string);
+
+        if (attr.GetFont().GetUnderlined())
+        {
+            g_snprintf(buf, sizeof(buf), "WXFONTUNDERLINE");
+            tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
+                                             buf );
+            if (!tag)
+                tag = gtk_text_buffer_create_tag( text_buffer, buf,
+                                                  "underline-set", TRUE,
+                                                  "underline", PANGO_UNDERLINE_SINGLE,
+                                                  NULL );
+            gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
+        }
     }
 
     if (attr.HasTextColour())

@@ -10,6 +10,10 @@ All:
 - wxSocket::_Read continues reading from socket after exhausting pushback buffer.
   Previously, only the buffer would be returned, even if more data was requested.
 
+wxGTK:
+
+- Support underlined fonts in wxTextCtrl.
+
 
 2.6.3
 -----
