@@ -61,8 +61,6 @@ public:
     
     // implementation
     bool IsOwnGtkWindow( GdkWindow *window );
-    void GtkDisableEvents();
-    void GtkEnableEvents();
 
     double m_pos;
     int m_scrollEventType;
