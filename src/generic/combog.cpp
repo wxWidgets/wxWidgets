@@ -148,13 +148,13 @@ bool wxGenericComboControl::Create(wxWindow *parent,
 
     // create main window
     if ( !wxComboCtrlBase::Create(parent,
-                                     id,
-                                     value,
-                                     wxDefaultPosition,
-                                     wxDefaultSize,
-                                     style | wxFULL_REPAINT_ON_RESIZE,
-                                     wxDefaultValidator,
-                                     name) )
+                                  id,
+                                  value,
+                                  pos,
+                                  size,
+                                  style | wxFULL_REPAINT_ON_RESIZE,
+                                  wxDefaultValidator,
+                                  name) )
         return false;
 
     // Create textctrl, if necessary
@@ -166,8 +166,8 @@ bool wxGenericComboControl::Create(wxWindow *parent,
     // Set background
     SetBackgroundStyle( wxBG_STYLE_CUSTOM ); // for double-buffering
 
-    // SetSize should be called last
-    SetSize(pos.x,pos.y,size.x,size.y);
+    // SetBestSize should be called last
+    SetBestSize(size);
 
     return true;
 }
