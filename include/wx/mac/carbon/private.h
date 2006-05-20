@@ -15,7 +15,6 @@
 #define _WX_PRIVATE_H_
 
 #include "wx/defs.h"
-#include "wx/app.h"
 
 #ifdef __DARWIN__
 #    include <Carbon/Carbon.h>
@@ -33,7 +32,7 @@
 #endif
 
 #if UNIVERSAL_INTERFACES_VERSION < 0x0342
-    #error "please update to Apple's lastest universal headers from http://developer.apple.com/sdk/"
+    #error "please update to Apple's latest universal headers from http://developer.apple.com/sdk/"
 #endif
 
 #ifndef MAC_OS_X_VERSION_10_3
@@ -63,9 +62,7 @@ inline int    FixedToInt( Fixed inFixed )
 
 #if wxUSE_GUI
 
-#include "wx/dc.h"
-#include "wx/window.h"
-#include "wx/toplevel.h"
+#include "wx/listbox.h"
 
 class wxMacPortStateHelper
 {
@@ -427,8 +424,6 @@ private :
 };
 
 #if wxUSE_GUI
-
-#include "wx/listbox.h"
 
 /*
 GWorldPtr         wxMacCreateGWorld( int width , int height , int depth );

@@ -18,6 +18,10 @@
     #include <CFString.h>
 #endif
 
+#include "wx/fontenc.h"
+
+class WXDLLIMPEXP_BASE wxString;
+
 void wxMacConvertNewlines13To10( char * data ) ;
 void wxMacConvertNewlines10To13( char * data ) ;
 void wxMacConvertNewlines13To10( wxString *data ) ;
