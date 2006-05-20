@@ -28,7 +28,7 @@
 class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxPoint;
 class WXDLLEXPORT wxRect;
-class WXDLLEXPORT wxString;
+class WXDLLIMPEXP_BASE wxString;
 
 class WXDLLEXPORT wxDisplayFactory;
 class WXDLLEXPORT wxDisplayImpl;

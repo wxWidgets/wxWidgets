@@ -79,7 +79,7 @@
 
 class WXDLLEXPORT wxFont;
 class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxString;
+class WXDLLIMPEXP_BASE wxString;
 class WXDLLEXPORT wxBitmap;
 
 // ---------------------------------------------------------------------------
