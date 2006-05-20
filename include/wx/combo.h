@@ -159,7 +159,11 @@ public:
     virtual void SetPopupControl( wxComboPopup* popup );
 
     // get interface class instance derived from wxComboPopup
-    wxComboPopup* GetPopupControl() const { return m_popupInterface; }
+    wxComboPopup* GetPopupControl()
+    {
+        EnsurePopupControl();
+        return m_popupInterface;
+    }
 
     // get the popup window containing the popup control
     wxWindow *GetPopupWindow() const { return m_winPopup; }
