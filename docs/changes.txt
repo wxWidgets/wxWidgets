@@ -2,6 +2,15 @@
 wxWidgets Change Log - For more verbose changes, see the manual
 ---------------------------------------------------------------
 
+2.6.4
+-----
+
+All:
+
+- wxSocket::_Read continues reading from socket after exhausting pushback buffer.
+  Previously, only the buffer would be returned, even if more data was requested.
+
+
 2.6.3
 -----
 
@@ -22,8 +31,6 @@ All:
 - Fixed build error in list.h with VC++ 2005.
 - wxImage::Copy() forgot the alpha channel.
 - Fixed wxSocketBase::InterruptWait on wxBase.
-- wxSocket::_Read continues reading from socket after exhausting pushback buffer.
-  Previously, only the buffer would be returned, even if more data was requested.
 
 All (GUI):
 
