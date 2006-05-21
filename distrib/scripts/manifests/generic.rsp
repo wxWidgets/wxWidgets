@@ -253,6 +253,20 @@ samples/checklst/*.bmp
 samples/checklst/*.pro
 samples/checklst/*.bkl
 
+samples/combo/*.cpp
+samples/combo/*.h
+samples/combo/makefile*
+samples/combo/*.xbm
+samples/combo/*.xpm
+samples/combo/*.ico
+samples/combo/*.bmp
+samples/combo/*.rc
+samples/combo/*.pro
+samples/combo/icons/*.bmp
+samples/combo/icons/*.ico
+samples/combo/icons/*.xpm
+samples/combo/*.bkl
+
 samples/config/*.cpp
 samples/config/*.h
 samples/config/makefile*
@@ -265,6 +279,20 @@ samples/config/*.rc
 samples/config/*.wav
 samples/config/*.pro
 samples/config/*.bkl
+
+samples/controls/*.cpp
+samples/controls/*.h
+samples/controls/makefile*
+samples/controls/*.xbm
+samples/controls/*.xpm
+samples/controls/*.ico
+samples/controls/*.bmp
+samples/controls/*.rc
+samples/controls/*.pro
+samples/controls/icons/*.bmp
+samples/controls/icons/*.ico
+samples/controls/icons/*.xpm
+samples/controls/*.bkl
 
 samples/console/testdata.fc
 samples/console/*.cpp
@@ -293,6 +321,20 @@ samples/controls/icons/*.bmp
 samples/controls/icons/*.ico
 samples/controls/icons/*.xpm
 samples/controls/*.bkl
+
+samples/dataview/*.cpp
+samples/dataview/*.h
+samples/dataview/makefile*
+samples/dataview/*.xbm
+samples/dataview/*.xpm
+samples/dataview/*.ico
+samples/dataview/*.bmp
+samples/dataview/*.rc
+samples/dataview/*.pro
+samples/dataview/icons/*.bmp
+samples/dataview/icons/*.ico
+samples/dataview/icons/*.xpm
+samples/dataview/*.bkl
 
 samples/dialup/*.cpp
 samples/dialup/*.h

@@ -33,11 +33,15 @@ samples/caret/caret.dsp
 
 samples/checklst/checklst.dsp
 
+samples/combo/combo.dsp
+
 samples/config/config.dsp
 
 samples/console/console.dsp
 
 samples/controls/controls.dsp
+
+samples/dataview/dataview.dsp
 
 samples/db/db.dsp
 

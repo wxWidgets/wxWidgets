@@ -8,9 +8,11 @@ samples/artprov/Makefile.in
 samples/calendar/Makefile.in
 samples/caret/Makefile.in
 samples/checklst/Makefile.in
+samples/combo/Makefile.in
 samples/config/Makefile.in
 samples/console/Makefile.in
 samples/controls/Makefile.in
+samples/dataview/Makefile.in
 samples/db/Makefile.in
 samples/debugrpt/Makefile.in
 samples/dialogs/Makefile.in

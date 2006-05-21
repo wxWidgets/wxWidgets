@@ -19,6 +19,9 @@ samples/caret/caret.vcw
 samples/checklst/checklst.vcp
 samples/checklst/checklst.vcw
 
+samples/combo/combo.vcp
+samples/combo/combo.vcw
+
 samples/config/config.vcp
 samples/config/config.vcw
 
@@ -27,6 +30,9 @@ samples/console/console.vcw
 
 samples/controls/controls.vcp
 samples/controls/controls.vcw
+
+samples/dataview/dataview.vcp
+samples/dataview/dataview.vcw
 
 samples/db/db.vcp
 samples/db/db.vcw
