@@ -344,6 +344,12 @@ public :
 protected :
     // contains the tag for the content (is different for password and non-password controls)
     OSType m_valueTag ;
+
+    // as the selection tag only works correctly when the control has the focus we have to mirror the
+    // intended value
+    EventHandlerRef m_focusHandlerRef ;
+public :
+    ControlEditTextSelectionRec m_selection ;
 };
 
 #endif
@@ -1361,6 +1367,65 @@ int wxMacTextControl::GetLineLength(long lineNo) const
 
 #if TARGET_API_MAC_OSX
 
+// the current unicode textcontrol implementation has a bug : only if the control
+// is currently having the focus, the selection can be retrieved by the corresponding
+// data tag. So we have a mirroring using a member variable
+// TODO : build event table using virtual member functions for wxMacControl
+
+static const EventTypeSpec unicodeTextControlEventList[] =
+{
+    { kEventClassControl , kEventControlSetFocusPart } ,
+} ;
+
+static pascal OSStatus wxMacUnicodeTextControlControlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    wxMacUnicodeTextControl* focus = (wxMacUnicodeTextControl*) data ;
+    wxMacCarbonEvent cEvent( event ) ;
+    
+    switch ( GetEventKind( event ) )
+    {
+        case kEventControlSetFocusPart :
+        {
+            ControlPartCode controlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
+            if ( controlPart == kControlFocusNoPart )
+            {
+                // about to loose focus -> store selection to field
+                focus->GetData<ControlEditTextSelectionRec>( 0, kControlEditTextSelectionTag, &focus->m_selection );
+            }
+            result = CallNextEventHandler(handler,event) ;
+            if ( controlPart != kControlFocusNoPart )
+            {
+                // about to gain focus -> set selection from field
+                focus->SetData<ControlEditTextSelectionRec>( 0, kControlEditTextSelectionTag, &focus->m_selection );
+            }
+            break;
+        }
+        default:
+            break ;
+    }
+    
+    return result ;
+}
+
+static pascal OSStatus wxMacUnicodeTextControlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    
+    switch ( GetEventClass( event ) )
+    {
+        case kEventClassControl :
+            result = wxMacUnicodeTextControlControlEventHandler( handler , event , data ) ;
+            break ;
+            
+        default :
+            break ;
+    }
+    return result ;
+}
+
+DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacUnicodeTextControlEventHandler )
+
 wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxTextCtrl *wxPeer,
     const wxString& str,
     const wxPoint& pos,
@@ -1384,10 +1449,15 @@ wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxTextCtrl *wxPeer,
 
     if ( !(m_windowStyle & wxTE_MULTILINE) )
         SetData<Boolean>( kControlEditTextPart , kControlEditTextSingleLineTag , true ) ;
+
+    InstallControlEventHandler( m_controlRef , GetwxMacUnicodeTextControlEventHandlerUPP(),
+                                GetEventTypeCount(unicodeTextControlEventList), unicodeTextControlEventList, this,
+                                &m_focusHandlerRef);
 }
 
 wxMacUnicodeTextControl::~wxMacUnicodeTextControl()
 {
+    ::RemoveEventHandler( m_focusHandlerRef );
 }
 
 void wxMacUnicodeTextControl::VisibilityChanged(bool shown)
@@ -1465,7 +1535,11 @@ void wxMacUnicodeTextControl::SetEditable(bool editable)
 void wxMacUnicodeTextControl::GetSelection( long* from, long* to ) const
 {
     ControlEditTextSelectionRec sel ;
-    verify_noerr( GetData<ControlEditTextSelectionRec>( 0, kControlEditTextSelectionTag, &sel ) ) ;
+    if (HasFocus())
+        verify_noerr( GetData<ControlEditTextSelectionRec>( 0, kControlEditTextSelectionTag, &sel ) ) ;
+    else
+        sel = m_selection ;
+    
     if ( from )
         *from = sel.selStart ;
     if ( to )
@@ -1475,15 +1549,32 @@ void wxMacUnicodeTextControl::GetSelection( long* from, long* to ) const
 void wxMacUnicodeTextControl::SetSelection( long from , long to )
 {
     ControlEditTextSelectionRec sel ;
+    wxString result ;
+    int textLength = 0 ;
+    CFStringRef value = GetData<CFStringRef>(0, m_valueTag) ;
+    if ( value )
+    {
+        wxMacCFStringHolder cf(value) ;
+        textLength = cf.AsString().Length() ;
+    }
+
     if ((from == -1) && (to == -1))
     {
         from = 0 ;
-        to = 32767 ; // sel has 16 bit signed values, max is 32767
+        to = textLength ; 
+    }
+    else
+    {
+        from = wxMin(textLength,wxMax(from,0)) ;
+        to = wxMax(0,wxMin(textLength,to)) ;
     }
 
     sel.selStart = from ;
     sel.selEnd = to ;
-    SetData<ControlEditTextSelectionRec>( 0, kControlEditTextSelectionTag, &sel ) ;
+    if ( HasFocus() )
+        SetData<ControlEditTextSelectionRec>( 0, kControlEditTextSelectionTag, &sel ) ;
+    else
+        m_selection = sel;
 }
 
 void wxMacUnicodeTextControl::WriteText( const wxString& str )
@@ -1492,10 +1583,14 @@ void wxMacUnicodeTextControl::WriteText( const wxString& str )
     wxMacConvertNewlines10To13( &st ) ;
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+    if ( HasFocus() )
+    {
         wxMacCFStringHolder cf(st , m_font.GetEncoding() ) ;
         CFStringRef value = cf ;
         SetData<CFStringRef>( 0, kControlEditTextInsertCFStringRefTag, &value );
-#else
+    }
+#endif
+    {
         wxString val = GetStringValue() ;
         long start , end ;
         GetSelection( &start , &end ) ;
@@ -1503,7 +1598,7 @@ void wxMacUnicodeTextControl::WriteText( const wxString& str )
         val.insert( start , str ) ;
         SetStringValue( val ) ;
         SetSelection( start + str.length() , start + str.length() ) ;
-#endif
+    }
 }
 
 #endif
