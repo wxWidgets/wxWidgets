@@ -1,5 +1,7 @@
 lib/dummy
 
+build/os2/*
+
 docs/licence.txt
 docs/os2/*.txt
 
