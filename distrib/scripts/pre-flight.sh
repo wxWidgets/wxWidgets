@@ -44,9 +44,8 @@ fi
 if [ $rebake = "yes" ]; then
   cd $WX_SRC_DIR/build/bakefiles
   bakefile_gen -d ../../distrib/scripts/Bakefiles.release.bkgen
-  bakefile_gen -f watcom
-  bakefile_gen -f watcom -d ../mgl/Bakefiles.mgl.bkgen
-  bakefile_gen -f watcom -d ../os2/Bakefiles.os2.bkgen
+  bakefile_gen -f watcom -d ../mgl/Bakefiles.mgl.bkgen -b wx.bkl
+  bakefile_gen -f watcom -d ../os2/Bakefiles.os2.bkgen -b wx.bkl
 fi
 
 cd $WX_SRC_DIR
