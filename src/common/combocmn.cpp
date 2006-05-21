@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        combocmn.cpp
+// Name:        src/common/combocmn.cpp
 // Purpose:     wxComboCtrlBase
 // Author:      Jaakko Salli
 // Modified by:
@@ -26,7 +26,6 @@
 #if wxUSE_COMBOCTRL
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
     #include "wx/log.h"
     #include "wx/combobox.h"
     #include "wx/dcclient.h"
@@ -694,13 +693,13 @@ void wxComboCtrlBase::Init()
 }
 
 bool wxComboCtrlBase::Create(wxWindow *parent,
-                                wxWindowID id,
-                                const wxString& value,
-                                const wxPoint& pos,
-                                const wxSize& size,
-                                long style,
-                                const wxValidator& validator,
-                                const wxString& name)
+                             wxWindowID id,
+                             const wxString& value,
+                             const wxPoint& pos,
+                             const wxSize& size,
+                             long style,
+                             const wxValidator& validator,
+                             const wxString& name)
 {
     if ( !wxControl::Create(parent,
                             id,
@@ -1178,9 +1177,19 @@ void wxComboCtrlBase::DrawButton( wxDC& dc, const wxRect& rect, bool paintBg )
     if ( !m_bmpNormal.Ok() )
     {
         // Need to clear button background even if m_btn is present
-        // (assume non-button background was cleared just before this call so brushes are good)
         if ( paintBg )
+        {
+            wxColour bgCol;
+
+            if ( m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE )
+                bgCol = GetParent()->GetBackgroundColour();
+            else
+                bgCol = GetBackgroundColour();
+
+            dc.SetBrush(bgCol);
+            dc.SetPen(bgCol);
             dc.DrawRectangle(rect);
+        }
 
         // Draw standard button
         wxRendererNative::Get().DrawComboBoxDropButton(this,
