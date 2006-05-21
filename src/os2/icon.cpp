@@ -16,20 +16,19 @@
     #pragma hdrstop
 #endif
 
+#include "wx/icon.h"
+
 #ifndef WX_PRECOMP
     #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
-    #include "wx/icon.h"
     #include "wx/log.h"
 #endif
 
 #include "wx/os2/private.h"
 #include "assert.h"
 
-#include "wx/icon.h"
-
-    IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxGDIObject)
+IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxGDIObject)
 
 // ============================================================================
 // implementation

@@ -31,10 +31,10 @@
     #include "wx/pen.h"
     #include "wx/brush.h"
     #include "wx/palette.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/bitmap.h"
-#include "wx/icon.h"
 #include "wx/cursor.h"
 #include "wx/font.h"
 #include "wx/settings.h"

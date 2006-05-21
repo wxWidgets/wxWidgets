@@ -40,7 +40,6 @@
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
     #include "wx/wxchar.h"
-    #include "wx/icon.h"
     #include "wx/log.h"
 #endif
 

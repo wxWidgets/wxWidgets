@@ -16,9 +16,9 @@
     #include "wx/app.h"
     #include "wx/dcmemory.h"
     #include "wx/palette.h"
+    #include "wx/icon.h"
 #endif // WX_PRECOMP
 
-#include "wx/icon.h"
 #include "wx/filefn.h"
 #include "wx/image.h"
 

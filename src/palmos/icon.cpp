@@ -24,11 +24,12 @@
     #pragma hdrstop
 #endif
 
+#include "wx/icon.h"
+
 #ifndef WX_PRECOMP
     #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
-    #include "wx/icon.h"
     #include "wx/bitmap.h"
     #include "wx/log.h"
 #endif

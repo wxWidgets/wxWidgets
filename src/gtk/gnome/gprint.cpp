@@ -22,6 +22,7 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/dcmemory.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/math.h"
@@ -29,7 +30,6 @@
 #include "wx/gtk/private.h"
 #include "wx/module.h"
 #include "wx/dynlib.h"
-#include "wx/icon.h"
 
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-pango.h>

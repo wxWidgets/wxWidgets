@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        iconbndl.cpp
+// Name:        src/common/iconbndl.cpp
 // Purpose:     wxIconBundle
 // Author:      Mattia Barbon
 // Created:     23.03.2002
@@ -15,6 +15,8 @@
     #pragma hdrstop
 #endif
 
+#include "wx/iconbndl.h"
+
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/icon.h"
@@ -27,7 +29,6 @@
     #include "wx/image.h"
 #endif
 
-#include "wx/iconbndl.h"
 #include "wx/arrimpl.cpp"
 
 WX_DEFINE_OBJARRAY(wxIconArray)

@@ -26,6 +26,7 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/button.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/module.h"
@@ -37,7 +38,6 @@
 #include "wx/cmndata.h"
 #include "wx/gdicmn.h"
 #include "wx/imaglist.h"
-#include "wx/icon.h"
 #include "wx/sizer.h"
 #include "wx/tokenzr.h"
 #include "wx/dir.h"

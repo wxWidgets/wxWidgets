@@ -19,12 +19,10 @@
     #include "wx/dcmemory.h"
     #include "wx/menu.h"
     #include "wx/toplevel.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/mac/private.h"
-
-#include "wx/icon.h"
-
 
 class wxTaskBarIconImpl
 {

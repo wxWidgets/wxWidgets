@@ -19,11 +19,11 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/iconbndl.h"
 #include "wx/image.h"
-#include "wx/icon.h"
 
 #ifdef __VMS
 #pragma message disable nosimpint

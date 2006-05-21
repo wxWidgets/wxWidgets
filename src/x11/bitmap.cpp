@@ -18,9 +18,9 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/dcmemory.h"
+    #include "wx/icon.h"
 #endif
 
-#include "wx/icon.h"
 #include "wx/image.h"
 
 #include "wx/x11/private.h"

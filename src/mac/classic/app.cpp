@@ -29,11 +29,11 @@
     #include "wx/pen.h"
     #include "wx/brush.h"
     #include "wx/palette.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/gdicmn.h"
 #include "wx/cursor.h"
-#include "wx/icon.h"
 #include "wx/dialog.h"
 #include "wx/msgdlg.h"
 #include "wx/module.h"

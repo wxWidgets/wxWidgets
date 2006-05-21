@@ -1,13 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        icon.cpp
+// Name:        src/mac/classic/icon.cpp
 // Purpose:     wxIcon class
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+#include "wx/wxprec.h"
 
 #include "wx/icon.h"
 
@@ -24,10 +26,9 @@ wxIcon::wxIcon()
 {
 }
 
-wxIcon::wxIcon(const char bits[], int width, int height) :
-    wxBitmap(bits, width, height)
+wxIcon::wxIcon(const char bits[], int width, int height)
+       :wxBitmap(bits, width, height)
 {
-    
 }
 
 wxIcon::wxIcon( const char **bits ) :
@@ -54,15 +55,15 @@ bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
     int desiredWidth, int desiredHeight)
 {
     UnRef();
-    
+
     m_refData = new wxBitmapRefData;
-    
+
     wxBitmapHandler *handler = FindHandler((wxBitmapType)type);
-    
+
     if ( handler )
         return handler->LoadFile(this, filename, type, desiredWidth, desiredHeight);
     else
-        return FALSE;
+        return false;
 }
 
 void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
@@ -98,7 +99,7 @@ bool  wxICONResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lo
         Str255 theName ;
         OSType theType ;
         wxMacStringToPascal( name , theName ) ;
-        
+
         Handle resHandle = GetNamedResource( 'cicn' , theName ) ;
         if ( resHandle != 0L )
         {
@@ -114,13 +115,13 @@ bool  wxICONResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lo
             M_BITMAPHANDLERDATA->m_hIcon = theIcon ;
             M_BITMAPHANDLERDATA->m_width =  32 ;
             M_BITMAPHANDLERDATA->m_height = 32 ;
-            
+
             M_BITMAPHANDLERDATA->m_depth = 8 ;
             M_BITMAPHANDLERDATA->m_ok = true ;
             M_BITMAPHANDLERDATA->m_numColors = 256 ;
             M_BITMAPHANDLERDATA->m_bitmapType = kMacBitmapTypeIcon ;
-            return TRUE ;
+            return true;
         }
     }
-    return FALSE ;
+    return false;
 }

@@ -15,9 +15,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/icon.h"
 #endif // WX_PRECOMP
 
-#include "wx/icon.h"
 #include "wx/image.h"
 #include "wx/xpmdecod.h"
 

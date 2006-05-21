@@ -17,10 +17,10 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/gdicmn.h"
-#include "wx/icon.h"
 
 #include "wx/x11/private.h"
 

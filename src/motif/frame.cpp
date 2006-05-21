@@ -33,12 +33,12 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/menu.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/statusbr.h"
 #include "wx/toolbar.h"
 #include "wx/settings.h"
-#include "wx/icon.h"
 
 #ifdef __VMS__
     #pragma message disable nosimpint
