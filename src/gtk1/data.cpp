@@ -14,9 +14,8 @@
     #include "wx/object.h"
     #include "wx/window.h"
     #include "wx/dc.h"
+    #include "wx/cursor.h"
 #endif
-
-#include "wx/cursor.h"
 
 /* Current cursor, in order to hang on to
  * cursor handle when setting the cursor globally */

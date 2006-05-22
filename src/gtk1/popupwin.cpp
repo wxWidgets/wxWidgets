@@ -17,9 +17,8 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/frame.h"
+    #include "wx/cursor.h"
 #endif // WX_PRECOMP
-
-#include "wx/cursor.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
@@ -221,7 +220,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     gtk_signal_connect (GTK_OBJECT(m_widget), "button_press_event",
         GTK_SIGNAL_FUNC(gtk_popup_button_press), (gpointer)this );
 
-    return TRUE;
+    return true;
 }
 
 void wxPopupWindow::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(width), int WXUNUSED(height) )

@@ -24,12 +24,13 @@
     #pragma hdrstop
 #endif
 
+#include "wx/cursor.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/bitmap.h"
     #include "wx/icon.h"
-    #include "wx/cursor.h"
     #include "wx/settings.h"
     #include "wx/intl.h"
 #endif
@@ -110,7 +111,7 @@ wxCursor::~wxCursor()
 
 bool wxCursor::operator==(const wxCursor& cursor) const
 {
-    return FALSE;
+    return false;
 }
 
 wxGDIImageRefData *wxCursor::CreateData() const
@@ -130,5 +131,3 @@ const wxCursor *wxGetGlobalCursor()
 void wxSetCursor(const wxCursor& cursor)
 {
 }
-
-

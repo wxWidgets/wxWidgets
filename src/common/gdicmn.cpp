@@ -32,10 +32,10 @@
     #include "wx/brush.h"
     #include "wx/palette.h"
     #include "wx/icon.h"
+    #include "wx/cursor.h"
 #endif
 
 #include "wx/bitmap.h"
-#include "wx/cursor.h"
 #include "wx/font.h"
 #include "wx/settings.h"
 #include "wx/hashmap.h"

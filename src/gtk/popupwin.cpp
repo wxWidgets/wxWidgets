@@ -17,9 +17,8 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/frame.h"
+    #include "wx/cursor.h"
 #endif // WX_PRECOMP
-
-#include "wx/cursor.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>

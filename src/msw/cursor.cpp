@@ -24,12 +24,13 @@
     #pragma hdrstop
 #endif
 
+#include "wx/cursor.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/bitmap.h"
     #include "wx/icon.h"
-    #include "wx/cursor.h"
     #include "wx/settings.h"
     #include "wx/intl.h"
 #endif
@@ -217,7 +218,7 @@ wxCursor::wxCursor(const wxImage& image)
     }
 #else
     HCURSOR hcursor = 0;
-#endif                                         
+#endif
 
     m_refData = new wxCursorRefData(hcursor, true /* delete it later */);
 }
@@ -313,7 +314,7 @@ wxCursor::wxCursor(int idCursor)
         { false, _T("WXCURSOR_RIGHT_ARROW")  }, // wxCURSOR_RIGHT_ARROW
         { false, _T("WXCURSOR_BULLSEYE")     }, // wxCURSOR_BULLSEYE
         {  true, IDC_ARROW                   }, // WXCURSOR_CHAR
-        
+
         // Displays as an I-beam on XP, so use a cursor file
 //        {  true, IDC_CROSS                   }, // WXCURSOR_CROSS
         {  false, _T("WXCURSOR_CROSS")       }, // WXCURSOR_CROSS
@@ -321,7 +322,7 @@ wxCursor::wxCursor(int idCursor)
         // See special handling below for wxCURSOR_HAND
 //        { false, _T("WXCURSOR_HAND")         }, // wxCURSOR_HAND
         {  true, IDC_HAND                    }, // wxCURSOR_HAND
-        
+
         {  true, IDC_IBEAM                   }, // WXCURSOR_IBEAM
         {  true, IDC_ARROW                   }, // WXCURSOR_LEFT_BUTTON
         { false, _T("WXCURSOR_MAGNIFIER")    }, // wxCURSOR_MAGNIFIER
@@ -365,7 +366,7 @@ wxCursor::wxCursor(int idCursor)
         hcursor = ::LoadCursor(wxGetInstance(), _T("WXCURSOR_HAND"));
         deleteLater = true;
     }
-    
+
     if ( !hcursor )
     {
         wxLogLastError(_T("LoadCursor"));

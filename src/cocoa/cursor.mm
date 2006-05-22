@@ -1,18 +1,20 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.mm
+// Name:        src/cocoa/cursor.mm
 // Purpose:     wxCursor class for wxCocoa
 // Author:      Ryan Norton
 // Modified by:
 // Created:     2004-10-05
 // RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
-// Licence:   	wxWidgets licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#include "wx/cursor.h"
+
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
-    #include "wx/cursor.h"
 #endif //WX_PRECOMP
 
 #import <AppKit/NSCursor.h>
@@ -174,39 +176,39 @@ NSCursor* wxGetStockCursor( short sIndex )
 {
     ClassicCursor* pCursor = &gMacCursors[sIndex];
 
-    //Classic mac cursors are 1bps 16x16 black and white with a 
+    //Classic mac cursors are 1bps 16x16 black and white with a
     //identical mask that is 1 for on and 0 for off
     NSImage *theImage = [[NSImage alloc] initWithSize:NSMakeSize(16.0,16.0)];
-    
+
     //NSCursor takes an NSImage takes a number of Representations - here
     //we need only one for the raw data
-    NSBitmapImageRep *theRep = 
-    [[NSBitmapImageRep alloc] 
+    NSBitmapImageRep *theRep =
+    [[NSBitmapImageRep alloc]
       initWithBitmapDataPlanes: nil  // Allocate the buffer for us :)
-      pixelsWide: 16 
+      pixelsWide: 16
       pixelsHigh: 16
       bitsPerSample: 1
-      samplesPerPixel: 2  
-      hasAlpha: YES		// Well, more like a mask...
-      isPlanar: NO 
+      samplesPerPixel: 2
+      hasAlpha: YES                  // Well, more like a mask...
+      isPlanar: NO
       colorSpaceName: NSCalibratedWhiteColorSpace // Normal B/W - 0 black 1 white
       bytesPerRow: 0     // I don't care - figure it out for me :)
       bitsPerPixel: 2];  // bitsPerSample * samplesPerPixel
-  
+
     //unsigned int is better to put data in then a void*
     //note that working with bitfields would be a lot better here -
     //but since it breaks some compilers...
-    wxUint32 *data = (wxUint32 *)[theRep bitmapData];  
-    
+    wxUint32 *data = (wxUint32 *)[theRep bitmapData];
+
     //traverse through the bitmap data
     for (int i = 0; i < 16; ++i)
     {
         //bit alpha bit alpha ... :D
-        
-        //Notice the = instead of |= - 
+
+        //Notice the = instead of |= -
         //this is to avoid doing a memset earlier
         data[i] = 0;
-                
+
         //do the rest of those bits and alphas :)
         for (int shift = 0; shift < 32; ++shift)
         {
@@ -217,19 +219,19 @@ NSCursor* wxGetStockCursor( short sIndex )
 
     //add the representation (data) to the image
     [theImage addRepresentation:theRep];
-    
+
     //create the new cursor
-    NSCursor* theCursor =  [[NSCursor alloc] 	initWithImage:theImage 
+    NSCursor* theCursor =  [[NSCursor alloc]  initWithImage:theImage
                                     hotSpot:NSMakePoint(pCursor->hotspot[1], pCursor->hotspot[0])
                             ];
-    
+
     //do the usual cleanups
-    [theRep release];    
+    [theRep release];
     [theImage release];
-    
+
     //return the new cursor
     return theCursor;
-}    
+}
 
 wxCursorRefData::wxCursorRefData() :
     m_width(32), m_height(32), m_hCursor(nil)
@@ -250,34 +252,33 @@ wxCursor::wxCursor()
 wxCursor::wxCursor(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSED(height),
     int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY), const char WXUNUSED(maskBits)[])
 {
-    
 }
 
 wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int hotSpotY)
 {
     m_refData = new wxCursorRefData;
-    
+
     //TODO:  Not sure if this works or not
     NSImage* theImage;
-    
+
     if (flags & wxBITMAP_TYPE_MACCURSOR_RESOURCE)
     {
         //[NSBundle bundleForClass:[self class]]?
-        theImage = [[NSImage alloc] 
+        theImage = [[NSImage alloc]
                         initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:wxNSStringWithWxString(cursor_file) ofType:nil]
                     ];
-        
+
     }
-    else 
+    else
         theImage = [[NSImage alloc] initByReferencingFile:wxNSStringWithWxString(cursor_file)
                 ];
-    
+
     wxASSERT(theImage);
-    
+
     M_CURSORDATA->m_hCursor = [[NSCursor alloc] initWithImage:theImage
                                         hotSpot:NSMakePoint(hotSpotX, hotSpotY)
                                 ];
-    
+
     [theImage release];
 }
 
@@ -294,7 +295,7 @@ wxCursor::wxCursor(int cursor_type)
     case wxCURSOR_ARROW:
       M_CURSORDATA->m_hCursor = [[NSCursor arrowCursor] retain];
       break;
-/*	TODO:
+/* TODO:
     case wxCURSOR_COPY_ARROW:
         M_CURSORDATA->m_themeCursor = kThemeCopyArrowCursor ;
         break;
@@ -315,7 +316,7 @@ wxCursor::wxCursor(int cursor_type)
             M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorSizeNESW);
         }
         break;
-/*	TODO:
+/* TODO:
     case wxCURSOR_SIZEWE:
         {
             M_CURSORDATA->m_themeCursor = kThemeResizeLeftRightCursor;
@@ -332,7 +333,7 @@ wxCursor::wxCursor(int cursor_type)
             M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorSize);
         }
         break;
-/*	TODO:
+/* TODO:
     case wxCURSOR_HAND:
         {
             M_CURSORDATA->m_themeCursor = kThemePointingHandCursor;
@@ -426,33 +427,32 @@ static int wxBusyCursorCount = 0;
 // Set the cursor to the busy cursor for all windows
 void wxBeginBusyCursor(const wxCursor *cursor)
 {
-  wxBusyCursorCount ++;
-  if (wxBusyCursorCount == 1)
-  {
+    wxBusyCursorCount ++;
+    if (wxBusyCursorCount == 1)
+    {
         // TODO
-  }
-  else
-  {
+    }
+    else
+    {
         // TODO
-  }
+    }
 }
 
 // Restore cursor to normal
 void wxEndBusyCursor()
 {
-  if (wxBusyCursorCount == 0)
-    return;
-    
-  wxBusyCursorCount --;
-  if (wxBusyCursorCount == 0)
-  {
-    // TODO
-  }
+    if (wxBusyCursorCount == 0)
+        return;
+
+    wxBusyCursorCount --;
+    if (wxBusyCursorCount == 0)
+    {
+        // TODO
+    }
 }
 
-// TRUE if we're between the above two calls
+// true if we're between the above two calls
 bool wxIsBusy()
 {
   return (wxBusyCursorCount > 0);
-}    
-
+}

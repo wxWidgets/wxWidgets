@@ -14,7 +14,9 @@
     #pragma hdrstop
 #endif
 
-#include "wx/cursor.h"
+#ifndef WX_PRECOMP
+    #include "wx/cursor.h"
+#endif
 
 /* Current cursor, in order to hang on to
  * cursor handle when setting the cursor globally */
