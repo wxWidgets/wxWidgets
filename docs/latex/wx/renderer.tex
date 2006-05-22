@@ -52,6 +52,11 @@ the rendering functions should always prepare it.
 combination of the \texttt{wxCONTROL\_XXX} constants below.
 \end{itemize}
 
+Note that each drawing function restores the \helpref{wxDC}{wxdc} attributes if
+it changes them, so it is safe to assume that the same pen, brush and colours
+that were active before the call to this function are still in effect after it.
+
+
 \wxheading{Constants}
 
 The following rendering flags are defined:
