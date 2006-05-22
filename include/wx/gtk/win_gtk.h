@@ -15,15 +15,11 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include <gdk/gdk.h>
-#include <gdk/gdkx.h>
 #include <gtk/gtkcontainer.h>
-#include <gtk/gtkadjustment.h>
 
 #include "wx/dlimpexp.h"
 
 #define GTK_PIZZA(obj)          GTK_CHECK_CAST (obj, gtk_pizza_get_type (), GtkPizza)
-#define GTK_PIZZA_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_pizza_get_type (), GtkPizzaClass)
 #define GTK_IS_PIZZA(obj)       GTK_CHECK_TYPE (obj, gtk_pizza_get_type ())
 
 /* Shadow types */
@@ -62,13 +58,9 @@ struct _GtkPizza
 
     GdkWindow *bin_window;
 
-    GdkVisibilityState visibility;
-    gulong configure_serial;
     gint scroll_x;
     gint scroll_y;
 
-    gboolean clear_on_draw;
-    gboolean use_filter;
     gboolean external_expose;
 };
 
@@ -91,14 +83,6 @@ void       gtk_pizza_set_shadow_type (GtkPizza          *pizza,
                                       GtkMyShadowType    type);
 
 WXDLLIMPEXP_CORE
-void       gtk_pizza_set_clear       (GtkPizza          *pizza,
-                                      gboolean           clear);
-
-WXDLLIMPEXP_CORE
-void       gtk_pizza_set_filter      (GtkPizza          *pizza,
-                                      gboolean           use);
-
-WXDLLIMPEXP_CORE
 void       gtk_pizza_set_external    (GtkPizza          *pizza,
                                       gboolean           expose);
 
@@ -108,28 +92,12 @@ void       gtk_pizza_scroll          (GtkPizza          *pizza,
                                       gint               dy);
 
 WXDLLIMPEXP_CORE
-gint       gtk_pizza_child_resized   (GtkPizza          *pizza,
-                                      GtkWidget         *widget);
-
-WXDLLIMPEXP_CORE
 void       gtk_pizza_put             (GtkPizza          *pizza,
                                       GtkWidget         *widget,
                                       gint               x,
                                       gint               y,
                                       gint               width,
                                       gint               height);
-
-WXDLLIMPEXP_CORE
-void       gtk_pizza_move            (GtkPizza          *pizza,
-                                      GtkWidget         *widget,
-                                      gint               x,
-                                      gint               y );
-
-WXDLLIMPEXP_CORE
-void       gtk_pizza_resize          (GtkPizza          *pizza,
-                                      GtkWidget         *widget,
-                                      gint               width,
-                                      gint               height );
 
 WXDLLIMPEXP_CORE
 void       gtk_pizza_set_size        (GtkPizza          *pizza,

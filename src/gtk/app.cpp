@@ -45,10 +45,6 @@
     #include "wx/univ/renderer.h"
 #endif
 
-#if wxUSE_THREADS
-    #include "wx/thread.h"
-#endif
-
 #include <unistd.h>
 
 #ifdef HAVE_POLL
@@ -80,7 +76,7 @@
 #include "wx/gtk/win_gtk.h"
 #include "wx/gtk/private.h"
 
-#include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 
 //-----------------------------------------------------------------------------
 // link GnomeVFS

@@ -406,8 +406,6 @@ bool wxGLCanvas::Create( wxWindow *parent,
 
     gtk_widget_set_double_buffered( m_glWidget, FALSE );
 
-    gtk_pizza_set_clear( GTK_PIZZA(m_wxwindow), FALSE );
-
     g_signal_connect (m_wxwindow, "realize",
                       G_CALLBACK (gtk_glwindow_realized_callback),
                       this);

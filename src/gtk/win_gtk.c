@@ -200,13 +200,9 @@ gtk_pizza_init (GtkPizza *pizza)
     pizza->xoffset = 0;
     pizza->yoffset = 0;
 
-    pizza->configure_serial = 0;
     pizza->scroll_x = 0;
     pizza->scroll_y = 0;
-    pizza->visibility = GDK_VISIBILITY_PARTIAL;
 
-    pizza->clear_on_draw = TRUE;
-    pizza->use_filter = TRUE;
     pizza->external_expose = FALSE;
 }
 
@@ -245,26 +241,6 @@ gtk_pizza_set_shadow_type (GtkPizza        *pizza,
             gtk_widget_queue_draw (GTK_WIDGET (pizza));
         }
     }
-}
-
-void
-gtk_pizza_set_clear (GtkPizza  *pizza,
-                     gboolean   clear)
-{
-    g_return_if_fail (pizza != NULL);
-    g_return_if_fail (GTK_IS_PIZZA (pizza));
-
-    pizza->clear_on_draw = clear;
-}
-
-void
-gtk_pizza_set_filter (GtkPizza  *pizza,
-                      gboolean   use)
-{
-    g_return_if_fail (pizza != NULL);
-    g_return_if_fail (GTK_IS_PIZZA (pizza));
-
-    pizza->use_filter = use;
 }
 
 void
@@ -307,76 +283,6 @@ gtk_pizza_put (GtkPizza   *pizza,
     gtk_widget_set_parent (widget, GTK_WIDGET (pizza));
 
     gtk_widget_set_size_request (widget, width, height);
-}
-
-void
-gtk_pizza_move (GtkPizza     *pizza,
-                  GtkWidget  *widget,
-                  gint        x,
-                  gint        y)
-{
-    GtkPizzaChild *child;
-    GList *children;
-
-    g_return_if_fail (pizza != NULL);
-    g_return_if_fail (GTK_IS_PIZZA (pizza));
-    g_return_if_fail (widget != NULL);
-
-    children = pizza->children;
-    while (children)
-    {
-        child = children->data;
-        children = children->next;
-
-        if (child->widget == widget)
-        {
-            if ((child->x == x) && (child->y == y))
-                break;
-
-            child->x = x;
-            child->y = y;
-
-            if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (pizza))
-                gtk_widget_queue_resize (widget);
-            break;
-        }
-    }
-}
-
-void
-gtk_pizza_resize (GtkPizza    *pizza,
-                  GtkWidget   *widget,
-                  gint         width,
-                  gint         height)
-{
-    GtkPizzaChild *child;
-    GList *children;
-
-    g_return_if_fail (pizza != NULL);
-    g_return_if_fail (GTK_IS_PIZZA (pizza));
-    g_return_if_fail (widget != NULL);
-
-    children = pizza->children;
-    while (children)
-    {
-        child = children->data;
-        children = children->next;
-
-        if (child->widget == widget)
-        {
-            if ((child->width == width) && (child->height == height))
-                break;
-
-            child->width = width;
-            child->height = height;
-
-            gtk_widget_set_size_request (widget, width, height);
-
-            if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (pizza))
-                gtk_widget_queue_resize (widget);
-            break;
-        }
-    }
 }
 
 void
@@ -430,33 +336,6 @@ gtk_pizza_set_size (GtkPizza   *pizza,
             return;
         }
     }
-}
-
-gint
-gtk_pizza_child_resized  (GtkPizza   *pizza,
-                          GtkWidget  *widget)
-{
-    GtkPizzaChild *child;
-    GList *children;
-
-    g_return_val_if_fail (pizza != NULL, FALSE);
-    g_return_val_if_fail (GTK_IS_PIZZA (pizza), FALSE);
-    g_return_val_if_fail (widget != NULL, FALSE);
-
-    children = pizza->children;
-    while (children)
-    {
-        child = children->data;
-        children = children->next;
-
-        if (child->widget == widget)
-        {
-            return ((child->width == widget->allocation.width) &&
-                    (child->height == widget->allocation.height));
-        }
-    }
-
-    return FALSE;
 }
 
 static void
@@ -867,19 +746,6 @@ gtk_pizza_adjust_allocations (GtkPizza *pizza,
         }
     }
 }
-
-
-/* This is the main routine to do the scrolling. Scrolling is
- * done by "Guffaw" scrolling, as in the Mozilla XFE, with
- * a few modifications.
- *
- * The main improvement is that we keep track of whether we
- * are obscured or not. If not, we ignore the generated expose
- * events and instead do the exposes ourself, without having
- * to wait for a roundtrip to the server. This also provides
- * a limited form of expose-event compression, since we do
- * the affected area as one big chunk.
- */
 
 void
 gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
