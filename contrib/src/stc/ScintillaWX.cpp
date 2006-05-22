@@ -328,16 +328,17 @@ void ScintillaWX::SetTicking(bool on) {
 
 void ScintillaWX::SetMouseCapture(bool on) {
     if (mouseDownCaptures) {
-        if (on && !capturedMouse)
+        if (on && !stc->HasCapture())
             stc->CaptureMouse();
-        else if (!on && capturedMouse && stc->HasCapture())
+        else if (!on && stc->HasCapture())
             stc->ReleaseMouse();
-        capturedMouse = on;
+        capturedMouse = stc->HasCapture();
     }
 }
 
 
 bool ScintillaWX::HaveMouseCapture() {
+    capturedMouse = stc->HasCapture();
     return capturedMouse;
 }
 
@@ -827,13 +828,15 @@ void ScintillaWX::DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, b
 }
 
 void ScintillaWX::DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl) {
+    ButtonUp(pt, curTime, ctrl);
 #if wxUSE_DRAG_AND_DROP
     if (startDragTimer->IsRunning()) {
         startDragTimer->Stop();
+        SetDragPosition(invalidPosition);
         SetEmptySelection(PositionFromLocation(pt));
+        ShowCaretAtCurrentPosition();
     }
 #endif // wxUSE_DRAG_AND_DROP
-    ButtonUp(pt, curTime, ctrl);
 }
 
 void ScintillaWX::DoLeftButtonMove(Point pt) {
