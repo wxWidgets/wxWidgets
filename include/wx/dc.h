@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dc.h
+// Name:        wx/dc.h
 // Purpose:     wxDC class
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -161,20 +161,20 @@ public:
     // fill the area specified by rect with a radial gradient, starting from
     // initialColour in the centre of the cercle and fading to destColour.
     void GradientFillConcentric(const wxRect& rect,
-                                const wxColour& initialColour, 
+                                const wxColour& initialColour,
                                 const wxColour& destColour)
         { GradientFillConcentric(rect, initialColour, destColour,
                                  wxPoint(rect.GetWidth() / 2,
                                          rect.GetHeight() / 2)); }
 
     void GradientFillConcentric(const wxRect& rect,
-                                const wxColour& initialColour, 
+                                const wxColour& initialColour,
                                 const wxColour& destColour,
                                 const wxPoint& circleCenter);
 
     // fill the area specified by rect with a linear gradient
     void GradientFillLinear(const wxRect& rect,
-                            const wxColour& initialColour, 
+                            const wxColour& initialColour,
                             const wxColour& destColour,
                             wxDirection nDirection = wxEAST)
         { DoGradientFillLinear(rect, initialColour, destColour, nDirection); }
@@ -659,7 +659,7 @@ protected:
                                       const wxColour& initialColour,
                                       const wxColour& destColour,
                                       wxDirection nDirection = wxEAST);
-    
+
     virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const = 0;
 
     virtual void DoDrawPoint(wxCoord x, wxCoord y) = 0;
@@ -866,6 +866,68 @@ private:
     wxColour m_colFgOld;
 
     DECLARE_NO_COPY_CLASS(wxDCTextColourChanger)
+};
+
+// ----------------------------------------------------------------------------
+// helper class: you can use it to temporarily change the DC pen and
+// restore it automatically when the object goes out of scope
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxDCPenChanger
+{
+public:
+    wxDCPenChanger(wxDC& dc) : m_dc(dc), m_penOld() { }
+
+    ~wxDCPenChanger()
+    {
+        if ( m_penOld.Ok() )
+            m_dc.SetPen(m_penOld);
+    }
+
+    void Set(const wxPen& pen)
+    {
+        if ( !m_penOld.Ok() )
+            m_penOld = m_dc.GetPen();
+        m_dc.SetPen(pen);
+    }
+
+private:
+    wxDC& m_dc;
+
+    wxPen m_penOld;
+
+    DECLARE_NO_COPY_CLASS(wxDCPenChanger)
+};
+
+// ----------------------------------------------------------------------------
+// helper class: you can use it to temporarily change the DC brush and
+// restore it automatically when the object goes out of scope
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxDCBrushChanger
+{
+public:
+    wxDCBrushChanger(wxDC& dc) : m_dc(dc), m_brushOld() { }
+
+    ~wxDCBrushChanger()
+    {
+        if ( m_brushOld.Ok() )
+            m_dc.SetBrush(m_brushOld);
+    }
+
+    void Set(const wxBrush& brush)
+    {
+        if ( !m_brushOld.Ok() )
+            m_brushOld = m_dc.GetBrush();
+        m_dc.SetBrush(brush);
+    }
+
+private:
+    wxDC& m_dc;
+
+    wxBrush m_brushOld;
+
+    DECLARE_NO_COPY_CLASS(wxDCBrushChanger)
 };
 
 // ----------------------------------------------------------------------------

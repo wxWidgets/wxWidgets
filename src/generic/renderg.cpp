@@ -232,12 +232,13 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow * WXUNUSED(win),
                                       int flags)
 {
     // store settings
-    wxPen pen(dc.GetPen());
-    wxBrush brush(dc.GetBrush());
+    wxDCPenChanger penChanger(dc);
+    wxDCBrushChanger brushChanger(dc);
 
     // white background
-    dc.SetPen(*wxGREY_PEN);
-    dc.SetBrush(*wxWHITE_BRUSH);
+    penChanger.Set(*wxGREY_PEN);
+    brushChanger.Set(*wxWHITE_BRUSH);
+
     dc.DrawRectangle(rect);
 
     // black lines
@@ -257,9 +258,6 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow * WXUNUSED(win),
         dc.DrawLine(xMiddle, yMiddle - halfHeight,
                     xMiddle, yMiddle + halfHeight + 1);
     }
-
-    dc.SetPen(pen);
-    dc.SetBrush(brush);
 }
 
 // ----------------------------------------------------------------------------
