@@ -827,13 +827,15 @@ void ScintillaWX::DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, b
 }
 
 void ScintillaWX::DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl) {
+    ButtonUp(pt, curTime, ctrl);
 #if wxUSE_DRAG_AND_DROP
     if (startDragTimer->IsRunning()) {
         startDragTimer->Stop();
+        SetDragPosition(invalidPosition);
         SetEmptySelection(PositionFromLocation(pt));
+        ShowCaretAtCurrentPosition();
     }
 #endif // wxUSE_DRAG_AND_DROP
-    ButtonUp(pt, curTime, ctrl);
 }
 
 void ScintillaWX::DoLeftButtonMove(Point pt) {
