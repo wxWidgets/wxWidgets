@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 12 May 2006                                                        *
+ * Date : 19 May 2006                                                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -363,9 +363,9 @@ typedef pid_t GPid;
 
 #define wxUSE_MINIFRAME 1
 
-#define wxUSE_COMBOCONTROL 1
+#define wxUSE_COMBOCTRL 1
 
-#define wxUSE_OWNERDRAWNCOMBOBOX 1
+#define wxUSE_ODCOMBOBOX 1
 
 #define wxUSE_ACCEL 1
 

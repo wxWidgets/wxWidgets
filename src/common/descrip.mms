@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 3 May 2006                                                          *
+# Date : 22 May 2006                                                         *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -192,7 +192,8 @@ OBJECTS_MOTIF=gaugecmn.obj,radiocmn.obj
 OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
 	dynload.obj,effects.obj,fddlgcmn.obj,fs_mem.obj,gaugecmn.obj,\
 	gbsizer.obj,geometry.obj,matrix.obj,radiocmn.obj,\
-	regex.obj,taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj
+	regex.obj,taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj,\
+	combocmn.obj
 
 SOURCES = \
 		appbase.cpp,\
@@ -532,3 +533,4 @@ xtistrm.obj : xtistrm.cpp
 xtixml.obj : xtixml.cpp
 uri.obj : uri.cpp
 dpycmn.obj : dpycmn.cpp
+combocmn.obj : combocmn.cpp
