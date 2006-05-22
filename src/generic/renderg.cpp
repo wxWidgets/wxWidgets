@@ -231,6 +231,10 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow * WXUNUSED(win),
                                       const wxRect& rect,
                                       int flags)
 {
+    // store settings
+    wxPen pen(dc.GetPen());
+    wxBrush brush(dc.GetBrush());
+
     // white background
     dc.SetPen(*wxGREY_PEN);
     dc.SetBrush(*wxWHITE_BRUSH);
@@ -253,6 +257,9 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow * WXUNUSED(win),
         dc.DrawLine(xMiddle, yMiddle - halfHeight,
                     xMiddle, yMiddle + halfHeight + 1);
     }
+
+    dc.SetPen(pen);
+    dc.SetBrush(brush);
 }
 
 // ----------------------------------------------------------------------------
