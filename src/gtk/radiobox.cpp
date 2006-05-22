@@ -17,9 +17,8 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/frame.h"
+    #include "wx/dialog.h"
 #endif
-
-#include "wx/dialog.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"

@@ -21,10 +21,10 @@
     #include "wx/utils.h"
     #include "wx/frame.h"
     #include "wx/icon.h"
+    #include "wx/dialog.h"
 #endif
 
 #include "wx/gdicmn.h"
-#include "wx/dialog.h"
 #include "wx/module.h"
 #include "wx/memory.h"
 #include "wx/evtloop.h"

@@ -37,10 +37,10 @@
     #include "wx/dcclient.h"
     #include "wx/button.h"
     #include "wx/menu.h"
+    #include "wx/dialog.h"
 #endif
 
 #include "wx/layout.h"
-#include "wx/dialog.h"
 #include "wx/listbox.h"
 #include "wx/settings.h"
 #include "wx/msgdlg.h"

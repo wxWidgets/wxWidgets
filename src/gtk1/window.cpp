@@ -24,10 +24,10 @@
     #include "wx/frame.h"
     #include "wx/dcclient.h"
     #include "wx/menu.h"
+    #include "wx/dialog.h"
 #endif
 
 #include "wx/layout.h"
-#include "wx/dialog.h"
 #include "wx/msgdlg.h"
 #include "wx/module.h"
 #include "wx/combobox.h"

@@ -17,9 +17,9 @@
     #include "wx/intl.h"
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/dialog.h"
 #endif
 
-#include "wx/dialog.h"
 #include "wx/tokenzr.h"
 #include "wx/filename.h"
 

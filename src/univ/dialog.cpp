@@ -21,8 +21,9 @@
     #pragma hdrstop
 #endif
 
+#include "wx/dialog.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/dialog.h"
     #include "wx/utils.h"
     #include "wx/app.h"
 #endif
@@ -214,7 +215,7 @@ void wxDialog::EndModal(int retCode)
     }
 
     m_isShowingModal = false;
-    
+
     m_eventLoop->Exit();
 
     Show(false);

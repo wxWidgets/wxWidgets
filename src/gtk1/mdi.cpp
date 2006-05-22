@@ -17,10 +17,10 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/menu.h"
+    #include "wx/dialog.h"
 #endif
 
 #include "wx/notebook.h"
-#include "wx/dialog.h"
 #include "wx/gtk1/private.h"
 
 #include <glib.h>

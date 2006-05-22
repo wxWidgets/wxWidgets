@@ -24,13 +24,13 @@
     #include "wx/log.h"
     #include "wx/panel.h"
     #include "wx/frame.h"
+    #include "wx/dialog.h"
 #endif
 
 #ifndef __WXWINCE__
     #include <locale.h>
 #endif
 
-#include "wx/dialog.h"
 #include "wx/wfstream.h"
 #include "wx/filesys.h"
 #include "wx/filename.h"

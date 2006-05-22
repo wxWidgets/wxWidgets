@@ -24,9 +24,9 @@
     #include "wx/app.h"
     #include "wx/dcclient.h"
     #include "wx/menu.h"
+    #include "wx/dialog.h"
 #endif // WX_PRECOMP
 
-#include "wx/dialog.h"
 #include "wx/control.h"
 #if wxUSE_TOOLBAR
     #include "wx/toolbar.h"

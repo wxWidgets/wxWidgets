@@ -22,13 +22,13 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/dialog.h"
 #endif
 
 #include "wx/gdicmn.h"
 #include "wx/memory.h"
 #include "wx/font.h"
 #include "wx/settings.h"
-#include "wx/dialog.h"
 #include "wx/msgdlg.h"
 #include "wx/file.h"
 #include "wx/filename.h"

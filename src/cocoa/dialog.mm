@@ -10,10 +10,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#include "wx/dialog.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
-    #include "wx/dialog.h"
     #include "wx/settings.h"
 #endif //WX_PRECOMP
 
@@ -32,10 +34,10 @@ static wxWindowList wxModalDialogs;
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 
 BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
-  EVT_BUTTON(wxID_OK, wxDialog::OnOK)
-  EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
-  EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
-  EVT_CLOSE(wxDialog::OnCloseWindow)
+    EVT_BUTTON(wxID_OK, wxDialog::OnOK)
+    EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
+    EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
+    EVT_CLOSE(wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 WX_IMPLEMENT_COCOA_OWNER(wxDialog,NSPanel,NSWindow,NSWindow)
@@ -240,4 +242,3 @@ void wxDialog::OnCancel(wxCommandEvent& event)
     wxLogTrace(wxTRACE_COCOA,wxT("Cancelled!"));
     EndDialog(wxID_CANCEL);
 }
-

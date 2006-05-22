@@ -27,10 +27,10 @@
     #include "wx/palette.h"
     #include "wx/icon.h"
     #include "wx/cursor.h"
+    #include "wx/dialog.h"
 #endif
 
 #include "wx/gdicmn.h"
-#include "wx/dialog.h"
 #include "wx/msgdlg.h"
 #include "wx/module.h"
 #include "wx/memory.h"
