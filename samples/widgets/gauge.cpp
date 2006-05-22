@@ -52,7 +52,7 @@
 // control ids
 enum
 {
-    GaugePage_Reset = 100,
+    GaugePage_Reset = wxID_HIGHEST,
     GaugePage_Progress,
     GaugePage_Clear,
     GaugePage_SetValue,
@@ -157,9 +157,13 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(GaugeWidgetsPage, _T("Gauge"),
-                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
-                       );
+#if defined(__WXUNIVERSAL__)
+    #define FAMILY_CTRLS UNIVERSAL_CTRLS
+#else
+    #define FAMILY_CTRLS NATIVE_CTRLS
+#endif
+
+IMPLEMENT_WIDGETS_PAGE(GaugeWidgetsPage, _T("Gauge"), FAMILY_CTRLS );
 
 GaugeWidgetsPage::GaugeWidgetsPage(WidgetsBookCtrl *book,
                                    wxImageList *imaglist)

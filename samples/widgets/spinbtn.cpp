@@ -54,7 +54,7 @@
 // control ids
 enum
 {
-    SpinBtnPage_Reset = 100,
+    SpinBtnPage_Reset = wxID_HIGHEST,
     SpinBtnPage_Clear,
     SpinBtnPage_SetValue,
     SpinBtnPage_SetMinAndMax,
@@ -166,9 +166,14 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
+#if defined(__WXUNIVERSAL__)
+    #define FAMILY_CTRLS UNIVERSAL_CTRLS
+#else
+    #define FAMILY_CTRLS NATIVE_CTRLS
+#endif
+
 IMPLEMENT_WIDGETS_PAGE(SpinBtnWidgetsPage, _T("Spin"),
-                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
-                       | EDITABLE_CTRLS
+                       FAMILY_CTRLS | EDITABLE_CTRLS
                        );
 
 SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,

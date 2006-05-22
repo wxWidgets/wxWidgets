@@ -55,7 +55,7 @@
 // control ids
 enum
 {
-    ListboxPage_Reset = 100,
+    ListboxPage_Reset = wxID_HIGHEST,
     ListboxPage_Add,
     ListboxPage_AddText,
     ListboxPage_AddSeveral,
@@ -193,9 +193,14 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
+#if defined(__WXUNIVERSAL__)
+    #define FAMILY_CTRLS UNIVERSAL_CTRLS
+#else
+    #define FAMILY_CTRLS NATIVE_CTRLS
+#endif
+
 IMPLEMENT_WIDGETS_PAGE(ListboxWidgetsPage, _T("Listbox"),
-                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
-                       | WITH_ITEMS_CTRLS
+                       FAMILY_CTRLS | WITH_ITEMS_CTRLS
                        );
 
 ListboxWidgetsPage::ListboxWidgetsPage(WidgetsBookCtrl *book,

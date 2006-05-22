@@ -52,7 +52,7 @@
 // control ids
 enum
 {
-    ComboPage_Reset = 100,
+    ComboPage_Reset = wxID_HIGHEST,
     ComboPage_CurText,
     ComboPage_InsertionPointText,
     ComboPage_Insert,
@@ -192,9 +192,14 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
+#if defined(__WXUNIVERSAL__)
+    #define FAMILY_CTRLS UNIVERSAL_CTRLS
+#else
+    #define FAMILY_CTRLS NATIVE_CTRLS
+#endif
+
 IMPLEMENT_WIDGETS_PAGE(ComboboxWidgetsPage, _T("Combobox"),
-                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
-                       | WITH_ITEMS_CTRLS | COMBO_CTRLS
+                       FAMILY_CTRLS | WITH_ITEMS_CTRLS | COMBO_CTRLS
                        );
 
 ComboboxWidgetsPage::ComboboxWidgetsPage(WidgetsBookCtrl *book,

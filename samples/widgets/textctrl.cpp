@@ -53,7 +53,7 @@
 // control ids
 enum
 {
-    TextPage_Reset = 100,
+    TextPage_Reset = wxID_HIGHEST,
 
     TextPage_Set,
     TextPage_Add,
@@ -329,9 +329,16 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
+#if defined(__WXX11__)
+    #define FAMILY_CTRLS NATIVE_CTRLS
+#elif defined(__WXUNIVERSAL__)
+    #define FAMILY_CTRLS UNIVERSAL_CTRLS
+#else
+    #define FAMILY_CTRLS NATIVE_CTRLS
+#endif
+
 IMPLEMENT_WIDGETS_PAGE(TextWidgetsPage, _T("Text"),
-                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
-                       | EDITABLE_CTRLS
+                       FAMILY_CTRLS | EDITABLE_CTRLS
                        );
 
 // ----------------------------------------------------------------------------

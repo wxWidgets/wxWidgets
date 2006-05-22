@@ -119,9 +119,14 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
+#if defined(__WXMSW__)
+    #define FAMILY_CTRLS NATIVE_CTRLS
+#else
+    #define FAMILY_CTRLS GENERIC_CTRLS
+#endif
+
 IMPLEMENT_WIDGETS_PAGE(DatePickerWidgetsPage, wxT("DatePicker"),
-                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
-                       | PICKER_CTRLS
+                       FAMILY_CTRLS | PICKER_CTRLS
                        );
 
 DatePickerWidgetsPage::DatePickerWidgetsPage(WidgetsBookCtrl *book,

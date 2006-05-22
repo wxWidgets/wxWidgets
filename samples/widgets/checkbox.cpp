@@ -50,7 +50,7 @@
 // control ids
 enum
 {
-    CheckboxPage_Reset = 100,
+    CheckboxPage_Reset = wxID_HIGHEST,
     CheckboxPage_ChangeLabel,
     CheckboxPage_Check,
     CheckboxPage_Uncheck,
@@ -148,9 +148,13 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(CheckBoxWidgetsPage, wxT("CheckBox"),
-                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
-                       );
+#if defined(__WXUNIVERSAL__)
+    #define FAMILY_CTRLS UNIVERSAL_CTRLS
+#else
+    #define FAMILY_CTRLS NATIVE_CTRLS
+#endif
+
+IMPLEMENT_WIDGETS_PAGE(CheckBoxWidgetsPage, wxT("CheckBox"), FAMILY_CTRLS );
 
 CheckBoxWidgetsPage::CheckBoxWidgetsPage(WidgetsBookCtrl *book,
                                          wxImageList *imaglist)

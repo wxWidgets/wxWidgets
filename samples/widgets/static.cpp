@@ -51,7 +51,7 @@
 // control ids
 enum
 {
-    StaticPage_Reset = 100,
+    StaticPage_Reset = wxID_HIGHEST,
     StaticPage_BoxText,
     StaticPage_LabelText
 };

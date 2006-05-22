@@ -51,7 +51,7 @@
 // control ids
 enum
 {
-    RadioPage_Reset = 100,
+    RadioPage_Reset = wxID_HIGHEST,
     RadioPage_Update,
     RadioPage_Selection,
     RadioPage_Label,
@@ -173,9 +173,14 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
+#if defined(__WXUNIVERSAL__)
+    #define FAMILY_CTRLS UNIVERSAL_CTRLS
+#else
+    #define FAMILY_CTRLS NATIVE_CTRLS
+#endif
+
 IMPLEMENT_WIDGETS_PAGE(RadioWidgetsPage, _T("Radio"),
-                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
-                       | WITH_ITEMS_CTRLS
+                       FAMILY_CTRLS | WITH_ITEMS_CTRLS
                        );
 
 RadioWidgetsPage::RadioWidgetsPage(WidgetsBookCtrl *book,

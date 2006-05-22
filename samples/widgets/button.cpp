@@ -52,7 +52,7 @@
 // control ids
 enum
 {
-    ButtonPage_Reset = 100,
+    ButtonPage_Reset = wxID_HIGHEST,
     ButtonPage_ChangeLabel,
     ButtonPage_Button
 };
@@ -156,15 +156,8 @@ END_EVENT_TABLE()
 
 #if defined(__WXUNIVERSAL__)
     #define FAMILY_CTRLS UNIVERSAL_CTRLS
-#elif defined(__WXMSW__)    || \
-      defined(__WXMOTIF__)  || \
-      defined(__WXGTK__)    || \
-      defined(__WXMAC__)    || \
-      defined(__WXPM__)     || \
-      defined(__WXPALMOS__)
-    #define FAMILY_CTRLS NATIVE_CTRLS
 #else
-    #define FAMILY_CTRLS GENERIC_CTRLS
+    #define FAMILY_CTRLS NATIVE_CTRLS
 #endif
 
 IMPLEMENT_WIDGETS_PAGE(ButtonWidgetsPage, _T("Button"), FAMILY_CTRLS );

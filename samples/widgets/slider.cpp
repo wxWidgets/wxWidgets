@@ -198,9 +198,13 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(SliderWidgetsPage, _T("Slider"),
-                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
-                       );
+#if defined(__WXUNIVERSAL__)
+    #define FAMILY_CTRLS UNIVERSAL_CTRLS
+#else
+    #define FAMILY_CTRLS NATIVE_CTRLS
+#endif
+
+IMPLEMENT_WIDGETS_PAGE(SliderWidgetsPage, _T("Slider"), FAMILY_CTRLS );
 
 SliderWidgetsPage::SliderWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)

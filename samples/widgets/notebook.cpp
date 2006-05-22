@@ -93,11 +93,6 @@ public:
 
 protected:
     // event handlers
-#ifdef ABX
-    void OnPageChanging(wxNotebookEvent& event);
-    void OnPageChanged(wxNotebookEvent& event);
-#endif
-
     void OnButtonReset(wxCommandEvent& event);
     void OnButtonDeleteAll(wxCommandEvent& event);
     void OnButtonSelectPage(wxCommandEvent& event);
@@ -180,11 +175,6 @@ BEGIN_EVENT_TABLE(BookWidgetsPage, WidgetsPage)
     EVT_UPDATE_UI(BookPage_SelectPage, BookWidgetsPage::OnUpdateUISelectButton)
     EVT_UPDATE_UI(BookPage_InsertPage, BookWidgetsPage::OnUpdateUIInsertButton)
     EVT_UPDATE_UI(BookPage_RemovePage, BookWidgetsPage::OnUpdateUIRemoveButton)
-
-#ifdef ABX
-    EVT_NOTEBOOK_PAGE_CHANGING(wxID_ANY, BookWidgetsPage::OnPageChanging)
-    EVT_NOTEBOOK_PAGE_CHANGED(wxID_ANY, NotebookWidgetsPage::OnPageChanged)
-#endif
 
     EVT_CHECKBOX(wxID_ANY, BookWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, BookWidgetsPage::OnCheckOrRadioBox)
@@ -516,29 +506,6 @@ void BookWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
     RecreateBook();
 }
 
-#ifdef ABX
-void BookWidgetsPage::OnPageChanging(wxBookEvent& event)
-{
-    wxLogMessage(_T("Notebook page changing from %d to %d (currently %d)."),
-                 event.GetOldSelection(),
-                 event.GetSelection(),
-                 m_notebook->GetSelection());
-
-    event.Skip();
-}
-
-void NotebookWidgetsPage::OnPageChanged(wxNotebookEvent& event)
-{
-    wxLogMessage(_T("Notebook page changed from %d to %d (currently %d)."),
-                 event.GetOldSelection(),
-                 event.GetSelection(),
-                 m_notebook->GetSelection());
-
-    event.Skip();
-}
-
-#endif
-
 #if wxUSE_NOTEBOOK
 
 #include "icons/notebook.xpm"
@@ -561,6 +528,10 @@ public:
 
 protected:
 
+    // event handlers
+    void OnPageChanging(wxNotebookEvent& event);
+    void OnPageChanged(wxNotebookEvent& event);
+
     // (re)create book
     virtual wxBookCtrlBase *CreateBook(long flags)
     {
@@ -580,13 +551,41 @@ private:
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(NotebookWidgetsPage, BookWidgetsPage)
+    EVT_NOTEBOOK_PAGE_CHANGING(wxID_ANY, NotebookWidgetsPage::OnPageChanging)
+    EVT_NOTEBOOK_PAGE_CHANGED(wxID_ANY, NotebookWidgetsPage::OnPageChanged)
 END_EVENT_TABLE()
 
+#if defined(__WXUNIVERSAL__)
+    #define FAMILY_CTRLS UNIVERSAL_CTRLS
+#elif defined(__WXMOTIF__)
+    #define FAMILY_CTRLS GENERIC_CTRLS
+#else
+    #define FAMILY_CTRLS NATIVE_CTRLS
+#endif
+
 IMPLEMENT_WIDGETS_PAGE(NotebookWidgetsPage, _T("Notebook"),
-                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
-                                                     .ElseIf(wxGTK,NATIVE_CTRLS)
-                       | BOOK_CTRLS
+                       FAMILY_CTRLS | BOOK_CTRLS
                        );
+
+void NotebookWidgetsPage::OnPageChanging(wxNotebookEvent& event)
+{
+    wxLogMessage(_T("Notebook page changing from %d to %d (currently %d)."),
+                 event.GetOldSelection(),
+                 event.GetSelection(),
+                 m_book->GetSelection());
+
+    event.Skip();
+}
+
+void NotebookWidgetsPage::OnPageChanged(wxNotebookEvent& event)
+{
+    wxLogMessage(_T("Notebook page changed from %d to %d (currently %d)."),
+                 event.GetOldSelection(),
+                 event.GetSelection(),
+                 m_book->GetSelection());
+
+    event.Skip();
+}
 
 #endif // wxUSE_NOTEBOOK
 
@@ -612,6 +611,10 @@ public:
 
 protected:
 
+    // event handlers
+    void OnPageChanging(wxListbookEvent& event);
+    void OnPageChanged(wxListbookEvent& event);
+
     // (re)create book
     virtual wxBookCtrlBase *CreateBook(long flags)
     {
@@ -631,11 +634,33 @@ private:
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(ListbookWidgetsPage, BookWidgetsPage)
+    EVT_LISTBOOK_PAGE_CHANGING(wxID_ANY, ListbookWidgetsPage::OnPageChanging)
+    EVT_LISTBOOK_PAGE_CHANGED(wxID_ANY, ListbookWidgetsPage::OnPageChanged)
 END_EVENT_TABLE()
 
 IMPLEMENT_WIDGETS_PAGE(ListbookWidgetsPage, _T("Listbook"),
                        GENERIC_CTRLS | BOOK_CTRLS
                        );
+
+void ListbookWidgetsPage::OnPageChanging(wxListbookEvent& event)
+{
+    wxLogMessage(_T("Listbook page changing from %d to %d (currently %d)."),
+                 event.GetOldSelection(),
+                 event.GetSelection(),
+                 m_book->GetSelection());
+
+    event.Skip();
+}
+
+void ListbookWidgetsPage::OnPageChanged(wxListbookEvent& event)
+{
+    wxLogMessage(_T("Listbook page changed from %d to %d (currently %d)."),
+                 event.GetOldSelection(),
+                 event.GetSelection(),
+                 m_book->GetSelection());
+
+    event.Skip();
+}
 
 #endif // wxUSE_LISTBOOK
 
@@ -661,6 +686,10 @@ public:
 
 protected:
 
+    // event handlers
+    void OnPageChanging(wxChoicebookEvent& event);
+    void OnPageChanged(wxChoicebookEvent& event);
+
     // (re)create book
     virtual wxBookCtrlBase *CreateBook(long flags)
     {
@@ -680,11 +709,33 @@ private:
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(ChoicebookWidgetsPage, BookWidgetsPage)
+    EVT_CHOICEBOOK_PAGE_CHANGING(wxID_ANY, ChoicebookWidgetsPage::OnPageChanging)
+    EVT_CHOICEBOOK_PAGE_CHANGED(wxID_ANY, ChoicebookWidgetsPage::OnPageChanged)
 END_EVENT_TABLE()
 
 IMPLEMENT_WIDGETS_PAGE(ChoicebookWidgetsPage, _T("Choicebook"),
                        GENERIC_CTRLS | BOOK_CTRLS
                        );
+
+void ChoicebookWidgetsPage::OnPageChanging(wxChoicebookEvent& event)
+{
+    wxLogMessage(_T("Choicebook page changing from %d to %d (currently %d)."),
+                 event.GetOldSelection(),
+                 event.GetSelection(),
+                 m_book->GetSelection());
+
+    event.Skip();
+}
+
+void ChoicebookWidgetsPage::OnPageChanged(wxChoicebookEvent& event)
+{
+    wxLogMessage(_T("Choicebook page changed from %d to %d (currently %d)."),
+                 event.GetOldSelection(),
+                 event.GetSelection(),
+                 m_book->GetSelection());
+
+    event.Skip();
+}
 
 #endif // wxUSE_CHOICEBOOK
 
