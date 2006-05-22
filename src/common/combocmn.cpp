@@ -737,7 +737,7 @@ void wxComboCtrlBase::CreateTextCtrl( int extraStyle, const wxValidator& validat
     if ( !(m_windowStyle & wxCB_READONLY) )
     {
         m_text = new wxTextCtrl(this,
-                                12345,
+                                wxID_ANY,
                                 m_valueString,
                                 wxDefaultPosition,
                                 wxDefaultSize,
