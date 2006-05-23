@@ -42,6 +42,8 @@ public:
 
     virtual bool IsTransparentForMouse() const { return TRUE; }
 
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
+
 protected:
     virtual bool GTKWidgetNeedsMnemonic() const;
     virtual void GTKWidgetDoSetMnemonic(GtkWidget* w);

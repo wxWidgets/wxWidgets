@@ -107,4 +107,13 @@ wxStaticBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return GetDefaultAttributesFromGTKWidget(gtk_frame_new);
 }
 
+
+void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
+{
+    const int BORDER = 5; // FIXME: hardcoded value
+
+    *borderTop = GetLabel().empty() ? 2*BORDER : GetCharHeight();
+    *borderOther = BORDER;
+}
+
 #endif // wxUSE_STATBOX
