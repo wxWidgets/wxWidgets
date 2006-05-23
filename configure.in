@@ -2928,9 +2928,9 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         esac
 
         if test "$WXGTK20" = 1; then
-            save_CFLAGS="$CFLAGS"
+            save_CXXFLAGS="$CXXFLAGS"
             save_LIBS="$LIBS"
-            CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
+            CXXFLAGS="$wx_cv_cflags_gtk $CXXFLAGS"
             LIBS="$LIBS $wx_cv_libs_gtk"
 
             dnl gtk_icon_size_lookup is not available in the GTK+ headers
@@ -2970,7 +2970,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                             AC_MSG_RESULT([no])
                            ])
 
-            CFLAGS="$save_CFLAGS"
+            CXXFLAGS="$save_CXXFLAGS"
             LIBS="$save_LIBS"
         else
             if test "$wxUSE_UNICODE" = "yes"; then
