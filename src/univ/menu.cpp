@@ -346,7 +346,7 @@ void wxPopupMenuWindow::SetCurrentItem(wxMenuItemIter node)
 
 void wxPopupMenuWindow::ChangeCurrent(wxMenuItemIter node)
 {
-    if ( node != m_nodeCurrent )
+    if ( !m_nodeCurrent || (node != m_nodeCurrent) )
     {
         wxMenuItemIter nodeOldCurrent = m_nodeCurrent;
 
@@ -762,7 +762,7 @@ void wxPopupMenuWindow::ProcessMouseMove(const wxPoint& pt)
     // the window (see below)
     if ( node )
     {
-        if ( node != m_nodeCurrent )
+        if ( !m_nodeCurrent || (node != m_nodeCurrent) )
         {
             ChangeCurrent(node);
 
