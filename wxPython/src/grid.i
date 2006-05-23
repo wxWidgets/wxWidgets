@@ -1629,7 +1629,12 @@ public:
                  long style = wxWANTS_CHARS,
                  const wxString& name = wxPyPanelNameStr );
 
-
+    // Override the global renamer to leave these as they are, for backwards
+    // compatibility
+    %rename(wxGridSelectCells)   wxGridSelectCells;
+    %rename(wxGridSelectRows)    wxGridSelectRows;
+    %rename(wxGridSelectColumns) wxGridSelectColumns;
+    
     enum wxGridSelectionModes {
         wxGridSelectCells,
         wxGridSelectRows,
