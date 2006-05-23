@@ -136,7 +136,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(REZ) -d __DARWIN__ -t APPL -d \
 
 ### Targets: ###
 
-all: combo$(EXEEXT) $(__combo_bundle___depname)
+all: combo$(EXEEXT) $(__combo_bundle___depname) data
 
 install: all
 
@@ -182,6 +182,18 @@ combo.app/Contents/PkgInfo: combo$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.pli
 
 @COND_PLATFORM_MACOSX_1@combo_bundle: $(____combo_BUNDLE_TGT_REF_DEP)
 
+data: 
+	@mkdir -p .
+	@for f in dropbuth.png dropbutn.png dropbutp.png; do \
+	if test ! -f ./$$f -a ! -d ./$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/$$f . ;; \
+	esac; \
+	done
+
 combo_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
@@ -192,4 +204,4 @@ combo_combo.o: $(srcdir)/combo.cpp
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean combo_bundle
+.PHONY: all install uninstall clean distclean combo_bundle data

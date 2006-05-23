@@ -203,7 +203,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\combo.exe
+all: $(OBJS)\combo.exe data
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -220,6 +220,10 @@ $(OBJS)\combo.exe: $(COMBO_OBJECTS)  $(OBJS)\combo_sample.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
 	c0w32.obj $(COMBO_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_ADV_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,, $(OBJS)\combo_sample.res
 |
+
+data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (dropbuth.png dropbutn.png dropbutp.png) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\combo_sample.res: .\..\..\samples\sample.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) -i$(SETUPHDIR) -i.\..\..\include -i. $(__DLLFLAG_p_1) -i.\..\..\samples $**

@@ -228,7 +228,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\combo.exe
+all : .SYMBOLIC $(OBJS)\combo.exe data
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -249,6 +249,10 @@ $(OBJS)\combo.exe :  $(COMBO_OBJECTS) $(OBJS)\combo_sample.res
 	@%append $(OBJS)\combo.lbc option resource=$(OBJS)\combo_sample.res
 	@for %i in () do @%append $(OBJS)\combo.lbc option stack=%i
 	wlink @$(OBJS)\combo.lbc
+
+data : .SYMBOLIC 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (dropbuth.png dropbutn.png dropbutp.png) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\combo_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
