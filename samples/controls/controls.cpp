@@ -1056,6 +1056,13 @@ void MyPanel::OnIdle(wxIdleEvent& event)
     static const int INVALID_SELECTION = -2;
 
     static int s_selCombo = INVALID_SELECTION;
+
+    if (!m_combo || !m_choice)
+    {
+        event.Skip();
+        return;
+    }
+
     int sel = m_combo->GetSelection();
     if ( sel != s_selCombo )
     {
