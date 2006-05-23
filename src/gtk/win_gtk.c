@@ -15,9 +15,6 @@
 
 #include "wx/platform.h"
 #include "wx/gtk/win_gtk.h"
-#include "gtk/gtksignal.h"
-#include "gtk/gtkprivate.h"
-#include "gdk/gdkx.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -211,7 +208,7 @@ gtk_pizza_new ()
 {
     GtkPizza *pizza;
 
-    pizza = gtk_type_new (gtk_pizza_get_type ());
+    pizza = g_object_new (gtk_pizza_get_type (), NULL);
 
     return GTK_WIDGET (pizza);
 }
@@ -231,7 +228,7 @@ gtk_pizza_set_shadow_type (GtkPizza        *pizza,
     g_return_if_fail (pizza != NULL);
     g_return_if_fail (GTK_IS_PIZZA (pizza));
 
-    if ((GtkMyShadowType) pizza->shadow_type != type)
+    if (pizza->shadow_type != type)
     {
         pizza->shadow_type = type;
 
@@ -358,8 +355,7 @@ gtk_pizza_map (GtkWidget *widget)
         children = children->next;
 
         if ( GTK_WIDGET_VISIBLE (child->widget) &&
-            !GTK_WIDGET_MAPPED (child->widget) &&
-            TRUE)
+            !GTK_WIDGET_MAPPED (child->widget) )
         {
             gtk_widget_map (child->widget);
         }
