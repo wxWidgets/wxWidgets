@@ -1653,15 +1653,45 @@ void wxComboCtrlBase::ShowPopup()
     int popupX;
     int popupY = scrPos.y + ctrlSz.y;
 
+    // Default anchor is wxLEFT
     int anchorSide = m_anchorSide;
     if ( !anchorSide )
-        anchorSide = m_btnSide;
+        anchorSide = wxLEFT;
 
-    // Anchor popup to the side the dropbutton is on
+    int rightX = scrPos.x + ctrlSz.x + m_extRight - szp.x;
+    int leftX = scrPos.x - m_extLeft;
+    int screenWidth = wxSystemSettings::GetMetric( wxSYS_SCREEN_X );
+
+    // If there is not enough horizontal space, anchor on the other side.
+    // If there is no space even then, place the popup at x 0.
     if ( anchorSide == wxRIGHT )
-        popupX = scrPos.x + ctrlSz.x + m_extRight- szp.x;
+    {
+        if ( rightX < 0 )
+        {
+            if ( (leftX+szp.x) < screenWidth )
+                anchorSide = wxLEFT;
+            else
+                anchorSide = 0;
+        }
+    }
     else
-        popupX = scrPos.x - m_extLeft;
+    {
+        if ( (leftX+szp.x) >= screenWidth )
+        {
+            if ( rightX >= 0 )
+                anchorSide = wxRIGHT;
+            else
+                anchorSide = 0;
+        }
+    }
+
+    // Select x coordinate according to the anchor side
+    if ( anchorSide == wxRIGHT )
+        popupX = rightX;
+    else if ( anchorSide == wxLEFT )
+        popupX = leftX;
+    else
+        popupX = 0;
 
     if ( spaceBelow < szp.y )
     {
