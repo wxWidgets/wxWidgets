@@ -223,10 +223,13 @@ class wxPageSetupDialog : public wxObject
 {
 public:
     wxPageSetupDialog(wxWindow* parent, wxPageSetupDialogData* data = NULL);
-
+    ~wxPageSetupDialog();
+    
     wxPageSetupDialogData& GetPageSetupData();
     wxPageSetupDialogData& GetPageSetupDialogData();
     int ShowModal();
+
+    %pythoncode { def Destroy(self): pass }
 };
 
 //---------------------------------------------------------------------------
@@ -299,6 +302,8 @@ public:
     wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = NULL);
 
     // TODO?: wxPrintDialog(wxWindow *parent, wxPrintData* data);
+
+    ~wxPrintDialog();
     
     virtual int ShowModal();
 
@@ -308,6 +313,7 @@ public:
     %newobject GetPrintDC;
     virtual wxDC *GetPrintDC();
 
+    %pythoncode { def Destroy(self): pass }
 };
 
 
