@@ -52,6 +52,10 @@ class WXDLLEXPORT wxGenericFontDialog : public wxFontDialogBase
 {
 public:
     wxGenericFontDialog() { Init(); }
+#if wxABI_VERSION >= 20604
+    wxGenericFontDialog(wxWindow *parent)
+        : wxFontDialogBase(parent) { Init(); }
+#endif
     wxGenericFontDialog(wxWindow *parent, const wxFontData& data)
         : wxFontDialogBase(parent, data) { Init(); }
     virtual ~wxGenericFontDialog();
