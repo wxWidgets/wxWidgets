@@ -58,7 +58,7 @@ class RunDemoApp(wx.App):
 
         menuBar = wx.MenuBar()
         menu = wx.Menu()
-        item = menu.Append(-1, "E&xit\tAlt-X", "Exit demo")
+        item = menu.Append(-1, "E&xit\tCtrl-Q", "Exit demo")
         self.Bind(wx.EVT_MENU, self.OnExitApp, item)
         menuBar.Append(menu, "&File")
 

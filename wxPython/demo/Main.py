@@ -49,6 +49,7 @@ _treeList = [
     ('Recent Additions/Updates', [
         'AnalogClock',
         'CheckListCtrlMixin',
+        'RichTextCtrl',
         'Treebook',
         'Toolbook',
         ]),
@@ -173,6 +174,7 @@ _treeList = [
         'PyCrust',
         'PyPlot',
         'PyShell',
+        'RichTextCtrl',
         'ScrolledPanel',
         'SplitTree',
         'StyledTextCtrl_1',

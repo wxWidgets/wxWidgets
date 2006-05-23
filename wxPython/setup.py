@@ -458,6 +458,24 @@ ext = Extension('_xrc',
 wxpExtensions.append(ext)
 
 
+
+swig_sources = run_swig(['richtext.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps)
+ext = Extension('_richtext', swig_sources,
+                include_dirs =  includes,
+                define_macros = defines,
+                library_dirs = libdirs,
+                libraries = libs,
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                **depends
+                )
+wxpExtensions.append(ext)
+
+
+
+
+
 #----------------------------------------------------------------------
 # Define the GLCanvas extension module
 #----------------------------------------------------------------------
@@ -777,8 +795,6 @@ if __name__ == "__main__":
 
               packages = ['wxPython',
                           'wxPython.lib',
-                          'wx.lib.analogclock',
-                          'wx.lib.analogclock.lib_setup',
                           'wxPython.lib.colourchooser',
                           'wxPython.lib.editor',
                           'wxPython.lib.mixins',
@@ -787,6 +803,8 @@ if __name__ == "__main__":
                           'wx',
                           'wx.build',
                           'wx.lib',
+                          'wx.lib.analogclock',
+                          'wx.lib.analogclock.lib_setup',
                           'wx.lib.colourchooser',
                           'wx.lib.editor',
                           'wx.lib.floatcanvas',

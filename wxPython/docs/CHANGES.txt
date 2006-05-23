@@ -142,6 +142,11 @@ A DeprecationWarning is now issued when the old wxPython package is
 imported.  If you are still using the old namespace please convert
 your code to use the new wx package instead.
 
+Added wrappers for Julian's new wxRichTextCtrl class, visible in
+wxPython as wx.richtext.RichTextCtrl window.  It still needs some more
+work, but it is a great start.
+
+
 
 
 
