@@ -48,6 +48,8 @@ class WXDLLEXPORT wxGenericFontDialog : public wxFontDialogBase
 {
 public:
     wxGenericFontDialog() { Init(); }
+    wxGenericFontDialog(wxWindow *parent)
+        : wxFontDialogBase(parent) { Init(); }
     wxGenericFontDialog(wxWindow *parent, const wxFontData& data)
         : wxFontDialogBase(parent, data) { Init(); }
     virtual ~wxGenericFontDialog();
