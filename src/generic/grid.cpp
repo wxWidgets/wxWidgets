@@ -570,6 +570,12 @@ bool wxGridCellEditor::IsAcceptedKey(wxKeyEvent& event)
     int key = 0;
     bool keyOk = true;
 
+#ifdef __WXGTK20__
+    // If it's a F-Key or other special key then it shouldn't start the
+    // editor.
+    if (event.GetKeyCode() >= WXK_START)
+        return false;
+#endif
 #if wxUSE_UNICODE
     // if the unicode key code is not really a unicode character (it may
     // be a function key or etc., the platforms appear to always give us a
@@ -7957,23 +7963,11 @@ void wxGrid::ShowCellEditControl()
 
             editor->SetCellAttr( attr );
             editor->SetSize( rect );
-            editor->GetControl()->Move(
-                editor->GetControl()->GetPosition().x + nXMove,
-                editor->GetControl()->GetPosition().y );
+            if (nXMove != 0)
+                editor->GetControl()->Move(
+                    editor->GetControl()->GetPosition().x + nXMove,
+                    editor->GetControl()->GetPosition().y );
             editor->Show( true, attr );
-
-            int colXPos = 0;
-            for (int i = 0; i < m_currentCellCoords.GetCol(); i++)
-            {
-                colXPos += GetColSize( i );
-            }
-
-            int xUnit = 1, yUnit = 1;
-            GetScrollPixelsPerUnit( &xUnit, &yUnit );
-            if (m_currentCellCoords.GetCol() != 0)
-                Scroll( colXPos / xUnit - 1, GetScrollPos( wxVERTICAL ) );
-            else
-                Scroll( colXPos / xUnit, GetScrollPos( wxVERTICAL ) );
 
             // recalc dimensions in case we need to
             // expand the scrolled window to account for editor
