@@ -14,6 +14,10 @@ wxGTK:
 
 - Support underlined fonts in wxTextCtrl.
 
+wxUniv:
+
+- Implemented wxToggleButton (David Bjorkevik).
+
 
 2.6.3
 -----
