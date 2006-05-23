@@ -1307,13 +1307,21 @@ void wxGenericFileDialog::OnSelected( wxListEvent &event )
     // No double-click on most WinCE devices, so do action immediately.
     HandleAction( filename );
 #else
-    if (filename == wxT("..")) return;
+    if (filename == wxT(".."))
+    {
+        inSelected = false;
+        return;
+    }
 
     wxString dir = m_list->GetDir();
     if (!IsTopMostDir(dir))
         dir += wxFILE_SEP_PATH;
     dir += filename;
-    if (wxDirExists(dir)) return;
+    if (wxDirExists(dir))
+    {
+        inSelected = false;
+        return;
+    }
 
     ignoreChanges = true;
     m_text->SetValue( filename );
