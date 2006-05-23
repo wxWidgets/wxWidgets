@@ -3889,6 +3889,8 @@ class PageSetupDialog(_core.Object):
     def __init__(self, *args, **kwargs): 
         """__init__(self, Window parent, PageSetupDialogData data=None) -> PageSetupDialog"""
         _windows_.PageSetupDialog_swiginit(self,_windows_.new_PageSetupDialog(*args, **kwargs))
+    __swig_destroy__ = _windows_.delete_PageSetupDialog
+    __del__ = lambda self : None;
     def GetPageSetupData(*args, **kwargs):
         """GetPageSetupData(self) -> PageSetupDialogData"""
         return _windows_.PageSetupDialog_GetPageSetupData(*args, **kwargs)
@@ -3901,6 +3903,7 @@ class PageSetupDialog(_core.Object):
         """ShowModal(self) -> int"""
         return _windows_.PageSetupDialog_ShowModal(*args, **kwargs)
 
+    def Destroy(self): pass 
 _windows_.PageSetupDialog_swigregister(PageSetupDialog)
 
 class PrintDialogData(_core.Object):
@@ -4042,6 +4045,8 @@ class PrintDialog(_core.Object):
     def __init__(self, *args, **kwargs): 
         """__init__(self, Window parent, PrintDialogData data=None) -> PrintDialog"""
         _windows_.PrintDialog_swiginit(self,_windows_.new_PrintDialog(*args, **kwargs))
+    __swig_destroy__ = _windows_.delete_PrintDialog
+    __del__ = lambda self : None;
     def ShowModal(*args, **kwargs):
         """ShowModal(self) -> int"""
         return _windows_.PrintDialog_ShowModal(*args, **kwargs)
@@ -4058,6 +4063,7 @@ class PrintDialog(_core.Object):
         """GetPrintDC(self) -> DC"""
         return _windows_.PrintDialog_GetPrintDC(*args, **kwargs)
 
+    def Destroy(self): pass 
 _windows_.PrintDialog_swigregister(PrintDialog)
 
 PRINTER_NO_ERROR = _windows_.PRINTER_NO_ERROR

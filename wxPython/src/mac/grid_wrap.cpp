@@ -22880,9 +22880,9 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "GRIDTABLE_NOTIFY_COLS_INSERTED",SWIG_From_int(static_cast< int >(wxGRIDTABLE_NOTIFY_COLS_INSERTED)));
   SWIG_Python_SetConstant(d, "GRIDTABLE_NOTIFY_COLS_APPENDED",SWIG_From_int(static_cast< int >(wxGRIDTABLE_NOTIFY_COLS_APPENDED)));
   SWIG_Python_SetConstant(d, "GRIDTABLE_NOTIFY_COLS_DELETED",SWIG_From_int(static_cast< int >(wxGRIDTABLE_NOTIFY_COLS_DELETED)));
-  SWIG_Python_SetConstant(d, "Grid_GridSelectCells",SWIG_From_int(static_cast< int >(wxGrid::wxGridSelectCells)));
-  SWIG_Python_SetConstant(d, "Grid_GridSelectRows",SWIG_From_int(static_cast< int >(wxGrid::wxGridSelectRows)));
-  SWIG_Python_SetConstant(d, "Grid_GridSelectColumns",SWIG_From_int(static_cast< int >(wxGrid::wxGridSelectColumns)));
+  SWIG_Python_SetConstant(d, "Grid_wxGridSelectCells",SWIG_From_int(static_cast< int >(wxGrid::wxGridSelectCells)));
+  SWIG_Python_SetConstant(d, "Grid_wxGridSelectRows",SWIG_From_int(static_cast< int >(wxGrid::wxGridSelectRows)));
+  SWIG_Python_SetConstant(d, "Grid_wxGridSelectColumns",SWIG_From_int(static_cast< int >(wxGrid::wxGridSelectColumns)));
   PyDict_SetItemString(d, "wxEVT_GRID_CELL_LEFT_CLICK", PyInt_FromLong(wxEVT_GRID_CELL_LEFT_CLICK));
   PyDict_SetItemString(d, "wxEVT_GRID_CELL_RIGHT_CLICK", PyInt_FromLong(wxEVT_GRID_CELL_RIGHT_CLICK));
   PyDict_SetItemString(d, "wxEVT_GRID_CELL_LEFT_DCLICK", PyInt_FromLong(wxEVT_GRID_CELL_LEFT_DCLICK));
