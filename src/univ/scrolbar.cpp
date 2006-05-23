@@ -553,7 +553,7 @@ bool wxScrollBar::PerformAction(const wxControlAction& action,
             wxScrollEvent event(scrollType, this->GetId(), m_thumbPos,
                                 IsVertical() ? wxVERTICAL : wxHORIZONTAL);
             event.SetEventObject(this);
-            GetParent()->GetEventHandler()->ProcessEvent(event);
+            GetEventHandler()->ProcessEvent(event);
         }
         else // part of the window
         {
