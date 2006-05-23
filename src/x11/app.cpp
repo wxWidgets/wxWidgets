@@ -22,13 +22,13 @@
     #include "wx/frame.h"
     #include "wx/icon.h"
     #include "wx/dialog.h"
+    #include "wx/timer.h"
 #endif
 
 #include "wx/gdicmn.h"
 #include "wx/module.h"
 #include "wx/memory.h"
 #include "wx/evtloop.h"
-#include "wx/timer.h"
 #include "wx/filename.h"
 
 #include "wx/univ/theme.h"

@@ -42,11 +42,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/timer.h"
 #endif
 
 // uma is for wxMacFSSpec
 #include "wx/mac/uma.h"
-#include "wx/timer.h"
 
 // standard QT stuff
 #ifndef __DARWIN__

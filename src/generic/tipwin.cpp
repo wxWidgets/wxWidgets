@@ -24,17 +24,19 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_TIPWINDOW
+
+#include "wx/tipwin.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
+    #include "wx/timer.h"
 #endif // WX_PRECOMP
+
 #ifdef __WXGTK__
     #include <gtk/gtk.h>
 #endif
-#include "wx/tipwin.h"
 
-#if wxUSE_TIPWINDOW
-
-#include "wx/timer.h"
 #include "wx/settings.h"
 
 // ----------------------------------------------------------------------------

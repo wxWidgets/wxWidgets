@@ -37,11 +37,11 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/dcclient.h"
+    #include "wx/timer.h"
 #endif
 
 #include "wx/math.h"        // log10 & pow
 #include "wx/msw/private.h" // user info and wndproc setting/getting
-#include "wx/timer.h"
 #include "wx/dynlib.h"
 
 //---------------------------------------------------------------------------
@@ -3339,9 +3339,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend)
 // Time between timer calls - this is the Apple recommendation to the TCL
 // team I believe
 #define MOVIE_DELAY 20
-
-#include "wx/timer.h"
-
 
 //---------------------------------------------------------------------------
 // wxQTLoadTimer

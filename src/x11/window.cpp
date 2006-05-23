@@ -38,6 +38,7 @@
     #include "wx/button.h"
     #include "wx/menu.h"
     #include "wx/dialog.h"
+    #include "wx/timer.h"
 #endif
 
 #include "wx/layout.h"
@@ -57,11 +58,6 @@
 
 #include "wx/x11/private.h"
 #include "X11/Xutil.h"
-
-#if wxUSE_NANOX
-// For wxGetLocalTime, used by XButtonEventGetTime
-#include "wx/timer.h"
-#endif
 
 #include <string.h>
 

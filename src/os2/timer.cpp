@@ -12,6 +12,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/timer.h"
+
 #ifndef WX_PRECOMP
     #include "wx/list.h"
     #include "wx/window.h"
@@ -22,8 +24,6 @@
 #endif
 
 #include "wx/os2/private.h"
-
-#include "wx/timer.h"
 
 #include <time.h>
 #include <sys/types.h>

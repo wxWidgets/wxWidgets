@@ -22,13 +22,13 @@
     #include "wx/dcclient.h"
     #include "wx/frame.h"
     #include "wx/dcmemory.h"
+    #include "wx/timer.h"
 #endif
 
 #include "wx/html/htmlwin.h"
 #include "wx/html/htmlproc.h"
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
-#include "wx/timer.h"
 #include "wx/settings.h"
 
 #include "wx/arrimpl.cpp"

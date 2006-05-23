@@ -17,9 +17,9 @@
     #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/dc.h"
+    #include "wx/timer.h"
 #endif // WX_PRECOMP
 
-#include "wx/timer.h"
 #include "wx/geometry.h"
 #include "wx/mac/uma.h"
 
@@ -425,4 +425,4 @@ void wxMacToolTip::Clear()
 #endif
 }
 
-#endif
+#endif // wxUSE_TOOLTIPS

@@ -31,10 +31,10 @@
 #ifndef  WX_PRECOMP
     #include "wx/log.h"             // wxLogDebug/wxLogSysError/wxLogTrace
     #include "wx/app.h"             // wxTheApp->argc, wxTheApp->argv
+    #include "wx/timer.h"           // wxTimer
 #endif
 
 #include "wx/thread.h"              // wxMutex/wxMutexLocker
-#include "wx/timer.h"               // wxTimer
 
 #ifdef __WXGTK__
 #    include "wx/gtk/win_gtk.h"     // for <gdk/gdkx.h>/GDK_WINDOW_XWINDOW

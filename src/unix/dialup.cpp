@@ -23,9 +23,9 @@
     #include "wx/event.h"
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/timer.h"
 #endif // !PCH
 
-#include "wx/timer.h"
 #include "wx/filefn.h"
 #include "wx/ffile.h"
 #include "wx/process.h"

@@ -29,12 +29,12 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/timer.h"
 #endif  //WX_PRECOMP
 
 #include "wx/apptrait.h"
 #include "wx/dynload.h"
 #include "wx/confbase.h"
-#include "wx/timer.h"
 
 #include <MemoryMgr.h>
 #include <DLServer.h>
@@ -270,4 +270,3 @@ extern long wxCharsetToCodepage(const wxChar *name)
 }
 
 #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
-

@@ -30,10 +30,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
+    #include "wx/timer.h"
 #endif
 
 #include "wx/generic/treectlg.h"
-#include "wx/timer.h"
 #include "wx/textctrl.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"

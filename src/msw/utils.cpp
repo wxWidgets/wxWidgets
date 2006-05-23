@@ -29,6 +29,7 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/timer.h"
 #endif  //WX_PRECOMP
 
 #include "wx/msw/registry.h"
@@ -54,8 +55,6 @@
     // used in wxGetFullHostName() with the old mingw32 versions
     #include <winsock.h>
 #endif
-
-#include "wx/timer.h"
 
 #if !defined(__GNUWIN32__) && !defined(__SALFORDC__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     #include <direct.h>

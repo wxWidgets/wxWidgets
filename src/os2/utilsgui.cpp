@@ -28,10 +28,10 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/cursor.h"
+    #include "wx/timer.h"
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"
-#include "wx/timer.h"
 
 #include "wx/os2/private.h"     // includes <windows.h>
 
@@ -44,29 +44,27 @@
 // ----------------------------------------------------------------------------
 
 // Sleep for nSecs seconds. Attempt a Windows implementation using timers.
-static bool inTimer = FALSE;
+static bool inTimer = false;
 
 class wxSleepTimer: public wxTimer
 {
 public:
     inline void Notify()
     {
-        inTimer = FALSE;
+        inTimer = false;
         Stop();
     }
 };
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
 #if wxUSE_RESOURCES
-bool wxWriteResource(
-  const wxString&                   rSection
-, const wxString&                   rEntry
-, const wxString&                   rValue
-, const wxString&                   rFile
-)
+bool wxWriteResource( const wxString& rSection,
+                      const wxString& rEntry,
+                      const wxString& rValue,
+                      const wxString& rFile )
 {
-    HAB                             hab = 0;
-    HINI                            hIni = 0;
+    HAB  hab = 0;
+    HINI hIni = 0;
 
     if (!rFile.empty())
     {
@@ -86,7 +84,7 @@ bool wxWriteResource(
                                         ,(PSZ)WXSTRINGCAST rEntry
                                         ,(PSZ)WXSTRINGCAST rValue
                                        ));
-    return FALSE;
+    return false;
 }
 
 bool wxWriteResource(
@@ -123,34 +121,26 @@ bool wxWriteResource(
                           );
 }
 
-bool wxWriteResource(
-  const wxString&                   rSection
-, const wxString&                   rEntry
-, int                               lValue
-, const wxString&                   rFile
-)
+bool wxWriteResource( const wxString& rSection,
+                      const wxString& rEntry,
+                      int lValue,
+                      const wxString& rFile )
 {
-    wxChar                          zBuf[50];
+    wxChar zBuf[50];
 
     wxSprintf(zBuf, "%d", lValue);
-    return wxWriteResource( rSection
-                           ,rEntry
-                           ,zBuf
-                           ,rFile
-                          );
+    return wxWriteResource( rSection, rEntry, zBuf, rFile );
 }
 
-bool wxGetResource(
-  const wxString&                   rSection
-, const wxString&                   rEntry
-, wxChar**                          ppValue
-, const wxString&                   rFile
-)
+bool wxGetResource( const wxString& rSection,
+                    const wxString& rEntry,
+                    wxChar** ppValue,
+                    const wxString& rFile )
 {
-    HAB                             hab = 0;
-    HINI                            hIni = 0;
-    wxChar                          zDefunkt[] = _T("$$default");
-    char                            zBuf[1000];
+    HAB    hab = 0;
+    HINI   hIni = 0;
+    wxChar zDefunkt[] = _T("$$default");
+    char   zBuf[1000];
 
     if (!rFile.empty())
     {
@@ -165,13 +155,13 @@ bool wxGetResource(
                                               ,1000
                                              );
             if (zBuf == NULL)
-                return FALSE;
+                return false;
             if (n == 0L || wxStrcmp(zBuf, zDefunkt) == 0)
-                return FALSE;
+                return false;
             zBuf[n-1] = '\0';
         }
         else
-            return FALSE;
+            return false;
     }
     else
     {
@@ -183,100 +173,70 @@ bool wxGetResource(
                                           ,1000
                                          );
         if (zBuf == NULL)
-            return FALSE;
+            return false;
         if (n == 0L || wxStrcmp(zBuf, zDefunkt) == 0)
-            return FALSE;
+            return false;
         zBuf[n-1] = '\0';
     }
     strcpy((char*)*ppValue, zBuf);
-    return TRUE;
+    return true;
 }
 
-bool wxGetResource(
-  const wxString&                   rSection
-, const wxString&                   rEntry
-, float*                            pValue
-, const wxString&                   rFile
-)
+bool wxGetResource( const wxString& rSection,
+                    const wxString& rEntry,
+                    float* pValue,
+                    const wxString& rFile )
 {
-    wxChar*                         zStr = NULL;
+    wxChar* zStr = NULL;
 
     zStr = new wxChar[1000];
-    bool                            bSucc = wxGetResource( rSection
-                                                          ,rEntry
-                                                          ,(wxChar **)&zStr
-                                                          ,rFile
-                                                         );
+    bool bSucc = wxGetResource( rSection, rEntry, (wxChar **)&zStr, rFile );
 
     if (bSucc)
     {
         *pValue = (float)wxStrtod(zStr, NULL);
-        delete[] zStr;
-        return TRUE;
     }
-    else
-    {
-        delete[] zStr;
-        return FALSE;
-    }
+
+    delete[] zStr;
+    return bSucc;
 }
 
-bool wxGetResource(
-  const wxString&                   rSection
-, const wxString&                   rEntry
-, long*                             pValue
-, const wxString&                   rFile
-)
+bool wxGetResource( const wxString& rSection,
+                    const wxString& rEntry,
+                    long* pValue,
+                    const wxString& rFile )
 {
-    wxChar*                           zStr = NULL;
+    wxChar* zStr = NULL;
 
     zStr = new wxChar[1000];
-    bool                              bSucc = wxGetResource( rSection
-                                                            ,rEntry
-                                                            ,(wxChar **)&zStr
-                                                            ,rFile
-                                                           );
+    bool bSucc = wxGetResource( rSection, rEntry, (wxChar **)&zStr, rFile );
 
     if (bSucc)
     {
         *pValue = wxStrtol(zStr, NULL, 10);
-        delete[] zStr;
-        return TRUE;
     }
-    else
-    {
-        delete[] zStr;
-        return FALSE;
-    }
+
+    delete[] zStr;
+    return bSucc;
 }
 
-bool wxGetResource(
-  const wxString&                   rSection
-, const wxString&                   rEntry
-, int*                              pValue
-, const wxString&                   rFile
-)
+bool wxGetResource( const wxString& rSection,
+                    const wxString& rEntry,
+                    int* pValue,
+                    const wxString& rFile )
 {
-    wxChar*                         zStr = NULL;
+    wxChar* zStr = NULL;
 
     zStr = new wxChar[1000];
-    bool                            bSucc = wxGetResource( rSection
-                                                          ,rEntry
-                                                          ,(wxChar **)&zStr
-                                                          ,rFile
-                                                         );
+    bool bSucc = wxGetResource( rSection, rEntry, (wxChar **)&zStr, rFile );
 
     if (bSucc)
     {
         *pValue = (int)wxStrtol(zStr, NULL, 10);
-        delete[] zStr;
-        return TRUE;
     }
-    else
-    {
-        delete[] zStr;
-        return FALSE;
-    }
+
+    delete[] zStr;
+    return bSucc;
 }
 #endif // wxUSE_RESOURCES
 
@@ -313,7 +273,7 @@ void wxEndBusyCursor()
     }
 }
 
-// TRUE if we're between the above two calls
+// true if we're between the above two calls
 bool wxIsBusy()
 {
     return (gs_wxBusyCursorCount > 0);
@@ -321,26 +281,24 @@ bool wxIsBusy()
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
-bool wxCheckForInterrupt(
-  wxWindow*                         pWnd
-)
+bool wxCheckForInterrupt( wxWindow* pWnd )
 {
     if(pWnd)
     {
-        QMSG                        vMsg;
-        HAB                         hab = 0;
-        HWND                        hwndFilter = NULLHANDLE;
+        QMSG vMsg;
+        HAB  hab = 0;
+        HWND hwndFilter = NULLHANDLE;
 
         while(::WinPeekMsg(hab, &vMsg, hwndFilter, 0, 0, PM_REMOVE))
         {
             ::WinDispatchMsg(hab, &vMsg);
         }
-        return TRUE;//*** temporary?
+        return true;//*** temporary?
     }
     else
     {
         wxFAIL_MSG(_T("pWnd==NULL !!!"));
-        return FALSE;//*** temporary?
+        return false;//*** temporary?
     }
 }
 
@@ -362,7 +320,7 @@ void wxGetMousePosition(
     *pY = vPt.y;
 };
 
-// Return TRUE if we have a colour display
+// Return true if we have a colour display
 bool wxColourDisplay()
 {
 #if 0
@@ -377,7 +335,7 @@ bool wxColourDisplay()
 #else
     // I don't see how the PM display could not be color. Besides, this
     // was leaking DCs and PSs!!!  MN
-    return TRUE;
+    return true;
 #endif
 }
 

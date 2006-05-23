@@ -33,10 +33,10 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/timer.h"
 #endif
 
 #include "wx/module.h"
-#include "wx/timer.h"
 #include "wx/stopwatch.h"
 
 #include <stdio.h>

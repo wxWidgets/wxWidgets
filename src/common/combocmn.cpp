@@ -31,11 +31,11 @@
     #include "wx/dcclient.h"
     #include "wx/settings.h"
     #include "wx/dialog.h"
+    #include "wx/timer.h"
 #endif
 
 #include "wx/dcbuffer.h"
 #include "wx/tooltip.h"
-#include "wx/timer.h"
 
 #include "wx/combo.h"
 

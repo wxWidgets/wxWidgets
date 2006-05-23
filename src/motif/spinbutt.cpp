@@ -15,8 +15,12 @@
 #if wxUSE_SPINBTN
 
 #include "wx/spinbutt.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/timer.h"
+#endif
+
 #include "wx/spinctrl.h"
-#include "wx/timer.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

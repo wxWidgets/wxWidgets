@@ -31,10 +31,10 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/timer.h"
 #endif
 
 #include "wx/evtloop.h"
-#include "wx/timer.h"
 
 #include "wx/x11/private.h"
 #include "X11/Xatom.h"

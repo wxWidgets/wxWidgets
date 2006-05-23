@@ -22,8 +22,9 @@
 
 #if wxUSE_TIMER
 
+#include "wx/timer.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/timer.h"
 #endif
 
 #include "wx/cocoa/autorelease.h"
@@ -76,7 +77,7 @@ IMPLEMENT_CLASS(wxTimer, wxTimerBase)
 {
     m_timer->Notify(); //wxTimerBase method
 }
-@end 
+@end
 
 // ----------------------------------------------------------------------------
 // wxTimer
@@ -95,18 +96,18 @@ void wxTimer::Init()
 bool wxTimer::Start(int millisecs, bool oneShot)
 {
     Stop();
-    
+
     wxAutoNSAutoreleasePool thePool;
 
     wxNSTimerData *timerData = [[wxNSTimerData alloc] initWithWxTimer:this];
-    m_cocoaNSTimer =     [[NSTimer 
+    m_cocoaNSTimer =     [[NSTimer
             scheduledTimerWithTimeInterval: millisecs / 1000.0 //seconds
-            target:	timerData
-            selector:	@selector(onNotify:) 
-            userInfo:	nil
-            repeats:	oneShot == false] retain];
+            target:     timerData
+            selector:   @selector(onNotify:)
+            userInfo:   nil
+            repeats:    oneShot == false] retain];
     [timerData release];
-                       
+
     return IsRunning();
 }
 

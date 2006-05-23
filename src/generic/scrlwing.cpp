@@ -35,10 +35,9 @@
     #include "wx/utils.h"
     #include "wx/panel.h"
     #include "wx/dcclient.h"
-#endif
-
-#if wxUSE_TIMER
-    #include "wx/timer.h"
+    #if wxUSE_TIMER
+        #include "wx/timer.h"
+    #endif
 #endif
 
 #include "wx/sizer.h"

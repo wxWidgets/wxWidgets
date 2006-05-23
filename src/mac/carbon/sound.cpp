@@ -21,10 +21,10 @@
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/timer.h"
 #endif
 
 #include "wx/file.h"
-#include "wx/timer.h"
 
 // Carbon QT Implementation Details -
 //

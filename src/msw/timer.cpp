@@ -18,6 +18,8 @@
 
 #if wxUSE_TIMER
 
+#include "wx/timer.h"
+
 #ifndef WX_PRECOMP
     #include "wx/list.h"
     #include "wx/window.h"
@@ -28,8 +30,6 @@
 #endif
 
 #include "wx/hashmap.h"
-
-#include "wx/timer.h"
 
 #include "wx/msw/private.h"
 

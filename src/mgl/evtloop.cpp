@@ -22,10 +22,10 @@
     #include "wx/window.h"
     #include "wx/app.h"
     #include "wx/thread.h"
+    #include "wx/timer.h"
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
-#include "wx/timer.h"
 #include "wx/mgl/private.h"
 
 // ----------------------------------------------------------------------------
