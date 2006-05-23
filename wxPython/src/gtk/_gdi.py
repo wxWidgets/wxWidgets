@@ -4790,6 +4790,11 @@ class RendererNative(object):
     genereic controls in ways that are as close to the native look as
     possible.
 
+    Note that each drawing function restores the `wx.DC` attributes if it
+    changes them, so it is safe to assume that the same pen, brush and
+    colours that were active before the call to this function are still in
+    effect after it.
+
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     def __init__(self): raise AttributeError, "No constructor defined"

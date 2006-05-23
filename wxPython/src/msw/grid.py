@@ -1122,15 +1122,15 @@ class Grid(_windows.ScrolledWindow):
         """
         return _grid.Grid_Create(*args, **kwargs)
 
-    GridSelectCells = _grid.Grid_GridSelectCells
-    GridSelectRows = _grid.Grid_GridSelectRows
-    GridSelectColumns = _grid.Grid_GridSelectColumns
+    wxGridSelectCells = _grid.Grid_wxGridSelectCells
+    wxGridSelectRows = _grid.Grid_wxGridSelectRows
+    wxGridSelectColumns = _grid.Grid_wxGridSelectColumns
     SelectCells =   wxGridSelectCells
     SelectRows =    wxGridSelectRows
     SelectColumns = wxGridSelectColumns
 
     def CreateGrid(*args, **kwargs):
-        """CreateGrid(self, int numRows, int numCols, WXGRIDSELECTIONMODES selmode=GridSelectCells) -> bool"""
+        """CreateGrid(self, int numRows, int numCols, WXGRIDSELECTIONMODES selmode=wxGridSelectCells) -> bool"""
         return _grid.Grid_CreateGrid(*args, **kwargs)
 
     def SetSelectionMode(*args, **kwargs):
@@ -1158,7 +1158,7 @@ class Grid(_windows.ScrolledWindow):
         return _grid.Grid_GetTable(*args, **kwargs)
 
     def SetTable(*args, **kwargs):
-        """SetTable(self, GridTableBase table, bool takeOwnership=False, WXGRIDSELECTIONMODES selmode=GridSelectCells) -> bool"""
+        """SetTable(self, GridTableBase table, bool takeOwnership=False, WXGRIDSELECTIONMODES selmode=wxGridSelectCells) -> bool"""
         return _grid.Grid_SetTable(*args, **kwargs)
 
     def ClearGrid(*args, **kwargs):

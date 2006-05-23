@@ -25522,6 +25522,34 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_delete_PageSetupDialog(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPageSetupDialog *arg1 = (wxPageSetupDialog *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPageSetupDialog, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_PageSetupDialog" "', expected argument " "1"" of type '" "wxPageSetupDialog *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPageSetupDialog * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_PageSetupDialog_GetPageSetupData(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPageSetupDialog *arg1 = (wxPageSetupDialog *) 0 ;
@@ -26780,6 +26808,34 @@ SWIGINTERN PyObject *_wrap_new_PrintDialog(PyObject *SWIGUNUSEDPARM(self), PyObj
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPrintDialog, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_PrintDialog(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPrintDialog *arg1 = (wxPrintDialog *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPrintDialog, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_PrintDialog" "', expected argument " "1"" of type '" "wxPrintDialog *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPrintDialog * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete arg1;
+    
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -31140,6 +31196,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PageSetupDialogData_swigregister", PageSetupDialogData_swigregister, METH_VARARGS, NULL},
 	 { (char *)"PageSetupDialogData_swiginit", PageSetupDialogData_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_PageSetupDialog", (PyCFunction) _wrap_new_PageSetupDialog, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_PageSetupDialog", (PyCFunction)_wrap_delete_PageSetupDialog, METH_O, NULL},
 	 { (char *)"PageSetupDialog_GetPageSetupData", (PyCFunction)_wrap_PageSetupDialog_GetPageSetupData, METH_O, NULL},
 	 { (char *)"PageSetupDialog_GetPageSetupDialogData", (PyCFunction)_wrap_PageSetupDialog_GetPageSetupDialogData, METH_O, NULL},
 	 { (char *)"PageSetupDialog_ShowModal", (PyCFunction)_wrap_PageSetupDialog_ShowModal, METH_O, NULL},
@@ -31179,6 +31236,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintDialogData_swigregister", PrintDialogData_swigregister, METH_VARARGS, NULL},
 	 { (char *)"PrintDialogData_swiginit", PrintDialogData_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_PrintDialog", (PyCFunction) _wrap_new_PrintDialog, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_PrintDialog", (PyCFunction)_wrap_delete_PrintDialog, METH_O, NULL},
 	 { (char *)"PrintDialog_ShowModal", (PyCFunction)_wrap_PrintDialog_ShowModal, METH_O, NULL},
 	 { (char *)"PrintDialog_GetPrintDialogData", (PyCFunction)_wrap_PrintDialog_GetPrintDialogData, METH_O, NULL},
 	 { (char *)"PrintDialog_GetPrintData", (PyCFunction)_wrap_PrintDialog_GetPrintData, METH_O, NULL},
