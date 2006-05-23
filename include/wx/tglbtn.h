@@ -27,7 +27,9 @@ END_DECLARE_EVENT_TYPES()
 #define EVT_TOGGLEBUTTON(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, id, wxCommandEventHandler(fn))
 
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
+    #include "wx/univ/tglbtn.h"
+#elif defined(__WXMSW__)
     #include "wx/msw/tglbtn.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/tglbtn.h"
