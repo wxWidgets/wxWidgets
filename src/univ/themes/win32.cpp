@@ -2499,9 +2499,20 @@ void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
     {
         // leave a small gap aroudn the line, also account for the toolbar
         // border itself
-        DrawVerticalLine(dc, rectOrig.x + rectOrig.width/2,
-                         rectOrig.y + 2*BORDER_THICKNESS,
-                         rectOrig.GetBottom() - BORDER_THICKNESS);
+        if(rectOrig.height > rectOrig.width)
+        {
+            // horizontal
+            DrawVerticalLine(dc, rectOrig.x + rectOrig.width/2,
+                             rectOrig.y + 2*BORDER_THICKNESS,
+                             rectOrig.GetBottom() - BORDER_THICKNESS);
+        }
+        else
+        {
+            // vertical
+            DrawHorizontalLine(dc, rectOrig.y + rectOrig.height/2,
+                         rectOrig.x + 2*BORDER_THICKNESS,
+                         rectOrig.GetRight() - BORDER_THICKNESS);
+        }
     }
     // don't draw wxTOOL_STYLE_CONTROL
 }
