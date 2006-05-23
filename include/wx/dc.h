@@ -876,19 +876,15 @@ private:
 class WXDLLEXPORT wxDCPenChanger
 {
 public:
-    wxDCPenChanger(wxDC& dc) : m_dc(dc), m_penOld() { }
+    wxDCPenChanger(wxDC& dc, const wxPen& pen) : m_dc(dc), m_penOld(dc.GetPen())
+    {
+        m_dc.SetPen(pen);
+    }
 
     ~wxDCPenChanger()
     {
         if ( m_penOld.Ok() )
             m_dc.SetPen(m_penOld);
-    }
-
-    void Set(const wxPen& pen)
-    {
-        if ( !m_penOld.Ok() )
-            m_penOld = m_dc.GetPen();
-        m_dc.SetPen(pen);
     }
 
 private:
@@ -907,19 +903,15 @@ private:
 class WXDLLEXPORT wxDCBrushChanger
 {
 public:
-    wxDCBrushChanger(wxDC& dc) : m_dc(dc), m_brushOld() { }
+    wxDCBrushChanger(wxDC& dc, const wxBrush& brush) : m_dc(dc), m_brushOld(dc.GetBrush())
+    {
+        m_dc.SetBrush(brush);
+    }
 
     ~wxDCBrushChanger()
     {
         if ( m_brushOld.Ok() )
             m_dc.SetBrush(m_brushOld);
-    }
-
-    void Set(const wxBrush& brush)
-    {
-        if ( !m_brushOld.Ok() )
-            m_brushOld = m_dc.GetBrush();
-        m_dc.SetBrush(brush);
     }
 
 private:

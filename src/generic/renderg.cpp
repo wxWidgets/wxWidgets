@@ -232,12 +232,8 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow * WXUNUSED(win),
                                       int flags)
 {
     // store settings
-    wxDCPenChanger penChanger(dc);
-    wxDCBrushChanger brushChanger(dc);
-
-    // white background
-    penChanger.Set(*wxGREY_PEN);
-    brushChanger.Set(*wxWHITE_BRUSH);
+    wxDCPenChanger penChanger(dc, *wxGREY_PEN);
+    wxDCBrushChanger brushChanger(dc, *wxWHITE_BRUSH);
 
     dc.DrawRectangle(rect);
 
