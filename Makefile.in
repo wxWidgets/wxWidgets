@@ -3283,6 +3283,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_stattext.o \
 	monodll_statusbr.o \
 	monodll_textctrl.o \
+	monodll_tglbtn.o \
 	monodll_theme.o \
 	monodll_toolbar.o \
 	monodll_topluniv.o \
@@ -4918,6 +4919,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_stattext.o \
 	monolib_statusbr.o \
 	monolib_textctrl.o \
+	monolib_tglbtn.o \
 	monolib_theme.o \
 	monolib_toolbar.o \
 	monolib_topluniv.o \
@@ -6787,6 +6789,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_stattext.o \
 	coredll_statusbr.o \
 	coredll_textctrl.o \
+	coredll_tglbtn.o \
 	coredll_theme.o \
 	coredll_toolbar.o \
 	coredll_topluniv.o \
@@ -8128,6 +8131,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_stattext.o \
 	corelib_statusbr.o \
 	corelib_textctrl.o \
+	corelib_tglbtn.o \
 	corelib_theme.o \
 	corelib_toolbar.o \
 	corelib_topluniv.o \
@@ -14326,6 +14330,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_tglbtn.o: $(srcdir)/src/os2/tglbtn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/tglbtn.cpp
 
+@COND_USE_GUI_1_WXUNIV_1@monodll_tglbtn.o: $(srcdir)/src/univ/tglbtn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/tglbtn.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_utilsres.o: $(srcdir)/src/gtk/utilsres.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/utilsres.cpp
 
@@ -18135,6 +18142,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_tglbtn.o: $(srcdir)/src/os2/tglbtn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/tglbtn.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@monolib_tglbtn.o: $(srcdir)/src/univ/tglbtn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/tglbtn.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_utilsres.o: $(srcdir)/src/gtk/utilsres.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/utilsres.cpp
@@ -22366,6 +22376,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_tglbtn.o: $(srcdir)/src/os2/tglbtn.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/tglbtn.cpp
 
+@COND_USE_GUI_1_WXUNIV_1@coredll_tglbtn.o: $(srcdir)/src/univ/tglbtn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/tglbtn.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_utilsres.o: $(srcdir)/src/gtk/utilsres.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/utilsres.cpp
 
@@ -25155,6 +25168,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_tglbtn.o: $(srcdir)/src/os2/tglbtn.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/tglbtn.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@corelib_tglbtn.o: $(srcdir)/src/univ/tglbtn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/tglbtn.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_utilsres.o: $(srcdir)/src/gtk/utilsres.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/utilsres.cpp
