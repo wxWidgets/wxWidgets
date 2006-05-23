@@ -2281,6 +2281,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/stattext.cpp
     src/univ/statusbr.cpp
     src/univ/textctrl.cpp
+    src/univ/tglbtn.cpp
     src/univ/theme.cpp
     src/univ/toolbar.cpp
     src/univ/topluniv.cpp
