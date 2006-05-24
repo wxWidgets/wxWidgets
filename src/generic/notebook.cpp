@@ -72,6 +72,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 // Private class
 // ============================================================================
 
+WX_DECLARE_HASH_MAP(int, wxNotebookPage*, wxIntegerHash, wxIntegerEqual,
+                    wxIntToNotebookPageHashMap);
+
+WX_DECLARE_HASH_MAP(wxNotebookPage*, int, wxPointerHash, wxPointerEqual,
+                    wxNotebookPageToIntHashMap);
+
 // This reuses wxTabView to draw the tabs.
 class WXDLLEXPORT wxNotebookTabView: public wxTabView
 {
@@ -85,9 +91,23 @@ public:
     // Allows vetoing
     virtual bool OnTabPreActivate(int activateId, int deactivateId);
 
+    // map integer ids used by wxTabView to wxNotebookPage pointers
+    int GetId(wxNotebookPage *page);
+    wxNotebookPage *GetPage(int id) { return m_idToPage[id]; }
+
 protected:
-    wxNotebook*      m_notebook;
+    wxNotebook* m_notebook;
+
+private:
+    wxIntToNotebookPageHashMap m_idToPage;
+    wxNotebookPageToIntHashMap m_pageToId;
+    int m_nextid;
 };
+
+static int GetPageId(wxTabView *tabview, wxNotebookPage *page)
+{
+    return static_cast<wxNotebookTabView*>(tabview)->GetId(page);
+}
 
 // ----------------------------------------------------------------------------
 // wxNotebook construction
@@ -163,7 +183,7 @@ int wxNotebook::SetSelection(size_t nPage)
 
     wxNotebookPage* pPage = GetPage(nPage);
 
-    m_tabView->SetTabSelection((int) (long) pPage);
+    m_tabView->SetTabSelection(GetPageId(m_tabView, pPage));
 
     // TODO
     return 0;
@@ -188,7 +208,7 @@ bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
     wxNotebookPage* page = GetPage(nPage);
     if (page)
     {
-        m_tabView->SetTabText((int) (long) page, strText);
+        m_tabView->SetTabText(GetPageId(m_tabView, page), strText);
         Refresh();
         return true;
     }
@@ -202,7 +222,7 @@ wxString wxNotebook::GetPageText(size_t nPage) const
 
     wxNotebookPage* page = ((wxNotebook*)this)->GetPage(nPage);
     if (page)
-        return m_tabView->GetTabText((int) (long) page);
+        return m_tabView->GetTabText(GetPageId(m_tabView, page));
     else
         return wxEmptyString;
 }
@@ -259,7 +279,7 @@ bool wxNotebook::DeletePage(size_t nPage)
 
     wxNotebookPage* pPage = GetPage(nPage);
 
-    m_tabView->RemoveTab((int) (long) pPage);
+    m_tabView->RemoveTab(GetPageId(m_tabView, pPage));
 
     m_pages.Remove(pPage);
     delete pPage;
@@ -273,7 +293,7 @@ bool wxNotebook::DeletePage(size_t nPage)
     {
         m_nSelection = -1;
 
-        m_tabView->SetTabSelection((int) (long) GetPage(0), false);
+        m_tabView->SetTabSelection(GetPageId(m_tabView, GetPage(0)), false);
 
         if (m_nSelection != 0)
             ChangePage(-1, 0);
@@ -308,7 +328,7 @@ wxWindow* wxNotebook::DoRemovePage(size_t nPage)
 
     wxNotebookPage* pPage = GetPage(nPage);
 
-    m_tabView->RemoveTab((int) (long) pPage);
+    m_tabView->RemoveTab(GetPageId(m_tabView, pPage));
 
     m_pages.Remove(pPage);
 
@@ -387,7 +407,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     wxASSERT( pPage != NULL );
     wxCHECK( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), false );
 
-    m_tabView->AddTab((int) (long) pPage, strText);
+    m_tabView->AddTab(GetPageId(m_tabView, pPage), strText);
 
     if (!bSelect)
       pPage->Show(false);
@@ -399,7 +419,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     {
         // This will cause ChangePage to be called, via OnSelPage
 
-        m_tabView->SetTabSelection((int) (long) pPage, true);
+        m_tabView->SetTabSelection(GetPageId(m_tabView, pPage), true);
     }
 
     // some page must be selected: either this one or the first one if there is
@@ -653,7 +673,8 @@ wxRect wxNotebook::GetAvailableClientSize()
 
 IMPLEMENT_CLASS(wxNotebookTabView, wxTabView)
 
-wxNotebookTabView::wxNotebookTabView(wxNotebook *notebook, long style): wxTabView(style)
+wxNotebookTabView::wxNotebookTabView(wxNotebook *notebook, long style)
+    : wxTabView(style), m_nextid(1)
 {
   m_notebook = notebook;
 
@@ -666,6 +687,19 @@ wxNotebookTabView::~wxNotebookTabView(void)
 {
 }
 
+int wxNotebookTabView::GetId(wxNotebookPage *page)
+{
+    int& id = m_pageToId[page];
+
+    if (!id)
+    {
+        id = m_nextid++;
+        m_idToPage[id] = page;
+    }
+
+    return id;
+}
+
 // Called when a tab is activated
 void wxNotebookTabView::OnTabActivate(int activateId, int deactivateId)
 {
@@ -676,8 +710,8 @@ void wxNotebookTabView::OnTabActivate(int activateId, int deactivateId)
 
   // Translate from wxTabView's ids (which aren't position-dependent)
   // to wxNotebook's (which are).
-  wxNotebookPage* pActive = (wxNotebookPage*) activateId;
-  wxNotebookPage* pDeactive = (wxNotebookPage*) deactivateId;
+  wxNotebookPage* pActive = GetPage(activateId);
+  wxNotebookPage* pDeactive = GetPage(deactivateId);
 
   int activatePos = m_notebook->FindPagePosition(pActive);
   int deactivatePos = m_notebook->FindPagePosition(pDeactive);
@@ -699,8 +733,8 @@ bool wxNotebookTabView::OnTabPreActivate(int activateId, int deactivateId)
 
     // Translate from wxTabView's ids (which aren't position-dependent)
     // to wxNotebook's (which are).
-    wxNotebookPage* pActive = (wxNotebookPage*) activateId;
-    wxNotebookPage* pDeactive = (wxNotebookPage*) deactivateId;
+    wxNotebookPage* pActive = GetPage(activateId);
+    wxNotebookPage* pDeactive = GetPage(deactivateId);
 
     int activatePos = m_notebook->FindPagePosition(pActive);
     int deactivatePos = m_notebook->FindPagePosition(pDeactive);
