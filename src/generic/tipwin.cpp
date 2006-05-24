@@ -31,13 +31,12 @@
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
     #include "wx/timer.h"
+    #include "wx/settings.h"
 #endif // WX_PRECOMP
 
 #ifdef __WXGTK__
     #include <gtk/gtk.h>
 #endif
-
-#include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
 // constants

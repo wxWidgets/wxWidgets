@@ -49,11 +49,11 @@
         #include "wx/msw/private.h"
     #endif
     #include "wx/menu.h"
+    #include "wx/settings.h"
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
-#include "wx/settings.h"
 #include "wx/artprov.h"
 #include "wx/toplevel.h"
 #include "wx/image.h"
@@ -4345,12 +4345,12 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
     } else
 #endif // wxUSE_BMPBUTTON
 #if wxUSE_BUTTON || wxUSE_TOGGLEBTN
-    if ( 0 
+    if ( 0
 #  if wxUSE_BUTTON
-         || wxDynamicCast(window, wxButton) 
+         || wxDynamicCast(window, wxButton)
 #  endif // wxUSE_BUTTON
 #  if wxUSE_TOGGLEBTN
-         || wxDynamicCast(window, wxToggleButton) 
+         || wxDynamicCast(window, wxToggleButton)
 #  endif // wxUSE_TOGGLEBTN
         )
     {

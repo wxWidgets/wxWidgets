@@ -1,19 +1,23 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        settings.cpp
+// Name:        src/x11/settings.cpp
 // Purpose:     wxSettings
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
 // TODO: these settings should probably be configurable from some central or
 // per-user file, which can be edited using a Windows-control-panel clone.
 // Also they should be documented better. Some are very MS Windows-ish.
 
 #include "wx/settings.h"
+
 #include "wx/gdicmn.h"
 #include "wx/x11/private.h"
 
@@ -23,11 +27,11 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     {
         case wxSYS_COLOUR_APPWORKSPACE:
             return wxColour( 0xc0c0c0 );
-            
+
         default:
             break;
     }
-    
+
     // Overridden mostly by wxSystemSettings::GetColour in wxUniversal
     return *wxWHITE;
 }
@@ -57,8 +61,8 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 // Get a system metric, e.g. scrollbar size
 int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(win))
 {
-	switch ( index)
-	{
+    switch ( index)
+    {
         // TODO case wxSYS_MOUSE_BUTTONS:
         // TODO case wxSYS_BORDER_X:
         // TODO case wxSYS_BORDER_Y:
@@ -79,13 +83,13 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         // TODO case wxSYS_ICONSPACING_Y:
         // TODO case wxSYS_WINDOWMIN_X:
         // TODO case wxSYS_WINDOWMIN_Y:
-            
+
         case wxSYS_SCREEN_X:
             return DisplayWidth( wxGlobalDisplay(), 0 );
-            
+
         case wxSYS_SCREEN_Y:
             return DisplayHeight( wxGlobalDisplay(), 0 );
-            
+
         // TODO case wxSYS_FRAMESIZE_X:
         // TODO case wxSYS_FRAMESIZE_Y:
         // TODO case wxSYS_SMALLICON_X:
@@ -101,7 +105,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         // TODO case wxSYS_PENWINDOWS_PRESENT:
         // TODO case wxSYS_SHOW_SOUNDS:
         // TODO case wxSYS_SWAP_BUTTONS:
-            
+
         default:
             return -1;  // unsupported metric
     }
@@ -111,11 +115,11 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
 {
     switch (index)
     {
-        case wxSYS_CAN_ICONIZE_FRAME: 
+        case wxSYS_CAN_ICONIZE_FRAME:
         case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
-            return TRUE;
-            
+            return true;
+
         default:
-            return FALSE;
+            return false;
     }
 }

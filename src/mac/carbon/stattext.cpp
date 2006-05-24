@@ -20,11 +20,11 @@
     #include "wx/utils.h"
     #include "wx/dc.h"
     #include "wx/dcclient.h"
+    #include "wx/settings.h"
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
-#include "wx/settings.h"
 
 #include "wx/mac/uma.h"
 

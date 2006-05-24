@@ -20,11 +20,11 @@
     #include "wx/brush.h"
     #include "wx/colour.h"
     #include "wx/dc.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/html/htmlcell.h"
 #include "wx/html/htmlwin.h"
-#include "wx/settings.h"
 #include "wx/module.h"
 
 #include <stdlib.h>

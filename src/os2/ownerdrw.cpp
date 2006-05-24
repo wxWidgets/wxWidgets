@@ -22,9 +22,9 @@
     #include "wx/dcmemory.h"
     #include "wx/menu.h"
     #include "wx/utils.h"
+    #include "wx/settings.h"
 #endif
 
-#include "wx/settings.h"
 #include "wx/ownerdrw.h"
 #include "wx/menuitem.h"
 
@@ -43,7 +43,7 @@ wxOwnerDrawn::wxOwnerDrawn( const wxString& rsStr,
 : m_strName(rsStr)
 {
     m_bCheckable   = bCheckable;
-    m_bOwnerDrawn  = FALSE;
+    m_bOwnerDrawn  = false;
     m_nHeight      = 0;
     m_nMarginWidth = ms_nLastMarginWidth;
     if (wxNORMAL_FONT)

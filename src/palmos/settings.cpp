@@ -24,12 +24,13 @@
     #pragma hdrstop
 #endif
 
+#include "wx/settings.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/gdicmn.h"
 #endif
 
-#include "wx/settings.h"
 #include "wx/module.h"
 #include "wx/fontutil.h"
 

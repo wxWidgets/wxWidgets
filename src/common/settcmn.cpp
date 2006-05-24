@@ -22,9 +22,10 @@
     #pragma hdrstop
 #endif
 
+#include "wx/settings.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
-    #include "wx/settings.h"
 #endif //WX_PRECOMP
 
 // ----------------------------------------------------------------------------

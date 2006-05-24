@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        univ/colschem.cpp
+// Name:        src/univ/colschem.cpp
 // Purpose:     (trivial) wxColourScheme implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -25,9 +25,8 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/settings.h"
 #endif // WX_PRECOMP
-
-#include "wx/settings.h"
 
 #include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
@@ -93,4 +92,3 @@ wxColour wxSystemSettings::GetColour(wxSystemColour index)
 
     return wxTheme::Get()->GetColourScheme()->Get(col);
 }
-

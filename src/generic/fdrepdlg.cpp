@@ -37,10 +37,10 @@
     #include "wx/radiobox.h"
     #include "wx/stattext.h"
     #include "wx/textctrl.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/fdrepdlg.h"
-#include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
 // constants

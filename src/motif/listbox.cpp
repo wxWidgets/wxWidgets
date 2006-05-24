@@ -20,6 +20,7 @@
     #include "wx/dynarray.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/settings.h"
 #endif
 
 #ifdef __VMS
@@ -27,7 +28,6 @@
 #define XtDisplay XTDISPLAY
 #endif
 
-#include "wx/settings.h"
 #include "wx/arrstr.h"
 
 #ifdef __VMS__

@@ -25,13 +25,13 @@
     #include "wx/log.h"
     #include "wx/dcclient.h"
     #include "wx/timer.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/stockitem.h"
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
 #include "wx/renderer.h"
-#include "wx/settings.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/wrapwin.h"

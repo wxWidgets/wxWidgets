@@ -11,11 +11,12 @@
 
 #include "wx/wxprec.h"
 
+#include "wx/settings.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
 #endif
 
-#include "wx/settings.h"
 #include "wx/gdicmn.h"
 
 #include "wx/cocoa/autorelease.h"

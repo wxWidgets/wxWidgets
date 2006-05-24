@@ -21,6 +21,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/dc.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/print.h"
@@ -29,7 +30,6 @@
 #include "wx/wxhtml.h"
 #include "wx/wfstream.h"
 #include "wx/module.h"
-#include "wx/settings.h"
 
 
 //--------------------------------------------------------------------------------

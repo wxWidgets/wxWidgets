@@ -28,11 +28,11 @@
     #include "wx/string.h"
     #include "wx/window.h"
     #include "wx/dc.h"
+    #include "wx/settings.h"
 #endif //WX_PRECOMP
 
 #include "wx/splitter.h"
 #include "wx/renderer.h"
-#include "wx/settings.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
 

@@ -24,12 +24,12 @@
     #pragma hdrstop
 #endif
 
+#include "wx/settings.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/gdicmn.h"
 #endif
-
-#include "wx/settings.h"
 
 #include "wx/msw/private.h"
 
@@ -310,10 +310,10 @@ static const int gs_metricsMap[] =
     SM_CXBORDER,
     SM_CYBORDER,
 #ifdef SM_CXCURSOR
-	SM_CXCURSOR,
+    SM_CXCURSOR,
     SM_CYCURSOR,
 #else
-	-1, -1,
+    -1, -1,
 #endif
     SM_CXDOUBLECLK,
     SM_CYDOUBLECLK,

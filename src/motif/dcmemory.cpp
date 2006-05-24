@@ -16,9 +16,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
+    #include "wx/settings.h"
 #endif
-
-#include "wx/settings.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -139,5 +138,3 @@ void wxMemoryDC::DoGetSize( int *width, int *height ) const
         if (height) (*height) = 0;
     };
 }
-
-

@@ -25,6 +25,7 @@
     #include "wx/dcclient.h"
     #include "wx/menu.h"
     #include "wx/dialog.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/layout.h"
@@ -49,7 +50,6 @@
 #endif
 
 #include "wx/statusbr.h"
-#include "wx/settings.h"
 #include "wx/fontutil.h"
 
 #ifdef __WXDEBUG__

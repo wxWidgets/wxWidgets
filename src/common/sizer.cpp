@@ -22,11 +22,11 @@
     #include "wx/intl.h"
     #include "wx/math.h"
     #include "wx/utils.h"
+    #include "wx/settings.h"
 #endif // WX_PRECOMP
 
 #include "wx/sizer.h"
 #include "wx/statbox.h"
-#include "wx/settings.h"
 #include "wx/listimpl.cpp"
 
 #if WXWIN_COMPATIBILITY_2_4

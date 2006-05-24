@@ -30,11 +30,11 @@
     #include "wx/dcclient.h"
     #include "wx/dialog.h"
     #include "wx/timer.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/control.h"
 #include "wx/gtk/private.h"
-#include "wx/settings.h"
 #include "wx/evtloop.h"
 
 #include <glib.h>

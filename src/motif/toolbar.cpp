@@ -30,9 +30,8 @@
     #include "wx/app.h"
     #include "wx/frame.h"
     #include "wx/timer.h"
+    #include "wx/settings.h"
 #endif
-
-#include "wx/settings.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

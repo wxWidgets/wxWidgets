@@ -18,12 +18,12 @@
     #include "wx/dcclient.h"
     #include "wx/menu.h"
     #include "wx/dialog.h"
+    #include "wx/settings.h"
 #endif // WX_PRECOMP
 
 #include "wx/statusbr.h"
 #include "wx/toolbar.h"
 #include "wx/menuitem.h"
-#include "wx/settings.h"
 
 #include "wx/mac/uma.h"
 

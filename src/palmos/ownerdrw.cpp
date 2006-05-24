@@ -23,9 +23,9 @@
     #include "wx/dcmemory.h"
     #include "wx/menu.h"
     #include "wx/utils.h"
+    #include "wx/settings.h"
 #endif
 
-#include "wx/settings.h"
 #include "wx/ownerdrw.h"
 #include "wx/menuitem.h"
 #include "wx/fontutil.h"

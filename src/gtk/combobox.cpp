@@ -16,9 +16,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/settings.h"
 #endif
 
-#include "wx/settings.h"
 #include "wx/arrstr.h"
 
 #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED

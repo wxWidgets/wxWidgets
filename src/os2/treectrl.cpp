@@ -32,12 +32,12 @@
     #include "wx/dynarray.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/os2/private.h"
 
 #include "wx/imaglist.h"
-#include "wx/settings.h"
 
 // a macro to hide the ugliness of nested casts
 #define HITEM(item)     (HTREEITEM)(WXHTREEITEM)(item)

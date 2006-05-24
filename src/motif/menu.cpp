@@ -27,10 +27,10 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/frame.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/menuitem.h"
-#include "wx/settings.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

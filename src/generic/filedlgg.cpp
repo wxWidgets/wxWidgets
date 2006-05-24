@@ -26,6 +26,7 @@
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
     #include "wx/intl.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/checkbox.h"
@@ -44,7 +45,6 @@
 #include "wx/imaglist.h"
 #include "wx/dir.h"
 #include "wx/artprov.h"
-#include "wx/settings.h"
 #include "wx/filefn.h"
 #include "wx/file.h"        // for wxS_IXXX constants only
 #include "wx/filedlg.h"     // wxOPEN, wxSAVE...

@@ -32,6 +32,7 @@
     #include "wx/dynarray.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -46,7 +47,6 @@
 #define wxUSE_COMCTL32_SAFELY 0
 
 #include "wx/imaglist.h"
-#include "wx/settings.h"
 #include "wx/msw/dragimag.h"
 
 // macros to hide the cast ugliness

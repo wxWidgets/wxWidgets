@@ -26,10 +26,14 @@
 
 #if wxUSE_CHOICEBOOK
 
-#include "wx/choice.h"
 #include "wx/choicebk.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/settings.h"
+#endif
+
+#include "wx/choice.h"
 #include "wx/imaglist.h"
-#include "wx/settings.h"
 #include "wx/sizer.h"
 
 // ----------------------------------------------------------------------------

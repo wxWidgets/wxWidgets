@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/fontutil.h"
@@ -29,7 +30,6 @@
 #include "wx/utils.h"
 #include "wx/gdicmn.h"
 #include "wx/tokenzr.h"
-#include "wx/settings.h"
 
 #include <strings.h>
 
@@ -62,7 +62,7 @@ public:
                   int family = wxFONTFAMILY_DEFAULT,
                   int style = wxFONTSTYLE_NORMAL,
                   int weight = wxFONTWEIGHT_NORMAL,
-                  bool underlined = FALSE,
+                  bool underlined = false,
                   const wxString& faceName = wxEmptyString,
                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
@@ -91,7 +91,7 @@ public:
     void SetFaceName(const wxString& facename);
     void SetEncoding(wxFontEncoding encoding);
 
-    void SetNoAntiAliasing( bool no = TRUE ) { m_noAA = no; }
+    void SetNoAntiAliasing( bool no = true ) { m_noAA = no; }
     bool GetNoAntiAliasing() const { return m_noAA; }
 
     // and this one also modifies all the other font data fields
@@ -182,12 +182,12 @@ void wxFontRefData::Init(int pointSize,
     m_underlined = underlined;
     m_encoding = encoding;
 
-    m_noAA = FALSE;
+    m_noAA = false;
 }
 
 void wxFontRefData::InitFromNative()
 {
-    m_noAA = FALSE;
+    m_noAA = false;
 
     // get the font parameters from the XLFD
     // -------------------------------------
@@ -254,7 +254,7 @@ void wxFontRefData::InitFromNative()
     }
 
     // X fonts are never underlined...
-    m_underlined = FALSE;
+    m_underlined = false;
 
     // deal with font encoding
     wxString
@@ -496,7 +496,7 @@ bool wxFont::Create( int pointSize,
     m_refData = new wxFontRefData(pointSize, family, style, weight,
                                   underlined, face, encoding);
 
-    return TRUE;
+    return true;
 }
 
 bool wxFont::Create(const wxString& fontname)
@@ -506,12 +506,12 @@ bool wxFont::Create(const wxString& fontname)
     {
         *this = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 
-        return TRUE;
+        return true;
     }
 
     m_refData = new wxFontRefData(fontname);
 
-    return TRUE;
+    return true;
 }
 
 void wxFont::Unshare()
@@ -605,7 +605,7 @@ int wxFont::GetWeight() const
 
 bool wxFont::GetUnderlined() const
 {
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
 
     return M_FONTDATA->m_underlined;
 }
@@ -642,7 +642,7 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 
 bool wxFont::IsFixedWidth() const
 {
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
 
     if ( M_FONTDATA->HasNativeFont() )
     {

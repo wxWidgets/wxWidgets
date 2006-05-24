@@ -17,10 +17,10 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/panel.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/math.h"
-#include "wx/settings.h"
 #include "wx/strconv.h"
 #include "wx/fontutil.h"        // for wxNativeFontInfo (GetNativeFontInfo())
 
@@ -470,7 +470,7 @@ gtk_text_changed_callback( GtkWidget *widget, wxTextCtrl *win )
 // common part of the event handlers below
 static void
 handle_text_clipboard_callback( GtkWidget *widget, wxTextCtrl *win,
-								wxEventType eventType, const gchar * signal_name)
+                                wxEventType eventType, const gchar * signal_name)
 {
     wxClipboardTextEvent event( eventType, win->GetId() );
     event.SetEventObject( win );
@@ -478,7 +478,7 @@ handle_text_clipboard_callback( GtkWidget *widget, wxTextCtrl *win,
     {
         // don't let the default processing to take place if we did something
         // ourselves in the event handler
-    	g_signal_stop_emission_by_name (widget, signal_name);
+        g_signal_stop_emission_by_name (widget, signal_name);
     }
 }
 
@@ -486,22 +486,22 @@ extern "C" {
 static void
 gtk_copy_clipboard_callback( GtkWidget *widget, wxTextCtrl *win )
 {
-	handle_text_clipboard_callback(
-		widget, win, wxEVT_COMMAND_TEXT_COPY, "copy-clipboard" );
+    handle_text_clipboard_callback(
+        widget, win, wxEVT_COMMAND_TEXT_COPY, "copy-clipboard" );
 }
 
 static void
 gtk_cut_clipboard_callback( GtkWidget *widget, wxTextCtrl *win )
 {
-	handle_text_clipboard_callback(
-		widget, win, wxEVT_COMMAND_TEXT_CUT, "cut-clipboard" );
+    handle_text_clipboard_callback(
+        widget, win, wxEVT_COMMAND_TEXT_CUT, "cut-clipboard" );
 }
 
 static void
 gtk_paste_clipboard_callback( GtkWidget *widget, wxTextCtrl *win )
 {
-	handle_text_clipboard_callback(
-		widget, win, wxEVT_COMMAND_TEXT_PASTE, "paste-clipboard" );
+    handle_text_clipboard_callback(
+        widget, win, wxEVT_COMMAND_TEXT_PASTE, "paste-clipboard" );
 }
 }
 

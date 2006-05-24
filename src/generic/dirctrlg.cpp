@@ -27,6 +27,7 @@
     #include "wx/utils.h"
     #include "wx/button.h"
     #include "wx/icon.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/module.h"
@@ -41,7 +42,6 @@
 #include "wx/sizer.h"
 #include "wx/tokenzr.h"
 #include "wx/dir.h"
-#include "wx/settings.h"
 #include "wx/artprov.h"
 #include "wx/mimetype.h"
 #include "wx/image.h"

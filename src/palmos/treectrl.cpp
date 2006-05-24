@@ -32,12 +32,12 @@
     #include "wx/dynarray.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/palmos/private.h"
 
 #include "wx/imaglist.h"
-#include "wx/settings.h"
 
 // macros to hide the cast ugliness
 // --------------------------------

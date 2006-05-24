@@ -27,8 +27,12 @@
 #if wxUSE_TREEBOOK
 
 #include "wx/treebook.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/settings.h"
+#endif
+
 #include "wx/imaglist.h"
-#include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
 // various wxWidgets macros

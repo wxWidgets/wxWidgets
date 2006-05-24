@@ -29,6 +29,7 @@
     #include "wx/icon.h"
     #include "wx/sizer.h"
     #include "wx/app.h"
+    #include "wx/settings.h"
 #endif
 
 #include <stdio.h>
@@ -37,10 +38,9 @@
 #define __WX_COMPILING_MSGDLGG_CPP__ 1
 #include "wx/msgdlg.h"
 #include "wx/artprov.h"
-#include "wx/settings.h"
 
 #if wxUSE_STATLINE
-  #include "wx/statline.h"
+    #include "wx/statline.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -156,4 +156,3 @@ void wxGenericMessageDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 }
 
 #endif // wxUSE_MSGDLG && !defined(__WXGTK20__)
-

@@ -46,11 +46,11 @@
         #include "wx/msw/private.h"
     #endif
     #include "wx/menu.h"
+    #include "wx/settings.h"
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
-#include "wx/settings.h"
 #include "wx/artprov.h"
 #include "wx/toplevel.h"
 

@@ -32,9 +32,9 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include  "wx/dcclient.h"
+    #include  "wx/settings.h"
 #endif
 
-#include  "wx/settings.h"
 #include  "wx/generic/imaglist.h"
 #include  "wx/generic/tabg.h"
 

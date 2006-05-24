@@ -37,11 +37,11 @@
     #include "wx/statbmp.h"
     #include "wx/stattext.h"
     #include "wx/sizer.h"
+    #include "wx/settings.h"
 #endif // WX_PRECOMP
 
 #include "wx/statline.h"
 #include "wx/artprov.h"
-#include "wx/settings.h"
 
 #include "wx/tipdlg.h"
 

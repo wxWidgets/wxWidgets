@@ -14,9 +14,9 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/settings.h"
 #endif
 
-#include "wx/settings.h"
 #include "wx/scrolbar.h"
 #include "wx/mac/uma.h"
 
@@ -238,5 +238,5 @@ wxSize wxScrollBar::DoGetBestSize() const
 
     wxSize best(w, h);
     CacheBestSize(best);
-    return best;  
+    return best;
 }

@@ -33,11 +33,11 @@
     #include "wx/palette.h"
     #include "wx/icon.h"
     #include "wx/cursor.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/bitmap.h"
 #include "wx/font.h"
-#include "wx/settings.h"
 #include "wx/hashmap.h"
 
 #include <string.h>

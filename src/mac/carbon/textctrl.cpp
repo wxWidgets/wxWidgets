@@ -22,6 +22,7 @@
     #include "wx/dc.h"
     #include "wx/button.h"
     #include "wx/menu.h"
+    #include "wx/settings.h"
 #endif
 
 #ifdef __DARWIN__
@@ -42,7 +43,6 @@
 #endif
 
 #include "wx/toplevel.h"
-#include "wx/settings.h"
 #include "wx/filefn.h"
 #include "wx/sysopt.h"
 
@@ -202,7 +202,7 @@ public :
 
     virtual bool SetupCursor( const wxPoint& pt )
     { return false ; }
-    
+
     virtual void Clear() ;
     virtual bool CanUndo() const;
     virtual void Undo() ;
@@ -307,7 +307,7 @@ public :
                              const wxPoint& pos,
                              const wxSize& size, long style ) ;
     ~wxMacMLTEHIViewControl() ;
-    
+
     virtual OSStatus SetFocus( ControlFocusPart focusPart ) ;
     virtual bool HasFocus() const ;
     virtual void SetBackground( const wxBrush &brush) ;
@@ -1382,7 +1382,7 @@ static pascal OSStatus wxMacUnicodeTextControlControlEventHandler( EventHandlerC
     OSStatus result = eventNotHandledErr ;
     wxMacUnicodeTextControl* focus = (wxMacUnicodeTextControl*) data ;
     wxMacCarbonEvent cEvent( event ) ;
-    
+
     switch ( GetEventKind( event ) )
     {
         case kEventControlSetFocusPart :
@@ -1404,20 +1404,20 @@ static pascal OSStatus wxMacUnicodeTextControlControlEventHandler( EventHandlerC
         default:
             break ;
     }
-    
+
     return result ;
 }
 
 static pascal OSStatus wxMacUnicodeTextControlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
-    
+
     switch ( GetEventClass( event ) )
     {
         case kEventClassControl :
             result = wxMacUnicodeTextControlControlEventHandler( handler , event , data ) ;
             break ;
-            
+
         default :
             break ;
     }
@@ -1539,7 +1539,7 @@ void wxMacUnicodeTextControl::GetSelection( long* from, long* to ) const
         verify_noerr( GetData<ControlEditTextSelectionRec>( 0, kControlEditTextSelectionTag, &sel ) ) ;
     else
         sel = m_selection ;
-    
+
     if ( from )
         *from = sel.selStart ;
     if ( to )
@@ -1561,7 +1561,7 @@ void wxMacUnicodeTextControl::SetSelection( long from , long to )
     if ((from == -1) && (to == -1))
     {
         from = 0 ;
-        to = textLength ; 
+        to = textLength ;
     }
     else
     {
@@ -1855,7 +1855,7 @@ void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, boo
                 | kTXNSupportSpellCheckCommandUpdating
                 | kTXNSupportFontCommandProcessing
                 | kTXNSupportFontCommandUpdating;
-            
+
             TXNSetCommandEventSupport( m_txn , options ) ;
         }
     }
@@ -1881,7 +1881,7 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
     if ( style.HasFont() )
     {
         const wxFont &font = style.GetFont() ;
-                
+
 #if 0 // old version
         Str255 fontName = "\pMonaco" ;
         SInt16 fontSize = 12 ;
@@ -3012,7 +3012,7 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
 
 // tiger multi-line textcontrols with no CR in the entire content
-// don't scroll automatically, so we need a hack. 
+// don't scroll automatically, so we need a hack.
 // This attempt only works 'before' the key (ie before CallNextEventHandler)
 // is processed, thus the scrolling always occurs one character too late, but
 // better than nothing ...
@@ -3021,12 +3021,12 @@ static const EventTypeSpec eventList[] =
 {
     { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
 } ;
-    
+
 static pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
     wxMacMLTEHIViewControl* focus = (wxMacMLTEHIViewControl*) data ;
-    
+
     switch ( GetEventKind( event ) )
     {
         case kEventTextInputUnicodeForKeyEvent :
@@ -3044,20 +3044,20 @@ static pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler
         default:
             break ;
     }
-    
+
     return result ;
 }
 
 static pascal OSStatus wxMacTextControlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
-    
+
     switch ( GetEventClass( event ) )
     {
         case kEventClassTextInput :
             result = wxMacUnicodeTextEventHandler( handler , event , data ) ;
             break ;
-            
+
         default :
             break ;
     }

@@ -26,11 +26,15 @@
 
 #if wxUSE_LISTBOOK
 
+#include "wx/listbook.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/settings.h"
+#endif
+
 #include "wx/listctrl.h"
 #include "wx/statline.h"
-#include "wx/listbook.h"
 #include "wx/imaglist.h"
-#include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
 // various wxWidgets macros
@@ -303,7 +307,7 @@ wxListbook::InsertPage(size_t n,
     InvalidateBestSize();
     // GetListView()->InvalidateBestSize();
     GetListView()->Arrange();
-    
+
     if (GetPageCount() == 1)
     {
         wxSizeEvent sz(GetSize(), GetId());
@@ -354,12 +358,12 @@ bool wxListbook::DeleteAllPages()
     GetListView()->DeleteAllItems();
     if (!wxBookCtrlBase::DeleteAllPages())
         return false;
-    
+
     m_selection = -1;
 
     wxSizeEvent sz(GetSize(), GetId());
     ProcessEvent(sz);
-    
+
     return true;
 }
 

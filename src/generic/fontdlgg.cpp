@@ -30,6 +30,7 @@
     #include "wx/choice.h"
     #include "wx/checkbox.h"
     #include "wx/intl.h"
+    #include "wx/settings.h"
 #endif
 
 #include <string.h>
@@ -39,7 +40,6 @@
 #include "wx/sizer.h"
 #include "wx/fontdlg.h"
 #include "wx/generic/fontdlgg.h"
-#include "wx/settings.h"
 
 #if USE_SPINCTRL_FOR_POINT_SIZE
 #include "wx/spinctrl.h"

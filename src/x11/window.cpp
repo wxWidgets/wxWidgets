@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/x11/windows.cpp
+// Name:        src/x11/window.cpp
 // Purpose:     wxWindow
 // Author:      Julian Smart
 // Modified by:
@@ -39,11 +39,11 @@
     #include "wx/menu.h"
     #include "wx/dialog.h"
     #include "wx/timer.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/layout.h"
 #include "wx/listbox.h"
-#include "wx/settings.h"
 #include "wx/msgdlg.h"
 #include "wx/scrolwin.h"
 #include "wx/scrolbar.h"

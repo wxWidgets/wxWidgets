@@ -33,9 +33,9 @@
     #include "wx/frame.h"
     #include "wx/menu.h"
     #include "wx/statusbr.h"
+    #include "wx/settings.h"
 #endif //WX_PRECOMP
 
-#include "wx/settings.h"
 #include "wx/x11/private.h"
 #include "X11/Xutil.h"
 

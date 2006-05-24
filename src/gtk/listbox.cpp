@@ -20,11 +20,11 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/arrstr.h"
 #include "wx/checklst.h"
-#include "wx/settings.h"
 #include "wx/gtk/private.h"
 #include "wx/gtk/treeentry_gtk.h"
 

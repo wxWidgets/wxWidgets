@@ -17,10 +17,10 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/panel.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/math.h"
-#include "wx/settings.h"
 #include "wx/strconv.h"
 #include "wx/fontutil.h"        // for wxNativeFontInfo (GetNativeFontInfo())
 

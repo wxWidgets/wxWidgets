@@ -35,11 +35,11 @@
     #include "wx/intl.h"
     #include "wx/statbmp.h"
     #include "wx/button.h"
+    #include "wx/settings.h"
 #endif //WX_PRECOMP
 
 #include "wx/statline.h"
 #include "wx/sizer.h"
-#include "wx/settings.h"
 
 #include "wx/wizard.h"
 

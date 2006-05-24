@@ -21,10 +21,10 @@
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
     #include "wx/pen.h"
+    #include "wx/settings.h"
 #endif //WX_PRECOMP
 
 #include "wx/gdicmn.h"
-#include "wx/settings.h"
 
 /*
  * wxEffects: various 3D effects

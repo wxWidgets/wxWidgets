@@ -22,9 +22,8 @@
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
     #include "wx/log.h"
+    #include "wx/settings.h"
 #endif
-
-#include "wx/settings.h"
 
 #include "wx/mac/uma.h"
 
@@ -316,7 +315,7 @@ void wxGLCanvas::SetColour(const wxChar *colour)
 bool wxGLCanvas::Show(bool show)
 {
     if ( !wxWindow::Show( show ) )
-        return FALSE ;
+        return false ;
 /*
     if ( !show )
     {
@@ -335,7 +334,7 @@ bool wxGLCanvas::Show(bool show)
         }
     }
 */
-    return TRUE ;
+    return true ;
 }
 
 void wxGLCanvas::MacVisibilityChanged()

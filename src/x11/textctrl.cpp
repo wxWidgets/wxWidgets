@@ -18,9 +18,9 @@
     #include "wx/utils.h"
     #include "wx/panel.h"
     #include "wx/dcclient.h"
+    #include "wx/settings.h"
 #endif
 
-#include "wx/settings.h"
 #include "wx/clipbrd.h"
 #include "wx/tokenzr.h"
 

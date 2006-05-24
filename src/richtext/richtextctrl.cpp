@@ -13,7 +13,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_RICHTEXT
@@ -21,12 +21,12 @@
 #include "wx/richtext/richtextctrl.h"
 
 #ifndef WX_PRECOMP
-  #include "wx/wx.h"
+    #include "wx/wx.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/textfile.h"
 #include "wx/ffile.h"
-#include "wx/settings.h"
 #include "wx/filename.h"
 #include "wx/dcbuffer.h"
 #include "wx/arrimpl.cpp"

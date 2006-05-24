@@ -34,6 +34,7 @@
     #include "wx/statbox.h"
     #include "wx/radiobox.h"
     #include "wx/menu.h"
+    #include "wx/settings.h"
 #endif // WXPRECOMP
 
 #ifdef __WXMAC__
@@ -58,7 +59,6 @@
 #include "wx/artprov.h"
 #include "wx/spinctrl.h"
 #include "wx/choicdlg.h"
-#include "wx/settings.h"
 
 // what is considered "small index"?
 #define INDEX_IS_SMALL 100

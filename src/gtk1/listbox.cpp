@@ -18,11 +18,11 @@
     #include "wx/dynarray.h"
     #include "wx/intl.h"
     #include "wx/utils.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/arrstr.h"
 #include "wx/checklst.h"
-#include "wx/settings.h"
 #include "wx/gtk1/private.h"
 
 #if wxUSE_TOOLTIPS

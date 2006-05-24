@@ -25,14 +25,16 @@
     #include "wx/dcclient.h"
     #include "wx/menu.h"
     #include "wx/dialog.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/layout.h"
 #include "wx/msgdlg.h"
 #include "wx/module.h"
 #include "wx/combobox.h"
+
 #if wxUSE_TOOLBAR_NATIVE
-#include "wx/toolbar.h"
+    #include "wx/toolbar.h"
 #endif
 
 #if wxUSE_DRAG_AND_DROP
@@ -52,7 +54,6 @@
 #endif
 
 #include "wx/statusbr.h"
-#include "wx/settings.h"
 #include "wx/fontutil.h"
 
 #ifdef __WXDEBUG__

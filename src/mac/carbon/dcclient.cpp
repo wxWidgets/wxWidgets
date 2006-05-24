@@ -17,11 +17,11 @@
     #include "wx/log.h"
     #include "wx/window.h"
     #include "wx/dcmemory.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/region.h"
 #include "wx/toplevel.h"
-#include "wx/settings.h"
 #include "wx/math.h"
 #include "wx/mac/private.h"
 
@@ -78,7 +78,7 @@ static wxBrush MacGetBackgroundBrush( wxWindow* window )
             if ( parent->IsKindOf( CLASSINFO( wxNotebook ) )
 #if wxUSE_TAB_DIALOG
                  || parent->IsKindOf( CLASSINFO( wxTabCtrl ) )
-#endif // wxUSE_TAB_DIALOG 
+#endif // wxUSE_TAB_DIALOG
                 )
             {
                 Rect extent = { 0 , 0 , 0 , 0 } ;

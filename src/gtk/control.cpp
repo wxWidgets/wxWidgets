@@ -16,10 +16,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/settings.h"
 #include "wx/gtk/private.h"
 
 // ============================================================================
@@ -34,7 +34,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxControl, wxWindow)
 
 wxControl::wxControl()
 {
-    m_needParent = TRUE;
+    m_needParent = true;
 }
 
 bool wxControl::Create( wxWindow *parent,

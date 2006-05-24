@@ -16,9 +16,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
+    #include "wx/settings.h"
 #endif
-
-#include "wx/settings.h"
 
 #include "wx/x11/private.h"
 

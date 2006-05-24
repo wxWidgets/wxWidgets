@@ -22,9 +22,8 @@
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
     #include "wx/log.h"
+    #include "wx/settings.h"
 #endif
-
-#include "wx/settings.h"
 
 #include "wx/mac/uma.h"
 

@@ -16,9 +16,8 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/menu.h"
+    #include "wx/settings.h"
 #endif
-
-#include "wx/settings.h"
 
 #include "wx/mac/private.h"
 #include "wx/mac/uma.h"

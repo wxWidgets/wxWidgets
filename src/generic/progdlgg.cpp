@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        progdlgg.h
+// Name:        src/generic/progdlgg.cpp
 // Purpose:     wxProgressDialog class
 // Author:      Karsten Ballüder
 // Modified by:
@@ -37,10 +37,10 @@
     #include "wx/intl.h"
     #include "wx/dcclient.h"
     #include "wx/timer.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/generic/progdlgg.h"
-#include "wx/settings.h"
 
 // ---------------------------------------------------------------------------
 // macros

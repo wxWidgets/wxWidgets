@@ -25,6 +25,7 @@
     #include "wx/panel.h"
     #include "wx/frame.h"
     #include "wx/dialog.h"
+    #include "wx/settings.h"
 #endif
 
 #ifndef __WXWINCE__
@@ -41,7 +42,6 @@
 #include "wx/image.h"
 #include "wx/fontmap.h"
 #include "wx/artprov.h"
-#include "wx/settings.h"
 
 #include "wx/xml/xml.h"
 
