@@ -25,7 +25,6 @@
 #endif
 
 #include "wx/bitmap.h"
-#include "wx/debug.h"
 
 // NB: Some compilers define boolean type in Windows headers
 //     (e.g. Watcom C++, but not Open Watcom).

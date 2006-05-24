@@ -20,7 +20,6 @@
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/debug.h"
 #include "wx/msgdlg.h"
 
 #include "wx/gtk1/private.h"

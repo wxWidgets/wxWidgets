@@ -25,7 +25,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/debug.h"
     #include "wx/filefn.h"
     #include "wx/log.h"
     #include "wx/thread.h"
@@ -481,4 +480,3 @@ void wxUninitialize()
         wxEntryCleanup();
     }
 }
-

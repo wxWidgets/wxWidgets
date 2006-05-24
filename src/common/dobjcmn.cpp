@@ -18,12 +18,11 @@
 
 #if wxUSE_DATAOBJ
 
+#include "wx/dataobj.h"
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/debug.h"
 #endif
-
-#include "wx/dataobj.h"
 
 // ----------------------------------------------------------------------------
 // lists

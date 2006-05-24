@@ -25,7 +25,7 @@
 #endif
 
 #include "wx/bitmap.h"
-#include "wx/debug.h"
+
 extern "C"
 {
     #include "tiff.h"

@@ -44,7 +44,6 @@
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/debug.h"
     #include "wx/utils.h"
     #include "wx/app.h"
 #endif // WX_PRECOMP

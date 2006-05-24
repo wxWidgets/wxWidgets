@@ -27,6 +27,7 @@
     #include "wx/hash.h"
     #include "wx/intl.h"
     #include "wx/settings.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/checkbox.h"
@@ -34,8 +35,6 @@
 #include "wx/choice.h"
 #include "wx/checkbox.h"
 #include "wx/stattext.h"
-#include "wx/debug.h"
-#include "wx/log.h"
 #include "wx/longlong.h"
 #include "wx/msgdlg.h"
 #include "wx/sizer.h"
@@ -56,8 +55,8 @@
 #endif
 
 #ifndef __WXWINCE__
-#include <sys/types.h>
-#include <sys/stat.h>
+    #include <sys/types.h>
+    #include <sys/stat.h>
 #endif
 
 #ifdef __UNIX__

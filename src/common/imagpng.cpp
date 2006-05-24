@@ -31,7 +31,6 @@
 
 #include "wx/imagpng.h"
 #include "wx/bitmap.h"
-#include "wx/debug.h"
 #include "png.h"
 #include "wx/filefn.h"
 #include "wx/wfstream.h"

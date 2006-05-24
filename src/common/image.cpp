@@ -25,7 +25,6 @@
 
 #include "wx/image.h"
 #include "wx/bitmap.h"
-#include "wx/debug.h"
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/intl.h"

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/settings.cpp
+// Name:        src/gtk1/settings.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Modified by: Mart Raudsepp (GetMetric)
@@ -12,7 +12,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/settings.h"
-#include "wx/debug.h"
+
 #include "wx/cmndata.h"
 #include "wx/fontutil.h"
 #include "wx/toplevel.h"
@@ -125,11 +125,11 @@ static bool GetColourFromGTKWidget(int& red, int& green, int& blue,
         green = col[state].green;
         blue = col[state].blue;
 
-        ok = TRUE;
+        ok = true;
     }
     else
     {
-        ok = FALSE;
+        ok = false;
     }
 
     gtk_widget_destroy( widget );
@@ -465,12 +465,12 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
     switch (index)
     {
         case wxSYS_CAN_ICONIZE_FRAME:
-            return FALSE;
+            return false;
 
         case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
-            return TRUE;
+            return true;
 
         default:
-            return FALSE;
+            return false;
     }
 }

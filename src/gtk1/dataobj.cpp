@@ -19,7 +19,6 @@
     #include "wx/app.h"
 #endif
 
-#include "wx/debug.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
 #include "wx/uri.h"
