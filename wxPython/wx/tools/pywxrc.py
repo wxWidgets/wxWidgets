@@ -19,12 +19,13 @@ pywxrc -- Python XML resource compiler
           (see http://wiki.wxpython.org/index.cgi/pywxrc for more info)
 
 Usage: python pywxrc.py -h
-       python pywxrc.py <resource.xrc> [-e] [-g] [-o filename]
+       python pywxrc.py [-p] [-g] [-e] [-o filename] xrc input files... 
        
-  -h, --help    show help message
-  -e, --embed   embed resources in the output file
-  -g, --gettext embed list of translatable strings in the output file
-  -o, --output  output filename, or - for stdout
+  -h, --help     show help message
+  -p, --python   generate python module
+  -g, --gettext  output list of translatable strings (may be combined with -p)
+  -e, --embed    embed XRC resources in the output file
+  -o, --output   output filename, or - for stdout
 """
 
 import sys, os, getopt, glob, re
@@ -79,23 +80,20 @@ class xrc%(windowName)s(wx.%(windowClass)s):
 # ------------------------ Resource data ----------------------
 
 def __init_resources():
+    global __res
+    __res = xrc.EmptyXmlResource()
 """
 
     LOAD_RES_FILE = """\
-    global __res
-    __res = xrc.XmlResource('%(resourceFilename)s')
-"""
+    __res.Load('%(resourceFilename)s')"""
 
     FILE_AS_STRING = """\
     %(filename)s = '''\\
 %(fileData)s'''
 
-
 """
 
     PREPARE_MEMFS = """\
-    # Load all the strings as memory files
-    
     wx.FileSystem.AddHandler(wx.MemoryFSHandler())
 """
 
@@ -104,12 +102,10 @@ def __init_resources():
 """
 
     LOAD_RES_MEMFS = """\
-    global __res
-    __res = xrc.EmptyXmlResource()
     __res.Load('memory:XRC/%(memoryPath)s/%(resourceFilename)s')
 """
 
-    GETTEXT_DUMMY_FUNC = """\
+    GETTEXT_DUMMY_FUNC = """
 # ----------------------- Gettext strings ---------------------
 
 def __gettext_strings():
@@ -121,7 +117,7 @@ def __gettext_strings():
     
     def _(str): pass
     
-%(gettextStrings)s
+%s
 """
 
 #----------------------------------------------------------------------
@@ -132,27 +128,57 @@ class XmlResourceCompiler:
 
     """This class generates Python code from XML resource files (XRC)."""
 
-    def MakePythonModule(self, resourceFilename, outputFilename,
+    def MakePythonModule(self, inputFiles, outputFilename,
                          embedResources=False, generateGetText=False):
-        if outputFilename == "-":
-            outputFile = sys.stdout
-        else:
-            try:
-                outputFile = open(outputFilename, "wt")
-            except IOError:
-                raise IOError("Can't write output to '%s'" % outputFilename)
 
-        resourceDocument = minidom.parse(resourceFilename)
+        outputFile = self._OpenOutputFile(outputFilename)
+
+        classes = []
+        resources = []
+        gettextStrings = []
+
+        # process all the inputFiles, collecting the output data
+        for inFile in inputFiles:
+            resourceDocument = minidom.parse(inFile)
+            classes.append(self.GenerateClasses(resourceDocument))
+
+            if embedResources:
+                res = self.GenerateInitResourcesEmbedded(inFile, resourceDocument)
+            else:
+                res = self.GenerateInitResourcesFile(inFile, resourceDocument)
+            resources.append(res)
+
+            if generateGetText:
+                gettextStrings += self.FindStringsInNode(resourceDocument.firstChild)
+                
+        # now write it all out
         print >>outputFile, self.templates.FILE_HEADER
-        print >>outputFile, self.GenerateClasses(resourceDocument)
-        
+        print >>outputFile, "\n".join(classes)
+
+        print >>outputFile, self.templates.INIT_RESOURE_HEADER
         if embedResources:
-            print >>outputFile, self.GenerateInitResourcesEmbedded(resourceFilename, resourceDocument)
-        else:
-            print >>outputFile, self.GenerateInitResourcesFile(resourceFilename, resourceDocument)
+            print >>outputFile, self.templates.PREPARE_MEMFS
+        print >>outputFile, "\n".join(resources)
 
         if generateGetText:
-            print >>outputFile, self.GenerateGetText(resourceDocument)
+            gettextStrings = ['    _("%s")' % s for s in gettextStrings]
+            gettextStrings = "\n".join(gettextStrings)
+            print >>outputFile, self.templates.GETTEXT_DUMMY_FUNC % gettextStrings
+
+    #-------------------------------------------------------------------
+
+    def MakeGetTextOutput(self, inputFiles, outputFilename):
+        """
+        Just output the gettext strings by themselves, with no other
+        code generation.
+        """
+        outputFile = self._OpenOutputFile(outputFilename)
+        for inFile in inputFiles:
+            resourceDocument = minidom.parse(inFile)
+            resource = resourceDocument.firstChild
+            strings = self.FindStringsInNode(resource)
+            strings = ['_("%s");' % s for s in strings]
+            print >>outputFile, "\n".join(strings)
 
     #-------------------------------------------------------------------
 
@@ -187,20 +213,8 @@ class XmlResourceCompiler:
 
     #-------------------------------------------------------------------
 
-    def GenerateGetText(self, resourceDocument):
-        resource = resourceDocument.firstChild
-        strings = self.FindStringsInNode(resource)
-        strings = ['    _("%s")\n' % s for s in strings]
-        gettextStrings = "".join(strings)
-        return self.templates.GETTEXT_DUMMY_FUNC % locals()
-
-    #-------------------------------------------------------------------
-
     def GenerateInitResourcesEmbedded(self, resourceFilename, resourceDocument):
         outputList = []
-
-        outputList.append(self.templates.INIT_RESOURE_HEADER)
-
         files = []
 
         resourcePath = os.path.split(resourceFilename)[0]
@@ -218,8 +232,6 @@ class XmlResourceCompiler:
             fileData = self.FileToString(os.path.join(resourcePath, f))
             outputList.append(self.templates.FILE_AS_STRING % locals())
 
-        outputList.append(self.templates.PREPARE_MEMFS % locals())
-        
         for f in [resourceFilename] + files:
             filename = self.GetMemoryFilename(f)
             outputList.append(self.templates.ADD_FILE_TO_MEMFS % locals())
@@ -234,7 +246,6 @@ class XmlResourceCompiler:
         # take only the filename portion out of resourceFilename
         resourceFilename = os.path.split(resourceFilename)[1]
         outputList = []
-        outputList.append(self.templates.INIT_RESOURE_HEADER)
         outputList.append(self.templates.LOAD_RES_FILE % locals())
         return "".join(outputList)
 
@@ -416,27 +427,44 @@ class XmlResourceCompiler:
         return st2                
 
 
+    #-------------------------------------------------------------------
+
+    def _OpenOutputFile(self, outputFilename):
+        if outputFilename == "-":
+            outputFile = sys.stdout
+        else:
+            try:
+                outputFile = open(outputFilename, "wt")
+            except IOError:
+                raise IOError("Can't write output to '%s'" % outputFilename)
+        return outputFile
+
+    
+
+
 
 #---------------------------------------------------------------------------
 
 def main(args):
     resourceFilename = ""
-    outputFilename = ""
+    outputFilename = None
     embedResources = False
     generateGetText = False
+    generatePython = False
 
     try:
-        opts, args = getopt.gnu_getopt(args, "hego:", "help embed gettext output=".split())
+        opts, args = getopt.gnu_getopt(args,
+                                       "hpgeo:",
+                                       "help python gettext embed output=".split())
     except getopt.GetoptError, e:
         print "\nError : %s\n" % str(e)
         print __doc__
         sys.exit(1)
 
     # If there is no input file argument, show help and exit
-    if args:
-        resourceFilename = args[0]
-    else:
+    if not args:
         print __doc__
+        print "No xrc input file was specified."
         sys.exit(1)
 
     # Parse options and arguments
@@ -444,6 +472,9 @@ def main(args):
         if opt in ["-h", "--help"]:
             print __doc__
             sys.exit(1)
+
+        if opt in ["-p", "--python"]:
+            generatePython = True
 
         if opt in ["-o", "--output"]:
             outputFilename = val
@@ -454,13 +485,33 @@ def main(args):
         if opt in ["-g", "--gettext"]:
             generateGetText = True
 
-    if outputFilename is None or outputFilename == "":
-        outputFilename = os.path.splitext(resourceFilename)[0] + "_xrc.py"
+
+    # check for and expand any wildcards in the list of input files
+    inputFiles = []
+    for arg in args:
+        inputFiles += glob.glob(arg)
+
 
     comp = XmlResourceCompiler()
     
     try:
-        comp.MakePythonModule(resourceFilename, outputFilename, embedResources, generateGetText)
+        if generatePython:
+            if not outputFilename:
+                outputFilename = os.path.splitext(args[0])[0] + "_xrc.py"
+            comp.MakePythonModule(inputFiles, outputFilename,
+                                  embedResources, generateGetText)
+
+        elif generateGetText:
+            if not outputFilename:
+                outputFilename = '-'
+            comp.MakeGetTextOutput(inputFiles, outputFilename)
+
+        else:
+            print __doc__
+            print "One or both of -p, -g must be specified."
+            sys.exit(1)
+            
+            
     except IOError, e:
         print >>sys.stderr, "%s." % str(e)
     else:

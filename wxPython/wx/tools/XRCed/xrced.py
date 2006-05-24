@@ -427,7 +427,7 @@ class Frame(wx.Frame):
         try:
             import wx.tools.pywxrc
             rescomp = wx.tools.pywxrc.XmlResourceCompiler()
-            rescomp.MakePythonModule(dataFile, pypath, embed, genGettext)
+            rescomp.MakePythonModule([dataFile], pypath, embed, genGettext)
         except:
             inf = sys.exc_info()
             wx.LogError(traceback.format_exception(inf[0], inf[1], None)[-1])
