@@ -208,7 +208,7 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxString& value,
+                const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -227,11 +227,11 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxString& value = wxEmptyString,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                int n = 0,
-                const wxString choices[] = (const wxString *) NULL,
+                const wxString& value,
+                const wxPoint& pos,
+                const wxSize& size,
+                int n,
+                const wxString choices[],
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
