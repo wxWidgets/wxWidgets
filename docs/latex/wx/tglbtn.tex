@@ -15,11 +15,8 @@ wxToggleButton is a button that stays pressed when clicked by the user. In
 other words, it is similar to \helpref{wxCheckBox}{wxcheckbox} in
 functionality but looks like a \helpref{wxButton}{wxbutton}.
 
-You can see wxToggleButton in action in the sixth page of the 
+You can see wxToggleButton in action in the sixth page of the
 \helpref{controls}{samplecontrols} sample.
-
-{\bf NB:} This class is not available under wxUniversal ports such
-as wxX11.
 
 \wxheading{Derived from}
 
@@ -116,10 +113,9 @@ Returns {\tt true} if it is pressed, {\tt false} otherwise.
 
 \func{void}{SetValue}{\param{const bool}{ state}}
 
-Sets the toggle button to the given state. This does not cause a 
+Sets the toggle button to the given state. This does not cause a
 {\tt EVT\_TOGGLEBUTTON} event to be emitted.
 
 \wxheading{Parameters}
 
 \docparam{state}{If {\tt true}, the button is pressed.}
-
