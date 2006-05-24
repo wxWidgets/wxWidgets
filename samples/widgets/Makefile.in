@@ -59,6 +59,7 @@ WIDGETS_OBJECTS =  \
 	widgets_spinbtn.o \
 	widgets_static.o \
 	widgets_textctrl.o \
+	widgets_toggle.o \
 	widgets_widgets.o \
 	$(__widgets___win32rc)
 
@@ -234,6 +235,9 @@ widgets_static.o: $(srcdir)/static.cpp
 
 widgets_textctrl.o: $(srcdir)/textctrl.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/textctrl.cpp
+
+widgets_toggle.o: $(srcdir)/toggle.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/toggle.cpp
 
 widgets_widgets.o: $(srcdir)/widgets.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/widgets.cpp

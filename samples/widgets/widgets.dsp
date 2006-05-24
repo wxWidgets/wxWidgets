@@ -520,6 +520,10 @@ SOURCE=.\textctrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\toggle.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\widgets.cpp
 # End Source File
 # End Group

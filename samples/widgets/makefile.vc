@@ -39,6 +39,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_spinbtn.obj \
 	$(OBJS)\widgets_static.obj \
 	$(OBJS)\widgets_textctrl.obj \
+	$(OBJS)\widgets_toggle.obj \
 	$(OBJS)\widgets_widgets.obj \
 	$(OBJS)\widgets_sample.res
 
@@ -346,6 +347,9 @@ $(OBJS)\widgets_static.obj: .\static.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_textctrl.obj: .\textctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
+
+$(OBJS)\widgets_toggle.obj: .\toggle.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_widgets.obj: .\widgets.cpp

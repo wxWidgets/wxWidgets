@@ -46,6 +46,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_spinbtn.obj \
 	$(OBJS)\widgets_static.obj \
 	$(OBJS)\widgets_textctrl.obj \
+	$(OBJS)\widgets_toggle.obj \
 	$(OBJS)\widgets_widgets.obj
 
 ### Conditionally set variables: ###
@@ -271,6 +272,9 @@ $(OBJS)\widgets_static.obj: .\static.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_textctrl.obj: .\textctrl.cpp
+	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
+
+$(OBJS)\widgets_toggle.obj: .\toggle.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_widgets.obj: .\widgets.cpp

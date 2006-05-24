@@ -236,6 +236,7 @@ WIDGETS_OBJECTS =  &
 	$(OBJS)\widgets_spinbtn.obj &
 	$(OBJS)\widgets_static.obj &
 	$(OBJS)\widgets_textctrl.obj &
+	$(OBJS)\widgets_toggle.obj &
 	$(OBJS)\widgets_widgets.obj
 
 
@@ -301,6 +302,9 @@ $(OBJS)\widgets_static.obj :  .AUTODEPEND .\static.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_textctrl.obj :  .AUTODEPEND .\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_toggle.obj :  .AUTODEPEND .\toggle.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_widgets.obj :  .AUTODEPEND .\widgets.cpp
