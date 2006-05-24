@@ -95,7 +95,7 @@ public:
     virtual bool IsDefault() const { return m_isDefault; }
 
     // wxButton actions
-    void Toggle();
+    virtual void Toggle();
     virtual void Press();
     virtual void Release();
     virtual void Click();
