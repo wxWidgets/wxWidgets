@@ -375,6 +375,9 @@ protected:
     // Creates popup window, calls interface->Create(), etc
     void CreatePopup();
 
+    // Destroy popup window and all related constructs
+    void DestroyPopup();
+
     // override the base class virtuals involved in geometry calculations
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;

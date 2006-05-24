@@ -774,15 +774,7 @@ wxComboCtrlBase::~wxComboCtrlBase()
     m_toplevEvtHandler = (wxEvtHandler*) NULL;
 #endif
 
-    if ( m_popup )
-        m_popup->RemoveEventHandler(m_popupExtraHandler);
-
-    delete m_popupExtraHandler;
-
-    HidePopup();
-
-    delete m_popupInterface;
-    delete m_winPopup;
+    DestroyPopup();
 
     RemoveEventHandler(m_extraEvtHandler);
 
@@ -1531,19 +1523,38 @@ void wxComboCtrlBase::CreatePopup()
     popupInterface->m_iFlags |= wxCP_IFLAG_CREATED;
 }
 
+// Destroy popup window and the child control
+void wxComboCtrlBase::DestroyPopup()
+{
+    if ( m_popup )
+        m_popup->RemoveEventHandler(m_popupExtraHandler);
+
+    delete m_popupExtraHandler;
+
+    HidePopup();
+
+    delete m_popupInterface;
+
+    if ( m_winPopup )
+        m_winPopup->Destroy();
+
+    m_popupInterface = (wxComboPopup*) NULL;
+    m_winPopup = (wxWindow*) NULL;
+    m_popup = (wxWindow*) NULL;
+}
+
 void wxComboCtrlBase::SetPopupControl( wxComboPopup* iface )
 {
     wxCHECK_RET( iface, wxT("no popup interface set for wxComboCtrl") );
 
-    delete m_popupInterface;
-    delete m_winPopup;
+    DestroyPopup();
 
     iface->InitBase(this);
     iface->Init();
 
     m_popupInterface = iface;
 
-    if ( !iface->LazyCreate() || m_winPopup )
+    if ( !iface->LazyCreate() )
     {
         CreatePopup();
     }

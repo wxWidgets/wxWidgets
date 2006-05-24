@@ -125,7 +125,7 @@ protected:
 
     // sends combobox select event from the parent combo control
     void SendComboBoxEvent( int selection );
-    
+
     // gets value, sends event and dismisses
     void DismissWithEvent();
 
@@ -221,7 +221,7 @@ public:
                          const wxPoint& pos,
                          const wxSize& size,
                          const wxArrayString& choices,
-                         long style = 0,
+                         long style,
                          const wxValidator& validator = wxDefaultValidator,
                          const wxString& name = wxComboBoxNameStr);
 
@@ -262,6 +262,13 @@ public:
     virtual int GetSelection() const;
     virtual void SetSelection(int n) { Select(n); }
 
+
+    // Prevent a method from being hidden
+    virtual void SetSelection(long from, long to)
+    {
+        wxComboCtrl::SetSelection(from,to);
+    }
+
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
 protected:
@@ -294,5 +301,6 @@ private:
 
 
 #endif // wxUSE_ODCOMBOBOX
+
 #endif
     // _WX_ODCOMBO_H_
