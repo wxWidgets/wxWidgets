@@ -130,8 +130,11 @@ wxString wxComboListBox::GetStringValue() const
 
 void wxComboListBox::SetStringValue(const wxString& value)
 {
-    if ( !value.empty() && (FindString(value) != wxNOT_FOUND) )
-        wxListBox::SetStringSelection(value);
+    if ( !value.empty() )
+    {
+		if (FindString(value) != wxNOT_FOUND)
+        	wxListBox::SetStringSelection(value);
+	}
     else
         wxListBox::SetSelection(-1);
 }
