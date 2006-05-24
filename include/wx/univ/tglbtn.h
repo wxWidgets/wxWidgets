@@ -12,10 +12,9 @@
 #ifndef _WX_UNIV_TGLBTN_H_
 #define _WX_UNIV_TGLBTN_H_
 
-class WXDLLEXPORT wxInputHandler;
-
 #include "wx/bitmap.h"
-#include "wx/checkbox.h"
+
+extern WXDLLEXPORT_DATA(const wxChar) wxCheckBoxNameStr[];
 
 // ----------------------------------------------------------------------------
 // the actions supported by this control
@@ -106,16 +105,17 @@ public:
     // returns the default button size for this platform
     static wxSize GetDefaultSize();
 
-protected:
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = -1,
                                const wxString& strArg = wxEmptyString);
+
+    virtual bool CanBeHighlighted() const { return true; }
+
+protected:
     virtual wxSize DoGetBestClientSize() const;
     
     virtual bool DoDrawBackground(wxDC& dc);
     virtual void DoDraw(wxControlRenderer *renderer);
-
-    virtual bool CanBeHighlighted() const { return true; }
 
     // common part of all ctors
     void Init();

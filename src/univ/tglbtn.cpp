@@ -25,6 +25,8 @@
 
 #if wxUSE_TOGGLEBTN
 
+#include "wx/tglbtn.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
     #include "wx/dcscreen.h"
@@ -38,7 +40,6 @@
 #include "wx/univ/theme.h"
 #include "wx/univ/colschem.h"
 #include "wx/stockitem.h"
-#include "wx/tglbtn.h"
 
 // ----------------------------------------------------------------------------
 // constants
