@@ -522,6 +522,19 @@ class TextEditMixin:
     def OpenEditor(self, col, row):
         ''' Opens an editor at the current position. '''
 
+        # give the derived class a chance to Allow/Veto this edit.
+        evt = wx.ListEvent(wx.wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT, self.GetId())
+        evt.m_itemIndex = row
+        evt.m_col = col
+        item = self.GetItem(row, col)
+        evt.m_item.SetId(item.GetId()) 
+        evt.m_item.SetColumn(item.GetColumn()) 
+        evt.m_item.SetData(item.GetData()) 
+        evt.m_item.SetText(item.GetText()) 
+        ret = self.GetEventHandler().ProcessEvent(evt)
+        if ret and not evt.IsAllowed():
+            return   # user code doesn't allow the edit.
+
         if self.GetColumn(col).m_format != self.col_style:
             self.make_editor(self.GetColumn(col).m_format)
     
@@ -574,6 +587,8 @@ class TextEditMixin:
     # it is binded to wx.EVT_KILL_FOCUS. Can it be avoided? (MW)
     def CloseEditor(self, evt=None):
         ''' Close the editor and save the new value to the ListCtrl. '''
+        if not self.editor.IsShown():
+            return
         text = self.editor.GetValue()
         self.editor.Hide()
         self.SetFocus()
