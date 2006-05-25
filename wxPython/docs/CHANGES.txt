@@ -22,6 +22,14 @@ DocView and ActiveGrid IDE updates from Morgan Hua:
     Not important for python development, but at least that means the
     debugger framework is more generalized.
 
+wx.lib.mixins.listctrl.TextEditMixin: Fixed the double END_LABEL_EDIT
+event problem in TextEditMixin by checking if the editor was already
+hidden before continuing with the CloseEditor method.  Also added code
+to OpenEditor to send the BEGIN_LABEL_EDIT event and to not allow the
+opening of the editor to continue if the event handler doesn't allow
+it.
+
+
 
 
 2.6.3.2
