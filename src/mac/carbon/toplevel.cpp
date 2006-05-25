@@ -994,7 +994,7 @@ void wxTopLevelWindowMac::Maximize(bool maximize)
     wxMacPortStateHelper help( (GrafPtr)GetWindowPort( (WindowRef)m_macWindow) ) ;
     wxMacWindowClipper clip( this );
 #endif
-
+#if 0
     if ( !IsWindowInStandardState( (WindowRef)m_macWindow, NULL, NULL ) )
     {
         Rect rect;
@@ -1003,8 +1003,18 @@ void wxTopLevelWindowMac::Maximize(bool maximize)
         SetWindowIdealUserState((WindowRef)m_macWindow, &rect);
         SetWindowUserState((WindowRef)m_macWindow, &rect);
     }
-
     ZoomWindow( (WindowRef)m_macWindow , maximize ? inZoomOut : inZoomIn , false ) ;
+#else
+    Point idealSize = { 0 , 0 } ;
+    if ( maximize )
+    {
+        Rect rect ;
+        GetAvailableWindowPositioningBounds(GetMainDevice(),&rect) ;
+        idealSize.h = rect.right - rect.left ;
+        idealSize.v = rect.bottom - rect.top ;
+    }
+    ZoomWindowIdeal( (WindowRef)m_macWindow , maximize ? inZoomOut : inZoomIn , &idealSize ) ;
+#endif
 }
 
 bool wxTopLevelWindowMac::IsMaximized() const
