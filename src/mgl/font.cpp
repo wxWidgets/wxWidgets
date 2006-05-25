@@ -27,10 +27,10 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/settings.h"
+    #include "wx/cmndata.h"
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/cmndata.h"
 #include "wx/gdicmn.h"
 #include "wx/tokenzr.h"
 #include "wx/mgl/private.h"

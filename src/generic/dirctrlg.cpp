@@ -29,6 +29,7 @@
     #include "wx/icon.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
+    #include "wx/cmndata.h"
 #endif
 
 #include "wx/module.h"
@@ -36,7 +37,6 @@
 #include "wx/textctrl.h"
 #include "wx/textdlg.h"
 #include "wx/filefn.h"
-#include "wx/cmndata.h"
 #include "wx/gdicmn.h"
 #include "wx/imaglist.h"
 #include "wx/sizer.h"

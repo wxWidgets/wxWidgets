@@ -24,14 +24,14 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/intl.h"
-#endif
-
 #if wxUSE_COLOURDLG
 
-#include "wx/cmndata.h"
 #include "wx/colordlg.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/cmndata.h"
+#endif
 
 #include <UIColor.h>
 #include <UIControls.h>

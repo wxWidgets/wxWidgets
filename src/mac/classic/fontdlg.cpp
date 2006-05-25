@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fontdlg.cpp
+// Name:        src/mac/classic/fontdlg.cpp
 // Purpose:     wxFontDialog class. NOTE: you can use the generic class
 //              if you wish, instead of implementing this.
 // Author:      Stefan Csomor
@@ -7,11 +7,16 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/wxprec.h"
+
 #include "wx/mac/fontdlg.h"
-#include "wx/cmndata.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/cmndata.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
@@ -37,7 +42,7 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
 
     // TODO: you may need to do dialog creation here, unless it's
     // done in ShowModal.
-    return TRUE;
+    return true;
 }
 
 int wxFontDialog::ShowModal()
@@ -45,4 +50,3 @@ int wxFontDialog::ShowModal()
     // TODO: show (maybe create) the dialog
     return wxID_CANCEL;
 }
-

@@ -13,7 +13,10 @@
 
 #include "wx/settings.h"
 
-#include "wx/cmndata.h"
+#ifndef WX_PRECOMP
+    #include "wx/cmndata.h"
+#endif
+
 #include "wx/fontutil.h"
 #include "wx/toplevel.h"
 

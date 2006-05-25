@@ -12,15 +12,16 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/dirdlg.h"
+
 #ifndef WX_PRECOMP
     #include <stdio.h>
     #include "wx/utils.h"
     #include "wx/dialog.h"
-    #include "wx/dirdlg.h"
+    #include "wx/cmndata.h"
 #endif
 
 #include "wx/os2/private.h"
-#include "wx/cmndata.h"
 
 #include <stdlib.h>
 #include <string.h>

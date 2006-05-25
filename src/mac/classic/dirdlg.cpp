@@ -20,9 +20,8 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dialog.h"
+    #include "wx/cmndata.h"
 #endif // WX_PRECOMP
-
-#include "wx/cmndata.h"
 
 #include "wx/mac/private.h"
 

@@ -31,9 +31,9 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/dcprint.h"
+    #include "wx/cmndata.h"
 #endif
 
-#include "wx/cmndata.h"
 #include "wx/printdlg.h"
 #include "wx/msw/printdlg.h"
 #include "wx/paper.h"

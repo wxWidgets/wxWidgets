@@ -24,9 +24,9 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/cmndata.h"
 #endif
 
-#include "wx/cmndata.h"
 #include "wx/fontutil.h"
 
 // ============================================================================
