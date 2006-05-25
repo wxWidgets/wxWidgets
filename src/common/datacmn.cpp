@@ -69,8 +69,6 @@ wxColour  wxNullColour;
 // Default window names
 extern WXDLLEXPORT_DATA(const wxChar) wxControlNameStr[] = wxT("control");
 extern WXDLLEXPORT_DATA(const wxChar) wxButtonNameStr[] = wxT("button");
-extern WXDLLEXPORT_DATA(const wxChar) wxButtonBarNameStr[] = wxT("buttonbar");
-extern WXDLLEXPORT_DATA(const wxChar) wxCanvasNameStr[] = wxT("canvas");
 extern WXDLLEXPORT_DATA(const wxChar) wxCheckBoxNameStr[] = wxT("check");
 extern WXDLLEXPORT_DATA(const wxChar) wxChoiceNameStr[] = wxT("choice");
 extern WXDLLEXPORT_DATA(const wxChar) wxComboBoxNameStr[] = wxT("comboBox");
@@ -82,7 +80,6 @@ extern WXDLLEXPORT_DATA(const wxChar) wxListBoxNameStr[] = wxT("listBox");
 extern WXDLLEXPORT_DATA(const wxChar) wxListCtrlNameStr[] = wxT("listCtrl");
 extern WXDLLEXPORT_DATA(const wxChar) wxStaticTextNameStr[] = wxT("staticText");
 extern WXDLLEXPORT_DATA(const wxChar) wxStaticBitmapNameStr[] = wxT("staticBitmap");
-extern WXDLLEXPORT_DATA(const wxChar) wxMultiTextNameStr[] = wxT("multitext");
 extern WXDLLEXPORT_DATA(const wxChar) wxNotebookNameStr[] = wxT("notebook");
 extern WXDLLEXPORT_DATA(const wxChar) wxPanelNameStr[] = wxT("panel");
 extern WXDLLEXPORT_DATA(const wxChar) wxRadioBoxNameStr[] = wxT("radioBox");
@@ -90,14 +87,11 @@ extern WXDLLEXPORT_DATA(const wxChar) wxRadioButtonNameStr[] = wxT("radioButton"
 extern WXDLLEXPORT_DATA(const wxChar) wxBitmapRadioButtonNameStr[] = wxT("radioButton");
 extern WXDLLEXPORT_DATA(const wxChar) wxScrollBarNameStr[] = wxT("scrollBar");
 extern WXDLLEXPORT_DATA(const wxChar) wxSliderNameStr[] = wxT("slider");
-extern WXDLLEXPORT_DATA(const wxChar) wxStaticNameStr[] = wxT("static");
 extern WXDLLEXPORT_DATA(const wxChar) wxStatusLineNameStr[] = wxT("status_line");
-extern WXDLLEXPORT_DATA(const wxChar) wxTextCtrlWindowNameStr[] = wxT("textWindow");
 extern WXDLLEXPORT_DATA(const wxChar) wxTextCtrlNameStr[] = wxT("text");
 extern WXDLLEXPORT_DATA(const wxChar) wxTreeCtrlNameStr[] = wxT("treeCtrl");
 extern WXDLLEXPORT_DATA(const wxChar) wxEnhDialogNameStr[] = wxT("Shell");
 extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[] = wxT("toolbar");
-extern WXDLLEXPORT_DATA(const wxChar) wxVirtListBoxNameStr[] = wxT("virtListBox");
 extern WXDLLEXPORT_DATA(const wxChar) wxDataViewCtrlNameStr[] = wxT("dataviewCtrl");
 
 // Default messages

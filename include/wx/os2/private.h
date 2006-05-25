@@ -94,7 +94,6 @@ class WXDLLEXPORT wxBitmap;
 // Controls
 //
 WXDLLEXPORT_DATA(extern const wxChar) wxButtonNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxCanvasNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxCheckBoxNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxChoiceNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxComboBoxNameStr[];
@@ -105,18 +104,13 @@ WXDLLEXPORT_DATA(extern const wxChar) wxStaticBoxNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxListBoxNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxStaticTextNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxStaticBitmapNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxMultiTextNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxPanelNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxRadioBoxNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxRadioButtonNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxBitmapRadioButtonNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxScrollBarNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxSliderNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxStaticNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxTextCtrlWindowNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxTextCtrlNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxVirtListBoxNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxButtonBarNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxEnhDialogNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxToolBarNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxStatusLineNameStr[];
