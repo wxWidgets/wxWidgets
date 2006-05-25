@@ -28,11 +28,11 @@
     #include "wx/button.h"
     #include "wx/icon.h"
     #include "wx/settings.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/module.h"
 #include "wx/layout.h"
-#include "wx/msgdlg.h"
 #include "wx/textctrl.h"
 #include "wx/textdlg.h"
 #include "wx/filefn.h"

@@ -13,17 +13,17 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
-
-#ifndef WX_PRECOMP
-    #include  "wx/string.h"
-#endif //WX_PRECOMP
 
 #if wxUSE_PROGRESSDLG
 
 #include "wx/progdlg.h"
-#include "wx/msgdlg.h"
+
+#ifndef WX_PRECOMP
+    #include  "wx/string.h"
+    #include "wx/msgdlg.h"
+#endif //WX_PRECOMP
 
 #include <Progress.h>
 #include <SysEvtMgr.h>

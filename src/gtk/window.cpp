@@ -26,10 +26,10 @@
     #include "wx/menu.h"
     #include "wx/dialog.h"
     #include "wx/settings.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/layout.h"
-#include "wx/msgdlg.h"
 #include "wx/module.h"
 #include "wx/combobox.h"
 

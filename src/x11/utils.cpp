@@ -30,10 +30,10 @@
     #include "wx/app.h"
     #include "wx/window.h" // for wxTopLevelWindows
     #include "wx/cursor.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/apptrait.h"
-#include "wx/msgdlg.h"
 
 #include <ctype.h>
 #include <stdarg.h>

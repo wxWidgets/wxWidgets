@@ -23,6 +23,7 @@
     #include "wx/button.h"
     #include "wx/menu.h"
     #include "wx/settings.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #ifdef __DARWIN__
@@ -31,8 +32,6 @@
 #else
     #include <stat.h>
 #endif
-
-#include "wx/msgdlg.h"
 
 #if wxUSE_STD_IOSTREAM
     #if wxUSE_IOSTREAMH

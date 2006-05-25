@@ -17,10 +17,10 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/utils.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/msgdlg.h"
 
 #include "wx/gtk/private.h"
 

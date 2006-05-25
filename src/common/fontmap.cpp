@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/fontmap.cpp
+// Name:        src/common/fontmap.cpp
 // Purpose:     wxFontMapper class
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -26,10 +26,13 @@
 
 #if wxUSE_FONTMAP
 
+#include "wx/fontmap.h"
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/msgdlg.h"
 #endif // PCH
 
 #if wxUSE_CONFIG
@@ -41,10 +44,8 @@
   #include  "wx/msw/winundef.h"
 #endif
 
-#include "wx/fontmap.h"
 #include "wx/fmappriv.h"
 #include "wx/fontutil.h"
-#include "wx/msgdlg.h"
 #include "wx/fontdlg.h"
 #include "wx/choicdlg.h"
 #include "wx/encinfo.h"

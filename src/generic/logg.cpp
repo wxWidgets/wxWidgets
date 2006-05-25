@@ -60,8 +60,6 @@
     #include "wx/listctrl.h"
     #include "wx/imaglist.h"
     #include "wx/image.h"
-#else // !wxUSE_LOG_DIALOG
-    #include "wx/msgdlg.h"
 #endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
 
 #if defined(__MWERKS__) && wxUSE_UNICODE

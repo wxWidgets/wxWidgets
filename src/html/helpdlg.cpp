@@ -29,11 +29,8 @@
     #include "wx/statbox.h"
     #include "wx/radiobox.h"
     #include "wx/menu.h"
-#endif // WXPRECOMP
-
-#ifdef __WXMAC__
     #include "wx/msgdlg.h"
-#endif
+#endif // WXPRECOMP
 
 #include "wx/html/htmlwin.h"
 #include "wx/html/helpdlg.h"

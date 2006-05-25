@@ -19,6 +19,7 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/panel.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/imaglist.h"
@@ -29,8 +30,6 @@
 #include "wx/gtk1/win_gtk.h"
 
 #include <gdk/gdkkeysyms.h>
-
-#include "wx/msgdlg.h"
 
 // ----------------------------------------------------------------------------
 // events

@@ -12,13 +12,14 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/printdlg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/object.h"
     #include "wx/dcprint.h"
+    #include "wx/msgdlg.h"
 #endif
 
-#include "wx/printdlg.h"
-#include "wx/msgdlg.h"
 #include "wx/mac/private/print.h"
 
 // Use generic page setup dialog: use your own native one if one exists.

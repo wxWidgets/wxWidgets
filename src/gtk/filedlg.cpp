@@ -16,6 +16,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #ifdef __WXGTK24__
@@ -28,7 +29,6 @@
 #include "wx/filename.h" // wxFilename
 #include "wx/tokenzr.h" // wxStringTokenizer
 #include "wx/filefn.h" // ::wxGetCwd
-#include "wx/msgdlg.h" // wxMessageDialog
 
 //-----------------------------------------------------------------------------
 // idle system

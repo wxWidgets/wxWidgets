@@ -16,11 +16,12 @@
     #pragma hdrstop
 #endif
 
+#include "wx/msgdlg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/dialog.h"
-    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/msw/private.h"

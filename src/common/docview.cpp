@@ -26,6 +26,8 @@
 
 #if wxUSE_DOC_VIEW_ARCHITECTURE
 
+#include "wx/docview.h"
+
 #ifndef WX_PRECOMP
     #include "wx/list.h"
     #include "wx/string.h"
@@ -37,6 +39,7 @@
     #include "wx/filedlg.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/ffile.h"
@@ -54,9 +57,7 @@
     #include "wx/printdlg.h"
 #endif
 
-#include "wx/msgdlg.h"
 #include "wx/choicdlg.h"
-#include "wx/docview.h"
 #include "wx/confbase.h"
 #include "wx/file.h"
 #include "wx/cmdproc.h"

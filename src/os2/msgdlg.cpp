@@ -12,12 +12,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/msgdlg.h"
+
 #ifndef WX_PRECOMP
     #include <stdio.h>
     #include "wx/utils.h"
     #include "wx/dialog.h"
     #include "wx/app.h"
-    #include "wx/msgdlg.h"
     #include "wx/math.h"
 #endif
 
