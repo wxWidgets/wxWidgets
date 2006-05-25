@@ -253,7 +253,6 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
       source "OS2\\OWNERDRW.CPP"
       source "OS2\\PALETTE.CPP"
       source "OS2\\PEN.CPP"
-      source "OS2\\PNGHAND.CPP"
       source "OS2\\PRINT.CPP"
       source "OS2\\RADIOBOX.CPP"
       source "OS2\\RADIOBUT.CPP"

@@ -270,7 +270,6 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "OS2\\OWNERDRW.CPP"
       source type(cpp) "OS2\\PALETTE.CPP"
       source type(cpp) "OS2\\PEN.CPP"
-      source type(cpp) "OS2\\PNGHAND.CPP"
       source type(cpp) "OS2\\PRINT.CPP"
       source type(cpp) "OS2\\RADIOBOX.CPP"
       source type(cpp) "OS2\\RADIOBUT.CPP"

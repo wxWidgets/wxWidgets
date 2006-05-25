@@ -387,9 +387,6 @@ pen.obj:     $(MSWDIR)\pen.cpp
 penwin.obj:     $(MSWDIR)\penwin.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\penwin.cpp /BINARY penwin.obj
 
-pnghand.obj:     $(MSWDIR)\pnghand.cpp
-  $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\pnghand.cpp /BINARY pnghand.obj
-
 printdlg.obj:     $(MSWDIR)\printdlg.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\printdlg.cpp /BINARY printdlg.obj
 
