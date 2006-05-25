@@ -3891,7 +3891,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_notebmac.o \
 	monodll_palette.o \
 	monodll_pen.o \
-	monodll_pnghand.o \
 	monodll_printdlg.o \
 	monodll_printmac.o \
 	monodll_radiobox.o \
@@ -5528,7 +5527,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_notebmac.o \
 	monolib_palette.o \
 	monolib_pen.o \
-	monolib_pnghand.o \
 	monolib_printdlg.o \
 	monolib_printmac.o \
 	monolib_radiobox.o \
@@ -7398,7 +7396,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_notebmac.o \
 	coredll_palette.o \
 	coredll_pen.o \
-	coredll_pnghand.o \
 	coredll_printdlg.o \
 	coredll_printmac.o \
 	coredll_radiobox.o \
@@ -8740,7 +8737,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_notebmac.o \
 	corelib_palette.o \
 	corelib_pen.o \
-	corelib_pnghand.o \
 	corelib_printdlg.o \
 	corelib_printmac.o \
 	corelib_radiobox.o \
@@ -11527,9 +11523,6 @@ monodll_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(MONODLL_ODEP)
 
 monodll_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/notebmac.cpp
-
-monodll_pnghand.o: $(srcdir)/src/mac/carbon/pnghand.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/pnghand.cpp
 
 monodll_printmac.o: $(srcdir)/src/mac/carbon/printmac.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/printmac.cpp
@@ -15340,9 +15333,6 @@ monolib_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(MONOLIB_ODEP)
 
 monolib_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/notebmac.cpp
-
-monolib_pnghand.o: $(srcdir)/src/mac/carbon/pnghand.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/pnghand.cpp
 
 monolib_printmac.o: $(srcdir)/src/mac/carbon/printmac.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/printmac.cpp
@@ -20117,9 +20107,6 @@ coredll_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(COREDLL_ODEP)
 coredll_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/notebmac.cpp
 
-coredll_pnghand.o: $(srcdir)/src/mac/carbon/pnghand.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/pnghand.cpp
-
 coredll_printmac.o: $(srcdir)/src/mac/carbon/printmac.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/printmac.cpp
 
@@ -22909,9 +22896,6 @@ corelib_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(CORELIB_ODEP)
 
 corelib_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/notebmac.cpp
-
-corelib_pnghand.o: $(srcdir)/src/mac/carbon/pnghand.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/pnghand.cpp
 
 corelib_printmac.o: $(srcdir)/src/mac/carbon/printmac.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/printmac.cpp

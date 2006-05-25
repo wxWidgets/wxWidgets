@@ -1971,15 +1971,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>:printmac.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -5126,13 +5117,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>:window.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -9253,15 +9237,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>:printmac.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -12402,13 +12377,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>:window.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -18497,15 +18465,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>:printmac.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -21599,13 +21558,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>:window.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -25397,15 +25349,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>:printmac.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -28486,13 +28429,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>:window.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -34720,15 +34656,6 @@
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:docview.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
@@ -37478,13 +37405,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:imagiff.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -41640,15 +41560,6 @@
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:docview.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
@@ -44409,13 +44320,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:imagiff.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -49602,15 +49506,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>:printmac.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -52742,13 +52637,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>:window.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -56836,15 +56724,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>:printmac.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -59976,13 +59855,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>:window.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                    <PATH>:pnghand.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -66239,14 +66111,6 @@
                 <PATHROOT>Project</PATHROOT>
                 <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                 <PATH>:pen.cpp</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>wxshlb Mach-O debug</TARGETNAME>
-                <PATHTYPE>PathRelative</PATHTYPE>
-                <PATHROOT>Project</PATHROOT>
-                <ACCESSPATH>:mac:carbon:</ACCESSPATH>
-                <PATH>:pnghand.cpp</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
             <FILEREF>
