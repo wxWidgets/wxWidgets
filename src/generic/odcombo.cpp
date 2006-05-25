@@ -384,6 +384,8 @@ void wxVListBoxComboPopup::Clear()
 
     ClearClientDatas();
 
+    m_value = wxNOT_FOUND;
+
     if ( IsCreated() )
         wxVListBox::SetItemCount(0);
 }
@@ -677,7 +679,7 @@ void wxOwnerDrawnComboBox::Clear()
 
     m_popupInterface->Clear();
 
-    GetTextCtrl()->SetValue(wxEmptyString);
+    SetValue(wxEmptyString);
 }
 
 void wxOwnerDrawnComboBox::Delete(unsigned int n)
