@@ -222,6 +222,12 @@ protected:
     // Lay out controls
     void DoSize();
 
+#if wxUSE_HELP
+    // Show the help for the corresponding page
+    void OnHelp(wxHelpEvent& event);
+#endif // wxUSE_HELP
+
+
     // the array of all pages of this control
     wxArrayPages m_pages;
 

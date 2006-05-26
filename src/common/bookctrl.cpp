@@ -42,6 +42,9 @@ IMPLEMENT_ABSTRACT_CLASS(wxBookCtrlBase, wxControl)
 
 BEGIN_EVENT_TABLE(wxBookCtrlBase, wxControl)
     EVT_SIZE(wxBookCtrlBase::OnSize)
+#if wxUSE_HELP
+    EVT_HELP(wxID_ANY, wxBookCtrlBase::OnHelp)
+#endif // wxUSE_HELP
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -157,6 +160,35 @@ wxSize wxBookCtrlBase::DoGetBestSize() const
     CacheBestSize(best);
     return best;
 }
+
+#if wxUSE_HELP
+void wxBookCtrlBase::OnHelp(wxHelpEvent& event)
+{
+    // find the corresponding page
+    wxWindow *page = NULL;
+
+    if ( event.GetOrigin() == wxHelpEvent::Origin_HelpButton )
+    {
+        // show help for the page under the mouse
+        const int pagePos = HitTest(ScreenToClient(event.GetPosition()));
+
+        if ( pagePos != wxNOT_FOUND)
+        {
+            page = GetPage((size_t)pagePos);
+        }
+    }
+
+    if ( !page )
+    {
+        page = GetCurrentPage();
+    }
+
+    if ( !page || !page->GetEventHandler()->ProcessEvent(event) )
+    {
+        event.Skip();
+    }
+}
+#endif // wxUSE_HELP
 
 // ----------------------------------------------------------------------------
 // pages management
