@@ -17,8 +17,12 @@
 
 #if wxUSE_TAB_DIALOG
 
-#include "wx/control.h"
 #include "wx/tabctrl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/control.h"
+#endif
+
 #include "wx/mac/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)

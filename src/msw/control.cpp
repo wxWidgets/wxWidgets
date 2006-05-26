@@ -26,6 +26,8 @@
 
 #if wxUSE_CONTROLS
 
+#include "wx/control.h"
+
 #ifndef WX_PRECOMP
     #include "wx/event.h"
     #include "wx/app.h"
@@ -33,8 +35,6 @@
     #include "wx/log.h"
     #include "wx/settings.h"
 #endif
-
-#include "wx/control.h"
 
 #if wxUSE_LISTCTRL
     #include "wx/listctrl.h"

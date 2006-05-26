@@ -1,20 +1,24 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tabctrl.cpp
+// Name:        src/mac/carbon/tabctrl.cpp
 // Purpose:     wxTabCtrl
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #if wxUSE_TAB_DIALOG
 
-#include "wx/control.h"
 #include "wx/tabctrl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/control.h"
+#endif
+
 #include "wx/mac/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)

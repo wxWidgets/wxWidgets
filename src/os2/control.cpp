@@ -12,6 +12,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/control.h"
+
 #ifndef WX_PRECOMP
     #include "wx/event.h"
     #include "wx/app.h"
@@ -21,7 +23,6 @@
 #endif
 
 #include "wx/os2/private.h"
-#include "wx/control.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 

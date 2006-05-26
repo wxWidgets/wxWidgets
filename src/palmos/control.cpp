@@ -26,6 +26,8 @@
 
 #if wxUSE_CONTROLS
 
+#include "wx/control.h"
+
 #ifndef WX_PRECOMP
     #include "wx/event.h"
     #include "wx/app.h"
@@ -35,7 +37,6 @@
     #include "wx/button.h"
 #endif
 
-#include "wx/control.h"
 #include "wx/toplevel.h"
 #include "wx/checkbox.h"
 #include "wx/tglbtn.h"

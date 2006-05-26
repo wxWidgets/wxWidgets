@@ -28,10 +28,10 @@
     #include  "wx/app.h"
     #include  "wx/dcclient.h"
     #include  "wx/dcmemory.h"
+    #include  "wx/control.h"
 #endif  // WX_PRECOMP
 
 #include  "wx/imaglist.h"
-#include  "wx/control.h"
 #include  "wx/sysopt.h"
 
 #include  "wx/msw/private.h"

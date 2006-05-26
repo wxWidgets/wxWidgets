@@ -31,9 +31,9 @@
     #include "wx/dialog.h"
     #include "wx/timer.h"
     #include "wx/settings.h"
+    #include "wx/control.h"
 #endif
 
-#include "wx/control.h"
 #include "wx/gtk/private.h"
 #include "wx/evtloop.h"
 

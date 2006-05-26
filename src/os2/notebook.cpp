@@ -24,10 +24,10 @@
     #include "wx/settings.h"
     #include "wx/log.h"
     #include "wx/event.h"
+    #include  "wx/control.h"
 #endif  // WX_PRECOMP
 
 #include  "wx/imaglist.h"
-#include  "wx/control.h"
 
 #include  "wx/os2/private.h"
 

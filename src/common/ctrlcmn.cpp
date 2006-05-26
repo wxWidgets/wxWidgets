@@ -26,8 +26,9 @@
 
 #if wxUSE_CONTROLS
 
+#include "wx/control.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/control.h"
     #include "wx/log.h"
     #include "wx/radiobut.h"
 #endif
