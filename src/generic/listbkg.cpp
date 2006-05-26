@@ -161,6 +161,26 @@ void wxListbook::OnSize(wxSizeEvent& event)
     wxBookCtrlBase::OnSize(event);
 }
 
+int wxListbook::HitTest(const wxPoint& pt, long * WXUNUSED(flags)) const
+{
+    int pagePos = wxNOT_FOUND;
+
+    const wxPoint clientPt = ClientToScreen(GetListView()->ScreenToClient(pt));
+
+    if ( wxRect(GetListView()->GetSize()).Inside(clientPt) )
+    {
+        int flagsList;
+        pagePos = GetListView()->HitTest(clientPt, flagsList);
+
+        if ( !(flagsList & wxLIST_HITTEST_ONITEM) )
+        {
+            pagePos = wxNOT_FOUND;
+        }
+    }
+
+    return pagePos;
+}
+
 wxSize wxListbook::CalcSizeFromPage(const wxSize& sizePage) const
 {
     // we need to add the size of the list control and the border between

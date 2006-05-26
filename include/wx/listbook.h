@@ -78,6 +78,9 @@ protected:
     // get the size which the list control should have
     virtual wxSize GetControllerSize() const;
 
+    // return the page corresponding to the tab at the specified position
+    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
+
     // event handlers
     void OnListSelected(wxListEvent& event);
     void OnSize(wxSizeEvent& event);

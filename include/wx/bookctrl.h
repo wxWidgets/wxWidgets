@@ -119,14 +119,8 @@ public:
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const = 0;
 
     // get/set size of area between book control area and page area
-    inline unsigned int GetInternalBorder() const
-    {
-        return m_internalBorder;
-    }
-    void SetInternalBorder(unsigned int internalBorder)
-    {
-        m_internalBorder = internalBorder;
-    }
+    unsigned int GetInternalBorder() const { return m_internalBorder; }
+    void SetInternalBorder(unsigned int border) { m_internalBorder = border; }
 
     // Sets/gets the margin around the controller
     void SetControlMargin(int margin) { m_controlMargin = margin; }
@@ -196,6 +190,13 @@ public:
             // cast is safe because of the check above
             SetSelection((size_t)nPage);
         }
+    }
+
+    // hit test: returns which page is hit and, optionally, where (icon, label)
+    virtual int HitTest(const wxPoint& WXUNUSED(pt),
+                        long * WXUNUSED(flags) = NULL) const
+    {
+        return wxNOT_FOUND;
     }
 
 protected:

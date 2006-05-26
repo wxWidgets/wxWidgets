@@ -650,6 +650,20 @@ int wxTreebook::DoSetSelection(size_t pagePos)
     return oldSel;
 }
 
+wxTreebookPage *wxTreebook::DoGetCurrentPage() const
+{
+    if ( m_selection == wxNOT_FOUND )
+        return NULL;
+
+    wxTreebookPage *page = wxBookCtrlBase::GetPage(m_selection);
+    if ( !page && m_actualSelection != wxNOT_FOUND )
+    {
+        page = wxBookCtrlBase::GetPage(m_actualSelection);
+    }
+
+    return page;
+}
+
 void wxTreebook::SetImageList(wxImageList *imageList)
 {
     wxBookCtrlBase::SetImageList(imageList);
@@ -709,18 +723,25 @@ void wxTreebook::OnTreeNodeExpandedCollapsed(wxTreeEvent & event)
 // wxTreebook geometry management
 // ----------------------------------------------------------------------------
 
-wxTreebookPage * wxTreebook::DoGetCurrentPage() const
+int wxTreebook::HitTest(wxPoint const & pt, long * WXUNUSED(flags)) const
 {
-    if ( m_selection == wxNOT_FOUND )
-        return NULL;
+    int pagePos = wxNOT_FOUND;
 
-    wxTreebookPage *page = wxBookCtrlBase::GetPage(m_selection);
-    if ( !page && m_actualSelection != wxNOT_FOUND )
+    wxTreeCtrl * const tree = GetTreeCtrl();
+    const wxPoint treePt = ClientToScreen(tree->ScreenToClient(pt));
+
+    if ( wxRect(tree->GetSize()).Inside(treePt) )
     {
-        page = wxBookCtrlBase::GetPage(m_actualSelection);
+        int flagsTree;
+        wxTreeItemId id = tree->HitTest(treePt, flagsTree);
+
+        if ( id.IsOk() && (flagsTree & wxTREE_HITTEST_ONITEM) )
+        {
+            pagePos = DoInternalFindPageById(id);
+        }
     }
 
-    return page;
+    return pagePos;
 }
 
 #endif // wxUSE_TREEBOOK

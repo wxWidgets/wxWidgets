@@ -144,6 +144,9 @@ protected:
     // This subclass of wxBookCtrlBase accepts NULL page pointers (empty pages)
     virtual bool AllowNullPage() const { return true; }
 
+    // return the page corresponding to the tab at the specified position
+    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
+
     // event handlers
     void OnTreeSelectionChange(wxTreeEvent& event);
     void OnTreeNodeExpandedCollapsed(wxTreeEvent& event);
