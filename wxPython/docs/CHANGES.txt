@@ -120,13 +120,13 @@ source of the clipboard or DnD operation, and then you'll know which
 of the component data objects to use to access the data.
 
 Changed how the stock objects (wx.RED, wx.RED_PEN, wx.RED_BRUSH, etc.)
-are initialized.  They are now created after the wx.App has been
-created, but before OnInit is called, so if you use any of these
-objects before the wx.App is created you will need to adjust your
-code.  This was needed because of some delayed initialization
-functionality that was implemented in wxWidgets, but the end result is
-cleaner for wxPython as well, and allowed me to remove some ugly code
-previously hidden under the covers.
+are initialized.  They are now created as uninitialized instances
+using __new__.  Then after the wx.App has been created, but before
+OnInit is called, the .this attribute of each obhect is initialized.
+This was needed because of some delayed initialization functionality
+that was implemented in wxWidgets, but the end result is cleaner for
+wxPython as well, and allowed me to remove some ugly code previously
+hidden under the covers.
 
 Added wx.StandardPaths.GetDocumentsDir.
 
@@ -145,6 +145,13 @@ your code to use the new wx package instead.
 Added wrappers for Julian's new wxRichTextCtrl class, visible in
 wxPython as wx.richtext.RichTextCtrl window.  It still needs some more
 work, but it is a great start.
+
+wx.lib.mixins.listctrl.TextEditMixin: Fixed the double END_LABEL_EDIT
+event problem in TextEditMixin by checking if the editor was already
+hidden before continuing with the CloseEditor method.  Also added code
+to OpenEditor to send the BEGIN_LABEL_EDIT event and to not allow the
+opening of the editor to continue if the event handler doesn't allow
+it.
 
 
 
