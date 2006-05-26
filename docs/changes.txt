@@ -81,6 +81,7 @@ All (GUI):
 - Added wxComboCtrl and wxOwnerDrawnComboBox (Jaakko Salli)
 - Added wxTreebook (uses a wxTreeCtrl to control pages).
 - Added wxDC::GradientFillLinear/Concentric()
+- Added clipboard events (wxEVT_COMMAND_TEXT_COPY/CUT/PASTE)
 - Added wxRadioBox::SetItemToolTip()
 - Added wxKeyEvent::GetModifiers()
 - Added wxDialog::SetEscapeId().
