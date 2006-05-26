@@ -20,7 +20,6 @@
 #include "wx/list.h"
 #include "wx/string.h"
 #include "wx/fontenc.h"
-#include "wx/hashmap.h"
 #include "wx/math.h"
 
 // ---------------------------------------------------------------------------
@@ -37,6 +36,7 @@ class WXDLLIMPEXP_CORE wxPalette;
 class WXDLLIMPEXP_CORE wxPen;
 class WXDLLIMPEXP_CORE wxRegion;
 class WXDLLIMPEXP_BASE wxString;
+class wxStringToColourHashMap;
 
 // ---------------------------------------------------------------------------
 // constants
@@ -493,8 +493,6 @@ public:
     wxDEPRECATED( void RemoveFont(wxFont*) );
 #endif
 };
-
-WX_DECLARE_STRING_HASH_MAP( wxColour *, wxStringToColourHashMap );
 
 class WXDLLEXPORT wxColourDatabase
 {
