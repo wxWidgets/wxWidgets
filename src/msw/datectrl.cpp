@@ -104,29 +104,40 @@ wxDatePickerCtrl::Create(wxWindow *parent,
     static bool s_initDone = false; // MT-ok: used from GUI thread only
     if ( !s_initDone )
     {
+#ifndef __WXWINCE__
         if ( wxApp::GetComCtl32Version() < 470 )
         {
             wxLogError(_("This system doesn't support date picker control, please upgrade your version of comctl32.dll"));
 
             return false;
         }
+#endif
 
 #if wxUSE_DYNLIB_CLASS
         INITCOMMONCONTROLSEX icex;
         icex.dwSize = sizeof(icex);
         icex.dwICC = ICC_DATE_CLASSES;
 
-        wxDynamicLibrary dllComCtl32(_T("comctl32.dll"), wxDL_VERBATIM);
+        wxDynamicLibrary dllComCtl32(
+#ifdef __WXWINCE__
+            _T("commctrl.dll")
+#else
+            _T("comctl32.dll")
+#endif
+            , wxDL_VERBATIM);
 
-        typedef BOOL (WINAPI *ICCEx_t)(INITCOMMONCONTROLSEX *);
-        wxDYNLIB_FUNCTION( ICCEx_t, InitCommonControlsEx, dllComCtl32 );
-
-        if ( pfnInitCommonControlsEx )
+        if ( dllComCtl32.IsLoaded() )
         {
-            (*pfnInitCommonControlsEx)(&icex);
-        }
+            typedef BOOL (WINAPI *ICCEx_t)(INITCOMMONCONTROLSEX *);
+            wxDYNLIB_FUNCTION( ICCEx_t, InitCommonControlsEx, dllComCtl32 );
 
-        s_initDone = true;
+            if ( pfnInitCommonControlsEx )
+            {
+                (*pfnInitCommonControlsEx)(&icex);
+            }
+
+            s_initDone = true;
+        }
 #endif
     }
 
