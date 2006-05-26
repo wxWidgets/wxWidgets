@@ -18,8 +18,9 @@
 
 #if wxUSE_BMPBUTTON
 
+#include "wx/bmpbuttn.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/bmpbuttn.h"
     #include "wx/log.h"
     #include "wx/dcmemory.h"
 #endif

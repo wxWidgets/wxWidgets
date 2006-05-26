@@ -29,6 +29,7 @@
     #include "wx/settings.h"
     #include "wx/log.h"
     #include "wx/msgdlg.h"
+    #include "wx/bmpbuttn.h"
 #endif
 
 #include "wx/checkbox.h"
@@ -38,7 +39,6 @@
 #include "wx/stattext.h"
 #include "wx/longlong.h"
 #include "wx/sizer.h"
-#include "wx/bmpbuttn.h"
 #include "wx/tokenzr.h"
 #include "wx/config.h"
 #include "wx/imaglist.h"

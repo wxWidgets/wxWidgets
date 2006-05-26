@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/bmpbuttn.cpp
+// Name:        src/univ/bmpbuttn.cpp
 // Purpose:     wxBitmapButton implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -25,9 +25,10 @@
 
 #if wxUSE_BMPBUTTON
 
+#include "wx/bmpbuttn.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
-    #include "wx/bmpbuttn.h"
     #include "wx/validate.h"
 #endif
 
@@ -154,4 +155,3 @@ void wxBitmapButton::Release()
 }
 
 #endif // wxUSE_BMPBUTTON
-

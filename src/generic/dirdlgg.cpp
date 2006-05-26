@@ -26,13 +26,13 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/msgdlg.h"
+    #include "wx/bmpbuttn.h"
 #endif
 
 #include "wx/statline.h"
 #include "wx/dirctrl.h"
 #include "wx/generic/dirdlgg.h"
 #include "wx/artprov.h"
-#include "wx/bmpbuttn.h"
 
 // ----------------------------------------------------------------------------
 // constants

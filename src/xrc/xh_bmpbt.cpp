@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_bmpbt.cpp
+// Name:        src/xrc/xh_bmpbt.cpp
 // Purpose:     XRC resource for bitmap buttons
 // Author:      Brian Gavin
 // Created:     2000/09/09
@@ -15,10 +15,13 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XRC && wxUSE_BMPBUTTON
 
 #include "wx/xrc/xh_bmpbt.h"
-#include "wx/bmpbuttn.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/bmpbuttn.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButtonXmlHandler, wxXmlResourceHandler)
 
@@ -64,4 +67,4 @@ bool wxBitmapButtonXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxBitmapButton"));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_BMPBUTTON
