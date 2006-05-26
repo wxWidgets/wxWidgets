@@ -112,6 +112,11 @@ The wx.RendererNative class is a collection of functions that have
 platform-specific implementations for drawing certain parts of
 genereic controls in ways that are as close to the native look as
 possible.
+
+Note that each drawing function restores the `wx.DC` attributes if it
+changes them, so it is safe to assume that the same pen, brush and
+colours that were active before the call to this function are still in
+effect after it.
 ", "");
 
 class wxRendererNative
@@ -226,12 +231,13 @@ The flags parameter may be:
     
 
 
-
+    MustHaveApp(Get);
     DocDeclStr(
         static wxRendererNative& , Get(),
         "Return the currently used renderer", "");
     
 
+    MustHaveApp(GetGeneric);
     DocDeclStr(
         static wxRendererNative& , GetGeneric(),
         "Return the generic implementation of the renderer. Under some
@@ -240,6 +246,7 @@ platform-specific default renderer which can be retrieved by calling
 `GetDefault`.", "");
     
 
+    MustHaveApp(GetDefault);
     DocDeclStr(
         static wxRendererNative& , GetDefault(),
         "Return the default (native) implementation for this platform -- this
@@ -255,6 +262,7 @@ the return value of `Get`.", "");
 //     static wxRendererNative *Load(const wxString& name);
 
 
+    MustHaveApp(Set);
     DocDeclStr(
         static wxRendererNative *, Set(wxRendererNative *renderer),
         "Set the renderer to use, passing None reverts to using the default
