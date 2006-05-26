@@ -11,15 +11,18 @@
 #ifndef _WX_DCPSG_H_
 #define _WX_DCPSG_H_
 
-#include "wx/dc.h"
+#include "wx/defs.h"
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
 #if wxUSE_POSTSCRIPT
 
+#include "wx/dc.h"
 #include "wx/dialog.h"
 #include "wx/module.h"
 #include "wx/cmndata.h"
+
+extern WXDLLIMPEXP_DATA_CORE(int) wxPageNumber;
 
 //-----------------------------------------------------------------------------
 // classes

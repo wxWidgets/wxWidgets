@@ -30,6 +30,8 @@
     #include "wx/choice.h"
 #endif
 
+WXDLLIMPEXP_DATA_CORE(const wxChar) wxChoiceNameStr[] = wxT("choice");
+
 // ============================================================================
 // implementation
 // ============================================================================

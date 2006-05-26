@@ -63,8 +63,6 @@
 // global variables
 // ---------------------------------------------------------------------------
 
-extern wxList WXDLLEXPORT wxPendingDelete;
-
 // NB: all "NoRedraw" classes must have the same names as the "normal" classes
 //     with NR suffix - wxWindow::MSWCreate() supposes this
 const wxChar *wxCanvasClassName        = wxT("wxWindowClass");

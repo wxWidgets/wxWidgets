@@ -109,8 +109,6 @@
 // global variables
 // ---------------------------------------------------------------------------
 
-extern wxList WXDLLEXPORT wxPendingDelete;
-
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
 extern void wxSetKeyboardHook(bool doIt);
 #endif

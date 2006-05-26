@@ -34,9 +34,6 @@
 #endif
 
 
-extern int wxPageNumber;
-
-
 class wxMacPortStateHelper;
 
 class WXDLLEXPORT wxGraphicPath

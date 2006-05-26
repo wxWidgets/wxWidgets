@@ -27,9 +27,11 @@
 #ifndef WX_PRECOMP
 #endif //WX_PRECOMP
 
+#if wxUSE_GAUGE
+
 #include "wx/gauge.h"
 
-#if wxUSE_GAUGE
+WXDLLIMPEXP_DATA_CORE(const wxChar) wxGaugeNameStr[] = wxT("gauge");
 
 // ============================================================================
 // implementation

@@ -9,10 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __VMS
-#define XtDisplay XTDISPLAY
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -24,10 +20,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
-    #include "wx/event.h"
-    #include "wx/app.h"
-    #include "wx/utils.h"
-    #include "wx/dc.h"
     #include "wx/pen.h"
     #include "wx/brush.h"
     #include "wx/palette.h"
@@ -36,25 +28,32 @@
     #include "wx/settings.h"
 #endif
 
+#include "wx/colour.h"
 #include "wx/bitmap.h"
 #include "wx/font.h"
 #include "wx/hashmap.h"
 
-#include <string.h>
+WXDLLIMPEXP_DATA_CORE(wxBrushList*) wxTheBrushList;
+WXDLLIMPEXP_DATA_CORE(wxFontList*)  wxTheFontList;
+WXDLLIMPEXP_DATA_CORE(wxPenList*)   wxThePenList;
 
-#ifdef __WXMOTIF__
-#ifdef __VMS__
-#pragma message disable nosimpint
-#endif
-#include <Xm/Xm.h>
-#ifdef __VMS__
-#pragma message enable nosimpint
-#endif
+WXDLLIMPEXP_DATA_CORE(wxColourDatabase*) wxTheColourDatabase;
+
+WXDLLIMPEXP_DATA_CORE(wxBitmap)  wxNullBitmap;
+WXDLLIMPEXP_DATA_CORE(wxBrush)   wxNullBrush;
+WXDLLIMPEXP_DATA_CORE(wxColour)  wxNullColour;
+WXDLLIMPEXP_DATA_CORE(wxCursor)  wxNullCursor;
+WXDLLIMPEXP_DATA_CORE(wxFont)    wxNullFont;
+WXDLLIMPEXP_DATA_CORE(wxIcon)    wxNullIcon;
+WXDLLIMPEXP_DATA_CORE(wxPen)     wxNullPen;
+#if wxUSE_PALETTE
+WXDLLIMPEXP_DATA_CORE(wxPalette) wxNullPalette;
 #endif
 
-#ifdef __WXX11__
-#include "X11/Xlib.h"
-#endif
+WX_DECLARE_STRING_HASH_MAP(wxColour*, wxStringToColourHashMap);
+
+const wxSize wxDefaultSize(wxDefaultCoord, wxDefaultCoord);
+const wxPoint wxDefaultPosition(wxDefaultCoord, wxDefaultCoord);
 
 #if wxUSE_EXTENDED_RTTI
 
@@ -85,8 +84,6 @@ template<> void wxStringWriteValue(wxString &s , const wxSize &data )
 wxCUSTOM_TYPE_INFO(wxSize, wxToStringConverter<wxSize> , wxFromStringConverter<wxSize>)
 
 #endif
-
-IMPLEMENT_ABSTRACT_CLASS(wxDCBase, wxObject)
 
 wxRect::wxRect(const wxPoint& point1, const wxPoint& point2)
 {

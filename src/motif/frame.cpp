@@ -88,7 +88,6 @@ static void wxFrameMapProc(Widget frameShell, XtPointer clientData,
 // ----------------------------------------------------------------------------
 
 extern wxList wxModelessWindows;
-extern wxList wxPendingDelete;
 
 // ----------------------------------------------------------------------------
 // wxWin macros

@@ -203,7 +203,6 @@
 // data
 //-----------------------------------------------------------------------------
 
-extern wxList     wxPendingDelete;
 extern bool       g_blockEventsOnDrag;
 extern bool       g_blockEventsOnScroll;
 extern wxCursor   g_globalCursor;

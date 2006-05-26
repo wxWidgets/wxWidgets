@@ -46,8 +46,6 @@
 //   global data
 //------------------------------------------------------------------------
 
-extern wxList wxPendingDelete;
-
 wxWindowHash *wxWidgetHashTable = NULL;
 wxWindowHash *wxClientWidgetHashTable = NULL;
 

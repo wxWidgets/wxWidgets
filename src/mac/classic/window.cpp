@@ -60,7 +60,6 @@
 
 #include <string.h>
 
-extern wxList wxPendingDelete;
 wxWindowMac* gFocusWindow = NULL ;
 
 #ifdef __WXUNIVERSAL__

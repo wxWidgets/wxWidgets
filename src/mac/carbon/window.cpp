@@ -68,8 +68,6 @@
 
 #include <string.h>
 
-extern wxList wxPendingDelete;
-
 #ifdef __WXUNIVERSAL__
     IMPLEMENT_ABSTRACT_CLASS(wxWindowMac, wxWindowBase)
 #else

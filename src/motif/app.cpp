@@ -67,7 +67,6 @@ static void wxTLWidgetDestroyCallback(Widget w, XtPointer clientData,
                                       XtPointer ptr);
 static WXWidget wxCreateTopLevelWidget( WXDisplay* display );
 
-extern wxList wxPendingDelete;
 extern bool wxAddIdleCallback();
 
 wxHashTable *wxWidgetHashTable = NULL;

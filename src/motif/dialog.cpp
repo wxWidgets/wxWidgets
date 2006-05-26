@@ -66,7 +66,6 @@
 // for modal dialogs
 wxList wxModalDialogs;
 extern wxList wxModelessWindows;  // Frames and modeless dialogs
-extern wxList wxPendingDelete;
 
 #define wxUSE_INVISIBLE_RESIZE 1
 

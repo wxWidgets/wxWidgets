@@ -676,9 +676,6 @@ extern WXDLLEXPORT_DATA(const wxChar) wxPanelNameStr[];
 extern WXDLLEXPORT_DATA(const wxSize) wxDefaultSize;
 extern WXDLLEXPORT_DATA(const wxPoint) wxDefaultPosition;
 
-// The list of objects which should be deleted
-extern WXDLLEXPORT_DATA(wxList) wxPendingDelete;
-
 // ---------------------------------------------------------------------------
 // global functions
 // ---------------------------------------------------------------------------

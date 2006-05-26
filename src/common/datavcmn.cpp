@@ -17,13 +17,13 @@
 
 #if wxUSE_DATAVIEWCTRL
 
+#include "wx/dataview.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/object.h"
     #include "wx/log.h"
 #endif
 
-#include "wx/image.h"
-#include "wx/dataview.h"
+WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[] = wxT("dataviewCtrl");
 
 // ---------------------------------------------------------
 // wxDataViewModel

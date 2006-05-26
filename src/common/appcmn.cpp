@@ -55,6 +55,7 @@
 #include "wx/build.h"
 WX_CHECK_BUILD_OPTIONS("wxCore")
 
+WXDLLIMPEXP_DATA_CORE(wxList) wxPendingDelete;
 
 // ----------------------------------------------------------------------------
 // wxEventLoopPtr

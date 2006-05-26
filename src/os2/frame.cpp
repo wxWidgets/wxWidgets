@@ -48,8 +48,6 @@
 // globals
 // ----------------------------------------------------------------------------
 
-extern wxList WXDLLEXPORT wxPendingDelete;
-
 #if wxUSE_MENUS_NATIVE
 extern wxMenu *wxCurrentPopupMenu;
 #endif

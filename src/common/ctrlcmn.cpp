@@ -38,6 +38,8 @@
     #include "wx/statbmp.h"
 #endif // wxUSE_STATBMP
 
+WXDLLIMPEXP_DATA_CORE(const wxChar) wxControlNameStr[] = wxT("control");
+
 // ============================================================================
 // implementation
 // ============================================================================

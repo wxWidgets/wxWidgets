@@ -80,15 +80,14 @@
 // For reporting compile- and runtime version of GTK+ in the ctrl+alt+mclick dialog.
 // The gtk includes don't pull any other headers in, at least not on my system - MR
 #ifdef __WXGTK__
-    #ifdef __WXGTK20__
-        #include <gtk/gtkversion.h>
-    #else
-        #include <gtk/gtkfeatures.h>
-    #endif
+    #include <gtk/gtkversion.h>
     extern const unsigned int gtk_major_version;
     extern const unsigned int gtk_minor_version;
     extern const unsigned int gtk_micro_version;
 #endif
+
+// Windows List
+WXDLLIMPEXP_DATA_CORE(wxWindowList) wxTopLevelWindows;
 
 // ----------------------------------------------------------------------------
 // static data

@@ -81,8 +81,7 @@ extern "C" int _System bsdselect(int,
 // global variables
 // ---------------------------------------------------------------------------
 
-extern wxChar*                      wxBuffer;
-extern wxList WXDLLEXPORT           wxPendingDelete;
+WXDLLEXPORT_DATA(wxChar*) wxBuffer;
 extern wxCursor*                    g_globalCursor;
 
 HAB                                 vHabmain = NULLHANDLE;

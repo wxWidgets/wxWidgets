@@ -28,7 +28,6 @@
 #include "wx/mac/uma.h"
 
 extern wxWindowList wxModelessWindows;
-//extern wxList wxPendingDelete;
 
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
   EVT_ACTIVATE(wxFrame::OnActivate)

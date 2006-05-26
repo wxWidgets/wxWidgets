@@ -111,7 +111,6 @@ WXDLLEXPORT_DATA(extern const wxChar) wxBitmapRadioButtonNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxScrollBarNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxSliderNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxTextCtrlNameStr[];
-WXDLLEXPORT_DATA(extern const wxChar) wxEnhDialogNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxToolBarNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxStatusLineNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxGetTextFromUserPromptStr[];

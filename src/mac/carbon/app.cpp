@@ -67,8 +67,6 @@
 #  include <Devices.h>
 #endif
 
-extern wxList wxPendingDelete;
-
 #if wxUSE_THREADS
 extern size_t g_numberOfThreads;
 #endif

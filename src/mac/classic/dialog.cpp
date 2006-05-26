@@ -25,8 +25,6 @@
 // Lists to keep track of windows, so we can disable/enable them
 // for modal dialogs
 wxList wxModalDialogs;
-//wxList wxModelessWindows;  // Frames and modeless dialogs
-extern wxList wxPendingDelete;
 
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 

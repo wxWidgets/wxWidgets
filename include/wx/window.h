@@ -113,6 +113,7 @@ WX_DECLARE_LIST_3(wxWindow, wxWindowBase, wxWindowList, wxWindowListNode, class 
 // ----------------------------------------------------------------------------
 
 extern WXDLLEXPORT_DATA(wxWindowList) wxTopLevelWindows;
+extern WXDLLIMPEXP_DATA_CORE(wxList) wxPendingDelete;
 
 // ----------------------------------------------------------------------------
 // wxWindowBase is the base class for all GUI controls/widgets, this is the public

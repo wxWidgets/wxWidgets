@@ -27,8 +27,6 @@
 // for modal dialogs
 wxList wxModalDialogs;
 
-extern wxList wxPendingDelete;
-
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 
 BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)

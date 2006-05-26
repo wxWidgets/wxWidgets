@@ -35,6 +35,8 @@
 #include "wx/math.h"
 #include "wx/stdpaths.h"
 
+WXDLLIMPEXP_DATA_CORE(int) wxPageNumber;
+
 #ifdef __WXMSW__
 
 #ifdef DrawText

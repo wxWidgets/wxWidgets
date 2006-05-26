@@ -11,9 +11,6 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/object.h"
-    #include "wx/window.h"
-    #include "wx/dc.h"
     #include "wx/cursor.h"
 #endif
 

@@ -26,6 +26,8 @@
 
 #if wxUSE_TEXTDLG
 
+#include "wx/generic/textdlgg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dialog.h"
@@ -40,7 +42,8 @@
     #include "wx/statline.h"
 #endif
 
-#include "wx/generic/textdlgg.h"
+WXDLLIMPEXP_DATA_CORE(const wxChar) wxGetTextFromUserPromptStr[] = wxT("Input Text");
+WXDLLIMPEXP_DATA_CORE(const wxChar) wxGetPasswordFromUserPromptStr[] = wxT("Enter Password");
 
 // ----------------------------------------------------------------------------
 // constants

@@ -61,8 +61,6 @@ extern bool g_isIdle;
 // data
 // ----------------------------------------------------------------------------
 
-extern wxList           wxPendingDelete;
-
 extern int              g_openDialogs;
 extern wxWindowGTK     *g_delayedFocus;
 
