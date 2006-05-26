@@ -227,7 +227,8 @@ bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
     bool eventProcessed = false;
     while (subjectOfHelp && !eventProcessed)
     {
-        wxHelpEvent helpEvent(wxEVT_HELP, subjectOfHelp->GetId(), pt) ;
+        wxHelpEvent helpEvent(wxEVT_HELP, subjectOfHelp->GetId(), pt,
+                              wxHelpEvent::Origin_HelpButton);
         helpEvent.SetEventObject(subjectOfHelp);
 
         eventProcessed = win->GetEventHandler()->ProcessEvent(helpEvent);

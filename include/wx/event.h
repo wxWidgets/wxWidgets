@@ -1983,17 +1983,28 @@ private:
 class WXDLLIMPEXP_CORE wxHelpEvent : public wxCommandEvent
 {
 public:
+    // how was this help event generated?
+    enum Origin
+    {
+        Origin_Unknown,    // unrecognized event source
+        Origin_Keyboard,   // event generated from F1 key press
+        Origin_HelpButton  // event from [?] button on the title bar (Windows)
+    };
+
     wxHelpEvent(wxEventType type = wxEVT_NULL,
                 wxWindowID winid = 0,
-                const wxPoint& pt = wxDefaultPosition)
+                const wxPoint& pt = wxDefaultPosition,
+                Origin origin = Origin_Unknown)
         : wxCommandEvent(type, winid),
-          m_pos(pt), m_target(), m_link()
+          m_pos(pt),
+          m_origin(GuessOrigin(origin))
     { }
     wxHelpEvent(const wxHelpEvent & event)
         : wxCommandEvent(event),
           m_pos(event.m_pos),
           m_target(event.m_target),
-          m_link(event.m_link)
+          m_link(event.m_link),
+          m_origin(event.m_origin)
     { }
 
     // Position of event (in screen coordinates)
@@ -2010,10 +2021,19 @@ public:
 
     virtual wxEvent *Clone() const { return new wxHelpEvent(*this); }
 
+    // optional indication of the event source
+    Origin GetOrigin() const { return m_origin; }
+    void SetOrigin(Origin origin) { m_origin = origin; }
+
 protected:
     wxPoint   m_pos;
     wxString  m_target;
     wxString  m_link;
+    Origin    m_origin;
+
+    // we can try to guess the event origin ourselves, even if none is
+    // specified in the ctor
+    static Origin GuessOrigin(Origin origin);
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHelpEvent)
