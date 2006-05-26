@@ -75,13 +75,6 @@ public:
     // set the size of the tabs for wxNB_FIXEDWIDTH controls
     virtual void SetTabSize(const wxSize& sz) = 0;
 
-    // hit test, returns which tab is hit and, optionally, where (icon, label)
-    // (not implemented on all platforms)
-    virtual int HitTest(const wxPoint& WXUNUSED(pt),
-                        long * WXUNUSED(flags) = NULL) const
-    {
-        return wxNOT_FOUND;
-    }
 
 
     // implement some base class functions
