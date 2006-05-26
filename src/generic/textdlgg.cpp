@@ -42,8 +42,8 @@
     #include "wx/statline.h"
 #endif
 
-WXDLLIMPEXP_DATA_CORE(const wxChar) wxGetTextFromUserPromptStr[] = wxT("Input Text");
-WXDLLIMPEXP_DATA_CORE(const wxChar) wxGetPasswordFromUserPromptStr[] = wxT("Enter Password");
+const wxChar wxGetTextFromUserPromptStr[] = wxT("Input Text");
+const wxChar wxGetPasswordFromUserPromptStr[] = wxT("Enter Password");
 
 // ----------------------------------------------------------------------------
 // constants

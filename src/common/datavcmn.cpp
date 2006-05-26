@@ -23,7 +23,7 @@
     #include "wx/log.h"
 #endif
 
-WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[] = wxT("dataviewCtrl");
+const wxChar wxDataViewCtrlNameStr[] = wxT("dataviewCtrl");
 
 // ---------------------------------------------------------
 // wxDataViewModel
