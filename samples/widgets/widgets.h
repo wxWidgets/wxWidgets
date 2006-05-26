@@ -18,31 +18,41 @@
     #define WidgetsBookCtrl wxTreebook
     #define WidgetsBookCtrlEvent wxTreebookEvent
     #define EVT_WIDGETS_PAGE_CHANGED(id,func) EVT_TREEBOOK_PAGE_CHANGED(id,func)
+    #define WidgetBookStyle (wxBK_DEFAULT)
 #else
     #include "wx/bookctrl.h"
     #define USE_TREEBOOK 0
     #define WidgetsBookCtrl wxBookCtrl
     #define WidgetsBookCtrlEvent wxBookCtrlEvent
     #define EVT_WIDGETS_PAGE_CHANGED(id,func) EVT_BOOKCTRL_PAGE_CHANGED(id,func)
+    #ifdef __POCKETPC__
+        #define WidgetBookStyle (wxBK_BOTTOM|wxNB_FLAT)
+    #else
+        #define WidgetBookStyle (wxBK_DEFAULT)
+    #endif
 #endif
 
-#if wxUSE_LOG && !defined(__SMARTPHONE__)
+#if wxUSE_LOG && !defined(__WXHANDHELD__)
     #define USE_LOG 1
 #else
     #define USE_LOG 0
 #endif
 
+#if defined(__WXHANDHELD__)
+    #define USE_ICONS_IN_BOOK 0
+#else
+    #define USE_ICONS_IN_BOOK 1
+#endif
+
 class WXDLLEXPORT wxCheckBox;
 class WXDLLEXPORT wxSizer;
+class WXDLLEXPORT wxImageList;
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT WidgetsBookCtrl;
 
 class WidgetsPageInfo;
 
 #include "wx/panel.h"
-
-// all source files use wxImageList
-#include "wx/imaglist.h"
 
 // INTRODUCING NEW PAGES DON'T FORGET TO ADD ENTRIES TO 'WidgetsCategories'
 enum
@@ -81,7 +91,9 @@ enum
 class WidgetsPage : public wxPanel
 {
 public:
-    WidgetsPage(WidgetsBookCtrl *book);
+    WidgetsPage(WidgetsBookCtrl *book,
+                wxImageList *imaglist,
+                char* icon[]);
 
     // return the control shown by this page
     virtual wxControl *GetWidget() const = 0;

@@ -131,10 +131,8 @@ IMPLEMENT_WIDGETS_PAGE(DatePickerWidgetsPage, wxT("DatePicker"),
 
 DatePickerWidgetsPage::DatePickerWidgetsPage(WidgetsBookCtrl *book,
                                          wxImageList *imaglist)
-                      :WidgetsPage(book)
+                      :WidgetsPage(book, imaglist, datepick_xpm)
 {
-    imaglist->Add(wxBitmap(datepick_xpm));
-
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane

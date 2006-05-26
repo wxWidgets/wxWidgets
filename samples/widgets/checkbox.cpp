@@ -158,10 +158,8 @@ IMPLEMENT_WIDGETS_PAGE(CheckBoxWidgetsPage, wxT("CheckBox"), FAMILY_CTRLS );
 
 CheckBoxWidgetsPage::CheckBoxWidgetsPage(WidgetsBookCtrl *book,
                                          wxImageList *imaglist)
-                  : WidgetsPage(book)
+                  : WidgetsPage(book, imaglist, checkbox_xpm)
 {
-    imaglist->Add(wxBitmap(checkbox_xpm));
-
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane

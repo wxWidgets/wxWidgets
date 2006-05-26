@@ -164,10 +164,8 @@ IMPLEMENT_WIDGETS_PAGE(ButtonWidgetsPage, _T("Button"), FAMILY_CTRLS );
 
 ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)
-                  : WidgetsPage(book)
+                  : WidgetsPage(book, imaglist, button_xpm)
 {
-    imaglist->Add(wxBitmap(button_xpm));
-
     // init everything
     m_chkBitmap =
     m_chkImage =

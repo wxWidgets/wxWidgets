@@ -205,10 +205,8 @@ IMPLEMENT_WIDGETS_PAGE(ListboxWidgetsPage, _T("Listbox"),
 
 ListboxWidgetsPage::ListboxWidgetsPage(WidgetsBookCtrl *book,
                                        wxImageList *imaglist)
-                  : WidgetsPage(book)
+                  : WidgetsPage(book, imaglist, listbox_xpm)
 {
-    imaglist->Add(wxBitmap(listbox_xpm));
-
     // init everything
     m_radioSelMode = (wxRadioBox *)NULL;
 

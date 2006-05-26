@@ -167,10 +167,8 @@ IMPLEMENT_WIDGETS_PAGE(GaugeWidgetsPage, _T("Gauge"), FAMILY_CTRLS );
 
 GaugeWidgetsPage::GaugeWidgetsPage(WidgetsBookCtrl *book,
                                    wxImageList *imaglist)
-                 :WidgetsPage(book)
+                 :WidgetsPage(book, imaglist, gauge_xpm)
 {
-    imaglist->Add(wxBitmap(gauge_xpm));
-
     // init everything
     m_range = 100;
 

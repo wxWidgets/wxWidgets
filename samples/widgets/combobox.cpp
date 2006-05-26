@@ -204,7 +204,7 @@ IMPLEMENT_WIDGETS_PAGE(ComboboxWidgetsPage, _T("Combobox"),
 
 ComboboxWidgetsPage::ComboboxWidgetsPage(WidgetsBookCtrl *book,
                                          wxImageList *imaglist)
-                  : WidgetsPage(book)
+                  : WidgetsPage(book, imaglist, combobox_xpm)
 {
     // init everything
     m_chkSort =
@@ -212,8 +212,6 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(WidgetsBookCtrl *book,
 
     m_combobox = (wxComboBox *)NULL;
     m_sizerCombo = (wxSizer *)NULL;
-
-    imaglist->Add(wxBitmap(combobox_xpm));
 
     /*
        What we create here is a frame having 3 panes: style pane is the

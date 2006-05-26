@@ -44,6 +44,7 @@
 #include "wx/sizer.h"
 #include "wx/bookctrl.h"
 #include "wx/artprov.h"
+#include "wx/imaglist.h"
 
 #include "widgets.h"
 
@@ -85,7 +86,7 @@ enum Orient
 class BookWidgetsPage : public WidgetsPage
 {
 public:
-    BookWidgetsPage(WidgetsBookCtrl *book);
+    BookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist, char* icon[]);
     virtual ~BookWidgetsPage();
 
     virtual wxControl *GetWidget() const { return m_book; }
@@ -184,8 +185,8 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-BookWidgetsPage::BookWidgetsPage(WidgetsBookCtrl *book)
-                :WidgetsPage(book)
+BookWidgetsPage::BookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist, char* icon[])
+                :WidgetsPage(book, imaglist, icon)
 {
     // init everything
     m_chkImages = NULL;
@@ -519,9 +520,8 @@ class NotebookWidgetsPage : public BookWidgetsPage
 {
 public:
     NotebookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
-        : BookWidgetsPage(book)
+        : BookWidgetsPage(book, imaglist, notebook_xpm)
     {
-        imaglist->Add(wxBitmap(notebook_xpm));
         RecreateBook();
     }
     virtual ~NotebookWidgetsPage() {}
@@ -602,9 +602,8 @@ class ListbookWidgetsPage : public BookWidgetsPage
 {
 public:
     ListbookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
-        : BookWidgetsPage(book)
+        : BookWidgetsPage(book, imaglist, listbook_xpm)
     {
-        imaglist->Add(wxBitmap(listbook_xpm));
         RecreateBook();
     }
     virtual ~ListbookWidgetsPage() {}
@@ -677,9 +676,8 @@ class ChoicebookWidgetsPage : public BookWidgetsPage
 {
 public:
     ChoicebookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
-        : BookWidgetsPage(book)
+        : BookWidgetsPage(book, imaglist, choicebk_xpm)
     {
-        imaglist->Add(wxBitmap(choicebk_xpm));
         RecreateBook();
     }
     virtual ~ChoicebookWidgetsPage() {}

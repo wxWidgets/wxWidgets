@@ -47,6 +47,7 @@
 #include "wx/colordlg.h"
 #include "wx/fontdlg.h"
 #include "wx/textdlg.h"
+#include "wx/imaglist.h"
 
 #include "widgets.h"
 
@@ -380,7 +381,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     // we have 2 panes: book with pages demonstrating the controls in the
     // upper one and the log window with some buttons in the lower
 
-    int style = wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|wxBK_DEFAULT;
+    int style = wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|WidgetBookStyle;
     // Uncomment to suppress page theme (draw in solid colour)
     //style |= wxNB_NOPAGETHEME;
 
@@ -393,7 +394,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
         style);
     InitBook();
 
-#ifndef __SMARTPHONE__
+#ifndef __WXHANDHELD__
     // the lower one only has the log listbox and a button to clear it
 #if USE_LOG
     wxSizer *sizerDown = new wxStaticBoxSizer(
@@ -423,11 +424,11 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     sizerTop->Add(0, 5, 0, wxGROW); // spacer in between
     sizerTop->Add(sizerDown, 0,  wxGROW | (wxALL & ~wxTOP), 10);
 
-#else // !__SMARTPHONE__/__SMARTPHONE__
+#else // !__WXHANDHELD__/__WXHANDHELD__
 
     sizerTop->Add(m_book, 1, wxGROW | wxALL );
 
-#endif // __SMARTPHONE__
+#endif // __WXHANDHELD__
 
     m_panel->SetSizer(sizerTop);
 
@@ -445,9 +446,13 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
 void WidgetsFrame::InitBook()
 {
+#if USE_ICONS_IN_BOOK
     wxImageList *imageList = new wxImageList(32, 32);
 
     imageList->Add(wxBitmap(sample_xpm));
+#else
+    wxImageList *imageList = NULL;
+#endif
 
 #if !USE_TREEBOOK
     WidgetsBookCtrl *books[MAX_PAGES];
@@ -469,7 +474,11 @@ void WidgetsFrame::InitBook()
 #if USE_TREEBOOK
         nPage++; // increase for parent page
 #else
-        books[cat] = new WidgetsBookCtrl( m_book, wxID_ANY );
+        books[cat] = new WidgetsBookCtrl(m_book,
+                                         wxID_ANY,
+                                         wxDefaultPosition,
+                                         wxDefaultSize,
+                                         WidgetBookStyle);
 #endif
 
         for ( WidgetsPageInfo *info = WidgetsPage::ms_widgetPages;
@@ -517,7 +526,9 @@ void WidgetsFrame::InitBook()
 
     GetMenuBar()->Append(menuPages, _T("&Page"));
 
+#if USE_ICONS_IN_BOOK
     m_book->AssignImageList(imageList);
+#endif
 
     for ( cat = 0; cat < MAX_PAGES; cat++ )
     {
@@ -525,7 +536,9 @@ void WidgetsFrame::InitBook()
         m_book->AddPage(NULL,WidgetsCategories[cat],false,0);
 #else
         m_book->AddPage(books[cat],WidgetsCategories[cat],false,0);
+#if USE_ICONS_IN_BOOK
         books[cat]->SetImageList(imageList);
+#endif
 #endif
 
         // now do add them
@@ -816,13 +829,21 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label, int cate
 int WidgetsPage::ms_defaultFlags = wxBORDER_DEFAULT;
 WidgetsPageInfo *WidgetsPage::ms_widgetPages = NULL;
 
-WidgetsPage::WidgetsPage(WidgetsBookCtrl *book)
+WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
+                         wxImageList *imaglist,
+                         char* icon[])
            : wxPanel(book, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
                      wxNO_FULL_REPAINT_ON_RESIZE |
                      wxCLIP_CHILDREN |
                      wxTAB_TRAVERSAL)
 {
+#if USE_ICONS_IN_BOOK
+    imaglist->Add(wxBitmap(icon));
+#else
+    wxUnusedVar(imaglist);
+    wxUnusedVar(icon);
+#endif
 }
 
 wxSizer *WidgetsPage::CreateSizerWithText(wxControl *control,

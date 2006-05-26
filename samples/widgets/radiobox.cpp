@@ -185,10 +185,8 @@ IMPLEMENT_WIDGETS_PAGE(RadioWidgetsPage, _T("Radio"),
 
 RadioWidgetsPage::RadioWidgetsPage(WidgetsBookCtrl *book,
                                    wxImageList *imaglist)
-                  : WidgetsPage(book)
+                  : WidgetsPage(book, imaglist, radio_xpm)
 {
-    imaglist->Add(wxBitmap(radio_xpm));
-
     // init everything
     m_chkVert = (wxCheckBox *)NULL;
     m_chkEnableItem = (wxCheckBox *)NULL;

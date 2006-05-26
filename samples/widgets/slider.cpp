@@ -208,10 +208,8 @@ IMPLEMENT_WIDGETS_PAGE(SliderWidgetsPage, _T("Slider"), FAMILY_CTRLS );
 
 SliderWidgetsPage::SliderWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)
-                  : WidgetsPage(book)
+                  : WidgetsPage(book, imaglist, slider_xpm)
 {
-    imaglist->Add(wxBitmap(slider_xpm));
-
     // init everything
     m_min = 0;
     m_max = 100;

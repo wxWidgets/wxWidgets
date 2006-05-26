@@ -346,10 +346,8 @@ IMPLEMENT_WIDGETS_PAGE(TextWidgetsPage, _T("Text"),
 // ----------------------------------------------------------------------------
 
 TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
-               : WidgetsPage(book)
+               : WidgetsPage(book, imaglist, text_xpm)
 {
-    imaglist->Add(wxBitmap(text_xpm));
-
     // init everything
 #ifdef __WXMSW__
     m_radioKind =

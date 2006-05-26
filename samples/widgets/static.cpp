@@ -210,10 +210,8 @@ IMPLEMENT_WIDGETS_PAGE(StaticWidgetsPage, _T("Static"),
 
 StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)
-                  : WidgetsPage(book)
+                  : WidgetsPage(book, imaglist, statbox_xpm)
 {
-    imaglist->Add(wxBitmap(statbox_xpm));
-
     // init everything
     m_chkVert =
     m_chkAutoResize = (wxCheckBox *)NULL;

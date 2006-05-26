@@ -34,6 +34,7 @@
 #ifndef WX_PRECOMP
     #include "wx/sizer.h"
     #include "wx/statbox.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "icons/toggle.xpm"
@@ -114,10 +115,8 @@ IMPLEMENT_WIDGETS_PAGE(ToggleWidgetsPage, wxT("ToggleButton"),
 
 ToggleWidgetsPage::ToggleWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)
-                      :WidgetsPage(book)
+                      :WidgetsPage(book, imaglist, toggle_xpm)
 {
-    imaglist->Add(wxBitmap(toggle_xpm));
-
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane

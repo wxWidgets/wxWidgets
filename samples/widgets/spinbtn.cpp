@@ -178,7 +178,7 @@ IMPLEMENT_WIDGETS_PAGE(SpinBtnWidgetsPage, _T("Spin"),
 
 SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
                                        wxImageList *imaglist)
-                  : WidgetsPage(book)
+                  : WidgetsPage(book, imaglist, spinbtn_xpm)
 {
     m_chkVert = NULL;
     m_chkWrap = NULL;
@@ -187,7 +187,6 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
     m_textValue = NULL;
     m_textMin = NULL;
     m_textMax = NULL;
-    imaglist->Add(wxBitmap(spinbtn_xpm));
 
     // init everything
     m_min = 0;
