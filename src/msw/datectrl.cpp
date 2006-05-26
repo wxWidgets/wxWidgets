@@ -277,6 +277,7 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     switch ( hdr->code )
     {
         case DTN_DATETIMECHANGE:
+        {
             NMDATETIMECHANGE *dtch = (NMDATETIMECHANGE *)hdr;
             wxDateTime dt;
             if ( dtch->dwFlags == GDT_VALID )
@@ -288,6 +289,7 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 *result = 0;
                 return true;
             }
+        }
     }
 
     return wxDatePickerCtrlBase::MSWOnNotify(idCtrl, lParam, result);
