@@ -23,6 +23,7 @@
 
 #include "wx/app.h"
 #include "wx/hash.h"
+#include "wx/textfile.h"
 
 #ifdef new
 #undef new
@@ -386,95 +387,79 @@ void AddTexRef(wxChar *name, wxChar *file, wxChar *sectionName,
 
 void WriteTexReferences(wxChar *filename)
 {
-  wxString converter;
-  wxString name = filename;
-  wxSTD ofstream ostr((char const *)name.fn_str());
-  if (ostr.bad()) return;
+    wxString name = filename;
+    wxTextFile file;
 
-  TexReferences.BeginFind();
-  wxHashTable::Node *node = TexReferences.Next();
-  while (node)
-  {
-    Tex2RTFYield();
-    TexRef *ref = (TexRef *)node->GetData();
-    converter = ref->refLabel;
-    ostr << converter.mb_str();
-    ostr << " ";
-    converter = (ref->refFile ? ref->refFile : _T("??"));
-    ostr << converter.mb_str();
-    ostr << " ";
-    converter = (ref->sectionName ? ref->sectionName : _T("??")) ;
-    ostr << converter.mb_str();
-    ostr << " ";
-    converter = (ref->sectionNumber ? ref->sectionNumber : _T("??")) ;
-    ostr << converter.mb_str();
-    ostr << "\n";
-    if (!ref->sectionNumber || (wxStrcmp(ref->sectionNumber, _T("??")) == 0 && wxStrcmp(ref->sectionName, _T("??")) == 0))
+    if (!(wxFileExists(name)?file.Open(name):file.Create(name)))
+        return;
+
+    file.Clear();
+
+    TexReferences.BeginFind();
+    wxHashTable::Node *node = TexReferences.Next();
+    while (node)
     {
-      wxChar buf[200];
-      wxSnprintf(buf, sizeof(buf), _T("Warning: reference %s not resolved."), ref->refLabel);
-      OnInform(buf);
+        Tex2RTFYield();
+        TexRef *ref = (TexRef *)node->GetData();
+        wxString converter = ref->refLabel;
+        converter << wxT(" ");
+        converter << (ref->refFile ? ref->refFile : _T("??"));
+        converter << wxT(" ");
+        converter << (ref->sectionName ? ref->sectionName : _T("??")) ;
+        converter << wxT(" ");
+        converter << (ref->sectionNumber ? ref->sectionNumber : _T("??")) ;
+        file.AddLine(converter);
+
+        if (!ref->sectionNumber || (wxStrcmp(ref->sectionNumber, _T("??")) == 0 && wxStrcmp(ref->sectionName, _T("??")) == 0))
+        {
+            wxChar buf[200];
+            wxSnprintf(buf, sizeof(buf), _T("Warning: reference %s not resolved."), ref->refLabel);
+            OnInform(buf);
+        }
+        node = TexReferences.Next();
     }
-    node = TexReferences.Next();
-  }
+
+    file.Write();
+    file.Close();
 }
 
 void ReadTexReferences(wxChar *filename)
 {
-  if (!wxFileExists(filename))
-      return;
+    wxString name = filename;
 
-  wxString name = filename;
-  wxSTD ifstream istr((char const *)name.fn_str(), wxSTD ios::in);
+    if (!wxFileExists(name))
+        return;
 
-  if (istr.bad()) return;
+    wxTextFile file;
+    if (!file.Open(name))
+        return;
 
-  char label[100];
-  char file[400];
-  char section[100];
-  char sectionName[100];
-
-  while (!istr.eof())
-  {
-    istr >> label;
-    if (!istr.eof())
+    wxString line;
+    for ( line = file.GetFirstLine(); !file.Eof(); line = file.GetNextLine() )
     {
-      istr >> file;
-      istr >> sectionName;
-      char ch;
-      istr.get(ch); // Read past space
-      istr.get(ch);
-      int i = 0;
-      while (ch != '\n' && !istr.eof())
-      {
-        section[i] = ch;
-        i ++;
-        istr.get(ch);
-      }
-      section[i] = 0;
+        wxString labelStr = line.BeforeFirst(wxT(' '));
+        line = line.AfterFirst(wxT(' '));
+        wxString fileStr  = line.BeforeFirst(wxT(' '));
+        line = line.AfterFirst(wxT(' '));
+        wxString sectionNameStr = line.BeforeFirst(wxT(' '));
+        wxString sectionStr = line.AfterFirst(wxT(' '));
 
-      wxString label_string       = wxString::FromAscii(label);
-      wxString file_string        = wxString::FromAscii(file);
-      wxString sectionName_string = wxString::FromAscii(sectionName);
-      wxString section_string     = wxString::FromAscii(section);
-
-      // gt - needed to trick the hash table "TexReferences" into deleting the key
-      // strings it creates in the Put() function, but not the item that is
-      // created here, as that is destroyed elsewhere.  Without doing this, there
-      // were massive memory leaks
-      TexReferences.DeleteContents(true);
-      TexReferences.Put(
-        label_string.c_str(),
-        new TexRef(
-              label_string.c_str(),
-              file_string.c_str(),
-              section_string.c_str(),
-              sectionName_string.c_str()
-        )
-      );
-      TexReferences.DeleteContents(false);
+        // gt - needed to trick the hash table "TexReferences" into deleting the key
+        // strings it creates in the Put() function, but not the item that is
+        // created here, as that is destroyed elsewhere.  Without doing this, there
+        // were massive memory leaks
+        TexReferences.DeleteContents(true);
+        TexReferences.Put(
+            labelStr.c_str(),
+            new TexRef(
+                labelStr.c_str(),
+                fileStr.c_str(),
+                sectionStr.c_str(),
+                sectionNameStr.c_str()
+            )
+        );
+        TexReferences.DeleteContents(false);
     }
-  }
 }
 
 
