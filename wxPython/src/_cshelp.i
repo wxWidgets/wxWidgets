@@ -70,10 +70,19 @@ Events
 class wxHelpEvent : public wxCommandEvent
 {
 public:
+    // how was this help event generated?
+    enum Origin
+    {
+        Origin_Unknown,    // unrecognized event source
+        Origin_Keyboard,   // event generated from F1 key press
+        Origin_HelpButton  // event from [?] button on the title bar (Windows)
+    };
+
     DocCtorStr(
         wxHelpEvent(wxEventType type = wxEVT_NULL,
                     wxWindowID winid = 0,
-                    const wxPoint& pt = wxDefaultPosition),
+                    const wxPoint& pt = wxDefaultPosition,
+                    Origin origin = Origin_Unknown ),
         "", "");
     
 
@@ -104,7 +113,16 @@ appropriately.", "");
     DocDeclStr(
         void , SetTarget(const wxString& target),
         "Set an optional target to display help in. E.g. a window specification", "");
+
+    // optional indication of the event source
+    DocDeclStr(
+        Origin , GetOrigin() const,
+        "Optiononal indication of the source of the event.", "");
     
+    DocDeclStr(
+        void , SetOrigin(Origin origin),
+        "", "");
+        
 };
 
 //---------------------------------------------------------------------------

@@ -151,6 +151,12 @@ public:
     // cycle thru the pages
     void AdvanceSelection(bool forward = true);
 
+    DocDeclAStr(
+        virtual int, HitTest(const wxPoint& pt, long* OUTPUT) const,
+        "HitTest(Point pt) -> (tab, where)",
+        "Returns the page/tab which is hit, and flags indicating where using
+wx.NB_HITTEST flags.", "");
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
@@ -232,14 +238,6 @@ public:
 
     // set the size of the tabs for wxNB_FIXEDWIDTH controls
     virtual void SetTabSize(const wxSize& sz);
-
-    // hit test, returns which tab is hit and, optionally, where (icon, label)
-    // (not implemented on all platforms)
-    DocDeclAStr(
-        virtual int, HitTest(const wxPoint& pt, long* OUTPUT) const,
-        "HitTest(Point pt) -> (tab, where)",
-        "Returns the tab which is hit, and flags indicating where using
-wx.NB_HITTEST flags.", "");
 
     // implement some base class functions
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
