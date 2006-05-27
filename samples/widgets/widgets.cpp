@@ -325,7 +325,7 @@ bool WidgetsApp::OnInit()
 
 WidgetsFrame::WidgetsFrame(const wxString& title)
             : wxFrame(NULL, wxID_ANY, title,
-                      wxPoint(0, 50), wxDefaultSize,
+                      wxDefaultPosition, wxDefaultSize,
                       wxDEFAULT_FRAME_STYLE |
                       wxNO_FULL_REPAINT_ON_RESIZE |
                       wxCLIP_CHILDREN |
