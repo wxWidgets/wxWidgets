@@ -585,6 +585,7 @@ ALL_BASE_SOURCES =  \
 	src/msw/dir.cpp \
 	src/msw/dlmsw.cpp \
 	src/msw/mimetype.cpp \
+	src/msw/power.cpp \
 	src/msw/regconf.cpp \
 	src/msw/registry.cpp \
 	src/msw/snglinst.cpp \
@@ -2952,6 +2953,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_dir.o \
 	monodll_dlmsw.o \
 	monodll_mimetype.o \
+	monodll_power.o \
 	monodll_regconf.o \
 	monodll_registry.o \
 	monodll_snglinst.o \
@@ -4587,6 +4589,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_dir.o \
 	monolib_dlmsw.o \
 	monolib_mimetype.o \
+	monolib_power.o \
 	monolib_regconf.o \
 	monolib_registry.o \
 	monolib_snglinst.o \
@@ -6260,6 +6263,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_dir.o \
 	basedll_dlmsw.o \
 	basedll_mimetype.o \
+	basedll_power.o \
 	basedll_regconf.o \
 	basedll_registry.o \
 	basedll_snglinst.o \
@@ -6419,6 +6423,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_dir.o \
 	baselib_dlmsw.o \
 	baselib_mimetype.o \
+	baselib_power.o \
 	baselib_regconf.o \
 	baselib_registry.o \
 	baselib_snglinst.o \
@@ -11381,6 +11386,9 @@ monodll_dde.o: $(srcdir)/src/msw/dde.cpp $(MONODLL_ODEP)
 monodll_dlmsw.o: $(srcdir)/src/msw/dlmsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/dlmsw.cpp
 
+monodll_power.o: $(srcdir)/src/msw/power.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/power.cpp
+
 monodll_regconf.o: $(srcdir)/src/msw/regconf.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/regconf.cpp
 
@@ -15193,6 +15201,9 @@ monolib_dde.o: $(srcdir)/src/msw/dde.cpp $(MONOLIB_ODEP)
 
 monolib_dlmsw.o: $(srcdir)/src/msw/dlmsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/dlmsw.cpp
+
+monolib_power.o: $(srcdir)/src/msw/power.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/power.cpp
 
 monolib_regconf.o: $(srcdir)/src/msw/regconf.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/regconf.cpp
@@ -19010,6 +19021,9 @@ basedll_dde.o: $(srcdir)/src/msw/dde.cpp $(BASEDLL_ODEP)
 basedll_dlmsw.o: $(srcdir)/src/msw/dlmsw.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/dlmsw.cpp
 
+basedll_power.o: $(srcdir)/src/msw/power.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/power.cpp
+
 basedll_regconf.o: $(srcdir)/src/msw/regconf.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/regconf.cpp
 
@@ -19567,6 +19581,9 @@ baselib_dde.o: $(srcdir)/src/msw/dde.cpp $(BASELIB_ODEP)
 
 baselib_dlmsw.o: $(srcdir)/src/msw/dlmsw.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/dlmsw.cpp
+
+baselib_power.o: $(srcdir)/src/msw/power.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/power.cpp
 
 baselib_regconf.o: $(srcdir)/src/msw/regconf.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/regconf.cpp

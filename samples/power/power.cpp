@@ -52,7 +52,11 @@ public:
                                           wxTE_MULTILINE | wxTE_READONLY);
         m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(text));
 
+        CreateStatusBar();
+
         SetIcon(wxICON(sample));
+
+        UpdatePowerSettings(wxPOWER_UNKNOWN, wxBATTERY_UNKNOWN_STATE);
 
         Show();
     }
@@ -63,6 +67,17 @@ public:
     }
 
 private:
+    void OnIdle(wxIdleEvent& WXUNUSED(event))
+    {
+        const wxPowerType powerType = wxGetPowerType();
+        const wxBatteryState batteryState = wxGetBatteryState();
+        if ( powerType != m_powerType || batteryState != m_batteryState )
+        {
+            UpdatePowerSettings(powerType, batteryState);
+        }
+    }
+
+#ifdef wxHAS_POWER_EVENTS
     void OnSuspending(wxPowerEvent& event)
     {
         wxLogMessage(_T("System suspend starting..."));
@@ -88,7 +103,67 @@ private:
     {
         wxLogMessage(_T("System resumed from suspend."));
     }
+#endif // wxHAS_POWER_EVENTS
 
+
+    void UpdatePowerSettings(wxPowerType powerType, wxBatteryState batteryState)
+    {
+        wxString powerStr;
+        switch ( m_powerType = powerType )
+        {
+            case wxPOWER_SOCKET:
+                powerStr = _T("wall");
+                break;
+
+            case wxPOWER_BATTERY:
+                powerStr = _T("battery");
+                break;
+
+            default:
+                wxFAIL_MSG(_T("unknown wxPowerType value"));
+                // fall through
+
+            case wxPOWER_UNKNOWN:
+                powerStr = _T("psychic");
+                break;
+        }
+
+        wxString batteryStr;
+        switch ( m_batteryState = batteryState )
+        {
+            case wxBATTERY_NORMAL_STATE:
+                batteryStr = _T("charged");
+                break;
+
+            case wxBATTERY_LOW_STATE:
+                batteryStr = _T("low");
+                break;
+
+            case wxBATTERY_CRITICAL_STATE:
+                batteryStr = _T("critical");
+                break;
+
+            case wxBATTERY_SHUTDOWN_STATE:
+                batteryStr = _T("empty");
+                break;
+
+            default:
+                wxFAIL_MSG(_T("unknown wxBatteryState value"));
+                // fall through
+
+            case wxBATTERY_UNKNOWN_STATE:
+                batteryStr = _T("unknown");
+                break;
+        }
+
+        SetStatusText(wxString::Format(
+                        _T("System is on %s power, battery state is %s"),
+                        powerStr.c_str(),
+                        batteryStr.c_str()));
+    }
+
+    wxPowerType m_powerType;
+    wxBatteryState m_batteryState;
 
     wxLog *m_logOld;
 
@@ -96,10 +171,14 @@ private:
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_IDLE(MyFrame::OnIdle)
+
+#ifdef wxHAS_POWER_EVENTS
     EVT_POWER_SUSPENDING(MyFrame::OnSuspending)
     EVT_POWER_SUSPENDED(MyFrame::OnSuspended)
     EVT_POWER_SUSPEND_CANCEL(MyFrame::OnSuspendCancel)
     EVT_POWER_RESUME(MyFrame::OnResume)
+#endif // wxHAS_POWER_EVENTS
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------

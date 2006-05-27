@@ -2735,6 +2735,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_dir.obj &
 	$(OBJS)\monodll_dlmsw.obj &
 	$(OBJS)\monodll_mimetype.obj &
+	$(OBJS)\monodll_power.obj &
 	$(OBJS)\monodll_regconf.obj &
 	$(OBJS)\monodll_registry.obj &
 	$(OBJS)\monodll_snglinst.obj &
@@ -2846,6 +2847,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_dir.obj &
 	$(OBJS)\monolib_dlmsw.obj &
 	$(OBJS)\monolib_mimetype.obj &
+	$(OBJS)\monolib_power.obj &
 	$(OBJS)\monolib_regconf.obj &
 	$(OBJS)\monolib_registry.obj &
 	$(OBJS)\monolib_snglinst.obj &
@@ -2957,6 +2959,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_dir.obj &
 	$(OBJS)\basedll_dlmsw.obj &
 	$(OBJS)\basedll_mimetype.obj &
+	$(OBJS)\basedll_power.obj &
 	$(OBJS)\basedll_regconf.obj &
 	$(OBJS)\basedll_registry.obj &
 	$(OBJS)\basedll_snglinst.obj &
@@ -3053,6 +3056,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_dir.obj &
 	$(OBJS)\baselib_dlmsw.obj &
 	$(OBJS)\baselib_mimetype.obj &
+	$(OBJS)\baselib_power.obj &
 	$(OBJS)\baselib_regconf.obj &
 	$(OBJS)\baselib_registry.obj &
 	$(OBJS)\baselib_snglinst.obj &
@@ -4591,6 +4595,9 @@ $(OBJS)\monodll_dlmsw.obj :  .AUTODEPEND ..\..\src\msw\dlmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mimetype.obj :  .AUTODEPEND ..\..\src\msw\mimetype.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_power.obj :  .AUTODEPEND ..\..\src\msw\power.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_regconf.obj :  .AUTODEPEND ..\..\src\msw\regconf.cpp
@@ -6489,6 +6496,9 @@ $(OBJS)\monolib_dlmsw.obj :  .AUTODEPEND ..\..\src\msw\dlmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mimetype.obj :  .AUTODEPEND ..\..\src\msw\mimetype.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_power.obj :  .AUTODEPEND ..\..\src\msw\power.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_regconf.obj :  .AUTODEPEND ..\..\src\msw\regconf.cpp
@@ -8392,6 +8402,9 @@ $(OBJS)\basedll_dlmsw.obj :  .AUTODEPEND ..\..\src\msw\dlmsw.cpp
 $(OBJS)\basedll_mimetype.obj :  .AUTODEPEND ..\..\src\msw\mimetype.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_power.obj :  .AUTODEPEND ..\..\src\msw\power.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_regconf.obj :  .AUTODEPEND ..\..\src\msw\regconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -8630,6 +8643,9 @@ $(OBJS)\baselib_dlmsw.obj :  .AUTODEPEND ..\..\src\msw\dlmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_mimetype.obj :  .AUTODEPEND ..\..\src\msw\mimetype.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_power.obj :  .AUTODEPEND ..\..\src\msw\power.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_regconf.obj :  .AUTODEPEND ..\..\src\msw\regconf.cpp

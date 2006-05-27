@@ -1543,6 +1543,10 @@ SOURCE=.\msw\popupwin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\power.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\printdlg.cpp
 # End Source File
 # Begin Source File

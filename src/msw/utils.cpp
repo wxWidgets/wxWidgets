@@ -37,7 +37,6 @@
 #include "wx/dynlib.h"
 #include "wx/dynload.h"
 #include "wx/scopeguard.h"
-#include "wx/power.h"
 
 #include "wx/confbase.h"        // for wxExpandEnvVars()
 
@@ -1002,18 +1001,6 @@ bool wxShutdown(wxShutdownFlags WXUNUSED_IN_WINCE(wFlags))
 
     return bOK;
 #endif // Win32/16
-}
-
-wxPowerType wxGetPowerType()
-{
-    // TODO
-    return wxPOWER_UNKNOWN;
-}
-
-wxBatteryState wxGetBatteryState()
-{
-    // TODO
-    return wxBATTERY_UNKNOWN_STATE;
 }
 
 // ----------------------------------------------------------------------------

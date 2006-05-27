@@ -743,6 +743,10 @@ SOURCE=..\..\src\msw\mslu.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\power.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\regconf.cpp
 # End Source File
 # Begin Source File

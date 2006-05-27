@@ -88,6 +88,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/dir.cpp
     src/msw/dlmsw.cpp
     src/msw/mimetype.cpp
+    src/msw/power.cpp
     src/msw/regconf.cpp
     src/msw/registry.cpp
     src/msw/snglinst.cpp
