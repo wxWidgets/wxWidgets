@@ -612,10 +612,6 @@ SOURCE=..\..\src\msw\version.rc
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\generic\buttonbar.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\generic\calctrl.cpp
 # End Source File
 # Begin Source File
@@ -1119,10 +1115,6 @@ SOURCE=..\..\include\wx\msw\taskbar.h
 # Begin Group "Generic Headers"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\buttonbar.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\calctrl.h

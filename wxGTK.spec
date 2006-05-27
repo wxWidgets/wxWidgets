@@ -302,6 +302,7 @@ wx/msgout.h
 wx/mstream.h
 wx/object.h
 wx/platform.h
+wx/power.h
 wx/process.h
 wx/ptr_scpd.h
 wx/recguard.h

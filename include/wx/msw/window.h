@@ -339,6 +339,9 @@ public:
 
     bool HandleSetCursor(WXHWND hWnd, short nHitTest, int mouseMsg);
 
+    bool HandlePower(WXWPARAM wParam, WXLPARAM lParam, bool *vetoed);
+
+
     // Window procedure
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 

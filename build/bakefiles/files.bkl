@@ -322,6 +322,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/module.cpp
     src/common/mstream.cpp
     src/common/object.cpp
+    src/common/powercmn.cpp
     src/common/process.cpp
     src/common/regex.cpp
     src/common/stdpbase.cpp
@@ -419,6 +420,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mstream.h
     wx/object.h
     wx/platform.h
+    wx/power.h
     wx/process.h
     wx/ptr_scpd.h
     wx/recguard.h

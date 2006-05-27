@@ -35,6 +35,7 @@
 #include "wx/apptrait.h"
 #include "wx/dynload.h"
 #include "wx/confbase.h"
+#include "wx/power.h"
 
 #include <MemoryMgr.h>
 #include <DLServer.h>
@@ -146,6 +147,10 @@ bool wxShutdown(wxShutdownFlags wFlags)
 {
     return false;
 }
+
+// ----------------------------------------------------------------------------
+// power management
+// ----------------------------------------------------------------------------
 
 wxPowerType wxGetPowerType()
 {

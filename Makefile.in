@@ -286,6 +286,7 @@ ALL_BASE_HEADERS =  \
 	wx/mstream.h \
 	wx/object.h \
 	wx/platform.h \
+	wx/power.h \
 	wx/process.h \
 	wx/ptr_scpd.h \
 	wx/recguard.h \
@@ -414,6 +415,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/mstream.h \
 	wx/object.h \
 	wx/platform.h \
+	wx/power.h \
 	wx/process.h \
 	wx/ptr_scpd.h \
 	wx/recguard.h \
@@ -546,6 +548,7 @@ ALL_BASE_SOURCES =  \
 	src/common/module.cpp \
 	src/common/mstream.cpp \
 	src/common/object.cpp \
+	src/common/powercmn.cpp \
 	src/common/process.cpp \
 	src/common/regex.cpp \
 	src/common/stdpbase.cpp \
@@ -691,6 +694,7 @@ MONODLL_OBJECTS =  \
 	monodll_module.o \
 	monodll_mstream.o \
 	monodll_object.o \
+	monodll_powercmn.o \
 	monodll_process.o \
 	monodll_regex.o \
 	monodll_stdpbase.o \
@@ -781,6 +785,7 @@ MONOLIB_OBJECTS =  \
 	monolib_module.o \
 	monolib_mstream.o \
 	monolib_object.o \
+	monolib_powercmn.o \
 	monolib_process.o \
 	monolib_regex.o \
 	monolib_stdpbase.o \
@@ -873,6 +878,7 @@ BASEDLL_OBJECTS =  \
 	basedll_module.o \
 	basedll_mstream.o \
 	basedll_object.o \
+	basedll_powercmn.o \
 	basedll_process.o \
 	basedll_regex.o \
 	basedll_stdpbase.o \
@@ -948,6 +954,7 @@ BASELIB_OBJECTS =  \
 	baselib_module.o \
 	baselib_mstream.o \
 	baselib_object.o \
+	baselib_powercmn.o \
 	baselib_process.o \
 	baselib_regex.o \
 	baselib_stdpbase.o \
@@ -11293,6 +11300,9 @@ monodll_mstream.o: $(srcdir)/src/common/mstream.cpp $(MONODLL_ODEP)
 monodll_object.o: $(srcdir)/src/common/object.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/object.cpp
 
+monodll_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
+
 monodll_process.o: $(srcdir)/src/common/process.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/process.cpp
 
@@ -15102,6 +15112,9 @@ monolib_mstream.o: $(srcdir)/src/common/mstream.cpp $(MONOLIB_ODEP)
 
 monolib_object.o: $(srcdir)/src/common/object.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/object.cpp
+
+monolib_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
 
 monolib_process.o: $(srcdir)/src/common/process.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/process.cpp
@@ -18916,6 +18929,9 @@ basedll_mstream.o: $(srcdir)/src/common/mstream.cpp $(BASEDLL_ODEP)
 basedll_object.o: $(srcdir)/src/common/object.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/object.cpp
 
+basedll_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
+
 basedll_process.o: $(srcdir)/src/common/process.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/process.cpp
 
@@ -19470,6 +19486,9 @@ baselib_mstream.o: $(srcdir)/src/common/mstream.cpp $(BASELIB_ODEP)
 
 baselib_object.o: $(srcdir)/src/common/object.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/object.cpp
+
+baselib_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
 
 baselib_process.o: $(srcdir)/src/common/process.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/process.cpp

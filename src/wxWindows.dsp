@@ -718,6 +718,10 @@ SOURCE=.\common\popupcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\powercmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\prntbase.cpp
 # End Source File
 # Begin Source File
@@ -2740,6 +2744,10 @@ SOURCE=..\include\wx\platform.h
 # Begin Source File
 
 SOURCE=..\include\wx\popupwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\power.h
 # End Source File
 # Begin Source File
 

@@ -222,6 +222,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_module.o \
 	$(OBJS)\monodll_mstream.o \
 	$(OBJS)\monodll_object.o \
+	$(OBJS)\monodll_powercmn.o \
 	$(OBJS)\monodll_process.o \
 	$(OBJS)\monodll_regex.o \
 	$(OBJS)\monodll_stdpbase.o \
@@ -331,6 +332,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_module.o \
 	$(OBJS)\monolib_mstream.o \
 	$(OBJS)\monolib_object.o \
+	$(OBJS)\monolib_powercmn.o \
 	$(OBJS)\monolib_process.o \
 	$(OBJS)\monolib_regex.o \
 	$(OBJS)\monolib_stdpbase.o \
@@ -442,6 +444,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_module.o \
 	$(OBJS)\basedll_mstream.o \
 	$(OBJS)\basedll_object.o \
+	$(OBJS)\basedll_powercmn.o \
 	$(OBJS)\basedll_process.o \
 	$(OBJS)\basedll_regex.o \
 	$(OBJS)\basedll_stdpbase.o \
@@ -537,6 +540,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_module.o \
 	$(OBJS)\baselib_mstream.o \
 	$(OBJS)\baselib_object.o \
+	$(OBJS)\baselib_powercmn.o \
 	$(OBJS)\baselib_process.o \
 	$(OBJS)\baselib_regex.o \
 	$(OBJS)\baselib_stdpbase.o \
@@ -1333,6 +1337,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_wincmn.o \
 	$(OBJS)\monodll_xpmdecod.o \
 	$(OBJS)\monodll_busyinfo.o \
+	$(OBJS)\monodll_buttonbar.o \
 	$(OBJS)\monodll_choicdgg.o \
 	$(OBJS)\monodll_choicbkg.o \
 	$(OBJS)\monodll_combog.o \
@@ -1452,6 +1457,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_stattext.o \
 	$(OBJS)\monodll_statusbr.o \
 	$(OBJS)\monodll_textctrl.o \
+	$(OBJS)\monodll_tglbtn.o \
 	$(OBJS)\monodll_theme.o \
 	$(OBJS)\monodll_toolbar.o \
 	$(OBJS)\monodll_topluniv.o \
@@ -1537,6 +1543,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_wincmn.o \
 	$(OBJS)\monodll_xpmdecod.o \
 	$(OBJS)\monodll_busyinfo.o \
+	$(OBJS)\monodll_buttonbar.o \
 	$(OBJS)\monodll_choicdgg.o \
 	$(OBJS)\monodll_choicbkg.o \
 	$(OBJS)\monodll_combog.o \
@@ -1566,7 +1573,6 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavcmn.o \
-	$(OBJS)\monodll_buttonbar.o \
 	$(OBJS)\monodll_calctrl.o \
 	$(OBJS)\monodll_datavgen.o \
 	$(OBJS)\monodll_datectlg.o \
@@ -1595,7 +1601,6 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavcmn.o \
-	$(OBJS)\monodll_buttonbar.o \
 	$(OBJS)\monodll_calctrl.o \
 	$(OBJS)\monodll_datavgen.o \
 	$(OBJS)\monodll_datectlg.o \
@@ -1887,6 +1892,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_wincmn.o \
 	$(OBJS)\monolib_xpmdecod.o \
 	$(OBJS)\monolib_busyinfo.o \
+	$(OBJS)\monolib_buttonbar.o \
 	$(OBJS)\monolib_choicdgg.o \
 	$(OBJS)\monolib_choicbkg.o \
 	$(OBJS)\monolib_combog.o \
@@ -2006,6 +2012,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_stattext.o \
 	$(OBJS)\monolib_statusbr.o \
 	$(OBJS)\monolib_textctrl.o \
+	$(OBJS)\monolib_tglbtn.o \
 	$(OBJS)\monolib_theme.o \
 	$(OBJS)\monolib_toolbar.o \
 	$(OBJS)\monolib_topluniv.o \
@@ -2091,6 +2098,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_wincmn.o \
 	$(OBJS)\monolib_xpmdecod.o \
 	$(OBJS)\monolib_busyinfo.o \
+	$(OBJS)\monolib_buttonbar.o \
 	$(OBJS)\monolib_choicdgg.o \
 	$(OBJS)\monolib_choicbkg.o \
 	$(OBJS)\monolib_combog.o \
@@ -2120,7 +2128,6 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavcmn.o \
-	$(OBJS)\monolib_buttonbar.o \
 	$(OBJS)\monolib_calctrl.o \
 	$(OBJS)\monolib_datavgen.o \
 	$(OBJS)\monolib_datectlg.o \
@@ -2149,7 +2156,6 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavcmn.o \
-	$(OBJS)\monolib_buttonbar.o \
 	$(OBJS)\monolib_calctrl.o \
 	$(OBJS)\monolib_datavgen.o \
 	$(OBJS)\monolib_datectlg.o \
@@ -2384,6 +2390,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_wincmn.o \
 	$(OBJS)\coredll_xpmdecod.o \
 	$(OBJS)\coredll_busyinfo.o \
+	$(OBJS)\coredll_buttonbar.o \
 	$(OBJS)\coredll_choicdgg.o \
 	$(OBJS)\coredll_choicbkg.o \
 	$(OBJS)\coredll_combog.o \
@@ -2503,6 +2510,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_stattext.o \
 	$(OBJS)\coredll_statusbr.o \
 	$(OBJS)\coredll_textctrl.o \
+	$(OBJS)\coredll_tglbtn.o \
 	$(OBJS)\coredll_theme.o \
 	$(OBJS)\coredll_toolbar.o \
 	$(OBJS)\coredll_topluniv.o \
@@ -2588,6 +2596,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_wincmn.o \
 	$(OBJS)\coredll_xpmdecod.o \
 	$(OBJS)\coredll_busyinfo.o \
+	$(OBJS)\coredll_buttonbar.o \
 	$(OBJS)\coredll_choicdgg.o \
 	$(OBJS)\coredll_choicbkg.o \
 	$(OBJS)\coredll_combog.o \
@@ -2800,6 +2809,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_wincmn.o \
 	$(OBJS)\corelib_xpmdecod.o \
 	$(OBJS)\corelib_busyinfo.o \
+	$(OBJS)\corelib_buttonbar.o \
 	$(OBJS)\corelib_choicdgg.o \
 	$(OBJS)\corelib_choicbkg.o \
 	$(OBJS)\corelib_combog.o \
@@ -2919,6 +2929,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_stattext.o \
 	$(OBJS)\corelib_statusbr.o \
 	$(OBJS)\corelib_textctrl.o \
+	$(OBJS)\corelib_tglbtn.o \
 	$(OBJS)\corelib_theme.o \
 	$(OBJS)\corelib_toolbar.o \
 	$(OBJS)\corelib_topluniv.o \
@@ -3004,6 +3015,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_wincmn.o \
 	$(OBJS)\corelib_xpmdecod.o \
 	$(OBJS)\corelib_busyinfo.o \
+	$(OBJS)\corelib_buttonbar.o \
 	$(OBJS)\corelib_choicdgg.o \
 	$(OBJS)\corelib_choicbkg.o \
 	$(OBJS)\corelib_combog.o \
@@ -3041,7 +3053,6 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datavcmn.o \
-	$(OBJS)\advdll_buttonbar.o \
 	$(OBJS)\advdll_calctrl.o \
 	$(OBJS)\advdll_datavgen.o \
 	$(OBJS)\advdll_datectlg.o \
@@ -3070,7 +3081,6 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datavcmn.o \
-	$(OBJS)\advdll_buttonbar.o \
 	$(OBJS)\advdll_calctrl.o \
 	$(OBJS)\advdll_datavgen.o \
 	$(OBJS)\advdll_datectlg.o \
@@ -3106,7 +3116,6 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datavcmn.o \
-	$(OBJS)\advlib_buttonbar.o \
 	$(OBJS)\advlib_calctrl.o \
 	$(OBJS)\advlib_datavgen.o \
 	$(OBJS)\advlib_datectlg.o \
@@ -3135,7 +3144,6 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datavcmn.o \
-	$(OBJS)\advlib_buttonbar.o \
 	$(OBJS)\advlib_calctrl.o \
 	$(OBJS)\advlib_datavgen.o \
 	$(OBJS)\advlib_datectlg.o \
@@ -4298,6 +4306,9 @@ $(OBJS)\monodll_mstream.o: ../../src/common/mstream.cpp
 $(OBJS)\monodll_object.o: ../../src/common/object.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_powercmn.o: ../../src/common/powercmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_process.o: ../../src/common/process.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -4521,9 +4532,6 @@ $(OBJS)\monodll_tabctrl.o: ../../src/msw/tabctrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_tbar95.o: ../../src/msw/tbar95.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monodll_tglbtn.o: ../../src/msw/tglbtn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_treectrl.o: ../../src/msw/treectrl.cpp
@@ -5413,6 +5421,20 @@ endif
 
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
+$(OBJS)\monodll_tglbtn.o: ../../src/msw/tglbtn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\monodll_tglbtn.o: ../../src/univ/tglbtn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),0)
 $(OBJS)\monodll_checklst.o: ../../src/msw/checklst.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -5830,6 +5852,11 @@ $(OBJS)\monodll_busyinfo.o: ../../src/generic/busyinfo.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_buttonbar.o: ../../src/generic/buttonbar.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_choicdgg.o: ../../src/generic/choicdgg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -5951,11 +5978,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_datavcmn.o: ../../src/common/datavcmn.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_buttonbar.o: ../../src/generic/buttonbar.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -6182,6 +6204,9 @@ $(OBJS)\monolib_mstream.o: ../../src/common/mstream.cpp
 $(OBJS)\monolib_object.o: ../../src/common/object.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_powercmn.o: ../../src/common/powercmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_process.o: ../../src/common/process.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6405,9 +6430,6 @@ $(OBJS)\monolib_tabctrl.o: ../../src/msw/tabctrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_tbar95.o: ../../src/msw/tbar95.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_tglbtn.o: ../../src/msw/tglbtn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_treectrl.o: ../../src/msw/treectrl.cpp
@@ -7297,6 +7319,20 @@ endif
 
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
+$(OBJS)\monolib_tglbtn.o: ../../src/msw/tglbtn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\monolib_tglbtn.o: ../../src/univ/tglbtn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),0)
 $(OBJS)\monolib_checklst.o: ../../src/msw/checklst.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7714,6 +7750,11 @@ $(OBJS)\monolib_busyinfo.o: ../../src/generic/busyinfo.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_buttonbar.o: ../../src/generic/buttonbar.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_choicdgg.o: ../../src/generic/choicdgg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7835,11 +7876,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_datavcmn.o: ../../src/common/datavcmn.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_buttonbar.o: ../../src/generic/buttonbar.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8067,6 +8103,9 @@ $(OBJS)\basedll_mstream.o: ../../src/common/mstream.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_object.o: ../../src/common/object.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\basedll_powercmn.o: ../../src/common/powercmn.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_process.o: ../../src/common/process.cpp
@@ -8304,6 +8343,9 @@ $(OBJS)\baselib_mstream.o: ../../src/common/mstream.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_object.o: ../../src/common/object.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_powercmn.o: ../../src/common/powercmn.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_process.o: ../../src/common/process.cpp
@@ -8601,9 +8643,6 @@ $(OBJS)\coredll_tabctrl.o: ../../src/msw/tabctrl.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_tbar95.o: ../../src/msw/tbar95.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\coredll_tglbtn.o: ../../src/msw/tglbtn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_treectrl.o: ../../src/msw/treectrl.cpp
@@ -9250,6 +9289,20 @@ endif
 
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
+$(OBJS)\coredll_tglbtn.o: ../../src/msw/tglbtn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\coredll_tglbtn.o: ../../src/univ/tglbtn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),0)
 $(OBJS)\coredll_checklst.o: ../../src/msw/checklst.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9667,6 +9720,11 @@ $(OBJS)\coredll_busyinfo.o: ../../src/generic/busyinfo.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_buttonbar.o: ../../src/generic/buttonbar.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_choicdgg.o: ../../src/generic/choicdgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9868,9 +9926,6 @@ $(OBJS)\corelib_tabctrl.o: ../../src/msw/tabctrl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_tbar95.o: ../../src/msw/tbar95.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\corelib_tglbtn.o: ../../src/msw/tglbtn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_treectrl.o: ../../src/msw/treectrl.cpp
@@ -10517,6 +10572,20 @@ endif
 
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
+$(OBJS)\corelib_tglbtn.o: ../../src/msw/tglbtn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\corelib_tglbtn.o: ../../src/univ/tglbtn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),0)
 $(OBJS)\corelib_checklst.o: ../../src/msw/checklst.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10934,6 +11003,11 @@ $(OBJS)\corelib_busyinfo.o: ../../src/generic/busyinfo.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_buttonbar.o: ../../src/generic/buttonbar.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_choicdgg.o: ../../src/generic/choicdgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11065,9 +11139,6 @@ $(OBJS)\advdll_datectrl.o: ../../src/msw/datectrl.cpp
 $(OBJS)\advdll_datavcmn.o: ../../src/common/datavcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advdll_buttonbar.o: ../../src/generic/buttonbar.cpp
-	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\advdll_calctrl.o: ../../src/generic/calctrl.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11144,9 +11215,6 @@ $(OBJS)\advlib_datectrl.o: ../../src/msw/datectrl.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_datavcmn.o: ../../src/common/datavcmn.cpp
-	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\advlib_buttonbar.o: ../../src/generic/buttonbar.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_calctrl.o: ../../src/generic/calctrl.cpp

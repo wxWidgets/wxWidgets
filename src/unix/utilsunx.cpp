@@ -403,18 +403,6 @@ bool wxShutdown(wxShutdownFlags wFlags)
     return system(wxString::Format(_T("init %c"), level).mb_str()) == 0;
 }
 
-wxPowerType wxGetPowerType()
-{
-    // TODO
-    return wxPOWER_UNKNOWN;
-}
-
-wxBatteryState wxGetBatteryState()
-{
-    // TODO
-    return wxBATTERY_UNKNOWN_STATE;
-}
-
 // ----------------------------------------------------------------------------
 // wxStream classes to support IO redirection in wxExecute
 // ----------------------------------------------------------------------------

@@ -54,6 +54,7 @@
 
 #include "wx/evtloop.h"
 #include "wx/module.h"
+#include "wx/power.h"
 #include "wx/sysopt.h"
 
 #if wxUSE_DRAG_AND_DROP
@@ -3078,6 +3079,14 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 }
             }
             break;
+
+        case WM_POWERBROADCAST:
+            {
+                bool vetoed;
+                processed = HandlePower(wParam, lParam, &vetoed);
+                rc.result = processed && vetoed ? BROADCAST_QUERY_DENY : TRUE;
+            }
+            break;
     }
 
     if ( !processed )
@@ -3783,6 +3792,62 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
 
     // pass up the window chain
     return false;
+}
+
+bool wxWindowMSW::HandlePower(WXWPARAM wParam,
+                              WXLPARAM WXUNUSED(lParam),
+                              bool *vetoed)
+{
+    wxEventType evtType;
+    switch ( wParam )
+    {
+        case PBT_APMQUERYSUSPEND:
+            evtType = wxEVT_POWER_SUSPENDING;
+            break;
+
+        case PBT_APMQUERYSUSPENDFAILED:
+            evtType = wxEVT_POWER_SUSPEND_CANCEL;
+            break;
+
+        case PBT_APMSUSPEND:
+            evtType = wxEVT_POWER_SUSPENDED;
+            break;
+
+        case PBT_APMRESUMESUSPEND:
+            evtType = wxEVT_POWER_RESUME;
+            break;
+
+        default:
+            wxLogDebug(_T("Unknown WM_POWERBROADCAST(%d) event"), wParam);
+            // fall through
+
+        // these messages are currently not mapped to wx events
+        case PBT_APMQUERYSTANDBY:
+        case PBT_APMQUERYSTANDBYFAILED:
+        case PBT_APMSTANDBY:
+        case PBT_APMRESUMESTANDBY:
+        case PBT_APMBATTERYLOW:
+        case PBT_APMPOWERSTATUSCHANGE:
+        case PBT_APMOEMEVENT:
+        case PBT_APMRESUMEAUTOMATIC:
+        case PBT_APMRESUMECRITICAL:
+            evtType = wxEVT_NULL;
+            break;
+    }
+
+    // don't handle unknown messages
+    if ( evtType == wxEVT_NULL )
+        return false;
+
+    // TODO: notify about PBTF_APMRESUMEFROMFAILURE in case of resume events?
+
+    wxPowerEvent event(evtType);
+    if ( !GetEventHandler()->ProcessEvent(event) )
+        return false;
+
+    *vetoed = event.IsVetoed();
+
+    return true;
 }
 
 // ---------------------------------------------------------------------------
