@@ -788,7 +788,7 @@ void wxCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
 {
     int yDiff;
 
-    if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
+    if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) && m_staticMonth )
     {
         wxSize sizeCombo = m_comboMonth->GetSize();
         wxSize sizeStatic = m_staticMonth->GetSize();
@@ -816,7 +816,7 @@ void wxCalendarCtrl::DoGetPosition(int *x, int *y) const
 {
     wxControl::DoGetPosition(x, y);
 
-    if ( !(GetWindowStyle() & wxCAL_SEQUENTIAL_MONTH_SELECTION) )
+    if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) && GetMonthControl() )
     {
         // our real top corner is not in this position
         if ( y )
