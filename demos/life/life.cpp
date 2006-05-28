@@ -456,7 +456,7 @@ void LifeFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
                          wxEmptyString,
                          wxEmptyString,
                          _("Life patterns (*.lif)|*.lif|All files (*.*)|*.*"),
-                         wxOPEN | wxFILE_MUST_EXIST);
+                         wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
     if (filedlg.ShowModal() == wxID_OK)
     {

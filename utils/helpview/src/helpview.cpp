@@ -152,7 +152,7 @@ bool hvApp::OnInit()
             wxEmptyString,
             wxEmptyString,
             wxT("Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp"),
-            wxOPEN | wxFILE_MUST_EXIST,
+            wxFD_OPEN | wxFD_FILE_MUST_EXIST,
             NULL);
 
         if (!s.empty())
