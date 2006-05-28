@@ -109,6 +109,9 @@ public:
     virtual void AddChild( wxWindowBase *child );
     virtual void RemoveChild( wxWindowBase *child );
 
+    // currently wxGTK2-only
+    void SetDoubleBuffered(bool on);
+
     // implementation
     // --------------
 

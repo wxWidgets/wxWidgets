@@ -3743,6 +3743,14 @@ void wxWindowGTK::GtkSendPaintEvents()
     m_updateRegion.Clear();
 }
 
+void wxWindowGTK::SetDoubleBuffered( bool on )
+{
+    wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
+
+    if ( m_wxwindow )
+        gtk_widget_set_double_buffered( m_wxwindow, on );
+}
+
 void wxWindowGTK::ClearBackground()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
