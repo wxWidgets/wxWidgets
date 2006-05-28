@@ -105,6 +105,7 @@
 #endif
 
 #include <commctrl.h>
+#include <pbt.h>
 
 #include "wx/msw/missing.h"
 
@@ -3829,7 +3830,9 @@ bool wxWindowMSW::HandlePower(WXWPARAM wParam,
         case PBT_APMBATTERYLOW:
         case PBT_APMPOWERSTATUSCHANGE:
         case PBT_APMOEMEVENT:
+#ifdef PBT_APMRESUMEAUTOMATIC
         case PBT_APMRESUMEAUTOMATIC:
+#endif
         case PBT_APMRESUMECRITICAL:
             evtType = wxEVT_NULL;
             break;
