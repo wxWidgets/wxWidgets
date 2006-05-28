@@ -376,9 +376,8 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
                         (style & ~wxBORDER_MASK) | wxBORDER_NONE, exstyle
                       );
 
-    // always include this one, it never hurts and setting it later
-    // only if we do have tooltips wouldn't work
-    msStyle |= TBSTYLE_TOOLTIPS;
+    if ( !(style & wxTB_NO_TOOLTIPS) )
+        msStyle |= TBSTYLE_TOOLTIPS;
 
     if ( style & (wxTB_FLAT | wxTB_HORZ_LAYOUT) )
     {
@@ -1118,33 +1117,34 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                             WXLPARAM lParam,
                             WXLPARAM *WXUNUSED(result))
 {
+    if( !HasFlag(wxTB_NO_TOOLTIPS) )
+    {
 #if wxUSE_TOOLTIPS
-    // First check if this applies to us
-    NMHDR *hdr = (NMHDR *)lParam;
+        // First check if this applies to us
+        NMHDR *hdr = (NMHDR *)lParam;
 
-    // the tooltips control created by the toolbar is sometimes Unicode, even
-    // in an ANSI application - this seems to be a bug in comctl32.dll v5
-    UINT code = hdr->code;
-    if ( (code != (UINT) TTN_NEEDTEXTA) && (code != (UINT) TTN_NEEDTEXTW) )
-        return false;
+        // the tooltips control created by the toolbar is sometimes Unicode, even
+        // in an ANSI application - this seems to be a bug in comctl32.dll v5
+        UINT code = hdr->code;
+        if ( (code != (UINT) TTN_NEEDTEXTA) && (code != (UINT) TTN_NEEDTEXTW) )
+            return false;
 
-    HWND toolTipWnd = (HWND)::SendMessage((HWND)GetHWND(), TB_GETTOOLTIPS, 0, 0);
-    if ( toolTipWnd != hdr->hwndFrom )
-        return false;
+        HWND toolTipWnd = (HWND)::SendMessage(GetHwnd(), TB_GETTOOLTIPS, 0, 0);
+        if ( toolTipWnd != hdr->hwndFrom )
+            return false;
 
-    LPTOOLTIPTEXT ttText = (LPTOOLTIPTEXT)lParam;
-    int id = (int)ttText->hdr.idFrom;
+        LPTOOLTIPTEXT ttText = (LPTOOLTIPTEXT)lParam;
+        int id = (int)ttText->hdr.idFrom;
 
-    wxToolBarToolBase *tool = FindById(id);
-    if ( !tool )
-        return false;
-
-    return HandleTooltipNotify(code, lParam, tool->GetShortHelp());
+        wxToolBarToolBase *tool = FindById(id);
+        if ( tool )
+            return HandleTooltipNotify(code, lParam, tool->GetShortHelp());
 #else
-    wxUnusedVar(lParam);
+        wxUnusedVar(lParam);
+#endif
+    }
 
     return false;
-#endif
 }
 
 // ----------------------------------------------------------------------------

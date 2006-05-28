@@ -49,7 +49,10 @@ enum
 
     // show the text and the icons alongside, not vertically stacked (Win32/GTK)
     wxTB_HORZ_LAYOUT = 0x0800,
-    wxTB_HORZ_TEXT   = wxTB_HORZ_LAYOUT | wxTB_TEXT
+    wxTB_HORZ_TEXT   = wxTB_HORZ_LAYOUT | wxTB_TEXT,
+
+    // don't show the toolbar short help tooltips
+    wxTB_NO_TOOLTIPS = 0x1000
 };
 
 #if wxUSE_TOOLBAR

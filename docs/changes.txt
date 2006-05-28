@@ -140,6 +140,7 @@ All (GUI):
 - wxString <-> wxColour conversions in wxColour class (Francesco Montorsi).
 - Fixed bug with ignoring blank lines in multiline wxGrid cell labels
 - Added wxTextAttr::Merge() (Marcin Simonides)
+- Added wxTB_NO_TOOLTIPS style (Igor Korot)
 
 wxMSW:
 

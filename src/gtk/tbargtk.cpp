@@ -317,8 +317,7 @@ bool wxToolBar::Create( wxWindow *parent,
         ConnectWidget( m_widget );
         gtk_widget_show(GTK_WIDGET(m_toolbar));
     }
-
-    gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), TRUE );
+    gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), !(style & wxTB_NO_TOOLTIPS) );
 
     // FIXME: there is no such function for toolbars in 2.0
 #if 0
@@ -346,7 +345,16 @@ void wxToolBar::GtkSetStyle()
 void wxToolBar::SetWindowStyleFlag( long style )
 {
     wxToolBarBase::SetWindowStyleFlag(style);
-
+    if( style & wxTB_TOOLTIPS )
+    {
+        if( m_toolbar )
+             gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), TRUE );
+    }
+    else
+    {
+        if( m_toolbar )
+             gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), FALSE );
+    }
     if ( m_toolbar )
         GtkSetStyle();
 }

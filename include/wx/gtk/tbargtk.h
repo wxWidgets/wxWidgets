@@ -25,7 +25,7 @@ public:
                wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = 0,
+               long style = wxTB_HORIZONTAL,
                const wxString& name = wxToolBarNameStr )
     {
         Init();

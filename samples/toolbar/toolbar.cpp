@@ -111,6 +111,7 @@ public:
     void OnToggleToolbarSize(wxCommandEvent& event);
     void OnToggleToolbarOrient(wxCommandEvent& event);
     void OnToggleToolbarRows(wxCommandEvent& event);
+    void OnToggleTooltips(wxCommandEvent& event);
     void OnToggleCustomDisabled(wxCommandEvent& event);
 
     void OnEnablePrint(wxCommandEvent& WXUNUSED(event)) { DoEnablePrint(); }
@@ -149,7 +150,8 @@ private:
     bool                m_smallToolbar,
                         m_horzToolbar,
                         m_horzText,
-                        m_useCustomDisabled;
+                        m_useCustomDisabled,
+                        m_showTooltips;
     size_t              m_rows;             // 1 or 2 only
 
     // the number of print buttons we have (they're added/removed dynamically)
@@ -175,6 +177,7 @@ enum
     IDM_TOOLBAR_TOGGLETOOLBARSIZE = 200,
     IDM_TOOLBAR_TOGGLETOOLBARORIENT,
     IDM_TOOLBAR_TOGGLETOOLBARROWS,
+    IDM_TOOLBAR_TOGGLETOOLTIPS,
     IDM_TOOLBAR_TOGGLECUSTOMDISABLED,
     IDM_TOOLBAR_ENABLEPRINT,
     IDM_TOOLBAR_DELETEPRINT,
@@ -218,6 +221,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARSIZE, MyFrame::OnToggleToolbarSize)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARORIENT, MyFrame::OnToggleToolbarOrient)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARROWS, MyFrame::OnToggleToolbarRows)
+    EVT_MENU(IDM_TOOLBAR_TOGGLETOOLTIPS, MyFrame::OnToggleTooltips)
     EVT_MENU(IDM_TOOLBAR_TOGGLECUSTOMDISABLED, MyFrame::OnToggleCustomDisabled)
 
     EVT_MENU(IDM_TOOLBAR_ENABLEPRINT, MyFrame::OnEnablePrint)
@@ -302,6 +306,11 @@ void MyFrame::RecreateToolbar()
     style &= ~(wxTB_HORIZONTAL | wxTB_VERTICAL | wxTB_HORZ_LAYOUT);
     style |= m_horzToolbar ? wxTB_HORIZONTAL : wxTB_VERTICAL;
 
+    if ( m_showTooltips )
+        style &= ~wxTB_NO_TOOLTIPS;
+    else
+        style |= wxTB_NO_TOOLTIPS;
+
     if ( style & wxTB_TEXT && !(style & wxTB_NOICONS) && m_horzText )
         style |= wxTB_HORZ_LAYOUT;
 
@@ -354,9 +363,9 @@ void MyFrame::RecreateToolbar()
             toolBarBitmaps[n] =
                 wxBitmap(toolBarBitmaps[n].ConvertToImage().Scale(w, h));
         }
-
-        toolBar->SetToolBitmapSize(wxSize(w, h));
     }
+
+    toolBar->SetToolBitmapSize(wxSize(w, h));
 
     toolBar->AddTool(wxID_NEW, _T("New"), toolBarBitmaps[Tool_new], _T("New file"));
     toolBar->AddTool(wxID_OPEN, _T("Open"), toolBarBitmaps[Tool_open], _T("Open file"));
@@ -432,6 +441,8 @@ MyFrame::MyFrame(wxFrame* parent,
     m_horzToolbar = true;
     m_horzText = false;
     m_useCustomDisabled = false;
+    m_showTooltips = true;
+
     m_rows = 1;
     m_nPrint = 1;
 
@@ -468,6 +479,10 @@ MyFrame::MyFrame(wxFrame* parent,
     tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLETOOLBARROWS,
                               _T("Toggle number of &rows\tCtrl-R"),
                               _T("Toggle number of toolbar rows between 1 and 2"));
+
+    tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLETOOLTIPS,
+                              _T("Show &tooltips\tCtrl-L"),
+                              _T("Show tooltips for the toolbar tools"));
 
     tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLECUSTOMDISABLED,
                               _T("Use c&ustom disabled images\tCtrl-U"),
@@ -507,6 +522,7 @@ MyFrame::MyFrame(wxFrame* parent,
     SetMenuBar(menuBar);
 
     menuBar->Check(IDM_TOOLBAR_SHOW_BOTH, true);
+    menuBar->Check(IDM_TOOLBAR_TOGGLETOOLTIPS, true);
 
     // Create the toolbar
     RecreateToolbar();
@@ -628,6 +644,13 @@ void MyFrame::OnToggleToolbarRows(wxCommandEvent& WXUNUSED(event))
     GetToolBar()->SetRows(m_horzToolbar ? m_rows : 10 / m_rows);
 
     //RecreateToolbar(); -- this is unneeded
+}
+
+void MyFrame::OnToggleTooltips(wxCommandEvent& WXUNUSED(event))
+{
+    m_showTooltips = !m_showTooltips;
+
+    RecreateToolbar();
 }
 
 void MyFrame::OnToggleCustomDisabled(wxCommandEvent& WXUNUSED(event))
