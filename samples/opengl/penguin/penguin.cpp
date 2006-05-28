@@ -108,7 +108,7 @@ void MyFrame::OnMenuFileOpen( wxCommandEvent& WXUNUSED(event) )
 #else
         wxT("DXF Drawing (*.dxf)|*.dxf)|All files (*.*)|*.*"),
 #endif
-        wxOPEN);
+        wxFD_OPEN);
     if (!filename.IsEmpty())
     {
         m_canvas->LoadDXF(filename);

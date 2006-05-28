@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dirdlg.h
-// Purpose:     wxDirDialogGTK
+// Purpose:     wxDirDialog
 // Author:      Francesco Montorsi
 // Id:          $Id$
 // Copyright:   (c) 2006 Francesco Montorsi
@@ -13,15 +13,15 @@
 #include "wx/generic/dirdlgg.h"
 
 //-------------------------------------------------------------------------
-// wxDirDialogGTK
+// wxDirDialog
 //-------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDirDialogGTK : public wxGenericDirDialog
+class WXDLLIMPEXP_CORE wxDirDialog : public wxGenericDirDialog
 {
 public:
-    wxDirDialogGTK() { }
+    wxDirDialog() { }
 
-    wxDirDialogGTK(wxWindow *parent,
+    wxDirDialog(wxWindow *parent,
                 const wxString& message = wxDirSelectorPromptStr,
                 const wxString& defaultPath = wxEmptyString,
                 long style = wxDD_DEFAULT_STYLE,
@@ -29,7 +29,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 const wxString& name = wxDirDialogNameStr);
 
-    virtual ~wxDirDialogGTK() {}
+    virtual ~wxDirDialog() { }
 
 
 public:     // overrides from wxGenericDirDialog
@@ -50,7 +50,7 @@ protected:
 
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxDirDialogGTK)
+    DECLARE_DYNAMIC_CLASS(wxDirDialog)
     DECLARE_EVENT_TABLE()
     void OnFakeOk( wxCommandEvent &event );
 };

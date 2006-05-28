@@ -1706,13 +1706,6 @@ enum wxBorder
 #define wxPD_REMAINING_TIME     0x0040
 #define wxPD_CAN_SKIP           0x0080
 
-/*
- * wxDirDialog styles
- */
-
-#define wxDD_NEW_DIR_BUTTON     0x0080
-#define wxDD_CHANGE_DIR         0x0100
-
 
 /*
  * extended dialog specifiers. these values are stored in a different

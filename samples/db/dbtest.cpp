@@ -1712,7 +1712,7 @@ bool CeditorDlg::Initialize()
 
 void CeditorDlg::OnSelectPict()
 {
-    wxFileDialog dlg(this, wxT("Choose an image file less than 60K"), wxEmptyString, wxEmptyString, wxT("JPEG files (*.jpg)|*.jpg|GIF files (*.gif)|*.gif|BMP files (*.bmp)|*.bmp|All Files (*.*)|*.*"), wxOPEN);
+    wxFileDialog dlg(this, wxT("Choose an image file less than 60K"), wxEmptyString, wxEmptyString, wxT("JPEG files (*.jpg)|*.jpg|GIF files (*.gif)|*.gif|BMP files (*.bmp)|*.bmp|All Files (*.*)|*.*"), wxFD_OPEN);
 
     if (dlg.ShowModal() == wxID_OK)
     {

@@ -148,7 +148,7 @@ int wxDirDialog::ShowModal()
     // is also the only way to have a resizable dialog
     //
     // "new" style is only available in the version 5.0+ of comctl32.dll
-    const bool needNewDir = HasFlag(wxDD_NEW_DIR_BUTTON);
+    const bool needNewDir = !HasFlag(wxDD_DIR_MUST_EXIST);
     if ( (needNewDir || HasFlag(wxRESIZE_BORDER)) && (verComCtl32 >= 500) )
     {
         if (needNewDir)

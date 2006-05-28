@@ -350,7 +350,7 @@ void MyFrame::FileSavePicture (wxCommandEvent & WXUNUSED(event) )
 
     wxFileDialog dialog(this, wxT("Save Picture as"), wxEmptyString, pChild->GetTitle(),
         wxT("SVG vector picture files (*.svg)|*.svg"),
-        wxSAVE|wxOVERWRITE_PROMPT);
+        wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 
     if (dialog.ShowModal() == wxID_OK)
     {

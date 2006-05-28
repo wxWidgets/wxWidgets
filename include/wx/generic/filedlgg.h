@@ -50,8 +50,10 @@ public:
                         const wxString& defaultDir = wxEmptyString,
                         const wxString& defaultFile = wxEmptyString,
                         const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
-                        long style = 0,
+                        long style = wxFD_DEFAULT_STYLE,
                         const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& sz = wxDefaultSize,
+                        const wxString& name = wxFileDialogNameStr,
                         bool bypassGenericImpl = false );
 
     bool Create( wxWindow *parent,
@@ -59,8 +61,10 @@ public:
                  const wxString& defaultDir = wxEmptyString,
                  const wxString& defaultFile = wxEmptyString,
                  const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
-                 long style = 0,
+                 long style = wxFD_DEFAULT_STYLE,
                  const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& sz = wxDefaultSize,
+                 const wxString& name = wxFileDialogNameStr,
                  bool bypassGenericImpl = false );
 
     virtual ~wxGenericFileDialog();

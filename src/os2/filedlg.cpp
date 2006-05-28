@@ -71,13 +71,15 @@ wxFileDialog::wxFileDialog (
 , const wxString&                   rsDefaultFileName
 , const wxString&                   rsWildCard
 , long                              lStyle
-, const wxPoint&                    rPos
+, const wxPoint&                    rPos,
+  const wxSize& sz,
+  const wxString& name
 )
-    :wxFileDialogBase(pParent, rsMessage, rsDefaultDir, rsDefaultFileName, rsWildCard, lStyle, rPos)
+    :wxFileDialogBase(pParent, rsMessage, rsDefaultDir, rsDefaultFileName, rsWildCard, lStyle, rPos, sz, name)
 
 {
-    if ((m_dialogStyle & wxMULTIPLE) && (m_dialogStyle & wxSAVE))
-        m_dialogStyle &= ~wxMULTIPLE;
+    if ((m_windowStyle & wxMULTIPLE) && (m_windowStyle & wxSAVE))
+        m_windowStyle &= ~wxMULTIPLE;
 
     m_filterIndex = 1;
 } // end of wxFileDialog::wxFileDialog
@@ -124,19 +126,19 @@ int wxFileDialog::ShowModal()
     *zFileNameBuffer = wxT('\0');
     *zTitleBuffer    = wxT('\0');
 
-    if (m_dialogStyle & wxSAVE)
+    if (m_windowStyle & wxSAVE)
         lFlags = FDS_SAVEAS_DIALOG;
     else
         lFlags = FDS_OPEN_DIALOG;
 
 #if WXWIN_COMPATIBILITY_2_4
-    if (m_dialogStyle & wxHIDE_READONLY)
+    if (m_windowStyle & wxHIDE_READONLY)
         lFlags |= FDS_SAVEAS_DIALOG;
 #endif
 
-    if (m_dialogStyle & wxSAVE)
+    if (m_windowStyle & wxSAVE)
         lFlags |= FDS_SAVEAS_DIALOG;
-    if (m_dialogStyle & wxMULTIPLE )
+    if (m_windowStyle & wxMULTIPLE )
         lFlags |= FDS_OPEN_DIALOG | FDS_MULTIPLESEL;
 
     vFileDlg.cbSize = sizeof(FILEDLG);
@@ -222,7 +224,7 @@ int wxFileDialog::ShowModal()
     if (hWnd && vFileDlg.lReturn == DID_OK)
     {
         m_fileNames.Empty();
-        if ((m_dialogStyle & wxMULTIPLE ) && vFileDlg.ulFQFCount > 1)
+        if ((m_windowStyle & wxMULTIPLE ) && vFileDlg.ulFQFCount > 1)
         {
             for (int i = 0; i < (int)vFileDlg.ulFQFCount; i++)
             {
@@ -236,7 +238,7 @@ int wxFileDialog::ShowModal()
             }
             ::WinFreeFileDlgList(vFileDlg.papszFQFilename);
         }
-        else if (!(m_dialogStyle & wxSAVE))
+        else if (!(m_windowStyle & wxSAVE))
         {
             m_path = (wxChar*)vFileDlg.szFullFile;
             m_fileName = wxFileNameFromPath(wxString((const wxChar*)vFileDlg.szFullFile));
@@ -301,8 +303,8 @@ int wxFileDialog::ShowModal()
             //
             // === Simulating the wxOVERWRITE_PROMPT >>============================
             //
-            if ((m_dialogStyle & wxOVERWRITE_PROMPT) &&
-                (m_dialogStyle & wxSAVE) &&
+            if ((m_windowStyle & wxOVERWRITE_PROMPT) &&
+                (m_windowStyle & wxSAVE) &&
                 (wxFileExists(m_path.c_str())))
             {
                 wxString            sMessageText;

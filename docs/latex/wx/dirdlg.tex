@@ -16,13 +16,12 @@ This class represents the directory chooser dialog.
 \wxheading{Window styles}
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxDD\_DEFAULT\_STYLE}}{Equivalent to a combination of wxDEFAULT\_DIALOG\_STYLE, wxDD\_NEW\_DIR\_BUTTON and wxRESIZE\_BORDER (the last one is not used under wxWinCE).}
-\twocolitem{\windowstyle{wxDD\_NEW\_DIR\_BUTTON}}{Add "Create new
-directory" button and allow directory names to be editable.  On
-Windows the new directory button is only available with recent
-versions of the common dialogs.}
+\twocolitem{\windowstyle{wxDD\_DEFAULT\_STYLE}}{Equivalent to a combination of wxDEFAULT\_DIALOG\_STYLE and wxRESIZE\_BORDER (the last one is not used under wxWinCE).}
+\twocolitem{\windowstyle{wxDD\_DIR_MUST_EXIST}}{The dialog will allow the user to choose only an existing folder. When this style is not given, a "Create new directory" button is added to the dialog (on Windows) or some other way is provided to the user to type the name of a new folder.}
 \twocolitem{\windowstyle{wxDD\_CHANGE\_DIR}}{Change the current working directory to the directory chosen by the user.}
 \end{twocollist}
+
+{\bf NB:} on Windows the new directory button is only available with recent versions of the common dialogs.
 
 See also \helpref{Generic window styles}{windowstyles}.
 

@@ -170,7 +170,7 @@ public:
                                                 wxT("PCX files (*.pcx)|*.pcx|")
                                                 wxT("ICO files (*.ico)|*.ico|")
                                                 wxT("CUR files (*.cur)|*.cur"),
-                                                wxSAVE,
+                                                wxFD_SAVE,
                                                 this);
 
         if ( savefilename.empty() )

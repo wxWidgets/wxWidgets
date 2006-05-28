@@ -292,8 +292,8 @@ static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dat
 
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
-        long style, const wxPoint& pos)
-             :wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos)
+        long style, const wxPoint& pos, const wxSize& sz, const wxString& name)
+             :wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name)
 {
     wxASSERT_MSG( NavServicesAvailable() , wxT("Navigation Services are not running") ) ;
 }
@@ -372,7 +372,7 @@ int wxFileDialog::ShowModal()
     OpenUserDataRec myData;
     myData.defaultLocation = m_dir;
 
-    if (m_dialogStyle & wxSAVE)
+    if (HasFlag(wxFD_SAVE))
     {
         dialogCreateOptions.optionFlags |= kNavNoTypePopup;
         dialogCreateOptions.optionFlags |= kNavDontAutoTranslate;
@@ -445,7 +445,7 @@ int wxFileDialog::ShowModal()
                 break;
 
             CFURLRef fullURLRef;
-            if (m_dialogStyle & wxSAVE)
+            if (HasFlag(wxFD_SAVE))
             {
                 CFURLRef parentURLRef = ::CFURLCreateFromFSRef(NULL, &theFSRef);
 
@@ -562,7 +562,7 @@ int wxFileDialog::ShowModal()
             wxMacStringToPascal( myData.name[i] , (StringPtr)(*mNavOptions.popupExtension)[i].menuItemName ) ;
         }
     }
-    if ( m_dialogStyle & wxSAVE )
+    if ( HasFlag(wxFD_SAVE) )
     {
         myData.saveMode = true ;
 
@@ -584,7 +584,7 @@ int wxFileDialog::ShowModal()
         myData.saveMode = false ;
 
         mNavFilterUPP = NewNavObjectFilterUPP( CrossPlatformFilterCallback ) ;
-        if ( m_dialogStyle & wxMULTIPLE )
+        if ( m_windowStyle & wxMULTIPLE )
             mNavOptions.dialogOptionFlags |= kNavAllowMultipleFiles ;
         else
             mNavOptions.dialogOptionFlags &= ~kNavAllowMultipleFiles ;

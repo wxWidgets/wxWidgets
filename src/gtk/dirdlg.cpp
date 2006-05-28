@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/gtk/dirdlg.cpp
-// Purpose:     native implementation of wxDirDialogGTK
+// Purpose:     native implementation of wxDirDialog
 // Author:      Robert Roebling, Zbigniew Zagorski, Mart Raudsepp, Francesco Montorsi
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, 2004 Zbigniew Zagorski, 2005 Mart Raudsepp
@@ -13,14 +13,14 @@
 
 
 /*
-  NOTE: the GtkFileChooser interface can be used both for wxFileDialog and for wxDirDialogGTK.
+  NOTE: the GtkFileChooser interface can be used both for wxFileDialog and for wxDirDialog.
         Thus following code is very similar (even if not identic) to src/gtk/filedlg.cpp
         If you find a problem in this code, remember to check also that file !
 */
 
 
 
-#if wxUSE_DIRDLG
+#if wxUSE_DIRDLG && defined( __WXGTK24__ )
 
 #include "wx/dirdlg.h"
 
@@ -28,8 +28,6 @@
     #include "wx/intl.h"
     #include "wx/filedlg.h"
 #endif
-
-#ifdef __WXGTK24__      // only for GTK+ > 2.4 there is GtkFileChooserDialog
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
@@ -48,7 +46,7 @@ extern void wxapp_install_idle_handler();
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_dirdialog_ok_callback(GtkWidget *widget, wxDirDialogGTK *dialog)
+static void gtk_dirdialog_ok_callback(GtkWidget *widget, wxDirDialog *dialog)
 {
     gchar* filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
 
@@ -70,7 +68,7 @@ static void gtk_dirdialog_ok_callback(GtkWidget *widget, wxDirDialogGTK *dialog)
 
 extern "C" {
 static void gtk_dirdialog_cancel_callback(GtkWidget *WXUNUSED(w),
-                                           wxDirDialogGTK *dialog)
+                                           wxDirDialog *dialog)
 {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     event.SetEventObject(dialog);
@@ -81,7 +79,7 @@ static void gtk_dirdialog_cancel_callback(GtkWidget *WXUNUSED(w),
 extern "C" {
 static void gtk_dirdialog_response_callback(GtkWidget *w,
                                              gint response,
-                                             wxDirDialogGTK *dialog)
+                                             wxDirDialog *dialog)
 {
     wxapp_install_idle_handler();
 
@@ -92,24 +90,21 @@ static void gtk_dirdialog_response_callback(GtkWidget *w,
 }
 }
 
-#endif // __WXGTK24__
-
 //-----------------------------------------------------------------------------
-// wxDirDialogGTK
+// wxDirDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxDirDialogGTK,wxGenericDirDialog)
+IMPLEMENT_DYNAMIC_CLASS(wxDirDialog,wxGenericDirDialog)
 
-BEGIN_EVENT_TABLE(wxDirDialogGTK,wxGenericDirDialog)
-    EVT_BUTTON(wxID_OK, wxDirDialogGTK::OnFakeOk)
+BEGIN_EVENT_TABLE(wxDirDialog,wxGenericDirDialog)
+    EVT_BUTTON(wxID_OK, wxDirDialog::OnFakeOk)
 END_EVENT_TABLE()
 
-wxDirDialogGTK::wxDirDialogGTK(wxWindow* parent, const wxString& title,
+wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
                         const wxString& defaultPath, long style,
                         const wxPoint& pos, const wxSize& sz,
                         const wxString& name)
 {
-#ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
     {
         m_message = title;
@@ -119,7 +114,7 @@ wxDirDialogGTK::wxDirDialogGTK(wxWindow* parent, const wxString& title,
             !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
                     wxDefaultValidator, wxT("dirdialog")))
         {
-            wxFAIL_MSG( wxT("wxDirDialogGTK creation failed") );
+            wxFAIL_MSG( wxT("wxDirDialog creation failed") );
             return;
         }
 
@@ -128,8 +123,9 @@ wxDirDialogGTK::wxDirDialogGTK(wxWindow* parent, const wxString& title,
         if (parent)
             gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
+        if (HasFlag(wxDD_DIR_MUST_EXIST))
         gtk_action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
-        if (style & wxDD_NEW_DIR_BUTTON)
+        else
             gtk_action = GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
 
         m_widget = gtk_file_chooser_dialog_new(
@@ -169,37 +165,31 @@ wxDirDialogGTK::wxDirDialogGTK(wxWindow* parent, const wxString& title,
         wxGenericDirDialog::Create(parent, title, defaultPath, style, pos, sz, name);
 }
 
-void wxDirDialogGTK::OnFakeOk( wxCommandEvent &event )
+void wxDirDialog::OnFakeOk( wxCommandEvent &event )
 {
-#ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
         wxDialog::OnOK( event );
     else
-#endif
         wxGenericDirDialog::OnOK( event );
 }
 
-int wxDirDialogGTK::ShowModal()
+int wxDirDialog::ShowModal()
 {
-#ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
         return wxDialog::ShowModal();
     else
-#endif
         return wxGenericDirDialog::ShowModal();
 }
 
-bool wxDirDialogGTK::Show( bool show )
+bool wxDirDialog::Show( bool show )
 {
-#ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
         return wxDialog::Show( show );
     else
-#endif
         return wxGenericDirDialog::Show( show );
 }
 
-void wxDirDialogGTK::DoSetSize(int x, int y, int width, int height, int sizeFlags )
+void wxDirDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     if (!m_wxwindow)
         return;
@@ -207,9 +197,8 @@ void wxDirDialogGTK::DoSetSize(int x, int y, int width, int height, int sizeFlag
         wxGenericDirDialog::DoSetSize( x, y, width, height, sizeFlags );
 }
 
-void wxDirDialogGTK::SetPath(const wxString& dir)
+void wxDirDialog::SetPath(const wxString& dir)
 {
-#ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
     {
         if (wxDirExists(dir))
@@ -218,17 +207,14 @@ void wxDirDialogGTK::SetPath(const wxString& dir)
         }
     }
     else
-#endif
         wxGenericDirDialog::SetPath( dir );
 }
 
-wxString wxDirDialogGTK::GetPath() const
+wxString wxDirDialog::GetPath() const
 {
-#ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
         return wxConvFileName->cMB2WX( gtk_file_chooser_get_filename( GTK_FILE_CHOOSER(m_widget) ) );
     else
-#endif
         return wxGenericDirDialog::GetPath();
 }
 

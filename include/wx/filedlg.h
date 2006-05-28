@@ -23,6 +23,7 @@
 // wxFileDialog data
 //----------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_2_6
 enum
 {
     wxOPEN              = 0x0001,
@@ -35,7 +36,21 @@ enum
     wxMULTIPLE          = 0x0020,
     wxCHANGE_DIR        = 0x0040
 };
+#endif
 
+enum
+{
+    wxFD_OPEN              = 0x0001,
+    wxFD_SAVE              = 0x0002,
+    wxFD_OVERWRITE_PROMPT  = 0x0004,
+    wxFD_FILE_MUST_EXIST   = 0x0010,
+    wxFD_MULTIPLE          = 0x0020,
+    wxFD_CHANGE_DIR        = 0x0040
+};
+
+#define wxFD_DEFAULT_STYLE      wxFD_OPEN
+
+extern WXDLLEXPORT_DATA(const wxChar) wxFileDialogNameStr[];
 extern WXDLLEXPORT_DATA(const wxChar) wxFileSelectorPromptStr[];
 extern WXDLLEXPORT_DATA(const wxChar) wxFileSelectorDefaultWildcardStr[];
 
@@ -53,11 +68,13 @@ public:
                      const wxString& defaultDir = wxEmptyString,
                      const wxString& defaultFile = wxEmptyString,
                      const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
-                     long style = 0,
-                     const wxPoint& pos = wxDefaultPosition) : wxDialog()
+                     long style = wxFD_DEFAULT_STYLE,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& sz = wxDefaultSize,
+                     const wxString& name = wxFileDialogNameStr)
     {
         Init();
-        Create(parent, message, defaultDir, defaultFile, wildCard, style, pos);
+        Create(parent, message, defaultDir, defaultFile, wildCard, style, pos, sz, name);
     }
 
     bool Create(wxWindow *parent,
@@ -65,15 +82,16 @@ public:
                 const wxString& defaultDir = wxEmptyString,
                 const wxString& defaultFile = wxEmptyString,
                 const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
-                long style = 0,
-                const wxPoint& pos = wxDefaultPosition);
+                long style = wxFD_DEFAULT_STYLE,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& sz = wxDefaultSize,
+                const wxString& name = wxFileDialogNameStr);
 
     virtual void SetMessage(const wxString& message) { m_message = message; }
     virtual void SetPath(const wxString& path) { m_path = path; }
     virtual void SetDirectory(const wxString& dir) { m_dir = dir; }
     virtual void SetFilename(const wxString& name) { m_fileName = name; }
     virtual void SetWildcard(const wxString& wildCard) { m_wildCard = wildCard; }
-    virtual void SetStyle(long style) { m_dialogStyle = style; }
     virtual void SetFilterIndex(int filterIndex) { m_filterIndex = filterIndex; }
 
     virtual wxString GetMessage() const { return m_message; }
@@ -83,7 +101,6 @@ public:
     virtual wxString GetFilename() const { return m_fileName; }
     virtual void GetFilenames(wxArrayString& files) const { files.Empty(); files.Add(m_fileName); }
     virtual wxString GetWildcard() const { return m_wildCard; }
-    virtual long GetStyle() const { return m_dialogStyle; }
     virtual int GetFilterIndex() const { return m_filterIndex; }
 
     // Utility functions
@@ -108,7 +125,6 @@ public:
 
 protected:
     wxString      m_message;
-    long          m_dialogStyle;
     wxString      m_dir;
     wxString      m_path;       // Full path
     wxString      m_fileName;
@@ -168,8 +184,10 @@ wxSaveFileSelector(const wxChar *what,
 #include "wx/msw/filedlg.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/filedlg.h"
+#elif defined(__WXGTK24__)
+#include "wx/gtk/filedlg.h"     // GTK+ > 2.4 has native version
 #elif defined(__WXGTK20__)
-#include "wx/gtk/filedlg.h"
+#include "wx/generic/filedlgg.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk1/filedlg.h"
 #elif defined(__WXX11__)

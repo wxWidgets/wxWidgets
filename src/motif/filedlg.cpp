@@ -117,8 +117,8 @@ static wxString ParseWildCard( const wxString& wild )
 
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                            const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
-                           long style, const wxPoint& pos)
-             :wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos)
+                           long style, const wxPoint& pos, const wxSize& sz, const wxString& name)
+             :wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name)
 {
     m_filterIndex = 1;
 }

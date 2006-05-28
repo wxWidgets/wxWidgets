@@ -305,7 +305,7 @@ bool wxDocument::SaveAs()
             wxFileNameFromPath(GetFilename()),
             docTemplate->GetDefaultExtension(),
             filter,
-            wxSAVE | wxOVERWRITE_PROMPT,
+            wxFD_SAVE | wxFD_OVERWRITE_PROMPT,
             GetDocumentWindow());
 
     if (tmp.empty())

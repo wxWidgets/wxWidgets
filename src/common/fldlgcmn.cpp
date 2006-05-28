@@ -35,7 +35,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileDialogBase, wxDialog)
 void wxFileDialogBase::Init()
 {
     m_filterIndex =
-    m_dialogStyle = 0;
+    m_windowStyle = 0;
 }
 
 bool wxFileDialogBase::Create(wxWindow *parent,
@@ -44,7 +44,9 @@ bool wxFileDialogBase::Create(wxWindow *parent,
                               const wxString& defaultFile,
                               const wxString& wildCard,
                               long style,
-                              const wxPoint& WXUNUSED(pos))
+                              const wxPoint& WXUNUSED(pos),
+                              const wxSize& WXUNUSED(sz),
+                              const wxString& WXUNUSED(name))
 {
     m_message = message;
     m_dir = defaultDir;
@@ -52,8 +54,19 @@ bool wxFileDialogBase::Create(wxWindow *parent,
     m_wildCard = wildCard;
 
     m_parent = parent;
-    m_dialogStyle = style;
+    m_windowStyle = style;
     m_filterIndex = 0;
+
+#ifdef __WXDEBUG__
+    // check the given styles
+    wxASSERT_MSG(HasFlag(wxFD_OPEN) || HasFlag(wxFD_SAVE), wxT("You must specify one of wxFD_OPEN and wxFD_SAVE styles"));
+    if (HasFlag(wxFD_SAVE))
+        wxASSERT_MSG( !HasFlag(wxFD_OPEN) && !HasFlag(wxFD_MULTIPLE) && !HasFlag(wxFD_FILE_MUST_EXIST),
+                      wxT("wxFileDialog - wxFD_OPEN, wxFD_MULTIPLE or wxFD_FILE_MUST_EXIST used on a save dialog" ) );
+    if (HasFlag(wxFD_OPEN))
+        wxASSERT_MSG( !HasFlag(wxFD_SAVE) && !HasFlag(wxFD_OVERWRITE_PROMPT),
+                      wxT("wxFileDialog - wxFD_SAVE or wxFD_OVERWRITE_PROMPT used on a open dialog" ) );
+#endif
 
     if ( wildCard.empty() || wildCard == wxFileSelectorDefaultWildcardStr )
     {
@@ -270,7 +283,7 @@ static wxString wxDefaultFileSelector(bool load,
     }
 
     return wxFileSelector(prompt, NULL, default_name, ext, wild,
-                          load ? wxOPEN : wxSAVE, parent);
+                          load ? wxFD_OPEN : wxFD_SAVE, parent);
 }
 
 //----------------------------------------------------------------------------

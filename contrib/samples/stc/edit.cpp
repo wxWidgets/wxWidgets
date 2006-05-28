@@ -508,7 +508,7 @@ bool Edit::LoadFile ()
     // get filname
     if (!m_filename) {
         wxFileDialog dlg (this, _T("Open file"), wxEmptyString, wxEmptyString,
-                          _T("Any file (*)|*"), wxOPEN | wxFILE_MUST_EXIST | wxCHANGE_DIR);
+                          _T("Any file (*)|*"), wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR);
         if (dlg.ShowModal() != wxID_OK) return false;
         m_filename = dlg.GetPath();
     }
@@ -557,7 +557,7 @@ bool Edit::SaveFile ()
     // get filname
     if (!m_filename) {
         wxFileDialog dlg (this, _T("Save file"), wxEmptyString, wxEmptyString, _T("Any file (*)|*"),
-                          wxSAVE | wxOVERWRITE_PROMPT);
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
         if (dlg.ShowModal() != wxID_OK) return false;
         m_filename = dlg.GetPath();
     }

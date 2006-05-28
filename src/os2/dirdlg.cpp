@@ -36,7 +36,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
         long style, const wxPoint& pos)
 {
     m_message = message;
-    m_dialogStyle = style;
+    m_windowStyle = style;
     m_parent = parent;
     m_path = defaultPath;
 }

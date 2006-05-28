@@ -75,8 +75,10 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
                            const wxString& defaultFileName,
                            const wxString& wildCard,
                            long style,
-                           const wxPoint& pos)
-             :wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos)
+                           const wxPoint& pos,
+                           const wxSize& sz,
+                           const wxString& name)
+             :wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name)
 
 {
 }

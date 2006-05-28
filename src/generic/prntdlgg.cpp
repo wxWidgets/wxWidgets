@@ -295,7 +295,7 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
         wxFileName fname( m_printDialogData.GetPrintData().GetFilename() );
 
         wxFileDialog dialog( this, _("PostScript file"),
-            fname.GetPath(), fname.GetFullName(), wxT("*.ps"), wxSAVE | wxOVERWRITE_PROMPT );
+            fname.GetPath(), fname.GetFullName(), wxT("*.ps"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
         if (dialog.ShowModal() != wxID_OK) return;
 
         m_printDialogData.GetPrintData().SetFilename( dialog.GetPath() );

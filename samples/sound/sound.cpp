@@ -984,7 +984,7 @@ void MyFrame::OnSelectFile(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_FILEDLG
     wxFileDialog dlg(this, _T("Choose a sound file"),
                      wxEmptyString, wxEmptyString,
-                     _T("WAV files (*.wav)|*.wav"), wxOPEN|wxCHANGE_DIR);
+                     _T("WAV files (*.wav)|*.wav"), wxFD_OPEN|wxFD_CHANGE_DIR);
     if ( dlg.ShowModal() == wxID_OK )
     {
         m_soundFile = dlg.GetPath();

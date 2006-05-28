@@ -24,13 +24,13 @@ extern WXDLLEXPORT_DATA(const wxChar) wxDirDialogNameStr[];
 extern WXDLLEXPORT_DATA(const wxChar) wxDirDialogDefaultFolderStr[];
 extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[];
 
+#define wxDD_DIR_MUST_EXIST     0x0080
+#define wxDD_CHANGE_DIR         0x0100
 
 #ifdef __WXWINCE__
-    #define wxDD_DEFAULT_STYLE \
-        (wxDEFAULT_DIALOG_STYLE | wxDD_NEW_DIR_BUTTON)
+    #define wxDD_DEFAULT_STYLE      wxDEFAULT_DIALOG_STYLE
 #else
-    #define wxDD_DEFAULT_STYLE \
-        (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON)
+    #define wxDD_DEFAULT_STYLE      (wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 #endif
 
 //-------------------------------------------------------------------------
@@ -85,59 +85,34 @@ protected:
 
 // Universal and non-port related switches with need for generic implementation
 #if defined(__WXUNIVERSAL__)
-
     #include "wx/generic/dirdlgg.h"
     #define wxDirDialog wxGenericDirDialog
-
 #elif defined(__WXMSW__) && (defined(__SALFORDC__)    || \
                              !wxUSE_OLE               || \
                              (defined (__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS))
-
     #include "wx/generic/dirdlgg.h"
     #define wxDirDialog wxGenericDirDialog
-
-// MS PocketPC or MS Smartphone
 #elif defined(__WXMSW__) && defined(__WXWINCE__) && !defined(__HANDHELDPC__)
-
-    #include "wx/generic/dirdlgg.h"
+    #include "wx/generic/dirdlgg.h"     // MS PocketPC or MS Smartphone
     #define wxDirDialog wxGenericDirDialog
-
-// Native MSW
 #elif defined(__WXMSW__)
-
-    #include "wx/msw/dirdlg.h"
-
-// Native GTK for gtk2.x and generic for gtk1.x
+    #include "wx/msw/dirdlg.h"  // Native MSW
+#elif defined(__WXGTK24__)
+    #include "wx/gtk/dirdlg.h"  // Native GTK for gtk2.4
 #elif defined(__WXGTK__)
-
-#if defined( __WXGTK20__ )
-    #include "wx/gtk/dirdlg.h"
-    #define wxDirDialog wxDirDialogGTK
-#else
     #include "wx/generic/dirdlgg.h"
     #define wxDirDialog wxGenericDirDialog
-#endif
-
-// Native Mac
 #elif defined(__WXMAC__)
-
-    #include "wx/mac/dirdlg.h"
-
-// Native Cocoa
+    #include "wx/mac/dirdlg.h"      // Native Mac
 #elif defined(__WXCOCOA__)
-
-    #include "wx/cocoa/dirdlg.h"
-
-// Other ports use generic implementation
+    #include "wx/cocoa/dirdlg.h"    // Native Cocoa
 #elif defined(__WXMOTIF__) || \
       defined(__WXX11__)   || \
       defined(__WXMGL__)   || \
       defined(__WXCOCOA__) || \
       defined(__WXPM__)
-
-    #include "wx/generic/dirdlgg.h"
+    #include "wx/generic/dirdlgg.h"     // Other ports use generic implementation
     #define wxDirDialog wxGenericDirDialog
-
 #endif
 
 // ----------------------------------------------------------------------------

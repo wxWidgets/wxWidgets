@@ -220,7 +220,7 @@ void MyFrame::OnOpen( wxCommandEvent& WXUNUSED(event) )
 
     wxFileDialog dialog( this, _T("Open text"), wxEmptyString, wxEmptyString,
         _T("Text file (*.txt)|*.txt|Any file (*)|*"),
-        wxOPEN|wxFILE_MUST_EXIST );
+        wxFD_OPEN|wxFD_FILE_MUST_EXIST );
     if (dialog.ShowModal() == wxID_OK)
     {
         m_text->Clear();
@@ -275,7 +275,7 @@ void MyFrame::OnSaveAs( wxCommandEvent& WXUNUSED(event) )
 #if wxUSE_FILEDLG
     wxFileDialog dialog( this, _T("Open text"), wxEmptyString, wxEmptyString,
         _T("Text file (*.txt)|*.txt|Any file (*)|*"),
-        wxSAVE|wxOVERWRITE_PROMPT );
+        wxFD_SAVE|wxFD_OVERWRITE_PROMPT );
     if (dialog.ShowModal() == wxID_OK)
     {
         m_filename = dialog.GetPath();

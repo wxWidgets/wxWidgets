@@ -46,7 +46,7 @@
 #include "wx/artprov.h"
 #include "wx/filefn.h"
 #include "wx/file.h"        // for wxS_IXXX constants only
-#include "wx/filedlg.h"     // wxOPEN, wxSAVE...
+#include "wx/filedlg.h"     // wxFD_OPEN, wxFD_SAVE...
 #include "wx/generic/filedlgg.h"
 #include "wx/generic/dirctrlg.h" // for wxFileIconsTable
 
@@ -974,10 +974,12 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
                            const wxString& wildCard,
                            long  style,
                            const wxPoint& pos,
+                           const wxSize& sz,
+                           const wxString& name,
                            bool  bypassGenericImpl ) : wxFileDialogBase()
 {
     Init();
-    Create( parent, message, defaultDir, defaultFile, wildCard, style, pos, bypassGenericImpl );
+    Create( parent, message, defaultDir, defaultFile, wildCard, style, pos, sz, name, bypassGenericImpl );
 }
 
 bool wxGenericFileDialog::Create( wxWindow *parent,
@@ -987,12 +989,14 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
                                   const wxString& wildCard,
                                   long  style,
                                   const wxPoint& pos,
+                                  const wxSize& sz,
+                                  const wxString& name,
                                   bool  bypassGenericImpl )
 {
     m_bypassGenericImpl = bypassGenericImpl;
 
     if (!wxFileDialogBase::Create(parent, message, defaultDir, defaultFile,
-                                  wildCard, style, pos))
+                                  wildCard, style, pos, sz, name))
     {
         return false;
     }
@@ -1000,8 +1004,8 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
     if (m_bypassGenericImpl)
         return true;
 
-    if (!wxDialog::Create( parent, wxID_ANY, message, pos, wxDefaultSize,
-                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER
+    if (!wxDialog::Create( parent, wxID_ANY, message, pos, sz,
+                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER, name
                            ))
     {
         return false;
@@ -1016,11 +1020,6 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
         wxConfig::Get()->Read(wxT("/wxWindows/wxFileDialog/ShowHidden"),
                               &ms_lastShowHidden);
     }
-
-    if (m_dialogStyle == 0)
-        m_dialogStyle = wxOPEN;
-    if ((m_dialogStyle & wxMULTIPLE ) && !(m_dialogStyle & wxOPEN))
-        m_dialogStyle |= wxOPEN;
 
     if ((m_dir.empty()) || (m_dir == wxT(".")))
     {
@@ -1102,7 +1101,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
     mainsizer->Add( staticsizer, 0, wxEXPAND | wxLEFT|wxRIGHT|wxBOTTOM, 10 );
 
     long style2 = ms_lastViewStyle;
-    if ( !(m_dialogStyle & wxMULTIPLE) )
+    if ( !HasFlag(wxFD_MULTIPLE) )
         style2 |= wxLC_SINGLE_SEL;
 
 #ifdef __WXWINCE__
@@ -1404,7 +1403,7 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
     }
 #endif // __UNIX__
 
-    if (!(m_dialogStyle & wxSAVE))
+    if (!HasFlag(wxFD_SAVE))
     {
         if ((filename.Find(wxT('*')) != wxNOT_FOUND) ||
             (filename.Find(wxT('?')) != wxNOT_FOUND))
@@ -1449,14 +1448,13 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
     // VZ: the logic of testing for !wxFileExists() only for the open file
     //     dialog is not entirely clear to me, why don't we allow saving to a
     //     file without extension as well?
-    if ( !(m_dialogStyle & wxOPEN) || !wxFileExists(filename) )
+    if ( !HasFlag(wxFD_OPEN) || !wxFileExists(filename) )
     {
         filename = AppendExtension(filename, m_filterExtension);
     }
 
     // check that the file [doesn't] exist if necessary
-    if ( (m_dialogStyle & wxSAVE) &&
-            (m_dialogStyle & wxOVERWRITE_PROMPT) &&
+    if ( HasFlag(wxFD_SAVE) && HasFlag(wxFD_OVERWRITE_PROMPT) &&
                 wxFileExists( filename ) )
     {
         wxString msg;
@@ -1465,8 +1463,7 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
         if (wxMessageBox(msg, _("Confirm"), wxYES_NO) != wxYES)
             return;
     }
-    else if ( (m_dialogStyle & wxOPEN) &&
-                (m_dialogStyle & wxFILE_MUST_EXIST) &&
+    else if ( HasFlag(wxFD_OPEN) && HasFlag(wxFD_FILE_MUST_EXIST) &&
                     !wxFileExists(filename) )
     {
         wxMessageBox(_("Please choose an existing file."), _("Error"),
@@ -1476,7 +1473,7 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
     SetPath( filename );
 
     // change to the directory where the user went if asked
-    if ( m_dialogStyle & wxCHANGE_DIR )
+    if ( HasFlag(wxFD_CHANGE_DIR) )
     {
         wxString cwd;
         wxSplitPath(filename, &cwd, NULL, NULL);

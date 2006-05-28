@@ -1533,7 +1533,7 @@ void wxHtmlHelpWindow::OnToolbar(wxCommandEvent& event)
                                             wxEmptyString,
                                             wxEmptyString,
                                             filemask,
-                                            wxOPEN | wxFILE_MUST_EXIST,
+                                            wxFD_OPEN | wxFD_FILE_MUST_EXIST,
                                             this);
                 if (!s.empty())
                 {

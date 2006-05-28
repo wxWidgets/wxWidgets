@@ -729,7 +729,7 @@ void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
                                         wxFileSelectorDefaultWildcardStr,
                                         wxFileSelectorDefaultWildcardStr
                                     ),
-                                    wxCHANGE_DIR,
+                                    wxFD_OPEN|wxFD_CHANGE_DIR,
                                     this
                                    );
 
@@ -758,7 +758,7 @@ void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
 #endif
     wxFileDialog dialog(this, _T("Testing open multiple file dialog"),
                         wxEmptyString, wxEmptyString, wildcards,
-                        wxMULTIPLE);
+                        wxFD_OPEN|wxFD_MULTIPLE);
 
     if (dialog.ShowModal() == wxID_OK)
     {
@@ -791,7 +791,7 @@ void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
                         wxEmptyString,
                         _T("myletter.doc"),
                         _T("Text files (*.txt)|*.txt|Document files (*.doc)|*.doc"),
-                        wxSAVE|wxOVERWRITE_PROMPT);
+                        wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 
     dialog.SetFilterIndex(1);
 
@@ -905,12 +905,12 @@ void MyFrame::DoDirChoose(int style)
 
 void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
 {
-    DoDirChoose(wxDD_DEFAULT_STYLE & ~wxDD_NEW_DIR_BUTTON);
+    DoDirChoose(wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
 }
 
 void MyFrame::DirChooseNew(wxCommandEvent& WXUNUSED(event) )
 {
-    DoDirChoose(wxDD_DEFAULT_STYLE | wxDD_NEW_DIR_BUTTON);
+    DoDirChoose(wxDD_DEFAULT_STYLE & ~wxDD_DIR_MUST_EXIST);
 }
 #endif // wxUSE_DIRDLG
 

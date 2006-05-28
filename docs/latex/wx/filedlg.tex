@@ -13,6 +13,26 @@ This class represents the file chooser dialog.
 
 <wx/filedlg.h>
 
+\wxheading{Window styles}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxFD\_DEFAULT\_STYLE}}{Equivalent to wxFD_OPEN.}
+\twocolitem{\windowstyle{wxFD\_OPEN}}{This is an open dialog; usually this means that the default button's label of the dialog is "Open". Cannot be combined with wxFD\_SAVE.}
+\twocolitem{\windowstyle{wxFD\_SAVE}}{This is a save dialog; usually this means that the default button's label of the dialog is "Save". Cannot be combined with wxFD\_OPEN.}
+\twocolitem{{\windowstyle wxFD\_OVERWRITE\_PROMPT}}{For save dialog only: prompt for a confirmation if a file will be overwritten.}
+\twocolitem{{\windowstyle wxFD\_FILE\_MUST\_EXIST}}{For open dialog only: the user may only select files that actually exist.}
+\twocolitem{{\windowstyle wxFD_MULTIPLE}}{For open dialog only: allows selecting multiple files.}
+\twocolitem{{\windowstyle wxFD_CHANGE\_DIR}}{Change the current working directory to the directory where the file(s) chosen by the user are.}
+\end{twocollist}
+
+{\bf NB:} Previous versions of wxWidgets used {\tt wxFD_CHANGE\_DIR} by default
+under MS Windows which allowed the program to simply remember the last
+directory where user selected the files to open/save. This (desired)
+functionality must be implemented in the program itself now (manually remember
+the last path used and pass it to the dialog the next time it is called) or
+by using this flag.
+
+
 \wxheading{See also}
 
 \helpref{wxFileDialog overview}{wxfiledialogoverview}, \helpref{wxFileSelector}{wxfileselector}
@@ -25,9 +45,7 @@ functionality. The path and filename are distinct elements of a full file pathna
 If path is ``", the current directory will be used. If filename is ``",
 no default filename will be supplied. The wildcard determines what files
 are displayed in the file selector, and file extension supplies a type
-extension for the required filename. Flags may be a combination of wxOPEN,
-wxSAVE, wxOVERWRITE\_PROMPT, wxHIDE\_READONLY, wxFILE\_MUST\_EXIST,
-wxMULTIPLE, wxCHANGE\_DIR or 0.
+extension for the required filename.
 
 Both the X and Windows versions implement a wildcard filter. Typing a
 filename containing wildcards (*, ?) in the filename text item, and
@@ -52,7 +70,7 @@ is displayed as ``*.bmp'', and both
 
 \func{}{wxFileDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{message = "Choose a file"},\rtfsp
 \param{const wxString\& }{defaultDir = ""}, \param{const wxString\& }{defaultFile = ``"},\rtfsp
-\param{const wxString\& }{wildcard = ``*.*"}, \param{long }{style = 0}, \param{const wxPoint\& }{pos = wxDefaultPosition}}
+\param{const wxString\& }{wildcard = ``*.*"}, \param{long }{style = wxFD\_DEFAULT\_STYLE}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{sz = wxDefaultSize}, \param{const wxString\& }{name = "filedlg"}}
 
 Constructor. Use \helpref{wxFileDialog::ShowModal}{wxfiledialogshowmodal} to show the dialog.
 
@@ -71,28 +89,14 @@ Constructor. Use \helpref{wxFileDialog::ShowModal}{wxfiledialogshowmodal} to sho
 Note that the native Motif dialog has some limitations with respect to
 wildcards; see the Remarks section above.}
 
-\docparam{style}{A dialog style. A bitlist of:
-
-\twocolwidtha{5cm}
-\begin{twocollist}
-\twocolitem{{\bf wxOPEN}}{This is an open dialog.}
-\twocolitem{{\bf wxSAVE}}{This is a save dialog.}
-\twocolitem{{\bf wxOVERWRITE\_PROMPT}}{For save dialog only: prompt for a confirmation if a file will be overwritten.}
-\twocolitem{{\bf wxHIDE\_READONLY}}{Do not display the checkbox to toggle display of read-only files. Deprecated in 2.6; the checkbox is never shown.}
-\twocolitem{{\bf wxFILE\_MUST\_EXIST}}{The user may only select files that actually exist.}
-\twocolitem{{\bf wxMULTIPLE}}{For open dialog only: allows selecting multiple files.}
-\twocolitem{{\bf wxCHANGE\_DIR}}{Change the current working directory to the directory where the file(s) chosen by the user are.}
-\end{twocollist}%
-}
+\docparam{style}{A dialog style. See wxFD_* styles for more info.}
 
 \docparam{pos}{Dialog position. Not implemented.}
 
-{\bf NB:} Previous versions of wxWidgets used {\tt wxCHANGE\_DIR} by default
-under MS Windows which allowed the program to simply remember the last
-directory where user selected the files to open/save. This (desired)
-functionality must be implemented in the program itself now (manually remember
-the last path used and pass it to the dialog the next time it is called) or
-by using this flag.
+\docparam{size}{Dialog size. Not implemented.}
+
+\docparam{name}{Dialog name. Not implemented.}
+
 
 \membersection{wxFileDialog::\destruct{wxFileDialog}}\label{wxfiledialogdtor}
 
@@ -153,12 +157,6 @@ Fills the array {\it paths} with the full paths of the files chosen. This
 function should only be used with the dialogs which have {\tt wxMULTIPLE} style,
 use \helpref{GetPath}{wxfiledialoggetpath} for the others.
 
-\membersection{wxFileDialog::GetStyle}\label{wxfiledialoggetstyle}
-
-\constfunc{long}{GetStyle}{\void}
-
-Returns the dialog style.
-
 \membersection{wxFileDialog::GetWildcard}\label{wxfiledialoggetwildcard}
 
 \constfunc{wxString}{GetWildcard}{\void}
@@ -194,12 +192,6 @@ Sets the message that will be displayed on the dialog.
 \func{void}{SetPath}{\param{const wxString\& }{path}}
 
 Sets the path (the combined directory and filename that will be returned when the dialog is dismissed).
-
-\membersection{wxFileDialog::SetStyle}\label{wxfiledialogsetstyle}
-
-\func{void}{SetStyle}{\param{long }{style}}
-
-Sets the dialog style. See \helpref{wxFileDialog::wxFileDialog}{wxfiledialogctor} for details.
 
 \membersection{wxFileDialog::SetWildcard}\label{wxfiledialogsetwildcard}
 

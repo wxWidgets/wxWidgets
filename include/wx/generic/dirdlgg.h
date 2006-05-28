@@ -25,11 +25,9 @@ extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[];
 
 #ifndef wxDD_DEFAULT_STYLE
 #ifdef __WXWINCE__
-    #define wxDD_DEFAULT_STYLE \
-        (wxDEFAULT_DIALOG_STYLE | wxDD_NEW_DIR_BUTTON)
+    #define wxDD_DEFAULT_STYLE      wxDEFAULT_DIALOG_STYLE
 #else
-    #define wxDD_DEFAULT_STYLE \
-        (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON)
+    #define wxDD_DEFAULT_STYLE      (wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 #endif
 #endif
 

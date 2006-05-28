@@ -259,8 +259,8 @@ static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dat
 wxFileDialog::wxFileDialog(
     wxWindow *parent, const wxString& message,
     const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
-    long style, const wxPoint& pos)
-    : wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos)
+    long style, const wxPoint& pos, const wxSize& sz, const wxString& name)
+    : wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name)
 {
     wxASSERT_MSG( NavServicesAvailable() , wxT("Navigation Services are not running") ) ;
 }
@@ -338,7 +338,7 @@ int wxFileDialog::ShowModal()
         }
     }
 
-    if (m_dialogStyle & wxSAVE)
+    if (HasFlag(wxFD_SAVE))
     {
         myData.saveMode = true;
 
@@ -352,7 +352,7 @@ int wxFileDialog::ShowModal()
             dialogCreateOptions.optionFlags |= kNavPreserveSaveFileExtension;
 
 #if TARGET_API_MAC_OSX
-        if (!(m_dialogStyle & wxOVERWRITE_PROMPT))
+        if (!(m_windowStyle & wxOVERWRITE_PROMPT))
             dialogCreateOptions.optionFlags |= kNavDontConfirmReplacement;
 #endif
 
@@ -413,7 +413,7 @@ int wxFileDialog::ShowModal()
             if (err != noErr)
                 break;
 
-            if (m_dialogStyle & wxSAVE)
+            if (HasFlag(wxFD_SAVE))
                 thePath = wxMacFSRefToPath( &theFSRef, navReply.saveFileName );
             else
                 thePath = wxMacFSRefToPath( &theFSRef );

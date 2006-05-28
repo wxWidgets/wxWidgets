@@ -29,11 +29,13 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                            const wxString& defaultDir,
                            const wxString& defaultFileName,
                            const wxString& wildCard,
-                           long style, const wxPoint& pos)
+                           long style, const wxPoint& pos,
+                           const wxSize& sz,
+                           const wxString& name)
     : wxGenericFileDialog(parent, message, defaultDir, defaultFileName,
-                       wildCard, style, pos, true )
+                       wildCard, style, pos, sz, name, true )
 {
-        wxGenericFileDialog::Create( parent, message, defaultDir, defaultFileName, wildCard, style, pos );
+        wxGenericFileDialog::Create( parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name );
 }
 
 wxFileDialog::~wxFileDialog()

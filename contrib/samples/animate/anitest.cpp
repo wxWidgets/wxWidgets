@@ -154,7 +154,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
     wxFileDialog dialog(this, _T("Please choose an animated GIF"),
-        wxEmptyString, wxEmptyString, wxT("*.gif"), wxOPEN);
+        wxEmptyString, wxEmptyString, wxT("*.gif"), wxFD_OPEN);
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString filename(dialog.GetPath());

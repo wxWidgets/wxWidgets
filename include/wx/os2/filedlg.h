@@ -25,8 +25,10 @@ public:
                  ,const wxString& rsDefaultDir = wxEmptyString
                  ,const wxString& rsDefaultFile = wxEmptyString
                  ,const wxString& rsWildCard = wxFileSelectorDefaultWildcardStr
-                 ,long            lStyle = 0
-                 ,const wxPoint&  rPos = wxDefaultPosition
+                 ,long            lStyle = wxFD_DEFAULT_STYLE
+                 ,const wxPoint&  rPos = wxDefaultPosition,
+                  const wxSize& sz = wxDefaultSize,
+                  const wxString& name = wxFileDialogNameStr
                 );
 
     virtual void GetPaths(wxArrayString& rasPath) const;

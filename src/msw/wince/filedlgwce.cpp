@@ -70,9 +70,9 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
                            const wxPoint& WXUNUSED(pos))
 {
     m_message = message;
-    m_dialogStyle = style;
-    if ( ( m_dialogStyle & wxMULTIPLE ) && ( m_dialogStyle & wxSAVE ) )
-        m_dialogStyle &= ~wxMULTIPLE;
+    m_windowStyle = style;
+    if ( ( m_windowStyle & wxMULTIPLE ) && ( m_windowStyle & wxSAVE ) )
+        m_windowStyle &= ~wxMULTIPLE;
     m_parent = parent;
     m_path = wxEmptyString;
     m_fileName = defaultFileName;

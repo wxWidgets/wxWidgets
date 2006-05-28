@@ -597,7 +597,7 @@ public:
                          wxEmptyString,
                          GetValue(),
                          wxT("All files (*.*)|*.*"),
-                         wxOPEN);
+                         wxFD_OPEN);
 
         if ( dlg.ShowModal() == wxID_OK )
         {

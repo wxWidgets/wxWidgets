@@ -24,8 +24,10 @@ public:
                  const wxString& defaultDir = wxEmptyString,
                  const wxString& defaultFile = wxEmptyString,
                  const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
-                 long style = 0,
-                 const wxPoint& pos = wxDefaultPosition);
+                 long style = wxFD_DEFAULT_STYLE,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& sz = wxDefaultSize,
+                 const wxString& name = wxFileDialogNameStr);
 
     virtual void SetPath(const wxString& path);
     virtual void GetPaths(wxArrayString& paths) const;

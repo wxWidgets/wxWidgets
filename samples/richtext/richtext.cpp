@@ -721,7 +721,7 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
         path,
         filename,
         filter,
-        wxOPEN);
+        wxFD_OPEN);
 
     if (dialog.ShowModal() == wxID_OK)
     {
@@ -759,7 +759,7 @@ void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
         path,
         filename,
         filter,
-        wxSAVE);
+        wxFD_SAVE);
 
     if (dialog.ShowModal() == wxID_OK)
     {

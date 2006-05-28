@@ -913,7 +913,7 @@ void ctConfigToolView::OnSaveSetupFile(wxCommandEvent& WXUNUSED(event))
     wxFileDialog dialog(wxTheApp->GetTopWindow(),
         _("Save Setup File As"),
         path, filename ,
-        wildcard, wxSAVE|wxOVERWRITE_PROMPT);
+        wildcard, wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 
     if (dialog.ShowModal() == wxID_OK)
     {
@@ -946,7 +946,7 @@ void ctConfigToolView::OnSaveConfigureCommand(wxCommandEvent& WXUNUSED(event))
     wxFileDialog dialog(wxTheApp->GetTopWindow(),
         _("Save Configure Command File As"),
         path, filename ,
-        wildcard, wxSAVE|wxOVERWRITE_PROMPT);
+        wildcard, wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 
     if (dialog.ShowModal() == wxID_OK)
     {
