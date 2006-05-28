@@ -89,8 +89,7 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_filedialog_cancel_callback(GtkWidget *WXUNUSED(w),
-                                           wxFileDialog *dialog)
+static void gtk_filedialog_cancel_callback(GtkWidget *w, wxFileDialog *dialog)
 {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     event.SetEventObject(dialog);
@@ -107,13 +106,8 @@ static void gtk_filedialog_response_callback(GtkWidget *w,
 
     if (response == GTK_RESPONSE_ACCEPT)
         gtk_filedialog_ok_callback(w, dialog);
-    else if (response == GTK_RESPONSE_CANCEL)
+    else    // GTK_RESPONSE_CANCEL or GTK_RESPONSE_NONE
         gtk_filedialog_cancel_callback(w, dialog);
-    else // "delete"
-    {
-        gtk_filedialog_cancel_callback(w, dialog);
-        dialog->m_destroyed_by_delete = true;
-    }
 }
 }
 
@@ -142,7 +136,6 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     {
         wxASSERT_MSG( !( (style & wxSAVE) && (style & wxMULTIPLE) ), wxT("wxFileDialog - wxMULTIPLE used on a save dialog" ) );
         m_needParent = false;
-        m_destroyed_by_delete = false;
 
         if (!PreCreation(parent, pos, wxDefaultSize) ||
             !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
@@ -181,6 +174,14 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 
         if ( style & wxMULTIPLE )
             gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(m_widget), true);
+
+        // gtk_widget_hide_on_delete is used here to avoid that Gtk automatically destroys
+        // the dialog when the user press ESC on the dialog: in that case a second call to
+        // ShowModal() would result in a bunch of Gtk-CRITICAL errors...
+        g_signal_connect (G_OBJECT(m_widget),
+                        "delete_event",
+                        G_CALLBACK (gtk_widget_hide_on_delete),
+                        (gpointer)this);
 
         // local-only property could be set to false to allow non-local files to be loaded.
         // In that case get/set_uri(s) should be used instead of get/set_filename(s) everywhere
@@ -230,17 +231,6 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     else
 #endif
         wxGenericFileDialog::Create( parent, message, defaultDir, defaultFileName, wildCard, style, pos );
-}
-
-wxFileDialog::~wxFileDialog()
-{
-#ifdef __WXGTK24__
-    if (!gtk_check_version(2,4,0))
-    {
-        if (m_destroyed_by_delete)
-            m_widget = NULL;
-    }
-#endif
 }
 
 void wxFileDialog::OnFakeOk( wxCommandEvent &event )

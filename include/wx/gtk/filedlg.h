@@ -29,7 +29,7 @@ public:
                  long style = 0,
                  const wxPoint& pos = wxDefaultPosition);
 
-    virtual ~wxFileDialog();
+    virtual ~wxFileDialog() {}
 
     virtual wxString GetPath() const;
     virtual void GetPaths(wxArrayString& paths) const;
@@ -48,8 +48,7 @@ public:
     virtual int ShowModal();
     virtual bool Show( bool show = true );
 
-//private:
-    bool m_destroyed_by_delete;
+
 
 protected:
     // override this from wxTLW since the native

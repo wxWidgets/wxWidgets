@@ -87,13 +87,8 @@ static void gtk_dirdialog_response_callback(GtkWidget *w,
 
     if (response == GTK_RESPONSE_ACCEPT)
         gtk_dirdialog_ok_callback(w, dialog);
-    else if (response == GTK_RESPONSE_CANCEL)
+    else // GTK_RESPONSE_CANCEL or GTK_RESPONSE_NONE
         gtk_dirdialog_cancel_callback(w, dialog);
-    else // "delete"
-    {
-        gtk_dirdialog_cancel_callback(w, dialog);
-        dialog->m_destroyed_by_delete = true;
-    }
 }
 }
 
@@ -119,7 +114,6 @@ wxDirDialogGTK::wxDirDialogGTK(wxWindow* parent, const wxString& title,
     {
         m_message = title;
         m_needParent = false;
-        m_destroyed_by_delete = false;
 
         if (!PreCreation(parent, pos, wxDefaultSize) ||
             !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
@@ -148,6 +142,14 @@ wxDirDialogGTK::wxDirDialogGTK(wxWindow* parent, const wxString& title,
 
         gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
 
+        // gtk_widget_hide_on_delete is used here to avoid that Gtk automatically destroys
+        // the dialog when the user press ESC on the dialog: in that case a second call to
+        // ShowModal() would result in a bunch of Gtk-CRITICAL errors...
+        g_signal_connect (G_OBJECT(m_widget),
+                        "delete_event",
+                        G_CALLBACK (gtk_widget_hide_on_delete),
+                        (gpointer)this);
+
         // local-only property could be set to false to allow non-local files to be loaded.
         // In that case get/set_uri(s) should be used instead of get/set_filename(s) everywhere
         // and the GtkFileChooserDialog should probably also be created with a backend,
@@ -165,17 +167,6 @@ wxDirDialogGTK::wxDirDialogGTK(wxWindow* parent, const wxString& title,
     else
 #endif
         wxGenericDirDialog::Create(parent, title, defaultPath, style, pos, sz, name);
-}
-
-wxDirDialogGTK::~wxDirDialogGTK()
-{
-#ifdef __WXGTK24__
-    if (!gtk_check_version(2,4,0))
-    {
-        if (m_destroyed_by_delete)
-            m_widget = NULL;
-    }
-#endif
 }
 
 void wxDirDialogGTK::OnFakeOk( wxCommandEvent &event )

@@ -29,7 +29,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 const wxString& name = wxDirDialogNameStr);
 
-    virtual ~wxDirDialogGTK();
+    virtual ~wxDirDialogGTK() {}
 
 
 public:     // overrides from wxGenericDirDialog
@@ -40,9 +40,6 @@ public:     // overrides from wxGenericDirDialog
     virtual int ShowModal();
     virtual bool Show( bool show = true );
 
-
-//private:      must be accessible by GTK callback
-    bool m_destroyed_by_delete;
 
 protected:
     // override this from wxTLW since the native
