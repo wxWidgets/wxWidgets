@@ -79,3 +79,4 @@ extern WXDLLEXPORT_DATA(const wxChar) wxDirDialogDefaultFolderStr[] = wxT("/");
 #if defined(__WXMSW__) || defined(__OS2__)
 WXDLLEXPORT_DATA(const wxChar *) wxUserResourceStr = wxT("TEXT");
 #endif
+extern WXDLLEXPORT_DATA(const wxChar) wxHyperlinkCtrlNameStr[] = wxT("hyperlink");

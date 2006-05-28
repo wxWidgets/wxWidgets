@@ -121,6 +121,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_GRID
     AddHandler( new wxGridXmlHandler);
 #endif
+#if wxUSE_HYPERLINKCTRL
+    AddHandler( new wxHyperlinkCtrlXmlHandler);
+#endif
 }
 
 #endif // wxUSE_XRC

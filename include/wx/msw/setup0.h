@@ -569,31 +569,32 @@
 // Default is 1
 //
 // Recommended setting: 1
-#define wxUSE_BUTTON       1    // wxButton
-#define wxUSE_BMPBUTTON    1    // wxBitmapButton
-#define wxUSE_CALENDARCTRL 1    // wxCalendarCtrl
-#define wxUSE_CHECKBOX     1    // wxCheckBox
-#define wxUSE_CHECKLISTBOX 1    // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
-#define wxUSE_CHOICE       1    // wxChoice
-#define wxUSE_COMBOBOX     1    // wxComboBox
-#define wxUSE_DATAVIEWCTRL 1    // wxDataViewCtrl
-#define wxUSE_DATEPICKCTRL 1    // wxDatePickerCtrl
-#define wxUSE_GAUGE        1    // wxGauge
-#define wxUSE_LISTBOX      1    // wxListBox
-#define wxUSE_LISTCTRL     1    // wxListCtrl
-#define wxUSE_RADIOBOX     1    // wxRadioBox
-#define wxUSE_RADIOBTN     1    // wxRadioButton
-#define wxUSE_SCROLLBAR    1    // wxScrollBar
-#define wxUSE_SLIDER       1    // wxSlider
-#define wxUSE_SPINBTN      1    // wxSpinButton
-#define wxUSE_SPINCTRL     1    // wxSpinCtrl
-#define wxUSE_STATBOX      1    // wxStaticBox
-#define wxUSE_STATLINE     1    // wxStaticLine
-#define wxUSE_STATTEXT     1    // wxStaticText
-#define wxUSE_STATBMP      1    // wxStaticBitmap
-#define wxUSE_TEXTCTRL     1    // wxTextCtrl
-#define wxUSE_TOGGLEBTN    1    // requires wxButton
-#define wxUSE_TREECTRL     1    // wxTreeCtrl
+#define wxUSE_BUTTON        1   // wxButton
+#define wxUSE_BMPBUTTON     1   // wxBitmapButton
+#define wxUSE_CALENDARCTRL  1   // wxCalendarCtrl
+#define wxUSE_CHECKBOX      1   // wxCheckBox
+#define wxUSE_CHECKLISTBOX  1   // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
+#define wxUSE_CHOICE        1   // wxChoice
+#define wxUSE_COMBOBOX      1   // wxComboBox
+#define wxUSE_DATAVIEWCTRL  1   // wxDataViewCtrl
+#define wxUSE_DATEPICKCTRL  1   // wxDatePickerCtrl
+#define wxUSE_GAUGE         1   // wxGauge
+#define wxUSE_HYPERLINKCTRL 1   // wxHyperlinkCtrl
+#define wxUSE_LISTBOX       1   // wxListBox
+#define wxUSE_LISTCTRL      1   // wxListCtrl
+#define wxUSE_RADIOBOX      1   // wxRadioBox
+#define wxUSE_RADIOBTN      1   // wxRadioButton
+#define wxUSE_SCROLLBAR     1   // wxScrollBar
+#define wxUSE_SLIDER        1   // wxSlider
+#define wxUSE_SPINBTN       1   // wxSpinButton
+#define wxUSE_SPINCTRL      1   // wxSpinCtrl
+#define wxUSE_STATBOX       1   // wxStaticBox
+#define wxUSE_STATLINE      1   // wxStaticLine
+#define wxUSE_STATTEXT      1   // wxStaticText
+#define wxUSE_STATBMP       1   // wxStaticBitmap
+#define wxUSE_TEXTCTRL      1   // wxTextCtrl
+#define wxUSE_TOGGLEBTN     1   // requires wxButton
+#define wxUSE_TREECTRL      1   // wxTreeCtrl
 
 // Use a status bar class? Depending on the value of wxUSE_NATIVE_STATUSBAR
 // below either wxStatusBar95 or a generic wxStatusBar will be used.

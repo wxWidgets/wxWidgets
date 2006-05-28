@@ -514,6 +514,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_DISPLAY=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
+  DEFAULT_wxUSE_HYPERLINKCTRL=no
   DEFAULT_wxUSE_DATAVIEWCTRL=no
   DEFAULT_wxUSE_IMAGLIST=no
   DEFAULT_wxUSE_LISTBOOK=no
@@ -720,6 +721,7 @@ else
   DEFAULT_wxUSE_DISPLAY=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
+  DEFAULT_wxUSE_HYPERLINKCTRL=yes
   DEFAULT_wxUSE_DATAVIEWCTRL=no
   DEFAULT_wxUSE_IMAGLIST=yes
   DEFAULT_wxUSE_LISTBOOK=yes
@@ -1032,6 +1034,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_DATEPICKCTRL=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
+  DEFAULT_wxUSE_HYPERLINKCTRL=yes
   DEFAULT_wxUSE_DATAVIEWCTRL=no
   DEFAULT_wxUSE_IMAGLIST=yes
   DEFAULT_wxUSE_LISTBOOK=yes
@@ -1075,6 +1078,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_DATEPICKCTRL=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
+  DEFAULT_wxUSE_HYPERLINKCTRL=no
   DEFAULT_wxUSE_DATAVIEWCTRL=no
   DEFAULT_wxUSE_IMAGLIST=no
   DEFAULT_wxUSE_LISTBOOK=no
@@ -1122,6 +1126,7 @@ WX_ARG_ENABLE(display,     [  --enable-display        use wxDisplay class], wxUS
 WX_ARG_ENABLE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
 WX_ARG_ENABLE(grid,        [  --enable-grid           use wxGrid class], wxUSE_GRID)
 WX_ARG_ENABLE(dataviewctrl,[  --enable-dataviewctrl,  use wxDataViewCtrl class], wxUSE_DATAVIEWCTRL)
+WX_ARG_ENABLE(hyperlink,   [  --enable-hyperlink      use wxHyperlinkCtrl class], wxUSE_HYPERLINKCTRL)
 WX_ARG_ENABLE(imaglist,    [  --enable-imaglist       use wxImageList class], wxUSE_IMAGLIST)
 WX_ARG_ENABLE(listbook,    [  --enable-listbook       use wxListbook class], wxUSE_LISTBOOK)
 WX_ARG_ENABLE(listbox,     [  --enable-listbox        use wxListBox class], wxUSE_LISTBOX)
@@ -6326,6 +6331,11 @@ if test "$wxUSE_GRID" = "yes"; then
   AC_DEFINE(wxUSE_GRID)
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS grid"
+fi
+
+if test "$wxUSE_HYPERLINKCTRL" = "yes"; then
+  AC_DEFINE(wxUSE_HYPERLINKCTRL)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_DATAVIEWCTRL" = "yes"; then

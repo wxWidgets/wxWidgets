@@ -293,31 +293,32 @@
 
 #define wxUSE_TIPWINDOW    0
 
-#define wxUSE_BUTTON       0
-#define wxUSE_BMPBUTTON    0
-#define wxUSE_CALENDARCTRL 0
-#define wxUSE_CHECKBOX     0
-#define wxUSE_CHECKLISTBOX 0
-#define wxUSE_CHOICE       0
-#define wxUSE_COMBOBOX     0
-#define wxUSE_DATAVIEWCTRL 0
-#define wxUSE_DATEPICKCTRL 0
-#define wxUSE_GAUGE        0
-#define wxUSE_LISTBOX      0
-#define wxUSE_LISTCTRL     0
-#define wxUSE_RADIOBOX     0
-#define wxUSE_RADIOBTN     0
-#define wxUSE_SCROLLBAR    0
-#define wxUSE_SLIDER       0
-#define wxUSE_SPINBTN      0
-#define wxUSE_SPINCTRL     0
-#define wxUSE_STATBOX      0
-#define wxUSE_STATLINE     0
-#define wxUSE_STATTEXT     0
-#define wxUSE_STATBMP      0
-#define wxUSE_TEXTCTRL     0
-#define wxUSE_TOGGLEBTN    0
-#define wxUSE_TREECTRL     0
+#define wxUSE_BUTTON        0
+#define wxUSE_BMPBUTTON     0
+#define wxUSE_CALENDARCTRL  0
+#define wxUSE_CHECKBOX      0
+#define wxUSE_CHECKLISTBOX  0
+#define wxUSE_CHOICE        0
+#define wxUSE_COMBOBOX      0
+#define wxUSE_DATAVIEWCTRL  0
+#define wxUSE_DATEPICKCTRL  0
+#define wxUSE_GAUGE         0
+#define wxUSE_HYPERLINKCTRL 0
+#define wxUSE_LISTBOX       0
+#define wxUSE_LISTCTRL      0
+#define wxUSE_RADIOBOX      0
+#define wxUSE_RADIOBTN      0
+#define wxUSE_SCROLLBAR     0
+#define wxUSE_SLIDER        0
+#define wxUSE_SPINBTN       0
+#define wxUSE_SPINCTRL      0
+#define wxUSE_STATBOX       0
+#define wxUSE_STATLINE      0
+#define wxUSE_STATTEXT      0
+#define wxUSE_STATBMP       0
+#define wxUSE_TEXTCTRL      0
+#define wxUSE_TOGGLEBTN     0
+#define wxUSE_TREECTRL      0
 
 #define wxUSE_STATUSBAR    0
 

@@ -57,5 +57,6 @@
 #include "wx/xrc/xh_statbar.h"
 #include "wx/xrc/xh_mdi.h"
 #include "wx/xrc/xh_grid.h"
+#include "wx/xrc/xh_hyperlink.h"
 
 #endif // _WX_XH_ALL_H_

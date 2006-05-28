@@ -496,6 +496,14 @@
 #   endif
 #endif /* !defined(wxUSE_HELP) */
 
+#ifndef wxUSE_HYPERLINKCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_HYPERLINKCTRL must be defined."
+#   else
+#       define wxUSE_HYPERLINKCTRL 0
+#   endif
+#endif /* !defined(wxUSE_HYPERLINKCTRL) */
+
 #ifndef wxUSE_HTML
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_HTML must be defined."
