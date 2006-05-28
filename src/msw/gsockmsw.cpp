@@ -335,7 +335,8 @@ void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
 {
   /* Remove the socket from the list */
   EnterCriticalSection(&critical);
-  socketList[(socket->m_msgnumber - WM_USER)] = NULL;
+  if ( socket->IsOk() )
+      socketList[(socket->m_msgnumber - WM_USER)] = NULL;
   LeaveCriticalSection(&critical);
 }
 
