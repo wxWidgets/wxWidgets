@@ -199,9 +199,11 @@ WXHWND wxToolTip::GetToolTipCtrl()
 {
     if ( !ms_hwndTT )
     {
+        // we want to show the tooltips always (even when the window is not
+        // active) and we don't want to strip "&"s from them
         ms_hwndTT = (WXHWND)::CreateWindow(TOOLTIPS_CLASS,
                                            (LPCTSTR)NULL,
-                                           TTS_ALWAYSTIP,
+                                           TTS_ALWAYSTIP | TTS_NOPREFIX,
                                            CW_USEDEFAULT, CW_USEDEFAULT,
                                            CW_USEDEFAULT, CW_USEDEFAULT,
                                            NULL, (HMENU)NULL,
