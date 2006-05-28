@@ -135,7 +135,7 @@ To get a pointer to the second child of this node (if it does exist), use the
 \constfunc{wxString}{GetContent}{\void}
 
 Returns the content of this node. Can be an empty string.
-Be aware that for nodes of type \texttt{wxXML_ELEMENT_NODE} (the most used node type) the
+Be aware that for nodes of type \texttt{wxXML\_ELEMENT\_NODE} (the most used node type) the
 content is an empty string. See \helpref{GetNodeContent()}{wxxmlnodegetnodecontent} for more details.
 
 
@@ -143,7 +143,7 @@ content is an empty string. See \helpref{GetNodeContent()}{wxxmlnodegetnodeconte
 
 \constfunc{wxString}{GetNodeContent}{\void}
 
-Returns the content of the first child node of type \texttt{wxXML_TEXT_NODE} or \texttt{wxXML_CDATA_SECTION_NODE}.
+Returns the content of the first child node of type \texttt{wxXML\_TEXT\_NODE} or \texttt{wxXML\_CDATA\_SECTION\_NODE}.
 This function is very useful since the XML snippet \texttt{``<tagname>tagcontent</tagname>"} is represented by
 expat with the following tag tree:
 
@@ -159,7 +159,7 @@ wxXML_ENTITY_NODE name="tagname", content=""
 |-- wxXML_CDATA_SECTION_NODE name="", content="tagcontent"
 \end{verbatim}
 
-An empty string is returned if the node has no children of type \texttt{wxXML_TEXT_NODE} or \texttt{wxXML_CDATA_SECTION_NODE}, or if the content of the first child of such types is empty.
+An empty string is returned if the node has no children of type \texttt{wxXML\_TEXT\_NODE} or \texttt{wxXML\_CDATA\_SECTION\_NODE}, or if the content of the first child of such types is empty.
 
 
 \membersection{wxXmlNode::GetName}\label{wxxmlnodegetname}
