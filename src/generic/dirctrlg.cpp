@@ -1065,6 +1065,33 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
     return true;
 }
 
+
+bool wxGenericDirCtrl::CollapsePath(const wxString& path)
+{
+    bool done           = false;
+    wxTreeItemId id     = FindChild(m_rootId, path, done);
+    wxTreeItemId lastId = id; // The last non-zero id
+
+    while ( id.IsOk() && !done )
+    {
+        CollapseDir(id);
+
+        id = FindChild(id, path, done);
+
+        if ( id.IsOk() )
+            lastId = id;
+    }
+
+    if ( !lastId.IsOk() )
+        return false;
+
+    m_treeCtrl->SelectItem(lastId);
+    m_treeCtrl->EnsureVisible(lastId);
+
+    return true;
+}
+
+
 wxString wxGenericDirCtrl::GetPath() const
 {
     wxTreeItemId id = m_treeCtrl->GetSelection();
