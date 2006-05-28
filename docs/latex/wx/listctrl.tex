@@ -441,6 +441,7 @@ for \helpref{GetItemRect}{wxlistctrlgetitemrect}.
 \arg{code} can be one of \texttt{wxLIST\_RECT\_BOUNDS}, 
 \texttt{wxLIST\_RECT\_ICON} or \texttt{wxLIST\_RECT\_LABEL}.
 
+\newsince{2.7.0}
 
 
 \membersection{wxListCtrl::GetItemSpacing}\label{wxlistctrlgetitemspacing}
@@ -596,11 +597,11 @@ wxLIST\_HITTEST\_ONITEMSTATEICON.}
 
 If \arg{ptrSubItem} is not \NULL and the wxListCtrl is in the report
 mode the subitem (or column) number will also be provided. 
-This feature is currently only implemented under wxMSW and requires at least
-comctl32.dll of verion 4.70 on the host system or the value stored in 
-\arg{ptrSubItem} will be always -1. To compile this feature into wxWidgets
-library you need to have access to commctrl.h of version 4.70 that is provided
-by Microsoft.
+This feature is only available in version 2.7.0 or higher and is currently only
+implemented under wxMSW and requires at least comctl32.dll of verion 4.70 on
+the host system or the value stored in \arg{ptrSubItem} will be always -1. To
+compile this feature into wxWidgets library you need to have access to
+commctrl.h of version 4.70 that is provided by Microsoft.
 
 \pythonnote{A tuple of values is returned in the wxPython version of
 this method. The first value is the item id and the second is the
