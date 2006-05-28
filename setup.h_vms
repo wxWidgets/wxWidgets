@@ -218,6 +218,8 @@ typedef pid_t GPid;
 
 #define wxUSE_STD_STRING  0
 
+#define wxUSE_PRINTF_POS_PARAMS 0
+
 #define wxUSE_LONGLONG      1
 
 #define wxUSE_FILE          1

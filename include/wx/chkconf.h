@@ -154,6 +154,14 @@
 #   endif
 #endif /* !defined(wxUSE_ON_FATAL_EXCEPTION) */
 
+#ifndef wxUSE_PRINTF_POS_PARAMS
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_PRINTF_POS_PARAMS must be defined."
+#   else
+#       define wxUSE_PRINTF_POS_PARAMS 0
+#   endif
+#endif /* !defined(wxUSE_PRINTF_POS_PARAMS) */
+
 #ifndef wxUSE_PROTOCOL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_PROTOCOL must be defined."

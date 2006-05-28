@@ -270,6 +270,21 @@
 // Enable conversion to standard C++ string if 1.
 #define wxUSE_STD_STRING  0
 
+// Support for positional parameters (e.g. %1$d, %2$s ...) in wxVsnprintf.
+// Note that if the system's implementation does not support positional
+// parameters, setting this to 1 forces the use of the wxWidgets implementation
+// of wxVsnprintf. The standard vsnprintf() supports positional parameters on
+// many Unix systems but usually doesn't under Windows.
+//
+// Positional parameters are very useful when translating a program since using
+// them in formatting strings allow translators to correctly reorder the
+// translated sentences.
+//
+// Default is 1
+//
+// Recommended setting: 1 if you want to support multiple languages
+#define wxUSE_PRINTF_POS_PARAMS      0
+
 // ----------------------------------------------------------------------------
 // non GUI features selection
 // ----------------------------------------------------------------------------

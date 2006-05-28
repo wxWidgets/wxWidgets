@@ -38,6 +38,7 @@ Deprecated methods since 2.6.x and their replacements
 
 All:
 
+- Added positional parameters support to wxVsnprintf() (Francesco Montorsi)
 - wx(F)File, wxTextFile and wxInputStreams recognize Unicode BOM now
 - Many fixes for UTF-16/32 handling in Unicode builds
 - wxLaunchDefaultBrowser() now supports wxBROWSER_NEW_WINDOW flag.

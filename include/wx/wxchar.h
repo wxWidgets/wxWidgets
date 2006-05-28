@@ -369,8 +369,14 @@
     /* special case: not all TCHAR-aware compilers have those */
     #if defined(__VISUALC__) || \
             (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
-        #define wxVsnprintf_    _vsntprintf
-        #define wxSnprintf_     _sntprintf
+        /*
+           we can only use the system _vsntprintf() if we don't require the
+           Unix98 positional parameters support as it doesn't have it
+         */
+        #if !wxUSE_PRINTF_POS_PARAMS
+            #define wxVsnprintf_    _vsntprintf
+            #define wxSnprintf_     _sntprintf
+        #endif
     #endif
 
     /* special case: these functions are missing under Win9x with Unicows so we */
@@ -867,7 +873,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
    We define function with a trailing underscore here because the real one is a
    wrapper around it as explained below
  */
-#ifndef wxVsnprintf_
+#if !defined( wxVsnprintf_ ) && !wxUSE_PRINTF_POS_PARAMS
     #if wxUSE_UNICODE
         #ifdef wxHAVE_MWERKS_UNICODE
             #define HAVE_WCSRTOMBS 1
@@ -877,22 +883,24 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
             #define wxVsnprintf_    _vsnwprintf
             #define wxSnprintf_     _snwprintf
         #endif /* Watcom */
-        #if defined(HAVE__VSNWPRINTF)
+        #if defined(HAVE__VSNWPRINTF) && defined(HAVE_UNIX98_PRINTF)
             #define wxVsnprintf_    _vsnwprintf
         /* MinGW?MSVCRT has the wrong vswprintf */
-		/* Mac OS X has a somehow buggy vswprintf */
+        /* Mac OS X has a somehow buggy vswprintf */
         #elif defined(HAVE_VSWPRINTF) && !defined(__MINGW32__) && !defined(__DARWIN__)
             #define wxVsnprintf_    vswprintf
         #endif
     #else /* ASCII */
         /* all versions of CodeWarrior supported by wxWidgets apparently have */
         /* both snprintf() and vsnprintf() */
-        #if defined(HAVE_SNPRINTF) || defined(__MWERKS__) || defined(__WATCOMC__)
+        #if (defined(HAVE_SNPRINTF) && defined(HAVE_UNIX98_PRINTF)) \
+            || defined(__MWERKS__) || defined(__WATCOMC__)
             #ifndef HAVE_BROKEN_SNPRINTF_DECL
                 #define wxSnprintf_     snprintf
             #endif
         #endif
-        #if defined(HAVE_VSNPRINTF) || defined(__MWERKS__) || defined(__WATCOMC__)
+        #if (defined(HAVE_VSNPRINTF) && defined(HAVE_UNIX98_PRINTF)) \
+            || defined(__MWERKS__) || defined(__WATCOMC__)
             #if defined __cplusplus && defined HAVE_BROKEN_VSNPRINTF_DECL
                 #define wxVsnprintf_    wx_fixed_vsnprintf
             #else
