@@ -2693,9 +2693,15 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                             wxTreeItemAttr * const attr = it->second;
 
+                            wxTreeViewItem tvItem((void *)nmcd.dwItemSpec,
+                                                  TVIF_STATE, TVIS_DROPHILITED);
+                            DoGetItem(&tvItem);
+                            const UINT tvItemState = tvItem.state;
+
                             // selection colours should override ours,
-                            // otherwise it is too confusing ot the user
-                            if ( !(nmcd.uItemState & CDIS_SELECTED) )
+                            // otherwise it is too confusing to the user
+                            if ( !(nmcd.uItemState & CDIS_SELECTED) &&
+                                 !(tvItemState & TVIS_DROPHILITED) )
                             {
                                 wxColour colBack;
                                 if ( attr->HasBackgroundColour() )
@@ -2709,8 +2715,9 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                             // colour when we don't have focus (we can't keep
                             // it when we do, it would usually be unreadable on
                             // the almost inverted bg colour...)
-                            if ( !(nmcd.uItemState & CDIS_SELECTED) ||
-                                    FindFocus() != this )
+                            if ( ( !(nmcd.uItemState & CDIS_SELECTED) ||
+                                    FindFocus() != this ) &&
+                                 !(tvItemState & TVIS_DROPHILITED) )
                             {
                                 wxColour colText;
                                 if ( attr->HasTextColour() )
