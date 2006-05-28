@@ -83,6 +83,7 @@ public:
     wxBitmap  my_horse_rawgrey_pnm;
 
     wxBitmap  colorized_horse_jpeg;
+    wxBitmap  my_cmyk_jpeg;
 
     wxBitmap my_toucan;
     wxBitmap my_toucan_flipped_horiz;
@@ -484,12 +485,18 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     else
     {
         my_horse_jpeg = wxBitmap( image );
+
         // Colorize by rotating green hue to red
         wxImage::HSVValue greenHSV = wxImage::RGBtoHSV(wxImage::RGBValue(0, 255, 0));
         wxImage::HSVValue redHSV = wxImage::RGBtoHSV(wxImage::RGBValue(255, 0, 0));
         image.RotateHue(redHSV.hue - greenHSV.hue);
         colorized_horse_jpeg = wxBitmap( image );
     }
+
+    if ( !image.LoadFile( dir + _T("cmyk.jpg")) )
+        wxLogError(_T("Can't load CMYK JPG image"));
+    else
+        my_cmyk_jpeg = wxBitmap(image);
 #endif // wxUSE_LIBJPEG
 
 #if wxUSE_GIF
@@ -685,6 +692,14 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if (my_horse_jpeg.Ok())
         dc.DrawBitmap( my_horse_jpeg, 30, 380 );
 
+    dc.DrawText( _T("Green rotated to red"), 280, 365 );
+    if (colorized_horse_jpeg.Ok())
+        dc.DrawBitmap( colorized_horse_jpeg, 280, 380 );
+
+    dc.DrawText( _T("CMYK JPEG image"), 530, 365 );
+    if (my_cmyk_jpeg.Ok())
+        dc.DrawBitmap( my_cmyk_jpeg, 530, 380 );
+
     dc.DrawText( _T("GIF handler"), 30, 595 );
     if (my_horse_gif.Ok())
         dc.DrawBitmap( my_horse_gif, 30, 610 );
@@ -721,8 +736,9 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if (my_horse_xpm.Ok())
         dc.DrawBitmap( my_horse_xpm, 30, 1760 );
 
+    // toucans
     {
-        int x = 200, y = 300, yy = 170;;
+        int x = 750, y = 10, yy = 170;
 
         dc.DrawText(wxT("Original toucan"), x+50, y);
         dc.DrawBitmap(my_toucan, x, y+15);
@@ -871,15 +887,6 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
             dc.DrawBitmap( my_horse_ani[i], 230 + i * 2 * my_horse_ani[i].GetWidth() , 2420, true );
         }
     }
-
-#if wxUSE_LIBJPEG
-    if (colorized_horse_jpeg.Ok())
-    {
-        dc.DrawText( _T("Colorize image by rotating green hue to red"), 30, 2490 );
-        dc.DrawBitmap( colorized_horse_jpeg, 30, 2520 );
-    }
-#endif // wxUSE_LIBJPEG
-
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()
@@ -959,7 +966,7 @@ END_EVENT_TABLE()
 
 MyFrame::MyFrame()
        : wxFrame( (wxFrame *)NULL, wxID_ANY, _T("wxImage sample"),
-                  wxPoint(20,20), wxSize(470,360) )
+                  wxPoint(20, 20), wxSize(950, 700) )
 {
   wxMenuBar *menu_bar = new wxMenuBar();
 

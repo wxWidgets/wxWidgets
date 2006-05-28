@@ -202,6 +202,21 @@ void wx_jpeg_io_src( j_decompress_ptr cinfo, wxInputStream& infile )
     src->pub.term_source = wx_term_source;
 }
 
+static inline void wx_cmyk_to_rgb(unsigned char* rgb, const unsigned char* cmyk)
+{
+    register int k = 255 - cmyk[3];
+    register int k2 = cmyk[3];
+    register int c;
+
+    c = k + k2 * (255 - cmyk[0]) / 255;
+    rgb[0] = (c > 255) ? 0 : (255 - c);
+
+    c = k + k2 * (255 - cmyk[1]) / 255;
+    rgb[1] = (c > 255) ? 0 : (255 - c);
+
+    c = k + k2 * (255 - cmyk[2]) / 255;
+    rgb[2] = (c > 255) ? 0 : (255 - c);
+}
 
 // temporarily disable the warning C4611 (interaction between '_setjmp' and
 // C++ object destruction is non-portable) - I don't see any dtors here
@@ -213,9 +228,7 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 {
     struct jpeg_decompress_struct cinfo;
     struct wx_error_mgr jerr;
-    JSAMPARRAY tempbuf;
     unsigned char *ptr;
-    unsigned stride;
 
     image->Destroy();
     cinfo.err = jpeg_std_error( &jerr.pub );
@@ -240,7 +253,19 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     jpeg_create_decompress( &cinfo );
     wx_jpeg_io_src( &cinfo, stream );
     jpeg_read_header( &cinfo, TRUE );
-    cinfo.out_color_space = JCS_RGB;
+
+    int bytesPerPixel;
+    if ((cinfo.out_color_space == JCS_CMYK) || (cinfo.out_color_space == JCS_YCCK))
+    {
+        cinfo.out_color_space = JCS_CMYK;
+        bytesPerPixel = 4;
+    }
+    else // all the rest is treated as RGB
+    {
+        cinfo.out_color_space = JCS_RGB;
+        bytesPerPixel = 3;
+    }
+
     jpeg_start_decompress( &cinfo );
 
     image->Create( cinfo.image_width, cinfo.image_height );
@@ -251,15 +276,31 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     }
     image->SetMask( false );
     ptr = image->GetData();
-    stride = cinfo.output_width * 3;
-    tempbuf = (*cinfo.mem->alloc_sarray)
-        ((j_common_ptr) &cinfo, JPOOL_IMAGE, stride, 1 );
 
-    while ( cinfo.output_scanline < cinfo.output_height ) {
+    unsigned stride = cinfo.output_width * bytesPerPixel;
+    JSAMPARRAY tempbuf = (*cinfo.mem->alloc_sarray)
+                            ((j_common_ptr) &cinfo, JPOOL_IMAGE, stride, 1 );
+
+    while ( cinfo.output_scanline < cinfo.output_height )
+    {
         jpeg_read_scanlines( &cinfo, tempbuf, 1 );
-        memcpy( ptr, tempbuf[0], stride );
-        ptr += stride;
+        if (cinfo.out_color_space == JCS_RGB)
+        {
+            memcpy( ptr, tempbuf[0], stride );
+            ptr += stride;
+        }
+        else // CMYK
+        {
+            const unsigned char* inptr = (const unsigned char*) tempbuf[0];
+            for (size_t i = 0; i < cinfo.output_width; i++)
+            {
+                wx_cmyk_to_rgb(ptr, inptr);
+                ptr += 3;
+                inptr += 4;
+            }
+        }
     }
+
     jpeg_finish_decompress( &cinfo );
     jpeg_destroy_decompress( &cinfo );
     return true;
