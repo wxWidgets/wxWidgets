@@ -104,6 +104,9 @@ typedef int (wxCALLBACK *wxListCtrlCompare)(long item1, long item2, long sortDat
 
 #define wxLIST_HITTEST_ONITEM (wxLIST_HITTEST_ONITEMICON | wxLIST_HITTEST_ONITEMLABEL | wxLIST_HITTEST_ONITEMSTATEICON)
 
+// GetSubItemRect constants
+#define wxLIST_GETSUBITEMRECT_WHOLEITEM -1l
+
 // Flags for GetNextItem (MSW only except wxLIST_NEXT_ALL)
 enum
 {

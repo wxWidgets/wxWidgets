@@ -2,7 +2,7 @@
 // Name:        src/msw/listctrl.cpp
 // Purpose:     wxListCtrl
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Agron Selimaj
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -1011,6 +1011,24 @@ wxRect wxListCtrl::GetViewRect() const
 // Gets the item rectangle
 bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
 {
+    return GetSubItemRect( item, wxLIST_GETSUBITEMRECT_WHOLEITEM, rect, code) ;
+}
+
+/*!
+ * Retrieve coordinates and size of a specified subitem of a listview control.
+ * This function only works if the listview control is in the report mode.
+ *
+ * @param item : Item number
+ * @param subItem : Subitem or column number, use -1 for the whole row including
+ *                  all columns or subitems
+ * @param rect : A pointer to an allocated wxRect object
+ * @param code : Specify the part of the subitem coordinates you need. Choices are
+ *               wxLIST_RECT_BOUNDS, wxLIST_RECT_ICON, wxLIST_RECT_LABEL
+ *
+ * @return bool  : True if successful.
+ */
+bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code) const
+{
     RECT rectWin;
 
     int codeWin;
@@ -1022,12 +1040,24 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
         codeWin = LVIR_LABEL;
     else
     {
-        wxFAIL_MSG( _T("incorrect code in GetItemRect()") );
-
+        wxFAIL_MSG( _T("incorrect code in GetItemRect() / GetSubItemRect()") );
         codeWin = LVIR_BOUNDS;
     }
 
-    bool success = ListView_GetItemRect(GetHwnd(), (int) item, &rectWin, codeWin) != 0;
+    bool success;
+    if( subItem == wxLIST_GETSUBITEMRECT_WHOLEITEM)
+    {
+      success = ListView_GetItemRect(GetHwnd(), (int) item, &rectWin, codeWin) != 0;
+    }
+    else if( subItem >= 0)
+    {
+      success = ListView_GetSubItemRect( GetHwnd(), (int) item, (int) subItem, codeWin, &rectWin) != 0;
+    }
+    else
+    {
+      wxFAIL_MSG( _T("incorrect subItem number in GetSubItemRect()") );
+      return false;
+    }
 
     rect.x = rectWin.left;
     rect.y = rectWin.top;
@@ -1036,6 +1066,9 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
 
     return success;
 }
+
+
+
 
 // Gets the item position
 bool wxListCtrl::GetItemPosition(long item, wxPoint& pos) const
@@ -1478,13 +1511,24 @@ long wxListCtrl::FindItem(long start, const wxPoint& pt, int direction)
 
 // Determines which item (if any) is at the specified point,
 // giving details in 'flags' (see wxLIST_HITTEST_... flags above)
-long wxListCtrl::HitTest(const wxPoint& point, int& flags)
+long wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem)
 {
     LV_HITTESTINFO hitTestInfo;
     hitTestInfo.pt.x = (int) point.x;
     hitTestInfo.pt.y = (int) point.y;
 
-    ListView_HitTest(GetHwnd(), & hitTestInfo);
+    long item;
+#ifdef LVM_SUBITEMHITTEST
+    if ( ptrSubItem && wxApp::GetComCtl32Version() >= 470 )
+    {
+        item = ListView_SubItemHitTest(GetHwnd(), &hitTestInfo);
+        *ptrSubItem = hitTestInfo.iSubItem;
+    }
+    else
+#endif // LVM_SUBITEMHITTEST
+    {
+        item = ListView_HitTest(GetHwnd(), &hitTestInfo);
+    }
 
     flags = 0;
 
@@ -1519,8 +1563,9 @@ long wxListCtrl::HitTest(const wxPoint& point, int& flags)
             flags |= wxLIST_HITTEST_ONITEMSTATEICON;
     }
 
-    return (long) hitTestInfo.iItem;
+    return item;
 }
+
 
 // Inserts an item, returning the index of the new item if successful,
 // -1 otherwise.

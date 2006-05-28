@@ -125,6 +125,8 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_CONTEXT_MENU(MyListCtrl::OnContextMenu)
 #endif
     EVT_CHAR(MyListCtrl::OnChar)
+
+    EVT_RIGHT_DOWN(MyListCtrl::OnRightClick)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -1007,6 +1009,36 @@ void MyListCtrl::OnChar(wxKeyEvent& event)
         default:
             event.Skip();
     }
+}
+
+void MyListCtrl::OnRightClick(wxMouseEvent& event)
+{
+    if ( !event.ControlDown() )
+    {
+        event.Skip();
+        return;
+    }
+
+    int flags;
+    long subitem;
+    long item = HitTest(event.GetPosition(), flags, &subitem);
+
+    wxString where;
+    switch ( flags )
+    {
+        case wxLIST_HITTEST_ABOVE: where = _T("above"); break;
+        case wxLIST_HITTEST_BELOW: where = _T("below"); break;
+        case wxLIST_HITTEST_NOWHERE: where = _T("nowhere near"); break;
+        case wxLIST_HITTEST_ONITEMICON: where = _T("on icon of"); break;
+        case wxLIST_HITTEST_ONITEMLABEL: where = _T("on label of"); break;
+        case wxLIST_HITTEST_ONITEMRIGHT: where = _T("right on"); break;
+        case wxLIST_HITTEST_TOLEFT: where = _T("to the left of"); break;
+        case wxLIST_HITTEST_TORIGHT: where = _T("to the right of"); break;
+        default: where = _T("not clear exactly where on"); break;
+    }
+
+    wxLogMessage(_T("Right double click %s item %ld, subitem %ld"),
+                 where.c_str(), item, subitem);
 }
 
 void MyListCtrl::LogEvent(const wxListEvent& event, const wxChar *eventName)

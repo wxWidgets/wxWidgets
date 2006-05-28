@@ -76,6 +76,8 @@ public:
     void OnContextMenu(wxContextMenuEvent& event);
 #endif
 
+    void OnRightClick(wxMouseEvent& event);
+
 private:
     void ShowContextMenu(const wxPoint& pos);
     wxLog *m_logOld;

@@ -2,7 +2,7 @@
 // Name:        wx/msw/listctrl.h
 // Purpose:     wxListCtrl class
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Agron Selimaj
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -174,6 +174,9 @@ public:
     // Gets the item rectangle
     bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const ;
 
+    // Gets the subitem rectangle in report mode
+    bool GetSubItemRect(long item, long subItem, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const ;
+
     // Gets the item position
     bool GetItemPosition(long item, wxPoint& pos) const ;
 
@@ -293,7 +296,8 @@ public:
 
     // Determines which item (if any) is at the specified point,
     // giving details in 'flags' (see wxLIST_HITTEST_... flags above)
-    long HitTest(const wxPoint& point, int& flags);
+    // Request the subitem number as well at the given coordinate.
+    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = NULL);
 
     // Inserts an item, returning the index of the new item if successful,
     // -1 otherwise.

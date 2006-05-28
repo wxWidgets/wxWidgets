@@ -425,6 +425,24 @@ returns a Wx::Rect ( or undef ).}
 
 
 
+\membersection{wxListCtrl::GetSubItemRect}\label{wxlistctrlgetsubitemrect}
+
+\constfunc{bool}{GetSubItemRect}{\param{long }{item}, \param{long }{subItem}, \param{wxRect\& }{rect}, \param{int }{code = wxLIST\_RECT\_BOUNDS}}
+
+Returns the rectangle representing the size and position, in physical
+coordinates, of the given subitem, i.e. the part of the row \arg{item} in the
+column \arg{subItem}.
+
+This method is only meaningfull when the wxListCtrl is in the report mode. If
+\arg{subItem} parameter is equal to the special value 
+\texttt{wxLIST\_GETSUBITEMRECT\_WHOLEITEM} the return value is the same as
+for \helpref{GetItemRect}{wxlistctrlgetitemrect}.
+
+\arg{code} can be one of \texttt{wxLIST\_RECT\_BOUNDS}, 
+\texttt{wxLIST\_RECT\_ICON} or \texttt{wxLIST\_RECT\_LABEL}.
+
+
+
 \membersection{wxListCtrl::GetItemSpacing}\label{wxlistctrlgetitemspacing}
 
 \constfunc{wxSize}{GetItemSpacing}{\void}
@@ -554,7 +572,7 @@ list or report views (this is a limitation of the native Win32 control).
 
 \membersection{wxListCtrl::HitTest}\label{wxlistctrlhittest}
 
-\func{long}{HitTest}{\param{const wxPoint\& }{point}, \param{int\& }{flags}}
+\func{long}{HitTest}{\param{const wxPoint\& }{point}, \param{int\& }{flags}, \param{long\* }{ptrSubItem}}
 
 Determines which item (if any) is at the specified point,
 giving details in {\it flags}. Returns index of the item or {\tt wxNOT\_FOUND}
@@ -575,6 +593,14 @@ if no item is at the specified point.
 \twocolitem{wxLIST\_HITTEST\_ONITEM}{Combination of wxLIST\_HITTEST\_ONITEMICON, wxLIST\_HITTEST\_ONITEMLABEL,
 wxLIST\_HITTEST\_ONITEMSTATEICON.}
 \end{twocollist}
+
+If \arg{ptrSubItem} is not \NULL and the wxListCtrl is in the report
+mode the subitem (or column) number will also be provided. 
+This feature is currently only implemented under wxMSW and requires at least
+comctl32.dll of verion 4.70 on the host system or the value stored in 
+\arg{ptrSubItem} will be always -1. To compile this feature into wxWidgets
+library you need to have access to commctrl.h of version 4.70 that is provided
+by Microsoft.
 
 \pythonnote{A tuple of values is returned in the wxPython version of
 this method. The first value is the item id and the second is the

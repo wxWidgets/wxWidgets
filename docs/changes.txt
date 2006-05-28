@@ -89,6 +89,7 @@ All (GUI):
 - Added wxHyperlinkCtrl (Francesco Montorsi)
 - Added clipboard events (wxEVT_COMMAND_TEXT_COPY/CUT/PASTE)
 - Added wxRadioBox::SetItemToolTip()
+- Added wxListCtrl::GetSubItemRect() and subitem hit testing (Agron Selimaj)
 - Added wxKeyEvent::GetModifiers()
 - Added wxDialog::SetEscapeId().
 - wxItemContainerImmutable::FindString unified (affects wxRadioBox, wxListBox,
