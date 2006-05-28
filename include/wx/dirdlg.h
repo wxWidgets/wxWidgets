@@ -24,8 +24,11 @@ extern WXDLLEXPORT_DATA(const wxChar) wxDirDialogNameStr[];
 extern WXDLLEXPORT_DATA(const wxChar) wxDirDialogDefaultFolderStr[];
 extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[];
 
-#define wxDD_DIR_MUST_EXIST     0x0080
 #define wxDD_CHANGE_DIR         0x0100
+#define wxDD_DIR_MUST_EXIST     0x0200
+
+// deprecated, on by default now, use wxDD_DIR_MUST_EXIST to disable it
+#define wxDD_NEW_DIR_BUTTON     0
 
 #ifdef __WXWINCE__
     #define wxDD_DEFAULT_STYLE      wxDEFAULT_DIALOG_STYLE
