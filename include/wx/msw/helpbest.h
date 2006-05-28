@@ -20,9 +20,12 @@
 class WXDLLIMPEXP_HTML wxBestHelpController: public wxHelpControllerBase
 {
 public:
-    wxBestHelpController(wxWindow* parentWindow = NULL)
-        : wxHelpControllerBase( parentWindow ), m_helpControllerType( wxUseNone ),
-          m_helpController( NULL )
+    wxBestHelpController(wxWindow* parentWindow = NULL,
+                         int style = wxHF_DEFAULT_STYLE)
+        : wxHelpControllerBase(parentWindow),
+          m_helpControllerType(wxUseNone),
+          m_helpController(NULL),
+          m_style(style)
     {
     }
 
@@ -113,6 +116,7 @@ protected:
 
     HelpControllerType m_helpControllerType;
     wxHelpControllerBase* m_helpController;
+    int m_style;
 
     DECLARE_DYNAMIC_CLASS(wxBestHelpController)
     DECLARE_NO_COPY_CLASS(wxBestHelpController)

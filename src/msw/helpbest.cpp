@@ -51,7 +51,8 @@ bool wxBestHelpController::Initialize( const wxString& filename )
     delete chm;
 
     // try wxHtmlHelpController
-    wxHtmlHelpController* html = new wxHtmlHelpController(wxHF_DEFAULT_STYLE, m_parentWindow);
+    wxHtmlHelpController *
+        html = new wxHtmlHelpController(m_style, m_parentWindow);
 
     m_helpControllerType = wxUseHtmlHelp;
     if( html->Initialize( GetValidFilename( filename ) ) )
