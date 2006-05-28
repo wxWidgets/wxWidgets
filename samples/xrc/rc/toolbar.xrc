@@ -26,7 +26,7 @@
         <longhelp>Disable autocentering of a dialog on its parent</longhelp>
     </object>  
     <separator/>
-     <object class="tool" name="custom_class_tool_or_menuitem">
+    <object class="tool" name="custom_class_tool_or_menuitem">
         <tooltip>Custom Class Example</tooltip>
         <bitmap>custclas.xpm</bitmap>
         <longhelp>Embed your own custom classes into an XRC</longhelp>
