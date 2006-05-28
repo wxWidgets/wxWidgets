@@ -25,6 +25,8 @@
 
 #if wxUSE_FSVOLUME
 
+#include "wx/volume.h"
+
 #ifndef WX_PRECOMP
     #if wxUSE_GUI
         #include "wx/icon.h"
@@ -33,7 +35,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/arrstr.h"
-#include "wx/volume.h"
+#include "wx/hashmap.h"
 
 #include <VFSMgr.h>
 #include <PalmTypesCompatibility.h>
@@ -232,4 +234,3 @@ wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
 #endif // wxUSE_GUI
 
 #endif // wxUSE_FSVOLUME
-

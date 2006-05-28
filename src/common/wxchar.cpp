@@ -752,11 +752,13 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
 #else
                     p->pad_char;
 
+#if wxUSE_WCHAR_T
                 if (type == wxPAT_WCHAR) {
                     // user passed a character explicitely indicated as Unicode...
                     const wchar_t buf[2] = { p->pad_wchar, 0 };
                     val = wxString(buf, wxConvLibc)[0u];
                 }
+#endif
 #endif
 
                 size_t i;
@@ -788,10 +790,12 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
 #else
                     p->pad_pchar;
 
+#if wxUSE_WCHAR_T
                 if (type == wxPAT_PWCHAR) {
                     // user passed a string explicitely indicated as Unicode...
                     val = wxString(p->pad_pwchar, wxConvLibc);
                 }
+#endif
 #endif
                 int len;
 

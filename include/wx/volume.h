@@ -20,6 +20,8 @@
 
 #if wxUSE_FSVOLUME
 
+#include "wx/arrstr.h"
+
 // the volume flags
 enum
 {
@@ -142,4 +144,3 @@ typedef wxFSVolumeBase wxFSVolume;
 #endif // wxUSE_FSVOLUME
 
 #endif // _WX_FSVOLUME_H_
-

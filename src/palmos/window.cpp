@@ -233,6 +233,16 @@ wxWindow *wxWindowPalm::FindItemByWinHandle(WXWINHANDLE handle, bool controlOnly
     return NULL;
 }
 
+bool wxGetKeyState(wxKeyCode key)
+{
+    wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
+        WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
+
+    // TODO
+
+    return false;
+}
+
 // ----------------------------------------------------------------------------
 // constructors and such
 // ----------------------------------------------------------------------------
