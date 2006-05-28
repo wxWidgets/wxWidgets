@@ -1997,6 +1997,7 @@ public:
     }
 
     wxMBConv_win32(const wxMBConv_win32& conv)
+        : wxMBConv()
     {
         m_CodePage = conv.m_CodePage;
         m_minMBCharWidth = conv.m_minMBCharWidth;
