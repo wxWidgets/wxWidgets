@@ -70,7 +70,8 @@ public:
     virtual void DoCreateControls();
 
 protected:
-    void FinishLayout();
+    // for compatibility only, doesn't do anything any more
+    void FinishLayout() { }
 
 private:
     // was the dialog really created?
@@ -88,8 +89,6 @@ private:
     void AddBackNextPair(wxBoxSizer *buttonRow);
     void AddButtonRow(wxBoxSizer *mainColumn);
 
-    wxSize GetManualPageSize() const;
-
     // the page size requested by user
     wxSize m_sizePage;
 
@@ -105,8 +104,6 @@ private:
                 *m_btnNext;     // the "Next>" or "Finish" button
     wxStaticBitmap *m_statbmp;  // the control for the bitmap
 
-    // Whether user called SetBorder()
-    bool m_calledSetBorder;
     // Border around page area sizer requested using SetBorder()
     int m_border;
 
@@ -115,6 +112,9 @@ private:
 
     // Whether was modal (modeless has to be destroyed on finish or cancel)
     bool m_wasModal;
+
+    // True if pages are laid out using the sizer
+    bool m_usingSizer;
 
     // Page area sizer will be inserted here with padding
     wxBoxSizer *m_sizerBmpAndPage;
