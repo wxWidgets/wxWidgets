@@ -72,8 +72,8 @@ public:
     wxHtmlPageBreakCell() {}
 
     bool AdjustPagebreak(int* pagebreak,
-                         int* known_pagebreaks = NULL,
-                         int number_of_pages = 0) const;
+                         wxArrayInt& known_pagebreaks) const;
+
     void Draw(wxDC& WXUNUSED(dc),
               int WXUNUSED(x), int WXUNUSED(y),
               int WXUNUSED(view_y1), int WXUNUSED(view_y2),
@@ -89,7 +89,7 @@ extern "C" int wxCMPFUNC_CONV wxInteger_compare(void const* i0, void const* i1)
     return *(int*)i0 - *(int*)i1;
 }
 
-bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, int* known_pagebreaks, int number_of_pages) const
+bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, wxArrayInt& known_pagebreaks) const
 {
     // When we are counting pages, 'known_pagebreaks' is non-NULL.
     // That's the only time we change 'pagebreak'. Otherwise, pages
@@ -101,10 +101,10 @@ bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, int* known_pagebreaks,
     // vertical position. Otherwise we'd be setting a pagebreak above
     // the current cell, which is incorrect, or duplicating a
     // pagebreak that has already been set.
-    if(NULL == known_pagebreaks || *pagebreak <= m_PosY)
-        {
+    if( known_pagebreaks.Count() == 0 || *pagebreak <= m_PosY)
+    {
         return false;
-        }
+    }
 
     // m_PosY is only the vertical offset from the parent. The pagebreak
     // required here is the total page offset, so m_PosY must be added
@@ -117,20 +117,20 @@ bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, int* known_pagebreaks,
     // is known to be sorted in strictly increasing order. '1 + number_of_pages'
     // is used as a bsearch() argument because the array contains a leading
     // zero plus one element for each page.
-    int* where = (int*) bsearch(&total_height, known_pagebreaks,
-                                1 + number_of_pages, sizeof(int),
-                                wxInteger_compare);
+    int where = known_pagebreaks.Index( total_height);
     // Add a pagebreak only if there isn't one already set here.
-    if(NULL != where)
-        {
+    if( wxNOT_FOUND != where)
+    {
         return false;
-        }
+    }
     else
-        {
+    {
         *pagebreak = m_PosY;
         return true;
-        }
+    }
 }
+
+
 
 TAG_HANDLER_BEGIN(P, "P")
     TAG_HANDLER_CONSTR(P) { }

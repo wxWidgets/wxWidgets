@@ -219,7 +219,8 @@ wxCursor wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface *window) const
 }
 
 
-bool wxHtmlCell::AdjustPagebreak(int *pagebreak, int* WXUNUSED(known_pagebreaks), int WXUNUSED(number_of_pages)) const
+bool wxHtmlCell::AdjustPagebreak(int *pagebreak,
+                                 wxArrayInt& WXUNUSED(known_pagebreaks)) const
 {
     if ((!m_CanLiveOnPagebreak) &&
                 m_PosY < *pagebreak && m_PosY + m_Height > *pagebreak)
@@ -699,30 +700,26 @@ int wxHtmlContainerCell::GetIndentUnits(int ind) const
 }
 
 
-
-bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak, int* known_pagebreaks, int number_of_pages) const
+bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak,
+                                          wxArrayInt& known_pagebreaks) const
 {
     if (!m_CanLiveOnPagebreak)
-        return wxHtmlCell::AdjustPagebreak(pagebreak, known_pagebreaks, number_of_pages);
+        return wxHtmlCell::AdjustPagebreak(pagebreak, known_pagebreaks);
 
-    else
+    wxHtmlCell *c = GetFirstChild();
+    bool rt = false;
+    int pbrk = *pagebreak - m_PosY;
+
+    while (c)
     {
-        wxHtmlCell *c = GetFirstChild();
-        bool rt = false;
-        int pbrk = *pagebreak - m_PosY;
-
-        while (c)
-        {
-            if (c->AdjustPagebreak(&pbrk, known_pagebreaks, number_of_pages))
-                rt = true;
-            c = c->GetNext();
-        }
-        if (rt)
-            *pagebreak = pbrk + m_PosY;
-        return rt;
+        if (c->AdjustPagebreak(&pbrk, known_pagebreaks))
+            rt = true;
+        c = c->GetNext();
     }
+    if (rt)
+        *pagebreak = pbrk + m_PosY;
+    return rt;
 }
-
 
 
 void wxHtmlContainerCell::Layout(int w)

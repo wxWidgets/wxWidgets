@@ -22,6 +22,8 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
   wxHtmlCell::GetMouseCursor(); old code overriding GetCursor() will
   continue to work with WXWIN_COMPATIBILITY_2_6, but should be rewritten to
   use GetMouseCursor().
+- wxHtmlCell::AdjustPagebreak() signature has changed, update your code if you
+  override it
 - wxFontEnumerator::GetFacenames() and GetEncodings() now return arrays and
   not pointers to arrays
 - wxStaticBoxSizer now deletes the associated wxStaticBox when it is deleted

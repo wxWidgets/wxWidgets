@@ -77,9 +77,8 @@ public:
     // set the same pagebreak twice.
     //
     // CAUTION! Render() changes DC's user scale and does NOT restore it!
-    int Render(int x, int y, int from = 0, int dont_render = FALSE,
-               int maxHeight = INT_MAX,
-               int *known_pagebreaks = NULL, int number_of_pages = 0);
+    int Render(int x, int y, wxArrayInt& known_pagebreaks, int from = 0,
+               int dont_render = FALSE, int to = INT_MAX);
 
     // returns total height of the html document
     // (compare Render's return value with this)
@@ -181,7 +180,8 @@ private:
 
 private:
     int m_NumPages;
-    int m_PageBreaks[wxHTML_PRINT_MAX_PAGES];
+    //int m_PageBreaks[wxHTML_PRINT_MAX_PAGES];
+    wxArrayInt m_PageBreaks;
 
     wxString m_Document, m_BasePath;
     bool m_BasePathIsDir;
