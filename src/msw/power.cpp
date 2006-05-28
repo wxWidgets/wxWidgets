@@ -28,6 +28,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/power.h"
+#include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
 // helper functions
