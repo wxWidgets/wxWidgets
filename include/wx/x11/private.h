@@ -80,5 +80,9 @@ extern Window wxGetWindowParent(Window window);
 bool wxSetWMDecorations(Window w, long style);
 bool wxMWMIsRunning(Window w);
 
+// Checks if any of our children are finished.
+// implemented in src/x11/utils.cpp
+void wxCheckForFinishedChildren();
+
 #endif
 // _WX_PRIVATE_H_

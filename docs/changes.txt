@@ -299,6 +299,7 @@ wxX11:
 - Invisible text problem fixed.
 - Bitmap clipping with masks and scaling improved.
 - Fixed a crash bug in the generic timer.
+- Implemented child process termination notifications (David Björkevik)
 
 Unix:
 

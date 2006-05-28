@@ -91,10 +91,52 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 // wxExecute stuff
 // ----------------------------------------------------------------------------
 
+WX_DECLARE_HASH_MAP( int, wxEndProcessData*, wxIntegerHash, wxIntegerEqual, wxProcMap );
+
+static wxProcMap *gs_procmap;
+
 int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
-    // TODO
-    return 0;
+    if (!gs_procmap) gs_procmap = new wxProcMap();
+    (*gs_procmap)[fd] = proc_data;
+    return 1;
+}
+
+void wxCheckForFinishedChildren()
+{
+    wxProcMap::iterator it;
+    if (!gs_procmap) return;
+    if (gs_procmap->size() == 0) {
+      // Map empty, delete it.
+      delete gs_procmap;
+      gs_procmap = NULL;
+    }
+    for (it = gs_procmap->begin();it != gs_procmap->end(); ++it)
+    {
+        wxEndProcessData *proc_data = it->second;
+        int pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
+        int status = 0;
+        // has the process really terminated?
+        int rc = waitpid(pid, &status, WNOHANG);
+        if (rc == 0)
+            continue;       // no, it didn't exit yet, continue waiting
+
+        // set exit code to -1 if something bad happened
+        proc_data->exitcode = rc != -1 && WIFEXITED(status) ?
+                   WEXITSTATUS(status) : -1;
+
+        // child exited, end waiting
+        close(it->first);
+
+        // don't call us again!
+        gs_procmap->erase(it->first);
+
+        wxHandleProcessTermination(proc_data);
+
+        // Iterator is invalid. Handle any further children in subsequent
+        // calls.
+        break;
+    }
 }
 
 // ----------------------------------------------------------------------------

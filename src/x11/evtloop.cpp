@@ -430,6 +430,9 @@ bool wxEventLoop::Dispatch()
 {
     XEvent event;
 
+    // Start off by checking if any of our child processes have finished.
+    wxCheckForFinishedChildren();
+
     // TODO allowing for threads, as per e.g. wxMSW
 
     // This now waits until either an X event is received,
