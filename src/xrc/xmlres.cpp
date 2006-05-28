@@ -1351,15 +1351,14 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     if (hasFacename)
     {
         wxString faces = GetParamValue(wxT("face"));
-        wxFontEnumerator enu;
-        enu.EnumerateFacenames();
+        wxArrayString facenames(wxFontEnumerator::GetFacenames());
         wxStringTokenizer tk(faces, wxT(","));
         while (tk.HasMoreTokens())
         {
-            int index = enu.GetFacenames()->Index(tk.GetNextToken(), false);
+            int index = facenames.Index(tk.GetNextToken(), false);
             if (index != wxNOT_FOUND)
             {
-                facename = (*enu.GetFacenames())[index];
+                facename = facenames[index];
                 break;
             }
         }

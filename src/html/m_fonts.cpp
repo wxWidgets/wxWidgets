@@ -67,13 +67,8 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
         if (tag.HasParam(wxT("FACE")))
         {
             if (m_Faces.GetCount() == 0)
-            {
-                wxFontEnumerator enu;
-                enu.EnumerateFacenames();
-                const wxArrayString *faces = enu.GetFacenames();
-                if ( faces )
-                    m_Faces = *faces;
-            }
+                m_Faces = wxFontEnumerator::GetFacenames();
+
             wxStringTokenizer tk(tag.GetParam(wxT("FACE")), wxT(","));
             int index;
 

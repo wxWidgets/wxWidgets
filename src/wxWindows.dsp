@@ -526,6 +526,10 @@ SOURCE=.\common\fontcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\fontenumcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\fontmap.cpp
 # End Source File
 # Begin Source File

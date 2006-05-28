@@ -1281,18 +1281,14 @@ void wxHtmlHelpWindow::OptionsDialog()
 
     if (m_NormalFonts == NULL)
     {
-        wxFontEnumerator enu;
-        enu.EnumerateFacenames();
-        m_NormalFonts = new wxArrayString;
-        *m_NormalFonts = *enu.GetFacenames();
+        m_NormalFonts = new wxArrayString(wxFontEnumerator::GetFacenames());
         m_NormalFonts->Sort(); // ascending sort
     }
     if (m_FixedFonts == NULL)
     {
-        wxFontEnumerator enu;
-        enu.EnumerateFacenames(wxFONTENCODING_SYSTEM, true /*enum fixed width only*/);
-        m_FixedFonts = new wxArrayString;
-        *m_FixedFonts = *enu.GetFacenames();
+        m_FixedFonts = new wxArrayString(
+                    wxFontEnumerator::GetFacenames(wxFONTENCODING_SYSTEM,
+                    true /*enum fixed width only*/));
         m_FixedFonts->Sort(); // ascending sort
     }
 

@@ -1293,6 +1293,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_fddlgcmn.o \
 	$(OBJS)\monodll_fldlgcmn.o \
 	$(OBJS)\monodll_fontcmn.o \
+	$(OBJS)\monodll_fontenumcmn.o \
 	$(OBJS)\monodll_fontmap.o \
 	$(OBJS)\monodll_framecmn.o \
 	$(OBJS)\monodll_gaugecmn.o \
@@ -1499,6 +1500,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_fddlgcmn.o \
 	$(OBJS)\monodll_fldlgcmn.o \
 	$(OBJS)\monodll_fontcmn.o \
+	$(OBJS)\monodll_fontenumcmn.o \
 	$(OBJS)\monodll_fontmap.o \
 	$(OBJS)\monodll_framecmn.o \
 	$(OBJS)\monodll_gaugecmn.o \
@@ -1848,6 +1850,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_fddlgcmn.o \
 	$(OBJS)\monolib_fldlgcmn.o \
 	$(OBJS)\monolib_fontcmn.o \
+	$(OBJS)\monolib_fontenumcmn.o \
 	$(OBJS)\monolib_fontmap.o \
 	$(OBJS)\monolib_framecmn.o \
 	$(OBJS)\monolib_gaugecmn.o \
@@ -2054,6 +2057,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_fddlgcmn.o \
 	$(OBJS)\monolib_fldlgcmn.o \
 	$(OBJS)\monolib_fontcmn.o \
+	$(OBJS)\monolib_fontenumcmn.o \
 	$(OBJS)\monolib_fontmap.o \
 	$(OBJS)\monolib_framecmn.o \
 	$(OBJS)\monolib_gaugecmn.o \
@@ -2346,6 +2350,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_fddlgcmn.o \
 	$(OBJS)\coredll_fldlgcmn.o \
 	$(OBJS)\coredll_fontcmn.o \
+	$(OBJS)\coredll_fontenumcmn.o \
 	$(OBJS)\coredll_fontmap.o \
 	$(OBJS)\coredll_framecmn.o \
 	$(OBJS)\coredll_gaugecmn.o \
@@ -2552,6 +2557,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_fddlgcmn.o \
 	$(OBJS)\coredll_fldlgcmn.o \
 	$(OBJS)\coredll_fontcmn.o \
+	$(OBJS)\coredll_fontenumcmn.o \
 	$(OBJS)\coredll_fontmap.o \
 	$(OBJS)\coredll_framecmn.o \
 	$(OBJS)\coredll_gaugecmn.o \
@@ -2765,6 +2771,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_fddlgcmn.o \
 	$(OBJS)\corelib_fldlgcmn.o \
 	$(OBJS)\corelib_fontcmn.o \
+	$(OBJS)\corelib_fontenumcmn.o \
 	$(OBJS)\corelib_fontmap.o \
 	$(OBJS)\corelib_framecmn.o \
 	$(OBJS)\corelib_gaugecmn.o \
@@ -2971,6 +2978,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_fddlgcmn.o \
 	$(OBJS)\corelib_fldlgcmn.o \
 	$(OBJS)\corelib_fontcmn.o \
+	$(OBJS)\corelib_fontenumcmn.o \
 	$(OBJS)\corelib_fontmap.o \
 	$(OBJS)\corelib_framecmn.o \
 	$(OBJS)\corelib_gaugecmn.o \
@@ -5619,6 +5627,11 @@ $(OBJS)\monodll_fontcmn.o: ../../src/common/fontcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_fontenumcmn.o: ../../src/common/fontenumcmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_fontmap.o: ../../src/common/fontmap.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7516,6 +7529,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_fontcmn.o: ../../src/common/fontcmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_fontenumcmn.o: ../../src/common/fontenumcmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9496,6 +9514,11 @@ $(OBJS)\coredll_fontcmn.o: ../../src/common/fontcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_fontenumcmn.o: ../../src/common/fontenumcmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_fontmap.o: ../../src/common/fontmap.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10775,6 +10798,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_fontcmn.o: ../../src/common/fontcmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_fontenumcmn.o: ../../src/common/fontenumcmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

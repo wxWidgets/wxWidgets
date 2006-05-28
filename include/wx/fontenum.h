@@ -24,7 +24,10 @@
 class WXDLLEXPORT wxFontEnumerator
 {
 public:
-    wxFontEnumerator() : m_Facenames(NULL), m_Encodings(NULL) { }
+    wxFontEnumerator() {}
+
+    // virtual dtor for the base class
+    virtual ~wxFontEnumerator() {}
 
     // start enumerating font facenames (either all of them or those which
     // support the given encoding) - will result in OnFacename() being
@@ -46,42 +49,25 @@ public:
     // true to continue with it
 
     // called by EnumerateFacenames
-    virtual bool OnFacename(const wxString& facename)
-        {
-            if (m_Facenames == NULL) m_Facenames = new wxArrayString;
-            m_Facenames -> Add(facename);
-            return true;
-        }
+    virtual bool OnFacename(const wxString& WXUNUSED(facename))
+        { return true; }
 
     // called by EnumerateEncodings
     virtual bool OnFontEncoding(const wxString& WXUNUSED(facename),
-                                const wxString& encoding)
-        {
-            if (m_Encodings == NULL) m_Encodings = new wxArrayString;
-            m_Encodings -> Add(encoding);
-            return true;
-        }
+                                const wxString& WXUNUSED(encoding))
+        { return true; }
 
-    // convenience function that returns array of facenames. Cannot be called
-    // before EnumerateFacenames.
-    wxArrayString *GetFacenames()
-        { return m_Facenames; }
 
-    // convenience function that returns array of encodings.
-    // Cannot be called before EnumerateEncodings.
-    wxArrayString *GetEncodings()
-        { return m_Encodings; }
 
-    // virtual dtor for the base class
-    virtual ~wxFontEnumerator()
-        {
-            if (m_Facenames) delete m_Facenames;
-            if (m_Encodings) delete m_Encodings;
-        }
+    // convenience function that returns array of facenames.
+    static wxArrayString
+    GetFacenames(wxFontEncoding encoding = wxFONTENCODING_SYSTEM, // all
+                 bool fixedWidthOnly = false);
+
+    // convenience function that returns array of all available encodings.
+    static wxArrayString GetEncodings(const wxString& facename = wxEmptyString);
 
 private:
-    wxArrayString *m_Facenames, *m_Encodings;
-
     DECLARE_NO_COPY_CLASS(wxFontEnumerator)
 };
 
