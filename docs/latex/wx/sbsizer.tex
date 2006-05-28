@@ -1,8 +1,10 @@
 \section{\class{wxStaticBoxSizer}}\label{wxstaticboxsizer}
 
 wxStaticBoxSizer is a sizer derived from wxBoxSizer but adds a static
-box around the sizer. This static box has to be created independently or the
-sizer may create it itself as a convenience.
+box around the sizer. This static box may be either created independently or
+the sizer may create it itself as a convenience. In any case, the sizer owns
+the \helpref{wxStaticBox}{wxstaticbox} control and will delete it if it is
+deleted.
 
 \wxheading{Derived from}
 

@@ -24,6 +24,7 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
   use GetMouseCursor().
 - wxFontEnumerator::GetFacenames() and GetEncodings() now return arrays and
   not pointers to arrays
+- wxStaticBoxSizer now deletes the associated wxStaticBox when it is deleted
 
 
 Deprecated methods since 2.6.x and their replacements

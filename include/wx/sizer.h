@@ -685,6 +685,7 @@ class WXDLLEXPORT wxStaticBoxSizer: public wxBoxSizer
 public:
     wxStaticBoxSizer(wxStaticBox *box, int orient);
     wxStaticBoxSizer(int orient, wxWindow *win, const wxString& label = wxEmptyString);
+    virtual ~wxStaticBoxSizer() { delete m_staticBox; }
 
     void RecalcSizes();
     wxSize CalcMin();
@@ -694,6 +695,7 @@ public:
 
     // override to hide/show the static box as well
     virtual void ShowItems (bool show);
+    virtual bool Detach( wxWindow *window );
 
 protected:
     wxStaticBox   *m_staticBox;

@@ -1697,16 +1697,22 @@ wxSize wxBoxSizer::CalcMin()
 #if wxUSE_STATBOX
 
 wxStaticBoxSizer::wxStaticBoxSizer( wxStaticBox *box, int orient )
-    : wxBoxSizer( orient )
-    , m_staticBox( box )
+    : wxBoxSizer( orient ),
+      m_staticBox( box )
 {
     wxASSERT_MSG( box, wxT("wxStaticBoxSizer needs a static box") );
+
+    // do this so that our Detach() is called if the static box is destroyed
+    // before we are
+    m_staticBox->SetContainingSizer(this);
 }
 
 wxStaticBoxSizer::wxStaticBoxSizer(int orient, wxWindow *win, const wxString& s)
                 : wxBoxSizer(orient),
                   m_staticBox(new wxStaticBox(win, wxID_ANY, s))
 {
+    // same as above
+    m_staticBox->SetContainingSizer(this);
 }
 
 static void GetStaticBoxBorders( wxStaticBox *box,
@@ -1754,6 +1760,20 @@ void wxStaticBoxSizer::ShowItems( bool show )
 {
     m_staticBox->Show( show );
     wxBoxSizer::ShowItems( show );
+}
+
+bool wxStaticBoxSizer::Detach( wxWindow *window )
+{
+    // avoid deleting m_staticBox in our dtor if it's being detached from the
+    // sizer (which can happen because it's being already destroyed for
+    // example)
+    if ( window == m_staticBox )
+    {
+        m_staticBox = NULL;
+        return true;
+    }
+
+    return wxSizer::Detach( window );
 }
 
 #endif // wxUSE_STATBOX
