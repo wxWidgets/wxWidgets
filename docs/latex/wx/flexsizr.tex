@@ -21,7 +21,7 @@ Since wxWidgets 2.5.0, wxFlexGridSizer can also size items equally in one
 direction but unequally ("flexibly") in the other. If the sizer is only
 flexible in one direction (this can be changed using
 \helpref{SetFlexibleDirection}{wxflexgridsizersetflexibledirection}),
-it needs to be decided how the sizer should grow in the other ("non flexible")
+it needs to be decided how the sizer should grow in the other ("non-flexible")
 direction in order to fill the available space. The
 \helpref{SetNonFlexibleGrowMode}{wxflexgridsizersetnonflexiblegrowmode} method
 serves this purpose.
@@ -102,7 +102,7 @@ One of the following values:
 
 \constfunc{int}{GetNonFlexibleGrowMode}{\void}
 
-Returns the value that specifies how the sizer grows in the "non flexible"
+Returns the value that specifies how the sizer grows in the "non-flexible"
 direction if there is one.
 
 \wxheading{Return value}
@@ -110,14 +110,14 @@ direction if there is one.
 One of the following values:
 
 \begin{twocollist}
-\twocolitem{wxFLEX\_GROWMODE\_NONE}{Sizer doesn't grow in the non flexible direction.}
+\twocolitem{wxFLEX\_GROWMODE\_NONE}{Sizer doesn't grow in the non-flexible direction.}
 \twocolitem{wxFLEX\_GROWMODE\_SPECIFIED}{Sizer honors growable columns/rows set with
 \helpref{AddGrowableCol}{wxflexgridsizeraddgrowablecol} and
 \helpref{AddGrowableRow}{wxflexgridsizeraddgrowablerow}.
 In this case equal sizing applies to minimum sizes of columns or
 rows (this is the default value).}
 \twocolitem{wxFLEX\_GROWMODE\_ALL}{Sizer equally stretches all columns or rows
-in the non flexible direction, whether they are growable or not in the flexible
+in the non-flexible direction, whether they are growable or not in the flexible
 direction.}
 \end{twocollist}
 
@@ -158,7 +158,7 @@ Note that this method does not trigger relayout.
 
 \func{void}{SetNonFlexibleGrowMode}{\param{wxFlexSizerGrowMode }{mode}}
 
-Specifies how the sizer should grow in the non flexible direction if
+Specifies how the sizer should grow in the non-flexible direction if
 there is one (so
 \helpref{SetFlexibleDirection()}{wxflexgridsizersetflexibledirection} must have
 been called previously). Argument {\it mode} can be one of those documented in

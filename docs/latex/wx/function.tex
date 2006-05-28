@@ -751,7 +751,7 @@ See also \helpref{wxExecute}{wxexecute}, \helpref{Exec sample}{sampleexec}.
 
 This function shuts down or reboots the computer depending on the value of the
 {\it flags}. Please notice that doing this requires the corresponding access
-rights (superuser under Unix, {\tt SE\_SHUTDOWN} privelege under Windows NT)
+rights (superuser under Unix, {\tt SE\_SHUTDOWN} privilege under Windows NT)
 and that this function is only implemented under Unix and Win32.
 
 \wxheading{Parameters}
@@ -1189,7 +1189,7 @@ with wildcard characters. See \helpref{wxIsWild}{wxiswild}.
 Makes the directory \arg{dir}, returning true if successful.
 
 {\it perm} is the access mask for the directory for the systems on which it is
-supported (Unix) and doesn't have effect for the other ones.
+supported (Unix) and doesn't have any effect on the other ones.
 
 
 \membersection{::wxParseCommonDialogsFilter}\label{wxparsecommondialogsfilter}
@@ -3732,7 +3732,7 @@ Example:
 
 This macro is equivalent to {\tt wxDynamicCast(this, classname)} but the
 latter provokes spurious compilation warnings from some compilers (because it
-tests whether {\tt this} pointer is non {\tt NULL} which is always true), so
+tests whether {\tt this} pointer is non-{\tt NULL} which is always true), so
 this macro should be used to avoid them.
 
 \wxheading{See also}
@@ -4466,7 +4466,7 @@ This check is done even in release mode.
 Checks that the condition is true, returns with the given return value if not (FAILs in debug mode).
 This check is done even in release mode.
 
-This macro may be only used in non void functions, see also
+This macro may be only used in non-void functions, see also
 \helpref{wxCHECK\_RET}{wxcheckret}.
 
 

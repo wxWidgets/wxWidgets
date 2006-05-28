@@ -10,7 +10,7 @@ There are three different ways to use this class:
 \item You may derive a new class from wxTimer and override the 
 \helpref{Notify}{wxtimernotify} member to perform the required action.
 \item Or you may redirect the notifications to any 
-\helpref{wxEvtHandler}{wxevthandler} derived object by using the non default
+\helpref{wxEvtHandler}{wxevthandler} derived object by using the non-default
 constructor or \helpref{SetOwner}{wxtimersetowner}. Then use the {\tt EVT\_TIMER} 
 macro to connect it to the event handler which will receive 
 \helpref{wxTimerEvent}{wxtimerevent} notifications.
