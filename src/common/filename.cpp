@@ -519,7 +519,7 @@ bool wxFileName::FileExists( const wxString &file )
 
 bool wxFileName::DirExists() const
 {
-    return wxFileName::DirExists( GetFullPath() );
+    return wxFileName::DirExists( GetPath() );
 }
 
 bool wxFileName::DirExists( const wxString &dir )
@@ -562,7 +562,7 @@ wxString wxFileName::GetCwd(const wxString& volume)
 
 bool wxFileName::SetCwd()
 {
-    return wxFileName::SetCwd( GetFullPath() );
+    return wxFileName::SetCwd( GetPath() );
 }
 
 bool wxFileName::SetCwd( const wxString &cwd )
@@ -799,7 +799,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
 
 bool wxFileName::Mkdir( int perm, int flags )
 {
-    return wxFileName::Mkdir( GetFullPath(), perm, flags );
+    return wxFileName::Mkdir(GetPath(), perm, flags);
 }
 
 bool wxFileName::Mkdir( const wxString& dir, int perm, int flags )
@@ -850,7 +850,7 @@ bool wxFileName::Mkdir( const wxString& dir, int perm, int flags )
 
 bool wxFileName::Rmdir()
 {
-    return wxFileName::Rmdir( GetFullPath() );
+    return wxFileName::Rmdir( GetPath() );
 }
 
 bool wxFileName::Rmdir( const wxString &dir )
