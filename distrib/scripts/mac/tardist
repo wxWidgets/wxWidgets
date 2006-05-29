@@ -7,6 +7,8 @@
 # because there's not enough space on the command line, plus we need to ignore the
 # blank lines.
 
+set -o errexit
+
 PROGNAME=$0
 WXSRC=$1
 WXDEST=$2
