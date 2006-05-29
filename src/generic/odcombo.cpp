@@ -438,9 +438,9 @@ void wxVListBoxComboPopup::Delete( unsigned int item )
         wxVListBox::SetItemCount( wxVListBox::GetItemCount()-1 );
 }
 
-int wxVListBoxComboPopup::FindString(const wxString& s) const
+int wxVListBoxComboPopup::FindString(const wxString& s, bool bCase) const
 {
-    return m_strings.Index(s);
+    return m_strings.Index(s, bCase);
 }
 
 unsigned int wxVListBoxComboPopup::GetCount() const
@@ -710,10 +710,10 @@ void wxOwnerDrawnComboBox::SetString(unsigned int n, const wxString& s)
     m_popupInterface->SetString(n,s);
 }
 
-int wxOwnerDrawnComboBox::FindString(const wxString& s) const
+int wxOwnerDrawnComboBox::FindString(const wxString& s, bool bCase) const
 {
     wxASSERT_MSG( m_popupInterface, wxT("no popup interface") );
-    return m_popupInterface->FindString(s);
+    return m_popupInterface->FindString(s, bCase);
 }
 
 void wxOwnerDrawnComboBox::Select(int n)

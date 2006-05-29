@@ -106,7 +106,7 @@ public:
     void SetString( int item, const wxString& str );
     wxString GetString( int item ) const;
     unsigned int GetCount() const;
-    int FindString(const wxString& s) const;
+    int FindString(const wxString& s, bool bCase = false) const;
     int GetSelection() const;
 
     //void Populate( int n, const wxString choices[] );
@@ -257,7 +257,7 @@ public:
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& s);
-    virtual int FindString(const wxString& s) const;
+    virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual void Select(int n);
     virtual int GetSelection() const;
     virtual void SetSelection(int n) { Select(n); }
