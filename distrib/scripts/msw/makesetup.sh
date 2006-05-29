@@ -4,8 +4,6 @@
 # Example:
 # ../distrib/msw/makesetup.sh --wxmsw --verbose &> log
 
-set -o errexit
-
 # If your zip accepts Cygwin-style paths, then
 # use cygpath, else substitute echo
 CYGPATHPROG=cygpath

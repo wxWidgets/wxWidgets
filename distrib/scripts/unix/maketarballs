@@ -1,8 +1,6 @@
 #!/bin/sh
 # Makes the wxWidgets tarballs with 'make dist'
 
-set -o errexit
-
 PROGNAME=$0
 WXSRC=$1
 WXDEST=$2
