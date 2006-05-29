@@ -22,6 +22,7 @@
     #include "wx/intl.h"
     #include "wx/dc.h"
     #include "wx/settings.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/print.h"
