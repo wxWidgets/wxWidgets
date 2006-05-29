@@ -184,7 +184,6 @@ enum {
     // These will dissappear in 2.8
     wxOPEN,
     wxSAVE,
-    wxHIDE_READONLY,
     wxOVERWRITE_PROMPT,
     wxFILE_MUST_EXIST,
     wxMULTIPLE,
@@ -284,10 +283,6 @@ example::
 ", "");
 
     DocDeclStr(
-        void , SetStyle(long style),
-        "Sets the dialog style.", "");
-
-    DocDeclStr(
         void , SetFilterIndex(int filterIndex),
         "Sets the default filter index, starting from zero.", "");
 
@@ -310,10 +305,6 @@ example::
     DocDeclStr(
         wxString , GetWildcard() const,
         "Returns the file dialog wildcard.", "");
-
-    DocDeclStr(
-        long , GetStyle() const,
-        "Returns the dialog style.", "");
 
     DocDeclStr(
         int , GetFilterIndex() const,
