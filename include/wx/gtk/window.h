@@ -276,6 +276,8 @@ public:
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
 
+    void HandleScrollEvent(GtkAdjustment* adj);
+
 protected:
     // common part of all ctors (not virtual because called from ctor)
     void Init();

@@ -154,17 +154,9 @@ public:
     void OnPaint(wxPaintEvent& event);
     void OnChar(wxKeyEvent& event);
 
-    void GtkVScroll( float value, unsigned int scroll_type );
-    void GtkHScroll( float value, unsigned int scroll_type );
-    void GtkVConnectEvent();
-    void GtkHConnectEvent();
-    void GtkVDisconnectEvent();
-    void GtkHDisconnectEvent();
-
     // Calculate scroll increment
     virtual int CalcScrollInc(wxScrollWinEvent& event);
 
-    // Overridden from wxWidgets due callback being static
     virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
 
 #if WXWIN_COMPATIBILITY_2_2
@@ -192,6 +184,13 @@ protected:
     double                m_scaleY,m_scaleX;
 
 private:
+    void DoScroll(int orient, int pos, int posOld, int pixelsPerLine);
+    void DoAdjustScrollbars(GtkAdjustment* adj,
+                            int pixelsPerLine,
+                            int winSize,
+                            int virtSize,
+                            int *linesPerPage);
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxScrolledWindow)
 };
