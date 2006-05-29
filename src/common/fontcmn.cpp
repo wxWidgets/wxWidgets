@@ -289,7 +289,7 @@ wxString wxFontBase::GetNativeFontInfoUserDesc() const
     }
     else
     {
-        wxASSERT_MSG(0, wxT("Derived class should have created the wxNativeFontInfo!"));
+        wxFAIL_MSG(wxT("Derived class should have created the wxNativeFontInfo!"));
     }
 
     return fontDesc;
