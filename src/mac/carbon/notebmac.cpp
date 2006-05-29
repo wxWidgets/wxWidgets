@@ -80,6 +80,9 @@ bool wxNotebook::Create( wxWindow *parent,
 {
     m_macIsUserPane = false ;
 
+    if (! (style & wxBK_ALIGN_MASK))
+        style |= wxBK_TOP;
+    
     if ( !wxNotebookBase::Create( parent, id, pos, size, style, name ) )
         return false;
 
