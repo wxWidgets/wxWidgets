@@ -16,6 +16,7 @@
     && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
 
 #include "wx/helpbase.h"
+#include "wx/html/helpfrm.h"        // for wxHF_DEFAULT_STYLE
 
 class WXDLLIMPEXP_HTML wxBestHelpController: public wxHelpControllerBase
 {
