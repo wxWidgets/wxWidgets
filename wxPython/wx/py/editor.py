@@ -805,7 +805,7 @@ def openMultiple(parent=None, title='Open', directory='', filename='',
 
 def saveSingle(parent=None, title='Save', directory='', filename='',
                wildcard='All Files (*.*)|*.*',
-               style=wx.SAVE | wx.HIDE_READONLY | wx.OVERWRITE_PROMPT):
+               style=wx.SAVE | wx.OVERWRITE_PROMPT):
     """File dialog wrapper function."""
     dialog = wx.FileDialog(parent, title, directory, filename,
                            wildcard, style)
