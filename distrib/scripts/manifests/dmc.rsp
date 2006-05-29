@@ -107,6 +107,7 @@ samples/opengl/penguin/makefile.dm?
 samples/ownerdrw/makefile.dm?
 samples/png/makefile.dm?
 samples/popup/makefile.dm?
+samples/power/makefile.dm?
 samples/printing/makefile.dm?
 samples/propsize/makefile.dm?
 samples/regtest/makefile.dm?

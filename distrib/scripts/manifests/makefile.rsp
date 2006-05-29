@@ -64,6 +64,7 @@ samples/oleauto/Makefile.in
 samples/ownerdrw/Makefile.in
 samples/png/Makefile.in
 samples/popup/Makefile.in
+samples/power/Makefile.in
 samples/printing/Makefile.in
 samples/propsize/Makefile.in
 samples/regtest/Makefile.in

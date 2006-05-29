@@ -1043,6 +1043,10 @@ samples/popup/*.png
 samples/popup/*.pro
 samples/popup/*.bkl
 
+samples/power/*.cpp
+samples/power/makefile*
+samples/popup/*.bkl
+
 samples/printing/*.cpp
 samples/printing/*.h
 samples/printing/makefile*
@@ -1477,4 +1481,3 @@ tests/streams/*.h
 tests/strings/*.cpp
 
 tests/uris/*.cpp
-

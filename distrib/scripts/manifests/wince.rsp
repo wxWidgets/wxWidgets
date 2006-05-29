@@ -183,6 +183,9 @@ samples/png/png.vcw
 samples/popup/popup.vcp
 samples/popup/popup.vcw
 
+samples/power/power.vcp
+samples/power/power.vcw
+
 samples/printing/printing.vcp
 samples/printing/printing.vcw
 

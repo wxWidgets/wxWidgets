@@ -149,6 +149,8 @@ samples/png/png.dsp
 
 samples/popup/popup.dsp
 
+samples/power/power.dsp
+
 samples/printing/printing.dsp
 
 samples/propsize/propsize.dsp
