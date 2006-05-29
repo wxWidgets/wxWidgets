@@ -1045,7 +1045,7 @@ samples/popup/*.bkl
 
 samples/power/*.cpp
 samples/power/makefile*
-samples/popup/*.bkl
+samples/power/*.bkl
 
 samples/printing/*.cpp
 samples/printing/*.h
