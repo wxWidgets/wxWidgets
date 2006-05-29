@@ -1057,7 +1057,7 @@ wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
 
     wxPoint pos = win->GetPosition();
     wxSize sz = win->GetSize();
-    if ( !win->IsTopLeven() && win->GetParent() )
+    if ( !win->IsTopLevel() && win->GetParent() )
     {
         pos = win->GetParent()->ClientToScreen(pos);
     }
