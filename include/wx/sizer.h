@@ -678,7 +678,7 @@ private:
 
 #if wxUSE_STATBOX
 
-class WXDLLEXPORT wxStaticBox;
+#include "wx/statbox.h"
 
 class WXDLLEXPORT wxStaticBoxSizer: public wxBoxSizer
 {
