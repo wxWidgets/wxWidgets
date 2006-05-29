@@ -678,14 +678,14 @@ private:
 
 #if wxUSE_STATBOX
 
-#include "wx/statbox.h"
+class WXDLLEXPORT wxStaticBox;
 
 class WXDLLEXPORT wxStaticBoxSizer: public wxBoxSizer
 {
 public:
     wxStaticBoxSizer(wxStaticBox *box, int orient);
     wxStaticBoxSizer(int orient, wxWindow *win, const wxString& label = wxEmptyString);
-    virtual ~wxStaticBoxSizer() { delete m_staticBox; }
+    virtual ~wxStaticBoxSizer();
 
     void RecalcSizes();
     wxSize CalcMin();

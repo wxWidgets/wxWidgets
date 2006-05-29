@@ -1715,6 +1715,11 @@ wxStaticBoxSizer::wxStaticBoxSizer(int orient, wxWindow *win, const wxString& s)
     m_staticBox->SetContainingSizer(this);
 }
 
+wxStaticBoxSizer::~wxStaticBoxSizer()
+{
+    delete m_staticBox;
+}
+
 static void GetStaticBoxBorders( wxStaticBox *box,
                                  int *borderTop,
                                  int *borderOther)
