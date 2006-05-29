@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        checkbox.cpp
+// Name:        src/os2/checkbox.cpp
 // Purpose:     wxCheckBox
 // Author:      David Webster
 // Modified by:
@@ -12,8 +12,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/checkbox.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/checkbox.h"
     #include "wx/brush.h"
     #include "wx/scrolwin.h"
     #include "wx/dcscreen.h"
@@ -51,20 +52,15 @@ bool wxCheckBox::OS2Command( WXUINT WXUNUSED(uParam),
     return true;
 } // end of wxCheckBox::OS2Command
 
-bool wxCheckBox::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxString&                   rsLabel
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, const wxValidator&                rValidator
-, const wxString&                   rsName
-)
+bool wxCheckBox::Create(wxWindow* pParent,
+                        wxWindowID vId,
+                        const wxString& rsLabel,
+                        const wxPoint& rPos,
+                        const wxSize& rSize,
+                        long lStyle,
+                        const wxValidator& rValidator,
+                        const wxString& rsName )
 {
-    LONG                            lColor;
-    bool                            bOk;
-
     if (!CreateControl( pParent
                        ,vId
                        ,rPos
@@ -73,14 +69,12 @@ bool wxCheckBox::Create(
                        ,rValidator
                        ,rsName
                       ))
-        return FALSE;
+        return false;
 
 
-    long                            osStyle = BS_AUTOCHECKBOX |
-                                              WS_TABSTOP      |
-                                              WS_VISIBLE;
+    long osStyle = BS_AUTOCHECKBOX | WS_TABSTOP | WS_VISIBLE;
 
-    bOk = OS2CreateControl( wxT("BUTTON")
+    bool bOk = OS2CreateControl( wxT("BUTTON")
                            ,osStyle
                            ,rPos
                            ,rSize
@@ -88,7 +82,8 @@ bool wxCheckBox::Create(
                            ,0
                           );
     m_backgroundColour = pParent->GetBackgroundColour();
-    lColor = (LONG)m_backgroundColour.GetPixel();
+
+    LONG lColor = (LONG)m_backgroundColour.GetPixel();
     ::WinSetPresParam( m_hWnd
                       ,PP_BACKGROUNDCOLOR
                       ,sizeof(LONG)
@@ -98,11 +93,9 @@ bool wxCheckBox::Create(
     return bOk;
 } // end of wxCheckBox::Create
 
-void wxCheckBox::SetLabel(
-  const wxString&                   rsLabel
-)
+void wxCheckBox::SetLabel( const wxString& rsLabel )
 {
-    wxString                         sLabel=::wxPMTextToLabel(rsLabel);
+    wxString  sLabel=::wxPMTextToLabel(rsLabel);
     ::WinSetWindowText(GetHwnd(), (PSZ)sLabel.c_str());
 } // end of wxCheckBox::SetLabel
 
@@ -132,14 +125,10 @@ wxSize wxCheckBox::DoGetBestSize() const
         nHeightCheckbox = nCheckSize;
     }
 
-    return wxSize( nWidthCheckbox
-                  ,nHeightCheckbox
-                 );
+    return wxSize( nWidthCheckbox, nHeightCheckbox );
 } // end of wxCheckBox::DoGetBestSize
 
-void wxCheckBox::SetValue(
-  bool                              bValue
-)
+void wxCheckBox::SetValue( bool bValue )
 {
     ::WinSendMsg(GetHwnd(), BM_SETCHECK, (MPARAM)bValue, 0);
 } // end of wxCheckBox::SetValue
@@ -153,9 +142,7 @@ bool wxCheckBox::GetValue() const
     return((LONGFROMMR(::WinSendMsg(GetHwnd(), BM_QUERYCHECK, (MPARAM)0, (MPARAM)0)) == 1L));
 } // end of wxCheckBox::GetValue
 
-void wxCheckBox::Command (
-  wxCommandEvent&                  rEvent
-)
+void wxCheckBox::Command ( wxCommandEvent& rEvent )
 {
     SetValue((rEvent.GetInt() != 0));
     ProcessCommand(rEvent);

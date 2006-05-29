@@ -26,8 +26,9 @@
 
 #if wxUSE_CHECKBOX
 
+#include "wx/checkbox.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/checkbox.h"
     #include "wx/brush.h"
     #include "wx/dcscreen.h"
     #include "wx/settings.h"

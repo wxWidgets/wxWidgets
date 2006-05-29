@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_chckb.cpp
+// Name:        src/xrc/xh_chckb.cpp
 // Purpose:     XRC resource for wxCheckBox
 // Author:      Bob Mitchell
 // Created:     2000/03/21
@@ -18,7 +18,10 @@
 #if wxUSE_XRC && wxUSE_CHECKBOX
 
 #include "wx/xrc/xh_chckb.h"
-#include "wx/checkbox.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/checkbox.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBoxXmlHandler, wxXmlResourceHandler)
 

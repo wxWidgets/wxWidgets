@@ -25,9 +25,10 @@
 
 #if wxUSE_CHECKBOX
 
+#include "wx/checkbox.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
-    #include "wx/checkbox.h"
     #include "wx/validate.h"
 
     #include "wx/button.h" // for wxACTION_BUTTON_XXX

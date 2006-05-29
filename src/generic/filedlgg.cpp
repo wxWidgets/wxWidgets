@@ -30,12 +30,11 @@
     #include "wx/log.h"
     #include "wx/msgdlg.h"
     #include "wx/bmpbuttn.h"
+    #include "wx/checkbox.h"
 #endif
 
-#include "wx/checkbox.h"
 #include "wx/textctrl.h"
 #include "wx/choice.h"
-#include "wx/checkbox.h"
 #include "wx/stattext.h"
 #include "wx/longlong.h"
 #include "wx/sizer.h"

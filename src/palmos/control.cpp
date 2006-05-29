@@ -35,10 +35,10 @@
     #include "wx/log.h"
     #include "wx/settings.h"
     #include "wx/button.h"
+    #include "wx/checkbox.h"
 #endif
 
 #include "wx/toplevel.h"
-#include "wx/checkbox.h"
 #include "wx/tglbtn.h"
 #include "wx/radiobut.h"
 #include "wx/slider.h"
