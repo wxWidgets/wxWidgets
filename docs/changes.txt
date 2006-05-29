@@ -307,6 +307,11 @@ Unix:
 
 - NO_GCC_PRAGMA is not used any more, remove checks for it if you used it.
 
+wxMGL:
+
+- Fixed NUM_LOCK having no effect.
+- Fixed wxFileExists (affecting wxImage::LoadFile).
+
 
 2.6.2
 -----
