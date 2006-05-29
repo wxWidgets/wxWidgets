@@ -82,7 +82,7 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     if(url.empty())
         SetURL(label);
     else
-        SetUrl(url);
+        SetURL(url);
 
     if(label.empty())
         SetLabel(url);
