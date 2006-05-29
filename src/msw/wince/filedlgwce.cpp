@@ -67,7 +67,9 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
                            const wxString& defaultFileName,
                            const wxString& wildCard,
                            long style,
-                           const wxPoint& WXUNUSED(pos))
+                           const wxPoint& WXUNUSED(pos),
+                           const wxSize& WXUNUSED(sz),
+                           const wxString& WXUNUSED(name))
 {
     m_message = message;
     m_windowStyle = style;
