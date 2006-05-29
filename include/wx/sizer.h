@@ -695,7 +695,10 @@ public:
 
     // override to hide/show the static box as well
     virtual void ShowItems (bool show);
+
     virtual bool Detach( wxWindow *window );
+    virtual bool Detach( wxSizer *sizer ) { return wxBoxSizer::Detach(sizer); }
+    virtual bool Detach( int index ) { return wxBoxSizer::Detach(index); }
 
 protected:
     wxStaticBox   *m_staticBox;
