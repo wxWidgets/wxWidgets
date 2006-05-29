@@ -153,6 +153,16 @@ to OpenEditor to send the BEGIN_LABEL_EDIT event and to not allow the
 opening of the editor to continue if the event handler doesn't allow
 it.
 
+wx.StaticBoxSizer now keeps better track of the wx.StaticBox, and it
+will destroy it if the sizer is destroyed before the parent window is.
+
+Added wx.HyperlinkCtrl.
+
+Added battery and power related functions and events (wxMSW only so
+far.)  See wx.PowerEvent, wx.GetPowerType and wx.GetBatteryState.
+
+Added wx.ListCtrl.HitTestSubItem which returns the sub-item that was
+hit (if any) in addition to the item and flags.
 
 
 

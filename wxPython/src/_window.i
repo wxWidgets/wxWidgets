@@ -980,8 +980,17 @@ functions so should not be required by the application programmer.", "");
         "Removes a child window. This is called automatically by window
 deletion functions so should not be required by the application
 programmer.", "");
-    
 
+
+    DocStr(SetDoubleBuffered,
+           "Currently wxGTK2 only.", "");
+#ifdef __WXGTK__
+    void SetDoubleBuffered(bool on);
+#else
+    %extend {
+        void SetDoubleBuffered(bool on) {}
+    }
+#endif
 
 
     // looking for windows

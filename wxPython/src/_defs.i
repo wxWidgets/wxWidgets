@@ -679,14 +679,6 @@ enum {
    
     wxID_HIGHEST,
 
-    wxOPEN,
-    wxSAVE,
-    wxHIDE_READONLY,
-    wxOVERWRITE_PROMPT,
-    wxFILE_MUST_EXIST,
-    wxMULTIPLE,
-    wxCHANGE_DIR,
-
     wxACCEL_ALT,
     wxACCEL_CTRL,
     wxACCEL_SHIFT,
@@ -701,10 +693,6 @@ enum {
     wxPD_SMOOTH,
     wxPD_CAN_SKIP,
 
-    wxDD_NEW_DIR_BUTTON,
-    wxDD_DEFAULT_STYLE,
-    wxDD_CHANGE_DIR,
-    
     wxMENU_TEAROFF,
     wxMB_DOCKABLE,
     wxNO_FULL_REPAINT_ON_RESIZE,

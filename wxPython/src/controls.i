@@ -59,7 +59,7 @@ MAKE_CONST_WXSTRING_NOSWIG(ControlNameStr);
 %include _cshelp.i
 %include _dragimg.i
 %include _datectrl.i
-
+%include _hyperlink.i
 
 
 //---------------------------------------------------------------------------

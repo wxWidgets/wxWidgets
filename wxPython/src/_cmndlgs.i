@@ -30,48 +30,48 @@ DocStr(wxColourData,
 "This class holds a variety of information related to the colour
 chooser dialog, used to transfer settings and results to and from the
 `wx.ColourDialog`.", "");
-    
+
 class wxColourData : public wxObject {
 public:
     DocCtorStr(
         wxColourData(),
         "Constructor, sets default values.", "");
-    
+
     ~wxColourData();
 
-    
+
     DocDeclStr(
         bool , GetChooseFull(),
         "Under Windows, determines whether the Windows colour dialog will
 display the full dialog with custom colour selection controls. Has no
 meaning under other platforms.  The default value is true.", "");
-    
+
     DocDeclStr(
         wxColour , GetColour(),
         "Gets the colour (pre)selected by the dialog.", "");
-    
+
     DocDeclStr(
         wxColour , GetCustomColour(int i),
         "Gets the i'th custom colour associated with the colour dialog. i
 should be an integer between 0 and 15. The default custom colours are
 all invalid colours.", "");
-    
+
     DocDeclStr(
         void , SetChooseFull(int flag),
         "Under Windows, tells the Windows colour dialog to display the full
 dialog with custom colour selection controls. Under other platforms,
 has no effect.  The default value is true.", "");
-    
+
     DocDeclStr(
         void , SetColour(const wxColour& colour),
         "Sets the default colour for the colour dialog.  The default colour is
 black.", "");
-    
+
     DocDeclStr(
         void , SetCustomColour(int i, const wxColour& colour),
         "Sets the i'th custom colour for the colour dialog. i should be an
 integer between 0 and 15. The default custom colours are all invalid colours.", "");
-    
+
 };
 
 
@@ -105,6 +105,11 @@ wxColour wxGetColourFromUser(wxWindow *parent = (wxWindow *)NULL,
 
 //--------------------------------------------------------------------------------
 
+enum {
+    wxDD_NEW_DIR_BUTTON,
+    wxDD_DEFAULT_STYLE,
+    wxDD_CHANGE_DIR,
+};
 
 DocStr(wxDirDialog,
        "wx.DirDialog allows the user to select a directory by browising the
@@ -113,10 +118,17 @@ file system.", "
 Window  Styles
 --------------
     ====================  ==========================================
+    wx.DD_DEFAULT_STYLE   Equivalent to a combination of
+                          wx.DEFAULT_DIALOG_STYLE, wx.DD_NEW_DIR_BUTTON
+                          and wx.RESIZE_BORDER.
+
     wx.DD_NEW_DIR_BUTTON  Add 'Create new directory' button and allow
                           directory names to be editable. On Windows
                           the new directory button is only available
                           with recent versions of the common dialogs.
+
+    wx.DD_CHANGE_DIR      Change the current working directory to the
+                          directory chosen by the user.
     ====================  ==========================================
 ");
 
@@ -126,12 +138,12 @@ class wxDirDialog : public wxDialog {
 public:
     %pythonAppend wxDirDialog   "self._setOORInfo(self)"
     %pythonAppend wxDirDialog() ""
-   
+
     DocCtorStr(
         wxDirDialog(wxWindow* parent,
                     const wxString& message = wxPyDirSelectorPromptStr,
                     const wxString& defaultPath = wxPyEmptyString,
-                    long style = 0,
+                    long style = wxDD_DEFAULT_STYLE,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     const wxString& name = wxPyDirDialogNameStr),
@@ -150,23 +162,42 @@ public:
     DocDeclStr(
         wxString , GetPath(),
         "Returns the default or user-selected path.", "");
-    
+
     DocDeclStr(
         wxString , GetMessage(),
         "Returns the message that will be displayed on the dialog.", "");
-    
+
     DocDeclStr(
         void , SetMessage(const wxString& message),
         "Sets the message that will be displayed on the dialog.", "");
-    
+
     DocDeclStr(
         void , SetPath(const wxString& path),
         "Sets the default path.", "");
-    
+
 };
 
 
 //---------------------------------------------------------------------------
+
+enum {
+    // These will dissappear in 2.8
+    wxOPEN,
+    wxSAVE,
+    wxHIDE_READONLY,
+    wxOVERWRITE_PROMPT,
+    wxFILE_MUST_EXIST,
+    wxMULTIPLE,
+    wxCHANGE_DIR,
+
+    wxFD_OPEN,
+    wxFD_SAVE,
+    wxFD_OVERWRITE_PROMPT,
+    wxFD_FILE_MUST_EXIST,
+    wxFD_MULTIPLE,
+    wxFD_CHANGE_DIR,
+    wxFD_DEFAULT_STYLE,
+};
 
 DocStr(wxFileDialog,
 "wx.FileDialog allows the user to select one or more files from the
@@ -191,24 +222,21 @@ types of file with a description for each, such as::
 
 Window  Styles
 --------------
-    ===================   ==========================================
-    wx.OPEN               This is an open dialog.
+    ======================   ==========================================
+    wx.FD_OPEN               This is an open dialog.
 
-    wx.SAVE               This is a save dialog.
+    wx.FD_SAVE               This is a save dialog.
 
-    wx.HIDE_READONLY      For open dialog only: hide the checkbox
-                          allowing to open the file in read-only mode.
+    wx.FD_OVERWRITE_PROMPT   For save dialog only: prompt for a confirmation
+                             if a file will be overwritten.
 
-    wx.OVERWRITE_PROMPT   For save dialog only: prompt for a confirmation
-                          if a file will be overwritten.
+    wx.FD_MULTIPLE           For open dialog only: allows selecting multiple
+                             files.
 
-    wx.MULTIPLE           For open dialog only: allows selecting multiple
-                          files.
-
-    wx.CHANGE_DIR         Change the current working directory to the
-                          directory  where the file(s) chosen by the user
-                          are.
-    ===================   ==========================================
+    wx.FD_CHANGE_DIR         Change the current working directory to the
+                             directory  where the file(s) chosen by the user
+                             are.
+    ======================   ==========================================
 ");
 
 
@@ -225,7 +253,7 @@ public:
                      const wxString& defaultDir = wxPyEmptyString,
                      const wxString& defaultFile = wxPyEmptyString,
                      const wxString& wildcard = wxPyFileSelectorDefaultWildcardStr,
-                     long style = 0,
+                     long style = wxFD_DEFAULT_STYLE,
                      const wxPoint& pos = wxDefaultPosition),
         "Constructor.  Use ShowModal method to show the dialog.", "");
 
@@ -233,20 +261,20 @@ public:
     DocDeclStr(
         void , SetMessage(const wxString& message),
         "Sets the message that will be displayed on the dialog.", "");
-    
+
     DocDeclStr(
         void , SetPath(const wxString& path),
         "Sets the path (the combined directory and filename that will be
 returned when the dialog is dismissed).", "");
-    
+
     DocDeclStr(
         void , SetDirectory(const wxString& dir),
         "Sets the default directory.", "");
-    
+
     DocDeclStr(
         void , SetFilename(const wxString& name),
         "Sets the default filename.", "");
-    
+
     DocDeclStr(
         void , SetWildcard(const wxString& wildCard),
         "Sets the wildcard, which can contain multiple file types, for
@@ -254,39 +282,39 @@ example::
 
     \"BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif\"
 ", "");
-    
+
     DocDeclStr(
         void , SetStyle(long style),
         "Sets the dialog style.", "");
-    
+
     DocDeclStr(
         void , SetFilterIndex(int filterIndex),
         "Sets the default filter index, starting from zero.", "");
-    
+
     DocDeclStr(
         wxString , GetMessage() const,
         "Returns the message that will be displayed on the dialog.", "");
-    
+
     DocDeclStr(
         wxString , GetPath() const,
         "Returns the full path (directory and filename) of the selected file.", "");
-    
+
     DocDeclStr(
         wxString , GetDirectory() const,
         "Returns the default directory.", "");
-    
+
     DocDeclStr(
         wxString , GetFilename() const,
         "Returns the default filename.", "");
-    
+
     DocDeclStr(
         wxString , GetWildcard() const,
         "Returns the file dialog wildcard.", "");
-    
+
     DocDeclStr(
         long , GetStyle() const,
         "Returns the dialog style.", "");
-    
+
     DocDeclStr(
         int , GetFilterIndex() const,
         "Returns the index into the list of filters supplied, optionally, in
@@ -309,8 +337,8 @@ GetFilename for the others.", "");
         DocStr(GetPaths,
                "Fills the array paths with the full paths of the files chosen. This
 function should only be used with the dialogs which have wx.MULTIPLE
-style, use GetPath for the others.", "");   
-    
+style, use GetPath for the others.", "");
+
         PyObject* GetPaths() {
             wxArrayString arr;
             self->GetPaths(arr);
@@ -379,7 +407,7 @@ public:
 
 ", "");
 
-    
+
     DocDeclAStr(
         void, SetSelections(const wxArrayInt& selections),
         "SetSelections(List selections)",
@@ -434,11 +462,11 @@ public:
     DocDeclStr(
         int , GetSelection(),
         "Get the index of teh currently selected item.", "");
-    
+
     DocDeclStr(
         wxString , GetStringSelection(),
         "Returns the string value of the currently selected item", "");
-    
+
     DocDeclStr(
         void , SetSelection(int sel),
         "Set the current selected item to sel", "");
@@ -471,7 +499,7 @@ public:
         wxString , GetValue(),
         "Returns the text that the user has entered if the user has pressed OK,
 or the original value if the user has pressed Cancel.", "");
-    
+
     DocDeclStr(
         void , SetValue(const wxString& value),
         "Sets the default text value.", "");
@@ -510,60 +538,60 @@ public:
         "Enables or disables 'effects' under MS Windows only. This refers to
 the controls for manipulating colour, strikeout and underline
 properties.  The default value is true.", "");
-    
+
     DocDeclStr(
         bool , GetAllowSymbols(),
         "Under MS Windows, returns a flag determining whether symbol fonts can
 be selected. Has no effect on other platforms. The default value is
 true.", "");
-    
+
     DocDeclStr(
         wxColour , GetColour(),
         "Gets the colour associated with the font dialog. The default value is
 black.", "");
-    
+
     DocDeclStr(
         wxFont , GetChosenFont(),
         "Gets the font chosen by the user.", "");
-    
+
     DocDeclStr(
         bool , GetEnableEffects(),
         "Determines whether 'effects' are enabled under Windows.", "");
-    
+
     DocDeclStr(
         wxFont , GetInitialFont(),
         "Gets the font that will be initially used by the font dialog. This
 should have previously been set by the application.", "");
-    
+
     DocDeclStr(
         bool , GetShowHelp(),
         "Returns true if the Help button will be shown (Windows only).  The
 default value is false.", "");
-    
+
     DocDeclStr(
         void , SetAllowSymbols(bool allowSymbols),
         "Under MS Windows, determines whether symbol fonts can be selected. Has
 no effect on other platforms.  The default value is true.", "");
-    
+
     DocDeclStr(
         void , SetChosenFont(const wxFont& font),
         "Sets the font that will be returned to the user (normally for internal
 use only).", "");
-    
+
     DocDeclStr(
         void , SetColour(const wxColour& colour),
         "Sets the colour that will be used for the font foreground colour.  The
 default colour is black.", "");
-    
+
     DocDeclStr(
         void , SetInitialFont(const wxFont& font),
         "Sets the font that will be initially used by the font dialog.", "");
-    
+
     DocDeclStr(
         void , SetRange(int min, int max),
         "Sets the valid range for the font point size (Windows only).  The
 default is 0, 0 (unrestricted range).", "");
-    
+
     DocDeclStr(
         void , SetShowHelp(bool showHelp),
         "Determines whether the Help button will be displayed in the font
@@ -592,11 +620,11 @@ the dialog.  If ShowModal returns ``wx.ID_OK`` then you can fetch the
 results with via the `wx.FontData` returned by `GetFontData`.", "");
     wxFontDialog(wxWindow* parent, const wxFontData& data);
 
-    
+
     DocDeclStr(
         wxFontData& , GetFontData(),
         "Returns a reference to the internal `wx.FontData` used by the
-wx.FontDialog.", "");    
+wx.FontDialog.", "");
 };
 
 
@@ -638,7 +666,7 @@ MustHaveApp(wxMessageDialog);
 class wxMessageDialog : public wxDialog {
 public:
     %pythonAppend wxMessageDialog   "self._setOORInfo(self)"
-    
+
     DocCtorStr(
         wxMessageDialog(wxWindow* parent,
                         const wxString& message,
@@ -731,12 +759,12 @@ If the ``continue`` return value is ``false``, the application can either
 immediately destroy the dialog or ask the user for confirmation, and if the
 abort is not confirmed the dialog may be resumed with `Resume` function.
 ", "");
-    
+
     DocDeclStr(
         void , Resume(),
         "Can be used to continue with the dialog, after the user had chosen to
 abort.", "");
-    
+
 };
 
 //---------------------------------------------------------------------------
@@ -786,11 +814,11 @@ EVT_FIND_REPLACE_ALL = wx.PyEventBinder( wxEVT_COMMAND_FIND_REPLACE_ALL, 1 )
 EVT_FIND_CLOSE = wx.PyEventBinder( wxEVT_COMMAND_FIND_CLOSE, 1 )
 
 %# For backwards compatibility.  Should they be removed?
-EVT_COMMAND_FIND             = EVT_FIND 
+EVT_COMMAND_FIND             = EVT_FIND
 EVT_COMMAND_FIND_NEXT        = EVT_FIND_NEXT
 EVT_COMMAND_FIND_REPLACE     = EVT_FIND_REPLACE
 EVT_COMMAND_FIND_REPLACE_ALL = EVT_FIND_REPLACE_ALL
-EVT_COMMAND_FIND_CLOSE       = EVT_FIND_CLOSE        
+EVT_COMMAND_FIND_CLOSE       = EVT_FIND_CLOSE
 }
 
 
@@ -801,33 +829,33 @@ class wxFindDialogEvent : public wxCommandEvent
 {
 public:
     wxFindDialogEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
-    
+
     DocDeclStr(
         int , GetFlags(),
         "Get the currently selected flags: this is the combination of
 wx.FR_DOWN, wx.FR_WHOLEWORD and wx.FR_MATCHCASE flags.", "");
-    
+
     DocDeclStr(
         const wxString& , GetFindString(),
         "Return the string to find (never empty).", "");
-    
+
     DocDeclStr(
         const wxString& , GetReplaceString(),
         "Return the string to replace the search string with (only for replace
 and replace all events).", "");
-    
+
     DocDeclStr(
         wxFindReplaceDialog *, GetDialog(),
         "Return the pointer to the dialog which generated this event.", "");
-    
+
     DocDeclStr(
         void , SetFlags(int flags),
         "", "");
-    
+
     DocDeclStr(
         void , SetFindString(const wxString& str),
         "", "");
-    
+
     DocDeclStr(
         void , SetReplaceString(const wxString& str),
         "", "");
@@ -835,7 +863,7 @@ and replace all events).", "");
 
 
 
-DocStr(wxFindReplaceData, 
+DocStr(wxFindReplaceData,
 "wx.FindReplaceData holds the data for wx.FindReplaceDialog. It is used
 to initialize the dialog with the default values and will keep the
 last values from the dialog when it is closed. It is also updated each
@@ -847,7 +875,7 @@ dialog and calling them has no effect later.", "
 
 Flags
 -----
-    ================   ===============================================  
+    ================   ===============================================
     wx.FR_DOWN         Downward search/replace selected (otherwise,
                        upwards)
 
@@ -855,7 +883,7 @@ Flags
 
     wx.FR_MATCHCASE    Case sensitive search/replace selected
                        (otherwise, case insensitive)
-    ================   ===============================================  
+    ================   ===============================================
 ");
 
 
@@ -867,34 +895,34 @@ public:
     DocCtorStr(
         wxFindReplaceData(int flags=0),
         "Constuctor initializes the flags to default value (0).", "");
-    
+
     ~wxFindReplaceData();
-    
+
 
     DocDeclStr(
         const wxString& , GetFindString(),
         "Get the string to find.", "");
-    
+
     DocDeclStr(
         const wxString& , GetReplaceString(),
         "Get the replacement string.", "");
-    
+
     DocDeclStr(
         int , GetFlags(),
         "Get the combination of flag values.", "");
-    
+
     DocDeclStr(
         void , SetFlags(int flags),
         "Set the flags to use to initialize the controls of the dialog.", "");
-    
+
     DocDeclStr(
         void , SetFindString(const wxString& str),
         "Set the string to find (used as initial value by the dialog).", "");
-    
+
     DocDeclStr(
         void , SetReplaceString(const wxString& str),
         "Set the replacement string (used as initial value by the dialog).", "");
-    
+
 };
 
 
@@ -944,21 +972,21 @@ non-None.  Use Show to display the dialog.", "");
         "Precreate a FindReplaceDialog for 2-phase creation", "",
         PreFindReplaceDialog);
 
-    
+
     DocDeclStr(
         bool , Create(wxWindow *parent, wxFindReplaceData *data,
                       const wxString &title, int style = 0),
         "Create the dialog, for 2-phase create.", "");
-    
+
 
     DocDeclStr(
         const wxFindReplaceData *, GetData(),
         "Get the FindReplaceData object used by this dialog.", "");
-    
+
     DocDeclStr(
         void , SetData(wxFindReplaceData *data),
         "Set the FindReplaceData object used by this dialog.", "");
-    
+
 };
 
 //---------------------------------------------------------------------------

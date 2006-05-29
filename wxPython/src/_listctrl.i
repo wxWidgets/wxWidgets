@@ -84,6 +84,9 @@ enum {
     wxLIST_HITTEST_TOLEFT,
     wxLIST_HITTEST_TORIGHT,
     wxLIST_HITTEST_ONITEM,
+
+// GetSubItemRect constants    
+    wxLIST_GETSUBITEMRECT_WHOLEITEM,
 };
 
 
@@ -544,6 +547,13 @@ public:
             self->GetItemRect(item, rect, code);
             return rect;
         }
+
+// MSW only so far...        
+//         wxRect GetSubItemRect(long item, long subItem, int code = wxLIST_RECT_BOUNDS) {
+//             wxRect rect;
+//             self->GetSubItemRect(item, subItem, rect, code);
+//             return rect;
+//         }
     }
 
 
@@ -660,6 +670,15 @@ public:
         "Determines which item (if any) is at the specified point, giving
 details in the second return value (see wx.LIST_HITTEST flags.)", "");
 
+    DocDeclAStrName(
+        long, HitTest(const wxPoint& point, int& OUTPUT, long* OUTPUT),
+        "HitTestSubItem(Point point) -> (item, where, subItem)",
+        "Determines which item (if any) is at the specified point, giving details in
+the second return value (see wx.LIST_HITTEST flags) and also the subItem, if
+any.", "",
+        HitTestSubItem);
+
+    
     // Inserts an item, returning the index of the new item if successful,
     // -1 otherwise.
     long InsertItem(wxListItem& info);

@@ -43,6 +43,7 @@ enum {
     wxTB_NOALIGN,
     wxTB_HORZ_LAYOUT,
     wxTB_HORZ_TEXT,
+    wxTB_NO_TOOLTIPS,
 };
 
 
