@@ -31,7 +31,6 @@
 #include "wx/colour.h"
 #include "wx/bitmap.h"
 #include "wx/font.h"
-#include "wx/hashmap.h"
 
 WXDLLIMPEXP_DATA_CORE(wxBrushList*) wxTheBrushList;
 WXDLLIMPEXP_DATA_CORE(wxFontList*)  wxTheFontList;
@@ -49,8 +48,6 @@ WXDLLIMPEXP_DATA_CORE(wxPen)     wxNullPen;
 #if wxUSE_PALETTE
 WXDLLIMPEXP_DATA_CORE(wxPalette) wxNullPalette;
 #endif
-
-WX_DECLARE_STRING_HASH_MAP(wxColour*, wxStringToColourHashMap);
 
 const wxSize wxDefaultSize(wxDefaultCoord, wxDefaultCoord);
 const wxPoint wxDefaultPosition(wxDefaultCoord, wxDefaultCoord);
