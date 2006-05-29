@@ -105,7 +105,10 @@
 #endif
 
 #include <commctrl.h>
-#include <pbt.h>
+
+#ifndef __WXWINCE__
+    #include <pbt.h>
+#endif
 
 #include "wx/msw/missing.h"
 
@@ -3081,6 +3084,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             }
             break;
 
+#ifndef __WXWINCE__
         case WM_POWERBROADCAST:
             {
                 bool vetoed;
@@ -3088,6 +3092,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 rc.result = processed && vetoed ? BROADCAST_QUERY_DENY : TRUE;
             }
             break;
+#endif // __WXWINCE__
     }
 
     if ( !processed )
@@ -3795,10 +3800,14 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
     return false;
 }
 
-bool wxWindowMSW::HandlePower(WXWPARAM wParam,
+bool wxWindowMSW::HandlePower(WXWPARAM WXUNUSED_IN_WINCE(wParam),
                               WXLPARAM WXUNUSED(lParam),
-                              bool *vetoed)
+                              bool *WXUNUSED_IN_WINCE(vetoed))
 {
+#ifdef __WXWINCE__
+    // FIXME
+    return false;
+#else
     wxEventType evtType;
     switch ( wParam )
     {
@@ -3851,6 +3860,7 @@ bool wxWindowMSW::HandlePower(WXWPARAM wParam,
     *vetoed = event.IsVetoed();
 
     return true;
+#endif
 }
 
 // ---------------------------------------------------------------------------

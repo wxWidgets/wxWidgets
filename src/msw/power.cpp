@@ -30,6 +30,14 @@
 #include "wx/power.h"
 #include "wx/msw/private.h"
 
+#ifdef __WXWINCE__
+    typedef SYSTEM_POWER_STATUS_EX SYSTEM_POWER_STATUS;
+    BOOL GetSystemPowerStatus(SYSTEM_POWER_STATUS *status)
+    {
+        return GetSystemPowerStatusEx(status, TRUE);
+    }
+#endif
+
 // ----------------------------------------------------------------------------
 // helper functions
 // ----------------------------------------------------------------------------
@@ -94,5 +102,3 @@ wxBatteryState wxGetBatteryState()
 
     return wxBATTERY_UNKNOWN_STATE;
 }
-
-
