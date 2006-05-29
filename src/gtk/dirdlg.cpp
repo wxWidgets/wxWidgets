@@ -161,7 +161,6 @@ wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
                     wxConvFileName->cWX2MB(defaultPath) );
     }
     else
-#endif
         wxGenericDirDialog::Create(parent, title, defaultPath, style, pos, sz, name);
 }
 
