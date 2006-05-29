@@ -795,7 +795,6 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
 {
     wxSize sz = GetClientSize();
     int customBorder = m_widthCustomBorder;
-    bool buttonOutside;
     int btnBorder; // border for button only
 
     // check if button should really be outside the border: we'll do it it if
@@ -806,13 +805,11 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
          m_btnSpacingX == 0 &&
          m_btnHei == 0 )
     {
-        buttonOutside = true;
         m_iFlags |= wxCC_IFLAG_BUTTON_OUTSIDE;
         btnBorder = 0;
     }
     else
     {
-        buttonOutside = false;
         m_iFlags &= ~(wxCC_IFLAG_BUTTON_OUTSIDE);
         btnBorder = customBorder;
     }
