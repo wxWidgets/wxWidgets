@@ -33198,6 +33198,44 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Window_SetDoubleBuffered(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "on", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetDoubleBuffered",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_SetDoubleBuffered" "', expected argument " "1"" of type '" "wxWindow *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Window_SetDoubleBuffered" "', expected argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetDoubleBuffered(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Window_FindWindowById(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
@@ -53462,6 +53500,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_Reparent", (PyCFunction) _wrap_Window_Reparent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_AddChild", (PyCFunction) _wrap_Window_AddChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_RemoveChild", (PyCFunction) _wrap_Window_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Window_SetDoubleBuffered", (PyCFunction) _wrap_Window_SetDoubleBuffered, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_FindWindowById", (PyCFunction) _wrap_Window_FindWindowById, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_FindWindowByName", (PyCFunction) _wrap_Window_FindWindowByName, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetEventHandler", (PyCFunction)_wrap_Window_GetEventHandler, METH_O, NULL},
@@ -55729,13 +55768,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "ID_UNDELETE",SWIG_From_int(static_cast< int >(wxID_UNDELETE)));
   SWIG_Python_SetConstant(d, "ID_REVERT_TO_SAVED",SWIG_From_int(static_cast< int >(wxID_REVERT_TO_SAVED)));
   SWIG_Python_SetConstant(d, "ID_HIGHEST",SWIG_From_int(static_cast< int >(wxID_HIGHEST)));
-  SWIG_Python_SetConstant(d, "OPEN",SWIG_From_int(static_cast< int >(wxOPEN)));
-  SWIG_Python_SetConstant(d, "SAVE",SWIG_From_int(static_cast< int >(wxSAVE)));
-  SWIG_Python_SetConstant(d, "HIDE_READONLY",SWIG_From_int(static_cast< int >(wxHIDE_READONLY)));
-  SWIG_Python_SetConstant(d, "OVERWRITE_PROMPT",SWIG_From_int(static_cast< int >(wxOVERWRITE_PROMPT)));
-  SWIG_Python_SetConstant(d, "FILE_MUST_EXIST",SWIG_From_int(static_cast< int >(wxFILE_MUST_EXIST)));
-  SWIG_Python_SetConstant(d, "MULTIPLE",SWIG_From_int(static_cast< int >(wxMULTIPLE)));
-  SWIG_Python_SetConstant(d, "CHANGE_DIR",SWIG_From_int(static_cast< int >(wxCHANGE_DIR)));
   SWIG_Python_SetConstant(d, "ACCEL_ALT",SWIG_From_int(static_cast< int >(wxACCEL_ALT)));
   SWIG_Python_SetConstant(d, "ACCEL_CTRL",SWIG_From_int(static_cast< int >(wxACCEL_CTRL)));
   SWIG_Python_SetConstant(d, "ACCEL_SHIFT",SWIG_From_int(static_cast< int >(wxACCEL_SHIFT)));
@@ -55748,9 +55780,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "PD_REMAINING_TIME",SWIG_From_int(static_cast< int >(wxPD_REMAINING_TIME)));
   SWIG_Python_SetConstant(d, "PD_SMOOTH",SWIG_From_int(static_cast< int >(wxPD_SMOOTH)));
   SWIG_Python_SetConstant(d, "PD_CAN_SKIP",SWIG_From_int(static_cast< int >(wxPD_CAN_SKIP)));
-  SWIG_Python_SetConstant(d, "DD_NEW_DIR_BUTTON",SWIG_From_int(static_cast< int >(wxDD_NEW_DIR_BUTTON)));
-  SWIG_Python_SetConstant(d, "DD_DEFAULT_STYLE",SWIG_From_int(static_cast< int >(wxDD_DEFAULT_STYLE)));
-  SWIG_Python_SetConstant(d, "DD_CHANGE_DIR",SWIG_From_int(static_cast< int >(wxDD_CHANGE_DIR)));
   SWIG_Python_SetConstant(d, "MENU_TEAROFF",SWIG_From_int(static_cast< int >(wxMENU_TEAROFF)));
   SWIG_Python_SetConstant(d, "MB_DOCKABLE",SWIG_From_int(static_cast< int >(wxMB_DOCKABLE)));
   SWIG_Python_SetConstant(d, "NO_FULL_REPAINT_ON_RESIZE",SWIG_From_int(static_cast< int >(wxNO_FULL_REPAINT_ON_RESIZE)));
@@ -56330,7 +56359,6 @@ SWIGEXPORT void SWIG_init(void) {
   PyDict_SetItemString(d, "wxEVT_END_SESSION", PyInt_FromLong(wxEVT_END_SESSION));
   PyDict_SetItemString(d, "wxEVT_QUERY_END_SESSION", PyInt_FromLong(wxEVT_QUERY_END_SESSION));
   PyDict_SetItemString(d, "wxEVT_ACTIVATE_APP", PyInt_FromLong(wxEVT_ACTIVATE_APP));
-  PyDict_SetItemString(d, "wxEVT_POWER", PyInt_FromLong(wxEVT_POWER));
   PyDict_SetItemString(d, "wxEVT_ACTIVATE", PyInt_FromLong(wxEVT_ACTIVATE));
   PyDict_SetItemString(d, "wxEVT_CREATE", PyInt_FromLong(wxEVT_CREATE));
   PyDict_SetItemString(d, "wxEVT_DESTROY", PyInt_FromLong(wxEVT_DESTROY));

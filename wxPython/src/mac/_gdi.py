@@ -1288,7 +1288,7 @@ class NativeFontInfo(object):
         return _gdi_.NativeFontInfo_SetUnderlined(*args, **kwargs)
 
     def SetFaceName(*args, **kwargs):
-        """SetFaceName(self, String facename)"""
+        """SetFaceName(self, String facename) -> bool"""
         return _gdi_.NativeFontInfo_SetFaceName(*args, **kwargs)
 
     def SetFamily(*args, **kwargs):
@@ -1679,7 +1679,7 @@ class Font(GDIObject):
 
     def SetFaceName(*args, **kwargs):
         """
-        SetFaceName(self, String faceName)
+        SetFaceName(self, String faceName) -> bool
 
         Sets the facename for the font.  The facename, which should be a valid
         font installed on the end-user's system.
@@ -1718,7 +1718,7 @@ class Font(GDIObject):
 
     def SetNativeFontInfoFromString(*args, **kwargs):
         """
-        SetNativeFontInfoFromString(self, String info)
+        SetNativeFontInfoFromString(self, String info) -> bool
 
         Set the font's attributes from string representation of a
         `wx.NativeFontInfo` object.
@@ -1727,7 +1727,7 @@ class Font(GDIObject):
 
     def SetNativeFontInfoUserDesc(*args, **kwargs):
         """
-        SetNativeFontInfoUserDesc(self, String info)
+        SetNativeFontInfoUserDesc(self, String info) -> bool
 
         Set the font's attributes from a string formerly returned from
         `GetNativeFontInfoDesc`.
@@ -1910,14 +1910,43 @@ class FontEnumerator(object):
         return _gdi_.FontEnumerator_EnumerateEncodings(*args, **kwargs)
 
     def GetEncodings(*args, **kwargs):
-        """GetEncodings(self) -> PyObject"""
+        """GetEncodings() -> PyObject"""
         return _gdi_.FontEnumerator_GetEncodings(*args, **kwargs)
 
+    GetEncodings = staticmethod(GetEncodings)
     def GetFacenames(*args, **kwargs):
-        """GetFacenames(self) -> PyObject"""
+        """GetFacenames() -> PyObject"""
         return _gdi_.FontEnumerator_GetFacenames(*args, **kwargs)
 
+    GetFacenames = staticmethod(GetFacenames)
+    def IsValidFacename(*args, **kwargs):
+        """
+        IsValidFacename(String str) -> bool
+
+        Convenience function that returns true if the given face name exist in
+        the user's system
+        """
+        return _gdi_.FontEnumerator_IsValidFacename(*args, **kwargs)
+
+    IsValidFacename = staticmethod(IsValidFacename)
 _gdi_.FontEnumerator_swigregister(FontEnumerator)
+
+def FontEnumerator_GetEncodings(*args):
+  """FontEnumerator_GetEncodings() -> PyObject"""
+  return _gdi_.FontEnumerator_GetEncodings(*args)
+
+def FontEnumerator_GetFacenames(*args):
+  """FontEnumerator_GetFacenames() -> PyObject"""
+  return _gdi_.FontEnumerator_GetFacenames(*args)
+
+def FontEnumerator_IsValidFacename(*args, **kwargs):
+  """
+    FontEnumerator_IsValidFacename(String str) -> bool
+
+    Convenience function that returns true if the given face name exist in
+    the user's system
+    """
+  return _gdi_.FontEnumerator_IsValidFacename(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
@@ -4423,44 +4452,50 @@ class StockGDI(object):
 
     def _initStockObjects():
         import wx
-        wx.ITALIC_FONT  = StockGDI.instance().GetFont(StockGDI.FONT_ITALIC)
-        wx.NORMAL_FONT  = StockGDI.instance().GetFont(StockGDI.FONT_NORMAL)
-        wx.SMALL_FONT   = StockGDI.instance().GetFont(StockGDI.FONT_SMALL)
-        wx.SWISS_FONT   = StockGDI.instance().GetFont(StockGDI.FONT_SWISS)
+        wx.ITALIC_FONT.this  = StockGDI.instance().GetFont(StockGDI.FONT_ITALIC).this
+        wx.NORMAL_FONT.this  = StockGDI.instance().GetFont(StockGDI.FONT_NORMAL).this
+        wx.SMALL_FONT.this   = StockGDI.instance().GetFont(StockGDI.FONT_SMALL).this
+        wx.SWISS_FONT.this   = StockGDI.instance().GetFont(StockGDI.FONT_SWISS).this
                                               
-        wx.BLACK_DASHED_PEN  = StockGDI.GetPen(StockGDI.PEN_BLACKDASHED)
-        wx.BLACK_PEN         = StockGDI.GetPen(StockGDI.PEN_BLACK)
-        wx.CYAN_PEN          = StockGDI.GetPen(StockGDI.PEN_CYAN)
-        wx.GREEN_PEN         = StockGDI.GetPen(StockGDI.PEN_GREEN)
-        wx.GREY_PEN          = StockGDI.GetPen(StockGDI.PEN_GREY)
-        wx.LIGHT_GREY_PEN    = StockGDI.GetPen(StockGDI.PEN_LIGHTGREY)
-        wx.MEDIUM_GREY_PEN   = StockGDI.GetPen(StockGDI.PEN_MEDIUMGREY)
-        wx.RED_PEN           = StockGDI.GetPen(StockGDI.PEN_RED)
-        wx.TRANSPARENT_PEN   = StockGDI.GetPen(StockGDI.PEN_TRANSPARENT)
-        wx.WHITE_PEN         = StockGDI.GetPen(StockGDI.PEN_WHITE)
+        wx.BLACK_DASHED_PEN.this  = StockGDI.GetPen(StockGDI.PEN_BLACKDASHED).this
+        wx.BLACK_PEN.this         = StockGDI.GetPen(StockGDI.PEN_BLACK).this
+        wx.CYAN_PEN.this          = StockGDI.GetPen(StockGDI.PEN_CYAN).this
+        wx.GREEN_PEN.this         = StockGDI.GetPen(StockGDI.PEN_GREEN).this
+        wx.GREY_PEN.this          = StockGDI.GetPen(StockGDI.PEN_GREY).this
+        wx.LIGHT_GREY_PEN.this    = StockGDI.GetPen(StockGDI.PEN_LIGHTGREY).this
+        wx.MEDIUM_GREY_PEN.this   = StockGDI.GetPen(StockGDI.PEN_MEDIUMGREY).this
+        wx.RED_PEN.this           = StockGDI.GetPen(StockGDI.PEN_RED).this
+        wx.TRANSPARENT_PEN.this   = StockGDI.GetPen(StockGDI.PEN_TRANSPARENT).this
+        wx.WHITE_PEN.this         = StockGDI.GetPen(StockGDI.PEN_WHITE).this
 
-        wx.BLACK_BRUSH        = StockGDI.GetBrush(StockGDI.BRUSH_BLACK)
-        wx.BLUE_BRUSH         = StockGDI.GetBrush(StockGDI.BRUSH_BLUE)
-        wx.CYAN_BRUSH         = StockGDI.GetBrush(StockGDI.BRUSH_CYAN)
-        wx.GREEN_BRUSH        = StockGDI.GetBrush(StockGDI.BRUSH_GREEN)
-        wx.GREY_BRUSH         = StockGDI.GetBrush(StockGDI.BRUSH_GREY)
-        wx.LIGHT_GREY_BRUSH   = StockGDI.GetBrush(StockGDI.BRUSH_LIGHTGREY)
-        wx.MEDIUM_GREY_BRUSH  = StockGDI.GetBrush(StockGDI.BRUSH_MEDIUMGREY)
-        wx.RED_BRUSH          = StockGDI.GetBrush(StockGDI.BRUSH_RED)
-        wx.TRANSPARENT_BRUSH  = StockGDI.GetBrush(StockGDI.BRUSH_TRANSPARENT)
-        wx.WHITE_BRUSH        = StockGDI.GetBrush(StockGDI.BRUSH_WHITE)
+        wx.BLACK_BRUSH.this        = StockGDI.GetBrush(StockGDI.BRUSH_BLACK).this
+        wx.BLUE_BRUSH.this         = StockGDI.GetBrush(StockGDI.BRUSH_BLUE).this
+        wx.CYAN_BRUSH.this         = StockGDI.GetBrush(StockGDI.BRUSH_CYAN).this
+        wx.GREEN_BRUSH.this        = StockGDI.GetBrush(StockGDI.BRUSH_GREEN).this
+        wx.GREY_BRUSH.this         = StockGDI.GetBrush(StockGDI.BRUSH_GREY).this
+        wx.LIGHT_GREY_BRUSH.this   = StockGDI.GetBrush(StockGDI.BRUSH_LIGHTGREY).this
+        wx.MEDIUM_GREY_BRUSH.this  = StockGDI.GetBrush(StockGDI.BRUSH_MEDIUMGREY).this
+        wx.RED_BRUSH.this          = StockGDI.GetBrush(StockGDI.BRUSH_RED).this
+        wx.TRANSPARENT_BRUSH.this  = StockGDI.GetBrush(StockGDI.BRUSH_TRANSPARENT).this
+        wx.WHITE_BRUSH.this        = StockGDI.GetBrush(StockGDI.BRUSH_WHITE).this
 
-        wx.BLACK       = StockGDI.GetColour(StockGDI.COLOUR_BLACK)
-        wx.BLUE        = StockGDI.GetColour(StockGDI.COLOUR_BLUE)
-        wx.CYAN        = StockGDI.GetColour(StockGDI.COLOUR_CYAN)
-        wx.GREEN       = StockGDI.GetColour(StockGDI.COLOUR_GREEN)
-        wx.LIGHT_GREY  = StockGDI.GetColour(StockGDI.COLOUR_LIGHTGREY)
-        wx.RED         = StockGDI.GetColour(StockGDI.COLOUR_RED)
-        wx.WHITE       = StockGDI.GetColour(StockGDI.COLOUR_WHITE)
+        wx.BLACK.this       = StockGDI.GetColour(StockGDI.COLOUR_BLACK).this
+        wx.BLUE.this        = StockGDI.GetColour(StockGDI.COLOUR_BLUE).this
+        wx.CYAN.this        = StockGDI.GetColour(StockGDI.COLOUR_CYAN).this
+        wx.GREEN.this       = StockGDI.GetColour(StockGDI.COLOUR_GREEN).this
+        wx.LIGHT_GREY.this  = StockGDI.GetColour(StockGDI.COLOUR_LIGHTGREY).this
+        wx.RED.this         = StockGDI.GetColour(StockGDI.COLOUR_RED).this
+        wx.WHITE.this       = StockGDI.GetColour(StockGDI.COLOUR_WHITE).this
 
-        wx.CROSS_CURSOR      = StockGDI.GetCursor(StockGDI.CURSOR_CROSS)
-        wx.HOURGLASS_CURSOR  = StockGDI.GetCursor(StockGDI.CURSOR_HOURGLASS)
-        wx.STANDARD_CURSOR   = StockGDI.GetCursor(StockGDI.CURSOR_STANDARD)
+        wx.CROSS_CURSOR.this      = StockGDI.GetCursor(StockGDI.CURSOR_CROSS).this
+        wx.HOURGLASS_CURSOR.this  = StockGDI.GetCursor(StockGDI.CURSOR_HOURGLASS).this
+        wx.STANDARD_CURSOR.this   = StockGDI.GetCursor(StockGDI.CURSOR_STANDARD).this
+
+        wx.TheFontList.this       = _wxPyInitTheFontList().this
+        wx.ThePenList.this        = _wxPyInitThePenList().this
+        wx.TheBrushList.this      = _wxPyInitTheBrushList().this
+        wx.TheColourDatabase.this = _wxPyInitTheColourDatabase().this
+
         
     _initStockObjects = staticmethod(_initStockObjects)
 
@@ -4489,6 +4524,47 @@ def StockGDI_GetCursor(*args, **kwargs):
 def StockGDI_GetPen(*args, **kwargs):
   """StockGDI_GetPen(int item) -> Pen"""
   return _gdi_.StockGDI_GetPen(*args, **kwargs)
+
+# Create an uninitialized instance for the stock objects, they will
+# be initialized later when the wx.App object is created.
+ITALIC_FONT  = Font.__new__(Font)
+NORMAL_FONT  = Font.__new__(Font)
+SMALL_FONT   = Font.__new__(Font)
+SWISS_FONT   = Font.__new__(Font)
+                                   
+BLACK_DASHED_PEN  = Pen.__new__(Pen)
+BLACK_PEN         = Pen.__new__(Pen)
+CYAN_PEN          = Pen.__new__(Pen)
+GREEN_PEN         = Pen.__new__(Pen)
+GREY_PEN          = Pen.__new__(Pen)
+LIGHT_GREY_PEN    = Pen.__new__(Pen)
+MEDIUM_GREY_PEN   = Pen.__new__(Pen)
+RED_PEN           = Pen.__new__(Pen)
+TRANSPARENT_PEN   = Pen.__new__(Pen)
+WHITE_PEN         = Pen.__new__(Pen)
+
+BLACK_BRUSH        = Brush.__new__(Brush)
+BLUE_BRUSH         = Brush.__new__(Brush)
+CYAN_BRUSH         = Brush.__new__(Brush)
+GREEN_BRUSH        = Brush.__new__(Brush)
+GREY_BRUSH         = Brush.__new__(Brush)
+LIGHT_GREY_BRUSH   = Brush.__new__(Brush)
+MEDIUM_GREY_BRUSH  = Brush.__new__(Brush)
+RED_BRUSH          = Brush.__new__(Brush)
+TRANSPARENT_BRUSH  = Brush.__new__(Brush)
+WHITE_BRUSH        = Brush.__new__(Brush)
+
+BLACK       = Colour.__new__(Colour)
+BLUE        = Colour.__new__(Colour)
+CYAN        = Colour.__new__(Colour)
+GREEN       = Colour.__new__(Colour)
+LIGHT_GREY  = Colour.__new__(Colour)
+RED         = Colour.__new__(Colour)
+WHITE       = Colour.__new__(Colour)
+
+CROSS_CURSOR      = Cursor.__new__(Cursor)
+HOURGLASS_CURSOR  = Cursor.__new__(Cursor)
+STANDARD_CURSOR   = Cursor.__new__(Cursor)
 
 class GDIObjListBase(object):
     """Proxy of C++ GDIObjListBase class"""
@@ -4626,29 +4702,12 @@ def _wxPyInitTheBrushList(*args):
 def _wxPyInitTheColourDatabase(*args):
   """_wxPyInitTheColourDatabase() -> ColourDatabase"""
   return _gdi_._wxPyInitTheColourDatabase(*args)
-# This function makes a class used to do delayed initialization of some
-# stock wx objects.  When they are used the first time then an init function
-# is called to make the real instance, which is then used to replace the
-# original instance and class seen by the programmer.
-def _wxPyMakeDelayedInitWrapper(initFunc):
-    class _wxPyStockObjectWrapper(object):
-        def __init__(self, *args):
-            self._args = args
-        def __getattr__(self, name):
-            obj = initFunc(*self._args)
-            self.__class__ = obj.__class__
-            self.__dict__ = obj.__dict__
-            return getattr(self, name)
-        def __str__(self):
-            return self.__getattr__("__str__")()
-        def __repr__(self):
-            return self.__getattr__("__repr__")()
-    return _wxPyStockObjectWrapper
-    
-TheFontList       = _wxPyMakeDelayedInitWrapper(_wxPyInitTheFontList)()
-ThePenList        = _wxPyMakeDelayedInitWrapper(_wxPyInitThePenList)()
-TheBrushList      = _wxPyMakeDelayedInitWrapper(_wxPyInitTheBrushList)()
-TheColourDatabase = _wxPyMakeDelayedInitWrapper(_wxPyInitTheColourDatabase)()
+# Create an uninitialized instance for the stock objects, they will
+# be initialized later when the wx.App object is created.
+TheFontList       = FontList.__new__(FontList)
+ThePenList        = PenList.__new__(PenList)
+TheBrushList      = BrushList.__new__(BrushList)
+TheColourDatabase = ColourDatabase.__new__(ColourDatabase)
 
 NullColor = NullColour 
 #---------------------------------------------------------------------------
@@ -4816,6 +4875,11 @@ class RendererNative(object):
     platform-specific implementations for drawing certain parts of
     genereic controls in ways that are as close to the native look as
     possible.
+
+    Note that each drawing function restores the `wx.DC` attributes if it
+    changes them, so it is safe to assume that the same pen, brush and
+    colours that were active before the call to this function are still in
+    effect after it.
 
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')

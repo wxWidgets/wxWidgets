@@ -3099,25 +3099,19 @@ IMP_PYCALLBACK_BOOL_STRING(wxPyFontEnumerator, wxFontEnumerator, OnFacename);
 IMP_PYCALLBACK_BOOL_STRINGSTRING(wxPyFontEnumerator, wxFontEnumerator, OnFontEncoding);
 
 
-SWIGINTERN PyObject *wxPyFontEnumerator_GetEncodings(wxPyFontEnumerator *self){
+SWIGINTERN PyObject *wxPyFontEnumerator_GetEncodings(){
             PyObject* ret;
-            wxArrayString* arr = self->GetEncodings();
+            wxArrayString arr = wxFontEnumerator::GetEncodings();
             wxPyBlock_t blocked = wxPyBeginBlockThreads();            
-            if (arr)
-                ret = wxArrayString2PyList_helper(*arr);
-            else
-                ret = PyList_New(0);
+            ret = wxArrayString2PyList_helper(arr);
             wxPyEndBlockThreads(blocked);
             return ret;
         }
-SWIGINTERN PyObject *wxPyFontEnumerator_GetFacenames(wxPyFontEnumerator *self){
+SWIGINTERN PyObject *wxPyFontEnumerator_GetFacenames(){
             PyObject* ret;
-            wxArrayString* arr = self->GetFacenames();
+            wxArrayString arr = wxFontEnumerator::GetFacenames();
             wxPyBlock_t blocked = wxPyBeginBlockThreads();            
-            if (arr)
-                ret = wxArrayString2PyList_helper(*arr);
-            else
-                ret =  PyList_New(0);
+            ret = wxArrayString2PyList_helper(arr);
             wxPyEndBlockThreads(blocked);
             return ret;
         }
@@ -9828,6 +9822,7 @@ SWIGINTERN PyObject *_wrap_NativeFontInfo_SetFaceName(PyObject *SWIGUNUSEDPARM(s
   PyObject *resultobj = 0;
   wxNativeFontInfo *arg1 = (wxNativeFontInfo *) 0 ;
   wxString arg2 ;
+  bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
@@ -9850,11 +9845,13 @@ SWIGINTERN PyObject *_wrap_NativeFontInfo_SetFaceName(PyObject *SWIGUNUSEDPARM(s
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetFaceName(arg2);
+    result = (bool)(arg1)->SetFaceName(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_Py_Void();
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
   return resultobj;
 fail:
   return NULL;
@@ -12217,6 +12214,7 @@ SWIGINTERN PyObject *_wrap_Font_SetFaceName(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject *resultobj = 0;
   wxFont *arg1 = (wxFont *) 0 ;
   wxString *arg2 = 0 ;
+  bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool temp2 = false ;
@@ -12239,11 +12237,13 @@ SWIGINTERN PyObject *_wrap_Font_SetFaceName(PyObject *SWIGUNUSEDPARM(self), PyOb
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetFaceName((wxString const &)*arg2);
+    result = (bool)(arg1)->SetFaceName((wxString const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_Py_Void();
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
   {
     if (temp2)
     delete arg2;
@@ -12379,6 +12379,7 @@ SWIGINTERN PyObject *_wrap_Font_SetNativeFontInfoFromString(PyObject *SWIGUNUSED
   PyObject *resultobj = 0;
   wxFont *arg1 = (wxFont *) 0 ;
   wxString *arg2 = 0 ;
+  bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool temp2 = false ;
@@ -12401,11 +12402,13 @@ SWIGINTERN PyObject *_wrap_Font_SetNativeFontInfoFromString(PyObject *SWIGUNUSED
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetNativeFontInfo((wxString const &)*arg2);
+    result = (bool)(arg1)->SetNativeFontInfo((wxString const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_Py_Void();
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
   {
     if (temp2)
     delete arg2;
@@ -12424,6 +12427,7 @@ SWIGINTERN PyObject *_wrap_Font_SetNativeFontInfoUserDesc(PyObject *SWIGUNUSEDPA
   PyObject *resultobj = 0;
   wxFont *arg1 = (wxFont *) 0 ;
   wxString *arg2 = 0 ;
+  bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool temp2 = false ;
@@ -12446,11 +12450,13 @@ SWIGINTERN PyObject *_wrap_Font_SetNativeFontInfoUserDesc(PyObject *SWIGUNUSEDPA
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetNativeFontInfoUserDesc((wxString const &)*arg2);
+    result = (bool)(arg1)->SetNativeFontInfoUserDesc((wxString const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_Py_Void();
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
   {
     if (temp2)
     delete arg2;
@@ -12895,22 +12901,12 @@ fail:
 
 SWIGINTERN PyObject *_wrap_FontEnumerator_GetEncodings(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  wxPyFontEnumerator *arg1 = (wxPyFontEnumerator *) 0 ;
   PyObject *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyFontEnumerator, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FontEnumerator_GetEncodings" "', expected argument " "1"" of type '" "wxPyFontEnumerator *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyFontEnumerator * >(argp1);
+  if (!SWIG_Python_UnpackTuple(args,"FontEnumerator_GetEncodings",0,0,0)) SWIG_fail;
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (PyObject *)wxPyFontEnumerator_GetEncodings(arg1);
+    result = (PyObject *)wxPyFontEnumerator_GetEncodings();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -12923,28 +12919,57 @@ fail:
 
 SWIGINTERN PyObject *_wrap_FontEnumerator_GetFacenames(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  wxPyFontEnumerator *arg1 = (wxPyFontEnumerator *) 0 ;
   PyObject *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyFontEnumerator, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FontEnumerator_GetFacenames" "', expected argument " "1"" of type '" "wxPyFontEnumerator *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyFontEnumerator * >(argp1);
+  if (!SWIG_Python_UnpackTuple(args,"FontEnumerator_GetFacenames",0,0,0)) SWIG_fail;
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (PyObject *)wxPyFontEnumerator_GetFacenames(arg1);
+    result = (PyObject *)wxPyFontEnumerator_GetFacenames();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = result;
   return resultobj;
 fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FontEnumerator_IsValidFacename(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxString *arg1 = 0 ;
+  bool result;
+  bool temp1 = false ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "str", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:FontEnumerator_IsValidFacename",kwnames,&obj0)) SWIG_fail;
+  {
+    arg1 = wxString_in_helper(obj0);
+    if (arg1 == NULL) SWIG_fail;
+    temp1 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)wxPyFontEnumerator::IsValidFacename((wxString const &)*arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  {
+    if (temp1)
+    delete arg1;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp1)
+    delete arg1;
+  }
   return NULL;
 }
 
@@ -24922,6 +24947,7 @@ SWIGINTERN PyObject *_wrap_RendererNative_Get(PyObject *SWIGUNUSEDPARM(self), Py
   
   if (!SWIG_Python_UnpackTuple(args,"RendererNative_Get",0,0,0)) SWIG_fail;
   {
+    if (!wxPyCheckForApp()) SWIG_fail;
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     {
       wxRendererNative &_result_ref = wxRendererNative::Get();
@@ -24943,6 +24969,7 @@ SWIGINTERN PyObject *_wrap_RendererNative_GetGeneric(PyObject *SWIGUNUSEDPARM(se
   
   if (!SWIG_Python_UnpackTuple(args,"RendererNative_GetGeneric",0,0,0)) SWIG_fail;
   {
+    if (!wxPyCheckForApp()) SWIG_fail;
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     {
       wxRendererNative &_result_ref = wxRendererNative::GetGeneric();
@@ -24964,6 +24991,7 @@ SWIGINTERN PyObject *_wrap_RendererNative_GetDefault(PyObject *SWIGUNUSEDPARM(se
   
   if (!SWIG_Python_UnpackTuple(args,"RendererNative_GetDefault",0,0,0)) SWIG_fail;
   {
+    if (!wxPyCheckForApp()) SWIG_fail;
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     {
       wxRendererNative &_result_ref = wxRendererNative::GetDefault();
@@ -24997,6 +25025,7 @@ SWIGINTERN PyObject *_wrap_RendererNative_Set(PyObject *SWIGUNUSEDPARM(self), Py
   }
   arg1 = reinterpret_cast< wxRendererNative * >(argp1);
   {
+    if (!wxPyCheckForApp()) SWIG_fail;
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (wxRendererNative *)wxRendererNative::Set(arg1);
     wxPyEndAllowThreads(__tstate);
@@ -25334,8 +25363,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FontEnumerator__setCallbackInfo", (PyCFunction) _wrap_FontEnumerator__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FontEnumerator_EnumerateFacenames", (PyCFunction) _wrap_FontEnumerator_EnumerateFacenames, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FontEnumerator_EnumerateEncodings", (PyCFunction) _wrap_FontEnumerator_EnumerateEncodings, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"FontEnumerator_GetEncodings", (PyCFunction)_wrap_FontEnumerator_GetEncodings, METH_O, NULL},
-	 { (char *)"FontEnumerator_GetFacenames", (PyCFunction)_wrap_FontEnumerator_GetFacenames, METH_O, NULL},
+	 { (char *)"FontEnumerator_GetEncodings", (PyCFunction)_wrap_FontEnumerator_GetEncodings, METH_NOARGS, NULL},
+	 { (char *)"FontEnumerator_GetFacenames", (PyCFunction)_wrap_FontEnumerator_GetFacenames, METH_NOARGS, NULL},
+	 { (char *)"FontEnumerator_IsValidFacename", (PyCFunction) _wrap_FontEnumerator_IsValidFacename, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FontEnumerator_swigregister", FontEnumerator_swigregister, METH_VARARGS, NULL},
 	 { (char *)"FontEnumerator_swiginit", FontEnumerator_swiginit, METH_VARARGS, NULL},
 	 { (char *)"LanguageInfo_Language_set", _wrap_LanguageInfo_Language_set, METH_VARARGS, NULL},

@@ -686,10 +686,6 @@ class HtmlCell(_core.Object):
         """ProcessMouseClick(self, HtmlWindowInterface window, Point pos, MouseEvent event) -> bool"""
         return _html.HtmlCell_ProcessMouseClick(*args, **kwargs)
 
-    def AdjustPagebreak(*args, **kwargs):
-        """AdjustPagebreak(self, int INOUT) -> bool"""
-        return _html.HtmlCell_AdjustPagebreak(*args, **kwargs)
-
     def SetCanLiveOnPagebreak(*args, **kwargs):
         """SetCanLiveOnPagebreak(self, bool can)"""
         return _html.HtmlCell_SetCanLiveOnPagebreak(*args, **kwargs)
@@ -1197,8 +1193,8 @@ class HtmlDCRenderer(_core.Object):
 
     def Render(*args, **kwargs):
         """
-        Render(self, int x, int y, int from=0, int dont_render=False, int maxHeight=INT_MAX, 
-            int choices=None, int LCOUNT=0) -> int
+        Render(self, int x, int y, wxArrayInt known_pagebreaks, int from=0, 
+            int dont_render=False, int to=INT_MAX) -> int
         """
         return _html.HtmlDCRenderer_Render(*args, **kwargs)
 

@@ -271,13 +271,6 @@ ID_ZOOM_OUT = _core_.ID_ZOOM_OUT
 ID_UNDELETE = _core_.ID_UNDELETE
 ID_REVERT_TO_SAVED = _core_.ID_REVERT_TO_SAVED
 ID_HIGHEST = _core_.ID_HIGHEST
-OPEN = _core_.OPEN
-SAVE = _core_.SAVE
-HIDE_READONLY = _core_.HIDE_READONLY
-OVERWRITE_PROMPT = _core_.OVERWRITE_PROMPT
-FILE_MUST_EXIST = _core_.FILE_MUST_EXIST
-MULTIPLE = _core_.MULTIPLE
-CHANGE_DIR = _core_.CHANGE_DIR
 ACCEL_ALT = _core_.ACCEL_ALT
 ACCEL_CTRL = _core_.ACCEL_CTRL
 ACCEL_SHIFT = _core_.ACCEL_SHIFT
@@ -290,9 +283,6 @@ PD_ESTIMATED_TIME = _core_.PD_ESTIMATED_TIME
 PD_REMAINING_TIME = _core_.PD_REMAINING_TIME
 PD_SMOOTH = _core_.PD_SMOOTH
 PD_CAN_SKIP = _core_.PD_CAN_SKIP
-DD_NEW_DIR_BUTTON = _core_.DD_NEW_DIR_BUTTON
-DD_DEFAULT_STYLE = _core_.DD_DEFAULT_STYLE
-DD_CHANGE_DIR = _core_.DD_CHANGE_DIR
 MENU_TEAROFF = _core_.MENU_TEAROFF
 MB_DOCKABLE = _core_.MB_DOCKABLE
 NO_FULL_REPAINT_ON_RESIZE = _core_.NO_FULL_REPAINT_ON_RESIZE
@@ -3501,7 +3491,6 @@ wxEVT_CLOSE_WINDOW = _core_.wxEVT_CLOSE_WINDOW
 wxEVT_END_SESSION = _core_.wxEVT_END_SESSION
 wxEVT_QUERY_END_SESSION = _core_.wxEVT_QUERY_END_SESSION
 wxEVT_ACTIVATE_APP = _core_.wxEVT_ACTIVATE_APP
-wxEVT_POWER = _core_.wxEVT_POWER
 wxEVT_ACTIVATE = _core_.wxEVT_ACTIVATE
 wxEVT_CREATE = _core_.wxEVT_CREATE
 wxEVT_DESTROY = _core_.wxEVT_DESTROY
@@ -3557,7 +3546,7 @@ EVT_ERASE_BACKGROUND = wx.PyEventBinder( wxEVT_ERASE_BACKGROUND )
 EVT_CHAR = wx.PyEventBinder( wxEVT_CHAR )
 EVT_KEY_DOWN = wx.PyEventBinder( wxEVT_KEY_DOWN )
 EVT_KEY_UP = wx.PyEventBinder( wxEVT_KEY_UP )
-EVT_HOTKEY = wx.PyEventBinder( wxEVT_HOTKEY, 1) 
+EVT_HOTKEY = wx.PyEventBinder( wxEVT_HOTKEY, 1)
 EVT_CHAR_HOOK = wx.PyEventBinder( wxEVT_CHAR_HOOK )
 EVT_MENU_OPEN = wx.PyEventBinder( wxEVT_MENU_OPEN )
 EVT_MENU_CLOSE = wx.PyEventBinder( wxEVT_MENU_CLOSE )
@@ -3568,7 +3557,7 @@ EVT_KILL_FOCUS = wx.PyEventBinder( wxEVT_KILL_FOCUS )
 EVT_CHILD_FOCUS = wx.PyEventBinder( wxEVT_CHILD_FOCUS )
 EVT_ACTIVATE = wx.PyEventBinder( wxEVT_ACTIVATE )
 EVT_ACTIVATE_APP = wx.PyEventBinder( wxEVT_ACTIVATE_APP )
-EVT_HIBERNATE = wx.PyEventBinder( wxEVT_HIBERNATE )     
+EVT_HIBERNATE = wx.PyEventBinder( wxEVT_HIBERNATE )
 EVT_END_SESSION = wx.PyEventBinder( wxEVT_END_SESSION )
 EVT_QUERY_END_SESSION = wx.PyEventBinder( wxEVT_QUERY_END_SESSION )
 EVT_DROP_FILES = wx.PyEventBinder( wxEVT_DROP_FILES )
@@ -3617,11 +3606,11 @@ EVT_MOUSE_EVENTS = wx.PyEventBinder([ wxEVT_LEFT_DOWN,
 
 
 # Scrolling from wxWindow (sent to wxScrolledWindow)
-EVT_SCROLLWIN = wx.PyEventBinder([ wxEVT_SCROLLWIN_TOP, 
+EVT_SCROLLWIN = wx.PyEventBinder([ wxEVT_SCROLLWIN_TOP,
                                   wxEVT_SCROLLWIN_BOTTOM,
                                   wxEVT_SCROLLWIN_LINEUP,
                                   wxEVT_SCROLLWIN_LINEDOWN,
-                                  wxEVT_SCROLLWIN_PAGEUP, 
+                                  wxEVT_SCROLLWIN_PAGEUP,
                                   wxEVT_SCROLLWIN_PAGEDOWN,
                                   wxEVT_SCROLLWIN_THUMBTRACK,
                                   wxEVT_SCROLLWIN_THUMBRELEASE,
@@ -3637,14 +3626,14 @@ EVT_SCROLLWIN_THUMBTRACK = wx.PyEventBinder( wxEVT_SCROLLWIN_THUMBTRACK )
 EVT_SCROLLWIN_THUMBRELEASE = wx.PyEventBinder( wxEVT_SCROLLWIN_THUMBRELEASE )
 
 # Scrolling from wx.Slider and wx.ScrollBar
-EVT_SCROLL = wx.PyEventBinder([ wxEVT_SCROLL_TOP, 
-                               wxEVT_SCROLL_BOTTOM, 
-                               wxEVT_SCROLL_LINEUP, 
-                               wxEVT_SCROLL_LINEDOWN, 
-                               wxEVT_SCROLL_PAGEUP, 
-                               wxEVT_SCROLL_PAGEDOWN, 
-                               wxEVT_SCROLL_THUMBTRACK, 
-                               wxEVT_SCROLL_THUMBRELEASE, 
+EVT_SCROLL = wx.PyEventBinder([ wxEVT_SCROLL_TOP,
+                               wxEVT_SCROLL_BOTTOM,
+                               wxEVT_SCROLL_LINEUP,
+                               wxEVT_SCROLL_LINEDOWN,
+                               wxEVT_SCROLL_PAGEUP,
+                               wxEVT_SCROLL_PAGEDOWN,
+                               wxEVT_SCROLL_THUMBTRACK,
+                               wxEVT_SCROLL_THUMBRELEASE,
                                wxEVT_SCROLL_CHANGED,
                                ])
 
@@ -3658,15 +3647,15 @@ EVT_SCROLL_THUMBTRACK = wx.PyEventBinder( wxEVT_SCROLL_THUMBTRACK )
 EVT_SCROLL_THUMBRELEASE = wx.PyEventBinder( wxEVT_SCROLL_THUMBRELEASE )
 EVT_SCROLL_CHANGED = wx.PyEventBinder( wxEVT_SCROLL_CHANGED )
 EVT_SCROLL_ENDSCROLL = EVT_SCROLL_CHANGED
-     
+
 # Scrolling from wx.Slider and wx.ScrollBar, with an id
-EVT_COMMAND_SCROLL = wx.PyEventBinder([ wxEVT_SCROLL_TOP, 
-                                       wxEVT_SCROLL_BOTTOM, 
-                                       wxEVT_SCROLL_LINEUP, 
-                                       wxEVT_SCROLL_LINEDOWN, 
-                                       wxEVT_SCROLL_PAGEUP, 
-                                       wxEVT_SCROLL_PAGEDOWN, 
-                                       wxEVT_SCROLL_THUMBTRACK, 
+EVT_COMMAND_SCROLL = wx.PyEventBinder([ wxEVT_SCROLL_TOP,
+                                       wxEVT_SCROLL_BOTTOM,
+                                       wxEVT_SCROLL_LINEUP,
+                                       wxEVT_SCROLL_LINEDOWN,
+                                       wxEVT_SCROLL_PAGEUP,
+                                       wxEVT_SCROLL_PAGEDOWN,
+                                       wxEVT_SCROLL_THUMBTRACK,
                                        wxEVT_SCROLL_THUMBRELEASE,
                                        wxEVT_SCROLL_CHANGED,
                                        ], 1)
@@ -8402,6 +8391,14 @@ class Window(EvtHandler):
         programmer.
         """
         return _core_.Window_RemoveChild(*args, **kwargs)
+
+    def SetDoubleBuffered(*args, **kwargs):
+        """
+        SetDoubleBuffered(self, bool on)
+
+        Currently wxGTK2 only.
+        """
+        return _core_.Window_SetDoubleBuffered(*args, **kwargs)
 
     def FindWindowById(*args, **kwargs):
         """

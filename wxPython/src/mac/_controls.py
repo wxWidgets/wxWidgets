@@ -2856,6 +2856,15 @@ class BookCtrlBase(_core.Control):
         """AdvanceSelection(self, bool forward=True)"""
         return _controls_.BookCtrlBase_AdvanceSelection(*args, **kwargs)
 
+    def HitTest(*args, **kwargs):
+        """
+        HitTest(Point pt) -> (tab, where)
+
+        Returns the page/tab which is hit, and flags indicating where using
+        wx.NB_HITTEST flags.
+        """
+        return _controls_.BookCtrlBase_HitTest(*args, **kwargs)
+
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
@@ -2970,15 +2979,6 @@ class Notebook(BookCtrlBase):
     def SetTabSize(*args, **kwargs):
         """SetTabSize(self, Size sz)"""
         return _controls_.Notebook_SetTabSize(*args, **kwargs)
-
-    def HitTest(*args, **kwargs):
-        """
-        HitTest(Point pt) -> (tab, where)
-
-        Returns the tab which is hit, and flags indicating where using
-        wx.NB_HITTEST flags.
-        """
-        return _controls_.Notebook_HitTest(*args, **kwargs)
 
     def GetThemeBackgroundColour(*args, **kwargs):
         """GetThemeBackgroundColour(self) -> Colour"""
@@ -3334,6 +3334,7 @@ TB_NODIVIDER = _controls_.TB_NODIVIDER
 TB_NOALIGN = _controls_.TB_NOALIGN
 TB_HORZ_LAYOUT = _controls_.TB_HORZ_LAYOUT
 TB_HORZ_TEXT = _controls_.TB_HORZ_TEXT
+TB_NO_TOOLTIPS = _controls_.TB_NO_TOOLTIPS
 class ToolBarToolBase(_core.Object):
     """Proxy of C++ ToolBarToolBase class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -3894,6 +3895,7 @@ LIST_HITTEST_ONITEMSTATEICON = _controls_.LIST_HITTEST_ONITEMSTATEICON
 LIST_HITTEST_TOLEFT = _controls_.LIST_HITTEST_TOLEFT
 LIST_HITTEST_TORIGHT = _controls_.LIST_HITTEST_TORIGHT
 LIST_HITTEST_ONITEM = _controls_.LIST_HITTEST_ONITEM
+LIST_GETSUBITEMRECT_WHOLEITEM = _controls_.LIST_GETSUBITEMRECT_WHOLEITEM
 LIST_NEXT_ABOVE = _controls_.LIST_NEXT_ABOVE
 LIST_NEXT_ALL = _controls_.LIST_NEXT_ALL
 LIST_NEXT_BELOW = _controls_.LIST_NEXT_BELOW
@@ -4481,6 +4483,16 @@ class ListCtrl(_core.Control):
          in the second return value (see wx.LIST_HITTEST flags.)
         """
         return _controls_.ListCtrl_HitTest(*args, **kwargs)
+
+    def HitTestSubItem(*args, **kwargs):
+        """
+        HitTestSubItem(Point point) -> (item, where, subItem)
+
+        Determines which item (if any) is at the specified point, giving  in
+        the second return value (see wx.LIST_HITTEST flags) and also the subItem, if
+        any.
+        """
+        return _controls_.ListCtrl_HitTestSubItem(*args, **kwargs)
 
     def InsertItem(*args, **kwargs):
         """InsertItem(self, ListItem info) -> long"""
@@ -5348,6 +5360,10 @@ class GenericDirCtrl(_core.Control):
         """ExpandPath(self, String path) -> bool"""
         return _controls_.GenericDirCtrl_ExpandPath(*args, **kwargs)
 
+    def CollapsePath(*args, **kwargs):
+        """CollapsePath(self, String path) -> bool"""
+        return _controls_.GenericDirCtrl_CollapsePath(*args, **kwargs)
+
     def GetDefaultPath(*args, **kwargs):
         """GetDefaultPath(self) -> String"""
         return _controls_.GenericDirCtrl_GetDefaultPath(*args, **kwargs)
@@ -5676,8 +5692,14 @@ class HelpEvent(_core.CommandEvent):
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
+    Origin_Unknown = _controls_.HelpEvent_Origin_Unknown
+    Origin_Keyboard = _controls_.HelpEvent_Origin_Keyboard
+    Origin_HelpButton = _controls_.HelpEvent_Origin_HelpButton
     def __init__(self, *args, **kwargs): 
-        """__init__(self, EventType type=wxEVT_NULL, int winid=0, Point pt=DefaultPosition) -> HelpEvent"""
+        """
+        __init__(self, EventType type=wxEVT_NULL, int winid=0, Point pt=DefaultPosition, 
+            int origin=Origin_Unknown) -> HelpEvent
+        """
         _controls_.HelpEvent_swiginit(self,_controls_.new_HelpEvent(*args, **kwargs))
     def GetPosition(*args, **kwargs):
         """
@@ -5728,6 +5750,18 @@ class HelpEvent(_core.CommandEvent):
         Set an optional target to display help in. E.g. a window specification
         """
         return _controls_.HelpEvent_SetTarget(*args, **kwargs)
+
+    def GetOrigin(*args, **kwargs):
+        """
+        GetOrigin(self) -> int
+
+        Optiononal indication of the source of the event.
+        """
+        return _controls_.HelpEvent_GetOrigin(*args, **kwargs)
+
+    def SetOrigin(*args, **kwargs):
+        """SetOrigin(self, int origin)"""
+        return _controls_.HelpEvent_SetOrigin(*args, **kwargs)
 
 _controls_.HelpEvent_swigregister(HelpEvent)
 
@@ -6140,6 +6174,131 @@ def PreDatePickerCtrl(*args, **kwargs):
     """
     val = _controls_.new_PreDatePickerCtrl(*args, **kwargs)
     return val
+
+HL_CONTEXTMENU = _controls_.HL_CONTEXTMENU
+HL_DEFAULT_STYLE = _controls_.HL_DEFAULT_STYLE
+#---------------------------------------------------------------------------
+
+class HyperlinkCtrl(_core.Control):
+    """
+    A static text control that emulates a hyperlink. The link is displayed
+    in an appropriate text style, derived from the control's normal font.
+    When the mouse rolls over the link, the cursor changes to a hand and
+    the link's color changes to the active color.
+
+    Clicking on the link does not launch a web browser; instead, a
+    wx.HyperlinkEvent is fired. Use the wx.EVT_HYPERLINK to catch link
+    events.
+
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int id, String label, String url, Point pos=DefaultPosition, 
+            Size size=DefaultSize, 
+            long style=HL_DEFAULT_STYLE, String name=HyperlinkCtrlNameStr) -> HyperlinkCtrl
+
+        A static text control that emulates a hyperlink. The link is displayed
+        in an appropriate text style, derived from the control's normal font.
+        When the mouse rolls over the link, the cursor changes to a hand and
+        the link's color changes to the active color.
+
+        Clicking on the link does not launch a web browser; instead, a
+        wx.HyperlinkEvent is fired. Use the wx.EVT_HYPERLINK to catch link
+        events.
+
+        """
+        _controls_.HyperlinkCtrl_swiginit(self,_controls_.new_HyperlinkCtrl(*args, **kwargs))
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id, String label, String url, Point pos=DefaultPosition, 
+            Size size=DefaultSize, 
+            long style=HL_DEFAULT_STYLE, String name=HyperlinkCtrlNameStr) -> bool
+        """
+        return _controls_.HyperlinkCtrl_Create(*args, **kwargs)
+
+    def GetHoverColour(*args, **kwargs):
+        """GetHoverColour(self) -> Colour"""
+        return _controls_.HyperlinkCtrl_GetHoverColour(*args, **kwargs)
+
+    def SetHoverColour(*args, **kwargs):
+        """SetHoverColour(self, Colour colour)"""
+        return _controls_.HyperlinkCtrl_SetHoverColour(*args, **kwargs)
+
+    def GetNormalColour(*args, **kwargs):
+        """GetNormalColour(self) -> Colour"""
+        return _controls_.HyperlinkCtrl_GetNormalColour(*args, **kwargs)
+
+    def SetNormalColour(*args, **kwargs):
+        """SetNormalColour(self, Colour colour)"""
+        return _controls_.HyperlinkCtrl_SetNormalColour(*args, **kwargs)
+
+    def GetVisitedColour(*args, **kwargs):
+        """GetVisitedColour(self) -> Colour"""
+        return _controls_.HyperlinkCtrl_GetVisitedColour(*args, **kwargs)
+
+    def SetVisitedColour(*args, **kwargs):
+        """SetVisitedColour(self, Colour colour)"""
+        return _controls_.HyperlinkCtrl_SetVisitedColour(*args, **kwargs)
+
+    def GetURL(*args, **kwargs):
+        """GetURL(self) -> String"""
+        return _controls_.HyperlinkCtrl_GetURL(*args, **kwargs)
+
+    def SetURL(*args, **kwargs):
+        """SetURL(self, String url)"""
+        return _controls_.HyperlinkCtrl_SetURL(*args, **kwargs)
+
+    def SetVisited(*args, **kwargs):
+        """SetVisited(self, bool visited=True)"""
+        return _controls_.HyperlinkCtrl_SetVisited(*args, **kwargs)
+
+    def GetVisited(*args, **kwargs):
+        """GetVisited(self) -> bool"""
+        return _controls_.HyperlinkCtrl_GetVisited(*args, **kwargs)
+
+_controls_.HyperlinkCtrl_swigregister(HyperlinkCtrl)
+HyperlinkCtrlNameStr = cvar.HyperlinkCtrlNameStr
+
+def PreHyperlinkCtrl(*args, **kwargs):
+    """
+    PreHyperlinkCtrl() -> HyperlinkCtrl
+
+    A static text control that emulates a hyperlink. The link is displayed
+    in an appropriate text style, derived from the control's normal font.
+    When the mouse rolls over the link, the cursor changes to a hand and
+    the link's color changes to the active color.
+
+    Clicking on the link does not launch a web browser; instead, a
+    wx.HyperlinkEvent is fired. Use the wx.EVT_HYPERLINK to catch link
+    events.
+
+    """
+    val = _controls_.new_PreHyperlinkCtrl(*args, **kwargs)
+    return val
+
+wxEVT_COMMAND_HYPERLINK = _controls_.wxEVT_COMMAND_HYPERLINK
+class HyperlinkEvent(_core.CommandEvent):
+    """Proxy of C++ HyperlinkEvent class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, Object generator, int id, String url) -> HyperlinkEvent"""
+        _controls_.HyperlinkEvent_swiginit(self,_controls_.new_HyperlinkEvent(*args, **kwargs))
+    def GetURL(*args, **kwargs):
+        """GetURL(self) -> String"""
+        return _controls_.HyperlinkEvent_GetURL(*args, **kwargs)
+
+    def SetURL(*args, **kwargs):
+        """SetURL(self, String url)"""
+        return _controls_.HyperlinkEvent_SetURL(*args, **kwargs)
+
+_controls_.HyperlinkEvent_swigregister(HyperlinkEvent)
+
+EVT_HYPERLINK = wx.PyEventBinder( wxEVT_COMMAND_HYPERLINK, 1 )
 
 
 

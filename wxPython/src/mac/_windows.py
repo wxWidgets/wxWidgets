@@ -2119,6 +2119,9 @@ def GetColourFromUser(*args, **kwargs):
         String caption=EmptyString) -> Colour
     """
   return _windows_.GetColourFromUser(*args, **kwargs)
+DD_NEW_DIR_BUTTON = _windows_.DD_NEW_DIR_BUTTON
+DD_DEFAULT_STYLE = _windows_.DD_DEFAULT_STYLE
+DD_CHANGE_DIR = _windows_.DD_CHANGE_DIR
 class DirDialog(Dialog):
     """
     wx.DirDialog allows the user to select a directory by browising the
@@ -2129,7 +2132,7 @@ class DirDialog(Dialog):
     def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, String message=DirSelectorPromptStr, 
-            String defaultPath=EmptyString, long style=0, 
+            String defaultPath=EmptyString, long style=DD_DEFAULT_STYLE, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             String name=DirDialogNameStr) -> DirDialog
 
@@ -2172,6 +2175,19 @@ class DirDialog(Dialog):
 
 _windows_.DirDialog_swigregister(DirDialog)
 
+OPEN = _windows_.OPEN
+SAVE = _windows_.SAVE
+OVERWRITE_PROMPT = _windows_.OVERWRITE_PROMPT
+FILE_MUST_EXIST = _windows_.FILE_MUST_EXIST
+MULTIPLE = _windows_.MULTIPLE
+CHANGE_DIR = _windows_.CHANGE_DIR
+FD_OPEN = _windows_.FD_OPEN
+FD_SAVE = _windows_.FD_SAVE
+FD_OVERWRITE_PROMPT = _windows_.FD_OVERWRITE_PROMPT
+FD_FILE_MUST_EXIST = _windows_.FD_FILE_MUST_EXIST
+FD_MULTIPLE = _windows_.FD_MULTIPLE
+FD_CHANGE_DIR = _windows_.FD_CHANGE_DIR
+FD_DEFAULT_STYLE = _windows_.FD_DEFAULT_STYLE
 class FileDialog(Dialog):
     """
     wx.FileDialog allows the user to select one or more files from the
@@ -2184,7 +2200,8 @@ class FileDialog(Dialog):
         __init__(self, Window parent, String message=FileSelectorPromptStr, 
             String defaultDir=EmptyString, String defaultFile=EmptyString, 
             String wildcard=FileSelectorDefaultWildcardStr, 
-            long style=0, Point pos=DefaultPosition) -> FileDialog
+            long style=FD_DEFAULT_STYLE, 
+            Point pos=DefaultPosition) -> FileDialog
 
         Constructor.  Use ShowModal method to show the dialog.
         """
@@ -2236,14 +2253,6 @@ class FileDialog(Dialog):
         """
         return _windows_.FileDialog_SetWildcard(*args, **kwargs)
 
-    def SetStyle(*args, **kwargs):
-        """
-        SetStyle(self, long style)
-
-        Sets the dialog style.
-        """
-        return _windows_.FileDialog_SetStyle(*args, **kwargs)
-
     def SetFilterIndex(*args, **kwargs):
         """
         SetFilterIndex(self, int filterIndex)
@@ -2291,14 +2300,6 @@ class FileDialog(Dialog):
         Returns the file dialog wildcard.
         """
         return _windows_.FileDialog_GetWildcard(*args, **kwargs)
-
-    def GetStyle(*args, **kwargs):
-        """
-        GetStyle(self) -> long
-
-        Returns the dialog style.
-        """
-        return _windows_.FileDialog_GetStyle(*args, **kwargs)
 
     def GetFilterIndex(*args, **kwargs):
         """
@@ -2730,11 +2731,11 @@ EVT_FIND_REPLACE_ALL = wx.PyEventBinder( wxEVT_COMMAND_FIND_REPLACE_ALL, 1 )
 EVT_FIND_CLOSE = wx.PyEventBinder( wxEVT_COMMAND_FIND_CLOSE, 1 )
 
 # For backwards compatibility.  Should they be removed?
-EVT_COMMAND_FIND             = EVT_FIND 
+EVT_COMMAND_FIND             = EVT_FIND
 EVT_COMMAND_FIND_NEXT        = EVT_FIND_NEXT
 EVT_COMMAND_FIND_REPLACE     = EVT_FIND_REPLACE
 EVT_COMMAND_FIND_REPLACE_ALL = EVT_FIND_REPLACE_ALL
-EVT_COMMAND_FIND_CLOSE       = EVT_FIND_CLOSE        
+EVT_COMMAND_FIND_CLOSE       = EVT_FIND_CLOSE
 
 class FindDialogEvent(_core.CommandEvent):
     """Events for the FindReplaceDialog"""

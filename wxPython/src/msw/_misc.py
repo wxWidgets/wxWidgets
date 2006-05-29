@@ -432,7 +432,7 @@ def SaveFileSelector(*args, **kwargs):
 def DirSelector(*args, **kwargs):
   """
     DirSelector(String message=DirSelectorPromptStr, String defaultPath=EmptyString, 
-        long style=DD_DEFAULT_STYLE, 
+        long style=wxDD_DEFAULT_STYLE, 
         Point pos=DefaultPosition, Window parent=None) -> String
     """
   return _misc_.DirSelector(*args, **kwargs)
@@ -5776,5 +5776,65 @@ def StandardPaths_Get(*args):
     """
   return _misc_.StandardPaths_Get(*args)
 
+#---------------------------------------------------------------------------
+
+POWER_SOCKET = _misc_.POWER_SOCKET
+POWER_BATTERY = _misc_.POWER_BATTERY
+POWER_UNKNOWN = _misc_.POWER_UNKNOWN
+BATTERY_NORMAL_STATE = _misc_.BATTERY_NORMAL_STATE
+BATTERY_LOW_STATE = _misc_.BATTERY_LOW_STATE
+BATTERY_CRITICAL_STATE = _misc_.BATTERY_CRITICAL_STATE
+BATTERY_SHUTDOWN_STATE = _misc_.BATTERY_SHUTDOWN_STATE
+BATTERY_UNKNOWN_STATE = _misc_.BATTERY_UNKNOWN_STATE
+class PowerEvent(_core.Event):
+    """
+    wx.PowerEvent is generated when the system online status changes.
+    Currently this is only implemented for Windows.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, EventType evtType) -> PowerEvent
+
+        wx.PowerEvent is generated when the system online status changes.
+        Currently this is only implemented for Windows.
+        """
+        _misc_.PowerEvent_swiginit(self,_misc_.new_PowerEvent(*args, **kwargs))
+    def Veto(*args, **kwargs):
+        """Veto(self)"""
+        return _misc_.PowerEvent_Veto(*args, **kwargs)
+
+    def IsVetoed(*args, **kwargs):
+        """IsVetoed(self) -> bool"""
+        return _misc_.PowerEvent_IsVetoed(*args, **kwargs)
+
+_misc_.PowerEvent_swigregister(PowerEvent)
+
+wxEVT_POWER_SUSPENDING = _misc_.wxEVT_POWER_SUSPENDING
+wxEVT_POWER_SUSPENDED = _misc_.wxEVT_POWER_SUSPENDED
+wxEVT_POWER_SUSPEND_CANCEL = _misc_.wxEVT_POWER_SUSPEND_CANCEL
+wxEVT_POWER_RESUME = _misc_.wxEVT_POWER_RESUME
+EVT_POWER_SUSPENDING       = wx.PyEventBinder( wxEVT_POWER_SUSPENDING , 1 )
+EVT_POWER_SUSPENDED        = wx.PyEventBinder( wxEVT_POWER_SUSPENDED , 1 )
+EVT_POWER_SUSPEND_CANCEL   = wx.PyEventBinder( wxEVT_POWER_SUSPEND_CANCEL , 1 )
+EVT_POWER_RESUME           = wx.PyEventBinder( wxEVT_POWER_RESUME , 1 )
+
+
+def GetPowerType(*args):
+  """
+    GetPowerType() -> int
+
+    return the current system power state: online or offline
+    """
+  return _misc_.GetPowerType(*args)
+
+def GetBatteryState(*args):
+  """
+    GetBatteryState() -> int
+
+    return approximate battery state
+    """
+  return _misc_.GetBatteryState(*args)
 
 

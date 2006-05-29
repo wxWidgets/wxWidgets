@@ -16500,7 +16500,7 @@ SWIGINTERN PyObject *_wrap_new_DirDialog(PyObject *SWIGUNUSEDPARM(self), PyObjec
   wxString *arg2 = (wxString *) &arg2_defvalue ;
   wxString const &arg3_defvalue = wxPyEmptyString ;
   wxString *arg3 = (wxString *) &arg3_defvalue ;
-  long arg4 = (long) 0 ;
+  long arg4 = (long) wxDD_DEFAULT_STYLE ;
   wxPoint const &arg5_defvalue = wxDefaultPosition ;
   wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
   wxSize const &arg6_defvalue = wxDefaultSize ;
@@ -16792,7 +16792,7 @@ SWIGINTERN PyObject *_wrap_new_FileDialog(PyObject *SWIGUNUSEDPARM(self), PyObje
   wxString *arg4 = (wxString *) &arg4_defvalue ;
   wxString const &arg5_defvalue = wxPyFileSelectorDefaultWildcardStr ;
   wxString *arg5 = (wxString *) &arg5_defvalue ;
-  long arg6 = (long) 0 ;
+  long arg6 = (long) wxFD_DEFAULT_STYLE ;
   wxPoint const &arg7_defvalue = wxDefaultPosition ;
   wxPoint *arg7 = (wxPoint *) &arg7_defvalue ;
   wxFileDialog *result = 0 ;
@@ -17134,44 +17134,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_FileDialog_SetStyle(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxFileDialog *arg1 = (wxFileDialog *) 0 ;
-  long arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  long val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "style", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:FileDialog_SetStyle",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxFileDialog, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileDialog_SetStyle" "', expected argument " "1"" of type '" "wxFileDialog *""'"); 
-  }
-  arg1 = reinterpret_cast< wxFileDialog * >(argp1);
-  ecode2 = SWIG_AsVal_long(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "FileDialog_SetStyle" "', expected argument " "2"" of type '" "long""'");
-  } 
-  arg2 = static_cast< long >(val2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetStyle(arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_FileDialog_SetFilterIndex(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxFileDialog *arg1 = (wxFileDialog *) 0 ;
@@ -17374,34 +17336,6 @@ SWIGINTERN PyObject *_wrap_FileDialog_GetWildcard(PyObject *SWIGUNUSEDPARM(self)
     resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
 #endif
   }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileDialog_GetStyle(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxFileDialog *arg1 = (wxFileDialog *) 0 ;
-  long result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxFileDialog, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileDialog_GetStyle" "', expected argument " "1"" of type '" "wxFileDialog const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxFileDialog * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (long)((wxFileDialog const *)arg1)->GetStyle();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_From_long(static_cast< long >(result));
   return resultobj;
 fail:
   return NULL;
@@ -30823,14 +30757,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FileDialog_SetDirectory", (PyCFunction) _wrap_FileDialog_SetDirectory, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FileDialog_SetFilename", (PyCFunction) _wrap_FileDialog_SetFilename, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FileDialog_SetWildcard", (PyCFunction) _wrap_FileDialog_SetWildcard, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"FileDialog_SetStyle", (PyCFunction) _wrap_FileDialog_SetStyle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FileDialog_SetFilterIndex", (PyCFunction) _wrap_FileDialog_SetFilterIndex, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FileDialog_GetMessage", (PyCFunction)_wrap_FileDialog_GetMessage, METH_O, NULL},
 	 { (char *)"FileDialog_GetPath", (PyCFunction)_wrap_FileDialog_GetPath, METH_O, NULL},
 	 { (char *)"FileDialog_GetDirectory", (PyCFunction)_wrap_FileDialog_GetDirectory, METH_O, NULL},
 	 { (char *)"FileDialog_GetFilename", (PyCFunction)_wrap_FileDialog_GetFilename, METH_O, NULL},
 	 { (char *)"FileDialog_GetWildcard", (PyCFunction)_wrap_FileDialog_GetWildcard, METH_O, NULL},
-	 { (char *)"FileDialog_GetStyle", (PyCFunction)_wrap_FileDialog_GetStyle, METH_O, NULL},
 	 { (char *)"FileDialog_GetFilterIndex", (PyCFunction)_wrap_FileDialog_GetFilterIndex, METH_O, NULL},
 	 { (char *)"FileDialog_GetFilenames", (PyCFunction)_wrap_FileDialog_GetFilenames, METH_O, NULL},
 	 { (char *)"FileDialog_GetPaths", (PyCFunction)_wrap_FileDialog_GetPaths, METH_O, NULL},
@@ -33528,6 +33460,22 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char*)"FileSelectorDefaultWildcardStr",FileSelectorDefaultWildcardStr_get, FileSelectorDefaultWildcardStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"GetTextFromUserPromptStr",GetTextFromUserPromptStr_get, GetTextFromUserPromptStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"MessageBoxCaptionStr",MessageBoxCaptionStr_get, MessageBoxCaptionStr_set);
+  SWIG_Python_SetConstant(d, "DD_NEW_DIR_BUTTON",SWIG_From_int(static_cast< int >(wxDD_NEW_DIR_BUTTON)));
+  SWIG_Python_SetConstant(d, "DD_DEFAULT_STYLE",SWIG_From_int(static_cast< int >(wxDD_DEFAULT_STYLE)));
+  SWIG_Python_SetConstant(d, "DD_CHANGE_DIR",SWIG_From_int(static_cast< int >(wxDD_CHANGE_DIR)));
+  SWIG_Python_SetConstant(d, "OPEN",SWIG_From_int(static_cast< int >(wxOPEN)));
+  SWIG_Python_SetConstant(d, "SAVE",SWIG_From_int(static_cast< int >(wxSAVE)));
+  SWIG_Python_SetConstant(d, "OVERWRITE_PROMPT",SWIG_From_int(static_cast< int >(wxOVERWRITE_PROMPT)));
+  SWIG_Python_SetConstant(d, "FILE_MUST_EXIST",SWIG_From_int(static_cast< int >(wxFILE_MUST_EXIST)));
+  SWIG_Python_SetConstant(d, "MULTIPLE",SWIG_From_int(static_cast< int >(wxMULTIPLE)));
+  SWIG_Python_SetConstant(d, "CHANGE_DIR",SWIG_From_int(static_cast< int >(wxCHANGE_DIR)));
+  SWIG_Python_SetConstant(d, "FD_OPEN",SWIG_From_int(static_cast< int >(wxFD_OPEN)));
+  SWIG_Python_SetConstant(d, "FD_SAVE",SWIG_From_int(static_cast< int >(wxFD_SAVE)));
+  SWIG_Python_SetConstant(d, "FD_OVERWRITE_PROMPT",SWIG_From_int(static_cast< int >(wxFD_OVERWRITE_PROMPT)));
+  SWIG_Python_SetConstant(d, "FD_FILE_MUST_EXIST",SWIG_From_int(static_cast< int >(wxFD_FILE_MUST_EXIST)));
+  SWIG_Python_SetConstant(d, "FD_MULTIPLE",SWIG_From_int(static_cast< int >(wxFD_MULTIPLE)));
+  SWIG_Python_SetConstant(d, "FD_CHANGE_DIR",SWIG_From_int(static_cast< int >(wxFD_CHANGE_DIR)));
+  SWIG_Python_SetConstant(d, "FD_DEFAULT_STYLE",SWIG_From_int(static_cast< int >(wxFD_DEFAULT_STYLE)));
   SWIG_Python_SetConstant(d, "CHOICEDLG_STYLE",SWIG_From_int(static_cast< int >(wxCHOICEDLG_STYLE)));
   SWIG_Python_SetConstant(d, "TextEntryDialogStyle",SWIG_From_int(static_cast< int >(wxTextEntryDialogStyle)));
   SWIG_addvarlink(SWIG_globals(),(char*)"GetPasswordFromUserPromptStr",GetPasswordFromUserPromptStr_get, GetPasswordFromUserPromptStr_set);
