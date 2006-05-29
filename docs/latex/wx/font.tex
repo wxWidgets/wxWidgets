@@ -304,8 +304,8 @@ family identifiers.
 
 \constfunc{wxString}{GetNativeFontInfoDesc}{\void}
 
-Returns the platform-dependent string completely describing this font or an
-empty string if the font wasn't constructed using the native font description.
+Returns the platform-dependent string completely describing this font.
+Returned string is always non-empty.
 Note that the returned string is not meant to be shown or edited by the user: a typical
 use of this function is for serializing in string-form a wxFont object.
 
@@ -318,7 +318,8 @@ use of this function is for serializing in string-form a wxFont object.
 
 \func{wxString}{GetNativeFontInfoUserDesc}{\void}
 
-Returns a user-friendly string for this font object. Some examples of the formats of returned strings (which are platform-dependent) are in \helpref{SetNativeFontInfoUserDesc}{wxfontsetnativefontinfouserdesc}.
+Returns a user-friendly string for this font object. Returned string is always non-empty.
+Some examples of the formats of returned strings (which are platform-dependent) are in \helpref{SetNativeFontInfoUserDesc}{wxfontsetnativefontinfouserdesc}.
 
 \wxheading{See also}
 
@@ -417,9 +418,10 @@ Sets the default font encoding.
 
 \membersection{wxFont::SetFaceName}\label{wxfontsetfacename}
 
-\func{void}{SetFaceName}{\param{const wxString\& }{faceName}}
+\func{bool}{SetFaceName}{\param{const wxString\& }{faceName}}
 
 Sets the facename for the font.
+Returns \true if the given face name exists; \false otherwise.
 
 \wxheading{Parameters}
 
@@ -465,9 +467,10 @@ Sets the font family.
 
 \membersection{wxFont::SetNativeFontInfo}\label{wxfontsetnativefontinfo}
 
-\func{void}{SetNativeFontInfo}{\param{const wxString\& }{info}}
+\func{bool}{SetNativeFontInfo}{\param{const wxString\& }{info}}
 
-Creates the font corresponding to the given native font description string
+Creates the font corresponding to the given native font description string and returns \true if
+the creation was successful.
 which must have been previously returned by
 \helpref{GetNativeFontInfoDesc}{wxfontgetnativefontinfodesc}. If the string is
 invalid, font is unchanged. This function is typically used for de-serializing a wxFont
@@ -480,9 +483,10 @@ object previously saved in a string-form.
 
 \membersection{wxFont::SetNativeFontInfoUserDesc}\label{wxfontsetnativefontinfouserdesc}
 
-\func{void}{SetNativeFontInfoUserDesc}{\param{const wxString\& }{info}}
+\func{bool}{SetNativeFontInfoUserDesc}{\param{const wxString\& }{info}}
 
-Creates the font corresponding to the given native font description string.
+Creates the font corresponding to the given native font description string and returns \true if
+the creation was successful.
 Unlike \helpref{SetNativeFontInfo}{wxfontsetnativefontinfo}, this function accepts
 strings which are user-friendly.
 Examples of accepted string formats are:

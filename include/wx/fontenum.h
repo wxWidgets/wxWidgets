@@ -67,6 +67,10 @@ public:
     // convenience function that returns array of all available encodings.
     static wxArrayString GetEncodings(const wxString& facename = wxEmptyString);
 
+    // convenience function that returns true if the given face name exist
+    // in the user's system
+    static bool IsValidFacename(const wxString &str);
+
 private:
     DECLARE_NO_COPY_CLASS(wxFontEnumerator)
 };

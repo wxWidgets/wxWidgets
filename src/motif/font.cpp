@@ -393,12 +393,14 @@ void wxFont::SetWeight(int weight)
     M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
 }
 
-void wxFont::SetFaceName(const wxString& faceName)
+bool wxFont::SetFaceName(const wxString& faceName)
 {
     Unshare();
 
     M_FONTDATA->m_faceName = faceName;
     M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
+
+    return wxFontBase::SetFaceName(faceName);
 }
 
 void wxFont::SetUnderlined(bool underlined)

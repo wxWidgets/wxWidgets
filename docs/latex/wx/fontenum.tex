@@ -91,6 +91,14 @@ Return array of strings containing all facenames found by
 \helpref{EnumerateFacenames}{wxfontenumeratorenumeratefacenames}.
 
 
+\membersection{wxFontEnumerator::IsValidFacename}\label{wxfontenumeratorisvalidfacename}
+
+\func{static bool}{IsValidFacename}{\param{const wxString \&}{ facename}}
+
+Returns \true if the given string is valid face name, i.e. it's the face name of an installed
+font and it can safely be used with \helpref{wxFont::SetFaceName}{wxfontsetfacename}.
+
+
 \membersection{wxFontEnumerator::OnFacename}\label{wxfontenumeratoronfacename}
 
 \func{virtual bool}{OnFacename}{\param{const wxString\& }{font}}

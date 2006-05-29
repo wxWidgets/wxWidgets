@@ -251,7 +251,7 @@ public:
             m_weight = weight;
     }
 
-    void SetFaceName(const wxString& faceName)
+    bool SetFaceName(const wxString& faceName)
     {
         if ( m_nativeFontInfoOk )
             m_nativeFontInfo.SetFaceName(faceName);
@@ -444,8 +444,9 @@ void wxFont::SetWeight(int weight)
 {
 }
 
-void wxFont::SetFaceName(const wxString& faceName)
+bool wxFont::SetFaceName(const wxString& faceName)
 {
+    return true;
 }
 
 void wxFont::SetUnderlined(bool underlined)

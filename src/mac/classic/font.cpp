@@ -339,13 +339,15 @@ void wxFont::SetWeight(int weight)
     RealizeResource();
 }
 
-void wxFont::SetFaceName(const wxString& faceName)
+bool wxFont::SetFaceName(const wxString& faceName)
 {
     Unshare();
 
     M_FONTDATA->m_faceName = faceName;
 
     RealizeResource();
+
+    return wxFontBase::SetFaceName(faceName);
 }
 
 void wxFont::SetUnderlined(bool underlined)

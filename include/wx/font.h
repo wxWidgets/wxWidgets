@@ -106,7 +106,7 @@ enum
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxFontRefData;
-struct WXDLLEXPORT wxNativeFontInfo;
+class WXDLLEXPORT wxNativeFontInfo;
 
 class WXDLLEXPORT wxFontBase : public wxGDIObject
 {
@@ -186,14 +186,14 @@ public:
     virtual void SetFamily( int family ) = 0;
     virtual void SetStyle( int style ) = 0;
     virtual void SetWeight( int weight ) = 0;
-    virtual void SetFaceName( const wxString& faceName ) = 0;
     virtual void SetUnderlined( bool underlined ) = 0;
     virtual void SetEncoding(wxFontEncoding encoding) = 0;
+    virtual bool SetFaceName( const wxString& faceName );
     void SetNativeFontInfo(const wxNativeFontInfo& info)
         { DoSetNativeFontInfo(info); }
 
-    void SetNativeFontInfo(const wxString& info);
-    void SetNativeFontInfoUserDesc(const wxString& info);
+    bool SetNativeFontInfo(const wxString& info);
+    bool SetNativeFontInfoUserDesc(const wxString& info);
 
     // translate the fonts into human-readable string (i.e. GetStyleString()
     // will return "wxITALIC" for an italic font, ...)

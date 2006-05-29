@@ -88,7 +88,7 @@ public:
     void SetStyle(int style);
     void SetWeight(int weight);
     void SetUnderlined(bool underlined);
-    void SetFaceName(const wxString& facename);
+    bool SetFaceName(const wxString& facename);
     void SetEncoding(wxFontEncoding encoding);
 
     void SetNoAntiAliasing( bool no = true ) { m_noAA = no; }
@@ -321,11 +321,11 @@ void wxFontRefData::SetUnderlined(bool underlined)
     // the XLFD doesn't have "underlined" field anyhow
 }
 
-void wxFontRefData::SetFaceName(const wxString& facename)
+bool wxFontRefData::SetFaceName(const wxString& facename)
 {
     m_faceName = facename;
 
-    m_nativeFontInfo.SetFaceName(facename);
+    return m_nativeFontInfo.SetFaceName(facename);
 }
 
 void wxFontRefData::SetEncoding(wxFontEncoding encoding)
@@ -548,11 +548,12 @@ void wxFont::SetWeight(int weight)
     M_FONTDATA->SetWeight(weight);
 }
 
-void wxFont::SetFaceName(const wxString& faceName)
+bool wxFont::SetFaceName(const wxString& faceName)
 {
     Unshare();
 
-    M_FONTDATA->SetFaceName(faceName);
+    return M_FONTDATA->SetFaceName(faceName) &&
+           wxFontBase::SetFaceName(faceName);
 }
 
 void wxFont::SetUnderlined(bool underlined)

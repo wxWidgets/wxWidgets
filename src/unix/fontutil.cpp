@@ -37,6 +37,7 @@
 #include "wx/fontmap.h"
 #include "wx/tokenzr.h"
 #include "wx/module.h"
+#include "wx/fontenum.h"
 
 #if wxUSE_PANGO
 
@@ -260,9 +261,10 @@ void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
     wxFAIL_MSG( _T("not implemented") );
 }
 
-void wxNativeFontInfo::SetFaceName(const wxString& facename)
+bool wxNativeFontInfo::SetFaceName(const wxString& facename)
 {
     pango_font_description_set_family(description, wxGTK_CONV_SYS(facename));
+    return true;
 }
 
 void wxNativeFontInfo::SetFamily(wxFontFamily WXUNUSED(family))
@@ -308,6 +310,10 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     }
 
     description = pango_font_description_from_string( wxGTK_CONV_SYS( str ) );
+
+    // ensure a valid facename is selected
+    if (!wxFontEnumerator::IsValidFacename(GetFaceName()))
+        SetFaceName(wxNORMAL_FONT->GetFaceName());
 
     return true;
 }
@@ -776,9 +782,10 @@ void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
     // can't do this under X
 }
 
-void wxNativeFontInfo::SetFaceName(const wxString& facename)
+bool wxNativeFontInfo::SetFaceName(const wxString& facename)
 {
     SetXFontComponent(wxXLFD_FAMILY, facename);
+    return true;
 }
 
 void wxNativeFontInfo::SetFamily(wxFontFamily WXUNUSED(family))

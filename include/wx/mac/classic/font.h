@@ -66,7 +66,7 @@ public:
     virtual void SetFamily(int family);
     virtual void SetStyle(int style);
     virtual void SetWeight(int weight);
-    virtual void SetFaceName(const wxString& faceName);
+    virtual bool SetFaceName(const wxString& faceName);
     virtual void SetUnderlined(bool underlined);
     virtual void SetEncoding(wxFontEncoding encoding);
 

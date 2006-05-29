@@ -311,12 +311,14 @@ void wxFont::SetWeight(int weight)
     M_FONTDATA->m_valid = false;
 }
 
-void wxFont::SetFaceName(const wxString& faceName)
+bool wxFont::SetFaceName(const wxString& faceName)
 {
     AllocExclusive();
 
     M_FONTDATA->m_faceName = faceName;
     M_FONTDATA->m_valid = false;
+
+    return wxFontBase::SetFaceName(faceName);
 }
 
 void wxFont::SetUnderlined(bool underlined)

@@ -195,12 +195,13 @@ public:
             m_nWeight = nWeight;
     }
 
-    inline void SetFaceName(const wxString& sFaceName)
+    inline bool SetFaceName(const wxString& sFaceName)
     {
         if (m_bNativeFontInfoOk)
-            m_vNativeFontInfo.SetFaceName(sFaceName);
+            return m_vNativeFontInfo.SetFaceName(sFaceName);
         else
             m_sFaceName = sFaceName;
+        return true;
     }
 
     inline void SetUnderlined(bool bUnderlined)
@@ -689,11 +690,12 @@ void wxNativeFontInfo::SetUnderlined(
         fa.fsSelection |= FATTR_SEL_UNDERSCORE;
 } // end of wxNativeFontInfo::SetUnderlined
 
-void wxNativeFontInfo::SetFaceName(
+bool wxNativeFontInfo::SetFaceName(
   const wxString&                   sFacename
 )
 {
     wxStrncpy((wxChar*)fa.szFacename, sFacename, WXSIZEOF(fa.szFacename));
+    return true;
 } // end of wxNativeFontInfo::SetFaceName
 
 void wxNativeFontInfo::SetFamily(
@@ -1023,15 +1025,17 @@ void wxFont::SetWeight(
     RealizeResource();
 } // end of wxFont::SetWeight
 
-void wxFont::SetFaceName(
+bool wxFont::SetFaceName(
   const wxString&                   rsFaceName
 )
 {
     Unshare();
 
-    M_FONTDATA->SetFaceName(rsFaceName);
+    bool refdataok = M_FONTDATA->SetFaceName(rsFaceName);
 
     RealizeResource();
+
+    return refdataok && wxFontBase::SetFaceName(rsFaceName);
 } // end of wxFont::SetFaceName
 
 void wxFont::SetUnderlined(

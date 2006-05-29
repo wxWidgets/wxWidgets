@@ -112,6 +112,8 @@ public:
     void OnEnumerateEncodings(wxCommandEvent& event);
 
     void OnCheckNativeToFromString(wxCommandEvent& event);
+    void OnCheckNativeToFromUserString(wxCommandEvent& event);
+    void OnCheckFaceName(wxCommandEvent& event);
 
 protected:
     bool DoEnumerateFamilies(bool fixedWidthOnly,
@@ -159,6 +161,8 @@ enum
     Font_EnumFixedFamilies,
     Font_EnumEncodings,
     Font_CheckNativeToFromString,
+    Font_CheckNativeToFromUserString,
+    Font_CheckFaceName,
     Font_Max
 };
 
@@ -185,7 +189,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_wxITALIC_FONT, MyFrame::OnwxPointerFont)
     EVT_MENU(Font_wxSWISS_FONT, MyFrame::OnwxPointerFont)
 
+
     EVT_MENU(Font_CheckNativeToFromString, MyFrame::OnCheckNativeToFromString)
+    EVT_MENU(Font_CheckNativeToFromUserString, MyFrame::OnCheckNativeToFromUserString)
+    EVT_MENU(Font_CheckFaceName, MyFrame::OnCheckFaceName)
 
     EVT_MENU(Font_Choose, MyFrame::OnSelectFont)
     EVT_MENU(Font_EnumFamiliesForEncoding, MyFrame::OnEnumerateFamiliesForEncoding)
@@ -260,6 +267,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFont->AppendSeparator();
     menuFont->Append(Font_CheckNativeToFromString,
                      wxT("Check Native Font Info To/From String"));
+    menuFont->Append(Font_CheckNativeToFromUserString,
+                     wxT("Check Native Font Info User String"));
+    menuFont->Append(Font_CheckFaceName,
+                     wxT("Check font face name"));                     
 
     wxMenu *menuSelect = new wxMenu;
     menuSelect->Append(Font_Choose, wxT("&Select font...\tCtrl-S"),
@@ -488,6 +499,53 @@ void MyFrame::OnCheckNativeToFromString(wxCommandEvent& WXUNUSED(event))
      }
 }
 
+void MyFrame::OnCheckFaceName(wxCommandEvent& WXUNUSED(event))
+{
+    wxString facename = GetCanvas()->GetTextFont().GetFaceName();
+    wxString newFaceName = wxGetTextFromUser(
+            wxT("Here you can edit current font face name."),
+            wxT("Input font facename"), facename,
+            this);
+    if (newFaceName.IsEmpty())
+        return;     // user clicked "Cancel" - do nothing
+
+    wxFont font(GetCanvas()->GetTextFont());
+    if (font.SetFaceName(newFaceName))      // change facename only
+    {
+        wxASSERT_MSG(font.Ok(), wxT("The font should now be valid"));
+        DoChangeFont(font);
+    }
+    else
+    {
+        wxASSERT_MSG(!font.Ok(), wxT("The font should now be invalid"));
+        wxMessageBox(wxT("There is no font with such face name..."),
+                     wxT("Invalid face name"), wxOK|wxICON_ERROR, this);
+    }    
+}
+
+void MyFrame::OnCheckNativeToFromUserString(wxCommandEvent& WXUNUSED(event))
+{
+    wxString fontdesc = GetCanvas()->GetTextFont().GetNativeFontInfoUserDesc();
+    wxString fontUserInfo = wxGetTextFromUser(
+            wxT("Here you can edit current font description"),
+            wxT("Input font description"), fontdesc,
+            this);
+    if (fontUserInfo.IsEmpty())
+        return;     // user clicked "Cancel" - do nothing
+
+    wxFont font;
+    if (font.SetNativeFontInfoUserDesc(fontUserInfo))
+    {
+        wxASSERT_MSG(font.Ok(), wxT("The font should now be valid"));
+        DoChangeFont(font);
+    }
+    else
+    {
+        wxASSERT_MSG(!font.Ok(), wxT("The font should now be invalid"));
+        wxMessageBox(wxT("Error trying to create a font with such description..."));
+    }
+}
+
 void MyFrame::DoResizeFont(int diff)
 {
     wxFont font = m_canvas->GetTextFont();
@@ -533,10 +591,6 @@ void MyFrame::OnwxPointerFont(wxCommandEvent& event)
         default                 : font = wxFont(*wxNORMAL_FONT); break;
     }
 
-    GetMenuBar()->Check(Font_Bold, false);
-    GetMenuBar()->Check(Font_Italic, false);
-    GetMenuBar()->Check(Font_Underlined, false);
-
     DoChangeFont(font);
 }
 
@@ -550,6 +604,15 @@ void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
     m_textctrl->SetFont(font);
     if ( col.Ok() )
         m_textctrl->SetForegroundColour(col);
+
+    // update the state of the bold/italic/underlined menu items
+    wxMenuBar *mbar = GetMenuBar();
+    if ( mbar )
+    {
+        mbar->Check(Font_Bold, font.GetWeight() == wxFONTWEIGHT_BOLD);
+        mbar->Check(Font_Italic, font.GetStyle() == wxFONTSTYLE_ITALIC);
+        mbar->Check(Font_Underlined, font.GetUnderlined());
+    }
 }
 
 void MyFrame::OnSelectFont(wxCommandEvent& WXUNUSED(event))
@@ -566,15 +629,6 @@ void MyFrame::OnSelectFont(wxCommandEvent& WXUNUSED(event))
         wxColour colour = retData.GetColour();
 
         DoChangeFont(font, colour);
-
-        // update the state of the bold/italic/underlined menu items
-        wxMenuBar *mbar = GetMenuBar();
-        if ( mbar )
-        {
-            mbar->Check(Font_Bold, font.GetWeight() == wxFONTWEIGHT_BOLD);
-            mbar->Check(Font_Italic, font.GetStyle() == wxFONTSTYLE_ITALIC);
-            mbar->Check(Font_Underlined, font.GetUnderlined());
-        }
     }
 }
 

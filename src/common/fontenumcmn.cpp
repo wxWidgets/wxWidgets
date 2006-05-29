@@ -72,3 +72,31 @@ wxArrayString wxFontEnumerator::GetEncodings(const wxString& facename)
     temp.EnumerateEncodings(facename);
     return temp.m_arrEncodings;
 }
+
+/* static */
+bool wxFontEnumerator::IsValidFacename(const wxString &facename)
+{
+    // we cache the result of wxFontEnumerator::GetFacenames supposing that
+    // the array of face names won't change in the session of this program
+    static wxArrayString s_arr = wxFontEnumerator::GetFacenames();
+
+#ifdef __WXMSW__
+    // Quoting the MSDN:
+    //     "MS Shell Dlg is a mapping mechanism that enables 
+    //     U.S. English Microsoft Windows NT, and Microsoft Windows 2000 to 
+    //     support locales that have characters that are not contained in code 
+    //     page 1252. It is not a font but a face name for a nonexistent font."
+    // Thus we need to consider "Ms Shell Dlg" and "Ms Shell Dlg 2" as valid
+    // font face names even if they are enumerated by wxFontEnumerator
+    if (facename.IsSameAs(wxT("Ms Shell Dlg"), false) ||
+        facename.IsSameAs(wxT("Ms Shell Dlg 2"), false))
+        return true;
+#endif
+
+    // is given font face name a valid one ?
+    if (s_arr.Index(facename, false) == wxNOT_FOUND)
+        return false;
+
+    return true;
+}
+
