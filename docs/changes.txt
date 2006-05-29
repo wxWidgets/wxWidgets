@@ -200,6 +200,7 @@ wxMSW:
   if its size is set within a paint handler (for example when embedded in a
   wxHtmlWindow). [Now reverted due to problems in W2K and below.]
 - wxDC::GetTextExtent() width calculation is more precise for italics fonts now
+- Warning fixes for VC++ 5.0 (Igor Korot)
 
 wxGTK:
 
