@@ -1023,7 +1023,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/widgets/Makefile.in $(DISTDIR)/samples/widgets
 	$(CP_P) $(SAMPDIR)/widgets/*.cpp $(DISTDIR)/samples/widgets
 	$(CP_P) $(SAMPDIR)/widgets/*.h $(DISTDIR)/samples/widgets
-	$(CP_P) $(SAMPDIR)/widgets/*.rc $(DISTDIR)/samples/widgets
 	$(CP_P) $(SAMPDIR)/widgets/icons/*.xpm $(DISTDIR)/samples/widgets/icons
 
 	mkdir $(DISTDIR)/samples/xrc
