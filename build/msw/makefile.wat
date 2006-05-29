@@ -150,6 +150,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_gdctl.obj &
 	$(OBJS)\monodll_xh_grid.obj &
 	$(OBJS)\monodll_xh_html.obj &
+	$(OBJS)\monodll_xh_hyperlink.obj &
 	$(OBJS)\monodll_xh_listb.obj &
 	$(OBJS)\monodll_xh_listbk.obj &
 	$(OBJS)\monodll_xh_listc.obj &
@@ -604,6 +605,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_gridctrl.obj &
 	$(OBJS)\monodll_gridsel.obj &
 	$(OBJS)\monodll_helpext.obj &
+	$(OBJS)\monodll_hyperlink.obj &
 	$(OBJS)\monodll_laywin.obj &
 	$(OBJS)\monodll_odcombo.obj &
 	$(OBJS)\monodll_propdlg.obj &
@@ -632,6 +634,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_gridctrl.obj &
 	$(OBJS)\monodll_gridsel.obj &
 	$(OBJS)\monodll_helpext.obj &
+	$(OBJS)\monodll_hyperlink.obj &
 	$(OBJS)\monodll_laywin.obj &
 	$(OBJS)\monodll_odcombo.obj &
 	$(OBJS)\monodll_propdlg.obj &
@@ -711,6 +714,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_gdctl.obj &
 	$(OBJS)\monolib_xh_grid.obj &
 	$(OBJS)\monolib_xh_html.obj &
+	$(OBJS)\monolib_xh_hyperlink.obj &
 	$(OBJS)\monolib_xh_listb.obj &
 	$(OBJS)\monolib_xh_listbk.obj &
 	$(OBJS)\monolib_xh_listc.obj &
@@ -1165,6 +1169,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_gridctrl.obj &
 	$(OBJS)\monolib_gridsel.obj &
 	$(OBJS)\monolib_helpext.obj &
+	$(OBJS)\monolib_hyperlink.obj &
 	$(OBJS)\monolib_laywin.obj &
 	$(OBJS)\monolib_odcombo.obj &
 	$(OBJS)\monolib_propdlg.obj &
@@ -1193,6 +1198,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_gridctrl.obj &
 	$(OBJS)\monolib_gridsel.obj &
 	$(OBJS)\monolib_helpext.obj &
+	$(OBJS)\monolib_hyperlink.obj &
 	$(OBJS)\monolib_laywin.obj &
 	$(OBJS)\monolib_odcombo.obj &
 	$(OBJS)\monolib_propdlg.obj &
@@ -2104,6 +2110,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_gridctrl.obj &
 	$(OBJS)\advdll_gridsel.obj &
 	$(OBJS)\advdll_helpext.obj &
+	$(OBJS)\advdll_hyperlink.obj &
 	$(OBJS)\advdll_laywin.obj &
 	$(OBJS)\advdll_odcombo.obj &
 	$(OBJS)\advdll_propdlg.obj &
@@ -2132,6 +2139,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_gridctrl.obj &
 	$(OBJS)\advdll_gridsel.obj &
 	$(OBJS)\advdll_helpext.obj &
+	$(OBJS)\advdll_hyperlink.obj &
 	$(OBJS)\advdll_laywin.obj &
 	$(OBJS)\advdll_odcombo.obj &
 	$(OBJS)\advdll_propdlg.obj &
@@ -2169,6 +2177,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_gridctrl.obj &
 	$(OBJS)\advlib_gridsel.obj &
 	$(OBJS)\advlib_helpext.obj &
+	$(OBJS)\advlib_hyperlink.obj &
 	$(OBJS)\advlib_laywin.obj &
 	$(OBJS)\advlib_odcombo.obj &
 	$(OBJS)\advlib_propdlg.obj &
@@ -2197,6 +2206,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_gridctrl.obj &
 	$(OBJS)\advlib_gridsel.obj &
 	$(OBJS)\advlib_helpext.obj &
+	$(OBJS)\advlib_hyperlink.obj &
 	$(OBJS)\advlib_laywin.obj &
 	$(OBJS)\advlib_odcombo.obj &
 	$(OBJS)\advlib_propdlg.obj &
@@ -3399,6 +3409,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_gdctl.obj &
 	$(OBJS)\xrcdll_xh_grid.obj &
 	$(OBJS)\xrcdll_xh_html.obj &
+	$(OBJS)\xrcdll_xh_hyperlink.obj &
 	$(OBJS)\xrcdll_xh_listb.obj &
 	$(OBJS)\xrcdll_xh_listbk.obj &
 	$(OBJS)\xrcdll_xh_listc.obj &
@@ -3454,6 +3465,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_gdctl.obj &
 	$(OBJS)\xrclib_xh_grid.obj &
 	$(OBJS)\xrclib_xh_html.obj &
+	$(OBJS)\xrclib_xh_hyperlink.obj &
 	$(OBJS)\xrclib_xh_listb.obj &
 	$(OBJS)\xrclib_xh_listbk.obj &
 	$(OBJS)\xrclib_xh_listc.obj &
@@ -4977,6 +4989,9 @@ $(OBJS)\monodll_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
 $(OBJS)\monodll_xh_html.obj :  .AUTODEPEND ..\..\src\xrc\xh_html.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_xh_hyperlink.obj :  .AUTODEPEND ..\..\src\xrc\xh_hyperlink.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_xh_listb.obj :  .AUTODEPEND ..\..\src\xrc\xh_listb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -6237,6 +6252,11 @@ $(OBJS)\monodll_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_hyperlink.obj :  .AUTODEPEND ..\..\src\generic\hyperlink.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_laywin.obj :  .AUTODEPEND ..\..\src\generic\laywin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -6881,6 +6901,9 @@ $(OBJS)\monolib_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_html.obj :  .AUTODEPEND ..\..\src\xrc\xh_html.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_hyperlink.obj :  .AUTODEPEND ..\..\src\xrc\xh_hyperlink.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_listb.obj :  .AUTODEPEND ..\..\src\xrc\xh_listb.cpp
@@ -8139,6 +8162,11 @@ $(OBJS)\monolib_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_hyperlink.obj :  .AUTODEPEND ..\..\src\generic\hyperlink.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -11404,6 +11432,9 @@ $(OBJS)\advdll_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp
 $(OBJS)\advdll_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_hyperlink.obj :  .AUTODEPEND ..\..\src\generic\hyperlink.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_laywin.obj :  .AUTODEPEND ..\..\src\generic\laywin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -11480,6 +11511,9 @@ $(OBJS)\advlib_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_hyperlink.obj :  .AUTODEPEND ..\..\src\generic\hyperlink.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_laywin.obj :  .AUTODEPEND ..\..\src\generic\laywin.cpp
@@ -11851,6 +11885,9 @@ $(OBJS)\xrcdll_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
 $(OBJS)\xrcdll_xh_html.obj :  .AUTODEPEND ..\..\src\xrc\xh_html.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xh_hyperlink.obj :  .AUTODEPEND ..\..\src\xrc\xh_hyperlink.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xh_listb.obj :  .AUTODEPEND ..\..\src\xrc\xh_listb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -11987,6 +12024,9 @@ $(OBJS)\xrclib_xh_grid.obj :  .AUTODEPEND ..\..\src\xrc\xh_grid.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_html.obj :  .AUTODEPEND ..\..\src\xrc\xh_html.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_hyperlink.obj :  .AUTODEPEND ..\..\src\xrc\xh_hyperlink.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_listb.obj :  .AUTODEPEND ..\..\src\xrc\xh_listb.cpp

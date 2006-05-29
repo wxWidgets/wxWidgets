@@ -1269,6 +1269,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_gdctl.o \
 	xrcdll_xh_grid.o \
 	xrcdll_xh_html.o \
+	xrcdll_xh_hyperlink.o \
 	xrcdll_xh_listb.o \
 	xrcdll_xh_listbk.o \
 	xrcdll_xh_listc.o \
@@ -1320,6 +1321,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_gdctl.o \
 	xrclib_xh_grid.o \
 	xrclib_xh_html.o \
+	xrclib_xh_hyperlink.o \
 	xrclib_xh_listb.o \
 	xrclib_xh_listbk.o \
 	xrclib_xh_listc.o \
@@ -2497,6 +2499,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/generic/splash.h \
 	wx/generic/wizard.h \
 	wx/grid.h \
+	wx/hyperlink.h \
 	wx/joystick.h \
 	wx/laywin.h \
 	wx/odcombo.h \
@@ -2535,6 +2538,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/generic/splash.h \
 	wx/generic/wizard.h \
 	wx/grid.h \
+	wx/hyperlink.h \
 	wx/joystick.h \
 	wx/laywin.h \
 	wx/odcombo.h \
@@ -2830,6 +2834,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_gdctl.h \
 	wx/xrc/xh_grid.h \
 	wx/xrc/xh_html.h \
+	wx/xrc/xh_hyperlink.h \
 	wx/xrc/xh_listb.h \
 	wx/xrc/xh_listbk.h \
 	wx/xrc/xh_listc.h \
@@ -3112,6 +3117,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_gdctl.o \
 	monodll_xh_grid.o \
 	monodll_xh_html.o \
+	monodll_xh_hyperlink.o \
 	monodll_xh_listb.o \
 	monodll_xh_listbk.o \
 	monodll_xh_listc.o \
@@ -4472,6 +4478,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_gridctrl.o \
 	monodll_gridsel.o \
 	monodll_helpext.o \
+	monodll_hyperlink.o \
 	monodll_laywin.o \
 	monodll_odcombo.o \
 	monodll_propdlg.o \
@@ -4496,6 +4503,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_gridctrl.o \
 	monodll_gridsel.o \
 	monodll_helpext.o \
+	monodll_hyperlink.o \
 	monodll_laywin.o \
 	monodll_odcombo.o \
 	monodll_propdlg.o \
@@ -4750,6 +4758,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_gdctl.o \
 	monolib_xh_grid.o \
 	monolib_xh_html.o \
+	monolib_xh_hyperlink.o \
 	monolib_xh_listb.o \
 	monolib_xh_listbk.o \
 	monolib_xh_listc.o \
@@ -6112,6 +6121,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_gridctrl.o \
 	monolib_gridsel.o \
 	monolib_helpext.o \
+	monolib_hyperlink.o \
 	monolib_laywin.o \
 	monolib_odcombo.o \
 	monolib_propdlg.o \
@@ -6136,6 +6146,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_gridctrl.o \
 	monolib_gridsel.o \
 	monolib_helpext.o \
+	monolib_hyperlink.o \
 	monolib_laywin.o \
 	monolib_odcombo.o \
 	monolib_propdlg.o \
@@ -9374,6 +9385,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_gridctrl.o \
 	advdll_gridsel.o \
 	advdll_helpext.o \
+	advdll_hyperlink.o \
 	advdll_laywin.o \
 	advdll_odcombo.o \
 	advdll_propdlg.o \
@@ -9398,6 +9410,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_gridctrl.o \
 	advdll_gridsel.o \
 	advdll_helpext.o \
+	advdll_hyperlink.o \
 	advdll_laywin.o \
 	advdll_odcombo.o \
 	advdll_propdlg.o \
@@ -9437,6 +9450,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_gridctrl.o \
 	advlib_gridsel.o \
 	advlib_helpext.o \
+	advlib_hyperlink.o \
 	advlib_laywin.o \
 	advlib_odcombo.o \
 	advlib_propdlg.o \
@@ -9461,6 +9475,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_gridctrl.o \
 	advlib_gridsel.o \
 	advlib_helpext.o \
+	advlib_hyperlink.o \
 	advlib_laywin.o \
 	advlib_odcombo.o \
 	advlib_propdlg.o \
@@ -11798,6 +11813,9 @@ monodll_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(MONODLL_ODEP)
 
 monodll_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_html.cpp
+
+monodll_xh_hyperlink.o: $(srcdir)/src/xrc/xh_hyperlink.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_hyperlink.cpp
 
 monodll_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_listb.cpp
@@ -14865,6 +14883,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_helpext.o: $(srcdir)/src/generic/helpext.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/helpext.cpp
 
+@COND_USE_GUI_1@monodll_hyperlink.o: $(srcdir)/src/generic/hyperlink.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/hyperlink.cpp
+
 @COND_USE_GUI_1@monodll_laywin.o: $(srcdir)/src/generic/laywin.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
 
@@ -15617,6 +15638,9 @@ monolib_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(MONOLIB_ODEP)
 
 monolib_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_html.cpp
+
+monolib_xh_hyperlink.o: $(srcdir)/src/xrc/xh_hyperlink.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_hyperlink.cpp
 
 monolib_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_listb.cpp
@@ -18683,6 +18707,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_helpext.o: $(srcdir)/src/generic/helpext.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/helpext.cpp
+
+@COND_USE_GUI_1@monolib_hyperlink.o: $(srcdir)/src/generic/hyperlink.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/hyperlink.cpp
 
 @COND_USE_GUI_1@monolib_laywin.o: $(srcdir)/src/generic/laywin.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
@@ -25695,6 +25722,9 @@ advdll_gridsel.o: $(srcdir)/src/generic/gridsel.cpp $(ADVDLL_ODEP)
 advdll_helpext.o: $(srcdir)/src/generic/helpext.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/helpext.cpp
 
+advdll_hyperlink.o: $(srcdir)/src/generic/hyperlink.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/hyperlink.cpp
+
 advdll_laywin.o: $(srcdir)/src/generic/laywin.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
 
@@ -25871,6 +25901,9 @@ advlib_gridsel.o: $(srcdir)/src/generic/gridsel.cpp $(ADVLIB_ODEP)
 
 advlib_helpext.o: $(srcdir)/src/generic/helpext.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/helpext.cpp
+
+advlib_hyperlink.o: $(srcdir)/src/generic/hyperlink.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/hyperlink.cpp
 
 advlib_laywin.o: $(srcdir)/src/generic/laywin.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
@@ -26364,6 +26397,9 @@ xrcdll_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(XRCDLL_ODEP)
 xrcdll_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_html.cpp
 
+xrcdll_xh_hyperlink.o: $(srcdir)/src/xrc/xh_hyperlink.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_hyperlink.cpp
+
 xrcdll_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_listb.cpp
 
@@ -26498,6 +26534,9 @@ xrclib_xh_grid.o: $(srcdir)/src/xrc/xh_grid.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_html.cpp
+
+xrclib_xh_hyperlink.o: $(srcdir)/src/xrc/xh_hyperlink.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_hyperlink.cpp
 
 xrclib_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_listb.cpp
@@ -27669,7 +27708,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/widgets/Makefile.in $(DISTDIR)/samples/widgets
 	$(CP_P) $(SAMPDIR)/widgets/*.cpp $(DISTDIR)/samples/widgets
 	$(CP_P) $(SAMPDIR)/widgets/*.h $(DISTDIR)/samples/widgets
-	$(CP_P) $(SAMPDIR)/widgets/*.rc $(DISTDIR)/samples/widgets
 	$(CP_P) $(SAMPDIR)/widgets/icons/*.xpm $(DISTDIR)/samples/widgets/icons
 
 	mkdir $(DISTDIR)/samples/xrc

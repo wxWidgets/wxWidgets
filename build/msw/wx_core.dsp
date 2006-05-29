@@ -8805,6 +8805,10 @@ SOURCE=..\..\include\wx\htmllbox.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\hyperlink.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\icon.h
 # End Source File
 # Begin Source File
@@ -9266,6 +9270,10 @@ SOURCE=..\..\include\wx\xrc\xh_grid.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\xrc\xh_html.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_hyperlink.h
 # End Source File
 # Begin Source File
 

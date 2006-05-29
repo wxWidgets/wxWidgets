@@ -640,6 +640,10 @@ SOURCE=..\..\src\generic\helpext.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\hyperlink.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\laywin.cpp
 # End Source File
 # Begin Source File
@@ -1190,6 +1194,10 @@ SOURCE=..\..\include\wx\dcbuffer.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\grid.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\hyperlink.h
 # End Source File
 # Begin Source File
 
