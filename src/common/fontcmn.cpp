@@ -30,6 +30,7 @@
     #include "wx/dc.h"
     #include "wx/intl.h"
     #include "wx/dcscreen.h"
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #include "wx/gdicmn.h"
