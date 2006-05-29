@@ -1,5 +1,5 @@
-wxWidgets 2.6.3 for MGL installation
-------------------------------------
+wxWidgets for MGL installation
+------------------------------
 
 IMPORTANT NOTE:
 
@@ -170,16 +170,16 @@ configure, you only have to specify the target:
 > ./configure --with-mgl --build=i586-linux --host=i586-pc-msdosdjgpp
 > make
 
-For this to work, you must have installed a cross compiler on your system. Ready
-made binaries are not available for very many systems, so usually this means you
-must obtain the djgpp sources and compile them yourself.
+For this to work, you must have installed a cross compiler on your system.
 
-NetBSD does have a binary package which can be installed with:
+Linux rpms are available here:
+    http://ap1.pp.fi/djgpp/gcc/cross-compiler/index.html
+
+NetBSD has a binary package which can be installed with:
     # pkg_add cross-i386-msdosdjgpp
 
-You can also try asking on the wx-dev mailing list. If someone else has already
-built a cross-compiler for you platform they may be willing to send you the
-binaries.
+For other systems you will need to obtain the djgpp sources and compile them
+yourself.
 
 
 * Building wxMGL for MS-DOS using Watcom C/C++
