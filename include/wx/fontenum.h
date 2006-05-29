@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fontenum.h
+// Name:        wx/fontenum.h
 // Purpose:     wxFontEnumerator class for getting available fonts
 // Author:      Julian Smart, Vadim Zeitlin
 // Modified by: extended to enumerate more than just font facenames and works

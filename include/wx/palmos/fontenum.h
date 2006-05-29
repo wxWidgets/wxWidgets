@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FONTENUM_H_
-#define _WX_FONTENUM_H_
+#ifndef _WX_FONTENUM_PALM_H_
+#define _WX_FONTENUM_PALM_H_
 
 /*
  * wxFontEnumerator: for gathering font information
@@ -37,5 +37,4 @@ protected:
 };
 
 #endif
-  // _WX_FONTENUM_H_
-
+  // _WX_FONTENUM_PALM_H_
