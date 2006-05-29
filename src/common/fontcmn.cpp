@@ -36,8 +36,8 @@
 #include "wx/gdicmn.h"
 
 #if defined(__WXMSW__)
-  #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
-  #include  "wx/msw/winundef.h"
+    #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
+    #include  "wx/msw/winundef.h"
 #endif
 
 #include "wx/fontutil.h" // for wxNativeFontInfo
@@ -272,7 +272,7 @@ wxString wxFontBase::GetNativeFontInfoDesc() const
     }
     else
     {
-        wxASSERT_MSG(0, wxT("Derived class should have created the wxNativeFontInfo!"));
+        wxFAIL_MSG(wxT("Derived class should have created the wxNativeFontInfo!"));
     }
 
     return fontDesc;
