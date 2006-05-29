@@ -119,14 +119,17 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
            delete ent;
        }
        if (found)
+       {
            return new wxFSFile(s,
                             left + wxT("#zip:") + right,
                             GetMimeTypeFromExt(location),
                             GetAnchor(location)
 #if wxUSE_DATETIME
-                            , wxDateTime(wxFileModificationTime(left))
+                            , wxFileSystem::URLToFileName(left).
+                                GetModificationTime()
 #endif // wxUSE_DATETIME
                             );
+       }
     }
 
     delete s;
