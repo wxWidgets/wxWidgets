@@ -244,6 +244,7 @@ GUI_CMN_SRC = \
 ../../src/common/fddlgcmn.cpp \
 ../../src/common/fldlgcmn.cpp \
 ../../src/common/fontcmn.cpp \
+../../src/common/fontenumcmn.cpp \
 ../../src/common/fontmap.cpp \
 ../../src/common/framecmn.cpp \
 ../../src/common/gaugecmn.cpp \
