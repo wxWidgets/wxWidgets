@@ -565,7 +565,8 @@ public:
                                    const wxPoint& pos,
                                    const wxMouseEvent& event);
     
-    bool AdjustPagebreak(int* INOUT);
+// TODO:     bool AdjustPagebreak(int* INOUT,
+//                                 wxArrayInt& known_pagebreaks);
     void SetCanLiveOnPagebreak(bool can);
 
     // Can the line be broken before this cell?
