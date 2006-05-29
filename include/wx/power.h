@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/include/wx/power.h
+// Name:        wx/power.h
 // Purpose:     functions and classes for system power management
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -105,4 +105,3 @@ WXDLLIMPEXP_BASE wxPowerType wxGetPowerType();
 WXDLLIMPEXP_BASE wxBatteryState wxGetBatteryState();
 
 #endif // _WX_POWER_H_
-
