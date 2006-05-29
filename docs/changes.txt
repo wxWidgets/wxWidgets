@@ -225,6 +225,7 @@ wxGTK:
 - Implemented ScrollLines/Pages() for all windows (Paul Cornett).
 - Support underlined fonts in wxTextCtrl.
 - Support all border styles; wxListBox honours the borders now
+- wxWindow and wxScrolledWindow now generate line, page and thumb-release scroll events.
 
 wxMac:
 
