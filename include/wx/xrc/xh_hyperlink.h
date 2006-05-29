@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_hyperlink.h
+// Name:        wx/xrc/xh_hyperlink.h
 // Purpose:     Hyperlink control (wxAdv)
 // Author:      David Norris <danorris@gmail.com>
 // Modified by: Ryan Norton, Francesco Montorsi
@@ -41,4 +41,3 @@ public:
 
 #endif // wxUSE_HYPERLINKCTRL
 #endif // _WX_XH_HYPERLINKH__
-

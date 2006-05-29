@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        hyperlink.cpp
+// Name:        src/xrc/hyperlink.cpp
 // Purpose:     Hyperlink control
 // Author:      David Norris <danorris@gmail.com>
 // Modified by: Ryan Norton, Francesco Montorsi
@@ -28,16 +28,19 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_XRC && wxUSE_HYPERLINKCTRL
+
 //---------------------------------------------------------------------------
 // Includes
 //---------------------------------------------------------------------------
 
-#include "wx/hyperlink.h"
-#include "wx/utils.h" // wxLaunchDefaultBrowser
-#include "wx/xrc/xmlres.h"
 #include "wx/xrc/xh_hyperlink.h"
 
-#if wxUSE_HYPERLINKCTRL
+#ifndef WX_PRECOMP
+#endif
+
+#include "wx/hyperlink.h"
+#include "wx/xrc/xmlres.h"
 
 //===========================================================================
 // Implementation
@@ -72,4 +75,4 @@ bool wxHyperlinkCtrlXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxHyperlinkCtrl"));
 }
 
-#endif // wxUSE_HYPERLINKCTRL
+#endif // wxUSE_XRC && wxUSE_HYPERLINKCTRL

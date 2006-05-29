@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xmlrsall.cpp
+// Name:        src/xrc/xmlrsall.cpp
 // Purpose:     wxXmlResource::InitAllHandlers
 // Author:      Vaclav Slavik
 // Created:     2000/03/05

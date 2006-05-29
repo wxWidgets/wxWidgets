@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_all.h
+// Name:        wx/xrc/xh_all.h
 // Purpose:     includes all xh_*.h files
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
