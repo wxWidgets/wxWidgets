@@ -34,6 +34,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h" // for wxLaunchDefaultBrowser
+    #include "wx/dcclient.h"
+    #include "wx/menu.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/clipbrd.h"
