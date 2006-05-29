@@ -64,6 +64,7 @@ extern WXDLLEXPORT_DATA(const wxChar) wxToolBarNameStr[] = wxT("toolbar");
 // Default messages
 extern WXDLLEXPORT_DATA(const wxChar) wxMessageBoxCaptionStr[] = wxT("Message");
 extern WXDLLEXPORT_DATA(const wxChar) wxFileSelectorPromptStr[] = wxT("Select a file");
+extern WXDLLEXPORT_DATA(const wxChar) wxDirSelectorPromptStr[] = wxT("Select a directory");
 
 // Other default strings
 extern WXDLLEXPORT_DATA(const wxChar) wxFileSelectorDefaultWildcardStr[] =
