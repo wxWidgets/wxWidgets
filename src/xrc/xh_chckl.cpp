@@ -22,9 +22,8 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/checklst.h"
 #endif
-
-#include "wx/checklst.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBoxXmlHandler, wxXmlResourceHandler)
 

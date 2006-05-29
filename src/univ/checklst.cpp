@@ -25,11 +25,11 @@
 
 #if wxUSE_CHECKLISTBOX
 
+#include "wx/checklst.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
-
     #include "wx/dcclient.h"
-    #include "wx/checklst.h"
     #include "wx/validate.h"
 #endif
 

@@ -21,10 +21,12 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
-#if wxUSE_OWNER_DRAWN
+#if wxUSE_CHECKLISTBOX && wxUSE_OWNER_DRAWN
+
+#include "wx/checklst.h"
 
 #ifndef WX_PRECOMP
     #include "wx/object.h"
@@ -41,7 +43,6 @@
 #endif
 
 #include "wx/ownerdrw.h"
-#include "wx/checklst.h"
 
 #include "wx/palmos/wrapwin.h"
 
@@ -283,4 +284,4 @@ int wxCheckListBox::DoHitTestItem(wxCoord x, wxCoord y) const
     return wxNOT_FOUND;
 }
 
-#endif
+#endif // wxUSE_CHECKLISTBOX && wxUSE_OWNER_DRAWN

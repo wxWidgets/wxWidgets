@@ -13,10 +13,11 @@
 
 #if wxUSE_CHECKLISTBOX
 
+#include "wx/checklst.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
-    #include "wx/checklst.h"
 #endif //WX_PRECOMP
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)

@@ -19,10 +19,10 @@
     #include "wx/intl.h"
     #include "wx/utils.h"
     #include "wx/settings.h"
+    #include "wx/checklst.h"
 #endif
 
 #include "wx/arrstr.h"
-#include "wx/checklst.h"
 #include "wx/gtk1/private.h"
 
 #if wxUSE_TOOLTIPS
@@ -976,7 +976,7 @@ int wxListBox::FindString( const wxString &item, bool bCase ) const
 
 int wxListBox::GetSelection() const
 {
-    wxCHECK_MSG( m_list != NULL, -1, wxT("invalid listbox") );
+    wxCHECK_MSG( m_list != NULL, wxNOT_FOUND, wxT("invalid listbox") );
 
     GList *child = m_list->children;
     int count = 0;
@@ -986,12 +986,12 @@ int wxListBox::GetSelection() const
         count++;
         child = child->next;
     }
-    return -1;
+    return wxNOT_FOUND;
 }
 
 int wxListBox::GetSelections( wxArrayInt& aSelections ) const
 {
-    wxCHECK_MSG( m_list != NULL, -1, wxT("invalid listbox") );
+    wxCHECK_MSG( m_list != NULL, wxNOT_FOUND, wxT("invalid listbox") );
 
     // get the number of selected items first
     GList *child = m_list->children;

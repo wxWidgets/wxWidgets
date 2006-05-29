@@ -21,15 +21,15 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_CHECKLISTBOX
 
+#include "wx/checklst.h"
+
 #ifndef WX_PRECOMP
 #endif
-
-#include "wx/checklst.h"
 
 // include <commctrl.h> "properly"
 #include "wx/msw/wrapcctl.h"

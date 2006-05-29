@@ -34,15 +34,13 @@
     #include "wx/button.h"
     #include "wx/listbox.h"
     #include "wx/slider.h"
+    #include "wx/checklst.h"
 #endif
 
 #include "wx/spinctrl.h"
 
 #if wxUSE_SPINBTN
     #include "wx/spinbutt.h"
-#endif
-#if wxUSE_CHECKLISTBOX
-    #include "wx/checklst.h"
 #endif
 #if wxUSE_TOGGLEBTN
     #include "wx/tglbtn.h"

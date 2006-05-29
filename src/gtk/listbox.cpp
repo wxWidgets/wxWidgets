@@ -21,10 +21,10 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/settings.h"
+    #include "wx/checklst.h"
 #endif
 
 #include "wx/arrstr.h"
-#include "wx/checklst.h"
 #include "wx/gtk/private.h"
 #include "wx/gtk/treeentry_gtk.h"
 
@@ -880,8 +880,8 @@ int wxListBox::FindString( const wxString &item, bool bCase ) const
 
 int wxListBox::GetSelection() const
 {
-    wxCHECK_MSG( m_treeview != NULL, -1, wxT("invalid listbox"));
-    wxCHECK_MSG( HasFlag(wxLB_SINGLE), -1,
+    wxCHECK_MSG( m_treeview != NULL, wxNOT_FOUND, wxT("invalid listbox"));
+    wxCHECK_MSG( HasFlag(wxLB_SINGLE), wxNOT_FOUND,
                     wxT("must be single selection listbox"));
 
     GtkTreeIter iter;
@@ -889,7 +889,7 @@ int wxListBox::GetSelection() const
 
     // only works on single-sel
     if (!gtk_tree_selection_get_selected(selection, NULL, &iter))
-        return -1;
+        return wxNOT_FOUND;
 
     GtkTreePath* path =
         gtk_tree_model_get_path(GTK_TREE_MODEL(m_liststore), &iter);
@@ -903,7 +903,7 @@ int wxListBox::GetSelection() const
 
 int wxListBox::GetSelections( wxArrayInt& aSelections ) const
 {
-    wxCHECK_MSG( m_treeview != NULL, -1, wxT("invalid listbox") );
+    wxCHECK_MSG( m_treeview != NULL, wxNOT_FOUND, wxT("invalid listbox") );
 
     aSelections.Empty();
 
