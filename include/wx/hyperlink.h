@@ -25,7 +25,7 @@
 #define wxHL_CONTEXTMENU        0x0001
 #define wxHL_DEFAULT_STYLE      wxHL_CONTEXTMENU|wxNO_BORDER
 
-extern WXDLLEXPORT_DATA(const wxChar) wxHyperlinkCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxHyperlinkCtrlNameStr[];
 
 
 // ----------------------------------------------------------------------------
@@ -42,7 +42,7 @@ extern WXDLLEXPORT_DATA(const wxChar) wxHyperlinkCtrlNameStr[];
 // just like a wxCommandEvent.
 //
 // Use the EVT_HYPERLINK() to catch link events.
-class WXDLLIMPEXP_CORE wxHyperlinkCtrl : public wxControl
+class WXDLLIMPEXP_ADV wxHyperlinkCtrl : public wxControl
 {
 public:
     // Default constructor (for two-step construction).
@@ -161,14 +161,14 @@ private:
 
 // Declare an event identifier.
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_CORE, wxEVT_COMMAND_HYPERLINK, 3700)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_HYPERLINK, 3700)
 END_DECLARE_EVENT_TYPES()
 
 //
 // An event fired when the user clicks on the label in a hyperlink control.
 // See HyperlinkControl for details.
 //
-class WXDLLIMPEXP_CORE wxHyperlinkEvent : public wxCommandEvent
+class WXDLLIMPEXP_ADV wxHyperlinkEvent : public wxCommandEvent
 {
 public:
 
