@@ -17,15 +17,11 @@
 // Pre-compiled header stuff
 //---------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "hyperlink.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_HYPERLINKCTRL
@@ -218,12 +214,14 @@ void wxHyperlinkCtrl::OnLeaveWindow(wxMouseEvent& WXUNUSED(event))
 
 void wxHyperlinkCtrl::OnPopUpCopy( wxCommandEvent& WXUNUSED(event) )
 {
+#if wxUSE_CLIPBOARD
     if (!wxTheClipboard->Open())
         return;
 
     wxTextDataObject *data = new wxTextDataObject( m_url );
     wxTheClipboard->SetData( data );
     wxTheClipboard->Close();
+#endif // wxUSE_CLIPBOARD
 }
 
 #endif // wxUSE_HYPERLINKCTRL

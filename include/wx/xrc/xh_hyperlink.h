@@ -12,10 +12,6 @@
 #ifndef _WX_XH_HYPERLINKH__
 #define _WX_XH_HYPERLINKH__
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "hyperlink.h"
-#endif
-
 #include "wx/defs.h"
 
 #if wxUSE_HYPERLINKCTRL
