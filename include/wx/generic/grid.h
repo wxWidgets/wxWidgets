@@ -105,7 +105,7 @@ public:
     // calling DecRef() once will delete it. Calling IncRef() allows to lock
     // it until the matching DecRef() is called
     void IncRef() { m_nRef++; }
-    void DecRef() { if ( !--m_nRef ) delete this; }
+    void DecRef() { if ( --m_nRef == 0 ) delete this; }
 
     // interpret renderer parameters: arbitrary string whose interpretatin is
     // left to the derived classes
@@ -660,7 +660,7 @@ public:
     // calling DecRef() once will delete it. Calling IncRef() allows to lock
     // it until the matching DecRef() is called
     void IncRef() { m_nRef++; }
-    void DecRef() { if ( !--m_nRef ) delete this; }
+    void DecRef() { if ( --m_nRef == 0 ) delete this; }
 
     // setters
     void SetTextColour(const wxColour& colText) { m_colText = colText; }

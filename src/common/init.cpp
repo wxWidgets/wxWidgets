@@ -474,7 +474,7 @@ void wxUninitialize()
 {
     wxCRIT_SECT_LOCKER(lockInit, gs_initData.csInit);
 
-    if ( !--gs_initData.nInitCount )
+    if ( --gs_initData.nInitCount == 0 )
     {
         wxEntryCleanup();
     }

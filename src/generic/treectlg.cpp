@@ -3557,7 +3557,7 @@ void wxGenericTreeCtrl::Thaw()
 {
     wxCHECK_RET( m_freezeCount > 0, _T("thawing unfrozen tree control?") );
 
-    if ( !--m_freezeCount )
+    if ( --m_freezeCount == 0 )
     {
         Refresh();
     }

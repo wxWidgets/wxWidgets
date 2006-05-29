@@ -84,7 +84,7 @@ void wxFontPreviewer::OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         dc.SetFont(font);
         // Calculate vertical centre
-        long w, h;
+        long w = 0, h = 0;
         dc.GetTextExtent( wxT("X"), &w, &h);
         dc.SetTextForeground(GetForegroundColour());
         dc.SetClippingRegion(2, 2, size.x-4, size.y-4);

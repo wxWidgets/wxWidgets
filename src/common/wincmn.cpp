@@ -1832,7 +1832,7 @@ bool wxWindowBase::Layout()
     // If there is a sizer, use it instead of the constraints
     if ( GetSizer() )
     {
-        int w, h;
+        int w = 0, h = 0;
         GetVirtualSize(&w, &h);
         GetSizer()->SetDimension( 0, 0, w, h );
     }

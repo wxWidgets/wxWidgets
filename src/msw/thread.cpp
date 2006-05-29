@@ -929,7 +929,7 @@ bool wxThread::SetConcurrency(size_t WXUNUSED_IN_WINCE(level))
             dwProcMask |= bit;
 
             // another process added
-            if ( !--level )
+            if ( --level == 0 )
             {
                 // and that's enough
                 break;

@@ -163,7 +163,7 @@ void wxSocketBase::Shutdown()
 {
     // we should be initialized
     wxASSERT_MSG( m_countInit, _T("extra call to Shutdown()") );
-    if ( !--m_countInit )
+    if ( --m_countInit == 0 )
     {
         GSocket_Cleanup();
     }

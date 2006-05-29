@@ -7455,8 +7455,8 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
                                int vertAlign,
                                int textOrientation )
 {
-    long textWidth, textHeight;
-    long lineWidth, lineHeight;
+    long textWidth = 0, textHeight = 0;
+    long lineWidth = 0, lineHeight = 0;
     int nLines;
 
     dc.SetClippingRegion( rect );
@@ -7583,7 +7583,7 @@ void wxGrid::GetTextBoxSize( wxDC& dc,
 {
     long w = 0;
     long h = 0;
-    long lineW, lineH;
+    long lineW = 0, lineH = 0;
 
     size_t i;
     for ( i = 0;  i < lines.GetCount();  i++ )

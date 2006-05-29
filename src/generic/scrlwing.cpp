@@ -882,7 +882,7 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
     if (((x_pos == -1) || (x_pos == m_xScrollPosition)) &&
         ((y_pos == -1) || (y_pos == m_yScrollPosition))) return;
 
-    int w, h;
+    int w = 0, h = 0;
     GetTargetSize(&w, &h);
 
     if ((x_pos != -1) && (m_xScrollPixelsPerLine))
@@ -1278,7 +1278,7 @@ bool wxGenericScrolledWindow::Layout()
         // If we're the scroll target, take into account the
         // virtual size and scrolled position of the window.
 
-        int x, y, w, h;
+        int x = 0, y = 0, w = 0, h = 0;
         CalcScrolledPosition(0,0, &x,&y);
         GetVirtualSize(&w, &h);
         GetSizer()->SetDimension(x, y, w, h);
