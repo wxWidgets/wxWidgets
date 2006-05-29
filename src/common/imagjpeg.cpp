@@ -209,13 +209,13 @@ static inline void wx_cmyk_to_rgb(unsigned char* rgb, const unsigned char* cmyk)
     register int c;
 
     c = k + k2 * (255 - cmyk[0]) / 255;
-    rgb[0] = (c > 255) ? 0 : (255 - c);
+    rgb[0] = (unsigned char)((c > 255) ? 0 : (255 - c));
 
     c = k + k2 * (255 - cmyk[1]) / 255;
-    rgb[1] = (c > 255) ? 0 : (255 - c);
+    rgb[1] = (unsigned char)((c > 255) ? 0 : (255 - c));
 
     c = k + k2 * (255 - cmyk[2]) / 255;
-    rgb[2] = (c > 255) ? 0 : (255 - c);
+    rgb[2] = (unsigned char)((c > 255) ? 0 : (255 - c));
 }
 
 // temporarily disable the warning C4611 (interaction between '_setjmp' and
