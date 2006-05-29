@@ -71,7 +71,7 @@
     }
  */
 
-#ifdef __VISUALC__
+#if defined __VISUALC__ && __VISUALC__ >= 1200
     // VC++ gives an absolutely harmless warning for wxPixelData<wxBitmap> ctor
     #pragma warning(push)
     #pragma warning(disable: 4355) // 'this' used in initializer list
@@ -717,7 +717,7 @@ struct wxPixelIterator : public wxPixelData<Image, PixelFormat>::Iterator
 {
 };
 
-#ifdef __VISUALC__
+#if defined __VISUALC__ && __VISUALC__ >= 1200
     #pragma warning(pop)
 #endif
 
