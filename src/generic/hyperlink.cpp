@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        hyperlink.cpp
+// Name:        src/generic/hyperlink.cpp
 // Purpose:     Hyperlink control
 // Author:      David Norris <danorris@gmail.com>, Otto Wyss
 // Modified by: Ryan Norton, Francesco Montorsi
@@ -28,16 +28,19 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_HYPERLINKCTRL
+
 //---------------------------------------------------------------------------
 // Includes
 //---------------------------------------------------------------------------
 
 #include "wx/hyperlink.h"
-#include "wx/utils.h" // for wxLaunchDefaultBrowser
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h" // for wxLaunchDefaultBrowser
+#endif
+
 #include "wx/clipbrd.h"
-
-
-#if wxUSE_HYPERLINKCTRL
 
 // ============================================================================
 // implementation
@@ -69,15 +72,22 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     const wxString& label, const wxString& url, const wxPoint& pos,
     const wxSize& size, long style, const wxString& name)
 {
-    wxASSERT_MSG(!url.IsEmpty() || !label.IsEmpty(),
+    wxASSERT_MSG(!url.empty() || !label.empty(),
                  wxT("Both URL and label are empty ?"));
 
     if (!wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name))
         return false;
 
     // set to non empty strings both the url and the label
-    SetURL(url.IsEmpty() ? label : url);
-    SetLabel(label.IsEmpty() ? url : label);
+    if(url.empty())
+        SetURL(label);
+    else
+        SetUrl(url);
+
+    if(label.empty())
+        SetLabel(url);
+    else
+        SetLabel(label);
 
     // by default the cursor to use in this window is wxCURSOR_HAND
     SetCursor(wxCursor(wxCURSOR_HAND));

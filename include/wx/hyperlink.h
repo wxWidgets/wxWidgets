@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        hyperlink.h
+// Name:        wx/hyperlink.h
 // Purpose:     Hyperlink control
 // Author:      David Norris <danorris@gmail.com>, Otto Wyss
 // Modified by: Ryan Norton, Francesco Montorsi
@@ -207,4 +207,3 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
 #endif // wxUSE_HYPERLINKCTRL
 
 #endif // _WX_HYPERLINK_H__
-

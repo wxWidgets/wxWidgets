@@ -65,7 +65,7 @@ Constructor. See \helpref{Create}{wxhyperlinkctrlcreate} for more info.
 
 \membersection{wxHyperLinkCtrl::Create}\label{wxhyperlinkctrlcreate}
 
-\func{}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id = -1} \param{const wxString \&}{ label}, \param{const wxString \&}{ url}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\param{long}{ style}, \param{const wxString\& }{name = ``hyperlink"}}
+\func{}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id = wxID\_ANY} \param{const wxString \&}{ label}, \param{const wxString \&}{ url}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\param{long}{ style}, \param{const wxString\& }{name = ``hyperlink"}}
 
 Creates the hyperlink control.
 
@@ -73,7 +73,7 @@ Creates the hyperlink control.
 
 \docparam{parent}{Parent window. Must not be \NULL.}
 
-\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+\docparam{id}{Window identifier. A value of wxID\_ANY indicates a default value.}
 
 \docparam{label}{The label of the hyperlink.}
 
@@ -81,7 +81,7 @@ Creates the hyperlink control.
 
 \docparam{pos}{Window position.}
 
-\docparam{size}{Window size. If the default size (-1, -1) is specified then the window is sized
+\docparam{size}{Window size. If the wxDefaultSize is specified then the window is sized
 appropriately.}
 
 \docparam{style}{Window style. See \helpref{wxHyperlinkCtrl}{wxhyperlinkctrl}.}
@@ -217,4 +217,3 @@ Returns the URL of the hyperlink where the user has just clicked.
 \func{void}{SetURL}{\param{const wxString \&}{ url}}
 
 Sets the URL associated with the event.
-
