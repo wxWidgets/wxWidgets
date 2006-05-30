@@ -73,7 +73,8 @@ that the handler name is equal to the control's name plus 'XmlHandler', for exam
 wxTextCtrlXmlHandler, wxHtmlWindowXmlHandler. The XML resource compiler
 (wxxrc) can create include file that contains initialization code for
 all controls used within the resource. Note that this handler should be
-located on heap instead of stack, since it will get destroyed on shutdown.
+allocated on the heap, since it will be delete by 
+\helpref{ClearHandlers}{wxxmlresourceclearhandlers} later.
 
 
 \membersection{wxXmlResource::AttachUnknownControl}\label{wxxmlresourceattachunknowncontrol}
@@ -88,7 +89,8 @@ Unknown controls are used in conjunction with <object class="unknown">.
 
 \func{void}{ClearHandlers}{\void}
 
-Removes all handlers.
+Removes all handlers and deletes them (this means that any handlers added using 
+\helpref{AddHandler}{wxxmlresourceaddhandler} must be allocated on the heap).
 
 
 \membersection{wxXmlResource::CompareVersion}\label{wxxmlresourcecompareversion}
