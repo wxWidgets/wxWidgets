@@ -107,25 +107,36 @@ void VsnprintfTestCase::Compare(const wxChar *expected, const wxChar *format, ..
     va_end(argptr);
 
 #if USE_LIBC
-    CPPUNIT_ASSERT_STR_EQUAL( buf, buf2 );
+    CPPUNIT_ASSERT_STR_EQUAL( buf2, buf );
 #else
-    CPPUNIT_ASSERT_STR_EQUAL( buf, expected );
+    CPPUNIT_ASSERT_STR_EQUAL( expected, buf );
 #endif
 }
 
 void VsnprintfTestCase::E()
 {
-    CMP("2.342000e+02", "%e",2.342E+02);
-    CMP("-2.3420e-02", "%10.4e",-2.342E-02);
-    CMP("-2.3420e-02", "%11.4e",-2.342E-02);
-    CMP("    -2.3420e-02", "%15.4e",-2.342E-02);
+    // NB: there are no standards about the minimum exponent width
+    //     (and the width of the %e conversion specifier refers to the
+    //      mantissa, not to the exponent).
+    //     Since newer MSVC versions use 3 digits as minimum exponent
+    //     width while GNU libc uses 2 digits as minimum width, here we
+    //     workaround this problem using for the exponent values with at
+    //     least three digits.
+    //     Some examples:
+    //       printf("%e",2.342E+02);
+    //     -> under MSVC7.1 prints:      2.342000e+002
+    //     -> under GNU libc 2.4 prints: 2.342000e+02
+    CMP("2.342000e+112", "%e",2.342E+112);
+    CMP("-2.3420e-112", "%10.4e",-2.342E-112);
+    CMP("-2.3420e-112", "%11.4e",-2.342E-112);
+    CMP("   -2.3420e-112", "%15.4e",-2.342E-112);
 
     CMP("-0.02342", "%G",-2.342E-02);
-    CMP("3.1415E-06", "%G",3.1415e-6);
-    CMP("00003.141500e+03", "%016e", 3141.5);
-    CMP("    3.141500e+03", "%16e", 3141.5);
-    CMP("3.141500e+03    ", "%-16e", 3141.5);
-    CMP("03.142e+03", "%010.3e", 3141.5);
+    CMP("3.1415E-116", "%G",3.1415e-116);
+    CMP("0003.141500e+103", "%016e", 3141.5e100);
+    CMP("   3.141500e+103", "%16e", 3141.5e100);
+    CMP("3.141500e+103   ", "%-16e", 3141.5e100);
+    CMP("3.142e+103", "%010.3e", 3141.5e100);
 }
 
 void VsnprintfTestCase::F()
@@ -139,26 +150,28 @@ void VsnprintfTestCase::F()
 
 void VsnprintfTestCase::G()
 {
+    // NOTE: the same about E() testcase applies here...
+
     CMP("  3.3", "%5g", 3.3);
     CMP("    3", "%5g", 3.0);
-    CMP("9.99999e-05", "%5g", .999999E-4);
+    CMP("9.99999e-115", "%5g", .999999E-114);
     CMP("0.00099", "%5g", .99E-3);
     CMP(" 3333", "%5g", 3333.0);
     CMP(" 0.01", "%5g", 0.01);
 
     CMP("    3", "%5.g", 3.3);
     CMP("    3", "%5.g", 3.0);
-    CMP("1e-04", "%5.g", .999999E-4);
+    CMP("1e-114", "%5.g", .999999E-114);
     CMP("0.0001", "%5.g", 1.0E-4);
     CMP("0.001", "%5.g", .99E-3);
-    CMP("3e+03", "%5.g", 3333.0);
+    CMP("3e+103", "%5.g", 3333.0E100);
     CMP(" 0.01", "%5.g", 0.01);
 
     CMP("  3.3", "%5.2g", 3.3);
     CMP("    3", "%5.2g", 3.0);
-    CMP("1e-04", "%5.2g", .999999E-4);
+    CMP("1e-114", "%5.2g", .999999E-114);
     CMP("0.00099", "%5.2g", .99E-3);
-    CMP("3.3e+03", "%5.2g", 3333.0);
+    CMP("3.3e+103", "%5.2g", 3333.0E100);
     CMP(" 0.01", "%5.2g", 0.01);
 }
 
@@ -179,27 +192,31 @@ void VsnprintfTestCase::Misc(wxChar *buffer, int size)
 
     // test without positionals
     ret = wxSnprintf(buffer, size,
-          wxT("\n\n%s %e %le %i %li - test - %d %i %% -%*.*f-\n\n"), wxT("aa"), 123.123,
-          123123123123123123123123.123123123123, 456, (long int)33333333, 789, 999, 10, 1, 0.123);
+          wxT("\n\n%s %e %le %i %li - test - %d %i %% -%*.*f-\n\n"), wxT("aa"), 123.123e100,
+          123123123123123123123123.123123123123e100, 456, (long int)33333333, 789, 999, 10, 1, 0.123);
     if (ret >= 0)
     {
         CPPUNIT_ASSERT_STR_EQUAL(
-            wxT("\n\naa 1.231230e+02 1.231231e+23 456 33333333 - test - 789 999 %% -       0.1-\n\n"),
+            wxT("\n\naa 1.231230e+102 1.231231e+123 456 33333333 - test - 789 999 %% -       0.1-\n\n"),
             buffer);
     }
 
     // test woth positional
     ret = wxSnprintf(buffer, size,
-          wxT("\n\n%8$s %2$e %3$le %4$i %5$li - test - %6$d %7$i %% %1$.4f\n\n"), 0.123123123, 123.123,
-         123123123123123123123123.123123123123, 456, (long int)33333333, 789, 999, wxT("aa"));
+          wxT("\n\n%8$s %2$e %3$le %4$i %5$li - test - %6$d %7$i %% %1$.4f\n\n"), 0.123123123, 123.123e100,
+         123123123123123123123123.123123123123e100, 456, (long int)33333333, 789, 999, wxT("aa"));
     if (ret >= 0)
     {
         CPPUNIT_ASSERT_STR_EQUAL(
-            wxT("\n\naa 1.231230e+02 1.231231e+23 456 33333333 - test - 789 999 %% 0.1231\n\n"),
+            wxT("\n\naa 1.231230e+102 1.231231e+123 456 33333333 - test - 789 999 %% 0.1231\n\n"),
             buffer);
     }
 
     // test unicode/ansi conversion specifiers
+    // NB: this line will output two warnings like these, on GCC:
+    //        warning: use of ‘h’ length modifier with ‘s’ type character
+    //     (i.e. GCC warns you that 'h' is not legal on 's' conv spec) but they must be ignored
+    //     as here we explicitely want to test the wxSnprintf() behaviour in such case
     ret = wxSnprintf(buffer, size,
         wxT("\n\nunicode string: %ls %lc - ansi string: %hs %hc\n\n"), L"unicode!!", L'W', "ansi!!", 'w');
     if (ret >= 0)
