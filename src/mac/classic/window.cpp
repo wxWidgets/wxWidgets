@@ -26,11 +26,11 @@
     #include "wx/dialog.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
+    #include "wx/scrolbar.h"
 #endif
 
 #include "wx/layout.h"
 #include "wx/listbox.h"
-#include "wx/scrolbar.h"
 #include "wx/statbox.h"
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"

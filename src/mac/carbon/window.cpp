@@ -26,10 +26,10 @@
     #include "wx/dialog.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
+    #include "wx/scrolbar.h"
 #endif
 
 #include "wx/layout.h"
-#include "wx/scrolbar.h"
 #include "wx/statbox.h"
 #include "wx/tooltip.h"
 #include "wx/statusbr.h"
@@ -1762,7 +1762,7 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
     menu->SetInvokingWindow(this);
     menu->UpdateUI();
 
-    if ( x == -1 && y == -1 )
+    if ( x == wxDefaultCoord && y == wxDefaultCoord )
     {
         wxPoint mouse = wxGetMousePosition();
         x = mouse.x;

@@ -41,11 +41,8 @@
     #include "wx/statusbr.h"
     #include "wx/toolbar.h"
     #include "wx/dcclient.h"
-#endif //WX_PRECOMP
-
-#if defined(__WXMAC__) && wxUSE_SCROLLBAR
     #include "wx/scrolbar.h"
-#endif
+#endif //WX_PRECOMP
 
 #if wxUSE_CONSTRAINTS
     #include "wx/layout.h"

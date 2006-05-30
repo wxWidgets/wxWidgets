@@ -73,7 +73,7 @@ wxBEGIN_FLAGS( wxSliderStyle )
 
 wxEND_FLAGS( wxSliderStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider, wxControl,"wx/scrolbar.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider, wxControl,"wx/slider.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxSlider)
     wxEVENT_RANGE_PROPERTY( Scroll , wxEVT_SCROLL_TOP , wxEVT_SCROLL_ENDSCROLL , wxScrollEvent )

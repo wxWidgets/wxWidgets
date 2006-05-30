@@ -1,20 +1,22 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/scrolbar.mm
+// Name:        src/cocoa/scrolbar.mm
 // Purpose:     wxScrollBar
 // Author:      David Elliott
 // Modified by:
 // Created:     2004/04/25
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
 #if wxUSE_SCROLLBAR
+
+#include "wx/scrolbar.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/scrolbar.h"
 #endif //WX_PRECOMP
 
 #import <AppKit/NSScroller.h>

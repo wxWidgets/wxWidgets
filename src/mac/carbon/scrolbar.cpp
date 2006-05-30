@@ -11,13 +11,14 @@
 
 #include "wx/wxprec.h"
 
+#include "wx/scrolbar.h"
+
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/settings.h"
 #endif
 
-#include "wx/scrolbar.h"
 #include "wx/mac/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)

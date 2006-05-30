@@ -18,12 +18,13 @@
 
 #if wxUSE_SCROLLBAR
 
+#include "wx/scrolbar.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/settings.h"
 #endif
 
-#include "wx/scrolbar.h"
 #include "wx/palmos/private.h"
 
 #if wxUSE_EXTENDED_RTTI

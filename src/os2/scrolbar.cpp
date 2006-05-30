@@ -12,11 +12,12 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/scrolbar.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
 #endif
 
-#include "wx/scrolbar.h"
 #include "wx/os2/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)

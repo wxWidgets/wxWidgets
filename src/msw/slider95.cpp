@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/slider.cpp
+// Name:        src/msw/slider.cpp
 // Purpose:     wxSlider, using the Win95 (and later) trackbar control
 // Author:      Julian Smart
 // Modified by:
@@ -102,7 +102,7 @@ wxBEGIN_FLAGS( wxSliderStyle )
 
 wxEND_FLAGS( wxSliderStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider, wxControl,"wx/scrolbar.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider, wxControl,"wx/slider.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxSlider)
     wxEVENT_RANGE_PROPERTY( Scroll , wxEVT_SCROLL_TOP , wxEVT_SCROLL_CHANGED , wxScrollEvent )

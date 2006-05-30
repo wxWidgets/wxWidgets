@@ -41,12 +41,12 @@
     #include "wx/timer.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
+    #include "wx/scrolbar.h"
 #endif
 
 #include "wx/layout.h"
 #include "wx/listbox.h"
 #include "wx/scrolwin.h"
-#include "wx/scrolbar.h"
 #include "wx/module.h"
 #include "wx/menuitem.h"
 #include "wx/fontutil.h"
@@ -1111,7 +1111,7 @@ void wxWindowX11::GetTextExtent(const wxString& string,
 
     int direction, ascent, descent2;
     XCharStruct overall;
-    int slen = string.Len();
+    int slen = string.length();
 
     XTextExtents((XFontStruct*) pFontStruct, (char*) string.c_str(), slen,
                  &direction, &ascent, &descent2, &overall);

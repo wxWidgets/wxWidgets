@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_scrol.cpp
+// Name:        src/xrc/xh_scrol.cpp
 // Purpose:     XRC resource for wxScrollBar
 // Author:      Brian Gavin
 // Created:     2000/09/09
@@ -18,7 +18,10 @@
 #if wxUSE_XRC && wxUSE_SCROLLBAR
 
 #include "wx/xrc/xh_scrol.h"
-#include "wx/scrolbar.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/scrolbar.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBarXmlHandler, wxXmlResourceHandler)
 

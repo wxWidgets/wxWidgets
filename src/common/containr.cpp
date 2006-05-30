@@ -28,13 +28,10 @@
     #include "wx/log.h"
     #include "wx/event.h"
     #include "wx/window.h"
+    #include "wx/scrolbar.h"
 #endif //WX_PRECOMP
 
 #include "wx/containr.h"
-
-#ifdef __WXMAC__
-    #include "wx/scrolbar.h"
-#endif
 
 #ifdef __WXMSW__
     #include "wx/radiobut.h"
@@ -646,4 +643,3 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
 
     return false;
 }
-
