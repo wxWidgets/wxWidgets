@@ -785,7 +785,7 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
 
                 if (type == wxPAT_PCHAR) {
                     // user passed a string explicitely indicated as ANSI...
-                    val = wxString(p->pad_pchar, wxConvLibc);
+                    val = s = wxString(p->pad_pchar, wxConvLibc);
                 }
 #else
                     p->pad_pchar;
@@ -793,7 +793,7 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
 #if wxUSE_WCHAR_T
                 if (type == wxPAT_PWCHAR) {
                     // user passed a string explicitely indicated as Unicode...
-                    val = wxString(p->pad_pwchar, wxConvLibc);
+                    val = s = wxString(p->pad_pwchar, wxConvLibc);
                 }
 #endif
 #endif
@@ -802,7 +802,9 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
                 if (val)
                 {
 #if wxUSE_STRUTILS
-                    len = wxMin(max_width, wxStrlen(val));
+                    // at this point we are sure that max_width is positive or null
+                    // (see top of wxPrintfConvSpec::LoadArg)
+                    len = wxMin((unsigned int)max_width, wxStrlen(val));
 #else
                     for ( len = 0; val[len] && (len < max_width); len++ )
                         ;
@@ -828,7 +830,9 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
                 }
 
 #if wxUSE_STRUTILS
-                len = wxMin(len, lenMax-lenCur);
+                // at this point we are sure that max_width is positive or null
+                // (see top of wxPrintfConvSpec::LoadArg)
+                len = wxMin((unsigned int)len, lenMax-lenCur);
                 wxStrncpy(buf+lenCur, val, len);
                 lenCur += len;
 #else
