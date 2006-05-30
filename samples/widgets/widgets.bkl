@@ -10,6 +10,7 @@
             combobox.cpp
             datepick.cpp
             gauge.cpp
+            hyperlnk.cpp
             listbox.cpp
             notebook.cpp
             radiobox.cpp

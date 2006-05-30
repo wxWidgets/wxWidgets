@@ -488,6 +488,10 @@ SOURCE=.\gauge.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\hyperlnk.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\listbox.cpp
 # End Source File
 # Begin Source File

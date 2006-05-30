@@ -32,6 +32,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_combobox.obj \
 	$(OBJS)\widgets_datepick.obj \
 	$(OBJS)\widgets_gauge.obj \
+	$(OBJS)\widgets_hyperlnk.obj \
 	$(OBJS)\widgets_listbox.obj \
 	$(OBJS)\widgets_notebook.obj \
 	$(OBJS)\widgets_radiobox.obj \
@@ -326,6 +327,9 @@ $(OBJS)\widgets_datepick.obj: .\datepick.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_gauge.obj: .\gauge.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
+
+$(OBJS)\widgets_hyperlnk.obj: .\hyperlnk.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_listbox.obj: .\listbox.cpp

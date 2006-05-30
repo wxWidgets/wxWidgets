@@ -229,6 +229,7 @@ WIDGETS_OBJECTS =  &
 	$(OBJS)\widgets_combobox.obj &
 	$(OBJS)\widgets_datepick.obj &
 	$(OBJS)\widgets_gauge.obj &
+	$(OBJS)\widgets_hyperlnk.obj &
 	$(OBJS)\widgets_listbox.obj &
 	$(OBJS)\widgets_notebook.obj &
 	$(OBJS)\widgets_radiobox.obj &
@@ -281,6 +282,9 @@ $(OBJS)\widgets_datepick.obj :  .AUTODEPEND .\datepick.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_gauge.obj :  .AUTODEPEND .\gauge.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_hyperlnk.obj :  .AUTODEPEND .\hyperlnk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_listbox.obj :  .AUTODEPEND .\listbox.cpp
