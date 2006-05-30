@@ -12,6 +12,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/stattext.h"
+
 #ifndef WX_PRECOMP
     #include "wx/event.h"
     #include "wx/app.h"
@@ -19,7 +21,6 @@
     #include "wx/scrolwin.h"
 #endif
 
-#include "wx/stattext.h"
 #include "wx/os2/private.h"
 #include <stdio.h>
 

@@ -25,6 +25,7 @@
     #include "wx/button.h"
     #include "wx/dialog.h"
     #include "wx/scrolbar.h"
+    #include "wx/stattext.h"
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
@@ -33,7 +34,6 @@
 #include "wx/spinbutt.h"
 #include "wx/statbox.h"
 #include "wx/sizer.h"
-#include "wx/stattext.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/stattext.cpp
+// Name:        src/univ/stattext.cpp
 // Purpose:     wxStaticText
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -25,9 +25,10 @@
 
 #if wxUSE_STATTEXT
 
+#include "wx/stattext.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
-    #include "wx/stattext.h"
     #include "wx/validate.h"
 #endif
 
@@ -54,7 +55,7 @@ bool wxStaticText::Create(wxWindow *parent,
 {
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
         return false;
-        
+
     SetLabel(label);
     SetBestSize(size);
 

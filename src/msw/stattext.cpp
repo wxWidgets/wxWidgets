@@ -18,6 +18,8 @@
 
 #if wxUSE_STATTEXT
 
+#include "wx/stattext.h"
+
 #ifndef WX_PRECOMP
     #include "wx/event.h"
     #include "wx/app.h"
@@ -26,7 +28,6 @@
     #include "wx/settings.h"
 #endif
 
-#include "wx/stattext.h"
 #include "wx/msw/private.h"
 
 #if wxUSE_EXTENDED_RTTI

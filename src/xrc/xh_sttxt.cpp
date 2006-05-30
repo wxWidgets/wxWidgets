@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_sttxt.cpp
+// Name:        src/xrc/xh_sttxt.cpp
 // Purpose:     XRC resource for wxStaticText
 // Author:      Bob Mitchell
 // Created:     2000/03/21
@@ -15,10 +15,13 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XRC && wxUSE_STATTEXT
 
 #include "wx/xrc/xh_sttxt.h"
-#include "wx/stattext.h"
+
+#ifndef WX_PRECOMP
+   #include "wx/stattext.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticTextXmlHandler, wxXmlResourceHandler)
 
@@ -37,11 +40,11 @@ wxObject *wxStaticTextXmlHandler::DoCreateResource()
     XRC_MAKE_INSTANCE(text, wxStaticText)
 
     text->Create(m_parentAsWindow,
-                    GetID(),
-                    GetText(wxT("label")),
-                    GetPosition(), GetSize(),
-                    GetStyle(),
-                    GetName());
+                 GetID(),
+                 GetText(wxT("label")),
+                 GetPosition(), GetSize(),
+                 GetStyle(),
+                 GetName());
 
     SetupWindow(text);
 
@@ -53,4 +56,4 @@ bool wxStaticTextXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxStaticText"));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_STATTEXT
