@@ -716,6 +716,16 @@ bool wxComboCtrlBase::Create(wxWindow *parent,
     OnThemeChange();
     m_absIndent = GetNativeTextIndent();
 
+    m_iFlags |= wxCC_IFLAG_CREATED;
+
+    // If x and y indicate valid size, wxSizeEvent won't be
+    // emitted automatically, so we need to add artifical one.
+    if ( size.x > 0 && size.y > 0 )
+    {
+        wxSizeEvent evt(size,GetId());
+        GetEventHandler()->AddPendingEvent(evt);
+    }
+
     return true;
 }
 
@@ -828,15 +838,31 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     if ( butWidth <= 0 )
         return;
 
+    int butHeight = sz.y - btnBorder*2;
+
     // Adjust button width
     if ( m_btnWid < 0 )
         butWidth += m_btnWid;
     else if ( m_btnWid > 0 )
         butWidth = m_btnWid;
+    else
+    {
+        // Adjust button width to match aspect ratio
+        // (but only if control is smaller than best size).
+        int bestHeight = GetBestSize().y;
+        int height = GetSize().y;
 
-    int butHeight = sz.y;
-
-    butHeight -= btnBorder*2;
+        if ( height < bestHeight )
+        {
+            // Make very small buttons square, as it makes
+            // them accommodate arrow image better and still
+            // looks decent.
+            if ( height > 18 )
+                butWidth = (height*butWidth)/bestHeight;
+            else
+                butWidth = butHeight;
+        }
+    }
 
     // Adjust button height
     if ( m_btnHei < 0 )
@@ -985,14 +1011,6 @@ wxSize wxComboCtrlBase::DoGetBestSize() const
 
     CacheBestSize(ret);
     return ret;
-}
-
-void wxComboCtrlBase::DoMoveWindow(int x, int y, int width, int height)
-{
-    // SetSize is called last in create, so it marks the end of creation
-    m_iFlags |= wxCC_IFLAG_CREATED;
-
-    wxControl::DoMoveWindow(x, y, width, height);
 }
 
 void wxComboCtrlBase::OnSizeEvent( wxSizeEvent& event )

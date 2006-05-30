@@ -379,7 +379,6 @@ protected:
     void DestroyPopup();
 
     // override the base class virtuals involved in geometry calculations
-    virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
 
     // ensures there is atleast the default popup
