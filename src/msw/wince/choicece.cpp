@@ -26,8 +26,9 @@
 
 #if wxUSE_CHOICE && defined(__SMARTPHONE__) && defined(__WXWINCE__)
 
+#include "wx/choice.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/choice.h"
     #include <commctrl.h>
     #include "wx/msw/missing.h"
     #include "wx/msw/winundef.h"

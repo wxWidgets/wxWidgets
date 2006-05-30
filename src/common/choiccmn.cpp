@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/choiccmn.cpp
+// Name:        src/common/choiccmn.cpp
 // Purpose:     common (to all ports) wxChoice functions
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -26,8 +26,9 @@
 
 #if wxUSE_CHOICE
 
+#include "wx/choice.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/choice.h"
 #endif
 
 const wxChar wxChoiceNameStr[] = wxT("choice");
@@ -52,4 +53,3 @@ void wxChoiceBase::Command(wxCommandEvent& event)
 }
 
 #endif // wxUSE_CHOICE
-

@@ -15,15 +15,14 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XRC && wxUSE_CHOICE
 
 #include "wx/xrc/xh_choic.h"
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/choice.h"
 #endif
-
-#include "wx/choice.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxChoiceXmlHandler, wxXmlResourceHandler)
 
@@ -96,4 +95,4 @@ bool wxChoiceXmlHandler::CanHandle(wxXmlNode *node)
            (m_insideBox && node->GetName() == wxT("item")));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_CHOICE

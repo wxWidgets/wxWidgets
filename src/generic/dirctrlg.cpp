@@ -30,6 +30,7 @@
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
     #include "wx/cmndata.h"
+    #include "wx/choice.h"
 #endif
 
 #include "wx/module.h"
@@ -45,7 +46,6 @@
 #include "wx/artprov.h"
 #include "wx/mimetype.h"
 #include "wx/image.h"
-#include "wx/choice.h"
 
 #if wxUSE_STATLINE
     #include "wx/statline.h"
@@ -283,7 +283,7 @@ bool wxIsDriveAvailable(const wxString& dirName)
 #ifdef __WATCOMC__
     wxUnusedVar(dirName);
 #else
-    if ( dirName.Len() == 3 && dirName[1u] == wxT(':') )
+    if ( dirName.length() == 3 && dirName[1u] == wxT(':') )
     {
         wxString dirNameLower(dirName.Lower());
         // VS: always return true for removable media, since Win95 doesn't
@@ -343,7 +343,7 @@ bool wxIsDriveAvailable(const wxString& WXUNUSED_IN_WINCE(dirName))
 
     // Check if this is a root directory and if so,
     // whether the drive is available.
-    if (dirName.Len() == 3 && dirName[(size_t)1] == wxT(':'))
+    if (dirName.length() == 3 && dirName[(size_t)1] == wxT(':'))
     {
         wxString dirNameLower(dirName.Lower());
 #if defined(__GNUWIN32__) && !(defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
@@ -988,12 +988,12 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
             childPath.MakeLower();
 #endif
 
-            if (childPath.Len() <= path2.Len())
+            if (childPath.length() <= path2.length())
             {
-                wxString path3 = path2.Mid(0, childPath.Len());
+                wxString path3 = path2.Mid(0, childPath.length());
                 if (childPath == path3)
                 {
-                    if (path3.Len() == path2.Len())
+                    if (path3.length() == path2.length())
                         done = true;
                     else
                         done = false;

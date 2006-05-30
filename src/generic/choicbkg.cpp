@@ -30,9 +30,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
+    #include "wx/choice.h"
 #endif
 
-#include "wx/choice.h"
 #include "wx/imaglist.h"
 #include "wx/sizer.h"
 

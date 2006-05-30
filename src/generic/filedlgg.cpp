@@ -31,10 +31,10 @@
     #include "wx/msgdlg.h"
     #include "wx/bmpbuttn.h"
     #include "wx/checkbox.h"
+    #include "wx/choice.h"
 #endif
 
 #include "wx/textctrl.h"
-#include "wx/choice.h"
 #include "wx/stattext.h"
 #include "wx/longlong.h"
 #include "wx/sizer.h"
@@ -733,7 +733,7 @@ void wxFileCtrl::GoToParentDir()
 {
     if (!IsTopMostDir(m_dirName))
     {
-        size_t len = m_dirName.Len();
+        size_t len = m_dirName.length();
         if (wxEndsWithPathSeparator(m_dirName))
             m_dirName.Remove( len-1, 1 );
         wxString fname( wxFileNameFromPath(m_dirName) );
@@ -1027,7 +1027,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
             m_dir = wxFILE_SEP_PATH;
     }
 
-    size_t len = m_dir.Len();
+    size_t len = m_dir.length();
     if ((len > 1) && (wxEndsWithPathSeparator(m_dir)))
         m_dir.Remove( len-1, 1 );
 

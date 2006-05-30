@@ -13,10 +13,11 @@
 
 #if wxUSE_CHOICE
 
+#include "wx/choice.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
-    #include "wx/choice.h"
     #include "wx/arrstr.h"
 #endif //WX_PRECOMP
 

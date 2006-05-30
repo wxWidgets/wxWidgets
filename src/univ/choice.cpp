@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/choice.cpp
+// Name:        src/univ/choice.cpp
 // Purpose:     wxChoice implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -25,8 +25,9 @@
 
 #if wxUSE_CHOICE
 
+#include "wx/choice.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/choice.h"
     #include "wx/arrstr.h"
 #endif
 
