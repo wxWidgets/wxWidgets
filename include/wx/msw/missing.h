@@ -215,6 +215,10 @@ typedef struct _OSVERSIONINFOEX {
     #define LVM_SETEXTENDEDLISTVIEWSTYLE (0x1000 + 54)
 #endif
 
+#ifndef LVM_GETSUBITEMRECT
+    #define LVM_GETSUBITEMRECT           (0x1000 + 56)
+#endif
+
 #ifndef LVCF_IMAGE
     #define LVCF_IMAGE             0x0010
 #endif
@@ -230,6 +234,10 @@ typedef struct _OSVERSIONINFOEX {
 
 #ifndef ListView_GetHeader
     #define ListView_GetHeader(w) (HWND)SendMessage((w),LVM_GETHEADER,0,0)
+#endif
+
+#ifndef ListView_GetSubItemRect
+    #define ListView_GetSubItemRect(w, i, s, c, p) (HWND)SendMessage(w,LVM_GETSUBITEMRECT,i, ((p) ? ((((LPRECT)(p))->top = s), (((LPRECT)(p))->left = c), (LPARAM)(p)) : (LPARAM)(LPRECT)NULL))
 #endif
 
 #ifndef LVM_GETHEADER
