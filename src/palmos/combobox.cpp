@@ -40,9 +40,6 @@
 #include "wx/palmos/private.h"
 
 #if wxUSE_TOOLTIPS
-    #if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
-        #include <commctrl.h>
-    #endif
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 

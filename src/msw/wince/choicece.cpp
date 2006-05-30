@@ -29,10 +29,10 @@
 #include "wx/choice.h"
 
 #ifndef WX_PRECOMP
-    #include <commctrl.h>
-    #include "wx/msw/missing.h"
-    #include "wx/msw/winundef.h"
 #endif
+
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
 
 #include "wx/spinbutt.h" // for wxSpinnerBestSize
 

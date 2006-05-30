@@ -41,13 +41,15 @@
 
 #include "wx/msw/private.h"
 
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
+
 #ifdef __WXWINCE__
 #include <windows.h>
 #include <windowsx.h>
 #include <tchar.h>
 #include <ole2.h>
 #include <shellapi.h>
-#include <commctrl.h>
 #if (_WIN32_WCE < 400) && !defined(__HANDHELDPC__)
 #include <aygshell.h>
 #endif

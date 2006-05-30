@@ -104,7 +104,8 @@
     #include <windowsx.h>
 #endif
 
-#include <commctrl.h>
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
 
 #ifndef __WXWINCE__
     #include <pbt.h>

@@ -45,13 +45,15 @@
     #include "malloc.h"
 #endif
 
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
+
 #include "wx/msw/private.h"
 #include <windows.h>
 #include <windowsx.h>
 #include <tchar.h>
 #include <ole2.h>
 #include <shellapi.h>
-#include <commctrl.h>
 #if defined(WINCE_WITHOUT_COMMANDBAR)
   #include <aygshell.h>
 #endif

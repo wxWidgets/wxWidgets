@@ -37,10 +37,10 @@
 #include  "wx/msw/private.h"
 
 #include  <windowsx.h>
-
-#include <commctrl.h>
-
 #include "wx/msw/winundef.h"
+
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
 
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"

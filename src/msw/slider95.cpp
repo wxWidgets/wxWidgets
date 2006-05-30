@@ -34,9 +34,8 @@
 #include "wx/slider.h"
 #include "wx/msw/subwin.h"
 
-#if !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
-    #include <commctrl.h>
-#endif
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
 
 // ----------------------------------------------------------------------------
 // constants

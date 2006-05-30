@@ -40,9 +40,8 @@
 
 #include "wx/msw/private.h"
 
-#ifdef __WXWINCE__
-#include <commctrl.h>
-#endif
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
 
 #if defined(__POCKETPC__) || defined(__SMARTPHONE__)
     #include <ole2.h>

@@ -40,10 +40,10 @@
 #include "wx/clipbrd.h"
 #include "wx/msw/private.h"
 
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
+
 #if wxUSE_TOOLTIPS
-    #if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
-        #include <commctrl.h>
-    #endif
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
