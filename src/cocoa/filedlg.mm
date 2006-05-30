@@ -27,6 +27,7 @@
     #include "wx/filedlg.h"
     #include "wx/app.h"
 #endif
+
 #include "wx/filename.h"
 
 #include "wx/cocoa/autorelease.h"
@@ -67,7 +68,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 
     //If the user requests to save - use a NSSavePanel
     //else use a NSOpenPanel
-    if (m_dialogStyle & wxSAVE)
+    if (m_dialogStyle & wxFD_SAVE)
     {
         SetNSPanel([NSSavePanel savePanel]);
 
@@ -86,12 +87,12 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         // dialogs are all that useful, anyway :)
         //
     }
-    else //m_dialogStyle & wxOPEN
+    else //m_dialogStyle & wxFD_OPEN
     {
         SetNSPanel([NSOpenPanel openPanel]);
         [m_cocoaNSWindow setTitle:wxNSStringWithWxString(message)];
 
-        [(NSOpenPanel*)m_cocoaNSWindow setAllowsMultipleSelection:(m_dialogStyle & wxMULTIPLE)];
+        [(NSOpenPanel*)m_cocoaNSWindow setAllowsMultipleSelection:(m_dialogStyle & wxFD_MULTIPLE)];
         [(NSOpenPanel*)m_cocoaNSWindow setResolvesAliases:YES];
         [(NSOpenPanel*)m_cocoaNSWindow setCanChooseFiles:YES];
         [(NSOpenPanel*)m_cocoaNSWindow setCanChooseDirectories:NO];
@@ -194,7 +195,7 @@ int wxFileDialog::ShowModal()
 
     int nResult;
 
-    if (m_dialogStyle & wxSAVE)
+    if (m_dialogStyle & wxFD_SAVE)
     {
         nResult = [GetNSSavePanel()
                     runModalForDirectory:wxNSStringWithWxString(m_dir)
@@ -206,7 +207,7 @@ int wxFileDialog::ShowModal()
             m_path = m_fileNames[0];
         }
     }
-    else //m_dialogStyle & wxOPEN
+    else //m_dialogStyle & wxFD_OPEN
     {
         nResult = [(NSOpenPanel*)m_cocoaNSWindow
                     runModalForDirectory:wxNSStringWithWxString(m_dir)
@@ -228,4 +229,3 @@ int wxFileDialog::ShowModal()
 }
 
 #endif // wxUSE_FILEDLG
-

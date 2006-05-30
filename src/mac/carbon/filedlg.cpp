@@ -135,7 +135,7 @@ void MakeUserDataRec(OpenUserDataRec *myData , const wxString& filter )
         bool isName = true ;
         wxString current ;
 
-        for ( unsigned int i = 0; i < filter2.Len() ; i++ )
+        for ( unsigned int i = 0; i < filter2.length() ; i++ )
         {
             if ( filter2.GetChar(i) == wxT('|') )
             {
@@ -215,7 +215,7 @@ static Boolean CheckFile( const wxString &filename , OSType type , OpenUserDataR
                 if ( extension.GetChar(0) == '*' )
                     extension = extension.Mid(1) ;
 
-                if ( file.Len() >= extension.Len() && extension == file.Right(extension.Len() ) )
+                if ( file.length() >= extension.length() && extension == file.Right(extension.length() ) )
                     return true ;
             }
         }
@@ -352,7 +352,7 @@ int wxFileDialog::ShowModal()
             dialogCreateOptions.optionFlags |= kNavPreserveSaveFileExtension;
 
 #if TARGET_API_MAC_OSX
-        if (!(m_windowStyle & wxOVERWRITE_PROMPT))
+        if (!(m_windowStyle & wxFD_OVERWRITE_PROMPT))
             dialogCreateOptions.optionFlags |= kNavDontConfirmReplacement;
 #endif
 

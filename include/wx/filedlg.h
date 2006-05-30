@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filedlg.h
+// Name:        wx/filedlg.h
 // Purpose:     wxFileDialog base header
 // Author:      Robert Roebling
 // Modified by:
@@ -23,21 +23,6 @@
 // wxFileDialog data
 //----------------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_2_6
-enum
-{
-    wxOPEN              = 0x0001,
-    wxSAVE              = 0x0002,
-    wxOVERWRITE_PROMPT  = 0x0004,
-#if WXWIN_COMPATIBILITY_2_4
-    wxHIDE_READONLY     = 0x0008,
-#endif
-    wxFILE_MUST_EXIST   = 0x0010,
-    wxMULTIPLE          = 0x0020,
-    wxCHANGE_DIR        = 0x0040
-};
-#endif
-
 enum
 {
     wxFD_OPEN              = 0x0001,
@@ -47,6 +32,21 @@ enum
     wxFD_MULTIPLE          = 0x0020,
     wxFD_CHANGE_DIR        = 0x0040
 };
+
+#if WXWIN_COMPATIBILITY_2_6
+enum
+{
+    wxOPEN              = wxFD_OPEN,
+    wxSAVE              = wxFD_SAVE,
+    wxOVERWRITE_PROMPT  = wxFD_OVERWRITE_PROMPT,
+#if WXWIN_COMPATIBILITY_2_4
+    wxHIDE_READONLY     = 0x0008,
+#endif
+    wxFILE_MUST_EXIST   = wxFD_FILE_MUST_EXIST,
+    wxMULTIPLE          = wxFD_MULTIPLE,
+    wxCHANGE_DIR        = wxFD_CHANGE_DIR
+};
+#endif
 
 #define wxFD_DEFAULT_STYLE      wxFD_OPEN
 

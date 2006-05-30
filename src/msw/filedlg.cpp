@@ -136,8 +136,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
                                wildCard, style, pos, sz, name)
 
 {
-    if ( ( m_windowStyle & wxMULTIPLE ) && ( m_windowStyle & wxSAVE ) )
-        m_windowStyle &= ~wxMULTIPLE;
+    if ( ( m_windowStyle & wxFD_MULTIPLE ) && ( m_windowStyle & wxFD_SAVE ) )
+        m_windowStyle &= ~wxFD_MULTIPLE;
 
     m_bMovedWindow = false;
 
@@ -208,12 +208,12 @@ void wxFileDialog::DoMoveWindow(int x, int y, int WXUNUSED(w), int WXUNUSED(h))
 }
 
 // helper used below in ShowModal(): style is used to determine whether to show
-// the "Save file" dialog (if it contains wxSAVE bit) or "Open file" one;
+// the "Save file" dialog (if it contains wxFD_SAVE bit) or "Open file" one;
 // returns true on success or false on failure in which case err is filled with
 // the CDERR_XXX constant
 static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
 {
-    if ( style & wxSAVE ? GetSaveFileName(of) : GetOpenFileName(of) )
+    if ( style & wxFD_SAVE ? GetSaveFileName(of) : GetOpenFileName(of) )
         return true;
 
     if ( err )
@@ -280,13 +280,13 @@ int wxFileDialog::ShowModal()
 
 #if WXWIN_COMPATIBILITY_2_4
     long msw_flags = 0;
-    if ( (m_windowStyle & wxHIDE_READONLY) || (m_windowStyle & wxSAVE) )
+    if ( (m_windowStyle & wxHIDE_READONLY) || (m_windowStyle & wxFD_SAVE) )
         msw_flags |= OFN_HIDEREADONLY;
 #else
     long msw_flags = OFN_HIDEREADONLY;
 #endif
 
-    if ( m_windowStyle & wxFILE_MUST_EXIST )
+    if ( m_windowStyle & wxFD_FILE_MUST_EXIST )
         msw_flags |= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
     /*
         If the window has been moved the programmer is probably
@@ -304,21 +304,21 @@ int wxFileDialog::ShowModal()
 #endif
     }
 
-    if (m_windowStyle & wxMULTIPLE )
+    if (m_windowStyle & wxFD_MULTIPLE )
     {
         // OFN_EXPLORER must always be specified with OFN_ALLOWMULTISELECT
         msw_flags |= OFN_EXPLORER | OFN_ALLOWMULTISELECT;
     }
 
-    // if wxCHANGE_DIR flag is not given we shouldn't change the CWD which the
+    // if wxFD_CHANGE_DIR flag is not given we shouldn't change the CWD which the
     // standard dialog does by default (notice that under NT it does it anyhow,
     // OFN_NOCHANGEDIR or not, see below)
-    if ( !(m_windowStyle & wxCHANGE_DIR) )
+    if ( !(m_windowStyle & wxFD_CHANGE_DIR) )
     {
         msw_flags |= OFN_NOCHANGEDIR;
     }
 
-    if ( m_windowStyle & wxOVERWRITE_PROMPT )
+    if ( m_windowStyle & wxFD_OVERWRITE_PROMPT )
     {
         msw_flags |= OFN_OVERWRITEPROMPT;
     }
@@ -393,7 +393,7 @@ int wxFileDialog::ShowModal()
     }
 
     // Replace | with \0
-    for (i = 0; i < filterBuffer.Len(); i++ ) {
+    for (i = 0; i < filterBuffer.length(); i++ ) {
         if ( filterBuffer.GetChar(i) == wxT('|') ) {
             filterBuffer[i] = wxT('\0');
         }
@@ -411,11 +411,11 @@ int wxFileDialog::ShowModal()
     of.nMaxFile  = wxMAXPATH;
 
     // we must set the default extension because otherwise Windows would check
-    // for the existing of a wrong file with wxOVERWRITE_PROMPT (i.e. if the
+    // for the existing of a wrong file with wxFD_OVERWRITE_PROMPT (i.e. if the
     // user types "foo" and the default extension is ".bar" we should force it
     // to check for "foo.bar" existence and not "foo")
     wxString defextBuffer; // we need it to be alive until GetSaveFileName()!
-    if (m_windowStyle & wxSAVE)
+    if (m_windowStyle & wxFD_SAVE)
     {
         const wxChar* extension = filterBuffer;
         int maxFilter = (int)(of.nFilterIndex*2L) - 1;
@@ -463,7 +463,7 @@ int wxFileDialog::ShowModal()
         // GetOpenFileName will always change the current working directory on
         // (according to MSDN) "Windows NT 4.0/2000/XP" because the flag
         // OFN_NOCHANGEDIR has no effect.  If the user did not specify
-        // wxCHANGE_DIR let's restore the current working directory to what it
+        // wxFD_CHANGE_DIR let's restore the current working directory to what it
         // was before the dialog was shown.
         if ( msw_flags & OFN_NOCHANGEDIR )
         {
@@ -472,7 +472,7 @@ int wxFileDialog::ShowModal()
 
         m_fileNames.Empty();
 
-        if ( ( m_windowStyle & wxMULTIPLE ) &&
+        if ( ( m_windowStyle & wxFD_MULTIPLE ) &&
 #if defined(OFN_EXPLORER)
              ( fileNameBuffer[of.nFileOffset-1] == wxT('\0') )
 #else
@@ -485,7 +485,7 @@ int wxFileDialog::ShowModal()
             i = of.nFileOffset;
             m_fileName = &fileNameBuffer[i];
             m_fileNames.Add(m_fileName);
-            i += m_fileName.Len() + 1;
+            i += m_fileName.length() + 1;
 
             while (fileNameBuffer[i] != wxT('\0'))
             {
@@ -526,8 +526,8 @@ int wxFileDialog::ShowModal()
                     extension = extension + wxStrlen( extension ) + 1;
 
                 m_fileName = AppendExtension(fileNameBuffer, extension);
-                wxStrncpy(fileNameBuffer, m_fileName.c_str(), wxMin(m_fileName.Len(), wxMAXPATH-1));
-                fileNameBuffer[wxMin(m_fileName.Len(), wxMAXPATH-1)] = wxT('\0');
+                wxStrncpy(fileNameBuffer, m_fileName.c_str(), wxMin(m_fileName.length(), wxMAXPATH-1));
+                fileNameBuffer[wxMin(m_fileName.length(), wxMAXPATH-1)] = wxT('\0');
             }
 
             m_path = fileNameBuffer;
@@ -555,4 +555,3 @@ int wxFileDialog::ShowModal()
 }
 
 #endif // wxUSE_FILEDLG && !(__SMARTPHONE__ && __WXWINCE__)
-

@@ -369,7 +369,7 @@ bool MyApp::OnInit()
     wxMenu *sheet_menu = new wxMenu;
     sheet_menu->Append(DIALOGS_PROPERTY_SHEET, _T("&Standard property sheet\tShift-Ctrl-P"));
     sheet_menu->Append(DIALOGS_PROPERTY_SHEET_TOOLBOOK, _T("&Toolbook sheet\tShift-Ctrl-T"));
-    
+
     if (wxPlatformIs(wxMac))
         sheet_menu->Append(DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK, _T("Button &Toolbook sheet\tShift-Ctrl-U"));
 /*
@@ -840,7 +840,7 @@ void MyFrame::FilesOpenGeneric(wxCommandEvent& WXUNUSED(event) )
     wxString wildcards = _T("All files (*.*)|*.*|C++ files (*.cpp;*.h)|*.cpp;*.h");
     wxGenericFileDialog dialog(this, _T("Testing open multiple file dialog"),
                         wxEmptyString, wxEmptyString, wildcards,
-                        wxMULTIPLE);
+                        wxFD_MULTIPLE);
 
     if (dialog.ShowModal() == wxID_OK)
     {
@@ -876,7 +876,7 @@ void MyFrame::FileSaveGeneric(wxCommandEvent& WXUNUSED(event) )
                         wxEmptyString,
                         _T("myletter.doc"),
                         _T("Text files (*.txt)|*.txt|Document files (*.doc)|*.doc"),
-                        wxSAVE|wxOVERWRITE_PROMPT);
+                        wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 
     dialog.SetFilterIndex(1);
 
@@ -1423,7 +1423,7 @@ SettingsDialog::SettingsDialog(wxWindow* win, int dialogType)
 
     int tabImage1 = -1;
     int tabImage2 = -1;
-    
+
     bool useToolBook = (dialogType == DIALOGS_PROPERTY_SHEET_TOOLBOOK || dialogType == DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK);
     int resizeBorder = wxRESIZE_BORDER;
 
@@ -1432,13 +1432,13 @@ SettingsDialog::SettingsDialog(wxWindow* win, int dialogType)
         resizeBorder = 0;
         tabImage1 = 0;
         tabImage2 = 1;
-        
+
         int sheetStyle = wxPROPSHEET_SHRINKTOFIT;
         if (dialogType == DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK)
             sheetStyle |= wxPROPSHEET_BUTTONTOOLBOOK;
         else
             sheetStyle |= wxPROPSHEET_TOOLBOOK;
-            
+
         SetSheetStyle(sheetStyle);
         SetSheetInnerBorder(0);
         SetSheetOuterBorder(0);

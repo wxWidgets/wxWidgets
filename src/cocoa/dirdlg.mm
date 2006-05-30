@@ -28,6 +28,7 @@
     #include "wx/dirdlg.h"
     #include "wx/app.h"
 #endif
+
 #include "wx/filename.h"
 
 #include "wx/cocoa/autorelease.h"
@@ -52,8 +53,8 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
         const wxSize& size, const wxString& name)
 {
     wxTopLevelWindows.Append(this);
-    
-	m_message = message;
+
+    m_message = message;
     m_dialogStyle = style;
     m_parent = parent;
     m_path = defaultPath;
@@ -68,7 +69,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
 
     //If the user requests to save - use a NSSavePanel
     //else use a NSOpenPanel
-    if (m_dialogStyle & wxSAVE)
+    if (m_dialogStyle & wxFD_SAVE)
     {
         SetNSPanel([NSSavePanel savePanel]);
 
@@ -78,7 +79,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
         [GetNSSavePanel() setTreatsFilePackagesAsDirectories:YES];
         [GetNSSavePanel() setCanSelectHiddenExtension:YES];
     }
-    else //m_dialogStyle & wxOPEN
+    else //m_dialogStyle & wxFD_OPEN
     {
         SetNSPanel([NSOpenPanel openPanel]);
         [m_cocoaNSWindow setTitle:wxNSStringWithWxString(message)];
@@ -89,10 +90,10 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
         [GetNSSavePanel() setPrompt:@"Open"];
     }
 
-	if (m_dialogStyle & wxDD_NEW_DIR_BUTTON) //m_dialogStyle & wxDD_NEW_DIR_BUTTON
-	{
+    if (m_dialogStyle & wxDD_NEW_DIR_BUTTON) //m_dialogStyle & wxDD_NEW_DIR_BUTTON
+    {
         [(NSOpenPanel*)m_cocoaNSWindow setCanCreateDirectories:YES];
-	}
+    }
 }
 
 wxDirDialog::~wxDirDialog()
@@ -107,7 +108,7 @@ int wxDirDialog::ShowModal()
 
     int nResult;
 
-    if (m_dialogStyle & wxSAVE)
+    if (m_dialogStyle & wxFD_SAVE)
     {
         nResult = [GetNSSavePanel()
                     runModalForDirectory:wxNSStringWithWxString(m_dir)
@@ -119,7 +120,7 @@ int wxDirDialog::ShowModal()
             m_path = m_fileNames[0];
         }
     }
-    else //m_dialogStyle & wxOPEN
+    else //m_dialogStyle & wxFD_OPEN
     {
         nResult = [(NSOpenPanel*)m_cocoaNSWindow
                     runModalForDirectory:wxNSStringWithWxString(m_dir)
@@ -141,4 +142,3 @@ int wxDirDialog::ShowModal()
 }
 
 #endif // wxUSE_DIRDLG
-

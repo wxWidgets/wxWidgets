@@ -169,7 +169,7 @@ void MakeUserDataRec(OpenUserDataRec    *myData , const wxString& filter )
         int filterIndex = 0;
         bool isName = true ;
         wxString current ;
-        for( unsigned int i = 0; i < filter2.Len() ; i++ )
+        for( unsigned int i = 0; i < filter2.length() ; i++ )
         {
             if( filter2.GetChar(i) == wxT('|') )
             {
@@ -251,7 +251,7 @@ static Boolean CheckFile( const wxString &filename , OSType type , OpenUserDataR
                 if ( extension.GetChar(0) == '*' )
                     extension = extension.Mid(1) ;
 
-                if ( file.Len() >= extension.Len() && extension == file.Right(extension.Len() ) )
+                if ( file.length() >= extension.length() && extension == file.Right(extension.length() ) )
                     return true ;
             }
         }
@@ -584,7 +584,7 @@ int wxFileDialog::ShowModal()
         myData.saveMode = false ;
 
         mNavFilterUPP = NewNavObjectFilterUPP( CrossPlatformFilterCallback ) ;
-        if ( m_windowStyle & wxMULTIPLE )
+        if ( m_windowStyle & wxFD_MULTIPLE )
             mNavOptions.dialogOptionFlags |= kNavAllowMultipleFiles ;
         else
             mNavOptions.dialogOptionFlags &= ~kNavAllowMultipleFiles ;

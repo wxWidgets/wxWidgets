@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filedlg.cpp
+// Name:        src/os2/filedlg.cpp
 // Purpose:     wxFileDialog
 // Author:      David Webster
 // Modified by:
@@ -78,8 +78,8 @@ wxFileDialog::wxFileDialog (
     :wxFileDialogBase(pParent, rsMessage, rsDefaultDir, rsDefaultFileName, rsWildCard, lStyle, rPos, sz, name)
 
 {
-    if ((m_windowStyle & wxMULTIPLE) && (m_windowStyle & wxSAVE))
-        m_windowStyle &= ~wxMULTIPLE;
+    if ((m_windowStyle & wxFD_MULTIPLE) && (m_windowStyle & wxFD_SAVE))
+        m_windowStyle &= ~wxFD_MULTIPLE;
 
     m_filterIndex = 1;
 } // end of wxFileDialog::wxFileDialog
@@ -126,7 +126,7 @@ int wxFileDialog::ShowModal()
     *zFileNameBuffer = wxT('\0');
     *zTitleBuffer    = wxT('\0');
 
-    if (m_windowStyle & wxSAVE)
+    if (m_windowStyle & wxFD_SAVE)
         lFlags = FDS_SAVEAS_DIALOG;
     else
         lFlags = FDS_OPEN_DIALOG;
@@ -136,9 +136,9 @@ int wxFileDialog::ShowModal()
         lFlags |= FDS_SAVEAS_DIALOG;
 #endif
 
-    if (m_windowStyle & wxSAVE)
+    if (m_windowStyle & wxFD_SAVE)
         lFlags |= FDS_SAVEAS_DIALOG;
-    if (m_windowStyle & wxMULTIPLE )
+    if (m_windowStyle & wxFD_MULTIPLE)
         lFlags |= FDS_OPEN_DIALOG | FDS_MULTIPLESEL;
 
     vFileDlg.cbSize = sizeof(FILEDLG);
@@ -224,7 +224,7 @@ int wxFileDialog::ShowModal()
     if (hWnd && vFileDlg.lReturn == DID_OK)
     {
         m_fileNames.Empty();
-        if ((m_windowStyle & wxMULTIPLE ) && vFileDlg.ulFQFCount > 1)
+        if ((m_windowStyle & wxFD_MULTIPLE ) && vFileDlg.ulFQFCount > 1)
         {
             for (int i = 0; i < (int)vFileDlg.ulFQFCount; i++)
             {
@@ -238,7 +238,7 @@ int wxFileDialog::ShowModal()
             }
             ::WinFreeFileDlgList(vFileDlg.papszFQFilename);
         }
-        else if (!(m_windowStyle & wxSAVE))
+        else if (!(m_windowStyle & wxFD_SAVE))
         {
             m_path = (wxChar*)vFileDlg.szFullFile;
             m_fileName = wxFileNameFromPath(wxString((const wxChar*)vFileDlg.szFullFile));
@@ -301,10 +301,10 @@ int wxFileDialog::ShowModal()
             m_dir = wxPathOnly((const wxChar*)vFileDlg.szFullFile);
 
             //
-            // === Simulating the wxOVERWRITE_PROMPT >>============================
+            // === Simulating the wxFD_OVERWRITE_PROMPT >>============================
             //
-            if ((m_windowStyle & wxOVERWRITE_PROMPT) &&
-                (m_windowStyle & wxSAVE) &&
+            if ((m_windowStyle & wxFD_OVERWRITE_PROMPT) &&
+                (m_windowStyle & wxFD_SAVE) &&
                 (wxFileExists(m_path.c_str())))
             {
                 wxString            sMessageText;
