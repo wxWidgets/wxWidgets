@@ -14,13 +14,13 @@
 
 // check if to use precompiled headers: do it for most Windows compilers unless
 // explicitly disabled by defining NOPCH
-#if ( defined(__WXMSW__) && \
-       ( defined(__BORLANDC__)    || \
-         defined(__VISUALC__)     || \
-         defined(__DIGITALMARS__) || \
-         defined(__WATCOMC__) ) ) || \
-      defined(__VISAGECPP__) || \
-      defined(__MWERKS__)
+#if defined(__VISUALC__)   || \
+    defined(__DMC__)       || \
+    defined(__VISAGECPP__) || \
+    defined(__MWERKS__)    || \
+    defined(__WATCOMC__)   || \
+    defined(__BORLANDC__)
+         
 
     // If user did not request NOCPH and we're not building using configure
     // then assume user wants precompiled headers.
