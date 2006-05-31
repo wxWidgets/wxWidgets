@@ -57,16 +57,16 @@ bool wxFileDialogBase::Create(wxWindow *parent,
     m_windowStyle = style;
     m_filterIndex = 0;
 
-#ifdef __WXDEBUG__
-    // check the given styles
-    wxASSERT_MSG(HasFlag(wxFD_OPEN) || HasFlag(wxFD_SAVE), wxT("You must specify one of wxFD_OPEN and wxFD_SAVE styles"));
-    if (HasFlag(wxFD_SAVE))
-        wxASSERT_MSG( !HasFlag(wxFD_OPEN) && !HasFlag(wxFD_MULTIPLE) && !HasFlag(wxFD_FILE_MUST_EXIST),
-                      wxT("wxFileDialog - wxFD_OPEN, wxFD_MULTIPLE or wxFD_FILE_MUST_EXIST used on a save dialog" ) );
-    if (HasFlag(wxFD_OPEN))
-        wxASSERT_MSG( !HasFlag(wxFD_SAVE) && !HasFlag(wxFD_OVERWRITE_PROMPT),
-                      wxT("wxFileDialog - wxFD_SAVE or wxFD_OVERWRITE_PROMPT used on a open dialog" ) );
-#endif
+    // check that the styles are not contradictory
+    wxASSERT_MSG( !(HasFlag(wxFD_SAVE) && HasFlag(wxFD_OPEN)),
+                  _T("can't specify both wxFD_SAVE and wxFD_OPEN at once") );
+
+    wxASSERT_MSG( !HasFlag(wxFD_SAVE) ||
+                    (!HasFlag(wxFD_MULTIPLE) && !HasFlag(wxFD_FILE_MUST_EXIST)),
+                   _T("wxFD_MULTIPLE or wxFD_FILE_MUST_EXIST can't be used with wxFD_SAVE" ) );
+
+    wxASSERT_MSG( !HasFlag(wxFD_OPEN) || !HasFlag(wxFD_OVERWRITE_PROMPT),
+                  _T("wxFD_OVERWRITE_PROMPT can't be used with wxFD_OPEN") );
 
     if ( wildCard.empty() || wildCard == wxFileSelectorDefaultWildcardStr )
     {
