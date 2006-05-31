@@ -1,24 +1,28 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/statbmp.mm
+// Name:        src/cocoa/statbmp.mm
 // Purpose:     wxStaticBitmap
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/02/15
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWidgets licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#include "wx/statbmp.h"
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/statbmp.h"
 #endif //WX_PRECOMP
+
 #include "wx/cocoa/autorelease.h"
 
 #import <AppKit/NSImageView.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
+
 BEGIN_EVENT_TABLE(wxStaticBitmap, wxControl)
 END_EVENT_TABLE()
 // WX_IMPLEMENT_COCOA_OWNER(wxStaticBitmap,NSTextField,NSControl,NSView)
@@ -59,4 +63,3 @@ wxBitmap wxStaticBitmap::GetBitmap() const
 {
     return wxNullBitmap;
 }
-

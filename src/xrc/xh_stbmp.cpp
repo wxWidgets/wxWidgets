@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_stbmp.cpp
+// Name:        src/xrc/xh_stbmp.cpp
 // Purpose:     XRC resource for wxStaticBitmap
 // Author:      Vaclav Slavik
 // Created:     2000/04/22
@@ -15,15 +15,18 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XRC && wxUSE_STATBMP
 
 #include "wx/xrc/xh_stbmp.h"
-#include "wx/statbmp.h"
+
+#ifndef  WX_PRECOMP
+    #include "wx/statbmp.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmapXmlHandler, wxXmlResourceHandler)
 
 wxStaticBitmapXmlHandler::wxStaticBitmapXmlHandler()
-: wxXmlResourceHandler()
+                         :wxXmlResourceHandler()
 {
     AddWindowStyles();
 }
@@ -49,4 +52,4 @@ bool wxStaticBitmapXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxStaticBitmap"));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_STATBMP

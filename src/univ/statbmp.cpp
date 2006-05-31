@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/statbmp.cpp
+// Name:        src/univ/statbmp.cpp
 // Purpose:     wxStaticBitmap implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -25,10 +25,11 @@
 
 #if wxUSE_STATBMP
 
+#include "wx/statbmp.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/icon.h"
-    #include "wx/statbmp.h"
     #include "wx/validate.h"
 #endif
 
@@ -105,4 +106,3 @@ void wxStaticBitmap::DoDraw(wxControlRenderer *renderer)
 }
 
 #endif // wxUSE_STATBMP
-

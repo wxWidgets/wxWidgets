@@ -27,10 +27,10 @@
     #include "wx/log.h"
     #include "wx/frame.h"
     #include "wx/dcclient.h"
+    #include "wx/statbmp.h"
 #endif
 
 #include "wx/bitmap.h"
-#include "wx/statbmp.h"
 #include "wx/sizer.h"
 #include "wx/image.h"
 
@@ -118,7 +118,7 @@ protected:
 BEGIN_EVENT_TABLE(wxTaskBarIconArea, wxTaskBarIconAreaBase)
     EVT_SIZE(wxTaskBarIconArea::OnSizeChange)
     EVT_MOUSE_EVENTS(wxTaskBarIconArea::OnMouseEvent)
-    EVT_MENU(-1, wxTaskBarIconArea::OnMenuEvent)
+    EVT_MENU(wxID_ANY, wxTaskBarIconArea::OnMenuEvent)
     EVT_PAINT(wxTaskBarIconArea::OnPaint)
 END_EVENT_TABLE()
 
