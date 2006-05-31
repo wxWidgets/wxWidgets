@@ -2546,6 +2546,7 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumbVisible,
     int range, bool refresh)
 {
     bool showScroller;
+    bool triggerSizeEvent = false;
 
     if ( orient == wxHORIZONTAL )
     {
@@ -2553,7 +2554,10 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumbVisible,
         {
             showScroller = ((range != 0) && (range > thumbVisible));
             if ( m_hScrollBar->IsShown() != showScroller )
-                m_hScrollBar->Show( showScroller ) ;
+            {
+                m_hScrollBar->Show( showScroller );
+                triggerSizeEvent = true;
+            }
 
             m_hScrollBar->SetScrollbar( pos , thumbVisible , range , thumbVisible , refresh ) ;
         }
@@ -2564,13 +2568,22 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumbVisible,
         {
             showScroller = ((range != 0) && (range > thumbVisible));
             if ( m_vScrollBar->IsShown() != showScroller )
+            {
                 m_vScrollBar->Show( showScroller ) ;
+                triggerSizeEvent = true;
+            }
 
             m_vScrollBar->SetScrollbar( pos , thumbVisible , range , thumbVisible , refresh ) ;
         }
     }
 
     MacRepositionScrollBars() ;
+    if ( triggerSizeEvent )
+    {
+        wxSizeEvent event(GetSize(), m_windowId);
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
+    }
 }
 
 // Does a physical scroll
