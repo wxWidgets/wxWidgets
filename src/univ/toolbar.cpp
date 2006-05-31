@@ -34,6 +34,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/frame.h"
+    #include "wx/dc.h"
 #endif
 
 #include "wx/univ/renderer.h"
@@ -375,8 +376,17 @@ wxRect wxToolBar::GetToolRect(wxToolBarToolBase *toolBase) const
     {
         if (tool->IsButton())
         {
-            rect.width = m_defaultWidth;
-            rect.height = m_defaultHeight;
+            if(!HasFlag(wxTB_TEXT))
+            {
+                rect.width = m_defaultWidth;
+                rect.height = m_defaultHeight;
+            }
+            else
+            {
+                rect.width = m_defaultWidth +
+                    GetFont().GetPointSize() * tool->GetLabel().length();
+                rect.height = m_defaultHeight;
+            }
         }
         else if (tool->IsSeparator())
         {
@@ -393,8 +403,17 @@ wxRect wxToolBar::GetToolRect(wxToolBarToolBase *toolBase) const
     {
         if (tool->IsButton())
         {
-            rect.width = m_defaultWidth;
-            rect.height = m_defaultHeight;
+            if(!HasFlag(wxTB_TEXT))
+            {
+                rect.width = m_defaultWidth;
+                rect.height = m_defaultHeight;
+            }
+            else
+            {
+                rect.width = m_defaultWidth +
+                    GetFont().GetPointSize() * tool->GetLabel().length();
+                rect.height = m_defaultHeight;
+            }
         }
         else if (tool->IsSeparator())
         {
@@ -427,6 +446,15 @@ bool wxToolBar::Realize()
     return true;
 }
 
+void wxToolBar::SetWindowStyleFlag( long style )
+{
+    wxToolBarBase::SetWindowStyleFlag(style);
+
+    m_needsLayout = true;
+
+    Refresh();
+}
+
 void wxToolBar::DoLayout()
 {
     wxASSERT_MSG( m_needsLayout, _T("why are we called?") );
@@ -436,7 +464,8 @@ void wxToolBar::DoLayout()
     wxCoord x = m_xMargin,
             y = m_yMargin;
 
-    const wxCoord widthTool = IsVertical() ? m_defaultHeight : m_defaultWidth;
+    wxCoord widthTool = 0, maxWidthTool = 0;
+    wxCoord heightTool = 0, maxHeightTool = 0;
     wxCoord margin = IsVertical() ? m_xMargin : m_yMargin;
     wxCoord *pCur = IsVertical() ? &y : &x;
 
@@ -453,6 +482,32 @@ void wxToolBar::DoLayout()
         // TODO ugly number fiddling
         if (tool->IsButton())
         {
+            if (IsVertical())
+            {
+                widthTool = m_defaultHeight;
+                heightTool = m_defaultWidth;
+                if(HasFlag(wxTB_TEXT))
+                    heightTool += GetFont().GetPointSize() * tool->GetLabel().length();
+            }
+            else
+            {
+                widthTool = m_defaultWidth;
+                if(HasFlag(wxTB_TEXT))
+                    widthTool += GetFont().GetPointSize() * tool->GetLabel().length();
+
+                heightTool = m_defaultHeight;
+            }
+
+            if(widthTool > maxWidthTool) // Record max width of tool
+            {
+                maxWidthTool = widthTool;
+            }
+
+            if(heightTool > maxHeightTool) // Record max width of tool
+            {
+                maxHeightTool = heightTool;
+            }
+
             *pCur += widthTool;
         }
         else if (tool->IsSeparator())
@@ -473,8 +528,26 @@ void wxToolBar::DoLayout()
     }
 
     // calculate the total toolbar size
-    wxCoord xMin = m_defaultWidth + 2*m_xMargin,
-            yMin = m_defaultHeight + 2*m_yMargin;
+    wxCoord xMin, yMin;
+
+    if(!HasFlag(wxTB_TEXT))
+    {
+        xMin = m_defaultWidth + 2*m_xMargin;
+        yMin = m_defaultHeight + 2*m_yMargin;
+    }
+    else
+    {
+        if (IsVertical())
+        {
+            xMin = heightTool + 2*m_xMargin;
+            yMin = widthTool + 2*m_xMargin;
+        }
+        else
+        {
+            xMin = maxWidthTool + 2*m_xMargin;
+            yMin = heightTool + 2*m_xMargin;
+        }
+    }
 
     m_maxWidth = x < xMin ? xMin : x;
     m_maxHeight = y < yMin ? yMin : y;
@@ -550,7 +623,7 @@ void wxToolBar::DoDraw(wxControlRenderer *renderer)
     // prepare the variables used below
     wxDC& dc = renderer->GetDC();
     wxRenderer *rend = renderer->GetRenderer();
-    // dc.SetFont(GetFont()); -- uncomment when we support labels
+    dc.SetFont(GetFont());
 
     // draw the border separating us from the menubar (if there is no menubar
     // we probably shouldn't draw it?)
@@ -616,14 +689,28 @@ void wxToolBar::DoDraw(wxControlRenderer *renderer)
         wxBitmap bitmap;
         if ( !tool->IsSeparator() )
         {
-            // label = tool->GetLabel();
+            label = tool->GetLabel();
             bitmap = tool->GetBitmap();
         }
         //else: leave both the label and the bitmap invalid to draw a separator
 
         if ( !tool->IsControl() )
         {
-            rend->DrawToolBarButton(dc, label, bitmap, rectTool, flags, tool->GetStyle());
+            int tbStyle = 0;
+            if(HasFlag(wxTB_TEXT))
+            {
+                tbStyle |= wxTB_TEXT;
+            }
+
+            if(HasFlag(wxTB_VERTICAL))
+            {
+                tbStyle |= wxTB_VERTICAL;
+            }
+            else
+            {
+                tbStyle |= wxTB_HORIZONTAL;
+            }
+            rend->DrawToolBarButton(dc, label, bitmap, rectTool, flags, tool->GetStyle(), tbStyle);
         }
         else // control
         {

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        univ/themes/gtk.cpp
+// Name:        src/univ/themes/gtk.cpp
 // Purpose:     wxUniversal theme implementing GTK-like LNF
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -171,7 +171,8 @@ public:
                                    const wxBitmap& bitmap,
                                    const wxRect& rect,
                                    int flags = 0,
-                                   long style = 0);
+                                   long style = 0,
+                                   int tbarStyle = 0);
 
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
@@ -1683,7 +1684,8 @@ void wxGTKRenderer::DrawToolBarButton(wxDC& dc,
                                       const wxBitmap& bitmap,
                                       const wxRect& rectOrig,
                                       int flags,
-                                      long WXUNUSED(style))
+                                      long WXUNUSED(style),
+                                      int tbarStyle)
 {
     // we don't draw the separators at all
     if ( !label.empty() || bitmap.Ok() )
@@ -1704,7 +1706,23 @@ void wxGTKRenderer::DrawToolBarButton(wxDC& dc,
             DrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL_CURRENT), rect);
         }
 
-        dc.DrawLabel(label, bitmap, rect, wxALIGN_CENTRE);
+        if(tbarStyle & wxTB_TEXT)
+        {
+            if(tbarStyle & wxTB_HORIZONTAL)
+            {
+                dc.DrawLabel(label, bitmap, rect, wxALIGN_CENTRE);
+            }
+            else
+            {
+                dc.DrawLabel(label, bitmap, rect, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL);
+            }
+        }
+        else
+        {
+            int xpoint = (rect.GetLeft() + rect.GetRight() + 1 - bitmap.GetWidth()) / 2;
+            int ypoint = (rect.GetTop() + rect.GetBottom() + 1 - bitmap.GetHeight()) / 2;
+            dc.DrawBitmap(bitmap, xpoint, ypoint);
+        }
     }
 }
 
@@ -2819,12 +2837,12 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
     } else
 #endif // wxUSE_BMPBUTTON
 #if wxUSE_BUTTON || wxUSE_TOGGLEBTN
-    if ( 0 
+    if ( 0
 #  if wxUSE_BUTTON
-         || wxDynamicCast(window, wxButton) 
+         || wxDynamicCast(window, wxButton)
 #  endif // wxUSE_BUTTON
 #  if wxUSE_TOGGLEBTN
-         || wxDynamicCast(window, wxToggleButton) 
+         || wxDynamicCast(window, wxToggleButton)
 #  endif // wxUSE_TOGGLEBTN
         )
     {

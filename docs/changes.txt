@@ -297,6 +297,7 @@ wxUniv:
 
 - Send wxEVT_SCROLL_XXX events from wxSlider (Danny Raynor).
 - Implemented wxToggleButton (David Bjorkevik).
+- Label in Toolbar tools implemented (Danny Raynor).
 
 wxX11:
 

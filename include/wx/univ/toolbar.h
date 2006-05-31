@@ -59,6 +59,8 @@ public:
 
     virtual bool Realize();
 
+    virtual void SetWindowStyleFlag( long style );
+
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
 
     virtual void SetToolShortHelp(int id, const wxString& helpString);

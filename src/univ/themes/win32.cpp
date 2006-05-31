@@ -249,7 +249,8 @@ public:
                                    const wxBitmap& bitmap,
                                    const wxRect& rect,
                                    int flags = 0,
-                                   long style = 0);
+                                   long style = 0,
+                                   int tbarStyle = 0);
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
                               const wxRect& rect,
@@ -2480,7 +2481,8 @@ void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
                                         const wxBitmap& bitmap,
                                         const wxRect& rectOrig,
                                         int flags,
-                                        long style)
+                                        long style,
+                                        int tbarStyle)
 {
     if (style == wxTOOL_STYLE_BUTTON)
     {
@@ -2496,7 +2498,23 @@ void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
             DrawBorder(dc, wxBORDER_RAISED, rect, flags);
         }
 
-        dc.DrawLabel(label, bitmap, rect, wxALIGN_CENTRE);
+        if(tbarStyle & wxTB_TEXT)
+        {
+            if(tbarStyle & wxTB_HORIZONTAL)
+            {
+                dc.DrawLabel(label, bitmap, rect, wxALIGN_CENTRE);
+            }
+            else
+            {
+                dc.DrawLabel(label, bitmap, rect, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL);
+            }
+        }
+        else
+        {
+            int xpoint = (rect.GetLeft() + rect.GetRight() + 1 - bitmap.GetWidth()) / 2;
+            int ypoint = (rect.GetTop() + rect.GetBottom() + 1 - bitmap.GetHeight()) / 2;
+            dc.DrawBitmap(bitmap, xpoint, ypoint);
+        }
     }
     else if (style == wxTOOL_STYLE_SEPARATOR)
     {
