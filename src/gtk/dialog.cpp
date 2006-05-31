@@ -210,11 +210,12 @@ int wxDialog::ShowModal()
 
     g_openDialogs++;
 
-    gtk_grab_add( m_widget );
+    // NOTE: gtk_window_set_modal internally calls gtk_grab_add() !
+    gtk_window_set_modal(GTK_WINDOW(m_widget), TRUE);
 
     wxEventLoop().Run();
 
-    gtk_grab_remove( m_widget );
+    gtk_window_set_modal(GTK_WINDOW(m_widget), FALSE);
 
     g_openDialogs--;
 
