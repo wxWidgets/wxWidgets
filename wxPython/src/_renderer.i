@@ -190,12 +190,13 @@ you need. ``flags`` may have the ``wx.CONTROL_PRESSED`` or
     
 
 
-
+    MustHaveApp(Get);
     DocDeclStr(
         static wxRendererNative& , Get(),
         "Return the currently used renderer", "");
     
 
+    MustHaveApp(GetGeneric);
     DocDeclStr(
         static wxRendererNative& , GetGeneric(),
         "Return the generic implementation of the renderer. Under some
@@ -204,6 +205,7 @@ platform-specific default renderer which can be retrieved by calling
 `GetDefault`.", "");
     
 
+    MustHaveApp(GetDefault);
     DocDeclStr(
         static wxRendererNative& , GetDefault(),
         "Return the default (native) implementation for this platform -- this
@@ -219,6 +221,7 @@ the return value of `Get`.", "");
 //     static wxRendererNative *Load(const wxString& name);
 
 
+    MustHaveApp(Set);
     DocDeclStr(
         static wxRendererNative *, Set(wxRendererNative *renderer),
         "Set the renderer to use, passing None reverts to using the default
