@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        generic/statline.cpp
-// Purpose:     a generic wxStaticLine class
+// Name:        src/mac/classic/statline.cpp
+// Purpose:     wxStaticLine class
 // Author:      Vadim Zeitlin
 // Created:     28.06.99
 // Version:     $Id$
@@ -24,7 +24,10 @@
 #endif
 
 #include "wx/statline.h"
-#include "wx/statbox.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/statbox.h"
+#endif
 
 // ============================================================================
 // implementation
@@ -44,7 +47,7 @@ bool wxStaticLine::Create( wxWindow *parent,
                            const wxString &name)
 {
     if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+        return false;
 
     // ok, this is ugly but it's better than nothing: use a thin static box to
     // emulate static line
@@ -53,5 +56,5 @@ bool wxStaticLine::Create( wxWindow *parent,
 
 //    m_statbox = new wxStaticBox(parent, id, wxT(""), pos, sizeReal, style, name);
 
-    return TRUE;
+    return true;
 }

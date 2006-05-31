@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        generic/statline.cpp
-// Purpose:     a generic wxStaticLine class
+// Name:        src/mac/carbon/statline.cpp
+// Purpose:     wxStaticLine class
 // Author:      Vadim Zeitlin
 // Created:     28.06.99
 // Version:     $Id$
@@ -15,7 +15,10 @@
 #endif
 
 #include "wx/statline.h"
-#include "wx/statbox.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/statbox.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
 

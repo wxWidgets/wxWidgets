@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        generic/statline.cpp
+// Name:        src/mac/classic/statlmac.cpp
 // Purpose:     a generic wxStaticLine class
 // Author:      Vadim Zeitlin
 // Created:     28.06.99
@@ -24,7 +24,10 @@
 #endif
 
 #include "wx/statline.h"
-#include "wx/statbox.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/statbox.h"
+#endif
 
 #include "wx/mac/uma.h"
 
@@ -51,13 +54,13 @@ bool wxStaticLine::Create( wxWindow *parent,
 
     Rect bounds ;
     Str255 title ;
-    
+
     MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
 
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1,
           kControlSeparatorLineProc , (long) this ) ;
-    
+
     MacPostControlCreate() ;
 
-    return TRUE;
+    return true;
 }

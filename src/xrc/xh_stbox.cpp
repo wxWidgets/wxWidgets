@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_stbox.cpp
+// Name:        src/xrc/xh_stbox.cpp
 // Purpose:     XRC resource for wxStaticBox
 // Author:      Brian Gavin
 // Created:     2000/09/09
@@ -15,15 +15,18 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XRC && wxUSE_STATBOX
 
 #include "wx/xrc/xh_stbox.h"
-#include "wx/statbox.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/statbox.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBoxXmlHandler, wxXmlResourceHandler)
 
 wxStaticBoxXmlHandler::wxStaticBoxXmlHandler()
-: wxXmlResourceHandler()
+                      :wxXmlResourceHandler()
 {
     AddWindowStyles();
 }
@@ -49,4 +52,4 @@ bool wxStaticBoxXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxStaticBox"));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_STATBOX

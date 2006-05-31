@@ -26,13 +26,13 @@
     #include "wx/dialog.h"
     #include "wx/scrolbar.h"
     #include "wx/stattext.h"
+    #include "wx/statbox.h"
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 #include "wx/radiobox.h"
 #include "wx/spinbutt.h"
-#include "wx/statbox.h"
 #include "wx/sizer.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)

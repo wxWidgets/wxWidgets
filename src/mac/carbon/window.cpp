@@ -27,10 +27,10 @@
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
     #include "wx/scrolbar.h"
+    #include "wx/statbox.h"
 #endif
 
 #include "wx/layout.h"
-#include "wx/statbox.h"
 #include "wx/tooltip.h"
 #include "wx/statusbr.h"
 #include "wx/menuitem.h"
