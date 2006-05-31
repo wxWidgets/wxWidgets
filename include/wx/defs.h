@@ -1465,6 +1465,13 @@ enum wxBorder
 /*  window is resized (currently, makes sense for wxMSW only) */
 #define wxNO_FULL_REPAINT_ON_RESIZE 0
 
+/* A mask which can be used to filter (out) all wxWindow-specific styles.
+ */
+#define wxWINDOW_STYLE_MASK     \
+    (wxVSCROLL|wxHSCROLL|wxBORDER_MASK|wxALWAYS_SHOW_SB|wxCLIP_CHILDREN| \
+     wxCLIP_SIBLINGS|wxTRANSPARENT_WINDOW|wxTAB_TRAVERSAL|wxWANTS_CHARS| \
+     wxRETAINED|wxPOPUP_WINDOW|wxFULL_REPAINT_ON_RESIZE)
+
 /*
  * Extra window style flags (use wxWS_EX prefix to make it clear that they
  * should be passed to wxWindow::SetExtraStyle(), not SetWindowStyle())

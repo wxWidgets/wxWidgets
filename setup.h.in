@@ -65,6 +65,9 @@
 /* Define this if your version of GTK+ is greater than 2.4 */
 #undef __WXGTK24__
 
+/* Define this if your version of GTK+ is greater than 2.6 */
+#undef __WXGTK26__
+
 /* Define this if you want to use GPE features */
 #undef __WXGPE__
 
@@ -299,9 +302,13 @@
 #define wxUSE_CHECKBOX      0
 #define wxUSE_CHECKLISTBOX  0
 #define wxUSE_CHOICE        0
+#define wxUSE_COLOURPICKERCTRL 0
 #define wxUSE_COMBOBOX      0
 #define wxUSE_DATAVIEWCTRL  0
 #define wxUSE_DATEPICKCTRL  0
+#define wxUSE_DIRPICKERCTRL 0
+#define wxUSE_FILEPICKERCTRL 0
+#define wxUSE_FONTPICKERCTRL 0
 #define wxUSE_GAUGE         0
 #define wxUSE_HYPERLINKCTRL 0
 #define wxUSE_LISTBOX       0

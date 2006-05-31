@@ -341,6 +341,10 @@ SOURCE=.\common\clntdata.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\clrpickercmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\cmdline.cpp
 # End Source File
 # Begin Source File
@@ -515,6 +519,10 @@ SOURCE=.\common\filename.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\filepickercmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\filesys.cpp
 # End Source File
 # Begin Source File
@@ -536,6 +544,10 @@ SOURCE=.\common\fontenumcmn.cpp
 # Begin Source File
 
 SOURCE=.\common\fontmap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\fontpickercmn.cpp
 # End Source File
 # Begin Source File
 
@@ -720,6 +732,10 @@ SOURCE=.\common\object.cpp
 # Begin Source File
 
 SOURCE=.\common\paper.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\pickerbase.cpp
 # End Source File
 # Begin Source File
 
@@ -955,6 +971,10 @@ SOURCE=.\generic\choicdgg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\clrpickerg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\combog.cpp
 # End Source File
 # Begin Source File
@@ -980,6 +1000,14 @@ SOURCE=.\generic\dirctrlg.cpp
 # Begin Source File
 
 SOURCE=.\generic\dragimgg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\filepickerg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\fontpickerg.cpp
 # End Source File
 # Begin Source File
 
@@ -1771,6 +1799,10 @@ SOURCE=.\xrc\xh_choicbk.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xrc\xh_clrpicker.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xrc\xh_combo.cpp
 # End Source File
 # Begin Source File
@@ -1779,7 +1811,19 @@ SOURCE=.\xrc\xh_datectrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xrc\xh_dirpicker.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xrc\xh_dlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_filepicker.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_fontpicker.cpp
 # End Source File
 # Begin Source File
 
@@ -2139,6 +2183,10 @@ SOURCE=..\include\wx\clntdata.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\clrpicker.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\cmdline.h
 # End Source File
 # Begin Source File
@@ -2407,6 +2455,10 @@ SOURCE=..\include\wx\filename.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\filepicker.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\filesys.h
 # End Source File
 # Begin Source File
@@ -2432,6 +2484,10 @@ SOURCE=..\include\wx\fontenum.h
 # Begin Source File
 
 SOURCE=..\include\wx\fontmap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\fontpicker.h
 # End Source File
 # Begin Source File
 
@@ -3239,6 +3295,10 @@ SOURCE=..\include\wx\xrc\xh_choicbk.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\xrc\xh_clrpicker.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\xrc\xh_combo.h
 # End Source File
 # Begin Source File
@@ -3247,7 +3307,19 @@ SOURCE=..\include\wx\xrc\xh_datectrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\xrc\xh_dirpicker.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\xrc\xh_dlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_filepicker.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_fontpicker.h
 # End Source File
 # Begin Source File
 
@@ -3911,6 +3983,10 @@ SOURCE=..\include\wx\generic\choicdgg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\generic\clrpicker.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\generic\colrdlgg.h
 # End Source File
 # Begin Source File
@@ -3943,7 +4019,15 @@ SOURCE=..\include\wx\generic\filedlgg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\generic\filepicker.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\generic\fontdlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\generic\fontpicker.h
 # End Source File
 # Begin Source File
 

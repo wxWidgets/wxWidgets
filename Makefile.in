@@ -1260,11 +1260,15 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_chckl.o \
 	xrcdll_xh_choic.o \
 	xrcdll_xh_choicbk.o \
+	xrcdll_xh_clrpicker.o \
 	xrcdll_xh_combo.o \
 	xrcdll_xh_datectrl.o \
+	xrcdll_xh_dirpicker.o \
 	xrcdll_xh_dlg.o \
 	xrcdll_xh_frame.o \
 	xrcdll_xh_mdi.o \
+	xrcdll_xh_filepicker.o \
+	xrcdll_xh_fontpicker.o \
 	xrcdll_xh_gauge.o \
 	xrcdll_xh_gdctl.o \
 	xrcdll_xh_grid.o \
@@ -1312,11 +1316,15 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_chckl.o \
 	xrclib_xh_choic.o \
 	xrclib_xh_choicbk.o \
+	xrclib_xh_clrpicker.o \
 	xrclib_xh_combo.o \
 	xrclib_xh_datectrl.o \
+	xrclib_xh_dirpicker.o \
 	xrclib_xh_dlg.o \
 	xrclib_xh_frame.o \
 	xrclib_xh_mdi.o \
+	xrclib_xh_filepicker.o \
+	xrclib_xh_fontpicker.o \
 	xrclib_xh_gauge.o \
 	xrclib_xh_gdctl.o \
 	xrclib_xh_grid.o \
@@ -1863,8 +1871,11 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION__GUI_HDR =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION__GUI_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/generic/colrdlgg.h \
+	wx/generic/clrpickerg.h \
 	wx/generic/dirdlgg.h \
 	wx/generic/fdrepdlg.h \
+	wx/generic/fontpickerg.h \
+	wx/generic/filepickerg.h \
 	wx/generic/listctrl.h \
 	wx/generic/statusbr.h \
 	wx/generic/tabg.h \
@@ -1877,9 +1888,12 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/choice.h \
 	wx/gtk/combobox.h \
 	wx/gtk/control.h \
+	wx/gtk/clrpicker.h \
 	wx/gtk/dialog.h \
 	wx/gtk/dirdlg.h \
 	wx/gtk/filedlg.h \
+	wx/gtk/fontpicker.h \
+	wx/gtk/filepicker.h \
 	wx/gtk/fontdlg.h \
 	wx/gtk/frame.h \
 	wx/gtk/gauge.h \
@@ -2146,6 +2160,9 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/motif/window.h
 @COND_TOOLKIT_MOTIF@GUI_HDR = $(COND_TOOLKIT_MOTIF_GUI_HDR)
 COND_TOOLKIT_MSW_GUI_HDR =  \
+	wx/generic/clrpicker.h \
+	wx/generic/fontpicker.h \
+	wx/generic/filepicker.h \
 	wx/msw/accel.h \
 	wx/msw/app.h \
 	wx/msw/bitmap.h \
@@ -2337,6 +2354,9 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/os2/window.h
 @COND_TOOLKIT_PM@GUI_HDR = $(COND_TOOLKIT_PM_GUI_HDR)
 COND_TOOLKIT_WINCE_GUI_HDR =  \
+	wx/generic/clrpicker.h \
+	wx/generic/fontpicker.h \
+	wx/generic/filepicker.h \
 	wx/msw/accel.h \
 	wx/msw/app.h \
 	wx/msw/bitmap.h \
@@ -2707,6 +2727,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/caret.h \
 	wx/choicebk.h \
 	wx/clipbrd.h \
+	wx/clrpicker.h \
 	wx/cmdproc.h \
 	wx/colordlg.h \
 	wx/colour.h \
@@ -2724,6 +2745,8 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/effects.h \
 	wx/evtloop.h \
 	wx/fdrepdlg.h \
+	wx/filepicker.h \
+	wx/fontpicker.h \
 	wx/fmappriv.h \
 	wx/font.h \
 	wx/fontdlg.h \
@@ -2825,9 +2848,13 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_chckl.h \
 	wx/xrc/xh_choic.h \
 	wx/xrc/xh_choicbk.h \
+	wx/xrc/xh_clrpicker.h \
 	wx/xrc/xh_combo.h \
 	wx/xrc/xh_datectrl.h \
+	wx/xrc/xh_dirpicker.h \
 	wx/xrc/xh_dlg.h \
+	wx/xrc/xh_filepicker.h \
+	wx/xrc/xh_fontpicker.h \
 	wx/xrc/xh_frame.h \
 	wx/xrc/xh_mdi.h \
 	wx/xrc/xh_gauge.h \
@@ -3108,11 +3135,15 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_chckl.o \
 	monodll_xh_choic.o \
 	monodll_xh_choicbk.o \
+	monodll_xh_clrpicker.o \
 	monodll_xh_combo.o \
 	monodll_xh_datectrl.o \
+	monodll_xh_dirpicker.o \
 	monodll_xh_dlg.o \
 	monodll_xh_frame.o \
 	monodll_xh_mdi.o \
+	monodll_xh_filepicker.o \
+	monodll_xh_fontpicker.o \
 	monodll_xh_gauge.o \
 	monodll_xh_gdctl.o \
 	monodll_xh_grid.o \
@@ -3158,6 +3189,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_bookctrl.o \
 	monodll_choiccmn.o \
 	monodll_clipcmn.o \
+	monodll_clrpickercmn.o \
 	monodll_colourcmn.o \
 	monodll_combocmn.o \
 	monodll_cmdproc.o \
@@ -3178,6 +3210,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_effects.o \
 	monodll_evtloopcmn.o \
 	monodll_fddlgcmn.o \
+	monodll_filepickercmn.o \
+	monodll_fontpickercmn.o \
 	monodll_fldlgcmn.o \
 	monodll_fontcmn.o \
 	monodll_fontenumcmn.o \
@@ -3208,6 +3242,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_menucmn.o \
 	monodll_nbkbase.o \
 	monodll_paper.o \
+	monodll_pickerbase.o \
 	monodll_popupcmn.o \
 	monodll_prntbase.o \
 	monodll_quantize.o \
@@ -3315,6 +3350,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_bookctrl.o \
 	monodll_choiccmn.o \
 	monodll_clipcmn.o \
+	monodll_clrpickercmn.o \
 	monodll_colourcmn.o \
 	monodll_combocmn.o \
 	monodll_cmdproc.o \
@@ -3335,6 +3371,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_effects.o \
 	monodll_evtloopcmn.o \
 	monodll_fddlgcmn.o \
+	monodll_filepickercmn.o \
+	monodll_fontpickercmn.o \
 	monodll_fldlgcmn.o \
 	monodll_fontcmn.o \
 	monodll_fontenumcmn.o \
@@ -3365,6 +3403,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_menucmn.o \
 	monodll_nbkbase.o \
 	monodll_paper.o \
+	monodll_pickerbase.o \
 	monodll_popupcmn.o \
 	monodll_prntbase.o \
 	monodll_quantize.o \
@@ -3809,8 +3848,11 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS =  \
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_accel.o \
 	monodll_colrdlgg.o \
+	monodll_clrpickerg.o \
 	monodll_dirdlgg.o \
 	monodll_fdrepdlg.o \
+	monodll_fontpickerg.o \
+	monodll_filepickerg.o \
 	monodll_filedlgg.o \
 	monodll_imaglist.o \
 	monodll_listctrl.o \
@@ -3828,7 +3870,10 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_colordlg.o \
 	monodll_combobox.o \
 	monodll_control.o \
+	monodll_clrpicker.o \
 	monodll_dialog.o \
+	monodll_fontpicker.o \
+	monodll_filepicker.o \
 	monodll_dirdlg.o \
 	monodll_filedlg.o \
 	monodll_fontdlg.o \
@@ -4009,6 +4054,9 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_tabg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
+	monodll_clrpickerg.o \
+	monodll_fontpickerg.o \
+	monodll_filepickerg.o \
 	monodll_statusbr.o \
 	monodll_prntdlgg.o \
 	monodll_accel.o \
@@ -4143,6 +4191,9 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_window.o
 @COND_TOOLKIT_PM@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_PM___GUI_SRC_OBJECTS)
 COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
+	monodll_clrpickerg.o \
+	monodll_fontpickerg.o \
+	monodll_filepickerg.o \
 	monodll_statusbr.o \
 	monodll_prntdlgg.o \
 	monodll_accel.o \
@@ -4749,11 +4800,15 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_chckl.o \
 	monolib_xh_choic.o \
 	monolib_xh_choicbk.o \
+	monolib_xh_clrpicker.o \
 	monolib_xh_combo.o \
 	monolib_xh_datectrl.o \
+	monolib_xh_dirpicker.o \
 	monolib_xh_dlg.o \
 	monolib_xh_frame.o \
 	monolib_xh_mdi.o \
+	monolib_xh_filepicker.o \
+	monolib_xh_fontpicker.o \
 	monolib_xh_gauge.o \
 	monolib_xh_gdctl.o \
 	monolib_xh_grid.o \
@@ -4799,6 +4854,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_bookctrl.o \
 	monolib_choiccmn.o \
 	monolib_clipcmn.o \
+	monolib_clrpickercmn.o \
 	monolib_colourcmn.o \
 	monolib_combocmn.o \
 	monolib_cmdproc.o \
@@ -4819,6 +4875,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_effects.o \
 	monolib_evtloopcmn.o \
 	monolib_fddlgcmn.o \
+	monolib_filepickercmn.o \
+	monolib_fontpickercmn.o \
 	monolib_fldlgcmn.o \
 	monolib_fontcmn.o \
 	monolib_fontenumcmn.o \
@@ -4849,6 +4907,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_menucmn.o \
 	monolib_nbkbase.o \
 	monolib_paper.o \
+	monolib_pickerbase.o \
 	monolib_popupcmn.o \
 	monolib_prntbase.o \
 	monolib_quantize.o \
@@ -4956,6 +5015,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_bookctrl.o \
 	monolib_choiccmn.o \
 	monolib_clipcmn.o \
+	monolib_clrpickercmn.o \
 	monolib_colourcmn.o \
 	monolib_combocmn.o \
 	monolib_cmdproc.o \
@@ -4976,6 +5036,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_effects.o \
 	monolib_evtloopcmn.o \
 	monolib_fddlgcmn.o \
+	monolib_filepickercmn.o \
+	monolib_fontpickercmn.o \
 	monolib_fldlgcmn.o \
 	monolib_fontcmn.o \
 	monolib_fontenumcmn.o \
@@ -5006,6 +5068,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_menucmn.o \
 	monolib_nbkbase.o \
 	monolib_paper.o \
+	monolib_pickerbase.o \
 	monolib_popupcmn.o \
 	monolib_prntbase.o \
 	monolib_quantize.o \
@@ -5451,8 +5514,11 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1 =  \
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_accel.o \
 	monolib_colrdlgg.o \
+	monolib_clrpickerg.o \
 	monolib_dirdlgg.o \
 	monolib_fdrepdlg.o \
+	monolib_fontpickerg.o \
+	monolib_filepickerg.o \
 	monolib_filedlgg.o \
 	monolib_imaglist.o \
 	monolib_listctrl.o \
@@ -5470,7 +5536,10 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_colordlg.o \
 	monolib_combobox.o \
 	monolib_control.o \
+	monolib_clrpicker.o \
 	monolib_dialog.o \
+	monolib_fontpicker.o \
+	monolib_filepicker.o \
 	monolib_dirdlg.o \
 	monolib_filedlg.o \
 	monolib_fontdlg.o \
@@ -5651,6 +5720,9 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_tabg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
+	monolib_clrpickerg.o \
+	monolib_fontpickerg.o \
+	monolib_filepickerg.o \
 	monolib_statusbr.o \
 	monolib_prntdlgg.o \
 	monolib_accel.o \
@@ -5785,6 +5857,9 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_window.o
 @COND_TOOLKIT_PM@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
+	monolib_clrpickerg.o \
+	monolib_fontpickerg.o \
+	monolib_filepickerg.o \
 	monolib_statusbr.o \
 	monolib_prntdlgg.o \
 	monolib_accel.o \
@@ -6674,6 +6749,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_bookctrl.o \
 	coredll_choiccmn.o \
 	coredll_clipcmn.o \
+	coredll_clrpickercmn.o \
 	coredll_colourcmn.o \
 	coredll_combocmn.o \
 	coredll_cmdproc.o \
@@ -6694,6 +6770,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_effects.o \
 	coredll_evtloopcmn.o \
 	coredll_fddlgcmn.o \
+	coredll_filepickercmn.o \
+	coredll_fontpickercmn.o \
 	coredll_fldlgcmn.o \
 	coredll_fontcmn.o \
 	coredll_fontenumcmn.o \
@@ -6724,6 +6802,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_menucmn.o \
 	coredll_nbkbase.o \
 	coredll_paper.o \
+	coredll_pickerbase.o \
 	coredll_popupcmn.o \
 	coredll_prntbase.o \
 	coredll_quantize.o \
@@ -6831,6 +6910,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_bookctrl.o \
 	coredll_choiccmn.o \
 	coredll_clipcmn.o \
+	coredll_clrpickercmn.o \
 	coredll_colourcmn.o \
 	coredll_combocmn.o \
 	coredll_cmdproc.o \
@@ -6851,6 +6931,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_effects.o \
 	coredll_evtloopcmn.o \
 	coredll_fddlgcmn.o \
+	coredll_filepickercmn.o \
+	coredll_fontpickercmn.o \
 	coredll_fldlgcmn.o \
 	coredll_fontcmn.o \
 	coredll_fontenumcmn.o \
@@ -6881,6 +6963,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_menucmn.o \
 	coredll_nbkbase.o \
 	coredll_paper.o \
+	coredll_pickerbase.o \
 	coredll_popupcmn.o \
 	coredll_prntbase.o \
 	coredll_quantize.o \
@@ -7326,8 +7409,11 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2 =  \
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_accel.o \
 	coredll_colrdlgg.o \
+	coredll_clrpickerg.o \
 	coredll_dirdlgg.o \
 	coredll_fdrepdlg.o \
+	coredll_fontpickerg.o \
+	coredll_filepickerg.o \
 	coredll_filedlgg.o \
 	coredll_imaglist.o \
 	coredll_listctrl.o \
@@ -7345,7 +7431,10 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_colordlg.o \
 	coredll_combobox.o \
 	coredll_control.o \
+	coredll_clrpicker.o \
 	coredll_dialog.o \
+	coredll_fontpicker.o \
+	coredll_filepicker.o \
 	coredll_dirdlg.o \
 	coredll_filedlg.o \
 	coredll_fontdlg.o \
@@ -7526,6 +7615,9 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_tabg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
+	coredll_clrpickerg.o \
+	coredll_fontpickerg.o \
+	coredll_filepickerg.o \
 	coredll_statusbr.o \
 	coredll_prntdlgg.o \
 	coredll_accel.o \
@@ -7660,6 +7752,9 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_window.o
 @COND_TOOLKIT_PM@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
+	coredll_clrpickerg.o \
+	coredll_fontpickerg.o \
+	coredll_filepickerg.o \
 	coredll_statusbr.o \
 	coredll_prntdlgg.o \
 	coredll_accel.o \
@@ -8017,6 +8112,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_bookctrl.o \
 	corelib_choiccmn.o \
 	corelib_clipcmn.o \
+	corelib_clrpickercmn.o \
 	corelib_colourcmn.o \
 	corelib_combocmn.o \
 	corelib_cmdproc.o \
@@ -8037,6 +8133,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_effects.o \
 	corelib_evtloopcmn.o \
 	corelib_fddlgcmn.o \
+	corelib_filepickercmn.o \
+	corelib_fontpickercmn.o \
 	corelib_fldlgcmn.o \
 	corelib_fontcmn.o \
 	corelib_fontenumcmn.o \
@@ -8067,6 +8165,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_menucmn.o \
 	corelib_nbkbase.o \
 	corelib_paper.o \
+	corelib_pickerbase.o \
 	corelib_popupcmn.o \
 	corelib_prntbase.o \
 	corelib_quantize.o \
@@ -8174,6 +8273,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_bookctrl.o \
 	corelib_choiccmn.o \
 	corelib_clipcmn.o \
+	corelib_clrpickercmn.o \
 	corelib_colourcmn.o \
 	corelib_combocmn.o \
 	corelib_cmdproc.o \
@@ -8194,6 +8294,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_effects.o \
 	corelib_evtloopcmn.o \
 	corelib_fddlgcmn.o \
+	corelib_filepickercmn.o \
+	corelib_fontpickercmn.o \
 	corelib_fldlgcmn.o \
 	corelib_fontcmn.o \
 	corelib_fontenumcmn.o \
@@ -8224,6 +8326,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_menucmn.o \
 	corelib_nbkbase.o \
 	corelib_paper.o \
+	corelib_pickerbase.o \
 	corelib_popupcmn.o \
 	corelib_prntbase.o \
 	corelib_quantize.o \
@@ -8669,8 +8772,11 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3 =  \
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_accel.o \
 	corelib_colrdlgg.o \
+	corelib_clrpickerg.o \
 	corelib_dirdlgg.o \
 	corelib_fdrepdlg.o \
+	corelib_fontpickerg.o \
+	corelib_filepickerg.o \
 	corelib_filedlgg.o \
 	corelib_imaglist.o \
 	corelib_listctrl.o \
@@ -8688,7 +8794,10 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_colordlg.o \
 	corelib_combobox.o \
 	corelib_control.o \
+	corelib_clrpicker.o \
 	corelib_dialog.o \
+	corelib_fontpicker.o \
+	corelib_filepicker.o \
 	corelib_dirdlg.o \
 	corelib_filedlg.o \
 	corelib_fontdlg.o \
@@ -8869,6 +8978,9 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_tabg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
+	corelib_clrpickerg.o \
+	corelib_fontpickerg.o \
+	corelib_filepickerg.o \
 	corelib_statusbr.o \
 	corelib_prntdlgg.o \
 	corelib_accel.o \
@@ -9003,6 +9115,9 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_window.o
 @COND_TOOLKIT_PM@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
+	corelib_clrpickerg.o \
+	corelib_fontpickerg.o \
+	corelib_filepickerg.o \
 	corelib_statusbr.o \
 	corelib_prntdlgg.o \
 	corelib_accel.o \
@@ -11511,6 +11626,15 @@ monodll_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONODLL_ODEP)
 monodll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
+monodll_clrpicker.o: $(srcdir)/src/gtk/clrpicker.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/clrpicker.cpp
+
+monodll_fontpicker.o: $(srcdir)/src/gtk/fontpicker.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/fontpicker.cpp
+
+monodll_filepicker.o: $(srcdir)/src/gtk/filepicker.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/filepicker.cpp
+
 monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
@@ -11787,11 +11911,17 @@ monodll_xh_choic.o: $(srcdir)/src/xrc/xh_choic.cpp $(MONODLL_ODEP)
 monodll_xh_choicbk.o: $(srcdir)/src/xrc/xh_choicbk.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_choicbk.cpp
 
+monodll_xh_clrpicker.o: $(srcdir)/src/xrc/xh_clrpicker.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_clrpicker.cpp
+
 monodll_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_combo.cpp
 
 monodll_xh_datectrl.o: $(srcdir)/src/xrc/xh_datectrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_datectrl.cpp
+
+monodll_xh_dirpicker.o: $(srcdir)/src/xrc/xh_dirpicker.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_dirpicker.cpp
 
 monodll_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_dlg.cpp
@@ -11801,6 +11931,12 @@ monodll_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(MONODLL_ODEP)
 
 monodll_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
+
+monodll_xh_filepicker.o: $(srcdir)/src/xrc/xh_filepicker.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_filepicker.cpp
+
+monodll_xh_fontpicker.o: $(srcdir)/src/xrc/xh_fontpicker.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_fontpicker.cpp
 
 monodll_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_gauge.cpp
@@ -13392,6 +13528,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@monodll_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/colrdlgg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/dirdlgg.cpp
 
@@ -13436,6 +13581,24 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_fdrepdlg.o: $(srcdir)/src/msw/fdrepdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/fdrepdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_fontpickerg.o: $(srcdir)/src/generic/fontpickerg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fontpickerg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_fontpickerg.o: $(srcdir)/src/generic/fontpickerg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fontpickerg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_fontpickerg.o: $(srcdir)/src/generic/fontpickerg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fontpickerg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
@@ -14571,6 +14734,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_clipcmn.o: $(srcdir)/src/common/clipcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/clipcmn.cpp
 
+@COND_USE_GUI_1@monodll_clrpickercmn.o: $(srcdir)/src/common/clrpickercmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/clrpickercmn.cpp
+
 @COND_USE_GUI_1@monodll_colourcmn.o: $(srcdir)/src/common/colourcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/colourcmn.cpp
 
@@ -14630,6 +14796,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
+
+@COND_USE_GUI_1@monodll_filepickercmn.o: $(srcdir)/src/common/filepickercmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/filepickercmn.cpp
+
+@COND_USE_GUI_1@monodll_fontpickercmn.o: $(srcdir)/src/common/fontpickercmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fontpickercmn.cpp
 
 @COND_USE_GUI_1@monodll_fldlgcmn.o: $(srcdir)/src/common/fldlgcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fldlgcmn.cpp
@@ -14720,6 +14892,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_paper.o: $(srcdir)/src/common/paper.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/paper.cpp
+
+@COND_USE_GUI_1@monodll_pickerbase.o: $(srcdir)/src/common/pickerbase.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/pickerbase.cpp
 
 @COND_USE_GUI_1@monodll_popupcmn.o: $(srcdir)/src/common/popupcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/popupcmn.cpp
@@ -15336,6 +15511,15 @@ monolib_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONOLIB_ODEP)
 monolib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
+monolib_clrpicker.o: $(srcdir)/src/gtk/clrpicker.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/clrpicker.cpp
+
+monolib_fontpicker.o: $(srcdir)/src/gtk/fontpicker.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/fontpicker.cpp
+
+monolib_filepicker.o: $(srcdir)/src/gtk/filepicker.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/filepicker.cpp
+
 monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
@@ -15612,11 +15796,17 @@ monolib_xh_choic.o: $(srcdir)/src/xrc/xh_choic.cpp $(MONOLIB_ODEP)
 monolib_xh_choicbk.o: $(srcdir)/src/xrc/xh_choicbk.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_choicbk.cpp
 
+monolib_xh_clrpicker.o: $(srcdir)/src/xrc/xh_clrpicker.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_clrpicker.cpp
+
 monolib_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_combo.cpp
 
 monolib_xh_datectrl.o: $(srcdir)/src/xrc/xh_datectrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_datectrl.cpp
+
+monolib_xh_dirpicker.o: $(srcdir)/src/xrc/xh_dirpicker.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_dirpicker.cpp
 
 monolib_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_dlg.cpp
@@ -15626,6 +15816,12 @@ monolib_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(MONOLIB_ODEP)
 
 monolib_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
+
+monolib_xh_filepicker.o: $(srcdir)/src/xrc/xh_filepicker.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_filepicker.cpp
+
+monolib_xh_fontpicker.o: $(srcdir)/src/xrc/xh_fontpicker.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_fontpicker.cpp
 
 monolib_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_gauge.cpp
@@ -17217,6 +17413,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@monolib_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/colrdlgg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/dirdlgg.cpp
 
@@ -17261,6 +17466,24 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_fdrepdlg.o: $(srcdir)/src/msw/fdrepdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/fdrepdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_fontpickerg.o: $(srcdir)/src/generic/fontpickerg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fontpickerg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_fontpickerg.o: $(srcdir)/src/generic/fontpickerg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fontpickerg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_fontpickerg.o: $(srcdir)/src/generic/fontpickerg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fontpickerg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
@@ -18396,6 +18619,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_clipcmn.o: $(srcdir)/src/common/clipcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/clipcmn.cpp
 
+@COND_USE_GUI_1@monolib_clrpickercmn.o: $(srcdir)/src/common/clrpickercmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/clrpickercmn.cpp
+
 @COND_USE_GUI_1@monolib_colourcmn.o: $(srcdir)/src/common/colourcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/colourcmn.cpp
 
@@ -18455,6 +18681,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
+
+@COND_USE_GUI_1@monolib_filepickercmn.o: $(srcdir)/src/common/filepickercmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/filepickercmn.cpp
+
+@COND_USE_GUI_1@monolib_fontpickercmn.o: $(srcdir)/src/common/fontpickercmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fontpickercmn.cpp
 
 @COND_USE_GUI_1@monolib_fldlgcmn.o: $(srcdir)/src/common/fldlgcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fldlgcmn.cpp
@@ -18545,6 +18777,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_paper.o: $(srcdir)/src/common/paper.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/paper.cpp
+
+@COND_USE_GUI_1@monolib_pickerbase.o: $(srcdir)/src/common/pickerbase.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/pickerbase.cpp
 
 @COND_USE_GUI_1@monolib_popupcmn.o: $(srcdir)/src/common/popupcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/popupcmn.cpp
@@ -20130,6 +20365,15 @@ coredll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(COREDLL_ODEP)
 coredll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
+coredll_clrpicker.o: $(srcdir)/src/gtk/clrpicker.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/clrpicker.cpp
+
+coredll_fontpicker.o: $(srcdir)/src/gtk/fontpicker.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/fontpicker.cpp
+
+coredll_filepicker.o: $(srcdir)/src/gtk/filepicker.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/filepicker.cpp
+
 coredll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
@@ -21465,6 +21709,15 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@coredll_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/colrdlgg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/dirdlgg.cpp
 
@@ -21509,6 +21762,24 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_fdrepdlg.o: $(srcdir)/src/msw/fdrepdlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/fdrepdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_fontpickerg.o: $(srcdir)/src/generic/fontpickerg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fontpickerg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_fontpickerg.o: $(srcdir)/src/generic/fontpickerg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fontpickerg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_fontpickerg.o: $(srcdir)/src/generic/fontpickerg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fontpickerg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
@@ -22611,6 +22882,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_clipcmn.o: $(srcdir)/src/common/clipcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/clipcmn.cpp
 
+@COND_USE_GUI_1@coredll_clrpickercmn.o: $(srcdir)/src/common/clrpickercmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/clrpickercmn.cpp
+
 @COND_USE_GUI_1@coredll_colourcmn.o: $(srcdir)/src/common/colourcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/colourcmn.cpp
 
@@ -22670,6 +22944,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
+
+@COND_USE_GUI_1@coredll_filepickercmn.o: $(srcdir)/src/common/filepickercmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/filepickercmn.cpp
+
+@COND_USE_GUI_1@coredll_fontpickercmn.o: $(srcdir)/src/common/fontpickercmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fontpickercmn.cpp
 
 @COND_USE_GUI_1@coredll_fldlgcmn.o: $(srcdir)/src/common/fldlgcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fldlgcmn.cpp
@@ -22760,6 +23040,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_paper.o: $(srcdir)/src/common/paper.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/paper.cpp
+
+@COND_USE_GUI_1@coredll_pickerbase.o: $(srcdir)/src/common/pickerbase.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/pickerbase.cpp
 
 @COND_USE_GUI_1@coredll_popupcmn.o: $(srcdir)/src/common/popupcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/popupcmn.cpp
@@ -22922,6 +23205,15 @@ corelib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(CORELIB_ODEP)
 
 corelib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
+
+corelib_clrpicker.o: $(srcdir)/src/gtk/clrpicker.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/clrpicker.cpp
+
+corelib_fontpicker.o: $(srcdir)/src/gtk/fontpicker.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/fontpicker.cpp
+
+corelib_filepicker.o: $(srcdir)/src/gtk/filepicker.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/filepicker.cpp
 
 corelib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
@@ -24258,6 +24550,15 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@corelib_colrdlgg.o: $(srcdir)/src/generic/colrdlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/colrdlgg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_clrpickerg.o: $(srcdir)/src/generic/clrpickerg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/clrpickerg.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_dirdlgg.o: $(srcdir)/src/generic/dirdlgg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/dirdlgg.cpp
 
@@ -24302,6 +24603,24 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_fdrepdlg.o: $(srcdir)/src/msw/fdrepdlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/fdrepdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_fontpickerg.o: $(srcdir)/src/generic/fontpickerg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fontpickerg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_fontpickerg.o: $(srcdir)/src/generic/fontpickerg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fontpickerg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_fontpickerg.o: $(srcdir)/src/generic/fontpickerg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fontpickerg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_filepickerg.o: $(srcdir)/src/generic/filepickerg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filepickerg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
@@ -25404,6 +25723,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_clipcmn.o: $(srcdir)/src/common/clipcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/clipcmn.cpp
 
+@COND_USE_GUI_1@corelib_clrpickercmn.o: $(srcdir)/src/common/clrpickercmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/clrpickercmn.cpp
+
 @COND_USE_GUI_1@corelib_colourcmn.o: $(srcdir)/src/common/colourcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/colourcmn.cpp
 
@@ -25463,6 +25785,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
+
+@COND_USE_GUI_1@corelib_filepickercmn.o: $(srcdir)/src/common/filepickercmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/filepickercmn.cpp
+
+@COND_USE_GUI_1@corelib_fontpickercmn.o: $(srcdir)/src/common/fontpickercmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fontpickercmn.cpp
 
 @COND_USE_GUI_1@corelib_fldlgcmn.o: $(srcdir)/src/common/fldlgcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fldlgcmn.cpp
@@ -25553,6 +25881,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_paper.o: $(srcdir)/src/common/paper.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/paper.cpp
+
+@COND_USE_GUI_1@corelib_pickerbase.o: $(srcdir)/src/common/pickerbase.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/pickerbase.cpp
 
 @COND_USE_GUI_1@corelib_popupcmn.o: $(srcdir)/src/common/popupcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/popupcmn.cpp
@@ -26370,11 +26701,17 @@ xrcdll_xh_choic.o: $(srcdir)/src/xrc/xh_choic.cpp $(XRCDLL_ODEP)
 xrcdll_xh_choicbk.o: $(srcdir)/src/xrc/xh_choicbk.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_choicbk.cpp
 
+xrcdll_xh_clrpicker.o: $(srcdir)/src/xrc/xh_clrpicker.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_clrpicker.cpp
+
 xrcdll_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_combo.cpp
 
 xrcdll_xh_datectrl.o: $(srcdir)/src/xrc/xh_datectrl.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_datectrl.cpp
+
+xrcdll_xh_dirpicker.o: $(srcdir)/src/xrc/xh_dirpicker.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_dirpicker.cpp
 
 xrcdll_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_dlg.cpp
@@ -26384,6 +26721,12 @@ xrcdll_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(XRCDLL_ODEP)
 
 xrcdll_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
+
+xrcdll_xh_filepicker.o: $(srcdir)/src/xrc/xh_filepicker.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_filepicker.cpp
+
+xrcdll_xh_fontpicker.o: $(srcdir)/src/xrc/xh_fontpicker.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_fontpicker.cpp
 
 xrcdll_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_gauge.cpp
@@ -26508,11 +26851,17 @@ xrclib_xh_choic.o: $(srcdir)/src/xrc/xh_choic.cpp $(XRCLIB_ODEP)
 xrclib_xh_choicbk.o: $(srcdir)/src/xrc/xh_choicbk.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_choicbk.cpp
 
+xrclib_xh_clrpicker.o: $(srcdir)/src/xrc/xh_clrpicker.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_clrpicker.cpp
+
 xrclib_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_combo.cpp
 
 xrclib_xh_datectrl.o: $(srcdir)/src/xrc/xh_datectrl.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_datectrl.cpp
+
+xrclib_xh_dirpicker.o: $(srcdir)/src/xrc/xh_dirpicker.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_dirpicker.cpp
 
 xrclib_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_dlg.cpp
@@ -26522,6 +26871,12 @@ xrclib_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
+
+xrclib_xh_filepicker.o: $(srcdir)/src/xrc/xh_filepicker.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_filepicker.cpp
+
+xrclib_xh_fontpicker.o: $(srcdir)/src/xrc/xh_fontpicker.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_fontpicker.cpp
 
 xrclib_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_gauge.cpp

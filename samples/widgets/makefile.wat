@@ -232,6 +232,7 @@ WIDGETS_OBJECTS =  &
 	$(OBJS)\widgets_hyperlnk.obj &
 	$(OBJS)\widgets_listbox.obj &
 	$(OBJS)\widgets_notebook.obj &
+	$(OBJS)\widgets_picker.obj &
 	$(OBJS)\widgets_radiobox.obj &
 	$(OBJS)\widgets_slider.obj &
 	$(OBJS)\widgets_spinbtn.obj &
@@ -291,6 +292,9 @@ $(OBJS)\widgets_listbox.obj :  .AUTODEPEND .\listbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_notebook.obj :  .AUTODEPEND .\notebook.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_picker.obj :  .AUTODEPEND .\picker.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_radiobox.obj :  .AUTODEPEND .\radiobox.cpp

@@ -508,10 +508,14 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_CHECKLST=no
   DEFAULT_wxUSE_CHOICE=no
   DEFAULT_wxUSE_CHOICEBOOK=no
+  DEFAULT_wxUSE_COLOURPICKERCTRL=no
   DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_COMBOCTRL=no
   DEFAULT_wxUSE_DATEPICKCTRL=no
   DEFAULT_wxUSE_DISPLAY=no
+  DEFAULT_wxUSE_DIRPICKERCTRL=no
+  DEFAULT_wxUSE_FILEPICKERCTRL=no
+  DEFAULT_wxUSE_FONTPICKERCTRL=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
   DEFAULT_wxUSE_HYPERLINKCTRL=no
@@ -715,10 +719,14 @@ else
   DEFAULT_wxUSE_CHECKLST=yes
   DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_CHOICEBOOK=yes
+  DEFAULT_wxUSE_COLOURPICKERCTRL=yes
   DEFAULT_wxUSE_COMBOBOX=yes
   DEFAULT_wxUSE_COMBOCTRL=yes
   DEFAULT_wxUSE_DATEPICKCTRL=yes
   DEFAULT_wxUSE_DISPLAY=yes
+  DEFAULT_wxUSE_DIRPICKERCTRL=yes
+  DEFAULT_wxUSE_FILEPICKERCTRL=yes
+  DEFAULT_wxUSE_FONTPICKERCTRL=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
   DEFAULT_wxUSE_HYPERLINKCTRL=yes
@@ -1031,7 +1039,13 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_CHECKLISTBOX=yes
   DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_CHOICEBOOK=yes
+  DEFAULT_wxUSE_COLOURPICKERCTRL=yes
+  DEFAULT_wxUSE_COMBOBOX=yes
   DEFAULT_wxUSE_DATEPICKCTRL=yes
+  DEFAULT_wxUSE_DISPLAY=yes
+  DEFAULT_wxUSE_DIRPICKERCTRL=yes
+  DEFAULT_wxUSE_FILEPICKERCTRL=yes
+  DEFAULT_wxUSE_FONTPICKERCTRL=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
   DEFAULT_wxUSE_HYPERLINKCTRL=yes
@@ -1075,7 +1089,13 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_CHECKLISTBOX=no
   DEFAULT_wxUSE_CHOICE=no
   DEFAULT_wxUSE_CHOICEBOOK=no
+  DEFAULT_wxUSE_COLOURPICKERCTRL=no
+  DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_DATEPICKCTRL=no
+  DEFAULT_wxUSE_DISPLAY=no
+  DEFAULT_wxUSE_DIRPICKERCTRL=no
+  DEFAULT_wxUSE_FILEPICKERCTRL=no
+  DEFAULT_wxUSE_FONTPICKERCTRL=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
   DEFAULT_wxUSE_HYPERLINKCTRL=no
@@ -1119,10 +1139,14 @@ WX_ARG_ENABLE(checkbox,    [  --enable-checkbox       use wxCheckBox class], wxU
 WX_ARG_ENABLE(checklst,    [  --enable-checklst       use wxCheckListBox (listbox with checkboxes) class], wxUSE_CHECKLST)
 WX_ARG_ENABLE(choice,      [  --enable-choice         use wxChoice class], wxUSE_CHOICE)
 WX_ARG_ENABLE(choicebook,  [  --enable-choicebook     use wxChoicebook class], wxUSE_CHOICEBOOK)
+WX_ARG_ENABLE(colourpicker,[  --enable-colourpicker   use wxColourPickerCtrl class], wxUSE_COLOURPICKERCTRL)
 WX_ARG_ENABLE(combobox,    [  --enable-combobox       use wxComboBox class], wxUSE_COMBOBOX)
 WX_ARG_ENABLE(comboctrl,   [  --enable-comboctrl      use wxComboCtrl class], wxUSE_COMBOCTRL)
 WX_ARG_ENABLE(datepick,    [  --enable-datepick       use wxDatePickerCtrl class], wxUSE_DATEPICKCTRL)
+WX_ARG_ENABLE(dirpicker,   [  --enable-dirpicker      use wxDirPickerCtrl class], wxUSE_DIRPICKERCTRL)
 WX_ARG_ENABLE(display,     [  --enable-display        use wxDisplay class], wxUSE_DISPLAY)
+WX_ARG_ENABLE(filepicker,  [  --enable-filepicker     use wxFilePickerCtrl class], wxUSE_FILEPICKERCTRL)
+WX_ARG_ENABLE(fontpicker,  [  --enable-fontpicker     use wxFontPickerCtrl class], wxUSE_FONTPICKERCTRL)
 WX_ARG_ENABLE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
 WX_ARG_ENABLE(grid,        [  --enable-grid           use wxGrid class], wxUSE_GRID)
 WX_ARG_ENABLE(dataviewctrl,[  --enable-dataviewctrl,  use wxDataViewCtrl class], wxUSE_DATAVIEWCTRL)
@@ -2957,6 +2981,28 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                             AC_MSG_RESULT([yes])
                            ])
 
+            dnl test if we have at least GTK+ 2.6:
+            AC_MSG_CHECKING([if GTK+ is version >= 2.6])
+            AC_TRY_COMPILE([
+                            #include <gtk/gtk.h>
+                           ],
+                           [
+                            #if !GTK_CHECK_VERSION(2,6,0)
+                            Not GTK+ 2.6
+                            #endif
+                           ],
+                           [
+                            AC_DEFINE(__WXGTK26__)
+                            AC_DEFINE(__WXGTK24__)
+                            AC_MSG_RESULT([yes])
+                            ac_wxgtk26=1
+                           ],
+                           [
+                            AC_MSG_RESULT([no])
+                            ac_wxgtk26=0
+                           ])
+
+            if test "$ac_wxgtk26" = 0; then
             dnl test if we have at least GTK+ 2.4:
             AC_MSG_CHECKING([if GTK+ is version >= 2.4])
             AC_TRY_COMPILE([
@@ -2974,6 +3020,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                            [
                             AC_MSG_RESULT([no])
                            ])
+            fi
 
             CFLAGS="$save_CFLAGS"
             LIBS="$save_LIBS"
@@ -6312,8 +6359,28 @@ if test "$wxUSE_CHECKLST" = "yes"; then
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS checklst"
 fi
 
+if test "$wxUSE_COLOURPICKERCTRL" = "yes"; then
+  AC_DEFINE(wxUSE_COLOURPICKERCTRL)
+  USES_CONTROLS=1
+fi
+
 if test "$wxUSE_DATEPICKCTRL" = "yes"; then
   AC_DEFINE(wxUSE_DATEPICKCTRL)
+  USES_CONTROLS=1
+fi
+
+if test "$wxUSE_DIRPICKERCTRL" = "yes"; then
+  AC_DEFINE(wxUSE_DIRPICKERCTRL)
+  USES_CONTROLS=1
+fi
+
+if test "$wxUSE_FILEPICKERCTRL" = "yes"; then
+  AC_DEFINE(wxUSE_FILEPICKERCTRL)
+  USES_CONTROLS=1
+fi
+
+if test "$wxUSE_FONTPICKERCTRL" = "yes"; then
+  AC_DEFINE(wxUSE_FONTPICKERCTRL)
   USES_CONTROLS=1
 fi
 

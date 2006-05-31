@@ -392,6 +392,14 @@
 #   endif
 #endif /* !defined(wxUSE_COLOURDLG) */
 
+#ifndef wxUSE_COLOURPICKERCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_COLOURPICKERCTRL must be defined."
+#   else
+#       define wxUSE_COLOURPICKERCTRL 0
+#   endif
+#endif /* !defined(wxUSE_COLOURPICKERCTRL) */
+
 #ifndef wxUSE_COMBOBOX
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_COMBOBOX must be defined."
@@ -432,6 +440,14 @@
 #   endif
 #endif /* !defined(wxUSE_DATEPICKCTRL) */
 
+#ifndef wxUSE_DIRPICKERCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DIRPICKERCTRL must be defined."
+#   else
+#       define wxUSE_DIRPICKERCTRL 0
+#   endif
+#endif /* !defined(wxUSE_DIRPICKERCTRL) */
+
 #ifndef wxUSE_DISPLAY
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DISPLAY must be defined."
@@ -456,6 +472,14 @@
 #   endif
 #endif /* !defined(wxUSE_FILEDLG) */
 
+#ifndef wxUSE_FILEPICKERCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_FILEPICKERCTRL must be defined."
+#   else
+#       define wxUSE_FILEPICKERCTRL 0
+#   endif
+#endif /* !defined(wxUSE_FILEPICKERCTRL) */
+
 #ifndef wxUSE_FONTDLG
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_FONTDLG must be defined."
@@ -471,6 +495,14 @@
 #       define wxUSE_FONTMAP 0
 #   endif
 #endif /* !defined(wxUSE_FONTMAP) */
+
+#ifndef wxUSE_FONTPICKERCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_FONTPICKERCTRL must be defined."
+#   else
+#       define wxUSE_FONTPICKERCTRL 0
+#   endif
+#endif /* !defined(wxUSE_FONTPICKERCTRL) */
 
 #ifndef wxUSE_GAUGE
 #   ifdef wxABORT_ON_CONFIG_ERROR

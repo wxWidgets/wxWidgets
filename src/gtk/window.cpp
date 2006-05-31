@@ -2746,6 +2746,10 @@ void wxWindowGTK::PostCreation()
                           G_CALLBACK (wxgtk_combo_size_request_callback),
                           this);
     }
+    else if (GTK_IS_FILE_CHOOSER_BUTTON(m_widget))
+    {
+        // FIXME: what should be done here ?
+    }
     else
     {
         // This is needed if we want to add our windows into native

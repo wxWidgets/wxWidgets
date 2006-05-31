@@ -87,6 +87,7 @@ All (GUI):
 
 - Added wxComboCtrl and wxOwnerDrawnComboBox (Jaakko Salli)
 - Added wxTreebook (uses a wxTreeCtrl to control pages).
+- Added wxColour/Dir/File/Font/PickerCtrls (Francesco Montorsi)
 - Added wxDC::GradientFillLinear/Concentric()
 - Added wxHyperlinkCtrl (Francesco Montorsi)
 - Added clipboard events (wxEVT_COMMAND_TEXT_COPY/CUT/PASTE)

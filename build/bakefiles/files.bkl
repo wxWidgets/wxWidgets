@@ -555,6 +555,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/bookctrl.cpp
     src/common/choiccmn.cpp
     src/common/clipcmn.cpp
+    src/common/clrpickercmn.cpp
     src/common/colourcmn.cpp
     src/common/combocmn.cpp
     src/common/cmdproc.cpp
@@ -575,6 +576,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/effects.cpp
     src/common/evtloopcmn.cpp
     src/common/fddlgcmn.cpp
+    src/common/filepickercmn.cpp
+    src/common/fontpickercmn.cpp
     src/common/fldlgcmn.cpp
     src/common/fontcmn.cpp
     src/common/fontenumcmn.cpp
@@ -605,6 +608,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/menucmn.cpp
     src/common/nbkbase.cpp
     src/common/paper.cpp
+    src/common/pickerbase.cpp
     src/common/popupcmn.cpp
     src/common/prntbase.cpp
     src/common/quantize.cpp
@@ -748,6 +752,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/caret.h
     wx/choicebk.h
     wx/clipbrd.h
+    wx/clrpicker.h
     wx/cmdproc.h
     wx/colordlg.h
     wx/colour.h
@@ -765,6 +770,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/effects.h
     wx/evtloop.h
     wx/fdrepdlg.h
+    wx/filepicker.h
+    wx/fontpicker.h
     wx/fmappriv.h
     wx/font.h
     wx/fontdlg.h
@@ -925,8 +932,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Generic implementations used by wxGTK: -->
     src/generic/accel.cpp
     src/generic/colrdlgg.cpp
+    src/generic/clrpickerg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
+    src/generic/fontpickerg.cpp
+    src/generic/filepickerg.cpp
     src/generic/filedlgg.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
@@ -946,7 +956,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/colordlg.cpp
     src/gtk/combobox.cpp
     src/gtk/control.cpp
+    src/gtk/clrpicker.cpp
     src/gtk/dialog.cpp
+    src/gtk/fontpicker.cpp
+    src/gtk/filepicker.cpp
     src/gtk/dirdlg.cpp
     src/gtk/filedlg.cpp
     src/gtk/fontdlg.cpp
@@ -978,8 +991,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="GTK_HDR" hints="files">
     wx/generic/colrdlgg.h
+    wx/generic/clrpickerg.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
+    wx/generic/fontpickerg.h
+    wx/generic/filepickerg.h
     wx/generic/listctrl.h
     wx/generic/statusbr.h
     wx/generic/tabg.h
@@ -992,9 +1008,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/choice.h
     wx/gtk/combobox.h
     wx/gtk/control.h
+    wx/gtk/clrpicker.h
     wx/gtk/dialog.h
     wx/gtk/dirdlg.h
     wx/gtk/filedlg.h
+    wx/gtk/fontpicker.h
+    wx/gtk/filepicker.h
     wx/gtk/fontdlg.h
     wx/gtk/frame.h
     wx/gtk/gauge.h
@@ -1483,6 +1502,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="MSW_SRC" hints="files">
+    src/generic/clrpickerg.cpp
+    src/generic/fontpickerg.cpp
+    src/generic/filepickerg.cpp
     src/generic/statusbr.cpp
     src/generic/prntdlgg.cpp
     src/msw/accel.cpp
@@ -1531,6 +1553,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/treectrl.cpp
 </set>
 <set var="MSW_HDR" hints="files">
+    wx/generic/clrpicker.h
+    wx/generic/fontpicker.h
+    wx/generic/filepicker.h
     wx/msw/accel.h
     wx/msw/app.h
     wx/msw/bitmap.h
@@ -2797,11 +2822,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_chckl.cpp
     src/xrc/xh_choic.cpp
     src/xrc/xh_choicbk.cpp
+    src/xrc/xh_clrpicker.cpp
     src/xrc/xh_combo.cpp
     src/xrc/xh_datectrl.cpp
+    src/xrc/xh_dirpicker.cpp
     src/xrc/xh_dlg.cpp
     src/xrc/xh_frame.cpp
     src/xrc/xh_mdi.cpp
+    src/xrc/xh_filepicker.cpp
+    src/xrc/xh_fontpicker.cpp
     src/xrc/xh_gauge.cpp
     src/xrc/xh_gdctl.cpp
     src/xrc/xh_grid.cpp
@@ -2846,9 +2875,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_chckl.h
     wx/xrc/xh_choic.h
     wx/xrc/xh_choicbk.h
+    wx/xrc/xh_clrpicker.h
     wx/xrc/xh_combo.h
     wx/xrc/xh_datectrl.h
+    wx/xrc/xh_dirpicker.h
     wx/xrc/xh_dlg.h
+    wx/xrc/xh_filepicker.h
+    wx/xrc/xh_fontpicker.h
     wx/xrc/xh_frame.h
     wx/xrc/xh_mdi.h
     wx/xrc/xh_gauge.h

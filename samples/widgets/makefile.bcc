@@ -42,6 +42,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_hyperlnk.obj \
 	$(OBJS)\widgets_listbox.obj \
 	$(OBJS)\widgets_notebook.obj \
+	$(OBJS)\widgets_picker.obj \
 	$(OBJS)\widgets_radiobox.obj \
 	$(OBJS)\widgets_slider.obj \
 	$(OBJS)\widgets_spinbtn.obj \
@@ -261,6 +262,9 @@ $(OBJS)\widgets_listbox.obj: .\listbox.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_notebook.obj: .\notebook.cpp
+	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
+
+$(OBJS)\widgets_picker.obj: .\picker.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_radiobox.obj: .\radiobox.cpp

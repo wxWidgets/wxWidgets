@@ -994,6 +994,10 @@ SOURCE=..\..\include\wx\xrc\xh_choicbk.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_clrpicker.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_combo.h
 # End Source File
 # Begin Source File
@@ -1002,7 +1006,19 @@ SOURCE=..\..\include\wx\xrc\xh_datectrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_dirpicker.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_dlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_filepicker.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_fontpicker.h
 # End Source File
 # Begin Source File
 
@@ -1178,6 +1194,10 @@ SOURCE=..\..\src\xrc\xh_choicbk.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\xrc\xh_clrpicker.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\xrc\xh_combo.cpp
 # End Source File
 # Begin Source File
@@ -1186,7 +1206,19 @@ SOURCE=..\..\src\xrc\xh_datectrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\xrc\xh_dirpicker.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\xrc\xh_dlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_filepicker.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_fontpicker.cpp
 # End Source File
 # Begin Source File
 

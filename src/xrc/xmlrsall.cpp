@@ -115,6 +115,18 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_DATEPICKCTRL
     AddHandler(new wxDateCtrlXmlHandler);
 #endif
+#if wxUSE_COLOURPICKERCTRL
+    AddHandler(new wxColourPickerCtrlXmlHandler);
+#endif
+#if wxUSE_FILEPICKERCTRL
+    AddHandler(new wxFilePickerCtrlXmlHandler);
+#endif
+#if wxUSE_DIRPICKERCTRL
+    AddHandler(new wxDirPickerCtrlXmlHandler);
+#endif
+#if wxUSE_FONTPICKERCTRL
+    AddHandler(new wxFontPickerCtrlXmlHandler);
+#endif
 #if wxUSE_MDI
     AddHandler(new wxMdiXmlHandler);
 #endif

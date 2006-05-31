@@ -930,6 +930,91 @@
                         </object>
                     </object>
                 </object>
+
+                <object class="notebookpage">
+                    <label>wx*PickerCtrl</label>
+                    <object class="wxPanel" name="pickers">
+                        <object class="wxFlexGridSizer">
+                            <cols>2</cols>
+                            <rows>0</rows>
+                            <vgap>10</vgap>
+                            <hgap>10</hgap>
+                            <growablecols>0,1</growablecols>
+                            <growablerows>0,1,2,3</growablerows>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="controls_pickers_statictext">
+                                    <label>wxColourPickerCtrl:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALL</flag>
+                                <option>1</option>
+                                <border>5</border>
+                                <object class="wxColourPickerCtrl" name="controls_colourpicker">
+                                    <colour>#00ff00</colour>
+                                    <style>wxCLRP_SHOW_LABEL</style>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="controls_pickers_statictext2">
+                                    <label>wxFilePickerCtrl:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALL</flag>
+                                <option>1</option>
+                                <border>5</border>
+                                <object class="wxFilePickerCtrl" name="controls_filepicker">
+                                    <message>Here goes a message</message>
+                                    <style>wxFLP_OPEN</style>
+                                    <wildcard>*.png</wildcard>
+                                    <default-path/>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="controls_pickers_statictext3">
+                                    <label>wxDirPickerCtrl:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALL</flag>
+                                <option>1</option>
+                                <border>5</border>
+                                <object class="wxDirPickerCtrl" name="controls_dirpicker">
+                                    <default-path/>
+                                    <style>wxDIRP_CHANGE_DIR</style>
+                                    <message>Here goes a message</message>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="controls_pickers_statictext4">
+                                    <label>wxFontPickerCtrl:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALL</flag>
+                                <option>1</option>
+                                <border>5</border>
+                                <object class="wxFontPickerCtrl" name="controls_fontpicker">
+                                    <style>wxFNTP_USEFONT_FOR_LABEL</style>
+                                    <default-font>
+                                        <size>20</size>
+                                        <sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+                                    </default-font>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+
                 <object class="notebookpage">
                     <label>The Rest</label>
                     <object class="wxPanel" name="Rest">

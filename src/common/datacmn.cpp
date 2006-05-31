@@ -82,3 +82,14 @@ extern WXDLLEXPORT_DATA(const wxChar) wxFileDialogNameStr[] = wxT("filedlg");
 WXDLLEXPORT_DATA(const wxChar *) wxUserResourceStr = wxT("TEXT");
 #endif
 extern WXDLLEXPORT_DATA(const wxChar) wxHyperlinkCtrlNameStr[] = wxT("hyperlink");
+extern WXDLLEXPORT_DATA(const wxChar) wxColourPickerCtrlNameStr[] = wxT("colourpicker");
+extern WXDLLEXPORT_DATA(const wxChar) wxColourPickerWidgetNameStr[] = wxT("colourpickerwidget");
+extern WXDLLEXPORT_DATA(const wxChar) wxFontPickerCtrlNameStr[] = wxT("fontpicker");
+extern WXDLLEXPORT_DATA(const wxChar) wxFontPickerWidgetNameStr[] = wxT("fontpickerwidget");
+extern WXDLLEXPORT_DATA(const wxChar) wxFilePickerCtrlNameStr[] = wxT("filepicker");
+extern WXDLLEXPORT_DATA(const wxChar) wxFilePickerWidgetNameStr[] = wxT("filepickerwidget");
+extern WXDLLEXPORT_DATA(const wxChar) wxDirPickerCtrlNameStr[] = wxT("dirpicker");
+extern WXDLLEXPORT_DATA(const wxChar) wxDirPickerWidgetNameStr[] = wxT("dirpickerwidget");
+extern WXDLLEXPORT_DATA(const wxChar) wxFilePickerWidgetLabel[] = wxT("Browse");
+extern WXDLLEXPORT_DATA(const wxChar) wxDirPickerWidgetLabel[] = wxT("Browse");
+

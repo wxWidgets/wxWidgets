@@ -57,6 +57,10 @@
 #include "wx/xrc/xh_statbar.h"
 #include "wx/xrc/xh_mdi.h"
 #include "wx/xrc/xh_grid.h"
+#include "wx/xrc/xh_clrpicker.h"
+#include "wx/xrc/xh_filepicker.h"
+#include "wx/xrc/xh_fontpicker.h"
+#include "wx/xrc/xh_dirpicker.h"
 #include "wx/xrc/xh_hyperlink.h"
 
 #endif // _WX_XH_ALL_H_

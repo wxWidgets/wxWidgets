@@ -52,8 +52,10 @@ WIDGETS_OBJECTS =  \
 	widgets_combobox.o \
 	widgets_datepick.o \
 	widgets_gauge.o \
+	widgets_hyperlnk.o \
 	widgets_listbox.o \
 	widgets_notebook.o \
+	widgets_picker.o \
 	widgets_radiobox.o \
 	widgets_slider.o \
 	widgets_spinbtn.o \
@@ -215,11 +217,17 @@ widgets_datepick.o: $(srcdir)/datepick.cpp
 widgets_gauge.o: $(srcdir)/gauge.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/gauge.cpp
 
+widgets_hyperlnk.o: $(srcdir)/hyperlnk.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/hyperlnk.cpp
+
 widgets_listbox.o: $(srcdir)/listbox.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/listbox.cpp
 
 widgets_notebook.o: $(srcdir)/notebook.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/notebook.cpp
+
+widgets_picker.o: $(srcdir)/picker.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/picker.cpp
 
 widgets_radiobox.o: $(srcdir)/radiobox.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/radiobox.cpp
