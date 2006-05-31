@@ -27,7 +27,27 @@
 
 #include "wx/msw/private.h"
 #include "wx/image.h"
-#include "wx/msw/uxtheme.h"
+
+#if wxUSE_UXTHEME
+    #include "wx/msw/uxtheme.h"
+
+    // no need to include tmschema.h
+    #ifndef BP_PUSHBUTTON
+        #define BP_PUSHBUTTON 1
+
+        #define PBS_NORMAL    1
+        #define PBS_HOT       2
+        #define PBS_PRESSED   3
+        #define PBS_DISABLED  4
+        #define PBS_DEFAULTED 5
+
+        #define TMT_CONTENTMARGINS 3602
+    #endif
+#endif // wxUSE_UXTHEME
+
+#ifndef ODS_NOFOCUSRECT
+    #define ODS_NOFOCUSRECT     0x0200
+#endif
 
 // ----------------------------------------------------------------------------
 // macros
@@ -119,8 +139,6 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
 
     parent->AddChild(this);
 
-    m_backgroundColour = parent->GetBackgroundColour();
-    m_foregroundColour = parent->GetForegroundColour();
     m_windowStyle = style;
 
     if ( style & wxBU_AUTODRAW )
@@ -226,6 +244,79 @@ void wxBitmapButton::OnSetBitmap()
     wxBitmapButtonBase::OnSetBitmap();
 }
 
+#if wxUSE_UXTHEME
+static
+void MSWDrawXPBackground(wxButton *button, WXDRAWITEMSTRUCT *wxdis)
+{
+    LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT)wxdis;
+    HDC hdc = lpDIS->hDC;
+    UINT state = lpDIS->itemState;
+    RECT rectBtn;
+    CopyRect(&rectBtn, &lpDIS->rcItem);
+
+    wxUxThemeHandle theme(button, L"BUTTON");
+    int iState;
+
+    if ( state & ODS_SELECTED )
+    {
+        iState = PBS_PRESSED;
+    }
+    else if ( button->HasCapture() || button->IsMouseInWindow() )
+    {
+        iState = PBS_HOT;
+    }
+    else if ( state & ODS_FOCUS )
+    {
+        iState = PBS_DEFAULTED;
+    }
+    else if ( state & ODS_DISABLED )
+    {
+        iState = PBS_DISABLED;
+    }
+    else
+    {
+        iState = PBS_NORMAL;
+    }
+
+    // draw parent background if needed
+    if ( wxUxThemeEngine::Get()->IsThemeBackgroundPartiallyTransparent(theme,
+                                                                       BP_PUSHBUTTON,
+                                                                       iState) )
+    {
+        wxUxThemeEngine::Get()->DrawThemeParentBackground(GetHwndOf(button), hdc, &rectBtn);
+    }
+
+    // draw background
+    wxUxThemeEngine::Get()->DrawThemeBackground(theme, hdc, BP_PUSHBUTTON, iState,
+                                                &rectBtn, NULL);
+
+    // calculate content area margins
+    MARGINS margins;
+    wxUxThemeEngine::Get()->GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
+                                            TMT_CONTENTMARGINS, &rectBtn, &margins);
+    RECT rectClient;
+    ::CopyRect(&rectClient, &rectBtn);
+    ::InflateRect(&rectClient, -margins.cxLeftWidth, -margins.cyTopHeight);
+
+    // if focused and !nofocus rect
+    if ( (state & ODS_FOCUS) && !(state & ODS_NOFOCUSRECT) )
+    {
+        DrawFocusRect(hdc, &rectClient);
+    }
+
+    if ( button->UseBgCol() )
+    {
+        COLORREF colBg = wxColourToRGB(button->GetBackgroundColour());
+        HBRUSH hbrushBackground = ::CreateSolidBrush(colBg);
+
+        // don't overwrite the focus rect
+        ::InflateRect(&rectClient, -1, -1);
+        FillRect(hdc, &rectClient, hbrushBackground);
+        ::DeleteObject(hbrushBackground);
+    }
+}
+#endif // wxUSE_UXTHEME
+
 // VZ: should be at the very least less than wxDEFAULT_BUTTON_MARGIN
 #define FOCUS_MARGIN 3
 
@@ -272,6 +363,58 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     int height = lpDIS->rcItem.bottom - y;
     int wBmp   = bitmap->GetWidth();
     int hBmp   = bitmap->GetHeight();
+
+#if wxUSE_UXTHEME
+    if ( autoDraw && wxUxThemeEngine::GetIfActive() )
+    {
+        MSWDrawXPBackground(this, item);
+        wxUxThemeHandle theme(this, L"BUTTON");
+
+        // calculate content area margins
+        // assuming here that each state is the same size
+        MARGINS margins;
+        wxUxThemeEngine::Get()->GetThemeMargins(theme, NULL,
+                                                BP_PUSHBUTTON, PBS_NORMAL,
+                                                TMT_CONTENTMARGINS, NULL,
+                                                &margins);
+        int marginX = margins.cxLeftWidth + 1;
+        int marginY = margins.cyTopHeight + 1;
+        int x1,y1;
+
+        if ( m_windowStyle & wxBU_LEFT )
+        {
+            x1 = x + marginX;
+        }
+        else if ( m_windowStyle & wxBU_RIGHT )
+        {
+            x1 = x + (width - wBmp) - marginX;
+        }
+        else
+        {
+            x1 = x + (width - wBmp) / 2;
+        }
+
+        if ( m_windowStyle & wxBU_TOP )
+        {
+            y1 = y + marginY;
+        }
+        else if ( m_windowStyle & wxBU_BOTTOM )
+        {
+            y1 = y + (height - hBmp) - marginY;
+        }
+        else
+        {
+            y1 = y + (height - hBmp) / 2;
+        }
+
+        // draw the bitmap
+        wxClientDC dst;
+        dst.SetHDC((WXHDC) hDC, false);
+        dst.DrawBitmap(*bitmap, x1, y1, true);
+
+        return true;
+    }
+#endif // wxUSE_UXTHEME
 
     int x1,y1;
 
@@ -346,10 +489,7 @@ void wxBitmapButton::DrawFace( WXHDC dc, int left, int top,
     penLight    = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DLIGHT));
     penShadow   = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DSHADOW));
     penDkShadow = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DDKSHADOW));
-    // brushFace   = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
-    // Taking the background colour fits in better with
-    // Windows XP themes.
-    brushFace   = CreateSolidBrush(m_backgroundColour.m_pixel);
+    brushFace   = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
 
     // draw the rectangle
     RECT rect;
@@ -452,6 +592,25 @@ wxSize wxBitmapButton::DoGetBestSize() const
 {
     if ( m_bmpNormal.Ok() )
     {
+#if wxUSE_UXTHEME
+        if ( (GetWindowStyleFlag() & wxBU_AUTODRAW) && wxUxThemeEngine::GetIfActive() )
+        {
+            wxUxThemeHandle theme((wxBitmapButton *)this, L"BUTTON");
+
+            // calculate content area margins
+            // assuming here that each state is the same size
+            MARGINS margins;
+            wxUxThemeEngine::Get()->GetThemeMargins(theme, NULL,
+                                                    BP_PUSHBUTTON, PBS_NORMAL,
+                                                    TMT_CONTENTMARGINS, NULL,
+                                                    &margins);
+            wxSize best(m_bmpNormal.GetWidth() + 2 * (margins.cxLeftWidth + 1),
+                        m_bmpNormal.GetHeight() + 2* (margins.cyTopHeight + 1));
+            CacheBestSize(best);
+            return best;
+        }
+#endif // wxUSE_UXTHEME
+
         wxSize best(m_bmpNormal.GetWidth() + 2*m_marginX,
                       m_bmpNormal.GetHeight() + 2*m_marginY);
         CacheBestSize(best);
