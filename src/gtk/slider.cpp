@@ -221,6 +221,7 @@ extern "C" {
 static gboolean
 idle_thumbrelease(void* data)
 {
+    gdk_threads_enter();
     wxSlider* win = (wxSlider*)data;
     win->m_isScrolling = false;
     if (win->m_needThumbRelease)
@@ -232,6 +233,7 @@ idle_thumbrelease(void* data)
     win->BlockScrollEvent();
     gtk_range_set_value((GtkRange*)win->m_widget, win->GetValue());
     win->UnblockScrollEvent();
+    gdk_threads_leave();
     return false;
 }
 }
