@@ -115,7 +115,7 @@ class ColumnSorterMixin:
     def __OnColClick(self, evt):
         oldCol = self._col
         self._col = col = evt.GetColumn()
-        self._colSortFlag[col] = not self._colSortFlag[col]
+        self._colSortFlag[col] = int(not self._colSortFlag[col])
         self.GetListCtrl().SortItems(self.GetColumnSorter())
         self.__updateImages(oldCol)
         evt.Skip()
