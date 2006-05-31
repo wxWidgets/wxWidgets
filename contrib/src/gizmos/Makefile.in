@@ -320,7 +320,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 @COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmos_0): $(GIZMOSDLL_OBJECTS) $(__gizmosdll___win32rc)
-@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(GIZMOSDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__gizmosdll___macinstnamecmd) $(__gizmosdll___importlib) $(__gizmosdll___soname_flags) $(WXMACVERSION_CMD)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
+@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(GIZMOSDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__gizmosdll___macinstnamecmd) $(__gizmosdll___importlib) $(__gizmosdll___soname_flags) $(WXMACVERSION_CMD)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 @COND_SHARED_1@	
 @COND_SHARED_1@	$(__gizmosdll___so_symlinks_cmd)
 
@@ -334,7 +334,7 @@ distclean: clean
 @COND_USE_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_gizmosdll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(GIZMOSDLL_CXXFLAGS)
 
 @COND_SHARED_1_USE_XRC_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmos_0): $(GIZMOS_XRCDLL_OBJECTS) $(__gizmos_xrcdll___win32rc) $(__gizmosdll___depname)
-@COND_SHARED_1_USE_XRC_1@	$(SHARED_LD_CXX) $@ $(GIZMOS_XRCDLL_OBJECTS) -L$(LIBDIRNAME) $(LDFLAGS)   -L$(LIBDIRNAME) $(__gizmos_xrcdll___macinstnamecmd) $(__gizmos_xrcdll___importlib) $(__gizmos_xrcdll___soname_flags) $(WXMACVERSION_CMD)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos-$(WX_RELEASE)$(HOST_SUFFIX) $(__WXLIB_XRC_p)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
+@COND_SHARED_1_USE_XRC_1@	$(SHARED_LD_CXX) $@ $(GIZMOS_XRCDLL_OBJECTS) -L$(LIBDIRNAME) $(LDFLAGS)   -L$(LIBDIRNAME) $(__gizmos_xrcdll___macinstnamecmd) $(__gizmos_xrcdll___importlib) $(__gizmos_xrcdll___soname_flags) $(WXMACVERSION_CMD)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos-$(WX_RELEASE)$(HOST_SUFFIX) $(__WXLIB_XRC_p)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 @COND_SHARED_1_USE_XRC_1@	
 @COND_SHARED_1_USE_XRC_1@	$(__gizmos_xrcdll___so_symlinks_cmd)
 

@@ -460,7 +460,7 @@ SOURCE=../../src/mmedia\cdwin.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/mmedia\..\..\..\src\msw\dummy.cpp
+SOURCE=../../src/mmedia\..\..\..\src\common\dummy.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
 # End Source File

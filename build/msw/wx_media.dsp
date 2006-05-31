@@ -452,6 +452,12 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\src\common\dummy.cpp
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\mediactrlcmn.cpp
 # End Source File
 # End Group
@@ -461,12 +467,6 @@ SOURCE=..\..\src\common\mediactrlcmn.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\ole\activex.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\msw\dummy.cpp
-# ADD BASE CPP /Yc"wx/wxprec.h"
-# ADD CPP /Yc"wx/wxprec.h"
 # End Source File
 # Begin Source File
 

@@ -488,6 +488,12 @@ SOURCE=..\..\src\common\dircmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\dummy.cpp
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\dynarray.cpp
 # End Source File
 # Begin Source File
@@ -722,12 +728,6 @@ SOURCE=..\..\src\msw\dir.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\dlmsw.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\msw\dummy.cpp
-# ADD BASE CPP /Yc"wx/wxprec.h"
-# ADD CPP /Yc"wx/wxprec.h"
 # End Source File
 # Begin Source File
 

@@ -345,7 +345,7 @@ clean:
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl_vc$(VENDORTAG).dll: $(OBJS)\ogldll_dummy.obj  $(OGLDLL_OBJECTS) $(OBJS)\ogldll_version.res
 	link /DLL /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) @<<
-	$(OGLDLL_OBJECTS)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl.lib
+	$(OGLDLL_OBJECTS)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl.lib
 <<
 !endif
 
@@ -357,7 +357,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 <<
 !endif
 
-$(OBJS)\ogldll_dummy.obj: ../../src/ogl\..\..\..\src\msw\dummy.cpp
+$(OBJS)\ogldll_dummy.obj: ../../src/ogl\..\..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(OGLDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\ogldll_version.res: ../../src/ogl\..\..\..\src\msw\version.rc
@@ -399,7 +399,7 @@ $(OBJS)\ogldll_lines.obj: ../../src/ogl\lines.cpp
 $(OBJS)\ogldll_ogldiag.obj: ../../src/ogl\ogldiag.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(OGLDLL_CXXFLAGS) $**
 
-$(OBJS)\ogllib_dummy.obj: ../../src/ogl\..\..\..\src\msw\dummy.cpp
+$(OBJS)\ogllib_dummy.obj: ../../src/ogl\..\..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(OGLLIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\ogllib_basic2.obj: ../../src/ogl\basic2.cpp

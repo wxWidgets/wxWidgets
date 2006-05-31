@@ -456,7 +456,7 @@ SOURCE=../../src/animate\animate.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/animate\..\..\..\src\msw\dummy.cpp
+SOURCE=../../src/animate\..\..\..\src\common\dummy.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
 # End Source File

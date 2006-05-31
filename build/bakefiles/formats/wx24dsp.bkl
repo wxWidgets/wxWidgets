@@ -8,7 +8,7 @@
     <include file="presets/fake.bkl"/>
 
     <set var="ALL_SOURCES" eval="0">
-        $(MONOLIB_SRC) src/msw/dummy.cpp $(OPENGL_SRC)
+        $(MONOLIB_SRC) src/common/dummy.cpp $(OPENGL_SRC)
     </set>
     
     <output file="$(OUTPUT_FILE)" writer="wx24dsp.empy"/>

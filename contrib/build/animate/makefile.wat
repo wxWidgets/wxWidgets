@@ -270,7 +270,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@%append $(OBJS)\animatedll.lbc option caseexact
 	@%append $(OBJS)\animatedll.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME)
 	@for %i in ($(ANIMATEDLL_OBJECTS)) do @%append $(OBJS)\animatedll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\animatedll.lbc library %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\animatedll.lbc library %i
 	@%append $(OBJS)\animatedll.lbc option resource=$(OBJS)\animatedll_version.res
 	@%append $(OBJS)\animatedll.lbc system nt_dll
 	wlink @$(OBJS)\animatedll.lbc
@@ -284,7 +284,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	wlib -q -p4096 -n -b $^@ @$(OBJS)\animatelib.lbc
 !endif
 
-$(OBJS)\animatedll_dummy.obj :  .AUTODEPEND ../../src/animate\..\..\..\src\msw\dummy.cpp
+$(OBJS)\animatedll_dummy.obj :  .AUTODEPEND ../../src/animate\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ANIMATEDLL_CXXFLAGS) $<
 
 $(OBJS)\animatedll_version.res :  .AUTODEPEND ../../src/animate\..\..\..\src\msw\version.rc
@@ -293,7 +293,7 @@ $(OBJS)\animatedll_version.res :  .AUTODEPEND ../../src/animate\..\..\..\src\msw
 $(OBJS)\animatedll_animate.obj :  .AUTODEPEND ../../src/animate\animate.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ANIMATEDLL_CXXFLAGS) $<
 
-$(OBJS)\animatelib_dummy.obj :  .AUTODEPEND ../../src/animate\..\..\..\src\msw\dummy.cpp
+$(OBJS)\animatelib_dummy.obj :  .AUTODEPEND ../../src/animate\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ANIMATELIB_CXXFLAGS) $<
 
 $(OBJS)\animatelib_animate.obj :  .AUTODEPEND ../../src/animate\animate.cpp

@@ -458,16 +458,16 @@ SOURCE=..\..\src\common\db.cpp
 
 SOURCE=..\..\src\common\dbtable.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\dummy.cpp
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
+# End Source File
 # End Group
 # Begin Group "MSW Sources"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\src\msw\dummy.cpp
-# ADD BASE CPP /Yc"wx/wxprec.h"
-# ADD CPP /Yc"wx/wxprec.h"
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\src\msw\version.rc

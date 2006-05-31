@@ -270,7 +270,7 @@ clean:
 
 ifeq ($(SHARED),1)
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia_gcc$(VENDORTAG).dll: $(MMEDIADLL_OBJECTS) $(OBJS)\mmediadll_version_rc.o
-	$(CXX) -shared -fPIC -o $@ $(MMEDIADLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia.a  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
+	$(CXX) -shared -fPIC -o $@ $(MMEDIADLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mmedia.a  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 endif
 
 ifeq ($(SHARED),0)
@@ -280,7 +280,7 @@ $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(
 	ranlib $@
 endif
 
-$(OBJS)\mmediadll_dummy.o: ../../src/mmedia/../../../src/msw/dummy.cpp
+$(OBJS)\mmediadll_dummy.o: ../../src/mmedia/../../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\mmediadll_version_rc.o: ../../src/mmedia/../../../src/msw/version.rc
@@ -346,7 +346,7 @@ $(OBJS)\mmediadll_sndwav.o: ../../src/mmedia/sndwav.cpp
 $(OBJS)\mmediadll_vidbase.o: ../../src/mmedia/vidbase.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\mmedialib_dummy.o: ../../src/mmedia/../../../src/msw/dummy.cpp
+$(OBJS)\mmedialib_dummy.o: ../../src/mmedia/../../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\mmedialib_cdwin.o: ../../src/mmedia/cdwin.cpp

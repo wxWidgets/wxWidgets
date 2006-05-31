@@ -457,7 +457,7 @@ SOURCE=../../src/deprecated\dosyacc.c
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/deprecated\..\..\..\src\msw\dummy.cpp
+SOURCE=../../src/deprecated\..\..\..\src\common\dummy.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
 # End Source File

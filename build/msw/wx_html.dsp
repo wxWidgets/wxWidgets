@@ -447,15 +447,19 @@ LIB32=link.exe -lib
 # Name "html - Win32 Unicode Debug"
 # Name "html - Win32 Release"
 # Name "html - Win32 Debug"
-# Begin Group "MSW Sources"
+# Begin Group "Common Sources"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\msw\dummy.cpp
+SOURCE=..\..\src\common\dummy.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
 # End Source File
+# End Group
+# Begin Group "MSW Sources"
+
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=..\..\src\msw\helpbest.cpp

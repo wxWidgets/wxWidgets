@@ -301,7 +301,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@%append $(OBJS)\fldll.lbc option caseexact
 	@%append $(OBJS)\fldll.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME)
 	@for %i in ($(FLDLL_OBJECTS)) do @%append $(OBJS)\fldll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\fldll.lbc library %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\fldll.lbc library %i
 	@%append $(OBJS)\fldll.lbc option resource=$(OBJS)\fldll_version.res
 	@%append $(OBJS)\fldll.lbc system nt_dll
 	wlink @$(OBJS)\fldll.lbc
@@ -315,7 +315,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	wlib -q -p4096 -n -b $^@ @$(OBJS)\fllib.lbc
 !endif
 
-$(OBJS)\fldll_dummy.obj :  .AUTODEPEND ../../src/fl\..\..\..\src\msw\dummy.cpp
+$(OBJS)\fldll_dummy.obj :  .AUTODEPEND ../../src/fl\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(FLDLL_CXXFLAGS) $<
 
 $(OBJS)\fldll_version.res :  .AUTODEPEND ../../src/fl\..\..\..\src\msw\version.rc
@@ -372,7 +372,7 @@ $(OBJS)\fldll_toolwnd.obj :  .AUTODEPEND ../../src/fl\toolwnd.cpp
 $(OBJS)\fldll_updatesmgr.obj :  .AUTODEPEND ../../src/fl\updatesmgr.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fllib_dummy.obj :  .AUTODEPEND ../../src/fl\..\..\..\src\msw\dummy.cpp
+$(OBJS)\fllib_dummy.obj :  .AUTODEPEND ../../src/fl\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(FLLIB_CXXFLAGS) $<
 
 $(OBJS)\fllib_antiflickpl.obj :  .AUTODEPEND ../../src/fl\antiflickpl.cpp

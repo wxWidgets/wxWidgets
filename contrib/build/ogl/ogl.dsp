@@ -484,7 +484,7 @@ SOURCE=../../src/ogl\drawn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/ogl\..\..\..\src\msw\dummy.cpp
+SOURCE=../../src/ogl\..\..\..\src\common\dummy.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
 # End Source File

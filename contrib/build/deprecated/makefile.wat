@@ -300,7 +300,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@%append $(OBJS)\deprecateddll.lbc option caseexact
 	@%append $(OBJS)\deprecateddll.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME)
 	@for %i in ($(DEPRECATEDDLL_OBJECTS)) do @%append $(OBJS)\deprecateddll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\deprecateddll.lbc library %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\deprecateddll.lbc library %i
 	@%append $(OBJS)\deprecateddll.lbc option resource=$(OBJS)\deprecateddll_version.res
 	@%append $(OBJS)\deprecateddll.lbc system nt_dll
 	wlink @$(OBJS)\deprecateddll.lbc
@@ -314,7 +314,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	wlib -q -p4096 -n -b $^@ @$(OBJS)\deprecatedlib.lbc
 !endif
 
-$(OBJS)\deprecateddll_dummy.obj :  .AUTODEPEND ../../src/deprecated\..\..\..\src\msw\dummy.cpp
+$(OBJS)\deprecateddll_dummy.obj :  .AUTODEPEND ../../src/deprecated\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
 $(OBJS)\deprecateddll_version.res :  .AUTODEPEND ../../src/deprecated\..\..\..\src\msw\version.rc
@@ -344,7 +344,7 @@ $(OBJS)\deprecateddll_wxexpr.obj :  .AUTODEPEND ../../src/deprecated\wxexpr.cpp
 $(OBJS)\deprecateddll_dosyacc.obj :  .AUTODEPEND ../../src/deprecated\dosyacc.c
 	$(CC) -bt=nt -zq -fo=$^@ $(DEPRECATEDDLL_CFLAGS) $<
 
-$(OBJS)\deprecatedlib_dummy.obj :  .AUTODEPEND ../../src/deprecated\..\..\..\src\msw\dummy.cpp
+$(OBJS)\deprecatedlib_dummy.obj :  .AUTODEPEND ../../src/deprecated\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 $(OBJS)\deprecatedlib_prop.obj :  .AUTODEPEND ../../src/deprecated\prop.cpp

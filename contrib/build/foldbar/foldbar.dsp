@@ -456,7 +456,7 @@ SOURCE=../../src/foldbar\captionbar.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/foldbar\..\..\..\src\msw\dummy.cpp
+SOURCE=../../src/foldbar\..\..\..\src\common\dummy.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
 # End Source File

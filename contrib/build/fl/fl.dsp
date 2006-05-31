@@ -472,7 +472,7 @@ SOURCE=../../src/fl\controlbar.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/fl\..\..\..\src\msw\dummy.cpp
+SOURCE=../../src/fl\..\..\..\src\common\dummy.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
 # End Source File

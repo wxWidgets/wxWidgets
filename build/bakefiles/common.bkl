@@ -582,9 +582,9 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
 
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
             <if cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','WINCE']">
-                <sources>$(WXTOPDIR)src/msw/dummy.cpp</sources>
+                <sources>$(WXTOPDIR)src/common/dummy.cpp</sources>
                 <precomp-headers-gen>
-                    $(WXTOPDIR)src/msw/dummy.cpp
+                    $(WXTOPDIR)src/common/dummy.cpp
                 </precomp-headers-gen>
             </if>
             <precomp-headers-location>$(WXTOPDIR)include</precomp-headers-location>

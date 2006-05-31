@@ -269,7 +269,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@%append $(OBJS)\svgdll.lbc option caseexact
 	@%append $(OBJS)\svgdll.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME)
 	@for %i in ($(SVGDLL_OBJECTS)) do @%append $(OBJS)\svgdll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\svgdll.lbc library %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\svgdll.lbc library %i
 	@%append $(OBJS)\svgdll.lbc option resource=$(OBJS)\svgdll_version.res
 	@%append $(OBJS)\svgdll.lbc system nt_dll
 	wlink @$(OBJS)\svgdll.lbc
@@ -283,7 +283,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	wlib -q -p4096 -n -b $^@ @$(OBJS)\svglib.lbc
 !endif
 
-$(OBJS)\svgdll_dummy.obj :  .AUTODEPEND ../../src/svg\..\..\..\src\msw\dummy.cpp
+$(OBJS)\svgdll_dummy.obj :  .AUTODEPEND ../../src/svg\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(SVGDLL_CXXFLAGS) $<
 
 $(OBJS)\svgdll_version.res :  .AUTODEPEND ../../src/svg\..\..\..\src\msw\version.rc
@@ -292,7 +292,7 @@ $(OBJS)\svgdll_version.res :  .AUTODEPEND ../../src/svg\..\..\..\src\msw\version
 $(OBJS)\svgdll_dcsvg.obj :  .AUTODEPEND ../../src/svg\dcsvg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(SVGDLL_CXXFLAGS) $<
 
-$(OBJS)\svglib_dummy.obj :  .AUTODEPEND ../../src/svg\..\..\..\src\msw\dummy.cpp
+$(OBJS)\svglib_dummy.obj :  .AUTODEPEND ../../src/svg\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(SVGLIB_CXXFLAGS) $<
 
 $(OBJS)\svglib_dcsvg.obj :  .AUTODEPEND ../../src/svg\dcsvg.cpp

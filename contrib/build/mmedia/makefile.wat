@@ -307,7 +307,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@%append $(OBJS)\mmediadll.lbc option caseexact
 	@%append $(OBJS)\mmediadll.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME)
 	@for %i in ($(MMEDIADLL_OBJECTS)) do @%append $(OBJS)\mmediadll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\mmediadll.lbc library %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\mmediadll.lbc library %i
 	@%append $(OBJS)\mmediadll.lbc option resource=$(OBJS)\mmediadll_version.res
 	@%append $(OBJS)\mmediadll.lbc system nt_dll
 	wlink @$(OBJS)\mmediadll.lbc
@@ -321,7 +321,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	wlib -q -p4096 -n -b $^@ @$(OBJS)\mmedialib.lbc
 !endif
 
-$(OBJS)\mmediadll_dummy.obj :  .AUTODEPEND ../../src/mmedia\..\..\..\src\msw\dummy.cpp
+$(OBJS)\mmediadll_dummy.obj :  .AUTODEPEND ../../src/mmedia\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\mmediadll_version.res :  .AUTODEPEND ../../src/mmedia\..\..\..\src\msw\version.rc
@@ -387,7 +387,7 @@ $(OBJS)\mmediadll_sndwav.obj :  .AUTODEPEND ../../src/mmedia\sndwav.cpp
 $(OBJS)\mmediadll_vidbase.obj :  .AUTODEPEND ../../src/mmedia\vidbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_dummy.obj :  .AUTODEPEND ../../src/mmedia\..\..\..\src\msw\dummy.cpp
+$(OBJS)\mmedialib_dummy.obj :  .AUTODEPEND ../../src/mmedia\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MMEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\mmedialib_cdwin.obj :  .AUTODEPEND ../../src/mmedia\cdwin.cpp

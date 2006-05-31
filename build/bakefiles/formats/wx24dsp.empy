@@ -330,7 +330,7 @@ SOURCE="This project is deprecated, please see install.txt"
 # Begin Source File
 
 SOURCE=.\@src[4:].replace('/','\\')
-@[if src=='src/msw/dummy.cpp']@
+@[if src=='src/common/dummy.cpp']@
 # ADD CPP /Yc"wx/wxprec.h"
 @[end if]@
 @[if src.endswith('.c')]@

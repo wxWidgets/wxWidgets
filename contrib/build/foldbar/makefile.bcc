@@ -242,7 +242,7 @@ clean:
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar_bcc$(VENDORTAG).dll: $(OBJS)\foldbardll_dummy.obj  $(FOLDBARDLL_OBJECTS)  $(OBJS)\foldbardll_version.res
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(FOLDBARDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG_6)$(__RUNTIME_LIBS_9).lib,, $(OBJS)\foldbardll_version.res
+	c0d32.obj $(FOLDBARDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG_6)$(__RUNTIME_LIBS_9).lib,, $(OBJS)\foldbardll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar $@
 !endif
@@ -255,7 +255,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 |
 !endif
 
-$(OBJS)\foldbardll_dummy.obj: ../../src/foldbar\..\..\..\src\msw\dummy.cpp
+$(OBJS)\foldbardll_dummy.obj: ../../src/foldbar\..\..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(FOLDBARDLL_CXXFLAGS) -H $**
 
 $(OBJS)\foldbardll_version.res: ../../src/foldbar\..\..\..\src\msw\version.rc
@@ -270,7 +270,7 @@ $(OBJS)\foldbardll_foldpanelbar.obj: ../../src/foldbar\foldpanelbar.cpp
 $(OBJS)\foldbardll_foldpanelitem.obj: ../../src/foldbar\foldpanelitem.cpp
 	$(CXX) -q -c -P -o$@ $(FOLDBARDLL_CXXFLAGS) $**
 
-$(OBJS)\foldbarlib_dummy.obj: ../../src/foldbar\..\..\..\src\msw\dummy.cpp
+$(OBJS)\foldbarlib_dummy.obj: ../../src/foldbar\..\..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(FOLDBARLIB_CXXFLAGS) -H $**
 
 $(OBJS)\foldbarlib_captionbar.obj: ../../src/foldbar\captionbar.cpp

@@ -453,6 +453,11 @@ SOURCE=.\common\dseldlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\dummy.cpp
+# ADD CPP /Yc"wx/wxprec.h"
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\dynarray.cpp
 # End Source File
 # Begin Source File
@@ -998,6 +1003,10 @@ SOURCE=.\generic\htmllbox.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\hyperlink.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\laywin.cpp
 # End Source File
 # Begin Source File
@@ -1343,11 +1352,6 @@ SOURCE=.\msw\dlmsw.cpp
 # Begin Source File
 
 SOURCE=.\msw\dragimag.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\dummy.cpp
-# ADD CPP /Yc"wx/wxprec.h"
 # End Source File
 # Begin Source File
 
@@ -1796,6 +1800,10 @@ SOURCE=.\xrc\xh_grid.cpp
 # Begin Source File
 
 SOURCE=.\xrc\xh_html.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_hyperlink.cpp
 # End Source File
 # Begin Source File
 
@@ -2512,6 +2520,10 @@ SOURCE=..\include\wx\helpwin.h
 # Begin Source File
 
 SOURCE=..\include\wx\htmllbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\hyperlink.h
 # End Source File
 # Begin Source File
 
@@ -3256,6 +3268,10 @@ SOURCE=..\include\wx\xrc\xh_grid.h
 # Begin Source File
 
 SOURCE=..\include\wx\xrc\xh_html.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_hyperlink.h
 # End Source File
 # Begin Source File
 

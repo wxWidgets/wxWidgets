@@ -4424,7 +4424,7 @@ $(OBJS)\wxexpat_xmlrole.obj: ..\..\src\expat\lib\xmlrole.c
 $(OBJS)\wxexpat_xmltok.obj: ..\..\src\expat\lib\xmltok.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) $**
 
-$(OBJS)\monodll_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\monodll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\monodll_version.res: ..\..\src\msw\version.rc
@@ -6237,7 +6237,7 @@ $(OBJS)\monodll_joystick.obj: ..\..\src\msw\joystick.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
-$(OBJS)\monolib_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\monolib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\monolib_appbase.obj: ..\..\src\common\appbase.cpp
@@ -8047,7 +8047,7 @@ $(OBJS)\monolib_joystick.obj: ..\..\src\msw\joystick.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
-$(OBJS)\basedll_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\basedll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\basedll_version.res: ..\..\src\msw\version.rc
@@ -8293,7 +8293,7 @@ $(OBJS)\basedll_mslu.obj: ..\..\src\msw\mslu.cpp
 $(OBJS)\basedll_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) $**
 
-$(OBJS)\baselib_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\baselib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\baselib_appbase.obj: ..\..\src\common\appbase.cpp
@@ -8536,7 +8536,7 @@ $(OBJS)\baselib_mslu.obj: ..\..\src\msw\mslu.cpp
 $(OBJS)\baselib_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) $**
 
-$(OBJS)\netdll_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\netdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\netdll_version.res: ..\..\src\msw\version.rc
@@ -8578,7 +8578,7 @@ $(OBJS)\netdll_gsocket.obj: ..\..\src\msw\gsocket.cpp
 $(OBJS)\netdll_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETDLL_CXXFLAGS) $**
 
-$(OBJS)\netlib_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\netlib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETLIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\netlib_fs_inet.obj: ..\..\src\common\fs_inet.cpp
@@ -8617,7 +8617,7 @@ $(OBJS)\netlib_gsocket.obj: ..\..\src\msw\gsocket.cpp
 $(OBJS)\netlib_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETLIB_CXXFLAGS) $**
 
-$(OBJS)\coredll_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\coredll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\coredll_version.res: ..\..\src\msw\version.rc
@@ -9804,7 +9804,7 @@ $(OBJS)\coredll_vscroll.obj: ..\..\src\generic\vscroll.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
 !endif
 
-$(OBJS)\corelib_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\corelib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\corelib_event.obj: ..\..\src\common\event.cpp
@@ -10988,7 +10988,7 @@ $(OBJS)\corelib_vscroll.obj: ..\..\src\generic\vscroll.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
 !endif
 
-$(OBJS)\advdll_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\advdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\advdll_version.res: ..\..\src\msw\version.rc
@@ -11072,7 +11072,7 @@ $(OBJS)\advdll_taskbar.obj: ..\..\src\msw\taskbar.cpp
 $(OBJS)\advdll_joystick.obj: ..\..\src\msw\joystick.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
 
-$(OBJS)\advlib_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\advlib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\advlib_datectrl.obj: ..\..\src\msw\datectrl.cpp
@@ -11153,7 +11153,7 @@ $(OBJS)\advlib_taskbar.obj: ..\..\src\msw\taskbar.cpp
 $(OBJS)\advlib_joystick.obj: ..\..\src\msw\joystick.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
 
-$(OBJS)\mediadll_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\mediadll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MEDIADLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\mediadll_version.res: ..\..\src\msw\version.rc
@@ -11171,7 +11171,7 @@ $(OBJS)\mediadll_mediactrl_wmp10.obj: ..\..\src\msw\mediactrl_wmp10.cpp
 $(OBJS)\mediadll_activex.obj: ..\..\src\msw\ole\activex.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MEDIADLL_CXXFLAGS) $**
 
-$(OBJS)\medialib_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\medialib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MEDIALIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\medialib_mediactrlcmn.obj: ..\..\src\common\mediactrlcmn.cpp
@@ -11186,7 +11186,7 @@ $(OBJS)\medialib_mediactrl_wmp10.obj: ..\..\src\msw\mediactrl_wmp10.cpp
 $(OBJS)\medialib_activex.obj: ..\..\src\msw\ole\activex.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MEDIALIB_CXXFLAGS) $**
 
-$(OBJS)\odbcdll_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\odbcdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ODBCDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\odbcdll_version.res: ..\..\src\msw\version.rc
@@ -11198,7 +11198,7 @@ $(OBJS)\odbcdll_db.obj: ..\..\src\common\db.cpp
 $(OBJS)\odbcdll_dbtable.obj: ..\..\src\common\dbtable.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ODBCDLL_CXXFLAGS) $**
 
-$(OBJS)\odbclib_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\odbclib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ODBCLIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\odbclib_db.obj: ..\..\src\common\db.cpp
@@ -11207,7 +11207,7 @@ $(OBJS)\odbclib_db.obj: ..\..\src\common\db.cpp
 $(OBJS)\odbclib_dbtable.obj: ..\..\src\common\dbtable.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ODBCLIB_CXXFLAGS) $**
 
-$(OBJS)\dbgriddll_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\dbgriddll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(DBGRIDDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\dbgriddll_version.res: ..\..\src\msw\version.rc
@@ -11216,13 +11216,13 @@ $(OBJS)\dbgriddll_version.res: ..\..\src\msw\version.rc
 $(OBJS)\dbgriddll_dbgrid.obj: ..\..\src\common\dbgrid.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(DBGRIDDLL_CXXFLAGS) $**
 
-$(OBJS)\dbgridlib_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\dbgridlib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(DBGRIDLIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\dbgridlib_dbgrid.obj: ..\..\src\common\dbgrid.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(DBGRIDLIB_CXXFLAGS) $**
 
-$(OBJS)\htmldll_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\htmldll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(HTMLDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\htmldll_version.res: ..\..\src\msw\version.rc
@@ -11300,7 +11300,7 @@ $(OBJS)\htmldll_winpars.obj: ..\..\src\html\winpars.cpp
 $(OBJS)\htmldll_htmllbox.obj: ..\..\src\generic\htmllbox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(HTMLDLL_CXXFLAGS) $**
 
-$(OBJS)\htmllib_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\htmllib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(HTMLLIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\htmllib_helpbest.obj: ..\..\src\msw\helpbest.cpp
@@ -11375,7 +11375,7 @@ $(OBJS)\htmllib_winpars.obj: ..\..\src\html\winpars.cpp
 $(OBJS)\htmllib_htmllbox.obj: ..\..\src\generic\htmllbox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(HTMLLIB_CXXFLAGS) $**
 
-$(OBJS)\qadll_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\qadll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(QADLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\qadll_version.res: ..\..\src\msw\version.rc
@@ -11387,7 +11387,7 @@ $(OBJS)\qadll_debugrpt.obj: ..\..\src\common\debugrpt.cpp
 $(OBJS)\qadll_dbgrptg.obj: ..\..\src\generic\dbgrptg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(QADLL_CXXFLAGS) $**
 
-$(OBJS)\qalib_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\qalib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(QALIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\qalib_debugrpt.obj: ..\..\src\common\debugrpt.cpp
@@ -11396,7 +11396,7 @@ $(OBJS)\qalib_debugrpt.obj: ..\..\src\common\debugrpt.cpp
 $(OBJS)\qalib_dbgrptg.obj: ..\..\src\generic\dbgrptg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(QALIB_CXXFLAGS) $**
 
-$(OBJS)\xmldll_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\xmldll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XMLDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\xmldll_version.res: ..\..\src\msw\version.rc
@@ -11408,7 +11408,7 @@ $(OBJS)\xmldll_xml.obj: ..\..\src\xml\xml.cpp
 $(OBJS)\xmldll_xtixml.obj: ..\..\src\common\xtixml.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XMLDLL_CXXFLAGS) $**
 
-$(OBJS)\xmllib_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\xmllib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XMLLIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\xmllib_xml.obj: ..\..\src\xml\xml.cpp
@@ -11417,7 +11417,7 @@ $(OBJS)\xmllib_xml.obj: ..\..\src\xml\xml.cpp
 $(OBJS)\xmllib_xtixml.obj: ..\..\src\common\xtixml.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XMLLIB_CXXFLAGS) $**
 
-$(OBJS)\xrcdll_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\xrcdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\xrcdll_version.res: ..\..\src\msw\version.rc
@@ -11561,7 +11561,7 @@ $(OBJS)\xrcdll_xmlres.obj: ..\..\src\xrc\xmlres.cpp
 $(OBJS)\xrcdll_xmlrsall.obj: ..\..\src\xrc\xmlrsall.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) $**
 
-$(OBJS)\xrclib_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\xrclib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\xrclib_xh_bmpbt.obj: ..\..\src\xrc\xh_bmpbt.cpp
@@ -11702,7 +11702,7 @@ $(OBJS)\xrclib_xmlres.obj: ..\..\src\xrc\xmlres.cpp
 $(OBJS)\xrclib_xmlrsall.obj: ..\..\src\xrc\xmlrsall.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) $**
 
-$(OBJS)\gldll_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\gldll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GLDLL_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\gldll_version.res: ..\..\src\msw\version.rc
@@ -11711,7 +11711,7 @@ $(OBJS)\gldll_version.res: ..\..\src\msw\version.rc
 $(OBJS)\gldll_glcanvas.obj: ..\..\src\msw\glcanvas.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GLDLL_CXXFLAGS) $**
 
-$(OBJS)\gllib_dummy.obj: ..\..\src\msw\dummy.cpp
+$(OBJS)\gllib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GLLIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
 $(OBJS)\gllib_glcanvas.obj: ..\..\src\msw\glcanvas.cpp

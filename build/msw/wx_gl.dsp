@@ -447,15 +447,19 @@ LIB32=link.exe -lib
 # Name "gl - Win32 Unicode Debug"
 # Name "gl - Win32 Release"
 # Name "gl - Win32 Debug"
-# Begin Group "MSW Sources"
+# Begin Group "Common Sources"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\msw\dummy.cpp
+SOURCE=..\..\src\common\dummy.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
 # End Source File
+# End Group
+# Begin Group "MSW Sources"
+
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=..\..\src\msw\glcanvas.cpp
@@ -527,141 +531,6 @@ SOURCE=..\..\src\msw\version.rc
 # Begin Group "Setup Headers"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\setup.h
-
-!IF  "$(CFG)" == "gl - Win32 DLL Universal Unicode Release"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 DLL Universal Unicode Debug"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 DLL Universal Release"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 DLL Universal Debug"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 DLL Unicode Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 DLL Unicode Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswud\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 DLL Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\msw\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\msw\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 DLL Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswd\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswd\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 Universal Unicode Release"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 Universal Unicode Debug"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 Universal Release"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 Universal Debug"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 Unicode Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswu\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 Unicode Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswud\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\msw\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\msw\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "gl - Win32 Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswd\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswd\wx\setup.h
-
-# End Custom Build
-
-!ENDIF
-
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\univ\setup.h
@@ -791,6 +660,141 @@ InputPath=..\include\wx\univ\setup.h
 !ELSEIF  "$(CFG)" == "gl - Win32 Debug"
 
 # Begin Custom Build - 
+
+# End Custom Build
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\setup.h
+
+!IF  "$(CFG)" == "gl - Win32 DLL Universal Unicode Release"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 DLL Universal Unicode Debug"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 DLL Universal Release"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 DLL Universal Debug"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 DLL Unicode Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_dll\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_dll\mswu\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 DLL Unicode Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_dll\mswud\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_dll\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_dll\mswud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 DLL Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_dll\msw\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_dll\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_dll\msw\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 DLL Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_dll\mswd\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_dll\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_dll\mswd\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 Universal Unicode Release"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 Universal Unicode Debug"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 Universal Release"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 Universal Debug"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 Unicode Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswu\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswu\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 Unicode Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswud\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\msw\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\msw\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gl - Win32 Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswd\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswd\wx\setup.h
 
 # End Custom Build
 

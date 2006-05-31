@@ -267,7 +267,7 @@ clean:
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated_bcc$(VENDORTAG).dll: $(OBJS)\deprecateddll_dummy.obj  $(DEPRECATEDDLL_OBJECTS)  $(OBJS)\deprecateddll_version.res
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(DEPRECATEDDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG_6)$(__RUNTIME_LIBS_9).lib,, $(OBJS)\deprecateddll_version.res
+	c0d32.obj $(DEPRECATEDDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG_6)$(__RUNTIME_LIBS_9).lib,, $(OBJS)\deprecateddll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_deprecated $@
 !endif
@@ -280,7 +280,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 |
 !endif
 
-$(OBJS)\deprecateddll_dummy.obj: ../../src/deprecated\..\..\..\src\msw\dummy.cpp
+$(OBJS)\deprecateddll_dummy.obj: ../../src/deprecated\..\..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(DEPRECATEDDLL_CXXFLAGS) -H $**
 
 $(OBJS)\deprecateddll_version.res: ../../src/deprecated\..\..\..\src\msw\version.rc
@@ -310,7 +310,7 @@ $(OBJS)\deprecateddll_wxexpr.obj: ../../src/deprecated\wxexpr.cpp
 $(OBJS)\deprecateddll_dosyacc.obj: ../../src/deprecated\dosyacc.c
 	$(CC) -q -c -P- -o$@ $(DEPRECATEDDLL_CFLAGS) $**
 
-$(OBJS)\deprecatedlib_dummy.obj: ../../src/deprecated\..\..\..\src\msw\dummy.cpp
+$(OBJS)\deprecatedlib_dummy.obj: ../../src/deprecated\..\..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(DEPRECATEDLIB_CXXFLAGS) -H $**
 
 $(OBJS)\deprecatedlib_prop.obj: ../../src/deprecated\prop.cpp

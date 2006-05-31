@@ -238,7 +238,7 @@ clean:
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_animate_bcc$(VENDORTAG).dll: $(OBJS)\animatedll_dummy.obj  $(ANIMATEDLL_OBJECTS)  $(OBJS)\animatedll_version.res
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(ANIMATEDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG_6)$(__RUNTIME_LIBS_9).lib,, $(OBJS)\animatedll_version.res
+	c0d32.obj $(ANIMATEDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG_6)$(__RUNTIME_LIBS_9).lib,, $(OBJS)\animatedll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_animate $@
 !endif
@@ -251,7 +251,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 |
 !endif
 
-$(OBJS)\animatedll_dummy.obj: ../../src/animate\..\..\..\src\msw\dummy.cpp
+$(OBJS)\animatedll_dummy.obj: ../../src/animate\..\..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(ANIMATEDLL_CXXFLAGS) -H $**
 
 $(OBJS)\animatedll_version.res: ../../src/animate\..\..\..\src\msw\version.rc
@@ -260,7 +260,7 @@ $(OBJS)\animatedll_version.res: ../../src/animate\..\..\..\src\msw\version.rc
 $(OBJS)\animatedll_animate.obj: ../../src/animate\animate.cpp
 	$(CXX) -q -c -P -o$@ $(ANIMATEDLL_CXXFLAGS) $**
 
-$(OBJS)\animatelib_dummy.obj: ../../src/animate\..\..\..\src\msw\dummy.cpp
+$(OBJS)\animatelib_dummy.obj: ../../src/animate\..\..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(ANIMATELIB_CXXFLAGS) -H $**
 
 $(OBJS)\animatelib_animate.obj: ../../src/animate\animate.cpp

@@ -236,7 +236,7 @@ clean:
 
 ifeq ($(SHARED),1)
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_gcc$(VENDORTAG).dll: $(NETUTILSDLL_OBJECTS) $(OBJS)\netutilsdll_version_rc.o
-	$(CXX) -shared -fPIC -o $@ $(NETUTILSDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils.a  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
+	$(CXX) -shared -fPIC -o $@ $(NETUTILSDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils.a  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 endif
 
 ifeq ($(SHARED),0)
@@ -246,7 +246,7 @@ $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(
 	ranlib $@
 endif
 
-$(OBJS)\netutilsdll_dummy.o: ../../src/net/../../../src/msw/dummy.cpp
+$(OBJS)\netutilsdll_dummy.o: ../../src/net/../../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\netutilsdll_version_rc.o: ../../src/net/../../../src/msw/version.rc
@@ -261,7 +261,7 @@ $(OBJS)\netutilsdll_smapi.o: ../../src/net/smapi.cpp
 $(OBJS)\netutilsdll_web.o: ../../src/net/web.cpp
 	$(CXX) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\netutilslib_dummy.o: ../../src/net/../../../src/msw/dummy.cpp
+$(OBJS)\netutilslib_dummy.o: ../../src/net/../../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(NETUTILSLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\netutilslib_email.o: ../../src/net/email.cpp

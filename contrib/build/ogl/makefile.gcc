@@ -253,7 +253,7 @@ clean:
 
 ifeq ($(SHARED),1)
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl_gcc$(VENDORTAG).dll: $(OGLDLL_OBJECTS) $(OBJS)\ogldll_version_rc.o
-	$(CXX) -shared -fPIC -o $@ $(OGLDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl.a  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
+	$(CXX) -shared -fPIC -o $@ $(OGLDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl.a  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 endif
 
 ifeq ($(SHARED),0)
@@ -263,7 +263,7 @@ $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(
 	ranlib $@
 endif
 
-$(OBJS)\ogldll_dummy.o: ../../src/ogl/../../../src/msw/dummy.cpp
+$(OBJS)\ogldll_dummy.o: ../../src/ogl/../../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\ogldll_version_rc.o: ../../src/ogl/../../../src/msw/version.rc
@@ -305,7 +305,7 @@ $(OBJS)\ogldll_lines.o: ../../src/ogl/lines.cpp
 $(OBJS)\ogldll_ogldiag.o: ../../src/ogl/ogldiag.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\ogllib_dummy.o: ../../src/ogl/../../../src/msw/dummy.cpp
+$(OBJS)\ogllib_dummy.o: ../../src/ogl/../../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\ogllib_basic2.o: ../../src/ogl/basic2.cpp

@@ -273,7 +273,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@%append $(OBJS)\netutilsdll.lbc option caseexact
 	@%append $(OBJS)\netutilsdll.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME)
 	@for %i in ($(NETUTILSDLL_OBJECTS)) do @%append $(OBJS)\netutilsdll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\netutilsdll.lbc library %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\netutilsdll.lbc library %i
 	@%append $(OBJS)\netutilsdll.lbc option resource=$(OBJS)\netutilsdll_version.res
 	@%append $(OBJS)\netutilsdll.lbc system nt_dll
 	wlink @$(OBJS)\netutilsdll.lbc
@@ -287,7 +287,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	wlib -q -p4096 -n -b $^@ @$(OBJS)\netutilslib.lbc
 !endif
 
-$(OBJS)\netutilsdll_dummy.obj :  .AUTODEPEND ../../src/net\..\..\..\src\msw\dummy.cpp
+$(OBJS)\netutilsdll_dummy.obj :  .AUTODEPEND ../../src/net\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETUTILSDLL_CXXFLAGS) $<
 
 $(OBJS)\netutilsdll_version.res :  .AUTODEPEND ../../src/net\..\..\..\src\msw\version.rc
@@ -302,7 +302,7 @@ $(OBJS)\netutilsdll_smapi.obj :  .AUTODEPEND ../../src/net\smapi.cpp
 $(OBJS)\netutilsdll_web.obj :  .AUTODEPEND ../../src/net\web.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETUTILSDLL_CXXFLAGS) $<
 
-$(OBJS)\netutilslib_dummy.obj :  .AUTODEPEND ../../src/net\..\..\..\src\msw\dummy.cpp
+$(OBJS)\netutilslib_dummy.obj :  .AUTODEPEND ../../src/net\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETUTILSLIB_CXXFLAGS) $<
 
 $(OBJS)\netutilslib_email.obj :  .AUTODEPEND ../../src/net\email.cpp

@@ -274,7 +274,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@%append $(OBJS)\foldbardll.lbc option caseexact
 	@%append $(OBJS)\foldbardll.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME)
 	@for %i in ($(FOLDBARDLL_OBJECTS)) do @%append $(OBJS)\foldbardll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\foldbardll.lbc library %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\foldbardll.lbc library %i
 	@%append $(OBJS)\foldbardll.lbc option resource=$(OBJS)\foldbardll_version.res
 	@%append $(OBJS)\foldbardll.lbc system nt_dll
 	wlink @$(OBJS)\foldbardll.lbc
@@ -288,7 +288,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	wlib -q -p4096 -n -b $^@ @$(OBJS)\foldbarlib.lbc
 !endif
 
-$(OBJS)\foldbardll_dummy.obj :  .AUTODEPEND ../../src/foldbar\..\..\..\src\msw\dummy.cpp
+$(OBJS)\foldbardll_dummy.obj :  .AUTODEPEND ../../src/foldbar\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(FOLDBARDLL_CXXFLAGS) $<
 
 $(OBJS)\foldbardll_version.res :  .AUTODEPEND ../../src/foldbar\..\..\..\src\msw\version.rc
@@ -303,7 +303,7 @@ $(OBJS)\foldbardll_foldpanelbar.obj :  .AUTODEPEND ../../src/foldbar\foldpanelba
 $(OBJS)\foldbardll_foldpanelitem.obj :  .AUTODEPEND ../../src/foldbar\foldpanelitem.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(FOLDBARDLL_CXXFLAGS) $<
 
-$(OBJS)\foldbarlib_dummy.obj :  .AUTODEPEND ../../src/foldbar\..\..\..\src\msw\dummy.cpp
+$(OBJS)\foldbarlib_dummy.obj :  .AUTODEPEND ../../src/foldbar\..\..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(FOLDBARLIB_CXXFLAGS) $<
 
 $(OBJS)\foldbarlib_captionbar.obj :  .AUTODEPEND ../../src/foldbar\captionbar.cpp

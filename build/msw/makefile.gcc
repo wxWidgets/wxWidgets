@@ -4219,7 +4219,7 @@ $(OBJS)\wxexpat_xmlrole.o: ../../src/expat/lib/xmlrole.c
 $(OBJS)\wxexpat_xmltok.o: ../../src/expat/lib/xmltok.c
 	$(CC) -c -o $@ $(WXEXPAT_CFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\monodll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_version_rc.o: ../../src/msw/version.rc
@@ -6136,7 +6136,7 @@ $(OBJS)\monodll_joystick.o: ../../src/msw/joystick.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
-$(OBJS)\monolib_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\monolib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_appbase.o: ../../src/common/appbase.cpp
@@ -8050,7 +8050,7 @@ $(OBJS)\monolib_joystick.o: ../../src/msw/joystick.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
-$(OBJS)\basedll_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\basedll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_version_rc.o: ../../src/msw/version.rc
@@ -8296,7 +8296,7 @@ $(OBJS)\basedll_mslu.o: ../../src/msw/mslu.cpp
 $(OBJS)\basedll_volume.o: ../../src/msw/volume.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\baselib_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\baselib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_appbase.o: ../../src/common/appbase.cpp
@@ -8539,7 +8539,7 @@ $(OBJS)\baselib_mslu.o: ../../src/msw/mslu.cpp
 $(OBJS)\baselib_volume.o: ../../src/msw/volume.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\netdll_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\netdll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\netdll_version_rc.o: ../../src/msw/version.rc
@@ -8581,7 +8581,7 @@ $(OBJS)\netdll_gsocket.o: ../../src/msw/gsocket.cpp
 $(OBJS)\netdll_urlmsw.o: ../../src/msw/urlmsw.cpp
 	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\netlib_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\netlib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\netlib_fs_inet.o: ../../src/common/fs_inet.cpp
@@ -8620,7 +8620,7 @@ $(OBJS)\netlib_gsocket.o: ../../src/msw/gsocket.cpp
 $(OBJS)\netlib_urlmsw.o: ../../src/msw/urlmsw.cpp
 	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\coredll_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\coredll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_version_rc.o: ../../src/msw/version.rc
@@ -9911,7 +9911,7 @@ $(OBJS)\coredll_vscroll.o: ../../src/generic/vscroll.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
-$(OBJS)\corelib_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\corelib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_event.o: ../../src/common/event.cpp
@@ -11199,7 +11199,7 @@ $(OBJS)\corelib_vscroll.o: ../../src/generic/vscroll.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
-$(OBJS)\advdll_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\advdll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advdll_version_rc.o: ../../src/msw/version.rc
@@ -11283,7 +11283,7 @@ $(OBJS)\advdll_taskbar.o: ../../src/msw/taskbar.cpp
 $(OBJS)\advdll_joystick.o: ../../src/msw/joystick.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advlib_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\advlib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_datectrl.o: ../../src/msw/datectrl.cpp
@@ -11364,7 +11364,7 @@ $(OBJS)\advlib_taskbar.o: ../../src/msw/taskbar.cpp
 $(OBJS)\advlib_joystick.o: ../../src/msw/joystick.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\mediadll_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\mediadll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(MEDIADLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\mediadll_version_rc.o: ../../src/msw/version.rc
@@ -11382,7 +11382,7 @@ $(OBJS)\mediadll_mediactrl_wmp10.o: ../../src/msw/mediactrl_wmp10.cpp
 $(OBJS)\mediadll_activex.o: ../../src/msw/ole/activex.cpp
 	$(CXX) -c -o $@ $(MEDIADLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\medialib_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\medialib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(MEDIALIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\medialib_mediactrlcmn.o: ../../src/common/mediactrlcmn.cpp
@@ -11397,7 +11397,7 @@ $(OBJS)\medialib_mediactrl_wmp10.o: ../../src/msw/mediactrl_wmp10.cpp
 $(OBJS)\medialib_activex.o: ../../src/msw/ole/activex.cpp
 	$(CXX) -c -o $@ $(MEDIALIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\odbcdll_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\odbcdll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(ODBCDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\odbcdll_version_rc.o: ../../src/msw/version.rc
@@ -11409,7 +11409,7 @@ $(OBJS)\odbcdll_db.o: ../../src/common/db.cpp
 $(OBJS)\odbcdll_dbtable.o: ../../src/common/dbtable.cpp
 	$(CXX) -c -o $@ $(ODBCDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\odbclib_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\odbclib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(ODBCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\odbclib_db.o: ../../src/common/db.cpp
@@ -11418,7 +11418,7 @@ $(OBJS)\odbclib_db.o: ../../src/common/db.cpp
 $(OBJS)\odbclib_dbtable.o: ../../src/common/dbtable.cpp
 	$(CXX) -c -o $@ $(ODBCLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\dbgriddll_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\dbgriddll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(DBGRIDDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\dbgriddll_version_rc.o: ../../src/msw/version.rc
@@ -11427,13 +11427,13 @@ $(OBJS)\dbgriddll_version_rc.o: ../../src/msw/version.rc
 $(OBJS)\dbgriddll_dbgrid.o: ../../src/common/dbgrid.cpp
 	$(CXX) -c -o $@ $(DBGRIDDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\dbgridlib_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\dbgridlib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(DBGRIDLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\dbgridlib_dbgrid.o: ../../src/common/dbgrid.cpp
 	$(CXX) -c -o $@ $(DBGRIDLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\htmldll_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\htmldll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmldll_version_rc.o: ../../src/msw/version.rc
@@ -11511,7 +11511,7 @@ $(OBJS)\htmldll_winpars.o: ../../src/html/winpars.cpp
 $(OBJS)\htmldll_htmllbox.o: ../../src/generic/htmllbox.cpp
 	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\htmllib_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\htmllib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmllib_helpbest.o: ../../src/msw/helpbest.cpp
@@ -11586,7 +11586,7 @@ $(OBJS)\htmllib_winpars.o: ../../src/html/winpars.cpp
 $(OBJS)\htmllib_htmllbox.o: ../../src/generic/htmllbox.cpp
 	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\qadll_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\qadll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(QADLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\qadll_version_rc.o: ../../src/msw/version.rc
@@ -11598,7 +11598,7 @@ $(OBJS)\qadll_debugrpt.o: ../../src/common/debugrpt.cpp
 $(OBJS)\qadll_dbgrptg.o: ../../src/generic/dbgrptg.cpp
 	$(CXX) -c -o $@ $(QADLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\qalib_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\qalib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(QALIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\qalib_debugrpt.o: ../../src/common/debugrpt.cpp
@@ -11607,7 +11607,7 @@ $(OBJS)\qalib_debugrpt.o: ../../src/common/debugrpt.cpp
 $(OBJS)\qalib_dbgrptg.o: ../../src/generic/dbgrptg.cpp
 	$(CXX) -c -o $@ $(QALIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\xmldll_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\xmldll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(XMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\xmldll_version_rc.o: ../../src/msw/version.rc
@@ -11619,7 +11619,7 @@ $(OBJS)\xmldll_xml.o: ../../src/xml/xml.cpp
 $(OBJS)\xmldll_xtixml.o: ../../src/common/xtixml.cpp
 	$(CXX) -c -o $@ $(XMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\xmllib_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\xmllib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(XMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\xmllib_xml.o: ../../src/xml/xml.cpp
@@ -11628,7 +11628,7 @@ $(OBJS)\xmllib_xml.o: ../../src/xml/xml.cpp
 $(OBJS)\xmllib_xtixml.o: ../../src/common/xtixml.cpp
 	$(CXX) -c -o $@ $(XMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\xrcdll_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\xrcdll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\xrcdll_version_rc.o: ../../src/msw/version.rc
@@ -11772,7 +11772,7 @@ $(OBJS)\xrcdll_xmlres.o: ../../src/xrc/xmlres.cpp
 $(OBJS)\xrcdll_xmlrsall.o: ../../src/xrc/xmlrsall.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\xrclib_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\xrclib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\xrclib_xh_bmpbt.o: ../../src/xrc/xh_bmpbt.cpp
@@ -11913,7 +11913,7 @@ $(OBJS)\xrclib_xmlres.o: ../../src/xrc/xmlres.cpp
 $(OBJS)\xrclib_xmlrsall.o: ../../src/xrc/xmlrsall.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\gldll_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\gldll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(GLDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\gldll_version_rc.o: ../../src/msw/version.rc
@@ -11922,7 +11922,7 @@ $(OBJS)\gldll_version_rc.o: ../../src/msw/version.rc
 $(OBJS)\gldll_glcanvas.o: ../../src/msw/glcanvas.cpp
 	$(CXX) -c -o $@ $(GLDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\gllib_dummy.o: ../../src/msw/dummy.cpp
+$(OBJS)\gllib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(GLLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\gllib_glcanvas.o: ../../src/msw/glcanvas.cpp

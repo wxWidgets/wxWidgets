@@ -456,6 +456,12 @@ SOURCE=..\..\src\common\datavcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\dummy.cpp
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\taskbarcmn.cpp
 # End Source File
 # End Group
@@ -524,12 +530,6 @@ SOURCE=..\..\src\msw\datectrl.cpp
 
 !ENDIF
 
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\msw\dummy.cpp
-# ADD BASE CPP /Yc"wx/wxprec.h"
-# ADD CPP /Yc"wx/wxprec.h"
 # End Source File
 # Begin Source File
 
