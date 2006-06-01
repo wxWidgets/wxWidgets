@@ -29,6 +29,9 @@
         <define>wxUSE_BASE=1</define>
         <sources>$(MONOLIB_SRC) $(PLUGIN_MONOLIB_SRC)</sources>
         <msvc-headers>$(ALL_HEADERS)</msvc-headers>
+        <if cond="FORMAT=='watcom'">
+            <set var="LIB_PAGESIZE" overwrite="1">8192</set>
+        </if>
     </lib>
 
 
