@@ -958,14 +958,24 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
         return -1;      // format strings with both positional and
                         // non-positional conversion specifier are unsupported !!
 
+    // on platforms where va_list is an array type, it is necessary to make a
+    // copy to be able to pass it to LoadArg as a reference.
+    bool ok = true;
+    va_list ap;
+    wxVaCopy(ap, argptr);
+
     // now load arguments from stack
-    for (i=0; i < nargs; i++) {
-        if (!pspec[i])
-            return -1;  // user forgot a positional parameter (e.g. %$1s %$3s) ?
-        if (!pspec[i]->LoadArg(&argdata[i], argptr))
-            return -1;  // this means that wxPrintfConvSpec::Parse failed
-                        // to set its 'type' to a valid value...
+    for (i=0; i < nargs && ok; i++) {
+        // !pspec[i] if user forgot a positional parameter (e.g. %$1s %$3s) ?
+        // or LoadArg false if wxPrintfConvSpec::Parse failed to set its 'type'
+        // to a valid value...
+        ok = pspec[i] && pspec[i]->LoadArg(&argdata[i], ap);
     }
+
+    va_end(ap);
+
+    if (!ok)
+        return -1;
 
     // finally, process each conversion specifier with its own argument
     toparse = format;
