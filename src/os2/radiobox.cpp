@@ -14,13 +14,14 @@
 
 #if wxUSE_RADIOBOX
 
+#include "wx/radiobox.h"
+
 #ifndef WX_PRECOMP
     #include <stdio.h>
     #include "wx/wxchar.h"
     #include "wx/string.h"
     #include "wx/bitmap.h"
     #include "wx/brush.h"
-    #include "wx/radiobox.h"
 #endif
 
 #include "wx/os2/private.h"

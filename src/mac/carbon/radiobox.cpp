@@ -13,8 +13,9 @@
 
 #if wxUSE_RADIOBOX
 
-#include "wx/arrstr.h"
 #include "wx/radiobox.h"
+
+#include "wx/arrstr.h"
 #include "wx/radiobut.h"
 #include "wx/mac/uma.h"
 

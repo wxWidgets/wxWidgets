@@ -26,10 +26,11 @@
 
 #if wxUSE_RADIOBOX
 
+#include "wx/radiobox.h"
+
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
     #include "wx/brush.h"
-    #include "wx/radiobox.h"
     #include "wx/settings.h"
     #include "wx/log.h"
 #endif

@@ -25,9 +25,10 @@
 
 #if wxUSE_RADIOBOX
 
+#include "wx/radiobox.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
-    #include "wx/radiobox.h"
     #include "wx/radiobut.h"
     #include "wx/validate.h"
     #include "wx/arrstr.h"

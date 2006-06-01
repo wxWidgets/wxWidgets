@@ -21,9 +21,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/radiobox.h"
 #endif
-
-#include "wx/radiobox.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBoxXmlHandler, wxXmlResourceHandler)
 
