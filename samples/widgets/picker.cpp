@@ -183,14 +183,19 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(PickerWidgetsPage, _T("Pickers"), PICKER_CTRLS);
+#if defined(__WXGTK24__)
+    #define FAMILY_CTRLS NATIVE_CTRLS
+#else
+    #define FAMILY_CTRLS GENERIC_CTRLS
+#endif
+
+IMPLEMENT_WIDGETS_PAGE(PickerWidgetsPage, _T("Pickers"),
+                       PICKER_CTRLS | FAMILY_CTRLS);
 
 PickerWidgetsPage::PickerWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)
                   : WidgetsPage(book, imaglist, picker_xpm)
 {
-    imaglist->Add(wxBitmap(picker_xpm));
-
     // left pane
     wxSizer *boxleft = new wxBoxSizer(wxVERTICAL);
 
@@ -264,22 +269,22 @@ PickerWidgetsPage::PickerWidgetsPage(WidgetsBookCtrl *book,
     m_sizerPicker = new wxFlexGridSizer(nrows, 2, 0, 0);  // 4 rows x 2 columns
 #if wxUSE_COLOURPICKERCTRL
     m_sizerPicker->Add(new wxStaticText(this, wxID_ANY, wxT("wxColourPickerCtrl:")),
-                       0, wxALIGN_CENTER | wxALL, 5);
+                       0, wxALIGN_CENTER_VERTICAL | wxALIGN_RIGHT | wxALL, 5);
     m_sizerPicker->Add(m_clrPicker, 1, wxGROW | wxALL, 5);
 #endif
 #if wxUSE_FILEPICKERCTRL
     m_sizerPicker->Add(new wxStaticText(this, wxID_ANY, wxT("wxFilePickerCtrl:")),
-                       0, wxALIGN_CENTER | wxALL, 5);
+                       0, wxALIGN_CENTER_VERTICAL | wxALIGN_RIGHT | wxALL, 5);
     m_sizerPicker->Add(m_filePicker, 1, wxGROW | wxALL, 5);
 #endif
 #if wxUSE_DIRPICKERCTRL
     m_sizerPicker->Add(new wxStaticText(this, wxID_ANY, wxT("wxDirPickerCtrl:")),
-                       0, wxALIGN_CENTER | wxALL, 5);
+                       0, wxALIGN_CENTER_VERTICAL | wxALIGN_RIGHT | wxALL, 5);
     m_sizerPicker->Add(m_dirPicker, 1, wxGROW | wxALL, 5);
 #endif
 #if wxUSE_FONTPICKERCTRL
     m_sizerPicker->Add(new wxStaticText(this, wxID_ANY, wxT("wxFontPickerCtrl:")),
-                       0, wxALIGN_CENTER | wxALL, 5);
+                       0, wxALIGN_CENTER_VERTICAL | wxALIGN_RIGHT | wxALL, 5);
     m_sizerPicker->Add(m_fontPicker, 1, wxGROW | wxALL, 5);
 #endif
 
