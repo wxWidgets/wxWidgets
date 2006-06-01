@@ -734,6 +734,16 @@ ifndef DEBIAN_WX_DEFAULT_VERSION
 	dh_installdirs usr/share/lintian/overrides
 	cp debian/lintian-override debian/$(package_gtk_py_tools)/usr/share/lintian/overrides/$(package_gtk_py_tools)
 endif
+	mkdir -p debian/$(package_gtk_py_tools)/usr/share/pixmaps
+	mkdir -p debian/$(package_gtk_py_tools)/usr/share/applications
+
+	cp wxPython/wx/py/PyCrust_32.png        debian/$(package_gtk_py_tools)/usr/share/pixmaps/pycrust.png
+	cp wxPython/wx/py/PyCrust_32.png        debian/$(package_gtk_py_tools)/usr/share/pixmaps/pyshell.png
+	cp wxPython/wx/tools/XRCed/XRCed_32.png debian/$(package_gtk_py_tools)/usr/share/pixmaps/xrced.png
+	cp debian/pycrust.desktop               debian/$(package_gtk_py_tools)/usr/share/applications
+	cp debian/pyshell.desktop               debian/$(package_gtk_py_tools)/usr/share/applications
+	cp debian/xrced.desktop                 debian/$(package_gtk_py_tools)/usr/share/applications
+
 	rm -r debian/$(package_gtk_py_lib)/usr/bin
 
 install-gtk-py: install-gtk-py-tools
