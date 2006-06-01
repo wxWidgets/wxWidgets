@@ -1,3 +1,93 @@
+wxwidgets2.7 (2.7.0.0-0rpd) unstable; urgency=low
+
+  * First test build with wx 2.7 tree.
+
+ -- Robin Dunn <robin@alldunn.com>  Thu,  1 Jun 2006 14:23:16 -0700
+
+wxwidgets2.6 (2.6.3.2-3rpd) unstable; urgency=low
+
+  * Added icons and *.desktop files for the wpython-wxtools
+
+ -- Robin Dunn <robin@alldunn.com>  Thu,  4 May 2006 15:35:08 -0700
+ 
+wxwidgets2.6 (2.6.3.2) unstable; urgency=low
+
+  * Next try for an upload candidate.
+  * Fixes FTBFS on GNU/kFreeBSD. Closes: #327638
+  * Update fr.po, thanks to Thomas Huriaux and debian-l10n-french.
+    Closes: #328966
+  * Split wxbase back into its own package, after all these years
+    and just after I drop it, someone finally has a use for it.
+    Such is life.  Closes: #333944
+  * Fixes FTBFS with new make.  If this ugly quoting is the tradeoff,
+    I'm itching to learn of the fabulous benefits...
+    Ack NMU for this from Kurt Roeckx to keep the amd64 transition
+    rolling while my x86 build machine was painfully dying.  Thanks!
+    Closes: #350695, #361443
+  * New FSF address in copyright file.
+  * Add an index.html link to the doc contents page.  Closes: #328896
+  * Fixes declarations for friends, as required by C++, and now gcc4.1.
+    Closes: #358219
+  * Add an unpack_examples script, loosely based on one submitted
+    by Richard Esplin.  Closes: #342761
+  * Disable the reserved vtable entries (again, but this time its
+    optional) to retain compatibility with the existing release
+    in the distro.
+  * Update build-deps for xorg7.
+
+ -- Ron Lee <ron@debian.org>  Fri, 14 Apr 2006 16:50:24 +0930
+
+wxwidgets2.6 (2.6.1.2-0.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Make it build using the new make.  Patch from
+    Daniel Schepler <schepler@math.berkeley.edu> (Closes: #350695)
+
+ -- Kurt Roeckx <kurt@roeckx.be>  Sun,  9 Apr 2006 14:04:34 +0200
+
+wxwidgets2.6 (2.6.1.2) unstable; urgency=low
+
+  * Fix the build_options.py created by the in tree build.
+    Closes: #324960  Thanks.
+  * Move the wx.pth alternative to its own directory where
+    it can't mess with anything else.
+  * Pull in changes to dcclient.cpp and window.cpp from HEAD
+    mostly for gtk2.8 compatibility, but fixes a couple of
+    other issues too.
+
+ -- Ron Lee <ron@debian.org>  Thu, 25 Aug 2005 18:38:31 +0930
+
+wxwidgets2.6 (2.6.1.1.1) unstable; urgency=low
+
+  * Reshuffle the wxPython packages again, to comply better with
+    the python naming policy and improve support for concurrent
+    installations.  The runtime files are now in python-wxgtk2.6-0,
+    the version selector in python-wxversion and the ancillary
+    tools in the python-wxtools package.
+
+    Many thanks to Matthias Klose <doko@ubuntu.com> for patches
+    and patient prodding to get wxpython into better shape for
+    version transitions.
+
+  * Collapse the wx-common package into an 'unversioned' one also.
+
+  * On its way back into unstable by popular demand.
+
+ -- Ron Lee <ron@debian.org>  Sun, 14 Aug 2005 21:25:34 +0930
+
+wxwidgets2.6 (2.6.1.1) experimental; urgency=low
+
+  * 2.6.2 prerelease test -- Pain for the Impatient.
+
+    Be warned, wx2.6 has still not branched off the main
+    development tree, and the API is still in flux.
+
+    This one is to see what else is wrong.
+
+  * Upload to experimental now the -c2 transition is real.
+
+ -- Ron Lee <ron@debian.org>  Thu, 23 Jun 2005 14:08:33 +0930
+
 wxwidgets2.6 (2.6.0) unstable; urgency=low
 
   * 8 ... 9 ... 10.  Here it comes, ready or not...
