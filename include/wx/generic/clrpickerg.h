@@ -13,8 +13,7 @@
 #define _WX_CLRPICKER_H_
 
 #include "wx/button.h"
-
-class WXDLLIMPEXP_CORE wxColourData;
+#include "wx/cmndata.h"
 
 //-----------------------------------------------------------------------------
 // wxGenericColourButton: a button which brings up a wxColourDialog

@@ -13,8 +13,7 @@
 #define _WX_FONTPICKER_H_
 
 #include "wx/button.h"
-
-class WXDLLIMPEXP_CORE wxFontData;
+#include "wx/cmndata.h"
 
 //-----------------------------------------------------------------------------
 // wxGenericFontButton: a button which brings up a wxColourDialog
