@@ -73,10 +73,11 @@ bool wxGenericColourButton::Create( wxWindow *parent, wxWindowID id,
 void wxGenericColourButton::InitColourData()
 {
     ms_data.SetChooseFull(true);
-    for (int i = 0; i < 16; i++)
+    unsigned char grey = 0;
+    for (int i = 0; i < 16; i++, grey += 16)
     {
         // fill with grey tones the custom colors palette
-        wxColour colour(i*16, i*16, i*16);
+        wxColour colour(grey, grey, grey);
         ms_data.SetCustomColour(i, colour);
     }
 }
