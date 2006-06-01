@@ -7,8 +7,8 @@ Recent Changes for wxPython
 
 wx.lib.pubsub updates from Oliver Schoenborn:
     - fixed the hash problem with non-hashable objects
-    - now supports listeners that use *args as an argument
-      (listener(*args) was not passing the validity test)
+    - now supports listeners that use \*args as an argument
+      (listener(\*args) was not passing the validity test)
     - corrected some mistakes in documentation
     - added some clarifications (hopefully useful for first time
       users)
