@@ -28,9 +28,9 @@
 #include "wx/msw/private.h"
 #include "wx/image.h"
 
-#if wxUSE_UXTHEME
-    #include "wx/msw/uxtheme.h"
+#include "wx/msw/uxtheme.h"
 
+#if wxUSE_UXTHEME
     // no need to include tmschema.h
     #ifndef BP_PUSHBUTTON
         #define BP_PUSHBUTTON 1
