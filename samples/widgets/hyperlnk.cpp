@@ -42,7 +42,7 @@
     #include "wx/sizer.h"
 #endif
 
-#include "wx/Hyperlink.h"
+#include "wx/hyperlink.h"
 
 #include "widgets.h"
 
