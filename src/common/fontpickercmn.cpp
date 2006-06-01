@@ -24,16 +24,15 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_FONTPICKERCTRL
+
 #include "wx/fontpicker.h"
 #include "wx/fontenum.h"
 #include "wx/tokenzr.h"
 
-
 // ============================================================================
 // implementation
 // ============================================================================
-
-#if wxUSE_FONTPICKERCTRL
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_FONTPICKER_CHANGED)
 IMPLEMENT_DYNAMIC_CLASS(wxFontPickerCtrl, wxPickerBase)
@@ -94,9 +93,9 @@ wxFont wxFontPickerCtrl::String2Font(const wxString &s)
     if (size.ToDouble(&n))
     {
         if (n < 1)
-            str = str.Left(str.Len() - size.Len()) + wxT("1");
+            str = str.Left(str.length() - size.length()) + wxT("1");
         else if (n >= m_nMaxPointSize)
-            str = str.Left(str.Len() - size.Len()) +
+            str = str.Left(str.length() - size.length()) +
                   wxString::Format(wxT("%d"), m_nMaxPointSize);
     }
 

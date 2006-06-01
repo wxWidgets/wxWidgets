@@ -24,15 +24,13 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
+
 #include "wx/filepicker.h"
-
-
 
 // ============================================================================
 // implementation
 // ============================================================================
-
-#if wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_FILEPICKER_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DIRPICKER_CHANGED)
@@ -51,7 +49,7 @@ bool wxFileDirPickerCtrlBase::CreateBase( wxWindow *parent, wxWindowID id,
                         long style, const wxValidator& validator,
                         const wxString &name )
 {
-    wxASSERT_MSG(path.IsEmpty() || CheckPath(path), wxT("Invalid initial path !"));
+    wxASSERT_MSG(path.empty() || CheckPath(path), wxT("Invalid initial path !"));
 
     if (!wxPickerBase::CreateBase(parent, id, path, pos, size,
                                    style, validator, name))

@@ -17,12 +17,14 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/gtk/private.h"
+#if wxUSE_FILEPICKERCTRL && defined(__WXGTK26__)
+
 #include "wx/filepicker.h"
 
+#include "wx/gtk/private.h"
 
 #if wxUSE_TOOLTIPS
-#include "wx/tooltip.h"
+    #include "wx/tooltip.h"
 #endif
 
 #include <gdk/gdk.h>
@@ -34,8 +36,6 @@
 // ============================================================================
 // implementation
 // ============================================================================
-
-#if wxUSE_FILEPICKERCTRL && defined(__WXGTK26__)
 
 //-----------------------------------------------------------------------------
 // wxFileButton

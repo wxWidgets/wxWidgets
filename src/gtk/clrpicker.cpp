@@ -17,19 +17,18 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/gtk/private.h"
+#if wxUSE_COLOURPICKERCTRL && defined(__WXGTK24__)
+
 #include "wx/clrpicker.h"
+
+#include "wx/gtk/private.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
-
-
 // ============================================================================
 // implementation
 // ============================================================================
-
-#if wxUSE_COLOURPICKERCTRL && defined(__WXGTK24__)
 
 //-----------------------------------------------------------------------------
 // "color-set"

@@ -17,7 +17,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/gtk/private.h"
+#if wxUSE_FONTPICKERCTRL && defined(__WXGTK24__)
+
 #include "wx/fontpicker.h"
 
 #include "wx/fontutil.h"        // for wxNativeFontInfo
@@ -26,13 +27,9 @@
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
-
-
 // ============================================================================
 // implementation
 // ============================================================================
-
-#if wxUSE_FONTPICKERCTRL && defined(__WXGTK24__)
 
 //-----------------------------------------------------------------------------
 // "font-set"
@@ -126,4 +123,4 @@ void wxFontButton::UpdateFont()
         wxGenericFontButton::UpdateFont();
 }
 
-#endif      // wxUSE_FONTPICKERCTRL
+#endif      // wxUSE_FONTPICKERCTRL && defined(__WXGTK24__)

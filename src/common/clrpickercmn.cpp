@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_COLOURPICKERCTRL
+
 #include "wx/clrpicker.h"
 
 
@@ -31,8 +33,6 @@
 // ============================================================================
 // implementation
 // ============================================================================
-
-#if wxUSE_COLOURPICKERCTRL
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_COLOURPICKER_CHANGED)
 IMPLEMENT_DYNAMIC_CLASS(wxColourPickerCtrl, wxPickerBase)
