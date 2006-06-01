@@ -91,6 +91,7 @@ All (GUI):
 - Added wxDC::GradientFillLinear/Concentric()
 - Added wxHyperlinkCtrl (Francesco Montorsi)
 - Added clipboard events (wxEVT_COMMAND_TEXT_COPY/CUT/PASTE)
+- Allow to reorder wxGrid columns by drag-and-drop (Santiago Palacios)
 - Added wxRadioBox::SetItemToolTip()
 - Added support for CMYK JPEG images loading (Robert Wruck)
 - Added wxListCtrl::GetSubItemRect() and subitem hit testing (Agron Selimaj)

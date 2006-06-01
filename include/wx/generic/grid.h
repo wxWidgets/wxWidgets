@@ -2,7 +2,7 @@
 // Name:        wx/generic/grid.h
 // Purpose:     wxGrid and related classes
 // Author:      Michael Bedward (based on code by Julian Smart, Robin Dunn)
-// Modified by:
+// Modified by: Santiago Palacios
 // Created:     1/08/1999
 // RCS-ID:      $Id$
 // Copyright:   (c) Michael Bedward
@@ -1123,6 +1123,7 @@ public:
 
     void DoEndDragResizeRow();
     void DoEndDragResizeCol();
+    void DoEndDragMoveCol();
 
     wxGridTableBase * GetTable() const { return m_table; }
     bool SetTable( wxGridTableBase *table, bool takeOwnership = false,
@@ -1226,7 +1227,7 @@ public:
     //
     void XYToCell( int x, int y, wxGridCellCoords& );
     int  YToRow( int y );
-    int  XToCol( int x );
+    int  XToCol( int x, bool clipToMinMax = false );
 
     int  YToEdgeOfRow( int y );
     int  XToEdgeOfCol( int x );
@@ -1306,6 +1307,9 @@ public:
     void     EnableDragColSize( bool enable = true );
     void     DisableDragColSize() { EnableDragColSize( false ); }
     bool     CanDragColSize() { return m_canDragColSize; }
+    void     EnableDragColMove( bool enable = true );
+    void     DisableDragColMove() { EnableDragColMove( false ); }
+    bool     CanDragColMove() { return m_canDragColMove; }
     void     EnableDragGridSize(bool enable = true);
     void     DisableDragGridSize() { EnableDragGridSize(false); }
     bool     CanDragGridSize() { return m_canDragGridSize; }
@@ -1360,6 +1364,33 @@ public:
     void     SetDefaultColSize( int width, bool resizeExistingCols = false );
 
     void     SetColSize( int col, int width );
+
+    //Column positions
+    int GetColAt( int colPos ) const
+    {
+        if ( m_colAt.IsEmpty() )
+            return colPos;
+        else
+            return m_colAt[colPos];
+    }
+
+    void SetColPos( int colID, int newPos );
+
+    int GetColPos( int colID ) const
+    {
+        if ( m_colAt.IsEmpty() )
+            return colID;
+        else
+        {
+            for ( int i = 0; i < m_numCols; i++ )
+            {
+                if ( m_colAt[i] == colID )
+                    return i;
+            }
+        }
+
+        return -1;
+    }
 
     // automatically size the column or row to fit to its contents, if
     // setAsMin is true, this optimal width will also be set as minimal width
@@ -1869,7 +1900,8 @@ protected:
         WXGRID_CURSOR_RESIZE_ROW,
         WXGRID_CURSOR_RESIZE_COL,
         WXGRID_CURSOR_SELECT_ROW,
-        WXGRID_CURSOR_SELECT_COL
+        WXGRID_CURSOR_SELECT_COL,
+        WXGRID_CURSOR_MOVE_COL
     };
 
     // this method not only sets m_cursorMode but also sets the correct cursor
@@ -1885,8 +1917,13 @@ protected:
     wxWindow *m_winCapture;     // the window which captured the mouse
     CursorMode m_cursorMode;
 
+    //Column positions
+    wxArrayInt m_colAt;
+    int m_moveToCol;
+
     bool    m_canDragRowSize;
     bool    m_canDragColSize;
+    bool    m_canDragColMove;
     bool    m_canDragGridSize;
     bool    m_canDragCell;
     int     m_dragLastPos;
@@ -1980,7 +2017,7 @@ public:
     bool        MetaDown() { return m_meta; }
     bool        ShiftDown() { return m_shift; }
     bool        AltDown() { return m_alt; }
-    bool        CmdDown() 
+    bool        CmdDown()
     {
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
         return MetaDown();
@@ -2022,7 +2059,7 @@ public:
     bool        MetaDown() { return m_meta; }
     bool        ShiftDown() { return m_shift; }
     bool        AltDown() { return m_alt; }
-    bool        CmdDown() 
+    bool        CmdDown()
     {
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
         return MetaDown();
@@ -2077,7 +2114,7 @@ public:
     bool        MetaDown()     { return m_meta; }
     bool        ShiftDown()    { return m_shift; }
     bool        AltDown()      { return m_alt; }
-    bool        CmdDown() 
+    bool        CmdDown()
     {
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
         return MetaDown();

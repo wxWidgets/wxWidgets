@@ -2,7 +2,7 @@
 %% Name:        grid.tex
 %% Purpose:     wxGrid
 %% Author:
-%% Modified by:
+%% Modified by: Santiago Palacios
 %% Created:
 %% RCS-ID:      $Id$
 %% Copyright:   (c) wxWidgets
@@ -265,6 +265,15 @@ to the client size of the grid window.
 
 
 
+\membersection{wxGrid::CanDragColMove}\label{wxgridcandragcolmove}
+
+\func{bool}{CanDragColMove}{\void}
+
+Returns true if columns can be moved by dragging with the mouse. Columns can be moved
+by dragging on their labels.
+
+
+
 \membersection{wxGrid::CanDragColSize}\label{wxgridcandragcolsize}
 
 \func{bool}{CanDragColSize}{\void}
@@ -391,6 +400,15 @@ Equivalent to calling EnableCellEditControl(false).
 
 
 
+\membersection{wxGrid::DisableDragColMove}\label{wxgriddisabledragcolmove}
+
+\func{void}{DisableDragColMove}{\void}
+
+Disables column moving by dragging with the mouse. Equivalent to passing false to
+\helpref{wxGrid::EnableDragColMove}{wxgridenabledragcolmove}.
+
+
+
 \membersection{wxGrid::DisableDragColSize}\label{wxgriddisabledragcolsize}
 
 \func{void}{DisableDragColSize}{\void}
@@ -432,6 +450,14 @@ wxEVT\_GRID\_EDITOR\_SHOWN or wxEVT\_GRID\_EDITOR\_HIDDEN event.
 \func{void}{EnableDragColSize}{\param{bool }{enable = true}}
 
 Enables or disables column sizing by dragging with the mouse.
+
+
+
+\membersection{wxGrid::EnableDragColMove}\label{wxgridenabledragcolmove}
+
+\func{void}{EnableDragColMove}{\param{bool }{enable = true}}
+
+Enables or disables column moving by dragging with the mouse.
 
 
 
@@ -596,6 +622,13 @@ and the \helpref{wxGrid overview}{gridoverview} for more information.
 
 
 
+\membersection{wxGrid::GetColAt}\label{wxgridgetcolat}
+
+\constfunc{int}{GetColAt}{\param{int }{colPos}}
+
+Returns the column ID of the specified column position.
+
+
 \membersection{wxGrid::GetColLeft}\label{wxgridgetcolleft}
 
 \constfunc{int}{GetColLeft}{\param{int }{col}}
@@ -649,6 +682,14 @@ member \helpref{SetColMinimalAcceptableWidth}{wxgridsetcolminimalacceptablewidth
 \constfunc{int}{GetColMinimalWidth}{\param{int }{col}}
 
 Get the minimal width of the given column/row.
+
+
+
+\membersection{wxGrid::GetColPos}\label{wxgridgetcolpos}
+
+\constfunc{int}{GetColPos}{\param{int }{colID}}
+
+Returns the position of the specified column.
 
 
 
@@ -1062,10 +1103,10 @@ used at present.
 
 The sequence of actions begins with the grid object requesting the underlying grid
 table to insert new columns. If this is successful the table notifies the grid and the
-grid updates the display. For a default grid (one where you have called 
+grid updates the display. For a default grid (one where you have called
 \helpref{wxGrid::CreateGrid}{wxgridcreategrid}) this process is automatic. If you are
 using a custom grid table (specified with \helpref{wxGrid::SetTable}{wxgridsettable})
-then you must override 
+then you must override
 \helpref{wxGridTableBase::InsertCols}{wxgridtablebaseinsertcols} in your derived
 table class.
 
@@ -1081,10 +1122,10 @@ present.
 
 The sequence of actions begins with the grid object requesting the underlying grid
 table to insert new rows. If this is successful the table notifies the grid and the
-grid updates the display. For a default grid (one where you have called 
+grid updates the display. For a default grid (one where you have called
 \helpref{wxGrid::CreateGrid}{wxgridcreategrid}) this process is automatic. If you are
 using a custom grid table (specified with \helpref{wxGrid::SetTable}{wxgridsettable})
-then you must override 
+then you must override
 \helpref{wxGridTableBase::InsertRows}{wxgridtablebaseinsertrows} in your derived
 table class.
 
@@ -1438,7 +1479,7 @@ function for those cells that contain string values.
 
 The last form is for backward compatibility only.
 
-See \helpref{wxGridTableBase::CanSetValueAs}{wxgridtablebasecangetvalueas} 
+See \helpref{wxGridTableBase::CanSetValueAs}{wxgridtablebasecangetvalueas}
 and the \helpref{wxGrid overview}{gridoverview} for more information.
 
 
@@ -1449,8 +1490,8 @@ and the \helpref{wxGrid overview}{gridoverview} for more information.
 
 Sets the cell attributes for all cells in the specified column.
 
-For more information about controlling grid cell attributes see the 
-\helpref{wxGridCellAttr}{wxgridcellattr} cell attribute class and the 
+For more information about controlling grid cell attributes see the
+\helpref{wxGridCellAttr}{wxgridcellattr} cell attribute class and the
 \helpref{wxGrid classes overview}{gridoverview}.
 
 
@@ -1540,6 +1581,14 @@ than the actual minimum size will incur a performance penalty in the functions w
 grid cell index lookup on the basis of screen coordinates.
 This should normally be called when creating the grid because it will not resize existing columns
 with sizes smaller than the value specified here.
+
+
+
+\membersection{wxGrid::SetColPos}\label{wxgridsetcolpos}
+
+\func{void}{SetColPos}{\param{int }{colID}, \param{int }{newPos}}
+
+Sets the position of the specified column.
 
 
 
@@ -1877,9 +1926,14 @@ Displays the in-place cell edit control for the current cell.
 
 \membersection{wxGrid::XToCol}\label{wxgridxtocol}
 
-\func{int}{XToCol}{\param{int }{x}}
+\func{int}{XToCol}{\param{int }{x}, \param{bool }{clipToMinMax = false}}
 
-Returns the grid column that corresponds to the logical x coordinate. Returns 
+\wxheading{Parameters}
+\docparam{x}{The x position to evaluate.}
+\docparam{clipToMinMax}{If true, rather than returning wxNOT\_FOUND, it returns either the first or last column depending on whether x is too far to the left or right respectively.}
+
+\wxheading{Return value}
+The grid column that corresponds to the logical x coordinate. Returns
 {\tt wxNOT\_FOUND} if there is no column at the x position.
 
 
@@ -1906,6 +1960,6 @@ If no row edge is near to this position {\tt wxNOT\_FOUND} is returned.
 
 \func{int}{YToRow}{\param{int }{y}}
 
-Returns the grid row that corresponds to the logical y coordinate. Returns 
+Returns the grid row that corresponds to the logical y coordinate. Returns
 {\tt wxNOT\_FOUND} if there is no row at the y position.
 
