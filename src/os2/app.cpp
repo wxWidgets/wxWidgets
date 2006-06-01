@@ -29,10 +29,11 @@
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
     #include "wx/wxchar.h"
-    #include "wx/stdpaths.h"
-    #include "wx/filename.h"
     #include "wx/log.h"
 #endif
+
+#include "wx/stdpaths.h"
+#include "wx/filename.h"
 
 #include "wx/module.h"
 
