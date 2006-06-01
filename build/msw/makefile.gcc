@@ -1443,11 +1443,14 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_automtn.o \
 	$(OBJS)\monodll_uuid.o \
 	$(OBJS)\monodll_accel.o \
+	$(OBJS)\monodll_clrpickerg.o \
 	$(OBJS)\monodll_colrdlgg.o \
 	$(OBJS)\monodll_dirdlgg.o \
 	$(OBJS)\monodll_fdrepdlg.o \
 	$(OBJS)\monodll_filedlgg.o \
+	$(OBJS)\monodll_filepickerg.o \
 	$(OBJS)\monodll_fontdlgg.o \
+	$(OBJS)\monodll_fontpickerg.o \
 	$(OBJS)\monodll_imaglist.o \
 	$(OBJS)\monodll_listctrl.o \
 	$(OBJS)\monodll_mdig.o \
@@ -2018,11 +2021,14 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_automtn.o \
 	$(OBJS)\monolib_uuid.o \
 	$(OBJS)\monolib_accel.o \
+	$(OBJS)\monolib_clrpickerg.o \
 	$(OBJS)\monolib_colrdlgg.o \
 	$(OBJS)\monolib_dirdlgg.o \
 	$(OBJS)\monolib_fdrepdlg.o \
 	$(OBJS)\monolib_filedlgg.o \
+	$(OBJS)\monolib_filepickerg.o \
 	$(OBJS)\monolib_fontdlgg.o \
+	$(OBJS)\monolib_fontpickerg.o \
 	$(OBJS)\monolib_imaglist.o \
 	$(OBJS)\monolib_listctrl.o \
 	$(OBJS)\monolib_mdig.o \
@@ -2531,11 +2537,14 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_automtn.o \
 	$(OBJS)\coredll_uuid.o \
 	$(OBJS)\coredll_accel.o \
+	$(OBJS)\coredll_clrpickerg.o \
 	$(OBJS)\coredll_colrdlgg.o \
 	$(OBJS)\coredll_dirdlgg.o \
 	$(OBJS)\coredll_fdrepdlg.o \
 	$(OBJS)\coredll_filedlgg.o \
+	$(OBJS)\coredll_filepickerg.o \
 	$(OBJS)\coredll_fontdlgg.o \
+	$(OBJS)\coredll_fontpickerg.o \
 	$(OBJS)\coredll_imaglist.o \
 	$(OBJS)\coredll_listctrl.o \
 	$(OBJS)\coredll_mdig.o \
@@ -2963,11 +2972,14 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_automtn.o \
 	$(OBJS)\corelib_uuid.o \
 	$(OBJS)\corelib_accel.o \
+	$(OBJS)\corelib_clrpickerg.o \
 	$(OBJS)\corelib_colrdlgg.o \
 	$(OBJS)\corelib_dirdlgg.o \
 	$(OBJS)\corelib_fdrepdlg.o \
 	$(OBJS)\corelib_filedlgg.o \
+	$(OBJS)\corelib_filepickerg.o \
 	$(OBJS)\corelib_fontdlgg.o \
+	$(OBJS)\corelib_fontpickerg.o \
 	$(OBJS)\corelib_imaglist.o \
 	$(OBJS)\corelib_listctrl.o \
 	$(OBJS)\corelib_mdig.o \
@@ -4561,15 +4573,6 @@ $(OBJS)\monodll_gsocket.o: ../../src/msw/gsocket.cpp
 $(OBJS)\monodll_urlmsw.o: ../../src/msw/urlmsw.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monodll_fontpickerg.o: ../../src/generic/fontpickerg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monodll_filepickerg.o: ../../src/generic/filepickerg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_colordlg.o: ../../src/msw/colordlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -5200,6 +5203,21 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_uuid.o: ../../src/msw/ole/uuid.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_fontpickerg.o: ../../src/generic/fontpickerg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_filepickerg.o: ../../src/generic/filepickerg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -6516,15 +6534,6 @@ $(OBJS)\monolib_gsocket.o: ../../src/msw/gsocket.cpp
 $(OBJS)\monolib_urlmsw.o: ../../src/msw/urlmsw.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_fontpickerg.o: ../../src/generic/fontpickerg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_filepickerg.o: ../../src/generic/filepickerg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monolib_colordlg.o: ../../src/msw/colordlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7155,6 +7164,21 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_uuid.o: ../../src/msw/ole/uuid.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_fontpickerg.o: ../../src/generic/fontpickerg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_filepickerg.o: ../../src/generic/filepickerg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8789,15 +8813,6 @@ $(OBJS)\coredll_mslu.o: ../../src/msw/mslu.cpp
 $(OBJS)\coredll_volume.o: ../../src/msw/volume.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\coredll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\coredll_fontpickerg.o: ../../src/generic/fontpickerg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\coredll_filepickerg.o: ../../src/generic/filepickerg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\coredll_colordlg.o: ../../src/msw/colordlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9170,6 +9185,21 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_uuid.o: ../../src/msw/ole/uuid.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_fontpickerg.o: ../../src/generic/fontpickerg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_filepickerg.o: ../../src/generic/filepickerg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10106,15 +10136,6 @@ $(OBJS)\corelib_mslu.o: ../../src/msw/mslu.cpp
 $(OBJS)\corelib_volume.o: ../../src/msw/volume.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\corelib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\corelib_fontpickerg.o: ../../src/generic/fontpickerg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\corelib_filepickerg.o: ../../src/generic/filepickerg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\corelib_colordlg.o: ../../src/msw/colordlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10487,6 +10508,21 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_uuid.o: ../../src/msw/ole/uuid.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_fontpickerg.o: ../../src/generic/fontpickerg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_filepickerg.o: ../../src/generic/filepickerg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

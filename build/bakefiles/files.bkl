@@ -2444,11 +2444,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="UNIV_SRC" hints="files">
     src/generic/accel.cpp
+    src/generic/clrpickerg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/filedlgg.cpp
+    src/generic/filepickerg.cpp
     src/generic/fontdlgg.cpp
+    src/generic/fontpickerg.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/mdig.cpp
@@ -2493,9 +2496,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="UNIV_HDR" hints="files">
     wx/generic/accel.h
+    wx/generic/clrpickerg.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
+    wx/generic/filepickerg.h
     wx/generic/fontdlgg.h
+    wx/generic/fontpickerg.h
     wx/generic/listctrl.h
     wx/generic/mdig.h
     wx/generic/statusbr.h

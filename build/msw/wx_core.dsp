@@ -4118,65 +4118,6 @@ SOURCE=..\..\src\generic\choicdgg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\clrpickerg.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
@@ -4449,65 +4390,6 @@ SOURCE=..\..\src\generic\filedlgg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\filepickerg.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
@@ -4575,65 +4457,6 @@ SOURCE=..\..\src\generic\fontdlgg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\fontpickerg.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
@@ -8338,6 +8161,10 @@ SOURCE=..\..\include\wx\generic\clrpicker.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\clrpickerg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\colrdlgg.h
 # End Source File
 # Begin Source File
@@ -8382,11 +8209,19 @@ SOURCE=..\..\include\wx\generic\filepicker.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\filepickerg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\fontdlgg.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\fontpicker.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\fontpickerg.h
 # End Source File
 # Begin Source File
 
