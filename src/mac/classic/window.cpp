@@ -28,10 +28,10 @@
     #include "wx/msgdlg.h"
     #include "wx/scrolbar.h"
     #include "wx/statbox.h"
+    #include "wx/listbox.h"
 #endif
 
 #include "wx/layout.h"
-#include "wx/listbox.h"
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 #include "wx/tooltip.h"

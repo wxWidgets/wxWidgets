@@ -29,6 +29,7 @@
     #include "wx/valtext.h"
     #include "wx/intl.h"
     #include "wx/math.h"
+    #include "wx/listbox.h"
 #endif
 
 #include "wx/textfile.h"
@@ -4171,10 +4172,6 @@ wxGrid::~wxGrid()
 // NOTE: If using the default visual attributes works everywhere then this can
 // be removed as well as the #else cases below.
 #define _USE_VISATTR 0
-
-#if _USE_VISATTR
-#include "wx/listbox.h"
-#endif
 
 void wxGrid::Create()
 {

@@ -40,7 +40,6 @@
     #include "wx/scrolbar.h"
     #include "wx/slider.h"
     #include "wx/textctrl.h"
-    #include "wx/listbox.h"
     #include "wx/toolbar.h"
     #include "wx/statusbr.h"
 

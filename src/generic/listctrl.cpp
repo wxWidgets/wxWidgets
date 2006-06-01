@@ -23,13 +23,6 @@
 
 #if wxUSE_LISTCTRL
 
-#ifndef WX_PRECOMP
-    #include "wx/dynarray.h"
-    #include "wx/app.h"
-    #include "wx/dcscreen.h"
-    #include "wx/textctrl.h"
-#endif
-
 // under Win32 we always use the native version and also may use the generic
 // one, however some things should be done only if we use only the generic
 // version
@@ -50,6 +43,14 @@
 
     IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxGenericListCtrl)
 #endif // HAVE_NATIVE_LISTCTRL/!HAVE_NATIVE_LISTCTRL
+
+#ifndef WX_PRECOMP
+    #include "wx/dynarray.h"
+    #include "wx/app.h"
+    #include "wx/dcscreen.h"
+    #include "wx/textctrl.h"
+    #include "wx/listbox.h"
+#endif
 
 #include "wx/selstore.h"
 #include "wx/renderer.h"
@@ -5447,10 +5448,6 @@ bool wxGenericListCtrl::SetFont( const wxFont &font )
 
     return true;
 }
-
-#if _USE_VISATTR
-#include "wx/listbox.h"
-#endif
 
 // static
 wxVisualAttributes

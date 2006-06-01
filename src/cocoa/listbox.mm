@@ -13,10 +13,11 @@
 
 #if wxUSE_LISTBOX
 
+#include "wx/listbox.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
-    #include "wx/listbox.h"
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/string.h"

@@ -15,15 +15,14 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XRC && wxUSE_LISTBOX
 
 #include "wx/xrc/xh_listb.h"
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/listbox.h"
 #endif
-
-#include "wx/listbox.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBoxXmlHandler, wxXmlResourceHandler)
 
@@ -102,4 +101,4 @@ bool wxListBoxXmlHandler::CanHandle(wxXmlNode *node)
            (m_insideBox && node->GetName() == wxT("item")));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_LISTBOX

@@ -32,6 +32,7 @@
     #include "wx/dcclient.h"
     #include "wx/timer.h"
     #include "wx/settings.h"
+    #include "wx/listbox.h"
 #endif
 
 #include "wx/generic/treectlg.h"
@@ -3565,10 +3566,6 @@ void wxGenericTreeCtrl::OnGetToolTip( wxTreeEvent &event )
 // NOTE: If using the wxListBox visual attributes works everywhere then this can
 // be removed, as well as the #else case below.
 #define _USE_VISATTR 0
-
-#if _USE_VISATTR
-#include "wx/listbox.h"
-#endif
 
 //static
 wxVisualAttributes
