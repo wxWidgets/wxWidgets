@@ -986,6 +986,7 @@ class BusyInfo(_core.Object):
             if self.thisown: destroy(self)
         except: pass
 
+    def Destroy(self): pass 
 
 class BusyInfoPtr(BusyInfo):
     def __init__(self, this):

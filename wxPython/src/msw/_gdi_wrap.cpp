@@ -22513,6 +22513,7 @@ static PyObject *_wrap_RendererNative_Get(PyObject *, PyObject *args, PyObject *
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":RendererNative_Get",kwnames)) goto fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
             wxRendererNative &_result_ref = wxRendererNative::Get();
@@ -22538,6 +22539,7 @@ static PyObject *_wrap_RendererNative_GetGeneric(PyObject *, PyObject *args, PyO
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":RendererNative_GetGeneric",kwnames)) goto fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
             wxRendererNative &_result_ref = wxRendererNative::GetGeneric();
@@ -22563,6 +22565,7 @@ static PyObject *_wrap_RendererNative_GetDefault(PyObject *, PyObject *args, PyO
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":RendererNative_GetDefault",kwnames)) goto fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
             wxRendererNative &_result_ref = wxRendererNative::GetDefault();
@@ -22592,6 +22595,7 @@ static PyObject *_wrap_RendererNative_Set(PyObject *, PyObject *args, PyObject *
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxRendererNative, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
+        if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxRendererNative *)wxRendererNative::Set(arg1);
         
