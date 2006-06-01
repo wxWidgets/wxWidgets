@@ -12,6 +12,8 @@
 #ifndef _WX_CLRPICKER_H_
 #define _WX_CLRPICKER_H_
 
+#include "wx/button.h"
+
 class WXDLLIMPEXP_CORE wxColourData;
 
 //-----------------------------------------------------------------------------

@@ -12,6 +12,8 @@
 #ifndef _WX_FONTPICKER_H_
 #define _WX_FONTPICKER_H_
 
+#include "wx/button.h"
+
 class WXDLLIMPEXP_CORE wxFontData;
 
 //-----------------------------------------------------------------------------

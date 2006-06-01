@@ -12,6 +12,7 @@
 #ifndef _WX_FILEDIRPICKER_H_
 #define _WX_FILEDIRPICKER_H_
 
+#include "wx/button.h"
 #include "wx/filename.h"
 #include "wx/filedlg.h"
 #include "wx/dirdlg.h"
