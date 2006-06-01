@@ -1807,12 +1807,14 @@ static void wxListBox_Insert(wxListBox *self,wxString const &item,int pos,PyObje
                 self->Insert(item, pos);
         }
 static PyObject *wxListBox_GetSelections(wxListBox *self){
+          wxPyBlock_t blocked = wxPyBeginBlockThreads();
           wxArrayInt lst;
           self->GetSelections(lst);
           PyObject *tup = PyTuple_New(lst.GetCount());
           for(size_t i=0; i<lst.GetCount(); i++) {
               PyTuple_SetItem(tup, i, PyInt_FromLong(lst[i]));
           }
+          wxPyEndBlockThreads(blocked);
           return tup;
       }
 static void wxListBox_SetItemForegroundColour(wxListBox *self,int item,wxColour const &c){
