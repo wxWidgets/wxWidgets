@@ -128,21 +128,21 @@ if [ -z "$TARBALLDIR" ]; then
     # TARBALLDIR before invoking this script...
     TARBALLDIR=/stuff/Development/wxPython/dist/$VERSION
 fi
-TARBALL=$TARBALLDIR/wxPython-src-$VERSION.tar.gz
+TARBALL=$TARBALLDIR/wxPython-src-$VERSION.tar.bz2
 
-if [ ! -e $TARBALLDIR/wxPython-demo-$VERSION.tar.gz ]; then 
+if [ ! -e $TARBALLDIR/wxPython-demo-$VERSION.tar.bz2 ]; then 
     echo "-------------------------------------------------------"
     echo " WARNING:  Demo tarball not found, will skip building "
     echo "           the Demo app bundle and etc."
-    echo " $TARBALLDIR/wxPython-demo-$VERSION.tar.gz"
+    echo " $TARBALLDIR/wxPython-demo-$VERSION.tar.bz2"
     echo "-------------------------------------------------------"
 fi
 
-if [ ! -e $TARBALLDIR/wxPython-docs-$VERSION.tar.gz ]; then
+if [ ! -e $TARBALLDIR/wxPython-docs-$VERSION.tar.bz2 ]; then
     echo "-------------------------------------------------------"
     echo " WARNING:  Docs tarball not found, will skip building "
     echo "           the the wxDocsViewer app bundle and etc."
-    echo " $TARBALLDIR/wxPython-docs-$VERSION.tar.gz"
+    echo " $TARBALLDIR/wxPython-docs-$VERSION.tar.bz2"
     echo "-------------------------------------------------------"
 fi
 
@@ -191,7 +191,7 @@ pushd $BUILDROOT
 
 if [ $skiptar != yes ]; then
     echo Unarchiving tarball...
-    tar xzf $TARBALL
+    tar xjf $TARBALL
 fi
 
 if [ $inplace = no ]; then
@@ -521,7 +521,7 @@ EOF
 
 
     # wxDocs
-    if [ ! -e $TARBALLDIR/wxPython-docs-$VERSION.tar.gz ]; then
+    if [ ! -e $TARBALLDIR/wxPython-docs-$VERSION.tar.bz2 ]; then
 	cat > "$DMGAPPS/Docs/Build ERROR.txt" <<EOF
 
 The wxPython-docs tarball was not found when building this disk image!
@@ -530,7 +530,7 @@ EOF
 
     else
 	pushd $BUILDROOT
-	tar xzvf $TARBALLDIR/wxPython-docs-$VERSION.tar.gz
+	tar xjvf $TARBALLDIR/wxPython-docs-$VERSION.tar.bz2
 	popd
 
         # Make an app to launch viewdocs.py
@@ -563,7 +563,7 @@ EOF
     popd
 
 
-    if [ ! -e $TARBALLDIR/wxPython-demo-$VERSION.tar.gz ]; then
+    if [ ! -e $TARBALLDIR/wxPython-demo-$VERSION.tar.bz2 ]; then
 	cat > "$DMGAPPS/Samples/Build ERROR.txt" <<EOF
 
 The wxPython-$VERSION-demo tarball was not found when building this disk image!
@@ -575,7 +575,7 @@ EOF
 
         # Copy the demo and samples to the disk image from the tarball
 	pushd $DMGAPPS/Samples
-	tar xzvf $TARBALLDIR/wxPython-demo-$VERSION.tar.gz
+	tar xjvf $TARBALLDIR/wxPython-demo-$VERSION.tar.bz2
 	mv wxPython-$VERSION/* .
 	rm -rf wxPython-$VERSION
 	rm demo/b demo/.setup.sh

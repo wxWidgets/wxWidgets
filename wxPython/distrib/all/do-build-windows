@@ -50,10 +50,10 @@ fi
 
 
 # untar the source 
-echo "Unarchiving wxPython-src-$VERSION.tar.gz"
+echo "Unarchiving wxPython-src-$VERSION.tar.bz2"
 cd $DESTDIR
-tar xzf wxPython-src-$VERSION.tar.gz 
-rm wxPython-src-$VERSION.tar.gz
+tar xjf wxPython-src-$VERSION.tar.bz2
+rm wxPython-src-$VERSION.tar.bz2
 
 
 # Fix line endings

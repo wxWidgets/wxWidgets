@@ -59,9 +59,9 @@ cp ../distrib/viewdocs.py $DEST
 cp ../distrib/README.viewdocs.txt $DEST/README.txt
 ##cp ../docs/xml/wxPython-metadata.xml $DEST
 
-rm -f ../dist/wxPython-docs-$VERSION.tar.gz
+rm -f ../dist/wxPython-docs-$VERSION.tar.bz2
 tar cvf ../dist/wxPython-docs-$VERSION.tar $DEST
-gzip -9 ../dist/wxPython-docs-$VERSION.tar
+bzip2 -9 ../dist/wxPython-docs-$VERSION.tar
 
 
 # **** Cleanup

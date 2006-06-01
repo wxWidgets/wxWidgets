@@ -134,21 +134,14 @@ if [ -z "${skipcopy}" ]; then
     # copy root dir contents
     cp -pf --link ${wxdir}/* ${tarver} > /dev/null 2>&1
 
-    # copy all top dirs except CVS, build, demos, samples, utils, and wxPython
-    for d in art build contrib debian distrib docs include lib locale misc patches src; do
+    # copy all top dirs except CVS, demos, samples, and wxPython
+    for d in art build contrib debian docs include lib locale patches samples src utils; do
 	if [ -e ${wxdir}/$d ]; then
 	    cp -Rpf --link ${wxdir}/$d ${tarver} #> /dev/null 2>&1
 	fi
     done
 
-#     # and tex2rtf too
-#     mkdir ${tarver}/utils
-#     cp -Rpf --link ${wxdir}/utils/tex2rtf ${tarver}/utils
-#     # tex2rtf needs these files
-#     mkdir ${tarver}/samples
-#     cp -Rpf --link ${wxdir}/samples/sample.* ${tarver}/samples
-
-    # now do the same thing for wxPython, skipping it's build dirs and such
+    # now do the same thing for wxPython, but use the DIRLIST to select dirs to copy
     for dir in `grep -v '#' ${wxdir}/wxPython/distrib/DIRLIST`; do
 	mkdir ${tarver}/${dir}
 	##echo "cp -pf --link ${wxdir}/${dir}/* ${tarver}/${dir}"
@@ -172,9 +165,9 @@ if [ -z "${skipcopy}" ]; then
     rm *.spec
     rm -rf distrib/msw/tmake
     rm -rf docs/html
-    rm -rf docs/latex
-    rm -rf contrib/docs
-    rm -rf contrib/samples
+    #rm -rf docs/latex
+    #rm -rf contrib/docs
+    #rm -rf contrib/samples
     rm locale/*.mo
     cleanup ".#*"
     cleanup "#*#"
@@ -193,6 +186,8 @@ if [ -z "${skipcopy}" ]; then
     cleanup motif
     cleanup os2
     cleanup x11
+    cleanup univ
+    cleanup wine
 
     rm -f wxPython/wx/*  > /dev/null 2>&1
 
@@ -226,10 +221,10 @@ if [ -z "${skiptar}" ]; then
     tar cvf ${distdir}/${tarver}.tar ${tarver} > /dev/null
 
     echo "*** Compressing..."
-    if [ -e ${distdir}/${tarver}.tar.gz ]; then
-	rm ${distdir}/${tarver}.tar.gz
+    if [ -e ${distdir}/${tarver}.tar.bz2 ]; then
+	rm ${distdir}/${tarver}.tar.bz2
     fi
-    gzip --best ${distdir}/${tarver}.tar
+    bzip2 --best ${distdir}/${tarver}.tar
     popd > /dev/null
 fi
 
@@ -239,7 +234,7 @@ fi
 
 if [ -z "${skiprpm}" ]; then
     echo "*** Building RPMs..."
-    cp ${distdir}/${tarver}.tar.gz ${rpmtop}/SOURCES
+    cp ${distdir}/${tarver}.tar.bz2 ${rpmtop}/SOURCES
 
     if [ "${srpmonly}" = "1" ]; then
 	rpmbuild -bs \
