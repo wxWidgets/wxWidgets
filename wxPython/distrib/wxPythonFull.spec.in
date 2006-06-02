@@ -111,7 +111,7 @@ Name:      %{pkgname}%{ver2}
 Summary:   Cross platform GUI toolkit for Python
 Version:   %{version}
 Release:   %{release}
-Source0:   %{tarname}-%{version}.tar.gz
+Source0:   %{tarname}-%{version}.tar.bz2
 License:   wx Library Licence, Version 3
 URL:       http://wxPython.org/
 Packager:  Robin Dunn <robin@alldunn.com>

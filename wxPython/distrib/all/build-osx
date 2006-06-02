@@ -23,9 +23,9 @@ if [ $skiposx != yes ]; then
     echo "Copying source files and build script..."
     ssh root@$host "mkdir -p $OSX_BUILD && rm -rf $OSX_BUILD/* || true"
     
-    scp $STAGING_DIR/wxPython-src-$VERSION.tar.gz \
-	$STAGING_DIR/wxPython-docs-$VERSION.tar.gz \
-	$STAGING_DIR/wxPython-demo-$VERSION.tar.gz \
+    scp $STAGING_DIR/wxPython-src-$VERSION.tar.bz2 \
+	$STAGING_DIR/wxPython-docs-$VERSION.tar.bz2 \
+	$STAGING_DIR/wxPython-demo-$VERSION.tar.bz2 \
 	distrib/all/do-build-osx \
 	root@$host:$OSX_BUILD
 

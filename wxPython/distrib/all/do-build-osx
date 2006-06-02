@@ -39,10 +39,10 @@ echo "which gcc = " `which gcc`
 #exit 0
 
 # untar the source 
-echo "Unarchiving wxPython-src-$VERSION.tar.gz"
+echo "Unarchiving wxPython-src-$VERSION.tar.bz2"
 cd $DESTDIR
-tar xzf wxPython-src-$VERSION.tar.gz 
-rm wxPython-src-$VERSION.tar.gz
+tar xjf wxPython-src-$VERSION.tar.bz2
+rm wxPython-src-$VERSION.tar.bz2
 
 
 echo "Invoking wxPythonOSX build script..."
@@ -63,8 +63,8 @@ cd $DESTDIR
 if [ $SKIPCLEAN != yes ]; then 
     echo "Cleaning up..."
     rm -r $WXDIR || true
-    rm wxPython-docs-$VERSION.tar.gz
-    rm wxPython-demo-$VERSION.tar.gz
+    rm wxPython-docs-$VERSION.tar.bz2
+    rm wxPython-demo-$VERSION.tar.bz2
 fi
 
 echo "-=-=-=-  Goodbye!  -=-=-=-"
