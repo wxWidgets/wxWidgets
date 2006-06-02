@@ -12,18 +12,6 @@
 			buildConfigurationList = 18B5B99A08564B5D002803C9 /* Build configuration list for PBXAggregateTarget "Build All" */;
 			buildPhases = (
 			);
-			buildSettings = {
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = "Build All";
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
 			dependencies = (
 				4086D203063BC05E00D4CD53 /* PBXTargetDependency */,
 				4086D207063BC05E00D4CD53 /* PBXTargetDependency */,
@@ -313,7 +301,6 @@
 		4086C83B063AB2FF00D4CD53 /* notebmac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861E801FA022C0175ACA7 /* notebmac.cpp */; };
 		4086C83C063AB2FF00D4CD53 /* palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861E901FA022C0175ACA7 /* palette.cpp */; };
 		4086C83D063AB2FF00D4CD53 /* pen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861EA01FA022C0175ACA7 /* pen.cpp */; };
-		4086C83E063AB2FF00D4CD53 /* pnghand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861EB01FA022C0175ACA7 /* pnghand.cpp */; };
 		4086C83F063AB2FF00D4CD53 /* printmac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861EE01FA022C0175ACA7 /* printmac.cpp */; };
 		4086C840063AB2FF00D4CD53 /* radiobox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861EF01FA022C0175ACA7 /* radiobox.cpp */; };
 		4086C841063AB2FF00D4CD53 /* printdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861ED01FA022C0175ACA7 /* printdlg.cpp */; };
@@ -689,7 +676,6 @@
 		4086CB4E063AB30000D4CD53 /* notebmac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861E801FA022C0175ACA7 /* notebmac.cpp */; };
 		4086CB4F063AB30000D4CD53 /* palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861E901FA022C0175ACA7 /* palette.cpp */; };
 		4086CB50063AB30000D4CD53 /* pen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861EA01FA022C0175ACA7 /* pen.cpp */; };
-		4086CB51063AB30000D4CD53 /* pnghand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861EB01FA022C0175ACA7 /* pnghand.cpp */; };
 		4086CB52063AB30000D4CD53 /* printmac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861EE01FA022C0175ACA7 /* printmac.cpp */; };
 		4086CB53063AB30000D4CD53 /* radiobox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861EF01FA022C0175ACA7 /* radiobox.cpp */; };
 		4086CB54063AB30000D4CD53 /* printdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A861ED01FA022C0175ACA7 /* printdlg.cpp */; };
@@ -974,6 +960,12 @@
 		40DCE35206C744C90000D83E /* gsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40DCE34F06C744C90000D83E /* gsocket.cpp */; };
 		40ECB13A074BD1D0005AAC48 /* stdpaths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40ECB139074BD1D0005AAC48 /* stdpaths.cpp */; };
 		40ECB13C074BD1D0005AAC48 /* stdpaths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40ECB139074BD1D0005AAC48 /* stdpaths.cpp */; };
+		40F0173A0A30684000AC9076 /* colourcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F017380A30683F00AC9076 /* colourcmn.cpp */; };
+		40F0173B0A30684000AC9076 /* convauto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F017390A30683F00AC9076 /* convauto.cpp */; };
+		40F0173C0A30684000AC9076 /* colourcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F017380A30683F00AC9076 /* colourcmn.cpp */; };
+		40F0173D0A30684000AC9076 /* convauto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F017390A30683F00AC9076 /* convauto.cpp */; };
+		40F017420A306C7600AC9076 /* fontenumcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F017410A306C7600AC9076 /* fontenumcmn.cpp */; };
+		40F017430A306C7600AC9076 /* fontenumcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F017410A306C7600AC9076 /* fontenumcmn.cpp */; };
 		40F10E5806AD0230003C7AC3 /* tglbtn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F10E5606AD0230003C7AC3 /* tglbtn.cpp */; };
 		40F10E5906AD0230003C7AC3 /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F10E5706AD0230003C7AC3 /* thread.cpp */; };
 		40F10E5C06AD0230003C7AC3 /* tglbtn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40F10E5606AD0230003C7AC3 /* tglbtn.cpp */; };
@@ -1000,26 +992,6 @@
 			);
 		};
 /* End PBXBuildRule section */
-
-/* Begin PBXBuildStyle section */
-		4F0BB7EC011F40E904CA0E50 /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4F0BB7ED011F40E904CA0E50 /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
 
 /* Begin PBXContainerItemProxy section */
 		4086D202063BC05E00D4CD53 /* PBXContainerItemProxy */ = {
@@ -1152,6 +1124,9 @@
 		40CDE8D9098250AB00E8156D /* evtloop.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = evtloop.cpp; sourceTree = "<group>"; };
 		40DCE34F06C744C90000D83E /* gsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = gsocket.cpp; sourceTree = "<group>"; };
 		40ECB139074BD1D0005AAC48 /* stdpaths.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = stdpaths.cpp; sourceTree = "<group>"; };
+		40F017380A30683F00AC9076 /* colourcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = colourcmn.cpp; sourceTree = "<group>"; };
+		40F017390A30683F00AC9076 /* convauto.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = convauto.cpp; sourceTree = "<group>"; };
+		40F017410A306C7600AC9076 /* fontenumcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = fontenumcmn.cpp; sourceTree = "<group>"; };
 		40F10E5606AD0230003C7AC3 /* tglbtn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = tglbtn.cpp; sourceTree = "<group>"; };
 		40F10E5706AD0230003C7AC3 /* thread.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = thread.cpp; sourceTree = "<group>"; };
 		40FF2B0C0869B1530013E961 /* webkit.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = webkit.mm; path = htmlctrl/webkit/webkit.mm; sourceTree = "<group>"; };
@@ -1810,7 +1785,6 @@
 		F5A861E801FA022C0175ACA7 /* notebmac.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = notebmac.cpp; sourceTree = "<group>"; };
 		F5A861E901FA022C0175ACA7 /* palette.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = palette.cpp; sourceTree = "<group>"; };
 		F5A861EA01FA022C0175ACA7 /* pen.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pen.cpp; sourceTree = "<group>"; };
-		F5A861EB01FA022C0175ACA7 /* pnghand.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = pnghand.cpp; sourceTree = "<group>"; };
 		F5A861ED01FA022C0175ACA7 /* printdlg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = printdlg.cpp; sourceTree = "<group>"; };
 		F5A861EE01FA022C0175ACA7 /* printmac.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = printmac.cpp; sourceTree = "<group>"; };
 		F5A861EF01FA022C0175ACA7 /* radiobox.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = radiobox.cpp; sourceTree = "<group>"; };
@@ -2511,8 +2485,10 @@
 				F5A85FE501FA022B0175ACA7 /* cmdline.cpp */,
 				F5A85FE601FA022B0175ACA7 /* cmdproc.cpp */,
 				F5A85FE701FA022B0175ACA7 /* cmndata.cpp */,
+				40F017380A30683F00AC9076 /* colourcmn.cpp */,
 				F5A85FE801FA022B0175ACA7 /* config.cpp */,
 				F5A85FE901FA022B0175ACA7 /* containr.cpp */,
+				40F017390A30683F00AC9076 /* convauto.cpp */,
 				F5A85FEA01FA022B0175ACA7 /* cshelp.cpp */,
 				F5A85FEB01FA022B0175ACA7 /* ctrlcmn.cpp */,
 				F5A85FEC01FA022B0175ACA7 /* ctrlsub.cpp */,
@@ -2551,6 +2527,7 @@
 				CA60175C04D43A8100000080 /* fldlgcmn.cpp */,
 				CA60175D04D43A8100000080 /* fmapbase.cpp */,
 				F5A8600D01FA022B0175ACA7 /* fontcmn.cpp */,
+				40F017410A306C7600AC9076 /* fontenumcmn.cpp */,
 				F5A8600E01FA022B0175ACA7 /* fontmap.cpp */,
 				F5A8600F01FA022B0175ACA7 /* framecmn.cpp */,
 				F5A8601001FA022B0175ACA7 /* fs_inet.cpp */,
@@ -2850,7 +2827,6 @@
 				F5A861E801FA022C0175ACA7 /* notebmac.cpp */,
 				F5A861E901FA022C0175ACA7 /* palette.cpp */,
 				F5A861EA01FA022C0175ACA7 /* pen.cpp */,
-				F5A861EB01FA022C0175ACA7 /* pnghand.cpp */,
 				F5A861ED01FA022C0175ACA7 /* printdlg.cpp */,
 				F5A861EE01FA022C0175ACA7 /* printmac.cpp */,
 				F5A861EF01FA022C0175ACA7 /* radiobox.cpp */,
@@ -3021,58 +2997,6 @@
 			buildRules = (
 				40EEBF1E08BE1E8B000BD0A5 /* PBXBuildRule */,
 			);
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 2.6;
-				DYLIB_CURRENT_VERSION = 2.6.0;
-				GCC_INPUT_FILETYPE = automatic;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PFE_FILE_C_DIALECTS = "c++";
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ../include/wx/wxprec.h;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					NO_GCC_PRAGMA,
-					__WXDEBUG__,
-					__WXMAC__,
-					"wxUSE_BASE=1",
-					"_FILE_OFFSET_BITS=64",
-					_LARGE_FILES,
-					"__WXMAC_XCODE__=1",
-					"WX_PRECOMP=1",
-					MACOS_CLASSIC,
-				);
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				HEADER_SEARCH_PATHS = (
-					"${SYMROOT}/include",
-					../include,
-					mac/carbon/morefilex,
-					common,
-					jpeg,
-					png,
-					regex,
-					expat/lib,
-					tiff,
-					"-",
-					"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon",
-					/usr/include,
-				);
-				LIBRARY_STYLE = STATIC;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "-d __UNIX__";
-				PRODUCT_NAME = wx_macd;
-				REZ_EXECUTABLE = NO;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = FALSE;
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
 			dependencies = (
 			);
 			name = static;
@@ -3092,59 +3016,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 2.6;
-				DYLIB_CURRENT_VERSION = 2.6.0;
-				GCC_C_LANGUAGE_STANDARD = "compiler-default";
-				GCC_INPUT_FILETYPE = automatic;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PFE_FILE_C_DIALECTS = "c++";
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ../include/wx/wxprec.h;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					NO_GCC_PRAGMA,
-					__WXDEBUG__,
-					WXMAKINGDLL,
-					__WXMAC__,
-					"wxUSE_BASE=1",
-					"_FILE_OFFSET_BITS=64",
-					_LARGE_FILES,
-					"__WXMAC_XCODE__=1",
-					MACOS_CLASSIC,
-					"WX_PRECOMP=1",
-				);
-				HEADER_SEARCH_PATHS = (
-					"${SYMROOT}/include",
-					../include,
-					mac/carbon/morefilex,
-					common,
-					jpeg,
-					png,
-					expat/lib,
-					regex,
-					tiff,
-					"-",
-					"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon",
-					/usr/include,
-				);
-				INSTALL_PATH = "@executable_path/../Frameworks/";
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/3.1;
-				LIBRARY_STYLE = DYNAMIC;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "\U0001-flat_namespace";
-				OTHER_LIBTOOL_FLAGS = "\U0001";
-				OTHER_REZFLAGS = "-d __UNIX__";
-				PRODUCT_NAME = libwx_macd;
-				REZ_EXECUTABLE = NO;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = FALSE;
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
 			dependencies = (
 			);
 			name = dynamic;
@@ -3158,14 +3029,6 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 18B5B99E08564B5D002803C9 /* Build configuration list for PBXProject "wxWindows" */;
-			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-			};
-			buildStyles = (
-				4F0BB7EC011F40E904CA0E50 /* Development */,
-				4F0BB7ED011F40E904CA0E50 /* Deployment */,
-			);
 			hasScannedForEncodings = 1;
 			mainGroup = 0867D691FE84028FC02AAC07 /* wxWindows */;
 			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
@@ -3462,7 +3325,6 @@
 				4086C83B063AB2FF00D4CD53 /* notebmac.cpp in Sources */,
 				4086C83C063AB2FF00D4CD53 /* palette.cpp in Sources */,
 				4086C83D063AB2FF00D4CD53 /* pen.cpp in Sources */,
-				4086C83E063AB2FF00D4CD53 /* pnghand.cpp in Sources */,
 				4086C83F063AB2FF00D4CD53 /* printmac.cpp in Sources */,
 				4086C840063AB2FF00D4CD53 /* radiobox.cpp in Sources */,
 				4086C841063AB2FF00D4CD53 /* printdlg.cpp in Sources */,
@@ -3691,6 +3553,9 @@
 				40CDE8DB098250AB00E8156D /* evtloop.cpp in Sources */,
 				43DFF5BA09926F7B0033000B /* helpdlg.cpp in Sources */,
 				43DFF5BB09926F7B0033000B /* helpwnd.cpp in Sources */,
+				40F0173A0A30684000AC9076 /* colourcmn.cpp in Sources */,
+				40F0173B0A30684000AC9076 /* convauto.cpp in Sources */,
+				40F017420A306C7600AC9076 /* fontenumcmn.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3939,7 +3804,6 @@
 				4086CB4E063AB30000D4CD53 /* notebmac.cpp in Sources */,
 				4086CB4F063AB30000D4CD53 /* palette.cpp in Sources */,
 				4086CB50063AB30000D4CD53 /* pen.cpp in Sources */,
-				4086CB51063AB30000D4CD53 /* pnghand.cpp in Sources */,
 				4086CB52063AB30000D4CD53 /* printmac.cpp in Sources */,
 				4086CB53063AB30000D4CD53 /* radiobox.cpp in Sources */,
 				4086CB54063AB30000D4CD53 /* printdlg.cpp in Sources */,
@@ -4168,6 +4032,9 @@
 				40CDE8DA098250AB00E8156D /* evtloop.cpp in Sources */,
 				43DFF5BC09926F7B0033000B /* helpdlg.cpp in Sources */,
 				43DFF5BD09926F7B0033000B /* helpwnd.cpp in Sources */,
+				40F0173C0A30684000AC9076 /* colourcmn.cpp in Sources */,
+				40F0173D0A30684000AC9076 /* convauto.cpp in Sources */,
+				40F017430A306C7600AC9076 /* fontenumcmn.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
