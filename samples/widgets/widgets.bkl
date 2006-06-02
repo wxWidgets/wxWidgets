@@ -22,6 +22,7 @@
             toggle.cpp
             widgets.cpp
         </sources>
+        <wx-lib>xml</wx-lib>
         <wx-lib>adv</wx-lib>
         <wx-lib>html</wx-lib>
         <wx-lib>core</wx-lib>
