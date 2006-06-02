@@ -13,7 +13,7 @@
 #define _WX_PICKERBASE_H_BASE_
 
 #include "wx/defs.h"
-#include "wx/control.h"
+#include "wx/button.h"
 #include "wx/textctrl.h"
 
 // ----------------------------------------------------------------------------
