@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 22 May 2006                                                         *
+# Date : 29 May 2006                                                         *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -98,12 +98,14 @@ OBJECTS = \
 		fldlgcmn.obj,\
 		fmapbase.obj,\
 		fontcmn.obj,\
+		fontenumcmn.obj,\
 		fontmap.obj,\
 		framecmn.obj
 
 OBJECTS1=fs_inet.obj,\
 		fs_zip.obj,\
 		ftp.obj,\
+		gaugecmn.obj,\
 		gdicmn.obj,\
 		gifdecod.obj,\
 		hash.obj,\
@@ -161,8 +163,9 @@ OBJECTS1=fs_inet.obj,\
 		strconv.obj,\
 		stream.obj,\
 		string.obj,\
-		sysopt.obj,\
-		tbarbase.obj,\
+		sysopt.obj
+
+OBJECTS2=tbarbase.obj,\
 		textbuf.obj,\
 		textcmn.obj,\
 		textfile.obj,\
@@ -171,9 +174,8 @@ OBJECTS1=fs_inet.obj,\
 		toplvcmn.obj,\
 		treebase.obj,\
 		txtstrm.obj,\
-		url.obj
-
-OBJECTS2=utilscmn.obj,\
+		url.obj,\
+		utilscmn.obj,\
 		rgncmn.obj,\
 		uri.obj,\
 		valgen.obj,\
@@ -187,10 +189,10 @@ OBJECTS2=utilscmn.obj,\
 		zipstrm.obj,\
 		zstream.obj
 
-OBJECTS_MOTIF=gaugecmn.obj,radiocmn.obj
+OBJECTS_MOTIF=radiocmn.obj
 
 OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
-	dynload.obj,effects.obj,fddlgcmn.obj,fs_mem.obj,gaugecmn.obj,\
+	dynload.obj,effects.obj,fddlgcmn.obj,fs_mem.obj,\
 	gbsizer.obj,geometry.obj,matrix.obj,radiocmn.obj,\
 	regex.obj,taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj,\
 	combocmn.obj
@@ -244,6 +246,7 @@ SOURCES = \
 		fldlgcmn.cpp,\
 		fmapbase.cpp,\
 		fontcmn.cpp,\
+		fontenumcmn.cpp,\
 		fontmap.cpp,\
 		framecmn.cpp,\
 		fs_inet.cpp,\
@@ -428,6 +431,7 @@ filesys.obj : filesys.cpp
 fldlgcmn.obj : fldlgcmn.cpp
 fmapbase.obj : fmapbase.cpp
 fontcmn.obj : fontcmn.cpp
+fontenumcmn.obj : fontenumcmn.cpp
 fontmap.obj : fontmap.cpp
 framecmn.obj : framecmn.cpp
 fs_inet.obj : fs_inet.cpp

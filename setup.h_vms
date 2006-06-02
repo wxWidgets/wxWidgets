@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 19 May 2006                                                        *
+ * Date : 2 June 2006                                                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -84,6 +84,9 @@
 
 /* Define this if your version of GTK+ is greater than 2.4 */
 #define __WXGTK24__ 1
+
+/* Define this if your version of GTK+ is greater than 2.6 */
+#define __WXGTK26__ 1
 
 #include <types.h>
 typedef pid_t GPid;
@@ -318,10 +321,15 @@ typedef pid_t GPid;
 #define wxUSE_CHECKBOX     1
 #define wxUSE_CHECKLISTBOX 1
 #define wxUSE_CHOICE       1
+#define wxUSE_COLOURPICKERCTRL 1
 #define wxUSE_COMBOBOX     1
 #define wxUSE_DATAVIEWCTRL   1
 #define wxUSE_DATEPICKCTRL 1
+#define wxUSE_DIRPICKERCTRL 1
+#define wxUSE_FILEPICKERCTRL 1
+#define wxUSE_FONTPICKERCTRL 1
 #define wxUSE_GAUGE        1
+#define wxUSE_HYPERLINKCTRL 1
 #define wxUSE_LISTBOX      1
 #define wxUSE_LISTCTRL     1
 #define wxUSE_RADIOBOX     1

@@ -12,6 +12,11 @@
 
 #if wxUSE_SLIDER
 
+#ifdef __VMS
+   //Missing definition in OpenVMS C++ header files.
+   double round(double __x);
+#endif
+
 #include "wx/slider.h"
 
 #ifndef WX_PRECOMP
