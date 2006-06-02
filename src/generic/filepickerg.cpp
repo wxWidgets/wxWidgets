@@ -45,8 +45,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxGenericDirButton, wxButton)
 // wxGenericFileButton
 // ----------------------------------------------------------------------------
 
-static wxString s_message, s_wildcard;
-
 bool wxGenericFileDirButton::Create( wxWindow *parent, wxWindowID id,
                         const wxString &label, const wxString &path,
                         const wxString &message, const wxString &wildcard,
@@ -68,17 +66,11 @@ bool wxGenericFileDirButton::Create( wxWindow *parent, wxWindowID id,
 
     // create the dialog associated with this button
     m_path = path;
-    s_message = message;
-    s_wildcard = wildcard;
-
-    m_dialog = NULL;
-    return true;
+    return CreateDialog(message, wildcard);
 }
 
 void wxGenericFileDirButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
 {
-    CreateDialog(s_message, s_wildcard);
-
     if (m_dialog->ShowModal() == wxID_OK)
     {
         // save the path
@@ -88,8 +80,6 @@ void wxGenericFileDirButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
         wxFileDirPickerEvent event(GetEventType(), this, GetId(), m_path);
         GetEventHandler()->ProcessEvent(event);
     }
-
-    wxDELETE(m_dialog);
 }
 
 #endif      // wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
