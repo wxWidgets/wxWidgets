@@ -30,7 +30,7 @@ class WXDLLIMPEXP_CORE wxGenericFileDirButton : public wxButton,
                                                 public wxFileDirPickerWidgetBase
 {
 public:
-    wxGenericFileDirButton() { m_dialog = NULL; }
+    wxGenericFileDirButton() { }
     wxGenericFileDirButton(wxWindow *parent,
                            wxWindowID id,
                            const wxString& label = wxFilePickerWidgetLabel,
@@ -43,7 +43,6 @@ public:
                            const wxValidator& validator = wxDefaultValidator,
                            const wxString& name = wxFilePickerWidgetNameStr)
     {
-        m_dialog = NULL;
         Create(parent, id, label, path, message, wildcard,
                pos, size, style, validator, name);
     }
@@ -52,22 +51,14 @@ public:
 
 public:     // overrideable
 
-    virtual bool CreateDialog(const wxString &message,
-                              const wxString &wildcard) = 0;
+    virtual wxDialog *CreateDialog() = 0;
 
-    // NULL is because of a problem with destruction order in both generic & GTK code
     virtual wxWindow *GetDialogParent()
-        { return NULL; }
+        { return GetParent(); }
 
     virtual wxEventType GetEventType() const = 0;
 
 public:
-
-    bool Destroy()
-    {
-        if (m_dialog) m_dialog->Destroy();
-        return wxButton::Destroy();
-    }
 
     bool Create(wxWindow *parent, wxWindowID id,
            const wxString& label = wxFilePickerWidgetLabel,
@@ -83,7 +74,8 @@ public:
     // event handler for the click
     void OnButtonClick(wxCommandEvent &);
 
-    wxDialog *m_dialog;
+protected:
+    wxString m_message, m_wildcard;
 };
 
 
@@ -91,7 +83,7 @@ public:
 // wxGenericFileButton: a button which brings up a wxFileDialog
 //-----------------------------------------------------------------------------
 
-#define wxFILEBTN_DEFAULT_STYLE                     wxFLP_OPEN
+#define wxFILEBTN_DEFAULT_STYLE                     (wxFLP_OPEN)
 
 class WXDLLIMPEXP_CORE wxGenericFileButton : public wxGenericFileDirButton
 {
@@ -133,24 +125,21 @@ public:     // overrideable
         return filedlgstyle;
     }
 
-    virtual bool CreateDialog(const wxString &message, const wxString &wildcard)
+    virtual wxDialog *CreateDialog()
     {
-        m_dialog = new wxFileDialog(GetDialogParent(), message,
+        wxFileDialog *p = new wxFileDialog(GetDialogParent(), m_message,
                                     wxEmptyString, wxEmptyString,
-                                    wildcard, GetDialogStyle());
+                                    m_wildcard, GetDialogStyle());
 
         // this sets both the default folder and the default file of the dialog
-        GetDialog()->SetPath(m_path);
-
-        return true;
+        p->SetPath(m_path);
+        return p;
     }
 
-    wxFileDialog *GetDialog()
-        { return wxStaticCast(m_dialog, wxFileDialog); }
-    void UpdateDialogPath()
-        { GetDialog()->SetPath(m_path); }
-    void UpdatePathFromDialog()
-        { m_path = GetDialog()->GetPath(); }
+    void UpdateDialogPath(wxDialog *p)
+        { wxStaticCast(p, wxFileDialog)->SetPath(m_path); }
+    void UpdatePathFromDialog(wxDialog *p)
+        { m_path = wxStaticCast(p, wxFileDialog)->GetPath(); }
     wxEventType GetEventType() const
         { return wxEVT_COMMAND_FILEPICKER_CHANGED; }
 
@@ -198,19 +187,16 @@ public:     // overrideable
         return dirdlgstyle;
     }
 
-    virtual bool CreateDialog(const wxString &message, const wxString &WXUNUSED(wildcard))
+    virtual wxDialog *CreateDialog()
     {
-        m_dialog = new wxDirDialog(GetDialogParent(), message, m_path,
+        return new wxDirDialog(GetDialogParent(), m_message, m_path,
                                    GetDialogStyle());
-        return true;
     }
 
-    wxDirDialog *GetDialog()
-        { return wxStaticCast(m_dialog, wxDirDialog); }
-    void UpdateDialogPath()
-        { GetDialog()->SetPath(m_path); }
-    void UpdatePathFromDialog()
-        { m_path = GetDialog()->GetPath(); }
+    void UpdateDialogPath(wxDialog *p)
+        { wxStaticCast(p, wxDirDialog)->SetPath(m_path); }
+    void UpdatePathFromDialog(wxDialog *p)
+        { m_path = wxStaticCast(p, wxDirDialog)->GetPath(); }
     wxEventType GetEventType() const
         { return wxEVT_COMMAND_DIRPICKER_CHANGED; }
 

@@ -66,20 +66,26 @@ bool wxGenericFileDirButton::Create( wxWindow *parent, wxWindowID id,
 
     // create the dialog associated with this button
     m_path = path;
-    return CreateDialog(message, wildcard);
+    m_message = message;
+    m_wildcard = wildcard;
+
+    return true;
 }
 
 void wxGenericFileDirButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
 {
-    if (m_dialog->ShowModal() == wxID_OK)
+    wxDialog *p = CreateDialog();
+    if (p->ShowModal() == wxID_OK)
     {
-        // save the path
-        UpdatePathFromDialog();
+        // save updated path in m_path
+        UpdatePathFromDialog(p);
 
         // fire an event
         wxFileDirPickerEvent event(GetEventType(), this, GetId(), m_path);
         GetEventHandler()->ProcessEvent(event);
     }
+
+    wxDELETE(p);
 }
 
 #endif      // wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL

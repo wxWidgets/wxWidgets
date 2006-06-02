@@ -48,11 +48,11 @@ public:
     virtual ~wxFileDirPickerWidgetBase() {  }
 
     wxString GetPath() const { return m_path; }
-    void SetPath(const wxString &str) { m_path=str; UpdateDialogPath(); }
+    virtual void SetPath(const wxString &str) { m_path=str; }
 
 protected:
-    virtual void UpdateDialogPath() = 0;
-    virtual void UpdatePathFromDialog() = 0;
+    virtual void UpdateDialogPath(wxDialog *) = 0;
+    virtual void UpdatePathFromDialog(wxDialog *) = 0;
 
     wxString m_path;
 };
@@ -159,13 +159,13 @@ protected:
 // used, a textctrl next to it.
 // ----------------------------------------------------------------------------
 
-#define wxFLP_USE_TEXTCTRL            wxPB_USE_TEXTCTRL
+#define wxFLP_USE_TEXTCTRL            (wxPB_USE_TEXTCTRL)
 
 #ifdef __WXGTK__
     // GTK apps usually don't have a textctrl next to the picker
-    #define wxFLP_DEFAULT_STYLE       wxFLP_OPEN
+    #define wxFLP_DEFAULT_STYLE       (wxFLP_OPEN)
 #else
-    #define wxFLP_DEFAULT_STYLE       wxFLP_USE_TEXTCTRL|wxFLP_OPEN
+    #define wxFLP_DEFAULT_STYLE       (wxFLP_USE_TEXTCTRL|wxFLP_OPEN)
 #endif
 
 class WXDLLIMPEXP_CORE wxFilePickerCtrl : public wxFileDirPickerCtrlBase
@@ -253,13 +253,13 @@ private:
 // (see wxDIRP_USE_TEXTCTRL) next to it.
 // ----------------------------------------------------------------------------
 
-#define wxDIRP_USE_TEXTCTRL            wxPB_USE_TEXTCTRL
+#define wxDIRP_USE_TEXTCTRL            (wxPB_USE_TEXTCTRL)
 
 #ifdef __WXGTK__
     // GTK apps usually don't have a textctrl next to the picker
     #define wxDIRP_DEFAULT_STYLE       0
 #else
-    #define wxDIRP_DEFAULT_STYLE       wxDIRP_USE_TEXTCTRL
+    #define wxDIRP_DEFAULT_STYLE       (wxDIRP_USE_TEXTCTRL)
 #endif
 
 class WXDLLIMPEXP_CORE wxDirPickerCtrl : public wxFileDirPickerCtrlBase

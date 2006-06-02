@@ -66,9 +66,13 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         }
 
         // create the dialog associated with this button
+        // NB: unlike generic implementation, native GTK implementation needs to create
+        //     the filedialog here as it needs to use gtk_file_chooser_button_new_with_dialog()
         SetWindowStyle(style);
         m_path = path;
-        if (!CreateDialog(message, wildcard))
+        m_message = message;
+        m_wildcard = wildcard;
+        if ((m_dialog = CreateDialog()) == NULL)
             return false;
 
         // little trick used to avoid problems when there are other GTK windows 'grabbed':
@@ -122,7 +126,7 @@ void wxFileButton::OnDialogOK(wxCommandEvent& ev)
     if (ev.GetId() == wxID_OK)
     {
         // ...update our path
-        UpdatePathFromDialog();
+        UpdatePathFromDialog(m_dialog);
 
         // ...and fire an event
         wxFileDirPickerEvent event(wxEVT_COMMAND_FILEPICKER_CHANGED, this, GetId(), m_path);
@@ -199,8 +203,9 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
 
         // create the dialog associated with this button
         SetWindowStyle(style);
-        m_path = path;
-        if (!CreateDialog(message, wildcard))
+        m_message = message;
+        m_wildcard = wildcard;
+        if ((m_dialog = CreateDialog()) == NULL)
             return false;
 
         // little trick used to avoid problems when there are other GTK windows 'grabbed':

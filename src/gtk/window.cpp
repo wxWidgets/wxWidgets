@@ -2749,6 +2749,9 @@ void wxWindowGTK::PostCreation()
 #ifdef GTK_IS_FILE_CHOOSER_BUTTON
     else if (GTK_IS_FILE_CHOOSER_BUTTON(m_widget))
     {
+        // If we connect to the "size_request" signal of a GtkFileChooserButton
+        // then that control won't be sized properly when placed inside sizers
+        // (this can be tested removing this elseif and running XRC or WIDGETS samples)
         // FIXME: what should be done here ?
     }
 #endif

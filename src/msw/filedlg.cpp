@@ -136,8 +136,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
                                wildCard, style, pos, sz, name)
 
 {
-    if ( ( m_windowStyle & wxFD_MULTIPLE ) && ( m_windowStyle & wxFD_SAVE ) )
-        m_windowStyle &= ~wxFD_MULTIPLE;
+    // NB: all style checks are done by wxFileDialogBase::Create
 
     m_bMovedWindow = false;
 

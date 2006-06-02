@@ -85,7 +85,7 @@ protected:
 // used, a textctrl next to it.
 // ----------------------------------------------------------------------------
 
-#define wxCLRP_USE_TEXTCTRL       wxPB_USE_TEXTCTRL
+#define wxCLRP_USE_TEXTCTRL       (wxPB_USE_TEXTCTRL)
 #define wxCLRP_DEFAULT_STYLE      0
 
 class WXDLLIMPEXP_CORE wxColourPickerCtrl : public wxPickerBase

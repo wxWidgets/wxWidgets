@@ -80,8 +80,8 @@ protected:
 // wxFontPickerCtrl specific flags
 // ----------------------------------------------------------------------------
 
-#define wxFNTP_USE_TEXTCTRL       wxPB_USE_TEXTCTRL
-#define wxFNTP_DEFAULT_STYLE      wxFNTP_FONTDESC_AS_LABEL|wxFNTP_USEFONT_FOR_LABEL
+#define wxFNTP_USE_TEXTCTRL       (wxPB_USE_TEXTCTRL)
+#define wxFNTP_DEFAULT_STYLE      (wxFNTP_FONTDESC_AS_LABEL|wxFNTP_USEFONT_FOR_LABEL)
 
 // not a style but rather the default value of the maximum pointsize allowed
 #define wxFNTP_MAXPOINT_SIZE      100

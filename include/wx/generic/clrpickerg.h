@@ -23,7 +23,7 @@
 #define wxCLRBTN_SHOW_LABEL     100
 
 // the default style
-#define wxCLRBTN_DEFAULT_STYLE  wxCLRBTN_SHOW_LABEL
+#define wxCLRBTN_DEFAULT_STYLE  (wxCLRBTN_SHOW_LABEL)
 
 
 class WXDLLIMPEXP_CORE wxGenericColourButton : public wxButton,

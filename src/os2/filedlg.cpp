@@ -78,8 +78,7 @@ wxFileDialog::wxFileDialog (
     :wxFileDialogBase(pParent, rsMessage, rsDefaultDir, rsDefaultFileName, rsWildCard, lStyle, rPos, sz, name)
 
 {
-    if ((m_windowStyle & wxFD_MULTIPLE) && (m_windowStyle & wxFD_SAVE))
-        m_windowStyle &= ~wxFD_MULTIPLE;
+    // NB: all style checks are done by wxFileDialogBase::Create
 
     m_filterIndex = 1;
 } // end of wxFileDialog::wxFileDialog

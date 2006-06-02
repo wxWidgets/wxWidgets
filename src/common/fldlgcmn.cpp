@@ -57,6 +57,9 @@ bool wxFileDialogBase::Create(wxWindow *parent,
     m_windowStyle = style;
     m_filterIndex = 0;
 
+    if (!HasFlag(wxFD_OPEN) && !HasFlag(wxFD_SAVE))
+        m_windowStyle |= wxFD_OPEN;     // wxFD_OPEN is the default
+
     // check that the styles are not contradictory
     wxASSERT_MSG( !(HasFlag(wxFD_SAVE) && HasFlag(wxFD_OPEN)),
                   _T("can't specify both wxFD_SAVE and wxFD_OPEN at once") );

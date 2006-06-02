@@ -30,6 +30,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/log.h"
+    #include "wx/radiobox.h"
 #endif
 
 #include "wx/artprov.h"
@@ -49,6 +50,12 @@
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
+
+enum
+{
+    FilePickerMode_Open = 0,
+    FilePickerMode_Save
+};
 
 // control ids
 enum
@@ -80,7 +87,7 @@ public:
     PickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~PickerWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const { /*return m_fontPicker;*/ return NULL; }
+    virtual wxControl *GetWidget() const { return m_filePicker; }
     virtual void RecreateWidget() { RecreateAllPickers(); }
 
 protected:
@@ -108,6 +115,8 @@ protected:
     // get the initial style for the picker of the given kind
     long GetPickerStyle(PickerKind kind);
 
+    // update filepicker radiobox
+    void UpdateFilePickerMode();
 
     // the pickers and the relative event handlers
 #if wxUSE_COLOURPICKERCTRL
@@ -140,6 +149,7 @@ protected:
                *m_chkFileOverwritePrompt,
                *m_chkFileMustExist,
                *m_chkFileChangeDir;
+    wxRadioBox *m_radioFilePickerMode;
 
     wxCheckBox *m_chkDirTextCtrl,
                *m_chkDirChangeDir,
@@ -177,6 +187,7 @@ BEGIN_EVENT_TABLE(PickerWidgetsPage, WidgetsPage)
 #endif
 
     EVT_CHECKBOX(wxID_ANY, PickerWidgetsPage::OnCheckBox)
+    EVT_RADIOBOX(wxID_ANY, PickerWidgetsPage::OnCheckBox)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -208,6 +219,12 @@ PickerWidgetsPage::PickerWidgetsPage(WidgetsBookCtrl *book,
 #endif // wxUSE_COLOURPICKERCTRL
 
 #if wxUSE_FILEPICKERCTRL
+    static const wxString mode[] = { _T("open"), _T("save") };
+    m_radioFilePickerMode = new wxRadioBox(this, wxID_ANY, _T("wxFilePicker mode"),
+                                           wxDefaultPosition, wxDefaultSize,
+                                           WXSIZEOF(mode), mode);
+    boxleft->Add(m_radioFilePickerMode, 0, wxALL|wxGROW, 5);
+
     wxStaticBoxSizer *filebox = new wxStaticBoxSizer(wxVERTICAL, this, _T("&FilePicker style"));
     m_chkFileTextCtrl = CreateCheckBoxAndAddToSizer(filebox, _T("With textctrl"), false);
     m_chkFileOverwritePrompt = CreateCheckBoxAndAddToSizer(filebox, _T("Overwrite prompt"), false);
@@ -388,6 +405,11 @@ long PickerWidgetsPage::GetPickerStyle(PickerKind picker)
             if ( m_chkFileChangeDir->GetValue() )
                 style |= wxFLP_CHANGE_DIR;
 
+            if (m_radioFilePickerMode->GetSelection() == FilePickerMode_Open)
+                style |= wxFLP_OPEN;
+            else
+                style |= wxFLP_SAVE;
+
             break;
 #endif // wxUSE_FILEPICKERCTRL
 
@@ -496,10 +518,14 @@ void PickerWidgetsPage::Reset()
 #endif
 
 #if wxUSE_FILEPICKERCTRL
+    m_radioFilePickerMode->SetSelection((wxFLP_DEFAULT_STYLE & wxFLP_OPEN) ?
+                                            FilePickerMode_Open : FilePickerMode_Save);
     m_chkFileTextCtrl->SetValue((wxFLP_DEFAULT_STYLE & wxFLP_USE_TEXTCTRL) != 0);
     m_chkFileOverwritePrompt->SetValue((wxFLP_DEFAULT_STYLE & wxFLP_OVERWRITE_PROMPT) != 0);
     m_chkFileMustExist->SetValue((wxFLP_DEFAULT_STYLE & wxFLP_FILE_MUST_EXIST) != 0);
     m_chkFileChangeDir->SetValue((wxFLP_DEFAULT_STYLE & wxFLP_CHANGE_DIR) != 0);
+
+    UpdateFilePickerMode();
 #endif
 
 #if wxUSE_DIRPICKERCTRL
@@ -513,6 +539,23 @@ void PickerWidgetsPage::Reset()
     m_chkFontUseFontForLabel->SetValue((wxFNTP_DEFAULT_STYLE & wxFNTP_USEFONT_FOR_LABEL) != 0);
     m_chkFontDescAsLabel->SetValue((wxFNTP_DEFAULT_STYLE & wxFNTP_FONTDESC_AS_LABEL) != 0);
 #endif
+}
+
+void PickerWidgetsPage::UpdateFilePickerMode()
+{
+    switch (m_radioFilePickerMode->GetSelection())
+    {
+    case FilePickerMode_Open:
+        m_chkFileOverwritePrompt->SetValue(false);
+        m_chkFileOverwritePrompt->Disable();
+        m_chkFileMustExist->Enable();
+        break;
+    case FilePickerMode_Save:
+        m_chkFileMustExist->SetValue(false);
+        m_chkFileMustExist->Disable();
+        m_chkFileOverwritePrompt->Enable();
+        break;
+    }
 }
 
 
@@ -577,6 +620,12 @@ void PickerWidgetsPage::OnCheckBox(wxCommandEvent &event)
         event.GetEventObject() == m_chkFontDescAsLabel ||
         event.GetEventObject() == m_chkFontUseFontForLabel)
         RecreatePicker(Picker_Font);
+
+    if (event.GetEventObject() == m_radioFilePickerMode)
+    {
+        UpdateFilePickerMode();
+        RecreatePicker(Picker_File);
+    }
 }
 
 #endif  // wxUSE_COLOURPICKERCTRL || wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL || wxUSE_FONTPICKERCTRL
