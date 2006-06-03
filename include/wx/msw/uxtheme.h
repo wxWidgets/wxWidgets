@@ -202,13 +202,12 @@ private:
 class wxUxThemeHandle
 {
 public:
-    wxUxThemeHandle(wxWindow *win, const wchar_t *classes)
+    wxUxThemeHandle(const wxWindow *win, const wchar_t *classes)
     {
         wxUxThemeEngine *engine = wxUxThemeEngine::Get();
 
-        m_hTheme =
-            engine ? (HTHEME)engine->OpenThemeData((HWND) win->GetHWND(), classes)
-                   : NULL;
+        m_hTheme = engine ? (HTHEME)engine->OpenThemeData(GetHwndOf(win), classes)
+                          : NULL;
     }
 
     operator HTHEME() const { return m_hTheme; }
