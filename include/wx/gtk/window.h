@@ -215,6 +215,7 @@ public:
     GtkRange* m_scrollBar[2];
     // horizontal/vertical scroll position
     double m_scrollPos[2];
+    bool m_blockValueChanged[2];
 
     // extra (wxGTK-specific) flags
     bool                 m_needParent:1;        // ! wxFrame, wxDialog, wxNotebookPage ?

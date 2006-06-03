@@ -2107,9 +2107,12 @@ gtk_scrollbar_value_changed(GtkRange* range, wxWindow* win)
         // Convert scroll event type to scrollwin event type
         eventType += wxEVT_SCROLLWIN_TOP - wxEVT_SCROLL_TOP;
         const int orient = range == win->m_scrollBar[0] ? wxHORIZONTAL : wxVERTICAL;
+        const int i = orient == wxVERTICAL;
         wxScrollWinEvent event(eventType, win->GetScrollPos(orient), orient);
         event.SetEventObject(win);
+        win->m_blockValueChanged[i] = true;
         win->GetEventHandler()->ProcessEvent(event);
+        win->m_blockValueChanged[i] = false;
     }
 }
 }
@@ -2153,7 +2156,9 @@ gtk_scrollbar_button_release_event(GtkRange* range, GdkEventButton*, wxWindow* w
         const int orient = range == win->m_scrollBar[0] ? wxHORIZONTAL : wxVERTICAL;
         wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBRELEASE, win->GetScrollPos(orient), orient);
         event.SetEventObject(win);
-        win->GetEventHandler()->ProcessEvent(event);
+        // To allow setting scroll position from event handler, sending event must
+        // be deferred until after the GtkRange handler for this signal has run
+        win->GetEventHandler()->AddPendingEvent(event);
     }
 
     return false;
@@ -2462,6 +2467,8 @@ void wxWindowGTK::Init()
     m_scrollBar[1] = NULL;
     m_scrollPos[0] =
     m_scrollPos[1] = 0;
+    m_blockValueChanged[0] =
+    m_blockValueChanged[1] = false;
 
     m_oldClientWidth =
     m_oldClientHeight = 0;
@@ -4085,18 +4092,18 @@ void wxWindowGTK::SetScrollbar( int orient, int pos, int thumbVisible,
         thumbVisible = 1;
     }
 
+    if (pos > range - thumbVisible)
+        pos = range - thumbVisible;
+    if (pos < 0)
+        pos = 0;
     const int i = orient == wxVERTICAL;
     GtkAdjustment* adj = m_scrollBar[i]->adjustment;
-    adj->value = pos;
     adj->step_increment = 1;
     adj->page_increment =
     adj->page_size = thumbVisible;
-
-    BlockScrollEvent();
-    // automatically clamps value to [0,range-page_size], and emits change events
-    gtk_range_set_range(m_scrollBar[i], 0, range);
-    UnblockScrollEvent();
-    m_scrollPos[i] = adj->value;
+    adj->upper = range;
+    SetScrollPos(orient, pos);
+    gtk_adjustment_changed(adj);
 }
 
 void wxWindowGTK::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
@@ -4109,10 +4116,19 @@ void wxWindowGTK::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
     if (GetScrollPos(orient) != pos)
     {
         const int i = orient == wxVERTICAL;
-        BlockScrollEvent();
-        gtk_range_set_value(m_scrollBar[i], pos);
-        UnblockScrollEvent();
-        m_scrollPos[i] = m_scrollBar[i]->adjustment->value;
+        GtkAdjustment* adj = m_scrollBar[i]->adjustment;
+        const int max = int(adj->upper - adj->page_size);
+        if (pos > max)
+            pos = max;
+        if (pos < 0)
+            pos = 0;
+        m_scrollPos[i] =
+        adj->value = pos;
+        // If a "value_changed" signal emission is not already in progress
+        if (!m_blockValueChanged[i])
+        {
+            gtk_adjustment_value_changed(adj);
+        }
     }
 }
 
@@ -4169,7 +4185,7 @@ wxEventType wxWindowGTK::GetScrollEventType(GtkRange* range)
     // update current position
     m_scrollPos[barIndex] = adj->value;
     // If event should be ignored, or integral position has not changed
-    if (!m_hasVMT || g_blockEventsOnDrag || m_blockScrollEvent || value == int(oldPos + 0.5))
+    if (!m_hasVMT || g_blockEventsOnDrag || value == int(oldPos + 0.5))
     {
         return wxEVT_NULL;
     }
