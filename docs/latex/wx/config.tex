@@ -88,8 +88,10 @@ one (especially because creating a wxFileConfig object might be a time
 consuming operation). In this case, you may create this global config object
 in the very start of the program and {\it Set()} it as the default. Then, from
 anywhere in your program, you may access it using the {\it Get()} function.
-Note that you must delete this object (usually in \helpref{wxApp::OnExit}{wxapponexit}) 
-in order to avoid memory leaks, wxWidgets won't do it automatically.
+This global wxConfig object will be deleted by wxWidgets automatically if it
+exists. Note that this implies that if you do delete this object yourself
+(usually in \helpref{wxApp::OnExit}{wxapponexit}) you must use {\it Set(NULL)}
+to prevent wxWidgets from deleting it the second time.
 
 As it happens, you may even further simplify the procedure described above:
 you may forget about calling {\it Set()}. When {\it Get()} is called and there
