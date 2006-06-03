@@ -13,7 +13,6 @@
 #define _WX_FILEDIRPICKER_H_
 
 #include "wx/button.h"
-#include "wx/filename.h"
 #include "wx/filedlg.h"
 #include "wx/dirdlg.h"
 
@@ -136,12 +135,14 @@ public:     // overrideable
         return p;
     }
 
+    wxEventType GetEventType() const
+        { return wxEVT_COMMAND_FILEPICKER_CHANGED; }
+
+protected:
     void UpdateDialogPath(wxDialog *p)
         { wxStaticCast(p, wxFileDialog)->SetPath(m_path); }
     void UpdatePathFromDialog(wxDialog *p)
         { m_path = wxStaticCast(p, wxFileDialog)->GetPath(); }
-    wxEventType GetEventType() const
-        { return wxEVT_COMMAND_FILEPICKER_CHANGED; }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGenericFileButton)
@@ -193,12 +194,14 @@ public:     // overrideable
                                    GetDialogStyle());
     }
 
+    wxEventType GetEventType() const
+        { return wxEVT_COMMAND_DIRPICKER_CHANGED; }
+
+protected:
     void UpdateDialogPath(wxDialog *p)
         { wxStaticCast(p, wxDirDialog)->SetPath(m_path); }
     void UpdatePathFromDialog(wxDialog *p)
         { m_path = wxStaticCast(p, wxDirDialog)->GetPath(); }
-    wxEventType GetEventType() const
-        { return wxEVT_COMMAND_DIRPICKER_CHANGED; }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGenericDirButton)

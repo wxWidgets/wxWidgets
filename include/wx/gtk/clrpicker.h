@@ -52,8 +52,8 @@ public:     // overrides
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxColourPickerWidgetNameStr);
 
+protected:
     void UpdateColour();
-
 
 public:     // used by the GTK callback only
 

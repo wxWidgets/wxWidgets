@@ -51,6 +51,7 @@ public:     // overrides
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxFontPickerWidgetNameStr);
 
+protected:
     void UpdateFont();
 
 

@@ -17,7 +17,6 @@
 
 #if wxUSE_FONTPICKERCTRL
 
-#include "wx/control.h"
 #include "wx/pickerbase.h"
 
 
@@ -156,11 +155,11 @@ public:        // internal functions
     virtual wxString Font2String(const wxFont &font);
     virtual wxFont String2Font(const wxString &font);
 
+protected:
+
     // extracts the style for our picker from wxFontPickerCtrl's style
     long GetPickerStyle(long style) const
         { return (style & (wxFNTP_FONTDESC_AS_LABEL|wxFNTP_USEFONT_FOR_LABEL)); }
-
-protected:
 
     // true if the next UpdateTextCtrl() call is to ignore
     bool m_bIgnoreNextTextCtrlUpdate;

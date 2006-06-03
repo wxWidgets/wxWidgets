@@ -24,19 +24,14 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/window.h"
-#endif //WX_PRECOMP
+#if wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
 #include "wx/filepicker.h"
-#include "wx/filedlg.h"
 
 
 // ============================================================================
 // implementation
 // ============================================================================
-
-#if wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericFileButton, wxButton)
 IMPLEMENT_DYNAMIC_CLASS(wxGenericDirButton, wxButton)

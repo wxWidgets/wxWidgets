@@ -24,19 +24,16 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/window.h"
-#endif //WX_PRECOMP
+#if wxUSE_FONTPICKERCTRL
 
 #include "wx/fontpicker.h"
+
 #include "wx/fontdlg.h"
 
 
 // ============================================================================
 // implementation
 // ============================================================================
-
-#if wxUSE_FONTPICKERCTRL
 
 wxFontData wxGenericFontButton::ms_data;
 IMPLEMENT_DYNAMIC_CLASS(wxGenericFontButton, wxButton)

@@ -17,7 +17,6 @@
 
 #if wxUSE_COLOURPICKERCTRL
 
-#include "wx/control.h"
 #include "wx/pickerbase.h"
 
 
@@ -137,10 +136,9 @@ public:        // internal functions
     // event handler for our picker
     void OnColourChange(wxColourPickerEvent &);
 
+protected:
     virtual long GetPickerStyle(long style) const
         { return (style & wxCLRP_SHOW_LABEL); }
-
-protected:
 
     // true if the next UpdateTextCtrl() call is to ignore
     bool m_bIgnoreNextTextCtrlUpdate;

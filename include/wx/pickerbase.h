@@ -12,9 +12,11 @@
 #ifndef _WX_PICKERBASE_H_BASE_
 #define _WX_PICKERBASE_H_BASE_
 
-#include "wx/defs.h"
-#include "wx/button.h"
-#include "wx/textctrl.h"
+#include "wx/control.h"
+
+class WXDLLIMPEXP_CORE wxTextCtrl;
+
+extern WXDLLEXPORT_DATA(const wxChar) wxButtonNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxPickerBase is the base class for the picker controls which support
@@ -70,6 +72,7 @@ public:     // wxWindow overrides
                         int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
                         int incW = wxDefaultCoord, int incH = wxDefaultCoord );
 
+protected:
     void DoSetSize(int x, int y,
                    int width, int height,
                    int sizeFlags = wxSIZE_AUTO);

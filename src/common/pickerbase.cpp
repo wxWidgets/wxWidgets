@@ -26,6 +26,7 @@
 
 #include "wx/pickerbase.h"
 
+#include "wx/textctrl.h"
 
 // ============================================================================
 // implementation

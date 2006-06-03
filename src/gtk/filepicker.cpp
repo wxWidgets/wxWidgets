@@ -21,13 +21,8 @@
 
 #include "wx/filepicker.h"
 
-#include "wx/gtk/private.h"
+#include "wx/tooltip.h"
 
-#if wxUSE_TOOLTIPS
-    #include "wx/tooltip.h"
-#endif
-
-#include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
 #include <unistd.h> // chdir

@@ -14,15 +14,12 @@
 
 #include "wx/defs.h"
 
-
 #if wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
-#include "wx/control.h"
 #include "wx/pickerbase.h"
-#include "wx/filedlg.h"
 #include "wx/filename.h"
 
-
+class WXDLLIMPEXP_CORE wxDialog;
 class WXDLLIMPEXP_CORE wxFileDirPickerEvent;
 
 extern WXDLLEXPORT_DATA(const wxChar) wxFilePickerWidgetLabel[];
@@ -220,13 +217,6 @@ public:     // overrides
         return true;
     }
 
-    // extracts the style for our picker from wxFileDirPickerCtrlBase's style
-    long GetPickerStyle(long style) const
-    {
-        return (style & (wxFLP_OPEN|wxFLP_SAVE|wxFLP_OVERWRITE_PROMPT|
-                            wxFLP_FILE_MUST_EXIST|wxFLP_CHANGE_DIR));
-    }
-
     bool CheckPath(const wxString &path) const
     {
         return HasFlag(wxFLP_SAVE) || wxFileName::FileExists(path);
@@ -237,6 +227,14 @@ public:     // overrides
 
     wxEventType GetEventType() const
         { return wxEVT_COMMAND_FILEPICKER_CHANGED; }
+
+protected:
+    // extracts the style for our picker from wxFileDirPickerCtrlBase's style
+    long GetPickerStyle(long style) const
+    {
+        return (style & (wxFLP_OPEN|wxFLP_SAVE|wxFLP_OVERWRITE_PROMPT|
+                            wxFLP_FILE_MUST_EXIST|wxFLP_CHANGE_DIR));
+    }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxFilePickerCtrl)
@@ -299,10 +297,6 @@ public:     // overrides
         return true;
     }
 
-    // extracts the style for our picker from wxFileDirPickerCtrlBase's style
-    long GetPickerStyle(long style) const
-        { return (style & (wxDIRP_DIR_MUST_EXIST|wxDIRP_CHANGE_DIR)); }
-
     bool CheckPath(const wxString &path) const
         { if (HasFlag(wxDIRP_DIR_MUST_EXIST)) return wxFileName::DirExists(path); else return true; }
 
@@ -311,6 +305,11 @@ public:     // overrides
 
     wxEventType GetEventType() const
         { return wxEVT_COMMAND_DIRPICKER_CHANGED; }
+
+protected:
+    // extracts the style for our picker from wxFileDirPickerCtrlBase's style
+    long GetPickerStyle(long style) const
+        { return (style & (wxDIRP_DIR_MUST_EXIST|wxDIRP_CHANGE_DIR)); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDirPickerCtrl)

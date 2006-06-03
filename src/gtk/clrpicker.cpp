@@ -21,9 +21,6 @@
 
 #include "wx/clrpicker.h"
 
-#include "wx/gtk/private.h"
-
-#include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
 // ============================================================================

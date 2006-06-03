@@ -24,19 +24,16 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/window.h"
-#endif //WX_PRECOMP
+#if wxUSE_COLOURPICKERCTRL
 
 #include "wx/clrpicker.h"
+
 #include "wx/colordlg.h"
 
 
 // ============================================================================
 // implementation
 // ============================================================================
-
-#if wxUSE_COLOURPICKERCTRL
 
 wxColourData wxGenericColourButton::ms_data;
 IMPLEMENT_DYNAMIC_CLASS(wxGenericColourButton, wxButton)
