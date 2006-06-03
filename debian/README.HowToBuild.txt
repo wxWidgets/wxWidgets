@@ -4,7 +4,7 @@ How to build the Debian wx packages
 This file is currently just a brain dump of my experiences with
 building the Debian wx packages, based on various experimentations,
 and Googling around.  Please don't take anything said here as
-autoritative or written in stone.  Although I've been able to get
+authoritative or written in stone.  Although I've been able to get
 things to work fairly reliably, I still feel pretty clueless about
 some things.
 
@@ -12,12 +12,12 @@ some things.
 Overview
 --------
 
-Contrary to how RPM and other pacakging systems work, building Debian
+Contrary to how RPM and other packaging systems work, building Debian
 packages is done with an expanded source tree instead of using a
 tarball.  Inside the toplevel of the source tree you'll find a subdir
 named debian, and within this dir are various files used by the build.
 The most important of these are the control file and the rules file.
-The control file specifies the metadata about each pacakge, such as
+The control file specifies the metadata about each package, such as
 name, description, dependencies, etc.  Interestingly, the version
 number of the current build is not in the control file as might be
 expected, but is instead taken from the changelog file.  I guess this
@@ -38,7 +38,7 @@ considering changing how it finds this value for 2.7 so, for example,
 the debian packages could also be build from the wxPython source
 tarball...)  Second, since the build tools use the current source dir
 for creating the source package, you'll probably want to start with a
-clean source tree that has had uneccessary things removed from it.
+clean source tree that has had unnecessary things removed from it.
 There is a Makefile target that will create a minimized and clean
 source tree for you, and will name it as debian/rules expects.  To use
 it go to a build dir where you've already run configure, and then run:
@@ -53,7 +53,7 @@ the current source tree.
 Environment
 -----------
 
-The various dpkg helper tools will use some environtment settings to
+The various dpkg helper tools will use some environment settings to
 provide default values.  I have these set:
 
        DEBFULLNAME='Robin Dunn'
@@ -66,10 +66,10 @@ matching gnupg key) then the packages will be digitally signed when
 they are built.
 
 If you are building packages that you intend to be installable on
-machines other than your own, then I recoomend that you either have a
-separte machine with a minimal OS install, or set up a chroot
+machines other than your own, then I recommend that you either have a
+separate machine with a minimal OS install, or set up a chroot
 environment and do the builds there.  The reason for this is to
-minimize unexepcted extra dependencies that the built packages will
+minimize unexpected extra dependencies that the built packages will
 have because of extra things you have installed on your desktop
 system, for example OpenGL libs installed by your video card drivers.
 Using a chroot will also allow you to build packages for different
@@ -78,8 +78,8 @@ description of setting up a chroot environment here:
 
        https://wiki.ubuntu.com/DebootstrapChroot
 
-In addition to the base system pacakges, you'll need to install in
-the chroot environment any pacakges needed for bulding wxWidgets
+In addition to the base system packages, you'll need to install in
+the chroot environment any packages needed for building wxWidgets
 (compilers, make, autoconf, gtk and image libs, lib-dev's, python,
 python-dev, etc.)  as well as the packages listed in the next section.
 
@@ -87,7 +87,7 @@ python-dev, etc.)  as well as the packages listed in the next section.
 Build Packages
 --------------
 
-There are a number of helper pacakges that are used when building
+There are a number of helper packages that are used when building
 debian packages.  Here are some that I have in my chroot, there may be
 some others that I am not seeing at the moment:
 
@@ -111,7 +111,7 @@ making packages for yourself, then doing the build on in your main
 desktop environment would  be okay.)  The first step is to chdir to
 the top level of this source tree.
 
-If you havn't already you'll want to edit debian/changelog to make an
+If you haven't already you'll want to edit debian/changelog to make an
 entry for the current build.  If the version number is changing since
 the last build then you'll need a whole new section.  If you are just
 updating something in the same version then you can just get by with
@@ -123,7 +123,7 @@ workspace if appropriate.
 
 Our debian/control file is generated from debian/control.in, so you
 can force it to be created now by running the following.  You may want
-to do this to verify its contents before proceding with the build.
+to do this to verify its contents before proceeding with the build.
 
        ./debian/rules debian/control
 
@@ -140,7 +140,7 @@ To clean up from prior builds you can do this:
 
        fakeroot ./debian/rules clean
 
-And to automate the entire process (build, binaries, source pacakges,
+And to automate the entire process (build, binaries, source packages,
 digital signing, etc.) you can do this:
 
        dpkg-buildpackage -rfakeroot
