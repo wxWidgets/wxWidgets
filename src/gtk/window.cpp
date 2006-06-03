@@ -249,7 +249,7 @@ static guint32 gs_timeLastClick = 0;
 extern bool g_mainThreadLocked;
 
 bool g_mouseButtonDown;
-bool g_blockScrollEvent;
+bool gs_blockValueChanged;
 
 //-----------------------------------------------------------------------------
 // debug
@@ -2353,51 +2353,6 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     return FALSE;
 }
-}
-
-static inline bool IsScrollIncrement(double increment, double x)
-{
-    wxASSERT(increment > 0);
-    const double tolerance = 1.0 / 1024;
-    return fabs(increment - fabs(x)) < tolerance;
-}
-
-void wxWindowGTK::HandleScrollEvent(GtkAdjustment* adj)
-{
-    wxASSERT(adj == m_hAdjust || adj == m_vAdjust);
-    float* oldPos = adj == m_hAdjust ? &m_oldHorizontalPos : &m_oldVerticalPos;
-    const double posPrev = *oldPos;
-    *oldPos = float(adj->value);
-    const int pos = int(adj->value + 0.5);
-
-    if (g_blockEventsOnDrag || !m_hasVMT || g_blockScrollEvent || pos == int(posPrev + 0.5))
-        return;
-
-    wxEventType eventType = wxEVT_SCROLLWIN_THUMBTRACK;
-    if (!m_isScrolling)
-    {
-        // Difference from last change event
-        const double diff = adj->value - posPrev;
-        const bool isDown = diff > 0;
-
-        if (IsScrollIncrement(adj->step_increment, diff))
-        {
-            eventType = isDown ? wxEVT_SCROLLWIN_LINEDOWN : wxEVT_SCROLLWIN_LINEUP;
-        }
-        else if (IsScrollIncrement(adj->page_increment, diff))
-        {
-            eventType = isDown ? wxEVT_SCROLLWIN_PAGEDOWN : wxEVT_SCROLLWIN_PAGEUP;
-        }
-        else if (g_mouseButtonDown)
-        {
-            // Assume track event
-            m_isScrolling = true;
-        }
-    }
-    const int orient = adj == m_hAdjust ? wxHORIZONTAL : wxVERTICAL;
-    wxScrollWinEvent event(eventType, pos, orient);
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------
@@ -4724,16 +4679,51 @@ bool wxWindowGTK::IsRetained() const
     return false;
 }
 
-static inline void BlockScrollEvent()
+static inline bool IsScrollIncrement(double increment, double x)
 {
-    wxASSERT(!g_blockScrollEvent);
-    g_blockScrollEvent = true;
+    wxASSERT(increment > 0);
+    const double tolerance = 1.0 / 1024;
+    return fabs(increment - fabs(x)) < tolerance;
 }
 
-static inline void UnblockScrollEvent()
+void wxWindowGTK::HandleScrollEvent(GtkAdjustment* adj)
 {
-    wxASSERT(g_blockScrollEvent);
-    g_blockScrollEvent = false;
+    wxASSERT(adj == m_hAdjust || adj == m_vAdjust);
+    float* oldPos = adj == m_hAdjust ? &m_oldHorizontalPos : &m_oldVerticalPos;
+    const double posPrev = *oldPos;
+    *oldPos = float(adj->value);
+    const int pos = int(adj->value + 0.5);
+
+    if (g_blockEventsOnDrag || !m_hasVMT || pos == int(posPrev + 0.5))
+        return;
+
+    wxEventType eventType = wxEVT_SCROLLWIN_THUMBTRACK;
+    if (!m_isScrolling)
+    {
+        // Difference from last change event
+        const double diff = adj->value - posPrev;
+        const bool isDown = diff > 0;
+
+        if (IsScrollIncrement(adj->step_increment, diff))
+        {
+            eventType = isDown ? wxEVT_SCROLLWIN_LINEDOWN : wxEVT_SCROLLWIN_LINEUP;
+        }
+        else if (IsScrollIncrement(adj->page_increment, diff))
+        {
+            eventType = isDown ? wxEVT_SCROLLWIN_PAGEDOWN : wxEVT_SCROLLWIN_PAGEUP;
+        }
+        else if (g_mouseButtonDown)
+        {
+            // Assume track event
+            m_isScrolling = true;
+        }
+    }
+    const int orient = adj == m_hAdjust ? wxHORIZONTAL : wxVERTICAL;
+    wxScrollWinEvent event(eventType, pos, orient);
+    event.SetEventObject(this);
+    gs_blockValueChanged = true;
+    GetEventHandler()->ProcessEvent(event);
+    gs_blockValueChanged = false;
 }
 
 void wxWindowGTK::SetScrollbar( int orient, int pos, int thumbVisible,
@@ -4750,17 +4740,12 @@ void wxWindowGTK::SetScrollbar( int orient, int pos, int thumbVisible,
     if (pos < 0)
         pos = 0;
     GtkAdjustment* adj = orient == wxHORIZONTAL ? m_hAdjust : m_vAdjust;
-    adj->value = pos;
-    adj->lower = 0;
-    adj->upper = range;
     adj->step_increment = 1;
     adj->page_increment =
     adj->page_size = thumbVisible;
-
-    BlockScrollEvent();
-    gtk_adjustment_value_changed(adj);
+    adj->upper = range;
+    SetScrollPos(orient, pos);
     gtk_adjustment_changed(adj);
-    UnblockScrollEvent();
 }
 
 void wxWindowGTK::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
@@ -4772,15 +4757,20 @@ void wxWindowGTK::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
     if (GetScrollPos(orient) != pos)
     {
         GtkAdjustment* adj = orient == wxHORIZONTAL ? m_hAdjust : m_vAdjust;
+        const int max = int(adj->upper - adj->page_size);
+        if (pos > max)
+            pos = max;
+        if (pos < 0)
+            pos = 0;
+        float* oldPos = orient == wxHORIZONTAL ? &m_oldHorizontalPos : &m_oldVerticalPos;
+        *oldPos = pos;
         adj->value = pos;
-        if (adj->value > adj->upper - adj->page_size)
-            adj->value = adj->upper - adj->page_size;
-        if (adj->value < 0)
-            adj->value = 0;
 
-        BlockScrollEvent();
-        gtk_adjustment_value_changed(adj);
-        UnblockScrollEvent();
+        // If a "value_changed" signal emission is not already in progress
+        if (!gs_blockValueChanged)
+        {
+            gtk_adjustment_value_changed(adj);
+        }
     }
 }
 
