@@ -2397,19 +2397,7 @@ void wxArrayString::assign(const_iterator first, const_iterator last)
 #if wxUSE_THREADS
   // need a critical section to protect access to gs_compareFunction and
   // gs_sortAscending variables
-  static wxCriticalSection *gs_critsectStringSort = NULL;
-
-  // call this before the value of the global sort vars is changed/after
-  // you're finished with them
-  #define START_SORT()     wxASSERT( !gs_critsectStringSort );                \
-                           gs_critsectStringSort = new wxCriticalSection;     \
-                           gs_critsectStringSort->Enter()
-  #define END_SORT()       gs_critsectStringSort->Leave();                    \
-                           delete gs_critsectStringSort;                      \
-                           gs_critsectStringSort = NULL
-#else // !threads
-  #define START_SORT()
-  #define END_SORT()
+  static wxCriticalSection gs_critsectStringSort;
 #endif // wxUSE_THREADS
 
 // function to use for string comparaison
@@ -2440,7 +2428,7 @@ wxStringCompareFunction(const void *first, const void *second)
 // sort array elements using passed comparaison function
 void wxArrayString::Sort(CompareFunction compareFunction)
 {
-  START_SORT();
+  wxCRIT_SECT_LOCKER(lockCmpFunc, gs_critsectStringSort);
 
   wxASSERT( !gs_compareFunction );  // must have been reset to NULL
   gs_compareFunction = compareFunction;
@@ -2449,8 +2437,6 @@ void wxArrayString::Sort(CompareFunction compareFunction)
 
   // reset it to NULL so that Sort(bool) will work the next time
   gs_compareFunction = NULL;
-
-  END_SORT();
 }
 
 extern "C"
