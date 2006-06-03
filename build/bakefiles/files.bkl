@@ -2068,6 +2068,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     src/generic/tabg.cpp
+    src/generic/clrpickerg.cpp
+    src/generic/fontpickerg.cpp
+    src/generic/filepickerg.cpp
 </set>
 
 <!-- Header files like wx/mac/foo.h which include wx/mac/carbon/foo.h -->
@@ -2244,6 +2247,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/listctrl.h
     wx/generic/statusbr.h
     wx/generic/tabg.h
+    wx/generic/clrpickerg.h
+    wx/generic/filepickerg.h
+    wx/generic/fontpickerg.h
     <!-- wxWebKit headers -->
     wx/html/webkit.h
 </set>
