@@ -5598,23 +5598,26 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
         switch ( m_cursorMode )
         {
             case WXGRID_CURSOR_RESIZE_COL:
-            {
                 DoEndDragResizeCol();
 
                 // Note: we are ending the event *after* doing
                 // default processing in this case
                 //
                 SendEvent( wxEVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event );
-            }
-            break;
+                break;
 
             case WXGRID_CURSOR_MOVE_COL:
-            {
                 DoEndDragMoveCol();
 
                 SendEvent( wxEVT_GRID_COL_MOVE, -1, m_dragRowOrCol, event );
-            }
-            break;
+                break;
+
+            case WXGRID_CURSOR_SELECT_COL:
+            case WXGRID_CURSOR_SELECT_CELL:
+            case WXGRID_CURSOR_RESIZE_ROW:
+            case WXGRID_CURSOR_SELECT_ROW:
+                // nothing to do (?)
+                break;
         }
 
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_colLabelWin);
