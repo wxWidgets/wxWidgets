@@ -144,8 +144,14 @@ bool wxIcon::LoadFile(const wxString& filename,
 
     if ( !handler )
     {
-        // say something?
-        return false;
+        // load via wxBitmap which, in turn, uses wxImage allowing us to
+        // support more formats
+        wxBitmap bmp;
+        if ( !bmp.LoadFile(filename, type) )
+            return false;
+
+        CopyFromBitmap(bmp);
+        return true;
     }
 
     return handler->Load(this, filename, type, desiredWidth, desiredHeight);
