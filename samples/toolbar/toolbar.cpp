@@ -502,9 +502,9 @@ MyFrame::MyFrame(wxFrame* parent,
     tbarMenu->AppendSeparator();
     tbarMenu->Append(IDM_TOOLBAR_CHANGE_TOOLTIP, _T("Change tool tip"), wxEmptyString);
     tbarMenu->AppendSeparator();
-    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_TEXT, _T("Show &text\tAlt-T"));
-    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_ICONS, _T("Show &icons\tAlt-I"));
-    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_BOTH, _T("Show &both\tAlt-B"));
+    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_TEXT, _T("Show &text\tCtrl-Alt-T"));
+    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_ICONS, _T("Show &icons\tCtrl-Alt-I"));
+    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_BOTH, _T("Show &both\tCtrl-Alt-B"));
 
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append(wxID_EXIT, _T("E&xit\tAlt-X"), _T("Quit toolbar sample") );
