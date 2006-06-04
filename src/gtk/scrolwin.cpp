@@ -532,21 +532,23 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
 {
     wxASSERT_MSG( m_targetWindow != 0, _T("No target window") );
 
-    DoScroll(wxHORIZONTAL, x_pos, m_xScrollPosition, m_xScrollPixelsPerLine);
-    DoScroll(wxVERTICAL, y_pos, m_yScrollPosition, m_yScrollPixelsPerLine);
+    DoScroll(wxHORIZONTAL, x_pos, &m_xScrollPosition, m_xScrollPixelsPerLine);
+    DoScroll(wxVERTICAL, y_pos, &m_yScrollPosition, m_yScrollPixelsPerLine);
 }
 
-void wxScrolledWindow::DoScroll(int orient, int pos, int posOld, int pixelsPerLine)
+void wxScrolledWindow::DoScroll(int orient, int pos, int* posOld, int pixelsPerLine)
 {
-    if (pos != -1 && pos != posOld && pixelsPerLine > 0)
+    if (pos != -1 && pos != *posOld && pixelsPerLine > 0)
     {
         SetScrollPos(orient, pos);
         pos = GetScrollPos(orient);
 
-        const int diff = (posOld - pos) * pixelsPerLine;
+        const int diff = (*posOld - pos) * pixelsPerLine;
         m_targetWindow->ScrollWindow(
             orient == wxHORIZONTAL ? diff : 0,
             orient == wxHORIZONTAL ? 0 : diff);
+
+        *posOld = pos;
     }
 }
 

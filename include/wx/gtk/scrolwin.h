@@ -184,7 +184,7 @@ protected:
     double                m_scaleY,m_scaleX;
 
 private:
-    void DoScroll(int orient, int pos, int posOld, int pixelsPerLine);
+    void DoScroll(int orient, int pos, int* posOld, int pixelsPerLine);
     void DoAdjustScrollbars(GtkAdjustment* adj,
                             int pixelsPerLine,
                             int winSize,
