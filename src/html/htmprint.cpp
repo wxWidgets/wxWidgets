@@ -440,7 +440,7 @@ wxString wxHtmlPrintout::TranslateHeader(const wxString& instr, int page)
     num.Printf(wxT("%i"), page);
     r.Replace(wxT("@PAGENUM@"), num);
 
-    num.Printf(wxT("%i"), m_PageBreaks.Count()-1);
+    num.Printf(wxT("%lu"), m_PageBreaks.Count()-1);
     r.Replace(wxT("@PAGESCNT@"), num);
 
     return r;
