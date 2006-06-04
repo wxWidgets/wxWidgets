@@ -92,7 +92,7 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkRange* range,
     //   with a page size of 1. This will also clamp position to 0.
     int upper = 1;
     int page_size = 1;
-    if (pixelsPerLine > 0 && winSize < virtSize)
+    if (pixelsPerLine > 0 && winSize > 0 && winSize < virtSize)
     {
         upper = (virtSize + pixelsPerLine - 1) / pixelsPerLine;
         page_size = winSize / pixelsPerLine;
