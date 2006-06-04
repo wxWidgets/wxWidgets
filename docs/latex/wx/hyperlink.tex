@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Name:        hyperlink.tex
-%% Purpose:     wxHyperLink documentation
+%% Purpose:     wxHyperlinkCtrl documentation
 %% Author:      Otto Wyss
 %% Modified by: Francesco Montorsi
 %% Created:     25.4.2004
@@ -9,7 +9,7 @@
 %% License:     wxWindows
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{\class{wxHyperLinkCtrl}}\label{wxhyperlinkctrl}
+\section{\class{wxHyperlinkCtrl}}\label{wxhyperlinkctrl}
 
 This class shows a static text element which links to an URL.
 Appearance and behaviour is completely customizable. In fact, when the user clicks on the hyperlink, a \helpref{wxHyperlinkEvent}{wxhyperlinkctrlevent} is sent but if that event is not handled (or it's skipped; see \helpref{wxEvent::Skip}{wxeventskip}), then a call to \helpref{wxLaunchDefaultBrowser}{wxlaunchdefaultbrowser} is done with the hyperlink's URL.
@@ -56,14 +56,14 @@ functions that take a \helpref{wxHyperlinkEvent}{wxhyperlinkctrlevent} argument.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxHyperLinkCtrl::wxHyperLink}\label{wxhyperlinkctrlctor}
+\membersection{wxHyperlinkCtrl::wxHyperLink}\label{wxhyperlinkctrlctor}
 
 \func{}{wxHyperLink}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id}, \param{const wxString \&}{ label}, \param{const wxString \&}{ url}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style}, \param{const wxString\& }{name = ``hyperlink"}}
 
 Constructor. See \helpref{Create}{wxhyperlinkctrlcreate} for more info.
 
 
-\membersection{wxHyperLinkCtrl::Create}\label{wxhyperlinkctrlcreate}
+\membersection{wxHyperlinkCtrl::Create}\label{wxhyperlinkctrlcreate}
 
 \func{}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id = wxID\_ANY} \param{const wxString \&}{ label}, \param{const wxString \&}{ url}, \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},\param{long}{ style}, \param{const wxString\& }{name = ``hyperlink"}}
 
@@ -91,21 +91,21 @@ appropriately.}
 \docparam{name}{Window name.}
 
 
-\membersection{wxHyperLinkCtrl::GetHoverColour}\label{wxhyperlinkctrlgethovercolour}
+\membersection{wxHyperlinkCtrl::GetHoverColour}\label{wxhyperlinkctrlgethovercolour}
 
 \constfunc{wxColour}{GetHoverColour}{\void}
 
 Returns the colour used to print the label of the hyperlink when the mouse is over the control.
 
 
-\membersection{wxHyperLinkCtrl::SetHoverColour}\label{wxhyperlinkctrlsethovercolour}
+\membersection{wxHyperlinkCtrl::SetHoverColour}\label{wxhyperlinkctrlsethovercolour}
 
 \func{void}{SetHoverColour}{\param{const wxColour \&}{ colour}}
 
 Sets the colour used to print the label of the hyperlink when the mouse is over the control.
 
 
-\membersection{wxHyperLinkCtrl::GetNormalColour}\label{wxhyperlinkctrlgetnormalcolour}
+\membersection{wxHyperlinkCtrl::GetNormalColour}\label{wxhyperlinkctrlgetnormalcolour}
 
 \constfunc{wxColour}{GetNormalColour}{\void}
 
@@ -113,7 +113,7 @@ Returns the colour used to print the label when the link has never been clicked 
 (i.e. the link has not been {\it visited}) and the mouse is not over the control.
 
 
-\membersection{wxHyperLinkCtrl::SetNormalColour}\label{wxhyperlinkctrlsetnormalcolour}
+\membersection{wxHyperlinkCtrl::SetNormalColour}\label{wxhyperlinkctrlsetnormalcolour}
 
 \func{void}{SetNormalColour}{\param{const wxColour \&}{ colour}}
 
@@ -121,7 +121,7 @@ Sets the colour used to print the label when the link has never been clicked bef
 (i.e. the link has not been {\it visited}) and the mouse is not over the control.
 
 
-\membersection{wxHyperLinkCtrl::GetVisitedColour}\label{wxhyperlinkctrlgetvisitedcolour}
+\membersection{wxHyperlinkCtrl::GetVisitedColour}\label{wxhyperlinkctrlgetvisitedcolour}
 
 \constfunc{wxColour}{GetVisitedColour}{\void}
 
@@ -129,7 +129,7 @@ Returns the colour used to print the label when the mouse is not over the contro
 and the link has already been clicked before (i.e. the link has been {\it visited}).
 
 
-\membersection{wxHyperLinkCtrl::SetVisitedColour}\label{wxhyperlinkctrlsetvisitedcolour}
+\membersection{wxHyperlinkCtrl::SetVisitedColour}\label{wxhyperlinkctrlsetvisitedcolour}
 
 \func{void}{SetVisitedColour}{\param{const wxColour \&}{ colour}}
 
@@ -137,28 +137,28 @@ Sets the colour used to print the label when the mouse is not over the control
 and the link has already been clicked before (i.e. the link has been {\it visited}).
 
 
-\membersection{wxHyperLinkCtrl::GetVisited}\label{wxhyperlinkctrlgetvisited}
+\membersection{wxHyperlinkCtrl::GetVisited}\label{wxhyperlinkctrlgetvisited}
 
 \constfunc{bool}{GetVisited}{\void}
 
 Returns \true if the hyperlink has already been clicked by the user at least one time.
 
 
-\membersection{wxHyperLinkCtrl::SetVisited}\label{wxhyperlinkctrlsetvisited}
+\membersection{wxHyperlinkCtrl::SetVisited}\label{wxhyperlinkctrlsetvisited}
 
 \func{void}{SetVisited}{\param{bool}{ visited = true}}
 
 Marks the hyperlink as visited (see \helpref{SetVisitedColour}{wxhyperlinkctrlsetvisitedcolour}).
 
 
-\membersection{wxHyperLinkCtrl::GetURL}\label{wxhyperlinkctrlgeturl}
+\membersection{wxHyperlinkCtrl::GetURL}\label{wxhyperlinkctrlgeturl}
 
 \constfunc{wxString}{GetURL}{\void}
 
 Returns the URL associated with the hyperlink.
 
 
-\membersection{wxHyperLinkCtrl::SetURL}\label{wxhyperlinkctrlseturl}
+\membersection{wxHyperlinkCtrl::SetURL}\label{wxhyperlinkctrlseturl}
 
 \func{void}{SetURL}{\param{const wxString \&}{ url}}
 
