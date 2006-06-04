@@ -20,23 +20,6 @@
 # Extra^2 debug mode, for if things ever get really weird.
 [ -z "$WXDEBUG_X" ] || set -x
 
-# We expect a posix shell, so if this is a Bourne shell,
-# and apparently a few still exist, try for bash or ksh.
-
-if [ ~ = '~' ]
-then
-    if (bash -c echo) >/dev/null 2>&1
-    then
-        exec bash "$0" "$@"
-    fi
-    if (ksh -c echo) >/dev/null 2>&1
-    then
-        exec ksh "$0" "$@"
-    fi
-    echo "$0: this script requires bash or ksh"
-    exit 1
-fi
- 
 
 # On with some basic stuff, like the ability to die gracefully,
 # and to tell people what we are about.
@@ -157,15 +140,14 @@ wxconfig_flag_options="$wxconfig_yesno_options selected_config no_rpath inplace"
 # Returns NAME if _string is of the form: --NAME[=...]
 option_name()
 {
-    _option_name_temp=${1%%=*}
-    echo ${_option_name_temp#--} | tr '-' '_'
+    echo "$1" | sed 's/^--//;s/=.*//' | tr '-' '_'
 }
 
 # option_value _string
 # Returns FOO if _string is of the form: --option=FOO
 option_value()
 {
-    echo "${1#*=}"
+    echo "$1" | sed 's/^[^=]*=//'
 }
 
 # match_field _value _list
@@ -174,7 +156,7 @@ match_field()
 {
     _match_field_match="$1"
     shift
-    for _match_field_i; do
+    for _match_field_i do
         [ "x$_match_field_i" != "x$_match_field_match" ] || return 0
     done
     false
@@ -188,7 +170,7 @@ remove_field()
     _remf_list=''
     shift
     if [ -n "$_remf_value" ]; then
-        for _remf_item; do
+        for _remf_item do
             [ "x$_remf_item" = "x$_remf_value" ] ||
                 _remf_list="${_remf_list:+$_remf_list }$_remf_item"
         done
@@ -215,7 +197,7 @@ remove_field()
 # with the one liners you see on the page below.
 validate_arg()
 {
-    if match_field "$3" $(eval echo \"\$$1_$2_options\"); then
+    if match_field "$3" `eval echo \"\\\$$1_$2_options\"`; then
         eval "$2_options=\"\${$2_options:+\$$2_options }$3\""
         eval "$2_option_$3=\"$4\""
         return
@@ -260,15 +242,15 @@ check_yesno_option()
 # at this point, otherwise, it's time to just shut up and listen for
 # a moment.
 
-for arg; do
+for arg do
   case "$arg" in
     --help|-h)
         usage
         ;;
 
     --*=*)
-        _name=$(option_name $arg)
-        _value=$(option_value $arg)
+        _name=`option_name $arg`
+        _value=`option_value $arg`
         if validate_arg wxconfig input "$_name" "$_value" ||
            validate_arg wxconfig yesno "$_name" "$_value"
         then
@@ -277,7 +259,7 @@ for arg; do
         ;;
 
     --*)
-        _name=$(option_name $arg)
+        _name=`option_name $arg`
         if validate_arg wxconfig flag   "$_name" yes ||
            validate_arg wxconfig output "$_name" yes
         then
@@ -312,19 +294,19 @@ if [ -n "$WXDEBUG" ]; then
     decho "  input parameters  = $input_parameters"
     decho "  input options     = $input_options"
     for i in $input_options; do
-        decho "    $i = $(eval echo \"\$input_option_$i\")"
+        decho "    $i = `eval echo \"\\\$input_option_$i\"`"
     done
     decho "  yes/no options    = $yesno_options"
     for y in $yesno_options; do
-        decho "    $y = $(eval echo \"\$yesno_option_$y\")"
+        decho "    $y = `eval echo \"\\\$yesno_option_$y\"`"
     done
     decho "  flag options      = $flag_options"
     for f in $flag_options; do
-        decho "    $f = $(eval echo \"\$flag_option_$f\")"
+        decho "    $f = `eval echo \"\\\$flag_option_$f\"`"
     done
     decho "  output options    = $output_options"
     for o in $output_options; do
-        decho "    $o = $(eval echo \"\$output_option_$o\")"
+        decho "    $o = `eval echo \"\\\$output_option_$o\"`"
     done
 
 fi
@@ -355,7 +337,7 @@ prefix=${input_option_prefix-${this_prefix:-@prefix@}}
 exec_prefix=${input_option_exec_prefix-${input_option_prefix-${this_exec_prefix:-@exec_prefix@}}}
 wxconfdir="@libdir@/wx/config"
 
-installed_configs=$( cd "$wxconfdir" 2> /dev/null && ls | grep -v "^inplace-" )
+installed_configs=`cd "$wxconfdir" 2> /dev/null && ls | grep -v "^inplace-"`
 
 is_cross && target="@host_alias@"
 
@@ -368,23 +350,23 @@ this_chartype="@WX_CHARTYPE@"
 this_debugtype="@WX_DEBUGTYPE@"
 this_flavour="@WX_FLAVOUR@"
 this_version="@WX_RELEASE@"
-this_linkage=$( [ "x@SHARED@" = "x1" ] || echo '-static' )
+this_linkage=`[ "x@SHARED@" = "x1" ] || echo '-static'`
 
-this_config=$(get_mask this)
+this_config=`get_mask this`
 
 # Extract the user specification from the options parsed.
-m_host=${input_option_host:+${input_option_host}-?}
+m_host=${input_option_host:+"${input_option_host}-?"}
 m_host=${m_host:-${input_option_host-$this_host}}
-m_toolkit=${input_option_toolkit:-[^-]+}
-m_widgetset=${input_option_widgetset-(univ)?}
-m_chartype=${input_option_chartype:-(unicode|ansi)}
-m_debugtype=${input_option_debugtype:-(debug|release)}
+m_toolkit=${input_option_toolkit:-'[^-]+'}
+m_widgetset=${input_option_widgetset-'(univ)?'}
+m_chartype=${input_option_chartype:-'(unicode|ansi)'}
+m_debugtype=${input_option_debugtype:-'(debug|release)'}
 m_flavour=${input_option_flavour:+-$input_option_flavour}
-m_flavour=${m_flavour:-${input_option_flavour-(-[^-]+)?}}
-m_version=${input_option_version:-[0-9]+\.[0-9]+}
-m_linkage=${input_option_linkage-(-static)?}
+m_flavour=${m_flavour:-${input_option_flavour-'(-[^-]+)?'}}
+m_version=${input_option_version:-'[0-9]+\.[0-9]+'}
+m_linkage=${input_option_linkage-'(-static)?'}
 
-configmask="^$(get_mask)$"
+configmask="^`get_mask`$"
 
 
 # Dump the user specification in debug mode.
@@ -469,11 +451,15 @@ count_fields()      { return $#; }
 
 # count_delegates _mask
 # Return the number of eligible config files that match _mask
-count_delegates()   { count_fields $(find_eligible_delegates $1); }
+count_delegates()   { count_fields `find_eligible_delegates $1`; }
 
 # is_set _variablename
 # Returns true if $_variablename is initialised.
-is_set()            { [ "x$(eval echo \"\${$1-unset}\")" != "xunset" ]; }
+is_set()            { [ "x`eval echo \"\\\${$1-unset}\"`" != "xunset" ]; }
+
+# not _cmd _args...
+# true iff _cmd is false
+not()               { if "$@"; then false; else true; fi }
 
 # do_find_best_delegate _unbound-options
 # The real worker part of find_best_delegate below.  Recurses though all
@@ -506,22 +492,22 @@ do_find_best_delegate()
         decho "  $_fbd_indent---> unbound options: $*"
     fi
 
-    for i; do
+    for i do
 
         if [ "x$WXDEBUG" = "xverbose" ]; then
-            decho "  ${_fbd_indent}binding '$i' with '$(remove_field $i $*)' still free"
+            decho "  ${_fbd_indent}binding '$i' with '`remove_field $i $*`' still free"
             [ -z "$_pruned" ] || decho "  ${_fbd_indent}  --- pruned: $_pruned ---"
         fi
 
         if (
             eval m_$i=\$this_$i
-            _mask="^$(get_mask)$"
+            _mask="^`get_mask`$"
 
             if [ "x$WXDEBUG" = "xverbose" ]; then
                 decho "  ${_fbd_indent}  checking: $_mask"
                 count_delegates "$_mask"
                 decho "  $_fbd_indent  $? eligible delegates"
-                for d in $(find_eligible_delegates "$_mask"); do
+                for d in `find_eligible_delegates "$_mask"`; do
                     decho "  ${_fbd_indent}    $d"
                 done
             fi 
@@ -530,14 +516,14 @@ do_find_best_delegate()
             _still_eligible=$?
 
             if [ $_still_eligible -eq 1 ]; then
-                echo $(find_eligible_delegates "$_mask")
+                echo `find_eligible_delegates "$_mask"`
                 return
             fi
 
             [ "x$WXDEBUG" != "xfindprogress" ] || printf "." 1>&2
 
             [ $_still_eligible -gt 1 ] && [ $# -gt 1 ] &&
-                do_find_best_delegate $(remove_field $i $*)
+                do_find_best_delegate `remove_field $i $*`
            )
         then
 
@@ -549,7 +535,7 @@ do_find_best_delegate()
                 decho "  ${_fbd_indent}pruning: $i"
                 _pruned="${_pruned:+$_pruned }$i"
             fi
-            set $(remove_field $i $*)
+            set `remove_field $i $*`
 
         fi
 
@@ -603,9 +589,9 @@ find_legacy_configs()
 # This assumes no matching new style config has been found.
 find_best_legacy_config()
 {
-    _legacy_configs=$(find_legacy_configs)
+    _legacy_configs=`find_legacy_configs`
     if [ -n "$_legacy_configs" ]; then
-        _legacy_mask=$(get_legacy_mask)
+        _legacy_mask=`get_legacy_mask`
         for d in $_legacy_configs; do
             if echo $d | $EGREP $_legacy_mask > /dev/null 2>&1 ; then
                 echo "$d"
@@ -632,8 +618,8 @@ config_spec="$0 $*"
 if [ -n "$output_option_list" ]; then
 
     _remains_in_prefix=$installed_configs
-    _delegates=$(find_eligible_delegates $configmask)
-    _best_delegate=$(find_best_delegate)
+    _delegates=`find_eligible_delegates $configmask`
+    _best_delegate=`find_best_delegate`
 
     if [ "x$WXDEBUG" = "xverbose" ]; then
         decho
@@ -644,7 +630,7 @@ if [ -n "$output_option_list" ]; then
     fi
 
     for d in $_delegates; do
-        _remains_in_prefix=$(remove_field $d $_remains_in_prefix)
+        _remains_in_prefix=`remove_field $d $_remains_in_prefix`
     done
 
     echo
@@ -656,7 +642,7 @@ if [ -n "$output_option_list" ]; then
         echo "  Default config ${this_exec_prefix+in $this_exec_prefix }will be used for output"
 
         if match_field "$this_config" $_delegates ; then
-            _delegates=$(remove_field $this_config $_delegates)
+            _delegates=`remove_field $this_config $_delegates`
         else
             echo "  though it is not installed in: $prefix"
             if [ -n "$_best_delegate" ] && [ "x$_best_delegate" != "x$this_config" ]; then
@@ -672,7 +658,7 @@ if [ -n "$output_option_list" ]; then
 
     elif [ -z "$_delegates" ]; then
 
-        _last_chance=$(find_best_legacy_config)
+        _last_chance=`find_best_legacy_config`
         if [ -n "$_last_chance" ]; then
 
             echo "  Specification matches legacy config: $_last_chance"
@@ -696,7 +682,7 @@ if [ -n "$output_option_list" ]; then
         echo " to choose between alternate matches."
     fi
 
-    _delegates=$(remove_field "$_best_delegate" $_delegates)
+    _delegates=`remove_field "$_best_delegate" $_delegates`
 
     if [ -n "$_delegates" ]; then
         echo
@@ -713,12 +699,12 @@ if [ -n "$output_option_list" ]; then
         done
     fi
 
-    _legacy_configs=$(find_legacy_configs)
+    _legacy_configs=`find_legacy_configs`
     if [ -n "$_legacy_configs" ]; then
         echo
         echo "  Legacy configs available in $prefix:"
         for d in $_legacy_configs; do
-            echo "    ${d%-config}"
+            echo "    $d" | sed 's/-config$//'
         done
     fi
 
@@ -732,7 +718,7 @@ fi
 # certain, can this config satisfy the user specification?
 # --------------------------------------------------------------
 
-if ! user_mask_fits "$this_config" ; then
+if not user_mask_fits "$this_config" ; then
 
     # No?  Then lets see if it knows anybody who can.
     # But first, just be sure someone hasn't typo'd us into a loop.
@@ -757,17 +743,17 @@ if ! user_mask_fits "$this_config" ; then
     if [ -n "$WXDEBUG" ]; then
         decho "  must delegate to an alternate config"
         decho "  potential delegates ($_numdelegates):"
-        for i in $(find_eligible_delegates "$configmask"); do
+        for i in `find_eligible_delegates "$configmask"`; do
             decho "    $i"
         done
     fi
 
     if [ $_numdelegates -eq 0 ]; then
 
-        _last_chance=$(find_best_legacy_config)
+        _last_chance=`find_best_legacy_config`
         if [ -n "$_last_chance" ]; then
 
-            for arg; do
+            for arg do
                 case "$arg" in
                     --prefix*|--exec-prefix*|               \
                     --version|--release|--basename|         \
@@ -819,7 +805,7 @@ if ! user_mask_fits "$this_config" ; then
 
         [ -z "$WXDEBUG" ] || decho "  must prune the list of eligible delegates"
 
-        best_delegate=$(find_best_delegate)
+        best_delegate=`find_best_delegate`
 
         if [ -n "$best_delegate" ]; then
             
@@ -837,7 +823,7 @@ if ! user_mask_fits "$this_config" ; then
         decho " *** Error: Specification is ambiguous"
         decho "            as $config_spec"
         decho " Use additional feature options to choose between:"
-        for i in $(find_eligible_delegates "$configmask"); do
+        for i in `find_eligible_delegates "$configmask"`; do
             decho "  $i"
         done
         decho
@@ -847,11 +833,11 @@ if ! user_mask_fits "$this_config" ; then
 
     if [ -n "$WXDEBUG" ]; then
         decho "  using the only suitable delegate"
-        decho "--> $wxconfdir/$(find_eligible_delegates $configmask) $*"
+        decho "--> $wxconfdir/`find_eligible_delegates $configmask` $*"
     fi
 
     export WXCONFIG_DELEGATED=yes
-    $wxconfdir/$(find_eligible_delegates $configmask) $*
+    $wxconfdir/`find_eligible_delegates $configmask` $*
     exit
 fi
 
@@ -920,7 +906,7 @@ if [ -n "$input_option_utility" ]; then
     # like the libs, but work with what we've got for now.
     is_cross || _util="$exec_prefix/utils/$input_option_utility/$input_option_utility"
 
-    if ! is_installed && [ -x "$_util" ]; then
+    if not is_installed && [ -x "$_util" ]; then
         is_static || _preload="eval LD_LIBRARY_PATH=$exec_prefix/lib"
         echo $_preload $_util
         exit
@@ -979,7 +965,7 @@ lib_flags_for()
 
     is_cross && _target="-${target}"
 
-    for lib; do
+    for lib do
 
         # We evidently can't trust people not to duplicate things in
         # configure, or to keep them in any sort of sane order overall,
@@ -997,7 +983,7 @@ lib_flags_for()
         # for sloppy work elsewhere though and @GUI_TK_LIBRARY should
         # be fixed.
 
-        for f in $(eval echo \"\$ldflags_$lib\"); do
+        for f in `eval echo \"\\\$ldflags_$lib\"`; do
             match_field "$f" $_all_ldflags || _all_ldflags="$_all_ldflags $f"
         done
 
@@ -1011,7 +997,7 @@ lib_flags_for()
 
         if is_static; then
             _wxlibs="$_wxlibs ${libdir}/lib${_libname}.a"
-            for f in $(eval echo \"\$ldlibs_$lib\"); do
+            for f in `eval echo \"\\\$ldlibs_$lib\"`; do
 
                 # Only propagate duplicate -libraries to their latest
                 # possible position.  Do not eliminate any other
@@ -1023,7 +1009,7 @@ lib_flags_for()
                 # We should maybe filter *.a here too, but not unless
                 # we have to.
                 case "$f" in
-                  -l*)  _all_libs="$(remove_field $f $_all_libs) $f"    ;;
+                  -l*)  _all_libs="`remove_field $f $_all_libs` $f"     ;;
                     *)  _all_libs="$_all_libs $f"                       ;;
                 esac
 
@@ -1059,7 +1045,7 @@ link_deps_for()
 
     is_cross && _target="-${target}"
 
-    for lib; do
+    for lib do
         if match_field "$lib" @CORE_BASE_LIBS@ ; then
             _libname="@WX_LIBRARY_BASENAME_NOGUI@"
         else
@@ -1077,7 +1063,7 @@ link_deps_for()
 # Sanity check the list of libs the user provided us, if any.
 # --------------------------------------------------------------
 
-wx_libs=$(echo "$input_parameters" | tr ',' ' ')
+wx_libs=`echo "$input_parameters" | tr ',' ' '`
 
 [ -z "$WXDEBUG" ] || decho "  user supplied libs: '$wx_libs'"
 
@@ -1085,10 +1071,10 @@ if is_monolithic; then
 
     # Core libs are already built into the blob.
     for i in std @CORE_GUI_LIBS@ @CORE_BASE_LIBS@; do
-        wx_libs=$(remove_field $i $wx_libs)
+        wx_libs=`remove_field $i $wx_libs`
     done
 
-    wx_libs="@WXCONFIG_LDFLAGS_GUI@ $(lib_flags_for $wx_libs)"
+    wx_libs="@WXCONFIG_LDFLAGS_GUI@ `lib_flags_for $wx_libs`"
 
     # We still need the core lib deps for a static build though
     if is_static; then
@@ -1108,11 +1094,11 @@ else    # MONOLITHIC = 0
     elif match_field std $wx_libs; then
         # Bubble any libs that were already specified to the end
         # of the list and ensure static linking order is retained.
-        wx_libs=$(remove_field std $wx_libs)
+        wx_libs=`remove_field std $wx_libs`
         for i in @CORE_GUI_LIBS@ @CORE_BASE_LIBS@; do
-            wx_libs="$(remove_field $i $wx_libs) $i"
+            wx_libs="`remove_field $i $wx_libs` $i"
         done
-    elif ! match_field base $wx_libs ; then
+    elif not match_field base $wx_libs ; then
         wx_libs="$wx_libs base"
     fi
 
@@ -1127,9 +1113,9 @@ else    # MONOLITHIC = 0
     done
 
     if is_static; then
-        link_deps=$(link_deps_for $wx_libs)
+        link_deps=`link_deps_for $wx_libs`
     fi
-    wx_libs="$_guildflags $(lib_flags_for $wx_libs)"
+    wx_libs="$_guildflags `lib_flags_for $wx_libs`"
 fi
 
 
@@ -1152,13 +1138,13 @@ else
     _include_cppflags="-I${includedir} -I${prefix}/contrib/include"
 fi
 
-_cppflags=$(echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@" $_include_cppflags "@WXCONFIG_CPPFLAGS@" $_gui_cppflags)  
+_cppflags=`echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@" $_include_cppflags "@WXCONFIG_CPPFLAGS@" $_gui_cppflags`
 
 # now without further ado, we can answer these too.
 [ -z "$output_option_cppflags" ] || echo $_cppflags
 [ -z "$output_option_cflags"   ] || echo $_cppflags "@WXCONFIG_CFLAGS@"
 [ -z "$output_option_cxxflags" ] || echo $_cppflags "@WXCONFIG_CXXFLAGS@"
-[ -z "$output_option_gl_libs"  ] || echo $(lib_flags_for gl)
+[ -z "$output_option_gl_libs"  ] || echo `lib_flags_for gl`
 [ -z "$output_option_linkdeps" ] || echo $link_deps
 
 if [ -n "$output_option_libs" ]; then
