@@ -864,7 +864,6 @@ class XML_Tree(wx.TreeCtrl):
             inf = sys.exc_info()
             wx.LogError(traceback.format_exception(inf[0], inf[1], None)[-1])
             wx.LogError('Error writing temporary file')
-            if debug: raise            
         memFile.close()                 # write to wxMemoryFS
         xmlFlags = xrc.XRC_NO_SUBCLASSING
         # Use translations if encoding is not specified
