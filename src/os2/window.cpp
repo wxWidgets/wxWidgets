@@ -2401,9 +2401,6 @@ MRESULT wxWindowOS2::OS2WindowProc( WXUINT uMsg,
         case WM_BUTTON3MOTIONEND:
         case WM_BUTTON3MOTIONSTART:
             {
-                if (uMsg == WM_BUTTON1DOWN && AcceptsFocus())
-                    SetFocus();
-
                 short               nX = LOWORD(wParam);
                 short               nY = HIWORD(wParam);
 
