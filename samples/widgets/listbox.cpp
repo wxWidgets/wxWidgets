@@ -142,7 +142,13 @@ protected:
                *m_chkOwnerDraw;
 
     // the listbox itself and the sizer it is in
-    wxListBoxBase *m_lbox;
+#ifdef __WXWINCE__
+    wxListBoxBase
+#else
+    wxListBox 
+#endif
+                  *m_lbox;
+
     wxSizer *m_sizerLbox;
 
     // the text entries for "Add/change string" and "Delete" buttons
@@ -216,7 +222,7 @@ ListboxWidgetsPage::ListboxWidgetsPage(WidgetsBookCtrl *book,
     m_chkSort =
     m_chkOwnerDraw = (wxCheckBox *)NULL;
 
-    m_lbox = (wxListBoxBase *)NULL;
+    m_lbox = NULL;
     m_sizerLbox = (wxSizer *)NULL;
 
     /*
