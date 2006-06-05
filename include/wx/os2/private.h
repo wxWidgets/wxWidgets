@@ -19,6 +19,7 @@
 #define INCL_GPI
 #define INCL_WINSYS
 #define INCL_SHLERRORS
+#define INCL_GPIERRORS
 #define INCL_DOS
 #define INCL_WINATOM
 #define INCL_WIN
