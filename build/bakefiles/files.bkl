@@ -1115,10 +1115,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="GTK1_SRC" hints="files">
     <!-- Generic implementations used by wxGTK1: -->
     src/generic/accel.cpp
+    src/generic/clrpickerg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/filedlgg.cpp
+    src/generic/filepickerg.cpp
+    src/generic/fontpickerg.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/msgdlgg.cpp
@@ -1161,9 +1164,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk1/utilsres.cpp
 </set>
 <set var="GTK1_HDR" hints="files">
+    wx/generic/clrpickerg.h
     wx/generic/colrdlgg.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
+    wx/generic/filepickerg.h
+    wx/generic/fontpickerg.h
     wx/generic/listctrl.h
     wx/generic/statusbr.h
     wx/generic/tabg.h
@@ -1503,8 +1509,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="MSW_SRC" hints="files">
     src/generic/clrpickerg.cpp
-    src/generic/fontpickerg.cpp
     src/generic/filepickerg.cpp
+    src/generic/fontpickerg.cpp
     src/generic/statusbr.cpp
     src/generic/prntdlgg.cpp
     src/msw/accel.cpp
@@ -2062,15 +2068,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/window.cpp
     <!-- Generic implementations used by wxMac: -->
     src/generic/caret.cpp
+    src/generic/clrpickerg.cpp
     src/generic/fdrepdlg.cpp
+    src/generic/filepickerg.cpp
     src/generic/fontdlgg.cpp
+    src/generic/fontpickerg.cpp
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     src/generic/tabg.cpp
-    src/generic/clrpickerg.cpp
-    src/generic/fontpickerg.cpp
-    src/generic/filepickerg.cpp
 </set>
 
 <!-- Header files like wx/mac/foo.h which include wx/mac/carbon/foo.h -->
@@ -2242,14 +2248,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/carbon/window.h
     <!-- Generic implementations used by wxMac: -->
     wx/generic/caret.h
+    wx/generic/clrpickerg.h
     wx/generic/fdrepdlg.h
+    wx/generic/filepickerg.h
     wx/generic/fontdlgg.h
+    wx/generic/fontpickerg.h
     wx/generic/listctrl.h
     wx/generic/statusbr.h
     wx/generic/tabg.h
-    wx/generic/clrpickerg.h
-    wx/generic/filepickerg.h
-    wx/generic/fontpickerg.h
     <!-- wxWebKit headers -->
     wx/html/webkit.h
 </set>
