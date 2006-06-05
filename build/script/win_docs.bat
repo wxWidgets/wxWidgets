@@ -70,8 +70,8 @@ zip %DAILY%\wx-docs-extra-pdf.ZIP *.pdf -x wx.pdf
 
 
 echo setting S
-rem echo yes > net use t: /delete
-rem net use t: \\biolpc22\bake 
+echo yes > net use s: /delete
+net use s: \\biolpc22\bake 
 
 copy %DAILY%\*.ZIP s:\bkl-cronjob\archives\win
 copy %DAILY%\*.exe s:\bkl-cronjob\archives\win\*.EXE
