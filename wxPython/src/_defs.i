@@ -490,6 +490,8 @@ enum {
     wxCLIP_CHILDREN,
     wxCLIP_SIBLINGS,
 
+    wxWINDOW_STYLE_MASK,
+    
     wxALWAYS_SHOW_SB,
     
     wxRETAINED,
