@@ -30,7 +30,7 @@ executable when running setup.py, like this:
 
 swig-1.3.29.patch
 
-    SWIG changed how the import statments are output to the proxy
+    SWIG changed how the import statements are output to the proxy
     file, but this also caused the order to change (they all moved to
     the very top of the file) so this broke the module docstring, as
     well as some behavior that Chandler development is depending upon,
@@ -54,7 +54,7 @@ swig-1.3.27.patch
     uncovered a bug in the implementation, so this patch includes the
     fix that was checked in to CVS for 1.3.28.
 
-    SWIG changed how the import statments are output to the proxy
+    SWIG changed how the import statements are output to the proxy
     file, but this also caused the order to change (they all moved to
     the very top of the file) so this broke the module docstring, as
     well as some behavior that Chandler development is depending upon,
@@ -74,7 +74,7 @@ swig-1.3.24.patch (now obsolete)
     the code generator to use a reference to the object instead of
     making a copy.
 
-    Part of my autodoc patch was disabled becuase a unit-test failed.
+    Part of my autodoc patch was disabled because a unit-test failed.
     It turns out that the failure was due to a name clash in the unit
     test itself, so I re-enabled that section of code in this patch.
 
@@ -110,7 +110,7 @@ swig.python-2.patch
 
 ------------------------------------------------------------------------
 This patch was applied to SWIG's CVS on 07/12/2004 and is in the
-1.3.22 relese.
+1.3.22 release.
 ------------------------------------------------------------------------
 
 swig.xmlout.patch            Fixes a couple problems in the XML output
