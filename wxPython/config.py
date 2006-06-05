@@ -271,7 +271,8 @@ for flag in [ 'BUILD_ACTIVEX', 'BUILD_ANIMATE', 'BUILD_DLLWIDGET',
 
 # String options
 for option in ['WX_CONFIG', 'SYS_WX_CONFIG', 'WXDLLVER', 'BUILD_BASE',
-               'WXPORT', 'SWIG', 'CONTRIBS_INC', 'WXPY_SRC', 'FLAVOUR', 
+               'WXPORT', 'SWIG', 'CONTRIBS_INC', 'WXPY_SRC', 'FLAVOUR',
+               'VER_FLAGS',
                ]:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(option) == 0:
