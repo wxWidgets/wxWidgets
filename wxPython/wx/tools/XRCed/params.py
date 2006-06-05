@@ -630,7 +630,7 @@ class ParamContent(PPanel):
     def GetValue(self):
         if self.textModified:           # text has newer value
             try:
-                return eval(self.text.GetValue())
+                return self.text.GetValue().split('|')
             except SyntaxError:
                 wx.LogError('Syntax error in parameter value: ' + self.GetName())
                 return []
@@ -639,15 +639,12 @@ class ParamContent(PPanel):
         self.freeze = True
         if not value: value = []
         self.value = value
-        self.text.SetValue(str(value))  # update text ctrl
+        repr_ = reduce(lambda a,b: '%s|%s' % (a,b), value)
+        self.text.SetValue(repr_)  # update text ctrl
         self.freeze = False
     def OnButtonEdit(self, evt):
         if self.textModified:           # text has newer value
-            try:
-                self.value = eval(self.text.GetValue())
-            except SyntaxError:
-                wx.LogError('Syntax error in parameter value: ' + self.GetName())
-                self.value = []
+            self.value = self.GetValue()
         dlg = ContentDialog(self, self.value)
         if dlg.ShowModal() == wx.ID_OK:
             value = []
@@ -664,11 +661,7 @@ class ParamContentCheckList(ParamContent):
         ParamContent.__init__(self, parent, name)
     def OnButtonEdit(self, evt):
         if self.textModified:           # text has newer value
-            try:
-                self.value = eval(self.text.GetValue())
-            except SyntaxError:
-                wx.LogError('Syntax error in parameter value: ' + self.GetName())
-                self.value = []
+            self.value = self.GetValue()
         dlg = ContentCheckListDialog(self, self.value)
         if dlg.ShowModal() == wx.ID_OK:
             value = []

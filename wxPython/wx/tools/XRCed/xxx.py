@@ -90,7 +90,7 @@ class xxxParamContent(xxxNode):
                     text = n.childNodes[0] # first child must be text node
                     assert text.nodeType == minidom.Node.TEXT_NODE
                 l.append(text)
-                data.append(str(text.data))
+                data.append(text.data)
             else:                       # remove other
                 node.removeChild(n)
                 n.unlink()
