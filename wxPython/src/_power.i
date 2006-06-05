@@ -16,12 +16,6 @@
 %newgroup
 
 %{
-#include <wx/power.h>
-%}
-
-
-
-%{
 #ifndef wxHAS_POWER_EVENTS
 // Dummy class and other definitions for platforms that don't have them
 

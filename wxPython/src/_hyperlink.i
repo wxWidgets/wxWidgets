@@ -15,10 +15,6 @@
 
 //---------------------------------------------------------------------------
 
-%{
-#include <wx/hyperlink.h>
-%}
-
 MAKE_CONST_WXSTRING(HyperlinkCtrlNameStr);
 
 enum {

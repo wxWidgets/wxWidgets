@@ -71,7 +71,8 @@
 #include <wx/vscroll.h>
 #include <wx/dateevt.h>
 #include <wx/datectrl.h>
-
+#include <wx/power.h>
+#include <wx/hyperlink.h>
 
 
 #ifdef _MSC_VER
