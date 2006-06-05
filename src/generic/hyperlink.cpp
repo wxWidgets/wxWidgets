@@ -40,6 +40,7 @@
 #endif
 
 #include "wx/clipbrd.h"
+#include "wx/dataobj.h"
 
 // ============================================================================
 // implementation
