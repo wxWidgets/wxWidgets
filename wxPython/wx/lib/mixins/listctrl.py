@@ -424,7 +424,6 @@ class TextEditMixin:
 
 
     def make_editor(self, col_style=wx.LIST_FORMAT_LEFT):
-        editor = wx.PreTextCtrl()
         
         style =wx.TE_PROCESS_ENTER|wx.TE_PROCESS_TAB|wx.TE_RICH2
         style |= {wx.LIST_FORMAT_LEFT: wx.TE_LEFT,
@@ -432,7 +431,7 @@ class TextEditMixin:
                   wx.LIST_FORMAT_CENTRE : wx.TE_CENTRE
                   }[col_style]
         
-        editor.Create(self, -1, style=style)
+        editor = wx.TextCtrl(self, -1, style=style)
         editor.SetBackgroundColour(self.editorBgColour)
         editor.SetForegroundColour(self.editorFgColour)
         font = self.GetFont()
@@ -442,6 +441,8 @@ class TextEditMixin:
         self.curCol = 0
 
         editor.Hide()
+        if hasattr(self, 'editor'):
+            self.editor.Destroy()
         self.editor = editor
 
         self.col_style = col_style
