@@ -481,6 +481,106 @@ wxString wxPMErrorToStr(ERRORID vError)
             sError = wxT("Valid name format, but cannot find name in atom table");
             break;
 
+        case PMERR_INV_HPS:
+            sError = wxT("PMERR_INV_HPS");
+            break;
+
+        case PMERR_PS_BUSY:
+            sError = wxT("PMERR_PS_BUSY");
+            break;
+
+        case PMERR_INV_PRIMITIVE_TYPE:
+            sError = wxT("PMERR_INV_PRIMITIVE_TYPE");
+            break;
+
+        case PMERR_UNSUPPORTED_ATTR:
+            sError = wxT("PMERR_UNSUPPORTED_ATTR");
+            break;
+
+        case PMERR_INV_COLOR_ATTR:
+            sError = wxT("PMERR_INV_COLOR_ATTR");
+            break;
+
+        case PMERR_INV_BACKGROUND_COL_ATTR:
+            sError = wxT("PMERR_INV_BACKGROUND_COL_ATTR");
+            break;
+
+        case PMERR_INV_MIX_ATTR:
+            sError = wxT("PMERR_INV_MIX_ATTR");
+            break;
+
+        case PMERR_INV_LINE_WIDTH_ATTR:
+            sError = wxT("PMERR_INV_LINE_WIDTH_ATTR");
+            break;
+
+        case PMERR_INV_GEOM_LINE_WIDTH_ATTR:
+            sError = wxT("PMERR_INV_GEOM_LINE_WIDTH_ATTR");
+            break;
+
+        case PMERR_INV_LINE_TYPE_ATTR:
+            sError = wxT("PMERR_INV_LINE_TYPE_ATTR");
+            break;
+
+        case PMERR_INV_LINE_END_ATTR:
+            sError = wxT("PMERR_INV_LINE_END_ATTR");
+            break;
+
+        case PMERR_INV_LINE_JOIN_ATTR:
+            sError = wxT("PMERR_INV_LINE_JOIN_ATTR");
+            break;
+
+        case PMERR_INV_CHAR_SET_ATTR:
+            sError = wxT("PMERR_INV_CHAR_SET_ATTR");
+            break;
+
+        case PMERR_INV_CHAR_MODE_ATTR:
+            sError = wxT("PMERR_INV_CHAR_MODE_ATTR");
+            break;
+
+        case PMERR_INV_CHAR_DIRECTION_ATTR:
+            sError = wxT("PMERR_INV_CHAR_DIRECTION_ATTR");
+            break;
+
+        case PMERR_INV_CHAR_SHEAR_ATTR:
+            sError = wxT("PMERR_INV_CHAR_SHEAR_ATTR");
+            break;
+
+        case PMERR_INV_CHAR_ANGLE_ATTR:
+            sError = wxT("PMERR_INV_CHAR_ANGLE_ATTR");
+            break;
+
+        case PMERR_INV_MARKER_SET_ATTR:
+            sError = wxT("PMERR_INV_MARKER_SET_ATTR");
+            break;
+
+        case PMERR_INV_MARKER_SYMBOL_ATTR:
+            sError = wxT("PMERR_INV_MARKER_SYMBOL_ATTR");
+            break;
+
+        case PMERR_INV_PATTERN_SET_ATTR:
+            sError = wxT("PMERR_INV_PATTERN_SET_ATTR");
+            break;
+
+        case PMERR_INV_PATTERN_ATTR:
+            sError = wxT("PMERR_INV_PATTERN_ATTR");
+            break;
+
+        case PMERR_INV_COORDINATE:
+            sError = wxT("PMERR_INV_COORDINATE");
+            break;
+
+        case PMERR_UNSUPPORTED_ATTR_VALUE:
+            sError = wxT("PMERR_UNSUPPORTED_ATTR_VALUE");
+            break;
+
+        case PMERR_INV_PATTERN_SET_FONT:
+            sError = wxT("PMERR_INV_PATTERN_SET_FONT");
+            break;
+
+        case PMERR_HUGE_FONTS_NOT_SUPPORTED:
+            sError = wxT("PMERR_HUGE_FONTS_NOT_SUPPORTED");
+            break;
+
         default:
             sError = wxT("Unknown error");
     }

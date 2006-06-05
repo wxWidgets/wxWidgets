@@ -3294,7 +3294,7 @@ bool wxWindowOS2::OS2OnDrawItem( int vId,
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError(_T("Unable to set current color table. Error: %s\n"), sError.c_str());
+            wxLogError(_T("Unable to set current color table (1). Error: %s\n"), sError.c_str());
         }
         //
         // Set the color table to RGB mode
@@ -3309,7 +3309,7 @@ bool wxWindowOS2::OS2OnDrawItem( int vId,
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError(_T("Unable to set current color table. Error: %s\n"), sError.c_str());
+            wxLogError(_T("Unable to set current color table (2). Error: %s\n"), sError.c_str());
         }
 
         wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );

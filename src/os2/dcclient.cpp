@@ -139,7 +139,7 @@ wxWindowDC::wxWindowDC(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError(_T("Unable to set current color table. Error: %s\n"), sError.c_str());
+        wxLogError(_T("Unable to set current color table (3). Error: %s\n"), sError.c_str());
     }
     ::GpiCreateLogColorTable( m_hPS
                              ,0L
@@ -239,7 +239,7 @@ wxClientDC::wxClientDC(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError(_T("Unable to set current color table. Error: %s\n"), sError.c_str());
+        wxLogError(_T("Unable to set current color table (4). Error: %s\n"), sError.c_str());
     }
     ::GpiCreateLogColorTable( m_hPS
                              ,0L
