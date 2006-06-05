@@ -13,12 +13,13 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#include "wx/radiobut.h"
 
 #ifndef WX_PRECOMP
     #include <stdio.h>
-    #include "wx/radiobut.h"
     #include "wx/brush.h"
     #include "wx/dcscreen.h"
     #include "wx/settings.h"
@@ -34,27 +35,23 @@ extern void  wxAssociateWinWithHandle( HWND         hWnd
 
 void wxRadioButton::Init()
 {
-    m_bFocusJustSet = FALSE;
+    m_bFocusJustSet = false;
 } // end of wxRadioButton::Init
 
-void wxRadioButton::Command (
-  wxCommandEvent&                   rEvent
-)
+void wxRadioButton::Command ( wxCommandEvent& rEvent )
 {
     SetValue ((rEvent.GetInt() != 0) );
     ProcessCommand (rEvent);
 } // end of wxRadioButton::Command
 
-bool wxRadioButton::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxString&                   rsLabel
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, const wxValidator&                rValidator
-, const wxString&                   rsName
-)
+bool wxRadioButton::Create( wxWindow* pParent,
+                            wxWindowID vId,
+                            const wxString& rsLabel,
+                            const wxPoint& rPos,
+                            const wxSize& rSize,
+                            long lStyle,
+                            const wxValidator& rValidator,
+                            const wxString& rsName )
 {
     if ( !CreateControl( pParent
                         ,vId
@@ -63,7 +60,7 @@ bool wxRadioButton::Create(
                         ,lStyle
                         ,rValidator
                         ,rsName))
-        return FALSE;
+        return false;
 
     long                            lSstyle = WS_TABSTOP;
 
@@ -93,19 +90,15 @@ bool wxRadioButton::Create(
                           ,rsLabel
                           ,0
                          ))
-        return FALSE;
+        return false;
 
     wxAssociateWinWithHandle(m_hWnd, this);
     if (HasFlag(wxRB_GROUP))
-        SetValue(TRUE);
+        SetValue(true);
 
     SetFont(*wxSMALL_FONT);
-    SetSize( rPos.x
-            ,rPos.y
-            ,rSize.x
-            ,rSize.y
-           );
-    return TRUE;
+    SetSize( rPos.x, rPos.y, rSize.x, rSize.y );
+    return true;
 } // end of wxRadioButton::Create
 
 wxSize wxRadioButton::DoGetBestSize() const
@@ -170,7 +163,7 @@ bool wxRadioButton::OS2Command( WXUINT wParam, WXWORD WXUNUSED(wId) )
             // (presumably when another button is pressed)
             //
             if (!bIsChecked )
-                SetValue(TRUE);
+                SetValue(true);
         }
         wxCommandEvent rEvent( wxEVT_COMMAND_RADIOBUTTON_SELECTED, m_windowId );
         rEvent.SetEventObject(this);
@@ -195,17 +188,13 @@ void wxRadioButton::SetFocus()
     wxControl::SetFocus();
 }
 
-void wxRadioButton::SetLabel(
-  const wxString&                   rsLabel
-)
+void wxRadioButton::SetLabel( const wxString& rsLabel )
 {
     wxString                        sLabel = ::wxPMTextToLabel(rsLabel);
     ::WinSetWindowText((HWND)GetHWND(), (const char *)sLabel.c_str());
 } // end of wxRadioButton::SetLabel
 
-void wxRadioButton::SetValue(
-  bool                              bValue
-)
+void wxRadioButton::SetValue( bool bValue )
 {
     ::WinSendMsg((HWND)GetHWND(), BM_SETCHECK, (MPARAM)bValue, (MPARAM)0);
     if (bValue)
@@ -238,7 +227,7 @@ void wxRadioButton::SetValue(
                     //
                     break;
                 }
-                pBtn->SetValue(FALSE);
+                pBtn->SetValue(false);
                 if (pBtn->HasFlag(wxRB_GROUP))
                 {
                     //
@@ -268,7 +257,7 @@ void wxRadioButton::SetValue(
                 //
                 break;
             }
-            pBtn->SetValue(FALSE);
+            pBtn->SetValue(false);
         }
     }
 } // end of wxRadioButton::SetValue
@@ -281,14 +270,14 @@ MRESULT wxRadioButton::OS2WindowProc(
 {
     if (uMsg == WM_SETFOCUS)
     {
-        m_bFocusJustSet = TRUE;
+        m_bFocusJustSet = true;
 
         MRESULT                     mRc = wxControl::OS2WindowProc( uMsg
                                                                    ,wParam
                                                                    ,lParam
                                                                   );
 
-        m_bFocusJustSet = FALSE;
+        m_bFocusJustSet = false;
         return mRc;
     }
     return wxControl::OS2WindowProc( uMsg

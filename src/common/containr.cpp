@@ -29,13 +29,10 @@
     #include "wx/event.h"
     #include "wx/window.h"
     #include "wx/scrolbar.h"
+    #include "wx/radiobut.h"
 #endif //WX_PRECOMP
 
 #include "wx/containr.h"
-
-#ifdef __WXMSW__
-    #include "wx/radiobut.h"
-#endif
 
 // trace mask for focus messages
 #define TRACE_FOCUS _T("focus")

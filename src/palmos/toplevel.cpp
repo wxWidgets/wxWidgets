@@ -35,13 +35,13 @@
     #include "wx/containr.h"        // wxSetFocusToChild()
     #include "wx/button.h"
     #include "wx/checkbox.h"
+    #include "wx/radiobut.h"
 #endif //WX_PRECOMP
 
 #include "wx/module.h"
 #include "wx/display.h"
 
 // controls for sending select event
-#include "wx/radiobut.h"
 #include "wx/tglbtn.h"
 #include "wx/slider.h"
 #include "wx/datectrl.h"

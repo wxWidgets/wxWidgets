@@ -15,15 +15,18 @@
 
 #include "wx/radiobox.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/radiobut.h"
+#endif
+
 #include "wx/arrstr.h"
-#include "wx/radiobut.h"
 #include "wx/mac/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 
 
 BEGIN_EVENT_TABLE(wxRadioBox, wxControl)
-EVT_RADIOBUTTON( wxID_ANY , wxRadioBox::OnRadioButton )
+    EVT_RADIOBUTTON( wxID_ANY , wxRadioBox::OnRadioButton )
 END_EVENT_TABLE()
 
 

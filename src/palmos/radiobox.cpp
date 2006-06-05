@@ -33,13 +33,12 @@
     #include "wx/brush.h"
     #include "wx/settings.h"
     #include "wx/log.h"
+    #include "wx/radiobut.h"
 #endif
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
-
-#include "wx/radiobut.h"
 
 // TODO: wxCONSTRUCTOR
 #if 0 // wxUSE_EXTENDED_RTTI

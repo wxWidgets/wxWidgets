@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/radiobut.cpp
+// Name:        src/univ/radiobut.cpp
 // Purpose:     wxRadioButton implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -25,9 +25,10 @@
 
 #if wxUSE_RADIOBTN
 
+#include "wx/radiobut.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
-    #include "wx/radiobut.h"
     #include "wx/validate.h"
 #endif
 
@@ -176,4 +177,3 @@ void wxRadioButton::DoDraw(wxControlRenderer *renderer)
 }
 
 #endif // wxUSE_RADIOBTN
-

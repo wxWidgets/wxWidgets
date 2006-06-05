@@ -1,22 +1,23 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/radiobut.mm
+// Name:        src/cocoa/radiobut.mm
 // Purpose:     wxRadioButton
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/03/16
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWidgets licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #if wxUSE_RADIOBTN
 
+#include "wx/radiobut.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
-    #include "wx/radiobut.h"
 #endif //WX_PRECOMP
 
 #import <AppKit/NSButton.h>
@@ -99,13 +100,13 @@ wxRadioButton::~wxRadioButton()
         wxASSERT(slaveNode);
         wxASSERT(slaveNode->GetData() == this);
         m_radioSlaves.Erase(slaveNode);
-    
+
         // Now find the new master
         wxRadioButton *newMaster = NULL;
         slaveNode = m_radioSlaves.GetFirst();
         if(slaveNode)
             newMaster = slaveNode->GetData();
-    
+
         // For each node (including the new master) set the master, remove
         // it from this list, and add it to the new master's list
         for(; slaveNode; slaveNode = m_radioSlaves.GetFirst())

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_radbt.cpp
+// Name:        src/xrc/xh_radbt.cpp
 // Purpose:     XRC resource for wxRadioButton
 // Author:      Bob Mitchell
 // Created:     2000/03/21
@@ -18,7 +18,10 @@
 #if wxUSE_XRC && wxUSE_RADIOBTN
 
 #include "wx/xrc/xh_radbt.h"
-#include "wx/radiobut.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/radiobut.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButtonXmlHandler, wxXmlResourceHandler)
 

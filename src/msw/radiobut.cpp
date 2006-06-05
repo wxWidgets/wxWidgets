@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/radiobut.cpp
+// Name:        src/msw/radiobut.cpp
 // Purpose:     wxRadioButton
 // Author:      Julian Smart
 // Modified by:
@@ -26,8 +26,9 @@
 
 #if wxUSE_RADIOBTN
 
+#include "wx/radiobut.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/radiobut.h"
     #include "wx/settings.h"
     #include "wx/dcscreen.h"
 #endif
@@ -164,7 +165,7 @@ void wxRadioButton::SetValue(bool value)
     // buttons in the same group: Windows doesn't do it automatically
     if ( m_isChecked )
     {
-        // If another radiobutton in the group currently has the focus, we have to 
+        // If another radiobutton in the group currently has the focus, we have to
         // set it to this radiobutton, else the old readiobutton will be reselected
         // automatically, if a parent window loses the focus and regains it.
         bool shouldSetFocus = false;
@@ -189,7 +190,7 @@ void wxRadioButton::SetValue(bool value)
                     // A wxRB_SINGLE button isn't part of this group
                     break;
                 }
-                
+
                 if (btn)
                 {
                     if (btn == pFocusWnd)
@@ -314,4 +315,3 @@ wxSize wxRadioButton::DoGetBestSize() const
 }
 
 #endif // wxUSE_RADIOBTN
-
