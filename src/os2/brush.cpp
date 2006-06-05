@@ -212,8 +212,8 @@ bool wxBrush::RealizeResource()
         bOk = (bool)::GpiSetAttrs( M_BRUSHDATA->m_hBrush
                                   ,PRIM_AREA
                                   ,ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE |
-                                   ABB_SET | ABB_SYMBOL
-                                  ,ABB_REF_POINT
+                                   ABB_SET | ABB_SYMBOL | ABB_REF_POINT
+                                  ,ABB_SET | ABB_SYMBOL | ABB_REF_POINT
                                   ,&M_BRUSHDATA->m_vBundle
                                  );
         if (!bOk)
