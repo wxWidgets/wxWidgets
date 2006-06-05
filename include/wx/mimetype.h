@@ -356,8 +356,8 @@ public:
 
     virtual wxMimeTypesManagerImpl *CreateMimeTypesManagerImpl();
 
-    static void SetFactory( wxMimeTypesManagerFactory *factory );
-    static wxMimeTypesManagerFactory *GetFactory();
+    static void Set( wxMimeTypesManagerFactory *factory );
+    static wxMimeTypesManagerFactory *Get();
     
 private:
     static wxMimeTypesManagerFactory *m_factory;

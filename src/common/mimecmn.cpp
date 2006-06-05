@@ -453,28 +453,27 @@ bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
 #endif
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxMimeTypesManagerFactory
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 wxMimeTypesManagerFactory *wxMimeTypesManagerFactory::m_factory = NULL;
 
 /* static */
-void wxMimeTypesManagerFactory::SetFactory( wxMimeTypesManagerFactory *factory )
+void wxMimeTypesManagerFactory::Set(wxMimeTypesManagerFactory *factory)
 {
-    if (wxMimeTypesManagerFactory::m_factory)
-        delete wxMimeTypesManagerFactory::m_factory;
+    delete m_factory;
 
-    wxMimeTypesManagerFactory::m_factory = factory;
+    m_factory = factory;
 }
 
 /* static */
-wxMimeTypesManagerFactory *wxMimeTypesManagerFactory::GetFactory()
+wxMimeTypesManagerFactory *wxMimeTypesManagerFactory::Get()
 {
-    if (!wxMimeTypesManagerFactory::m_factory)
-        wxMimeTypesManagerFactory::m_factory = new wxMimeTypesManagerFactory;
+    if ( !m_factory )
+        m_factory = new wxMimeTypesManagerFactory;
 
-    return wxMimeTypesManagerFactory::m_factory;
+    return m_factory;
 }
 
 wxMimeTypesManagerImpl *wxMimeTypesManagerFactory::CreateMimeTypesManagerImpl()
@@ -489,7 +488,7 @@ wxMimeTypesManagerImpl *wxMimeTypesManagerFactory::CreateMimeTypesManagerImpl()
 void wxMimeTypesManager::EnsureImpl()
 {
     if ( !m_impl )
-        m_impl = wxMimeTypesManagerFactory::GetFactory()->CreateMimeTypesManagerImpl();
+        m_impl = wxMimeTypesManagerFactory::Get()->CreateMimeTypesManagerImpl();
 }
 
 bool wxMimeTypesManager::IsOfType(const wxString& mimeType,
@@ -673,10 +672,12 @@ class wxMimeTypeCmnModule: public wxModule
 {
 public:
     wxMimeTypeCmnModule() : wxModule() { }
+
     virtual bool OnInit() { return true; }
     virtual void OnExit()
     {
-        // this avoids false memory leak allerts:
+        wxMimeTypesManagerFactory::Set(NULL);
+
         if ( gs_mimeTypesManager.m_impl != NULL )
         {
             delete gs_mimeTypesManager.m_impl;
