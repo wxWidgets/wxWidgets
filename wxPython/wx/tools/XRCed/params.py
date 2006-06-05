@@ -639,7 +639,10 @@ class ParamContent(PPanel):
         self.freeze = True
         if not value: value = []
         self.value = value
-        repr_ = reduce(lambda a,b: '%s|%s' % (a,b), value)
+        if value:
+            repr_ = reduce(lambda a,b: '%s|%s' % (a,b), value)
+        else:
+            repr_ = ''
         self.text.SetValue(repr_)  # update text ctrl
         self.freeze = False
     def OnButtonEdit(self, evt):
