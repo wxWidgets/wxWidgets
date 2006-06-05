@@ -111,6 +111,14 @@ static inline wxUint32 CrackUint32(const char *m)
     return (n[3] << 24) | (n[2] << 16) | (n[1] << 8) | n[0];
 }
 
+// Decode a little endian wxUint16 number from a character array
+//
+static inline wxUint16 CrackUint16(const char *m)
+{
+    const unsigned char *n = (const unsigned char*)m;
+    return (n[1] << 8) | n[0];
+}
+
 // Temporarily lower the logging level in debug mode to avoid a warning
 // from SeekI about seeking on a stream with data written back to it.
 //
@@ -171,23 +179,23 @@ wxZipHeader::wxZipHeader(wxInputStream& stream, size_t size)
 wxUint8 wxZipHeader::Read8()
 {
     wxASSERT(m_pos < m_size);
-    return *wx_reinterpret_cast(wxUint8*, m_data + m_pos++);
+    return m_data[m_pos++];
 }
 
 wxUint16 wxZipHeader::Read16()
 {
     wxASSERT(m_pos + 2 <= m_size);
-    wxUint16 n = *wx_reinterpret_cast(wxUint16*, m_data + m_pos);
+    wxUint16 n = CrackUint16(m_data + m_pos);
     m_pos += 2;
-    return wxUINT16_SWAP_ON_BE(n);
+    return n;
 }
 
 wxUint32 wxZipHeader::Read32()
 {
     wxASSERT(m_pos + 4 <= m_size);
-    wxUint32 n = *wx_reinterpret_cast(wxUint32*, m_data + m_pos);
+    wxUint32 n = CrackUint32(m_data + m_pos);
     m_pos += 4;
-    return wxUINT32_SWAP_ON_BE(n);
+    return n;
 }
 
 
