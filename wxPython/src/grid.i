@@ -1746,7 +1746,7 @@ public:
     }
 
     int  YToRow( int y );
-    int  XToCol( int x );
+    int  XToCol( int x, bool clipToMinMax = false );
 
     int  YToEdgeOfRow( int y );
     int  XToEdgeOfCol( int x );
@@ -1829,6 +1829,9 @@ public:
     void     EnableDragColSize( bool enable = true );
     void     DisableDragColSize();
     bool     CanDragColSize();
+    void     EnableDragColMove( bool enable = true );
+    void     DisableDragColMove() { EnableDragColMove( false ); }
+    bool     CanDragColMove() { return m_canDragColMove; }
     void     EnableDragGridSize(bool enable = true);
     void     DisableDragGridSize();
     bool     CanDragGridSize();
@@ -1894,6 +1897,10 @@ public:
 
     void     SetColSize( int col, int width );
 
+    int GetColAt( int colPos ) const;
+    void SetColPos( int colID, int newPos );
+    int GetColPos( int colID ) const;
+    
     // automatically size the column or row to fit to its contents, if
     // setAsMin is True, this optimal width will also be set as minimal width
     // for this column
