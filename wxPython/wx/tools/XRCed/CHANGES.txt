@@ -1,3 +1,9 @@
+0.1.7-5
+-------
+
+Fix for non-ascii characters support when using other encodings 
+than utf-8 in 'content' property. Tested under unicode build.
+
 0.1.7-4
 -------
 
