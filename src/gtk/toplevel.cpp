@@ -556,8 +556,10 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 #endif
 
+#if 0
     if (!name.empty())
-        gtk_window_set_wmclass( GTK_WINDOW(m_widget), wxGTK_CONV( name ), wxGTK_CONV( name ) );
+        gtk_window_set_role( GTK_WINDOW(m_widget), wxGTK_CONV( name ) );
+#endif
 
     gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
