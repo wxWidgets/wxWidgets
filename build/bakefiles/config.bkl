@@ -197,6 +197,14 @@ Acts according to BUILD by default.
         </description>
     </option>
 
+    <option name="USE_AUI">
+        <values>0,1</values>
+        <default-value>1</default-value>
+        <description>
+            Build wxAUI library (USE_GUI must be 1)?
+        </description>
+    </option>
+
     <option name="USE_OPENGL">
         <values>0,1</values>
         <default-value>0</default-value>

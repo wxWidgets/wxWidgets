@@ -108,6 +108,11 @@ USE_MEDIA = 1
 USE_XRC = 1
 !endif
 
+# Build wxAUI library (USE_GUI must be 1)? [0,1]
+!ifndef USE_AUI
+USE_AUI = 1
+!endif
+
 # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
 !ifndef USE_OPENGL
 USE_OPENGL = 0

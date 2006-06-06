@@ -289,6 +289,7 @@
 #  define wxUSE_XML       0
 #endif
 
+#define wxUSE_AUI       0
 
 #define wxUSE_CONTROLS     0
 

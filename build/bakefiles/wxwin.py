@@ -40,10 +40,10 @@ def mk_wxid(id):
 
 # All libs that are part of the main library (i.e. non-contrib):
 MAIN_LIBS = ['mono', 'base', 'core', 'adv', 'html', 'xml', 'net',
-             'media', 'odbc', 'qa', 'dbgrid', 'xrc']
+             'media', 'odbc', 'qa', 'dbgrid', 'xrc', 'aui']
 # List of library names/ids for categories with different names:
 LIBS_NOGUI = ['xml', 'net', 'odbc']
-LIBS_GUI   = ['core', 'adv', 'html', 'gl', 'qa', 'dbgrid', 'xrc', 'media']
+LIBS_GUI   = ['core', 'adv', 'html', 'gl', 'qa', 'dbgrid', 'xrc', 'media', 'aui']
 # Additional libraries that must be linked in:
 EXTRALIBS = {
     'gl' : '$(EXTRALIBS_OPENGL)',

@@ -1743,6 +1743,18 @@ SOURCE=.\msw\window.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\aui\dockart.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\aui\floatpane.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\aui\framemanager.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\richtext\richtextbuffer.cpp
 # End Source File
 # Begin Source File
@@ -2104,6 +2116,22 @@ SOURCE=..\include\wx\arrstr.h
 # Begin Source File
 
 SOURCE=..\include\wx\artprov.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\aui\aui.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\aui\dockart.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\aui\floatpane.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\aui\framemanager.h
 # End Source File
 # Begin Source File
 
@@ -3987,6 +4015,10 @@ SOURCE=..\include\wx\generic\clrpicker.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\generic\clrpickerg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\generic\colrdlgg.h
 # End Source File
 # Begin Source File
@@ -4023,11 +4055,19 @@ SOURCE=..\include\wx\generic\filepicker.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\generic\filepickerg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\generic\fontdlgg.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\include\wx\generic\fontpicker.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\generic\fontpickerg.h
 # End Source File
 # Begin Source File
 

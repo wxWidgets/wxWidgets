@@ -149,6 +149,9 @@
     <set var="WXLIB_DBGRID">
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('dbgrid')))</if>
     </set>
+    <set var="WXLIB_AUI">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('aui')))</if>
+    </set>
 
     <set var="WXLIB_MONO">
         <if cond="MONOLITHIC=='1'">$(mk.evalExpr(wxwin.mkLibName('mono')))</if>

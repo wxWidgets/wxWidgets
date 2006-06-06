@@ -2992,6 +2992,22 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <!-- ====================================================================== -->
+<!--                                  wxAUI                                 -->
+<!-- ====================================================================== -->
+
+<set var="AUI_SRC" hints="files">
+    src/aui/framemanager.cpp
+    src/aui/dockart.cpp
+    src/aui/floatpane.cpp
+</set>
+<set var="AUI_HDR" hints="files">
+    wx/aui/framemanager.h
+    wx/aui/dockart.h
+    wx/aui/floatpane.h
+    wx/aui/aui.h
+</set>
+
+<!-- ====================================================================== -->
 <!--                    Define sources for specific libraries:              -->
 <!-- ====================================================================== -->
 
@@ -3221,7 +3237,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(LOWLEVEL_HDR)
             $(GUI_CORE_HEADERS)
             $(ADVANCED_HDR) $(MEDIA_HDR) $(HTML_HDR)
-            $(OPENGL_HDR) $(QA_HDR) $(DBGRID_HDR) $(XRC_HDR)
+            $(OPENGL_HDR) $(QA_HDR) $(DBGRID_HDR) $(XRC_HDR) $(AUI_HDR)
         </if>
     </set>
 

@@ -265,4 +265,27 @@
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">xrc=xrclib+xrcdll</set>
 
+    <!-- ================================================================ -->
+    <!--                            AUI                                   -->
+    <!-- ================================================================ -->
+
+    <dll id="auidll" template="wx_dll"
+         cond="SHARED=='1' and USE_AUI=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_AUI</define>
+        <sources>$(AUI_SRC)</sources>
+        <library>advdll</library>
+        <library>coredll</library>
+        <library>basedll</library>
+        <msvc-headers>$(AUI_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="auilib" template="wx_lib"
+         cond="SHARED=='0' and USE_AUI=='1' and MONOLITHIC=='0'">
+        <sources>$(AUI_SRC)</sources>
+        <msvc-headers>$(AUI_HDR)</msvc-headers>
+    </lib>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">aui=auilib+auidll</set>
+
 </makefile>
