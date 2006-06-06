@@ -34,6 +34,10 @@
     #include "wx/dcclient.h"
 #endif
 
+#ifdef __WXMAC__
+#include "wx/mac/private.h"
+#endif
+
 // -- wxDefaultDockArt class implementation --
 
 // wxDefaultDockArt is an art provider class which does all of the drawing for
