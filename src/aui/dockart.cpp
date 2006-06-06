@@ -31,6 +31,10 @@
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"
 
+#ifdef __WXMAC__
+#include "wx/mac/private.h"
+#endif
+
 #ifndef WX_PRECOMP
 //    #include "wx/log.h"
 #endif
