@@ -36,6 +36,7 @@
     #include "wx/button.h"
     #include "wx/checkbox.h"
     #include "wx/radiobut.h"
+    #include "wx/slider.h"
 #endif //WX_PRECOMP
 
 #include "wx/module.h"
@@ -43,7 +44,6 @@
 
 // controls for sending select event
 #include "wx/tglbtn.h"
-#include "wx/slider.h"
 #include "wx/datectrl.h"
 
 #include <Window.h>

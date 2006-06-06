@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_slidr.cpp
+// Name:        src/xrc/xh_slidr.cpp
 // Purpose:     XRC resource for wxSlider
 // Author:      Bob Mitchell
 // Created:     2000/03/21
@@ -18,12 +18,15 @@
 #if wxUSE_XRC && wxUSE_SLIDER
 
 #include "wx/xrc/xh_slidr.h"
-#include "wx/slider.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/slider.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxSliderXmlHandler, wxXmlResourceHandler)
 
 wxSliderXmlHandler::wxSliderXmlHandler()
-: wxXmlResourceHandler()
+                   :wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxSL_HORIZONTAL);
     XRC_ADD_STYLE(wxSL_VERTICAL);

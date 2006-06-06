@@ -48,13 +48,13 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/dc.h"
-#endif
+#if wxUSE_SLIDER
 
 #include "wx/slider.h"
 
-#if wxUSE_SLIDER
+#ifndef WX_PRECOMP
+    #include "wx/dc.h"
+#endif
 
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"

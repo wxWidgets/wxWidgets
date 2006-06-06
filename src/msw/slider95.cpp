@@ -27,11 +27,12 @@
 
 #if wxUSE_SLIDER
 
+#include "wx/slider.h"
+
 #ifndef WX_PRECOMP
     #include "wx/brush.h"
 #endif
 
-#include "wx/slider.h"
 #include "wx/msw/subwin.h"
 
 // include <commctrl.h> "properly"

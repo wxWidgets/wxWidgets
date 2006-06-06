@@ -18,10 +18,11 @@
 
 #if wxUSE_SLIDER
 
-#ifndef WX_PRECOMP
-#include "wx/utils.h"
-#include "wx/brush.h"
 #include "wx/slider.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+    #include "wx/brush.h"
 #endif
 
 #include "wx/toplevel.h"
