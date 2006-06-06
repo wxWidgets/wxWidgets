@@ -28,7 +28,9 @@
 
 #include "wx/clrpicker.h"
 
-#include "wx/textctrl.h"
+#ifndef WX_PRECOMP
+    #include "wx/textctrl.h"
+#endif
 
 
 // ============================================================================

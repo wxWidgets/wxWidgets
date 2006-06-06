@@ -17,11 +17,10 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/settings.h"
+    #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
 #endif
 
 #include "wx/arrstr.h"
-
-#include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
 
 // We use GtkCombo which has been deprecated since GTK+ 2.3.0
 // in favour of GtkComboBox for <GTK2.4 runtime

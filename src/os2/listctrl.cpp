@@ -32,9 +32,9 @@
     #include "wx/log.h"
     #include "wx/settings.h"
     #include "wx/dcclient.h"
+    #include "wx/textctrl.h"
 #endif
 
-#include "wx/textctrl.h"
 #include "wx/imaglist.h"
 #include "wx/listctrl.h"
 
@@ -487,14 +487,12 @@ SHORT EXPENTRY InternalDataCompareFunc (
 //  none
 //
 /////////////////////////////////////////////////////////////////////////////
-void ConvertFromOS2ListItem (
-  HWND                              hWndListCtrl
-, wxListItem&                       rInfo
-, PMYRECORD                         pRecord
-)
+void ConvertFromOS2ListItem ( HWND hWndListCtrl,
+                              wxListItem& rInfo,
+                              PMYRECORD pRecord )
 {
-    CListItemInternalData*          pInternaldata = (CListItemInternalData *)pRecord->m_ulUserData;
-    bool                            bNeedText = FALSE;
+    CListItemInternalData* pInternaldata = (CListItemInternalData *)pRecord->m_ulUserData;
+    bool bNeedText = false;
 
     if (pInternaldata)
         rInfo.SetData(pInternaldata->m_lParam);
@@ -826,30 +824,28 @@ void wxListCtrl::Init ()
     m_pImageListNormal     = NULL;
     m_pImageListSmall      = NULL;
     m_pImageListState      = NULL;
-    m_bOwnsImageListNormal = FALSE;
-    m_bOwnsImageListSmall  = FALSE;
-    m_bOwnsImageListState  = FALSE;
+    m_bOwnsImageListNormal = false;
+    m_bOwnsImageListSmall  = false;
+    m_bOwnsImageListState  = false;
     m_lBaseStyle           = 0L;
     m_nColCount            = 0;
     m_pTextCtrl            = NULL;
-    m_bAnyInternalData     = FALSE;
-    m_bHasAnyAttr          = FALSE;
+    m_bAnyInternalData     = false;
+    m_bHasAnyAttr          = false;
 } // end of wxListCtrl::Init
 
-bool wxListCtrl::Create (
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, const wxValidator&                rValidator
-, const wxString&                   rsName
-)
+bool wxListCtrl::Create ( wxWindow* pParent,
+                          wxWindowID vId,
+                          const wxPoint& rPos,
+                          const wxSize& rSize,
+                          long lStyle,
+                          const wxValidator& rValidator,
+                          const wxString& rsName )
 {
-    int                             nX = rPos.x;
-    int                             nY = rPos.y;
-    int                             nWidth = rSize.x;
-    int                             nHeight = rSize.y;
+    int nX = rPos.x;
+    int nY = rPos.y;
+    int nWidth = rSize.x;
+    int nHeight = rSize.y;
 
 #if wxUSE_VALIDATORS
     SetValidator(rValidator);
@@ -869,7 +865,7 @@ bool wxListCtrl::Create (
 
     m_windowId = (vId == -1) ? NewControlId() : vId;
 
-    long                            lSstyle = WS_VISIBLE | WS_TABSTOP;
+    long lSstyle = WS_VISIBLE | WS_TABSTOP;
 
     if (GetWindowStyleFlag() & wxCLIP_SIBLINGS)
         lSstyle |= WS_CLIPSIBLINGS;
@@ -879,23 +875,19 @@ bool wxListCtrl::Create (
                          ,nWidth
                          ,nHeight
                         ))
-        return FALSE;
+        return false;
     if (pParent)
         pParent->AddChild(this);
-   return TRUE;
+   return true;
 } // end of wxListCtrl::Create
 
-bool wxListCtrl::DoCreateControl (
-  int                               nX
-, int                               nY
-, int                               nWidth
-, int                               nHeight
-)
+bool wxListCtrl::DoCreateControl ( int nX, int nY,
+                                   int nWidth, int nHeight )
 {
-    DWORD                           lWstyle = m_lBaseStyle;
-    long                            lOldStyle = 0; // Dummy
+    DWORD lWstyle = m_lBaseStyle;
+    long lOldStyle = 0; // Dummy
 
-    CNRINFO                         vCnrInfo;
+    CNRINFO vCnrInfo;
 
     lWstyle |= ConvertToOS2Style( lOldStyle
                                  ,GetWindowStyleFlag()
@@ -914,7 +906,7 @@ bool wxListCtrl::DoCreateControl (
                                       );
     if (!m_hWnd)
     {
-        return FALSE;
+        return false;
     }
 
     //
@@ -925,7 +917,7 @@ bool wxListCtrl::DoCreateControl (
                       ,MPFROMP(&vCnrInfo)
                       ,(MPARAM)(USHORT)sizeof(CNRINFO)
                      ))
-        return FALSE;
+        return false;
     lWstyle = ConvertViewToOS2Style(GetWindowStyleFlag());
     vCnrInfo.flWindowAttr |= lWstyle;
     if (!::WinSendMsg( GetHWND()
@@ -933,7 +925,7 @@ bool wxListCtrl::DoCreateControl (
                       ,MPFROMP(&vCnrInfo)
                       ,(MPARAM)CMA_FLWINDOWATTR
                      ))
-        return FALSE;
+        return false;
 
     //
     // And now set needed arrangement flags
@@ -944,36 +936,30 @@ bool wxListCtrl::DoCreateControl (
                       ,(MPARAM)CMA_ARRANGEGRID
                       ,(MPARAM)lWstyle
                      ))
-        return FALSE;
+        return false;
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(GetParent()->GetForegroundColour());
     SubclassWin(m_hWnd);
     SetFont(*wxSMALL_FONT);
     SetXComp(0);
     SetYComp(0);
-    SetSize( nX
-            ,nY
-            ,nWidth
-            ,nHeight
-           );
-    return TRUE;
+    SetSize( nX, nY, nWidth, nHeight );
+    return true;
 } // end of wxListCtrl::DoCreateControl
 
 void wxListCtrl::UpdateStyle ()
 {
     if (GetHWND())
     {
-        long                        lDummy;
-        DWORD                       dwStyleNew = ConvertToOS2Style( lDummy
-                                                                   ,GetWindowStyleFlag()
-                                                                  );
+        long lDummy;
+        DWORD dwStyleNew = ConvertToOS2Style( lDummy, GetWindowStyleFlag() );
 
         dwStyleNew |= m_lBaseStyle;
 
         //
         // Get the current window style.
         //
-        ULONG                       dwStyleOld = ::WinQueryWindowULong(GetHWND(), QWL_STYLE);
+        ULONG dwStyleOld = ::WinQueryWindowULong(GetHWND(), QWL_STYLE);
 
         //
         // Only set the window style if the view bits have changed.
@@ -989,12 +975,12 @@ void wxListCtrl::FreeAllInternalData ()
 {
     if (m_bAnyInternalData)
     {
-        int                         n = GetItemCount();
-        int                         i = 0;
+        int n = GetItemCount();
+        int i = 0;
 
         for (i = 0; i < n; i++)
             DeleteInternalData(this, (long)i);
-        m_bAnyInternalData = FALSE;
+        m_bAnyInternalData = false;
     }
 } // end of wxListCtrl::FreeAllInternalData
 
@@ -1149,57 +1135,48 @@ long wxListCtrl::ConvertViewToOS2Style (
 // ----------------------------------------------------------------------------
 
 // Sets the foreground, i.e. text, colour
-bool wxListCtrl::SetForegroundColour (
-  const wxColour&                   rCol)
+bool wxListCtrl::SetForegroundColour (const wxColour& rCol)
 {
-    ULONG                           ulColor = wxColourToRGB(rCol);
+    ULONG ulColor = wxColourToRGB(rCol);
 
     if (!wxWindow::SetForegroundColour(rCol))
-        return FALSE;
-
+        return false;
 
     ::WinSetPresParam( GetHWND()
                       ,PP_FOREGROUNDCOLOR
                       ,sizeof(ULONG)
                       ,&ulColor
                      );
-    return TRUE;
+    return true;
 } // end of wxListCtrl::SetForegroundColour
 
 // Sets the background colour
-bool wxListCtrl::SetBackgroundColour (
-  const wxColour&                   rCol
-)
+bool wxListCtrl::SetBackgroundColour ( const wxColour& rCol )
 {
     if (!wxWindow::SetBackgroundColour(rCol))
-        return FALSE;
+        return false;
 
     //
     // We set the same colour for both the "empty" background and the items
     // background
     //
-    ULONG                           ulColor = wxColourToRGB(rCol);
+    ULONG ulColor = wxColourToRGB(rCol);
 
     ::WinSetPresParam( GetHWND()
                       ,PP_BACKGROUNDCOLOR
                       ,sizeof(ULONG)
                       ,&ulColor
                      );
-    return TRUE;
+    return true;
 } // end of wxListCtrl::SetBackgroundColour
 
 // Gets information about this column
-bool wxListCtrl::GetColumn (
-  int                               nCol
-, wxListItem&                       rItem
-) const
+bool wxListCtrl::GetColumn ( int nCol, wxListItem& rItem ) const
 {
-    PFIELDINFO                      pFieldInfo = FindOS2ListFieldByColNum ( GetHWND()
-                                                                           ,nCol
-                                                                          );
+    PFIELDINFO pFieldInfo = FindOS2ListFieldByColNum ( GetHWND(), nCol );
 
     if (!pFieldInfo)
-        return FALSE;
+        return false;
     rItem.SetWidth(pFieldInfo->cxWidth);
     if ((rItem.GetMask() & wxLIST_MASK_TEXT) &&
         (pFieldInfo->flData & CFA_STRING) &&
@@ -1216,37 +1193,25 @@ bool wxListCtrl::GetColumn (
         else if (pFieldInfo->flData & CFA_CENTER)
             rItem.m_format = wxLIST_FORMAT_CENTRE;
     }
-    return TRUE;
+    return true;
 } // end of wxListCtrl::GetColumn
 
 // Sets information about this column
-bool wxListCtrl::SetColumn (
-  int                               nCol
-, wxListItem&                       rItem
-)
+bool wxListCtrl::SetColumn ( int nCol, wxListItem& rItem )
 {
-    PFIELDINFO                      pFieldInfo = FindOS2ListFieldByColNum( GetHWND()
-                                                                          ,nCol
-                                                                         );
-    ConvertToOS2ListCol( nCol
-                        ,rItem
-                        ,pFieldInfo
-                       );
+    PFIELDINFO pFieldInfo = FindOS2ListFieldByColNum( GetHWND(), nCol );
+    ConvertToOS2ListCol( nCol, rItem, pFieldInfo );
     //
     // Since we changed the field pointed to, we invalidate to see the result
     //
     ::WinSendMsg(GetHWND(), CM_INVALIDATEDETAILFIELDINFO, NULL, NULL);
-    return TRUE;
+    return true;
 } // end of wxListCtrl::SetColumn
 
 // Gets the column width
-int wxListCtrl::GetColumnWidth (
-  int                               nCol
-) const
+int wxListCtrl::GetColumnWidth ( int nCol ) const
 {
-    PFIELDINFO                      pFieldInfo = FindOS2ListFieldByColNum ( GetHWND()
-                                                                           ,nCol
-                                                                          );
+    PFIELDINFO pFieldInfo = FindOS2ListFieldByColNum ( GetHWND(), nCol );
 
     if (!pFieldInfo)
         return 0;
@@ -1254,23 +1219,18 @@ int wxListCtrl::GetColumnWidth (
 } // end of wxListCtrl::GetColumnWidth
 
 // Sets the column width
-bool wxListCtrl::SetColumnWidth (
-  int                               nCol
-, int                               nWidth
-)
+bool wxListCtrl::SetColumnWidth ( int nCol, int nWidth )
 {
-    int                             nCol2 = nCol;
-    int                             nWidth2 = nWidth;
+    int nCol2 = nCol;
+    int nWidth2 = nWidth;
 
     if (GetWindowStyleFlag() & wxLC_LIST)
         nCol2 = -1;
 
-    PFIELDINFO                      pFieldInfo = FindOS2ListFieldByColNum( GetHWND()
-                                                                          ,nCol
-                                                                         );
+    PFIELDINFO pFieldInfo = FindOS2ListFieldByColNum( GetHWND(), nCol );
     pFieldInfo->cxWidth = nWidth;
     ::WinSendMsg(GetHWND(), CM_INVALIDATEDETAILFIELDINFO, NULL, NULL);
-    return TRUE;
+    return true;
 } // end of wxListCtrl::SetColumnWidth
 
 // Gets the number of items that can fit vertically in the
@@ -1328,35 +1288,22 @@ wxTextCtrl* wxListCtrl::GetEditControl() const
 }
 
 // Gets information about the item
-bool wxListCtrl::GetItem (
-  wxListItem&                       rInfo
-) const
+bool wxListCtrl::GetItem ( wxListItem& rInfo ) const
 {
-    PMYRECORD                       pRecord = FindOS2ListRecordByID( GetHWND()
-                                                                    ,rInfo.GetId()
-                                                                   );
+    PMYRECORD pRecord = FindOS2ListRecordByID( GetHWND(), rInfo.GetId() );
 
     //
     // Give NULL as hwnd as we already have everything we need
     //
-    ConvertFromOS2ListItem( NULL
-                           ,rInfo
-                           ,pRecord
-                          );
-    return TRUE;
+    ConvertFromOS2ListItem( NULL, rInfo, pRecord );
+    return true;
 } // end of wxListCtrl::GetItem
 
 // Sets information about the item
-bool wxListCtrl::SetItem (
-  wxListItem&                       rInfo
-)
+bool wxListCtrl::SetItem ( wxListItem& rInfo )
 {
-    PFIELDINFO                      pFieldInfo = FindOS2ListFieldByColNum ( GetHWND()
-                                                                           ,rInfo.GetColumn()
-                                                                          );
-    PMYRECORD                       pRecord = FindOS2ListRecordByID( GetHWND()
-                                                                    ,rInfo.GetId()
-                                                                   );
+    PFIELDINFO pFieldInfo = FindOS2ListFieldByColNum ( GetHWND(), rInfo.GetColumn() );
+    PMYRECORD pRecord = FindOS2ListRecordByID( GetHWND(), rInfo.GetId() );
 
     ConvertToOS2ListItem( this
                          ,rInfo
@@ -1382,7 +1329,7 @@ bool wxListCtrl::SetItem (
             //
             // Need to set it
             //
-            m_bAnyInternalData    = TRUE;
+            m_bAnyInternalData    = true;
             pData                 = new CListItemInternalData();
             pRecord->m_ulUserData = (unsigned long)pData;
         };
@@ -1407,19 +1354,19 @@ bool wxListCtrl::SetItem (
     //
     // We need to update the item immediately to show the new image
     //
-    bool                            bUpdateNow = (rInfo.GetMask() & wxLIST_MASK_IMAGE) != 0;
+    bool bUpdateNow = (rInfo.GetMask() & wxLIST_MASK_IMAGE) != 0;
 
     //
     // Check whether it has any custom attributes
     //
     if (rInfo.HasAttributes())
     {
-        m_bHasAnyAttr = TRUE;
+        m_bHasAnyAttr = true;
 
         //
         // If the colour has changed, we must redraw the item
         //
-        bUpdateNow = TRUE;
+        bUpdateNow = true;
     }
     if (::WinIsWindowVisible(GetHWND()))
     {
@@ -1435,7 +1382,7 @@ bool wxListCtrl::SetItem (
                  ,NULL
                  ,NULL
                 );
-    return TRUE;
+    return true;
 } // end of wxListCtrl::SetItem
 
 long wxListCtrl::SetItem (
@@ -1477,23 +1424,15 @@ int wxListCtrl::GetItemState (
 } // end of wxListCtrl::GetItemState
 
 // Sets the item state
-bool wxListCtrl::SetItemState (
-  long                              lItem
-, long                              lState
-, long                              lStateMask
-)
+bool wxListCtrl::SetItemState ( long lItem, long lState, long lStateMask )
 {
-    PMYRECORD                       pRecord = FindOS2ListRecordByID( GetHWND()
-                                                                    ,lItem
-                                                                   );
+    PMYRECORD pRecord = FindOS2ListRecordByID( GetHWND(), lItem );
 
     //
     // Don't use SetItem() here as it doesn't work with the virtual list
     // controls
     //
-    ConvertToOS2Flags( lState
-                      ,pRecord
-                     );
+    ConvertToOS2Flags( lState, pRecord );
 
     //
     // for the virtual list controls we need to refresh the previously focused
@@ -1535,7 +1474,7 @@ bool wxListCtrl::SetItemState (
             RefreshItem(lFocusOld);
         }
     }
-    return TRUE;
+    return true;
 } // end of wxListCtrl::SetItemState
 
 // Sets the item image
@@ -1620,22 +1559,18 @@ bool wxListCtrl::SetItemData (
 } // end of wxListCtrl::SetItemData
 
 // Gets the item rectangle
-bool wxListCtrl::GetItemRect (
-  long                              lItem
-, wxRect&                           rRect
-, int                               nCode
-) const
+bool wxListCtrl::GetItemRect ( long lItem,
+                               wxRect& rRect,
+                               int nCode ) const
 {
-    bool                            bSuccess;
-    PMYRECORD                       pRecord = FindOS2ListRecordByID( GetHWND()
-                                                                    ,lItem
-                                                                   );
-    QUERYRECORDRECT                 vQueryRect;
-    RECTL                           vRect;
-    int                             nHeight;
+    bool bSuccess;
+    PMYRECORD pRecord = FindOS2ListRecordByID( GetHWND(), lItem );
+    QUERYRECORDRECT vQueryRect;
+    RECTL vRect;
+    int nHeight;
 
     if (!pRecord)
-        return FALSE;
+        return false;
     vQueryRect.cb                = sizeof(QUERYRECORDRECT);
     vQueryRect.pRecord           = &pRecord->m_vRecord;
     vQueryRect.fRightSplitWindow = TRUE;
@@ -1648,33 +1583,26 @@ bool wxListCtrl::GetItemRect (
     //
     // remember OS/2 is backwards
     //
-    GetClientSize( NULL
-                  ,&nHeight
-                 );
+    GetClientSize( NULL, &nHeight );
     rRect.x      = vRect.xLeft;
     rRect.y      = nHeight - vRect.yTop;
     rRect.width  = vRect.xRight;
     rRect.height = nHeight - vRect.yBottom;
-    bSuccess = TRUE;
+    bSuccess = true;
     return bSuccess;
 } // end of wxListCtrl::GetItemRect
 
 // Gets the item position
-bool wxListCtrl::GetItemPosition (
-  long                              lItem
-, wxPoint&                          rPos
-) const
+bool wxListCtrl::GetItemPosition ( long lItem, wxPoint& rPos ) const
 {
-    bool                            bSuccess;
-    PMYRECORD                       pRecord = FindOS2ListRecordByID( GetHWND()
-                                                                    ,lItem
-                                                                   );
-    QUERYRECORDRECT                 vQueryRect;
-    RECTL                           vRect;
-    int                             nHeight;
+    bool bSuccess;
+    PMYRECORD pRecord = FindOS2ListRecordByID( GetHWND() , lItem );
+    QUERYRECORDRECT vQueryRect;
+    RECTL vRect;
+    int nHeight;
 
     if (!pRecord)
-        return FALSE;
+        return false;
     vQueryRect.cb                = sizeof(QUERYRECORDRECT);
     vQueryRect.pRecord           = &pRecord->m_vRecord;
     vQueryRect.fRightSplitWindow = TRUE;
@@ -1687,25 +1615,20 @@ bool wxListCtrl::GetItemPosition (
     //
     // remember OS/2 is backwards
     //
-    GetClientSize( NULL
-                  ,&nHeight
-                 );
+    GetClientSize( NULL, &nHeight );
     rPos.x   = vRect.xLeft;
     rPos.y   = nHeight - vRect.yTop;
-    bSuccess = TRUE;
+    bSuccess = true;
     return bSuccess;
 } // end of wxListCtrl::GetItemPosition
 
 // Sets the item position.
-bool wxListCtrl::SetItemPosition (
-  long                              lItem
-, const wxPoint&                    rPos
-)
+bool wxListCtrl::SetItemPosition ( long lItem, const wxPoint& rPos )
 {
     //
     // Items cannot be positioned in X/Y coord in OS/2
     //
-    return FALSE;
+    return false;
 } // end of wxListCtrl::SetItemPosition
 
 // Gets the number of items in the list control
@@ -1723,11 +1646,9 @@ int wxListCtrl::GetItemCount () const
 } // end of wxListCtrl::GetItemCount
 
 // Retrieves the spacing between icons in pixels.
-// If small is TRUE, gets the spacing for the small icon
+// If bIsSmall is true, gets the spacing for the small icon
 // view, otherwise the large icon view.
-int wxListCtrl::GetItemSpacing (
-  bool                              bIsSmall
-) const
+int wxListCtrl::GetItemSpacing ( bool bIsSmall ) const
 {
     CNRINFO                         vCnrInfo;
 
@@ -1916,48 +1837,42 @@ wxImageList* wxListCtrl::GetImageList (
     return NULL;
 } // end of wxListCtrl::GetImageList
 
-void wxListCtrl::SetImageList (
-  wxImageList*                      pImageList
-, int                               nWhich
-)
+void wxListCtrl::SetImageList ( wxImageList* pImageList,
+                                int nWhich )
 {
     if (nWhich == wxIMAGE_LIST_NORMAL)
     {
         if (m_bOwnsImageListNormal)
             delete m_pImageListNormal;
         m_pImageListNormal     = pImageList;
-        m_bOwnsImageListNormal = FALSE;
+        m_bOwnsImageListNormal = false;
     }
     else if (nWhich == wxIMAGE_LIST_SMALL)
     {
         if (m_bOwnsImageListSmall)
             delete m_pImageListSmall;
         m_pImageListSmall    = pImageList;
-        m_bOwnsImageListSmall = FALSE;
+        m_bOwnsImageListSmall = false;
     }
     else if (nWhich == wxIMAGE_LIST_STATE)
     {
         if (m_bOwnsImageListState)
             delete m_pImageListState;
         m_pImageListState     = pImageList;
-        m_bOwnsImageListState = FALSE;
+        m_bOwnsImageListState = false;
     }
 } // end of wxListCtrl::SetImageList
 
-void wxListCtrl::AssignImageList (
-  wxImageList*                      pImageList
-, int                               nWhich
-)
+void wxListCtrl::AssignImageList ( wxImageList* pImageList, int nWhich )
 {
-    SetImageList( pImageList
-                 ,nWhich
-                );
+    SetImageList( pImageList, nWhich );
+
     if (nWhich == wxIMAGE_LIST_NORMAL )
-        m_bOwnsImageListNormal = TRUE;
+        m_bOwnsImageListNormal = true;
     else if (nWhich == wxIMAGE_LIST_SMALL )
-        m_bOwnsImageListSmall = TRUE;
+        m_bOwnsImageListSmall = true;
     else if (nWhich == wxIMAGE_LIST_STATE )
-        m_bOwnsImageListState = TRUE;
+        m_bOwnsImageListState = true;
 } // end of wxListCtrl::AssignImageList
 
 // ----------------------------------------------------------------------------
@@ -1965,12 +1880,10 @@ void wxListCtrl::AssignImageList (
 // ----------------------------------------------------------------------------
 
 // Arranges the items
-bool wxListCtrl::Arrange (
-  int                               nFlag
-)
+bool wxListCtrl::Arrange ( int nFlag )
 {
-    ULONG                           ulType = 0L;
-    ULONG                           ulFlags = 0L;
+    ULONG ulType = 0L;
+    ULONG ulFlags = 0L;
 
     if (nFlag == wxLIST_ALIGN_SNAP_TO_GRID)
     {
@@ -1992,24 +1905,20 @@ bool wxListCtrl::Arrange (
     //
     // We do not support CMA_ARRANGESELECTED
     //
-    return TRUE;
+    return true;
 } // end of wxListCtrl::Arrange
 
 // Deletes an item
-bool wxListCtrl::DeleteItem (
-  long                              lItem
-)
+bool wxListCtrl::DeleteItem ( long lItem )
 {
-    PMYRECORD                       pRecord = FindOS2ListRecordByID( GetHWND()
-                                                                    ,lItem
-                                                                   );
+    PMYRECORD pRecord = FindOS2ListRecordByID( GetHWND(), lItem );
     if (LONGFROMMR(::WinSendMsg( GetHWND()
                                 ,CM_REMOVERECORD
                                 ,(MPARAM)pRecord
                                 ,MPFROM2SHORT(1, CMA_FREE)
                                )) == -1L)
     {
-        return FALSE;
+        return false;
     }
 
     //
@@ -2038,7 +1947,7 @@ bool wxListCtrl::DeleteItem (
         vRectWin.y      = vRectItem.GetBottom();
         RefreshRect(vRectWin);
     }
-    return TRUE;
+    return true;
 } // end of wxListCtrl::DeleteItem
 
 // Deletes all items
@@ -2061,18 +1970,14 @@ bool wxListCtrl::DeleteAllColumns ()
     }
 
     wxASSERT_MSG(m_nColCount == 0, wxT("no columns should be left"));
-    return TRUE;
+    return true;
 } // end of wxListCtrl::DeleteAllColumns
 
 // Deletes a column
-bool wxListCtrl::DeleteColumn (
-  int                               nCol
-)
+bool wxListCtrl::DeleteColumn ( int nCol )
 {
-    bool                            bSuccess = FALSE;
-    PFIELDINFO                      pField = FindOS2ListFieldByColNum( GetHWND()
-                                                                      ,nCol
-                                                                     );
+    bool bSuccess = false;
+    PFIELDINFO pField = FindOS2ListFieldByColNum( GetHWND(), nCol );
     bSuccess = ((LONG)::WinSendMsg( GetHWND()
                                    ,CM_REMOVEDETAILFIELDINFO
                                    ,MPFROMP(pField)
@@ -2123,32 +2028,26 @@ wxTextCtrl* wxListCtrl::EditLabel (
 
 // End label editing, optionally cancelling the edit.  Under OS/2 you close
 // the record for editting
-bool wxListCtrl::EndEditLabel (
-  bool                              WXUNUSED(bCancel)
-)
+bool wxListCtrl::EndEditLabel ( bool WXUNUSED(bCancel) )
 {
     ::WinSendMsg( GetHWND()
                  ,CM_CLOSEEDIT
                  ,(MPARAM)0
                  ,(MPARAM)0
                 );
-    return TRUE;
+    return true;
 } // end of wxListCtrl::EndEditLabel
 
 // Ensures this item is visible
-bool wxListCtrl::EnsureVisible (
-  long                              lItem
-)
+bool wxListCtrl::EnsureVisible ( long lItem )
 {
-    PMYRECORD                       pRecord = FindOS2ListRecordByID( GetHWND()
-                                                                    ,lItem
-                                                                   );
+    PMYRECORD pRecord = FindOS2ListRecordByID( GetHWND(), lItem );
     ::WinSendMsg( GetHWND()
                  ,CM_INVALIDATERECORD
                  ,MPFROMP(pRecord)
                  ,MPFROM2SHORT((SHORT)1, CMA_NOREPOSITION)
                 );
-    return TRUE;
+    return true;
 } // end of wxListCtrl::EnsureVisible
 
 // Find an item whose label matches this string, starting from the item after 'start'
@@ -2390,7 +2289,7 @@ long wxListCtrl::InsertItem (
                                                         );
     if (bNeedInternalData)
     {
-        m_bAnyInternalData = TRUE;
+        m_bAnyInternalData = true;
 
         //
         // Internal stucture that manages data
@@ -2536,10 +2435,7 @@ long wxListCtrl::InsertColumn (
 
 // scroll the control by the given number of pixels (exception: in list view,
 // dx is interpreted as number of columns)
-bool wxListCtrl::ScrollList (
-  int                               nDx
-, int                               nDy
-)
+bool wxListCtrl::ScrollList ( int nDx, int nDy )
 {
     if (nDx > 0)
         ::WinSendMsg( GetHWND()
@@ -2553,15 +2449,12 @@ bool wxListCtrl::ScrollList (
                      ,(MPARAM)CMA_VERTICAL
                      ,(MPARAM)nDy
                     );
-    return TRUE;
+    return true;
 } // end of wxListCtrl::ScrollList
 
-bool wxListCtrl::SortItems (
-  wxListCtrlCompare                 fn
-, long                              lData
-)
+bool wxListCtrl::SortItems ( wxListCtrlCompare fn, long lData )
 {
-    SInternalDataSort               vInternalData;
+    SInternalDataSort vInternalData;
 
     vInternalData.m_fnUser = fn;
     vInternalData.m_lData  = lData;
@@ -2574,47 +2467,38 @@ bool wxListCtrl::SortItems (
                      ))
     {
         wxLogDebug(_T("CM_SORTRECORD failed"));
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 } // end of wxListCtrl::SortItems
 
 // ----------------------------------------------------------------------------
 // message processing
 // ----------------------------------------------------------------------------
 
-bool wxListCtrl::OS2Command (
-  WXUINT                            uCmd
-, WXWORD                            wId
-)
+bool wxListCtrl::OS2Command ( WXUINT uCmd, WXWORD wId )
 {
     if (uCmd == CN_ENDEDIT)
     {
-        wxCommandEvent              vEvent( wxEVT_COMMAND_TEXT_UPDATED
-                                           ,wId
-                                          );
+        wxCommandEvent vEvent( wxEVT_COMMAND_TEXT_UPDATED, wId );
 
         vEvent.SetEventObject( this );
         ProcessCommand(vEvent);
-        return TRUE;
+        return true;
     }
     else if (uCmd == CN_KILLFOCUS)
     {
-        wxCommandEvent              vEvent( wxEVT_KILL_FOCUS
-                                           ,wId
-                                          );
+        wxCommandEvent vEvent( wxEVT_KILL_FOCUS, wId );
         vEvent.SetEventObject( this );
         ProcessCommand(vEvent);
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 } // end of wxListCtrl::OS2Command
 
 // Necessary for drawing hrules and vrules, if specified
-void wxListCtrl::OnPaint (
-  wxPaintEvent&                     rEvent
-)
+void wxListCtrl::OnPaint ( wxPaintEvent& rEvent )
 {
     wxPaintDC                       vDc(this);
     wxPen                           vPen(wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT)
@@ -2775,34 +2659,25 @@ void wxListCtrl::RefreshItem (
     RefreshRect(vRect);
 } // end of wxListCtrl::RefreshItem
 
-void wxListCtrl::RefreshItems (
-  long                              lItemFrom
-, long                              lItemTo
-)
+void wxListCtrl::RefreshItems ( long lItemFrom, long lItemTo )
 {
-    wxRect                          vRect1;
-    wxRect                          vRect2;
+    wxRect vRect1;
+    wxRect vRect2;
 
-    GetItemRect( lItemFrom
-                ,vRect1
-               );
-    GetItemRect( lItemTo
-                ,vRect2
-               );
+    GetItemRect( lItemFrom , vRect1 );
+    GetItemRect( lItemTo , vRect2 );
 
-    wxRect                          vRect = vRect1;
+    wxRect vRect = vRect1;
 
     vRect.height = vRect2.GetBottom() - vRect1.GetTop();
     RefreshRect(vRect);
 } // end of wxListCtrl::RefreshItems
 
-MRESULT wxListCtrl::OS2WindowProc(
-  WXUINT                            uMsg
-, WXWPARAM                          wParam
-, WXLPARAM                          lParam
-)
+MRESULT wxListCtrl::OS2WindowProc( WXUINT uMsg,
+                                   WXWPARAM wParam,
+                                   WXLPARAM lParam )
 {
-    bool                            bProcessed = FALSE;
+    bool                            bProcessed = false;
     MRESULT                         lRc;
     wxListEvent                     vEvent( wxEVT_NULL
                                            ,m_windowId

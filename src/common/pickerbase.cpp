@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/pickerbase.cpp
+// Name:        src/common/pickerbase.cpp
 // Purpose:     wxPickerBase class implementation
 // Author:      Francesco Montorsi
 // Modified by:
@@ -26,7 +26,9 @@
 
 #include "wx/pickerbase.h"
 
-#include "wx/textctrl.h"
+#ifndef WX_PRECOMP
+    #include "wx/textctrl.h"
+#endif
 
 // ============================================================================
 // implementation
@@ -60,7 +62,7 @@ bool wxPickerBase::CreateBase(wxWindow *parent,
     // remove any border style from our style as wxPickerBase's window must be
     // invisible (user styles must be set on the textctrl or the platform-dependent picker)
     style &= ~wxBORDER_MASK;
-    if (!wxControl::Create(parent, id, pos, size, style | wxNO_BORDER | wxTAB_TRAVERSAL, 
+    if (!wxControl::Create(parent, id, pos, size, style | wxNO_BORDER | wxTAB_TRAVERSAL,
                             validator, name))
         return false;
 
@@ -107,7 +109,7 @@ void wxPickerBase::OnTextCtrlKillFocus(wxFocusEvent &)
     wxASSERT(m_text);
 
     // don't leave the textctrl empty
-    if (m_text->GetValue().IsEmpty())
+    if (m_text->GetValue().empty())
         UpdateTextCtrlFromPicker();
 }
 

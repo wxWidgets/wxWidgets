@@ -125,15 +125,15 @@
 
 #if wxUSE_TEXTCTRL
 
-#include <ctype.h>
+#include "wx/textctrl.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
-
     #include "wx/dcclient.h"
     #include "wx/validate.h"
-    #include "wx/textctrl.h"
 #endif
+
+#include <ctype.h>
 
 #include "wx/clipbrd.h"
 

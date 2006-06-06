@@ -46,6 +46,7 @@
     #include "wx/sizer.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/textctrl.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
@@ -89,7 +90,6 @@
     #include "wx/spinctrl.h"
 #endif // wxUSE_SPINCTRL
 
-#include "wx/textctrl.h"
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
 
@@ -3393,7 +3393,7 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
         // Truncate tooltip length if needed as otherwise we might not have
         // enough space for it in the buffer and MultiByteToWideChar() would
         // return an error
-        size_t tipLength = wxMin(ttip.Len(), WXSIZEOF(buf) - 1);
+        size_t tipLength = wxMin(ttip.length(), WXSIZEOF(buf) - 1);
 
         // Convert to WideChar without adding the NULL character. The NULL
         // character is added afterwards (this is more efficient).

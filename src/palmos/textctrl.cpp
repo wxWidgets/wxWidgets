@@ -26,8 +26,9 @@
 
 #if wxUSE_TEXTCTRL
 
+#include "wx/textctrl.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/textctrl.h"
     #include "wx/settings.h"
     #include "wx/brush.h"
     #include "wx/utils.h"

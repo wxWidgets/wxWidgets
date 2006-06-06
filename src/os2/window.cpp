@@ -46,6 +46,7 @@
     #include "wx/settings.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/textctrl.h"
     #include <stdio.h>
 #endif
 
@@ -72,9 +73,6 @@
 #if wxUSE_CARET
     #include "wx/caret.h"
 #endif // wxUSE_CARET
-
-
-#include "wx/textctrl.h"
 
 #include <string.h>
 

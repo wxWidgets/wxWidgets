@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_gdctl.cpp
+// Name:        src/xrc/xh_gdctl.cpp
 // Purpose:     XRC resource for wxGenericDirCtrl
 // Author:      Markus Greither
 // Created:     2002/01/20
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) 2002 Markus Greither
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -17,8 +17,12 @@
 
 #if wxUSE_XRC && wxUSE_DIRDLG
 
-#include "wx/textctrl.h"
 #include "wx/xrc/xh_gdctl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/textctrl.h"
+#endif
+
 #include "wx/dirctrl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericDirCtrlXmlHandler, wxXmlResourceHandler)

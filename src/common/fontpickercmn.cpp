@@ -28,7 +28,10 @@
 
 #include "wx/fontpicker.h"
 
-#include "wx/textctrl.h"
+#ifndef WX_PRECOMP
+    #include "wx/textctrl.h"
+#endif
+
 #include "wx/fontenum.h"
 #include "wx/tokenzr.h"
 

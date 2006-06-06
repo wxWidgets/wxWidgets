@@ -36,11 +36,11 @@
     #include "wx/menu.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
+    #include "wx/textctrl.h"
 #endif // WXPRECOMP
 
 #include "wx/html/helpfrm.h"
 #include "wx/html/helpctrl.h"
-#include "wx/textctrl.h"
 #include "wx/notebook.h"
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"

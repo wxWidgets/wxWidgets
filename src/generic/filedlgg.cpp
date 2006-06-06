@@ -33,9 +33,9 @@
     #include "wx/checkbox.h"
     #include "wx/choice.h"
     #include "wx/stattext.h"
+    #include "wx/textctrl.h"
 #endif
 
-#include "wx/textctrl.h"
 #include "wx/longlong.h"
 #include "wx/sizer.h"
 #include "wx/tokenzr.h"

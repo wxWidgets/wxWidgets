@@ -16,15 +16,13 @@
 
 #if wxUSE_SPINCTRL
 
+#include "wx/spinctrl.h"
+
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
 #endif //WX_PRECOMP
 
 #include "wx/spinbutt.h"
-#include "wx/spinctrl.h"
-
-
-#include "wx/spinctrl.h"
 
 // ----------------------------------------------------------------------------
 // constants

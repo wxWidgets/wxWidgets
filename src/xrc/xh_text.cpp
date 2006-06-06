@@ -15,10 +15,13 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XRC && wxUSE_TEXTCTRL
 
 #include "wx/xrc/xh_text.h"
-#include "wx/textctrl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/textctrl.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrlXmlHandler, wxXmlResourceHandler)
 
@@ -73,4 +76,4 @@ bool wxTextCtrlXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxTextCtrl"));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_TEXTCTRL

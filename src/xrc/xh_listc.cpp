@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_listc.cpp
+// Name:        src/xrc/xh_listc.cpp
 // Purpose:     XRC resource for wxListCtrl
 // Author:      Brian Gavin
 // Created:     2000/09/09
@@ -15,10 +15,14 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XRC && wxUSE_LISTCTRL
 
-#include "wx/textctrl.h"
 #include "wx/xrc/xh_listc.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/textctrl.h"
+#endif
+
 #include "wx/listctrl.h"
 
 
@@ -70,4 +74,4 @@ bool wxListCtrlXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxListCtrl"));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_LISTCTRL

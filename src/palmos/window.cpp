@@ -44,6 +44,7 @@
     #include "wx/statbox.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/textctrl.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
@@ -74,7 +75,6 @@
     #include "wx/spinctrl.h"
 #endif // wxUSE_SPINCTRL
 
-#include "wx/textctrl.h"
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
 

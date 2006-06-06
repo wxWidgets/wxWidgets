@@ -31,11 +31,11 @@
     #include "wx/msgdlg.h"
     #include "wx/cmndata.h"
     #include "wx/choice.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/module.h"
 #include "wx/layout.h"
-#include "wx/textctrl.h"
 #include "wx/textdlg.h"
 #include "wx/filefn.h"
 #include "wx/gdicmn.h"

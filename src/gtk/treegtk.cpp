@@ -19,10 +19,10 @@
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
     #include "wx/log.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/gtk/treectrl.h"
-#include "wx/textctrl.h"
 
 #include <gtk/gtk.h>
 
@@ -103,7 +103,7 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
   if (y < 0)
     y = 0;
 
-  m_needParent = TRUE;
+  m_needParent = true;
 
 printf("precreate\n");
   PreCreation( parent, id, pos, size, style, name );
@@ -133,9 +133,9 @@ printf("postcreate\n");
 
   gtk_widget_realize(GTK_WIDGET(m_tree));
 
-  Show(TRUE);
+  Show(true);
 
-  return TRUE;
+  return true;
 }
 
 wxTreeCtrl::~wxTreeCtrl(void) {
@@ -739,49 +739,54 @@ long wxTreeCtrl::GetFirstVisibleItem(void) const {
   return (-1);
 }
 
-long wxTreeCtrl::GetNextVisibleItem(long item) const {
-  GtkTreeItem *p;
-  GtkTreeItem *next = NULL;
+long wxTreeCtrl::GetNextVisibleItem(long item) const
+{
+    GtkTreeItem *p;
+    GtkTreeItem *next = NULL;
 
-  p = findGtkTreeItem(item);
-  GList *list = gtk_container_get_children(GTK_CONTAINER(p));
-  next = GTK_TREE_ITEM(list->data);
+    p = findGtkTreeItem(item);
+    GList *list = gtk_container_get_children(GTK_CONTAINER(p));
+    next = GTK_TREE_ITEM(list->data);
 //  gtk_container_foreach(GTK_CONTAINER(p), gtk_treectrl_next_visible_callback, &next);
 
-  if (next != NULL)
-    return (long)gtk_object_get_data(GTK_OBJECT(next), "id");
+    if (next != NULL)
+        return (long)gtk_object_get_data(GTK_OBJECT(next), "id");
 
-  return (-1);
+    return wxNOT_FOUND;
 }
 
-bool wxTreeCtrl::GetItem(wxTreeItem& info) const {
-  GtkTreeItem *p;
+bool wxTreeCtrl::GetItem(wxTreeItem& info) const
+{
+    GtkTreeItem *p;
 
-  p = findGtkTreeItem(info.m_itemId);
+    p = findGtkTreeItem(info.m_itemId);
 
-  if (p == NULL) {
-    wxLogSysError("TreeCtrl::GetItem failed");
-    return FALSE;
-  }
+    if (p == NULL)
+    {
+        wxLogSysError("TreeCtrl::GetItem failed");
+        return false;
+    }
 
-  wxConvertFromGtkTreeItem(info, p);
+    wxConvertFromGtkTreeItem(info, p);
 
-  return TRUE;
+    return true;
 }
 
-bool wxTreeCtrl::SetItem(wxTreeItem& info) {
-  GtkTreeItem *p;
+bool wxTreeCtrl::SetItem(wxTreeItem& info)
+{
+    GtkTreeItem *p;
 
-  p = findGtkTreeItem(info.m_itemId);
+    p = findGtkTreeItem(info.m_itemId);
 
-  if (p == NULL) {
-    wxLogSysError("TreeCtrl::SetItem failed");
-    return FALSE;
-  }
+    if (p == NULL)
+    {
+        wxLogSysError("TreeCtrl::SetItem failed");
+        return false;
+    }
 
-  wxConvertToGtkTreeItem(this, info, &p);
+    wxConvertToGtkTreeItem(this, info, &p);
 
-  return TRUE;
+    return true;
 }
 
 int wxTreeCtrl::GetItemState(long item, long stateMask) const {
@@ -797,30 +802,32 @@ int wxTreeCtrl::GetItemState(long item, long stateMask) const {
   return info.m_state;
 }
 
-bool wxTreeCtrl::SetItemState(long item, long state, long stateMask) {
-  wxTreeItem info;
+bool wxTreeCtrl::SetItemState(long item, long state, long stateMask)
+{
+    wxTreeItem info;
 
-  info.m_mask = wxTREE_MASK_STATE ;
-  info.m_state = state;
-  info.m_stateMask = stateMask;
-  info.m_itemId = item;
+    info.m_mask = wxTREE_MASK_STATE ;
+    info.m_state = state;
+    info.m_stateMask = stateMask;
+    info.m_itemId = item;
 
-  return SetItem(info);
+    return SetItem(info);
 }
 */
 
 // Operations
 /*
-bool wxTreeCtrl::DeleteChildren(long item) {
-  GtkTreeItem *p;
+bool wxTreeCtrl::DeleteChildren(long item)
+{
+    GtkTreeItem *p;
 
-  p = findGtkTreeItem(item);
-  if (p == NULL)
-    return FALSE;
+    p = findGtkTreeItem(item);
+    if (p == NULL)
+        return false;
 
-  gtk_tree_item_remove_subtree(GTK_TREE_ITEM(p));
+    gtk_tree_item_remove_subtree(GTK_TREE_ITEM(p));
 
-  return TRUE;
+    return true;
 }
 */
 

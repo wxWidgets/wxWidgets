@@ -33,10 +33,10 @@
     #include "wx/timer.h"
     #include "wx/settings.h"
     #include "wx/listbox.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/generic/treectlg.h"
-#include "wx/textctrl.h"
 #include "wx/imaglist.h"
 
 #include "wx/renderer.h"

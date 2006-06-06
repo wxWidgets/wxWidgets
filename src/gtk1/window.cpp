@@ -27,6 +27,7 @@
     #include "wx/dialog.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/layout.h"
@@ -44,10 +45,6 @@
 #if wxUSE_CARET
     #include "wx/caret.h"
 #endif // wxUSE_CARET
-
-#if wxUSE_TEXTCTRL
-    #include "wx/textctrl.h"
-#endif
 
 #include "wx/statusbr.h"
 #include "wx/fontutil.h"
