@@ -187,6 +187,9 @@ bool wxNotebook::Create(wxWindow *parent,
     Rect bounds ;
     Str255 title ;
 
+    if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
+        style |= wxBK_TOP;
+    
     MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
 
     int tabstyle = kControlTabSmallNorthProc ;

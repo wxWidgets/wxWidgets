@@ -274,6 +274,8 @@ bool wxNotebook::Create(wxWindow *parent,
     if (style & wxNB_FLAT)
         style |= wxBORDER_SUNKEN;
 #endif
+    if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
+        style |= wxBK_TOP;
 
 #if !wxUSE_UXTHEME
     // ComCtl32 notebook tabs simply don't work unless they're on top if we have uxtheme, we can

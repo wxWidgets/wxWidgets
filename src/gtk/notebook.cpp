@@ -324,6 +324,9 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
     m_acceptsFocus = true;
     m_insertCallback = (wxInsertChildFunction)wxInsertChildInNotebook;
 
+    if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
+        style |= wxBK_TOP;
+
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {

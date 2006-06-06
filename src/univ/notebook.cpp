@@ -121,6 +121,9 @@ bool wxNotebook::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
+    if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
+        style |= wxBK_TOP;
+
     if ( !wxControl::Create(parent, id, pos, size, style,
                             wxDefaultValidator, name) )
         return false;

@@ -124,6 +124,8 @@ bool wxNotebook::Create( wxWindow*       pParent,
                          long            lStyle,
                          const wxString& rsName )
 {
+    if ( (lStyle & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
+        lStyle |= wxBK_TOP;
     //
     // Base init
     //

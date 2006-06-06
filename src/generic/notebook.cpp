@@ -150,6 +150,9 @@ bool wxNotebook::Create(wxWindow *parent,
     // base init
     SetName(name);
 
+    if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
+        style |= wxBK_TOP;
+    
     m_windowId = id == wxID_ANY ? NewControlId() : id;
 
     if (!wxControl::Create(parent, id, pos, size, style|wxNO_BORDER, wxDefaultValidator, name))

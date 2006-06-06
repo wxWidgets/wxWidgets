@@ -118,9 +118,6 @@ public:
     // calculate the size of the control from the size of its page
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const = 0;
 
-    // get the default alignment
-    virtual int GetDefaultAlignment() const { return wxBK_TOP; }
-
     // get/set size of area between book control area and page area
     unsigned int GetInternalBorder() const { return m_internalBorder; }
     void SetInternalBorder(unsigned int border) { m_internalBorder = border; }
@@ -130,7 +127,7 @@ public:
     int GetControlMargin() const { return m_controlMargin; }
 
     // returns true if we have wxBK_TOP or wxBK_BOTTOM style
-    bool IsVertical() const { return HasFlag(wxBK_ALIGN_MASK) ? HasFlag(wxBK_BOTTOM | wxBK_TOP) : (0 != (GetDefaultAlignment() & (wxBK_BOTTOM | wxBK_TOP))); }
+    bool IsVertical() const { return HasFlag(wxBK_BOTTOM | wxBK_TOP); }
 
     // set/get option to shrink to fit current page
     void SetFitToCurrentPage(bool fit) { m_fitToCurrentPage = fit; }
