@@ -25,6 +25,7 @@
 #include "wx/image.h"
 #include "wx/colordlg.h"
 #include "wx/wxhtml.h"
+#include "wx/imaglist.h"
 
 #include "wx/aui/aui.h"
 #include "../sample.xpm"

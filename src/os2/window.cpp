@@ -5041,11 +5041,19 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& rPt)
 // Get the current mouse position.
 wxPoint wxGetMousePosition()
 {
-    POINTL                          vPt;
+    POINTL vPt;
 
     ::WinQueryPointerPos(HWND_DESKTOP, &vPt);
     return wxPoint(vPt.x, vPt.y);
 }
+
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+    // TODO
+    return ms;
+}
+
 
 wxWindowOS2* FindWindowForMouseEvent( wxWindow* pWin,
                                       short*    WXUNUSED(pnX),
