@@ -268,7 +268,11 @@ wxRect wxBookCtrlBase::GetPageRect() const
 
     wxPoint pt;
     wxRect rectPage(pt, GetClientSize());
-    switch ( GetWindowStyle() & wxBK_ALIGN_MASK )
+    long style = GetWindowStyle();
+    if ( !HasFlag(wxBK_ALIGN_MASK) )
+        style = GetDefaultAlignment();
+
+    switch ( style )
     {
         default:
             wxFAIL_MSG( _T("unexpected alignment") );
