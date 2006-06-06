@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        floatpane.cpp
+// Name:        src/aui/floatpane.cpp
 // Purpose:     wxaui: wx advanced user interface - docking window manager
 // Author:      Benjamin I. Williams
 // Modified by:
 // Created:     2005-05-17
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (C) Copyright 2005-2006, Kirix Corporation, All Rights Reserved
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,15 +30,14 @@
 #include "wx/aui/dockart.h"
 
 #ifndef WX_PRECOMP
-//    #include "wx/log.h"
 #endif
 
 wxFloatingPane::wxFloatingPane(wxWindow* parent,
                 wxFrameManager* owner_mgr,
-                wxWindowID id /*= -1*/,
+                wxWindowID id /*= wxID_ANY*/,
                 const wxPoint& pos /*= wxDefaultPosition*/,
                 const wxSize& size /*= wxDefaultSize*/)
-                : wxFloatingPaneBaseClass(parent, id, wxT(""), pos, size,
+                : wxFloatingPaneBaseClass(parent, id, wxEmptyString, pos, size,
                         wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
                         wxCLOSE_BOX | wxFRAME_NO_TASKBAR |
                         wxFRAME_FLOAT_ON_PARENT | wxCLIP_CHILDREN)
@@ -59,15 +58,15 @@ void wxFloatingPane::SetPaneWindow(const wxPaneInfo& pane)
 {
     m_pane_window = pane.window;
     m_pane_window->Reparent(this);
-    
+
     wxPaneInfo contained_pane = pane;
     contained_pane.Dock().Center().Show().
                     CaptionVisible(false).
                     PaneBorder(false).
                     Layer(0).Row(0).Position(0);
-                                            
+
     m_mgr.AddPane(m_pane_window, contained_pane);
-    m_mgr.Update();           
+    m_mgr.Update();
 
     if (pane.min_size.IsFullySpecified())
     {
@@ -78,7 +77,7 @@ void wxFloatingPane::SetPaneWindow(const wxPaneInfo& pane)
         GetSizer()->SetSizeHints(this);
         SetSize(tmp);
     }
-    
+
     SetTitle(pane.caption);
 
     if (contained_pane.IsFixed())
@@ -102,7 +101,7 @@ void wxFloatingPane::SetPaneWindow(const wxPaneInfo& pane)
             else
                 size.x += m_owner_mgr->m_art->GetMetric(wxAUI_ART_GRIPPER_SIZE);
         }
-            
+
         SetClientSize(size);
     }
 }
@@ -137,7 +136,7 @@ void wxFloatingPane::OnMoveEvent(wxMoveEvent& event)
     }
 
     m_last_rect = win_rect;
-    
+
     if (!isMouseDown())
         return;
 

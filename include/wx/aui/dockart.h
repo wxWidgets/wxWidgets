@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dockart.h
+// Name:        wx/aui/dockart.h
 // Purpose:     wxaui: wx advanced user interface - docking window manager
 // Author:      Benjamin I. Williams
 // Modified by:
 // Created:     2005-05-17
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (C) Copyright 2005, Kirix Corporation, All Rights Reserved.
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@ public:
     virtual void SetColour(int id, const wxColor& colour) = 0;
     wxColor GetColor(int id) { return GetColour(id); }
     void SetColor(int id, const wxColor& color) { SetColour(id, color); }
-    
+
     virtual void DrawSash(wxDC& dc,
                           int orientation,
                           const wxRect& rect) = 0;

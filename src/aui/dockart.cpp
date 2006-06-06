@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dockart.cpp
+// Name:        src/aui/dockart.cpp
 // Purpose:     wxaui: wx advanced user interface - docking window manager
 // Author:      Benjamin I. Williams
 // Modified by:
 // Created:     2005-05-17
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (C) Copyright 2005-2006, Kirix Corporation, All Rights Reserved
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,17 +26,12 @@
 #if wxUSE_AUI
 
 #include "wx/image.h"
-#include "wx/dcclient.h"
-#include "wx/settings.h"
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"
 
-#ifdef __WXMAC__
-#include "wx/mac/private.h"
-#endif
-
 #ifndef WX_PRECOMP
-//    #include "wx/log.h"
+    #include "wx/settings.h"
+    #include "wx/dcclient.h"
 #endif
 
 // -- wxDefaultDockArt class implementation --
@@ -54,9 +49,9 @@
 static wxColor StepColour(const wxColor& c, int percent)
 {
     int r = c.Red(), g = c.Green(), b = c.Blue();
-    return wxColour(wxMin((r*percent)/100,255),
-                    wxMin((g*percent)/100,255),
-                    wxMin((b*percent)/100,255));
+    return wxColour((unsigned char)wxMin((r*percent)/100,255),
+                    (unsigned char)wxMin((g*percent)/100,255),
+                    (unsigned char)wxMin((b*percent)/100,255));
 }
 
 static wxColor LightContrastColour(const wxColour& c)
@@ -106,7 +101,9 @@ static void DrawGradientRectangle(wxDC& dc,
         int g = start_color.Green() + ((i*gd*100)/high)/100;
         int b = start_color.Blue() + ((i*bd*100)/high)/100;
 
-        wxPen p(wxColor(r,g,b));
+        wxPen p(wxColor((unsigned char)r,
+                        (unsigned char)g,
+                        (unsigned char)b));
         dc.SetPen(p);
 
         if (direction == wxAUI_GRADIENT_VERTICAL)
@@ -126,7 +123,7 @@ wxDefaultDockArt::wxDefaultDockArt()
 #else
     wxColor base_color = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 #endif
-    
+
     wxColor darker1_color = StepColour(base_color, 85);
     wxColor darker2_color = StepColour(base_color, 70);
     wxColor darker3_color = StepColour(base_color, 60);
@@ -177,7 +174,7 @@ wxDefaultDockArt::wxDefaultDockArt()
         0xff,0xff,0xff,0xff,0xff,0xff,0x1f,0xfc,0xdf,0xfc,0xdf,0xfc,
         0xdf,0xfc,0xdf,0xfc,0xdf,0xfc,0x0f,0xf8,0x7f,0xff,0x7f,0xff,
         0x7f,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
-          
+
 #ifdef __WXMAC__
     m_inactive_close_bitmap = BitmapFromBits(close_bits, 16, 16, *wxWHITE);
 #else
@@ -240,16 +237,16 @@ wxColour wxDefaultDockArt::GetColour(int id)
 {
     switch (id)
     {
-        case wxAUI_ART_BACKGROUND_COLOUR:                return m_background_brush.GetColour(); break;
-        case wxAUI_ART_SASH_COLOUR:                      return m_sash_brush.GetColour(); break;
-        case wxAUI_ART_INACTIVE_CAPTION_COLOUR:          return m_inactive_caption_colour; break;
-        case wxAUI_ART_INACTIVE_CAPTION_GRADIENT_COLOUR: return m_inactive_caption_gradient_colour; break;
-        case wxAUI_ART_INACTIVE_CAPTION_TEXT_COLOUR:     return m_inactive_caption_text_colour; break;
-        case wxAUI_ART_ACTIVE_CAPTION_COLOUR:            return m_active_caption_colour; break;
-        case wxAUI_ART_ACTIVE_CAPTION_GRADIENT_COLOUR:   return m_active_caption_gradient_colour; break;
-        case wxAUI_ART_ACTIVE_CAPTION_TEXT_COLOUR:       return m_active_caption_text_colour; break;
-        case wxAUI_ART_BORDER_COLOUR:                    return m_border_pen.GetColour(); break;
-        case wxAUI_ART_GRIPPER_COLOUR:                   return m_gripper_brush.GetColour(); break;
+        case wxAUI_ART_BACKGROUND_COLOUR:                return m_background_brush.GetColour();
+        case wxAUI_ART_SASH_COLOUR:                      return m_sash_brush.GetColour();
+        case wxAUI_ART_INACTIVE_CAPTION_COLOUR:          return m_inactive_caption_colour;
+        case wxAUI_ART_INACTIVE_CAPTION_GRADIENT_COLOUR: return m_inactive_caption_gradient_colour;
+        case wxAUI_ART_INACTIVE_CAPTION_TEXT_COLOUR:     return m_inactive_caption_text_colour;
+        case wxAUI_ART_ACTIVE_CAPTION_COLOUR:            return m_active_caption_colour;
+        case wxAUI_ART_ACTIVE_CAPTION_GRADIENT_COLOUR:   return m_active_caption_gradient_colour;
+        case wxAUI_ART_ACTIVE_CAPTION_TEXT_COLOUR:       return m_active_caption_text_colour;
+        case wxAUI_ART_BORDER_COLOUR:                    return m_border_pen.GetColour();
+        case wxAUI_ART_GRIPPER_COLOUR:                   return m_gripper_brush.GetColour();
         default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
     }
 
@@ -305,13 +302,13 @@ void wxDefaultDockArt::DrawSash(wxDC& dc, int, const wxRect& rect)
     CGContextTranslateCTM( cgContext , 0 , bounds.bottom - bounds.top ) ;
     CGContextScaleCTM( cgContext , 1 , -1 ) ;
 #endif
-    
+
     HIThemeSplitterDrawInfo drawInfo ;
     drawInfo.version = 0 ;
     drawInfo.state = kThemeStateActive ;
     drawInfo.adornment = kHIThemeSplitterAdornmentNone ;
-    HIThemeDrawPaneSplitter( &splitterRect , &drawInfo , cgContext , kHIThemeOrientationNormal ) ;    
-    
+    HIThemeDrawPaneSplitter( &splitterRect , &drawInfo , cgContext , kHIThemeOrientationNormal ) ;
+
 #if wxMAC_USE_CORE_GRAPHICS
 #else
     QDEndCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
@@ -354,7 +351,7 @@ void wxDefaultDockArt::DrawBorder(wxDC& dc, const wxRect& _rect,
             dc.SetPen(*wxWHITE_PEN);
             dc.DrawLine(rect.x, rect.y, rect.x+rect.width, rect.y);
             dc.DrawLine(rect.x, rect.y, rect.x, rect.y+rect.height);
-            dc.SetPen(m_border_pen);       
+            dc.SetPen(m_border_pen);
             dc.DrawLine(rect.x, rect.y+rect.height-1,
                         rect.x+rect.width, rect.y+rect.height-1);
             dc.DrawLine(rect.x+rect.width-1, rect.y,
