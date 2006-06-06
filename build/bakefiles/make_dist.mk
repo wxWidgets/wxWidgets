@@ -14,6 +14,7 @@ GENDIR   = $(WXDIR)/src/generic
 COMMDIR  = $(WXDIR)/src/common
 HTMLDIR  = $(WXDIR)/src/html
 RICHTEXTDIR = $(WXDIR)/src/richtext
+AUIDIR =   $(WXDIR)/src/aui
 UNIXDIR  = $(WXDIR)/src/unix
 PNGDIR   = $(WXDIR)/src/png
 JPEGDIR  = $(WXDIR)/src/jpeg
@@ -157,6 +158,7 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/generic
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
+	mkdir $(DISTDIR)/include/wx/aui
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/include/wx/xml
@@ -166,6 +168,7 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(INCDIR)/wx/generic/*.h $(DISTDIR)/include/wx/generic
 	$(CP_P) $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
 	$(CP_P) $(INCDIR)/wx/richtext/*.h $(DISTDIR)/include/wx/richtext
+	$(CP_P) $(INCDIR)/wx/aui/*.h $(DISTDIR)/include/wx/aui
 	$(CP_P) $(INCDIR)/wx/unix/*.h $(DISTDIR)/include/wx/unix
 	$(CP_P) $(INCDIR)/wx/xml/*.h $(DISTDIR)/include/wx/xml
 	$(CP_P) $(INCDIR)/wx/xrc/*.h $(DISTDIR)/include/wx/xrc
@@ -179,6 +182,7 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/src/generic
 	mkdir $(DISTDIR)/src/html
 	mkdir $(DISTDIR)/src/richtext
+	mkdir $(DISTDIR)/src/aui
 	mkdir $(DISTDIR)/src/$(TOOLKITDIR)
 	mkdir $(DISTDIR)/src/png
 	mkdir $(DISTDIR)/src/jpeg
@@ -196,6 +200,7 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(GENDIR)/*.mms $(DISTDIR)/src/generic
 	$(CP_P) $(HTMLDIR)/*.cpp $(DISTDIR)/src/html
 	$(CP_P) $(RICHTEXTDIR)/*.cpp $(DISTDIR)/src/richtext
+	$(CP_P) $(AUIDIR)/*.cpp $(DISTDIR)/src/aui
 	$(CP_P) $(PNGDIR)/*.h $(DISTDIR)/src/png
 	$(CP_P) $(PNGDIR)/*.c $(DISTDIR)/src/png
 	$(CP_P) $(PNGDIR)/README $(DISTDIR)/src/png
@@ -222,6 +227,7 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
+	mkdir $(DISTDIR)/include/wx/aui
 	mkdir $(DISTDIR)/include/wx/mac
 	mkdir $(DISTDIR)/include/wx/mac/carbon
 	mkdir $(DISTDIR)/include/wx/mac/corefoundation
@@ -904,6 +910,10 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/richtext/bitmaps/*.xpm $(DISTDIR)/samples/richtext/bitmaps
 	$(CP_P) $(SAMPDIR)/richtext/readme.txt $(DISTDIR)/samples/richtext
 	$(CP_P) $(SAMPDIR)/richtext/todo.txt $(DISTDIR)/samples/richtext
+
+	mkdir $(DISTDIR)/samples/aui
+	$(CP_P) $(SAMPDIR)/aui/Makefile.in $(DISTDIR)/samples/aui
+	$(CP_P) $(SAMPDIR)/aui/*.cpp $(DISTDIR)/samples/aui
 
 	mkdir $(DISTDIR)/samples/propsize
 	$(CP_P) $(SAMPDIR)/propsize/Makefile.in $(DISTDIR)/samples/propsize
