@@ -982,11 +982,13 @@ void MyFrame::OnCopyPerspectiveCode(wxCommandEvent& WXUNUSED(event))
 {
     wxString s = m_mgr.SavePerspective();
 
+#if wxUSE_CLIPBOARD
     if (wxTheClipboard->Open())
     {
         wxTheClipboard->SetData(new wxTextDataObject(s));
         wxTheClipboard->Close();
     }
+#endif
 }
 
 void MyFrame::OnRestorePerspective(wxCommandEvent& event)

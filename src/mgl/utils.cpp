@@ -165,6 +165,12 @@ wxPoint wxGetMousePosition()
     return pt;
 }
 
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+    // TODO
+    return ms;
+}
 
 
 #ifdef __UNIX__
