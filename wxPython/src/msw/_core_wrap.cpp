@@ -55625,6 +55625,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "CENTER_ON_SCREEN",SWIG_From_int(static_cast< int >(wxCENTER_ON_SCREEN)));
   SWIG_Python_SetConstant(d, "CLIP_CHILDREN",SWIG_From_int(static_cast< int >(wxCLIP_CHILDREN)));
   SWIG_Python_SetConstant(d, "CLIP_SIBLINGS",SWIG_From_int(static_cast< int >(wxCLIP_SIBLINGS)));
+  SWIG_Python_SetConstant(d, "WINDOW_STYLE_MASK",SWIG_From_int(static_cast< int >(wxWINDOW_STYLE_MASK)));
   SWIG_Python_SetConstant(d, "ALWAYS_SHOW_SB",SWIG_From_int(static_cast< int >(wxALWAYS_SHOW_SB)));
   SWIG_Python_SetConstant(d, "RETAINED",SWIG_From_int(static_cast< int >(wxRETAINED)));
   SWIG_Python_SetConstant(d, "BACKINGSTORE",SWIG_From_int(static_cast< int >(wxBACKINGSTORE)));

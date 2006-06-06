@@ -4059,9 +4059,6 @@ SWIGINTERN wxStandardPaths *wxStandardPaths_Get(){
 SWIGINTERN void wxStandardPaths_SetInstallPrefix(wxStandardPaths *self,wxString const &prefix){}
 SWIGINTERN wxString wxStandardPaths_GetInstallPrefix(wxStandardPaths *self){ return wxEmptyString; }
 
-#include <wx/power.h>
-
-
 #ifndef wxHAS_POWER_EVENTS
 // Dummy class and other definitions for platforms that don't have them
 

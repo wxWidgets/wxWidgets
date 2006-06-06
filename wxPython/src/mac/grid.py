@@ -1273,7 +1273,7 @@ class Grid(_windows.ScrolledWindow):
         return _grid.Grid_YToRow(*args, **kwargs)
 
     def XToCol(*args, **kwargs):
-        """XToCol(self, int x) -> int"""
+        """XToCol(self, int x, bool clipToMinMax=False) -> int"""
         return _grid.Grid_XToCol(*args, **kwargs)
 
     def YToEdgeOfRow(*args, **kwargs):
@@ -1492,6 +1492,18 @@ class Grid(_windows.ScrolledWindow):
         """CanDragColSize(self) -> bool"""
         return _grid.Grid_CanDragColSize(*args, **kwargs)
 
+    def EnableDragColMove(*args, **kwargs):
+        """EnableDragColMove(self, bool enable=True)"""
+        return _grid.Grid_EnableDragColMove(*args, **kwargs)
+
+    def DisableDragColMove(*args, **kwargs):
+        """DisableDragColMove(self)"""
+        return _grid.Grid_DisableDragColMove(*args, **kwargs)
+
+    def CanDragColMove(*args, **kwargs):
+        """CanDragColMove(self) -> bool"""
+        return _grid.Grid_CanDragColMove(*args, **kwargs)
+
     def EnableDragGridSize(*args, **kwargs):
         """EnableDragGridSize(self, bool enable=True)"""
         return _grid.Grid_EnableDragGridSize(*args, **kwargs)
@@ -1631,6 +1643,18 @@ class Grid(_windows.ScrolledWindow):
     def SetColSize(*args, **kwargs):
         """SetColSize(self, int col, int width)"""
         return _grid.Grid_SetColSize(*args, **kwargs)
+
+    def GetColAt(*args, **kwargs):
+        """GetColAt(self, int colPos) -> int"""
+        return _grid.Grid_GetColAt(*args, **kwargs)
+
+    def SetColPos(*args, **kwargs):
+        """SetColPos(self, int colID, int newPos)"""
+        return _grid.Grid_SetColPos(*args, **kwargs)
+
+    def GetColPos(*args, **kwargs):
+        """GetColPos(self, int colID) -> int"""
+        return _grid.Grid_GetColPos(*args, **kwargs)
 
     def AutoSizeColumn(*args, **kwargs):
         """AutoSizeColumn(self, int col, bool setAsMin=True)"""

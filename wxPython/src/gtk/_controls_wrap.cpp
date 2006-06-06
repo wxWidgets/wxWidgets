@@ -3348,9 +3348,6 @@ SWIGINTERN wxDateTime wxDatePickerCtrl_GetUpperLimit(wxDatePickerCtrl *self){
             self->GetRange(NULL, &rv);
             return rv;
         }
-
-#include <wx/hyperlink.h>
-
  static const wxString wxPyHyperlinkCtrlNameStr(wxHyperlinkCtrlNameStr); 
 #ifdef __cplusplus
 extern "C" {

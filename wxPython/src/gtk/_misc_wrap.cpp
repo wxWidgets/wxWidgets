@@ -4067,22 +4067,11 @@ SWIGINTERN wxStandardPaths *wxStandardPaths_Get(){
             return (wxStandardPaths*) &wxStandardPaths::Get();
         }
 
-#include <wx/power.h>
-
-
 #ifndef wxHAS_POWER_EVENTS
 // Dummy class and other definitions for platforms that don't have them
 
-class wxPowerEvent : public wxEvent
-{
-public:
-    wxPowerEvent(wxEventType evtType) : wxEvent(wxID_NONE, evtType) {}
-    void Veto() {}
-    bool IsVetoed() const { return false; }
-
-    virtual wxEvent *Clone() const { return new wxPowerEvent(*this); }
-};
-
+// See wxPython_int.h for wxPowerEvent
+    
 enum {
     wxEVT_POWER_SUSPENDING,
     wxEVT_POWER_SUSPENDED,
