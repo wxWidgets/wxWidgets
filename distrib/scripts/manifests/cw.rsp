@@ -20,6 +20,7 @@ src/png/*W7.xml
 src/regex/*W7.xml
 
 samples/artprov/*W7.xml
+samples/aui/*W7.xml
 samples/calendar/*W7.xml
 samples/caret/*W7.xml
 samples/checklst/*W7.xml

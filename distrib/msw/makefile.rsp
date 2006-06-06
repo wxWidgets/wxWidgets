@@ -5,6 +5,7 @@ tests/Makefile.in
 samples/Makefile.in
 samples/access/Makefile.in
 samples/artprov/Makefile.in
+samples/aui/Makefile.in
 samples/calendar/Makefile.in
 samples/caret/Makefile.in
 samples/checklst/Makefile.in

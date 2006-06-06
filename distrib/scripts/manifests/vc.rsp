@@ -27,6 +27,8 @@ samples/access/access.dsp
 
 samples/artprov/artprov.dsp
 
+samples/aui/aui.dsp
+
 samples/calendar/calendar.dsp
 
 samples/caret/caret.dsp

@@ -36,6 +36,8 @@ contrib/utils/convertrc/*.mcp
 
 samples/artprov/*M?.xml
 samples/artprov/*.mcp
+samples/aui/*M?.xml
+samples/aui/*.mcp
 samples/calendar/*M?.xml
 samples/calendar/*.mcp
 samples/caret/*M?.xml

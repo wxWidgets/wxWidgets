@@ -7,6 +7,9 @@ samples/access/access.vcw
 samples/artprov/artprov.vcp
 samples/artprov/artprov.vcw
 
+samples/aui/auidemo.vcp
+samples/aui/auidemo.vcw
+
 samples/calendar/arttest.vcp
 samples/calendar/arttest.vcw
 

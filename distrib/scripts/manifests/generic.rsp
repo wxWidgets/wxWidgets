@@ -100,6 +100,8 @@ src/html/bitmaps/*.xpm
 
 src/richtext/*.cpp
 
+src/aui/*.cpp
+
 src/unix/*.cpp
 src/unix/*.c
 
@@ -169,6 +171,7 @@ include/wx/html/msw/*.bmp
 include/wx/html/msw/*.ico
 include/wx/html/msw/*.rc
 include/wx/richtext/*.h
+include/wx/aui/*.h
 lib/dummy
 
 tools/gettext/*.*
@@ -217,6 +220,10 @@ samples/artprov/*.rc
 samples/artprov/*.wav
 samples/artprov/*.pro
 samples/artprov/*.bkl
+
+samples/aui/*.cpp
+samples/aui/*.bkl
+samples/aui/makefile*
 
 samples/calendar/*.cpp
 samples/calendar/*.h
