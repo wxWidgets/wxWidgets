@@ -20,6 +20,12 @@
 
 #if wxUSE_AUI
 
+#include "wx/dynarray.h"
+#include "wx/gdicmn.h"
+#include "wx/window.h"
+#include "wx/timer.h"
+#include "wx/sizer.h"
+
 enum WXDLLIMPEXP_AUI wxFrameManagerDock
 {
     wxAUI_DOCK_NONE = 0,

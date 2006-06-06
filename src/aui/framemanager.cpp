@@ -35,8 +35,16 @@
 
 //#include "wx/dcbuffer.h"
 
+#include "wx/dcclient.h"
+#include "wx/dcscreen.h"
 #include "wx/app.h"
 #include "wx/image.h"
+#include "wx/settings.h"
+
+#if wxUSE_MDI
+#include "wx/mdi.h"
+#endif
+
 WX_CHECK_BUILD_OPTIONS("wxAUI")
 
 #include "wx/arrimpl.cpp"

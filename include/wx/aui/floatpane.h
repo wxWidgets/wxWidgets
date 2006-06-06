@@ -20,6 +20,8 @@
 
 #if wxUSE_AUI
 
+#include "wx/frame.h"
+
 #if defined( __WXMSW__ ) || defined( __WXMAC__ )
 #include "wx/minifram.h"
 #define wxFloatingPaneBaseClass wxMiniFrame

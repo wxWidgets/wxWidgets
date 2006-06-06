@@ -20,6 +20,10 @@
 
 #if wxUSE_AUI
 
+#include "wx/pen.h"
+#include "wx/brush.h"
+#include "wx/bitmap.h"
+#include "wx/colour.h"
 
 // dock art provider code - a dock provider provides all drawing
 // functionality to the wxAui dock manager.  This allows the dock

@@ -26,6 +26,8 @@
 #if wxUSE_AUI
 
 #include "wx/image.h"
+#include "wx/dcclient.h"
+#include "wx/settings.h"
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"
 
