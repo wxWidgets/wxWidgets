@@ -201,6 +201,12 @@ int wxChoice::GetCount() const
 
 int wxChoice::FindString(const wxString& s) const
 {
+#if !wxUSE_STL
+    // Avoid assert for non-default args passed to sorted array Index
+    if ( HasFlag(wxCB_SORT) )
+        bCase = true;
+#endif
+
     return m_strings.Index( s , true , false) ;
 }
 
