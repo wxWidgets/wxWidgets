@@ -532,6 +532,13 @@
 #  define wxUSE_XML       0
 #endif
 
+// Use wxWidget's AUI docking system
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_AUI       1
+
 // ----------------------------------------------------------------------------
 // Individual GUI controls
 // ----------------------------------------------------------------------------
