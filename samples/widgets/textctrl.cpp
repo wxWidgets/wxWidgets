@@ -138,6 +138,9 @@ public:
     virtual wxControl *GetWidget() const { return m_text; }
     virtual void RecreateWidget() { CreateText(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     // create an info text contorl
     wxTextCtrl *CreateInfoText();
@@ -374,7 +377,10 @@ TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
     m_posLast =
     m_selFrom =
     m_selTo = -2; // not -1 which means "no selection"
+}
 
+void TextWidgetsPage::CreateContent()
+{
     // left pane
     static const wxString modes[] =
     {

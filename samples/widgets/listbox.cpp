@@ -81,6 +81,9 @@ public:
     virtual wxControl *GetWidget() const { return m_lbox; }
     virtual void RecreateWidget() { CreateLbox(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
@@ -145,7 +148,7 @@ protected:
 #ifdef __WXWINCE__
     wxListBoxBase
 #else
-    wxListBox 
+    wxListBox
 #endif
                   *m_lbox;
 
@@ -225,6 +228,10 @@ ListboxWidgetsPage::ListboxWidgetsPage(WidgetsBookCtrl *book,
     m_lbox = NULL;
     m_sizerLbox = (wxSizer *)NULL;
 
+}
+
+void ListboxWidgetsPage::CreateContent()
+{
     /*
        What we create here is a frame having 3 panes: style pane is the
        leftmost one, in the middle the pane with buttons allowing to perform

@@ -90,6 +90,9 @@ public:
     virtual wxControl *GetWidget() const { return m_combobox; }
     virtual void RecreateWidget() { CreateCombo(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
@@ -212,7 +215,10 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(WidgetsBookCtrl *book,
 
     m_combobox = (wxComboBox *)NULL;
     m_sizerCombo = (wxSizer *)NULL;
+}
 
+void ComboboxWidgetsPage::CreateContent()
+{
     /*
        What we create here is a frame having 3 panes: style pane is the
        leftmost one, in the middle the pane with buttons allowing to perform
@@ -408,7 +414,7 @@ void ComboboxWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 void ComboboxWidgetsPage::OnButtonChange(wxCommandEvent& WXUNUSED(event))
 {
     int sel = m_combobox->GetSelection();
-    if ( sel != -1 )
+    if ( sel != wxNOT_FOUND )
     {
 #ifndef __WXGTK__
         m_combobox->SetString(sel, m_textChange->GetValue());
@@ -531,7 +537,7 @@ void ComboboxWidgetsPage::OnUpdateUIDeleteButton(wxUpdateUIEvent& event)
 void ComboboxWidgetsPage::OnUpdateUIDeleteSelButton(wxUpdateUIEvent& event)
 {
     if (m_combobox)
-        event.Enable(m_combobox->GetSelection() != -1);
+        event.Enable(m_combobox->GetSelection() != wxNOT_FOUND);
 }
 
 void ComboboxWidgetsPage::OnUpdateUIClearButton(wxUpdateUIEvent& event)

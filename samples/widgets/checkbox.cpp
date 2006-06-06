@@ -79,6 +79,9 @@ public:
     virtual wxControl *GetWidget() const { return m_checkbox; }
     virtual void RecreateWidget() { CreateCheckbox(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     // event handlers
     void OnCheckBox(wxCommandEvent& event);
@@ -159,6 +162,10 @@ IMPLEMENT_WIDGETS_PAGE(CheckBoxWidgetsPage, wxT("CheckBox"), FAMILY_CTRLS );
 CheckBoxWidgetsPage::CheckBoxWidgetsPage(WidgetsBookCtrl *book,
                                          wxImageList *imaglist)
                   : WidgetsPage(book, imaglist, checkbox_xpm)
+{
+}
+
+void CheckBoxWidgetsPage::CreateContent()
 {
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 

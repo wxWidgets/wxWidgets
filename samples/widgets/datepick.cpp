@@ -75,6 +75,9 @@ public:
     virtual wxControl *GetWidget() const { return m_datePicker; }
     virtual void RecreateWidget() { CreateDatePicker(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     // event handlers
     void OnButtonSet(wxCommandEvent& event);
@@ -132,6 +135,10 @@ IMPLEMENT_WIDGETS_PAGE(DatePickerWidgetsPage, wxT("DatePicker"),
 DatePickerWidgetsPage::DatePickerWidgetsPage(WidgetsBookCtrl *book,
                                          wxImageList *imaglist)
                       :WidgetsPage(book, imaglist, datepick_xpm)
+{
+}
+
+void DatePickerWidgetsPage::CreateContent()
 {
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 

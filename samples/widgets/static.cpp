@@ -145,6 +145,9 @@ public:
     virtual wxControl *GetWidget() const { return m_statText; }
     virtual void RecreateWidget() { CreateStatic(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     // event handlers
     void OnCheckOrRadioBox(wxCommandEvent& event);
@@ -227,7 +230,10 @@ StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
     m_staticBox = (wxStaticBox *)NULL;
     m_sizerStatBox = (wxStaticBoxSizer *)NULL;
     m_sizerStatic = (wxSizer *)NULL;
+}
 
+void StaticWidgetsPage::CreateContent()
+{
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane

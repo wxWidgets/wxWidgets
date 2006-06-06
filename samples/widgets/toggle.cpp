@@ -64,6 +64,9 @@ public:
     virtual wxControl *GetWidget() const { return m_toggle; }
     virtual void RecreateWidget() { CreateToggle(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
@@ -116,6 +119,10 @@ IMPLEMENT_WIDGETS_PAGE(ToggleWidgetsPage, wxT("ToggleButton"),
 ToggleWidgetsPage::ToggleWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)
                       :WidgetsPage(book, imaglist, toggle_xpm)
+{
+}
+
+void ToggleWidgetsPage::CreateContent()
 {
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 

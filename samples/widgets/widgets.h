@@ -98,6 +98,9 @@ public:
     // return the control shown by this page
     virtual wxControl *GetWidget() const = 0;
 
+    // lazy creation of the content
+    virtual void CreateContent() = 0;
+
     // some pages show 2 controls, in this case override this one as well
     virtual wxControl *GetWidget2() const { return NULL; }
 

@@ -77,6 +77,9 @@ public:
     virtual wxControl *GetWidget() const { return m_gauge; }
     virtual void RecreateWidget() { CreateGauge(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
@@ -179,7 +182,10 @@ GaugeWidgetsPage::GaugeWidgetsPage(WidgetsBookCtrl *book,
 
     m_gauge = (wxGauge *)NULL;
     m_sizerGauge = (wxSizer *)NULL;
+}
 
+void GaugeWidgetsPage::CreateContent()
+{
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane

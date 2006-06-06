@@ -85,6 +85,9 @@ public:
     virtual wxControl *GetWidget() const { return m_button; }
     virtual void RecreateWidget() { CreateButton(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     // event handlers
     void OnCheckOrRadioBox(wxCommandEvent& event);
@@ -183,7 +186,10 @@ ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
 
     m_button = (wxButton *)NULL;
     m_sizerButton = (wxSizer *)NULL;
+}
 
+void ButtonWidgetsPage::CreateContent()
+{
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane

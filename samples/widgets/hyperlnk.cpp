@@ -69,10 +69,13 @@ class HyperlinkWidgetsPage : public WidgetsPage
 {
 public:
     HyperlinkWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~HyperlinkWidgetsPage(){};
+    virtual ~HyperlinkWidgetsPage() {}
 
     virtual wxControl *GetWidget() const { return m_hyperlink; }
     virtual void RecreateWidget() { CreateHyperlink(); }
+
+    // lazy creation of the content
+    virtual void CreateContent();
 
 protected:
     // event handlers
@@ -128,7 +131,11 @@ IMPLEMENT_WIDGETS_PAGE(HyperlinkWidgetsPage, wxT("Hyperlink"),
 
 HyperlinkWidgetsPage::HyperlinkWidgetsPage(WidgetsBookCtrl *book,
                                            wxImageList *imaglist)
-                      :WidgetsPage(book, imaglist, hyperlnk_xpm)
+                     :WidgetsPage(book, imaglist, hyperlnk_xpm)
+{
+}
+
+void HyperlinkWidgetsPage::CreateContent()
 {
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 

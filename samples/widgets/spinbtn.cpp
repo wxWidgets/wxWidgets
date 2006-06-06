@@ -80,6 +80,9 @@ public:
     virtual wxControl *GetWidget2() const { return m_spinctrl; }
     virtual void RecreateWidget() { CreateSpin(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
@@ -197,7 +200,10 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
 
     m_spinbtn = (wxSpinButton *)NULL;
     m_sizerSpin = (wxSizer *)NULL;
+}
 
+void SpinBtnWidgetsPage::CreateContent()
+{
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane

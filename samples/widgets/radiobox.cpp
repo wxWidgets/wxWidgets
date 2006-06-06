@@ -89,6 +89,9 @@ public:
     virtual wxControl *GetWidget() const { return m_radio; }
     virtual void RecreateWidget() { CreateRadio(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     // event handlers
     void OnCheckOrRadioBox(wxCommandEvent& event);
@@ -199,7 +202,10 @@ RadioWidgetsPage::RadioWidgetsPage(WidgetsBookCtrl *book,
     m_radio =
     m_radioDir = (wxRadioBox *)NULL;
     m_sizerRadio = (wxSizer *)NULL;
+}
 
+void RadioWidgetsPage::CreateContent()
+{
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane

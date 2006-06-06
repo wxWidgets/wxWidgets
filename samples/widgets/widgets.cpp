@@ -48,6 +48,7 @@
 #include "wx/fontdlg.h"
 #include "wx/textdlg.h"
 #include "wx/imaglist.h"
+#include "wx/wupdlock.h"
 
 #include "widgets.h"
 
@@ -567,12 +568,17 @@ void WidgetsFrame::InitBook()
 
 WidgetsPage *WidgetsFrame::CurrentPage()
 {
+    wxWindow *page = m_book->GetCurrentPage();
+    if(!page) return NULL;
+
 #if USE_TREEBOOK
-    return wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+    return wxStaticCast(page, WidgetsPage);
 #else
-    WidgetsBookCtrl *book = wxStaticCast(m_book->GetCurrentPage(), WidgetsBookCtrl);
-    if (!book) return NULL;
-    return wxStaticCast(book->GetCurrentPage(), WidgetsPage);
+    WidgetsBookCtrl *subBook = wxStaticCast(page, WidgetsBookCtrl);
+    if (!subBook) return NULL;
+    page = subBook->GetCurrentPage();
+    if(!page) return NULL;
+    return wxStaticCast(page, WidgetsPage);
 #endif
 }
 
@@ -603,8 +609,29 @@ void WidgetsFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
 
 void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
 {
+    // adjust "Page" menu selection
     wxMenuItem *item = GetMenuBar()->FindItem(Widgets_GoToPage + event.GetSelection());
     if (item) item->Check();
+
+    // lazy creation of the pages
+    WidgetsPage* page = CurrentPage();
+    if (page && (page->GetChildren().GetCount()==0))
+    {
+        wxWindowUpdateLocker noUpdates(page);
+        page->CreateContent();
+        WidgetsBookCtrl *book = wxStaticCast(page->GetParent(), WidgetsBookCtrl);
+        wxSize size;
+        for ( size_t i = 0; i < book->GetPageCount(); ++i )
+        {
+            wxWindow *page = book->GetPage(i);
+            if (page)
+            {
+                size.IncTo(page->GetSize());
+            }
+        }
+        page->SetSize(size);
+    }
+
     event.Skip();
 }
 

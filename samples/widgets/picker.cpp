@@ -90,6 +90,9 @@ public:
     virtual wxControl *GetWidget() const { return m_filePicker; }
     virtual void RecreateWidget() { RecreateAllPickers(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     enum PickerKind
     {
@@ -206,6 +209,10 @@ IMPLEMENT_WIDGETS_PAGE(PickerWidgetsPage, _T("Pickers"),
 PickerWidgetsPage::PickerWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)
                   : WidgetsPage(book, imaglist, picker_xpm)
+{
+}
+
+void PickerWidgetsPage::CreateContent()
 {
     // left pane
     wxSizer *boxleft = new wxBoxSizer(wxVERTICAL);

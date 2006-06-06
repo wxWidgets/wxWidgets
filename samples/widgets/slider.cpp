@@ -95,6 +95,9 @@ public:
     virtual wxControl *GetWidget() const { return m_slider; }
     virtual void RecreateWidget() { CreateSlider(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
@@ -223,7 +226,10 @@ SliderWidgetsPage::SliderWidgetsPage(WidgetsBookCtrl *book,
 
     m_slider = (wxSlider *)NULL;
     m_sizerSlider = (wxSizer *)NULL;
+}
 
+void SliderWidgetsPage::CreateContent()
+{
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane

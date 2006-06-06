@@ -92,6 +92,9 @@ public:
     virtual wxControl *GetWidget() const { return m_book; }
     virtual void RecreateWidget() { RecreateBook(); }
 
+    // lazy creation of the content
+    virtual void CreateContent();
+
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
@@ -199,8 +202,12 @@ BookWidgetsPage::BookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist, c
 #endif // USE_ICONS_IN_BOOK
 
     m_book = NULL;
+    m_radioOrient = NULL;
     m_sizerBook = (wxSizer *)NULL;
+}
 
+void BookWidgetsPage::CreateContent()
+{
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
@@ -343,7 +350,12 @@ void BookWidgetsPage::CreateImageList()
 
 void BookWidgetsPage::RecreateBook()
 {
+    // do not recreate anything in case page content was not prepared yet
+    if(!m_radioOrient)
+        return;
+
     int flags = ms_defaultFlags;
+
     switch ( m_radioOrient->GetSelection() )
     {
         default:
@@ -412,8 +424,9 @@ void BookWidgetsPage::RecreateBook()
 
 int BookWidgetsPage::GetTextValue(wxTextCtrl *text) const
 {
-    long pos;
-    if ( !text->GetValue().ToLong(&pos) )
+    long pos = -1;
+
+    if ( !text || !text->GetValue().ToLong(&pos) )
         pos = -1;
 
     return (int)pos;
@@ -504,18 +517,21 @@ void BookWidgetsPage::OnUpdateUIRemoveButton(wxUpdateUIEvent& event)
 
 void BookWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
-    event.Enable( !m_chkImages->GetValue() ||
-                  m_radioOrient->GetSelection() != wxBK_TOP );
+    if(m_chkImages && m_radioOrient)
+        event.Enable( !m_chkImages->GetValue() ||
+                      m_radioOrient->GetSelection() != wxBK_TOP );
 }
 
 void BookWidgetsPage::OnUpdateUINumPagesText(wxUpdateUIEvent& event)
 {
-    event.SetText( wxString::Format(_T("%d"), m_book->GetPageCount()) );
+    if(m_book)
+        event.SetText( wxString::Format(_T("%d"), m_book->GetPageCount()) );
 }
 
 void BookWidgetsPage::OnUpdateUICurSelectText(wxUpdateUIEvent& event)
 {
-    event.SetText( wxString::Format(_T("%d"), m_book->GetSelection()) );
+    if(m_book)
+        event.SetText( wxString::Format(_T("%d"), m_book->GetSelection()) );
 }
 
 void BookWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
