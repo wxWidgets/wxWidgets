@@ -86,6 +86,18 @@
 
 //---------------------------------------------------------------------------
 
+#ifndef wxHAS_POWER_EVENTS
+class wxPowerEvent : public wxEvent
+{
+public:
+    wxPowerEvent(wxEventType evtType) : wxEvent(wxID_NONE, evtType) {}
+    void Veto() {}
+    bool IsVetoed() const { return false; }
+    virtual wxEvent *Clone() const { return new wxPowerEvent(*this); }
+};
+#endif
+
+//---------------------------------------------------------------------------
 typedef unsigned char byte;
 typedef wxPoint2DDouble wxPoint2D;    
 
