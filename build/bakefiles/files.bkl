@@ -633,10 +633,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/buttonbar.cpp
     src/generic/choicdgg.cpp
     src/generic/choicbkg.cpp
+    src/generic/clrpickerg.cpp
     src/generic/combog.cpp
     src/generic/dcpsg.cpp
     src/generic/dirctrlg.cpp
     src/generic/dragimgg.cpp
+    src/generic/filepickerg.cpp
+    src/generic/fontpickerg.cpp
     src/generic/listbkg.cpp
     src/generic/logg.cpp
     src/generic/numdlgg.cpp
@@ -687,13 +690,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/accel.h
     wx/generic/buttonbar.h
     wx/generic/choicdgg.h
+    wx/generic/clrpickerg.h
     wx/generic/colrdlgg.h
     wx/generic/combo.h
     wx/generic/dcpsg.h
     wx/generic/dirctrlg.h
     wx/generic/dragimgg.h
     wx/generic/filedlgg.h
+    wx/generic/filepickerg.h
     wx/generic/fontdlgg.h
+    wx/generic/fontpickerg.h
     wx/generic/imaglist.h
     wx/generic/logg.h
     wx/generic/msgdlgg.h
@@ -932,11 +938,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Generic implementations used by wxGTK: -->
     src/generic/accel.cpp
     src/generic/colrdlgg.cpp
-    src/generic/clrpickerg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
-    src/generic/fontpickerg.cpp
-    src/generic/filepickerg.cpp
     src/generic/filedlgg.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
@@ -991,11 +994,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="GTK_HDR" hints="files">
     wx/generic/colrdlgg.h
-    wx/generic/clrpickerg.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
-    wx/generic/fontpickerg.h
-    wx/generic/filepickerg.h
     wx/generic/listctrl.h
     wx/generic/statusbr.h
     wx/generic/tabg.h
@@ -1115,13 +1115,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="GTK1_SRC" hints="files">
     <!-- Generic implementations used by wxGTK1: -->
     src/generic/accel.cpp
-    src/generic/clrpickerg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/filedlgg.cpp
-    src/generic/filepickerg.cpp
-    src/generic/fontpickerg.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/msgdlgg.cpp
@@ -1164,12 +1161,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk1/utilsres.cpp
 </set>
 <set var="GTK1_HDR" hints="files">
-    wx/generic/clrpickerg.h
     wx/generic/colrdlgg.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
-    wx/generic/filepickerg.h
-    wx/generic/fontpickerg.h
     wx/generic/listctrl.h
     wx/generic/statusbr.h
     wx/generic/tabg.h
@@ -1508,9 +1502,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="MSW_SRC" hints="files">
-    src/generic/clrpickerg.cpp
-    src/generic/filepickerg.cpp
-    src/generic/fontpickerg.cpp
     src/generic/statusbr.cpp
     src/generic/prntdlgg.cpp
     src/msw/accel.cpp
@@ -1794,12 +1785,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OS2_SRC" hints="files">
     <!-- Generic implementations used by wxOS2: -->
     src/generic/caret.cpp
-    src/generic/clrpickerg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
-    src/generic/filepickerg.cpp
-    src/generic/fontpickerg.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/mdig.cpp
@@ -1880,12 +1868,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="OS2_HDR" hints="files">
     wx/generic/caret.h
-    wx/generic/clrpickerg.h
     wx/generic/colrdlgg.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
-    wx/generic/filepickerg.h
-    wx/generic/fontpickerg.h
     wx/generic/listctrl.h
     wx/generic/mdig.h
     wx/generic/statusbr.h
@@ -2068,11 +2053,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/window.cpp
     <!-- Generic implementations used by wxMac: -->
     src/generic/caret.cpp
-    src/generic/clrpickerg.cpp
     src/generic/fdrepdlg.cpp
-    src/generic/filepickerg.cpp
     src/generic/fontdlgg.cpp
-    src/generic/fontpickerg.cpp
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
@@ -2248,11 +2230,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/carbon/window.h
     <!-- Generic implementations used by wxMac: -->
     wx/generic/caret.h
-    wx/generic/clrpickerg.h
     wx/generic/fdrepdlg.h
-    wx/generic/filepickerg.h
     wx/generic/fontdlgg.h
-    wx/generic/fontpickerg.h
     wx/generic/listctrl.h
     wx/generic/statusbr.h
     wx/generic/tabg.h
@@ -2461,14 +2440,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="UNIV_SRC" hints="files">
     src/generic/accel.cpp
-    src/generic/clrpickerg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/filedlgg.cpp
-    src/generic/filepickerg.cpp
     src/generic/fontdlgg.cpp
-    src/generic/fontpickerg.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/mdig.cpp
@@ -2513,12 +2489,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="UNIV_HDR" hints="files">
     wx/generic/accel.h
-    wx/generic/clrpickerg.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
-    wx/generic/filepickerg.h
     wx/generic/fontdlgg.h
-    wx/generic/fontpickerg.h
     wx/generic/listctrl.h
     wx/generic/mdig.h
     wx/generic/statusbr.h
