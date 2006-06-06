@@ -40,6 +40,7 @@
 #include "wx/app.h"
 #include "wx/image.h"
 #include "wx/settings.h"
+#include "wx/toolbar.h"
 
 #if wxUSE_MDI
 #include "wx/mdi.h"
@@ -502,7 +503,7 @@ void wxFrameManager::SetFrame(wxFrame* frame)
     if (frame->IsKindOf(CLASSINFO(wxMDIParentFrame)))
     {
         wxMDIParentFrame* mdi_frame = (wxMDIParentFrame*)frame;
-        wxMDIClientWindow* client_window = mdi_frame->GetClientWindow();
+        wxWindow* client_window = mdi_frame->GetClientWindow();
 
         wxASSERT_MSG(client_window, wxT("Client window is NULL!"));
 
