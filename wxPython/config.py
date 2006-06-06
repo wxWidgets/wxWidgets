@@ -285,41 +285,6 @@ sys.argv = filter(None, sys.argv)
 
 
 #----------------------------------------------------------------------
-# build options file
-#----------------------------------------------------------------------
-
-if SYS_WX_CONFIG is None:
-    SYS_WX_CONFIG = WX_CONFIG
-
-build_options_template = """
-UNICODE=%d
-UNDEF_NDEBUG=%d
-INSTALL_MULTIVERSION=%d
-FLAVOUR="%s"
-EP_ADD_OPTS=%d
-EP_FULL_VER=%d
-WX_CONFIG="%s"
-WXPORT="%s"
-MONOLITHIC=%d
-FINAL=%d
-HYBRID=%d
-""" % (UNICODE, UNDEF_NDEBUG, INSTALL_MULTIVERSION, FLAVOUR, EP_ADD_OPTS,
-       EP_FULL_VER, SYS_WX_CONFIG, WXPORT, MONOLITHIC, FINAL, HYBRID)
-
-try: 
-    from build_options import *
-except:
-    build_options_file = os.path.join(os.path.dirname(__file__), "build_options.py")
-    if not os.path.exists(build_options_file):
-        try:
-            myfile = open(build_options_file, "w")
-            myfile.write(build_options_template)
-            myfile.close()
-        except:
-            print "WARNING: Unable to create build_options.py."
-    
-
-#----------------------------------------------------------------------
 # some helper functions
 #----------------------------------------------------------------------
 
@@ -793,6 +758,7 @@ elif os.name == 'posix':
         cflags.append('-O3')
 
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
+    MONOLITHIC = (lflags.find("_xrc") == -1)
     lflags = lflags.split()
 
     WXBASENAME = os.popen(WX_CONFIG + ' --basename').read()[:-1]
@@ -846,6 +812,41 @@ elif os.name == 'posix':
 else:
     raise 'Sorry, platform not supported...'
 
+
+#----------------------------------------------------------------------
+# build options file
+#----------------------------------------------------------------------
+
+if SYS_WX_CONFIG is None:
+    SYS_WX_CONFIG = WX_CONFIG
+
+build_options_template = """
+UNICODE=%d
+UNDEF_NDEBUG=%d
+INSTALL_MULTIVERSION=%d
+FLAVOUR="%s"
+EP_ADD_OPTS=%d
+EP_FULL_VER=%d
+WX_CONFIG="%s"
+WXPORT="%s"
+MONOLITHIC=%d
+FINAL=%d
+HYBRID=%d
+""" % (UNICODE, UNDEF_NDEBUG, INSTALL_MULTIVERSION, FLAVOUR, EP_ADD_OPTS,
+       EP_FULL_VER, SYS_WX_CONFIG, WXPORT, MONOLITHIC, FINAL, HYBRID)
+
+try: 
+    from build_options import *
+except:
+    build_options_file = os.path.join(os.path.dirname(__file__), "build_options.py")
+    if not os.path.exists(build_options_file):
+        try:
+            myfile = open(build_options_file, "w")
+            myfile.write(build_options_template)
+            myfile.close()
+        except:
+            print "WARNING: Unable to create build_options.py."
+    
 
 #----------------------------------------------------------------------
 # post platform setup checks and tweaks, create the full version string

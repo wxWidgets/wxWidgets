@@ -390,8 +390,8 @@ wxpExtensions.append(ext)
 
 
 mediaLibs = libs[:]
-if not MONOLITHIC and os.name == 'nt':
-    mediaLibs.append(makeLibName('media')[0])
+if not MONOLITHIC:
+    mediaLibs += makeLibName('media')
 swig_sources = run_swig(['media.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps)
 ext = Extension('_media', swig_sources,
