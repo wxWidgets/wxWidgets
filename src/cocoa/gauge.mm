@@ -1,20 +1,22 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cocoa/gauge.mm
+// Name:        src/cocoa/gauge.mm
 // Purpose:     wxGauge
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/07/15
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWidgets licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
 #if wxUSE_GAUGE
+
+#include "wx/gauge.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/gauge.h"
     #include "wx/log.h"
 #endif //WX_PRECOMP
 
@@ -26,6 +28,7 @@
 #include <math.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
+
 BEGIN_EVENT_TABLE(wxGauge, wxGaugeBase)
 END_EVENT_TABLE()
 // WX_IMPLEMENT_COCOA_OWNER(wxGauge,NSProgressIndicator,NSView,NSView)

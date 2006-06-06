@@ -18,12 +18,15 @@
 #if wxUSE_XRC && wxUSE_GAUGE
 
 #include "wx/xrc/xh_gauge.h"
-#include "wx/gauge.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/gauge.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxGaugeXmlHandler, wxXmlResourceHandler)
 
 wxGaugeXmlHandler::wxGaugeXmlHandler()
-: wxXmlResourceHandler()
+                  :wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxGA_HORIZONTAL);
     XRC_ADD_STYLE(wxGA_VERTICAL);

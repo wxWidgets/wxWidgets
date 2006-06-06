@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gauge.cpp
+// Name:        src/gtk1/gauge.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -10,9 +10,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/gauge.h"
-
 #if wxUSE_GAUGE
+
+#include "wx/gauge.h"
 
 #include <gtk/gtk.h>
 
@@ -31,13 +31,13 @@ bool wxGauge::Create( wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name )
 {
-    m_needParent = TRUE;
+    m_needParent = true;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxGauge creation failed") );
-        return FALSE;
+        return false;
     }
 
     m_rangeMax = range;
@@ -54,7 +54,7 @@ bool wxGauge::Create( wxWindow *parent,
     PostCreation(size);
     SetBestSize(size);
 
-    return TRUE;
+    return true;
 }
 
 void wxGauge::DoSetGauge()
@@ -123,4 +123,3 @@ wxGauge::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 }
 
 #endif // wxUSE_GAUGE
-

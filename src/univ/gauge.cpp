@@ -24,12 +24,12 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#endif //WX_PRECOMP
+#if wxUSE_GAUGE
 
 #include "wx/gauge.h"
 
-#if wxUSE_GAUGE
+#ifndef WX_PRECOMP
+#endif //WX_PRECOMP
 
 #include "wx/univ/renderer.h"
 

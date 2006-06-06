@@ -26,10 +26,11 @@
 
 #if wxUSE_GAUGE
 
+#include "wx/gauge.h"
+
 #ifndef WX_PRECOMP
 #endif
 
-#include "wx/gauge.h"
 #include "wx/msw/private.h"
 
 // include <commctrl.h> "properly"

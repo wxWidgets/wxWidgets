@@ -32,6 +32,7 @@
     #include "wx/scrolbar.h"
     #include "wx/dc.h"
     #include "wx/log.h"
+    #include "wx/gauge.h"
 #endif // WX_PRECOMP
 
 #include "wx/image.h"
@@ -39,10 +40,6 @@
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
 #include "wx/univ/colschem.h"
-
-#if wxUSE_GAUGE
-    #include "wx/gauge.h"
-#endif
 
 // ============================================================================
 // implementation
