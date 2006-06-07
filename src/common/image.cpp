@@ -866,6 +866,16 @@ wxImage wxImage::ConvertToGreyscale( double lr, double lg, double lb ) const
         }
     }
 
+    // copy the alpha channel, if any
+    if (HasAlpha())
+    {
+        const size_t alphaSize = GetWidth() * GetHeight();
+        unsigned char *alpha = (unsigned char*)malloc(alphaSize);
+        memcpy(alpha, GetAlpha(), alphaSize);
+        image.InitAlpha();
+        image.SetAlpha(alpha);
+    }
+
     return image;
 }
 
