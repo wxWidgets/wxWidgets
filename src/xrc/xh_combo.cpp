@@ -21,14 +21,14 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/combobox.h"
 #endif
-
-#include "wx/combobox.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBoxXmlHandler, wxXmlResourceHandler)
 
 wxComboBoxXmlHandler::wxComboBoxXmlHandler()
-: wxXmlResourceHandler() , m_insideBox(false)
+                     :wxXmlResourceHandler()
+                     ,m_insideBox(false)
 {
     XRC_ADD_STYLE(wxCB_SIMPLE);
     XRC_ADD_STYLE(wxCB_SORT);

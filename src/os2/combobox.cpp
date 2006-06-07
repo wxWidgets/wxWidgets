@@ -14,11 +14,12 @@
 
 #if wxUSE_COMBOBOX
 
+#include "wx/combobox.h"
+
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
 #endif
 
-#include "wx/combobox.h"
 #include "wx/clipbrd.h"
 #include "wx/os2/private.h"
 
@@ -36,35 +37,29 @@ static WXFARPROC gfnWndprocEdit     = (WXFARPROC)NULL;
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
-bool wxComboBox::OS2Command(
-  WXUINT                            uParam
-, WXWORD                            WXUNUSED(wId)
-)
+bool wxComboBox::OS2Command( WXUINT uParam, WXWORD WXUNUSED(wId) )
 {
-    long                            lSel = -1L;
-    wxString                        sValue;
+    long lSel = -1L;
+    wxString sValue;
 
     switch (uParam)
     {
         case CBN_LBSELECT:
             if (GetSelection() > -1)
             {
-                wxCommandEvent      vEvent( wxEVT_COMMAND_COMBOBOX_SELECTED
-                                           ,GetId()
-                                          );
+                wxCommandEvent vEvent( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
 
                 vEvent.SetInt(GetSelection());
                 vEvent.SetEventObject(this);
                 vEvent.SetString(GetStringSelection());
+
                 ProcessCommand(vEvent);
             }
             break;
 
         case CBN_EFCHANGE:
             {
-                wxCommandEvent      vEvent( wxEVT_COMMAND_TEXT_UPDATED
-                                           ,GetId()
-                                          );
+                wxCommandEvent vEvent( wxEVT_COMMAND_TEXT_UPDATED, GetId() );
 
                 if (lSel == -1L)
                     sValue = GetValue();
@@ -319,14 +314,11 @@ void wxComboBox::Remove( long lFrom, long lTo)
 #endif
 } // end of wxComboBox::Remove
 
-void wxComboBox::SetSelection(
-  long                              lFrom
-, long                              lTo
-)
+void wxComboBox::SetSelection( long lFrom, long lTo )
 {
-    HWND                            hWnd = GetHwnd();
-    long                            lFromChar = 0;
-    long                            lToChar   = 0;
+    HWND hWnd = GetHwnd();
+    long lFromChar = 0;
+    long lToChar   = 0;
 
     //
     // If from and to are both -1, it means

@@ -78,6 +78,8 @@
 
 #if wxUSE_COMBOBOX
 
+#include "wx/combobox.h"
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/log.h"
@@ -85,7 +87,6 @@
 #endif // WX_PRECOMP
 
 #include "wx/cocoa/ObjcPose.h"
-#include "wx/combobox.h"
 
 #import <AppKit/NSComboBox.h>
 #import <Foundation/NSNotification.h>
@@ -159,8 +160,6 @@ void wxCocoaNSComboBox::DisassociateNSComboBox(WX_NSComboBox cocoaNSComboBox)
 }
 
 @end // implementation wxPoserNSComboBox
-
-#include "wx/combobox.h"
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"

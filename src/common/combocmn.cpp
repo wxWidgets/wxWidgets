@@ -25,9 +25,10 @@
 
 #if wxUSE_COMBOCTRL
 
+#include "wx/combobox.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
-    #include "wx/combobox.h"
     #include "wx/dcclient.h"
     #include "wx/settings.h"
     #include "wx/dialog.h"
@@ -895,7 +896,7 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
         if ( (sz.y-(customBorder*2)) < butHeight && btnWidth == 0 )
         {
             int newY = butHeight+(customBorder*2);
-            SetClientSize(-1,newY);
+            SetClientSize(wxDefaultCoord,newY);
             sz.y = newY;
         }
     }

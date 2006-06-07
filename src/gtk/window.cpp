@@ -29,11 +29,11 @@
     #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
     #include "wx/toolbar.h"
+    #include "wx/combobox.h"
 #endif
 
 #include "wx/layout.h"
 #include "wx/module.h"
-#include "wx/combobox.h"
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
