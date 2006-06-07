@@ -357,11 +357,11 @@ dospininstaller()
 
     mkdir -p wxWidgets-$VERSION
 
-    unzip $ZIPFLAGS -o wxWidgets-$VERSION-win.zip -d .
-    unzip $ZIPFLAGS -o wxWidgets-$VERSION-VC.zip -d .
-    unzip $ZIPFLAGS -o wxWidgets-$VERSION-DMC.zip -d .
-    unzip $ZIPFLAGS -o wxWidgets-$VERSION-BC.zip -d .
-    unzip $ZIPFLAGS -o wxWidgets-$VERSION-CW.zip -d .
+    unzip $ZIPFLAGS -o wxWidgets-$VERSION-win.zip -d wxWidgets-$VERSION
+    unzip $ZIPFLAGS -o wxWidgets-$VERSION-VC.zip -d wxWidgets-$VERSION
+    unzip $ZIPFLAGS -o wxWidgets-$VERSION-DMC.zip -d wxWidgets-$VERSION
+    unzip $ZIPFLAGS -o wxWidgets-$VERSION-BC.zip -d wxWidgets-$VERSION
+    unzip $ZIPFLAGS -o wxWidgets-$VERSION-CW.zip -d wxWidgets-$VERSION
 
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-HTMLHelp.zip
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-ExtraDoc.zip
