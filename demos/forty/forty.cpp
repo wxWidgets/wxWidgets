@@ -124,7 +124,7 @@ const wxColour& FortyApp::TextColour()
 {
     if (!m_textColour)
     {
-        m_textColour = new wxColour(_T("BLACK"));
+        m_textColour = new wxColour(*wxBLACK);
     }
 
     return *m_textColour;

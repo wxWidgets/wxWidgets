@@ -170,7 +170,7 @@ void Card::Draw(wxDC& dc, int x, int y)
         dc.SetBackground(* wxRED_BRUSH);
         dc.SetBackgroundMode(wxSOLID);
         wxBrush* brush = wxTheBrushList->FindOrCreateBrush(
-                            _T("BLACK"), wxCROSSDIAG_HATCH
+                            *wxBLACK, wxCROSSDIAG_HATCH
                             );
         dc.SetBrush(* brush);
 

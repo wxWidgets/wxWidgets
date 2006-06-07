@@ -765,7 +765,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetTextBackground( _T("RED") );
         dc.DrawBitmap( my_smile_xbm, 30, 2010 );
 
-        dc.SetTextForeground( wxT("BLACK") );
+        dc.SetTextForeground( *wxBLACK );
         dc.DrawText( _T("After wxImage conversion"), 150, 1975 );
         dc.DrawText( _T("(red on white)"), 150, 1990 );
         dc.SetTextForeground( wxT("RED") );
@@ -776,7 +776,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
         dc.DrawBitmap( wxBitmap(i), 150, 2010, true );
-        dc.SetTextForeground( wxT("BLACK") );
+        dc.SetTextForeground( *wxBLACK );
     }
 
 
@@ -805,7 +805,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetTextBackground( wxT("GREEN") );
         dc.DrawBitmap( mono, 30, 2130 );
 
-        dc.SetTextForeground( wxT("BLACK") );
+        dc.SetTextForeground( *wxBLACK );
         dc.DrawText( _T("After wxImage conversion"), 150, 2095 );
         dc.DrawText( _T("(red on white)"), 150, 2110 );
         dc.SetTextForeground( wxT("RED") );
@@ -816,7 +816,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
         dc.DrawBitmap( wxBitmap(i), 150, 2130, true );
-        dc.SetTextForeground( wxT("BLACK") );
+        dc.SetTextForeground( *wxBLACK );
     }
 
     // For testing transparency

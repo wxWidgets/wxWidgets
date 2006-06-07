@@ -227,7 +227,7 @@ bool MyApp::OnInit()
     wxInitAllImageHandlers();
 #endif
 
-    m_canvasTextColour = wxColour(_T("BLACK"));
+    m_canvasTextColour = *wxBLACK;
     m_canvasFont = *wxNORMAL_FONT;
 
     // Create the main frame window

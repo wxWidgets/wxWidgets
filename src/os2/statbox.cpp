@@ -62,9 +62,7 @@ bool wxStaticBox::Create( wxWindow*       pParent,
     //
     SetBackgroundColour(GetParent()->GetBackgroundColour());
 
-    wxColour                        vColour;
-    vColour.Set(wxString(wxT("BLACK")));
-    LONG                            lColor = (LONG)vColour.GetPixel();
+    LONG lColor = (LONG)wxBLACK->GetPixel();
     ::WinSetPresParam( m_hWnd
                       ,PP_FOREGROUNDCOLOR
                       ,sizeof(LONG)

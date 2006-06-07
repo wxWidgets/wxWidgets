@@ -406,11 +406,9 @@ bool wxSlider::Create(
                                               )
                                  ) + 4; // for bordersizes
 
-    wxColour                        vColour;
+    wxColour vColour(*wxBLACK);
 
-    vColour.Set(wxString(wxT("BLACK")));
-
-    LONG                            lColor = (LONG)vColour.GetPixel();
+    LONG lColor = (LONG)vColour.GetPixel();
 
     ::WinSetPresParam( m_hStaticMin
                       ,PP_FOREGROUNDCOLOR

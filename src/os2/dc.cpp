@@ -353,11 +353,8 @@ wxDC::wxDC(void)
     m_hPS          = NULL;
     m_bIsPaintTime = false; // True at Paint Time
 
-    wxColour vColor( wxT("BLACK") );
-    m_pen.SetColour(vColor);
-
-    vColor.Set( wxT("WHITE") );
-    m_brush.SetColour(vColor);
+    m_pen.SetColour(*wxBLACK);
+    m_brush.SetColour(*wxWHITE);
 
 } // end of wxDC::wxDC
 
@@ -1708,11 +1705,9 @@ void wxDC::DoDrawText(
     CalcBoundingBox((vX + vWidth), (vY + vHeight));
 } // end of wxDC::DoDrawText
 
-void wxDC::DrawAnyText(
-  const wxString&                   rsText
-, wxCoord                           vX
-, wxCoord                           vY
-)
+void wxDC::DrawAnyText( const wxString& rsText,
+                        wxCoord vX,
+                        wxCoord vY )
 {
     int                             nOldBackground = 0;
     POINTL                          vPtlStart;
@@ -1776,7 +1771,7 @@ void wxDC::DrawAnyText(
             vPtlStart.y = vY;
     }
 
-    PCH                             pzStr = (PCH)rsText.c_str();
+    PCH pzStr = (PCH)rsText.c_str();
 
     ::GpiMove(m_hPS, &vPtlStart);
     lHits = ::GpiCharString( m_hPS

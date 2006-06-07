@@ -145,11 +145,10 @@ bool wxRadioBox::Create( wxWindow* pParent,
                          const wxValidator& rVal,
                          const wxString& rsName )
 {
-    wxColour vColour;
+    wxColour vColour(*wxBLACK);
     LONG     lColor;
     HWND     hWndParent = GetHwndOf(pParent);
 
-    vColour.Set(wxString(wxT("BLACK")));
     m_backgroundColour = pParent->GetBackgroundColour();
     m_nSelectedButton = -1;
     m_nNoItems = 0;

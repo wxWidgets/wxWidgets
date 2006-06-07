@@ -168,17 +168,10 @@ void wxWindowDC::InitDC()
     //
     SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
 
-    wxColour vColor( wxT("BLACK") );
-    m_pen.SetColour(vColor);
-
-    vColor.Set( wxT("WHITE") );
-    m_brush.SetColour(vColor);
+    m_pen.SetColour(*wxBLACK);
+    m_brush.SetColour(*wxWHITE);
     InitializePalette();
-    wxFont*                         pFont = new wxFont( 10
-                                                       ,wxMODERN
-                                                       ,wxNORMAL
-                                                       ,wxBOLD
-                                                      );
+    wxFont* pFont = new wxFont( 10, wxMODERN, wxNORMAL, wxBOLD );
     SetFont(*pFont);
     delete pFont;
     //
