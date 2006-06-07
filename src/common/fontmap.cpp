@@ -160,17 +160,17 @@ wxFontMapper::~wxFontMapper()
 {
 }
 
-bool wxFontMapper::IsWxFontMapper()
-{   return true; }
-
 /* static */
 wxFontMapper *wxFontMapper::Get()
 {
     wxFontMapperBase *fontmapper = wxFontMapperBase::Get();
-    wxASSERT_MSG(fontmapper->IsWxFontMapper(), wxT("GUI code requested a wxFontMapper but we only have a wxFontMapperBase."));
+    wxASSERT_MSG( !fontmapper->IsDummy(),
+                 wxT("GUI code requested a wxFontMapper but we only have a wxFontMapperBase.") );
+
     // Now return it anyway because there's a chance the GUI code might just
-    // only want to call wxFontMapperBase functions.
-    return (wxFontMapper*)fontmapper;
+    // only want to call wxFontMapperBase functions and it's better than
+    // crashing by returning NULL
+    return (wxFontMapper *)fontmapper;
 }
 
 wxFontEncoding

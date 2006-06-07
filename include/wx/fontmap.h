@@ -49,8 +49,6 @@ class WXDLLIMPEXP_CORE wxFontMapper;
 
 class WXDLLIMPEXP_BASE wxFontMapperBase
 {
-    // For IsWxFontMapper()
-    friend class WXDLLIMPEXP_CORE wxFontMapper;
 public:
     // constructtor and such
     // ---------------------
@@ -69,6 +67,10 @@ public:
 
     // set the singleton to 'mapper' instance and return previous one
     static wxFontMapper *Set(wxFontMapper *mapper);
+
+    // delete the existing font mapper if any
+    static void Reset();
+
 
     // translates charset strings to encoding
     // --------------------------------------
@@ -124,6 +126,10 @@ public:
 #endif // wxUSE_CONFIG
 
 
+    // returns true for the base class and false for a "real" font mapper object
+    // (implementation-only)
+    virtual bool IsDummy() { return true; }
+
 protected:
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
     // get the config object we're using -- either the global config object
@@ -159,9 +165,6 @@ protected:
     int NonInteractiveCharsetToEncoding(const wxString& charset);
 
 private:
-    // pseudo-RTTI since we aren't a wxObject.
-    virtual bool IsWxFontMapper();
-
     // the global fontmapper object or NULL
     static wxFontMapper *sm_instance;
 
@@ -239,6 +242,9 @@ public:
     // are additional methods in the subclass.
     static wxFontMapper *Get();
 
+    // pseudo-RTTI since we aren't a wxObject.
+    virtual bool IsDummy() { return false; }
+
 protected:
     // GetAltForEncoding() helper: tests for the existence of the given
     // encoding and saves the result in config if ok - this results in the
@@ -258,9 +264,6 @@ protected:
     wxWindow *m_windowParent;
 
 private:
-    // pseudo-RTTI since we aren't a wxObject.
-    virtual bool IsWxFontMapper();
-
     DECLARE_NO_COPY_CLASS(wxFontMapper)
 };
 

@@ -36,9 +36,6 @@
 #include "wx/ptr_scpd.h"
 #include "wx/module.h"
 #include "wx/except.h"
-#if wxUSE_FONTMAP
-#include "wx/fontmap.h"
-#endif
 
 #if defined(__WXMSW__) && defined(__WXDEBUG__)
     #include "wx/msw/msvcrt.h"
@@ -452,13 +449,6 @@ int wxEntry(int& argc, char **argv)
 {
     ConvertArgsToUnicode(argc, argv);
 
-#if wxUSE_FONTMAP
-    // If we created a font mapper during the above call,
-    // it will only be the base class, so delete it to allow
-    // app traits to create mapper.
-    delete (wxFontMapperBase*) wxFontMapperBase::Set(NULL);
-#endif
-    
     return wxEntry(argc, gs_initData.argv);
 }
 

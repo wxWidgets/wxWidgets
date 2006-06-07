@@ -233,8 +233,25 @@ class wxFontMapperModule : public wxModule
 {
 public:
     wxFontMapperModule() : wxModule() { }
-    virtual bool OnInit() { return true; }
-    virtual void OnExit() { delete (wxFontMapperBase*)wxFontMapperBase::Set(NULL); }
+
+    virtual bool OnInit()
+    {
+        // a dummy wxFontMapperBase object could have been created during the
+        // program startup before wxApp was created, we have to delete it to
+        // allow creating the real font mapper next time it is needed now that
+        // we can create it (when the modules are initialized, wxApp object
+        // already exists)
+        wxFontMapperBase *fm = wxFontMapperBase::Get();
+        if ( fm && fm->IsDummy() )
+            wxFontMapperBase::Reset();
+
+        return true;
+    }
+
+    virtual void OnExit()
+    {
+        wxFontMapperBase::Reset();
+    }
 
     DECLARE_DYNAMIC_CLASS(wxFontMapperModule)
 };
@@ -267,9 +284,6 @@ wxFontMapperBase::~wxFontMapperBase()
 #endif // wxUSE_CONFIG
 }
 
-bool wxFontMapperBase::IsWxFontMapper()
-{   return false; }
-
 /* static */
 wxFontMapperBase *wxFontMapperBase::Get()
 {
@@ -301,6 +315,19 @@ wxFontMapper *wxFontMapperBase::Set(wxFontMapper *mapper)
     wxFontMapper *old = sm_instance;
     sm_instance = mapper;
     return old;
+}
+
+/* static */
+void wxFontMapperBase::Reset()
+{
+    if ( sm_instance )
+    {
+        // we need a cast as wxFontMapper is not fully declared here and so the
+        // compiler can't know that it derives from wxFontMapperBase (but
+        // run-time behaviour will be correct because the dtor is virtual)
+        delete sm_instance;
+        sm_instance = NULL;
+    }
 }
 
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
