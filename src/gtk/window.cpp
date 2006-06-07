@@ -28,15 +28,12 @@
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
+    #include "wx/toolbar.h"
 #endif
 
 #include "wx/layout.h"
 #include "wx/module.h"
 #include "wx/combobox.h"
-
-#if wxUSE_TOOLBAR_NATIVE
-    #include "wx/toolbar.h"
-#endif
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"

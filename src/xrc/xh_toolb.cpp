@@ -21,9 +21,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
+    #include "wx/toolbar.h"
 #endif
-
-#include "wx/toolbar.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarXmlHandler, wxXmlResourceHandler)
 

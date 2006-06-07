@@ -37,6 +37,7 @@
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
+    #include "wx/toolbar.h"
 #endif // WXPRECOMP
 
 #include "wx/html/helpfrm.h"
@@ -50,7 +51,6 @@
 #include "wx/html/htmlwin.h"
 #include "wx/busyinfo.h"
 #include "wx/progdlg.h"
-#include "wx/toolbar.h"
 #include "wx/fontenum.h"
 #include "wx/filedlg.h"
 #include "wx/artprov.h"

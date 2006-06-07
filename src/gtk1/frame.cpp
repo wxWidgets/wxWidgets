@@ -26,11 +26,9 @@
     #include "wx/menu.h"
     #include "wx/dialog.h"
     #include "wx/control.h"
+    #include "wx/toolbar.h"
 #endif // WX_PRECOMP
 
-#if wxUSE_TOOLBAR
-    #include "wx/toolbar.h"
-#endif
 #if wxUSE_STATUSBAR
     #include "wx/statusbr.h"
 #endif

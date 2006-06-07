@@ -34,12 +34,12 @@
     #include "wx/app.h"
     #include "wx/dcclient.h"
     #include "wx/dcscreen.h"
+    #include "wx/toolbar.h"
 #endif
 
 //#include "wx/dcbuffer.h"
 
 #include "wx/image.h"
-#include "wx/toolbar.h"
 
 #if wxUSE_MDI
      #include "wx/mdi.h"

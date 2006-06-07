@@ -35,10 +35,10 @@
     #include "wx/menu.h"
     #include "wx/icon.h"
     #include "wx/settings.h"
+    #include "wx/toolbar.h"
 #endif
 
 #include "wx/statusbr.h"
-#include "wx/toolbar.h"
 
 #ifdef __VMS__
     #pragma message disable nosimpint

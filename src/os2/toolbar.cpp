@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        toolbar.cpp
+// Name:        src/os2/toolbar.cpp
 // Purpose:     wxToolBar
 // Author:      David Webster
 // Modified by:
@@ -14,6 +14,8 @@
 
 #if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE
 
+#include "wx/toolbar.h"
+
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/window.h"
@@ -24,9 +26,8 @@
 #endif
 
 #include "wx/tooltip.h"
-#include "wx/toolbar.h"
 
-bool                                wxToolBar::m_bInitialized = FALSE;
+bool wxToolBar::m_bInitialized = false;
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -275,12 +276,10 @@ wxToolBarToolBase* wxToolBar::InsertTool(
     return pTool;
 } // end of wxToolBar::InsertTool
 
-bool wxToolBar::DoInsertTool(
-  size_t                            WXUNUSED(nPos)
-, wxToolBarToolBase*                pToolBase
-)
+bool wxToolBar::DoInsertTool( size_t WXUNUSED(nPos),
+                              wxToolBarToolBase* pToolBase )
 {
-    wxToolBarTool*                  pTool = (wxToolBarTool *)pToolBase;
+    wxToolBarTool* pTool = (wxToolBarTool *)pToolBase;
 
     pTool->m_vX = m_vXPos;
     if (pTool->m_vX == -1)
@@ -303,27 +302,23 @@ bool wxToolBar::DoInsertTool(
         if ((pTool->m_vY + pTool->GetNormalBitmap().GetHeight() + m_yMargin) > m_vMaxHeight)
             m_vMaxHeight = (wxCoord)((pTool->m_vY + pTool->GetHeight() + m_yMargin));
     }
-    return TRUE;
+    return true;
 } // end of wxToolBar::DoInsertTool
 
-bool wxToolBar::DoDeleteTool(
-  size_t                            WXUNUSED(nPos)
-, wxToolBarToolBase*                pTool
-)
+bool wxToolBar::DoDeleteTool( size_t WXUNUSED(nPos),
+                              wxToolBarToolBase* pTool )
 {
     pTool->Detach();
     Refresh();
-    return TRUE;
+    return true;
 } // end of wxToolBar::DoDeleteTool
 
-bool wxToolBar::Create(
-  wxWindow*                         pParent
-, wxWindowID                        vId
-, const wxPoint&                    rPos
-, const wxSize&                     rSize
-, long                              lStyle
-, const wxString&                   rsName
-)
+bool wxToolBar::Create( wxWindow* pParent,
+                        wxWindowID vId,
+                        const wxPoint& rPos,
+                        const wxSize& rSize,
+                        long lStyle,
+                        const wxString& rsName )
 {
     if ( !wxWindow::Create( pParent
                            ,vId
@@ -332,7 +327,7 @@ bool wxToolBar::Create(
                            ,lStyle
                            ,rsName
                           ))
-        return FALSE;
+        return false;
 
     // Set it to grey (or other 3D face colour)
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
@@ -418,7 +413,7 @@ bool wxToolBar::Create(
             ,nWidth
             ,nHeight
            );
-    return TRUE;
+    return true;
 } // end of wxToolBar::Create
 
 wxToolBar::~wxToolBar()
@@ -577,8 +572,8 @@ bool wxToolBar::Realize()
 
     m_maxWidth += m_xMargin;
     m_maxHeight += m_yMargin;
-    m_bInitialized = TRUE;
-    return TRUE;
+    m_bInitialized = true;
+    return true;
 } // end of wxToolBar::Realize
 
 // ----------------------------------------------------------------------------
@@ -716,9 +711,7 @@ void wxToolBar::OnMouseEvent(
             pTool = (wxToolBarTool *)FindById(m_nCurrentTool);
             if (pTool && !pTool->IsToggled())
             {
-                RaiseTool( pTool
-                          ,FALSE
-                         );
+                RaiseTool( pTool, FALSE );
             }
             m_nCurrentTool = -1;
             OnMouseEnter(-1);
@@ -745,9 +738,7 @@ void wxToolBar::OnMouseEvent(
             wxToolBarTool*          pOldTool = (wxToolBarTool*)FindById(m_nCurrentTool);
 
             if (pOldTool && !pTool->IsToggled())
-                RaiseTool( pOldTool
-                          ,FALSE
-                         );
+                RaiseTool( pOldTool, FALSE );
             m_nCurrentTool = pTool->GetId();
             OnMouseEnter(m_nCurrentTool);
             if (!pTool->GetShortHelp().empty())
@@ -810,27 +801,20 @@ void wxToolBar::OnMouseEvent(
 // drawing
 // ----------------------------------------------------------------------------
 
-void wxToolBar::DrawTool(
-  wxToolBarToolBase*                pTool
-)
+void wxToolBar::DrawTool( wxToolBarToolBase* pTool )
 {
-    wxClientDC                      vDc(this);
+    wxClientDC vDc(this);
 
-    DrawTool( vDc
-             ,pTool
-            );
+    DrawTool( vDc, pTool );
 } // end of wxToolBar::DrawTool
 
-void wxToolBar::DrawTool(
-  wxDC&                             rDc
-, wxToolBarToolBase*                pToolBase
-)
+void wxToolBar::DrawTool( wxDC& rDc, wxToolBarToolBase* pToolBase )
 {
     wxToolBarTool* pTool = (wxToolBarTool *)pToolBase;
     wxColour gray85( 85,85,85 );
     wxPen vDarkGreyPen( gray85, 1, wxSOLID );
     wxBitmap vBitmap = pTool->GetNormalBitmap();
-    bool bUseMask = FALSE;
+    bool bUseMask = false;
     wxMask* pMask = NULL;
 
     PrepareDC(rDc);
@@ -839,7 +823,7 @@ void wxToolBar::DrawTool(
         return;
     if ((pMask = vBitmap.GetMask()) != NULL)
         if (pMask->GetMaskBitmap() != NULLHANDLE)
-            bUseMask = TRUE;
+            bUseMask = true;
 
     if (!pTool->IsToggled())
     {
@@ -1179,15 +1163,11 @@ void wxToolBar::RaiseTool ( wxToolBarToolBase* pToolBase,
     }
 } // end of wxToolBar::RaiseTool
 
-void wxToolBar::OnTimer (
-  wxTimerEvent&                     rEvent
-)
+void wxToolBar::OnTimer ( wxTimerEvent& rEvent )
 {
     if (rEvent.GetId() == m_vToolTimer.GetTimerId())
     {
-        wxPoint                     vPos( m_vXMouse
-                                         ,m_vYMouse
-                                        );
+        wxPoint vPos( m_vXMouse, m_vYMouse );
 
         m_pToolTip->DisplayToolTipWindow(vPos);
         m_vToolTimer.Stop();

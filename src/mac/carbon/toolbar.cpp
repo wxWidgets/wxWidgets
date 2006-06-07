@@ -13,9 +13,13 @@
 
 #if wxUSE_TOOLBAR
 
-#include "wx/wx.h"
-#include "wx/bitmap.h"
 #include "wx/toolbar.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
+#include "wx/bitmap.h"
 
 #include "wx/mac/uma.h"
 #include "wx/geometry.h"

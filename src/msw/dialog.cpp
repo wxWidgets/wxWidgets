@@ -34,6 +34,7 @@
     #include "wx/settings.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/toolbar.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -45,10 +46,6 @@
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     #include "wx/msw/wince/resources.h"
 #endif // __SMARTPHONE__ && __WXWINCE__
-
-#if wxUSE_TOOLBAR && defined(__POCKETPC__)
-#include "wx/toolbar.h"
-#endif
 
 // ----------------------------------------------------------------------------
 // wxWin macros

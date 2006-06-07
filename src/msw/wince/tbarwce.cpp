@@ -28,6 +28,8 @@
 // with a WinCE earlier than 4, or we wish to emulate a PocketPC-style UI
 #if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
 
+#include "wx/toolbar.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/frame.h"
@@ -38,8 +40,6 @@
     #include "wx/dcmemory.h"
     #include "wx/control.h"
 #endif
-
-#include "wx/toolbar.h"
 
 #if !defined(__GNUWIN32__) && !defined(__SALFORDC__)
     #include "malloc.h"

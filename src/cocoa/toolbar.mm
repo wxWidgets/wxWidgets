@@ -6,7 +6,7 @@
 // Created:     2003/08/17
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWidgets licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -21,8 +21,10 @@
 #include "wx/wxprec.h"
 
 #if wxUSE_TOOLBAR_NATIVE
+
+#include "wx/toolbar.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/toolbar.h"
     #include "wx/frame.h"
     #include "wx/log.h"
 #endif // WX_PRECOMP

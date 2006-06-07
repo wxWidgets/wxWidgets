@@ -29,6 +29,7 @@
     #include "wx/settings.h"
     #include "wx/dcclient.h"
     #include "wx/mdi.h"
+    #include "wx/toolbar.h"
 #endif // WX_PRECOMP
 
 #include "wx/os2/private.h"
@@ -37,10 +38,6 @@
     #include "wx/statusbr.h"
     #include "wx/generic/statusbr.h"
 #endif // wxUSE_STATUSBAR
-
-#if wxUSE_TOOLBAR
-    #include "wx/toolbar.h"
-#endif // wxUSE_TOOLBAR
 
 #include "wx/menuitem.h"
 

@@ -38,6 +38,7 @@
     #include "wx/settings.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/toolbar.h"
 #endif
 
 #include "wx/stockitem.h"
@@ -47,10 +48,6 @@
 #if wxUSE_STATUSBAR && wxUSE_NATIVE_STATUSBAR
     #include "wx/msw/statbr95.h"
 #endif
-
-#if wxUSE_TOOLBAR
-    #include "wx/toolbar.h"
-#endif // wxUSE_TOOLBAR
 
 #include <string.h>
 

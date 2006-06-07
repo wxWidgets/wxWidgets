@@ -19,9 +19,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/toolbar.h"
-
 #if wxUSE_TOOLBAR_NATIVE
+
+#include "wx/toolbar.h"
 
 #ifndef WX_PRECOMP
     #include "wx/frame.h"

@@ -26,6 +26,8 @@
 
 #if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && !defined(__SMARTPHONE__)
 
+#include "wx/toolbar.h"
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/frame.h"
@@ -38,7 +40,6 @@
     #include "wx/app.h"         // for GetComCtl32Version
 #endif
 
-#include "wx/toolbar.h"
 #include "wx/sysopt.h"
 #include "wx/image.h"
 

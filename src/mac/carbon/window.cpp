@@ -29,6 +29,7 @@
     #include "wx/scrolbar.h"
     #include "wx/statbox.h"
     #include "wx/textctrl.h"
+    #include "wx/toolbar.h"
 #endif
 
 #include "wx/layout.h"
@@ -37,8 +38,6 @@
 #include "wx/menuitem.h"
 #include "wx/spinctrl.h"
 #include "wx/geometry.h"
-
-#include "wx/toolbar.h"
 
 #if wxUSE_CARET
     #include "wx/caret.h"
