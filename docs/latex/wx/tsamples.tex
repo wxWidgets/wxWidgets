@@ -26,9 +26,9 @@ this list is not complete. You should start your tour of wxWidgets with the
 "Hello, world!". It shows the basic structure of wxWidgets program and is the
 most commented sample of all - looking at its source code is recommended.
 
-The next most useful sample is probably the \helpref{controls}{samplecontrols}
-one which shows many of wxWidgets standard controls, such as buttons,
-listboxes, checkboxes, comboboxes etc.
+The next most useful sample is probably \helpref{widgets}{samplewidgets}
+and \helpref{controls}{samplecontrols} which show many of wxWidgets native and
+generic controls, such as buttons, listboxes, checkboxes, comboboxes etc.
 
 Other, more complicated controls, have their own samples. In this category you
 may find the following samples showing the corresponding controls:
@@ -136,11 +136,11 @@ generate a debug report in case of a program crash or otherwise. On start up,
 it proposes to either crash itself (by dereferencing a NULL pointer) or
 generate debug report without doing it. Next it initializes the debug report
 with standard information adding a custom file to it (just a timestamp) and
-allows to view the information gathered using 
+allows to view the information gathered using
 \helpref{wxDebugReportPreview}{wxdebugreportpreview}.
 
 For the report processing part of the sample to work you should make available
-a Web server accepting form uploads, otherwise 
+a Web server accepting form uploads, otherwise
 \helpref{wxDebugReportUpload}{wxdebugreportupload} will report an error.
 
 
@@ -559,6 +559,15 @@ sorting (in default alphabetical order as well as in custom one) is
 demonstrated here as well - try the corresponding menu entries.
 
 
+\subsection{Widgets sample}\label{samplewidgets}
+
+The widgets sample is the main presentation program for most simple and advanced
+native controls and complex generic widgets provided by wxWidgets.
+The sample tests their basic functionality, events, placement, modification
+in terms of colour and font as well as the possibility to change
+the controls programmatically, such as adding an item to a list box etc.
+All widgets are categorized for easy browsing.
+
 \subsection{Wizard sample}\label{samplewizard}
 
 This sample shows the so-called wizard dialog (implemented using
@@ -582,4 +591,3 @@ but sometimes it depends on the user choices: wxCheckboxPage shows how to
 dynamically decide which page to display next (see also
 \helpref{wxWizardPage}{wxwizardpage})
 \end{itemize}
-
