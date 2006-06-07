@@ -614,7 +614,7 @@ public:
         typePaneSizer,
         typeBackground,
         typePaneBorder,
-        typePaneButton,
+        typePaneButton
     };
 
     int type;                // ui part type (see enum above)
