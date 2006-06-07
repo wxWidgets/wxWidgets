@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/enhmeta.cpp
+// Name:        src/msw/enhmeta.cpp
 // Purpose:     implementation of wxEnhMetaFileXXX classes
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -75,7 +75,7 @@ void wxEnhMetaFile::Init()
     }
     else // have valid file name, load metafile from it
     {
-        m_hMF = GetEnhMetaFile(m_filename);
+        m_hMF = (WXHANDLE)::GetEnhMetaFile(m_filename);
         if ( !m_hMF )
             wxLogSysError(_("Failed to load metafile from file \"%s\"."),
                           m_filename.c_str());

@@ -1488,7 +1488,7 @@ void wxDC::SetFont(const wxFont& font)
         else // selected ok
         {
             if ( !m_oldFont )
-                m_oldFont = (WXHPEN)hfont;
+                m_oldFont = (WXHFONT)hfont;
 
             m_font = font;
         }
@@ -1581,7 +1581,7 @@ void wxDC::SetBrush(const wxBrush& brush)
         else // selected ok
         {
             if ( !m_oldBrush )
-                m_oldBrush = (WXHPEN)hbrush;
+                m_oldBrush = (WXHBRUSH)hbrush;
 
             m_brush = brush;
         }
