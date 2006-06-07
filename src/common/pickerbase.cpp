@@ -195,3 +195,8 @@ wxSize wxPickerBase::DoGetBestSize() const
 
     return ret;
 }
+
+void wxPickerBase::SetInternalMargin(int newmargin)
+{
+    m_margin = newmargin;
+}
