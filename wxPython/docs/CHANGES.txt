@@ -164,6 +164,10 @@ far.)  See wx.PowerEvent, wx.GetPowerType and wx.GetBatteryState.
 Added wx.ListCtrl.HitTestSubItem which returns the sub-item that was
 hit (if any) in addition to the item and flags.
 
+Added wrappers for wx.ColourPickerCtrl, wx.DirPickerCtrl,
+wx.FilePickerCtrl, and wx.FontPickerCtrl.
+
+
 
 
 

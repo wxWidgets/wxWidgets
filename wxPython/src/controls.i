@@ -60,7 +60,7 @@ MAKE_CONST_WXSTRING_NOSWIG(ControlNameStr);
 %include _dragimg.i
 %include _datectrl.i
 %include _hyperlink.i
-
+%include _picker.i
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

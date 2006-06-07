@@ -52,6 +52,7 @@ _treeList = [
         'RichTextCtrl',
         'Treebook',
         'Toolbook',
+        'Pickers',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -171,6 +172,7 @@ _treeList = [
         'MaskedNumCtrl',
         'MediaCtrl',
         'MultiSplitterWindow',
+        'Pickers',
         'PyCrust',
         'PyPlot',
         'PyShell',
