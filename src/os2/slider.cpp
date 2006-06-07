@@ -17,10 +17,10 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/utils.h"
-#include "wx/brush.h"
-#include "wx/scrolwin.h"
+    #include <stdio.h>
+    #include "wx/utils.h"
+    #include "wx/brush.h"
+    #include "wx/scrolwin.h"
 #endif
 
 #if wxUSE_SLIDER
@@ -232,7 +232,7 @@ bool wxSlider::Create(
     m_windowStyle  = lStyle;
     m_nTickFreq    = 0;
 
-    if (vId == -1)
+    if (vId == wxID_ANY)
         m_windowId = (int)NewControlId();
     else
         m_windowId = vId;
@@ -464,27 +464,25 @@ bool wxSlider::Create(
     return true;
 } // end of wxSlider::Create
 
-void wxSlider::DoSetSize(
-  int                               nX
-, int                               nY
-, int                               nWidth
-, int                               nHeight
-, int                               nSizeFlags
-)
+void wxSlider::DoSetSize( int nX,
+                          int nY,
+                          int nWidth,
+                          int nHeight,
+                          int nSizeFlags )
 {
-    int                             nX1      = nX;
-    int                             nY1      = nY;
-    int                             nWidth1  = nWidth;
-    int                             nHeight1 = nHeight;
-    int                             nXOffset = nX;
-    int                             nYOffset = nY;
-    int                             nCx;     // slider,min,max sizes
-    int                             nCy;
-    int                             nCyf;
-    int                             nCurrentX;
-    int                             nCurrentY;
-    wxChar                          zBuf[300];
-    wxFont                          vFont = this->GetFont();
+    int    nX1      = nX;
+    int    nY1      = nY;
+    int    nWidth1  = nWidth;
+    int    nHeight1 = nHeight;
+    int    nXOffset = nX;
+    int    nYOffset = nY;
+    int    nCx;     // slider,min,max sizes
+    int    nCy;
+    int    nCyf;
+    int    nCurrentX;
+    int    nCurrentY;
+    wxChar zBuf[300];
+    wxFont vFont = this->GetFont();
 
     //
     // Adjust for OS/2's reverse coordinate system
@@ -499,26 +497,24 @@ void wxSlider::DoSetSize(
 
     if (pParent)
     {
-        int                         nOS2ParentHeight = GetOS2ParentHeight(pParent);
+        int nOS2ParentHeight = GetOS2ParentHeight(pParent);
 
         nYOffset = nOS2ParentHeight - (nYOffset + nOS2Height);
-        if (nY != -1)
+        if (nY != wxDefaultCoord)
             nY1 = nOS2ParentHeight - (nY1 + nOS2Height);
     }
     else
     {
-        RECTL                       vRect;
+        RECTL vRect;
 
         ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
         nYOffset = vRect.yTop - (nYOffset + nOS2Height);
-        if (nY != -1)
+        if (nY != wxDefaultCoord)
             nY1 = vRect.yTop - (nY1 + nOS2Height);
     }
     m_nSizeFlags = nSizeFlags;
 
-    GetPosition( &nCurrentX
-                ,&nCurrentY
-               );
+    GetPosition( &nCurrentX, &nCurrentY );
     if (nX == -1 && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         nX1 = nCurrentX;
     if (nY == -1 && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))

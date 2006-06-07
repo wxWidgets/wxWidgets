@@ -28,10 +28,11 @@
 
 #if defined(__WIN95__) && !defined(__GNUWIN32_OLD__) && wxUSE_OLE
 
+#include "wx/dirdlg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dialog.h"
-    #include "wx/dirdlg.h"
     #include "wx/log.h"
     #include "wx/app.h"     // for GetComCtl32Version()
 #endif

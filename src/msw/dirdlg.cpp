@@ -29,10 +29,11 @@
 #if wxUSE_OLE && !defined(__GNUWIN32_OLD__) && (!defined(__WXWINCE__) || \
     (defined(__HANDHELDPC__) && (_WIN32_WCE >= 500)))
 
+#include "wx/dirdlg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dialog.h"
-    #include "wx/dirdlg.h"
     #include "wx/log.h"
     #include "wx/app.h"     // for GetComCtl32Version()
 #endif
@@ -248,4 +249,3 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 #endif // compiler/platform on which the code here compiles
 
 #endif // wxUSE_DIRDLG
-

@@ -37,10 +37,10 @@
     #include "wx/button.h"
     #include "wx/menu.h"
     #include "wx/settings.h"
+    #include "wx/scrolwin.h"
 #endif
 
 #include "wx/layout.h"
-#include "wx/scrolwin.h"
 #include "wx/module.h"
 #include "wx/menuitem.h"
 #include "wx/evtloop.h"

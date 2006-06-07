@@ -22,10 +22,11 @@
 
 #if wxUSE_DIRDLG
 
+#include "wx/dirdlg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/msgdlg.h"
     #include "wx/filedlg.h"
-    #include "wx/dirdlg.h"
     #include "wx/app.h"
 #endif
 

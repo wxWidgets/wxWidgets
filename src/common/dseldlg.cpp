@@ -24,12 +24,12 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#endif //WX_PRECOMP
+#if wxUSE_DIRDLG
 
 #include "wx/dirdlg.h"
 
-#if wxUSE_DIRDLG
+#ifndef WX_PRECOMP
+#endif //WX_PRECOMP
 
 // ============================================================================
 // implementation
@@ -53,4 +53,3 @@ wxString wxDirSelector(const wxString& message,
 }
 
 #endif // wxUSE_DIRDLG
-

@@ -43,10 +43,10 @@
     #include "wx/msgdlg.h"
     #include "wx/scrolbar.h"
     #include "wx/listbox.h"
+    #include "wx/scrolwin.h"
 #endif
 
 #include "wx/layout.h"
-#include "wx/scrolwin.h"
 #include "wx/module.h"
 #include "wx/menuitem.h"
 #include "wx/fontutil.h"

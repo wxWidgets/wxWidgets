@@ -21,9 +21,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
+    #include "wx/scrolwin.h"
 #endif
-
-#include "wx/scrolwin.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindowXmlHandler, wxXmlResourceHandler)
 
