@@ -812,9 +812,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/notebook.h
     wx/ownerdrw.h
     wx/paper.h
+    wx/pickerbase.h
     wx/popupwin.h
     wx/print.h
-    wx/printdlg.h
+    wx/printdlg.h 
     wx/prntbase.h
     wx/progdlg.h
     wx/ptr_scpd.h
