@@ -11,7 +11,7 @@
 
 \section{wxBookCtrl overview}\label{wxbookctrloverview}
 
-Classes: \helpref{wxNotebook}{wxnotebook}, \helpref{wxListbook}{wxlistbook}, \helpref{wxChoicebook}{wxchoicebook}, 
+Classes: \helpref{wxNotebook}{wxnotebook}, \helpref{wxListbook}{wxlistbook}, \helpref{wxChoicebook}{wxchoicebook},
 \helpref{wxTreebook}{wxtreebook}, \helpref{wxToolbook}{wxtoolbook}
 
 \subsection{Introduction}\label{wxbookctrlintro}
@@ -27,6 +27,8 @@ displayed one page at a time. wxWidgets has five variants of this control:
 \item \helpref{wxToolbook}{wxtoolbook}: controlled by a \helpref{wxToolBar}{wxtoolbar}
 \end{itemize}
 
+See \helpref{Notebook sample}{samplenotebook} for an example of wxBookCtrl usage.
+
 \subsection{Best book}\label{wxbestbookctrl}
 
 wxBookCtrl is mapped to the class best suited for a given platform.
@@ -41,12 +43,14 @@ WinCE, and \helpref{wxNotebook}{wxnotebook} for all other platforms. The mapping
 \twocolitem{wxEVT\_COMMAND\_BOOKCTRL\_PAGE\_CHANGING}{wxEVT\_COMMAND\_CHOICEBOOK\_PAGE\_CHANGING or wxEVT\_COMMAND\_NOTEBOOK\_PAGE\_CHANGING}
 \twocolitem{EVT\_BOOKCTRL\_PAGE\_CHANGED(id, fn)}{EVT\_CHOICEBOOK\_PAGE\_CHANGED(id, fn) or EVT\_NOTEBOOK\_PAGE\_CHANGED(id, fn)}
 \twocolitem{EVT\_BOOKCTRL\_PAGE\_CHANGING(id, fn)}{EVT\_CHOICEBOOK\_PAGE\_CHANGING(id, fn) or EVT\_NOTEBOOK\_PAGE\_CHANGING(id, fn)}
-\twocolitem{\windowstyle{wxBC\_TOP}}{\windowstyle{wxCHB\_TOP} or \windowstyle{wxNB\_TOP}}
-\twocolitem{\windowstyle{wxBC\_BOTTOM}}{\windowstyle{wxCHB\_BOTTOM} or \windowstyle{wxNB\_BOTTOM}}
-\twocolitem{\windowstyle{wxBC\_LEFT}}{\windowstyle{wxCHB\_LEFT} or \windowstyle{wxNB\_LEFT}}
-\twocolitem{\windowstyle{wxBC\_RIGHT}}{\windowstyle{wxCHB\_RIGHT} or \windowstyle{wxNB\_RIGHT}}
-\twocolitem{\windowstyle{wxBC\_DEFAULT}}{\windowstyle{wxCHB\_DEFAULT} or \windowstyle{wxNB\_DEFAULT}}
 \end{twocollist}
 
-See {\tt samples/widgets} for an example of wxBookCtrl usage.
-
+For orientation of the book controller, use following flags in style:
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxBK\_TOP}}{controller above pages}
+\twocolitem{\windowstyle{wxBK\_BOTTOM}}{controller below pages}
+\twocolitem{\windowstyle{wxBK\_LEFT}}{controller on the left}
+\twocolitem{\windowstyle{wxBK\_RIGHT}}{controller on the right}
+\twocolitem{\windowstyle{wxBK\_DEFAULT}}{native controller placement}
+\end{twocollist}
