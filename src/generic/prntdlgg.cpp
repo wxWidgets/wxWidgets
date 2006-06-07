@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        prntdlgg.cpp
+// Name:        src/generic/prntdlgg.cpp
 // Purpose:     Generic print dialogs
 // Author:      Julian Smart
 // Modified by:
@@ -43,7 +43,7 @@
 #endif
 
 #if wxUSE_STATLINE
-  #include "wx/statline.h"
+    #include "wx/statline.h"
 #endif
 
 #include "wx/generic/prntdlgg.h"
@@ -536,8 +536,8 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
             if (tmp != wxT("for"))
                 break;  // the lpstat syntax must have changed.
             tmp = tok.GetNextToken();          // "hp_deskjet930c:"
-            if (tmp[tmp.Len()-1] == wxT(':'))
-                tmp.Remove(tmp.Len()-1,1);
+            if (tmp[tmp.length()-1] == wxT(':'))
+                tmp.Remove(tmp.length()-1,1);
             wxString name = tmp;
             item.SetText( name );
             item.SetId( m_printerListCtrl->InsertItem( item ) );
@@ -566,7 +566,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
                 tmp = output2[0]; // "printer hp_deskjet930c is idle. enable since ..."
                 int pos = tmp.Find( wxT('.') );
                 if (pos != wxNOT_FOUND)
-                    tmp.Remove( (size_t)pos, tmp.Len()-(size_t)pos );
+                    tmp.Remove( (size_t)pos, tmp.length()-(size_t)pos );
                 wxStringTokenizer tok2( tmp, wxT(" ") );
                 tmp = tok2.GetNextToken();  // "printer"
                 tmp = tok2.GetNextToken();  // "hp_deskjet930c"
@@ -1097,4 +1097,3 @@ void wxGenericPageSetupDialog::OnPrinter(wxCommandEvent& WXUNUSED(event))
 }
 
 #endif
-
