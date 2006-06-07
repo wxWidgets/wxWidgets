@@ -240,14 +240,14 @@ $(OBJS)\image.exe :  $(IMAGE_OBJECTS) $(OBJS)\image_image.res
 	@%append $(OBJS)\image.lbc option caseexact
 	@%append $(OBJS)\image.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(IMAGE_OBJECTS)) do @%append $(OBJS)\image.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\image.lbc library %i
+	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\image.lbc library %i
 	@%append $(OBJS)\image.lbc option resource=$(OBJS)\image_image.res
 	@for %i in () do @%append $(OBJS)\image.lbc option stack=%i
 	wlink @$(OBJS)\image.lbc
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm horse_ag.pnm horse_rg.pnm horse.tif horse.xpm horse.cur horse.ico horse3.ani smile.xbm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm horse_ag.pnm horse_rg.pnm horse.tif horse.xpm horse.cur horse.ico horse3.ani smile.xbm toucan.png cmyk.jpg) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\image_image.obj :  .AUTODEPEND .\image.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(IMAGE_CXXFLAGS) $<

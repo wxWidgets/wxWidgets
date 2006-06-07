@@ -17,7 +17,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
 #endif
 
 #include "wx/image.h"
@@ -89,6 +89,7 @@ public:
     wxBitmap my_toucan_flipped_horiz;
     wxBitmap my_toucan_flipped_vert;
     wxBitmap my_toucan_flipped_both;
+    wxBitmap my_toucan_grey;
     wxBitmap my_toucan_head;
 
     int xH, yH ;
@@ -468,11 +469,15 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     else
         my_horse_png = wxBitmap( image );
 
-    image = wxImage(wxT("toucan.png"));
-    my_toucan = wxBitmap(image);
+    if ( !image.LoadFile( dir + _T("toucan.png")) )
+        wxLogError(wxT("Can't load PNG image"));
+    else
+        my_toucan = wxBitmap(image);
+
     my_toucan_flipped_horiz = wxBitmap(image.Mirror(true));
     my_toucan_flipped_vert = wxBitmap(image.Mirror(false));
     my_toucan_flipped_both = wxBitmap(image.Mirror(true).Mirror(false));
+    my_toucan_grey = wxBitmap(image.ConvertToGreyscale());
     my_toucan_head = wxBitmap(image.GetSubImage(wxRect(40, 7, 80, 60)));
 
 #endif // wxUSE_LIBPNG
@@ -751,6 +756,10 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         y += yy;
         dc.DrawText(wxT("Flipped both h&v"), x+50, y);
         dc.DrawBitmap(my_toucan_flipped_both, x, y+15);
+
+        y += yy;
+        dc.DrawText(wxT("In greyscale"), x+50, y);
+        dc.DrawBitmap(my_toucan_grey, x, y+15);
 
         y += yy;
         dc.DrawText(wxT("Toucan's head"), x+50, y);
