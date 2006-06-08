@@ -34,10 +34,13 @@ public:
     const wxDateTime& GetDate() const { return m_date; }
     void SetDate(const wxDateTime &date) { m_date = date; }
 
+    // default copy ctor, assignment operator and dtor are ok
+    virtual wxEvent *Clone() const { return new wxDateEvent(*this); }
+
 private:
     wxDateTime m_date;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDateEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDateEvent)
 };
 
 // ----------------------------------------------------------------------------

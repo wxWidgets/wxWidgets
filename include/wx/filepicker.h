@@ -343,10 +343,13 @@ public:
     wxString GetPath() const { return m_path; }
     void SetPath(const wxString &p) { m_path = p; }
 
+    // default copy ctor, assignment operator and dtor are ok
+    virtual wxEvent *Clone() const { return new wxFileDirPickerEvent(*this); }
+
 private:
     wxString m_path;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxFileDirPickerEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFileDirPickerEvent)
 };
 
 // ----------------------------------------------------------------------------

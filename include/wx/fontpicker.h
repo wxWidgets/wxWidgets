@@ -194,10 +194,13 @@ public:
     wxFont GetFont() const { return m_font; }
     void SetFont(const wxFont &c) { m_font = c; }
 
+    // default copy ctor, assignment operator and dtor are ok
+    virtual wxEvent *Clone() const { return new wxFontPickerEvent(*this); }
+
 private:
     wxFont m_font;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxFontPickerEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFontPickerEvent)
 };
 
 // ----------------------------------------------------------------------------

@@ -170,10 +170,14 @@ public:
     wxColour GetColour() const { return m_colour; }
     void SetColour(const wxColour &c) { m_colour = c; }
 
+
+    // default copy ctor, assignment operator and dtor are ok
+    virtual wxEvent *Clone() const { return new wxColourPickerEvent(*this); }
+
 private:
     wxColour m_colour;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxColourPickerEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxColourPickerEvent)
 };
 
 // ----------------------------------------------------------------------------

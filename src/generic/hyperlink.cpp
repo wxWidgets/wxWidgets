@@ -47,6 +47,7 @@
 // ============================================================================
 
 IMPLEMENT_DYNAMIC_CLASS(wxHyperlinkCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxHyperlinkEvent, wxCommandEvent)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_HYPERLINK)
 
 // reserved for internal use only

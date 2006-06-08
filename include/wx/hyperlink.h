@@ -171,34 +171,49 @@ END_DECLARE_EVENT_TYPES()
 class WXDLLIMPEXP_ADV wxHyperlinkEvent : public wxCommandEvent
 {
 public:
-
     wxHyperlinkEvent() {}
     wxHyperlinkEvent(wxObject *generator, wxWindowID id, const wxString& url)
-     : wxCommandEvent(wxEVT_COMMAND_HYPERLINK, id), m_url(url)
-        { SetEventObject(generator); }
+        : wxCommandEvent(wxEVT_COMMAND_HYPERLINK, id),
+          m_url(url)
+    {
+        SetEventObject(generator);
+    }
 
     // Returns the URL associated with the hyperlink control
     // that the user clicked on.
     wxString GetURL() const { return m_url; }
     void SetURL(const wxString &url) { m_url=url; }
 
+    // default copy ctor, assignment operator and dtor are ok
+    virtual wxEvent *Clone() const { return new wxHyperlinkEvent(*this); }
+
 private:
 
     // URL associated with the hyperlink control that the used clicked on.
     wxString m_url;
+
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHyperlinkEvent)
 };
 
-// Define a typedef for event handler functions.
+
+// ----------------------------------------------------------------------------
+// event types and macros
+// ----------------------------------------------------------------------------
+
 typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
 
-// Define an event table macro.
-#define EVT_HYPERLINK(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_HYPERLINK, \
-    id, id, (wxObjectEventFunction) (wxEventFunction) \
-    wxStaticCastEvent(wxHyperlinkEventFunction, &fn), (wxObject *) NULL),
-
-// Newer event macro
 #define wxHyperlinkEventHandler(func) \
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxHyperlinkEventFunction, &func)
+
+#define EVT_HYPERLINK(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_HYPERLINK, id, wxHyperlinkEventHandler(fn))
+
+#ifdef _WX_DEFINE_DATE_EVENTS_
+    DEFINE_EVENT_TYPE(wxEVT_COMMAND_HYPERLINK)
+
+    IMPLEMENT_DYNAMIC_CLASS(wxHyperlinkEvent, wxCommandEvent)
+#endif
+
 
 #endif // wxUSE_HYPERLINKCTRL
 
