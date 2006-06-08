@@ -385,7 +385,7 @@ static wxString CharToString(wxMBConv *conv,
         const wxWCharBuffer wbuf(
             wxConvUTF8.cMB2WC(s, len == wxSTRING_MAXLEN ? wxNO_LEN : len, NULL));
 
-        return wxString(wbuf, conv);
+        return wxString(wbuf, *conv);
     }
     else // already in UTF-8, no conversion needed
     {
