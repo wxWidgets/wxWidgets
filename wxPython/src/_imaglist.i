@@ -64,7 +64,7 @@ public:
 
     DocDeclA(
         void, GetSize(int index, int& OUTPUT, int& OUTPUT),
-        "GetSize() -> (width,height)");
+        "GetSize(index) -> (width,height)");
         
 };
 
