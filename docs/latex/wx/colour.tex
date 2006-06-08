@@ -155,22 +155,13 @@ Returns the red intensity.
 
 \func{void}{Set}{\param{unsigned char}{ red}, \param{unsigned char}{ green}, \param{unsigned char}{ blue}}
 
-Sets the RGB intensity values.
-
-
-\membersection{wxColour::Set}\label{wxcolourset2}
-
 \func{void}{Set}{\param{unsigned long}{ RGB}}
-
-Sets the RGB intensity values extracting them from the packed long.
-
-
-\membersection{wxColour::Set}\label{wxcolourset3}
 
 \func{bool}{Set}{\param{const wxString \&}{ str}}
 
-Sets the colour using the given string.
-Accepts colour names (those listed in \helpref{wxTheColourDatabase}{wxcolourdatabase}), the CSS-like \texttt{``RGB(r,g,b)"} syntax (case insensitive) and the HTML-like syntax (i.e. \texttt{``\#"} followed by 6 hexadecimal digits for red, green, blue components).
+Sets the RGB intensity values using the given values (first overload), extracting them from the packed long (second overload), using the given string (third overloard).
+
+When using third form, Set() accepts: colour names (those listed in \helpref{wxTheColourDatabase}{wxcolourdatabase}), the CSS-like \texttt{``RGB(r,g,b)"} syntax (case insensitive) and the HTML-like syntax (i.e. \texttt{``\#"} followed by 6 hexadecimal digits for red, green, blue components).
 
 Returns \true if the conversion was successful, \false otherwise.
 

@@ -60,7 +60,7 @@ The text control is automatically synchronized with button's value. Use function
 
 \membersection{wxDirPickerCtrl::wxDirPickerCtrl}\label{wxdirpickerctrl}
 
-\func{}{wxdirpickerctrl}{\param{wxWindow *}{parent},\rtfsp
+\func{}{wxDirPickerCtrl}{\param{wxWindow *}{parent},\rtfsp
 \param{wxWindowID}{ id},\rtfsp
 \param{const wxString\& }{path = wxEmptyString},\rtfsp
 \param{const wxString\& }{message = ``Select a folder"},\rtfsp
@@ -94,13 +94,13 @@ all the parameters.
 
 \docparam{path}{The initial directory shown in the control. Must be a valid path to a directory or the empty string.}
 
-\docparam{message}{The message shown to the user in the \helpref{wxFileDialog}{wxfiledialog} shown by the control.}
+\docparam{message}{The message shown to the user in the \helpref{wxDirDialog}{wxdirdialog} shown by the control.}
 
 \docparam{pos}{Initial position.}
 
 \docparam{size}{Initial size.}
 
-\docparam{style}{The window style, see wxDIRP\_* flags.}
+\docparam{style}{The window style, see {\tt wxDIRP\_*} flags.}
 
 \docparam{validator}{Validator which can be used for additional date checks.}
 
@@ -122,6 +122,7 @@ Returns the currently selected directory.
 
 \func{void}{SetPath}{\param{const wxString \&}{dirname}}
 
-Sets the currently selected directory. This must be a valid directory.
+Sets the currently selected directory. his must be a valid directory if
+{\tt wxDIRP\_DIR\_MUST\_EXIST} style was given.
 
 
