@@ -26,6 +26,8 @@
 
 #if wxUSE_MDI && !defined(__WXUNIVERSAL__)
 
+#include "wx/mdi.h"
+
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
     #include "wx/menu.h"
@@ -42,7 +44,6 @@
 #endif
 
 #include "wx/stockitem.h"
-#include "wx/mdi.h"
 #include "wx/msw/private.h"
 
 #if wxUSE_STATUSBAR && wxUSE_NATIVE_STATUSBAR

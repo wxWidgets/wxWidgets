@@ -40,16 +40,13 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/msgdlg.h"
+    #include "wx/mdi.h"
 #endif
 
 #include "wx/ffile.h"
 
 #ifdef __WXMAC__
     #include "wx/filename.h"
-#endif
-
-#ifdef __WXGTK__
-    #include "wx/mdi.h"
 #endif
 
 #if wxUSE_PRINTING_ARCHITECTURE

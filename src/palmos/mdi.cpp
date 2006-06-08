@@ -24,7 +24,9 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_MDI && !defined(__WXUNIVERSAL__)
+#if wxUSE_MDI
+
+#include "wx/mdi.h"
 
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
@@ -41,7 +43,6 @@
     #include "wx/toolbar.h"
 #endif
 
-#include "wx/mdi.h"
 #include "wx/palmos/private.h"
 
 #if wxUSE_STATUSBAR && wxUSE_NATIVE_STATUSBAR
@@ -402,4 +403,4 @@ static void UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,
 {
 }
 
-#endif // wxUSE_MDI && !defined(__WXUNIVERSAL__)
+#endif // wxUSE_MDI

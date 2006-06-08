@@ -1,20 +1,21 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mdi.cpp
+// Name:        src/mac/carbon/mdi.cpp
 // Purpose:     MDI classes
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #if wxUSE_MDI
 
+#include "wx/mdi.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/mdi.h"
     #include "wx/log.h"
     #include "wx/menu.h"
     #include "wx/settings.h"
@@ -31,12 +32,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
 
 BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
-  EVT_ACTIVATE(wxMDIParentFrame::OnActivate)
-  EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
+    EVT_ACTIVATE(wxMDIParentFrame::OnActivate)
+    EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxMDIClientWindow, wxWindow)
-  EVT_SCROLL(wxMDIClientWindow::OnScroll)
+    EVT_SCROLL(wxMDIClientWindow::OnScroll)
 END_EVENT_TABLE()
 
 static const wxChar *TRACE_MDI = _T("mdi");
@@ -350,19 +351,19 @@ void wxMDIChildFrame::Init()
 }
 
 bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
-    wxWindowID id,
-    const wxString& title,
-    const wxPoint& pos,
-    const wxSize& size,
-    long style,
-    const wxString& name)
+                             wxWindowID id,
+                             const wxString& title,
+                             const wxPoint& pos,
+                             const wxSize& size,
+                             long style,
+                             const wxString& name)
 {
     SetName(name);
 
-    if ( id > -1 )
-        m_windowId = id;
-    else
+    if ( id == wxID_ANY )
         m_windowId = (int)NewControlId();
+    else
+        m_windowId = id;
 
     if (parent)
         parent->AddChild(this);
@@ -492,4 +493,3 @@ void wxMDIClientWindow::OnScroll(wxScrollEvent& event)
 }
 
 #endif // wxUSE_MDI
-

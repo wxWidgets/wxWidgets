@@ -23,9 +23,8 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/dialog.h" // to get wxDEFAULT_DIALOG_STYLE
+    #include "wx/mdi.h"
 #endif
-
-#include "wx/mdi.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxMdiXmlHandler, wxXmlResourceHandler)
 

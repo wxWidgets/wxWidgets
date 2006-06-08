@@ -35,15 +35,12 @@
     #include "wx/dcclient.h"
     #include "wx/dcscreen.h"
     #include "wx/toolbar.h"
+    #include "wx/mdi.h"
 #endif
 
 //#include "wx/dcbuffer.h"
 
 #include "wx/image.h"
-
-#if wxUSE_MDI
-     #include "wx/mdi.h"
-#endif
 
 WX_CHECK_BUILD_OPTIONS("wxAUI")
 
