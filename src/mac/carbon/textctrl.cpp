@@ -1588,6 +1588,7 @@ void wxMacUnicodeTextControl::WriteText( const wxString& str )
         CFStringRef value = cf ;
         SetData<CFStringRef>( 0, kControlEditTextInsertCFStringRefTag, &value );
     }
+    else
 #endif
     {
         wxString val = GetStringValue() ;
