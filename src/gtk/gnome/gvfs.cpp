@@ -162,7 +162,7 @@ bool wxGnomeVFSModule::OnInit()
     if (gs_lgvfs->IsOk())
     {
         if (gs_lgvfs->gnome_vfs_init())
-            wxMimeTypesManagerFactory::SetFactory( new wxGnomeVFSMimeTypesManagerFactory );
+            wxMimeTypesManagerFactory::Set( new wxGnomeVFSMimeTypesManagerFactory );
     }
     return true;
 }
