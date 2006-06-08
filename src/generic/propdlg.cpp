@@ -135,12 +135,7 @@ void wxPropertySheetDialog::CreateButtons(int flags)
 // Creates the book control
 wxBookCtrlBase* wxPropertySheetDialog::CreateBookCtrl()
 {
-    int style = wxCLIP_CHILDREN;
-#if defined(__POCKETPC__) && wxUSE_NOTEBOOK
-    style |= wxBK_BOTTOM|wxNB_FLAT;
-#else
-    style |= wxBK_DEFAULT;
-#endif
+    int style = wxCLIP_CHILDREN | wxBK_DEFAULT;
 
     wxBookCtrlBase* bookCtrl = NULL;
 

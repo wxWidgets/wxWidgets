@@ -382,7 +382,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     // we have 2 panes: book with pages demonstrating the controls in the
     // upper one and the log window with some buttons in the lower
 
-    int style = wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|WidgetBookStyle;
+    int style = wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|wxBK_DEFAULT;
     // Uncomment to suppress page theme (draw in solid colour)
     //style |= wxNB_NOPAGETHEME;
 
@@ -479,7 +479,7 @@ void WidgetsFrame::InitBook()
                                          wxID_ANY,
                                          wxDefaultPosition,
                                          wxDefaultSize,
-                                         WidgetBookStyle);
+                                         wxBK_DEFAULT);
 #endif
 
         for ( WidgetsPageInfo *info = WidgetsPage::ms_widgetPages;

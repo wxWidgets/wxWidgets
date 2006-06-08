@@ -268,14 +268,21 @@ bool wxNotebook::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
+    if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
+    {
+#if defined(__POCKETPC__)
+        style |= wxBK_BOTTOM | wxNB_FLAT;
+#else
+        style |= wxBK_TOP;
+#endif
+    }
+
 #ifdef __WXWINCE__
     // Not sure why, but without this style, there is no border
     // around the notebook tabs.
     if (style & wxNB_FLAT)
         style |= wxBORDER_SUNKEN;
 #endif
-    if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
-        style |= wxBK_TOP;
 
 #if !wxUSE_UXTHEME
     // ComCtl32 notebook tabs simply don't work unless they're on top if we have uxtheme, we can

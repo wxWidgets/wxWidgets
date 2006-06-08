@@ -18,18 +18,12 @@
     #define WidgetsBookCtrl wxTreebook
     #define WidgetsBookCtrlEvent wxTreebookEvent
     #define EVT_WIDGETS_PAGE_CHANGED(id,func) EVT_TREEBOOK_PAGE_CHANGED(id,func)
-    #define WidgetBookStyle (wxBK_DEFAULT)
 #else
     #include "wx/bookctrl.h"
     #define USE_TREEBOOK 0
     #define WidgetsBookCtrl wxBookCtrl
     #define WidgetsBookCtrlEvent wxBookCtrlEvent
     #define EVT_WIDGETS_PAGE_CHANGED(id,func) EVT_BOOKCTRL_PAGE_CHANGED(id,func)
-    #ifdef __POCKETPC__
-        #define WidgetBookStyle (wxBK_BOTTOM|wxNB_FLAT)
-    #else
-        #define WidgetBookStyle (wxBK_DEFAULT)
-    #endif
 #endif
 
 #if wxUSE_LOG && !defined(__WXHANDHELD__)
