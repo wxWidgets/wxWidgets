@@ -25,10 +25,10 @@
     #include "wx/dialog.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
+    #include "wx/memory.h"
 #endif
 
 #include "wx/gdicmn.h"
-#include "wx/memory.h"
 #include "wx/font.h"
 #include "wx/file.h"
 #include "wx/filename.h"

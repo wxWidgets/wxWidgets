@@ -20,13 +20,10 @@
 #ifndef WX_PRECOMP
     #include "wx/object.h"
     #include "wx/hash.h"
+    #include "wx/memory.h"
 #endif
 
 #include <string.h>
-
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-#include "wx/memory.h"
-#endif
 
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
     #if defined(__VISAGECPP__)

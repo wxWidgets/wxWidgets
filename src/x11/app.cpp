@@ -23,11 +23,11 @@
     #include "wx/icon.h"
     #include "wx/dialog.h"
     #include "wx/timer.h"
+    #include "wx/memory.h"
 #endif
 
 #include "wx/gdicmn.h"
 #include "wx/module.h"
-#include "wx/memory.h"
 #include "wx/evtloop.h"
 #include "wx/filename.h"
 

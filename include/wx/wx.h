@@ -24,6 +24,7 @@
 #include "wx/app.h"
 #include "wx/utils.h"
 #include "wx/stream.h"
+#include "wx/memory.h"
 
 #if wxUSE_GUI
 
@@ -70,7 +71,6 @@
 #include "wx/combobox.h"
 #include "wx/layout.h"
 #include "wx/sizer.h"
-#include "wx/memory.h"
 #include "wx/mdi.h"
 #include "wx/statusbr.h"
 #include "wx/scrolbar.h"

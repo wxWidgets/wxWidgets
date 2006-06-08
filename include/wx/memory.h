@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        memory.h
-// Purpose:     MDI classes
+// Name:        wx/memory.h
+// Purpose:     Memory operations
 // Author:      Arthur Seaton, Julian Smart
 // Modified by:
 // Created:     29/01/98
@@ -70,33 +70,33 @@ WXDLLIMPEXP_BASE void wxDebugFree(void * buf, bool isVect = false);
 #if defined(__WXMSW__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE))
 inline void * operator new (size_t size, wxChar * fileName, int lineNum)
 {
-  return wxDebugAlloc(size, fileName, lineNum, FALSE, FALSE);
+    return wxDebugAlloc(size, fileName, lineNum, false, false);
 }
 
 inline void * operator new (size_t size)
 {
-  return wxDebugAlloc(size, NULL, 0, FALSE);
+    return wxDebugAlloc(size, NULL, 0, false);
 }
 
 inline void operator delete (void * buf)
 {
-  wxDebugFree(buf, FALSE);
+    wxDebugFree(buf, false);
 }
 
 #if wxUSE_ARRAY_MEMORY_OPERATORS
 inline void * operator new[] (size_t size)
 {
-  return wxDebugAlloc(size, NULL, 0, FALSE, TRUE);
+    return wxDebugAlloc(size, NULL, 0, false, true);
 }
 
 inline void * operator new[] (size_t size, wxChar * fileName, int lineNum)
 {
-  return wxDebugAlloc(size, fileName, lineNum, FALSE, TRUE);
+    return wxDebugAlloc(size, fileName, lineNum, false, true);
 }
 
 inline void operator delete[] (void * buf)
 {
-  wxDebugFree(buf, TRUE);
+    wxDebugFree(buf, true);
 }
 #endif // wxUSE_ARRAY_MEMORY_OPERATORS
 
@@ -371,4 +371,3 @@ void WXDLLIMPEXP_BASE wxTraceLevel(int level, const wxChar *fmt ...) ATTRIBUTE_P
 
 #endif
     // _WX_MEMORYH__
-
