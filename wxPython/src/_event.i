@@ -1330,6 +1330,17 @@ function is only meaningfule in a Unicode build of wxPython.", "");
     }
     %pythoncode { GetUniChar = GetUnicodeKey }
 
+    %extend {
+        DocStr(
+            SetUnicodeKey,
+            "Set the Unicode value of the key event, but only if this is a Unicode
+build of wxPython.", "");
+        void SetUnicodeKey(int uniChar) {
+            %#if wxUSE_UNICODE
+                self->m_uniChar = uniChar;
+            %#endif
+        }
+    }
 
     DocDeclStr(
         wxUint32 , GetRawKeyCode() const,
