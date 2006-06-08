@@ -330,7 +330,7 @@ class FindFiles:
             if pattern.match(value) != None:
                 filelist.append(i)
 
-            self.files = filelist
+        self.files = filelist
 
     def MakeRegex(self, pattern):
         import re
