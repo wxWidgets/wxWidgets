@@ -65,12 +65,38 @@ gtk_button_press_event(GtkRange*, GdkEventButton*, wxScrollBar* win)
 }
 
 //-----------------------------------------------------------------------------
+// "event_after" from scrollbar
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void
+gtk_event_after(GtkRange* range, GdkEvent* event, wxScrollBar* win)
+{
+    if (event->type == GDK_BUTTON_RELEASE)
+    {
+        g_signal_handlers_block_by_func(range, (void*)gtk_event_after, win);
+
+        const int value = win->GetThumbPosition();
+        const int orient = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
+
+        wxScrollEvent event(wxEVT_SCROLL_THUMBRELEASE, win->GetId(), value, orient);
+        event.SetEventObject(win);
+        win->GetEventHandler()->ProcessEvent(event);
+
+        wxScrollEvent event2(wxEVT_SCROLL_CHANGED, win->GetId(), value, orient);
+        event2.SetEventObject(win);
+        win->GetEventHandler()->ProcessEvent(event2);
+    }
+}
+}
+
+//-----------------------------------------------------------------------------
 // "button_release_event" from scrollbar
 //-----------------------------------------------------------------------------
 
 extern "C" {
 static gboolean
-gtk_button_release_event(GtkRange*, GdkEventButton*, wxScrollBar* win)
+gtk_button_release_event(GtkRange* range, GdkEventButton*, wxScrollBar* win)
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -80,18 +106,10 @@ gtk_button_release_event(GtkRange*, GdkEventButton*, wxScrollBar* win)
     if (win->m_isScrolling)
     {
         win->m_isScrolling = false;
-        const int value = win->GetThumbPosition();
-        const int orient = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
-
-        wxScrollEvent event(wxEVT_SCROLL_THUMBRELEASE, win->GetId(), value, orient);
-        event.SetEventObject(win);
+        // Hook up handler to send thumb release event after this emission is finished.
         // To allow setting scroll position from event handler, sending event must
         // be deferred until after the GtkRange handler for this signal has run
-        win->GetEventHandler()->AddPendingEvent(event);
-
-        wxScrollEvent event2(wxEVT_SCROLL_CHANGED, win->GetId(), value, orient);
-        event2.SetEventObject(win);
-        win->GetEventHandler()->AddPendingEvent(event2);
+        g_signal_handlers_unblock_by_func(range, (void*)gtk_event_after, win);
     }
 
     return false;
@@ -140,6 +158,11 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
                      G_CALLBACK(gtk_button_press_event), this);
     g_signal_connect(m_widget, "button_release_event",
                      G_CALLBACK(gtk_button_release_event), this);
+
+    gulong handler_id;
+    handler_id = g_signal_connect(
+        m_widget, "event_after", G_CALLBACK(gtk_event_after), this);
+    g_signal_handler_block(m_widget, handler_id);
 
     m_parent->DoAddChild( this );
 

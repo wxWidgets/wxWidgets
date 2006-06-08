@@ -219,27 +219,28 @@ gtk_button_press_event(GtkWidget*, GdkEventButton*, wxSlider* win)
 }
 }
 
-// Single shot idle callback, to generate thumb release event, and
-//  truncate position to integral value.  Idle callback is used
-//  because position cannot be changed from button release event.
+//-----------------------------------------------------------------------------
+// "event_after"
+//-----------------------------------------------------------------------------
+
 extern "C" {
-static gboolean
-idle_thumbrelease(void* data)
+static void
+gtk_event_after(GtkRange* range, GdkEvent* event, wxSlider* win)
 {
-    gdk_threads_enter();
-    wxSlider* win = (wxSlider*)data;
-    win->m_isScrolling = false;
-    if (win->m_needThumbRelease)
+    if (event->type == GDK_BUTTON_RELEASE)
     {
-        win->m_needThumbRelease = false;
-        ProcessScrollEvent(win, wxEVT_SCROLL_THUMBRELEASE);
+        g_signal_handlers_block_by_func(range, (void*)gtk_event_after, win);
+
+        if (win->m_needThumbRelease)
+        {
+            win->m_needThumbRelease = false;
+            ProcessScrollEvent(win, wxEVT_SCROLL_THUMBRELEASE);
+        }
+        // Keep slider at an integral position
+        win->BlockScrollEvent();
+        gtk_range_set_value((GtkRange*)win->m_widget, win->GetValue());
+        win->UnblockScrollEvent();
     }
-    // Keep slider at an integral position
-    win->BlockScrollEvent();
-    gtk_range_set_value((GtkRange*)win->m_widget, win->GetValue());
-    win->UnblockScrollEvent();
-    gdk_threads_leave();
-    return false;
 }
 }
 
@@ -249,12 +250,13 @@ idle_thumbrelease(void* data)
 
 extern "C" {
 static gboolean
-gtk_button_release_event(GtkWidget*, GdkEventButton*, wxSlider* win)
+gtk_button_release_event(GtkRange* range, GdkEventButton*, wxSlider* win)
 {
     win->m_mouseButtonDown = false;
     if (win->m_isScrolling)
     {
-        g_idle_add(idle_thumbrelease, win);
+        win->m_isScrolling = false;
+        g_signal_handlers_unblock_by_func(range, (void*)gtk_event_after, win);
     }
     return false;
 }
@@ -321,6 +323,10 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     g_signal_connect(m_widget, "move_slider", G_CALLBACK(gtk_move_slider), this);
     g_signal_connect(m_widget, "format_value", G_CALLBACK(gtk_format_value), NULL);
     g_signal_connect(m_widget, "value_changed", G_CALLBACK(gtk_value_changed), this);
+    gulong handler_id;
+    handler_id = g_signal_connect(
+        m_widget, "event_after", G_CALLBACK(gtk_event_after), this);
+    g_signal_handler_block(m_widget, handler_id);
 
     SetRange( minValue, maxValue );
     SetValue( value );

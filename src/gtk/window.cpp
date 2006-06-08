@@ -2132,6 +2132,26 @@ gtk_scrollbar_button_press_event(GtkRange*, GdkEventButton*, wxWindow* win)
 }
 
 //-----------------------------------------------------------------------------
+// "event_after" from scrollbar
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void
+gtk_scrollbar_event_after(GtkRange* range, GdkEvent* event, wxWindow* win)
+{
+    if (event->type == GDK_BUTTON_RELEASE)
+    {
+        g_signal_handlers_block_by_func(range, (void*)gtk_scrollbar_event_after, win);
+
+        const int orient = range == win->m_scrollBar[0] ? wxHORIZONTAL : wxVERTICAL;
+        wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBRELEASE, win->GetScrollPos(orient), orient);
+        event.SetEventObject(win);
+        win->GetEventHandler()->ProcessEvent(event);
+    }
+}
+}
+
+//-----------------------------------------------------------------------------
 // "button_release_event" from scrollbar
 //-----------------------------------------------------------------------------
 
@@ -2147,12 +2167,10 @@ gtk_scrollbar_button_release_event(GtkRange* range, GdkEventButton*, wxWindow* w
     if (win->m_isScrolling)
     {
         win->m_isScrolling = false;
-        const int orient = range == win->m_scrollBar[0] ? wxHORIZONTAL : wxVERTICAL;
-        wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBRELEASE, win->GetScrollPos(orient), orient);
-        event.SetEventObject(win);
+        // Hook up handler to send thumb release event after this emission is finished.
         // To allow setting scroll position from event handler, sending event must
         // be deferred until after the GtkRange handler for this signal has run
-        win->GetEventHandler()->AddPendingEvent(event);
+        g_signal_handlers_unblock_by_func(range, (void*)gtk_scrollbar_event_after, win);
     }
 
     return false;
@@ -2569,6 +2587,13 @@ bool wxWindowGTK::Create( wxWindow *parent,
                      G_CALLBACK(gtk_scrollbar_button_release_event), this);
     g_signal_connect(m_scrollBar[1], "button_release_event",
                      G_CALLBACK(gtk_scrollbar_button_release_event), this);
+    gulong handler_id;
+    handler_id = g_signal_connect(
+        m_scrollBar[0], "event_after", G_CALLBACK(gtk_scrollbar_event_after), this);
+    g_signal_handler_block(m_scrollBar[0], handler_id);
+    handler_id = g_signal_connect(
+        m_scrollBar[1], "event_after", G_CALLBACK(gtk_scrollbar_event_after), this);
+    g_signal_handler_block(m_scrollBar[1], handler_id);
 
     // these handlers get notified when scrollbar slider moves
 
