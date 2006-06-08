@@ -21,16 +21,18 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/listbook.h"
 #include "wx/imaglist.h"
-#include "wx/sizer.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxListbookXmlHandler, wxXmlResourceHandler)
 
 wxListbookXmlHandler::wxListbookXmlHandler()
-: wxXmlResourceHandler(), m_isInside(false), m_listbook(NULL)
+                     :wxXmlResourceHandler(),
+                      m_isInside(false),
+                      m_listbook(NULL)
 {
     XRC_ADD_STYLE(wxBK_DEFAULT);
     XRC_ADD_STYLE(wxBK_LEFT);

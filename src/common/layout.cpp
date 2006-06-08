@@ -26,6 +26,8 @@
 
 #if wxUSE_CONSTRAINTS
 
+#include "wx/layout.h"
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/utils.h"
@@ -33,8 +35,6 @@
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
 #endif
-
-#include "wx/layout.h"
 
 
 IMPLEMENT_DYNAMIC_CLASS(wxIndividualLayoutConstraint, wxObject)

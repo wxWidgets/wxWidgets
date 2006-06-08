@@ -21,16 +21,18 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/notebook.h"
 #include "wx/imaglist.h"
-#include "wx/sizer.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookXmlHandler, wxXmlResourceHandler)
 
 wxNotebookXmlHandler::wxNotebookXmlHandler()
-: wxXmlResourceHandler(), m_isInside(false), m_notebook(NULL)
+                     :wxXmlResourceHandler(),
+                      m_isInside(false),
+                      m_notebook(NULL)
 {
     XRC_ADD_STYLE(wxBK_DEFAULT);
     XRC_ADD_STYLE(wxBK_LEFT);

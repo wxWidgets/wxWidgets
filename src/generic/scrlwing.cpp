@@ -38,9 +38,9 @@
     #if wxUSE_TIMER
         #include "wx/timer.h"
     #endif
+    #include "wx/sizer.h"
 #endif
 
-#include "wx/sizer.h"
 #include "wx/recguard.h"
 
 #ifdef __WXMSW__

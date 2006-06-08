@@ -23,9 +23,9 @@
     #include "wx/log.h"
     #include "wx/panel.h"
     #include "wx/statbox.h"
+    #include "wx/sizer.h"
 #endif
 
-#include "wx/sizer.h"
 #include "wx/gbsizer.h"
 #include "wx/notebook.h"
 #include "wx/tokenzr.h"
@@ -38,10 +38,10 @@
 IMPLEMENT_DYNAMIC_CLASS(wxSizerXmlHandler, wxXmlResourceHandler)
 
 wxSizerXmlHandler::wxSizerXmlHandler()
-    : wxXmlResourceHandler(),
-      m_isInside(false),
-      m_isGBS(false),
-      m_parentSizer(NULL)
+                  :wxXmlResourceHandler(),
+                   m_isInside(false),
+                   m_isGBS(false),
+                   m_parentSizer(NULL)
 {
     XRC_ADD_STYLE(wxHORIZONTAL);
     XRC_ADD_STYLE(wxVERTICAL);

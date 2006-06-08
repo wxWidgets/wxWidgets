@@ -34,10 +34,10 @@
     #include "wx/choice.h"
     #include "wx/stattext.h"
     #include "wx/textctrl.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/longlong.h"
-#include "wx/sizer.h"
 #include "wx/tokenzr.h"
 #include "wx/config.h"
 #include "wx/imaglist.h"

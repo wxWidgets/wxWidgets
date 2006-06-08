@@ -32,12 +32,12 @@
     #include "wx/intl.h"
     #include "wx/settings.h"
     #include "wx/cmndata.h"
+    #include "wx/sizer.h"
 #endif
 
 #include <string.h>
 #include <stdlib.h>
 
-#include "wx/sizer.h"
 #include "wx/fontdlg.h"
 #include "wx/generic/fontdlgg.h"
 

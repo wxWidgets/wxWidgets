@@ -19,12 +19,12 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/dcclient.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/stockitem.h"
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
-#include "wx/sizer.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"

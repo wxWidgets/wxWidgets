@@ -29,9 +29,9 @@
     #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
     #include "wx/combobox.h"
+    #include "wx/layout.h"
 #endif
 
-#include "wx/layout.h"
 #include "wx/module.h"
 
 #if wxUSE_DRAG_AND_DROP

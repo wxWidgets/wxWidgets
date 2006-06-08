@@ -32,15 +32,15 @@
     #include "wx/cmndata.h"
     #include "wx/choice.h"
     #include "wx/textctrl.h"
+    #include "wx/layout.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/module.h"
-#include "wx/layout.h"
 #include "wx/textdlg.h"
 #include "wx/filefn.h"
 #include "wx/gdicmn.h"
 #include "wx/imaglist.h"
-#include "wx/sizer.h"
 #include "wx/tokenzr.h"
 #include "wx/dir.h"
 #include "wx/artprov.h"
@@ -73,16 +73,16 @@
 #endif
 
 #if defined(__OS2__) || defined(__DOS__)
-  #ifdef __OS2__
-    #define INCL_BASE
-    #include <os2.h>
-    #ifndef __EMX__
-      #include <direct.h>
+    #ifdef __OS2__
+        #define INCL_BASE
+        #include <os2.h>
+        #ifndef __EMX__
+            #include <direct.h>
+        #endif
+        #include <stdlib.h>
+        #include <ctype.h>
     #endif
-    #include <stdlib.h>
-    #include <ctype.h>
-  #endif
-  extern bool wxIsDriveAvailable(const wxString& dirName);
+    extern bool wxIsDriveAvailable(const wxString& dirName);
 #endif // __OS2__
 
 #if defined(__WXMAC__)

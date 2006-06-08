@@ -23,9 +23,8 @@
     #include "wx/log.h"
     #include "wx/window.h"
     #include "wx/panel.h"
+    #include "wx/sizer.h"
 #endif
-
-#include "wx/sizer.h"
 
 
 class wxUnknownControlContainer : public wxPanel

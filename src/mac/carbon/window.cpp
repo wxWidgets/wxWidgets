@@ -30,9 +30,9 @@
     #include "wx/statbox.h"
     #include "wx/textctrl.h"
     #include "wx/toolbar.h"
+    #include "wx/layout.h"
 #endif
 
-#include "wx/layout.h"
 #include "wx/tooltip.h"
 #include "wx/statusbr.h"
 #include "wx/menuitem.h"

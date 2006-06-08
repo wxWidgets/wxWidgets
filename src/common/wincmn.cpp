@@ -42,13 +42,9 @@
     #include "wx/toolbar.h"
     #include "wx/dcclient.h"
     #include "wx/scrolbar.h"
-#endif //WX_PRECOMP
-
-#if wxUSE_CONSTRAINTS
     #include "wx/layout.h"
-#endif // wxUSE_CONSTRAINTS
-
-#include "wx/sizer.h"
+    #include "wx/sizer.h"
+#endif //WX_PRECOMP
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"

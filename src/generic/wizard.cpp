@@ -36,10 +36,10 @@
     #include "wx/statbmp.h"
     #include "wx/button.h"
     #include "wx/settings.h"
+    #include "wx/sizer.h"
 #endif //WX_PRECOMP
 
 #include "wx/statline.h"
-#include "wx/sizer.h"
 
 #include "wx/wizard.h"
 

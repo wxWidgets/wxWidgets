@@ -29,9 +29,9 @@
     #include "wx/scrolbar.h"
     #include "wx/statbox.h"
     #include "wx/listbox.h"
+    #include "wx/layout.h"
 #endif
 
-#include "wx/layout.h"
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 #include "wx/tooltip.h"
@@ -268,13 +268,13 @@ void wxWindowMac::SetFocus()
             wxChildFocusEvent eventFocus(this);
             GetEventHandler()->ProcessEvent(eventFocus);
 
-      #ifndef __WXUNIVERSAL__
+#ifndef __WXUNIVERSAL__
             wxControl* control = wxDynamicCast( gFocusWindow , wxControl ) ;
             if ( control && control->GetMacControl() )
             {
                 UMASetKeyboardFocus( (WindowRef) gFocusWindow->MacGetRootWindow() , (ControlHandle) control->GetMacControl()  , kControlFocusNextPart ) ;
             }
-      #endif
+#endif
             wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
             event.SetEventObject(this);
             GetEventHandler()->ProcessEvent(event) ;

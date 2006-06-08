@@ -31,10 +31,10 @@
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/choice.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/imaglist.h"
-#include "wx/sizer.h"
 
 // ----------------------------------------------------------------------------
 // various wxWidgets macros

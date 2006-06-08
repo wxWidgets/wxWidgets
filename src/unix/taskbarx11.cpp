@@ -28,10 +28,10 @@
     #include "wx/frame.h"
     #include "wx/dcclient.h"
     #include "wx/statbmp.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/bitmap.h"
-#include "wx/sizer.h"
 #include "wx/image.h"
 
 #ifdef __VMS
