@@ -30,16 +30,27 @@
 
 #include "wx/renderer.h"
 
+class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxCheckListBox;
-class WXDLLEXPORT wxListBox;
-class WXDLLEXPORT wxMenu;
-class WXDLLEXPORT wxMenuGeometryInfo;
+
+#if wxUSE_LISTBOX
+    class WXDLLEXPORT wxListBox;
+#endif // wxUSE_LISTBOX
+
+#if wxUSE_MENUS
+   class WXDLLEXPORT wxMenu;
+   class WXDLLEXPORT wxMenuGeometryInfo;
+#endif // wxUSE_MENUS
+
 class WXDLLEXPORT wxScrollBar;
-class WXDLLEXPORT wxTextCtrl;
-class WXDLLEXPORT wxWindow;
+
+#if wxUSE_TEXTCTRL
+    class WXDLLEXPORT wxTextCtrl;
+#endif
+
 #if wxUSE_GAUGE
-class WXDLLEXPORT wxGauge;
+    class WXDLLEXPORT wxGauge;
 #endif // wxUSE_GAUGE
 
 #include "wx/string.h"
@@ -199,6 +210,7 @@ public:
                                  wxAlignment align = wxALIGN_LEFT,
                                  int indexAccel = -1) = 0;
 
+#if wxUSE_TOOLBAR
     // draw a toolbar button (label may be empty, bitmap may be invalid, if
     // both conditions are true this function draws a separator)
     virtual void DrawToolBarButton(wxDC& dc,
@@ -208,6 +220,7 @@ public:
                                    int flags = 0,
                                    long style = 0,
                                    int tbarStyle = 0) = 0;
+#endif // wxUSE_TOOLBAR
 
     // draw a (part of) line in the text control
     virtual void DrawTextLine(wxDC& dc,
@@ -228,6 +241,8 @@ public:
                          const wxBitmap& bitmap = wxNullBitmap,
                          int flags = 0,
                          int indexAccel = -1) = 0;
+
+#if wxUSE_SLIDER
 
     // draw the slider shaft
     virtual void DrawSliderShaft(wxDC& dc,
@@ -255,7 +270,9 @@ public:
                                  int step = 1,
                                  int flags = 0,
                                  long style = 0) = 0;
+#endif // wxUSE_SLIDER
 
+#if wxUSE_MENUS
     // draw a menu bar item
     virtual void DrawMenuBarItem(wxDC& dc,
                                  const wxRect& rect,
@@ -279,13 +296,16 @@ public:
     virtual void DrawMenuSeparator(wxDC& dc,
                                    wxCoord y,
                                    const wxMenuGeometryInfo& geomInfo) = 0;
+#endif // wxUSE_MENUS
 
+#if wxUSE_STATUSBAR
     // draw a status bar field: wxCONTROL_ISDEFAULT bit in the flags is
     // interpreted specially and means "draw the status bar grip" here
     virtual void DrawStatusField(wxDC& dc,
                                  const wxRect& rect,
                                  const wxString& label,
                                  int flags = 0, int style = 0) = 0;
+#endif // wxUSE_STATUSBAR
 
     // draw complete frame/dialog titlebar
     virtual void DrawFrameTitleBar(wxDC& dc,
@@ -350,6 +370,8 @@ public:
     // the control looks "nice" if it uses the adjusted rectangle
     virtual void AdjustSize(wxSize *size, const wxWindow *window) = 0;
 
+#if wxUSE_SCROLLBAR
+
     // get the size of a scrollbar arrow
     virtual wxSize GetScrollbarArrowSize() const = 0;
 
@@ -373,6 +395,8 @@ public:
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar,
                                  wxCoord coord) = 0;
 
+#endif // wxUSE_SCROLLBAR
+
     // get the height of a listbox item from the base font height
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight) = 0;
 
@@ -388,6 +412,7 @@ public:
     // get the margins between/around the toolbar buttons
     virtual wxSize GetToolBarMargin() const = 0;
 
+#if wxUSE_TEXTCTRL
     // convert between text rectangle and client rectangle for text controls:
     // the former is typicall smaller to leave margins around text
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
@@ -397,6 +422,7 @@ public:
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
                                      const wxRect& rectTotal,
                                      wxCoord *extraSpaceBeyond) const = 0;
+#endif // wxUSE_TEXTCTRL
 
     // get the overhang of a selected tab
     virtual wxSize GetTabIndent() const = 0;
@@ -404,6 +430,7 @@ public:
     // get the padding around the text in a tab
     virtual wxSize GetTabPadding() const = 0;
 
+#if wxUSE_SLIDER
     // get the default size of the slider in lesser dimension (i.e. height of a
     // horizontal slider or width of a vertical one)
     virtual wxCoord GetSliderDim() const = 0;
@@ -421,10 +448,12 @@ public:
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
                                       int lenThumb,
                                       wxOrientation orient) const = 0;
+#endif // wxUSE_SLIDER
 
     // get the size of one progress bar step (in horz and vertical directions)
     virtual wxSize GetProgressBarStep() const = 0;
 
+#if wxUSE_MENUS
     // get the size of rectangle to use in the menubar for the given text rect
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const = 0;
 
@@ -435,10 +464,13 @@ public:
     // the returned pointer must be deleted by the caller
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const = 0;
+#endif // wxUSE_MENUS
 
+#if wxUSE_STATUSBAR
     // get the borders around the status bar fields (x and y fields of the
     // return value) and also, optionally, the border between the fields
     virtual wxSize GetStatusBarBorders(wxCoord *borderBetweenFields) const = 0;
+#endif // wxUSE_STATUSBAR
 
     // get client area rectangle of top level window (i.e. subtract
     // decorations from given rectangle)
@@ -477,6 +509,7 @@ protected:
                                      int selStart, int selEnd,
                                      int flags);
 
+#if wxUSE_SCROLLBAR
     // standard scrollbar hit testing: this assumes that it only has 2 arrows
     // and a thumb, so the themes which have more complicated scrollbars (e.g.
     // BeOS) can't use this method
@@ -501,6 +534,8 @@ protected:
                                            int range,
                                            wxCoord *thumbStart,
                                            wxCoord *thumbEnd);
+#endif // wxUSE_SCROLLBAR
+
 };
 
 // ----------------------------------------------------------------------------
@@ -622,6 +657,7 @@ public:
                                  int indexAccel = -1)
         { m_renderer->DrawRadioButton(dc, label, bitmap, rect,
                                       flags, align, indexAccel); }
+#if wxUSE_TOOLBAR
     virtual void DrawToolBarButton(wxDC& dc,
                                    const wxString& label,
                                    const wxBitmap& bitmap,
@@ -630,6 +666,7 @@ public:
                                    long style = 0,
                                    int tbarStyle = 0)
         { m_renderer->DrawToolBarButton(dc, label, bitmap, rect, flags, style, tbarStyle); }
+#endif // wxUSE_TOOLBAR
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
                               const wxRect& rect,
@@ -648,6 +685,8 @@ public:
                          int flags = 0,
                          int accel = -1)
         { m_renderer->DrawTab(dc, rect, dir, label, bitmap, flags, accel); }
+
+#if wxUSE_SLIDER
 
     virtual void DrawSliderShaft(wxDC& dc,
                                  const wxRect& rect,
@@ -674,7 +713,9 @@ public:
                                  long style = 0)
         { m_renderer->DrawSliderTicks(dc, rect, lenThumb, orient,
                                       start, end, start, flags, style); }
+#endif // wxUSE_SLIDER
 
+#if wxUSE_MENUS
     virtual void DrawMenuBarItem(wxDC& dc,
                                  const wxRect& rect,
                                  const wxString& label,
@@ -695,12 +736,15 @@ public:
                                    wxCoord y,
                                    const wxMenuGeometryInfo& geomInfo)
         { m_renderer->DrawMenuSeparator(dc, y, geomInfo); }
+#endif // wxUSE_MENUS
 
+#if wxUSE_STATUSBAR
     virtual void DrawStatusField(wxDC& dc,
                                  const wxRect& rect,
                                  const wxString& label,
                                  int flags = 0, int style = 0)
         { m_renderer->DrawStatusField(dc, rect, label, flags, style); }
+#endif // wxUSE_STATUSBAR
 
     virtual void DrawFrameTitleBar(wxDC& dc,
                                    const wxRect& rect,
@@ -749,6 +793,7 @@ public:
     virtual bool AreScrollbarsInsideBorder() const
         { return m_renderer->AreScrollbarsInsideBorder(); }
 
+#if wxUSE_SCROLLBAR
     virtual wxSize GetScrollbarArrowSize() const
         { return m_renderer->GetScrollbarArrowSize(); }
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
@@ -766,6 +811,8 @@ public:
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar,
                                  wxCoord coord)
         { return m_renderer->PixelToScrollbar(scrollbar, coord); }
+#endif // wxUSE_SCROLLBAR
+
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
         { return m_renderer->GetListboxItemHeight(fontHeight); }
     virtual wxSize GetCheckBitmapSize() const
@@ -780,6 +827,7 @@ public:
     virtual wxSize GetToolBarMargin() const
         { return m_renderer->GetToolBarMargin(); }
 
+#if wxUSE_TEXTCTRL
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
                                     const wxRect& rect) const
         { return m_renderer->GetTextTotalArea(text, rect); }
@@ -787,14 +835,17 @@ public:
                                      const wxRect& rect,
                                      wxCoord *extraSpaceBeyond) const
         { return m_renderer->GetTextClientArea(text, rect, extraSpaceBeyond); }
+#endif // wxUSE_TEXTCTRL
 
     virtual wxSize GetTabIndent() const { return m_renderer->GetTabIndent(); }
     virtual wxSize GetTabPadding() const { return m_renderer->GetTabPadding(); }
 
+#if wxUSE_SLIDER
     virtual wxCoord GetSliderDim() const
         { return m_renderer->GetSliderDim(); }
     virtual wxCoord GetSliderTickLen() const
         { return m_renderer->GetSliderTickLen(); }
+
     virtual wxRect GetSliderShaftRect(const wxRect& rect,
                                       int lenThumb,
                                       wxOrientation orient,
@@ -804,15 +855,23 @@ public:
                                       int lenThumb,
                                       wxOrientation orient) const
         { return m_renderer->GetSliderThumbSize(rect, lenThumb, orient); }
+#endif // wxUSE_SLIDER
+
     virtual wxSize GetProgressBarStep() const
         { return m_renderer->GetProgressBarStep(); }
+
+#if wxUSE_MENUS
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const
         { return m_renderer->GetMenuBarItemSize(sizeText); }
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const
         { return m_renderer->GetMenuGeometry(win, menu); }
+#endif // wxUSE_MENUS
+
+#if wxUSE_STATUSBAR
     virtual wxSize GetStatusBarBorders(wxCoord *borderBetweenFields) const
         { return m_renderer->GetStatusBarBorders(borderBetweenFields); }
+#endif // wxUSE_STATUSBAR
     virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const
         { return m_renderer->GetFrameClientArea(rect, flags); }
     virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const
@@ -892,10 +951,13 @@ public:
                            wxStretch stretch = wxSTRETCH_NOT);
 
 private:
+
+#if wxUSE_LISTBOX
     // common part of DrawItems() and DrawCheckItems()
     void DoDrawItems(const wxListBox *listbox,
                      size_t itemFirst, size_t itemLast,
                      bool isCheckLbox = false);
+#endif // wxUSE_LISTBOX
 
     wxWindow *m_window;
     wxRenderer *m_renderer;

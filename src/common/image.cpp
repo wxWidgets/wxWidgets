@@ -1459,7 +1459,9 @@ bool wxImage::HasOption(const wxString& name) const
 // image I/O
 // ----------------------------------------------------------------------------
 
-bool wxImage::LoadFile( const wxString& filename, long type, int index )
+bool wxImage::LoadFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
+                        long WXUNUSED_UNLESS_STREAMS(type),
+                        int WXUNUSED_UNLESS_STREAMS(index) )
 {
 #if wxUSE_STREAMS
     if (wxFileExists(filename))
@@ -1479,7 +1481,9 @@ bool wxImage::LoadFile( const wxString& filename, long type, int index )
 #endif // wxUSE_STREAMS
 }
 
-bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype, int index )
+bool wxImage::LoadFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
+                        const wxString& WXUNUSED_UNLESS_STREAMS(mimetype),
+                        int WXUNUSED_UNLESS_STREAMS(index) )
 {
 #if wxUSE_STREAMS
     if (wxFileExists(filename))
@@ -1517,7 +1521,8 @@ bool wxImage::SaveFile( const wxString& filename ) const
     return false;
 }
 
-bool wxImage::SaveFile( const wxString& filename, int type ) const
+bool wxImage::SaveFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
+                        int WXUNUSED_UNLESS_STREAMS(type) ) const
 {
 #if wxUSE_STREAMS
     wxCHECK_MSG( Ok(), false, wxT("invalid image") );
@@ -1536,7 +1541,8 @@ bool wxImage::SaveFile( const wxString& filename, int type ) const
     return false;
 }
 
-bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype ) const
+bool wxImage::SaveFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
+                        const wxString& WXUNUSED_UNLESS_STREAMS(mimetype) ) const
 {
 #if wxUSE_STREAMS
     wxCHECK_MSG( Ok(), false, wxT("invalid image") );
@@ -1555,22 +1561,23 @@ bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype ) con
     return false;
 }
 
-bool wxImage::CanRead( const wxString &name )
+bool wxImage::CanRead( const wxString& WXUNUSED_UNLESS_STREAMS(name) )
 {
 #if wxUSE_STREAMS
-  wxFileInputStream stream(name);
-  return CanRead(stream);
+    wxFileInputStream stream(name);
+    return CanRead(stream);
 #else
-  return false;
+    return false;
 #endif
 }
 
-int wxImage::GetImageCount( const wxString &name, long type )
+int wxImage::GetImageCount( const wxString& WXUNUSED_UNLESS_STREAMS(name),
+                            long WXUNUSED_UNLESS_STREAMS(type) )
 {
 #if wxUSE_STREAMS
-  wxFileInputStream stream(name);
-  if (stream.Ok())
-      return GetImageCount(stream, type);
+    wxFileInputStream stream(name);
+    if (stream.Ok())
+        return GetImageCount(stream, type);
 #endif
 
   return 0;

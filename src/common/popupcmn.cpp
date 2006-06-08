@@ -462,10 +462,10 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
     wxPoint pos = event.GetPosition();
 
     // in non-Univ ports the system manages scrollbars for us
-#ifdef __WXUNIVERSAL__
+#if defined(__WXUNIVERSAL__) && wxUSE_SCROLLBAR
     // scrollbar on which the click occurred
     wxWindow *sbar = NULL;
-#endif // __WXUNIVERSAL__
+#endif // __WXUNIVERSAL__ && wxUSE_SCROLLBAR
 
     wxWindow *win = (wxWindow *)event.GetEventObject();
 
@@ -498,7 +498,7 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
             }
             break;
 
-#ifdef __WXUNIVERSAL__
+#if defined(__WXUNIVERSAL__) && wxUSE_SCROLLBAR
         case wxHT_WINDOW_HORZ_SCROLLBAR:
             sbar = win->GetScrollbar(wxHORIZONTAL);
             break;
@@ -506,7 +506,7 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
         case wxHT_WINDOW_VERT_SCROLLBAR:
             sbar = win->GetScrollbar(wxVERTICAL);
             break;
-#endif // __WXUNIVERSAL__
+#endif // __WXUNIVERSAL__ && wxUSE_SCROLLBAR
 
         default:
             // forgot to update the switch after adding a new hit test code?
@@ -523,7 +523,7 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
             break;
     }
 
-#ifdef __WXUNIVERSAL__
+#if defined(__WXUNIVERSAL__) && wxUSE_SCROLLBAR
     if ( sbar )
     {
         // translate the event coordinates to the scrollbar ones
@@ -536,7 +536,7 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 
         (void)sbar->GetEventHandler()->ProcessEvent(event2);
     }
-#endif // __WXUNIVERSAL__
+#endif // __WXUNIVERSAL__ && wxUSE_SCROLLBAR
 }
 
 // ----------------------------------------------------------------------------

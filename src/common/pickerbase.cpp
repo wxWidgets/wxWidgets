@@ -24,6 +24,11 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_COLOURPICKERCTRL || \
+    wxUSE_DIRPICKERCTRL    || \
+    wxUSE_FILEPICKERCTRL   || \
+    wxUSE_FONTPICKERCTRL
+
 #include "wx/pickerbase.h"
 
 #ifndef WX_PRECOMP
@@ -200,3 +205,5 @@ void wxPickerBase::SetInternalMargin(int newmargin)
 {
     m_margin = newmargin;
 }
+
+#endif // Any picker in use

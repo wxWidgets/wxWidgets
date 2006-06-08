@@ -127,6 +127,8 @@ void wxRenderer::StandardDrawTextLine(wxDC& dc,
 // wxRenderer: scrollbar geometry
 // ----------------------------------------------------------------------------
 
+#if wxUSE_SCROLLBAR
+
 /* static */
 void wxRenderer::StandardScrollBarThumbSize(wxCoord length,
                                             int thumbPos,
@@ -386,6 +388,8 @@ wxHitTest wxRenderer::StandardHitTestScrollbar(const wxScrollBar *scrollbar,
     }
 }
 
+#endif // wxUSE_SCROLLBAR
+
 wxRenderer::~wxRenderer()
 {
 }
@@ -500,11 +504,13 @@ void wxControlRenderer::DrawBitmap(wxDC &dc,
             }
         }
     }
+#if wxUSE_IMAGE
     else if ( stretch & wxEXPAND )
     {
         // stretch bitmap to fill the entire control
         bmp = wxBitmap(wxImage(bmp.ConvertToImage()).Scale(rect.width, rect.height));
     }
+#endif // wxUSE_IMAGE
     else // not stretched, not tiled
     {
         if ( alignment & wxALIGN_RIGHT )
@@ -537,6 +543,8 @@ void wxControlRenderer::DrawBitmap(wxDC &dc,
     // do draw it
     dc.DrawBitmap(bmp, x, y, true /* use mask */);
 }
+
+#if wxUSE_SCROLLBAR
 
 void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
                                       int WXUNUSED(thumbPosOld))
@@ -647,6 +655,8 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
                                        scrollbar->GetState(elem));
     }
 }
+
+#endif // wxUSE_SCROLLBAR
 
 void wxControlRenderer::DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {

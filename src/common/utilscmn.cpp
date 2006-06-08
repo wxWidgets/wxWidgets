@@ -913,15 +913,18 @@ wxRegisterId (long id)
     wxCurrentId = id + 1;
 }
 
-#if wxUSE_MENUS
-
 // ----------------------------------------------------------------------------
 // Menu accelerators related functions
 // ----------------------------------------------------------------------------
 
 wxChar *wxStripMenuCodes(const wxChar *in, wxChar *out)
 {
+#if wxUSE_MENUS
     wxString s = wxMenuItem::GetLabelFromText(in);
+#else
+    wxString str(in);
+    wxString s = wxStripMenuCodes(str);
+#endif // wxUSE_MENUS
     if ( out )
     {
         // go smash their buffer if it's not big enough - I love char * params
@@ -974,8 +977,6 @@ wxString wxStripMenuCodes(const wxString& in)
     return out;
 }
 
-#endif // wxUSE_MENUS
-
 // ----------------------------------------------------------------------------
 // Window search functions
 // ----------------------------------------------------------------------------
@@ -1010,12 +1011,12 @@ int
 wxFindMenuItemId (wxFrame * frame, const wxString& menuString, const wxString& itemString)
 {
 #if wxUSE_MENUS
-  wxMenuBar *menuBar = frame->GetMenuBar ();
-  if ( menuBar )
-      return menuBar->FindMenuItem (menuString, itemString);
+    wxMenuBar *menuBar = frame->GetMenuBar ();
+    if ( menuBar )
+        return menuBar->FindMenuItem (menuString, itemString);
 #endif // wxUSE_MENUS
 
-  return wxNOT_FOUND;
+    return wxNOT_FOUND;
 }
 
 // Try to find the deepest child that contains 'pt'.

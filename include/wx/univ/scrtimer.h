@@ -14,6 +14,10 @@
 
 // NB: this class is implemented in scrolbar.cpp
 
+#include "wx/defs.h"
+
+#if wxUSE_TIMER
+
 #include "wx/timer.h"
 
 // ----------------------------------------------------------------------------
@@ -41,5 +45,7 @@ protected:
     // should we skip the next timer event?
     bool m_skipNext;
 };
+
+#endif // wxUSE_TIMER
 
 #endif // _WX_UNIV_SCRTIMER_H

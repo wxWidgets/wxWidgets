@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/init.cpp
+// Name:        src/common/init.cpp
 // Purpose:     initialisation for the library
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -20,7 +20,7 @@
 #include "wx/wxprec.h"
 
 #ifdef    __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif  //__BORLANDC__
 
 #ifndef WX_PRECOMP

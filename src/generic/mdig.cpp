@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_MDI
+
 #include "wx/generic/mdig.h"
 
 #ifndef WX_PRECOMP
@@ -812,4 +814,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxGenericMDIParentFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxGenericMDIChildFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxGenericMDIClientWindow)
 
-#endif
+#endif // wxUSE_GENERIC_MDI_AS_NATIVE
+
+#endif // wxUSE_MDI

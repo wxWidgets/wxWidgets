@@ -17,7 +17,7 @@
     #pragma hdrstop
 #endif
 
-#include "wx/generic/region.h"
+#include "wx/region.h"
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -631,14 +631,17 @@ SOFTWARE.
  */
 
 /* Create a new empty region */
-Region REGION::
-XCreateRegion(void)
+Region REGION::XCreateRegion(void)
 {
-    Region temp;
+    Region temp = new REGION;
 
-    if (! (temp = new REGION))
+    if (!temp)
         return (Region) NULL;
-    if (! (temp->rects = ( BOX * )malloc( (unsigned) sizeof( BOX )))) {
+
+    temp->rects = ( BOX * )malloc( (unsigned) sizeof( BOX ));
+
+    if (!temp->rects)
+    {
         free((char *) temp);
         return (Region) NULL;
     }
@@ -651,10 +654,7 @@ XCreateRegion(void)
     return( temp );
 }
 
-bool REGION::
-XClipBox(
-    Region r,
-    wxRect *rect)
+bool REGION::XClipBox(Region r, wxRect *rect)
 {
     rect->x = r->extents.x1;
     rect->y = r->extents.y1;
@@ -887,9 +887,10 @@ miRegionCopy(
             {
                 BOX *prevRects = dstrgn->rects;
 
-                if (! (dstrgn->rects = (BOX *)
+                dstrgn->rects = (BOX *)
                        realloc((char *) dstrgn->rects,
-                               (unsigned) rgn->numRects * (sizeof(BOX)))))
+                               (unsigned) rgn->numRects * (sizeof(BOX)));
+                if (!dstrgn->rects)
                 {
                     free(prevRects);
                     return;
@@ -1156,8 +1157,10 @@ miRegionOp(
      */
     newReg->size = wxMax(reg1->numRects,reg2->numRects) * 2;
 
-    if (! (newReg->rects = (BoxPtr)
-           malloc ((unsigned) (sizeof(BoxRec) * newReg->size)))) {
+    newReg->rects = (BoxPtr)malloc((unsigned) (sizeof(BoxRec) * newReg->size));
+
+    if (!newReg->rects)
+    {
         newReg->size = 0;
         return;
     }
@@ -1786,11 +1789,7 @@ miSubtractO (
  *-----------------------------------------------------------------------
  */
 
-bool REGION::
-XSubtractRegion(
-    Region                   regM,
-    Region                  regS,
-    register Region        regD)
+bool REGION::XSubtractRegion(Region regM, Region regS, register Region regD)
 {
    /* check for trivial reject */
     if ( (!(regM->numRects)) || (!(regS->numRects))  ||
@@ -1814,13 +1813,16 @@ XSubtractRegion(
     return true;
 }
 
-bool REGION::
-XXorRegion(Region sra, Region srb, Region dr)
+bool REGION::XXorRegion(Region sra, Region srb, Region dr)
 {
-    Region tra, trb;
+    Region tra = XCreateRegion();
 
-    if ((! (tra = XCreateRegion())) || (! (trb = XCreateRegion())))
-        return 0;
+    wxCHECK_MSG( tra, false, wxT("region not created") );
+
+    Region trb = XCreateRegion();
+
+    wxCHECK_MSG( trb, false, wxT("region not created") );
+
     (void) XSubtractRegion(sra,srb,tra);
     (void) XSubtractRegion(srb,sra,trb);
     (void) XUnionRegion(tra,trb,dr);
@@ -1833,9 +1835,7 @@ XXorRegion(Region sra, Region srb, Region dr)
  * Check to see if the region is empty.  Assumes a region is passed
  * as a parameter
  */
-bool REGION::
-XEmptyRegion(
-    Region r)
+bool REGION::XEmptyRegion(Region r)
 {
     if( r->numRects == 0 ) return true;
     else  return false;
@@ -1844,8 +1844,7 @@ XEmptyRegion(
 /*
  *        Check to see if two regions are equal
  */
-bool REGION::
-XEqualRegion(Region r1, Region r2)
+bool REGION::XEqualRegion(Region r1, Region r2)
 {
     int i;
 
@@ -1864,10 +1863,7 @@ XEqualRegion(Region r1, Region r2)
     return true;
 }
 
-bool REGION::
-XPointInRegion(
-    Region pRegion,
-    int x, int y)
+bool REGION::XPointInRegion(Region pRegion, int x, int y)
 {
     int i;
 
@@ -1883,11 +1879,10 @@ XPointInRegion(
     return false;
 }
 
-wxRegionContain REGION::
-XRectInRegion(
-    register Region        region,
-    int rx, int ry,
-    unsigned int rwidth, unsigned int rheight)
+wxRegionContain REGION::XRectInRegion(register Region region,
+                                      int rx, int ry,
+                                      unsigned int rwidth,
+                                      unsigned int rheight)
 {
     register BoxPtr pbox;
     register BoxPtr pboxEnd;

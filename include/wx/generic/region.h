@@ -90,6 +90,19 @@ public:
     // Does the region contain the rectangle rect?
     wxRegionContain Contains(const wxRect& rect) const;
 
+    // Use the non-transparent pixels of a wxBitmap for the region to combine
+    // with this region.  First version takes transparency from bitmap's mask,
+    // second lets the user specify the colour to be treated as transparent
+    // along with an optional tolerance value.
+    // NOTE: implemented in common/rgncmn.cpp
+    bool Union(const wxBitmap& bmp);
+    bool Union(const wxBitmap& bmp,
+               const wxColour& transColour, int tolerance = 0);
+
+    // Convert the region to a B&W bitmap with the white pixels being inside
+    // the region.
+    wxBitmap ConvertToBitmap() const;
+
 protected:
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;

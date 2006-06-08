@@ -166,6 +166,7 @@ public:
                                  wxAlignment align = wxALIGN_LEFT,
                                  int indexAccel = -1);
 
+#if wxUSE_TOOLBAR
     virtual void DrawToolBarButton(wxDC& dc,
                                    const wxString& label,
                                    const wxBitmap& bitmap,
@@ -173,6 +174,7 @@ public:
                                    int flags = 0,
                                    long style = 0,
                                    int tbarStyle = 0);
+#endif // wxUSE_TOOLBAR
 
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
@@ -189,6 +191,7 @@ public:
                          int flags = 0,
                          int indexAccel = -1);
 
+#if wxUSE_SLIDER
     virtual void DrawSliderShaft(wxDC& dc,
                                  const wxRect& rect,
                                  int lenThumb,
@@ -213,7 +216,9 @@ public:
     {
         // we don't have the ticks in GTK version
     }
+#endif // wxUSE_SLIDER
 
+#if wxUSE_MENUS
     virtual void DrawMenuBarItem(wxDC& dc,
                                  const wxRect& rect,
                                  const wxString& label,
@@ -230,11 +235,14 @@ public:
     virtual void DrawMenuSeparator(wxDC& dc,
                                    wxCoord y,
                                    const wxMenuGeometryInfo& geomInfo);
+#endif // wxUSE_MENUS
 
+#if wxUSE_STATUSBAR
     virtual void DrawStatusField(wxDC& dc,
                                  const wxRect& rect,
                                  const wxString& label,
                                  int flags = 0, int style = 0);
+#endif // wxUSE_STATUSBAR
 
     virtual void DrawFrameTitleBar(wxDC& dc,
                                    const wxRect& rect,
@@ -281,6 +289,7 @@ public:
     // geometry and hit testing
     virtual wxSize GetScrollbarArrowSize() const
         { return m_sizeScrollbarArrow; }
+#if wxUSE_SCROLLBAR
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
                                     wxScrollBar::Element elem,
                                     int thumbPos = -1) const;
@@ -290,6 +299,8 @@ public:
     virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar,
                                      int thumbPos = -1);
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
+#endif // wxUSE_SCROLLBAR
+
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
         { return fontHeight + 2; }
     virtual wxSize GetCheckBitmapSize() const
@@ -304,15 +315,18 @@ public:
     virtual wxSize GetToolBarMargin() const
         { return wxSize(6, 6); }
 
+#if wxUSE_TEXTCTRL
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
                                     const wxRect& rect) const;
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
                                      const wxRect& rect,
                                      wxCoord *extraSpaceBeyond) const;
+#endif // wxUSE_TEXTCTRL
 
     virtual wxSize GetTabIndent() const { return wxSize(2, 2); }
     virtual wxSize GetTabPadding() const { return wxSize(6, 6); }
 
+#if wxUSE_SLIDER
     virtual wxCoord GetSliderDim() const { return 15; }
     virtual wxCoord GetSliderTickLen() const { return 0; }
     virtual wxRect GetSliderShaftRect(const wxRect& rect,
@@ -322,13 +336,19 @@ public:
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
                                       int lenThumb,
                                       wxOrientation orient) const;
+#endif // wxUSE_SLIDER
+
     virtual wxSize GetProgressBarStep() const { return wxSize(16, 32); }
 
+#if wxUSE_MENUS
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const;
     virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
                                                 const wxMenu& menu) const;
+#endif // wxUSE_MENUS
 
+#if wxUSE_STATUSBAR
     virtual wxSize GetStatusBarBorders(wxCoord *borderBetweenFields) const;
+#endif // wxUSE_STATUSBAR
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
@@ -400,6 +420,7 @@ protected:
     // rect is drawn with DrawAntiShadedRect() and not DrawShadedRect())
     void DrawAntiRaisedBorder(wxDC& dc, wxRect *rect);
 
+#if wxUSE_SCROLLBAR
     // returns the size of the arrow for the scrollbar (depends on
     // orientation)
     wxSize GetScrollbarArrowSize(const wxScrollBar *scrollbar) const
@@ -417,6 +438,7 @@ protected:
 
         return size;
     }
+#endif // wxUSE_SCROLLBAR
 
     // get the line wrap indicator bitmap
     wxBitmap GetLineWrapBitmap() const;
@@ -515,6 +537,8 @@ protected:
     wxGTKRenderer *m_renderer;
 };
 
+#if wxUSE_SCROLLBAR
+
 class wxGTKScrollBarInputHandler : public wxStdScrollBarInputHandler
 {
 public:
@@ -549,6 +573,10 @@ protected:
     }
 };
 
+#endif // wxUSE_SCROLLBAR
+
+#if wxUSE_CHECKBOX
+
 class wxGTKCheckboxInputHandler : public wxStdCheckboxInputHandler
 {
 public:
@@ -560,6 +588,10 @@ public:
                            bool pressed);
 };
 
+#endif // wxUSE_CHECKBOX
+
+#if wxUSE_TEXTCTRL
+
 class wxGTKTextCtrlInputHandler : public wxStdTextCtrlInputHandler
 {
 public:
@@ -570,6 +602,8 @@ public:
                            const wxKeyEvent& event,
                            bool pressed);
 };
+
+#endif // wxUSE_TEXTCTRL
 
 // ----------------------------------------------------------------------------
 // wxGTKColourScheme: uses the standard GTK colours
@@ -705,14 +739,18 @@ wxInputHandler *wxGTKTheme::GetDefaultInputHandler()
 
 wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
 {
-    wxInputHandler *handler;
+    wxInputHandler *handler = NULL;
     int n = m_handlerNames.Index(control);
     if ( n == wxNOT_FOUND )
     {
         // create a new handler
         if ( control == wxINP_HANDLER_SCROLLBAR )
+        {
+#if wxUSE_SCROLLBAR
             handler = new wxGTKScrollBarInputHandler(m_renderer,
                                                      GetDefaultInputHandler());
+#endif // wxUSE_SCROLLBAR
+        }
 #if wxUSE_BUTTON
         else if ( control == wxINP_HANDLER_BUTTON )
             handler = new wxStdButtonInputHandler(GetDefaultInputHandler());
@@ -755,7 +793,8 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
 #endif // wxUSE_TOOLBAR
         else if ( control == wxINP_HANDLER_TOPLEVEL )
             handler = new wxStdFrameInputHandler(GetDefaultInputHandler());
-        else
+
+        if(!handler)
             handler = GetDefaultInputHandler();
 
         n = m_handlerNames.Add(control);
@@ -798,9 +837,12 @@ wxColour wxGTKColourScheme::GetBackground(wxWindow *win) const
         // and for the states for which we don't have any specific colours
         if ( !col.Ok() || (flags != 0) )
         {
+#if wxUSE_SCROLLBAR
             if ( wxDynamicCast(win, wxScrollBar) )
                 col = Get(SCROLLBAR);
-            else if ( (flags & wxCONTROL_CURRENT) && win->CanBeHighlighted() )
+            else
+#endif //wxUSE_SCROLLBAR
+                 if ( (flags & wxCONTROL_CURRENT) && win->CanBeHighlighted() )
                 col = Get(CONTROL_CURRENT);
             else if ( flags & wxCONTROL_PRESSED )
                 col = Get(CONTROL_PRESSED);
@@ -840,6 +882,14 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col) const
         case HIGHLIGHT_TEXT:    return wxColour(0xffffff);
 
         case GAUGE:             return Get(CONTROL_CURRENT);
+
+        case TITLEBAR:          return wxColour(0xaeaaae);
+        case TITLEBAR_ACTIVE:   return wxColour(0x820300);
+        case TITLEBAR_TEXT:     return wxColour(0xc0c0c0);
+        case TITLEBAR_ACTIVE_TEXT:
+                                return *wxWHITE;
+
+        case DESKTOP:           return *wxBLACK;
 
         case MAX:
         default:
@@ -1679,6 +1729,7 @@ void wxGTKRenderer::DrawRadioButton(wxDC& dc,
                              flags, align, indexAccel);
 }
 
+#if wxUSE_TOOLBAR
 void wxGTKRenderer::DrawToolBarButton(wxDC& dc,
                                       const wxString& label,
                                       const wxBitmap& bitmap,
@@ -1725,10 +1776,13 @@ void wxGTKRenderer::DrawToolBarButton(wxDC& dc,
         }
     }
 }
+#endif // wxUSE_TOOLBAR
 
 // ----------------------------------------------------------------------------
 // text control
 // ----------------------------------------------------------------------------
+
+#if wxUSE_TEXTCTRL
 
 wxRect wxGTKRenderer::GetTextTotalArea(const wxTextCtrl * WXUNUSED(text),
                                        const wxRect& rect) const
@@ -1758,6 +1812,8 @@ wxRect wxGTKRenderer::GetTextClientArea(const wxTextCtrl *text,
 
     return rectText;
 }
+
+#endif // wxUSE_TEXTCTRL
 
 void wxGTKRenderer::DrawTextLine(wxDC& dc,
                                  const wxString& text,
@@ -1883,11 +1939,21 @@ void wxGTKRenderer::DrawTab(wxDC& dc,
         dcMem.SetFont(dc.GetFont());
         dcMem.SetTextForeground(dc.GetTextForeground());
         dcMem.Clear();
-        bitmapRotated = wxBitmap( wxImage( bitmap.ConvertToImage() ).Rotate90(dir==wxLEFT) );
+        bitmapRotated =
+#if wxUSE_IMAGE
+                        wxBitmap( wxImage( bitmap.ConvertToImage() ).Rotate90(dir==wxLEFT) )
+#else
+                        bitmap
+#endif // wxUSE_IMAGE
+                        ;
         dcMem.DrawLabel(label, bitmapRotated, rectLabel, wxALIGN_CENTRE, indexAccel);
         dcMem.SelectObject(wxNullBitmap);
         bitmapMem = bitmapMem.GetSubBitmap(rectLabel);
-        bitmapMem = wxBitmap(wxImage(bitmapMem.ConvertToImage()).Rotate90(dir==wxRIGHT));
+#if wxUSE_IMAGE
+        bitmapMem = wxBitmap(wxImage(bitmapMem.ConvertToImage()).Rotate90(dir==wxRIGHT))
+#endif
+                    ;
+
         dc.DrawBitmap(bitmapMem, rectLabel.y, rectLabel.x, false);
     }
     else
@@ -1986,6 +2052,8 @@ void wxGTKRenderer::DrawTab(wxDC& dc,
     }
 }
 
+#if wxUSE_SLIDER
+
 // ----------------------------------------------------------------------------
 // slider
 // ----------------------------------------------------------------------------
@@ -2074,6 +2142,10 @@ void wxGTKRenderer::DrawSliderThumb(wxDC& dc,
 
     DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
 }
+
+#endif // wxUSE_SLIDER
+
+#if wxUSE_MENUS
 
 // ----------------------------------------------------------------------------
 // menu and menubar
@@ -2340,6 +2412,10 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
     return gi;
 }
 
+#endif // wxUSE_MENUS
+
+#if wxUSE_STATUSBAR
+
 // ----------------------------------------------------------------------------
 // status bar
 // ----------------------------------------------------------------------------
@@ -2356,6 +2432,8 @@ void wxGTKRenderer::DrawStatusField(wxDC& WXUNUSED(dc),
                                     int WXUNUSED(flags), int WXUNUSED(style))
 {
 }
+
+#endif // wxUSE_STATUSBAR
 
 // ----------------------------------------------------------------------------
 // combobox
@@ -2780,6 +2858,7 @@ void wxGTKRenderer::DrawScrollCorner(wxDC& dc, const wxRect& rect)
     DoDrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL), rect);
 }
 
+#if wxUSE_SCROLLBAR
 wxRect wxGTKRenderer::GetScrollbarRect(const wxScrollBar *scrollbar,
                                        wxScrollBar::Element elem,
                                        int thumbPos) const
@@ -2822,6 +2901,7 @@ int wxGTKRenderer::PixelToScrollbar(const wxScrollBar *scrollbar,
     return StandardPixelToScrollbar(scrollbar, coord,
                                     GetScrollbarArrowSize(scrollbar));
 }
+#endif // wxUSE_SCROLLBAR
 
 // ----------------------------------------------------------------------------
 // size adjustments
@@ -2859,6 +2939,7 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
         }
     } else
 #endif // wxUSE_BUTTON || wxUSE_TOGGLEBTN
+#if wxUSE_SCROLLBAR
     if ( wxDynamicCast(window, wxScrollBar) )
     {
         // we only set the width of vert scrollbars and height of the
@@ -2869,6 +2950,7 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
             size->x = m_sizeScrollbarArrow.x;
     }
     else
+#endif // wxUSE_SCROLLBAR
     {
         // take into account the border width
         wxRect rectBorder = GetBorderDimensions(window->GetBorder());
@@ -3294,6 +3376,8 @@ bool wxGTKInputHandler::HandleMouseMove(wxInputConsumer *control,
     return true;
 }
 
+#if wxUSE_CHECKBOX
+
 // ----------------------------------------------------------------------------
 // wxGTKCheckboxInputHandler
 // ----------------------------------------------------------------------------
@@ -3315,6 +3399,10 @@ bool wxGTKCheckboxInputHandler::HandleKey(wxInputConsumer *control,
 
     return false;
 }
+
+#endif // wxUSE_CHECKBOX
+
+#if wxUSE_TEXTCTRL
 
 // ----------------------------------------------------------------------------
 // wxGTKTextCtrlInputHandler
@@ -3409,3 +3497,5 @@ bool wxGTKTextCtrlInputHandler::HandleKey(wxInputConsumer *control,
 
     return wxStdTextCtrlInputHandler::HandleKey(control, event, pressed);
 }
+
+#endif // wxUSE_TEXTCTRL

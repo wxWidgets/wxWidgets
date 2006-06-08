@@ -70,6 +70,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 
     wxBoxSizer *icon_text = new wxBoxSizer( wxHORIZONTAL );
 
+#if wxUSE_STATBMP
     // 1) icon
     if (style & wxICON_MASK)
     {
@@ -102,11 +103,14 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
         else
             icon_text->Add( icon, 0, wxCENTER );
     }
+#endif // wxUSE_STATBMP
 
+#if wxUSE_STATTEXT
     // 2) text
     icon_text->Add( CreateTextSizer( message ), 0, wxALIGN_CENTER | wxLEFT, 10 );
 
     topsizer->Add( icon_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
+#endif // wxUSE_STATTEXT
 
 #if wxUSE_STATLINE
     // 3) static line

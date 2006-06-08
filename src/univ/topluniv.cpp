@@ -239,12 +239,7 @@ void wxTopLevelWindow::OnNcPaint(wxNcPaintEvent& event)
     else
     {
         // get the window rect
-        wxRect rect;
-        wxSize size = GetSize();
-        rect.x =
-        rect.y = 0;
-        rect.width = size.x;
-        rect.height = size.y;
+        wxRect rect(GetSize());
 
         wxWindowDC dc(this);
         m_renderer->DrawFrameTitleBar(dc, rect,
@@ -309,12 +304,14 @@ void wxTopLevelWindow::SetIcons(const wxIconBundle& icons)
                 m_titlebarIcon = wxNullIcon;
             else if ( bmp1.GetWidth() == size.x && bmp1.GetHeight() == size.y )
                 m_titlebarIcon = icon;
+#if wxUSE_IMAGE
             else
             {
                 wxImage img = bmp1.ConvertToImage();
                 img.Rescale(size.x, size.y);
                 m_titlebarIcon.CopyFromBitmap(wxBitmap(img));
             }
+#endif // wxUSE_IMAGE
         }
     }
 }

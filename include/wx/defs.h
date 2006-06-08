@@ -597,6 +597,13 @@ typedef int wxWindowID;
     #define WXUNUSED_IN_WINCE(param)  param
 #endif
 
+/*  unused parameters in non stream builds */
+#if wxUSE_STREAMS
+    #define WXUNUSED_UNLESS_STREAMS(param)  param
+#else
+    #define WXUNUSED_UNLESS_STREAMS(param)  WXUNUSED(param)
+#endif
+
 /*  some compilers give warning about a possibly unused variable if it is */
 /*  initialized in both branches of if/else and shut up if it is initialized */
 /*  when declared, but other compilers then give warnings about unused variable */

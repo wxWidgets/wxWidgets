@@ -18,10 +18,17 @@
 
 class WXDLLEXPORT wxControlRenderer;
 class WXDLLEXPORT wxEventLoop;
-class WXDLLEXPORT wxMenu;
-class WXDLLEXPORT wxMenuBar;
+
+#if wxUSE_MENUS
+    class WXDLLEXPORT wxMenu;
+    class WXDLLEXPORT wxMenuBar;
+#endif // wxUSE_MENUS
+
 class WXDLLEXPORT wxRenderer;
-class WXDLLEXPORT wxScrollBar;
+
+#if wxUSE_SCROLLBAR
+    class WXDLLEXPORT wxScrollBar;
+#endif // wxUSE_SCROLLBAR
 
 #ifdef __WXX11__
 #define wxUSE_TWO_WINDOWS 1
@@ -125,11 +132,13 @@ public:
     // set the "highlighted" flag and return true if it changed
     virtual bool SetCurrent(bool doit = true);
 
+#if wxUSE_SCROLLBAR
     // get the scrollbar (may be NULL) for the given orientation
     wxScrollBar *GetScrollbar(int orient) const
     {
         return orient & wxVERTICAL ? m_scrollbarVert : m_scrollbarHorz;
     }
+#endif // wxUSE_SCROLLBAR
 
     // methods used by wxColourScheme to choose the colours for this window
     // --------------------------------------------------------------------
@@ -256,9 +265,12 @@ public:
 #endif // __WXMSW__
 
 private:
+
+#if wxUSE_SCROLLBAR
     // the window scrollbars
     wxScrollBar *m_scrollbarHorz,
                 *m_scrollbarVert;
+#endif // wxUSE_SCROLLBAR
 
 #if wxUSE_MENUS
     // the current modal event loop for the popup menu we show or NULL
