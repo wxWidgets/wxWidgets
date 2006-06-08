@@ -154,7 +154,8 @@ wxSize wxStaticText::DoGetBestSize() const
 
     gtk_label_set_line_wrap( GTK_LABEL(m_widget), TRUE );
 
-    return wxSize (req.width, req.height);
+    // Adding 1 to width to workaround GTK sometimes wrapping the text needlessly
+    return wxSize (req.width+1, req.height);
 }
 
 bool wxStaticText::SetForegroundColour(const wxColour& colour)
