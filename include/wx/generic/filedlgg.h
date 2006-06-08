@@ -32,10 +32,6 @@ class WXDLLEXPORT wxListItem;
 class WXDLLEXPORT wxStaticText;
 class WXDLLEXPORT wxTextCtrl;
 
-#if defined(__WXUNIVERSAL__)||defined(__WXX11__)||defined(__WXMGL__)||defined(__WXCOCOA__)
-    #define USE_GENERIC_FILEDIALOG
-#endif
-
 //-------------------------------------------------------------------------
 // wxGenericFileDialog
 //-------------------------------------------------------------------------
@@ -128,7 +124,7 @@ private:
     static bool ms_lastShowHidden;    // did we show hidden files?
 };
 
-#ifdef USE_GENERIC_FILEDIALOG
+#ifdef wxUSE_GENERIC_FILEDIALOG
 
 class WXDLLEXPORT wxFileDialog: public wxGenericFileDialog
 {
@@ -150,7 +146,7 @@ private:
      DECLARE_DYNAMIC_CLASS(wxFileDialog)
 };
 
-#endif // USE_GENERIC_FILEDIALOG
+#endif // wxUSE_GENERIC_FILEDIALOG
 
 //-----------------------------------------------------------------------------
 //  wxFileData - a class to hold the file info for the wxFileCtrl

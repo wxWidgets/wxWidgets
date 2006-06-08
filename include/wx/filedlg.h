@@ -179,6 +179,7 @@ wxSaveFileSelector(const wxChar *what,
 
 
 #if defined (__WXUNIVERSAL__)
+#define wxUSE_GENERIC_FILEDIALOG
 #include "wx/generic/filedlgg.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/filedlg.h"
@@ -187,13 +188,10 @@ wxSaveFileSelector(const wxChar *what,
 #elif defined(__WXGTK24__)
 #include "wx/gtk/filedlg.h"     // GTK+ > 2.4 has native version
 #elif defined(__WXGTK20__)
+#define wxUSE_GENERIC_FILEDIALOG
 #include "wx/generic/filedlgg.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk1/filedlg.h"
-#elif defined(__WXX11__)
-#include "wx/generic/filedlgg.h"
-#elif defined(__WXMGL__)
-#include "wx/generic/filedlgg.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/filedlg.h"
 #elif defined(__WXCOCOA__)
