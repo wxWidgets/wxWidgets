@@ -313,6 +313,7 @@ wxSize wxScrolledWindow::DoGetBestSize() const
 {
     wxSize best;
 
+    bool addClientSizeDiff = true;
     if ( GetSizer() )
     {
         wxSize b = GetSizer()->GetMinSize();
@@ -327,7 +328,14 @@ wxSize wxScrolledWindow::DoGetBestSize() const
         if ( GetMinSize().IsFullySpecified() )
             minSize = GetMinSize();
         else
+        {
             minSize = GetSize();
+            
+            // If we're using the overall size, we don't want to then
+            // add to it, or we'll successively grow the window over
+            // multiple layouts.
+            addClientSizeDiff = false;
+        }
 
         if (ppuX > 0)
             b.x = minSize.x;
@@ -338,10 +346,13 @@ wxSize wxScrolledWindow::DoGetBestSize() const
     else
         return wxWindow::DoGetBestSize();
 
-    // Add any difference between size and client size
-    wxSize diff = GetSize() - GetClientSize();
-    best.x += wxMax(0, diff.x);
-    best.y += wxMax(0, diff.y);
+    if (addClientSizeDiff)
+    {
+        // Add any difference between size and client size
+        wxSize diff = GetSize() - GetClientSize();
+        best.x += wxMax(0, diff.x);
+        best.y += wxMax(0, diff.y);
+    }
 
     return best;
 }
