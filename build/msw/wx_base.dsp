@@ -2,10 +2,10 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# TARGTYPE "Win32 (x86) Static Library" 0x0104
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
+# TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=base - Win32 Debug USE_AUI_0
+CFG=base - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -14,42 +14,26 @@ CFG=base - Win32 Debug USE_AUI_0
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "wx_base.mak" CFG="base - Win32 Debug USE_AUI_0"
+!MESSAGE NMAKE /f "wx_base.mak" CFG="base - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "base - Win32 DLL Universal Unicode Release USE_AUI_1" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Universal Unicode Release USE_AUI_0" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Universal Unicode Debug USE_AUI_1" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Universal Unicode Debug USE_AUI_0" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Universal Release USE_AUI_1" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Universal Release USE_AUI_0" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Universal Debug USE_AUI_1" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Universal Debug USE_AUI_0" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Unicode Release USE_AUI_1" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Unicode Release USE_AUI_0" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Unicode Debug USE_AUI_1" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Unicode Debug USE_AUI_0" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Release USE_AUI_1" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Release USE_AUI_0" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Debug USE_AUI_1" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 DLL Debug USE_AUI_0" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "base - Win32 Universal Unicode Release USE_AUI_1" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Universal Unicode Release USE_AUI_0" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Universal Unicode Debug USE_AUI_1" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Universal Unicode Debug USE_AUI_0" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Universal Release USE_AUI_1" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Universal Release USE_AUI_0" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Universal Debug USE_AUI_1" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Universal Debug USE_AUI_0" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Unicode Release USE_AUI_1" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Unicode Release USE_AUI_0" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Unicode Debug USE_AUI_1" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Unicode Debug USE_AUI_0" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Release USE_AUI_1" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Release USE_AUI_0" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Debug USE_AUI_1" (based on "Win32 (x86) Static Library")
-!MESSAGE "base - Win32 Debug USE_AUI_0" (based on "Win32 (x86) Static Library")
+!MESSAGE "base - Win32 DLL Universal Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "base - Win32 DLL Universal Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "base - Win32 DLL Universal Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "base - Win32 DLL Universal Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "base - Win32 DLL Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "base - Win32 DLL Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "base - Win32 DLL Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "base - Win32 DLL Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "base - Win32 Universal Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "base - Win32 Universal Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "base - Win32 Universal Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "base - Win32 Universal Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "base - Win32 Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "base - Win32 Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "base - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "base - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -59,7 +43,7 @@ CFG=base - Win32 Debug USE_AUI_0
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release USE_AUI_1"
+!IF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -84,32 +68,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270u_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27u.lib"
 # ADD LINK32 wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270u_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27u.lib"
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswunivudll\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswunivudll\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_dll\mswunivu" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase270u_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_dll\mswunivu" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase270u_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\lib\vc_dll\mswunivu" /i "..\..\include" /d WXDLLNAME=wxbase270u_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\lib\vc_dll\mswunivu" /i "..\..\include" /d WXDLLNAME=wxbase270u_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270u_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27u.lib"
-# ADD LINK32 wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270u_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27u.lib"
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -134,32 +93,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270ud_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27ud.lib" /debug
 # ADD LINK32 wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270ud_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27ud.lib" /debug
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswunivuddll\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswunivuddll\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_dll\mswunivud" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase270ud_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_dll\mswunivud" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase270ud_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\lib\vc_dll\mswunivud" /i "..\..\include" /d WXDLLNAME=wxbase270ud_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\lib\vc_dll\mswunivud" /i "..\..\include" /d WXDLLNAME=wxbase270ud_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270ud_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27ud.lib" /debug
-# ADD LINK32 wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270ud_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27ud.lib" /debug
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -184,32 +118,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27.lib"
 # ADD LINK32 wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27.lib"
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswunivdll\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswunivdll\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_dll\mswuniv" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase270_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_dll\mswuniv" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase270_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\lib\vc_dll\mswuniv" /i "..\..\include" /d WXDLLNAME=wxbase270_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\lib\vc_dll\mswuniv" /i "..\..\include" /d WXDLLNAME=wxbase270_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27.lib"
-# ADD LINK32 wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27.lib"
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -234,32 +143,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270d_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27d.lib" /debug
 # ADD LINK32 wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270d_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27d.lib" /debug
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswunivddll\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswunivddll\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_dll\mswunivd" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase270d_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_dll\mswunivd" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase270d_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\lib\vc_dll\mswunivd" /i "..\..\include" /d WXDLLNAME=wxbase270d_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\lib\vc_dll\mswunivd" /i "..\..\include" /d WXDLLNAME=wxbase270d_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270d_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27d.lib" /debug
-# ADD LINK32 wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270d_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27d.lib" /debug
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -284,32 +168,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270u_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27u.lib"
 # ADD LINK32 wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270u_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27u.lib"
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswudll\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswudll\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_dll\mswu" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase270u_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_dll\mswu" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase270u_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\lib\vc_dll\mswu" /i "..\..\include" /d WXDLLNAME=wxbase270u_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\lib\vc_dll\mswu" /i "..\..\include" /d WXDLLNAME=wxbase270u_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270u_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27u.lib"
-# ADD LINK32 wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270u_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27u.lib"
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -334,32 +193,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270ud_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27ud.lib" /debug
 # ADD LINK32 wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270ud_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27ud.lib" /debug
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswuddll\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswuddll\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_dll\mswud" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase270ud_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_dll\mswud" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase270ud_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\lib\vc_dll\mswud" /i "..\..\include" /d WXDLLNAME=wxbase270ud_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\lib\vc_dll\mswud" /i "..\..\include" /d WXDLLNAME=wxbase270ud_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270ud_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27ud.lib" /debug
-# ADD LINK32 wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270ud_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27ud.lib" /debug
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -384,32 +218,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27.lib"
 # ADD LINK32 wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27.lib"
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Release USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswdll\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswdll\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_dll\msw" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase270_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_dll\msw" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase270_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /i "..\..\lib\vc_dll\msw" /i "..\..\include" /d WXDLLNAME=wxbase270_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x409 /d "__WXMSW__" /i "..\..\lib\vc_dll\msw" /i "..\..\include" /d WXDLLNAME=wxbase270_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27.lib"
-# ADD LINK32 wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27.lib"
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -434,32 +243,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270d_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27d.lib" /debug
 # ADD LINK32 wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270d_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27d.lib" /debug
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswddll\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswddll\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_dll\mswd" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase270d_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_dll\mswd" /I "..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase270d_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\lib\vc_dll\mswd" /i "..\..\include" /d WXDLLNAME=wxbase270d_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\lib\vc_dll\mswd" /i "..\..\include" /d WXDLLNAME=wxbase270d_vc_custom /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270d_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27d.lib" /debug
-# ADD LINK32 wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase270d_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase27d.lib" /debug
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -482,30 +266,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27u.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27u.lib"
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswunivu\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswunivu\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_lib\mswunivu" /I "..\..\include" /W4 /Fd..\..\lib\vc_lib\wxbase27u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_lib\mswunivu" /I "..\..\include" /W4 /Fd..\..\lib\vc_lib\wxbase27u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27u.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27u.lib"
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -528,30 +289,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27ud.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27ud.lib"
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswunivud\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswunivud\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_lib\mswunivud" /I "..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase27ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_lib\mswunivud" /I "..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase27ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27ud.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27ud.lib"
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -574,30 +312,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27.lib"
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Release USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswuniv\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswuniv\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_lib\mswuniv" /I "..\..\include" /W4 /Fd..\..\lib\vc_lib\wxbase27.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_lib\mswuniv" /I "..\..\include" /W4 /Fd..\..\lib\vc_lib\wxbase27.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27.lib"
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -620,30 +335,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27d.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27d.lib"
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswunivd\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswunivd\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_lib\mswunivd" /I "..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase27d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_lib\mswunivd" /I "..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase27d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27d.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27d.lib"
-
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -666,30 +358,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27u.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27u.lib"
 
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswu\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswu\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_lib\mswu" /I "..\..\include" /W4 /Fd..\..\lib\vc_lib\wxbase27u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_lib\mswu" /I "..\..\include" /W4 /Fd..\..\lib\vc_lib\wxbase27u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27u.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27u.lib"
-
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -712,30 +381,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27ud.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27ud.lib"
 
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswud\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswud\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_lib\mswud" /I "..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase27ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_lib\mswud" /I "..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase27ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27ud.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27ud.lib"
-
-!ELSEIF  "$(CFG)" == "base - Win32 Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -758,53 +404,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27.lib"
 
-!ELSEIF  "$(CFG)" == "base - Win32 Release USE_AUI_0"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_msw\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_msw\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_lib\msw" /I "..\..\include" /W4 /Fd..\..\lib\vc_lib\wxbase27.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\lib\vc_lib\msw" /I "..\..\include" /W4 /Fd..\..\lib\vc_lib\wxbase27.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27.lib"
-
-!ELSEIF  "$(CFG)" == "base - Win32 Debug USE_AUI_1"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswd\base"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswd\base"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_lib\mswd" /I "..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase27d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\lib\vc_lib\mswd" /I "..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase27d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27d.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase27d.lib"
-
-!ELSEIF  "$(CFG)" == "base - Win32 Debug USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -831,38 +431,22 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "base - Win32 DLL Universal Unicode Release USE_AUI_1"
-# Name "base - Win32 DLL Universal Unicode Release USE_AUI_0"
-# Name "base - Win32 DLL Universal Unicode Debug USE_AUI_1"
-# Name "base - Win32 DLL Universal Unicode Debug USE_AUI_0"
-# Name "base - Win32 DLL Universal Release USE_AUI_1"
-# Name "base - Win32 DLL Universal Release USE_AUI_0"
-# Name "base - Win32 DLL Universal Debug USE_AUI_1"
-# Name "base - Win32 DLL Universal Debug USE_AUI_0"
-# Name "base - Win32 DLL Unicode Release USE_AUI_1"
-# Name "base - Win32 DLL Unicode Release USE_AUI_0"
-# Name "base - Win32 DLL Unicode Debug USE_AUI_1"
-# Name "base - Win32 DLL Unicode Debug USE_AUI_0"
-# Name "base - Win32 DLL Release USE_AUI_1"
-# Name "base - Win32 DLL Release USE_AUI_0"
-# Name "base - Win32 DLL Debug USE_AUI_1"
-# Name "base - Win32 DLL Debug USE_AUI_0"
-# Name "base - Win32 Universal Unicode Release USE_AUI_1"
-# Name "base - Win32 Universal Unicode Release USE_AUI_0"
-# Name "base - Win32 Universal Unicode Debug USE_AUI_1"
-# Name "base - Win32 Universal Unicode Debug USE_AUI_0"
-# Name "base - Win32 Universal Release USE_AUI_1"
-# Name "base - Win32 Universal Release USE_AUI_0"
-# Name "base - Win32 Universal Debug USE_AUI_1"
-# Name "base - Win32 Universal Debug USE_AUI_0"
-# Name "base - Win32 Unicode Release USE_AUI_1"
-# Name "base - Win32 Unicode Release USE_AUI_0"
-# Name "base - Win32 Unicode Debug USE_AUI_1"
-# Name "base - Win32 Unicode Debug USE_AUI_0"
-# Name "base - Win32 Release USE_AUI_1"
-# Name "base - Win32 Release USE_AUI_0"
-# Name "base - Win32 Debug USE_AUI_1"
-# Name "base - Win32 Debug USE_AUI_0"
+# Name "base - Win32 DLL Universal Unicode Release"
+# Name "base - Win32 DLL Universal Unicode Debug"
+# Name "base - Win32 DLL Universal Release"
+# Name "base - Win32 DLL Universal Debug"
+# Name "base - Win32 DLL Unicode Release"
+# Name "base - Win32 DLL Unicode Debug"
+# Name "base - Win32 DLL Release"
+# Name "base - Win32 DLL Debug"
+# Name "base - Win32 Universal Unicode Release"
+# Name "base - Win32 Universal Unicode Debug"
+# Name "base - Win32 Universal Release"
+# Name "base - Win32 Universal Debug"
+# Name "base - Win32 Unicode Release"
+# Name "base - Win32 Unicode Debug"
+# Name "base - Win32 Release"
+# Name "base - Win32 Debug"
 # Begin Group "Common Sources"
 
 # PROP Default_Filter ""
@@ -1197,115 +781,59 @@ SOURCE=..\..\src\msw\utilsexc.cpp
 
 SOURCE=..\..\src\msw\version.rc
 
-!IF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release USE_AUI_1"
+!IF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Release"
 
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug"
 
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release USE_AUI_1"
-
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release USE_AUI_0"
-
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug USE_AUI_1"
-
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug USE_AUI_0"
-
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Release USE_AUI_1"
-
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Release USE_AUI_0"
-
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug USE_AUI_1"
-
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug USE_AUI_0"
-
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Release USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug USE_AUI_0"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release USE_AUI_1"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release USE_AUI_0"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug USE_AUI_1"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug USE_AUI_0"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "base - Win32 Release USE_AUI_1"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "base - Win32 Release USE_AUI_0"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "base - Win32 Debug USE_AUI_1"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "base - Win32 Debug USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 Debug"
 
 # PROP Exclude_From_Build 1
 
@@ -1324,55 +852,31 @@ SOURCE=..\..\src\msw\volume.cpp
 
 SOURCE=..\..\include\wx\msw\setup.h
 
-!IF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release USE_AUI_1"
+!IF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release USE_AUI_1"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release USE_AUI_0"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug USE_AUI_1"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug USE_AUI_0"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -1382,17 +886,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswud\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -1402,17 +896,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswud\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\msw\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -1422,17 +906,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\msw\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\msw\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswd\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -1442,65 +916,31 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswd\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswd\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Release"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Release USE_AUI_1"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Release USE_AUI_0"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug USE_AUI_1"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug USE_AUI_0"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswu\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -1510,17 +950,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswu\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswud\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -1530,17 +960,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswud\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\msw\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -1550,27 +970,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\msw\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\msw\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Debug USE_AUI_1"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswd\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswd\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Debug USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswd\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -1587,7 +987,7 @@ InputPath=..\include\wx\msw\setup.h
 
 SOURCE=..\..\include\wx\univ\setup.h
 
-!IF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release USE_AUI_1"
+!IF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivu\wx\setup.h
 InputPath=..\include\wx\univ\setup.h
@@ -1597,17 +997,7 @@ InputPath=..\include\wx\univ\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivu\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
-
-"..\..\lib\vc_dll\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivud\wx\setup.h
 InputPath=..\include\wx\univ\setup.h
@@ -1617,17 +1007,7 @@ InputPath=..\include\wx\univ\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivud\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
-
-"..\..\lib\vc_dll\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswuniv\wx\setup.h
 InputPath=..\include\wx\univ\setup.h
@@ -1637,17 +1017,7 @@ InputPath=..\include\wx\univ\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswuniv\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
-
-"..\..\lib\vc_dll\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswuniv\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivd\wx\setup.h
 InputPath=..\include\wx\univ\setup.h
@@ -1657,65 +1027,31 @@ InputPath=..\include\wx\univ\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivd\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
-
-"..\..\lib\vc_dll\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivd\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Release"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Release USE_AUI_1"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Release USE_AUI_0"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug USE_AUI_1"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug USE_AUI_0"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h
 InputPath=..\include\wx\univ\setup.h
@@ -1725,17 +1061,7 @@ InputPath=..\include\wx\univ\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
-
-"..\..\lib\vc_lib\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h
 InputPath=..\include\wx\univ\setup.h
@@ -1745,17 +1071,7 @@ InputPath=..\include\wx\univ\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
-
-"..\..\lib\vc_lib\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswuniv\wx\setup.h
 InputPath=..\include\wx\univ\setup.h
@@ -1765,17 +1081,7 @@ InputPath=..\include\wx\univ\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswuniv\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
-
-"..\..\lib\vc_lib\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswuniv\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivd\wx\setup.h
 InputPath=..\include\wx\univ\setup.h
@@ -1785,59 +1091,25 @@ InputPath=..\include\wx\univ\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivd\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
-
-"..\..\lib\vc_lib\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivd\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Release"
 
 # Begin Custom Build - 
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug USE_AUI_0"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Release USE_AUI_1"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Release USE_AUI_0"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Debug USE_AUI_1"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Debug USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 Debug"
 
 # Begin Custom Build - 
 
@@ -1882,7 +1154,7 @@ SOURCE=..\..\include\wx\msw\gccpriv.h
 
 SOURCE=..\..\include\wx\msw\genrcdefs.h
 
-!IF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release USE_AUI_1"
+!IF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h
 
@@ -1891,16 +1163,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h
-
-"..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h
 
@@ -1909,16 +1172,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h
-
-"..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswuniv\wx\msw\rcdefs.h
 
@@ -1927,16 +1181,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswuniv\wx\msw\rcdefs.h
-
-"..\..\lib\vc_dll\mswuniv\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswuniv\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivd\wx\msw\rcdefs.h
 
@@ -1945,16 +1190,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivd\wx\msw\rcdefs.h
-
-"..\..\lib\vc_dll\mswunivd\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswunivd\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h
 
@@ -1963,16 +1199,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h
-
-"..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswud\wx\msw\rcdefs.h
 
@@ -1981,16 +1208,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswud\wx\msw\rcdefs.h
-
-"..\..\lib\vc_dll\mswud\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswud\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\msw\wx\msw\rcdefs.h
 
@@ -1999,16 +1217,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\msw\wx\msw\rcdefs.h
-
-"..\..\lib\vc_dll\msw\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\msw\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswd\wx\msw\rcdefs.h
 
@@ -2017,16 +1226,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 DLL Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswd\wx\msw\rcdefs.h
-
-"..\..\lib\vc_dll\mswd\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswd\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h
 
@@ -2035,16 +1235,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h
-
-"..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h
 
@@ -2053,16 +1244,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h
-
-"..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswuniv\wx\msw\rcdefs.h
 
@@ -2071,16 +1253,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswuniv\wx\msw\rcdefs.h
-
-"..\..\lib\vc_lib\mswuniv\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswuniv\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivd\wx\msw\rcdefs.h
 
@@ -2089,16 +1262,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Universal Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivd\wx\msw\rcdefs.h
-
-"..\..\lib\vc_lib\mswunivd\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswunivd\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswu\wx\msw\rcdefs.h
 
@@ -2107,16 +1271,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswu\wx\msw\rcdefs.h
-
-"..\..\lib\vc_lib\mswu\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswu\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h
 
@@ -2125,16 +1280,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h
-
-"..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Release USE_AUI_1"
+!ELSEIF  "$(CFG)" == "base - Win32 Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\msw\wx\msw\rcdefs.h
 
@@ -2143,25 +1289,7 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "base - Win32 Release USE_AUI_0"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\msw\wx\msw\rcdefs.h
-
-"..\..\lib\vc_lib\msw\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\msw\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Debug USE_AUI_1"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswd\wx\msw\rcdefs.h
-
-"..\..\lib\vc_lib\mswd\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
-	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswd\wx\msw\rcdefs.h"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "base - Win32 Debug USE_AUI_0"
+!ELSEIF  "$(CFG)" == "base - Win32 Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswd\wx\msw\rcdefs.h
 
