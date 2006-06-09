@@ -1197,7 +1197,7 @@ class wxPythonDemo(wx.Frame):
         shellItem = menu.Append(-1, 'Open Py&Shell Window\tF5',
                                 'An interactive interpreter window with the demo app and frame objects in the namesapce')
         menu.AppendSeparator()
-        helpItem = menu.Append(-1, '&About\tCtrl-H', 'wxPython RULES!!!')
+        helpItem = menu.Append(-1, '&About wxPython Demo', 'wxPython RULES!!!')
         wx.App.SetMacAboutMenuItemId(helpItem.GetId())
 
         self.Bind(wx.EVT_MENU, self.OnOpenShellWindow, shellItem)
