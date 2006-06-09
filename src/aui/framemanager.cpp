@@ -574,10 +574,11 @@ bool wxFrameManager::AddPane(wxWindow* window, const wxPaneInfo& pane_info)
     // if the pane's name identifier is blank, create a random string
     if (pinfo.name.empty())
     {
-        pinfo.name.Printf(wxT("%08x%08x%08x%08x"),
+        pinfo.name.Printf(wxT("%08lx%08x%08x%08lx"),
              ((unsigned long)pinfo.window) & 0xffffffff,
              (unsigned int)time(NULL),
-             (unsigned int)clock(), m_panes.GetCount());
+             (unsigned int)clock(),
+             (unsigned long)m_panes.GetCount());
     }
 
     // set initial proportion (if not already set)
