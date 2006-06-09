@@ -459,7 +459,7 @@ is_set()            { [ "x`eval echo \"\\\${$1-unset}\"`" != "xunset" ]; }
 
 # not _cmd _args...
 # true iff _cmd is false
-not()               { if "$@"; then false; else true; fi }
+not()               { if "$@"; then false; else true; fi; }
 
 # do_find_best_delegate _unbound-options
 # The real worker part of find_best_delegate below.  Recurses though all
