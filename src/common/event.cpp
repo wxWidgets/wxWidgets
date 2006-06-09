@@ -35,17 +35,15 @@
         #include "wx/control.h"
         #include "wx/dc.h"
         #include "wx/textctrl.h"
+        #include "wx/validate.h"
     #endif // wxUSE_GUI
 #endif
 
 #include "wx/module.h"
 
-#if wxUSE_GUI
-    #include "wx/validate.h"
-#if wxUSE_STOPWATCH
+#if wxUSE_GUI && wxUSE_STOPWATCH
     #include "wx/stopwatch.h"
-#endif
-#endif // wxUSE_GUI
+#endif // wxUSE_GUI && wxUSE_STOPWATCH
 
 // ----------------------------------------------------------------------------
 // wxWin macros

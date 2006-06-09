@@ -18,11 +18,11 @@
 
 #if wxUSE_VALIDATORS
 
+#include "wx/validate.h"
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
 #endif
-
-#include "wx/validate.h"
 
 const wxValidator wxDefaultValidator;
 
