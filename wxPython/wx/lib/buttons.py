@@ -262,7 +262,7 @@ class GenButton(wx.PyControl):
         x2 = width-1
         y2 = height-1
         
-        dc = wx.BufferedPaintDC(self)
+        dc = wx.PaintDC(self)
         brush = None
         
         if self.up:
