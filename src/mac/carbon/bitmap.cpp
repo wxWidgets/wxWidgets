@@ -165,8 +165,8 @@ wxBitmapRefData::wxBitmapRefData( int w , int h , int d )
 
 bool wxBitmapRefData::Create( int w , int h , int d )
 {
-    m_width = w ;
-    m_height = h ;
+    m_width = wxMax(1, w);
+    m_height = wxMax(1, h);
     m_depth = d ;
 
     m_bytesPerRow = w * 4 ;
