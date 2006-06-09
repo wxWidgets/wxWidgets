@@ -1175,22 +1175,6 @@ class wxPythonDemo(wx.Frame):
             menu.AppendMenu(wx.NewId(), item[0], submenu)
         self.mainmenu.Append(menu, '&Demo')
 
-        # Make a Demo Code menu
-        #TODO: Add new menu items
-        #       Like the option-enabled entries to select the
-        #       active module
-        #TODO: should we bother?
-
-        #menu = wx.Menu()
-        #saveID = wx.NewId()
-        #restoreID = wx.NewId()
-       # 
-        #menu.Append(saveID, '&Save\tCtrl-S', 'Save edited demo')
-        #menu.Append(restoreID, '&Delete Modified\tCtrl-R', 'Delete modified copy')
-        #self.Bind(wx.EVT_MENU, self.codePage.OnSave, id=saveID)
-        #self.Bind(wx.EVT_MENU, self.codePage.OnRestore, id=restoreID)
-        #self.mainmenu.Append(menu, 'Demo &Code')
-       # 
 
         # Make a Help menu
         menu = wx.Menu()
@@ -1201,7 +1185,7 @@ class wxPythonDemo(wx.Frame):
         shellItem = menu.Append(-1, 'Open Py&Shell Window\tF5',
                                 'An interactive interpreter window with the demo app and frame objects in the namesapce')
         menu.AppendSeparator()
-        helpItem = menu.Append(-1, '&About\tCtrl-H', 'wxPython RULES!!!')
+        helpItem = menu.Append(-1, '&About wxPython Demo', 'wxPython RULES!!!')
         wx.App.SetMacAboutMenuItemId(helpItem.GetId())
 
         self.Bind(wx.EVT_MENU, self.OnOpenShellWindow, shellItem)
