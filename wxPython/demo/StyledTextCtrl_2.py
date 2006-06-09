@@ -26,6 +26,14 @@ if wx.Platform == '__WXMSW__':
               'size' : 10,
               'size2': 8,
              }
+elif wx.Platform == '__WXMAC__':
+    faces = { 'times': 'Times New Roman',
+              'mono' : 'Courier New',
+              'helv' : 'Arial',
+              'other': 'Comic Sans MS',
+              'size' : 12,
+              'size2': 10,
+             }
 else:
     faces = { 'times': 'Times',
               'mono' : 'Courier',
