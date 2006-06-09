@@ -33,6 +33,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/msgdlg.h"
+    #include "wx/choicdlg.h"
 #endif // PCH
 
 #if wxUSE_CONFIG
@@ -47,7 +48,6 @@
 #include "wx/fmappriv.h"
 #include "wx/fontutil.h"
 #include "wx/fontdlg.h"
-#include "wx/choicdlg.h"
 #include "wx/encinfo.h"
 
 #include "wx/encconv.h"

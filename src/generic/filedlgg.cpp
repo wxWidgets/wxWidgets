@@ -35,6 +35,7 @@
     #include "wx/stattext.h"
     #include "wx/textctrl.h"
     #include "wx/sizer.h"
+    #include "wx/filedlg.h"     // wxFD_OPEN, wxFD_SAVE...
 #endif
 
 #include "wx/longlong.h"
@@ -45,7 +46,6 @@
 #include "wx/artprov.h"
 #include "wx/filefn.h"
 #include "wx/file.h"        // for wxS_IXXX constants only
-#include "wx/filedlg.h"     // wxFD_OPEN, wxFD_SAVE...
 #include "wx/generic/filedlgg.h"
 #include "wx/generic/dirctrlg.h" // for wxFileIconsTable
 

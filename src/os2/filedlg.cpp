@@ -18,10 +18,11 @@
 
 #if wxUSE_FILEDLG
 
+#include "wx/filedlg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/msgdlg.h"
-    #include "wx/filedlg.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"

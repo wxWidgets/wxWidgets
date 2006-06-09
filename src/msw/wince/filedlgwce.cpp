@@ -29,11 +29,12 @@
 
 #if wxUSE_FILEDLG && defined(__SMARTPHONE__) && defined(__WXWINCE__)
 
+#include "wx/filedlg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/msgdlg.h"
     #include "wx/dialog.h"
-    #include "wx/filedlg.h"
     #include "wx/filefn.h"
     #include "wx/intl.h"
     #include "wx/log.h"

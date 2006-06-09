@@ -33,6 +33,7 @@
     #include "wx/textctrl.h"
     #include "wx/intl.h"
     #include "wx/stattext.h"
+    #include "wx/filedlg.h"
 #endif // WX_PRECOMP
 
 #include "wx/filename.h"
@@ -40,7 +41,6 @@
 #include "wx/mimetype.h"
 
 #include "wx/statline.h"
-#include "wx/filedlg.h"
 #include "wx/valtext.h"
 
 #ifdef __WXMSW__

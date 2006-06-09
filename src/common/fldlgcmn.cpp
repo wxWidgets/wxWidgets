@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        common/fldlgcmn.cpp
+// Name:        src/common/fldlgcmn.cpp
 // Purpose:     wxFileDialog common functions
 // Author:      John Labenski
 // Modified by:
@@ -16,15 +16,15 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_FILEDLG
+
+#include "wx/filedlg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/window.h"
 #endif // WX_PRECOMP
-
-#include "wx/filedlg.h"
-
-#if wxUSE_FILEDLG
 
 //----------------------------------------------------------------------------
 // wxFileDialogBase
@@ -121,7 +121,7 @@ wxString wxFileDialogBase::AppendExtension(const wxString &filePath,
 
     // if fileName is of form "foo.bar" it's ok, return it
     int idx_dot = fileName.Find(wxT('.'), true);
-    if ((idx_dot != wxNOT_FOUND) && (idx_dot < (int)fileName.Len() - 1))
+    if ((idx_dot != wxNOT_FOUND) && (idx_dot < (int)fileName.length() - 1))
         return filePath;
 
     // get the first extension from extensionList, or all of it
@@ -129,7 +129,7 @@ wxString wxFileDialogBase::AppendExtension(const wxString &filePath,
 
     // if ext == "foo" or "foo." there's no extension
     int idx_ext_dot = ext.Find(wxT('.'), true);
-    if ((idx_ext_dot == wxNOT_FOUND) || (idx_ext_dot == (int)ext.Len() - 1))
+    if ((idx_ext_dot == wxNOT_FOUND) || (idx_ext_dot == (int)ext.length() - 1))
         return filePath;
     else
         ext = ext.AfterLast(wxT('.'));
@@ -314,4 +314,3 @@ WXDLLEXPORT wxString wxSaveFileSelector(const wxChar *what,
 }
 
 #endif // wxUSE_FILEDLG
-

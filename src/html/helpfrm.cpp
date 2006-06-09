@@ -38,6 +38,8 @@
     #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
     #include "wx/toolbar.h"
+    #include "wx/choicdlg.h"
+    #include "wx/filedlg.h"
 #endif // WXPRECOMP
 
 #include "wx/html/helpfrm.h"
@@ -51,10 +53,8 @@
 #include "wx/busyinfo.h"
 #include "wx/progdlg.h"
 #include "wx/fontenum.h"
-#include "wx/filedlg.h"
 #include "wx/artprov.h"
 #include "wx/spinctrl.h"
-#include "wx/choicdlg.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpFrame, wxFrame)
 

@@ -41,6 +41,7 @@
     #include "wx/log.h"
     #include "wx/msgdlg.h"
     #include "wx/mdi.h"
+    #include "wx/choicdlg.h"
 #endif
 
 #include "wx/ffile.h"
@@ -54,7 +55,6 @@
     #include "wx/printdlg.h"
 #endif
 
-#include "wx/choicdlg.h"
 #include "wx/confbase.h"
 #include "wx/file.h"
 #include "wx/cmdproc.h"

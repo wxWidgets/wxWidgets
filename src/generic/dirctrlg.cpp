@@ -34,10 +34,10 @@
     #include "wx/textctrl.h"
     #include "wx/layout.h"
     #include "wx/sizer.h"
+    #include "wx/textdlg.h"
 #endif
 
 #include "wx/module.h"
-#include "wx/textdlg.h"
 #include "wx/filefn.h"
 #include "wx/gdicmn.h"
 #include "wx/imaglist.h"

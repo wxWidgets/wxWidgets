@@ -22,9 +22,10 @@
 
 #if wxUSE_FILEDLG
 
+#include "wx/filedlg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/msgdlg.h"
-    #include "wx/filedlg.h"
     #include "wx/app.h"
 #endif
 
