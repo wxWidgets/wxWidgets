@@ -12,10 +12,11 @@
 #ifndef _WX_STATUSBR_H_BASE_
 #define _WX_STATUSBR_H_BASE_
 
-#include "wx/window.h"
+#include "wx/defs.h"
 
 #if wxUSE_STATUSBAR
 
+#include "wx/window.h"
 #include "wx/list.h"
 #include "wx/dynarray.h"
 

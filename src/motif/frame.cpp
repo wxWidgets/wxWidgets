@@ -36,9 +36,8 @@
     #include "wx/icon.h"
     #include "wx/settings.h"
     #include "wx/toolbar.h"
+    #include "wx/statusbr.h"
 #endif
-
-#include "wx/statusbr.h"
 
 #ifdef __VMS__
     #pragma message disable nosimpint

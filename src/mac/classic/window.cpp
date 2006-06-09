@@ -30,12 +30,12 @@
     #include "wx/statbox.h"
     #include "wx/listbox.h"
     #include "wx/layout.h"
+    #include "wx/statusbr.h"
 #endif
 
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 #include "wx/tooltip.h"
-#include "wx/statusbr.h"
 #include "wx/menuitem.h"
 #include "wx/spinctrl.h"
 #include "wx/geometry.h"

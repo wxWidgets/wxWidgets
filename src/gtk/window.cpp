@@ -31,6 +31,7 @@
     #include "wx/toolbar.h"
     #include "wx/combobox.h"
     #include "wx/layout.h"
+    #include "wx/statusbr.h"
 #endif
 
 #include "wx/module.h"
@@ -47,7 +48,6 @@
     #include "wx/caret.h"
 #endif // wxUSE_CARET
 
-#include "wx/statusbr.h"
 #include "wx/fontutil.h"
 
 #ifdef __WXDEBUG__

@@ -34,9 +34,7 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/dialog.h"
-    #if wxUSE_STATUSBAR
-        #include "wx/statusbr.h"
-    #endif
+    #include "wx/statusbr.h"
     #include "wx/settings.h"
     #include "wx/intl.h"
     #include "wx/log.h"

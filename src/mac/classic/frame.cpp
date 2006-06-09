@@ -20,9 +20,9 @@
     #include "wx/dialog.h"
     #include "wx/settings.h"
     #include "wx/toolbar.h"
+    #include "wx/statusbr.h"
 #endif // WX_PRECOMP
 
-#include "wx/statusbr.h"
 #include "wx/menuitem.h"
 
 #include "wx/mac/uma.h"

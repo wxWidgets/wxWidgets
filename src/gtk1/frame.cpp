@@ -27,11 +27,8 @@
     #include "wx/dialog.h"
     #include "wx/control.h"
     #include "wx/toolbar.h"
-#endif // WX_PRECOMP
-
-#if wxUSE_STATUSBAR
     #include "wx/statusbr.h"
-#endif
+#endif // WX_PRECOMP
 
 #include <glib.h>
 #include "wx/gtk1/private.h"

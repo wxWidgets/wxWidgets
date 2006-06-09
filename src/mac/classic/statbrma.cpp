@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -88,14 +91,14 @@ void wxStatusBarMac::DrawField(wxDC& dc, int i)
 void wxStatusBarMac::SetStatusText(const wxString& text, int number)
 {
     wxCHECK_RET( (number >= 0) && (number < m_nFields),
-        _T("invalid status bar field index") );
+                 _T("invalid status bar field index") );
 
     m_statusStrings[number] = text;
     wxRect rect;
     GetFieldRect(number, rect);
     rect.y=0;
     rect.height = m_height ;
-    Refresh( TRUE , &rect ) ;
+    Refresh( true , &rect ) ;
     Update();
 }
 
@@ -149,6 +152,6 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
 
 void wxStatusBarMac::MacSuperEnabled( bool enabled )
 {
-    Refresh(FALSE) ;
+    Refresh(false) ;
     wxWindow::MacSuperEnabled( enabled ) ;
 }

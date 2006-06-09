@@ -37,6 +37,7 @@
     #include "wx/panel.h"
     #include "wx/log.h"
     #include "wx/toolbar.h"
+    #include "wx/statusbr.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"
@@ -50,10 +51,7 @@
     #include "wx/msw/winundef.h"
 #endif
 
-#if wxUSE_STATUSBAR
-    #include "wx/statusbr.h"
-    #include "wx/generic/statusbr.h"
-#endif // wxUSE_STATUSBAR
+#include "wx/generic/statusbr.h"
 
 #include "wx/menuitem.h"
 

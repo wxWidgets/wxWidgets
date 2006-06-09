@@ -30,14 +30,12 @@
     #include "wx/dcclient.h"
     #include "wx/mdi.h"
     #include "wx/toolbar.h"
+    #include "wx/statusbr.h"
 #endif // WX_PRECOMP
 
 #include "wx/os2/private.h"
 
-#if wxUSE_STATUSBAR
-    #include "wx/statusbr.h"
-    #include "wx/generic/statusbr.h"
-#endif // wxUSE_STATUSBAR
+#include "wx/generic/statusbr.h"
 
 #include "wx/menuitem.h"
 

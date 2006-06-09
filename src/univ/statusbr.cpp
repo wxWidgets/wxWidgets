@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/statusbr.cpp
+// Name:        src/univ/statusbr.cpp
 // Purpose:     wxStatusBar implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -25,12 +25,13 @@
 
 #if wxUSE_STATUSBAR
 
+#include "wx/statusbr.h"
+
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/dcclient.h"
 #endif
 
-#include "wx/statusbr.h"
 #include "wx/toplevel.h"
 
 #include "wx/univ/renderer.h"
@@ -327,4 +328,3 @@ int wxStatusBarUniv::GetBorderY() const
 }
 
 #endif // wxUSE_STATUSBAR
-

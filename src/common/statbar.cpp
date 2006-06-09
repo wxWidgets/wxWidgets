@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        common/statbar.cpp
+// Name:        src/common/statbar.cpp
 // Purpose:     wxStatusBarBase implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -24,9 +24,10 @@
     #pragma hdrstop
 #endif
 
+#include "wx/statusbr.h"
+
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
-    #include "wx/statusbr.h"
 #endif //WX_PRECOMP
 
 #if wxUSE_STATUSBAR
@@ -354,4 +355,3 @@ wxListString *wxStatusBarBase::GetOrCreateStatusStack(int i)
 }
 
 #endif // wxUSE_STATUSBAR
-

@@ -24,9 +24,7 @@
     #include "wx/icon.h"
     #include "wx/msgdlg.h"
     #include "wx/dcprint.h"
-#if wxUSE_STATUSBAR
     #include "wx/statusbr.h"
-#endif
 #endif
 
 #include "wx/module.h"
@@ -2729,12 +2727,10 @@ bool wxDC::DoBlit( wxCoord vXdest,
     return bSuccess;
 }
 
-void wxDC::DoGetSize(
-  int*                              pnWidth
-, int*                              pnHeight
-) const
+void wxDC::DoGetSize( int* pnWidth,
+                      int* pnHeight ) const
 {
-    LONG                            lArray[CAPS_HEIGHT];
+    LONG lArray[CAPS_HEIGHT];
 
     if(::DevQueryCaps( m_hDC
                       ,CAPS_FAMILY
@@ -2802,10 +2798,7 @@ wxSize wxDC::GetPPI() const
     return ppisize;
 } // end of wxDC::GetPPI
 
-void wxDC::SetLogicalScale(
-  double                            dX
-, double                            dY
-)
+void wxDC::SetLogicalScale( double dX, double dY )
 {
     m_logicalScaleX = dX;
     m_logicalScaleY = dY;

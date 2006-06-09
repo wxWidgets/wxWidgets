@@ -30,11 +30,8 @@
     #include "wx/menuitem.h"
     #include "wx/dcclient.h"
     #include "wx/toolbar.h"
-#endif // WX_PRECOMP
-
-#if wxUSE_STATUSBAR
     #include "wx/statusbr.h"
-#endif
+#endif // WX_PRECOMP
 
 // ----------------------------------------------------------------------------
 // event table

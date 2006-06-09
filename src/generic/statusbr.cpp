@@ -18,6 +18,8 @@
 
 #if wxUSE_STATUSBAR
 
+#include "wx/statusbr.h"
+
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
     #include "wx/settings.h"
@@ -28,8 +30,6 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
 #endif
-
-#include "wx/statusbr.h"
 
 // we only have to do it here when we use wxStatusBarGeneric in addition to the
 // standard wxStatusBar class, if wxStatusBarGeneric is the same as
