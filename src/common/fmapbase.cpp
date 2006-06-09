@@ -325,7 +325,7 @@ void wxFontMapperBase::Reset()
         // we need a cast as wxFontMapper is not fully declared here and so the
         // compiler can't know that it derives from wxFontMapperBase (but
         // run-time behaviour will be correct because the dtor is virtual)
-        delete sm_instance;
+        delete (wxFontMapperBase *)sm_instance;
         sm_instance = NULL;
     }
 }
