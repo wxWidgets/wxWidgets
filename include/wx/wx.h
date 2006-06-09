@@ -73,7 +73,6 @@
 #include "wx/sizer.h"
 #include "wx/mdi.h"
 #include "wx/statusbr.h"
-#include "wx/scrolbar.h"
 #include "wx/choicdlg.h"
 #include "wx/textdlg.h"
 #include "wx/filedlg.h"
