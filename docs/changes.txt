@@ -267,6 +267,8 @@ wxMac:
 - Fixed wxNotebook off-by-one bug in HitTest.
 - Fixed joystick GetXMin/Max bug.
 - Fixed Unix domain socket problem in wxIPC.
+- Fixed non-detection of process termination on Intel Macs by
+  polling for process termination in a separate thread.
 
 wxCocoa:
 
