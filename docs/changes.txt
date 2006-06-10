@@ -10,6 +10,11 @@ All:
 - wxSocket::_Read continues reading from socket after exhausting pushback buffer.
   Previously, only the buffer would be returned, even if more data was requested.
 
+All (GUI):
+
+- In wxScrolledWindow:DoGetBestSize, no longer adds difference between client and
+  total size if we've just used the total size as the best size.
+
 wxGTK:
 
 - Support underlined fonts in wxTextCtrl.
@@ -18,6 +23,11 @@ wxGTK:
 wxUniv:
 
 - Implemented wxToggleButton (David Bjorkevik).
+
+wxMac:
+
+- Fixed non-detection of process termination on Intel Macs by
+  polling for process termination in a separate thread.
 
 
 2.6.3
