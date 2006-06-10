@@ -701,12 +701,17 @@ class CheckListCtrlMixin:
     """
     This is a mixin for ListCtrl which add a checkbox in the first
     column of each row. It is inspired by limodou's CheckList.py(which
-    can be got from his NewEdit) and improved:    
+    can be got from his NewEdit) and improved:
+    
         - You can just use InsertStringItem() to insert new items;
-        - Once a checkbox is checked/unchecked, the corresponding item is not
-          selected;
+
+        - Once a checkbox is checked/unchecked, the corresponding item
+          is not selected;
+
         - You can use SetItemData() and GetItemData();
-        - Interfaces are changed to OnCheckItem(), IsChecked(), CheckItem().
+
+        - Interfaces are changed to OnCheckItem(), IsChecked(),
+          CheckItem().
 
     You should not set a imagelist for the ListCtrl once this mixin is used.
     """

@@ -604,10 +604,11 @@ class PublisherClass:
     - message: this is an instance of Message, containing the topic for 
       which the message was sent, and any data the sender specified. 
       
-    :note: This class is visible to importers of pubsub only as a 
-    Singleton. I.e., every time you execute 'Publisher()', it's 
-    actually the same instance of PublisherClass that is returned. So to 
-    use, just do 'Publisher().method()'.
+    :note: This class is visible to importers of pubsub only as a
+           Singleton. I.e., every time you execute 'Publisher()', it's
+           actually the same instance of PublisherClass that is
+           returned. So to use, just do'Publisher().method()'.
+        
     """
     
     __ALL_TOPICS_TPL = (ALL_TOPICS, )
@@ -645,31 +646,33 @@ class PublisherClass:
         listener.  See the class doc for requirements on listener and
         topic.
 
-        :note: The listener is held by Publisher() only by *weak* reference.
-        This means you must ensure you have at least one strong reference
-        to listener, otherwise it will be DOA ("dead on arrival"). This is 
-        particularly easy to forget when wrapping a listener method in a 
-        proxy object (e.g. to bind some of its parameters), e.g. 
+        :note: The listener is held by Publisher() only by *weak*
+               reference.  This means you must ensure you have at
+               least one strong reference to listener, otherwise it
+               will be DOA ("dead on arrival"). This is particularly
+               easy to forget when wrapping a listener method in a
+               proxy object (e.g. to bind some of its parameters),
+               e.g.::
         
-        :code:
-            class Foo: 
-                def listener(self, event): pass
-            class Wrapper:
-                def __init__(self, fun): self.fun = fun
-                def __call__(self, *args): self.fun(*args)
-            foo = Foo()
-            Publisher().subscribe( Wrapper(foo.listener) ) # whoops: DOA!
-            wrapper = Wrapper(foo.listener)
-            Publisher().subscribe(wrapper) # good!
+                  class Foo: 
+                      def listener(self, event): pass
+                  class Wrapper:
+                      def __init__(self, fun): self.fun = fun
+                      def __call__(self, *args): self.fun(*args)
+                  foo = Foo()
+                  Publisher().subscribe( Wrapper(foo.listener) ) # whoops: DOA!
+                  wrapper = Wrapper(foo.listener)
+                  Publisher().subscribe(wrapper) # good!
         
-        :note: Calling 
-        this method for the same listener, with two topics in the same 
-        branch of the topic hierarchy, will cause the listener to be
-        notified twice when a message for the deepest topic is sent. E.g.
-        subscribe(listener, 't1') and then subscribe(listener, ('t1','t2'))
-        means that when calling sendMessage('t1'), listener gets one message,
-        but when calling sendMessage(('t1','t2')), listener gets message 
-        twice. 
+        :note: Calling this method for the same listener, with two
+               topics in the same branch of the topic hierarchy, will
+               cause the listener to be notified twice when a message
+               for the deepest topic is sent. E.g.
+               subscribe(listener, 't1') and then subscribe(listener,
+               ('t1','t2')) means that when calling sendMessage('t1'),
+               listener gets one message, but when calling
+               sendMessage(('t1','t2')), listener gets message twice.
+        
         """
         self.validate(listener)
 
@@ -765,13 +768,14 @@ class PublisherClass:
         """Return a list of topics the given listener is registered with. 
         Returns [] if listener never subscribed.
         
-        :attention: when using the return of this method to compare to 
-        expected list of topics, remember that topics that are not in the
-        form of a tuple appear as a one-tuple in the return. E.g. if you 
-        have subscribed a listener to 'topic1' and ('topic2','subtopic2'), 
-        this method returns::
+        :attention: when using the return of this method to compare to
+                expected list of topics, remember that topics that are
+                not in the form of a tuple appear as a one-tuple in
+                the return. E.g. if you have subscribed a listener to
+                'topic1' and ('topic2','subtopic2'), this method
+                returns::
             
-            associatedTopics = [('topic1',), ('topic2','subtopic2')]
+                associatedTopics = [('topic1',), ('topic2','subtopic2')]
         """
         return self.__topicTree.getTopics(listener)
     

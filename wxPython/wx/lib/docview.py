@@ -1039,7 +1039,7 @@ class DocTemplate(wx.Object):
         string will be displayed in the file filter list of Windows file
         selectors.
 
-        filter is an appropriate file filter such as *.txt.
+        filter is an appropriate file filter such as \*.txt.
 
         dir is the default directory to use for file selectors.
 

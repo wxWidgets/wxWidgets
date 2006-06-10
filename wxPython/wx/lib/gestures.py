@@ -41,7 +41,7 @@ Not Yet Implemented
 The criteria for a direction is as follows:
 x in a row.  (Where x is the WobbleTolerance).
 So if the WobbleTolerance is 9
- 'URUUUUUUUUUUUUUUURUURUUUU1' is Up.
+'URUUUUUUUUUUUUUUURUURUUUU1' is Up.
 
 The higher this number, the less sensitive this class is.
 So the more likely something like 1L will translate to 1.

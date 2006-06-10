@@ -202,16 +202,16 @@ you need. ``flags`` may have the ``wx.CONTROL_PRESSED`` or
         "Return the generic implementation of the renderer. Under some
 platforms, this is the default renderer implementation, others have
 platform-specific default renderer which can be retrieved by calling
-`GetDefault`.", "");
+`wx.RendererNative.GetDefault`.", "");
     
 
     MustHaveApp(GetDefault);
     DocDeclStr(
         static wxRendererNative& , GetDefault(),
         "Return the default (native) implementation for this platform -- this
-is also the one used by default but this may be changed by calling `Set`
-in which case the return value of this method may be different from
-the return value of `Get`.", "");
+is also the one used by default but this may be changed by calling
+`wx.RendererNative.Set` in which case the return value of this method
+may be different from the return value of `wx.RendererNative.Get`.", "");
     
 
 

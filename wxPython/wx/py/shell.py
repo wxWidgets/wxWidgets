@@ -354,7 +354,7 @@ class Shell(editwindow.EditWindow):
     def setBuiltinKeywords(self):
         """Create pseudo keywords as part of builtins.
 
-        This sets `close`, `exit` and `quit` to a helpful string.
+        This sets "close", "exit" and "quit" to a helpful string.
         """
         import __builtin__
         __builtin__.close = __builtin__.exit = __builtin__.quit = \
