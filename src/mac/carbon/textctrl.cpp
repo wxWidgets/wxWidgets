@@ -991,6 +991,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 #endif
     }
     if ( ( key >= 0x20 && key < WXK_START ) ||
+         ( key >= WXK_NUMPAD0 && key <= WXK_DIVIDE ) ||
          key == WXK_RETURN ||
          key == WXK_DELETE ||
          key == WXK_BACK)
