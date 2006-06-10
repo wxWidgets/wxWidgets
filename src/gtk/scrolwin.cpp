@@ -103,6 +103,30 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
 }
 }
 
+#ifdef __WXGTK20__
+//-----------------------------------------------------------------------------
+// "event_after" from scrollbar
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void
+gtk_scrollbar_event_after(GtkRange* range, GdkEvent* event, wxWindow* win)
+{
+    if (event->type == GDK_BUTTON_RELEASE)
+    {
+        g_signal_handlers_block_by_func(range, (void*)gtk_scrollbar_event_after, win);
+
+        GtkAdjustment* adj = range->adjustment;
+        wxASSERT(adj == win->m_hAdjust || adj == win->m_vAdjust);
+        const int orient = adj == win->m_hAdjust ? wxHORIZONTAL : wxVERTICAL;
+        wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBRELEASE, win->GetScrollPos(orient), orient);
+        event.SetEventObject(win);
+        win->GetEventHandler()->ProcessEvent(event);
+    }
+}
+}
+#endif // __WXGTK20__
+
 //-----------------------------------------------------------------------------
 // "button_release_event" from scrollbar
 //-----------------------------------------------------------------------------
@@ -118,12 +142,16 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
     if (win->m_isScrolling)
     {
         win->m_isScrolling = false;
+#ifdef __WXGTK20__
+        g_signal_handlers_unblock_by_func(widget, (void*)gtk_scrollbar_event_after, win);
+#else
         GtkAdjustment* adj = widget->adjustment;
         wxASSERT(adj == win->m_hAdjust || adj == win->m_vAdjust);
         const int orient = adj == win->m_hAdjust ? wxHORIZONTAL : wxVERTICAL;
         wxScrollWinEvent event(wxEVT_SCROLLWIN_THUMBRELEASE, win->GetScrollPos(orient), orient);
         event.SetEventObject(win);
         win->GetEventHandler()->ProcessEvent(event);
+#endif
     }
 
     return FALSE;
@@ -264,6 +292,16 @@ bool wxScrolledWindow::Create(wxWindow *parent,
 
     gtk_signal_connect( GTK_OBJECT(scrolledWindow->hscrollbar), "button_release_event",
           (GtkSignalFunc)gtk_scrollbar_button_release_callback, (gpointer) this );
+
+#ifdef __WXGTK20__
+    gulong handler_id;
+    handler_id = g_signal_connect(
+        scrolledWindow->vscrollbar, "event_after", G_CALLBACK(gtk_scrollbar_event_after), this);
+    g_signal_handler_block(scrolledWindow->vscrollbar, handler_id);
+    handler_id = g_signal_connect(
+        scrolledWindow->hscrollbar, "event_after", G_CALLBACK(gtk_scrollbar_event_after), this);
+    g_signal_handler_block(scrolledWindow->hscrollbar, handler_id);
+#endif
 
     gtk_widget_show( m_wxwindow );
 
