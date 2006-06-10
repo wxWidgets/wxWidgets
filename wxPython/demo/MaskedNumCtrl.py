@@ -33,8 +33,8 @@ The controls at the top reconfigure the resulting control at the bottom.
 
         groupcharlabel = wx.StaticText( panel,-1, "Grouping char:" )
         self.groupchar = masked.TextCtrl(
-                                panel, -1, value=',', mask='&', excludeChars = '-()',
-                                formatcodes='F', emptyInvalid=True, validRequired=True
+                                panel, -1, value=',', mask='*', includeChars = ' ', excludeChars = '-()0123456789',
+                                formatcodes='F', emptyInvalid=False, validRequired=True
                                 )
 
         decimalcharlabel = wx.StaticText( panel,-1, "Decimal char:" )
