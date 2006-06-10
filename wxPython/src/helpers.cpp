@@ -191,21 +191,23 @@ void wxPyApp::ExitMainLoop() {
 
 
 #ifdef __WXDEBUG__
-void wxPyApp::OnAssert(const wxChar *file,
-                     int line,
-                     const wxChar *cond,
-                     const wxChar *msg) {
-
+void wxPyApp::OnAssertFailure(const wxChar *file,
+                              int line,
+                              const wxChar *func,
+                              const wxChar *cond,
+                              const wxChar *msg)
+{
     // if we're not fully initialized then just log the error
     if (! m_startupComplete) {
         wxString buf;
         buf.Alloc(4096);
         buf.Printf(wxT("%s(%d): assert \"%s\" failed"),
                    file, line, cond);
-        if (msg != NULL) {
-            buf += wxT(": ");
-            buf += msg;
-        }
+        if ( func && *func )
+            buf << wxT(" in ") << func << wxT("()");
+        if (msg != NULL) 
+            buf << wxT(": ") << msg;
+        
         wxLogDebug(buf);
         return;
     }
@@ -239,11 +241,12 @@ void wxPyApp::OnAssert(const wxChar *file,
         if (m_assertMode & wxPYAPP_ASSERT_EXCEPTION) {
             wxString buf;
             buf.Alloc(4096);
-            buf.Printf(wxT("C++ assertion \"%s\" failed in %s(%d)"), cond, file, line);
-            if (msg != NULL) {
-                buf += wxT(": ");
-                buf += msg;
-            }
+            buf.Printf(wxT("C++ assertion \"%s\" failed at %s(%d)"), cond, file, line);
+            if ( func && *func )
+                buf << wxT(" in ") << func << wxT("()");
+            if (msg != NULL) 
+                buf << wxT(": ") << msg;
+            
 
             // set the exception
             wxPyBlock_t blocked = wxPyBeginBlockThreads();
@@ -264,10 +267,10 @@ void wxPyApp::OnAssert(const wxChar *file,
             buf.Alloc(4096);
             buf.Printf(wxT("%s(%d): assert \"%s\" failed"),
                        file, line, cond);
-            if (msg != NULL) {
-                buf += wxT(": ");
-                buf += msg;
-            }
+            if ( func && *func )
+                buf << wxT(" in ") << func << wxT("()");
+            if (msg != NULL) 
+                buf << wxT(": ") << msg;
             wxLogDebug(buf);
         }
 
