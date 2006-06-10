@@ -831,7 +831,7 @@ nav = (
     )
 
 control = (
-    wx.WXK_BACK, wx.WXK_DELETE, WXK_CTRL_A, WXK_CTRL_C, WXK_CTRL_S, WXK_CTRL_V,
+    wx.WXK_BACK, wx.WXK_DELETE, wx.WXK_INSERT, WXK_CTRL_A, WXK_CTRL_C, WXK_CTRL_S, WXK_CTRL_V,
     WXK_CTRL_X, WXK_CTRL_Z
     )
 
@@ -1715,7 +1715,8 @@ class MaskedEditMixin:
             wx.WXK_NEXT:   self._OnAutoCompleteField,
 
             # default function control keys and handlers:
-            wx.WXK_DELETE: self._OnErase,
+            wx.WXK_DELETE: self._OnDelete,
+            wx.WXK_INSERT: self._OnInsert,
             WXK_CTRL_A: self._OnCtrl_A,
             WXK_CTRL_C: self._OnCtrl_C,
             WXK_CTRL_S: self._OnCtrl_S,
@@ -3199,6 +3200,32 @@ class MaskedEditMixin:
             Should return False to skip other processing. """
 ##        dbg("MaskedEditMixin::_OnCtrl_V", indent=1)
         self.Paste()
+        dbg(indent=0)
+        return False
+
+    def _OnInsert(self, event=None):
+        """ Handles shift-insert and control-insert operations (paste and copy, respectively)"""
+##        dbg("MaskedEditMixin::_OnInsert", indent=1)
+        if event and isinstance(event, wx.KeyEvent):
+            if event.ShiftDown():
+                self.Paste()
+            elif event.ControlDown():
+                self.Copy()
+            # (else do nothing)
+        # (else do nothing)
+##        dbg(indent=0)
+        return False
+
+    def _OnDelete(self, event=None):
+        """ Handles shift-delete and delete operations (cut and erase, respectively)"""
+##        dbg("MaskedEditMixin::_OnDelete", indent=1)
+        if event and isinstance(event, wx.KeyEvent):
+            if event.ShiftDown():
+                self.Cut()
+            else:
+                self._OnErase(event)
+        else:
+            self._OnErase(event)
 ##        dbg(indent=0)
         return False
 
@@ -6572,6 +6599,10 @@ __i=0
 
 ## CHANGELOG:
 ## ====================
+##  Version 1.10
+##  1. Added handling for WXK_DELETE and WXK_INSERT, such that shift-delete
+##     cuts, shift-insert pastes, and ctrl-insert copies.
+##
 ##  Version 1.9
 ##  1. Now ignores kill focus events when being destroyed.
 ##  2. Added missing call to set insertion point on changing fields.
