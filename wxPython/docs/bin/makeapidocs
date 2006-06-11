@@ -15,7 +15,7 @@ rm -r docs/api/*
 
 # build the docs
 export PTYHONPATH=$PWD
-epydoc --name wxPython \
+/opt/python/bin/epydoc --name wxPython \
     --html \
     --output docs/api \
     --ignore-param-mismatch \
@@ -52,9 +52,9 @@ DEST=wxPython-$VERSION/docs
 mkdir -p _build_docs/$DEST
 cp -R --link docs/api _build_docs/$DEST
 cd _build_docs
-rm -f ../dist/wxPython-newdocs-$VERSION.tar.gz
+rm -f ../dist/wxPython-newdocs-$VERSION.tar.bz2
 tar cf ../dist/wxPython-newdocs-$VERSION.tar $DEST
-gzip -9 ../dist/wxPython-newdocs-$VERSION.tar
+bzip2 -9 ../dist/wxPython-newdocs-$VERSION.tar
 
 # Cleanup
 cd ..

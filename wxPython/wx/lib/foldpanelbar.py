@@ -1005,7 +1005,7 @@ class FoldPanelBar(wx.Panel):
 
     This control is easy to use. Simply create it as a child for a
     panel or sash window, and populate panels with
-    `AddFoldPanel`. Then use the `AdddFoldPanelWindow` to add
+    `AddFoldPanel`. Then use the `AddFoldPanelWindow` to add
     `wx.Window` derived controls to the current fold panel. Use
     `AddFoldPanelSeparator` to put separators between the groups of
     controls that need a visual separator to group them

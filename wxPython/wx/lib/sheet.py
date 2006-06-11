@@ -64,8 +64,9 @@ class CCellEditor(wx.grid.PyGridCellEditor):
     def Show(self, show, attr):
         """ Show or hide the edit control.  Use the attr (if not None)
             to set colors or fonts for the control.
+
             NOTE: There is no need to everride this if you don't need
-                  to do something out of the ordinary.
+            to do something out of the ordinary.
         """
         super(CCellEditor, self).Show(show, attr)
 
@@ -73,8 +74,9 @@ class CCellEditor(wx.grid.PyGridCellEditor):
         """ Draws the part of the cell not occupied by the edit control.  The
             base class version just fills it with background colour from the
             attribute.
+
             NOTE: There is no need to everride this if you don't need
-                  to do something out of the ordinary.
+            to do something out of the ordinary.
         """
         # Call base class method.
         super(CCellEditor, self).PaintBackground(self, rect, attr)
@@ -151,8 +153,9 @@ class CCellEditor(wx.grid.PyGridCellEditor):
 
     def Destroy(self):
         """ Final cleanup
+        
             NOTE: There is no need to everride this if you don't need
-                  to do something out of the ordinary.
+            to do something out of the ordinary.
         """
         super(CCellEditor, self).Destroy()
 
