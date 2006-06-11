@@ -185,7 +185,9 @@ void wxURL::CleanData()
 #if wxUSE_PROTOCOL_HTTP
     if (!m_useProxy)
 #endif // wxUSE_PROTOCOL_HTTP
-        delete m_protocol;
+        if (m_protocol)
+            // Need to safely delete the socket (pending events)
+            m_protocol->Destroy();
 }
 
 wxURL::~wxURL()
