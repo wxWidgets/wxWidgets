@@ -36,6 +36,46 @@ if [ "$VERSION" = "" ]; then
   VERSION=2.6.2
 fi
 
+getfilelist(){
+  port=$1
+  outfile=$2
+  
+  filelist="base.rsp"
+  contribfiles="stc.rsp contrib.rsp ogl.rsp"
+  utilsfiles="tex2rtf.rsp utils.rsp utilmake.rsp"
+  commonfiles="generic.rsp jpeg.rsp tiff.rsp xml.rsp deprecated.rsp makefile.rsp $utilsfiles $contribfiles"
+  
+  if [ ! $port = "base" ]; then
+    filelist="$filelist $commonfiles" 
+  fi 
+  
+  if [ $port = "msw" || $port = "all" ]; then
+    filelist="$filelist msw.rsp univ.rsp vc.rsp mmedia.rsp wince.rsp palmos.rsp"
+  fi
+  
+  if [ $port = "os2" || $port = "all" ]; then
+     filelist="$filelist os2.rsp"
+  fi
+  
+  if [ $port = "all" ]; then
+      filelist="$filelist x11.rsp gtk.rsp cocoa.rsp motif.rsp mac.rsp mgl.rsp"
+  fi
+  
+  tempfile="/tmp/$portfiles.in"
+  rm -f $tempfile 
+  rm -f $outfile
+  
+  olddir=$PWD
+  cd $MANIFESTDIR
+  
+  cat $filelist > $tempfile
+  
+  cd $APPDIR
+  expandlines $tempfile $outfile
+  
+  cd $olddir
+}
+
 doreplace()
 {
     thefile=$1
@@ -132,11 +172,8 @@ dospinos2()
 {
     echo Zipping OS/2...
 
-    cd $MANIFESTDIR
-    cat generic.rsp os2.rsp jpeg.rsp tiff.rsp jpeg.rsp utils.rsp tex2rtf.rsp ogl.rsp xml.rsp contrib.rsp deprecated.rsp makefile.rsp > /tmp/os2files.in
-
     cd $APPDIR
-    expandlines /tmp/os2files.in /tmp/os2files
+    getfilelist "os2" /tmp/os2files
     
     # Zip up the complete wxOS2-xxx.zip file
     zip $ZIPFLAGS -@ $DESTDIR/wxOS2-$VERSION.zip < /tmp/os2files
@@ -149,17 +186,6 @@ dospinos2()
     mkdir $DESTDIR/wxWidgets-$VERSION
     cd $DESTDIR/wxWidgets-$VERSION
     unzip $ZIPFLAGS ../wxOS2-$VERSION.zip
-    # No longer do this, configure should be OK
-    # echo Overwriting with OS2-specific versions of configure files...
-    # unzip $ZIPFLAGS -o $APPDIR/distrib/os2/os2-specific.zip
-    rm -f src/gtk/descrip.mms src/motif/descrip.mms docs/pdf/*.pdf
-    rm -f src/tiff/*.mcp src/jpeg/*.mcp src/png/*.mcp src/zlib/*.mcp
-    rm -f -r docs/html/tex2rtf
-
-    # echo Making OS/2 files lower case...
-    # no longer necessary
-    # $SCRIPTDIR/namedown include/wx/os2/*.H
-    # $SCRIPTDIR/namedown src/os2/*.CPP src/os2/*.I
 
     echo Copying readme files...
     cp $APPDIR/docs/os2/install.txt INSTALL-OS2.txt
@@ -174,14 +200,10 @@ dospinmsw()
 {
     echo Zipping wxMSW...
     
-    cd $MANIFESTDIR
-    # add all the files into a megafile
-    cat generic.rsp makefile.rsp msw.rsp ogl.rsp mmedia.rsp stc.rsp tex2rtf.rsp jpeg.rsp tiff.rsp xml.rsp contrib.rsp deprecated.rsp utils.rsp utilmake.rsp univ.rsp vc.rsp wince.rsp palmos.rsp > /tmp/mswfiles.in
-    
     cd $APPDIR
 
     # now expand the wildcards to actual file names
-    expandlines /tmp/mswfiles.in /tmp/mswfiles
+    getfilelist "msw" /tmp/mswfiles
 
     # Create wxWidgets-$VERSION-win.zip which is used to create wxMSW
     echo Zipping individual components
@@ -323,6 +345,35 @@ dospinmisc()
     zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-BC.zip < /tmp/bcfiles
     rearchive wxWidgets-$VERSION-BC.zip wxWidgets-$VERSION $DESTDIR
 
+}
+
+
+dospinport(){
+    port=$1
+    
+    upperport="`echo $port|tr '[a-z]' '[A-Z]'`"
+    echo "Zipping wx$upperport..."
+
+    cd $APPDIR
+    getfilelist "$port" "/tmp/$port_filelist"
+
+    mkdir -p /tmp/wx$port/wxWidgets-$VERSION
+    
+    for line in `cat /tmp/$port_filelist` ; do
+        cp -r $line /tmp/wx$port/wxWidgets-$VERSION
+    done
+    
+    cd /tmp/wxWidgets-$VERSION
+
+    echo Copying readme files...
+    cp $APPDIR/docs/msw/readme.txt README-MSW.txt
+    cp $APPDIR/docs/msw/install.txt INSTALL-MSW.txt
+    cp $APPDIR/docs/licence.txt LICENCE.txt
+    cp $APPDIR/docs/lgpl.txt COPYING.LIB
+    cp $APPDIR/docs/changes.txt CHANGES.txt
+    cp $APPDIR/docs/readme.txt README.txt
+
+    zip $ZIPFLAGS -r -@ $DESTDIR/wx$upperport-$VERSION.zip /tmp/wx$port/wxWidgets-$VERSION 
 }
 
 dospininstaller()
@@ -564,7 +615,7 @@ makesetup()
 
     # Do OS/2 spin
     if [ "$SPINOS2" = "1" ] || [ "$SPINALL" = "1" ]; then
-        dospinos2
+        dospinport "os2" #dospinos2
     fi
 
     # Do Mac spin
@@ -574,17 +625,17 @@ makesetup()
 
     # Do MSW spin
     if [ "$SPINMSW" = "1" ] || [ "$SPINALL" = "1" ]; then
-        dospinmsw
+        dospinport "msw" #dospinmsw
     fi
 
     # Do wxBase spin
     if [ "$SPINBASE" = "1" ] || [ "$SPINALL" = "1" ]; then
-        dospinbase
+        dospinport "base" #dospinbase
     fi
 
     # Do wxAll spin
     if [ "$SPINWXALL" = "1" ] || [ "$SPINALL" = "1" ]; then
-        dospinwxall
+        dospinport "all" #dospinwxall
     fi
 
     # Do docs spin
