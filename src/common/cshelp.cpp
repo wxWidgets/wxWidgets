@@ -327,6 +327,25 @@ wxHelpProvider::~wxHelpProvider()
 {
 }
 
+wxString wxHelpProvider::GetHelpTextMaybeAtPoint(wxWindowBase *window)
+{
+    if ( m_helptextAtPoint != wxDefaultPosition ||
+            m_helptextOrigin != wxHelpEvent::Origin_Unknown )
+    {
+        wxCHECK_MSG( window, wxEmptyString, _T("window must not be NULL") );
+
+        wxPoint pt = m_helptextAtPoint;
+        wxHelpEvent::Origin origin = m_helptextOrigin;
+
+        m_helptextAtPoint = wxDefaultPosition;
+        m_helptextOrigin = wxHelpEvent::Origin_Unknown;
+
+        return window->GetHelpTextAtPoint(pt, origin);
+    }
+
+    return GetHelp(window);
+}
+
 // ----------------------------------------------------------------------------
 // wxSimpleHelpProvider
 // ----------------------------------------------------------------------------
@@ -380,10 +399,11 @@ bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
     }
     s_tipWindow = NULL;
 
-    wxString text = GetHelp(window);
+    const wxString text = GetHelpTextMaybeAtPoint(window);
     if ( !text.empty() )
     {
-        s_tipWindow = new wxTipWindow((wxWindow *)window, text, 100, & s_tipWindow);
+        s_tipWindow = new wxTipWindow((wxWindow *)window, text,
+                                        100, &s_tipWindow);
 
         return true;
     }
@@ -405,29 +425,26 @@ wxHelpControllerHelpProvider::wxHelpControllerHelpProvider(wxHelpControllerBase*
 
 bool wxHelpControllerHelpProvider::ShowHelp(wxWindowBase *window)
 {
-    wxString text = GetHelp(window);
-    if ( !text.empty() )
+    const wxString text = GetHelpTextMaybeAtPoint(window);
+
+    if ( text.empty() )
+        return false;
+
+    if ( m_helpController )
     {
-        if (m_helpController)
-        {
-            if (text.IsNumber())
-                return m_helpController->DisplayContextPopup(wxAtoi(text));
+        // if it's a numeric topic, show it
+        long topic;
+        if ( text.ToLong(&topic) )
+            return m_helpController->DisplayContextPopup(topic);
 
-            // If the help controller is capable of popping up the text...
-            else if (m_helpController->DisplayTextPopup(text, wxGetMousePosition()))
-            {
-                return true;
-            }
-            else
-            // ...else use the default method.
-                return wxSimpleHelpProvider::ShowHelp(window);
-        }
-        else
-            return wxSimpleHelpProvider::ShowHelp(window);
-
+        // otherwise show the text directly
+        if ( m_helpController->DisplayTextPopup(text, wxGetMousePosition()) )
+            return true;
     }
 
-    return false;
+    // if there is no help controller or it's not capable of showing the help,
+    // fallback to the default method
+    return wxSimpleHelpProvider::ShowHelp(window);
 }
 
 // Convenience function for turning context id into wxString

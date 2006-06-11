@@ -1016,6 +1016,23 @@ handle, such as {\bf HWND} for Windows, {\bf Widget} for Motif, {\bf GtkWidget} 
 \perlnote{This method will return an integer in wxPerl.}
 
 
+\membersection{wxWindow::GetHelpTextAtPoint}\label{wxwindowgethelptextatpoint}
+
+\constfunc{virtual wxString}{GetHelpTextAtPoint}{\param{const wxPoint &}{point}, \param{wxHelpEvent::Origin }{origin}}
+
+Gets the help text to be used as context-sensitive help for this window. This
+method should be overridden if the help message depends on the position inside
+the window, otherwise \helpref{GetHelpText}{wxwindowgethelptext} can be used.
+
+\wxheading{Parameters}
+
+\docparam{point}{Coordinates of the mouse at the moment of help event emission.}
+
+\docparam{origin}{Help event origin, see also \helpref{wxHelpEvent::Origin}{wxhelpeventorigin}.}
+
+\newsince{2.7.0}
+
+
 \membersection{wxWindow::GetHelpText}\label{wxwindowgethelptext}
 
 \constfunc{virtual wxString}{GetHelpText}{\void}
@@ -1027,7 +1044,7 @@ and not in the window object itself.
 
 \wxheading{See also}
 
-\helpref{SetHelpText}{wxwindowsethelptext}, \helpref{wxHelpProvider}{wxhelpprovider}
+\helpref{SetHelpText}{wxwindowsethelptext}, \helpref{GetHelpTextAtPoint}{wxwindowgethelptextatpoint}, \helpref{wxHelpProvider}{wxhelpprovider}
 
 
 \membersection{wxWindow::GetId}\label{wxwindowgetid}

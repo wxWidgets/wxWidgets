@@ -1469,7 +1469,10 @@ void wxWindowBase::SetHelpTextForId(const wxString& text)
 }
 
 // get the help string associated with this window (may be empty)
-wxString wxWindowBase::GetHelpText() const
+// default implementation forwards calls to the help provider
+wxString
+wxWindowBase::GetHelpTextAtPoint(const wxPoint & WXUNUSED(pt),
+                                 wxHelpEvent::Origin WXUNUSED(origin)) const
 {
     wxString text;
     wxHelpProvider *helpProvider = wxHelpProvider::Get();
@@ -1487,7 +1490,7 @@ void wxWindowBase::OnHelp(wxHelpEvent& event)
     wxHelpProvider *helpProvider = wxHelpProvider::Get();
     if ( helpProvider )
     {
-        if ( helpProvider->ShowHelp(this) )
+        if ( helpProvider->ShowHelpAtPoint(this, event.GetPosition(), event.GetOrigin()) )
         {
             // skip the event.Skip() below
             return;
@@ -2801,7 +2804,7 @@ wxAccStatus wxWindowAccessible::GetDescription(int WXUNUSED(childId), wxString* 
     if (!GetWindow())
         return wxACC_FAIL;
 
-    wxString ht(GetWindow()->GetHelpText());
+    wxString ht(GetWindow()->GetHelpTextAtPoint(wxDefaultPosition, wxHelpEvent::Origin_Keyboard));
     if (!ht.empty())
     {
         *description = ht;
@@ -2817,7 +2820,7 @@ wxAccStatus wxWindowAccessible::GetHelpText(int WXUNUSED(childId), wxString* hel
     if (!GetWindow())
         return wxACC_FAIL;
 
-    wxString ht(GetWindow()->GetHelpText());
+    wxString ht(GetWindow()->GetHelpTextAtPoint(wxDefaultPosition, wxHelpEvent::Origin_Keyboard));
     if (!ht.empty())
     {
         *helpText = ht;

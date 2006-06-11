@@ -927,9 +927,19 @@ public:
         // associate this help text with all windows with the same id as this
         // one
     void SetHelpTextForId(const wxString& text);
-        // get the help string associated with this window (may be empty)
-    wxString GetHelpText() const;
-#else
+        // get the help string associated with the given position in this window
+        //
+        // notice that pt may be invalid if event origin is keyboard or unknown
+        // and this method should return the global window help text then
+    virtual wxString GetHelpTextAtPoint(const wxPoint& pt,
+                                        wxHelpEvent::Origin origin) const;
+        // returns the position-independent help text
+    wxString GetHelpText() const
+    {
+        return GetHelpTextAtPoint(wxDefaultPosition, wxHelpEvent::Origin_Unknown);
+    }
+
+#else // !wxUSE_HELP
     // silently ignore SetHelpText() calls
     void SetHelpText(const wxString& WXUNUSED(text)) { }
     void SetHelpTextForId(const wxString& WXUNUSED(text)) { }

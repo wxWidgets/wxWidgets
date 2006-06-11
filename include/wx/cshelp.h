@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CSHELPH__
-#define _WX_CSHELPH__
+#ifndef _WX_CSHELP_H_
+#define _WX_CSHELP_H_
 
 #include "wx/defs.h"
 
@@ -22,6 +22,8 @@
 #if wxUSE_BMPBUTTON
 #include "wx/bmpbuttn.h"
 #endif
+
+#include "wx/event.h"
 
 // ----------------------------------------------------------------------------
 // classes used to implement context help UI
@@ -91,6 +93,19 @@ private:
 //
 // The current help provider must be explicitly set by the application using
 // wxHelpProvider::Set().
+//
+// Special note about ShowHelpAtPoint() and ShowHelp(): we want to be able to
+// override ShowHelpAtPoint() when we need to use different help messages for
+// different parts of the window, but it should also be possible to override
+// just ShowHelp() both for backwards compatibility and just because most
+// often the help does not, in fact, depend on the position and so
+// implementing just ShowHelp() is simpler and more natural, so by default
+// ShowHelpAtPoint() forwards to ShowHelp(). But this means that
+// wxSimpleHelpProvider has to override ShowHelp() and not ShowHelpAtPoint()
+// for backwards compatibility as otherwise the existing code deriving from it
+// and overriding ShowHelp() but calling the base class version wouldn't work
+// any more, which forces us to use a rather ugly hack and pass the extra
+// parameters of ShowHelpAtPoint() to ShowHelp() via member variables.
 class WXDLLEXPORT wxHelpProvider
 {
 public:
@@ -112,10 +127,23 @@ public:
     // the window) for this window
     virtual wxString GetHelp(const wxWindowBase *window) = 0;
 
-    // do show help for the given window (uses GetHelp() internally if
-    // applicable), return true if it was done or false if no help available
-    // for this window
-    virtual bool ShowHelp(wxWindowBase *window) = 0;
+    // do show help for the given window (uses window->GetHelpAtPoint()
+    // internally if applicable), return true if it was done or false
+    // if no help available for this window
+    virtual bool ShowHelpAtPoint(wxWindowBase *window,
+                                 const wxPoint& pt,
+                                 wxHelpEvent::Origin origin)
+    {
+        wxCHECK_MSG( window, false, _T("window must not be NULL") );
+
+        m_helptextAtPoint = pt;
+        m_helptextOrigin = origin;
+
+        return ShowHelp(window);
+    }
+
+    // show help for the given window, see ShowHelpAtPoint() above
+    virtual bool ShowHelp(wxWindowBase * WXUNUSED(window)) { return false; }
 
     // associate the text with the given window or id: although all help
     // providers have these functions to allow making wxWindow::SetHelpText()
@@ -133,6 +161,23 @@ public:
     // virtual dtor for any base class
     virtual ~wxHelpProvider();
 
+protected:
+    wxHelpProvider()
+        : m_helptextAtPoint(wxDefaultPosition),
+          m_helptextOrigin(wxHelpEvent::Origin_Unknown)
+    {
+    }
+
+    // helper method used by ShowHelp(): returns the help string to use by
+    // using m_helptextAtPoint/m_helptextOrigin if they're set or just GetHelp
+    // otherwise
+    wxString GetHelpTextMaybeAtPoint(wxWindowBase *window);
+
+
+    // parameters of the last ShowHelpAtPoint() call, used by ShowHelp()
+    wxPoint m_helptextAtPoint;
+    wxHelpEvent::Origin m_helptextOrigin;
+
 private:
     static wxHelpProvider *ms_helpProvider;
 };
@@ -148,7 +193,10 @@ class WXDLLEXPORT wxSimpleHelpProvider : public wxHelpProvider
 public:
     // implement wxHelpProvider methods
     virtual wxString GetHelp(const wxWindowBase *window);
+
+    // override ShowHelp() and not ShowHelpAtPoint() as explained above
     virtual bool ShowHelp(wxWindowBase *window);
+
     virtual void AddHelp(wxWindowBase *window, const wxString& text);
     virtual void AddHelp(wxWindowID id, const wxString& text);
     virtual void RemoveHelp(wxWindowBase* window);
@@ -172,6 +220,9 @@ public:
     wxHelpControllerHelpProvider(wxHelpControllerBase* hc = (wxHelpControllerBase*) NULL);
 
     // implement wxHelpProvider methods
+
+    // again (see above): this should be ShowHelpAtPoint() but we need to
+    // override ShowHelp() to avoid breaking existing code
     virtual bool ShowHelp(wxWindowBase *window);
 
     // Other accessors
@@ -189,5 +240,5 @@ WXDLLEXPORT wxString wxContextId(int id);
 
 #endif // wxUSE_HELP
 
-#endif // _WX_CSHELPH__
+#endif // _WX_CSHELP_H_
 
