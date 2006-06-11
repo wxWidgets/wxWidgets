@@ -3000,50 +3000,48 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 #if defined(WM_HELP)
         case WM_HELP:
             {
-                // HELPINFO doesn't seem to be supported on WinCE.
+                // by default, WM_HELP is propagated by DefWindowProc() upwards
+                // to the window parent but as we do it ourselves already
+                // (wxHelpEvent is derived from wxCommandEvent), we don't want
+                // to get the other events if we process this message at all
+                processed = true;
+
+                // WM_HELP doesn't use lParam under CE
 #ifndef __WXWINCE__
                 HELPINFO* info = (HELPINFO*) lParam;
-                // Don't yet process menu help events, just windows
-                if (info->iContextType == HELPINFO_WINDOW)
+                if ( info->iContextType == HELPINFO_WINDOW )
                 {
-#endif
-                    wxWindowMSW* subjectOfHelp = this;
-                    bool eventProcessed = false;
-                    while (subjectOfHelp && !eventProcessed)
-                    {
-                        wxHelpEvent helpEvent(wxEVT_HELP,
-                                              subjectOfHelp->GetId(),
+#endif // !__WXWINCE__
+                    wxHelpEvent helpEvent
+                                (
+                                    wxEVT_HELP,
+                                    GetId(),
 #ifdef __WXWINCE__
-                                              wxPoint(0,0)
+                                    wxGetMousePosition(), // what else?
 #else
-                                              wxPoint(info->MousePos.x, info->MousePos.y)
+                                    wxPoint(info->MousePos.x, info->MousePos.y)
 #endif
-                                              );
+                                );
 
-                        helpEvent.SetEventObject(this);
-                        eventProcessed =
-                            GetEventHandler()->ProcessEvent(helpEvent);
-
-                        // Go up the window hierarchy until the event is
-                        // handled (or not)
-                        subjectOfHelp = subjectOfHelp->GetParent();
-                    }
-
-                    processed = eventProcessed;
+                    helpEvent.SetEventObject(this);
+                    GetEventHandler()->ProcessEvent(helpEvent);
 #ifndef __WXWINCE__
                 }
-                else if (info->iContextType == HELPINFO_MENUITEM)
+                else if ( info->iContextType == HELPINFO_MENUITEM )
                 {
                     wxHelpEvent helpEvent(wxEVT_HELP, info->iCtrlId);
                     helpEvent.SetEventObject(this);
-                    processed = GetEventHandler()->ProcessEvent(helpEvent);
+                    GetEventHandler()->ProcessEvent(helpEvent);
 
                 }
-                //else: processed is already false
-#endif
+                else // unknown help event?
+                {
+                    processed = false;
+                }
+#endif // !__WXWINCE__
             }
             break;
-#endif
+#endif // WM_HELP
 
 #if !defined(__WXWINCE__)
         case WM_CONTEXTMENU:
