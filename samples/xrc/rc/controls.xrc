@@ -5,6 +5,7 @@
 <object class="wxDialog" name="controls_dialog">
     <title>Controls Example</title>
     <style>wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER</style>
+    <exstyle>wxDIALOG_EX_CONTEXTHELP</exstyle>
     <centered>1</centered>
     <object class="wxFlexGridSizer">
         <cols>1</cols>
@@ -633,10 +634,10 @@
                                     <dimension>1</dimension>
                                     <selection>0</selection>
                                     <content>
-                                        <item tooltip="Powerful radio station">Power 108</item>
+                                        <item tooltip="Powerful radio station" helptext="This station is for amateurs of hard rock and heavy metal">Power 108</item>
                                         <item tooltip="">WMMS 100.7</item>
                                         <item tooltip="E=mc^2">Energy 98.3</item>
-                                        <item>CHUM FM</item>
+                                        <item helptext="Favourite chukcha's radio">CHUM FM</item>
                                         <item>92FM</item>
                                     </content>
                                 </object>
