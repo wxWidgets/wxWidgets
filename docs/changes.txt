@@ -49,6 +49,7 @@ All:
 - Added wxStandardPaths::GetDocumentsDir() (Ken Thomases)
 - Added wxStringTokenizer::GetLastDelimiter(); improved documentation.
 - Fixed wxTextFile in Unicode build
+- Added possibility to specify dependencies for a wxModule
 - Speed improvements to wxRegEx when matching is done in a loop such as
   during a search and replace.
 - Fix regerror and regfree name conficts when built-in regex and system regex

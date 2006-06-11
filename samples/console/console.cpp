@@ -65,6 +65,7 @@
     #define TEST_LOCALE
     #define TEST_LOG
     #define TEST_MIME
+    #define TEST_MODULE
     #define TEST_PATHLIST
     #define TEST_ODBC
     #define TEST_PRINTF
@@ -85,7 +86,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-    #define TEST_STDPATHS
+    #define TEST_MODULE
 #endif
 
 // some tests are interactive, define this to run them
@@ -1380,6 +1381,80 @@ static void TestMimeAssociate()
 }
 
 #endif // TEST_MIME
+
+// ----------------------------------------------------------------------------
+// module dependencies feature
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_MODULE
+
+#include "wx/module.h"
+
+class wxTestModule : public wxModule
+{
+protected:
+    virtual bool OnInit() { wxPrintf(_T("Load module: %s\n"), GetClassInfo()->GetClassName()); return true; }
+    virtual void OnExit() { wxPrintf(_T("Unload module: %s\n"), GetClassInfo()->GetClassName()); }
+};
+
+class wxTestModuleA : public wxTestModule
+{
+public:
+    wxTestModuleA();
+private:
+    DECLARE_DYNAMIC_CLASS(wxTestModuleA)
+};
+
+class wxTestModuleB : public wxTestModule
+{
+public:
+    wxTestModuleB();
+private:
+    DECLARE_DYNAMIC_CLASS(wxTestModuleB)
+};
+
+class wxTestModuleC : public wxTestModule
+{
+public:
+    wxTestModuleC();
+private:
+    DECLARE_DYNAMIC_CLASS(wxTestModuleC)
+};
+
+class wxTestModuleD : public wxTestModule
+{
+public:
+    wxTestModuleD();
+private:
+    DECLARE_DYNAMIC_CLASS(wxTestModuleD)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxTestModuleC, wxModule)
+wxTestModuleC::wxTestModuleC()
+{
+    AddDependency(CLASSINFO(wxTestModuleD));
+}
+
+IMPLEMENT_DYNAMIC_CLASS(wxTestModuleA, wxModule)
+wxTestModuleA::wxTestModuleA()
+{
+    AddDependency(CLASSINFO(wxTestModuleB));
+    AddDependency(CLASSINFO(wxTestModuleD));
+}
+
+IMPLEMENT_DYNAMIC_CLASS(wxTestModuleD, wxModule)
+wxTestModuleD::wxTestModuleD()
+{
+}
+
+IMPLEMENT_DYNAMIC_CLASS(wxTestModuleB, wxModule)
+wxTestModuleB::wxTestModuleB()
+{
+    AddDependency(CLASSINFO(wxTestModuleD));
+    AddDependency(CLASSINFO(wxTestModuleC));
+}
+
+#endif // TEST_MODULE
 
 // ----------------------------------------------------------------------------
 // misc information functions
