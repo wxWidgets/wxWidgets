@@ -176,7 +176,7 @@ dospinmsw()
     
     cd $MANIFESTDIR
     # add all the files into a megafile
-    cat generic.rsp makefile.rsp msw.rsp ogl.rsp mmedia.rsp stc.rsp tex2rtf.rsp jpeg.rsp tiff.rsp xml.rsp contrib.rsp deprecated.rsp utils.rsp utilmake.rsp univ.rsp wince.rsp palmos.rsp > /tmp/mswfiles.in
+    cat generic.rsp makefile.rsp msw.rsp ogl.rsp mmedia.rsp stc.rsp tex2rtf.rsp jpeg.rsp tiff.rsp xml.rsp contrib.rsp deprecated.rsp utils.rsp utilmake.rsp univ.rsp vc.rsp wince.rsp palmos.rsp > /tmp/mswfiles.in
     
     cd $APPDIR
 
@@ -311,18 +311,6 @@ dospinmisc()
     zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-Univ.zip < /tmp/univfiles
     rearchive wxWidgets-$VERSION-Univ.zip wxWidgets-$VERSION $DESTDIR
 
-    # VC++ project files
-    echo Creating $DESTDIR/wxWidgets-$VERSION-VC.zip
-    expandlines $MANIFESTDIR/vc.rsp /tmp/vcfiles
-    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-VC.zip < /tmp/vcfiles
-    rearchive wxWidgets-$VERSION-VC.zip wxWidgets-$VERSION $DESTDIR
-
-    # eVC++ project files
-    echo Creating $DESTDIR/wxWidgets-$VERSION-eVC.zip
-    expandlines $MANIFESTDIR/wince.rsp /tmp/wincefiles
-    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-eVC.zip < /tmp/wincefiles
-    rearchive wxWidgets-$VERSION-eVC.zip wxWidgets-$VERSION $DESTDIR
-
     # DMC project files
     echo Creating $DESTDIR/wxWidgets-$VERSION-DMC.zip
     expandlines $MANIFESTDIR/dmc.rsp /tmp/dmcfiles
@@ -335,11 +323,6 @@ dospinmisc()
     zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-BC.zip < /tmp/bcfiles
     rearchive wxWidgets-$VERSION-BC.zip wxWidgets-$VERSION $DESTDIR
 
-    # CodeWarrior project files
-    echo Creating $DESTDIR/wxWidgets-$VERSION-CW.zip
-    expandlines $MANIFESTDIR/cw.rsp /tmp/cwfiles
-    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-CW.zip < /tmp/cwfiles
-    rearchive wxWidgets-$VERSION-CW.zip wxWidgets-$VERSION $DESTDIR
 }
 
 dospininstaller()
@@ -349,7 +332,7 @@ dospininstaller()
     # Put all archives for transit to Linux in a zip file
     echo Creating $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip
     rm -f $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip
-    zip $ZIPFLAGS $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip wxWidgets-$VERSION-LinuxDocs.zip wxWidgets-$VERSION-VC.zip wxWidgets-$VERSION-DMC.zip wxWidgets-$VERSION-eVC.zip wxWidgets-$VERSION-CW-Mac.zip
+    zip $ZIPFLAGS $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip wxWidgets-$VERSION-LinuxDocs.zip wxWidgets-$VERSION-DMC.zip
 
     rm -f -r wxWidgets-$VERSION
 
@@ -358,10 +341,8 @@ dospininstaller()
     mkdir -p wxWidgets-$VERSION
 
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-win.zip -d wxWidgets-$VERSION
-    unzip $ZIPFLAGS -o wxWidgets-$VERSION-VC.zip -d wxWidgets-$VERSION
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-DMC.zip -d wxWidgets-$VERSION
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-BC.zip -d wxWidgets-$VERSION
-    unzip $ZIPFLAGS -o wxWidgets-$VERSION-CW.zip -d wxWidgets-$VERSION
 
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-HTMLHelp.zip
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-ExtraDoc.zip
@@ -493,9 +474,7 @@ dospininstaller()
     rm -f wxWidgets-$VERSION-win.zip
     rm -f wxWidgets-$VERSION-ExtraDoc.zip
     rm -f wxWidgets-$VERSION-DMC.zip
-    rm -f wxWidgets-$VERSION-eVC.zip
     rm -f wxWidgets-$VERSION-Univ.zip
-    rm -f wxWidgets-$VERSION-VC.zip
     rm -f wxWidgets-$VERSION-DocSource.zip
     rm -f wxWidgets-$VERSION-LinuxDocs.zip
 
