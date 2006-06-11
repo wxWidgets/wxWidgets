@@ -677,14 +677,12 @@ BEGIN_EVENT_TABLE(MyModalDialog, wxDialog)
 END_EVENT_TABLE()
 
 MyModalDialog::MyModalDialog(wxWindow *parent)
-             : wxDialog()
+             : wxDialog(parent, wxID_ANY, wxString(_T("Modal dialog")))
 {
-    // Add the context-sensitive help button on the caption for MSW
-#ifdef __WXMSW__
+    // Add the context-sensitive help button on the caption for the platforms
+    // which support it (currently MSW only)
     SetExtraStyle(wxDIALOG_EX_CONTEXTHELP);
-#endif
 
-    wxDialog::Create(parent, wxID_ANY, wxString(_T("Modal dialog")));
 
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
