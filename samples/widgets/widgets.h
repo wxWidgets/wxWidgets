@@ -12,7 +12,7 @@
 #ifndef _WX_SAMPLE_WIDGETS_H_
 #define _WX_SAMPLE_WIDGETS_H_
 
-#if wxUSE_TREEBOOK && !defined(__WXHANDHELD__)
+#if wxUSE_TREEBOOK && !defined(__WXHANDHELD__) && !defined(__WXPM__)
     #include "wx/treebook.h"
     #define USE_TREEBOOK 1
     #define WidgetsBookCtrl wxTreebook
