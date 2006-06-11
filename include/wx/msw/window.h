@@ -84,7 +84,8 @@ public:
     virtual void Freeze();
     virtual void Thaw();
 
-    virtual void SetWindowStyleFlag( long style );
+    virtual void SetWindowStyleFlag(long style);
+    virtual void SetExtraStyle(long exStyle);
     virtual bool SetCursor( const wxCursor &cursor );
     virtual bool SetFont( const wxFont &font );
 
@@ -205,6 +206,11 @@ public:
     // (WS_EX_XXX) flags into the provided pointer if not NULL
     WXDWORD MSWGetCreateWindowFlags(WXDWORD *exflags = NULL) const
         { return MSWGetStyle(GetWindowStyle(), exflags); }
+
+    // update the real underlying window style flags to correspond to the
+    // current wxWindow object style (safe to call even if window isn't fully
+    // created yet)
+    void MSWUpdateStyle(long flagsOld, long exflagsOld);
 
     // translate wxWidgets coords into Windows ones suitable to be passed to
     // ::CreateWindow()

@@ -1147,6 +1147,25 @@ void wxWindowMSW::SetWindowStyleFlag(long flags)
     // update the internal variable
     wxWindowBase::SetWindowStyleFlag(flags);
 
+    // and the real window flags
+    MSWUpdateStyle(flagsOld, GetExtraStyle());
+}
+
+void wxWindowMSW::SetExtraStyle(long exflags)
+{
+    long exflagsOld = GetExtraStyle();
+    if ( exflags == exflagsOld )
+        return;
+
+    // update the internal variable
+    wxWindowBase::SetExtraStyle(exflags);
+
+    // and the real window flags
+    MSWUpdateStyle(GetWindowStyleFlag(), exflagsOld);
+}
+
+void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
+{
     // now update the Windows style as well if needed - and if the window had
     // been already created
     if ( !GetHwnd() )
@@ -1155,9 +1174,21 @@ void wxWindowMSW::SetWindowStyleFlag(long flags)
     // we may need to call SetWindowPos() when we change some styles
     bool callSWP = false;
 
-    WXDWORD exstyle, exstyleOld;
-    long style = MSWGetStyle(flags, &exstyle),
-         styleOld = MSWGetStyle(flagsOld, &exstyleOld);
+    WXDWORD exstyle;
+    long style = MSWGetStyle(GetWindowStyleFlag(), &exstyle);
+
+    // this is quite a horrible hack but we need it because MSWGetStyle()
+    // doesn't take exflags as parameter but uses GetExtraStyle() internally
+    // and so we have to modify the window exflags temporarily to get the
+    // correct exstyleOld
+    long exflagsNew = GetExtraStyle();
+    wxWindowBase::SetExtraStyle(exflagsOld);
+
+    WXDWORD exstyleOld;
+    long styleOld = MSWGetStyle(flagsOld, &exstyleOld);
+
+    wxWindowBase::SetExtraStyle(exflagsNew);
+
 
     if ( style != styleOld )
     {
@@ -1171,14 +1202,8 @@ void wxWindowMSW::SetWindowStyleFlag(long flags)
 
         ::SetWindowLong(GetHwnd(), GWL_STYLE, styleReal);
 
-        // If any of the style changes changed any of the frame styles:
-        // MSDN: SetWindowLong:
-        //       Certain window data is cached, so changes you make using
-        //       SetWindowLong will not take effect until you call the
-        //       SetWindowPos function. Specifically, if you change any of
-        //       the frame styles, you must call SetWindowPos with the
-        //       SWP_FRAMECHANGED flag for the cache to be updated properly.
-
+        // we need to call SetWindowPos() if any of the styles affecting the
+        // frame appearance have changed
         callSWP = ((styleOld ^ style ) & (WS_BORDER |
                                       WS_THICKFRAME |
                                       WS_CAPTION |
