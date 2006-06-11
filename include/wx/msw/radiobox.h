@@ -144,6 +144,16 @@ protected:
     virtual void DoSetItemToolTip(unsigned int n, wxToolTip * tooltip);
 #endif
 
+    virtual int GetItemFromPoint(const wxPoint& pt) const;
+
+#if wxUSE_HELP
+    // override virtual function with a platform-independent implementation
+    virtual wxString GetHelpTextAtPoint(const wxPoint & pt, wxHelpEvent::Origin origin) const
+    {
+        return wxRadioBoxBase::DoGetHelpTextAtPoint( this, pt, origin );
+    }
+#endif // wxUSE_HELP
+
 #ifndef __WXWINCE__
     virtual WXHRGN MSWGetRegionWithoutChildren();
 #endif // __WXWINCE__

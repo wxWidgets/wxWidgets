@@ -423,7 +423,8 @@ wxRadioBox
 This control may have "dimension" (major dimension) and (initial) "selection"
 Integer subelements and a composite "content" element similar to wxCheckList.
 The only difference is that the "item" subelements can have an optional
-"tooltip=I18nString" attribute to specify the per-item tooltip.
+"tooltip=I18nString" and "helptext=I18nString" attributes to specify
+the per-item tooltip and helptext.
 
 
 wxScrolledWindow

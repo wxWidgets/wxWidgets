@@ -656,6 +656,23 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     }
 }
 
+int wxRadioBox::GetItemFromPoint(const wxPoint& pt) const
+{
+    const unsigned int count = GetCount();
+    for ( unsigned int i = 0; i < count; i++ )
+    {
+        RECT rect = wxGetWindowRect((*m_radioButtons)[i]);
+
+        if ( rect.left <= pt.x && pt.x < rect.right &&
+                rect.top  <= pt.y && pt.y < rect.bottom )
+        {
+            return i;
+        }
+    }
+
+    return wxNOT_FOUND;
+}
+
 // ----------------------------------------------------------------------------
 // radio box drawing
 // ----------------------------------------------------------------------------

@@ -80,37 +80,53 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
 
         SetupWindow(control);
 
-#if wxUSE_TOOLTIPS
         const unsigned count = labels.size();
         for( unsigned i = 0; i < count; i++ )
         {
+#if wxUSE_TOOLTIPS
             if ( !tooltips[i].empty() )
                 control->SetItemToolTip(i, tooltips[i]);
-        }
 #endif // wxUSE_TOOLTIPS
+#if wxUSE_HELP
+            if ( helptextSpecified[i] )
+                control->SetItemHelpText(i, helptexts[i]);
+#endif // wxUSE_HELP
+        }
 
         labels.clear();    // dump the strings
+
         tooltips.clear();    // dump the tooltips
+
+        helptexts.clear();   // dump the helptexts
+        helptextSpecified.clear();
 
         return control;
     }
     else // inside the radiobox element
     {
-        // we handle <item tooltip="...">Label</item> constructs here
+        // we handle handle <item tooltip="..." helptext="...">Label</item> constructs here
 
         wxString str = GetNodeContent(m_node);
+
         wxString tooltip;
         m_node->GetPropVal(wxT("tooltip"), &tooltip);
+
+        wxString helptext;
+        bool hasHelptext = m_node->GetPropVal(wxT("helptext"), &helptext);
 
         if (m_resource->GetFlags() & wxXRC_USE_LOCALE)
         {
             str = wxGetTranslation(str);
             if ( !tooltip.empty() )
                 tooltip = wxGetTranslation(tooltip);
+            if ( hasHelptext )
+                helptext = wxGetTranslation(helptext);
         }
 
         labels.push_back(str);
         tooltips.push_back(tooltip);
+        helptexts.push_back(helptext);
+        helptextSpecified.push_back(hasHelptext);
 
         return NULL;
     }

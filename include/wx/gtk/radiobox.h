@@ -12,6 +12,13 @@
 
 #include "wx/bitmap.h"
 
+class WXDLLIMPEXP_CORE wxGTKRadioButtonInfo;
+
+#include "wx/list.h"
+
+WX_DECLARE_LIST(wxGTKRadioButtonInfo, wxRadioBoxButtonsInfoList);
+
+
 //-----------------------------------------------------------------------------
 // wxRadioBox
 //-----------------------------------------------------------------------------
@@ -107,6 +114,17 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
+    virtual int GetItemFromPoint( const wxPoint& pt ) const;
+#if wxUSE_HELP
+    // override virtual wxWindow::GetHelpTextAtPoint to use common platform independent
+    // wxRadioBoxBase::DoGetHelpTextAtPoint from the platform independent
+    // base class-interface wxRadioBoxBase.
+    virtual wxString GetHelpTextAtPoint(const wxPoint & pt, wxHelpEvent::Origin origin) const
+    {
+        return wxRadioBoxBase::DoGetHelpTextAtPoint( this, pt, origin );
+    }
+#endif // wxUSE_HELP
+
     // implementation
     // --------------
 
@@ -120,9 +138,9 @@ public:
 
     virtual void OnInternalIdle();
 
-    bool             m_hasFocus,
-                     m_lostFocus;
-    wxList           m_buttons;
+    bool                        m_hasFocus,
+                                m_lostFocus;
+    wxRadioBoxButtonsInfoList   m_buttonsInfo;
 
 protected:
 #if wxUSE_TOOLTIPS

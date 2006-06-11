@@ -34,6 +34,10 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
+#if wxUSE_HELP
+    #include "wx/cshelp.h"
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -227,6 +231,51 @@ wxRadioBoxBase::~wxRadioBoxBase()
     }
 #endif // wxUSE_TOOLTIPS
 }
+
+#if wxUSE_HELP
+
+// set helptext for a particular item
+void wxRadioBoxBase::SetItemHelpText(unsigned int n, const wxString& helpText)
+{
+    wxCHECK_RET( n < GetCount(), _T("Invalid item index") );
+
+    if ( m_itemsHelpTexts.empty() )
+    {
+        // once-only initialization of the array: reserve space for all items
+        m_itemsHelpTexts.Add(wxEmptyString, GetCount());
+    }
+
+    m_itemsHelpTexts[n] = helpText;
+}
+
+// retrieve helptext for a particular item
+wxString wxRadioBoxBase::GetItemHelpText( unsigned int n ) const
+{
+    wxCHECK_MSG( n < GetCount(), wxEmptyString, _T("Invalid item index") );
+
+    return m_itemsHelpTexts.empty() ? wxString() : m_itemsHelpTexts[n];
+}
+
+// return help text for the item for which wxEVT_HELP was generated.
+wxString wxRadioBoxBase::DoGetHelpTextAtPoint(const wxWindow *derived,
+                                              const wxPoint& pt,
+                                              wxHelpEvent::Origin origin) const
+{
+    const int item = origin == wxHelpEvent::Origin_HelpButton
+                        ? GetItemFromPoint(pt)
+                        : GetSelection();
+
+    if ( item != wxNOT_FOUND )
+    {
+        wxString text = GetItemHelpText(wx_static_cast(unsigned int, item));
+        if( !text.empty() )
+            return text;
+    }
+
+    return derived->wxWindowBase::GetHelpTextAtPoint(pt, origin);
+}
+
+#endif // wxUSE_HELP
 
 #if WXWIN_COMPATIBILITY_2_4
 

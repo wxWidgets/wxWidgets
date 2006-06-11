@@ -28,8 +28,12 @@ private:
     // the items labels
     wxArrayString labels;
 
-    // the items tooltips (some or all elements may be empty)
+    // the items tooltips
     wxArrayString tooltips;
+
+	// the item help text
+    wxArrayString helptexts;
+    wxArrayInt    helptextSpecified;
 };
 
 #endif // wxUSE_RADIOBOX

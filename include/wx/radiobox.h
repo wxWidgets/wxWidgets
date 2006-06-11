@@ -61,6 +61,29 @@ public:
         { return m_itemsTooltips ? (*m_itemsTooltips)[item] : NULL; }
 #endif // wxUSE_TOOLTIPS
 
+#if wxUSE_HELP
+    // set helptext for a particular item, pass an empty string to erase it
+    void SetItemHelpText(unsigned int n, const wxString& helpText);
+
+    // retrieve helptext for a particular item, empty string means no help text
+    wxString GetItemHelpText(unsigned int n) const;
+#else // wxUSE_HELP
+    // just silently ignore the help text, it's better than requiring using
+    // conditional compilation in all code using this function
+    void SetItemHelpText(unsigned int WXUNUSED(n),
+                         const wxString& WXUNUSED(helpText))
+    {
+    }
+#endif // wxUSE_HELP
+
+    // returns the radio item at the given position or wxNOT_FOUND if none
+    // (currently implemented only under MSW and GTK)
+    virtual int GetItemFromPoint(const wxPoint& WXUNUSED(pt)) const
+    {
+        return wxNOT_FOUND;
+    }
+
+
     // deprecated functions
     // --------------------
 
@@ -101,6 +124,14 @@ protected:
     bool HasItemToolTips() const { return m_itemsTooltips != NULL; }
 #endif // wxUSE_TOOLTIPS
 
+#if wxUSE_HELP
+    // Retrieve help text for an item: this is a helper for the implementation
+    // of wxWindow::GetHelpTextAtPoint() in the real radiobox class
+    wxString DoGetHelpTextAtPoint(const wxWindow *derived,
+                                  const wxPoint& pt,
+                                  wxHelpEvent::Origin origin) const;
+#endif // wxUSE_HELP
+
 private:
     // the number of elements in major dimension (i.e. number of columns if
     // wxRA_SPECIFY_COLS or the number of rows if wxRA_SPECIFY_ROWS) and also
@@ -115,6 +146,11 @@ private:
     // this array is initially NULL and initialized on first use
     wxToolTipArray *m_itemsTooltips;
 #endif
+
+#if wxUSE_HELP
+    // help text associated with a particular item or empty string if none
+    wxArrayString m_itemsHelpTexts;
+#endif // wxUSE_HELP
 };
 
 #if defined(__WXUNIVERSAL__)
@@ -139,5 +175,4 @@ private:
 
 #endif // wxUSE_RADIOBOX
 
-#endif
-    // _WX_RADIOBOX_H_BASE_
+#endif // _WX_RADIOBOX_H_BASE_
