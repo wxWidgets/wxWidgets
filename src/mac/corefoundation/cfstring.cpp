@@ -666,6 +666,9 @@ void wxMacCFStringHolder::Assign( const wxString &st , wxFontEncoding encoding )
 
 wxString wxMacCFStringHolder::AsString(wxFontEncoding encoding)
 {
+    if ( m_cfs == NULL )
+        return wxEmptyString ;
+
     Size cflen = CFStringGetLength( m_cfs )  ;
     size_t noChars ;
     wxChar* buf = NULL ;
