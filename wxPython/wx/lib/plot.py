@@ -1246,13 +1246,13 @@ class PlotCanvas(wx.Panel):
         # The Buffer init is done here, to make sure the buffer is always
         # the same size as the Window
         Size  = self.canvas.GetClientSize()
-        if Size.width <= 0 or Size.height <= 0:
-            return
+        Size.width = max(1, Size.width)
+        Size.height = max(1, Size.height)
         
         # Make new offscreen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image to
         # a file, or whatever.
-        self._Buffer = wx.EmptyBitmap(Size[0],Size[1])
+        self._Buffer = wx.EmptyBitmap(Size.width, Size.height)
         self._setSize()
 
         self.last_PointLabel = None        #reset pointLabel
