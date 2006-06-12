@@ -223,22 +223,13 @@ bool wxContextHelpEvtHandler::ProcessEvent(wxEvent& event)
 // Dispatch the help event to the relevant window
 bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
 {
-    wxWindow* subjectOfHelp = win;
-    bool eventProcessed = false;
-    while (subjectOfHelp && !eventProcessed)
-    {
-        wxHelpEvent helpEvent(wxEVT_HELP, subjectOfHelp->GetId(), pt,
-                              wxHelpEvent::Origin_HelpButton);
-        helpEvent.SetEventObject(subjectOfHelp);
+    wxCHECK_MSG( win, false, _T("win parameter can't be NULL") );
 
-        eventProcessed = win->GetEventHandler()->ProcessEvent(helpEvent);
+    wxHelpEvent helpEvent(wxEVT_HELP, win->GetId(), pt,
+                          wxHelpEvent::Origin_HelpButton);
+    helpEvent.SetEventObject(win);
 
-        // Go up the window hierarchy until the event is handled (or not).
-        // I.e. keep submitting ancestor windows until one is recognised
-        // by the app code that processes the ids and displays help.
-        subjectOfHelp = subjectOfHelp->GetParent();
-    }
-    return eventProcessed;
+    return win->GetEventHandler()->ProcessEvent(helpEvent);
 }
 
 // ----------------------------------------------------------------------------
