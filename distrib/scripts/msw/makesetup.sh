@@ -360,6 +360,7 @@ dospinport(){
     mkdir -p /tmp/wx$port/wxWidgets-$VERSION
     
     for line in `cat /tmp/$port_filelist` ; do
+        mkdir -p `dirname $line`
         cp -r $line /tmp/wx$port/wxWidgets-$VERSION
     done
     
