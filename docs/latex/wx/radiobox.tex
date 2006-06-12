@@ -193,6 +193,21 @@ Finds a button matching the given string, returning the position if found, or
 Returns the number of columns in the radiobox.
 
 
+\membersection{wxRadioBox::GetItemHelpText}\label{wxradioboxgetitemhelptext}
+
+\constfunc{wxString}{GetItemHelpText}{\param{unsigned int}{ item}}
+
+Returns the helptext associated with the specified \arg{item} if any or {\tt wxEmptyString}.
+
+\wxheading{Parameters}
+
+\docparam{item}{The zero-based item index.}
+
+\wxheading{See also}
+
+\helpref{SetItemHelpText}{wxradioboxsetitemhelptext}
+
+
 \membersection{wxRadioBox::GetItemToolTip}\label{wxradioboxgetitemtooltip}
 
 \constfunc{wxToolTip *}{GetItemToolTip}{\param{unsigned int}{ item}}
@@ -203,6 +218,15 @@ Returns the tooltip associated with the specified \arg{item} if any or \NULL.
 
 \helpref{SetItemToolTip}{wxradioboxsetitemtooltip},\\
 \helpref{wxWindow::GetToolTip}{wxwindowgettooltip}
+
+
+\membersection{wxRadioBox::GetItemFromPoint}\label{wxradioboxgetitemfrompoint}
+
+\constfunc{int}{GetItemFromPoint}{\param{const wxPoint&}{ pt}}
+
+Returns a radio box item under the point, a zero-based item index, or {\tt wxNOT\_FOUND} if no item is under the point.
+
+\docparam{pt}{Point in client coordinates.}
 
 
 \membersection{wxRadioBox::GetLabel}\label{wxradioboxgetlabel}
@@ -291,6 +315,23 @@ and always returns \true in the other ports.
 \wxheading{Parameters}
 
 \docparam{n}{The zero-based button position.}
+
+
+\membersection{wxRadioBox::SetItemHelpText}\label{wxradioboxsetitemhelptext}
+
+\func{void}{SetItemHelpText}{\param{unsigned int}{ item}, \param{const wxString\&}{ helptext}}
+
+Sets the helptext for an item. Empty string erases any existing helptext.
+
+\wxheading{Parameters}
+
+\docparam{item}{The zero-based item index.}
+
+\docparam{helptext}{The help text to set for the item.}
+
+\wxheading{See also}
+
+\helpref{GetItemHelpText}{wxradioboxgetitemhelptext}
 
 
 \membersection{wxRadioBox::SetLabel}\label{wxradioboxsetlabel}
