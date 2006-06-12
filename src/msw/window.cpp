@@ -6243,18 +6243,10 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
     POINT pt2;
     pt2.x = pt.x;
     pt2.y = pt.y;
-    HWND hWndHit = ::WindowFromPoint(pt2);
 
-    wxWindow* win = wxFindWinFromHandle((WXHWND) hWndHit) ;
-    HWND hWnd = hWndHit;
+    HWND hWnd = ::WindowFromPoint(pt2);
 
-    // Try to find a window with a wxWindow associated with it
-    while (!win && (hWnd != 0))
-    {
-        hWnd = ::GetParent(hWnd);
-        win = wxFindWinFromHandle((WXHWND) hWnd) ;
-    }
-    return win;
+    return wxGetWindowFromHWND((WXHWND)hWnd);
 }
 
 // Get the current mouse position.
