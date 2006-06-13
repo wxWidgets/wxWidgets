@@ -1628,7 +1628,7 @@ extern wxPyApp *wxPythonApp;
     bool CLASS::CBNAME() const {                                                \
         bool rval=false;                                                        \
         bool found;                                                             \
-        wxPyBlock_t blocked = wxPyBeginBlockThreads();                                 \
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();                          \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));         \
         wxPyEndBlockThreads(blocked);                                           \
@@ -1647,7 +1647,7 @@ extern wxPyApp *wxPythonApp;
     wxDragResult CLASS::CBNAME(wxCoord a, wxCoord b, wxDragResult c) {          \
         int rval=0;                                                             \
         bool found;                                                             \
-        wxPyBlock_t blocked = wxPyBeginBlockThreads();                                 \
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();                          \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iii)", a,b,c));\
         wxPyEndBlockThreads(blocked);                                           \
@@ -1663,7 +1663,7 @@ extern wxPyApp *wxPythonApp;
 
 #define IMP_PYCALLBACK_FSF_FSSTRING_pure(CLASS, PCLASS, CBNAME)                 \
     wxFSFile* CLASS::CBNAME(wxFileSystem& a,const wxString& b) {                \
-        wxPyBlock_t blocked = wxPyBeginBlockThreads();                                 \
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();                          \
         wxFSFile* rval=0;                                                       \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
             PyObject* ro;                                                       \
@@ -1673,6 +1673,8 @@ extern wxPyApp *wxPythonApp;
                                          obj, s));                              \
             if (ro) {                                                           \
                 wxPyConvertSwigPtr(ro, (void **)&rval, wxT("wxFSFile"));        \
+                /* release ownership of the C++ wx.FSFile object. */            \
+                PyObject_SetAttrString(ro, "thisown", Py_False);                \
                 Py_DECREF(ro);                                                  \
             }                                                                   \
             Py_DECREF(obj);                                                     \
@@ -1692,7 +1694,7 @@ extern wxPyApp *wxPythonApp;
     bool CLASS::CBNAME(wxDragResult a) {                                        \
         bool rval=false;                                                        \
         bool found;                                                             \
-        wxPyBlock_t blocked = wxPyBeginBlockThreads();                                 \
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();                          \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(i)", a));     \
         wxPyEndBlockThreads(blocked);                                           \
@@ -1709,7 +1711,7 @@ extern wxPyApp *wxPythonApp;
 
 #define IMP_PYCALLBACK_DR_2WXCDR_pure(CLASS, PCLASS, CBNAME)                    \
     wxDragResult CLASS::CBNAME(wxCoord a, wxCoord b, wxDragResult c) {          \
-        wxPyBlock_t blocked = wxPyBeginBlockThreads();                                 \
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();                          \
         int rval=0;                                                             \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME))                            \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iii)", a,b,c));\

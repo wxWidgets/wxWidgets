@@ -26,14 +26,16 @@
 class wxFSFile : public wxObject
 {
 public:
-    %pythonAppend wxFSFile
-        "self.thisown = 0   # It will normally be deleted by the user of the wx.FileSystem";
+    %typemap(out) wxFSFile*;    // turn off this typemap
 
     wxFSFile(wxInputStream *stream, const wxString& loc,
              const wxString& mimetype, const wxString& anchor,
              wxDateTime modif);
-    
-    ~wxFSFile();  
+
+    // Turn it back on.
+    %typemap(out) wxFSFile* { $result = wxPyMake_wxObject($1, $owner); }
+
+    ~wxFSFile();
 
     wxInputStream *GetStream();
     const wxString& GetMimeType();
@@ -103,7 +105,7 @@ class wxPyFileSystemHandler : public wxFileSystemHandler
 {
 public:
     %pythonAppend    wxPyFileSystemHandler "self._setCallbackInfo(self, FileSystemHandler)";
-    
+
     wxPyFileSystemHandler();
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -142,7 +144,7 @@ public:
     %disownarg(wxFileSystemHandler *handler);
     static void AddHandler(wxFileSystemHandler *handler);
     %cleardisown(wxFileSystemHandler *handler);
-    
+
     static void CleanUpHandlers();
 
     // Returns the file URL for a native path
@@ -155,7 +157,7 @@ public:
             wxFileName fname = wxFileSystem::URLToFileName(url);
             return fname.GetFullPath();
         }
-    }   
+    }
 };
 
 
@@ -250,7 +252,7 @@ public:
 
     // Add a file to the memory FS
     %pythoncode { AddFile = staticmethod(MemoryFSHandler_AddFile) }
-    
+
     bool CanOpen(const wxString& location);
     %newobject OpenFile;
     wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
