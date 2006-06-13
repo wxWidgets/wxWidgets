@@ -49,11 +49,11 @@ getfilelist(){
     filelist="$filelist $commonfiles" 
   fi 
   
-  if [ $port = "msw" || $port = "all" ]; then
-    filelist="$filelist msw.rsp univ.rsp vc.rsp mmedia.rsp wince.rsp palmos.rsp"
+  if [ $port = "msw" ] || [ $port = "all" ]; then
+    filelist="$filelist msw.rsp univ.rsp vc.rsp mmedia.rsp wince.rsp palmos.rsp dmc.rsp"
   fi
   
-  if [ $port = "os2" || $port = "all" ]; then
+  if [ $port = "os2" ] || [ $port = "all" ]; then
      filelist="$filelist os2.rsp"
   fi
   
@@ -61,7 +61,7 @@ getfilelist(){
       filelist="$filelist x11.rsp gtk.rsp cocoa.rsp motif.rsp mac.rsp mgl.rsp"
   fi
   
-  tempfile="/tmp/$portfiles.in"
+  tempfile="/tmp/wx$port.files.in"
   rm -f $tempfile 
   rm -f $outfile
   
@@ -323,30 +323,6 @@ dospindocs()
     rearchive wxWidgets-$VERSION-ExtraDoc.zip wxWidgets-$VERSION $DESTDIR
 }
 
-dospinmisc()
-{
-    cd $APPDIR
-
-    # zip up Univ-specific files
-    echo Creating $DESTDIR/wxWidgets-$VERSION-Univ.zip
-    expandlines $MANIFESTDIR/univ.rsp /tmp/univfiles
-    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-Univ.zip < /tmp/univfiles
-    rearchive wxWidgets-$VERSION-Univ.zip wxWidgets-$VERSION $DESTDIR
-
-    # DMC project files
-    echo Creating $DESTDIR/wxWidgets-$VERSION-DMC.zip
-    expandlines $MANIFESTDIR/dmc.rsp /tmp/dmcfiles
-    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-DMC.zip < /tmp/dmcfiles
-    rearchive wxWidgets-$VERSION-DMC.zip wxWidgets-$VERSION $DESTDIR
-
-    # BC++ project files
-    echo Creating $DESTDIR/wxWidgets-$VERSION-BC.zip
-    expandlines $MANIFESTDIR/bc.rsp /tmp/bcfiles
-    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-BC.zip < /tmp/bcfiles
-    rearchive wxWidgets-$VERSION-BC.zip wxWidgets-$VERSION $DESTDIR
-
-}
-
 
 dospinport(){
     port=$1
@@ -355,46 +331,33 @@ dospinport(){
     echo "Zipping wx$upperport..."
 
     cd $APPDIR
-    getfilelist "$port" "/tmp/$port_filelist"
+    portfiles="/tmp/wx$port.files"
+    getfilelist "$port" "$portfiles"
 
-    mkdir -p /tmp/wx$port/wxWidgets-$VERSION
+    zip $ZIPFLAGS -@ $DESTDIR/wx$upperport-$VERSION.zip < $portfiles 
+    zip $ZIPFLAGS -g $DESTDIR/wx$upperport-$VERSION.zip LICENSE.txt COPYING.LIB CHANGES.txt README.txt
     
-    for line in `cat /tmp/$port_filelist` ; do
-        mkdir -p `dirname $line`
-        cp -r $line /tmp/wx$port/wxWidgets-$VERSION
-    done
+    if [ $port = "msw" ] || [ $port = "all" ]; then
+        zip $ZIPFLAGS -g $DESTDIR/wx$upperport-$VERSION.zip README-MSW.txt INSTALL-MSW.txt        
+    fi
     
-    cd /tmp/wxWidgets-$VERSION
-
-    echo Copying readme files...
-    cp $APPDIR/docs/msw/readme.txt README-MSW.txt
-    cp $APPDIR/docs/msw/install.txt INSTALL-MSW.txt
-    cp $APPDIR/docs/licence.txt LICENCE.txt
-    cp $APPDIR/docs/lgpl.txt COPYING.LIB
-    cp $APPDIR/docs/changes.txt CHANGES.txt
-    cp $APPDIR/docs/readme.txt README.txt
-
-    zip $ZIPFLAGS -r -@ $DESTDIR/wx$upperport-$VERSION.zip /tmp/wx$port/wxWidgets-$VERSION 
+    if [ $port = "os2" ] || [ $port = "all" ]; then
+        zip $ZIPFLAGS -g $DESTDIR/wx$upperport-$VERSION.zip INSTALL-OS2.txt          
+    fi
+    
+    # put all files in a wxWidgets-$VERSION subdir in the zip archive
+    rearchive wx$upperport-$VERSION.zip wxWidgets-$VERSION $DESTDIR
 }
 
 dospininstaller()
 {
     cd $DESTDIR
 
-    # Put all archives for transit to Linux in a zip file
-    echo Creating $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip
-    rm -f $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip
-    zip $ZIPFLAGS $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip wxWidgets-$VERSION-LinuxDocs.zip wxWidgets-$VERSION-DMC.zip
-
     rm -f -r wxWidgets-$VERSION
 
     echo Unzipping the Windows files into wxWidgets-$VERSION
 
     mkdir -p wxWidgets-$VERSION
-
-    unzip $ZIPFLAGS -o wxWidgets-$VERSION-win.zip -d wxWidgets-$VERSION
-    unzip $ZIPFLAGS -o wxWidgets-$VERSION-DMC.zip -d wxWidgets-$VERSION
-    unzip $ZIPFLAGS -o wxWidgets-$VERSION-BC.zip -d wxWidgets-$VERSION
 
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-HTMLHelp.zip
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-ExtraDoc.zip
@@ -415,13 +378,6 @@ dospininstaller()
     rm -f *.spec
     rm -f src/gtk/descrip.mms src/motif/descrip.mms
 
-    echo Copying readme files...
-    cp $APPDIR/docs/msw/readme.txt README-MSW.txt
-    cp $APPDIR/docs/msw/install.txt INSTALL-MSW.txt
-    cp $APPDIR/docs/licence.txt LICENCE.txt
-    cp $APPDIR/docs/lgpl.txt COPYING.LIB
-    cp $APPDIR/docs/changes.txt CHANGES.txt
-    cp $APPDIR/docs/readme.txt README.txt
 
     # Disabled for now - Now cp some binary files to 'bin'
     if [ ! -d bin ]; then
@@ -523,10 +479,7 @@ dospininstaller()
     # echo Putting all the setup files into a single zip archive
     # zip wxMSW-$VERSION-setup.zip readme-$VERSION.txt setup*.*
 
-    rm -f wxWidgets-$VERSION-win.zip
     rm -f wxWidgets-$VERSION-ExtraDoc.zip
-    rm -f wxWidgets-$VERSION-DMC.zip
-    rm -f wxWidgets-$VERSION-Univ.zip
     rm -f wxWidgets-$VERSION-DocSource.zip
     rm -f wxWidgets-$VERSION-LinuxDocs.zip
 
@@ -536,10 +489,6 @@ dospininstaller()
 
 makesetup()
 {
-#    if [ -d $SETUPIMAGEDIR ]; then
-#        echo Removing contents of existing $SETUPIMAGEDIR
-#        rm -f -r $SETUPIMAGEDIR/*
-#    fi
 
     if [ ! -d $SETUPIMAGEDIR ]; then
         echo Making the $SETUPIMAGEDIR for preparing the setup
@@ -607,7 +556,16 @@ makesetup()
     cp $WEBFILES/site/faq*.htm $APPDIR/docs/html
     cp $WEBFILES/site/platform.htm $APPDIR/docs/html
     cp $WEBFILES/site/i18n.htm $APPDIR/docs/html
-
+    
+    echo Copying readme files...
+    cp $APPDIR/docs/msw/readme.txt README-MSW.txt
+    cp $APPDIR/docs/msw/install.txt INSTALL-MSW.txt
+    cp $APPDIR/docs/os2/install.txt INSTALL-OS2.txt
+    cp $APPDIR/docs/licence.txt LICENCE.txt
+    cp $APPDIR/docs/lgpl.txt COPYING.LIB
+    cp $APPDIR/docs/changes.txt CHANGES.txt
+    cp $APPDIR/docs/readme.txt README.txt
+    
     # Copy setup0.h files to setup.h
     # OS/2 always built with configure now
     # cp $APPDIR/include/wx/os2/setup0.h $APPDIR/include/wx/os2/setup.h
@@ -617,11 +575,6 @@ makesetup()
     # Do OS/2 spin
     if [ "$SPINOS2" = "1" ] || [ "$SPINALL" = "1" ]; then
         dospinport "os2" #dospinos2
-    fi
-
-    # Do Mac spin
-    if [ "$SPINMAC" = "1" ] || [ "$SPINALL" = "1" ]; then
-        dospinmac
     fi
 
     # Do MSW spin
@@ -643,9 +596,6 @@ makesetup()
     if [ "$SPINDOCS" = "1" ] || [ "$SPINALL" = "1" ]; then
         dospindocs
     fi
-
-    # Do misc files spin
-    dospinmisc
 
     docopydocs $APPDIR $DESTDIR
     
