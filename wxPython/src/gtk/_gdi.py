@@ -4338,7 +4338,7 @@ class ImageList(_core.Object):
         return _gdi_.ImageList_RemoveAll(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
-        """GetSize() -> (width,height)"""
+        """GetSize(index) -> (width,height)"""
         return _gdi_.ImageList_GetSize(*args, **kwargs)
 
 _gdi_.ImageList_swigregister(ImageList)

@@ -2375,6 +2375,14 @@ class RadioBox(_core.Control):
         """GetItemToolTip(self, unsigned int item) -> ToolTip"""
         return _controls_.RadioBox_GetItemToolTip(*args, **kwargs)
 
+    def SetItemHelpText(*args, **kwargs):
+        """SetItemHelpText(self, unsigned int n, String helpText)"""
+        return _controls_.RadioBox_SetItemHelpText(*args, **kwargs)
+
+    def GetItemHelpText(*args, **kwargs):
+        """GetItemHelpText(self, unsigned int n) -> String"""
+        return _controls_.RadioBox_GetItemHelpText(*args, **kwargs)
+
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
@@ -5924,6 +5932,16 @@ class HelpProvider(object):
         """
         return _controls_.HelpProvider_ShowHelp(*args, **kwargs)
 
+    def ShowHelpAtPoint(*args, **kwargs):
+        """
+        ShowHelpAtPoint(self, wxWindowBase window, Point pt, int origin) -> bool
+
+        Show help for the given window (uses window.GetHelpAtPoint()
+        internally if applicable), return true if it was done or false if no
+        help available for this window.
+        """
+        return _controls_.HelpProvider_ShowHelpAtPoint(*args, **kwargs)
+
     def AddHelp(*args, **kwargs):
         """
         AddHelp(self, Window window, String text)
@@ -6312,6 +6330,381 @@ class HyperlinkEvent(_core.CommandEvent):
 _controls_.HyperlinkEvent_swigregister(HyperlinkEvent)
 
 EVT_HYPERLINK = wx.PyEventBinder( wxEVT_COMMAND_HYPERLINK, 1 )
+
+#---------------------------------------------------------------------------
+
+PB_USE_TEXTCTRL = _controls_.PB_USE_TEXTCTRL
+class PickerBase(_core.Control):
+    """
+    Base abstract class for all pickers which support an auxiliary text
+    control. This class handles all positioning and sizing of the text
+    control like a an horizontal `wx.BoxSizer` would do, with the text
+    control on the left of the picker button and the proportion of the
+    picker fixed to value 1.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def CreateBase(*args, **kwargs):
+        """
+        CreateBase(self, Window parent, int id, String text=wxEmptyString, Point pos=DefaultPosition, 
+            Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            String name=wxButtonNameStr) -> bool
+        """
+        return _controls_.PickerBase_CreateBase(*args, **kwargs)
+
+    def SetInternalMargin(*args, **kwargs):
+        """
+        SetInternalMargin(self, int newmargin)
+
+        Sets the margin (in pixels) between the picker and the text control.
+        """
+        return _controls_.PickerBase_SetInternalMargin(*args, **kwargs)
+
+    def GetInternalMargin(*args, **kwargs):
+        """
+        GetInternalMargin(self) -> int
+
+        Returns the margin (in pixels) between the picker and the text
+        control.
+        """
+        return _controls_.PickerBase_GetInternalMargin(*args, **kwargs)
+
+    def SetTextCtrlProportion(*args, **kwargs):
+        """
+        SetTextCtrlProportion(self, int prop)
+
+        Sets the proportion between the text control and the picker button.
+        This is used to set relative sizes of the text contorl and the picker.
+        The value passed to this function must be >= 1.
+        """
+        return _controls_.PickerBase_SetTextCtrlProportion(*args, **kwargs)
+
+    def GetTextCtrlProportion(*args, **kwargs):
+        """
+        GetTextCtrlProportion(self) -> int
+
+        Returns the proportion between the text control and the picker.
+        """
+        return _controls_.PickerBase_GetTextCtrlProportion(*args, **kwargs)
+
+    def HasTextCtrl(*args, **kwargs):
+        """
+        HasTextCtrl(self) -> bool
+
+        Returns true if this class has a valid text control (i.e. if the
+        wx.PB_USE_TEXTCTRL style was given when creating this control).
+        """
+        return _controls_.PickerBase_HasTextCtrl(*args, **kwargs)
+
+    def GetTextCtrl(*args, **kwargs):
+        """
+        GetTextCtrl(self) -> TextCtrl
+
+        Returns a pointer to the text control handled by this class or None if
+        the wx.PB_USE_TEXTCTRL style was not specified when this control was
+        created.
+
+        Very important: the contents of the text control could be containing
+        an invalid representation of the entity which can be chosen through
+        the picker (e.g. the user entered an invalid colour syntax because of
+        a typo). Thus you should never parse the content of the textctrl to
+        get the user's input; rather use the derived-class getter
+        (e.g. `wx.ColourPickerCtrl.GetColour`, `wx.FilePickerCtrl.GetPath`,
+        etc).
+        """
+        return _controls_.PickerBase_GetTextCtrl(*args, **kwargs)
+
+    def GetPickerCtrl(*args, **kwargs):
+        """GetPickerCtrl(self) -> Control"""
+        return _controls_.PickerBase_GetPickerCtrl(*args, **kwargs)
+
+_controls_.PickerBase_swigregister(PickerBase)
+
+#---------------------------------------------------------------------------
+
+CLRP_SHOW_LABEL = _controls_.CLRP_SHOW_LABEL
+CLRP_USE_TEXTCTRL = _controls_.CLRP_USE_TEXTCTRL
+CLRP_DEFAULT_STYLE = _controls_.CLRP_DEFAULT_STYLE
+class ColourPickerCtrl(PickerBase):
+    """
+    This control allows the user to select a colour. The generic
+    implementation is a button which brings up a `wx.ColourDialog` when
+    clicked. Native implementations may differ but this is usually a
+    (small) widget which give access to the colour-chooser dialog.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int id=-1, Colour col=*wxBLACK, Point pos=DefaultPosition, 
+            Size size=DefaultSize, 
+            long style=CLRP_DEFAULT_STYLE, Validator validator=DefaultValidator, 
+            String name=ColourPickerCtrlNameStr) -> ColourPickerCtrl
+
+        This control allows the user to select a colour. The generic
+        implementation is a button which brings up a `wx.ColourDialog` when
+        clicked. Native implementations may differ but this is usually a
+        (small) widget which give access to the colour-chooser dialog.
+        """
+        _controls_.ColourPickerCtrl_swiginit(self,_controls_.new_ColourPickerCtrl(*args, **kwargs))
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id, Colour col=*wxBLACK, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=CLRP_DEFAULT_STYLE, 
+            Validator validator=DefaultValidator, 
+            String name=ColourPickerCtrlNameStr) -> bool
+        """
+        return _controls_.ColourPickerCtrl_Create(*args, **kwargs)
+
+    def GetColour(*args, **kwargs):
+        """
+        GetColour(self) -> Colour
+
+        Returns the currently selected colour.
+        """
+        return _controls_.ColourPickerCtrl_GetColour(*args, **kwargs)
+
+    def SetColour(*args, **kwargs):
+        """
+        SetColour(self, Colour col)
+
+        Set the displayed colour.
+        """
+        return _controls_.ColourPickerCtrl_SetColour(*args, **kwargs)
+
+_controls_.ColourPickerCtrl_swigregister(ColourPickerCtrl)
+ColourPickerCtrlNameStr = cvar.ColourPickerCtrlNameStr
+
+def PreColourPickerCtrl(*args, **kwargs):
+    """
+    PreColourPickerCtrl() -> ColourPickerCtrl
+
+    This control allows the user to select a colour. The generic
+    implementation is a button which brings up a `wx.ColourDialog` when
+    clicked. Native implementations may differ but this is usually a
+    (small) widget which give access to the colour-chooser dialog.
+    """
+    val = _controls_.new_PreColourPickerCtrl(*args, **kwargs)
+    return val
+
+wxEVT_COMMAND_COLOURPICKER_CHANGED = _controls_.wxEVT_COMMAND_COLOURPICKER_CHANGED
+EVT_COLOURPICKER_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_COLOURPICKER_CHANGED, 1 )
+
+class ColourPickerEvent(_core.CommandEvent):
+    """Proxy of C++ ColourPickerEvent class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, Object generator, int id, Colour col) -> ColourPickerEvent"""
+        _controls_.ColourPickerEvent_swiginit(self,_controls_.new_ColourPickerEvent(*args, **kwargs))
+    def GetColour(*args, **kwargs):
+        """GetColour(self) -> Colour"""
+        return _controls_.ColourPickerEvent_GetColour(*args, **kwargs)
+
+    def SetColour(*args, **kwargs):
+        """SetColour(self, Colour c)"""
+        return _controls_.ColourPickerEvent_SetColour(*args, **kwargs)
+
+_controls_.ColourPickerEvent_swigregister(ColourPickerEvent)
+
+#---------------------------------------------------------------------------
+
+FLP_OPEN = _controls_.FLP_OPEN
+FLP_SAVE = _controls_.FLP_SAVE
+FLP_OVERWRITE_PROMPT = _controls_.FLP_OVERWRITE_PROMPT
+FLP_FILE_MUST_EXIST = _controls_.FLP_FILE_MUST_EXIST
+FLP_CHANGE_DIR = _controls_.FLP_CHANGE_DIR
+DIRP_DIR_MUST_EXIST = _controls_.DIRP_DIR_MUST_EXIST
+DIRP_CHANGE_DIR = _controls_.DIRP_CHANGE_DIR
+FLP_USE_TEXTCTRL = _controls_.FLP_USE_TEXTCTRL
+FLP_DEFAULT_STYLE = _controls_.FLP_DEFAULT_STYLE
+DIRP_USE_TEXTCTRL = _controls_.DIRP_USE_TEXTCTRL
+DIRP_DEFAULT_STYLE = _controls_.DIRP_DEFAULT_STYLE
+class FilePickerCtrl(PickerBase):
+    """Proxy of C++ FilePickerCtrl class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int id=-1, String path=EmptyString, 
+            String message=FileSelectorPromptStr, String wildcard=FileSelectorDefaultWildcardStr, 
+            Point pos=DefaultPosition, 
+            Size size=DefaultSize, 
+            long style=FLP_DEFAULT_STYLE, Validator validator=DefaultValidator, 
+            String name=FilePickerCtrlNameStr) -> FilePickerCtrl
+        """
+        _controls_.FilePickerCtrl_swiginit(self,_controls_.new_FilePickerCtrl(*args, **kwargs))
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id=-1, String path=EmptyString, 
+            String message=FileSelectorPromptStr, String wildcard=FileSelectorDefaultWildcardStr, 
+            Point pos=DefaultPosition, 
+            Size size=DefaultSize, 
+            long style=FLP_DEFAULT_STYLE, Validator validator=DefaultValidator, 
+            String name=FilePickerCtrlNameStr) -> bool
+        """
+        return _controls_.FilePickerCtrl_Create(*args, **kwargs)
+
+    def GetPath(*args, **kwargs):
+        """GetPath(self) -> String"""
+        return _controls_.FilePickerCtrl_GetPath(*args, **kwargs)
+
+    def SetPath(*args, **kwargs):
+        """SetPath(self, String str)"""
+        return _controls_.FilePickerCtrl_SetPath(*args, **kwargs)
+
+_controls_.FilePickerCtrl_swigregister(FilePickerCtrl)
+FilePickerCtrlNameStr = cvar.FilePickerCtrlNameStr
+FileSelectorPromptStr = cvar.FileSelectorPromptStr
+DirPickerCtrlNameStr = cvar.DirPickerCtrlNameStr
+DirSelectorPromptStr = cvar.DirSelectorPromptStr
+FileSelectorDefaultWildcardStr = cvar.FileSelectorDefaultWildcardStr
+
+def PreFilePickerCtrl(*args, **kwargs):
+    """PreFilePickerCtrl() -> FilePickerCtrl"""
+    val = _controls_.new_PreFilePickerCtrl(*args, **kwargs)
+    return val
+
+class DirPickerCtrl(PickerBase):
+    """Proxy of C++ DirPickerCtrl class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int id=-1, String path=EmptyString, 
+            String message=DirSelectorPromptStr, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=DIRP_DEFAULT_STYLE, 
+            Validator validator=DefaultValidator, 
+            String name=DirPickerCtrlNameStr) -> DirPickerCtrl
+        """
+        _controls_.DirPickerCtrl_swiginit(self,_controls_.new_DirPickerCtrl(*args, **kwargs))
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id=-1, String path=EmptyString, 
+            String message=DirSelectorPromptStr, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=DIRP_DEFAULT_STYLE, 
+            Validator validator=DefaultValidator, 
+            String name=DirPickerCtrlNameStr) -> bool
+        """
+        return _controls_.DirPickerCtrl_Create(*args, **kwargs)
+
+    def GetPath(*args, **kwargs):
+        """GetPath(self) -> String"""
+        return _controls_.DirPickerCtrl_GetPath(*args, **kwargs)
+
+    def SetPath(*args, **kwargs):
+        """SetPath(self, String str)"""
+        return _controls_.DirPickerCtrl_SetPath(*args, **kwargs)
+
+_controls_.DirPickerCtrl_swigregister(DirPickerCtrl)
+
+def PreDirPickerCtrl(*args, **kwargs):
+    """PreDirPickerCtrl() -> DirPickerCtrl"""
+    val = _controls_.new_PreDirPickerCtrl(*args, **kwargs)
+    return val
+
+wxEVT_COMMAND_FILEPICKER_CHANGED = _controls_.wxEVT_COMMAND_FILEPICKER_CHANGED
+wxEVT_COMMAND_DIRPICKER_CHANGED = _controls_.wxEVT_COMMAND_DIRPICKER_CHANGED
+EVT_FILEPICKER_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_FILEPICKER_CHANGED, 1 )
+EVT_DIRPICKER_CHANGED  = wx.PyEventBinder( wxEVT_COMMAND_DIRPICKER_CHANGED,  1 )
+
+class FileDirPickerEvent(_core.CommandEvent):
+    """Proxy of C++ FileDirPickerEvent class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, EventType type, Object generator, int id, String path) -> FileDirPickerEvent"""
+        _controls_.FileDirPickerEvent_swiginit(self,_controls_.new_FileDirPickerEvent(*args, **kwargs))
+    def GetPath(*args, **kwargs):
+        """GetPath(self) -> String"""
+        return _controls_.FileDirPickerEvent_GetPath(*args, **kwargs)
+
+    def SetPath(*args, **kwargs):
+        """SetPath(self, String p)"""
+        return _controls_.FileDirPickerEvent_SetPath(*args, **kwargs)
+
+_controls_.FileDirPickerEvent_swigregister(FileDirPickerEvent)
+
+#---------------------------------------------------------------------------
+
+FNTP_FONTDESC_AS_LABEL = _controls_.FNTP_FONTDESC_AS_LABEL
+FNTP_USEFONT_FOR_LABEL = _controls_.FNTP_USEFONT_FOR_LABEL
+FNTP_USE_TEXTCTRL = _controls_.FNTP_USE_TEXTCTRL
+FNTP_DEFAULT_STYLE = _controls_.FNTP_DEFAULT_STYLE
+class FontPickerCtrl(PickerBase):
+    """Proxy of C++ FontPickerCtrl class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int id=-1, Font initial=*wxNORMAL_FONT, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=FNTP_DEFAULT_STYLE, Validator validator=DefaultValidator, 
+            String name=FontPickerCtrlNameStr) -> FontPickerCtrl
+        """
+        _controls_.FontPickerCtrl_swiginit(self,_controls_.new_FontPickerCtrl(*args, **kwargs))
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id=-1, Font initial=*wxNORMAL_FONT, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=FNTP_DEFAULT_STYLE, Validator validator=DefaultValidator, 
+            String name=FontPickerCtrlNameStr) -> bool
+        """
+        return _controls_.FontPickerCtrl_Create(*args, **kwargs)
+
+    def GetSelectedFont(*args, **kwargs):
+        """GetSelectedFont(self) -> Font"""
+        return _controls_.FontPickerCtrl_GetSelectedFont(*args, **kwargs)
+
+    def SetSelectedFont(*args, **kwargs):
+        """SetSelectedFont(self, Font f)"""
+        return _controls_.FontPickerCtrl_SetSelectedFont(*args, **kwargs)
+
+    def SetMaxPointSize(*args, **kwargs):
+        """SetMaxPointSize(self, unsigned int max)"""
+        return _controls_.FontPickerCtrl_SetMaxPointSize(*args, **kwargs)
+
+    def GetMaxPointSize(*args, **kwargs):
+        """GetMaxPointSize(self) -> unsigned int"""
+        return _controls_.FontPickerCtrl_GetMaxPointSize(*args, **kwargs)
+
+_controls_.FontPickerCtrl_swigregister(FontPickerCtrl)
+FontPickerCtrlNameStr = cvar.FontPickerCtrlNameStr
+
+def PreFontPickerCtrl(*args, **kwargs):
+    """PreFontPickerCtrl() -> FontPickerCtrl"""
+    val = _controls_.new_PreFontPickerCtrl(*args, **kwargs)
+    return val
+
+wxEVT_COMMAND_FONTPICKER_CHANGED = _controls_.wxEVT_COMMAND_FONTPICKER_CHANGED
+EVT_FONTPICKER_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_FONTPICKER_CHANGED, 1 )
+
+class FontPickerEvent(_core.CommandEvent):
+    """Proxy of C++ FontPickerEvent class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, Object generator, int id, Font f) -> FontPickerEvent"""
+        _controls_.FontPickerEvent_swiginit(self,_controls_.new_FontPickerEvent(*args, **kwargs))
+    def GetFont(*args, **kwargs):
+        """GetFont(self) -> Font"""
+        return _controls_.FontPickerEvent_GetFont(*args, **kwargs)
+
+    def SetFont(*args, **kwargs):
+        """SetFont(self, Font c)"""
+        return _controls_.FontPickerEvent_SetFont(*args, **kwargs)
+
+_controls_.FontPickerEvent_swigregister(FontPickerEvent)
 
 
 

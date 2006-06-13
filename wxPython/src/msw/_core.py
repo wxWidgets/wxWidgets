@@ -4818,6 +4818,15 @@ class KeyEvent(Event):
         return _core_.KeyEvent_GetUnicodeKey(*args, **kwargs)
 
     GetUniChar = GetUnicodeKey 
+    def SetUnicodeKey(*args, **kwargs):
+        """
+        SetUnicodeKey(self, int uniChar)
+
+        Set the Unicode value of the key event, but only if this is a Unicode
+        build of wxPython.
+        """
+        return _core_.KeyEvent_SetUnicodeKey(*args, **kwargs)
+
     def GetRawKeyCode(*args, **kwargs):
         """
         GetRawKeyCode(self) -> unsigned int
@@ -9316,6 +9325,18 @@ class Window(EvtHandler):
         one.
         """
         return _core_.Window_SetHelpTextForId(*args, **kwargs)
+
+    def GetHelpTextAtPoint(*args, **kwargs):
+        """
+        GetHelpTextAtPoint(self, Point pt, wxHelpEvent::Origin origin) -> String
+
+        Get the help string associated with the given position in this window.
+
+        Notice that pt may be invalid if event origin is keyboard or unknown
+        and this method should return the global window help text then
+
+        """
+        return _core_.Window_GetHelpTextAtPoint(*args, **kwargs)
 
     def GetHelpText(*args, **kwargs):
         """
