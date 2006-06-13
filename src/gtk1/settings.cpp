@@ -15,10 +15,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/cmndata.h"
+    #include "wx/toplevel.h"
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/toplevel.h"
 
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>

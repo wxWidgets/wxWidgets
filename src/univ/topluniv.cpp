@@ -18,15 +18,16 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#include "wx/toplevel.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
     #include "wx/settings.h"
 #endif
 
-#include "wx/toplevel.h"
 #include "wx/univ/renderer.h"
 #include "wx/bitmap.h"
 #include "wx/image.h"

@@ -23,9 +23,8 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/brush.h"
+    #include "wx/toplevel.h"
 #endif
-
-#include "wx/toplevel.h"
 
 #include <Form.h>
 #include <Control.h>

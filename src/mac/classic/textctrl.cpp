@@ -26,6 +26,7 @@
     #include "wx/button.h"
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
+    #include "wx/toplevel.h"
 #endif
 
 #ifdef __DARWIN__
@@ -43,7 +44,6 @@
     #endif
 #endif
 
-#include "wx/toplevel.h"
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 #include "wx/filefn.h"
@@ -662,7 +662,7 @@ static void SetTXNData( TXNObject txn , const wxString& st , TXNOffset start , T
 {
 #if wxUSE_UNICODE
 #if SIZEOF_WCHAR_T == 2
-    size_t len = st.Len() ;
+    size_t len = st.length() ;
     TXNSetData( txn , kTXNUnicodeTextData,  (void*)st.wc_str(), len * 2,
       start, end);
 #else

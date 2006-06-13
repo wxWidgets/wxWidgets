@@ -24,9 +24,8 @@
     #include "wx/button.h"
     #include "wx/settings.h"
     #include "wx/arrstr.h"
+    #include "wx/toplevel.h"
 #endif
-
-#include "wx/toplevel.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 

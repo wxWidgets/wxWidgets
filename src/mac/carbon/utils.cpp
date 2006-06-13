@@ -16,6 +16,9 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/app.h"
+    #if wxUSE_GUI
+        #include "wx/toplevel.h"
+    #endif
 #endif
 
 #include "wx/apptrait.h"
@@ -23,7 +26,6 @@
 #if wxUSE_GUI
     #include "wx/mac/uma.h"
     #include "wx/font.h"
-    #include "wx/toplevel.h"
 #endif
 
 #include <ctype.h>

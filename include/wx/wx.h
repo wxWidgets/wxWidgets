@@ -31,6 +31,7 @@
 
 #include "wx/window.h"
 #include "wx/panel.h"
+#include "wx/toplevel.h"
 #include "wx/frame.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"

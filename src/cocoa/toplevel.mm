@@ -19,9 +19,11 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+
+#include "wx/toplevel.h"
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
-    #include "wx/toplevel.h"
     #include "wx/menuitem.h"
     #include "wx/frame.h"
     #include "wx/log.h"

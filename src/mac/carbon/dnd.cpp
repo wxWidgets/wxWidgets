@@ -18,9 +18,9 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/window.h"
+    #include "wx/toplevel.h"
 #endif // WX_PRECOMP
 
-#include "wx/toplevel.h"
 #include "wx/gdicmn.h"
 #include "wx/mac/private.h"
 
@@ -286,7 +286,7 @@ bool wxDropTarget::GetData()
             }
         }
 
-        if (filenamesPassed.Len() > 0)
+        if (filenamesPassed.length() > 0)
         {
             wxCharBuffer buf = filenamesPassed.fn_str();
             m_dataObject->SetData( wxDataFormat(wxDF_FILENAME), strlen( buf ), (const char*)buf );

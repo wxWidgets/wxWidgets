@@ -22,8 +22,9 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include "wx/toplevel.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/toplevel.h"
     #include "wx/app.h"
 #endif // WX_PRECOMP
 

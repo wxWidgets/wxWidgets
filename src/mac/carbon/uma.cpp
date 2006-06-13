@@ -13,6 +13,12 @@
 
 #if wxUSE_GUI
 
+#ifndef WX_PRECOMP
+    #if TARGET_API_MAC_OSX
+        #include "wx/toplevel.h"
+    #endif
+#endif
+
 #include "wx/dc.h"
 
 #ifndef __DARWIN__
@@ -29,13 +35,10 @@
 #endif
 
 #ifndef __DARWIN__
-#include <Scrap.h>
+#  include <Scrap.h>
 #endif
-#include "wx/mac/uma.h"
 
-#if TARGET_API_MAC_OSX
-#include "wx/toplevel.h"
-#endif
+#include "wx/mac/uma.h"
 
 // since we have decided that we only support 8.6 upwards we are
 // checking for these minimum requirements in the startup code of

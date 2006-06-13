@@ -30,9 +30,8 @@
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/dcclient.h"
+    #include "wx/toplevel.h"
 #endif
-
-#include "wx/toplevel.h"
 
 #include "wx/univ/renderer.h"
 

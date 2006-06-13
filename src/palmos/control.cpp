@@ -38,9 +38,9 @@
     #include "wx/checkbox.h"
     #include "wx/radiobut.h"
     #include "wx/slider.h"
+    #include "wx/toplevel.h"
 #endif
 
-#include "wx/toplevel.h"
 #include "wx/tglbtn.h"
 
 #include <Control.h>

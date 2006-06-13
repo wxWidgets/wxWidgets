@@ -18,10 +18,10 @@
     #include "wx/window.h"
     #include "wx/dcmemory.h"
     #include "wx/settings.h"
+    #include "wx/toplevel.h"
 #endif
 
 #include "wx/region.h"
-#include "wx/toplevel.h"
 #include "wx/math.h"
 #include "wx/mac/private.h"
 

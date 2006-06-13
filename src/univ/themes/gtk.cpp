@@ -45,11 +45,11 @@
     #include "wx/statusbr.h"
 
     #include "wx/settings.h"
+    #include "wx/toplevel.h"
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
-#include "wx/toplevel.h"
 #include "wx/artprov.h"
 #include "wx/image.h"
 #ifdef wxUSE_TOGGLEBTN

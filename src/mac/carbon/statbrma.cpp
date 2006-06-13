@@ -16,10 +16,10 @@
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/dcclient.h"
+    #include "wx/toplevel.h"
 #endif
 
 #include "wx/mac/private.h"
-#include "wx/toplevel.h"
 
 
 BEGIN_EVENT_TABLE(wxStatusBarMac, wxStatusBarGeneric)

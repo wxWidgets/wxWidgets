@@ -49,12 +49,12 @@
     #endif
     #include "wx/menu.h"
     #include "wx/settings.h"
+    #include "wx/toplevel.h"
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
 #include "wx/artprov.h"
-#include "wx/toplevel.h"
 #include "wx/image.h"
 #ifdef wxUSE_TOGGLEBTN
 #include "wx/tglbtn.h"
