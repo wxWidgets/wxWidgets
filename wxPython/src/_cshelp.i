@@ -255,6 +255,16 @@ help is associated with the window.", "");
         "Shows help for the given window. Uses GetHelp internally if
 applicable. Returns True if it was done, or False if no help was
 available for this window.", "");
+
+    DocDeclStr(
+        virtual bool , ShowHelpAtPoint(wxWindowBase *window,
+                                       const wxPoint& pt,
+                                       wxHelpEvent::Origin origin),
+        "Show help for the given window (uses window.GetHelpAtPoint()
+internally if applicable), return true if it was done or false if no
+help available for this window.", "");
+    
+
     
     DocDeclStr(
         void , AddHelp(wxWindow *window, const wxString& text),

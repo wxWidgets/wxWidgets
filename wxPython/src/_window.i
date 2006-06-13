@@ -1776,6 +1776,16 @@ one.", "");
     
 
     DocDeclStr(
+        virtual wxString , GetHelpTextAtPoint(const wxPoint& pt,
+                                              wxHelpEvent::Origin origin) const,
+        "Get the help string associated with the given position in this window.
+
+Notice that pt may be invalid if event origin is keyboard or unknown
+and this method should return the global window help text then
+", "");
+    
+    
+   DocDeclStr(
         wxString , GetHelpText() const,
         "Gets the help text to be used as context-sensitive help for this
 window.  Note that the text is actually stored by the current

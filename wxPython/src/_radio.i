@@ -86,7 +86,14 @@ public:
     // get the individual items tooltip; returns NULL if none
     wxToolTip *GetItemToolTip(unsigned int item) const;
 
+    // set helptext for a particular item, pass an empty string to erase it
+    void SetItemHelpText(unsigned int n, const wxString& helpText);
+
+    // retrieve helptext for a particular item, empty string means no help text
+    wxString GetItemHelpText(unsigned int n) const;
     
+    virtual int GetItemFromPoint(const wxPoint& pt) const;
+
 //    bool IsValid(int n) const;  ** not public
         
     static wxVisualAttributes
