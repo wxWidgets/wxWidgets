@@ -531,6 +531,18 @@ gtk_window_expose_callback( GtkWidget *widget,
 // "key_press_event" from any window
 //-----------------------------------------------------------------------------
 
+// These are used when transforming Ctrl-alpha to ascii values 1-26
+inline bool wxIsLowerChar(int code)
+{
+    return (code >= 'a' && code <= 'z' );
+}
+
+inline bool wxIsUpperChar(int code)
+{
+    return (code >= 'A' && code <= 'Z' );
+}
+
+
 // set WXTRACE to this to see the key event codes on the console
 #define TRACE_KEYS  _T("keyevent")
 
@@ -1082,9 +1094,13 @@ gtk_window_key_press_callback( GtkWidget *widget,
 
             // To conform to the docs we need to translate Ctrl-alpha
             // characters to values in the range 1-26.
-            if (event.ControlDown() && key_code >= 'a' && key_code <= 'z' )
+            if ( event.ControlDown() &&
+                 ( wxIsLowerChar(key_code) || wxIsUpperChar(key_code) ))
             {
-                event.m_keyCode = key_code - 'a' + 1;
+                if ( wxIsLowerChar(key_code) )
+                    event.m_keyCode = key_code - 'a' + 1;
+                if ( wxIsUpperChar(key_code) )
+                    event.m_keyCode = key_code - 'A' + 1;
 #if wxUSE_UNICODE
                 event.m_uniChar = event.m_keyCode;
 #endif
@@ -1223,8 +1239,14 @@ gtk_wxwindow_commit_cb (GtkIMContext *context,
 
         // To conform to the docs we need to translate Ctrl-alpha
         // characters to values in the range 1-26.
-        if (event.ControlDown() && *pstr >= 'a' && *pstr <= 'z' )
+        if ( event.ControlDown() &&
+             ( wxIsLowerChar(*pstr) || wxIsUpperChar(*pstr) ))
         {
+            if ( wxIsLowerChar(*pstr) )
+                event.m_keyCode = *pstr - 'a' + 1;
+            if ( wxIsUpperChar(*pstr) )
+                event.m_keyCode = *pstr - 'A' + 1;
+
             event.m_keyCode = *pstr - 'a' + 1;
 #if wxUSE_UNICODE
             event.m_uniChar = event.m_keyCode;
