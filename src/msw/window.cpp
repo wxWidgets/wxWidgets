@@ -3042,7 +3042,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                                     wxEVT_HELP,
                                     GetId(),
 #ifdef __WXWINCE__
-                                    wxGetMousePosition(), // what else?
+                                    wxGetMousePosition() // what else?
 #else
                                     wxPoint(info->MousePos.x, info->MousePos.y)
 #endif
