@@ -252,14 +252,14 @@ def getRoot(command, terminator=None):
         line = token[4]
         if tokentype is tokenize.ENDMARKER:
             continue
-        if tokentype in (tokenize.NAME, tokenize.STRING, tokenize.NUMBER) \
-        and laststring != '.':
-            # We've reached something that's not part of the root.
-            if prefix and line[token[3][1]] != ' ':
-                # If it doesn't have a space after it, remove the prefix.
-                prefix = ''
-            break
-        if tokentype in (tokenize.NAME, tokenize.STRING, tokenize.NUMBER) \
+        #if tokentype in (tokenize.NAME, tokenize.STRING, tokenize.NUMBER) \
+        #    and laststring != '.':
+        #    # We've reached something that's not part of the root.
+        #    if prefix and line[token[3][1]] != ' ':
+        #        # If it doesn't have a space after it, remove the prefix.
+        #        prefix = ''
+        #    break
+        if tokentype in (tokenize.NAME, tokenize.STRING, tokenize.NUMBER, tokenize.OP) \
         or (tokentype is tokenize.OP and tokenstring == '.'):
             if prefix:
                 # The prefix isn't valid because it comes after a dot.
