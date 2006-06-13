@@ -32,9 +32,9 @@
         #include "wx/icon.h"
     #endif
     #include "wx/intl.h"
+    #include "wx/arrstr.h"
 #endif // WX_PRECOMP
 
-#include "wx/arrstr.h"
 #include "wx/hashmap.h"
 
 #include <VFSMgr.h>

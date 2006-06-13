@@ -23,6 +23,7 @@
     #include "wx/utils.h"
     #include "wx/button.h"
     #include "wx/settings.h"
+    #include "wx/arrstr.h"
 #endif
 
 #include "wx/toplevel.h"
@@ -34,7 +35,6 @@ END_EVENT_TABLE()
 
 #include "wx/mac/uma.h"
 #include "wx/dynarray.h"
-#include "wx/arrstr.h"
 
 // ============================================================================
 // list box control implementation

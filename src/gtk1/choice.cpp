@@ -12,7 +12,10 @@
 #if wxUSE_CHOICE
 
 #include "wx/choice.h"
-#include "wx/arrstr.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/arrstr.h"
+#endif
 
 #include "wx/gtk1/private.h"
 

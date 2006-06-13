@@ -20,9 +20,9 @@
     #include "wx/utils.h"
     #include "wx/settings.h"
     #include "wx/checklst.h"
+    #include "wx/arrstr.h"
 #endif
 
-#include "wx/arrstr.h"
 #include "wx/gtk1/private.h"
 
 #if wxUSE_TOOLTIPS

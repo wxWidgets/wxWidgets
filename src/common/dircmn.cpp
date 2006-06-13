@@ -29,9 +29,9 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/filefn.h"
+    #include "wx/arrstr.h"
 #endif //WX_PRECOMP
 
-#include "wx/arrstr.h"
 #include "wx/dir.h"
 
 // ============================================================================
@@ -236,4 +236,3 @@ size_t wxDir::GetAllFiles(const wxString& dirname,
 
     return nFiles;
 }
-

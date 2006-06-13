@@ -12,7 +12,10 @@
 #if wxUSE_CHOICE
 
 #include "wx/choice.h"
-#include "wx/arrstr.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/arrstr.h"
+#endif
 
 // FIXME: We use GtkOptionMenu which has been deprecated since GTK+ 2.3.0 in
 // favour of GtkComboBox.

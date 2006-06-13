@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tokenzr.cpp
+// Name:        src/common/tokenzr.cpp
 // Purpose:     String tokenizer
 // Author:      Guilhem Lavaux
 // Modified by: Vadim Zeitlin (almost full rewrite)
@@ -25,7 +25,10 @@
 #endif
 
 #include "wx/tokenzr.h"
-#include "wx/arrstr.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/arrstr.h"
+#endif
 
 // Required for wxIs... functions
 #include <ctype.h>

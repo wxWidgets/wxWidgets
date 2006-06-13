@@ -31,9 +31,8 @@
 #ifndef WX_PRECOMP
     #include "wx/list.h"
     #include "wx/string.h"
+    #include "wx/arrstr.h"
 #endif
-
-#include "wx/arrstr.h"
 
 // ----------------------------------------------------------------------------
 // private globals

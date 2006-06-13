@@ -21,14 +21,13 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/settings.h"
+    #include "wx/arrstr.h"
 #endif
 
 #ifdef __VMS
 #define XtParent XTPARENT
 #define XtDisplay XTDISPLAY
 #endif
-
-#include "wx/arrstr.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

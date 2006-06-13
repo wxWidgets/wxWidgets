@@ -18,9 +18,8 @@
     #include "wx/intl.h"
     #include "wx/settings.h"
     #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
+    #include "wx/arrstr.h"
 #endif
-
-#include "wx/arrstr.h"
 
 #include "wx/gtk1/private.h"
 

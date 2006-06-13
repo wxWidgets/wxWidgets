@@ -31,9 +31,8 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/arrstr.h"
 #endif //WX_PRECOMP
-
-#include "wx/arrstr.h"
 
 #if wxUSE_CONFIG && ((wxUSE_FILE && wxUSE_TEXTFILE) || wxUSE_CONFIG_NATIVE)
 
@@ -309,10 +308,10 @@ enum Bracket
 wxString wxExpandEnvVars(const wxString& str)
 {
   wxString strResult;
-  strResult.Alloc(str.Len());
+  strResult.Alloc(str.length());
 
   size_t m;
-  for ( size_t n = 0; n < str.Len(); n++ ) {
+  for ( size_t n = 0; n < str.length(); n++ ) {
     switch ( str[n] ) {
 #ifdef  __WXMSW__
       case wxT('%'):
@@ -325,7 +324,7 @@ wxString wxExpandEnvVars(const wxString& str)
               bracket = Bracket_Windows;
             else
           #endif  //WINDOWS
-          if ( n == str.Len() - 1 ) {
+          if ( n == str.length() - 1 ) {
             bracket = Bracket_None;
           }
           else {
@@ -347,7 +346,7 @@ wxString wxExpandEnvVars(const wxString& str)
 
           m = n + 1;
 
-          while ( m < str.Len() && (wxIsalnum(str[m]) || str[m] == wxT('_')) )
+          while ( m < str.length() && (wxIsalnum(str[m]) || str[m] == wxT('_')) )
             m++;
 
           wxString strVarName(str.c_str() + n + 1, m - n - 1);
@@ -372,7 +371,7 @@ wxString wxExpandEnvVars(const wxString& str)
 
           // check the closing bracket
           if ( bracket != Bracket_None ) {
-            if ( m == str.Len() || str[m] != (wxChar)bracket ) {
+            if ( m == str.length() || str[m] != (wxChar)bracket ) {
               // under MSW it's common to have '%' characters in the registry
               // and it's annoying to have warnings about them each time, so
               // ignroe them silently if they are not used for env vars
@@ -398,7 +397,7 @@ wxString wxExpandEnvVars(const wxString& str)
 
       case '\\':
         // backslash can be used to suppress special meaning of % and $
-        if ( n != str.Len() - 1 &&
+        if ( n != str.length() - 1 &&
                 (str[n + 1] == wxT('%') || str[n + 1] == wxT('$')) ) {
           strResult += str[++n];
 

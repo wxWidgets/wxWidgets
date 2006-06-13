@@ -18,7 +18,10 @@
 #if wxUSE_CHECKLISTBOX
 
 #include "wx/checklst.h"
-#include "wx/arrstr.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/arrstr.h"
+#endif
 
 #include "wx/mac/uma.h"
 #include <Appearance.h>

@@ -17,7 +17,10 @@
 #if wxUSE_CHECKLISTBOX
 
 #include "wx/checklst.h"
-#include "wx/arrstr.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/arrstr.h"
+#endif
 
 #include "wx/mac/uma.h"
 
@@ -37,7 +40,7 @@ public:
     ~wxMacDataBrowserCheckListControl();
 
     virtual wxMacListBoxItem* CreateItem();
-    
+
     virtual bool            MacIsChecked(unsigned int n) const;
     virtual void            MacCheck(unsigned int n, bool bCheck = true);
 };
@@ -87,7 +90,7 @@ bool wxCheckListBox::Create(
 
     MacPostControlCreate(pos,size);
 
-	InsertItems( n , choices , 0 );
+    InsertItems( n , choices , 0 );
 
     // Needed because it is a wxControlWithItems
     SetBestSize( size );
@@ -119,9 +122,9 @@ void wxCheckListBox::Check(unsigned int item, bool check)
     }
 }
 
-wxMacCheckListControl* wxCheckListBox::GetPeer() const 
-{ 
-    return dynamic_cast<wxMacCheckListControl*>(m_peer); 
+wxMacCheckListControl* wxCheckListBox::GetPeer() const
+{
+    return dynamic_cast<wxMacCheckListControl*>(m_peer);
 }
 
 const short kCheckboxColumnId = 1026;
@@ -153,14 +156,14 @@ wxMacDataBrowserCheckListControl::wxMacDataBrowserCheckListControl( wxListBox *p
         kDataBrowserPropertyIsMutable
         | kDataBrowserTableViewSelectionColumn
         | kDataBrowserDefaultPropertyFlags;
-        
+
     err = AddColumn( &columnDesc, 0 );
     verify_noerr( err );
 }
 
 wxMacDataBrowserCheckListControl::~wxMacDataBrowserCheckListControl()
 {
-    
+
 }
 
 class wxMacCheckListBoxItem : public wxMacListBoxItem
@@ -170,15 +173,15 @@ public :
     {
         m_isChecked = false;
     }
-    
+
     ~wxMacCheckListBoxItem()
     {
     }
-    
+
     virtual OSStatus GetSetData( wxMacDataItemBrowserControl *owner ,
         DataBrowserPropertyID property,
         DataBrowserItemDataRef itemData,
-        bool changeValue ) 
+        bool changeValue )
     {
         OSStatus err = errDataBrowserPropertyNotSupported;
 
@@ -218,7 +221,7 @@ public :
                     wxCommandEvent event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, checklist->GetId() );
                     event.SetInt( owner->GetLineFromItem( this ) );
                     event.SetEventObject( checklist );
-                    checklist->GetEventHandler()->ProcessEvent( event );               
+                    checklist->GetEventHandler()->ProcessEvent( event );
                 }
                 break;
 
@@ -233,35 +236,35 @@ public :
         return err;
     }
 
-    void Check( bool check ) 
+    void Check( bool check )
     {
         m_isChecked = check;
     }
-    bool IsChecked() const 
+    bool IsChecked() const
     {
-         return m_isChecked; 
+         return m_isChecked;
     }
 
 protected :
     bool        m_isChecked;
 };
 
-wxMacListBoxItem* wxMacDataBrowserCheckListControl::CreateItem() 
+wxMacListBoxItem* wxMacDataBrowserCheckListControl::CreateItem()
 {
     return new wxMacCheckListBoxItem();
 }
 
-void wxMacDataBrowserCheckListControl::MacCheck( unsigned int n, bool bCheck) 
+void wxMacDataBrowserCheckListControl::MacCheck( unsigned int n, bool bCheck)
 {
     wxMacCheckListBoxItem* item = dynamic_cast<wxMacCheckListBoxItem*>( GetItemFromLine( n) );
     item->Check( bCheck);
     UpdateItem(wxMacDataBrowserRootContainer, item , kCheckboxColumnId);
 }
 
-bool wxMacDataBrowserCheckListControl::MacIsChecked( unsigned int n) const 
+bool wxMacDataBrowserCheckListControl::MacIsChecked( unsigned int n) const
 {
     wxMacCheckListBoxItem * item = dynamic_cast<wxMacCheckListBoxItem*>( GetItemFromLine( n ) );
-    return item->IsChecked();    
+    return item->IsChecked();
 }
 
 

@@ -17,9 +17,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/radiobut.h"
+    #include "wx/arrstr.h"
 #endif
 
-#include "wx/arrstr.h"
 #include "wx/mac/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)

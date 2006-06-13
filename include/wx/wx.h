@@ -18,6 +18,7 @@
 #include "wx/list.h"
 #include "wx/hash.h"
 #include "wx/string.h"
+#include "wx/arrstr.h"
 #include "wx/intl.h"
 #include "wx/log.h"
 #include "wx/event.h"

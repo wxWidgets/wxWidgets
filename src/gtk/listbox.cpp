@@ -22,9 +22,9 @@
     #include "wx/utils.h"
     #include "wx/settings.h"
     #include "wx/checklst.h"
+    #include "wx/arrstr.h"
 #endif
 
-#include "wx/arrstr.h"
 #include "wx/gtk/private.h"
 #include "wx/gtk/treeentry_gtk.h"
 

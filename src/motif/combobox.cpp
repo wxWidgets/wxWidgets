@@ -15,7 +15,10 @@
 #if wxUSE_COMBOBOX
 
 #include "wx/combobox.h"
-#include "wx/arrstr.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/arrstr.h"
+#endif
 
 #ifdef __VMS__
 #pragma message disable nosimpint
