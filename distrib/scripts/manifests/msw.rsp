@@ -13,9 +13,6 @@ docs/wine/COPYING.LIB
 docs/microwin/readme.txt
 docs/microwin/microwindows.patches
 
-distrib/msw/*.rsp
-distrib/msw/*.bat
-
 tools/gettext/*.exe
 tools/gettext/*.sed
 
@@ -40,7 +37,7 @@ src/msw/wince/*.c
 
 include/wx/msw/*.h
 include/wx/msw/*.rc
-include/wx/msw/wx.manifest
+include/wx/msw/*.manifest
 include/wx/msw/ole/*.h
 include/wx/msw/*.cur
 include/wx/msw/*.ico
