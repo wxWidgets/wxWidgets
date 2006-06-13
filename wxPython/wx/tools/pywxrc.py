@@ -77,6 +77,28 @@ class xrc%(windowName)s(wx.%(windowClass)s):
         self.%(widgetName)s = xrc.XRCCTRL(self, \"%(widgetName)s\")
 """
 
+    MENU_CLASS_HEADER = """\
+class xrc%(windowName)s(wx.%(windowClass)s):
+    def __init__(self):
+        pre = get_resources().LoadMenu("%(windowName)s")
+
+        # This is a copy of Robin's PostCreate voodoo magic in wx.Window that
+        # relinks the self object with the menu object.
+        self.this = pre.this
+        self.thisown = pre.thisown
+        pre.thisown = 0
+        if hasattr(self, '_setOORInfo'):
+            self._setOORInfo(self)
+        if hasattr(self, '_setCallbackInfo'):
+            self._setCallbackInfo(self, self.__class__)
+
+        # Define variables for the menu items
+"""
+
+    CREATE_MENUITEM_VAR = """\
+        self.%(widgetName)s = self.FindItemById(xrc.XRCID(\"%(widgetName)s\"))
+"""
+
     INIT_RESOURE_HEADER = """\
 # ------------------------ Resource data ----------------------
 
@@ -204,7 +226,11 @@ class XmlResourceCompiler:
             windowClass = topWindow.getAttribute("class")
             windowClass = re.sub("^wx", "", windowClass)
             windowName = topWindow.getAttribute("name")
-            outputList.append(self.templates.CLASS_HEADER % locals())
+            
+            if windowClass == "Menu":
+                outputList.append(self.templates.MENU_CLASS_HEADER % locals())
+            else:
+                outputList.append(self.templates.CLASS_HEADER % locals())
             
             # Generate a variable for each control, and standard event handlers
             # for standard controls.
@@ -212,11 +238,12 @@ class XmlResourceCompiler:
                 widgetClass = widget.getAttribute("class")
                 widgetClass = re.sub("^wx", "", widgetClass)
                 widgetName = widget.getAttribute("name")
-                if (widgetName != "" and widgetClass != "" and 
-                    widgetClass not in 
-                        ['tool', 'unknown', 'notebookpage', 
-                         'separator', 'sizeritem', 'MenuItem']):
-                    outputList.append(self.templates.CREATE_WIDGET_VAR % locals())
+                if (widgetName != "" and widgetClass != ""):
+                    if widgetClass == "MenuItem":
+                        outputList.append(self.templates.CREATE_MENUITEM_VAR % locals())
+                    elif widgetClass not in \
+                        ['tool', 'unknown', 'notebookpage', 'separator', 'sizeritem']:
+                        outputList.append(self.templates.CREATE_WIDGET_VAR % locals())
             outputList.append('\n\n')
                     
         return "".join(outputList)
@@ -234,7 +261,7 @@ class XmlResourceCompiler:
         self.ReplaceFilenamesInXRC(resourceDocument.firstChild, files, resourcePath)
         
         filename = resourceFilename
-        fileData = resourceDocument.toxml()
+        fileData = resourceDocument.toxml() # what about this? encoding=resourceDocument.encoding)
         outputList.append(self.templates.FILE_AS_STRING % locals())
 
         for f in files:
