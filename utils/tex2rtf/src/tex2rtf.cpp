@@ -186,6 +186,8 @@ bool MyApp::OnInit()
       }
   }
 
+  TexPathList.Add(::wxGetCwd());
+
 #ifdef NO_GUI
   if (InputFile.empty() || OutputFile.empty())
   {
