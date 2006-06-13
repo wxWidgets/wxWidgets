@@ -91,8 +91,9 @@ public:
 
     // retrieve helptext for a particular item, empty string means no help text
     wxString GetItemHelpText(unsigned int n) const;
-    
-    virtual int GetItemFromPoint(const wxPoint& pt) const;
+
+// Hmmm...  This is protected on wxMSW.    
+//    virtual int GetItemFromPoint(const wxPoint& pt) const;
 
 //    bool IsValid(int n) const;  ** not public
         
