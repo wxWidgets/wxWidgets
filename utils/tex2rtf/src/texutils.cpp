@@ -1185,6 +1185,7 @@ bool StringTobool(const wxString& val)
     up.MakeUpper();
 
     if (up.IsSameAs(_T("YES")) ||
+        up.IsSameAs(_T("TRUE")) ||
         up.IsSameAs(_T("ON")) ||
         up.IsSameAs(_T("OK")) |
         up.IsSameAs(_T("1")))
