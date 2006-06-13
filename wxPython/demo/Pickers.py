@@ -20,7 +20,7 @@ class TestPanel(wx.Panel):
         fgs = wx.FlexGridSizer(cols=4, hgap=5, vgap=5)
         fgs.AddGrowableCol(3)
         fgs.Add((10,10))  # spacer
-        lbl = wx.StaticText(self, -1, "w/o textctrl")
+        lbl = wx.StaticText(self, -1, "default style")
         lbl.SetFont(wx.FFont(12, wx.FONTFAMILY_SWISS, wx.FONTFLAG_BOLD))
         fgs.Add(lbl)
         fgs.Add((10,10))  # spacer
