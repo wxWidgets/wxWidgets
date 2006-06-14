@@ -517,12 +517,14 @@ private:
     // current defer window position operation handle (may be NULL)
     WXHANDLE m_hDWP;
 
+protected:
     // When deferred positioning is done these hold the pending changes, and
     // are used for the default values if another size/pos changes is done on
     // this window before the group of deferred changes is completed.
     wxPoint     m_pendingPosition;
     wxSize      m_pendingSize;
 
+private:
 #ifdef __POCKETPC__
     bool        m_contextMenuEnabled;
 #endif
