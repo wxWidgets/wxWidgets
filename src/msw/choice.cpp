@@ -541,6 +541,11 @@ void wxChoice::DoSetSize(int x, int y,
 
     wxControl::DoSetSize(x, y, width, height, sizeFlags);
 
+    // If we're storing a pending size, make sure we store
+    // the original size for reporting back to the app.
+    if (m_pendingSize != wxDefaultSize)
+        m_pendingSize = wxSize(width, heightOrig);
+
     // This solution works on XP, but causes choice/combobox lists to be
     // too short on W2K and earlier.
 #if 0
