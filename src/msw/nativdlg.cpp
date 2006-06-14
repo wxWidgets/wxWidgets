@@ -146,20 +146,14 @@ wxWindow* wxWindow::GetWindowChild(wxWindowID id)
     wxWindow* win = GetWindowChild1(id);
     if ( !win )
     {
-        HWND hWnd = ::GetDlgItem((HWND) GetHWND(), id);
-
-        if (hWnd)
+        HWND hwnd = ::GetDlgItem(GetHwnd(), id);
+        if ( hwnd )
         {
-            wxWindow* child = CreateWindowFromHWND(this, (WXHWND) hWnd);
-            if (child)
-            {
-                child->AddChild(this);
-                return child;
-            }
+            win = CreateWindowFromHWND(this, (WXHWND) hwnd);
         }
     }
 
-    return NULL;
+    return win;
 }
 
 // ---------------------------------------------------------------------------
