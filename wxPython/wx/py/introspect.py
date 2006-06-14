@@ -78,7 +78,7 @@ def getAttributeNames(object, includeMagic=1, includeSingle=1,
     attributes.sort(lambda x, y: cmp(x.upper(), y.upper()))
     if not includeSingle:
         attributes = filter(lambda item: item[0]!='_' \
-                            or item[1]=='_', attributes)
+                            or item[1:2]=='_', attributes)
     if not includeDouble:
         attributes = filter(lambda item: item[:2]!='__', attributes)
     return attributes
