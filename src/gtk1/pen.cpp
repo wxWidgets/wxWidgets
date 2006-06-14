@@ -11,7 +11,10 @@
 #include "wx/wxprec.h"
 
 #include "wx/pen.h"
-#include "wx/colour.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/colour.h"
+#endif
 
 #include <gdk/gdk.h>
 

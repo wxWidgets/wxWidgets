@@ -15,9 +15,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
+    #include "wx/colour.h"
 #endif //WX_PRECOMP
-
-#include "wx/colour.h"
 
 #import <AppKit/NSColor.h>
 

@@ -18,9 +18,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
+    #include "wx/colour.h"
 #endif
 
-#include "wx/colour.h"
 #include "wx/mgl/private.h"
 
 //-----------------------------------------------------------------------------

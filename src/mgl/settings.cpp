@@ -14,7 +14,11 @@
 #endif
 
 #include "wx/settings.h"
-#include "wx/colour.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/colour.h"
+#endif
+
 #include "wx/font.h"
 #include "wx/gdicmn.h"
 #include "wx/module.h"

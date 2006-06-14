@@ -18,10 +18,10 @@
 #include "wx/html/htmltag.h"
 
 #ifndef WXPRECOMP
+    #include "wx/colour.h"
 #endif
 
 #include "wx/html/htmlpars.h"
-#include "wx/colour.h"
 #include <stdio.h> // for vsscanf
 #include <stdarg.h>
 

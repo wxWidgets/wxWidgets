@@ -27,9 +27,9 @@
     #include "wx/cursor.h"
     #include "wx/settings.h"
     #include "wx/bitmap.h"
+    #include "wx/colour.h"
 #endif
 
-#include "wx/colour.h"
 #include "wx/font.h"
 
 WXDLLIMPEXP_DATA_CORE(wxBrushList*) wxTheBrushList;

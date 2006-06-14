@@ -34,6 +34,7 @@
 #include "wx/toplevel.h"
 #include "wx/frame.h"
 #include "wx/bitmap.h"
+#include "wx/colour.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"

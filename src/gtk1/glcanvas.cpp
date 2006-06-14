@@ -19,9 +19,9 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/frame.h"
+    #include "wx/colour.h"
 #endif // WX_PRECOMP
 
-#include "wx/colour.h"
 #include "wx/module.h"
 
 extern "C"

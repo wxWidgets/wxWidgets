@@ -14,9 +14,8 @@
 #ifndef WX_PRECOMP
     #include "wx/pen.h"
     #include "wx/bitmap.h"
+    #include "wx/colour.h"
 #endif //WX_PRECOMP
-
-#include "wx/colour.h"
 
 #import <AppKit/NSColor.h>
 

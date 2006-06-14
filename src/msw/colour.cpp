@@ -12,11 +12,11 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/colour.h"
-
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#include "wx/colour.h"
 
 #include "wx/gdicmn.h"
 #include "wx/msw/private.h"

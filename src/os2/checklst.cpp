@@ -29,9 +29,9 @@
     #include "wx/settings.h"
     #include "wx/listbox.h"
     #include "wx/bitmap.h"
+    #include "wx/colour.h"
 #endif
 
-#include "wx/colour.h"
 #include "wx/font.h"
 #include "wx/ownerdrw.h"
 
