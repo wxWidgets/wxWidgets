@@ -44,59 +44,58 @@
     #define HTMLHELP_NAME wxT("HtmlHelpW")
 #endif
 
-// dll symbol handle
-static HTMLHELP gs_htmlHelp = 0;
-
-static bool LoadHtmlHelpLibrary()
+HTMLHELP GetHtmlHelpFunction()
 {
-    wxPluginLibrary *lib = wxPluginManager::LoadLibrary( _T("HHCTRL.OCX"), wxDL_DEFAULT | wxDL_VERBATIM );
+    static HTMLHELP s_htmlHelp = NULL;
 
-    if( !lib )
+    if ( !s_htmlHelp )
     {
-        wxLogError(_("MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."));
-        return false;
-    }
-    else
-    {
-        gs_htmlHelp = (HTMLHELP)lib->GetSymbol( HTMLHELP_NAME );
+        static wxDynamicLibrary s_dllHtmlHelp(_T("HHCTRL.OCX"), wxDL_VERBATIM);
 
-        if( !gs_htmlHelp )
+        if ( !s_dllHtmlHelp.IsLoaded() )
         {
-            wxLogError(_("Failed to initialize MS HTML Help."));
-
-            lib->UnrefLib();
-            return false ;
+            wxLogError(_("MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."));
+        }
+        else
+        {
+            s_htmlHelp = (HTMLHELP)s_dllHtmlHelp.GetSymbol(HTMLHELP_NAME);
+            if ( !s_htmlHelp )
+            {
+                wxLogError(_("Failed to initialize MS HTML Help."));
+            }
         }
     }
 
-    return true;
+    return s_htmlHelp;
 }
 
-static void UnloadHtmlHelpLibrary()
+// find the window to use in HtmlHelp() call: use the given one by default but
+// fall back to the top level app window and then the desktop if it's NULL
+static HWND GetSuitableHWND(wxWindow *win)
 {
-    if ( gs_htmlHelp )
-    {
-        if (wxPluginManager::UnloadLibrary( _T("HHCTRL.OCX") ))
-            gs_htmlHelp = 0;
-    }
+    if ( !win && wxTheApp )
+        win = wxTheApp->GetTopWindow();
+
+    return win ? GetHwndOf(win) : ::GetDesktopWindow();
 }
 
-static HWND GetSuitableHWND(wxCHMHelpController* controller)
+// wrap the real HtmlHelp() but just return false (and not crash) if it
+// couldn't be loaded
+//
+// it also takes a wxWindow instead of HWND
+static bool
+CallHtmlHelpFunction(wxWindow *win, const wxChar *str, UINT uint, DWORD dword)
 {
-    if (controller->GetParentWindow())
-        return (HWND) controller->GetParentWindow()->GetHWND();
-    else if (wxTheApp->GetTopWindow())
-        return (HWND) wxTheApp->GetTopWindow()->GetHWND();
-    else
-        return GetDesktopWindow();
+    HTMLHELP htmlHelp = GetHtmlHelpFunction();
+
+    return htmlHelp && htmlHelp(GetSuitableHWND(win), str, uint, dword);
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxCHMHelpController, wxHelpControllerBase)
 
 bool wxCHMHelpController::Initialize(const wxString& filename)
 {
-    // warn on failure
-    if( !LoadHtmlHelpLibrary() )
+    if ( !GetHtmlHelpFunction() )
         return false;
 
     m_helpFile = filename;
@@ -112,40 +111,43 @@ bool wxCHMHelpController::LoadFile(const wxString& file)
 
 bool wxCHMHelpController::DisplayContents()
 {
-    if (m_helpFile.IsEmpty()) return false;
+    if (m_helpFile.IsEmpty())
+        return false;
 
     wxString str = GetValidFilename(m_helpFile);
 
-    gs_htmlHelp(GetSuitableHWND(this), (const wxChar*) str, HH_DISPLAY_TOPIC, 0L);
-    return true;
+    return CallHtmlHelpFunction(GetParentWindow(), str, HH_DISPLAY_TOPIC, 0L);
 }
 
 // Use topic or HTML filename
 bool wxCHMHelpController::DisplaySection(const wxString& section)
 {
-    if (m_helpFile.IsEmpty()) return false;
+    if (m_helpFile.IsEmpty())
+        return false;
 
     wxString str = GetValidFilename(m_helpFile);
 
     // Is this an HTML file or a keyword?
-    bool isFilename = (section.Find(wxT(".htm")) != wxNOT_FOUND);
+    if ( section.Find(wxT(".htm")) != wxNOT_FOUND )
+    {
+        // interpret as a file name
+        return CallHtmlHelpFunction(GetParentWindow(), str, HH_DISPLAY_TOPIC,
+                                    wxPtrToUInt(section.c_str()));
+    }
 
-    if (isFilename)
-        gs_htmlHelp(GetSuitableHWND(this), (const wxChar*) str, HH_DISPLAY_TOPIC, (DWORD) (const wxChar*) section);
-    else
-        KeywordSearch(section);
-    return true;
+    return KeywordSearch(section);
 }
 
 // Use context number
 bool wxCHMHelpController::DisplaySection(int section)
 {
-    if (m_helpFile.IsEmpty()) return false;
+    if (m_helpFile.IsEmpty())
+        return false;
 
     wxString str = GetValidFilename(m_helpFile);
 
-    gs_htmlHelp(GetSuitableHWND(this), (const wxChar*) str, HH_HELP_CONTEXT, (DWORD)section);
-    return true;
+    return CallHtmlHelpFunction(GetParentWindow(), str, HH_HELP_CONTEXT,
+                                (DWORD)section);
 }
 
 bool wxCHMHelpController::DisplayContextPopup(int contextId)
@@ -169,11 +171,20 @@ bool wxCHMHelpController::DisplayContextPopup(int contextId)
     popup.pszFont = NULL;
     popup.pszText = NULL;
 
-    gs_htmlHelp(GetSuitableHWND(this), (const wxChar*) str, HH_DISPLAY_TEXT_POPUP, (DWORD) & popup);
-    return true;
+    return CallHtmlHelpFunction(GetParentWindow(), str, HH_DISPLAY_TEXT_POPUP,
+                                wxPtrToUInt(&popup));
 }
 
-bool wxCHMHelpController::DisplayTextPopup(const wxString& text, const wxPoint& pos)
+bool
+wxCHMHelpController::DisplayTextPopup(const wxString& text, const wxPoint& pos)
+{
+    return ShowContextHelpPopup(text, pos, GetParentWindow());
+}
+
+/* static */
+bool wxCHMHelpController::ShowContextHelpPopup(const wxString& text,
+                                               const wxPoint& pos,
+                                               wxWindow *window)
 {
     HH_POPUP popup;
     popup.cbStruct = sizeof(popup);
@@ -186,8 +197,8 @@ bool wxCHMHelpController::DisplayTextPopup(const wxString& text, const wxPoint& 
     popup.pszFont = NULL;
     popup.pszText = (const wxChar*) text;
 
-    gs_htmlHelp(GetSuitableHWND(this), NULL, HH_DISPLAY_TEXT_POPUP, (DWORD) & popup);
-    return true;
+    return CallHtmlHelpFunction(window, NULL, HH_DISPLAY_TEXT_POPUP,
+                                wxPtrToUInt(&popup));
 }
 
 bool wxCHMHelpController::DisplayBlock(long block)
@@ -198,7 +209,8 @@ bool wxCHMHelpController::DisplayBlock(long block)
 bool wxCHMHelpController::KeywordSearch(const wxString& k,
                                         wxHelpSearchMode WXUNUSED(mode))
 {
-    if (m_helpFile.IsEmpty()) return false;
+    if (m_helpFile.IsEmpty())
+        return false;
 
     wxString str = GetValidFilename(m_helpFile);
 
@@ -212,15 +224,13 @@ bool wxCHMHelpController::KeywordSearch(const wxString& k,
     link.pszWindow =    NULL ;
     link.fIndexOnFail = TRUE ;
 
-    gs_htmlHelp(GetSuitableHWND(this), (const wxChar*) str, HH_KEYWORD_LOOKUP, (DWORD)& link);
-    return true;
+    return CallHtmlHelpFunction(GetParentWindow(), str, HH_KEYWORD_LOOKUP,
+                                wxPtrToUInt(&link));
 }
 
 bool wxCHMHelpController::Quit()
 {
-    gs_htmlHelp(GetSuitableHWND(this), 0, HH_CLOSE_ALL, 0L);
-
-    return true;
+    return CallHtmlHelpFunction(GetParentWindow(), NULL, HH_CLOSE_ALL, 0L);
 }
 
 // Append extension if necessary.
@@ -237,11 +247,6 @@ wxString wxCHMHelpController::GetValidFilename(const wxString& file) const
     else
         fullName = path + wxT("\\") + name + wxT(".chm");
     return fullName;
-}
-
-wxCHMHelpController::~wxCHMHelpController()
-{
-    UnloadHtmlHelpLibrary();
 }
 
 #endif // wxUSE_HELP

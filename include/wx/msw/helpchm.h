@@ -20,7 +20,6 @@ class WXDLLEXPORT wxCHMHelpController : public wxHelpControllerBase
 {
 public:
     wxCHMHelpController(wxWindow* parentWindow = NULL): wxHelpControllerBase(parentWindow) { }
-    virtual ~wxCHMHelpController();
 
     // Must call this to set the filename
     virtual bool Initialize(const wxString& file);
@@ -39,6 +38,11 @@ public:
     virtual bool Quit();
 
     wxString GetHelpFile() const { return m_helpFile; }
+
+    // helper of DisplayTextPopup(), also used in wxSimpleHelpProvider::ShowHelp
+    static bool ShowContextHelpPopup(const wxString& text,
+                                     const wxPoint& pos,
+                                     wxWindow *window);
 
 protected:
     // Append extension if necessary.

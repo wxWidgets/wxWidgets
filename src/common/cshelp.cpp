@@ -34,6 +34,11 @@
 #include "wx/module.h"
 #include "wx/cshelp.h"
 
+#if wxUSE_MS_HTML_HELP
+    #include "wx/msw/helpchm.h"     // for ShowContextHelpPopup
+    #include "wx/utils.h"           // for wxGetMousePosition()
+#endif
+
 // ----------------------------------------------------------------------------
 // wxContextHelpEvtHandler private class
 // ----------------------------------------------------------------------------
@@ -378,29 +383,46 @@ void wxSimpleHelpProvider::RemoveHelp(wxWindowBase* window)
 
 bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
 {
-#if wxUSE_TIPWINDOW
-    static wxTipWindow* s_tipWindow = NULL;
-
-    if (s_tipWindow)
-    {
-        // Prevent s_tipWindow being nulled in OnIdle,
-        // thereby removing the chance for the window to be closed by ShowHelp
-        s_tipWindow->SetTipWindowPtr(NULL);
-        s_tipWindow->Close();
-    }
-    s_tipWindow = NULL;
-
+#if wxUSE_MS_HTML_HELP || wxUSE_TIPWINDOW
     const wxString text = GetHelpTextMaybeAtPoint(window);
+
     if ( !text.empty() )
     {
-        s_tipWindow = new wxTipWindow((wxWindow *)window, text,
-                                        100, &s_tipWindow);
+        // use the native help popup style if it's available
+#if wxUSE_MS_HTML_HELP
+        if ( !wxCHMHelpController::ShowContextHelpPopup
+                                   (
+                                        text,
+                                        wxGetMousePosition(),
+                                        (wxWindow *)window
+                                   ) )
+#endif // wxUSE_MS_HTML_HELP
+        {
+#if wxUSE_TIPWINDOW
+            static wxTipWindow* s_tipWindow = NULL;
+
+            if ( s_tipWindow )
+            {
+                // Prevent s_tipWindow being nulled in OnIdle, thereby removing
+                // the chance for the window to be closed by ShowHelp
+                s_tipWindow->SetTipWindowPtr(NULL);
+                s_tipWindow->Close();
+            }
+
+            s_tipWindow = new wxTipWindow((wxWindow *)window, text,
+                                            100, &s_tipWindow);
+#else // !wxUSE_TIPWINDOW
+            // we tried wxCHMHelpController but it failed and we don't have
+            // wxTipWindow to fall back on, so
+            return false;
+#endif // wxUSE_TIPWINDOW
+        }
 
         return true;
     }
-#else
+#else // !wxUSE_MS_HTML_HELP && !wxUSE_TIPWINDOW
     wxUnusedVar(window);
-#endif // wxUSE_TIPWINDOW
+#endif // wxUSE_MS_HTML_HELP || wxUSE_TIPWINDOW
 
     return false;
 }
