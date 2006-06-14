@@ -1617,19 +1617,18 @@ wxString& wxString::Trim(bool bFromRight)
         if ( bFromRight )
         {
             // find last non-space character
-            iterator psz = begin() + length() - 1;
-            while ( wxSafeIsspace(*psz) && (psz >= begin()) )
-                psz--;
-
+            reverse_iterator psz = rbegin();
+            while ( wxSafeIsspace(*psz) && (psz != rend()) )
+                psz++;
+            
             // truncate at trailing space start
-            *++psz = wxT('\0');
-            erase(psz, end());
+            erase(psz.base(), end());
         }
         else
         {
             // find first non-space character
             iterator psz = begin();
-            while ( wxSafeIsspace(*psz) )
+            while ( wxSafeIsspace(*psz) && (psz != end()) )
                 psz++;
 
             // fix up data and length
