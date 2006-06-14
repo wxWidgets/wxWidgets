@@ -103,10 +103,10 @@ void wxVListBoxComboPopup::PaintComboControl( wxDC& dc, const wxRect& rect )
 {
     if ( !(m_combo->GetWindowStyle() & wxODCB_STD_CONTROL_PAINT) )
     {
-        m_combo->DrawFocusBackground(dc,rect,0);
+        OnDrawBg(dc,rect,m_value,wxODCB_PAINTING_CONTROL);
         if ( m_value >= 0 )
         {
-            OnDrawItem(dc,rect,m_value,wxCP_PAINTING_CONTROL);
+            OnDrawItem(dc,rect,m_value,wxODCB_PAINTING_CONTROL);
             return;
         }
     }
@@ -128,40 +128,56 @@ void wxVListBoxComboPopup::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) co
     OnDrawItem(dc,rect,(int)n,0);
 }
 
-wxCoord wxVListBoxComboPopup::OnMeasureItem(size_t WXUNUSED(n)) const
+wxCoord wxVListBoxComboPopup::OnMeasureItem(size_t n) const
 {
-    return m_itemHeight;
+    wxOwnerDrawnComboBox* combo = (wxOwnerDrawnComboBox*) m_combo;
+
+    wxASSERT_MSG( combo->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)),
+                  wxT("you must subclass wxVListBoxComboPopup for drawing and measuring methods") );
+
+    wxCoord h = combo->OnMeasureItem(n);
+    if ( h < 0 )
+        h = m_itemHeight;
+    return h;
 }
 
-wxCoord wxVListBoxComboPopup::OnMeasureItemWidth(size_t WXUNUSED(n)) const
+wxCoord wxVListBoxComboPopup::OnMeasureItemWidth(size_t n) const
 {
-    //return OnMeasureListItemWidth(n);
-    return -1;
+    wxOwnerDrawnComboBox* combo = (wxOwnerDrawnComboBox*) m_combo;
+
+    wxASSERT_MSG( combo->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)),
+                  wxT("you must subclass wxVListBoxComboPopup for drawing and measuring methods") );
+
+    return combo->OnMeasureItemWidth(n);
+}
+
+void wxVListBoxComboPopup::OnDrawBg( wxDC& dc,
+                                     const wxRect& rect,
+                                     int item,
+                                     int flags ) const
+{
+    wxOwnerDrawnComboBox* combo = (wxOwnerDrawnComboBox*) m_combo;
+
+    wxASSERT_MSG( combo->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)),
+                  wxT("you must subclass wxVListBoxComboPopup for drawing and measuring methods") );
+
+    combo->OnDrawBackground(dc,rect,item,flags);
 }
 
 void wxVListBoxComboPopup::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
 {
-    // we need to render selected and current items differently
-    if ( IsCurrent(n) )
-    {
-        m_combo->DrawFocusBackground( dc, rect, wxCONTROL_ISSUBMENU|wxCONTROL_SELECTED );
-    }
-    //else: do nothing for the normal items
+    OnDrawBg(dc,rect,(int)n,0);
 }
 
 // This is called from wxVListBoxComboPopup::OnDrawItem, with text colour and font prepared
 void wxVListBoxComboPopup::OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const
 {
-    if ( flags & wxCP_PAINTING_CONTROL )
-    {
-        dc.DrawText( m_combo->GetValue(),
-                     rect.x + m_combo->GetTextIndent(),
-                     (rect.height-dc.GetCharHeight())/2 + rect.y );
-    }
-    else
-    {
-        dc.DrawText( GetString(item), rect.x + 2, rect.y );
-    }
+    wxOwnerDrawnComboBox* combo = (wxOwnerDrawnComboBox*) m_combo;
+
+    wxASSERT_MSG( combo->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)),
+                  wxT("you must subclass wxVListBoxComboPopup for drawing and measuring methods") );
+
+    combo->OnDrawItem(dc,rect,item,flags);
 }
 
 void wxVListBoxComboPopup::DismissWithEvent()
@@ -550,7 +566,7 @@ void wxVListBoxComboPopup::Populate( const wxArrayString& choices )
 
     // Find initial selection
     wxString strValue = m_combo->GetValue();
-    if ( strValue.Length() )
+    if ( strValue.length() )
         m_value = m_strings.Index(strValue);
 }
 
@@ -718,8 +734,9 @@ int wxOwnerDrawnComboBox::FindString(const wxString& s, bool bCase) const
 
 void wxOwnerDrawnComboBox::Select(int n)
 {
-    wxCHECK_RET( (n == wxNOT_FOUND) || IsValid(n), _T("invalid index in wxOwnerDrawnComboBox::Select") );
     EnsurePopupControl();
+
+    wxCHECK_RET( (n == wxNOT_FOUND) || IsValid(n), _T("invalid index in wxOwnerDrawnComboBox::Select") );
 
     m_popupInterface->SetSelection(n);
 
@@ -751,10 +768,11 @@ int wxOwnerDrawnComboBox::DoAppend(const wxString& item)
 
 int wxOwnerDrawnComboBox::DoInsert(const wxString& item, unsigned int pos)
 {
+    EnsurePopupControl();
+
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
     wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
 
-    EnsurePopupControl();
     m_popupInterface->Insert(item,pos);
 
     return pos;
@@ -780,6 +798,50 @@ void wxOwnerDrawnComboBox::DoSetItemClientObject(unsigned int n, wxClientData* c
 wxClientData* wxOwnerDrawnComboBox::DoGetItemClientObject(unsigned int n) const
 {
     return (wxClientData*) DoGetItemClientData(n);
+}
+
+// ----------------------------------------------------------------------------
+// wxOwnerDrawnComboBox item drawing and measuring default implementations
+// ----------------------------------------------------------------------------
+
+void wxOwnerDrawnComboBox::OnDrawItem( wxDC& dc,
+                                       const wxRect& rect,
+                                       int item,
+                                       int flags ) const
+{
+    if ( flags & wxODCB_PAINTING_CONTROL )
+    {
+        dc.DrawText( GetValue(),
+                     rect.x + GetTextIndent(),
+                     (rect.height-dc.GetCharHeight())/2 + rect.y );
+    }
+    else
+    {
+        dc.DrawText( m_popupInterface->GetString(item), rect.x + 2, rect.y );
+    }
+}
+
+wxCoord wxOwnerDrawnComboBox::OnMeasureItem( size_t WXUNUSED(item) ) const
+{
+    return -1;
+}
+
+wxCoord wxOwnerDrawnComboBox::OnMeasureItemWidth( size_t WXUNUSED(item) ) const
+{
+    return -1;
+}
+
+void wxOwnerDrawnComboBox::OnDrawBackground(wxDC& dc, const wxRect& rect, int item, int flags) const
+{
+    // we need to render selected and current items differently
+    if ( m_popupInterface->IsCurrent((size_t)item) )
+    {
+        DrawFocusBackground(dc,
+                            rect,
+                            (flags&wxODCB_PAINTING_CONTROL?0:wxCONTROL_ISSUBMENU) |
+                            wxCONTROL_SELECTED);
+    }
+    //else: do nothing for the normal items
 }
 
 #endif // wxUSE_ODCOMBOBOX

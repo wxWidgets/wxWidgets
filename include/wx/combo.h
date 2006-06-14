@@ -2,7 +2,7 @@
 // Name:        wx/combo.h
 // Purpose:     wxComboCtrl declaration
 // Author:      Jaakko Salli
-// Modified by: 
+// Modified by:
 // Created:     Apr-30-2006
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
@@ -304,7 +304,7 @@ public:
     // flags: wxRendererNative flags: wxCONTROL_ISSUBMENU: is drawing a list item instead of combo control
     //                                wxCONTROL_SELECTED: list item is selected
     //                                wxCONTROL_DISABLED: control/item is disabled
-    virtual void DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags );
+    virtual void DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags ) const;
 
     // Returns true if focus indicator should be drawn in the control.
     bool ShouldDrawFocus() const

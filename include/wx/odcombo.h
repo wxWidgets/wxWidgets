@@ -37,13 +37,13 @@ enum
 
 
 //
-// Callback flags
+// Callback flags (see wxOwnerDrawnComboBox::OnDrawItem)
 //
 enum
 {
     // when set, we are painting the selected item in control,
     // not in the popup
-    wxCP_PAINTING_CONTROL           = 0x0001
+    wxODCB_PAINTING_CONTROL         = 0x0001
 };
 
 
@@ -84,17 +84,6 @@ public:
     virtual void OnComboDoubleClick();
     virtual bool LazyCreate();
 
-    // Callbacks for drawing and measuring items. Override in a derived class for
-    // owner-drawnness.
-    // item: item index to be drawn, may be wxNOT_FOUND when painting combo control itself
-    //       and there is no valid selection
-    // flags: wxCP_PAINTING_CONTROL is set if painting to combo control instead of list
-    virtual void OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const;
-
-    // Return item width, or -1 for calculating from text extent (default)
-    virtual wxCoord OnMeasureItemWidth( size_t item ) const;
-
-
     // Item management
     void SetSelection( int item );
     void Insert( const wxString& item, int pos );
@@ -132,13 +121,30 @@ protected:
     // Re-calculates width for given item
     void CheckWidth( int pos );
 
-    // wxVListBox implementation
-    virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
-    //virtual wxCoord OnMeasureItem(size_t n) const;
-    void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
+    // Callbacks for drawing and measuring items. Override in a derived class for
+    // owner-drawnness. Font, background and text colour have been prepared according
+    // to selection, focus and such.
+    //
+    // item: item index to be drawn, may be wxNOT_FOUND when painting combo control itself
+    //       and there is no valid selection
+    // flags: wxODCB_PAINTING_CONTROL is set if painting to combo control instead of list
+    // NOTE: If wxVListBoxComboPopup is used with wxComboCtrl class not derived from
+    //       wxOwnerDrawnComboBox, this method must be overridden.
+    virtual void OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const;
 
-    // Return item height
+    // This is same as in wxVListBox
     virtual wxCoord OnMeasureItem( size_t item ) const;
+
+    // Return item width, or -1 for calculating from text extent (default)
+    virtual wxCoord OnMeasureItemWidth( size_t item ) const;
+
+    // Draw item and combo control background. Flags are same as with OnDrawItem.
+    // NB: Can't use name OnDrawBackground because of virtual function hiding warnings.
+    virtual void OnDrawBg(wxDC& dc, const wxRect& rect, int item, int flags) const;
+
+    // Additional wxVListBox implementation (no need to override in derived classes)
+    virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
+    void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
 
     // filter mouse move events happening outside the list box
     // move selection with cursor
@@ -181,8 +187,8 @@ private:
 class WXDLLIMPEXP_ADV wxOwnerDrawnComboBox : public wxComboCtrl,
                                              public wxItemContainer
 {
-    friend class wxComboPopupWindow;
-    friend class wxComboCtrlBase;
+    //friend class wxComboPopupWindow;
+    friend class wxVListBoxComboPopup;
 public:
 
     // ctors and such
@@ -272,6 +278,23 @@ public:
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
 protected:
+
+    // Callback for drawing. Font, background and text colour have been
+    // prepared according to selection, focus and such.
+    // item: item index to be drawn, may be wxNOT_FOUND when painting combo control itself
+    //       and there is no valid selection
+    // flags: wxODCB_PAINTING_CONTROL is set if painting to combo control instead of list
+    virtual void OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const;
+
+    // Callback for item height, or -1 for default
+    virtual wxCoord OnMeasureItem( size_t item ) const;
+
+    // Callback for item width, or -1 for default/undetermined
+    virtual wxCoord OnMeasureItemWidth( size_t item ) const;
+
+    // Callback for background drawing. Flags are same as with
+    // OnDrawItem.
+    virtual void OnDrawBackground( wxDC& dc, const wxRect& rect, int item, int flags ) const;
 
     // clears all allocated client datas
     void ClearClientDatas();

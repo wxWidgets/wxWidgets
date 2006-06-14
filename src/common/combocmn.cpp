@@ -1092,7 +1092,7 @@ void wxComboCtrlBase::DoSetToolTip(wxToolTip *tooltip)
 // ----------------------------------------------------------------------------
 
 // draw focus background on area in a way typical on platform
-void wxComboCtrlBase::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags )
+void wxComboCtrlBase::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags ) const
 {
     wxSize sz = GetClientSize();
     bool isEnabled;

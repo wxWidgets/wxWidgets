@@ -239,9 +239,12 @@ static void wxMSWDrawFocusRect( wxDC& dc, const wxRect& rect )
 }
 
 // draw focus background on area in a way typical on platform
-void wxComboCtrl::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags )
+void wxComboCtrl::DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags ) const
 {
     wxUxThemeEngine* theme = (wxUxThemeEngine*) NULL;
+
+    // Constructor only calls GetHWND() const, so it should be safe
+    // to cast "this" to const.
     wxUxThemeHandle hTheme(this, L"COMBOBOX");
     //COLORREF cref;
 

@@ -59,7 +59,7 @@ public:
 
     virtual ~wxComboCtrl();
 
-    virtual void DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags );
+    virtual void DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags ) const;
 
     static int GetFeatures() { return wxComboCtrlFeatures::All; }
 
