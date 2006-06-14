@@ -37,6 +37,7 @@ private:
         CPPUNIT_TEST( Format );
         CPPUNIT_TEST( Constructors );
         CPPUNIT_TEST( Extraction );
+        CPPUNIT_TEST( Trim );
         CPPUNIT_TEST( Find );
         CPPUNIT_TEST( Replace );
         CPPUNIT_TEST( Match );
@@ -53,6 +54,7 @@ private:
     void Format();
     void Constructors();
     void Extraction();
+    void Trim();
     void Find();
     void Replace();
     void Match();
@@ -196,6 +198,24 @@ void StringTestCase::Extraction()
     TEST_ENDS_WITH( _T("Gello, world!"),    _T(""),              false );
 
     #undef TEST_ENDS_WITH
+}
+
+void StringTestCase::Trim()
+{
+    #define TEST_TRIM( str , dir , result )  \
+        CPPUNIT_ASSERT( wxString(str).Trim(dir) == result )
+
+    TEST_TRIM( _T("  Test  "),  true, _T("  Test") );
+    TEST_TRIM( _T("    "),      true, _T("")       );
+    TEST_TRIM( _T(" "),         true, _T("")       );
+    TEST_TRIM( _T(""),          true, _T("")       );
+
+    TEST_TRIM( _T("  Test  "),  false, _T("Test  ") );
+    TEST_TRIM( _T("    "),      false, _T("")       );
+    TEST_TRIM( _T(" "),         false, _T("")       );
+    TEST_TRIM( _T(""),          false, _T("")       );
+
+    #undef TEST_TRIM
 }
 
 void StringTestCase::Find()
