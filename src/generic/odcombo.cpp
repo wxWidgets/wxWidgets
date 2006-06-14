@@ -710,25 +710,36 @@ void wxOwnerDrawnComboBox::Delete(unsigned int n)
 
 unsigned int wxOwnerDrawnComboBox::GetCount() const
 {
-    wxASSERT_MSG( m_popupInterface, wxT("no popup interface") );
+    if ( !m_popupInterface )
+        return m_initChs.GetCount();
+
     return m_popupInterface->GetCount();
 }
 
 wxString wxOwnerDrawnComboBox::GetString(unsigned int n) const
 {
     wxCHECK_MSG( IsValid(n), wxEmptyString, _T("invalid index in wxOwnerDrawnComboBox::GetString") );
+
+    if ( !m_popupInterface )
+        return m_initChs.Item(n);
+
     return m_popupInterface->GetString(n);
 }
 
 void wxOwnerDrawnComboBox::SetString(unsigned int n, const wxString& s)
 {
+    EnsurePopupControl();
+
     wxCHECK_RET( IsValid(n), _T("invalid index in wxOwnerDrawnComboBox::SetString") );
+
     m_popupInterface->SetString(n,s);
 }
 
 int wxOwnerDrawnComboBox::FindString(const wxString& s, bool bCase) const
 {
-    wxASSERT_MSG( m_popupInterface, wxT("no popup interface") );
+    if ( !m_popupInterface )
+        return m_initChs.Index(s, bCase);
+
     return m_popupInterface->FindString(s, bCase);
 }
 
@@ -755,7 +766,9 @@ void wxOwnerDrawnComboBox::Select(int n)
 
 int wxOwnerDrawnComboBox::GetSelection() const
 {
-    wxASSERT_MSG( m_popupInterface, wxT("no popup interface") );
+    if ( !m_popupInterface )
+        return m_initChs.Index(m_valueString);
+
     return m_popupInterface->GetSelection();
 }
 
@@ -786,7 +799,9 @@ void wxOwnerDrawnComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 
 void* wxOwnerDrawnComboBox::DoGetItemClientData(unsigned int n) const
 {
-    wxASSERT_MSG( m_popupInterface, wxT("no popup interface") );
+    if ( !m_popupInterface )
+        return NULL;
+
     return m_popupInterface->GetItemClientData(n);
 }
 
