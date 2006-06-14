@@ -52,6 +52,10 @@ public:
     void OnAddSubPage(wxCommandEvent& event);
     void OnAddPageBefore(wxCommandEvent& event);
 
+#if wxUSE_HELP
+    void OnContextHelp(wxCommandEvent& event);
+#endif // wxUSE_HELP
+
     void OnHitTest(wxCommandEvent& event);
 
     void OnBookCtrl(wxBookCtrlBaseEvent& event);
@@ -144,6 +148,9 @@ enum ID_COMMANDS
     ID_ADD_PAGE_BEFORE,
     ID_ADD_SUB_PAGE,
 
+#if wxUSE_HELP
+    ID_CONTEXT_HELP,
+#endif // wxUSE_HELP
     ID_HITTEST
 };
 

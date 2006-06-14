@@ -34,6 +34,10 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
+#if wxUSE_HELP
+    wxHelpProvider::Set( new wxSimpleHelpProvider );
+#endif
+
     // Create the main window
     MyFrame *frame = new MyFrame();
 
@@ -54,6 +58,10 @@ wxPanel *CreateUserCreatedPage(wxBookCtrlBase *parent)
 {
     wxPanel *panel = new wxPanel(parent);
 
+#if wxUSE_HELP
+    panel->SetHelpText( wxT( "Panel with a Button" ) );
+#endif
+
     (void) new wxButton( panel, wxID_ANY, wxT("Button"),
         wxPoint(10, 10), wxDefaultSize );
 
@@ -63,6 +71,10 @@ wxPanel *CreateUserCreatedPage(wxBookCtrlBase *parent)
 wxPanel *CreateRadioButtonsPage(wxBookCtrlBase *parent)
 {
     wxPanel *panel = new wxPanel(parent);
+
+#if wxUSE_HELP
+    panel->SetHelpText( wxT( "Panel with some Radio Buttons" ) );
+#endif
 
     wxString animals[] = { wxT("Fox"), wxT("Hare"), wxT("Rabbit"),
         wxT("Sabre-toothed tiger"), wxT("T Rex") };
@@ -89,6 +101,10 @@ wxPanel *CreateVetoPage(wxBookCtrlBase *parent)
 {
     wxPanel *panel = new wxPanel(parent);
 
+#if wxUSE_HELP
+    panel->SetHelpText( wxT( "An empty panel" ) );
+#endif
+
     (void) new wxStaticText( panel, wxID_ANY,
         wxT("This page intentionally left blank"), wxPoint(10, 10) );
 
@@ -98,6 +114,10 @@ wxPanel *CreateVetoPage(wxBookCtrlBase *parent)
 wxPanel *CreateBigButtonPage(wxBookCtrlBase *parent)
 {
     wxPanel *panel = new wxPanel(parent);
+
+#if wxUSE_HELP
+    panel->SetHelpText( wxT( "Panel with a maximized button" ) );
+#endif
 
     wxButton *buttonBig = new wxButton(panel, wxID_ANY, wxT("Maximized button"));
 
@@ -112,6 +132,10 @@ wxPanel *CreateBigButtonPage(wxBookCtrlBase *parent)
 wxPanel *CreateInsertPage(wxBookCtrlBase *parent)
 {
     wxPanel *panel = new wxPanel(parent);
+
+#if wxUSE_HELP
+    panel->SetHelpText( wxT( "Maroon panel" ) );
+#endif
 
     panel->SetBackgroundColour( wxColour( wxT("MAROON") ) );
     (void) new wxStaticText( panel, wxID_ANY,
@@ -179,8 +203,12 @@ wxPanel *CreatePage(wxBookCtrlBase *parent, const wxString&pageName)
 }
 
 MyFrame::MyFrame()
-    : wxFrame(NULL, wxID_ANY,  wxString(wxT("wxWidgets book controls sample")))
+    : wxFrame(NULL, wxID_ANY, wxString(wxT("wxWidgets book controls sample")))
 {
+#if wxUSE_HELP
+    SetExtraStyle(wxFRAME_EX_CONTEXTHELP);
+#endif // wxUSE_HELP
+
 #if wxUSE_NOTEBOOK
     m_type = Type_Notebook;
 #elif wxUSE_CHOICEBOOK
@@ -239,6 +267,9 @@ MyFrame::MyFrame()
 #endif
 
     wxMenu *menuOperations = new wxMenu;
+#if wxUSE_HELP
+    menuOperations->Append(ID_CONTEXT_HELP, wxT("&Context help\tCtrl-F1"));
+#endif // wxUSE_HELP
     menuOperations->Append(ID_HITTEST, wxT("&Hit test\tCtrl-H"));
 
     wxMenu *menuFile = new wxMenu;
@@ -487,6 +518,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_DELETE_LAST_PAGE, MyFrame::OnDeleteLastPage)
     EVT_MENU(ID_NEXT_PAGE, MyFrame::OnNextPage)
 
+#if wxUSE_HELP
+    EVT_MENU(ID_CONTEXT_HELP, MyFrame::OnContextHelp)
+#endif // wxUSE_HELP
     EVT_MENU(ID_HITTEST, MyFrame::OnHitTest)
 
     // Book controls
@@ -519,6 +553,16 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     // Update title in idle time
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
+
+#if wxUSE_HELP
+
+void MyFrame::OnContextHelp(wxCommandEvent& WXUNUSED(event))
+{
+    // launches local event loop
+    wxContextHelp ch( this );
+}
+
+#endif // wxUSE_HELP
 
 void MyFrame::AddFlagStrIfFlagPresent(wxString & flagStr, long flags, long flag, const wxChar * flagName) const
 {
@@ -602,6 +646,10 @@ void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 wxPanel *MyFrame::CreateNewPage() const
 {
     wxPanel *panel = new wxPanel(m_bookCtrl, wxID_ANY );
+
+#if wxUSE_HELP
+    panel->SetHelpText( wxT( "Panel with \"First\" and \"Second\" buttons" ) );
+#endif
 
     (void) new wxButton(panel, wxID_ANY, wxT("First button"), wxPoint(10, 10));
     (void) new wxButton(panel, wxID_ANY, wxT("Second button"), wxPoint(50, 100));
