@@ -1140,70 +1140,70 @@ wxString& wxString::operator=(const wchar_t *pwz)
 wxString operator+(const wxString& str1, const wxString& str2)
 {
 #if !wxUSE_STL
-  wxASSERT( str1.GetStringData()->IsValid() );
-  wxASSERT( str2.GetStringData()->IsValid() );
+    wxASSERT( str1.GetStringData()->IsValid() );
+    wxASSERT( str2.GetStringData()->IsValid() );
 #endif
 
-  wxString s = str1;
-  s += str2;
+    wxString s = str1;
+    s += str2;
 
-  return s;
+    return s;
 }
 
 wxString operator+(const wxString& str, wxChar ch)
 {
 #if !wxUSE_STL
-  wxASSERT( str.GetStringData()->IsValid() );
+    wxASSERT( str.GetStringData()->IsValid() );
 #endif
 
-  wxString s = str;
-  s += ch;
+    wxString s = str;
+    s += ch;
 
-  return s;
+    return s;
 }
 
 wxString operator+(wxChar ch, const wxString& str)
 {
 #if !wxUSE_STL
-  wxASSERT( str.GetStringData()->IsValid() );
+    wxASSERT( str.GetStringData()->IsValid() );
 #endif
 
-  wxString s = ch;
-  s += str;
+    wxString s = ch;
+    s += str;
 
-  return s;
+    return s;
 }
 
 wxString operator+(const wxString& str, const wxChar *psz)
 {
 #if !wxUSE_STL
-  wxASSERT( str.GetStringData()->IsValid() );
+    wxASSERT( str.GetStringData()->IsValid() );
 #endif
 
-  wxString s;
-  if ( !s.Alloc(wxStrlen(psz) + str.Len()) ) {
-    wxFAIL_MSG( _T("out of memory in wxString::operator+") );
-  }
-  s += str;
-  s += psz;
+    wxString s;
+    if ( !s.Alloc(wxStrlen(psz) + str.length()) ) {
+        wxFAIL_MSG( _T("out of memory in wxString::operator+") );
+    }
+    s += str;
+    s += psz;
 
-  return s;
+    return s;
 }
 
 wxString operator+(const wxChar *psz, const wxString& str)
 {
 #if !wxUSE_STL
-  wxASSERT( str.GetStringData()->IsValid() );
+    wxASSERT( str.GetStringData()->IsValid() );
 #endif
 
-  wxString s;
-  if ( !s.Alloc(wxStrlen(psz) + str.Len()) ) {
-    wxFAIL_MSG( _T("out of memory in wxString::operator+") );
-  }
-  s = psz;
-  s += str;
+    wxString s;
+    if ( !s.Alloc(wxStrlen(psz) + str.length()) ) {
+        wxFAIL_MSG( _T("out of memory in wxString::operator+") );
+    }
+    s = psz;
+    s += str;
 
-  return s;
+    return s;
 }
 
 // ===========================================================================
@@ -1606,65 +1606,66 @@ inline int wxSafeIsspace(wxChar ch) { return (ch < 127) && wxIsspace(ch); }
 // trims spaces (in the sense of isspace) from left or right side
 wxString& wxString::Trim(bool bFromRight)
 {
-  // first check if we're going to modify the string at all
-  if ( !empty() &&
-       (
-        (bFromRight && wxSafeIsspace(GetChar(Len() - 1))) ||
-        (!bFromRight && wxSafeIsspace(GetChar(0u)))
+    // first check if we're going to modify the string at all
+    if ( !empty() &&
+         (
+          (bFromRight && wxSafeIsspace(GetChar(length() - 1))) ||
+          (!bFromRight && wxSafeIsspace(GetChar(0u)))
+         )
        )
-     )
-  {
-    if ( bFromRight )
     {
-      // find last non-space character
-      iterator psz = begin() + length() - 1;
-      while ( wxSafeIsspace(*psz) && (psz >= begin()) )
-        psz--;
+        if ( bFromRight )
+        {
+            // find last non-space character
+            iterator psz = begin() + length() - 1;
+            while ( wxSafeIsspace(*psz) && (psz >= begin()) )
+                psz--;
 
-      // truncate at trailing space start
-      *++psz = wxT('\0');
-      erase(psz, end());
+            // truncate at trailing space start
+            *++psz = wxT('\0');
+            erase(psz, end());
+        }
+        else
+        {
+            // find first non-space character
+            iterator psz = begin();
+            while ( wxSafeIsspace(*psz) )
+                psz++;
+
+            // fix up data and length
+            erase(begin(), psz);
+        }
     }
-    else
-    {
-      // find first non-space character
-      iterator psz = begin();
-      while ( wxSafeIsspace(*psz) )
-        psz++;
 
-      // fix up data and length
-      erase(begin(), psz);
-    }
-  }
-
-  return *this;
+    return *this;
 }
 
 // adds nCount characters chPad to the string from either side
 wxString& wxString::Pad(size_t nCount, wxChar chPad, bool bFromRight)
 {
-  wxString s(chPad, nCount);
+    wxString s(chPad, nCount);
 
-  if ( bFromRight )
-    *this += s;
-  else
-  {
-    s += *this;
-    swap(s);
-  }
+    if ( bFromRight )
+        *this += s;
+    else
+    {
+        s += *this;
+        swap(s);
+    }
 
-  return *this;
+    return *this;
 }
 
 // truncate the string
 wxString& wxString::Truncate(size_t uiLen)
 {
-  if ( uiLen < Len() ) {
-    erase(begin() + uiLen, end());
-  }
-  //else: nothing to do, string is already short enough
+    if ( uiLen < length() )
+    {
+        erase(begin() + uiLen, end());
+    }
+    //else: nothing to do, string is already short enough
 
-  return *this;
+    return *this;
 }
 
 // ---------------------------------------------------------------------------
@@ -1674,17 +1675,17 @@ wxString& wxString::Truncate(size_t uiLen)
 // find a character
 int wxString::Find(wxChar ch, bool bFromEnd) const
 {
-  size_type idx = bFromEnd ? find_last_of(ch) : find_first_of(ch);
+    size_type idx = bFromEnd ? find_last_of(ch) : find_first_of(ch);
 
-  return (idx == npos) ? wxNOT_FOUND : (int)idx;
+    return (idx == npos) ? wxNOT_FOUND : (int)idx;
 }
 
 // find a sub-string (like strstr)
 int wxString::Find(const wxChar *pszSub) const
 {
-  size_type idx = find(pszSub);
+    size_type idx = find(pszSub);
 
-  return (idx == npos) ? wxNOT_FOUND : (int)idx;
+    return (idx == npos) ? wxNOT_FOUND : (int)idx;
 }
 
 // ----------------------------------------------------------------------------
@@ -1819,7 +1820,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
     // we could have overshot
     Shrink();
 
-    return Len();
+    return length();
 }
 
 // ----------------------------------------------------------------------------
@@ -1968,7 +1969,7 @@ match:
 int wxString::Freq(wxChar ch) const
 {
     int count = 0;
-    int len = Len();
+    int len = length();
     for (int i = 0; i < len; i++)
     {
         if (GetChar(i) == ch)
