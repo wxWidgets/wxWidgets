@@ -2460,10 +2460,8 @@ void wxFrameManager::ShowHint(const wxRect& rect)
         }
          else
         {
-            wxPoint pt = rect.GetPosition();
-            wxSize size = rect.GetSize();
             MakeWindowTransparent(m_hint_wnd, initial_fade);
-            m_hint_wnd->SetSize(pt.x, pt.y, rect.width, rect.height);
+            m_hint_wnd->SetSize(rect);
         }
 
         if (m_flags & wxAUI_MGR_TRANSPARENT_HINT_FADE)
