@@ -22,6 +22,8 @@
 
 #include "wx/imaglist.h"
 #include "wx/artprov.h"
+#include "wx/cshelp.h"
+#include "wx/utils.h"
 #include "notebook.h"
 
 #if !defined(__WXMSW__) && !defined(__WXPM__)
@@ -177,7 +179,7 @@ wxPanel *CreatePage(wxBookCtrlBase *parent, const wxString&pageName)
 }
 
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY,  wxString(wxT("wxWidgets book controls sample")))
+    : wxFrame(NULL, wxID_ANY,  wxString(wxT("wxWidgets book controls sample")))
 {
 #if wxUSE_NOTEBOOK
     m_type = Type_Notebook;
@@ -224,17 +226,20 @@ MyFrame::MyFrame()
     menuOrient->AppendRadioItem(ID_ORIENT_LEFT,    wxT("&Left\tCtrl-8"));
     menuOrient->AppendRadioItem(ID_ORIENT_RIGHT,   wxT("&Right\tCtrl-9"));
 
-    wxMenu *menuOperations = new wxMenu;
-    menuOperations->Append(ID_ADD_PAGE, wxT("&Add page\tAlt-A"));
-    menuOperations->Append(ID_INSERT_PAGE, wxT("&Insert page\tAlt-I"));
-    menuOperations->Append(ID_DELETE_CUR_PAGE, wxT("&Delete current page\tAlt-D"));
-    menuOperations->Append(ID_DELETE_LAST_PAGE, wxT("D&elete last page\tAlt-L"));
-    menuOperations->Append(ID_NEXT_PAGE, wxT("&Next page\tAlt-N"));
+    wxMenu *menuPageOperations = new wxMenu;
+    menuPageOperations->Append(ID_ADD_PAGE, wxT("&Add page\tAlt-A"));
+    menuPageOperations->Append(ID_INSERT_PAGE, wxT("&Insert page\tAlt-I"));
+    menuPageOperations->Append(ID_DELETE_CUR_PAGE, wxT("&Delete current page\tAlt-D"));
+    menuPageOperations->Append(ID_DELETE_LAST_PAGE, wxT("D&elete last page\tAlt-L"));
+    menuPageOperations->Append(ID_NEXT_PAGE, wxT("&Next page\tAlt-N"));
 #if wxUSE_TREEBOOK
-    menuOperations->AppendSeparator();
-    menuOperations->Append(ID_ADD_PAGE_BEFORE, wxT("Insert page &before\tAlt-B"));
-    menuOperations->Append(ID_ADD_SUB_PAGE, wxT("Add s&ub page\tAlt-U"));
+    menuPageOperations->AppendSeparator();
+    menuPageOperations->Append(ID_ADD_PAGE_BEFORE, wxT("Insert page &before\tAlt-B"));
+    menuPageOperations->Append(ID_ADD_SUB_PAGE, wxT("Add s&ub page\tAlt-U"));
 #endif
+
+    wxMenu *menuOperations = new wxMenu;
+    menuOperations->Append(ID_HITTEST, wxT("&Hit test\tCtrl-H"));
 
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(wxID_ANY, wxT("&Type"), menuType, wxT("Type of control"));
@@ -248,6 +253,7 @@ MyFrame::MyFrame()
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(menuFile, wxT("&File"));
+    menuBar->Append(menuPageOperations, wxT("&Pages"));
     menuBar->Append(menuOperations, wxT("&Operations"));
     SetMenuBar(menuBar);
 
@@ -481,6 +487,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_DELETE_LAST_PAGE, MyFrame::OnDeleteLastPage)
     EVT_MENU(ID_NEXT_PAGE, MyFrame::OnNextPage)
 
+    EVT_MENU(ID_HITTEST, MyFrame::OnHitTest)
+
     // Book controls
 #if wxUSE_NOTEBOOK
     EVT_NOTEBOOK_PAGE_CHANGED(wxID_ANY, MyFrame::OnNotebook)
@@ -511,6 +519,38 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     // Update title in idle time
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
+
+void MyFrame::AddFlagStrIfFlagPresent(wxString & flagStr, long flags, long flag, const wxChar * flagName) const
+{
+    if( (flags & flag) == flag )
+    {
+        if( !flagStr.empty() )
+            flagStr += _T(" | ");
+        flagStr += flagName;
+    }
+}
+
+void MyFrame::OnHitTest(wxCommandEvent& WXUNUSED(event))
+{
+    wxBookCtrlBase * book = GetCurrentBook();
+    const wxPoint pt = ::wxGetMousePosition();
+
+    long flags;
+    int pagePos = book->HitTest( book->ScreenToClient(pt), &flags );
+
+    wxString flagsStr;
+
+    AddFlagStrIfFlagPresent( flagsStr, flags, wxNB_HITTEST_NOWHERE, _T("wxNB_HITTEST_NOWHERE") );
+    AddFlagStrIfFlagPresent( flagsStr, flags, wxNB_HITTEST_ONICON,  _T("wxNB_HITTEST_ONICON") );
+    AddFlagStrIfFlagPresent( flagsStr, flags, wxNB_HITTEST_ONLABEL, _T("wxNB_HITTEST_ONLABEL") );
+    AddFlagStrIfFlagPresent( flagsStr, flags, wxNB_HITTEST_ONPAGE,  _T("wxNB_HITTEST_ONPAGE") );
+
+    wxLogMessage(wxT("HitTest at (%d,%d): %d: %s"),
+                 pt.x,
+                 pt.y,
+                 pagePos,
+                 flagsStr.c_str());
+}
 
 void MyFrame::OnType(wxCommandEvent& event)
 {
@@ -562,6 +602,7 @@ void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 wxPanel *MyFrame::CreateNewPage() const
 {
     wxPanel *panel = new wxPanel(m_bookCtrl, wxID_ANY );
+
     (void) new wxButton(panel, wxID_ANY, wxT("First button"), wxPoint(10, 10));
     (void) new wxButton(panel, wxID_ANY, wxT("Second button"), wxPoint(50, 100));
 

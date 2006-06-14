@@ -795,7 +795,22 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
     }
 
     if ( flags )
+    {
         *flags = wxNB_HITTEST_NOWHERE;
+        wxWindowBase * page = GetCurrentPage();
+        if ( page )
+        {
+            // rect origin is in notebook's parent coordinates
+            wxRect rect = page->GetRect();
+
+            // adjust it to the notebook's coordinates
+            wxPoint pos = GetPosition();
+            rect.x -= pos.x;
+            rect.y -= pos.y;
+            if ( rect.Inside( pt ) )
+                *flags |= wxNB_HITTEST_ONPAGE;
+        }
+    }
 
     return wxNOT_FOUND;
 }

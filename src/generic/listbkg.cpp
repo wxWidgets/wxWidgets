@@ -161,21 +161,40 @@ void wxListbook::OnSize(wxSizeEvent& event)
     wxBookCtrlBase::OnSize(event);
 }
 
-int wxListbook::HitTest(const wxPoint& pt, long * WXUNUSED(flags)) const
+int wxListbook::HitTest(const wxPoint& pt, long *flags) const
 {
     int pagePos = wxNOT_FOUND;
 
-    const wxPoint clientPt = ClientToScreen(GetListView()->ScreenToClient(pt));
+    if ( flags )
+        *flags = wxNB_HITTEST_NOWHERE;
 
-    if ( wxRect(GetListView()->GetSize()).Inside(clientPt) )
+    // convert from listbook control coordinates to list control coordinates
+    const wxListView * const list = GetListView();
+    const wxPoint listPt = list->ScreenToClient(ClientToScreen(pt));
+
+    // is the point inside list control?
+    if ( wxRect(list->GetSize()).Inside(listPt) )
     {
         int flagsList;
-        pagePos = GetListView()->HitTest(clientPt, flagsList);
+        pagePos = list->HitTest(listPt, flagsList);
 
-        if ( !(flagsList & wxLIST_HITTEST_ONITEM) )
+        if ( flags )
         {
-            pagePos = wxNOT_FOUND;
+            if ( pagePos != wxNOT_FOUND )
+                *flags = 0;
+
+            if ( flagsList & (wxLIST_HITTEST_ONITEMICON |
+                              wxLIST_HITTEST_ONITEMSTATEICON ) )
+                *flags |= wxNB_HITTEST_ONICON;
+
+            if ( flagsList & wxLIST_HITTEST_ONITEMLABEL )
+                *flags |= wxNB_HITTEST_ONLABEL;
         }
+    }
+    else // not over list control at all
+    {
+        if ( flags && GetPageRect().Inside(pt) )
+            *flags |= wxNB_HITTEST_ONPAGE;
     }
 
     return pagePos;

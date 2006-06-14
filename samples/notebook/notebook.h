@@ -52,6 +52,8 @@ public:
     void OnAddSubPage(wxCommandEvent& event);
     void OnAddPageBefore(wxCommandEvent& event);
 
+    void OnHitTest(wxCommandEvent& event);
+
     void OnBookCtrl(wxBookCtrlBaseEvent& event);
 #if wxUSE_NOTEBOOK
     void OnNotebook(wxNotebookEvent& event) { OnBookCtrl(event); }
@@ -83,6 +85,7 @@ private:
     void RecreateBook();
     wxPanel *CreateNewPage() const;
     int TranslateBookFlag(int nb, int lb, int chb, int tbk, int toolbk) const;
+    void AddFlagStrIfFlagPresent(wxString & flagStr, long flags, long flag, const wxChar * flagName) const;
 
     // Sample setup
     enum BookType
@@ -139,7 +142,9 @@ enum ID_COMMANDS
     ID_DELETE_LAST_PAGE,
     ID_NEXT_PAGE,
     ID_ADD_PAGE_BEFORE,
-    ID_ADD_SUB_PAGE
+    ID_ADD_SUB_PAGE,
+
+    ID_HITTEST
 };
 
 /*

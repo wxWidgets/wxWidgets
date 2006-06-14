@@ -57,6 +57,7 @@ public:
                 const wxString& name = wxEmptyString);
 
 
+    // implement base class virtuals
     virtual int GetSelection() const;
     virtual bool SetPageText(size_t n, const wxString& strText);
     virtual wxString GetPageText(size_t n) const;
@@ -72,11 +73,16 @@ public:
     virtual void SetImageList(wxImageList *imageList);
 
     virtual bool DeleteAllPages();
+    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
 
+
+    // methods which are not part of base wxBookctrl API
+
+    // get the underlying toolbar
     wxToolBarBase* GetToolBar() const { return (wxToolBarBase*)m_bookctrl; }
 
-    // Not part of the wxBookctrl API, but must be called in OnIdle or
-    // by application to realize the toolbar and select the initial page.
+    // must be called in OnIdle or by application to realize the toolbar and
+    // select the initial page.
     void Realize();
 
 protected:
@@ -97,7 +103,7 @@ protected:
     bool m_needsRealizing;
 
     // maximum bitmap size
-    wxSize  m_maxBitmapSize;
+    wxSize m_maxBitmapSize;
 
 private:
     // common part of all constructors

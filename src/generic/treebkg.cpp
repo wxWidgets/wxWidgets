@@ -723,13 +723,18 @@ void wxTreebook::OnTreeNodeExpandedCollapsed(wxTreeEvent & event)
 // wxTreebook geometry management
 // ----------------------------------------------------------------------------
 
-int wxTreebook::HitTest(wxPoint const & pt, long * WXUNUSED(flags)) const
+int wxTreebook::HitTest(wxPoint const & pt, long * flags) const
 {
     int pagePos = wxNOT_FOUND;
 
-    wxTreeCtrl * const tree = GetTreeCtrl();
-    const wxPoint treePt = ClientToScreen(tree->ScreenToClient(pt));
+    if ( flags )
+        *flags = wxNB_HITTEST_NOWHERE;
 
+    // convert from wxTreebook coorindates to wxTreeCtrl ones
+    const wxTreeCtrl * const tree = GetTreeCtrl();
+    const wxPoint treePt = tree->ScreenToClient(ClientToScreen(pt));
+
+    // is it over the tree?
     if ( wxRect(tree->GetSize()).Inside(treePt) )
     {
         int flagsTree;
@@ -739,6 +744,25 @@ int wxTreebook::HitTest(wxPoint const & pt, long * WXUNUSED(flags)) const
         {
             pagePos = DoInternalFindPageById(id);
         }
+
+        if ( flags )
+        {
+            if ( pagePos != wxNOT_FOUND )
+                *flags = 0;
+
+            if ( flagsTree & (wxTREE_HITTEST_ONITEMBUTTON |
+                              wxTREE_HITTEST_ONITEMICON |
+                              wxTREE_HITTEST_ONITEMSTATEICON) )
+                *flags |= wxNB_HITTEST_ONICON;
+
+            if ( flagsTree & wxTREE_HITTEST_ONITEMLABEL )
+                *flags |= wxNB_HITTEST_ONLABEL;
+        }
+    }
+    else // not over the tree
+    {
+        if ( flags && GetPageRect().Inside( pt ) )
+            *flags |= wxNB_HITTEST_ONPAGE;
     }
 
     return pagePos;

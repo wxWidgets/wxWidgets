@@ -818,6 +818,8 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
             *flags |= wxNB_HITTEST_ONICON;
         if ((hitTestInfo.flags & TCHT_ONITEMLABEL) == TCHT_ONITEMLABEL)
             *flags |= wxNB_HITTEST_ONLABEL;
+        if ( item == wxNOT_FOUND && GetPageSize().Inside(pt) )
+            *flags |= wxNB_HITTEST_ONPAGE;
     }
 
     return item;

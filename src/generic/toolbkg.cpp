@@ -309,6 +309,39 @@ void wxToolbook::Realize()
     DoSize();
 }
 
+int wxToolbook::HitTest(const wxPoint& pt, long *flags) const
+{
+    int pagePos = wxNOT_FOUND;
+
+    if ( flags )
+        *flags = wxNB_HITTEST_NOWHERE;
+
+    // convert from wxToolbook coordinates to wxToolBar ones
+    const wxToolBarBase * const tbar = GetToolBar();
+    const wxPoint tbarPt = tbar->ScreenToClient(ClientToScreen(pt));
+
+    // is the point over the toolbar?
+    if ( wxRect(tbar->GetSize()).Inside(tbarPt) )
+    {
+        const wxToolBarToolBase * const
+            tool = tbar->FindToolForPosition(tbarPt.x, tbarPt.y);
+
+        if ( tool )
+        {
+            pagePos = tbar->GetToolPos(tool->GetId());
+            if ( flags )
+                *flags = wxNB_HITTEST_ONICON | wxNB_HITTEST_ONLABEL;
+        }
+    }
+    else // not over the toolbar
+    {
+        if ( flags && GetPageRect().Inside(pt) )
+            *flags |= wxNB_HITTEST_ONPAGE;
+    }
+
+    return pagePos;
+}
+
 void wxToolbook::OnIdle(wxIdleEvent& event)
 {
     if (m_needsRealizing)

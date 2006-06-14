@@ -186,9 +186,9 @@ void wxBookCtrlBase::OnHelp(wxHelpEvent& event)
             page = GetPage((size_t)pagePos);
         }
     }
-
-    if ( !page )
+    else // event.GetOrigin() != wxHelpEvent::Origin_HelpButton
     {
+        // if event came from keyboard then show the current page help
         page = GetCurrentPage();
     }
 
