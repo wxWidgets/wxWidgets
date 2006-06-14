@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/wx.h"
+
 #include "wx/grid.h"
 #include "wx/treectrl.h"
 #include "wx/spinctrl.h"
@@ -125,7 +126,7 @@ private:
     wxArrayString m_perspectives;
     wxMenu* m_perspectives_menu;
 
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 };
 
 
@@ -203,7 +204,7 @@ private:
 
     wxFrameManager* m_mgr;
 
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(wxSizeReportCtrl, wxControl)
