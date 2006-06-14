@@ -788,16 +788,27 @@ void wxCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
         wxSize sizeCombo = m_comboMonth->GetSize();
         wxSize sizeStatic = m_staticMonth->GetSize();
         wxSize sizeSpin = m_spinYear->GetSize();
-        int dy = (sizeCombo.y - sizeStatic.y) / 2;
+
+        // wxMSW sometimes reports the wrong combo height,
+        // so on this platform we'll use the spin control
+        // height instead.
+#ifdef __WXMSW__
+        int maxHeight = sizeSpin.y;
+        int requiredSpinHeight = -1;
+#else
+        int maxHeight = sizeCombo.y;
+        int requiredSpinHeight = sizeCombo.y;
+#endif
+        int dy = (maxHeight - sizeStatic.y) / 2;
         m_comboMonth->Move(x, y);
-        m_staticMonth->SetSize(x, y + dy, sizeCombo.x, sizeStatic.y);
+        m_staticMonth->SetSize(x, y + dy, sizeCombo.x, -1, sizeStatic.y);
 
         int xDiff = sizeCombo.x + HORZ_MARGIN;
 
-        m_spinYear->SetSize(x + xDiff, y, width - xDiff, sizeCombo.y);
+        m_spinYear->SetSize(x + xDiff, y, width - xDiff, requiredSpinHeight);
         m_staticYear->SetSize(x + xDiff, y + dy, width - xDiff, sizeStatic.y);
 
-        yDiff = wxMax(sizeSpin.y, sizeCombo.y) + VERT_MARGIN;
+        yDiff = wxMax(sizeSpin.y, maxHeight) + VERT_MARGIN;
     }
     else // no controls on the top
     {
