@@ -30,9 +30,9 @@
     #include "wx/listbox.h"
     #include "wx/bitmap.h"
     #include "wx/colour.h"
+    #include "wx/font.h"
 #endif
 
-#include "wx/font.h"
 #include "wx/ownerdrw.h"
 
 #define INCL_PM

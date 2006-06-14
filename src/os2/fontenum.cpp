@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/fontenum.cpp
+// Name:        src/os2/fontenum.cpp
 // Purpose:     wxFontEnumerator class for Windows
 // Author:      Julian Smart
 // Modified by: David Webster to add support for font encodings
@@ -22,11 +22,12 @@
 
 #if wxUSE_FONTMAP
 
+#include "wx/fontenum.h"
+
 #ifndef WX_PRECOMP
-  #include "wx/font.h"
+    #include "wx/font.h"
 #endif
 
-#include "wx/fontenum.h"
 #include "wx/fontmap.h"
 #include "wx/encinfo.h"
 

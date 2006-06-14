@@ -12,8 +12,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/gdiobj.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/font.h"
+#endif
+
 #include "wx/gdicmn.h"
-#include "wx/font.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
 

@@ -10,15 +10,16 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/intl.h"
+    #if wxUSE_GUI
+        #include "wx/font.h"
+    #endif
 #endif
-#include "wx/mac/corefoundation/cfstring.h"
 
-#if wxUSE_GUI
-    #include "wx/font.h"
-#endif
+#include "wx/mac/corefoundation/cfstring.h"
 
 #ifdef __DARWIN__
     #include <CoreServices/CoreServices.h>
@@ -633,7 +634,7 @@ wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
 // converts this string into a carbon foundation string with optional pc 2 mac encoding
 void wxMacCFStringHolder::Assign( const wxString &st , wxFontEncoding encoding )
 {
-    Release() ; 
+    Release() ;
     if (st.IsEmpty())
     {
         m_cfs = CFSTR("") ;
@@ -668,7 +669,7 @@ wxString wxMacCFStringHolder::AsString(wxFontEncoding encoding)
 {
     if ( m_cfs == NULL )
         return wxEmptyString ;
-    
+
     Size cflen = CFStringGetLength( m_cfs )  ;
     size_t noChars ;
     wxChar* buf = NULL ;
@@ -706,4 +707,3 @@ wxString wxMacCFStringHolder::AsString(wxFontEncoding encoding)
     delete[] buf ;
     return result ;
 }
-

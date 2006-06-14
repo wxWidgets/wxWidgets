@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        mac/fontenum.cpp
+// Name:        src/mac/classic/fontenum.cpp
 // Purpose:     wxFontEnumerator class for MacOS
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
@@ -21,11 +21,11 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-  #include "wx/font.h"
+    #include "wx/font.h"
 #endif
 
 #include "wx/fontenum.h"
@@ -78,7 +78,7 @@ wxFontEnumeratorHelper::wxFontEnumeratorHelper(wxFontEnumerator *fontEnum)
 {
     m_fontEnum = fontEnum;
     m_charset = -1;
-    m_fixedOnly = FALSE;
+    m_fixedOnly = false;
 }
 
 bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
@@ -89,13 +89,13 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
         if ( !wxFontMapper::Get()->GetAltForEncoding(encoding, &info) )
         {
             // no such encodings at all
-            return FALSE;
+            return false;
         }
     }
     m_charset = info.charset;
     m_facename = info.facename;
 
-    return TRUE;
+    return true;
 }
 
 void wxFontEnumeratorHelper::DoEnumerate()
@@ -104,7 +104,7 @@ void wxFontEnumeratorHelper::DoEnumerate()
     Str255        p_name ;
 
     short         lines ;
-    
+
     menu = NewMenu( 32000 , "\pFont" )  ;
     AppendResMenu( menu , 'FONT' ) ;
     lines = CountMenuItems( menu ) ;
@@ -115,7 +115,7 @@ void wxFontEnumeratorHelper::DoEnumerate()
         wxString c_name = wxMacMakeStringFromPascal(p_name) ;
 
         /*
-          
+
           if ( m_fixedOnly )
         {
             // check that it's a fixed pitch font (there is *no* error here, the
@@ -126,7 +126,7 @@ void wxFontEnumeratorHelper::DoEnumerate()
                 return TRUE;
             }
         }
-    
+
         if ( m_charset != -1 )
         {
             // check that we have the right encoding
@@ -135,7 +135,7 @@ void wxFontEnumeratorHelper::DoEnumerate()
                 return TRUE;
             }
         }
-    
+
         */
         m_fontEnum->OnFacename( c_name ) ;
     }
@@ -158,12 +158,12 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
     }
     // else: no such fonts, unknown encoding
 
-    return TRUE;
+    return true;
 }
 
 bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 {
     wxFAIL_MSG(wxT("wxFontEnumerator::EnumerateEncodings() not yet implemented"));
 
-    return TRUE;
+    return true;
 }

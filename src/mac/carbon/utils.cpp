@@ -18,6 +18,7 @@
     #include "wx/app.h"
     #if wxUSE_GUI
         #include "wx/toplevel.h"
+        #include "wx/font.h"
     #endif
 #endif
 
@@ -25,7 +26,6 @@
 
 #if wxUSE_GUI
     #include "wx/mac/uma.h"
-    #include "wx/font.h"
 #endif
 
 #include <ctype.h>

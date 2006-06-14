@@ -28,9 +28,8 @@
     #include "wx/settings.h"
     #include "wx/bitmap.h"
     #include "wx/colour.h"
+    #include "wx/font.h"
 #endif
-
-#include "wx/font.h"
 
 WXDLLIMPEXP_DATA_CORE(wxBrushList*) wxTheBrushList;
 WXDLLIMPEXP_DATA_CORE(wxFontList*)  wxTheFontList;

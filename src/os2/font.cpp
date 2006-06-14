@@ -20,12 +20,13 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include "wx/font.h"
+
 #ifndef WX_PRECOMP
     #include <stdio.h>
     #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
-    #include "wx/font.h"
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
@@ -1135,19 +1136,14 @@ const wxNativeFontInfo* wxFont::GetNativeFontInfo() const
 //
 // Internal use only method to set the FONTMETRICS array
 //
-void wxFont::SetFM(
-  PFONTMETRICS                      pFM
-, int                               nNumFonts
-)
+void wxFont::SetFM( PFONTMETRICS pFM, int nNumFonts )
 {
     M_FONTDATA->SetFM(pFM);
     M_FONTDATA->SetNumFonts(nNumFonts);
 } // end of wxFont::SetFM
 
 
-void wxFont::SetPS(
-  HPS                               hPS
-)
+void wxFont::SetPS( HPS hPS )
 {
     Unshare();
 

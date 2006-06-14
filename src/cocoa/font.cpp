@@ -11,11 +11,12 @@
 
 #include "wx/wxprec.h"
 
+#include "wx/font.h"
+
 #ifndef WX_PRECOMP
     #include "wx/string.h"
 #endif
 
-#include "wx/font.h"
 #include "wx/gdicmn.h"
 #include "wx/encinfo.h"
 

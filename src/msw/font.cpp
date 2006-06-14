@@ -24,11 +24,12 @@
     #pragma hdrstop
 #endif
 
+#include "wx/font.h"
+
 #ifndef WX_PRECOMP
     #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
-    #include "wx/font.h"
     #include "wx/log.h"
     #include "wx/encinfo.h"
 #endif // WX_PRECOMP
@@ -573,7 +574,7 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
     BYTE ff_family;
     wxArrayString facename;
 
-    // the list of fonts associated with a family was partially 
+    // the list of fonts associated with a family was partially
     // taken from http://www.codestyle.org/css/font-family
 
     switch ( family )
@@ -635,9 +636,9 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
                 facename.Add(_T("MS Shell Dlg"));
 
             // Quoting the MSDN:
-            //     "MS Shell Dlg is a mapping mechanism that enables 
-            //     U.S. English Microsoft Windows NT, and Microsoft Windows 2000 to 
-            //     support locales that have characters that are not contained in code 
+            //     "MS Shell Dlg is a mapping mechanism that enables
+            //     U.S. English Microsoft Windows NT, and Microsoft Windows 2000 to
+            //     support locales that have characters that are not contained in code
             //     page 1252. It is not a font but a face name for a nonexistent font."
         }
     }
@@ -1095,4 +1096,3 @@ bool wxFont::IsFixedWidth() const
 
     return wxFontBase::IsFixedWidth();
 }
-
