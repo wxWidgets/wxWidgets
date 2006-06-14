@@ -675,7 +675,7 @@ bool wxFrameManager::InsertPane(wxWindow* window, const wxPaneInfo& pane_info,
     {
         return AddPane(window, pane_info);
     }
-     else
+    else
     {
         if (pane_info.IsFloating())
         {
@@ -1140,7 +1140,7 @@ void wxFrameManager::LayoutAddPane(wxSizer* cont,
     {
         sizer_item = vert_pane_sizer->Add(1, 1, 1, wxEXPAND);
     }
-     else
+    else
     {
         sizer_item = vert_pane_sizer->Add(pane.window, 1, wxEXPAND);
         vert_pane_sizer->SetItemMinSize(pane.window, 1, 1);
@@ -1199,7 +1199,7 @@ void wxFrameManager::LayoutAddPane(wxSizer* cont,
         part.sizer_item = sizer_item;
         uiparts.Add(part);
     }
-     else
+    else
     {
         sizer_item = cont->Add(horz_pane_sizer, pane_proportion, wxEXPAND);
     }
@@ -1289,7 +1289,7 @@ void wxFrameManager::LayoutAddDock(wxSizer* cont,
         part.sizer_item = sizer_item;
         uiparts.Add(part);
     }
-     else
+    else
     {
         for (pane_i = 0; pane_i < pane_count; ++pane_i)
         {
@@ -2086,8 +2086,8 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
              Position(pt.y - GetDockPixelOffset(drop) - offset.y);
         return ProcessDockResult(target, drop);
     }
-     else if (pt.y < layer_insert_offset &&
-              pt.y > layer_insert_offset-auiLayerInsertPixels)
+    else if (pt.y < layer_insert_offset &&
+             pt.y > layer_insert_offset-auiLayerInsertPixels)
     {
         int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_TOP),
                                     GetMaxLayer(docks, wxAUI_DOCK_LEFT)),
@@ -2098,8 +2098,8 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
              Position(pt.x - GetDockPixelOffset(drop) - offset.x);
         return ProcessDockResult(target, drop);
     }
-     else if (pt.x >= cli_size.x - layer_insert_offset &&
-              pt.x < cli_size.x - layer_insert_offset + auiLayerInsertPixels)
+    else if (pt.x >= cli_size.x - layer_insert_offset &&
+             pt.x < cli_size.x - layer_insert_offset + auiLayerInsertPixels)
     {
         int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_RIGHT),
                                     GetMaxLayer(docks, wxAUI_DOCK_TOP)),
@@ -2110,8 +2110,8 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
              Position(pt.y - GetDockPixelOffset(drop) - offset.y);
         return ProcessDockResult(target, drop);
     }
-     else if (pt.y >= cli_size.y - layer_insert_offset &&
-              pt.y < cli_size.y - layer_insert_offset + auiLayerInsertPixels)
+    else if (pt.y >= cli_size.y - layer_insert_offset &&
+             pt.y < cli_size.y - layer_insert_offset + auiLayerInsertPixels)
     {
         int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_BOTTOM),
                                     GetMaxLayer(docks, wxAUI_DOCK_LEFT)),
@@ -2944,7 +2944,7 @@ void wxFrameManager::UpdateButtonOnScreen(wxDockUIPart* button_ui_part,
              else
             state = wxAUI_BUTTON_STATE_HOVER;
     }
-     else
+    else
     {
         if (event.LeftDown())
             state = wxAUI_BUTTON_STATE_HOVER;
@@ -3230,7 +3230,7 @@ void wxFrameManager::OnLeftUp(wxMouseEvent& event)
             Repaint(NULL);
         }
     }
-     else if (m_action == actionClickButton)
+    else if (m_action == actionClickButton)
     {
         m_hover_button = NULL;
         m_frame->ReleaseMouse();
@@ -3246,15 +3246,15 @@ void wxFrameManager::OnLeftUp(wxMouseEvent& event)
             ProcessMgrEvent(e);
         }
     }
-     else if (m_action == actionClickCaption)
+    else if (m_action == actionClickCaption)
     {
         m_frame->ReleaseMouse();
     }
-     else if (m_action == actionDragFloatingPane)
+    else if (m_action == actionDragFloatingPane)
     {
         m_frame->ReleaseMouse();
     }
-     else if (m_action == actionDragToolbarPane)
+    else if (m_action == actionDragToolbarPane)
     {
         m_frame->ReleaseMouse();
 
@@ -3280,7 +3280,7 @@ void wxFrameManager::OnLeftUp(wxMouseEvent& event)
         pane.state &= ~wxPaneInfo::actionPane;
         Update();
     }
-     else
+    else
     {
         event.Skip();
     }
@@ -3321,7 +3321,7 @@ void wxFrameManager::OnMotion(wxMouseEvent& event)
         DrawResizeHint(dc, rect);
         m_action_hintrect = rect;
     }
-     else if (m_action == actionClickCaption)
+    else if (m_action == actionClickCaption)
     {
         int drag_x_threshold = wxSystemSettings::GetMetric(wxSYS_DRAG_X);
         int drag_y_threshold = wxSystemSettings::GetMetric(wxSYS_DRAG_Y);
@@ -3368,13 +3368,13 @@ void wxFrameManager::OnMotion(wxMouseEvent& event)
             }
         }
     }
-     else if (m_action == actionDragFloatingPane)
+    else if (m_action == actionDragFloatingPane)
     {
         wxPoint pt = m_frame->ClientToScreen(event.GetPosition());
         m_action_window->Move(pt.x - m_action_offset.x,
                              pt.y - m_action_offset.y);
     }
-     else if (m_action == actionDragToolbarPane)
+    else if (m_action == actionDragToolbarPane)
     {
         wxPaneInfo& pane = GetPane(m_action_window);
         wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
@@ -3477,7 +3477,7 @@ void wxFrameManager::OnPaneButton(wxFrameManagerEvent& event)
         pane.Hide();
         Update();
     }
-     else if (event.button == wxPaneInfo::buttonPin)
+    else if (event.button == wxPaneInfo::buttonPin)
     {
         if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) &&
             pane.IsFloatable())

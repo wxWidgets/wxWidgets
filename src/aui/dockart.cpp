@@ -363,7 +363,7 @@ void wxDefaultDockArt::DrawBorder(wxDC& dc, const wxRect& _rect,
             rect.Deflate(1);
         }
     }
-     else
+    else
     {
         for (i = 0; i < border_width; ++i)
         {
@@ -385,7 +385,7 @@ void wxDefaultDockArt::DrawCaptionBackground(wxDC& dc, const wxRect& rect, bool 
 
         dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
     }
-     else
+    else
     {
         if (active)
         {
@@ -434,7 +434,7 @@ void wxDefaultDockArt::DrawCaption(wxDC& dc,
 
     if (pane.state & wxPaneInfo::optionActive)
         dc.SetTextForeground(m_active_caption_text_colour);
-     else
+    else
         dc.SetTextForeground(m_inactive_caption_text_colour);
 
 
