@@ -2852,11 +2852,9 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
     }
 }
 
-wxTreeItemId wxGenericTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags)
+wxTreeItemId
+wxGenericTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags) const
 {
-    // JACS: removed wxYieldIfNeeded() because it can cause the window
-    // to be deleted from under us if a close window event is pending
-
     int w, h;
     GetSize(&w, &h);
     flags=0;

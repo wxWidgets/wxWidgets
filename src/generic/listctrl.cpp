@@ -707,7 +707,7 @@ public:
     long FindItem( long start, const wxString& str, bool partial = false );
     long FindItem( long start, wxUIntPtr data);
     long FindItem( const wxPoint& pt );
-    long HitTest( int x, int y, int &flags );
+    long HitTest( int x, int y, int &flags ) const;
     void InsertItem( wxListItem &item );
     void InsertColumn( long col, wxListItem &item );
     int GetItemWidthWithImage(wxListItem * item);
@@ -4432,7 +4432,7 @@ long wxListMainWindow::FindItem( const wxPoint& pt )
     return wxNOT_FOUND;
 }
 
-long wxListMainWindow::HitTest( int x, int y, int &flags )
+long wxListMainWindow::HitTest( int x, int y, int &flags ) const
 {
     CalcUnscrolledPosition( x, y, &x, &y );
 
@@ -5257,7 +5257,7 @@ long wxGenericListCtrl::FindItem( long WXUNUSED(start), const wxPoint& pt,
 }
 
 // TODO: sub item hit testing
-long wxGenericListCtrl::HitTest(const wxPoint& point, int& flags, long *)
+long wxGenericListCtrl::HitTest(const wxPoint& point, int& flags, long *) const
 {
     return m_mainWin->HitTest( (int)point.x, (int)point.y, flags );
 }

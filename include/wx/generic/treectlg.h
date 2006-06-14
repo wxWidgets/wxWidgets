@@ -304,7 +304,7 @@ protected:
                                        const wxString& text,
                                        int image = -1, int selImage = -1,
                                        wxTreeItemData *data = NULL);
-    virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags);
+    virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags) const;
 
     // called by wxTextTreeCtrl when it marks itself for deletion
     void ResetTextControl();

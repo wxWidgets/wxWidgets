@@ -297,7 +297,7 @@ public:
     // Determines which item (if any) is at the specified point,
     // giving details in 'flags' (see wxLIST_HITTEST_... flags above)
     // Request the subitem number as well at the given coordinate.
-    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = NULL);
+    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = NULL) const;
 
     // Inserts an item, returning the index of the new item if successful,
     // -1 otherwise.

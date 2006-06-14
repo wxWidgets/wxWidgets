@@ -353,9 +353,9 @@ public:
         // coordinates specified are relative to the client area of tree ctrl)
         // and, in the second variant, fill the flags parameter with a bitmask
         // of wxTREE_HITTEST_xxx constants.
-    wxTreeItemId HitTest(const wxPoint& point)
+    wxTreeItemId HitTest(const wxPoint& point) const
         { int dummy; return DoTreeHitTest(point, dummy); }
-    wxTreeItemId HitTest(const wxPoint& point, int& flags)
+    wxTreeItemId HitTest(const wxPoint& point, int& flags) const
         { return DoTreeHitTest(point, flags); }
 
         // get the bounding rectangle of the item (or of its label only)
@@ -398,7 +398,8 @@ protected:
     // real HitTest() implementation: again, can't be called just HitTest()
     // because it's overloaded and so the non-virtual overload would be hidden
     // (and can't be called DoHitTest() because this is already in wxWindow)
-    virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags) = 0;
+    virtual wxTreeItemId DoTreeHitTest(const wxPoint& point,
+                                        int& flags) const = 0;
 
 
     wxImageList *m_imageListNormal, // images for tree elements

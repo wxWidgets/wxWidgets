@@ -257,7 +257,7 @@ protected:
                                        const wxString& text,
                                        int image = -1, int selImage = -1,
                                        wxTreeItemData *data = NULL);
-    virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags);
+    virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags) const;
 
     // obtain the user data for the lParam member of TV_ITEM
     class wxTreeItemParam *GetItemParam(const wxTreeItemId& item) const;

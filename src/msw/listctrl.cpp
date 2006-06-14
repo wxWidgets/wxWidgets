@@ -1511,7 +1511,8 @@ long wxListCtrl::FindItem(long start, const wxPoint& pt, int direction)
 
 // Determines which item (if any) is at the specified point,
 // giving details in 'flags' (see wxLIST_HITTEST_... flags above)
-long wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem)
+long
+wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
 {
     LV_HITTESTINFO hitTestInfo;
     hitTestInfo.pt.x = (int) point.x;

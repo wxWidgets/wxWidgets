@@ -1874,7 +1874,7 @@ void wxTreeCtrl::DoEndEditLabel(bool discardChanges)
     DeleteTextCtrl();
 }
 
-wxTreeItemId wxTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags)
+wxTreeItemId wxTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags) const
 {
     TV_HITTESTINFO hitTestInfo;
     hitTestInfo.pt.x = (int)point.x;
