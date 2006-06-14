@@ -17,12 +17,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
+    #include "wx/bitmap.h"
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 
 #include "wx/mac/uma.h"
-#include "wx/bitmap.h"
 
 bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
            const wxPoint& pos,

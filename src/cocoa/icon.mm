@@ -14,9 +14,8 @@
 #include "wx/icon.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/bitmap.h"
 #endif //WX_PRECOMP
-
-#include "wx/bitmap.h"
 
 #include "wx/cocoa/autorelease.h"
 

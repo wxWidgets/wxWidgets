@@ -19,9 +19,9 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/frame.h"
+    #include "wx/bitmap.h"
 #endif
 
-#include "wx/bitmap.h"
 #include "wx/metafile.h"
 
 #ifndef __DARWIN__

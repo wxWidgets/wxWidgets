@@ -26,6 +26,7 @@
     #include "wx/frame.h"
     #include "wx/dialog.h"
     #include "wx/settings.h"
+    #include "wx/bitmap.h"
 #endif
 
 #ifndef __WXWINCE__
@@ -38,7 +39,6 @@
 #include "wx/tokenzr.h"
 #include "wx/fontenum.h"
 #include "wx/module.h"
-#include "wx/bitmap.h"
 #include "wx/image.h"
 #include "wx/fontmap.h"
 #include "wx/artprov.h"
@@ -643,7 +643,7 @@ static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
         }
     }
 
-    if ( dest.GetType() == wxXML_TEXT_NODE && with.GetContent().Length() )
+    if ( dest.GetType() == wxXML_TEXT_NODE && with.GetContent().length() )
          dest.SetContent(with.GetContent());
 }
 

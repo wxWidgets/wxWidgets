@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_bmp.cpp
+// Name:        src/xrc/xh_bmp.cpp
 // Purpose:     XRC resource for wxBitmap and wxIcon
 // Author:      Vaclav Slavik
 // Created:     2000/09/09
@@ -18,12 +18,15 @@
 #if wxUSE_XRC
 
 #include "wx/xrc/xh_bmp.h"
-#include "wx/bitmap.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/bitmap.h"
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapXmlHandler, wxXmlResourceHandler)
 
 wxBitmapXmlHandler::wxBitmapXmlHandler()
-: wxXmlResourceHandler()
+                   :wxXmlResourceHandler()
 {
 }
 

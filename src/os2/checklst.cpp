@@ -28,11 +28,11 @@
     #include "wx/dcscreen.h"
     #include "wx/settings.h"
     #include "wx/listbox.h"
+    #include "wx/bitmap.h"
 #endif
 
 #include "wx/colour.h"
 #include "wx/font.h"
-#include "wx/bitmap.h"
 #include "wx/ownerdrw.h"
 
 #define INCL_PM

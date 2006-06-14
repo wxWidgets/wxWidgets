@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/cocoa/bitmap.cpp
+// Name:        src/cocoa/bitmap.mm
 // Purpose:     wxBitmap
 // Author:      David Elliott
 // Modified by:
@@ -10,6 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#include "wx/bitmap.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/utils.h"
@@ -17,7 +20,7 @@
     #include "wx/icon.h"
     #include "wx/colour.h"
 #endif //WX_PRECOMP
-#include "wx/bitmap.h"
+
 #include "wx/image.h"
 #include "wx/xpmdecod.h"
 #include "wx/rawbmp.h"
@@ -666,4 +669,3 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     m_cocoaNSBitmapImageRep = [maskRep retain];
     return true;
 }
-

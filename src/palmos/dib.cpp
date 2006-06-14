@@ -30,9 +30,9 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/bitmap.h"
 #endif //WX_PRECOMP
 
-#include "wx/bitmap.h"
 #include "wx/file.h"
 
 #include "wx/image.h"

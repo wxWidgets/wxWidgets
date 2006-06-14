@@ -20,10 +20,10 @@
     #include "wx/utils.h"
     #include "wx/panel.h"
     #include "wx/msgdlg.h"
+    #include "wx/bitmap.h"
 #endif
 
 #include "wx/imaglist.h"
-#include "wx/bitmap.h"
 #include "wx/fontutil.h"
 
 // FIXME: Use GtkImage instead of GtkPixmap. Don't use gtk_container_border_width

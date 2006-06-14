@@ -20,16 +20,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
+    #include "wx/bitmap.h"
 #endif //WX_PRECOMP
-
-#include "wx/bitmap.h"
 
 #if wxUSE_IMAGE
     #include "wx/image.h"
 #endif
-
-
-//---------------------------------------------------------------------------
 
 
 
@@ -156,5 +152,3 @@ bool wxRegion::Union(const wxBitmap& WXUNUSED(bmp),
 }
 
 #endif
-
-//---------------------------------------------------------------------------

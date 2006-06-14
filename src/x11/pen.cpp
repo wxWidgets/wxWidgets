@@ -16,10 +16,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
+    #include "wx/bitmap.h"
 #endif
 
 #include "wx/colour.h"
-#include "wx/bitmap.h"
 
 //-----------------------------------------------------------------------------
 // wxPen

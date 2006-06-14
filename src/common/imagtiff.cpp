@@ -22,9 +22,8 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/intl.h"
+    #include "wx/bitmap.h"
 #endif
-
-#include "wx/bitmap.h"
 
 extern "C"
 {
@@ -36,11 +35,11 @@ extern "C"
 #include "wx/module.h"
 
 #ifndef TIFFLINKAGEMODE
-  #if defined(__WATCOMC__) && defined(__WXMGL__)
-    #define TIFFLINKAGEMODE cdecl
-  #else
-    #define TIFFLINKAGEMODE LINKAGEMODE
-  #endif
+    #if defined(__WATCOMC__) && defined(__WXMGL__)
+        #define TIFFLINKAGEMODE cdecl
+    #else
+        #define TIFFLINKAGEMODE LINKAGEMODE
+    #endif
 #endif
 
 //-----------------------------------------------------------------------------

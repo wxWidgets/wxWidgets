@@ -19,8 +19,6 @@
     #include "wx/wx.h"
 #endif
 
-#include "wx/bitmap.h"
-
 #include "wx/mac/uma.h"
 #include "wx/geometry.h"
 

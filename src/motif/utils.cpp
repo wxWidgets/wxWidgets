@@ -29,10 +29,10 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/dcmemory.h"
+    #include "wx/bitmap.h"
 #endif
 
 #include "wx/apptrait.h"
-#include "wx/bitmap.h"
 #include "wx/evtloop.h"
 
 #include <string.h>

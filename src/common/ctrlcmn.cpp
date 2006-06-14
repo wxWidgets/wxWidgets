@@ -32,11 +32,8 @@
     #include "wx/log.h"
     #include "wx/radiobut.h"
     #include "wx/statbmp.h"
-#endif
-
-#if wxUSE_STATBMP
     #include "wx/bitmap.h"
-#endif // wxUSE_STATBMP
+#endif
 
 const wxChar wxControlNameStr[] = wxT("control");
 

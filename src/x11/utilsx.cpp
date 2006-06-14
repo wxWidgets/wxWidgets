@@ -20,15 +20,20 @@
 #include "wx/x11/privx.h"
 
 #ifdef HAVE_XSHAPE
-#ifdef __VMS
-# include "wx/vms_x_fix.h"
-# include <X11/shape.h>
-#else
-# include <X11/extensions/shape.h>
-#endif
-#include "wx/region.h"
-#include "wx/bitmap.h"
-#include "wx/dcmemory.h"
+
+    #ifndef WX_PRECOMP
+        #include "wx/bitmap.h"
+    #endif
+
+    #ifdef __VMS
+        #include "wx/vms_x_fix.h"
+        #include <X11/shape.h>
+    #else
+        #include <X11/extensions/shape.h>
+    #endif
+
+    #include "wx/region.h"
+    #include "wx/dcmemory.h"
 #endif
 
 // ----------------------------------------------------------------------------

@@ -16,9 +16,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
+    #include "wx/bitmap.h"
 #endif
 
-#include "wx/bitmap.h"
 #include "wx/colour.h"
 
 //-----------------------------------------------------------------------------

@@ -28,9 +28,9 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/bitmap.h"
 #endif // WX_PRECOMP
 
-#include "wx/bitmap.h"
 #include "wx/palmos/gdiimage.h"
 
 #if wxUSE_WXDIB

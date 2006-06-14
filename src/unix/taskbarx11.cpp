@@ -29,9 +29,9 @@
     #include "wx/dcclient.h"
     #include "wx/statbmp.h"
     #include "wx/sizer.h"
+    #include "wx/bitmap.h"
 #endif
 
-#include "wx/bitmap.h"
 #include "wx/image.h"
 
 #ifdef __VMS

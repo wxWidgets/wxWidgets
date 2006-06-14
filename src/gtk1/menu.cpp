@@ -16,9 +16,8 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/bitmap.h"
 #endif
-
-#include "wx/bitmap.h"
 
 #if wxUSE_ACCEL
     #include "wx/accel.h"

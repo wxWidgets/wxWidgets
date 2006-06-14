@@ -22,9 +22,8 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/intl.h"
+    #include "wx/bitmap.h"
 #endif
-
-#include "wx/bitmap.h"
 
 // NB: Some compilers define boolean type in Windows headers
 //     (e.g. Watcom C++, but not Open Watcom).

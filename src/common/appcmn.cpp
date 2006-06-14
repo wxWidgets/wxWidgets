@@ -31,7 +31,6 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/msgdlg.h"
-    #include "wx/bitmap.h"
     #include "wx/confbase.h"
     #include "wx/utils.h"
 #endif

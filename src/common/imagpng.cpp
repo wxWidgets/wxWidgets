@@ -24,13 +24,14 @@
 
 #if wxUSE_IMAGE && wxUSE_LIBPNG
 
+#include "wx/imagpng.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/bitmap.h"
 #endif
 
-#include "wx/imagpng.h"
-#include "wx/bitmap.h"
 #include "png.h"
 #include "wx/filefn.h"
 #include "wx/wfstream.h"

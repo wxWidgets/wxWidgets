@@ -26,10 +26,10 @@
     #include "wx/icon.h"
     #include "wx/cursor.h"
     #include "wx/settings.h"
+    #include "wx/bitmap.h"
 #endif
 
 #include "wx/colour.h"
-#include "wx/bitmap.h"
 #include "wx/font.h"
 
 WXDLLIMPEXP_DATA_CORE(wxBrushList*) wxTheBrushList;

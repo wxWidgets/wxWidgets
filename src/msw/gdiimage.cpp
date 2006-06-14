@@ -28,11 +28,11 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/bitmap.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"
 
-#include "wx/bitmap.h"
 #include "wx/msw/gdiimage.h"
 
 #if wxUSE_WXDIB

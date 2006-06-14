@@ -21,7 +21,6 @@
 
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
-#include "wx/bitmap.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 

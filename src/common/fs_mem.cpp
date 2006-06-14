@@ -1,7 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        fs_mem.cpp
+// Name:        src/common/fs_mem.cpp
 // Purpose:     in-memory file system
 // Author:      Vaclav Slavik
+// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -9,23 +10,25 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_FILESYSTEM && wxUSE_STREAMS
 
 #include "wx/fs_mem.h"
 
-#if wxUSE_GUI
-    #include "wx/image.h"
-    #include "wx/bitmap.h"
-#endif // wxUSE_GUI
-
 #ifndef WXPRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/hash.h"
+    #if wxUSE_GUI
+        #include "wx/bitmap.h"
+    #endif // wxUSE_GUI
 #endif
+
+#if wxUSE_GUI
+    #include "wx/image.h"
+#endif // wxUSE_GUI
 
 #include "wx/mstream.h"
 
@@ -172,7 +175,7 @@ bool wxMemoryFSHandlerBase::CheckHash(const wxString& filename)
 
 /*static*/ void wxMemoryFSHandlerBase::AddFile(const wxString& filename, const wxString& textdata)
 {
-    AddFile(filename, (const void*) textdata.mb_str(), textdata.Length());
+    AddFile(filename, (const void*) textdata.mb_str(), textdata.length());
 }
 
 
@@ -239,4 +242,3 @@ wxMemoryFSHandler::AddFile(const wxString& filename,
 
 
 #endif // wxUSE_FILESYSTEM && wxUSE_FS_ZIP
-

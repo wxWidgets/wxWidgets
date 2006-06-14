@@ -15,7 +15,11 @@
 #endif
 
 #include "wx/pen.h"
-#include "wx/bitmap.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/bitmap.h"
+#endif
+
 #include "wx/colour.h"
 #include "wx/mgl/private.h"
 
