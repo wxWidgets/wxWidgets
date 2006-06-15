@@ -102,10 +102,10 @@ class wxDockInfo;
 class wxDockArt;
 class wxFrameManagerEvent;
 
-WX_DECLARE_OBJARRAY(wxDockInfo, wxDockInfoArray);
-WX_DECLARE_OBJARRAY(wxDockUIPart, wxDockUIPartArray);
-WX_DECLARE_OBJARRAY(wxPaneButton, wxPaneButtonArray);
-WX_DECLARE_OBJARRAY(wxPaneInfo, wxPaneInfoArray);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDockInfo, wxDockInfoArray, WXDLLIMPEXP_AUI);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDockUIPart, wxDockUIPartArray, WXDLLIMPEXP_AUI);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxPaneButton, wxPaneButtonArray, WXDLLIMPEXP_AUI);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxPaneInfo, wxPaneInfoArray, WXDLLIMPEXP_AUI);
 WX_DEFINE_ARRAY_PTR(wxPaneInfo*, wxPaneInfoPtrArray);
 WX_DEFINE_ARRAY_PTR(wxDockInfo*, wxDockInfoPtrArray);
 
