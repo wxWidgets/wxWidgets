@@ -249,14 +249,14 @@ private:
     wxCoord     m_x;
     wxCoord     m_y;
 
-    bool        m_leftDown;
-    bool        m_middleDown;
-    bool        m_rightDown;
+    bool        m_leftDown : 1;
+    bool        m_middleDown : 1;
+    bool        m_rightDown : 1;
 
-    bool        m_controlDown;
-    bool        m_shiftDown;
-    bool        m_altDown;
-    bool        m_metaDown;
+    bool        m_controlDown : 1;
+    bool        m_shiftDown : 1;
+    bool        m_altDown : 1;
+    bool        m_metaDown : 1;
 };
 
 
