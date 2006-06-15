@@ -254,8 +254,11 @@ public:
 
     virtual ~wxOwnerDrawnComboBox();
 
-    // NULL popup can be used to indicate default interface
-    virtual void SetPopupControl( wxComboPopup* popup );
+    // Prevent app from using wxComboPopup
+    void SetPopupControl(wxVListBoxComboPopup* popup)
+    {
+        DoSetPopupControl(popup);
+    }
 
     // wxControlWithItems methods
     virtual void Clear();
@@ -295,6 +298,9 @@ protected:
     // Callback for background drawing. Flags are same as with
     // OnDrawItem.
     virtual void OnDrawBackground( wxDC& dc, const wxRect& rect, int item, int flags ) const;
+
+    // NULL popup can be used to indicate default interface
+    virtual void DoSetPopupControl(wxComboPopup* popup);
 
     // clears all allocated client datas
     void ClearClientDatas();

@@ -664,14 +664,14 @@ wxOwnerDrawnComboBox::~wxOwnerDrawnComboBox()
         m_popupInterface->ClearClientDatas();
 }
 
-void wxOwnerDrawnComboBox::SetPopupControl( wxComboPopup* popup )
+void wxOwnerDrawnComboBox::DoSetPopupControl(wxComboPopup* popup)
 {
     if ( !popup )
     {
         popup = new wxVListBoxComboPopup();
     }
 
-    wxComboCtrl::SetPopupControl(popup);
+    wxComboCtrl::DoSetPopupControl(popup);
 
     wxASSERT(popup);
     m_popupInterface = (wxVListBoxComboPopup*) popup;

@@ -156,7 +156,10 @@ public:
 
     // set interface class instance derived from wxComboPopup
     // NULL popup can be used to indicate default in a derived class
-    virtual void SetPopupControl( wxComboPopup* popup );
+    void SetPopupControl( wxComboPopup* popup )
+    {
+        DoSetPopupControl(popup);
+    }
 
     // get interface class instance derived from wxComboPopup
     wxComboPopup* GetPopupControl()
@@ -380,6 +383,9 @@ protected:
 
     // override the base class virtuals involved in geometry calculations
     virtual wxSize DoGetBestSize() const;
+
+    // NULL popup can be used to indicate default in a derived class
+    virtual void DoSetPopupControl(wxComboPopup* popup);
 
     // ensures there is atleast the default popup
     void EnsurePopupControl();

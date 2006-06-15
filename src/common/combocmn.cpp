@@ -1559,7 +1559,7 @@ void wxComboCtrlBase::DestroyPopup()
     m_popup = (wxWindow*) NULL;
 }
 
-void wxComboCtrlBase::SetPopupControl( wxComboPopup* iface )
+void wxComboCtrlBase::DoSetPopupControl(wxComboPopup* iface)
 {
     wxCHECK_RET( iface, wxT("no popup interface set for wxComboCtrl") );
 
