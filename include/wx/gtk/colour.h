@@ -40,6 +40,7 @@ public:
     // default
     wxColour() {}
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
+    wxColour(const GdkColor& gdkColor);
 
     ~wxColour();
 
@@ -55,13 +56,9 @@ public:
     // Implementation part
     void CalcPixel( GdkColormap *cmap );
     int GetPixel() const;
-    GdkColor *GetColor() const;
+    const GdkColor *GetColor() const;
 
 protected:
-    // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
-
     virtual bool FromString(const wxChar *str);
     virtual void InitWith( unsigned char red, unsigned char green, unsigned char blue );
 

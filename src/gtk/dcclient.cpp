@@ -368,7 +368,7 @@ void wxWindowDC::SetUpDC()
     /* background colour */
     m_backgroundBrush = *wxWHITE_BRUSH;
     m_backgroundBrush.GetColour().CalcPixel( m_cmap );
-    GdkColor *bg_col = m_backgroundBrush.GetColour().GetColor();
+    const GdkColor *bg_col = m_backgroundBrush.GetColour().GetColor();
 
     /* m_textGC */
     m_textForegroundColour.CalcPixel( m_cmap );

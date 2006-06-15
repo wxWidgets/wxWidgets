@@ -3897,7 +3897,7 @@ GtkRcStyle *wxWindowGTK::CreateWidgetStyle(bool forceStyle)
 
     if ( m_foregroundColour.Ok() )
     {
-        GdkColor *fg = m_foregroundColour.GetColor();
+        const GdkColor *fg = m_foregroundColour.GetColor();
 
         style->fg[GTK_STATE_NORMAL] = *fg;
         style->color_flags[GTK_STATE_NORMAL] = GTK_RC_FG;
@@ -3911,7 +3911,7 @@ GtkRcStyle *wxWindowGTK::CreateWidgetStyle(bool forceStyle)
 
     if ( m_backgroundColour.Ok() )
     {
-        GdkColor *bg = m_backgroundColour.GetColor();
+        const GdkColor *bg = m_backgroundColour.GetColor();
 
         style->bg[GTK_STATE_NORMAL] = *bg;
         style->base[GTK_STATE_NORMAL] = *bg;

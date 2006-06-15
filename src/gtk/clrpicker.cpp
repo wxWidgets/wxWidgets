@@ -37,7 +37,9 @@ static void gtk_clrbutton_setcolor_callback(GtkColorButton *widget,
 {
     // update the m_colour member of the wxColourButton
     wxASSERT(p);
-    gtk_color_button_get_color(widget, p->GetGdkColor());
+    GdkColor gdkColor;
+    gtk_color_button_get_color(widget, &gdkColor);
+    p->SetGdkColor(gdkColor);
 
     // fire the colour-changed event
     wxColourPickerEvent event(p, p->GetId(), p->GetColour());

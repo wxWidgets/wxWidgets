@@ -104,7 +104,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
 
     if (attr.HasTextColour())
     {
-        GdkColor *colFg = attr.GetTextColour().GetColor();
+        const GdkColor *colFg = attr.GetTextColour().GetColor();
         g_snprintf(buf, sizeof(buf), "WXFORECOLOR %d %d %d",
                    colFg->red, colFg->green, colFg->blue);
         tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
@@ -117,7 +117,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
 
     if (attr.HasBackgroundColour())
     {
-        GdkColor *colBg = attr.GetBackgroundColour().GetColor();
+        const GdkColor *colBg = attr.GetBackgroundColour().GetColor();
         g_snprintf(buf, sizeof(buf), "WXBACKCOLOR %d %d %d",
                    colBg->red, colBg->green, colBg->blue);
         tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),

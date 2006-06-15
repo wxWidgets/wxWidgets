@@ -57,8 +57,8 @@ protected:
 
 public:     // used by the GTK callback only
 
-    GdkColor *GetGdkColor() const
-        { return m_colour.GetColor(); }
+    void SetGdkColor(const GdkColor& gdkColor)
+        { m_colour = wxColor(gdkColor); }
 
     wxWindow *m_topParent;
 
