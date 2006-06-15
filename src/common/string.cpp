@@ -1618,7 +1618,7 @@ wxString& wxString::Trim(bool bFromRight)
         {
             // find last non-space character
             reverse_iterator psz = rbegin();
-            while ( wxSafeIsspace(*psz) && (psz != rend()) )
+            while ( (psz != rend()) && wxSafeIsspace(*psz) )
                 psz++;
             
             // truncate at trailing space start
@@ -1628,7 +1628,7 @@ wxString& wxString::Trim(bool bFromRight)
         {
             // find first non-space character
             iterator psz = begin();
-            while ( wxSafeIsspace(*psz) && (psz != end()) )
+            while ( (psz != end()) && wxSafeIsspace(*psz) )
                 psz++;
 
             // fix up data and length
