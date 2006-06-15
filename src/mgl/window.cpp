@@ -76,6 +76,8 @@ static wxWindowMGL *gs_mouseCapture = NULL;
 // the frame that is currently active (i.e. its child has focus). It is
 // used to generate wxActivateEvents
 static wxWindowMGL *gs_activeFrame = NULL;
+// track the mouse button state for wxGetMouseState()
+unsigned long g_buttonState = 0;
 
 // ---------------------------------------------------------------------------
 // constants
@@ -153,6 +155,8 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
     wxWindowMGL *win = (wxWindowMGL*)MGL_wmGetWindowUserData(wnd);
     wxPoint orig(win->GetClientAreaOrigin());
     wxPoint where;
+
+    g_buttonState = e->modifiers;
 
     MGL_wmCoordGlobalToLocal(win->GetHandle(),
                              e->where_x, e->where_y, &where.x, &where.y);

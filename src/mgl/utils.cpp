@@ -152,7 +152,28 @@ wxPoint wxGetMousePosition()
     return pt;
 }
 
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+    int x, y;
 
+    wxGetMousePosition(&x, &y);
+
+    ms.SetX(x);
+    ms.SetY(y);
+
+    extern unsigned long g_buttonState;
+    ms.SetLeftDown(g_buttonState & EVT_LEFTBUT);
+    ms.SetMiddleDown(g_buttonState & EVT_MIDDLEBUT);
+    ms.SetRightDown(g_buttonState & EVT_RIGHTBUT);
+
+    ms.SetControlDown(EVT_isKeyDown(KB_leftCtrl) || EVT_isKeyDown(KB_rightCtrl));
+    ms.SetShiftDown(EVT_isKeyDown(KB_leftShift) || EVT_isKeyDown(KB_rightShift));
+    ms.SetAltDown(EVT_isKeyDown(KB_leftAlt));
+    ms.SetMetaDown(EVT_isKeyDown(KB_rightAlt));
+
+    return ms;
+}
 
 #ifdef __UNIX__
 

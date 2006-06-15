@@ -33,6 +33,13 @@ wxMGL:
 
 - Fixed NUM_LOCK having no effect.
 - Fixed wxFileExists (affecting wxImage::LoadFile).
+- Implement wxGetMouseState()
+
+wxMotif:
+- Implement wxGetMouseState()
+
+wxX11:
+- Implement wxGetMouseState()
 
 
 2.6.3
