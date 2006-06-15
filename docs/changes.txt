@@ -29,6 +29,11 @@ wxMac:
 - Fixed non-detection of process termination on Intel Macs by
   polling for process termination in a separate thread.
 
+wxMGL:
+
+- Fixed NUM_LOCK having no effect.
+- Fixed wxFileExists (affecting wxImage::LoadFile).
+
 
 2.6.3
 -----
