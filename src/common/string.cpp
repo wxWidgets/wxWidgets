@@ -1642,38 +1642,37 @@ inline int wxSafeIsspace(wxChar ch) { return (ch < 127) && wxIsspace(ch); }
 // trims spaces (in the sense of isspace) from left or right side
 wxString& wxString::Trim(bool bFromRight)
 {
-  // first check if we're going to modify the string at all
-  if ( !empty() &&
-       (
-        (bFromRight && wxSafeIsspace(GetChar(Len() - 1))) ||
-        (!bFromRight && wxSafeIsspace(GetChar(0u)))
+    // first check if we're going to modify the string at all
+    if ( !empty() &&
+         (
+          (bFromRight && wxSafeIsspace(GetChar(length() - 1))) ||
+          (!bFromRight && wxSafeIsspace(GetChar(0u)))
+         )
        )
-     )
-  {
-    if ( bFromRight )
     {
-      // find last non-space character
-      iterator psz = begin() + length() - 1;
-      while ( wxSafeIsspace(*psz) && (psz >= begin()) )
-        psz--;
+        if ( bFromRight )
+        {
+            // find last non-space character
+            reverse_iterator psz = rbegin();
+            while ( (psz != rend()) && wxSafeIsspace(*psz) )
+                psz++;
+            
+            // truncate at trailing space start
+            erase(psz.base(), end());
+        }
+        else
+        {
+            // find first non-space character
+            iterator psz = begin();
+            while ( (psz != end()) && wxSafeIsspace(*psz) )
+                psz++;
 
-      // truncate at trailing space start
-      *++psz = wxT('\0');
-      erase(psz, end());
+            // fix up data and length
+            erase(begin(), psz);
+        }
     }
-    else
-    {
-      // find first non-space character
-      iterator psz = begin();
-      while ( wxSafeIsspace(*psz) )
-        psz++;
 
-      // fix up data and length
-      erase(begin(), psz);
-    }
-  }
-
-  return *this;
+    return *this;
 }
 
 // adds nCount characters chPad to the string from either side
