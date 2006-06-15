@@ -1626,26 +1626,57 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
     return wxFindWindowAtPoint(wxGetMousePosition());
 }
 
-// Get the current mouse position.
-wxPoint wxGetMousePosition()
+void wxGetMouseState(int& rootX, int& rootY, unsigned& maskReturn)
 {
 #if wxUSE_NANOX
     /* TODO */
-    return wxPoint(0, 0);
+    rootX = rootY = 0;
+    maskReturn = 0;
 #else
     Display *display = wxGlobalDisplay();
     Window rootWindow = RootWindowOfScreen (DefaultScreenOfDisplay(display));
     Window rootReturn, childReturn;
-    int rootX, rootY, winX, winY;
-    unsigned int maskReturn;
+    int winX, winY;
 
     XQueryPointer (display,
                    rootWindow,
                    &rootReturn,
                    &childReturn,
                    &rootX, &rootY, &winX, &winY, &maskReturn);
-    return wxPoint(rootX, rootY);
 #endif
+}
+
+// Get the current mouse position.
+wxPoint wxGetMousePosition()
+{
+    int x, y;
+    unsigned mask;
+
+    wxGetMouseState(x, y, mask);
+    return wxPoint(x, y);
+}
+
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+    int x, y;
+    unsigned mask;
+
+    wxGetMouseState(x, y, mask);
+
+    ms.SetX(x);
+    ms.SetY(y);
+
+    ms.SetLeftDown(mask & Button1Mask);
+    ms.SetMiddleDown(mask & Button2Mask);
+    ms.SetRightDown(mask & Button3Mask);
+
+    ms.SetControlDown(mask & ControlMask);
+    ms.SetShiftDown(mask & ShiftMask);
+    ms.SetAltDown(mask & Mod1Mask);
+    ms.SetMetaDown(mask & Mod2Mask);
+
+    return ms;
 }
 
 
