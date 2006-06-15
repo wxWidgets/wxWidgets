@@ -113,12 +113,24 @@
   /*  generic assert macro */
   #define wxASSERT(cond) wxASSERT_MSG(cond, NULL)
 
-  /*  assert with additional message explaining it's cause */
-  #define wxASSERT_MSG(cond, msg)                                             \
-    if ( cond )                                                               \
-        ;                                                                     \
-    else                                                                      \
-        wxOnAssert(__TFILE__, __LINE__, __WXFUNCTION__, _T(#cond), msg)
+
+  /*  assert with additional message explaining its cause */
+
+  /*  compilers can give a warning (such as "possible unwanted ;") when using */
+  /*  the default definition of wxASSERT_MSG so we provide an alternative */
+  #if defined(__MWERKS__)
+    #define wxASSERT_MSG(cond, msg)                                           \
+      if ( cond )                                                             \
+      {}                                                                      \
+      else                                                                    \
+          wxOnAssert(__TFILE__, __LINE__, __WXFUNCTION__, _T(#cond), msg)
+  #else
+    #define wxASSERT_MSG(cond, msg)                                           \
+      if ( cond )                                                             \
+          ;                                                                   \
+      else                                                                    \
+          wxOnAssert(__TFILE__, __LINE__, __WXFUNCTION__, _T(#cond), msg)
+  #endif
 
   /*  special form of assert: always triggers it (in debug mode) */
   #define wxFAIL wxFAIL_MSG(NULL)
@@ -177,15 +189,29 @@
 #define wxCHECK2(cond, op)           wxCHECK2_MSG(cond, op, NULL)
 
 /*  as wxCHECK2 but with a message explaining why we fail */
-#define wxCHECK2_MSG(cond, op, msg)                                           \
-    if ( cond )                                                               \
-        ;                                                                     \
-    else                                                                      \
-    {                                                                         \
-        wxFAIL_COND_MSG(#cond, msg);                                          \
-        op;                                                                   \
-    }                                                                         \
-    struct wxDummyCheckStruct /* just to force a semicolon */
+
+/* see comment near the definition of wxASSERT_MSG for the # if/else reason */
+#if defined(__MWERKS__)
+    #define wxCHECK2_MSG(cond, op, msg)                                       \
+        if ( cond )                                                           \
+        {}                                                                    \
+        else                                                                  \
+        {                                                                     \
+            wxFAIL_COND_MSG(#cond, msg);                                      \
+            op;                                                               \
+        }                                                                     \
+        struct wxDummyCheckStruct /* just to force a semicolon */
+#else
+    #define wxCHECK2_MSG(cond, op, msg)                                       \
+        if ( cond )                                                           \
+            ;                                                                 \
+        else                                                                  \
+        {                                                                     \
+            wxFAIL_COND_MSG(#cond, msg);                                      \
+            op;                                                               \
+        }                                                                     \
+        struct wxDummyCheckStruct /* just to force a semicolon */
+#endif
 
 /*  special form of wxCHECK2: as wxCHECK, but for use in void functions */
 /*  */
