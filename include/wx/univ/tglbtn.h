@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/button.h"
+#include "wx/checkbox.h"
 
 // ----------------------------------------------------------------------------
 // wxToggleButton: a push button
