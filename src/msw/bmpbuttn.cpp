@@ -593,19 +593,22 @@ wxSize wxBitmapButton::DoGetBestSize() const
     if ( m_bmpNormal.Ok() )
     {
 #if wxUSE_UXTHEME
-        if ( (GetWindowStyleFlag() & wxBU_AUTODRAW) && wxUxThemeEngine::GetIfActive() )
+        if ( wxUxThemeEngine::GetIfActive() )
         {
             wxUxThemeHandle theme((wxBitmapButton *)this, L"BUTTON");
 
-            // calculate content area margins
-            // assuming here that each state is the same size
             MARGINS margins;
             wxUxThemeEngine::Get()->GetThemeMargins(theme, NULL,
                                                     BP_PUSHBUTTON, PBS_NORMAL,
                                                     TMT_CONTENTMARGINS, NULL,
                                                     &margins);
-            wxSize best(m_bmpNormal.GetWidth() + 2 * (margins.cxLeftWidth + 1),
-                        m_bmpNormal.GetHeight() + 2* (margins.cyTopHeight + 1));
+
+            // the margins we get are too small, part of the bitmap is
+            // truncated if we use them -- so add a little extra space
+            wxSize best(m_bmpNormal.GetWidth() +
+                            margins.cxLeftWidth + margins.cxRightWidth + 5,
+                        m_bmpNormal.GetHeight() +
+                            margins.cyTopHeight + margins.cyBottomHeight + 5);
             CacheBestSize(best);
             return best;
         }
