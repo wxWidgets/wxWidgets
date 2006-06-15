@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        matrix.h
-// Purpose:     wxTransformMatrix class. NOT YET USED
-// Author:      Chris Breeze, Julian Smart
+// Name:         wx/matrix.h
+// Purpose:      wxTransformMatrix class. NOT YET USED
+// Author:       Chris Breeze, Julian Smart
 // Modified by:  Klaas Holwerda
-// Created:     01/02/97
-// RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart, Chris Breeze
-// Licence:     wxWindows licence
+// Created:      01/02/97
+// RCS-ID:       $Id$
+// Copyright:    (c) Julian Smart, Chris Breeze
+// Licence:      wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MATRIXH__
@@ -14,6 +14,7 @@
 
 //! headerfiles="matrix.h wx/object.h"
 #include "wx/object.h"
+#include "wx/math.h"
 
 //! codefiles="matrix.cpp"
 
