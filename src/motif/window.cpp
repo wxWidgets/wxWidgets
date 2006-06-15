@@ -2567,8 +2567,8 @@ wxMouseState wxGetMouseState()
 
     ms.SetControlDown(mask & ControlMask);
     ms.SetShiftDown(mask & ShiftMask);
-    ms.SetAltDown(mask & Mod1Mask);
-    ms.SetMetaDown(mask & Mod2Mask);
+    ms.SetAltDown(mask & Mod3Mask);
+    ms.SetMetaDown(mask & Mod1Mask);
 
     return ms;
 }
