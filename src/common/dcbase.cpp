@@ -25,7 +25,10 @@
 #endif
 
 #include "wx/dc.h"
-#include "wx/math.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/math.h"
+#endif
 
 // bool wxDCBase::sm_cacheing = false;
 
@@ -414,7 +417,7 @@ bool wxDCBase::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths)
 {
     int totalWidth = 0;
 
-    const size_t len = text.Length();
+    const size_t len = text.length();
     widths.Empty();
     widths.Add(0, len);
 

@@ -26,6 +26,7 @@
 #include "wx/utils.h"
 #include "wx/stream.h"
 #include "wx/memory.h"
+#include "wx/math.h"
 
 #if wxUSE_GUI
 

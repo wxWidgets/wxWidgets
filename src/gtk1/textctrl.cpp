@@ -18,16 +18,15 @@
     #include "wx/utils.h"
     #include "wx/panel.h"
     #include "wx/settings.h"
+    #include "wx/math.h"
 #endif
 
-#include "wx/math.h"
 #include "wx/strconv.h"
 #include "wx/fontutil.h"        // for wxNativeFontInfo (GetNativeFontInfo())
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <ctype.h>
-#include "wx/math.h"
 
 #include "wx/gtk1/private.h"
 #include <gdk/gdkkeysyms.h>
@@ -458,7 +457,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         // resetting the style and appending some more text wouldn't work: if
         // we don't specify the style explicitly, the old style would be used
         gtk_editable_delete_selection( GTK_EDITABLE(m_text) );
-        wxGtkTextInsert(m_text, m_defaultStyle, text.c_str(), text.Len());
+        wxGtkTextInsert(m_text, m_defaultStyle, text.c_str(), text.length());
 
         // we called wxGtkTextInsert with correct font, no need to do anything
         // in UpdateFontIfNeeded() any longer
@@ -478,7 +477,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         // This moves the cursor pos to behind the inserted text.
         gint len = GET_EDITABLE_POS(m_text);
 
-        gtk_editable_insert_text( GTK_EDITABLE(m_text), text.c_str(), text.Len(), &len );
+        gtk_editable_insert_text( GTK_EDITABLE(m_text), text.c_str(), text.length(), &len );
 
         // Bring entry's cursor uptodate.
         gtk_entry_set_position( GTK_ENTRY(m_text), len );
@@ -542,7 +541,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
         wxString text = GetValue();
 
         // cast to prevent warning. But pos really should've been unsigned.
-        if( (unsigned long)pos > text.Len()  )
+        if( (unsigned long)pos > text.length()  )
             return false;
 
         *x=0;   // First Col

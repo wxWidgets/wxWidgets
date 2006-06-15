@@ -50,11 +50,11 @@
     #include "wx/dcscreen.h"
     #include "wx/textctrl.h"
     #include "wx/listbox.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/selstore.h"
 #include "wx/renderer.h"
-#include "wx/math.h"
 
 #ifdef __WXMAC__
     #include "wx/mac/private.h"

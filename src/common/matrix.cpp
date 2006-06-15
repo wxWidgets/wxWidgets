@@ -16,14 +16,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#include "wx/matrix.h"
 
 #ifndef WX_PRECOMP
     #include "wx/math.h"
 #endif
-
-#include "wx/matrix.h"
 
 static const double pi = M_PI;
 

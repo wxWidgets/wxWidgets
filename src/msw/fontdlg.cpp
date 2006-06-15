@@ -33,11 +33,10 @@
     #include "wx/dialog.h"
     #include "wx/log.h"
     #include "wx/cmndata.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/msw/wrapcdlg.h"
-
-#include "wx/math.h"
 
 #include <stdlib.h>
 #include <string.h>

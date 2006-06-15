@@ -22,9 +22,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/msgdlg.h"
+    #include "wx/math.h"
 #endif
 
-#include "wx/math.h"
 #include "wx/mac/uma.h"
 #include "wx/mac/private/print.h"
 

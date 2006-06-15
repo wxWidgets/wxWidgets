@@ -46,10 +46,10 @@
     #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/dcmemory.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/image.h"
-#include "wx/math.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

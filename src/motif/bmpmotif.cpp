@@ -19,6 +19,10 @@
 
 #include "wx/motif/bmpmotif.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/math.h"
+#endif
+
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
@@ -32,8 +36,6 @@
 #if wxHAVE_LIB_XPM
     #include <X11/xpm.h>
 #endif
-
-#include "wx/math.h"
 
 Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
 

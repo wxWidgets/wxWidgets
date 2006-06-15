@@ -31,6 +31,7 @@
     #include "wx/combobox.h"
     #include "wx/layout.h"
     #include "wx/statusbr.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/module.h"
@@ -53,7 +54,6 @@
     #include "wx/thread.h"
 #endif
 
-#include "wx/math.h"
 #include <ctype.h>
 
 #include "wx/gtk1/private.h"

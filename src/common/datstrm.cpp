@@ -19,7 +19,10 @@
 #if wxUSE_STREAMS
 
 #include "wx/datstrm.h"
-#include "wx/math.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/math.h"
+#endif //WX_PRECOMP
 
 // ---------------------------------------------------------------------------
 // wxDataInputStream

@@ -19,6 +19,7 @@
     #include "wx/app.h"
     #include "wx/dcmemory.h"
     #include "wx/icon.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/image.h"
@@ -42,7 +43,6 @@ bool wxGetImageFromDrawable(GR_DRAW_ID drawable, int srcX, int srcY, int width, 
 #include "wx/wfstream.h"
 #endif
 #endif
-#include "wx/math.h"
 
 //-----------------------------------------------------------------------------
 // wxMask

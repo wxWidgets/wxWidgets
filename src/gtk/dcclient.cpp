@@ -19,6 +19,7 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/dcmemory.h"
+    #include "wx/math.h" // for floating-point functions
 #endif
 
 #include "wx/image.h"
@@ -27,8 +28,6 @@
 
 #include "wx/gtk/win_gtk.h"
 #include "wx/gtk/private.h"
-
-#include "wx/math.h" // for floating-point functions
 
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>

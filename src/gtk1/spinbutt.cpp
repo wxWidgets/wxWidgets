@@ -17,9 +17,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
+    #include "wx/math.h"
 #endif
 
-#include "wx/math.h"
 #include "wx/gtk1/private.h"
 
 //-----------------------------------------------------------------------------

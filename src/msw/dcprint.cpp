@@ -33,6 +33,7 @@
     #include "wx/log.h"
     #include "wx/window.h"
     #include "wx/dcmemory.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -43,7 +44,6 @@
 
 #include "wx/printdlg.h"
 #include "wx/msw/printdlg.h"
-#include "wx/math.h"
 
 #include "wx/msw/wrapcdlg.h"
 #ifndef __WIN32__

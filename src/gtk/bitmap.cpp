@@ -17,6 +17,7 @@
     #include "wx/dcmemory.h"
     #include "wx/palette.h"
     #include "wx/icon.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/filefn.h"
@@ -31,8 +32,6 @@
 #include <gdk/gdkx.h>
 
 #include <gdk/gdkimage.h>
-
-#include "wx/math.h"
 
 extern void gdk_wx_draw_bitmap     (GdkDrawable  *drawable,
                           GdkGC               *gc,

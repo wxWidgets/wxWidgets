@@ -15,6 +15,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/math.h" //math constants
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
@@ -30,7 +31,6 @@
 #import <AppKit/NSTypesetter.h>
 #import <AppKit/NSImage.h>
 
-#include "wx/math.h" //math constants
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxCocoaDCStack);
 

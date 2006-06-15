@@ -24,9 +24,9 @@
     #include "wx/app.h"
     #include "wx/msgdlg.h"
     #include "wx/dcprint.h"
+    #include "wx/math.h"
 #endif
 
-#include "wx/math.h"
 #include "wx/mac/uma.h"
 
 #include "wx/mac/printmac.h"

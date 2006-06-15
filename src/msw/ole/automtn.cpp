@@ -22,13 +22,13 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/math.h"
 #endif
 
 #define _FORCENAMELESSUNION
 #include "wx/msw/private.h"
 #include "wx/msw/ole/oleutils.h"
 #include "wx/msw/ole/automtn.h"
-#include "wx/math.h"
 
 #ifdef __WXWINCE__
 #include "wx/msw/wince/time.h"

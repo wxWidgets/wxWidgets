@@ -24,13 +24,13 @@
     #include "wx/hash.h"
     #include "wx/utils.h"
     #include "wx/bitmap.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/intl.h"
 #include "wx/module.h"
-#include "wx/math.h"
 
 #if wxUSE_XPM
     #include "wx/xpmdecod.h"

@@ -32,6 +32,7 @@
     #include "wx/combobox.h"
     #include "wx/layout.h"
     #include "wx/statusbr.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/module.h"
@@ -54,7 +55,6 @@
     #include "wx/thread.h"
 #endif
 
-#include "wx/math.h"
 #include <ctype.h>
 
 // FIXME: Due to a hack we use GtkCombo in here, which is deprecated since gtk2.3.0

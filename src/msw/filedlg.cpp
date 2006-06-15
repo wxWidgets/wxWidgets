@@ -35,6 +35,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/msw/wrapcdlg.h"
@@ -44,7 +45,6 @@
 
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
-#include "wx/math.h"
 
 #include "wx/msw/missing.h"
 

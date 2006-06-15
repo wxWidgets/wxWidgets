@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/longlong.cpp
+// Name:        src/common/longlong.cpp
 // Purpose:     implementation of wxLongLongNative
 // Author:      Jeffrey C. Ollie <jeff@ollie.clive.ia.us>, Vadim Zeitlin
 // Remarks:     this class is not public in wxWidgets 2.0! It is intentionally
@@ -22,17 +22,21 @@
 #endif
 
 #if wxUSE_LONGLONG
+
 #include "wx/longlong.h"
-#include "wx/math.h"       // for fabs()
+
+#ifndef WX_PRECOMP
+    #include "wx/math.h"       // for fabs()
+#endif
 
 #if wxUSE_STREAMS
-#include "wx/txtstrm.h"
+    #include "wx/txtstrm.h"
 #endif
 
 #if defined(__MWERKS__) && defined(__WXMSW__)
-#include <string.h>     // for memset()
+    #include <string.h>     // for memset()
 #else
-#include <memory.h>     // for memset()
+    #include <memory.h>     // for memset()
 #endif
 
 #include "wx/ioswrap.h"
@@ -1257,7 +1261,7 @@ WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &o,
     wxString s = o.ReadWord();
 
     ll = wxULongLong(0l, 0l);
-    size_t length = s.Length();
+    size_t length = s.length();
     size_t idx = 0;
 
     wxChar ch = READ_STRING_CHAR(s, idx, length);
@@ -1282,7 +1286,7 @@ WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &o,
     wxString s = o.ReadWord();
 
     ll = wxLongLong(0l, 0l);
-    size_t length = s.Length();
+    size_t length = s.length();
     size_t idx = 0;
 
     wxChar ch = READ_STRING_CHAR(s, idx, length);

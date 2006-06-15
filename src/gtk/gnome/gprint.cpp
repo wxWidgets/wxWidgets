@@ -23,9 +23,9 @@
     #include "wx/log.h"
     #include "wx/dcmemory.h"
     #include "wx/icon.h"
+    #include "wx/math.h"
 #endif
 
-#include "wx/math.h"
 #include "wx/fontutil.h"
 #include "wx/gtk/private.h"
 #include "wx/module.h"

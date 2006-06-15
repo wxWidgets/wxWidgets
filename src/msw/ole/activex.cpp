@@ -25,9 +25,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
+    #include "wx/math.h"
 #endif
-
-#include "wx/math.h"
 
 // I don't know why members of tagVARIANT aren't found when compiling
 // with Wine

@@ -25,6 +25,7 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/dcmemory.h"
+    #include "wx/math.h"
 #endif // WX_PRECOMP
 
 #include "wx/image.h"
@@ -32,7 +33,6 @@
 #include "wx/generic/prntdlgg.h"
 #include "wx/paper.h"
 #include "wx/filefn.h"
-#include "wx/math.h"
 #include "wx/stdpaths.h"
 
 WXDLLIMPEXP_DATA_CORE(int) wxPageNumber;

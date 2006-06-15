@@ -32,12 +32,12 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/arrstr.h"
+    #include "wx/math.h"
 #endif //WX_PRECOMP
 
 #if wxUSE_CONFIG && ((wxUSE_FILE && wxUSE_TEXTFILE) || wxUSE_CONFIG_NATIVE)
 
 #include "wx/file.h"
-#include "wx/math.h"
 
 #include <stdlib.h>
 #include <ctype.h>

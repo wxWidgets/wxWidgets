@@ -35,10 +35,10 @@
     #include "wx/utils.h"
     #include "wx/dialog.h"
     #include "wx/cmndata.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/msw/private.h"
-#include "wx/math.h"
 #include "wx/msw/wrapcdlg.h"
 
 #include <stdlib.h>

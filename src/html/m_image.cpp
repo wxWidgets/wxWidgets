@@ -22,6 +22,7 @@
     #include "wx/timer.h"
     #include "wx/dcmemory.h"
     #include "wx/log.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/html/forcelnk.h"
@@ -31,7 +32,6 @@
 #include "wx/image.h"
 #include "wx/gifdecod.h"
 #include "wx/artprov.h"
-#include "wx/math.h"
 
 #include <float.h>
 

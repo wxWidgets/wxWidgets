@@ -1,23 +1,23 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:          src/mac/carbon/thread.cpp
-// Purpose:      wxThread Implementation
-// Author:        Original from Wolfram Gloger/Guilhem Lavaux/Vadim Zeitlin
+// Name:        src/mac/carbon/thread.cpp
+// Purpose:     wxThread Implementation
+// Author:      Original from Wolfram Gloger/Guilhem Lavaux/Vadim Zeitlin
 // Modified by: Aj Lavin, Stefan Csomor
-// Created:       04/22/98
-// RCS-ID:        $Id$
-// Copyright:    (c) Wolfram Gloger (1996, 1997); Guilhem Lavaux (1998),
-//                     Vadim Zeitlin (1999), Stefan Csomor (2000)
-// Licence:        wxWindows licence
+// Created:     04/22/98
+// RCS-ID:      $Id$
+// Copyright:   (c) Wolfram Gloger (1996, 1997); Guilhem Lavaux (1998),
+//                  Vadim Zeitlin (1999), Stefan Csomor (2000)
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
 #endif
 
 #if wxUSE_THREADS
@@ -31,7 +31,6 @@
 #else
     #include <DriverServices.h>
     #include <Multiprocessing.h>
-    #include "wx/math.h"
 #endif
 
 #include "wx/mac/uma.h"

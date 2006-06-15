@@ -64,9 +64,9 @@
     #include "wx/log.h"
     #include "wx/dcclient.h"
     #include "wx/timer.h"
+    #include "wx/math.h"        // log10 & pow
 #endif
 
-#include "wx/math.h"        // log10 & pow
 #include "wx/msw/private.h" // user info and wndproc setting/getting
 #include "wx/dynlib.h"
 #include "wx/stopwatch.h"

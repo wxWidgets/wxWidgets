@@ -18,6 +18,7 @@
     #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/dcmemory.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/image.h"
@@ -25,8 +26,6 @@
 #include "wx/fontutil.h"
 
 #include "wx/x11/private.h"
-
-#include "wx/math.h"
 
 #if wxUSE_UNICODE
 #include "glib.h"
@@ -1594,7 +1593,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 #endif
     {
         XDrawString( (Display*) m_display, (Window) m_window,
-            (GC) m_textGC, x, y + XFontStructGetAscent(xfont), text.c_str(), text.Len() );
+            (GC) m_textGC, x, y + XFontStructGetAscent(xfont), text.c_str(), text.length() );
     }
 
 #if 0
@@ -1670,7 +1669,7 @@ void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoor
     int direction, ascent, descent2;
     XCharStruct overall;
 
-    XTextExtents( xfont, (char*) string.c_str(), string.Len(), &direction,
+    XTextExtents( xfont, (char*) string.c_str(), string.length(), &direction,
         &ascent, &descent2, &overall);
 
     if (width)

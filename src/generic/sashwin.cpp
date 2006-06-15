@@ -28,9 +28,8 @@
     #include "wx/settings.h"
     #include "wx/dcclient.h"
     #include "wx/dcscreen.h"
+    #include "wx/math.h"
 #endif
-
-#include "wx/math.h"
 
 #include <stdlib.h>
 

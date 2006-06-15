@@ -20,6 +20,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/math.h"
     #if wxUSE_STREAMS
         #include "wx/stream.h"
     #endif
@@ -44,7 +45,6 @@ using namespace std ;
 
 #include "wx/string.h"
 #include "wx/tokenzr.h"
-#include "wx/math.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxVariantData, wxObject)
 
