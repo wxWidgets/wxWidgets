@@ -1551,9 +1551,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/treectrl.cpp
 </set>
 <set var="MSW_HDR" hints="files">
-    wx/generic/clrpicker.h
-    wx/generic/fontpicker.h
-    wx/generic/filepicker.h
+    wx/generic/clrpickerg.h
+    wx/generic/fontpickerg.h
+    wx/generic/filepickerg.h
     wx/msw/accel.h
     wx/msw/app.h
     wx/msw/bitmap.h
