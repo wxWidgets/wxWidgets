@@ -26,7 +26,7 @@
 #include "wx/timer.h"
 #include "wx/sizer.h"
 
-enum WXDLLIMPEXP_AUI wxFrameManagerDock
+enum wxFrameManagerDock
 {
     wxAUI_DOCK_NONE = 0,
     wxAUI_DOCK_TOP = 1,
@@ -37,7 +37,7 @@ enum WXDLLIMPEXP_AUI wxFrameManagerDock
     wxAUI_DOCK_CENTRE = wxAUI_DOCK_CENTER
 };
 
-enum WXDLLIMPEXP_AUI wxFrameManagerOption
+enum wxFrameManagerOption
 {
     wxAUI_MGR_ALLOW_FLOATING        = 1 << 0,
     wxAUI_MGR_ALLOW_ACTIVE_PANE     = 1 << 1,
@@ -50,7 +50,7 @@ enum WXDLLIMPEXP_AUI wxFrameManagerOption
                         wxAUI_MGR_TRANSPARENT_HINT_FADE
 };
 
-enum WXDLLIMPEXP_AUI wxPaneDockArtSetting
+enum wxPaneDockArtSetting
 {
     wxAUI_ART_SASH_SIZE = 0,
     wxAUI_ART_CAPTION_SIZE = 1,
@@ -71,21 +71,21 @@ enum WXDLLIMPEXP_AUI wxPaneDockArtSetting
     wxAUI_ART_GRADIENT_TYPE = 16
 };
 
-enum WXDLLIMPEXP_AUI wxPaneDockArtGradients
+enum wxPaneDockArtGradients
 {
     wxAUI_GRADIENT_NONE = 0,
     wxAUI_GRADIENT_VERTICAL = 1,
     wxAUI_GRADIENT_HORIZONTAL = 2
 };
 
-enum WXDLLIMPEXP_AUI wxPaneButtonState
+enum wxPaneButtonState
 {
     wxAUI_BUTTON_STATE_NORMAL = 0,
     wxAUI_BUTTON_STATE_HOVER = 1,
     wxAUI_BUTTON_STATE_PRESSED = 2
 };
 
-enum WXDLLIMPEXP_AUI wxPaneInsertLevel
+enum wxPaneInsertLevel
 {
     wxAUI_INSERT_PANE = 0,
     wxAUI_INSERT_ROW = 1,
