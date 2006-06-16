@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/mimetype.h
+// Name:        wx/msdos/mimetype.h
 // Purpose:     classes and functions to manage MIME types
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -20,7 +20,7 @@ class wxMimeTypesManagerImpl
 {
 public :
     wxMimeTypesManagerImpl() { }
- 
+
     // load all data into memory - done when it is needed for the first time
     void Initialize(int mailcapStyles = wxMAILCAP_STANDARD,
                     const wxString& extraDir = wxEmptyString);
@@ -62,7 +62,7 @@ public:
     // index 1 the type / * match
     // if built with GetFileTypeFromExtension, index 0 has the mimetype for
     // the first extension found, index 1 for the second and so on
-    
+
     void Init(wxMimeTypesManagerImpl *manager, size_t index)
     { m_manager = manager; m_index.Add(index); }
 
@@ -103,7 +103,7 @@ public:
  private:
     // helper function
     bool GetCommand(wxString *command, const char *verb) const;
-    
+
     wxMimeTypesManagerImpl *m_manager;
     wxArrayInt              m_index; // in the wxMimeTypesManagerImpl arrays
     wxString m_strFileType, m_ext;
