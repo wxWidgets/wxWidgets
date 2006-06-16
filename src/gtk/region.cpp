@@ -19,11 +19,12 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/region.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
 #endif
 
-#include "wx/region.h"
 #include "wx/gtk/private.h"
 
 
@@ -134,9 +135,9 @@ wxObjectRefData *wxRegion::CloneRefData(const wxObjectRefData *data) const
 
 bool wxRegion::operator==( const wxRegion& region ) const
 {
-    if (m_refData == region.m_refData) return TRUE;
+    if (m_refData == region.m_refData) return true;
 
-    if (!m_refData || !region.m_refData) return FALSE;
+    if (!m_refData || !region.m_refData) return false;
 
     // compare the regions themselves, not the pointers to ref data!
     return gdk_region_equal(M_REGIONDATA->m_region,
@@ -158,7 +159,7 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
     // rectangle results in an empty region which is definitely not what we
     // want
     if ( !width || !height )
-        return TRUE;
+        return true;
 
     if ( !m_refData )
     {
@@ -177,7 +178,7 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
         gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxRegion::Union( const wxRect& rect )
@@ -188,7 +189,7 @@ bool wxRegion::Union( const wxRect& rect )
 bool wxRegion::Union( const wxRegion& region )
 {
     if (region.IsNull())
-        return FALSE;
+        return false;
 
     if (!m_refData)
     {
@@ -202,7 +203,7 @@ bool wxRegion::Union( const wxRegion& region )
 
     gdk_region_union( M_REGIONDATA->m_region, region.GetRegion() );
 
-    return TRUE;
+    return true;
 }
 
 bool wxRegion::Intersect( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -222,19 +223,19 @@ bool wxRegion::Intersect( const wxRect& rect )
 bool wxRegion::Intersect( const wxRegion& region )
 {
     if (region.IsNull())
-        return FALSE;
+        return false;
 
     if (!m_refData)
     {
         // intersecting with invalid region doesn't make sense
-        return FALSE;
+        return false;
     }
 
     AllocExclusive();
 
     gdk_region_intersect( M_REGIONDATA->m_region, region.GetRegion() );
 
-    return TRUE;
+    return true;
 }
 
 bool wxRegion::Subtract( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -252,19 +253,19 @@ bool wxRegion::Subtract( const wxRect& rect )
 bool wxRegion::Subtract( const wxRegion& region )
 {
     if (region.IsNull())
-        return FALSE;
+        return false;
 
     if (!m_refData)
     {
         // subtracting from an invalid region doesn't make sense
-        return FALSE;
+        return false;
     }
 
     AllocExclusive();
 
     gdk_region_subtract( M_REGIONDATA->m_region, region.GetRegion() );
 
-    return TRUE;
+    return true;
 }
 
 bool wxRegion::Xor( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -282,30 +283,30 @@ bool wxRegion::Xor( const wxRect& rect )
 bool wxRegion::Xor( const wxRegion& region )
 {
     if (region.IsNull())
-        return FALSE;
+        return false;
 
     if (!m_refData)
     {
-        return FALSE;
+        return false;
     }
 
     AllocExclusive();
 
     gdk_region_xor( M_REGIONDATA->m_region, region.GetRegion() );
 
-    return TRUE;
+    return true;
 }
 
 bool wxRegion::Offset( wxCoord x, wxCoord y )
 {
     if (!m_refData)
-        return FALSE;
+        return false;
 
     AllocExclusive();
 
     gdk_region_offset( M_REGIONDATA->m_region, x, y );
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -342,7 +343,7 @@ wxRect wxRegion::GetBox() const
 bool wxRegion::Empty() const
 {
     if (!m_refData)
-        return TRUE;
+        return true;
 
     return gdk_region_empty( M_REGIONDATA->m_region );
 }

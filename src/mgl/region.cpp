@@ -15,6 +15,7 @@
 #endif
 
 #include "wx/region.h"
+
 #include "wx/gdicmn.h"
 #include "wx/thread.h"
 #include "wx/module.h"

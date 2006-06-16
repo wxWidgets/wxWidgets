@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:      msw/region.cpp
+// Name:      src/msw/region.cpp
 // Purpose:   wxRegion implementation using Win32 API
 // Author:    Vadim Zeitlin
 // Modified by:
@@ -25,8 +25,8 @@
 #endif
 
 #include "wx/region.h"
-#include "wx/gdicmn.h"
 
+#include "wx/gdicmn.h"
 #include "wx/msw/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
@@ -491,4 +491,3 @@ wxCoord wxRegionIterator::GetH() const
 
     return m_rects[m_current].height;
 }
-

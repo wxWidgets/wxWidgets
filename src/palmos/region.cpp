@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:      src/palmos/region.cpp
-// Purpose:   wxRegion implementation
+// Name:        src/palmos/region.cpp
+// Purpose:     wxRegion implementation
 // Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
-// Created:   10/13/04
-// RCS-ID:    $Id$
-// Copyright: (c) William Osborne
-// Licence:   wxWindows licence
+// Created:     10/13/04
+// RCS-ID:      $Id$
+// Copyright:   (c) William Osborne
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/region.h"
+
 #include "wx/gdicmn.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
@@ -236,4 +237,3 @@ wxCoord wxRegionIterator::GetH() const
 {
     return 0;
 }
-

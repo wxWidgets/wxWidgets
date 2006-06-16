@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// File:      region.cpp
+// File:      src/mac/carbon/region.cpp
 // Purpose:   Region class
 // Author:    Stefan Csomor
 // Created:   Fri Oct 24 10:46:34 MET 1997
@@ -11,6 +11,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/region.h"
+
 #include "wx/gdicmn.h"
 #include "wx/mac/uma.h"
 
@@ -512,7 +513,7 @@ wxRegionIterator& wxRegionIterator::operator ++ ()
 {
     if (m_current < m_numRects)
         ++m_current;
-    
+
     return *this;
 }
 
@@ -561,4 +562,3 @@ long wxRegionIterator::GetH() const
 
     return 0;
 }
-

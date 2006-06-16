@@ -18,9 +18,9 @@
     #include "wx/dcmemory.h"
     #include "wx/toplevel.h"
     #include "wx/math.h"
+    #include "wx/region.h"
 #endif
 
-#include "wx/region.h"
 #include "wx/mac/private.h"
 
 //-----------------------------------------------------------------------------

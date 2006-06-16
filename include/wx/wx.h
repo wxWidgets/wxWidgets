@@ -34,6 +34,7 @@
 #include "wx/panel.h"
 #include "wx/toplevel.h"
 #include "wx/frame.h"
+#include "wx/region.h"
 #include "wx/bitmap.h"
 #include "wx/colour.h"
 #include "wx/font.h"
@@ -93,4 +94,3 @@
 #endif // wxUSE_GUI
 
 #endif // _WX_WX_H_
-

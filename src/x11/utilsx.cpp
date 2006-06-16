@@ -23,6 +23,7 @@
 
     #ifndef WX_PRECOMP
         #include "wx/bitmap.h"
+        #include "wx/region.h"
     #endif
 
     #ifdef __VMS
@@ -32,7 +33,6 @@
         #include <X11/extensions/shape.h>
     #endif
 
-    #include "wx/region.h"
     #include "wx/dcmemory.h"
 #endif
 
