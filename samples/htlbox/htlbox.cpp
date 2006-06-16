@@ -475,13 +475,16 @@ wxString MyHtmlListBox::OnGetItem(size_t n) const
     return s;
 #else
     int level = n % 6 + 1;
-    wxString label = wxString::Format(_T("<h%d><font color=#%2x%2x%2x>")
+
+    wxColour clr(abs((int)n - 192) % 256,
+                 abs((int)n - 256) % 256,
+                 abs((int)n - 128) % 256);
+
+    wxString label = wxString::Format(_T("<h%d><font color=%s>")
                                       _T("Item</font> <b>%lu</b>")
                                       _T("</h%d>"),
                                       level,
-                                      abs((int)n - 192) % 256,
-                                      abs((int)n - 256) % 256,
-                                      abs((int)n - 128) % 256,
+                                      clr.GetAsString(wxC2S_HTML_SYNTAX).c_str(),
                                       (unsigned long)n, level);
     if ( n == 1 )
     {
