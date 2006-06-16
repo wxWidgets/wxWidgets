@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 13 February 2006                                                    *
+# Date : 15 June 2006                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -39,6 +39,8 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.xml]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.aui]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.xrc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.unix]
@@ -50,6 +52,8 @@ gtk : [.include.wx]setup.h
 	set default [---.demos.bombs]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--.samples.calendar]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.aui]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.caret]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
@@ -92,6 +96,8 @@ gtk2 : [.include.wx]setup.h
 	set default [-.common]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.html]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
+	set default [-.aui]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.xml]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
@@ -153,6 +159,8 @@ x11 : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.xrc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
+	set default [-.aui]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.unix]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.x11]
@@ -205,6 +213,8 @@ motif : [.include.wx]setup.h
 	set default [-.common]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.unix]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [-.aui]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.motif]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
