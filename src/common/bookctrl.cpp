@@ -172,7 +172,7 @@ void wxBookCtrlBase::OnHelp(wxHelpEvent& event)
     // if the event object == this because the book control can have other
     // subcontrols inside it (e.g. wxSpinButton in case of a notebook in wxUniv)
     wxWindow *source = wxStaticCast(event.GetEventObject(), wxWindow);
-    while ( source && source->GetParent() != this )
+    while ( source && source != this && source->GetParent() != this )
     {
         source = source->GetParent();
     }
