@@ -16,14 +16,6 @@
 //---------------------------------------------------------------------------
 %newgroup
 
-%{
-#include <wx/pickerbase.h>
-#include <wx/clrpicker.h>
-#include <wx/filepicker.h>
-#include <wx/fontpicker.h>    
-%}
-
-
 enum {
      wxPB_USE_TEXTCTRL,
  };

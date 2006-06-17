@@ -73,6 +73,10 @@
 #include <wx/datectrl.h>
 #include <wx/power.h>
 #include <wx/hyperlink.h>
+#include <wx/pickerbase.h>
+#include <wx/clrpicker.h>
+#include <wx/filepicker.h>
+#include <wx/fontpicker.h>    
 
 
 #ifdef _MSC_VER
