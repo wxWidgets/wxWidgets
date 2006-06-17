@@ -144,7 +144,12 @@ wxCursor::wxCursor(const char bits[], int width, int  height,
 
     m_refData = new wxCursorRefData;
     M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap(
-                 data, mask, fg->GetColor(), bg->GetColor(),
+                 data, mask,
+#if GTK_CHECK_VERSION(2, 6, 0)
+                 fg->GetColor(), bg->GetColor(),
+#else
+                 wx_const_cast(GdkColor*, fg->GetColor()), wx_const_cast(GdkColor*, bg->GetColor()),
+#endif
                  hotSpotX, hotSpotY );
 
     g_object_unref (data);
@@ -295,7 +300,11 @@ wxCursor::wxCursor( const wxImage & image )
                              (
                                 data,
                                 mask,
+#if GTK_CHECK_VERSION(2, 6, 0)
                                 fg.GetColor(), bg.GetColor(),
+#else
+                                wx_const_cast(GdkColor*, fg.GetColor()), wx_const_cast(GdkColor*, bg.GetColor()),
+#endif
                                 hotSpotX, hotSpotY
                              );
 
