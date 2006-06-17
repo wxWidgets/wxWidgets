@@ -108,7 +108,7 @@ wxImage wxNullImage;
 
 //-----------------------------------------------------------------------------
 
-#define M_IMGDATA ((wxImageRefData *)m_refData)
+#define M_IMGDATA wx_static_cast(wxImageRefData*, m_refData)
 
 IMPLEMENT_DYNAMIC_CLASS(wxImage, wxObject)
 
@@ -235,36 +235,48 @@ void wxImage::Destroy()
     UnRef();
 }
 
+wxObjectRefData* wxImage::CreateRefData() const
+{
+    return new wxImageRefData;
+}
+
+wxObjectRefData* wxImage::CloneRefData(const wxObjectRefData* that) const
+{
+    const wxImageRefData* refData = wx_static_cast(const wxImageRefData*, that);
+    wxCHECK_MSG(refData->m_ok, NULL, wxT("invalid image") );
+
+    wxImageRefData* refData_new = new wxImageRefData;
+    refData_new->m_width = refData->m_width;
+    refData_new->m_height = refData->m_height;
+    refData_new->m_maskRed = refData->m_maskRed;
+    refData_new->m_maskGreen = refData->m_maskGreen;
+    refData_new->m_maskBlue = refData->m_maskBlue;
+    refData_new->m_hasMask = refData->m_hasMask;
+    refData_new->m_ok = true;
+    unsigned size = unsigned(refData->m_width) * unsigned(refData->m_height);
+    if (refData->m_alpha != NULL)
+    {
+        refData_new->m_alpha = (unsigned char*)malloc(size);
+        memcpy(refData_new->m_alpha, refData->m_alpha, size);
+    }
+    size *= 3;
+    refData_new->m_data = (unsigned char*)malloc(size);
+    memcpy(refData_new->m_data, refData->m_data, size);
+#if wxUSE_PALETTE
+    refData_new->m_palette = refData->m_palette;
+#endif
+    refData_new->m_optionNames = refData->m_optionNames;
+    refData_new->m_optionValues = refData->m_optionValues;
+    return refData_new;
+}
+
 wxImage wxImage::Copy() const
 {
     wxImage image;
 
     wxCHECK_MSG( Ok(), image, wxT("invalid image") );
 
-    image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height, false );
-
-    unsigned char *data = image.GetData();
-
-    wxCHECK_MSG( data, image, wxT("unable to create image") );
-
-    image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
-    image.SetMask( M_IMGDATA->m_hasMask );
-
-    memcpy( data, GetData(), M_IMGDATA->m_width*M_IMGDATA->m_height*3 );
-
-    wxImageRefData *imgData = (wxImageRefData *)image.m_refData;
-
-    // also copy the alpha channel
-    if (HasAlpha())
-    {
-        image.SetAlpha();
-        unsigned char* alpha = image.GetAlpha();
-        memcpy( alpha, GetAlpha(), M_IMGDATA->m_width*M_IMGDATA->m_height );
-    }
-
-    // also copy the image options
-    imgData->m_optionNames = M_IMGDATA->m_optionNames;
-    imgData->m_optionValues = M_IMGDATA->m_optionValues;
+    image.m_refData = CloneRefData(m_refData);
 
     return image;
 }
@@ -272,7 +284,7 @@ wxImage wxImage::Copy() const
 wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
 {
     if( xFactor == 1 && yFactor == 1 )
-        return Copy() ;
+        return *this;
 
     wxImage image;
 
@@ -731,6 +743,8 @@ void wxImage::Paste( const wxImage &image, int x, int y )
     wxCHECK_RET( Ok(), wxT("invalid image") );
     wxCHECK_RET( image.Ok(), wxT("invalid image") );
 
+    AllocExclusive();
+
     int xx = 0;
     int yy = 0;
     int width = image.GetWidth();
@@ -811,6 +825,8 @@ void wxImage::Replace( unsigned char r1, unsigned char g1, unsigned char b1,
                        unsigned char r2, unsigned char g2, unsigned char b2 )
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
+
+    AllocExclusive();
 
     unsigned char *data = GetData();
 
@@ -948,6 +964,8 @@ void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned c
     long pos = XYToIndex(x, y);
     wxCHECK_RET( pos != -1, wxT("invalid image coordinates") );
 
+    AllocExclusive();
+
     pos *= 3;
 
     M_IMGDATA->m_data[ pos   ] = r;
@@ -958,6 +976,8 @@ void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned c
 void wxImage::SetRGB( const wxRect& rect_, unsigned char r, unsigned char g, unsigned char b )
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
+
+    AllocExclusive();
 
     wxRect rect(rect_);
     wxRect imageRect(0, 0, GetWidth(), GetHeight());
@@ -1097,6 +1117,8 @@ void wxImage::SetAlpha(int x, int y, unsigned char alpha)
     long pos = XYToIndex(x, y);
     wxCHECK_RET( pos != -1, wxT("invalid image coordinates") );
 
+    AllocExclusive();
+
     M_IMGDATA->m_alpha[pos] = alpha;
 }
 
@@ -1138,6 +1160,8 @@ wxImage::ConvertColourToAlpha(unsigned char r, unsigned char g, unsigned char b)
 void wxImage::SetAlpha( unsigned char *alpha, bool static_data )
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
+
+    AllocExclusive();
 
     if ( !alpha )
     {
@@ -1200,6 +1224,8 @@ void wxImage::SetMaskColour( unsigned char r, unsigned char g, unsigned char b )
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
 
+    AllocExclusive();
+
     M_IMGDATA->m_maskRed = r;
     M_IMGDATA->m_maskGreen = g;
     M_IMGDATA->m_maskBlue = b;
@@ -1248,6 +1274,8 @@ unsigned char wxImage::GetMaskBlue() const
 void wxImage::SetMask( bool mask )
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
+
+    AllocExclusive();
 
     M_IMGDATA->m_hasMask = mask;
 }
@@ -1308,6 +1336,8 @@ bool wxImage::SetMaskFromImage(const wxImage& mask,
         return false ;
     }
 
+    AllocExclusive();
+
     unsigned char *imgdata = GetData();
     unsigned char *maskdata = mask.GetData();
 
@@ -1346,6 +1376,8 @@ bool wxImage::ConvertAlphaToMask(unsigned char threshold)
         wxLogError( _("No unused colour in image being masked.") );
         return false;
     }
+
+    AllocExclusive();
 
     SetMask(true);
     SetMaskColour(mr, mg, mb);
@@ -1400,6 +1432,8 @@ void wxImage::SetPalette(const wxPalette& palette)
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
 
+    AllocExclusive();
+
     M_IMGDATA->m_palette = palette;
 }
 
@@ -1412,6 +1446,8 @@ void wxImage::SetPalette(const wxPalette& palette)
 void wxImage::SetOption(const wxString& name, const wxString& value)
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
+
+    AllocExclusive();
 
     int idx = M_IMGDATA->m_optionNames.Index(name, false);
     if (idx == wxNOT_FOUND)
@@ -2017,6 +2053,8 @@ wxImage::RGBValue wxImage::HSVtoRGB(const HSVValue& hsv)
  */
 void wxImage::RotateHue(double angle)
 {
+    AllocExclusive();
+
     unsigned char *srcBytePtr;
     unsigned char *dstBytePtr;
     unsigned long count;

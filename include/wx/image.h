@@ -393,6 +393,9 @@ protected:
     // note that index must be multiplied by 3 when using it with RGB array
     long XYToIndex(int x, int y) const;
 
+    virtual wxObjectRefData* CreateRefData() const;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
+
 private:
     friend class WXDLLEXPORT wxImageHandler;
 
