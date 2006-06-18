@@ -102,6 +102,11 @@ bool wxChoice::Create(
     return true;
 } // end of wxChoice::Create
 
+wxChoice::~wxChoice()
+{
+    Free();
+}
+
 // ----------------------------------------------------------------------------
 // adding/deleting items to/from the list
 // ----------------------------------------------------------------------------
