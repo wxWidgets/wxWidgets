@@ -395,7 +395,7 @@ void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename,
 
             wxLogTrace(TRACE_MIME, wxT("--- Reading from Gnome file %s '%s' ---"),
                     filename.c_str(), pc);
-            
+
             // trim trailing space and tab
             while ((*pc == wxT(' ')) || (*pc == wxT('\t')))
                 pc++;
@@ -406,18 +406,18 @@ void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename,
             {
                 wxString left_of_equal = sTmp.Left( equal_pos );
                 const wxChar *right_of_equal = pc;
-                right_of_equal += equal_pos+1; 
-                
+                right_of_equal += equal_pos+1;
+
                 if (left_of_equal == wxT("icon_filename"))
                 {
                     // GNOME 2:
                     curIconFile = right_of_equal;
-                    
+
                     wxFileName newFile( curIconFile );
                     if (newFile.IsRelative() || newFile.FileExists())
                     {
                         size_t nDirs = search_dirs.GetCount();
-                        
+
                         for (size_t nDir = 0; nDir < nDirs; nDir++)
                         {
                             newFile.SetPath( search_dirs[nDir] );
@@ -2641,6 +2641,8 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 
 bool wxMimeTypesManagerImpl::Unassociate(wxFileType *ft)
 {
+    InitIfNeeded();
+
     wxArrayString sMimeTypes;
     ft->GetMimeTypes (sMimeTypes);
 

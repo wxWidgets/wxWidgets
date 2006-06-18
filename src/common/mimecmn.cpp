@@ -402,6 +402,8 @@ size_t wxFileType::GetAllCommands(wxArrayString *verbs,
 
 bool wxFileType::Unassociate()
 {
+    EnsureImpl();
+
 #if defined(__WXMSW__)
     return m_impl->Unassociate();
 #elif defined(__UNIX__)
