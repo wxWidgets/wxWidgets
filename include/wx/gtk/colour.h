@@ -56,7 +56,13 @@ public:
     // Implementation part
     void CalcPixel( GdkColormap *cmap );
     int GetPixel() const;
+#ifdef __WXGTK24__
     const GdkColor *GetColor() const;
+#else
+    // GDK functions from old gtk2 versions take non-const color parameters,
+    // too many uses to deal with individually
+    GdkColor *GetColor() const;
+#endif
 
 protected:
     virtual bool FromString(const wxChar *str);
