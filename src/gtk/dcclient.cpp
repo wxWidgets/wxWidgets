@@ -1069,7 +1069,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
 
     wxCHECK_RET( bitmap.Ok(), wxT("invalid bitmap") );
 
-    bool is_mono = bitmap.GetDepth() == 1;
+    bool is_mono = (bitmap.GetBitmap() != NULL);
 
     // scale/translate size and position
     int xx = XLOG2DEV(x);
@@ -1162,7 +1162,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
         GdkGC *gc = gdk_gc_new( bitmap2 );
         gdk_gc_set_foreground( gc, m_textForegroundColour.GetColor() );
         gdk_gc_set_background( gc, m_textBackgroundColour.GetColor() );
-        gdk_wx_draw_bitmap( bitmap2, gc, use_bitmap.GetPixmap(), 0, 0, 0, 0, -1, -1 );
+        gdk_wx_draw_bitmap( bitmap2, gc, use_bitmap.GetBitmap(), 0, 0, 0, 0, -1, -1 );
 
         gdk_draw_drawable( m_window, m_textGC, bitmap2, 0, 0, xx, yy, -1, -1 );
 
@@ -1416,7 +1416,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
             GdkGC *gc = gdk_gc_new( bitmap );
             gdk_gc_set_foreground( gc, m_textForegroundColour.GetColor() );
             gdk_gc_set_background( gc, m_textBackgroundColour.GetColor() );
-            gdk_wx_draw_bitmap( bitmap, gc, use_bitmap.GetPixmap(), 0, 0, 0, 0, -1, -1 );
+            gdk_wx_draw_bitmap( bitmap, gc, use_bitmap.GetBitmap(), 0, 0, 0, 0, -1, -1 );
 
             gdk_draw_drawable( m_window, m_textGC, bitmap, xsrc, ysrc, cx, cy, cw, ch );
 
@@ -2009,7 +2009,7 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
 
     if ((m_brush.GetStyle() == wxSTIPPLE) && (m_brush.GetStipple()->Ok()))
     {
-        if (m_brush.GetStipple()->GetDepth() != 1)
+        if (m_brush.GetStipple()->GetPixmap())
         {
             gdk_gc_set_fill( m_brushGC, GDK_TILED );
             gdk_gc_set_tile( m_brushGC, m_brush.GetStipple()->GetPixmap() );
@@ -2017,7 +2017,7 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
         else
         {
             gdk_gc_set_fill( m_brushGC, GDK_STIPPLED );
-            gdk_gc_set_stipple( m_brushGC, m_brush.GetStipple()->GetPixmap() );
+            gdk_gc_set_stipple( m_brushGC, m_brush.GetStipple()->GetBitmap() );
         }
     }
 
@@ -2060,7 +2060,7 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
 
     if ((m_backgroundBrush.GetStyle() == wxSTIPPLE) && (m_backgroundBrush.GetStipple()->Ok()))
     {
-        if (m_backgroundBrush.GetStipple()->GetDepth() != 1)
+        if (m_backgroundBrush.GetStipple()->GetPixmap())
         {
             gdk_gc_set_fill( m_bgGC, GDK_TILED );
             gdk_gc_set_tile( m_bgGC, m_backgroundBrush.GetStipple()->GetPixmap() );
@@ -2068,7 +2068,7 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
         else
         {
             gdk_gc_set_fill( m_bgGC, GDK_STIPPLED );
-            gdk_gc_set_stipple( m_bgGC, m_backgroundBrush.GetStipple()->GetPixmap() );
+            gdk_gc_set_stipple( m_bgGC, m_backgroundBrush.GetStipple()->GetBitmap() );
         }
     }
 
