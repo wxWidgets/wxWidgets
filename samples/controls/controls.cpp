@@ -1377,15 +1377,17 @@ void MyPanel::OnCombo( wxCommandEvent &event )
 
 void MyPanel::OnComboTextChanged(wxCommandEvent& event)
 {
-    wxLogMessage(wxT("EVT_TEXT for the combobox: \"%s\" (event) or \"%s\" (control)."),
-                 event.GetString().c_str(),
-                 m_combo->GetValue().c_str());
+    if (m_combo)
+        wxLogMessage(wxT("EVT_TEXT for the combobox: \"%s\" (event) or \"%s\" (control)."),
+                     event.GetString().c_str(),
+                     m_combo->GetValue().c_str());
 }
 
 void MyPanel::OnComboTextEnter(wxCommandEvent& WXUNUSED(event))
 {
-    wxLogMessage(_T("Enter pressed in the combobox: value is '%s'."),
-                 m_combo->GetValue().c_str());
+    if (m_combo)
+        wxLogMessage(_T("Enter pressed in the combobox: value is '%s'."),
+                     m_combo->GetValue().c_str());
 }
 
 void MyPanel::OnComboButtons( wxCommandEvent &event )
