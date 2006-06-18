@@ -100,6 +100,14 @@ bool wxChoice::Create(
             ,rSize.x
             ,rSize.y
            );
+
+    // Set height to use with sizers i.e. without the dropdown listbox
+    wxFont vFont = GetFont();
+    int nCx,nCy;
+    wxGetCharSize( GetHWND(), &nCx, &nCy, &vFont );
+    int nEditHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy);
+    SetBestFittingSize(wxSize(-1,nEditHeight));
+
     return true;
 } // end of wxChoice::Create
 
@@ -242,7 +250,7 @@ wxString wxChoice::GetString(unsigned int n) const
     nLen = (size_t)LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXTLENGTH, (MPARAM)n, (MPARAM)0));
     if (nLen != LIT_ERROR && nLen > 0)
     {
-        zBuf = new wxChar[nLen + 1];
+        zBuf = new wxChar[++nLen];
         ::WinSendMsg( GetHwnd()
                      ,LM_QUERYITEMTEXT
                      ,MPFROM2SHORT((SHORT)n, (SHORT)nLen)
