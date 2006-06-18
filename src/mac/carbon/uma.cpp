@@ -13,12 +13,7 @@
 
 #if wxUSE_GUI
 
-#ifndef WX_PRECOMP
-    #if TARGET_API_MAC_OSX
-        #include "wx/toplevel.h"
-    #endif
-#endif
-
+#include "wx/toplevel.h"
 #include "wx/dc.h"
 
 #ifndef __DARWIN__
