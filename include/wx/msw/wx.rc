@@ -77,6 +77,10 @@ wxICON_SMALL_CDROM              ICON "wx/msw/cdrom.ico"
 wxICON_SMALL_FLOPPY             ICON "wx/msw/floppy.ico"
 wxICON_SMALL_REMOVEABLE         ICON "wx/msw/removble.ico"
 
+// Low alphabetically to make it the default, but not so low as to
+// affect applications that use 'a'
+bICON                           ICON "wx/msw/std.ico"
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // Bitmaps
