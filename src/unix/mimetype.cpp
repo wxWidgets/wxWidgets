@@ -2643,6 +2643,8 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 
 bool wxMimeTypesManagerImpl::Unassociate(wxFileType *ft)
 {
+    InitIfNeeded();
+
     wxArrayString sMimeTypes;
     ft->GetMimeTypes(sMimeTypes);
 
