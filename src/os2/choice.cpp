@@ -178,17 +178,6 @@ void wxChoice::Clear()
 
 int wxChoice::GetSelection() const
 {
-    // if m_lastAcceptedSelection is set, it means that the dropdown is
-    // currently shown and that we want to use the last "permanent" selection
-    // instead of whatever is under the mouse pointer currently
-    //
-    // otherwise, get the selection from the control
-    return m_lastAcceptedSelection == wxID_NONE ? GetCurrentSelection()
-                                                : m_lastAcceptedSelection;
-}
-
-int wxChoice::GetCurrentSelection() const
-{
     return((int)LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYSELECTION, (MPARAM)LIT_FIRST, (MPARAM)0)));
 } // end of wxChoice::GetSelection
 

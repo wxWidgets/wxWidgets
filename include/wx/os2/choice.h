@@ -22,7 +22,7 @@ class WXDLLEXPORT wxChoice: public wxChoiceBase
 
 public:
     // ctors
-    inline wxChoice() { Init(); }
+    inline wxChoice() { }
     virtual ~wxChoice();
 
     inline wxChoice( wxWindow*          pParent
@@ -36,7 +36,6 @@ public:
                     ,const wxString&    rsName = wxChoiceNameStr
                    )
     {
-        Init();
         Create( pParent
                ,vId
                ,rPos
@@ -59,7 +58,6 @@ public:
                     ,const wxString&      rsName = wxChoiceNameStr
                    )
     {
-        Init();
         Create( pParent
                ,vId
                ,rPos
@@ -100,7 +98,7 @@ public:
 
     virtual unsigned int GetCount() const;
     virtual int      GetSelection(void) const;
-    virtual int      GetCurrentSelection(void) const;
+    virtual int      GetCurrentSelection(void) const { return GetSelection(); }
     virtual void     SetSelection(int n);
 
     virtual wxString GetString(unsigned int n) const;
@@ -118,9 +116,6 @@ public:
                                   );
 
 protected:
-    // common part of all ctors
-    void Init() { m_lastAcceptedSelection = wxID_NONE; }
-
     virtual int           DoAppend(const wxString& rsItem);
     virtual int           DoInsert(const wxString& rsItem, unsigned int pos);
     virtual void          DoSetItemClientData(unsigned int n, void* pClientData);
@@ -135,11 +130,6 @@ protected:
                                     ,int nsizeFlags = wxSIZE_AUTO
                                    );
     void                  Free(void);
-
-    // last "completed" selection, i.e. not the transient one while the user is
-    // browsing the popup list: this is only used when != wxID_NONE which is
-    // the case while the drop down is opened
-    int m_lastAcceptedSelection;
 }; // end of CLASS wxChoice
 
 #endif // _WX_CHOICE_H_
