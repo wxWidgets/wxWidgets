@@ -25,8 +25,11 @@ class wxColourRefData: public wxObjectRefData
 public:
     wxColourRefData(guint16 red, guint16 green, guint16 blue)
     {
+        m_color.red =
         m_red = red;
+        m_color.green =
         m_green = green;
+        m_color.blue =
         m_blue = blue;
         m_color.pixel = 0;
         m_colormap = NULL;
