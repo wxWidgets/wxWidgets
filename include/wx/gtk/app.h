@@ -54,8 +54,6 @@ public:
 
     gint            m_idleTag;
     void RemoveIdleTag();
-    
-    unsigned char  *m_colorCube;
 
     // Used by the the wxGLApp and wxGLCanvas class for GL-based X visual
     // selection.

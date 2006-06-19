@@ -431,8 +431,6 @@ wxApp::wxApp()
     g_main_context_set_poll_func( NULL, wxapp_poll_func );
 #endif
 
-    m_colorCube = (unsigned char*) NULL;
-
     // this is NULL for a "regular" wxApp, but is set (and freed) by a wxGLApp
     m_glVisualInfo = (void *) NULL;
     m_glFBCInfo = (void *) NULL;
@@ -442,17 +440,12 @@ wxApp::~wxApp()
 {
     if (m_idleTag)
         g_source_remove( m_idleTag );
-
-    if (m_colorCube)
-        free(m_colorCube);
 }
 
 bool wxApp::OnInitGui()
 {
     if ( !wxAppBase::OnInitGui() )
         return false;
-
-    GdkVisual *visual = gdk_visual_get_system();
 
     // if this is a wxGLApp (derived from wxApp), and we've already
     // chosen a specific visual, then derive the GdkVisual from that
@@ -463,8 +456,6 @@ bool wxApp::OnInitGui()
 
         GdkColormap *colormap = gdk_colormap_new( vis, FALSE );
         gtk_widget_set_default_colormap( colormap );
-
-        visual = vis;
     }
 
     // On some machines, the default visual is just 256 colours, so
@@ -478,59 +469,6 @@ bool wxApp::OnInitGui()
 
         GdkColormap *colormap = gdk_colormap_new( vis, FALSE );
         gtk_widget_set_default_colormap( colormap );
-
-        visual = vis;
-    }
-
-    // Nothing to do for 15, 16, 24, 32 bit displays
-    if (visual->depth > 8) return true;
-
-    // initialize color cube for 8-bit color reduction dithering
-
-    GdkColormap *cmap = gtk_widget_get_default_colormap();
-
-    m_colorCube = (unsigned char*)malloc(32 * 32 * 32);
-
-    for (int r = 0; r < 32; r++)
-    {
-        for (int g = 0; g < 32; g++)
-        {
-            for (int b = 0; b < 32; b++)
-            {
-                int rr = (r << 3) | (r >> 2);
-                int gg = (g << 3) | (g >> 2);
-                int bb = (b << 3) | (b >> 2);
-
-                int index = -1;
-
-                GdkColor *colors = cmap->colors;
-                if (colors)
-                {
-                    int max = 3 * 65536;
-
-                    for (int i = 0; i < cmap->size; i++)
-                    {
-                        int rdiff = ((rr << 8) - colors[i].red);
-                        int gdiff = ((gg << 8) - colors[i].green);
-                        int bdiff = ((bb << 8) - colors[i].blue);
-                        int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
-                        if (sum < max)
-                        {
-                            index = i; max = sum;
-                        }
-                    }
-                }
-                else
-                {
-                    // assume 8-bit true or static colors. this really exists
-                    GdkVisual* vis = gdk_colormap_get_visual( cmap );
-                    index = (r >> (5 - vis->red_prec)) << vis->red_shift;
-                    index |= (g >> (5 - vis->green_prec)) << vis->green_shift;
-                    index |= (b >> (5 - vis->blue_prec)) << vis->blue_shift;
-                }
-                m_colorCube[ (r*1024) + (g*32) + b ] = index;
-            }
-        }
     }
 
     return true;
