@@ -504,7 +504,7 @@ void wxChoice::DoSetSize(int x, int y,
                          int width, int height,
                          int sizeFlags)
 {
-    heightOrig = height;
+    int heightOrig = height;
     
     // the height which we must pass to Windows should be the total height of
     // the control including the drop down list while the height given to us
