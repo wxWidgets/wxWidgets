@@ -608,7 +608,7 @@ wxSize wxBitmapButton::DoGetBestSize() const
             wxSize best(m_bmpNormal.GetWidth() +
                             margins.cxLeftWidth + margins.cxRightWidth + 5,
                         m_bmpNormal.GetHeight() +
-                            margins.cyTopHeight + margins.cyBottomHeight + 5);
+                            margins.cyTopHeight + margins.cyBottomHeight + 2);
             CacheBestSize(best);
             return best;
         }
