@@ -603,11 +603,11 @@ wxSize wxBitmapButton::DoGetBestSize() const
                                                     TMT_CONTENTMARGINS, NULL,
                                                     &margins);
 
-            // the margins we get are too small, part of the bitmap is
-            // truncated if we use them -- so add a little extra space
-            wxSize best(m_bmpNormal.GetWidth() +
-                            margins.cxLeftWidth + margins.cxRightWidth + 5,
-                        m_bmpNormal.GetHeight() +
+            // XP doesn't draw themed buttons correctly when the client area is
+            // smaller than 8x8 - enforce this minimum size for small bitmaps
+            wxSize best(wxMax(8, m_bmpNormal.GetWidth()) +
+                            margins.cxLeftWidth + margins.cxRightWidth + 2,
+                        wxMax(8, m_bmpNormal.GetHeight()) +
                             margins.cyTopHeight + margins.cyBottomHeight + 2);
             CacheBestSize(best);
             return best;
