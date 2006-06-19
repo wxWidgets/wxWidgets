@@ -22,9 +22,8 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/gdicmn.h"
 #endif
-
-#include "wx/gdicmn.h"
 
 
 // ============================================================================

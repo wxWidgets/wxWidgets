@@ -15,9 +15,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/gdicmn.h"
 #endif
-
-#include "wx/gdicmn.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

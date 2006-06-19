@@ -31,9 +31,8 @@
     #include "wx/intl.h"
     #include "wx/dcscreen.h"
     #include "wx/log.h"
+    #include "wx/gdicmn.h"
 #endif // WX_PRECOMP
-
-#include "wx/gdicmn.h"
 
 #if defined(__WXMSW__)
     #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
@@ -268,7 +267,7 @@ wxString wxFontBase::GetNativeFontInfoDesc() const
     if ( fontInfo )
     {
         fontDesc = fontInfo->ToString();
-        wxASSERT_MSG(!fontDesc.IsEmpty(), wxT("This should be a non-empty string!"));
+        wxASSERT_MSG(!fontDesc.empty(), wxT("This should be a non-empty string!"));
     }
     else
     {
@@ -285,7 +284,7 @@ wxString wxFontBase::GetNativeFontInfoUserDesc() const
     if ( fontInfo )
     {
         fontDesc = fontInfo->ToUserString();
-        wxASSERT_MSG(!fontDesc.IsEmpty(), wxT("This should be a non-empty string!"));
+        wxASSERT_MSG(!fontDesc.empty(), wxT("This should be a non-empty string!"));
     }
     else
     {

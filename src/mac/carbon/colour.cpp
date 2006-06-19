@@ -13,7 +13,9 @@
 
 #include "wx/colour.h"
 
-#include "wx/gdicmn.h"
+#ifndef WX_PRECOMP
+    #include "wx/gdicmn.h"
+#endif
 
 #include "wx/mac/private.h"
 

@@ -24,9 +24,9 @@
     #include "wx/dialog.h"
     #include "wx/timer.h"
     #include "wx/memory.h"
+    #include "wx/gdicmn.h"
 #endif
 
-#include "wx/gdicmn.h"
 #include "wx/module.h"
 #include "wx/evtloop.h"
 #include "wx/filename.h"

@@ -14,9 +14,8 @@
 #include "wx/colour.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/gdicmn.h"
 #endif //WX_PRECOMP
-
-#include "wx/gdicmn.h"
 
 #include "wx/cocoa/autorelease.h"
 

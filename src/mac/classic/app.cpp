@@ -35,9 +35,9 @@
     #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
     #include "wx/memory.h"
+    #include "wx/gdicmn.h"
 #endif
 
-#include "wx/gdicmn.h"
 #include "wx/module.h"
 #include "wx/tooltip.h"
 #include "wx/docview.h"

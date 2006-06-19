@@ -35,9 +35,9 @@
     #include "wx/string.h"
     #include "wx/utils.h"       // for wxGetDisplay()
     #include "wx/settings.h"
+    #include "wx/gdicmn.h"
 #endif
 
-#include "wx/gdicmn.h"
 #include "wx/fontutil.h"    // for wxNativeFontInfo
 #include "wx/tokenzr.h"
 #include "wx/motif/private.h"
@@ -675,7 +675,7 @@ void wxGetTextExtent(WXDisplay* display, const wxFont& font,
 
     int direction, ascent2, descent2;
     XCharStruct overall;
-    int slen = str.Len();
+    int slen = str.length();
 
     XTextExtents((XFontStruct*) pFontStruct, (char*) str.c_str(), slen,
                  &direction, &ascent2, &descent2, &overall);

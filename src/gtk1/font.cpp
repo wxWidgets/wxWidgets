@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk/font.cpp
+// Name:        src/gtk1/font.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -24,11 +24,11 @@
     #include "wx/log.h"
     #include "wx/settings.h"
     #include "wx/cmndata.h"
+    #include "wx/gdicmn.h"
 #endif
 
 #include "wx/fontutil.h"
 #include "wx/utils.h"
-#include "wx/gdicmn.h"
 #include "wx/tokenzr.h"
 
 #include <strings.h>

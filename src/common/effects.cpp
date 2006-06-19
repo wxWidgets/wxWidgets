@@ -22,9 +22,8 @@
     #include "wx/dcmemory.h"
     #include "wx/pen.h"
     #include "wx/settings.h"
+    #include "wx/gdicmn.h"
 #endif //WX_PRECOMP
-
-#include "wx/gdicmn.h"
 
 /*
  * wxEffects: various 3D effects

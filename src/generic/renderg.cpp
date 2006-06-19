@@ -30,9 +30,8 @@
     #include "wx/string.h"
     #include "wx/dc.h"
     #include "wx/settings.h"
+    #include "wx/gdicmn.h"
 #endif //WX_PRECOMP
-
-#include "wx/gdicmn.h"
 
 #include "wx/splitter.h"
 #include "wx/dcmirror.h"

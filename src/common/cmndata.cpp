@@ -32,9 +32,9 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/log.h"
+    #include "wx/gdicmn.h"
 #endif
 
-#include "wx/gdicmn.h"
 #include "wx/prntbase.h"
 #include "wx/printdlg.h"
 

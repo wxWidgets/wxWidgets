@@ -35,11 +35,11 @@
     #include "wx/layout.h"
     #include "wx/sizer.h"
     #include "wx/textdlg.h"
+    #include "wx/gdicmn.h"
 #endif
 
 #include "wx/module.h"
 #include "wx/filefn.h"
-#include "wx/gdicmn.h"
 #include "wx/imaglist.h"
 #include "wx/tokenzr.h"
 #include "wx/dir.h"

@@ -15,9 +15,9 @@
 #include "wx/colour.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/gdicmn.h"
 #endif
 
-#include "wx/gdicmn.h"
 #define INCL_GPI
 #define INCL_PM
 #include<os2.h>

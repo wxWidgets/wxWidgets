@@ -35,9 +35,9 @@
     #include "wx/string.h"
     #include "wx/utils.h"       // for wxGetDisplay()
     #include "wx/settings.h"
+    #include "wx/gdicmn.h"
 #endif
 
-#include "wx/gdicmn.h"
 #include "wx/fontutil.h"    // for wxNativeFontInfo
 #include "wx/tokenzr.h"
 

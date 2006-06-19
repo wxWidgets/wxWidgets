@@ -16,9 +16,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/gdicmn.h"
 #endif
-
-#include "wx/gdicmn.h"
 
 #include "wx/x11/private.h"
 

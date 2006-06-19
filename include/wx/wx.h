@@ -34,6 +34,7 @@
 #include "wx/panel.h"
 #include "wx/toplevel.h"
 #include "wx/frame.h"
+#include "wx/gdicmn.h"
 #include "wx/region.h"
 #include "wx/bitmap.h"
 #include "wx/colour.h"

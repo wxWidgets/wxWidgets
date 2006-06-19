@@ -15,10 +15,10 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/window.h"
+    #include "wx/gdicmn.h"
 #endif
 
 #include "wx/os2/region.h"
-#include "wx/gdicmn.h"
 
 #include "wx/os2/private.h"
 

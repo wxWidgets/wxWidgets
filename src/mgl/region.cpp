@@ -11,12 +11,15 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #include "wx/region.h"
 
-#include "wx/gdicmn.h"
+#ifndef WX_PRECOMP
+    #include "wx/gdicmn.h"
+#endif
+
 #include "wx/thread.h"
 #include "wx/module.h"
 

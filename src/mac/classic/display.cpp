@@ -32,6 +32,7 @@
     #include "wx/dynarray.h"
     #include "wx/log.h"
     #include "wx/string.h"
+    #include "wx/gdicmn.h"
 #endif
 
 #ifdef __DARWIN__
@@ -45,7 +46,6 @@
 #endif
 
 #include "wx/display_impl.h"
-#include "wx/gdicmn.h"
 
 // ----------------------------------------------------------------------------
 // display implementation classes

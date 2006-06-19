@@ -32,7 +32,6 @@
 #include "wx/display.h"
 #include "wx/display_impl.h"
 #include "wx/module.h"
-#include "wx/gdicmn.h"           // for wxDisplaySize()
 
 #if wxUSE_DISPLAY
 
@@ -268,4 +267,3 @@ int wxDisplayFactorySingle::GetFromPoint(const wxPoint& pt)
     // the point is outside of the screen
     return wxNOT_FOUND;
 }
-

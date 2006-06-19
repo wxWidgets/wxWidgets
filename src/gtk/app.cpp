@@ -27,9 +27,9 @@
     #include "wx/msgdlg.h"
     #include "wx/memory.h"
     #include "wx/font.h"
+    #include "wx/gdicmn.h"
 #endif
 
-#include "wx/gdicmn.h"
 #include "wx/file.h"
 #include "wx/filename.h"
 #include "wx/module.h"

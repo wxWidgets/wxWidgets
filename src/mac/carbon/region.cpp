@@ -12,7 +12,10 @@
 
 #include "wx/region.h"
 
-#include "wx/gdicmn.h"
+#ifndef WX_PRECOMP
+    #include "wx/gdicmn.h"
+#endif
+
 #include "wx/mac/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)

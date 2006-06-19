@@ -15,9 +15,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/gdicmn.h"
 #endif
 
-#include "wx/gdicmn.h"
 #include "wx/encinfo.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)

@@ -20,10 +20,10 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/utils.h"
+    #include "wx/gdicmn.h"
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/gdicmn.h"
 
 #include "wx/fontutil.h"
 

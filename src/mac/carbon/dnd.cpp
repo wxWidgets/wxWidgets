@@ -19,9 +19,9 @@
     #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/toplevel.h"
+    #include "wx/gdicmn.h"
 #endif // WX_PRECOMP
 
-#include "wx/gdicmn.h"
 #include "wx/mac/private.h"
 
 #ifndef __DARWIN__

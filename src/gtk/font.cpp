@@ -25,10 +25,10 @@
     #include "wx/utils.h"
     #include "wx/settings.h"
     #include "wx/cmndata.h"
+    #include "wx/gdicmn.h"
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/gdicmn.h"
 #include "wx/tokenzr.h"
 
 #include <strings.h>

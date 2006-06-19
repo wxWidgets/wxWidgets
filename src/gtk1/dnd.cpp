@@ -20,9 +20,8 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/window.h"
+    #include "wx/gdicmn.h"
 #endif
-
-#include "wx/gdicmn.h"
 
 #include "wx/gtk1/private.h"
 

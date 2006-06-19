@@ -15,9 +15,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
+    #include "wx/gdicmn.h"
 #endif
-
-#include "wx/gdicmn.h"
 
 #include "wx/cocoa/autorelease.h"
 

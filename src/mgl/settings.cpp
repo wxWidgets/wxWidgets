@@ -18,9 +18,9 @@
 #ifndef WX_PRECOMP
     #include "wx/colour.h"
     #include "wx/font.h"
+    #include "wx/gdicmn.h"
 #endif
 
-#include "wx/gdicmn.h"
 #include "wx/module.h"
 
 // ----------------------------------------------------------------------------

@@ -23,10 +23,10 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/string.h"
+    #include "wx/gdicmn.h"
 #endif
 
 #include "wx/display_impl.h"
-#include "wx/gdicmn.h"
 
 #import <Foundation/Foundation.h>
 

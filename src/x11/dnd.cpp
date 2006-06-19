@@ -24,9 +24,8 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/window.h"
+    #include "wx/gdicmn.h"
 #endif
-
-#include "wx/gdicmn.h"
 
 #include <X11/Xlib.h>
 

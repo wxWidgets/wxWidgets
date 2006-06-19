@@ -1,18 +1,22 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gdiobj.cpp
+// Name:        src/mac/carbon/gdiobj.cpp
 // Purpose:     wxGDIObject class
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #include "wx/gdiobj.h"
-#include "wx/gdicmn.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/gdicmn.h"
+#endif
+
 #include "wx/mac/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)

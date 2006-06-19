@@ -18,7 +18,10 @@
 
 #include "wx/settings.h"
 
-#include "wx/gdicmn.h"
+#ifndef WX_PRECOMP
+    #include "wx/gdicmn.h"
+#endif
+
 #include "wx/x11/private.h"
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
