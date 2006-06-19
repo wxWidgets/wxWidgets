@@ -645,8 +645,8 @@ wxSize wxBitmapButton::DoGetBestSize() const
                                                     BP_PUSHBUTTON, PBS_NORMAL,
                                                     TMT_CONTENTMARGINS, NULL,
                                                     &margins);
-            wxSize best(m_bmpNormal.GetWidth() + 2 * (margins.cxLeftWidth + 1),
-                        m_bmpNormal.GetHeight() + 2* (margins.cyTopHeight + 1));
+            wxSize best(wxMax(8, m_bmpNormal.GetWidth()) + 2 * (margins.cxLeftWidth + 1),
+                        wxMax(8, m_bmpNormal.GetHeight()) + 2* (margins.cyTopHeight + 1));
             CacheBestSize(best);
             return best;
         }
