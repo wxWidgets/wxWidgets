@@ -476,9 +476,9 @@ wxString MyHtmlListBox::OnGetItem(size_t n) const
 #else
     int level = n % 6 + 1;
 
-    wxColour clr(abs((int)n - 192) % 256,
-                 abs((int)n - 256) % 256,
-                 abs((int)n - 128) % 256);
+    wxColour clr((unsigned char)(abs((int)n - 192) % 256),
+                 (unsigned char)(abs((int)n - 256) % 256),
+                 (unsigned char)(abs((int)n - 128) % 256));
 
     wxString label = wxString::Format(_T("<h%d><font color=%s>")
                                       _T("Item</font> <b>%lu</b>")
