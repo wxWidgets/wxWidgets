@@ -1126,8 +1126,14 @@ void wxComboCtrlBase::DrawFocusBackground( wxDC& dc, const wxRect& rect, int fla
     wxRect selRect(rect);
     selRect.y += focusSpacingY;
     selRect.height -= (focusSpacingY*2);
-    selRect.x += m_widthCustomPaint + focusSpacingX;
-    selRect.width -= m_widthCustomPaint + (focusSpacingX*2);
+
+    int wcp = 0;
+
+    if ( !(flags & wxCONTROL_ISSUBMENU) )
+        wcp += m_widthCustomPaint;
+
+    selRect.x += wcp + focusSpacingX;
+    selRect.width -= wcp + (focusSpacingX*2);
 
     wxColour bgCol;
 
