@@ -45,6 +45,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/textctrl.h"
+    #include "wx/menuitem.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
@@ -60,8 +61,6 @@
 #if wxUSE_ACCESSIBILITY
     #include "wx/access.h"
 #endif
-
-#include "wx/menuitem.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"

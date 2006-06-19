@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        menuitem.cpp
+// Name:        src/cocoa/menuitem.mm
 // Purpose:     wxMenuItem implementation
 // Author:      David Elliott
 // Modified by:
@@ -18,9 +18,13 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/wxprec.h"
+
+#if wxUSE_MENUS
+
+#include "wx/menuitem.h"
+
 #ifndef WX_PRECOMP
     #include "wx/menu.h"
-    #include "wx/menuitem.h"
     #include "wx/utils.h"
     #include "wx/frame.h"
     #include "wx/log.h"
@@ -35,8 +39,6 @@
 #import <Foundation/NSString.h>
 #import <AppKit/NSCell.h> // NSOnState, NSOffState
 #import <AppKit/NSEvent.h> // modifier key masks
-
-#if wxUSE_MENUS
 
 // ----------------------------------------------------------------------------
 // functions prototypes

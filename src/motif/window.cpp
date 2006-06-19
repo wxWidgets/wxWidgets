@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/motif/windows.cpp
+// Name:        src/motif/window.cpp
 // Purpose:     wxWindow
 // Author:      Julian Smart
 // Modified by:
@@ -39,10 +39,10 @@
     #include "wx/settings.h"
     #include "wx/scrolwin.h"
     #include "wx/layout.h"
+    #include "wx/menuitem.h"
 #endif
 
 #include "wx/module.h"
-#include "wx/menuitem.h"
 #include "wx/evtloop.h"
 
 #if  wxUSE_DRAG_AND_DROP

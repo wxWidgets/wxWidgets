@@ -47,6 +47,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/textctrl.h"
+    #include "wx/menuitem.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
@@ -73,8 +74,6 @@
         #define OBJID_CLIENT 0xFFFFFFFC
     #endif
 #endif
-
-#include "wx/menuitem.h"
 
 #include "wx/msw/private.h"
 

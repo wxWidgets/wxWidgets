@@ -47,6 +47,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/textctrl.h"
+    #include "wx/menuitem.h"
     #include <stdio.h>
 #endif
 
@@ -57,8 +58,6 @@
 #if     wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
 #endif
-
-#include "wx/menuitem.h"
 
 #include "wx/os2/private.h"
 

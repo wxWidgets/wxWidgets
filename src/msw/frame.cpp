@@ -38,6 +38,7 @@
     #include "wx/log.h"
     #include "wx/toolbar.h"
     #include "wx/statusbr.h"
+    #include "wx/menuitem.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"
@@ -52,8 +53,6 @@
 #endif
 
 #include "wx/generic/statusbr.h"
-
-#include "wx/menuitem.h"
 
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/theme.h"

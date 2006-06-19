@@ -32,10 +32,10 @@
     #include "wx/toolbar.h"
     #include "wx/layout.h"
     #include "wx/statusbr.h"
+    #include "wx/menuitem.h"
 #endif
 
 #include "wx/tooltip.h"
-#include "wx/menuitem.h"
 #include "wx/spinctrl.h"
 #include "wx/geometry.h"
 

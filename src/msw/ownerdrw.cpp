@@ -25,10 +25,10 @@
     #include "wx/menu.h"
     #include "wx/utils.h"
     #include "wx/settings.h"
+    #include "wx/menuitem.h"
 #endif
 
 #include "wx/ownerdrw.h"
-#include "wx/menuitem.h"
 #include "wx/fontutil.h"
 #include "wx/module.h"
 

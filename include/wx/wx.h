@@ -44,6 +44,7 @@
 #include "wx/dcprint.h"
 #include "wx/dcscreen.h"
 #include "wx/button.h"
+#include "wx/menuitem.h"
 #include "wx/menu.h"
 #include "wx/pen.h"
 #include "wx/brush.h"

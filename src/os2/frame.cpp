@@ -31,13 +31,12 @@
     #include "wx/mdi.h"
     #include "wx/toolbar.h"
     #include "wx/statusbr.h"
+    #include "wx/menuitem.h"
 #endif // WX_PRECOMP
 
 #include "wx/os2/private.h"
 
 #include "wx/generic/statusbr.h"
-
-#include "wx/menuitem.h"
 
 // ----------------------------------------------------------------------------
 // globals

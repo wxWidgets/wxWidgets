@@ -26,9 +26,8 @@
     #include "wx/utils.h"
     #include "wx/window.h"
     #include "wx/frame.h"
+    #include "wx/menuitem.h"
 #endif
-
-#include "wx/menuitem.h"
 
 #include "wx/mac/uma.h"
 

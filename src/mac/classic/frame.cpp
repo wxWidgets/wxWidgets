@@ -21,9 +21,8 @@
     #include "wx/settings.h"
     #include "wx/toolbar.h"
     #include "wx/statusbr.h"
+    #include "wx/menuitem.h"
 #endif // WX_PRECOMP
-
-#include "wx/menuitem.h"
 
 #include "wx/mac/uma.h"
 
