@@ -59,14 +59,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
     m_selected = bitmap;
     if (m_selected.Ok())
     {
-        if (m_selected.GetPixmap())
-        {
-            m_window = m_selected.GetPixmap();
-        }
-        else
-        {
-            m_window = m_selected.GetBitmap();
-        }
+        m_window = m_selected.GetPixmap();
 
         m_selected.PurgeOtherRepresentations(wxBitmap::Pixmap);
 
@@ -85,7 +78,7 @@ void wxMemoryDC::SetPen( const wxPen& penOrig )
 {
     wxPen pen( penOrig );
     if ( m_selected.Ok() &&
-            m_selected.GetBitmap() &&
+            m_selected.GetDepth() == 1 &&
                 (pen != *wxTRANSPARENT_PEN) )
     {
         pen.SetColour( pen.GetColour() == *wxWHITE ? *wxBLACK : *wxWHITE );
@@ -98,7 +91,7 @@ void wxMemoryDC::SetBrush( const wxBrush& brushOrig )
 {
     wxBrush brush( brushOrig );
     if ( m_selected.Ok() &&
-            m_selected.GetBitmap() &&
+            m_selected.GetDepth() == 1 &&
                 (brush != *wxTRANSPARENT_BRUSH) )
     {
         brush.SetColour( brush.GetColour() == *wxWHITE ? *wxBLACK : *wxWHITE);
@@ -112,7 +105,7 @@ void wxMemoryDC::SetBackground( const wxBrush& brushOrig )
     wxBrush brush(brushOrig);
 
     if ( m_selected.Ok() &&
-            m_selected.GetBitmap() &&
+            m_selected.GetDepth() == 1 &&
                 (brush != *wxTRANSPARENT_BRUSH) )
     {
         brush.SetColour( brush.GetColour() == *wxWHITE ? *wxBLACK : *wxWHITE );
@@ -123,7 +116,7 @@ void wxMemoryDC::SetBackground( const wxBrush& brushOrig )
 
 void wxMemoryDC::SetTextForeground( const wxColour& col )
 {
-    if ( m_selected.Ok() && m_selected.GetBitmap() )
+    if ( m_selected.Ok() && m_selected.GetDepth() == 1 )
     {
         wxWindowDC::SetTextForeground( col == *wxWHITE ? *wxBLACK : *wxWHITE);
     }
@@ -135,7 +128,7 @@ void wxMemoryDC::SetTextForeground( const wxColour& col )
 
 void wxMemoryDC::SetTextBackground( const wxColour &col )
 {
-    if (m_selected.Ok() && m_selected.GetBitmap())
+    if (m_selected.Ok() && m_selected.GetDepth() == 1)
     {
         wxWindowDC::SetTextBackground( col == *wxWHITE ? *wxBLACK : *wxWHITE );
     }

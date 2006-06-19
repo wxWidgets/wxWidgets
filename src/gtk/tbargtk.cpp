@@ -365,7 +365,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             wxCHECK_MSG( bitmap.Ok(), false,
                          wxT("invalid bitmap for wxToolBar icon") );
 
-            wxCHECK_MSG( bitmap.GetBitmap() == NULL, false,
+            wxCHECK_MSG( bitmap.GetDepth() != 1, false,
                          wxT("wxToolBar doesn't support GdkBitmap") );
 
             wxCHECK_MSG( bitmap.GetPixmap() != NULL, false,

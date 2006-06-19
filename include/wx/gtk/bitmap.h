@@ -113,11 +113,9 @@ public:
     void SetWidth( int width );
     void SetDepth( int depth );
     void SetPixmap( GdkPixmap *pixmap );
-    void SetBitmap( GdkBitmap *bitmap );
     void SetPixbuf(GdkPixbuf *pixbuf);
 
     GdkPixmap *GetPixmap() const;
-    GdkBitmap *GetBitmap() const;
     bool HasPixmap() const;
     bool HasPixbuf() const;
     GdkPixbuf *GetPixbuf() const;
