@@ -638,3 +638,4 @@ else
     echo "Cleanup is disabled.  You should remove $TMPDIR when finished"
 fi
 
+exit 0

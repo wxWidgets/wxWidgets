@@ -414,9 +414,13 @@ rm %{wxpref}/bin/wx-config
 %doc wxPython/docs/*
 %dir %{pref}/lib*/python%{pyver}/site-packages/wx-%{ver2}*-%{port}-%{chartype}
 %{pref}/lib*/python%{pyver}/site-packages/wx-%{ver2}*-%{port}-%{chartype}/*
+%dir %{pref}/lib*/python%{pyver}/site-packages/wxaddons
+%{pref}/lib*/python%{pyver}/site-packages/wxaddons/*
 %dir %{wxpref}
 %dir %{wxpref}/lib
 %{wxpref}/lib/libwx_gtk*
+%dir %{wxpref}/bin
+%{wxpref}/bin/wxrc*
 %{wxpref}/share
 
 
