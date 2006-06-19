@@ -18,20 +18,20 @@ are shown on the screen need to be measured; or, even, "vertical" because
 this class only supports scrolling in one direction currently (this could
 and probably will change in the future however).
 
-In any case, this is a generalization of the 
+In any case, this is a generalization of the
 \helpref{wxScrolledWindow}{wxscrolledwindow} class which can be only used when
 all lines have the same height. It lacks some other wxScrolledWindow features
 however, notably there is currently no support for horizontal scrolling; it
 can't scroll another window nor only a rectangle of the window and not its
 entire client area.
- 
-To use this class, you need to derive from it and implement 
+
+To use this class, you need to derive from it and implement
 \helpref{OnGetLineHeight()}{wxvscrolledwindowongetlineheight} pure virtual
-method. You also must call \helpref{SetLineCount}{wxvscrolledwindowsetlinecount} 
+method. You also must call \helpref{SetLineCount}{wxvscrolledwindowsetlinecount}
 to let the base class know how many lines it should display but from that
 moment on the scrolling is handled entirely by wxVScrolledWindow, you only
 need to draw the visible part of contents in your {\tt OnPaint()} method as
-usual. You should use \helpref{GetFirstVisibleLine()}{wxvscrolledwindowgetfirstvisibleline} 
+usual. You should use \helpref{GetFirstVisibleLine()}{wxvscrolledwindowgetfirstvisibleline}
 and \helpref{GetLastVisibleLine()}{wxvscrolledwindowgetlastvisibleline} to
 select the lines to display. Note that the device context origin is not shifted
 so the first visible line always appears at the point $(0, 0)$ in physical as
@@ -39,7 +39,10 @@ well as logical coordinates.
 
 \wxheading{Derived from}
 
-\helpref{wxPanel}{wxpanel}
+\helpref{wxPanel}{wxpanel}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
 
 \wxheading{Include files}
 
@@ -60,7 +63,7 @@ no need to specify it explicitly.
 
 \func{}{wxVScrolledWindow}{\void}
 
-Default constructor, you must call \helpref{Create()}{wxvscrolledwindowcreate} 
+Default constructor, you must call \helpref{Create()}{wxvscrolledwindowcreate}
 later.
 
 \wxheading{Parameters}
@@ -95,7 +98,7 @@ need to specify it explicitly.
 \constfunc{virtual wxCoord}{EstimateTotalHeight}{\void}
 
 This protected function is used internally by wxVScrolledWindow to estimate the
-total height of the window when \helpref{SetLineCount}{wxvscrolledwindowsetlinecount} 
+total height of the window when \helpref{SetLineCount}{wxvscrolledwindowsetlinecount}
 is called. The default implementation uses the brute force approach if the
 number of the items in the control is small enough. Otherwise, it tries to find
 the average line height using some lines in the beginning, middle and the end.
@@ -125,7 +128,7 @@ exists only for symmetry with \helpref{GetLastVisibleLine}{wxvscrolledwindowgetl
 
 Returns the index of the last currently visible line. Note that this method
 returns \texttt{(size\_t)-1} (i.e. a huge positive number) if the control is
-empty so if this is possible you should use \helpref{GetVisibleEnd}{wxvscrolledwindowgetvisibleend} 
+empty so if this is possible you should use \helpref{GetVisibleEnd}{wxvscrolledwindowgetvisibleend}
 instead.
 
 \wxheading{See also}
@@ -137,7 +140,7 @@ instead.
 
 \constfunc{size\_t}{GetLineCount}{\void}
 
-Get the number of lines this window contains (previously set by 
+Get the number of lines this window contains (previously set by
 \helpref{SetLineCount()}{wxvscrolledwindowsetlinecount})
 
 
@@ -180,7 +183,7 @@ Return the item at the specified (in physical coordinates) position or
 
 \constfunc{bool}{IsVisible}{\param{size\_t }{line}}
 
-Returns {\tt true} if the given line is (at least partially) visible or 
+Returns {\tt true} if the given line is (at least partially) visible or
 {\tt false} otherwise.
 
 
@@ -205,7 +208,7 @@ it if calculating the lines heights is a relatively expensive operation
 as it gives the user code a possibility to calculate several of them at
 once.
 
-{\tt OnGetLinesHint()} is normally called just before 
+{\tt OnGetLinesHint()} is normally called just before
 \helpref{OnGetLineHeight()}{wxvscrolledwindowongetlineheight} but you
 shouldn't rely on the latter being called for all lines in the interval
 specified here. It is also possible that OnGetLineHeight() will be
@@ -296,5 +299,3 @@ Return {\tt true} if we scrolled the window, {\tt false} if nothing was done.
 Set the number of lines the window contains: the derived class must
 provide the heights for all lines with indices up to the one given here
 in its \helpref{OnGetLineHeight()}{wxvscrolledwindowongetlineheight}.
-
-
