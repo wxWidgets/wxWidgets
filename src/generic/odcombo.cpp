@@ -58,8 +58,9 @@ END_EVENT_TABLE()
 void wxVListBoxComboPopup::Init()
 {
     m_widestWidth = 0;
-    m_avgCharWidth = 0;
-    m_baseImageWidth = 0;
+    m_widestItem = -1;
+    m_widthsDirty = false;
+    m_findWidest = false;
     m_itemHeight = 0;
     m_value = -1;
     m_itemHover = -1;
@@ -327,26 +328,6 @@ void wxVListBoxComboPopup::OnKey(wxKeyEvent& event)
         event.Skip();
 }
 
-void wxVListBoxComboPopup::CheckWidth( int pos )
-{
-    wxCoord x = OnMeasureItemWidth(pos);
-
-    if ( x < 0 )
-    {
-        if ( !m_useFont.Ok() )
-            m_useFont = m_combo->GetFont();
-
-        wxCoord y;
-        m_combo->GetTextExtent(m_strings[pos], &x, &y, 0, 0, &m_useFont);
-        x += 4;
-    }
-
-    if ( m_widestWidth < x )
-    {
-        m_widestWidth = x;
-    }
-}
-
 void wxVListBoxComboPopup::Insert( const wxString& item, int pos )
 {
     // Need to change selection?
@@ -358,12 +339,11 @@ void wxVListBoxComboPopup::Insert( const wxString& item, int pos )
     }
 
     m_strings.Insert(item,pos);
+    m_widths.Insert(-1,pos);
+    m_widthsDirty = true;
 
     if ( IsCreated() )
         wxVListBox::SetItemCount( wxVListBox::GetItemCount()+1 );
-
-    // Calculate width
-    CheckWidth(pos);
 }
 
 int wxVListBoxComboPopup::Append(const wxString& item)
@@ -397,6 +377,10 @@ void wxVListBoxComboPopup::Clear()
     wxASSERT(m_combo);
 
     m_strings.Empty();
+    m_widths.Empty();
+
+    m_widestWidth = 0;
+    m_widestItem = -1;
 
     ClearClientDatas();
 
@@ -427,6 +411,8 @@ void wxVListBoxComboPopup::SetItemClientData( unsigned int n,
 
     m_clientDatas.SetCount(n+1,NULL);
     m_clientDatas[n] = clientData;
+
+    ItemWidthChanged(n);
 }
 
 void* wxVListBoxComboPopup::GetItemClientData(unsigned int n) const
@@ -449,6 +435,10 @@ void wxVListBoxComboPopup::Delete( unsigned int item )
     }
 
     m_strings.RemoveAt(item);
+    m_widths.RemoveAt(item);
+
+    if ( (int)item == m_widestItem )
+        m_findWidest = true;
 
     if ( IsCreated() )
         wxVListBox::SetItemCount( wxVListBox::GetItemCount()-1 );
@@ -472,6 +462,7 @@ wxString wxVListBoxComboPopup::GetString( int item ) const
 void wxVListBoxComboPopup::SetString( int item, const wxString& str )
 {
     m_strings[item] = str;
+    ItemWidthChanged(item);
 }
 
 wxString wxVListBoxComboPopup::GetStringValue() const
@@ -537,6 +528,92 @@ wxSize wxVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, int 
     else
         height = 50;
 
+    bool doFindWidest = m_findWidest;
+
+    // Measure items with dirty width.
+    if ( m_widthsDirty )
+    {
+        unsigned int i;
+        unsigned int n = m_widths.GetCount();
+        int dirtyHandled = 0;
+        wxArrayInt& widths = m_widths;
+
+        // I think using wxDC::GetTextExtent is faster than
+        // wxWindow::GetTextExtent (assuming same dc is used
+        // for all calls, as we do here).
+        wxClientDC dc(m_combo);
+        dc.SetFont(m_useFont);
+
+        for ( i=0; i<n; i++ )
+        {
+            if ( widths[i] < 0 )
+            {
+                wxCoord x = OnMeasureItemWidth(i);
+
+                if ( x < 0 )
+                {
+                    const wxString& text = m_strings[i];
+
+                    // To make sure performance won't suck in extreme scenarios,
+                    // we'll estimate length after some arbitrary number of items
+                    // have been checked precily.
+                    if ( dirtyHandled < 1024 )
+                    {
+                        wxCoord y;
+                        dc.GetTextExtent(text, &x, &y, 0, 0);
+                        x += 4;
+                    }
+                    else
+                    {
+                        x = text.length() * (dc.GetCharWidth()+1);
+                    }
+                }
+
+                widths[i] = x;
+
+                if ( x >= m_widestWidth )
+                {
+                    m_widestWidth = x;
+                    m_widestItem = (int)i;
+                }
+                else if ( (int)i == m_widestItem )
+                {
+                    // Width of previously widest item has been decreased, so
+                    // we'll have to check all to find current widest item.
+                    doFindWidest = true;
+                }
+
+                dirtyHandled++;
+            }
+        }
+
+        m_widthsDirty = false;
+    }
+
+    if ( doFindWidest )
+    {
+        unsigned int i;
+        unsigned int n = m_widths.GetCount();
+
+        int bestWidth = -1;
+        int bestIndex = -1;
+
+        for ( i=0; i<n; i++ )
+        {
+            int w = m_widths[i];
+            if ( w > bestWidth )
+            {
+                bestIndex = (int)i;
+                bestWidth = w;
+            }
+        }
+
+        m_widestWidth = bestWidth;
+        m_widestItem = bestIndex;
+
+        m_findWidest = false;
+    }
+
     // Take scrollbar into account in width calculations
     int widestWidth = m_widestWidth + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
     return wxSize(minWidth > widestWidth ? minWidth : widestWidth,
@@ -554,8 +631,10 @@ void wxVListBoxComboPopup::Populate( const wxArrayString& choices )
     {
         const wxString& item = choices.Item(i);
         m_strings.Add(item);
-        CheckWidth(i);
     }
+
+    m_widths.SetCount(n,-1);
+    m_widthsDirty = true;
 
     if ( IsCreated() )
         wxVListBox::SetItemCount(n);

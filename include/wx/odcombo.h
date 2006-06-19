@@ -118,8 +118,12 @@ protected:
     // gets value, sends event and dismisses
     void DismissWithEvent();
 
-    // Re-calculates width for given item
-    void CheckWidth( int pos );
+    // OnMeasureItemWidth will be called on next GetAdjustedSize.
+    void ItemWidthChanged(unsigned int item)
+    {
+        m_widths[item] = -1;
+        m_widthsDirty = true;
+    }
 
     // Callbacks for drawing and measuring items. Override in a derived class for
     // owner-drawnness. Font, background and text colour have been prepared according
@@ -155,24 +159,35 @@ protected:
 
     wxArrayString           m_strings;
     wxArrayPtrVoid          m_clientDatas;
-    wxArrayInt              m_widths; // cached line widths
 
     wxFont                  m_useFont;
 
     //wxString                m_stringValue; // displayed text (may be different than m_strings[m_value])
     int                     m_value; // selection
     int                     m_itemHover; // on which item the cursor is
-    int                     m_widestWidth; // width of widest item thus far
-    int                     m_avgCharWidth;
-    int                     m_baseImageWidth; // how much per item drawn in addition to text
     int                     m_itemHeight; // default item height (calculate from font size
                                           // and used in the absence of callback)
     wxClientDataType        m_clientDataItemsType;
 
 private:
 
+    // Cached item widths (in pixels).
+    wxArrayInt              m_widths;
+
+    // Width of currently widest item.
+    int                     m_widestWidth;
+
+    // Index of currently widest item.
+    int                     m_widestItem;
+
+    // Measure some items in next GetAdjustedSize?
+    bool                    m_widthsDirty;
+
+    // Find widest item in next GetAdjustedSize?
+    bool                    m_findWidest;
+
     // has the mouse been released on this control?
-    bool m_clicked;
+    bool                    m_clicked;
 
     DECLARE_EVENT_TABLE()
 };
