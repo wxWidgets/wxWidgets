@@ -479,11 +479,13 @@ class HandSet:
                 idx = ends[i]
                 # Is this the hours hand?
                 if i == 0:
-                    idx = idx * 5 + ends[1] / 12
-                # Adjust idx offset and prevent exceptions on leap seconds.
-                idx = idx - 1
-                if idx < 0 or idx > 59:
+                    idx = idx * 5 + ends[1] / 12 - 1
+                # else prevent exceptions on leap seconds
+                elif idx <= 0 or idx > 60:
                     idx = 59
+                # and adjust idx offset for minutes and non-leap seconds 
+                else:
+                    idx = idx - 1
                 angle = math.radians(180 - 6 * (idx + 1))
 
                 hand.dyer.Select(dc, shadow)
