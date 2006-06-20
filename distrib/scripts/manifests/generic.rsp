@@ -18,7 +18,7 @@ regen
 build/bakefiles/*.bkl
 build/bakefiles/Bakefiles.bkgen
 build/bakefiles/README
-build/bakefiles/*.py*
+build/bakefiles/*.py
 build/bakefiles/*.mk
 build/bakefiles/formats/*.bkl
 build/bakefiles/formats/*.empy
@@ -33,29 +33,9 @@ build/update-setup-h
 
 build/aclocal/*.m4
 
-build/script/*.sh
-build/script/*.txt
-build/script/*.bat
-build/script/*.vc
-build/script/*.iss
-
 misc/scripts/makegtktags
 misc/scripts/*.sh
 misc/scripts/*.bat
-
-distrib/msw/*.rsp
-distrib/msw/*.bat
-distrib/msw/*.cpp
-distrib/msw/*.txt
-distrib/msw/tardist
-distrib/msw/tarwxmotif
-distrib/msw/tmake/*.t
-distrib/msw/tmake/Makefile
-distrib/msw/tmake/filelist.txt
-distrib/msw/tmake/makeall.bat
-distrib/msw/tmake/makeall.sh
-distrib/msw/tmake/wxwin.pro
-distrib/msw/tmake/tmake.conf
 
 locale/*.po
 locale/msw/*.po
@@ -85,8 +65,6 @@ docs/tech/*.htm
 
 src/common/*.cpp
 src/common/extended.c
-src/common/unzip.c
-src/common/unzip.h
 src/common/*.inc
 src/common/base.rc
 
@@ -101,9 +79,6 @@ src/html/bitmaps/*.xpm
 src/richtext/*.cpp
 
 src/aui/*.cpp
-
-src/unix/*.cpp
-src/unix/*.c
 
 src/png/*.c
 src/png/*.h
@@ -121,29 +96,6 @@ src/png/scripts/makefile*
 src/png/scripts/*.com
 src/png/scripts/*.def
 
-src/zlib/*.c
-src/zlib/*.h
-src/zlib/INDEX
-src/zlib/README
-src/zlib/ChangeLog
-src/zlib/configure
-src/zlib/*.txt
-src/zlib/makefile*
-src/zlib/*.com
-src/zlib/*.3
-
-src/regex/COPYRIGHT
-src/regex/makefile*
-src/regex/README
-src/regex/WHATSNEW
-src/regex/mkh
-src/regex/*.h
-src/regex/*.ih
-src/regex/*.c
-src/regex/tests
-src/regex/regex.3
-src/regex/regex.7
-
 src/iodbc/AUTHORS
 src/iodbc/COPYING
 src/iodbc/autoconfig
@@ -157,19 +109,11 @@ src/iodbc/*.h
 src/iodbc/*.ci
 src/iodbc/*.exp
 
-include/wx/*.h
-include/wx/*.inl
-include/wx/*.cpp
-include/wx/protocol/*.h
 include/wx/wx_setup.vms
 include/wx/common/*.h
 include/wx/generic/*.h
 include/wx/generic/*.xpm
-include/wx/unix/*.h
 include/wx/html/*.h
-include/wx/html/msw/*.bmp
-include/wx/html/msw/*.ico
-include/wx/html/msw/*.rc
 include/wx/richtext/*.h
 include/wx/aui/*.h
 lib/dummy
@@ -201,7 +145,6 @@ samples/*.xpm
 samples/access/*.cpp
 samples/access/*.h
 samples/access/makefile*
-samples/access/*.xbm
 samples/access/*.xpm
 samples/access/*.ico
 samples/access/*.rc
@@ -211,7 +154,6 @@ samples/access/*.bkl
 samples/artprov/*.cpp
 samples/artprov/*.h
 samples/artprov/makefile*
-samples/artprov/*.xbm
 samples/artprov/*.xpm
 samples/artprov/*.txt
 samples/artprov/*.ico

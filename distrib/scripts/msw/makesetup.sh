@@ -50,15 +50,39 @@ getfilelist(){
   fi 
   
   if [ $port = "msw" ] || [ $port = "all" ]; then
-    filelist="$filelist msw.rsp univ.rsp vc.rsp mmedia.rsp wince.rsp palmos.rsp dmc.rsp"
+    filelist="$filelist msw.rsp univ.rsp vc.rsp mmedia.rsp wince.rsp dmc.rsp"
   fi
   
   if [ $port = "os2" ] || [ $port = "all" ]; then
-     filelist="$filelist os2.rsp"
+    filelist="$filelist os2.rsp"
+  fi
+  
+  if [ $port = "x11" ] || [ $port = "all" ]; then
+    filelist="$filelist x11.rsp"
+  fi
+  
+  if [ $port = "mgl" ] || [ $port = "all" ]; then
+    filelist="$filelist mgl.rsp" 
+  fi
+  
+  if [ $port = "gtk" ] || [ $port = "all" ]; then
+    filelist="$filelist gtk.rsp"
+  fi
+  
+  if [ $port = "cocoa" ] || [ $port = "all" ]; then
+    filelist="$filelist cocoa.rsp"
+  fi
+  
+  if [ $port = "motif" ] || [ $port = "all" ]; then
+    filelist="$filelist motif.rsp"
+  fi
+  
+  if [ $port = "mac" ] || [ $port = "all" ]; then
+    filelist="$filelist mac.rsp"
   fi
   
   if [ $port = "all" ]; then
-      filelist="$filelist x11.rsp gtk.rsp cocoa.rsp motif.rsp mac.rsp mgl.rsp"
+    filelist="$filelist palmos.rsp"
   fi
   
   tempfile="/tmp/wx$port.files.in"
@@ -132,6 +156,26 @@ rearchive()
 
     popd
 }
+
+ziptotar()
+{
+    archive=$1
+    dirname=$2
+    changeto=$3
+
+    pushd $changeto
+
+    unzip $ZIPFLAGS $archive
+    
+    tar cfz $archive.tar.gz $dirname
+
+    tar -cvf $dirname | bzip2 -9 > $archive.tar.bz2
+    
+    rm -rf $dirname
+
+    popd
+}
+
 
 rearchivetar()
 {
@@ -327,26 +371,31 @@ dospindocs()
 dospinport(){
     port=$1
     
-    upperport="`echo $port|tr '[a-z]' '[A-Z]'`"
-    echo "Zipping wx$upperport..."
+    if [ $port != "all" ]; then
+        portname="`echo $port|tr '[a-z]' '[A-Z]'`"    
+    else
+        portname="wxWidgets"
+    fi
+    
+    echo "Zipping wx$portname..."
 
     cd $APPDIR
     portfiles="/tmp/wx$port.files"
     getfilelist "$port" "$portfiles"
 
-    zip $ZIPFLAGS -@ $DESTDIR/wx$upperport-$VERSION.zip < $portfiles 
-    zip $ZIPFLAGS -g $DESTDIR/wx$upperport-$VERSION.zip LICENSE.txt COPYING.LIB CHANGES.txt README.txt
+    zip $ZIPFLAGS -@ $DESTDIR/wx$portname-$VERSION.zip < $portfiles 
+    zip $ZIPFLAGS -g $DESTDIR/wx$portname-$VERSION.zip LICENSE.txt COPYING.LIB CHANGES.txt README.txt
     
     if [ $port = "msw" ] || [ $port = "all" ]; then
-        zip $ZIPFLAGS -g $DESTDIR/wx$upperport-$VERSION.zip README-MSW.txt INSTALL-MSW.txt        
+        zip $ZIPFLAGS -g $DESTDIR/wx$portname-$VERSION.zip README-MSW.txt INSTALL-MSW.txt        
     fi
     
     if [ $port = "os2" ] || [ $port = "all" ]; then
-        zip $ZIPFLAGS -g $DESTDIR/wx$upperport-$VERSION.zip INSTALL-OS2.txt          
+        zip $ZIPFLAGS -g $DESTDIR/wx$portname-$VERSION.zip INSTALL-OS2.txt          
     fi
     
     # put all files in a wxWidgets-$VERSION subdir in the zip archive
-    rearchive wx$upperport-$VERSION.zip wxWidgets-$VERSION $DESTDIR
+    rearchive wx$portname-$VERSION.zip wxWidgets-$VERSION $DESTDIR
 }
 
 dospininstaller()
@@ -384,12 +433,12 @@ dospininstaller()
         mkdir bin
     fi
     
-    cp $APPDIR/bin/tex2rtf.exe bin
-    cp $APPDIR/bin/tex2rtf.chm bin
-    cp $APPDIR/bin/widgets.exe bin
-    cp $APPDIR/bin/life.exe bin
-    cp $APPDIR/demos/life/breeder.lif bin
-    cp $APPDIR/docs/htmlhelp/tex2rtf.chm bin
+    #cp $APPDIR/bin/tex2rtf.exe bin
+    #cp $APPDIR/bin/tex2rtf.chm bin
+    #cp $APPDIR/bin/widgets.exe bin
+    #cp $APPDIR/bin/life.exe bin
+    #cp $APPDIR/demos/life/breeder.lif bin
+    #cp $APPDIR/docs/htmlhelp/tex2rtf.chm bin
 
     if [ ! -d docs/pdf ]; then
         mkdir docs/pdf
@@ -591,6 +640,17 @@ makesetup()
     if [ "$SPINWXALL" = "1" ] || [ "$SPINALL" = "1" ]; then
         dospinport "all" #dospinwxall
     fi
+
+    if [ "$SPINALL" = "1" ]; then
+        dospinport "mgl"
+        dospinport "gtk"
+        dospinport "x11"
+        dospinport "motif"
+        dospinport "mac"
+        dospinport "cocoa"
+        #dospinwxall
+    fi
+
 
     # Do docs spin
     if [ "$SPINDOCS" = "1" ] || [ "$SPINALL" = "1" ]; then

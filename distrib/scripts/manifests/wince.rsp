@@ -1,6 +1,8 @@
 build/wince/wx.vcw
 build/wince/wx_*.vcp
 
+build/wince/missing
+
 samples/access/access.vcp
 samples/access/access.vcw
 

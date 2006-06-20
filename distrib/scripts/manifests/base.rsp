@@ -20,43 +20,29 @@ build/msw/makefile.*
 
 src/common/*.cpp
 src/common/extended.c
-src/common/unzip.c
-src/common/unzip.h
 src/common/*.inc
 src/common/base.rc
 
 src/msdos/*.cpp
 
 src/msw/*.cpp
-src/msw/*.h
 src/msw/makefile.*
 src/msw/makebase.b32
-src/msw/makeuniv.b32
-src/msw/*.lst
-src/msw/*.def
-src/msw/*.inc
 src/msw/winestub.c
-src/msw/gsocket.c
-src/msw/gsockmsw.c
 src/msw/version.rc
 
 src/msw/ole/*.cpp
-src/msw/*.prj
 
 src/msw/wince/*.cpp
-src/msw/wince/*.c
 
 src/unix/*.cpp
-src/unix/*.c
 
 src/zlib/*.c
 src/zlib/*.h
 src/zlib/INDEX
 src/zlib/README
 src/zlib/ChangeLog
-src/zlib/configure
 src/zlib/*.txt
-src/zlib/makefile*
 src/zlib/*.com
 src/zlib/*.3
 
@@ -77,7 +63,6 @@ include/wx/*.inl
 include/wx/*.cpp
 include/wx/protocol/*.h
 include/wx/wx_setup.vms
-include/wx/common/*.h
 include/wx/unix/*.h
 lib/dummy
 
@@ -99,11 +84,8 @@ samples/console/*.h
 samples/console/makefile*
 samples/console/*.rc
 samples/console/*.def
-samples/console/*.bmp
 samples/console/*.xpm
 samples/console/*.xbm
-samples/console/*.png
-samples/console/*.ico
 samples/console/*.txt
 samples/console/*.pro
 samples/console/*.bkl
