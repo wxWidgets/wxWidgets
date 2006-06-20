@@ -34,6 +34,7 @@
 #include "wx/xrc/xh_sizer.h"
 #include "wx/xrc/xh_stbmp.h"
 #include "wx/xrc/xh_notbk.h"
+#include "wx/xrc/xh_odcombo.h"
 #include "wx/xrc/xh_listbk.h"
 #include "wx/xrc/xh_choicbk.h"
 #include "wx/xrc/xh_treebk.h"

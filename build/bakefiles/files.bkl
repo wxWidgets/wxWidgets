@@ -815,7 +815,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/pickerbase.h
     wx/popupwin.h
     wx/print.h
-    wx/printdlg.h 
+    wx/printdlg.h
     wx/prntbase.h
     wx/progdlg.h
     wx/ptr_scpd.h
@@ -2838,6 +2838,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_listc.cpp
     src/xrc/xh_menu.cpp
     src/xrc/xh_notbk.cpp
+    src/xrc/xh_odcombo.cpp
     src/xrc/xh_panel.cpp
     src/xrc/xh_radbt.cpp
     src/xrc/xh_radbx.cpp
@@ -2891,6 +2892,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_listc.h
     wx/xrc/xh_menu.h
     wx/xrc/xh_notbk.h
+    wx/xrc/xh_odcombo.h
     wx/xrc/xh_panel.h
     wx/xrc/xh_radbt.h
     wx/xrc/xh_radbx.h

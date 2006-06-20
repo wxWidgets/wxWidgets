@@ -160,6 +160,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_listc.obj &
 	$(OBJS)\monodll_xh_menu.obj &
 	$(OBJS)\monodll_xh_notbk.obj &
+	$(OBJS)\monodll_xh_odcombo.obj &
 	$(OBJS)\monodll_xh_panel.obj &
 	$(OBJS)\monodll_xh_radbt.obj &
 	$(OBJS)\monodll_xh_radbx.obj &
@@ -745,6 +746,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_listc.obj &
 	$(OBJS)\monolib_xh_menu.obj &
 	$(OBJS)\monolib_xh_notbk.obj &
+	$(OBJS)\monolib_xh_odcombo.obj &
 	$(OBJS)\monolib_xh_panel.obj &
 	$(OBJS)\monolib_xh_radbt.obj &
 	$(OBJS)\monolib_xh_radbx.obj &
@@ -3507,6 +3509,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_listc.obj &
 	$(OBJS)\xrcdll_xh_menu.obj &
 	$(OBJS)\xrcdll_xh_notbk.obj &
+	$(OBJS)\xrcdll_xh_odcombo.obj &
 	$(OBJS)\xrcdll_xh_panel.obj &
 	$(OBJS)\xrcdll_xh_radbt.obj &
 	$(OBJS)\xrcdll_xh_radbx.obj &
@@ -3567,6 +3570,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_listc.obj &
 	$(OBJS)\xrclib_xh_menu.obj &
 	$(OBJS)\xrclib_xh_notbk.obj &
+	$(OBJS)\xrclib_xh_odcombo.obj &
 	$(OBJS)\xrclib_xh_panel.obj &
 	$(OBJS)\xrclib_xh_radbt.obj &
 	$(OBJS)\xrclib_xh_radbx.obj &
@@ -5172,6 +5176,9 @@ $(OBJS)\monodll_xh_menu.obj :  .AUTODEPEND ..\..\src\xrc\xh_menu.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_notbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_notbk.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_odcombo.obj :  .AUTODEPEND ..\..\src\xrc\xh_odcombo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_panel.obj :  .AUTODEPEND ..\..\src\xrc\xh_panel.cpp
@@ -7142,6 +7149,9 @@ $(OBJS)\monolib_xh_menu.obj :  .AUTODEPEND ..\..\src\xrc\xh_menu.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_notbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_notbk.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_odcombo.obj :  .AUTODEPEND ..\..\src\xrc\xh_odcombo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_panel.obj :  .AUTODEPEND ..\..\src\xrc\xh_panel.cpp
@@ -12252,6 +12262,9 @@ $(OBJS)\xrcdll_xh_menu.obj :  .AUTODEPEND ..\..\src\xrc\xh_menu.cpp
 $(OBJS)\xrcdll_xh_notbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_notbk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xh_odcombo.obj :  .AUTODEPEND ..\..\src\xrc\xh_odcombo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xh_panel.obj :  .AUTODEPEND ..\..\src\xrc\xh_panel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -12403,6 +12416,9 @@ $(OBJS)\xrclib_xh_menu.obj :  .AUTODEPEND ..\..\src\xrc\xh_menu.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_notbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_notbk.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_odcombo.obj :  .AUTODEPEND ..\..\src\xrc\xh_odcombo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_panel.obj :  .AUTODEPEND ..\..\src\xrc\xh_panel.cpp

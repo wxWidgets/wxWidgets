@@ -1279,6 +1279,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_listc.o \
 	xrcdll_xh_menu.o \
 	xrcdll_xh_notbk.o \
+	xrcdll_xh_odcombo.o \
 	xrcdll_xh_panel.o \
 	xrcdll_xh_radbt.o \
 	xrcdll_xh_radbx.o \
@@ -1335,6 +1336,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_listc.o \
 	xrclib_xh_menu.o \
 	xrclib_xh_notbk.o \
+	xrclib_xh_odcombo.o \
 	xrclib_xh_panel.o \
 	xrclib_xh_radbt.o \
 	xrclib_xh_radbx.o \
@@ -2177,9 +2179,9 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/motif/window.h
 @COND_TOOLKIT_MOTIF@GUI_HDR = $(COND_TOOLKIT_MOTIF_GUI_HDR)
 COND_TOOLKIT_MSW_GUI_HDR =  \
-	wx/generic/clrpicker.h \
-	wx/generic/fontpicker.h \
-	wx/generic/filepicker.h \
+	wx/generic/clrpickerg.h \
+	wx/generic/fontpickerg.h \
+	wx/generic/filepickerg.h \
 	wx/msw/accel.h \
 	wx/msw/app.h \
 	wx/msw/bitmap.h \
@@ -2371,9 +2373,9 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/os2/window.h
 @COND_TOOLKIT_PM@GUI_HDR = $(COND_TOOLKIT_PM_GUI_HDR)
 COND_TOOLKIT_WINCE_GUI_HDR =  \
-	wx/generic/clrpicker.h \
-	wx/generic/fontpicker.h \
-	wx/generic/filepicker.h \
+	wx/generic/clrpickerg.h \
+	wx/generic/fontpickerg.h \
+	wx/generic/filepickerg.h \
 	wx/msw/accel.h \
 	wx/msw/app.h \
 	wx/msw/bitmap.h \
@@ -2888,6 +2890,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_listc.h \
 	wx/xrc/xh_menu.h \
 	wx/xrc/xh_notbk.h \
+	wx/xrc/xh_odcombo.h \
 	wx/xrc/xh_panel.h \
 	wx/xrc/xh_radbt.h \
 	wx/xrc/xh_radbx.h \
@@ -3179,6 +3182,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_listc.o \
 	monodll_xh_menu.o \
 	monodll_xh_notbk.o \
+	monodll_xh_odcombo.o \
 	monodll_xh_panel.o \
 	monodll_xh_radbt.o \
 	monodll_xh_radbx.o \
@@ -4843,6 +4847,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_listc.o \
 	monolib_xh_menu.o \
 	monolib_xh_notbk.o \
+	monolib_xh_odcombo.o \
 	monolib_xh_panel.o \
 	monolib_xh_radbt.o \
 	monolib_xh_radbx.o \
@@ -12070,6 +12075,9 @@ monodll_xh_menu.o: $(srcdir)/src/xrc/xh_menu.cpp $(MONODLL_ODEP)
 monodll_xh_notbk.o: $(srcdir)/src/xrc/xh_notbk.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_notbk.cpp
 
+monodll_xh_odcombo.o: $(srcdir)/src/xrc/xh_odcombo.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_odcombo.cpp
+
 monodll_xh_panel.o: $(srcdir)/src/xrc/xh_panel.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_panel.cpp
 
@@ -15942,6 +15950,9 @@ monolib_xh_menu.o: $(srcdir)/src/xrc/xh_menu.cpp $(MONOLIB_ODEP)
 
 monolib_xh_notbk.o: $(srcdir)/src/xrc/xh_notbk.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_notbk.cpp
+
+monolib_xh_odcombo.o: $(srcdir)/src/xrc/xh_odcombo.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_odcombo.cpp
 
 monolib_xh_panel.o: $(srcdir)/src/xrc/xh_panel.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_panel.cpp
@@ -26794,6 +26805,9 @@ xrcdll_xh_menu.o: $(srcdir)/src/xrc/xh_menu.cpp $(XRCDLL_ODEP)
 xrcdll_xh_notbk.o: $(srcdir)/src/xrc/xh_notbk.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_notbk.cpp
 
+xrcdll_xh_odcombo.o: $(srcdir)/src/xrc/xh_odcombo.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_odcombo.cpp
+
 xrcdll_xh_panel.o: $(srcdir)/src/xrc/xh_panel.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_panel.cpp
 
@@ -26943,6 +26957,9 @@ xrclib_xh_menu.o: $(srcdir)/src/xrc/xh_menu.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_notbk.o: $(srcdir)/src/xrc/xh_notbk.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_notbk.cpp
+
+xrclib_xh_odcombo.o: $(srcdir)/src/xrc/xh_odcombo.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_odcombo.cpp
 
 xrclib_xh_panel.o: $(srcdir)/src/xrc/xh_panel.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_panel.cpp

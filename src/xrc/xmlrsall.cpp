@@ -77,6 +77,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_COMBOBOX
     AddHandler(new wxComboBoxXmlHandler);
 #endif
+#if wxUSE_ODCOMBOBOX
+    AddHandler(new wxOwnerDrawnComboBoxXmlHandler);
+#endif
 #if wxUSE_NOTEBOOK
     AddHandler(new wxNotebookXmlHandler);
 #endif

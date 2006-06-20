@@ -1070,6 +1070,10 @@ SOURCE=..\..\include\wx\xrc\xh_notbk.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_odcombo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_panel.h
 # End Source File
 # Begin Source File
@@ -1267,6 +1271,10 @@ SOURCE=..\..\src\xrc\xh_menu.cpp
 # Begin Source File
 
 SOURCE=..\..\src\xrc\xh_notbk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_odcombo.cpp
 # End Source File
 # Begin Source File
 

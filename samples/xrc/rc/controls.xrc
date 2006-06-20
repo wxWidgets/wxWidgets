@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
+<!-- $Id$ -->
+
 <resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.3.0.1">
 
 <object class="wxDialog" name="controls_dialog">
@@ -127,6 +129,13 @@
                                             <item>in the toolbar</item>
                                         </content>
                                     </object>
+                                    <object class="wxOwnerDrawnComboBox">
+                                        <content>
+                                            <item>Owner Drawn</item>
+                                            <item>combobox</item>
+                                            <item>in the toolbar</item>
+                                        </content>
+                                    </object>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -191,13 +200,20 @@
                                             <item>in the toolbar</item>
                                         </content>
                                     </object>
+                                    <object class="wxOwnerDrawnComboBox">
+                                        <content>
+                                            <item>Owner Drawn</item>
+                                            <item>combobox</item>
+                                            <item>in the toolbar</item>
+                                        </content>
+                                    </object>
                                 </object>
                             </object>
                         </object>
                     </object>
                 </object>
 
-                
+
                 <object class="notebookpage">
                     <label>wxBitmapButton</label>
                     <object class="wxPanel" name="bitmapbutton">
@@ -482,7 +498,7 @@
                                     I dream things that never were, and say why not"&lt;/i&gt;
                                     &lt;p&gt;&lt;pre&gt;Fixed width for code snippets.&lt;/pre&gt;
                                     &lt;p&gt;Horizontal rules to organize sections: &lt;hr&gt;
-                                    &lt;p&gt;A wxImage is worth a thousand words and can be also used.                            
+                                    &lt;p&gt;A wxImage is worth a thousand words and can be also used.
                                 </htmlcode>
                                 </object>
                             </object>
