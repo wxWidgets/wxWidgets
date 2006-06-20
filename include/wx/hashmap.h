@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        hashmap.h
+// Name:        wx/hashmap.h
 // Purpose:     wxHashMap class
 // Author:      Mattia Barbon
 // Modified by:
@@ -708,4 +708,3 @@ WX_DECLARE_HASH_MAP_WITH_DECL( long, long, wxIntegerHash, wxIntegerEqual,
 
 
 #endif // _WX_HASHMAP_H_
-

@@ -46,6 +46,7 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/app.h"
+    #include "wx/hashmap.h"
 #endif // WX_PRECOMP
 
 #ifndef __WXWINCE__
@@ -71,7 +72,6 @@
 #include "wx/module.h"
 #include "wx/fontmap.h"
 #include "wx/encconv.h"
-#include "wx/hashmap.h"
 #include "wx/ptr_scpd.h"
 #include "wx/apptrait.h"
 #include "wx/stdpaths.h"
@@ -1939,9 +1939,9 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
     // check for this
 
     // do we have just the language (or sublang too)?
-    bool justLang = langFull.Len() == LEN_LANG;
+    bool justLang = langFull.length() == LEN_LANG;
     if ( justLang ||
-         (langFull.Len() == LEN_FULL && langFull[LEN_LANG] == wxT('_')) )
+         (langFull.length() == LEN_FULL && langFull[LEN_LANG] == wxT('_')) )
     {
         // 0. Make sure the lang is according to latest ISO 639
         //    (this is necessary because glibc uses iw and in instead

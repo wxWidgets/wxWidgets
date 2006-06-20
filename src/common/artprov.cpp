@@ -23,10 +23,10 @@
 #ifndef WX_PRECOMP
     #include "wx/list.h"
     #include "wx/log.h"
+    #include "wx/hashmap.h"
 #endif
 
 #include "wx/artprov.h"
-#include "wx/hashmap.h"
 #include "wx/module.h"
 
 #if wxUSE_IMAGE

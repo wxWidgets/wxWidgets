@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        hashmap.cpp
+// Name:        src/common/hashmap.cpp
 // Purpose:     wxHashMap implementation
 // Author:      Mattia Barbon
 // Modified by:
@@ -13,7 +13,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #include "wx/hashmap.h"

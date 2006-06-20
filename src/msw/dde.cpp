@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/dde.cpp
+// Name:        src/msw/dde.cpp
 // Purpose:     DDE classes
 // Author:      Julian Smart
 // Modified by:
@@ -29,12 +29,12 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
+    #include "wx/hashmap.h"
 #endif
 
 #include "wx/module.h"
 #include "wx/dde.h"
 #include "wx/intl.h"
-#include "wx/hashmap.h"
 
 #include "wx/msw/private.h"
 
@@ -300,7 +300,7 @@ bool wxDDEServer::Create(const wxString& server)
 
 wxDDEServer::~wxDDEServer()
 {
-    if ( !m_serviceName.IsEmpty() )
+    if ( !m_serviceName.empty() )
     {
         HSZ hsz = DDEAtomFromString(m_serviceName);
 
@@ -558,7 +558,7 @@ bool wxDDEConnection::Execute(const wxChar *data, int size, wxIPCFormat WXUNUSED
                                     GetHConv(),
                                     NULL,
 // If the transaction specified by the wType parameter does not pass data or is XTYP_EXECUTE,
-// wFmt should be zero. 
+// wFmt should be zero.
                                     0,
                                     XTYP_EXECUTE,
                                     DDE_TIMEOUT,

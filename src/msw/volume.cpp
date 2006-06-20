@@ -30,10 +30,10 @@
         #include "wx/icon.h"
     #endif
     #include "wx/intl.h"
+    #include "wx/hashmap.h"
 #endif // WX_PRECOMP
 
 #include "wx/dir.h"
-#include "wx/hashmap.h"
 #include "wx/dynlib.h"
 #include "wx/arrimpl.cpp"
 
@@ -262,7 +262,7 @@ static void BuildListFromNN(wxArrayString& list, NETRESOURCE* pResSrc,
                 {
                     wxString filename(pRes->lpRemoteName);
 
-                    if (filename.Len())
+                    if (!filename.empty())
                     {
                         if (filename.Last() != '\\')
                             filename.Append('\\');

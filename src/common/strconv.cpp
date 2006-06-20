@@ -19,6 +19,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/hashmap.h"
 #endif
 
 #include "wx/strconv.h"
@@ -3073,7 +3074,6 @@ void wxCSConv::SetName(const wxChar *charset)
 }
 
 #if wxUSE_FONTMAP
-#include "wx/hashmap.h"
 
 WX_DECLARE_HASH_MAP( wxFontEncoding, wxString, wxIntegerHash, wxIntegerEqual,
                      wxEncodingNameCache );

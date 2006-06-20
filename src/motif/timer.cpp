@@ -16,9 +16,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/hashmap.h"
 #endif
-
-#include "wx/hashmap.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint

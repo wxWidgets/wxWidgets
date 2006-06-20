@@ -33,9 +33,8 @@
     #endif
     #include "wx/intl.h"
     #include "wx/arrstr.h"
+    #include "wx/hashmap.h"
 #endif // WX_PRECOMP
-
-#include "wx/hashmap.h"
 
 #include <VFSMgr.h>
 #include <PalmTypesCompatibility.h>

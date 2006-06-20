@@ -27,9 +27,8 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/hashmap.h"
 #endif
-
-#include "wx/hashmap.h"
 
 #include "wx/palmos/private.h"
 

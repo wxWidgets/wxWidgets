@@ -103,13 +103,13 @@ license is as follows:
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/hashmap.h"
     #if wxUSE_STREAMS
         #include "wx/stream.h"
     #endif
 #endif
 
 #include "wx/image.h"
-#include "wx/hashmap.h"
 #include <string.h>
 
 #include <ctype.h>
