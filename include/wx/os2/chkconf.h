@@ -38,6 +38,11 @@
 #   define wxUSE_POSTSCRIPT 1
 #endif
 
+#if wxUSE_MS_HTML_HELP
+#   undef wxUSE_MS_HTML_HELP
+#   define wxUSE_MS_HTML_HELP 0
+#endif
+
 #endif /* __WATCOM__ */
 
 #endif /* _WX_OS2_CHKCONF_H_ */
