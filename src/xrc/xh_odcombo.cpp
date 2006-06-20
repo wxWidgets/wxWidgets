@@ -71,8 +71,6 @@ wxObject *wxOwnerDrawnComboBoxXmlHandler::DoCreateResource()
                         wxDefaultValidator,
                         GetName());
 
-        control->SetPopupControl(NULL);
-
         wxSize ButtonSize=GetSize(wxT("buttonsize"));
 
         if (ButtonSize != wxDefaultSize)
