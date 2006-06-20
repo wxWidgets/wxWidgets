@@ -89,6 +89,11 @@
 #   define wxUSE_FS_INET 0
 #endif /* wxUSE_FS_INET */
 
+#if wxUSE_MS_HTML_HELP
+#   undef wxUSE_MS_HTML_HELP
+#   define wxUSE_MS_HTML_HELP 0
+#endif
+
 #endif /* __WATCOM__ */
 
 #endif /* _WX_MGL_CHKCONF_H_ */
