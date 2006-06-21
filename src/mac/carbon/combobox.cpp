@@ -18,9 +18,9 @@
 #ifndef WX_PRECOMP
     #include "wx/button.h"
     #include "wx/menu.h"
+    #include "wx/containr.h"
 #endif
 
-#include "wx/containr.h"
 #include "wx/mac/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
@@ -165,7 +165,7 @@ BEGIN_EVENT_TABLE(wxComboBoxText, wxTextCtrl)
     EVT_KEY_DOWN(wxComboBoxText::OnKeyDown)
     EVT_CHAR(wxComboBoxText::OnChar)
     EVT_KEY_UP(wxComboBoxText::OnKeyUp)
-    EVT_TEXT(-1, wxComboBoxText::OnText)
+    EVT_TEXT(wxID_ANY, wxComboBoxText::OnText)
 END_EVENT_TABLE()
 
 class wxComboBoxChoice : public wxChoice
@@ -228,7 +228,7 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxComboBoxChoice, wxChoice)
-    EVT_CHOICE(-1, wxComboBoxChoice::OnChoice)
+    EVT_CHOICE(wxID_ANY, wxComboBoxChoice::OnChoice)
 END_EVENT_TABLE()
 
 wxComboBox::~wxComboBox()
@@ -676,4 +676,4 @@ wxInt32 wxComboBox::MacControlHit( WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENT
     return noErr ;
 }
 
-#endif
+#endif // wxUSE_COMBOBOX

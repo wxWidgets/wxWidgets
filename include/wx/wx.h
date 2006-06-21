@@ -32,6 +32,7 @@
 #if wxUSE_GUI
 
 #include "wx/window.h"
+#include "wx/containr.h"
 #include "wx/panel.h"
 #include "wx/toplevel.h"
 #include "wx/frame.h"

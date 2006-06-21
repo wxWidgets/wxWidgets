@@ -31,9 +31,8 @@
     #include "wx/settings.h"
     #include "wx/log.h"
     #include "wx/panel.h"
+    #include "wx/containr.h"
 #endif
-
-#include "wx/containr.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros

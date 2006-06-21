@@ -12,14 +12,14 @@
 
 #if wxUSE_SPINCTRL
 
-#include "wx/spinbutt.h"
+#include "wx/spinctrl.h"
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
+    #include "wx/containr.h"
 #endif
 
-#include "wx/spinctrl.h"
-#include "wx/containr.h"
+#include "wx/spinbutt.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -39,7 +39,7 @@ class wxSpinCtrlText : public wxTextCtrl
 {
 public:
     wxSpinCtrlText(wxSpinCtrl *spin, const wxString& value)
-        : wxTextCtrl(spin , -1, value, wxDefaultPosition, wxSize(40, -1))
+        : wxTextCtrl(spin , wxID_ANY, value, wxDefaultPosition, wxSize(40, wxDefaultCoord))
     {
         m_spin = spin;
 
@@ -92,7 +92,7 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxSpinCtrlText, wxTextCtrl)
-    EVT_TEXT(-1, wxSpinCtrlText::OnTextChange)
+    EVT_TEXT(wxID_ANY, wxSpinCtrlText::OnTextChange)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -137,7 +137,7 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxSpinCtrlButton, wxSpinButton)
-    EVT_SPIN(-1, wxSpinCtrlButton::OnSpinButton)
+    EVT_SPIN(wxID_ANY, wxSpinCtrlButton::OnSpinButton)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
@@ -179,7 +179,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     if ( !wxControl::Create(parent, id, pos, size, style,
                             wxDefaultValidator, name) )
     {
-        return FALSE;
+        return false;
     }
 
     // the string value overrides the numeric one (for backwards compatibility
@@ -200,11 +200,11 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     m_btn->SetRange(min, max);
     m_btn->SetValue(initial);
 
-    if ( size.x == -1 ){
+    if ( size.x == wxDefaultCoord ){
         csize.x = m_text->GetSize().x + MARGIN + m_btn->GetSize().x ;
     }
 
-    if ( size.y == -1 ) {
+    if ( size.y == wxDefaultCoord ) {
         csize.y = m_text->GetSize().y + 2 * TEXTBORDER ; //allow for text border highlights
         if ( m_btn->GetSize().y > csize.y )
             csize.y = m_btn->GetSize().y ;
@@ -295,13 +295,13 @@ bool wxSpinCtrl::GetTextValue(int *val) const
     if ( !m_text->GetValue().ToLong(&l) )
     {
         // not a number at all
-        return FALSE;
+        return false;
     }
 
     if ( l < GetMin() || l > GetMax() )
     {
         // out of range
-        return FALSE;
+        return false;
     }
 
     *val = l;
