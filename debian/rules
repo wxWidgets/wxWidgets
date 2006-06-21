@@ -72,7 +72,7 @@ alt_prio  := $(subst .,,$(release))
 
 pytoolkit := gtk2
 pydir     := usr/lib/$(python_ver)/site-packages
-wxpydir   := $(pydir)/wx-$(release)-$(pytoolkit)-unicode
+wxpydir   := $(pydir)/wx-$(release)-$(pytoolkit)
 
 cross_host  := i586-mingw32msvc
 cross_build := $(shell ./config.guess)
@@ -80,6 +80,44 @@ cross_build := $(shell ./config.guess)
 config_cache       = ../config_deb.cache
 config_cache_cross = ../config_deb_cross.cache
 
+
+# build options
+COMMON_CONFIGURE_OPTIONS = \
+    --prefix=/usr \
+    --cache-file=$(config_cache) \
+    --with-flavour=$(DEBIAN_WXFLAVOUR) \
+    --enable-debug \
+    --with-zlib=sys \
+    --disable-reserved_virtual \
+
+BASE_CONFIGURE_OPTIONS = $(COMMON_CONFIGURE_OPTIONS) \
+    --disable-gui \
+
+GTK_CONFIGURE_OPTIONS = $(COMMON_CONFIGURE_OPTIONS) \
+    --with-gtk \
+    --with-gnomeprint \
+    --with-libjpeg=sys \
+    --with-libpng=sys \
+    --with-libtiff=sys \
+
+
+PY_WX_CONFIG_OPTIONS = --version=$(release) --toolkit=$(pytoolkit) --static=no
+
+WX_UNICODE := 1
+WX_OPENGL := 1
+
+ifeq ($(WX_UNICODE),1)
+    COMMON_CONFIGURE_OPTIONS += --enable-unicode
+    PY_WX_CONFIG_OPTIONS += --unicode
+    PY_UNICODE="UNICODE=1"
+    wxpydir += "-unicode"
+endif
+
+ifeq ($(WX_OPENGL),1)
+    GTK_CONFIGURE_OPTIONS += --with-opengl
+else
+    GTK_CONFIGURE_OPTIONS += --without-opengl
+endif
 
 # Packages to build:
 package_wxbase_lib      := libwxbase$(sorelease)
@@ -198,10 +236,8 @@ wxconfig     := $(shell pwd)/$(objdir_gtk_shared)/wx-config --no_rpath
 wxconfig-dbg := $(shell pwd)/$(objdir_gtk_debug)/wx-config --no_rpath
 
 # and this after it is installed.
-py_wxconfig  := wx-config --version=$(release) --toolkit=$(pytoolkit)     \
-			  --unicode --debug=no --static=no
-pyd_wxconfig := wx-config --version=$(release) --toolkit=$(pytoolkit)     \
-			  --unicode --debug --static=no
+py_wxconfig  := wx-config $(PY_WX_CONFIG_OPTIONS) --debug=no
+pyd_wxconfig := wx-config $(PY_WX_CONFIG_OPTIONS) --debug
 
 
 #contrib_libs := $(subst CVS,,$(notdir $(wildcard contrib/include/wx/*)))
@@ -321,14 +357,8 @@ build: build_arch
 configure-wxbase-shared-stamp:
 	dh_testdir
 	mkdir -p $(objdir_wxbase_shared)
-	cd $(objdir_wxbase_shared) 					\
-		&& ../configure --prefix=/usr 				\
-				--cache-file=$(config_cache) 		\
-				--with-flavour=$(DEBIAN_WXFLAVOUR)	\
-				--disable-gui 				\
-				--with-zlib=sys				\
-				--enable-unicode			\
-				--disable-reserved_virtual
+	cd $(objdir_wxbase_shared) \
+	    && ../configure $(BASE_CONFIGURE_OPTIONS)
 	touch $@
 
 build-wxbase-shared-stamp: configure-wxbase-shared-stamp
@@ -341,14 +371,7 @@ configure-wxbase-debug-stamp:
 	dh_testdir
 	mkdir -p $(objdir_wxbase_debug)
 	cd $(objdir_wxbase_debug) 					\
-		&& ../configure --prefix=/usr 				\
-				--cache-file=$(config_cache) 		\
-				--with-flavour=$(DEBIAN_WXFLAVOUR)	\
-				--disable-gui 				\
-				--enable-debug 				\
-				--with-zlib=sys				\
-				--enable-unicode			\
-				--disable-reserved_virtual
+	    && ../configure $(BASE_CONFIGURE_OPTIONS) --enable-debug
 	touch $@
 
 build-wxbase-debug-stamp: configure-wxbase-debug-stamp
@@ -361,18 +384,7 @@ configure-gtk-shared-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_shared)
 	cd $(objdir_gtk_shared) \
-		&& ../configure --prefix=/usr				\
-				--cache-file=$(config_cache)		\
-				--with-flavour=$(DEBIAN_WXFLAVOUR)	\
-				--with-gtk				\
-				--with-opengl				\
-				--with-gnomeprint			\
-				--with-zlib=sys				\
-				--with-libjpeg=sys			\
-				--with-libpng=sys			\
-				--with-libtiff=sys			\
-				--enable-unicode			\
-				--disable-reserved_virtual
+	    && ../configure $(GTK_CONFIGURE_OPTIONS)
 	touch $@
 
 build-gtk-shared-stamp: configure-gtk-shared-stamp
@@ -385,19 +397,7 @@ configure-gtk-debug-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_debug)
 	cd $(objdir_gtk_debug) \
-		&& ../configure --prefix=/usr				\
-				--cache-file=$(config_cache)		\
-				--with-flavour=$(DEBIAN_WXFLAVOUR)	\
-				--with-gtk				\
-				--with-opengl				\
-				--with-gnomeprint			\
-				--with-zlib=sys				\
-				--with-libjpeg=sys			\
-				--with-libpng=sys			\
-				--with-libtiff=sys			\
-				--enable-debug				\
-				--enable-unicode			\
-				--disable-reserved_virtual
+	    && ../configure $(GTK_CONFIGURE_OPTIONS) --enable-debug
 	touch $@
 
 build-gtk-debug-stamp: configure-gtk-debug-stamp
@@ -432,7 +432,7 @@ build-gtk-py-stamp: build-gtk-shared-stamp purge-dbg-py
 		&& $(python_ver) ./setup.py 	build			\
 						WX_CONFIG='$(wxconfig)'	\
 						WXPORT=$(pytoolkit)	\
-						UNICODE=1		\
+						$(PY_UNICODE)		\
 					    	FLAVOUR=$(DEBIAN_WXFLAVOUR)
 	touch $@
 
@@ -504,7 +504,7 @@ build-gtk-dbg-py-stamp: build-gtk-debug-stamp purge-release-py
 		&& $(python_ver) ./setup.py build			\
 					    WX_CONFIG='$(wxconfig-dbg)' \
 					    WXPORT=$(pytoolkit)		\
-					    UNICODE=1			\
+					    $(PY_UNICODE)		\
 					    FLAVOUR=$(addsuffix -,$(DEBIAN_WXFLAVOUR))dbg
 	touch $@
 
@@ -684,7 +684,7 @@ install-gtk-py-lib: build-gtk-py-stamp
 			      WX_CONFIG='$(wxconfig)'				\
 			      SYS_WX_CONFIG='$(py_wxconfig)'			\
 			      WXPORT=$(pytoolkit)				\
-			      UNICODE=1						\
+			      $(PY_UNICODE)					\
 			      FLAVOUR=$(DEBIAN_WXFLAVOUR)
 
 	mv debian/$(package_gtk_py_lib)/$(pydir)/wx.pth 			\
@@ -815,7 +815,7 @@ install-gtk-dbg-py: build-gtk-dbg-py-stamp
 			      WX_CONFIG='$(wxconfig-dbg)'			\
 			      SYS_WX_CONFIG='$(pyd_wxconfig)'			\
 			      WXPORT=$(pytoolkit)				\
-			      UNICODE=1						\
+			      $(PY_UNICODE)					\
 			      FLAVOUR=$(addsuffix -,$(DEBIAN_WXFLAVOUR))dbg
 
 	mv debian/$(package_gtk_py_lib)/$(pydir)/wx.pth 			\
