@@ -16,6 +16,8 @@
     #pragma hdrstop
 #endif
 
+#include "wx/gdiobj.h"
+
 #ifndef WX_PRECOMP
     #include <stdio.h>
     #include "wx/list.h"
@@ -23,7 +25,6 @@
     #include "wx/app.h"
 #endif
 
-#include "wx/gdiobj.h"
 #include "wx/msw/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
