@@ -178,7 +178,7 @@ public:     // overrideable
 
     virtual long GetDialogStyle() const
     {
-        long dirdlgstyle = 0;
+        long dirdlgstyle = wxDD_DEFAULT_STYLE;
 
         if (this->HasFlag(wxDIRP_DIR_MUST_EXIST))
             dirdlgstyle |= wxDD_DIR_MUST_EXIST;
