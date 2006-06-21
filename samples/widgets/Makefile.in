@@ -56,7 +56,10 @@ WIDGETS_OBJECTS =  \
 	widgets_hyperlnk.o \
 	widgets_listbox.o \
 	widgets_notebook.o \
-	widgets_picker.o \
+	widgets_clrpicker.o \
+	widgets_fontpicker.o \
+	widgets_filepicker.o \
+	widgets_dirpicker.o \
 	widgets_radiobox.o \
 	widgets_slider.o \
 	widgets_spinbtn.o \
@@ -230,8 +233,17 @@ widgets_listbox.o: $(srcdir)/listbox.cpp
 widgets_notebook.o: $(srcdir)/notebook.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/notebook.cpp
 
-widgets_picker.o: $(srcdir)/picker.cpp
-	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/picker.cpp
+widgets_clrpicker.o: $(srcdir)/clrpicker.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/clrpicker.cpp
+
+widgets_fontpicker.o: $(srcdir)/fontpicker.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/fontpicker.cpp
+
+widgets_filepicker.o: $(srcdir)/filepicker.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/filepicker.cpp
+
+widgets_dirpicker.o: $(srcdir)/dirpicker.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/dirpicker.cpp
 
 widgets_radiobox.o: $(srcdir)/radiobox.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/radiobox.cpp

@@ -13,7 +13,10 @@
             hyperlnk.cpp
             listbox.cpp
             notebook.cpp
-            picker.cpp
+            clrpicker.cpp
+            fontpicker.cpp
+            filepicker.cpp
+            dirpicker.cpp
             radiobox.cpp
             slider.cpp
             spinbtn.cpp

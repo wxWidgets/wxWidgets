@@ -138,6 +138,11 @@ __EXCEPTIONSFLAG_8 =
 !ifeq USE_EXCEPTIONS 1
 __EXCEPTIONSFLAG_8 = -xs
 !endif
+__WXLIB_XML_p =
+!ifeq MONOLITHIC 0
+__WXLIB_XML_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
+!endif
 __WXLIB_ADV_p =
 !ifeq MONOLITHIC 0
 __WXLIB_ADV_p = &
@@ -232,7 +237,10 @@ WIDGETS_OBJECTS =  &
 	$(OBJS)\widgets_hyperlnk.obj &
 	$(OBJS)\widgets_listbox.obj &
 	$(OBJS)\widgets_notebook.obj &
-	$(OBJS)\widgets_picker.obj &
+	$(OBJS)\widgets_clrpicker.obj &
+	$(OBJS)\widgets_fontpicker.obj &
+	$(OBJS)\widgets_filepicker.obj &
+	$(OBJS)\widgets_dirpicker.obj &
 	$(OBJS)\widgets_radiobox.obj &
 	$(OBJS)\widgets_slider.obj &
 	$(OBJS)\widgets_spinbtn.obj &
@@ -265,7 +273,7 @@ $(OBJS)\widgets.exe :  $(WIDGETS_OBJECTS) $(OBJS)\widgets_sample.res
 	@%append $(OBJS)\widgets.lbc option caseexact
 	@%append $(OBJS)\widgets.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(WIDGETS_OBJECTS)) do @%append $(OBJS)\widgets.lbc file %i
-	@for %i in ( $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\widgets.lbc library %i
+	@for %i in ( $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\widgets.lbc library %i
 	@%append $(OBJS)\widgets.lbc option resource=$(OBJS)\widgets_sample.res
 	@for %i in () do @%append $(OBJS)\widgets.lbc option stack=%i
 	wlink @$(OBJS)\widgets.lbc
@@ -294,7 +302,16 @@ $(OBJS)\widgets_listbox.obj :  .AUTODEPEND .\listbox.cpp
 $(OBJS)\widgets_notebook.obj :  .AUTODEPEND .\notebook.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
-$(OBJS)\widgets_picker.obj :  .AUTODEPEND .\picker.cpp
+$(OBJS)\widgets_clrpicker.obj :  .AUTODEPEND .\clrpicker.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_fontpicker.obj :  .AUTODEPEND .\fontpicker.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_filepicker.obj :  .AUTODEPEND .\filepicker.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_dirpicker.obj :  .AUTODEPEND .\dirpicker.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_radiobox.obj :  .AUTODEPEND .\radiobox.cpp
