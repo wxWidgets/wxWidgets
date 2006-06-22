@@ -592,6 +592,11 @@ wxSize wxBitmapButton::DoGetBestSize() const
 {
     if ( m_bmpNormal.Ok() )
     {
+        int width = m_bmpNormal.GetWidth(),
+            height = m_bmpNormal.GetHeight();
+        int marginH = 0,
+            marginV = 0;
+
 #if wxUSE_UXTHEME
         if ( wxUxThemeEngine::GetIfActive() )
         {
@@ -605,17 +610,30 @@ wxSize wxBitmapButton::DoGetBestSize() const
 
             // XP doesn't draw themed buttons correctly when the client area is
             // smaller than 8x8 - enforce this minimum size for small bitmaps
-            wxSize best(wxMax(8, m_bmpNormal.GetWidth()) +
-                            margins.cxLeftWidth + margins.cxRightWidth + 2,
-                        wxMax(8, m_bmpNormal.GetHeight()) +
-                            margins.cyTopHeight + margins.cyBottomHeight + 2);
-            CacheBestSize(best);
-            return best;
-        }
-#endif // wxUSE_UXTHEME
+            if ( width < 8 )
+                width = 8;
+            if ( height < 8 )
+                height = 8;
 
-        wxSize best(m_bmpNormal.GetWidth() + 2*m_marginX,
-                      m_bmpNormal.GetHeight() + 2*m_marginY);
+            // don't add margins for the borderless buttons, they don't need
+            // them and it just makes them appear larger than needed
+            if ( !HasFlag(wxBORDER_NONE) )
+            {
+                marginH = margins.cxLeftWidth + margins.cxRightWidth;
+                marginV = margins.cyTopHeight + margins.cyBottomHeight;
+            }
+        }
+        else
+#endif // wxUSE_UXTHEME
+        {
+            if ( !HasFlag(wxBORDER_NONE) )
+            {
+                marginH = 2*m_marginX;
+                marginV = 2*m_marginY;
+            }
+        }
+
+        wxSize best(width + marginH, height + marginV);
         CacheBestSize(best);
         return best;
     }
