@@ -5558,16 +5558,55 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
     WXWORD vk;
     switch ( wxk )
     {
-        case WXK_PAGEUP:    vk = VK_PRIOR; break;
-        case WXK_PAGEDOWN:  vk = VK_NEXT; break;
-        case WXK_END:       vk = VK_END; break;
-        case WXK_HOME :     vk = VK_HOME; break;
-        case WXK_LEFT :     vk = VK_LEFT; break;
-        case WXK_UP:        vk = VK_UP; break;
-        case WXK_RIGHT:     vk = VK_RIGHT; break;
-        case WXK_DOWN :     vk = VK_DOWN; break;
-        case WXK_INSERT:    vk = VK_INSERT; break;
-        case WXK_DELETE:    vk = VK_DELETE; break;
+        case WXK_PAGEUP:
+        case WXK_NUMPAD_PAGEUP:
+            vk = VK_PRIOR;
+            break;
+
+        case WXK_PAGEDOWN:
+        case WXK_NUMPAD_PAGEDOWN:
+            vk = VK_NEXT;
+            break;
+
+        case WXK_END:
+        case WXK_NUMPAD_END:
+            vk = VK_END;
+            break;
+
+        case WXK_HOME:
+        case WXK_NUMPAD_HOME:
+            vk = VK_HOME;
+            break;
+
+        case WXK_LEFT:
+        case WXK_NUMPAD_LEFT:
+            vk = VK_LEFT;
+            break;
+
+        case WXK_UP:
+        case WXK_NUMPAD_UP:
+            vk = VK_UP;
+            break;
+
+        case WXK_RIGHT:
+        case WXK_NUMPAD_RIGHT:
+            vk = VK_RIGHT;
+            break;
+
+        case WXK_DOWN:
+        case WXK_NUMPAD_DOWN:
+            vk = VK_DOWN;
+            break;
+
+        case WXK_INSERT:
+        case WXK_NUMPAD_INSERT:
+            vk = VK_INSERT;
+            break;
+
+        case WXK_DELETE:
+        case WXK_NUMPAD_DELETE:
+            vk = VK_DELETE;
+            break;
 
         default:
             if ( isVirtual )
