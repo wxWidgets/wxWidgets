@@ -5406,7 +5406,8 @@ static const struct wxKeyMapping
     { VK_SELECT,        WXK_SELECT },
     { VK_PRINT,         WXK_PRINT },
     { VK_EXECUTE,       WXK_EXECUTE },
-    { VK_HELP ,         WXK_HELP },
+    { VK_SNAPSHOT,      WXK_SNAPSHOT },
+    { VK_HELP,          WXK_HELP },
 
     { VK_NUMPAD0,       WXK_NUMPAD0 },
     { VK_NUMPAD1,       WXK_NUMPAD1 },
