@@ -981,47 +981,94 @@ static inline bool WHITESPACE(wxChar c)
     return c == _T(' ') || c == _T('\n') || c == _T('\r') || c == _T('\t');
 }
 
+// replace continuous spaces by one single space
+static inline wxString CompressSpaces(const wxString & str)
+{
+    wxString buf;
+    buf.reserve( str.size() );
+
+    bool space_counted = false;
+    for( const wxChar * pstr = str.c_str(); *pstr; ++pstr )
+    {
+        wxChar ch = *pstr;
+        if( WHITESPACE( ch ) )
+        {
+            if( space_counted )
+            {
+                continue;
+            }
+            ch = _T(' ');
+            space_counted = true;
+        }
+        else
+        {
+            space_counted = false;
+        }
+        buf += ch;
+    }
+
+    return buf;
+}
+
 bool wxHtmlSearchEngine::Scan(const wxFSFile& file)
 {
     wxASSERT_MSG(!m_Keyword.empty(), wxT("wxHtmlSearchEngine::LookFor must be called before scanning!"));
 
-    int i, j;
-    int wrd = m_Keyword.length();
-    bool found = false;
     wxHtmlFilterHTML filter;
-    wxString tmp = filter.ReadFile(file);
-    int lng = tmp.length();
-    const wxChar *buf = tmp.c_str();
+    wxString bufStr = filter.ReadFile(file);
 
     if (!m_CaseSensitive)
-        tmp.LowerCase();
+        bufStr.LowerCase();
 
-    const wxChar *kwd = m_Keyword.c_str();
+    {   // remove html tags
+        wxString bufStrCopy;
+        bufStrCopy.reserve( bufStr.size() );
+        bool insideTag = false;
+        for (const wxChar * pBufStr = bufStr.c_str(); *pBufStr; ++pBufStr)
+        {
+            wxChar c = *pBufStr;
+            if (insideTag)
+            {
+                if (c == _T('>'))
+                {
+                    insideTag = false;
+                    // replace the tag by an empty space
+                    c = _T(' ');
+                }
+                else
+                    continue;
+            }
+            else if (c == _T('<'))
+            {
+                wxChar nextCh = *(pBufStr + 1);
+                if (nextCh == _T('/') || !WHITESPACE(nextCh))
+                {
+                    insideTag = true;
+                    continue;
+                }
+            }
+            bufStrCopy += c;
+        }
+        bufStr.swap( bufStrCopy );
+    }
+
+    wxString keyword = m_Keyword;
 
     if (m_WholeWords)
     {
-        for (i = 0; i < lng - wrd; i++)
-        {
-            if (WHITESPACE(buf[i])) continue;
-            j = 0;
-            while ((j < wrd) && (buf[i + j] == kwd[j])) j++;
-            if (j == wrd && WHITESPACE(buf[i + j])) { found = true; break; }
-        }
+        // insert ' ' at the beginning and at the end
+        keyword.insert( 0, _T(" ") );
+        keyword.append( _T(" ") );
+        bufStr.insert( 0, _T(" ") );
+        bufStr.append( _T(" ") );
     }
 
-    else
-    {
-        for (i = 0; i < lng - wrd; i++)
-        {
-            j = 0;
-            while ((j < wrd) && (buf[i + j] == kwd[j])) j++;
-            if (j == wrd) { found = true; break; }
-        }
-    }
+    // remove continuous spaces
+    keyword = CompressSpaces( keyword );
+    bufStr = CompressSpaces( bufStr );
 
-    return found;
+    // finally do the search
+    return bufStr.find( keyword ) != wxString::npos;
 }
-
-
 
 #endif
