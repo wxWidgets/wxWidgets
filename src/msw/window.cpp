@@ -5381,244 +5381,237 @@ int ChooseNormalOrExtended(int lParam, int keyNormal, int keyExtended)
     return !lParam || (lParam & (1 << 24)) ? keyExtended : keyNormal;
 }
 
-// Returns 0 if was a normal ASCII value, not a special key. This indicates that
-// the key should be ignored by WM_KEYDOWN and processed by WM_CHAR instead.
-int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam)
+// this array contains the Windows virtual key codes which map one to one to
+// WXK_xxx constants and is used in wxCharCodeMSWToWX/WXToMSW() below
+//
+// note that keys having a normal and numpad version (e.g. WXK_HOME and
+// WXK_NUMPAD_HOME) are not included in this table as the mapping is not 1-to-1
+static const struct wxKeyMapping
 {
-    int id;
-    switch (keySym)
-    {
-        case VK_CANCEL:     id = WXK_CANCEL; break;
-        case VK_BACK:       id = WXK_BACK; break;
-        case VK_TAB:        id = WXK_TAB; break;
-        case VK_CLEAR:      id = WXK_CLEAR; break;
-        case VK_SHIFT:      id = WXK_SHIFT; break;
-        case VK_CONTROL:    id = WXK_CONTROL; break;
-        case VK_MENU :      id = WXK_ALT; break;
-        case VK_PAUSE:      id = WXK_PAUSE; break;
-        case VK_CAPITAL:    id = WXK_CAPITAL; break;
-        case VK_SPACE:      id = WXK_SPACE; break;
-        case VK_ESCAPE:     id = WXK_ESCAPE; break;
-        case VK_SELECT:     id = WXK_SELECT; break;
-        case VK_PRINT:      id = WXK_PRINT; break;
-        case VK_EXECUTE:    id = WXK_EXECUTE; break;
-        case VK_HELP :      id = WXK_HELP; break;
-        case VK_NUMPAD0:    id = WXK_NUMPAD0; break;
-        case VK_NUMPAD1:    id = WXK_NUMPAD1; break;
-        case VK_NUMPAD2:    id = WXK_NUMPAD2; break;
-        case VK_NUMPAD3:    id = WXK_NUMPAD3; break;
-        case VK_NUMPAD4:    id = WXK_NUMPAD4; break;
-        case VK_NUMPAD5:    id = WXK_NUMPAD5; break;
-        case VK_NUMPAD6:    id = WXK_NUMPAD6; break;
-        case VK_NUMPAD7:    id = WXK_NUMPAD7; break;
-        case VK_NUMPAD8:    id = WXK_NUMPAD8; break;
-        case VK_NUMPAD9:    id = WXK_NUMPAD9; break;
-        case VK_MULTIPLY:   id = WXK_NUMPAD_MULTIPLY; break;
-        case VK_ADD:        id = WXK_NUMPAD_ADD; break;
-        case VK_SUBTRACT:   id = WXK_NUMPAD_SUBTRACT; break;
-        case VK_DECIMAL:    id = WXK_NUMPAD_DECIMAL; break;
-        case VK_DIVIDE:     id = WXK_NUMPAD_DIVIDE; break;
-        case VK_F1:         id = WXK_F1; break;
-        case VK_F2:         id = WXK_F2; break;
-        case VK_F3:         id = WXK_F3; break;
-        case VK_F4:         id = WXK_F4; break;
-        case VK_F5:         id = WXK_F5; break;
-        case VK_F6:         id = WXK_F6; break;
-        case VK_F7:         id = WXK_F7; break;
-        case VK_F8:         id = WXK_F8; break;
-        case VK_F9:         id = WXK_F9; break;
-        case VK_F10:        id = WXK_F10; break;
-        case VK_F11:        id = WXK_F11; break;
-        case VK_F12:        id = WXK_F12; break;
-        case VK_F13:        id = WXK_F13; break;
-        case VK_F14:        id = WXK_F14; break;
-        case VK_F15:        id = WXK_F15; break;
-        case VK_F16:        id = WXK_F16; break;
-        case VK_F17:        id = WXK_F17; break;
-        case VK_F18:        id = WXK_F18; break;
-        case VK_F19:        id = WXK_F19; break;
-        case VK_F20:        id = WXK_F20; break;
-        case VK_F21:        id = WXK_F21; break;
-        case VK_F22:        id = WXK_F22; break;
-        case VK_F23:        id = WXK_F23; break;
-        case VK_F24:        id = WXK_F24; break;
-        case VK_NUMLOCK:    id = WXK_NUMLOCK; break;
-        case VK_SCROLL:     id = WXK_SCROLL; break;
+    int vk;
+    wxKeyCode wxk;
+} gs_specialKeys[] =
+{
+    { VK_CANCEL,        WXK_CANCEL },
+    { VK_BACK,          WXK_BACK },
+    { VK_TAB,           WXK_TAB },
+    { VK_CLEAR,         WXK_CLEAR },
+    { VK_SHIFT,         WXK_SHIFT },
+    { VK_CONTROL,       WXK_CONTROL },
+    { VK_MENU ,         WXK_ALT },
+    { VK_PAUSE,         WXK_PAUSE },
+    { VK_CAPITAL,       WXK_CAPITAL },
+    { VK_SPACE,         WXK_SPACE },
+    { VK_ESCAPE,        WXK_ESCAPE },
+    { VK_SELECT,        WXK_SELECT },
+    { VK_PRINT,         WXK_PRINT },
+    { VK_EXECUTE,       WXK_EXECUTE },
+    { VK_HELP ,         WXK_HELP },
 
-        // the mapping for these keys may be incorrect on non-US keyboards so
-        // maybe we shouldn't map them to ASCII values at all
-        case VK_OEM_1:      id = ';'; break;
-        case VK_OEM_PLUS:   id = '+'; break;
-        case VK_OEM_COMMA:  id = ','; break;
-        case VK_OEM_MINUS:  id = '-'; break;
-        case VK_OEM_PERIOD: id = '.'; break;
-        case VK_OEM_2:      id = '/'; break;
-        case VK_OEM_3:      id = '~'; break;
-        case VK_OEM_4:      id = '['; break;
-        case VK_OEM_5:      id = '\\'; break;
-        case VK_OEM_6:      id = ']'; break;
-        case VK_OEM_7:      id = '\''; break;
+    { VK_NUMPAD0,       WXK_NUMPAD0 },
+    { VK_NUMPAD1,       WXK_NUMPAD1 },
+    { VK_NUMPAD2,       WXK_NUMPAD2 },
+    { VK_NUMPAD3,       WXK_NUMPAD3 },
+    { VK_NUMPAD4,       WXK_NUMPAD4 },
+    { VK_NUMPAD5,       WXK_NUMPAD5 },
+    { VK_NUMPAD6,       WXK_NUMPAD6 },
+    { VK_NUMPAD7,       WXK_NUMPAD7 },
+    { VK_NUMPAD8,       WXK_NUMPAD8 },
+    { VK_NUMPAD9,       WXK_NUMPAD9 },
+    { VK_MULTIPLY,      WXK_NUMPAD_MULTIPLY },
+    { VK_ADD,           WXK_NUMPAD_ADD },
+    { VK_SUBTRACT,      WXK_NUMPAD_SUBTRACT },
+    { VK_DECIMAL,       WXK_NUMPAD_DECIMAL },
+    { VK_DIVIDE,        WXK_NUMPAD_DIVIDE },
+
+    { VK_F1,            WXK_F1 },
+    { VK_F2,            WXK_F2 },
+    { VK_F3,            WXK_F3 },
+    { VK_F4,            WXK_F4 },
+    { VK_F5,            WXK_F5 },
+    { VK_F6,            WXK_F6 },
+    { VK_F7,            WXK_F7 },
+    { VK_F8,            WXK_F8 },
+    { VK_F9,            WXK_F9 },
+    { VK_F10,           WXK_F10 },
+    { VK_F11,           WXK_F11 },
+    { VK_F12,           WXK_F12 },
+    { VK_F13,           WXK_F13 },
+    { VK_F14,           WXK_F14 },
+    { VK_F15,           WXK_F15 },
+    { VK_F16,           WXK_F16 },
+    { VK_F17,           WXK_F17 },
+    { VK_F18,           WXK_F18 },
+    { VK_F19,           WXK_F19 },
+    { VK_F20,           WXK_F20 },
+    { VK_F21,           WXK_F21 },
+    { VK_F22,           WXK_F22 },
+    { VK_F23,           WXK_F23 },
+    { VK_F24,           WXK_F24 },
+
+    { VK_NUMLOCK,       WXK_NUMLOCK },
+    { VK_SCROLL,        WXK_SCROLL },
 
 #ifdef VK_APPS
-        case VK_LWIN:       id = WXK_WINDOWS_LEFT; break;
-        case VK_RWIN:       id = WXK_WINDOWS_RIGHT; break;
-        case VK_APPS:       id = WXK_WINDOWS_MENU; break;
+    { VK_LWIN,          WXK_WINDOWS_LEFT },
+    { VK_RWIN,          WXK_WINDOWS_RIGHT },
+    { VK_APPS,          WXK_WINDOWS_MENU },
 #endif // VK_APPS defined
+};
+
+// Returns 0 if was a normal ASCII value, not a special key. This indicates that
+// the key should be ignored by WM_KEYDOWN and processed by WM_CHAR instead.
+int wxCharCodeMSWToWX(int vk, WXLPARAM lParam)
+{
+    // check the table first
+    for ( size_t n = 0; n < WXSIZEOF(gs_specialKeys); n++ )
+    {
+        if ( gs_specialKeys[n].vk == vk )
+            return gs_specialKeys[n].wxk;
+    }
+
+    // keys requiring special handling
+    int wxk;
+    switch ( vk )
+    {
+        // the mapping for these keys may be incorrect on non-US keyboards so
+        // maybe we shouldn't map them to ASCII values at all
+        case VK_OEM_1:      wxk = ';'; break;
+        case VK_OEM_PLUS:   wxk = '+'; break;
+        case VK_OEM_COMMA:  wxk = ','; break;
+        case VK_OEM_MINUS:  wxk = '-'; break;
+        case VK_OEM_PERIOD: wxk = '.'; break;
+        case VK_OEM_2:      wxk = '/'; break;
+        case VK_OEM_3:      wxk = '~'; break;
+        case VK_OEM_4:      wxk = '['; break;
+        case VK_OEM_5:      wxk = '\\'; break;
+        case VK_OEM_6:      wxk = ']'; break;
+        case VK_OEM_7:      wxk = '\''; break;
 
         // handle extended keys
         case VK_PRIOR:
-            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_PAGEUP, WXK_PAGEUP);
+            wxk = ChooseNormalOrExtended(lParam, WXK_NUMPAD_PAGEUP, WXK_PAGEUP);
             break;
+
         case VK_NEXT:
-            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_PAGEDOWN, WXK_PAGEDOWN);
+            wxk = ChooseNormalOrExtended(lParam, WXK_NUMPAD_PAGEDOWN, WXK_PAGEDOWN);
             break;
+
         case VK_END:
-            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_END, WXK_END);
+            wxk = ChooseNormalOrExtended(lParam, WXK_NUMPAD_END, WXK_END);
             break;
+
         case VK_HOME:
-            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_HOME, WXK_HOME);
+            wxk = ChooseNormalOrExtended(lParam, WXK_NUMPAD_HOME, WXK_HOME);
             break;
+
         case VK_LEFT:
-            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_LEFT, WXK_LEFT);
+            wxk = ChooseNormalOrExtended(lParam, WXK_NUMPAD_LEFT, WXK_LEFT);
             break;
+
         case VK_UP:
-            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_UP, WXK_UP);
+            wxk = ChooseNormalOrExtended(lParam, WXK_NUMPAD_UP, WXK_UP);
             break;
+
         case VK_RIGHT:
-            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_RIGHT, WXK_RIGHT);
+            wxk = ChooseNormalOrExtended(lParam, WXK_NUMPAD_RIGHT, WXK_RIGHT);
             break;
+
         case VK_DOWN:
-            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_DOWN, WXK_DOWN);
+            wxk = ChooseNormalOrExtended(lParam, WXK_NUMPAD_DOWN, WXK_DOWN);
             break;
+
         case VK_INSERT:
-            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_INSERT, WXK_INSERT);
+            wxk = ChooseNormalOrExtended(lParam, WXK_NUMPAD_INSERT, WXK_INSERT);
             break;
+
         case VK_DELETE:
-            id = ChooseNormalOrExtended(lParam, WXK_NUMPAD_DELETE, WXK_DELETE);
+            wxk = ChooseNormalOrExtended(lParam, WXK_NUMPAD_DELETE, WXK_DELETE);
             break;
+
         case VK_RETURN:
             // don't use ChooseNormalOrExtended() here as the keys are reversed
             // here: numpad enter is the extended one
-            id = lParam && (lParam & (1 << 24)) ? WXK_NUMPAD_ENTER : WXK_RETURN;
+            wxk = lParam && (lParam & (1 << 24)) ? WXK_NUMPAD_ENTER : WXK_RETURN;
             break;
 
         default:
-            id = 0;
+            wxk = 0;
     }
 
-    return id;
+    return wxk;
 }
 
-WXWORD wxCharCodeWXToMSW(int id, bool *isVirtual)
+WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
 {
-    *isVirtual = true;
-    WXWORD keySym;
-    switch (id)
+    if ( isVirtual )
+        *isVirtual = true;
+
+    // check the table first
+    for ( size_t n = 0; n < WXSIZEOF(gs_specialKeys); n++ )
     {
-    case WXK_CANCEL:    keySym = VK_CANCEL; break;
-    case WXK_CLEAR:     keySym = VK_CLEAR; break;
-    case WXK_SHIFT:     keySym = VK_SHIFT; break;
-    case WXK_CONTROL:   keySym = VK_CONTROL; break;
-    case WXK_ALT:       keySym = VK_MENU; break;
-    case WXK_PAUSE:     keySym = VK_PAUSE; break;
-    case WXK_CAPITAL:   keySym = VK_CAPITAL; break;
-    case WXK_PAGEUP:    keySym = VK_PRIOR; break;
-    case WXK_PAGEDOWN:  keySym = VK_NEXT; break;
-    case WXK_END:       keySym = VK_END; break;
-    case WXK_HOME :     keySym = VK_HOME; break;
-    case WXK_LEFT :     keySym = VK_LEFT; break;
-    case WXK_UP:        keySym = VK_UP; break;
-    case WXK_RIGHT:     keySym = VK_RIGHT; break;
-    case WXK_DOWN :     keySym = VK_DOWN; break;
-    case WXK_SELECT:    keySym = VK_SELECT; break;
-    case WXK_PRINT:     keySym = VK_PRINT; break;
-    case WXK_EXECUTE:   keySym = VK_EXECUTE; break;
-    case WXK_INSERT:    keySym = VK_INSERT; break;
-    case WXK_DELETE:    keySym = VK_DELETE; break;
-    case WXK_HELP :     keySym = VK_HELP; break;
-    case WXK_NUMPAD0:   keySym = VK_NUMPAD0; break;
-    case WXK_NUMPAD1:   keySym = VK_NUMPAD1; break;
-    case WXK_NUMPAD2:   keySym = VK_NUMPAD2; break;
-    case WXK_NUMPAD3:   keySym = VK_NUMPAD3; break;
-    case WXK_NUMPAD4:   keySym = VK_NUMPAD4; break;
-    case WXK_NUMPAD5:   keySym = VK_NUMPAD5; break;
-    case WXK_NUMPAD6:   keySym = VK_NUMPAD6; break;
-    case WXK_NUMPAD7:   keySym = VK_NUMPAD7; break;
-    case WXK_NUMPAD8:   keySym = VK_NUMPAD8; break;
-    case WXK_NUMPAD9:   keySym = VK_NUMPAD9; break;
-    case WXK_NUMPAD_MULTIPLY:  keySym = VK_MULTIPLY; break;
-    case WXK_NUMPAD_ADD:       keySym = VK_ADD; break;
-    case WXK_NUMPAD_SUBTRACT:  keySym = VK_SUBTRACT; break;
-    case WXK_NUMPAD_DECIMAL:   keySym = VK_DECIMAL; break;
-    case WXK_NUMPAD_DIVIDE:    keySym = VK_DIVIDE; break;
-    case WXK_F1:        keySym = VK_F1; break;
-    case WXK_F2:        keySym = VK_F2; break;
-    case WXK_F3:        keySym = VK_F3; break;
-    case WXK_F4:        keySym = VK_F4; break;
-    case WXK_F5:        keySym = VK_F5; break;
-    case WXK_F6:        keySym = VK_F6; break;
-    case WXK_F7:        keySym = VK_F7; break;
-    case WXK_F8:        keySym = VK_F8; break;
-    case WXK_F9:        keySym = VK_F9; break;
-    case WXK_F10:       keySym = VK_F10; break;
-    case WXK_F11:       keySym = VK_F11; break;
-    case WXK_F12:       keySym = VK_F12; break;
-    case WXK_F13:       keySym = VK_F13; break;
-    case WXK_F14:       keySym = VK_F14; break;
-    case WXK_F15:       keySym = VK_F15; break;
-    case WXK_F16:       keySym = VK_F16; break;
-    case WXK_F17:       keySym = VK_F17; break;
-    case WXK_F18:       keySym = VK_F18; break;
-    case WXK_F19:       keySym = VK_F19; break;
-    case WXK_F20:       keySym = VK_F20; break;
-    case WXK_F21:       keySym = VK_F21; break;
-    case WXK_F22:       keySym = VK_F22; break;
-    case WXK_F23:       keySym = VK_F23; break;
-    case WXK_F24:       keySym = VK_F24; break;
-    case WXK_NUMLOCK:   keySym = VK_NUMLOCK; break;
-    case WXK_SCROLL:    keySym = VK_SCROLL; break;
-    default:
-        {
-            *isVirtual = false;
-            keySym = (WORD)id;
-            break;
-        }
+        if ( gs_specialKeys[n].wxk == wxk )
+            return gs_specialKeys[n].vk;
     }
-    return keySym;
+
+    // and then check for special keys not included in the table
+    WXWORD vk;
+    switch ( wxk )
+    {
+        case WXK_PAGEUP:    vk = VK_PRIOR; break;
+        case WXK_PAGEDOWN:  vk = VK_NEXT; break;
+        case WXK_END:       vk = VK_END; break;
+        case WXK_HOME :     vk = VK_HOME; break;
+        case WXK_LEFT :     vk = VK_LEFT; break;
+        case WXK_UP:        vk = VK_UP; break;
+        case WXK_RIGHT:     vk = VK_RIGHT; break;
+        case WXK_DOWN :     vk = VK_DOWN; break;
+        case WXK_INSERT:    vk = VK_INSERT; break;
+        case WXK_DELETE:    vk = VK_DELETE; break;
+
+        default:
+            if ( isVirtual )
+                *isVirtual = false;
+            vk = (WXWORD)wxk;
+            break;
+    }
+
+    return vk;
+}
+
+// small helper for wxGetKeyState() and wxGetMouseState()
+static inline bool wxIsKeyDown(WXWORD vk)
+{
+    // the low order bit indicates whether the key was pressed since the last
+    // call and the high order one indicates whether it is down right now and
+    // we only want that one
+    return (::GetAsyncKeyState(vk) & (1<<15)) != 0;
 }
 
 bool wxGetKeyState(wxKeyCode key)
 {
-    bool bVirtual;
+    // although this does work under Windows, it is not supported under other
+    // platforms so don't allow it, you must use wxGetMouseState() instead
+    wxASSERT_MSG( key != VK_LBUTTON &&
+                    key != VK_RBUTTON &&
+                        key != VK_MBUTTON,
+                    wxT("can't use wxGetKeyState() for mouse buttons") );
 
-    wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
-        WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
+    const WXWORD vk = wxCharCodeWXToMSW(key);
 
-//High order with GetAsyncKeyState only available on WIN32
-#ifdef __WIN32__
-    //If the requested key is a LED key, return
-    //true if the led is pressed
-    if (key == WXK_NUMLOCK ||
-        key == WXK_CAPITAL ||
-        key == WXK_SCROLL)
+    // if the requested key is a LED key, return true if the led is pressed
+    if ( key == WXK_NUMLOCK || key == WXK_CAPITAL || key == WXK_SCROLL )
     {
-#endif
-        //low order bit means LED is highlighted,
-        //high order means key is down
-        //Here, for compat with other ports we want both
-        return GetKeyState( wxCharCodeWXToMSW(key, &bVirtual) ) != 0;
+        // low order bit means LED is highlighted and high order one means the
+        // key is down; for compatibility with the other ports return true if
+        // either one is set
+        return ::GetKeyState(vk) != 0;
 
-#ifdef __WIN32__
     }
-    else
+    else // normal key
     {
-        //normal key
-        //low order bit means key pressed since last call
-        //high order means key is down
-        //We want only the high order bit - the key may not be down if only low order
-        return ( GetAsyncKeyState( wxCharCodeWXToMSW(key, &bVirtual) ) & (1<<15) ) != 0;
+        return wxIsKeyDown(vk);
     }
-#endif
 }
 
 
@@ -5630,13 +5623,13 @@ wxMouseState wxGetMouseState()
 
     ms.SetX(pt.x);
     ms.SetY(pt.y);
-    ms.SetLeftDown( (GetAsyncKeyState(VK_LBUTTON) & (1<<15)) != 0 );
-    ms.SetMiddleDown( (GetAsyncKeyState(VK_MBUTTON) & (1<<15)) != 0 );
-    ms.SetRightDown( (GetAsyncKeyState(VK_RBUTTON) & (1<<15)) != 0 );
+    ms.SetLeftDown(wxIsKeyDown(VK_LBUTTON));
+    ms.SetMiddleDown(wxIsKeyDown(VK_MBUTTON));
+    ms.SetRightDown(wxIsKeyDown(VK_RBUTTON));
 
-    ms.SetControlDown( (GetAsyncKeyState(VK_CONTROL) & (1<<15)) != 0 );
-    ms.SetShiftDown( (GetAsyncKeyState(VK_SHIFT) & (1<<15)) != 0 );
-    ms.SetAltDown( (GetAsyncKeyState(VK_MENU) & (1<<15)) != 0 );
+    ms.SetControlDown(wxIsKeyDown(VK_CONTROL));
+    ms.SetShiftDown(wxIsKeyDown(VK_SHIFT));
+    ms.SetAltDown(wxIsKeyDown(VK_MENU));
 //    ms.SetMetaDown();
 
     return ms;
