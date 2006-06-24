@@ -619,8 +619,10 @@ wxSize wxBitmapButton::DoGetBestSize() const
             // them and it just makes them appear larger than needed
             if ( !HasFlag(wxBORDER_NONE) )
             {
-                marginH = margins.cxLeftWidth + margins.cxRightWidth;
-                marginV = margins.cyTopHeight + margins.cyBottomHeight;
+                // we need 2 extra pixels for the focus rectangle, without them
+                // it's overwritten by the bitmap itself
+                marginH = margins.cxLeftWidth + margins.cxRightWidth + 2;
+                marginV = margins.cyTopHeight + margins.cyBottomHeight + 2;
             }
         }
         else
