@@ -364,8 +364,7 @@ protected:
 
     // Returns true if the node has a property class equal to classname,
     // e.g. <object class="wxDialog">.
-    bool IsOfClass(wxXmlNode *node, const wxString& classname)
-        { return node->GetPropVal(wxT("class"), wxEmptyString) == classname; }
+    bool IsOfClass(wxXmlNode *node, const wxString& classname);
 
     // Gets node content from wxXML_ENTITY_NODE
     // The problem is, <tag>content<tag> is represented as

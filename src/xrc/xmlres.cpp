@@ -1147,6 +1147,14 @@ wxXmlNode *wxXmlResourceHandler::GetParamNode(const wxString& param)
 }
 
 
+
+bool wxXmlResourceHandler::IsOfClass(wxXmlNode *node, const wxString& classname)
+{
+    return node->GetPropVal(wxT("class"), wxEmptyString) == classname;
+}
+
+
+
 wxString wxXmlResourceHandler::GetNodeContent(wxXmlNode *node)
 {
     wxXmlNode *n = node;
