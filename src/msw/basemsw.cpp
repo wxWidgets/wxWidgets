@@ -41,9 +41,17 @@
 
 void wxConsoleAppTraits::AlwaysYield()
 {
+    // we need to use special logic to deal with WM_PAINT: as this pseudo
+    // message is generated automatically as long as there are invalidated
+    // windows belonging to this thread, we'd never return if we waited here
+    // until we have no more of them left. OTOH, this message is always the
+    // last one in the queue, so we can safely return as soon as we detect it
     MSG msg;
     while ( ::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) )
-        ;
+    {
+        if ( msg.message == WM_PAINT )
+            break;
+    }
 }
 
 void *wxConsoleAppTraits::BeforeChildWaitLoop()
