@@ -31,6 +31,7 @@
 #include "wx/toolbar.h"
 #include "wx/log.h"
 #include "wx/image.h"
+#include "wx/filedlg.h"
 
 // define this to 1 to use wxToolBarSimple instead of the native one
 #define USE_GENERIC_TBAR 0
@@ -122,6 +123,7 @@ public:
     void OnToggleRadioBtn(wxCommandEvent& event);
 
     void OnToolbarStyle(wxCommandEvent& event);
+    void OnToolbarCustomBitmap(wxCommandEvent& event);
 
     void OnToolLeftClick(wxCommandEvent& event);
     void OnToolRightClick(wxCommandEvent& event);
@@ -161,6 +163,9 @@ private:
 
     wxToolBar          *m_tbar;
 
+    // the path to the custom bitmap for the test toolbar tool
+    wxString            m_pathBmp;
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -193,6 +198,7 @@ enum
     IDM_TOOLBAR_SHOW_TEXT,
     IDM_TOOLBAR_SHOW_ICONS,
     IDM_TOOLBAR_SHOW_BOTH,
+    IDM_TOOLBAR_CUSTOM_PATH,
 
     IDM_TOOLBAR_OTHER_1,
     IDM_TOOLBAR_OTHER_2,
@@ -235,6 +241,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU_RANGE(IDM_TOOLBAR_SHOW_TEXT, IDM_TOOLBAR_SHOW_BOTH,
                    MyFrame::OnToolbarStyle)
 
+    EVT_MENU(IDM_TOOLBAR_CUSTOM_PATH, MyFrame::OnToolbarCustomBitmap)
+
     EVT_MENU(wxID_ANY, MyFrame::OnToolLeftClick)
 
     EVT_COMBOBOX(ID_COMBO, MyFrame::OnCombo)
@@ -269,18 +277,15 @@ bool MyApp::OnInit()
     // Create the main frame window
     MyFrame* frame = new MyFrame((wxFrame *) NULL, wxID_ANY,
                                  _T("wxToolBar Sample"),
-#ifdef __WXWINCE__
-                                 wxDefaultPosition, wxDefaultSize
-#else
-                                 wxPoint(100, 100), wxSize(550, 300)
-#endif
-                                 );
+                                  wxPoint(100, 100), wxSize(550, 300));
 
     frame->Show(true);
 
 #if wxUSE_STATUSBAR
     frame->SetStatusText(_T("Hello, wxWidgets"));
 #endif
+
+    wxInitAllImageHandlers();
 
     SetTopWindow(frame);
 
@@ -415,6 +420,20 @@ void MyFrame::RecreateToolbar()
     toolBar->AddSeparator();
     toolBar->AddTool(wxID_HELP, _T("Help"), toolBarBitmaps[Tool_help], _T("Help button"), wxITEM_CHECK);
 
+    if ( !m_pathBmp.empty() )
+    {
+        // create a tool with a custom bitmap for testing
+        wxImage img(m_pathBmp);
+        if ( img.Ok() )
+        {
+            if ( img.GetWidth() > w && img.GetHeight() > h )
+                img = img.GetSubImage(wxRect(0, 0, w, h));
+
+            toolBar->AddSeparator();
+            toolBar->AddTool(wxID_ANY, _T("Custom"), img);
+        }
+    }
+
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
     toolBar->Realize();
@@ -491,20 +510,22 @@ MyFrame::MyFrame(wxFrame* parent,
 
     tbarMenu->AppendSeparator();
 
-    tbarMenu->Append(IDM_TOOLBAR_ENABLEPRINT, _T("&Enable print button\tCtrl-E"), wxEmptyString);
-    tbarMenu->Append(IDM_TOOLBAR_DELETEPRINT, _T("&Delete print button\tCtrl-D"), wxEmptyString);
-    tbarMenu->Append(IDM_TOOLBAR_INSERTPRINT, _T("&Insert print button\tCtrl-I"), wxEmptyString);
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, _T("Toggle &help button\tCtrl-T"), wxEmptyString);
+    tbarMenu->Append(IDM_TOOLBAR_ENABLEPRINT, _T("&Enable print button\tCtrl-E"));
+    tbarMenu->Append(IDM_TOOLBAR_DELETEPRINT, _T("&Delete print button\tCtrl-D"));
+    tbarMenu->Append(IDM_TOOLBAR_INSERTPRINT, _T("&Insert print button\tCtrl-I"));
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, _T("Toggle &help button\tCtrl-T"));
     tbarMenu->AppendSeparator();
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN1, _T("Toggle &1st radio button\tCtrl-1"), wxEmptyString);
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN2, _T("Toggle &2nd radio button\tCtrl-2"), wxEmptyString);
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN3, _T("Toggle &3rd radio button\tCtrl-3"), wxEmptyString);
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN1, _T("Toggle &1st radio button\tCtrl-1"));
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN2, _T("Toggle &2nd radio button\tCtrl-2"));
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN3, _T("Toggle &3rd radio button\tCtrl-3"));
     tbarMenu->AppendSeparator();
-    tbarMenu->Append(IDM_TOOLBAR_CHANGE_TOOLTIP, _T("Change tool tip"), wxEmptyString);
+    tbarMenu->Append(IDM_TOOLBAR_CHANGE_TOOLTIP, _T("Change tool tip"));
     tbarMenu->AppendSeparator();
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_TEXT, _T("Show &text\tCtrl-Alt-T"));
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_ICONS, _T("Show &icons\tCtrl-Alt-I"));
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_BOTH, _T("Show &both\tCtrl-Alt-B"));
+    tbarMenu->AppendSeparator();
+    tbarMenu->Append(IDM_TOOLBAR_CUSTOM_PATH, _T("Custom &bitmap...\tCtrl-B"));
 
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append(wxID_EXIT, _T("E&xit\tAlt-X"), _T("Quit toolbar sample") );
@@ -780,6 +801,13 @@ void MyFrame::OnToolbarStyle(wxCommandEvent& event)
     }
 
     GetToolBar()->SetWindowStyle(style);
+}
+
+void MyFrame::OnToolbarCustomBitmap(wxCommandEvent& WXUNUSED(event))
+{
+    m_pathBmp = wxFileSelector(_T("Custom bitmap path"));
+
+    RecreateToolbar();
 }
 
 void MyFrame::OnInsertPrint(wxCommandEvent& WXUNUSED(event))
