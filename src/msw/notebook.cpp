@@ -603,13 +603,13 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
     }
     if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
     {
-        sizeTotal.x += tabSize.x + 7;
-        sizeTotal.y += 7;
+        sizeTotal.x += tabSize.x + 8;
+        sizeTotal.y += 8;
     }
     else
     {
-        sizeTotal.x += 7;
-        sizeTotal.y += tabSize.y + 7;
+        sizeTotal.x += 8;
+        sizeTotal.y += tabSize.y + 8;
     }
 
     return sizeTotal;
