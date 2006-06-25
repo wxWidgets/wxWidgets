@@ -57,7 +57,3 @@ contrib/utils/wxrc/*.ico
 contrib/utils/wxrc/*.bmp
 contrib/utils/wxrc/*.xpm
 
-distrib/msw/xml.rsp
-distrib/msw/zipxml.bat
-
-

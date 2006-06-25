@@ -1,7 +1,3 @@
-distrib/gtk/copy_src
-distrib/gtk/README.txt
-distrib/gtk/Setup
-
 docs/gtk/*.html
 docs/gtk/*.txt
 docs/gtk/COPYING.LIB

@@ -13,8 +13,6 @@ docs/metrowerks/mwar
 docs/metrowerks/mwpefar
 docs/metrowerks/wchar_t_panther_fix/machine/ansi.h
 
-distrib/mac/*-sh
-
 src/html/htmlctrl/webkit/*.mm
 
 samples/Info.plist

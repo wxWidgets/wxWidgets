@@ -116,7 +116,3 @@ utils/wxrc/*.xpm
 utils/wxrc/wxrc.dsp
 utils/wxrc/*.bkl
 
-distrib/msw/xml.rsp
-distrib/msw/zipxml.bat
-
-

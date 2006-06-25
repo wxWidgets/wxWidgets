@@ -96,7 +96,4 @@ contrib/samples/ogl/studio/manual/*.hlp
 contrib/samples/ogl/studio/manual/*.cnt
 contrib/samples/ogl/studio/manual/Makefile
 
-distrib/msw/ogl.rsp
-distrib/msw/zipogl.bat
-
 

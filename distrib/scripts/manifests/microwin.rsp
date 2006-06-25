@@ -44,9 +44,6 @@ samples/minimal/*.ico
 
 lib/dummy.txt
 
-distrib/msw/microwin.rsp
-distrib/msw/tarmicrowin.sh
-
 microwindows.patches
 
 docs/microwin/readme.txt
