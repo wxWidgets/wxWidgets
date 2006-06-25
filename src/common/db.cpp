@@ -1755,8 +1755,9 @@ void wxDb::Close(void)
         tiu = (wxTablesInUse *)pNode->GetData();
         if (tiu->pDb == this)
         {
-            s.Printf(wxT("(%-20s)     tableID:[%6lu]     pDb:[%p]"), tiu->tableName,tiu->tableID,tiu->pDb);
-            s2.Printf(wxT("Orphaned table found using pDb:[%p]"),this);
+            s.Printf(wxT("(%-20s)     tableID:[%6lu]     pDb:[%p]"),
+                     tiu->tableName, tiu->tableID, wx_static_cast(void*, tiu->pDb));
+            s2.Printf(wxT("Orphaned table found using pDb:[%p]"), wx_static_cast(void*, this));
             wxLogDebug(s.c_str(),s2.c_str());
         }
         pNode = pNode->GetNext();

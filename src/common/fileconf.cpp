@@ -1650,12 +1650,12 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
 
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("  (m_pLine) = prev: %p, this %p, next %p"),
-                ((m_pLine) ? m_pLine->Prev() : 0),
+                m_pLine ? m_pLine->Prev() : NULL,
                 m_pLine,
-                ((m_pLine) ? m_pLine->Next() : 0) );
+                m_pLine ? m_pLine->Next() : NULL );
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("  text: '%s'"),
-                ((m_pLine) ? m_pLine->Text().c_str() : wxEmptyString) );
+                m_pLine ? m_pLine->Text().c_str() : wxEmptyString );
 
     // delete all entries...
     size_t nCount = pGroup->m_aEntries.Count();

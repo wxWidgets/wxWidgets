@@ -186,7 +186,8 @@ bool wxDbTable::initialize(wxDb *pwxDb, const wxString &tblName, const UWORD num
 
     wxString s;
     tableID = ++lastTableID;
-    s.Printf(wxT("wxDbTable constructor (%-20s) tableID:[%6lu] pDb:[%p]"), tblName.c_str(), tableID, pDb);
+    s.Printf(wxT("wxDbTable constructor (%-20s) tableID:[%6lu] pDb:[%p]"),
+             tblName.c_str(), tableID, wx_static_cast(void*, pDb));
 
 #ifdef __WXDEBUG__
     wxTablesInUse *tableInUse;
@@ -309,7 +310,8 @@ void wxDbTable::cleanup()
     wxString s;
     if (pDb)
     {
-        s.Printf(wxT("wxDbTable destructor (%-20s) tableID:[%6lu] pDb:[%p]"), tableName.c_str(), tableID, pDb);
+        s.Printf(wxT("wxDbTable destructor (%-20s) tableID:[%6lu] pDb:[%p]"),
+                 tableName.c_str(), tableID, wx_static_cast(void*, pDb));
         pDb->WriteSqlLog(s);
     }
 
