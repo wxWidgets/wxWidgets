@@ -594,26 +594,29 @@ void wxNotebook::SetTabSize(const wxSize& sz)
 
 wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
+    // we can't use TabCtrl_AdjustRect here because it only works for wxNB_TOP
     wxSize sizeTotal = sizePage;
 
-    // We need to make getting tab size part of the wxWidgets API.
     wxSize tabSize;
-    if (GetPageCount() > 0)
+    if ( GetPageCount() > 0 )
     {
         RECT rect;
-        TabCtrl_GetItemRect((HWND) GetHWND(), 0, & rect);
+        TabCtrl_GetItemRect(GetHwnd(), 0, &rect);
         tabSize.x = rect.right - rect.left;
         tabSize.y = rect.bottom - rect.top;
     }
-    if ( HasFlag(wxBK_LEFT) || HasFlag(wxBK_RIGHT) )
+
+    // add an extra margin in both directions
+    const int MARGIN = 8;
+    if ( IsVertical() )
     {
-        sizeTotal.x += tabSize.x + 7;
-        sizeTotal.y += 7;
+        sizeTotal.x += MARGIN;
+        sizeTotal.y += tabSize.y + MARGIN;
     }
-    else
+    else // horizontal layout
     {
-        sizeTotal.x += 7;
-        sizeTotal.y += tabSize.y + 7;
+        sizeTotal.x += tabSize.x + MARGIN;
+        sizeTotal.y += MARGIN;
     }
 
     return sizeTotal;
