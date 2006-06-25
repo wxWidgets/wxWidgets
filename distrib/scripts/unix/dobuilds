@@ -4,41 +4,24 @@ HOMEDIR="$PWD"
 
 BUILDDIR_ROOT="$PWD/builds"
 
-BUILDDIR_CARBON="$BUILDDIR_ROOT/carbon"
-BUILDDIR_COCOA="$BUILDDIR_ROOT/cocoa"
+do_builds {
+    PORT=$1
+    BUILDDIR=$BUILDDIR_ROOT/$PORT
+    mkdir -p $BUILDDIR
+    cd $BUILDDIR
+    
+    export WXROOT="$HOMEDIR/../../.."
+    export INSTALLDIR="$BUILDDIR/install-ansi"
+    $HOMEDIR/unixbuild $PORT
+    
+    export INSTALLDIR="$BUILDDIR/install-unicode"
+    $HOMEDIR/unixbuild $PORT unicode
+    
+    export INSTALLDIR="$BUILDDIR/install-static-ansi"
+    $HOMEDIR/unixbuild $PORT static
+    
+    export INSTALLDIR="$BUILDDIR/install-static-unicode"
+    $HOMEDIR/unixbuild $PORT static unicode
+}
 
-mkdir -p $BUILDDIR_CARBON
-mkdir -p $BUILDDIR_COCOA
-
-cd $BUILDDIR_CARBON
-BUILDDIR=$BUILDDIR_CARBON
-
-export WXROOT="$HOMEDIR/../../.."
-export INSTALLDIR="$BUILDDIR/install-ansi"
-$HOMEDIR/macbuild
-
-export INSTALLDIR="$BUILDDIR/install-unicode"
-$HOMEDIR/macbuild unicode
-
-export INSTALLDIR="$BUILDDIR/install-static-ansi"
-$HOMEDIR/macbuild static
-
-export INSTALLDIR="$BUILDDIR/install-static-unicode"
-$HOMEDIR/macbuild static unicode
-
-cd $BUILDDIR_COCOA
-BUILDDIR=$BUILDDIR_COCOA
-
-export INSTALLDIR="$BUILDDIR/install-ansi"
-$HOMEDIR/macbuild cocoa
-
-export INSTALLDIR="$BUILDDIR/install-unicode"
-$HOMEDIR/macbuild cocoa unicode
-
-export INSTALLDIR="$BUILDDIR/install-static-ansi"
-$HOMEDIR/macbuild cocoa static
-
-export INSTALLDIR="$BUILDDIR/install-static-unicode"
-$HOMEDIR/macbuild cocoa static unicode
-
-cd $HOMEDIR
+do_builds "gtk2"
