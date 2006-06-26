@@ -108,6 +108,7 @@
 #if defined(__WXMSW__)
     #include "wx/msw/private.h"
     #include "wx/msw/registry.h"
+    #include <shellapi.h> // needed for SHELLEXECUTEINFO
 #endif
 
 #if wxUSE_BASE
