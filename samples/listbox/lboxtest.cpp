@@ -77,6 +77,7 @@ enum
     LboxTest_Delete,
     LboxTest_DeleteText,
     LboxTest_DeleteSel,
+    LboxTest_DeselectAll,
     LboxTest_Listbox,
     LboxTest_Quit
 };
@@ -113,7 +114,9 @@ protected:
     void OnButtonChange(wxCommandEvent& event);
     void OnButtonDelete(wxCommandEvent& event);
     void OnButtonDeleteSel(wxCommandEvent& event);
+    void OnButtonDeselectAll(wxCommandEvent& event);
     void OnButtonClear(wxCommandEvent& event);
+
 #if wxUSE_LOG
     void OnButtonClearLog(wxCommandEvent& event);
 #endif // wxUSE_LOG
@@ -133,6 +136,7 @@ protected:
     void OnUpdateUIClearButton(wxUpdateUIEvent& event);
     void OnUpdateUIDeleteButton(wxUpdateUIEvent& event);
     void OnUpdateUIDeleteSelButton(wxUpdateUIEvent& event);
+    void OnUpdateUIDeselectAllButton(wxUpdateUIEvent& event);
 
     // reset the listbox parameters
     void Reset();
@@ -277,6 +281,7 @@ BEGIN_EVENT_TABLE(LboxTestFrame, wxFrame)
     EVT_BUTTON(LboxTest_Change, LboxTestFrame::OnButtonChange)
     EVT_BUTTON(LboxTest_Delete, LboxTestFrame::OnButtonDelete)
     EVT_BUTTON(LboxTest_DeleteSel, LboxTestFrame::OnButtonDeleteSel)
+    EVT_BUTTON(LboxTest_DeselectAll, LboxTestFrame::OnButtonDeselectAll)
     EVT_BUTTON(LboxTest_Clear, LboxTestFrame::OnButtonClear)
 #if wxUSE_LOG
     EVT_BUTTON(LboxTest_ClearLog, LboxTestFrame::OnButtonClearLog)
@@ -299,6 +304,7 @@ BEGIN_EVENT_TABLE(LboxTestFrame, wxFrame)
     EVT_UPDATE_UI(LboxTest_Change, LboxTestFrame::OnUpdateUIDeleteSelButton)
     EVT_UPDATE_UI(LboxTest_ChangeText, LboxTestFrame::OnUpdateUIDeleteSelButton)
     EVT_UPDATE_UI(LboxTest_DeleteSel, LboxTestFrame::OnUpdateUIDeleteSelButton)
+    EVT_UPDATE_UI(LboxTest_DeselectAll, LboxTestFrame::OnUpdateUIDeselectAllButton)
 
     EVT_LISTBOX(LboxTest_Listbox, LboxTestFrame::OnListbox)
     EVT_LISTBOX_DCLICK(wxID_ANY, LboxTestFrame::OnListboxDClick)
@@ -430,6 +436,9 @@ LboxTestFrame::LboxTestFrame(const wxString& title)
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     btn = new wxButton(m_panel, LboxTest_DeleteSel, _T("Delete &selection"));
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+
+    btn = new wxButton(m_panel, LboxTest_DeselectAll, _T("Deselect All"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
     btn = new wxButton(m_panel, LboxTest_Clear, _T("&Clear"));
@@ -619,6 +628,11 @@ void LboxTestFrame::OnButtonDeleteSel(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void LboxTestFrame::OnButtonDeselectAll(wxCommandEvent& WXUNUSED(event))
+{
+    m_lbox->SetSelection(-1); 
+}
+
 void LboxTestFrame::OnButtonClear(wxCommandEvent& WXUNUSED(event))
 {
     m_lbox->Clear();
@@ -676,6 +690,12 @@ void LboxTestFrame::OnUpdateUIDeleteButton(wxUpdateUIEvent& event)
 }
 
 void LboxTestFrame::OnUpdateUIDeleteSelButton(wxUpdateUIEvent& event)
+{
+    wxArrayInt selections;
+    event.Enable(m_lbox->GetSelections(selections) != 0);
+}
+
+void LboxTestFrame::OnUpdateUIDeselectAllButton(wxUpdateUIEvent& event)
 {
     wxArrayInt selections;
     event.Enable(m_lbox->GetSelections(selections) != 0);
