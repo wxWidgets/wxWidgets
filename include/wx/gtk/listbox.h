@@ -100,6 +100,7 @@ public:
     struct _GtkTreeEntry* GtkGetEntry(int pos) const;
     void GtkInsertItems(const wxArrayString& items,
                         void** clientData, unsigned int pos);
+    void GtkDeselectAll();
     void GtkSetSelection(int n, const bool select, const bool blockEvent);
 
 protected:

@@ -944,7 +944,30 @@ bool wxListBox::IsSelected( int n ) const
 
 void wxListBox::DoSetSelection( int n, bool select )
 {
-    return GtkSetSelection(n, select, true); //docs say no events here
+    // passing -1 to SetSelection() is documented to deselect all items
+    if ( n == wxNOT_FOUND )
+    {
+        // ... and not generate any events in the process
+        GtkDeselectAll();
+    }
+
+    wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::SetSelection") );
+
+    // don't generate the selection event
+    GtkSetSelection(n, select, true);
+}
+
+void wxListBox::GtkDeselectAll()
+{
+    wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
+
+    GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
+
+    m_blockEvent = true;
+
+    gtk_tree_selection_unselect_all(selection);
+
+    m_blockEvent = false;
 }
 
 void wxListBox::GtkSetSelection(int n, const bool select, const bool blockEvent)
