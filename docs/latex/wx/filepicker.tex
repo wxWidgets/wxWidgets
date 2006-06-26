@@ -32,7 +32,9 @@ It is only available if \texttt{wxUSE\_FILEPICKERCTRL} is set to $1$ (the defaul
 
 \twocolwidtha{5cm}%
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxFLP\_DEFAULT\_STYLE}}{Default style.}
+\twocolitem{\windowstyle{wxFLP\_DEFAULT\_STYLE}}{The default style: includes
+wxFLP\_OPEN | wxFLP\_FILE\_MUST\_EXIST and, under wxMSW only,
+wxFLP\_USE\_TEXTCTRL.}
 \twocolitem{\windowstyle{wxFLP\_USE\_TEXTCTRL}}{Creates a text control to the left of the
 picker button which is completely managed by the \helpref{wxFilePickerCtrl}{wxfilepickerctrl}
 and which can be used by the user to specify a path (see \helpref{SetPath}{wxfilepickerctrlsetpath}).

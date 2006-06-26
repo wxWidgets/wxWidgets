@@ -17,7 +17,6 @@
 #if wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
 #include "wx/pickerbase.h"
-#include "wx/filename.h"
 
 class WXDLLIMPEXP_CORE wxDialog;
 class WXDLLIMPEXP_CORE wxFileDirPickerEvent;
@@ -96,7 +95,6 @@ class WXDLLIMPEXP_CORE wxFileDirPickerCtrlBase : public wxPickerBase
 {
 public:
     wxFileDirPickerCtrlBase() : m_bIgnoreNextTextCtrlUpdate(false) {}
-    virtual ~wxFileDirPickerCtrlBase() {}
 
     // NB: no default values since this function will never be used
     //     directly by the user and derived classes wouldn't use them
@@ -139,6 +137,9 @@ public:        // internal functions
     // Returns the event type sent by this picker
     virtual wxEventType GetEventType() const = 0;
 
+    // Returns the filtered value currently placed in the text control (if present).
+    virtual wxString GetTextCtrlValue() const = 0;
+
 protected:
 
     // true if the next UpdateTextCtrl() call is to ignore
@@ -160,16 +161,15 @@ protected:
 
 #ifdef __WXGTK__
     // GTK apps usually don't have a textctrl next to the picker
-    #define wxFLP_DEFAULT_STYLE       (wxFLP_OPEN)
+    #define wxFLP_DEFAULT_STYLE       (wxFLP_OPEN|wxFLP_FILE_MUST_EXIST)
 #else
-    #define wxFLP_DEFAULT_STYLE       (wxFLP_USE_TEXTCTRL|wxFLP_OPEN)
+    #define wxFLP_DEFAULT_STYLE       (wxFLP_USE_TEXTCTRL|wxFLP_OPEN|wxFLP_FILE_MUST_EXIST)
 #endif
 
 class WXDLLIMPEXP_CORE wxFilePickerCtrl : public wxFileDirPickerCtrlBase
 {
 public:
     wxFilePickerCtrl() {}
-    virtual ~wxFilePickerCtrl() {}
 
     wxFilePickerCtrl(wxWindow *parent,
                      wxWindowID id,
@@ -217,10 +217,11 @@ public:     // overrides
         return true;
     }
 
-    bool CheckPath(const wxString &path) const
-    {
-        return HasFlag(wxFLP_SAVE) || wxFileName::FileExists(path);
-    }
+    // return true if the given path is valid for this control
+    bool CheckPath(const wxString& path) const;
+
+    // return the text control value in canonical form
+    wxString GetTextCtrlValue() const;
 
     bool IsCwdToUpdate() const
         { return HasFlag(wxFLP_CHANGE_DIR); }
@@ -255,35 +256,43 @@ private:
 
 #ifdef __WXGTK__
     // GTK apps usually don't have a textctrl next to the picker
-    #define wxDIRP_DEFAULT_STYLE       0
+    #define wxDIRP_DEFAULT_STYLE       (wxDIRP_DIR_MUST_EXIST)
 #else
-    #define wxDIRP_DEFAULT_STYLE       (wxDIRP_USE_TEXTCTRL)
+    #define wxDIRP_DEFAULT_STYLE       (wxDIRP_USE_TEXTCTRL|wxDIRP_DIR_MUST_EXIST)
 #endif
 
 class WXDLLIMPEXP_CORE wxDirPickerCtrl : public wxFileDirPickerCtrlBase
 {
 public:
     wxDirPickerCtrl() {}
-    virtual ~wxDirPickerCtrl() {}
 
     wxDirPickerCtrl(wxWindow *parent, wxWindowID id,
-        const wxString& path = wxEmptyString,
-        const wxString& message = wxDirSelectorPromptStr,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = wxDIRP_DEFAULT_STYLE,
-        const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxDirPickerCtrlNameStr)
-    { Create(parent, id, path, message, pos, size, style, validator, name); }
+                    const wxString& path = wxEmptyString,
+                    const wxString& message = wxDirSelectorPromptStr,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxDIRP_DEFAULT_STYLE,
+                    const wxValidator& validator = wxDefaultValidator,
+                    const wxString& name = wxDirPickerCtrlNameStr)
+    {
+        Create(parent, id, path, message, pos, size, style, validator, name);
+    }
 
     bool Create(wxWindow *parent, wxWindowID id,
-        const wxString& path = wxEmptyString,
-        const wxString& message = wxDirSelectorPromptStr,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = wxDIRP_DEFAULT_STYLE,
-        const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxDirPickerCtrlNameStr)
-    { return wxFileDirPickerCtrlBase::CreateBase(parent, id, path, message, wxEmptyString,
-                                                 pos, size, style, validator, name); }
+                const wxString& path = wxEmptyString,
+                const wxString& message = wxDirSelectorPromptStr,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDIRP_DEFAULT_STYLE,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxDirPickerCtrlNameStr)
+    {
+        return wxFileDirPickerCtrlBase::CreateBase
+               (
+                    parent, id, path, message, wxEmptyString,
+                    pos, size, style, validator, name
+               );
+    }
 
 
 public:     // overrides
@@ -297,8 +306,9 @@ public:     // overrides
         return true;
     }
 
-    bool CheckPath(const wxString &path) const
-        { if (HasFlag(wxDIRP_DIR_MUST_EXIST)) return wxFileName::DirExists(path); else return true; }
+    bool CheckPath(const wxString &path) const;
+
+    wxString GetTextCtrlValue() const;
 
     bool IsCwdToUpdate() const
         { return HasFlag(wxDIRP_CHANGE_DIR); }

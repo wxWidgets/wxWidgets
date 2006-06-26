@@ -20,12 +20,10 @@
 #if wxUSE_FILEPICKERCTRL && defined(__WXGTK26__)
 
 #include "wx/filepicker.h"
-
 #include "wx/tooltip.h"
 
 #include <gtk/gtk.h>
 
-#include <unistd.h> // chdir
 
 
 // ============================================================================
@@ -129,12 +127,21 @@ void wxFileButton::OnDialogOK(wxCommandEvent& ev)
     }
 }
 
+
+void wxFileButton::SetPath(const wxString &str)
+{
+    m_path = str;
+    UpdateDialogPath(m_dialog);
+}
+
 #endif      // wxUSE_FILEPICKERCTRL && defined(__WXGTK26__)
 
 
 
 
 #if wxUSE_DIRPICKERCTRL && defined(__WXGTK26__)
+
+#include <unistd.h> // chdir
 
 //-----------------------------------------------------------------------------
 // "current-folder-changed"
@@ -145,6 +152,12 @@ static void gtk_dirbutton_currentfolderchanged_callback(GtkFileChooserButton *wi
                                                         wxDirButton *p)
 {
     // update the m_path member of the wxDirButtonGTK
+    // unless the path was changed by wxDirButton::SetPath()
+    if (p->m_bIgnoreNextChange)
+    {
+        p->m_bIgnoreNextChange=false;
+        return;
+    }
     wxASSERT(p);
 
     // NB: it's important to use gtk_file_chooser_get_filename instead of
@@ -202,6 +215,7 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         m_wildcard = wildcard;
         if ((m_dialog = CreateDialog()) == NULL)
             return false;
+        SetPath(path);
 
         // little trick used to avoid problems when there are other GTK windows 'grabbed':
         // GtkFileChooserDialog won't be responsive to user events if there is another
@@ -244,6 +258,20 @@ wxDirButton::~wxDirButton()
     // Thus we have to set its m_widget to NULL to avoid
     // double destruction on same widget
     m_dialog->m_widget = NULL;
+}
+
+void wxDirButton::SetPath(const wxString &str)
+{
+    m_path = str;
+
+    // wxDirButton uses the "current-folder-changed" signal which is triggered also
+    // when we set the path on the dialog associated with this button; thus we need
+    // to set the following flag to avoid sending a wxFileDirPickerEvent from this
+    // function (which would be inconsistent with wxFileButton's behaviour and in
+    // general with all wxWidgets control-manipulation functions which do not send events).
+    m_bIgnoreNextChange = true;
+
+    UpdateDialogPath(m_dialog);
 }
 
 #endif      // wxUSE_DIRPICKERCTRL && defined(__WXGTK26__)

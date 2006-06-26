@@ -39,12 +39,6 @@
     {                                                                               \
         m_dialog->Destroy();                                                        \
         return wxButton::Destroy();                                                 \
-    }                                                                               \
-                                                                                    \
-    virtual void SetPath(const wxString &str)                                       \
-    {                                                                               \
-        m_path=str;                                                                 \
-        UpdateDialogPath(m_dialog);                                                 \
     }
 
 
@@ -105,6 +99,8 @@ public:     // some overrides
                      ~(wxFD_SAVE | wxFD_OVERWRITE_PROMPT)) | wxFD_OPEN;
     }
 
+    virtual void SetPath(const wxString &str);
+
     // see macro defined above
     FILEDIRBTN_OVERRIDES
 
@@ -123,7 +119,7 @@ private:
 class WXDLLIMPEXP_CORE wxDirButton : public wxGenericDirButton
 {
 public:
-    wxDirButton() { m_dialog = NULL;}
+    wxDirButton() { Init(); }
     wxDirButton(wxWindow *parent,
                 wxWindowID id,
                 const wxString& label = wxFilePickerWidgetLabel,
@@ -135,7 +131,8 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxFilePickerWidgetNameStr)
     {
-        m_dialog = NULL;
+        Init();
+
         Create(parent, id, label, path, message, wxEmptyString,
                 pos, size, style, validator, name);
     }
@@ -157,9 +154,6 @@ public:     // overrides
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxFilePickerWidgetNameStr);
 
-    // used by the GTK callback only
-    void UpdatePath(char *gtkpath)
-        { m_path = wxString::FromAscii(gtkpath); }
 
     // GtkFileChooserButton does not support GTK_FILE_CHOOSER_CREATE_FOLDER
     // thus we must ensure that the wxDD_DIR_MUST_EXIST style was given
@@ -168,11 +162,27 @@ public:     // overrides
         return (wxGenericDirButton::GetDialogStyle() | wxDD_DIR_MUST_EXIST);
     }
 
+    virtual void SetPath(const wxString &str);
+
     // see macro defined above
     FILEDIRBTN_OVERRIDES
 
 protected:
+    // common part of all ctors
+    void Init()
+    {
+        m_dialog = NULL;
+        m_bIgnoreNextChange = false;
+    }
+
     wxDialog *m_dialog;
+
+public:    // used by the GTK callback only
+
+    bool m_bIgnoreNextChange;
+
+    void UpdatePath(const char *gtkpath)
+        { m_path = wxString::FromAscii(gtkpath); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDirButton)

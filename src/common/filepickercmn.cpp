@@ -27,6 +27,7 @@
 #if wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
 #include "wx/filepicker.h"
+#include "wx/filename.h"
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
@@ -106,9 +107,7 @@ void wxFileDirPickerCtrlBase::UpdatePickerFromTextCtrl()
     // remove the eventually present path-separator from the end of the textctrl
     // string otherwise we would generate a wxFileDirPickerEvent when changing
     // from e.g. /home/user to /home/user/ and we want to avoid it !
-    wxString newpath(m_text->GetValue());
-    if (!newpath.empty() && wxFileName::IsPathSeparator(newpath.Last()))
-        newpath.RemoveLast();
+    wxString newpath(GetTextCtrlValue());
     if (!CheckPath(newpath))
         return;       // invalid user input
 
@@ -120,7 +119,7 @@ void wxFileDirPickerCtrlBase::UpdatePickerFromTextCtrl()
         // NOTE: the path separator is required because if newpath is "C:"
         //       then no change would happen
         if (IsCwdToUpdate())
-            wxSetWorkingDirectory(newpath + wxFileName::GetPathSeparator());
+            wxSetWorkingDirectory(newpath);
 
         // fire an event
         wxFileDirPickerEvent event(GetEventType(), this, GetId(), newpath);
@@ -158,9 +157,48 @@ void wxFileDirPickerCtrlBase::OnFileDirChange(wxFileDirPickerEvent &ev)
 
 #endif  // wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
+// ----------------------------------------------------------------------------
+// wxFileDirPickerCtrl
+// ----------------------------------------------------------------------------
+
 #if wxUSE_FILEPICKERCTRL
+
 IMPLEMENT_DYNAMIC_CLASS(wxFilePickerCtrl, wxPickerBase)
-#endif
+
+bool wxFilePickerCtrl::CheckPath(const wxString& path) const
+{
+    // if wxFLP_SAVE was given or wxFLP_FILE_MUST_EXIST has NOT been given we
+    // must accept any path
+    return HasFlag(wxFLP_SAVE) ||
+            !HasFlag(wxFLP_FILE_MUST_EXIST) ||
+                wxFileName::FileExists(path);
+}
+
+wxString wxFilePickerCtrl::GetTextCtrlValue() const
+{
+    // filter it through wxFileName to remove any spurious path separator
+    return wxFileName(m_text->GetValue()).GetFullPath();
+}
+
+#endif // wxUSE_FILEPICKERCTRL
+
+// ----------------------------------------------------------------------------
+// wxDirPickerCtrl
+// ----------------------------------------------------------------------------
+
 #if wxUSE_DIRPICKERCTRL
 IMPLEMENT_DYNAMIC_CLASS(wxDirPickerCtrl, wxPickerBase)
-#endif
+
+bool wxDirPickerCtrl::CheckPath(const wxString& path) const
+{
+    // if wxDIRP_DIR_MUST_EXIST has NOT been given we must accept any path
+    return !HasFlag(wxDIRP_DIR_MUST_EXIST) || wxFileName::DirExists(path);
+}
+
+wxString wxDirPickerCtrl::GetTextCtrlValue() const
+{
+    // filter it through wxFileName to remove any spurious path separator
+    return wxFileName::DirName(m_text->GetValue()).GetPath();
+}
+
+#endif // wxUSE_DIRPICKERCTRL
