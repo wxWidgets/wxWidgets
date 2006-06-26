@@ -80,11 +80,15 @@ gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
     // when the popup is hidden, throw a SELECTED event only if the combobox
     // selection changed.
     int curSelection = combo->GetCurrentSelection();
-    
-    // reset the selection flag to value meaning that it is hidden
+
+    const bool hasChanged = curSelection != g_SelectionBeforePopup;
+
+    // reset the selection flag to value meaning that it is hidden and do it
+    // now, before generating the events, so that GetSelection() returns the
+    // new value from the event handler
     g_SelectionBeforePopup = wxID_NONE;
-    
-    if (g_SelectionBeforePopup != curSelection)
+
+    if ( hasChanged )
     {
         wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
         event.SetInt( curSelection );
