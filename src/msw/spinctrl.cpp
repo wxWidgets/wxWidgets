@@ -431,16 +431,34 @@ void wxSpinCtrl::SetValue(const wxString& text)
     }
 }
 
+void  wxSpinCtrl::SetValue(int val)
+{
+    wxSpinButton::SetValue(val);
+
+    // normally setting the value of the spin button is enough as it updates
+    // its buddy control automatically ...
+    if ( wxGetWindowText(m_hwndBuddy).empty() )
+    {
+        // ... but sometimes it doesn't, notably when the value is 0 and the
+        // text control is currently empty, the spin button seems to be happy
+        // to leave it like this, while we really want to always show the
+        // current value in the control, so do it manually
+        ::SetWindowText(GetBuddyHwnd(), wxString::Format(_T("%ld"), val));
+    }
+}
+
 int wxSpinCtrl::GetValue() const
 {
     wxString val = wxGetWindowText(m_hwndBuddy);
 
     long n;
-    if ( (wxSscanf(val, wxT("%lu"), &n) != 1) )
+    if ( (wxSscanf(val, wxT("%ld"), &n) != 1) )
         n = INT_MIN;
 
-    if (n < m_min) n = m_min;
-    if (n > m_max) n = m_max;
+    if ( n < m_min )
+        n = m_min;
+    if ( n > m_max )
+        n = m_max;
 
     return n;
 }

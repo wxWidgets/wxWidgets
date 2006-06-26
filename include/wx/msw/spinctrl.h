@@ -65,7 +65,7 @@ public:
 
     virtual ~wxSpinCtrl();
 
-    virtual void SetValue(int val) { wxSpinButton::SetValue(val); }
+    virtual void SetValue(int val);
     virtual int  GetValue() const;
     virtual bool SetFont(const wxFont &font);
     virtual void SetFocus();
