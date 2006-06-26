@@ -1481,20 +1481,38 @@ void wxFlexGridSizer::AddGrowableRow( size_t idx, int proportion )
     m_growableRowsProportions.Add( proportion );
 }
 
-void wxFlexGridSizer::RemoveGrowableRow( size_t idx )
-{
-    m_growableRows.Remove( idx );
-}
-
 void wxFlexGridSizer::AddGrowableCol( size_t idx, int proportion )
 {
     m_growableCols.Add( idx );
     m_growableColsProportions.Add( proportion );
 }
 
+// helper function for RemoveGrowableCol/Row()
+static void
+DoRemoveFromArrays(size_t idx, wxArrayInt& items, wxArrayInt& proportions)
+{
+    const size_t count = items.size();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if ( (size_t)items[n] == idx )
+        {
+            items.RemoveAt(n);
+            proportions.RemoveAt(n);
+            return;
+        }
+    }
+
+    wxFAIL_MSG( _T("column/row is already not growable") );
+}
+
 void wxFlexGridSizer::RemoveGrowableCol( size_t idx )
 {
-    m_growableCols.Remove( idx );
+    DoRemoveFromArrays(idx, m_growableCols, m_growableColsProportions);
+}
+
+void wxFlexGridSizer::RemoveGrowableRow( size_t idx )
+{
+    DoRemoveFromArrays(idx, m_growableRows, m_growableRowsProportions);
 }
 
 //---------------------------------------------------------------------------
