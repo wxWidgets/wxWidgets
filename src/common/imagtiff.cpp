@@ -374,7 +374,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     int compression = image->GetOptionInt(wxIMAGE_OPTION_COMPRESSION);
     if ( !compression )
-        compression=COMPRESSION_LZW;
+        compression=COMPRESSION_NONE;
 
     TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, spp);
     TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bpp);
