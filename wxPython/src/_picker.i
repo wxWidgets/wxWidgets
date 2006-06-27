@@ -68,6 +68,23 @@ The value passed to this function must be >= 1.", "");
         int , GetTextCtrlProportion() const,
         "Returns the proportion between the text control and the picker.", "");
 
+    DocDeclStr(
+        bool , IsTextCtrlGrowable() const,
+        "", "");
+
+    DocDeclStr(
+        void , SetTextCtrlGrowable(bool grow = true),
+        "", "");
+    
+
+    DocDeclStr(
+        bool , IsPickerCtrlGrowable() const,
+        "", "");
+    
+    DocDeclStr(
+        void , SetPickerCtrlGrowable(bool grow = true),
+        "", "");
+        
 
     DocDeclStr(
         bool , HasTextCtrl() const,
@@ -256,6 +273,12 @@ public:
     wxString GetPath() const;
     void SetPath(const wxString &str);
 
+    // return true if the given path is valid for this control
+    bool CheckPath(const wxString& path) const;
+
+    // Returns the filtered value currently placed in the text control (if present).
+    wxString GetTextCtrlValue() const;
+
 };
 
 
@@ -292,6 +315,12 @@ public:
 
     wxString GetPath() const;
     void SetPath(const wxString &str);
+    
+    // return true if the given path is valid for this control
+    bool CheckPath(const wxString& path) const;
+
+    // Returns the filtered value currently placed in the text control (if present).
+    wxString GetTextCtrlValue() const;
 };
 
 
