@@ -39,7 +39,7 @@
 // implementation
 // ============================================================================
 
-IMPLEMENT_ABSTRACT_CLASS(wxPickerBase, wxWindow)
+IMPLEMENT_ABSTRACT_CLASS(wxPickerBase, wxControl)
 
 BEGIN_EVENT_TABLE(wxPickerBase, wxControl)
     EVT_SIZE(wxPickerBase::OnSize)
