@@ -64,25 +64,29 @@ public:     // public API
         { return GetTextCtrlItem()->GetProportion(); }
 
     bool IsTextCtrlGrowable() const
-        { return GetTextCtrlItem()->GetFlag() & wxGROW; }
+        { return (GetTextCtrlItem()->GetFlag() & wxGROW) != 0; }
     void SetTextCtrlGrowable(bool grow = true)
     {
         int f = GetDefaultTextCtrlFlag();
-        if (grow)
-            GetTextCtrlItem()->SetFlag(f | wxGROW);
+        if ( grow )
+            f |= wxGROW;
         else
-            GetTextCtrlItem()->SetFlag(f & ~wxGROW);
+            f &= ~wxGROW;
+
+        GetTextCtrlItem()->SetFlag(f);
     }
 
     bool IsPickerCtrlGrowable() const
-        { return GetPickerCtrlItem()->GetFlag() & wxGROW; }
+        { return (GetPickerCtrlItem()->GetFlag() & wxGROW) != 0; }
     void SetPickerCtrlGrowable(bool grow = true)
     {
         int f = GetDefaultPickerCtrlFlag();
-        if (grow)
-            GetPickerCtrlItem()->SetFlag(f | wxGROW);
+        if ( grow )
+            f |= wxGROW;
         else
-            GetPickerCtrlItem()->SetFlag(f & ~wxGROW);
+            f &= ~wxGROW;
+
+        GetPickerCtrlItem()->SetFlag(f);
     }
 
     bool HasTextCtrl() const
