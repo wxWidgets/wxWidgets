@@ -223,6 +223,11 @@ EVT_TREE_ITEM_MENU         = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_MENU,     
 }
 
 
+%{
+    static wxTreeItemId wxNullTreeItemId;
+%}
+wxTreeItemId wxNullTreeItemId;
+
 
 // wxTreeEvent is a special class for all events associated with tree controls
 //
@@ -230,7 +235,11 @@ EVT_TREE_ITEM_MENU         = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_MENU,     
 //     descriptions below
 class wxTreeEvent : public wxNotifyEvent {
 public:
+    %nokwargs wxTreeEvent;
     wxTreeEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
+    wxTreeEvent(wxEventType   commandType,
+                wxPyTreeCtrl* tree,
+                wxTreeItemId& item = wxNullTreeItemId);
 
         // get the item on which the operation was performed or the newly
         // selected item for wxEVT_COMMAND_TREE_SEL_CHANGED/ING events
