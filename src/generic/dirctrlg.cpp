@@ -120,15 +120,9 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
         wxString path, name;
         path.Printf(wxT("%c:\\"), driveBuffer[i]);
         name.Printf(wxT("%c:"), driveBuffer[i]);
-
-#if !defined(__WXWINCE__)
-        wxChar pname[52]; // FIXME: why 52 and not MAX_PATH or whatever?
-        if ( GetVolumeInformation(path, pname, WXSIZEOF(pname),
-                                  NULL, NULL, NULL, NULL, 0) )
-        {
-            name << _T(' ') << pname;
-        }
-#endif // __WXWINCE__
+        
+        // Do not use GetVolumeInformation to further decorate the
+        // name, since it can cause severe delays on network drives.
 
         int imageId;
         int driveType = ::GetDriveType(path);
