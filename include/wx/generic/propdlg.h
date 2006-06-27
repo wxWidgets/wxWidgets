@@ -49,25 +49,28 @@ class WXDLLEXPORT wxBookCtrlBase;
 //-----------------------------------------------------------------------------
 
 // Use the platform default
-#define wxPROPSHEET_DEFAULT     0x0001
+#define wxPROPSHEET_DEFAULT         0x0001
 
 // Use a notebook
-#define wxPROPSHEET_NOTEBOOK    0x0002
+#define wxPROPSHEET_NOTEBOOK        0x0002
 
 // Use a toolbook
-#define wxPROPSHEET_TOOLBOOK    0x0004
+#define wxPROPSHEET_TOOLBOOK        0x0004
 
 // Use a choicebook
-#define wxPROPSHEET_CHOICEBOOK  0x0008
+#define wxPROPSHEET_CHOICEBOOK      0x0008
 
 // Use a listbook
-#define wxPROPSHEET_LISTBOOK    0x0010
-
-// Shrink dialog to fit current page
-#define wxPROPSHEET_SHRINKTOFIT 0x0100
+#define wxPROPSHEET_LISTBOOK        0x0010
 
 // Use a wxButtonToolBar toolbook
-#define wxPROPSHEET_BUTTONTOOLBOOK    0x0200
+#define wxPROPSHEET_BUTTONTOOLBOOK  0x0020
+
+// Use a treebook
+#define wxPROPSHEET_TREEBOOK        0x0040
+
+// Shrink dialog to fit current page
+#define wxPROPSHEET_SHRINKTOFIT     0x0100
 
 class WXDLLIMPEXP_ADV wxPropertySheetDialog : public wxDialog
 {

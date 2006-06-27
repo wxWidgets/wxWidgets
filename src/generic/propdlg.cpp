@@ -40,6 +40,9 @@
 #if wxUSE_LISTBOOK
 #include "wx/listbook.h"
 #endif
+#if wxUSE_TREEBOOK
+#include "wx/treebook.h"
+#endif
 
 #include "wx/generic/propdlg.h"
 #include "wx/sysopt.h"
@@ -159,6 +162,10 @@ wxBookCtrlBase* wxPropertySheetDialog::CreateBookCtrl()
 #if wxUSE_LISTBOOK
     if (GetSheetStyle() & wxPROPSHEET_LISTBOOK)
         bookCtrl = new wxListbook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+#endif
+#if wxUSE_TREEBOOK
+    if (GetSheetStyle() & wxPROPSHEET_TREEBOOK)
+        bookCtrl = new wxTreebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
 #endif
     if (!bookCtrl)
         bookCtrl = new wxBookCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
