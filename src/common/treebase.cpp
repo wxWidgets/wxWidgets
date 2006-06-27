@@ -76,6 +76,13 @@ wxTreeEvent::wxTreeEvent(wxEventType commandType,
         SetClientObject(tree->GetItemData(item));
 }
 
+wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
+           : wxNotifyEvent(commandType, id)
+{
+    m_itemOld = 0l;
+    m_editCancelled = false;
+}
+
 wxTreeEvent::wxTreeEvent(const wxTreeEvent & event)
            : wxNotifyEvent(event)
 {

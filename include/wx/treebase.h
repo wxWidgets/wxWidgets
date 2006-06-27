@@ -273,6 +273,7 @@ public:
     wxTreeEvent(wxEventType commandType,
                 wxTreeCtrlBase *tree,
                 const wxTreeItemId &item = wxTreeItemId());
+    wxTreeEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
     wxTreeEvent(const wxTreeEvent& event);
 
     virtual wxEvent *Clone() const { return new wxTreeEvent(*this); }
