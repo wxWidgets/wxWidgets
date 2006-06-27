@@ -287,7 +287,7 @@
 // Default is 1
 //
 // Recommended setting: 1 if you want to support multiple languages
-#define wxUSE_PRINTF_POS_PARAMS      0
+#define wxUSE_PRINTF_POS_PARAMS      1
 
 // ----------------------------------------------------------------------------
 // non GUI features selection
@@ -531,6 +531,13 @@
 #else
 #  define wxUSE_XML       0
 #endif
+
+// Use wxWidget's AUI docking system
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_AUI       1
 
 // ----------------------------------------------------------------------------
 // Individual GUI controls

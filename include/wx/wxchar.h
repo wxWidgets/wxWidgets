@@ -883,7 +883,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
             #define wxVsnprintf_    _vsnwprintf
             #define wxSnprintf_     _snwprintf
         #endif /* Watcom */
-        #if defined(HAVE__VSNWPRINTF) && defined(HAVE_UNIX98_PRINTF)
+        #if defined(HAVE__VSNWPRINTF)
             #define wxVsnprintf_    _vsnwprintf
         /* MinGW?MSVCRT has the wrong vswprintf */
         /* Mac OS X has a somehow buggy vswprintf */
@@ -893,13 +893,13 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
     #else /* ASCII */
         /* all versions of CodeWarrior supported by wxWidgets apparently have */
         /* both snprintf() and vsnprintf() */
-        #if (defined(HAVE_SNPRINTF) && defined(HAVE_UNIX98_PRINTF)) \
+        #if defined(HAVE_SNPRINTF) \
             || defined(__MWERKS__) || defined(__WATCOMC__)
             #ifndef HAVE_BROKEN_SNPRINTF_DECL
                 #define wxSnprintf_     snprintf
             #endif
         #endif
-        #if (defined(HAVE_VSNPRINTF) && defined(HAVE_UNIX98_PRINTF)) \
+        #if defined(HAVE_VSNPRINTF) \
             || defined(__MWERKS__) || defined(__WATCOMC__)
             #if defined __cplusplus && defined HAVE_BROKEN_VSNPRINTF_DECL
                 #define wxVsnprintf_    wx_fixed_vsnprintf
@@ -908,7 +908,28 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
             #endif
         #endif
     #endif
-#endif /* wxVsnprintf_ not defined yet */
+#endif /* wxVsnprintf_ not defined yet && !wxUSE_PRINTF_POS_PARAMS */
+
+#if !defined( wxVsnprintf_ ) && wxUSE_PRINTF_POS_PARAMS
+    /*
+        The systems where vsnprintf() supports positionals should define
+        the HAVE_UNIX98_PRINTF symbol.
+
+        On systems which don't (e.g. Windows) we are forced to use
+        our wxVsnprintf() implementation.
+    */
+    #if defined(HAVE_UNIX98_PRINTF)
+        #if wxUSE_UNICODE
+            #define wxVsnprintf_        vswprintf
+        #else /* ASCII */
+            #if defined __cplusplus && defined HAVE_BROKEN_VSNPRINTF_DECL
+                #define wxVsnprintf_    wx_fixed_vsnprintf
+            #else
+                #define wxVsnprintf_    vsnprintf
+            #endif
+        #endif
+    #endif
+#endif  // !defined( wxVsnprintf_ ) && wxUSE_PRINTF_POS_PARAMS
 
 #ifndef wxSnprintf_
     /* no [v]snprintf(), cook our own */
