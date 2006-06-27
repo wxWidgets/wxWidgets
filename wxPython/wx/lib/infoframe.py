@@ -406,7 +406,7 @@ class PyInformationalMessagesFrame:
         self.CloseFile()
         dlg = wx.FileDialog(self.frame,
                           "Choose a new log file", self.dir,"","*",
-                           wx.SAVE | wx.HIDE_READONLY | wx.OVERWRITE_PROMPT)
+                           wx.SAVE | wx.OVERWRITE_PROMPT)
         if dlg.ShowModal() == wx.ID_CANCEL:
             dlg.Destroy()
             return 0
