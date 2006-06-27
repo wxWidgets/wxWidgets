@@ -180,6 +180,11 @@ public:
 
 //---------------------------------------------------------------------------
 
+%{
+// for compatibility only    
+#define wxHIDE_READONLY 0
+%}
+
 enum {
     // These will dissappear in 2.8
     wxOPEN,
@@ -188,6 +193,7 @@ enum {
     wxFILE_MUST_EXIST,
     wxMULTIPLE,
     wxCHANGE_DIR,
+    wxHIDE_READONLY,
 
     wxFD_OPEN,
     wxFD_SAVE,
