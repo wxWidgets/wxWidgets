@@ -46,10 +46,10 @@ public:
     //bool LoadFile(wxImage* image, wxInputStream& stream);
     //bool SaveFile(wxImage* image, wxOutputStream& stream);
     //virtual int GetImageCount( wxInputStream& stream );
-    //bool CanRead( wxInputStream& stream );
 
     bool CanRead( const wxString& name );
-
+    %Rename(CanReadStream, bool, CanRead( wxInputStream& stream ));
+    
     void SetName(const wxString& name);
     void SetExtension(const wxString& extension);
     void SetType(long type);
