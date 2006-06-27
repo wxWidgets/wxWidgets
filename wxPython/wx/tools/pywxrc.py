@@ -56,7 +56,7 @@ def get_resources():
 
     CLASS_HEADER = """\
 class xrc%(windowName)s(wx.%(windowClass)s):
-    def PreCreate(self):
+    def PreCreate(self, pre):
         \"\"\" This function is called during the class's initialization.
         
         Override it for custom setup before the window is created usually to
@@ -66,8 +66,8 @@ class xrc%(windowName)s(wx.%(windowClass)s):
     def __init__(self, parent):
         # Two stage creation (see http://wiki.wxpython.org/index.cgi/TwoStageCreation)
         pre = wx.Pre%(windowClass)s()
+        self.PreCreate(pre)
         get_resources().LoadOn%(windowClass)s(pre, parent, "%(windowName)s")
-        self.PreCreate()
         self.PostCreate(pre)
 
         # Define variables for the controls
