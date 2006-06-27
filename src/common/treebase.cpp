@@ -59,14 +59,21 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_MENU)
 // Tree event
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxNotifyEvent)
+IMPLEMENT_ABSTRACT_CLASS(wxTreeEvent, wxNotifyEvent)
 
 
-wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
-           : wxNotifyEvent(commandType, id)
+wxTreeEvent::wxTreeEvent(wxEventType commandType,
+                         wxTreeCtrlBase *tree,
+                         const wxTreeItemId& item)
+           : wxNotifyEvent(commandType, tree->GetId()),
+             m_item(item)
 {
-    m_itemOld = 0l;
     m_editCancelled = false;
+
+    SetEventObject(tree);
+
+    if ( item.IsOk() )
+        SetClientObject(tree->GetItemData(item));
 }
 
 wxTreeEvent::wxTreeEvent(const wxTreeEvent & event)

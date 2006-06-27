@@ -1493,9 +1493,7 @@ wxTreeItemId wxGenericTreeCtrl::DoInsertAfter(const wxTreeItemId& parentId,
 
 void wxGenericTreeCtrl::SendDeleteEvent(wxGenericTreeItem *item)
 {
-    wxTreeEvent event( wxEVT_COMMAND_TREE_DELETE_ITEM, GetId() );
-    event.m_item = item;
-    event.SetEventObject( this );
+    wxTreeEvent event(wxEVT_COMMAND_TREE_DELETE_ITEM, this, item);
     ProcessEvent( event );
 }
 
@@ -1613,9 +1611,7 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
     if ( item->IsExpanded() )
         return;
 
-    wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_EXPANDING, GetId() );
-    event.m_item = item;
-    event.SetEventObject( this );
+    wxTreeEvent event(wxEVT_COMMAND_TREE_ITEM_EXPANDING, this, item);
 
     if ( ProcessEvent( event ) && !event.IsAllowed() )
     {
@@ -1661,9 +1657,7 @@ void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
     if ( !item->IsExpanded() )
         return;
 
-    wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_COLLAPSING, GetId() );
-    event.m_item = item;
-    event.SetEventObject( this );
+    wxTreeEvent event(wxEVT_COMMAND_TREE_ITEM_COLLAPSING, this, item);
     if ( ProcessEvent( event ) && !event.IsAllowed() )
     {
         // cancelled by program
@@ -1843,10 +1837,8 @@ void wxGenericTreeCtrl::DoSelectItem(const wxTreeItemId& itemId,
             return;
     }
 
-    wxTreeEvent event( wxEVT_COMMAND_TREE_SEL_CHANGING, GetId() );
-    event.m_item = item;
+    wxTreeEvent event(wxEVT_COMMAND_TREE_SEL_CHANGING, this, item);
     event.m_itemOld = m_current;
-    event.SetEventObject( this );
     // TODO : Here we don't send any selection mode yet !
 
     if ( GetEventHandler()->ProcessEvent( event ) && !event.IsAllowed() )
@@ -2580,9 +2572,8 @@ void wxGenericTreeCtrl::OnKillFocus( wxFocusEvent &event )
 
 void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
 {
-    wxTreeEvent te( wxEVT_COMMAND_TREE_KEY_DOWN, GetId() );
+    wxTreeEvent te( wxEVT_COMMAND_TREE_KEY_DOWN, this);
     te.m_evtKey = event;
-    te.SetEventObject( this );
     if ( GetEventHandler()->ProcessEvent( te ) )
     {
         // intercepted by the user code
@@ -2648,22 +2639,19 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                 wxRect ItemRect;
                 GetBoundingRect(m_current, ItemRect, true);
 
-                wxTreeEvent eventMenu( wxEVT_COMMAND_TREE_ITEM_MENU, GetId() );
-                eventMenu.m_item = m_current;
+                wxTreeEvent eventMenu(wxEVT_COMMAND_TREE_ITEM_MENU, this, m_current);
                 // Use the left edge, vertical middle
                 eventMenu.m_pointDrag = wxPoint(ItemRect.GetX(),
                                                 ItemRect.GetY() + ItemRect.GetHeight() / 2);
-                eventMenu.SetEventObject( this );
                 GetEventHandler()->ProcessEvent( eventMenu );
-                break;
             }
+            break;
+
         case ' ':
         case WXK_RETURN:
             if ( !event.HasModifiers() )
             {
-                wxTreeEvent eventAct( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
-                eventAct.m_item = m_current;
-                eventAct.SetEventObject( this );
+                wxTreeEvent eventAct(wxEVT_COMMAND_TREE_ITEM_ACTIVATED, this, m_current);
                 GetEventHandler()->ProcessEvent( eventAct );
             }
 
@@ -2923,9 +2911,7 @@ wxTextCtrl *wxGenericTreeCtrl::EditLabel(const wxTreeItemId& item,
 
     wxGenericTreeItem *itemEdit = (wxGenericTreeItem *)item.m_pItem;
 
-    wxTreeEvent te( wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, GetId() );
-    te.m_item = itemEdit;
-    te.SetEventObject( this );
+    wxTreeEvent te(wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, this, itemEdit);
     if ( GetEventHandler()->ProcessEvent( te ) && !te.IsAllowed() )
     {
         // vetoed by user
@@ -2969,9 +2955,7 @@ void wxGenericTreeCtrl::EndEditLabel(const wxTreeItemId& WXUNUSED(item),
 bool wxGenericTreeCtrl::OnRenameAccept(wxGenericTreeItem *item,
                                        const wxString& value)
 {
-    wxTreeEvent le( wxEVT_COMMAND_TREE_END_LABEL_EDIT, GetId() );
-    le.m_item = item;
-    le.SetEventObject( this );
+    wxTreeEvent le(wxEVT_COMMAND_TREE_END_LABEL_EDIT, this, item);
     le.m_label = value;
     le.m_editCancelled = false;
 
@@ -2981,9 +2965,7 @@ bool wxGenericTreeCtrl::OnRenameAccept(wxGenericTreeItem *item,
 void wxGenericTreeCtrl::OnRenameCancelled(wxGenericTreeItem *item)
 {
     // let owner know that the edit was cancelled
-    wxTreeEvent le( wxEVT_COMMAND_TREE_END_LABEL_EDIT, GetId() );
-    le.m_item = item;
-    le.SetEventObject( this );
+    wxTreeEvent le(wxEVT_COMMAND_TREE_END_LABEL_EDIT, this, item);
     le.m_label = wxEmptyString;
     le.m_editCancelled = true;
 
@@ -2997,7 +2979,7 @@ void wxGenericTreeCtrl::OnRenameTimer()
 
 void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 {
-    if ( !m_anchor ) return;
+    if ( !m_anchor )return;
 
     wxPoint pt = CalcUnscrolledPosition(event.GetPosition());
 
@@ -3044,9 +3026,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
     if (underMouseChanged && hoverItem.IsOk() && !m_isDragging && (!m_renameTimer || !m_renameTimer->IsRunning()))
     {
         // Ask the tree control what tooltip (if any) should be shown
-        wxTreeEvent hevent(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP, GetId());
-        hevent.m_item = hoverItem;
-        hevent.SetEventObject(this);
+        wxTreeEvent hevent(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP,  this, hoverItem);
 
         if ( GetEventHandler()->ProcessEvent(hevent) && hevent.IsAllowed() )
         {
@@ -3091,9 +3071,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                               ? wxEVT_COMMAND_TREE_BEGIN_RDRAG
                               : wxEVT_COMMAND_TREE_BEGIN_DRAG;
 
-        wxTreeEvent nevent( command, GetId() );
-        nevent.m_item = m_current;
-        nevent.SetEventObject(this);
+        wxTreeEvent nevent(command,  this, m_current);
         nevent.SetPoint(CalcScrolledPosition(pt));
 
         // by default the dragging is not supported, the user code must
@@ -3158,11 +3136,9 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         }
 
         // generate the drag end event
-        wxTreeEvent eventEndDrag(wxEVT_COMMAND_TREE_END_DRAG, GetId());
+        wxTreeEvent eventEndDrag(wxEVT_COMMAND_TREE_END_DRAG,  this, item);
 
-        eventEndDrag.m_item = item;
         eventEndDrag.m_pointDrag = CalcScrolledPosition(pt);
-        eventEndDrag.SetEventObject(this);
 
         (void)GetEventHandler()->ProcessEvent(eventEndDrag);
 
@@ -3204,18 +3180,14 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                 DoSelectItem(item, true, false);
             }
 
-            wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, GetId());
-            nevent.m_item = item;
+            wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK,  this, item);
             nevent.m_pointDrag = CalcScrolledPosition(pt);
-            nevent.SetEventObject(this);
             event.Skip(!GetEventHandler()->ProcessEvent(nevent));
 
             // Consistent with MSW (for now), send the ITEM_MENU *after*
             // the RIGHT_CLICK event. TODO: This behavior may change.
-            wxTreeEvent nevent2(wxEVT_COMMAND_TREE_ITEM_MENU, GetId());
-            nevent2.m_item = item;
+            wxTreeEvent nevent2(wxEVT_COMMAND_TREE_ITEM_MENU,  this, item);
             nevent2.m_pointDrag = CalcScrolledPosition(pt);
-            nevent2.SetEventObject(this);
             GetEventHandler()->ProcessEvent(nevent2);
         }
         else if ( event.LeftUp() )
@@ -3307,10 +3279,8 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                 m_lastOnSame = false;
 
                 // send activate event first
-                wxTreeEvent nevent( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
-                nevent.m_item = item;
+                wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_ACTIVATED,  this, item);
                 nevent.m_pointDrag = CalcScrolledPosition(pt);
-                nevent.SetEventObject( this );
                 if ( !GetEventHandler()->ProcessEvent( nevent ) )
                 {
                     // if the user code didn't process the activate event,
