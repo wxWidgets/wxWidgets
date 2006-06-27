@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/wxchar.cpp
 // Purpose:     wxChar implementation
-// Author:      Ove Kåven
-// Modified by: Ron Lee
+// Author:      Ove Kaven
+// Modified by: Ron Lee, Francesco Montorsi
 // Created:     09/04/99
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets copyright
@@ -901,6 +901,36 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p)
     return lenCur;
 }
 
+// differences from standard strncpy:
+// 1) copies everything from 'source' except for '%%' sequence which is copied as '%'
+// 2) returns the number of written characters in 'dest' as it could differ from given 'n'
+// 3) much less optimized, unfortunately...
+static int wxCopyStrWithPercents(wxChar *dest, const wxChar *source, size_t n)
+{
+    size_t written = 0;
+
+    if (n == 0)
+        return 0;
+
+    size_t i;
+    for ( i = 0; i < n-1; source++, i++)
+    {
+        dest[written++] = *source;
+        if (*(source+1) == wxT('%'))
+        {
+            // skip this additional '%' character
+            source++;
+            i++;
+        }
+    }
+
+    if (i < n)
+        // copy last character inconditionally
+        dest[written++] = *source;
+
+    return written;
+}
+
 int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                              const wxChar *format, va_list argptr)
 {
@@ -974,6 +1004,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
 
     va_end(ap);
 
+    // something failed while loading arguments from the variable list...
     if (!ok)
         return -1;
 
@@ -987,8 +1018,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
         if (lenCur+tocopy >= lenMax)
             return -1;      // not enough space in the output buffer !
 
-        wxStrncpy(buf+lenCur, toparse, tocopy);
-        lenCur += tocopy;
+        lenCur += wxCopyStrWithPercents(buf+lenCur, toparse, tocopy);
 
         // process this specifier directly in the output buffer
         int n = arg[i].Process(buf+lenCur, lenMax - lenCur, &argdata[arg[i].pos]);
@@ -1008,8 +1038,9 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
     size_t tocopy = wxStrlen(format) + 1  - ( toparse - format ) ;
     if (lenCur+tocopy >= lenMax)
         return -1;      // not enough space in the output buffer !
-    wxStrncpy(buf+lenCur, toparse, tocopy);
-    lenCur += tocopy - 1;   // the -1 is because of the '\0'
+
+    // the -1 is because of the '\0'
+    lenCur += wxCopyStrWithPercents(buf+lenCur, toparse, tocopy) - 1;
 
     // clean the static array portion used...
     // NOTE: other arrays do not need cleanup!

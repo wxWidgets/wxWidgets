@@ -184,6 +184,11 @@ void VsnprintfTestCase::S()
     CMP("abcdefghi", "%-5s", wxT("abcdefghi"));
 
     CMP("abcde", "%.5s", wxT("abcdefghi"));
+
+    // some tests without any argument:
+    Compare(wxT("%"), wxT("%%"));
+    Compare(wxT("%%%"), wxT("%%%%%%"));
+    Compare(wxT("%%"), wxT("%%%"));
 }
 
 void VsnprintfTestCase::Misc(wxChar *buffer, int size)
@@ -197,7 +202,7 @@ void VsnprintfTestCase::Misc(wxChar *buffer, int size)
     if (ret >= 0)
     {
         CPPUNIT_ASSERT_STR_EQUAL(
-            wxT("\n\naa 1.231230e+102 1.231231e+123 456 33333333 - test - 789 999 %% -       0.1-\n\n"),
+            wxT("\n\naa 1.231230e+102 1.231231e+123 456 33333333 - test - 789 999 % -       0.1-\n\n"),
             buffer);
     }
 
@@ -208,7 +213,7 @@ void VsnprintfTestCase::Misc(wxChar *buffer, int size)
     if (ret >= 0)
     {
         CPPUNIT_ASSERT_STR_EQUAL(
-            wxT("\n\naa 1.231230e+102 1.231231e+123 456 33333333 - test - 789 999 %% 0.1231\n\n"),
+            wxT("\n\naa 1.231230e+102 1.231231e+123 456 33333333 - test - 789 999 % 0.1231\n\n"),
             buffer);
     }
 
