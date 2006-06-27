@@ -249,7 +249,8 @@ public:
     // sets/clears the dirty flag
     virtual void MarkDirty();
     virtual void DiscardEdits();
-
+    void SetModified(bool modified);
+    
     // set the max number of characters which may be entered in a single line
     // text control
     virtual void SetMaxLength(unsigned long len);
