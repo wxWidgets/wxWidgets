@@ -35,7 +35,7 @@ First, the debian/rules file is currently looking at the name of the
 toplevel source dir and extracting from it the flavour name (if
 present) for use in passing to --with-flavor configure flag.  (I'm
 considering changing how it finds this value for 2.7 so, for example,
-the debian packages could also be build from the wxPython source
+the debian packages could also be built from the wxPython source
 tarball...)  Second, since the build tools use the current source dir
 for creating the source package, you'll probably want to start with a
 clean source tree that has had unnecessary things removed from it.
