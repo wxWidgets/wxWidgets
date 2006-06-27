@@ -45,10 +45,11 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
 {
     if (!gtk_check_version(2,6,0))
     {
-        // VERY IMPORTANT: this code is identic to relative code in wxFileButton;
-        //                 if you find a problem here, fix it also in wxFileButton !
+        // VERY IMPORTANT: this code is identic to relative code in wxDirButton;
+        //                 if you find a problem here, fix it also in wxDirButton !
 
         m_needParent = true;
+        m_acceptsFocus = true;
 
         if (!PreCreation( parent, pos, size ) ||
             !wxControl::CreateBase(parent, id, pos, size, style & wxWINDOW_STYLE_MASK,
@@ -127,7 +128,6 @@ void wxFileButton::OnDialogOK(wxCommandEvent& ev)
     }
 }
 
-
 void wxFileButton::SetPath(const wxString &str)
 {
     m_path = str;
@@ -200,6 +200,7 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         //                 if you find a problem here, fix it also in wxFileButton !
 
         m_needParent = true;
+        m_acceptsFocus = true;
 
         if (!PreCreation( parent, pos, size ) ||
             !wxControl::CreateBase(parent, id, pos, size, style & wxWINDOW_STYLE_MASK,

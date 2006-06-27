@@ -55,9 +55,6 @@ bool wxFontPickerCtrl::Create( wxWindow *parent, wxWindowID id,
                         long style, const wxValidator& validator,
                         const wxString &name )
 {
-    // by default, the textctrl is, if present, as big as the picker, for wxFontPickerCtrl
-    SetTextCtrlProportion(1);
-
     if (!wxPickerBase::CreateBase(parent, id, Font2String(initial),
                                   pos, size, style, validator, name))
         return false;
@@ -66,6 +63,9 @@ bool wxFontPickerCtrl::Create( wxWindow *parent, wxWindowID id,
     m_picker = new wxFontPickerWidget(this, wxID_ANY, initial,
                                       wxDefaultPosition, wxDefaultSize,
                                       GetPickerStyle(style));
+    // complete sizer creation
+    wxPickerBase::PostCreation();
+
     m_picker->Connect(wxEVT_COMMAND_FONTPICKER_CHANGED,
             wxFontPickerEventHandler(wxFontPickerCtrl::OnFontChange),
             NULL, this);

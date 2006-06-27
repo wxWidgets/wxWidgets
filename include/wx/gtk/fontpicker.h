@@ -60,8 +60,6 @@ public:     // used by the GTK callback only
     void SetNativeFontInfo(const gchar *gtkdescription)
         { m_selectedFont.SetNativeFontInfo(wxString::FromAscii(gtkdescription)); }
 
-    wxWindow *m_topParent;
-
 private:
     DECLARE_DYNAMIC_CLASS(wxFontButton)
 };

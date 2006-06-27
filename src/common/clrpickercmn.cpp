@@ -61,6 +61,10 @@ bool wxColourPickerCtrl::Create( wxWindow *parent, wxWindowID id,
     // to its "changed" event dynamically...
     m_picker = new wxColourPickerWidget(this, wxID_ANY, col, wxPoint(40,0), wxSize(30,-1),
                                         GetPickerStyle(style));
+
+    // complete sizer creation
+    wxPickerBase::PostCreation();
+
     m_picker->Connect(wxEVT_COMMAND_COLOURPICKER_CHANGED,
             wxColourPickerEventHandler(wxColourPickerCtrl::OnColourChange),
             NULL, this);

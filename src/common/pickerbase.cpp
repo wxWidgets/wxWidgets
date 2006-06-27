@@ -41,19 +41,16 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxPickerBase, wxWindow)
 
+BEGIN_EVENT_TABLE(wxPickerBase, wxControl)
+    EVT_SIZE(wxPickerBase::OnSize)
+    WX_EVENT_TABLE_CONTROL_CONTAINER(wxPickerBase)
+END_EVENT_TABLE()
+WX_DELEGATE_TO_CONTROL_CONTAINER(wxPickerBase)
+
+
 // ----------------------------------------------------------------------------
 // wxPickerBase
 // ----------------------------------------------------------------------------
-
-wxPickerBase::~wxPickerBase()
-{
-    // destroy the windows we are managing: these are not automatically
-    // destroyed by wxWindow because they are not built as our children
-    // but rather as children of the parent of the wxPickerBase class
-    // (since wxPickerBase does not represent a real window)
-    if (m_text) m_text->Destroy();
-    if (m_picker) m_picker->Destroy();
-}
 
 bool wxPickerBase::CreateBase(wxWindow *parent,
                          wxWindowID id,
@@ -68,16 +65,18 @@ bool wxPickerBase::CreateBase(wxWindow *parent,
     // invisible (user styles must be set on the textctrl or the platform-dependent picker)
     style &= ~wxBORDER_MASK;
     if (!wxControl::Create(parent, id, pos, size, style | wxNO_BORDER | wxTAB_TRAVERSAL,
-                            validator, name))
+                           validator, name))
         return false;
+
+    m_sizer = new wxBoxSizer(wxHORIZONTAL);
 
     if (HasFlag(wxPB_USE_TEXTCTRL))
     {
         // NOTE: the style of this class (wxPickerBase) and the style of the
         //       attached text control are different: GetTextCtrlStyle() extracts
         //       the styles related to the textctrl from the styles passed here
-        m_text = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(0, 0),
-                                wxSize(40, size.GetHeight()), GetTextCtrlStyle(style));
+        m_text = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                wxDefaultSize, GetTextCtrlStyle(style));
         if (!m_text)
         {
             wxFAIL_MSG( wxT("wxPickerBase's textctrl creation failed") );
@@ -104,9 +103,20 @@ bool wxPickerBase::CreateBase(wxWindow *parent,
         m_text->Connect(wxEVT_DESTROY,
                 wxWindowDestroyEventHandler(wxPickerBase::OnTextCtrlDelete),
                 NULL, this);
+
+        m_sizer->Add(m_text, 2, GetDefaultTextCtrlFlag(), 5);
     }
 
     return true;
+}
+
+void wxPickerBase::PostCreation()
+{
+    // the picker's proportion value is fixed
+    m_sizer->Add(m_picker, 1, GetDefaultPickerCtrlFlag(), 5);
+
+    SetSizer(m_sizer);
+    m_sizer->SetSizeHints(this);
 }
 
 void wxPickerBase::OnTextCtrlKillFocus(wxFocusEvent &)
@@ -130,80 +140,11 @@ void wxPickerBase::OnTextCtrlUpdate(wxCommandEvent &)
     UpdatePickerFromTextCtrl();
 }
 
-int wxPickerBase::GetTextCtrlWidth(int given)
+void wxPickerBase::OnSize(wxSizeEvent &event)
 {
-    // compute the width of m_text like a wxBoxSizer(wxHORIZONTAL) would do
-    // NOTE: the proportion of m_picker is fixed to 1
-    return ((given - m_margin) / (m_textProportion + 1)) * m_textProportion;
-}
-
-void wxPickerBase::DoSetSizeHints(int minW, int minH, int maxW, int maxH, int incW, int incH)
-{
-    wxControl::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
-
-    if (m_text)
-    {
-        // compute minWidth and maxWidth of the ausiliary textctrl
-        int textCtrlMinW = -1, textCtrlMaxW = -1;
-        if (minW != -1)
-        {
-            textCtrlMinW = GetTextCtrlWidth(minW);
-            minW -= textCtrlMinW + m_margin;
-        }
-
-        if (maxW != -1)
-        {
-            textCtrlMaxW = GetTextCtrlWidth(maxW);
-            maxW -= textCtrlMaxW + m_margin;
-        }
-
-        m_text->SetSizeHints(textCtrlMinW, minH, textCtrlMaxW, maxH, incW, incH);
-    }
-
-    if (m_picker)
-        m_picker->SetSizeHints(minW, minH, maxW, maxH, incW, incH);
-}
-
-void wxPickerBase::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    wxControl::DoSetSize(x, y, width, height, sizeFlags);
-
-    int pickerx = 0;
-    if (m_text)
-    {
-        // compute width of the ausiliary textctrl
-        int textCtrlW = GetTextCtrlWidth(width);
-
-        // set the m_text's position relatively to this window
-        m_text->SetSize(0, 0, textCtrlW, height, sizeFlags);
-
-        // change position of the real picker
-        pickerx += textCtrlW + m_margin;
-        width -= textCtrlW + m_margin;
-    }
-
-    if (m_picker)
-        m_picker->SetSize(pickerx, 0, width, height, sizeFlags);
-}
-
-wxSize wxPickerBase::DoGetBestSize() const
-{
-    wxSize ret = m_picker->GetBestSize();
-
-    if (m_text)
-    {
-        wxSize sz = m_text->GetBestSize();
-
-        ret.SetWidth( ret.GetWidth() + sz.GetWidth() + m_margin );
-        ret.SetHeight( wxMax(ret.GetHeight(), sz.GetHeight()) );
-    }
-
-    return ret;
-}
-
-void wxPickerBase::SetInternalMargin(int newmargin)
-{
-    m_margin = newmargin;
+    if (GetAutoLayout())
+        Layout();
+    event.Skip();
 }
 
 #endif // Any picker in use

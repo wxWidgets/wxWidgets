@@ -76,6 +76,10 @@ bool wxFileDirPickerCtrlBase::CreateBase( wxWindow *parent, wxWindowID id,
     // create a wxFilePickerWidget or a wxDirPickerWidget...
     if (!CreatePicker(this, path, message, wildcard))
         return false;
+
+    // complete sizer creation
+    wxPickerBase::PostCreation();
+
     m_picker->Connect(GetEventType(),
             wxFileDirPickerEventHandler(wxFileDirPickerCtrlBase::OnFileDirChange),
             NULL, this);

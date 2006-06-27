@@ -33,9 +33,9 @@ class WXDLLIMPEXP_CORE wxPickerBase : public wxControl
 {
 public:
     // ctor: text is the associated text control
-    wxPickerBase() : m_text(NULL), m_picker(NULL),
-                     m_margin(5), m_textProportion(2) {}
-    virtual ~wxPickerBase();
+    wxPickerBase() : m_text(NULL), m_picker(NULL), m_sizer(NULL)
+        { m_container.SetContainerWindow(this); }
+    virtual ~wxPickerBase() {}
 
 
     // if present, intercepts wxPB_USE_TEXTCTRL style and creates the text control
@@ -51,13 +51,39 @@ public:
 public:     // public API
 
     // margin between the text control and the picker
-    void SetInternalMargin(int newmargin);
-    int GetInternalMargin() const { return m_margin; }
+    void SetInternalMargin(int newmargin)
+        { GetTextCtrlItem()->SetBorder(newmargin); m_sizer->Layout(); }
+    int GetInternalMargin() const
+        { return GetTextCtrlItem()->GetBorder(); }
 
     // proportion of the text control respect the picker
     // (which has a fixed proportion value of 1)
-    void SetTextCtrlProportion(int prop) { wxASSERT(prop>=1); m_textProportion=prop; }
-    int GetTextCtrlProportion() const { return m_textProportion; }
+    void SetTextCtrlProportion(int prop)
+        { GetTextCtrlItem()->SetProportion(prop); m_sizer->Layout(); }
+    int GetTextCtrlProportion() const
+        { return GetTextCtrlItem()->GetProportion(); }
+
+    bool IsTextCtrlGrowable() const
+        { return GetTextCtrlItem()->GetFlag() & wxGROW; }
+    void SetTextCtrlGrowable(bool grow = true)
+    {
+        int f = GetDefaultTextCtrlFlag();
+        if (grow)
+            GetTextCtrlItem()->SetFlag(f | wxGROW);
+        else
+            GetTextCtrlItem()->SetFlag(f & ~wxGROW);
+    }
+
+    bool IsPickerCtrlGrowable() const
+        { return GetPickerCtrlItem()->GetFlag() & wxGROW; }
+    void SetPickerCtrlGrowable(bool grow = true)
+    {
+        int f = GetDefaultPickerCtrlFlag();
+        if (grow)
+            GetPickerCtrlItem()->SetFlag(f | wxGROW);
+        else
+            GetPickerCtrlItem()->SetFlag(f & ~wxGROW);
+    }
 
     bool HasTextCtrl() const
         { return m_text != NULL; }
@@ -66,20 +92,6 @@ public:     // public API
     wxControl *GetPickerCtrl()
         { return m_picker; }
 
-public:     // wxWindow overrides
-
-    void DoSetSizeHints(int minW, int minH,
-                        int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
-                        int incW = wxDefaultCoord, int incH = wxDefaultCoord );
-
-protected:
-    void DoSetSize(int x, int y,
-                   int width, int height,
-                   int sizeFlags = wxSIZE_AUTO);
-
-    wxSize DoGetBestSize() const;
-
-
 public:     // methods that derived class must/may override
 
     virtual void UpdatePickerFromTextCtrl() = 0;
@@ -87,12 +99,12 @@ public:     // methods that derived class must/may override
 
 protected:        // utility functions
 
-    inline int GetTextCtrlWidth(int given);
-
     // event handlers
     void OnTextCtrlDelete(wxWindowDestroyEvent &);
     void OnTextCtrlUpdate(wxCommandEvent &);
     void OnTextCtrlKillFocus(wxFocusEvent &);
+
+    void OnSize(wxSizeEvent &);
 
     // returns the set of styles for the attached wxTextCtrl
     // from given wxPickerBase's styles
@@ -103,15 +115,56 @@ protected:        // utility functions
     virtual long GetPickerStyle(long style) const
         { return (style & wxWINDOW_STYLE_MASK); }
 
+
+    wxSizerItem *GetPickerCtrlItem() const
+    {
+        if (this->HasTextCtrl())
+            return m_sizer->GetItem((size_t)1);
+        return m_sizer->GetItem((size_t)0);
+    }
+
+    wxSizerItem *GetTextCtrlItem() const
+    {
+        wxASSERT(this->HasTextCtrl());
+        return m_sizer->GetItem((size_t)0);
+    }
+
+    int GetDefaultPickerCtrlFlag() const
+    {
+        // on macintosh, without additional borders
+        // there's not enough space for focus rect
+        return wxALIGN_CENTER_VERTICAL|wxGROW
+#ifdef __WXMAC__
+            | wxTOP | wxRIGHT | wxBOTTOM
+#endif
+            ;
+    }
+
+    int GetDefaultTextCtrlFlag() const
+    {
+        // on macintosh, without wxALL there's not enough space for focus rect
+        return wxALIGN_CENTER_VERTICAL
+#ifdef __WXMAC__
+            | wxALL
+#else
+            | wxRIGHT
+#endif
+            ;
+    }
+
+    void PostCreation();
+
 protected:
     wxTextCtrl *m_text;     // can be NULL
     wxControl *m_picker;
-
-    int m_margin;           // distance between subcontrols
-    int m_textProportion;   // proportion between textctrl and other item
+    wxBoxSizer *m_sizer;
 
 private:
     DECLARE_ABSTRACT_CLASS(wxPickerBase)
+    DECLARE_EVENT_TABLE()
+
+    // This class must be something just like a panel...
+    WX_DECLARE_CONTROL_CONTAINER();
 };
 
 
