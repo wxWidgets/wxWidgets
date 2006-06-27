@@ -3222,6 +3222,10 @@ SWIGINTERN void wxPyTaskBarIcon_Destroy(wxPyTaskBarIcon *self){
  static const wxString wxPyFileSelectorDefaultWildcardStr(wxFileSelectorDefaultWildcardStr); 
  static const wxString wxPyGetTextFromUserPromptStr(wxGetTextFromUserPromptStr); 
  static const wxString wxPyMessageBoxCaptionStr(wxMessageBoxCaptionStr); 
+
+// for compatibility only    
+#define wxHIDE_READONLY 0
+
 SWIGINTERN PyObject *wxFileDialog_GetFilenames(wxFileDialog *self){
             wxArrayString arr;
             self->GetFilenames(arr);
@@ -33744,6 +33748,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "FILE_MUST_EXIST",SWIG_From_int(static_cast< int >(wxFILE_MUST_EXIST)));
   SWIG_Python_SetConstant(d, "MULTIPLE",SWIG_From_int(static_cast< int >(wxMULTIPLE)));
   SWIG_Python_SetConstant(d, "CHANGE_DIR",SWIG_From_int(static_cast< int >(wxCHANGE_DIR)));
+  SWIG_Python_SetConstant(d, "HIDE_READONLY",SWIG_From_int(static_cast< int >(wxHIDE_READONLY)));
   SWIG_Python_SetConstant(d, "FD_OPEN",SWIG_From_int(static_cast< int >(wxFD_OPEN)));
   SWIG_Python_SetConstant(d, "FD_SAVE",SWIG_From_int(static_cast< int >(wxFD_SAVE)));
   SWIG_Python_SetConstant(d, "FD_OVERWRITE_PROMPT",SWIG_From_int(static_cast< int >(wxFD_OVERWRITE_PROMPT)));

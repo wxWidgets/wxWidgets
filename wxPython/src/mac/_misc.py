@@ -328,6 +328,41 @@ def Shell(*args, **kwargs):
 def StartTimer(*args):
   """StartTimer()"""
   return _misc_.StartTimer(*args)
+UNKNOWN_PLATFORM = _misc_.UNKNOWN_PLATFORM
+CURSES = _misc_.CURSES
+XVIEW_X = _misc_.XVIEW_X
+MOTIF_X = _misc_.MOTIF_X
+COSE_X = _misc_.COSE_X
+NEXTSTEP = _misc_.NEXTSTEP
+MAC = _misc_.MAC
+MAC_DARWIN = _misc_.MAC_DARWIN
+BEOS = _misc_.BEOS
+GTK = _misc_.GTK
+GTK_WIN32 = _misc_.GTK_WIN32
+GTK_OS2 = _misc_.GTK_OS2
+GTK_BEOS = _misc_.GTK_BEOS
+GEOS = _misc_.GEOS
+OS2_PM = _misc_.OS2_PM
+WINDOWS = _misc_.WINDOWS
+MICROWINDOWS = _misc_.MICROWINDOWS
+PENWINDOWS = _misc_.PENWINDOWS
+WINDOWS_NT = _misc_.WINDOWS_NT
+WIN32S = _misc_.WIN32S
+WIN95 = _misc_.WIN95
+WIN386 = _misc_.WIN386
+WINDOWS_CE = _misc_.WINDOWS_CE
+WINDOWS_POCKETPC = _misc_.WINDOWS_POCKETPC
+WINDOWS_SMARTPHONE = _misc_.WINDOWS_SMARTPHONE
+MGL_UNIX = _misc_.MGL_UNIX
+MGL_X = _misc_.MGL_X
+MGL_WIN32 = _misc_.MGL_WIN32
+MGL_OS2 = _misc_.MGL_OS2
+MGL_DOS = _misc_.MGL_DOS
+WINDOWS_OS2 = _misc_.WINDOWS_OS2
+UNIX = _misc_.UNIX
+X11 = _misc_.X11
+PALMOS = _misc_.PALMOS
+DOS = _misc_.DOS
 
 def GetOsVersion(*args):
   """GetOsVersion() -> (platform, major, minor)"""

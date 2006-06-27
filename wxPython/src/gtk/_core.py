@@ -1982,6 +1982,10 @@ class ImageHandler(Object):
         """CanRead(self, String name) -> bool"""
         return _core_.ImageHandler_CanRead(*args, **kwargs)
 
+    def CanReadStream(*args, **kwargs):
+        """CanReadStream(self, InputStream stream) -> bool"""
+        return _core_.ImageHandler_CanReadStream(*args, **kwargs)
+
     def SetName(*args, **kwargs):
         """SetName(self, String name)"""
         return _core_.ImageHandler_SetName(*args, **kwargs)

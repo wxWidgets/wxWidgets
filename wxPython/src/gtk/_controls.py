@@ -1751,6 +1751,10 @@ class TextCtrl(_core.Control):
         """DiscardEdits(self)"""
         return _controls_.TextCtrl_DiscardEdits(*args, **kwargs)
 
+    def SetModified(*args, **kwargs):
+        """SetModified(self, bool modified)"""
+        return _controls_.TextCtrl_SetModified(*args, **kwargs)
+
     def SetMaxLength(*args, **kwargs):
         """SetMaxLength(self, unsigned long len)"""
         return _controls_.TextCtrl_SetMaxLength(*args, **kwargs)
@@ -2970,6 +2974,7 @@ NB_HITTEST_NOWHERE = _controls_.NB_HITTEST_NOWHERE
 NB_HITTEST_ONICON = _controls_.NB_HITTEST_ONICON
 NB_HITTEST_ONLABEL = _controls_.NB_HITTEST_ONLABEL
 NB_HITTEST_ONITEM = _controls_.NB_HITTEST_ONITEM
+NB_HITTEST_ONPAGE = _controls_.NB_HITTEST_ONPAGE
 class Notebook(BookCtrlBase):
     """Proxy of C++ Notebook class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -4898,9 +4903,12 @@ class TreeEvent(_core.NotifyEvent):
     """Proxy of C++ TreeEvent class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
-    def __init__(self, *args, **kwargs): 
-        """__init__(self, EventType commandType=wxEVT_NULL, int id=0) -> TreeEvent"""
-        _controls_.TreeEvent_swiginit(self,_controls_.new_TreeEvent(*args, **kwargs))
+    def __init__(self, *args): 
+        """
+        __init__(self, EventType commandType=wxEVT_NULL, int id=0) -> TreeEvent
+        __init__(self, EventType commandType, TreeCtrl tree, TreeItemId item=NullTreeItemId) -> TreeEvent
+        """
+        _controls_.TreeEvent_swiginit(self,_controls_.new_TreeEvent(*args))
     def GetItem(*args, **kwargs):
         """GetItem(self) -> TreeItemId"""
         return _controls_.TreeEvent_GetItem(*args, **kwargs)
@@ -6389,6 +6397,22 @@ class PickerBase(_core.Control):
         """
         return _controls_.PickerBase_GetTextCtrlProportion(*args, **kwargs)
 
+    def IsTextCtrlGrowable(*args, **kwargs):
+        """IsTextCtrlGrowable(self) -> bool"""
+        return _controls_.PickerBase_IsTextCtrlGrowable(*args, **kwargs)
+
+    def SetTextCtrlGrowable(*args, **kwargs):
+        """SetTextCtrlGrowable(self, bool grow=True)"""
+        return _controls_.PickerBase_SetTextCtrlGrowable(*args, **kwargs)
+
+    def IsPickerCtrlGrowable(*args, **kwargs):
+        """IsPickerCtrlGrowable(self) -> bool"""
+        return _controls_.PickerBase_IsPickerCtrlGrowable(*args, **kwargs)
+
+    def SetPickerCtrlGrowable(*args, **kwargs):
+        """SetPickerCtrlGrowable(self, bool grow=True)"""
+        return _controls_.PickerBase_SetPickerCtrlGrowable(*args, **kwargs)
+
     def HasTextCtrl(*args, **kwargs):
         """
         HasTextCtrl(self) -> bool
@@ -6559,6 +6583,14 @@ class FilePickerCtrl(PickerBase):
         """SetPath(self, String str)"""
         return _controls_.FilePickerCtrl_SetPath(*args, **kwargs)
 
+    def CheckPath(*args, **kwargs):
+        """CheckPath(self, String path) -> bool"""
+        return _controls_.FilePickerCtrl_CheckPath(*args, **kwargs)
+
+    def GetTextCtrlValue(*args, **kwargs):
+        """GetTextCtrlValue(self) -> String"""
+        return _controls_.FilePickerCtrl_GetTextCtrlValue(*args, **kwargs)
+
 _controls_.FilePickerCtrl_swigregister(FilePickerCtrl)
 FilePickerCtrlNameStr = cvar.FilePickerCtrlNameStr
 FileSelectorPromptStr = cvar.FileSelectorPromptStr
@@ -6603,6 +6635,14 @@ class DirPickerCtrl(PickerBase):
     def SetPath(*args, **kwargs):
         """SetPath(self, String str)"""
         return _controls_.DirPickerCtrl_SetPath(*args, **kwargs)
+
+    def CheckPath(*args, **kwargs):
+        """CheckPath(self, String path) -> bool"""
+        return _controls_.DirPickerCtrl_CheckPath(*args, **kwargs)
+
+    def GetTextCtrlValue(*args, **kwargs):
+        """GetTextCtrlValue(self) -> String"""
+        return _controls_.DirPickerCtrl_GetTextCtrlValue(*args, **kwargs)
 
 _controls_.DirPickerCtrl_swigregister(DirPickerCtrl)
 

@@ -1691,8 +1691,6 @@ class FSFile(Object):
             DateTime modif) -> FSFile
         """
         _core_.FSFile_swiginit(self,_core_.new_FSFile(*args, **kwargs))
-        self.thisown = 0   # It will normally be deleted by the user of the wx.FileSystem
-
     __swig_destroy__ = _core_.delete_FSFile
     __del__ = lambda self : None;
     def GetStream(*args, **kwargs):
@@ -1983,6 +1981,10 @@ class ImageHandler(Object):
     def CanRead(*args, **kwargs):
         """CanRead(self, String name) -> bool"""
         return _core_.ImageHandler_CanRead(*args, **kwargs)
+
+    def CanReadStream(*args, **kwargs):
+        """CanReadStream(self, InputStream stream) -> bool"""
+        return _core_.ImageHandler_CanReadStream(*args, **kwargs)
 
     def SetName(*args, **kwargs):
         """SetName(self, String name)"""

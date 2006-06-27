@@ -9642,9 +9642,7 @@ SWIGINTERN PyObject *_wrap_new_FSFile(PyObject *SWIGUNUSEDPARM(self), PyObject *
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  {
-    resultobj = wxPyMake_wxObject(result, (bool)SWIG_POINTER_NEW); 
-  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxFSFile, SWIG_POINTER_NEW |  0 );
   {
     if (temp2)
     delete arg2;
@@ -10068,7 +10066,7 @@ SWIGINTERN PyObject *_wrap_FileSystemHandler_OpenFile(PyObject *SWIGUNUSEDPARM(s
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = wxPyMake_wxObject(result, (bool)SWIG_POINTER_OWN); 
+    resultobj = wxPyMake_wxObject(result, SWIG_POINTER_OWN); 
   }
   {
     if (temp3)
@@ -10622,7 +10620,7 @@ SWIGINTERN PyObject *_wrap_FileSystem_OpenFile(PyObject *SWIGUNUSEDPARM(self), P
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = wxPyMake_wxObject(result, (bool)SWIG_POINTER_OWN); 
+    resultobj = wxPyMake_wxObject(result, SWIG_POINTER_OWN); 
   }
   {
     if (temp2)
@@ -10986,7 +10984,7 @@ SWIGINTERN PyObject *_wrap_InternetFSHandler_OpenFile(PyObject *SWIGUNUSEDPARM(s
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = wxPyMake_wxObject(result, (bool)SWIG_POINTER_OWN); 
+    resultobj = wxPyMake_wxObject(result, SWIG_POINTER_OWN); 
   }
   {
     if (temp3)
@@ -11123,7 +11121,7 @@ SWIGINTERN PyObject *_wrap_ZipFSHandler_OpenFile(PyObject *SWIGUNUSEDPARM(self),
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = wxPyMake_wxObject(result, (bool)SWIG_POINTER_OWN); 
+    resultobj = wxPyMake_wxObject(result, SWIG_POINTER_OWN); 
   }
   {
     if (temp3)
@@ -11546,7 +11544,7 @@ SWIGINTERN PyObject *_wrap_MemoryFSHandler_OpenFile(PyObject *SWIGUNUSEDPARM(sel
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = wxPyMake_wxObject(result, (bool)SWIG_POINTER_OWN); 
+    resultobj = wxPyMake_wxObject(result, SWIG_POINTER_OWN); 
   }
   {
     if (temp3)
@@ -11843,6 +11841,62 @@ fail:
   {
     if (temp2)
     delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ImageHandler_CanReadStream(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxImageHandler *arg1 = (wxImageHandler *) 0 ;
+  wxInputStream *arg2 = 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxPyInputStream *temp2 ;
+  bool created2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "stream", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ImageHandler_CanReadStream",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxImageHandler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ImageHandler_CanReadStream" "', expected argument " "1"" of type '" "wxImageHandler *""'"); 
+  }
+  arg1 = reinterpret_cast< wxImageHandler * >(argp1);
+  {
+    if (wxPyConvertSwigPtr(obj1, (void **)&temp2, wxT("wxPyInputStream"))) {
+      arg2 = temp2->m_wxis;
+      created2 = false;
+    } else {
+      PyErr_Clear();  // clear the failure of the wxPyConvert above
+      arg2 = wxPyCBInputStream_create(obj1, false);
+      if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError, "Expected wx.InputStream or Python file-like object.");
+        SWIG_fail;
+      }
+      created2 = true;
+    }
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->CanRead(*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  {
+    if (created2) delete arg2; 
+  }
+  return resultobj;
+fail:
+  {
+    if (created2) delete arg2; 
   }
   return NULL;
 }
@@ -52921,6 +52975,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ImageHandler_GetType", (PyCFunction)_wrap_ImageHandler_GetType, METH_O, NULL},
 	 { (char *)"ImageHandler_GetMimeType", (PyCFunction)_wrap_ImageHandler_GetMimeType, METH_O, NULL},
 	 { (char *)"ImageHandler_CanRead", (PyCFunction) _wrap_ImageHandler_CanRead, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ImageHandler_CanReadStream", (PyCFunction) _wrap_ImageHandler_CanReadStream, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ImageHandler_SetName", (PyCFunction) _wrap_ImageHandler_SetName, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ImageHandler_SetExtension", (PyCFunction) _wrap_ImageHandler_SetExtension, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ImageHandler_SetType", (PyCFunction) _wrap_ImageHandler_SetType, METH_VARARGS | METH_KEYWORDS, NULL},
