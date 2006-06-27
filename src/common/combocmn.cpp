@@ -743,24 +743,23 @@ void wxComboCtrlBase::InstallInputHandlers( bool alsoTextCtrl )
     m_extraEvtHandler = inputHandler;
 }
 
-void wxComboCtrlBase::CreateTextCtrl( int extraStyle, const wxValidator& validator )
+void
+wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
 {
     if ( !(m_windowStyle & wxCB_READONLY) )
     {
-        m_text = new wxTextCtrl(this,
-                                wxID_ANY,
-                                m_valueString,
-                                wxDefaultPosition,
-                                wxDefaultSize,
-                                // wxTE_PROCESS_TAB is needed because on Windows, wxTAB_TRAVERSAL is
-                                // not used by the wxPropertyGrid and therefore the tab is
-                                // processed by looking at ancestors to see if they have
-                                // wxTAB_TRAVERSAL. The navigation event is then sent to
-                                // the wrong window.
-                                wxTE_PROCESS_TAB |
-                                wxTE_PROCESS_ENTER |
-                                extraStyle,
-                                validator);
+        // wxTE_PROCESS_TAB is needed because on Windows, wxTAB_TRAVERSAL is
+        // not used by the wxPropertyGrid and therefore the tab is processed by
+        // looking at ancestors to see if they have wxTAB_TRAVERSAL. The
+        // navigation event is then sent to the wrong window.
+        style |= wxTE_PROCESS_TAB;
+
+        if ( HasFlag(wxPROCESS_ENTER) )
+            style |= wxTE_PROCESS_ENTER;
+
+        m_text = new wxTextCtrl(this, wxID_ANY, m_valueString,
+                                wxDefaultPosition, wxDefaultSize,
+                                style, validator);
 
         // This is required for some platforms (GTK+ atleast)
         m_text->SetSizeHints(2,4);
