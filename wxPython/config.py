@@ -503,7 +503,7 @@ def build_locale_dir(destdir, verbose=1):
     moFiles = glob.glob(opj(WXDIR, 'locale', '*.mo'))
     for src in moFiles:
         lang = os.path.splitext(os.path.basename(src))[0]
-        dest = opj(destdir, lang, 'LC_MESSAGES')
+        dest = opj(destdir, lang)
         mkpath(dest, verbose=verbose)
         copy_file(src, opj(dest, 'wxstd.mo'), update=1, verbose=verbose)
         CLEANUP.append(opj(dest, 'wxstd.mo'))
