@@ -249,10 +249,7 @@ void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
     if ( !m_webView )
         return;
 
-    if (CanGetPageSource()){
-        [[m_webView mainFrame] loadHTMLString:(NSString*)wxNSStringWithWxString( source ) baseURL:[NSURL URLWithString:wxNSStringWithWxString( baseUrl )]];
-    }
-
+    [[m_webView mainFrame] loadHTMLString:(NSString*)wxNSStringWithWxString( source ) baseURL:[NSURL URLWithString:wxNSStringWithWxString( baseUrl )]];
 }
 
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
