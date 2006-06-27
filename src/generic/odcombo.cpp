@@ -662,7 +662,6 @@ IMPLEMENT_DYNAMIC_CLASS2(wxOwnerDrawnComboBox, wxComboCtrl, wxControlWithItems)
 
 void wxOwnerDrawnComboBox::Init()
 {
-    m_popupInterface = NULL;
 }
 
 bool wxOwnerDrawnComboBox::Create(wxWindow *parent,
@@ -740,7 +739,7 @@ bool wxOwnerDrawnComboBox::Create(wxWindow *parent,
 wxOwnerDrawnComboBox::~wxOwnerDrawnComboBox()
 {
     if ( m_popupInterface )
-        m_popupInterface->ClearClientDatas();
+        GetVListBoxComboPopup()->ClearClientDatas();
 }
 
 void wxOwnerDrawnComboBox::DoSetPopupControl(wxComboPopup* popup)
@@ -753,13 +752,11 @@ void wxOwnerDrawnComboBox::DoSetPopupControl(wxComboPopup* popup)
     wxComboCtrl::DoSetPopupControl(popup);
 
     wxASSERT(popup);
-    m_popupInterface = (wxVListBoxComboPopup*) popup;
 
     // Add initial choices to the wxVListBox
-    if ( !m_popupInterface->GetCount() )
+    if ( !GetVListBoxComboPopup()->GetCount() )
     {
-        //m_popupInterface->Populate(m_initChs.GetCount(),m_initChs.GetStrings());
-        m_popupInterface->Populate(m_initChs);
+        GetVListBoxComboPopup()->Populate(m_initChs);
         m_initChs.Clear();
     }
 }
@@ -772,7 +769,7 @@ void wxOwnerDrawnComboBox::Clear()
 {
     EnsurePopupControl();
 
-    m_popupInterface->Clear();
+    GetVListBoxComboPopup()->Clear();
 
     SetValue(wxEmptyString);
 }
@@ -784,7 +781,7 @@ void wxOwnerDrawnComboBox::Delete(unsigned int n)
     if ( GetSelection() == (int) n )
         SetValue(wxEmptyString);
 
-    m_popupInterface->Delete(n);
+    GetVListBoxComboPopup()->Delete(n);
 }
 
 unsigned int wxOwnerDrawnComboBox::GetCount() const
@@ -792,7 +789,7 @@ unsigned int wxOwnerDrawnComboBox::GetCount() const
     if ( !m_popupInterface )
         return m_initChs.GetCount();
 
-    return m_popupInterface->GetCount();
+    return GetVListBoxComboPopup()->GetCount();
 }
 
 wxString wxOwnerDrawnComboBox::GetString(unsigned int n) const
@@ -802,7 +799,7 @@ wxString wxOwnerDrawnComboBox::GetString(unsigned int n) const
     if ( !m_popupInterface )
         return m_initChs.Item(n);
 
-    return m_popupInterface->GetString(n);
+    return GetVListBoxComboPopup()->GetString(n);
 }
 
 void wxOwnerDrawnComboBox::SetString(unsigned int n, const wxString& s)
@@ -811,7 +808,7 @@ void wxOwnerDrawnComboBox::SetString(unsigned int n, const wxString& s)
 
     wxCHECK_RET( IsValid(n), _T("invalid index in wxOwnerDrawnComboBox::SetString") );
 
-    m_popupInterface->SetString(n,s);
+    GetVListBoxComboPopup()->SetString(n,s);
 }
 
 int wxOwnerDrawnComboBox::FindString(const wxString& s, bool bCase) const
@@ -819,7 +816,7 @@ int wxOwnerDrawnComboBox::FindString(const wxString& s, bool bCase) const
     if ( !m_popupInterface )
         return m_initChs.Index(s, bCase);
 
-    return m_popupInterface->FindString(s, bCase);
+    return GetVListBoxComboPopup()->FindString(s, bCase);
 }
 
 void wxOwnerDrawnComboBox::Select(int n)
@@ -828,11 +825,11 @@ void wxOwnerDrawnComboBox::Select(int n)
 
     wxCHECK_RET( (n == wxNOT_FOUND) || IsValid(n), _T("invalid index in wxOwnerDrawnComboBox::Select") );
 
-    m_popupInterface->SetSelection(n);
+    GetVListBoxComboPopup()->SetSelection(n);
 
     wxString str;
     if ( n >= 0 )
-        str = m_popupInterface->GetString(n);
+        str = GetVListBoxComboPopup()->GetString(n);
 
     // Refresh text portion in control
     if ( m_text )
@@ -848,14 +845,15 @@ int wxOwnerDrawnComboBox::GetSelection() const
     if ( !m_popupInterface )
         return m_initChs.Index(m_valueString);
 
-    return m_popupInterface->GetSelection();
+    return GetVListBoxComboPopup()->GetSelection();
 }
 
 int wxOwnerDrawnComboBox::DoAppend(const wxString& item)
 {
     EnsurePopupControl();
     wxASSERT(m_popupInterface);
-    return m_popupInterface->Append(item);
+
+    return GetVListBoxComboPopup()->Append(item);
 }
 
 int wxOwnerDrawnComboBox::DoInsert(const wxString& item, unsigned int pos)
@@ -865,7 +863,7 @@ int wxOwnerDrawnComboBox::DoInsert(const wxString& item, unsigned int pos)
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
     wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
 
-    m_popupInterface->Insert(item,pos);
+    GetVListBoxComboPopup()->Insert(item,pos);
 
     return pos;
 }
@@ -873,7 +871,8 @@ int wxOwnerDrawnComboBox::DoInsert(const wxString& item, unsigned int pos)
 void wxOwnerDrawnComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
     EnsurePopupControl();
-    m_popupInterface->SetItemClientData(n,clientData,m_clientDataItemsType);
+
+    GetVListBoxComboPopup()->SetItemClientData(n,clientData,m_clientDataItemsType);
 }
 
 void* wxOwnerDrawnComboBox::DoGetItemClientData(unsigned int n) const
@@ -881,7 +880,7 @@ void* wxOwnerDrawnComboBox::DoGetItemClientData(unsigned int n) const
     if ( !m_popupInterface )
         return NULL;
 
-    return m_popupInterface->GetItemClientData(n);
+    return GetVListBoxComboPopup()->GetItemClientData(n);
 }
 
 void wxOwnerDrawnComboBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
@@ -911,7 +910,7 @@ void wxOwnerDrawnComboBox::OnDrawItem( wxDC& dc,
     }
     else
     {
-        dc.DrawText( m_popupInterface->GetString(item), rect.x + 2, rect.y );
+        dc.DrawText( GetVListBoxComboPopup()->GetString(item), rect.x + 2, rect.y );
     }
 }
 
@@ -928,7 +927,7 @@ wxCoord wxOwnerDrawnComboBox::OnMeasureItemWidth( size_t WXUNUSED(item) ) const
 void wxOwnerDrawnComboBox::OnDrawBackground(wxDC& dc, const wxRect& rect, int item, int flags) const
 {
     // we need to render selected and current items differently
-    if ( m_popupInterface->IsCurrent((size_t)item) )
+    if ( GetVListBoxComboPopup()->IsCurrent((size_t)item) )
     {
         DrawFocusBackground(dc,
                             rect,

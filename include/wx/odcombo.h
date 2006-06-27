@@ -320,15 +320,17 @@ protected:
     // clears all allocated client datas
     void ClearClientDatas();
 
+    wxVListBoxComboPopup* GetVListBoxComboPopup() const
+    {
+        return (wxVListBoxComboPopup*) m_popupInterface;
+    }
+
     virtual int DoAppend(const wxString& item);
     virtual int DoInsert(const wxString& item, unsigned int pos);
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
     virtual void* DoGetItemClientData(unsigned int n) const;
     virtual void DoSetItemClientObject(unsigned int n, wxClientData* clientData);
     virtual wxClientData* DoGetItemClientObject(unsigned int n) const;
-
-    // overload m_popupInterface member so we can access specific popup interface easier
-    wxVListBoxComboPopup*   m_popupInterface;
 
     // temporary storage for the initial choices
     //const wxString*         m_baseChoices;
