@@ -854,12 +854,7 @@ static void SetEventText(wxStyledTextEvent& evt, const char* text,
                          size_t length) {
     if(!text) return;
 
-    // The unicode conversion MUST have a null byte to terminate the
-    // string so move it into a buffer first and give it one.
-    wxMemoryBuffer buf(length+1);
-    buf.AppendData((void*)text, length);
-    buf.AppendByte(0);
-    evt.SetText(stc2wx(buf));
+    evt.SetText(stc2wx(text, length));
 }
 
 
