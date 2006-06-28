@@ -14,6 +14,7 @@ All (GUI):
 
 - In wxScrolledWindow:DoGetBestSize, no longer adds difference between client and
   total size if we've just used the total size as the best size.
+- Fixed problem with zoom setting in print preview.
 
 wxGTK:
 

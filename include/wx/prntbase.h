@@ -571,6 +571,9 @@ public:
     virtual void AdjustScrollbars(wxPreviewCanvas *canvas);
     virtual bool RenderPage(int pageNum);
     virtual void SetZoom(int percent);
+#if wxABI_VERSION >= 20604
+    virtual int GetZoom() const;
+#endif
 
     virtual bool Print(bool interactive);
     virtual void DetermineScaling();
