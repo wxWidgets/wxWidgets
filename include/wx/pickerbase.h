@@ -13,6 +13,7 @@
 #define _WX_PICKERBASE_H_BASE_
 
 #include "wx/control.h"
+#include "wx/sizer.h"
 
 class WXDLLIMPEXP_CORE wxTextCtrl;
 
