@@ -213,7 +213,7 @@ void LineLayoutCache::Allocate(int length_) {
 }
 
 void LineLayoutCache::AllocateForLevel(int linesOnScreen, int linesInDoc) {
-	PLATFORM_ASSERT(useCount == 0);
+//	PLATFORM_ASSERT(useCount == 0);
 	int lengthForLevel = 0;
 	if (level == llcCaret) {
 		lengthForLevel = 1;
@@ -239,7 +239,7 @@ void LineLayoutCache::AllocateForLevel(int linesOnScreen, int linesInDoc) {
 }
 
 void LineLayoutCache::Deallocate() {
-	PLATFORM_ASSERT(useCount == 0);
+//	PLATFORM_ASSERT(useCount == 0);
 	for (int i = 0; i < length; i++)
 		delete cache[i];
 	delete []cache;
