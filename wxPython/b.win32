@@ -16,6 +16,7 @@ case $1 in
     22 | 2.2) VER=22; shift ;;
     23 | 2.3) VER=23; shift ;;
     24 | 2.4) VER=24; shift ;;
+    25 | 2.5) VER=25; shift ;;
 
     *) 	VER=24
 esac
