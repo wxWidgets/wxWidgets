@@ -155,6 +155,7 @@ All (GUI):
 - Fixed 64-bit issue in wxNotebook causing segfaults on Tru64 Unix.
 - Made it possible to associate context help to a region of a window.
 - Added support for tabs in wxRichTextCtrl (Ashish More).
+- Fixed problem with zoom setting in print preview.
 
 wxMSW:
 

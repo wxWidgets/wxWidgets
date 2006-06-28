@@ -1477,6 +1477,11 @@ void wxPrintPreview::SetZoom(int percent)
     m_pimpl->SetZoom( percent );
 }
 
+int wxPrintPreview::GetZoom() const
+{
+    return m_pimpl->GetZoom();
+}
+
 wxPrintDialogData& wxPrintPreview::GetPrintDialogData()
 {
     return m_pimpl->GetPrintDialogData();

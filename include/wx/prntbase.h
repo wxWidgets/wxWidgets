@@ -568,6 +568,7 @@ public:
     virtual void AdjustScrollbars(wxPreviewCanvas *canvas);
     virtual bool RenderPage(int pageNum);
     virtual void SetZoom(int percent);
+    virtual int GetZoom() const;
 
     virtual bool Print(bool interactive);
     virtual void DetermineScaling();
