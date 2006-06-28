@@ -1241,7 +1241,7 @@ public:
     /// Clone
     virtual wxRichTextObject* Clone() const { return new wxRichTextPlainText(*this); }
 private:
-    bool wxRichTextPlainText::DrawTabbedString(wxDC& dc,const wxRect& rect,wxString& str, wxCoord& x, wxCoord& y, bool selected);
+    bool DrawTabbedString(wxDC& dc,const wxRect& rect,wxString& str, wxCoord& x, wxCoord& y, bool selected);
 
 protected:
     wxString    m_text;
