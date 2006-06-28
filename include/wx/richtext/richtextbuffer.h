@@ -538,7 +538,7 @@ public:
 
     /// Get the object size for the given range. Returns false if the range
     /// is invalid for this object.
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags) const  = 0;
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0)) const  = 0;
 
     /// Do a split, returning an object containing the second part, and setting
     /// the first part in 'this'.
@@ -758,7 +758,7 @@ public:
 
     /// Get/set the object size for the given range. Returns false if the range
     /// is invalid for this object.
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags) const;
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0)) const;
 
 // Accessors
 
@@ -797,7 +797,7 @@ public:
 
     /// Get/set the object size for the given range. Returns false if the range
     /// is invalid for this object.
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags) const;
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0)) const;
 
     /// Delete range
     virtual bool DeleteRange(const wxRichTextRange& range);
@@ -1102,7 +1102,7 @@ public:
 
     /// Get/set the object size for the given range. Returns false if the range
     /// is invalid for this object.
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags) const;
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0)) const;
 
     /// Finds the absolute position and row height for the given character position
     virtual bool FindPosition(wxDC& dc, long index, wxPoint& pt, int* height, bool forceLineStart);
@@ -1197,7 +1197,7 @@ public:
 
     /// Get/set the object size for the given range. Returns false if the range
     /// is invalid for this object.
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags) const;
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position/* = wxPoint(0,0)*/) const;
 
     /// Get any text in this object for the given range
     virtual wxString GetTextForRange(const wxRichTextRange& range) const;
@@ -1240,6 +1240,8 @@ public:
 
     /// Clone
     virtual wxRichTextObject* Clone() const { return new wxRichTextPlainText(*this); }
+private:
+    bool wxRichTextPlainText::DrawTabbedString(wxDC& dc,const wxRect& rect,wxString& str, wxCoord& x, wxCoord& y, bool selected);
 
 protected:
     wxString    m_text;
@@ -1350,7 +1352,7 @@ public:
 
     /// Get the object size for the given range. Returns false if the range
     /// is invalid for this object.
-    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags) const;
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0)) const;
 
     /// Returns true if the object is empty
     virtual bool IsEmpty() const { return !m_image.Ok(); }

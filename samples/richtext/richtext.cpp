@@ -475,7 +475,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);
     wxFont italicFont = wxFont(12, wxROMAN, wxITALIC, wxNORMAL);
 
-    m_richTextCtrl = new wxRichTextCtrl(splitter, wxID_ANY, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxNO_BORDER);
+    m_richTextCtrl = new wxRichTextCtrl(splitter, wxID_ANY, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS);
     wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
 
 #ifdef __WXMAC__
@@ -602,6 +602,19 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     r.WriteText(wxT("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."));
     r.EndLineSpacing();
     r.EndAlignment();
+
+    wxArrayInt tabs;
+    tabs.Add(400);
+    tabs.Add(600);
+    tabs.Add(800);
+    tabs.Add(1000);
+    wxTextAttrEx attr;
+    attr.SetFlags(wxTEXT_ATTR_TABS);
+    attr.SetTabs(tabs);
+    r.SetDefaultStyle(attr);
+    
+    r.Newline();
+    r.WriteText(wxT("This line contains tabs:\tFirst tab\tSecond tab\tThird tab"));
 
     r.Newline();
     r.WriteText(wxT("Other notable features of wxRichTextCtrl include:"));

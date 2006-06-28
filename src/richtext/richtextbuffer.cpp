@@ -441,13 +441,13 @@ bool wxRichTextBox::Layout(wxDC& dc, const wxRect& rect, int style)
 }
 
 /// Get/set the size for the given range. Assume only has one child.
-bool wxRichTextBox::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags) const
+bool wxRichTextBox::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position) const
 {
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
     if (node)
     {
         wxRichTextObject* child = node->GetData();
-        return child->GetRangeSize(range, size, descent, dc, flags);
+        return child->GetRangeSize(range, size, descent, dc, flags, position);
     }
     else
         return false;
@@ -657,7 +657,7 @@ void wxRichTextParagraphLayoutBox::Copy(const wxRichTextParagraphLayoutBox& obj)
 }
 
 /// Get/set the size for the given range.
-bool wxRichTextParagraphLayoutBox::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags) const
+bool wxRichTextParagraphLayoutBox::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position) const
 {
     wxSize sz;
 
@@ -713,7 +713,7 @@ bool wxRichTextParagraphLayoutBox::GetRangeSize(const wxRichTextRange& range, wx
         wxSize childSize;
 
         int childDescent = 0;
-        child->GetRangeSize(rangeToFind, childSize, childDescent, dc, flags);
+        child->GetRangeSize(rangeToFind, childSize, childDescent, dc, flags, position);
 
         descent = wxMax(childDescent, descent);
 
@@ -1962,7 +1962,7 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& WXUNUSED(range),
 
                 wxSize objectSize;
                 int descent = 0;
-                child->GetRangeSize(objectRange, objectSize, descent, dc, wxRICHTEXT_UNFORMATTED);
+                child->GetRangeSize(objectRange, objectSize, descent, dc, wxRICHTEXT_UNFORMATTED, objectPosition);
 
                 // Use the child object's width, but the whole line's height
                 wxRect childRect(objectPosition, wxSize(objectSize.x, line->GetSize().y));
@@ -2075,7 +2075,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
             childDescent = child->GetDescent();
         }
         else
-            GetRangeSize(wxRichTextRange(lastEndPos+1, child->GetRange().GetEnd()), childSize, childDescent, dc, wxRICHTEXT_UNFORMATTED);
+            GetRangeSize(wxRichTextRange(lastEndPos+1, child->GetRange().GetEnd()), childSize, childDescent, dc, wxRICHTEXT_UNFORMATTED,rect.GetPosition());
 
         if (childSize.x + currentWidth > availableSpaceForText)
         {
@@ -2310,7 +2310,7 @@ void wxRichTextParagraph::ClearLines()
 
 /// Get/set the object size for the given range. Returns false if the range
 /// is invalid for this object.
-bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags) const
+bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position) const
 {
     if (!range.IsWithin(GetRange()))
         return false;
@@ -2334,7 +2334,7 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                 rangeToUse.LimitTo(child->GetRange());
                 int childDescent = 0;
 
-                if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, flags))
+                if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, flags, position))
                 {
                     sz.y = wxMax(sz.y, childSize.y);
                     sz.x += childSize.x;
@@ -2379,7 +2379,7 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
                         wxSize childSize;
                         int childDescent = 0;
-                        if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, flags))
+                        if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, flags, position))
                         {
                             lineSize.y = wxMax(lineSize.y, childSize.y);
                             lineSize.x += childSize.x;
@@ -2480,7 +2480,7 @@ bool wxRichTextParagraph::FindPosition(wxDC& dc, long index, wxPoint& pt, int* h
             // then we can add this size to the line start position and
             // paragraph start position to find the actual position.
 
-            if (GetRangeSize(r, rangeSize, descent, dc, wxRICHTEXT_UNFORMATTED))
+            if (GetRangeSize(r, rangeSize, descent, dc, wxRICHTEXT_UNFORMATTED, line->GetPosition()+ GetPosition()))
             {
                 pt.x = line->GetPosition().x + GetPosition().x + rangeSize.x;
                 *height = line->GetSize().y;
@@ -2533,7 +2533,7 @@ int wxRichTextParagraph::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition
 
                     wxRichTextRange rangeToUse(lineRange.GetStart(), i);
 
-                    GetRangeSize(rangeToUse, childSize, descent, dc, wxRICHTEXT_UNFORMATTED);
+                    GetRangeSize(rangeToUse, childSize, descent, dc, wxRICHTEXT_UNFORMATTED, linePos);
 
                     int nextX = childSize.x + linePos.x;
 
@@ -2947,7 +2947,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
 
     // (a) All selected.
     if (selectionRange.GetStart() <= range.GetStart() && selectionRange.GetEnd() >= range.GetEnd())
-    {
+    {/*
         // Draw all selected
         dc.SetBrush(*wxBLACK_BRUSH);
         dc.SetPen(*wxBLACK_PEN);
@@ -2957,15 +2957,18 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
         dc.DrawRectangle(selRect);
         dc.SetTextForeground(*wxWHITE);
         dc.SetBackgroundMode(wxTRANSPARENT);
-        dc.DrawText(stringChunk, x, y);
+        dc.DrawText(stringChunk, x, y);*/
+        DrawTabbedString(dc, rect,stringChunk, x, y, true);
     }
     // (b) None selected.
     else if (selectionRange.GetEnd() < range.GetStart() || selectionRange.GetStart() > range.GetEnd())
     {
         // Draw all unselected
+        /*
         dc.SetTextForeground(GetAttributes().GetTextColour());
         dc.SetBackgroundMode(wxTRANSPARENT);
-        dc.DrawText(stringChunk, x, y);
+        dc.DrawText(stringChunk, x, y);*/
+        DrawTabbedString(dc, rect,stringChunk, x, y, false);
     }
     else
     {
@@ -2983,13 +2986,14 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             if (fragmentLen < 0)
                 wxLogDebug(wxT("Mid(%d, %d"), (int)(r1 - offset), (int)fragmentLen);
             wxString stringFragment = m_text.Mid(r1 - offset, fragmentLen);
-
+/*
             dc.SetTextForeground(GetAttributes().GetTextColour());
             dc.DrawText(stringFragment, x, y);
 
             wxCoord w, h;
             dc.GetTextExtent(stringFragment, & w, & h);
-            x += w;
+            x += w;*/
+            DrawTabbedString(dc, rect,stringFragment, x, y, false);
         }
 
         // 2. Selected chunk, if any.
@@ -3002,7 +3006,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             if (fragmentLen < 0)
                 wxLogDebug(wxT("Mid(%d, %d"), (int)(s1 - offset), (int)fragmentLen);
             wxString stringFragment = m_text.Mid(s1 - offset, fragmentLen);
-
+/*
             wxCoord w, h;
             dc.GetTextExtent(stringFragment, & w, & h);
             wxRect selRect(x, rect.y, w, rect.GetHeight());
@@ -3013,7 +3017,8 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             dc.SetTextForeground(*wxWHITE);
             dc.DrawText(stringFragment, x, y);
 
-            x += w;
+            x += w;*/
+            DrawTabbedString(dc, rect,stringFragment, x, y, true);
         }
 
         // 3. Remaining unselected chunk, if any
@@ -3026,15 +3031,76 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             if (fragmentLen < 0)
                 wxLogDebug(wxT("Mid(%d, %d"), (int)(s2 - offset), (int)fragmentLen);
             wxString stringFragment = m_text.Mid(s2 - offset, fragmentLen);
-
+/*
             dc.SetTextForeground(GetAttributes().GetTextColour());
-            dc.DrawText(stringFragment, x, y);
+            dc.DrawText(stringFragment, x, y);*/
+            DrawTabbedString(dc, rect,stringFragment, x, y, false);
         }
     }
 
     return true;
 }
+ 
+bool wxRichTextPlainText::DrawTabbedString(wxDC& dc,const wxRect& rect,wxString& str, wxCoord& x, wxCoord& y, bool selected)
+{
+    wxArrayInt tab_array =  GetAttributes().GetTabs();
+    if(tab_array.IsEmpty()){// create a default tab list at 10 mm each.
+        for( int i = 0; i < 20; ++i){
+            tab_array.Add(i*100);
+        }
+    }
+    int map_mode = dc.GetMapMode();
+    dc.SetMapMode(wxMM_LOMETRIC );
+    int num_tabs = tab_array.GetCount();
+    for( int i = 0; i < num_tabs; ++i){
+       tab_array[i] = dc.LogicalToDeviceXRel(tab_array[i]);         
+    }
+    dc.SetMapMode(map_mode );
+    int next_tab_pos = -1;
+    int tab_pos = -1;
+    wxCoord w, h;
+    if(selected){
+        dc.SetBrush(*wxBLACK_BRUSH);
+        dc.SetPen(*wxBLACK_PEN);
+        dc.SetTextForeground(*wxWHITE);
+        dc.SetBackgroundMode(wxTRANSPARENT);
+    }
+    else{
+        dc.SetTextForeground(GetAttributes().GetTextColour());
+        dc.SetBackgroundMode(wxTRANSPARENT);
+    }
+    while(str.Find(wxT('\t')) >= 0){// the string has a tab 
+        // break up the string at the Tab
+        wxString stringChunk = str.BeforeFirst(wxT('\t'));
+        str = str.AfterFirst(wxT('\t'));
+        dc.GetTextExtent(stringChunk, & w, & h);
+        tab_pos = x + w;
+        bool not_found = true;
+        for( int i = 0; i < num_tabs && not_found; ++i){
+            next_tab_pos = tab_array.Item(i);
+            if( next_tab_pos > tab_pos){
+                not_found = false;
+                if(selected){
+                    w = next_tab_pos - x;
+                    wxRect selRect(x, rect.y, w, rect.GetHeight());
+                    dc.DrawRectangle(selRect);   
+                }
+                dc.DrawText(stringChunk, x, y);
+                x = next_tab_pos;
+            }
+        }
+    }
+    
+    dc.GetTextExtent(str, & w, & h);
+    if(selected){
+        wxRect selRect(x, rect.y, w, rect.GetHeight());
+        dc.DrawRectangle(selRect);   
+    }
+    dc.DrawText(str, x, y);
+    x += w;
+    return true;
 
+}
 /// Lay the item out
 bool wxRichTextPlainText::Layout(wxDC& dc, const wxRect& WXUNUSED(rect), int WXUNUSED(style))
 {
@@ -3058,7 +3124,7 @@ void wxRichTextPlainText::Copy(const wxRichTextPlainText& obj)
 
 /// Get/set the object size for the given range. Returns false if the range
 /// is invalid for this object.
-bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int WXUNUSED(flags)) const
+bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int WXUNUSED(flags), wxPoint position) const
 {
     if (!range.IsWithin(GetRange()))
         return false;
@@ -3074,9 +3140,44 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
     long len = range.GetLength();
     wxString stringChunk = m_text.Mid(startPos, (size_t) len);
     wxCoord w, h;
+    int width = 0;
+    if(stringChunk.Find(wxT('\t')) >= 0){// the string has a tab 
+        wxArrayInt tab_array =  GetAttributes().GetTabs();
+        if(tab_array.IsEmpty()){// create a default tab list at 10 mm each.
+            for( int i = 0; i < 20; ++i){
+                tab_array.Add(i*100);
+            }
+        }
+        int map_mode = dc.GetMapMode();
+        dc.SetMapMode(wxMM_LOMETRIC );
+        int num_tabs = tab_array.GetCount();
+        for( int i = 0; i < num_tabs; ++i){
+            tab_array[i] = dc.LogicalToDeviceXRel(tab_array[i]);         
+        }
+        dc.SetMapMode(map_mode );
+        int next_tab_pos = -1;
+        
+        while(stringChunk.Find(wxT('\t')) >= 0){// the string has a tab 
+            // break up the string at the Tab
+            wxString stringFragment = stringChunk.BeforeFirst(wxT('\t'));
+            stringChunk = stringChunk.AfterFirst(wxT('\t'));
+            dc.GetTextExtent(stringFragment, & w, & h);
+            width += w;
+            int absolute_width = width + position.x;
+            bool not_found = true;
+            for( int i = 0; i < num_tabs && not_found; ++i){
+                next_tab_pos = tab_array.Item(i);
+                if( next_tab_pos > absolute_width){
+                    not_found = false;                  
+                    width = next_tab_pos - position.x;
+                }
+            }
+        }
+    }
     dc.GetTextExtent(stringChunk, & w, & h, & descent);
-    size = wxSize(w, dc.GetCharHeight());
-
+    width += w;
+    size = wxSize(width, dc.GetCharHeight());
+    
     return true;
 }
 
@@ -4260,7 +4361,7 @@ bool wxRichTextImage::Layout(wxDC& WXUNUSED(dc), const wxRect& rect, int WXUNUSE
 
 /// Get/set the object size for the given range. Returns false if the range
 /// is invalid for this object.
-bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& WXUNUSED(descent), wxDC& WXUNUSED(dc), int WXUNUSED(flags)) const
+bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& WXUNUSED(descent), wxDC& WXUNUSED(dc), int WXUNUSED(flags), wxPoint WXUNUSED(position)) const
 {
     if (!range.IsWithin(GetRange()))
         return false;
