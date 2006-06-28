@@ -43,6 +43,7 @@ swig-1.3.27.patch
 
     Bug fix for SWIG's definition of the %makedefault macro.
 
+    Fixes to allow compiling with Python 2.5 headers.
     
 
 ------------------------------------------------------------------------
