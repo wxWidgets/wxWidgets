@@ -4,7 +4,7 @@ RCS file: /cvsroot/swig/SWIG/Doc/Manual/Python.html,v
 retrieving revision 1.31
 diff -u -4 -r1.31 Python.html
 --- Doc/Manual/Python.html	6 Oct 2005 21:49:58 -0000	1.31
-+++ Doc/Manual/Python.html	11 Feb 2006 18:59:48 -0000
++++ Doc/Manual/Python.html	28 Jun 2006 22:22:00 -0000
 @@ -4461,10 +4461,10 @@
  <H2><a name="Python_nn65"></a>26.10 Docstring Features</H2>
  
@@ -24,7 +24,7 @@ RCS file: /cvsroot/swig/SWIG/Lib/swig.swg,v
 retrieving revision 1.49
 diff -u -4 -r1.49 swig.swg
 --- Lib/swig.swg	15 Oct 2005 00:15:30 -0000	1.49
-+++ Lib/swig.swg	11 Feb 2006 18:59:48 -0000
++++ Lib/swig.swg	28 Jun 2006 22:22:00 -0000
 @@ -51,9 +51,9 @@
  
  #define %nodefault       %feature("nodefault","1")
@@ -42,7 +42,7 @@ RCS file: /cvsroot/swig/SWIG/Lib/swiginit.swg,v
 retrieving revision 1.5
 diff -u -4 -r1.5 swiginit.swg
 --- Lib/swiginit.swg	12 Sep 2005 23:25:03 -0000	1.5
-+++ Lib/swiginit.swg	11 Feb 2006 18:59:48 -0000
++++ Lib/swiginit.swg	28 Jun 2006 22:22:00 -0000
 @@ -40,14 +40,19 @@
  **/
  
@@ -192,7 +192,7 @@ RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
 retrieving revision 1.107
 diff -u -4 -r1.107 python.cxx
 --- Source/Modules/python.cxx	7 Oct 2005 13:17:41 -0000	1.107
-+++ Source/Modules/python.cxx	11 Feb 2006 18:59:48 -0000
++++ Source/Modules/python.cxx	28 Jun 2006 22:22:01 -0000
 @@ -36,9 +36,8 @@
  static  File         *f_directors_h = 0;
  static  File         *f_init = 0;
@@ -267,3 +267,44 @@ diff -u -4 -r1.107 python.cxx
        }
  
        if (name) {
+Index: Lib/python/pyinit.swg
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Lib/python/pyinit.swg,v
+retrieving revision 1.19
+diff -u -4 -r1.19 pyinit.swg
+--- Lib/python/pyinit.swg	17 Jun 2005 19:12:20 -0000	1.19
++++ Lib/python/pyinit.swg	28 Jun 2006 22:22:01 -0000
+@@ -214,13 +214,13 @@
+ 		       swig_type_info **types,
+ 		       swig_type_info **types_initial) {
+   size_t i;
+   for (i = 0; methods[i].ml_name; ++i) {
+-    char *c = methods[i].ml_doc;
++    const char *c = methods[i].ml_doc;
+     if (c && (c = strstr(c, "swig_ptr: "))) {
+       int j;
+       swig_const_info *ci = 0;
+-      char *name = c + 10;
++      const char *name = c + 10;
+       for (j = 0; const_table[j].type; ++j) {
+ 	if (strncmp(const_table[j].name, name, 
+ 		    strlen(const_table[j].name)) == 0) {
+ 	  ci = &(const_table[j]);
+Index: Lib/python/pyrun.swg
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Lib/python/pyrun.swg,v
+retrieving revision 1.73
+diff -u -4 -r1.73 pyrun.swg
+--- Lib/python/pyrun.swg	23 Aug 2005 10:55:05 -0000	1.73
++++ Lib/python/pyrun.swg	28 Jun 2006 22:22:01 -0000
+@@ -635,9 +635,9 @@
+   if (pyobj && !obj) {    
+     obj = pyobj;
+     if (PyCFunction_Check(obj)) {
+       /* here we get the method pointer for callbacks */
+-      char *doc = (((PyCFunctionObject *)obj) -> m_ml -> ml_doc);
++      const char *doc = (((PyCFunctionObject *)obj) -> m_ml -> ml_doc);
+       c = doc ? strstr(doc, "swig_ptr: ") : 0;
+       if (c) {
+ 	c = ty ? SWIG_UnpackVoidPtr(c + 10, &vptr, ty->name) : 0;
+ 	if (!c) goto type_error;
