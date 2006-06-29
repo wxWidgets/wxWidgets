@@ -1650,7 +1650,8 @@ void wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 #endif
         {
             wxCharBuffer text = linetext.mb_str(wxConvLocal) ;
-            ::DrawText( text , 0 , strlen(text) ) ;
+            if ( text.data() != NULL )
+                ::DrawText( text , 0 , strlen(text) ) ;
          }
     }
 
@@ -1718,7 +1719,10 @@ void wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *he
         else
         {
             wxCharBuffer text = linetext.mb_str(wxConvLocal) ;
-            curwidth = ::TextWidth( text , 0 , strlen(text) ) ;
+            if ( text.data() != NULL )
+                curwidth = ::TextWidth( text , 0 , strlen(text) ) ;
+            else
+                curwidth = 0 ;
         }
 
         if ( curwidth > *width )
