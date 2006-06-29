@@ -5,8 +5,6 @@ __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-from __future__ import nested_scopes
-
 import cStringIO
 import inspect
 import sys
