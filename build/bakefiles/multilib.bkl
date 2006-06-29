@@ -295,7 +295,7 @@
     <dll id="richtextdll" template="wx_dll"
          cond="SHARED=='1' and USE_RICHTEXT=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
-        <define>WXMAKINGDLL_AUI</define>
+        <define>WXMAKINGDLL_RICHTEXT</define>
         <sources>$(RICHTEXT_SRC)</sources>
         <library>advdll</library>
         <library>coredll</library>

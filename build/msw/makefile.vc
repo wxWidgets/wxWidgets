@@ -1132,7 +1132,7 @@ RICHTEXTDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_438)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I..\..\include /W4 /I..\..\src\tiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
-	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_AUI $(__RTTIFLAG) \
+	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_RICHTEXT $(__RTTIFLAG) \
 	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_richtextdll.pch" \
 	$(CPPFLAGS) $(CXXFLAGS)
 RICHTEXTDLL_OBJECTS =  \

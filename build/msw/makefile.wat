@@ -3615,7 +3615,7 @@ RICHTEXTDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -wx -wcd=549 -wcd=656 &
 	-wcd=657 -wcd=667 -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
 	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL &
-	-dWXMAKINGDLL_AUI /fh=$(OBJS)\wxprec_richtextdll.pch $(__RTTIFLAG) &
+	-dWXMAKINGDLL_RICHTEXT /fh=$(OBJS)\wxprec_richtextdll.pch $(__RTTIFLAG) &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 RICHTEXTDLL_OBJECTS =  &
 	$(OBJS)\richtextdll_dummy.obj &
