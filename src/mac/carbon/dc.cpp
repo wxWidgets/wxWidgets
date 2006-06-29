@@ -1474,7 +1474,6 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
 void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
                               double angle)
 {
-    // TODO: support text background color (only possible by hand, ATSUI does not support it)
     wxCHECK_RET( Ok(), wxT("wxDC::DoDrawRotatedText - invalid DC") );
 
     if ( str.empty() )
@@ -1483,44 +1482,13 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     wxMacFastPortSetter helper(this) ;
     MacInstallFont() ;
 
-#if 0
-    if ( 0 )
-    {
-        m_macFormerAliasState = IsAntiAliasedTextEnabled(&m_macFormerAliasSize);
-        SetAntiAliasedTextEnabled(true, SInt16(m_scaleY * m_font.MacGetFontSize()));
-        m_macAliasWasEnabled = true ;
-    }
-#endif
-
     OSStatus status = noErr ;
     ATSUTextLayout atsuLayout ;
-    UniCharCount chars = str.length() ;
-    UniChar* ubuf = NULL ;
 
-#if SIZEOF_WCHAR_T == 4
-    wxMBConvUTF16 converter ;
-#if wxUSE_UNICODE
-    size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
-    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
-    converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 ) ;
-#else
-    const wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
-    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 ) ;
-    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
-    converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 ) ;
-#endif
-    chars = unicharlen / 2 ;
-#else
-#if wxUSE_UNICODE
-    ubuf = (UniChar*) str.wc_str() ;
-#else
-    wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
-    chars = wxWcslen( wchar.data() ) ;
-    ubuf = (UniChar*) wchar.data() ;
-#endif
-#endif
-
-    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
+    wxMacUniCharBuffer unibuf( str ) ;
+    UniCharCount chars = unibuf.GetChars() ;
+    
+    status = ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 
     wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the rotated text") );
@@ -1535,29 +1503,66 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     ATSUTextMeasurement textBefore, textAfter ;
     ATSUTextMeasurement ascent, descent ;
 
-    if ( abs(iAngle) > 0 )
+    ATSLineLayoutOptions layoutOptions = kATSLineNoLayoutOptions ;
+    
+    if (m_font.GetNoAntiAliasing())
     {
-        Fixed atsuAngle = IntToFixed( iAngle ) ;
-
-        ATSUAttributeTag atsuTags[] =
-        {
-            kATSULineRotationTag ,
-        } ;
-        ByteCount atsuSizes[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
-        {
-            sizeof( Fixed ) ,
-        } ;
-        ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
-        {
-            &atsuAngle ,
-        } ;
-
-        status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags)/sizeof(ATSUAttributeTag),
-            atsuTags, atsuSizes, atsuValues ) ;
+        layoutOptions |= kATSLineNoAntiAliasing ;
     }
+    
+    Fixed atsuAngle = IntToFixed( iAngle ) ;
+
+    ATSUAttributeTag atsuTags[] =
+    {
+        kATSULineLayoutOptionsTag ,
+        kATSULineRotationTag ,
+    } ;
+    
+    ByteCount atsuSizes[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
+    {
+        sizeof( ATSLineLayoutOptions ) ,
+        sizeof( Fixed ) ,
+    } ;
+    
+    ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
+    {
+        &layoutOptions ,
+        &atsuAngle ,
+    } ;
+    
+    status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags)/sizeof(ATSUAttributeTag) - ( abs(iAngle) > 0.001 ? 0 : 1),
+            atsuTags, atsuSizes, atsuValues ) ;
 
     status = ::ATSUMeasureText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
         &textBefore , &textAfter, &ascent , &descent );
+    wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
+    
+    if ( m_backgroundMode == wxSOLID )
+    {      
+        // background painting must be done by hand, cannot be done by ATSUI
+        wxCoord x2 , y2 ;
+        PolyHandle polygon = OpenPoly();
+
+        ::MoveTo(drawX, drawY);
+
+        x2 = (int) (drawX + sin(angle / RAD2DEG) * FixedToInt(ascent + descent)) ;
+        y2 = (int) (drawY + cos(angle / RAD2DEG) * FixedToInt(ascent + descent)) ;
+        ::LineTo(x2, y2);
+
+        x2 = (int) (drawX + sin(angle / RAD2DEG) * FixedToInt(ascent + descent ) + cos(angle / RAD2DEG) * FixedToInt(textAfter)) ;
+        y2 = (int) (drawY + cos(angle / RAD2DEG) * FixedToInt(ascent + descent) - sin(angle / RAD2DEG) * FixedToInt(textAfter)) ;
+        ::LineTo(x2, y2);
+
+        x2 = (int) (drawX + cos(angle / RAD2DEG) * FixedToInt(textAfter)) ;
+        y2 = (int) (drawY - sin(angle / RAD2DEG) * FixedToInt(textAfter)) ;
+        ::LineTo(x2, y2);
+
+        ::LineTo( drawX, drawY) ;
+        ClosePoly();
+
+        ::ErasePoly( polygon );
+        KillPoly( polygon );
+    }
 
     drawX += (int)(sin(angle / RAD2DEG) * FixedToInt(ascent));
     drawY += (int)(cos(angle / RAD2DEG) * FixedToInt(ascent));
@@ -1575,87 +1580,11 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     CalcBoundingBox(XDEV2LOG(rect.left), YDEV2LOG(rect.top) );
     CalcBoundingBox(XDEV2LOG(rect.right), YDEV2LOG(rect.bottom) );
     ::ATSUDisposeTextLayout(atsuLayout);
-
-#if SIZEOF_WCHAR_T == 4
-    free( ubuf ) ;
-#endif
 }
 
 void wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 {
-    wxCHECK_RET(Ok(), wxT("wxDC::DoDrawText - invalid DC"));
-
-    wxMacFastPortSetter helper(this) ;
-    long xx = XLOG2DEVMAC(x);
-    long yy = YLOG2DEVMAC(y);
-
-#if TARGET_CARBON
-    bool useDrawThemeText = ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
-    if ( UMAGetSystemVersion() < 0x1000 || IsKindOf(CLASSINFO( wxPrinterDC ) ) || m_font.GetNoAntiAliasing() )
-        useDrawThemeText = false ;
-#endif
-
-    MacInstallFont() ;
-
-    FontInfo fi ;
-    ::GetFontInfo( &fi ) ;
-
-#if TARGET_CARBON
-    if ( !useDrawThemeText )
-        yy += fi.ascent ;
-#else
-    yy += fi.ascent ;
-#endif
-
-    ::TextMode( (m_backgroundMode == wxTRANSPARENT) ? srcOr : srcCopy ) ;
-    ::MoveTo( xx , yy );
-
-    int line = 0 ;
-    {
-        wxString linetext = strtext ;
-
-#if TARGET_CARBON
-        if ( useDrawThemeText )
-        {
-            Rect frame = {
-                yy + line*(fi.descent + fi.ascent + fi.leading), xx ,
-                yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
-            wxMacCFStringHolder mString( linetext , m_font.GetEncoding()) ;
-
-            if ( m_backgroundMode != wxTRANSPARENT )
-            {
-                Point bounds = {0, 0} ;
-                Rect background = frame ;
-                SInt16 baseline ;
-                ::GetThemeTextDimensions( mString,
-                    m_font.MacGetThemeFontID() ,
-                    kThemeStateActive,
-                    false,
-                    &bounds,
-                    &baseline );
-                background.right = background.left + bounds.h ;
-                background.bottom = background.top + bounds.v ;
-                ::EraseRect( &background ) ;
-            }
-
-            ::DrawThemeTextBox( mString,
-                m_font.MacGetThemeFontID() ,
-                kThemeStateActive,
-                false,
-                &frame,
-                teJustLeft,
-                NULL );
-        }
-        else
-#endif
-        {
-            wxCharBuffer text = linetext.mb_str(wxConvLocal) ;
-            if ( text.data() != NULL )
-                ::DrawText( text , 0 , strlen(text) ) ;
-         }
-    }
-
-    ::TextMode( srcOr ) ;
+    DoDrawRotatedText( strtext , x , y , 0) ;
 }
 
 bool wxDC::CanGetTextExtent() const
@@ -1665,7 +1594,8 @@ bool wxDC::CanGetTextExtent() const
     return true ;
 }
 
-void wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *height,
+
+void wxDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *height,
                             wxCoord *descent, wxCoord *externalLeading ,
                             wxFont *theFont ) const
 {
@@ -1680,54 +1610,63 @@ void wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *he
     }
 
     MacInstallFont() ;
-    FontInfo fi ;
-    ::GetFontInfo( &fi ) ;
 
-#if TARGET_CARBON
-    bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
-    if ( UMAGetSystemVersion() < 0x1000 || IsKindOf(CLASSINFO( wxPrinterDC ) ) || ((wxFont*)&m_font)->GetNoAntiAliasing() )
-        useGetThemeText = false ;
-#endif
+    OSStatus status = noErr ;
+    ATSUTextLayout atsuLayout ;
+    
+    wxMacUniCharBuffer unibuf( str ) ;
+    UniCharCount chars = unibuf.GetChars() ;
+    
+    status = ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
+        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
+
+    wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the text") );
+
+    status = ::ATSUSetTransientFontMatching( atsuLayout , true ) ;
+    wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
+
+    ATSLineLayoutOptions layoutOptions = kATSLineNoLayoutOptions ;
+    
+    if (m_font.GetNoAntiAliasing())
+    {
+        layoutOptions |= kATSLineNoAntiAliasing ;
+    }
+    
+    ATSUAttributeTag atsuTags[] =
+    {
+        kATSULineLayoutOptionsTag ,
+    } ;
+    
+    ByteCount atsuSizes[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
+    {
+        sizeof( ATSLineLayoutOptions ) ,
+    } ;
+    
+    ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
+    {
+        &layoutOptions ,
+    } ;
+    
+    status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags)/sizeof(ATSUAttributeTag) ,
+            atsuTags, atsuSizes, atsuValues ) ;
+            
+    ATSUTextMeasurement textBefore, textAfter ;
+    ATSUTextMeasurement textAscent, textDescent ;
+
+    status = ::ATSUGetUnjustifiedBounds( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
+        &textBefore , &textAfter, &textAscent , &textDescent );
 
     if ( height )
-        *height = YDEV2LOGREL( fi.descent + fi.ascent ) ;
+        *height = YDEV2LOGREL( FixedToInt(textAscent + textDescent) ) ;
     if ( descent )
-        *descent =YDEV2LOGREL( fi.descent );
+        *descent =YDEV2LOGREL( FixedToInt(textDescent) );
     if ( externalLeading )
-        *externalLeading = YDEV2LOGREL( fi.leading ) ;
-
-    int curwidth = 0 ;
+        *externalLeading = 0 ;
     if ( width )
-    {
-        *width = 0 ;
-        wxString linetext = strtext ;
+        *width = XDEV2LOGREL( FixedToInt(textAfter - textBefore) ) ;
 
-        if ( useGetThemeText )
-        {
-            Point bounds = {0, 0} ;
-            SInt16 baseline ;
-            wxMacCFStringHolder mString( linetext , m_font.GetEncoding() ) ;
-            ThemeFontID themeFont = m_font.MacGetThemeFontID() ;
-            ::GetThemeTextDimensions( mString,
-                themeFont ,
-                kThemeStateActive,
-                false,
-                &bounds,
-                &baseline );
-            curwidth = bounds.h ;
-        }
-        else
-        {
-            wxCharBuffer text = linetext.mb_str(wxConvLocal) ;
-            if ( text.data() != NULL )
-                curwidth = ::TextWidth( text , 0 , strlen(text) ) ;
-            else
-                curwidth = 0 ;
-        }
+    ::ATSUDisposeTextLayout(atsuLayout);
 
-        if ( curwidth > *width )
-            *width = XDEV2LOGREL( curwidth ) ;
-    }
 
     if ( theFont )
     {
@@ -1750,110 +1689,77 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
     wxMacFastPortSetter helper(this) ;
     MacInstallFont() ;
 
-#if TARGET_CARBON
-    bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
-    if ( UMAGetSystemVersion() < 0x1000 || IsKindOf(CLASSINFO( wxPrinterDC ) ) || ((wxFont*)&m_font)->GetNoAntiAliasing() )
-        useGetThemeText = false ;
+    OSStatus status = noErr ;
+    ATSUTextLayout atsuLayout ;
+    
+    wxMacUniCharBuffer unibuf( text ) ;
+    UniCharCount chars = unibuf.GetChars() ;
+    
+    status = ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
+        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 
-    if ( useGetThemeText )
+    wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the text") );
+
+    status = ::ATSUSetTransientFontMatching( atsuLayout , true ) ;
+    wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
+
+    ATSLineLayoutOptions layoutOptions = kATSLineNoLayoutOptions ;
+    
+    if (m_font.GetNoAntiAliasing())
     {
-        // If anybody knows how to do this more efficiently yet still handle
-        // the fractional glyph widths that may be present when using AA
-        // fonts, please change it.  Currently it is measuring from the
-        // beginning of the string for each succeeding substring, which is much
-        // slower than this should be.
-        for (size_t i=0; i<text.length(); i++)
-        {
-            wxString str(text.Left(i + 1));
-            Point bounds = {0, 0};
-            SInt16 baseline ;
-            wxMacCFStringHolder mString(str, m_font.GetEncoding());
-
-            ::GetThemeTextDimensions( mString,
-                                      m_font.MacGetThemeFontID(),
-                                      kThemeStateActive,
-                                      false,
-                                      &bounds,
-                                      &baseline );
-            widths[i] = XDEV2LOGREL(bounds.h);
-        }
+        layoutOptions |= kATSLineNoAntiAliasing ;
     }
-    else
-#endif
+    
+    ATSUAttributeTag atsuTags[] =
     {
-        wxCharBuffer buff = text.mb_str(wxConvLocal);
-        if ( buff.data() == 0 )
-        {
-            for (size_t i=0; i<text.length(); i++)
-                widths[i] = 0 ;
-        }
-        else
-        {
-            size_t len = strlen(buff);
-            short* measurements = new short[len+1];
-            MeasureText(len, buff.data(), measurements);
+        kATSULineLayoutOptionsTag ,
+    } ;
+    
+    ByteCount atsuSizes[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
+    {
+        sizeof( ATSLineLayoutOptions ) ,
+    } ;
+    
+    ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
+    {
+        &layoutOptions ,
+    } ;
+    
+    status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags)/sizeof(ATSUAttributeTag) ,
+            atsuTags, atsuSizes, atsuValues ) ;
+            
+    for ( int pos = 0; pos < (int)chars ; pos ++ )
+    {
+        unsigned long actualNumberOfBounds = 0;
+        ATSTrapezoid glyphBounds;
 
-            // Copy to widths, starting at measurements[1]
-            // NOTE: this doesn't take into account any multi-byte characters
-            // in buff, it probably should...
-            for (size_t i=0; i<text.length(); i++)
-                widths[i] = XDEV2LOGREL(measurements[i + 1]);
+        // We get a single bound, since the text should only require one. If it requires more, there is an issue
+        OSStatus result;
+        result = ATSUGetGlyphBounds( atsuLayout, 0, 0, kATSUFromTextBeginning, pos + 1,
+            kATSUseDeviceOrigins, 1, &glyphBounds, &actualNumberOfBounds );
+        if (result != noErr || actualNumberOfBounds != 1 )
+            return false;
 
-            delete [] measurements;
-        }
+        widths[pos] = XDEV2LOGREL(FixedToInt( glyphBounds.upperRight.x - glyphBounds.upperLeft.x ));
     }
+
+    ::ATSUDisposeTextLayout(atsuLayout);
 
     return true;
 }
 
 wxCoord wxDC::GetCharWidth(void) const
 {
-    wxCHECK_MSG(Ok(), 1, wxT("wxDC::GetCharWidth - invalid DC"));
-
-    wxMacFastPortSetter helper(this) ;
-    int width = 0 ;
-    const char text[] = "g" ;
-
-    MacInstallFont() ;
-
-#if TARGET_CARBON
-    bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
-    if ( UMAGetSystemVersion() < 0x1000 || ((wxFont*)&m_font)->GetNoAntiAliasing() )
-        useGetThemeText = false ;
-
-    if ( useGetThemeText )
-    {
-        Point bounds = {0, 0} ;
-        SInt16 baseline ;
-        CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text , 1 , CFStringGetSystemEncoding(), false ) ;
-        ::GetThemeTextDimensions( mString,
-            m_font.MacGetThemeFontID(),
-            kThemeStateActive,
-            false,
-            &bounds,
-            &baseline );
-        CFRelease( mString ) ;
-        width = bounds.h ;
-    }
-    else
-#endif
-    {
-        width = ::TextWidth( text , 0 , 1 ) ;
-    }
-
-    return YDEV2LOGREL(width) ;
+    wxCoord width = 0 ;
+    DoGetTextExtent( wxT("g"), &width , NULL , NULL , NULL , NULL ) ;
+    return width ;
 }
 
 wxCoord wxDC::GetCharHeight(void) const
 {
-    wxCHECK_MSG(Ok(), 1, wxT("wxDC::GetCharHeight - invalid DC"));
-
-    wxMacFastPortSetter helper(this) ;
-    MacInstallFont() ;
-    FontInfo fi ;
-    ::GetFontInfo( &fi ) ;
-
-    return YDEV2LOGREL( fi.descent + fi.ascent );
+    wxCoord height ;
+    DoGetTextExtent( wxT("g") , NULL , &height , NULL , NULL , NULL ) ;
+    return height ;
 }
 
 void wxDC::Clear(void)
