@@ -1782,17 +1782,25 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
 #endif
     {
         wxCharBuffer buff = text.mb_str(wxConvLocal);
-        size_t len = strlen(buff);
-        short* measurements = new short[len+1];
-        MeasureText(len, buff.data(), measurements);
+        if ( buff.data() == 0 )
+        {
+            for (size_t i=0; i<text.length(); i++)
+                widths[i] = 0 ;
+        }
+        else
+        {
+            size_t len = strlen(buff);
+            short* measurements = new short[len+1];
+            MeasureText(len, buff.data(), measurements);
 
-        // Copy to widths, starting at measurements[1]
-        // NOTE: this doesn't take into account any multi-byte characters
-        // in buff, it probably should...
-        for (size_t i=0; i<text.length(); i++)
-            widths[i] = XDEV2LOGREL(measurements[i + 1]);
+            // Copy to widths, starting at measurements[1]
+            // NOTE: this doesn't take into account any multi-byte characters
+            // in buff, it probably should...
+            for (size_t i=0; i<text.length(); i++)
+                widths[i] = XDEV2LOGREL(measurements[i + 1]);
 
-        delete [] measurements;
+            delete [] measurements;
+        }
     }
 
     return true;
