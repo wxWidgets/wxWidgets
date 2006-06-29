@@ -28,15 +28,15 @@
  * Forward declarations
  */
 
-class WXDLLIMPEXP_ADV wxRichTextCtrl;
-class WXDLLIMPEXP_ADV wxRichTextBuffer;
+class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl;
+class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
 
 /*!
  * wxRichTextStyleDefinition class declaration
  * A base class for paragraph and character styles.
  */
 
-class WXDLLIMPEXP_ADV wxRichTextStyleDefinition: public wxObject
+class WXDLLIMPEXP_RICHTEXT wxRichTextStyleDefinition: public wxObject
 {
     DECLARE_CLASS(wxRichTextStyleDefinition)
 public:
@@ -71,7 +71,7 @@ protected:
  * wxRichTextCharacterStyleDefinition class declaration
  */
 
-class WXDLLIMPEXP_ADV wxRichTextCharacterStyleDefinition: public wxRichTextStyleDefinition
+class WXDLLIMPEXP_RICHTEXT wxRichTextCharacterStyleDefinition: public wxRichTextStyleDefinition
 {
     DECLARE_DYNAMIC_CLASS(wxRichTextCharacterStyleDefinition)
 public:
@@ -89,7 +89,7 @@ protected:
  * wxRichTextParagraphStyleDefinition class declaration
  */
 
-class WXDLLIMPEXP_ADV wxRichTextParagraphStyleDefinition: public wxRichTextStyleDefinition
+class WXDLLIMPEXP_RICHTEXT wxRichTextParagraphStyleDefinition: public wxRichTextStyleDefinition
 {
     DECLARE_DYNAMIC_CLASS(wxRichTextParagraphStyleDefinition)
 public:
@@ -114,7 +114,7 @@ protected:
  * The style sheet
  */
 
-class WXDLLIMPEXP_ADV wxRichTextStyleSheet: public wxObject
+class WXDLLIMPEXP_RICHTEXT wxRichTextStyleSheet: public wxObject
 {
     DECLARE_CLASS( wxRichTextStyleSheet )
 
@@ -182,7 +182,7 @@ protected:
  * A listbox to display styles.
  */
 
-class WXDLLIMPEXP_ADV wxRichTextStyleListBox: public wxHtmlListBox
+class WXDLLIMPEXP_RICHTEXT wxRichTextStyleListBox: public wxHtmlListBox
 {
     DECLARE_CLASS(wxRichTextStyleListBox)
     DECLARE_EVENT_TABLE()

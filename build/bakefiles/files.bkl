@@ -2558,11 +2558,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/splash.cpp
     src/generic/tipdlg.cpp
     src/generic/wizard.cpp
-    src/richtext/richtextctrl.cpp
-    src/richtext/richtextbuffer.cpp
-    src/richtext/richtextstyles.cpp
-    src/richtext/richtextxml.cpp
-    src/richtext/richtexthtml.cpp
 </set>
 
 <set var="ADVANCED_CMN_HDR" hints="files">
@@ -2595,10 +2590,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/tipdlg.h
     wx/wave.h
     wx/wizard.h
-    wx/richtext/richtextctrl.h
-    wx/richtext/richtextbuffer.h
-    wx/richtext/richtextstyles.h
-    wx/richtext/richtextxml.h
 </set>
 
 <set var="ADVANCED_CMN_NATIVE_HDR" hints="files">
@@ -3011,6 +3002,24 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <!-- ====================================================================== -->
+<!--                                  wxRichTextCtrl                        -->
+<!-- ====================================================================== -->
+
+<set var="RICHTEXT_SRC" hints="files">
+    src/richtext/richtextctrl.cpp
+    src/richtext/richtextbuffer.cpp
+    src/richtext/richtextstyles.cpp
+    src/richtext/richtextxml.cpp
+    src/richtext/richtexthtml.cpp
+</set>
+<set var="RICHTEXT_HDR" hints="files">
+    wx/richtext/richtextctrl.h
+    wx/richtext/richtextbuffer.h
+    wx/richtext/richtextstyles.h
+    wx/richtext/richtextxml.h
+</set>
+
+<!-- ====================================================================== -->
 <!--                    Define sources for specific libraries:              -->
 <!-- ====================================================================== -->
 
@@ -3240,7 +3249,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(LOWLEVEL_HDR)
             $(GUI_CORE_HEADERS)
             $(ADVANCED_HDR) $(MEDIA_HDR) $(HTML_HDR)
-            $(OPENGL_HDR) $(QA_HDR) $(DBGRID_HDR) $(XRC_HDR) $(AUI_HDR)
+            $(OPENGL_HDR) $(QA_HDR) $(DBGRID_HDR) $(XRC_HDR) $(AUI_HDR) $(RICHTEXT_HDR)
         </if>
     </set>
 

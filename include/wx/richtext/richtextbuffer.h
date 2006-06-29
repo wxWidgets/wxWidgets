@@ -117,16 +117,16 @@
  * Forward declarations
  */
 
-class WXDLLIMPEXP_ADV wxRichTextCtrl;
-class WXDLLIMPEXP_ADV wxRichTextObject;
-class WXDLLIMPEXP_ADV wxRichTextCacheObject;
-class WXDLLIMPEXP_ADV wxRichTextObjectList;
-class WXDLLIMPEXP_ADV wxRichTextLine;
-class WXDLLIMPEXP_ADV wxRichTextParagraph;
-class WXDLLIMPEXP_ADV wxRichTextFragment;
-class WXDLLIMPEXP_ADV wxRichTextFileHandler;
-class WXDLLIMPEXP_ADV wxRichTextStyleSheet;
-class WXDLLIMPEXP_ADV wxTextAttrEx;
+class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl;
+class WXDLLIMPEXP_RICHTEXT wxRichTextObject;
+class WXDLLIMPEXP_RICHTEXT wxRichTextCacheObject;
+class WXDLLIMPEXP_RICHTEXT wxRichTextObjectList;
+class WXDLLIMPEXP_RICHTEXT wxRichTextLine;
+class WXDLLIMPEXP_RICHTEXT wxRichTextParagraph;
+class WXDLLIMPEXP_RICHTEXT wxRichTextFragment;
+class WXDLLIMPEXP_RICHTEXT wxRichTextFileHandler;
+class WXDLLIMPEXP_RICHTEXT wxRichTextStyleSheet;
+class WXDLLIMPEXP_RICHTEXT wxTextAttrEx;
 
 /*!
  * Flags determining the available space, passed to Layout
@@ -202,7 +202,7 @@ class WXDLLIMPEXP_ADV wxTextAttrEx;
  * This stores beginning and end positions for a range of data.
  */
 
-class WXDLLIMPEXP_ADV wxRichTextRange
+class WXDLLIMPEXP_RICHTEXT wxRichTextRange
 {
 public:
 // Constructors
@@ -258,7 +258,7 @@ protected:
  * wxTextAttrEx is an extended version of wxTextAttr with more paragraph attributes.
  */
 
-class WXDLLIMPEXP_ADV wxTextAttrEx: public wxTextAttr
+class WXDLLIMPEXP_RICHTEXT wxTextAttrEx: public wxTextAttr
 {
 public:
     // ctors
@@ -337,7 +337,7 @@ private:
  * efficient way to query styles.
  */
 
-class WXDLLIMPEXP_ADV wxRichTextAttr
+class WXDLLIMPEXP_RICHTEXT wxRichTextAttr
 {
 public:
     // ctors
@@ -505,7 +505,7 @@ private:
  * This is the base for drawable objects.
  */
 
-class WXDLLIMPEXP_ADV wxRichTextObject: public wxObject
+class WXDLLIMPEXP_RICHTEXT wxRichTextObject: public wxObject
 {
     DECLARE_CLASS(wxRichTextObject)
 public:
@@ -651,14 +651,14 @@ protected:
     wxTextAttrEx            m_attributes;
 };
 
-WX_DECLARE_LIST_WITH_DECL( wxRichTextObject, wxRichTextObjectList, class WXDLLIMPEXP_ADV );
+WX_DECLARE_LIST_WITH_DECL( wxRichTextObject, wxRichTextObjectList, class WXDLLIMPEXP_RICHTEXT );
 
 /*!
  * wxRichTextCompositeObject class declaration
  * Objects of this class can contain other objects.
  */
 
-class WXDLLIMPEXP_ADV wxRichTextCompositeObject: public wxRichTextObject
+class WXDLLIMPEXP_RICHTEXT wxRichTextCompositeObject: public wxRichTextObject
 {
     DECLARE_CLASS(wxRichTextCompositeObject)
 public:
@@ -739,7 +739,7 @@ protected:
  * This defines a 2D space to lay out objects
  */
 
-class WXDLLIMPEXP_ADV wxRichTextBox: public wxRichTextCompositeObject
+class WXDLLIMPEXP_RICHTEXT wxRichTextBox: public wxRichTextCompositeObject
 {
     DECLARE_DYNAMIC_CLASS(wxRichTextBox)
 public:
@@ -778,7 +778,7 @@ protected:
  * This box knows how to lay out paragraphs.
  */
 
-class WXDLLIMPEXP_ADV wxRichTextParagraphLayoutBox: public wxRichTextBox
+class WXDLLIMPEXP_RICHTEXT wxRichTextParagraphLayoutBox: public wxRichTextBox
 {
     DECLARE_DYNAMIC_CLASS(wxRichTextParagraphLayoutBox)
 public:
@@ -960,7 +960,7 @@ protected:
  * paragraphs for Undo/Redo, for example.
  */
 
-class WXDLLIMPEXP_ADV wxRichTextFragment: public wxRichTextParagraphLayoutBox
+class WXDLLIMPEXP_RICHTEXT wxRichTextFragment: public wxRichTextParagraphLayoutBox
 {
     DECLARE_DYNAMIC_CLASS(wxRichTextFragment)
 public:
@@ -1001,7 +1001,7 @@ protected:
  * start and end positions of the line.
  */
 
-class WXDLLIMPEXP_ADV wxRichTextLine
+class WXDLLIMPEXP_RICHTEXT wxRichTextLine
 {
 public:
 // Constructors
@@ -1074,14 +1074,14 @@ protected:
     wxRichTextParagraph* m_parent;
 };
 
-WX_DECLARE_LIST_WITH_DECL( wxRichTextLine, wxRichTextLineList , class WXDLLIMPEXP_ADV );
+WX_DECLARE_LIST_WITH_DECL( wxRichTextLine, wxRichTextLineList , class WXDLLIMPEXP_RICHTEXT );
 
 /*!
  * wxRichTextParagraph class declaration
  * This object represents a single paragraph (or in a straight text editor, a line).
  */
 
-class WXDLLIMPEXP_ADV wxRichTextParagraph: public wxRichTextBox
+class WXDLLIMPEXP_RICHTEXT wxRichTextParagraph: public wxRichTextBox
 {
     DECLARE_DYNAMIC_CLASS(wxRichTextParagraph)
 public:
@@ -1178,7 +1178,7 @@ protected:
  * This object represents a single piece of text.
  */
 
-class WXDLLIMPEXP_ADV wxRichTextPlainText: public wxRichTextObject
+class WXDLLIMPEXP_RICHTEXT wxRichTextPlainText: public wxRichTextObject
 {
     DECLARE_DYNAMIC_CLASS(wxRichTextPlainText)
 public:
@@ -1254,7 +1254,7 @@ protected:
 class WXDLLIMPEXP_BASE wxDataInputStream;
 class WXDLLIMPEXP_BASE wxDataOutputStream;
 
-class WXDLLIMPEXP_ADV wxRichTextImageBlock: public wxObject
+class WXDLLIMPEXP_RICHTEXT wxRichTextImageBlock: public wxObject
 {
 public:
     wxRichTextImageBlock();
@@ -1331,7 +1331,7 @@ protected:
  * This object represents an image.
  */
 
-class WXDLLIMPEXP_ADV wxRichTextImage: public wxRichTextObject
+class WXDLLIMPEXP_RICHTEXT wxRichTextImage: public wxRichTextObject
 {
     DECLARE_DYNAMIC_CLASS(wxRichTextImage)
 public:
@@ -1395,10 +1395,10 @@ protected:
  * This is a kind of box, used to represent the whole buffer
  */
 
-class WXDLLIMPEXP_ADV wxRichTextCommand;
-class WXDLLIMPEXP_ADV wxRichTextAction;
+class WXDLLIMPEXP_RICHTEXT wxRichTextCommand;
+class WXDLLIMPEXP_RICHTEXT wxRichTextAction;
 
-class WXDLLIMPEXP_ADV wxRichTextBuffer: public wxRichTextParagraphLayoutBox
+class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer: public wxRichTextParagraphLayoutBox
 {
     DECLARE_DYNAMIC_CLASS(wxRichTextBuffer)
 public:
@@ -1696,8 +1696,8 @@ enum wxRichTextCommandId
  *
  */
 
-class WXDLLIMPEXP_ADV wxRichTextAction;
-class WXDLLIMPEXP_ADV wxRichTextCommand: public wxCommand
+class WXDLLIMPEXP_RICHTEXT wxRichTextAction;
+class WXDLLIMPEXP_RICHTEXT wxRichTextCommand: public wxCommand
 {
 public:
     // Ctor for one action
@@ -1727,7 +1727,7 @@ protected:
  * There can be more than one action in a command.
  */
 
-class WXDLLIMPEXP_ADV wxRichTextAction: public wxObject
+class WXDLLIMPEXP_RICHTEXT wxRichTextAction: public wxObject
 {
 public:
     wxRichTextAction(wxRichTextCommand* cmd, const wxString& name, wxRichTextCommandId id, wxRichTextBuffer* buffer,
@@ -1793,7 +1793,7 @@ protected:
  * Base class for file handlers
  */
 
-class WXDLLIMPEXP_ADV wxRichTextFileHandler: public wxObject
+class WXDLLIMPEXP_RICHTEXT wxRichTextFileHandler: public wxObject
 {
     DECLARE_CLASS(wxRichTextFileHandler)
 public:
@@ -1859,7 +1859,7 @@ protected:
  * Plain text handler
  */
 
-class WXDLLIMPEXP_ADV wxRichTextPlainTextHandler: public wxRichTextFileHandler
+class WXDLLIMPEXP_RICHTEXT wxRichTextPlainTextHandler: public wxRichTextFileHandler
 {
     DECLARE_CLASS(wxRichTextPlainTextHandler)
 public:

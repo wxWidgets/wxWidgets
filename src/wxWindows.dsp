@@ -1887,6 +1887,10 @@ SOURCE=.\xrc\xh_notbk.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xrc\xh_odcombo.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xrc\xh_panel.cpp
 # End Source File
 # Begin Source File
@@ -2843,6 +2847,10 @@ SOURCE=..\include\wx\pen.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\pickerbase.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\platform.h
 # End Source File
 # Begin Source File
@@ -3396,6 +3404,10 @@ SOURCE=..\include\wx\xrc\xh_menu.h
 # Begin Source File
 
 SOURCE=..\include\wx\xrc\xh_notbk.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_odcombo.h
 # End Source File
 # Begin Source File
 
@@ -4011,7 +4023,7 @@ SOURCE=..\include\wx\generic\choicdgg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\generic\clrpicker.h
+SOURCE=..\include\wx\generic\clrpickerg.h
 # End Source File
 # Begin Source File
 
@@ -4051,7 +4063,7 @@ SOURCE=..\include\wx\generic\filedlgg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\generic\filepicker.h
+SOURCE=..\include\wx\generic\filepickerg.h
 # End Source File
 # Begin Source File
 
@@ -4063,7 +4075,7 @@ SOURCE=..\include\wx\generic\fontdlgg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\generic\fontpicker.h
+SOURCE=..\include\wx\generic\fontpickerg.h
 # End Source File
 # Begin Source File
 

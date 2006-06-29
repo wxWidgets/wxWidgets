@@ -26,7 +26,7 @@
 
 class WXDLLIMPEXP_XML wxXmlNode;
 
-class WXDLLIMPEXP_ADV wxRichTextXMLHandler: public wxRichTextFileHandler
+class WXDLLIMPEXP_RICHTEXT wxRichTextXMLHandler: public wxRichTextFileHandler
 {
     DECLARE_CLASS(wxRichTextXMLHandler)
 public:

@@ -288,4 +288,27 @@
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">aui=auilib+auidll</set>
 
+    <!-- ================================================================ -->
+    <!--                            RICHTEXT                              -->
+    <!-- ================================================================ -->
+
+    <dll id="richtextdll" template="wx_dll"
+         cond="SHARED=='1' and USE_RICHTEXT=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_AUI</define>
+        <sources>$(RICHTEXT_SRC)</sources>
+        <library>advdll</library>
+        <library>coredll</library>
+        <library>basedll</library>
+        <msvc-headers>$(RICHTEXT_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="richtextlib" template="wx_lib"
+         cond="SHARED=='0' and USE_RICHTEXT=='1' and MONOLITHIC=='0'">
+        <sources>$(RICHTEXT_SRC)</sources>
+        <msvc-headers>$(RICHTEXT_HDR)</msvc-headers>
+    </lib>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">richtext=richtextlib+richtextdll</set>
+
 </makefile>

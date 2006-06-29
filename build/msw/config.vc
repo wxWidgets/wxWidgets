@@ -86,6 +86,9 @@ USE_XRC = 1
 # Build wxAUI library (USE_GUI must be 1)? [0,1]
 USE_AUI = 1
 
+# Build wxRichTextCtrl library (USE_GUI must be 1)? [0,1]
+USE_RICHTEXT = 1
+
 # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
 USE_OPENGL = 0
 

@@ -113,6 +113,11 @@ USE_XRC = 1
 USE_AUI = 1
 !endif
 
+# Build wxRichTextCtrl library (USE_GUI must be 1)? [0,1]
+!ifndef USE_RICHTEXT
+USE_RICHTEXT = 1
+!endif
+
 # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
 !ifndef USE_OPENGL
 USE_OPENGL = 0

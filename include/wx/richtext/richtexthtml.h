@@ -22,7 +22,7 @@
  * wxRichTextHTMLHandler
  */
 
-class WXDLLIMPEXP_ADV wxRichTextHTMLHandler: public wxRichTextFileHandler
+class WXDLLIMPEXP_RICHTEXT wxRichTextHTMLHandler: public wxRichTextFileHandler
 {
     DECLARE_CLASS(wxRichTextHTMLHandler)
 public:
