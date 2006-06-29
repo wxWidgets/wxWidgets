@@ -166,6 +166,7 @@ void wxSafeShowMessage(const wxString& title, const wxString& text)
     ::MessageBox(NULL, text, title, MB_OK | MB_ICONSTOP);
 #else
     wxFprintf(stderr, _T("%s: %s\n"), title.c_str(), text.c_str());
+    fflush(stderr);
 #endif
 }
 
