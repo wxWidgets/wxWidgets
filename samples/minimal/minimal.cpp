@@ -119,6 +119,11 @@ IMPLEMENT_APP(MyApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+    // call the base class initialization method, currently it only parses a
+    // few common command-line options but it could be do more in the future
+    if ( !wxApp::OnInit() )
+        return false;
+
     // create the main application window
     MyFrame *frame = new MyFrame(_T("Minimal wxWidgets App"));
 
