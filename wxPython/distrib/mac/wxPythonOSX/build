@@ -35,6 +35,9 @@ function usage {
     echo "   skiptar        Don't unpack the tarball"
     echo "   inplace        Don't use the tarball, build from the CVS tree instead"
     echo "                  (The Docs and Demo tarballs are still required for a full build.)"
+    echo "   reswig         Regenerate SWIG wrappers"
+    echo "   universal      Generate Universal wxWidgets binary (requires Universal Python "
+    echo "                  to general Universal wxPython)."
     echo "   unicode        Make a unicode build"
     echo "   skipconfig     Don't run configure"
     echo "   skipbuild      Don't build wxWidgets or wxPython"
@@ -76,6 +79,9 @@ skipdmg=no
 skipclean=no
 inplace=no
 unicode=no
+debug=no
+reswig=no
+universal=no
 
 for flag in $*; do
     case ${flag} in
@@ -83,11 +89,13 @@ for flag in $*; do
 	skipconfig)  skipconfig=yes; skiptar=yes                ;;
 	skipbuild)   skipbuild=yes; skipconfig=yes; skiptar=yes ;;
 	skipinstall) skipinstall=yes                            ;;
-        skipdmg)     skipdmg=yes                                ;;
+    skipdmg)     skipdmg=yes                                ;;
 	skipclean)   skipclean=yes                              ;;
 	inplace)     inplace=yes; skiptar=yes                   ;;
 	unicode)     unicode=yes                                ;;
-
+	debug)       debug=yes                                  ;;
+	reswig)      reswig=yes                                 ;;
+	universal)   universal=yes                              ;;
 	*)  echo "Unknown flag \"${flag}\""
 	    usage
 	    exit 1
@@ -109,6 +117,14 @@ else
     CHARTYPE=ansi
     UNICODEOPT=--disable-unicode
     PYUNICODEOPT=0
+fi
+
+if [ $debug == yes ]; then
+    DEBUG_FLAG=--enable-debug
+    PYDEBUGOPT=--debug
+else
+    DEBUG_FLAG=--enable-debug_flag
+    PYDEBUGOPT=
 fi
 
 
@@ -152,6 +168,7 @@ fi
 PREFIX=/usr/local/lib/wxPython-$CHARTYPE-$VERSION
 BINPREFIX=/usr/local/bin
 
+SWIGBIN=/opt/swig/bin/swig
 WXROOT=`dirname $PWD`
 PROGDIR="`dirname \"$0\"`"
 TMPDIR=$PWD/_build_dmg
@@ -224,7 +241,7 @@ if [ $KIND = panther ]; then
 fi
 
 # Configure wxWidgets
-if [ $skipconfig != yes ]; then
+if [ $skipconfig != yes -a $universal != yes ]; then
     $WXDIR/configure \
 	--prefix=$PREFIX \
 	--with-mac \
@@ -233,10 +250,11 @@ if [ $skipconfig != yes ]; then
 	--enable-sound \
 	--enable-display \
 	--enable-geometry \
-	--enable-debug_flag \
+	$DEBUG_FLAG \
 	--enable-precomp=no \
 	--enable-optimise \
 	--disable-debugreport \
+	--disable-precompiled-headers \
 	$UNICODEOPT $OTHER_CFG_OPTS
 
 fi
@@ -257,10 +275,24 @@ if [ $skipbuild != yes ]; then
 #     fi
 #     touch lib/libwx*.r*
 
-    make $MAKEJOBS
-    make $MAKEJOBS -C contrib/src/animate
-    make $MAKEJOBS -C contrib/src/gizmos
-    make $MAKEJOBS -C contrib/src/stc
+    WXBLD_CONFIG="$WXBLD/wx-config"
+    if [ $universal = yes ]; then
+        TAG=universal10.4
+        export WXROOT
+        export BUILDPREFIX=$PREFIX
+        export INSTALLDIR=$INSTALLROOT$PREFIX
+        $WXDIR/distrib/scripts/mac/macbuild wxpython universal $CHARTYPE
+    else
+        make $MAKEJOBS
+        make $MAKEJOBS -C contrib/src/animate
+        make $MAKEJOBS -C contrib/src/gizmos
+        make $MAKEJOBS -C contrib/src/stc
+    fi
+    
+    SWIGIT=0
+    if [ $reswig = yes ]; then
+        SWIGIT=1
+    fi
 
     # Build wxPython
     cd $WXROOT/wxPython
@@ -268,8 +300,10 @@ if [ $skipbuild != yes ]; then
 	UNICODE=$PYUNICODEOPT \
 	NO_SCRIPTS=1 \
 	EP_ADD_OPTS=1 \
-	WX_CONFIG="$WXBLD/wx-config --inplace" \
+	WX_CONFIG="$WXBLD_CONFIG --inplace" \
 	BUILD_BASE=$WXBLD/wxPython \
+	SWIG=$SWIGBIN \
+	USE_SWIG=$SWIGIT \
 	build
 fi
 
@@ -278,11 +312,12 @@ fi
 if [ $skipinstall != yes ]; then
     # Install wxWidgets
     cd $WXBLD
-    make                        prefix=$INSTALLROOT$PREFIX install
-    make -C contrib/src/animate prefix=$INSTALLROOT$PREFIX install
-    make -C contrib/src/gizmos  prefix=$INSTALLROOT$PREFIX install
-    make -C contrib/src/stc     prefix=$INSTALLROOT$PREFIX install
-
+    if [ $universal != yes ]; then
+        make                        prefix=$INSTALLROOT$PREFIX install
+        make -C contrib/src/animate prefix=$INSTALLROOT$PREFIX install
+        make -C contrib/src/gizmos  prefix=$INSTALLROOT$PREFIX install
+        make -C contrib/src/stc     prefix=$INSTALLROOT$PREFIX install
+    fi
 
     # relink wx-config with a relative link
     cd $INSTALLROOT$PREFIX/bin
@@ -295,7 +330,7 @@ if [ $skipinstall != yes ]; then
 	UNICODE=$PYUNICODEOPT \
 	NO_SCRIPTS=1 \
 	EP_ADD_OPTS=1 \
-	WX_CONFIG="$INSTALLROOT/$PREFIX/bin/wx-config --prefix=$INSTALLROOT/$PREFIX" \
+	WX_CONFIG="$INSTALLROOT$PREFIX/bin/wx-config --prefix=$INSTALLROOT$PREFIX" \
 	BUILD_BASE=$WXBLD/wxPython \
 	install \
 	--root=$INSTALLROOT
@@ -355,6 +390,11 @@ if [ $skipdmg != yes ]; then
 	jaguar)   W_MSG="the Jaguar (OS X 10.2.x) version of" ;;
     esac
     
+    # TODO: Change
+    if [ $universal == yes ]; then
+      W_MSG="the Universal (OS X 10.4.x and above) version of"
+    fi
+    
 
     cat > $RESOURCEDIR/Welcome.txt <<EOF
 Welcome!
@@ -401,9 +441,9 @@ EOF
     
 
     # Build the main Installer Package...
-    PKGNAME=wxPython${SHORTVER}-osx-$CHARTYPE-$KIND
+    PKGNAME=wxPython${SHORTVER}-osx-$CHARTYPE-$TAG
     if [ $PYVER != 2.3 ]; then
-	PKGNAME=wxPython${SHORTVER}-osx-$CHARTYPE-$KIND-py$PYVER
+	PKGNAME=wxPython${SHORTVER}-osx-$CHARTYPE-$TAG-py$PYVER
     fi
     rm -rf $PKGNAME.pkg
     $PYTHON $PROGDIR/../buildpkg.py \
@@ -578,7 +618,7 @@ EOF
 	tar xjvf $TARBALLDIR/wxPython-demo-$VERSION.tar.bz2
 	mv wxPython-$VERSION/* .
 	rm -rf wxPython-$VERSION
-	rm demo/b demo/.setup.sh
+	rm -f demo/b demo/.setup.sh
 	mv demo/demo.py demo/demo.pyw
 	popd
 

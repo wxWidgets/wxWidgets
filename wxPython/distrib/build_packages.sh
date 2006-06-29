@@ -70,18 +70,13 @@ if [ "$OSTYPE" = "cygwin" ]; then
       UNI=-uni
   fi
   ./.make hybrid$UNI
-  
   # make tools for docs creation, etc.
   ./.make_tools
   
-  # update the language files
-  cd $WXWIN/locale
-  make allmo
-  
-  $TOOLS/Python$PY_VERSION/python `cygpath -d $WXWIN/wxPython/distrib/makemo.py`
-
   cd $WXWIN/wxPython
 
+  # update the language files
+  $TOOLS/Python$PY_VERSION/python `cygpath -d $WXWIN/wxPython/distrib/makemo.py`
   rm -rf build build.unicode
   rm -rf wx/*.pyd
   
@@ -105,14 +100,17 @@ if [ "$OSTYPE" = "cygwin" ]; then
   
   $TOOLS/Python$PY_VERSION/python `cygpath -d $WXWIN/wxPython/distrib/make_installer_inno4.py` $UNICODE_FLAG
 elif [ "$OSTYPE" = "darwin" ]; then
+  OSX_VERSION=`sw_vers -productVersion`
+  echo "OS X Version: ${OSX_VERSION:0:4}"
   cd $WXWIN/wxPython
   
   if [ ! -d dist ]; then
     mkdir dist
   fi
   # re-generate SWIG files
+  RESWIG=
   if [ $reswig = yes ]; then
-    $WXWIN/wxPython/b $PY_VERSION t
+    RESWIG=reswig
   fi
   
   PY_DOT_VER=2.3
@@ -125,11 +123,22 @@ elif [ "$OSTYPE" = "darwin" ]; then
     UNICODE_OPT=unicode
   fi 
   
-  #sudo $WXWIN/wxPython/distrib/makedocs
+  DEBUG_OPT=
+  if [ $debug = yes ]; then
+    DEBUG_OPT=debug
+  fi
+  # On Tiger, build Universal.
+  UNIV_OPT=
+  if [ ${OSX_VERSION:0:4} = "10.4" ]; then
+    UNIV_OPT="universal"
+  fi
+  
+  #$WXWIN/wxPython/distrib/makedocs
   $WXWIN/wxPython/distrib/makedemo
   export TARBALLDIR=$WXWIN/wxPython/dist
+  echo "distrib/mac/wxPythonOSX/build $PY_DOT_VER panther inplace $UNICODE_OPT $RESWIG"
   
-  distrib/mac/wxPythonOSX/build $PY_DOT_VER panther inplace $UNICODE_OPT
+  distrib/mac/wxPythonOSX/build $PY_DOT_VER panther inplace $UNICODE_OPT $DEBUG_OPT $RESWIG $UNIV_OPT
 else
   echo "OSTYPE $OSTYPE not yet supported by this build script."
 fi
