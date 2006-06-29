@@ -707,3 +707,50 @@ wxString wxMacCFStringHolder::AsString(wxFontEncoding encoding)
     delete[] buf ;
     return result ;
 }
+
+
+wxMacUniCharBuffer::wxMacUniCharBuffer( const wxString &str )
+{
+    m_chars = str.length() ;
+    m_ubuf = NULL ;
+
+#if SIZEOF_WCHAR_T == 4
+    wxMBConvUTF16 converter ;
+#if wxUSE_UNICODE
+    size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
+    m_ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) m_ubuf , str.wc_str(), unicharlen + 2 ) ;
+#else
+    const wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
+    size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 ) ;
+    m_ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) m_ubuf , wchar.data() , unicharlen + 2 ) ;
+#endif
+    m_chars = unicharlen / 2 ;
+#else // SIZEOF_WCHAR_T is then 2
+#if wxUSE_UNICODE
+    m_ubuf = malloc( m_chars * 2 + 2 ) ;
+    memcpy( m_ubuf , (UniChar*) str.wc_str() , m_chars * 2 + 2 ) ;
+#else
+    wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
+    m_chars = wxWcslen( wchar.data() ) ;
+    m_ubuf = malloc( m_chars * 2 + 2 ) ;
+    memcpy( m_ubuf , (UniChar*) wchar.data() , m_chars * 2 + 2 ) ;
+#endif
+#endif
+}
+
+wxMacUniCharBuffer::~wxMacUniCharBuffer()
+{
+    free( m_ubuf ) ;
+}
+
+UniCharArrayPtr wxMacUniCharBuffer::GetBuffer() 
+{
+    return m_ubuf ;
+}
+   
+UniCharCount wxMacUniCharBuffer::GetChars()
+{
+    return m_chars ;
+}
