@@ -1977,8 +1977,8 @@ static wxBitmap *new_wxBitmap(PyObject *listOfStrings){
             return bmp;
         }
 static wxBitmap *new_wxBitmap(PyObject *bits,int width,int height,int depth=1){
-            char* buf;
-            int   length;
+            char*       buf;
+            Py_ssize_t  length;
             PyString_AsStringAndSize(bits, &buf, &length);
             return new wxBitmap(buf, width, height, depth);
         }
