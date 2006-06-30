@@ -2105,6 +2105,20 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                         bProcess = false;
                     break;
 
+                case VK_PRIOR:
+                    bForward = false;
+                    // fall through
+
+                case VK_NEXT:
+                    // we treat PageUp/Dn as arrows because chances are that
+                    // a control which needs arrows also needs them for
+                    // navigation (e.g. wxTextCtrl, wxListCtrl, ...)
+                    if ( (lDlgCode & DLGC_WANTARROWS) || !bCtrlDown )
+                        bProcess = false;
+                    else
+                        bWindowChange = true;
+                    break;
+
                 case VK_RETURN:
                     {
                         if ( (lDlgCode & DLGC_WANTMESSAGE) && !bCtrlDown )
