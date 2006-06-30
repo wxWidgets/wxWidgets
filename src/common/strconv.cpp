@@ -2742,27 +2742,40 @@ public:
     ~wxMBConv_mac()
     {
         OSStatus status = noErr ;
-        status = TECDisposeConverter(m_MB2WC_converter);
-        status = TECDisposeConverter(m_WC2MB_converter);
+        if (m_MB2WC_converter)
+            status = TECDisposeConverter(m_MB2WC_converter);
+        if (m_WC2MB_converter)
+            status = TECDisposeConverter(m_WC2MB_converter);
     }
 
-
-    void Init( TextEncodingBase encoding)
+    void Init( TextEncodingBase encoding,TextEncodingVariant encodingVariant = kTextEncodingDefaultVariant ,
+            TextEncodingFormat encodingFormat = kTextEncodingDefaultFormat)
     {
-        OSStatus status = noErr ;
-        m_char_encoding = encoding ;
+        m_MB2WC_converter = NULL ;
+        m_WC2MB_converter = NULL ;
+        m_char_encoding = CreateTextEncoding(encoding, encodingVariant, encodingFormat) ;
         m_unicode_encoding = CreateTextEncoding(kTextEncodingUnicodeDefault, 0, kUnicode16BitFormat) ;
+    }
 
-        status = TECCreateConverter(&m_MB2WC_converter,
+    virtual void CreateIfNeeded() const
+    {
+        if ( m_MB2WC_converter == NULL && m_WC2MB_converter == NULL )
+        {
+            OSStatus status = noErr ;
+            status = TECCreateConverter(&m_MB2WC_converter,
                                     m_char_encoding,
                                     m_unicode_encoding);
-        status = TECCreateConverter(&m_WC2MB_converter,
+            wxASSERT_MSG( status == noErr , _("Unable to create TextEncodingConverter")) ;
+            status = TECCreateConverter(&m_WC2MB_converter,
                                     m_unicode_encoding,
                                     m_char_encoding);
+            wxASSERT_MSG( status == noErr , _("Unable to create TextEncodingConverter")) ;
+        }
     }
-
+    
     size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const
     {
+        CreateIfNeeded() ;
         OSStatus status = noErr ;
         ByteCount byteOutLen ;
         ByteCount byteInLen = strlen(psz) + 1;
@@ -2811,6 +2824,7 @@ public:
 
     size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const
     {
+        CreateIfNeeded() ;
         OSStatus status = noErr ;
         ByteCount byteOutLen ;
         ByteCount byteInLen = wxWcslen(psz) * SIZEOF_WCHAR_T ;
@@ -2873,16 +2887,117 @@ public:
     virtual wxMBConv *Clone() const { return new wxMBConv_mac(*this); }
 
     bool IsOk() const
-        { return m_MB2WC_converter != NULL && m_WC2MB_converter != NULL; }
+    {         
+        CreateIfNeeded() ;
+        return m_MB2WC_converter != NULL && m_WC2MB_converter != NULL; 
+    }
 
-private:
-    TECObjectRef m_MB2WC_converter;
-    TECObjectRef m_WC2MB_converter;
+protected :
+    mutable TECObjectRef m_MB2WC_converter;
+    mutable TECObjectRef m_WC2MB_converter;
 
     TextEncodingBase m_char_encoding;
     TextEncodingBase m_unicode_encoding;
 };
 
+// MB is decomposed (D) normalized UTF8
+
+class wxMBConv_macUTF8D : public wxMBConv_mac
+{
+public :
+    wxMBConv_macUTF8D() 
+    {
+        Init( kTextEncodingUnicodeDefault , kUnicodeNoSubset , kUnicodeUTF8Format ) ;
+        m_uni = NULL;
+    }
+     
+    ~wxMBConv_macUTF8D()
+    {
+        DisposeUnicodeToTextInfo(&m_uni);
+    }
+    
+    size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const
+    {
+        CreateIfNeeded() ;
+        OSStatus status = noErr ;
+        ByteCount byteOutLen ;
+        ByteCount byteInLen = wxWcslen(psz) * SIZEOF_WCHAR_T ;
+
+        char *tbuf = NULL ;
+
+        if (buf == NULL)
+        {
+            // Apple specs say at least 32
+            n = wxMax( 32, ((byteInLen / SIZEOF_WCHAR_T) * 8) + SIZEOF_WCHAR_T );
+            tbuf = (char*) malloc( n ) ;
+        }
+
+        ByteCount byteBufferLen = n ;
+        UniChar* ubuf = NULL ;
+
+#if SIZEOF_WCHAR_T == 4
+        wxMBConvUTF16 converter ;
+        size_t unicharlen = converter.WC2MB( NULL, psz, 0 ) ;
+        byteInLen = unicharlen ;
+        ubuf = (UniChar*) malloc( byteInLen + 2 ) ;
+        converter.WC2MB( (char*) ubuf, psz, unicharlen + 2 ) ;
+#else
+        ubuf = (UniChar*) psz ;
+#endif
+
+        // ubuf is a non-decomposed UniChar buffer 
+        
+        ByteCount dcubuflen = byteInLen * 2 + 2 ;
+        ByteCount dcubufread , dcubufwritten ;
+        UniChar *dcubuf = (UniChar*) malloc( dcubuflen ) ; 
+       
+        ConvertFromUnicodeToText( m_uni , byteInLen , ubuf , 
+            kUnicodeDefaultDirectionMask, 0, NULL, NULL, NULL, dcubuflen  , &dcubufread , &dcubufwritten , dcubuf ) ;
+       
+        // we now convert that decomposed buffer into UTF8
+
+        status = TECConvertText(
+            m_WC2MB_converter, (ConstTextPtr) dcubuf, dcubufwritten, &dcubufread,
+            (TextPtr) (buf ? buf : tbuf), byteBufferLen, &byteOutLen);
+
+        free( dcubuf );
+
+#if SIZEOF_WCHAR_T == 4
+        free( ubuf ) ;
+#endif
+
+        if ( buf == NULL )
+            free(tbuf) ;
+
+        size_t res = byteOutLen ;
+        if ( buf  && res < n)
+        {
+            buf[res] = 0;
+            // don't test for round-trip fidelity yet, we cannot guarantee it yet
+        }
+
+        return res ;
+    }
+    
+    virtual void CreateIfNeeded() const
+    {
+        wxMBConv_mac::CreateIfNeeded() ;
+        if ( m_uni == NULL )
+        {
+            m_map.unicodeEncoding = CreateTextEncoding(kTextEncodingUnicodeDefault,
+                kUnicodeNoSubset, kTextEncodingDefaultFormat);
+            m_map.otherEncoding = CreateTextEncoding(kTextEncodingUnicodeDefault,
+                kUnicodeCanonicalDecompVariant, kTextEncodingDefaultFormat);
+            m_map.mappingVersion = kUnicodeUseLatestMapping;
+            
+            OSStatus err = CreateUnicodeToTextInfo(&m_map, &m_uni); 
+            wxASSERT_MSG( err == noErr , _(" Couldn't create the UnicodeConverter")) ;
+        }
+    }
+protected :
+    mutable UnicodeToTextInfo   m_uni;
+    mutable UnicodeMapping      m_map;
+}; 
 #endif // defined(__WXMAC__) && defined(TARGET_CARBON)
 
 // ============================================================================
@@ -3392,7 +3507,9 @@ static wxCSConv wxConvLocalObj(wxFONTENCODING_SYSTEM);
 static wxCSConv wxConvISO8859_1Obj(wxFONTENCODING_ISO8859_1);
 static wxMBConvUTF7 wxConvUTF7Obj;
 static wxMBConvUTF8 wxConvUTF8Obj;
-
+#ifdef __WXOSX__
+static wxMBConv_macUTF8D wxConvMacUTF8DObj;
+#endif
 WXDLLIMPEXP_DATA_BASE(wxMBConv&) wxConvLibc = wxConvLibcObj;
 WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvLocal = wxConvLocalObj;
 WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvISO8859_1 = wxConvISO8859_1Obj;
@@ -3402,7 +3519,7 @@ WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = &wxConvLibcObj;
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI = &wxConvLocal;
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName = &
 #ifdef __WXOSX__
-                                    wxConvUTF8Obj;
+                                    wxConvMacUTF8DObj;
 #else
                                     wxConvLibcObj;
 #endif

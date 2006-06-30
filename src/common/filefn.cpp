@@ -881,13 +881,19 @@ wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathCompon
     }
     CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, kDefaultPathStyle);
     CFRelease( fullURLRef ) ;
-    return wxMacCFStringHolder(cfString).AsString(wxLocale::GetSystemEncoding());
+    CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, cfString);
+    CFRelease( cfString );
+    CFStringNormalize(cfMutableString,kCFStringNormalizationFormC);    
+    return wxMacCFStringHolder(cfMutableString).AsString(wxLocale::GetSystemEncoding());
 }
 
 OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef )
 {
     OSStatus err = noErr ;
-    CFURLRef url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, wxMacCFStringHolder(path ,wxLocale::GetSystemEncoding() ) , kDefaultPathStyle, false);
+    CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, wxMacCFStringHolder(path ,wxLocale::GetSystemEncoding() ) ) ;
+    CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);    
+    CFURLRef url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kDefaultPathStyle, false);
+    CFRelease( cfMutableString );
     if ( NULL != url )
     {
         if ( CFURLGetFSRef(url, fsRef) == false )
@@ -906,7 +912,10 @@ wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname )
     CFStringRef cfname = CFStringCreateWithCharacters( kCFAllocatorDefault,
                                                       uniname->unicode,
                                                       uniname->length );
-    return wxMacCFStringHolder(cfname).AsString() ;
+    CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, cfname);
+    CFRelease( cfname );
+    CFStringNormalize(cfMutableString,kCFStringNormalizationFormC);    
+    return wxMacCFStringHolder(cfMutableString).AsString() ;
 }
 
 wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
