@@ -172,16 +172,14 @@ bool wxEventLoop::PreProcessMessage(WXMSG *msg)
     // now try the other hooks (kbd navigation is handled here)
     for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
     {
-        if (wnd != wndThis) // Skip the first since wndThis->MSWProcessMessage() was called above
-        {
-            if ( wnd->MSWProcessMessage((WXMSG *)msg) )
-                return true;
-        }
+        if ( wnd->MSWProcessMessage((WXMSG *)msg) )
+            return true;
 
-        // Stop at first top level window (as per comment above).
-        // If we don't do this, pressing ESC on a modal dialog shown as child of a modal
-        // dialog with wxID_CANCEL will cause the parent dialog to be closed, for example
-        if (wnd->IsTopLevel())
+        // also stop at first top level window here, just as above because
+        // if we don't do this, pressing ESC on a modal dialog shown as child
+        // of a modal dialog with wxID_CANCEL will cause the parent dialog to
+        // be closed, for example
+        if ( wnd->IsTopLevel() )
             break;
     }
 
