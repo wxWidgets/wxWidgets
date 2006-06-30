@@ -2057,18 +2057,14 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             // WM_GETDLGCODE: ask the control if it wants the key for itself,
             // don't process it if it's the case (except for Ctrl-Tab/Enter
             // combinations which are always processed)
-            LONG lDlgCode = 0;
-            if ( !bCtrlDown )
-            {
-                lDlgCode = ::SendMessage(msg->hwnd, WM_GETDLGCODE, 0, 0);
+            LONG lDlgCode = ::SendMessage(msg->hwnd, WM_GETDLGCODE, 0, 0);
 
-                // surprizingly, DLGC_WANTALLKEYS bit mask doesn't contain the
-                // DLGC_WANTTAB nor DLGC_WANTARROWS bits although, logically,
-                // it, of course, implies them
-                if ( lDlgCode & DLGC_WANTALLKEYS )
-                {
-                    lDlgCode |= DLGC_WANTTAB | DLGC_WANTARROWS;
-                }
+            // surprizingly, DLGC_WANTALLKEYS bit mask doesn't contain the
+            // DLGC_WANTTAB nor DLGC_WANTARROWS bits although, logically,
+            // it, of course, implies them
+            if ( lDlgCode & DLGC_WANTALLKEYS )
+            {
+                lDlgCode |= DLGC_WANTTAB | DLGC_WANTARROWS;
             }
 
             bool bForward = true,
