@@ -333,7 +333,9 @@ static void RenumberDockRows(wxDockInfoPtrArray& docks)
 }
 
 
-
+// SetActivePane() sets the active pane, as well as cycles through
+// every other pane and makes sure that all others' active flags
+// are turned off
 static void SetActivePane(wxPaneInfoArray& panes, wxWindow* active_pane)
 {
     int i, pane_count;
@@ -544,7 +546,9 @@ void wxFrameManager::ProcessMgrEvent(wxFrameManagerEvent& event)
 
 // SetArtProvider() instructs wxFrameManager to use the
 // specified art provider for all drawing calls.  This allows
-// plugable look-and-feel features
+// plugable look-and-feel features.  The pointer that is
+// passed to this method subsequently belongs to wxFrameManager,
+// and is deleted in the frame manager destructor
 void wxFrameManager::SetArtProvider(wxDockArt* art_provider)
 {
     // delete the last art provider, if any
@@ -553,6 +557,7 @@ void wxFrameManager::SetArtProvider(wxDockArt* art_provider)
     // assign the new art provider
     m_art = art_provider;
 }
+
 
 bool wxFrameManager::AddPane(wxWindow* window, const wxPaneInfo& pane_info)
 {
@@ -698,6 +703,8 @@ bool wxFrameManager::InsertPane(wxWindow* window, const wxPaneInfo& pane_info,
 }
 
 
+// DetachPane() removes a pane from the frame manager.  This
+// method will not destroy the window that is removed.
 bool wxFrameManager::DetachPane(wxWindow* window)
 {
     int i, count;
