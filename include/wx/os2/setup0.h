@@ -997,8 +997,6 @@
                                 // 0 for no interprocess comms
 #define wxUSE_HELP        1
                                 // 0 for no help facility
-#define wxUSE_MS_HTML_HELP 1
-                                // 0 for no MS HTML Help
 
 // Use wxHTML-based help controller?
 #define wxUSE_WXHTML_HELP 1

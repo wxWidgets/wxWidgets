@@ -477,9 +477,6 @@ typedef pid_t GPid;
 
 #define wxUSE_HELP        1
 
-#define wxUSE_MS_HTML_HELP 0
-
-
 #define wxUSE_WXHTML_HELP 1
 
 #define wxUSE_RESOURCES   1
