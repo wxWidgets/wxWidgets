@@ -477,10 +477,12 @@ if BUILD_GLCANVAS:
                             USE_SWIG, swig_force, swig_args, swig_deps)
 
     gl_libs = []
+    gl_libdirs = libdirs[:]
     if os.name == 'posix':
         gl_config = os.popen(WX_CONFIG + ' --libs gl', 'r').read()[:-1]
         gl_lflags = gl_config.split()
-        gl_libs = libs
+        gl_lflags = adjustLFLAGS(gl_lflags, gl_libdirs, gl_libs)
+
         
     else:
         gl_libs = libs + ['opengl32', 'glu32'] + makeLibName('gl')
@@ -492,7 +494,7 @@ if BUILD_GLCANVAS:
                     include_dirs = includes + CONTRIBS_INC,
                     define_macros = defines,
 
-                    library_dirs = libdirs,
+                    library_dirs = gl_libdirs,
                     libraries = gl_libs,
 
                     extra_compile_args = cflags,
