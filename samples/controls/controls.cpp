@@ -24,6 +24,7 @@
 #include "wx/bookctrl.h"
 #include "wx/imaglist.h"
 #include "wx/artprov.h"
+#include "wx/cshelp.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -57,6 +58,9 @@
     #define wxToggleButton wxCheckBox
     #define EVT_TOGGLEBUTTON EVT_CHECKBOX
 #endif
+
+#include "wx/hyperlink.h"
+#include "wx/utils.h"
 
 //----------------------------------------------------------------------
 // class definitions
@@ -120,6 +124,10 @@ public:
 
     void OnSizerCheck (wxCommandEvent &event);
 
+#if wxUSE_HYPERLINKCTRL
+    void OnHyperlink(wxHyperlinkEvent& event);
+#endif
+
     wxListBox     *m_listbox,
                   *m_listboxSorted;
 #if wxUSE_CHOICE
@@ -168,6 +176,10 @@ public:
     wxBoxSizer    *m_hsizer;
     wxButton      *m_bigBtn;
 
+#if wxUSE_HYPERLINKCTRL
+    wxHyperlinkCtrl *m_hyperlink;
+#endif
+
 private:
     wxLog *m_logTargetOld;
 
@@ -189,6 +201,7 @@ public:
 #endif // wxUSE_TOOLTIPS
 
     void OnEnableAll(wxCommandEvent& event);
+    void OnContextHelp(wxCommandEvent& event);
 
     void OnIdle( wxIdleEvent& event );
     void OnIconized( wxIconizeEvent& event );
@@ -378,7 +391,8 @@ enum
     CONTROLS_ENABLE_TOOLTIPS,
 
     // panel menu
-    CONTROLS_ENABLE_ALL
+    CONTROLS_ENABLE_ALL,
+    CONTROLS_CONTEXT_HELP
 };
 
 bool MyApp::OnInit()
@@ -395,6 +409,10 @@ bool MyApp::OnInit()
         wxSscanf(wxString(argv[1]), wxT("%d"), &x);
         wxSscanf(wxString(argv[2]), wxT("%d"), &y);
     }
+
+#if wxUSE_HELP
+    wxHelpProvider::Set( new wxSimpleHelpProvider );
+#endif // wxUSE_HELP
 
     // Create the main frame window
     MyFrame *frame = new MyFrame(_T("Controls wxWidgets App"), x, y);
@@ -480,6 +498,8 @@ const int  ID_SIZER_CHECK4      = 204;
 const int  ID_SIZER_CHECK14     = 205;
 const int  ID_SIZER_CHECKBIG    = 206;
 
+const int  ID_HYPERLINK         = 300;
+
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_IDLE      (                         MyPanel::OnIdle)
 EVT_BOOKCTRL_PAGE_CHANGING(ID_BOOK,     MyPanel::OnPageChanging)
@@ -549,6 +569,9 @@ EVT_BUTTON    (ID_BUTTON_TEST1,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BUTTON_TEST2,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BITMAP_BTN,           MyPanel::OnBmpButton)
 EVT_TOGGLEBUTTON(ID_BITMAP_BTN_ENABLE,  MyPanel::OnBmpButtonToggle)
+#if wxUSE_HYPERLINKCTRL
+EVT_HYPERLINK (ID_HYPERLINK,            MyPanel::OnHyperlink)
+#endif
 
 EVT_CHECKBOX  (ID_SIZER_CHECK1,         MyPanel::OnSizerCheck)
 EVT_CHECKBOX  (ID_SIZER_CHECK2,         MyPanel::OnSizerCheck)
@@ -825,6 +848,16 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_radio->SetItemToolTip(2, _T(""));
 #endif // wxUSE_TOOLTIPS
 
+#if wxUSE_HELP
+    for( unsigned int item = 0; item < WXSIZEOF(choices); ++item )
+        m_radio->SetItemHelpText( item, wxString::Format( _T("Help text for \"%s\""), choices[item].c_str() ) );
+
+    // erase help text for the second item
+    m_radio->SetItemHelpText( 1, _T("") );
+    // set default help text for control
+    m_radio->SetHelpText( _T("Default helptext for wxRadioBox") );
+#endif // wxUSE_HELP
+
     (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, _T("Select #&2"), wxPoint(180,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, _T("&Select 'This'"), wxPoint(180,80), wxSize(140,30) );
     m_fontButton = new wxButton( panel, ID_SET_FONT, _T("Set &more Italic font"), wxPoint(340,30), wxSize(140,30) );
@@ -920,7 +953,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
 #if wxUSE_SPINCTRL
     m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, wxEmptyString, wxPoint(200, 160), wxSize(80, wxDefaultCoord) );
-    m_spinctrl->SetRange(10,30);
+    //m_spinctrl->SetRange(10,30);
     m_spinctrl->SetValue(15);
 #endif // wxUSE_SPINCTRL
 
@@ -941,6 +974,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     wxBitmap bitmap( 100, 100 );
     wxMemoryDC dc;
+    dc.SetBackground(*wxGREEN);
     dc.SelectObject( bitmap );
     dc.SetPen(*wxGREEN_PEN);
     dc.Clear();
@@ -985,6 +1019,24 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_label->SetForegroundColour( *wxBLUE );
 
     m_book->AddPage(panel, _T("wxBitmapXXX"));
+
+    // hyperlink
+#if wxUSE_HYPERLINKCTRL
+    panel = new wxPanel(m_book);
+    m_hyperlink = new wxHyperlinkCtrl(panel, ID_HYPERLINK,
+                                      _T("Click here to go to Google!"),
+                                      _T("http://www.google.com"),
+                                      wxPoint(20, 20));
+    m_hyperlink->SetVisitedColour(m_hyperlink->GetNormalColour());
+    m_hyperlink->SetFont(*wxITALIC_FONT);
+    m_hyperlink->SetBackgroundColour(*wxWHITE);
+
+    // this hyperlink will automatically call wxLaunchDefaultBrowser on user's clicks
+    new wxHyperlinkCtrl(panel, wxID_ANY, wxT("http://www.test.com"),
+                        wxEmptyString, wxPoint(20, 50));
+
+    m_book->AddPage(panel, _T("wxHyperlinkCtrl"));
+#endif
 
     // sizer
 
@@ -1660,6 +1712,15 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
 #endif // wxUSE_PROGRESSDLG
 #endif // wxUSE_SPINBTN
 
+#if wxUSE_HYPERLINKCTRL
+void MyPanel::OnHyperlink(wxHyperlinkEvent& event)
+{
+    wxLogMessage(wxT("Clicked on hyperlink with url '%s'"), event.GetURL().c_str());
+    if (!wxLaunchDefaultBrowser(event.GetURL()))
+        wxMessageBox(_T("Could not launch the default browser!"));
+}
+#endif //wxUSE_HYPERLINK
+
 void MyPanel::OnSizerCheck( wxCommandEvent &event)
 {
   switch (event.GetId ()) {
@@ -1713,6 +1774,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxUSE_TOOLTIPS
 
     EVT_MENU(CONTROLS_ENABLE_ALL, MyFrame::OnEnableAll)
+    EVT_MENU(CONTROLS_CONTEXT_HELP, MyFrame::OnContextHelp)
 
     EVT_ICONIZE(MyFrame::OnIconized)
     EVT_MAXIMIZE(MyFrame::OnMaximized)
@@ -1723,8 +1785,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(const wxChar *title, int x, int y)
-       : wxFrame(NULL, wxID_ANY, title, wxPoint(x, y), wxSize(500, 430))
 {
+    // give it a context help button
+    SetExtraStyle(wxFRAME_EX_CONTEXTHELP);
+    wxFrame::Create(NULL, wxID_ANY, title, wxPoint(x, y), wxSize(500, 430),
+                    wxDEFAULT_FRAME_STYLE & ~ (wxMINIMIZE_BOX | wxMAXIMIZE_BOX));
+    SetHelpText( _T("Controls sample demonstrating various widgets") );
+
     // Give it an icon
     // The wxICON() macros loads an icon from a resource under Windows
     // and uses an #included XPM image under GTK+ and Motif
@@ -1757,6 +1824,8 @@ MyFrame::MyFrame(const wxChar *title, int x, int y)
     wxMenu *panel_menu = new wxMenu;
     panel_menu->Append(CONTROLS_ENABLE_ALL, _T("&Disable all\tCtrl-E"),
                        _T("Enable/disable all panel controls"), true);
+    panel_menu->Append(CONTROLS_CONTEXT_HELP, _T("&Context help...\tCtrl-H"),
+                       _T("Get context help for a control"));
     menu_bar->Append(panel_menu, _T("&Panel"));
 
     SetMenuBar(menu_bar);
@@ -1828,6 +1897,12 @@ void MyFrame::OnEnableAll(wxCommandEvent& WXUNUSED(event))
 
     s_enable = !s_enable;
     m_panel->Enable(s_enable);
+}
+
+void MyFrame::OnContextHelp(wxCommandEvent& WXUNUSED(event))
+{
+    // starts a local event loop
+    wxContextHelp chelp(this);
 }
 
 void MyFrame::OnMove( wxMoveEvent& event )
