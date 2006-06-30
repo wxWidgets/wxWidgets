@@ -1,0 +1,193 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        dgramsocket.tex
+%% Purpose:     wxSocket docs
+%% Author:      Angel Vidal Veiga (kry@amule.org)
+%% Modified by:
+%% Created:     2006
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ---------------------------------------------------------------------------
+% CLASS wxDatagramSocket
+% ---------------------------------------------------------------------------
+
+\section{\class{wxDatagramSocket}}\label{wxdatagramsocket}
+
+\wxheading{Derived from}
+
+\helpref{wxSocketBase}{wxsocketbase}
+
+\wxheading{Include files}
+
+<wx/socket.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+% ---------------------------------------------------------------------------
+% Members
+% ---------------------------------------------------------------------------
+%
+% wxDatagramSocket
+%
+\membersection{wxDatagramSocket::wxDatagramSocket}\label{wxdatagramsocketctor}
+
+\func{}{wxDatagramSocket}{\param{wxSocketFlags}{ flags = wxSOCKET\_NONE}}
+
+Constructor.
+
+\wxheading{Parameters}
+
+\docparam{flags}{Socket flags (See \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags})}
+
+%
+% ~wxDatagramSocket
+%
+\membersection{wxDatagramSocket::\destruct{wxDatagramSocket}}\label{wxdatagramsocketdtor}
+
+\func{}{\destruct{wxDatagramSocket}}{\void}
+
+Destructor. Please see \helpref{wxSocketBase::Destroy}{wxsocketbasedestroy}.
+
+%
+% Connect
+%
+\membersection{wxDatagramSocket::Connect}\label{wxdatagramsocketconnect}
+
+\func{bool}{Connect}{\param{wxSockAddress\&}{ address}}
+
+Connects to another peer using the specified address.
+
+Connecting in an UDP socket like the one wxDatagramSocket creates is different 
+from TCP socket's idea of connect. Give then fact that UDP is a connectionless 
+protocol, the meaning of wxDatagramSocket::Connect is that of the unix connect() 
+call when used with with UDP sockets. This means the socket send/receive will be bind 
+to the wxSockAddress specified, and no datagrams will be send or received from other 
+address.
+
+The Connect() call can be isued several times with no drawbacks, to change the destination 
+adddress.
+
+{\bf Warning:} When a Connect() has been called on a socket, calling \helpref{ReceiveFrom}{wxdatagramsocketreceivefrom} or \helpref{SendTo}{wxdatagramsocketsendto} with a different wxSockAddress will result in an assertion on debug mode and 
+no data being sent/received on both debug and release modes. Use  
+\helpref{Read()}{wxsocketbaseread} and \helpref{Write()}{wxsocketbasewrite}
+after calling Connect() to make sure you're reading from/writing to the proper destination.
+
+\wxheading{Parameters}
+
+\docparam{address}{Address of the destination peer.}
+
+\wxheading{Return value}
+
+Returns true if the connect() call is successful and socket is correctly
+attached to the destination address.
+
+\wxheading{See also}
+
+\helpref{wxDatagramSocket::Disconnect}{wxdatagramsocketdisconnect}, 
+
+\newsince{2.7.0} { There was no way to Connect() an wxDatagramSocket before }.
+
+%
+% Disconnect
+%
+\membersection{wxDatagramSocket::Disconnect}\label{wxdatagramsocketdisconnect}
+
+\func{bool}{Disconnect}{}
+
+Removes previously bind to an specific destination address set by a 
+\helpref{Connect()}{wxdatagramsocketconnect} call.
+
+The Disconnect() call can be isued several times with no drawbacks. No error is set
+if the socket was not connected.
+
+
+\wxheading{Parameters}
+
+
+\wxheading{Return value}
+
+Returns true if the socket was sucessfully deatached from the destination address.
+
+\wxheading{See also}
+
+\helpref{wxDatagramSocket::Connect}{wxdatagramsocketconnect}, 
+
+\newsince{2.7.0} { There was no way to Connect() an wxDatagramSocket before. }
+
+%
+% ReceiveFrom
+%
+\membersection{wxDatagramSocket::ReceiveFrom}\label{wxdatagramsocketreceivefrom}
+
+\func{wxDatagramSocket\&}{ReceiveFrom}{\param{wxSockAddress\&}{ address}, \param{void *}{ buffer}, \param{wxUint32}{ nbytes}}
+
+This function reads a buffer of {\it nbytes} bytes from the socket.
+
+Use \helpref{LastCount}{wxsocketbaselastcount} to verify the number of bytes actually read.
+
+Use \helpref{Error}{wxsocketbaseerror} to determine if the operation succeeded.
+
+\wxheading{Parameters}
+
+\docparam{address}{Any address - will be overwritten with the address of the peer that sent that data.}
+
+\docparam{buffer}{Buffer where to put read data.}
+
+\docparam{nbytes}{Number of bytes.}
+
+\wxheading{Return value}
+
+Returns a reference to the current object, and the address of the peer that sent the data on address param.
+
+\wxheading{Remark/Warning}
+
+If a \helpref{Connect()}{wxdatagramsocketconnect} call is issued before ReceiveFrom is called, 
+the address sent on this call MUST match the one ussed on the Connect() call, or this call will assert. It's usually a good idea to use \helpref{wxSocketBase::Read}{wxsocketbaseread} in this case.
+
+\wxheading{See also}
+
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
+\helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags},
+\helpref{Connect()}{wxdatagramsocketconnect}
+
+%
+% SendTo
+%
+\membersection{wxDatagramSocket::SendTo}\label{wxdatagramsocketsendto}
+
+\func{wxDatagramSocket\&}{SendTo}{\param{const wxSockAddress\&}{ address}, \param{const void *}{ buffer}, \param{wxUint32}{ nbytes}}
+
+This function writes a buffer of {\it nbytes} bytes to the socket.
+
+Use \helpref{LastCount}{wxsocketbaselastcount} to verify the number of bytes actually wrote.
+
+Use \helpref{Error}{wxsocketbaseerror} to determine if the operation succeeded.
+
+\wxheading{Parameters}
+
+\docparam{address}{The address of the destination peer for this data.}
+
+\docparam{buffer}{Buffer where read data is.}
+
+\docparam{nbytes}{Number of bytes.}
+
+\wxheading{Return value}
+
+Returns a reference to the current object.
+
+\wxheading{Remark/Warning}
+
+If a \helpref{Connect()}{wxdatagramsocketconnect} call is issued before SendTo is called, 
+the address sent on this call MUST match the one ussed on the Connect() call, or this call will assert. It's usually a good idea to use \helpref{wxSocketBase::Write}{wxsocketbasewrite} in this case.
+
+\wxheading{See also}
+
+\helpref{wxSocketBase::Error}{wxsocketbaseerror}, 
+\helpref{wxSocketBase::LastError}{wxsocketbaselasterror}, 
+\helpref{wxSocketBase::LastCount}{wxsocketbaselastcount}, 
+\helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags}
+\helpref{Connect()}{wxdatagramsocketconnect}
