@@ -111,6 +111,8 @@ public:
     // wxCheckBox-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event)
     {
+        wxControl::DoUpdateWindowUI(event);
+
         if ( event.GetSetChecked() )
             SetValue(event.GetChecked());
     }
