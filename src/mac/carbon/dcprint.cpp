@@ -39,8 +39,9 @@ public :
     virtual void EndDoc( wxPrinterDC* dc ) = 0;
     virtual void StartPage( wxPrinterDC* dc ) = 0;
     virtual void EndPage( wxPrinterDC* dc ) = 0;
-    virtual wxCoord GetMaxX() const = 0 ;
-    virtual wxCoord GetMaxY() const = 0 ;
+    virtual void GetSize( int *w , int *h) const = 0 ;
+    virtual wxSize GetPPI() const = 0 ;
+
     // returns 0 in case of no Error, otherwise platform specific error codes
     virtual wxUint32 GetStatus() const = 0 ;
     bool Ok() { return GetStatus() == 0 ; }
@@ -57,13 +58,14 @@ public :
     virtual void EndDoc( wxPrinterDC* dc ) ;
     virtual void StartPage( wxPrinterDC* dc ) ;
     virtual void EndPage( wxPrinterDC* dc ) ;
-    virtual wxCoord GetMaxX() const { return m_maxX ; }
-    virtual wxCoord GetMaxY() const { return m_maxY ; }
     virtual wxUint32 GetStatus() const { return m_err ; }
+    virtual void GetSize( int *w , int *h) const ;
+    virtual wxSize GetPPI() const ;
 private :
     GrafPtr m_macPrintFormerPort ;
     wxCoord m_maxX ;
     wxCoord m_maxY ;
+    wxSize  m_ppi ;
     OSStatus m_err ;
 } ;
 
@@ -81,6 +83,10 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
 
     m_maxX = wxCoord(rPage.right - rPage.left) ;
     m_maxY = wxCoord(rPage.bottom - rPage.top);
+
+    PMResolution res;
+    m_err = PMGetResolution((PMPageFormat) (native->m_macPageFormat), &res);
+    m_ppi = wxSize(int(res.hRes), int(res.vRes));
 }
 
 wxMacCarbonPrinterDC::~wxMacCarbonPrinterDC()
@@ -119,10 +125,14 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED
     PMRect rPage;
     m_err = PMGetAdjustedPageRect(native->m_macPageFormat, &rPage);
     if ( m_err != noErr )
-        return false;
+        return;
 
-    m_maxX = (wxCoord)(rPage.right - rPage.left);
-    m_maxY = (wxCoord)(rPage.bottom - rPage.top);
+    m_maxX = wxCoord(rPage.right - rPage.left) ;
+    m_maxY = wxCoord(rPage.bottom - rPage.top);
+
+    PMResolution res;
+    m_err = PMGetResolution((PMPageFormat) (native->m_macPageFormat), &res);
+    m_ppi = wxSize(int(res.hRes), int(res.vRes));
     return true ;
 }
 
@@ -206,6 +216,23 @@ void wxMacCarbonPrinterDC::EndPage( wxPrinterDC* dc )
     }
 }
 
+void wxMacCarbonPrinterDC::GetSize( int *w , int *h) const
+{
+    if ( w )
+        *w = m_maxX ;
+    if ( h )
+        *h = m_maxY ;
+}
+
+wxSize wxMacCarbonPrinterDC::GetPPI() const 
+{
+     return m_ppi ;
+};
+
+//
+//
+//
+
 wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 {
     m_ok = false ;
@@ -222,11 +249,22 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
             wxMessageDialog dialog( NULL , message , wxEmptyString, wxICON_HAND | wxOK) ;
             dialog.ShowModal();
         }
+        else
+        {
+            wxSize sz = GetPPI();
+            m_mm_to_pix_x = mm2inches * sz.x;
+            m_mm_to_pix_y = mm2inches * sz.y;        
+        }
 #if wxMAC_USE_CORE_GRAPHICS
         // the cgContext will only be handed over page by page
         m_graphicContext = new wxMacCGContext() ;
 #endif
     }
+}
+
+wxSize wxPrinterDC::GetPPI() const
+{
+    return m_nativePrinterDC->GetPPI() ;
 }
 
 wxPrinterDC::~wxPrinterDC(void)
@@ -324,11 +362,7 @@ void wxPrinterDC::EndPage(void)
 void wxPrinterDC::DoGetSize(int *width, int *height) const
 {
     wxCHECK_RET( m_ok , _T("GetSize() doesn't work without a valid wxPrinterDC") );
-
-    if ( width )
-        * width = m_nativePrinterDC->GetMaxX() ;
-    if ( height )
-        * height = m_nativePrinterDC->GetMaxY() ;
+    m_nativePrinterDC->GetSize(width,  height ) ;
 }
 
 #endif
