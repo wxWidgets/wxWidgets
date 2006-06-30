@@ -1218,8 +1218,6 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
 
 void MyPanel::OnListBox( wxCommandEvent &event )
 {
-//    GetParent()->Move(100, 100);
-
     if (event.GetInt() == -1)
     {
         m_text->AppendText( _T("ListBox has no selections anymore\n") );
@@ -1232,9 +1230,15 @@ void MyPanel::OnListBox( wxCommandEvent &event )
     m_text->AppendText( _T("ListBox event selection string is: '") );
     m_text->AppendText( event.GetString() );
     m_text->AppendText( _T("'\n") );
-    m_text->AppendText( _T("ListBox control selection string is: '") );
-    m_text->AppendText( listbox->GetStringSelection() );
-    m_text->AppendText( _T("'\n") );
+
+    // can't use GetStringSelection() with multiple selections, there could be
+    // more than one of them
+    if ( !listbox->HasFlag(wxLB_MULTIPLE) )
+    {
+        m_text->AppendText( _T("ListBox control selection string is: '") );
+        m_text->AppendText( listbox->GetStringSelection() );
+        m_text->AppendText( _T("'\n") );
+    }
 
     wxStringClientData *obj = ((wxStringClientData *)event.GetClientObject());
     m_text->AppendText( _T("ListBox event client data string is: '") );
@@ -1245,7 +1249,7 @@ void MyPanel::OnListBox( wxCommandEvent &event )
 
     m_text->AppendText( _T("'\n") );
     m_text->AppendText( _T("ListBox control client data string is: '") );
-    obj = (wxStringClientData *)listbox->GetClientObject(listbox->GetSelection());
+    obj = (wxStringClientData *)listbox->GetClientObject(event.GetInt());
     if (obj)
         m_text->AppendText( obj->GetData() );
     else
