@@ -125,7 +125,7 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED
     PMRect rPage;
     m_err = PMGetAdjustedPageRect(native->m_macPageFormat, &rPage);
     if ( m_err != noErr )
-        return;
+        return false ;
 
     m_maxX = wxCoord(rPage.right - rPage.left) ;
     m_maxY = wxCoord(rPage.bottom - rPage.top);
