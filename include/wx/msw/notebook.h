@@ -156,7 +156,6 @@ public:
   virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
   virtual bool MSWOnScroll(int orientation, WXWORD nSBCode,
                            WXWORD pos, WXHWND control);
-  virtual bool MSWTranslateMessage(WXMSG *wxmsg);
 
 #if wxUSE_CONSTRAINTS
   virtual void SetConstraintSizes(bool recurse = true);

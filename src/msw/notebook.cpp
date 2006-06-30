@@ -1056,25 +1056,6 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
   event.Skip();
 }
 
-bool wxNotebook::MSWTranslateMessage(WXMSG *wxmsg)
-{
-    const MSG * const msg = (MSG *)wxmsg;
-
-    // intercept TAB, CTRL+TAB and CTRL+SHIFT+TAB for processing by wxNotebook.
-    // TAB will be passed to the currently selected page, CTRL+TAB and
-    // CTRL+SHIFT+TAB will be processed by the notebook itself. do not
-    // intercept SHIFT+TAB. This goes to the parent of the notebook which will
-    // process it.
-    if ( msg->message == WM_KEYDOWN && msg->wParam == VK_TAB &&
-            msg->hwnd == GetHwnd() &&
-                (wxIsCtrlDown() || !wxIsShiftDown()) )
-    {
-        return MSWProcessMessage(wxmsg);
-    }
-
-    return false;
-}
-
 void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 {
     if ( event.IsWindowChange() ) {
