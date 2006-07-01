@@ -1627,8 +1627,12 @@ wxRichTextCtrl::HitTest(const wxPoint& pt,
 {
     wxClientDC dc((wxRichTextCtrl*) this);
     ((wxRichTextCtrl*)this)->PrepareDC(dc);
+    
+    // Buffer uses logical position (relative to start of buffer)
+    // so convert
+    wxPoint pt2 = GetLogicalPoint(pt);
 
-    int hit = ((wxRichTextCtrl*)this)->GetBuffer().HitTest(dc, pt, *pos);
+    int hit = ((wxRichTextCtrl*)this)->GetBuffer().HitTest(dc, pt2, *pos);
 
     switch ( hit )
     {
@@ -2017,10 +2021,10 @@ bool wxRichTextCtrl::CanRedo() const
 }
 
 // ----------------------------------------------------------------------------
-// implemenation details
+// implementation details
 // ----------------------------------------------------------------------------
 
-void wxRichTextCtrl::Command(wxCommandEvent & event)
+void wxRichTextCtrl::Command(wxCommandEvent& event)
 {
     SetValue(event.GetString());
     GetEventHandler()->ProcessEvent(event);
