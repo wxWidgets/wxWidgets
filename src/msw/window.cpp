@@ -1567,6 +1567,7 @@ bool wxWindowMSW::IsSizeDeferred() const
 // Get total size
 void wxWindowMSW::DoGetSize(int *x, int *y) const
 {
+#if USE_DEFERRED_SIZING
     // if SetSize() had been called at wx level but not realized at Windows
     // level yet (i.e. EndDeferWindowPos() not called), we still should return
     // the new and not the old position to the other wx code
@@ -1578,6 +1579,7 @@ void wxWindowMSW::DoGetSize(int *x, int *y) const
             *y = m_pendingSize.y;
     }
     else // use current size
+#endif // USE_DEFERRED_SIZING
     {
         RECT rect = wxGetWindowRect(GetHwnd());
 
@@ -1592,21 +1594,9 @@ void wxWindowMSW::DoGetSize(int *x, int *y) const
 void wxWindowMSW::DoGetClientSize(int *x, int *y) const
 {
 #if USE_DEFERRED_SIZING
-    if ( IsTopLevel() || m_pendingSize == wxDefaultSize )
-#endif
-    {        // top level windows resizing is never deferred, so we can safely use
-        // the current size here
-        RECT rect = wxGetClientRect(GetHwnd());
-
-        if ( x )
-            *x = rect.right;
-        if ( y )
-            *y = rect.bottom;
-    }
-#if USE_DEFERRED_SIZING
-    else // non top level and using deferred sizing
+    if ( m_pendingSize != wxDefaultSize )
     {
-        // we need to calculate the *pending* client size here
+        // we need to calculate the client size corresponding to pending size
         RECT rect;
         rect.left = m_pendingPosition.x;
         rect.top = m_pendingPosition.y;
@@ -1620,7 +1610,16 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
         if ( y )
             *y = rect.bottom - rect.top;
     }
-#endif
+    else
+#endif // USE_DEFERRED_SIZING
+    {
+        RECT rect = wxGetClientRect(GetHwnd());
+
+        if ( x )
+            *x = rect.right;
+        if ( y )
+            *y = rect.bottom;
+    }
 }
 
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
