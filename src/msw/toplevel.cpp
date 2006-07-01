@@ -501,20 +501,9 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
     WXDWORD exflags;
     WXDWORD flags = MSWGetCreateWindowFlags(&exflags);
 
-    wxSize sz;
+    const wxSize sz = IsAlwaysMaximized() ? wxDefaultSize : size;
 
-    if (IsAlwaysMaximized())
-    {
-        sz = wxDefaultSize;
-    }
-    else
-    {
-        sz = size;
-    }
-
-    bool result = MSWCreate(wxCanvasClassName, title, pos, sz, flags, exflags);
-
-    return result;
+    return MSWCreate(wxCanvasClassName, title, pos, sz, flags, exflags);
 }
 
 bool wxTopLevelWindowMSW::Create(wxWindow *parent,
@@ -695,6 +684,11 @@ bool wxTopLevelWindowMSW::Show(bool show)
         frame->GetMenuBar()->AddAdornments(GetWindowStyleFlag());
 #endif
 
+    // we only set pending size if we're maximized before being shown, now that
+    // we're shown we don't need it any more (it is reset in size event handler
+    // for child windows but we have to do it ourselves for this parent window)
+    m_pendingSize = wxDefaultSize;
+
     return true;
 }
 
@@ -721,9 +715,15 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
         // it's shown, so return our size as it will be then in this case
         if ( maximize )
         {
-            // unfortunately we don't know which display we're on yet so we
-            // have to use the default one
-            SetSize(wxGetClientDisplayRect().GetSize());
+            // we must only change pending size here, and not call SetSize()
+            // because otherwise Windows would think that this (full screen)
+            // size is the natural size for the frame and so would use it when
+            // the user clicks on "restore" title bar button instead of the
+            // correct initial frame size
+            //
+            // NB: unfortunately we don't know which display we're on yet so we
+            //     have to use the default one
+            m_pendingSize = wxGetClientDisplayRect().GetSize();
         }
         //else: can't do anything in this case, we don't have the old size
     }
