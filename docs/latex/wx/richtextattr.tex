@@ -1,0 +1,640 @@
+\section{\class{wxRichTextAttr}}\label{wxrichtextattr}
+
+wxRichTextAttr represents the character and paragraph attributes, or style,
+for a range of text in a \helpref{wxRichTextCtrl}{wxrichtextctrl}. This class
+is specific to wxRichTextCtrl, although you can also use the
+standard \helpref{wxTextAttr}{wxtextattr} class with wxRichTextCtrl.
+
+When setting up a wxRichTextAttr object, pass a bitlist mask to \helpref{SetFlags}{wxrichtextattrsetflags} to
+indicate which style elements should be changed. As a convenience, when you call a setter such
+s SetFont, the relevant bit will be set.
+
+wxRichTextAttr stores attributes without a wxFont object, so is a much more
+efficient way to query styles than using a \helpref{wxTextAttr}{wxtextattr} or \helpref{wxTextAttrEx}{wxtextattrex} object.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/richtext/richtextbuffer.h>
+
+\wxheading{Constants}
+
+The following values can be passed to SetAlignment to determine
+paragraph alignment.
+
+{\small
+\begin{verbatim}
+enum wxTextAttrAlignment
+{
+    wxTEXT_ALIGNMENT_DEFAULT,
+    wxTEXT_ALIGNMENT_LEFT,
+    wxTEXT_ALIGNMENT_CENTRE,
+    wxTEXT_ALIGNMENT_CENTER = wxTEXT_ALIGNMENT_CENTRE,
+    wxTEXT_ALIGNMENT_RIGHT,
+    wxTEXT_ALIGNMENT_JUSTIFIED
+};
+\end{verbatim}
+}
+
+These values are passed in a bitlist to SetFlags to determine
+what attributes will be considered when setting the attributes
+for a text control.
+
+{\small
+\begin{verbatim}
+// Standard wxTextAttr constants
+
+#define wxTEXT_ATTR_TEXT_COLOUR             0x0001
+#define wxTEXT_ATTR_BACKGROUND_COLOUR       0x0002
+#define wxTEXT_ATTR_FONT_FACE               0x0004
+#define wxTEXT_ATTR_FONT_SIZE               0x0008
+#define wxTEXT_ATTR_FONT_WEIGHT             0x0010
+#define wxTEXT_ATTR_FONT_ITALIC             0x0020
+#define wxTEXT_ATTR_FONT_UNDERLINE          0x0040
+#define wxTEXT_ATTR_FONT \
+  wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT \
+| wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE
+#define wxTEXT_ATTR_ALIGNMENT               0x0080
+#define wxTEXT_ATTR_LEFT_INDENT             0x0100
+#define wxTEXT_ATTR_RIGHT_INDENT            0x0200
+#define wxTEXT_ATTR_TABS                    0x0400
+
+// Extra formatting flags not in wxTextAttr
+
+#define wxTEXT_ATTR_PARA_SPACING_AFTER      0x00000800
+#define wxTEXT_ATTR_PARA_SPACING_BEFORE     0x00001000
+#define wxTEXT_ATTR_LINE_SPACING            0x00002000
+#define wxTEXT_ATTR_CHARACTER_STYLE_NAME    0x00004000
+#define wxTEXT_ATTR_PARAGRAPH_STYLE_NAME    0x00008000
+#define wxTEXT_ATTR_BULLET_STYLE            0x00010000
+#define wxTEXT_ATTR_BULLET_NUMBER           0x00020000
+#define wxTEXT_ATTR_BULLET_SYMBOL           0x00040000
+\end{verbatim}
+}
+
+The following styles can be passed to wxRichTextAttr::SetBulletStyle:
+
+{\small
+\begin{verbatim}
+#define wxTEXT_ATTR_BULLET_STYLE_NONE           0x0000
+#define wxTEXT_ATTR_BULLET_STYLE_ARABIC         0x0001
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER  0x0002
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER  0x0004
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER    0x0008
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER    0x0010
+#define wxTEXT_ATTR_BULLET_STYLE_SYMBOL         0x0020
+#define wxTEXT_ATTR_BULLET_STYLE_BITMAP         0x0040
+#define wxTEXT_ATTR_BULLET_STYLE_PARENTHESES    0x0080
+#define wxTEXT_ATTR_BULLET_STYLE_PERIOD         0x0100
+\end{verbatim}
+}
+
+The following constants can be passed to wxRichTextAttr::SetLineSpacing:
+
+{\small
+\begin{verbatim}
+#define wxTEXT_ATTR_LINE_SPACING_NORMAL         10
+#define wxTEXT_ATTR_LINE_SPACING_HALF           15
+#define wxTEXT_ATTR_LINE_SPACING_TWICE          20
+\end{verbatim}
+}
+
+\wxheading{See also}
+
+\helpref{wxTextAttr}{wxtextattr}, \helpref{wxTextAttrEx}{wxtextattrex}, \helpref{wxRichTextCtrl}{wxrichtextctrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextAttr::wxRichTextAttr}\label{wxrichtextattrwxrichtextattr}
+
+\func{}{wxRichTextAttr}{\void}
+
+\func{}{wxRichTextAttr}{\param{const wxColour\& }{colText}, \param{const wxColour\& }{colBack = wxNullColour}, \param{wxTextAttrAlignment }{alignment = wxTEXT\_ALIGNMENT\_DEFAULT}}
+
+\func{}{wxRichTextAttr}{\param{const wxTextAttrEx\& }{attr}}
+
+Constructors.
+
+\membersection{wxRichTextAttr::CopyTo}\label{wxrichtextattrcopyto}
+
+\constfunc{void}{CopyTo}{\param{wxTextAttrEx\& }{attr}}
+
+Copies the wxRichTextAttr attributes to a \helpref{wxTextAttrEx}{wxtextattrex} object.
+
+\membersection{wxRichTextAttr::CreateFont}\label{wxrichtextattrcreatefont}
+
+\constfunc{wxFont}{CreateFont}{\void}
+
+Creates a font from the font attributes.
+
+\membersection{wxRichTextAttr::GetAlignment}\label{wxrichtextattrgetalignment}
+
+\constfunc{wxTextAttrAlignment}{GetAlignment}{\void}
+
+Returns the alignment flags.
+See \helpref{wxRichTextAttr::SetAlignment}{wxrichtextattrsetalignment} for a list of available styles.
+
+\membersection{wxRichTextAttr::GetBackgroundColour}\label{wxrichtextattrgetbackgroundcolour}
+
+\constfunc{const wxColour\&}{GetBackgroundColour}{\void}
+
+Returns the background colour.
+
+\membersection{wxRichTextAttr::GetBulletNumber}\label{wxrichtextattrgetbulletnumber}
+
+\constfunc{int}{GetBulletNumber}{\void}
+
+Returns the bullet number.
+
+\membersection{wxRichTextAttr::GetBulletStyle}\label{wxrichtextattrgetbulletstyle}
+
+\constfunc{int}{GetBulletStyle}{\void}
+
+Returns the bullet style.
+See \helpref{wxRichTextAttr::SetBulletStyle}{wxrichtextattrsetbulletstyle} for a list of available styles.
+
+\membersection{wxRichTextAttr::GetBulletSymbol}\label{wxrichtextattrgetbulletsymbol}
+
+\constfunc{wxChar}{GetBulletSymbol}{\void}
+
+Returns the bullet symbol, a character.
+
+\membersection{wxRichTextAttr::GetCharacterStyleName}\label{wxrichtextattrgetcharacterstylename}
+
+\constfunc{const wxString\&}{GetCharacterStyleName}{\void}
+
+Returns the name of the character style.
+
+\membersection{wxRichTextAttr::GetFlags}\label{wxrichtextattrgetflags}
+
+\constfunc{long}{GetFlags}{\void}
+
+Returns flags indicating which attributes are applicable.
+See \helpref{wxRichTextAttr::SetFlags}{wxrichtextattrsetflags} for a list of available flags.
+
+\membersection{wxRichTextAttr::GetFontAttributes}\label{wxrichtextattrgetfontattributes}
+
+\func{bool}{GetFontAttributes}{\param{const wxFont\& }{font}}
+
+Sets the font attributes from the given font.
+
+\membersection{wxRichTextAttr::GetFontFaceName}\label{wxrichtextattrgetfontfacename}
+
+\constfunc{const wxString\&}{GetFontFaceName}{\void}
+
+Returns the font face name.
+
+\membersection{wxRichTextAttr::GetFontSize}\label{wxrichtextattrgetfontsize}
+
+\constfunc{int}{GetFontSize}{\void}
+
+Returns the font size in points.
+
+\membersection{wxRichTextAttr::GetFontStyle}\label{wxrichtextattrgetfontstyle}
+
+\constfunc{int}{GetFontStyle}{\void}
+
+Returns the font style.
+
+\membersection{wxRichTextAttr::GetFontUnderlined}\label{wxrichtextattrgetfontunderlined}
+
+\constfunc{bool}{GetFontUnderlined}{\void}
+
+Returns \true if the font is underlined.
+
+\membersection{wxRichTextAttr::GetFontWeight}\label{wxrichtextattrgetfontweight}
+
+\constfunc{int}{GetFontWeight}{\void}
+
+Returns the font weight.
+
+\membersection{wxRichTextAttr::GetLeftIndent}\label{wxrichtextattrgetleftindent}
+
+\constfunc{long}{GetLeftIndent}{\void}
+
+Returns the left indent in tenths of a millimetre.
+
+\membersection{wxRichTextAttr::GetLeftSubIndent}\label{wxrichtextattrgetleftsubindent}
+
+\constfunc{long}{GetLeftSubIndent}{\void}
+
+Returns the left sub-indent in tenths of a millimetre.
+
+\membersection{wxRichTextAttr::GetLineSpacing}\label{wxrichtextattrgetlinespacing}
+
+\constfunc{int}{GetLineSpacing}{\void}
+
+Returns the line spacing value, one of wxTEXT\_ATTR\_LINE\_SPACING\_NORMAL,
+wxTEXT\_ATTR\_LINE\_SPACING\_HALF, and wxTEXT\_ATTR\_LINE\_SPACING\_TWICE.
+
+\membersection{wxRichTextAttr::GetParagraphSpacingAfter}\label{wxrichtextattrgetparagraphspacingafter}
+
+\constfunc{int}{GetParagraphSpacingAfter}{\void}
+
+Returns the space in tenths of a millimeter after the paragraph.
+
+\membersection{wxRichTextAttr::GetParagraphSpacingBefore}\label{wxrichtextattrgetparagraphspacingbefore}
+
+\constfunc{int}{GetParagraphSpacingBefore}{\void}
+
+Returns the space in tenths of a millimeter before the paragraph.
+
+\membersection{wxRichTextAttr::GetParagraphStyleName}\label{wxrichtextattrgetparagraphstylename}
+
+\constfunc{const wxString\&}{GetParagraphStyleName}{\void}
+
+Returns the name of the paragraph style.
+
+\membersection{wxRichTextAttr::GetRightIndent}\label{wxrichtextattrgetrightindent}
+
+\constfunc{long}{GetRightIndent}{\void}
+
+Returns the right indent in tenths of a millimeter.
+
+\membersection{wxRichTextAttr::GetTabs}\label{wxrichtextattrgettabs}
+
+\constfunc{const wxArrayInt\&}{GetTabs}{\void}
+
+Returns an array of tab stops, each expressed in tenths of a millimeter. Each stop
+is measured from the left margin and therefore each value must be larger than the last.
+
+\membersection{wxRichTextAttr::GetTextColour}\label{wxrichtextattrgettextcolour}
+
+\constfunc{const wxColour\&}{GetTextColour}{\void}
+
+Returns the text foreground colour.
+
+\membersection{wxRichTextAttr::HasAlignment}\label{wxrichtextattrhasalignment}
+
+\constfunc{bool}{HasAlignment}{\void}
+
+Returns \true if the attribute object specifies alignment.
+
+\membersection{wxRichTextAttr::HasBackgroundColour}\label{wxrichtextattrhasbackgroundcolour}
+
+\constfunc{bool}{HasBackgroundColour}{\void}
+
+Returns \true if the attribute object specifies a background colour.
+
+\membersection{wxRichTextAttr::HasBulletNumber}\label{wxrichtextattrhasbulletnumber}
+
+\constfunc{bool}{HasBulletNumber}{\void}
+
+Returns \true if the attribute object specifies a bullet number.
+
+\membersection{wxRichTextAttr::HasBulletStyle}\label{wxrichtextattrhasbulletstyle}
+
+\constfunc{bool}{HasBulletStyle}{\void}
+
+Returns \true if the attribute object specifies a bullet style.
+
+\membersection{wxRichTextAttr::HasBulletSymbol}\label{wxrichtextattrhasbulletsymbol}
+
+\constfunc{bool}{HasBulletSymbol}{\void}
+
+Returns \true if the attribute object specifies a bullet symbol.
+
+\membersection{wxRichTextAttr::HasCharacterStyleName}\label{wxrichtextattrhascharacterstylename}
+
+\constfunc{bool}{HasCharacterStyleName}{\void}
+
+Returns \true if the attribute object specifies a character style name.
+
+\membersection{wxRichTextAttr::HasFaceName}\label{wxrichtextattrhasfacename}
+
+\constfunc{bool}{HasFaceName}{\void}
+
+Returns \true if the attribute object specifies a font face name.
+
+\membersection{wxRichTextAttr::HasFlag}\label{wxrichtextattrhasflag}
+
+\constfunc{bool}{HasFlag}{\param{long }{flag}}
+
+Returns \true if the {\it flag} is present in the attribute object's flag bitlist.
+
+\membersection{wxRichTextAttr::HasFont}\label{wxrichtextattrhasfont}
+
+\constfunc{bool}{HasFont}{\void}
+
+Returns \true if the attribute object specifies any font attributes.
+
+\membersection{wxRichTextAttr::HasItalic}\label{wxrichtextattrhasitalic}
+
+\constfunc{bool}{HasItalic}{\void}
+
+Returns \true if the attribute object specifies italic style.
+
+\membersection{wxRichTextAttr::HasLeftIndent}\label{wxrichtextattrhasleftindent}
+
+\constfunc{bool}{HasLeftIndent}{\void}
+
+Returns \true if the attribute object specifies a left indent.
+
+\membersection{wxRichTextAttr::HasLineSpacing}\label{wxrichtextattrhaslinespacing}
+
+\constfunc{bool}{HasLineSpacing}{\void}
+
+Returns \true if the attribute object specifies line spacing.
+
+\membersection{wxRichTextAttr::HasParagraphSpacingAfter}\label{wxrichtextattrhasparagraphspacingafter}
+
+\constfunc{bool}{HasParagraphSpacingAfter}{\void}
+
+Returns \true if the attribute object specifies spacing after a paragraph.
+
+\membersection{wxRichTextAttr::HasParagraphSpacingBefore}\label{wxrichtextattrhasparagraphspacingbefore}
+
+\constfunc{bool}{HasParagraphSpacingBefore}{\void}
+
+Returns \true if the attribute object specifies spacing before a paragraph.
+
+\membersection{wxRichTextAttr::HasParagraphStyleName}\label{wxrichtextattrhasparagraphstylename}
+
+\constfunc{bool}{HasParagraphStyleName}{\void}
+
+Returns \true if the attribute object specifies a paragraph style name.
+
+\membersection{wxRichTextAttr::HasRightIndent}\label{wxrichtextattrhasrightindent}
+
+\constfunc{bool}{HasRightIndent}{\void}
+
+Returns \true if the attribute object specifies a right indent.
+
+\membersection{wxRichTextAttr::HasSize}\label{wxrichtextattrhassize}
+
+\constfunc{bool}{HasSize}{\void}
+
+Returns \true if the attribute object specifies a font point size.
+
+\membersection{wxRichTextAttr::HasTabs}\label{wxrichtextattrhastabs}
+
+\constfunc{bool}{HasTabs}{\void}
+
+Returns \true if the attribute object specifies tab stops.
+
+\membersection{wxRichTextAttr::HasTextColour}\label{wxrichtextattrhastextcolour}
+
+\constfunc{bool}{HasTextColour}{\void}
+
+Returns \true if the attribute object specifies a text foreground colour.
+
+\membersection{wxRichTextAttr::HasUnderlined}\label{wxrichtextattrhasunderlined}
+
+\constfunc{bool}{HasUnderlined}{\void}
+
+Returns \true if the attribute object specifies either underlining or no underlining.
+
+\membersection{wxRichTextAttr::HasWeight}\label{wxrichtextattrhasweight}
+
+\constfunc{bool}{HasWeight}{\void}
+
+Returns \true if the attribute object specifies font weight (bold, light or normal).
+
+\membersection{wxRichTextAttr::Init}\label{wxrichtextattrinit}
+
+\func{void}{Init}{\void}
+
+Initialise the object.
+
+\membersection{wxRichTextAttr::IsCharacterStyle}\label{wxrichtextattrischaracterstyle}
+
+\constfunc{bool}{IsCharacterStyle}{\void}
+
+Returns \true if the object represents a character style, that is,
+the flags specify a font or a text background or foreground colour.
+
+\membersection{wxRichTextAttr::IsDefault}\label{wxrichtextattrisdefault}
+
+\constfunc{bool}{IsDefault}{\void}
+
+Returns \false if we have any attributes set, \true otherwise.
+
+\membersection{wxRichTextAttr::IsParagraphStyle}\label{wxrichtextattrisparagraphstyle}
+
+\constfunc{bool}{IsParagraphStyle}{\void}
+
+Returns \true if the object represents a paragraph style, that is,
+the flags specify alignment, indentation, tabs, paragraph spacing, or
+bullet style.
+
+\membersection{wxRichTextAttr::SetAlignment}\label{wxrichtextattrsetalignment}
+
+\func{void}{SetAlignment}{\param{wxTextAttrAlignment }{alignment}}
+
+Sets the paragraph alignment. These are the possible values for {\it alignment}:
+
+{\small
+\begin{verbatim}
+enum wxTextAttrAlignment
+{
+    wxTEXT_ALIGNMENT_DEFAULT,
+    wxTEXT_ALIGNMENT_LEFT,
+    wxTEXT_ALIGNMENT_CENTRE,
+    wxTEXT_ALIGNMENT_CENTER = wxTEXT_ALIGNMENT_CENTRE,
+    wxTEXT_ALIGNMENT_RIGHT,
+    wxTEXT_ALIGNMENT_JUSTIFIED
+};
+\end{verbatim}
+}
+
+\membersection{wxRichTextAttr::SetBackgroundColour}\label{wxrichtextattrsetbackgroundcolour}
+
+\func{void}{SetBackgroundColour}{\param{const wxColour\& }{colBack}}
+
+Sets the background colour.
+
+\membersection{wxRichTextAttr::SetBulletNumber}\label{wxrichtextattrsetbulletnumber}
+
+\func{void}{SetBulletNumber}{\param{int }{n}}
+
+Sets the bullet number.
+
+\membersection{wxRichTextAttr::SetBulletStyle}\label{wxrichtextattrsetbulletstyle}
+
+\func{void}{SetBulletStyle}{\param{int }{style}}
+
+Sets the bullet style. The following styles can be passed:
+
+{\small
+\begin{verbatim}
+#define wxTEXT_ATTR_BULLET_STYLE_NONE           0x0000
+#define wxTEXT_ATTR_BULLET_STYLE_ARABIC         0x0001
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER  0x0002
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER  0x0004
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER    0x0008
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER    0x0010
+#define wxTEXT_ATTR_BULLET_STYLE_SYMBOL         0x0020
+#define wxTEXT_ATTR_BULLET_STYLE_BITMAP         0x0040
+#define wxTEXT_ATTR_BULLET_STYLE_PARENTHESES    0x0080
+#define wxTEXT_ATTR_BULLET_STYLE_PERIOD         0x0100
+\end{verbatim}
+}
+
+\membersection{wxRichTextAttr::SetBulletSymbol}\label{wxrichtextattrsetbulletsymbol}
+
+\func{void}{SetBulletSymbol}{\param{wxChar }{symbol}}
+
+Sets the paragraph symbol.
+
+\membersection{wxRichTextAttr::SetCharacterStyleName}\label{wxrichtextattrsetcharacterstylename}
+
+\func{void}{SetCharacterStyleName}{\param{const wxString\& }{name}}
+
+Sets the character style name.
+
+\membersection{wxRichTextAttr::SetFlags}\label{wxrichtextattrsetflags}
+
+\func{void}{SetFlags}{\param{long }{flags}}
+
+Sets the flags determining which styles are being specified. The following
+flags can be passed in a bitlist:
+
+{\small
+\begin{verbatim}
+// Standard wxTextAttr constants
+
+#define wxTEXT_ATTR_TEXT_COLOUR             0x0001
+#define wxTEXT_ATTR_BACKGROUND_COLOUR       0x0002
+#define wxTEXT_ATTR_FONT_FACE               0x0004
+#define wxTEXT_ATTR_FONT_SIZE               0x0008
+#define wxTEXT_ATTR_FONT_WEIGHT             0x0010
+#define wxTEXT_ATTR_FONT_ITALIC             0x0020
+#define wxTEXT_ATTR_FONT_UNDERLINE          0x0040
+#define wxTEXT_ATTR_FONT \
+  wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT \
+| wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE
+#define wxTEXT_ATTR_ALIGNMENT               0x0080
+#define wxTEXT_ATTR_LEFT_INDENT             0x0100
+#define wxTEXT_ATTR_RIGHT_INDENT            0x0200
+#define wxTEXT_ATTR_TABS                    0x0400
+
+// Extra formatting flags not in wxTextAttr
+
+#define wxTEXT_ATTR_PARA_SPACING_AFTER      0x00000800
+#define wxTEXT_ATTR_PARA_SPACING_BEFORE     0x00001000
+#define wxTEXT_ATTR_LINE_SPACING            0x00002000
+#define wxTEXT_ATTR_CHARACTER_STYLE_NAME    0x00004000
+#define wxTEXT_ATTR_PARAGRAPH_STYLE_NAME    0x00008000
+#define wxTEXT_ATTR_BULLET_STYLE            0x00010000
+#define wxTEXT_ATTR_BULLET_NUMBER           0x00020000
+#define wxTEXT_ATTR_BULLET_SYMBOL           0x00040000
+\end{verbatim}
+}
+
+\membersection{wxRichTextAttr::SetFontFaceName}\label{wxrichtextattrsetfontfacename}
+
+\func{void}{SetFontFaceName}{\param{const wxString\& }{faceName}}
+
+Sets the paragraph alignment.
+
+\membersection{wxRichTextAttr::SetFontSize}\label{wxrichtextattrsetfontsize}
+
+\func{void}{SetFontSize}{\param{int }{pointSize}}
+
+Sets the font size in points.
+
+\membersection{wxRichTextAttr::SetFontStyle}\label{wxrichtextattrsetfontstyle}
+
+\func{void}{SetFontStyle}{\param{int }{fontStyle}}
+
+Sets the font style (normal, italic or slanted).
+
+\membersection{wxRichTextAttr::SetFontUnderlined}\label{wxrichtextattrsetfontunderlined}
+
+\func{void}{SetFontUnderlined}{\param{bool }{underlined}}
+
+Sets the font underlining.
+
+\membersection{wxRichTextAttr::SetFontWeight}\label{wxrichtextattrsetfontweight}
+
+\func{void}{SetFontWeight}{\param{int }{fontWeight}}
+
+Sets the font weight.
+
+\membersection{wxRichTextAttr::SetLeftIndent}\label{wxrichtextattrsetleftindent}
+
+\func{void}{SetLeftIndent}{\param{int }{indent}, \param{int }{subIndent = 0}}
+
+Sets the left indent and left subindent in tenths of a millimetre.
+
+The sub-indent is an offset from the left of the paragraph, and is used for all but the
+first line in a paragraph. A positive value will cause the first line to appear to the left
+of the subsequent lines, and a negative value will cause the first line to be indented
+relative to the subsequent lines.
+
+wxRichTextBuffer uses indentation to render a bulleted item. The left indent is the distance between
+the margin and the bullet. The content of the paragraph, including the first line, starts
+at leftMargin + leftSubIndent. So the distance between the left edge of the bullet and the
+left of the actual paragraph is leftSubIndent.
+
+\membersection{wxRichTextAttr::SetLineSpacing}\label{wxrichtextattrsetlinespacing}
+
+\func{void}{SetLineSpacing}{\param{int }{spacing}}
+
+Sets the line spacing. {\it spacing} is a multiple, where 10 means single-spacing,
+15 means 1.5 spacing, and 20 means double spacing. The following constants are
+defined for convenience:
+
+{\small
+\begin{verbatim}
+#define wxTEXT_ATTR_LINE_SPACING_NORMAL         10
+#define wxTEXT_ATTR_LINE_SPACING_HALF           15
+#define wxTEXT_ATTR_LINE_SPACING_TWICE          20
+\end{verbatim}
+}
+
+\membersection{wxRichTextAttr::SetParagraphSpacingAfter}\label{wxrichtextattrsetparagraphspacingafter}
+
+\func{void}{SetParagraphSpacingAfter}{\param{int }{spacing}}
+
+Sets the spacing after a paragraph, in tenths of a millimetre.
+
+\membersection{wxRichTextAttr::SetParagraphSpacingBefore}\label{wxrichtextattrsetparagraphspacingbefore}
+
+\func{void}{SetParagraphSpacingBefore}{\param{int }{spacing}}
+
+Sets the spacing before a paragraph, in tenths of a millimetre.
+
+\membersection{wxRichTextAttr::SetParagraphStyleName}\label{wxrichtextattrsetparagraphstylename}
+
+\func{void}{SetParagraphStyleName}{\param{const wxString\& }{name}}
+
+Sets the name of the paragraph style.
+
+\membersection{wxRichTextAttr::SetRightIndent}\label{wxrichtextattrsetrightindent}
+
+\func{void}{SetRightIndent}{\param{int }{indent}}
+
+Sets the right indent in tenths of a millimetre.
+
+\membersection{wxRichTextAttr::SetTabs}\label{wxrichtextattrsettabs}
+
+\func{void}{SetTabs}{\param{const wxArrayInt\& }{tabs}}
+
+Sets the tab stops, expressed in tenths of a millimetre.
+Each stop is measured from the left margin and therefore each value must be larger than the last.
+
+\membersection{wxRichTextAttr::SetTextColour}\label{wxrichtextattrsettextcolour}
+
+\func{void}{SetTextColour}{\param{const wxColour\& }{colText}}
+
+Sets the text foreground colout.
+
+\membersection{wxRichTextAttr::operator=}\label{wxrichtextattroperatorassign}
+
+\func{void operator}{operator=}{\param{const wxTextAttrEx\& }{attr}}
+
+Assignment from a \helpref{wxTextAttrEx}{wxtextattr} object.
+
+\func{void operator}{operator=}{\param{const wxRichTextAttr\& }{attr}}
+
+Assignment from a \helpref{wxRichTextAttr}{wxrichtextattr} object.
+
+\membersection{wxRichTextAttr::wxTextAttrEx}\label{wxrichtextattrwxtextattrex}
+
+\constfunc{operator}{wxTextAttrEx}{\void}
+
+Makes a \helpref{wxTextAttrEx}{wxtextattrex} object from this object.

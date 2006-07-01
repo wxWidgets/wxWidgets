@@ -1,0 +1,573 @@
+\section{\class{wxRichTextBuffer}}\label{wxrichtextbuffer}
+
+This class represents the whole buffer associated with a \helpref{wxRichTextCtrl}{wxrichtextctrl}.
+
+\wxheading{Derived from}
+
+wxRichTextParagraphLayoutBox
+
+\wxheading{Include files}
+
+<wx/richtext/richtextbuffer.h>
+
+\wxheading{Data structures}
+
+\wxheading{See also}
+
+\helpref{wxTextAttr}{wxtextattr}, \helpref{wxTextAttrEx}{wxtextattrex}, \helpref{wxRichTextAttr}{wxrichtextattr}, \helpref{wxRichTextCtrl}{wxrichtextctrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextBuffer::wxRichTextBuffer}\label{wxrichtextbufferwxrichtextbuffer}
+
+\func{}{wxRichTextBuffer}{\param{const wxRichTextBuffer\& }{obj}}
+
+Copy constructor.
+
+\func{}{wxRichTextBuffer}{\void}
+
+Default constructors.
+
+\membersection{wxRichTextBuffer::\destruct{wxRichTextBuffer}}\label{wxrichtextbufferdtor}
+
+\func{}{\destruct{wxRichTextBuffer}}{\void}
+
+Destructor.
+
+\membersection{wxRichTextBuffer::AddHandler}\label{wxrichtextbufferaddhandler}
+
+\func{void}{AddHandler}{\param{wxRichTextFileHandler* }{handler}}
+
+Adds a file handler.
+
+\membersection{wxRichTextBuffer::AddParagraph}\label{wxrichtextbufferaddparagraph}
+
+\func{wxRichTextRange}{AddParagraph}{\param{const wxString\& }{text}}
+
+Adds a paragraph of text.
+
+\membersection{wxRichTextBuffer::BatchingUndo}\label{wxrichtextbufferbatchingundo}
+
+\constfunc{bool}{BatchingUndo}{\void}
+
+Returns \true if the buffer is currently collapsing commands into a single notional command.
+
+\membersection{wxRichTextBuffer::BeginAlignment}\label{wxrichtextbufferbeginalignment}
+
+\func{bool}{BeginAlignment}{\param{wxTextAttrAlignment }{alignment}}
+
+Begins using alignment.
+
+\membersection{wxRichTextBuffer::BeginBatchUndo}\label{wxrichtextbufferbeginbatchundo}
+
+\func{bool}{BeginBatchUndo}{\param{const wxString\& }{cmdName}}
+
+Begins collapsing undo/redo commands. Note that this may not work properly
+if combining commands that delete or insert content, changing ranges for
+subsequent actions.
+
+{\it cmdName} should be the name of the combined command that will appear
+next to Undo and Redo in the edit menu.
+
+\membersection{wxRichTextBuffer::BeginBold}\label{wxrichtextbufferbeginbold}
+
+\func{bool}{BeginBold}{\void}
+
+Begin applying bold.
+
+\membersection{wxRichTextBuffer::BeginCharacterStyle}\label{wxrichtextbufferbegincharacterstyle}
+
+\func{bool}{BeginCharacterStyle}{\param{const wxString\& }{characterStyle}}
+
+Begins applying the named character style.
+
+\membersection{wxRichTextBuffer::BeginFont}\label{wxrichtextbufferbeginfont}
+
+\func{bool}{BeginFont}{\param{const wxFont\& }{font}}
+
+Begins using this font.
+
+\membersection{wxRichTextBuffer::BeginFontSize}\label{wxrichtextbufferbeginfontsize}
+
+\func{bool}{BeginFontSize}{\param{int }{pointSize}}
+
+Begins using the given point size.
+
+\membersection{wxRichTextBuffer::BeginItalic}\label{wxrichtextbufferbeginitalic}
+
+\func{bool}{BeginItalic}{\void}
+
+Begins using italic.
+
+\membersection{wxRichTextBuffer::BeginLeftIndent}\label{wxrichtextbufferbeginleftindent}
+
+\func{bool}{BeginLeftIndent}{\param{int }{leftIndent}, \param{int }{leftSubIndent = 0}}
+
+Begin using {\it leftIndent} for the left indent, and optionally {\it leftSubIndent} for
+the sub-indent. Both are expressed in tenths of a millimetre.
+
+The sub-indent is an offset from the left of the paragraph, and is used for all but the
+first line in a paragraph. A positive value will cause the first line to appear to the left
+of the subsequent lines, and a negative value will cause the first line to be indented
+relative to the subsequent lines.
+
+\membersection{wxRichTextBuffer::BeginLineSpacing}\label{wxrichtextbufferbeginlinespacing}
+
+\func{bool}{BeginLineSpacing}{\param{int }{lineSpacing}}
+
+Begins line spacing using the specified value. {\it spacing} is a multiple, where 10 means single-spacing,
+15 means 1.5 spacing, and 20 means double spacing. The following constants are
+defined for convenience:
+
+{\small
+\begin{verbatim}
+#define wxTEXT_ATTR_LINE_SPACING_NORMAL         10
+#define wxTEXT_ATTR_LINE_SPACING_HALF           15
+#define wxTEXT_ATTR_LINE_SPACING_TWICE          20
+\end{verbatim}
+}
+
+\membersection{wxRichTextBuffer::BeginNumberedBullet}\label{wxrichtextbufferbeginnumberedbullet}
+
+\func{bool}{BeginNumberedBullet}{\param{int }{bulletNumber}, \param{int }{leftIndent}, \param{int }{leftSubIndent}, \param{int }{bulletStyle = wxTEXT\_ATTR\_BULLET\_STYLE\_ARABIC|wxTEXT\_ATTR\_BULLET\_STYLE\_PERIOD}}
+
+Begins a numbered bullet. This call will be needed for each item in the list, and the
+application should take care of incrementing the numbering.
+
+{\it bulletNumber} is a number, usually starting with 1.
+
+{\it leftIndent} and {\it leftSubIndent} are values in tenths of a millimetre.
+
+{\it bulletStyle} is a bitlist of the following values:
+
+{\small
+\begin{verbatim}
+#define wxTEXT_ATTR_BULLET_STYLE_NONE           0x0000
+#define wxTEXT_ATTR_BULLET_STYLE_ARABIC         0x0001
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER  0x0002
+#define wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER  0x0004
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER    0x0008
+#define wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER    0x0010
+#define wxTEXT_ATTR_BULLET_STYLE_SYMBOL         0x0020
+#define wxTEXT_ATTR_BULLET_STYLE_BITMAP         0x0040
+#define wxTEXT_ATTR_BULLET_STYLE_PARENTHESES    0x0080
+#define wxTEXT_ATTR_BULLET_STYLE_PERIOD         0x0100
+\end{verbatim}
+}
+
+wxRichTextBuffer uses indentation to render a bulleted item. The left indent is the distance between
+the margin and the bullet. The content of the paragraph, including the first line, starts
+at leftMargin + leftSubIndent. So the distance between the left edge of the bullet and the
+left of the actual paragraph is leftSubIndent.
+
+\membersection{wxRichTextBuffer::BeginParagraphSpacing}\label{wxrichtextbufferbeginparagraphspacing}
+
+\func{bool}{BeginParagraphSpacing}{\param{int }{before}, \param{int }{after}}
+
+Begins paragraph spacing; pass the before-paragraph and after-paragraph spacing in tenths of
+a millimetre.
+
+\membersection{wxRichTextBuffer::BeginParagraphStyle}\label{wxrichtextbufferbeginparagraphstyle}
+
+\func{bool}{BeginParagraphStyle}{\param{const wxString\& }{paragraphStyle}}
+
+Begins applying the named paragraph style.
+
+\membersection{wxRichTextBuffer::BeginRightIndent}\label{wxrichtextbufferbeginrightindent}
+
+\func{bool}{BeginRightIndent}{\param{int }{rightIndent}}
+
+Begins a right indent, specified in tenths of a millimetre.
+
+\membersection{wxRichTextBuffer::BeginStyle}\label{wxrichtextbufferbeginstyle}
+
+\func{bool}{BeginStyle}{\param{const wxTextAttrEx\& }{style}}
+
+Begins using a specified style.
+
+\membersection{wxRichTextBuffer::BeginSuppressUndo}\label{wxrichtextbufferbeginsuppressundo}
+
+\func{bool}{BeginSuppressUndo}{\void}
+
+Begins suppressing undo/redo commands. The way undo is suppressed may be implemented
+differently by each command. If not dealt with by a command implementation, then
+it will be implemented automatically by not storing the command in the undo history
+when the action is submitted to the command processor.
+
+\membersection{wxRichTextBuffer::BeginSymbolBullet}\label{wxrichtextbufferbeginsymbolbullet}
+
+\func{bool}{BeginSymbolBullet}{\param{wxChar }{symbol}, \param{int }{leftIndent}, \param{int }{leftSubIndent}, \param{int }{bulletStyle = wxTEXT\_ATTR\_BULLET\_STYLE\_SYMBOL}}
+
+Begins applying a symbol bullet, using a character from the current font. See \helpref{BeginNumberedBullet}{wxrichtextbufferbeginnumberedbullet} for
+an explanation of how indentation is used to render the bulleted paragraph.
+
+\membersection{wxRichTextBuffer::BeginTextColour}\label{wxrichtextbufferbegintextcolour}
+
+\func{bool}{BeginTextColour}{\param{const wxColour\& }{colour}}
+
+Begins using the specified text foreground colour.
+
+\membersection{wxRichTextBuffer::BeginUnderline}\label{wxrichtextbufferbeginunderline}
+
+\func{bool}{BeginUnderline}{\void}
+
+Begins using underline.
+
+\membersection{wxRichTextBuffer::CanPasteFromClipboard}\label{wxrichtextbuffercanpastefromclipboard}
+
+\constfunc{bool}{CanPasteFromClipboard}{\void}
+
+Returns \true if content can be pasted from the clipboard.
+
+\membersection{wxRichTextBuffer::CleanUpHandlers}\label{wxrichtextbuffercleanuphandlers}
+
+\func{void}{CleanUpHandlers}{\void}
+
+Cleans up the file handlers.
+
+\membersection{wxRichTextBuffer::Clear}\label{wxrichtextbufferclear}
+
+\func{void}{Clear}{\void}
+
+Clears the buffer and resets the command processor.
+
+\membersection{wxRichTextBuffer::ClearStyleStack}\label{wxrichtextbufferclearstylestack}
+
+\func{void}{ClearStyleStack}{\void}
+
+Clears the style stack.
+
+\membersection{wxRichTextBuffer::Clone}\label{wxrichtextbufferclone}
+
+\constfunc{wxRichTextObject*}{Clone}{\void}
+
+Clones the object.
+
+\membersection{wxRichTextBuffer::Copy}\label{wxrichtextbuffercopy}
+
+\func{void}{Copy}{\param{const wxRichTextBuffer\& }{obj}}
+
+Copies the given buffer.
+
+\membersection{wxRichTextBuffer::CopyToClipboard}\label{wxrichtextbuffercopytoclipboard}
+
+\func{bool}{CopyToClipboard}{\param{const wxRichTextRange\& }{range}}
+
+Copy the given range to the clipboard.
+
+\membersection{wxRichTextBuffer::DeleteRangeWithUndo}\label{wxrichtextbufferdeleterangewithundo}
+
+\func{bool}{DeleteRangeWithUndo}{\param{const wxRichTextRange\& }{range}, \param{long }{initialCaretPosition}, \param{long }{newCaretPositon}, \param{wxRichTextCtrl* }{ctrl}}
+
+Submits a command to delete the given range.
+
+\membersection{wxRichTextBuffer::Dump}\label{wxrichtextbufferdump}
+
+\func{void}{Dump}{\void}
+
+\func{void}{Dump}{\param{wxTextOutputStream\& }{stream}}
+
+Dumps the contents of the buffer for debugging purposes.
+
+\membersection{wxRichTextBuffer::EndAlignment}\label{wxrichtextbufferendalignment}
+
+\func{bool}{EndAlignment}{\void}
+
+Ends alignment.
+
+\membersection{wxRichTextBuffer::EndAllStyles}\label{wxrichtextbufferendallstyles}
+
+\func{bool}{EndAllStyles}{\void}
+
+Ends all styles that have been started with a Begin... command.
+
+\membersection{wxRichTextBuffer::EndBatchUndo}\label{wxrichtextbufferendbatchundo}
+
+\func{bool}{EndBatchUndo}{\void}
+
+Ends collapsing undo/redo commands, and submits the combined command.
+
+\membersection{wxRichTextBuffer::EndBold}\label{wxrichtextbufferendbold}
+
+\func{bool}{EndBold}{\void}
+
+Ends using bold.
+
+\membersection{wxRichTextBuffer::EndCharacterStyle}\label{wxrichtextbufferendcharacterstyle}
+
+\func{bool}{EndCharacterStyle}{\void}
+
+Ends using the named character style.
+
+\membersection{wxRichTextBuffer::EndFont}\label{wxrichtextbufferendfont}
+
+\func{bool}{EndFont}{\void}
+
+Ends using a font.
+
+\membersection{wxRichTextBuffer::EndFontSize}\label{wxrichtextbufferendfontsize}
+
+\func{bool}{EndFontSize}{\void}
+
+Ends using a point size.
+
+\membersection{wxRichTextBuffer::EndItalic}\label{wxrichtextbufferenditalic}
+
+\func{bool}{EndItalic}{\void}
+
+Ends using italic.
+
+\membersection{wxRichTextBuffer::EndLeftIndent}\label{wxrichtextbufferendleftindent}
+
+\func{bool}{EndLeftIndent}{\void}
+
+Ends using a left indent.
+
+\membersection{wxRichTextBuffer::EndLineSpacing}\label{wxrichtextbufferendlinespacing}
+
+\func{bool}{EndLineSpacing}{\void}
+
+Ends using a line spacing.
+
+\membersection{wxRichTextBuffer::EndNumberedBullet}\label{wxrichtextbufferendnumberedbullet}
+
+\func{bool}{EndNumberedBullet}{\void}
+
+Ends a numbered bullet.
+
+\membersection{wxRichTextBuffer::EndParagraphSpacing}\label{wxrichtextbufferendparagraphspacing}
+
+\func{bool}{EndParagraphSpacing}{\void}
+
+Ends paragraph spacing.
+
+\membersection{wxRichTextBuffer::EndParagraphStyle}\label{wxrichtextbufferendparagraphstyle}
+
+\func{bool}{EndParagraphStyle}{\void}
+
+Ends applying a named character style.
+
+\membersection{wxRichTextBuffer::EndRightIndent}\label{wxrichtextbufferendrightindent}
+
+\func{bool}{EndRightIndent}{\void}
+
+Ends using a right indent.
+
+\membersection{wxRichTextBuffer::EndStyle}\label{wxrichtextbufferendstyle}
+
+\func{bool}{EndStyle}{\void}
+
+Ends the current style.
+
+\membersection{wxRichTextBuffer::EndSuppressUndo}\label{wxrichtextbufferendsuppressundo}
+
+\func{bool}{EndSuppressUndo}{\void}
+
+Ends suppressing undo/redo commands.
+
+\membersection{wxRichTextBuffer::EndSymbolBullet}\label{wxrichtextbufferendsymbolbullet}
+
+\func{bool}{EndSymbolBullet}{\void}
+
+Ends using a symbol bullet.
+
+\membersection{wxRichTextBuffer::EndTextColour}\label{wxrichtextbufferendtextcolour}
+
+\func{bool}{EndTextColour}{\void}
+
+Ends using a text foreground colour.
+
+\membersection{wxRichTextBuffer::EndUnderline}\label{wxrichtextbufferendunderline}
+
+\func{bool}{EndUnderline}{\void}
+
+Ends using underline.
+
+\membersection{wxRichTextBuffer::FindHandler}\label{wxrichtextbufferfindhandler}
+
+\func{wxRichTextFileHandler*}{FindHandler}{\param{int }{imageType}}
+
+Finds a handler by type.
+
+\func{wxRichTextFileHandler*}{FindHandler}{\param{const wxString\& }{extension}, \param{int }{imageType}}
+
+Finds a handler by extension and type.
+
+\func{wxRichTextFileHandler*}{FindHandler}{\param{const wxString\& }{name}}
+
+Finds a handler by name.
+
+\membersection{wxRichTextBuffer::FindHandlerFilenameOrType}\label{wxrichtextbufferfindhandlerfilenameortype}
+
+\func{wxRichTextFileHandler*}{FindHandlerFilenameOrType}{\param{const wxString\& }{filename}, \param{int }{imageType}}
+
+Finds a handler by filename or, if supplied, type.
+
+\membersection{wxRichTextBuffer::GetBatchedCommand}\label{wxrichtextbuffergetbatchedcommand}
+
+\constfunc{wxRichTextCommand*}{GetBatchedCommand}{\void}
+
+Gets the collapsed command.
+
+\membersection{wxRichTextBuffer::GetCommandProcessor}\label{wxrichtextbuffergetcommandprocessor}
+
+\constfunc{wxCommandProcessor*}{GetCommandProcessor}{\void}
+
+Gets the command processor. A text buffer always creates its own command processor when it is
+initialized.
+
+\membersection{wxRichTextBuffer::GetExtWildcard}\label{wxrichtextbuffergetextwildcard}
+
+\func{wxString}{GetExtWildcard}{\param{bool }{combine = false}, \param{bool }{save = false}, \param{wxArrayInt* }{types = NULL}}
+
+Gets a wildcard incorporating all visible handlers. If {\it types} is present,
+it will be filled with the file type corresponding to each filter. This can be
+used to determine the type to pass to \helpref{LoadFile}{wxrichtextbuffergetextwildcard} given a selected filter.
+
+\membersection{wxRichTextBuffer::GetHandlers}\label{wxrichtextbuffergethandlers}
+
+\func{wxList\&}{GetHandlers}{\void}
+
+Returns the list of file handlers.
+
+\membersection{wxRichTextBuffer::GetStyleSheet}\label{wxrichtextbuffergetstylesheet}
+
+\constfunc{wxRichTextStyleSheet*}{GetStyleSheet}{\void}
+
+Returns the current style sheet associated with the buffer, if any.
+
+\membersection{wxRichTextBuffer::GetStyleStackSize}\label{wxrichtextbuffergetstylestacksize}
+
+\constfunc{size\_t}{GetStyleStackSize}{\void}
+
+Get the size of the style stack, for example to check correct nesting.
+
+\membersection{wxRichTextBuffer::HitTest}\label{wxrichtextbufferhittest}
+
+\func{int}{HitTest}{\param{wxDC\& }{dc}, \param{const wxPoint\& }{pt}, \param{long\& }{textPosition}}
+
+Finds the text position for the given position, putting the position in {\it textPosition} if
+one is found. {\it pt} is in logical units (a zero y position is
+at the beginning of the buffer).
+
+The function returns one of the following values:
+
+{\small
+\begin{verbatim}
+// The point was not on this object
+#define wxRICHTEXT_HITTEST_NONE     0x01
+// The point was before the position returned from HitTest
+#define wxRICHTEXT_HITTEST_BEFORE   0x02
+// The point was after the position returned from HitTest
+#define wxRICHTEXT_HITTEST_AFTER    0x04
+// The point was on the position returned from HitTest
+#define wxRICHTEXT_HITTEST_ON       0x08
+\end{verbatim}
+}
+
+\membersection{wxRichTextBuffer::Init}\label{wxrichtextbufferinit}
+
+\func{void}{Init}{\void}
+
+Initialisation.
+
+\membersection{wxRichTextBuffer::InitStandardHandlers}\label{wxrichtextbufferinitstandardhandlers}
+
+\func{void}{InitStandardHandlers}{\void}
+
+Initialises the standard handlers. Currently, only the plain text loading/saving handler
+is initialised by default.
+
+\membersection{wxRichTextBuffer::InsertHandler}\label{wxrichtextbufferinserthandler}
+
+\func{void}{InsertHandler}{\param{wxRichTextFileHandler* }{handler}}
+
+Inserts a handler at the front of the list.
+
+\membersection{wxRichTextBuffer::InsertImageWithUndo}\label{wxrichtextbufferinsertimagewithundo}
+
+\func{bool}{InsertImageWithUndo}{\param{long }{pos}, \param{const wxRichTextImageBlock\& }{imageBlock}, \param{wxRichTextCtrl* }{ctrl}}
+
+Submits a command to insert the given image.
+
+\membersection{wxRichTextBuffer::InsertNewlineWithUndo}\label{wxrichtextbufferinsertnewlinewithundo}
+
+\func{bool}{InsertNewlineWithUndo}{\param{long }{pos}, \param{wxRichTextCtrl* }{ctrl}}
+
+Submits a command to insert a newline.
+
+\membersection{wxRichTextBuffer::InsertTextWithUndo}\label{wxrichtextbufferinserttextwithundo}
+
+\func{bool}{InsertTextWithUndo}{\param{long }{pos}, \param{const wxString\& }{text}, \param{wxRichTextCtrl* }{ctrl}}
+
+Submits a command to insert the given text.
+
+\membersection{wxRichTextBuffer::IsModified}\label{wxrichtextbufferismodified}
+
+\constfunc{bool}{IsModified}{\void}
+
+Returns \true if the buffer has been modified.
+
+\membersection{wxRichTextBuffer::LoadFile}\label{wxrichtextbufferloadfile}
+
+\func{bool}{LoadFile}{\param{wxInputStream\& }{stream}, \param{int }{type = wxRICHTEXT\_TYPE\_ANY}}
+
+Loads content from a stream.
+
+\func{bool}{LoadFile}{\param{const wxString\& }{filename}, \param{int }{type = wxRICHTEXT\_TYPE\_ANY}}
+
+Loads content from a file.
+
+\membersection{wxRichTextBuffer::Modify}\label{wxrichtextbuffermodify}
+
+\func{void}{Modify}{\param{bool }{modify = true}}
+
+Marks the buffer as modified or unmodified.
+
+\membersection{wxRichTextBuffer::PasteFromClipboard}\label{wxrichtextbufferpastefromclipboard}
+
+\func{bool}{PasteFromClipboard}{\param{long }{position}}
+
+Pastes the clipboard content to the buffer at the given position.
+
+\membersection{wxRichTextBuffer::RemoveHandler}\label{wxrichtextbufferremovehandler}
+
+\func{bool}{RemoveHandler}{\param{const wxString\& }{name}}
+
+Removes a handler.
+
+\membersection{wxRichTextBuffer::Reset}\label{wxrichtextbufferreset}
+
+\func{void}{Reset}{\void}
+
+The same as \helpref{Clear}{wxrichtextbufferclear}, plus an empty paragraph is added.
+
+\membersection{wxRichTextBuffer::SaveFile}\label{wxrichtextbuffersavefile}
+
+\func{bool}{SaveFile}{\param{wxOutputStream\& }{stream}, \param{int }{type = wxRICHTEXT\_TYPE\_ANY}}
+
+Saves content to a stream.
+
+\func{bool}{SaveFile}{\param{const wxString\& }{filename}, \param{int }{type = wxRICHTEXT\_TYPE\_ANY}}
+
+Saves content to a file.
+
+\membersection{wxRichTextBuffer::SetStyleSheet}\label{wxrichtextbuffersetstylesheet}
+
+\func{void}{SetStyleSheet}{\param{wxRichTextStyleSheet* }{styleSheet}}
+
+Sets the current style sheet, if any. This will allow the application to use
+named character and paragraph styles found in the style sheet.
+
+\membersection{wxRichTextBuffer::SubmitAction}\label{wxrichtextbuffersubmitaction}
+
+\func{bool}{SubmitAction}{\param{wxRichTextAction* }{action}}
+
+Submit an action immediately, or delay it according to whether collapsing is on.
+
+\membersection{wxRichTextBuffer::SuppressingUndo}\label{wxrichtextbuffersuppressingundo}
+
+\constfunc{bool}{SuppressingUndo}{\void}
+
+Returns \true if undo suppression is currently on.
+

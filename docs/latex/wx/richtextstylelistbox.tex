@@ -1,0 +1,96 @@
+\section{\class{wxRichTextStyleListBox}}\label{wxrichtextstylelistbox}
+
+This is a listbox that can display the styles in a \helpref{wxRichTextStyleSheet}{wxrichtextstylesheet},
+and apply the selection to an associated \helpref{wxRichTextCtrl}{wxrichtextctrl}.
+
+See {\tt samples/richtext} for an example of how to use it.
+
+\wxheading{Derived from}
+
+\helpref{wxHtmlListBox}{wxhtmllistbox}
+
+\wxheading{Include files}
+
+<wx/richtext/richtextstyles.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxRichTextStyleListBox::wxRichTextStyleListBox}\label{wxrichtextstylelistboxwxrichtextstylelistbox}
+
+\func{}{wxRichTextStyleListBox}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}}
+
+Constructor.
+
+\membersection{wxRichTextStyleListBox::\destruct{wxRichTextStyleListBox}}\label{wxrichtextstylelistboxdtor}
+
+\func{}{\destruct{wxRichTextStyleListBox}}{\void}
+
+Destructor.
+
+\membersection{wxRichTextStyleListBox::ConvertTenthsMMToPixels}\label{wxrichtextstylelistboxconverttenthsmmtopixels}
+
+\constfunc{int}{ConvertTenthsMMToPixels}{\param{wxDC\& }{dc}, \param{int }{units}}
+
+Converts units in tenths of a millimetre to device units.
+
+\membersection{wxRichTextStyleListBox::CreateHTML}\label{wxrichtextstylelistboxcreatehtml}
+
+\constfunc{wxString}{CreateHTML}{\param{wxRichTextStyleDefinition* }{def}}
+
+Creates a suitable HTML fragment for a definition.
+
+\membersection{wxRichTextStyleListBox::GetRichTextCtrl}\label{wxrichtextstylelistboxgetrichtextctrl}
+
+\constfunc{wxRichTextCtrl*}{GetRichTextCtrl}{\void}
+
+Returns the \helpref{wxRichTextCtrl}{wxrichtextctrl} associated with this listbox.
+
+\membersection{wxRichTextStyleListBox::GetStyle}\label{wxrichtextstylelistboxgetstyle}
+
+\constfunc{wxRichTextStyleDefinition*}{GetStyle}{\param{size\_t }{i}}
+
+Gets a style for a listbox index.
+
+\membersection{wxRichTextStyleListBox::GetStyleSheet}\label{wxrichtextstylelistboxgetstylesheet}
+
+\constfunc{wxRichTextStyleSheet*}{GetStyleSheet}{\void}
+
+Returns the style sheet associated with this listbox.
+
+\membersection{wxRichTextStyleListBox::OnGetItem}\label{wxrichtextstylelistboxongetitem}
+
+\constfunc{wxString}{OnGetItem}{\param{size\_t }{n}}
+
+Returns the HTML for this item.
+
+\membersection{wxRichTextStyleListBox::OnLeftDown}\label{wxrichtextstylelistboxonleftdown}
+
+\func{void}{OnLeftDown}{\param{wxMouseEvent\& }{event}}
+
+Implements left click behaviour, applying the clicked style to the wxRichTextCtrl.
+
+\membersection{wxRichTextStyleListBox::OnSelect}\label{wxrichtextstylelistboxonselect}
+
+\func{void}{OnSelect}{\param{wxCommandEvent\& }{event}}
+
+Reacts to selection.
+
+\membersection{wxRichTextStyleListBox::SetRichTextCtrl}\label{wxrichtextstylelistboxsetrichtextctrl}
+
+\func{void}{SetRichTextCtrl}{\param{wxRichTextCtrl* }{ctrl}}
+
+Associates the listbox with a \helpref{wxRichTextCtrl}{wxrichtextctrl}.
+
+\membersection{wxRichTextStyleListBox::SetStyleSheet}\label{wxrichtextstylelistboxsetstylesheet}
+
+\func{void}{SetStyleSheet}{\param{wxRichTextStyleSheet* }{styleSheet}}
+
+Associates the control with a style sheet.
+
+\membersection{wxRichTextStyleListBox::UpdateStyles}\label{wxrichtextstylelistboxupdatestyles}
+
+\func{void}{UpdateStyles}{\void}
+
+Updates the list from the associated style sheet.
