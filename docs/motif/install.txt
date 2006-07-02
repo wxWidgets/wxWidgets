@@ -79,10 +79,10 @@ such as for GTK and Motif, you can now build two complete libraries and use
 them concurrently. For this end, you have to create a directory for each build 
 of wxWidgets - you may also want to create different versions of wxWidgets
 and test them concurrently. Most typically, this would be a version configured 
-with --enable-debug and one without. Note, that only one build can
-currently be installed, so you'd have to use local version of the library for
-that purpose.  For building three versions (one GTK, one Motif and a debug
-version of the GTK source) you'd do this:
+with --enable-debug and one without.
+
+For building three versions (one GTK, one Motif and a debug version of the GTK
+source) you'd do this:
 
 mkdir buildmotif
 cd buildmotif
@@ -101,6 +101,9 @@ cd buildgtkd
 ../configure --with-gtk --enable-debug
 make
 cd ..
+
+Note that since wxWidgets-2.6.0 you can install all those libraries
+concurrently, you just need to pass the appropriate flags when using them.
 
 * The simplest errors
 ---------------------
@@ -180,9 +183,8 @@ was actually used by myself, newer version should cause no problems and
 even older ones are expected to work most of the time.
 
 You'll need OS/2 Warp (4.51) or eCS(1.0), X-Free86/2 (3.3.6 or newer),
-Lesstif (0.92.7 or newer), emx (0.9d fix 4), flex (2.5.4), yacc (1.8) or
-bison (1.25), a Unix like shell (pdksh-5.2.14 or ash), Autoconf (2.57),
-GNU file utilities (3.13), GNU text utilities (1.19),
+Lesstif (0.92.7 or newer), emx (0.9d fix 4), a Unix like shell (pdksh-5.2.14
+or ash), Autoconf (2.57), GNU file utilities (3.13), GNU text utilities (1.19),
 GNU shell utilites (1.12), m4 (1.4), sed (2.05), grep (2.0), Awk (3.0.3),
 GNU Make (3.75).
 
@@ -191,15 +193,15 @@ LIBRARY_PATH set up accordingly, however, wxGTK will even work without it.
 Presence of Posix/2 will be auto-detected.
 
 Open an OS/2 prompt and switch to the directory above.
-Set MAKESHELL (and depending on your installation also INSTALL, for me
-it tends to try to use the system's tcpip\pcomos\install.exe which causes
-problems...) to a Unix like shell, e.g.
+Set MAKESHELL or MAKE_SHELL (which one is needed depends on the version of
+make) to a Unix like shell, e.g.
 SET MAKESHELL=ash
-
-Be warned that depending on the precise version of your make, the
-variable that needs to be set might be MAKE_SHELL instead of MAKESHELL.
 If you have a really deficient version of GNU make, it might even be
 necessary to set SHELL or even COMSPEC to a unix like shell as well. 
+Depending on your installation you might want to also set INSTALL, for me
+it tends to try to use the system's tcpip\pcomos\install.exe which causes
+problems, e.g.
+SET INSTALL=<path_to_src_directory>/install-sh -c
 
 Notice that the delivered configure scripts are fully OS/2 aware, so you
 can simply run
@@ -280,19 +282,19 @@ The following options handle the kind of library you want to build.
 
 	--disable-threads       Compile without thread support. Threads
 	                        support is also required for the
-                            socket code to work.
+	                        socket code to work.
 
 	--disable-shared        Do not create shared libraries.
 
-    --enable-monolithic     Build wxWidgets as single library instead
-                            of as several smaller libraries (which is
-                            the default since wxWidgets 2.5.0).
+	--enable-monolithic     Build wxWidgets as single library instead
+	                        of as several smaller libraries (which is
+	                        the default since wxWidgets 2.5.0).
 
 	--disable-optimise      Do not optimise the code. Can
 	                        sometimes be useful for debugging
-                            and is required on some architectures
-                            such as Sun with gcc 2.8.X which
-                            would otherwise produce segvs.
+	                        and is required on some architectures
+	                        such as Sun with gcc 2.8.X which
+	                        would otherwise produce segvs.
 
 	--enable-profile        Add profiling info to the object 
 				files. Currently broken, I think.
@@ -311,16 +313,16 @@ The following options handle the kind of library you want to build.
 	--enable-no_deps        Enable compilation without creation of
 	                        dependency information.
 				
-        --enable-permissive     Enable compilation without checking for strict
-                                ANSI conformance.  Useful to prevent the build
-                                dying with errors as soon as you compile with
-                                Solaris' ANSI-defying headers.
-				
+	--enable-permissive     Enable compilation without checking for strict
+	                        ANSI conformance.  Useful to prevent the build
+	                        dying with errors as soon as you compile with
+	                        Solaris' ANSI-defying headers.
+
 	--enable-mem_tracing    Add built-in memory tracing. 
-				
+
 	--enable-dmalloc        Use the dmalloc memory debugger.
 	                        Read more at www.letters.com/dmalloc/
-				
+
 	--enable-debug		Equivalent to --enable-debug_info plus
 				--enable-debug-flag.
 
@@ -349,34 +351,34 @@ are not used in your program. The most relevant such features
 are
 
 	--without-libpng	Disables PNG image format code.
-	
+
 	--without-libjpeg	Disables JPEG image format code.
-	
+
 	--without-odbc          Disables ODBC code.
-   
-    --without-libtiff       Disables TIFF image format code.
- 
-    --without-expat         Disable XML classes based on Expat parser.
-	
+
+	--without-libtiff       Disables TIFF image format code.
+
+	--without-expat         Disable XML classes based on Expat parser.
+
 	--disable-threads       Disables threads. Will also
 	                        disable sockets.
 
 	--disable-sockets       Disables sockets.
 
 	--disable-dnd           Disables Drag'n'Drop.
-	
+
 	--disable-clipboard     Disables Clipboard.
-	
+
 	--disable-streams       Disables the wxStream classes.
-	
+
 	--disable-file          Disables the wxFile class.
-	
+
 	--disable-textfile      Disables the wxTextFile class.
-	
+
 	--disable-intl          Disables the internationalisation.
-	
+
 	--disable-validators    Disables validators.
-	
+
 	--disable-accel         Disables accel.
 	
 Apart from disabling certain features you can very often "strip"
