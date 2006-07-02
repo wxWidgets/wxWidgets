@@ -328,6 +328,7 @@ bool wxFontBase::operator==(const wxFont& font) const
            (
             Ok() == font.Ok() &&
             GetPointSize() == font.GetPointSize() &&
+            GetPixelSize() == font.GetPixelSize() &&
             GetFamily() == font.GetFamily() &&
             GetStyle() == font.GetStyle() &&
             GetWeight() == font.GetWeight() &&
