@@ -49,6 +49,7 @@ wxX11:
 All:
 
 - Fixed crash when loading message catalogs in Unicode build.
+- Fixed crash in wxList code when building with wxUSE_STL=1 (Christoph Schulz)
 - Spurious error message from wxLaunchDefaultBrowser fixed.
 - Compilation fixes for (more strict) g++ 4.1
 - Speed improvements to wxRegEx when matching is done in a loop such as

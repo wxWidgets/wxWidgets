@@ -178,7 +178,9 @@ private:
             const compatibility_iterator* operator->() const { return this; } \
                                                                               \
             bool operator==(const compatibility_iterator& i) const            \
-                { return (m_list == i.m_list) && (m_iter == i.m_iter); }      \
+                { return (m_list == i.m_list) && (m_iter == i.m_iter)         \
+                  || !m_list && (i.m_iter == i.m_list->end())                 \
+                  || !i.m_list && (m_iter == m_list->end()); }                \
             bool operator!=(const compatibility_iterator& i) const            \
                 { return !( operator==( i ) ); }                              \
             operator bool() const                                             \
@@ -199,7 +201,8 @@ private:
             compatibility_iterator GetPrevious() const                        \
             {                                                                 \
                 iterator i = m_iter;                                          \
-                return compatibility_iterator( m_list, --i );                 \
+                i != m_list->begin() ? --i : i = m_list->end();               \
+                return compatibility_iterator( m_list, i );                   \
             }                                                                 \
             int IndexOf() const                                               \
             {                                                                 \
