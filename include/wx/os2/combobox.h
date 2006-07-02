@@ -97,8 +97,8 @@ class WXDLLEXPORT wxComboBox : public wxChoice
     //
     // List functions: see wxChoice
     //
-    inline wxString GetValue(void) const { return GetLabel(); }
-    virtual void    SetValue(const wxString& rsValue);
+    virtual wxString GetValue(void) const;
+    virtual void     SetValue(const wxString& rsValue);
 
     //
     // Clipboard operations
@@ -132,13 +132,6 @@ class WXDLLEXPORT wxComboBox : public wxChoice
                                        ,WXLPARAM lParam
                                       );
 
-protected:
-    virtual void        DoSetSize( int nX
-                                  ,int nY
-                                  ,int nWidth
-                                  ,int nHeight
-                                  ,int nSizeFlags = wxSIZE_AUTO
-                                 );
 private:
     DECLARE_DYNAMIC_CLASS(wxComboBox)
 }; // end of CLASS wxComboBox

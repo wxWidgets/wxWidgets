@@ -39,17 +39,17 @@ IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
 bool wxComboBox::OS2Command( WXUINT uParam, WXWORD WXUNUSED(wId) )
 {
-    long lSel = -1L;
+    long lSel = GetSelection();
     wxString sValue;
 
     switch (uParam)
     {
         case CBN_LBSELECT:
-            if (GetSelection() > -1)
+            if (lSel > -1)
             {
                 wxCommandEvent vEvent( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
 
-                vEvent.SetInt(GetSelection());
+                vEvent.SetInt(lSel);
                 vEvent.SetEventObject(this);
                 vEvent.SetString(GetStringSelection());
 
@@ -64,8 +64,8 @@ bool wxComboBox::OS2Command( WXUINT uParam, WXWORD WXUNUSED(wId) )
                 if (lSel == -1L)
                     sValue = GetValue();
                 else
-                    SetValue(sValue);
-                vEvent.SetString(GetValue());
+                    sValue = GetStringSelection();
+                vEvent.SetString(sValue);
                 vEvent.SetEventObject(this);
                 ProcessCommand(vEvent);
             }
@@ -160,6 +160,14 @@ bool wxComboBox::Create(
             ,rSize.x
             ,rSize.y
            );
+
+    // Set height to use with sizers i.e. without the dropdown listbox
+    wxFont vFont = GetFont();
+    int nCx,nCy;
+    wxGetCharSize( GetHWND(), &nCx, &nCy, &vFont );
+    int nEditHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy);
+    SetBestFittingSize(wxSize(-1,nEditHeight));
+
     if (!rsValue.empty())
     {
         SetValue(rsValue);
@@ -171,6 +179,11 @@ bool wxComboBox::Create(
     Show(true);
     return true;
 } // end of wxComboBox::Create
+
+wxString wxComboBox::GetValue() const
+{
+    return wxGetWindowText(GetHwnd());
+}
 
 void wxComboBox::SetValue(
   const wxString&                   rsValue
@@ -337,22 +350,6 @@ void wxComboBox::SetSelection( long lFrom, long lTo )
                  ,(MPARAM)0
                 );
 } // end of wxComboBox::SetSelection
-
-void wxComboBox::DoSetSize(
-  int                               nX
-, int                               nY
-, int                               nWidth
-, int                               nHeight
-, int                               nSizeFlags
-)
-{
-    wxControl::DoSetSize( nX
-                         ,nY
-                         ,nWidth
-                         ,nHeight
-                         ,nSizeFlags
-                        );
-} // end of wxComboBox::DoSetSize
 
 bool wxComboBox::ProcessEditMsg(
   WXUINT                            uMsg
