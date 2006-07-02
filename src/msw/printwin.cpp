@@ -352,28 +352,27 @@ bool wxWindowsPrintPreview::Print(bool interactive)
 
 void wxWindowsPrintPreview::DetermineScaling()
 {
-    HDC dc = ::GetDC(NULL);
+    ScreenHDC dc;
     int screenWidth = ::GetDeviceCaps(dc, HORZSIZE);
-    int screenYRes = ::GetDeviceCaps(dc, VERTRES);
+    int screenXRes = ::GetDeviceCaps(dc, HORZRES);
     int logPPIScreenX = ::GetDeviceCaps(dc, LOGPIXELSX);
     int logPPIScreenY = ::GetDeviceCaps(dc, LOGPIXELSY);
     m_previewPrintout->SetPPIScreen(logPPIScreenX, logPPIScreenY);
 
-    ::ReleaseDC(NULL, dc);
 
     // Get a device context for the currently selected printer
     wxPrinterDC printerDC(m_printDialogData.GetPrintData());
 
     int printerWidth = 150;
-    int printerHeight wxDUMMY_INITIALIZE(250);
     int printerXRes = 1500;
     int printerYRes = 2500;
 
-    dc = GetHdcOf(printerDC);
-    if ( dc )
+    if ( printerDC.Ok() )
     {
+        HDC dc = GetHdcOf(printerDC);
+
         printerWidth = ::GetDeviceCaps(dc, HORZSIZE);
-        printerHeight = ::GetDeviceCaps(dc, VERTSIZE);
+        int printerHeight = ::GetDeviceCaps(dc, VERTSIZE);
         printerXRes = ::GetDeviceCaps(dc, HORZRES);
         printerYRes = ::GetDeviceCaps(dc, VERTRES);
 
@@ -383,18 +382,29 @@ void wxWindowsPrintPreview::DetermineScaling()
         m_previewPrintout->SetPPIPrinter(logPPIPrinterX, logPPIPrinterY);
         m_previewPrintout->SetPageSizeMM(printerWidth, printerHeight);
 
-        if (logPPIPrinterX == 0 || logPPIPrinterY == 0 || printerWidth == 0 || printerHeight == 0)
+        if ( logPPIPrinterX == 0 ||
+                logPPIPrinterY == 0 ||
+                    printerWidth == 0 ||
+                        printerHeight == 0 )
+        {
             m_isOk = false;
+        }
     }
     else
+    {
         m_isOk = false;
+    }
 
     m_pageWidth = printerXRes;
     m_pageHeight = printerYRes;
 
     // At 100%, the page should look about page-size on the screen.
-    m_previewScale = (float)((float)screenWidth/(float)printerWidth);
-    m_previewScale = m_previewScale * (float)((float)screenYRes/(float)printerYRes);
+    //
+    // TODO: the scale could be different in vertical and horizontal directions
+    float screenDPI = (float)screenXRes / screenWidth;
+    float printerDPI = (float)printerXRes / printerWidth;
+
+    m_previewScale = screenDPI / printerDPI;
 }
 
 /****************************************************************************
