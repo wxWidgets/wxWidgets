@@ -414,6 +414,10 @@ void wxFontRefData::Free()
 void wxNativeFontInfo::Init()
 {
     wxZeroMemory(lf);
+
+    // we get better font quality if we use this instead of DEFAULT_QUALITY
+    // apparently without any drawbacks
+    lf.lfQuality = PROOF_QUALITY;
 }
 
 int wxNativeFontInfo::GetPointSize() const
