@@ -541,7 +541,7 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
     else
     {
 #ifndef __WXMAC__
-        // okay, let convert to ISO_8859-1, available always
+        // okay, let's convert to ISO_8859-1, available always
         m_OutputEnc = wxFONTENCODING_DEFAULT;
 #else
         m_OutputEnc = wxLocale::GetSystemEncoding() ;
@@ -561,7 +561,7 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
                            (m_OutputEnc == wxFONTENCODING_DEFAULT) ?
                                       wxFONTENCODING_ISO8859_1 : m_OutputEnc,
                            wxCONVERT_SUBSTITUTE))
-    { // total failture :-(
+    { // total failure :-(
         wxLogError(_("Failed to display HTML document in %s encoding"),
                    wxFontMapper::GetEncodingName(enc).c_str());
         m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;

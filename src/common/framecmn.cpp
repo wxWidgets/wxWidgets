@@ -458,7 +458,7 @@ wxToolBar* wxFrameBase::CreateToolBar(long style,
                                       wxWindowID id,
                                       const wxString& name)
 {
-    // the main toolbar can't be recreated (unless it was explicitly deeleted
+    // the main toolbar can't be recreated (unless it was explicitly deleted
     // before)
     wxCHECK_MSG( !m_frameToolBar, (wxToolBar *)NULL,
                  wxT("recreating toolbar in wxFrame") );

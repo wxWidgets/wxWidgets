@@ -414,8 +414,8 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                         !pItem->GetFont().Ok() &&
                             !pItem->GetBitmap(true).Ok() )
         {
-            // try to use InsertMenuItem() as it's guaranteed to look correctly
-            // while our owner-drawning code is not
+            // try to use InsertMenuItem() as it's guaranteed to look correct
+            // while our owner-drawn code is not
 
             // first compile-time check
 #ifdef MIIM_BITMAP
@@ -442,7 +442,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 // we can't pass HBITMAP directly as hbmpItem for 2 reasons:
                 //  1. we can't draw it with transparency then (this is not
                 //     very important now but would be with themed menu bg)
-                //  2. worse, Windows inverses the bitmap for the selected
+                //  2. worse, Windows inverts the bitmap for the selected
                 //     item and this looks downright ugly
                 //
                 // so instead draw it ourselves in MSWOnDrawItem()
@@ -494,7 +494,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     else
 #endif // wxUSE_OWNER_DRAWN
     {
-        // menu is just a normal string (passed in data parameter)
+        // item is just a normal string (passed in data parameter)
         flags |= MF_STRING;
 
 #ifdef __WXWINCE__
@@ -504,7 +504,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         pData = (wxChar*)itemText.c_str();
     }
 
-    // item might have been already inserted by InsertMenuItem() above
+    // item might have already been inserted by InsertMenuItem() above
     if ( !ok )
     {
         if ( !::InsertMenu(GetHmenu(), pos, flags | MF_BYPOSITION, id, pData) )
@@ -605,7 +605,7 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 {
-    // we need to find the items position in the child list
+    // we need to find the item's position in the child list
     size_t pos;
     wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
     for ( pos = 0; node; pos++ )
@@ -616,7 +616,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
         node = node->GetNext();
     }
 
-    // DoRemove() (unlike Remove) can only be called for existing item!
+    // DoRemove() (unlike Remove) can only be called for an existing item!
     wxCHECK_MSG( node, NULL, wxT("bug in wxMenu::Remove logic") );
 
 #if wxUSE_ACCEL
@@ -639,7 +639,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
     if ( IsAttached() && GetMenuBar()->IsAttached() )
     {
-        // otherwise, the chane won't be visible
+        // otherwise, the change won't be visible
         GetMenuBar()->Refresh();
     }
 
@@ -653,7 +653,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
 #if wxUSE_ACCEL
 
-// create the wxAcceleratorEntries for our accels and put them into provided
+// create the wxAcceleratorEntries for our accels and put them into the provided
 // array - return the number of accels we have
 size_t wxMenu::CopyAccels(wxAcceleratorEntry *accels) const
 {
@@ -867,7 +867,7 @@ void wxMenuBar::Refresh()
 
 WXHMENU wxMenuBar::Create()
 {
-    // Note: this totally doesn't work on Smartphone,
+    // Note: this doesn't work at all on Smartphone,
     // since you have to use resources.
     // We'll have to find another way to add a menu
     // by changing/adding menu items to an existing menu.

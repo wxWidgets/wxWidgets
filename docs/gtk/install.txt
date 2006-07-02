@@ -48,26 +48,26 @@ such as for GTK+ and Motif, you can now build two complete libraries and use
 them concurrently. To do this, create a separate directory for each build
 of wxWidgets - you may also want to create different versions of wxWidgets
 and test them concurrently. Most typically, this would be a version configured
-with --enable-debug and one without. Note, that only one build can
-currently be installed with 'make install', so you'd have to use local version of
+with --enable-debug and one without. Note, that only one build can currently
+be installed with 'make install', so you'd have to use a local version of
 the library for that purpose.
 
 For building three versions (one GTK+, one Motif and a debug version of the GTK
 source) you'd do this:
 
-md buildmotif
+mkdir buildmotif
 cd buildmotif
 ../configure --with-motif
 make
 cd ..
 
-md buildgtk
+mkdir buildgtk
 cd buildgtk
 ../configure --with-gtk
 make
 cd ..
 
-md buildgtkd
+mkdir buildgtkd
 cd buildgtkd
 ../configure --with-gtk --enable-debug
 make
@@ -82,11 +82,11 @@ during configure run, it usually contains some useful information.
 configure reports, that you don't have GTK+ 1.2 installed although you are
 very sure you have. Well, you have installed it, but you also have another
 version of the GTK+ installed, which you may need to remove including other
-versions of glib (and its headers). Or maybe you installed it in non default
+versions of glib (and its headers). Or maybe you installed it in a non-default
 location and configure can't find it there, so please check that your PATH
 variable includes the path to the correct gtk-config. Also check that your
 LD_LIBRARY_PATH or equivalent variable contains the path to GTK+ libraries if
-they were installed in a non default location.
+they were installed in a non-default location.
 
 You get errors from make: please use GNU make instead of the native make
 program. Currently wxWidgets can be built only with GNU make, BSD make and
@@ -210,7 +210,7 @@ Usage:
     ./configure options
 
 If you want to use system's C and C++ compiler,
-set environment variables CC and CCC as
+set environment variables CC and CXX as
 
     % setenv CC cc
     % setenv CXX CC

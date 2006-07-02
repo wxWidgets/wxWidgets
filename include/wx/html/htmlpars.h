@@ -35,7 +35,7 @@ enum wxHtmlURLType
 };
 
 // This class handles generic parsing of HTML document : it scans
-// the document and divide it into blocks of tags (where one block
+// the document and divides it into blocks of tags (where one block
 // consists of starting and ending tag and of text between these
 // 2 tags.
 class WXDLLIMPEXP_HTML wxHtmlParser : public wxObject
@@ -59,7 +59,7 @@ public:
     // This method does these things:
     // 1. call InitParser(source);
     // 2. call DoParsing();
-    // 3. call GetProduct(); (it's return value is then returned)
+    // 3. call GetProduct(); (its return value is then returned)
     // 4. call DoneParser();
     wxObject* Parse(const wxString& source);
 
@@ -96,7 +96,7 @@ public:
     //     <it name="two" value="2">
     //   </myitems>
     //   <it> This last it has different meaning, we don't want it to be parsed by myitems handler!
-    // handler can handle only 'myitems' (e.g. it's GetSupportedTags returns "MYITEMS")
+    // handler can handle only 'myitems' (e.g. its GetSupportedTags returns "MYITEMS")
     // you can call PushTagHandler(handler, "IT") when you find <myitems>
     // and call PopTagHandler() when you find </myitems>
     void PushTagHandler(wxHtmlTagHandler *handler, const wxString& tags);
@@ -107,7 +107,7 @@ public:
     wxString* GetSource() {return &m_Source;}
     void SetSource(const wxString& src);
 
-    // Sets HTML source and remebers current parser's state so that it can
+    // Sets HTML source and remembers current parser's state so that it can
     // later be restored. This is useful for on-line modifications of
     // HTML source (for example, <pre> handler replaces spaces with &nbsp;
     // and newlines with <br>)
@@ -193,7 +193,7 @@ protected:
 // Each recognized tag is passed to handler which is capable
 // of handling it. Each tag is handled in 3 steps:
 // 1. Handler will modifies state of parser
-//    (using it's public methods)
+//    (using its public methods)
 // 2. Parser parses source between starting and ending tag
 // 3. Handler restores original state of the parser
 class WXDLLIMPEXP_HTML wxHtmlTagHandler : public wxObject

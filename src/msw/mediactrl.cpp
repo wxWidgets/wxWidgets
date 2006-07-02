@@ -1979,14 +1979,14 @@ wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
     {
         return wxString::Format(wxT("DirectShow error \"%s\" \n")
                                      wxT("(numeric %X)\n")
-                                     wxT("occured"),
+                                     wxT("occurred"),
                                      szError, (int)hrdsv);
     }
     else
     {
         return wxString::Format(wxT("Unknown error \n")
                                      wxT("(numeric %X)\n")
-                                     wxT("occured"),
+                                     wxT("occurred"),
                                      (int)hrdsv);
     }
 }
@@ -1995,7 +1995,6 @@ wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
 #define wxVERIFY(x) wxASSERT((x))
 #define wxAMLOG(x) wxLogDebug(GetErrorString(x))
 #else
-#define wxAMVERIFY(x) (x)
 #define wxVERIFY(x) (x)
 #define wxAMLOG(x)
 #define wxAMFAIL(x)

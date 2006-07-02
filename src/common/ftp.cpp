@@ -861,7 +861,7 @@ bool wxFTP::FileExists(const wxString& fileName)
     if ( GetList(fileList, fileName, false) )
     {
         // Some ftp-servers (Ipswitch WS_FTP Server 1.0.5 does this)
-        // displays this behaviour when queried on a non-existing file:
+        // displays this behaviour when queried on a nonexistent file:
         // NLST this_file_does_not_exist
         // 150 Opening ASCII data connection for directory listing
         // (no data transferred)

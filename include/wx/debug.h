@@ -68,7 +68,7 @@
 /*  ---------------------------------------------------------------------------- */
 /*  Debugging macros */
 /*  */
-/*  All debugging macros rely on ASSERT() which in turn calls user-defined */
+/*  All debugging macros rely on ASSERT() which in turn calls the user-defined */
 /*  OnAssert() function. To keep things simple, it's called even when the */
 /*  expression is true (i.e. everything is ok) and by default does nothing: just */
 /*  returns the same value back. But if you redefine it to do something more sexy */
@@ -142,18 +142,18 @@
   #define wxFAIL_COND_MSG(cond, msg)                                          \
       wxOnAssert(__TFILE__, __LINE__,  __WXFUNCTION__, _T(cond), msg)
 
-  /*  an assert helper used to avoid warning when testing constant expressions, */
+  /*  An assert helper used to avoid warning when testing constant expressions, */
   /*  i.e. wxASSERT( sizeof(int) == 4 ) can generate a compiler warning about */
   /*  expression being always true, but not using */
   /*  wxASSERT( wxAssertIsEqual(sizeof(int), 4) ) */
   /*  */
-  /*  NB: this is made obsolete by wxCOMPILE_TIME_ASSERT() and shouldn't be */
-  /*      used any longer */
+  /*  NB: this is made obsolete by wxCOMPILE_TIME_ASSERT() and should no */
+  /*      longer be used. */
   extern bool WXDLLIMPEXP_BASE wxAssertIsEqual(int x, int y);
 #else
   #define wxTrap()
 
-  /*  nothing to do in release modes (hopefully at this moment there are */
+  /*  nothing to do in release mode (hopefully at this moment there are */
   /*  no more bugs ;-) */
   #define wxASSERT(cond)
   #define wxASSERT_MSG(cond, msg)
@@ -170,11 +170,11 @@
 
 #define wxAssertFailure wxFalse
 
-/*  NB: the following macros work also in release mode! */
+/*  NB: the following macros also work in release mode! */
 
 /*
   These macros must be used only in invalid situation: for example, an
-  invalid parameter (NULL pointer) is passed to a function. Instead of
+  invalid parameter (e.g. a NULL pointer) is passed to a function. Instead of
   dereferencing it and causing core dump the function might try using
   CHECK( p != NULL ) or CHECK( p != NULL, return LogError("p is NULL!!") )
 */

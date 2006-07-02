@@ -1806,8 +1806,8 @@ size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
     }
 
 #if wxUSE_THREADS
-    // NB: iconv() is MT-safe, but each thread must use it's own iconv_t handle.
-    //     Unfortunately there is a couple of global wxCSConv objects such as
+    // NB: iconv() is MT-safe, but each thread must use its own iconv_t handle.
+    //     Unfortunately there are a couple of global wxCSConv objects such as
     //     wxConvLocal that are used all over wx code, so we have to make sure
     //     the handle is used by at most one thread at the time. Otherwise
     //     only a few wx classes would be safe to use from non-main threads
@@ -3385,10 +3385,10 @@ wxMBConv *wxCSConv::DoCreate() const
     // NB: This is a hack to prevent deadlock. What could otherwise happen
     //     in Unicode build: wxConvLocal creation ends up being here
     //     because of some failure and logs the error. But wxLog will try to
-    //     attach timestamp, for which it will need wxConvLocal (to convert
-    //     time to char* and then wchar_t*), but that fails, tries to log
-    //     error, but wxLog has a (already locked) critical section that
-    //     guards static buffer.
+    //     attach a timestamp, for which it will need wxConvLocal (to convert
+    //     time to char* and then wchar_t*), but that fails, tries to log the
+    //     error, but wxLog has an (already locked) critical section that
+    //     guards the static buffer.
     static bool alreadyLoggingError = false;
     if (!alreadyLoggingError)
     {

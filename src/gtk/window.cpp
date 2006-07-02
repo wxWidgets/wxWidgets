@@ -122,7 +122,7 @@ extern GtkContainerClass *pizza_parent_class;
    6) Display a border (sunken, raised, simple or none).
 
    Normally one might expect, that one wxWidgets window would always correspond
-   to one GTK widget. Under GTK, there is no such allround widget that has all
+   to one GTK widget. Under GTK, there is no such all-round widget that has all
    the functionality. Moreover, the GTK defines a client area as a different
    widget from the actual widget you are handling. Last but not least some
    special classes (e.g. wxFrame) handle different categories of widgets and
@@ -167,14 +167,14 @@ extern GtkContainerClass *pizza_parent_class;
    clicking on a scrollbar belonging to scrolled window will inevitably move
    the window. In wxWidgets, the scrollbar will only emit an event, send this
    to (normally) a wxScrolledWindow and that class will call ScrollWindow()
-   which actually moves the window and its subchildren. Note that GtkPizza
+   which actually moves the window and its sub-windows. Note that GtkPizza
    memorizes how much it has been scrolled but that wxWidgets forgets this
    so that the two coordinates systems have to be kept in synch. This is done
    in various places using the pizza->xoffset and pizza->yoffset values.
 
    III)
 
-   Singularily the most broken code in GTK is the code that is supposed to
+   Singularly the most broken code in GTK is the code that is supposed to
    inform subwindows (child windows) about new positions. Very often, duplicate
    events are sent without changes in size or position, equally often no
    events are sent at all (All this is due to a bug in the GtkContainer code
@@ -1158,7 +1158,7 @@ gtk_window_key_press_callback( GtkWidget *widget,
     {
         // however only do it if we have a Cancel button in the dialog,
         // otherwise the user code may get confused by the events from a
-        // non-existing button and, worse, a wxButton might get button event
+        // nonexistent button and, worse, a wxButton might get button event
         // from another button which is not really expected
         wxWindow *winForCancel = win,
                  *btnCancel = NULL;
@@ -1676,7 +1676,7 @@ gtk_window_button_release_callback( GtkWidget *widget,
             break;
 
         default:
-            // unknwon button, don't process
+            // unknown button, don't process
             return FALSE;
     }
 
@@ -1748,7 +1748,7 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
 
     if ( g_captureWindow )
     {
-        // synthetize a mouse enter or leave event if needed
+        // synthesise a mouse enter or leave event if needed
         GdkWindow *winUnderMouse = gdk_window_at_pointer(NULL, NULL);
         // This seems to be necessary and actually been added to
         // GDK itself in version 2.0.X
