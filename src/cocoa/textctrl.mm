@@ -28,8 +28,8 @@
 
 #include <math.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
-BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
+BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxTextCtrl,NSTextField,NSControl,NSView)
 

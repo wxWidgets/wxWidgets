@@ -606,13 +606,13 @@ private:
 // implementation
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
+BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_CHAR(wxTextCtrl::OnChar)
 
     EVT_SIZE(wxTextCtrl::OnSize)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
 
 // ----------------------------------------------------------------------------
 // creation

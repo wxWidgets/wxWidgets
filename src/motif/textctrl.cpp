@@ -63,9 +63,9 @@ static void wxTextWindowGainFocusProc(Widget w, XtPointer clientData, XmAnyCallb
 static void wxTextWindowLoseFocusProc(Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs);
 static void wxTextWindowActivateProc(Widget w, XtPointer clientData, XmAnyCallbackStruct *ptr);
 
-    IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
+    IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
 
-    BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
+    BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
         EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
         EVT_CHAR(wxTextCtrl::OnChar)
 

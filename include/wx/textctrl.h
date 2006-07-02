@@ -431,6 +431,7 @@ protected:
     wxTextAttr m_defaultStyle;
 
     DECLARE_NO_COPY_CLASS(wxTextCtrlBase)
+    DECLARE_ABSTRACT_CLASS(wxTextCtrlBase)
 };
 
 // ----------------------------------------------------------------------------

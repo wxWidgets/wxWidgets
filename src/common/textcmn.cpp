@@ -54,6 +54,8 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_ENTER)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_URL)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_MAXLEN)
 
+IMPLEMENT_ABSTRACT_CLASS(wxTextCtrlBase, wxControl)
+
 // ----------------------------------------------------------------------------
 // style functions - not implemented here
 // ----------------------------------------------------------------------------
