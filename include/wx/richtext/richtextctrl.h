@@ -510,7 +510,7 @@ public:
 
 // Command handlers
 
-    void Command(wxCommandEvent & event);
+    void Command(wxCommandEvent& event);
     void OnDropFiles(wxDropFilesEvent& event);
 
     void OnCut(wxCommandEvent& event);
