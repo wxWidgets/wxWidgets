@@ -293,6 +293,12 @@ public:
     int GetBulletNumber() const { return m_bulletNumber; }
     wxChar GetBulletSymbol() const { return m_bulletSymbol; }
 
+    bool HasWeight() const { return (GetFlags() & wxTEXT_ATTR_FONT_WEIGHT) != 0; }
+    bool HasSize() const { return (GetFlags() & wxTEXT_ATTR_FONT_SIZE) != 0; }
+    bool HasItalic() const { return (GetFlags() & wxTEXT_ATTR_FONT_ITALIC) != 0; }
+    bool HasUnderlined() const { return (GetFlags() & wxTEXT_ATTR_FONT_UNDERLINE) != 0; }
+    bool HasFaceName() const { return (GetFlags() & wxTEXT_ATTR_FONT_FACE) != 0; }
+
     bool HasParagraphSpacingAfter() const { return HasFlag(wxTEXT_ATTR_PARA_SPACING_AFTER); }
     bool HasParagraphSpacingBefore() const { return HasFlag(wxTEXT_ATTR_PARA_SPACING_BEFORE); }
     bool HasLineSpacing() const { return HasFlag(wxTEXT_ATTR_LINE_SPACING); }
@@ -316,6 +322,14 @@ public:
                !HasParagraphSpacingAfter() && !HasParagraphSpacingBefore() && !HasLineSpacing() &&
                !HasCharacterStyleName() && !HasParagraphStyleName() && !HasBulletNumber() && !HasBulletStyle() && !HasBulletSymbol();
     }
+
+    // return the attribute having the valid font and colours: it uses the
+    // attributes set in attr and falls back first to attrDefault and then to
+    // the text control font/colours for those attributes which are not set
+    static wxTextAttrEx CombineEx(const wxTextAttrEx& attr,
+                              const wxTextAttrEx& attrDef,
+                              const wxTextCtrlBase *text);
+
 private:
     // Paragraph styles
     int                 m_paragraphSpacingAfter;
@@ -457,6 +471,12 @@ public:
                !HasCharacterStyleName() && !HasParagraphStyleName() && !HasBulletNumber() && !HasBulletStyle() && !HasBulletSymbol();
     }
 
+    // return the attribute having the valid font and colours: it uses the
+    // attributes set in attr and falls back first to attrDefault and then to
+    // the text control font/colours for those attributes which are not set
+    static wxRichTextAttr Combine(const wxRichTextAttr& attr,
+                              const wxRichTextAttr& attrDef,
+                              const wxTextCtrlBase *text);
 private:
     long                m_flags;
 

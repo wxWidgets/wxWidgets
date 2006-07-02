@@ -1671,7 +1671,13 @@ bool wxRichTextParagraphLayoutBox::GetStyle(long position, wxRichTextAttr& style
 /// Set default style
 bool wxRichTextParagraphLayoutBox::SetDefaultStyle(const wxTextAttrEx& style)
 {
-    m_defaultAttributes = style;
+    // keep the old attributes if the new style doesn't specify them unless the
+    // new style is empty - then reset m_defaultStyle (as there is no other way
+    // to do it)
+    if ( style.IsDefault() )
+        m_defaultAttributes = style;
+    else
+        m_defaultAttributes = wxTextAttrEx::CombineEx(style, m_defaultAttributes, NULL);
 
     return true;
 }
@@ -4913,6 +4919,94 @@ bool wxRichTextAttr::GetFontAttributes(const wxFont& font)
     return true;
 }
 
+wxRichTextAttr wxRichTextAttr::Combine(const wxRichTextAttr& attr,
+                               const wxRichTextAttr& attrDef,
+                               const wxTextCtrlBase *text)
+{    
+    wxColour colFg = attr.GetTextColour();
+    if ( !colFg.Ok() )
+    {
+        colFg = attrDef.GetTextColour();
+
+        if ( text && !colFg.Ok() )
+            colFg = text->GetForegroundColour();
+    }
+
+    wxColour colBg = attr.GetBackgroundColour();
+    if ( !colBg.Ok() )
+    {
+        colBg = attrDef.GetBackgroundColour();
+
+        if ( text && !colBg.Ok() )
+            colBg = text->GetBackgroundColour();
+    }
+
+    wxRichTextAttr newAttr(colFg, colBg);
+
+    if (attr.HasWeight())
+        newAttr.SetFontWeight(attr.GetFontWeight());
+    
+    if (attr.HasSize())
+        newAttr.SetFontSize(attr.GetFontSize());
+    
+    if (attr.HasItalic())
+        newAttr.SetFontStyle(attr.GetFontStyle());
+    
+    if (attr.HasUnderlined())
+        newAttr.SetFontUnderlined(attr.GetFontUnderlined());
+    
+    if (attr.HasFaceName())
+        newAttr.SetFontFaceName(attr.GetFontFaceName());
+    
+    if (attr.HasAlignment())
+        newAttr.SetAlignment(attr.GetAlignment());
+    else if (attrDef.HasAlignment())
+        newAttr.SetAlignment(attrDef.GetAlignment());
+
+    if (attr.HasTabs())
+        newAttr.SetTabs(attr.GetTabs());
+    else if (attrDef.HasTabs())
+        newAttr.SetTabs(attrDef.GetTabs());
+
+    if (attr.HasLeftIndent())
+        newAttr.SetLeftIndent(attr.GetLeftIndent(), attr.GetLeftSubIndent());
+    else if (attrDef.HasLeftIndent())
+        newAttr.SetLeftIndent(attrDef.GetLeftIndent(), attr.GetLeftSubIndent());
+
+    if (attr.HasRightIndent())
+        newAttr.SetRightIndent(attr.GetRightIndent());
+    else if (attrDef.HasRightIndent())
+        newAttr.SetRightIndent(attrDef.GetRightIndent());
+    
+    // NEW ATTRIBUTES
+    
+    if (attr.HasParagraphSpacingAfter())
+        newAttr.SetParagraphSpacingAfter(attr.GetParagraphSpacingAfter());
+    
+    if (attr.HasParagraphSpacingBefore())
+        newAttr.SetParagraphSpacingBefore(attr.GetParagraphSpacingBefore());
+
+    if (attr.HasLineSpacing())
+        newAttr.SetLineSpacing(attr.GetLineSpacing());
+        
+    if (attr.HasCharacterStyleName())
+        newAttr.SetCharacterStyleName(attr.GetCharacterStyleName());
+        
+    if (attr.HasParagraphStyleName())
+        newAttr.SetParagraphStyleName(attr.GetParagraphStyleName());
+        
+    if (attr.HasBulletStyle())
+        newAttr.SetBulletStyle(attr.GetBulletStyle());
+
+    if (attr.HasBulletNumber())
+        newAttr.SetBulletNumber(attr.GetBulletNumber());
+        
+    if (attr.HasBulletSymbol())
+        newAttr.SetBulletSymbol(attr.GetBulletSymbol());
+        
+    return newAttr;
+}
+
 /*!
  * wxTextAttrEx is an extended version of wxTextAttr with more paragraph attributes.
  */
@@ -4961,6 +5055,146 @@ void wxTextAttrEx::operator= (const wxTextAttr& attr)
 {
     wxTextAttr::operator= (attr);
 }
+
+wxTextAttrEx wxTextAttrEx::CombineEx(const wxTextAttrEx& attr,
+                               const wxTextAttrEx& attrDef,
+                               const wxTextCtrlBase *text)
+{    
+    wxTextAttrEx newAttr;
+
+    // If attr specifies the complete font, just use that font, overriding all
+    // default font attributes.
+    if ((attr.GetFlags() & wxTEXT_ATTR_FONT) == wxTEXT_ATTR_FONT)
+        newAttr.SetFont(attr.GetFont());
+    else
+    {
+        // First find the basic, default font
+        long flags = 0;
+
+        wxFont font;
+        if (attrDef.HasFont())
+        {
+            flags = (attrDef.GetFlags() & wxTEXT_ATTR_FONT);
+            font = attrDef.GetFont();
+        }
+        else
+        {
+            if (text)
+                font = text->GetFont();
+
+            // We leave flags at 0 because no font attributes have been specified yet
+        }
+        if (!font.Ok())
+            font = *wxNORMAL_FONT;
+
+        // Otherwise, if there are font attributes in attr, apply them
+        if (attr.HasFont())
+        {
+            if (attr.HasSize())
+            {
+                flags |= wxTEXT_ATTR_FONT_SIZE;
+                font.SetPointSize(attr.GetFont().GetPointSize());
+            }
+            if (attr.HasItalic())
+            {
+                flags |= wxTEXT_ATTR_FONT_ITALIC;;
+                font.SetStyle(attr.GetFont().GetStyle());
+            }
+            if (attr.HasWeight())
+            {
+                flags |= wxTEXT_ATTR_FONT_WEIGHT;
+                font.SetWeight(attr.GetFont().GetWeight());
+            }
+            if (attr.HasFaceName())
+            {
+                flags |= wxTEXT_ATTR_FONT_FACE;
+                font.SetFaceName(attr.GetFont().GetFaceName());
+            }
+            if (attr.HasUnderlined())
+            {
+                flags |= wxTEXT_ATTR_FONT_UNDERLINE;
+                font.SetUnderlined(attr.GetFont().GetUnderlined());
+            }
+            newAttr.SetFont(font);
+            newAttr.SetFlags(newAttr.GetFlags()|flags);
+        }
+    }
+
+    // TODO: should really check we are specifying these in the flags,
+    // before setting them, as per above; or we will set them willy-nilly.
+    // However, we should also check whether this is the intention
+    // as per wxTextAttr::Combine, i.e. always to have valid colours
+    // in the style.
+    wxColour colFg = attr.GetTextColour();
+    if ( !colFg.Ok() )
+    {
+        colFg = attrDef.GetTextColour();
+
+        if ( text && !colFg.Ok() )
+            colFg = text->GetForegroundColour();
+    }
+
+    wxColour colBg = attr.GetBackgroundColour();
+    if ( !colBg.Ok() )
+    {
+        colBg = attrDef.GetBackgroundColour();
+
+        if ( text && !colBg.Ok() )
+            colBg = text->GetBackgroundColour();
+    }
+
+    newAttr.SetTextColour(colFg);
+    newAttr.SetBackgroundColour(colBg);
+
+    if (attr.HasAlignment())
+        newAttr.SetAlignment(attr.GetAlignment());
+    else if (attrDef.HasAlignment())
+        newAttr.SetAlignment(attrDef.GetAlignment());
+
+    if (attr.HasTabs())
+        newAttr.SetTabs(attr.GetTabs());
+    else if (attrDef.HasTabs())
+        newAttr.SetTabs(attrDef.GetTabs());
+
+    if (attr.HasLeftIndent())
+        newAttr.SetLeftIndent(attr.GetLeftIndent(), attr.GetLeftSubIndent());
+    else if (attrDef.HasLeftIndent())
+        newAttr.SetLeftIndent(attrDef.GetLeftIndent(), attr.GetLeftSubIndent());
+
+    if (attr.HasRightIndent())
+        newAttr.SetRightIndent(attr.GetRightIndent());
+    else if (attrDef.HasRightIndent())
+        newAttr.SetRightIndent(attrDef.GetRightIndent());
+    
+    // NEW ATTRIBUTES
+    
+    if (attr.HasParagraphSpacingAfter())
+        newAttr.SetParagraphSpacingAfter(attr.GetParagraphSpacingAfter());
+    
+    if (attr.HasParagraphSpacingBefore())
+        newAttr.SetParagraphSpacingBefore(attr.GetParagraphSpacingBefore());
+
+    if (attr.HasLineSpacing())
+        newAttr.SetLineSpacing(attr.GetLineSpacing());
+        
+    if (attr.HasCharacterStyleName())
+        newAttr.SetCharacterStyleName(attr.GetCharacterStyleName());
+        
+    if (attr.HasParagraphStyleName())
+        newAttr.SetParagraphStyleName(attr.GetParagraphStyleName());
+        
+    if (attr.HasBulletStyle())
+        newAttr.SetBulletStyle(attr.GetBulletStyle());
+
+    if (attr.HasBulletNumber())
+        newAttr.SetBulletNumber(attr.GetBulletNumber());
+        
+    if (attr.HasBulletSymbol())
+        newAttr.SetBulletSymbol(attr.GetBulletSymbol());
+        
+    return newAttr;
+}
+
 
 /*!
  * wxRichTextFileHandler
