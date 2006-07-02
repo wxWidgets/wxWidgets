@@ -202,7 +202,7 @@ void wxDirDialog::SetPath(const wxString& dir)
     {
         if (wxDirExists(dir))
         {
-            gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget), wxConvFileName->cWX2MB(dir));
+            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget), wxConvFileName->cWX2MB(dir));
         }
     }
     else
