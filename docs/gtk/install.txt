@@ -48,9 +48,7 @@ such as for GTK+ and Motif, you can now build two complete libraries and use
 them concurrently. To do this, create a separate directory for each build
 of wxWidgets - you may also want to create different versions of wxWidgets
 and test them concurrently. Most typically, this would be a version configured
-with --enable-debug and one without. Note, that only one build can currently
-be installed with 'make install', so you'd have to use a local version of
-the library for that purpose.
+with --enable-debug and one without.
 
 For building three versions (one GTK+, one Motif and a debug version of the GTK
 source) you'd do this:
@@ -73,20 +71,23 @@ cd buildgtkd
 make
 cd ..
 
+Note that since wxWidgets-2.6.0 you can install all those libraries
+concurrently, you just need to pass the appropriate flags when using them.
+
 * The simplest errors
 ---------------------
 
 For any configure errors: please look at config.log file which was generated
 during configure run, it usually contains some useful information.
 
-configure reports, that you don't have GTK+ 1.2 installed although you are
+configure reports, that you don't have GTK+ 1.2/2.0 installed although you are
 very sure you have. Well, you have installed it, but you also have another
 version of the GTK+ installed, which you may need to remove including other
 versions of glib (and its headers). Or maybe you installed it in a non-default
 location and configure can't find it there, so please check that your PATH
-variable includes the path to the correct gtk-config. Also check that your
-LD_LIBRARY_PATH or equivalent variable contains the path to GTK+ libraries if
-they were installed in a non-default location.
+variable includes the path to the correct gtk-config/pkg-config. Also check
+that your LD_LIBRARY_PATH or equivalent variable contains the path to GTK+
+libraries if they were installed in a non-default location.
 
 You get errors from make: please use GNU make instead of the native make
 program. Currently wxWidgets can be built only with GNU make, BSD make and
@@ -103,9 +104,6 @@ either due to having compiled the library with different flags or options than
 your program - typically you might have the __WXDEBUG__ option set for the
 library but not for your program - or due to using a compiler with optimisation
 bugs.
-
-Linker complains about missing PROIO_yy_flex_alloc and similar symbols: you
-probably have an old version of flex, 2.5.4 is recommended.
 
 * The simplest program
 ----------------------
@@ -159,9 +157,8 @@ was actually used by myself, newer version should cause no problems and
 even older ones are expected to work most of the time.
 
 You'll need OS/2 Warp (4.51) or eCS(1.0), X-Free86/2 (3.3.6 or newer),
-GTK+ (1.2.5 or newer), emx (0.9d fix 4), flex (2.5.4), yacc (1.8) or
-bison (1.25), a Unix like shell (pdksh-5.2.14 or ash), Autoconf (2.57),
-GNU file utilities (3.13), GNU text utilities (1.19),
+GTK+ (1.2.5 or newer), emx (0.9d fix 4), a Unix like shell (pdksh-5.2.14 or
+ash), Autoconf (2.57), GNU file utilities (3.13), GNU text utilities (1.19),
 GNU shell utilites (1.12), m4 (1.4), sed (2.05), grep (2.0), Awk (3.0.3),
 GNU Make (3.75).
 
@@ -170,19 +167,19 @@ LIBRARY_PATH set up accordingly, however, wxGTK will even work without it.
 Presence of Posix/2 will be auto-detected.
 
 Open an OS/2 prompt and switch to the directory above.
-Set MAKESHELL (and depending on your installation also INSTALL, for me
-it tends to try to use the system's tcpip\pcomos\install.exe which causes
-problems...) to a Unix like shell, e.g.
+Set MAKESHELL or MAKE_SHELL (which one is needed depends on the version of
+make) to a Unix like shell, e.g.
 SET MAKESHELL=ash
-
-Be warned that depending on the precise version of your make, the
-variable that needs to be set might be MAKE_SHELL instead of MAKESHELL.
 If you have a really deficient version of GNU make, it might even be
 necessary to set SHELL or even COMSPEC to a unix like shell as well. 
+Depending on your installation you might want to also set INSTALL, for me
+it tends to try to use the system's tcpip\pcomos\install.exe which causes
+problems, e.g.
+SET INSTALL=<path_to_src_directory>/install-sh -c
 
 Notice that the delivered configure scripts are fully OS/2 aware, so you
 can simply run
-    ash -c "configure --with-gtk"
+    ash -c "configure --with-gtk=1"
 and make and possibly make install as described above.
 
 * Building wxGTK on SGI
