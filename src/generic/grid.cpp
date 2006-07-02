@@ -4418,8 +4418,8 @@ void wxGrid::Init()
 
     m_currentCellCoords = wxGridNoCellCoords;
 
-    m_selectingTopLeft = wxGridNoCellCoords;
-    m_selectingBottomRight = wxGridNoCellCoords;
+    ClearSelection();
+
     m_selectionBackground = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
     m_selectionForeground = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
 
@@ -10793,8 +10793,9 @@ wxArrayInt wxGrid::GetSelectedCols() const
 
 void wxGrid::ClearSelection()
 {
-    m_selectingTopLeft = wxGridNoCellCoords;
-    m_selectingBottomRight = wxGridNoCellCoords;
+    m_selectingTopLeft =
+    m_selectingBottomRight =
+    m_selectingKeyboard = wxGridNoCellCoords;
     if ( m_selection )
         m_selection->ClearSelection();
 }
