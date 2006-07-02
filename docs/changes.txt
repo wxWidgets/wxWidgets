@@ -152,6 +152,7 @@ All (GUI):
 - Added wxTextAttr::Merge() (Marcin Simonides).
 - Added wxTB_NO_TOOLTIPS style (Igor Korot).
 - Added wxGenericDirCtrl::CollapsePath() (Christian Buhtz).
+- Added wxTreeCtrl::ExpandAllChildren() (Christian Buhtz)
 - Fixed 64-bit issue in wxNotebook causing segfaults on Tru64 Unix.
 - Made it possible to associate context help to a region of a window.
 - Added support for tabs in wxRichTextCtrl (Ashish More).

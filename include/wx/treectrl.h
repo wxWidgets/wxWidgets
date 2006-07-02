@@ -287,6 +287,10 @@ public:
 
         // expand this item
     virtual void Expand(const wxTreeItemId& item) = 0;
+        // expand the item and all its childs and thats childs
+    void ExpandAllChildren(const wxTreeItemId& item);
+        // expand all items
+    void ExpandAll();
         // collapse the item without removing its children
     virtual void Collapse(const wxTreeItemId& item) = 0;
         // collapse the item and remove all children

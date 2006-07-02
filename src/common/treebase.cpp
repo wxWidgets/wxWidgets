@@ -109,7 +109,7 @@ wxTreeCtrlBase::~wxTreeCtrlBase()
 static void wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, const wxTreeItemId& id, wxSize& size)
 {
     wxRect rect;
-    
+
     if ( treeCtrl->GetBoundingRect(id, rect, true) )
     {
         if ( size.x < rect.x + rect.width )
@@ -134,7 +134,7 @@ wxSize wxTreeCtrlBase::DoGetBestSize() const
     // this doesn't really compute the total bounding rectangle of all items
     // but a not too bad guess of it which has the advantage of not having to
     // examine all (potentially hundreds or thousands) items in the control
-    
+
     if (GetQuickBestSize())
     {
         for ( wxTreeItemId item = GetRootItem();
@@ -165,6 +165,27 @@ wxSize wxTreeCtrlBase::DoGetBestSize() const
         CacheBestSize(size);
 
     return size;
+}
+
+void wxTreeCtrlBase::ExpandAll()
+{
+    ExpandAllChildren(GetRootItem());
+}
+
+void wxTreeCtrlBase::ExpandAllChildren(const wxTreeItemId& item)
+{
+    // expand this item first, this might result in its children being added on
+    // the fly
+    Expand(item);
+
+    // then (recursively) expand all the children
+    wxTreeItemIdValue cookie;
+    for ( wxTreeItemId idCurr = GetFirstChild(item, cookie);
+          idCurr.IsOk();
+          idCurr = GetNextChild(item, cookie) )
+    {
+        ExpandAllChildren(idCurr);
+    }
 }
 
 #endif // wxUSE_TREECTRL
