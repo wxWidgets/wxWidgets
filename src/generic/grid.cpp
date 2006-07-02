@@ -8173,13 +8173,6 @@ void wxGrid::ShowCellEditControl()
                 m_currentCellCoords.SetCol( col );
             }
 
-            // convert to scrolled coords
-            CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-
-            int nXMove = 0;
-            if (rect.x < 0)
-                nXMove = rect.x;
-
             // erase the highlight and the cell contents because the editor
             // might not cover the entire cell
             wxClientDC dc( m_gridWin );
@@ -8187,6 +8180,13 @@ void wxGrid::ShowCellEditControl()
             dc.SetBrush(wxBrush(GetCellAttr(row, col)->GetBackgroundColour(), wxSOLID));
             dc.SetPen(*wxTRANSPARENT_PEN);
             dc.DrawRectangle(rect);
+
+            // convert to scrolled coords
+            CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+
+            int nXMove = 0;
+            if (rect.x < 0)
+                nXMove = rect.x;
 
             // cell is shifted by one pixel
             // However, don't allow x or y to become negative
