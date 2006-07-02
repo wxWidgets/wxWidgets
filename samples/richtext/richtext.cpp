@@ -478,9 +478,6 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     m_richTextCtrl = new wxRichTextCtrl(splitter, wxID_ANY, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS);
     wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
 
-#ifdef __WXMAC__
-    font.SetNoAntiAliasing(true);
-#endif
     m_richTextCtrl->SetFont(font);
 
     wxRichTextStyleListBox* styleListBox = new wxRichTextStyleListBox(splitter, wxID_ANY);
