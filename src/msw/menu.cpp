@@ -847,6 +847,9 @@ wxMenuBar::~wxMenuBar()
 
 void wxMenuBar::Refresh()
 {
+    if ( IsFrozen() )
+        return;
+
     wxCHECK_RET( IsAttached(), wxT("can't refresh unattached menubar") );
 
 #if defined(WINCE_WITHOUT_COMMANDBAR)
