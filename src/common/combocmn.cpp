@@ -754,7 +754,7 @@ wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
         // navigation event is then sent to the wrong window.
         style |= wxTE_PROCESS_TAB;
 
-        if ( HasFlag(wxPROCESS_ENTER) )
+        if ( HasFlag(wxTE_PROCESS_ENTER) )
             style |= wxTE_PROCESS_ENTER;
 
         m_text = new wxTextCtrl(this, wxID_ANY, m_valueString,
