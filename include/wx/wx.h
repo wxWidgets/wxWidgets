@@ -40,6 +40,7 @@
 #include "wx/gdiobj.h"
 #include "wx/region.h"
 #include "wx/bitmap.h"
+#include "wx/image.h"
 #include "wx/colour.h"
 #include "wx/font.h"
 #include "wx/dc.h"

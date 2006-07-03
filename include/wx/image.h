@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        image.h
+// Name:        wx/image.h
 // Purpose:     wxImage class
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
@@ -11,6 +11,9 @@
 #define _WX_IMAGE_H_
 
 #include "wx/defs.h"
+
+#if wxUSE_IMAGE
+
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/gdicmn.h"
@@ -19,8 +22,6 @@
 #if wxUSE_STREAMS
 #  include "wx/stream.h"
 #endif
-
-#if wxUSE_IMAGE
 
 // on some systems (Unixware 7.x) index is defined as a macro in the headers
 // which breaks the compilation below
@@ -425,4 +426,3 @@ extern WXDLLEXPORT_DATA(wxImage)    wxNullImage;
 
 #endif
   // _WX_IMAGE_H_
-

@@ -31,11 +31,11 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/bitmap.h"
+    #include "wx/image.h"
 #endif //WX_PRECOMP
 
 #include "wx/file.h"
 
-#include "wx/image.h"
 #include "wx/palmos/dib.h"
 
 // ----------------------------------------------------------------------------

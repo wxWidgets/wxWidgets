@@ -18,10 +18,10 @@
     #include "wx/palette.h"
     #include "wx/icon.h"
     #include "wx/math.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/filefn.h"
-#include "wx/image.h"
 
 #include "wx/rawbmp.h"
     // need this to get gdk_image_new_bitmap()

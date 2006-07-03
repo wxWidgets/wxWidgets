@@ -27,10 +27,10 @@
     #include "wx/dcclient.h"
     #include "wx/settings.h"
     #include "wx/bitmap.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/univ/renderer.h"
-#include "wx/image.h"
 #include "wx/cshelp.h"
 #include "wx/evtloop.h"
 

@@ -24,14 +24,11 @@
     #include "wx/list.h"
     #include "wx/log.h"
     #include "wx/hashmap.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/artprov.h"
 #include "wx/module.h"
-
-#if wxUSE_IMAGE
-    #include "wx/image.h"
-#endif
 
 // ===========================================================================
 // implementation

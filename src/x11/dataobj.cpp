@@ -18,10 +18,10 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/mstream.h"
-#include "wx/image.h"
 
 #include "wx/x11/private.h"
 
@@ -199,7 +199,7 @@ bool wxFileDataObject::GetDataHere(void *buf) const
         filenames += (wxChar) 0;
     }
 
-    memcpy( buf, filenames.mbc_str(), filenames.Len() + 1 );
+    memcpy( buf, filenames.mbc_str(), filenames.length() + 1 );
 
     return true;
 }
@@ -210,7 +210,7 @@ size_t wxFileDataObject::GetDataSize() const
 
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
-        res += m_filenames[i].Len();
+        res += m_filenames[i].length();
         res += 1;
     }
 
@@ -232,8 +232,8 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
             break;
         wxString file( filenames );  // this returns the first file
         AddFile( file );
-        pos += file.Len()+1;
-        filenames += file.Len()+1;
+        pos += file.length()+1;
+        filenames += file.length()+1;
     }
 #else // 1
     m_filenames.Empty();

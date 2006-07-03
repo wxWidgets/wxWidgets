@@ -36,6 +36,7 @@
     #include "wx/sizer.h"
     #include "wx/textdlg.h"
     #include "wx/gdicmn.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/module.h"
@@ -45,7 +46,6 @@
 #include "wx/dir.h"
 #include "wx/artprov.h"
 #include "wx/mimetype.h"
-#include "wx/image.h"
 
 #if wxUSE_STATLINE
     #include "wx/statline.h"
@@ -120,7 +120,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
         wxString path, name;
         path.Printf(wxT("%c:\\"), driveBuffer[i]);
         name.Printf(wxT("%c:"), driveBuffer[i]);
-        
+
         // Do not use GetVolumeInformation to further decorate the
         // name, since it can cause severe delays on network drives.
 

@@ -22,9 +22,6 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/window.h"
-#endif
-
-#if wxUSE_IMAGE
     #include "wx/image.h"
 #endif
 

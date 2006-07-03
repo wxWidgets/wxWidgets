@@ -11,15 +11,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
-
-#ifndef WX_PRECOMP
-#endif
-
-#include "wx/image.h"
 
 #if wxUSE_IMAGE
+
+#ifndef WX_PRECOMP
+    #include "wx/image.h"
+#endif
 
 //-----------------------------------------------------------------------------
 // This function allows dynamic access to all image handlers compile within

@@ -36,13 +36,10 @@
     #include "wx/settings.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/image.h"
 #endif
 
 #define wxUSE_IMAGE_IN_DRAGIMAGE 1
-
-#if wxUSE_IMAGE_IN_DRAGIMAGE
-#include "wx/image.h"
-#endif
 
 #include "wx/generic/dragimgg.h"
 

@@ -21,10 +21,10 @@
     #include "wx/dcmemory.h"
     #include "wx/dcprint.h"
     #include "wx/region.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/mac/uma.h"
-#include "wx/image.h"
 
 #ifdef __MSL__
     #if __MSL__ >= 0x6000
@@ -1487,7 +1487,7 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 
     wxMacUniCharBuffer unibuf( str ) ;
     UniCharCount chars = unibuf.GetChars() ;
-    
+
     status = ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 
@@ -1504,12 +1504,12 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     ATSUTextMeasurement ascent, descent ;
 
     ATSLineLayoutOptions layoutOptions = kATSLineNoLayoutOptions ;
-    
+
     if (m_font.GetNoAntiAliasing())
     {
         layoutOptions |= kATSLineNoAntiAliasing ;
     }
-    
+
     Fixed atsuAngle = IntToFixed( iAngle ) ;
 
     ATSUAttributeTag atsuTags[] =
@@ -1517,28 +1517,28 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
         kATSULineLayoutOptionsTag ,
         kATSULineRotationTag ,
     } ;
-    
+
     ByteCount atsuSizes[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
     {
         sizeof( ATSLineLayoutOptions ) ,
         sizeof( Fixed ) ,
     } ;
-    
+
     ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
     {
         &layoutOptions ,
         &atsuAngle ,
     } ;
-    
+
     status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags)/sizeof(ATSUAttributeTag) - ( abs(iAngle) > 0.001 ? 0 : 1),
             atsuTags, atsuSizes, atsuValues ) ;
 
     status = ::ATSUMeasureText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
         &textBefore , &textAfter, &ascent , &descent );
     wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
-    
+
     if ( m_backgroundMode == wxSOLID )
-    {      
+    {
         // background painting must be done by hand, cannot be done by ATSUI
         wxCoord x2 , y2 ;
         PolyHandle polygon = OpenPoly();
@@ -1613,10 +1613,10 @@ void wxDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *height
 
     OSStatus status = noErr ;
     ATSUTextLayout atsuLayout ;
-    
+
     wxMacUniCharBuffer unibuf( str ) ;
     UniCharCount chars = unibuf.GetChars() ;
-    
+
     status = ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 
@@ -1626,30 +1626,30 @@ void wxDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *height
     wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
 
     ATSLineLayoutOptions layoutOptions = kATSLineNoLayoutOptions ;
-    
+
     if (m_font.GetNoAntiAliasing())
     {
         layoutOptions |= kATSLineNoAntiAliasing ;
     }
-    
+
     ATSUAttributeTag atsuTags[] =
     {
         kATSULineLayoutOptionsTag ,
     } ;
-    
+
     ByteCount atsuSizes[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
     {
         sizeof( ATSLineLayoutOptions ) ,
     } ;
-    
+
     ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
     {
         &layoutOptions ,
     } ;
-    
+
     status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags)/sizeof(ATSUAttributeTag) ,
             atsuTags, atsuSizes, atsuValues ) ;
-            
+
     ATSUTextMeasurement textBefore, textAfter ;
     ATSUTextMeasurement textAscent, textDescent ;
 
@@ -1691,10 +1691,10 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
 
     OSStatus status = noErr ;
     ATSUTextLayout atsuLayout ;
-    
+
     wxMacUniCharBuffer unibuf( text ) ;
     UniCharCount chars = unibuf.GetChars() ;
-    
+
     status = ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 
@@ -1704,30 +1704,30 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
     wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
 
     ATSLineLayoutOptions layoutOptions = kATSLineNoLayoutOptions ;
-    
+
     if (m_font.GetNoAntiAliasing())
     {
         layoutOptions |= kATSLineNoAntiAliasing ;
     }
-    
+
     ATSUAttributeTag atsuTags[] =
     {
         kATSULineLayoutOptionsTag ,
     } ;
-    
+
     ByteCount atsuSizes[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
     {
         sizeof( ATSLineLayoutOptions ) ,
     } ;
-    
+
     ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
     {
         &layoutOptions ,
     } ;
-    
+
     status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags)/sizeof(ATSUAttributeTag) ,
             atsuTags, atsuSizes, atsuValues ) ;
-            
+
     for ( int pos = 0; pos < (int)chars ; pos ++ )
     {
         unsigned long actualNumberOfBounds = 0;

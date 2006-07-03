@@ -36,11 +36,8 @@
     #include "wx/dcscreen.h"
     #include "wx/toolbar.h"
     #include "wx/mdi.h"
+    #include "wx/image.h"
 #endif
-
-//#include "wx/dcbuffer.h"
-
-#include "wx/image.h"
 
 WX_CHECK_BUILD_OPTIONS("wxAUI")
 

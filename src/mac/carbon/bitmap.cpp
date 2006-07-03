@@ -17,9 +17,9 @@
     #include "wx/log.h"
     #include "wx/dcmemory.h"
     #include "wx/icon.h"
+    #include "wx/image.h"
 #endif
 
-#include "wx/image.h"
 #include "wx/metafile.h"
 #include "wx/xpmdecod.h"
 

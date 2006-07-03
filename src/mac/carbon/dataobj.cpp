@@ -20,10 +20,10 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/dcmemory.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/mstream.h"
-#include "wx/image.h"
 #include "wx/metafile.h"
 #include "wx/tokenzr.h"
 

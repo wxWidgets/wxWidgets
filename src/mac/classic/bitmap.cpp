@@ -20,9 +20,9 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/icon.h"
+    #include "wx/image.h"
 #endif
 
-#include "wx/image.h"
 #include "wx/xpmdecod.h"
 
 #include "wx/rawbmp.h"

@@ -33,10 +33,10 @@
     #include "wx/icon.h"
     #include "wx/settings.h"
     #include "wx/intl.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/module.h"
-#include "wx/image.h"
 
 // ----------------------------------------------------------------------------
 // private classes

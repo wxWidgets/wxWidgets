@@ -107,9 +107,9 @@ license is as follows:
     #if wxUSE_STREAMS
         #include "wx/stream.h"
     #endif
+    #include "wx/image.h"
 #endif
 
-#include "wx/image.h"
 #include <string.h>
 
 #include <ctype.h>

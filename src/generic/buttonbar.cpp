@@ -37,9 +37,8 @@
     #include "wx/frame.h"
     #include "wx/dcclient.h"
     #include "wx/settings.h"
+    #include "wx/image.h"
 #endif
-
-#include "wx/image.h"
 
 // ----------------------------------------------------------------------------
 // wxButtonToolBarTool: our implementation of wxToolBarToolBase

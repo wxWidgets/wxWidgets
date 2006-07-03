@@ -18,10 +18,10 @@
     #include "wx/palette.h"
     #include "wx/icon.h"
     #include "wx/math.h"
+    #include "wx/image.h"
 #endif // WX_PRECOMP
 
 #include "wx/filefn.h"
-#include "wx/image.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>

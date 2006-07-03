@@ -23,9 +23,6 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/bitmap.h"
-#endif
-
-#if wxUSE_IMAGE && !defined(_WX_IMAGE_H_)
     #include "wx/image.h"
 #endif
 

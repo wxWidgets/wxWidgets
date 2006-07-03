@@ -17,10 +17,10 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/mstream.h"
-#include "wx/image.h"
 #include "wx/uri.h"
 
 #include <gdk/gdk.h>
@@ -224,7 +224,7 @@ bool wxFileDataObject::GetDataHere(void *buf) const
         filenames += wxT("\r\n");
     }
 
-    memcpy( buf, filenames.mbc_str(), filenames.Len() + 1 );
+    memcpy( buf, filenames.mbc_str(), filenames.length() + 1 );
 
     return true;
 }
@@ -236,7 +236,7 @@ size_t wxFileDataObject::GetDataSize() const
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
         // This is junk in UTF-8
-        res += m_filenames[i].Len();
+        res += m_filenames[i].length();
         res += 5 + 2; // "file:" (5) + "\r\n" (2)
     }
 

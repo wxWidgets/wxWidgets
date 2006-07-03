@@ -19,11 +19,11 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/string.h"
 #include "wx/imaglist.h"
-#include "wx/image.h"
 #include "wx/mac/uma.h"
 
 
@@ -82,7 +82,7 @@ bool wxNotebook::Create( wxWindow *parent,
 
     if (! (style & wxBK_ALIGN_MASK))
         style |= wxBK_TOP;
-    
+
     if ( !wxNotebookBase::Create( parent, id, pos, size, style, name ) )
         return false;
 

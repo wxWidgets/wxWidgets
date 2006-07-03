@@ -28,12 +28,12 @@
     #include "wx/memory.h"
     #include "wx/font.h"
     #include "wx/gdicmn.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/file.h"
 #include "wx/filename.h"
 #include "wx/module.h"
-#include "wx/image.h"
 #include "wx/thread.h"
 
 #ifdef __WXGPE__

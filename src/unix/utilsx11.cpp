@@ -20,10 +20,10 @@
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/icon.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/iconbndl.h"
-#include "wx/image.h"
 
 #ifdef __VMS
 #pragma message disable nosimpint

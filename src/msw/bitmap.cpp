@@ -36,19 +36,19 @@
     #include "wx/dcmemory.h"
     #include "wx/icon.h"
     #include "wx/log.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/msw/private.h"
 
 #if wxUSE_WXDIB
-#include "wx/msw/dib.h"
+    #include "wx/msw/dib.h"
 #endif
 
-#include "wx/image.h"
 #include "wx/xpmdecod.h"
 
 #ifdef wxHAVE_RAW_BITMAP
-#include "wx/rawbmp.h"
+    #include "wx/rawbmp.h"
 #endif
 
 // missing from mingw32 header

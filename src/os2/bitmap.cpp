@@ -24,11 +24,11 @@
     #include "wx/dcmemory.h"
     #include "wx/icon.h"
     #include "wx/log.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/os2/private.h"
 
-#include "wx/image.h"
 #include "wx/xpmdecod.h"
 
 // ----------------------------------------------------------------------------

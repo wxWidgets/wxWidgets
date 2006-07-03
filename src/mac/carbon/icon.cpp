@@ -1,18 +1,22 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        icon.cpp
+// Name:        src/mac/carbon/icon.cpp
 // Purpose:     wxIcon class
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #include "wx/icon.h"
-#include "wx/image.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/image.h"
+#endif
+
 #include "wx/mac/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap)
@@ -180,7 +184,7 @@ bool wxIcon::LoadFile(
                     desiredHeight = loadimage.GetHeight() ;
                 if ( desiredWidth != loadimage.GetWidth() || desiredHeight != loadimage.GetHeight() )
                     loadimage.Rescale( desiredWidth , desiredHeight ) ;
-    
+
                 wxBitmap bmp( loadimage );
                 CopyFromBitmap( bmp ) ;
 

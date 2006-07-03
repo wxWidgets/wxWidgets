@@ -36,10 +36,10 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/frame.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/msw/private.h"
-#include "wx/image.h"
 
 #include "wx/msw/dragimag.h"
 #include "wx/msw/private.h"

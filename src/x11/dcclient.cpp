@@ -19,9 +19,9 @@
     #include "wx/window.h"
     #include "wx/dcmemory.h"
     #include "wx/math.h"
+    #include "wx/image.h"
 #endif
 
-#include "wx/image.h"
 #include "wx/module.h"
 #include "wx/fontutil.h"
 

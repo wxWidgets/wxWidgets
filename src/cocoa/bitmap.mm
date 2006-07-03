@@ -19,9 +19,9 @@
     #include "wx/palette.h"
     #include "wx/icon.h"
     #include "wx/colour.h"
+    #include "wx/image.h"
 #endif //WX_PRECOMP
 
-#include "wx/image.h"
 #include "wx/xpmdecod.h"
 #include "wx/rawbmp.h"
 

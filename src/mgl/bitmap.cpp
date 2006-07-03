@@ -21,11 +21,10 @@
     #include "wx/utils.h"
     #include "wx/dcmemory.h"
     #include "wx/icon.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/filefn.h"
-#include "wx/image.h"
-#include "wx/image.h"
 #include "wx/xpmdecod.h"
 
 #include "wx/mgl/private.h"

@@ -21,12 +21,8 @@
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
     #include "wx/bitmap.h"
-#endif //WX_PRECOMP
-
-#if wxUSE_IMAGE
     #include "wx/image.h"
-#endif
-
+#endif //WX_PRECOMP
 
 
 wxBitmap wxRegion::ConvertToBitmap() const

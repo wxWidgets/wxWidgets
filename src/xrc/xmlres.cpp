@@ -27,6 +27,7 @@
     #include "wx/dialog.h"
     #include "wx/settings.h"
     #include "wx/bitmap.h"
+    #include "wx/image.h"
 #endif
 
 #ifndef __WXWINCE__
@@ -39,7 +40,6 @@
 #include "wx/tokenzr.h"
 #include "wx/fontenum.h"
 #include "wx/module.h"
-#include "wx/image.h"
 #include "wx/fontmap.h"
 #include "wx/artprov.h"
 

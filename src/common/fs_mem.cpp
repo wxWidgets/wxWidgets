@@ -23,12 +23,9 @@
     #include "wx/hash.h"
     #if wxUSE_GUI
         #include "wx/bitmap.h"
+        #include "wx/image.h"
     #endif // wxUSE_GUI
 #endif
-
-#if wxUSE_GUI
-    #include "wx/image.h"
-#endif // wxUSE_GUI
 
 #include "wx/mstream.h"
 

@@ -32,11 +32,10 @@
     #include "wx/app.h"
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/notebook.h"
-#include "wx/sysopt.h"
-#include "wx/image.h"
 #include "wx/sysopt.h"
 
 #include "wx/msw/uxtheme.h"

@@ -20,11 +20,11 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/icon.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/os2/private.h"
 #include "wx/os2/wxrsc.h"
-#include "wx/image.h"
 
 #include "assert.h"
 

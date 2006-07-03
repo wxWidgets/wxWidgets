@@ -16,9 +16,8 @@
 #if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WXPRECOMP
+    #include "wx/image.h"
 #endif
-
-#include "wx/image.h"
 
 #include "wx/html/forcelnk.h"
 #include "wx/html/m_templ.h"

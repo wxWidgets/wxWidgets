@@ -33,10 +33,10 @@
     #include "wx/icon.h"
     #include "wx/settings.h"
     #include "wx/intl.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/module.h"
-#include "wx/image.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h" // IDC_HAND
@@ -421,5 +421,3 @@ void wxSetCursor(const wxCursor& cursor)
             *gs_globalCursor = cursor;
     }
 }
-
-

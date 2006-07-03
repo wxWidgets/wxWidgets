@@ -20,9 +20,9 @@
     #include "wx/log.h"
     #include "wx/dcmemory.h"
     #include "wx/math.h" // for floating-point functions
+    #include "wx/image.h"
 #endif
 
-#include "wx/image.h"
 #include "wx/module.h"
 #include "wx/fontutil.h"
 

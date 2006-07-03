@@ -36,9 +36,8 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/frame.h"
+    #include "wx/image.h"
 #endif
-
-#include "wx/image.h"
 
 #include "wx/palmos/dragimag.h"
 #include "wx/palmos/private.h"

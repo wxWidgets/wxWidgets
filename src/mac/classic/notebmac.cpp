@@ -25,10 +25,10 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/imaglist.h"
-#include "wx/image.h"
 #include "wx/mac/uma.h"
 // ----------------------------------------------------------------------------
 // macros
@@ -189,7 +189,7 @@ bool wxNotebook::Create(wxWindow *parent,
 
     if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
         style |= wxBK_TOP;
-    
+
     MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
 
     int tabstyle = kControlTabSmallNorthProc ;

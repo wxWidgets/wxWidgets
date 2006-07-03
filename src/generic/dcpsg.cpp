@@ -26,9 +26,9 @@
     #include "wx/utils.h"
     #include "wx/dcmemory.h"
     #include "wx/math.h"
+    #include "wx/image.h"
 #endif // WX_PRECOMP
 
-#include "wx/image.h"
 #include "wx/prntbase.h"
 #include "wx/generic/prntdlgg.h"
 #include "wx/paper.h"

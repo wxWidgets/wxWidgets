@@ -22,9 +22,8 @@
     #include "wx/brush.h"
     #include "wx/dc.h"
     #include "wx/dcmemory.h"
+    #include "wx/image.h"
 #endif
-
-#include "wx/image.h"
 
 // DoFloodFill
 // Fills with the colour extracted from fillBrush, starting at x,y until either

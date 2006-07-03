@@ -30,9 +30,8 @@
     #include "wx/statbmp.h"
     #include "wx/sizer.h"
     #include "wx/bitmap.h"
+    #include "wx/image.h"
 #endif
-
-#include "wx/image.h"
 
 #ifdef __VMS
 #pragma message disable nosimpint

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        artstd.cpp
+// Name:        src/common/artstd.cpp
 // Purpose:     stock wxArtProvider instance with default wxWin art
 // Author:      Vaclav Slavik
 // Modified by:
@@ -20,8 +20,11 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/image.h"
+#endif
+
 #include "wx/artprov.h"
-#include "wx/image.h"
 
 // ----------------------------------------------------------------------------
 // wxDefaultArtProvider

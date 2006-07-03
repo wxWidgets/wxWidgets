@@ -36,13 +36,13 @@
     #include "wx/dcmemory.h"
     #include "wx/icon.h"
     #include "wx/log.h"
+    #include "wx/image.h"
 #endif
 
 #if wxUSE_WXDIB
 #include "wx/palmos/dib.h"
 #endif
 
-#include "wx/image.h"
 #include "wx/xpmdecod.h"
 
 #ifdef wxHAVE_RAW_BITMAP

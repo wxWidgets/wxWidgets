@@ -25,11 +25,11 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/dataobj.h"
 #include "wx/mstream.h"
-#include "wx/image.h"
 
 #include "wx/os2/private.h"
 
@@ -229,7 +229,7 @@ bool wxFileDataObject::GetDataHere( void* pBuf ) const
         sFilenames += (wxChar)0;
     }
 
-    memcpy(pBuf, sFilenames.mbc_str(), sFilenames.Len() + 1);
+    memcpy(pBuf, sFilenames.mbc_str(), sFilenames.length() + 1);
     return true;
 }
 
@@ -239,7 +239,7 @@ size_t wxFileDataObject::GetDataSize() const
 
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
-        nRes += m_filenames[i].Len();
+        nRes += m_filenames[i].length();
         nRes += 1;
     }
 

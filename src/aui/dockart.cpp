@@ -25,13 +25,13 @@
 
 #if wxUSE_AUI
 
-#include "wx/image.h"
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/dcclient.h"
+    #include "wx/image.h"
 #endif
 
 #ifdef __WXMAC__

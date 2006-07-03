@@ -23,13 +23,13 @@
     #include "wx/dcmemory.h"
     #include "wx/log.h"
     #include "wx/math.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/html/forcelnk.h"
 #include "wx/html/m_templ.h"
 #include "wx/html/htmlwin.h"
 
-#include "wx/image.h"
 #include "wx/gifdecod.h"
 #include "wx/artprov.h"
 

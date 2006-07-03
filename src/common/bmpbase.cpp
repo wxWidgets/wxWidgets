@@ -28,9 +28,9 @@
     #include "wx/utils.h"
     #include "wx/palette.h"
     #include "wx/icon.h"
+    #include "wx/image.h"
 #endif // WX_PRECOMP
 
-#include "wx/image.h"
 #include "wx/module.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxBitmapBase, wxGDIObject)

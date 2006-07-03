@@ -35,11 +35,10 @@
     #include "wx/log.h"
     #include "wx/frame.h"
     #include "wx/dc.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/univ/renderer.h"
-
-#include "wx/image.h"
 
 // ----------------------------------------------------------------------------
 // constants

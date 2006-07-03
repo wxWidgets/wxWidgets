@@ -37,6 +37,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/bitmap.h"
+    #include "wx/image.h"
 #endif //WX_PRECOMP
 
 #include "wx/file.h"
@@ -48,7 +49,6 @@
     #include <memory.h>
 #endif
 
-#include "wx/image.h"
 #include "wx/msw/dib.h"
 
 #ifdef __WXWINCE__

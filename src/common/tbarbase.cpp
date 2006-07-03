@@ -32,11 +32,8 @@
     #include "wx/control.h"
     #include "wx/frame.h"
     #include "wx/settings.h"
-#endif
-
-#if wxUSE_IMAGE
     #include "wx/image.h"
-#endif // wxUSE_IMAGE
+#endif
 
 // ----------------------------------------------------------------------------
 // wxWidgets macros

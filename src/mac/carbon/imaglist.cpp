@@ -20,9 +20,8 @@
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/icon.h"
+    #include "wx/image.h"
 #endif
-
-#include "wx/image.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxImageList, wxObject)
 
