@@ -1411,7 +1411,7 @@ wxString wxRichTextParagraphLayoutBox::GetText() const
 /// Get the paragraph by number
 wxRichTextParagraph* wxRichTextParagraphLayoutBox::GetParagraphAtLine(long paragraphNumber) const
 {
-    if ((size_t) paragraphNumber <= GetChildCount())
+    if ((size_t) paragraphNumber >= GetChildCount())
         return NULL;
 
     return (wxRichTextParagraph*) GetChild((size_t) paragraphNumber);

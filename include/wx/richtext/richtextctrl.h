@@ -98,14 +98,14 @@ public:
 // Constructors
 
     wxRichTextCtrl( );
-    wxRichTextCtrl( wxWindow* parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+    wxRichTextCtrl( wxWindow* parent, wxWindowID id = -1, const wxString& value = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
         long style = wxRE_MULTILINE );
     ~wxRichTextCtrl( );
 
 // Operations
 
     /// Creation
-    bool Create( wxWindow* parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+    bool Create( wxWindow* parent, wxWindowID id = -1, const wxString& value = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
         long style = wxRE_MULTILINE );
 
     /// Member initialisation
@@ -175,14 +175,18 @@ public:
     // text control under some platforms supports the text styles: these
     // methods allow to apply the given text style to the given selection or to
     // set/get the style which will be used for all appended text
+    virtual bool SetStyle(long start, long end, const wxTextAttr& style);
     virtual bool SetStyle(long start, long end, const wxTextAttrEx& style);
     virtual bool SetStyle(const wxRichTextRange& range, const wxRichTextAttr& style);
+    virtual bool GetStyle(long position, wxTextAttr& style) const;
     virtual bool GetStyle(long position, wxTextAttrEx& style) const;
     virtual bool GetStyle(long position, wxRichTextAttr& style) const;
     virtual bool SetDefaultStyle(const wxTextAttrEx& style);
+    virtual bool SetDefaultStyle(const wxTextAttr& style);
 
     // TODO: change to GetDefaultStyle if we merge wxTextAttr and wxTextAttrEx
     virtual const wxTextAttrEx& GetDefaultStyleEx() const;
+    virtual const wxTextAttr& GetDefaultStyle() const;
 
     // translate between the position (which is just an index in the text ctrl
     // considering all its contents as a single strings) and (x, y) coordinates

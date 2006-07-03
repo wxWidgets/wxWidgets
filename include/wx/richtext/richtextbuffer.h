@@ -263,6 +263,7 @@ class WXDLLIMPEXP_RICHTEXT wxTextAttrEx: public wxTextAttr
 public:
     // ctors
     wxTextAttrEx(const wxTextAttrEx& attr);
+    wxTextAttrEx(const wxTextAttr& attr) { Init(); (*this) = attr; }
     wxTextAttrEx() { Init(); }
 
     // Initialise this object.

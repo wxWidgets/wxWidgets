@@ -31,6 +31,10 @@
 #include "wx/dcbuffer.h"
 #include "wx/arrimpl.cpp"
 
+// DLL options compatibility check:
+#include "wx/app.h"
+WX_CHECK_BUILD_OPTIONS("wxRichTextCtrl")
+
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_ITEM_SELECTED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_ITEM_DESELECTED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_LEFT_CLICK)
@@ -102,17 +106,17 @@ wxRichTextCtrl::wxRichTextCtrl()
     Init();
 }
 
-wxRichTextCtrl::wxRichTextCtrl( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style)
+wxRichTextCtrl::wxRichTextCtrl( wxWindow* parent, wxWindowID id, const wxString& value, const wxPoint& pos, const wxSize& size, long style)
 #if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
     : wxScrollHelper(this)
 #endif
 {
     Init();
-    Create(parent, id, pos, size, style);
+    Create(parent, id, value, pos, size, style);
 }
 
 /// Creation
-bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style)
+bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& value, const wxPoint& pos, const wxSize& size, long style)
 {
 #if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
     if (!wxTextCtrlBase::Create(parent, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE
@@ -151,6 +155,9 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxPoint& pos
     RecreateBuffer(size);
 
     SetCursor(wxCursor(wxCURSOR_IBEAM));
+    
+    if (!value.IsEmpty())
+        SetValue(value);
 
     return true;
 }
@@ -2177,6 +2184,11 @@ bool wxRichTextCtrl::SetStyle(long start, long end, const wxTextAttrEx& style)
     return GetBuffer().SetStyle(wxRichTextRange(start, end), style);
 }
 
+bool wxRichTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
+{
+    return GetBuffer().SetStyle(wxRichTextRange(start, end), wxTextAttrEx(style));
+}
+
 bool wxRichTextCtrl::SetStyle(const wxRichTextRange& range, const wxRichTextAttr& style)
 {
     return GetBuffer().SetStyle(range, style);
@@ -2187,9 +2199,31 @@ bool wxRichTextCtrl::SetDefaultStyle(const wxTextAttrEx& style)
     return GetBuffer().SetDefaultStyle(style);
 }
 
+bool wxRichTextCtrl::SetDefaultStyle(const wxTextAttr& style)
+{
+    return GetBuffer().SetDefaultStyle(wxTextAttrEx(style));
+}
+
 const wxTextAttrEx& wxRichTextCtrl::GetDefaultStyleEx() const
 {
     return GetBuffer().GetDefaultStyle();
+}
+
+const wxTextAttr& wxRichTextCtrl::GetDefaultStyle() const
+{
+    return GetBuffer().GetDefaultStyle();    
+}
+
+bool wxRichTextCtrl::GetStyle(long position, wxTextAttr& style) const
+{
+    wxTextAttrEx attr;
+    if (GetBuffer().GetStyle(position, attr))
+    {
+        style = attr;
+        return true;
+    }
+    else
+        return false;
 }
 
 bool wxRichTextCtrl::GetStyle(long position, wxTextAttrEx& style) const

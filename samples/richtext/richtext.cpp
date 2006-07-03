@@ -312,6 +312,20 @@ void MyApp::CreateStyles()
 
     m_styleSheet->AddParagraphStyle(indentedPara);
 
+    wxRichTextParagraphStyleDefinition* indentedPara2 = new wxRichTextParagraphStyleDefinition(wxT("Red Bold Indented"));
+    wxRichTextAttr indentedAttr2;
+    indentedAttr2.SetFontFaceName(romanFont.GetFaceName());
+    indentedAttr2.SetFontSize(12);
+    indentedAttr2.SetFontWeight(wxBOLD);
+    indentedAttr2.SetTextColour(*wxRED);
+    indentedAttr2.SetFontSize(12);
+    indentedAttr2.SetLeftIndent(100, 0);
+    // We want to affect indentation, font and text colour
+    indentedAttr2.SetFlags(wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_FONT|wxTEXT_ATTR_TEXT_COLOUR);
+    indentedPara2->SetStyle(indentedAttr2);
+
+    m_styleSheet->AddParagraphStyle(indentedPara2);
+
     wxRichTextParagraphStyleDefinition* flIndentedPara = new wxRichTextParagraphStyleDefinition(wxT("First Line Indented"));
     wxRichTextAttr flIndentedAttr;
     flIndentedAttr.SetFontFaceName(swissFont.GetFaceName());
@@ -475,7 +489,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);
     wxFont italicFont = wxFont(12, wxROMAN, wxITALIC, wxNORMAL);
 
-    m_richTextCtrl = new wxRichTextCtrl(splitter, wxID_ANY, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS);
+    m_richTextCtrl = new wxRichTextCtrl(splitter, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS);
     wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
 
     m_richTextCtrl->SetFont(font);
