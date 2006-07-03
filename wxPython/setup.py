@@ -453,7 +453,7 @@ ext = Extension('_xrc',
                 define_macros = defines,
 
                 library_dirs = libdirs,
-                libraries = libs,
+                libraries = libs + makeLibName('xrc'),
 
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
@@ -468,7 +468,7 @@ ext = Extension('_richtext', swig_sources,
                 include_dirs =  includes,
                 define_macros = defines,
                 library_dirs = libdirs,
-                libraries = libs,
+                libraries = libs + makeLibName('richtext'),
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
                 **depends
