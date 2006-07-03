@@ -298,6 +298,8 @@
         <define>WXMAKINGDLL_RICHTEXT</define>
         <sources>$(RICHTEXT_SRC)</sources>
         <library>advdll</library>
+        <library>htmldll</library>
+        <library>xmldll</library>
         <library>coredll</library>
         <library>basedll</library>
         <msvc-headers>$(RICHTEXT_HDR)</msvc-headers>
