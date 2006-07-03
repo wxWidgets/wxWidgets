@@ -104,11 +104,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_splash.obj &
 	$(OBJS)\monodll_tipdlg.obj &
 	$(OBJS)\monodll_wizard.obj &
-	$(OBJS)\monodll_richtextctrl.obj &
-	$(OBJS)\monodll_richtextbuffer.obj &
-	$(OBJS)\monodll_richtextstyles.obj &
-	$(OBJS)\monodll_richtextxml.obj &
-	$(OBJS)\monodll_richtexthtml.obj &
 	$(OBJS)\monodll_mediactrlcmn.obj &
 	$(OBJS)\monodll_helpctrl.obj &
 	$(OBJS)\monodll_helpdata.obj &
@@ -191,7 +186,12 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xmlrsall.obj &
 	$(OBJS)\monodll_framemanager.obj &
 	$(OBJS)\monodll_dockart.obj &
-	$(OBJS)\monodll_floatpane.obj
+	$(OBJS)\monodll_floatpane.obj &
+	$(OBJS)\monodll_richtextctrl.obj &
+	$(OBJS)\monodll_richtextbuffer.obj &
+	$(OBJS)\monodll_richtextstyles.obj &
+	$(OBJS)\monodll_richtextxml.obj &
+	$(OBJS)\monodll_richtexthtml.obj
 !endif
 ____CORE_SRC_FILENAMES_OBJECTS =
 !ifeq USE_GUI 1
@@ -412,11 +412,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_splash.obj &
 	$(OBJS)\monolib_tipdlg.obj &
 	$(OBJS)\monolib_wizard.obj &
-	$(OBJS)\monolib_richtextctrl.obj &
-	$(OBJS)\monolib_richtextbuffer.obj &
-	$(OBJS)\monolib_richtextstyles.obj &
-	$(OBJS)\monolib_richtextxml.obj &
-	$(OBJS)\monolib_richtexthtml.obj &
 	$(OBJS)\monolib_mediactrlcmn.obj &
 	$(OBJS)\monolib_helpctrl.obj &
 	$(OBJS)\monolib_helpdata.obj &
@@ -499,7 +494,12 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xmlrsall.obj &
 	$(OBJS)\monolib_framemanager.obj &
 	$(OBJS)\monolib_dockart.obj &
-	$(OBJS)\monolib_floatpane.obj
+	$(OBJS)\monolib_floatpane.obj &
+	$(OBJS)\monolib_richtextctrl.obj &
+	$(OBJS)\monolib_richtextbuffer.obj &
+	$(OBJS)\monolib_richtextstyles.obj &
+	$(OBJS)\monolib_richtextxml.obj &
+	$(OBJS)\monolib_richtexthtml.obj
 !endif
 ____CORE_SRC_FILENAMES_1_OBJECTS =
 !ifeq USE_GUI 1
@@ -1297,6 +1297,24 @@ __auilib___depname = &
 !endif
 !endif
 !endif
+__richtextdll___depname =
+!ifeq MONOLITHIC 0
+!ifeq SHARED 1
+!ifeq USE_RICHTEXT 1
+__richtextdll___depname = &
+	$(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.dll
+!endif
+!endif
+!endif
+__richtextlib___depname =
+!ifeq MONOLITHIC 0
+!ifeq SHARED 0
+!ifeq USE_RICHTEXT 1
+__richtextlib___depname = &
+	$(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.lib
+!endif
+!endif
+!endif
 __gldll___depname =
 !ifeq SHARED 1
 !ifeq USE_GUI 1
@@ -1457,7 +1475,8 @@ MAKEARGS = DOS32="$(DOS32)" CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" &
 	DEBUG_INFO="$(DEBUG_INFO)" DEBUG_FLAG="$(DEBUG_FLAG)" &
 	MONOLITHIC="$(MONOLITHIC)" USE_GUI="$(USE_GUI)" USE_HTML="$(USE_HTML)" &
 	USE_MEDIA="$(USE_MEDIA)" USE_XRC="$(USE_XRC)" USE_AUI="$(USE_AUI)" &
-	USE_OPENGL="$(USE_OPENGL)" USE_ODBC="$(USE_ODBC)" USE_QA="$(USE_QA)" &
+	USE_RICHTEXT="$(USE_RICHTEXT)" USE_OPENGL="$(USE_OPENGL)" &
+	USE_ODBC="$(USE_ODBC)" USE_QA="$(USE_QA)" &
 	USE_EXCEPTIONS="$(USE_EXCEPTIONS)" USE_RTTI="$(USE_RTTI)" &
 	OFFICIAL_BUILD="$(OFFICIAL_BUILD)" VENDOR="$(VENDOR)" &
 	WX_FLAVOUR="$(WX_FLAVOUR)" WX_LIB_FLAVOUR="$(WX_LIB_FLAVOUR)" CFG="$(CFG)" &
@@ -2048,12 +2067,7 @@ ADVDLL_OBJECTS =  &
 	$(OBJS)\advdll_sashwin.obj &
 	$(OBJS)\advdll_splash.obj &
 	$(OBJS)\advdll_tipdlg.obj &
-	$(OBJS)\advdll_wizard.obj &
-	$(OBJS)\advdll_richtextctrl.obj &
-	$(OBJS)\advdll_richtextbuffer.obj &
-	$(OBJS)\advdll_richtextstyles.obj &
-	$(OBJS)\advdll_richtextxml.obj &
-	$(OBJS)\advdll_richtexthtml.obj
+	$(OBJS)\advdll_wizard.obj
 ADVLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
 	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
@@ -2079,12 +2093,7 @@ ADVLIB_OBJECTS =  &
 	$(OBJS)\advlib_sashwin.obj &
 	$(OBJS)\advlib_splash.obj &
 	$(OBJS)\advlib_tipdlg.obj &
-	$(OBJS)\advlib_wizard.obj &
-	$(OBJS)\advlib_richtextctrl.obj &
-	$(OBJS)\advlib_richtextbuffer.obj &
-	$(OBJS)\advlib_richtextstyles.obj &
-	$(OBJS)\advlib_richtextxml.obj &
-	$(OBJS)\advlib_richtexthtml.obj
+	$(OBJS)\advlib_wizard.obj
 MEDIADLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
 	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
@@ -2415,6 +2424,36 @@ AUILIB_OBJECTS =  &
 	$(OBJS)\auilib_framemanager.obj &
 	$(OBJS)\auilib_dockart.obj &
 	$(OBJS)\auilib_floatpane.obj
+RICHTEXTDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
+	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
+	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
+	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
+	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL &
+	-dWXMAKINGDLL_RICHTEXT /fh=$(OBJS)\wxprec_richtextdll.pch $(__RTTIFLAG) &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+RICHTEXTDLL_OBJECTS =  &
+	$(OBJS)\richtextdll_dummy.obj &
+	$(OBJS)\richtextdll_richtextctrl.obj &
+	$(OBJS)\richtextdll_richtextbuffer.obj &
+	$(OBJS)\richtextdll_richtextstyles.obj &
+	$(OBJS)\richtextdll_richtextxml.obj &
+	$(OBJS)\richtextdll_richtexthtml.obj
+RICHTEXTLIB_CXXFLAGS = $(____DOS_CFLAG_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
+	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
+	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
+	-i=..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
+	-i=$(%SCITECH)\include -i=..\..\src\tiff -i=..\..\src\jpeg -i=..\..\src\png &
+	-i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib &
+	/fh=$(OBJS)\wxprec_richtextlib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) &
+	$(CPPFLAGS) $(CXXFLAGS)
+RICHTEXTLIB_OBJECTS =  &
+	$(OBJS)\richtextlib_dummy.obj &
+	$(OBJS)\richtextlib_richtextctrl.obj &
+	$(OBJS)\richtextlib_richtextbuffer.obj &
+	$(OBJS)\richtextlib_richtextstyles.obj &
+	$(OBJS)\richtextlib_richtextxml.obj &
+	$(OBJS)\richtextlib_richtexthtml.obj
 GLDLL_CXXFLAGS = $(____DOS_CFLAG_p) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) &
 	-d__WXMGL__ -d__WXUNIVERSAL__ $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
 	$(__RTTI_DEFINE_p) -dwxNO_THREADS $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
@@ -2444,7 +2483,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC setup_h $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__mediadll___depname) $(__medialib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__qadll___depname) $(__qalib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__auidll___depname) $(__auilib___depname) $(__gldll___depname) $(__gllib___depname) build_cfg_file
+all : .SYMBOLIC setup_h $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__mediadll___depname) $(__medialib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__qadll___depname) $(__qalib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__auidll___depname) $(__auilib___depname) $(__richtextdll___depname) $(__richtextlib___depname) $(__gldll___depname) $(__gllib___depname) build_cfg_file
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -2497,6 +2536,9 @@ clean : .SYMBOLIC
 	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui.dll
 	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui.lib
 	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui.lib
+	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.dll
+	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.lib
+	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.lib
 	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.dll
 	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib
 	-del $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib
@@ -2928,6 +2970,36 @@ $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 	@%create $(OBJS)\auilib.lbc
 	@for %i in ($(AUILIB_OBJECTS)) do @%append $(OBJS)\auilib.lbc +%i
 	wlib -q -p4096 -n -b $^@ @$(OBJS)\auilib.lbc
+!endif
+!endif
+!endif
+
+!ifeq MONOLITHIC 0
+!ifeq SHARED 1
+!ifeq USE_RICHTEXT 1
+$(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.dll :  $(RICHTEXTDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(__advdll___depname) $(__coredll___depname) $(__basedll___depname)
+	@%create $(OBJS)\richtextdll.lbc
+	@%append $(OBJS)\richtextdll.lbc option quiet
+	@%append $(OBJS)\richtextdll.lbc name $^@
+	@%append $(OBJS)\richtextdll.lbc option caseexact
+	@%append $(OBJS)\richtextdll.lbc $(LDFLAGS) $(__DEBUGINFO_3)  libpath $(LIBDIRNAME) libpath $(%SCITECH)\lib\$(__BUILD_FILENAMES)\dos32\ow10 libpath $(%SCITECH)\lib\$(__BUILD_FILENAMES)\dos32\ow10\$(__MGLPMLIBPATH_FILENAMES)
+	@for %i in ($(RICHTEXTDLL_OBJECTS)) do @%append $(OBJS)\richtextdll.lbc file %i
+	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) mgl.lib mglcpp.lib pm.lib $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib) do @%append $(OBJS)\richtextdll.lbc library %i
+	@%append $(OBJS)\richtextdll.lbc
+	@%append $(OBJS)\richtextdll.lbc system
+	wlink @$(OBJS)\richtextdll.lbc
+	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.lib +$^@
+!endif
+!endif
+!endif
+
+!ifeq MONOLITHIC 0
+!ifeq SHARED 0
+!ifeq USE_RICHTEXT 1
+$(LIBDIRNAME)\wx$(PORTNAME)univ$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.lib :  $(RICHTEXTLIB_OBJECTS)
+	@%create $(OBJS)\richtextlib.lbc
+	@for %i in ($(RICHTEXTLIB_OBJECTS)) do @%append $(OBJS)\richtextlib.lbc +%i
+	wlib -q -p4096 -n -b $^@ @$(OBJS)\richtextlib.lbc
 !endif
 !endif
 !endif
@@ -4202,21 +4274,6 @@ $(OBJS)\monodll_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
 $(OBJS)\monodll_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -4464,6 +4521,21 @@ $(OBJS)\monodll_dockart.obj :  .AUTODEPEND ..\..\src\aui\dockart.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_floatpane.obj :  .AUTODEPEND ..\..\src\aui\floatpane.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
@@ -5309,21 +5381,6 @@ $(OBJS)\monolib_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
 $(OBJS)\monolib_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_mediactrlcmn.obj :  .AUTODEPEND ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5571,6 +5628,21 @@ $(OBJS)\monolib_dockart.obj :  .AUTODEPEND ..\..\src\aui\dockart.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_floatpane.obj :  .AUTODEPEND ..\..\src\aui\floatpane.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
@@ -7244,21 +7316,6 @@ $(OBJS)\advdll_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
 $(OBJS)\advdll_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
-$(OBJS)\advdll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
-
-$(OBJS)\advdll_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
-
-$(OBJS)\advdll_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
-
-$(OBJS)\advdll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
-
-$(OBJS)\advdll_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
-
 $(OBJS)\advlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
@@ -7308,21 +7365,6 @@ $(OBJS)\advlib_tipdlg.obj :  .AUTODEPEND ..\..\src\generic\tipdlg.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
-
-$(OBJS)\advlib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
-
-$(OBJS)\advlib_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
-
-$(OBJS)\advlib_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
-
-$(OBJS)\advlib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
-	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
-
-$(OBJS)\advlib_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\mediadll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
@@ -7882,6 +7924,42 @@ $(OBJS)\auilib_dockart.obj :  .AUTODEPEND ..\..\src\aui\dockart.cpp
 
 $(OBJS)\auilib_floatpane.obj :  .AUTODEPEND ..\..\src\aui\floatpane.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
+
+$(OBJS)\richtextdll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
+$(OBJS)\richtextdll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
+$(OBJS)\richtextdll_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
+$(OBJS)\richtextdll_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
+$(OBJS)\richtextdll_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
+$(OBJS)\richtextdll_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTDLL_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_richtextbuffer.obj :  .AUTODEPEND ..\..\src\richtext\richtextbuffer.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_richtextstyles.obj :  .AUTODEPEND ..\..\src\richtext\richtextstyles.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_richtextxml.obj :  .AUTODEPEND ..\..\src\richtext\richtextxml.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
+
+$(OBJS)\richtextlib_richtexthtml.obj :  .AUTODEPEND ..\..\src\richtext\richtexthtml.cpp
+	$(CXX) -bt=dos -zq -fo=$^@ $(RICHTEXTLIB_CXXFLAGS) $<
 
 $(OBJS)\gldll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=dos -zq -fo=$^@ $(GLDLL_CXXFLAGS) $<
