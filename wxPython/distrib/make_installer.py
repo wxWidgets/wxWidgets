@@ -231,6 +231,9 @@ Type: files; Name: "{app}\%(PKGDIR)s\wxPython\tools\*.pyo";
 Type: files; Name: "{app}\wxversion.pyc";
 Type: files; Name: "{app}\wxversion.pyo";
 
+Type: files; Name: "{app}\%(PKGDIR)s\wxaddons\*.pyc";
+Type: files; Name: "{app}\%(PKGDIR)s\wxaddons\*.pyo";
+
 %(UNINSTALL_BATCH)s
 
 '''

@@ -3,7 +3,7 @@
 # Build wxMac and wxPythonOSX from the tarball and then make an
 # Installer package out of it.
 
-##set -x
+#set -o xtrace
 
 spectemplate=distrib/wxPythonFull.spec.in
 
@@ -24,12 +24,10 @@ fi
 
 function usage {
     echo ""
-    echo "Usage: $0  PYVER  [jaguar|panther] [command flags...]"
+    echo "Usage: $0  PYVER [command flags...]"
     echo ""
-    echo "   PYVER          Python version to use to do the build"
-    echo ""
-    echo "   panther        Build for Apple's python in /usr/bin, such as on Panther"
-    echo "   jaguar         Build for a python in /usr/local/bin, such as on Jaguar"
+    echo "   PYVER          Python version to use to do the build.  A"
+    echo "                  matching python\$PYVER must be found on the PATH"
     echo ""
     echo "optional command flags:"
     echo "   skiptar        Don't unpack the tarball"
@@ -48,13 +46,8 @@ function usage {
 }
 
 
-if [ $# -lt 2 ]; then
-    usage
-    exit 1
-fi
-
 PYVER=$1
-if which python$PYVER && which pythonw$PYVER; then
+if [ "$PYVER" != "" ] && which python$PYVER && which pythonw$PYVER; then
     PYTHON=`which python$PYVER`
     PYTHONW=`which pythonw$PYVER`
 else
@@ -62,14 +55,7 @@ else
     exit 1
 fi
 
-KIND=$2
-case $KIND in
-    panther)    TAG=macosx10.3 ;;
-    jaguar)     TAG=macosx10.2 ;;
-    *)          usage; exit 1 ;;
-esac
-
-shift;shift
+shift
 
 skiptar=no
 skipconfig=no
@@ -89,10 +75,11 @@ for flag in $*; do
 	skipconfig)  skipconfig=yes; skiptar=yes                ;;
 	skipbuild)   skipbuild=yes; skipconfig=yes; skiptar=yes ;;
 	skipinstall) skipinstall=yes                            ;;
-    skipdmg)     skipdmg=yes                                ;;
+	skipdmg)     skipdmg=yes                                ;;
 	skipclean)   skipclean=yes                              ;;
 	inplace)     inplace=yes; skiptar=yes                   ;;
 	unicode)     unicode=yes                                ;;
+	ansi)        unicode=no                                 ;;
 	debug)       debug=yes                                  ;;
 	reswig)      reswig=yes                                 ;;
 	universal)   universal=yes                              ;;
@@ -101,6 +88,23 @@ for flag in $*; do
 	    exit 1
     esac
 done
+
+
+
+OSX_VERSION=`sw_vers -productVersion`
+OSX_VERSION=${OSX_VERSION:0:4}
+
+case $OSX_VERSION in
+    10.4)    TAG=macosx10.4 ;;
+    10.3)    TAG=macosx10.3 ;;
+    10.2)    TAG=macosx10.2 ;;
+    *)       usage; exit 1 ;;
+esac
+
+if [ $universal = yes ]; then
+    TAG=universal10.4
+fi
+
 
 
 VERSION=`$PYTHON -c "import setup;print setup.VERSION"`
@@ -199,6 +203,9 @@ mkdir -p $DMGROOT
 mkdir -p $DMGAPPS/Docs
 mkdir -p $DMGAPPS/Samples
 
+if [ ! -d $DESTDIR ]; then
+  mkdir $DESTDIR
+fi
 
 pushd $BUILDROOT
 
@@ -236,7 +243,7 @@ echo "Using source tree: $WXDIR"
 
 #----------------------------------------------------------------------
 
-if [ $KIND = panther ]; then 
+if [ $OSX_VERSION = 10.3 -o $OSX_VERSION = 10.4 ]; then 
     OTHER_CFG_OPTS=--enable-mediactrl
 fi
 
@@ -263,21 +270,8 @@ fi
 if [ $skipbuild != yes ]; then
 
     # Make wxWidgets and some contribs
-
-#     # For some reason Rez and DeRez have started locking up if run via
-#     # an ssh terminal.  Figure out why, but in the meantime...
-#     if [ "$CHARTYPE" = "ansi" ]; then
-# 	echo cp /projects/wx2.5/bld/lib/libwx_macd-2.5.?.r* lib
-# 	     cp /projects/wx2.5/bld/lib/libwx_macd-2.5.?.r* lib
-#     else
-# 	echo cp /projects/wx2.5/bld-unicode/lib/libwx_macud-2.5.?.r* lib
-#              cp /projects/wx2.5/bld-unicode/lib/libwx_macud-2.5.?.r* lib
-#     fi
-#     touch lib/libwx*.r*
-
     WXBLD_CONFIG="$WXBLD/wx-config"
     if [ $universal = yes ]; then
-        TAG=universal10.4
         export WXROOT
         export BUILDPREFIX=$PREFIX
         export INSTALLDIR=$INSTALLROOT$PREFIX
@@ -385,12 +379,12 @@ if [ $skipdmg != yes ]; then
     # The main runtime installer package
 
     # Make the welcome message
-    case $KIND in
-	panther)  W_MSG="the Panther (OS X 10.3.x) version of" ;;
-	jaguar)   W_MSG="the Jaguar (OS X 10.2.x) version of" ;;
+    case $OSX_VERSION in
+	10.4)  W_MSG="the Tiger (OS X 10.4.x Intel) version of" ;;
+	10.3)  W_MSG="the Panther (OS X 10.3.x) version of" ;;
+	10.2)  W_MSG="the Jaguar (OS X 10.2.x) version of" ;;
     esac
-    
-    # TODO: Change
+
     if [ $universal == yes ]; then
       W_MSG="the Universal (OS X 10.4.x and above) version of"
     fi
@@ -666,7 +660,7 @@ EOF
     $PROGDIR/../makedmg $DMGAPPS $DMGDIR $dmgname
 
     echo Moving $DMGDIR/$dmgname.dmg to $DESTDIR
-    mv $DMGDIR/$dmgname.dmg  $DESTDIR
+    mv $DMGDIR/$dmgname.dmg  $DESTDIR/$dmgname.dmg
 fi
 
 

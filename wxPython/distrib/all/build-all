@@ -48,6 +48,7 @@ config.WIN_BUILD = "/c/BUILD"
 
 
 # Just like the above
+config.OSX_HOST_tiger = "smallfry"
 config.OSX_HOST_panther = "bigmac"
 config.OSX_HOST_jaguar = "whopper"
 config.OSX_BUILD = "/BUILD"
@@ -94,40 +95,55 @@ initialTask = Task([ Job("", ["distrib/all/build-setup", CFGFILE]),
 # on the nature of the build machines configurations...) is a separate
 # task.
 
-jaguarTask =  Task( Job("whopper.23",
-                        ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_jaguar, "jaguar", "2.3"]) )
+jaguarTask =  Task( Job("whopper.23",  ["distrib/all/build-osx",
+                                        CFGFILE,
+                                        config.OSX_HOST_jaguar,
+                                        "2.3", "ansi"]) )
 
-pantherTask =  Task([ Job("bigmac.23", 
-                          ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_panther, "panther", "2.3"]),
-                      Job("bigmac.24",
-                          ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_panther, "panther", "2.4"])
+pantherTask =  Task([ Job("bigmac.23", ["distrib/all/build-osx",
+                                        CFGFILE,
+                                        config.OSX_HOST_panther,
+                                        "2.3", "both"]),
+                      Job("bigmac.24", ["distrib/all/build-osx",
+                                        CFGFILE,
+                                        config.OSX_HOST_panther,
+                                        "2.4", "both"])
                      ])
+
+tigerTask =  Task([ #Job("smallfry.23", ["distrib/all/build-osx",
+                    #                    CFGFILE,
+                    #                    config.OSX_HOST_tiger,
+                    #                    "2.3", "both"]),
+                    Job("smallfry.24", ["distrib/all/build-osx",
+                                        CFGFILE,
+                                        config.OSX_HOST_tiger,
+                                        "2.4", "both", "universal"]),
+                    Job("smallfry.25", ["distrib/all/build-osx",
+                                        CFGFILE,
+                                        config.OSX_HOST_tiger,
+                                        "2.5", "both", "universal"])
+                    ])
+
 
 beastTask1 = Task([ Job("beast.23",     ["distrib/all/build-windows", CFGFILE, "2.3"]),
                     Job("co-rh9.23",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-rh9",   "rh9",   "2.3"]),
                     Job("beast.24",     ["distrib/all/build-windows", CFGFILE, "2.4"]),
                     Job("co-rh9.24",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-rh9",   "rh9",   "2.4"]),
-                    Job("co-mdk2006.24",["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk2006","mdk2006","2.4"]),
+                    Job("beast.25",     ["distrib/all/build-windows", CFGFILE, "2.5"]),
                     ])
 
 beastTask2 = Task([ Job("co-fc2.23",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc2",   "fc2",   "2.3"]),
-                    #Job("co-mdk101.23", ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk101","mdk101","2.3"]),
                     Job("co-fc4.24",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc4",   "fc4",   "2.4"]),
-                    #Job("co-fc2.24",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc2",   "fc2",   "2.4"]),
                     Job("co-mdk102.24", ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk102","mdk102","2.4"]),
+                    Job("co-mdk2006.24",["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk2006","mdk2006","2.4"]),
                     ])
 
-## cyclopsTask = Task([ Job("co-mdk92.23",  ["distrib/all/build-rpm", CFGFILE, "cyclops", "co-mdk92", "mdk92", "2.3"]),
-##                      Job("co-rh9.23",    ["distrib/all/build-rpm", CFGFILE, "cyclops", "co-rh9",   "rh9",   "2.3"]),
-##                      Job("co-mdk92.24",  ["distrib/all/build-rpm", CFGFILE, "cyclops", "co-mdk92", "mdk92", "2.4"]),
-##                      Job("co-rh9.24",    ["distrib/all/build-rpm", CFGFILE, "cyclops", "co-rh9",   "rh9",   "2.4"]),
-##                      ])
 
 buildTasks = [ jaguarTask,
                pantherTask,
+               tigerTask,
                beastTask1,
                beastTask2,
-##               cyclopsTask,
                ]
 
 # Finalization.  This is for things that must wait until all the

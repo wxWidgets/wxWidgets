@@ -31,11 +31,9 @@ PYVER=$5
 
 
 # WXDIR is the cygwin path, WXWIN is the DOS path
-WXWIN_OLD=$WXWIN
 WXWIN=`cygpath -w $WXDIR`
 export WXWIN
-
-
+export WXDIR
 
 # setup the compiler
 if [ $PYVER = 2.3 ]; then
@@ -93,13 +91,35 @@ echo "Building the wx DLLs..."
 .make hybrid-uni
 
 
-#echo "Building the wx tools..."
-#.make_tools
+echo "Building tex2rtf..."
+cd $WXDIR/utils/tex2rtf/src
+$WXDIR/build/msw/.mymake hybrid 
+cp vc_mswhdll/tex2rtf.exe $WXDIR/lib/vc_dll/tex2rtf.exe
 
-# cheat and just copy the .CHM files from the regular project dir
-# TODO:  Copy over the wxPython-docs fle and run hhc on the contents of that.
-mkdir -p $WXDIR/docs/htmlhelp
-cp `cygpath $WXWIN_OLD/docs/htmlhelp`/*.chm $WXDIR/docs/htmlhelp
+echo "Building the HTMLHelp file..."
+DOCDIR=$WXDIR/docs
+cd $DOCDIR/latex/wx
+mkdir -p $DOCDIR/html/wx
+cp *.gif $DOCDIR/html/wx
+cp *.css $DOCDIR/html/wx
+DOCSRC=`cygpath -w $DOCDIR/latex/wx/manual.tex`
+DOCDEST=`cygpath -w $DOCDIR/html/wx/wx.htm` 
+DOCINI=`cygpath -w $DOCDIR/latex/wx/tex2rtf_css.ini`
+
+$WXDIR/lib/vc_dll/tex2rtf.exe $DOCSRC $DOCDEST -twice -html -macros $DOCINI
+
+cd $DOCDIR/html/wx
+cp $DOCDIR/latex/wx/wx.css .
+$TOOLS/HTMLHelpWorkshop/hhc.exe wx.hhp || true
+mkdir -p ../../htmlhelp
+mv wx.chm ../../htmlhelp
+
+# rm -f $DOCDIR/html/wx/*.con
+# rm -f $DOCDIR/html/wx/*.ref
+# rm -f $DOCDIR/latex/wx/*.con
+# rm -f $DOCDIR/latex/wx/*.ref
+
+
 
 
 echo "Building wxPython and installers..."
@@ -119,7 +139,7 @@ done
 echo "Building the developer package..."
 WXWIN=`cygpath -w $WXDIR`
 export WXWIN
-4nt /c distrib/makedev.bat $VERSION
+$TOOLS/4dos/4nt /c distrib/makedev.bat $VERSION
 
 
 echo "Copying installers to $DESTDIR..."
