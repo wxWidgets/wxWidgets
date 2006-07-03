@@ -12,8 +12,8 @@
 \section{\class{wxDir}}\label{wxdir}
 
 wxDir is a portable equivalent of Unix {open/read/close}dir functions which
-allow enumerating of the files in a directory. wxDir allows enumerate files as
-well as directories.
+allow enumerating of the files in a directory. wxDir allows to enumerate files
+as well as directories.
 
 wxDir also provides a flexible way to enumerate files recursively using 
 \helpref{Traverse}{wxdirtraverse} or a simpler 
@@ -136,8 +136,8 @@ trailing path separator (slash or backslash).
 
 \constfunc{bool}{GetNext}{\param{wxString* }{filename}}
 
-Continue enumerating files satisfying the criteria specified by the last call
-to \helpref{GetFirst}{wxdirgetfirst}.
+Continue enumerating files which satisfy the criteria specified by the last
+call to \helpref{GetFirst}{wxdirgetfirst}.
 
 
 \membersection{wxDir::HasFiles}\label{wxdirhasfiles}
@@ -170,8 +170,8 @@ Returns true if the directory was successfully opened by a previous call to
 
 \func{bool}{Open}{\param{const wxString\& }{dir}}
 
-Open the directory for enumerating, returns true on success or false if an
-error occurred.
+Open the directory for enumerating, returns {\tt true} on success
+or {\tt false} if an error occurred.
 
 
 \membersection{wxDir::Traverse}\label{wxdirtraverse}

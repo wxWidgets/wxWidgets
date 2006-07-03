@@ -19,7 +19,7 @@ one month to Feb, 15 -- we want to get Mar, 15, of course).
 
 When adding a month to the date, all lesser components (days, hours, ...)
 won't be changed unless the resulting date would be invalid: for example,
-Jan 31 + 1 month will be Feb 28, not (non existing) Feb 31.
+Jan 31 + 1 month will be Feb 28, not (non-existing) Feb 31.
 
 Because of this feature, adding and subtracting back again the same
 wxDateSpan will {\bf not}, in general give back the original date: Feb 28 - 1

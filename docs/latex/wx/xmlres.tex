@@ -72,7 +72,8 @@ Initializes only a specific handler (or custom handler). Convention says
 that the handler name is equal to the control's name plus 'XmlHandler', for example
 wxTextCtrlXmlHandler, wxHtmlWindowXmlHandler. The XML resource compiler
 (wxxrc) can create include file that contains initialization code for
-all controls used within the resource.
+all controls used within the resource. Note that this handler should be
+located on heap instead of stack, since it will get destroyed on shutdown.
 
 
 \membersection{wxXmlResource::AttachUnknownControl}\label{wxxmlresourceattachunknowncontrol}
