@@ -59,9 +59,6 @@
     #define EVT_TOGGLEBUTTON EVT_CHECKBOX
 #endif
 
-#include "wx/hyperlink.h"
-#include "wx/utils.h"
-
 //----------------------------------------------------------------------
 // class definitions
 //----------------------------------------------------------------------
@@ -124,10 +121,6 @@ public:
 
     void OnSizerCheck (wxCommandEvent &event);
 
-#if wxUSE_HYPERLINKCTRL
-    void OnHyperlink(wxHyperlinkEvent& event);
-#endif
-
     wxListBox     *m_listbox,
                   *m_listboxSorted;
 #if wxUSE_CHOICE
@@ -175,10 +168,6 @@ public:
     wxButton      *m_sizerBtn4;
     wxBoxSizer    *m_hsizer;
     wxButton      *m_bigBtn;
-
-#if wxUSE_HYPERLINKCTRL
-    wxHyperlinkCtrl *m_hyperlink;
-#endif
 
 private:
     wxLog *m_logTargetOld;
@@ -569,9 +558,6 @@ EVT_BUTTON    (ID_BUTTON_TEST1,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BUTTON_TEST2,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BITMAP_BTN,           MyPanel::OnBmpButton)
 EVT_TOGGLEBUTTON(ID_BITMAP_BTN_ENABLE,  MyPanel::OnBmpButtonToggle)
-#if wxUSE_HYPERLINKCTRL
-EVT_HYPERLINK (ID_HYPERLINK,            MyPanel::OnHyperlink)
-#endif
 
 EVT_CHECKBOX  (ID_SIZER_CHECK1,         MyPanel::OnSizerCheck)
 EVT_CHECKBOX  (ID_SIZER_CHECK2,         MyPanel::OnSizerCheck)
@@ -1020,26 +1006,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_book->AddPage(panel, _T("wxBitmapXXX"));
 
-    // hyperlink
-#if wxUSE_HYPERLINKCTRL
-    panel = new wxPanel(m_book);
-    m_hyperlink = new wxHyperlinkCtrl(panel, ID_HYPERLINK,
-                                      _T("Click here to go to Google!"),
-                                      _T("http://www.google.com"),
-                                      wxPoint(20, 20));
-    m_hyperlink->SetVisitedColour(m_hyperlink->GetNormalColour());
-    m_hyperlink->SetFont(*wxITALIC_FONT);
-    m_hyperlink->SetBackgroundColour(*wxWHITE);
-
-    // this hyperlink will automatically call wxLaunchDefaultBrowser on user's clicks
-    new wxHyperlinkCtrl(panel, wxID_ANY, wxT("http://www.test.com"),
-                        wxEmptyString, wxPoint(20, 50));
-
-    m_book->AddPage(panel, _T("wxHyperlinkCtrl"));
-#endif
-
     // sizer
-
     panel = new wxPanel(m_book);
     panel->SetAutoLayout( true );
 
@@ -1715,15 +1682,6 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
 
 #endif // wxUSE_PROGRESSDLG
 #endif // wxUSE_SPINBTN
-
-#if wxUSE_HYPERLINKCTRL
-void MyPanel::OnHyperlink(wxHyperlinkEvent& event)
-{
-    wxLogMessage(wxT("Clicked on hyperlink with url '%s'"), event.GetURL().c_str());
-    if (!wxLaunchDefaultBrowser(event.GetURL()))
-        wxMessageBox(_T("Could not launch the default browser!"));
-}
-#endif //wxUSE_HYPERLINK
 
 void MyPanel::OnSizerCheck( wxCommandEvent &event)
 {
