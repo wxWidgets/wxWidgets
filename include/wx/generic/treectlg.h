@@ -180,8 +180,6 @@ public:
 
     wxTreeItemId GetNext(const wxTreeItemId& item) const;
 
-    void ExpandAll(const wxTreeItemId& item);
-
 #if WXWIN_COMPATIBILITY_2_6
     // use EditLabel() instead
     void Edit( const wxTreeItemId& item ) { EditLabel(item); }

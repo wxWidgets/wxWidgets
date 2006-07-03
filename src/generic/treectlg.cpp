@@ -1628,25 +1628,6 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
     ProcessEvent( event );
 }
 
-void wxGenericTreeCtrl::ExpandAll(const wxTreeItemId& item)
-{
-    if ( !HasFlag(wxTR_HIDE_ROOT) || item != GetRootItem())
-    {
-        Expand(item);
-        if ( !IsExpanded(item) )
-            return;
-    }
-
-    wxTreeItemIdValue cookie;
-    wxTreeItemId child = GetFirstChild(item, cookie);
-    while ( child.IsOk() )
-    {
-        ExpandAll(child);
-
-        child = GetNextChild(item, cookie);
-    }
-}
-
 void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
 {
     wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || itemId != GetRootItem(),
@@ -2620,7 +2601,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
             if ( !IsExpanded(m_current) )
             {
                 // expand all
-                ExpandAll(m_current);
+                ExpandAllChildren(m_current);
                 break;
             }
             //else: fall through to Collapse() it
