@@ -301,12 +301,30 @@ void wxVListBoxComboPopup::OnPopup()
 
 void wxVListBoxComboPopup::OnMouseMove(wxMouseEvent& event)
 {
-    // Move selection to cursor if it is inside the popup
-    int itemHere = GetItemAtPosition(event.GetPosition());
-    if ( itemHere >= 0 )
-        wxVListBox::SetSelection(itemHere);
-
     event.Skip();
+
+    // Move selection to cursor if it is inside the popup
+
+    int y = event.GetPosition().y;
+    int fromBottom = GetClientSize().y - y;
+
+    // Since in any case we need to find out if the last item is only
+    // partially visible, we might just as well replicate the HitTest
+    // loop here.
+    const size_t lineMax = GetVisibleEnd();
+    for ( size_t line = GetVisibleBegin(); line < lineMax; line++ )
+    {
+        y -= OnGetLineHeight(line);
+        if ( y < 0 )
+        {
+            // Only change selection if item is fully visible
+            if ( (y + fromBottom) >= 0 )
+            {
+                wxVListBox::SetSelection((int)line);
+                return;
+            }
+        }
+    }
 }
 
 void wxVListBoxComboPopup::OnLeftClick(wxMouseEvent& WXUNUSED(event))
