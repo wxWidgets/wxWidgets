@@ -575,10 +575,6 @@ public:
 
 // Implementation
 
-#if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
-     WX_FORWARD_TO_SCROLL_HELPER()
-#endif
-
     /// Set font, and also default attributes
     virtual bool SetFont(const wxFont& font);
 
@@ -672,6 +668,10 @@ public:
 
     /// Returns the first visible position in the current view
     long GetFirstVisiblePosition() const;
+
+#if wxRICHTEXT_DERIVES_FROM_TEXTCTRLBASE
+     WX_FORWARD_TO_SCROLL_HELPER()
+#endif
 
 // Overrides
 protected:
