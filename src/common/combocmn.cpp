@@ -1290,8 +1290,11 @@ wxBitmap& wxComboCtrlBase::GetBufferBitmap( const wxSize& sz ) const
 
 void wxComboCtrlBase::OnTextCtrlEvent(wxCommandEvent& event)
 {
-    // Change event id and relay it forward
+    // Change event id, object and string before relaying it forward
     event.SetId(GetId());
+    wxString s = event.GetString();
+    event.SetEventObject(this);
+    event.SetString(s);
     event.Skip();
 }
 
