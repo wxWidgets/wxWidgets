@@ -652,6 +652,12 @@ public:
     // expand this item
     void Expand(const wxTreeItemId& item);
 
+    // expand the item and all its childs and thats childs
+    void ExpandAllChildren(const wxTreeItemId& item);
+
+    // expand all items
+    void ExpandAll();
+   
     // collapse the item without removing its children
     void Collapse(const wxTreeItemId& item);
 
