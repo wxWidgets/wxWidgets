@@ -10,7 +10,34 @@ Classes: \helpref{wxRichTextCtrl}{wxrichtextctrl}, \helpref{wxRichTextBuffer}{wx
 \helpref{wxRichTextFileHandler}{wxrichtextfilehandler}, \helpref{wxRichTextHTMLHandler}{wxrichtexthtmlhandler}, 
 \helpref{wxRichTextXMLHandler}{wxrichtextxmlhandler}
 
-wxRichTextCtrl provides a generic implementation of a rich text editor
+wxRichTextCtrl provides a generic implementation of a rich text editor that can handle different character
+styles, paragraph formatting, and images. It's aimed at editing 'natural' language text - if you need an editor that supports code editing,
+wxStyledTextCtrl is a better choice.
+
+Despite its name, it cannot currently read or write RTF (rich text format) files. Instead, it
+uses its own XML format, and can also read and write plain text. In future we expect to provide
+RTF file capabilities. Custom file formats can be supported by creating additional
+file handlers and registering them with the control.
+
+wxRichTextCtrl is largely compatible with the wxTextCtrl API, but extends it where necessary.
+The control can be used where the native rich text capabilities of wxTextCtrl are not
+adequate (this is particularly true on Windows) and where more direct access to
+the content representation is required. It is difficult and inefficient to read
+the style information in a wxTextCtrl, whereas this information is readily
+available in wxRichTextCtrl. Since it's written in pure wxWidgets, any customizations
+you make to wxRichTextCtrl will be reflected on all platforms.
+
+There are of course a few disadvantages to using wxRichTextCtrl. It is not native,
+so does not behave exactly as a native wxTextCtrl, although common editing conventions
+are followed. Users may miss the built-in spelling correction on Mac OS X, or any
+special character input that may be provided by the native control. It would also
+be a bad choice if intended users rely on screen readers that would be unhappy
+with non-native text input implementation. You might mitigate this by providing
+the choice between wxTextCtrl and wxRichTextCtrl, with fewer features in the
+former case.
+
+wxRichTextCtrl does not yet support printing directly, but content can be converted
+to HTML which can then be used with \helpref{wxHtmlEasyPrinting}{wxhtmleasyprinting}.
 
 The following screenshot shows the wxRichTextCtrl sample in action:
 
@@ -18,17 +45,242 @@ $$\image{8cm;0cm}{richtextctrl.gif}$$
 
 \wxheading{Example}\label{wxrichtextctrlexample}
 
-TODO
+The following code is taken from the sample, and adds text and styles to a rich text control programmatically.
 
 {\small
 \begin{verbatim}
+    wxRichTextCtrl* richTextCtrl = new wxRichTextCtrl(splitter, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS);
+
+    wxFont textFont = wxFont(12, wxROMAN, wxNORMAL, wxNORMAL);
+    wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);
+    wxFont italicFont = wxFont(12, wxROMAN, wxITALIC, wxNORMAL);
+
+    wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
+
+    m_richTextCtrl->SetFont(font);
+
+    wxRichTextCtrl& r = richTextCtrl;
+
+    r.BeginSuppressUndo();
+
+    r.BeginParagraphSpacing(0, 20);
+
+    r.BeginAlignment(wxTEXT_ALIGNMENT_CENTRE);
+    r.BeginBold();
+
+    r.BeginFontSize(14);
+    r.WriteText(wxT("Welcome to wxRichTextCtrl, a wxWidgets control for editing and presenting styled text and images"));
+    r.EndFontSize();
+    r.Newline();
+
+    r.BeginItalic();
+    r.WriteText(wxT("by Julian Smart"));
+    r.EndItalic();
+
+    r.EndBold();
+
+    r.Newline();
+    r.WriteImage(wxBitmap(zebra_xpm));
+
+    r.EndAlignment();
+
+    r.Newline();
+    r.Newline();
+
+    r.WriteText(wxT("What can you do with this thing? "));
+    r.WriteImage(wxBitmap(smiley_xpm));
+    r.WriteText(wxT(" Well, you can change text "));
+
+    r.BeginTextColour(wxColour(255, 0, 0));
+    r.WriteText(wxT("colour, like this red bit."));
+    r.EndTextColour();
+
+    r.BeginTextColour(wxColour(0, 0, 255));
+    r.WriteText(wxT(" And this blue bit."));
+    r.EndTextColour();
+
+    r.WriteText(wxT(" Naturally you can make things "));
+    r.BeginBold();
+    r.WriteText(wxT("bold "));
+    r.EndBold();
+    r.BeginItalic();
+    r.WriteText(wxT("or italic "));
+    r.EndItalic();
+    r.BeginUnderline();
+    r.WriteText(wxT("or underlined."));
+    r.EndUnderline();
+
+    r.BeginFontSize(14);
+    r.WriteText(wxT(" Different font sizes on the same line is allowed, too."));
+    r.EndFontSize();
+
+    r.WriteText(wxT(" Next we'll show an indented paragraph."));
+
+    r.BeginLeftIndent(60);
+    r.Newline();
+
+    r.WriteText(wxT("Indented paragraph."));
+    r.EndLeftIndent();
+
+    r.Newline();
+
+    r.WriteText(wxT("Next, we'll show a first-line indent, achieved using BeginLeftIndent(100, -40)."));
+
+    r.BeginLeftIndent(100, -40);
+    r.Newline();
+
+    r.WriteText(wxT("It was in January, the most down-trodden month of an Edinburgh winter."));
+    r.EndLeftIndent();
+
+    r.Newline();
+
+    r.WriteText(wxT("Numbered bullets are possible, again using subindents:"));
+
+    r.BeginNumberedBullet(1, 100, 60);
+    r.Newline();
+
+    r.WriteText(wxT("This is my first item. Note that wxRichTextCtrl doesn't automatically do numbering, but this will be added later."));
+    r.EndNumberedBullet();
+
+    r.BeginNumberedBullet(2, 100, 60);
+    r.Newline();
+
+    r.WriteText(wxT("This is my second item."));
+    r.EndNumberedBullet();
+
+    r.Newline();
+
+    r.WriteText(wxT("The following paragraph is right-indented:"));
+
+    r.BeginRightIndent(200);
+    r.Newline();
+
+    r.WriteText(wxT("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."));
+    r.EndRightIndent();
+
+    r.Newline();
+
+    wxArrayInt tabs;
+    tabs.Add(400);
+    tabs.Add(600);
+    tabs.Add(800);
+    tabs.Add(1000);
+    wxTextAttrEx attr;
+    attr.SetFlags(wxTEXT_ATTR_TABS);
+    attr.SetTabs(tabs);
+    r.SetDefaultStyle(attr);
+    
+    r.WriteText(wxT("This line contains tabs:\tFirst tab\tSecond tab\tThird tab"));
+
+    r.Newline();
+    r.WriteText(wxT("Other notable features of wxRichTextCtrl include:"));
+
+    r.BeginSymbolBullet(wxT('*'), 100, 60);
+    r.Newline();
+    r.WriteText(wxT("Compatibility with wxTextCtrl API"));
+    r.EndSymbolBullet();
+
+    r.WriteText(wxT("Note: this sample content was generated programmatically from within the MyFrame constructor in the demo. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!"));
+
+    r.EndSuppressUndo();
 \end{verbatim}
 }
 
-\wxheading{Programming with wxRichTextCtrl}
+\subsection{Programming with wxRichTextCtrl}
 
-TODO
+You need to include {\tt <wx/richtext/richtextctrl.h>} in your source, and link
+with the appropriate wxWidgets library with {\tt richtext} suffix. Put the rich text
+library first in your link line to avoid unresolved symbols.
 
-\wxheading{How wxRichTextCtrl is implemented}
+Then you can create a wxRichTextCtrl, with the wxWANT\_CHARS style if you want tabs to
+be processed by the control rather than being used for navigation between controls.
 
-TODO
+It's helpful to have a model of how styling works. Any piece of text can have its
+style changed, but there also two global notions of style. The control's {\it basic} style
+is the fundamental style for the whole control, to which other character and paragraph styles are
+applied. For example, you can change the control's overall font by either calling SetBasicStyle with
+the appropriate font style, or by calling SetFont.
+
+The {\it default} style, on the other hand, is applied to subsequently inserted
+content. You might click on a Bold formatting tool, which sets bold as one of the default
+attributes, and typing will appear in bold. Then when you select Italic, both
+bold and italic attributes are applied as you type. The default attribute
+is set with \helpref{SetDefaultStyle}{wxrichtextctrlsetdefaultstyle}.
+
+(To be finished.)
+
+\subsection{How wxRichTextCtrl is implemented}
+
+Data representation is handled by wxRichTextBuffer, and a wxRichTextCtrl
+always has one such buffer.
+
+The content is represented by a hierarchy of objects, all derived from
+wxRichTextObject. An object might be an image, a fragment of text, a paragraph,
+or a whole buffer. Objects store a wxRichTextAttr containing style information;
+although it contains both paragraph formatting and character style, the
+paragraph style information is ignored by children of a paragraph (only
+character style is relevant to these objects).
+
+The top of the hierarchy is the buffer, a kind of wxRichTextParagraphLayoutBox.
+containing further wxRichTextParagraph objects, each of which can include text and
+images.
+
+Each object maintains a range (start and end position) measured
+from the start of the main parent box.
+
+When Layout is called on an object, it is given a size which the object
+must limit itself to, or one or more flexible directions (vertical
+or horizontal). So, for example, a centered paragraph is given the page
+width to play with (minus any margins), but can extend indefinitely
+in the vertical direction. The implementation of Layout caches the calculated
+size and position.
+
+When the buffer is modified, a range is invalidated (marked as requiring
+layout), so that only the minimum amount of layout is performed.
+
+A paragraph of pure text with the same style contains just one further
+object, a wxRichTextPlainText object. When styling is applied to part of
+this object, the object is decomposed into separate objects, one object
+for each different character style. So each object within a paragraph always has
+just one wxRichTextAttr object to denote its character style. Of course, this can
+lead to fragmentation after a lot of edit operations, potentially leading
+to several objects with the same style where just one would do. So
+a Defragment function is called when updating the control's display, to ensure that
+the minimum number of objects is used.
+
+(To be finished.)
+
+\subsection{wxRichTextCtrl roadmap}
+
+\wxheading{Bugs}
+
+This is an incomplete list of bugs.
+
+\begin{itemize}
+\item Moving the caret up at the beginning of a line sometimes incorrectly positions the
+caret.
+\end{itemize}
+
+\wxheading{Features}
+
+This is a list of some of the features that have yet to be implemented. Help with them will be appreciated.
+
+\begin{itemize}
+\item Printing
+\item RTF input and output
+\item Floating images, with content wrapping around them
+\item A ruler control
+\item Standard editing toolbars
+\item Automatic list numbering
+\item Standard dialogs for paragraph/character formatting
+\item Tables
+\item Text frames
+\item Add ability to show images in wxHTML output (currently uses
+\item More complete stylesheet viewer, plus style sheet editing dialogs
+\item Ability to store style sheets with documents
+embedded images suitable only for browsers).
+\end{itemize}
+
+There are also things that could be done to take advantage of the underlying text capabilities of the platform;
+higher-level text formatting APIs are available on some platforms, such as Mac OS X, and some of translation from
+high level to low level wxDC API is unnecessary. However this would require additions to the wxWidgets API.
