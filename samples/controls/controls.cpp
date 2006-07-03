@@ -1789,11 +1789,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(const wxChar *title, int x, int y)
+       : wxFrame(NULL, wxID_ANY, title, wxPoint(x, y), wxSize(700, 450))
 {
-    // give it a context help button
-    SetExtraStyle(wxFRAME_EX_CONTEXTHELP);
-    wxFrame::Create(NULL, wxID_ANY, title, wxPoint(x, y), wxSize(500, 430),
-                    wxDEFAULT_FRAME_STYLE & ~ (wxMINIMIZE_BOX | wxMAXIMIZE_BOX));
     SetHelpText( _T("Controls sample demonstrating various widgets") );
 
     // Give it an icon
@@ -1839,8 +1836,6 @@ MyFrame::MyFrame(const wxChar *title, int x, int y)
 #endif // wxUSE_STATUSBAR
 
     m_panel = new MyPanel( this, 10, 10, 300, 100 );
-
-    SetSizeHints( 500, 425 );
 }
 
 void MyFrame::OnQuit (wxCommandEvent& WXUNUSED(event) )
