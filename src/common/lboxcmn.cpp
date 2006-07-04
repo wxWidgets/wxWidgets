@@ -75,9 +75,9 @@ void wxListBoxBase::Set(int nItems, const wxString* items, void **clientData)
 
 bool wxListBoxBase::SetStringSelection(const wxString& s, bool select)
 {
-    int sel = FindString(s);
-    wxCHECK_MSG( sel != wxNOT_FOUND, false,
-                 wxT("invalid string in SetStringSelection") );
+    const int sel = FindString(s);
+    if ( sel == wxNOT_FOUND )
+        return false;
 
     SetSelection(sel, select);
 
