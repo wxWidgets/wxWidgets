@@ -212,6 +212,8 @@ void wxRichTextCtrl::Clear()
     m_caretAtLineStart = false;
     m_selectionRange.SetRange(-2, -2);
 
+    SetScrollbars(0, 0, 0, 0, 0, 0);
+
     if (m_freezeCount == 0)
     {
         SetupScrollbars();
@@ -709,16 +711,16 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
     int ppuX, ppuY;
     GetScrollPixelsPerUnit(& ppuX, & ppuY);
 
-    int startX, startY;
-    GetViewStart(& startX, & startY);
-    startX = 0;
-    startY = startY * ppuY;
+    int startXUnits, startYUnits;
+    GetViewStart(& startXUnits, & startYUnits);
+    int startY = startYUnits * ppuY;
 
     int sx = 0, sy = 0;
     GetVirtualSize(& sx, & sy);
-    sx = 0;
+    int sxUnits = 0;
+    int syUnits = 0;
     if (ppuY != 0)
-        sy = sy/ppuY;
+        syUnits = sy/ppuY;
 
     wxRect rect = line->GetRect();
 
@@ -734,11 +736,15 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             // Make it scroll so this item is at the bottom
             // of the window
             int y = rect.y - (clientSize.y - rect.height);
-            y = (int) (0.5 + y/ppuY);
+            int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
 
-            if (startY != y)
+            // If we're still off the screen, scroll another line down
+            if ((rect.y + rect.height) > (clientSize.y + (yUnits*ppuY)))
+                yUnits ++;
+
+            if (startYUnits != yUnits)
             {
-                SetScrollbars(ppuX, ppuY, sx, sy, 0, y);
+                SetScrollbars(ppuX, ppuY, sxUnits, syUnits, 0, yUnits);
                 scrolled = true;
             }
         }
@@ -747,11 +753,11 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             // Make it scroll so this item is at the top
             // of the window
             int y = rect.y ;
-            y = (int) (0.5 + y/ppuY);
+            int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
 
-            if (startY != y)
+            if (startYUnits != yUnits)
             {
-                SetScrollbars(ppuX, ppuY, sx, sy, 0, y);
+                SetScrollbars(ppuX, ppuY, sxUnits, syUnits, 0, yUnits);
                 scrolled = true;
             }
         }
@@ -764,11 +770,11 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             // Make it scroll so this item is at the top
             // of the window
             int y = rect.y ;
-            y = (int) (0.5 + y/ppuY);
+            int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
 
-            if (startY != y)
+            if (startYUnits != yUnits)
             {
-                SetScrollbars(ppuX, ppuY, sx, sy, 0, y);
+                SetScrollbars(ppuX, ppuY, sxUnits, syUnits, 0, yUnits);
                 scrolled = true;
             }
         }
@@ -777,11 +783,15 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             // Make it scroll so this item is at the bottom
             // of the window
             int y = rect.y - (clientSize.y - rect.height);
-            y = (int) (0.5 + y/ppuY);
+            int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
 
-            if (startY != y)
+            // If we're still off the screen, scroll another line down
+            if ((rect.y + rect.height) > (clientSize.y + (yUnits*ppuY)))
+                yUnits ++;
+
+            if (startYUnits != yUnits)
             {
-                SetScrollbars(ppuX, ppuY, sx, sy, 0, y);
+                SetScrollbars(ppuX, ppuY, sxUnits, syUnits, 0, yUnits);
                 scrolled = true;
             }
         }
@@ -1439,19 +1449,20 @@ void wxRichTextCtrl::SetupScrollbars(bool atTop)
 
     // TODO: reimplement scrolling so we scroll by line, not by fixed number
     // of pixels. See e.g. wxVScrolledWindow for ideas.
-    int pixelsPerUnit = 5; // 10;
+    int pixelsPerUnit = 5;
     wxSize clientSize = GetClientSize();
 
     int maxHeight = GetBuffer().GetCachedSize().y;
 
-    int unitsY = maxHeight/pixelsPerUnit;
+    // Round up so we have at least maxHeight pixels
+    int unitsY = (int) (((float)maxHeight/(float)pixelsPerUnit) + 0.5);
 
     int startX = 0, startY = 0;
     if (!atTop)
         GetViewStart(& startX, & startY);
 
     int maxPositionX = 0; // wxMax(sz.x - clientSize.x, 0);
-    int maxPositionY = (wxMax(maxHeight - clientSize.y, 0))/pixelsPerUnit;
+    int maxPositionY = (int) ((((float)(wxMax((unitsY*pixelsPerUnit) - clientSize.y, 0)))/((float)pixelsPerUnit)) + 0.5);
 
     // Move to previous scroll position if
     // possible
