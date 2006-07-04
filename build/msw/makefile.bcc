@@ -4562,7 +4562,7 @@ $(OBJS)\monodll_socket.obj: ..\..\src\common\socket.cpp
 $(OBJS)\monodll_url.obj: ..\..\src\common\url.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
-$(OBJS)\monodll_gsocket.obj: ..\..\src\msw\gsocket.cpp
+$(OBJS)\monodll_gsocket.obj: ..\..\src\common\gsocket.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
 $(OBJS)\monodll_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
@@ -6421,7 +6421,7 @@ $(OBJS)\monolib_socket.obj: ..\..\src\common\socket.cpp
 $(OBJS)\monolib_url.obj: ..\..\src\common\url.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
-$(OBJS)\monolib_gsocket.obj: ..\..\src\msw\gsocket.cpp
+$(OBJS)\monolib_gsocket.obj: ..\..\src\common\gsocket.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
@@ -8532,7 +8532,7 @@ $(OBJS)\netdll_socket.obj: ..\..\src\common\socket.cpp
 $(OBJS)\netdll_url.obj: ..\..\src\common\url.cpp
 	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
 
-$(OBJS)\netdll_gsocket.obj: ..\..\src\msw\gsocket.cpp
+$(OBJS)\netdll_gsocket.obj: ..\..\src\common\gsocket.cpp
 	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) $**
 
 $(OBJS)\netdll_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
@@ -8571,7 +8571,7 @@ $(OBJS)\netlib_socket.obj: ..\..\src\common\socket.cpp
 $(OBJS)\netlib_url.obj: ..\..\src\common\url.cpp
 	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
 
-$(OBJS)\netlib_gsocket.obj: ..\..\src\msw\gsocket.cpp
+$(OBJS)\netlib_gsocket.obj: ..\..\src\common\gsocket.cpp
 	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) $**
 
 $(OBJS)\netlib_urlmsw.obj: ..\..\src\msw\urlmsw.cpp

@@ -4906,7 +4906,7 @@ $(OBJS)\monodll_socket.obj :  .AUTODEPEND ..\..\src\common\socket.cpp
 $(OBJS)\monodll_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
+$(OBJS)\monodll_gsocket.obj :  .AUTODEPEND ..\..\src\common\gsocket.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
@@ -6869,7 +6869,7 @@ $(OBJS)\monolib_socket.obj :  .AUTODEPEND ..\..\src\common\socket.cpp
 $(OBJS)\monolib_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
+$(OBJS)\monolib_gsocket.obj :  .AUTODEPEND ..\..\src\common\gsocket.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
@@ -9084,7 +9084,7 @@ $(OBJS)\netdll_socket.obj :  .AUTODEPEND ..\..\src\common\socket.cpp
 $(OBJS)\netdll_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
-$(OBJS)\netdll_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
+$(OBJS)\netdll_gsocket.obj :  .AUTODEPEND ..\..\src\common\gsocket.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETDLL_CXXFLAGS) $<
 
 $(OBJS)\netdll_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
@@ -9123,7 +9123,7 @@ $(OBJS)\netlib_socket.obj :  .AUTODEPEND ..\..\src\common\socket.cpp
 $(OBJS)\netlib_url.obj :  .AUTODEPEND ..\..\src\common\url.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
-$(OBJS)\netlib_gsocket.obj :  .AUTODEPEND ..\..\src\msw\gsocket.cpp
+$(OBJS)\netlib_gsocket.obj :  .AUTODEPEND ..\..\src\common\gsocket.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(NETLIB_CXXFLAGS) $<
 
 $(OBJS)\netlib_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp

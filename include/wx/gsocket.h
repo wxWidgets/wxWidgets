@@ -2,7 +2,8 @@
  * Project:     GSocket (Generic Socket)
  * Name:        gsocket.h
  * Author:      Guilhem Lavaux
- *              Guillermo Rodriguez Garcia <guille@iies.es> (maintainer)
+ *              Guillermo Rodriguez Garcia <guille@iies.es> 
+ *              Angel Vidal Veiga <kry@amule.org> (mantainer)
  * Copyright:   (c) Guilhem Lavaux
  * Licence:     wxWindows Licence
  * Purpose:     GSocket include file (system independent)
@@ -13,14 +14,13 @@
 #ifndef __GSOCKET_H
 #define __GSOCKET_H
 
-#ifndef __GSOCKET_STANDALONE__
 #include "wx/defs.h"
 
+#if wxUSE_SOCKETS
+
 #include "wx/dlimpexp.h" /* for WXDLLIMPEXP_NET */
-
-#endif
-
-#if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
+#include "wx/setup.h"
+#include "wx/gsocket.h"
 
 #include <stddef.h>
 
@@ -33,14 +33,26 @@
 #include <sys/types.h>
 #endif
 
-#ifdef __WXWINCE__
-#include <stdlib.h>
+#ifdef __WINDOWS__
+  #include "wx/msw/wrapwin.h"
+  #ifdef __WXWINCE__
+    #include <stdlib.h>
+  #endif
+  #if defined(__WXWINCE__) || defined(__CYGWIN__)
+    #include <winsock.h>
+  #endif
 #endif
 
 class GSocket;
 
-#ifdef __cplusplus
-extern "C" {
+#ifndef SOCKET
+/* Most probably any non-MSW platform */
+#define SOCKET int
+#endif
+
+#ifndef SOCKET_ERROR
+/* Most probably any non-MSW platform */
+#define SOCKET_ERROR -1
 #endif
 
 typedef struct _GAddress GAddress;
@@ -108,10 +120,8 @@ public:
     virtual bool CanUseEventLoop() = 0;
     virtual bool Init_Socket(GSocket *socket) = 0;
     virtual void Destroy_Socket(GSocket *socket) = 0;
-#ifndef __WINDOWS__
     virtual void Install_Callback(GSocket *socket, GSocketEvent event) = 0;
     virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event) = 0;
-#endif
     virtual void Enable_Events(GSocket *socket) = 0;
     virtual void Disable_Events(GSocket *socket) = 0;
 };
@@ -163,22 +173,149 @@ unsigned long GAddress_INET_GetHostAddress(GAddress *address);
 unsigned short GAddress_INET_GetPort(GAddress *address);
 
 /* TODO: Define specific parts (INET6, UNIX) */
+#warning Sorry, what? As in, WTH?
 
 GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path);
 GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
 
-# if defined(__WINDOWS__)
-#  include "wx/msw/gsockmsw.h"
-# elif defined(__WXMAC__) && !defined(__DARWIN__)
-#  include "wx/mac/gsockmac.h"
-# else
-#  include "wx/unix/gsockunx.h"
-# endif
 
-#endif    /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
+class GSocketGUIFunctionsTableConcrete: public GSocketGUIFunctionsTable
+{
+public:
+    virtual bool OnInit();
+    virtual void OnExit();
+    virtual bool CanUseEventLoop();
+    virtual bool Init_Socket(GSocket *socket);
+    virtual void Destroy_Socket(GSocket *socket);
+    virtual void Install_Callback(GSocket *socket, GSocketEvent event);
+    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event);
+    virtual void Enable_Events(GSocket *socket);
+    virtual void Disable_Events(GSocket *socket);
+};
+
+class GSocket
+{
+public:
+  GSocket();
+  virtual ~GSocket();
+
+  GSocketError WXDLLIMPEXP_NET GetError();
+
+  bool IsOk() { return m_ok; }
+
+  void Shutdown();
+
+  GSocketError Connect(GSocketStream stream);
+  GSocket *WaitConnection();
+
+  GSocketEventFlags Select(GSocketEventFlags flags);
+  int Read(char *buffer, int size);
+  int Write(const char *buffer, int size);
+
+  GSocketError SetNonOriented();
+
+  void SetNonBlocking(bool non_block);
+
+  GSocketError SetServer();
+
+  bool SetReusable();
+
+  void SetTimeout(unsigned long millisec);
+
+  GAddress *GetLocal();
+  GSocketError SetLocal(GAddress *address);
+
+  GAddress *GetPeer();
+  GSocketError SetPeer(GAddress *address);
+
+  void SetCallback(GSocketEventFlags flags,
+      GSocketCallback callback, char *cdata);
+  void UnsetCallback(GSocketEventFlags flags);
+
+
+  GSocketError GetSockOpt(int level, int optname, void *optval, int *optlen);
+  GSocketError SetSockOpt(int level, int optname,
+      const void *optval, int optlen);
+
+
+#warning Callback (gtK) specific stuff. Shouldn't this be out of this class?
+  virtual void Detected_Read();
+  virtual void Detected_Write();
+
+public:
+  #warning To be changed to accessors
+
+  SOCKET m_fd;
+  bool m_server;
+
+/* Platform-specific */
+#warning Probably to be removed?-
+#ifdef __WINDOWS__
+  int m_msgnumber;
+#else
+  char *m_gui_dependent;
+#endif
+
+private:
+
+  void Close();
+  void Enable(GSocketEvent event);
+  void Disable(GSocketEvent event);
+  bool UDPDisconnect();
+
+  GSocketError Input_Timeout();
+  GSocketError Output_Timeout();
+  GSocketError Connect_Timeout();
+  int Recv_Stream(char *buffer, int size);
+  int Recv_Dgram(char *buffer, int size);
+  int Send_Stream(const char *buffer, int size);
+  int Send_Dgram(const char *buffer, int size);
+  bool m_ok;
+
+  struct timeval m_timeout;
+
+  GAddress *m_local;
+  GAddress *m_peer;
+  GSocketError m_error;
+
+  bool m_non_blocking;
+  bool m_stream;
+  bool m_establishing;
+  bool m_reusable;
+  bool m_udpconnected;
+
+#warning - Whis is only used from the outside in MSw - FIX THIS
+public:
+  /* Callbacks */
+  GSocketEventFlags m_detected;
+  GSocketCallback m_cbacks[GSOCK_MAX_EVENT];
+  char *m_data[GSOCK_MAX_EVENT];
+
+};
+
+/* Definition of GAddress */
+struct _GAddress
+{
+  struct sockaddr *m_addr;
+  size_t m_len;
+
+  GAddressType m_family;
+  int m_realfamily;
+
+  GSocketError m_error;
+};
+
+/* GAddress */
+
+GSocketError _GAddress_translate_from(GAddress *address,
+                                      struct sockaddr *addr, int len);
+GSocketError _GAddress_translate_to  (GAddress *address,
+                                      struct sockaddr **addr, int *len);
+GSocketError _GAddress_Init_INET(GAddress *address);
+GSocketError _GAddress_Init_UNIX(GAddress *address);
+
+
+#endif  /* wxUSE_SOCKETS */
 
 #endif    /* __GSOCKET_H */

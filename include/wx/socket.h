@@ -271,8 +271,6 @@ private:
 // wxDatagramSocket
 // --------------------------------------------------------------------------
 
-// WARNING: still in alpha stage
-
 class WXDLLIMPEXP_NET wxDatagramSocket : public wxSocketBase
 {
   DECLARE_CLASS(wxDatagramSocket)
@@ -280,16 +278,18 @@ class WXDLLIMPEXP_NET wxDatagramSocket : public wxSocketBase
 public:
   wxDatagramSocket(const wxSockAddress& addr, wxSocketFlags flags = wxSOCKET_NONE);
 
-  wxDatagramSocket& RecvFrom( wxSockAddress& addr,
+    wxDEPRECATED( wxDatagramSocket& RecvFrom( wxSockAddress& addr,
                               void* buf,
-                              wxUint32 nBytes );
+                              wxUint32 nBytes ) );
+
   wxDatagramSocket& SendTo( const wxSockAddress& addr,
                             const void* buf,
                             wxUint32 nBytes );
 
-/* TODO:
   bool Connect(wxSockAddress& addr);
-*/
+
+  bool Disconnect();
+
   DECLARE_NO_COPY_CLASS(wxDatagramSocket)
 };
 

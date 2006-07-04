@@ -591,6 +591,10 @@ SOURCE=.\common\gifdecod.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\gsocket.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\hash.cpp
 # End Source File
 # Begin Source File
@@ -1432,10 +1436,6 @@ SOURCE=.\msw\gdiobj.cpp
 # Begin Source File
 
 SOURCE=.\msw\glcanvas.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\gsocket.cpp
 # End Source File
 # Begin Source File
 
@@ -3696,10 +3696,6 @@ SOURCE=..\include\wx\msw\gdiimage.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\glcanvas.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\gsockmsw.h
 # End Source File
 # Begin Source File
 

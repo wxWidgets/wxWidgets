@@ -226,7 +226,6 @@ wx/unix/private.h
 wx/unix/stackwalk.h
 wx/unix/stdpaths.h
 wx/fs_inet.h
-wx/gsocket.h
 wx/protocol/file.h
 wx/protocol/ftp.h
 wx/protocol/http.h
@@ -236,7 +235,7 @@ wx/sckipc.h
 wx/sckstrm.h
 wx/socket.h
 wx/url.h
-wx/unix/gsockunx.h
+wx/gsocket.h
 wx/xml/xml.h
 wx/xtixml.h
 wx/db.h

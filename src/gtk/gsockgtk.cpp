@@ -19,7 +19,6 @@
 #include <glib.h>
 
 #include "wx/gsocket.h"
-#include "wx/unix/gsockunx.h"
 
 
 extern "C" {

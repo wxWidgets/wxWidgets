@@ -466,6 +466,10 @@ SOURCE=..\..\src\common\ftp.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\gsocket.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\http.cpp
 # End Source File
 # Begin Source File
@@ -500,10 +504,6 @@ SOURCE=..\..\src\common\url.cpp
 # Begin Group "MSW Sources"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\src\msw\gsocket.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\src\msw\urlmsw.cpp
@@ -999,10 +999,6 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 
 !ENDIF
 
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\gsockmsw.h
 # End Source File
 # End Group
 # Begin Group "Common Headers"

@@ -464,6 +464,20 @@ void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
   }
 }
 
+/*
+ * Callbacks. Unused on MSW.
+ */
+
+void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket, GSocketEvent event)
+{
+   // Nothing to see, move on.
+}
+
+void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket, GSocketEvent event)
+{
+   // Nothing to see, move on.
+}
+
 #else /* !wxUSE_SOCKETS */
 
 /*

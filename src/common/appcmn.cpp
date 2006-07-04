@@ -581,32 +581,12 @@ void wxGUIAppTraitsBase::RemoveFromPendingDelete(wxObject *object)
 
 #if wxUSE_SOCKETS
 
-#if defined(__WINDOWS__)
-    #include "wx/msw/gsockmsw.h"
-#elif defined(__UNIX__) || defined(__DARWIN__) || defined(__OS2__)
-    #include "wx/unix/gsockunx.h"
-#elif defined(__WXMAC__)
-    #include <MacHeaders.c>
-    #define OTUNIXERRORS 1
-    #include <OpenTransport.h>
-    #include <OpenTransportProviders.h>
-    #include <OpenTptInternet.h>
-
-    #include "wx/mac/gsockmac.h"
-#else
-    #error "Must include correct GSocket header here"
-#endif
+#include "wx/gsocket.h"
 
 GSocketGUIFunctionsTable* wxGUIAppTraitsBase::GetSocketGUIFunctionsTable()
 {
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-    // NB: wxMac CFM does not have any GUI-specific functions in gsocket.c and
-    //     so it doesn't need this table at all
-    return NULL;
-#else // !__WXMAC__ || __DARWIN__
     static GSocketGUIFunctionsTableConcrete table;
     return &table;
-#endif // !__WXMAC__ || __DARWIN__
 }
 
 #endif

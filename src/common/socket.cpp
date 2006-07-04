@@ -1371,20 +1371,60 @@ wxDatagramSocket& wxDatagramSocket::RecvFrom( wxSockAddress& addr,
                                               void* buf,
                                               wxUint32 nBytes )
 {
-    Read(buf, nBytes);
-    GetPeer(addr);
-    return (*this);
+  wxCHECK_MSG( m_socket, (*this), _T("Socket not initialised") );
+  if (m_connected)
+  {
+    // This is a Connected socket. We have to fail if the addr is different.
+    #warning This will be cleaned when GAddress becomes a class.
+    GAddress* gsock_addr = m_socket->GetPeer();
+    GAddress* dest_addr = addr.GetAddress();
+    bool matches = (GAddress_INET_GetHostAddress(gsock_addr) == GAddress_INET_GetHostAddress(dest_addr))
+                   && (GAddress_INET_GetPort(gsock_addr) == GAddress_INET_GetPort(dest_addr));    
+    wxCHECK_MSG( matches, (*this), _T("Attempt to send to a different destination address on a connected wxDatagramSocket - use Read(buf, nBytes) instead."));
+  }
+
+  Read(buf, nBytes);
+  GetPeer(addr);
+  return (*this);
 }
 
 wxDatagramSocket& wxDatagramSocket::SendTo( const wxSockAddress& addr,
                                             const void* buf,
                                             wxUint32 nBytes )
 {
-    wxASSERT_MSG( m_socket, _T("Socket not initialised") );
+  wxCHECK_MSG( m_socket, (*this), _T("Socket not initialised") );
 
-    m_socket->SetPeer(addr.GetAddress());
-    Write(buf, nBytes);
-    return (*this);
+  if (m_connected)
+  {
+    // This is a Connected socket. We have to fail if the addr is different.
+    #warning This will be cleaned when GAddress becomes a class.
+    GAddress* gsock_addr = m_socket->GetPeer();
+    GAddress* dest_addr = addr.GetAddress();
+    bool matches = (GAddress_INET_GetHostAddress(gsock_addr) == GAddress_INET_GetHostAddress(dest_addr))
+                   && (GAddress_INET_GetPort(gsock_addr) == GAddress_INET_GetPort(dest_addr));
+    wxCHECK_MSG( matches, (*this), _T("Attempt to send to a different destination address on a connected wxDatagramSocket - use Write(buf, nBytes) instead."));
+  }
+
+  m_socket->SetPeer(addr.GetAddress());
+  Write(buf, nBytes);
+  return (*this);
+}
+
+bool wxDatagramSocket::Connect(wxSockAddress& addr)
+{
+  wxCHECK_MSG( m_socket, false, _T("Socket not initialised") );
+
+  m_socket->SetPeer(addr.GetAddress());
+  int err = m_socket->Connect(GSOCK_UNSTREAMED);
+
+  if (err != GSOCK_NOERROR)
+  {
+    return false;
+  }
+
+  m_connected = true;
+
+  return true;
 }
 
 // ==========================================================================

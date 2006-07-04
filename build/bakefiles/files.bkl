@@ -468,18 +468,18 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="NET_UNIX_SRC" hints="files">
-    src/unix/gsocket.cpp
+    src/common/gsocket.cpp
 </set>
 <set var="NET_UNIX_HDR" hints="files">
-    wx/unix/gsockunx.h
+    wx/gsocket.h
 </set>
 
 <set var="NET_WIN32_SRC" hints="files">
-    src/msw/gsocket.cpp
+    src/common/gsocket.cpp
     src/msw/urlmsw.cpp
 </set>
 <set var="NET_WIN32_HDR" hints="files">
-    wx/msw/gsockmsw.h
+    wx/gsocket.h
 </set>
 
 <set var="NET_WINCE_SRC" hints="files">
@@ -490,10 +490,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="NET_OS2_SRC" hints="files">
-    src/unix/gsocket.cpp
+    src/common/gsocket.cpp
 </set>
 <set var="NET_OS2_HDR" hints="files">
-    wx/unix/gsockunx.h
+    wx/gsocket.h
 </set>
 <!-- Net files used only by CarbonLib (not Classic or OS X) -->
 <set var="NET_MAC_CARBONLIB_SRC" hints="files">
@@ -517,7 +517,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="NET_CMN_HDR" hints="files">
     wx/fs_inet.h
-    wx/gsocket.h
     wx/protocol/file.h
     wx/protocol/ftp.h
     wx/protocol/http.h
