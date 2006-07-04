@@ -32,15 +32,19 @@
 #ifndef WX_PRECOMP
 #endif
 
+IMPLEMENT_CLASS( wxFloatingPane, wxFloatingPaneBaseClass )
+
 wxFloatingPane::wxFloatingPane(wxWindow* parent,
                 wxFrameManager* owner_mgr,
-                wxWindowID id /*= wxID_ANY*/,
-                const wxPoint& pos /*= wxDefaultPosition*/,
-                const wxSize& size /*= wxDefaultSize*/)
-                : wxFloatingPaneBaseClass(parent, id, wxEmptyString, pos, size,
+                const wxPaneInfo& pane,
+                wxWindowID id /*= wxID_ANY*/)
+                : wxFloatingPaneBaseClass(parent, id, wxEmptyString,
+                        pane.floating_pos, pane.floating_size,
                         wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
                         wxCLOSE_BOX | wxFRAME_NO_TASKBAR |
-                        wxFRAME_FLOAT_ON_PARENT | wxCLIP_CHILDREN)
+                        wxFRAME_FLOAT_ON_PARENT | wxCLIP_CHILDREN |
+                        (pane.IsFixed()?0:wxRESIZE_BORDER)
+                        )
 {
     m_owner_mgr = owner_mgr;
     m_moving = false;
@@ -79,9 +83,6 @@ void wxFloatingPane::SetPaneWindow(const wxPaneInfo& pane)
     }
 
     SetTitle(pane.caption);
-
-    if (contained_pane.IsFixed())
-        SetWindowStyle(GetWindowStyle() & ~wxRESIZE_BORDER);
 
     if (pane.floating_size != wxDefaultSize)
     {

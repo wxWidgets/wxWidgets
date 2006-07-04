@@ -1782,9 +1782,8 @@ void wxFrameManager::Update()
                 // we need to create a frame for this
                 // pane, which has recently been floated
                 wxFloatingPane* frame = new wxFloatingPane(m_frame,
-                                                  this, -1,
-                                                  p.floating_pos,
-                                                  p.floating_size);
+                                                  this,
+                                                  p);
 
                 // on MSW, if the owner desires transparent dragging, and
                 // the dragging is happening right now, then the floating

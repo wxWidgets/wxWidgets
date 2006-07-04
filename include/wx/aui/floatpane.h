@@ -34,9 +34,9 @@ class WXDLLIMPEXP_AUI wxFloatingPane : public wxFloatingPaneBaseClass
 public:
     wxFloatingPane(wxWindow* parent,
                    wxFrameManager* owner_mgr,
-                   wxWindowID id = wxID_ANY,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize);
+                   const wxPaneInfo& pane,
+                   wxWindowID id = wxID_ANY
+                   );
     ~wxFloatingPane();
     void SetPaneWindow(const wxPaneInfo& pane);
 private:
@@ -59,6 +59,8 @@ private:
     wxFrameManager m_mgr;
 
     DECLARE_EVENT_TABLE()
+
+    DECLARE_CLASS(wxFloatingPaneBaseClass)
 };
 
 #endif // wxUSE_AUI
