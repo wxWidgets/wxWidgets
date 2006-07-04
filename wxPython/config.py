@@ -568,7 +568,7 @@ def adjustCFLAGS(cflags, defines, includes):
 
 
 
-def adjustLFLAGS(lfags, libdirs, libs):
+def adjustLFLAGS(lflags, libdirs, libs):
     '''Extract the -L and -l flags and put them in libdirs and libs as needed'''
     newLFLAGS = []
     for flag in lflags:
