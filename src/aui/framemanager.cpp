@@ -3486,8 +3486,20 @@ void wxFrameManager::OnPaneButton(wxFrameManagerEvent& event)
 
     if (event.button == wxPaneInfo::buttonClose)
     {
-        pane.Hide();
-        Update();
+        if (pane.IsOk())
+        {
+            wxWindow * pane_window = pane.window;
+            wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+            cancelEvent.SetEventObject( pane_window );
+            pane_window->GetEventHandler()->ProcessEvent(cancelEvent);
+
+            // The problem here is that the above can cause the window itself to be destroyed
+            if (!pane_window->IsBeingDeleted() && pane.IsOk())
+            {
+                pane.Hide();
+                Update();
+            }
+        }
     }
     else if (event.button == wxPaneInfo::buttonPin)
     {
