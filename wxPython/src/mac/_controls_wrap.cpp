@@ -36276,6 +36276,74 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_TreeCtrl_ExpandAllChildren(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
+  wxTreeItemId *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeCtrl_ExpandAllChildren",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeCtrl_ExpandAllChildren" "', expected argument " "1"" of type '" "wxPyTreeCtrl *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeCtrl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeCtrl_ExpandAllChildren" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeCtrl_ExpandAllChildren" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->ExpandAllChildren((wxTreeItemId const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeCtrl_ExpandAll(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyTreeCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeCtrl_ExpandAll" "', expected argument " "1"" of type '" "wxPyTreeCtrl *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeCtrl * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->ExpandAll();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_TreeCtrl_Collapse(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
@@ -45769,6 +45837,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TreeCtrl_DeleteChildren", (PyCFunction) _wrap_TreeCtrl_DeleteChildren, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_DeleteAllItems", (PyCFunction)_wrap_TreeCtrl_DeleteAllItems, METH_O, NULL},
 	 { (char *)"TreeCtrl_Expand", (PyCFunction) _wrap_TreeCtrl_Expand, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeCtrl_ExpandAllChildren", (PyCFunction) _wrap_TreeCtrl_ExpandAllChildren, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeCtrl_ExpandAll", (PyCFunction)_wrap_TreeCtrl_ExpandAll, METH_O, NULL},
 	 { (char *)"TreeCtrl_Collapse", (PyCFunction) _wrap_TreeCtrl_Collapse, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_CollapseAndReset", (PyCFunction) _wrap_TreeCtrl_CollapseAndReset, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_Toggle", (PyCFunction) _wrap_TreeCtrl_Toggle, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -48323,11 +48393,11 @@ extern "C" {
     swig_type_info **types_initial) {
     size_t i;
     for (i = 0; methods[i].ml_name; ++i) {
-      char *c = methods[i].ml_doc;
+      const char *c = methods[i].ml_doc;
       if (c && (c = strstr(c, "swig_ptr: "))) {
         int j;
         swig_const_info *ci = 0;
-        char *name = c + 10;
+        const char *name = c + 10;
         for (j = 0; const_table[j].type; ++j) {
           if (strncmp(const_table[j].name, name, 
               strlen(const_table[j].name)) == 0) {
