@@ -417,7 +417,11 @@ void wxNativeFontInfo::Init()
 
     // we get better font quality if we use this instead of DEFAULT_QUALITY
     // apparently without any drawbacks
+#ifdef __WXWINCE__
+    lf.lfQuality = CLEARTYPE_QUALITY;
+#else
     lf.lfQuality = PROOF_QUALITY;
+#endif
 }
 
 int wxNativeFontInfo::GetPointSize() const

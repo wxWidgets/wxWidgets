@@ -100,7 +100,13 @@ static void MakeWindowTransparent(wxWindow* wnd, int amount)
     if (!pSetLayeredWindowAttributes)
     {
         pSetLayeredWindowAttributes =
-         (PSETLAYEREDWINDOWATTR)GetProcAddress(h,"SetLayeredWindowAttributes");
+         (PSETLAYEREDWINDOWATTR)GetProcAddress(h,
+#ifdef __WXWINCE__
+                                                 wxT("SetLayeredWindowAttributes")
+#else
+                                                 "SetLayeredWindowAttributes"
+#endif
+                                               );
     }
 
     if (pSetLayeredWindowAttributes == NULL)
@@ -579,7 +585,11 @@ bool wxFrameManager::AddPane(wxWindow* window, const wxPaneInfo& pane_info)
         pinfo.name.Printf(wxT("%08lx%08x%08x%08lx"),
              ((unsigned long)pinfo.window) & 0xffffffff,
              (unsigned int)time(NULL),
+#ifdef __WXWINCE__
+             (unsigned int)GetTickCount(),
+#else
              (unsigned int)clock(),
+#endif
              (unsigned long)m_panes.GetCount());
     }
 
