@@ -1984,7 +1984,6 @@ void TexInitialize(int bufSize)
 #ifdef __UNIX__
   TexPathList.AddEnvList(_T("TEXINPUTS"));
 #endif
-  TexPathList.Add(_T("."));
   int i;
   for (i = 0; i < 15; i++)
   {
