@@ -1556,6 +1556,8 @@ void wxHtmlWindow::SetHTMLStatusText(const wxString& text)
 #if wxUSE_STATUSBAR
     if (m_RelatedStatusBar != -1)
         m_RelatedFrame->SetStatusText(text, m_RelatedStatusBar);
+#else
+    wxUnusedVar(text);
 #endif // wxUSE_STATUSBAR
 }
 
