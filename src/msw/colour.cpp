@@ -54,7 +54,7 @@ wxBEGIN_PROPERTIES_TABLE(wxColour)
     wxREADONLY_PROPERTY( Blue, unsigned char, Blue, EMPTY_MACROVALUE , 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
-wxCONSTRUCTOR_3( wxColour, unsigned char, Red, unsigned char, Green, unsigned char, Blue )
+wxDIRECT_CONSTRUCTOR_3( wxColour, unsigned char, Red, unsigned char, Green, unsigned char, Blue )
 
 wxBEGIN_HANDLERS_TABLE(wxColour)
 wxEND_HANDLERS_TABLE()
