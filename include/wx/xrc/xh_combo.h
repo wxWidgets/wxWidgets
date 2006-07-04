@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_combo.h
+// Name:        wx/xrc/xh_combo.h
 // Purpose:     XML resource handler for wxComboBox
 // Author:      Bob Mitchell
 // Created:     2000/03/21

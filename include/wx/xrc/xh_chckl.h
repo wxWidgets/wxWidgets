@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_chckl.h
+// Name:        wx/xrc/xh_chckl.h
 // Purpose:     XML resource handler for wxCheckListBox
 // Author:      Bob Mitchell
 // Created:     2000/03/21
@@ -11,9 +11,11 @@
 #ifndef _WX_XH_CHCKL_H_
 #define _WX_XH_CHCKL_H_
 
-#include "wx/xrc/xmlres.h"
+#include "wx/defs.h"
 
-#if wxUSE_CHECKLISTBOX
+#if wxUSE_XRC && wxUSE_CHECKLISTBOX
+
+#include "wx/xrc/xmlres.h"
 
 class WXDLLIMPEXP_XRC wxCheckListBoxXmlHandler : public wxXmlResourceHandler
 {
@@ -27,6 +29,6 @@ private:
     wxArrayString strList;
 };
 
-#endif
+#endif // wxUSE_XRC && wxUSE_CHECKLISTBOX
 
 #endif // _WX_XH_CHECKLIST_H_

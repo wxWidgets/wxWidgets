@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_treebk.h
+// Name:        wx/xrc/xh_treebk.h
 // Purpose:     XML resource handler for wxTreebook
 // Author:      Evgeniy Tarassov
 // Created:     2005/09/28
@@ -81,4 +81,3 @@ private:
 #endif // wxUSE_TREEBOOK
 
 #endif // _WX_XH_TREEBK_H_
-

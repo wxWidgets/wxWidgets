@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_radbt.h
+// Name:        wx/xrc/xh_radbt.h
 // Purpose:     XML resource handler for radio buttons
 // Author:      Bob Mitchell
 // Created:     2000/03/21

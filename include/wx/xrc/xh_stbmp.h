@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_stbmp.h
+// Name:        wx/xrc/xh_stbmp.h
 // Purpose:     XML resource handler for wxStaticBitmap
 // Author:      Vaclav Slavik
 // Created:     2000/04/22

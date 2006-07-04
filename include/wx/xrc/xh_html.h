@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_html.h
+// Name:        wx/xrc/xh_html.h
 // Purpose:     XML resource handler for wxHtmlWindow
 // Author:      Bob Mitchell
 // Created:     2000/03/21

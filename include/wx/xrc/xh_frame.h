@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_frame.h
+// Name:        wx/xrc/xh_frame.h
 // Purpose:     XML resource handler for dialogs
 // Author:      Vaclav Slavik & Aleks.
 // Created:     2000/03/05

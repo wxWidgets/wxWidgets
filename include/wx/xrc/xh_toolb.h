@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_toolb.h
+// Name:        wx/xrc/xh_toolb.h
 // Purpose:     XML resource handler for wxBoxSizer
 // Author:      Vaclav Slavik
 // Created:     2000/08/11

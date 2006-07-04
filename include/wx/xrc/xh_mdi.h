@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_mdi.h
+// Name:        wx/xrc/xh_mdi.h
 // Purpose:     XML resource handler for dialogs
 // Author:      David M. Falkinder & Vaclav Slavik
 // Created:     14/02/2005

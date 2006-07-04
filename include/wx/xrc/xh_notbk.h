@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_notbk.h
+// Name:        wx/xrc/xh_notbk.h
 // Purpose:     XML resource handler for wxNotebook
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$

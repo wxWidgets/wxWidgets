@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_clrpicker.cpp
+// Name:        wx/xrc/xh_clrpicker.cpp
 // Purpose:     XML resource handler for wxColourPickerCtrl
 // Author:      Francesco Montorsi
 // Created:     2006-04-17

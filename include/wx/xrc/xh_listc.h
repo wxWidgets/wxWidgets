@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_listc.h
+// Name:        wx/xrc/xh_listc.h
 // Purpose:     XML resource handler for wxCalendarCtrl
 // Author:      Brian Gavin
 // Created:     2000/09/09

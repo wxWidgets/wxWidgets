@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_menu.h
+// Name:        wx/xrc/xh_menu.h
 // Purpose:     XML resource handler for menus/menubars
 // Author:      Vaclav Slavik
 // Created:     2000/03/05

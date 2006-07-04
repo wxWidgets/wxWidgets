@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_spin.h
+// Name:        wx/xrc/xh_spin.h
 // Purpose:     XML resource handler for wxSpinButton
 // Author:      Bob Mitchell
 // Created:     2000/03/21

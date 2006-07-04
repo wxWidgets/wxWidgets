@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xmlres.h
+// Name:        wx/xrc/xmlres.h
 // Purpose:     XML resources
 // Author:      Vaclav Slavik
 // Created:     2000/03/05

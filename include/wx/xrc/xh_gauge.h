@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_gauge.h
+// Name:        wx/xrc/xh_gauge.h
 // Purpose:     XML resource handler for wxGauge
 // Author:      Bob Mitchell
 // Created:     2000/03/21

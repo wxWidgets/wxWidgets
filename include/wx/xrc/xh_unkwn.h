@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_unkwn.h
+// Name:        wx/xrc/xh_unkwn.h
 // Purpose:     XML resource handler for unkown widget
 // Author:      Vaclav Slavik
 // Created:     2000/03/05

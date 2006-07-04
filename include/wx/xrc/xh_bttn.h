@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_bttn.h
+// Name:        wx/xrc/xh_bttn.h
 // Purpose:     XML resource handler for buttons
 // Author:      Vaclav Slavik
 // Created:     2000/03/05

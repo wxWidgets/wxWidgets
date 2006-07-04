@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_dlg.h
+// Name:        wx/xrc/xh_dlg.h
 // Purpose:     XML resource handler for dialogs
 // Author:      Vaclav Slavik
 // Created:     2000/03/05

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_listbk.h
+// Name:        wx/xrc/xh_listbk.h
 // Purpose:     XML resource handler for wxListbook
 // Author:      Vaclav Slavik
 // Copyright:   (c) 2000 Vaclav Slavik

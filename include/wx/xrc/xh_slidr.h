@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_slidr.h
+// Name:        wx/xrc/xh_slidr.h
 // Purpose:     XML resource handler for wxSlider
 // Author:      Bob Mitchell
 // Created:     2000/03/21

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_choicbk.h
+// Name:        wx/xrc/xh_choicbk.h
 // Purpose:     XML resource handler for wxChoicebook
 // Author:      Vaclav Slavik
 // Copyright:   (c) 2000 Vaclav Slavik
@@ -9,9 +9,11 @@
 #ifndef _WX_XH_CHOICEBK_H_
 #define _WX_XH_CHOICEBK_H_
 
-#include "wx/xrc/xmlres.h"
+#include "wx/defs.h"
 
-#if wxUSE_CHOICEBOOK
+#if wxUSE_XRC && wxUSE_CHOICEBOOK
+
+#include "wx/xrc/xmlres.h"
 
 class WXDLLEXPORT wxChoicebook;
 
@@ -28,6 +30,6 @@ private:
     wxChoicebook *m_choicebook;
 };
 
-#endif
+#endif // wxUSE_XRC && wxUSE_CHOICEBOOK
 
 #endif // _WX_XH_CHOICEBK_H_

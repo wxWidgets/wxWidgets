@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_panel.h
+// Name:        wx/xrc/xh_panel.h
 // Purpose:     XML resource handler for panels
 // Author:      Vaclav Slavik
 // Created:     2000/03/05

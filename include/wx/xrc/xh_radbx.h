@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_radbx.h
+// Name:        wx/xrc/xh_radbx.h
 // Purpose:     XML resource handler for radio box
 // Author:      Bob Mitchell
 // Created:     2000/03/21
@@ -31,7 +31,7 @@ private:
     // the items tooltips
     wxArrayString tooltips;
 
-	// the item help text
+    // the item help text
     wxArrayString helptexts;
     wxArrayInt    helptextSpecified;
 };

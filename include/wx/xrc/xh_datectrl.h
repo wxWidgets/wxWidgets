@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_datectrl.h
+// Name:        wx/xrc/xh_datectrl.h
 // Purpose:     XML resource handler for wxDatePickerCtrl
 // Author:      Vaclav Slavik
 // Created:     2005-02-07

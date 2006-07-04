@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_bmp.h
+// Name:        wx/xrc/xh_bmp.h
 // Purpose:     XML resource handler for wxBitmap and wxIcon
 // Author:      Vaclav Slavik
 // Created:     2000/09/00

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_sttxt.h
+// Name:        wx/xrc/xh_sttxt.h
 // Purpose:     XML resource handler for wxStaticBitmap
 // Author:      Bob Mitchell
 // Created:     2000/03/21

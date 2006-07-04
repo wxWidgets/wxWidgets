@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_text.h
+// Name:        wx/xrc/xh_text.h
 // Purpose:     XML resource handler for wxTextCtrl
 // Author:      Aleksandras Gluchovas
 // Created:     2000/03/21

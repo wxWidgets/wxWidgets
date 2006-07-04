@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_tree.h
+// Name:        wx/xrc/xh_tree.h
 // Purpose:     XML resource handler for wxTreeCtrl
 // Author:      Brian Gavin
 // Created:     2000/09/09

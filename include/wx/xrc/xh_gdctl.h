@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_gdctl.h
+// Name:        wx/xrc/xh_gdctl.h
 // Purpose:     XML resource handler for wxGenericDirCtrl
 // Author:      Markus Greither
 // Created:     2002/01/20

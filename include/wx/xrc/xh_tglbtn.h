@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_tglbtn.h
+// Name:        wx/xrc/xh_tglbtn.h
 // Purpose:     XML resource handler for wxToggleButton
 // Author:      Julian Smart
 // Created:     2004-08-30
@@ -29,4 +29,3 @@ public:
 
 
 #endif // _WX_XH_TGLBTN_H_
-

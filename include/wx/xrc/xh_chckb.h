@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_chckb.h
+// Name:        wx/xrc/xh_chckb.h
 // Purpose:     XML resource handler for wxCheckBox
 // Author:      Bob Mitchell
 // Created:     2000/03/21
@@ -11,10 +11,11 @@
 #ifndef _WX_XH_CHCKB_H_
 #define _WX_XH_CHCKB_H_
 
-#include "wx/xrc/xmlres.h"
 #include "wx/defs.h"
 
-#if wxUSE_CHECKBOX
+#if wxUSE_XRC && wxUSE_CHECKBOX
+
+#include "wx/xrc/xmlres.h"
 
 class WXDLLIMPEXP_XRC wxCheckBoxXmlHandler : public wxXmlResourceHandler
 {
@@ -25,8 +26,7 @@ public:
     virtual bool CanHandle(wxXmlNode *node);
 };
 
-#endif
-
+#endif // wxUSE_XRC && wxUSE_CHECKBOX
 
 #endif // _WX_XH_CHECKBOX_H_
 

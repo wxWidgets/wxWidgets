@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_wizrd.h
+// Name:        wx/xrc/xh_wizrd.h
 // Purpose:     XML resource handler for wxWizard
 // Author:      Vaclav Slavik
 // Created:     2003/03/02

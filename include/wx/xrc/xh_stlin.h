@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_stlin.h
+// Name:        wx/xrc/xh_stlin.h
 // Purpose:     XML resource handler for wxStaticLine
 // Author:      Vaclav Slavik
 // Created:     2000/09/00

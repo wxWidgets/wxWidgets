@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_scwin.h
+// Name:        wx/xrc/xh_scwin.h
 // Purpose:     XML resource handler for wxScrolledWindow
 // Author:      Vaclav Slavik
 // Created:     2002/10/18

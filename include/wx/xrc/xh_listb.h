@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_listb.h
+// Name:        wx/xrc/xh_listb.h
 // Purpose:     XML resource handler for wxListbox
 // Author:      Bob Mitchell & Vaclav Slavik
 // Created:     2000/07/29

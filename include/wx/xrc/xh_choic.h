@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_choic.h
+// Name:        wx/xrc/xh_choic.h
 // Purpose:     XML resource handler for wxChoice
 // Author:      Bob Mitchell
 // Created:     2000/03/21
@@ -10,6 +10,10 @@
 
 #ifndef _WX_XH_CHOIC_H_
 #define _WX_XH_CHOIC_H_
+
+#include "wx/defs.h"
+
+#if wxUSE_XRC && wxUSE_CHOICE
 
 #include "wx/xrc/xmlres.h"
 
@@ -25,5 +29,6 @@ private:
     wxArrayString strList;
 };
 
+#endif // wxUSE_XRC && wxUSE_CHOICE
 
 #endif // _WX_XH_CHOIC_H_

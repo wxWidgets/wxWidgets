@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_scrol.h
+// Name:        wx/xrc/xh_scrol.h
 // Purpose:     XML resource handler for wxScrollBar
 // Author:      Brian Gavin
 // Created:     2000/09/09

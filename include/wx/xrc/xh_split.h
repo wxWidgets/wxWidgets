@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        xh_split.h
+// Name:        wx/xrc/xh_split.h
 // Purpose:     XRC resource for wxSplitterWindow
 // Author:      panga@freemail.hu, Vaclav Slavik
 // Created:     2003/01/26
