@@ -114,8 +114,26 @@ void wxFloatingPane::OnSize(wxSizeEvent& event)
 
 void wxFloatingPane::OnClose(wxCloseEvent& WXUNUSED(event))
 {
-    m_owner_mgr->OnFloatingPaneClosed(m_pane_window);
-    Destroy();
+    static wxList s_closing;
+
+    if (!s_closing.Member(this))
+    {
+        s_closing.Append(this);
+
+        wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+        cancelEvent.SetEventObject( m_pane_window );
+        m_pane_window->GetEventHandler()->ProcessEvent(cancelEvent);
+        s_closing.DeleteObject(this);
+        // we should really return here without doing anything if the close was vetoed
+    }
+
+    // The problem here is that the above can cause the window itself to be destroyed
+    if (!IsBeingDeleted() && m_pane_window && !m_pane_window->IsBeingDeleted()
+        && (m_pane_window->GetParent()==this))
+    {
+        m_owner_mgr->OnFloatingPaneClosed(m_pane_window);
+        Destroy();
+    }
 }
 
 void wxFloatingPane::OnMoveEvent(wxMoveEvent& event)
