@@ -5236,6 +5236,14 @@ class TreeCtrl(_core.Control):
         """Expand(self, TreeItemId item)"""
         return _controls_.TreeCtrl_Expand(*args, **kwargs)
 
+    def ExpandAllChildren(*args, **kwargs):
+        """ExpandAllChildren(self, TreeItemId item)"""
+        return _controls_.TreeCtrl_ExpandAllChildren(*args, **kwargs)
+
+    def ExpandAll(*args, **kwargs):
+        """ExpandAll(self)"""
+        return _controls_.TreeCtrl_ExpandAll(*args, **kwargs)
+
     def Collapse(*args, **kwargs):
         """Collapse(self, TreeItemId item)"""
         return _controls_.TreeCtrl_Collapse(*args, **kwargs)

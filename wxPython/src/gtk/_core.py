@@ -9563,7 +9563,7 @@ class Window(EvtHandler):
             self._setCallbackInfo(self, self.__class__)
 
     def SendSizeEvent(self):
-        self.GetEventhandler().ProcessEvent(wx.SizeEvent((-1,-1)))
+        self.GetEventHandler().ProcessEvent(wx.SizeEvent((-1,-1)))
 
 _core_.Window_swigregister(Window)
 

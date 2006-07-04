@@ -54,7 +54,6 @@ def _swig_setattr_nondynamic_method(set):
 USE_TEXTATTREX = _richtext.USE_TEXTATTREX
 import _windows
 import _core
-import _gdi
 wx = _core 
 __docfilter__ = wx.__DocFilter(globals()) 
 RE_READONLY = _richtext.RE_READONLY
@@ -260,7 +259,7 @@ class RichTextAttr(object):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, Colour colText=NullColour, Colour colBack=NullColour, 
+        __init__(self, Colour colText=wxNullColour, Colour colBack=wxNullColour, 
             int alignment=TEXT_ALIGNMENT_DEFAULT) -> RichTextAttr
 
         The RichTextAttr class stored information about the various attributes
