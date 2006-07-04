@@ -3507,7 +3507,7 @@ static wxCSConv wxConvLocalObj(wxFONTENCODING_SYSTEM);
 static wxCSConv wxConvISO8859_1Obj(wxFONTENCODING_ISO8859_1);
 static wxMBConvUTF7 wxConvUTF7Obj;
 static wxMBConvUTF8 wxConvUTF8Obj;
-#ifdef __WXOSX__
+#if defined(__WXMAC__) && defined(TARGET_CARBON)
 static wxMBConv_macUTF8D wxConvMacUTF8DObj;
 #endif
 WXDLLIMPEXP_DATA_BASE(wxMBConv&) wxConvLibc = wxConvLibcObj;
@@ -3519,7 +3519,11 @@ WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = &wxConvLibcObj;
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI = &wxConvLocal;
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName = &
 #ifdef __WXOSX__
+#if defined(__WXMAC__) && defined(TARGET_CARBON)
                                     wxConvMacUTF8DObj;
+#else
+                                    wxConvUTF8Obj;
+#endif
 #else
                                     wxConvLibcObj;
 #endif
