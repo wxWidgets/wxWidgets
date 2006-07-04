@@ -2790,8 +2790,7 @@ void wxFrameManager::OnFloatingPaneActivated(wxWindow* wnd)
     if (GetFlags() & wxAUI_MGR_ALLOW_ACTIVE_PANE)
     {
         // try to find the pane
-        wxPaneInfo& pane = GetPane(wnd);
-        wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
+        wxASSERT_MSG(GetPane(wnd).IsOk(), wxT("Pane window not found"));
 
         SetActivePane(m_panes, wnd);
         Repaint();
