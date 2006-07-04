@@ -826,7 +826,7 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
             break;
 
         case GDK_KP_Next: // == GDK_KP_Page_Down
-            key_code = isChar ? WXK_NEXT : WXK_NUMPAD_PAGEDOWN;
+            key_code = isChar ? WXK_PAGEDOWN : WXK_NUMPAD_PAGEDOWN;
             break;
 
         case GDK_KP_End:
