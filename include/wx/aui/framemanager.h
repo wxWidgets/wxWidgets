@@ -397,7 +397,7 @@ public:
 
     void Update();
 
-private:
+protected:
 
     void DrawHintRect(wxWindow* pane_window,
                        const wxPoint& pt,
@@ -446,11 +446,10 @@ private:
     void GetPanePositionsAndSizes(wxDockInfo& dock,
                               wxArrayInt& positions,
                               wxArrayInt& sizes);
-    void ShowHint(const wxRect& rect);
-    void HideHint();
-    void RemoveHint();
+    virtual void ShowHint(const wxRect& rect);
+    virtual void HideHint();
 
-private:
+protected:
 
     // events
     void OnPaint(wxPaintEvent& event);
@@ -465,7 +464,7 @@ private:
     void OnChildFocus(wxChildFocusEvent& event);
     void OnHintFadeTimer(wxTimerEvent& event);
 
-private:
+protected:
 
     enum
     {
@@ -477,7 +476,7 @@ private:
         actionDragFloatingPane
     };
 
-private:
+protected:
 
     wxFrame* m_frame;            // the frame being managed
     wxDockArt* m_art;            // dock art object which does all drawing
