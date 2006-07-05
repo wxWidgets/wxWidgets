@@ -186,6 +186,13 @@ typedef PyGILState_STATE wxPyBlock_t;
 #endif
 
 
+// Python 2.5 changes the type of some API parameter and return types.  Using
+// this typedef for versions < 2.5 will help with the transition...
+#if PY_VERSION_HEX < 0x02050000
+typedef int Py_ssize_t;
+#endif
+
+
 #ifndef wxPyUSE_EXPORTED_API
 
 // For Python --> C++

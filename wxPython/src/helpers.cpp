@@ -1878,7 +1878,7 @@ wxString* wxString_in_helper(PyObject* source) {
         str = PyObject_Str(source);
         if (PyErr_Occurred()) return NULL;
     }
-    char* tmpPtr; int tmpSize;
+    char* tmpPtr; Py_ssize_t tmpSize;
     PyString_AsStringAndSize(str, &tmpPtr, &tmpSize);
     target = new wxString(tmpPtr, tmpSize);
 
@@ -1921,7 +1921,7 @@ wxString Py2wxString(PyObject* source)
         str = PyObject_Str(source);
         if (PyErr_Occurred()) return wxEmptyString;    // TODO:  should we PyErr_Clear?
     }
-    char* tmpPtr; int tmpSize;
+    char* tmpPtr; Py_ssize_t tmpSize;
     PyString_AsStringAndSize(str, &tmpPtr, &tmpSize);
     target = wxString(tmpPtr, tmpSize);
 

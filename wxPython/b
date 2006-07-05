@@ -25,6 +25,8 @@ function getpyver {
 	PYVER=2.3
     elif [ "$1" = "24" ]; then
 	PYVER=2.4
+    elif [ "$1" = "25" ]; then
+	PYVER=2.5
     else
 	echo You must specify Python version as first parameter.
         exit
