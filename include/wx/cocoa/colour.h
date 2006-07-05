@@ -61,7 +61,21 @@ public:
 
     // Set() functions
     void Set( WX_NSColor aColor );
-
+    
+    // reroute the inherited ones
+    void Set(unsigned char red, unsigned char green, unsigned char blue)
+    { wxColourBase::Set(red,green,blue); }
+    
+    // implemented in colourcmn.cpp
+    bool Set(const wxChar *str)
+    { return wxColourBase::Set(str); }
+    
+    bool Set(const wxString &str)
+    { return wxColourBase::Set(str); }
+    
+    void Set(unsigned long colRGB)
+    { wxColourBase::Set(colRGB); }
+    
 protected:
     // puts the object in an invalid, uninitialized state
     void Init();

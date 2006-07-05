@@ -56,7 +56,8 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
     wxTopLevelWindows.Append(this);
 
     m_message = message;
-    m_dialogStyle = style;
+
+    SetWindowStyle(style);
     m_parent = parent;
     m_path = defaultPath;
 
@@ -70,7 +71,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
 
     //If the user requests to save - use a NSSavePanel
     //else use a NSOpenPanel
-    if (m_dialogStyle & wxFD_SAVE)
+    if (HasFlag(wxFD_SAVE))
     {
         SetNSPanel([NSSavePanel savePanel]);
 
@@ -91,7 +92,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
         [GetNSSavePanel() setPrompt:@"Open"];
     }
 
-    if (m_dialogStyle & wxDD_NEW_DIR_BUTTON) //m_dialogStyle & wxDD_NEW_DIR_BUTTON
+    if (HasFlag(wxDD_NEW_DIR_BUTTON)) //m_dialogStyle & wxDD_NEW_DIR_BUTTON
     {
         [(NSOpenPanel*)m_cocoaNSWindow setCanCreateDirectories:YES];
     }
@@ -109,7 +110,7 @@ int wxDirDialog::ShowModal()
 
     int nResult;
 
-    if (m_dialogStyle & wxFD_SAVE)
+    if (HasFlag(wxFD_SAVE))
     {
         nResult = [GetNSSavePanel()
                     runModalForDirectory:wxNSStringWithWxString(m_dir)

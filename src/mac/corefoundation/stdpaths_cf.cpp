@@ -109,6 +109,7 @@ wxString wxStandardPathsCF::GetFromFunc(wxCFURLRef (*func)(wxCFBundleRef)) const
 
 wxString wxStandardPathsCF::GetDocumentsDir() const
 {
+#ifdef __WXMAC__
     return wxMacFindFolderNoSeparator
         (
 #if TARGET_API_MAC_OSX
@@ -119,6 +120,9 @@ wxString wxStandardPathsCF::GetDocumentsDir() const
         kDocumentsFolderType,
         kCreateFolder
         );
+#else
+    return wxFileName::GetHomeDir() + wxT("/Documents");
+#endif
 }
 
 // ----------------------------------------------------------------------------

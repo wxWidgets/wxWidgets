@@ -48,11 +48,17 @@ IMPLEMENT_CLASS(wxCocoaFileDialog, wxFileDialogBase)
 // wxFileDialog
 // ----------------------------------------------------------------------------
 
-wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
-        const wxString& defaultDir, const wxString& defaultFileName,
-        const wxString& wildCard, long style, const wxPoint& pos)
-:   wxFileDialogBase(parent, message, defaultDir, defaultFileName,
-        wildCard, style, pos)
+wxFileDialog::wxFileDialog(wxWindow *parent,
+                           const wxString& message,
+                           const wxString& defaultDir,
+                           const wxString& defaultFileName,
+                           const wxString& wildCard,
+                           long style,
+                           const wxPoint& pos,
+                           const wxSize& sz,
+                           const wxString& name)
+            : wxFileDialogBase(parent, message, defaultDir, defaultFileName,
+                               wildCard, style, pos, sz, name)
 {
     wxTopLevelWindows.Append(this);
 
@@ -69,7 +75,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 
     //If the user requests to save - use a NSSavePanel
     //else use a NSOpenPanel
-    if (m_dialogStyle & wxFD_SAVE)
+    if (HasFlag(wxFD_SAVE))
     {
         SetNSPanel([NSSavePanel savePanel]);
 
@@ -93,7 +99,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         SetNSPanel([NSOpenPanel openPanel]);
         [m_cocoaNSWindow setTitle:wxNSStringWithWxString(message)];
 
-        [(NSOpenPanel*)m_cocoaNSWindow setAllowsMultipleSelection:(m_dialogStyle & wxFD_MULTIPLE)];
+        [(NSOpenPanel*)m_cocoaNSWindow setAllowsMultipleSelection:(HasFlag(wxFD_MULTIPLE))];
         [(NSOpenPanel*)m_cocoaNSWindow setResolvesAliases:YES];
         [(NSOpenPanel*)m_cocoaNSWindow setCanChooseFiles:YES];
         [(NSOpenPanel*)m_cocoaNSWindow setCanChooseDirectories:NO];
@@ -196,7 +202,7 @@ int wxFileDialog::ShowModal()
 
     int nResult;
 
-    if (m_dialogStyle & wxFD_SAVE)
+    if (HasFlag(wxFD_SAVE))
     {
         nResult = [GetNSSavePanel()
                     runModalForDirectory:wxNSStringWithWxString(m_dir)
