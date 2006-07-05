@@ -5944,30 +5944,34 @@ SWIGINTERN PyObject *_wrap_new_RichTextCtrl(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
   int arg2 = (int) -1 ;
-  wxPoint const &arg3_defvalue = wxDefaultPosition ;
-  wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
-  wxSize const &arg4_defvalue = wxDefaultSize ;
-  wxSize *arg4 = (wxSize *) &arg4_defvalue ;
-  long arg5 = (long) wxRE_MULTILINE ;
+  wxString const &arg3_defvalue = wxPyEmptyString ;
+  wxString *arg3 = (wxString *) &arg3_defvalue ;
+  wxPoint const &arg4_defvalue = wxDefaultPosition ;
+  wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
+  wxSize const &arg5_defvalue = wxDefaultSize ;
+  wxSize *arg5 = (wxSize *) &arg5_defvalue ;
+  long arg6 = (long) wxRE_MULTILINE ;
   wxRichTextCtrl *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int val2 ;
   int ecode2 = 0 ;
-  wxPoint temp3 ;
-  wxSize temp4 ;
-  long val5 ;
-  int ecode5 = 0 ;
+  bool temp3 = false ;
+  wxPoint temp4 ;
+  wxSize temp5 ;
+  long val6 ;
+  int ecode6 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
   char *  kwnames[] = {
-    (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style", NULL 
+    (char *) "parent",(char *) "id",(char *) "value",(char *) "pos",(char *) "size",(char *) "style", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOO:new_RichTextCtrl",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:new_RichTextCtrl",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_RichTextCtrl" "', expected argument " "1"" of type '" "wxWindow *""'"); 
@@ -5982,33 +5986,48 @@ SWIGINTERN PyObject *_wrap_new_RichTextCtrl(PyObject *SWIGUNUSEDPARM(self), PyOb
   }
   if (obj2) {
     {
-      arg3 = &temp3;
-      if ( ! wxPoint_helper(obj2, &arg3)) SWIG_fail;
+      arg3 = wxString_in_helper(obj2);
+      if (arg3 == NULL) SWIG_fail;
+      temp3 = true;
     }
   }
   if (obj3) {
     {
       arg4 = &temp4;
-      if ( ! wxSize_helper(obj3, &arg4)) SWIG_fail;
+      if ( ! wxPoint_helper(obj3, &arg4)) SWIG_fail;
     }
   }
   if (obj4) {
-    ecode5 = SWIG_AsVal_long(obj4, &val5);
-    if (!SWIG_IsOK(ecode5)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_RichTextCtrl" "', expected argument " "5"" of type '" "long""'");
+    {
+      arg5 = &temp5;
+      if ( ! wxSize_helper(obj4, &arg5)) SWIG_fail;
+    }
+  }
+  if (obj5) {
+    ecode6 = SWIG_AsVal_long(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_RichTextCtrl" "', expected argument " "6"" of type '" "long""'");
     } 
-    arg5 = static_cast< long >(val5);
+    arg6 = static_cast< long >(val6);
   }
   {
     if (!wxPyCheckForApp()) SWIG_fail;
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxRichTextCtrl *)new wxRichTextCtrl(arg1,arg2,(wxPoint const &)*arg3,(wxSize const &)*arg4,arg5);
+    result = (wxRichTextCtrl *)new wxRichTextCtrl(arg1,arg2,(wxString const &)*arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxRichTextCtrl, SWIG_POINTER_NEW |  0 );
+  {
+    if (temp3)
+    delete arg3;
+  }
   return resultobj;
 fail:
+  {
+    if (temp3)
+    delete arg3;
+  }
   return NULL;
 }
 
@@ -6037,11 +6056,13 @@ SWIGINTERN PyObject *_wrap_RichTextCtrl_Create(PyObject *SWIGUNUSEDPARM(self), P
   wxRichTextCtrl *arg1 = (wxRichTextCtrl *) 0 ;
   wxWindow *arg2 = (wxWindow *) 0 ;
   int arg3 = (int) -1 ;
-  wxPoint const &arg4_defvalue = wxDefaultPosition ;
-  wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
-  wxSize const &arg5_defvalue = wxDefaultSize ;
-  wxSize *arg5 = (wxSize *) &arg5_defvalue ;
-  long arg6 = (long) wxRE_MULTILINE ;
+  wxString const &arg4_defvalue = wxPyEmptyString ;
+  wxString *arg4 = (wxString *) &arg4_defvalue ;
+  wxPoint const &arg5_defvalue = wxDefaultPosition ;
+  wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
+  wxSize const &arg6_defvalue = wxDefaultSize ;
+  wxSize *arg6 = (wxSize *) &arg6_defvalue ;
+  long arg7 = (long) wxRE_MULTILINE ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -6049,21 +6070,23 @@ SWIGINTERN PyObject *_wrap_RichTextCtrl_Create(PyObject *SWIGUNUSEDPARM(self), P
   int res2 = 0 ;
   int val3 ;
   int ecode3 = 0 ;
-  wxPoint temp4 ;
-  wxSize temp5 ;
-  long val6 ;
-  int ecode6 = 0 ;
+  bool temp4 = false ;
+  wxPoint temp5 ;
+  wxSize temp6 ;
+  long val7 ;
+  int ecode7 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   PyObject * obj3 = 0 ;
   PyObject * obj4 = 0 ;
   PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style", NULL 
+    (char *) "self",(char *) "parent",(char *) "id",(char *) "value",(char *) "pos",(char *) "size",(char *) "style", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOO:RichTextCtrl_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:RichTextCtrl_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRichTextCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextCtrl_Create" "', expected argument " "1"" of type '" "wxRichTextCtrl *""'"); 
@@ -6083,34 +6106,49 @@ SWIGINTERN PyObject *_wrap_RichTextCtrl_Create(PyObject *SWIGUNUSEDPARM(self), P
   }
   if (obj3) {
     {
-      arg4 = &temp4;
-      if ( ! wxPoint_helper(obj3, &arg4)) SWIG_fail;
+      arg4 = wxString_in_helper(obj3);
+      if (arg4 == NULL) SWIG_fail;
+      temp4 = true;
     }
   }
   if (obj4) {
     {
       arg5 = &temp5;
-      if ( ! wxSize_helper(obj4, &arg5)) SWIG_fail;
+      if ( ! wxPoint_helper(obj4, &arg5)) SWIG_fail;
     }
   }
   if (obj5) {
-    ecode6 = SWIG_AsVal_long(obj5, &val6);
-    if (!SWIG_IsOK(ecode6)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "RichTextCtrl_Create" "', expected argument " "6"" of type '" "long""'");
+    {
+      arg6 = &temp6;
+      if ( ! wxSize_helper(obj5, &arg6)) SWIG_fail;
+    }
+  }
+  if (obj6) {
+    ecode7 = SWIG_AsVal_long(obj6, &val7);
+    if (!SWIG_IsOK(ecode7)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "RichTextCtrl_Create" "', expected argument " "7"" of type '" "long""'");
     } 
-    arg6 = static_cast< long >(val6);
+    arg7 = static_cast< long >(val7);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->Create(arg2,arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6);
+    result = (bool)(arg1)->Create(arg2,arg3,(wxString const &)*arg4,(wxPoint const &)*arg5,(wxSize const &)*arg6,arg7);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
     resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
   }
+  {
+    if (temp4)
+    delete arg4;
+  }
   return resultobj;
 fail:
+  {
+    if (temp4)
+    delete arg4;
+  }
   return NULL;
 }
 

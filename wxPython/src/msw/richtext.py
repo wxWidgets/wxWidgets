@@ -54,7 +54,6 @@ def _swig_setattr_nondynamic_method(set):
 USE_TEXTATTREX = _richtext.USE_TEXTATTREX
 import _windows
 import _core
-import _gdi
 wx = _core 
 __docfilter__ = wx.__DocFilter(globals()) 
 RE_READONLY = _richtext.RE_READONLY
@@ -260,7 +259,7 @@ class RichTextAttr(object):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, Colour colText=NullColour, Colour colBack=NullColour, 
+        __init__(self, Colour colText=wxNullColour, Colour colBack=wxNullColour, 
             int alignment=TEXT_ALIGNMENT_DEFAULT) -> RichTextAttr
 
         The RichTextAttr class stored information about the various attributes
@@ -557,16 +556,18 @@ class RichTextCtrl(_windows.ScrolledWindow):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=RE_MULTILINE) -> RichTextCtrl
+        __init__(self, Window parent, int id=-1, String value=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=RE_MULTILINE) -> RichTextCtrl
         """
         _richtext.RichTextCtrl_swiginit(self,_richtext.new_RichTextCtrl(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=RE_MULTILINE) -> bool
+        Create(self, Window parent, int id=-1, String value=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=RE_MULTILINE) -> bool
         """
         return _richtext.RichTextCtrl_Create(*args, **kwargs)
 

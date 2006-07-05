@@ -556,16 +556,18 @@ class RichTextCtrl(_windows.ScrolledWindow):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=RE_MULTILINE) -> RichTextCtrl
+        __init__(self, Window parent, int id=-1, String value=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=RE_MULTILINE) -> RichTextCtrl
         """
         _richtext.RichTextCtrl_swiginit(self,_richtext.new_RichTextCtrl(*args, **kwargs))
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=RE_MULTILINE) -> bool
+        Create(self, Window parent, int id=-1, String value=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=RE_MULTILINE) -> bool
         """
         return _richtext.RichTextCtrl_Create(*args, **kwargs)
 
