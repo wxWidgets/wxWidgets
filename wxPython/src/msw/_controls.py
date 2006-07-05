@@ -2769,6 +2769,11 @@ BK_LEFT = _controls_.BK_LEFT
 BK_RIGHT = _controls_.BK_RIGHT
 BK_ALIGN_MASK = _controls_.BK_ALIGN_MASK
 BK_BUTTONBAR = _controls_.BK_BUTTONBAR
+BK_HITTEST_NOWHERE = _controls_.BK_HITTEST_NOWHERE
+BK_HITTEST_ONICON = _controls_.BK_HITTEST_ONICON
+BK_HITTEST_ONLABEL = _controls_.BK_HITTEST_ONLABEL
+BK_HITTEST_ONITEM = _controls_.BK_HITTEST_ONITEM
+BK_HITTEST_ONPAGE = _controls_.BK_HITTEST_ONPAGE
 class BookCtrlBase(_core.Control):
     """Proxy of C++ BookCtrlBase class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
