@@ -3377,7 +3377,7 @@ class DC(_core.Object):
         """
         GetPPI(self) -> Size
 
-        Resolution in Pixels per inch
+        Resolution in pixels per inch
         """
         return _gdi_.DC_GetPPI(*args, **kwargs)
 
