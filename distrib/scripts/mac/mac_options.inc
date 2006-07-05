@@ -10,10 +10,10 @@ STATIC=0
 # Process command line options.
 for i in "$@"; do
     case "$i" in
-    unicode)       UNICODE=1 ;;
-    ansi)          UNICODE=0 ;;
-    debug)         DEBUG=1 ;;
-    wxpython)      WXPYTHON=1 ;;
+	unicode)       UNICODE=1 ;;
+	ansi)          UNICODE=0 ;;
+	debug)         DEBUG=1 ;;
+	wxpython)      WXPYTHON=1 ;;
 	universal)     UNIVERSAL=1 ;;
 	carbon)        PORT="mac" ;;
 	cocoa)         PORT="cocoa" ;;

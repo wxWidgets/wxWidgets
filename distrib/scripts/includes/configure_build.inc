@@ -22,6 +22,7 @@ ANSI_OPTS="--enable-ansi"
 WXPYTHON_OPTS="--enable-monolithic \
 	--with-opengl \
 	--enable-sound \
+        --enable-mediactrl \
 	--enable-display \
 	--enable-geometry \
 	--enable-debug_flag \
