@@ -454,6 +454,7 @@ public:
 
     wxRichTextCtrl( wxWindow* parent,
                     wxWindowID id = -1,
+                    const wxString& value = wxPyEmptyString,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxRE_MULTILINE );
@@ -462,6 +463,7 @@ public:
 
     bool Create( wxWindow* parent,
                  wxWindowID id = -1,
+                 const wxString& value = wxPyEmptyString,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxRE_MULTILINE );
