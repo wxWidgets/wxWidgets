@@ -28,7 +28,14 @@ enum {
     wxBK_LEFT,
     wxBK_RIGHT,
     wxBK_ALIGN_MASK,
-    wxBK_BUTTONBAR
+    wxBK_BUTTONBAR,
+
+    // hittest flags
+    wxBK_HITTEST_NOWHERE = 1,   // not on tab
+    wxBK_HITTEST_ONICON  = 2,   // on icon
+    wxBK_HITTEST_ONLABEL = 4,   // on label
+    wxBK_HITTEST_ONITEM  = wxBK_HITTEST_ONICON | wxBK_HITTEST_ONLABEL,
+    wxBK_HITTEST_ONPAGE  = 8,   // not on tab control, but over the selected page
 };
 
 
@@ -191,13 +198,6 @@ enum {
     wxNB_BOTTOM,
     wxNB_MULTILINE,
     wxNB_NOPAGETHEME,
-
-    // hittest flags
-    wxBK_HITTEST_NOWHERE = 1,   // not on tab
-    wxBK_HITTEST_ONICON  = 2,   // on icon
-    wxBK_HITTEST_ONLABEL = 4,   // on label
-    wxBK_HITTEST_ONITEM  = wxBK_HITTEST_ONICON | wxBK_HITTEST_ONLABEL,
-    wxBK_HITTEST_ONPAGE  = 8,   // not on tab control, but over the selected page
 
     // for backwards compatibility only
     wxNB_HITTEST_NOWHERE,
