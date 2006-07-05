@@ -46,7 +46,7 @@ See also \helpref{window styles overview}{windowstyles}.
 On Windows XP, the default theme paints a gradient on the notebook's pages.
 If you wish to suppress this theme, for aesthetic or performance reasons,
 there are three ways of doing it. You can use wxNB\_NOPAGETHEME to disable
-themed drawing for a particular notebook, you can call {\tt wxSystemOptions::SetOption} 
+themed drawing for a particular notebook, you can call {\tt wxSystemOptions::SetOption}
 to disable it for the whole application, or you can disable it for individual
 pages by using {\tt SetBackgroundColour}.
 
@@ -283,11 +283,11 @@ inside the tab is returned as well.
 \docparam{flags}{Return value for detailed information. One of the following values:
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf wxNB\_HITTEST\_NOWHERE}}{There was no tab under this point.}
-\twocolitem{{\bf wxNB\_HITTEST\_ONICON}}{The point was over an icon (currently wxMSW only).}
-\twocolitem{{\bf wxNB\_HITTEST\_ONLABEL}}{The point was over a label (currently wxMSW only).}
-\twocolitem{{\bf wxNB\_HITTEST\_ONITEM}}{The point was over an item, but not on the label or icon.}
-\twocolitem{{\bf wxNB\_HITTEST\_ONPAGE}}{The point was over a currently selected page, not over any tab. Note that this flag is present only if {\tt wxNOT\_FOUND} is returned.}
+\twocolitem{{\bf wxBK\_HITTEST\_NOWHERE}}{There was no tab under this point.}
+\twocolitem{{\bf wxBK\_HITTEST\_ONICON}}{The point was over an icon (currently wxMSW only).}
+\twocolitem{{\bf wxBK\_HITTEST\_ONLABEL}}{The point was over a label (currently wxMSW only).}
+\twocolitem{{\bf wxBK\_HITTEST\_ONITEM}}{The point was over an item, but not on the label or icon.}
+\twocolitem{{\bf wxBK\_HITTEST\_ONPAGE}}{The point was over a currently selected page, not over any tab. Note that this flag is present only if {\tt wxNOT\_FOUND} is returned.}
 \end{twocollist}
 }
 

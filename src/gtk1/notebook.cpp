@@ -780,15 +780,15 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 
                 if ( pixmap && IsPointInsideWidget(pt, pixmap, x, y) )
                 {
-                    *flags = wxNB_HITTEST_ONICON;
+                    *flags = wxBK_HITTEST_ONICON;
                 }
                 else if ( IsPointInsideWidget(pt, GTK_WIDGET(nb_page->m_label), x, y) )
                 {
-                    *flags = wxNB_HITTEST_ONLABEL;
+                    *flags = wxBK_HITTEST_ONLABEL;
                 }
                 else
                 {
-                    *flags = wxNB_HITTEST_ONITEM;
+                    *flags = wxBK_HITTEST_ONITEM;
                 }
             }
 
@@ -797,7 +797,7 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
     }
 
     if ( flags )
-        *flags = wxNB_HITTEST_NOWHERE;
+        *flags = wxBK_HITTEST_NOWHERE;
 
     return wxNOT_FOUND;
 }

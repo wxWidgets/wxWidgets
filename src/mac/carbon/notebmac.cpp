@@ -376,9 +376,9 @@ int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
 
         // we cannot differentiate better
         if (resultV >= 0)
-            *flags |= wxNB_HITTEST_ONLABEL;
+            *flags |= wxBK_HITTEST_ONLABEL;
         else
-            *flags |= wxNB_HITTEST_NOWHERE;
+            *flags |= wxBK_HITTEST_NOWHERE;
     }
 
     return resultV;

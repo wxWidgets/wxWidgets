@@ -166,7 +166,7 @@ int wxListbook::HitTest(const wxPoint& pt, long *flags) const
     int pagePos = wxNOT_FOUND;
 
     if ( flags )
-        *flags = wxNB_HITTEST_NOWHERE;
+        *flags = wxBK_HITTEST_NOWHERE;
 
     // convert from listbook control coordinates to list control coordinates
     const wxListView * const list = GetListView();
@@ -185,16 +185,16 @@ int wxListbook::HitTest(const wxPoint& pt, long *flags) const
 
             if ( flagsList & (wxLIST_HITTEST_ONITEMICON |
                               wxLIST_HITTEST_ONITEMSTATEICON ) )
-                *flags |= wxNB_HITTEST_ONICON;
+                *flags |= wxBK_HITTEST_ONICON;
 
             if ( flagsList & wxLIST_HITTEST_ONITEMLABEL )
-                *flags |= wxNB_HITTEST_ONLABEL;
+                *flags |= wxBK_HITTEST_ONLABEL;
         }
     }
     else // not over list control at all
     {
         if ( flags && GetPageRect().Inside(pt) )
-            *flags |= wxNB_HITTEST_ONPAGE;
+            *flags |= wxBK_HITTEST_ONPAGE;
     }
 
     return pagePos;

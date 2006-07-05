@@ -158,6 +158,7 @@ All (GUI):
 - Added support for tabs in wxRichTextCtrl (Ashish More).
 - Fixed problem with zoom setting in print preview.
 - Moved wxRichTextCtrl from the advanced library to its own.
+- wxNB_HITTEST_* flags renamed to wxBK_HITTEST_* to serve all book controls.
 
 wxMSW:
 

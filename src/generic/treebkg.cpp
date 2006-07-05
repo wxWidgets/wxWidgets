@@ -728,7 +728,7 @@ int wxTreebook::HitTest(wxPoint const & pt, long * flags) const
     int pagePos = wxNOT_FOUND;
 
     if ( flags )
-        *flags = wxNB_HITTEST_NOWHERE;
+        *flags = wxBK_HITTEST_NOWHERE;
 
     // convert from wxTreebook coorindates to wxTreeCtrl ones
     const wxTreeCtrl * const tree = GetTreeCtrl();
@@ -753,16 +753,16 @@ int wxTreebook::HitTest(wxPoint const & pt, long * flags) const
             if ( flagsTree & (wxTREE_HITTEST_ONITEMBUTTON |
                               wxTREE_HITTEST_ONITEMICON |
                               wxTREE_HITTEST_ONITEMSTATEICON) )
-                *flags |= wxNB_HITTEST_ONICON;
+                *flags |= wxBK_HITTEST_ONICON;
 
             if ( flagsTree & wxTREE_HITTEST_ONITEMLABEL )
-                *flags |= wxNB_HITTEST_ONLABEL;
+                *flags |= wxBK_HITTEST_ONLABEL;
         }
     }
     else // not over the tree
     {
         if ( flags && GetPageRect().Inside( pt ) )
-            *flags |= wxNB_HITTEST_ONPAGE;
+            *flags |= wxBK_HITTEST_ONPAGE;
     }
 
     return pagePos;

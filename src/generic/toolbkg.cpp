@@ -95,7 +95,7 @@ bool wxToolbook::Create(wxWindow *parent,
         orient = wxTB_VERTICAL;
 
     // TODO: make more configurable
-    
+
 #if defined(__WXMAC__) && wxUSE_TOOLBAR && wxUSE_BMPBUTTON
     if (style & wxBK_BUTTONBAR)
     {
@@ -314,7 +314,7 @@ int wxToolbook::HitTest(const wxPoint& pt, long *flags) const
     int pagePos = wxNOT_FOUND;
 
     if ( flags )
-        *flags = wxNB_HITTEST_NOWHERE;
+        *flags = wxBK_HITTEST_NOWHERE;
 
     // convert from wxToolbook coordinates to wxToolBar ones
     const wxToolBarBase * const tbar = GetToolBar();
@@ -330,13 +330,13 @@ int wxToolbook::HitTest(const wxPoint& pt, long *flags) const
         {
             pagePos = tbar->GetToolPos(tool->GetId());
             if ( flags )
-                *flags = wxNB_HITTEST_ONICON | wxNB_HITTEST_ONLABEL;
+                *flags = wxBK_HITTEST_ONICON | wxBK_HITTEST_ONLABEL;
         }
     }
     else // not over the toolbar
     {
         if ( flags && GetPageRect().Inside(pt) )
-            *flags |= wxNB_HITTEST_ONPAGE;
+            *flags |= wxBK_HITTEST_ONPAGE;
     }
 
     return pagePos;

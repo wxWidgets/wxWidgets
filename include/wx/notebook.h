@@ -26,15 +26,20 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// wxNotebook hit results
+#if WXWIN_COMPATIBILITY_2_6
+
+// wxNotebook hit results, use wxBK_HITTEST so other book controls can share them
+// if wxUSE_NOTEBOOK is disabled
 enum
 {
-    wxNB_HITTEST_NOWHERE = 1,   // not on tab
-    wxNB_HITTEST_ONICON  = 2,   // on icon
-    wxNB_HITTEST_ONLABEL = 4,   // on label
-    wxNB_HITTEST_ONITEM  = wxNB_HITTEST_ONICON | wxNB_HITTEST_ONLABEL,
-    wxNB_HITTEST_ONPAGE  = 8    // not on tab control, but over the selected page
+    wxNB_HITTEST_NOWHERE = wxBK_HITTEST_NOWHERE,
+    wxNB_HITTEST_ONICON  = wxBK_HITTEST_ONICON,
+    wxNB_HITTEST_ONLABEL = wxBK_HITTEST_ONLABEL,
+    wxNB_HITTEST_ONITEM  = wxBK_HITTEST_ONITEM,
+    wxNB_HITTEST_ONPAGE  = wxBK_HITTEST_ONPAGE
 };
+
+#endif // WXWIN_COMPATIBILITY_2_6
 
 typedef wxWindow wxNotebookPage;  // so far, any window can be a page
 

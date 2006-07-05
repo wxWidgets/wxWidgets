@@ -28,6 +28,20 @@ WX_DEFINE_EXPORTED_ARRAY_PTR(wxWindow *, wxArrayPages);
 class WXDLLEXPORT wxImageList;
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// wxBookCtrl hit results
+enum
+{
+    wxBK_HITTEST_NOWHERE = 1,   // not on tab
+    wxBK_HITTEST_ONICON  = 2,   // on icon
+    wxBK_HITTEST_ONLABEL = 4,   // on label
+    wxBK_HITTEST_ONITEM  = wxBK_HITTEST_ONICON | wxBK_HITTEST_ONLABEL,
+    wxBK_HITTEST_ONPAGE  = 8    // not on tab control, but over the selected page
+};
+
+// ----------------------------------------------------------------------------
 // wxBookCtrlBase
 // ----------------------------------------------------------------------------
 

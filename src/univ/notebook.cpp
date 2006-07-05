@@ -585,7 +585,7 @@ void wxNotebook::DoDraw(wxControlRenderer *renderer)
 int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 {
     if ( flags )
-        *flags = wxNB_HITTEST_NOWHERE;
+        *flags = wxBK_HITTEST_NOWHERE;
 
     // first check that it is in this window at all
     if ( !GetClientRect().Inside(pt) )
@@ -631,7 +631,7 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
             if ( flags )
             {
                 // TODO: be more precise
-                *flags = wxNB_HITTEST_ONITEM;
+                *flags = wxBK_HITTEST_ONITEM;
             }
 
             return n;

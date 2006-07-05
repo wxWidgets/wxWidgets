@@ -584,10 +584,10 @@ void MyFrame::OnHitTest(wxCommandEvent& WXUNUSED(event))
 
     wxString flagsStr;
 
-    AddFlagStrIfFlagPresent( flagsStr, flags, wxNB_HITTEST_NOWHERE, _T("wxNB_HITTEST_NOWHERE") );
-    AddFlagStrIfFlagPresent( flagsStr, flags, wxNB_HITTEST_ONICON,  _T("wxNB_HITTEST_ONICON") );
-    AddFlagStrIfFlagPresent( flagsStr, flags, wxNB_HITTEST_ONLABEL, _T("wxNB_HITTEST_ONLABEL") );
-    AddFlagStrIfFlagPresent( flagsStr, flags, wxNB_HITTEST_ONPAGE,  _T("wxNB_HITTEST_ONPAGE") );
+    AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_NOWHERE, _T("wxBK_HITTEST_NOWHERE") );
+    AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_ONICON,  _T("wxBK_HITTEST_ONICON") );
+    AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_ONLABEL, _T("wxBK_HITTEST_ONLABEL") );
+    AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_ONPAGE,  _T("wxBK_HITTEST_ONPAGE") );
 
     wxLogMessage(wxT("HitTest at (%d,%d): %d: %s"),
                  pt.x,
