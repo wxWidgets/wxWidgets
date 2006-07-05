@@ -1,9 +1,11 @@
 #!/bin/sh
 
-# cleanup after old build files
-#if [ -d $WX_TEMP_DIR ]; then
-#  rm -rf $WX_TEMP_DIR
-#fi 
+if [ "$VERSION" = "" ]; then
+    echo "Including build-environ.cfg"
+    . scripts/build-environ.cfg
+fi 
+
+echo "$WX_TEMP_DIR"
 
 START_DIR="$PWD"
 WX_WEB_DIR=$WX_TEMP_DIR/wxWebSite
@@ -44,8 +46,6 @@ fi
 if [ $rebake = "yes" ]; then
   cd $WX_SRC_DIR/build/bakefiles
   bakefile_gen -d ../../distrib/scripts/Bakefiles.release.bkgen
-  bakefile_gen -f watcom -d ../mgl/Bakefiles.mgl.bkgen -b wx.bkl
-  bakefile_gen -f watcom -d ../os2/Bakefiles.os2.bkgen -b wx.bkl
 fi
 
 cd $WX_SRC_DIR
@@ -56,8 +56,22 @@ fi
 # Now generate the mega tarball with everything. We will push this to our build machines.
 
 cd $WX_TEMP_DIR
-WX_TARBALL=$WX_TEMP_DIR/wxWidgets-$BUILD_VERSION.tar.gz
-tar cvzf $WX_TARBALL wxWidgets
+export APPDIR=$WX_TEMP_DIR/wxWidgets
+export WXWIN=$WX_TEMP_DIR/wxWidgets
+export VERSION=$BUILD_VERSION
+rm -rf $APPDIR/deliver/*
+
+tar czvf $START_DIR/$DIST_DIR/wxWidgets-$BUILD_VERSION-snapshot.tar.gz $APPDIR
+
+#export DESTDIR=$STAGING_DIR
+cp $START_DIR/scripts/create_archives.sh $APPDIR/distrib/scripts
+chmod +x $APPDIR/distrib/scripts/create_archives.sh
+$APPDIR/distrib/scripts/create_archives.sh --all
+
+# copy all the archives we created to the master machine's deliver directory
+cp $APPDIR/deliver/*.zip $START_DIR/$DIST_DIR
+cp $APPDIR/deliver/*.tar.gz $START_DIR/$DIST_DIR
+cp $APPDIR/deliver/*.tar.bz2 $START_DIR/$DIST_DIR
 
 echo "Tarball located at: $WX_TARBALL"
 
@@ -66,8 +80,8 @@ if [ ! -f $WX_TARBALL ]; then
   exit 1
 else
   cd $START_DIR
-  cp $WX_TARBALL $STAGING_DIR
-  cp -r $WX_WEB_DIR $STAGING_DIR
+  #cp $WX_TARBALL $STAGING_DIR
+  #cp -r $WX_WEB_DIR $STAGING_DIR
   
   echo "Pre-flight complete. Ready for takeoff."
 fi
