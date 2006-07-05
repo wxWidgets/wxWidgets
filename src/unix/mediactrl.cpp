@@ -37,7 +37,8 @@
 #include "wx/thread.h"              // wxMutex/wxMutexLocker
 
 #ifdef __WXGTK__
-#    include "wx/gtk/win_gtk.h"     // for <gdk/gdkx.h>/GDK_WINDOW_XWINDOW
+#    include "wx/gtk/win_gtk.h"
+#    include <gdk/gdkx.h>           // for GDK_WINDOW_XWINDOW
 #endif
 
 //-----------------------------------------------------------------------------
@@ -1070,9 +1071,6 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     // so it doesn't draw over the video and cause sporadic
     // disappearances of the video
     gtk_widget_set_double_buffered(m_ctrl->m_wxwindow, FALSE);
-
-    // Tell GtkPizza not to clear the background
-    gtk_pizza_set_clear(GTK_PIZZA(m_ctrl->m_wxwindow), FALSE);
 #endif
 
     // don't erase the background of our control window
