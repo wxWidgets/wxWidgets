@@ -2005,7 +2005,7 @@ wxControl where it returns true.", "");
 
     %pythoncode {
     def SendSizeEvent(self):
-        self.GetEventhandler().ProcessEvent(wx.SizeEvent((-1,-1)))
+        self.GetEventHandler().ProcessEvent(wx.SizeEvent((-1,-1)))
     }
 };
 
