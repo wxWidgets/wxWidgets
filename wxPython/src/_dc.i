@@ -703,7 +703,7 @@ converting a height, for example.", "");
 
     DocDeclStr(
         virtual wxSize , GetPPI() const,
-        "Resolution in Pixels per inch", "");
+        "Resolution in pixels per inch", "");
     
 
     DocDeclStr(
