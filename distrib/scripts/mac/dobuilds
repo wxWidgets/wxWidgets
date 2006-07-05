@@ -4,41 +4,31 @@ HOMEDIR="$PWD"
 
 BUILDDIR_ROOT="$PWD/builds"
 
-BUILDDIR_CARBON="$BUILDDIR_ROOT/carbon"
-BUILDDIR_COCOA="$BUILDDIR_ROOT/cocoa"
-
-mkdir -p $BUILDDIR_CARBON
-mkdir -p $BUILDDIR_COCOA
-
-cd $BUILDDIR_CARBON
-BUILDDIR=$BUILDDIR_CARBON
-
 export WXROOT="$HOMEDIR/../../.."
-export INSTALLDIR="$BUILDDIR/install-ansi"
-$HOMEDIR/macbuild
 
-export INSTALLDIR="$BUILDDIR/install-unicode"
-$HOMEDIR/macbuild unicode
+do_builds {
+    PORT=$1
+    BUILDDIR=$BUILDDIR_ROOT/$PORT
+    mkdir -p $BUILDDIR
+    pushd $BUILDDIR
+    
+    # TODO: add the lipo universal builds to this
+    export WXROOT="$HOMEDIR/../../.."
+    export INSTALLDIR="$BUILDDIR/install-ansi"
+    $HOMEDIR/macbuild $PORT
+    
+    export INSTALLDIR="$BUILDDIR/install-unicode"
+    $HOMEDIR/macbuild $PORT unicode
+    
+    export INSTALLDIR="$BUILDDIR/install-static-ansi"
+    $HOMEDIR/macbuild $PORT static
+    
+    export INSTALLDIR="$BUILDDIR/install-static-unicode"
+    $HOMEDIR/macbuild $PORT static unicode
+    
+    popd
+}
 
-export INSTALLDIR="$BUILDDIR/install-static-ansi"
-$HOMEDIR/macbuild static
+do_builds "carbon"
 
-export INSTALLDIR="$BUILDDIR/install-static-unicode"
-$HOMEDIR/macbuild static unicode
-
-cd $BUILDDIR_COCOA
-BUILDDIR=$BUILDDIR_COCOA
-
-export INSTALLDIR="$BUILDDIR/install-ansi"
-$HOMEDIR/macbuild cocoa
-
-export INSTALLDIR="$BUILDDIR/install-unicode"
-$HOMEDIR/macbuild cocoa unicode
-
-export INSTALLDIR="$BUILDDIR/install-static-ansi"
-$HOMEDIR/macbuild cocoa static
-
-export INSTALLDIR="$BUILDDIR/install-static-unicode"
-$HOMEDIR/macbuild cocoa static unicode
-
-cd $HOMEDIR
+do_builds "cocoa"
