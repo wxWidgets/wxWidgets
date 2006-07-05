@@ -39,7 +39,7 @@ class wxPrinterDC;
 //----------------------------------------------------------------------
 
 %import windows.i
-%import gdi.i
+// ??  %import gdi.i
 
 %pythoncode { wx = _core }
 %pythoncode { __docfilter__ = wx.__DocFilter(globals()) }
@@ -422,6 +422,13 @@ public:
     // returns false if we have any attributes set, true otherwise
     bool IsDefault() const;
 
+    
+//     // return the attribute having the valid font and colours: it uses the
+//     // attributes set in attr and falls back first to attrDefault and then to
+//     // the text control font/colours for those attributes which are not set
+//     static wxRichTextAttr Combine(const wxRichTextAttr& attr,
+//                               const wxRichTextAttr& attrDef,
+//                               const wxTextCtrlBase *text);
 };
 
 
