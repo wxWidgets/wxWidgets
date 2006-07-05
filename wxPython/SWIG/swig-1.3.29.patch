@@ -4,7 +4,7 @@ RCS file: /cvsroot/swig/SWIG/Makefile.in,v
 retrieving revision 1.103
 diff -u -4 -r1.103 Makefile.in
 --- Makefile.in	10 Mar 2006 22:54:02 -0000	1.103
-+++ Makefile.in	5 Jul 2006 00:38:47 -0000
++++ Makefile.in	5 Jul 2006 00:50:18 -0000
 @@ -21,9 +21,9 @@
  
  source:
@@ -33,7 +33,7 @@ RCS file: /cvsroot/swig/SWIG/Lib/typemaps/exception.swg,v
 retrieving revision 1.8
 diff -u -4 -r1.8 exception.swg
 --- Lib/typemaps/exception.swg	7 Mar 2006 00:14:10 -0000	1.8
-+++ Lib/typemaps/exception.swg	5 Jul 2006 00:38:47 -0000
++++ Lib/typemaps/exception.swg	5 Jul 2006 00:50:18 -0000
 @@ -12,9 +12,9 @@
  
  /* macros for error manipulation */
@@ -51,7 +51,7 @@ RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
 retrieving revision 1.203
 diff -u -4 -r1.203 python.cxx
 --- Source/Modules/python.cxx	16 Mar 2006 01:46:50 -0000	1.203
-+++ Source/Modules/python.cxx	5 Jul 2006 00:38:47 -0000
++++ Source/Modules/python.cxx	5 Jul 2006 00:50:19 -0000
 @@ -39,9 +39,8 @@
  static  File         *f_directors_h = 0;
  static  File         *f_init = 0;
@@ -140,7 +140,7 @@ RCS file: /cvsroot/swig/SWIG/Source/Swig/misc.c,v
 retrieving revision 1.57
 diff -u -4 -r1.57 misc.c
 --- Source/Swig/misc.c	6 Mar 2006 22:51:00 -0000	1.57
-+++ Source/Swig/misc.c	5 Jul 2006 00:38:47 -0000
++++ Source/Swig/misc.c	5 Jul 2006 00:50:19 -0000
 @@ -899,8 +899,26 @@
  }
  #endif
@@ -186,7 +186,7 @@ RCS file: /cvsroot/swig/SWIG/Lib/python/pyinit.swg,v
 retrieving revision 1.32
 diff -u -4 -r1.32 pyinit.swg
 --- Lib/python/pyinit.swg	2 Feb 2006 23:48:56 -0000	1.32
-+++ Lib/python/pyinit.swg	5 Jul 2006 00:38:47 -0000
++++ Lib/python/pyinit.swg	5 Jul 2006 00:50:19 -0000
 @@ -225,13 +225,13 @@
  		       swig_type_info **types,
  		       swig_type_info **types_initial) {
@@ -209,7 +209,7 @@ RCS file: /cvsroot/swig/SWIG/Lib/python/pyrun.swg,v
 retrieving revision 1.141
 diff -u -4 -r1.141 pyrun.swg
 --- Lib/python/pyrun.swg	7 Mar 2006 00:35:17 -0000	1.141
-+++ Lib/python/pyrun.swg	5 Jul 2006 00:38:47 -0000
++++ Lib/python/pyrun.swg	5 Jul 2006 00:50:19 -0000
 @@ -11,8 +11,12 @@
   * ----------------------------------------------------------------------------- */
  
@@ -240,14 +240,14 @@ RCS file: /cvsroot/swig/SWIG/Lib/python/pystrings.swg,v
 retrieving revision 1.27
 diff -u -4 -r1.27 pystrings.swg
 --- Lib/python/pystrings.swg	23 Feb 2006 21:43:33 -0000	1.27
-+++ Lib/python/pystrings.swg	5 Jul 2006 00:38:47 -0000
++++ Lib/python/pystrings.swg	5 Jul 2006 00:50:19 -0000
 @@ -5,9 +5,9 @@
  SWIGINTERN int
  SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc)
  {
    if (PyString_Check(obj)) {
 -    char *cstr; int len;
-+    char *cstr; Py_size_t len;
++    char *cstr; Py_ssize_t len;
      PyString_AsStringAndSize(obj, &cstr, &len);
      if (cptr)  {
        if (alloc) {
