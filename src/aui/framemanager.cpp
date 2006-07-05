@@ -3507,7 +3507,7 @@ void wxFrameManager::OnPaneButton(wxFrameManagerEvent& evt)
 
     if (evt.button == wxPaneInfo::buttonClose)
     {
-        // fire button-click event
+        // fire pane close event
         wxFrameManagerEvent e(wxEVT_AUI_PANECLOSE);
         e.SetPane(evt.pane);
         ProcessMgrEvent(e);
