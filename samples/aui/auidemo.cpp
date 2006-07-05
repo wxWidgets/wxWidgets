@@ -913,12 +913,12 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
 {
     unsigned int flag = 0;
 
-#ifndef __WXMSW__
+#if !defined(__WXMSW__) && !defined(__WXMAC__)
     if (event.GetId() == ID_TransparentDrag ||
         event.GetId() == ID_TransparentHint ||
         event.GetId() == ID_TransparentHintFade)
     {
-        wxMessageBox(wxT("This option is presently only available on wxMSW"));
+        wxMessageBox(wxT("This option is presently only available on wxMSW and wxMac"));
         return;
     }
 #endif

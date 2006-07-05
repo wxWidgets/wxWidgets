@@ -82,12 +82,12 @@ static void DrawResizeHint(wxDC& dc, const wxRect& rect)
     dc.DrawRectangle(rect);
 }
 
-#ifdef __WXMSW__
 
-// on supported windows systems (Win2000 and greater), this function
+// on supported windows systems (Win2000 and greater, Mac), this function
 // will make a frame window transparent by a certain amount
 static void MakeWindowTransparent(wxWindow* wnd, int amount)
 {
+#if defined(__WXMSW__)
     // this API call is not in all SDKs, only the newer ones, so
     // we will runtime bind this
     typedef DWORD (WINAPI *PSETLAYEREDWINDOWATTR)(HWND, DWORD, BYTE, DWORD);
@@ -118,9 +118,18 @@ static void MakeWindowTransparent(wxWindow* wnd, int amount)
         SetWindowLong(hwnd, GWL_EXSTYLE, exstyle | 0x80000 /*WS_EX_LAYERED*/);
 
     pSetLayeredWindowAttributes(hwnd, 0, (BYTE)amount, 2 /*LWA_ALPHA*/);
+
+#elif defined(__WXMAC__)
+
+    WindowRef handle = GetControlOwner((OpaqueControlRef*)wnd->GetHandle());
+    SetWindowAlpha(handle, float(amount)/ 255.0);
+
+#else
+    wxUnused(wnd);
+    wxUnused(amount);
+#endif
 }
 
-#endif
 
 
 // CopyDocksAndPanes() - this utility function creates copies of
@@ -1787,14 +1796,12 @@ void wxFrameManager::Update()
                                                   this,
                                                   p);
 
-                // on MSW, if the owner desires transparent dragging, and
+                // on MSW and Mac, if the owner desires transparent dragging, and
                 // the dragging is happening right now, then the floating
                 // window should have this style by default
-#ifdef __WXMSW__
                 if (m_action == actionDragFloatingPane &&
                     (m_flags & wxAUI_MGR_TRANSPARENT_DRAG))
                         MakeWindowTransparent(frame, 150);
-#endif
 
                 frame->SetPaneWindow(p);
                 p.frame = frame;
@@ -2414,7 +2421,6 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
 
 void wxFrameManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
 {
-#ifdef __WXMSW__
     if (!m_hint_wnd || m_hint_fadeamt >= 50)
     {
         m_hint_fadetimer.Stop();
@@ -2423,13 +2429,10 @@ void wxFrameManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
 
     m_hint_fadeamt += 5;
     MakeWindowTransparent(m_hint_wnd, m_hint_fadeamt);
-#endif
 }
 
 void wxFrameManager::ShowHint(const wxRect& rect)
 {
-#ifdef __WXMSW__
-
     // First, determine if the operating system can handle transparency.
     // Transparency is available on Win2000 and above
 
@@ -2442,8 +2445,11 @@ void wxFrameManager::ShowHint(const wxRect& rect)
     // If the transparent flag is set, and the OS supports it,
     // go ahead and use a transparent hint
 
-    if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) != 0 &&
-        os_type == wxWINDOWS_NT && ver_major >= 5)
+    if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) != 0
+#ifdef __WXMSW__
+        && os_type == wxWINDOWS_NT && ver_major >= 5
+#endif
+        )
     {
         if (m_last_hint == rect)
             return;
@@ -2457,6 +2463,7 @@ void wxFrameManager::ShowHint(const wxRect& rect)
         {
             wxPoint pt = rect.GetPosition();
             wxSize size = rect.GetSize();
+#if defined(__WXMSW__)
             m_hint_wnd = new wxFrame(m_frame, -1, wxEmptyString, pt, size,
                                      wxFRAME_TOOL_WINDOW |
                                      wxFRAME_FLOAT_ON_PARENT |
@@ -2465,6 +2472,23 @@ void wxFrameManager::ShowHint(const wxRect& rect)
 
             MakeWindowTransparent(m_hint_wnd, initial_fade);
             m_hint_wnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
+#elif defined(__WXMAC__)
+            // Using a miniframe with float and tool styles keeps the parent
+            // frame activated and highlighted as such...
+            m_hint_wnd = new wxMiniFrame(m_frame, -1, wxEmptyString, pt, size,
+                                         wxFRAME_FLOAT_ON_PARENT
+                                         | wxFRAME_TOOL_WINDOW
+                                         | wxCAPTION );
+
+            // Can't set the bg colour of a Frame in wxMac
+            wxPanel* p = new wxPanel(m_hint_wnd);
+
+            // The default wxSYS_COLOUR_ACTIVECAPTION colour is a light silver
+            // color that is really hard to see, especially transparent.
+            // Until a better system color is decided upon we'll just use
+            // blue.
+            p->SetBackgroundColour(*wxBLUE);
+#endif
             m_hint_wnd->Show();
 
             // if we are dragging a floating pane, set the focus
@@ -2473,10 +2497,11 @@ void wxFrameManager::ShowHint(const wxRect& rect)
                 m_action_window->SetFocus();
 
         }
-         else
+        else
         {
             MakeWindowTransparent(m_hint_wnd, initial_fade);
             m_hint_wnd->SetSize(rect);
+            m_hint_wnd->Raise();
         }
 
         if (m_flags & wxAUI_MGR_TRANSPARENT_HINT_FADE)
@@ -2489,7 +2514,6 @@ void wxFrameManager::ShowHint(const wxRect& rect)
 
         return;
     }
-#endif
 
     if (m_last_hint != rect)
     {
@@ -2538,8 +2562,7 @@ void wxFrameManager::ShowHint(const wxRect& rect)
 
 void wxFrameManager::HideHint()
 {
-    // hides a transparent window hint (currently wxMSW only)
-#ifdef __WXMSW__
+    // hides a transparent window hint, if there is one
     if (m_hint_wnd)
     {
         MakeWindowTransparent(m_hint_wnd, 0);
@@ -2547,7 +2570,6 @@ void wxFrameManager::HideHint()
         m_last_hint = wxRect();
         return;
     }
-#endif
 
     // hides a painted hint by redrawing the frame window
     if (!m_last_hint.IsEmpty())
@@ -2648,10 +2670,8 @@ void wxFrameManager::OnFloatingPaneMoveStart(wxWindow* wnd)
     wxPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
-#ifdef __WXMSW__
     if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
         MakeWindowTransparent(pane.frame, 150);
-#endif
 }
 
 void wxFrameManager::OnFloatingPaneMoving(wxWindow* wnd)
@@ -2753,10 +2773,8 @@ void wxFrameManager::OnFloatingPaneMoved(wxWindow* wnd)
     {
         pane.floating_pos = pane.frame->GetPosition();
 
-        #ifdef __WXMSW__
         if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
             MakeWindowTransparent(pane.frame, 255);
-        #endif
     }
 
     Update();
