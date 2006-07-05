@@ -436,7 +436,7 @@ protected:
     void OnFloatingPaneMoving(wxWindow* window);
     void OnFloatingPaneMoved(wxWindow* window);
     void OnFloatingPaneActivated(wxWindow* window);
-    void OnFloatingPaneClosed(wxWindow* window);
+    void OnFloatingPaneClosed(wxWindow* window, wxCloseEvent& evt);
     void OnFloatingPaneResized(wxWindow* window, const wxSize& size);
     void Render(wxDC* dc);
     void Repaint(wxDC* dc = NULL);
@@ -514,12 +514,16 @@ public:
     {
         pane = NULL;
         button = 0;
+        veto_flag = false;
+        canveto_flag = true;
     }
 
     wxFrameManagerEvent(const wxFrameManagerEvent& c) : wxEvent(c)
     {
         pane = c.pane;
         button = c.button;
+        veto_flag = c.veto_flag;
+        canveto_flag = c.canveto_flag;
     }
 
     wxEvent *Clone() const { return new wxFrameManagerEvent(*this); }
@@ -528,10 +532,17 @@ public:
     void SetButton(int b) { button = b; }
     wxPaneInfo* GetPane() { return pane; }
     int GetButton() { return button; }
-
+    
+    void Veto(bool veto = true) { veto_flag = veto; }
+    bool GetVeto() const { return veto_flag; }
+    void SetCanVeto(bool can_veto) { canveto_flag = can_veto; }
+    bool CanVeto() const { return  canveto_flag && veto_flag; }
+    
 public:
     wxPaneInfo* pane;
     int button;
+    bool veto_flag;
+    bool canveto_flag;
 };
 
 
@@ -638,12 +649,9 @@ public:
 
 // wx event machinery
 
-
-// right now the only event that works is wxEVT_AUI_PANEBUTTON. A full
-// spectrum of events will be implemented in the next incremental version
-
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_AUI_PANEBUTTON, 0)
+    DECLARE_EVENT_TYPE(wxEVT_AUI_PANECLOSE, 0)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxFrameManagerEventFunction)(wxFrameManagerEvent&);
@@ -653,6 +661,9 @@ typedef void (wxEvtHandler::*wxFrameManagerEventFunction)(wxFrameManagerEvent&);
 
 #define EVT_AUI_PANEBUTTON(func) \
    wx__DECLARE_EVT0(wxEVT_AUI_PANEBUTTON, wxFrameManagerEventHandler(func))
+#define EVT_AUI_PANECLOSE(func) \
+   wx__DECLARE_EVT0(wxEVT_AUI_PANECLOSE, wxFrameManagerEventHandler(func))
+
 
 #endif // wxUSE_AUI
 #endif //_WX_FRAMEMANAGER_H_

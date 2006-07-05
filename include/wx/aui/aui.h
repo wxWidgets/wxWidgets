@@ -15,6 +15,7 @@
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"
 #include "wx/aui/floatpane.h"
+#include "wx/aui/notebook.h"
 
 #endif
     // _WX_AUI_H_

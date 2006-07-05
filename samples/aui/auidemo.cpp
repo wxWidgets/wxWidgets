@@ -90,7 +90,7 @@ public:
     void DoUpdate();
 
 private:
-    wxTextCtrl* CreateTextCtrl();
+    wxTextCtrl* CreateTextCtrl(const wxString& text = wxEmptyString);
     wxGrid* CreateGrid();
     wxTreeCtrl* CreateTreeCtrl();
     wxSizeReportCtrl* CreateSizeReportCtrl(int width = 80, int height = 80);
@@ -101,26 +101,28 @@ private:
 
 private:
 
-    void OnEraseBackground(wxEraseEvent& event);
-    void OnSize(wxSizeEvent& event);
+    void OnEraseBackground(wxEraseEvent& evt);
+    void OnSize(wxSizeEvent& evt);
 
-    void OnCreateTree(wxCommandEvent& event);
-    void OnCreateGrid(wxCommandEvent& event);
-    void OnCreateHTML(wxCommandEvent& event);
-    void OnCreateText(wxCommandEvent& event);
-    void OnCreateSizeReport(wxCommandEvent& event);
-    void OnChangeContentPane(wxCommandEvent& event);
-    void OnCreatePerspective(wxCommandEvent& event);
-    void OnCopyPerspectiveCode(wxCommandEvent& event);
-    void OnRestorePerspective(wxCommandEvent& event);
-    void OnSettings(wxCommandEvent& event);
-    void OnExit(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
+    void OnCreateTree(wxCommandEvent& evt);
+    void OnCreateGrid(wxCommandEvent& evt);
+    void OnCreateHTML(wxCommandEvent& evt);
+    void OnCreateText(wxCommandEvent& evt);
+    void OnCreateSizeReport(wxCommandEvent& evt);
+    void OnChangeContentPane(wxCommandEvent& evt);
+    void OnCreatePerspective(wxCommandEvent& evt);
+    void OnCopyPerspectiveCode(wxCommandEvent& evt);
+    void OnRestorePerspective(wxCommandEvent& evt);
+    void OnSettings(wxCommandEvent& evt);
+    void OnExit(wxCommandEvent& evt);
+    void OnAbout(wxCommandEvent& evt);
 
-    void OnGradient(wxCommandEvent& event);
-    void OnManagerFlag(wxCommandEvent& event);
-    void OnUpdateUI(wxUpdateUIEvent& event);
+    void OnGradient(wxCommandEvent& evt);
+    void OnManagerFlag(wxCommandEvent& evt);
+    void OnUpdateUI(wxUpdateUIEvent& evt);
 
+    void OnPaneClose(wxFrameManagerEvent& evt);
+    
 private:
 
     wxFrameManager m_mgr;
@@ -573,6 +575,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_HorizontalGradient, MyFrame::OnUpdateUI)
     EVT_MENU_RANGE(MyFrame::ID_FirstPerspective, MyFrame::ID_FirstPerspective+1000,
                    MyFrame::OnRestorePerspective)
+    EVT_AUI_PANECLOSE(MyFrame::OnPaneClose)
 END_EVENT_TABLE()
 
 
@@ -765,8 +768,9 @@ MyFrame::MyFrame(wxWindow* parent,
                   BestSize(wxSize(200,100)).MinSize(wxSize(200,100)).
                   Bottom().Layer(1));
 
-    m_mgr.AddPane(CreateTextCtrl(), wxPaneInfo().
-                  Name(wxT("test10")).Caption(wxT("Text Pane")).
+    wxWindow* wnd10 = CreateTextCtrl(wxT("This pane will prompt the user before hiding."));
+    m_mgr.AddPane(wnd10, wxPaneInfo().
+                  Name(wxT("test10")).Caption(wxT("Text Pane with Hide Prompt")).
                   Bottom().Layer(1).Position(1));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
@@ -827,7 +831,6 @@ MyFrame::MyFrame(wxWindow* parent,
                   wxPaneInfo().Name(wxT("tb5")).
                   ToolbarPane().Top().Row(2).Position(1).
                   LeftDockable(false).RightDockable(false));
-
 
 
     // make some default perspectives
@@ -962,6 +965,21 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
     }
 }
 
+void MyFrame::OnPaneClose(wxFrameManagerEvent& evt)
+{
+    if (evt.pane->name == wxT("test10"))
+    {
+        int res = wxMessageBox(wxT("Are you sure you want to close/hide this pane?"),
+                               wxT("wxAUI"),
+                               wxYES_NO,
+                               this);
+        if (res != wxYES)
+            evt.Veto();
+    }
+}
+
+
+
 void MyFrame::OnCreatePerspective(wxCommandEvent& WXUNUSED(event))
 {
     wxTextEntryDialog dlg(this, wxT("Enter a name for the new perspective:"),
@@ -1070,12 +1088,15 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(_("wxAUI Demo\nAn advanced window management library for wxWidgets\n(c) Copyright 2005-2006, Kirix Corporation"), _("About wxAUI Demo"), wxOK, this);
 }
 
-wxTextCtrl* MyFrame::CreateTextCtrl()
+wxTextCtrl* MyFrame::CreateTextCtrl(const wxString& ctrl_text)
 {
-    wxString text;
     static int n = 0;
 
-    text.Printf(wxT("This is text box %d"), ++n);
+    wxString text;
+    if (ctrl_text.Length() > 0)
+        text = ctrl_text;
+         else
+        text.Printf(wxT("This is text box %d"), ++n);
 
     return new wxTextCtrl(this,wxID_ANY, text,
                           wxPoint(0,0), wxSize(150,90),

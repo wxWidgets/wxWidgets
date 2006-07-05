@@ -52,6 +52,7 @@ WX_DEFINE_OBJARRAY(wxPaneInfoArray)
 wxPaneInfo wxNullPaneInfo;
 wxDockInfo wxNullDockInfo;
 DEFINE_EVENT_TYPE(wxEVT_AUI_PANEBUTTON)
+DEFINE_EVENT_TYPE(wxEVT_AUI_PANECLOSE)
 
 #ifdef __WXMAC__
     // a few defines to avoid nameclashes
@@ -2771,19 +2772,37 @@ void wxFrameManager::OnFloatingPaneResized(wxWindow* wnd, const wxSize& size)
     pane.floating_size = size;
 }
 
-void wxFrameManager::OnFloatingPaneClosed(wxWindow* wnd)
+
+void wxFrameManager::OnFloatingPaneClosed(wxWindow* wnd, wxCloseEvent& evt)
 {
     // try to find the pane
     wxPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
-    // reparent the pane window back to us and
-    // prepare the frame window for destruction
-    pane.window->Show(false);
-    pane.window->Reparent(m_frame);
-    pane.frame = NULL;
-    pane.Hide();
+
+    // fire pane close event
+    wxFrameManagerEvent e(wxEVT_AUI_PANECLOSE);
+    e.SetPane(&pane);
+    e.SetCanVeto(evt.CanVeto());
+    ProcessMgrEvent(e);
+    
+    if (e.GetVeto())
+    {
+        evt.Veto();
+        return;
+    }
+     else
+    {
+        // reparent the pane window back to us and
+        // prepare the frame window for destruction
+        pane.window->Show(false);
+        pane.window->Reparent(m_frame);
+        pane.frame = NULL;
+        pane.Hide();
+    }
 }
+
+
 
 void wxFrameManager::OnFloatingPaneActivated(wxWindow* wnd)
 {
@@ -3480,28 +3499,26 @@ void wxFrameManager::OnChildFocus(wxChildFocusEvent& event)
 
 // OnPaneButton() is an event handler that is called
 // when a pane button has been pressed.
-void wxFrameManager::OnPaneButton(wxFrameManagerEvent& event)
+void wxFrameManager::OnPaneButton(wxFrameManagerEvent& evt)
 {
-    wxPaneInfo& pane = *(event.pane);
+    wxASSERT_MSG(evt.pane, wxT("Pane Info passed to wxFrameManager::OnPaneButton must be non-null"));
+    
+    wxPaneInfo& pane = *(evt.pane);
 
-    if (event.button == wxPaneInfo::buttonClose)
+    if (evt.button == wxPaneInfo::buttonClose)
     {
-        if (pane.IsOk())
+        // fire button-click event
+        wxFrameManagerEvent e(wxEVT_AUI_PANECLOSE);
+        e.SetPane(evt.pane);
+        ProcessMgrEvent(e);
+        
+        if (!e.GetVeto())
         {
-            wxWindow * pane_window = pane.window;
-            wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-            cancelEvent.SetEventObject( pane_window );
-            pane_window->GetEventHandler()->ProcessEvent(cancelEvent);
-
-            // The problem here is that the above can cause the window itself to be destroyed
-            if (!pane_window->IsBeingDeleted() && pane.IsOk())
-            {
-                pane.Hide();
-                Update();
-            }
+            pane.Hide();
+            Update();
         }
     }
-    else if (event.button == wxPaneInfo::buttonPin)
+     else if (evt.button == wxPaneInfo::buttonPin)
     {
         if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) &&
             pane.IsFloatable())
