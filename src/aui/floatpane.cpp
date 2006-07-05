@@ -69,6 +69,9 @@ void wxFloatingPane::SetPaneWindow(const wxPaneInfo& pane)
                     PaneBorder(false).
                     Layer(0).Row(0).Position(0);
 
+    // Carry over the minimum size
+    SetMinSize(pane.window->GetMinSize());
+
     m_mgr.AddPane(m_pane_window, contained_pane);
     m_mgr.Update();
 

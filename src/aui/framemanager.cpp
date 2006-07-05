@@ -1158,7 +1158,8 @@ void wxFrameManager::LayoutAddPane(wxSizer* cont,
     else
     {
         sizer_item = vert_pane_sizer->Add(pane.window, 1, wxEXPAND);
-        vert_pane_sizer->SetItemMinSize(pane.window, 1, 1);
+        // Don't do this because it breaks the pane size in floating windows
+        // vert_pane_sizer->SetItemMinSize(pane.window, 1, 1);
     }
 
     part.type = wxDockUIPart::typePane;
