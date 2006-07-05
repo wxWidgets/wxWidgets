@@ -1069,6 +1069,13 @@ wxString wxGetOsDescription()
     {
         switch ( info.dwPlatformId )
         {
+#ifdef VER_PLATFORM_WIN32_CE
+            case VER_PLATFORM_WIN32_CE:
+                str.Printf(_("Windows CE (%d.%d)"),
+                           info.dwMajorVersion,
+                           info.dwMinorVersion);
+                break;
+#endif
             case VER_PLATFORM_WIN32s:
                 str = _("Win32s on Windows 3.1");
                 break;
@@ -1132,7 +1139,7 @@ wxString wxGetOsDescription()
                             break;
                     }
                 }
-                if ( wxIsEmpty(str) )
+                if ( str.empty() )
                 {
                     str.Printf(_("Windows NT %lu.%lu (build %lu"),
                            info.dwMajorVersion,
