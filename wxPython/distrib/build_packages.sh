@@ -123,6 +123,10 @@ elif [ "$OSTYPE" = "darwin" ]; then
     UNICODE_OPT=unicode
   fi 
   
+  DEBUG_OPT=
+  if [ $debug = yes ]; then
+    DEBUG_OPT=debug
+  fi
   # On Tiger, build Universal.
   UNIV_OPT=
   if [ ${OSX_VERSION:0:4} = "10.4" ]; then
@@ -132,9 +136,9 @@ elif [ "$OSTYPE" = "darwin" ]; then
   #sudo $WXWIN/wxPython/distrib/makedocs
   $WXWIN/wxPython/distrib/makedemo
   export TARBALLDIR=$WXWIN/wxPython/dist
-  echo "distrib/mac/wxPythonOSX/build $PY_DOT_VER panther inplace $UNICODE_OPT $RESWIG"
+  echo "distrib/mac/wxPythonOSX/build $PY_DOT_VER inplace $UNICODE_OPT $RESWIG"
   
-  distrib/mac/wxPythonOSX/build $PY_DOT_VER panther inplace $UNICODE_OPT $RESWIG $UNIV_OPT
+  distrib/mac/wxPythonOSX/build $PY_DOT_VER inplace $UNICODE_OPT $DEBUG_OPT $RESWIG $UNIV_OPT
 else
   echo "OSTYPE $OSTYPE not yet supported by this build script."
 fi

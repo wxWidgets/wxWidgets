@@ -79,7 +79,7 @@
 # its use eventhough there is a compatibility problem that causes a
 # failed compile.
 %if %{?mediactrl:0}%{!?mediactrl:1}
-%define mediactrl 0
+%define mediactrl 1
 %endif
 
 
@@ -205,7 +205,7 @@ cd bld
 	--with-gtk=2 \
 %endif
 	--prefix=%{wxpref} \
-	--enable-monolithic \
+	--disable-monolithic \
 	--disable-rpath \
 	--with-opengl \
 	--with-gnomeprint \
@@ -414,9 +414,13 @@ rm %{wxpref}/bin/wx-config
 %doc wxPython/docs/*
 %dir %{pref}/lib*/python%{pyver}/site-packages/wx-%{ver2}*-%{port}-%{chartype}
 %{pref}/lib*/python%{pyver}/site-packages/wx-%{ver2}*-%{port}-%{chartype}/*
+%dir %{pref}/lib*/python%{pyver}/site-packages/wxaddons
+%{pref}/lib*/python%{pyver}/site-packages/wxaddons/*
 %dir %{wxpref}
 %dir %{wxpref}/lib
-%{wxpref}/lib/libwx_gtk*
+%{wxpref}/lib/libwx_*
+%dir %{wxpref}/bin
+%{wxpref}/bin/wxrc*
 %{wxpref}/share
 
 

@@ -142,6 +142,7 @@ Source: "wxPython\tools\*.py";                    DestDir: "{app}\%(PKGDIR)s\wxP
 Source: "src\winxp.manifest";               DestDir: "{code:GetPythonDir}"; DestName: "python.exe.manifest";   Flags: sharedfile; Components:  manifest
 Source: "src\winxp.manifest";               DestDir: "{code:GetPythonDir}"; DestName: "pythonw.exe.manifest";  Flags: sharedfile; Components: manifest
 Source: "wxversion\wxversion.py";           DestDir: "{app}";  Flags: sharedfile;  Components: core
+Source: "wxaddons\*.py";                    DestDir: "{app}\wxaddons";  Flags: sharedfile;  Components: core
 Source: "src\wx.pth";                       DestDir: "{app}";  Flags: sharedfile;  Components: pthfile
 
 %(LOCALE)s
@@ -230,6 +231,12 @@ Type: files; Name: "{app}\%(PKGDIR)s\wxPython\lib\mixins\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wxPython\lib\mixins\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wxPython\tools\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wxPython\tools\*.pyo";
+
+Type: files; Name: "{app}\wxversion.pyc";
+Type: files; Name: "{app}\wxversion.pyo";
+
+Type: files; Name: "{app}\%(PKGDIR)s\wxaddons\*.pyc";
+Type: files; Name: "{app}\%(PKGDIR)s\wxaddons\*.pyo";
 
 %(UNINSTALL_BATCH)s
 
@@ -627,7 +634,7 @@ def main():
     ISSFILE         = "__wxPython.iss"
     ISSDEMOFILE     = "__wxPythonDemo.iss"
     IFSFILE         = "__wxPython.ifs"
-    IFSFILEREF    = "CodeFile = " + IFSFILE
+    IFSFILEREF      = "CodeFile = " + IFSFILE
     IFSFILEREF = ""
     UNINSTALL_BATCH = get_batch_files()
     PKGDIR          = open('src/wx.pth').read()

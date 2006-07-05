@@ -207,9 +207,12 @@ swig_sources = run_swig(['gdi.i'], 'src', GENDIR, PKGDIR,
                          'src/_pen.i',
                          'src/_palette.i',
                          'src/_renderer.i',
+##                         'src/_pseudodc.i',
                          ],
                         True)
-ext = Extension('_gdi_', ['src/drawlist.cpp'] + swig_sources,
+ext = Extension('_gdi_', ['src/drawlist.cpp',
+##                          'src/pseudodc.cpp'
+                          ] + swig_sources,
                 include_dirs =  includes,
                 define_macros = defines,
                 library_dirs = libdirs,
@@ -446,6 +449,10 @@ swig_sources = run_swig(['xrc.i'], 'src', GENDIR, PKGDIR,
                           'src/_xml.i',
                           'src/_xmlhandler.i',
                           ])
+if not MONOLITHIC:
+    xrcLib = makeLibName('xrc')
+else:
+    xrcLib = []
 ext = Extension('_xrc',
                 swig_sources,
 
@@ -453,7 +460,7 @@ ext = Extension('_xrc',
                 define_macros = defines,
 
                 library_dirs = libdirs,
-                libraries = libs + makeLibName('xrc'),
+                libraries = libs + xrcLib,
 
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
@@ -464,11 +471,15 @@ wxpExtensions.append(ext)
 
 swig_sources = run_swig(['richtext.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps)
+if not MONOLITHIC:
+    richLib = makeLibName('richtext')
+else:
+    richLib = []
 ext = Extension('_richtext', swig_sources,
                 include_dirs =  includes,
                 define_macros = defines,
                 library_dirs = libdirs,
-                libraries = libs + makeLibName('richtext'),
+                libraries = libs + richLib,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
                 **depends
@@ -491,10 +502,12 @@ if BUILD_GLCANVAS:
                             USE_SWIG, swig_force, swig_args, swig_deps)
 
     gl_libs = []
+    gl_libdirs = libdirs[:]
     if os.name == 'posix':
         gl_config = os.popen(WX_CONFIG + ' --libs gl', 'r').read()[:-1]
         gl_lflags = gl_config.split()
-        gl_libs = libs
+        gl_lflags = adjustLFLAGS(gl_lflags, gl_libdirs, gl_libs)
+
         
     else:
         gl_libs = libs + ['opengl32', 'glu32'] + makeLibName('gl')
@@ -506,7 +519,7 @@ if BUILD_GLCANVAS:
                     include_dirs = includes + CONTRIBS_INC,
                     define_macros = defines,
 
-                    library_dirs = libdirs,
+                    library_dirs = gl_libdirs,
                     libraries = gl_libs,
 
                     extra_compile_args = cflags,
@@ -839,6 +852,21 @@ if __name__ == "__main__":
                            },
               )
 
+        setup(name = 'wxaddons', 
+                  version          = VERSION,
+                  description      = DESCRIPTION,
+                  long_description = LONG_DESCRIPTION,
+                  author           = AUTHOR,
+                  author_email     = AUTHOR_EMAIL,
+                  url              = URL,
+                  download_url     = DOWNLOAD_URL,
+                  license          = LICENSE,
+                  platforms        = PLATFORMS,
+                  classifiers      = filter(None, CLASSIFIERS.split("\n")),
+                  keywords         = KEYWORDS,
+                  
+                  packages = ['wxaddons']
+             )
 
         if INSTALL_MULTIVERSION:
             setup(name             = 'wxPython-common',

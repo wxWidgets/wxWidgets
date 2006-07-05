@@ -585,7 +585,11 @@ def adjustLFLAGS(lflags, libdirs, libs):
         else:
             newLFLAGS.append(flag)
 
-    return newLFLAGS
+    # remove any flags for universal binaries, we'll get those from
+    # distutils instead
+    return [flag for flag in newLFLAGS
+            if flag not in ['-isysroot', '-arch', 'ppc', 'i386'] and
+            not flag.startswith('/Developer') ]
 
 
 

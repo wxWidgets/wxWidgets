@@ -45,7 +45,7 @@ class Config:
                 continue # it's a comment, move on
             data = line.split("=")
             if len(data) == 2:
-                self.__dict__[data[0]] = data[1]
+                self.__dict__[data[0].strip()] = data[1].strip()
         myfile.close()
 
 class Job(object):
