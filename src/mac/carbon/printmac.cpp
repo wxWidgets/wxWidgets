@@ -554,8 +554,8 @@ void wxMacPrintPreview::DetermineScaling(void)
         // use some defaults
         x = 8 * 72 ;
         y = 11 * 72 ;
-        ww = x * 25.4 / ppiPrinter.x ;
-        hh = y * 25.4 / ppiPrinter.y ;
+        ww = (int) (x * 25.4 / ppiPrinter.x) ;
+        hh = (int) (y * 25.4 / ppiPrinter.y) ;
         m_isOk = false ;
     }
     m_previewPrintout->SetPageSizeMM((int)ww, (int)hh);
