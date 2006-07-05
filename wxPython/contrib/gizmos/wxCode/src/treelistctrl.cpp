@@ -2926,7 +2926,7 @@ void wxTreeListMainWindow::SelectItem(const wxTreeItemId& itemId,
 
 void wxTreeListMainWindow::SelectAll(bool extended_select)
 {
-    wxCHECK_RET( GetWindowStyleFlag() & wxTR_MULTIPLE, wxT("invalid tree style") );
+    wxCHECK_RET( GetWindowStyleFlag() & wxTR_MULTIPLE, wxT("invalid tree style, must have wxTR_MULTIPLE style to select all items") );
 
     wxTreeEvent event( wxEVT_COMMAND_TREE_SEL_CHANGING, m_owner->GetId() );
     event.SetItem( GetRootItem() );
@@ -2954,6 +2954,7 @@ void wxTreeListMainWindow::SelectAll(bool extended_select)
     wxTreeItemId root = GetRootItem();
     wxTreeListItem *first = (wxTreeListItem *)GetFirstChild (root, cookie).m_pItem;
     wxTreeListItem *last = (wxTreeListItem *)GetLastChild (GetRootItem()).m_pItem;
+    if (!first || !last) return;
     if (TagAllChildrenUntilLast (first, last, true)) return;
     TagNextChildren (first, last, true);
 
