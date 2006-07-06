@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpdlg.h
+// Name:        wx/html/helpdlg.h
 // Purpose:     wxHtmlHelpDialog
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
@@ -18,6 +18,7 @@
 
 #include "wx/html/helpdata.h"
 #include "wx/window.h"
+#include "wx/dialog.h"
 #include "wx/frame.h"
 #include "wx/config.h"
 #include "wx/splitter.h"
@@ -87,4 +88,3 @@ protected:
     // wxUSE_WXHTML_HELP
 
 #endif
-
