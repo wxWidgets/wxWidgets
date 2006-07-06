@@ -108,14 +108,23 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
     s = new wxZipFSInputStream(leftFile);
     if (s && s->IsOk())
     {
+#if wxUSE_DATETIME
+       wxDateTime dtMod;
+#endif // wxUSE_DATETIME
+
        bool found = false;
        while (!found)
        {
            wxZipEntry *ent = s->GetNextEntry();
            if (!ent)
                break;
+
            if (ent->GetInternalName() == right)
+           {
                found = true;
+               dtMod = ent->GetDateTime();
+           }
+
            delete ent;
        }
        if (found)
@@ -125,8 +134,7 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
                             GetMimeTypeFromExt(location),
                             GetAnchor(location)
 #if wxUSE_DATETIME
-                            , wxFileSystem::URLToFileName(left).
-                                GetModificationTime()
+                            , dtMod
 #endif // wxUSE_DATETIME
                             );
        }
