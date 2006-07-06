@@ -44,13 +44,6 @@ static inline bool AreSameAdjustValues(double x, double y)
     return fabs(x - y) < 0.02;
 }
 
-static inline int AdjustValueToInt(double x)
-{
-    // we want to round to the nearest integer, i.e. 0.9 is rounded to 1 and
-    // -0.9 is rounded to -1
-    return (int)(x < 0 ? x - 0.5 : x + 0.5);
-}
-
 // process a scroll event
 static void
 ProcessScrollEvent(wxSlider *win, wxEventType evtType, double dvalue)
@@ -209,7 +202,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
 int wxSlider::GetValue() const
 {
-    return AdjustValueToInt(m_adjust->value);
+    return wxRound(m_adjust->value);
 }
 
 void wxSlider::SetValue( int value )

@@ -77,28 +77,46 @@
 #endif
 
 #ifdef __cplusplus
-#ifdef __INTELC__
-inline bool wxIsSameDouble(double x, double y)
-{
-    // VZ: this warning, given for operators==() and !=() is not wrong, as ==
-    //     shouldn't be used with doubles, but we get too many of them and
-    //     removing these operators is probably not a good idea
-    //
-    //     Maybe we should alway compare doubles up to some "epsilon" precision
-    #pragma warning(push)
 
-    // floating-point equality and inequality comparisons are unreliable
-    #pragma warning(disable: 1572)
+    #ifdef __INTELC__
 
-    return x == y;
+        inline bool wxIsSameDouble(double x, double y)
+        {
+            // VZ: this warning, given for operators==() and !=() is not wrong, as ==
+            //     shouldn't be used with doubles, but we get too many of them and
+            //     removing these operators is probably not a good idea
+            //
+            //     Maybe we should alway compare doubles up to some "epsilon" precision
+            #pragma warning(push)
 
-    #pragma warning(pop)
-}
-#else /* !__INTELC__ */
-inline bool wxIsSameDouble(double x, double y) { return x == y; }
-#endif /* __INTELC__/!__INTELC__ */
+            // floating-point equality and inequality comparisons are unreliable
+            #pragma warning(disable: 1572)
 
-inline bool wxIsNullDouble(double x) { return wxIsSameDouble(x, 0.); }
+            return x == y;
+
+            #pragma warning(pop)
+        }
+
+    #else /* !__INTELC__ */
+
+        inline bool wxIsSameDouble(double x, double y) { return x == y; }
+
+    #endif /* __INTELC__/!__INTELC__ */
+
+    inline bool wxIsNullDouble(double x) { return wxIsSameDouble(x, 0.); }
+
+    #ifdef __VMS
+        //Missing definition in OpenVMS C++ header files.
+        double round(double __x);
+    #endif
+    inline int wxRound(double x)
+    {
+        #ifdef __VMS
+            return int(round(x));
+        #else
+            return (int)(x < 0 ? x - 0.5 : x + 0.5);
+        #endif
+    }
 #endif /* __cplusplus */
 
 

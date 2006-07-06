@@ -22,7 +22,11 @@
 #undef XtClass
 #endif
 
-# include "wx/gauge.h"
+#include "wx/gauge.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/math.h"
+#endif
 
 #ifdef __OS2__
 #include <types.h>
@@ -673,8 +677,6 @@ GaugePick(Widget WXUNUSED(w), XEvent *WXUNUSED(e), String *WXUNUSED(args), Cardi
 #endif
 }
 
-#define round(x) ( (x) > 0 ? ((x) + 0.5) : -(-(x) + 0.5) )
-
 void
 GaugeDrag(Widget WXUNUSED(w), XEvent *WXUNUSED(e), String *WXUNUSED(args), Cardinal  *WXUNUSED(num_args))
 {
@@ -720,7 +722,7 @@ GaugeDrag(Widget WXUNUSED(w), XEvent *WXUNUSED(e), String *WXUNUSED(args), Cardi
 
     fvalue = (int)((float)THIS.maximum -
         (float)THIS.minimum) * (float)nsize / (float)max;
-    value = round(fvalue);
+    value = wxRound(fvalue);
 
     THIS.value = value;
     THIS.oldx = x;

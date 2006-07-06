@@ -12,15 +12,11 @@
 
 #if wxUSE_SLIDER
 
-#ifdef __VMS
-   //Missing definition in OpenVMS C++ header files.
-   double round(double __x);
-#endif
-
 #include "wx/slider.h"
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/gtk/private.h"
@@ -134,7 +130,7 @@ gtk_value_changed(GtkRange* range, wxSlider* win)
     if (g_blockEventsOnDrag) return;
 
     GtkAdjustment* adj = range->adjustment;
-    const int pos = int(round(adj->value));
+    const int pos = wxRound(adj->value);
     const double oldPos = win->m_pos;
     win->m_pos = adj->value;
     if (win->m_blockScrollEvent)
@@ -183,7 +179,7 @@ gtk_value_changed(GtkRange* range, wxSlider* win)
     win->m_scrollEventType = GTK_SCROLL_NONE;
 
     // If integral position has changed
-    if (int(round(oldPos)) != pos)
+    if (wxRound(oldPos) != pos)
     {
         wxCHECK_RET(eventType != wxEVT_NULL, _T("Unknown slider scroll event type"));
         ProcessScrollEvent(win, eventType);
@@ -270,7 +266,7 @@ extern "C" {
 static gchar* gtk_format_value(GtkScale*, double value, void*)
 {
     // Format value as nearest integer
-    return g_strdup_printf("%d", int(round(value)));
+    return g_strdup_printf("%d", wxRound(value));
 }
 }
 
@@ -340,7 +336,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
 int wxSlider::GetValue() const
 {
-    return int(round(m_pos));
+    return wxRound(m_pos);
 }
 
 void wxSlider::SetValue( int value )
