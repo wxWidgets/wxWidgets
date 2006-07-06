@@ -516,36 +516,8 @@ void wxVListBoxComboPopup::SetStringValue( const wxString& value )
         wxVListBox::SetSelection(index);
 }
 
-wxSize wxVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, int maxHeight )
+void wxVListBoxComboPopup::CalcWidths()
 {
-    int height = 250;
-
-    if ( m_strings.GetCount() )
-    {
-        if ( prefHeight > 0 )
-            height = prefHeight;
-
-        if ( height > maxHeight )
-            height = maxHeight;
-
-        int totalHeight = GetTotalHeight(); // + 3;
-        if ( height >= totalHeight )
-        {
-            height = totalHeight;
-        }
-        else
-        {
-            // Adjust height to a multiple of the height of the first item
-            // NB: Calculations that take variable height into account
-            //     are unnecessary.
-            int fih = GetLineHeight(0);
-            int shown = height/fih;
-            height = shown * fih;
-        }
-    }
-    else
-        height = 50;
-
     bool doFindWidest = m_findWidest;
 
     // Measure items with dirty width.
@@ -631,6 +603,39 @@ wxSize wxVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, int 
 
         m_findWidest = false;
     }
+}
+
+wxSize wxVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, int maxHeight )
+{
+    int height = 250;
+
+    if ( m_strings.GetCount() )
+    {
+        if ( prefHeight > 0 )
+            height = prefHeight;
+
+        if ( height > maxHeight )
+            height = maxHeight;
+
+        int totalHeight = GetTotalHeight(); // + 3;
+        if ( height >= totalHeight )
+        {
+            height = totalHeight;
+        }
+        else
+        {
+            // Adjust height to a multiple of the height of the first item
+            // NB: Calculations that take variable height into account
+            //     are unnecessary.
+            int fih = GetLineHeight(0);
+            int shown = height/fih;
+            height = shown * fih;
+        }
+    }
+    else
+        height = 50;
+
+    CalcWidths();
 
     // Take scrollbar into account in width calculations
     int widestWidth = m_widestWidth + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);

@@ -157,6 +157,12 @@ protected:
     void OnKey(wxKeyEvent& event);
     void OnLeftClick(wxMouseEvent& event);
 
+    // Return the widest item width (recalculating it if necessary)
+    int GetWidestItemWidth() { CalcWidths(); return m_widestWidth; }
+
+    // Return the index of the widest item (recalculating it if necessary)
+    int GetWidestItem() { CalcWidths(); return m_widestItem; }
+
     wxArrayString           m_strings;
     wxArrayPtrVoid          m_clientDatas;
 
@@ -188,6 +194,9 @@ private:
 
     // has the mouse been released on this control?
     bool                    m_clicked;
+
+    // Recalculate widths if they are dirty
+    void CalcWidths();
 
     DECLARE_EVENT_TABLE()
 };
@@ -292,6 +301,12 @@ public:
     {
         wxComboCtrl::SetSelection(from,to);
     }
+
+    // Return the widest item width (recalculating it if necessary)
+    virtual int GetWidestItemWidth() { EnsurePopupControl(); return GetVListBoxComboPopup()->GetWidestItemWidth(); }
+
+    // Return the index of the widest item (recalculating it if necessary)
+    virtual int GetWidestItem() { EnsurePopupControl(); return GetVListBoxComboPopup()->GetWidestItem(); }
 
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
