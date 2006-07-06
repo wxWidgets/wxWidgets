@@ -1818,7 +1818,8 @@ void wxFrameManager::Update()
                 if (p.frame->GetPosition() != p.floating_pos)
                 {
                     p.frame->SetSize(p.floating_pos.x, p.floating_pos.y,
-                                     -1, -1, wxSIZE_USE_EXISTING);
+                                     wxDefaultCoord, wxDefaultCoord,
+                                     wxSIZE_USE_EXISTING);
                     //p.frame->Move(p.floating_pos.x, p.floating_pos.y);
                 }
 
@@ -2488,6 +2489,9 @@ void wxFrameManager::ShowHint(const wxRect& rect)
             // Until a better system color is decided upon we'll just use
             // blue.
             p->SetBackgroundColour(*wxBLUE);
+#else
+            wxUnusedVar(pt);
+            wxUnusedVar(size);
 #endif
             m_hint_wnd->Show();
 
@@ -2804,7 +2808,7 @@ void wxFrameManager::OnFloatingPaneClosed(wxWindow* wnd, wxCloseEvent& evt)
     e.SetPane(&pane);
     e.SetCanVeto(evt.CanVeto());
     ProcessMgrEvent(e);
-    
+
     if (e.GetVeto())
     {
         evt.Veto();
@@ -3521,7 +3525,7 @@ void wxFrameManager::OnChildFocus(wxChildFocusEvent& event)
 void wxFrameManager::OnPaneButton(wxFrameManagerEvent& evt)
 {
     wxASSERT_MSG(evt.pane, wxT("Pane Info passed to wxFrameManager::OnPaneButton must be non-null"));
-    
+
     wxPaneInfo& pane = *(evt.pane);
 
     if (evt.button == wxPaneInfo::buttonClose)
@@ -3530,7 +3534,7 @@ void wxFrameManager::OnPaneButton(wxFrameManagerEvent& evt)
         wxFrameManagerEvent e(wxEVT_AUI_PANECLOSE);
         e.SetPane(evt.pane);
         ProcessMgrEvent(e);
-        
+
         if (!e.GetVeto())
         {
             pane.Hide();
