@@ -484,6 +484,30 @@ public:
 
 //---------------------------------------------------------------------------
 
+DocStr( wxNumberEntryDialog,
+"A dialog with spin control, ok and cancel buttons.", "")
+
+MustHaveApp(wxNumberEntryDialog);
+
+class wxNumberEntryDialog : public wxDialog
+{
+public:
+    %pythonAppend wxNumberEntryDialog   "self._setOORInfo(self)"
+    
+    DocCtorStr(
+        wxNumberEntryDialog(wxWindow *parent,
+                            const wxString& message,
+                            const wxString& prompt,
+                            const wxString& caption,
+                            long value, long min, long max,
+                            const wxPoint& pos = wxDefaultPosition),
+        "Constructor.  Use ShowModal method to show the dialog.", "");
+
+    long GetValue();
+};
+
+//---------------------------------------------------------------------------
+
 
 DocStr(wxFontData,
        "This class holds a variety of information related to font dialogs and
