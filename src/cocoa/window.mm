@@ -15,6 +15,7 @@
     #include "wx/log.h"
     #include "wx/window.h"
     #include "wx/dc.h"
+    #include "wx/utils.h"
 #endif //WX_PRECOMP
 
 #include "wx/tooltip.h"
@@ -1040,6 +1041,13 @@ wxPoint wxGetMousePosition()
 {
     // TODO
     return wxDefaultPosition;
+}
+
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+    // TODO
+    return ms;
 }
 
 wxWindow* wxFindWindowAtPointer(wxPoint& pt)
