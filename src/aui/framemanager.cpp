@@ -125,8 +125,8 @@ static void MakeWindowTransparent(wxWindow* wnd, int amount)
     SetWindowAlpha(handle, float(amount)/ 255.0);
 
 #else
-    wxUnused(wnd);
-    wxUnused(amount);
+    wxUnusedVar(wnd);
+    wxUnusedVar(amount);
 #endif
 }
 
