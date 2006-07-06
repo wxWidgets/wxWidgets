@@ -38,8 +38,8 @@ else
 fi
 
 # this is where we will store the wxAll tarball we create
-if [ ! -d $DISTDIR ]; then
-  mkdir $DISTDIR
+if [ ! -d $START_DIR/$DISTDIR ]; then
+  mkdir -p $START_DIR/$DISTDIR
 fi
 
 #re-bake the bakefiles
