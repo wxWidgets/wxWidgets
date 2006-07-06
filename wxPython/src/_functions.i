@@ -241,8 +241,6 @@ int wxMessageBox(const wxString& message,
                  wxWindow *parent = NULL,
                  int x = -1, int y = -1);
 
-// WXWIN_COMPATIBILITY_2_4
-#if 0
 MustHaveApp(wxGetNumberFromUser);
 long wxGetNumberFromUser(const wxString& message,
                          const wxString& prompt,
@@ -251,8 +249,6 @@ long wxGetNumberFromUser(const wxString& message,
                          long min = 0, long max = 100,
                          wxWindow *parent = NULL,
                          const wxPoint& pos = wxDefaultPosition);
-%pythoncode { GetNumberFromUser = wx._deprecated(GetNumberFromUser) }
-#endif
 
 // GDI Functions
 

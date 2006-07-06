@@ -29,6 +29,7 @@
 #include <wx/dcps.h>
 #include <wx/dirctrl.h>
 #include <wx/dirdlg.h>
+#include <wx/numdlg.h>
 #include <wx/dnd.h>
 #include <wx/docview.h>
 #include <wx/encconv.h>
