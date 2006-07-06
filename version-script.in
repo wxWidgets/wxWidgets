@@ -11,9 +11,9 @@
 @WX_VERSION_TAG@.4 {
     global:
         *wxString*const_reverse_iterator*;
-        *wxString*reverse_iterator*;
         *wxString*rbegin*;
         *wxString*rend*;
+        *wxString*reverse_iterator*;
 };
 
 # public symbols added in release 2.6.3 (please keep in alphabetical order):
