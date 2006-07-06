@@ -71,7 +71,7 @@
 
 
 // Disable features which don't make sense for MS Smartphones
-// (due to pointer device usage, limited controls, file system)
+// (due to pointer device usage, limited controls or dialogs, file system)
 #if defined(__SMARTPHONE__)
     #undef wxUSE_LISTBOOK
     #define wxUSE_LISTBOOK 0
@@ -81,6 +81,9 @@
 
     #undef wxUSE_STATUSBAR
     #define wxUSE_STATUSBAR 0
+
+    #undef wxUSE_COLOURPICKERCTRL
+    #define wxUSE_COLOURPICKERCTRL 0
 #endif // __SMARTPHONE__
 
 #endif // _WX_MSW_WINCE_CHKCONF_H_
