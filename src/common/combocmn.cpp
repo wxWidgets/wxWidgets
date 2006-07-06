@@ -1562,6 +1562,7 @@ void wxComboCtrlBase::DestroyPopup()
     if ( m_winPopup )
         m_winPopup->Destroy();
 
+    m_popupExtraHandler = (wxEvtHandler*) NULL;
     m_popupInterface = (wxComboPopup*) NULL;
     m_winPopup = (wxWindow*) NULL;
     m_popup = (wxWindow*) NULL;
