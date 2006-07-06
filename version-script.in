@@ -6,6 +6,16 @@
 #       new development branch.
 
 
+# public symbols added in release 2.6.4 (please keep in alphabetical order):
+
+@WX_VERSION_TAG@.4 {
+    global:
+        *wxString*const_reverse_iterator*;
+        *wxString*reverse_iterator*;
+        *wxString*rbegin*;
+        *wxString*rend*;
+};
+
 # public symbols added in release 2.6.3 (please keep in alphabetical order):
 
 @WX_VERSION_TAG@.3 {
