@@ -37,6 +37,7 @@ wxOwnerDrawnComboBoxXmlHandler::wxOwnerDrawnComboBoxXmlHandler()
     XRC_ADD_STYLE(wxCB_DROPDOWN);
     XRC_ADD_STYLE(wxODCB_STD_CONTROL_PAINT);
     XRC_ADD_STYLE(wxODCB_DCLICK_CYCLES);
+    XRC_ADD_STYLE(wxTE_PROCESS_ENTER);
     AddWindowStyles();
 }
 
