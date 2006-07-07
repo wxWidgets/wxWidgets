@@ -21,6 +21,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/odcombo.h"
