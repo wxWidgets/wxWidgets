@@ -2434,6 +2434,7 @@ void wxFrameManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
 
 void wxFrameManager::ShowHint(const wxRect& rect)
 {
+#if defined(__WXMSW__) || defined(__WXMAC__)
     // First, determine if the operating system can handle transparency.
     // Transparency is available on Win2000 and above
 
@@ -2489,9 +2490,6 @@ void wxFrameManager::ShowHint(const wxRect& rect)
             // Until a better system color is decided upon we'll just use
             // blue.
             p->SetBackgroundColour(*wxBLUE);
-#else
-            wxUnusedVar(pt);
-            wxUnusedVar(size);
 #endif
             m_hint_wnd->Show();
 
@@ -2518,7 +2516,8 @@ void wxFrameManager::ShowHint(const wxRect& rect)
 
         return;
     }
-
+#endif
+    
     if (m_last_hint != rect)
     {
         // remove the last hint rectangle
