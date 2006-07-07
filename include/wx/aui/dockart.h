@@ -42,8 +42,8 @@ public:
     virtual wxFont GetFont(int id) = 0;
     virtual wxColour GetColour(int id) = 0;
     virtual void SetColour(int id, const wxColor& colour) = 0;
-    wxColor GetColor(int id) { return GetColour(id); }
-    void SetColor(int id, const wxColor& color) { SetColour(id, color); }
+    wxColour GetColor(int id) { return GetColour(id); }
+    void SetColor(int id, const wxColour& color) { SetColour(id, color); }
 
     virtual void DrawSash(wxDC& dc,
                           int orientation,

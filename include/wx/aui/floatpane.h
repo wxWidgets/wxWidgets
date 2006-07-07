@@ -58,9 +58,10 @@ private:
     wxFrameManager* m_owner_mgr;
     wxFrameManager m_mgr;
 
+#ifndef SWIG
     DECLARE_EVENT_TABLE()
-
     DECLARE_CLASS(wxFloatingPaneBaseClass)
+#endif // SWIG
 };
 
 #endif // wxUSE_AUI

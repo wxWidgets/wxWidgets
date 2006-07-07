@@ -102,16 +102,17 @@ class wxDockInfo;
 class wxDockArt;
 class wxFrameManagerEvent;
 
+#ifndef SWIG
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDockInfo, wxDockInfoArray, WXDLLIMPEXP_AUI);
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDockUIPart, wxDockUIPartArray, WXDLLIMPEXP_AUI);
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxPaneButton, wxPaneButtonArray, WXDLLIMPEXP_AUI);
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxPaneInfo, wxPaneInfoArray, WXDLLIMPEXP_AUI);
 WX_DEFINE_ARRAY_PTR(wxPaneInfo*, wxPaneInfoPtrArray);
 WX_DEFINE_ARRAY_PTR(wxDockInfo*, wxDockInfoPtrArray);
+#endif // SWIG
 
-extern wxDockInfo wxNullDockInfo;
-extern wxPaneInfo wxNullPaneInfo;
-
+extern WXDLLIMPEXP_AUI wxDockInfo wxNullDockInfo;
+extern WXDLLIMPEXP_AUI wxPaneInfo wxNullPaneInfo;
 
 
 
@@ -138,6 +139,9 @@ public:
         DefaultPane();
     }
 
+    ~wxPaneInfo() {}
+    
+#ifndef SWIG
     wxPaneInfo(const wxPaneInfo& c)
     {
         name = c.name;
@@ -180,7 +184,8 @@ public:
         rect = c.rect;
         return *this;
     }
-
+#endif // SWIG
+    
     bool IsOk() const { return (window != NULL) ? true : false; }
     bool IsFixed() const { return !HasFlag(optionResizable); }
     bool IsResizable() const { return HasFlag(optionResizable); }
@@ -203,6 +208,9 @@ public:
     bool HasPinButton() const { return HasFlag(buttonPin); }
     bool HasGripperTop() const { return HasFlag(optionGripperTop); }
 
+#ifdef SWIG
+    %typemap(out) wxPaneInfo& { $result = $self; Py_INCREF($result); }
+#endif
     wxPaneInfo& Window(wxWindow* w) { window = w; return *this; }
     wxPaneInfo& Name(const wxString& n) { name = n; return *this; }
     wxPaneInfo& Caption(const wxString& c) { caption = c; return *this; }
@@ -292,6 +300,10 @@ public:
         return (state & flag) ? true:false;
     }
 
+#ifdef SWIG
+    %typemap(out) wxPaneInfo& ;
+#endif
+    
 public:
 
     enum wxPaneState
@@ -500,7 +512,9 @@ protected:
     wxTimer m_hint_fadetimer;    // transparent fade timer (for now, only msw)
     int m_hint_fadeamt;          // transparent fade amount (for now, only msw)
 
+#ifndef SWIG
     DECLARE_EVENT_TABLE()
+#endif // SWIG
 };
 
 
@@ -517,7 +531,7 @@ public:
         veto_flag = false;
         canveto_flag = true;
     }
-
+#ifndef SWIG
     wxFrameManagerEvent(const wxFrameManagerEvent& c) : wxEvent(c)
     {
         pane = c.pane;
@@ -525,7 +539,7 @@ public:
         veto_flag = c.veto_flag;
         canveto_flag = c.canveto_flag;
     }
-
+#endif
     wxEvent *Clone() const { return new wxFrameManagerEvent(*this); }
 
     void SetPane(wxPaneInfo* p) { pane = p; }
@@ -561,6 +575,7 @@ public:
         toolbar = false;
     }
 
+#ifndef SWIG
     wxDockInfo(const wxDockInfo& c)
     {
         dock_direction = c.dock_direction;
@@ -589,6 +604,7 @@ public:
         rect = c.rect;
         return *this;
     }
+#endif // SWIG
 
     bool IsOk() const { return (dock_direction != 0) ? true : false; }
     bool IsHorizontal() const { return (dock_direction == wxAUI_DOCK_TOP ||
@@ -646,12 +662,12 @@ public:
 
 
 
-
+#ifndef SWIG
 // wx event machinery
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_AUI_PANEBUTTON, 0)
-    DECLARE_EVENT_TYPE(wxEVT_AUI_PANECLOSE, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANEBUTTON, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANECLOSE, 0)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxFrameManagerEventFunction)(wxFrameManagerEvent&);
@@ -664,6 +680,16 @@ typedef void (wxEvtHandler::*wxFrameManagerEventFunction)(wxFrameManagerEvent&);
 #define EVT_AUI_PANECLOSE(func) \
    wx__DECLARE_EVT0(wxEVT_AUI_PANECLOSE, wxFrameManagerEventHandler(func))
 
+#else
+
+%constant wxEventType wxEVT_AUI_PANEBUTTON;
+%constant wxEventType wxEVT_AUI_PANECLOSE;
+
+%pythoncode {
+    EVT_AUI_PANEBUTTON = wx.PyEventBinder( wxEVT_AUI_PANEBUTTON )
+    EVT_AUI_PANECLOSE = wx.PyEventBinder( wxEVT_AUI_PANECLOSE )
+}
+#endif // SWIG
 
 #endif // wxUSE_AUI
 #endif //_WX_FRAMEMANAGER_H_
