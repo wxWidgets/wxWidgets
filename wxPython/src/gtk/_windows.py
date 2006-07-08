@@ -2826,6 +2826,35 @@ class PasswordEntryDialogPtr(PasswordEntryDialog):
 _windows_.PasswordEntryDialog_swigregister(PasswordEntryDialogPtr)
 GetPasswordFromUserPromptStr = cvar.GetPasswordFromUserPromptStr
 
+class NumberEntryDialog(Dialog):
+    """A dialog with spin control, ok and cancel buttons."""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxNumberEntryDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, Window parent, String message, String prompt, String caption, 
+            long value, long min, long max, Point pos=DefaultPosition) -> NumberEntryDialog
+
+        Constructor.  Use ShowModal method to show the dialog.
+        """
+        newobj = _windows_.new_NumberEntryDialog(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._setOORInfo(self)
+
+    def GetValue(*args, **kwargs):
+        """GetValue(self) -> long"""
+        return _windows_.NumberEntryDialog_GetValue(*args, **kwargs)
+
+
+class NumberEntryDialogPtr(NumberEntryDialog):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = NumberEntryDialog
+_windows_.NumberEntryDialog_swigregister(NumberEntryDialogPtr)
+
 class FontData(_core.Object):
     """
     This class holds a variety of information related to font dialogs and
