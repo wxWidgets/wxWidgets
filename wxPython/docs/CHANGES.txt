@@ -43,7 +43,7 @@ reasons are long and complex, but suffice it to say that it was due to
 mixing C++'s dynamic dispatch, and Python's runtime lookup of the
 method attributes resulting in endless recursion of function calls.)
 Because of this problem I used a hack that I have always hated, and
-that is renaming the base class methods with a "base_" prefix, for
+that is renaming the base class methods with a "base_*" prefix, for
 example wx.Printout.base_OnBeginDocument.  Now that the problem has
 finally been solved I have replaced all the base_Whatever() methods
 with the real Whatever() method as well as a simple wrapper named
@@ -67,7 +67,7 @@ Or like this with super()::
 	return super(MyPrintout, self).OnBeginDocument(start, end)
 
 
-Note that the old way with the "base_" function still works, but you
+Note that the old way with the "base_*" function still works, but you
 will get a DeprecationWarning from calling base_OnBeginDocument.  The
 classes affected by this are:
 
@@ -166,6 +166,11 @@ hit (if any) in addition to the item and flags.
 
 Added wrappers for wx.ColourPickerCtrl, wx.DirPickerCtrl,
 wx.FilePickerCtrl, and wx.FontPickerCtrl.
+
+Patch #1502016 wx.Image.ConvertToGreyscale now retains the alpha
+channel.
+
+Added wrappers for the wxAUI classes, in the wx.aui module.
 
 
 

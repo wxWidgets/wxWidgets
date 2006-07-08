@@ -48,15 +48,17 @@ _treeList = [
     # new stuff
     ('Recent Additions/Updates', [
         'AnalogClock',
+        'AUI',
         'CheckListCtrlMixin',
+        'Pickers',
         'RichTextCtrl',
         'Treebook',
         'Toolbook',
-        'Pickers',
         ]),
 
     # managed windows == things with a (optional) caption you can close
     ('Frames and Dialogs', [
+        'AUI',
         'Dialog',
         'Frame',
         'MDIWindows',

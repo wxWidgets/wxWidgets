@@ -488,6 +488,31 @@ wxpExtensions.append(ext)
 
 
 
+swig_sources = run_swig(['aui.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force,
+                        swig_args + ['-I'+opj(WXDIR, 'include/wx/aui')],
+                        swig_deps + ['src/_aui_docstrings.i',
+                                     opj(WXDIR, 'include/wx/aui/framemanager.h'),
+                                     opj(WXDIR, 'include/wx/aui/floatpane.h'),
+                                     opj(WXDIR, 'include/wx/aui/dockart.h'),
+                                     ])
+if not MONOLITHIC:
+    auiLib = makeLibName('aui')
+else:
+    auiLib = []
+ext = Extension('_aui', swig_sources,
+                include_dirs =  includes,
+                define_macros = defines,
+                library_dirs = libdirs,
+                libraries = libs + auiLib,
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                **depends
+                )
+wxpExtensions.append(ext)
+
+
+
 
 
 #----------------------------------------------------------------------
