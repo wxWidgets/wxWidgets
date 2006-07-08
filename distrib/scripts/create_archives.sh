@@ -182,6 +182,10 @@ prepareforrelease()
     # cp $APPDIR/include/wx/os2/setup0.h $APPDIR/include/wx/os2/setup.h
     cp $APPDIR/include/wx/msw/setup0.h $APPDIR/include/wx/msw/setup.h
     cp $APPDIR/include/wx/univ/setup0.h $APPDIR/include/wx/univ/setup.h
+    
+    # Make MSW project files have DOS line endings.
+    unix2dos `cat $MANIFESTDIR/vc.rsp` 
+    
     popd
 }
 
