@@ -6200,6 +6200,32 @@ int wxGrid::SendEvent( const wxEventType type,
        claimed = GetEventHandler()->ProcessEvent(gridEvt);
        vetoed = !gridEvt.IsAllowed();
    }
+   else if ( type == wxEVT_GRID_LABEL_LEFT_CLICK ||
+             type == wxEVT_GRID_LABEL_LEFT_DCLICK ||
+             type == wxEVT_GRID_LABEL_RIGHT_CLICK ||
+             type == wxEVT_GRID_LABEL_RIGHT_DCLICK )
+   {
+       wxPoint pos = mouseEv.GetPosition();
+
+       if ( mouseEv.GetEventObject() == GetGridRowLabelWindow() )
+           pos.y += GetColLabelSize();
+       if ( mouseEv.GetEventObject() == GetGridColLabelWindow() )
+           pos.x += GetRowLabelSize();
+       
+       wxGridEvent gridEvt( GetId(),
+               type,
+               this,
+               row, col,
+               pos.x,
+               pos.y,
+               false,
+               mouseEv.ControlDown(),
+               mouseEv.ShiftDown(),
+               mouseEv.AltDown(),
+               mouseEv.MetaDown() );
+       claimed = GetEventHandler()->ProcessEvent(gridEvt);
+       vetoed = !gridEvt.IsAllowed();
+   }
    else
    {
        wxGridEvent gridEvt( GetId(),
