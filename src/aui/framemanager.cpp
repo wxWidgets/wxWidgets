@@ -61,6 +61,8 @@ DEFINE_EVENT_TYPE(wxEVT_AUI_PANECLOSE)
     #include "wx/mac/private.h"
 #endif
 
+IMPLEMENT_DYNAMIC_CLASS(wxFrameManagerEvent, wxEvent)
+
 
 // -- static utility functions --
 

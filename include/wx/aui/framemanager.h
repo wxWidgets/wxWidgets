@@ -382,6 +382,9 @@ public:
     void SetFrame(wxFrame* frame);
     wxFrame* GetFrame() const;
 
+#ifdef SWIG
+    %disownarg( wxDockArt* art_provider );
+#endif
     void SetArtProvider(wxDockArt* art_provider);
     wxDockArt* GetArtProvider() const;
 
@@ -397,7 +400,7 @@ public:
                  const wxString& caption = wxEmptyString);
 
     bool InsertPane(wxWindow* window,
-                 const wxPaneInfo& pane_info,
+                 const wxPaneInfo& insert_location,
                  int insert_level = wxAUI_INSERT_PANE);
 
     bool DetachPane(wxWindow* window);
@@ -524,7 +527,7 @@ protected:
 class WXDLLIMPEXP_AUI wxFrameManagerEvent : public wxEvent
 {
 public:
-    wxFrameManagerEvent(wxEventType type) : wxEvent(0, type)
+    wxFrameManagerEvent(wxEventType type=wxEVT_NULL) : wxEvent(0, type)
     {
         pane = NULL;
         button = 0;
@@ -557,6 +560,11 @@ public:
     int button;
     bool veto_flag;
     bool canveto_flag;
+
+#ifndef SWIG
+private:
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFrameManagerEvent)
+#endif
 };
 
 
