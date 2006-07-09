@@ -1762,10 +1762,8 @@ wxCoord wxWindowDC::GetCharWidth() const
 
 wxCoord wxWindowDC::GetCharHeight() const
 {
-    pango_layout_set_text( m_layout, "H", 1 );
-    int h;
-    pango_layout_get_pixel_size( m_layout, NULL, &h );
-    return h;
+    PangoFontMetrics *metrics = pango_context_get_metrics (m_context, m_fontdesc, NULL);
+    return PANGO_PIXELS (pango_font_metrics_get_descent (metrics) + pango_font_metrics_get_ascent (metrics));
 }
 
 void wxWindowDC::Clear()
