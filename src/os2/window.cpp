@@ -159,8 +159,9 @@ wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 //
 // get the current state of SHIFT/CTRL keys
 //
-static inline bool IsShiftDown() { return (::WinGetKeyState(HWND_DESKTOP, VK_SHIFT) & 0x8000) != 0; }
-static inline bool IsCtrlDown() { return (::WinGetKeyState(HWND_DESKTOP, VK_CTRL) & 0x8000) != 0; }
+static inline bool IsKeyDown(LONG key) {return (::WinGetKeyState(HWND_DESKTOP, key) & 0x8000) != 0; }
+static inline bool IsShiftDown() { return IsKeyDown(VK_SHIFT); }
+static inline bool IsCtrlDown() { return IsKeyDown(VK_CTRL); }
 
 static wxWindow*                    gpWinBeingCreated = NULL;
 
@@ -3906,12 +3907,9 @@ void wxWindowOS2::InitMouseEvent(
     rEvent.m_shiftDown   = ((uFlags & KC_SHIFT) != 0);
     rEvent.m_controlDown = ((uFlags & KC_CTRL) != 0);
     rEvent.m_altDown     = ((uFlags & KC_ALT) != 0);
-    rEvent.m_leftDown    = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON1) &
-                           0x8000) != 0;
-    rEvent.m_middleDown  = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON3) &
-                           0x8000) != 0;
-    rEvent.m_rightDown   = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON2) &
-                           0x8000) != 0;
+    rEvent.m_leftDown    = IsKeyDown(VK_BUTTON1);
+    rEvent.m_middleDown  = IsKeyDown(VK_BUTTON3);
+    rEvent.m_rightDown   = IsKeyDown(VK_BUTTON2);
     rEvent.SetTimestamp(s_currentMsg.time);
     rEvent.SetEventObject(this);
     rEvent.SetId(GetId());
@@ -4512,6 +4510,47 @@ int wxCharCodeWXToOS2( int nId,
     }
     return nKeySym;
 } // end of wxCharCodeWXToOS2
+
+bool wxGetKeyState(wxKeyCode key)
+{
+    bool bVirtual;
+
+    wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
+        WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
+
+    const LONG vk = wxCharCodeWXToOS2(key, &bVirtual);
+    //If the requested key is a LED key, return true if the led is pressed
+    if (key == WXK_NUMLOCK || key == WXK_CAPITAL || key == WXK_SCROLL)
+    {
+        // low order bit means LED is highlightedm high order one means the
+        // key is down; for compat with other ports we want both
+        return ::WinGetKeyState(HWND_DESKTOP, vk) != 0;
+    }
+    else
+    {
+        //normal key
+        //high order means key is down, so We want only the high order bit
+        return IsKeyDown(vk);
+    }
+}
+
+
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+    wxPoint pt = wxGetMousePosition();
+
+    ms.SetX(pt.x);
+    ms.SetY(pt.y);
+    ms.SetLeftDown(IsKeyDown(VK_BUTTON1));
+    ms.SetMiddleDown(IsKeyDown(VK_BUTTON3));
+    ms.SetRightDown(IsKeyDown(VK_BUTTON2));
+    ms.SetControlDown(IsCtrlDown());
+    ms.SetShiftDown(IsShiftDown());
+    ms.SetAltDown(IsKeyDown(VK_ALT)|IsKeyDown(VK_ALTGRAF));
+    ms.SetMetaDown(IsKeyDown(VK_ALTGRAF));
+    return ms;
+}
 
 wxWindow* wxGetActiveWindow()
 {
