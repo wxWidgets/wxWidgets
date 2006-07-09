@@ -571,7 +571,7 @@ public:
 // kbd code translation
 WXDLLEXPORT int wxCharCodeOS2ToWX(int nKeySym);
 WXDLLEXPORT int wxCharCodeWXToOS2( int   nId
-                                  ,bool* pbIsVirtual
+                                  ,bool* pbIsVirtual = NULL
                                  );
 
 // ----------------------------------------------------------------------------

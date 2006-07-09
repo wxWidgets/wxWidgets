@@ -154,8 +154,9 @@ wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 //
 // get the current state of SHIFT/CTRL keys
 //
-static inline bool IsShiftDown() { return (::WinGetKeyState(HWND_DESKTOP, VK_SHIFT) & 0x8000) != 0; }
-static inline bool IsCtrlDown() { return (::WinGetKeyState(HWND_DESKTOP, VK_CTRL) & 0x8000) != 0; }
+static inline bool IsKeyDown(LONG key) {return (::WinGetKeyState(HWND_DESKTOP, key) & 0x8000) != 0; }
+static inline bool IsShiftDown() { return IsKeyDown(VK_SHIFT); }
+static inline bool IsCtrlDown() { return IsKeyDown(VK_CTRL); }
 
 static wxWindow*                    gpWinBeingCreated = NULL;
 
@@ -3882,12 +3883,9 @@ void wxWindowOS2::InitMouseEvent(
     rEvent.m_shiftDown   = ((uFlags & KC_SHIFT) != 0);
     rEvent.m_controlDown = ((uFlags & KC_CTRL) != 0);
     rEvent.m_altDown     = ((uFlags & KC_ALT) != 0);
-    rEvent.m_leftDown    = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON1) &
-                           0x8000) != 0;
-    rEvent.m_middleDown  = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON3) &
-                           0x8000) != 0;
-    rEvent.m_rightDown   = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON2) &
-                           0x8000) != 0;
+    rEvent.m_leftDown    = IsKeyDown(VK_BUTTON1);
+    rEvent.m_middleDown  = IsKeyDown(VK_BUTTON3);
+    rEvent.m_rightDown   = IsKeyDown(VK_BUTTON2);
     rEvent.SetTimestamp(s_currentMsg.time);
     rEvent.SetEventObject(this);
     rEvent.SetId(GetId());
@@ -4435,7 +4433,8 @@ int wxCharCodeWXToOS2( int nId,
 {
     int nKeySym = 0;
 
-    *bIsVirtual = true;
+    if ( bIsVirtual )
+        *bIsVirtual = true;
     switch (nId)
     {
         case WXK_CLEAR:     nKeySym = VK_CLEAR; break;
@@ -4481,7 +4480,8 @@ int wxCharCodeWXToOS2( int nId,
         case WXK_SCROLL:    nKeySym = VK_SCRLLOCK; break;
         default:
         {
-            *bIsVirtual = false;
+            if ( bIsVirtual )
+                *bIsVirtual = false;
             nKeySym = nId;
             break;
         }
@@ -4495,9 +4495,20 @@ bool wxGetKeyState(wxKeyCode key)
     wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
         WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
 
-    // TODO
+    const LONG vk = wxCharCodeWXToOS2(key);
+    // if the requested key is a LED key, return true if the led is pressed
+    if ( key == WXK_NUMLOCK || key == WXK_CAPITAL || key == WXK_SCROLL )
+    {
+        // low order bit means LED is highlighted and high order one means the
+        // key is down; for compatibility with the other ports return true if
+        // either one is set
+        return ::WinGetKeyState(HWND_DESKTOP, vk) != 0;
 
-    return false;
+    }
+    else // normal key
+    {
+        return IsKeyDown(vk);
+    }
 }
 
 
@@ -5049,7 +5060,16 @@ wxPoint wxGetMousePosition()
 wxMouseState wxGetMouseState()
 {
     wxMouseState ms;
-    // TODO
+    wxPoint pt = wxGetMousePosition();
+    ms.SetX(pt.x);
+    ms.SetY(pt.y);
+    ms.SetLeftDown(IsKeyDown(VK_BUTTON1));
+    ms.SetMiddleDown(IsKeyDown(VK_BUTTON3));
+    ms.SetRightDown(IsKeyDown(VK_BUTTON2));
+    ms.SetControlDown(IsCtrlDown());
+    ms.SetShiftDown(IsShiftDown());
+    ms.SetAltDown(IsKeyDown(VK_ALT)|IsKeyDown(VK_ALTGRAF));
+    ms.SetMetaDown(IsKeyDown(VK_ALTGRAF));
     return ms;
 }
 
