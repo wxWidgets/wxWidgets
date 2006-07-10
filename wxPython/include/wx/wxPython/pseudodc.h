@@ -491,7 +491,7 @@ class pdcObject
 // Declare a wxList to hold all the objects.  List order reflects drawing
 // order (Z order) and is the same order as objects are added to the list
 //----------------------------------------------------------------------------
-class WXDLLEXPORT pdcObjectList;
+class pdcObjectList;
 WX_DECLARE_LIST(pdcObject, pdcObjectList);
 
 
@@ -504,7 +504,7 @@ WX_DECLARE_LIST(pdcObject, pdcObjectList);
 // Drawing methods are mirrored from wxDC but add nodes to m_list 
 // instead of doing any real drawing.
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxPseudoDC : public wxObject
+class wxPseudoDC : public wxObject
 {
 public:
     wxPseudoDC() 
