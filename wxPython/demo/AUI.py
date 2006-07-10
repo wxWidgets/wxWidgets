@@ -477,12 +477,12 @@ class PyAUIFrame(wx.Frame):
 
         flag = 0
         
-        if wx.Platform != "__WXMSW__":
+        if wx.Platform != "__WXMSW__" and wx.Platform != '__WXMAC__':
             if event.GetId() == ID_TransparentDrag or \
                event.GetId() == ID_TransparentHint or \
                event.GetId() == ID_TransparentHintFade:
             
-                wx.MessageBox("This option is presently only available on wxMSW")
+                wx.MessageBox("This option is presently only available on wxMSW and wxMac")
                 return
 
         if event.GetId() == ID_AllowFloating:
