@@ -172,6 +172,10 @@ channel.
 
 Added wrappers for the wxAUI classes, in the wx.aui module.
 
+Added the PseudoDC class from Paul Lanier.  It provides a way to
+record operations on a DC and then play them back later.
+
+
 
 
 

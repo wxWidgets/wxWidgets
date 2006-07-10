@@ -207,11 +207,11 @@ swig_sources = run_swig(['gdi.i'], 'src', GENDIR, PKGDIR,
                          'src/_pen.i',
                          'src/_palette.i',
                          'src/_renderer.i',
-##                         'src/_pseudodc.i',
+                         'src/_pseudodc.i',
                          ],
                         True)
 ext = Extension('_gdi_', ['src/drawlist.cpp',
-##                          'src/pseudodc.cpp'
+                          'src/pseudodc.cpp'
                           ] + swig_sources,
                 include_dirs =  includes,
                 define_macros = defines,
