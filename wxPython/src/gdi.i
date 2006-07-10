@@ -46,7 +46,7 @@ MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 %include _stockobjs.i
 %include _effects.i
 %include _renderer.i
-
+%include _pseudodc.i
 
 //---------------------------------------------------------------------------
 %init %{
