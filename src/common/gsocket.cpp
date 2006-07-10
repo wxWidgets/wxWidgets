@@ -995,7 +995,7 @@ GSocketError GSocket::Connect(GSocketStream stream)
     {
       if (Output_Timeout() == GSOCK_TIMEDOUT)
       {
-       Close();
+        Close();
         // m_error is set in _GSocket_Output_Timeout 
         return GSOCK_TIMEDOUT;
       }
@@ -1155,8 +1155,13 @@ int GSocket::Read(char *buffer, int size)
      * Otherwise, recv has returned an error (-1), in which case we have lost the
      * socket only if errno does _not_ indicate that there may be more data to read.
      */
-    if (ret == 0)
+    if (ret == 0) {
       m_error = GSOCK_IOERR;
+      m_detected = GSOCK_LOST_FLAG;
+      Close();
+      // Signal an error for return;
+      return -1;
+    }
     else if (ret == -1)
     {
       if (IN_PROGRESS)
