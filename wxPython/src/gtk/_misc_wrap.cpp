@@ -6557,6 +6557,128 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_GetNumberFromUser(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxString *arg1 = 0 ;
+  wxString *arg2 = 0 ;
+  wxString *arg3 = 0 ;
+  long arg4 ;
+  long arg5 = (long) 0 ;
+  long arg6 = (long) 100 ;
+  wxWindow *arg7 = (wxWindow *) NULL ;
+  wxPoint const &arg8_defvalue = wxDefaultPosition ;
+  wxPoint *arg8 = (wxPoint *) &arg8_defvalue ;
+  long result;
+  bool temp1 = false ;
+  bool temp2 = false ;
+  bool temp3 = false ;
+  long val4 ;
+  int ecode4 = 0 ;
+  long val5 ;
+  int ecode5 = 0 ;
+  long val6 ;
+  int ecode6 = 0 ;
+  void *argp7 = 0 ;
+  int res7 = 0 ;
+  wxPoint temp8 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
+  char *  kwnames[] = {
+    (char *) "message",(char *) "prompt",(char *) "caption",(char *) "value",(char *) "min",(char *) "max",(char *) "parent",(char *) "pos", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|OOOO:GetNumberFromUser",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
+  {
+    arg1 = wxString_in_helper(obj0);
+    if (arg1 == NULL) SWIG_fail;
+    temp1 = true;
+  }
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    arg3 = wxString_in_helper(obj2);
+    if (arg3 == NULL) SWIG_fail;
+    temp3 = true;
+  }
+  ecode4 = SWIG_AsVal_long(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GetNumberFromUser" "', expected argument " "4"" of type '" "long""'");
+  } 
+  arg4 = static_cast< long >(val4);
+  if (obj4) {
+    ecode5 = SWIG_AsVal_long(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GetNumberFromUser" "', expected argument " "5"" of type '" "long""'");
+    } 
+    arg5 = static_cast< long >(val5);
+  }
+  if (obj5) {
+    ecode6 = SWIG_AsVal_long(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GetNumberFromUser" "', expected argument " "6"" of type '" "long""'");
+    } 
+    arg6 = static_cast< long >(val6);
+  }
+  if (obj6) {
+    res7 = SWIG_ConvertPtr(obj6, &argp7,SWIGTYPE_p_wxWindow, 0 |  0 );
+    if (!SWIG_IsOK(res7)) {
+      SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "GetNumberFromUser" "', expected argument " "7"" of type '" "wxWindow *""'"); 
+    }
+    arg7 = reinterpret_cast< wxWindow * >(argp7);
+  }
+  if (obj7) {
+    {
+      arg8 = &temp8;
+      if ( ! wxPoint_helper(obj7, &arg8)) SWIG_fail;
+    }
+  }
+  {
+    if (!wxPyCheckForApp()) SWIG_fail;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (long)wxGetNumberFromUser((wxString const &)*arg1,(wxString const &)*arg2,(wxString const &)*arg3,arg4,arg5,arg6,arg7,(wxPoint const &)*arg8);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_long(static_cast< long >(result));
+  {
+    if (temp1)
+    delete arg1;
+  }
+  {
+    if (temp2)
+    delete arg2;
+  }
+  {
+    if (temp3)
+    delete arg3;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp1)
+    delete arg1;
+  }
+  {
+    if (temp2)
+    delete arg2;
+  }
+  {
+    if (temp3)
+    delete arg3;
+  }
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ColourDisplay(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   bool result;
@@ -36140,6 +36262,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GetSingleChoice", (PyCFunction) _wrap_GetSingleChoice, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GetSingleChoiceIndex", (PyCFunction) _wrap_GetSingleChoiceIndex, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MessageBox", (PyCFunction) _wrap_MessageBox, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GetNumberFromUser", (PyCFunction) _wrap_GetNumberFromUser, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ColourDisplay", (PyCFunction)_wrap_ColourDisplay, METH_NOARGS, NULL},
 	 { (char *)"DisplayDepth", (PyCFunction)_wrap_DisplayDepth, METH_NOARGS, NULL},
 	 { (char *)"GetDisplayDepth", (PyCFunction)_wrap_GetDisplayDepth, METH_NOARGS, NULL},

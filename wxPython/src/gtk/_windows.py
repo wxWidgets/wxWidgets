@@ -2493,6 +2493,26 @@ class PasswordEntryDialog(TextEntryDialog):
 _windows_.PasswordEntryDialog_swigregister(PasswordEntryDialog)
 GetPasswordFromUserPromptStr = cvar.GetPasswordFromUserPromptStr
 
+class NumberEntryDialog(Dialog):
+    """A dialog with spin control, ok and cancel buttons."""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, String message, String prompt, String caption, 
+            long value, long min, long max, Point pos=DefaultPosition) -> NumberEntryDialog
+
+        Constructor.  Use ShowModal method to show the dialog.
+        """
+        _windows_.NumberEntryDialog_swiginit(self,_windows_.new_NumberEntryDialog(*args, **kwargs))
+        self._setOORInfo(self)
+
+    def GetValue(*args, **kwargs):
+        """GetValue(self) -> long"""
+        return _windows_.NumberEntryDialog_GetValue(*args, **kwargs)
+
+_windows_.NumberEntryDialog_swigregister(NumberEntryDialog)
+
 class FontData(_core.Object):
     """
     This class holds a variety of information related to font dialogs and

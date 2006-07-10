@@ -5058,5 +5058,742 @@ def RendererNative_Set(*args, **kwargs):
     """
   return _gdi_.RendererNative_Set(*args, **kwargs)
 
+#---------------------------------------------------------------------------
+
+class PseudoDC(_core.Object):
+    """
+    A PseudoDC is an object that can be used as if it were a `wx.DC`.  All
+    commands issued to the PseudoDC are stored in a list.  You can then
+    play these commands back to a real DC object using the DrawToDC
+    method.  Commands in the command list are indexed by ID.  You can use
+    this to clear the operations associated with a single ID and then
+    re-draw the object associated with that ID.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self) -> PseudoDC
+
+        Constructs a new Pseudo device context for recording dc operations
+        """
+        _gdi_.PseudoDC_swiginit(self,_gdi_.new_PseudoDC(*args, **kwargs))
+    def BeginDrawing(*args, **kwargs):
+        """
+        BeginDrawing(self)
+
+        Allows for optimization of drawing code on platforms that need it.  On
+        other platforms this is just an empty function and is harmless.  To
+        take advantage of this postential optimization simply enclose each
+        group of calls to the drawing primitives within calls to
+        `BeginDrawing` and `EndDrawing`.
+        """
+        return _gdi_.PseudoDC_BeginDrawing(*args, **kwargs)
+
+    def EndDrawing(*args, **kwargs):
+        """
+        EndDrawing(self)
+
+        Ends the group of drawing primitives started with `BeginDrawing`, and
+        invokes whatever optimization is available for this DC type on the
+        current platform.
+        """
+        return _gdi_.PseudoDC_EndDrawing(*args, **kwargs)
+
+    __swig_destroy__ = _gdi_.delete_PseudoDC
+    __del__ = lambda self : None;
+    def RemoveAll(*args, **kwargs):
+        """
+        RemoveAll(self)
+
+        Removes all objects and operations from the recorded list.
+        """
+        return _gdi_.PseudoDC_RemoveAll(*args, **kwargs)
+
+    def GetLen(*args, **kwargs):
+        """
+        GetLen(self) -> int
+
+        Returns the number of operations in the recorded list.
+        """
+        return _gdi_.PseudoDC_GetLen(*args, **kwargs)
+
+    def SetId(*args, **kwargs):
+        """
+        SetId(self, int id)
+
+        Sets the id to be associated with subsequent operations.
+        """
+        return _gdi_.PseudoDC_SetId(*args, **kwargs)
+
+    def ClearId(*args, **kwargs):
+        """
+        ClearId(self, int id)
+
+        Removes all operations associated with id so the object can be redrawn.
+        """
+        return _gdi_.PseudoDC_ClearId(*args, **kwargs)
+
+    def RemoveId(*args, **kwargs):
+        """
+        RemoveId(self, int id)
+
+        Remove the object node (and all operations) associated with an id.
+        """
+        return _gdi_.PseudoDC_RemoveId(*args, **kwargs)
+
+    def TranslateId(*args, **kwargs):
+        """
+        TranslateId(self, int id, int dx, int dy)
+
+        Translate the operations of id by dx,dy.
+        """
+        return _gdi_.PseudoDC_TranslateId(*args, **kwargs)
+
+    def DrawIdToDC(*args, **kwargs):
+        """
+        DrawIdToDC(self, int id, DC dc)
+
+        Draw recorded operations of id to dc.
+        """
+        return _gdi_.PseudoDC_DrawIdToDC(*args, **kwargs)
+
+    def SetIdBounds(*args, **kwargs):
+        """
+        SetIdBounds(self, int id, Rect rect)
+
+        Set the bounding rect of a given object.  This will create 
+        an object node if one doesn't exist.
+        """
+        return _gdi_.PseudoDC_SetIdBounds(*args, **kwargs)
+
+    def GetIdBounds(*args, **kwargs):
+        """
+        GetIdBounds(self, int id) -> Rect
+
+        Returns the bounding rectangle previouly set with SetIdBounds.  If
+        no bounds have been set, it returns wx.Rect(0,0,0,0).
+        """
+        return _gdi_.PseudoDC_GetIdBounds(*args, **kwargs)
+
+    def DrawToDCClipped(*args, **kwargs):
+        """
+        DrawToDCClipped(self, DC dc, Rect rect)
+
+        Draws the recorded operations to dc unless the operation is known to
+        be outside rect.
+        """
+        return _gdi_.PseudoDC_DrawToDCClipped(*args, **kwargs)
+
+    def DrawToDCClippedRgn(*args, **kwargs):
+        """
+        DrawToDCClippedRgn(self, DC dc, Region region)
+
+        Draws the recorded operations to dc unless the operation is known to
+        be outside rect.
+        """
+        return _gdi_.PseudoDC_DrawToDCClippedRgn(*args, **kwargs)
+
+    def DrawToDC(*args, **kwargs):
+        """
+        DrawToDC(self, DC dc)
+
+        Draws the recorded operations to dc.
+        """
+        return _gdi_.PseudoDC_DrawToDC(*args, **kwargs)
+
+    def FloodFill(*args, **kwargs):
+        """
+        FloodFill(self, int x, int y, Colour col, int style=FLOOD_SURFACE)
+
+        Flood fills the device context starting from the given point, using
+        the current brush colour, and using a style:
+
+            - **wxFLOOD_SURFACE**: the flooding occurs until a colour other than
+              the given colour is encountered.
+
+            - **wxFLOOD_BORDER**: the area to be flooded is bounded by the given
+              colour.
+
+        Returns False if the operation failed.
+
+        Note: The present implementation for non-Windows platforms may fail to
+        find colour borders if the pixels do not match the colour
+        exactly. However the function will still return true.
+        """
+        return _gdi_.PseudoDC_FloodFill(*args, **kwargs)
+
+    def FloodFillPoint(*args, **kwargs):
+        """
+        FloodFillPoint(self, Point pt, Colour col, int style=FLOOD_SURFACE)
+
+        Flood fills the device context starting from the given point, using
+        the current brush colour, and using a style:
+
+            - **wxFLOOD_SURFACE**: the flooding occurs until a colour other than
+              the given colour is encountered.
+
+            - **wxFLOOD_BORDER**: the area to be flooded is bounded by the given
+              colour.
+
+        Returns False if the operation failed.
+
+        Note: The present implementation for non-Windows platforms may fail to
+        find colour borders if the pixels do not match the colour
+        exactly. However the function will still return true.
+        """
+        return _gdi_.PseudoDC_FloodFillPoint(*args, **kwargs)
+
+    def DrawLine(*args, **kwargs):
+        """
+        DrawLine(self, int x1, int y1, int x2, int y2)
+
+        Draws a line from the first point to the second. The current pen is
+        used for drawing the line. Note that the second point is *not* part of
+        the line and is not drawn by this function (this is consistent with
+        the behaviour of many other toolkits).
+        """
+        return _gdi_.PseudoDC_DrawLine(*args, **kwargs)
+
+    def DrawLinePoint(*args, **kwargs):
+        """
+        DrawLinePoint(self, Point pt1, Point pt2)
+
+        Draws a line from the first point to the second. The current pen is
+        used for drawing the line. Note that the second point is *not* part of
+        the line and is not drawn by this function (this is consistent with
+        the behaviour of many other toolkits).
+        """
+        return _gdi_.PseudoDC_DrawLinePoint(*args, **kwargs)
+
+    def CrossHair(*args, **kwargs):
+        """
+        CrossHair(self, int x, int y)
+
+        Displays a cross hair using the current pen. This is a vertical and
+        horizontal line the height and width of the window, centred on the
+        given point.
+        """
+        return _gdi_.PseudoDC_CrossHair(*args, **kwargs)
+
+    def CrossHairPoint(*args, **kwargs):
+        """
+        CrossHairPoint(self, Point pt)
+
+        Displays a cross hair using the current pen. This is a vertical and
+        horizontal line the height and width of the window, centred on the
+        given point.
+        """
+        return _gdi_.PseudoDC_CrossHairPoint(*args, **kwargs)
+
+    def DrawArc(*args, **kwargs):
+        """
+        DrawArc(self, int x1, int y1, int x2, int y2, int xc, int yc)
+
+        Draws an arc of a circle, centred on the *center* point (xc, yc), from
+        the first point to the second. The current pen is used for the outline
+        and the current brush for filling the shape.
+
+        The arc is drawn in an anticlockwise direction from the start point to
+        the end point.
+        """
+        return _gdi_.PseudoDC_DrawArc(*args, **kwargs)
+
+    def DrawArcPoint(*args, **kwargs):
+        """
+        DrawArcPoint(self, Point pt1, Point pt2, Point center)
+
+        Draws an arc of a circle, centred on the *center* point (xc, yc), from
+        the first point to the second. The current pen is used for the outline
+        and the current brush for filling the shape.
+
+        The arc is drawn in an anticlockwise direction from the start point to
+        the end point.
+        """
+        return _gdi_.PseudoDC_DrawArcPoint(*args, **kwargs)
+
+    def DrawCheckMark(*args, **kwargs):
+        """
+        DrawCheckMark(self, int x, int y, int width, int height)
+
+        Draws a check mark inside the given rectangle.
+        """
+        return _gdi_.PseudoDC_DrawCheckMark(*args, **kwargs)
+
+    def DrawCheckMarkRect(*args, **kwargs):
+        """
+        DrawCheckMarkRect(self, Rect rect)
+
+        Draws a check mark inside the given rectangle.
+        """
+        return _gdi_.PseudoDC_DrawCheckMarkRect(*args, **kwargs)
+
+    def DrawEllipticArc(*args, **kwargs):
+        """
+        DrawEllipticArc(self, int x, int y, int w, int h, double start, double end)
+
+        Draws an arc of an ellipse, with the given rectangle defining the
+        bounds of the ellipse. The current pen is used for drawing the arc and
+        the current brush is used for drawing the pie.
+
+        The *start* and *end* parameters specify the start and end of the arc
+        relative to the three-o'clock position from the center of the
+        rectangle. Angles are specified in degrees (360 is a complete
+        circle). Positive values mean counter-clockwise motion. If start is
+        equal to end, a complete ellipse will be drawn.
+        """
+        return _gdi_.PseudoDC_DrawEllipticArc(*args, **kwargs)
+
+    def DrawEllipticArcPointSize(*args, **kwargs):
+        """
+        DrawEllipticArcPointSize(self, Point pt, Size sz, double start, double end)
+
+        Draws an arc of an ellipse, with the given rectangle defining the
+        bounds of the ellipse. The current pen is used for drawing the arc and
+        the current brush is used for drawing the pie.
+
+        The *start* and *end* parameters specify the start and end of the arc
+        relative to the three-o'clock position from the center of the
+        rectangle. Angles are specified in degrees (360 is a complete
+        circle). Positive values mean counter-clockwise motion. If start is
+        equal to end, a complete ellipse will be drawn.
+        """
+        return _gdi_.PseudoDC_DrawEllipticArcPointSize(*args, **kwargs)
+
+    def DrawPoint(*args, **kwargs):
+        """
+        DrawPoint(self, int x, int y)
+
+        Draws a point using the current pen.
+        """
+        return _gdi_.PseudoDC_DrawPoint(*args, **kwargs)
+
+    def DrawPointPoint(*args, **kwargs):
+        """
+        DrawPointPoint(self, Point pt)
+
+        Draws a point using the current pen.
+        """
+        return _gdi_.PseudoDC_DrawPointPoint(*args, **kwargs)
+
+    def DrawRectangle(*args, **kwargs):
+        """
+        DrawRectangle(self, int x, int y, int width, int height)
+
+        Draws a rectangle with the given top left corner, and with the given
+        size. The current pen is used for the outline and the current brush
+        for filling the shape.
+        """
+        return _gdi_.PseudoDC_DrawRectangle(*args, **kwargs)
+
+    def DrawRectangleRect(*args, **kwargs):
+        """
+        DrawRectangleRect(self, Rect rect)
+
+        Draws a rectangle with the given top left corner, and with the given
+        size. The current pen is used for the outline and the current brush
+        for filling the shape.
+        """
+        return _gdi_.PseudoDC_DrawRectangleRect(*args, **kwargs)
+
+    def DrawRectanglePointSize(*args, **kwargs):
+        """
+        DrawRectanglePointSize(self, Point pt, Size sz)
+
+        Draws a rectangle with the given top left corner, and with the given
+        size. The current pen is used for the outline and the current brush
+        for filling the shape.
+        """
+        return _gdi_.PseudoDC_DrawRectanglePointSize(*args, **kwargs)
+
+    def DrawRoundedRectangle(*args, **kwargs):
+        """
+        DrawRoundedRectangle(self, int x, int y, int width, int height, double radius)
+
+        Draws a rectangle with the given top left corner, and with the given
+        size. The corners are quarter-circles using the given radius. The
+        current pen is used for the outline and the current brush for filling
+        the shape.
+
+        If radius is positive, the value is assumed to be the radius of the
+        rounded corner. If radius is negative, the absolute value is assumed
+        to be the proportion of the smallest dimension of the rectangle. This
+        means that the corner can be a sensible size relative to the size of
+        the rectangle, and also avoids the strange effects X produces when the
+        corners are too big for the rectangle.
+        """
+        return _gdi_.PseudoDC_DrawRoundedRectangle(*args, **kwargs)
+
+    def DrawRoundedRectangleRect(*args, **kwargs):
+        """
+        DrawRoundedRectangleRect(self, Rect r, double radius)
+
+        Draws a rectangle with the given top left corner, and with the given
+        size. The corners are quarter-circles using the given radius. The
+        current pen is used for the outline and the current brush for filling
+        the shape.
+
+        If radius is positive, the value is assumed to be the radius of the
+        rounded corner. If radius is negative, the absolute value is assumed
+        to be the proportion of the smallest dimension of the rectangle. This
+        means that the corner can be a sensible size relative to the size of
+        the rectangle, and also avoids the strange effects X produces when the
+        corners are too big for the rectangle.
+        """
+        return _gdi_.PseudoDC_DrawRoundedRectangleRect(*args, **kwargs)
+
+    def DrawRoundedRectanglePointSize(*args, **kwargs):
+        """
+        DrawRoundedRectanglePointSize(self, Point pt, Size sz, double radius)
+
+        Draws a rectangle with the given top left corner, and with the given
+        size. The corners are quarter-circles using the given radius. The
+        current pen is used for the outline and the current brush for filling
+        the shape.
+
+        If radius is positive, the value is assumed to be the radius of the
+        rounded corner. If radius is negative, the absolute value is assumed
+        to be the proportion of the smallest dimension of the rectangle. This
+        means that the corner can be a sensible size relative to the size of
+        the rectangle, and also avoids the strange effects X produces when the
+        corners are too big for the rectangle.
+        """
+        return _gdi_.PseudoDC_DrawRoundedRectanglePointSize(*args, **kwargs)
+
+    def DrawCircle(*args, **kwargs):
+        """
+        DrawCircle(self, int x, int y, int radius)
+
+        Draws a circle with the given center point and radius.  The current
+        pen is used for the outline and the current brush for filling the
+        shape.
+        """
+        return _gdi_.PseudoDC_DrawCircle(*args, **kwargs)
+
+    def DrawCirclePoint(*args, **kwargs):
+        """
+        DrawCirclePoint(self, Point pt, int radius)
+
+        Draws a circle with the given center point and radius.  The current
+        pen is used for the outline and the current brush for filling the
+        shape.
+        """
+        return _gdi_.PseudoDC_DrawCirclePoint(*args, **kwargs)
+
+    def DrawEllipse(*args, **kwargs):
+        """
+        DrawEllipse(self, int x, int y, int width, int height)
+
+        Draws an ellipse contained in the specified rectangle. The current pen
+        is used for the outline and the current brush for filling the shape.
+        """
+        return _gdi_.PseudoDC_DrawEllipse(*args, **kwargs)
+
+    def DrawEllipseRect(*args, **kwargs):
+        """
+        DrawEllipseRect(self, Rect rect)
+
+        Draws an ellipse contained in the specified rectangle. The current pen
+        is used for the outline and the current brush for filling the shape.
+        """
+        return _gdi_.PseudoDC_DrawEllipseRect(*args, **kwargs)
+
+    def DrawEllipsePointSize(*args, **kwargs):
+        """
+        DrawEllipsePointSize(self, Point pt, Size sz)
+
+        Draws an ellipse contained in the specified rectangle. The current pen
+        is used for the outline and the current brush for filling the shape.
+        """
+        return _gdi_.PseudoDC_DrawEllipsePointSize(*args, **kwargs)
+
+    def DrawIcon(*args, **kwargs):
+        """
+        DrawIcon(self, Icon icon, int x, int y)
+
+        Draw an icon on the display (does nothing if the device context is
+        PostScript). This can be the simplest way of drawing bitmaps on a
+        window.
+        """
+        return _gdi_.PseudoDC_DrawIcon(*args, **kwargs)
+
+    def DrawIconPoint(*args, **kwargs):
+        """
+        DrawIconPoint(self, Icon icon, Point pt)
+
+        Draw an icon on the display (does nothing if the device context is
+        PostScript). This can be the simplest way of drawing bitmaps on a
+        window.
+        """
+        return _gdi_.PseudoDC_DrawIconPoint(*args, **kwargs)
+
+    def DrawBitmap(*args, **kwargs):
+        """
+        DrawBitmap(self, Bitmap bmp, int x, int y, bool useMask=False)
+
+        Draw a bitmap on the device context at the specified point. If
+        *transparent* is true and the bitmap has a transparency mask, (or
+        alpha channel on the platforms that support it) then the bitmap will
+        be drawn transparently.
+        """
+        return _gdi_.PseudoDC_DrawBitmap(*args, **kwargs)
+
+    def DrawBitmapPoint(*args, **kwargs):
+        """
+        DrawBitmapPoint(self, Bitmap bmp, Point pt, bool useMask=False)
+
+        Draw a bitmap on the device context at the specified point. If
+        *transparent* is true and the bitmap has a transparency mask, (or
+        alpha channel on the platforms that support it) then the bitmap will
+        be drawn transparently.
+        """
+        return _gdi_.PseudoDC_DrawBitmapPoint(*args, **kwargs)
+
+    def DrawText(*args, **kwargs):
+        """
+        DrawText(self, String text, int x, int y)
+
+        Draws a text string at the specified point, using the current text
+        font, and the current text foreground and background colours.
+
+        The coordinates refer to the top-left corner of the rectangle bounding
+        the string. See `GetTextExtent` for how to get the dimensions of a
+        text string, which can be used to position the text more precisely.
+
+        **NOTE**: under wxGTK the current logical function is used by this
+        function but it is ignored by wxMSW. Thus, you should avoid using
+        logical functions with this function in portable programs.
+        """
+        return _gdi_.PseudoDC_DrawText(*args, **kwargs)
+
+    def DrawTextPoint(*args, **kwargs):
+        """
+        DrawTextPoint(self, String text, Point pt)
+
+        Draws a text string at the specified point, using the current text
+        font, and the current text foreground and background colours.
+
+        The coordinates refer to the top-left corner of the rectangle bounding
+        the string. See `GetTextExtent` for how to get the dimensions of a
+        text string, which can be used to position the text more precisely.
+
+        **NOTE**: under wxGTK the current logical function is used by this
+        function but it is ignored by wxMSW. Thus, you should avoid using
+        logical functions with this function in portable programs.
+        """
+        return _gdi_.PseudoDC_DrawTextPoint(*args, **kwargs)
+
+    def DrawRotatedText(*args, **kwargs):
+        """
+        DrawRotatedText(self, String text, int x, int y, double angle)
+
+        Draws the text rotated by *angle* degrees, if supported by the platform.
+
+        **NOTE**: Under Win9x only TrueType fonts can be drawn by this
+        function. In particular, a font different from ``wx.NORMAL_FONT``
+        should be used as the it is not normally a TrueType
+        font. ``wx.SWISS_FONT`` is an example of a font which is.
+        """
+        return _gdi_.PseudoDC_DrawRotatedText(*args, **kwargs)
+
+    def DrawRotatedTextPoint(*args, **kwargs):
+        """
+        DrawRotatedTextPoint(self, String text, Point pt, double angle)
+
+        Draws the text rotated by *angle* degrees, if supported by the platform.
+
+        **NOTE**: Under Win9x only TrueType fonts can be drawn by this
+        function. In particular, a font different from ``wx.NORMAL_FONT``
+        should be used as the it is not normally a TrueType
+        font. ``wx.SWISS_FONT`` is an example of a font which is.
+        """
+        return _gdi_.PseudoDC_DrawRotatedTextPoint(*args, **kwargs)
+
+    def DrawLines(*args, **kwargs):
+        """
+        DrawLines(self, List points, int xoffset=0, int yoffset=0)
+
+        Draws lines using a sequence of `wx.Point` objects, adding the
+        optional offset coordinate. The current pen is used for drawing the
+        lines.
+        """
+        return _gdi_.PseudoDC_DrawLines(*args, **kwargs)
+
+    def DrawPolygon(*args, **kwargs):
+        """
+        DrawPolygon(self, List points, int xoffset=0, int yoffset=0,
+            int fillStyle=ODDEVEN_RULE)
+
+        Draws a filled polygon using a sequence of `wx.Point` objects, adding
+        the optional offset coordinate.  The last argument specifies the fill
+        rule: ``wx.ODDEVEN_RULE`` (the default) or ``wx.WINDING_RULE``.
+
+        The current pen is used for drawing the outline, and the current brush
+        for filling the shape. Using a transparent brush suppresses
+        filling. Note that wxWidgets automatically closes the first and last
+        points.
+        """
+        return _gdi_.PseudoDC_DrawPolygon(*args, **kwargs)
+
+    def DrawLabel(*args, **kwargs):
+        """
+        DrawLabel(self, String text, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
+            int indexAccel=-1)
+
+        Draw *text* within the specified rectangle, abiding by the alignment
+        flags.  Will additionally emphasize the character at *indexAccel* if
+        it is not -1.
+        """
+        return _gdi_.PseudoDC_DrawLabel(*args, **kwargs)
+
+    def DrawImageLabel(*args, **kwargs):
+        """
+        DrawImageLabel(self, String text, Bitmap image, Rect rect, int alignment=wxALIGN_LEFT|wxALIGN_TOP, 
+            int indexAccel=-1)
+
+        Draw *text* and an image (which may be ``wx.NullBitmap`` to skip
+        drawing it) within the specified rectangle, abiding by the alignment
+        flags.  Will additionally emphasize the character at *indexAccel* if
+        it is not -1.
+        """
+        return _gdi_.PseudoDC_DrawImageLabel(*args, **kwargs)
+
+    def DrawSpline(*args, **kwargs):
+        """
+        DrawSpline(self, List points)
+
+        Draws a spline between all given control points, (a list of `wx.Point`
+        objects) using the current pen. The spline is drawn using a series of
+        lines, using an algorithm taken from the X drawing program 'XFIG'.
+        """
+        return _gdi_.PseudoDC_DrawSpline(*args, **kwargs)
+
+    def Clear(*args, **kwargs):
+        """
+        Clear(self)
+
+        Clears the device context using the current background brush.
+        """
+        return _gdi_.PseudoDC_Clear(*args, **kwargs)
+
+    def SetFont(*args, **kwargs):
+        """
+        SetFont(self, Font font)
+
+        Sets the current font for the DC. It must be a valid font, in
+        particular you should not pass ``wx.NullFont`` to this method.
+        """
+        return _gdi_.PseudoDC_SetFont(*args, **kwargs)
+
+    def SetPen(*args, **kwargs):
+        """
+        SetPen(self, Pen pen)
+
+        Sets the current pen for the DC.
+
+        If the argument is ``wx.NullPen``, the current pen is selected out of the
+        device context, and the original pen restored.
+        """
+        return _gdi_.PseudoDC_SetPen(*args, **kwargs)
+
+    def SetBrush(*args, **kwargs):
+        """
+        SetBrush(self, Brush brush)
+
+        Sets the current brush for the DC.
+
+        If the argument is ``wx.NullBrush``, the current brush is selected out
+        of the device context, and the original brush restored, allowing the
+        current brush to be destroyed safely.
+        """
+        return _gdi_.PseudoDC_SetBrush(*args, **kwargs)
+
+    def SetBackground(*args, **kwargs):
+        """
+        SetBackground(self, Brush brush)
+
+        Sets the current background brush for the DC.
+        """
+        return _gdi_.PseudoDC_SetBackground(*args, **kwargs)
+
+    def SetBackgroundMode(*args, **kwargs):
+        """
+        SetBackgroundMode(self, int mode)
+
+        *mode* may be one of ``wx.SOLID`` and ``wx.TRANSPARENT``. This setting
+        determines whether text will be drawn with a background colour or
+        not.
+        """
+        return _gdi_.PseudoDC_SetBackgroundMode(*args, **kwargs)
+
+    def SetPalette(*args, **kwargs):
+        """
+        SetPalette(self, Palette palette)
+
+        If this is a window DC or memory DC, assigns the given palette to the
+        window or bitmap associated with the DC. If the argument is
+        ``wx.NullPalette``, the current palette is selected out of the device
+        context, and the original palette restored.
+        """
+        return _gdi_.PseudoDC_SetPalette(*args, **kwargs)
+
+    def SetTextForeground(*args, **kwargs):
+        """
+        SetTextForeground(self, Colour colour)
+
+        Sets the current text foreground colour for the DC.
+        """
+        return _gdi_.PseudoDC_SetTextForeground(*args, **kwargs)
+
+    def SetTextBackground(*args, **kwargs):
+        """
+        SetTextBackground(self, Colour colour)
+
+        Sets the current text background colour for the DC.
+        """
+        return _gdi_.PseudoDC_SetTextBackground(*args, **kwargs)
+
+    def SetLogicalFunction(*args, **kwargs):
+        """
+        SetLogicalFunction(self, int function)
+
+        Sets the current logical function for the device context. This
+        determines how a source pixel (from a pen or brush colour, or source
+        device context if using `Blit`) combines with a destination pixel in
+        the current device context.
+
+        The possible values and their meaning in terms of source and
+        destination pixel values are as follows:
+
+            ================       ==========================
+            wx.AND                 src AND dst
+            wx.AND_INVERT          (NOT src) AND dst
+            wx.AND_REVERSE         src AND (NOT dst)
+            wx.CLEAR               0
+            wx.COPY                src
+            wx.EQUIV               (NOT src) XOR dst
+            wx.INVERT              NOT dst
+            wx.NAND                (NOT src) OR (NOT dst)
+            wx.NOR                 (NOT src) AND (NOT dst)
+            wx.NO_OP               dst
+            wx.OR                  src OR dst
+            wx.OR_INVERT           (NOT src) OR dst
+            wx.OR_REVERSE          src OR (NOT dst)
+            wx.SET                 1
+            wx.SRC_INVERT          NOT src
+            wx.XOR                 src XOR dst
+            ================       ==========================
+
+        The default is wx.COPY, which simply draws with the current
+        colour. The others combine the current colour and the background using
+        a logical operation. wx.INVERT is commonly used for drawing rubber
+        bands or moving outlines, since drawing twice reverts to the original
+        colour.
+
+        """
+        return _gdi_.PseudoDC_SetLogicalFunction(*args, **kwargs)
+
+_gdi_.PseudoDC_swigregister(PseudoDC)
+
 
 
