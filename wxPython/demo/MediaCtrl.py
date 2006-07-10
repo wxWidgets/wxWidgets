@@ -108,6 +108,8 @@ class TestPanel(wx.Panel):
                           "ERROR",
                           wx.ICON_ERROR | wx.OK)
         else:
+            self.mc.SetBestFittingSize()
+            self.GetSizer().Layout()
             self.slider.SetRange(0, self.mc.Length())
 
     def OnPause(self, evt):
