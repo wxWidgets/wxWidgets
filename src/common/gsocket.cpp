@@ -962,7 +962,6 @@ GSocketError GSocket::Connect(GSocketStream stream)
   // If a local address has been set, then we need to bind to it before calling connect
   if (m_local && m_local->m_addr)
   {
-	printf("Binding to local\n");
      bind(m_fd, m_local->m_addr, m_local->m_len);
   }
 
@@ -1703,31 +1702,14 @@ void GSocket::Detected_Read()
     return;
   }
 
-  int num =  recv(m_fd, &c, 1, MSG_PEEK | GSOCKET_MSG_NOSIGNAL);
 
-  if (num > 0)
+  if (m_server && m_stream)
   {
-    CALL_CALLBACK(this, GSOCK_INPUT);
+    CALL_CALLBACK(this, GSOCK_CONNECTION);
   }
   else
   {
-    if (m_server && m_stream)
-    {
-      CALL_CALLBACK(this, GSOCK_CONNECTION);
-    }
-    else
-    {
-      /* Do not throw a lost event in cases where the socket isn't really lost */
-      if (IN_PROGRESS)
-      {
-        CALL_CALLBACK(this, GSOCK_INPUT);
-      }
-      else
-      {
-        CALL_CALLBACK(this, GSOCK_LOST);
-        Shutdown();
-      }
-    }
+    CALL_CALLBACK(this, GSOCK_INPUT);
   }
 #endif
 }
@@ -1749,27 +1731,12 @@ void GSocket::Detected_Write()
 
   if (m_establishing && !m_server)
   {
-    int error;
-    SOCKOPTLEN_T len = sizeof(error);
-
-    m_establishing = false;
-
-    getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
-
-    if (error)
-    {
-      CALL_CALLBACK(this, GSOCK_LOST);
-      Shutdown();
-    }
-    else
-    {
-      CALL_CALLBACK(this, GSOCK_CONNECTION);
-      /* We have to fire this event by hand because CONNECTION (for clients)
-       * and OUTPUT are internally the same and we just disabled CONNECTION
-       * events with the above macro.
-       */
-      CALL_CALLBACK(this, GSOCK_OUTPUT);
-    }
+    CALL_CALLBACK(this, GSOCK_CONNECTION);
+    /* We have to fire this event by hand because CONNECTION (for clients)
+     * and OUTPUT are internally the same and we just disabled CONNECTION
+     * events with the above macro.
+     */
+    CALL_CALLBACK(this, GSOCK_OUTPUT);
   }
   else
   {
