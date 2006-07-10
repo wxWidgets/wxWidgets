@@ -213,15 +213,15 @@ The following example shows a simple implementation that utilizes
         pane info, and defaults to ``wx.LEFT``.  The pane caption may
         also be specified as an extra parameter in this form.
         """
-        if type(arg1) == PaneInfo:
-            return self._AddPane1(window, arg1)
+        if type(info) == PaneInfo:
+            return self._AddPane1(window, info)
         else:
             # This Is AddPane2
-            if arg1 is None:
-                arg1 = wx.LEFT
-            if arg2 is None:
-                arg2 = ""
-            return self._AddPane2(window, arg1, arg2)
+            if info is None:
+                info = wx.LEFT
+            if caption is None:
+                caption = ""
+            return self._AddPane2(window, info, caption)
 }
 }
 
