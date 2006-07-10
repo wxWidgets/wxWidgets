@@ -1013,6 +1013,8 @@ void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image,
         return;
 
     data->SetImage(image, which);
+
+    RefreshItem(item);
 }
 
 wxTreeItemParam *wxTreeCtrl::GetItemParam(const wxTreeItemId& item) const
