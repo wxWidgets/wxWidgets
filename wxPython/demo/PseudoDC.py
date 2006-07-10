@@ -263,6 +263,8 @@ def runTest(frame, nb, log):
 overview = """
 <html>
 <body>
+<h2>wx.PseudoDC</h2>
+
 The wx.PseudoDC class provides a way to record operations on a DC and then
 play them back later.  The PseudoDC can be passed to a drawing routine as
 if it were a real DC.  All Drawing methods are supported except Blit but
@@ -273,25 +275,25 @@ DrawToDC(dc)
 </pre>
 The operations can be tagged with an id in order to associated them with a
 specific object.  To do this use:<pre>
-SetId(id)
+    SetId(id)
 </pre>
 Every operation after this will be associated with id until SetId is called
 again.  The PseudoDC also supports object level clipping.  To enable this use:<pre>
-SetIdBounds(id,rect)
+    SetIdBounds(id,rect)
 </pre>
 for each object that should be clipped.  Then use:<pre>
-DrawToDCClipped(dc, clippingRect)
+    DrawToDCClipped(dc, clippingRect)
 </pre>
 To draw the PseudoDC to a real dc. This is useful for large scrolled windows 
 where many objects are offscreen.
 
 Objects can be moved around without re-drawing using:<pre>
-TranslateId(id, dx, dy)
+    TranslateId(id, dx, dy)
 </pre>
 
 To re-draw an object use:<pre>
-ClearId(id)
-SetId(id)
+    ClearId(id)
+    SetId(id)
 </pre>
 and then re-draw the object.
 </body>
