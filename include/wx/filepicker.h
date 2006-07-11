@@ -57,11 +57,11 @@ protected:
 // NB: these styles must be defined to carefully-chosen values to
 //     avoid conflicts with wxButton's styles
 
-#define wxFLP_OPEN                    0x0200
-#define wxFLP_SAVE                    0x0400
-#define wxFLP_OVERWRITE_PROMPT        0x0800
-#define wxFLP_FILE_MUST_EXIST         0x1000
-#define wxFLP_CHANGE_DIR              0x2000
+#define wxFLP_OPEN                    0x0400
+#define wxFLP_SAVE                    0x0800
+#define wxFLP_OVERWRITE_PROMPT        0x1000
+#define wxFLP_FILE_MUST_EXIST         0x2000
+#define wxFLP_CHANGE_DIR              0x4000
 
 // NOTE: wxMULTIPLE is not supported !
 
