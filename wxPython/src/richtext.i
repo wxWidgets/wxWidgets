@@ -571,7 +571,7 @@ during sizing.", "");
         virtual bool , SaveFile(const wxString& file = wxPyEmptyString,
                                 int type = wxRICHTEXT_TYPE_ANY),
         "Save the contents of the document to the given filename, or if the
-empty string is passed then to the filename set with `SetFileName`.", "");
+empty string is passed then to the filename set with `SetFilename`.", "");
 
 
     // sets/clears the dirty flag

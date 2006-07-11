@@ -342,8 +342,10 @@ current text background colour to draw the background (all bits set to
 font, and the current text foreground and background colours.
 
 The coordinates refer to the top-left corner of the rectangle bounding
-the string. See `GetTextExtent` for how to get the dimensions of a
-text string, which can be used to position the text more precisely.
+the string. See `wx.DC.GetTextExtent` for how to get the dimensions of
+a text string, which can be used to position the text more precisely,
+(you will need to use a real DC with GetTextExtent as wx.PseudoDC does
+not implement it.)
 
 **NOTE**: under wxGTK the current logical function is used by this
 function but it is ignored by wxMSW. Thus, you should avoid using
@@ -545,9 +547,8 @@ context, and the original palette restored.", "
     DocDeclStr(
         virtual void , SetLogicalFunction(int function),
         "Sets the current logical function for the device context. This
-determines how a source pixel (from a pen or brush colour, or source
-device context if using `Blit`) combines with a destination pixel in
-the current device context.
+determines how a source pixel (from a pen or brush colour, combines
+with a destination pixel in the current device context.
 
 The possible values and their meaning in terms of source and
 destination pixel values are as follows:
