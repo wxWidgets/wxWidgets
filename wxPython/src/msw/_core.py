@@ -10988,8 +10988,8 @@ class Sizer(Object):
     wx.Sizer is the abstract base class used for laying out subwindows in
     a window.  You cannot use wx.Sizer directly; instead, you will have to
     use one of the sizer classes derived from it such as `wx.BoxSizer`,
-    `wx.StaticBoxSizer`, `wx.NotebookSizer`, `wx.GridSizer`,  `wx.FlexGridSizer`
-    and `wx.GridBagSizer`.
+    `wx.StaticBoxSizer`, `wx.GridSizer`, `wx.FlexGridSizer` and
+    `wx.GridBagSizer`.
 
     The concept implemented by sizers in wxWidgets is closely related to
     layout tools in other GUI toolkits, such as Java's AWT, the GTK

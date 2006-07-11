@@ -942,7 +942,7 @@ class FrameManager(_core.EvtHandler):
 
     def SetFrame(*args, **kwargs):
         """
-        SetFrame(self, Frame frame)
+        SetFrame(self, Window frame)
 
         SetFrame is called to specify the frame which is to be managed by the
         FrameManager.  It only needs to be called if the Frame was not given
@@ -953,7 +953,7 @@ class FrameManager(_core.EvtHandler):
 
     def GetFrame(*args, **kwargs):
         """
-        GetFrame(self) -> Frame
+        GetFrame(self) -> Window
 
         GetFrame returns the frame currently being managed by the
         FrameManager.

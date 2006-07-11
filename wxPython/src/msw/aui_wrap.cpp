@@ -6722,7 +6722,7 @@ fail:
 SWIGINTERN PyObject *_wrap_FrameManager_SetFrame(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxFrameManager *arg1 = (wxFrameManager *) 0 ;
-  wxFrame *arg2 = (wxFrame *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -6739,11 +6739,11 @@ SWIGINTERN PyObject *_wrap_FrameManager_SetFrame(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FrameManager_SetFrame" "', expected argument " "1"" of type '" "wxFrameManager *""'"); 
   }
   arg1 = reinterpret_cast< wxFrameManager * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxFrame, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FrameManager_SetFrame" "', expected argument " "2"" of type '" "wxFrame *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FrameManager_SetFrame" "', expected argument " "2"" of type '" "wxWindow *""'"); 
   }
-  arg2 = reinterpret_cast< wxFrame * >(argp2);
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetFrame(arg2);
@@ -6760,7 +6760,7 @@ fail:
 SWIGINTERN PyObject *_wrap_FrameManager_GetFrame(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxFrameManager *arg1 = (wxFrameManager *) 0 ;
-  wxFrame *result = 0 ;
+  wxWindow *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -6774,7 +6774,7 @@ SWIGINTERN PyObject *_wrap_FrameManager_GetFrame(PyObject *SWIGUNUSEDPARM(self),
   arg1 = reinterpret_cast< wxFrameManager * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxFrame *)((wxFrameManager const *)arg1)->GetFrame();
+    result = (wxWindow *)((wxFrameManager const *)arg1)->GetFrame();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }

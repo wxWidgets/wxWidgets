@@ -4981,7 +4981,7 @@ class RendererNative(object):
         Return the generic implementation of the renderer. Under some
         platforms, this is the default renderer implementation, others have
         platform-specific default renderer which can be retrieved by calling
-        `GetDefault`.
+        `wx.RendererNative.GetDefault`.
         """
         return _gdi_.RendererNative_GetGeneric(*args, **kwargs)
 
@@ -4991,9 +4991,9 @@ class RendererNative(object):
         GetDefault() -> RendererNative
 
         Return the default (native) implementation for this platform -- this
-        is also the one used by default but this may be changed by calling `Set`
-        in which case the return value of this method may be different from
-        the return value of `Get`.
+        is also the one used by default but this may be changed by calling
+        `wx.RendererNative.Set` in which case the return value of this method
+        may be different from the return value of `wx.RendererNative.Get`.
         """
         return _gdi_.RendererNative_GetDefault(*args, **kwargs)
 
@@ -5034,7 +5034,7 @@ def RendererNative_GetGeneric(*args):
     Return the generic implementation of the renderer. Under some
     platforms, this is the default renderer implementation, others have
     platform-specific default renderer which can be retrieved by calling
-    `GetDefault`.
+    `wx.RendererNative.GetDefault`.
     """
   return _gdi_.RendererNative_GetGeneric(*args)
 
@@ -5043,9 +5043,9 @@ def RendererNative_GetDefault(*args):
     RendererNative_GetDefault() -> RendererNative
 
     Return the default (native) implementation for this platform -- this
-    is also the one used by default but this may be changed by calling `Set`
-    in which case the return value of this method may be different from
-    the return value of `Get`.
+    is also the one used by default but this may be changed by calling
+    `wx.RendererNative.Set` in which case the return value of this method
+    may be different from the return value of `wx.RendererNative.Get`.
     """
   return _gdi_.RendererNative_GetDefault(*args)
 
@@ -5557,8 +5557,10 @@ class PseudoDC(_core.Object):
         font, and the current text foreground and background colours.
 
         The coordinates refer to the top-left corner of the rectangle bounding
-        the string. See `GetTextExtent` for how to get the dimensions of a
-        text string, which can be used to position the text more precisely.
+        the string. See `wx.DC.GetTextExtent` for how to get the dimensions of
+        a text string, which can be used to position the text more precisely,
+        (you will need to use a real DC with GetTextExtent as wx.PseudoDC does
+        not implement it.)
 
         **NOTE**: under wxGTK the current logical function is used by this
         function but it is ignored by wxMSW. Thus, you should avoid using
@@ -5574,8 +5576,10 @@ class PseudoDC(_core.Object):
         font, and the current text foreground and background colours.
 
         The coordinates refer to the top-left corner of the rectangle bounding
-        the string. See `GetTextExtent` for how to get the dimensions of a
-        text string, which can be used to position the text more precisely.
+        the string. See `wx.DC.GetTextExtent` for how to get the dimensions of
+        a text string, which can be used to position the text more precisely,
+        (you will need to use a real DC with GetTextExtent as wx.PseudoDC does
+        not implement it.)
 
         **NOTE**: under wxGTK the current logical function is used by this
         function but it is ignored by wxMSW. Thus, you should avoid using
@@ -5758,9 +5762,8 @@ class PseudoDC(_core.Object):
         SetLogicalFunction(self, int function)
 
         Sets the current logical function for the device context. This
-        determines how a source pixel (from a pen or brush colour, or source
-        device context if using `Blit`) combines with a destination pixel in
-        the current device context.
+        determines how a source pixel (from a pen or brush colour, combines
+        with a destination pixel in the current device context.
 
         The possible values and their meaning in terms of source and
         destination pixel values are as follows:

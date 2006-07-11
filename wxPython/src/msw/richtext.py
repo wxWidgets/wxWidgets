@@ -675,7 +675,7 @@ class RichTextCtrl(_windows.ScrolledWindow):
         SaveFile(self, String file=EmptyString, int type=RICHTEXT_TYPE_ANY) -> bool
 
         Save the contents of the document to the given filename, or if the
-        empty string is passed then to the filename set with `SetFileName`.
+        empty string is passed then to the filename set with `SetFilename`.
         """
         return _richtext.RichTextCtrl_SaveFile(*args, **kwargs)
 
