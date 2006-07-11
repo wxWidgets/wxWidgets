@@ -12,7 +12,6 @@
 
 #include <stdlib.h>
 #include "wx/gsocket.h"
-#include "wx/unix/gsockunx.h"
 
 #include <CoreFoundation/CoreFoundation.h>
 
