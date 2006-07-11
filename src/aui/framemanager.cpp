@@ -53,6 +53,7 @@ wxPaneInfo wxNullPaneInfo;
 wxDockInfo wxNullDockInfo;
 DEFINE_EVENT_TYPE(wxEVT_AUI_PANEBUTTON)
 DEFINE_EVENT_TYPE(wxEVT_AUI_PANECLOSE)
+DEFINE_EVENT_TYPE(wxEVT_AUI_RENDER)
 
 #ifdef __WXMAC__
     // a few defines to avoid nameclashes
@@ -376,6 +377,7 @@ static int PaneSortFunc(wxPaneInfo** p1, wxPaneInfo** p2)
 
 BEGIN_EVENT_TABLE(wxFrameManager, wxEvtHandler)
     EVT_AUI_PANEBUTTON(wxFrameManager::OnPaneButton)
+    EVT_AUI_RENDER(wxFrameManager::OnRender)
     EVT_PAINT(wxFrameManager::OnPaint)
     EVT_ERASE_BACKGROUND(wxFrameManager::OnEraseBackground)
     EVT_SIZE(wxFrameManager::OnSize)
@@ -2842,12 +2844,14 @@ void wxFrameManager::OnFloatingPaneActivated(wxWindow* wnd)
     }
 }
 
-// Render() draws all of the pane captions, sashes,
+// OnRender() draws all of the pane captions, sashes,
 // backgrounds, captions, grippers, pane borders and buttons.
 // It renders the entire user interface.
 
-void wxFrameManager::Render(wxDC* dc)
+void wxFrameManager::OnRender(wxFrameManagerEvent& evt)
 {
+    wxDC* dc = evt.GetDC();
+    
 #ifdef __WXMAC__
     dc->Clear() ;
 #endif
@@ -2885,6 +2889,20 @@ void wxFrameManager::Render(wxDC* dc)
                 break;
         }
     }
+}
+
+
+// Render() fire a render event, which is normally handled by
+// wxFrameManager::OnRender().  This allows the render function to
+// be overridden via the render event.  This can be useful for paintin
+// custom graphics in the main window. Default behavior can be
+// invoked in the overridden function by calling OnRender()
+
+void wxFrameManager::Render(wxDC* dc)
+{
+    wxFrameManagerEvent e(wxEVT_AUI_RENDER);
+    e.SetDC(dc);
+    ProcessMgrEvent(e);
 }
 
 void wxFrameManager::Repaint(wxDC* dc)

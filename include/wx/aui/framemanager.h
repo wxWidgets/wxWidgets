@@ -464,20 +464,25 @@ protected:
     virtual void ShowHint(const wxRect& rect);
     virtual void HideHint();
 
+public:
+
+    // public events (which can be invoked externally)
+    void OnRender(wxFrameManagerEvent& evt);
+    void OnPaneButton(wxFrameManagerEvent& evt);
+
 protected:
 
-    // events
-    void OnPaint(wxPaintEvent& event);
-    void OnEraseBackground(wxEraseEvent& event);
-    void OnSize(wxSizeEvent& event);
-    void OnSetCursor(wxSetCursorEvent& event);
-    void OnLeftDown(wxMouseEvent& event);
-    void OnLeftUp(wxMouseEvent& event);
-    void OnMotion(wxMouseEvent& event);
-    void OnLeaveWindow(wxMouseEvent& event);
-    void OnPaneButton(wxFrameManagerEvent& event);
-    void OnChildFocus(wxChildFocusEvent& event);
-    void OnHintFadeTimer(wxTimerEvent& event);
+    // protected events
+    void OnPaint(wxPaintEvent& evt);
+    void OnEraseBackground(wxEraseEvent& evt);
+    void OnSize(wxSizeEvent& evt);
+    void OnSetCursor(wxSetCursorEvent& evt);
+    void OnLeftDown(wxMouseEvent& evt);
+    void OnLeftUp(wxMouseEvent& evt);
+    void OnMotion(wxMouseEvent& evt);
+    void OnLeaveWindow(wxMouseEvent& evt);
+    void OnChildFocus(wxChildFocusEvent& evt);
+    void OnHintFadeTimer(wxTimerEvent& evt);
 
 protected:
 
@@ -533,6 +538,7 @@ public:
         button = 0;
         veto_flag = false;
         canveto_flag = true;
+        dc = NULL;
     }
 #ifndef SWIG
     wxFrameManagerEvent(const wxFrameManagerEvent& c) : wxEvent(c)
@@ -541,14 +547,18 @@ public:
         button = c.button;
         veto_flag = c.veto_flag;
         canveto_flag = c.canveto_flag;
+        dc = c.dc;
     }
 #endif
     wxEvent *Clone() const { return new wxFrameManagerEvent(*this); }
 
     void SetPane(wxPaneInfo* p) { pane = p; }
     void SetButton(int b) { button = b; }
+    void SetDC(wxDC* pdc) { dc = pdc; }
+ 
     wxPaneInfo* GetPane() { return pane; }
     int GetButton() { return button; }
+    wxDC* GetDC() { return dc; }
     
     void Veto(bool veto = true) { veto_flag = veto; }
     bool GetVeto() const { return veto_flag; }
@@ -560,6 +570,7 @@ public:
     int button;
     bool veto_flag;
     bool canveto_flag;
+    wxDC* dc;
 
 #ifndef SWIG
 private:
@@ -676,6 +687,7 @@ public:
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANEBUTTON, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANECLOSE, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_RENDER, 0)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxFrameManagerEventFunction)(wxFrameManagerEvent&);
@@ -687,15 +699,19 @@ typedef void (wxEvtHandler::*wxFrameManagerEventFunction)(wxFrameManagerEvent&);
    wx__DECLARE_EVT0(wxEVT_AUI_PANEBUTTON, wxFrameManagerEventHandler(func))
 #define EVT_AUI_PANECLOSE(func) \
    wx__DECLARE_EVT0(wxEVT_AUI_PANECLOSE, wxFrameManagerEventHandler(func))
+#define EVT_AUI_RENDER(func) \
+   wx__DECLARE_EVT0(wxEVT_AUI_RENDER, wxFrameManagerEventHandler(func))
 
 #else
 
 %constant wxEventType wxEVT_AUI_PANEBUTTON;
 %constant wxEventType wxEVT_AUI_PANECLOSE;
+%constant wxEventType wxEVT_AUI_RENDER;
 
 %pythoncode {
     EVT_AUI_PANEBUTTON = wx.PyEventBinder( wxEVT_AUI_PANEBUTTON )
     EVT_AUI_PANECLOSE = wx.PyEventBinder( wxEVT_AUI_PANECLOSE )
+    EVT_AUI_RENDER = wx.PyEventBinder( wxEVT_AUI_RENDER )
 }
 #endif // SWIG
 
