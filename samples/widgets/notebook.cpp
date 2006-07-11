@@ -286,6 +286,8 @@ void BookWidgetsPage::CreateContent()
     sizerTop->Add(sizerMiddle, 0, wxGROW | wxALL, 10);
     sizerTop->Add(m_sizerBook, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
+    RecreateBook();
+
     // final initializations
     Reset();
 #if USE_ICONS_IN_BOOK
@@ -570,7 +572,6 @@ protected:
         return new wxNotebook(this, BookPage_Book,
                               wxDefaultPosition, wxDefaultSize,
                               flags);
-
     }
 
 private:
@@ -652,7 +653,6 @@ protected:
         return new wxListbook(this, BookPage_Book,
                               wxDefaultPosition, wxDefaultSize,
                               flags);
-
     }
 
 private:
@@ -726,7 +726,6 @@ protected:
         return new wxChoicebook(this, BookPage_Book,
                                 wxDefaultPosition, wxDefaultSize,
                                 flags);
-
     }
 
 private:
