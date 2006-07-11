@@ -16,6 +16,5 @@
 #include "wx/aui/dockart.h"
 #include "wx/aui/floatpane.h"
 
-#endif
-    // _WX_AUI_H_
+#endif // _WX_AUI_H_
 

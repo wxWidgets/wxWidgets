@@ -379,8 +379,8 @@ public:
     void SetFlags(unsigned int flags);
     unsigned int GetFlags() const;
 
-    void SetFrame(wxFrame* frame);
-    wxFrame* GetFrame() const;
+    void SetFrame(wxWindow* frame);
+    wxWindow* GetFrame() const;
 
 #ifdef SWIG
     %disownarg( wxDockArt* art_provider );
@@ -493,7 +493,7 @@ protected:
 
 protected:
 
-    wxFrame* m_frame;            // the frame being managed
+    wxWindow* m_frame;           // the window being managed
     wxDockArt* m_art;            // dock art object which does all drawing
     unsigned int m_flags;        // manager flags wxAUI_MGR_*
 

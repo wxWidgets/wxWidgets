@@ -501,7 +501,7 @@ unsigned int wxFrameManager::GetFlags() const
 // SetFrame() is usually called once when the frame
 // manager class is being initialized.  "frame" specifies
 // the frame which should be managed by the frame mananger
-void wxFrameManager::SetFrame(wxFrame* frame)
+void wxFrameManager::SetFrame(wxWindow* frame)
 {
     wxASSERT_MSG(frame, wxT("specified frame must be non-NULL"));
 
@@ -536,8 +536,8 @@ void wxFrameManager::UnInit()
     m_frame->RemoveEventHandler(this);
 }
 
-// GetFrame() returns the frame pointer being managed by wxFrameManager
-wxFrame* wxFrameManager::GetFrame() const
+// GetFrame() returns the window pointer being managed by wxFrameManager
+wxWindow* wxFrameManager::GetFrame() const
 {
     return m_frame;
 }
