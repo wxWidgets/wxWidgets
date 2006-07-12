@@ -191,7 +191,7 @@ case "${host}" in
     AC_DEFINE(__BSD__)
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
-  *-*-openbsd*)
+  *-*-openbsd*|*-*-mirbsd*)
     USE_BSD=1
     USE_OPENBSD=1
     AC_DEFINE(__OPENBSD__)
@@ -784,7 +784,7 @@ else
   DEFAULT_wxUSE_PLUGINS=no
   DEFAULT_wxUSE_OFFICIAL_BUILD=no
 
-  dnl Appliable only when --with-gtk was used:
+  dnl Applicable only when --with-gtk was used:
   DEFAULT_wxUSE_GTK2=yes
 fi
 
