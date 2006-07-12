@@ -421,6 +421,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
 
       powerpc-apple-macos* | \
       *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | *-*-k*bsd*-gnu | \
+      *-*-mirbsd* | \
       *-*-sunos4* | \
       *-*-osf* | \
       *-*-dgux5* | \
