@@ -1687,7 +1687,6 @@ int GSocket::Send_Dgram(const char *buffer, int size)
 void GSocket::Detected_Read()
 {
 #ifndef __WINDOWS__
-  char c;
 
   /* Safeguard against straggling call to Detectedw_Read */
   if (m_fd == INVALID_SOCKET)
