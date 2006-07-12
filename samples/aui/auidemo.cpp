@@ -589,7 +589,7 @@ MyFrame::MyFrame(wxWindow* parent,
         : wxFrame(parent, id, title, pos, size, style)
 {
     // tell wxFrameManager to manage this frame
-    m_mgr.SetFrame(this);
+    m_mgr.SetManagedWindow(this);
 
     // set frame icon
     SetIcon(wxIcon(sample_xpm));

@@ -371,7 +371,7 @@ friend class wxFloatingPane;
 
 public:
 
-    wxFrameManager(wxFrame* frame = NULL,
+    wxFrameManager(wxWindow* managed_wnd = NULL,
                    unsigned int flags = wxAUI_MGR_DEFAULT);
     virtual ~wxFrameManager();
     void UnInit();
@@ -379,8 +379,8 @@ public:
     void SetFlags(unsigned int flags);
     unsigned int GetFlags() const;
 
-    void SetFrame(wxWindow* frame);
-    wxWindow* GetFrame() const;
+    void SetManagedWindow(wxWindow* managed_wnd);
+    wxWindow* GetManagedWindow() const;
 
 #ifdef SWIG
     %disownarg( wxDockArt* art_provider );
@@ -412,6 +412,14 @@ public:
 
     void Update();
 
+public:
+
+    // deprecated -- please use SetManagedWindow() and
+    // and GetManagedWindow() instead
+    
+    wxDEPRECATED( void SetFrame(wxFrame* frame) );
+    wxDEPRECATED( wxFrame* GetFrame() const );
+    
 protected:
 
     void DrawHintRect(wxWindow* pane_window,

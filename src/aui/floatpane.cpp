@@ -49,7 +49,7 @@ wxFloatingPane::wxFloatingPane(wxWindow* parent,
     m_owner_mgr = owner_mgr;
     m_moving = false;
     m_last_rect = wxRect();
-    m_mgr.SetFrame(this);
+    m_mgr.SetManagedWindow(this);
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
 }
 

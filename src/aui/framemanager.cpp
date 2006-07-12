@@ -391,7 +391,7 @@ BEGIN_EVENT_TABLE(wxFrameManager, wxEvtHandler)
 END_EVENT_TABLE()
 
 
-wxFrameManager::wxFrameManager(wxFrame* frame, unsigned int flags)
+wxFrameManager::wxFrameManager(wxWindow* managed_wnd, unsigned int flags)
 {
     m_action = actionNone;
     m_last_mouse_move = wxPoint();
@@ -400,9 +400,9 @@ wxFrameManager::wxFrameManager(wxFrame* frame, unsigned int flags)
     m_hint_wnd = NULL;
     m_flags = flags;
 
-    if (frame)
+    if (managed_wnd)
     {
-        SetFrame(frame);
+        SetManagedWindow(managed_wnd);
     }
 }
 
@@ -500,10 +500,25 @@ unsigned int wxFrameManager::GetFlags() const
 }
 
 
-// SetFrame() is usually called once when the frame
+// don't use these anymore as they are deprecated
+// use Set/GetManagedFrame() instead
+void wxFrameManager::SetFrame(wxFrame* frame)
+{
+    SetManagedWindow((wxWindow*)frame);
+}
+
+wxFrame* wxFrameManager::GetFrame() const
+{
+    return (wxFrame*)m_frame;
+}
+
+
+
+
+// SetManagedWindow() is usually called once when the frame
 // manager class is being initialized.  "frame" specifies
 // the frame which should be managed by the frame mananger
-void wxFrameManager::SetFrame(wxWindow* frame)
+void wxFrameManager::SetManagedWindow(wxWindow* frame)
 {
     wxASSERT_MSG(frame, wxT("specified frame must be non-NULL"));
 
@@ -538,8 +553,8 @@ void wxFrameManager::UnInit()
     m_frame->RemoveEventHandler(this);
 }
 
-// GetFrame() returns the window pointer being managed by wxFrameManager
-wxWindow* wxFrameManager::GetFrame() const
+// GetManagedWindow() returns the window pointer being managed
+wxWindow* wxFrameManager::GetManagedWindow() const
 {
     return m_frame;
 }
