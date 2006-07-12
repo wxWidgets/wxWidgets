@@ -1079,6 +1079,14 @@ class FrameManager(_core.EvtHandler):
         """
         return _aui.FrameManager_Update(*args, **kwargs)
 
+    def OnRender(*args, **kwargs):
+        """OnRender(self, FrameManagerEvent evt)"""
+        return _aui.FrameManager_OnRender(*args, **kwargs)
+
+    def OnPaneButton(*args, **kwargs):
+        """OnPaneButton(self, FrameManagerEvent evt)"""
+        return _aui.FrameManager_OnPaneButton(*args, **kwargs)
+
     def GetPane(self, item):
         """
         GetPane(self, window_or_info item) -> PaneInfo
@@ -1146,6 +1154,10 @@ class FrameManagerEvent(_core.Event):
         """SetButton(self, int b)"""
         return _aui.FrameManagerEvent_SetButton(*args, **kwargs)
 
+    def SetDC(*args, **kwargs):
+        """SetDC(self, DC pdc)"""
+        return _aui.FrameManagerEvent_SetDC(*args, **kwargs)
+
     def GetPane(*args, **kwargs):
         """GetPane(self) -> PaneInfo"""
         return _aui.FrameManagerEvent_GetPane(*args, **kwargs)
@@ -1153,6 +1165,10 @@ class FrameManagerEvent(_core.Event):
     def GetButton(*args, **kwargs):
         """GetButton(self) -> int"""
         return _aui.FrameManagerEvent_GetButton(*args, **kwargs)
+
+    def GetDC(*args, **kwargs):
+        """GetDC(self) -> DC"""
+        return _aui.FrameManagerEvent_GetDC(*args, **kwargs)
 
     def Veto(*args, **kwargs):
         """Veto(self, bool veto=True)"""
@@ -1174,6 +1190,7 @@ class FrameManagerEvent(_core.Event):
     button = property(_aui.FrameManagerEvent_button_get, _aui.FrameManagerEvent_button_set)
     veto_flag = property(_aui.FrameManagerEvent_veto_flag_get, _aui.FrameManagerEvent_veto_flag_set)
     canveto_flag = property(_aui.FrameManagerEvent_canveto_flag_get, _aui.FrameManagerEvent_canveto_flag_set)
+    dc = property(_aui.FrameManagerEvent_dc_get, _aui.FrameManagerEvent_dc_set)
 _aui.FrameManagerEvent_swigregister(FrameManagerEvent)
 
 class DockInfo(object):
@@ -1241,8 +1258,10 @@ _aui.PaneButton_swigregister(PaneButton)
 
 wxEVT_AUI_PANEBUTTON = _aui.wxEVT_AUI_PANEBUTTON
 wxEVT_AUI_PANECLOSE = _aui.wxEVT_AUI_PANECLOSE
+wxEVT_AUI_RENDER = _aui.wxEVT_AUI_RENDER
 EVT_AUI_PANEBUTTON = wx.PyEventBinder( wxEVT_AUI_PANEBUTTON )
 EVT_AUI_PANECLOSE = wx.PyEventBinder( wxEVT_AUI_PANECLOSE )
+EVT_AUI_RENDER = wx.PyEventBinder( wxEVT_AUI_RENDER )
 
 class DockArt(object):
     """
