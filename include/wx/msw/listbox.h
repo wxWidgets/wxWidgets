@@ -105,9 +105,10 @@ public:
     int GetItemIndex(wxOwnerDrawn *item) const { return m_aItems.Index(item); }
 #endif // wxUSE_OWNER_DRAWN
 
-    // Windows-specific code to set the horizontal extent of the listbox, if
-    // necessary. If s is non-NULL, it's used to calculate the horizontal
-    // extent. Otherwise, all strings are used.
+    // Windows-specific code to update the horizontal extent of the listbox, if
+    // necessary. If s is non-empty, the horizontal extent is increased to the
+    // length of this string if it's currently too short, otherwise the maximum
+    // extent of all strings is used. In any case calls InvalidateBestSize()
     virtual void SetHorizontalExtent(const wxString& s = wxEmptyString);
 
     // Windows callbacks

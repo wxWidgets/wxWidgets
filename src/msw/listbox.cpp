@@ -275,8 +275,6 @@ void wxListBox::Delete(unsigned int n)
     m_noItems--;
 
     SetHorizontalExtent(wxEmptyString);
-
-    InvalidateBestSize();
 }
 
 int wxListBox::DoAppend(const wxString& item)
@@ -296,7 +294,6 @@ int wxListBox::DoAppend(const wxString& item)
 
     SetHorizontalExtent(item);
 
-    InvalidateBestSize();
     return index;
 }
 
@@ -344,8 +341,6 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
         // show the listbox back if we hid it
         ShowWindow(GetHwnd(), SW_SHOW);
     }
-
-    InvalidateBestSize();
 }
 
 int wxListBox::FindString(const wxString& s, bool bCase) const
@@ -369,8 +364,6 @@ void wxListBox::Clear()
 
     m_noItems = 0;
     SetHorizontalExtent();
-
-    InvalidateBestSize();
 }
 
 void wxListBox::Free()
@@ -547,8 +540,6 @@ wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
     m_noItems += nItems;
 
     SetHorizontalExtent();
-
-    InvalidateBestSize();
 }
 
 int wxListBox::DoListHitTest(const wxPoint& point) const
@@ -606,7 +597,7 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
     if ( wasSelected )
         Select(n);
 
-    InvalidateBestSize();
+    SetHorizontalExtent();
 }
 
 unsigned int wxListBox::GetCount() const
@@ -615,64 +606,56 @@ unsigned int wxListBox::GetCount() const
 }
 
 // ----------------------------------------------------------------------------
-// helpers
+// size-related stuff
 // ----------------------------------------------------------------------------
 
-// Windows-specific code to set the horizontal extent of the listbox, if
-// necessary. If s is non-NULL, it's used to calculate the horizontal extent.
-// Otherwise, all strings are used.
 void wxListBox::SetHorizontalExtent(const wxString& s)
 {
-    // Only necessary if we want a horizontal scrollbar
-    if (!(m_windowStyle & wxHSCROLL))
+    // in any case, our best size could have changed
+    InvalidateBestSize();
+
+    // the rest is only necessary if we want a horizontal scrollbar
+    if ( !HasFlag(wxHSCROLL) )
         return;
+
+
+    WindowHDC dc(GetHwnd());
+    SelectInHDC selFont(dc, GetHfontOf(GetFont()));
+
     TEXTMETRIC lpTextMetric;
+    ::GetTextMetrics(dc, &lpTextMetric);
 
-    if ( !s.empty() )
+    int largestExtent = 0;
+    SIZE extentXY;
+
+    if ( s.empty() )
     {
-        int existingExtent = (int)SendMessage(GetHwnd(), LB_GETHORIZONTALEXTENT, 0, 0L);
-        HDC dc = GetWindowDC(GetHwnd());
-        HFONT oldFont = 0;
-        if (GetFont().Ok() && GetFont().GetResourceHandle() != 0)
-            oldFont = (HFONT) ::SelectObject(dc, (HFONT) GetFont().GetResourceHandle());
-
-        GetTextMetrics(dc, &lpTextMetric);
-        SIZE extentXY;
-        ::GetTextExtentPoint32(dc, (LPTSTR) (const wxChar *)s, s.length(), &extentXY);
-        int extentX = (int)(extentXY.cx + lpTextMetric.tmAveCharWidth);
-
-        if (oldFont)
-            ::SelectObject(dc, oldFont);
-
-        ReleaseDC(GetHwnd(), dc);
-        if (extentX > existingExtent)
-            SendMessage(GetHwnd(), LB_SETHORIZONTALEXTENT, LOWORD(extentX), 0L);
-    }
-    else
-    {
-        int largestExtent = 0;
-        HDC dc = GetWindowDC(GetHwnd());
-        HFONT oldFont = 0;
-        if (GetFont().Ok() && GetFont().GetResourceHandle() != 0)
-            oldFont = (HFONT) ::SelectObject(dc, (HFONT) GetFont().GetResourceHandle());
-
-        GetTextMetrics(dc, &lpTextMetric);
-
-        for (unsigned int i = 0; i < m_noItems; i++)
+        // set extent to the max length of all strings
+        for ( unsigned int i = 0; i < m_noItems; i++ )
         {
-            wxString str = GetString(i);
-            SIZE extentXY;
+            const wxString str = GetString(i);
             ::GetTextExtentPoint32(dc, str.c_str(), str.length(), &extentXY);
+
             int extentX = (int)(extentXY.cx + lpTextMetric.tmAveCharWidth);
-            if (extentX > largestExtent)
+            if ( extentX > largestExtent )
                 largestExtent = extentX;
         }
-        if (oldFont)
-            ::SelectObject(dc, oldFont);
-
-        ReleaseDC(GetHwnd(), dc);
-        SendMessage(GetHwnd(), LB_SETHORIZONTALEXTENT, LOWORD(largestExtent), 0L);
     }
+    else // just increase the extent to the length of this string
+    {
+        int existingExtent = (int)SendMessage(GetHwnd(),
+                                              LB_GETHORIZONTALEXTENT, 0, 0L);
+
+        ::GetTextExtentPoint32(dc, s.c_str(), s.length(), &extentXY);
+
+        int extentX = (int)(extentXY.cx + lpTextMetric.tmAveCharWidth);
+        if ( extentX > existingExtent )
+            largestExtent = extentX;
+    }
+
+    if ( largestExtent )
+        SendMessage(GetHwnd(), LB_SETHORIZONTALEXTENT, LOWORD(largestExtent), 0L);
+    //else: it shouldn't change
 }
 
 wxSize wxListBox::DoGetBestSize() const
