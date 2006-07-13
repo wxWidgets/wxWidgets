@@ -3802,7 +3802,7 @@ public:
 
     DEC_PYCALLBACK_SIZET__const(GetDataSize);
     bool GetDataHere(void *buf) const;
-    bool SetData(size_t len, const void *buf) const;
+    bool SetData(size_t len, const void *buf);
     PYPRIVATE;
 };
 
@@ -3830,7 +3830,7 @@ bool wxPyDataObjectSimple::GetDataHere(void *buf) const {
     return rval;
 }
 
-bool wxPyDataObjectSimple::SetData(size_t len, const void *buf) const{
+bool wxPyDataObjectSimple::SetData(size_t len, const void *buf) {
     // For this one we simply need to make a string from buf and len
     // and send it to the Python method.
     bool rval = false;
