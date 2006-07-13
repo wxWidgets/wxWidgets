@@ -960,9 +960,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     wxBitmap bitmap( 100, 100 );
     wxMemoryDC dc;
-    dc.SetBackground(*wxGREEN);
     dc.SelectObject( bitmap );
-    dc.SetPen(*wxGREEN_PEN);
+    dc.SetBackground(*wxGREEN);
+    dc.SetPen(*wxRED_PEN);
     dc.Clear();
     dc.DrawEllipse(5, 5, 90, 90);
     dc.DrawText(_T("Bitmap"), 30, 40);
