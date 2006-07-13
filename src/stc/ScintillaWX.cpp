@@ -328,17 +328,16 @@ void ScintillaWX::SetTicking(bool on) {
 
 void ScintillaWX::SetMouseCapture(bool on) {
     if (mouseDownCaptures) {
-        if (on && !stc->HasCapture())
+        if (on && !capturedMouse)
             stc->CaptureMouse();
-        else if (!on && stc->HasCapture())
+        else if (!on && capturedMouse && stc->HasCapture())
             stc->ReleaseMouse();
-        capturedMouse = stc->HasCapture();
+        capturedMouse = on;
     }
 }
 
 
 bool ScintillaWX::HaveMouseCapture() {
-    capturedMouse = stc->HasCapture();
     return capturedMouse;
 }
 
