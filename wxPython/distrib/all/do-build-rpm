@@ -18,16 +18,16 @@ set -o errexit
 
 echo "-=-=-=-  Hello from $HOSTNAME  -=-=-=-"
 
-if [ $# -lt 4 ]; then
-    echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION PYVER..."
+if [ $# -lt 5 ]; then
+    echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION PYVER CHARTYPE"
     exit 1
 fi
 
 RELEASE=$1
 SKIPCLEAN=$2
 VERSION=$3
-shift;shift;shift
-PYVER=$@
+PYVER=$4
+CHARTYPE=$5
 
 rpmtop=_rpm_top
 
@@ -71,16 +71,20 @@ done
 
 cp wxPython-src-$VERSION.tar.bz2 $rpmtop/SOURCES
 
-echo "******************** PYVER = " $PYVER
-for ver in $PYVER; do 
-    echo "Building the RPMs for Python $ver..."
+echo "************************************************" 
+echo "Building the RPMs for Python $PYVER, $CHARTYPE"
 
-    ## for now let's just do the gtk2 builds
-    ##DoRPMBuild $ver gtk  0
+## for now let's just do the gtk2 builds
+##if [ $CHARTYPE = both -o $CHARTYPE = ansi ]; then
+##    DoRPMBuild $ver gtk  0
+##fi
 
-    DoRPMBuild $ver gtk2 0
-    DoRPMBuild $ver gtk2 1
-done
+if [ $CHARTYPE = both -o $CHARTYPE = ansi ]; then
+    DoRPMBuild $PYVER gtk2 0
+fi
+if [ $CHARTYPE = both -o $CHARTYPE = unicode ]; then
+    DoRPMBuild $PYVER gtk2 1
+fi
 
 
 echo "*** Moving RPMs to ."

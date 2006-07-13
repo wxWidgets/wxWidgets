@@ -7,11 +7,12 @@ set -o errexit
 coHost=$1
 host=$2
 reltag=$3
-shift;shift;shift
-pyver=$@
+pyver=$4
 
-if [ $pyver = config ]; then
-    pyver=$PYVER
+if [ $buildansi = yes ]; then
+    CHARTYPE=both
+else
+    CHARTYPE=unicode
 fi
 
 
@@ -81,7 +82,7 @@ if [ $skiplinux != yes ]; then
     
     echo "Running build script on $host..."
     cmd=./do-build-rpm
-    ssh root@$host "cd $LINUX_BUILD && $cmd $reltag $skipclean $VERSION $pyver"
+    ssh root@$host "cd $LINUX_BUILD && $cmd $reltag $skipclean $VERSION $pyver $CHARTYPE"
     
     echo "Fetching the results..."
     scp "root@$host:$LINUX_BUILD/wxPython*.i[0-9]86.rpm"  $STAGING_DIR

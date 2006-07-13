@@ -120,9 +120,10 @@ def usage():
     print "   skipdocs     Don't rebuild the docs"
     print "   skipwin      Don't do the remote Windows build"
     print "   skiposx      Don't do the remote OSX build"
-    print "   skiplinux    Don't do the remote Linux build"
+    print "   skiplinux    Don't do the remote Linux (RPM) build"
     print "   skipclean    Don't do the cleanup step on the remote builds"
     print "   skipupload   Don't upload the builds to starship"
+    print "   ansi         Also do the ansi builds"
     print ""
     print "   nocohost     Don't start the coLinux sessions if they are"
     print "                not already online"
@@ -172,6 +173,9 @@ def main(args):
             
         elif flag == "skipupload":
             config.skipupload = "yes"
+
+        elif flag == "ansi":
+            config.buildansi = "yes"
 
         elif flag == "nocohost":
             config.startcohost = "no"

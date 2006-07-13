@@ -52,8 +52,8 @@ cd $WXDIR/wxPython
 export TARBALLDIR=$DESTDIR
 mkdir -p dist
 if [ $CHARTYPE = both ]; then
-    distrib/mac/wxPythonOSX/build $PYVER inplace unicode $FLAGS
     distrib/mac/wxPythonOSX/build $PYVER inplace ansi $FLAGS
+    distrib/mac/wxPythonOSX/build $PYVER inplace unicode $FLAGS
 else
     distrib/mac/wxPythonOSX/build $PYVER inplace $CHARTYPE $FLAGS
 fi

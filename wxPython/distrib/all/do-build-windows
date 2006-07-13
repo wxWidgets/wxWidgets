@@ -18,8 +18,8 @@ set -o errexit
 
 echo "-=-=-=-  Hello from $HOSTNAME  -=-=-=-"
 
-if [ $# -lt 5 ]; then
-    echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION PYVER..."
+if [ $# -lt 6 ]; then
+    echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION PYVER CHARTYPE"
     exit 1
 fi
 
@@ -28,7 +28,7 @@ DESTDIR=$2
 SKIPCLEAN=$3
 VERSION=$4
 PYVER=$5
-
+CHARTYPE=$6
 
 # WXDIR is the cygwin path, WXWIN is the DOS path
 WXWIN=`cygpath -w $WXDIR`
@@ -89,37 +89,47 @@ rm .my.sedexpr
 
 
 echo "Building the wx DLLs..."
-.make hybrid
-.make hybrid-uni
+if [ $CHARTYPE = both -o $CHARTYPE = ansi ]; then
+    .make hybrid
+fi
+if [ $CHARTYPE = both -o $CHARTYPE = unicode ]; then
+    .make hybrid-uni
+fi
 
 
-echo "Building tex2rtf..."
-cd $WXDIR/utils/tex2rtf/src
-$WXDIR/build/msw/.mymake hybrid 
-cp vc_mswhdll/tex2rtf.exe $WXDIR/lib/vc_dll/tex2rtf.exe
+# echo "Building tex2rtf..."
+# cd $WXDIR/utils/tex2rtf/src
+# $WXDIR/build/msw/.mymake hybrid 
+# cp vc_mswhdll/tex2rtf.exe $WXDIR/lib/vc_dll/tex2rtf.exe
+
+# echo "Translating docs to html..."
+# DOCDIR=$WXDIR/docs
+# cd $DOCDIR/latex/wx
+# mkdir -p $DOCDIR/html/wx
+# cp *.gif $DOCDIR/html/wx
+# cp *.css $DOCDIR/html/wx
+# DOCSRC=`cygpath -w $DOCDIR/latex/wx/manual.tex`
+# DOCDEST=`cygpath -w $DOCDIR/html/wx/wx.htm` 
+# DOCINI=`cygpath -w $DOCDIR/latex/wx/tex2rtf_css.ini`
+
+# $WXDIR/lib/vc_dll/tex2rtf.exe $DOCSRC $DOCDEST -twice -html -macros $DOCINI
+
+
+echo "Extracting html docs..."
+mkdir -p $WXDIR/docs/html/wx
+cd $WXDIR/docs/html/wx
+rm -rf *
+tar xjf $DESTDIR/wxPython-docs-$VERSION.tar.bz2
+rm $DESTDIR/wxPython-docs-$VERSION.tar.bz2
+unzip wxPython-$VERSION/docs/wx.zip
 
 echo "Building the HTMLHelp file..."
-DOCDIR=$WXDIR/docs
-cd $DOCDIR/latex/wx
-mkdir -p $DOCDIR/html/wx
-cp *.gif $DOCDIR/html/wx
-cp *.css $DOCDIR/html/wx
-DOCSRC=`cygpath -w $DOCDIR/latex/wx/manual.tex`
-DOCDEST=`cygpath -w $DOCDIR/html/wx/wx.htm` 
-DOCINI=`cygpath -w $DOCDIR/latex/wx/tex2rtf_css.ini`
-
-$WXDIR/lib/vc_dll/tex2rtf.exe $DOCSRC $DOCDEST -twice -html -macros $DOCINI
-
-cd $DOCDIR/html/wx
-cp $DOCDIR/latex/wx/wx.css .
+cd $WXDIR/docs/html/wx
+##cp $DOCDIR/latex/wx/wx.css .
 $TOOLS/HTMLHelpWorkshop/hhc.exe wx.hhp || true
 mkdir -p ../../htmlhelp
 mv wx.chm ../../htmlhelp
 
-# rm -f $DOCDIR/html/wx/*.con
-# rm -f $DOCDIR/html/wx/*.ref
-# rm -f $DOCDIR/latex/wx/*.con
-# rm -f $DOCDIR/latex/wx/*.ref
 
 
 
@@ -127,16 +137,16 @@ mv wx.chm ../../htmlhelp
 echo "Building wxPython and installers..."
 cd $WXDIR/wxPython
 mkdir -p dist
-
-for ver in $PYVER; do
-    echo $ver
-    b $ver d UNICODE=0 USE_SWIG=0
-    b $ver h UNICODE=0 USE_SWIG=0 EP_ADD_OPTS=1
-    b $ver r UNICODE=0 USE_SWIG=0
-    b $ver d UNICODE=1 USE_SWIG=0
-    b $ver h UNICODE=1 USE_SWIG=0 EP_ADD_OPTS=1
-    b $ver r UNICODE=1 USE_SWIG=0
-done
+if [ $CHARTYPE = both -o $CHARTYPE = ansi ]; then
+    b $PYVER d UNICODE=0 USE_SWIG=0
+    b $PYVER h UNICODE=0 USE_SWIG=0 EP_ADD_OPTS=1
+    b $PYVER r UNICODE=0 USE_SWIG=0
+fi
+if [ $CHARTYPE = both -o $CHARTYPE = unicode ]; then
+    b $PYVER d UNICODE=1 USE_SWIG=0
+    b $PYVER h UNICODE=1 USE_SWIG=0 EP_ADD_OPTS=1
+    b $PYVER r UNICODE=1 USE_SWIG=0
+fi
 
 echo "Building the developer package..."
 WXWIN=`cygpath -w $WXDIR`
