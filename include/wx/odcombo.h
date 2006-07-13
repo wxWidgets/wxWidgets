@@ -110,7 +110,7 @@ public:
 protected:
 
     // Called by OnComboDoubleClick and OnComboKeyEvent
-    bool HandleKey( int keycode, bool saturate );
+    bool HandleKey( int keycode, bool saturate, wxChar unicode = 0 );
 
     // sends combobox select event from the parent combo control
     void SendComboBoxEvent( int selection );
@@ -163,6 +163,9 @@ protected:
     // Return the index of the widest item (recalculating it if necessary)
     int GetWidestItem() { CalcWidths(); return m_widestItem; }
 
+    // Stop partial completion (when some other event occurs)
+    void StopPartialCompletion();
+
     wxArrayString           m_strings;
     wxArrayPtrVoid          m_clientDatas;
 
@@ -197,6 +200,12 @@ private:
 
     // Recalculate widths if they are dirty
     void CalcWidths();
+
+    // Partial completion string
+    wxString                m_partialCompletionString;
+
+    // Partial completion timer
+    wxTimer                 m_partialCompletionTimer;
 
     DECLARE_EVENT_TABLE()
 };
