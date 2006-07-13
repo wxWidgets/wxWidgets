@@ -2063,7 +2063,7 @@ int wxFrameManager::GetDockPixelOffset(wxPaneInfo& test)
 // if a dock operation is allowed, the new dock position is copied into
 // the target info.  If the operation was allowed, the function returns true.
 
-static bool ProcessDockResult(wxPaneInfo& target,
+bool wxFrameManager::ProcessDockResult(wxPaneInfo& target,
                               const wxPaneInfo& new_pos)
 {
     bool allowed = false;

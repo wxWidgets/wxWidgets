@@ -444,6 +444,9 @@ protected:
                        wxDockUIPartArray& uiparts,
                        bool spacer_only = false);
 
+    virtual bool ProcessDockResult(wxPaneInfo& target,
+                                   const wxPaneInfo& new_pos);
+
     bool DoDrop(wxDockInfoArray& docks,
                 wxPaneInfoArray& panes,
                 wxPaneInfo& drop,
