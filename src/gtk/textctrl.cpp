@@ -1171,6 +1171,10 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
     {
 #ifdef __WXGTK20__
         GtkTextIter iter;
+
+        if (pos > GetLastPosition())
+            return false;
+
         gtk_text_buffer_get_iter_at_offset(m_buffer, &iter, pos);
 
         if ( y )
