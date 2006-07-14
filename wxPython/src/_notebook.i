@@ -529,7 +529,7 @@ public:
     int GetPageParent(size_t pos) const;
 
     // the tree control we use for showing the pages index tree
-    wxTreeCtrl* GetTreeCtrl() const;
+    wxPyTreeCtrl* GetTreeCtrl() const;
 
 };
 

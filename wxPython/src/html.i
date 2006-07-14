@@ -1373,6 +1373,9 @@ enum {
 };
 
 
+%{
+    typedef wxTreeCtrl wxPyTreeCtrl;
+%}
 
 MustHaveApp(wxHtmlHelpWindow);
 
@@ -1464,7 +1467,7 @@ public:
     wxHtmlHelpFrameCfg& GetCfgData();
 
     // Gets the tree control
-    wxTreeCtrl *GetTreeCtrl() const;
+    wxPyTreeCtrl *GetTreeCtrl() const;
 
 };
 
