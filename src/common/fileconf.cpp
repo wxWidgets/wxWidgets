@@ -889,12 +889,44 @@ bool wxFileConfig::HasGroup(const wxString& strName) const
     return rc;
 }
 
-bool wxFileConfig::HasEntry(const wxString& strName) const
+bool wxFileConfig::HasEntry(const wxString& entry) const
 {
-    wxConfigPathChanger path(this, strName);
+    // path is the part before the last "/"
+    wxString path = entry.BeforeLast(wxCONFIG_PATH_SEPARATOR);
 
-    wxFileConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
-    return pEntry != NULL;
+    // except in the special case of "/keyname" when there is nothing before "/"
+    if ( path.empty() && *entry.c_str() == wxCONFIG_PATH_SEPARATOR )
+    {
+        path = wxCONFIG_PATH_SEPARATOR;
+    }
+
+    // change to the path of the entry if necessary and remember the old path
+    // to restore it later
+    wxString pathOld;
+    wxFileConfig * const self = wx_const_cast(wxFileConfig *, this);
+    if ( !path.empty() )
+    {
+        pathOld = GetPath();
+        if ( pathOld.empty() )
+            pathOld = wxCONFIG_PATH_SEPARATOR;
+
+        if ( !self->DoSetPath(path, false /* don't create if doesn't exist */) )
+        {
+            return false;
+        }
+    }
+
+    // check if the entry exists in this group
+    const bool exists = m_pCurrentGroup->FindEntry(
+                            entry.AfterLast(wxCONFIG_PATH_SEPARATOR)) != NULL;
+
+    // restore the old path if we changed it above
+    if ( !pathOld.empty() )
+    {
+        self->SetPath(pathOld);
+    }
+
+    return exists;
 }
 
 // ----------------------------------------------------------------------------
