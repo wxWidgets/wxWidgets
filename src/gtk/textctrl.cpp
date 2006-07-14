@@ -944,18 +944,20 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
     {
         GtkTextIter iter;
         gtk_text_buffer_get_iter_at_offset(m_buffer, &iter, pos);
-        if (gtk_text_iter_is_end(&iter))
-            return false;
 
-        *y = gtk_text_iter_get_line(&iter);
-        *x = gtk_text_iter_get_line_offset(&iter);
+        if ( y )
+            *y = gtk_text_iter_get_line(&iter);
+        if ( x )
+            *x = gtk_text_iter_get_line_offset(&iter);
     }
     else // single line control
     {
         if ( pos <= GTK_ENTRY(m_text)->text_length )
         {
-            *y = 0;
-            *x = pos;
+            if ( y )
+                *y = 0;
+            if ( x )
+                *x = pos;
         }
         else
         {
