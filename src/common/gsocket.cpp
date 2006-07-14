@@ -245,14 +245,13 @@ static struct hostent * deepCopyHostent(struct hostent *h,
 }
 #endif
 
-struct hostent * wxGethostbyname_r(const char *hostname, struct hostent *h,
-				   void *buffer, int size, int *err)
+unsigned long wxGethostbyname_r(const char *hostname)
 
 {
   struct hostent *he = NULL;
+  unsigned long address;
 #ifndef __WXMSW__
 
-  *err = 0;
 #if defined(HAVE_FUNC_GETHOSTBYNAME_R_6) 
   if (gethostbyname_r(hostname, h, (char*)buffer, size, &he, err))
     he = NULL;
@@ -273,15 +272,22 @@ struct hostent * wxGethostbyname_r(const char *hostname, struct hostent *h,
 #endif
   he = gethostbyname(hostname);
   if (!he)
-    *err = h_errno;
+    address = INADDR_NONE;
   else
-    he = deepCopyHostent(h, he, (char*)buffer, size, err);
+  {	
+  	struct in_addr *array_addr;
+	array_addr = (struct in_addr *) *(he->h_addr_list);
+	if (array_addr == NULL)
+		address = INADDR_NONE;
+	else
+    	address = array_addr[0].s_addr;
+  }
 #endif
 #else
   he = gethostbyname(hostname);
 #endif
 
-  return he;
+  return address;
 }
 
 struct hostent * wxGethostbyaddr_r(const char *addr_buf, int buf_size,
@@ -1949,8 +1955,7 @@ GSocketError _GAddress_Init_INET(GAddress *address)
 }
 
 GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
-{
-  struct hostent *he;
+{  
   struct in_addr *addr;
 
   assert(address != NULL);
@@ -1973,29 +1978,19 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   if (val)
 #endif
   {
-#endif
-    struct in_addr *array_addr;
+#endif    
 
     /* It is a real name, we solve it */
-    struct hostent h;
-#if defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
-    struct hostent_data buffer;
-#else
-    char buffer[1024];
-#endif
-    int err;
-    he = wxGethostbyname_r(hostname, &h, (void*)&buffer, sizeof(buffer), &err);
+    
+    addr->s_addr = wxGethostbyname_r(hostname);
 
-    if (he == NULL)
+    if (addr->s_addr ==  INADDR_NONE)
     {
       /* Reset to invalid address */
-      addr->s_addr = INADDR_NONE;
       address->m_error = GSOCK_NOHOST;
       return GSOCK_NOHOST;
     }
-
-    array_addr = (struct in_addr *) *(he->h_addr_list);
-    addr->s_addr = array_addr[0].s_addr;
+    
   }
 
   return GSOCK_NOERROR;
