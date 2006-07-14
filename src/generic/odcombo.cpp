@@ -238,7 +238,7 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
     wxChar keychar=0;
     if ((keycode >= WXK_SPACE) && (keycode <=255) && (keycode != WXK_DELETE) && wxIsprint(keycode))
     {
-        keychar = keycode;
+        keychar = (wxChar)keycode;
     }
     else if (unicode>0)
     {
@@ -270,9 +270,11 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
         // Try partial completion
 
         // find the new partial completion string
+#if wxUSE_TIMER
         if (m_partialCompletionTimer.IsRunning())
             m_partialCompletionString+=wxString(keychar);
         else
+#endif // wxUSE_TIMER
             m_partialCompletionString=wxString(keychar);
 
         // now search through the values to see if this is found
@@ -298,7 +300,9 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
         else
         {
             value=i;
+#if wxUSE_TIMER
             m_partialCompletionTimer.Start(wxODCB_PARTIAL_COMPLETION_TIME, true);
+#endif // wxUSE_TIMER
         }
     }
     else
@@ -338,7 +342,9 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
 void wxVListBoxComboPopup::StopPartialCompletion()
 {
     m_partialCompletionString = wxEmptyString;
+#if wxUSE_TIMER
     m_partialCompletionTimer.Stop();
+#endif // wxUSE_TIMER
 }
 
 void wxVListBoxComboPopup::OnComboDoubleClick()

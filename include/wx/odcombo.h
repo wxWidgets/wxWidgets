@@ -19,6 +19,7 @@
 #include "wx/combo.h"
 #include "wx/ctrlsub.h"
 #include "wx/vlbox.h"
+#include "wx/timer.h"
 
 
 //
@@ -204,8 +205,10 @@ private:
     // Partial completion string
     wxString                m_partialCompletionString;
 
+#if wxUSE_TIMER
     // Partial completion timer
     wxTimer                 m_partialCompletionTimer;
+#endif // wxUSE_TIMER
 
     DECLARE_EVENT_TABLE()
 };
