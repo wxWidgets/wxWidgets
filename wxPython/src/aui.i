@@ -136,6 +136,8 @@ The following example shows a simple implementation that utilizes
 #define wxUSE_AUI 1
 #define WXDLLIMPEXP_AUI
 #define unsigned
+#define wxDEPRECATED(decl)
+
 
 // We'll let SWIG handle the function overloading for these
 %ignore wxPaneInfo::MaxSize(int x, int y);
@@ -176,7 +178,7 @@ The following example shows a simple implementation that utilizes
 // the overloaded versions of GetPane and AddPane
 
 %extend wxFrameManager {
-%pythoncode {
+    %pythoncode {
     def GetPane(self, item):
         """
         GetPane(self, window_or_info item) -> PaneInfo
@@ -222,7 +224,15 @@ The following example shows a simple implementation that utilizes
             if caption is None:
                 caption = ""
             return self._AddPane2(window, info, caption)
-}
+    }
+
+    // For backwards compatibility
+    %pythoncode {
+         SetFrame = wx._deprecated(SetManagedWindow,
+                                   "SetFrame is deprecated, use `SetManagedWindow` instead.")
+         GetFrame = wx._deprecated(GetManagedWindow,
+                                   "GetFrame is deprecated, use `GetManagedWindow` instead.")
+    }
 }
 
 //---------------------------------------------------------------------------

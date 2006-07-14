@@ -83,9 +83,9 @@ pane will end up:
 DocStr(wxFrameManager::wxFrameManager,
 "Constructor.
 
-    :param frame: Specifies the `wx.Frame` which should be managed.
-        If not set in the call to this constructor then `SetFrame`
-        should be called.
+    :param managed_wnd: Specifies the `wx.Window` which should be
+        managed.  If not set in the call to this constructor then
+        `SetManagedWindow` should be called later.
 
     :param flags: Specifies options which allow the frame management
         behavior to be modified.
@@ -113,7 +113,7 @@ Valid flags are:
 DocStr(wxFrameManager::UnInit,
 "UnInit uninitializes the framework and should be called before a
 managed frame is destroyed. UnInit is usually called in the managed
-wx.Frame's destructor.
+window's destructor.
 ", "");
 
 DocStr(wxFrameManager::SetFlags,
@@ -125,14 +125,16 @@ DocStr(wxFrameManager::GetFlags,
 "GetFlags returns the current FrameManager's flags.
 ", "");
 
-DocStr(wxFrameManager::SetFrame,
-"SetFrame is called to specify the frame which is to be managed by the
-FrameManager.  It only needs to be called if the Frame was not given
-to the manager in the constructor.
+DocStr(wxFrameManager::SetManagedWindow,
+"SetManagedWindow is called to specify the window which is to be
+managed by the FrameManager.  It is normally a `wx.Frame` but it is
+possible to also allow docking within any container window.  This only
+needs to be called if the window was not given to the manager in the
+constructor.
 ", "");
 
-DocStr(wxFrameManager::GetFrame,
-"GetFrame returns the frame currently being managed by the
+DocStr(wxFrameManager::GetManagedWindow,
+"GetManagedWindow returns the window currently being managed by the
 FrameManager.
 ", "");
 
