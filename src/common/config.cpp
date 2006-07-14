@@ -274,6 +274,21 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
   }
 }
 
+void wxConfigPathChanger::UpdateIfDeleted()
+{
+    // we don't have to do anything at all if we didn't change the path
+    if ( !m_bChanged )
+        return;
+
+    // find the deepest still existing parent path of the original path
+    while ( !m_pContainer->HasGroup(m_strOldPath) )
+    {
+        m_strOldPath = m_strOldPath.BeforeLast(wxCONFIG_PATH_SEPARATOR);
+        if ( m_strOldPath.empty() )
+            m_strOldPath = wxCONFIG_PATH_SEPARATOR;
+    }
+}
+
 wxConfigPathChanger::~wxConfigPathChanger()
 {
   // only restore path if it was changed

@@ -454,7 +454,10 @@ in it and the second parameter is true.
 
 \func{bool}{DeleteGroup}{\param{const wxString\& }{ key}}
 
-Delete the group (with all subgroups)
+Delete the group (with all subgroups). If the current path is under the group
+being deleted it is changed to its deepest still existing component. E.g. if
+the current path is \texttt{/A/B/C/D} and the group \texttt{C} is deleted the
+path becomes \texttt{/A/B}.
 
 
 \membersection{wxConfigBase::Exists}\label{wxconfigbaseexists}

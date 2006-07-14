@@ -699,7 +699,18 @@ bool wxRegConfig::DeleteGroup(const wxString& key)
 {
   wxConfigPathChanger path(this, key);
 
-  return m_keyLocal.Exists() ? LocalKey().DeleteKey(path.Name()) : true;
+  if ( !m_keyLocal.Exists() )
+  {
+      // nothing to do
+      return true;
+  }
+
+  if ( !LocalKey().DeleteKey(path.Name()) )
+      return false;
+
+  path.UpdateIfDeleted();
+
+  return true;
 }
 
 bool wxRegConfig::DeleteAll()
@@ -717,5 +728,4 @@ bool wxRegConfig::DeleteAll()
   return bOk;
 }
 
-#endif
-  // wxUSE_CONFIG
+#endif // wxUSE_CONFIG

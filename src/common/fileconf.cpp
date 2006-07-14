@@ -1145,6 +1145,8 @@ bool wxFileConfig::DeleteGroup(const wxString& key)
   if ( !m_pCurrentGroup->DeleteSubgroupByName(path.Name()) )
       return false;
 
+  path.UpdateIfDeleted();
+
   SetDirty();
 
   return true;
