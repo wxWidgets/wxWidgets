@@ -236,6 +236,8 @@ void FileConfigTestCase::HasEntry()
     CPPUNIT_ASSERT( !fc.HasEntry(_T("")) );
     CPPUNIT_ASSERT( !fc.HasEntry(_T("root/group1")) );
     CPPUNIT_ASSERT( !fc.HasEntry(_T("subgroup/subentry")) );
+    CPPUNIT_ASSERT( !fc.HasEntry(_T("/root/no_such_group/entry")) );
+    CPPUNIT_ASSERT( !fc.HasGroup(_T("/root/no_such_group")) );
 }
 
 void FileConfigTestCase::HasGroup()
