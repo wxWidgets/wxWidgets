@@ -155,6 +155,9 @@ DocStr(wxStyledTextCtrl::MarkerDefineBitmap,
 DocStr(wxStyledTextCtrl::MarkerAddSet,
 "Add a set of markers to a line.", "");
 
+DocStr(wxStyledTextCtrl::MarkerSetAlpha,
+"Set the alpha used for a marker that is drawn in the text area, not the margin.", "");
+
 DocStr(wxStyledTextCtrl::SetMarginType,
 "Set a margin to be either numeric or symbolic.", "");
 
@@ -220,6 +223,12 @@ DocStr(wxStyledTextCtrl::SetSelForeground,
 
 DocStr(wxStyledTextCtrl::SetSelBackground,
 "Set the background colour of the selection and whether to use this setting.", "");
+
+DocStr(wxStyledTextCtrl::GetSelAlpha,
+"Get the alpha of the selection.", "");
+
+DocStr(wxStyledTextCtrl::SetSelAlpha,
+"Set the alpha of the selection.", "");
 
 DocStr(wxStyledTextCtrl::SetCaretForeground,
 "Set the foreground colour of the caret.", "");
@@ -653,6 +662,9 @@ DocStr(wxStyledTextCtrl::CallTipSetForeground,
 
 DocStr(wxStyledTextCtrl::CallTipSetForegroundHighlight,
 "Set the foreground colour for the highlighted part of the call tip.", "");
+
+DocStr(wxStyledTextCtrl::CallTipUseStyle,
+"Enable use of STYLE_CALLTIP and set call tip tab size in pixels.", "");
 
 DocStr(wxStyledTextCtrl::VisibleFromDocLine,
 "Find the display line of a document line taking hidden lines into account.", "");
@@ -1301,6 +1313,12 @@ DocStr(wxStyledTextCtrl::GetPasteConvertEndings,
 
 DocStr(wxStyledTextCtrl::SelectionDuplicate,
 "Duplicate the selection. If selection empty duplicate the line containing the caret.", "");
+
+DocStr(wxStyledTextCtrl::SetCaretLineBackAlpha,
+"Set background alpha of the caret line.", "");
+
+DocStr(wxStyledTextCtrl::GetCaretLineBackAlpha,
+"Get the background alpha of the caret line.", "");
 
 DocStr(wxStyledTextCtrl::StartRecord,
 "Start notifying the container of all key presses and commands.", "");

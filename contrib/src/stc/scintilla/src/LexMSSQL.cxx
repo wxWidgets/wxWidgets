@@ -3,7 +3,7 @@
  ** Lexer for MSSQL.
  **/
 // By Filip Yaghob <fyaghob@gmail.com>
-
+// The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
 #include <string.h>

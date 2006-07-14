@@ -36,6 +36,7 @@ STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_AutoComplete.o \
 	$(OBJS)\stcdll_CallTip.o \
 	$(OBJS)\stcdll_CellBuffer.o \
+	$(OBJS)\stcdll_CharClassify.o \
 	$(OBJS)\stcdll_ContractionState.o \
 	$(OBJS)\stcdll_Document.o \
 	$(OBJS)\stcdll_DocumentAccessor.o \
@@ -70,6 +71,7 @@ STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_LexGui4Cli.o \
 	$(OBJS)\stcdll_LexHTML.o \
 	$(OBJS)\stcdll_LexHaskell.o \
+	$(OBJS)\stcdll_LexInno.o \
 	$(OBJS)\stcdll_LexKix.o \
 	$(OBJS)\stcdll_LexLisp.o \
 	$(OBJS)\stcdll_LexLout.o \
@@ -80,6 +82,7 @@ STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_LexMatlab.o \
 	$(OBJS)\stcdll_LexMetapost.o \
 	$(OBJS)\stcdll_LexNsis.o \
+	$(OBJS)\stcdll_LexOpal.o \
 	$(OBJS)\stcdll_LexOthers.o \
 	$(OBJS)\stcdll_LexPB.o \
 	$(OBJS)\stcdll_LexPOV.o \
@@ -94,6 +97,8 @@ STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_LexTADS3.o \
 	$(OBJS)\stcdll_LexScriptol.o \
 	$(OBJS)\stcdll_LexSpecman.o \
+	$(OBJS)\stcdll_LexSpice.o \
+	$(OBJS)\stcdll_LexTCL.o \
 	$(OBJS)\stcdll_LexTeX.o \
 	$(OBJS)\stcdll_LexVB.o \
 	$(OBJS)\stcdll_LexVHDL.o \
@@ -124,6 +129,7 @@ STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_AutoComplete.o \
 	$(OBJS)\stclib_CallTip.o \
 	$(OBJS)\stclib_CellBuffer.o \
+	$(OBJS)\stclib_CharClassify.o \
 	$(OBJS)\stclib_ContractionState.o \
 	$(OBJS)\stclib_Document.o \
 	$(OBJS)\stclib_DocumentAccessor.o \
@@ -158,6 +164,7 @@ STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_LexGui4Cli.o \
 	$(OBJS)\stclib_LexHTML.o \
 	$(OBJS)\stclib_LexHaskell.o \
+	$(OBJS)\stclib_LexInno.o \
 	$(OBJS)\stclib_LexKix.o \
 	$(OBJS)\stclib_LexLisp.o \
 	$(OBJS)\stclib_LexLout.o \
@@ -168,6 +175,7 @@ STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_LexMatlab.o \
 	$(OBJS)\stclib_LexMetapost.o \
 	$(OBJS)\stclib_LexNsis.o \
+	$(OBJS)\stclib_LexOpal.o \
 	$(OBJS)\stclib_LexOthers.o \
 	$(OBJS)\stclib_LexPB.o \
 	$(OBJS)\stclib_LexPOV.o \
@@ -182,6 +190,8 @@ STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_LexTADS3.o \
 	$(OBJS)\stclib_LexScriptol.o \
 	$(OBJS)\stclib_LexSpecman.o \
+	$(OBJS)\stclib_LexSpice.o \
+	$(OBJS)\stclib_LexTCL.o \
 	$(OBJS)\stclib_LexTeX.o \
 	$(OBJS)\stclib_LexVB.o \
 	$(OBJS)\stclib_LexVHDL.o \
@@ -418,6 +428,9 @@ $(OBJS)\stcdll_CallTip.o: ../../src/stc/scintilla/src/CallTip.cxx
 $(OBJS)\stcdll_CellBuffer.o: ../../src/stc/scintilla/src/CellBuffer.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\stcdll_CharClassify.o: ../../src/stc/scintilla/src/CharClassify.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\stcdll_ContractionState.o: ../../src/stc/scintilla/src/ContractionState.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -520,6 +533,9 @@ $(OBJS)\stcdll_LexHTML.o: ../../src/stc/scintilla/src/LexHTML.cxx
 $(OBJS)\stcdll_LexHaskell.o: ../../src/stc/scintilla/src/LexHaskell.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\stcdll_LexInno.o: ../../src/stc/scintilla/src/LexInno.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\stcdll_LexKix.o: ../../src/stc/scintilla/src/LexKix.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -548,6 +564,9 @@ $(OBJS)\stcdll_LexMetapost.o: ../../src/stc/scintilla/src/LexMetapost.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stcdll_LexNsis.o: ../../src/stc/scintilla/src/LexNsis.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stcdll_LexOpal.o: ../../src/stc/scintilla/src/LexOpal.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stcdll_LexOthers.o: ../../src/stc/scintilla/src/LexOthers.cxx
@@ -590,6 +609,12 @@ $(OBJS)\stcdll_LexScriptol.o: ../../src/stc/scintilla/src/LexScriptol.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stcdll_LexSpecman.o: ../../src/stc/scintilla/src/LexSpecman.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stcdll_LexSpice.o: ../../src/stc/scintilla/src/LexSpice.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stcdll_LexTCL.o: ../../src/stc/scintilla/src/LexTCL.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stcdll_LexTeX.o: ../../src/stc/scintilla/src/LexTeX.cxx
@@ -653,6 +678,9 @@ $(OBJS)\stclib_CallTip.o: ../../src/stc/scintilla/src/CallTip.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stclib_CellBuffer.o: ../../src/stc/scintilla/src/CellBuffer.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stclib_CharClassify.o: ../../src/stc/scintilla/src/CharClassify.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stclib_ContractionState.o: ../../src/stc/scintilla/src/ContractionState.cxx
@@ -757,6 +785,9 @@ $(OBJS)\stclib_LexHTML.o: ../../src/stc/scintilla/src/LexHTML.cxx
 $(OBJS)\stclib_LexHaskell.o: ../../src/stc/scintilla/src/LexHaskell.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\stclib_LexInno.o: ../../src/stc/scintilla/src/LexInno.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\stclib_LexKix.o: ../../src/stc/scintilla/src/LexKix.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -785,6 +816,9 @@ $(OBJS)\stclib_LexMetapost.o: ../../src/stc/scintilla/src/LexMetapost.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stclib_LexNsis.o: ../../src/stc/scintilla/src/LexNsis.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stclib_LexOpal.o: ../../src/stc/scintilla/src/LexOpal.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stclib_LexOthers.o: ../../src/stc/scintilla/src/LexOthers.cxx
@@ -827,6 +861,12 @@ $(OBJS)\stclib_LexScriptol.o: ../../src/stc/scintilla/src/LexScriptol.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stclib_LexSpecman.o: ../../src/stc/scintilla/src/LexSpecman.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stclib_LexSpice.o: ../../src/stc/scintilla/src/LexSpice.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\stclib_LexTCL.o: ../../src/stc/scintilla/src/LexTCL.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stclib_LexTeX.o: ../../src/stc/scintilla/src/LexTeX.cxx

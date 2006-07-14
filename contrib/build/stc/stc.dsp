@@ -464,6 +464,10 @@ SOURCE=../../src/stc\scintilla\src\CellBuffer.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=../../src/stc\scintilla\src\CharClassify.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=../../src/stc\scintilla\src\ContractionState.cxx
 # End Source File
 # Begin Source File
@@ -600,6 +604,10 @@ SOURCE=../../src/stc\scintilla\src\LexHaskell.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=../../src/stc\scintilla\src\LexInno.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=../../src/stc\scintilla\src\LexKix.cxx
 # End Source File
 # Begin Source File
@@ -637,6 +645,10 @@ SOURCE=../../src/stc\scintilla\src\LexMetapost.cxx
 # Begin Source File
 
 SOURCE=../../src/stc\scintilla\src\LexNsis.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=../../src/stc\scintilla\src\LexOpal.cxx
 # End Source File
 # Begin Source File
 
@@ -692,7 +704,15 @@ SOURCE=../../src/stc\scintilla\src\LexSpecman.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=../../src/stc\scintilla\src\LexSpice.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=../../src/stc\scintilla\src\LexTADS3.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=../../src/stc\scintilla\src\LexTCL.cxx
 # End Source File
 # Begin Source File
 

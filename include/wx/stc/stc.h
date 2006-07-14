@@ -120,15 +120,18 @@
 #define wxSTC_MASK_FOLDERS 0xFE000000
 #define wxSTC_MARGIN_SYMBOL 0
 #define wxSTC_MARGIN_NUMBER 1
+#define wxSTC_MARGIN_BACK 2
+#define wxSTC_MARGIN_FORE 3
 
-// Styles in range 32..37 are predefined for parts of the UI and are not used as normal styles.
-// Styles 38 and 39 are for future use.
+// Styles in range 32..38 are predefined for parts of the UI and are not used as normal styles.
+// Style 39 is for future use.
 #define wxSTC_STYLE_DEFAULT 32
 #define wxSTC_STYLE_LINENUMBER 33
 #define wxSTC_STYLE_BRACELIGHT 34
 #define wxSTC_STYLE_BRACEBAD 35
 #define wxSTC_STYLE_CONTROLCHAR 36
 #define wxSTC_STYLE_INDENTGUIDE 37
+#define wxSTC_STYLE_CALLTIP 38
 #define wxSTC_STYLE_LASTPREDEFINED 39
 #define wxSTC_STYLE_MAX 127
 
@@ -166,6 +169,7 @@
 #define wxSTC_INDIC_STRIKE 4
 #define wxSTC_INDIC_HIDDEN 5
 #define wxSTC_INDIC_BOX 6
+#define wxSTC_INDIC_ROUNDBOX 7
 #define wxSTC_INDIC0_MASK 0x20
 #define wxSTC_INDIC1_MASK 0x40
 #define wxSTC_INDIC2_MASK 0x80
@@ -258,6 +262,9 @@
 #define wxSTC_SEL_STREAM 0
 #define wxSTC_SEL_RECTANGLE 1
 #define wxSTC_SEL_LINES 2
+#define wxSTC_ALPHA_TRANSPARENT 0
+#define wxSTC_ALPHA_OPAQUE 255
+#define wxSTC_ALPHA_NOALPHA 256
 
 // Maximum value of keywordSet parameter of SetKeyWords.
 #define wxSTC_KEYWORDSET_MAX 8
@@ -381,10 +388,9 @@
 #define wxSTC_LEX_FLAGSHIP 73
 #define wxSTC_LEX_CSOUND 74
 #define wxSTC_LEX_FREEBASIC 75
-
-// These are deprecated, STC_LEX_HTML should be used instead.
-#define wxSTC_LEX_ASP 29
-#define wxSTC_LEX_PHP 30
+#define wxSTC_LEX_INNOSETUP 76
+#define wxSTC_LEX_OPAL 77
+#define wxSTC_LEX_SPICE 78
 
 // When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 // value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -429,6 +435,30 @@
 #define wxSTC_C_COMMENTDOCKEYWORD 17
 #define wxSTC_C_COMMENTDOCKEYWORDERROR 18
 #define wxSTC_C_GLOBALCLASS 19
+
+// Lexical states for SCLEX_TCL
+#define wxSTC_TCL_DEFAULT 0
+#define wxSTC_TCL_COMMENT 1
+#define wxSTC_TCL_COMMENTLINE 2
+#define wxSTC_TCL_NUMBER 3
+#define wxSTC_TCL_WORD_IN_QUOTE 4
+#define wxSTC_TCL_IN_QUOTE 5
+#define wxSTC_TCL_OPERATOR 6
+#define wxSTC_TCL_IDENTIFIER 7
+#define wxSTC_TCL_SUBSTITUTION 8
+#define wxSTC_TCL_SUB_BRACE 9
+#define wxSTC_TCL_MODIFIER 10
+#define wxSTC_TCL_EXPAND 11
+#define wxSTC_TCL_WORD 12
+#define wxSTC_TCL_WORD2 13
+#define wxSTC_TCL_WORD3 14
+#define wxSTC_TCL_WORD4 15
+#define wxSTC_TCL_WORD5 16
+#define wxSTC_TCL_WORD6 17
+#define wxSTC_TCL_WORD7 18
+#define wxSTC_TCL_WORD8 19
+#define wxSTC_TCL_COMMENT_BOX 20
+#define wxSTC_TCL_BLOCK_COMMENT 21
 
 // Lexical states for SCLEX_HTML, SCLEX_XML
 #define wxSTC_H_DEFAULT 0
@@ -664,6 +694,7 @@
 #define wxSTC_PROPS_SECTION 2
 #define wxSTC_PROPS_ASSIGNMENT 3
 #define wxSTC_PROPS_DEFVAL 4
+#define wxSTC_PROPS_KEY 5
 
 // Lexical states for SCLEX_LATEX
 #define wxSTC_L_DEFAULT 0
@@ -1208,6 +1239,7 @@
 #define wxSTC_AU3_SPECIAL 12
 #define wxSTC_AU3_EXPAND 13
 #define wxSTC_AU3_COMOBJ 14
+#define wxSTC_AU3_UDF 15
 
 // Lexical states for SCLEX_APDL
 #define wxSTC_APDL_DEFAULT 0
@@ -1445,6 +1477,44 @@
 #define wxSTC_CSOUND_IRATE_VAR 13
 #define wxSTC_CSOUND_GLOBAL_VAR 14
 #define wxSTC_CSOUND_STRINGEOL 15
+
+// Lexical states for SCLEX_INNOSETUP
+#define wxSTC_INNO_DEFAULT 0
+#define wxSTC_INNO_COMMENT 1
+#define wxSTC_INNO_KEYWORD 2
+#define wxSTC_INNO_PARAMETER 3
+#define wxSTC_INNO_SECTION 4
+#define wxSTC_INNO_PREPROC 5
+#define wxSTC_INNO_PREPROC_INLINE 6
+#define wxSTC_INNO_COMMENT_PASCAL 7
+#define wxSTC_INNO_KEYWORD_PASCAL 8
+#define wxSTC_INNO_KEYWORD_USER 9
+#define wxSTC_INNO_STRING_DOUBLE 10
+#define wxSTC_INNO_STRING_SINGLE 11
+#define wxSTC_INNO_IDENTIFIER 12
+
+// Lexical states for SCLEX_OPAL
+#define wxSTC_OPAL_SPACE 0
+#define wxSTC_OPAL_COMMENT_BLOCK 1
+#define wxSTC_OPAL_COMMENT_LINE 2
+#define wxSTC_OPAL_INTEGER 3
+#define wxSTC_OPAL_KEYWORD 4
+#define wxSTC_OPAL_SORT 5
+#define wxSTC_OPAL_STRING 6
+#define wxSTC_OPAL_PAR 7
+#define wxSTC_OPAL_BOOL_CONST 8
+#define wxSTC_OPAL_DEFAULT 32
+
+// Lexical states for SCLEX_SPICE
+#define wxSTC_SPICE_DEFAULT 0
+#define wxSTC_SPICE_IDENTIFIER 1
+#define wxSTC_SPICE_KEYWORD 2
+#define wxSTC_SPICE_KEYWORD2 3
+#define wxSTC_SPICE_KEYWORD3 4
+#define wxSTC_SPICE_NUMBER 5
+#define wxSTC_SPICE_DELIMITER 6
+#define wxSTC_SPICE_VALUE 7
+#define wxSTC_SPICE_COMMENTLINE 8
 
 
 //-----------------------------------------
@@ -1935,6 +2005,9 @@ public:
     // Add a set of markers to a line.
     void MarkerAddSet(int line, int set);
 
+    // Set the alpha used for a marker that is drawn in the text area, not the margin.
+    void MarkerSetAlpha(int markerNumber, int alpha);
+
     // Set a margin to be either numeric or symbolic.
     void SetMarginType(int margin, int marginType);
 
@@ -2000,6 +2073,12 @@ public:
 
     // Set the background colour of the selection and whether to use this setting.
     void SetSelBackground(bool useSetting, const wxColour& back);
+
+    // Get the alpha of the selection.
+    int GetSelAlpha();
+
+    // Set the alpha of the selection.
+    void SetSelAlpha(int alpha);
 
     // Set the foreground colour of the caret.
     void SetCaretForeground(const wxColour& fore);
@@ -2439,6 +2518,9 @@ public:
 
     // Set the foreground colour for the highlighted part of the call tip.
     void CallTipSetForegroundHighlight(const wxColour& fore);
+
+    // Enable use of STYLE_CALLTIP and set call tip tab size in pixels.
+    void CallTipUseStyle(int tabSize);
 
     // Find the display line of a document line taking hidden lines into account.
     int VisibleFromDocLine(int line);
@@ -3067,6 +3149,12 @@ public:
 
     // Duplicate the selection. If selection empty duplicate the line containing the caret.
     void SelectionDuplicate();
+
+    // Set background alpha of the caret line.
+    void SetCaretLineBackAlpha(int alpha);
+
+    // Get the background alpha of the caret line.
+    int GetCaretLineBackAlpha();
 
     // Start notifying the container of all key presses and commands.
     void StartRecord();

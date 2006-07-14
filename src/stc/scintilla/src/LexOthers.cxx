@@ -41,7 +41,7 @@ static bool IsBOperator(char ch) {
 
 // Tests for BATCH Separators
 static bool IsBSeparator(char ch) {
-	return (ch == ':') || (ch == '\\') || (ch == '.') || (ch == ';') ||
+	return (ch == '\\') || (ch == '.') || (ch == ';') ||
 		(ch == '\"') || (ch == '\'') || (ch == '/') || (ch == ')');
 }
 
@@ -50,7 +50,7 @@ static void ColouriseBatchLine(
     unsigned int lengthLine,
     unsigned int startLine,
     unsigned int endPos,
-    WordList &keywords,
+    WordList *keywordlists[],
     Accessor &styler) {
 
 	unsigned int offset = 0;	// Line Buffer Offset
@@ -59,7 +59,9 @@ static void ColouriseBatchLine(
 	char wordBuffer[81];		// Word Buffer - large to catch long paths
 	unsigned int wbl;		// Word Buffer Length
 	unsigned int wbo;		// Word Buffer Offset - also Special Keyword Buffer Length
-	bool forFound = false;		// No Local Variable without FOR statement
+	WordList &keywords = *keywordlists[0];      // Internal Commands
+	WordList &keywords2 = *keywordlists[1];     // External Commands (optional)
+
 	// CHOICE, ECHO, GOTO, PROMPT and SET have Default Text that may contain Regular Keywords
 	//   Toggling Regular Keyword Checking off improves readability
 	// Other Regular Keywords and External Commands / Programs might also benefit from toggling
@@ -174,7 +176,13 @@ static void ColouriseBatchLine(
 				// Reset Offset to re-process remainder of word
 				offset -= (wbl - 1);
 				// Colorize External Command / Program
-				styler.ColourTo(startLine + offset - 1, SCE_BAT_COMMAND);
+				if (!keywords2) {
+					styler.ColourTo(startLine + offset - 1, SCE_BAT_COMMAND);
+				} else if (keywords2.InList(wordBuffer)) {
+					styler.ColourTo(startLine + offset - 1, SCE_BAT_COMMAND);
+				} else {
+					styler.ColourTo(startLine + offset - 1, SCE_BAT_DEFAULT);
+				}
 				// Reset External Command / Program Location
 				cmdLoc = offset;
 			} else {
@@ -186,10 +194,6 @@ static void ColouriseBatchLine(
 		// Check for Regular Keyword in list
 		} else if ((keywords.InList(wordBuffer)) &&
 			(continueProcessing)) {
-			// Local Variables do not exist if no FOR statement
-			if (CompareCaseInsensitive(wordBuffer, "for") == 0) {
-				forFound = true;
-			}
 			// ECHO, GOTO, PROMPT and SET require no further Regular Keyword Checking
 			if ((CompareCaseInsensitive(wordBuffer, "echo") == 0) ||
 				(CompareCaseInsensitive(wordBuffer, "goto") == 0) ||
@@ -261,8 +265,8 @@ static void ColouriseBatchLine(
 					styler.ColourTo(startLine + offset - 1 - (wbl - wbo), SCE_BAT_WORD);
 					// Reset Offset to re-process remainder of word
 					offset -= (wbl - wbo);
+				}
 			}
-		}
 			// Check for External Command / Program or Default Text
 			if (!sKeywordFound) {
 				wbo = 0;
@@ -306,8 +310,14 @@ static void ColouriseBatchLine(
 							}
 						}
 					}
-					// Colorize External command / program
-					styler.ColourTo(startLine + offset - 1, SCE_BAT_COMMAND);
+					// Colorize External Command / Program
+					if (!keywords2) {
+						styler.ColourTo(startLine + offset - 1, SCE_BAT_COMMAND);
+					} else if (keywords2.InList(wordBuffer)) {
+						styler.ColourTo(startLine + offset - 1, SCE_BAT_COMMAND);
+					} else {
+						styler.ColourTo(startLine + offset - 1, SCE_BAT_DEFAULT);
+					}
 					// No need to Reset Offset
 				// Check for Default Text
 				} else {
@@ -354,13 +364,13 @@ static void ColouriseBatchLine(
 				// Check for External Command / Program
 				if (cmdLoc == offset - wbl) {
 					cmdLoc = offset - (wbl - wbo);
-			}
+				}
 				// Colorize Environment Variable
 				styler.ColourTo(startLine + offset - 1 - (wbl - wbo), SCE_BAT_IDENTIFIER);
 				// Reset Offset to re-process remainder of word
 				offset -= (wbl - wbo);
 			// Check for Local Variable (%%a)
-			} else if ((forFound) &&
+			} else if (
 				(wordBuffer[1] == '%') &&
 				(wordBuffer[2] != '%') &&
 				(!IsBOperator(wordBuffer[2])) &&
@@ -447,7 +457,6 @@ static void ColouriseBatchDoc(
     Accessor &styler) {
 
 	char lineBuffer[1024];
-	WordList &keywords = *keywordlists[0];
 
 	styler.StartAt(startPos);
 	styler.StartSegment(startPos);
@@ -458,14 +467,14 @@ static void ColouriseBatchDoc(
 		if (AtEOL(styler, i) || (linePos >= sizeof(lineBuffer) - 1)) {
 			// End of line (or of line buffer) met, colourise it
 			lineBuffer[linePos] = '\0';
-			ColouriseBatchLine(lineBuffer, linePos, startLine, i, keywords, styler);
+			ColouriseBatchLine(lineBuffer, linePos, startLine, i, keywordlists, styler);
 			linePos = 0;
 			startLine = i + 1;
 		}
 	}
 	if (linePos > 0) {	// Last line does not have ending characters
 		ColouriseBatchLine(lineBuffer, linePos, startLine, startPos + length - 1,
-		                   keywords, styler);
+		                   keywordlists, styler);
 	}
 }
 
@@ -593,8 +602,8 @@ static void ColourisePropsLine(
 			while ((i < lengthLine) && (lineBuffer[i] != '='))
 				i++;
 			if ((i < lengthLine) && (lineBuffer[i] == '=')) {
-				styler.ColourTo(startLine + i - 1, SCE_PROPS_DEFAULT);
-				styler.ColourTo(startLine + i, 3);
+				styler.ColourTo(startLine + i - 1, SCE_PROPS_KEY);
+				styler.ColourTo(startLine + i, SCE_PROPS_ASSIGNMENT);
 				styler.ColourTo(endPos, SCE_PROPS_DEFAULT);
 			} else {
 				styler.ColourTo(endPos, SCE_PROPS_DEFAULT);
@@ -871,7 +880,7 @@ static int RecogniseErrorListLine(const char *lineBuffer, unsigned int lengthLin
 		// CTags: \t<message>
 		// Lua 5 traceback: \t<filename>:<line>:<message>
 		bool initialTab = (lineBuffer[0] == '\t');
-		enum { stInitial, 
+		enum { stInitial,
 			stGccStart, stGccDigit, stGcc,
 			stMsStart, stMsDigit, stMsBracket, stMsVc, stMsDigitComma, stMsDotNet,
 			stCtagsStart, stCtagsStartString, stCtagsStringDollar, stCtags,
@@ -933,8 +942,8 @@ static int RecogniseErrorListLine(const char *lineBuffer, unsigned int lengthLin
 					for (j = i + numstep; j < lengthLine && isalpha(lineBuffer[j]) && chPos < sizeof(word) - 1; j++)
 						word[chPos++] = lineBuffer[j];
 					word[chPos] = 0;
-					if (!CompareCaseInsensitive(word, "error") || !CompareCaseInsensitive(word, "warning") || 
-						!CompareCaseInsensitive(word, "fatal") || !CompareCaseInsensitive(word, "catastrophic") || 
+					if (!CompareCaseInsensitive(word, "error") || !CompareCaseInsensitive(word, "warning") ||
+						!CompareCaseInsensitive(word, "fatal") || !CompareCaseInsensitive(word, "catastrophic") ||
 						!CompareCaseInsensitive(word, "note") || !CompareCaseInsensitive(word, "remark")) {
 						state = stMsVc;
 					} else
@@ -1103,7 +1112,8 @@ static void ColouriseLatexDoc(unsigned int startPos, int length, int initStyle,
 }
 
 static const char * const batchWordListDesc[] = {
-	"Keywords",
+	"Internal Commands",
+	"External Commands",
 	0
 };
 

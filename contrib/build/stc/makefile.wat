@@ -236,6 +236,7 @@ STCDLL_OBJECTS =  &
 	$(OBJS)\stcdll_AutoComplete.obj &
 	$(OBJS)\stcdll_CallTip.obj &
 	$(OBJS)\stcdll_CellBuffer.obj &
+	$(OBJS)\stcdll_CharClassify.obj &
 	$(OBJS)\stcdll_ContractionState.obj &
 	$(OBJS)\stcdll_Document.obj &
 	$(OBJS)\stcdll_DocumentAccessor.obj &
@@ -270,6 +271,7 @@ STCDLL_OBJECTS =  &
 	$(OBJS)\stcdll_LexGui4Cli.obj &
 	$(OBJS)\stcdll_LexHTML.obj &
 	$(OBJS)\stcdll_LexHaskell.obj &
+	$(OBJS)\stcdll_LexInno.obj &
 	$(OBJS)\stcdll_LexKix.obj &
 	$(OBJS)\stcdll_LexLisp.obj &
 	$(OBJS)\stcdll_LexLout.obj &
@@ -280,6 +282,7 @@ STCDLL_OBJECTS =  &
 	$(OBJS)\stcdll_LexMatlab.obj &
 	$(OBJS)\stcdll_LexMetapost.obj &
 	$(OBJS)\stcdll_LexNsis.obj &
+	$(OBJS)\stcdll_LexOpal.obj &
 	$(OBJS)\stcdll_LexOthers.obj &
 	$(OBJS)\stcdll_LexPB.obj &
 	$(OBJS)\stcdll_LexPOV.obj &
@@ -294,6 +297,8 @@ STCDLL_OBJECTS =  &
 	$(OBJS)\stcdll_LexTADS3.obj &
 	$(OBJS)\stcdll_LexScriptol.obj &
 	$(OBJS)\stcdll_LexSpecman.obj &
+	$(OBJS)\stcdll_LexSpice.obj &
+	$(OBJS)\stcdll_LexTCL.obj &
 	$(OBJS)\stcdll_LexTeX.obj &
 	$(OBJS)\stcdll_LexVB.obj &
 	$(OBJS)\stcdll_LexVHDL.obj &
@@ -324,6 +329,7 @@ STCLIB_OBJECTS =  &
 	$(OBJS)\stclib_AutoComplete.obj &
 	$(OBJS)\stclib_CallTip.obj &
 	$(OBJS)\stclib_CellBuffer.obj &
+	$(OBJS)\stclib_CharClassify.obj &
 	$(OBJS)\stclib_ContractionState.obj &
 	$(OBJS)\stclib_Document.obj &
 	$(OBJS)\stclib_DocumentAccessor.obj &
@@ -358,6 +364,7 @@ STCLIB_OBJECTS =  &
 	$(OBJS)\stclib_LexGui4Cli.obj &
 	$(OBJS)\stclib_LexHTML.obj &
 	$(OBJS)\stclib_LexHaskell.obj &
+	$(OBJS)\stclib_LexInno.obj &
 	$(OBJS)\stclib_LexKix.obj &
 	$(OBJS)\stclib_LexLisp.obj &
 	$(OBJS)\stclib_LexLout.obj &
@@ -368,6 +375,7 @@ STCLIB_OBJECTS =  &
 	$(OBJS)\stclib_LexMatlab.obj &
 	$(OBJS)\stclib_LexMetapost.obj &
 	$(OBJS)\stclib_LexNsis.obj &
+	$(OBJS)\stclib_LexOpal.obj &
 	$(OBJS)\stclib_LexOthers.obj &
 	$(OBJS)\stclib_LexPB.obj &
 	$(OBJS)\stclib_LexPOV.obj &
@@ -382,6 +390,8 @@ STCLIB_OBJECTS =  &
 	$(OBJS)\stclib_LexTADS3.obj &
 	$(OBJS)\stclib_LexScriptol.obj &
 	$(OBJS)\stclib_LexSpecman.obj &
+	$(OBJS)\stclib_LexSpice.obj &
+	$(OBJS)\stclib_LexTCL.obj &
 	$(OBJS)\stclib_LexTeX.obj &
 	$(OBJS)\stclib_LexVB.obj &
 	$(OBJS)\stclib_LexVHDL.obj &
@@ -458,6 +468,9 @@ $(OBJS)\stcdll_CallTip.obj :  .AUTODEPEND ../../src/stc\scintilla\src\CallTip.cx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_CellBuffer.obj :  .AUTODEPEND ../../src/stc\scintilla\src\CellBuffer.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_CharClassify.obj :  .AUTODEPEND ../../src/stc\scintilla\src\CharClassify.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_ContractionState.obj :  .AUTODEPEND ../../src/stc\scintilla\src\ContractionState.cxx
@@ -562,6 +575,9 @@ $(OBJS)\stcdll_LexHTML.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexHTML.cx
 $(OBJS)\stcdll_LexHaskell.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexHaskell.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
+$(OBJS)\stcdll_LexInno.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexInno.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+
 $(OBJS)\stcdll_LexKix.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexKix.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
@@ -590,6 +606,9 @@ $(OBJS)\stcdll_LexMetapost.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexMet
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexNsis.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexNsis.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexOpal.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexOpal.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexOthers.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexOthers.cxx
@@ -632,6 +651,12 @@ $(OBJS)\stcdll_LexScriptol.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexScr
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexSpecman.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexSpecman.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexSpice.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexSpice.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexTCL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexTCL.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexTeX.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexTeX.cxx
@@ -695,6 +720,9 @@ $(OBJS)\stclib_CallTip.obj :  .AUTODEPEND ../../src/stc\scintilla\src\CallTip.cx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_CellBuffer.obj :  .AUTODEPEND ../../src/stc\scintilla\src\CellBuffer.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_CharClassify.obj :  .AUTODEPEND ../../src/stc\scintilla\src\CharClassify.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_ContractionState.obj :  .AUTODEPEND ../../src/stc\scintilla\src\ContractionState.cxx
@@ -799,6 +827,9 @@ $(OBJS)\stclib_LexHTML.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexHTML.cx
 $(OBJS)\stclib_LexHaskell.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexHaskell.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
+$(OBJS)\stclib_LexInno.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexInno.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+
 $(OBJS)\stclib_LexKix.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexKix.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
@@ -827,6 +858,9 @@ $(OBJS)\stclib_LexMetapost.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexMet
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexNsis.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexNsis.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexOpal.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexOpal.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexOthers.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexOthers.cxx
@@ -869,6 +903,12 @@ $(OBJS)\stclib_LexScriptol.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexScr
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexSpecman.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexSpecman.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexSpice.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexSpice.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexTCL.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexTCL.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexTeX.obj :  .AUTODEPEND ../../src/stc\scintilla\src\LexTeX.cxx

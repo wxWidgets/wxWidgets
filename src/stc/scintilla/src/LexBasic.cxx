@@ -147,7 +147,7 @@ static void ColouriseBasicDoc(unsigned int startPos, int length, int initStyle,
 				sc.ChangeState(SCE_B_ERROR);
 				sc.SetState(SCE_B_DEFAULT);
 			}
-		} else if (sc.state == SCE_B_COMMENT) {
+		} else if (sc.state == SCE_B_COMMENT || sc.state == SCE_B_PREPROCESSOR) {
 			if (sc.atLineEnd) {
 				sc.SetState(SCE_B_DEFAULT);
 			}
@@ -163,7 +163,12 @@ static void ColouriseBasicDoc(unsigned int startPos, int length, int initStyle,
 				wasfirst = isfirst;
 				sc.SetState(SCE_B_IDENTIFIER);
 			} else if (sc.Match(comment_char)) {
-				sc.SetState(SCE_B_COMMENT);
+				// Hack to make deprecated QBASIC '$Include show
+				// up in freebasic with SCE_B_PREPROCESSOR.
+				if (comment_char == '\'' && sc.Match(comment_char, '$'))
+					sc.SetState(SCE_B_PREPROCESSOR);
+				else
+					sc.SetState(SCE_B_COMMENT);
 			} else if (sc.Match('"')) {
 				sc.SetState(SCE_B_STRING);
 			} else if (IsDigit(sc.ch)) {

@@ -17,7 +17,7 @@
 #include "ViewStyle.h"
 
 MarginStyle::MarginStyle() :
-	symbol(false), width(16), mask(0xffffffff), sensitive(false) {
+	style(SC_MARGIN_SYMBOL), width(0), mask(0), sensitive(false) {
 }
 
 // A list of the fontnames - avoids wasting space in each style
@@ -73,6 +73,7 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	selbackset = source.selbackset;
 	selbackground.desired = source.selbackground.desired;
 	selbackground2.desired = source.selbackground2.desired;
+	selAlpha = source.selAlpha;
 
 	foldmarginColourSet = source.foldmarginColourSet;
 	foldmarginColour.desired = source.foldmarginColour.desired;
@@ -95,6 +96,7 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	caretcolour.desired = source.caretcolour.desired;
 	showCaretLineBackground = source.showCaretLineBackground;
 	caretLineBackground.desired = source.caretLineBackground.desired;
+	caretLineAlpha = source.caretLineAlpha;
 	edgecolour.desired = source.edgecolour.desired;
 	edgeState = source.edgeState;
 	caretWidth = source.caretWidth;
@@ -140,6 +142,7 @@ void ViewStyle::Init() {
 	selbackset = true;
 	selbackground.desired = ColourDesired(0xc0, 0xc0, 0xc0);
 	selbackground2.desired = ColourDesired(0xb0, 0xb0, 0xb0);
+	selAlpha = SC_ALPHA_NOALPHA;
 
 	foldmarginColourSet = false;
 	foldmarginColour.desired = ColourDesired(0xff, 0, 0);
@@ -157,6 +160,7 @@ void ViewStyle::Init() {
 	caretcolour.desired = ColourDesired(0, 0, 0);
 	showCaretLineBackground = false;
 	caretLineBackground.desired = ColourDesired(0xff, 0xff, 0);
+	caretLineAlpha = SC_ALPHA_NOALPHA;
 	edgecolour.desired = ColourDesired(0xc0, 0xc0, 0xc0);
 	edgeState = EDGE_NONE;
 	caretWidth = 1;
@@ -171,13 +175,13 @@ void ViewStyle::Init() {
 
 	leftMarginWidth = 1;
 	rightMarginWidth = 1;
-	ms[0].symbol = false;
+	ms[0].style = SC_MARGIN_NUMBER;
 	ms[0].width = 0;
 	ms[0].mask = 0;
-	ms[1].symbol = true;
+	ms[1].style = SC_MARGIN_SYMBOL;
 	ms[1].width = 16;
 	ms[1].mask = ~SC_MASK_FOLDERS;
-	ms[2].symbol = true;
+	ms[2].style = SC_MARGIN_SYMBOL;
 	ms[2].width = 0;
 	ms[2].mask = 0;
 	fixedColumnWidth = leftMarginWidth;
@@ -185,7 +189,7 @@ void ViewStyle::Init() {
 	maskInLine = 0xffffffff;
 	for (int margin=0; margin < margins; margin++) {
 		fixedColumnWidth += ms[margin].width;
-		symbolMargin = symbolMargin || ms[margin].symbol;
+		symbolMargin = symbolMargin || (ms[margin].style != SC_MARGIN_NUMBER);
 		if (ms[margin].width > 0)
 			maskInLine &= ~ms[margin].mask;
 	}
@@ -256,7 +260,7 @@ void ViewStyle::Refresh(Surface &surface) {
 	maskInLine = 0xffffffff;
 	for (int margin=0; margin < margins; margin++) {
 		fixedColumnWidth += ms[margin].width;
-		symbolMargin = symbolMargin || ms[margin].symbol;
+		symbolMargin = symbolMargin || (ms[margin].style != SC_MARGIN_NUMBER);
 		if (ms[margin].width > 0)
 			maskInLine &= ~ms[margin].mask;
 	}
@@ -278,6 +282,10 @@ void ViewStyle::ClearStyles() {
 		}
 	}
 	styles[STYLE_LINENUMBER].back.desired = Platform::Chrome();
+
+	// Set call tip fore/back to match the values previously set for call tips
+	styles[STYLE_CALLTIP].back.desired = ColourDesired(0xff, 0xff, 0xff);
+	styles[STYLE_CALLTIP].fore.desired = ColourDesired(0x80, 0x80, 0x80);
 }
 
 void ViewStyle::SetStyleFontName(int styleIndex, const char *name) {

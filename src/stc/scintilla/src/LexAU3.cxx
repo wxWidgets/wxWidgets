@@ -39,6 +39,9 @@
 // May 23, 2005   - Fixed the SentKey lexing in case of a missing }
 // Aug 11, 2005   - Fixed possible bug with s_save length > 100.
 // Aug 23, 2005   - Added Switch/endswitch support to the folding logic.
+// Sep 27, 2005   - Fixed the SentKey lexing logic in case of multiple sentkeys.
+// Mar 12, 2006   - Fixed issue with <> coloring as String in stead of Operator in rare occasions.
+// Apr  8, 2006   - Added support for AutoIt3 Standard UDF library (SCE_AU3_UDF)
 //
 // Copyright for Scintilla: 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -92,6 +95,7 @@ static inline bool IsAOperator(char ch) {
 static int GetSendKey(const char *szLine, char *szKey)
 {
 	int		nFlag	= 0;
+	int		nStartFound	= 0;
 	int		nKeyPos	= 0;
 	int		nSpecPos= 0;
 	int		nSpecNum= 1;
@@ -102,31 +106,34 @@ static int GetSendKey(const char *szLine, char *szKey)
 	// split the portion of the sendkey in the part before and after the spaces
 	while ( ( (cTemp = szLine[nPos]) != '\0'))
 	{
-		// skip leading Ctrl/Shift/ALt state
-		if ((cTemp == '#' || cTemp == '!' || cTemp == '^') && (szLine[nPos+1] == '{') ) 
-		{
-		}	
-		else if ((cTemp == ' ') && (nFlag == 0) ) // get the stuff till first space
-		{
-			nFlag = 1;
-			// Add } to the end of the first bit for table lookup later.
-			szKey[nKeyPos++] = '}';
+		// skip leading Ctrl/Shift/Alt state
+		if (cTemp == '{') {
+			nStartFound = 1;
 		}
-		else if (cTemp == ' ')
-		{
-			// skip other spaces 
-		}
-		else if (nFlag == 0)
-		{
-			// save first portion into var till space or } is hit
-			szKey[nKeyPos++] = cTemp;
-		}
-		else if ((nFlag == 1) && (cTemp != '}'))
-		{
-			// Save second portion into var...
-			szSpecial[nSpecPos++] = cTemp;
-			// check if Second portion is all numbers for repeat fuction
-			if (isdigit(cTemp) == false) {nSpecNum = 0;} 
+		//
+		if (nStartFound == 1) {
+			if ((cTemp == ' ') && (nFlag == 0) ) // get the stuff till first space
+			{
+				nFlag = 1;
+				// Add } to the end of the first bit for table lookup later.
+				szKey[nKeyPos++] = '}';
+			}
+			else if (cTemp == ' ')
+			{
+				// skip other spaces 
+			}
+			else if (nFlag == 0)
+			{
+				// save first portion into var till space or } is hit
+				szKey[nKeyPos++] = cTemp;
+			}
+			else if ((nFlag == 1) && (cTemp != '}'))
+			{
+				// Save second portion into var...
+				szSpecial[nSpecPos++] = cTemp;
+				// check if Second portion is all numbers for repeat fuction
+				if (isdigit(cTemp) == false) {nSpecNum = 0;} 
+			}
 		}
 		nPos++;									// skip to next char
 
@@ -190,6 +197,7 @@ static void ColouriseAU3Doc(unsigned int startPos,
     WordList &keywords5 = *keywordlists[4];
     WordList &keywords6 = *keywordlists[5];
     WordList &keywords7 = *keywordlists[6];
+    WordList &keywords8 = *keywordlists[7];
 	// find the first previous line without continuation character at the end
 	int lineCurrent = styler.GetLine(startPos);
 	int s_startPos = startPos;
@@ -325,6 +333,10 @@ static void ColouriseAU3Doc(unsigned int startPos,
 							sc.ChangeState(SCE_AU3_EXPAND);
 							sc.SetState(SCE_AU3_DEFAULT);
 						}
+						else if (keywords8.InList(s)) {
+							sc.ChangeState(SCE_AU3_UDF);
+							sc.SetState(SCE_AU3_DEFAULT);
+						}
 						else if (strcmp(s, "_") == 0) {
 							sc.ChangeState(SCE_AU3_OPERATOR);
 							sc.SetState(SCE_AU3_DEFAULT);
@@ -411,9 +423,11 @@ static void ColouriseAU3Doc(unsigned int startPos,
 	            if ((si == 1 && sc.ch == '\"') || (si == 2 && sc.ch == '\'') || (si == 3 && sc.ch == '>'))
 				{
 					sc.ForwardSetState(SCE_AU3_DEFAULT);
+					si=0;
 				}
                 if (sc.atLineEnd)
 				{
+					si=0;
 					// at line end and not found a continuation char then reset to default
 					int lineCurrent = styler.GetLine(sc.currentPos);
 					if (!IsContinuationLine(lineCurrent,styler)) 
@@ -422,11 +436,8 @@ static void ColouriseAU3Doc(unsigned int startPos,
 					}
 				}
 				// find Sendkeys in a STRING
-				if (sc.ch == '{') {sc.SetState(SCE_AU3_SENT);}
-				if (sc.ch == '+' && sc.chNext == '{') {sc.SetState(SCE_AU3_SENT);}
-				if (sc.ch == '!' && sc.chNext == '{') {sc.SetState(SCE_AU3_SENT);}
-				if (sc.ch == '^' && sc.chNext == '{') {sc.SetState(SCE_AU3_SENT);}
-				if (sc.ch == '#' && sc.chNext == '{') {sc.SetState(SCE_AU3_SENT);}
+				if (sc.ch == '{' || sc.ch == '+' || sc.ch == '!' || sc.ch == '^' || sc.ch == '#' ) {
+					sc.SetState(SCE_AU3_SENT);}
 				break;
             }
             
@@ -459,6 +470,35 @@ static void ColouriseAU3Doc(unsigned int startPos,
 					}
 					sc.SetState(SCE_AU3_STRING);
 				}
+				else
+				{
+					// check if the start is a valid SendKey start
+					int		nPos	= 0;
+					int		nState	= 1;
+					char	cTemp;
+					while (!(nState == 2) && ((cTemp = s[nPos]) != '\0')) 
+					{
+						if (cTemp == '{' && nState == 1) 
+						{
+							nState = 2;
+						}
+						if (nState == 1 && !(cTemp == '+' || cTemp == '!' || cTemp == '^' || cTemp == '#' ))
+						{
+							nState = 0;
+						}
+						nPos++;
+					}
+					//Verify characters infront of { ... if not assume  regular string
+					if (nState == 1 && (!(sc.ch == '{' || sc.ch == '+' || sc.ch == '!' || sc.ch == '^' || sc.ch == '#' ))) {
+						sc.ChangeState(SCE_AU3_STRING);
+						sc.SetState(SCE_AU3_STRING);
+					}
+					// If invalid character found then assume its a regular string	
+					if (nState == 0) {
+						sc.ChangeState(SCE_AU3_STRING);
+						sc.SetState(SCE_AU3_STRING);
+					}
+				}
 				// check if next portion is again a sendkey
 				if (sc.atLineEnd) 
 				{
@@ -466,13 +506,12 @@ static void ColouriseAU3Doc(unsigned int startPos,
 					sc.SetState(SCE_AU3_DEFAULT);
 					si = 0;  // reset string indicator
 				}
-				//if (sc.ch == '{' && sc.chPrev != '{') {sc.SetState(SCE_AU3_SENT);}
-				if (sc.ch == '+' && sc.chNext == '{') {sc.SetState(SCE_AU3_SENT);}
-				if (sc.ch == '!' && sc.chNext == '{') {sc.SetState(SCE_AU3_SENT);}
-				if (sc.ch == '^' && sc.chNext == '{') {sc.SetState(SCE_AU3_SENT);}
-				if (sc.ch == '#' && sc.chNext == '{') {sc.SetState(SCE_AU3_SENT);}
+				//* check in next characters following a sentkey are again a sent key
+				// Need this test incase of 2 sentkeys like {F1}{ENTER} but not detect {{}
+				if (sc.state == SCE_AU3_STRING && (sc.ch == '{' || sc.ch == '+' || sc.ch == '!' || sc.ch == '^' || sc.ch == '#' )) {
+					sc.SetState(SCE_AU3_SENT);}
 				// check to see if the string ended...
-				// Sentkey string isn't complete but the string ended....
+				// Sendkey string isn't complete but the string ended....
 				if ((si == 1 && sc.ch == '\"') || (si == 2 && sc.ch == '\''))
 				{
 					sc.ChangeState(SCE_AU3_STRING);
@@ -491,6 +530,7 @@ static void ColouriseAU3Doc(unsigned int startPos,
             else if (sc.ch == '$') {sc.SetState(SCE_AU3_VARIABLE);}
             else if (sc.ch == '.' && !IsADigit(sc.chNext)) {sc.SetState(SCE_AU3_OPERATOR);}
             else if (sc.ch == '@') {sc.SetState(SCE_AU3_KEYWORD);}
+            //else if (sc.ch == '_') {sc.SetState(SCE_AU3_KEYWORD);}
             else if (sc.ch == '<' && si==3) {sc.SetState(SCE_AU3_STRING);}  // string after #include 
             else if (sc.ch == '\"') {
 				sc.SetState(SCE_AU3_STRING);
@@ -542,6 +582,10 @@ static void ColouriseAU3Doc(unsigned int startPos,
 		else if (keywords7.InList(s_save) && sc.atLineEnd) {
 			sc.ChangeState(SCE_AU3_EXPAND);
 			sc.SetState(SCE_AU3_EXPAND);
+		}
+		else if (keywords8.InList(s_save)) {
+			sc.ChangeState(SCE_AU3_UDF);
+			sc.SetState(SCE_AU3_UDF);
 		}
 		else {
 			sc.ChangeState(SCE_AU3_DEFAULT);
@@ -841,6 +885,7 @@ static const char * const AU3WordLists[] = {
     "#autoit Pre-processors",
     "#autoit Special",
     "#autoit Expand",
+    "#autoit UDF",
     0
 };
 LexerModule lmAU3(SCLEX_AU3, ColouriseAU3Doc, "au3", FoldAU3Doc , AU3WordLists);

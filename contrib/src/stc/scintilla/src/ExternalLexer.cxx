@@ -12,6 +12,8 @@
 
 #include "Platform.h"
 
+#include "Scintilla.h"
+
 #include "SciLexer.h"
 #include "PropSet.h"
 #include "Accessor.h"
@@ -116,16 +118,16 @@ LexerLibrary::LexerLibrary(const char* ModuleName) {
 	if (lib->IsValid()) {
 		m_sModuleName = ModuleName;
 		//Cannot use reinterpret_cast because: ANSI C++ forbids casting between pointers to functions and objects
-		GetLexerCountFn GetLexerCount = (GetLexerCountFn)lib->FindFunction("GetLexerCount");
+		GetLexerCountFn GetLexerCount = (GetLexerCountFn)(sptr_t)lib->FindFunction("GetLexerCount");
 
 		if (GetLexerCount) {
 			ExternalLexerModule *lex;
 			LexerMinder *lm;
 
 			// Find functions in the DLL
-			GetLexerNameFn GetLexerName = (GetLexerNameFn)lib->FindFunction("GetLexerName");
-			ExtLexerFunction Lexer = (ExtLexerFunction)lib->FindFunction("Lex");
-			ExtFoldFunction Folder = (ExtFoldFunction)lib->FindFunction("Fold");
+			GetLexerNameFn GetLexerName = (GetLexerNameFn)(sptr_t)lib->FindFunction("GetLexerName");
+			ExtLexerFunction Lexer = (ExtLexerFunction)(sptr_t)lib->FindFunction("Lex");
+			ExtFoldFunction Folder = (ExtFoldFunction)(sptr_t)lib->FindFunction("Fold");
 
 			// Assign a buffer for the lexer name.
 			char lexname[100];

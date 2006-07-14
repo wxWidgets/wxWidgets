@@ -149,7 +149,13 @@ static inline bool isStringState(int state) {
 	case SCE_HB_STRING:
 	case SCE_HBA_STRING:
 	case SCE_HP_STRING:
+	case SCE_HP_CHARACTER:
+	case SCE_HP_TRIPLE:
+	case SCE_HP_TRIPLEDOUBLE:
 	case SCE_HPA_STRING:
+	case SCE_HPA_CHARACTER:
+	case SCE_HPA_TRIPLE:
+	case SCE_HPA_TRIPLEDOUBLE:
 	case SCE_HPHP_HSTRING:
 	case SCE_HPHP_SIMPLESTRING:
 	case SCE_HPHP_HSTRING_VARIABLE:
@@ -161,6 +167,19 @@ static inline bool isStringState(int state) {
 		break;
 	}
 	return bResult;
+}
+
+static inline bool stateAllowsTermination(int state) {
+	bool allowTermination = !isStringState(state);
+	if (allowTermination) {
+		switch (state) {
+		case SCE_HPHP_COMMENT:
+		case SCE_HP_COMMENTLINE:
+		case SCE_HPA_COMMENTLINE:
+			allowTermination = false;
+		}
+	}
+	return allowTermination;
 }
 
 // not really well done, since it's only comments that should lex the %> and <%
@@ -668,7 +687,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 		         (ch == '<') &&
 		         (chNext == '?') &&
 				 !IsScriptCommentState(state) ) {
-			scriptLanguage = segIsScriptingIndicator(styler, styler.GetStartSegment() + 2, i + 10, eScriptPHP);
+			scriptLanguage = segIsScriptingIndicator(styler, i + 2, i + 10, eScriptPHP);
 			if (scriptLanguage != eScriptPHP && isStringState(state)) continue;
 			styler.ColourTo(i - 1, StateToPrint);
 			beforePreProc = state;
@@ -763,9 +782,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 		else if ((
 		             ((inScriptType == eNonHtmlPreProc)
 		              || (inScriptType == eNonHtmlScriptPreProc)) && (
-		                 ((scriptLanguage == eScriptPHP) && (ch == '?') && !isPHPStringState(state) && (state != SCE_HPHP_COMMENT)) ||
-		                 ((scriptLanguage != eScriptNone) && !isStringState(state) &&
-		                  ((ch == '%') || (ch == '?')))
+		                 ((scriptLanguage != eScriptNone) && stateAllowsTermination(state) && ((ch == '%') || (ch == '?')))
 		             ) && (chNext == '>')) ||
 		         ((scriptLanguage == eScriptSGML) && (ch == '>') && (state != SCE_H_SGML_COMMENT))) {
 			if (state == SCE_H_ASPAT) {

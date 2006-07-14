@@ -93,7 +93,7 @@ public:
 private:
 	int refCount;
 	CellBuffer cb;
-	charClassification charClass[256];
+	CharClassify charClass;
 	char stylingMask;
 	int endStyled;
 	int styleClock;
@@ -207,7 +207,7 @@ public:
 	void ChangeCase(Range r, bool makeUpperCase);
 
 	void SetDefaultCharClasses(bool includeWordClass);
-	void SetCharClasses(const unsigned char *chars, charClassification newCharClass);
+	void SetCharClasses(const unsigned char *chars, CharClassify::cc newCharClass);
 	void SetStylingBits(int bits);
 	void StartStyling(int position, char mask);
 	bool SetStyleFor(int length, char style);
@@ -239,7 +239,7 @@ public:
 private:
 	void CheckReadOnly();
 
-	charClassification WordCharClass(unsigned char ch);
+	CharClassify::cc WordCharClass(unsigned char ch);
 	bool IsWordStartAt(int pos);
 	bool IsWordEndAt(int pos);
 	bool IsWordAt(int start, int end);

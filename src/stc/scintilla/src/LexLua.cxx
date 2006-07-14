@@ -38,7 +38,8 @@ static inline bool IsANumberChar(int ch) {
 	// but probably enough in most cases.
 	return (ch < 0x80) &&
 	        (isdigit(ch) || toupper(ch) == 'E' ||
-             ch == '.' || ch == '-' || ch == '+');
+	        ch == '.' || ch == '-' || ch == '+' ||
+	        (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F'));
 }
 
 static inline bool IsLuaOperator(int ch) {
@@ -51,7 +52,8 @@ static inline bool IsLuaOperator(int ch) {
 		ch == '{' || ch == '}' || ch == '~' ||
 		ch == '[' || ch == ']' || ch == ';' ||
 		ch == '<' || ch == '>' || ch == ',' ||
-		ch == '.' || ch == '^' || ch == '%' || ch == ':') {
+		ch == '.' || ch == '^' || ch == '%' || ch == ':' ||
+		ch == '#') {
 		return true;
 	}
 	return false;
@@ -144,7 +146,7 @@ static void ColouriseLuaDoc(
 		if (sc.state == SCE_LUA_OPERATOR) {
 			sc.SetState(SCE_LUA_DEFAULT);
 		} else if (sc.state == SCE_LUA_NUMBER) {
-			// We stop the number definition on non-numerical non-dot non-eE non-sign char
+			// We stop the number definition on non-numerical non-dot non-eE non-sign non-hexdigit char
 			if (!IsANumberChar(sc.ch)) {
 				sc.SetState(SCE_LUA_DEFAULT);
 			}
@@ -225,6 +227,9 @@ static void ColouriseLuaDoc(
 		if (sc.state == SCE_LUA_DEFAULT) {
 			if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
 				sc.SetState(SCE_LUA_NUMBER);
+				if (sc.ch == '0' && toupper(sc.chNext) == 'X') {
+					sc.Forward(1);
+				}
 			} else if (IsAWordStart(sc.ch)) {
 				sc.SetState(SCE_LUA_IDENTIFIER);
 			} else if (sc.ch == '\"') {

@@ -15,6 +15,7 @@
         scintilla/src/AutoComplete.cxx
         scintilla/src/CallTip.cxx
         scintilla/src/CellBuffer.cxx
+        scintilla/src/CharClassify.cxx
         scintilla/src/ContractionState.cxx
         scintilla/src/Document.cxx
         scintilla/src/DocumentAccessor.cxx
@@ -49,6 +50,7 @@
         scintilla/src/LexGui4Cli.cxx
         scintilla/src/LexHTML.cxx
         scintilla/src/LexHaskell.cxx
+        scintilla/src/LexInno.cxx
         scintilla/src/LexKix.cxx
         scintilla/src/LexLisp.cxx
         scintilla/src/LexLout.cxx
@@ -59,6 +61,7 @@
         scintilla/src/LexMatlab.cxx
         scintilla/src/LexMetapost.cxx
         scintilla/src/LexNsis.cxx
+        scintilla/src/LexOpal.cxx
         scintilla/src/LexOthers.cxx
         scintilla/src/LexPB.cxx
         scintilla/src/LexPOV.cxx
@@ -73,6 +76,8 @@
         scintilla/src/LexTADS3.cxx
         scintilla/src/LexScriptol.cxx
         scintilla/src/LexSpecman.cxx
+        scintilla/src/LexSpice.cxx
+        scintilla/src/LexTCL.cxx
         scintilla/src/LexTeX.cxx
         scintilla/src/LexVB.cxx
         scintilla/src/LexVHDL.cxx

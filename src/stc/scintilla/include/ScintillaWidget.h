@@ -34,7 +34,11 @@ struct _ScintillaClass {
 	void (* notify) (ScintillaObject *ttt);
 };
 
+#if GLIB_MAJOR_VERSION < 2
 GtkType		scintilla_get_type	(void);
+#else
+GType		scintilla_get_type	(void);
+#endif
 GtkWidget*	scintilla_new		(void);
 void		scintilla_set_id	(ScintillaObject *sci, uptr_t id);
 sptr_t		scintilla_send_message	(ScintillaObject *sci,unsigned int iMessage, uptr_t wParam, sptr_t lParam);

@@ -258,7 +258,8 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 
 		if (state == SCE_SH_DEFAULT) {
 			if (ch == '\\') {	// escaped character
-				i++;
+				if (i < lengthDoc - 1)
+					i++;
 				ch = chNext;
 				chNext = chNext2;
 				styler.ColourTo(i, SCE_SH_IDENTIFIER);
@@ -626,7 +627,7 @@ static void FoldBashDoc(unsigned int startPos, int length, int, WordList *[],
                      && !IsCommentLine(lineCurrent+1, styler))
                 levelCurrent--;
         }
-		if (style == SCE_C_OPERATOR) {
+		if (style == SCE_SH_OPERATOR) {
 			if (ch == '{') {
 				levelCurrent++;
 			} else if (ch == '}') {

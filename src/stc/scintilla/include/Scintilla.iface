@@ -316,9 +316,14 @@ fun void MarkerDefinePixmap=2049(int markerNumber, string pixmap)
 # Add a set of markers to a line.
 fun void MarkerAddSet=2466(int line, int set)
 
+# Set the alpha used for a marker that is drawn in the text area, not the margin.
+fun void MarkerSetAlpha=2476(int markerNumber, int alpha)
+
 enu MarginType=SC_MARGIN_
 val SC_MARGIN_SYMBOL=0
 val SC_MARGIN_NUMBER=1
+val SC_MARGIN_BACK=2
+val SC_MARGIN_FORE=3
 
 # Set a margin to be either numeric or symbolic.
 set void SetMarginTypeN=2240(int margin, int marginType)
@@ -344,8 +349,8 @@ set void SetMarginSensitiveN=2246(int margin, bool sensitive)
 # Retrieve the mouse click sensitivity of a margin.
 get bool GetMarginSensitiveN=2247(int margin,)
 
-# Styles in range 32..37 are predefined for parts of the UI and are not used as normal styles.
-# Styles 38 and 39 are for future use.
+# Styles in range 32..38 are predefined for parts of the UI and are not used as normal styles.
+# Style 39 is for future use.
 enu StylesCommon=STYLE_
 val STYLE_DEFAULT=32
 val STYLE_LINENUMBER=33
@@ -353,6 +358,7 @@ val STYLE_BRACELIGHT=34
 val STYLE_BRACEBAD=35
 val STYLE_CONTROLCHAR=36
 val STYLE_INDENTGUIDE=37
+val STYLE_CALLTIP=38
 val STYLE_LASTPREDEFINED=39
 val STYLE_MAX=127
 
@@ -430,6 +436,12 @@ fun void SetSelFore=2067(bool useSetting, colour fore)
 # Set the background colour of the selection and whether to use this setting.
 fun void SetSelBack=2068(bool useSetting, colour back)
 
+# Get the alpha of the selection.
+get int GetSelAlpha=2477(,)
+
+# Set the alpha of the selection.
+set void SetSelAlpha=2478(int alpha,)
+
 # Set the foreground colour of the caret.
 set void SetCaretFore=2069(colour fore,)
 
@@ -474,6 +486,7 @@ val INDIC_DIAGONAL=3
 val INDIC_STRIKE=4
 val INDIC_HIDDEN=5
 val INDIC_BOX=6
+val INDIC_ROUNDBOX=7
 val INDIC0_MASK=0x20
 val INDIC1_MASK=0x40
 val INDIC2_MASK=0x80
@@ -918,6 +931,9 @@ set void CallTipSetFore=2206(colour fore,)
 
 # Set the foreground colour for the highlighted part of the call tip.
 set void CallTipSetForeHlt=2207(colour fore,)
+
+# Enable use of STYLE_CALLTIP and set call tip tab size in pixels.
+set void CallTipUseStyle=2212(int tabSize,)
 
 # Find the display line of a document line taking hidden lines into account.
 fun int VisibleFromDocLine=2220(int line,)
@@ -1446,7 +1462,6 @@ get int GetXOffset=2398(,)
 fun void ChooseCaretX=2399(,)
 
 # Set the focus to this Scintilla widget.
-# GTK+ Specific.
 fun void GrabFocus=2400(,)
 
 enu CaretPolicy = CARET_
@@ -1642,6 +1657,16 @@ get bool GetPasteConvertEndings=2468(,)
 # Duplicate the selection. If selection empty duplicate the line containing the caret.
 fun void SelectionDuplicate=2469(,)
 
+val SC_ALPHA_TRANSPARENT=0
+val SC_ALPHA_OPAQUE=255
+val SC_ALPHA_NOALPHA=256
+
+# Set background alpha of the caret line.
+set void SetCaretLineBackAlpha=2470(int alpha,)
+
+# Get the background alpha of the caret line.
+get int GetCaretLineBackAlpha=2471(,)
+
 # Start notifying the container of all key presses and commands.
 fun void StartRecord=3001(,)
 
@@ -1820,11 +1845,9 @@ val SCLEX_SMALLTALK=72
 val SCLEX_FLAGSHIP=73
 val SCLEX_CSOUND=74
 val SCLEX_FREEBASIC=75
-
-# These are deprecated, STC_LEX_HTML should be used instead.
-val SCLEX_ASP=29
-val SCLEX_PHP=30
-
+val SCLEX_INNOSETUP=76
+val SCLEX_OPAL=77
+val SCLEX_SPICE=78
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -1850,7 +1873,6 @@ val SCE_P_DECORATOR=15
 # Lexical states for SCLEX_CPP
 lex Cpp=SCLEX_CPP SCE_C_
 lex Pascal=SCLEX_PASCAL SCE_C_
-lex TCL=SCLEX_TCL SCE_C_
 lex BullAnt=SCLEX_BULLANT SCE_C_
 val SCE_C_DEFAULT=0
 val SCE_C_COMMENT=1
@@ -1872,6 +1894,30 @@ val SCE_C_WORD2=16
 val SCE_C_COMMENTDOCKEYWORD=17
 val SCE_C_COMMENTDOCKEYWORDERROR=18
 val SCE_C_GLOBALCLASS=19
+# Lexical states for SCLEX_TCL
+lex TCL=SCLEX_TCL SCE_TCL_
+val SCE_TCL_DEFAULT=0
+val SCE_TCL_COMMENT=1
+val SCE_TCL_COMMENTLINE=2
+val SCE_TCL_NUMBER=3
+val SCE_TCL_WORD_IN_QUOTE=4
+val SCE_TCL_IN_QUOTE=5
+val SCE_TCL_OPERATOR=6
+val SCE_TCL_IDENTIFIER=7
+val SCE_TCL_SUBSTITUTION=8
+val SCE_TCL_SUB_BRACE=9
+val SCE_TCL_MODIFIER=10
+val SCE_TCL_EXPAND=11
+val SCE_TCL_WORD=12
+val SCE_TCL_WORD2=13
+val SCE_TCL_WORD3=14
+val SCE_TCL_WORD4=15
+val SCE_TCL_WORD5=16
+val SCE_TCL_WORD6=17
+val SCE_TCL_WORD7=18
+val SCE_TCL_WORD8=19
+val SCE_TCL_COMMENT_BOX=20
+val SCE_TCL_BLOCK_COMMENT=21
 # Lexical states for SCLEX_HTML, SCLEX_XML
 lex HTML=SCLEX_HTML SCE_H
 lex XML=SCLEX_XML SCE_H
@@ -2100,6 +2146,7 @@ val SCE_PROPS_COMMENT=1
 val SCE_PROPS_SECTION=2
 val SCE_PROPS_ASSIGNMENT=3
 val SCE_PROPS_DEFVAL=4
+val SCE_PROPS_KEY=5
 # Lexical states for SCLEX_LATEX
 lex LaTeX=SCLEX_LATEX SCE_L_
 val SCE_L_DEFAULT=0
@@ -2646,6 +2693,7 @@ val SCE_AU3_PREPROCESSOR=11
 val SCE_AU3_SPECIAL=12
 val SCE_AU3_EXPAND=13
 val SCE_AU3_COMOBJ=14
+val SCE_AU3_UDF=15
 # Lexical states for SCLEX_APDL
 lex APDL=SCLEX_APDL SCE_APDL_
 val SCE_APDL_DEFAULT=0
@@ -2883,6 +2931,44 @@ val SCE_CSOUND_KRATE_VAR=12
 val SCE_CSOUND_IRATE_VAR=13
 val SCE_CSOUND_GLOBAL_VAR=14
 val SCE_CSOUND_STRINGEOL=15
+# Lexical states for SCLEX_INNOSETUP
+lex Inno=SCLEX_INNOSETUP SCE_INNO_
+val SCE_INNO_DEFAULT=0
+val SCE_INNO_COMMENT=1
+val SCE_INNO_KEYWORD=2
+val SCE_INNO_PARAMETER=3
+val SCE_INNO_SECTION=4
+val SCE_INNO_PREPROC=5
+val SCE_INNO_PREPROC_INLINE=6
+val SCE_INNO_COMMENT_PASCAL=7
+val SCE_INNO_KEYWORD_PASCAL=8
+val SCE_INNO_KEYWORD_USER=9
+val SCE_INNO_STRING_DOUBLE=10
+val SCE_INNO_STRING_SINGLE=11
+val SCE_INNO_IDENTIFIER=12
+# Lexical states for SCLEX_OPAL
+lex Opal=SCLEX_OPAL SCE_OPAL_
+val SCE_OPAL_SPACE=0
+val SCE_OPAL_COMMENT_BLOCK=1
+val SCE_OPAL_COMMENT_LINE=2
+val SCE_OPAL_INTEGER=3
+val SCE_OPAL_KEYWORD=4
+val SCE_OPAL_SORT=5
+val SCE_OPAL_STRING=6
+val SCE_OPAL_PAR=7
+val SCE_OPAL_BOOL_CONST=8
+val SCE_OPAL_DEFAULT=32
+# Lexical states for SCLEX_SPICE
+lex Spice=SCLEX_SPICE SCE_SPICE_
+val SCE_SPICE_DEFAULT=0
+val SCE_SPICE_IDENTIFIER=1
+val SCE_SPICE_KEYWORD=2
+val SCE_SPICE_KEYWORD2=3
+val SCE_SPICE_KEYWORD3=4
+val SCE_SPICE_NUMBER=5
+val SCE_SPICE_DELIMITER=6
+val SCE_SPICE_VALUE=7
+val SCE_SPICE_COMMENTLINE=8
 
 # Events
 

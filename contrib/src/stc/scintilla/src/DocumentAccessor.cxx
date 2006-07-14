@@ -18,6 +18,7 @@
 #include "DocumentAccessor.h"
 #include "CellBuffer.h"
 #include "Scintilla.h"
+#include "CharClassify.h"
 #include "Document.h"
 
 DocumentAccessor::~DocumentAccessor() {

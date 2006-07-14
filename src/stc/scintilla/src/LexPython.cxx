@@ -212,6 +212,8 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 		} else if (sc.state == SCE_P_DECORATOR) {
 			if (sc.ch == '\r' || sc.ch == '\n') {
 				sc.SetState(SCE_P_DEFAULT);
+			} else if (sc.ch == '#') {
+				sc.SetState((sc.chNext == '#') ? SCE_P_COMMENTBLOCK  :  SCE_P_COMMENTLINE);
 			}
 		} else if ((sc.state == SCE_P_STRING) || (sc.state == SCE_P_CHARACTER)) {
 			if (sc.ch == '\\') {

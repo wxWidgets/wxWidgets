@@ -3,6 +3,7 @@ Recent Changes for wxPython
 
 2.7.0.0
 -------
+*
 
 The following deprecated items have been removed:
 
@@ -175,7 +176,45 @@ Added wrappers for the wxAUI classes, in the wx.aui module.
 Added the PseudoDC class from Paul Lanier.  It provides a way to
 record operations on a DC and then play them back later.
 
+Upgraded to Scintilla 1.70 for wx.stc.StyledTextCtrl.
 
+
+
+
+2.6.3.3
+-------
+* 15-July-2006
+
+wx.lib.pubsub updates from Oliver Schoenborn:
+    - fixed the hash problem with non-hashable objects
+    - now supports listeners that use \*args as an argument
+      (listener(\*args) was not passing the validity test)
+    - corrected some mistakes in documentation
+    - added some clarifications (hopefully useful for first time
+      users)
+    - changed the way singleton is implemented since old way prevented
+      pydoc etc from extracting docs for Publisher
+
+DocView and ActiveGrid IDE updates from Morgan Hua:
+    New Features: In Tab-View mode, Ctrl-number will take the user to
+    the numbered tab view.  Modified files now show an '*' astrisk in
+    the view title.  Debugger framework can now support PHP debugging.
+    Not important for python development, but at least that means the
+    debugger framework is more generalized.
+
+wx.lib.mixins.listctrl.TextEditMixin: Fixed the double END_LABEL_EDIT
+event problem in TextEditMixin by checking if the editor was already
+hidden before continuing with the CloseEditor method.  Also added code
+to OpenEditor to send the BEGIN_LABEL_EDIT event and to not allow the
+opening of the editor to continue if the event handler doesn't allow
+it.
+
+Undeprecated wx.GetNumberFromUser and added wx.NumberEntryDialog.
+
+Made necessaary changes for building wxPython for Python 2.5.  There
+may still be some issues related to the new Py_ssize_t type and 64-bit
+machines, but at least all compile errors and warnings related to it
+have been resolved.
 
 
 

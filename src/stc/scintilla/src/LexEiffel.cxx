@@ -32,7 +32,7 @@ static inline bool isEiffelOperator(unsigned int ch) {
 }
 
 static inline bool IsAWordChar(unsigned int  ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
+	return (ch < 0x80) && (isalnum(ch) || ch == '_');
 }
 
 static inline bool IsAWordStart(unsigned int ch) {
