@@ -2629,6 +2629,7 @@ void wxFrameManager::DrawHintRect(wxWindow* pane_window,
     wxDockUIPartArray uiparts;
     wxPaneInfo hint = GetPane(pane_window);
     hint.name = wxT("__HINT__");
+    hint.Show();
 
     if (!hint.IsOk())
         return;
