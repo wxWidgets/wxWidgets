@@ -25,20 +25,21 @@
 //  and from wxGenericDirButton classes !)
 //-----------------------------------------------------------------------------
 
-#define FILEDIRBTN_OVERRIDES                                                        \
-    /* NULL is because of a problem with destruction order which happens      */    \
-    /* if we pass GetParent(): in fact, this GTK native implementation        */    \
-    /* needs to create the dialog in ::Create() and not for each user request */    \
-    /* in response to the user click as the generic implementation does       */    \
-    virtual wxWindow *GetDialogParent()                                             \
-    {                                                                               \
-        return NULL;                                                                \
-    }                                                                               \
-                                                                                    \
-    virtual bool Destroy()                                                          \
-    {                                                                               \
-        m_dialog->Destroy();                                                        \
-        return wxButton::Destroy();                                                 \
+#define FILEDIRBTN_OVERRIDES                                                  \
+    /* NULL is because of a problem with destruction order which happens   */ \
+    /* if we pass GetParent(): in fact, this GTK native implementation     */ \
+    /* needs to create the dialog in ::Create() and not for each user      */ \
+    /* request in response to the user click as the generic implementation */ \
+    /* does.                                                               */ \
+    virtual wxWindow *GetDialogParent()                                       \
+    {                                                                         \
+        return NULL;                                                          \
+    }                                                                         \
+                                                                              \
+    virtual bool Destroy()                                                    \
+    {                                                                         \
+        m_dialog->Destroy();                                                  \
+        return wxButton::Destroy();                                           \
     }
 
 
