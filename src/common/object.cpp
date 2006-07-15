@@ -205,12 +205,28 @@ wxClassInfo *wxClassInfo::FindClass(const wxChar *className)
     }
 }
 
+// This function wasn't written to be reentrant but there is a possiblity of
+// reentrance if something it does causes a shared lib to load and register
+// classes. On Solaris this happens when the wxHashTable is newed, so the first
+// part of the function has been modified to handle it, and a wxASSERT checks
+// against reentrance in the remainder of the function.
+
 void wxClassInfo::Register()
 {
     if ( !sm_classTable )
     {
-        sm_classTable = new wxHashTable(wxKEY_STRING);
+        wxHashTable *classTable = new wxHashTable(wxKEY_STRING);
+
+        // check for reentrance
+        if ( sm_classTable )
+            delete classTable;
+        else
+            sm_classTable = classTable;
     }
+
+    // reentrance guard - see note above
+    static int entry = 0;
+    wxASSERT_MSG(++entry == 1, _T("wxClassInfo::Register() reentrance"));
 
     // Using IMPLEMENT_DYNAMIC_CLASS() macro twice (which may happen if you
     // link any object module twice mistakenly, or link twice against wx shared
@@ -226,6 +242,8 @@ void wxClassInfo::Register()
     );
 
     sm_classTable->Put(m_className, (wxObject *)this);
+
+    --entry;
 }
 
 void wxClassInfo::Unregister()
