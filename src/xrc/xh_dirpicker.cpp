@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/xrc/xh_clrpicker.cpp
-// Purpose:     XML resource handler for wxColourPickerCtrl
+// Name:        src/xrc/xh_dirpicker.cpp
+// Purpose:     XML resource handler for wxDirPickerCtrl
 // Author:      Francesco Montorsi
 // Created:     2006-04-17
 // RCS-ID:      $Id$
