@@ -48,6 +48,8 @@ public:
 
     virtual ~wxGenericFileDirButton() {}
 
+    virtual wxControl *AsControl() { return this; }
+
 public:     // overrideable
 
     virtual wxDialog *CreateDialog() = 0;

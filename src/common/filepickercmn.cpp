@@ -45,8 +45,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileDirPickerEvent, wxCommandEvent)
 // wxFileDirPickerCtrlBase
 // ----------------------------------------------------------------------------
 
-#define M_PICKER     ((wxFilePickerWidget*)m_picker)
-
 bool wxFileDirPickerCtrlBase::CreateBase( wxWindow *parent, wxWindowID id,
                         const wxString &path, const wxString &message,
                         const wxString &wildcard,
@@ -54,7 +52,7 @@ bool wxFileDirPickerCtrlBase::CreateBase( wxWindow *parent, wxWindowID id,
                         long style, const wxValidator& validator,
                         const wxString &name )
 {
-    wxASSERT_MSG(path.empty() || CheckPath(path), wxT("Invalid initial path !"));
+    wxASSERT_MSG(path.empty() || CheckPath(path), wxT("Invalid initial path!"));
 
     if (!wxPickerBase::CreateBase(parent, id, path, pos, size,
                                    style, validator, name))
@@ -74,8 +72,10 @@ bool wxFileDirPickerCtrlBase::CreateBase( wxWindow *parent, wxWindowID id,
                   _T("wxFLP_OVERWRITE_PROMPT can't be used with wxFLP_OPEN") );
 
     // create a wxFilePickerWidget or a wxDirPickerWidget...
-    if (!CreatePicker(this, path, message, wildcard))
+    m_pickerIface = CreatePicker(this, path, message, wildcard);
+    if ( !m_pickerIface )
         return false;
+    m_picker = m_pickerIface->AsControl();
 
     // complete sizer creation
     wxPickerBase::PostCreation();
@@ -91,9 +91,14 @@ bool wxFileDirPickerCtrlBase::CreateBase( wxWindow *parent, wxWindowID id,
     return true;
 }
 
+wxString wxFileDirPickerCtrlBase::GetPath() const
+{
+    return m_pickerIface->GetPath();
+}
+
 void wxFileDirPickerCtrlBase::SetPath(const wxString &path)
 {
-    M_PICKER->SetPath(path);
+    m_pickerIface->SetPath(path);
     UpdateTextCtrlFromPicker();
 }
 
@@ -115,9 +120,9 @@ void wxFileDirPickerCtrlBase::UpdatePickerFromTextCtrl()
     if (!CheckPath(newpath))
         return;       // invalid user input
 
-    if (M_PICKER->GetPath() != newpath)
+    if (m_pickerIface->GetPath() != newpath)
     {
-        M_PICKER->SetPath(newpath);
+        m_pickerIface->SetPath(newpath);
 
         // update current working directory, if necessary
         // NOTE: the path separator is required because if newpath is "C:"
@@ -140,7 +145,7 @@ void wxFileDirPickerCtrlBase::UpdateTextCtrlFromPicker()
     //       which will trigger a unneeded UpdateFromTextCtrl(); thus before using
     //       SetValue() we set the m_bIgnoreNextTextCtrlUpdate flag...
     m_bIgnoreNextTextCtrlUpdate = true;
-    m_text->SetValue(M_PICKER->GetPath());
+    m_text->SetValue(m_pickerIface->GetPath());
 }
 
 
