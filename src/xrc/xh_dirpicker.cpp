@@ -37,7 +37,7 @@ wxObject *wxDirPickerCtrlXmlHandler::DoCreateResource()
 
    picker->Create(m_parentAsWindow,
                   GetID(),
-                  GetParamValue(wxT("default-path")),
+                  GetParamValue(wxT("value")),
                   GetParamValue(wxT("message")),
                   GetPosition(), GetSize(),
                   GetStyle(_T("style"), wxDIRP_DEFAULT_STYLE),

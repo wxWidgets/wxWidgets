@@ -970,7 +970,7 @@
                                 <option>1</option>
                                 <border>5</border>
                                 <object class="wxColourPickerCtrl" name="controls_colourpicker">
-                                    <colour>#00ff00</colour>
+                                    <value>#00ff00</value>
                                     <style>wxCLRP_SHOW_LABEL</style>
                                 </object>
                             </object>
@@ -989,7 +989,7 @@
                                     <message>Here goes a message</message>
                                     <style>wxFLP_OPEN</style>
                                     <wildcard>*.png</wildcard>
-                                    <default-path/>
+                                    <value/>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -1004,7 +1004,7 @@
                                 <option>1</option>
                                 <border>5</border>
                                 <object class="wxDirPickerCtrl" name="controls_dirpicker">
-                                    <default-path/>
+                                    <value/>
                                     <style>wxDIRP_CHANGE_DIR</style>
                                     <message>Here goes a message</message>
                                 </object>
@@ -1022,10 +1022,10 @@
                                 <border>5</border>
                                 <object class="wxFontPickerCtrl" name="controls_fontpicker">
                                     <style>wxFNTP_USEFONT_FOR_LABEL</style>
-                                    <default-font>
+                                    <value>
                                         <size>20</size>
                                         <sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
-                                    </default-font>
+                                    </value>
                                 </object>
                             </object>
                         </object>

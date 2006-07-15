@@ -36,8 +36,8 @@ wxObject *wxFontPickerCtrlXmlHandler::DoCreateResource()
    XRC_MAKE_INSTANCE(picker, wxFontPickerCtrl)
 
     wxFont f = *wxNORMAL_FONT;
-    if (HasParam(wxT("default-font")))
-        f = GetFont(wxT("default-font"));
+    if (HasParam(wxT("value")))
+        f = GetFont(wxT("value"));
 
    picker->Create(m_parentAsWindow,
                   GetID(),

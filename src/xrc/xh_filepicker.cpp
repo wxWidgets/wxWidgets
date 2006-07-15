@@ -39,7 +39,7 @@ wxObject *wxFilePickerCtrlXmlHandler::DoCreateResource()
 
     picker->Create(m_parentAsWindow,
                   GetID(),
-                  GetParamValue(wxT("default-path")),
+                  GetParamValue(wxT("value")),
                   GetParamValue(wxT("message")),
                   GetParamValue(wxT("wildcard")),
                   GetPosition(), GetSize(),
