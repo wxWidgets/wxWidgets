@@ -3,7 +3,7 @@ Recent Changes for wxPython
 
 2.6.3.3
 -------
-*
+* 15-July-2006
 
 wx.lib.pubsub updates from Oliver Schoenborn:
     - fixed the hash problem with non-hashable objects
@@ -28,6 +28,13 @@ hidden before continuing with the CloseEditor method.  Also added code
 to OpenEditor to send the BEGIN_LABEL_EDIT event and to not allow the
 opening of the editor to continue if the event handler doesn't allow
 it.
+
+Undeprecated wx.GetNumberFromUser and added wx.NumberEntryDialog.
+
+Made necessaary changes for building wxPython for Python 2.5.  There
+may still be some issues related to the new Py_ssize_t type and 64-bit
+machines, but at least all compile errors and warnings related to it
+have been resolved.
 
 
 
