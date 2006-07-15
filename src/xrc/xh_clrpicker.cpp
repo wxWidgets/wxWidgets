@@ -36,7 +36,7 @@ wxObject *wxColourPickerCtrlXmlHandler::DoCreateResource()
 
    picker->Create(m_parentAsWindow,
                   GetID(),
-                  GetColour(wxT("value")),
+                  GetColour(wxT("value"), *wxBLACK),
                   GetPosition(), GetSize(),
                   GetStyle(_T("style"), wxCLRP_DEFAULT_STYLE),
                   wxDefaultValidator,
