@@ -34,6 +34,7 @@ PYVER=$5
 WXWIN=`cygpath -w $WXDIR`
 export WXWIN
 export WXDIR
+export TOOLS=/cygdrive/c/TOOLS
 
 # setup the compiler
 if [ $PYVER = 2.3 ]; then
