@@ -293,12 +293,20 @@ private:
 class WXDLLIMPEXP_BASE wxConfigPathChanger
 {
 public:
-  // ctor/dtor do path changing/restorin
+  // ctor/dtor do path changing/restoring of the path
   wxConfigPathChanger(const wxConfigBase *pContainer, const wxString& strEntry);
  ~wxConfigPathChanger();
 
   // get the key name
   const wxString& Name() const { return m_strName; }
+
+  // this method must be called if the original path (i.e. the current path at
+  // the moment of creation of this object) could have been deleted to prevent
+  // us from restoring the not existing (any more) path
+  //
+  // if the original path doesn't exist any more, the path will be restored to
+  // the deepest still existing component of the old path
+  void UpdateIfDeleted();
 
 private:
   wxConfigBase *m_pContainer;   // object we live in
