@@ -415,7 +415,7 @@ protected:
     float GetFloat(const wxString& param, float defaultv = 0);
 
     // Gets colour in HTML syntax (#RRGGBB).
-    wxColour GetColour(const wxString& param);
+    wxColour GetColour(const wxString& param, const wxColour& defaultv = wxNullColour);
 
     // Gets the size (may be in dialog units).
     wxSize GetSize(const wxString& param = wxT("size"),

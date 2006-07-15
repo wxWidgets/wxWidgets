@@ -1042,9 +1042,13 @@ static wxColour GetSystemColour(const wxString& name)
     return wxNullColour;
 }
 
-wxColour wxXmlResourceHandler::GetColour(const wxString& param)
+wxColour wxXmlResourceHandler::GetColour(const wxString& param, const wxColour& defaultv)
 {
     wxString v = GetParamValue(param);
+
+    if ( v.empty() )
+        return defaultv;
+
     wxColour clr;
 
     // wxString -> wxColour conversion
