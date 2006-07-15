@@ -224,9 +224,11 @@ void wxClassInfo::Register()
             sm_classTable = classTable;
     }
 
+#ifdef __WXDEBUG__
     // reentrance guard - see note above
     static int entry = 0;
     wxASSERT_MSG(++entry == 1, _T("wxClassInfo::Register() reentrance"));
+#endif
 
     // Using IMPLEMENT_DYNAMIC_CLASS() macro twice (which may happen if you
     // link any object module twice mistakenly, or link twice against wx shared
@@ -243,7 +245,9 @@ void wxClassInfo::Register()
 
     sm_classTable->Put(m_className, (wxObject *)this);
 
+#ifdef __WXDEBUG__
     --entry;
+#endif
 }
 
 void wxClassInfo::Unregister()
