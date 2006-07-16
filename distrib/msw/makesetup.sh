@@ -25,7 +25,7 @@ PROGNAME=$0
 SCRIPTDIR=$WXWIN/distrib/msw
 WEBFILES=c:/wx2dev/wxWebSite
 # Set this to the required version
-VERSION=2.6.2
+VERSION=2.6.3
 
 . $SCRIPTDIR/setup.var
 
@@ -583,6 +583,8 @@ makesetup()
 #        echo Removing contents of existing $SETUPIMAGEDIR
 #        rm -f -r $SETUPIMAGEDIR/*
 #    fi
+
+    echo WXWIN is $WXWIN
 
     if [ ! -d $SETUPIMAGEDIR ]; then
         echo Making the $SETUPIMAGEDIR for preparing the setup

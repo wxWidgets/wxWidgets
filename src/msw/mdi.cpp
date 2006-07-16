@@ -549,6 +549,14 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
             return win->MSWCommand(cmd, id);
     }
 
+    if (wxCurrentPopupMenu)
+    {
+        wxMenu *popupMenu = wxCurrentPopupMenu;
+        wxCurrentPopupMenu = NULL;
+        if (popupMenu->MSWCommand(cmd, id))
+            return true;
+    }
+
     // is it one of standard MDI commands?
     WXWPARAM wParam = 0;
     WXLPARAM lParam = 0;
@@ -1145,9 +1153,29 @@ WXLRESULT wxMDIChildFrame::MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXL
                            (UINT)message, (WPARAM)wParam, (LPARAM)lParam);
 }
 
-bool wxMDIChildFrame::MSWTranslateMessage(WXMSG* msg)
+bool wxMDIChildFrame::MSWTranslateMessage(WXMSG* pMsg)
 {
-    return wxFrame::MSWTranslateMessage(msg);
+    // NB: this duplicates the code in wxFrame::MSWTranslateMessage() to avoid
+    //     breaking backwards compatibility; cvs HEAD has a better version of
+    //     this fix
+
+    if ( wxWindow::MSWTranslateMessage(pMsg) )
+        return true;
+
+#if wxUSE_MENUS && wxUSE_ACCEL && !defined(__WXUNIVERSAL__)
+    // try the menu bar accels
+    wxMenuBar *menuBar = GetMenuBar();
+    if ( menuBar )
+    {
+        const wxAcceleratorTable& acceleratorTable = menuBar->GetAccelTable();
+
+        // the difference with wxFrame version is that we must pass the top
+        // level frame to Translate() here, not "this" pointer
+        return acceleratorTable.Translate(GetParent(), pMsg);
+    }
+#endif // wxUSE_MENUS && wxUSE_ACCEL
+
+    return false;
 }
 
 // ---------------------------------------------------------------------------

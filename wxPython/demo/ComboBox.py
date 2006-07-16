@@ -47,12 +47,11 @@ class TestComboBox(wx.Panel):
             cb.Append(item, item.upper())
 
         self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox, cb)
-        self.Bind(wx.EVT_COMBOBOX, self.EvtText, cb)
 
     # When the user selects something, we go here.
     def EvtComboBox(self, evt):
         cb = evt.GetEventObject()
-        data = cb.GetClientData(cb.GetSelection())
+        data = cb.GetClientData(evt.GetSelection())
         self.log.WriteText('EvtComboBox: %s\nClientData: %s\n' % (evt.GetString(), data))
 
         if evt.GetString() == 'one':
@@ -61,11 +60,13 @@ class TestComboBox(wx.Panel):
     # Capture events every time a user hits a key in the text entry field.
     def EvtText(self, evt):
         self.log.WriteText('EvtText: %s\n' % evt.GetString())
+        evt.Skip()
 
     # Capture events when the user types something into the control then
     # hits ENTER.
     def EvtTextEnter(self, evt):
         self.log.WriteText('EvtTextEnter: %s' % evt.GetString())
+        evt.Skip()
 
 #---------------------------------------------------------------------------
 

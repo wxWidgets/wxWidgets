@@ -437,7 +437,10 @@ void wxToolBarBase::UnToggleRadioGroup(wxToolBarToolBase *tool)
 
 void wxToolBarBase::ClearTools()
 {
-    WX_CLEAR_LIST(wxToolBarToolsList, m_tools);
+    while ( GetToolsCount() )
+    {
+        DeleteToolByPos(0);
+    }
 }
 
 bool wxToolBarBase::Realize()

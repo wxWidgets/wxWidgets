@@ -115,7 +115,7 @@ class ColumnSorterMixin:
     def __OnColClick(self, evt):
         oldCol = self._col
         self._col = col = evt.GetColumn()
-        self._colSortFlag[col] = not self._colSortFlag[col]
+        self._colSortFlag[col] = int(not self._colSortFlag[col])
         self.GetListCtrl().SortItems(self.GetColumnSorter())
         self.__updateImages(oldCol)
         evt.Skip()
@@ -291,6 +291,7 @@ class ListCtrlAutoWidthMixin:
 
 
 #----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
 
 SEL_FOC = wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED
 def selectBeforePopup(event):
@@ -381,6 +382,7 @@ class ListCtrlSelectionManagerMix:
         self.afterPopupMenu(event.menu)
 
 
+#----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
 from bisect import bisect
 
@@ -520,6 +522,19 @@ class TextEditMixin:
     def OpenEditor(self, col, row):
         ''' Opens an editor at the current position. '''
 
+        # give the derived class a chance to Allow/Veto this edit.
+        evt = wx.ListEvent(wx.wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT, self.GetId())
+        evt.m_itemIndex = row
+        evt.m_col = col
+        item = self.GetItem(row, col)
+        evt.m_item.SetId(item.GetId()) 
+        evt.m_item.SetColumn(item.GetColumn()) 
+        evt.m_item.SetData(item.GetData()) 
+        evt.m_item.SetText(item.GetText()) 
+        ret = self.GetEventHandler().ProcessEvent(evt)
+        if ret and not evt.IsAllowed():
+            return   # user code doesn't allow the edit.
+
         if self.GetColumn(col).m_format != self.col_style:
             self.make_editor(self.GetColumn(col).m_format)
     
@@ -572,6 +587,8 @@ class TextEditMixin:
     # it is binded to wx.EVT_KILL_FOCUS. Can it be avoided? (MW)
     def CloseEditor(self, evt=None):
         ''' Close the editor and save the new value to the ListCtrl. '''
+        if not self.editor.IsShown():
+            return
         text = self.editor.GetValue()
         self.editor.Hide()
         self.SetFocus()
@@ -610,6 +627,163 @@ class TextEditMixin:
         self.SetItemState(row, wx.LIST_STATE_SELECTED,
                           wx.LIST_STATE_SELECTED)
 
+
+
+#----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
+
+"""
+FILENAME: CheckListCtrlMixin.py
+AUTHOR:   Bruce Who (bruce.who.hk at gmail.com)
+DATE:     2006-02-09
+$Revision$
+DESCRIPTION:
+    This script provide a mixin for ListCtrl which add a checkbox in the first
+    column of each row. It is inspired by limodou's CheckList.py(which can be
+    got from his NewEdit) and improved:
+        - You can just use InsertStringItem() to insert new items;
+        - Once a checkbox is checked/unchecked, the corresponding item is not
+          selected;
+        - You can use SetItemData() and GetItemData();
+        - Interfaces are changed to OnCheckItem(), IsChecked(), CheckItem().
+
+    You should not set a imagelist for the ListCtrl once this mixin is used.
+
+HISTORY:
+1.3     - You can check/uncheck a group of sequential items by <Shift-click>:
+          First click(or <Shift-Click>) item1 to check/uncheck it, then
+          Shift-click item2 to check/uncheck it, and you'll find that all
+          items between item1 and item2 are check/unchecked!
+1.2     - Add ToggleItem()
+1.1     - Initial version
+"""
+
+from wx import ImageFromStream, BitmapFromImage
+import cStringIO, zlib
+
+def getUncheckData():
+    return zlib.decompress(
+"x\xda\xeb\x0c\xf0s\xe7\xe5\x92\xe2b``\xe0\xf5\xf4p\t\x02\xd2\x02 \xcc\xc1\
+\x06$\xe5?\xffO\x04R,\xc5N\x9e!\x1c@P\xc3\x91\xd2\x01\xe4\xbb{\xba8\x86X\xf4\
+&\xa7\xa4$\xa5-`1\x08\\2\xbb\xb1\xb1\x91\xf5\xd8\x84o\xeb\xff\xfaw\x1d[.=[2\
+\x90'\x01\x08v\xec]\xd3\xa3qvU`l\x81\xd9\xd18\t\xd3\x84+\x0cll[\xa6t\xcc9\
+\xd4\xc1\xda\xc3<O\x9a1\xc3\x88\xc3j\xfa\x86_\xee@#\x19<]\xfd\\\xd69%4\x01\
+\x00\xdc\x80-\x05" )
+
+def getUncheckBitmap():
+    return BitmapFromImage(getUncheckImage())
+
+def getUncheckImage():
+    stream = cStringIO.StringIO(getUncheckData())
+    return ImageFromStream(stream)
+
+def getCheckData():
+    return zlib.decompress(
+'x\xda\xeb\x0c\xf0s\xe7\xe5\x92\xe2b``\xe0\xf5\xf4p\t\x02\xd2\x02 \xcc\xc1\
+\x06$\xe5?\xffO\x04R,\xc5N\x9e!\x1c@P\xc3\x91\xd2\x01\xe47{\xba8\x86X\xf4&\
+\xa7\xa4$\xa5-`1\x08\\2\xbb\xb1\xb1\x91\xf5\xd8\x84o\xeb\xff\xfaw\x1d[.=[2\
+\x90\'\x01\x08v\xec\\2C\xe3\xec+\xc3\xbd\x05fG\xe3\x14n1\xcc5\xad\x8a8\x1a\
+\xb9\xa1\xeb\xd1\x853-\xaa\xc76\xecb\xb8i\x16c&\\\xc2\xb8\xe9Xvbx\xa1T\xc3U\
+\xd6p\'\xbd\x85\x19\xff\xbe\xbf\xd7\xe7R\xcb`\xd8\xa5\xf8\x83\xe1^\xc4\x0e\
+\xa1"\xce\xc3n\x93x\x14\xd8\x16\xb0(\x15q)\x8b\x19\xf0U\xe4\xb10\x08V\xa8\
+\x99\xf3\xdd\xde\xad\x06t\x0e\x83\xa7\xab\x9f\xcb:\xa7\x84&\x00\xe0HE\xab' )
+
+def getCheckBitmap():
+    return BitmapFromImage(getCheckImage())
+
+def getCheckImage():
+    stream = cStringIO.StringIO(getCheckData())
+    return ImageFromStream(stream)
+
+
+
+class CheckListCtrlMixin:
+    """
+    This is a mixin for ListCtrl which add a checkbox in the first
+    column of each row. It is inspired by limodou's CheckList.py(which
+    can be got from his NewEdit) and improved:
+    
+        - You can just use InsertStringItem() to insert new items;
+
+        - Once a checkbox is checked/unchecked, the corresponding item
+          is not selected;
+
+        - You can use SetItemData() and GetItemData();
+
+        - Interfaces are changed to OnCheckItem(), IsChecked(),
+          CheckItem().
+
+    You should not set a imagelist for the ListCtrl once this mixin is used.
+    """
+    def __init__(self, check_image=None, uncheck_image=None):
+        self.__imagelist_ = wx.ImageList(16, 16)
+        if not check_image:
+            check_image = getCheckBitmap()
+        if not uncheck_image:
+            uncheck_image = getUncheckBitmap()
+        self.uncheck_image = self.__imagelist_.Add(uncheck_image)
+        self.check_image = self.__imagelist_.Add(check_image)
+        self.SetImageList(self.__imagelist_, wx.IMAGE_LIST_SMALL)
+        self.__last_check_ = None
+
+        self.Bind(wx.EVT_LEFT_DOWN, self.__OnLeftDown_)
+        
+        # override the default methods of ListCtrl/ListView
+        self.InsertStringItem = self.__InsertStringItem_
+
+    # NOTE: if you use InsertItem, InsertImageItem or InsertImageStringItem,
+    #       you must set the image yourself.
+    def __InsertStringItem_(self, index, label):
+        index = self.InsertImageStringItem(index, label, 0)
+        return index
+
+    def __OnLeftDown_(self, evt):
+        (index, flags) = self.HitTest(evt.GetPosition())
+        if flags == wx.LIST_HITTEST_ONITEMICON:
+            img_idx = self.GetItem(index).GetImage()
+            flag_check = img_idx == 0
+            begin_index = index
+            end_index = index
+            if self.__last_check_ is not None \
+                    and wx.GetKeyState(wx.WXK_SHIFT):
+                last_index, last_flag_check = self.__last_check_
+                if last_flag_check == flag_check:
+                    # XXX what if the previous item is deleted or new items
+                    # are inserted?
+                    item_count = self.GetItemCount()
+                    if last_index < item_count:
+                        if last_index < index:
+                            begin_index = last_index
+                            end_index = index
+                        elif last_index > index:
+                            begin_index = index
+                            end_index = last_index
+                        else:
+                            assert False
+            while begin_index <= end_index:
+                self.CheckItem(begin_index, flag_check)
+                begin_index += 1
+            self.__last_check_ = (index, flag_check)
+        else:
+            evt.Skip()
+
+    def OnCheckItem(self, index, flag):
+        pass
+
+    def IsChecked(self, index):
+        return self.GetItem(index).GetImage() == 1
+
+    def CheckItem(self, index, check = True):
+        img_idx = self.GetItem(index).GetImage()
+        if img_idx == 0 and check is True:
+            self.SetItemImage(index, 1)
+            self.OnCheckItem(index, True)
+        elif img_idx == 1 and check is False:
+            self.SetItemImage(index, 0)
+            self.OnCheckItem(index, False)
+
+    def ToggleItem(self, index):
+        self.CheckItem(index, not self.IsChecked(index))
 
 
 #----------------------------------------------------------------------------

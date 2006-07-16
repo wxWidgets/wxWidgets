@@ -9,12 +9,12 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_PNGHAND_H_
+#define _WX_PNGHAND_H_
+
 #ifdef __GNUG__
 #pragma interface "pnghand.h"
 #endif
-
-#ifndef _WX_PNGHAND_H_
-#define _WX_PNGHAND_H_
 
 class WXDLLEXPORT wxPNGFileHandler: public wxBitmapHandler
 {

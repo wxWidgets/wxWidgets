@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 """
@@ -1263,11 +1263,19 @@ class GridCellCoords(object):
         return _grid.GridCellCoords_Set(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
-        """__eq__(self, GridCellCoords other) -> bool"""
+        """
+        __eq__(self, PyObject other) -> bool
+
+        Test for equality of GridCellCoords objects.
+        """
         return _grid.GridCellCoords___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(self, GridCellCoords other) -> bool"""
+        """
+        __ne__(self, PyObject other) -> bool
+
+        Test for inequality of GridCellCoords objects.
+        """
         return _grid.GridCellCoords___ne__(*args, **kwargs)
 
     def Get(*args, **kwargs):
@@ -2434,5 +2442,6 @@ EVT_GRID_CMD_EDITOR_HIDDEN =       wx.PyEventBinder( wxEVT_GRID_EDITOR_HIDDEN,  
 EVT_GRID_CMD_EDITOR_CREATED =      wx.PyEventBinder( wxEVT_GRID_EDITOR_CREATED,     1 )
 EVT_GRID_CMD_CELL_BEGIN_DRAG =     wx.PyEventBinder( wxEVT_GRID_CELL_BEGIN_DRAG,    1 )
     
+
 
 

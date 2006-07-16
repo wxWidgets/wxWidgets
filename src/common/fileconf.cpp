@@ -1160,9 +1160,6 @@ bool wxFileConfig::DeleteAll()
                         m_strLocalFile.c_str());
           return false;
       }
-
-      m_strLocalFile =
-      m_strGlobalFile = wxEmptyString;
   }
 
   Init();
@@ -2030,8 +2027,11 @@ static wxString FilterInEntryName(const wxString& str)
   strResult.Alloc(str.Len());
 
   for ( const wxChar *pc = str.c_str(); *pc != '\0'; pc++ ) {
-    if ( *pc == wxT('\\') )
-      pc++;
+    if ( *pc == wxT('\\') ) {
+      // we need to test it here or we'd skip past the NUL in the loop line
+      if ( *++pc == _T('\0') )
+        break;
+    }
 
     strResult += *pc;
   }

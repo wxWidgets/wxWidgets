@@ -624,7 +624,7 @@ STDMETHODIMP wxIDataObject::EnumFormatEtc(DWORD dwDir,
     wxDataObject::Direction dir = dwDir == DATADIR_GET ? wxDataObject::Get
                                                        : wxDataObject::Set;
 
-    size_t nFormatCount = m_pDataObject->GetFormatCount(dir);
+    ULONG nFormatCount = wx_truncate_cast(ULONG, m_pDataObject->GetFormatCount(dir));
     wxDataFormat format;
     wxDataFormat *formats;
     formats = nFormatCount == 1 ? &format : new wxDataFormat[nFormatCount];

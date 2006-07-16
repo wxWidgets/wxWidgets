@@ -244,8 +244,9 @@ wxToolTip::wxToolTip(const wxString &tip)
 
 wxToolTip::~wxToolTip()
 {
-    // there is no need to Remove() this tool - it will be done automatically
-    // anyhow
+    // the tooltip has to be removed before deleting. Otherwise, if it is visible
+	// while being deleted, there will be a delay before it goes away.
+	Remove();
 }
 
 // ----------------------------------------------------------------------------

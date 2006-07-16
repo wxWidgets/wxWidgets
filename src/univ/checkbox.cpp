@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/checkbox.cpp
+// Name:        src/univ/checkbox.cpp
 // Purpose:     wxCheckBox implementation
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -181,7 +181,9 @@ wxSize wxCheckBox::DoGetBestClientSize() const
     if ( height < sizeBmp.y )
         height = sizeBmp.y;
 
-#if wxUNIV_COMPATIBLE_MSW
+#if defined(wxUNIV_COMPATIBLE_MSW) && wxUNIV_COMPATIBLE_MSW
+    // FIXME: flag nowhere defined so perhaps should be removed?
+
     // this looks better but is different from what wxMSW does
     height += GetCharHeight()/2;
 #endif // wxUNIV_COMPATIBLE_MSW

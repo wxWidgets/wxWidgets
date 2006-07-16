@@ -15,14 +15,15 @@
 # add index to data list after parsing total pages for paging
 #----------------------------------------------------------------------------
 # 12/10/2003 - Jeff Grimmett (grimmtooth@softhome.net)
-#
 # o 2.5 compatability update.
-#
-
+#----------------------------------------------------------------------------
+# 11/23/2004 - Vernon Cole (wnvcole@peppermillcas.com)
+# o Generalize for non-2-dimensional sequences and non-text data
+#   (can use as a simple text printer by supplying a list of strings.)
+# o Add a small _main_ for self test
+ 
 import  copy
-import  os
-import  sys
-
+import  types
 import  wx
 
 class PrintBase:
@@ -268,10 +269,47 @@ class PrintTableDraw(wx.ScrolledWindow, PrintBase):
         pos_x = self.left_margin * self.pwidth + self.horizontal_offset     # left margin
         self.column.append(pos_x)
 
+        #module logic expects two dimensional data -- fix input if needed
+        if isinstance(self.data,types.StringTypes):
+            self.data = [[copy.copy(self.data)]] # a string becomes a single cell
+        try:
+            rows = len(self.data)
+        except TypeError:
+            self.data = [[str(self.data)]] # a non-iterable becomes a single cell
+            rows = 1
+        first_value = self.data[0]
+
+        if isinstance(first_value, types.StringTypes): # a sequence of strings
+            if self.label == [] and self.set_column == []:
+                data = []
+                for x in self.data:     #becomes one column
+                    data.append([x])
+            else:
+                data = [self.data]      #becames one row
+            self.data = data
+            first_value = data[0]
+        try:
+            column_total = len(first_value)
+        except TypeError:    # a sequence of non-iterables
+            if self.label == [] and self.set_column == []:
+                data = []       #becomes one column
+                for x in self.data:
+                    data.append([str(x)])
+                column_total = 1
+            else:
+                data = [self.data] #becomes one row
+                column_total = len(self.data)
+            self.data = data
+            first_value = data[0]
+
         if self.set_column == []:
             table_width = self.page_width - self.left_margin - self.right_margin
-            width = table_width/(len(self.label))
-            for val in self.label:
+            if self.label == []:
+                temp = first_value
+            else:
+                temp = self.label
+            width = table_width/(len(temp))
+            for val in temp:
                 column_width = width * self.pwidth
                 pos_x = pos_x + column_width
                 self.column.append(pos_x)   # position of each column
@@ -290,13 +328,10 @@ class PrintTableDraw(wx.ScrolledWindow, PrintBase):
                 print "Column Settings Incorrect", "\nColumn Value: " + str(self.column), "\nLabel Value: " + str(self.label)
                 return
 
-        first_value = self.data[0]
-        column_total = len(first_value)
         if column_total != len(self.column) -1:
-            print "Column Settings Incorrect", first_value, self.column
+            print "Cannot fit", first_value, 'in', len(self.column)-1, 'columns.'
             return
 
-        col = 0
         for col in range(column_total):
             try:
                 align = set_column_align[col]       # check if custom column alignment
@@ -314,10 +349,8 @@ class PrintTableDraw(wx.ScrolledWindow, PrintBase):
                 colour = set_column_txtcolour[col]     # check if custom column text colour
             except:
                 colour = self.GetFontColour(self.parent.text_font)
-
             self.column_txtcolour.append(colour)
 
-            col = col + 1
 
     def SetPointAdjust(self):
         f = wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL)     # setup using 10 point
@@ -526,12 +559,14 @@ class PrintTableDraw(wx.ScrolledWindow, PrintBase):
         self.col = 0
         max_y = 0
         for vtxt in row_val:
+            if not isinstance(vtxt,types.StringTypes):
+                vtxt = str(vtxt)
             self.region = self.column[self.col+1] - self.column[self.col]
             self.indent = self.column[self.col]
             self.align = self.column_align[self.col]
 
             fcolour = self.column_txtcolour[self.col]       # set font colour
-            celltext = self.GetCellText(self.data_cnt, self.col)
+            celltext = self.GetCellTextColour(self.data_cnt, self.col)
             if celltext is not None:
                 fcolour = celltext      # override the column colour
 
@@ -554,7 +589,7 @@ class PrintTableDraw(wx.ScrolledWindow, PrintBase):
         except:
             return None
 
-    def GetCellText(self, row, col):      # check if custom colour defined for the cell text
+    def GetCellTextColour(self, row, col):      # check if custom colour defined for the cell text
         try:
             set = self.cell_text[row]
         except:
@@ -570,7 +605,8 @@ class PrintTableDraw(wx.ScrolledWindow, PrintBase):
         self.DrawColumns()      # draw all vertical lines
 
     def DrawGridLine(self):
-        if self.draw == True:
+        if self.draw == True \
+        and len(self.column) > 2:    #supress grid lines if only one column
             try:
                 size = self.row_line_size[self.data_cnt]
             except:
@@ -588,7 +624,8 @@ class PrintTableDraw(wx.ScrolledWindow, PrintBase):
             self.DC.DrawLine(self.column[0], y_out, self.end_x, y_out)
 
     def DrawColumns(self):
-        if self.draw == True:
+        if self.draw == True \
+        and len(self.column) > 2:   #surpress grid line if only one column
             col = 0
             for val in self.column:
                 try:
@@ -720,8 +757,8 @@ class PrintTable:
         self.footer_type = "Pageof"
 
     def SetMargins(self):
-        self.left_margin = 1.0
-        self.right_margin = 1.0     # only used if no column sizes
+        self.left_margin = 0.5
+        self.right_margin = 0.5    # only used if no column sizes
 
         self.top_margin  = 0.8
         self.bottom_margin = 1.0
@@ -869,15 +906,15 @@ class PrintTable:
         self.footer.append(set)
 
     def Preview(self):
+        data = wx.PrintDialogData(self.printData)
         printout = SetPrintout(self)
         printout2 = SetPrintout(self)
-        self.preview = wx.PrintPreview(printout, printout2, self.printData)
+        self.preview = wx.PrintPreview(printout, printout2, data)
         if not self.preview.Ok():
-            wxMessageBox("There was a problem printing!", "Printing", wx.OK)
+            wx.MessageBox("There was a problem printing!", "Printing", wx.OK)
             return
 
         self.preview.SetZoom(60)        # initial zoom value
-
         frame = wx.PreviewFrame(self.preview, self.parentFrame, "Print preview")
 
         frame.Initialize()
@@ -887,14 +924,13 @@ class PrintTable:
         frame.Show(True)
 
     def Print(self):
-        pdd = wx.PrintDialogData()
-        pdd.SetPrintData(self.printData)
+        pdd = wx.PrintDialogData(self.printData)
         printer = wx.Printer(pdd)
         printout = SetPrintout(self)
         if not printer.Print(self.parentFrame, printout):
             wx.MessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wx.OK)
         else:
-            self.printData = printer.GetPrintDialogData().GetPrintData()
+            self.printData = wx.PrintData( printer.GetPrintDialogData().GetPrintData() )
         printout.Destroy()
 
     def DoDrawing(self, DC):
@@ -1091,8 +1127,23 @@ class SetPrintout(wx.Printout):
         self.canvas.DoDrawing(dc)
         return True
 
-
-
-
-
-
+if __name__ == '__main__':
+    app = wx.PySimpleApp()
+    frame = wx.Frame(None, -1, "Dummy wx frame for testing printout.py")
+    frame.Show(True)
+    ptbl = PrintTable(frame)
+    ptbl.SetHeader('This is the test HEADER')
+    # a single sequence will print out as a single column with no borders ...
+    ptbl.data = (
+        'This is the first line of text.',
+        'This is the second line\nand the third. The fourth will be the number "4.0".',
+        04.00,
+        'This is the fifth line, but by design it is too long to fit in the width of a standard'\
+         ' page, so it will be forced to wrap around in order to fit without having '\
+         'some of its verbose verbage truncated.',
+        'Here we have the final line.'
+        )
+    #... but, if labels or columns are defined, a single sequence will print out as a single row
+    ##ptbl.label = ('One','Two','Three','Four','5')
+    ptbl.Preview()
+    app.MainLoop()

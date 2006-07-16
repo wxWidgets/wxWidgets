@@ -1,22 +1,188 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.6.1.1
+2.6.3.3
 -------
+* 15-July-2006
+
+wx.lib.pubsub updates from Oliver Schoenborn:
+    - fixed the hash problem with non-hashable objects
+    - now supports listeners that use \*args as an argument
+      (listener(\*args) was not passing the validity test)
+    - corrected some mistakes in documentation
+    - added some clarifications (hopefully useful for first time
+      users)
+    - changed the way singleton is implemented since old way prevented
+      pydoc etc from extracting docs for Publisher
+
+DocView and ActiveGrid IDE updates from Morgan Hua:
+    New Features: In Tab-View mode, Ctrl-number will take the user to
+    the numbered tab view.  Modified files now show an '*' astrisk in
+    the view title.  Debugger framework can now support PHP debugging.
+    Not important for python development, but at least that means the
+    debugger framework is more generalized.
+
+wx.lib.mixins.listctrl.TextEditMixin: Fixed the double END_LABEL_EDIT
+event problem in TextEditMixin by checking if the editor was already
+hidden before continuing with the CloseEditor method.  Also added code
+to OpenEditor to send the BEGIN_LABEL_EDIT event and to not allow the
+opening of the editor to continue if the event handler doesn't allow
+it.
+
+Undeprecated wx.GetNumberFromUser and added wx.NumberEntryDialog.
+
+Made necessaary changes for building wxPython for Python 2.5.  There
+may still be some issues related to the new Py_ssize_t type and 64-bit
+machines, but at least all compile errors and warnings related to it
+have been resolved.
+
+
+
+
+2.6.3.2
+-------
+* 3-April-2006
+
+Fixed reference leak in wx.gizmos.TreeListCtrl.GetSelections.
+
+wxMSW: Fixed sizing issue with wx.Choice and wx.ComboBox.  This change
+was implemented by reverting a prior fix for a different problem
+(contiuous painting/resizing when a combobox is used as a widget in a
+wx.html.HtmlWindow) so a method to fix both problems is still being
+investigated.
+
+wxGTK: Fixed potential buffer overrun when pasting from the
+clipboard. 
+
+Fixed problem in wx.lib.splitter when used on 64-bit platforms.  Used
+the current length of the list for specifying an append instead of
+sys.maxint.
+
+wxMSW: Support added for XP themed owner drawn buttons and bitmap
+buttons.  For example, if you change the foreground color of a button
+it will now be drawn with the XP themed style rather than an ugly
+generic button style.
+
+XRCed: Fix for Copy/Paste objects with international characters.
+
+Fixed the equality and inequality operators for some of the basic
+data types (wx.Point, wx.Size, wx.Colour, etc.) to no longer raise a
+TypeError if the compared object is not compatible, but to just return
+a boolean as expected.  For example::
+
+	  wx.Colour(64,0,64) == 123      ==> False
+
+wxMSW: Fixed (again) sizing/positioning issues of calling Realize on
+a wx.ToolBar that is not manaaged directly by a frame and that is
+already shown.
+
+wxMSW: Fixed wx.Choice/wx.ComboBox so they send events when a new item
+is selected only with the keyboard.
+
+
+
+2.6.3.0
+-------
+* 27-March-2006
+
+Change the wx.ListCtrl InsertStringItem wrapper to use the form that
+takes an imageIndex, and set the default to -1.  This ensures that on
+wxMSW that if there is an image list but they don't specify an image,
+the native control doesn't use one anyway.
+
+wxMSW: wx.ListCtrl in report mode is now able to support images in
+other columns besides the first one.  Simply pass an image index to
+SetStringItem.  For virtual list controls you can specify the image to
+use on the extra columns by overriding OnGetItemColumnImage in your
+derived class.  It is passed the item number and the column number as
+parameters, and the default version simply calls OnGetItemImage for
+column zero, or returns -1 for other columns.
+
+Switched to using SWIG 1.3.27 for generating the wrapper code.  There
+are some small changes needed to SWIG to work around some bugs that
+wxPython exposes, and to be able to generate code that matches that
+which wxPython is using.  If you are building wxPython yourself and
+need to modify any of the \*.i files or to add your own, then you will
+want to be sure to use a matching SWIG.  See wxPython/SWIG/README.txt
+in the source tarball for details.
+
+wx.Image.Copy now also copies the alpha channel.
+
+wxMSW: Fixed problem in wx.TextCtrl where using SetValue and
+wx.TE_RICH2 would cause the control to be shown if it was hidden. 
+
+wxMSW: Numpad special keys are now distinguished from normal keys in
+key events.
+
+wxMSW: Multiline notebook tab label change now resizes the control
+correctly if an extra row is removed or added.
+
+wxMSW: On XP fall back to unthemed wxNotebook if specified orientation
+not available in the themed version.
+
+Added wx.Toolbar.GetToolsCount.
+
+Added wx.GridSizer.CalcRowsCols.
+
+Added wx.OutputStream.LastWrite.
+
+wxGTK: EVT_SET_CURSOR is now sent.
+
+wxGTK: Fix RequestMore for idle events.
+
+wxGTK: Implement user dashes for PS and GNOME printing.
+
+wxGTK: Correct update region code. Don't always invalidate the whole
+window upon resize. Reenable support for thewx.NO_FULL_REPAINT_ON_RESIZE 
+flag.  Also disable refreshing custom controls when focusing in and out.
+
+wx.lib.pubsub: Publisher is now able to parse a dotted notation string
+into a topic tuple.  For example: subscribing to "timer.clock.seconds"
+is the same as subscribing to ("timer", "clock", "seconds").
+
+Applied patch #1441370: lib.plot - allow passing in wx.Colour()
+
+Added wx.CommandEvent.GetClientData.
+
+Updated wxStyledTextCtrl to use version 1.67 of Scintilla.  
+NOTE: The STC_LEX_ASP and STC_LEX_PHP lexers have been deprecated,
+you should use STC_LEX_HTML instead.
+
+wxSTC: Implemented Fix for SF Bug #1436503.  Delay the start of the
+DnD operation in case the user just intended to click, not drag.
+
+Updated the analogclock.py module to the new analogclock package from
+E. A. Tacao.
+
+Added the wx.lib.mixins.listctrl.CheckListCtrlMixin class from Bruce
+Who, which makes it easy to put checkboxes on list control items.
+
+Applied a patch from Christian Kristukat to wx.lib.plot that adds
+scrollbars when the plot is zoomed in, and also the ability to grab a
+zoomed plot and move it around with a mouse drag.
+
+XRCed updated to allow wxMenuBar to be created inside a wxFrame.
+
+
+
+
+2.6.2.1
+-------
+* 10-Jan-2006
 
 wxMSW: Fix for bug #1211907, popup menu indenting inconsistent with
-bitmaps. 
+bitmaps.
 
 wxMac: Don't send an event for wx.RadioButton deselections, just the
 selections.  This was done to make it consistent with the other
-platforms. 
+platforms.
 
 wxMSW: Always set flat toolbar style, even under XP with themes: this
 is necessary or separators aren't shown at all.
 
-Fixes for bug #1217872, pydocview.DocService not correctly initialized
+Fixes for bug #1217872, pydocview.DocService not correctly initialized.
 
-Fix for bug #1217874, Error in parameter name in DocManager.CreateView
+Fix for bug #1217874, Error in parameter name in DocManager.CreateView.
 
 Added wrappers for the wx.RendererNative class.
 
@@ -25,8 +191,8 @@ MultiSplitterWindow class.  This class is much like the standard
 wx.SplitterWindow class, except it allows more than one split, so it
 can manage more than two child windows.
 
-Docview and IDE patch from Morag Hua with fix for bug #1217890
-"Closing view crashes Python" plus some new features::
+Docview and IDE patch from Morgan Hua with fix for bug #1217890
+"Closing view crashes Python" plus some new features:
 
     New feature added to the IDE is 'Extensions'.  Under
     Tools|Options|Extensions, you can add calls to external programs.
@@ -35,6 +201,190 @@ Docview and IDE patch from Morag Hua with fix for bug #1217890
     menu item will appear under the Tools menu.
 
 Some fixes to XRCed to make encoding errors a bit more user friendly.
+
+XRCed changes from Roman Rolinsky:
+
+    * Added new controls (Choicebook, Listbook, StatusBar,
+      DatePicker), and completed style flags. Test window is opened
+      for an available parent control if no specific view
+      defined. Better handling of exceptions (highlighting does not
+      'stick' anymore).
+
+    * Use system clipboard for Copy/Paste.
+
+    * Improved some dialogs (window styles, growable cols). Changed
+      the range for wxSpinCtrl min/max to all integers (default 0/100
+      is not always good).
+
+Updates for wx.lib.foldpanelbar and wx.lib.hyperlink from Andrea
+Gavana.
+
+Fix for Bug #1283496: wxPython TheClipboard class causes problems for
+pychecker.  Ensure the app has been created before initializing
+wx.TheClipboard.
+
+Fix for Bug #1352602: FileBrowseButtonWithHistory can't type in Value.
+
+wxHTML: Added space after list item number.
+
+wx.lib.printout:  Applied patch #1384440.
+
+wxMSW:  Fix for Bug #1293225 Window_FromHWND crashes if parent is
+None.
+
+Fix for Bug #1261669, use a wx.TE_RICH2 style for the Process demo so
+it doesn't fill up too soon.
+
+Applied Patch #1354389: wxPython MenuItem SetBitmaps fix.
+
+Applied Patch #1239456: wxPython wx.DataObject.GetAllFormats fix.
+
+Applied Patch # #1230107 which allows image handlers to be written in
+Python by deriving from wx.PyImageHandler.
+
+Applied patch #1072210: generalize printout.py to allow text printing.
+
+Applied patch #1243907: Give Throbber much more flexibility by
+allowing the user to set the rest image, the direction, the current
+index, custom sequence.  Allows user to manually step through the
+sequence with Next(), Previous(), Increment(), Decrement() &
+SetCurrent(). Very handy if you have multiple throbbers that you want
+to synchronize with a single timer.
+
+Fix for bug #1336711: wx.lib.calendar.CalenDlg can yield incorrect
+result.
+
+Applied patch from Morgan Hua for updates to ActiveGrid code
+(pydocview, ActiveGrid IDE, etc.)
+
+Applied patch #1326241: Supporting "setup.py install --install-headers=path"
+
+Applied patch from Morgan Hua to fix bug #1219423: CommandManager
+should not repeat old commands after a branch.
+
+Applied patch #1238825 adding search backward capabilities to the
+demo.  Modified to use the up/down options in the wx.FindReplaceDialog
+instead of a separate menu item.
+
+Fix for bug #1266745 and #1387725 in the wx.FindReplaceDialog on MSW.
+Actually check we are using MSLU before doing the hack designed to
+workaround a bug in MSLU!
+
+wxMSW: wx.lib.iewin.IEHtmlWindow now properly handles tabbing, return
+and other special keys properly.
+
+Lots of PyCrust enhancments started by Franz Steinaeusler, Adi Sieker,
+and Sebastian Haase, and which in turn were further enhanced, fixed
+tweaked and finished up by me.  The changes include the following:
+
+    * The Autocomplete and Calltip windows can now be opened manually
+      with Ctrl-Space and Ctrl-Shift-Space.
+
+    * In the stand alone PyCrust app the various option settings,
+      window size and position, and etc. are saved and restored at the
+      next run.
+
+    * Added a help dialog bound to the F1 key that shows the key
+      bindings.
+
+    * Added a new text completion function that suggests words from
+      the history.  Bound to Shift-Return.
+
+    * F11 will toggle the maximized state of the frame.
+
+    * switched to Bind() from wx.EVT_*().
+
+    * Display of line numbers can be toggled.
+
+    * F12 toggles a "free edit" mode of the shell buffer.  This mode
+      is useful, for example, if you would like to remove some output
+      or errors or etc. from the buffer before doing a copy/paste.
+      The free edit mode is designated by the use of a red,
+      non-flashing caret.
+
+    * Ctrl-Shift-F will fold/unfold (hide/show) the selected lines.
+
+    * General code cleanup and fixes.
+
+    * Use wx.StandardPaths to determine the location of the config
+      files.
+
+    * Use wx.SP_LIVE_UPDATE on crust and filling windows.
+
+    * Extended the saving of the config info and other new features to
+      the PyShell app too.  Additionally, other apps that embed a
+      PyCrust or a PyShell can pass their own wx.Config object and
+      have the Py code save/restore its settings to/from there.
+
+    * All of the classes with config info get an opportunity to
+      save/load their own settings instead of putting all the
+      save/load code in one place that then has to reach all over the
+      place to do anything.
+
+    * Enable editing of the startup python code, which will either be
+      the file pointed to by PYTHONSTARTUP or a file in the config dir
+      if PYTHONSTARTUP is not set in the environment.
+
+    * Added an option to skip the running of the startup code when
+      PyShell or PyCrust starts.
+
+    * PyCrust adds a pp(item) function to the shell's namespace that
+      pretty prints the item in the Display tab of the notebook.
+      Added code to raise that tab when pp() is called.
+
+    * Added an option for whether to insert text for function
+      parameters when popping up the call tip.
+
+    * Added Find and Find-Next functions that use the
+      wx.FindReplaceDialog.
+
+
+Applied patches from Will Sadkin for wx.lib.masked modules:
+
+    * Now ignores kill focus events when being destroyed.
+
+    * Added missing call to set insertion point on changing fields.
+
+    * Modified SetKeyHandler() to accept None as means of removing
+      one.
+
+    * Fixed keyhandler processing for group and decimal character
+      changes.
+
+    * Fixed a problem that prevented input into the integer digit of a
+      integerwidth=1 numctrl, if the current value was 0.
+
+    * Fixed logic involving processing of "_signOk" flag, to remove
+      default sign key handlers if false, so that
+      SetAllowNegative(False) in the NumCtrl works properly.
+
+    * Fixed selection logic for numeric controls so that if
+      selectOnFieldEntry is true, and the integer portion of an
+      integer format control is selected and the sign position is
+      selected, the sign keys will always result in a negative value,
+      rather than toggling the previous sign.
+
+wx.FontMapper.SetConfig is deprecated.  You should instead just set an
+application-wide config object with wx.Config.Set, which wx.FontMapper
+will use by default.
+
+Added wx.GetMouseState which returns the current state of the mouse.
+It returns an instance of a wx.MouseState object that contains the
+current position of the mouse pointer in screen coordinants, as well
+as boolean values indicating the up/down status of the mouse buttons
+and the modifier keys.
+
+Added wx.SizerItem.SetUserData
+
+A variety of updates to wx.lib.floatcanvas, including Added
+DrawObjects, including a ScaledTextBox, with auto-wrapping, etc, and
+Scaled and Unscaled Bitmap Objects.
+
+       WARNING: Changed all DrawObjects to take an (x,y) pair rather
+       than individual x,y parameters. Also changed rectangles and
+       ellipses to take (w,h) pair. This is an API change, but should
+       be easy to accommodate, all you need to do is add a parenthesis
+       pair:  (...x, y, ...) --->  (...(x,y), ...) 
 
 
 
@@ -71,7 +421,7 @@ wx.TopLevelWindow.ShowFullScreen.
 Applied patch #1213066 correct device names for Joystick in Linux.
 
 wxGTK: Applied patch #1207162 wx.TextCtrl.SetStyle fix for overlapping
-calls. 
+calls.
 
 wx.FileConfig: fixed DeleteEntry to set the dirty flag properly so the
 change will get written at the next flush.
@@ -86,7 +436,7 @@ change will get written at the next flush.
 
 Added wx.BrushFromBitmap to create a stippled brush in a single step.
 Also added missing brysh style flags: wx.STIPPLE_MASK
-wx.STIPPLE_MASK_OPAQUE. 
+wx.STIPPLE_MASK_OPAQUE.
 
 wxMSW: Fix for default control colours when the system text fg colour
 is not black.
@@ -95,7 +445,7 @@ wxGTK: Patch #1171754, It is now possible to have a menu item that
 both has an icon and is a submenu.
 
 wxMSW: Patch #1197009, better refreshes when windows are moved and
-resized. 
+resized.
 
 wxMSW: Patch #1197468.  Keeps track of pending size/position changes
 in case there is more than one adjustment for a window in a single
@@ -156,7 +506,7 @@ wxMSW:  Fix for wrong sash colour of wx.SplitterWindow in the silver
 theme on XP.
 
 Added a wx.xrc.XmlResourceHandler for the Ticker class.  See
-wx/lib/ticker_xrc.py 
+wx/lib/ticker_xrc.py
 
 wxSTC: Fixed CmdKeyAssign key bindings for Ctrl-Backspace.
 
@@ -179,7 +529,7 @@ XP themes.
 
 More updates to the docview library modules and sample apps from the
 ActiveGrid folks.  Their sample IDE is now able to integrate with
-Subversion. 
+Subversion.
 
 wx.grid.Grid:  Ensure that the grid gets the focus when it is
 left-clicked.  Note that if you have custom widgets that handle the
@@ -197,7 +547,7 @@ window itself, not the borders, scrollbars, etc.  (Bug #1204069)
 
 Print framework:  Add more paper sizes and code to fallback to an
 explicit paper size if a known paper size is not found for the
-printer. 
+printer.
 
 wxMac: Applied patch for bug #1206181 Option-key decodes are wrong,
 also applied patch for bug #1205691 Modified Fn keys don't work.
@@ -215,7 +565,7 @@ The default DoGetBestSize is updated to not always return the current
 size if the window has no sizer, children, or minsize set.  Instead
 the current size is set as the minsize.  This solves the occasional
 problem where a sizer may cause a childless panel to grow but never
-shrink. 
+shrink.
 
 wxMSW: When converting a wx.Icon to a bitmap check if the icon has an
 alpha channel and set the bitmap to use it.
@@ -288,7 +638,7 @@ EVT_KEY_UP and EVT_TEXT events from its embedded text control.
 wxMac: Corrected refresh bugs in wxGrid.
 
 XRCed: Updated to version 0.1.5.
-    * Added wxWizard, wxWizardPageSimple (only from pull-down menu). 
+    * Added wxWizard, wxWizardPageSimple (only from pull-down menu).
     * Hide command for test window.
     * Replacing classes works better.
     * Added Locate tool.
@@ -296,7 +646,7 @@ XRCed: Updated to version 0.1.5.
 
 
 
-2.5.5.1    
+2.5.5.1
 -------
 * 8-Apr-2005
 

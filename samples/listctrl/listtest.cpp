@@ -46,6 +46,7 @@
 #include "wx/listctrl.h"
 #include "wx/timer.h"           // for wxStopWatch
 #include "wx/colordlg.h"        // for wxGetColourFromUser
+#include "wx/settings.h"
 
 #include "listtest.h"
 
@@ -126,6 +127,10 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_LIST_CACHE_HINT(LIST_CTRL, MyListCtrl::OnCacheHint)
 
     EVT_CHAR(MyListCtrl::OnChar)
+
+#if USE_CONTEXT_MENU
+    EVT_CONTEXT_MENU(MyListCtrl::OnContextMenu)
+#endif
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -151,7 +156,7 @@ int wxCALLBACK MyCompareFunction(long item1, long item2, long WXUNUSED(sortData)
 bool MyApp::OnInit()
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame(wxT("wxListCtrl Test"), 50, 50, 450, 340);
+  MyFrame *frame = new MyFrame(wxT("wxListCtrl Test"));
 
   // Show the frame
   frame->Show(true);
@@ -162,12 +167,15 @@ bool MyApp::OnInit()
 }
 
 // My frame constructor
-MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
-       : wxFrame(NULL, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
+MyFrame::MyFrame(const wxChar *title)
+       : wxFrame(NULL, wxID_ANY, title)
 {
     m_listCtrl = NULL;
     m_logWindow = NULL;
     m_smallVirtual = false;
+
+    if ( wxSystemSettings::GetScreenType() > wxSYS_SCREEN_SMALL )
+        SetSize(wxSize(450, 340));
 
     // Give it an icon
     SetIcon( wxICON(mondrian) );
@@ -496,6 +504,15 @@ void MyFrame::InitWithReportItems()
     m_listCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
     m_listCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
     m_listCtrl->SetColumnWidth( 2, wxLIST_AUTOSIZE );
+
+    // Set images in columns
+    m_listCtrl->SetItemColumnImage(1, 1, 0);
+
+    wxListItem info;
+    info.SetImage(0);
+    info.SetId(3);
+    info.SetColumn(2);
+    m_listCtrl->SetItem(info);
 
     // test SetItemFont too
     m_listCtrl->SetItemFont(0, *wxITALIC_FONT);
@@ -1036,8 +1053,36 @@ void MyListCtrl::InsertItemInReportView(int i)
     SetItemData(tmp, i);
 
     buf.Printf(_T("Col 1, item %d"), i);
-    SetItem(i, 1, buf);
+    SetItem(tmp, 1, buf);
 
     buf.Printf(_T("Item %d in column 2"), i);
-    SetItem(i, 2, buf);
+    SetItem(tmp, 2, buf);
 }
+
+#if USE_CONTEXT_MENU
+void MyListCtrl::OnContextMenu(wxContextMenuEvent& event)
+{
+    wxPoint point = event.GetPosition();
+    // If from keyboard
+    if (point.x == -1 && point.y == -1) {
+        wxSize size = GetSize();
+        point.x = size.x / 2;
+        point.y = size.y / 2;
+    } else {
+        point = ScreenToClient(point);
+    }
+    ShowContextMenu(point);
+}
+#endif
+
+void MyListCtrl::ShowContextMenu(const wxPoint& pos)
+{
+    wxMenu menu;
+
+    menu.Append(wxID_ABOUT, _T("&About"));
+    menu.AppendSeparator();
+    menu.Append(wxID_EXIT, _T("E&xit"));
+
+    PopupMenu(&menu, pos.x, pos.y);
+}
+

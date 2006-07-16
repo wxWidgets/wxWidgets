@@ -436,11 +436,18 @@ const wxChar* wxURI::ParseAuthority(const wxChar* uri)
     // authority     = [ userinfo "@" ] host [ ":" port ]
     if (*uri == wxT('/') && *(uri+1) == wxT('/'))
     {
+        //skip past the two slashes
         uri += 2;
 
+        // ############# DEVIATION FROM RFC #########################
+        // Don't parse the server component for file URIs
+        if(m_scheme != wxT("file"))
+        {
+            //normal way
         uri = ParseUserInfo(uri);
         uri = ParseServer(uri);
         return ParsePort(uri);
+        }
     }
 
     return uri;

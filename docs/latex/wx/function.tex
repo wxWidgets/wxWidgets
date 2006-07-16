@@ -117,6 +117,7 @@ the corresponding topic.
 \helpref{wxGetLocalTimeMillis}{wxgetlocaltimemillis}\\
 \helpref{wxGetLocalTime}{wxgetlocaltime}\\
 \helpref{wxGetMousePosition}{wxgetmouseposition}\\
+\helpref{wxGetMouseState}{wxgetmousestate}\\
 \helpref{wxGetMultipleChoices}{wxgetmultiplechoices}\\
 \helpref{wxGetMultipleChoice}{wxgetmultiplechoice}\\
 \helpref{wxGetNumberFromUser}{wxgetnumberfromuser}\\
@@ -509,7 +510,7 @@ the corresponding functions \helpref{::wxPostEvent}{wxpostevent} and
 
 \wxheading{Include files}
 
-<wx/event.h>
+<wx/app.h>
 
 
 
@@ -589,7 +590,7 @@ happening, i.e. with this flag the child process window will be shown normally.
 Under Unix the flag {\tt wxEXEC\_MAKE\_GROUP\_LEADER} may be used to ensure
 that the new process is a group leader (this will create a new session if
 needed). Calling \helpref{wxKill}{wxkill} passing wxKILL\_CHILDREN will
-will kill this process as well as all of its children (except those which have
+kill this process as well as all of its children (except those which have
 started their own session).
 
 Finally, you may use the third overloaded version of this function to execute
@@ -736,7 +737,7 @@ See also \helpref{wxExecute}{wxexecute}, \helpref{Exec sample}{sampleexec}.
 
 This function shuts down or reboots the computer depending on the value of the
 {\it flags}. Please notice that doing this requires the corresponding access
-rights (superuser under Unix, {\tt SE\_SHUTDOWN} privelege under Windows NT)
+rights (superuser under Unix, {\tt SE\_SHUTDOWN} privilege under Windows NT)
 and that this function is only implemented under Unix and Win32.
 
 \wxheading{Parameters}
@@ -1174,7 +1175,7 @@ with wildcard characters. See \helpref{wxIsWild}{wxiswild}.
 Makes the directory \arg{dir}, returning true if successful.
 
 {\it perm} is the access mask for the directory for the systems on which it is
-supported (Unix) and doesn't have effect for the other ones.
+supported (Unix) and doesn't have any effect on the other ones.
 
 
 \membersection{::wxParseCommonDialogsFilter}\label{wxparsecommondialogsfilter}
@@ -2166,7 +2167,7 @@ following identifiers:
 \begin{twocollist}\itemsep=0pt
 \twocolitem{wxYES\_NO}{Puts Yes and No buttons on the message box. May be combined with
 wxCANCEL.}
-\twocolitem{wxCANCEL}{Puts a Cancel button on the message box. May be combined with
+\twocolitem{wxCANCEL}{Puts a Cancel button on the message box. May only be combined with
 wxYES\_NO or wxOK.}
 \twocolitem{wxOK}{Puts an Ok button on the message box. May be combined with wxCANCEL.}
 \twocolitem{wxICON\_EXCLAMATION}{Displays an exclamation mark symbol.}
@@ -2977,6 +2978,55 @@ Returns the mouse position in screen coordinates.
 <wx/utils.h>
 
 
+\membersection{::wxGetMouseState}\label{wxgetmousestate}
+
+\func{wxMouseState}{wxGetMouseState}{\void}
+
+Returns the current state of the mouse.  Returns a wxMouseState
+instance that contains the current position of the mouse pointer in
+screen coordinants, as well as boolean values indicating the up/down
+status of the mouse buttons and the modifier keys.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+wxMouseState has the following interface:
+
+\begin{verbatim}
+class wxMouseState
+{
+public:
+    wxMouseState();
+
+    wxCoord     GetX();
+    wxCoord     GetY();
+
+    bool        LeftDown();
+    bool        MiddleDown();
+    bool        RightDown();
+
+    bool        ControlDown();
+    bool        ShiftDown();
+    bool        AltDown();
+    bool        MetaDown();
+    bool        CmdDown();
+
+    void        SetX(wxCoord x);
+    void        SetY(wxCoord y);
+
+    void        SetLeftDown(bool down);
+    void        SetMiddleDown(bool down);
+    void        SetRightDown(bool down);
+    
+    void        SetControlDown(bool down);
+    void        SetShiftDown(bool down);
+    void        SetAltDown(bool down);
+    void        SetMetaDown(bool down);
+};
+\end{verbatim}
+
+
 \membersection{::wxGetResource}\label{wxgetresource}
 
 \func{bool}{wxGetResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
@@ -3600,7 +3650,7 @@ Example:
 
 This macro is equivalent to {\tt wxDynamicCast(this, classname)} but the
 latter provokes spurious compilation warnings from some compilers (because it
-tests whether {\tt this} pointer is non {\tt NULL} which is always true), so
+tests whether {\tt this} pointer is non-{\tt NULL} which is always true), so
 this macro should be used to avoid them.
 
 \wxheading{See also}
@@ -4334,7 +4384,7 @@ This check is done even in release mode.
 Checks that the condition is true, returns with the given return value if not (FAILs in debug mode).
 This check is done even in release mode.
 
-This macro may be only used in non void functions, see also
+This macro may be only used in non-void functions, see also
 \helpref{wxCHECK\_RET}{wxcheckret}.
 
 

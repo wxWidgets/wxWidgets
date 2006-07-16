@@ -18,7 +18,7 @@ if [ $skipwin != yes ]; then
     fi
 
     echo "Copying source file and build script..."
-    scp $STAGING_DIR/wxPython-src-$VERSION.tar.gz \
+    scp $STAGING_DIR/wxPython-src-$VERSION.tar.bz2 \
 	distrib/all/do-build-windows \
 	$WIN_HOST:$WIN_BUILD
     

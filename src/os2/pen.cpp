@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        pen.cpp
+// Name:        src/os2/pen.cpp
 // Purpose:     wxPen
 // Author:      David Webster
 // Modified by:
@@ -13,13 +13,12 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/setup.h"
-#include "wx/list.h"
-#include "wx/utils.h"
-#include "wx/app.h"
-#include "wx/pen.h"
-#include "wx/log.h"
+    #include <stdio.h>
+    #include "wx/list.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+    #include "wx/pen.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/os2/private.h"
@@ -33,6 +32,8 @@ wxPenRefData::wxPenRefData()
     m_nWidth  = 1;
     m_nJoin   = wxJOIN_ROUND ;
     m_nCap    = wxCAP_ROUND ;
+    m_nbDash  = 0 ;
+    m_dash    = (wxDash*)NULL;
     m_hPen    = 0L;
 } // end of wxPenRefData::wxPenRefData
 
@@ -44,6 +45,8 @@ wxPenRefData::wxPenRefData(
     m_nWidth  = rData.m_nWidth;
     m_nJoin   = rData.m_nJoin;
     m_nCap    = rData.m_nCap;
+    m_nbDash  = rData.m_nbDash;
+    m_dash    = rData.m_dash;
     m_vColour = rData.m_vColour;
     m_hPen    = 0L;
 } // end of wxPenRefData::wxPenRefData
@@ -152,7 +155,7 @@ bool wxPen::RealizeResource()
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
             wxLogError(_T("Unable to set current color table to RGB mode. Error: %s\n"), sError.c_str());
-            return FALSE;
+            return false;
         }
         if (M_PENDATA->m_nStyle == wxTRANSPARENT)
         {
@@ -216,7 +219,7 @@ bool wxPen::RealizeResource()
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
             wxLogError(_T("Can't set Gpi attributes for a LINEBUNDLE. Error: %s\n"), sError.c_str());
-            return FALSE;
+            return false;
         }
 
         ULONG                           flAttrMask = 0L;
@@ -346,29 +349,21 @@ void wxPen::Unshare()
     }
 } // end of wxPen::Unshare
 
-void wxPen::SetColour(
-  const wxColour&                   rColour
-)
+void wxPen::SetColour( const wxColour& rColour )
 {
     Unshare();
     M_PENDATA->m_vColour = rColour;
     RealizeResource();
 } // end of wxPen::SetColour
 
-void wxPen::SetColour(
-  unsigned char                     cRed
-, unsigned char                     cGreen
-, unsigned char                     cBlue
-)
+void wxPen::SetColour( unsigned char cRed, unsigned char cGreen, unsigned char cBlue)
 {
     Unshare();
     M_PENDATA->m_vColour.Set(cRed, cGreen, cBlue);
     RealizeResource();
 } // end of wxPen::SetColour
 
-void wxPen::SetPS(
-  HPS                               hPS
-)
+void wxPen::SetPS( HPS hPS )
 {
     Unshare();
     if (M_PENDATA->m_hPen)

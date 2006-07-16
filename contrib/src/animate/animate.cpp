@@ -19,14 +19,14 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
+#include "wx/log.h"
 #include "wx/wfstream.h"
 #include "wx/image.h"
 #include "wx/gifdecod.h"
-#include "wx/log.h"
 #include "wx/dcmemory.h"
-#include "wx/animate/animate.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
+#include "wx/animate/animate.h"
 
 /*
  * wxAnimationPlayer
@@ -103,36 +103,34 @@ bool wxAnimationPlayer::Play(wxWindow& window, const wxPoint& pos, bool WXUNUSED
 bool wxAnimationPlayer::Build()
 {
     ClearCache();
-    if (m_animation)
-    {
-        int n = GetFrameCount();
-        int i;
-        for (i = 0; i < n; i++)
-        {
-            wxImage* image = GetFrame(i);
-            if (image)
-            {
-                // If the frame has transparency,
-                // set the colour so converting to a bitmap
-                // will create a mask
-                wxColour transparentColour;
-                if (GetTransparentColour(transparentColour))
-                    image->SetMaskColour(transparentColour.Red(), transparentColour.Green(), transparentColour.Blue());
+    if (!m_animation)
+        return false;
 
-                wxBitmap* bitmap = new wxBitmap(* image);
-                delete image;
-                if (bitmap)
-                    m_frames.Append(bitmap);
-                else
-                    return FALSE;
-            }
-            else
-                return FALSE;
-        }
-        return TRUE;
+    int i, n;
+
+    n = GetFrameCount();
+    for (i = 0; i < n; i++)
+    {
+        wxImage* image = GetFrame(i);
+        if (image == NULL)
+            return false;
+
+        // If the frame has transparency,
+        // set the colour so converting to a bitmap
+        // will create a mask
+        wxColour transparentColour;
+        if (GetTransparentColour(transparentColour))
+            image->SetMaskColour(transparentColour.Red(), transparentColour.Green(), transparentColour.Blue());
+
+        wxBitmap* bitmap = new wxBitmap(*image);
+        delete image;
+        if (bitmap == NULL)
+            return false;
+
+        m_frames.Append(bitmap);
     }
-    else
-        return FALSE;
+
+    return true;
 }
 
 // Stop the animation
@@ -148,7 +146,6 @@ void wxAnimationPlayer::Draw(wxDC& dc)
 {
     dc.DrawBitmap(m_backingStore, m_position.x, m_position.y);
 }
-
 
 int wxAnimationPlayer::GetFrameCount() const
 {
@@ -468,19 +465,15 @@ bool wxGIFAnimation::GetBackgroundColour(wxColour& col) const
 
     int i = m_decoder->GetBackgroundColour();
     if (i == -1)
-        return FALSE;
-    else
-    {
-        unsigned char* pal = m_decoder->GetPalette();
+        return false;
 
-        if (pal)
-        {
-            col = wxColour(pal[3*i + 0], pal[3*i + 1], pal[3*i + 2]);
-            return TRUE;
-        }
-        else
-            return FALSE;
-    }
+    const unsigned char *pal = m_decoder->GetPalette();
+    bool result = (pal != NULL);
+
+    if (result)
+        col = wxColour(pal[3*i + 0], pal[3*i + 1], pal[3*i + 2]);
+
+    return result;
 }
 
 bool wxGIFAnimation::GetTransparentColour(wxColour& col) const
@@ -489,19 +482,15 @@ bool wxGIFAnimation::GetTransparentColour(wxColour& col) const
 
     int i = m_decoder->GetTransparentColour();
     if (i == -1)
-        return FALSE;
-    else
-    {
-        unsigned char* pal = m_decoder->GetPalette();
+        return false;
 
-        if (pal)
-        {
-            col = wxColour(pal[3*i + 0], pal[3*i + 1], pal[3*i + 2]);
-            return TRUE;
-        }
-        else
-            return FALSE;
-    }
+    const unsigned char *pal = m_decoder->GetPalette();
+    bool result = (pal != NULL);
+
+    if (result)
+        col = wxColour(pal[3*i + 0], pal[3*i + 1], pal[3*i + 2]);
+
+    return result;
 }
 
 bool wxGIFAnimation::IsValid() const
@@ -511,34 +500,35 @@ bool wxGIFAnimation::IsValid() const
 
 bool wxGIFAnimation::LoadFile(const wxString& filename)
 {
-    if (m_decoder)
-        delete m_decoder;
-    m_decoder = NULL;
+    if (!wxFileExists(filename))
+        return false;
 
-    if (wxFileExists(filename))
+    bool result = true;
+
+    if (m_decoder)
+    {
+        delete m_decoder;
+        m_decoder = NULL;
+    }
+
     {
         wxFileInputStream stream(filename);
-        m_decoder = new wxGIFDecoder(& stream, TRUE);
 
-        if (m_decoder->ReadGIF() != wxGIF_OK)
-        {
-            delete m_decoder;
-            m_decoder = NULL;
-            return FALSE;
-        }
+        if (stream.GetLength() > 0)
+            m_decoder = new wxGIFDecoder(&stream, true);
 
-        if (!m_decoder->IsAnimation())
-        {
-            delete m_decoder;
-            m_decoder = NULL;
-
-            return FALSE;
-        }
-        else
-            return TRUE;
+        result = ((m_decoder != NULL) && (m_decoder->ReadGIF() == wxGIF_OK));
+        if (result)
+            result = m_decoder->IsAnimation();
     }
-    else
-        return FALSE;
+
+    if (!result && (m_decoder != NULL))
+    {
+        delete m_decoder;
+        m_decoder = NULL;
+    }
+
+    return result;
 }
 
 /*
@@ -568,8 +558,8 @@ bool wxAnimationCtrlBase::Create(wxWindow *parent, wxWindowID id,
 
     m_animationPlayer.SetCustomBackgroundColour(GetBackgroundColour());
 
-    // Want to give the impression of transparency by painting
-    // the parent background
+    // give the impression of transparency by painting
+    // with the parent background
 //    if (parent)
 //        m_animationPlayer.UseParentBackground(TRUE);
     m_animationPlayer.SetWindow(this);

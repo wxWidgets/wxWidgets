@@ -17,14 +17,21 @@ class App(wx.App):
     """PyShell standalone application."""
 
     def OnInit(self):
+        import os
         import wx
         from wx import py
-        wx.InitAllImageHandlers()
-        self.frame = py.shell.ShellFrame()
-        self.frame.SetSize((750, 525))
+
+        self.SetAppName("pyshell")
+        confDir = wx.StandardPaths.Get().GetUserDataDir()
+        if not os.path.exists(confDir):
+            os.mkdir(confDir)
+        fileName = os.path.join(confDir, 'config')
+        self.config = wx.FileConfig(localFilename=fileName)
+        self.config.SetRecordDefaults(True)
+
+        self.frame = py.shell.ShellFrame(config=self.config, dataDir=confDir)
         self.frame.Show()
         self.SetTopWindow(self.frame)
-        self.frame.shell.SetFocus()
         return True
 
 '''

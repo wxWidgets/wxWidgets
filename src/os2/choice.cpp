@@ -94,20 +94,26 @@ bool wxChoice::Create(
     {
         Append(asChoices[i]);
     }
-    wxFont*                          pTextFont = new wxFont( 10
-                                                            ,wxMODERN
-                                                            ,wxNORMAL
-                                                            ,wxNORMAL
-                                                           );
-    SetFont(*pTextFont);
     SetSize( rPos.x
             ,rPos.y
             ,rSize.x
             ,rSize.y
            );
-    delete pTextFont;
+
+    // Set height to use with sizers i.e. without the dropdown listbox
+    wxFont vFont = GetFont();
+    int nCx,nCy;
+    wxGetCharSize( GetHWND(), &nCx, &nCy, &vFont );
+    int nEditHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy);
+    SetBestFittingSize(wxSize(-1,nEditHeight));
+
     return true;
 } // end of wxChoice::Create
+
+wxChoice::~wxChoice()
+{
+    Free();
+}
 
 // ----------------------------------------------------------------------------
 // adding/deleting items to/from the list
@@ -274,7 +280,7 @@ wxString wxChoice::GetString(
     nLen = (size_t)LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXTLENGTH, (MPARAM)n, (MPARAM)0));
     if (nLen != LIT_ERROR && nLen > 0)
     {
-        zBuf = new wxChar[nLen + 1];
+        zBuf = new wxChar[++nLen];
         ::WinSendMsg( GetHwnd()
                      ,LM_QUERYITEMTEXT
                      ,MPFROM2SHORT((SHORT)n, (SHORT)nLen)

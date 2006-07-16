@@ -257,7 +257,7 @@ wxPaintDC::~wxPaintDC()
 
         wxCHECK_RET( info, wxT("existing DC should have a cache entry") );
 
-        if ( !--info->count )
+        if ( --info->count == 0 )
         {
             ::EndPaint(GetHwndOf(m_canvas), &g_paintStruct);
 
@@ -342,7 +342,7 @@ wxPaintDCEx::~wxPaintDCEx()
 
     wxCHECK_RET( info, wxT("existing DC should have a cache entry") );
 
-    if ( !--info->count )
+    if ( --info->count == 0 )
     {
         RestoreDC((HDC) m_hDC, saveState);
         ms_cache.RemoveAt(index);

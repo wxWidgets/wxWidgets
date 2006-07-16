@@ -40,7 +40,7 @@ src/msw/wince/*.c
 
 include/wx/msw/*.h
 include/wx/msw/*.rc
-include/wx/msw/wx.manifest
+include/wx/msw/*.manifest
 include/wx/msw/ole/*.h
 include/wx/msw/*.cur
 include/wx/msw/*.ico

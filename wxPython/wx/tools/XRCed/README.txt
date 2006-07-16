@@ -7,10 +7,16 @@
 System requirements
 -------------------
 
-XRCed requires wxWindows and wxPython greater or equal to 2.3.3, and 
-Python 2.2 or newer (it may work with earlier version, but was not tested).
+wxPython version must be recent enough to support all features (a warning
+message is shown if not).
 
-wxPython must be compiled with XRC support.
+
+User requirements
+-----------------
+
+To use XRCed it is really important to be familiar with wxWindows class names
+and at least partially with XRC resource format (read
+wxWindows/doc/tech/tn0014.txt for reference).
 
 
 Short manual
@@ -51,8 +57,11 @@ should be "checked" first. This panel can be made separate by unchecking
 All properties can be edited as text, and some are supplied with special
 editing controls.
 
+When no 'Edit' button is provided for editing a property's value, it is
+supposed to be copied verbatim to XRC file.
+
 The names of the properties are exactly as in XRC file, and it's usually not
-hard to guess what they do. XML ID is the name of the window, and must be
+hard to guess what they do. "XML ID" is the name of the window, and must be
 present for top-level windows (though this is not enforced by XRCed).
 
 To display the preview window double-click a top-level object (you should
@@ -61,8 +70,22 @@ from View menu, or press F5. After that, if you select a child object, it
 becomes highlighted, and if you change it, preview is updated when you select
 another item or press Ctrl-R (refresh). To turn off automatic update, toggle
 "View->Auto-refresh" or toolbar auto-refresh button (to the right of the
-refresh button).
+refresh button). If you double-click a non-window object (a button for
+example), then test view is created for a closest ancestor which is a window.
+
+
+Bugs
+----
+
+- Some combinations of parent/child windows are not valid but possible to put
+  into XML tree by using XRCed. Usually this produces a meaningful error
+  message from XRC library when test view is opened.
+
+- Be careful when replacing a non-empty container control with another class,
+  and check parameters which can be copied from the previous object but not
+  valid for the new one. Is it not possible to undo replacement yet.
+
 
 --------------------------------------------------------------------------------
 
-Copyright 2001-2003 Roman Rolinsky <rollrom@xrced.sourceforge.net>
+Copyright 2001-2005 Roman Rolinsky <rollrom@xrced.sourceforge.net>

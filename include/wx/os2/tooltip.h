@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_OS2_TOOLTIP_H_
+#define _WX_OS2_TOOLTIP_H_
+
 class wxToolTip : public wxObject
 {
 public:
@@ -44,3 +47,5 @@ private:
     wxString                        m_sText;           // tooltip text
     wxWindow*                       m_pWindow;         // window we're associated with
 }; // end of CLASS wxToolTip
+
+#endif // _WX_OS2_TOOLTIP_H_

@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_MSW_FDREPDLG_H_
+#define _WX_MSW_FDREPDLG_H_
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "mswfdrepdlg.h"
 #endif
@@ -60,4 +63,4 @@ protected:
     DECLARE_NO_COPY_CLASS(wxFindReplaceDialog)
 };
 
-
+#endif // _WX_MSW_FDREPDLG_H_

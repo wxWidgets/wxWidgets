@@ -23,7 +23,7 @@ class NavCanvas(wx.Panel):
     This is a high level window that encloses the FloatCanvas in a panel
     and adds a Navigation toolbar.
 
-    Copyright: wxWindows Software Foundation (Assigned by: Christopher Barker)
+    Copyright: Christopher Barker)
 
     License: Same as the version of wxPython you are using it with
 
@@ -72,18 +72,18 @@ class NavCanvas(wx.Panel):
         tb = wx.ToolBar(self,-1)
         self.ToolBar = tb
         
-        tb.SetToolBitmapSize((23,23))
+        tb.SetToolBitmapSize((24,24))
         
-        tb.AddTool(ID_POINTER_BUTTON, Resources.GetPointerBitmap(), isToggle=True, shortHelpString = "Pointer")
+        tb.AddTool(ID_POINTER_BUTTON, Resources.getPointerBitmap(), isToggle=True, shortHelpString = "Pointer")
         wx.EVT_TOOL(self, ID_POINTER_BUTTON, self.SetToolMode)
 
-        tb.AddTool(ID_ZOOM_IN_BUTTON, Resources.GetPlusBitmap(), isToggle=True, shortHelpString = "Zoom In")
+        tb.AddTool(ID_ZOOM_IN_BUTTON, Resources.getMagPlusBitmap(), isToggle=True, shortHelpString = "Zoom In")
         wx.EVT_TOOL(self, ID_ZOOM_IN_BUTTON, self.SetToolMode)
         
-        tb.AddTool(ID_ZOOM_OUT_BUTTON, Resources.GetMinusBitmap(), isToggle=True, shortHelpString = "Zoom Out")
+        tb.AddTool(ID_ZOOM_OUT_BUTTON, Resources.getMagMinusBitmap(), isToggle=True, shortHelpString = "Zoom Out")
         wx.EVT_TOOL(self, ID_ZOOM_OUT_BUTTON, self.SetToolMode)
         
-        tb.AddTool(ID_MOVE_MODE_BUTTON, Resources.GetHandBitmap(), isToggle=True, shortHelpString = "Move")
+        tb.AddTool(ID_MOVE_MODE_BUTTON, Resources.getHandBitmap(), isToggle=True, shortHelpString = "Move")
         wx.EVT_TOOL(self, ID_MOVE_MODE_BUTTON, self.SetToolMode)
         
         tb.AddSeparator()

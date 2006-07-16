@@ -32,16 +32,18 @@ _boundMethods = weakref.WeakKeyDictionary()
 
 
 def connect(receiver, signal=Any, sender=Any, weak=True):
-    """Connect receiver to sender for signal.
+    """
+    Connect receiver to sender for signal.
     
-    If sender is Any, receiver will receive signal from any sender.
-    If signal is Any, receiver will receive any signal from sender.
-    If sender is None, receiver will receive signal from Anonymous.
-    If signal is Any and sender is None, receiver will receive any 
-        signal from Anonymous.
-    If signal is Any and sender is Any, receiver will receive any 
-        signal from any sender.
-    If weak is true, weak references will be used."""
+    * If sender is Any, receiver will receive signal from any sender.
+    * If signal is Any, receiver will receive any signal from sender.
+    * If sender is None, receiver will receive signal from Anonymous.
+    * If signal is Any and sender is None, receiver will receive any 
+      signal from Anonymous.
+    * If signal is Any and sender is Any, receiver will receive any 
+      signal from any sender.
+    * If weak is true, weak references will be used.
+    """
     if signal is None:
         raise DispatcherError, 'signal cannot be None'
     if weak:

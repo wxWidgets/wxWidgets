@@ -1,8 +1,14 @@
 #!/bin/bash
 # ----------------------------------------------------------------------
 
+# To Robin: I tried to avoid making any changes to the existing
+# build scripts, but my env requires me to specify Windows paths...
+# if this breaks something at your end, let me know and we can
+# figure out some solution for both of us.
+if [ "$SWIGDIR" = "" ]; then
+  SWIGDIR=$PROJECTS\\SWIG-1.3.27
+fi
 
-FLAGS="USE_SWIG=1 SWIG=$PROJECTS/SWIG-cvs/swig.exe"
 
 #  Use non-default python?
 case $1 in
@@ -10,6 +16,7 @@ case $1 in
     22 | 2.2) VER=22; shift ;;
     23 | 2.3) VER=23; shift ;;
     24 | 2.4) VER=24; shift ;;
+    25 | 2.5) VER=25; shift ;;
 
     *) 	VER=24
 esac
@@ -18,6 +25,22 @@ PYTHON=$TOOLS/python$VER/python.exe
 
 SETUP="$PYTHON -u setup.py"
 $PYTHON -c "import sys;print '\n', sys.version, '\n'"
+
+
+FLAGS="USE_SWIG=1 SWIG=$SWIGDIR\\swig.exe"
+UNIFLAG="UNICODE=1"
+
+for p in $*; do
+    if [ "$p" = "UNICODE=0" -o "$p" = "UNICODE=1" ]; then
+	UNIFLAG=""
+	break
+    fi
+done
+
+FLAGS="$FLAGS $UNIFLAG"
+
+
+
 
 
 
@@ -68,19 +91,19 @@ elif [ "$1" = "a" ]; then
     shift
     CMD=
 
-#     $0 22 d
-#     $0 22 h
-#     $0 22 r
-#     $0 22 d UNICODE=1
-#     $0 22 h UNICODE=1
-#     $0 22 r UNICODE=1
-    
-    $0 23 d
-    $0 23 h
-    $0 23 r
+    $0 23 d UNICODE=0
+    $0 23 h UNICODE=0
+    $0 23 r UNICODE=0
     $0 23 d UNICODE=1
     $0 23 h UNICODE=1
     $0 23 r UNICODE=1
+
+    $0 24 d UNICODE=0
+    $0 24 h UNICODE=0
+    $0 24 r UNICODE=0
+    $0 24 d UNICODE=1
+    $0 24 h UNICODE=1
+    $0 24 r UNICODE=1
 
 
 # "b" --> both debug and hybrid builds

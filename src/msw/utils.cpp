@@ -31,6 +31,7 @@
     #include "wx/log.h"
 #endif  //WX_PRECOMP
 
+#include "wx/msw/registry.h"
 #include "wx/apptrait.h"
 #include "wx/dynlib.h"
 #include "wx/dynload.h"
@@ -278,12 +279,21 @@ bool wxGetUserId(wxChar *WXUNUSED_IN_WINCE(buf),
 }
 
 // Get user name e.g. Julian Smart
-bool wxGetUserName(wxChar *WXUNUSED_IN_WINCE(buf),
-                   int WXUNUSED_IN_WINCE(maxSize))
+bool wxGetUserName(wxChar *buf, int maxSize)
 {
+    wxCHECK_MSG( buf && ( maxSize > 0 ), false,
+                    _T("empty buffer in wxGetUserName") );
 #if defined(__WXWINCE__)
-    // TODO-CE
-    return false;
+    wxLogNull noLog;
+    wxRegKey key(wxRegKey::HKCU, wxT("ControlPanel\\Owner"));
+    if(!key.Open(wxRegKey::Read))
+        return false;
+    wxString name;
+    if(!key.QueryValue(wxT("Owner"),name))
+        return false;
+    wxStrncpy(buf, name.c_str(), maxSize-1);
+    buf[maxSize-1] = _T('\0');
+    return true;
 #elif defined(USE_NET_API)
     CHAR szUserName[256];
     if ( !wxGetUserId(szUserName, WXSIZEOF(szUserName)) )

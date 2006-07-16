@@ -495,6 +495,15 @@ bool wxToolMenuBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
     wxToolBarToolBase *tool = FindById((int)id);
     if ( !tool )
     {
+        if (m_menuBar)
+        {
+            wxMenuItem *item = m_menuBar->FindItem(id);
+            if (item && item->IsCheckable())
+            {
+                item->Toggle();
+            }
+        }
+
         wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
         event.SetEventObject(this);
         event.SetId(id);
@@ -547,7 +556,7 @@ WXLRESULT wxToolMenuBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lP
             break;
     }
 
-    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+    return MSWDefWindowProc(nMsg, wParam, lParam);
 }
 
 

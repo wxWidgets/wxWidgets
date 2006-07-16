@@ -65,7 +65,7 @@ _tiffReadProc(thandle_t handle, tdata_t buf, tsize_t size)
 {
     wxInputStream *stream = (wxInputStream*) handle;
     stream->Read( (void*) buf, (size_t) size );
-    return stream->LastRead();
+    return wx_truncate_cast(tsize_t, stream->LastRead());
 }
 
 tsize_t TIFFLINKAGEMODE
@@ -73,7 +73,7 @@ _tiffWriteProc(thandle_t handle, tdata_t buf, tsize_t size)
 {
     wxOutputStream *stream = (wxOutputStream*) handle;
     stream->Write( (void*) buf, (size_t) size );
-    return stream->LastWrite();
+    return wx_truncate_cast(tsize_t, stream->LastWrite());
 }
 
 toff_t TIFFLINKAGEMODE
@@ -374,7 +374,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     int compression = image->GetOptionInt(wxIMAGE_OPTION_COMPRESSION);
     if ( !compression )
-        compression=COMPRESSION_LZW;
+        compression=COMPRESSION_NONE;
 
     TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, spp);
     TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bpp);

@@ -29,7 +29,7 @@ if [ $KIND = daily ]; then
 	destdir=$UPLOAD_DAILY_ROOT/$DAILY
 	echo "Copying to the starship at $destdir..."
 	ssh $UPLOAD_HOST "mkdir -p $destdir"
-	scp $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+	scp -p $STAGING_DIR/* $UPLOAD_HOST:/$destdir
 	ssh $UPLOAD_HOST "cd $destdir && ls -al"
 
 
@@ -79,7 +79,7 @@ if [ $KIND = release ]; then
 	echo "Copying to the starship..."
 	destdir=$UPLOAD_PREVIEW_ROOT/$VERSION
 	ssh $UPLOAD_HOST "mkdir -p $destdir"
-	scp $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+	scp -p $STAGING_DIR/* $UPLOAD_HOST:/$destdir
 
         # Send email to wxPython-dev
 	DATE=`date`

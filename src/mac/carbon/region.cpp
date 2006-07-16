@@ -279,7 +279,10 @@ wxRect wxRegion::GetBox() const
 // Is region empty?
 bool wxRegion::Empty() const
 {
-    return EmptyRgn( M_REGION ) ;
+    if ( m_refData )
+        return EmptyRgn( M_REGION ) ;
+    else
+        return true ;
 }
 
 const WXHRGN wxRegion::GetWXHRGN() const

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/notebook.cpp
+// Name:        src/msw/notebook.cpp
 // Purpose:     implementation of wxNotebook
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -94,7 +94,7 @@
 static WXFARPROC gs_wndprocNotebookSpinBtn = (WXFARPROC)NULL;
 
 // the pointer to standard tab control wnd proc
-static WXFARPROC gs_wndprocNotebook = (WXFARPROC)NULL; 
+static WXFARPROC gs_wndprocNotebook = (WXFARPROC)NULL;
 
 LRESULT APIENTRY _EXPORT wxNotebookWndProc(HWND hwnd,
                                            UINT message,
@@ -277,19 +277,19 @@ bool wxNotebook::Create(wxWindow *parent,
         style |= wxBORDER_SUNKEN;
 #endif
 
-    // comctl32.dll 6.0 doesn't support non-top tabs with visual styles (the
-    // control is simply not rendered correctly), so disable them in this case
+    if ( (style & (wxNB_TOP | wxNB_BOTTOM | wxNB_LEFT | wxNB_RIGHT)) == 0 )
+        style |= wxNB_TOP;
+
+#if !wxUSE_UXTHEME 
+    // ComCtl32 notebook tabs simply don't work unless they're on top if we have uxtheme, we can
+    // work around it later (after control creation), but if we don't have uxtheme, we have to clear
+    // those styles
     const int verComCtl32 = wxApp::GetComCtl32Version();
     if ( verComCtl32 == 600 )
     {
-        // check if we use themes at all -- if we don't, we're still ok
-#if wxUSE_UXTHEME
-        if ( wxUxThemeEngine::GetIfActive() )
-#endif
-        {
-            style &= ~(wxNB_BOTTOM | wxNB_LEFT | wxNB_RIGHT);
-        }
+        style &= ~(wxNB_BOTTOM | wxNB_LEFT | wxNB_RIGHT);
     }
+#endif //wxUSE_UXTHEME
 
     LPCTSTR className = WC_TABCONTROL;
 
@@ -349,6 +349,22 @@ bool wxNotebook::Create(wxWindow *parent,
     {
         // create backing store
         UpdateBgBrush();
+    }
+    
+    // comctl32.dll 6.0 doesn't support non-top tabs with visual styles (the
+    // control is simply not rendered correctly), so we disable themes
+    // if possible, otherwise we simply clear the styles.
+    // It's probably not possible to have UXTHEME without ComCtl32 6 or better, but lets
+    // check it anyway.
+    const int verComCtl32 = wxApp::GetComCtl32Version();
+    if ( verComCtl32 == 600 ) 
+    {
+        // check if we use themes at all -- if we don't, we're still okay
+        if ( wxUxThemeEngine::GetIfActive() && (style & (wxNB_BOTTOM|wxNB_LEFT|wxNB_RIGHT)))
+        {
+            wxUxThemeEngine::GetIfActive()->SetWindowTheme((HWND)this->GetHandle(), L"", L"");
+            SetBackgroundColour(GetThemeBackgroundColour());    //correct the background color for the new non-themed control
+        }
     }
 #endif // wxUSE_UXTHEME
 
@@ -446,13 +462,28 @@ int wxNotebook::SetSelection(size_t nPage)
 
 bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), false, wxT("notebook page out of range") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), false, wxT("notebook page out of range") );
 
-  TC_ITEM tcItem;
-  tcItem.mask = TCIF_TEXT;
-  tcItem.pszText = (wxChar *)strText.c_str();
+    TC_ITEM tcItem;
+    tcItem.mask = TCIF_TEXT;
+    tcItem.pszText = (wxChar *)strText.c_str();
 
-  return TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
+    if ( !HasFlag(wxNB_MULTILINE) )
+        return TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
+
+    // multiline - we need to set new page size if a line is added or removed
+    int rows = GetRowCount();
+    bool ret = TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
+
+    if ( ret && rows != GetRowCount() )
+    {
+        const wxRect r = GetPageSize();
+        const size_t count = m_pages.Count();
+        for ( size_t page = 0; page < count; page++ )
+            m_pages[page]->SetSize(r);
+    }
+
+    return ret;
 }
 
 wxString wxNotebook::GetPageText(size_t nPage) const
@@ -499,7 +530,7 @@ void wxNotebook::SetImageList(wxImageList* imageList)
 
   if ( imageList )
   {
-    TabCtrl_SetImageList(GetHwnd(), (HIMAGELIST)imageList->GetHIMAGELIST());
+    (void) TabCtrl_SetImageList(GetHwnd(), (HIMAGELIST)imageList->GetHIMAGELIST());
   }
 }
 
@@ -572,13 +603,13 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
     }
     if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
     {
-        sizeTotal.x += tabSize.x + 7;
-        sizeTotal.y += 7;
+        sizeTotal.x += tabSize.x + 8;
+        sizeTotal.y += 8;
     }
     else
     {
-        sizeTotal.x += 7;
-        sizeTotal.y += tabSize.y + 7;
+        sizeTotal.x += 8;
+        sizeTotal.y += tabSize.y + 8;
     }
 
     return sizeTotal;
@@ -816,7 +847,7 @@ LRESULT APIENTRY _EXPORT wxNotebookWndProc(HWND hwnd,
                             hwnd, message, wParam, lParam);
 }
 
- 
+
 
 void wxNotebook::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 {
@@ -833,7 +864,11 @@ void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
     memdc.SelectObject(bmp);
 
     // if there is no special brush just use the solid background colour
+#if wxUSE_UXTHEME
     HBRUSH hbr = (HBRUSH)m_hbrBackground;
+#else
+    HBRUSH hbr = 0;
+#endif    
     wxBrush brush;
     if ( !hbr )
     {

@@ -9,7 +9,7 @@
 
 
 #if defined(_WIN32_WCE)
-    // eVC cause warnings in its own headers: stdlib.h and winnt.h
+    /* eVC cause warnings in its own headers: stdlib.h and winnt.h */
     #pragma warning (disable:4115)
     #pragma warning (disable:4214)
 #endif

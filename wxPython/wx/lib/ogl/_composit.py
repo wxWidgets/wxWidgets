@@ -559,6 +559,18 @@ class CompositeShape(RectangleShape):
         self.RemoveChildFromConstraints(child)
         child.SetParent(None)
 
+    def Delete(self):
+        """
+        Fully disconnect this shape from parents, children, the
+        canvas, etc.
+        """
+        for child in self.GetChildren():
+            self.RemoveChild(child)
+            child.Delete()
+        RectangleShape.Delete(self)
+        self._constraints = [] 
+        self._divisions = []
+
     def DeleteConstraintsInvolvingChild(self, child):
         """This function deletes constraints which mention the given child.
 

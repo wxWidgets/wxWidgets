@@ -1114,7 +1114,7 @@
 // Default is 1 if supported by the compiler (VC++ and recent BC++ only).
 //
 // Recommended setting: 1, set to 0 if your programs never crash
-#define wxUSE_CRASHREPORT 1
+#define wxUSE_CRASHREPORT 0
 
 // ----------------------------------------------------------------------------
 // obsolete settings

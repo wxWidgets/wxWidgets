@@ -1610,15 +1610,16 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
 void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, double angle )
 {
-    if (angle == 0.0)
+    if (!m_window || text.empty())
+        return;
+
+    wxCHECK_RET( Ok(), wxT("invalid window dc") );
+
+    if (wxIsNullDouble(angle))
     {
         DrawText(text, x, y);
         return;
     }
-
-    wxCHECK_RET( Ok(), wxT("invalid window dc") );
-
-    if (!m_window) return;
 
     wxCoord w;
     wxCoord h;

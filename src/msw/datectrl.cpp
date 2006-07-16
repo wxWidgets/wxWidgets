@@ -111,6 +111,7 @@ wxDatePickerCtrl::Create(wxWindow *parent,
             return false;
         }
 
+#if wxUSE_DYNLIB_CLASS
         INITCOMMONCONTROLSEX icex;
         icex.dwSize = sizeof(icex);
         icex.dwICC = ICC_DATE_CLASSES;
@@ -126,6 +127,7 @@ wxDatePickerCtrl::Create(wxWindow *parent,
         }
 
         s_initDone = true;
+#endif
     }
 
 
@@ -275,6 +277,7 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     switch ( hdr->code )
     {
         case DTN_DATETIMECHANGE:
+        {
             NMDATETIMECHANGE *dtch = (NMDATETIMECHANGE *)hdr;
             wxDateTime dt;
             if ( dtch->dwFlags == GDT_VALID )
@@ -286,6 +289,7 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 *result = 0;
                 return true;
             }
+        }
     }
 
     return wxDatePickerCtrlBase::MSWOnNotify(idCtrl, lParam, result);

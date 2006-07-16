@@ -23,17 +23,11 @@ will be created.
 import sys, os, time
 
 KEEP_TEMPS = 1
-ISCC = r"%s\InnoSetup2Ex\ISCC.exe %s"
+# default InnoSetup installer location
+ISCC = r"C:\progra~1\innose~1\ISCC.exe %s"
 
-# see if we can find Inno Setup 4 and use that if so
-USING_INNO4=False
-try:
-    import _winreg as wreg
-    key = wreg.OpenKey(wreg.HKEY_CURRENT_USER, "Software\Bjornar Henden\ISTool4\Prefs")
-    INNO_FOLDER = wreg.QueryValueEx(key,'InnoFolder')[0] 
-    USING_INNO4=True
-except:
-    pass		
+if os.environ.has_key("INNO4"):
+    ISCC = os.environ["INNO4"]
 
 
 #----------------------------------------------------------------------
@@ -112,6 +106,8 @@ Source: "wx\_xrc.pyd";                         DestDir: "{app}\%(PKGDIR)s\wx"; C
 Source: "wx\*.py";                             DestDir: "{app}\%(PKGDIR)s\wx"; Components: core
 Source: "wx\build\*.py";                       DestDir: "{app}\%(PKGDIR)s\wx\build"; Components: core
 Source: "wx\lib\*.py";                         DestDir: "{app}\%(PKGDIR)s\wx\lib"; Components: core
+Source: "wx\lib\analogclock\*.py";             DestDir: "{app}\%(PKGDIR)s\wx\lib\analogclock"; Components: core
+Source: "wx\lib\analogclock\lib_setup\*.py";   DestDir: "{app}\%(PKGDIR)s\wx\lib\analogclock\lib_setup"; Components: core
 Source: "wx\lib\colourchooser\*.py";           DestDir: "{app}\%(PKGDIR)s\wx\lib\colourchooser"; Components: core
 Source: "wx\lib\editor\*.py";                  DestDir: "{app}\%(PKGDIR)s\wx\lib\editor"; Components: core
 Source: "wx\lib\editor\*.txt";                 DestDir: "{app}\%(PKGDIR)s\wx\lib\editor"; Components: core
@@ -146,6 +142,7 @@ Source: "wxPython\tools\*.py";                    DestDir: "{app}\%(PKGDIR)s\wxP
 Source: "src\winxp.manifest";               DestDir: "{code:GetPythonDir}"; DestName: "python.exe.manifest";   Flags: sharedfile; Components:  manifest
 Source: "src\winxp.manifest";               DestDir: "{code:GetPythonDir}"; DestName: "pythonw.exe.manifest";  Flags: sharedfile; Components: manifest
 Source: "wxversion\wxversion.py";           DestDir: "{app}";  Flags: sharedfile;  Components: core
+Source: "wxaddons\*.py";                    DestDir: "{app}\wxaddons";  Flags: sharedfile;  Components: core
 Source: "src\wx.pth";                       DestDir: "{app}";  Flags: sharedfile;  Components: pthfile
 
 %(LOCALE)s
@@ -195,6 +192,10 @@ Type: files; Name: "{app}\%(PKGDIR)s\wx\build\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\build\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\*.pyo";
+Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\analogclock\*.pyc";
+Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\analogclock\*.pyo";
+Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\analogclock\lib_setup\*.pyc";
+Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\analogclock\lib_setup\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\colourchooser\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\colourchooser\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\editor\*.pyc";
@@ -230,6 +231,12 @@ Type: files; Name: "{app}\%(PKGDIR)s\wxPython\lib\mixins\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wxPython\lib\mixins\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wxPython\tools\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wxPython\tools\*.pyo";
+
+Type: files; Name: "{app}\wxversion.pyc";
+Type: files; Name: "{app}\wxversion.pyo";
+
+Type: files; Name: "{app}\%(PKGDIR)s\wxaddons\*.pyc";
+Type: files; Name: "{app}\%(PKGDIR)s\wxaddons\*.pyo";
 
 %(UNINSTALL_BATCH)s
 
@@ -403,7 +410,7 @@ Source: "demo\data\*.mpg";                  DestDir: "{app}\demo\data";
 ;;Source: "demo\dllwidget\makefile.*";        DestDir: "{app}\demo\dllwidget"; 
 
 Source: "licence\*.txt";                    DestDir: "{app}\docs\licence"; 
-Source: "%(WXDIR)s\docs\htmlhelp\wx.chm";   DestDir: "{app}\docs"; 
+;;Source: "%(WXDIR)s\docs\htmlhelp\wx.chm";   DestDir: "{app}\docs"; 
 ;;Source: "%(WXDIR)s\docs\htmlhelp\ogl.chm";  DestDir: "{app}\docs"; 
 Source: "docs\README.txt";                  DestDir: "{app}\docs";  Flags: isreadme; 
 Source: "docs\*.txt";                       DestDir: "{app}\docs"; 
@@ -627,9 +634,8 @@ def main():
     ISSFILE         = "__wxPython.iss"
     ISSDEMOFILE     = "__wxPythonDemo.iss"
     IFSFILE         = "__wxPython.ifs"
-    IFSFILEREF		= "CodeFile = " + IFSFILE
-    if USING_INNO4:
-        IFSFILEREF = ""
+    IFSFILEREF      = "CodeFile = " + IFSFILE
+    IFSFILEREF = ""
     UNINSTALL_BATCH = get_batch_files()
     PKGDIR          = open('src/wx.pth').read()
     LOCALE          = build_locale_string(PKGDIR)
@@ -669,17 +675,11 @@ def main():
     global IFS_Template
     global ISS_DocDemo_Template
 
-    if USING_INNO4:
-        ISS_Template = ISS_Template + "\n[Code]\n" + IFS_Template
+    ISS_Template = ISS_Template + "\n[Code]\n" + IFS_Template
 
     f = open(ISSFILE, "w")
     f.write(ISS_Template % vars())
     f.close()
-
-    if not USING_INNO4:
-        f = open(IFSFILE, "w")
-        f.write(IFS_Template % vars())
-        f.close()
 
     f = open(ISSDEMOFILE, "w")
     f.write(ISS_DocDemo_Template % vars())
@@ -688,16 +688,9 @@ def main():
     TOOLS = os.environ['TOOLS']
     if TOOLS.startswith('/cygdrive'):
         TOOLS = r"c:\TOOLS"  # temporary hack until I convert everything over to bash
-    if USING_INNO4:
-        print "Hello world!"
-        ISCC = os.path.join(INNO_FOLDER, "iscc.exe")
-        ISCC = r'"' + ISCC + '" %s'
-        os.system(ISCC % (ISSFILE))
-        #os.system(ISCC % (ISSDEMOFILE))
-    else:
-        print "not found..."
-        os.system(ISCC % (TOOLS, ISSFILE))
-        os.system(ISCC % (TOOLS, ISSDEMOFILE))
+        
+    os.system(ISCC % (ISSFILE))
+    os.system(ISCC % (ISSDEMOFILE))
     
     if not KEEP_TEMPS:
         time.sleep(1)

@@ -131,6 +131,10 @@ inline wxEventType GtkScrollWinTypeToWx(guint scrollType)
             wxEVT_SCROLLWIN_TOP - wxEVT_SCROLL_TOP;
 }
 
+// Needed for implementing e.g. combobox on wxGTK within a modal dialog.
+void wxAddGrab(wxWindow* window);
+void wxRemoveGrab(wxWindow* window);
+
 #ifdef __WXGTK20__
 // Escapes string so that it is valid Pango markup XML string:
 WXDLLIMPEXP_CORE wxString wxEscapeStringForPangoMarkup(const wxString& str);

@@ -231,6 +231,8 @@ class KeyLog(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
                 if keycode <= 127:
                     keycode = evt.GetKeyCode()
                 keyname = "\"" + unichr(evt.GetUnicodeKey()) + "\""
+                if keycode < 27:
+                    keyname = "Ctrl-%s" % chr(ord('A') + keycode-1)
                 
             elif keycode < 256:
                 if keycode == 0:

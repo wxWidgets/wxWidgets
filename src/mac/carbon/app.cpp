@@ -355,6 +355,146 @@ void wxApp::MacReopenApp()
 }
 
 //----------------------------------------------------------------------
+// Macintosh CommandID support - converting between native and wx IDs
+//----------------------------------------------------------------------
+
+// if no native match they just return the passed-in id
+
+struct IdPair
+{
+    UInt32 macId ;
+    int wxId ;
+} ;
+
+IdPair gCommandIds [] = 
+{
+    { kHICommandCut ,           wxID_CUT } ,
+    { kHICommandCopy ,          wxID_COPY } ,
+    { kHICommandPaste ,         wxID_PASTE } ,
+    { kHICommandSelectAll ,     wxID_SELECTALL } ,
+    { kHICommandClear ,         wxID_CLEAR } ,
+    { kHICommandUndo ,          wxID_UNDO } ,
+    { kHICommandRedo ,          wxID_REDO } ,
+} ;
+
+int wxMacCommandToId( UInt32 macCommandId ) 
+{
+    int wxid = 0 ;
+    
+    if ( macCommandId == kHICommandPreferences || macCommandId == kHICommandQuit || macCommandId == kHICommandAbout  )
+    {
+        switch ( macCommandId )
+        {
+            case kHICommandPreferences :
+                wxid = wxApp::s_macPreferencesMenuItemId ;
+                break ;
+            case kHICommandQuit :
+                wxid = wxApp::s_macExitMenuItemId ;
+                break ;
+            case kHICommandAbout :
+                wxid = wxApp::s_macAboutMenuItemId ;
+                break ;
+        }
+    }
+    else
+    {
+        for ( size_t i = 0 ; i < WXSIZEOF(gCommandIds) ; ++i )
+        {
+            if ( gCommandIds[i].macId == macCommandId )
+            {
+                wxid = gCommandIds[i].wxId ;
+                break ;
+            }
+        }
+    }
+    if ( wxid == 0 )
+        wxid = (int) macCommandId ;
+    
+    return wxid ;
+}
+
+UInt32 wxIdToMacCommand( int wxId ) 
+{
+    UInt32 macId = 0 ;
+    
+    if ( wxId == wxApp::s_macPreferencesMenuItemId )
+        macId = kHICommandPreferences ;
+    else if (wxId == wxApp::s_macExitMenuItemId)
+        macId = kHICommandQuit ;
+    else if (wxId == wxApp::s_macAboutMenuItemId)
+        macId = kHICommandAbout ;
+    else
+    {
+        for ( size_t i = 0 ; i < WXSIZEOF(gCommandIds) ; ++i )
+        {
+            if ( gCommandIds[i].wxId == wxId )
+            {
+                macId = gCommandIds[i].macId ;
+                break ;
+            }
+        }
+    }
+    if ( macId == 0 )
+        macId = (int) wxId ;
+    
+    return macId ;
+}
+
+wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item ) 
+{
+    wxMenu* itemMenu = NULL ;
+    int id = 0 ;
+    
+    // for 'standard' commands which don't have a wx-menu
+    if ( command.commandID == kHICommandPreferences || command.commandID == kHICommandQuit || command.commandID == kHICommandAbout  )
+    {
+        id = wxMacCommandToId( command.commandID ) ;
+        
+        wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
+        if ( mbar )
+        {
+            item = mbar->FindItem( id , &itemMenu ) ;
+        }
+    }
+    else if ( command.commandID != 0 && command.menu.menuRef != 0 && command.menu.menuItemIndex != 0 )
+    {
+        id = wxMacCommandToId( command.commandID ) ;
+        // make sure it is one of our own menus, or of the 'synthetic' apple and help menus , otherwise don't touch
+        MenuItemIndex firstUserHelpMenuItem ;
+        static MenuHandle mh = NULL ;
+        if ( mh == NULL )
+        {
+            if ( UMAGetHelpMenu( &mh , &firstUserHelpMenuItem) != noErr )
+            {
+                mh = NULL ;
+            }
+        }
+        
+        // is it part of the application or the help menu, then look for the id directly
+        if ( ( GetMenuHandle( kwxMacAppleMenuId ) != NULL && command.menu.menuRef == GetMenuHandle( kwxMacAppleMenuId ) ) ||
+             ( mh != NULL && command.menu.menuRef == mh ) )
+        {
+            wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
+            if ( mbar )
+            {
+                item = mbar->FindItem( id , &itemMenu ) ;
+            }
+        }
+        else
+        {
+            UInt32 refCon ;
+            GetMenuItemRefCon( command.menu.menuRef , command.menu.menuItemIndex , &refCon ) ;
+            itemMenu = wxFindMenuFromMacMenu( command.menu.menuRef ) ;
+            if ( itemMenu != NULL )
+            {
+                item = (wxMenuItem*) refCon ;
+            }
+        }
+    }
+    return itemMenu ;
+}
+
+//----------------------------------------------------------------------
 // Carbon Event Handler
 //----------------------------------------------------------------------
 
@@ -442,42 +582,69 @@ static pascal OSStatus wxMacAppCommandEventHandler( EventHandlerCallRef handler 
     cEvent.GetParameter<HICommand>(kEventParamDirectObject,typeHICommand,&command) ;
 
     wxMenuItem* item = NULL ;
-    MenuCommand id = command.commandID ;
-    // for items we don't really control
-    if ( id == kHICommandPreferences )
-    {
-        id = wxApp::s_macPreferencesMenuItemId ;
-
-        wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
-        if ( mbar )
-        {
-            wxMenu* menu = NULL ;
-            item = mbar->FindItem( id , &menu ) ;
-        }
-    }
-    else if ( id != 0 && command.menu.menuRef != 0 && command.menu.menuItemIndex != 0 )
-    {
-        GetMenuItemRefCon( command.menu.menuRef , command.menu.menuItemIndex , (UInt32*) &item ) ;
-    }
+    wxMenu* itemMenu = wxFindMenuFromMacCommand( command , item ) ;
+    int id = wxMacCommandToId( command.commandID ) ;
 
     if ( item )
     {
-       switch( cEvent.GetKind() )
-       {
-           case kEventProcessCommand :
-           {
+        wxASSERT( itemMenu != NULL ) ;
+        
+        switch( cEvent.GetKind() )
+        {
+            case kEventProcessCommand :
+            {
                 if (item->IsCheckable())
-                {
                     item->Check( !item->IsChecked() ) ;
-                }
 
-                item->GetMenu()->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
-                result = noErr ;
+                if ( itemMenu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) )
+                    result = noErr ;
             }
             break ;
         case kEventCommandUpdateStatus:
-            // eventually trigger an updateui round
-            result = noErr ;
+            {
+                wxUpdateUIEvent event(id);
+                event.SetEventObject( itemMenu );
+                                
+                bool processed = false;
+                
+                // Try the menu's event handler
+                {
+                    wxEvtHandler *handler = itemMenu->GetEventHandler();
+                    if ( handler )
+                        processed = handler->ProcessEvent(event);
+                }
+                
+                // Try the window the menu was popped up from (and up through the
+                // hierarchy)
+                if ( !processed )
+                {
+                    const wxMenuBase *menu = itemMenu;
+                    while ( menu )
+                    {
+                        wxWindow *win = menu->GetInvokingWindow();
+                        if ( win )
+                        {
+                            processed = win->GetEventHandler()->ProcessEvent(event);
+                            break;
+                        }
+                        
+                        menu = menu->GetParent();
+                    }
+                }
+                
+                if ( processed )
+                {
+                    // if anything changed, update the changed attribute
+                    if (event.GetSetText())
+                        itemMenu->SetLabel(id, event.GetText());
+                    if (event.GetSetChecked())
+                        itemMenu->Check(id, event.GetChecked());
+                    if (event.GetSetEnabled())
+                        itemMenu->Enable(id, event.GetEnabled());
+
+                    result = noErr ;
+                }
+            }
             break ;
         default :
             break ;
@@ -1277,6 +1444,33 @@ bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
 #endif
 
 
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+
+    wxPoint pt = wxGetMousePosition();
+    ms.SetX(pt.x);
+    ms.SetY(pt.y);
+
+#ifdef __DARWIN__
+    UInt32 buttons = GetCurrentButtonState();
+    ms.SetLeftDown( (buttons & 0x01) != 0 );
+    ms.SetMiddleDown( (buttons & 0x04) != 0 );
+    ms.SetRightDown( (buttons & 0x02) != 0 );
+#else
+    ms.SetLeftDown( Button() ) ;
+#endif
+    
+    UInt32 modifiers = GetCurrentKeyModifiers();
+    ms.SetControlDown(modifiers & controlKey);
+    ms.SetShiftDown(modifiers & shiftKey);
+    ms.SetAltDown(modifiers & optionKey);
+    ms.SetMetaDown(modifiers & cmdKey);
+
+    return ms;
+}
+
+
 bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar  )
 {
     if ( !focus )
@@ -1377,6 +1571,8 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     }
 #endif // wxUSE_ACCEL
 
+#if !TARGET_API_MAC_OSX
+
     if (!handled)
     {
         wxTopLevelWindowMac *tlw = focus->MacGetTopLevelWindow() ;
@@ -1454,6 +1650,7 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
             }
           }
     }
+#endif
     return handled ;
 }
 
@@ -1536,3 +1733,165 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
 
     return handled ;
 }
+
+bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+{
+    if ( !focus )
+        return false ;
+    
+    wxKeyEvent event(wxEVT_CHAR) ;
+    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
+    long keyval = event.m_keyCode ;
+
+    bool handled = false ;
+
+    wxTopLevelWindowMac *tlw = focus->MacGetTopLevelWindow() ;
+        
+    if (tlw)
+    {
+        event.SetEventType( wxEVT_CHAR_HOOK );
+        handled = tlw->GetEventHandler()->ProcessEvent( event );
+        if ( handled && event.GetSkipped() )
+            handled = false ;
+    }
+
+    if ( !handled )
+    {
+        event.SetEventType( wxEVT_CHAR );
+        event.Skip( false ) ;
+        handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+    }
+        
+    if ( !handled && (keyval == WXK_TAB) )
+    {
+        wxWindow* iter = focus->GetParent() ;
+        while ( iter && !handled )
+        {
+            if ( iter->HasFlag( wxTAB_TRAVERSAL ) )
+            {
+                wxNavigationKeyEvent new_event;
+                new_event.SetEventObject( focus );
+                new_event.SetDirection( !event.ShiftDown() );
+                /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
+                new_event.SetWindowChange( event.ControlDown() );
+                new_event.SetCurrentFocus( focus );
+                handled = focus->GetParent()->GetEventHandler()->ProcessEvent( new_event );
+                if ( handled && new_event.GetSkipped() )
+                    handled = false ;
+            }
+
+            iter = iter->GetParent() ;
+        }
+    }
+
+    // backdoor handler for default return and command escape
+    if ( !handled && (!focus->IsKindOf(CLASSINFO(wxControl) ) || !focus->MacCanFocus() ) )
+    {
+        // if window is not having a focus still testing for default enter or cancel
+        // TODO: add the UMA version for ActiveNonFloatingWindow
+        wxWindow* focus = wxFindWinFromMacWindow( FrontWindow() ) ;
+        if ( focus )
+        {
+            if ( keyval == WXK_RETURN )
+            {
+                wxButton *def = wxDynamicCast(focus->GetDefaultItem(), wxButton);
+                if ( def && def->IsEnabled() )
+                {
+                    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+                    event.SetEventObject(def);
+                    def->Command(event);
+
+                    return true ;
+                }
+            }
+            else if (keyval == WXK_ESCAPE || (keyval == '.' && modifiers & cmdKey ) )
+            {
+                // generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs)
+                wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+                new_event.SetEventObject( focus );
+                handled = focus->GetEventHandler()->ProcessEvent( new_event );
+            }
+        }
+    }
+    return handled ;
+}
+
+// This method handles common code for SendKeyDown, SendKeyUp, and SendChar events. 
+void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+{
+    short keycode, keychar ;
+
+    keychar = short(keymessage & charCodeMask);
+    keycode = short(keymessage & keyCodeMask) >> 8 ;
+    if ( !(event.GetEventType() == wxEVT_CHAR) && (modifiers & (controlKey | shiftKey | optionKey) ) )
+    {
+        // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
+        // and look at the character after
+        UInt32 state = 0;
+        UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~(controlKey | shiftKey | optionKey))) | keycode, &state);
+        keychar = short(keyInfo & charCodeMask);
+    }
+
+    long keyval = wxMacTranslateKey(keychar, keycode) ;
+    if ( keyval == keychar && ( event.GetEventType() == wxEVT_KEY_UP || event.GetEventType() == wxEVT_KEY_DOWN ) )
+        keyval = wxToupper( keyval ) ;
+
+    // Check for NUMPAD keys
+    if (keyval >= '0' && keyval <= '9' && keycode >= 82 && keycode <= 92)
+    {
+        keyval = (keyval - '0') + WXK_NUMPAD0;
+    }
+    else if (keycode >= 67 && keycode <= 81)
+    {
+        switch (keycode)
+        {
+        case 76 :
+            keyval = WXK_NUMPAD_ENTER;
+            break;
+
+        case 81:
+            keyval = WXK_NUMPAD_EQUAL;
+            break;
+
+        case 67:
+            keyval = WXK_NUMPAD_MULTIPLY;
+            break;
+
+        case 75:
+            keyval = WXK_NUMPAD_DIVIDE;
+            break;
+
+        case 78:
+            keyval = WXK_NUMPAD_SUBTRACT;
+            break;
+
+        case 69:
+            keyval = WXK_NUMPAD_ADD;
+            break;
+
+        case 65:
+            keyval = WXK_NUMPAD_DECIMAL;
+            break;
+
+        default:
+            break;
+        } // end switch
+    }
+
+    event.m_shiftDown = modifiers & shiftKey;
+    event.m_controlDown = modifiers & controlKey;
+    event.m_altDown = modifiers & optionKey;
+    event.m_metaDown = modifiers & cmdKey;
+    event.m_keyCode = keyval ;
+#if wxUSE_UNICODE
+    event.m_uniChar = uniChar ;
+#endif
+
+    event.m_rawCode = keymessage;
+    event.m_rawFlags = modifiers;
+    event.m_x = wherex;
+    event.m_y = wherey;
+    event.SetTimestamp(when);
+    event.SetEventObject(focus);
+}
+

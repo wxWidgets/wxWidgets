@@ -55,7 +55,20 @@ enum wxMediaState
     wxMEDIASTATE_PLAYING=0
 };
 
+enum wxMediaCtrlPlayerControls
+{
+    wxMEDIACTRLPLAYERCONTROLS_NONE,
+    wxMEDIACTRLPLAYERCONTROLS_STEP,
+    wxMEDIACTRLPLAYERCONTROLS_VOLUME,
+    wxMEDIACTRLPLAYERCONTROLS_DEFAULT
+};
 
+static wxString wxMEDIABACKEND_DIRECTSHOW(wxEmptyString);
+static wxString wxMEDIABACKEND_MCI       (wxEmptyString);
+static wxString wxMEDIABACKEND_QUICKTIME (wxEmptyString);
+static wxString wxMEDIABACKEND_GSTREAMER (wxEmptyString);
+
+    
 class wxMediaEvent : public wxNotifyEvent
 {
 public:
@@ -89,9 +102,6 @@ public:
     bool Pause() { return false; }
     bool Stop() { return false; }
 
-    bool Load(const wxString& fileName) { return false; }
-    bool Load(const wxURI& location) { return false; }
-
     wxMediaState GetState() { return wxMEDIASTATE_STOPPED; }
 
     double GetPlaybackRate()  { return 0.0; }
@@ -105,10 +115,19 @@ public:
 
     double GetVolume() { return 0.0; }
     bool   SetVolume(double dVolume) { return false; }
+
+    bool    ShowPlayerControls(
+        wxMediaCtrlPlayerControls flags = wxMEDIACTRLPLAYERCONTROLS_DEFAULT)
+        { return false; }
+
+    bool Load(const wxString& fileName) { return false; }
+    bool LoadURI(const wxString& fileName) { return false; }
+    bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy) { return false; }
 };
 
 const wxEventType wxEVT_MEDIA_FINISHED = 0;
 const wxEventType wxEVT_MEDIA_STOP = 0;
+const wxEventType wxEVT_MEDIA_LOADED = 0;
 
 #endif
 %}
@@ -125,10 +144,19 @@ enum wxMediaState
 };
 
 
+enum wxMediaCtrlPlayerControls
+{
+    wxMEDIACTRLPLAYERCONTROLS_NONE,
+    wxMEDIACTRLPLAYERCONTROLS_STEP,
+    wxMEDIACTRLPLAYERCONTROLS_VOLUME,
+    wxMEDIACTRLPLAYERCONTROLS_DEFAULT
+};
 
-// MAKE_CONST_WXSTRING(MEDIABACKEND_DIRECTSHOW);
-// MAKE_CONST_WXSTRING(MEDIABACKEND_MCI       );
-// MAKE_CONST_WXSTRING(MEDIABACKEND_QUICKTIME );
+
+MAKE_CONST_WXSTRING(MEDIABACKEND_DIRECTSHOW);
+MAKE_CONST_WXSTRING(MEDIABACKEND_MCI       );
+MAKE_CONST_WXSTRING(MEDIABACKEND_QUICKTIME );
+MAKE_CONST_WXSTRING(MEDIABACKEND_GSTREAMER );
 
 //---------------------------------------------------------------------------
 
@@ -180,16 +208,6 @@ public:
     bool Pause();
     bool Stop();
 
-    double GetVolume();                 //DirectShow only
-    bool   SetVolume(double dVolume);   //DirectShow only
-
-    bool Load(const wxString& fileName);
-    %extend {
-        bool LoadFromURI(const wxString& location) {
-            return self->Load(wxURI(location));
-        }
-    }
-
     wxMediaState GetState();
 
     double GetPlaybackRate();
@@ -198,16 +216,29 @@ public:
     wxFileOffset Seek(wxFileOffset where, wxSeekMode mode = wxFromStart);    
     wxFileOffset Tell();
     wxFileOffset Length();
+
+    double GetVolume();
+    bool   SetVolume(double dVolume);
+
+    bool    ShowPlayerControls(
+        wxMediaCtrlPlayerControls flags = wxMEDIACTRLPLAYERCONTROLS_DEFAULT);
+
+    bool Load(const wxString& fileName);
+    bool LoadURI(const wxString& fileName);
+    bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy);
+    %pythoncode { LoadFromURI = LoadURI }
 };
 
 
 
 %constant wxEventType wxEVT_MEDIA_FINISHED;
 %constant wxEventType wxEVT_MEDIA_STOP;
+%constant wxEventType wxEVT_MEDIA_LOADED;
 
 %pythoncode {
 EVT_MEDIA_FINISHED = wx.PyEventBinder( wxEVT_MEDIA_FINISHED, 1)
 EVT_MEDIA_STOP     = wx.PyEventBinder( wxEVT_MEDIA_STOP, 1)
+EVT_MEDIA_LOADED   = wx.PyEventBinder( wxEVT_MEDIA_LOADED, 1)    
 }    
 
 //---------------------------------------------------------------------------

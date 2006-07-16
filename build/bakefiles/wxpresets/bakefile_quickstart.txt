@@ -59,6 +59,34 @@ In a standard install, you need not do anything so long as wx-config is on
 your PATH. wx-config is all you need. (See the section of the book on using
 wx-config for more information.)
 
+~~~~~~~~~~~~~~
+UNIX NOTES: If you are using wxpresets on Unix, and you are linking against 
+third-party wx components, or if you are using multi-lib builds and link against 
+non-core libs (e.g. media, gl, adv), you currently need to take special steps
+on Unix.
+
+a) To link against third-party wx components, add the following line to your 
+bakefile, right above the <exe> target. 
+
+<set var="BEFORE_WX_LIBS">-lmywxlib</set>
+
+Where "mywxlib" is the name of the library you want to link against. Make sure
+that the library is on your linker path.
+
+b) To link against non-core libs, add the following line to your bakefile, 
+right above the <exe> target:
+
+<set var="BEFORE_WX_LIBS">`$(DOLLAR)(WX_CONFIG) --libs mylib`</set>
+
+Where 'mylib' is the base name of the non-core library you want to link against,
+and insert the results into the <ldlibs> tag. For more information, please
+see the Bakefile manual.
+
+If you have multiple libs, or combinations, just make sure they appear in <set>
+tag and are in the right order. We hope in future releases to have a simpler 
+solution to these issues. 
+~~~~~~~~~~~~~~
+
 -- A Sample wx Project Bakefile --
 
 Now that everything is setup, it's time to take Bakefile for a test run. I

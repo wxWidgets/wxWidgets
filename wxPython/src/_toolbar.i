@@ -380,6 +380,8 @@ public:
 
     // return True if this is a vertical toolbar, otherwise False
     bool IsVertical();
+
+    size_t GetToolsCount() const;
 };
 
 

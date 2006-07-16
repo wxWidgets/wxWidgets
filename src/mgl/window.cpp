@@ -76,6 +76,8 @@ static wxWindowMGL *gs_mouseCapture = NULL;
 // the frame that is currently active (i.e. its child has focus). It is
 // used to generate wxActivateEvents
 static wxWindowMGL *gs_activeFrame = NULL;
+// track the mouse button state for wxGetMouseState()
+unsigned long g_buttonState = 0;
 
 // ---------------------------------------------------------------------------
 // constants
@@ -153,6 +155,8 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
     wxWindowMGL *win = (wxWindowMGL*)MGL_wmGetWindowUserData(wnd);
     wxPoint orig(win->GetClientAreaOrigin());
     wxPoint where;
+
+    g_buttonState = e->modifiers;
 
     MGL_wmCoordGlobalToLocal(win->GetHandle(),
                              e->where_x, e->where_y, &where.x, &where.y);
@@ -300,25 +304,25 @@ static long wxScanToKeyCode(event_t *event, bool translate)
 
     if ( translate )
     {
+        bool numlock = (event->modifiers & EVT_NUMLOCK) != 0;
+
         switch ( EVT_scanCode(event->message) )
         {
             KEY (KB_padMinus,       WXK_NUMPAD_SUBTRACT)
             KEY (KB_padPlus,        WXK_NUMPAD_ADD)
             KEY (KB_padTimes,       WXK_NUMPAD_MULTIPLY)
             KEY (KB_padDivide,      WXK_NUMPAD_DIVIDE)
-            KEY (KB_padCenter,      WXK_NUMPAD_SEPARATOR) // ?
-            KEY (KB_padLeft,        WXK_NUMPAD_LEFT)
-            KEY (KB_padRight,       WXK_NUMPAD_RIGHT)
-            KEY (KB_padUp,          WXK_NUMPAD_UP)
-            KEY (KB_padDown,        WXK_NUMPAD_DOWN)
-            KEY (KB_padInsert,      WXK_NUMPAD_INSERT)
-            KEY (KB_padDelete,      WXK_NUMPAD_DELETE)
-            KEY (KB_padHome,        WXK_NUMPAD_HOME)
-            KEY (KB_padEnd,         WXK_NUMPAD_END)
-            KEY (KB_padPageUp,      WXK_NUMPAD_PAGEUP)
-          //KEY (KB_padPageUp,      WXK_NUMPAD_PRIOR)
-            KEY (KB_padPageDown,    WXK_NUMPAD_PAGEDOWN)
-          //KEY (KB_padPageDown,    WXK_NUMPAD_NEXT)
+            KEY (KB_padCenter,      numlock ? WXK_NUMPAD5 : WXK_NUMPAD_SEPARATOR) // ?
+            KEY (KB_padLeft,        numlock ? WXK_NUMPAD4 : WXK_NUMPAD_LEFT)
+            KEY (KB_padRight,       numlock ? WXK_NUMPAD6 : WXK_NUMPAD_RIGHT)
+            KEY (KB_padUp,          numlock ? WXK_NUMPAD8 : WXK_NUMPAD_UP)
+            KEY (KB_padDown,        numlock ? WXK_NUMPAD2 : WXK_NUMPAD_DOWN)
+            KEY (KB_padInsert,      numlock ? WXK_NUMPAD0 : WXK_NUMPAD_INSERT)
+            KEY (KB_padDelete,      numlock ? WXK_DECIMAL : WXK_NUMPAD_DELETE)
+            KEY (KB_padHome,        numlock ? WXK_NUMPAD7 : WXK_NUMPAD_HOME)
+            KEY (KB_padEnd,         numlock ? WXK_NUMPAD1 : WXK_NUMPAD_END)
+            KEY (KB_padPageUp,      numlock ? WXK_NUMPAD9 : WXK_NUMPAD_PAGEUP)
+            KEY (KB_padPageDown,    numlock ? WXK_NUMPAD3 : WXK_NUMPAD_PAGEDOWN)
             KEY (KB_1,              '1')
             KEY (KB_2,              '2')
             KEY (KB_3,              '3')
@@ -1156,7 +1160,7 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
     {
         dc->setColorRGB(255,0,255);
         dc->fillRect(-1000,-1000,2000,2000);
-        wxUsleep(50);
+        wxMilliSleep(50);
     }
 #endif
 

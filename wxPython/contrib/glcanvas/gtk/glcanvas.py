@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 """
@@ -179,5 +179,6 @@ def GLCanvasWithContext(*args, **kwargs):
     val.thisown = 1
     val._setOORInfo(val)
     return val
+
 
 

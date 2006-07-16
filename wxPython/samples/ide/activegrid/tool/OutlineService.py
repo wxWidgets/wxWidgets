@@ -147,7 +147,11 @@ class OutlineView(Service.ServiceView):
             return
 
         treeCtrl = self.GetControl()
+        
         parentItem = treeCtrl.GetRootItem()
+        if not parentItem:
+            return
+            
         if expanded[0] != treeCtrl.GetItemText(parentItem):
             return
 
@@ -157,8 +161,7 @@ class OutlineView(Service.ServiceView):
                 treeCtrl.Expand(child)
             (child, cookie) = treeCtrl.GetNextChild(parentItem, cookie)
 
-        if parentItem:
-            treeCtrl.EnsureVisible(parentItem)
+        treeCtrl.EnsureVisible(parentItem)
 
 
 class OutlineTreeCtrl(wx.TreeCtrl):
@@ -267,7 +270,7 @@ class OutlineTreeCtrl(wx.TreeCtrl):
 
         if self.ItemHasChildren(item):
             child, cookie = self.GetFirstChild(item)
-            while child and child.IsOk():
+            while child.IsOk():
                 self.FindDistanceToTreeItems(child, position, distances, items)
                 child, cookie = self.GetNextChild(item, cookie)
         return False
@@ -321,7 +324,7 @@ class OutlineService(Service.Service):
 
     def __init__(self, serviceName, embeddedWindowLocation = wx.lib.pydocview.EMBEDDED_WINDOW_BOTTOM):
         Service.Service.__init__(self, serviceName, embeddedWindowLocation)
-        self._validTemplates = []
+        self._validViewTypes = []
 
 
     def _CreateView(self):
@@ -493,9 +496,8 @@ class OutlineService(Service.Service):
         if self.GetView():
             currView = wx.GetApp().GetDocumentManager().GetCurrentView()
             if currView:
-                for template in self._validTemplates:
-                    type = template.GetViewType()
-                    if isinstance(currView, type):
+                for viewType in self._validViewTypes:
+                    if isinstance(currView, viewType):
                         self.LoadOutline(currView)
                         foundRegisteredView = True
                         break
@@ -506,14 +508,14 @@ class OutlineService(Service.Service):
         self._timer.Start(1000) # 1 second interval
 
 
-    def AddTemplateForBackgroundHandler(self, template):
-        self._validTemplates.append(template)
+    def AddViewTypeForBackgroundHandler(self, viewType):
+        self._validViewTypes.append(viewType)
 
 
-    def GetTemplatesForBackgroundHandler(self):
-        return self._validTemplates
+    def GetViewTypesForBackgroundHandler(self):
+        return self._validViewTypes
 
 
-    def RemoveTemplateForBackgroundHandler(self, template):
-        self._validTemplates.remove(template)
+    def RemoveViewTypeForBackgroundHandler(self, viewType):
+        self._validViewTypes.remove(viewType)
 

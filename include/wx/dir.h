@@ -16,9 +16,7 @@
     #pragma interface "dir.h"
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/string.h"
-#endif
+#include "wx/string.h"
 
 class WXDLLIMPEXP_BASE wxArrayString;
 

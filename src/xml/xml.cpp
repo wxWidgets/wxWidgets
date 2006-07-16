@@ -691,7 +691,7 @@ static void OutputNode(wxOutputStream& stream, wxXmlNode *node, int indent,
             {
                 OutputString(stream, wxT(" ") + prop->GetName() +  wxT("=\""),
                              NULL, NULL);
-                OutputStringEnt(stream, prop->GetValue(), NULL, NULL,
+                OutputStringEnt(stream, prop->GetValue(), convMem, convFile,
                                 true/*escapeQuotes*/);
                 OutputString(stream, wxT("\""), NULL, NULL);
                 prop = prop->GetNext();

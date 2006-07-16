@@ -351,7 +351,7 @@ instructions: </p>
 
 <p><b>SuperDoodle</b> and <b>wxPython</b> are brought to you by
 <b>Robin Dunn</b> and <b>Total Control Software</b>, Copyright
-&copy; 1997-2003.</p>
+&copy; 1997-2006.</p>
 </body>
 </html>
 '''

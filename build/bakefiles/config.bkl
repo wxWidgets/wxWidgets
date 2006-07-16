@@ -5,6 +5,29 @@
 
     <set var="BUILDING_LIB" overwrite="0">0</set>
 
+    <set var="CPP_DEFAULT_VALUE">
+        <if cond="FORMAT=='borland'">
+            cpp32 -Sr -oCON
+        </if>
+        <if cond="FORMAT=='mingw'">
+            $(DOLLAR)(CC) -E
+        </if>
+        <if cond="FORMAT=='msvc'">
+            $(DOLLAR)(CC) /EP /nologo
+        </if>
+        <if cond="FORMAT=='watcom'">
+            $(DOLLAR)(CC) -p
+        </if>
+    </set>
+    <option name="CPP">
+        <default-value>
+            $(CPP_DEFAULT_VALUE)
+        </default-value>
+        <description>
+            The C preprocessor
+        </description>
+    </option>
+
     <option name="SHARED">
         <values>0,1</values>
         <values-description>,DLL</values-description>
@@ -53,6 +76,23 @@
             Type of compiled binaries
         </description>
     </option>
+
+    <if cond="FORMAT=='msvc'">
+        <option name="TARGET_CPU">
+            <values>AMD64,IA64</values>
+            <default-value>$(DOLLAR)(CPU)</default-value>
+            <description>
+The target processor architecture must be specified when it is not X86.
+This does not affect the compiler output, so you still need to make sure
+your environment is set up appropriately with the correct compiler in the
+PATH. Rather it affects some options passed to some of the common build
+utilities such as the resource compiler and the linker.
+            </description>
+        </option>
+    </if>
+    <if cond="FORMAT!='msvc'">
+        <set var="TARGET_CPU"/>
+    </if>
 
     <!-- FIXME: restore this once bakefile is fixed to not use
                 /Gm /GZ (incompatible with /O2) w/ debug-info -->

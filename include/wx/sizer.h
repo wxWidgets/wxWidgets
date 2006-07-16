@@ -248,6 +248,10 @@ public:
     void Show(bool show);
     bool IsShown() const;
 
+#if wxABI_VERSION > 20602
+    void SetUserData(wxObject* userData)
+        { delete m_userData; m_userData = userData; }
+#endif
     wxObject* GetUserData() const
         { return m_userData; }
     wxPoint GetPosition() const

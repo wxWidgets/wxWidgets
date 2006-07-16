@@ -3,7 +3,7 @@
 # Ported From Jorgen Bodde & Julian Smart (Extended Demo) C++ Code By:
 #
 # Andrea Gavana, @ 23 Mar 2005
-# Latest Revision: 28 Mar 2005, 22.30 CET
+# Latest Revision: 05 Nov 2005, 23.30 CET
 #
 #
 # TODO List
@@ -30,9 +30,14 @@
 # TODO: A Smart Way To Check Wether The Old - New Width Of The
 # Panel Changed, If So No Need To Resize The Fold Panel Items
 #
-# 5. Implementing Styles Like FPB_SINGLE_FOLD and FPB_EXCLUSIVE_FOLD
-# TODO: Jorgen Has Left Undone These Jobs. I Don't Really Get What They
-# Should Supposed To Do, So If Someone Could Enlight Me, Please Let Me Know.
+#
+# DONE List:
+#
+# 1. Implemented Styles Like FPB_SINGLE_FOLD and FPB_EXCLUSIVE_FOLD
+# Thanks To E. A. Tacao For His Nice Suggestions.
+#
+# 2. Added Some Maquillage To FoldPanelBar: When The Mouse Enters The Icon
+# Region, It Is Changed To wx.CURSOR_HAND.
 #
 #
 # For The Original TODO List From Jorgen, Please Refer To:
@@ -106,7 +111,8 @@ FoldPanelBar is supported on the following platforms:
   * Mac OSX (Thanks To Robin Dunn For The CaptionBar Size Patch)
 
 
-Latest Revision: Andrea Gavana @ 30 Mar 2005, 22.30 CET
+FoldPanelBar is based upon Jorgen Bodde's C++ implementation.
+Latest Revision: Andrea Gavana @ 05 Nov 2005, 23.30 CET
 
 """
 
@@ -179,7 +185,7 @@ FPB_EXTRA_Y = 4
 # pixels of the bmp to be aligned from the right filled with space
 FPB_BMP_RIGHTSPACE = 2
 
-# Not yet supported but added for future reference. Single fold forces
+# Now supported! Single fold forces
 # other panels to close when they are open, and only opens the current panel.
 # This will allow the open panel to gain the full size left in the client area
 FPB_SINGLE_FOLD = 0x0001
@@ -188,9 +194,9 @@ FPB_SINGLE_FOLD = 0x0001
 # show up at the top
 FPB_COLLAPSE_TO_BOTTOM = 0x0002
 
-# Not yet supported, but added for future reference. Single fold plus panels
+# Now supported! Single fold plus panels
 # will be stacked at the bottom
-FPB_EXCLUSIVE_FOLD = FPB_SINGLE_FOLD | FPB_COLLAPSE_TO_BOTTOM
+FPB_EXCLUSIVE_FOLD = 0x0004
 
 # Orientation Flag 
 FPB_HORIZONTAL = wx.HORIZONTAL
@@ -496,7 +502,7 @@ class CaptionBar(wx.Window):
                  iconWidth=16, iconHeight=16, collapsed=False):
         """ Default Class Constructor."""
         
-        wx.Window.__init__(self, parent, wx.ID_ANY, pos=wx.DefaultPosition,
+        wx.Window.__init__(self, parent, wx.ID_ANY, pos=pos,
                            size=(20,20), style=wx.NO_BORDER)
 
         self._controlCreated = False
@@ -669,12 +675,13 @@ class CaptionBar(wx.Window):
         dc = wx.PaintDC(self)
         wndRect = self.GetRect()
         vertical = self.IsVertical()
-
+        
         # TODO: Maybe first a memory DC should draw all, and then paint it on
         # the caption. This way a flickering arrow during resize is not visible
         
         self.FillCaptionBackground(dc)
         dc.SetFont(self._style.GetCaptionFont())
+        dc.SetTextForeground(self._style.GetCaptionColour())
 
         if vertical:
             dc.DrawText(self._caption, 4, FPB_EXTRA_Y/2)
@@ -734,27 +741,52 @@ class CaptionBar(wx.Window):
         """
         Catches the mouse click-double click.
         
-        If clicked on the arrow (single) or double on the caption we
-        change state and an event must be fired to let this panel
-        collapse or expand.
+        If clicked on the arrow (single) or double on the caption we change state
+        and an event must be fired to let this panel collapse or expand.
         """
-        
-        send_event = False
 
+        send_event = False
+        vertical = self.IsVertical()
+        
         if event.LeftDown() and self._foldIcons:
 
             pt = event.GetPosition()
             rect = self.GetRect()
-            vertical = self.IsVertical()
-
+            
             drw = (rect.GetWidth() - self._iconWidth - self._rightIndent)
             if vertical and pt.x > drw or not vertical and \
                pt.y < (self._iconHeight + self._rightIndent):
                 send_event = True
 
         elif event.LeftDClick():
+            self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
             send_event = True
 
+        elif event.Entering() and self._foldIcons:
+            pt = event.GetPosition()
+            rect = self.GetRect()
+
+            drw = (rect.GetWidth() - self._iconWidth - self._rightIndent)
+            if vertical and pt.x > drw or not vertical and \
+               pt.y < (self._iconHeight + self._rightIndent):
+                self.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
+            else:
+                self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
+
+        elif event.Leaving():
+            self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
+
+        elif event.Moving():
+            pt = event.GetPosition()
+            rect = self.GetRect()
+
+            drw = (rect.GetWidth() - self._iconWidth - self._rightIndent)           
+            if vertical and pt.x > drw or not vertical and \
+               pt.y < (self._iconHeight + self._rightIndent):
+                self.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
+            else:
+                self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
+                
         # send the collapse, expand event to the parent
         
         if send_event:
@@ -973,7 +1005,7 @@ class FoldPanelBar(wx.Panel):
 
     This control is easy to use. Simply create it as a child for a
     panel or sash window, and populate panels with
-    `AddFoldPanel`. Then use the AdddFoldPanelWindow` to add
+    `AddFoldPanel`. Then use the `AddFoldPanelWindow` to add
     `wx.Window` derived controls to the current fold panel. Use
     `AddFoldPanelSeparator` to put separators between the groups of
     controls that need a visual separator to group them
@@ -1172,7 +1204,7 @@ class FoldPanelBar(wx.Panel):
 
         self._foldPanel.SetSize(foldrect[2:])
         
-        if self._extraStyle & FPB_COLLAPSE_TO_BOTTOM:
+        if self._extraStyle & FPB_COLLAPSE_TO_BOTTOM or self._extraStyle & FPB_EXCLUSIVE_FOLD:
             rect = self.RepositionCollapsedToBottom()
             vertical = self.IsVertical()
             if vertical and rect.GetHeight() > 0 or not vertical and rect.GetWidth() > 0:
@@ -1212,7 +1244,7 @@ class FoldPanelBar(wx.Panel):
         # should be drawn at the bottom. All panels that are expanded
         # are drawn on top. The last expanded panel gets all the extra space
 
-        if self._extraStyle & FPB_COLLAPSE_TO_BOTTOM:
+        if self._extraStyle & FPB_COLLAPSE_TO_BOTTOM or self._extraStyle & FPB_EXCLUSIVE_FOLD:
         
             offset = 0
 
@@ -1353,9 +1385,22 @@ class FoldPanelBar(wx.Panel):
         the bottom and the order where the panel originally was placed
         is restored.
         """
+
+        fpbextrastyle = 0
         
+        if self._extraStyle & FPB_SINGLE_FOLD or self._extraStyle & FPB_EXCLUSIVE_FOLD:
+            fpbextrastyle = 1
+            for panel in self._panels:
+                panel.Collapse()
+
         foldpanel.Expand()
-        self.RefreshPanelsFrom(foldpanel)
+        
+        if fpbextrastyle:
+            if self._extraStyle & FPB_EXCLUSIVE_FOLD:
+                self.RepositionCollapsedToBottom()
+            self.RefreshPanelsFrom(self._panels[0])
+        else:
+            self.RefreshPanelsFrom(foldpanel)
 
 
     def ApplyCaptionStyle(self, foldpanel, cbstyle):
@@ -1444,7 +1489,7 @@ class FoldPanelItem(wx.Panel):
                  collapsed=False, cbstyle=EmptyCaptionBarStyle):
         """ Default Class Constructor. """
         
-        wx.Panel.__init__(self, parent, id, style=wx.CLIP_CHILDREN)
+        wx.Panel.__init__(self, parent, id, wx.Point(0,0), style=wx.CLIP_CHILDREN)
         self._controlCreated = False
         self._UserSize = 0
         self._PanelSize = 0

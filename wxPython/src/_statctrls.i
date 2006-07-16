@@ -114,6 +114,14 @@ public:
                  long style = 0,
                  const wxString& name = wxPyStaticTextNameStr);
 
+    DocDeclStr(
+        void , Wrap(int width),
+        "This functions wraps the control's label so that each of its lines
+becomes at most ``width`` pixels wide if possible (the lines are
+broken at words boundaries so it might not be the case if words are
+too long). If ``width`` is negative, no wrapping is done.", "");
+    
+    
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };

@@ -1,7 +1,7 @@
-Installing wxWidgets 2.6.2
+Installing wxWidgets 2.6.3
 -----------------------------------------------------------
 
-This is wxWidgets 2.6.2 for Microsoft Windows 9x/ME, Windows NT,
+This is wxWidgets 2.6.3 for Microsoft Windows 9x/ME, Windows NT,
 Windows 2000, Windows XP and Windows CE.
 
 These installation notes can be found in docs/msw/install.txt
@@ -115,9 +115,9 @@ informal and more detailed description of the process summarized below.
 
 Please note that the VC++ 6.0 project files will work for VC++ .NET also.
 
-Also note that you can make the project files work with VC++ 5.0 but you'll
-need to edit .dsp file by hand before this is possible (change the version in
-the .dsp file header from 6.0 to 5.0).
+VC++ 5.0 can also be used, providing Service Pack 3 is applied. Without it
+you will have trouble with internal compiler errors. It is available for
+download at: ftp://ftp.microsoft.com/developr/visualstudio/sp3/full.
 
 Using project files (VC++ 6 and later):
 
@@ -185,6 +185,81 @@ the project. After this, delete everything (including PCH) and recompile.
 Note (4): to create your own IDE files, copy .dsp and .dsw
 files from an existing wxWidgets sample and adapt them, or
 visit http://wiki.wxwindows.org/wiki.pl?MSVC.
+
+Microsoft Visual C++ compilation for 64-bit Windows
+----------------------------------------------------------------
+
+Visual Studio 2005 includes 64-bit compilers, though they are not installed by
+default; you need to select them during the installation. Both native 64-bit
+compilers and 32-bit hosted cross compilers are included, so you do not need a
+64-bit machine to use them (though you do to run the created executables).
+Visual C++ Express Edition does not include 64-bit compilers.
+
+64-bit compilers are also available in various SDKs, for example
+the .NET Framework SDK:
+    http://msdn.microsoft.com/netframework/programming/64bit/devtools/
+
+Using project files:
+
+1. Open the VC++ 6 workspace file: build\msw\wx.dsw. Visual Studio will then
+   convert the projects to the current Visual C++ project format.
+
+2. To add 64-bit targets, go to the 'Build' menu and choose 'Configuration
+   Manager...'.  In the 'Active solution platform' drop down choose '<new>',
+   then you can choose either 'Itanium' or 'x64'.
+
+   For more detailed instructions see:
+    http://msdn2.microsoft.com/en-us/library/9yb4317s(en-us,vs.80).aspx
+
+   Note: 64-bit targets created this way will use the build directory of the
+         corresponding 32-bit target for some files. Therefore after building
+         for one CPU it is necessary to clean the build before building the
+         equivalent target for another CPU. We've reported the problem to MS
+         but they say it is not possible to fix it.
+
+3. To build, go to the 'Build' menu and choose 'Batch Build...'. Tick all the
+   all the 'x64|Debug' or all the 'Itanium|Debug' projects, and click 'Build'.
+
+   This will build a debug version of the static libs. The section above on
+   Visual C++ in general has more information about adjusting the settings to
+   build other configurations.
+
+4. To compile one of the samples open one of the sample projects, such as
+   samples\minimal\minimal.dsw. Visual Studio will convert the project as in
+   step 1, then add a 64-bit target as in step 2, and build.
+
+Using makefiles:
+
+1. Open a 64-bit build command prompt, for either x64 or Itanium. Change
+   directory to build\msw. Then for x64 type:
+
+    nmake -f makefile.vc TARGET_CPU=AMD64
+
+   or for Itanium:
+
+    nmake -f makefile.vc TARGET_CPU=IA64
+
+   This will build a debug version of wxWidgets DLLs. See "Configuring the
+   build" for instruction how to build other configurations such as a release
+   build or static libraries.
+
+2. Change to the directory of one of the samples such as samples\minimal. Type
+   the same command used to build the main library, for example for x64:
+
+    nmake -f makefile.vc TARGET_CPU=AMD64
+
+Notes:
+
+The versions of the VC++ 8 compiler included with some SDKs requires an
+additional library to be linked or the following error is received.
+
+    LNK2001 unresolved external symbol __security_check_cookie
+
+If you receive this error add bufferoverflowu.lib to link, e.g.:
+
+    nmake -f makefile.vc TARGET_CPU=AMD64 LDFLAGS=bufferoverflowu.lib
+
+See http://support.microsoft.com/?id=894573 for more information.
 
 Borland C++ 5.0/5.5 compilation
 ----------------------------------------------------------------
@@ -264,7 +339,7 @@ Metrowerks CodeWarrior compilation
 ----------------------------------------------------------------
 
 1. CodeWarrior Pro 7 project files in XML format are already
-   included in wxMSW-2.6.2.zip and the setup version.
+   included in wxMSW-2.6.3.zip and the setup version.
 
 2. Review the file include\wx\msw\setup.h (or include\wx\msw\setup0.h if
    you are working from the CVS version) to make sure the settings reflect
@@ -402,7 +477,7 @@ For example:
   cd build-debug
   ../configure --with-msw --enable-debug --enable-debug_gdb --disable-shared
   make
-  make install % This step is optional, see note (8) below.
+  make install % This step is optional, see note (6) below.
   cd samples/minimal
   make
   ./minimal.exe
@@ -463,6 +538,10 @@ Notes:
    debug an executable. If there are memory leaks, they will be
    flagged when the program quits. You can use Cygwin gdb
    to debug MinGW executables.
+
+8. Note that gcc's precompiled headers do not work on current versions of
+   Cygwin. If your version of Cygwin is affected you will need to use the
+   --disable-precomp-headers configure option.
 
 OLD VERSIONS:
 
@@ -548,10 +627,15 @@ Watcom C/C++:
 MinGW using native makefiles:
   > mingw32-make -f makefile.gcc BUILD=debug UNICODE=1
 
-MinGW using configure or Cygwin:
+MinGW using configure:
   > ./configure --enable-debug --enable-unicode
   (see ./configure --help on details; configure is not covered in this
   section)
+
+Cygwin using configure:
+  > ./configure --disable-precomp-headers --enable-debug --enable-unicode
+  (use --disable-precomp-headers if Cygwin doesn't support precompiled
+  headers)
 
 Brief explanation of options and possible values is in every
 build\msw\config.* file; more detailed description follows.

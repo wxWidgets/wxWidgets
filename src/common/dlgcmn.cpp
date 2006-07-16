@@ -262,13 +262,15 @@ private:
     wxString m_text;
 };
 
+// NB: don't "factor out" the scope operator, SGI MIPSpro 7.3 (but not 7.4)
+//     gets confused if it doesn't immediately follow the class name
 void
 #if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
-wxStaticText
+wxStaticText::
 #else
-wxStaticTextBase
+wxStaticTextBase::
 #endif
-::Wrap(int width)
+Wrap(int width)
 {
     wxLabelWrapper wrapper;
     wrapper.WrapLabel(this, width);

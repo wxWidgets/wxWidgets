@@ -3,23 +3,33 @@
 """
 This module provides a publish-subscribe component that allows
 listeners to subcribe to messages of a given topic. Contrary to the
-original wxPython.lib.pubsub module, which it is based on, it uses 
-weak referencing to the subscribers so the subscribers are not kept
-alive by the Publisher. Also, callable objects can be used in addition
-to functions and bound methods. See Publisher class docs for more
-details. 
+original wxPython.lib.pubsub module (which it is based on), it uses 
+weak referencing to the subscribers so the lifetime of subscribers 
+is not affected by Publisher. Also, callable objects can be used in 
+addition to functions and bound methods. See Publisher class docs for 
+more details. 
 
 Thanks to Robb Shecter and Robin Dunn for having provided 
 the basis for this module (which now shares most of the concepts but
 very little design or implementation with the original 
 wxPython.lib.pubsub).
 
+The publisher is a singleton instance of the PublisherClass class. You 
+access the instance via the Publisher object available from the module::
+
+    from wx.lib.pubsub import Publisher
+    Publisher().subscribe(...)
+    Publisher().sendMessage(...)
+    ...
+
 :Author:      Oliver Schoenborn
 :Since:       Apr 2004
 :Version:     $Id$
 :Copyright:   \(c) 2004 Oliver Schoenborn
 :License:     wxWidgets
+"""
 
+_implNotes = """
 Implementation notes
 --------------------
 
@@ -39,8 +49,7 @@ Ideally, _TopicTreeNode would be a generic _TreeNode with named
 subnodes, and _TopicTreeRoot would be a generic _Tree with named
 nodes, and Publisher would store listeners in each node and a topic
 tuple would be converted to a path in the tree.  This would lead to a
-much cleaner separation of concerns. But time is over, tim to move on.
-
+much cleaner separation of concerns. But time is over, time to move on.
 """
 #---------------------------------------------------------------------------
 
@@ -65,7 +74,9 @@ def _paramMinCountFunc(function):
     assert isfunction(function)
     (args, va, kwa, dflt) = getargspec(function)
     lenDef = len(dflt or ())
-    return (len(args or ()) - lenDef, lenDef)
+    lenArgs = len(args or ())
+    lenVA = int(va is not None)
+    return (lenArgs - lenDef + lenVA, lenDef)
 
 
 def _paramMinCount(callableObject):
@@ -90,9 +101,11 @@ def _paramMinCount(callableObject):
 def _tupleize(items):
     """Convert items to tuple if not already one, 
     so items must be a list, tuple or non-sequence"""
-    if isinstance(items, type([])):
+    if isinstance(items, list):
         raise TypeError, 'Not allowed to tuple-ize a list'
-    elif not isinstance(items, type(())):
+    elif isinstance(items, (str, unicode)) and items.find('.') != -1:
+        items = tuple(items.split('.'))
+    elif not isinstance(items, tuple):
         items = (items,)
     return items
 
@@ -152,17 +165,23 @@ class _WeakMethod:
         else:
             return InstanceMethod(self.fun, self.objRef(), self.cls)
         
-    def __cmp__(self, method2):
-        """Two _WeakMethod objects compare equal if they refer to the same method
-        of the same instance."""
-        return hash(self) - hash(method2)
+    def __eq__(self, method2):
+        """Two WeakMethod objects compare equal if they refer to the same method
+        of the same instance. Thanks to Josiah Carlson for patch and clarifications
+        on how dict uses eq/cmp and hashing. """
+        if not isinstance(method2, _WeakMethod):
+            return False 
+        return      self.fun      is method2.fun \
+                and self.objRef() is method2.objRef() \
+                and self.objRef() is not None
     
     def __hash__(self):
-        """Hash must depend on WeakRef of object, and on method, so that
-        separate methods, bound to same object, can be distinguished. 
-        I'm not sure how robust this hash function is, any feedback 
-        welcome."""
-        return hash(self.fun)/2 + hash(self.objRef)/2
+        """Hash is an optimization for dict searches, it need not 
+        return different numbers for every different object. Some objects
+        are not hashable (eg objects of classes derived from dict) so no
+        hash(objRef()) in there, and hash(self.cls) would only be useful
+        in the rare case where instance method was rebound. """
+        return hash(self.fun)
     
     def __repr__(self):
         dead = ''
@@ -412,8 +431,7 @@ class _TopicTreeRoot(_TopicTreeNode):
     def unsubscribe(self, listener, topicList):
         """Remove listener from given list of topics. If topicList
         doesn't have any topics for which listener has subscribed,
-        the onNotSubscribed callback, if not None, will be called,
-        as onNotSubscribed(listener, topic)."""
+        nothing happens."""
         weakCB = _getWeakRef(listener)
         if not self.__callbackDict.has_key(weakCB):
             return
@@ -465,7 +483,7 @@ class _TopicTreeRoot(_TopicTreeNode):
                 deliveryCount += node.sendMessage(message)
             else: # topic never created, don't bother continuing
                 if onTopicNeverCreated is not None:
-                    onTopicNeverCreated(aTopic)
+                    onTopicNeverCreated(topic)
                 break
         return deliveryCount
 
@@ -529,7 +547,9 @@ class _TopicTreeRoot(_TopicTreeNode):
     
 # -----------------------------------------------------------------------------
 
-class Publisher:
+class _SingletonKey: pass
+
+class PublisherClass:
     """
     The publish/subscribe manager.  It keeps track of which listeners
     are interested in which topics (see subscribe()), and sends a
@@ -539,7 +559,7 @@ class Publisher:
     The three important concepts for Publisher are:
         
     - listener: a function, bound method or
-      callable object that can be called with only one parameter
+      callable object that can be called with one parameter
       (not counting 'self' in the case of methods). The parameter
       will be a reference to a Message object. E.g., these listeners
       are ok::
@@ -561,10 +581,11 @@ class Publisher:
       with only one argument. In every case, the parameter 'a' will contain
       the message. 
 
-    - topic: a single word or tuple of words (though word could probably 
-      be any kind of object, not just a string, but this has not been 
-      tested). A tuple denotes a hierarchy of topics from most general
-      to least. For example, a listener of this topic::
+    - topic: a single word, a tuple of words, or a string containing a
+      set of words separated by dots, for example: 'sports.baseball'.
+      A tuple or a dotted notation string denotes a hierarchy of
+      topics from most general to least. For example, a listener of
+      this topic::
 
           ('sports','baseball')
 
@@ -583,15 +604,20 @@ class Publisher:
     - message: this is an instance of Message, containing the topic for 
       which the message was sent, and any data the sender specified. 
       
-    :note: This class is visible to importers of pubsub only as a 
-    Singleton. I.e., every time you execute 'Publisher()', it's 
-    actually the same instance of publisher that is returned. So to 
-    use, just do 'Publisher().method()'.
+    :note: This class is visible to importers of pubsub only as a
+           Singleton. I.e., every time you execute 'Publisher()', it's
+           actually the same instance of PublisherClass that is
+           returned. So to use, just do'Publisher().method()'.
+        
     """
     
     __ALL_TOPICS_TPL = (ALL_TOPICS, )
     
-    def __init__(self):
+    def __init__(self, singletonKey):
+        """Construct a Publisher. This can only be done by the pubsub 
+        module. You just use pubsub.Publisher()."""
+        if not isinstance(singletonKey, _SingletonKey):
+            raise invalid_argument("Use Publisher() to get access to singleton")
         self.__messageCount  = 0
         self.__deliveryCount = 0
         self.__topicTree     = _TopicTreeRoot()
@@ -614,23 +640,39 @@ class Publisher:
         listener will be subscribed for all topics (that listener will 
         receive a Message for any topic for which a message is generated). 
         
-        This method may be
-        called multiple times for one listener, registering it with
-        many topics.  It can also be invoked many times for a
-        particular topic, each time with a different listener.
-        See the class doc for requirements on listener and topic.
+        This method may be called multiple times for one listener,
+        registering it with many topics.  It can also be invoked many
+        times for a particular topic, each time with a different
+        listener.  See the class doc for requirements on listener and
+        topic.
 
-        :note: Calling 
-        this method for the same listener, with two topics in the same 
-        branch of the topic hierarchy, will cause the listener to be
-        notified twice when a message for the deepest topic is sent. E.g.
-        subscribe(listener, 't1') and then subscribe(listener, ('t1','t2'))
-        means that when calling sendMessage('t1'), listener gets one message,
-        but when calling sendMessage(('t1','t2')), listener gets message 
-        twice. This effect could be eliminated but it would not be safe to 
-        do so: how do we know what topic to give the listener? Answer appears
-        trivial at first but is far from obvious. It is best to rely on the
-        user to be careful about who registers for what topics. 
+        :note: The listener is held by Publisher() only by *weak*
+               reference.  This means you must ensure you have at
+               least one strong reference to listener, otherwise it
+               will be DOA ("dead on arrival"). This is particularly
+               easy to forget when wrapping a listener method in a
+               proxy object (e.g. to bind some of its parameters),
+               e.g.::
+        
+                  class Foo: 
+                      def listener(self, event): pass
+                  class Wrapper:
+                      def __init__(self, fun): self.fun = fun
+                      def __call__(self, *args): self.fun(*args)
+                  foo = Foo()
+                  Publisher().subscribe( Wrapper(foo.listener) ) # whoops: DOA!
+                  wrapper = Wrapper(foo.listener)
+                  Publisher().subscribe(wrapper) # good!
+        
+        :note: Calling this method for the same listener, with two
+               topics in the same branch of the topic hierarchy, will
+               cause the listener to be notified twice when a message
+               for the deepest topic is sent. E.g.
+               subscribe(listener, 't1') and then subscribe(listener,
+               ('t1','t2')) means that when calling sendMessage('t1'),
+               listener gets one message, but when calling
+               sendMessage(('t1','t2')), listener gets message twice.
+        
         """
         self.validate(listener)
 
@@ -643,7 +685,7 @@ class Publisher:
     def isSubscribed(self, listener, topic=None):
         """Return true if listener has subscribed to topic specified. 
         If no topic specified, return true if subscribed to something.
-        Use getStrAllTopics() to determine if a listener will receive 
+        Use topic=getStrAllTopics() to determine if a listener will receive 
         messages for all topics."""
         return self.__topicTree.isSubscribed(listener, topic)
             
@@ -669,7 +711,8 @@ class Publisher:
         assert (min == 0 and d>0) or (min == 1)
 
     def isValid(self, listener):
-        """Return true only if listener will be able to subscribe to Publisher."""
+        """Return true only if listener will be able to subscribe to 
+        Publisher."""
         try: 
             self.validate(listener)
             return True
@@ -682,16 +725,16 @@ class Publisher:
         list containing strings and/or tuples). If topics is not 
         specified, all listeners for all topics will be unsubscribed, 
         ie. the Publisher singleton will have no topics and no listeners
-        left. If topics was specified and is not found among contained
-        topics, the onNoSuchTopic, if specified, will be called, with 
-        the name of the topic."""
+        left. If onNoSuchTopic is given, it will be called as 
+        onNoSuchTopic(topic) for each topic that is unknown.
+        """
         if topics is None: 
             del self.__topicTree
             self.__topicTree = _TopicTreeRoot()
             return
         
         # make sure every topics are in tuple form
-        if isinstance(topics, type([])):
+        if isinstance(topics, list):
             topicList = [_tupleize(x) for x in topics]
         else:
             topicList = [_tupleize(topics)]
@@ -703,9 +746,8 @@ class Publisher:
         """Unsubscribe listener. If topics not specified, listener is
         completely unsubscribed. Otherwise, it is unsubscribed only 
         for the topic (the usual tuple) or list of topics (ie a list
-        of tuples) specified. In this case, if listener is not actually
-        subscribed for (one of) the topics, the optional onNotSubscribed
-        callback will be called, as onNotSubscribed(listener, missingTopic).
+        of tuples) specified. Nothing happens if listener is not actually
+        subscribed to any of the topics.
         
         Note that if listener subscribed for two topics (a,b) and (a,c), 
         then unsubscribing for topic (a) will do nothing. You must 
@@ -726,24 +768,25 @@ class Publisher:
         """Return a list of topics the given listener is registered with. 
         Returns [] if listener never subscribed.
         
-        :attention: when using the return of this method to compare to 
-        expected list of topics, remember that topics that are not in the
-        form of a tuple appear as a one-tuple in the return. E.g. if you 
-        have subscribed a listener to 'topic1' and ('topic2','subtopic2'), 
-        this method returns::
+        :attention: when using the return of this method to compare to
+                expected list of topics, remember that topics that are
+                not in the form of a tuple appear as a one-tuple in
+                the return. E.g. if you have subscribed a listener to
+                'topic1' and ('topic2','subtopic2'), this method
+                returns::
             
-            associatedTopics = [('topic1',), ('topic2','subtopic2')]
+                associatedTopics = [('topic1',), ('topic2','subtopic2')]
         """
         return self.__topicTree.getTopics(listener)
     
     def sendMessage(self, topic=ALL_TOPICS, data=None, onTopicNeverCreated=None):
         """Send a message for given topic, with optional data, to
         subscribed listeners. If topic is not specified, only the
-        listeners that are interested in all topics will receive
-        message. The onTopicNeverCreated is an optional callback of
-        your choice that will be called if the topic given was never
-        created (i.e. it, or one of its subtopics, was never
-        subscribed to). The callback must be of the form f(a)."""
+        listeners that are interested in all topics will receive message. 
+        The onTopicNeverCreated is an optional callback of your choice that 
+        will be called if the topic given was never created (i.e. it, or 
+        one of its subtopics, was never subscribed to by any listener). 
+        It will be called as onTopicNeverCreated(topic)."""
         aTopic  = _tupleize(topic)
         message = Message(aTopic, data)
         self.__messageCount += 1
@@ -763,8 +806,9 @@ class Publisher:
     def __str__(self):
         return str(self.__topicTree)
 
-# Create an instance with the same name as the class, effectivly
-# hiding the class object so it can't be instantiated any more.  From
+# Create the Publisher singleton. We prevent users from (inadvertently)
+# instantiating more than one object, by requiring a key that is 
+# accessible only to module.  From
 # this point forward any calls to Publisher() will invoke the __call__
 # of this instance which just returns itself.
 #
@@ -772,15 +816,18 @@ class Publisher:
 # class from Publisher without jumping through hoops.  If this ever
 # becomes an issue then a new Singleton implementaion will need to be
 # employed.
-Publisher = Publisher()
+_key = _SingletonKey()
+Publisher = PublisherClass(_key)
 
 
 #---------------------------------------------------------------------------
 
 class Message:
     """
-    A simple container object for the two components of
-    a message; the topic and the user data.
+    A simple container object for the two components of a message: the 
+    topic and the user data. An instance of Message is given to your 
+    listener when called by Publisher().sendMessage(topic) (if your
+    listener callback was registered for that topic).
     """
     def __init__(self, topic, data):
         self.topic = topic
@@ -801,16 +848,28 @@ def test():
         print '----------- Done %s -----------' % funcName
         
     def testParam():
-        def testFunc(a,b,c=1): pass
+        def testFunc00(): pass
+        def testFunc21(a,b,c=1): pass
+        def testFuncA(*args): pass
+        def testFuncAK(*args,**kwds): pass
+        def testFuncK(**kwds): pass
+        
         class Foo:
             def testMeth(self,a,b): pass
             def __call__(self, a): pass
+        class Foo2:
+            def __call__(self, *args): pass
             
+        assert _paramMinCount(testFunc00)==(0,0)
+        assert _paramMinCount(testFunc21)==(2,1)
+        assert _paramMinCount(testFuncA) ==(1,0)
+        assert _paramMinCount(testFuncAK)==(1,0)
+        assert _paramMinCount(testFuncK) ==(0,0)
         foo = Foo()
-        assert _paramMinCount(testFunc)==(2,1)
         assert _paramMinCount(Foo.testMeth)==(2,0)
         assert _paramMinCount(foo.testMeth)==(2,0)
         assert _paramMinCount(foo)==(1,0)
+        assert _paramMinCount(Foo2())==(1,0)
     
         done('testParam')
 

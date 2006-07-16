@@ -7,8 +7,8 @@ wxWidgets GUI library.
 wxWidgets no longer supports GTK 1.0.x (as did some early
 snapshots) and support for GTK 1.2.x will be phased out
 over time. Nearly all work is now done on GTK 2.0.x and
-quite a few of the enhancements of GTK+ 2.2.x and even
-GTK 2.4.x are used. 
+quite a few of the enhancements of GTK+ 2.4.x and even
+GTK 2.8.x are used.
 
 More info about the wxWidgets project (including all the
 other ports and version of wxWidgets) can be found at the

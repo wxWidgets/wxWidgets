@@ -78,137 +78,126 @@ wxColour wxSystemSettingsNative::GetColour(
 {
     COLORREF                        vRef;
     wxColour                        vCol;
+    LONG                            vSysClr;
     switch (nIndex)
     {
         //
         // PM actually has values for these
         //
         case wxSYS_COLOUR_WINDOW:
-            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
-                                             ,SYSCLR_WINDOW
-                                             ,0L
-                                            );
-            vCol.Set( GetRValue(vRef)
-                     ,GetGValue(vRef)
-                     ,GetBValue(vRef)
-                    );
+            vSysClr = SYSCLR_WINDOW;
             break;
 
         case wxSYS_COLOUR_WINDOWFRAME:
-            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
-                                             ,SYSCLR_WINDOWFRAME
-                                             ,0L
-                                            );
-            vCol.Set( GetRValue(vRef)
-                     ,GetGValue(vRef)
-                     ,GetBValue(vRef)
-                    );
+            vSysClr = SYSCLR_WINDOWFRAME;
             break;
 
         case wxSYS_COLOUR_MENUTEXT:
-            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
-                                             ,SYSCLR_MENUTEXT
-                                             ,0L
-                                            );
-            vCol.Set( GetRValue(vRef)
-                     ,GetGValue(vRef)
-                     ,GetBValue(vRef)
-                    );
+            vSysClr = SYSCLR_MENUTEXT;
+            break;
+
+        case wxSYS_COLOUR_MENUHILIGHT:
+            vSysClr = SYSCLR_MENUHILITE;
             break;
 
         case wxSYS_COLOUR_BTNFACE:
-            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
-                                             ,SYSCLR_BUTTONDEFAULT
-                                             ,0L
-                                            );
-            vCol.Set( GetRValue(vRef)
-                     ,GetGValue(vRef)
-                     ,GetBValue(vRef)
-                    );
+            vSysClr = SYSCLR_BUTTONMIDDLE;
             break;
 
         case wxSYS_COLOUR_BTNSHADOW:
-            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
-                                             ,SYSCLR_BUTTONMIDDLE
-                                             ,0L
-                                            );
-            vCol.Set( GetRValue(vRef)
-                     ,GetGValue(vRef)
-                     ,GetBValue(vRef)
-                    );
+            vSysClr = SYSCLR_BUTTONDARK;
             break;
 
         case wxSYS_COLOUR_BTNHIGHLIGHT:
-            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
-                                             ,SYSCLR_BUTTONLIGHT
-                                             ,0L
-                                            );
-            vCol.Set( GetRValue(vRef)
-                     ,GetGValue(vRef)
-                     ,GetBValue(vRef)
-                    );
+            vSysClr = SYSCLR_BUTTONLIGHT;
+            break;
+
+        case wxSYS_COLOUR_BACKGROUND:
+            vSysClr = SYSCLR_BACKGROUND;
+            break;
+
+        case wxSYS_COLOUR_APPWORKSPACE:
+            vSysClr = SYSCLR_APPWORKSPACE;
             break;
 
         case wxSYS_COLOUR_MENUBAR:
-            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
-                                             ,SYSCLR_MENU
-                                             ,0L
-                                            );
-            vCol.Set( GetRValue(vRef)
-                     ,GetGValue(vRef)
-                     ,GetBValue(vRef)
-                    );
+        case wxSYS_COLOUR_MENU:
+            vSysClr = SYSCLR_MENU;
             break;
 
-        //
-        // We'll have to just give values to these
-        //
+        case wxSYS_COLOUR_INACTIVECAPTION:
+            vSysClr = SYSCLR_INACTIVETITLE;
+            break;
+
+        case wxSYS_COLOUR_INACTIVEBORDER:
+            vSysClr = SYSCLR_INACTIVEBORDER;
+            break;
+
         case wxSYS_COLOUR_LISTBOX:
+            vSysClr = SYSCLR_ENTRYFIELD;
+            break;
+
         case wxSYS_COLOUR_CAPTIONTEXT:
-            return(*wxWHITE);
+            vSysClr = SYSCLR_TITLETEXT;
+            break;
+
+        case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+            vSysClr = SYSCLR_INACTIVETITLETEXT;
+            break;
 
         case wxSYS_COLOUR_WINDOWTEXT:
-        case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
         case wxSYS_COLOUR_BTNTEXT:
-        case wxSYS_COLOUR_INFOTEXT:
-            vCol = (*wxBLACK);
+            vSysClr = SYSCLR_WINDOWTEXT;
             break;
 
-        //
-        // We should customize these to look like other ports
-        //
+        case wxSYS_COLOUR_INFOTEXT:
+            vSysClr = SYSCLR_HELPTEXT;
+            break;
 
         case wxSYS_COLOUR_ACTIVECAPTION:
+            vSysClr = SYSCLR_ACTIVETITLE;
+            break;
+
         case wxSYS_COLOUR_ACTIVEBORDER:
+            vSysClr = SYSCLR_ACTIVEBORDER;
+            break;
+
         case wxSYS_COLOUR_HIGHLIGHT:
-            vCol = (*wxBLUE);
+            vSysClr = SYSCLR_HILITEBACKGROUND;
             break;
 
         case wxSYS_COLOUR_SCROLLBAR:
-        case wxSYS_COLOUR_BACKGROUND:
-        case wxSYS_COLOUR_INACTIVECAPTION:
-        case wxSYS_COLOUR_MENU:
-        case wxSYS_COLOUR_INACTIVEBORDER:
-        case wxSYS_COLOUR_APPWORKSPACE:
+            vSysClr = SYSCLR_SCROLLBAR;
+            break;
+
         case wxSYS_COLOUR_HIGHLIGHTTEXT:
+            vSysClr = SYSCLR_HILITEFOREGROUND;
+            break;
+
+        case wxSYS_COLOUR_INFOBK:
+            vSysClr = SYSCLR_HELPBACKGROUND;
+            break;
+
+        // Don't know what these should be, so leave them grey (normally)
         case wxSYS_COLOUR_GRAYTEXT:
         case wxSYS_COLOUR_3DDKSHADOW:
         case wxSYS_COLOUR_3DLIGHT:
-        case wxSYS_COLOUR_INFOBK:
-            vCol = (*wxLIGHT_GREY);
+        case wxSYS_COLOUR_HOTLIGHT:
+        case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
+        case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
+            vSysClr = SYSCLR_BUTTONMIDDLE;
             break;
 
         default:
-            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
-                                             ,SYSCLR_WINDOW
-                                             ,0L
-                                            );
-            vCol.Set( GetRValue(vRef)
-                     ,GetGValue(vRef)
-                     ,GetBValue(vRef)
-                    );
+            vSysClr = SYSCLR_WINDOW;
             break;
     }
+    vRef = (ULONG)::WinQuerySysColor(   HWND_DESKTOP,
+                                        vSysClr,
+                                        0L  );
+    vCol.Set(   GetRValue(vRef),
+                GetGValue(vRef),
+                GetBValue(vRef)  );
     return(vCol);
 } // end of wxSystemSettingsNative::GetColour
 
@@ -283,8 +272,12 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index,
         // TODO case wxSYS_FRAMESIZE_Y:
         // TODO case wxSYS_SMALLICON_X:
         // TODO case wxSYS_SMALLICON_Y:
-        // TODO case wxSYS_HSCROLL_Y:
-        // TODO case wxSYS_VSCROLL_X:
+
+        case wxSYS_HSCROLL_Y:
+            return ::WinQuerySysValue(HWND_DESKTOP,SV_CYHSCROLL);
+        case wxSYS_VSCROLL_X:
+            return ::WinQuerySysValue(HWND_DESKTOP,SV_CXVSCROLL);
+
         // TODO case wxSYS_VSCROLL_ARROW_X:
         // TODO case wxSYS_VSCROLL_ARROW_Y:
         // TODO case wxSYS_VTHUMB_Y:

@@ -21,7 +21,7 @@
 // in the wrapper code.
 
 #include <wx/hashmap.h>
-WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
+    WX_DECLARE_STRING_HASH_MAP( swig_type_info*, wxPyTypeInfoHashMap );
 
 
 // Maintains a hashmap of className to swig_type_info pointers.  Given the
@@ -122,6 +122,33 @@ PyObject* wxPyMakeSwigPtr(void* ptr, const wxChar* className) {
 }
 
 
+// Python's PyInstance_Check does not return True for instances of new-style
+// classes.  This should get close enough for both new and old classes but I
+// should re-evaluate the need for doing instance checks...
+bool wxPyInstance_Check(PyObject* obj) {
+    return PyObject_HasAttrString(obj, "__class__") != 0;
+}
+
+
+
+// This one checks if the object is an instance of a SWIG proxy class (it has
+// a .this attribute, and the .this attribute is a PySwigObject.)
+bool wxPySwigInstance_Check(PyObject* obj) {
+    static PyObject* this_str = NULL;
+    if (this_str == NULL)
+        this_str = PyString_FromString("this");
+    
+    PyObject* this_attr = PyObject_GetAttr(obj, this_str);
+    if (this_attr) {
+        bool retval = (PySwigObject_Check(this_attr) != 0);
+        Py_DECREF(this_attr);
+        return retval;
+    }
+
+    PyErr_Clear();
+    return false;
+}
+ 
 
 
 // Export a C API in a struct.  Other modules will be able to load this from

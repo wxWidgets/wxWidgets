@@ -113,6 +113,12 @@ public:
     virtual void RemoveChild( wxWindowBase *child );
 #endif
 
+#ifdef __WXGTK20__
+#if wxABI_VERSION >= 20603 /* 2.6.3+ only */
+    void SetDoubleBuffered( bool on );
+#endif
+#endif
+
     // implementation
     // --------------
 
@@ -269,6 +275,8 @@ public:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
+
+    void HandleScrollEvent(GtkAdjustment* adj);
 
 protected:
     // common part of all ctors (not virtual because called from ctor)

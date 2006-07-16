@@ -111,17 +111,11 @@ bool wxRadioButton::Create(
 
 wxSize wxRadioButton::DoGetBestSize() const
 {
-    static int                      snRadioSize = 0;
+    // We should probably compute snRadioSize but it seems to be a constant
+    // independent of its label's font size and not made available by OS/2.
+    static int                      snRadioSize = RADIO_SIZE;
 
-    if (!snRadioSize)
-    {
-        wxScreenDC                  vDC;
-
-        vDC.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-        snRadioSize = vDC.GetCharHeight();
-    }
-
-    wxString                        sStr = GetLabel();
+    wxString                        sStr = wxGetWindowText(GetHwnd());
     int                             nRadioWidth;
     int                             nRadioHeight;
 
@@ -131,7 +125,7 @@ wxSize wxRadioButton::DoGetBestSize() const
                       ,&nRadioWidth
                       ,&nRadioHeight
                      );
-        nRadioWidth += snRadioSize + GetCharWidth();
+        nRadioWidth += snRadioSize;
         if (nRadioHeight < snRadioSize)
             nRadioHeight = snRadioSize;
     }

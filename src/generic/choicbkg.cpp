@@ -368,7 +368,7 @@ wxChoicebook::InsertPage(size_t n,
 
 wxWindow *wxChoicebook::DoRemovePage(size_t page)
 {
-    const int page_count = GetPageCount();
+    const size_t page_count = GetPageCount();
     wxWindow *win = wxBookCtrlBase::DoRemovePage(page);
 
     if ( win )

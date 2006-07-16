@@ -49,16 +49,7 @@ Destructor.
 
 \func{void}{BeginDrawing}{\void}
 
-Allows optimization of drawing code under MS Windows. Enclose
-drawing primitives between {\bf BeginDrawing} and {\bf EndDrawing}\rtfsp
-calls.
-
-Drawing to a wxDialog panel device context outside of a
-system-generated OnPaint event {\it requires} this pair of calls to
-enclose drawing code. This is because a Windows dialog box does not have
-a retained device context associated with it, and selections such as pen
-and brush settings would be lost if the device context were obtained and
-released for each drawing operation.
+This is deprecated and does nothing. Don't use.
 
 
 \membersection{wxDC::Blit}\label{wxdcblit}
@@ -572,9 +563,7 @@ Ends a document (only relevant when outputting to a printer).
 
 \func{void}{EndDrawing}{\void}
 
-Allows optimization of drawing code under MS Windows. Enclose
-drawing primitives between {\bf BeginDrawing} and {\bf EndDrawing}\rtfsp
-calls.
+This is deprecated and does nothing. Don't use.
 
 
 \membersection{wxDC::EndPage}\label{wxdcendpage}

@@ -242,8 +242,8 @@ class FileBrowseButtonWithHistory( FileBrowseButton ):
         textControl.SetToolTipString( self.toolTip )
         textControl.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
         if self.changeCallback:
-            textControl.Bind(wx.EVT_TEXT, self.changeCallback)
-            textControl.Bind(wx.EVT_COMBOBOX, self.changeCallback)
+            textControl.Bind(wx.EVT_TEXT, self.OnChanged)
+            textControl.Bind(wx.EVT_COMBOBOX, self.OnChanged)
         if self.history:
             history=self.history
             self.history=None

@@ -2,6 +2,205 @@
 wxWidgets Change Log - For more verbose changes, see the manual
 ---------------------------------------------------------------
 
+2.6.4
+-----
+
+All:
+
+- wxSocket::_Read continues reading from socket after exhausting pushback buffer.
+  Previously, only the buffer would be returned, even if more data was requested.
+
+All (GUI):
+
+- In wxScrolledWindow:DoGetBestSize, no longer adds difference between client and
+  total size if we've just used the total size as the best size.
+- Fixed problem with zoom setting in print preview.
+
+wxGTK:
+
+- Support underlined fonts in wxTextCtrl.
+- wxWindow and wxScrolledWindow now generate line, page and thumb-release scroll events.
+
+wxUniv:
+
+- Implemented wxToggleButton (David Bjorkevik).
+
+wxMac:
+
+- Fixed non-detection of process termination on Intel Macs by
+  polling for process termination in a separate thread.
+
+wxMGL:
+
+- Fixed NUM_LOCK having no effect.
+- Fixed wxFileExists (affecting wxImage::LoadFile).
+- Implement wxGetMouseState()
+
+wxMotif:
+- Implement wxGetMouseState()
+
+wxX11:
+- Implement wxGetMouseState()
+
+
+2.6.3
+-----
+
+All:
+
+- Fixed crash when loading message catalogs in Unicode build.
+- Fixed crash in wxList code when building with wxUSE_STL=1 (Christoph Schulz)
+- Spurious error message from wxLaunchDefaultBrowser fixed.
+- Compilation fixes for (more strict) g++ 4.1
+- Speed improvements to wxRegEx when matching is done in a loop such as
+  during a search and replace.
+- Fix regerror and regfree name conficts when built-in regex and system regex
+  are both used in the same program.
+- wxCondition::WaitTimeout() now returns correct value when timeout occurs.
+- Bug in wxLogStream::DoLogString in Unicode builds fixed.
+- Fixed Unicode builds using SunPro compiler by defining__WCHAR_TYPE__.
+- wxFileName now also looks for TMPDIR on Unix.
+- Fixed occasional wxThread cleanup crash.
+- Fixed build error in list.h with VC++ 2005.
+- wxImage::Copy() forgot the alpha channel.
+- Fixed wxSocketBase::InterruptWait on wxBase.
+
+All (GUI):
+
+- Fixed abort() on loading invalid PNG image
+- Added space after list item number in wxHTML.
+- wxCalendarCtrl drawing, positioning and hit-testing fixes.
+- More checking of image validity before loading into wxImage.
+- Added double-buffering to wxVListBox and fixed a scrolling issue.
+- More than one filter allowed in in wxDocTemplate filter.
+- Fixed infinite loop in tab traversal code with wxUSE_STL==1
+
+wxGTK:
+
+- Fixed problem with choice editor in wxGrid whereby the editor
+  lost focus when the combobox menu was shown.
+- Fixed problem trying to print from a preview, whereby wrong printer
+  class was used.
+- Worked around pango crashes in strncmp on Solaris 10.
+- Polygon and line drawing speeded up if there is no scaling.
+- Fixed problems with CJK input method (reverted)
+- Fixed wxNotebook::HitTest when the leftmost visible tab is not the
+  actual first tab (has arrows for scrolling and is scrolled).
+- Send wxSetCursorEvent
+- Fix RequestMore for idle events.
+- Implement user dashes for PS and GNOME printing.
+- Correct update region code. Don't always invalidate the
+  whole window upon resize. Reenable support for the
+  wxNO_FULL_REPAINT_ON_RESIZE flag. Also disable refreshing
+  custom controls when focusing in and out.
+- Change wxMimeTypesManager code to ignore /etc/mailcap and
+  to just read the MIME-types. Modifiying the MIME-types is
+  not allowed under GNOME anyways, so make it a no-op.
+- Speed up reading MIME database.
+- wxClipboard fixes (thanks to Timothée Lecomte).
+
+wxMSW:
+
+- Fixed crash with ownerdrawn menu items accelerators (Perry Miller).
+- wxFileDialog respects absence of wxCHANGE_DIG flag under NT (Brad Anderson).
+- Fixed MDI context menu problem.
+- Create msw/rcdefs.h in setup.h's directory, which can be included by
+  resource files. It containts platform/compiler specific defines (such as
+  target cpu) which can be used in #ifs in .rc files.
+- Add support for Win64 manifests and VC++ 8 automatic manifests (see the
+  wxMSW faq for details).
+- New TARGET_CPU=amd64 (or 'ia64') option for the makefile.vc files which
+  puts 64-bit builds in their own directory and adds /machine:amd64 or ia64
+  to the link command.
+- wxStatusBar::GetFieldRect now returns correct values under XP.
+- wxStatusBar no longer corrupts surrounding windows on resize.
+- Enable wxListCtrl in report mode to be able to use images in other
+  columns, if ComCtl32 >= 470.
+- Fixed problem where using SetValue and wxTE_RICH2 would cause control to
+  show.
+- Numpad special keys are now distinguished from normal keys.
+- Menu codes now stripped before measuring control labels.
+- MFC sample now compiles in Unicode mode.
+- Fixed SetScrollbar thumb size setting bug (set orientation before triggering
+  events).
+- Fixed icon to cursor conversion problem for bitmaps with masks.
+- Fixed wxToolBar background colour problem for some video cards.
+- wxGenericDirCtrl now shows volume name.
+- Multiline notebook tab label change now resizes the control
+  correctly if an extra row is removed or added.
+- Fixed a crash when dismissing wxPrintDialog under VC++ 7.1.
+- Fixed out by one error in wxTextCtrl::GetStyle.
+- Fixed problem with getting input in universal/unicode build of wxMSW.
+- Link oleacc.lib conditionally.
+- Fall back to unthemed wxNotebook if specified orientation not available.
+- Fixed wxChoice/wxComboBox slow appending and infinite recursion
+  if its size is set within a paint handler (for example when embedded in a
+  wxHtmlWindow). [Now reverted due to problems in W2K and below.]
+- Warning fixes for VC++ 5.0 (Igor Korot)
+
+wxWinCE:
+
+- ::wxGetUserName() implemented.
+- Fixed wxFileDialog breakage on WinCE in previous version.
+- Checkable items in wxToolMenuBarTool supported.
+- Fixed date formatting and mktime.
+- Fixed getting standard folder paths on WinCE.
+- Backported wxCheckListBox implementation from 2.7.
+- Added support for the context menu event (wxContextMenuEvent)
+  and added platform-specific wxWindow::EnableContextMenu.
+- Fixed wxGenericFileDialog to work with WinCE.
+- Fixed compilation and menubar disappearance on Windows Mobile 5.
+
+wxMac:
+
+- Fixed problem with clipboard support for custom data flavors.
+- Fixed focus handling for generic controls in carbon-cfm.
+- Fixed a printing crash bug, for example using File->Print and changing
+  Popup from 'Copies & Pages' to e.g. 'Layout'.
+- Improved support for help and application menu items.
+- Added default implementations for wxTextCtrl::Replace and wxTextCtrl::Remove.
+- Added support for 10.4 context menu.
+- Added support for wxFRAME_EX_METAL and wxDIALOG_EX_METAL styles.
+- Added wxNotebook::HitTest support.
+- Corrected idle wake-up.
+- Corrected wxExecute.
+- Now makes use of full printer resolution.
+- Corrected CGImage handling in wxBitmap.
+- Now uses simple hide/how transition for top-level windows.
+- Uses reasonable temporary path for wxFileName::CreateTempFileName.
+- Added support for default key handling (escape, enter, command-period) even
+  if there is no control on the frame or dialog that has the focus.
+- Fixed joystick bugs including a link error and a crash if no joysticks
+  were found.
+- Removed an errorneous assertion from wxDir.
+- Uses CoreFoundation based and thread-safe implementation for message boxes
+  under Mach-O.
+- wxBitmapButton is created as a content icon if wxBORDER_NONE is
+  specified, otherwise as a bevel button.
+- Mouse event ids set correctly (fixing problems with Connect in particular).
+- Fixed wxZipInputStream read error on wxSocketInputStream which signals the
+  end of file with an error.
+- Xcode wxWidgets and minimal sample project files updated to create Universal
+  binaries.
+- Fix for setting wxMenuBar more than once.
+- wxListBox minimum size bug fixed.
+- Fixed wxNotebook off-by-one bug in HitTest.
+- Fixed joystick GetXMin/Max bug.
+- Fixed Unix domain socket problem in wxIPC.
+
+wxX11:
+
+- Invisible text problem fixed.
+- Bitmap clipping with masks and scaling improved.
+- Fixed a crash bug in the generic timer.
+
+wxODBC:
+
+- wxDb::DBMS() was incorrectly indicating that DB2 databases were
+  dBase databases.
+- Fixed buffer overflow problem in Unicode builds.
+
+
 2.6.2
 -----
 

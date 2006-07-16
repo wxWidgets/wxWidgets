@@ -1,0 +1,9 @@
+#! /bin/sh
+set -e
+
+update-alternatives --install /usr/bin/wx-config wx-config             \
+			      /usr/lib/wx/config/base-unicode-debug-=V \
+			      $(( =PRIO * 10 + 5 ))
+
+#DEBHELPER#
+

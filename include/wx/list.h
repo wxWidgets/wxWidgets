@@ -140,6 +140,13 @@ private:
 
 #endif // defined( __VISUALC__ )
 
+// Visual C++ 2005 complains about the const
+#if (defined(__VISUALC__) && __VISUALC__ >= 1400) || defined(__MWERKS__)
+#define _WX_DELETEFUNCTIONCONST
+#else
+#define _WX_DELETEFUNCTIONCONST const
+#endif
+
 #define WX_DECLARE_LIST_XO(elT, liT, decl)                                    \
     VC6_WORKAROUND(elT, liT, decl)                                            \
     decl liT : public std::list<elT>                                          \
@@ -148,7 +155,7 @@ private:
         bool m_destroy;                                                       \
     private:                                                                  \
         typedef elT _WX_LIST_ITEM_TYPE_##liT;                                 \
-        static void DeleteFunction( const _WX_LIST_ITEM_TYPE_##liT X );       \
+        static void DeleteFunction( _WX_DELETEFUNCTIONCONST _WX_LIST_ITEM_TYPE_##liT X );       \
     public:                                                                   \
         class compatibility_iterator                                          \
         {                                                                     \
@@ -171,7 +178,9 @@ private:
             const compatibility_iterator* operator->() const { return this; } \
                                                                               \
             bool operator==(const compatibility_iterator& i) const            \
-                { return (m_list == i.m_list) && (m_iter == i.m_iter); }      \
+                { return (m_list == i.m_list) && (m_iter == i.m_iter)         \
+                  || !m_list && (i.m_iter == i.m_list->end())                 \
+                  || !i.m_list && (m_iter == m_list->end()); }                \
             bool operator!=(const compatibility_iterator& i) const            \
                 { return !( operator==( i ) ); }                              \
             operator bool() const                                             \
@@ -192,7 +201,8 @@ private:
             compatibility_iterator GetPrevious() const                        \
             {                                                                 \
                 iterator i = m_iter;                                          \
-                return compatibility_iterator( m_list, --i );                 \
+                i != m_list->begin() ? --i : i = m_list->end();               \
+                return compatibility_iterator( m_list, i );                   \
             }                                                                 \
             int IndexOf() const                                               \
             {                                                                 \

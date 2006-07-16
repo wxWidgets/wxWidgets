@@ -24,13 +24,11 @@ build/bakefiles/formats/*.bkl
 build/bakefiles/formats/*.empy
 build/bakefiles/formats/README
 build/bakefiles/formats/*.bkmanifest
-build/bakefiles/wxpresets/*.bkl
 build/bakefiles/wxpresets/*.txt
 build/bakefiles/wxpresets/presets/*.bkl
 build/bakefiles/wxpresets/sample/*.bkl
 build/bakefiles/wxpresets/sample/*.in
 build/bakefiles/wxpresets/sample/*.cpp
-build/bakefiles/wxpresets/*.bkl
 build/update-setup-h
 
 build/aclocal/*.m4
@@ -87,18 +85,12 @@ docs/tech/*.htm
 
 src/common/*.cpp
 src/common/extended.c
-src/common/unzip.c
-src/common/unzip.h
 src/common/*.inc
 src/common/base.rc
 
 src/generic/*.cpp
-src/generic/*.c
-src/generic/*.inc
 
 src/html/*.cpp
-src/html/*.h
-src/html/bitmaps/*.xpm
 
 src/unix/*.cpp
 src/unix/*.c

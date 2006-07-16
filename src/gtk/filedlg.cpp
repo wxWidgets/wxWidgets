@@ -21,7 +21,7 @@
 
 #include "wx/filedlg.h"
 
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
@@ -141,7 +141,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     : wxGenericFileDialog(parent, message, defaultDir, defaultFileName,
                        wildCard, style, pos, true )
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
     {
         wxASSERT_MSG( !( (style & wxSAVE) && (style & wxMULTIPLE) ), wxT("wxFileDialog - wxMULTIPLE used on a save dialog" ) );
@@ -181,6 +181,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                        ok_btn_stock, GTK_RESPONSE_ACCEPT,
                        NULL);
 
+        gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
+
         if ( style & wxMULTIPLE )
             gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(m_widget), true);
 
@@ -206,7 +208,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                 wxConvFileName->cWX2MB(defaultFileName));
 
 #if GTK_CHECK_VERSION(2,7,3)
-            if (!gtk_check_version(2,7,3))
+            if ((style & wxOVERWRITE_PROMPT) && !gtk_check_version(2,7,3))
                 gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(m_widget), TRUE);
 #endif
         }
@@ -236,7 +238,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 
 wxFileDialog::~wxFileDialog()
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
     {
         if (m_destroyed_by_delete)
@@ -247,7 +249,7 @@ wxFileDialog::~wxFileDialog()
 
 void wxFileDialog::OnFakeOk( wxCommandEvent &event )
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
         wxDialog::OnOK( event );
     else
@@ -257,7 +259,7 @@ void wxFileDialog::OnFakeOk( wxCommandEvent &event )
 
 int wxFileDialog::ShowModal()
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
         return wxDialog::ShowModal();
     else
@@ -267,7 +269,7 @@ int wxFileDialog::ShowModal()
 
 bool wxFileDialog::Show( bool show )
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
         return wxDialog::Show( show );
     else
@@ -285,7 +287,7 @@ void wxFileDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags 
 
 wxString wxFileDialog::GetPath() const
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
         return wxConvFileName->cMB2WX(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
     else
@@ -295,7 +297,7 @@ wxString wxFileDialog::GetPath() const
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
     {
         GetPaths(files);
@@ -312,7 +314,7 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
 
 void wxFileDialog::GetPaths(wxArrayString& paths) const
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
     {
         paths.Empty();
@@ -340,7 +342,7 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
 
 void wxFileDialog::SetMessage(const wxString& message)
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
     {
         m_message = message;
@@ -353,7 +355,7 @@ void wxFileDialog::SetMessage(const wxString& message)
 
 void wxFileDialog::SetPath(const wxString& path)
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
     {
         if (path.empty()) return;
@@ -367,7 +369,7 @@ void wxFileDialog::SetPath(const wxString& path)
 
 void wxFileDialog::SetDirectory(const wxString& dir)
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
     {
         if (wxDirExists(dir))
@@ -382,7 +384,7 @@ void wxFileDialog::SetDirectory(const wxString& dir)
 
 wxString wxFileDialog::GetDirectory() const
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
         return wxConvFileName->cMB2WX(
             gtk_file_chooser_get_current_folder( GTK_FILE_CHOOSER(m_widget) ) );
@@ -393,7 +395,7 @@ wxString wxFileDialog::GetDirectory() const
 
 void wxFileDialog::SetFilename(const wxString& name)
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
     {
         if (GetStyle() & wxSAVE)
@@ -408,7 +410,7 @@ void wxFileDialog::SetFilename(const wxString& name)
 
 wxString wxFileDialog::GetFilename() const
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
         return wxFileName(
             wxConvFileName->cMB2WX(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget))) ).GetFullName();
@@ -419,7 +421,7 @@ wxString wxFileDialog::GetFilename() const
 
 void wxFileDialog::SetWildcard(const wxString& wildCard)
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
     {
         // parse filters
@@ -473,7 +475,7 @@ void wxFileDialog::SetWildcard(const wxString& wildCard)
 
 void wxFileDialog::SetFilterIndex(int filterIndex)
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
     {
         gpointer filter;
@@ -500,7 +502,7 @@ void wxFileDialog::SetFilterIndex(int filterIndex)
 
 int wxFileDialog::GetFilterIndex() const
 {
-#ifdef __WXGTK24__
+#if defined(__WXGTK24__) && (!defined(__WXGPE__))
     if (!gtk_check_version(2,4,0))
     {
         GtkFileChooser *chooser = GTK_FILE_CHOOSER(m_widget);

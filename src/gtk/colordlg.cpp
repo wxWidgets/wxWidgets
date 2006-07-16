@@ -46,8 +46,11 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
     m_widget = gtk_color_selection_dialog_new(wxGTK_CONV(title));
 
     if (parent)
+    {
+        GtkWindow* gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
         gtk_window_set_transient_for(GTK_WINDOW(m_widget),
-                                     GTK_WINDOW(parent->m_widget));
+                                     gtk_parent);
+    }
 
     GtkColorSelection *sel =
         GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(m_widget)->colorsel);

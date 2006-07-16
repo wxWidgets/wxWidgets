@@ -83,6 +83,8 @@ public:
   virtual void SetPadding(const wxSize& padding);
     // sets the size of the tabs (assumes all tabs are the same size)
   virtual void SetTabSize(const wxSize& sz);
+    // hit test
+  virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
 
     // calculate size for wxNotebookSizer
   wxSize CalcSizeFromPage(const wxSize& sizePage) const;

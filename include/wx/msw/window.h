@@ -156,6 +156,11 @@ public:
     virtual bool UnregisterHotKey(int hotkeyId);
 #endif // wxUSE_HOTKEY
 
+#ifdef __POCKETPC__
+    bool IsContextMenuEnabled() const { return m_contextMenuEnabled; }
+    void EnableContextMenu(bool enable = true) { m_contextMenuEnabled = enable; }
+#endif
+
     // window handle stuff
     // -------------------
 
@@ -516,11 +521,17 @@ private:
     // current defer window position operation handle (may be NULL)
     WXHANDLE m_hDWP;
 
+protected:
     // When deferred positioning is done these hold the pending changes, and
     // are used for the default values if another size/pos changes is done on
     // this window before the group of deferred changes is completed.
     wxPoint     m_pendingPosition;
     wxSize      m_pendingSize;
+
+private:
+#ifdef __POCKETPC__
+    bool        m_contextMenuEnabled;
+#endif
 
     DECLARE_DYNAMIC_CLASS(wxWindowMSW)
     DECLARE_NO_COPY_CLASS(wxWindowMSW)

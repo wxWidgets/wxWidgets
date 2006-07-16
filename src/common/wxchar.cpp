@@ -1070,7 +1070,7 @@ WXDLLEXPORT int wxTolower(wxChar ch) { return (wxChar)CharLower((LPTSTR)(ch)); }
 WXDLLEXPORT int wxToupper(wxChar ch) { return (wxChar)CharUpper((LPTSTR)(ch)); }
 #endif
 
-#if defined(__DARWIN__) && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 )
+#ifdef wxNEED_WX_MBSTOWCS
 
 WXDLLEXPORT size_t wxMbstowcs (wchar_t * out, const char * in, size_t outlen)
 {
@@ -1116,6 +1116,8 @@ WXDLLEXPORT size_t	wxWcstombs (char * out, const wchar_t * in, size_t outlen)
     return in - origin;
 }
 
+#endif // wxNEED_WX_MBSTOWCS
+
 #if defined(wxNEED_WX_CTYPE_H)
 
 #include <CoreFoundation/CoreFoundation.h>
@@ -1146,8 +1148,6 @@ WXDLLEXPORT int wxTolower(wxChar ch) { return (wxChar)tolower((char)(ch)); }
 WXDLLEXPORT int wxToupper(wxChar ch) { return (wxChar)toupper((char)(ch)); }
 
 #endif  // wxNEED_WX_CTYPE_H
-
-#endif  // defined(__DARWIN__) and OSX <= 10.2
 
 #ifndef wxStrdupA
 

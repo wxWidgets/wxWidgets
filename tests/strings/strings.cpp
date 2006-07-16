@@ -228,20 +228,19 @@ void StringTestCase::Conversion()
 #endif
 }
 
+#if !wxUSE_UNICODE
 // in case wcscmp is missing
 //
 static int wx_wcscmp(const wchar_t *s1, const wchar_t *s2)
 {
-    for (;;) {
-        if (*s1 != *s2)
-            return *s1 - *s2;
-        if (*s1 == 0)
-            break;
+    while (*s1 == *s2 && *s1 != 0)
+    {
         s1++;
         s2++;
     }
-    return 0;
+    return *s1 - *s2;
 }
+#endif
 
 void
 StringTestCase::DoTestConversion(const char *s,
@@ -550,8 +549,11 @@ void StringTestCase::CaseChanges()
     if ( locRu.IsOk() )
     {
         // try upper casing 8bit strings
-        wxString sUpper("\xdf"),
-                 sLower("\xff");
+        const wchar_t capital_ya[] = { 0x42f, 0 },
+                      small_ya[]   = { 0x44f, 0 };
+
+        wxString sUpper(wxConvLibc.cWC2MB(capital_ya)),
+                 sLower(wxConvLibc.cWC2MB(small_ya));
 
         CPPUNIT_ASSERT( sUpper.Lower() == sLower );
         CPPUNIT_ASSERT( sLower.Upper() == sUpper );

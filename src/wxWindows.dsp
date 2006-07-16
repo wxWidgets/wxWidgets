@@ -3439,6 +3439,10 @@ SOURCE=..\include\wx\msw\joystick.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msw\libraries.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\msw\listbox.h
 # End Source File
 # Begin Source File
@@ -3560,6 +3564,10 @@ SOURCE=..\include\wx\msw\radiobox.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\radiobut.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\rcdefs.h
 # End Source File
 # Begin Source File
 

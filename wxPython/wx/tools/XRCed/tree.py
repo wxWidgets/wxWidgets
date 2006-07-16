@@ -56,6 +56,7 @@ class ID_NEW:
     TOOL = wxNewId()
     MENU_BAR = wxNewId()
     MENU = wxNewId()
+    STATUS_BAR = wxNewId()
 
     STATIC_TEXT = wxNewId()
     TEXT_CTRL = wxNewId()
@@ -82,16 +83,21 @@ class ID_NEW:
     LIST_CTRL = wxNewId()
     CHECK_LIST = wxNewId()
     NOTEBOOK = wxNewId()
+    CHOICEBOOK = wxNewId()
+    LISTBOOK = wxNewId()
     SPLITTER_WINDOW = wxNewId()
     SCROLLED_WINDOW = wxNewId()
     HTML_WINDOW = wxNewId()
     CALENDAR_CTRL = wxNewId()
+    DATE_CTRL = wxNewId()
     GENERIC_DIR_CTRL = wxNewId()
     SPIN_CTRL = wxNewId()
     UNKNOWN = wxNewId()
     WIZARD = wxNewId()
     WIZARD_PAGE = wxNewId()
     WIZARD_PAGE_SIMPLE = wxNewId()
+    BITMAP = wxNewId()
+    ICON = wxNewId()
     STATUS_BAR = wxNewId()
 
     BOX_SIZER = wxNewId()
@@ -151,9 +157,12 @@ class PullDownMenu:
             ID_NEW.WIZARD_PAGE_SIMPLE: 'wxWizardPageSimple',
             ID_NEW.TOOL_BAR: 'wxToolBar',
             ID_NEW.TOOL: 'tool',
+            ID_NEW.STATUS_BAR: 'wxStatusBar',
             ID_NEW.MENU_BAR: 'wxMenuBar',
             ID_NEW.MENU: 'wxMenu',
             ID_NEW.MENU_ITEM: 'wxMenuItem',
+            ID_NEW.BITMAP: 'wxBitmap',
+            ID_NEW.ICON: 'wxIcon',
             ID_NEW.SEPARATOR: 'separator',
 
             ID_NEW.STATIC_TEXT: 'wxStaticText',
@@ -170,6 +179,7 @@ class PullDownMenu:
             ID_NEW.RADIO_BOX: 'wxRadioBox',
             ID_NEW.COMBO_BOX: 'wxComboBox',
             ID_NEW.LIST_BOX: 'wxListBox',
+            ID_NEW.CHECK_LIST: 'wxCheckListBox',
 
             ID_NEW.STATIC_LINE: 'wxStaticLine',
             ID_NEW.STATIC_BITMAP: 'wxStaticBitmap',
@@ -179,12 +189,14 @@ class PullDownMenu:
             ID_NEW.SCROLL_BAR: 'wxScrollBar',
             ID_NEW.TREE_CTRL: 'wxTreeCtrl',
             ID_NEW.LIST_CTRL: 'wxListCtrl',
-            ID_NEW.CHECK_LIST: 'wxCheckListBox',
             ID_NEW.NOTEBOOK: 'wxNotebook',
+            ID_NEW.CHOICEBOOK: 'wxChoicebook',
+            ID_NEW.LISTBOOK: 'wxListbook',
             ID_NEW.SPLITTER_WINDOW: 'wxSplitterWindow',
             ID_NEW.SCROLLED_WINDOW: 'wxScrolledWindow',
             ID_NEW.HTML_WINDOW: 'wxHtmlWindow',
             ID_NEW.CALENDAR_CTRL: 'wxCalendarCtrl',
+            ID_NEW.DATE_CTRL: 'wxDatePickerCtrl',
             ID_NEW.GENERIC_DIR_CTRL: 'wxGenericDirCtrl',
             ID_NEW.SPIN_CTRL: 'wxSpinCtrl',
 
@@ -214,13 +226,19 @@ class PullDownMenu:
             None,
             (ID_NEW.TOOL_BAR, 'ToolBar', 'Create toolbar'),
             (ID_NEW.MENU_BAR, 'MenuBar', 'Create menubar'),
-            (ID_NEW.MENU, 'Menu', 'Create menu')
+            (ID_NEW.MENU, 'Menu', 'Create menu'),
+            None,
+            (ID_NEW.BITMAP, 'Bitmap', 'Create bitmap'),
+            (ID_NEW.ICON, 'Icon', 'Create icon'),
             ]
         self.containers = [
              (ID_NEW.PANEL, 'Panel', 'Create panel'),
              (ID_NEW.NOTEBOOK, 'Notebook', 'Create notebook control'),
+             (ID_NEW.CHOICEBOOK, 'Choicebook', 'Create choicebook control'),
+             (ID_NEW.LISTBOOK, 'Listbook', 'Create listbook control'),
              (ID_NEW.SPLITTER_WINDOW, 'SplitterWindow', 'Create splitter window'),
              (ID_NEW.TOOL_BAR, 'ToolBar', 'Create toolbar'),
+             (ID_NEW.STATUS_BAR, 'StatusBar', 'Create status bar'),
 #             (ID_NEW.WIZARD_PAGE, 'WizardPage', 'Create wizard page'),
              (ID_NEW.WIZARD_PAGE_SIMPLE, 'WizardPageSimple', 'Create simple wizard page'),
             ]
@@ -250,10 +268,10 @@ class PullDownMenu:
              (ID_NEW.SCROLL_BAR, 'ScrollBar', 'Create scroll bar'),
              (ID_NEW.TREE_CTRL, 'TreeCtrl', 'Create tree'),
              (ID_NEW.LIST_CTRL, 'ListCtrl', 'Create list'),
-             (ID_NEW.CHECK_LIST, 'CheckList', 'Create check list'),
              (ID_NEW.SCROLLED_WINDOW, 'ScrolledWindow', 'Create scrolled window'),
              (ID_NEW.HTML_WINDOW, 'HtmlWindow', 'Create HTML window'),
              (ID_NEW.CALENDAR_CTRL, 'CalendarCtrl', 'Create calendar control'),
+             (ID_NEW.DATE_CTRL, 'DatePickerCtrl', 'Create date picker control'),
              (ID_NEW.GENERIC_DIR_CTRL, 'GenericDirCtrl', 'Create generic dir control'),
              (ID_NEW.UNKNOWN, 'Unknown', 'Create custom control placeholder'),
              ],
@@ -270,12 +288,17 @@ class PullDownMenu:
              (ID_NEW.RADIO_BOX, 'RadioBox', 'Create radio box'),
              (ID_NEW.COMBO_BOX, 'ComboBox', 'Create combo box'),
              (ID_NEW.LIST_BOX, 'ListBox', 'Create list box'),
+             (ID_NEW.CHECK_LIST, 'CheckListBox', 'Create checklist box'),
              ],
             ['container', 'Containers',
              (ID_NEW.PANEL, 'Panel', 'Create panel'),
              (ID_NEW.NOTEBOOK, 'Notebook', 'Create notebook control'),
+             (ID_NEW.CHOICEBOOK, 'Choicebook', 'Create choicebook control'),
+             (ID_NEW.LISTBOOK, 'Listbook', 'Create listbook control'),
              (ID_NEW.SPLITTER_WINDOW, 'SplitterWindow', 'Create splitter window'),
              (ID_NEW.TOOL_BAR, 'ToolBar', 'Create toolbar'),
+             (ID_NEW.STATUS_BAR, 'StatusBar', 'Create status bar'),
+             (ID_NEW.MENU_BAR, 'MenuBar', 'Create menubar'),
 #             (ID_NEW.WIZARD_PAGE, 'Wizard Page', 'Create wizard page'),
              (ID_NEW.WIZARD_PAGE_SIMPLE, 'WizardPageSimple', 'Create simple wizard page'),
              ],
@@ -311,7 +334,6 @@ class PullDownMenu:
              (ID_NEW.GAUGE, 'Gauge', 'Create gauge'),
              (ID_NEW.SCROLL_BAR, 'ScrollBar', 'Create scroll bar'),
              (ID_NEW.LIST_CTRL, 'ListCtrl', 'Create list control'),
-             (ID_NEW.CHECK_LIST, 'CheckList', 'Create check list'),
              ],
             ['button', 'Buttons',
              (ID_NEW.BUTTON, 'Button', 'Create button'),
@@ -325,6 +347,7 @@ class PullDownMenu:
              (ID_NEW.RADIO_BOX, 'RadioBox', 'Create radio box'),
              (ID_NEW.COMBO_BOX, 'ComboBox', 'Create combo box'),
              (ID_NEW.LIST_BOX, 'ListBox', 'Create list box'),
+             (ID_NEW.CHECK_LIST, 'CheckListBox', 'Create checklist box'),
              ],
             ]
         self.stdButtons = [
@@ -592,15 +615,16 @@ class XML_Tree(wxTreeCtrl):
         # Root at (0,0)
         if item == g.testWin.item: return wxPoint(0, 0)
         itemParent = self.GetItemParent(item)
-        # Select NB page
+        # Select book page
         if not obj: obj = self.FindNodeObject(item)
-        if self.GetPyData(itemParent).treeObject().__class__ == xxxNotebook:
-            notebook = self.FindNodeObject(itemParent)
+        if self.GetPyData(itemParent).treeObject().__class__ in \
+               [xxxNotebook, xxxChoicebook, xxxListbook]:
+            book = self.FindNodeObject(itemParent)
             # Find position
-            for i in range(notebook.GetPageCount()):
-                if notebook.GetPage(i) == obj:
-                    if notebook.GetSelection() != i:
-                        notebook.SetSelection(i)
+            for i in range(book.GetPageCount()):
+                if book.GetPage(i) == obj:
+                    if book.GetSelection() != i:
+                        book.SetSelection(i)
                         # Remove highlight - otherwise highlight window won't be visible
                         if g.testWin.highLight:
                             g.testWin.highLight.Remove()
@@ -630,8 +654,9 @@ class XML_Tree(wxTreeCtrl):
         # Top-level sizer? return window's sizer
         if xxx.isSizer and isinstance(parentWin, wxWindow):
             return parentWin.GetSizer()
-        elif isinstance(xxx, xxxToolBar):
-            # If it's the main toolbar, we can't really select it
+        elif xxx.__class__ in [xxxMenu, xxxMenuItem, xxxSeparator]:  return None
+        elif xxx.__class__ in [xxxToolBar, xxxMenuBar]:
+            # If it's the main toolbar or menubar, we can't really select it
             if xxx.parent.__class__ == xxxFrame:  return None
         elif isinstance(xxx.parent, xxxToolBar):
             # Select complete toolbar
@@ -642,16 +667,19 @@ class XML_Tree(wxTreeCtrl):
                 if ch.GetWindow() and ch.GetWindow().GetName() == xxx.name:
                     return ch.GetWindow()
             return None
+        elif xxx.parent.__class__ in [xxxChoicebook, xxxListbook]:
+            # First window is controld
+            return parentWin.GetChildren()[self.ItemIndex(item)+1]
         # Otherwise get parent's object and it's child
-        child = parentWin.GetChildren()[self.ItemIndex(item)]
+        child = parentWin.GetChildren()[self.WindowIndex(item)]
         # Return window or sizer for sizer items
         if child.GetClassName() == 'wxSizerItem':
             if child.IsWindow(): child = child.GetWindow()
             elif child.IsSizer():
                 child = child.GetSizer()
-                # Test for notebook sizers
+                # Test for notebook sizers (deprecated)
                 if isinstance(child, wxNotebookSizer):
-                    child = child.GetNotebook()
+                    child = child.GetNotebook()        
         return child
 
     def OnSelChanged(self, evt):
@@ -713,7 +741,9 @@ class XML_Tree(wxTreeCtrl):
             return
         # Get window/sizer object
         obj = self.FindNodeObject(item)
-        if not obj: return
+        if not obj:
+            if g.testWin.highLight: g.testWin.highLight.Remove()
+            return
         pos = self.FindNodePos(item, obj)
         size = obj.GetSize()
         # Highlight
@@ -729,18 +759,29 @@ class XML_Tree(wxTreeCtrl):
         xxx = self.GetPyData(item)
         if g.panel.IsModified():
             self.Apply(xxx, item)       # apply changes
-        treeObj = xxx.treeObject()
-        if treeObj.className not in ['wxFrame', 'wxPanel', 'wxDialog',
-                                     'wxMenuBar', 'wxToolBar', 'wxWizard',
-                                     'wxWizardPageSimple']:
+        availableViews = ['wxFrame', 'wxPanel', 'wxDialog',  
+                          'wxMenuBar', 'wxToolBar', 'wxWizard',  
+                          'wxWizardPageSimple']
+        originalItem = item
+        # Walk up the tree until we find an item that has a view
+        while item and self.GetPyData(item).treeObject().className not in availableViews:
+            item = self.GetItemParent(item)
+        if not item or not item.IsOk():
             wxLogMessage('No view for this element (yet)')
             return
         # Show item in bold
         if g.testWin:     # Reset old
             self.SetItemBold(g.testWin.item, False)
-        self.CreateTestWin(item)
+        try:
+            wxBeginBusyCursor()
+            self.CreateTestWin(item)
+        finally:
+            wxEndBusyCursor()
         # Maybe an error occurred, so we need to test
-        if g.testWin: self.SetItemBold(g.testWin.item)
+        if g.testWin:
+            self.SetItemBold(g.testWin.item)
+            # Select original item
+            self.ChangeSelection(originalItem)
 
     # Double-click on Linux
     def OnItemActivated(self, evt):
@@ -778,7 +819,6 @@ class XML_Tree(wxTreeCtrl):
 #                self.CreateTestWin(child)
 #                return
 
-        wxBeginBusyCursor()
         # Close old window, remember where it was
         highLight = None
         if testWin:
@@ -851,7 +891,7 @@ class XML_Tree(wxTreeCtrl):
                 res.LoadOnFrame(testWin, g.frame, STD_NAME)
                 # Create status bar
                 testWin.panel = testWin
-                testWin.CreateStatusBar()
+                #testWin.CreateStatusBar()
                 testWin.SetClientSize(testWin.GetBestSize())
                 testWin.SetPosition(pos)
                 testWin.Show(True)
@@ -932,7 +972,6 @@ class XML_Tree(wxTreeCtrl):
             wxLogError(traceback.format_exception(inf[0], inf[1], None)[-1])
             wxLogError('Error loading resource')
         wxMemoryFSHandler_RemoveFile('xxx.xrc')
-        wxEndBusyCursor()
 
     def CloseTestWindow(self):
         if not g.testWin: return
@@ -944,6 +983,17 @@ class XML_Tree(wxTreeCtrl):
 
     def OnCloseTestWin(self, evt):
         self.CloseTestWindow()
+
+    # Return index in parent, for real window children
+    def WindowIndex(self, item):
+        n = 0                           # index of sibling
+        prev = self.GetPrevSibling(item)
+        while prev.IsOk():
+            # MenuBar is not a child
+            if not isinstance(self.GetPyData(prev), xxxMenuBar):
+                n += 1
+            prev = self.GetPrevSibling(prev)
+        return n
 
     # Return item index in parent
     def ItemIndex(self, item):
@@ -1030,10 +1080,12 @@ class XML_Tree(wxTreeCtrl):
                     SetMenu(m, pullDownMenu.stdButtons)
                 else:
                     SetMenu(m, pullDownMenu.controls)
-                    if xxx.__class__ == xxxNotebook:
+                    if xxx.__class__ in [xxxNotebook, xxxChoicebook, xxxListbook]:
                         m.Enable(m.FindItem('sizer'), False)
                     elif not (xxx.isSizer or xxx.parent and xxx.parent.isSizer):
                         m.Enable(ID_NEW.SPACER, False)
+                    if xxx.__class__ is not xxxFrame:
+                        m.Enable(ID_NEW.MENU_BAR, False)
                 m.AppendSeparator()
                 m.Append(ID_NEW.REF, 'reference...', 'Create object_ref node')
             # Select correct label for create menu

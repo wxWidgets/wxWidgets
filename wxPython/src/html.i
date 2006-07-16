@@ -48,6 +48,10 @@ MAKE_CONST_WXSTRING2(HtmlPrintingTitleStr, wxT("Printing"))
 // wx/html include files (more or less.)
 
 //---------------------------------------------------------------------------
+
+%typemap(out) wxHtmlCell*         { $result = wxPyMake_wxObject($1, $owner); }
+%typemap(out) const wxHtmlCell*   { $result = wxPyMake_wxObject($1, $owner); }
+
 //---------------------------------------------------------------------------
 %newgroup
 
@@ -204,8 +208,8 @@ public:
     void SetStandardFonts(int size = -1,
                           const wxString& normal_face = wxPyEmptyString,
                           const wxString& fixed_face = wxPyEmptyString);
-     
-    
+
+
     wxHtmlContainerCell* GetContainer();
     wxHtmlContainerCell* OpenContainer();
     wxHtmlContainerCell *SetContainer(wxHtmlContainerCell *c);
@@ -242,7 +246,7 @@ public:
 
 %{
 class wxPyHtmlTagHandler : public wxHtmlTagHandler {
-    DECLARE_DYNAMIC_CLASS(wxPyHtmlTagHandler);
+    DECLARE_DYNAMIC_CLASS(wxPyHtmlTagHandler)
 public:
     wxPyHtmlTagHandler() : wxHtmlTagHandler() {};
 
@@ -265,7 +269,7 @@ IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlTagHandler, wxHtmlTagHandler, HandleTag);
 %rename(HtmlTagHandler) wxPyHtmlTagHandler;
 class wxPyHtmlTagHandler : public wxObject {
 public:
-    %pythonAppend wxPyHtmlTagHandler   "self._setCallbackInfo(self, HtmlTagHandler)"    
+    %pythonAppend wxPyHtmlTagHandler   "self._setCallbackInfo(self, HtmlTagHandler)"
     wxPyHtmlTagHandler();
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -280,7 +284,7 @@ public:
 
 %{
 class wxPyHtmlWinTagHandler : public wxHtmlWinTagHandler {
-    DECLARE_DYNAMIC_CLASS(wxPyHtmlWinTagHandler);
+    DECLARE_DYNAMIC_CLASS(wxPyHtmlWinTagHandler)
 public:
     wxPyHtmlWinTagHandler() : wxHtmlWinTagHandler() {};
 
@@ -347,7 +351,7 @@ public:
         PyObject* arg = PyTuple_New(0);
         PyObject* obj = PyObject_CallObject(m_tagHandlerClass, arg);
         Py_DECREF(arg);
-        
+
         // now figure out where it's C++ object is...
         wxPyHtmlWinTagHandler* thPtr;
         if (! wxPyConvertSwigPtr(obj, (void **)&thPtr, wxT("wxPyHtmlWinTagHandler"))) {
@@ -497,7 +501,12 @@ enum
 
 class wxHtmlCell : public wxObject {
 public:
+    %typemap(out) wxHtmlCell*;    // turn off this typemap
+
     wxHtmlCell();
+
+    // Turn it back on again
+    %typemap(out) wxHtmlCell* { $result = wxPyMake_wxObject($1, $owner); }
 
     int GetPosX();
     int GetPosY();
@@ -508,7 +517,7 @@ public:
     // Returns the maximum possible length of the cell.
     // Call Layout at least once before using GetMaxTotalWidth()
     int GetMaxTotalWidth() const;
-   
+
     const wxString& GetId() const;
     void SetId(const wxString& id);
     wxHtmlLinkInfo* GetLink(int x = 0, int y = 0);
@@ -580,6 +589,9 @@ class  wxHtmlWordCell : public wxHtmlCell
 {
 public:
     wxHtmlWordCell(const wxString& word, wxDC& dc);
+    wxString ConvertToText(wxHtmlSelection *sel) const;
+    bool IsLinebreakAllowed() const;
+    void SetPreviousWord(wxHtmlWordCell *cell);
 };
 
 
@@ -639,7 +651,7 @@ public:
 
 %{ // here's the C++ version
 class wxPyHtmlFilter : public wxHtmlFilter {
-    DECLARE_ABSTRACT_CLASS(wxPyHtmlFilter);
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlFilter)
 public:
     wxPyHtmlFilter() : wxHtmlFilter() {}
 
@@ -707,7 +719,7 @@ public:
 
 %{
 class wxPyHtmlWindow : public wxHtmlWindow {
-    DECLARE_ABSTRACT_CLASS(wxPyHtmlWindow);
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlWindow)
 public:
     wxPyHtmlWindow(wxWindow *parent, wxWindowID id = -1,
                    const wxPoint& pos = wxDefaultPosition,
@@ -736,6 +748,7 @@ public:
     DEC_PYCALLBACK__STRING(OnSetTitle);
     DEC_PYCALLBACK__CELLINTINT(OnCellMouseHover);
     DEC_PYCALLBACK__CELLINTINTME(OnCellClicked);
+
     PYPRIVATE;
 };
 
@@ -807,7 +820,7 @@ public:
     %pythonAppend wxPyHtmlWindow      "self._setCallbackInfo(self, HtmlWindow); self._setOORInfo(self)"
     %pythonAppend wxPyHtmlWindow()    ""
     %typemap(out) wxPyHtmlWindow*;    // turn off this typemap
-    
+
     wxPyHtmlWindow(wxWindow *parent, int id = -1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
@@ -827,7 +840,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
-    
+
     // Set HTML page and display it. !! source is HTML document itself,
     // it is NOT address/filename of HTML document. If you want to
     // specify document location, use LoadPage() istead
@@ -885,7 +898,7 @@ public:
     void SetStandardFonts(int size = -1,
                           const wxString& normal_face = wxPyEmptyString,
                           const wxString& fixed_face = wxPyEmptyString);
-    
+
     DocDeclStr(
         void, SetTitle(const wxString& title),
         "", "");
@@ -935,7 +948,7 @@ public:
 
     // Converts current page to text:
     wxString ToText();
-    
+
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnSetTitle(const wxString& title);
     void base_OnCellMouseHover(wxHtmlCell *cell, wxCoord x, wxCoord y);
@@ -983,7 +996,7 @@ public:
     void SetStandardFonts(int size = -1,
                           const wxString& normal_face = wxPyEmptyString,
                           const wxString& fixed_face = wxPyEmptyString);
-    
+
     int Render(int x, int y, int from = 0, int dont_render = false, int maxHeight = INT_MAX,
                //int *known_pagebreaks = NULL, int number_of_pages = 0
                int* choices=NULL, int LCOUNT = 0
@@ -1014,7 +1027,7 @@ public:
     void SetHtmlFile(const wxString &htmlfile);
     void SetHeader(const wxString& header, int pg = wxPAGE_ALL);
     void SetFooter(const wxString& footer, int pg = wxPAGE_ALL);
-    
+
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
     %extend {
         void SetFonts(wxString normal_face, wxString fixed_face, PyObject* sizes=NULL) {
@@ -1031,7 +1044,7 @@ public:
     void SetStandardFonts(int size = -1,
                           const wxString& normal_face = wxPyEmptyString,
                           const wxString& fixed_face = wxPyEmptyString);
-    
+
     void SetMargins(float top = 25.2, float bottom = 25.2,
                     float left = 25.2, float right = 25.2,
                     float spaces = 5);
@@ -1077,7 +1090,7 @@ public:
     void SetStandardFonts(int size = -1,
                           const wxString& normal_face = wxPyEmptyString,
                           const wxString& fixed_face = wxPyEmptyString);
-    
+
     wxPrintData *GetPrintData() {return m_PrintData;}
     wxPageSetupDialogData *GetPageSetupData() {return m_PageSetupData;}
 
@@ -1136,6 +1149,7 @@ public:
     int GetMaxIndex();
     const wxString& GetName();
     wxHtmlContentsItem* GetContentsItem();
+    %pythoncode { GetContentsItem = wx._deprecated(GetContentsItem) }
 };
 
 //---------------------------------------------------------------------------
@@ -1159,9 +1173,16 @@ public:
     const wxHtmlBookRecArray& GetBookRecArray();
 
     wxHtmlContentsItem* GetContents();
+    %pythoncode { GetContents = wx._deprecated(GetContents) }
+
     int GetContentsCnt();
+    %pythoncode { GetContentsCnt = wx._deprecated(GetContentsCnt) }
+
     wxHtmlContentsItem* GetIndex();
+    %pythoncode { GetIndex = wx._deprecated(GetIndex) }
+
     int GetIndexCnt();
+    %pythoncode { GetIndexCnt = wx._deprecated(GetIndexCnt) }
 };
 
 //---------------------------------------------------------------------------
@@ -1171,7 +1192,7 @@ MustHaveApp(wxHtmlHelpFrame);
 class wxHtmlHelpFrame : public wxFrame {
 public:
     %pythonAppend wxHtmlHelpFrame    "self._setOORInfo(self)"
-    
+
     wxHtmlHelpFrame(wxWindow* parent, int wxWindowID,
 		    const wxString& title = wxPyEmptyString,
 		    int style = wxHF_DEFAULTSTYLE, wxHtmlHelpData* data = NULL);
@@ -1211,7 +1232,7 @@ class wxHtmlHelpController : public wxObject  // wxHelpControllerBase
 {
 public:
 //    %pythonAppend wxHtmlHelpController "self._setOORInfo(self)"
-    
+
     wxHtmlHelpController(int style = wxHF_DEFAULTSTYLE);
     ~wxHtmlHelpController();
 

@@ -2,7 +2,7 @@
 /** @file LexVB.cxx
  ** Lexer for Visual Basic and VBScript.
  **/
-// Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2005 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
@@ -20,8 +20,12 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+// Internal state, highlighted as number
+#define SCE_B_FILENUMBER SCE_B_DEFAULT+100
+
+
 static bool IsVBComment(Accessor &styler, int pos, int len) {
-	return len>0 && styler[pos]=='\'';
+	return len > 0 && styler[pos] == '\'';
 }
 
 static inline bool IsTypeCharacter(int ch) {
@@ -36,12 +40,15 @@ static inline bool IsAWordChar(int ch) {
 
 static inline bool IsAWordStart(int ch) {
 	return ch >= 0x80 ||
-	       (isalnum(ch) || ch == '_');
+	       (isalpha(ch) || ch == '_');
 }
 
-static inline bool IsADateCharacter(const int ch) {
+static inline bool IsANumberChar(int ch) {
+	// Not exactly following number definition (several dots are seen as OK, etc.)
+	// but probably enough in most cases.
 	return (ch < 0x80) &&
-		(isalnum(ch) || ch == '|' || ch == '-' || ch == '/' || ch == ':' || ch == ' ' || ch == '\t');
+	        (isdigit(ch) || toupper(ch) == 'E' ||
+             ch == '.' || ch == '-' || ch == '+');
 }
 
 static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
@@ -55,6 +62,12 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 	styler.StartAt(startPos);
 
 	int visibleChars = 0;
+	int fileNbDigits = 0;
+
+	// Do not leak onto next line
+	if (initStyle == SCE_B_STRINGEOL || initStyle == SCE_B_COMMENT || initStyle == SCE_B_PREPROCESSOR) {
+		initStyle = SCE_B_DEFAULT;
+	}
 
 	StyleContext sc(startPos, length, initStyle, styler);
 
@@ -96,7 +109,9 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 				}
 			}
 		} else if (sc.state == SCE_B_NUMBER) {
-			if (!IsAWordChar(sc.ch)) {
+			// We stop the number definition on non-numerical non-dot non-eE non-sign char
+			// Also accepts A-F for hex. numbers
+			if (!IsANumberChar(sc.ch) && !(tolower(sc.ch) >= 'a' && tolower(sc.ch) <= 'f')) {
 				sc.SetState(SCE_B_DEFAULT);
 			}
 		} else if (sc.state == SCE_B_STRING) {
@@ -113,14 +128,38 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 			}
 		} else if (sc.state == SCE_B_COMMENT) {
 			if (sc.atLineEnd) {
-				sc.SetState(SCE_B_DEFAULT);
+				sc.ForwardSetState(SCE_B_DEFAULT);
 			}
 		} else if (sc.state == SCE_B_PREPROCESSOR) {
 			if (sc.atLineEnd) {
+				sc.ForwardSetState(SCE_B_DEFAULT);
+			}
+		} else if (sc.state == SCE_B_FILENUMBER) {
+			if (IsADigit(sc.ch)) {
+				fileNbDigits++;
+				if (fileNbDigits > 3) {
+					sc.ChangeState(SCE_B_DATE);
+				}
+			} else if (sc.ch == '\r' || sc.ch == '\n' || sc.ch == ',') {
+				// Regular uses: Close #1; Put #1, ...; Get #1, ... etc.
+				// Too bad if date is format #27, Oct, 2003# or something like that...
+				// Use regular number state
+				sc.ChangeState(SCE_B_NUMBER);
 				sc.SetState(SCE_B_DEFAULT);
+			} else if (sc.ch == '#') {
+				sc.ChangeState(SCE_B_DATE);
+				sc.ForwardSetState(SCE_B_DEFAULT);
+			} else {
+				sc.ChangeState(SCE_B_DATE);
+			}
+			if (sc.state != SCE_B_FILENUMBER) {
+				fileNbDigits = 0;
 			}
 		} else if (sc.state == SCE_B_DATE) {
-			if (sc.ch == '#' || !IsADateCharacter(sc.chNext)) {
+			if (sc.atLineEnd) {
+				sc.ChangeState(SCE_B_STRINGEOL);
+				sc.ForwardSetState(SCE_B_DEFAULT);
+			} else if (sc.ch == '#') {
 				sc.ForwardSetState(SCE_B_DEFAULT);
 			}
 		}
@@ -134,26 +173,24 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 				// Preprocessor commands are alone on their line
 				sc.SetState(SCE_B_PREPROCESSOR);
 			} else if (sc.ch == '#') {
-				int n = 1;
-				int chSeek = ' ';
-				while ((n < 100) && (chSeek == ' ' || chSeek == '\t')) {
-					chSeek = sc.GetRelative(n);
-					n++;
-				}
-				if (IsADigit(chSeek)) {
-					sc.SetState(SCE_B_DATE);
-				} else {
-					sc.SetState(SCE_B_OPERATOR);
-				}
+				// It can be a date literal, ending with #, or a file number, from 1 to 511
+				// The date literal depends on the locale, so anything can go between #'s.
+				// Can be #January 1, 1993# or #1 Jan 93# or #05/11/2003#, etc.
+				// So we set the FILENUMBER state, and switch to DATE if it isn't a file number
+				sc.SetState(SCE_B_FILENUMBER);
 			} else if (sc.ch == '&' && tolower(sc.chNext) == 'h') {
+				// Hexadecimal number
 				sc.SetState(SCE_B_NUMBER);
+				sc.Forward();
 			} else if (sc.ch == '&' && tolower(sc.chNext) == 'o') {
+				// Octal number
 				sc.SetState(SCE_B_NUMBER);
+				sc.Forward();
 			} else if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
 				sc.SetState(SCE_B_NUMBER);
 			} else if (IsAWordStart(sc.ch) || (sc.ch == '[')) {
 				sc.SetState(SCE_B_IDENTIFIER);
-			} else if (isoperator(static_cast<char>(sc.ch)) || (sc.ch == '\\')) {
+			} else if (isoperator(static_cast<char>(sc.ch)) || (sc.ch == '\\')) {	// Integer division
 				sc.SetState(SCE_B_OPERATOR);
 			}
 		}

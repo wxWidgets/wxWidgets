@@ -236,7 +236,7 @@ ColouriseGui4CliDoc(unsigned int startPos, int length, int initStyle,
 		if (!noforward) sc.Forward();
 
 	}
-	styler.ColourTo(sc.currentPos, sc.state);
+	sc.Complete();
 }
 
 // Main folding function called by Scintilla - (based on props (.ini) files function)

@@ -58,12 +58,29 @@
 
 
 # Used to set the Release tag below.  I normally use it to define what
-# distro the RPM was build on and also include the version of Python
+# distro the RPM was built on and also include the version of Python
 # it was built with.  
 %if %{?release:0}%{!?release:1}
 %define release 1_py%{pyver}
 %endif
 
+
+# This one is used to control whether the full 4 components of the
+# verseion number are used in the site-packages subdirectory name.  By
+# default only 2 or 3 components (depending on stable/unstable status)
+# are used.
+%if %{?fullver:0}%{!?fullver:1}
+%define fullver 0
+%endif
+
+
+# Whether to add --enable-mediactrl to the wxWidgets configure.  For
+# some older versions of gstreamer-0.8 it currently incorerctly allows
+# its use eventhough there is a compatibility problem that causes a
+# failed compile.
+%if %{?mediactrl:0}%{!?mediactrl:1}
+%define mediactrl 1
+%endif
 
 
 #----------------------------------------------------------------------
@@ -94,7 +111,7 @@ Name:      %{pkgname}%{ver2}
 Summary:   Cross platform GUI toolkit for Python
 Version:   %{version}
 Release:   %{release}
-Source0:   %{tarname}-%{version}.tar.gz
+Source0:   %{tarname}-%{version}.tar.bz2
 License:   wx Library Licence, Version 3
 URL:       http://wxPython.org/
 Packager:  Robin Dunn <robin@alldunn.com>
@@ -118,7 +135,7 @@ Provides:  wxPython
 
 %description -n %{pkgname}%{ver2}-%{port}-%{chartype}
 wxPython is a GUI toolkit for the Python programming language. It
- allows Python programmers to create programs with a robust, highly
+allows Python programmers to create programs with a robust, highly
 functional graphical user interface, simply and easily. It is
 implemented as a Python extension module (native code) that wraps the
 popular wxWidgets cross platform GUI library, which is written in C++.
@@ -195,6 +212,9 @@ cd bld
 	--enable-geometry \
 	--enable-optimise \
 	--enable-sound 	--with-sdl \
+%if %{mediactrl}
+	--enable-mediactrl \
+%endif
 	--enable-display \
 %if %{unicode}
 	--enable-unicode \
@@ -226,6 +246,7 @@ cd $WXDIR/wxPython
 	WXPORT=%{port} \
 	UNICODE=%{unicode} \
 	EP_ADD_OPTS=1 \
+	EP_FULL_VER=%{fullver} \
 	NO_SCRIPTS=1 \
 	WX_CONFIG="$WXDIR/bld/wx-config --no_rpath" \
        	build_ext --rpath=%{wxpref}/lib \
@@ -253,6 +274,7 @@ cd $WXDIR/wxPython
 	WXPORT=%{port} \
 	UNICODE=%{unicode} \
 	EP_ADD_OPTS=1 \
+	EP_FULL_VER=%{fullver} \
 	NO_SCRIPTS=1 \
 	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref} --no_rpath" \
        	build_ext --rpath=%{wxpref}/lib \
@@ -392,9 +414,13 @@ rm %{wxpref}/bin/wx-config
 %doc wxPython/docs/*
 %dir %{pref}/lib*/python%{pyver}/site-packages/wx-%{ver2}*-%{port}-%{chartype}
 %{pref}/lib*/python%{pyver}/site-packages/wx-%{ver2}*-%{port}-%{chartype}/*
+%dir %{pref}/lib*/python%{pyver}/site-packages/wxaddons
+%{pref}/lib*/python%{pyver}/site-packages/wxaddons/*
 %dir %{wxpref}
 %dir %{wxpref}/lib
 %{wxpref}/lib/libwx_gtk*
+%dir %{wxpref}/bin
+%{wxpref}/bin/wxrc*
 %{wxpref}/share
 
 

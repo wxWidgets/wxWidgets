@@ -529,6 +529,9 @@ bool wxGetClipboardFormatName(wxDataFormat dataFormat,
 
 IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject)
 
+// the last object which we put on the clipboard
+static IDataObject *gs_LastDataObject = NULL;
+
 wxClipboard::wxClipboard()
 {
 #if wxUSE_OLE_CLIPBOARD
@@ -554,10 +557,17 @@ wxClipboard::~wxClipboard()
 void wxClipboard::Clear()
 {
 #if wxUSE_OLE_CLIPBOARD
-    HRESULT hr = OleSetClipboard(NULL);
-    if ( FAILED(hr) )
+    if ( gs_LastDataObject )
     {
-        wxLogApiError(wxT("OleSetClipboard(NULL)"), hr);
+        if ( OleIsCurrentClipboard(gs_LastDataObject) == S_OK )
+        {
+            HRESULT hr = OleSetClipboard(NULL);
+            if ( FAILED(hr) )
+            {
+                wxLogApiError(wxT("OleSetClipboard(NULL)"), hr);
+            }
+        }
+        gs_LastDataObject = NULL;
     }
 #endif // wxUSE_OLE_CLIPBOARD
 }
@@ -565,19 +575,18 @@ void wxClipboard::Clear()
 bool wxClipboard::Flush()
 {
 #if wxUSE_OLE_CLIPBOARD
-    HRESULT hr = OleFlushClipboard();
-    if ( FAILED(hr) )
+    if ( gs_LastDataObject && OleIsCurrentClipboard(gs_LastDataObject) == S_OK )
     {
-        wxLogApiError(wxT("OleFlushClipboard"), hr);
+        HRESULT hr = OleFlushClipboard();
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxT("OleFlushClipboard"), hr);
 
-        return false;
+            return false;
+        }
     }
-    else
-    {
-        m_clearOnExit = false;
-
-        return true;
-    }
+    gs_LastDataObject = NULL;
+    return true;
 #else // !wxUSE_OLE_CLIPBOARD
     return false;
 #endif // wxUSE_OLE_CLIPBOARD/!wxUSE_OLE_CLIPBOARD
@@ -629,6 +638,11 @@ bool wxClipboard::AddData( wxDataObject *data )
 
         return false;
     }
+
+    // used to track whether the data in the clipboard is still this data
+    // otherwise don't call either OleSetClipboard(NULL) nor 
+    // OleFlushClipboard() as it will interfere with other applications
+    gs_LastDataObject = data->GetInterface();
 
     // we have a problem here because we should delete wxDataObject, but we
     // can't do it because IDataObject which we just gave to the clipboard

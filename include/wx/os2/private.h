@@ -19,6 +19,7 @@
 #define INCL_GPI
 #define INCL_WINSYS
 #define INCL_SHLERRORS
+#define INCL_GPIERRORS
 #define INCL_DOS
 #include <os2.h>
 
@@ -255,26 +256,31 @@ extern LONG APIENTRY wxSubclassedGenericControlProc(WXHWND hWnd, WXDWORD message
 // OS/2 convention of the mask is opposed to the wxWidgets one, so we need
 // to invert the mask each time we pass one/get one to/from Windows
 extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
+extern HBITMAP wxFlipBmp(HBITMAP hbmp, int w = 0, int h = 0);
 
 // ---------------------------------------------------------------------------
 // global data
 // ---------------------------------------------------------------------------
 
+#ifdef __WXPM__
 // The MakeProcInstance version of the function wxSubclassedGenericControlProc
 WXDLLEXPORT_DATA(extern int) wxGenericControlSubClassProc;
 WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
 WXDLLEXPORT_DATA(extern HINSTANCE) wxhInstance;
+#endif
 
 // ---------------------------------------------------------------------------
 // global functions
 // ---------------------------------------------------------------------------
 
+#ifdef __WXPM__
 extern "C"
 {
 WXDLLEXPORT HINSTANCE wxGetInstance();
 }
 
 WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
+#endif
 
 #include "wx/thread.h"
 static inline MRESULT MySendMsg(HWND hwnd, ULONG ulMsgid,

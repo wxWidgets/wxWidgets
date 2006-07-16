@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_IPC_H_
+#define _WX_IPC_H_
+
 // Set wxUSE_DDE_FOR_IPC to 1 to use DDE for IPC under Windows. If it is set to
 // 0, or if the platform is not Windows, use TCP/IP for IPC implementation
 
@@ -39,3 +42,4 @@
     #include "wx/sckipc.h"
 #endif // wxUSE_DDE_FOR_IPC/!wxUSE_DDE_FOR_IPC
 
+#endif // _WX_IPC_H_

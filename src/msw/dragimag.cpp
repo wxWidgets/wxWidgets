@@ -216,7 +216,7 @@ bool wxDragImage::Create(const wxString& str, const wxCursor& cursor)
 {
     wxFont font(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
-    long w, h;
+    long w = 0, h = 0;
     wxScreenDC dc;
     dc.SetFont(font);
     dc.GetTextExtent(str, & w, & h);
@@ -243,10 +243,14 @@ bool wxDragImage::Create(const wxString& str, const wxCursor& cursor)
 
     dc2.SelectObject(wxNullBitmap);
 
+#if wxUSE_WXDIB
     // Make the bitmap masked
     wxImage image = bitmap.ConvertToImage();
     image.SetMaskColour(255, 255, 255);
     return Create(wxBitmap(image), cursor);
+#else
+    return false;
+#endif
 }
 
 #if wxUSE_TREECTRL
@@ -301,9 +305,14 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
 #else
         if (!m_hCursorImageList)
         {
+#ifndef SM_CXCURSOR
+			// Smartphone may not have these metric symbol
+			int cxCursor = 16;
+            int cyCursor = 16;
+#else
             int cxCursor = ::GetSystemMetrics(SM_CXCURSOR);
             int cyCursor = ::GetSystemMetrics(SM_CYCURSOR);
-
+#endif
             m_hCursorImageList = (WXHIMAGELIST) ImageList_Create(cxCursor, cyCursor, ILC_MASK, 1, 1);
         }
 

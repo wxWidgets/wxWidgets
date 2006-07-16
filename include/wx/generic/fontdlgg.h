@@ -22,6 +22,13 @@
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
 
+#ifdef __WXWINCE__
+#define USE_SPINCTRL_FOR_POINT_SIZE 1
+class WXDLLEXPORT wxSpinEvent;
+#else
+#define USE_SPINCTRL_FOR_POINT_SIZE 0
+#endif
+
 /*
  * FONT DIALOG
  */
@@ -45,6 +52,10 @@ class WXDLLEXPORT wxGenericFontDialog : public wxFontDialogBase
 {
 public:
     wxGenericFontDialog() { Init(); }
+#if wxABI_VERSION >= 20604
+    wxGenericFontDialog(wxWindow *parent)
+        : wxFontDialogBase(parent) { Init(); }
+#endif
     wxGenericFontDialog(wxWindow *parent, const wxFontData& data)
         : wxFontDialogBase(parent, data) { Init(); }
     virtual ~wxGenericFontDialog();
@@ -63,6 +74,10 @@ public:
 
     void OnChangeFont(wxCommandEvent& event);
 
+#if USE_SPINCTRL_FOR_POINT_SIZE
+    void OnChangeSize(wxSpinEvent& event);
+#endif
+
 protected:
     // common part of all ctors
     void Init();
@@ -76,7 +91,10 @@ protected:
     wxChoice *weightChoice;
     wxChoice *colourChoice;
     wxCheckBox *underLineCheckBox;
+
+#if !USE_SPINCTRL_FOR_POINT_SIZE
     wxChoice   *pointSizeChoice;
+#endif
 
     wxFontPreviewer *m_previewer;
     bool       m_useEvents;

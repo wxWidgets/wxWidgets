@@ -57,6 +57,9 @@
 #include "wx/artprov.h"
 #include "wx/toplevel.h"
 #include "wx/image.h"
+#ifdef wxUSE_TOGGLEBTN
+#include "wx/tglbtn.h"
+#endif // wxUSE_TOGGLEBTN
 
 #include "wx/univ/scrtimer.h"
 #include "wx/univ/renderer.h"
@@ -2499,9 +2502,20 @@ void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
     {
         // leave a small gap aroudn the line, also account for the toolbar
         // border itself
-        DrawVerticalLine(dc, rectOrig.x + rectOrig.width/2,
-                         rectOrig.y + 2*BORDER_THICKNESS,
-                         rectOrig.GetBottom() - BORDER_THICKNESS);
+        if(rectOrig.height > rectOrig.width)
+        {
+            // horizontal
+            DrawVerticalLine(dc, rectOrig.x + rectOrig.width/2,
+                             rectOrig.y + 2*BORDER_THICKNESS,
+                             rectOrig.GetBottom() - BORDER_THICKNESS);
+        }
+        else
+        {
+            // vertical
+            DrawHorizontalLine(dc, rectOrig.y + rectOrig.height/2,
+                         rectOrig.x + 2*BORDER_THICKNESS,
+                         rectOrig.GetRight() - BORDER_THICKNESS);
+        }
     }
     // don't draw wxTOOL_STYLE_CONTROL
 }
@@ -4330,8 +4344,15 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
         // do nothing
     } else
 #endif // wxUSE_BMPBUTTON
-#if wxUSE_BUTTON
-    if ( wxDynamicCast(window, wxButton) )
+#if wxUSE_BUTTON || wxUSE_TOGGLEBTN
+    if ( 0 
+#  if wxUSE_BUTTON
+         || wxDynamicCast(window, wxButton) 
+#  endif // wxUSE_BUTTON
+#  if wxUSE_TOGGLEBTN
+         || wxDynamicCast(window, wxToggleButton) 
+#  endif // wxUSE_TOGGLEBTN
+        )
     {
         if ( !(window->GetWindowStyle() & wxBU_EXACTFIT) )
         {
@@ -4360,7 +4381,7 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
         // no border width adjustments for buttons
         return;
     }
-#endif // wxUSE_BUTTON
+#endif // wxUSE_BUTTON || wxUSE_TOGGLEBTN
 
     // take into account the border width
     wxRect rectBorder = GetBorderDimensions(window->GetBorder());

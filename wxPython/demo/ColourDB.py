@@ -53,6 +53,7 @@ class TestWindow(wx.ScrolledWindow):
             
         # Event handlers - moved here so events won't fire before init is 
         # finished.
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
 

@@ -16,14 +16,8 @@ class MyHtmlWindow(html.HtmlWindow):
     def __init__(self, parent, id, log):
         html.HtmlWindow.__init__(self, parent, id, style=wx.NO_FULL_REPAINT_ON_RESIZE)
         self.log = log
-        self.Bind(wx.EVT_SCROLLWIN, self.OnScroll )
         if "gtk2" in wx.PlatformInfo:
             self.SetStandardFonts()
-
-    def OnScroll( self, event ):
-        #print 'event.GetOrientation()',event.GetOrientation()
-        #print 'event.GetPosition()',event.GetPosition()
-        event.Skip()
 
     def OnLinkClicked(self, linkinfo):
         self.log.WriteText('OnLinkClicked: %s\n' % linkinfo.GetHref())
@@ -42,6 +36,9 @@ class MyHtmlWindow(html.HtmlWindow):
 
     def OnCellClicked(self, cell, x, y, evt):
         self.log.WriteText('OnCellClicked: %s, (%d %d)\n' % (cell, x, y))
+        if isinstance(cell, html.HtmlWordCell):
+            sel = html.HtmlSelection()
+            self.log.WriteText('     %s\n' % cell.ConvertToText(sel))
         self.base_OnCellClicked(cell, x, y, evt)
 
 

@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _gdi_
@@ -93,13 +93,15 @@ class Colour(_core.Object):
     window colours, etc.  Valid RGB values are in the range 0 to 255.
 
     In wxPython there are typemaps that will automatically convert from a
-    colour name, or from a '#RRGGBB' colour hex value string to a
-    wx.Colour object when calling C++ methods that expect a wxColour.
-    This means that the following are all equivallent::
+    colour name, from a '#RRGGBB' colour hex value string, or from a 3
+    integer tuple to a wx.Colour object when calling C++ methods that
+    expect a wxColour.  This means that the following are all
+    equivallent::
 
         win.SetBackgroundColour(wxColour(0,0,255))
         win.SetBackgroundColour('BLUE')
         win.SetBackgroundColour('#0000FF')
+        win.SetBackgroundColour((0,0,255))
 
     Additional colour names and their coresponding values can be added
     using `wx.ColourDatabase`.  Various system colours (as set in the
@@ -198,17 +200,17 @@ class Colour(_core.Object):
 
     def __eq__(*args, **kwargs):
         """
-        __eq__(self, Colour colour) -> bool
+        __eq__(self, PyObject other) -> bool
 
-        Compare colours for equality
+        Compare colours for equality.
         """
         return _gdi_.Colour___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(self, Colour colour) -> bool
+        __ne__(self, PyObject other) -> bool
 
-        Compare colours for inequality
+        Compare colours for inequality.
         """
         return _gdi_.Colour___ne__(*args, **kwargs)
 
@@ -727,6 +729,8 @@ class Bitmap(GDIObject):
         """SetQuality(self, int q)"""
         return _gdi_.Bitmap_SetQuality(*args, **kwargs)
 
+    GetQuality = wx._deprecated(GetQuality) 
+    SetQuality = wx._deprecated(SetQuality) 
     def __nonzero__(self): return self.Ok() 
     def __eq__(*args, **kwargs):
         """__eq__(self, Bitmap other) -> bool"""
@@ -1696,6 +1700,9 @@ class FontMapper(object):
     def SetConfig(*args, **kwargs):
         """SetConfig(self, ConfigBase config)"""
         return _gdi_.FontMapper_SetConfig(*args, **kwargs)
+
+    SetConfig = wx._deprecated(SetConfig,
+        "Set a config object for the whole app instead, with `wx.Config.Set`.")
 
     def SetConfigPath(*args, **kwargs):
         """SetConfigPath(self, String prefix)"""
@@ -4309,7 +4316,10 @@ class BufferedDC(MemoryDC):
     def __init__(self, *args):
         """
         __init__(self, DC dc, Bitmap buffer=NullBitmap, int style=BUFFER_CLIENT_AREA) -> BufferedDC
+        __init__(self, DC dc, Bitmap buffer=NullBitmap) -> BufferedDC
+        __init__(self, DC dc) -> BufferedDC
         __init__(self, DC dc, Size area, int style=BUFFER_CLIENT_AREA) -> BufferedDC
+        __init__(self, DC dc, Size area) -> BufferedDC
 
         Constructs a buffered DC.
         """
@@ -5324,7 +5334,7 @@ class RendererNative(object):
         Return the generic implementation of the renderer. Under some
         platforms, this is the default renderer implementation, others have
         platform-specific default renderer which can be retrieved by calling
-        `GetDefault`.
+        `wx.RendererNative.GetDefault`.
         """
         return _gdi_.RendererNative_GetGeneric(*args, **kwargs)
 
@@ -5334,9 +5344,9 @@ class RendererNative(object):
         GetDefault() -> RendererNative
 
         Return the default (native) implementation for this platform -- this
-        is also the one used by default but this may be changed by calling `Set`
-        in which case the return value of this method may be different from
-        the return value of `Get`.
+        is also the one used by default but this may be changed by calling
+        `wx.RendererNative.Set` in which case the return value of this method
+        may be different from the return value of `wx.RendererNative.Get`.
         """
         return _gdi_.RendererNative_GetDefault(*args, **kwargs)
 
@@ -5383,7 +5393,7 @@ def RendererNative_GetGeneric(*args, **kwargs):
     Return the generic implementation of the renderer. Under some
     platforms, this is the default renderer implementation, others have
     platform-specific default renderer which can be retrieved by calling
-    `GetDefault`.
+    `wx.RendererNative.GetDefault`.
     """
     return _gdi_.RendererNative_GetGeneric(*args, **kwargs)
 
@@ -5392,9 +5402,9 @@ def RendererNative_GetDefault(*args, **kwargs):
     RendererNative_GetDefault() -> RendererNative
 
     Return the default (native) implementation for this platform -- this
-    is also the one used by default but this may be changed by calling `Set`
-    in which case the return value of this method may be different from
-    the return value of `Get`.
+    is also the one used by default but this may be changed by calling
+    `wx.RendererNative.Set` in which case the return value of this method
+    may be different from the return value of `wx.RendererNative.Get`.
     """
     return _gdi_.RendererNative_GetDefault(*args, **kwargs)
 
@@ -5406,5 +5416,6 @@ def RendererNative_Set(*args, **kwargs):
     renderer.  Returns the previous renderer used with Set or None.
     """
     return _gdi_.RendererNative_Set(*args, **kwargs)
+
 
 

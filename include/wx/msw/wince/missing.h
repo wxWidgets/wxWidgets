@@ -123,5 +123,18 @@ bsearch(const void *key, const void *base, size_t num, size_t size,
     #define SS_SUNKEN 0x00001000L
 #endif
 
+// unsupported flags for WINDOWPOS structure
+#ifndef SWP_NOCOPYBITS
+    #define SWP_NOCOPYBITS 0
+#endif
+
+#ifndef SWP_NOOWNERZORDER
+    #define SWP_NOOWNERZORDER 0
+#endif
+
+#ifndef SWP_NOSENDCHANGING
+    #define SWP_NOSENDCHANGING 0
+#endif
+
 #endif // _WX_CE_MISSING_H_
 

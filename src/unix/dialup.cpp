@@ -730,7 +730,7 @@ wxDialUpManagerImpl::CheckIfconfig()
                         || strstr(output.fn_str(),"pl"); // plip
                     hasLAN = strstr(output.fn_str(), "eth") != NULL;
 #elif defined(__SGI__)  // IRIX
-                    hasModem = strstr(output, "ppp") != NULL; // PPP
+                    hasModem = strstr(output.fn_str(), "ppp") != NULL; // PPP
 #elif defined(__HPUX__)
                     // if could run ifconfig on interface, then it exists
                     hasModem = true;

@@ -63,7 +63,7 @@ bool hvApp::OnInit()
 
 #ifdef __WXMAC__
     wxApp::s_macAboutMenuItemId = wxID_ABOUT;
-    wxFileName::MacRegisterDefaultTypeAndCreator( "htb" , 'HTBD' , 'HTBA' ) ;
+    wxFileName::MacRegisterDefaultTypeAndCreator( wxT("htb") , 'HTBD' , 'HTBA' ) ;
 #endif
 
     int istyle = wxHF_DEFAULT_STYLE;

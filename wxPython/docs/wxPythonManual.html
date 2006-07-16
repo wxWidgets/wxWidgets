@@ -3,12 +3,294 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
 <title>The wxPython Manual</title>
 <meta name="author" content="Patrick K. O'Brien" />
 <meta name="organization" content="Orbtech" />
 <meta name="date" content="2004-03-26" />
-<link rel="stylesheet" href="default.css" type="text/css" />
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:Date: $Date$
+:Revision: $Revision$
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+tt.docutils {
+  background-color: #eeeeee }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
 </head>
 <body>
 <div class="document" id="the-wxpython-manual">
@@ -32,8 +314,8 @@
 </tr>
 </tbody>
 </table>
-<div class="contents topic" id="contents">
-<p class="topic-title first"><a name="contents">Contents</a></p>
+<div class="contents topic">
+<p class="topic-title first"><a id="contents" name="contents">Contents</a></p>
 <ul class="simple">
 <li><a class="reference" href="#introduction" id="id1" name="id1">Introduction</a></li>
 <li><a class="reference" href="#what-is-wxpython" id="id2" name="id2">What is wxPython?</a></li>
@@ -93,8 +375,8 @@
 <li><a class="reference" href="#license" id="id46" name="id46">License</a></li>
 </ul>
 </div>
-<div class="section" id="introduction">
-<h1><a class="toc-backref" href="#id1" name="introduction">Introduction</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id1" id="introduction" name="introduction">Introduction</a></h1>
 <p>This is a guide to the wxPython GUI toolkit, written <strong>by</strong> a Python
 programmer <strong>for</strong> his fellow Python programmers.  It began as a
 simple translation of the wxWidgets documentation (which is written
@@ -108,8 +390,8 @@ beans, dark chocolate, and large denomination currency.  Better yet,
 buy huge quantities of my wxPython book (written with Robin Dunn) and
 send one to each of your friends, relatives, and coworkers.</p>
 </div>
-<div class="section" id="what-is-wxpython">
-<h1><a class="toc-backref" href="#id2" name="what-is-wxpython">What is wxPython?</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id2" id="what-is-wxpython" name="what-is-wxpython">What is wxPython?</a></h1>
 <p>wxPython is a GUI toolkit for the Python programming language.  It
 allows Python programmers to create programs with a robust, highly
 functional graphical user interface, simply and easily.  It is
@@ -126,19 +408,19 @@ or unix-like systems, and Macintosh OS X.</p>
 <p>Since the language is Python, wxPython programs are simple, easy to
 write and easy to understand.</p>
 </div>
-<div class="section" id="wxpython-requirements">
-<h1><a class="toc-backref" href="#id3" name="wxpython-requirements">wxPython requirements</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id3" id="wxpython-requirements" name="wxpython-requirements">wxPython requirements</a></h1>
 <p>To make use of wxPython, you currently need one of the following
 setups.</p>
-<div class="section" id="ms-windows">
-<h2><a class="toc-backref" href="#id4" name="ms-windows">MS-Windows</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id4" id="ms-windows" name="ms-windows">MS-Windows</a></h2>
 <ul class="simple">
 <li>A 486 or higher PC running MS Windows.</li>
 <li>At least ?? MB of disk space.</li>
 </ul>
 </div>
-<div class="section" id="linux-or-unix">
-<h2><a class="toc-backref" href="#id5" name="linux-or-unix">Linux or Unix</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id5" id="linux-or-unix" name="linux-or-unix">Linux or Unix</a></h2>
 <ul class="simple">
 <li>Almost any C++ compiler, including GNU C++ (EGCS 1.1.1 or above).</li>
 <li>Almost any Unix workstation, and one of: GTK+ 1.2, GTK+ 2.0, Motif
@@ -146,16 +428,16 @@ setups.</p>
 <li>At least ?? MB of disk space.</li>
 </ul>
 </div>
-<div class="section" id="mac-os-x">
-<h2><a class="toc-backref" href="#id6" name="mac-os-x">Mac OS X</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id6" id="mac-os-x" name="mac-os-x">Mac OS X</a></h2>
 <ul class="simple">
 <li>A PowerPC Mac running Mac OS X 10.x.</li>
 <li>At least ?? MB of disk space.</li>
 </ul>
 </div>
 </div>
-<div class="section" id="what-is-wxwidgets">
-<h1><a class="toc-backref" href="#id7" name="what-is-wxwidgets">What is wxWidgets?</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id7" id="what-is-wxwidgets" name="what-is-wxwidgets">What is wxWidgets?</a></h1>
 <p>wxWidgets is a C++ framework providing GUI (Graphical User Interface)
 and other facilities on more than one platform.  Version 2 currently
 supports all desktop versions of MS Windows, Unix with GTK+, Unix with
@@ -169,8 +451,8 @@ Roebling, Vadim Zeitlin, Vaclav Slavik and many others.</p>
 platforms related to Microsoft Windows, including 16-bit and 32-bit
 variants, unless otherwise stated.  All trademarks are acknowledged.</p>
 </div>
-<div class="section" id="why-another-cross-platform-development-tool">
-<h1><a class="toc-backref" href="#id8" name="why-another-cross-platform-development-tool">Why another cross-platform development tool?</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id8" id="why-another-cross-platform-development-tool" name="why-another-cross-platform-development-tool">Why another cross-platform development tool?</a></h1>
 <p>wxWidgets was developed to provide a cheap and flexible way to
 maximize investment in GUI application development.  While a number of
 commercial class libraries already existed for cross-platform
@@ -244,8 +526,8 @@ the clipboard.</li>
 PNM, PCX).</li>
 </ul>
 </div>
-<div class="section" id="wxpython-overview">
-<h1><a class="toc-backref" href="#id9" name="wxpython-overview">wxPython Overview</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id9" id="wxpython-overview" name="wxpython-overview">wxPython Overview</a></h1>
 <p>To set a wxPython application going, you will need to derive an App
 class and override App.OnInit.</p>
 <p>An application must have a top-level Frame or Dialog window.  Each
@@ -291,14 +573,14 @@ PathList. There's a miscellany of operating system and other
 functions.</p>
 <p>See also Classes by Category for a list of classes.</p>
 </div>
-<div class="section" id="utilities-and-libraries-supplied-with-wxpython">
-<h1><a class="toc-backref" href="#id10" name="utilities-and-libraries-supplied-with-wxpython">Utilities and libraries supplied with wxPython</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id10" id="utilities-and-libraries-supplied-with-wxpython" name="utilities-and-libraries-supplied-with-wxpython">Utilities and libraries supplied with wxPython</a></h1>
 <p>In addition to the core wxWidgets library, a number of further
 libraries and utilities are supplied with each distribution.</p>
 <p>[Need to list these.]</p>
 </div>
-<div class="section" id="creating-and-deleting-wxpython-objects">
-<h1><a class="toc-backref" href="#id11" name="creating-and-deleting-wxpython-objects">Creating and deleting wxPython objects</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id11" id="creating-and-deleting-wxpython-objects" name="creating-and-deleting-wxpython-objects">Creating and deleting wxPython objects</a></h1>
 <p>[This section needs to be reviewed.]</p>
 <!-- In general, classes derived from wxWindow must dynamically
 allocated with new and deleted with delete. If you delete a window,
@@ -323,11 +605,11 @@ wxDC::SelectObject(wxNullBitmap) before deleting a drawing object
 that may be in use. Code that doesn't do this will probably work
 fine on some platforms, and then fail under Windows. -->
 </div>
-<div class="section" id="app-overview">
-<h1><a class="toc-backref" href="#id12" name="app-overview">App overview</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id12" id="app-overview" name="app-overview">App overview</a></h1>
 <p>Classes: wx.App</p>
-<div class="section" id="application-initialization">
-<h2><a class="toc-backref" href="#id13" name="application-initialization">Application initialization</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id13" id="application-initialization" name="application-initialization">Application initialization</a></h2>
 <p>The OnInit method defined for a class derived from wx.App will usually
 create a top window as a bare minimum.</p>
 <p>OnInit must return a boolean value to indicate whether processing
@@ -365,8 +647,8 @@ if __name__ == '__main__':
     main()
 </pre>
 </div>
-<div class="section" id="application-shutdown">
-<h2><a class="toc-backref" href="#id14" name="application-shutdown">Application shutdown</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id14" id="application-shutdown" name="application-shutdown">Application shutdown</a></h2>
 <p>The application normally shuts down when the last of its top level
 windows is closed.  This is normally the expected behaviour and means
 that it is enough to call Close() in response to the &quot;Exit&quot; menu
@@ -385,8 +667,8 @@ created by the time OnExit finishes.</p>
 <p>[Need examples of objects needing cleanup to keep app from crashing.]</p>
 </div>
 </div>
-<div class="section" id="sizer-overview">
-<h1><a class="toc-backref" href="#id15" name="sizer-overview">Sizer overview</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id15" id="sizer-overview" name="sizer-overview">Sizer overview</a></h1>
 <p>Classes: wx.Sizer, wx.GridSizer, wx.FlexGridSizer, wx.BoxSizer,
 wx.StaticBoxSizer, wx.NotebookSizer, wx.CreateButtonSizer</p>
 <table border="1" class="docutils">
@@ -425,8 +707,8 @@ individual controls.  Editors such as wxDesigner, wxrcedit, XRCed and
 wxWorkshop create dialogs based exclusively on sizers, practically
 forcing the user to create platform independent layouts without
 compromises.</p>
-<div class="section" id="the-idea-behind-sizers">
-<h2><a class="toc-backref" href="#id16" name="the-idea-behind-sizers">The idea behind sizers</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id16" id="the-idea-behind-sizers" name="the-idea-behind-sizers">The idea behind sizers</a></h2>
 <p>The layout algorithm used by sizers in wxPython is closely related to
 layout systems in other GUI toolkits, such as Java's AWT, the GTK
 toolkit or the Qt toolkit.  It is based upon the idea of individual
@@ -453,15 +735,15 @@ in a dialog or it fulfils a special task such as wrapping a static box
 around a dialog item (or another sizer).  These sizers will be
 discussed one by one in the text below.</p>
 </div>
-<div class="section" id="common-features">
-<h2><a class="toc-backref" href="#id17" name="common-features">Common features</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id17" id="common-features" name="common-features">Common features</a></h2>
 <p>All sizers are containers, that is, they are used to lay out one
 dialog item (or several dialog items), which they contain.  Such items
 are sometimes referred to as the children of the sizer.  Independent
 of how the individual sizers lay out their children, all children have
 certain features in common:</p>
-<div class="section" id="a-minimal-size">
-<h3><a class="toc-backref" href="#id18" name="a-minimal-size">A minimal size</a></h3>
+<div class="section">
+<h3><a class="toc-backref" href="#id18" id="a-minimal-size" name="a-minimal-size">A minimal size</a></h3>
 <p>This minimal size is usually identical to the initial size of the
 controls and may either be set explicitly in the size field of the
 control constructor or may be calculated by wxPython, typically by
@@ -472,8 +754,8 @@ thus require an explicit size.  Some controls can calculate their
 height, but not their width (e.g. a single line text control):</p>
 <p>[Need graphics]</p>
 </div>
-<div class="section" id="a-border">
-<h3><a class="toc-backref" href="#id19" name="a-border">A border</a></h3>
+<div class="section">
+<h3><a class="toc-backref" href="#id19" id="a-border" name="a-border">A border</a></h3>
 <p>The border is just empty space and is used to separate dialog items in
 a dialog.  This border can either be all around, or at any combination
 of sides such as only above and below the control.  The thickness of
@@ -482,8 +764,8 @@ samples show dialogs with only one dialog item (a button) and a border
 of 0, 5, and 10 pixels around the button:</p>
 <p>[Need graphics]</p>
 </div>
-<div class="section" id="an-alignment">
-<h3><a class="toc-backref" href="#id20" name="an-alignment">An alignment</a></h3>
+<div class="section">
+<h3><a class="toc-backref" href="#id20" id="an-alignment" name="an-alignment">An alignment</a></h3>
 <p>Often, a dialog item is given more space than its minimal size plus
 its border.  Depending on what flags are used for the respective dialog
 item, the dialog item can be made to fill out the available space
@@ -494,8 +776,8 @@ three buttons in a horizontal box sizer; one button is centred, one is
 aligned at the top, one is aligned at the bottom:</p>
 <p>[Need graphics]</p>
 </div>
-<div class="section" id="a-stretch-factor">
-<h3><a class="toc-backref" href="#id21" name="a-stretch-factor">A stretch factor</a></h3>
+<div class="section">
+<h3><a class="toc-backref" href="#id21" id="a-stretch-factor" name="a-stretch-factor">A stretch factor</a></h3>
 <p>If a sizer contains more than one child and it is offered more space
 than its children and their borders need, the question arises how to
 distribute the surplus space among the children.  For this purpose, a
@@ -513,8 +795,8 @@ have a stretch factor of zero and keep their initial width:</p>
 <p>Within wxDesigner, this stretch factor gets set from the Option menu.</p>
 </div>
 </div>
-<div class="section" id="boxsizer">
-<h2><a class="toc-backref" href="#id22" name="boxsizer">BoxSizer</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id22" id="boxsizer" name="boxsizer">BoxSizer</a></h2>
 <p>BoxSizer can lay out its children either vertically or horizontally,
 depending on what flag is being used in its constructor.  When using a
 vertical sizer, each child can be centered, aligned to the right or
@@ -527,14 +809,14 @@ horizontally.  The following sample shows the same dialog as in the
 last sample, only the box sizer is a vertical box sizer now:</p>
 <p>[Need graphics]</p>
 </div>
-<div class="section" id="staticboxsizer">
-<h2><a class="toc-backref" href="#id23" name="staticboxsizer">StaticBoxSizer</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id23" id="staticboxsizer" name="staticboxsizer">StaticBoxSizer</a></h2>
 <p>StaticBoxSixer is the same as a BoxSizer, but surrounded by a static
 box.  Here is a sample:</p>
 <p>[Need graphics]</p>
 </div>
-<div class="section" id="gridsizer">
-<h2><a class="toc-backref" href="#id24" name="gridsizer">GridSizer</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id24" id="gridsizer" name="gridsizer">GridSizer</a></h2>
 <p>GridSizer is a two-dimensional sizer.  All children are given the same
 size, which is the minimal size required by the biggest child, in this
 case the text control in the left bottom border.  Either the number of
@@ -542,8 +824,8 @@ columns or the number or rows is fixed and the grid sizer will grow in
 the respectively other orientation if new children are added:</p>
 <p>[Need graphics]</p>
 </div>
-<div class="section" id="flexgridsizer">
-<h2><a class="toc-backref" href="#id25" name="flexgridsizer">FlexGridSizer</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id25" id="flexgridsizer" name="flexgridsizer">FlexGridSizer</a></h2>
 <p>Another two-dimensional sizer derived from GridSizer.  The width of
 each column and the height of each row are calculated individually
 according the minimal requirements from the respectively biggest
@@ -553,16 +835,16 @@ it requested.  The following sample shows the same dialog as the one
 above, but using a flex grid sizer:</p>
 <p>[Need graphics]</p>
 </div>
-<div class="section" id="notebooksizer">
-<h2><a class="toc-backref" href="#id26" name="notebooksizer">NotebookSizer</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id26" id="notebooksizer" name="notebooksizer">NotebookSizer</a></h2>
 <p>NotebookSizer can be used with notebooks.  It calculates the size of
 each notebook page and sets the size of the notebook to the size of
 the biggest page plus some extra space required for the notebook tabs
 and decorations.</p>
 <p>[Need graphics]</p>
 </div>
-<div class="section" id="programming-with-boxsizer">
-<h2><a class="toc-backref" href="#id27" name="programming-with-boxsizer">Programming with BoxSizer</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id27" id="programming-with-boxsizer" name="programming-with-boxsizer">Programming with BoxSizer</a></h2>
 <p>The basic idea behind a BoxSizer is that windows will most often be
 laid out in rather simple basic geometry, typically in a row or a
 column or several hierarchies of either.</p>
@@ -615,16 +897,16 @@ that the entire behaviour of a sizer and its children can be
 controlled by the three parameters of the Add() method.</p>
 <p>[Show code and graphic here.]</p>
 </div>
-<div class="section" id="programming-with-gridsizer">
-<h2><a class="toc-backref" href="#id28" name="programming-with-gridsizer">Programming with GridSizer</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id28" id="programming-with-gridsizer" name="programming-with-gridsizer">Programming with GridSizer</a></h2>
 <p>GridSizer is a sizer which lays out its children in a two-dimensional
 table with all table fields having the same size, i.e. the width of
 each field is the width of the widest child, the height of each field
 is the height of the tallest child.</p>
 <p>[Show code and graphic here.]</p>
 </div>
-<div class="section" id="programming-with-flexgridsizer">
-<h2><a class="toc-backref" href="#id29" name="programming-with-flexgridsizer">Programming with FlexGridSizer</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id29" id="programming-with-flexgridsizer" name="programming-with-flexgridsizer">Programming with FlexGridSizer</a></h2>
 <p>FlexGridSizer is a sizer which lays out its children in a
 two-dimensional table with all table fields in one row having the same
 height and all fields in one column having the same width, but all
@@ -632,8 +914,8 @@ rows or all columns are not necessarily the same height or width as in
 the GridSizer.</p>
 <p>[Show code and graphic here.]</p>
 </div>
-<div class="section" id="programming-with-notebooksizer">
-<h2><a class="toc-backref" href="#id30" name="programming-with-notebooksizer">Programming with NotebookSizer</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id30" id="programming-with-notebooksizer" name="programming-with-notebooksizer">Programming with NotebookSizer</a></h2>
 <p>NotebookSizer is a specialized sizer to make sizers work in connection
 with using notebooks.  This sizer is different from any other sizer as
 you must not add any children to it - instead, it queries the notebook
@@ -648,15 +930,15 @@ one example showing how to add a notebook page that the notebook sizer
 is aware of:</p>
 <p>[Show code and graphic here.]</p>
 </div>
-<div class="section" id="programming-with-staticboxsizer">
-<h2><a class="toc-backref" href="#id31" name="programming-with-staticboxsizer">Programming with StaticBoxSizer</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id31" id="programming-with-staticboxsizer" name="programming-with-staticboxsizer">Programming with StaticBoxSizer</a></h2>
 <p>StaticBoxSizer is a sizer derived from BoxSizer but adds a static box
 around the sizer.  Note that this static box has to be created
 separately.</p>
 <p>[Show code and graphic here.]</p>
 </div>
-<div class="section" id="dialog-createbuttonsizer">
-<h2><a class="toc-backref" href="#id32" name="dialog-createbuttonsizer">Dialog.CreateButtonSizer</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id32" id="dialog-createbuttonsizer" name="dialog-createbuttonsizer">Dialog.CreateButtonSizer</a></h2>
 <p>As a convenience, the Dialog class has a CreateButtonSizer(flags)
 method that can be used to create a standard button sizer in which
 standard buttons are displayed.  The following flags can be passed to
@@ -705,8 +987,8 @@ wx.OK button will be default</td>
 </table>
 </div>
 </div>
-<div class="section" id="date-and-time-classes-overview">
-<h1><a class="toc-backref" href="#id33" name="date-and-time-classes-overview">Date and time classes overview</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id33" id="date-and-time-classes-overview" name="date-and-time-classes-overview">Date and time classes overview</a></h1>
 <p>wxPython provides a set of powerful classes to work with dates and
 times.  Some of the supported features of the DateTime class are:</p>
 <table border="1" class="docutils">
@@ -737,8 +1019,8 @@ with them is fast</td>
 </tr>
 </tbody>
 </table>
-<div class="section" id="all-date-time-classes-at-a-glance">
-<h2><a class="toc-backref" href="#id34" name="all-date-time-classes-at-a-glance">All date/time classes at a glance</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id34" id="all-date-time-classes-at-a-glance" name="all-date-time-classes-at-a-glance">All date/time classes at a glance</a></h2>
 <p>There are 3 main classes: except DateTime itself which represents an
 absolute moment in time, there are also two classes - TimeSpan and
 DateSpan which represent the intervals of time.</p>
@@ -748,8 +1030,8 @@ date is a holiday or not and DateTimeWorkDays which is a derivation of
 this class for which (only) Saturdays and Sundays are the holidays.
 See more about these classes in the discussion of the holidays.</p>
 </div>
-<div class="section" id="datetime-characteristics">
-<h2><a class="toc-backref" href="#id35" name="datetime-characteristics">DateTime characteristics</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id35" id="datetime-characteristics" name="datetime-characteristics">DateTime characteristics</a></h2>
 <p>DateTime stores the time as a signed number of milliseconds since the
 Epoch which is fixed, by convention, to Jan 1, 1970 - however this is
 not visible to the class users (in particular, dates prior to the
@@ -772,8 +1054,8 @@ country, and even region, dependent).  Future versions will probably
 have Julian calendar support as well and support for other calendars
 (Maya, Hebrew, Chinese...) is not ruled out.</p>
 </div>
-<div class="section" id="difference-between-datespan-and-timespan">
-<h2><a class="toc-backref" href="#id36" name="difference-between-datespan-and-timespan">Difference between DateSpan and TimeSpan</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id36" id="difference-between-datespan-and-timespan" name="difference-between-datespan-and-timespan">Difference between DateSpan and TimeSpan</a></h2>
 <p>While there is only one logical way to represent an absolute moment in
 the time (and hence only one DateTime class), there are at least two
 methods to describe a time interval.</p>
@@ -801,8 +1083,8 @@ in the program, you should probably use TimeSpan instead of DateSpan
 in situations when you do need to understand what 'in a month' means
 (of course, it is just DateTime.Now() + DateSpan.Month()).</p>
 </div>
-<div class="section" id="date-arithmetics">
-<h2><a class="toc-backref" href="#id37" name="date-arithmetics">Date arithmetics</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id37" id="date-arithmetics" name="date-arithmetics">Date arithmetics</a></h2>
 <p>Many different operations may be performed with the dates, however not
 all of them make sense.  For example, multiplying a date by a number
 is an invalid operation, even though multiplying either of the time
@@ -838,8 +1120,8 @@ opposite time direction.</td>
 </tbody>
 </table>
 </div>
-<div class="section" id="time-zone-considerations">
-<h2><a class="toc-backref" href="#id38" name="time-zone-considerations">Time zone considerations</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id38" id="time-zone-considerations" name="time-zone-considerations">Time zone considerations</a></h2>
 <p>Although the time is always stored internally in GMT, you will usually
 work in the local time zone.  Because of this, all DateTime
 constructors and setters which take the broken down date assume that
@@ -877,8 +1159,8 @@ job. I.e. you would just write</p>
 printf(&quot;The time is %s in local time zone&quot;, dt.FormatTime().c_str());
 printf(&quot;The time is %s in GMT&quot;, dt.FormatTime(wxDateTime::GMT).c_str());</p>
 </div>
-<div class="section" id="daylight-saving-time-dst">
-<h2><a class="toc-backref" href="#id39" name="daylight-saving-time-dst">Daylight saving time (DST)</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id39" id="daylight-saving-time-dst" name="daylight-saving-time-dst">Daylight saving time (DST)</a></h2>
 <p>DST (a.k.a. 'summer time') handling is always a delicate task which is
 better left to the operating system which is supposed to be configured
 by the administrator to behave correctly.  Unfortunately, when doing
@@ -894,17 +1176,17 @@ the future.</p>
 <p>The time zone handling methods use these functions too, so they are
 subject to the same limitations.</p>
 </div>
-<div class="section" id="datetime-and-holidays">
-<h2><a class="toc-backref" href="#id40" name="datetime-and-holidays">DateTime and Holidays</a></h2>
+<div class="section">
+<h2><a class="toc-backref" href="#id40" id="datetime-and-holidays" name="datetime-and-holidays">DateTime and Holidays</a></h2>
 <p>[TODO]</p>
 </div>
 </div>
-<div class="section" id="classes-by-category">
-<h1><a class="toc-backref" href="#id41" name="classes-by-category">Classes by category</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id41" id="classes-by-category" name="classes-by-category">Classes by category</a></h1>
 <p>Not done yet.</p>
 </div>
-<div class="section" id="id-constants">
-<h1><a class="toc-backref" href="#id42" name="id-constants">ID constants</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id42" id="id-constants" name="id-constants">ID constants</a></h1>
 <p>wxPython provides the following predefined ID constants:</p>
 <p>ID_ABORT
 ID_ABOUT
@@ -964,8 +1246,8 @@ ID_UNDO
 ID_YES
 ID_YESTOALL</p>
 </div>
-<div class="section" id="source-document">
-<h1><a class="toc-backref" href="#id43" name="source-document">Source document</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id43" id="source-document" name="source-document">Source document</a></h1>
 <p>The source document is named wxPythonManual.txt and can be found by
 clicking the link at the bottom of this page (assuming you are viewing
 the html file).  It is written using a fantastic formatting convention
@@ -973,8 +1255,8 @@ called reStructuredText.  The wxPythonManual.html file is created
 using the Docutils utilities, which can turn reStructuredText
 documents into html, xml, pdf, and even OpenOffice files.</p>
 </div>
-<div class="section" id="submitting-changes-to-the-source-document">
-<h1><a class="toc-backref" href="#id44" name="submitting-changes-to-the-source-document">Submitting changes to the source document</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id44" id="submitting-changes-to-the-source-document" name="submitting-changes-to-the-source-document">Submitting changes to the source document</a></h1>
 <p>Some items in the source text file look like this:</p>
 <pre class="literal-block">
 .. This is text from the wxWidgets documentation that needs to be
@@ -991,8 +1273,8 @@ to you and will show my gratitude by adding your name to the list of
 contributors.  (Contributors who also send me gifts of coffee,
 chocolate, or currency will have their names listed in bold.)</p>
 </div>
-<div class="section" id="contributors">
-<h1><a class="toc-backref" href="#id45" name="contributors">Contributors</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id45" id="contributors" name="contributors">Contributors</a></h1>
 <p>Individuals who contributed to this documentation (in order by last
 name):</p>
 <ul class="simple">
@@ -1003,8 +1285,8 @@ name):</p>
 <li>Vadim Zeitlin</li>
 </ul>
 </div>
-<div class="section" id="license">
-<h1><a class="toc-backref" href="#id46" name="license">License</a></h1>
+<div class="section">
+<h1><a class="toc-backref" href="#id46" id="license" name="license">License</a></h1>
 <p>This document began as a translation of the wxWidgets documentation.
 As such, it adheres to the same license, which is provided here:</p>
 <pre class="literal-block">

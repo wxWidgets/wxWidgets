@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        slider.cpp
+// Name:        src/os2/slider.cpp
 // Purpose:     wxSlider
 // Author:      David Webster
 // Modified by:
@@ -18,9 +18,9 @@
 
 #ifndef WX_PRECOMP
 #include <stdio.h>
-#include <wx/utils.h>
-#include <wx/brush.h>
-#include <wx/scrolwin.h>
+#include "wx/utils.h"
+#include "wx/brush.h"
+#include "wx/scrolwin.h"
 #endif
 
 #if wxUSE_SLIDER
@@ -495,6 +495,7 @@ void wxSlider::DoSetSize(
 
     if (nOS2Height < 0)
         nOS2Height = 20;
+    CacheBestSize(wxSize(nWidth,nOS2Height));
 
     if (pParent)
     {
@@ -812,8 +813,10 @@ void wxSlider::GetPosition(
         vPoint.x -= vPt.x;
         vPoint.y -= vPt.y;
     }
-    *pnX = vPoint.x;
-    *pnY = vPoint.y;
+    if (pnX)
+        *pnX = vPoint.x;
+    if (pnY)
+        *pnY = vPoint.y;
 } // end of wxSlider::GetPosition
 
 int wxSlider::GetSelEnd() const

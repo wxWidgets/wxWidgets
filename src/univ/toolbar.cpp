@@ -653,6 +653,22 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
         PerformAction( wxACTION_BUTTON_RELEASE, numArg );
 
         PerformAction( wxACTION_BUTTON_CLICK, numArg );
+                        
+        // Write by Danny Raynor to change state again.                
+        // Check button still pressed or not
+        if ( tool->CanBeToggled() && tool->IsToggled() )
+        {
+            tool->Toggle(false);
+        }
+
+        if( tool->IsInverted() )
+        {        
+            PerformAction( wxACTION_TOOLBAR_RELEASE, numArg );      
+        }
+    
+        // Set mouse leave toolbar button range (If still in the range,
+        // toolbar button would get focus again
+        PerformAction( wxACTION_TOOLBAR_LEAVE, numArg );
     }
     else if ( action == wxACTION_TOOLBAR_PRESS )
     {
@@ -875,4 +891,3 @@ bool wxStdToolbarInputHandler::HandleActivation(wxInputConsumer *consumer,
 }
 
 #endif // wxUSE_TOOLBAR
-

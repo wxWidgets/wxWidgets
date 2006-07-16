@@ -27,7 +27,8 @@ class TestPanel(wx.Panel):
             self, -1, size=(450, -1), changeCallback = self.dbbCallback
             )
 
-        self.fbbh.SetHistory(['You', 'can', 'put', 'some', 'filenames', 'here'])
+        self.fbbh.callCallback = False
+        self.fbbh.SetHistory(['You', 'can', 'put', 'some', 'filenames', 'here'], 4)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.fbb, 0, wx.ALL, 5)
@@ -45,6 +46,8 @@ class TestPanel(wx.Panel):
     def fbbhCallback(self, evt):
         if hasattr(self, 'fbbh'):
             value = evt.GetString()
+            if not value:
+                return
             self.log.write('FileBrowseButtonWithHistory: %s\n' % value)
             history = self.fbbh.GetHistory()
             if value not in history:

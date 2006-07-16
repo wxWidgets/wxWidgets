@@ -34,9 +34,10 @@
         <include>$(SRCDIR)/$(WXTOPDIR)samples</include>
         <!-- this include is not added via <include> for autoconf, see
              common.bkl: -->
-        <res-include cond="FORMAT=='autoconf'">
-            $(TOP_SRCDIR)include
-        </res-include>
+        <if cond="FORMAT=='autoconf'">
+            <res-include>$(RCDEFDIR)</res-include>
+            <res-include>$(TOP_SRCDIR)include</res-include>
+        </if>
         
         <win32-res>$(WXTOPDIR)samples/sample.rc</win32-res>
         <if cond="FORMAT=='autoconf'">

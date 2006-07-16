@@ -32,7 +32,9 @@
 #endif //WX_PRECOMP
 
 #include "wx/vlbox.h"
+#include "wx/dcbuffer.h"
 #include "wx/selstore.h"
+#include "wx/bitmap.h"
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -55,6 +57,11 @@ IMPLEMENT_ABSTRACT_CLASS(wxVListBox, wxVScrolledWindow)
 // ----------------------------------------------------------------------------
 // wxVListBox creation
 // ----------------------------------------------------------------------------
+
+// due to ABI compatibility reasons, we need to declare double-buffer
+// outside the class
+static wxBitmap* gs_doubleBuffer = NULL;
+
 
 void wxVListBox::Init()
 {
@@ -82,12 +89,18 @@ bool wxVListBox::Create(wxWindow *parent,
     SetBackgroundColour(GetBackgroundColour());
     m_colBgSel = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 
+    // flicker-free drawing requires this
+    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+
     return true;
 }
 
 wxVListBox::~wxVListBox()
 {
     delete m_selStore;
+
+    delete gs_doubleBuffer;
+    gs_doubleBuffer = NULL;
 }
 
 void wxVListBox::SetItemCount(size_t count)
@@ -224,10 +237,8 @@ bool wxVListBox::DoSetCurrent(int current)
         {
             // it is, indeed, only partly visible, so scroll it into view to
             // make it entirely visible
-            if ( (size_t)m_current == GetLastVisibleLine() )
-            {
-                ScrollToLine(m_current);
-            }
+            while ( (size_t)m_current == GetLastVisibleLine() &&
+                    ScrollToLine(GetVisibleBegin()+1) );
 
             // but in any case refresh it as even if it was only partly visible
             // before we need to redraw it entirely as its background changed
@@ -351,14 +362,29 @@ void wxVListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
 
 void wxVListBox::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    wxPaintDC dc(this);
+    // If size is larger, recalculate double buffer bitmap
+    wxSize clientSize = GetClientSize();
+
+    if ( !gs_doubleBuffer ||
+         clientSize.x > gs_doubleBuffer->GetWidth() ||
+         clientSize.y > gs_doubleBuffer->GetHeight() )
+    {
+        delete gs_doubleBuffer;
+        gs_doubleBuffer = new wxBitmap(clientSize.x+25,clientSize.y+25);
+    }
+
+    wxBufferedPaintDC dc(this,*gs_doubleBuffer);
 
     // the update rectangle
     wxRect rectUpdate = GetUpdateClientRect();
 
+    // fill it with background colour
+    dc.SetBackground(GetBackgroundColour());
+    dc.Clear();
+
     // the bounding rectangle of the current line
     wxRect rectLine;
-    rectLine.width = GetClientSize().x;
+    rectLine.width = clientSize.x;
 
     // iterate over all visible lines
     const size_t lineMax = GetLastVisibleLine();
@@ -577,7 +603,7 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
 void wxVListBox::OnLeftDown(wxMouseEvent& event)
 {
     SetFocus();
-    
+
     int item = HitTest(event.GetPosition());
 
     if ( item != wxNOT_FOUND )
@@ -599,16 +625,27 @@ void wxVListBox::OnLeftDown(wxMouseEvent& event)
     }
 }
 
-void wxVListBox::OnLeftDClick(wxMouseEvent& event)
+void wxVListBox::OnLeftDClick(wxMouseEvent& eventMouse)
 {
-    int item = HitTest(event.GetPosition());
+    int item = HitTest(eventMouse.GetPosition());
     if ( item != wxNOT_FOUND )
     {
-        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, GetId());
-        event.SetEventObject(this);
-        event.SetInt(item);
 
-        (void)GetEventHandler()->ProcessEvent(event);
+        // if item double-clicked was not yet selected, then treat
+        // this event as a left-click instead
+        if ( item == m_current )
+        {
+            wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, GetId());
+            event.SetEventObject(this);
+            event.SetInt(item);
+
+            (void)GetEventHandler()->ProcessEvent(event);
+        }
+        else
+        {
+            OnLeftDown(eventMouse);
+        }
+    
     }
 }
 

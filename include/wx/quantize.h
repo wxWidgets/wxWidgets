@@ -9,6 +9,9 @@
 // Licence:
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_QUANTIZE_H_
+#define _WX_QUANTIZE_H_
+
 /*
  * From jquant2.c
  *
@@ -20,9 +23,6 @@
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "quantize.h"
 #endif
-
-#ifndef _WX_QUANTIZE_H_
-#define _WX_QUANTIZE_H_
 
 class WXDLLEXPORT wxImage;
 

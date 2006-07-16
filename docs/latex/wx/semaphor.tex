@@ -20,8 +20,8 @@ decrements the counter. As soon as it reaches $0$, any subsequent calls to
 counter becomes strictly positive again as the result of calling 
 \helpref{Post}{wxsemaphorepost} which increments the counter.
 
-In general, the semaphores are useful to restrict access to a shared resource
-which can only be accessed by some fixed number of clients at once. For
+In general, semaphores are useful to restrict access to a shared resource
+which can only be accessed by some fixed number of clients at the same time. For
 example, when modeling a hotel reservation system a semaphore with the counter
 equal to the total number of available rooms could be created. Each time a room
 is reserved, the semaphore should be acquired by calling 
@@ -43,7 +43,7 @@ No base class
 \func{}{wxSemaphore}{\param{int }{initialcount = 0}, \param{int }{maxcount = 0}}
 
 Specifying a {\it maxcount} of $0$ actually makes wxSemaphore behave as if
-there is no upper limit. If maxcount is $1$ the semaphore behaves exactly as a
+there is no upper limit. If maxcount is $1$, the semaphore behaves exactly as a
 mutex.
 
 {\it initialcount} is the initial value of the semaphore which must be between

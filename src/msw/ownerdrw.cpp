@@ -110,12 +110,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxMSWSystemMenuFontModule, wxModule)
 //      a UDT.  Will produce errors if applied using infix notation.
 //
 // shut it down
-#ifdef __VISUALC__
-    #if __VISUALC__ <= 1300
+#if defined __VISUALC__ && __VISUALC__ <= 1300
+    #if __VISUALC__ >= 1200
         #pragma warning(push)
-        #pragma warning(disable: 4284)
         #define POP_WARNINGS
     #endif
+    #pragma warning(disable: 4284)
 #endif
 
 #include "wx/hashset.h"

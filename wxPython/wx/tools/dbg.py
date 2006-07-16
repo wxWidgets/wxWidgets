@@ -75,7 +75,8 @@ stream
     changing it will result in no action being taken.
 
 You can also call the log function implicitly on the Logger
-instance, ie. you can type:
+instance, ie. you can type::
+
     from wxPython.tools.dbg import Logger
     dbg = Logger()
     dbg('something to print')

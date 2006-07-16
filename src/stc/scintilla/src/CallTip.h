@@ -15,8 +15,8 @@ class CallTip {
 	int endHighlight;
 	char *val;
 	Font font;
-	int xUp;
-	int xDown;
+	PRectangle rectUp;
+	PRectangle rectDown;
 	int lineHeight;
 	int offsetMain;
 	// Private so CallTip objects can not be copied

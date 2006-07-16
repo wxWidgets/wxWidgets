@@ -126,7 +126,7 @@ public:
 
 %{  // C++ Version of a Python aware class
 class wxPyWizardPage : public wxWizardPage {
-    DECLARE_ABSTRACT_CLASS(wxPyWizardPage);
+    DECLARE_ABSTRACT_CLASS(wxPyWizardPage)
 public:
     wxPyWizardPage() : wxWizardPage() {}
     wxPyWizardPage(wxWizard *parent,

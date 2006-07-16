@@ -12,7 +12,6 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include <fcntl.h>
 
 #include "Platform.h"
 
@@ -23,15 +22,18 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-static inline bool IsAWordChar(const int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '_' || ch == '.');
+// Extended to accept accented characters
+static inline bool IsAWordChar(int ch) {
+	return ch >= 0x80 ||
+	       (isalnum(ch) || ch == '.' || ch == '_');
 }
 
-static inline bool IsAWordStart(const int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '_');
+static inline bool IsAWordStart(int ch) {
+	return ch >= 0x80 ||
+	       (isalpha(ch) || ch == '_');
 }
 
-static inline bool IsANumberChar(const int ch) {
+static inline bool IsANumberChar(int ch) {
 	// Not exactly following number definition (several dots are seen as OK, etc.)
 	// but probably enough in most cases.
 	return (ch < 0x80) &&
@@ -55,6 +57,18 @@ static inline bool IsLuaOperator(int ch) {
 	return false;
 }
 
+// Test for [=[ ... ]=] delimiters, returns 0 if it's only a [ or ],
+// return 1 for [[ or ]], returns >=2 for [=[ or ]=] and so on.
+// The maximum number of '=' characters allowed is 254.
+static int LongDelimCheck(StyleContext &sc) {
+	int sep = 1;
+	while (sc.GetRelative(sep) == '=' && sep < 0xFF)
+		sep++;
+	if (sc.GetRelative(sep) == sc.ch)
+		return sep;
+	return 0;
+}
+
 static void ColouriseLuaDoc(
 	unsigned int startPos,
 	int length,
@@ -72,19 +86,19 @@ static void ColouriseLuaDoc(
 	WordList &keywords8 = *keywordlists[7];
 
 	int currentLine = styler.GetLine(startPos);
-	// Initialize the literal string [[ ... ]] nesting level, if we are inside such a string.
-	int literalStringLevel = 0;
-	if (initStyle == SCE_LUA_LITERALSTRING) {
-		literalStringLevel = styler.GetLineState(currentLine - 1);
-	}
-	// Initialize the block comment --[[ ... ]] nesting level, if we are inside such a comment
-	int blockCommentLevel = 0;
-	if (initStyle == SCE_LUA_COMMENT) {
-		blockCommentLevel = styler.GetLineState(currentLine - 1);
+	// Initialize long string [[ ... ]] or block comment --[[ ... ]] nesting level,
+	// if we are inside such a string. Block comment was introduced in Lua 5.0,
+	// blocks with separators [=[ ... ]=] in Lua 5.1.
+	int nestLevel = 0;
+	int sepCount = 0;
+	if (initStyle == SCE_LUA_LITERALSTRING || initStyle == SCE_LUA_COMMENT) {
+		int lineState = styler.GetLineState(currentLine - 1);
+		nestLevel = lineState >> 8;
+		sepCount = lineState & 0xFF;
 	}
 
 	// Do not leak onto next line
-	if (initStyle == SCE_LUA_STRINGEOL) {
+	if (initStyle == SCE_LUA_STRINGEOL || initStyle == SCE_LUA_COMMENTLINE || initStyle == SCE_LUA_PREPROCESSOR) {
 		initStyle = SCE_LUA_DEFAULT;
 	}
 
@@ -99,12 +113,9 @@ static void ColouriseLuaDoc(
 			currentLine = styler.GetLine(sc.currentPos);
 			switch (sc.state) {
 			case SCE_LUA_LITERALSTRING:
-				// Inside a literal string, we set the line state
-				styler.SetLineState(currentLine, literalStringLevel);
-				break;
-			case SCE_LUA_COMMENT: 	// Block comment
-				// Inside a block comment, we set the line state
-				styler.SetLineState(currentLine, blockCommentLevel);
+			case SCE_LUA_COMMENT:
+				// Inside a literal string or block comment, we set the line state
+				styler.SetLineState(currentLine, (nestLevel << 8) | sepCount);
 				break;
 			default:
 				// Reset the line state
@@ -162,13 +173,9 @@ static void ColouriseLuaDoc(
 				}
 				sc.SetState(SCE_LUA_DEFAULT);
 			}
-		} else if (sc.state == SCE_LUA_COMMENTLINE ) {
+		} else if (sc.state == SCE_LUA_COMMENTLINE || sc.state == SCE_LUA_PREPROCESSOR) {
 			if (sc.atLineEnd) {
-				sc.SetState(SCE_LUA_DEFAULT);
-			}
-		} else if (sc.state == SCE_LUA_PREPROCESSOR ) {
-			if (sc.atLineEnd) {
-				sc.SetState(SCE_LUA_DEFAULT);
+				sc.ForwardSetState(SCE_LUA_DEFAULT);
 			}
 		} else if (sc.state == SCE_LUA_STRING) {
 			if (sc.ch == '\\') {
@@ -192,26 +199,23 @@ static void ColouriseLuaDoc(
 				sc.ChangeState(SCE_LUA_STRINGEOL);
 				sc.ForwardSetState(SCE_LUA_DEFAULT);
 			}
-		} else if (sc.state == SCE_LUA_LITERALSTRING) {
-			if (sc.Match('[', '[')) {
-				literalStringLevel++;
-				sc.Forward();
-				sc.SetState(SCE_LUA_LITERALSTRING);
-			} else if (sc.Match(']', ']') && literalStringLevel > 0) {
-				literalStringLevel--;
-				sc.Forward();
-				if (literalStringLevel == 0) {
-					sc.ForwardSetState(SCE_LUA_DEFAULT);
+		} else if (sc.state == SCE_LUA_LITERALSTRING || sc.state == SCE_LUA_COMMENT) {
+			if (sc.ch == '[') {
+				int sep = LongDelimCheck(sc);
+				if (sep == 1 && sepCount == 1) {    // [[-only allowed to nest
+					nestLevel++;
+					sc.Forward();
 				}
-			}
-		} else if (sc.state == SCE_LUA_COMMENT) {	// Lua 5.0's block comment
-			if (sc.Match('[', '[')) {
-				blockCommentLevel++;
-				sc.Forward();
-			} else if (sc.Match(']', ']') && blockCommentLevel > 0) {
-				blockCommentLevel--;
-				sc.Forward();
-				if (blockCommentLevel == 0) {
+			} else if (sc.ch == ']') {
+				int sep = LongDelimCheck(sc);
+				if (sep == 1 && sepCount == 1) {    // un-nest with ]]-only
+					nestLevel--;
+					sc.Forward();
+					if (nestLevel == 0) {
+						sc.ForwardSetState(SCE_LUA_DEFAULT);
+					}
+				} else if (sep > 1 && sep == sepCount) {   // ]=]-style delim
+					sc.Forward(sep);
 					sc.ForwardSetState(SCE_LUA_DEFAULT);
 				}
 			}
@@ -223,21 +227,32 @@ static void ColouriseLuaDoc(
 				sc.SetState(SCE_LUA_NUMBER);
 			} else if (IsAWordStart(sc.ch)) {
 				sc.SetState(SCE_LUA_IDENTIFIER);
-			} else if (sc.Match('\"')) {
+			} else if (sc.ch == '\"') {
 				sc.SetState(SCE_LUA_STRING);
-			} else if (sc.Match('\'')) {
+			} else if (sc.ch == '\'') {
 				sc.SetState(SCE_LUA_CHARACTER);
-			} else if (sc.Match('[', '[')) {
-				literalStringLevel = 1;
-				sc.SetState(SCE_LUA_LITERALSTRING);
-				sc.Forward();
-			} else if (sc.Match("--[[")) {	// Lua 5.0's block comment
-				blockCommentLevel = 1;
-				sc.SetState(SCE_LUA_COMMENT);
-				sc.Forward(3);
+			} else if (sc.ch == '[') {
+				sepCount = LongDelimCheck(sc);
+				if (sepCount == 0) {
+					sc.SetState(SCE_LUA_OPERATOR);
+				} else {
+					nestLevel = 1;
+					sc.SetState(SCE_LUA_LITERALSTRING);
+					sc.Forward(sepCount);
+				}
 			} else if (sc.Match('-', '-')) {
 				sc.SetState(SCE_LUA_COMMENTLINE);
-				sc.Forward();
+				if (sc.Match("--[")) {
+					sc.Forward(2);
+					sepCount = LongDelimCheck(sc);
+					if (sepCount > 0) {
+						nestLevel = 1;
+						sc.ChangeState(SCE_LUA_COMMENT);
+						sc.Forward(sepCount);
+					}
+				} else {
+					sc.Forward();
+				}
 			} else if (sc.atLineStart && sc.Match('$')) {
 				sc.SetState(SCE_LUA_PREPROCESSOR);	// Obsolete since Lua 4.0, but still in old code
 			} else if (IsLuaOperator(static_cast<char>(sc.ch))) {
@@ -267,7 +282,7 @@ static void FoldLuaDoc(unsigned int startPos, int length, int /* initStyle */, W
 		styleNext = styler.StyleAt(i + 1);
 		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
 		if (style == SCE_LUA_WORD) {
-			if (ch == 'i' || ch == 'd' || ch == 'f' || ch == 'e') {
+			if (ch == 'i' || ch == 'd' || ch == 'f' || ch == 'e' || ch == 'r' || ch == 'u') {
 				for (unsigned int j = 0; j < 8; j++) {
 					if (!iswordchar(styler[i + j])) {
 						break;
@@ -276,10 +291,10 @@ static void FoldLuaDoc(unsigned int startPos, int length, int /* initStyle */, W
 					s[j + 1] = '\0';
 				}
 
-				if ((strcmp(s, "if") == 0) || (strcmp(s, "do") == 0) || (strcmp(s, "function") == 0)) {
+				if ((strcmp(s, "if") == 0) || (strcmp(s, "do") == 0) || (strcmp(s, "function") == 0) || (strcmp(s, "repeat") == 0)) {
 					levelCurrent++;
 				}
-				if ((strcmp(s, "end") == 0) || (strcmp(s, "elseif") == 0)) {
+				if ((strcmp(s, "end") == 0) || (strcmp(s, "elseif") == 0) || (strcmp(s, "until") == 0)) {
 					levelCurrent--;
 				}
 			}
@@ -287,6 +302,12 @@ static void FoldLuaDoc(unsigned int startPos, int length, int /* initStyle */, W
 			if (ch == '{' || ch == '(') {
 				levelCurrent++;
 			} else if (ch == '}' || ch == ')') {
+				levelCurrent--;
+			}
+		} else if (style == SCE_LUA_LITERALSTRING || style == SCE_LUA_COMMENT) {
+			if (ch == '[') {
+				levelCurrent++;
+			} else if (ch == ']') {
 				levelCurrent--;
 			}
 		}
@@ -321,8 +342,10 @@ static const char * const luaWordListDesc[] = {
 	"Basic functions",
 	"String, (table) & math functions",
 	"(coroutines), I/O & system facilities",
-	"XXX",
-	"XXX",
+	"user1",
+	"user2",
+	"user3",
+	"user4",
 	0
 };
 

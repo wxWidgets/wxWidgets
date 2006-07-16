@@ -469,6 +469,7 @@ public:
     void UnRef();
 
 
+#if WX_USE_RESERVED_VIRTUALS
     // Reserved for future use
     virtual void ReservedObjectFunc1() {}
     virtual void ReservedObjectFunc2() {}
@@ -479,6 +480,7 @@ public:
     virtual void ReservedObjectFunc7() {}
     virtual void ReservedObjectFunc8() {}
     virtual void ReservedObjectFunc9() {}
+#endif
 
 protected:
     // ensure that our data is not shared with anybody else: if we have no

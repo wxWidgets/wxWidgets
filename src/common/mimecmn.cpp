@@ -494,6 +494,8 @@ wxMimeTypesManager::~wxMimeTypesManager()
 
 bool wxMimeTypesManager::Unassociate(wxFileType *ft)
 {
+    EnsureImpl();
+
 #if defined(__UNIX__) && !defined(__CYGWIN__) && !defined(__WINE__)
     return m_impl->Unassociate(ft);
 #else

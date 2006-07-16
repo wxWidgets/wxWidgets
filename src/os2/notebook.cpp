@@ -318,7 +318,7 @@ bool wxNotebook::SetPageImage (
     return (bool)::WinSendMsg( GetHWND()
                               ,BKM_SETTABBITMAP
                               ,MPFROMLONG((ULONG)m_alPageId[nPage])
-                              ,(MPARAM)vBitmap.GetHBITMAP()
+                              ,(MPARAM)wxFlipBmp(vBitmap.GetHBITMAP())
                              );
 } // end of wxNotebook::SetPageImage
 

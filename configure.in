@@ -1,8 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_REVISION($Id$)dnl
 
-AC_PREREQ(2.58)
-
 dnl ---------------------------------------------------------------------------
 dnl
 dnl Top-level configure.in for wxWidgets by Robert Roebling, Phil Blecker,
@@ -17,7 +15,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [2.6.2], [wx-dev@lists.wxwidgets.org])
+AC_INIT([wxWidgets], [2.6.3], [wx-dev@lists.wxwidgets.org])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -34,8 +32,8 @@ dnl wx_release_number += 1
 
 wx_major_version_number=2
 wx_minor_version_number=6
-wx_release_number=2
-wx_subrelease_number=1
+wx_release_number=3
+wx_subrelease_number=3
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
 WX_VERSION=$WX_RELEASE.$wx_release_number
@@ -187,7 +185,7 @@ case "${host}" in
     AC_DEFINE(__BSD__)
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
-  *-*-openbsd*)
+  *-*-openbsd*|*-*-mirbsd*)
     USE_BSD=1
     USE_OPENBSD=1
     AC_DEFINE(__OPENBSD__)
@@ -391,6 +389,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LIBMSPACK=no
   DEFAULT_wxUSE_LIBSDL=no
   DEFAULT_wxUSE_LIBGNOMEPRINT=no
+  DEFAULT_wxUSE_LIBHILDON=no
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -587,6 +586,7 @@ else
   DEFAULT_wxUSE_LIBMSPACK=yes
   DEFAULT_wxUSE_LIBSDL=no
   DEFAULT_wxUSE_LIBGNOMEPRINT=no
+  DEFAULT_wxUSE_LIBHILDON=no
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -807,6 +807,7 @@ WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file forma
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
 WX_ARG_WITH(sdl,           [  --with-sdl              use SDL for audio on Unix], wxUSE_LIBSDL)
 WX_ARG_WITH(gnomeprint,    [  --with-gnomeprint       use GNOME print for printing under Unix], wxUSE_LIBGNOMEPRINT)
+WX_ARG_WITH(hildon,        [  --with-hildon           use Hildon framework for Nokia 770], wxUSE_LIBHILDON)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
 fi
@@ -851,9 +852,13 @@ WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI
 WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ exceptions handling], wxUSE_NO_EXCEPTIONS)
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
+WX_ARG_ENABLE(universal_binary, [  --enable-universal_binary create Mac PowerPC and Intel Universal binary (not yet working)], wxUSE_UNIVERSAL_BINARY)
 
 WX_ARG_ENABLE(compat22,      [  --enable-compat22       enable wxWidgets 2.2 compatibility], WXWIN_COMPATIBILITY_2_2)
 WX_ARG_ENABLE(compat24,      [  --disable-compat24      disable wxWidgets 2.4 compatibility], WXWIN_COMPATIBILITY_2_4, disable)
+
+DEFAULT_WX_USE_RESERVED_VIRTUALS=yes
+WX_ARG_ENABLE(reserved_virtual, [  --disable-reserved_virtual do not create unused vtable entries], WX_USE_RESERVED_VIRTUALS)
 
 WX_ARG_ENABLE(rpath,         [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
 
@@ -2197,6 +2202,7 @@ if test "$build" != "$host" -a "$GCC" = yes; then
         dnl strip out any that don't start '^/usr'.
         SEARCH_LIB=`for x in $SEARCH_LIB; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
         SEARCH_INCLUDE=`for x in $SEARCH_INCLUDE; do echo $x; done | sed -ne "s|^/usr|$cross_root|p"`
+        SEARCH_INCLUDE="$SEARCH_INCLUDE $cross_root/include"
 
         dnl also have pkg-config search for *.pc files under this 'root'
         if test -z "$PKG_CONFIG_PATH"; then
@@ -2299,7 +2305,7 @@ if test "$wxUSE_REGEX" != "no"; then
     if test "$wxUSE_REGEX" = "sys" -o "$wxUSE_REGEX" = "yes" ; then
         dnl according to Unix 98 specs, regcomp() is in libc but I believe that
         dnl on some old systems it may be in libregex - check for it too?
-        AC_CHECK_HEADER(regex.h, [AC_CHECK_FUNCS(regcomp)])
+        AC_CHECK_HEADER(regex.h, [AC_CHECK_FUNCS(regcomp re_search)])
 
         if test "x$ac_cv_func_regcomp" != "xyes"; then
             if test "$wxUSE_REGEX" = "sys" ; then
@@ -2743,8 +2749,32 @@ if test "$wxUSE_GUI" = "yes"; then
 
                 dnl detect GTK2
                 wx_cv_lib_gtk=
-                if test "x$wxGTK_VERSION" != "x1"; then
+                if test "x$wxGTK_VERSION" != "x1"
+                then
+                    dnl The gthread.pc that ships with solaris returns '-mt',
+                    dnl it's correct for Sun CC, but gcc requires '-pthreads'.
+                    dnl So disable the compile check and remove the -mt below.
+                    case "${host}" in
+                        *-*-solaris2* )
+                            if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
+		                enable_gtktest=no
+                            fi
+                    esac
+
                     AM_PATH_GTK_2_0(2.0.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+
+                    dnl Remove the '-mt' for gcc on solaris
+                    case "${host}" in
+                        *-*-solaris2* )
+                            if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
+                                GTK_CFLAGS=`echo $GTK_CFLAGS | sed 's/-mt//'`
+                                GTK_LIBS=`echo $GTK_LIBS | sed 's/-mt//'`
+                            fi
+                            dnl solaris also requires -lX11 for static lib
+                            if test "$wxUSE_SHARED" != "yes"; then
+                                GTK_LIBS="$GTK_LIBS -lX11"
+                            fi
+                    esac
                 fi
 
                 dnl detect GTK1.x
@@ -5007,7 +5037,19 @@ if test "$wxUSE_OPTIMISE" = "no" ; then
     fi
 else
     if test "$GCC" = yes ; then
-        OPTIMISE="-O2"
+        case "${host}" in
+            *-pc-os2_emx | *-pc-os2-emx )
+                dnl Not all of the supported gcc versions understand
+                dnl -fstrict-aliasing and none actually needs it (yet).
+                OPTIMISE="-O2"
+            ;;
+            *)
+                dnl Switch on optimisation but keep strict-aliasing off for
+                dnl now (see -fstrict-aliasing in the gcc manual). When it is
+                dnl switched back on consider using -Wstrict-aliasing=2.
+                OPTIMISE="-O2 -fno-strict-aliasing"
+            ;;
+        esac
 
         dnl VZ: does anybody know what does this do??
         case "${host}" in
@@ -5032,6 +5074,10 @@ fi
 
 if test "x$WXWIN_COMPATIBILITY_2_4" != "xno"; then
     AC_DEFINE(WXWIN_COMPATIBILITY_2_4)
+fi
+
+if test "x$WX_USE_RESERVED_VIRTUALS" != "xno"; then
+    AC_DEFINE(WX_USE_RESERVED_VIRTUALS)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -5257,6 +5303,23 @@ dnl                     EXTRALIBS_GNOMEPRINT="$LIBGNOMEPRINTUI_LIBS"
                     ]
                 )
         fi
+    fi
+fi
+
+if test "$WXGTK20" = 1; then
+    if test "$wxUSE_LIBHILDON" = "yes" ; then
+        PKG_CHECK_MODULES(HILDON, 
+                          [hildon-lgpl >= 0.9],
+            [
+                EXTRALIBS_HILDON="$HILDON_LIBS"
+                CXXFLAGS="$CXXFLAGS $HILDON_CFLAGS"
+                AC_DEFINE(wxUSE_LIBHILDON)
+            ],
+            [
+                AC_MSG_WARN([libhildon_lgpl not found])
+                        wxUSE_LIBHILDON="no"
+            ]
+        )
     fi
 fi
 
@@ -6255,10 +6318,6 @@ if test "$wxUSE_TOGGLEBTN" = "yes"; then
         AC_MSG_WARN([Toggle button not yet supported under Mac OS X... disabled])
         wxUSE_TOGGLEBTN=no
     fi
-    if test "$wxUSE_UNIVERSAL" = "yes"; then
-        AC_MSG_WARN([Toggle button not yet supported under wxUniversal... disabled])
-        wxUSE_TOGGLEBTN=no
-    fi
 
     if test "$wxUSE_TOGGLEBTN" = "yes"; then
         AC_DEFINE(wxUSE_TOGGLEBTN)
@@ -6707,7 +6766,6 @@ fi
 AC_SUBST(CORE_BASE_LIBS)
 AC_SUBST(CORE_GUI_LIBS)
 
-
 dnl ---------------------------------------------------------------------------
 dnl Output the makefiles and such from the results found above
 dnl ---------------------------------------------------------------------------
@@ -6861,7 +6919,7 @@ EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_ODBC="$ODBC_LINK"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_GNOMEPRINT`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEPRINT`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
@@ -6968,6 +7026,7 @@ AC_SUBST(EXTRALIBS_OPENGL)
 AC_SUBST(EXTRALIBS_SDL)
 AC_SUBST(WITH_PLUGIN_SDL)
 AC_SUBST(EXTRALIBS_GNOMEPRINT)
+AC_SUBST(EXTRALIBS_HILDON)
 AC_SUBST(UNICODE)
 AC_SUBST(BUILD)
 AC_SUBST(DEBUG_INFO)
@@ -6998,7 +7057,38 @@ if test "$wxUSE_WINE" = "yes"; then
     BAKEFILE_FORCE_PLATFORM=win32
 fi
 
+dnl ---------------------------------------------------------------------------
+dnl Add Universal binary support 
+dnl Note we don't do this earlier because adding these cpp/ld flags could
+dnl cause configure tests to fail.
+dnl ---------------------------------------------------------------------------
+if test "$wxUSE_MAC" = 1 ; then
+    if test "$wxUSE_UNIVERSAL_BINARY" = "yes" ; then
+        CXXFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $CXXFLAGS"
+        CFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $CFLAGS"
+        LDFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $LDFLAGS"
+        bk_use_pch=no
+    fi
+    # TODO: where do we add "-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk" for libtool (static builds only)?
+    #       The makefile currently uses AR and RANLIB, which libtool apparently supercedes.
+    # TODO: how can we avoid a hardwired reference to the SDK, above? (Someone used -lSystemStubs to avoid it)
+fi
+
 AC_BAKEFILE([m4_include(autoconf_inc.m4)])
+
+dnl HACK ALERT!! 
+dnl For now, we need to alter bk-deps not to generate deps
+dnl when we've configured a Universal binary build.
+dnl The next version of Bakefile will have the correct fix for this
+dnl at which time, this hack can be removed.
+
+if test "$wxUSE_MAC" = 1 ; then
+    if test "$wxUSE_UNIVERSAL_BINARY" = "yes" ; then
+        sed "s/DEPSMODE=gcc/DEPSMODE=none/" < bk-deps > temp
+        mv temp bk-deps
+        chmod +x bk-deps
+    fi
+fi
 
 if test "$wxUSE_SHARED" = "yes"; then
 
@@ -7204,6 +7294,23 @@ AC_PROG_MAKE_SET
 
 AC_CONFIG_HEADERS([lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/setup.h:setup.h.in])
 
+if test "$USE_WIN32" = 1; then
+    AC_CONFIG_COMMANDS(
+        [
+            rcdefs.h
+        ],
+        [
+            mkdir -p $outdir &&
+            $CPP $infile | sed 's/^# *[1-9].*//;s/^ *//;/./,/^$/!d' > $outdir/rcdefs.h
+        ],
+        [
+            CPP="$CPP"
+            infile="$srcdir/include/wx/msw/genrcdefs.h"
+            outdir="lib/wx/include/$TOOLCHAIN_FULLNAME/wx/msw"
+        ]
+    )
+fi
+
 AC_CONFIG_FILES([ lib/wx/config/${TOOLCHAIN_FULLNAME}:wx-config.in ],
                 [ chmod +x lib/wx/config/${TOOLCHAIN_FULLNAME} ],
                 [ TOOLCHAIN_FULLNAME="${TOOLCHAIN_FULLNAME}" ])
@@ -7320,6 +7427,7 @@ echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
 echo "                                       gnomeprint         ${wxUSE_LIBGNOMEPRINT-none}"
+echo "                                       hildon             ${wxUSE_LIBHILDON-none}"
 
 echo ""
 

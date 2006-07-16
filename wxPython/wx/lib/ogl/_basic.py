@@ -288,9 +288,15 @@ class Shape(ShapeEvtHandler):
         return str(self.__class__).split(".")[-1][:-2]
 
     def Delete(self):
+        """
+        Fully disconnect this shape from parents, children, the
+        canvas, etc.
+        """
         if self._parent:
-            i = self._parent.GetChildren().index(self)
-            self._parent.GetChildren(i).remove(self)
+            self._parent.GetChildren().remove(self)
+
+        for child in self.GetChildren():
+            child.Delete()
 
         self.ClearText()
         self.ClearRegions()
@@ -301,7 +307,8 @@ class Shape(ShapeEvtHandler):
         if self._canvas:
             self.RemoveFromCanvas(self._canvas)
 
-        self.GetEventHandler().OnDelete()
+        if self.GetEventHandler():
+            self.GetEventHandler().OnDelete()
         self._eventHandler = None
         
     def __del__(self):
@@ -749,18 +756,18 @@ class Shape(ShapeEvtHandler):
         if self._pen:
             dc.SetPen(self._pen)
 
-        region = self._regions[0]
-        if region.GetFont():
-            dc.SetFont(region.GetFont())
+        for region in self._regions:
+            if region.GetFont():
+                dc.SetFont(region.GetFont())
 
-        dc.SetTextForeground(region.GetActualColourObject())
-        dc.SetBackgroundMode(wx.TRANSPARENT)
-        if not self._formatted:
-            CentreText(dc, region.GetFormattedText(), self._xpos, self._ypos, bound_x - 2 * self._textMarginX, bound_y - 2 * self._textMarginY, region.GetFormatMode())
-            self._formatted = True
+            dc.SetTextForeground(region.GetActualColourObject())
+            dc.SetBackgroundMode(wx.TRANSPARENT)
+            if not self._formatted:
+                CentreText(dc, region.GetFormattedText(), self._xpos, self._ypos, bound_x - 2 * self._textMarginX, bound_y - 2 * self._textMarginY, region.GetFormatMode())
+                self._formatted = True
 
-        if not self.GetDisableLabel():
-            DrawFormattedText(dc, region.GetFormattedText(), self._xpos, self._ypos, bound_x - 2 * self._textMarginX, bound_y - 2 * self._textMarginY, region.GetFormatMode())
+            if not self.GetDisableLabel():
+                DrawFormattedText(dc, region.GetFormattedText(), self._xpos, self._ypos, bound_x - 2 * self._textMarginX, bound_y - 2 * self._textMarginY, region.GetFormatMode())
             
 
     def DrawContents(self, dc):
@@ -1159,7 +1166,7 @@ class Shape(ShapeEvtHandler):
         """Flash the shape."""
         if self.GetCanvas():
             dc = wx.ClientDC(self.GetCanvas())
-            self.GetCanvas.PrepareDC(dc)
+            self.GetCanvas().PrepareDC(dc)
 
             dc.SetLogicalFunction(OGLRBLF)
             self.Draw(dc)
@@ -2171,7 +2178,7 @@ class Shape(ShapeEvtHandler):
         dc.SetLogicalFunction(OGLRBLF)
 
         bound_x, bound_y = self.GetBoundingBoxMin()
-        self.GetEventHandler().OnEndSize(bound_x, bound_y)
+        self.GetEventHandler().OnBeginSize(bound_x, bound_y)
 
         # Choose the 'opposite corner' of the object as the stationary
         # point in case this is non-centring resizing.
@@ -3040,7 +3047,7 @@ class ShapeRegion(object):
             return None
         if self._penColour=="Invisible":
             return None
-        self._actualPenObject = wx.ThePenList.FindOrCreatePen(self._penColour, 1, self._penStyle)
+        self._actualPenObject = wx.Pen(self._penColour, 1, self._penStyle)
         return self._actualPenObject
 
     def SetText(self, s):

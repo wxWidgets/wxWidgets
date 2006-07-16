@@ -1,5 +1,5 @@
-README for wxPython-src-2.6.*.tar.gz
-====================================
+README for wxPython-src-2.6.*.tar.bz2
+=====================================
 
 
 This archive contains the source code and other files for both

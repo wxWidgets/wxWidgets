@@ -56,7 +56,7 @@ class TestLayoutConstraints(wx.Panel):
         lc.centreY.SameAs   (self.panelA, wx.CentreY)
         lc.height.AsIs      ()
         lc.width.PercentOf  (self.panelA, wx.Width, 50)
-        b.SetConstraints(lc);
+        b.SetConstraints(lc)
 
         b = wx.Button(self.panelB, 100, ' Panel B ')
         lc = wx.LayoutConstraints()
@@ -64,7 +64,7 @@ class TestLayoutConstraints(wx.Panel):
         lc.right.SameAs     (self.panelB, wx.Right, 4)
         lc.height.AsIs      ()
         lc.width.AsIs       ()
-        b.SetConstraints(lc);
+        b.SetConstraints(lc)
 
         self.panelD = wx.Window(self.panelC, -1, style=wx.SIMPLE_BORDER)
         self.panelD.SetBackgroundColour(wx.GREEN)
@@ -78,14 +78,14 @@ class TestLayoutConstraints(wx.Panel):
         lc.left.RightOf     (self.panelD)
         lc.height.AsIs      ()
         lc.width.AsIs       ()
-        b.SetConstraints(lc);
+        b.SetConstraints(lc)
 
         lc = wx.LayoutConstraints()
         lc.bottom.PercentOf (self.panelC, wx.Height, 50)
         lc.right.PercentOf  (self.panelC, wx.Width, 50)
         lc.height.SameAs    (b, wx.Height)
         lc.width.SameAs     (b, wx.Width)
-        self.panelD.SetConstraints(lc);
+        self.panelD.SetConstraints(lc)
 
 
     def OnButton(self, event):

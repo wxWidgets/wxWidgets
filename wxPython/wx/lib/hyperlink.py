@@ -3,13 +3,15 @@
 # Ported From Angelo Mandato C++ Code By:
 #
 # Andrea Gavana, @ 27 Mar 2005
-# Latest Revision: 27 Apr 2005, 22.30 CET
+# Latest Revision: 05 Nov 2005, 22.30 CET
 #
 #
 # Original Web Site (For The C++ Code):
 #
 # http://www.spaceblue.com/codedetail.php?CodeID=7
 #
+#
+# Thanks to E. A. Tacao for his nice suggestions and improvements of the code.
 #
 # For all kind of problems, requests of enhancements and bug reports, please
 # write to me at:
@@ -33,7 +35,7 @@ browser window.
 Special thanks to Robin Dunn for the event binder for the 3 mouse buttons.
 
 
-Latest Revision: Andrea Gavana @ 11 May 2005, 21.00 CET
+Latest Revision: Andrea Gavana @ 05 Nov 2005, 22.30 CET
 
 """
 
@@ -212,15 +214,24 @@ class HyperLinkCtrl(StaticText):
             self.SetCursor(self._CursorHand)
 
             if self._EnableRollover:
-                self.SetForegroundColour(self._LinkRolloverColor)
                 fontTemp = self.GetFont()
                 fontTemp.SetUnderlined(self._RolloverUnderline)
                 if self._Bold:
                     fontTemp.SetWeight(wx.BOLD)
+                    
+                needRefresh = False
 
-                self.SetFont(fontTemp)
-                self.Refresh()
+                if self.GetFont() != fontTemp:
+                    self.SetFont(fontTemp)
+                    needRefresh = True
 
+                if self.GetForegroundColour() != self._LinkRolloverColor:
+                    self.SetForegroundColour(self._LinkRolloverColor)
+                    needRefresh = True
+
+                if needRefresh:
+                    self.Refresh()
+            
         else:            
             # Restore The Original Cursor            
             self.SetCursor(wx.NullCursor)
@@ -301,12 +312,12 @@ class HyperLinkCtrl(StaticText):
             self.SetForegroundColour(self._LinkColour)
             fontTemp.SetUnderlined(self._LinkUnderline)
 
-
         if self._Bold:
             fontTemp.SetWeight(wx.BOLD)
 
-        self.SetFont(fontTemp)
-        self.Refresh(OnRefresh)
+        if self.GetFont() != fontTemp:
+            self.SetFont(fontTemp)
+            self.Refresh(OnRefresh)            
 
 
     def DisplayError(self, ErrorMessage, ReportErrors=True):

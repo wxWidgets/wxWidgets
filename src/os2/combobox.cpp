@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        combobox.cpp
+// Name:        src/os2/combobox.cpp
 // Purpose:     wxComboBox class
 // Author:      David Webster
 // Modified by:
@@ -12,14 +12,14 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/settings.h"
-#endif
-
 #if wxUSE_COMBOBOX
 
 #include "wx/combobox.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/settings.h"
+#endif
+
 #include "wx/clipbrd.h"
 #include "wx/os2/private.h"
 
@@ -37,41 +37,35 @@ static WXFARPROC gfnWndprocEdit     = (WXFARPROC)NULL;
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
-bool wxComboBox::OS2Command(
-  WXUINT                            uParam
-, WXWORD                            WXUNUSED(wId)
-)
+bool wxComboBox::OS2Command( WXUINT uParam, WXWORD WXUNUSED(wId) )
 {
-    long                            lSel = -1L;
-    wxString                        sValue;
+    long lSel = GetSelection();
+    wxString sValue;
 
     switch (uParam)
     {
         case CBN_LBSELECT:
-            if (GetSelection() > -1)
+            if (lSel > -1)
             {
-                wxCommandEvent      vEvent( wxEVT_COMMAND_COMBOBOX_SELECTED
-                                           ,GetId()
-                                          );
+                wxCommandEvent vEvent( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
 
-                vEvent.SetInt(GetSelection());
+                vEvent.SetInt(lSel);
                 vEvent.SetEventObject(this);
                 vEvent.SetString(GetStringSelection());
+
                 ProcessCommand(vEvent);
             }
             break;
 
         case CBN_EFCHANGE:
             {
-                wxCommandEvent      vEvent( wxEVT_COMMAND_TEXT_UPDATED
-                                           ,GetId()
-                                          );
+                wxCommandEvent vEvent( wxEVT_COMMAND_TEXT_UPDATED, GetId() );
 
                 if (lSel == -1L)
                     sValue = GetValue();
                 else
-                    SetValue(sValue);
-                vEvent.SetString(GetValue());
+                    sValue = GetStringSelection();
+                vEvent.SetString(sValue);
                 vEvent.SetEventObject(this);
                 ProcessCommand(vEvent);
             }
@@ -156,10 +150,7 @@ bool wxComboBox::Create(
     //
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
-    SetFont(*wxSMALL_FONT);
-
-    int                             i;
-    for (i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
         Append(asChoices[i]);
     }
@@ -169,6 +160,14 @@ bool wxComboBox::Create(
             ,rSize.x
             ,rSize.y
            );
+
+    // Set height to use with sizers i.e. without the dropdown listbox
+    wxFont vFont = GetFont();
+    int nCx,nCy;
+    wxGetCharSize( GetHWND(), &nCx, &nCy, &vFont );
+    int nEditHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy);
+    SetBestFittingSize(wxSize(-1,nEditHeight));
+
     if (!rsValue.empty())
     {
         SetValue(rsValue);
@@ -180,6 +179,11 @@ bool wxComboBox::Create(
     Show(true);
     return true;
 } // end of wxComboBox::Create
+
+wxString wxComboBox::GetValue() const
+{
+    return wxGetWindowText(GetHwnd());
+}
 
 void wxComboBox::SetValue(
   const wxString&                   rsValue
@@ -323,14 +327,11 @@ void wxComboBox::Remove( long lFrom, long lTo)
 #endif
 } // end of wxComboBox::Remove
 
-void wxComboBox::SetSelection(
-  long                              lFrom
-, long                              lTo
-)
+void wxComboBox::SetSelection( long lFrom, long lTo )
 {
-    HWND                            hWnd = GetHwnd();
-    long                            lFromChar = 0;
-    long                            lToChar   = 0;
+    HWND hWnd = GetHwnd();
+    long lFromChar = 0;
+    long lToChar   = 0;
 
     //
     // If from and to are both -1, it means
@@ -349,22 +350,6 @@ void wxComboBox::SetSelection(
                  ,(MPARAM)0
                 );
 } // end of wxComboBox::SetSelection
-
-void wxComboBox::DoSetSize(
-  int                               nX
-, int                               nY
-, int                               nWidth
-, int                               nHeight
-, int                               nSizeFlags
-)
-{
-    wxControl::DoSetSize( nX
-                         ,nY
-                         ,nWidth
-                         ,nHeight
-                         ,nSizeFlags
-                        );
-} // end of wxComboBox::DoSetSize
 
 bool wxComboBox::ProcessEditMsg(
   WXUINT                            uMsg

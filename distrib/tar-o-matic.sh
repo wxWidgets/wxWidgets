@@ -2,7 +2,7 @@
 
 # create wx tarballs automatically given a tag, or from CVS HEAD
 PROGNAME=$0
-VERSION=$1
+VERSION=""
 TAG="" 
 STARTDIR=$PWD
 
@@ -12,6 +12,8 @@ SPINWXMOTIF=0
 SPINWXMAC=0
 SPINWXBASE=0
 SPINWXMGL=0
+SPINWXALL=0
+SPINWXMSW=0
 SPINDOCS=0
 SPINEVERYTHING=0
 REBAKE=0
@@ -50,6 +52,8 @@ usage()
     echo "    --wxmotif      Spin wxMotif"
     echo "    --wxmac        Spin wxMac"
     echo "    --wxmgl        Spin wxMGL"
+    echo "    --wxall        Spin wxALL"
+    echo "    --wxmsw        Spin wxMSW"
     echo "    --docs         Spin docs"
     echo "    --all          Spin EVERYTHING"
     echo "    --updatecvs    Update from CVS"
@@ -78,6 +82,7 @@ if [ "$1" = "--about" ]; then
 	exit
 fi
 
+VERSION=$1
 shift 1
 
 FINDTAG=`echo "$1" | sed /\-\-/p`
@@ -93,6 +98,7 @@ for i in "$@"; do
 	--wxmac) SPINWXMAC=1 ;;
 	--wxbase) SPINWXBASE=1 ;;
 	--wxmgl) SPINWXMGL=1 ;;
+	--wxmsw) SPINWXMSW=1 ;;
 	--wxmotif) SPINWXMOTIF=1 ;;
 	--docs) SPINDOCS=1 ;;
 	--all) SPINEVERYTHING=1 ;;
@@ -123,19 +129,15 @@ else
 fi
 echo "" # add a blank line for readability
 
-# TODO: look into whether or not we need to keep anonymous password, and if so
-# add support for something like expect to at least offer the possibility
-# of automatically entering the password if such a tool is installed
-# on the user's computer. For now people have to type the password manually...
-echo "Grabbing source tree, please use 'anoncvs' for the password when prompted..."
 cd $STARTDIR/temp-wx
-cvs -d:pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets login
+cvs -d:pserver:anoncvs:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets login
 
+echo "cvs -d :pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout $TAGNAME wxWidgets"
 cvs -d :pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout $TAGNAME wxWidgets
 
-#if [ "$REBAKE" = "1" ]; then
-#
-#fi
+if [ "$REBAKE" = "1" ]; then
+    echo "TODO! Implement re-baking..."
+fi
 
 # Copy extra .zips over to deliver/extra so they'll get picked up...
 if [ ! -d $WXDIR/deliver ]; then

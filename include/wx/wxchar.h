@@ -18,7 +18,9 @@
     #pragma interface "wxchar.h"
 #endif
 
-#include "wx/defs.h"        /* for wxUSE_UNICODE */
+/* defs.h indirectly includes this file, so don't include it here */
+#include "wx/platform.h"
+#include "wx/dlimpexp.h"
 
 #if defined(HAVE_STRTOK_R) && defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
     char *strtok_r(char *, const char *, char **);
@@ -52,7 +54,7 @@
 /*
     Standard headers we need here.
 
-    NB: don't include any wxWidgets headers here because almost of them include
+    NB: don't include any wxWidgets headers here because almost all of them include
         this one!
  */
 
@@ -61,7 +63,9 @@
 
 /* Almost all compiler have strdup(), but not quite all: CodeWarrior under Mac */
 /* and VC++ for Windows CE don't provide it */
-#if !(defined(__MWERKS__) && defined(__WXMAC__)) && !defined(__WXWINCE__)
+#if defined(__VISUALC__) && __VISUALC__ >= 1400
+    #define wxStrdupA _strdup
+#elif !(defined(__MWERKS__) && defined(__WXMAC__)) && !defined(__WXWINCE__)
     /* use #define, not inline wrapper, as it is tested with #ifndef below */
     #define wxStrdupA strdup
 #endif
@@ -179,6 +183,13 @@
     /*     signed/unsigned version of it which (a) makes sense to me (unlike */
     /*     char wchar_t is always unsigned) and (b) was how the previous */
     /*     definitions worked so keep it like this */
+
+    /* Sun's SunPro compiler supports the wchar_t type and wide character */
+    /* functions, but does not define __WCHAR_TYPE__. Define it here to */
+    /* allow unicode enabled builds. */
+    #if defined(__SUNPRO_CC) || defined(__SUNPRO_C)
+    #define __WCHAR_TYPE__ wxchar_t
+    #endif
 
     /* GNU libc has __WCHAR_TYPE__ which requires special treatment, see */
     /* comment below */
@@ -394,7 +405,28 @@
     #define wxWcstombs wcstombs
 #else /* !TCHAR-aware compilers */
 
-    #if !defined(__MWERKS__) && defined(__DARWIN__) && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 )
+    /*
+        There are 2 unrelated problems with these functions under Mac:
+            a) Metrowerks MSL CRT implements them strictly in C99 sense and
+               doesn't support (very common) extension of allowing to call
+               mbstowcs(NULL, ...) which makes it pretty useless as you can't
+               know the size of the needed buffer
+            b) OS X <= 10.2 declares and even defined these functions but
+               doesn't really implement them -- they always return an error
+
+        So use our own replacements in both cases.
+     */
+    #if defined(__MWERKS__) && defined(__MSL__)
+        #define wxNEED_WX_MBSTOWCS
+    #endif
+
+    #ifdef __DARWIN__
+        #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2
+            #define wxNEED_WX_MBSTOWCS
+        #endif
+    #endif
+
+    #ifdef wxNEED_WX_MBSTOWCS
         /* even though they are defined and "implemented", they are bad and just
            stubs so we need our own - we need these even in ANSI builds!! */
         WXDLLIMPEXP_BASE size_t wxMbstowcs (wchar_t *, const char *, size_t);
@@ -834,7 +866,8 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
         #if defined(HAVE__VSNWPRINTF)
             #define wxVsnprintf_    _vsnwprintf
         /* MinGW?MSVCRT has the wrong vswprintf */
-        #elif defined(HAVE_VSWPRINTF) && !defined(__MINGW32__)
+		/* Mac OS X has a somehow buggy vswprintf */
+        #elif defined(HAVE_VSWPRINTF) && !defined(__MINGW32__) && !defined(__DARWIN__)
             #define wxVsnprintf_    vswprintf
         #endif
     #else /* ASCII */

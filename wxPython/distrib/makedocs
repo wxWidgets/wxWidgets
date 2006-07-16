@@ -9,7 +9,7 @@ fi
 
 
 VERSION=`python -c "import setup;print setup.VERSION"`
-CONTRIBS="ogl gizmos"
+CONTRIBS="gizmos"
 DEST=wxPython-$VERSION/docs
 
 
@@ -17,8 +17,9 @@ DEST=wxPython-$VERSION/docs
 mkdir -p _build_docs/$DEST
 cd _build_docs
 mkdir $DEST/wx
+#DEST=`python -c "import os; print os.path.abspath('$DEST')"`
 
-WXDIR=../..
+WXDIR=`python -c "import os; print os.path.abspath('../..')"`
 INI=$WXDIR/docs/latex/wx/tex2rtf.ini
 
 # **** Build the main docs using tex2rtf
@@ -30,14 +31,12 @@ cp $DEST/wx/wx_contents.html $DEST/wx/index.html
 cp $DEST/wx/* $WXDIR/docs/html/wx
 
 # **** and the contribs
-for c in $CONTRIBS; do
-    echo "****" $c "****"
-    mkdir $DEST/$c
-    cp $WXDIR/contrib/docs/latex/$c/*.gif $DEST/$c
-    cp $WXDIR/contrib/docs/latex/$c/*.bmp $DEST/$c
-    tex2rtf $WXDIR/contrib/docs/latex/$c/$c.tex $DEST/$c/$c.html -twice -html -macros $INI
-    cp $DEST/$c/$c.html $DEST/$c/index.html || cp $DEST/$c/${c}_contents.html $DEST/$c/index.html
-done
+echo "**** gizmos ****"
+mkdir $DEST/gizmos
+cp $WXDIR/contrib/docs/latex/gizmos/*.gif $DEST/gizmos
+cp $WXDIR/contrib/docs/latex/gizmos/*.bmp $DEST/gizmos
+tex2rtf $WXDIR/contrib/docs/latex/gizmos/manual.tex $DEST/gizmos/gizmos.html -twice -html -macros $INI
+cp $DEST/gizmos/gizmos.html $DEST/gizmos/index.html || cp $DEST/gizmos/gizmos_contents.html $DEST/gizmos/index.html
 
 
 # **** zip the docs into "books"
@@ -57,11 +56,11 @@ done
 popd
 cp ../distrib/viewdocs.py $DEST
 cp ../distrib/README.viewdocs.txt $DEST/README.txt
-cp ../docs/xml/wxPython-metadata.xml $DEST
+##cp ../docs/xml/wxPython-metadata.xml $DEST
 
-rm -f ../dist/wxPython-docs-$VERSION.tar.gz
+rm -f ../dist/wxPython-docs-$VERSION.tar.bz2
 tar cvf ../dist/wxPython-docs-$VERSION.tar $DEST
-gzip -9 ../dist/wxPython-docs-$VERSION.tar
+bzip2 -9 ../dist/wxPython-docs-$VERSION.tar
 
 
 # **** Cleanup

@@ -23,13 +23,15 @@ Blue (RGB) intensity values, and is used to determine drawing colours,
 window colours, etc.  Valid RGB values are in the range 0 to 255.
 
 In wxPython there are typemaps that will automatically convert from a
-colour name, or from a '#RRGGBB' colour hex value string to a
-wx.Colour object when calling C++ methods that expect a wxColour.
-This means that the following are all equivallent::
+colour name, from a '#RRGGBB' colour hex value string, or from a 3
+integer tuple to a wx.Colour object when calling C++ methods that
+expect a wxColour.  This means that the following are all
+equivallent::
 
     win.SetBackgroundColour(wxColour(0,0,255))
     win.SetBackgroundColour('BLUE')
     win.SetBackgroundColour('#0000FF')
+    win.SetBackgroundColour((0,0,255))
 
 Additional colour names and their coresponding values can be added
 using `wx.ColourDatabase`.  Various system colours (as set in the
@@ -104,14 +106,32 @@ COLORREF is returned. On X, an allocated pixel value is returned.  -1
 is returned if the pixel is invalid (on X, unallocated).", "");
     
     
-    DocDeclStr(
-        bool , operator==(const wxColour& colour) const,
-        "Compare colours for equality", "");
-    
-    DocDeclStr(
-        bool , operator!=(const wxColour& colour) const,
-        "Compare colours for inequality", "");
-    
+    %extend {
+        KeepGIL(__eq__);
+        DocStr(__eq__, "Compare colours for equality.", "");
+        bool __eq__(PyObject* other) {
+            wxColour  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxColour_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+
+        
+        KeepGIL(__ne__);
+        DocStr(__ne__, "Compare colours for inequality.", "");
+        bool __ne__(PyObject* other) {
+            wxColour  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxColour_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
+    }
 
 
     %extend {

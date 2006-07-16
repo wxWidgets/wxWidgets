@@ -82,3 +82,12 @@ It focuses on handling charsets related problems.
 Finally, take a look at the \helpref{i18n sample}{sampleinternat} which shows
 you how all this looks in practice.
 
+\wxheading{Translating menu accelerators}
+
+If you translate the accelerator modifier names (Ctrl, Alt and Shift) in your menu labels, you may find
+the accelerators no longer work. In your message catalogs, you need to provide individual translations
+of these modifiers from their lower case names (ctrl, alt, shift) so that the wxWidgets accelerator
+code can recognise them even when translated. wxWidgets does not provide translations for all of these
+currently. wxWidgets does not yet handle translated special key names such as Backspace,
+End, Insert, etc.
+

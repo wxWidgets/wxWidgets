@@ -106,35 +106,46 @@ static ShellFunctions gs_shellFuncs;
 
 static void ResolveShellFunctions()
 {
+#if wxUSE_DYNLIB_CLASS
+
+    // start with the newest functions, fall back to the oldest ones
+#ifdef __WXWINCE__
+    wxString shellDllName(_T("coredll"));
+#else
+    // first check for SHGetFolderPath (shell32.dll 5.0)
+    wxString shellDllName(_T("shell32"));
+#endif
+
+    wxDynamicLibrary dllShellFunctions( shellDllName );
+    if ( !dllShellFunctions.IsLoaded() )
+    {
+        wxLogTrace(TRACE_MASK, _T("Failed to load %s.dll"), shellDllName.c_str() );
+    }
+
     // don't give errors if the functions are unavailable, we're ready to deal
     // with this
     wxLogNull noLog;
 
-    // start with the newest functions, fall back to the oldest ones
-
-    // first check for SHGetFolderPath (shell32.dll 5.0)
-    wxDynamicLibrary dllShell32(_T("shell32"));
-    if ( !dllShell32.IsLoaded() )
-    {
-        wxLogTrace(TRACE_MASK, _T("Failed to load shell32.dll"));
-    }
-
 #if wxUSE_UNICODE
-    static const wchar_t UNICODE_SUFFIX = L'W';
+    #ifdef __WXWINCE__
+        static const wchar_t UNICODE_SUFFIX = L''; // WinCE SH functions don't seem to have 'W'
+    #else
+        static const wchar_t UNICODE_SUFFIX = L'W';
+    #endif
 #else // !Unicode
     static const char UNICODE_SUFFIX = 'A';
 #endif // Unicode/!Unicode
 
     wxString funcname(_T("SHGetFolderPath"));
     gs_shellFuncs.pSHGetFolderPath =
-        (SHGetFolderPath_t)dllShell32.GetSymbol(funcname + UNICODE_SUFFIX);
+        (SHGetFolderPath_t)dllShellFunctions.GetSymbol(funcname + UNICODE_SUFFIX);
 
     // then for SHGetSpecialFolderPath (shell32.dll 4.71)
     if ( !gs_shellFuncs.pSHGetFolderPath )
     {
         funcname = _T("SHGetSpecialFolderPath");
         gs_shellFuncs.pSHGetSpecialFolderPath = (SHGetSpecialFolderPath_t)
-            dllShell32.GetSymbol(funcname + UNICODE_SUFFIX);
+            dllShellFunctions.GetSymbol(funcname + UNICODE_SUFFIX);
     }
 
     // finally we fall back on SHGetSpecialFolderLocation (shell32.dll 4.0),
@@ -144,6 +155,7 @@ static void ResolveShellFunctions()
     // because we also link to it statically, so it's ok
 
     gs_shellFuncs.initialized = true;
+#endif
 }
 
 // ============================================================================

@@ -35,7 +35,7 @@
 %{
 class wxPyVScrolledWindow  : public wxVScrolledWindow
 {
-    DECLARE_ABSTRACT_CLASS(wxPyVScrolledWindow);
+    DECLARE_ABSTRACT_CLASS(wxPyVScrolledWindow)
 public:
     wxPyVScrolledWindow() : wxVScrolledWindow() {}
 
@@ -224,7 +224,7 @@ MAKE_CONST_WXSTRING(VListBoxNameStr);
 %{
 class wxPyVListBox  : public wxVListBox
 {
-    DECLARE_ABSTRACT_CLASS(wxPyVListBox);
+    DECLARE_ABSTRACT_CLASS(wxPyVListBox)
 public:
     wxPyVListBox() : wxVListBox() {}
 
@@ -257,7 +257,7 @@ public:
     //
     // the base class version doesn't do anything
     //    virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
-    DEC_PYCALLBACK__DCRECTSIZET_constpure(OnDrawSeparator);
+    DEC_PYCALLBACK__DCRECTSIZET2_const(OnDrawSeparator);
 
 
     // this method is used to draw the items background and, maybe, a border
@@ -278,7 +278,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyVListBox, wxVListBox);
 
 IMP_PYCALLBACK__DCRECTSIZET_constpure(wxPyVListBox, wxVListBox, OnDrawItem);
 IMP_PYCALLBACK_COORD_SIZET_constpure (wxPyVListBox, wxVListBox, OnMeasureItem);
-IMP_PYCALLBACK__DCRECTSIZET_constpure(wxPyVListBox, wxVListBox, OnDrawSeparator);
+IMP_PYCALLBACK__DCRECTSIZET2_const   (wxPyVListBox, wxVListBox, OnDrawSeparator);
 IMP_PYCALLBACK__DCRECTSIZET_const    (wxPyVListBox, wxVListBox, OnDrawBackground);
 
 %}
@@ -449,6 +449,8 @@ public:
     // change the background colour of the selected cells
     void SetSelectionBackground(const wxColour& col);
 
+    void base_OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
+    void base_OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
 };
 
 
@@ -463,7 +465,7 @@ public:
 %{
 class wxPyHtmlListBox  : public wxHtmlListBox
 {
-    DECLARE_ABSTRACT_CLASS(wxPyHtmlListBox);
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlListBox)
 public:
     wxPyHtmlListBox() : wxHtmlListBox() {}
 
@@ -484,6 +486,10 @@ public:
 
     // this function may be overridden to decorate HTML returned by OnGetItem()
     DEC_PYCALLBACK_STRING_SIZET(OnGetItemMarkup);
+
+    // These are from wxVListBox
+    DEC_PYCALLBACK__DCRECTSIZET2_const(OnDrawSeparator);
+    DEC_PYCALLBACK__DCRECTSIZET_const(OnDrawBackground);
 
 // TODO:
 //     // this method allows to customize the selection appearance: it may be used
@@ -508,6 +514,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyHtmlListBox, wxHtmlListBox)
 
 IMP_PYCALLBACK_STRING_SIZET_pure(wxPyHtmlListBox, wxHtmlListBox, OnGetItem);
 IMP_PYCALLBACK_STRING_SIZET     (wxPyHtmlListBox, wxHtmlListBox, OnGetItemMarkup);
+IMP_PYCALLBACK__DCRECTSIZET2_const   (wxPyHtmlListBox, wxHtmlListBox, OnDrawSeparator);
+IMP_PYCALLBACK__DCRECTSIZET_const    (wxPyHtmlListBox, wxHtmlListBox, OnDrawBackground);
 
 %}
 

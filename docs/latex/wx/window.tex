@@ -355,7 +355,7 @@ Usually it is only used with the top level windows (wxFrame and wxDialog
 classes) as the others are not supposed to have any special OnClose() logic.
 
 The close handler should check whether the window is being deleted forcibly,
-using \helpref{wxCloseEvent::GetForce}{wxcloseeventgetforce}, in which case it
+using \helpref{wxCloseEvent::CanVeto}{wxcloseeventcanveto}, in which case it
 should destroy the window using \helpref{wxWindow::Destroy}{wxwindowdestroy}.
 
 {\it Note} that calling Close does not guarantee that the window will be
@@ -2337,7 +2337,7 @@ not delete) it from it.
 
 \wxheading{Parameters}
 
-\docparam{handler}{The event handler to remove, must be non {\tt NULL} and
+\docparam{handler}{The event handler to remove, must be non-{\tt NULL} and
 must be present in this windows event handlers chain}
 
 \wxheading{Return value}
@@ -3001,7 +3001,8 @@ from your \helpref{wxSizeEvent}{wxsizeevent} handler function.
 \wxheading{See also}
 
 \helpref{Scrolling overview}{scrollingoverview},\rtfsp
-\helpref{wxScrollBar}{wxscrollbar}, \helpref{wxScrolledWindow}{wxscrolledwindow}
+\helpref{wxScrollBar}{wxscrollbar}, \helpref{wxScrolledWindow}{wxscrolledwindow},\rtfsp
+\helpref{wxScrollWinEvent}{wxscrollwinevent}
 
 \begin{comment}
 

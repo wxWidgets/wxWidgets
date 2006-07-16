@@ -17,11 +17,11 @@
 
 #include <ctype.h>
 
-#include <wx/wx.h>
-#include <wx/tokenzr.h>
-#include <wx/mstream.h>
-#include <wx/image.h>
-#include <wx/file.h>
+#include "wx/wx.h"
+#include "wx/tokenzr.h"
+#include "wx/mstream.h"
+#include "wx/image.h"
+#include "wx/file.h"
 
 #include "wx/stc/stc.h"
 #include "ScintillaWX.h"
@@ -96,6 +96,7 @@ DEFINE_EVENT_TYPE( wxEVT_STC_ZOOM )
 DEFINE_EVENT_TYPE( wxEVT_STC_HOTSPOT_CLICK )
 DEFINE_EVENT_TYPE( wxEVT_STC_HOTSPOT_DCLICK )
 DEFINE_EVENT_TYPE( wxEVT_STC_CALLTIP_CLICK )
+DEFINE_EVENT_TYPE( wxEVT_STC_AUTOCOMP_SELECTION )    
 
 
 
@@ -401,6 +402,14 @@ void wxStyledTextCtrl::StyleSetCharacterSet(int style, int characterSet)
 
         case wxSTC_CHARSET_THAI:
             encoding = wxFONTENCODING_ISO8859_11;
+            break;
+
+        case wxSTC_CHARSET_CYRILLIC:
+            encoding = wxFONTENCODING_ISO8859_5;
+            break;
+                
+        case wxSTC_CHARSET_8859_15:
+            encoding = wxFONTENCODING_ISO8859_15;;
             break;
     }
 
@@ -845,12 +854,7 @@ static void SetEventText(wxStyledTextEvent& evt, const char* text,
                          size_t length) {
     if(!text) return;
 
-    // The unicode conversion MUST have a null byte to terminate the
-    // string so move it into a buffer first and give it one.
-    wxMemoryBuffer buf(length+1);
-    buf.AppendData((void*)text, length);
-    buf.AppendByte(0);
-    evt.SetText(stc2wx(buf));
+    evt.SetText(stc2wx(text, length));
 }
 
 
@@ -967,6 +971,10 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_CALLTIP_CLICK);
         break;
 
+    case SCN_AUTOCSELECTION:
+        evt.SetEventType(wxEVT_STC_AUTOCOMP_SELECTION);
+        break;
+        
     default:
         return;
     }

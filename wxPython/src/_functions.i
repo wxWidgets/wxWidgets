@@ -53,11 +53,6 @@ void wxEndBusyCursor();
 
 long wxGetElapsedTime(bool resetTimer = true);
 
-MustHaveApp(wxGetMousePosition);
-DocDeclA(
-    void, wxGetMousePosition(int* OUTPUT, int* OUTPUT),
-    "GetMousePosition() -> (x,y)");
-
 bool wxIsBusy();
 wxString wxNow();
 bool wxShell(const wxString& command = wxPyEmptyString);
@@ -204,7 +199,6 @@ int wxMessageBox(const wxString& message,
                  wxWindow *parent = NULL,
                  int x = -1, int y = -1);
 
-// WXWIN_COMPATIBILITY_2_4
 MustHaveApp(wxGetNumberFromUser);
 long wxGetNumberFromUser(const wxString& message,
                          const wxString& prompt,
@@ -213,6 +207,7 @@ long wxGetNumberFromUser(const wxString& message,
                          long min = 0, long max = 100,
                          wxWindow *parent = NULL,
                          const wxPoint& pos = wxDefaultPosition);
+
 
 // GDI Functions
 
@@ -275,8 +270,29 @@ other platforms.", "");
 MustHaveApp(wxBeginBusyCursor);
 void wxBeginBusyCursor(wxCursor *cursor = wxHOURGLASS_CURSOR);
 
+
+MustHaveApp(wxGetMousePosition);
+DocDeclStr(
+    wxPoint, wxGetMousePosition(),
+    "Get the current mouse position on the screen.", "");
+
+MustHaveApp(FindWindowAtPointer);
+DocStr(FindWindowAtPointer,
+       "Returns the window currently under the mouse pointer, if it belongs to
+    this application.  Otherwise it returns None.", "");
+%inline %{
+    wxWindow* FindWindowAtPointer() {
+        wxPoint unused;
+        return wxFindWindowAtPointer(unused);
+    }
+%}
+ 
+
 MustHaveApp(wxGetActiveWindow);
-wxWindow * wxGetActiveWindow();
+DocDeclStr(
+    wxWindow *, wxGetActiveWindow(),
+    "Get the currently active window of this application, or None", "");
+
 
 MustHaveApp(wxGenericFindWindowAtPoint);
 wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt);
@@ -301,9 +317,71 @@ DocDeclStr(
     bool , wxGetKeyState(wxKeyCode key),
     "Get the state of a key (true if pressed or toggled on, false if not.)
 This is generally most useful getting the state of the modifier or
-toggle keys.  On some platforms those may be the only keys that work.
+toggle keys.  On some platforms those may be the only keys that this
+function is able to detect.
 ", "");
 
+
+
+//---------------------------------------------------------------------------
+
+DocStr(wxMouseState,
+"`wx.MouseState` is used to hold information about mouse button and
+modifier key states and is what is returned from `wx.GetMouseState`.",
+"");
+
+class wxMouseState
+{
+public:
+    wxMouseState();
+    ~wxMouseState();
+
+    wxCoord     GetX();
+    wxCoord     GetY();
+
+    bool        LeftDown();
+    bool        MiddleDown();
+    bool        RightDown();
+
+    bool        ControlDown();
+    bool        ShiftDown();
+    bool        AltDown();
+    bool        MetaDown();
+    bool        CmdDown();
+
+    void        SetX(wxCoord x);
+    void        SetY(wxCoord y);
+
+    void        SetLeftDown(bool down);
+    void        SetMiddleDown(bool down);
+    void        SetRightDown(bool down);
+    
+    void        SetControlDown(bool down);
+    void        SetShiftDown(bool down);
+    void        SetAltDown(bool down);
+    void        SetMetaDown(bool down);
+
+    %pythoncode {
+        x = property(GetX, SetX)
+        y = property(GetY, SetY)
+        leftDown = property(LeftDown, SetLeftDown)
+        middleDown = property(MiddleDown, SetMiddleDown)
+        rightDown = property(RightDown, SetRightDown)
+        controlDown = property(ControlDown, SetControlDown)
+        shiftDown = property(ShiftDown, SetShiftDown)
+        altDown = property(AltDown, SetAltDown)
+        metaDown = property(MetaDown, SetMetaDown)
+        cmdDown = property(CmdDown)
+    }
+};
+
+
+DocDeclStr(
+    wxMouseState , wxGetMouseState(),
+    "Returns the current state of the mouse.  Returns an instance of a
+`wx.MouseState` object that contains the current position of the mouse
+pointer in screen coordinants, as well as boolean values indicating
+the up/down status of the mouse buttons and the modifier keys.", "");
 
 
 //---------------------------------------------------------------------------

@@ -159,8 +159,9 @@ wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 //
 // get the current state of SHIFT/CTRL keys
 //
-static inline bool IsShiftDown() { return (::WinGetKeyState(HWND_DESKTOP, VK_SHIFT) & 0x8000) != 0; }
-static inline bool IsCtrlDown() { return (::WinGetKeyState(HWND_DESKTOP, VK_CTRL) & 0x8000) != 0; }
+static inline bool IsKeyDown(LONG key) {return (::WinGetKeyState(HWND_DESKTOP, key) & 0x8000) != 0; }
+static inline bool IsShiftDown() { return IsKeyDown(VK_SHIFT); }
+static inline bool IsCtrlDown() { return IsKeyDown(VK_CTRL); }
 
 static wxWindow*                    gpWinBeingCreated = NULL;
 
@@ -595,7 +596,7 @@ void wxWindowOS2::DoCaptureMouse()
         ::WinSetCapture(HWND_DESKTOP, hWnd);
         m_bWinCaptured = true;
     }
-} // end of wxWindowOS2::GetTitle
+} // end of wxWindowOS2::DoCaptureMouse
 
 void wxWindowOS2::DoReleaseMouse()
 {
@@ -727,6 +728,10 @@ void wxWindowOS2::SetScrollbar( int  nOrient,
     int                             nOldRange = nRange - nThumbVisible;
     int                             nRange1 = nOldRange;
     int                             nPageSize = nThumbVisible;
+    int         nVSBWidth  = wxSystemSettingsNative::GetMetric(wxSYS_VSCROLL_X,
+                                                               this);
+    int         nHSBHeight = wxSystemSettingsNative::GetMetric(wxSYS_HSCROLL_Y,
+                                                               this);
 
     SBCDATA                         vInfo;
     ULONG                           ulStyle = WS_VISIBLE | WS_SYNCPAINT;
@@ -788,8 +793,8 @@ void wxWindowOS2::SetScrollbar( int  nOrient,
                                                     ,ulStyle
                                                     ,vSwp.x
                                                     ,vSwp.y
-                                                    ,vSwp.cx - 20
-                                                    ,20
+                                                    ,vSwp.cx - nVSBWidth
+                                                    ,nHSBHeight
                                                     ,hWnd
                                                     ,HWND_TOP
                                                     ,60000
@@ -806,18 +811,19 @@ void wxWindowOS2::SetScrollbar( int  nOrient,
             // origin, not the frame's client window origin.
             // The starting x position is the same as the starting x position
             // of the owner, but in terms of the parent frame.
-            // The starting y position is 20 pels below the origin of the
-            // owner in terms of the parent frame.
-            // The horz bar is the same width as the owner and 20 pels high.
+            // The starting y position is wxSYS_HSCROLL_Y pels below the
+            // origin of the owner in terms of the parent frame.
+            // The horz bar is the same width as the owner and wxSYS_HSCROLL_Y
+            // pels high.
             //
             if (nRange1 >= nThumbVisible)
             {
                 ::WinSetWindowPos( m_hWndScrollBarHorz
                                   ,HWND_TOP
                                   ,vSwp.x + vSwpOwner.x
-                                  ,(vSwp.y + vSwpOwner.y) - 20
+                                  ,(vSwp.y + vSwpOwner.y) - nHSBHeight
                                   ,vSwpOwner.cx
-                                  ,20
+                                  ,nHSBHeight
                                   ,SWP_MOVE | SWP_SIZE | SWP_SHOW | SWP_ACTIVATE | SWP_ZORDER
                                  );
                 ::WinSendMsg( m_hWndScrollBarHorz
@@ -858,10 +864,10 @@ void wxWindowOS2::SetScrollbar( int  nOrient,
                                                     ,WC_SCROLLBAR
                                                     ,(PSZ)NULL
                                                     ,ulStyle
-                                                    ,vSwp.x + vSwp.cx - 20
-                                                    ,vSwp.y + 20
-                                                    ,20
-                                                    ,vSwp.cy - 20
+                                                    ,vSwp.x + vSwp.cx - nVSBWidth
+                                                    ,vSwp.y + nHSBHeight
+                                                    ,nVSBWidth
+                                                    ,vSwp.cy - nHSBHeight
                                                     ,hWnd
                                                     ,HWND_TOP
                                                     ,60001
@@ -884,7 +890,7 @@ void wxWindowOS2::SetScrollbar( int  nOrient,
             // position of the scrollbar relative to the parent frame (the vert
             // scrollbar is on the right and starts at the bottom of the
             // owner window).
-            // It is 20 pels wide and the same height as the owner.
+            // It is wxSYS_VSCROLL_X pels wide and the same height as the owner.
             //
             if (nRange1 >= nThumbVisible)
             {
@@ -892,7 +898,7 @@ void wxWindowOS2::SetScrollbar( int  nOrient,
                                   ,HWND_TOP
                                   ,vSwp.x + vSwpOwner.x + vSwpOwner.cx
                                   ,vSwp.y + vSwpOwner.y
-                                  ,20
+                                  ,nVSBWidth
                                   ,vSwpOwner.cy
                                   ,SWP_ACTIVATE | SWP_MOVE | SWP_SIZE | SWP_SHOW
                                  );
@@ -1296,6 +1302,9 @@ void wxWindowOS2::DoGetPosition(
 , int*                              pY
 ) const
 {
+    //
+    // Return parameters assume wxWidgets coordinate system
+    //
     HWND                            hWnd = GetHwnd();
     SWP                             vSwp;
     POINTL                          vPoint;
@@ -1306,16 +1315,29 @@ void wxWindowOS2::DoGetPosition(
     // the WIN32 WinGetRect, but unlike WinGetRect which returns the window
     // origin position in screen coordinates, WinQueryWindowRect returns it
     // relative to itself, i.e. (0,0).  To get the same under PM we must
-    // us WinQueryWindowPos.  This call, unlike the WIN32 call, however,
+    // use WinQueryWindowPos.  This call, unlike the WIN32 call, however,
     // returns a position relative to it's parent, so no parent adujstments
     // are needed under OS/2.  Also, windows should be created using
-    // wxWindow coordinates, i.e 0,0 is the TOP left so vSwp will already
-    // reflect that.
+    // wxWindow coordinates, i.e 0,0 is the TOP left.
     //
+    if (IsKindOf(CLASSINFO(wxFrame)))
+    {
+        wxFrame*                    pFrame = wxDynamicCast(this, wxFrame);
+        hWnd = pFrame->GetFrame();
+    }
+    else
+        hWnd = GetHwnd();
+
     ::WinQueryWindowPos(hWnd, &vSwp);
 
     vPoint.x = vSwp.x;
     vPoint.y = vSwp.y;
+
+    // We need to convert to wxWidgets coordinates
+    int vHeight;
+    DoGetSize(NULL,&vHeight);
+    wxWindow* pWindow = wxDynamicCast(this,wxWindow);
+    vPoint.y = pWindow->GetOS2ParentHeight(pParent) - vPoint.y - vHeight;
 
     //
     // We may be faking the client origin. So a window that's really at (0,
@@ -1448,18 +1470,12 @@ void wxWindowOS2::DoMoveWindow(
 , int                               nHeight
 )
 {
+    //
+    // Input parameters assume wxWidgets coordinate system
+    //
     RECTL                           vRect;
     wxWindow*                       pParent = GetParent();
-
-    /* Due to OS/2's inverted coordinate system, changing the height
-       of a window requires repositioning all it's children, e.g. if
-       you want a child of height 100 to be at the top left corner of
-       the parent you need to position the lower left corner of the
-       child at (0, (height of parent - 100)), so, obviously, if the
-       height of the parent changes, the child needs to be repositioned. */
-    int                         nHeightDelta;
-    GetSize(0, &nHeightDelta);
-    nHeightDelta = nHeight - nHeightDelta;
+    HWND                            hWnd = GetHwnd();
 
     if (pParent && !IsKindOf(CLASSINFO(wxDialog)))
     {
@@ -1489,64 +1505,26 @@ void wxWindowOS2::DoMoveWindow(
     if (IsKindOf(CLASSINFO(wxFrame)))
     {
         RECTL                       vFRect;
-        HWND                        hWndFrame;
         int                         nWidthFrameDelta = 0;
         int                         nHeightFrameDelta = 0;
-        int                         nHeightFrame = 0;
-        int                         nWidthFrame = 0;
         wxFrame*                    pFrame;
 
         pFrame = wxDynamicCast(this, wxFrame);
-        hWndFrame = pFrame->GetFrame();
-        ::WinQueryWindowRect(hWndFrame, &vRect);
-        ::WinMapWindowPoints(hWndFrame, HWND_DESKTOP, (PPOINTL)&vRect, 2);
+        hWnd = pFrame->GetFrame();
+        ::WinQueryWindowRect(hWnd, &vRect);
+        ::WinMapWindowPoints(hWnd, HWND_DESKTOP, (PPOINTL)&vRect, 2);
         vFRect = vRect;
-        ::WinCalcFrameRect(hWndFrame, &vRect, TRUE);
+        ::WinCalcFrameRect(hWnd, &vRect, TRUE);
         nWidthFrameDelta = ((vRect.xLeft - vFRect.xLeft) + (vFRect.xRight - vRect.xRight));
         nHeightFrameDelta = ((vRect.yBottom - vFRect.yBottom) + (vFRect.yTop - vRect.yTop));
-        nWidthFrame = vFRect.xRight - vFRect.xLeft;
-        nHeightFrame = vFRect.yTop - vFRect.yBottom;
-
-        if (nWidth == vFRect.xRight - vFRect.xLeft &&
-            nHeight == vFRect.yTop - vFRect.yBottom)
-        {
-            //
-            // In this case the caller is not aware of OS/2's need to size both
-            // the frame and it's client and is really only moving the window,
-            // not resizeing it.  So move the frame, and back off the sizes
-            // for a proper client fit.
-            //
-            ::WinSetWindowPos( hWndFrame
-                              ,HWND_TOP
-                              ,(LONG)nX - (vRect.xLeft - vFRect.xLeft)
-                              ,(LONG)nY - (vRect.yBottom - vFRect.yBottom)
-                              ,(LONG)0
-                              ,(LONG)0
-                              ,SWP_MOVE
-                             );
-            nX += (vRect.xLeft - vFRect.xLeft);
-            nY += (vRect.yBottom - vFRect.yBottom);
-            nWidth -= nWidthFrameDelta;
-            nHeight -= nHeightFrameDelta;
-        }
-        else
-        {
-            if (nWidth > nWidthFrame - nHeightFrameDelta ||
-                nHeight > nHeightFrame - nHeightFrameDelta)
-            {
-                ::WinSetWindowPos( hWndFrame
-                                  ,HWND_TOP
-                                  ,(LONG)nX - (vRect.xLeft - vFRect.xLeft)
-                                  ,(LONG)nY - (vRect.yBottom - vFRect.yBottom)
-                                  ,(LONG)nWidth + nWidthFrameDelta
-                                  ,(LONG)nHeight + nHeightFrameDelta
-                                  ,SWP_MOVE | SWP_SIZE
-                                 );
-            }
-        }
+        // Input values refer to the window position relative to its parent
+        // which may be the Desktop so we need to calculate
+        // the new frame values to keep the wxWidgets frame origin constant
+        nY -= nHeightFrameDelta;
+        nWidth += nWidthFrameDelta;
+        nHeight += nHeightFrameDelta;
     }
-
-    ::WinSetWindowPos( GetHwnd()
+    ::WinSetWindowPos( hWnd
                       ,HWND_TOP
                       ,(LONG)nX
                       ,(LONG)nY
@@ -1558,17 +1536,15 @@ void wxWindowOS2::DoMoveWindow(
         //
         // Uninitialized
         //
-        ::WinQueryWindowPos(GetHwnd(), &m_vWinSwp);
+        ::WinQueryWindowPos(hWnd, &m_vWinSwp);
     else
     {
-        int                         nYDiff = m_vWinSwp.cy - nHeight;
-
         //
         // Handle resizing of scrolled windows.  The target or window to
-        // be scrolled is the owner (gets the scroll notificaitons).  The
+        // be scrolled is the owner (gets the scroll notifications).  The
         // parent is usually the parent frame of the scrolled panel window.
         // In order to show the scrollbars the target window will be shrunk
-        // by the size of the scroll bar widths (20) and moved in the X and Y
+        // by the size of the scroll bar widths and moved in the X and Y
         // directon.  That value will be computed as part of the diff for
         // moving the children.  Everytime the window is sized the
         // toplevel OnSize is going to resize the panel to fit the client
@@ -1583,20 +1559,24 @@ void wxWindowOS2::DoMoveWindow(
         {
             int                     nAdjustWidth  = 0;
             int                     nAdjustHeight = 0;
+            int nHSBHeight = wxSystemSettingsNative::GetMetric(wxSYS_HSCROLL_Y,
+                                                               this);
+            int nVSBWidth  = wxSystemSettingsNative::GetMetric(wxSYS_VSCROLL_X,
+                                                               this);
             SWP                     vSwpScroll;
 
             if (GetScrollBarHorz() == NULLHANDLE ||
                 !WinIsWindowShowing(GetScrollBarHorz()))
                 nAdjustHeight = 0L;
             else
-                nAdjustHeight = 20L;
+                nAdjustHeight = nHSBHeight;
             if (GetScrollBarVert() == NULLHANDLE ||
                 !WinIsWindowShowing(GetScrollBarVert()))
                 nAdjustWidth = 0L;
             else
-                nAdjustWidth = 20L;
-            ::WinQueryWindowPos(GetHWND(), &vSwpScroll);
-            ::WinSetWindowPos( GetHWND()
+                nAdjustWidth = nVSBWidth;
+            ::WinQueryWindowPos(hWnd, &vSwpScroll);
+            ::WinSetWindowPos( hWnd
                               ,HWND_TOP
                               ,vSwpScroll.x
                               ,vSwpScroll.y + nAdjustHeight
@@ -1604,19 +1584,9 @@ void wxWindowOS2::DoMoveWindow(
                               ,vSwpScroll.cy - nAdjustHeight
                               ,SWP_MOVE | SWP_SIZE
                              );
-            nYDiff -= nAdjustHeight;
         }
-        MoveChildren(nYDiff);
-        ::WinQueryWindowPos(GetHwnd(), &m_vWinSwp);
+        ::WinQueryWindowPos(hWnd, &m_vWinSwp);
     }
-#if 0
-    // FIXME: By my logic, the next line should be needed as it moves child
-    //        windows when resizing the parent (see comment at beginning of
-    //        function). However, this seems to cause lots of problems. At
-    //        least, e.g. the grid sample almost works with this line
-    //        commented out but crashes badly with it.
-    MoveChildren(nHeightDelta);
-#endif
 } // end of wxWindowOS2::DoMoveWindow
 
 //
@@ -1636,6 +1606,10 @@ void wxWindowOS2::DoSetSize( int nX,
                              int nSizeFlags )
 {
     //
+    // Input & output parameters assume wxWidgets coordinate system
+    //
+
+    //
     // Get the current size and position...
     //
     int    nCurrentX;
@@ -1650,12 +1624,7 @@ void wxWindowOS2::DoSetSize( int nX,
     //
     // ... and don't do anything (avoiding flicker) if it's already ok
     //
-    //
-    // Must convert Y coords to test for equality under OS/2
-    //
-    int                             nY2 = nY;
-
-    if (nX == nCurrentX && nY2 == nCurrentY &&
+    if (nX == nCurrentX && nY == nCurrentY &&
         nWidth == nCurrentWidth && nHeight == nCurrentHeight)
     {
         return;
@@ -1707,50 +1676,14 @@ void wxWindowOS2::DoSetSize( int nX,
 void wxWindowOS2::DoSetClientSize( int nWidth,
                                    int nHeight )
 {
-    POINTL    vPoint;
-    int       nActualWidth;
-    int       nActualHeight;
-    wxWindow* pParent = (wxWindow*)GetParent();
-    HWND      hParentWnd = (HWND)0;
+    //
+    // nX & nY assume wxWidgets coordinate system
+    //
+    int nX;
+    int nY;
 
-    if (pParent)
-        hParentWnd = (HWND)pParent->GetHWND();
-
-    if (IsKindOf(CLASSINFO(wxFrame)))
-    {
-        wxFrame* pFrame = wxDynamicCast(this, wxFrame);
-        HWND     hFrame = pFrame->GetFrame();
-        RECTL    vRect;
-        RECTL    vRect2;
-        RECTL    vRect3;
-
-        ::WinQueryWindowRect(GetHwnd(), &vRect2);
-        ::WinQueryWindowRect(hFrame, &vRect);
-        ::WinQueryWindowRect(hParentWnd, &vRect3);
-        nActualWidth = vRect2.xRight - vRect2.xLeft - vRect.xRight + nWidth;
-        nActualHeight = vRect2.yTop - vRect2.yBottom - vRect.yTop + nHeight;
-
-        vPoint.x = vRect2.xLeft;
-        vPoint.y = vRect2.yBottom;
-        if (pParent)
-        {
-            vPoint.x -= vRect3.xLeft;
-            vPoint.y -= vRect3.yBottom;
-        }
-    }
-    else
-    {
-        int nX;
-        int nY;
-
-        GetPosition(&nX, &nY);
-        nActualWidth  = nWidth;
-        nActualHeight = nHeight;
-
-        vPoint.x = nX;
-        vPoint.y = nY;
-    }
-    DoMoveWindow( vPoint.x, vPoint.y, nActualWidth, nActualHeight );
+    GetPosition(&nX, &nY);
+    DoMoveWindow( nX, nY, nWidth, nHeight );
 
     wxSize size( nWidth, nHeight );
     wxSizeEvent vEvent( size, m_windowId );
@@ -2469,9 +2402,6 @@ MRESULT wxWindowOS2::OS2WindowProc( WXUINT uMsg,
         case WM_BUTTON3MOTIONEND:
         case WM_BUTTON3MOTIONSTART:
             {
-                if (uMsg == WM_BUTTON1DOWN && AcceptsFocus())
-                    SetFocus();
-
                 short               nX = LOWORD(wParam);
                 short               nY = HIWORD(wParam);
 
@@ -2981,16 +2911,16 @@ void wxAssociateWinWithHandle(
     wxCHECK_RET( hWnd != (HWND)NULL,
                  wxT("attempt to add a NULL hWnd to window list ignored") );
 
-
     wxWindow*                       pOldWin = wxFindWinFromHandle((WXHWND) hWnd);
 
     if (pOldWin && (pOldWin != pWin))
     {
-        wxString                    str(pWin->GetClassInfo()->GetClassName());
-
-        wxLogError( _T("Bug! Found existing HWND %X for new window of class %s")
-                   ,(int)hWnd
-                   ,str.c_str()
+        wxString Newstr(pWin->GetClassInfo()->GetClassName());
+        wxString Oldstr(pOldWin->GetClassInfo()->GetClassName());
+        wxLogError( _T("Bug! New window of class %s has same HWND %X as old window of class %s"),
+                    Newstr.c_str(),
+                    (int)hWnd,
+                    Oldstr.c_str()
                   );
     }
     else if (!pOldWin)
@@ -3120,7 +3050,7 @@ bool wxWindowOS2::OS2Create( PSZ            zClass,
     SubclassWin(m_hWnd);
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
-    m_backgroundColour.Set(wxString(wxT("GREY")));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
     LONG lColor = (LONG)m_backgroundColour.GetPixel();
 
@@ -3141,7 +3071,7 @@ bool wxWindowOS2::OS2Create( PSZ            zClass,
             ,nHeight
            );
     return true;
-} // end of WinGuiBase_Window::OS2Create
+} // end of wxWindowOS2::OS2Create
 
 // ===========================================================================
 // OS2 PM message handlers
@@ -3369,7 +3299,7 @@ bool wxWindowOS2::OS2OnDrawItem( int vId,
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError(_T("Unable to set current color table. Error: %s\n"), sError.c_str());
+            wxLogError(_T("Unable to set current color table (1). Error: %s\n"), sError.c_str());
         }
         //
         // Set the color table to RGB mode
@@ -3384,7 +3314,7 @@ bool wxWindowOS2::OS2OnDrawItem( int vId,
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError(_T("Unable to set current color table. Error: %s\n"), sError.c_str());
+            wxLogError(_T("Unable to set current color table (2). Error: %s\n"), sError.c_str());
         }
 
         wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
@@ -3977,12 +3907,9 @@ void wxWindowOS2::InitMouseEvent(
     rEvent.m_shiftDown   = ((uFlags & KC_SHIFT) != 0);
     rEvent.m_controlDown = ((uFlags & KC_CTRL) != 0);
     rEvent.m_altDown     = ((uFlags & KC_ALT) != 0);
-    rEvent.m_leftDown    = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON1) &
-                           0x8000) != 0;
-    rEvent.m_middleDown  = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON3) &
-                           0x8000) != 0;
-    rEvent.m_rightDown   = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON2) &
-                           0x8000) != 0;
+    rEvent.m_leftDown    = IsKeyDown(VK_BUTTON1);
+    rEvent.m_middleDown  = IsKeyDown(VK_BUTTON3);
+    rEvent.m_rightDown   = IsKeyDown(VK_BUTTON2);
     rEvent.SetTimestamp(s_currentMsg.time);
     rEvent.SetEventObject(this);
     rEvent.SetId(GetId());
@@ -4310,88 +4237,9 @@ bool wxWindowOS2::OS2OnScroll( int nOrientation,
     return GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxWindowOS2::OS2OnScroll
 
-void wxWindowOS2::MoveChildren(
-  int                               nDiff
-)
-{
-    //
-    // We want to handle top levels ourself, manually
-    //
-    if (!IsTopLevel() && GetAutoLayout())
-    {
-        Layout();
-    }
-    else
-    {
-        SWP                         vSwp;
-
-        for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-             node;
-             node = node->GetNext())
-        {
-            wxWindow*               pWin = node->GetData();
-
-            ::WinQueryWindowPos( GetHwndOf(pWin)
-                                ,&vSwp
-                               );
-            // Actually, only move children that already are placed on the
-            // frame, not ones which are still at wxDefaultCoord.
-            if (vSwp.y == wxDefaultCoord)
-                continue;
-            if (pWin->IsKindOf(CLASSINFO(wxControl)))
-            {
-                wxControl*          pCtrl;
-
-                //
-                // Must deal with controls that have margins like ENTRYFIELD.  The SWP
-                // struct of such a control will have and origin offset from its intended
-                // position by the width of the margins.
-                //
-                pCtrl = wxDynamicCast(pWin, wxControl);
-                vSwp.y -= pCtrl->GetYComp();
-                vSwp.x -= pCtrl->GetXComp();
-            }
-            ::WinSetWindowPos( GetHwndOf(pWin)
-                              ,HWND_TOP
-                              ,vSwp.x
-                              ,vSwp.y - nDiff
-                              ,vSwp.cx
-                              ,vSwp.cy
-                              ,SWP_MOVE
-                             );
-            ::WinQueryWindowPos(GetHwndOf(pWin), pWin->GetSwp());
-            if (pWin->IsKindOf(CLASSINFO(wxRadioBox)))
-            {
-                wxRadioBox*     pRadioBox;
-
-                pRadioBox = wxDynamicCast(pWin, wxRadioBox);
-                pRadioBox->AdjustButtons( (int)vSwp.x
-                                         ,(int)vSwp.y - nDiff
-                                         ,(int)vSwp.cx
-                                         ,(int)vSwp.cy
-                                         ,pRadioBox->GetSizeFlags()
-                                        );
-            }
-            if (pWin->IsKindOf(CLASSINFO(wxSlider)))
-            {
-                wxSlider*           pSlider;
-
-                pSlider = wxDynamicCast(pWin, wxSlider);
-                pSlider->AdjustSubControls( (int)vSwp.x
-                                           ,(int)vSwp.y - nDiff
-                                           ,(int)vSwp.cx
-                                           ,(int)vSwp.cy
-                                           ,(int)pSlider->GetSizeFlags()
-                                          );
-            }
-        }
-    }
-    Refresh();
-} // end of wxWindowOS2::MoveChildren
-
 //
 //  Getting the Y position for a window, like a control, is a real
-//  pain.  There are three sitatuions we must deal with in determining
+//  pain.  There are three situations we must deal with in determining
 //  the OS2 to wxWidgets Y coordinate.
 //
 //  1)  The controls are created in a dialog.
@@ -4422,52 +4270,57 @@ void wxWindowOS2::MoveChildren(
 //
 int wxWindowOS2::GetOS2ParentHeight( wxWindowOS2* pParent )
 {
-    //
-    // Case 1
-    //
-    if (pParent->IsKindOf(CLASSINFO(wxDialog)))
-        return(pParent->GetClientSize().y);
-
-    //
-    // Case 2 -- if we are one of the separately built standard Frame
-    //           children, like a statusbar, menubar, or toolbar we want to
-    //           use the frame, itself, for positioning.  Otherwise we are
-    //           child window and want to use the Frame's client.
-    //
-    else if (pParent->IsKindOf(CLASSINFO(wxFrame)))
+    if (pParent)
     {
-        if (IsKindOf(CLASSINFO(wxStatusBar)) ||
-            IsKindOf(CLASSINFO(wxMenuBar))   ||
-            IsKindOf(CLASSINFO(wxToolBar))
-           )
-        {
-            if (IsKindOf(CLASSINFO(wxToolBar)))
-            {
-                wxFrame*            pFrame = wxDynamicCast(GetParent(), wxFrame);
+        //
+        // Case 1
+        //
+        if (pParent->IsKindOf(CLASSINFO(wxDialog)))
+            return(pParent->GetClientSize().y);
 
-                if (pFrame->GetToolBar() == this)
-                    return(pParent->GetSize().y);
+        //
+        // Case 2 -- if we are one of the separately built standard Frame
+        //           children, like a statusbar, menubar, or toolbar we want to
+        //           use the frame, itself, for positioning.  Otherwise we are
+        //           child window and want to use the Frame's client.
+        //
+        else if (pParent->IsKindOf(CLASSINFO(wxFrame)))
+        {
+            if (IsKindOf(CLASSINFO(wxStatusBar)) ||
+                IsKindOf(CLASSINFO(wxMenuBar))   ||
+                IsKindOf(CLASSINFO(wxToolBar))
+                )
+            {
+                if (IsKindOf(CLASSINFO(wxToolBar)))
+                {
+                    wxFrame*            pFrame = wxDynamicCast(GetParent(), wxFrame);
+
+                    if (pFrame->GetToolBar() == this)
+                        return(pParent->GetSize().y);
+                    else
+                      return(pParent->GetClientSize().y);
+                }
                 else
-                    return(pParent->GetClientSize().y);
+                    return(pParent->GetSize().y);
             }
             else
-                return(pParent->GetSize().y);
+              return(pParent->GetClientSize().y);
         }
+        //
+        // Case -- this is for any window that is the sole child of a Frame.
+        //         The grandparent must exist and it must be of type CFrame
+        //         and it's height must be different. Otherwise the standard
+        //         applies.
+        //
         else
             return(pParent->GetClientSize().y);
     }
-    //
-    // Case -- this is for any window that is the sole child of a Frame.
-    //         The grandparent must exist and it must be of type CFrame
-    //         and it's height must be different. Otherwise the standard
-    //         applies.
-    //
-    // else
-    // {
-
-    return(pParent->GetClientSize().y);
-
-    // }
+    else // We must be a child of the screen
+    {
+        int nHeight;
+        wxDisplaySize(NULL,&nHeight);
+        return(nHeight);
+    }
 } // end of wxWindowOS2::GetOS2ParentHeight
 
 //
@@ -4657,6 +4510,47 @@ int wxCharCodeWXToOS2( int nId,
     }
     return nKeySym;
 } // end of wxCharCodeWXToOS2
+
+bool wxGetKeyState(wxKeyCode key)
+{
+    bool bVirtual;
+
+    wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
+        WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
+
+    const LONG vk = wxCharCodeWXToOS2(key, &bVirtual);
+    //If the requested key is a LED key, return true if the led is pressed
+    if (key == WXK_NUMLOCK || key == WXK_CAPITAL || key == WXK_SCROLL)
+    {
+        // low order bit means LED is highlightedm high order one means the
+        // key is down; for compat with other ports we want both
+        return ::WinGetKeyState(HWND_DESKTOP, vk) != 0;
+    }
+    else
+    {
+        //normal key
+        //high order means key is down, so We want only the high order bit
+        return IsKeyDown(vk);
+    }
+}
+
+
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+    wxPoint pt = wxGetMousePosition();
+
+    ms.SetX(pt.x);
+    ms.SetY(pt.y);
+    ms.SetLeftDown(IsKeyDown(VK_BUTTON1));
+    ms.SetMiddleDown(IsKeyDown(VK_BUTTON3));
+    ms.SetRightDown(IsKeyDown(VK_BUTTON2));
+    ms.SetControlDown(IsCtrlDown());
+    ms.SetShiftDown(IsShiftDown());
+    ms.SetAltDown(IsKeyDown(VK_ALT)|IsKeyDown(VK_ALTGRAF));
+    ms.SetMetaDown(IsKeyDown(VK_ALTGRAF));
+    return ms;
+}
 
 wxWindow* wxGetActiveWindow()
 {

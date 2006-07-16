@@ -559,6 +559,32 @@ radiobox selection (only if the event was a selection, not a
 deselection), or a boolean value representing the value of a checkbox.", "");
     
 
+     %extend {
+        DocStr(GetClientData,
+               "Returns the client data object for a listbox or choice selection event, (if any.)", "");
+        PyObject* GetClientData() {
+            wxPyClientData* data = (wxPyClientData*)self->GetClientObject();
+            if (data) {
+                Py_INCREF(data->m_obj);
+                return data->m_obj;
+            } else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+
+        DocStr(SetClientData,
+               "Associate the given client data with the item at position n.", "");
+        void SetClientData(PyObject* clientData) {
+            wxPyClientData* data = new wxPyClientData(clientData);
+            self->SetClientObject(data);
+        }
+    }
+    %pythoncode {
+         GetClientObject = GetClientData
+         SetClientObject = SetClientData
+    }
+             
     virtual wxEvent *Clone() const;
 
 };
@@ -2234,8 +2260,15 @@ public:
 
 
 DocStr(wxWindowDestroyEvent,
-       "The EVT_WINDOW_DESTROY event is sent right before the window is
-destroyed.", "");
+       "The EVT_WINDOW_DESTROY event is sent from the `wx.Window` destructor
+when the GUI window is destroyed.
+
+When a class derived from `wx.Window` is destroyed its destructor will
+have already run by the time this event is sent. Therefore this event
+will not usually be received at all by the window itself.  Since it is
+received after the destructor has run, an object should not try to
+handle its own wx.WindowDestroyEvent, but it can be used to get
+notification of the destruction of another window.", "");
 class wxWindowDestroyEvent : public wxCommandEvent
 {
 public:

@@ -21,8 +21,8 @@
 #define __stc_h__
 
 
-#include <wx/wx.h>
-#include <wx/dnd.h>
+#include "wx/wx.h"
+#include "wx/dnd.h"
 
 
 #ifdef WXMAKINGDLL_STC
@@ -445,6 +445,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_HOTSPOT_CLICK,      1673)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_HOTSPOT_DCLICK,     1674)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_CALLTIP_CLICK,      1675)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_SELECTION, 1676)
 END_DECLARE_EVENT_TYPES()
 #else
     enum {
@@ -472,7 +473,8 @@ END_DECLARE_EVENT_TYPES()
         wxEVT_STC_ZOOM,
         wxEVT_STC_HOTSPOT_CLICK,
         wxEVT_STC_HOTSPOT_DCLICK,
-        wxEVT_STC_CALLTIP_CLICK
+        wxEVT_STC_CALLTIP_CLICK,
+        wxEVT_STC_AUTOCOMP_SELECTION
     };
 #endif
 
@@ -506,7 +508,7 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_HOTSPOT_CLICK(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_CLICK,         id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_HOTSPOT_DCLICK(id, fn)     DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_DCLICK,        id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_CALLTIP_CLICK(id, fn))     DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CALLTIP_CLICK          id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
-
+#define EVT_STC_AUTOCOMP_SELECTION(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_SELECTION     id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #endif
 
 //----------------------------------------------------------------------
@@ -515,9 +517,9 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #ifndef SWIG
 #if wxUSE_UNICODE
 
-wxString stc2wx(const char* str);
-wxString stc2wx(const char* str, size_t len);
-const wxWX2MBbuf wx2stc(const wxString& str);
+WXDLLIMPEXP_STC wxString stc2wx(const char* str);
+WXDLLIMPEXP_STC wxString stc2wx(const char* str, size_t len);
+WXDLLIMPEXP_STC const wxWX2MBbuf wx2stc(const wxString& str);
 
 #else // not UNICODE
 

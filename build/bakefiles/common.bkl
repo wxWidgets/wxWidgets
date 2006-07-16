@@ -161,6 +161,10 @@
 
     <set var="DIR_SUFFIX_CPU">
         <if cond="FORMAT=='msevc4prj'">_$(CPU)</if>
+        <if cond="TARGET_CPU=='amd64'">_amd64</if>
+        <if cond="TARGET_CPU=='AMD64'">_amd64</if>
+        <if cond="TARGET_CPU=='ia64'">_ia64</if>
+        <if cond="TARGET_CPU=='IA64'">_ia64</if>
     </set>
 
     <if cond="FORMAT!='autoconf'">
@@ -272,6 +276,13 @@
         <if cond="MSLU=='1'">unicows</if>
     </set>
 
+    <set var="LINK_TARGET_CPU">
+        <if cond="TARGET_CPU=='amd64'">/MACHINE:AMD64</if>
+        <if cond="TARGET_CPU=='AMD64'">/MACHINE:AMD64</if>
+        <if cond="TARGET_CPU=='ia64'">/MACHINE:IA64</if>
+        <if cond="TARGET_CPU=='IA64'">/MACHINE:IA64</if>
+    </set>
+
     <template id="common_settings">
         <debug-info>$(DEBUGINFO)</debug-info>
         <debug-runtime-libs>$(DEBUGRUNTIME)</debug-runtime-libs>
@@ -291,6 +302,9 @@
             <!-- hack to make eVC4 2.6.2 project files compatible with what we had in 2.6.1 -->
             <set var="_ldlibs">$(_ldlibs.replace('ccrtrtti.lib', ''))</set>
             <set var="_cppflags">$(_cppflags.replace('/GR', ''))</set>
+        </if>
+        <if cond="FORMAT=='msvc'">
+            <ldflags>$(LINK_TARGET_CPU)</ldflags>
         </if>
     </template>
 
@@ -385,8 +399,28 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         </if>
     </define-tag>
 
+    <define-tag name="msvc-create-rcdefs-h" rules="dll,lib">
+        <if cond="IS_MSVC_PRJ">
+            <msvc-headers-setup-h>
+                msw/genrcdefs.h
+            </msvc-headers-setup-h>
+            <!-- FIXME: we need another way to get the compiler name -->
+            <set var="VC_COMPILER">
+                <if cond="FORMAT=='msevc4prj'">$(_COMPILER)</if>
+                <if cond="FORMAT!='msevc4prj'">cl</if>
+            </set>
+            <set var="_custom_build_include_wx_msw_genrcdefs_h">
+Creating $(SETUPHDIR)\wx\msw\rcdefs.h
+
+"$(SETUPHDIR)\wx\msw\rcdefs.h" : "$(DOLLAR)(SOURCE)" "$(DOLLAR)(SETUPHDIR)\wx\msw"
+$(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
+            </set>
+        </if>
+    </define-tag>
+
     <template id="msvc_setup_h">
         <msvc-copy-setup-h/>
+        <msvc-create-rcdefs-h/>
     </template>
 
     <!-- =============================================================== -->
@@ -430,11 +464,9 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <define>$(THREAD_DEFINE)</define>
         <define>$(UNICODE_DEFINE)</define>
         <define>$(MSLU_DEFINE)</define>
-        <!-- this include is added by configure, we need to put other
-             includes before it: -->
+        <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <lib-path>$(LIBDIRNAME)</lib-path>
-        <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <warnings>max</warnings>
         <cppflags-watcom>
             -wcd=549 <!-- 'sizeof' operand contains compiler generated information -->
@@ -497,7 +529,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
                 <sys-lib>advapi32</sys-lib>
                 <sys-lib>wsock32</sys-lib>
             </if>
-            <if cond="FORMAT=='msvc' or FORMAT=='msvc6prj' or FORMAT=='borland'">
+            <if cond="FORMAT=='borland'">
                 <sys-lib>oleacc</sys-lib>
             </if>
             <if cond="FORMAT!='msevc4prj'">
@@ -560,6 +592,14 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         </if>
     </template>
 
+    <if cond="FORMAT=='autoconf'">
+        <set var="RCDEFDIR">
+            <if cond="TOOLKIT=='MSW'">
+                $(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
+            </if>
+        </set>
+    </if>
+
     <template id="wx_dll_b" template="wx_lib_b">
         <set var="WXDLLNAME">$(wxwin.mkDllName(wxid))</set>
         <dllname>$(WXDLLNAME)</dllname>
@@ -572,9 +612,10 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <!-- version info resources: -->
         <if cond="FORMAT not in ['rpmspec','wx24dsp']"> <!-- FIXME: fix for bkl-0.1.7 only, remove the cond later -->
             <res-define>WXDLLNAME=$(WXDLLNAME)</res-define>
-            <res-include cond="FORMAT=='autoconf'">
-                $(TOP_SRCDIR)include
-            </res-include>
+            <if cond="FORMAT=='autoconf'">
+                <res-include>$(RCDEFDIR)</res-include>
+                <res-include>$(TOP_SRCDIR)include</res-include>
+            </if>
         </if>
         <win32-res>$(WXTOPDIR)src/msw/version.rc</win32-res>
     </template>

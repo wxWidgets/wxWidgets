@@ -199,11 +199,11 @@ wxURLNativeImp *wxURL::CreateNativeImpObject()
 wxInputStream *wxWinINetURL::GetInputStream(wxURL *owner)
 {
     DWORD service;
-    if ( owner->GetProtocolName() == wxT("http") )
+    if ( owner->GetScheme() == wxT("http") )
     {
         service = INTERNET_SERVICE_HTTP;
     }
-    else if ( owner->GetProtocolName() == wxT("ftp") )
+    else if ( owner->GetScheme() == wxT("ftp") )
     {
         service = INTERNET_SERVICE_FTP;
     }

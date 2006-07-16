@@ -302,8 +302,8 @@ public:
 
 // Obsolete
 
-    STDMETHODIMP put_accName(VARIANT varChild, BSTR szName) { return E_FAIL; }
-    STDMETHODIMP put_accValue(VARIANT varChild, BSTR szName) { return E_FAIL; }
+    STDMETHODIMP put_accName(VARIANT WXUNUSED(varChild), BSTR WXUNUSED(szName)) { return E_FAIL; }
+    STDMETHODIMP put_accValue(VARIANT WXUNUSED(varChild), BSTR WXUNUSED(szName)) { return E_FAIL; }
 
 // IDispatch
 

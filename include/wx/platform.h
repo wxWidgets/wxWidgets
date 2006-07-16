@@ -246,10 +246,23 @@
 #endif /* wxUSE_UNICODE */
 
 #if defined( __MWERKS__ ) && !defined(__INTEL__)
-// otherwise MSL headers bring in WIN32 dependant APIs
+/* otherwise MSL headers bring in WIN32 dependant APIs */
 #undef UNICODE
 #endif
 
+
+/*
+   This macro can be used to test the Open Watcom version.
+*/
+#ifndef __WATCOMC__
+#   define wxWATCOM_VERSION(major,minor) 0
+#   define wxCHECK_WATCOM_VERSION(major,minor) 0
+#   define wxONLY_WATCOM_EARLIER_THAN(major,minor) 0
+#else
+#   define wxWATCOM_VERSION(major,minor) ( major * 100 + minor * 10 + 1100 )
+#   define wxCHECK_WATCOM_VERSION(major,minor) ( __WATCOMC__ >= wxWATCOM_VERSION(major,minor) )
+#   define wxONLY_WATCOM_EARLIER_THAN(major,minor) ( __WATCOMC__ < wxWATCOM_VERSION(major,minor) )
+#endif
 
 /*
    check the consistency of the settings in setup.h: note that this must be
@@ -484,9 +497,11 @@
 #   define __STDC_EXT__ 1
 #endif
 
-/* Force linking against required libraries under Windows CE: */
+/* Force linking against required libraries under Windows: */
 #ifdef __WXWINCE__
 #   include "wx/msw/wince/libraries.h"
+#elif defined __WINDOWS__
+#   include "wx/msw/libraries.h"
 #endif
 
 /*
@@ -498,10 +513,13 @@
         ... no gcc at all or gcc < 3.1 ...
 #    endif
 */
-#define wxCHECK_GCC_VERSION( major, minor ) \
-    ( defined(__GNUC__) && defined(__GNUC_MINOR__) \
-    && ( ( __GNUC__ > (major) ) \
-        || ( __GNUC__ == (major) && __GNUC_MINOR__ >= (minor) ) ) )
+#if defined(__GNUC__) && defined(__GNUC_MINOR__)
+    #define wxCHECK_GCC_VERSION( major, minor ) \
+        ( ( __GNUC__ > (major) ) \
+            || ( __GNUC__ == (major) && __GNUC_MINOR__ >= (minor) ) )
+#else
+    #define wxCHECK_GCC_VERSION( major, minor ) 0
+#endif
 
 /*
    This macro can be used to check that the version of mingw32 compiler is

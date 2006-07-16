@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_UNIV_GAUGE_H_
+#define _WX_UNIV_GAUGE_H_
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "gaugeuniv.h"
 #endif
@@ -72,3 +75,5 @@ protected:
 
     DECLARE_DYNAMIC_CLASS(wxGauge)
 };
+
+#endif // _WX_UNIV_GAUGE_H_

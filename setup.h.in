@@ -156,6 +156,8 @@
 
 #define WXWIN_COMPATIBILITY_2_4 0
 
+#define WX_USE_RESERVED_VIRTUALS 0
+
 #define wxDIALOG_UNIT_COMPATIBILITY   0
 
 
@@ -576,6 +578,11 @@
  */
 #undef WX_NO_REGEX_ADVANCED
 /*
+ * On GNU systems use re_search instead of regexec, since the latter does a
+ * strlen on the search text affecting the performance of some operations.
+ */
+#undef HAVE_RE_SEARCH
+/*
  * Use SDL for audio (Unix)
  */
 #define wxUSE_LIBSDL 0
@@ -589,6 +596,10 @@
  * Use GNOME print for printing under GTK+ 2.0
  */
 #define wxUSE_LIBGNOMEPRINT 0
+/*
+ * Use the Hildon framework
+ */
+#define wxUSE_LIBHILDON 0
 /*
  * Use iODBC
  */
@@ -1009,8 +1020,8 @@
    with wx/msw/setup.h */
 #define wxUSE_XPM_IN_MSW wxUSE_XPM
 
-// Set to 0 to disable PostScript print/preview architecture code under Windows
-// (just use Windows printing).
+/* Set to 0 to disable PostScript print/preview architecture code under Windows
+   (just use Windows printing). */
 #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
 
 #endif /* __WIN32__ */

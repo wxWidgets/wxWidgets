@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcclient.cpp
+// Name:        src/os2/dcclient.cpp
 // Purpose:     wxClientDC class
 // Author:      David Webster
 // Modified by:
@@ -20,14 +20,16 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/string.h"
-#include "wx/log.h"
-#include "wx/window.h"
-#include "wx/app.h"
+#include "wx/dcclient.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+    #include "wx/log.h"
+    #include "wx/app.h"
+    #include "wx/window.h"
+#endif
 
 #include "wx/os2/private.h"
-
-#include "wx/dcclient.h"
 
 // ----------------------------------------------------------------------------
 // array/list types
@@ -137,7 +139,7 @@ wxWindowDC::wxWindowDC(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError(_T("Unable to set current color table. Error: %s\n"), sError.c_str());
+        wxLogError(_T("Unable to set current color table (3). Error: %s\n"), sError.c_str());
     }
     ::GpiCreateLogColorTable( m_hPS
                              ,0L
@@ -172,8 +174,8 @@ void wxWindowDC::InitDC()
     vColor.Set( wxT("WHITE") );
     m_brush.SetColour(vColor);
     InitializePalette();
-    wxFont*                         pFont = new wxFont( 12
-                                                       ,wxNORMAL
+    wxFont*                         pFont = new wxFont( 10
+                                                       ,wxMODERN
                                                        ,wxNORMAL
                                                        ,wxBOLD
                                                       );
@@ -237,7 +239,7 @@ wxClientDC::wxClientDC(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError(_T("Unable to set current color table. Error: %s\n"), sError.c_str());
+        wxLogError(_T("Unable to set current color table (4). Error: %s\n"), sError.c_str());
     }
     ::GpiCreateLogColorTable( m_hPS
                              ,0L
@@ -362,7 +364,7 @@ wxPaintDC::wxPaintDC(
                                 );
         }
 
-        m_bIsPaintTime   = TRUE;
+        m_bIsPaintTime   = true;
         ms_cache.Add(new wxPaintDCInfo(m_pCanvas, this));
     }
     InitDC();
@@ -383,7 +385,7 @@ wxPaintDC::~wxPaintDC()
         {
             ::WinEndPaint(m_hPS);
             m_hPS          = m_hOldPS;
-            m_bIsPaintTime = FALSE;
+            m_bIsPaintTime = false;
             ms_cache.RemoveAt(nIndex);
         }
         //else: cached DC entry is still in use
@@ -431,4 +433,3 @@ WXHDC wxPaintDC::FindDCInCache(
     }
     return 0;
 } // end of wxPaintDC::FindInCache
-

@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _misc_
@@ -319,10 +319,6 @@ def GetElapsedTime(*args, **kwargs):
     """GetElapsedTime(bool resetTimer=True) -> long"""
     return _misc_.GetElapsedTime(*args, **kwargs)
 
-def GetMousePosition(*args, **kwargs):
-    """GetMousePosition() -> (x,y)"""
-    return _misc_.GetMousePosition(*args, **kwargs)
-
 def IsBusy(*args, **kwargs):
     """IsBusy() -> bool"""
     return _misc_.IsBusy(*args, **kwargs)
@@ -547,8 +543,29 @@ def BeginBusyCursor(*args, **kwargs):
     """BeginBusyCursor(Cursor cursor=wxHOURGLASS_CURSOR)"""
     return _misc_.BeginBusyCursor(*args, **kwargs)
 
+def GetMousePosition(*args, **kwargs):
+    """
+    GetMousePosition() -> Point
+
+    Get the current mouse position on the screen.
+    """
+    return _misc_.GetMousePosition(*args, **kwargs)
+
+def FindWindowAtPointer(*args, **kwargs):
+    """
+    FindWindowAtPointer() -> Window
+
+    Returns the window currently under the mouse pointer, if it belongs to
+        this application.  Otherwise it returns None.
+    """
+    return _misc_.FindWindowAtPointer(*args, **kwargs)
+
 def GetActiveWindow(*args, **kwargs):
-    """GetActiveWindow() -> Window"""
+    """
+    GetActiveWindow() -> Window
+
+    Get the currently active window of this application, or None
+    """
     return _misc_.GetActiveWindow(*args, **kwargs)
 
 def GenericFindWindowAtPoint(*args, **kwargs):
@@ -579,10 +596,144 @@ def GetKeyState(*args, **kwargs):
 
     Get the state of a key (true if pressed or toggled on, false if not.)
     This is generally most useful getting the state of the modifier or
-    toggle keys.  On some platforms those may be the only keys that work.
+    toggle keys.  On some platforms those may be the only keys that this
+    function is able to detect.
 
     """
     return _misc_.GetKeyState(*args, **kwargs)
+class MouseState(object):
+    """
+    `wx.MouseState` is used to hold information about mouse button and
+    modifier key states and is what is returned from `wx.GetMouseState`.
+    """
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxMouseState instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self) -> MouseState
+
+        `wx.MouseState` is used to hold information about mouse button and
+        modifier key states and is what is returned from `wx.GetMouseState`.
+        """
+        newobj = _misc_.new_MouseState(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_misc_.delete_MouseState):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    def GetX(*args, **kwargs):
+        """GetX(self) -> int"""
+        return _misc_.MouseState_GetX(*args, **kwargs)
+
+    def GetY(*args, **kwargs):
+        """GetY(self) -> int"""
+        return _misc_.MouseState_GetY(*args, **kwargs)
+
+    def LeftDown(*args, **kwargs):
+        """LeftDown(self) -> bool"""
+        return _misc_.MouseState_LeftDown(*args, **kwargs)
+
+    def MiddleDown(*args, **kwargs):
+        """MiddleDown(self) -> bool"""
+        return _misc_.MouseState_MiddleDown(*args, **kwargs)
+
+    def RightDown(*args, **kwargs):
+        """RightDown(self) -> bool"""
+        return _misc_.MouseState_RightDown(*args, **kwargs)
+
+    def ControlDown(*args, **kwargs):
+        """ControlDown(self) -> bool"""
+        return _misc_.MouseState_ControlDown(*args, **kwargs)
+
+    def ShiftDown(*args, **kwargs):
+        """ShiftDown(self) -> bool"""
+        return _misc_.MouseState_ShiftDown(*args, **kwargs)
+
+    def AltDown(*args, **kwargs):
+        """AltDown(self) -> bool"""
+        return _misc_.MouseState_AltDown(*args, **kwargs)
+
+    def MetaDown(*args, **kwargs):
+        """MetaDown(self) -> bool"""
+        return _misc_.MouseState_MetaDown(*args, **kwargs)
+
+    def CmdDown(*args, **kwargs):
+        """CmdDown(self) -> bool"""
+        return _misc_.MouseState_CmdDown(*args, **kwargs)
+
+    def SetX(*args, **kwargs):
+        """SetX(self, int x)"""
+        return _misc_.MouseState_SetX(*args, **kwargs)
+
+    def SetY(*args, **kwargs):
+        """SetY(self, int y)"""
+        return _misc_.MouseState_SetY(*args, **kwargs)
+
+    def SetLeftDown(*args, **kwargs):
+        """SetLeftDown(self, bool down)"""
+        return _misc_.MouseState_SetLeftDown(*args, **kwargs)
+
+    def SetMiddleDown(*args, **kwargs):
+        """SetMiddleDown(self, bool down)"""
+        return _misc_.MouseState_SetMiddleDown(*args, **kwargs)
+
+    def SetRightDown(*args, **kwargs):
+        """SetRightDown(self, bool down)"""
+        return _misc_.MouseState_SetRightDown(*args, **kwargs)
+
+    def SetControlDown(*args, **kwargs):
+        """SetControlDown(self, bool down)"""
+        return _misc_.MouseState_SetControlDown(*args, **kwargs)
+
+    def SetShiftDown(*args, **kwargs):
+        """SetShiftDown(self, bool down)"""
+        return _misc_.MouseState_SetShiftDown(*args, **kwargs)
+
+    def SetAltDown(*args, **kwargs):
+        """SetAltDown(self, bool down)"""
+        return _misc_.MouseState_SetAltDown(*args, **kwargs)
+
+    def SetMetaDown(*args, **kwargs):
+        """SetMetaDown(self, bool down)"""
+        return _misc_.MouseState_SetMetaDown(*args, **kwargs)
+
+    x = property(GetX, SetX)
+    y = property(GetY, SetY)
+    leftDown = property(LeftDown, SetLeftDown)
+    middleDown = property(MiddleDown, SetMiddleDown)
+    rightDown = property(RightDown, SetRightDown)
+    controlDown = property(ControlDown, SetControlDown)
+    shiftDown = property(ShiftDown, SetShiftDown)
+    altDown = property(AltDown, SetAltDown)
+    metaDown = property(MetaDown, SetMetaDown)
+    cmdDown = property(CmdDown)
+
+
+class MouseStatePtr(MouseState):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = MouseState
+_misc_.MouseState_swigregister(MouseStatePtr)
+FileSelectorPromptStr = cvar.FileSelectorPromptStr
+FileSelectorDefaultWildcardStr = cvar.FileSelectorDefaultWildcardStr
+DirSelectorPromptStr = cvar.DirSelectorPromptStr
+
+
+def GetMouseState(*args, **kwargs):
+    """
+    GetMouseState() -> MouseState
+
+    Returns the current state of the mouse.  Returns an instance of a
+    `wx.MouseState` object that contains the current position of the mouse
+    pointer in screen coordinants, as well as boolean values indicating
+    the up/down status of the mouse buttons and the modifier keys.
+    """
+    return _misc_.GetMouseState(*args, **kwargs)
 
 def WakeUpMainThread(*args, **kwargs):
     """WakeUpMainThread()"""
@@ -618,9 +769,6 @@ class MutexGuiLockerPtr(MutexGuiLocker):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = MutexGuiLocker
 _misc_.MutexGuiLocker_swigregister(MutexGuiLockerPtr)
-FileSelectorPromptStr = cvar.FileSelectorPromptStr
-FileSelectorDefaultWildcardStr = cvar.FileSelectorDefaultWildcardStr
-DirSelectorPromptStr = cvar.DirSelectorPromptStr
 
 
 def Thread_IsMain(*args, **kwargs):
@@ -837,6 +985,7 @@ class BusyInfo(_core.Object):
             if self.thisown: destroy(self)
         except: pass
 
+    def Destroy(self): pass 
 
 class BusyInfoPtr(BusyInfo):
     def __init__(self, this):
@@ -1115,7 +1264,7 @@ class Timer(_core.EvtHandler):
         return _misc_.Timer_GetId(*args, **kwargs)
 
     def Destroy(self):
-        """NO-OP: Timers must be destroyed by normal refrence counting"""
+        """NO-OP: Timers must be destroyed by normal reference counting"""
         pass
 
 
@@ -1170,6 +1319,7 @@ class TimerRunner(object):
         """
         __init__(self, wxTimer timer) -> TimerRunner
         __init__(self, wxTimer timer, int milli, bool oneShot=False) -> TimerRunner
+        __init__(self, wxTimer timer, int milli) -> TimerRunner
         """
         newobj = _misc_.new_TimerRunner(*args)
         self.this = newobj.this
@@ -3681,6 +3831,22 @@ class DateTime(object):
         """MakeTimezone(self, wxDateTime::TimeZone tz, bool noDST=False) -> DateTime"""
         return _misc_.DateTime_MakeTimezone(*args, **kwargs)
 
+    def FromTimezone(*args, **kwargs):
+        """FromTimezone(self, wxDateTime::TimeZone tz, bool noDST=False) -> DateTime"""
+        return _misc_.DateTime_FromTimezone(*args, **kwargs)
+
+    def MakeFromTimezone(*args, **kwargs):
+        """MakeFromTimezone(self, wxDateTime::TimeZone tz, bool noDST=False) -> DateTime"""
+        return _misc_.DateTime_MakeFromTimezone(*args, **kwargs)
+
+    def ToUTC(*args, **kwargs):
+        """ToUTC(self, bool noDST=False) -> DateTime"""
+        return _misc_.DateTime_ToUTC(*args, **kwargs)
+
+    def MakeUTC(*args, **kwargs):
+        """MakeUTC(self, bool noDST=False) -> DateTime"""
+        return _misc_.DateTime_MakeUTC(*args, **kwargs)
+
     def ToGMT(*args, **kwargs):
         """ToGMT(self, bool noDST=False) -> DateTime"""
         return _misc_.DateTime_ToGMT(*args, **kwargs)
@@ -3688,6 +3854,14 @@ class DateTime(object):
     def MakeGMT(*args, **kwargs):
         """MakeGMT(self, bool noDST=False) -> DateTime"""
         return _misc_.DateTime_MakeGMT(*args, **kwargs)
+
+    def FromUTC(*args, **kwargs):
+        """FromUTC(self, bool noDST=False) -> DateTime"""
+        return _misc_.DateTime_FromUTC(*args, **kwargs)
+
+    def MakeFromUTC(*args, **kwargs):
+        """MakeFromUTC(self, bool noDST=False) -> DateTime"""
+        return _misc_.DateTime_MakeFromUTC(*args, **kwargs)
 
     def IsDST(*args, **kwargs):
         """IsDST(self, int country=Country_Default) -> int"""
@@ -4022,6 +4196,12 @@ def DateTimeFromDMY(*args, **kwargs):
         int minute=0, int second=0, int millisec=0) -> DateTime
     """
     val = _misc_.new_DateTimeFromDMY(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+def DateTimeFromDateTime(*args, **kwargs):
+    """DateTimeFromDateTime(DateTime date) -> DateTime"""
+    val = _misc_.new_DateTimeFromDateTime(*args, **kwargs)
     val.thisown = 1
     return val
 
@@ -5161,7 +5341,7 @@ class CustomDataObjectPtr(CustomDataObject):
         self.__class__ = CustomDataObject
 _misc_.CustomDataObject_swigregister(CustomDataObjectPtr)
 
-class URLDataObject(DataObjectComposite):
+class URLDataObject(DataObject):
     """
     This data object holds a URL in a format that is compatible with some
     browsers such that it is able to be dragged to or from them.
@@ -5621,7 +5801,8 @@ class _wxPyDelayedInitWrapper(object):
         self._instance = None
     def _checkInstance(self):
         if self._instance is None:
-            self._instance = self._initfunc(*self._args, **self._kwargs)        
+            if wx.GetApp():
+                self._instance = self._initfunc(*self._args, **self._kwargs)        
     def __getattr__(self, name):
         self._checkInstance()
         return getattr(self._instance, name)
@@ -6086,5 +6267,6 @@ def StandardPaths_Get(*args, **kwargs):
     Return the global standard paths singleton
     """
     return _misc_.StandardPaths_Get(*args, **kwargs)
+
 
 

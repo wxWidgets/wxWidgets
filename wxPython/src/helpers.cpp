@@ -15,6 +15,7 @@
 #include <Python.h>
 #include "wx/wxPython/wxPython_int.h"
 #include "wx/wxPython/pyistream.h"
+#include "wx/wxPython/swigver.h"
 
 #ifdef __WXMSW__
 #include <wx/msw/private.h>
@@ -690,6 +691,7 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
 #else
     _AddInfoString("wx-assertions-off");
 #endif
+    _AddInfoString(wxPy_SWIG_VERSION);    
 
 #undef _AddInfoString
 
@@ -701,21 +703,6 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
 }
 
 
-//---------------------------------------------------------------------------
-
-// Python's PyInstance_Check does not return True for instances of new-style
-// classes.  This should get close enough for both new and old classes but I
-// should re-evaluate the need for doing instance checks...
-bool wxPyInstance_Check(PyObject* obj) {
-    return PyObject_HasAttrString(obj, "__class__") != 0;
-}
-
-
-// This one checks if the object is an instance of a SWIG proxy class (it has
-// a .this attribute)
-bool wxPySwigInstance_Check(PyObject* obj) {
-    return PyObject_HasAttrString(obj, "this") != 0;
-}
 
 //---------------------------------------------------------------------------
 
@@ -1989,9 +1976,9 @@ wxString* wxString_in_helper(PyObject* source) {
         str = PyObject_Str(source);
         if (PyErr_Occurred()) return NULL;
     }
-    char* tmpPtr; int tmpSize;
+    char* tmpPtr; Py_ssize_t tmpSize;
     PyString_AsStringAndSize(str, &tmpPtr, &tmpSize);
-    target = new wxString(tmpPtr, tmpSize);
+    target = new wxString(tmpPtr, (int)tmpSize);
 
     if (!PyString_Check(source))
         Py_DECREF(str);
@@ -2032,9 +2019,9 @@ wxString Py2wxString(PyObject* source)
         str = PyObject_Str(source);
         if (PyErr_Occurred()) return wxEmptyString;    // TODO:  should we PyErr_Clear?
     }
-    char* tmpPtr; int tmpSize;
+    char* tmpPtr; Py_ssize_t tmpSize;
     PyString_AsStringAndSize(str, &tmpPtr, &tmpSize);
-    target = wxString(tmpPtr, tmpSize);
+    target = wxString(tmpPtr, (int)tmpSize);
 
     if (!PyString_Check(source))
         Py_DECREF(str);
@@ -2722,6 +2709,145 @@ PyObject* wxArrayInt2PyList_helper(const wxArrayInt& arr) {
         Py_DECREF(number);
     }
     return list;
+}
+
+
+//----------------------------------------------------------------------
+// wxPyImageHandler methods
+//
+// TODO: Switch these to use wxPython's standard macros and helper classes
+//       for calling callbacks.
+
+PyObject* wxPyImageHandler::m_DoCanRead_Name = NULL;
+PyObject* wxPyImageHandler::m_GetImageCount_Name = NULL;
+PyObject* wxPyImageHandler::m_LoadFile_Name = NULL;
+PyObject* wxPyImageHandler::m_SaveFile_Name = NULL;
+
+PyObject* wxPyImageHandler::py_InputStream(wxInputStream* stream) {
+    return wxPyConstructObject(new wxPyInputStream(stream),
+                               wxT("wxPyInputStream"), 0);
+}
+
+PyObject* wxPyImageHandler::py_Image(wxImage* image) {
+    return wxPyConstructObject(image, wxT("wxImage"), 0);
+}
+
+PyObject* wxPyImageHandler::py_OutputStream(wxOutputStream* stream) {
+    return wxPyConstructObject(stream, wxT("wxOutputStream"), 0);
+}
+
+wxPyImageHandler::wxPyImageHandler():
+    m_self(NULL)
+{
+    if (!m_DoCanRead_Name) {
+        m_DoCanRead_Name = PyString_FromString("DoCanRead");
+        m_GetImageCount_Name = PyString_FromString("GetImageCount");
+        m_LoadFile_Name = PyString_FromString("LoadFile");
+        m_SaveFile_Name = PyString_FromString("SaveFile");
+    }
+}
+
+wxPyImageHandler::~wxPyImageHandler() {
+    if (m_self) {
+        Py_DECREF(m_self);
+        m_self = NULL;
+    }
+}
+
+void wxPyImageHandler::_SetSelf(PyObject *self) {
+    // should check here for isinstance(PyImageHandler) ??
+    m_self = self;
+    Py_INCREF(m_self);
+}
+
+bool wxPyImageHandler::DoCanRead(wxInputStream& stream) {
+    // check if our object has this method
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    if (!m_self || !PyObject_HasAttr(m_self, m_DoCanRead_Name)) {
+        wxPyEndBlockThreads(blocked);
+        return false;
+    }
+
+    PyObject* res = PyObject_CallMethodObjArgs(m_self, m_DoCanRead_Name,
+                                               py_InputStream(&stream), NULL);
+    bool retval = false;
+    if (res) {
+        retval = PyInt_AsLong(res);
+        Py_DECREF(res);
+        PyErr_Clear();
+    }
+    else
+        PyErr_Print();
+    wxPyEndBlockThreads(blocked);
+    return retval;
+}
+
+bool wxPyImageHandler::LoadFile( wxImage* image, wxInputStream& stream,
+                                 bool verbose, int index ) {
+    // check if our object has this method
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    if (!m_self || !PyObject_HasAttr(m_self, m_LoadFile_Name)) {
+        wxPyEndBlockThreads(blocked);
+        return false;
+    }
+    PyObject* res = PyObject_CallMethodObjArgs(m_self, m_LoadFile_Name,
+                                               py_Image(image),
+                                               py_InputStream(&stream),
+                                               PyInt_FromLong(verbose),
+                                               PyInt_FromLong(index),
+                                               NULL);
+    bool retval = false;
+    if (res) {
+        retval = PyInt_AsLong(res);
+        Py_DECREF(res);
+        PyErr_Clear();
+    } else
+        PyErr_Print();
+    wxPyEndBlockThreads(blocked);
+    return retval;
+}
+
+bool wxPyImageHandler::SaveFile( wxImage* image, wxOutputStream& stream,
+                                 bool verbose ) {
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    if (!m_self || !PyObject_HasAttr(m_self, m_SaveFile_Name)) {
+        wxPyEndBlockThreads(blocked);
+        return false;
+    }
+    PyObject* res = PyObject_CallMethodObjArgs(m_self, m_SaveFile_Name,
+                                               py_Image(image),
+                                               py_OutputStream(&stream),
+                                               PyInt_FromLong(verbose),
+                                               NULL);
+    bool retval = false;
+    if(res) {
+        retval=PyInt_AsLong(res);
+        Py_DECREF(res);
+        PyErr_Clear();
+    } else
+        PyErr_Print();
+    wxPyEndBlockThreads(blocked);
+    return retval;
+}
+
+int wxPyImageHandler::GetImageCount( wxInputStream& stream ) {
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    if (!m_self || !PyObject_HasAttr(m_self, m_GetImageCount_Name)) {
+        wxPyEndBlockThreads(blocked);
+        return 1;
+    }
+    PyObject *res=PyObject_CallMethodObjArgs(m_self, m_GetImageCount_Name,
+                                             py_InputStream(&stream),
+                                             NULL);
+    int retval = 1;
+    if(res) {
+        retval=PyInt_AsLong(res);
+        Py_DECREF(res);
+        PyErr_Clear();
+    } else
+        PyErr_Print();
+    wxPyEndBlockThreads(blocked);
+    return retval;
 }
 
 

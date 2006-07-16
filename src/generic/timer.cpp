@@ -194,7 +194,11 @@ void wxTimerScheduler::NotifyTimers()
                         QueueTimer(desc, now + desc->timer->GetInterval());
                 }
                 else
+                {
                     desc = m_timers;
+                    if (!desc)
+                        break;
+                }
             }
         }
     }

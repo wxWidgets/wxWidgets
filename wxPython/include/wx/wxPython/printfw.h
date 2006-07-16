@@ -35,7 +35,7 @@ public:
     void base_GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo);
 
     PYPRIVATE;
-    DECLARE_ABSTRACT_CLASS(wxPyPrintout); 
+    DECLARE_ABSTRACT_CLASS(wxPyPrintout)
 };
 
 #endif

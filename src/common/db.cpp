@@ -204,37 +204,37 @@ void wxDbConnectInf::FreeHenv()
 
 void wxDbConnectInf::SetDsn(const wxString &dsn)
 {
-    wxASSERT(dsn.Length() < sizeof(Dsn));
+    wxASSERT(dsn.Length() < WXSIZEOF(Dsn));
 
-    wxStrncpy(Dsn, dsn, sizeof(Dsn)-1);
-    Dsn[sizeof(Dsn)-1] = 0;  // Prevent buffer overrun
+    wxStrncpy(Dsn, dsn, WXSIZEOF(Dsn)-1);
+    Dsn[WXSIZEOF(Dsn)-1] = 0;  // Prevent buffer overrun
 }  // wxDbConnectInf::SetDsn()
 
 
 void wxDbConnectInf::SetUserID(const wxString &uid)
 {
-    wxASSERT(uid.Length() < sizeof(Uid));
-    wxStrncpy(Uid, uid, sizeof(Uid)-1);
-    Uid[sizeof(Uid)-1] = 0;  // Prevent buffer overrun
+    wxASSERT(uid.Length() < WXSIZEOF(Uid));
+    wxStrncpy(Uid, uid, WXSIZEOF(Uid)-1);
+    Uid[WXSIZEOF(Uid)-1] = 0;  // Prevent buffer overrun
 }  // wxDbConnectInf::SetUserID()
 
 
 void wxDbConnectInf::SetPassword(const wxString &password)
 {
-    wxASSERT(password.Length() < sizeof(AuthStr));
+    wxASSERT(password.Length() < WXSIZEOF(AuthStr));
 
-    wxStrncpy(AuthStr, password, sizeof(AuthStr)-1);
-    AuthStr[sizeof(AuthStr)-1] = 0;  // Prevent buffer overrun
+    wxStrncpy(AuthStr, password, WXSIZEOF(AuthStr)-1);
+    AuthStr[WXSIZEOF(AuthStr)-1] = 0;  // Prevent buffer overrun
 }  // wxDbConnectInf::SetPassword()
 
 void wxDbConnectInf::SetConnectionStr(const wxString &connectStr)
 {
-    wxASSERT(connectStr.Length() < sizeof(ConnectionStr));
+    wxASSERT(connectStr.Length() < WXSIZEOF(ConnectionStr));
 
     useConnectionStr = wxStrlen(connectStr) > 0;
 
-    wxStrncpy(ConnectionStr, connectStr, sizeof(ConnectionStr)-1);
-    ConnectionStr[sizeof(ConnectionStr)-1] = 0;  // Prevent buffer overrun
+    wxStrncpy(ConnectionStr, connectStr, WXSIZEOF(ConnectionStr)-1);
+    ConnectionStr[WXSIZEOF(ConnectionStr)-1] = 0;  // Prevent buffer overrun
 }  // wxDbConnectInf::SetConnectionStr()
 
 
@@ -3951,7 +3951,7 @@ wxDBMS wxDb::Dbms(void)
 
     baseName[3] = 0;
     if (!wxStricmp(baseName,wxT("DB2")))
-        return((wxDBMS)(dbmsType = dbmsDBASE));
+        return((wxDBMS)(dbmsType = dbmsDB2));
 
     return((wxDBMS)(dbmsType = dbmsUNIDENTIFIED));
 

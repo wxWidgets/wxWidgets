@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        grid.tex
+%% Purpose:     wxGrid
+%% Author:
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxGrid}}\label{wxgrid}
 
 wxGrid and its related classes are used for displaying and editing tabular
@@ -17,7 +28,7 @@ onwards. If you have been using the old wxGrid class you will probably
 want to have a look at the \helpref{wxGrid classes overview}{gridoverview} to see
 how things have changed. The new grid classes are reasonably backward-compatible
 but there are some exceptions. There are also easier ways of doing many things compared to
-the previous implementation. 
+the previous implementation.
 
 \wxheading{Derived from}
 
@@ -38,7 +49,7 @@ There are presently no specific window styles for wxGrid.
 
 \input gridevt.inc
 
-The event handler for the following functions takes a 
+The event handler for the following functions takes a
  \helpref{wxGridSizeEvent}{wxgridsizeevent} parameter.
 The ...\_CMD\_... variants also take a window identifier.
 
@@ -50,7 +61,7 @@ The ...\_CMD\_... variants also take a window identifier.
 \twocolitem{{\bf EVT\_GRID\_CMD\_ROW\_SIZE(func)}}{The user resized a row by dragging it; variant taking a window identifier. Processes a wxEVT\_GRID\_ROW\_SIZE.}
 \end{twocollist}%
 
-The event handler for the following functions takes a 
+The event handler for the following functions takes a
  \helpref{wxGridRangeSelectEvent}{wxgridrangeselectevent} parameter.
 The ...\_CMD\_... variant also takes a window identifier.
 
@@ -60,7 +71,7 @@ The ...\_CMD\_... variant also takes a window identifier.
 \twocolitem{{\bf EVT\_GRID\_CMD\_RANGE\_SELECT(id, func)}}{The user selected a group of contiguous cells; variant taking a window identifier. Processes a wxEVT\_GRID\_RANGE\_SELECT.}
 \end{twocollist}%
 
-The event handler for the following functions takes a 
+The event handler for the following functions takes a
  \helpref{wxGridEditorCreatedEvent}{wxgrideditorcreatedevent} parameter.
 The ...\_CMD\_... variant also takes a window identifier.
 
@@ -77,6 +88,8 @@ The ...\_CMD\_... variant also takes a window identifier.
 %%%%%%%%%%% FUNCTION GROUPS %%%%%%%%%%%%%
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
+
+
 \membersection{Constructors and initialization}\label{wxgridconstructors}
 
 \helpref{wxGrid}{wxgridctor}\\
@@ -84,7 +97,11 @@ The ...\_CMD\_... variant also takes a window identifier.
 \helpref{CreateGrid}{wxgridcreategrid}\\
 \helpref{SetTable}{wxgridsettable}
 
+
+
 \membersection{Display format}\label{wxgriddisplayformat}
+
+
 
 \membersection{Selection functions}\label{wxgridselectionfunctions}
 
@@ -102,6 +119,8 @@ The ...\_CMD\_... variant also takes a window identifier.
 
 }}
 
+
+
 \membersection{wxGrid::wxGrid}\label{wxgridctor}
 
 \func{}{wxGrid}{\void}
@@ -110,9 +129,11 @@ Default constructor
 
 \func{}{wxGrid}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxWANTS\_CHARS}, \param{const wxString\& }{name = wxPanelNameStr}}
 
-Constructor to create a grid object. Call either \helpref{wxGrid::CreateGrid}{wxgridcreategrid} or 
+Constructor to create a grid object. Call either \helpref{wxGrid::CreateGrid}{wxgridcreategrid} or
 \helpref{wxGrid::SetTable}{wxgridsettable} directly after this to initialize the grid before using
-it. 
+it.
+
+
 
 \membersection{wxGrid::\destruct{wxGrid}}\label{wxgriddtor}
 
@@ -120,7 +141,9 @@ it.
 
 Destructor. This will also destroy the associated grid table unless you passed a table
 object to the grid and specified that the grid should not take ownership of the
-table (see \helpref{wxGrid::SetTable}{wxgridsettable}). 
+table (see \helpref{wxGrid::SetTable}{wxgridsettable}).
+
+
 
 \membersection{wxGrid::AppendCols}\label{wxgridappendcols}
 
@@ -129,9 +152,11 @@ table (see \helpref{wxGrid::SetTable}{wxgridsettable}).
 Appends one or more new columns to the right of the grid and returns true if
 successful. The updateLabels argument is not used at present.
 
-If you are using a derived grid table class you will need to override 
-\helpref{wxGridTableBase::AppendCols}{wxgridtablebaseappendcols}. See 
-\helpref{wxGrid::InsertCols}{wxgridinsertcols} for further information. 
+If you are using a derived grid table class you will need to override
+\helpref{wxGridTableBase::AppendCols}{wxgridtablebaseappendcols}. See
+\helpref{wxGrid::InsertCols}{wxgridinsertcols} for further information.
+
+
 
 \membersection{wxGrid::AppendRows}\label{wxgridappendrows}
 
@@ -140,9 +165,11 @@ If you are using a derived grid table class you will need to override
 Appends one or more new rows to the bottom of the grid and returns true if
 successful. The updateLabels argument is not used at present.
 
-If you are using a derived grid table class you will need to override 
-\helpref{wxGridTableBase::AppendRows}{wxgridtablebaseappendrows}. See 
-\helpref{wxGrid::InsertRows}{wxgridinsertrows} for further information. 
+If you are using a derived grid table class you will need to override
+\helpref{wxGridTableBase::AppendRows}{wxgridtablebaseappendrows}. See
+\helpref{wxGrid::InsertRows}{wxgridinsertrows} for further information.
+
+
 
 \membersection{wxGrid::AutoSize}\label{wxgridautosize}
 
@@ -152,13 +179,17 @@ Automatically sets the height and width of all rows and columns to fit their con
 
 \wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
-The memory requirements for this could become prohibitive if your grid is very large. 
+The memory requirements for this could become prohibitive if your grid is very large.
+
+
 
 \membersection{wxGrid::AutoSizeColOrRow}\label{wxgridautosizecolorrow}
 
 \func{void}{AutoSizeColOrRow}{\param{int }{n}, \param{bool }{setAsMin}, \param{bool }{column}}
 
-Common part of AutoSizeColumn/Row() or row? 
+Common part of AutoSizeColumn/Row() or row?
+
+
 
 \membersection{wxGrid::AutoSizeColumn}\label{wxgridautosizecolumn}
 
@@ -169,7 +200,9 @@ also be set as the minimal width for the column.
 
 \wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
-The memory requirements for this could become prohibitive if your grid is very large. 
+The memory requirements for this could become prohibitive if your grid is very large.
+
+
 
 \membersection{wxGrid::AutoSizeColumns}\label{wxgridautosizecolumns}
 
@@ -180,7 +213,9 @@ also be set as the minimal widths for the columns.
 
 \wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
-The memory requirements for this could become prohibitive if your grid is very large. 
+The memory requirements for this could become prohibitive if your grid is very large.
+
+
 
 \membersection{wxGrid::AutoSizeRow}\label{wxgridautosizerow}
 
@@ -191,7 +226,9 @@ also be set as the minimal height for the row.
 
 \wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
-The memory requirements for this could become prohibitive if your grid is very large. 
+The memory requirements for this could become prohibitive if your grid is very large.
+
+
 
 \membersection{wxGrid::AutoSizeRows}\label{wxgridautosizerows}
 
@@ -202,17 +239,21 @@ also be set as the minimal heights for the rows.
 
 \wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
-The memory requirements for this could become prohibitive if your grid is very large. 
+The memory requirements for this could become prohibitive if your grid is very large.
+
+
 
 \membersection{wxGrid::BeginBatch}\label{wxgridbeginbatch}
 
 \func{void}{BeginBatch}{\void}
 
 Increments the grid's batch count. When the count is greater than zero repainting of
-the grid is suppressed. Each call to BeginBatch must be matched by a later call to 
+the grid is suppressed. Each call to BeginBatch must be matched by a later call to
 \helpref{wxGrid::EndBatch}{wxgridendbatch}. Code that does a lot of grid
 modification can be enclosed between BeginBatch and EndBatch calls to avoid
 screen flicker. The final EndBatch will cause the grid to be repainted.
+
+
 
 \membersection{wxGrid::BlockToDeviceRect}\label{wxgridblocktodevicerect}
 
@@ -223,14 +264,17 @@ limited by TopLeft and BottomRight cell in device coords and clipped
 to the client size of the grid window.
 
 
+
 \membersection{wxGrid::CanDragColSize}\label{wxgridcandragcolsize}
 
 \func{bool}{CanDragColSize}{\void}
 
 Returns true if columns can be resized by dragging with the mouse. Columns can be resized
 by dragging the edges of their labels. If grid line dragging is enabled they can also be
-resized by dragging the right edge of the column in the grid cell area 
+resized by dragging the right edge of the column in the grid cell area
 (see \helpref{wxGrid::EnableDragGridSize}{wxgridenabledraggridsize}).
+
+
 
 \membersection{wxGrid::CanDragRowSize}\label{wxgridcandragrowsize}
 
@@ -238,14 +282,18 @@ resized by dragging the right edge of the column in the grid cell area
 
 Returns true if rows can be resized by dragging with the mouse. Rows can be resized
 by dragging the edges of their labels. If grid line dragging is enabled they can also be
-resized by dragging the lower edge of the row in the grid cell area 
+resized by dragging the lower edge of the row in the grid cell area
 (see \helpref{wxGrid::EnableDragGridSize}{wxgridenabledraggridsize}).
+
+
 
 \membersection{wxGrid::CanDragGridSize}\label{wxgridcandraggridsize}
 
 \func{bool}{CanDragGridSize}{\void}
 
 Return true if the dragging of grid lines to resize rows and columns is enabled or false otherwise.
+
+
 
 \membersection{wxGrid::CanEnableCellControl}\label{wxgridcanenablecellcontrol}
 
@@ -254,11 +302,15 @@ Return true if the dragging of grid lines to resize rows and columns is enabled 
 Returns true if the in-place edit control for the current grid cell can be used and
 false otherwise (e.g. if the current cell is read-only).
 
+
+
 \membersection{wxGrid::CanHaveAttributes}\label{wxgridcanhaveattributes}
 
 \func{bool}{CanHaveAttributes}{\void}
 
 Do we have some place to store attributes in?
+
+
 
 \membersection{wxGrid::CellToRect}\label{wxgridcelltorect}
 
@@ -269,19 +321,25 @@ Do we have some place to store attributes in?
 Return the rectangle corresponding to the grid cell's size and position in logical
 coordinates.
 
+
+
 \membersection{wxGrid::ClearGrid}\label{wxgridcleargrid}
 
 \func{void}{ClearGrid}{\void}
 
 Clears all data in the underlying grid table and repaints the grid. The table is not deleted by
-this function. If you are using a derived table class then you need to override 
+this function. If you are using a derived table class then you need to override
 \helpref{wxGridTableBase::Clear}{wxgridtablebaseclear} for this function to have any effect.
+
+
 
 \membersection{wxGrid::ClearSelection}\label{wxgridclearselection}
 
 \func{void}{ClearSelection}{\void}
 
 Deselects all cells that are currently selected.
+
+
 
 \membersection{wxGrid::CreateGrid}\label{wxgridcreategrid}
 
@@ -294,7 +352,9 @@ for you. All of the grid data will be stored in memory.
 
 For applications with more complex data types or relationships, or for
 dealing with very large datasets, you should derive your own grid table
-class and pass a table object to the grid with \helpref{wxGrid::SetTable}{wxgridsettable}. 
+class and pass a table object to the grid with \helpref{wxGrid::SetTable}{wxgridsettable}.
+
+
 
 \membersection{wxGrid::DeleteCols}\label{wxgriddeletecols}
 
@@ -303,9 +363,11 @@ class and pass a table object to the grid with \helpref{wxGrid::SetTable}{wxgrid
 Deletes one or more columns from a grid starting at the specified position and returns
 true if successful. The updateLabels argument is not used at present.
 
-If you are using a derived grid table class you will need to override 
-\helpref{wxGridTableBase::DeleteCols}{wxgridtablebasedeletecols}. See 
+If you are using a derived grid table class you will need to override
+\helpref{wxGridTableBase::DeleteCols}{wxgridtablebasedeletecols}. See
 \helpref{wxGrid::InsertCols}{wxgridinsertcols} for further information.
+
+
 
 \membersection{wxGrid::DeleteRows}\label{wxgriddeleterows}
 
@@ -314,23 +376,29 @@ If you are using a derived grid table class you will need to override
 Deletes one or more rows from a grid starting at the specified position and returns
 true if successful. The updateLabels argument is not used at present.
 
-If you are using a derived grid table class you will need to override 
-\helpref{wxGridTableBase::DeleteRows}{wxgridtablebasedeleterows}. See 
+If you are using a derived grid table class you will need to override
+\helpref{wxGridTableBase::DeleteRows}{wxgridtablebasedeleterows}. See
 \helpref{wxGrid::InsertRows}{wxgridinsertrows} for further information.
+
+
 
 \membersection{wxGrid::DisableCellEditControl}\label{wxgriddisablecelleditcontrol}
 
 \func{void}{DisableCellEditControl}{\void}
 
-Disables in-place editing of grid cells. 
+Disables in-place editing of grid cells.
 Equivalent to calling EnableCellEditControl(false).
+
+
 
 \membersection{wxGrid::DisableDragColSize}\label{wxgriddisabledragcolsize}
 
 \func{void}{DisableDragColSize}{\void}
 
-Disables column sizing by dragging with the mouse. Equivalent to passing false to 
-\helpref{wxGrid::EnableDragColSize}{wxgridenabledragcolsize}. 
+Disables column sizing by dragging with the mouse. Equivalent to passing false to
+\helpref{wxGrid::EnableDragColSize}{wxgridenabledragcolsize}.
+
+
 
 \membersection{wxGrid::DisableDragGridSize}\label{wxgriddisabledraggridsize}
 
@@ -339,12 +407,16 @@ Disables column sizing by dragging with the mouse. Equivalent to passing false t
 Disable mouse dragging of grid lines to resize rows and columns. Equivalent to passing
 false to \helpref{wxGrid::EnableDragGridSize}{wxgridenabledraggridsize}
 
+
+
 \membersection{wxGrid::DisableDragRowSize}\label{wxgriddisabledragrowsize}
 
 \func{void}{DisableDragRowSize}{\void}
 
-Disables row sizing by dragging with the mouse. Equivalent to passing false to 
-\helpref{wxGrid::EnableDragRowSize}{wxgridenabledragrowsize}. 
+Disables row sizing by dragging with the mouse. Equivalent to passing false to
+\helpref{wxGrid::EnableDragRowSize}{wxgridenabledragrowsize}.
+
+
 
 \membersection{wxGrid::EnableCellEditControl}\label{wxgridenablecelleditcontrol}
 
@@ -353,11 +425,15 @@ Disables row sizing by dragging with the mouse. Equivalent to passing false to
 Enables or disables in-place editing of grid cell data. The grid will issue either a
 wxEVT\_GRID\_EDITOR\_SHOWN or wxEVT\_GRID\_EDITOR\_HIDDEN event.
 
+
+
 \membersection{wxGrid::EnableDragColSize}\label{wxgridenabledragcolsize}
 
 \func{void}{EnableDragColSize}{\param{bool }{enable = true}}
 
 Enables or disables column sizing by dragging with the mouse.
+
+
 
 \membersection{wxGrid::EnableDragGridSize}\label{wxgridenabledraggridsize}
 
@@ -365,11 +441,15 @@ Enables or disables column sizing by dragging with the mouse.
 
 Enables or disables row and column resizing by dragging gridlines with the mouse.
 
+
+
 \membersection{wxGrid::EnableDragRowSize}\label{wxgridenabledragrowsize}
 
 \func{void}{EnableDragRowSize}{\param{bool }{enable = true}}
 
 Enables or disables row sizing by dragging with the mouse.
+
+
 
 \membersection{wxGrid::EnableEditing}\label{wxgridenableediting}
 
@@ -378,14 +458,16 @@ Enables or disables row sizing by dragging with the mouse.
 If the edit argument is false this function sets the whole grid as read-only. If the
 argument is true the grid is set to the default state where cells may be editable. In the
 default state you can set single grid cells and whole rows and columns to be editable or
-read-only via 
+read-only via
 \helpref{wxGridCellAttribute::SetReadOnly}{wxgridcellattrsetreadonly}. For single
-cells you can also use the shortcut function 
-\helpref{wxGrid::SetReadOnly}{wxgridsetreadonly}. 
+cells you can also use the shortcut function
+\helpref{wxGrid::SetReadOnly}{wxgridsetreadonly}.
 
-For more information about controlling grid cell attributes see the 
-\helpref{wxGridCellAttr}{wxgridcellattr} cell attribute class and the 
+For more information about controlling grid cell attributes see the
+\helpref{wxGridCellAttr}{wxgridcellattr} cell attribute class and the
 \helpref{wxGrid classes overview}{gridoverview}.
+
+
 
 \membersection{wxGrid::EnableGridLines}\label{wxgridenablegridlines}
 
@@ -393,16 +475,20 @@ For more information about controlling grid cell attributes see the
 
 Turns the drawing of grid lines on or off.
 
+
+
 \membersection{wxGrid::EndBatch}\label{wxgridendbatch}
 
 \func{void}{EndBatch}{\void}
 
 Decrements the grid's batch count. When the count is greater than zero repainting of
-the grid is suppressed. Each previous call to 
+the grid is suppressed. Each previous call to
 \helpref{wxGrid::BeginBatch}{wxgridbeginbatch} must be matched by a later call to
 EndBatch. Code that does a lot of grid modification can be enclosed between
 BeginBatch and EndBatch calls to avoid screen flicker. The final EndBatch will
 cause the grid to be repainted.
+
+
 
 \membersection{wxGrid::Fit}\label{wxgridfit}
 
@@ -410,11 +496,15 @@ cause the grid to be repainted.
 
 Overridden wxWindow method.
 
+
+
 \membersection{wxGrid::ForceRefresh}\label{wxgridforcerefresh}
 
 \func{void}{ForceRefresh}{\void}
 
 Causes immediate repainting of the grid. Use this instead of the usual wxWindow::Refresh.
+
+
 
 \membersection{wxGrid::GetBatchCount}\label{wxgridgetbatchcount}
 
@@ -423,6 +513,8 @@ Causes immediate repainting of the grid. Use this instead of the usual wxWindow:
 Returns the number of times that \helpref{wxGrid::BeginBatch}{wxgridbeginbatch} has been called
 without (yet) matching calls to \helpref{wxGrid::EndBatch}{wxgridendbatch}. While
 the grid's batch count is greater than zero the display will not be updated.
+
+
 
 \membersection{wxGrid::GetCellAlignment}\label{wxgridgetcellalignment}
 
@@ -437,11 +529,15 @@ Vertical alignment will be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTT
 \perlnote{This method only takes the parameters {\tt row} and {\tt col} and
 returns a 2-element list {\tt ( horiz, vert )}.}
 
+
+
 \membersection{wxGrid::GetCellBackgroundColour}\label{wxgridgetcellbackgroundcolour}
 
 \func{wxColour}{GetCellBackgroundColour}{\param{int }{row}, \param{int }{col}}
 
 Returns the background colour of the cell at the specified location.
+
+
 
 \membersection{wxGrid::GetCellEditor}\label{wxgridgetcelleditor}
 
@@ -452,11 +548,15 @@ Returns a pointer to the editor for the cell at the specified location.
 See \helpref{wxGridCellEditor}{wxgridcelleditor} and
 the \helpref{wxGrid overview}{gridoverview} for more information about cell editors and renderers.
 
+
+
 \membersection{wxGrid::GetCellFont}\label{wxgridgetcellfont}
 
 \func{wxFont}{GetCellFont}{\param{int }{row}, \param{int }{col}}
 
 Returns the font for text in the grid cell at the specified location.
+
+
 
 \membersection{wxGrid::GetCellRenderer}\label{wxgridgetcellrenderer}
 
@@ -467,11 +567,15 @@ Returns a pointer to the renderer for the grid cell at the specified location.
 See \helpref{wxGridCellRenderer}{wxgridcellrenderer} and
 the \helpref{wxGrid overview}{gridoverview} for more information about cell editors and renderers.
 
+
+
 \membersection{wxGrid::GetCellTextColour}\label{wxgridgetcelltextcolour}
 
 \func{wxColour}{GetCellTextColour}{\param{int }{row}, \param{int }{col}}
 
 Returns the text colour for the grid cell at the specified location.
+
+
 
 \membersection{wxGrid::GetCellValue}\label{wxgridgetcellvalue}
 
@@ -481,19 +585,22 @@ Returns the text colour for the grid cell at the specified location.
 
 Returns the string contained in the cell at the specified location. For simple applications where a
 grid object automatically uses a default grid table of string values you use this function together
-with \helpref{wxGrid::SetCellValue}{wxgridsetcellvalue} to access cell values. 
+with \helpref{wxGrid::SetCellValue}{wxgridsetcellvalue} to access cell values.
 
 For more complex applications where you have derived your own grid table class that contains
 various data types (e.g. numeric, boolean or user-defined custom types) then you only use this
-function for those cells that contain string values. 
+function for those cells that contain string values.
 
 See \helpref{wxGridTableBase::CanGetValueAs}{wxgridtablebasecangetvalueas}
 and the \helpref{wxGrid overview}{gridoverview} for more information.
 
 
+
 \membersection{wxGrid::GetColLeft}\label{wxgridgetcolleft}
 
 \constfunc{int}{GetColLeft}{\param{int }{col}}
+
+
 
 \membersection{wxGrid::GetColLabelAlignment}\label{wxgridgetcollabelalignment}
 
@@ -507,20 +614,26 @@ Vertical alignment will be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTT
 \perlnote{This method takes no parameters and
 returns a 2-element list {\tt ( horiz, vert )}.}
 
+
+
 \membersection{wxGrid::GetColLabelSize}\label{wxgridgetcollabelsize}
 
 \func{int}{GetColLabelSize}{\void}
 
 Returns the current height of the column labels.
 
+
+
 \membersection{wxGrid::GetColLabelValue}\label{wxgridgetcollabelvalue}
 
 \func{wxString}{GetColLabelValue}{\param{int }{col}}
 
 Returns the specified column label. The default grid table class provides column labels of
-the form A,B...Z,AA,AB...ZZ,AAA... If you are using a custom grid table you can override 
+the form A,B...Z,AA,AB...ZZ,AAA... If you are using a custom grid table you can override
 \helpref{wxGridTableBase::GetColLabelValue}{wxgridtablebasegetcollabelvalue} to provide
-your own labels. 
+your own labels.
+
+
 
 \membersection{wxGrid::GetColMinimalAcceptableWidth}\label{wxgridgetcolminimalacceptablewidth}
 
@@ -529,6 +642,8 @@ your own labels.
 This returns the value of the lowest column width that can be handled correctly. See
 member \helpref{SetColMinimalAcceptableWidth}{wxgridsetcolminimalacceptablewidth} for details.
 
+
+
 \membersection{wxGrid::GetColMinimalWidth}\label{wxgridgetcolminimalwidth}
 
 \constfunc{int}{GetColMinimalWidth}{\param{int }{col}}
@@ -536,15 +651,20 @@ member \helpref{SetColMinimalAcceptableWidth}{wxgridsetcolminimalacceptablewidth
 Get the minimal width of the given column/row.
 
 
+
 \membersection{wxGrid::GetColRight}\label{wxgridgetcolright}
 
 \constfunc{int}{GetColRight}{\param{int }{col}}
+
+
 
 \membersection{wxGrid::GetColSize}\label{wxgridgetcolsize}
 
 \func{int}{GetColSize}{\param{int }{col}}
 
 Returns the width of the specified column.
+
+
 
 \membersection{wxGrid::GetDefaultCellAlignment}\label{wxgridgetdefaultcellalignment}
 
@@ -556,11 +676,15 @@ values.
 Horizontal alignment will be one of wxALIGN\_LEFT, wxALIGN\_CENTRE or wxALIGN\_RIGHT. \\
 Vertical alignment will be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTTOM.
 
+
+
 \membersection{wxGrid::GetDefaultCellBackgroundColour}\label{wxgridgetdefaultcellbackgroundcolour}
 
 \func{wxColour}{GetDefaultCellBackgroundColour}{\void}
 
 Returns the current default background colour for grid cells.
+
+
 
 \membersection{wxGrid::GetDefaultCellFont}\label{wxgridgetdefaultcellfont}
 
@@ -568,11 +692,15 @@ Returns the current default background colour for grid cells.
 
 Returns the current default font for grid cell text.
 
+
+
 \membersection{wxGrid::GetDefaultCellTextColour}\label{wxgridgetdefaultcelltextcolour}
 
 \func{wxColour}{GetDefaultCellTextColour}{\void}
 
 Returns the current default colour for grid cell text.
+
+
 
 \membersection{wxGrid::GetDefaultColLabelSize}\label{wxgridgetdefaultcollabelsize}
 
@@ -580,11 +708,15 @@ Returns the current default colour for grid cell text.
 
 Returns the default height for column labels.
 
+
+
 \membersection{wxGrid::GetDefaultColSize}\label{wxgridgetdefaultcolsize}
 
 \func{int}{GetDefaultColSize}{\void}
 
 Returns the current default width for grid columns.
+
+
 
 \membersection{wxGrid::GetDefaultEditor}\label{wxgridgetdefaulteditor}
 
@@ -595,6 +727,8 @@ Returns a pointer to the current default grid cell editor.
 See \helpref{wxGridCellEditor}{wxgridcelleditor} and
 the \helpref{wxGrid overview}{gridoverview} for more information about cell editors and renderers.
 
+
+
 \membersection{wxGrid::GetDefaultEditorForCell}\label{wxgridgetdefaulteditorforcell}
 
 \constfunc{wxGridCellEditor*}{GetDefaultEditorForCell}{\param{int }{row}, \param{int }{col}}
@@ -602,9 +736,11 @@ the \helpref{wxGrid overview}{gridoverview} for more information about cell edit
 \constfunc{wxGridCellEditor*}{GetDefaultEditorForCell}{\param{const wxGridCellCoords\& }{c}}
 
 
+
 \membersection{wxGrid::GetDefaultEditorForType}\label{wxgridgetdefaulteditorfortype}
 
 \constfunc{wxGridCellEditor*}{GetDefaultEditorForType}{\param{const wxString\& }{typeName}}
+
 
 
 \membersection{wxGrid::GetDefaultRenderer}\label{wxgridgetdefaultrenderer}
@@ -616,9 +752,13 @@ Returns a pointer to the current default grid cell renderer.
 See \helpref{wxGridCellRenderer}{wxgridcellrenderer} and
 the \helpref{wxGrid overview}{gridoverview} for more information about cell editors and renderers.
 
+
+
 \membersection{wxGrid::GetDefaultRendererForCell}\label{wxgridgetdefaultrendererforcell}
 
 \constfunc{wxGridCellRenderer*}{GetDefaultRendererForCell}{\param{int }{row}, \param{int }{col}}
+
+
 
 \membersection{wxGrid::GetDefaultRendererForType}\label{wxgridgetdefaultrendererfortype}
 
@@ -632,11 +772,15 @@ the \helpref{wxGrid overview}{gridoverview} for more information about cell edit
 
 Returns the default width for the row labels.
 
+
+
 \membersection{wxGrid::GetDefaultRowSize}\label{wxgridgetdefaultrowsize}
 
 \func{int}{GetDefaultRowSize}{\void}
 
 Returns the current default height for grid rows.
+
+
 
 \membersection{wxGrid::GetGridCursorCol}\label{wxgridgetgridcursorcol}
 
@@ -644,11 +788,15 @@ Returns the current default height for grid rows.
 
 Returns the current grid cell column position.
 
+
+
 \membersection{wxGrid::GetGridCursorRow}\label{wxgridgetgridcursorrow}
 
 \func{int}{GetGridCursorRow}{\void}
 
 Returns the current grid cell row position.
+
+
 
 \membersection{wxGrid::GetGridLineColour}\label{wxgridgetgridlinecolour}
 
@@ -656,11 +804,15 @@ Returns the current grid cell row position.
 
 Returns the colour used for grid lines.
 
+
+
 \membersection{wxGrid::GridLinesEnabled}\label{wxgridgridlinesenabled}
 
 \func{bool}{GridLinesEnabled}{\void}
 
 Returns true if drawing of grid lines is turned on, false otherwise.
+
+
 
 \membersection{wxGrid::GetLabelBackgroundColour}\label{wxgridgetlabelbackgroundcolour}
 
@@ -668,17 +820,23 @@ Returns true if drawing of grid lines is turned on, false otherwise.
 
 Returns the colour used for the background of row and column labels.
 
+
+
 \membersection{wxGrid::GetLabelFont}\label{wxgridgetlabelfont}
 
 \func{wxFont}{GetLabelFont}{\void}
 
 Returns the font used for row and column labels.
 
+
+
 \membersection{wxGrid::GetLabelTextColour}\label{wxgridgetlabeltextcolour}
 
 \func{wxColour}{GetLabelTextColour}{\void}
 
 Returns the colour used for row and column label text.
+
+
 
 \membersection{wxGrid::GetNumberCols}\label{wxgridgetnumbercols}
 
@@ -687,15 +845,21 @@ Returns the colour used for row and column label text.
 Returns the total number of grid columns (actually the number of columns in the underlying grid
 table).
 
+
+
 \membersection{wxGrid::GetNumberRows}\label{wxgridgetnumberrows}
 
 \func{int}{GetNumberRows}{\void}
 
 Returns the total number of grid rows (actually the number of rows in the underlying grid table).
 
+
+
 \membersection{wxGrid::GetOrCreateCellAttr}\label{wxgridgetorcreatecellattr}
 
 \constfunc{wxGridCellAttr*}{GetOrCreateCellAttr}{\param{int }{row}, \param{int }{col}}
+
+
 
 \membersection{wxGrid::GetRowMinimalAcceptableHeight}\label{wxgridgetrowminimalacceptableheight}
 
@@ -705,9 +869,12 @@ This returns the value of the lowest row width that can be handled correctly. Se
 member \helpref{SetRowMinimalAcceptableHeight}{wxgridsetrowminimalacceptableheight} for details.
 
 
+
 \membersection{wxGrid::GetRowMinimalHeight}\label{wxgridgetrowminimalheight}
 
 \constfunc{int}{GetRowMinimalHeight}{\param{int }{col}}
+
+
 
 \membersection{wxGrid::GetRowLabelAlignment}\label{wxgridgetrowlabelalignment}
 
@@ -721,20 +888,26 @@ Vertical alignment will be one of wxTOP, wxCENTRE or wxBOTTOM.
 \perlnote{This method takes no parameters and
 returns a 2-element list {\tt ( horiz, vert )}.}
 
+
+
 \membersection{wxGrid::GetRowLabelSize}\label{wxgridgetrowlabelsize}
 
 \func{int}{GetRowLabelSize}{\void}
 
 Returns the current width of the row labels.
 
+
+
 \membersection{wxGrid::GetRowLabelValue}\label{wxgridgetrowlabelvalue}
 
 \func{wxString}{GetRowLabelValue}{\param{int }{row}}
 
 Returns the specified row label. The default grid table class provides numeric row labels.
-If you are using a custom grid table you can override 
+If you are using a custom grid table you can override
 \helpref{wxGridTableBase::GetRowLabelValue}{wxgridtablebasegetcollabelvalue} to provide
-your own labels. 
+your own labels.
+
+
 
 \membersection{wxGrid::GetRowSize}\label{wxgridgetrowsize}
 
@@ -742,17 +915,35 @@ your own labels.
 
 Returns the height of the specified row.
 
-\membersection{wxGrid::GetScrollLinesX}\label{wxgridgetscrolllinesx}
 
-\constfunc{int}{GetScrollLinesX}{\void}
+
+\membersection{wxGrid::GetScrollLineX}\label{wxgridgetscrolllinex}
+
+\constfunc{int}{GetScrollLineX}{\void}
 
 Returns the number of pixels per horizontal scroll increment. The default is 15.
 
-\membersection{wxGrid::GetScrollLinesY}\label{wxgridgetscrolllinesy}
+\wxheading{See also}
 
-\constfunc{int}{GetScrollLinesY}{\void}
+\helpref{wxGrid::GetScrollLineY}{wxgridgetscrollliney},\rtfsp
+\helpref{wxGrid::SetScrollLineX}{wxgridsetscrolllinex},\rtfsp
+\helpref{wxGrid::SetScrollLineY}{wxgridsetscrollliney}
+
+
+
+\membersection{wxGrid::GetScrollLineY}\label{wxgridgetscrollliney}
+
+\constfunc{int}{GetScrollLineY}{\void}
 
 Returns the number of pixels per vertical scroll increment. The default is 15.
+
+\wxheading{See also}
+
+\helpref{wxGrid::GetScrollLineX}{wxgridgetscrolllinex},\rtfsp
+\helpref{wxGrid::SetScrollLineX}{wxgridsetscrolllinex},\rtfsp
+\helpref{wxGrid::SetScrollLineY}{wxgridsetscrollliney}
+
+
 
 \membersection{wxGrid::GetSelectionMode}\label{wxgridgetselectionmode}
 
@@ -760,11 +951,15 @@ Returns the number of pixels per vertical scroll increment. The default is 15.
 
 Returns the current selection mode, see \helpref{wxGrid::SetSelectionMode}{wxgridsetselectionmode}.
 
+
+
 \membersection{wxGrid::GetSelectedCells}\label{wxgridgetselectedcells}
 
 \constfunc{wxGridCellCoordsArray}{GetSelectedCells}{\void}
 
 Returns an array of singly selected cells.
+
+
 
 \membersection{wxGrid::GetSelectedCols}\label{wxgridgetselectedcols}
 
@@ -772,11 +967,15 @@ Returns an array of singly selected cells.
 
 Returns an array of selected cols.
 
+
+
 \membersection{wxGrid::GetSelectedRows}\label{wxgridgetselectedrows}
 
 \constfunc{wxArrayInt}{GetSelectedRows}{\void}
 
 Returns an array of selected rows.
+
+
 
 \membersection{wxGrid::GetSelectionBackground}\label{wxgridgetselectionbackground}
 
@@ -785,12 +984,15 @@ Returns an array of selected rows.
 Access or update the selection fore/back colours
 
 
+
 \membersection{wxGrid::GetSelectionBlockTopLeft}\label{wxgridgetselectionblocktopleft}
 
 \constfunc{wxGridCellCoordsArray}{GetSelectionBlockTopLeft}{\void}
 
-Returns an array of the top left corners of blocks of selected cells, 
+Returns an array of the top left corners of blocks of selected cells,
 see \helpref{wxGrid::GetSelectionBlockBottomRight}{wxgridgetselectionblockbottomright}.
+
+
 
 \membersection{wxGrid::GetSelectionBlockBottomRight}\label{wxgridgetselectionblockbottomright}
 
@@ -799,9 +1001,12 @@ see \helpref{wxGrid::GetSelectionBlockBottomRight}{wxgridgetselectionblockbottom
 Returns an array of the bottom right corners of blocks of selected cells,
 see \helpref{wxGrid::GetSelectionBlockTopLeft}{wxgridgetselectionblocktopleft}.
 
+
+
 \membersection{wxGrid::GetSelectionForeground}\label{wxgridgetselectionforeground}
 
 \constfunc{wxColour}{GetSelectionForeground}{\void}
+
 
 
 \membersection{wxGrid::GetTable}\label{wxgridgettable}
@@ -810,11 +1015,15 @@ see \helpref{wxGrid::GetSelectionBlockTopLeft}{wxgridgetselectionblocktopleft}.
 
 Returns a base pointer to the current table object.
 
+
+
 \membersection{wxGrid::GetViewWidth}\label{wxgridgetviewwidth}
 
 \func{int}{GetViewWidth}{\void}
 
 Returned number of whole cols visible.
+
+
 
 \membersection{wxGrid::HideCellEditControl}\label{wxgridhidecelleditcontrol}
 
@@ -822,11 +1031,15 @@ Returned number of whole cols visible.
 
 Hides the in-place cell edit control.
 
+
+
 \membersection{wxGrid::InitColWidths}\label{wxgridinitcolwidths}
 
 \func{void}{InitColWidths}{\void}
 
 Init the m\_colWidths/Rights arrays
+
+
 
 \membersection{wxGrid::InitRowHeights}\label{wxgridinitrowheights}
 
@@ -837,22 +1050,26 @@ on demand, {\it always} use accessor functions instead!
 
 Init the m\_rowHeights/Bottoms arrays with default values.
 
+
+
 \membersection{wxGrid::InsertCols}\label{wxgridinsertcols}
 
 \func{bool}{InsertCols}{\param{int }{pos = 0}, \param{int }{numCols = 1}, \param{bool }{updateLabels = true}}
 
 Inserts one or more new columns into a grid with the first new column at the
 specified position and returns true if successful. The updateLabels argument is not
-used at present. 
+used at present.
 
 The sequence of actions begins with the grid object requesting the underlying grid
 table to insert new columns. If this is successful the table notifies the grid and the
-grid updates the display. For a default grid (one where you have called 
+grid updates the display. For a default grid (one where you have called
 \helpref{wxGrid::CreateGrid}{wxgridcreategrid}) this process is automatic. If you are
-using a custom grid table (specified with \helpref{wxGrid::SetTable}{wxgridsettable}) 
-then you must override 
+using a custom grid table (specified with \helpref{wxGrid::SetTable}{wxgridsettable})
+then you must override
 \helpref{wxGridTableBase::InsertCols}{wxgridtablebaseinsertcols} in your derived
 table class.
+
+
 
 \membersection{wxGrid::InsertRows}\label{wxgridinsertrows}
 
@@ -860,16 +1077,18 @@ table class.
 
 Inserts one or more new rows into a grid with the first new row at the specified
 position and returns true if successful. The updateLabels argument is not used at
-present. 
+present.
 
 The sequence of actions begins with the grid object requesting the underlying grid
 table to insert new rows. If this is successful the table notifies the grid and the
-grid updates the display. For a default grid (one where you have called 
+grid updates the display. For a default grid (one where you have called
 \helpref{wxGrid::CreateGrid}{wxgridcreategrid}) this process is automatic. If you are
-using a custom grid table (specified with \helpref{wxGrid::SetTable}{wxgridsettable}) 
-then you must override 
+using a custom grid table (specified with \helpref{wxGrid::SetTable}{wxgridsettable})
+then you must override
 \helpref{wxGridTableBase::InsertRows}{wxgridtablebaseinsertrows} in your derived
 table class.
+
+
 
 \membersection{wxGrid::IsCellEditControlEnabled}\label{wxgridiscelleditcontrolenabled}
 
@@ -877,12 +1096,16 @@ table class.
 
 Returns true if the in-place edit control is currently enabled.
 
+
+
 \membersection{wxGrid::IsCurrentCellReadOnly}\label{wxgridiscurrentcellreadonly}
 
 \constfunc{bool}{IsCurrentCellReadOnly}{\void}
 
 Returns true if the current cell has been set to read-only
 (see \helpref{wxGrid::SetReadOnly}{wxgridsetreadonly}).
+
+
 
 \membersection{wxGrid::IsEditable}\label{wxgridiseditable}
 
@@ -892,6 +1115,8 @@ Returns false if the whole grid has been set as read-only or true otherwise.
 See \helpref{wxGrid::EnableEditing}{wxgridenableediting} for more information about
 controlling the editing status of grid cells.
 
+
+
 \membersection{wxGrid::IsInSelection}\label{wxgridisinselection}
 
 \constfunc{bool}{IsInSelection}{\param{int }{row}, \param{int }{col}}
@@ -900,6 +1125,8 @@ controlling the editing status of grid cells.
 
 Is this cell currently selected.
 
+
+
 \membersection{wxGrid::IsReadOnly}\label{wxgridisreadonly}
 
 \constfunc{bool}{IsReadOnly}{\param{int }{row}, \param{int }{col}}
@@ -907,11 +1134,15 @@ Is this cell currently selected.
 Returns true if the cell at the specified location can't be edited.
 See also \helpref{wxGrid::IsReadOnly}{wxgridisreadonly}.
 
+
+
 \membersection{wxGrid::IsSelection}\label{wxgridisselection}
 
 \func{bool}{IsSelection}{\void}
 
 Returns true if there are currently rows, columns or blocks of cells selected.
+
+
 
 \membersection{wxGrid::IsVisible}\label{wxgridisvisible}
 
@@ -922,6 +1153,8 @@ Returns true if there are currently rows, columns or blocks of cells selected.
 Returns true if a cell is either wholly visible (the default) or at least partially
 visible in the grid window.
 
+
+
 \membersection{wxGrid::MakeCellVisible}\label{wxgridmakecellvisible}
 
 \func{void}{MakeCellVisible}{\param{int }{row}, \param{int }{col}}
@@ -929,7 +1162,9 @@ visible in the grid window.
 \func{void}{MakeCellVisible}{\param{const wxGridCellCoords\& }{coords}}
 
 Brings the specified cell into the visible grid cell area with minimal scrolling. Does
-nothing if the cell is already visible. 
+nothing if the cell is already visible.
+
+
 
 \membersection{wxGrid::MoveCursorDown}\label{wxgridmovecursordown}
 
@@ -941,6 +1176,8 @@ will expand if the argument is true or be cleared if the argument is false.
 \wxheading{Keyboard}\\
 This function is called for Down cursor key presses or Shift+Down to expand a selection.
 
+
+
 \membersection{wxGrid::MoveCursorLeft}\label{wxgridmovecursorleft}
 
 \func{bool}{MoveCursorLeft}{\param{bool }{expandSelection}}
@@ -950,6 +1187,8 @@ will expand if the argument is true or be cleared if the argument is false.
 
 \wxheading{Keyboard}\\
 This function is called for Left cursor key presses or Shift+Left to expand a selection.
+
+
 
 \membersection{wxGrid::MoveCursorRight}\label{wxgridmovecursorright}
 
@@ -961,6 +1200,8 @@ will expand if the argument is true or be cleared if the argument is false.
 \wxheading{Keyboard}\\
 This function is called for Right cursor key presses or Shift+Right to expand a selection.
 
+
+
 \membersection{wxGrid::MoveCursorUp}\label{wxgridmovecursorup}
 
 \func{bool}{MoveCursorUp}{\param{bool }{expandSelection}}
@@ -970,6 +1211,8 @@ will expand if the argument is true or be cleared if the argument is false.
 
 \wxheading{Keyboard}\\
 This function is called for Up cursor key presses or Shift+Up to expand a selection.
+
+
 
 \membersection{wxGrid::MoveCursorDownBlock}\label{wxgridmovecursordownblock}
 
@@ -982,6 +1225,8 @@ will expand if the argument is true or be cleared if the argument is false.
 \wxheading{Keyboard}\\
 This function is called for the Ctrl+Down key combination. Shift+Ctrl+Down expands a selection.
 
+
+
 \membersection{wxGrid::MoveCursorLeftBlock}\label{wxgridmovecursorleftblock}
 
 \func{bool}{MoveCursorLeftBlock}{\param{bool }{expandSelection}}
@@ -992,6 +1237,8 @@ will expand if the argument is true or be cleared if the argument is false.
 
 \wxheading{Keyboard}\\
 This function is called for the Ctrl+Left key combination. Shift+Ctrl+left expands a selection.
+
+
 
 \membersection{wxGrid::MoveCursorRightBlock}\label{wxgridmovecursorrightblock}
 
@@ -1004,6 +1251,8 @@ will expand if the argument is true or be cleared if the argument is false.
 \wxheading{Keyboard}\\
 This function is called for the Ctrl+Right key combination. Shift+Ctrl+Right expands a selection.
 
+
+
 \membersection{wxGrid::MoveCursorUpBlock}\label{wxgridmovecursorupblock}
 
 \func{bool}{MoveCursorUpBlock}{\param{bool }{expandSelection}}
@@ -1015,6 +1264,8 @@ will expand if the argument is true or be cleared if the argument is false.
 \wxheading{Keyboard}\\
 This function is called for the Ctrl+Up key combination. Shift+Ctrl+Up expands a selection.
 
+
+
 \membersection{wxGrid::MovePageDown}\label{wxgridmovepagedown}
 
 \func{bool}{MovePageDown}{\void}
@@ -1024,6 +1275,8 @@ becomes the top visible row.
 
 \wxheading{Keyboard}\\
 This function is called for PgDn keypresses.
+
+
 
 \membersection{wxGrid::MovePageUp}\label{wxgridmovepageup}
 
@@ -1035,11 +1288,15 @@ becomes the bottom visible row.
 \wxheading{Keyboard}\\
 This function is called for PgUp keypresses.
 
+
+
 \membersection{wxGrid::RegisterDataType}\label{wxgridregisterdatatype}
 
 \func{void}{RegisterDataType}{\param{const wxString\& }{typeName}, \param{wxGridCellRenderer* }{renderer}, \param{wxGridCellEditor* }{editor}}
 
 Methods for a registry for mapping data types to Renderers/Editors
+
+
 
 \membersection{wxGrid::SaveEditControlValue}\label{wxgridsaveeditcontrolvalue}
 
@@ -1050,22 +1307,28 @@ This is called automatically when the grid cursor moves from the current cell to
 new cell. It is also a good idea to call this function when closing a grid since
 any edits to the final cell location will not be saved otherwise.
 
+
+
 \membersection{wxGrid::SelectAll}\label{wxgridselectall}
 
 \func{void}{SelectAll}{\void}
 
 Selects all cells in the grid.
 
+
+
 \membersection{wxGrid::SelectBlock}\label{wxgridselectblock}
 
-\func{void}{SelectBlock}{\param{int }{topRow}, \param{int }{leftCol}, 
+\func{void}{SelectBlock}{\param{int }{topRow}, \param{int }{leftCol},
 \param{int }{bottomRow}, \param{int }{rightCol}, \param{bool }{addToSelected = false}}
 
-\func{void}{SelectBlock}{\param{const wxGridCellCoords\& }{topLeft}, 
+\func{void}{SelectBlock}{\param{const wxGridCellCoords\& }{topLeft},
 \param{const wxGridCellCoords\& }{bottomRight}, \param{bool }{addToSelected = false}}
 
 Selects a rectangular block of cells. If addToSelected is false then any existing selection will be
-deselected; if true the column will be added to the existing selection. 
+deselected; if true the column will be added to the existing selection.
+
+
 
 \membersection{wxGrid::SelectCol}\label{wxgridselectcol}
 
@@ -1073,6 +1336,8 @@ deselected; if true the column will be added to the existing selection.
 
 Selects the specified column. If addToSelected is false then any existing selection will be
 deselected; if true the column will be added to the existing selection.
+
+
 
 \membersection{wxGrid::SelectionToDeviceRect}\label{wxgridselectiontodevicerect}
 
@@ -1082,12 +1347,15 @@ This function returns the rectangle that encloses the selected cells
 in device coords and clipped to the client size of the grid window.
 
 
+
 \membersection{wxGrid::SelectRow}\label{wxgridselectrow}
 
 \func{void}{SelectRow}{\param{int }{row}, \param{bool }{addToSelected = false}}
 
 Selects the specified row. If addToSelected is false then any existing selection will be
 deselected; if true the row will be added to the existing selection.
+
+
 
 \membersection{wxGrid::SetCellAlignment}\label{wxgridsetcellalignment}
 
@@ -1100,20 +1368,25 @@ Sets the horizontal and vertical alignment for grid cell text at the specified l
 Horizontal alignment should be one of wxALIGN\_LEFT, wxALIGN\_CENTRE or wxALIGN\_RIGHT. \\
 Vertical alignment should be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTTOM.
 
+
+
 \membersection{wxGrid::SetCellBackgroundColour}\label{wxgridsetcellbackgroundcolour}
 
 \func{void}{SetCellBackgroundColour}{\param{int }{row}, \param{int }{col}, \param{const wxColour\&}{ colour}}
+
 
 
 \membersection{wxGrid::SetCellEditor}\label{wxgridsetcelleditor}
 
 \func{void}{SetCellEditor}{\param{int }{row}, \param{int }{col}, \param{wxGridCellEditor* }{editor}}
 
-Sets the editor for the grid cell at the specified location. 
+Sets the editor for the grid cell at the specified location.
 The grid will take ownership of the pointer.
 
 See \helpref{wxGridCellEditor}{wxgridcelleditor} and
 the \helpref{wxGrid overview}{gridoverview} for more information about cell editors and renderers.
+
+
 
 \membersection{wxGrid::SetCellFont}\label{wxgridsetcellfont}
 
@@ -1121,15 +1394,19 @@ the \helpref{wxGrid overview}{gridoverview} for more information about cell edit
 
 Sets the font for text in the grid cell at the specified location.
 
+
+
 \membersection{wxGrid::SetCellRenderer}\label{wxgridsetcellrenderer}
 
 \func{void}{SetCellRenderer}{\param{int }{row}, \param{int }{col}, \param{wxGridCellRenderer* }{renderer}}
 
-Sets the renderer for the grid cell at the specified location. 
+Sets the renderer for the grid cell at the specified location.
 The grid will take ownership of the pointer.
 
 See \helpref{wxGridCellRenderer}{wxgridcellrenderer} and
 the \helpref{wxGrid overview}{gridoverview} for more information about cell editors and renderers.
+
+
 
 \membersection{wxGrid::SetCellTextColour}\label{wxgridsetcelltextcolour}
 
@@ -1141,6 +1418,8 @@ the \helpref{wxGrid overview}{gridoverview} for more information about cell edit
 
 Sets the text colour for the grid cell at the specified location.
 
+
+
 \membersection{wxGrid::SetCellValue}\label{wxgridsetcellvalue}
 
 \func{void}{SetCellValue}{\param{int }{row}, \param{int }{col}, \param{const wxString\& }{s}}
@@ -1151,7 +1430,7 @@ Sets the text colour for the grid cell at the specified location.
 
 Sets the string value for the cell at the specified location. For simple applications where a
 grid object automatically uses a default grid table of string values you use this function together
-with \helpref{wxGrid::GetCellValue}{wxgridgetcellvalue} to access cell values. 
+with \helpref{wxGrid::GetCellValue}{wxgridgetcellvalue} to access cell values.
 
 For more complex applications where you have derived your own grid table class that contains
 various data types (e.g. numeric, boolean or user-defined custom types) then you only use this
@@ -1162,15 +1441,19 @@ The last form is for backward compatibility only.
 See \helpref{wxGridTableBase::CanSetValueAs}{wxgridtablebasecangetvalueas}
 and the \helpref{wxGrid overview}{gridoverview} for more information.
 
+
+
 \membersection{wxGrid::SetColAttr}\label{wxgridsetcolattr}
 
 \func{void}{SetColAttr}{\param{int }{col}, \param{wxGridCellAttr* }{attr}}
 
 Sets the cell attributes for all cells in the specified column.
 
-For more information about controlling grid cell attributes see the 
-\helpref{wxGridCellAttr}{wxgridcellattr} cell attribute class and the 
+For more information about controlling grid cell attributes see the
+\helpref{wxGridCellAttr}{wxgridcellattr} cell attribute class and the
 \helpref{wxGrid classes overview}{gridoverview}.
+
+
 
 \membersection{wxGrid::SetColFormatBool}\label{wxgridsetcolformatbool}
 
@@ -1178,17 +1461,23 @@ For more information about controlling grid cell attributes see the
 
 Sets the specified column to display boolean values. wxGrid displays boolean values with a checkbox.
 
+
+
 \membersection{wxGrid::SetColFormatNumber}\label{wxgridsetcolformatnumber}
 
 \func{void}{SetColFormatNumber}{\param{int }{col}}
 
 Sets the specified column to display integer values.
 
+
+
 \membersection{wxGrid::SetColFormatFloat}\label{wxgridsetcolformatfloat}
 
 \func{void}{SetColFormatFloat}{\param{int }{col}, \param{int }{width = -1}, \param{int }{precision = -1}}
 
 Sets the specified column to display floating point values with the given width and precision.
+
+
 
 \membersection{wxGrid::SetColFormatCustom}\label{wxgridsetcolformatcustom}
 
@@ -1197,6 +1486,8 @@ Sets the specified column to display floating point values with the given width 
 Sets the specified column to display data in a custom format.
 See the \helpref{wxGrid overview}{gridoverview} for more information on working
 with custom data types.
+
+
 
 \membersection{wxGrid::SetColLabelAlignment}\label{wxgridsetcollabelalignment}
 
@@ -1208,19 +1499,25 @@ Horizontal alignment should be one of wxALIGN\_LEFT, wxALIGN\_CENTRE or wxALIGN\
 
 Vertical alignment should be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTTOM.
 
+
+
 \membersection{wxGrid::SetColLabelSize}\label{wxgridsetcollabelsize}
 
 \func{void}{SetColLabelSize}{\param{int }{height}}
 
 Sets the height of the column labels.
 
+
+
 \membersection{wxGrid::SetColLabelValue}\label{wxgridsetcollabelvalue}
 
 \func{void}{SetColLabelValue}{\param{int }{col}, \param{const wxString\&}{ value}}
 
-Set the value for the given column label. If you are using a derived grid table you must 
+Set the value for the given column label. If you are using a derived grid table you must
 override \helpref{wxGridTableBase::SetColLabelValue}{wxgridtablebasesetcollabelvalue}
 for this to have any effect.
+
+
 
 \membersection{wxGrid::SetColMinimalWidth}\label{wxgridsetcolminimalwidth}
 
@@ -1231,6 +1528,8 @@ because it will not resize a column that is already narrower than the minimal wi
 The width argument must be higher than the minimimal acceptable column width, see
 \helpref{wxGrid::GetColMinimalAcceptableWidth}{wxgridgetcolminimalacceptablewidth}.
 
+
+
 \membersection{wxGrid::SetColMinimalAcceptableWidth}\label{wxgridsetcolminimalacceptablewidth}
 
 \func{void}{SetColMinimalAcceptableWidth}{\param{int }{width}}
@@ -1240,23 +1539,27 @@ allows smaller grid cells to be dealt with correctly. Specifying a value here wh
 than the actual minimum size will incur a performance penalty in the functions which perform
 grid cell index lookup on the basis of screen coordinates.
 This should normally be called when creating the grid because it will not resize existing columns
-with sizes smaller than the value specified here. 
+with sizes smaller than the value specified here.
+
+
 
 \membersection{wxGrid::SetColSize}\label{wxgridsetcolsize}
 
 \func{void}{SetColSize}{\param{int }{col}, \param{int }{width}}
 
-Sets the width of the specified column. 
+Sets the width of the specified column.
 
 This function does not refresh the grid. If you are calling it outside of a BeginBatch / EndBatch
-block you can use \helpref{wxGrid::ForceRefresh}{wxgridforcerefresh} to see the changes. 
+block you can use \helpref{wxGrid::ForceRefresh}{wxgridforcerefresh} to see the changes.
 
 Automatically sizes the column to fit its contents. If setAsMin is true the calculated width will
 also be set as the minimal width for the column.
 
 \wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
-The memory requirements for this could become prohibitive if your grid is very large. 
+The memory requirements for this could become prohibitive if your grid is very large.
+
+
 
 \membersection{wxGrid::SetDefaultCellAlignment}\label{wxgridsetdefaultcellalignment}
 
@@ -1268,11 +1571,15 @@ Horizontal alignment should be one of wxALIGN\_LEFT, wxALIGN\_CENTRE or wxALIGN\
 
 Vertical alignment should be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTTOM.
 
+
+
 \membersection{wxGrid::SetDefaultCellBackgroundColour}\label{wxgridsetdefaultcellbackgroundcolour}
 
 \func{void}{SetDefaultCellBackgroundColour}{\param{const wxColour\&}{ colour}}
 
 Sets the default background colour for grid cells.
+
+
 
 \membersection{wxGrid::SetDefaultCellFont}\label{wxgridsetdefaultcellfont}
 
@@ -1280,11 +1587,15 @@ Sets the default background colour for grid cells.
 
 Sets the default font to be used for grid cell text.
 
+
+
 \membersection{wxGrid::SetDefaultCellTextColour}\label{wxgridsetdefaultcelltextcolour}
 
 \func{void}{SetDefaultCellTextColour}{\param{const wxColour\&}{ colour}}
 
 Sets the current default colour for grid cell text.
+
+
 
 \membersection{wxGrid::SetDefaultEditor}\label{wxgridsetdefaulteditor}
 
@@ -1295,6 +1606,8 @@ Sets the default editor for grid cells. The grid will take ownership of the poin
 See \helpref{wxGridCellEditor}{wxgridcelleditor} and
 the \helpref{wxGrid overview}{gridoverview} for more information about cell editors and renderers.
 
+
+
 \membersection{wxGrid::SetDefaultRenderer}\label{wxgridsetdefaultrenderer}
 
 \func{void}{SetDefaultRenderer}{\param{wxGridCellRenderer* }{renderer}}
@@ -1304,12 +1617,16 @@ Sets the default renderer for grid cells. The grid will take ownership of the po
 See \helpref{wxGridCellRenderer}{wxgridcellrenderer} and
 the \helpref{wxGrid overview}{gridoverview} for more information about cell editors and renderers.
 
+
+
 \membersection{wxGrid::SetDefaultColSize}\label{wxgridsetdefaultcolsize}
 
 \func{void}{SetDefaultColSize}{\param{int }{width}, \param{bool }{resizeExistingCols = false}}
 
 Sets the default width for columns in the grid. This will only affect columns subsequently added to
-the grid unless resizeExistingCols is true. 
+the grid unless resizeExistingCols is true.
+
+
 
 \membersection{wxGrid::SetDefaultRowSize}\label{wxgridsetdefaultrowsize}
 
@@ -1318,12 +1635,16 @@ the grid unless resizeExistingCols is true.
 Sets the default height for rows in the grid. This will only affect rows subsequently added
 to the grid unless resizeExistingRows is true.
 
+
+
 \membersection{wxGrid::SetGridCursor}\label{wxgridsetgridcursor}
 
 \func{void}{SetGridCursor}{\param{int }{row}, \param{int }{col}}
 
-Set the grid cursor to the specified cell. 
+Set the grid cursor to the specified cell.
 This function calls \helpref{wxGrid::MakeCellVisible}{wxgridmakecellvisible}.
+
+
 
 \membersection{wxGrid::SetGridLineColour}\label{wxgridsetgridlinecolour}
 
@@ -1331,11 +1652,15 @@ This function calls \helpref{wxGrid::MakeCellVisible}{wxgridmakecellvisible}.
 
 Sets the colour used to draw grid lines.
 
+
+
 \membersection{wxGrid::SetLabelBackgroundColour}\label{wxgridsetlabelbackgroundcolour}
 
 \func{void}{SetLabelBackgroundColour}{\param{const wxColour\&}{ colour}}
 
 Sets the background colour for row and column labels.
+
+
 
 \membersection{wxGrid::SetLabelFont}\label{wxgridsetlabelfont}
 
@@ -1343,11 +1668,15 @@ Sets the background colour for row and column labels.
 
 Sets the font for row and column labels.
 
+
+
 \membersection{wxGrid::SetLabelTextColour}\label{wxgridsetlabeltextcolour}
 
 \func{void}{SetLabelTextColour}{\param{const wxColour\&}{ colour}}
 
 Sets the colour for row and column label text.
+
+
 
 \membersection{wxGrid::SetMargins}\label{wxgridsetmargins}
 
@@ -1356,15 +1685,21 @@ Sets the colour for row and column label text.
 A grid may occupy more space than needed for its rows/columns. This
 function allows to set how big this extra space is
 
+
+
 \membersection{wxGrid::SetOrCalcColumnSizes}\label{wxgridsetorcalccolumnsizes}
 
 \func{int}{SetOrCalcColumnSizes}{\param{bool }{calcOnly}, \param{bool }{setAsMin = true}}
 
 Common part of AutoSizeColumn/Row() and GetBestSize()
 
+
+
 \membersection{wxGrid::SetOrCalcRowSizes}\label{wxgridsetorcalcrowsizes}
 
 \func{int}{SetOrCalcRowSizes}{\param{bool }{calcOnly}, \param{bool }{setAsMin = true}}
+
+
 
 \membersection{wxGrid::SetReadOnly}\label{wxgridsetreadonly}
 
@@ -1373,6 +1708,8 @@ Common part of AutoSizeColumn/Row() and GetBestSize()
 Makes the cell at the specified location read-only or editable.
 See also \helpref{wxGrid::IsReadOnly}{wxgridisreadonly}.
 
+
+
 \membersection{wxGrid::SetRowAttr}\label{wxgridsetrowattr}
 
 \func{void}{SetRowAttr}{\param{int }{row}, \param{wxGridCellAttr* }{attr}}
@@ -1380,6 +1717,8 @@ See also \helpref{wxGrid::IsReadOnly}{wxgridisreadonly}.
 Sets the cell attributes for all cells in the specified row.
 See the \helpref{wxGridCellAttr}{wxgridcellattr} class for more information
 about controlling cell attributes.
+
+
 
 \membersection{wxGrid::SetRowLabelAlignment}\label{wxgridsetrowlabelalignment}
 
@@ -1391,19 +1730,25 @@ Horizontal alignment should be one of wxALIGN\_LEFT, wxALIGN\_CENTRE or wxALIGN\
 
 Vertical alignment should be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTTOM.
 
+
+
 \membersection{wxGrid::SetRowLabelSize}\label{wxgridsetrowlabelsize}
 
 \func{void}{SetRowLabelSize}{\param{int }{width}}
 
 Sets the width of the row labels.
 
+
+
 \membersection{wxGrid::SetRowLabelValue}\label{wxgridsetrowlabelvalue}
 
 \func{void}{SetRowLabelValue}{\param{int }{row}, \param{const wxString\&}{ value}}
 
-Set the value for the given row label. If you are using a derived grid table you must 
-override \helpref{wxGridTableBase::SetRowLabelValue}{wxgridtablebasesetrowlabelvalue} 
+Set the value for the given row label. If you are using a derived grid table you must
+override \helpref{wxGridTableBase::SetRowLabelValue}{wxgridtablebasesetrowlabelvalue}
 for this to have any effect.
+
+
 
 \membersection{wxGrid::SetRowMinimalHeight}\label{wxgridsetrowminimalheight}
 
@@ -1414,6 +1759,8 @@ because it will not resize a row that is already shorter than the minimal height
 The height argument must be higher than the minimimal acceptable row height, see
 \helpref{wxGrid::GetRowMinimalAcceptableHeight}{wxgridgetrowminimalacceptableheight}.
 
+
+
 \membersection{wxGrid::SetRowMinimalAcceptableHeight}\label{wxgridsetrowminimalacceptableheight}
 
 \func{void}{SetRowMinimalAcceptableHeight}{\param{int }{height}}
@@ -1423,16 +1770,18 @@ allows smaller grid cells to be dealt with correctly. Specifying a value here wh
 than the actual minimum size will incur a performance penalty in the functions which perform
 grid cell index lookup on the basis of screen coordinates.
 This should normally be called when creating the grid because it will not resize existing rows
-with sizes smaller than the value specified here. 
+with sizes smaller than the value specified here.
+
+
 
 \membersection{wxGrid::SetRowSize}\label{wxgridsetrowsize}
 
 \func{void}{SetRowSize}{\param{int }{row}, \param{int }{height}}
 
-Sets the height of the specified row. 
+Sets the height of the specified row.
 
 This function does not refresh the grid. If you are calling it outside of a BeginBatch / EndBatch
-block you can use \helpref{wxGrid::ForceRefresh}{wxgridforcerefresh} to see the changes. 
+block you can use \helpref{wxGrid::ForceRefresh}{wxgridforcerefresh} to see the changes.
 
 Automatically sizes the column to fit its contents. If setAsMin is true the calculated width will
 also be set as the minimal width for the column.
@@ -1440,32 +1789,52 @@ also be set as the minimal width for the column.
 \wxheading{Note}
 
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
-The memory requirements for this could become prohibitive if your grid is very large. 
+The memory requirements for this could become prohibitive if your grid is very large.
 
-\membersection{wxGrid::SetScrollLinesX}\label{wxgridsetscrolllinesx}
 
-\func{void}{SetScrollLinesX}{\param{int }{x}}
+
+\membersection{wxGrid::SetScrollLineX}\label{wxgridsetscrolllinex}
+
+\func{void}{SetScrollLineX}{\param{int }{x}}
 
 Sets the number of pixels per horizontal scroll increment. The default is 15.
 Sometimes wxGrid has trouble setting the scrollbars correctly due to rounding
 errors: setting this to 1 can help.
 
-\membersection{wxGrid::SetScrollLinesY}\label{wxgridsetscrolllinesy}
+\wxheading{See also}
 
-\func{void}{SetScrollLinesY}{\param{int }{y}}
+\helpref{wxGrid::GetScrollLineX}{wxgridgetscrolllinex},\rtfsp
+\helpref{wxGrid::GetScrollLineY}{wxgridgetscrollliney},\rtfsp
+\helpref{wxGrid::SetScrollLineY}{wxgridsetscrollliney}
+
+
+
+\membersection{wxGrid::SetScrollLineY}\label{wxgridsetscrollliney}
+
+\func{void}{SetScrollLineY}{\param{int }{y}}
 
 Sets the number of pixels per vertical scroll increment. The default is 15.
 Sometimes wxGrid has trouble setting the scrollbars correctly due to rounding
 errors: setting this to 1 can help.
+
+\wxheading{See also}
+
+\helpref{wxGrid::GetScrollLineX}{wxgridgetscrolllinex},\rtfsp
+\helpref{wxGrid::GetScrollLineY}{wxgridgetscrollliney},\rtfsp
+\helpref{wxGrid::SetScrollLineX}{wxgridsetscrolllinex}
+
+
 
 \membersection{wxGrid::SetSelectionBackground}\label{wxgridsetselectionbackground}
 
 \func{void}{SetSelectionBackground}{\param{const wxColour\& }{c}}
 
 
+
 \membersection{wxGrid::SetSelectionForeground}\label{wxgridsetselectionforeground}
 
 \func{void}{SetSelectionForeground}{\param{const wxColour\& }{c}}
+
 
 
 \membersection{wxGrid::SetSelectionMode}\label{wxgridsetselectionmode}
@@ -1482,17 +1851,21 @@ Set the selection behaviour of the grid.
 
 \docparam{wxGrid::wxGridSelectColumns}{Selections will consist of whole columns.}
 
+
+
 \membersection{wxGrid::SetTable}\label{wxgridsettable}
 
 \func{bool}{SetTable}{\param{wxGridTableBase* }{table}, \param{bool }{takeOwnership = false}, \param{wxGrid::wxGridSelectionModes }{selmode = wxGrid::wxGridSelectCells}}
 
 Passes a pointer to a custom grid table to be used by the grid. This should be called
 after the grid constructor and before using the grid object. If takeOwnership is set to
-true then the table will be deleted by the wxGrid destructor. 
+true then the table will be deleted by the wxGrid destructor.
 
 Use this function instead of \helpref{wxGrid::CreateGrid}{wxgridcreategrid} when your
 application involves complex or non-string data or data sets that are too large to fit
-wholly in memory. 
+wholly in memory.
+
+
 
 \membersection{wxGrid::ShowCellEditControl}\label{wxgridshowcelleditcontrol}
 
@@ -1500,12 +1873,16 @@ wholly in memory.
 
 Displays the in-place cell edit control for the current cell.
 
+
+
 \membersection{wxGrid::XToCol}\label{wxgridxtocol}
 
 \func{int}{XToCol}{\param{int }{x}}
 
-Returns the grid column that corresponds to the logical x coordinate. Returns
+Returns the grid column that corresponds to the logical x coordinate. Returns 
 {\tt wxNOT\_FOUND} if there is no column at the x position.
+
+
 
 \membersection{wxGrid::XToEdgeOfCol}\label{wxgridxtoedgeofcol}
 
@@ -1514,6 +1891,8 @@ Returns the grid column that corresponds to the logical x coordinate. Returns
 Returns the column whose right hand edge is close to the given logical x position.
 If no column edge is near to this position {\tt wxNOT\_FOUND} is returned.
 
+
+
 \membersection{wxGrid::YToEdgeOfRow}\label{wxgridytoedgeofrow}
 
 \func{int}{YToEdgeOfRow}{\param{int }{y}}
@@ -1521,10 +1900,12 @@ If no column edge is near to this position {\tt wxNOT\_FOUND} is returned.
 Returns the row whose bottom edge is close to the given logical y position.
 If no row edge is near to this position {\tt wxNOT\_FOUND} is returned.
 
+
+
 \membersection{wxGrid::YToRow}\label{wxgridytorow}
 
 \func{int}{YToRow}{\param{int }{y}}
 
-Returns the grid row that corresponds to the logical y coordinate. Returns
+Returns the grid row that corresponds to the logical y coordinate. Returns 
 {\tt wxNOT\_FOUND} if there is no row at the y position.
 

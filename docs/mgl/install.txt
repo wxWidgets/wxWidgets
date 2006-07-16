@@ -1,33 +1,36 @@
-wxWidgets 2.6.2 for MGL installation
-------------------------------------
+wxWidgets for MGL installation
+------------------------------
 
 IMPORTANT NOTE:
+
+  wxMGL is currently in need of some work to bring it up to the
+  standard of some of the other wxWidgets ports.
 
   If you experience problems installing, please re-read these
   instructions and other related files (todo.txt, bugs.txt and
   osname.txt for your platform if it exists) carefully before
   mailing wxwin-users or the author. Preferably, try to fix the
   problem first and then send a patch to the author.
-  
-  When sending bug reports tell us what version of wxWidgets you are 
-  using (including the beta) and what compiler on what system. One 
+
+  When sending bug reports tell us what version of wxWidgets you are
+  using (including the beta) and what compiler on what system. One
   example: wxMGL 2.6.2, gcc 2.95.3, Redhat 7.0
 
 First steps
 -----------
 
-- Download SciTech MGL library (version 5.0) from http://www.scitechsoft.com.
-  The downloads page is here (you need MGL version 5.0beta7 or newer):
+- Download SciTech MGL library from http://www.scitechsoft.com. The
+  downloads page is here (you need MGL version 5.0beta7 or newer):
   http://scitechsoft.com/products/dev/mgl_download/mgl_down.html
-  
+
   Install MGL according to provided instructions. In particular, make sure that
   MGL_ROOT and NUCLEUS_PATH environment variables are set before attempting to
   build wxMGL.
 
   Make sure you installed all MGL components, including the "fonts" package
-  (it's called mgl50b7-font.tar.gz in Linux version). It is important to have
+  (it's called mgl_<ver>-font.tar.gz in Linux version). It is important to have
   SciTech's basic fonts in $(MGL_ROOT)/fonts directory (you may want to add
-  Arial TrueType font for better output quality) and basic cursors in 
+  Arial TrueType font for better output quality) and basic cursors in
   $(MGL_ROOT)/cursors. wxMGL depends on their presence.
 
 - Download wxMGL-x.y.z.tgz, where x.y.z is the version number.
@@ -36,9 +39,6 @@ First steps
 
 - Make a directory such as ~/wx and unarchive the files into this
   directory.
-
-- It is recommended that you install bison and flex; using yacc
-  and lex may require tweaking of the makefiles.
 
 - You can now use configure or makefiles to build wxWidgets and the samples.
   In case of problems, please use GNU make.
@@ -56,9 +56,9 @@ Following systems are supported by wxMGL so far:
 ----------------------------
 
 These instructions apply to installation on a Unix system (such as Linux). Please
-see bellow for information on using configure on non-Unix platforms.
+see below for information on using configure on non-Unix platforms.
 
-If you compile wxWidgets on Linux for the first time and don't like to read 
+If you compile wxWidgets on Linux for the first time and don't like to read
 install instructions just do (in the base dir):
 
 > ./configure --with-mgl
@@ -150,7 +150,7 @@ tar112ab.zip B     236,427 000305 GNU Tar 1.12a for DJGPP V2
 whic211b.zip B      86,296 000911 GNU which 2.11 for DJGPP V2
 
 The system you compile on must support long file names. You can use Windows 9x
-or Windows 2000/XP or later. For example:
+or an x86 version of Windows 2000/XP or later. For example:
 
 C:\>set MGL_ROOT=c:/scitech
 C:\>set DJGPP=c:/djgpp/djgpp.env
@@ -170,22 +170,24 @@ configure, you only have to specify the target:
 > ./configure --with-mgl --build=i586-linux --host=i586-pc-msdosdjgpp
 > make
 
-For this to work, you must have installed a cross compiler on your system. Ready
-made binaries are not available for very many systems, so usually this means you
-must obtain the djgpp sources and compile them yourself.
+For this to work, you must have installed a cross compiler on your system.
 
-NetBSD does have a binary package which can be installed with:
+Linux rpms are available here:
+    http://ap1.pp.fi/djgpp/gcc/cross-compiler/index.html
+
+NetBSD has a binary package which can be installed with:
     # pkg_add cross-i386-msdosdjgpp
 
-You can also try asking on the wx-dev mailing list. If someone else has already
-built a cross-compiler for you platform they may be willing to send you the
-binaries.
+For other systems you will need to obtain the djgpp sources and compile them
+yourself.
 
 
 * Building wxMGL for MS-DOS using Watcom C/C++
 -----------------------------------------------
 
-You will need Watcom C/C++ compiler version 11 or newer (Watcom is going to be 
+<Note: this section is currently out of date>
+
+You will need Watcom C/C++ compiler version 11 or newer (Watcom is going to be
 OpenSourced by SciTech, check out http://www.openwatcom.org).
 
 1. Edit $(WXDIR)\include\wx\univ\setup.h to suit your needs (in same way as you
@@ -195,7 +197,7 @@ OpenSourced by SciTech, check out http://www.openwatcom.org).
    > wmake -f makefile.wat all
 
 3. You can compile the samples by typing 'wmake -f makefile.mgl all' in sample
-   directory if this file is available. If it is not, copy makefile.wat to 
+   directory if this file is available. If it is not, copy makefile.wat to
    makefile.mgl and replace the line that says
 
        !include $(WXDIR)\src\makeprog.wat
@@ -205,8 +207,8 @@ OpenSourced by SciTech, check out http://www.openwatcom.org).
        !include $(WXDIR)\src\mgl\makeprog.wat
 
 
-Compilation notes for MGL 5.1
------------------------------
+Compilation notes for MGL with gcc
+----------------------------------
 
 The mvis library doesn't compile with current versions of gcc. However wxMGL
 does not use this part of MGL, so it can be taken out of the compile, e.g.:
@@ -214,82 +216,29 @@ does not use this part of MGL, so it can be taken out of the compile, e.g.:
 --- scitech/src/makefile.orig	2004-04-15 20:36:32.000000000 +0100
 +++ scitech/src/makefile	2005-04-26 01:50:12.000000000 +0100
 @@ -88,7 +88,7 @@
- 
+
  # Target to build libraries for one compiler for SciTech MGL Graphics Library
- 
+
 -all_mgl:    $(T_PM) $(T_GCONSOLE) $(T_SNAP) $(T_TECH) $(T_MVIS) $(T_FIXED) \
 +all_mgl:    $(T_PM) $(T_GCONSOLE) $(T_SNAP) $(T_TECH) $(T_FIXED) \
              $(T_GM) $(T_GLUT) $(T_MGL)
      @$(ECHO) =============================================================================
      @$(ECHO) DONE: Single compiler MGL build completed successfully!
 
-The dos version of _lztimer.asm can't be assembled by the GNU assember. A
-newer version is available from Scitech, a patch between the version in MGL
-5.1 and the newer version is included below:
+The following small change is also required to include/tcl/hashmap.hpp:
 
---- scitech/src/pm/dos/_lztimer.asm.orig	2004-04-15 20:36:33.000000000 +0100
-+++ scitech/src/pm/dos/_lztimer.asm	2005-04-26 18:39:57.000000000 +0100
-@@ -4,11 +4,11 @@
- ;*
- ;*  ========================================================================
- ;*
--;*   Copyright (C) 1991-2002 SciTech Software, Inc. All rights reserved.
-+;*   Copyright (C) 1991-2004 SciTech Software, Inc. All rights reserved.
- ;*
- ;*   This file may be distributed and/or modified under the terms of the
--;*   GNU Lesser General Public License version 2.1 as published by the Free
--;*   Software Foundation and appearing in the file LICENSE.LGPL included
-+;*   GNU General Public License version 2.0 as published by the Free
-+;*   Software Foundation and appearing in the file LICENSE.GPL included
- ;*   in the packaging of this file.
- ;*
- ;*   Licensees holding a valid Commercial License for this product from
-@@ -288,8 +288,8 @@
- ; Convert the BIOS time to microseconds
- 
- @@CalcBIOSTime:
--        mov     ax,[WORD EndBIOSCount]
--        sub     ax,[WORD StartBIOSCount]
-+        mov     ax,[EndBIOSCount]
-+        sub     ax,[StartBIOSCount]
-         mov     dx,54925            ; Number of microseconds each
-                                     ;  BIOS count represents.
-         mul     dx
-@@ -352,17 +352,17 @@
- ; See if more than an hour passed during timing. If so, notify the user.
- 
- @@CheckForHour:
--        mov     ax,[WORD StartBIOSCount+2]
--        cmp     ax,[WORD EndBIOSCount+2]
-+        mov     ax,[StartBIOSCount+2]
-+        cmp     ax,[EndBIOSCount+2]
-         jz      @@CalcBIOSTime      ; Hour count didn't change, so
-                                     ;  everything is fine
- 
-         inc     ax
--        cmp     ax,[WORD EndBIOSCount+2]
-+        cmp     ax,[EndBIOSCount+2]
-         jnz     @@TestTooLong       ; Two hour boundaries passed, so the
-                                     ;  results are no good
--        mov     ax,[WORD EndBIOSCount]
--        cmp     ax,[WORD StartBIOSCount]
-+        mov     ax,[EndBIOSCount]
-+        cmp     ax,[StartBIOSCount]
-         jb      @@CalcBIOSTime      ; a single hour boundary passed. That's
-                                     ; OK, so long as the total time wasn't
-                                     ; more than an hour.
-@@ -384,8 +384,8 @@
- ; Convert the BIOS time to microseconds
- 
- @@CalcBIOSTime:
--        mov     ax,[WORD EndBIOSCount]
--        sub     ax,[WORD StartBIOSCount]
-+        mov     ax,[EndBIOSCount]
-+        sub     ax,[StartBIOSCount]
-         mov     dx,54925            ; Number of microseconds each
-                                     ;  BIOS count represents.
-         mul     dx
-     
+--- scitech/include/tcl/hashtab.hpp.orig        2006-01-20 19:51:12.000000000 +0000
++++ scitech/include/tcl/hashtab.hpp     2006-01-22 14:12:12.000000000 +0000
+@@ -60,7 +60,7 @@
+     TCHashTableNode **prev;
+
+     friend class TCGenHashTable;
+-    friend  ostream& operator << (ostream& o,TCGenHashTable& h);
++    friend  ostream& operator << (ostream& o, class TCGenHashTable& h);
+ public:
+             // Constructor to satisfy some compilers :-(
+             TCHashTableNode() {};
+
 
 Bug reports
 -----------
@@ -300,3 +249,4 @@ compiler and the error message(s) to the wxwin-developers mailing list at:
     wx-dev@lists.wxwindows.org
 
 Vaclav Slavik, Julian Smart, Robert Roebling and Vadim Zeitlin, February 2002.
+Mike Wetherell 2005/2006

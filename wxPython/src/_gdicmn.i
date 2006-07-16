@@ -113,8 +113,8 @@ enum wxStockCursor
 
 DocStr( wxSize,
 "wx.Size is a useful data structure used to represent the size of
-something.  It simply contians integer width and height
-proprtites.  In most places in wxPython where a wx.Size is
+something.  It simply contains integer width and height
+properties.  In most places in wxPython where a wx.Size is
 expected a (width, height) tuple can be used instead.", "");
 
 class wxSize
@@ -130,19 +130,33 @@ public:
 
     ~wxSize();
 
-// None/NULL is now handled properly by the typemap, so these are not needed.
-//     %extend {
-//         bool __eq__(const wxSize* other) { return other ? (*self == *other) : false; }
-//         bool __ne__(const wxSize* other) { return other ? (*self != *other) : true;  }
-//     }
+    
+    %extend {
+        KeepGIL(__eq__);
+        DocStr(__eq__, "Test for equality of wx.Size objects.", "");
+        bool __eq__(PyObject* other) {
+            wxSize  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxSize_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
 
-    DocDeclStr(
-        bool, operator==(const wxSize& sz),
-        "Test for equality of wx.Size objects.", "");
-
-    DocDeclStr(
-        bool, operator!=(const wxSize& sz),
-        "Test for inequality.", "");
+        
+        KeepGIL(__ne__);
+        DocStr(__ne__, "Test for inequality of wx.Size objects.", "");
+        bool __ne__(PyObject* other) {
+            wxSize  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxSize_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
+    }
 
     DocDeclStr(
         wxSize, operator+(const wxSize& sz),
@@ -235,13 +249,32 @@ public:
     
     ~wxRealPoint();
 
-    DocDeclStr(
-        bool, operator==(const wxRealPoint& pt),
-        "Test for equality of wx.RealPoint objects.", "");
+    %extend {
+        KeepGIL(__eq__);
+        DocStr(__eq__, "Test for equality of wx.RealPoint objects.", "");
+        bool __eq__(PyObject* other) {
+            wxRealPoint  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxRealPoint_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
 
-    DocDeclStr(
-        bool, operator!=(const wxRealPoint& pt),
-        "Test for inequality of wx.RealPoint objects.", "");
+        
+        KeepGIL(__ne__);
+        DocStr(__ne__, "Test for inequality of wx.RealPoint objects.", "");
+        bool __ne__(PyObject* other) {
+            wxRealPoint  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxRealPoint_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
+    }
 
     
     DocDeclStr(
@@ -311,14 +344,32 @@ public:
     ~wxPoint();
 
     
-    DocDeclStr(
-        bool, operator==(const wxPoint& pt),
-        "Test for equality of wx.Point objects.", "");
+    %extend {
+        KeepGIL(__eq__);
+        DocStr(__eq__, "Test for equality of wx.Point objects.", "");
+        bool __eq__(PyObject* other) {
+            wxPoint  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxPoint_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
 
-    DocDeclStr(
-        bool, operator!=(const wxPoint& pt),
-        "Test for inequality of wx.Point objects.", "");
-
+        
+        KeepGIL(__ne__);
+        DocStr(__ne__, "Test for inequality of wx.Point objects.", "");
+        bool __ne__(PyObject* other) {
+            wxPoint  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxPoint_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
+    }
 
 
 //     %nokwargs operator+;
@@ -560,13 +611,32 @@ bottom, otherwise it is moved to the left or top respectively.", "",
         wxRect&, operator+=(const wxRect& rect),
         "Add the properties of rect to this rectangle, updating this rectangle.", "");
 
-    DocDeclStr(
-        bool, operator==(const wxRect& rect) const,
-        "Test for equality.", "");
+    %extend {
+        KeepGIL(__eq__);
+        DocStr(__eq__, "Test for equality of wx.Rect objects.", "");
+        bool __eq__(PyObject* other) {
+            wxRect  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxRect_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
 
-    DocDeclStr(
-        bool, operator!=(const wxRect& rect) const,
-        "Test for inequality.", "");
+        
+        KeepGIL(__ne__);
+        DocStr(__ne__, "Test for inequality of wx.Rect objects.", "");
+        bool __ne__(PyObject* other) {
+            wxRect  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxRect_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
+    }
 
     
     DocStr( Inside, "Return True if the point is (not strcitly) inside the rect.", "");
@@ -707,13 +777,32 @@ public:
     wxPoint2D& operator*=(const wxPoint2D& pt);
     wxPoint2D& operator/=(const wxPoint2D& pt);
 
-    DocDeclStr(
-        bool, operator==(const wxPoint2D& pt) const,
-        "Test for equality", "");
-    
-    DocDeclStr(
-        bool, operator!=(const wxPoint2D& pt) const,
-        "Test for inequality", "");
+    %extend {
+        KeepGIL(__eq__);
+        DocStr(__eq__, "Test for equality of wx.Point2D objects.", "");
+        bool __eq__(PyObject* other) {
+            wxPoint2D  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxPoint2D_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+
+        
+        KeepGIL(__ne__);
+        DocStr(__ne__, "Test for inequality of wx.Point2D objects.", "");
+        bool __ne__(PyObject* other) {
+            wxPoint2D  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxPoint2D_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
+    }
 
     %Rename(x, double,  m_x);
     %Rename(y, double,  m_y);

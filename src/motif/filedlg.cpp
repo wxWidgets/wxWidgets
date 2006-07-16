@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "filedlg.h"
+#pragma implementation "filedlgmot.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".

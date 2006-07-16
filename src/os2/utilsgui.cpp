@@ -428,8 +428,10 @@ void wxDisplaySize(
         ::DevCloseDC(hdcScreen);
         ::WinReleasePS(hpsScreen);
     }
-    *pWidth = (int)lWidth;
-    *pHeight = (int)lHeight;
+    if (pWidth)
+        *pWidth = (int)lWidth;
+    if (pHeight)
+        *pHeight = (int)lHeight;
 }
 
 void wxDisplaySizeMM(

@@ -1162,19 +1162,24 @@ void wxGridCellFloatEditor::SetParameters(const wxString& params)
 wxString wxGridCellFloatEditor::GetString() const
 {
     wxString fmt;
-    if ( m_width == -1 )
-    {
-        // default width/precision
-        fmt = _T("%f");
-    }
-    else if ( m_precision == -1 )
+    if ( m_precision == -1 && m_width != -1)
     {
         // default precision
         fmt.Printf(_T("%%%d.f"), m_width);
     }
-    else
+    else if ( m_precision != -1 && m_width == -1)
+    {
+        // default width
+        fmt.Printf(_T("%%.%df"), m_precision);
+    }
+    else if ( m_precision != -1 && m_width != -1 )
     {
         fmt.Printf(_T("%%%d.%df"), m_width, m_precision);
+    }
+    else
+    {
+        // default width/precision
+        fmt = _T("%f");
     }
 
     return wxString::Format(fmt, m_valueOld);
@@ -1491,7 +1496,13 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
     Combo()->SetFocus();
 
     if (evtHandler)
+    {
+        // When dropping down the menu, a kill focus event
+        // happens after this point, so we can't reset the flag yet.
+#if !defined(__WXGTK20__)
         evtHandler->SetInSetFocus(false);
+#endif
+    }
 }
 
 bool wxGridCellChoiceEditor::EndEdit(int row, int col,
@@ -4160,8 +4171,7 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
 
         m_table = table;
         m_table->SetView( this );
-        if (takeOwnership)
-            m_ownTable = true;
+        m_ownTable = takeOwnership;
         m_selection = new wxGridSelection( this, selmode );
 
         CalcDimensions();
@@ -6190,6 +6200,32 @@ int wxGrid::SendEvent( const wxEventType type,
        claimed = GetEventHandler()->ProcessEvent(gridEvt);
        vetoed = !gridEvt.IsAllowed();
    }
+   else if ( type == wxEVT_GRID_LABEL_LEFT_CLICK ||
+             type == wxEVT_GRID_LABEL_LEFT_DCLICK ||
+             type == wxEVT_GRID_LABEL_RIGHT_CLICK ||
+             type == wxEVT_GRID_LABEL_RIGHT_DCLICK )
+   {
+       wxPoint pos = mouseEv.GetPosition();
+
+       if ( mouseEv.GetEventObject() == GetGridRowLabelWindow() )
+           pos.y += GetColLabelSize();
+       if ( mouseEv.GetEventObject() == GetGridColLabelWindow() )
+           pos.x += GetRowLabelSize();
+       
+       wxGridEvent gridEvt( GetId(),
+               type,
+               this,
+               row, col,
+               pos.x,
+               pos.y,
+               false,
+               mouseEv.ControlDown(),
+               mouseEv.ShiftDown(),
+               mouseEv.AltDown(),
+               mouseEv.MetaDown() );
+       claimed = GetEventHandler()->ProcessEvent(gridEvt);
+       vetoed = !gridEvt.IsAllowed();
+   }
    else
    {
        wxGridEvent gridEvt( GetId(),
@@ -7445,8 +7481,8 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
                                int vertAlign,
                                int textOrientation )
 {
-    long textWidth, textHeight;
-    long lineWidth, lineHeight;
+    long textWidth = 0, textHeight = 0;
+    long lineWidth = 0, lineHeight = 0;
     int nLines;
 
     dc.SetClippingRegion( rect );
@@ -7573,7 +7609,7 @@ void wxGrid::GetTextBoxSize( wxDC& dc,
 {
     long w = 0;
     long h = 0;
-    long lineW, lineH;
+    long lineW = 0, lineH = 0;
 
     size_t i;
     for ( i = 0;  i < lines.GetCount();  i++ )

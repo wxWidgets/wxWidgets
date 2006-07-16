@@ -4690,6 +4690,9 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     if ( !event.HasModifiers() )
     {
         int keycode = event.GetKeyCode();
+#if wxUSE_UNICODE
+        wxChar unicode = event.GetUnicodeKey();
+#endif        
         if ( keycode == WXK_RETURN )
         {
             if ( IsSingleLine() || (GetWindowStyle() & wxTE_PROCESS_ENTER) )
@@ -4711,6 +4714,14 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             // skip event.Skip() below
             return;
         }
+#if wxUSE_UNICODE
+        else if (unicode > 0)
+        {
+            PerformAction(wxACTION_TEXT_INSERT, -1, unicode);
+
+            return;
+        }
+#endif        
     }
 #ifdef __WXDEBUG__
     // Ctrl-R refreshes the control in debug mode

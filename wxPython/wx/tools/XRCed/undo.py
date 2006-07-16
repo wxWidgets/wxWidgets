@@ -133,7 +133,7 @@ class UndoReplace:
         xxx = g.tree.GetPyData(item)
         # Replace with old element
         parent = xxx.parent.element
-        if xxx is self.xxx:             # sizeritem or notebookpage - replace child
+        if xxx is self.xxx:   # sizeritem or notebookpage - replace child
             parent.replaceChild(self.xxx.child.element, xxx.child.element)
         else:
             parent.replaceChild(self.xxx.element, xxx.element)

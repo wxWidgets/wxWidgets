@@ -63,6 +63,8 @@ Format-specific notes:
         <set var="FORMAT_OUTPUT_VARIABLES" append="1">WX_CONFIG</set>
     </if>
     
+    <set var="BEFORE_WX_LIBS"></set>
+    
     <!-- ============================================================== -->
     <!--                          Common code                           -->
     <!-- ============================================================== -->
@@ -79,7 +81,13 @@ Format-specific notes:
     </template>
 
     <template id="wx" template="wx-lib">
-        <ldlibs>$(WX_LIBS)</ldlibs>
+        <!-- this is a hack to allow wx components to be linked against,
+        as the components must be specified before the wx libs themselves. 
+        We hope to have a more comprehensive solution that addresses this 
+        problem as well as the need to use wx-config separately for add-on
+        wx libs.
+        -->
+        <ldlibs>$(BEFORE_WX_LIBS) $(WX_LIBS)</ldlibs>
     </template>
 
     <!-- not used together with wx-config: -->

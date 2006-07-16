@@ -267,14 +267,24 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
     styleDlg &= ~wxCAPTION;
 #endif
 
+#ifdef __WXMAC__
+    if ( !wxDialog::Create(parent, wxID_ANY, caption, pos, wxDefaultSize, styleDlg & (~wxCANCEL) ) )
+        return false;
+#else
     if ( !wxDialog::Create(parent, wxID_ANY, caption, pos, wxDefaultSize, styleDlg) )
         return false;
+#endif
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     // 1) text message
+#ifdef __WXMAC__
+    // align text and list at least on mac
+    topsizer->Add( CreateTextSizer( message ), 0, wxALL, wxLARGESMALL(15,0) );
+#else
     topsizer->Add( CreateTextSizer( message ), 0, wxALL, wxLARGESMALL(10,0) );
-
+#endif
+    
     // 2) list box
     m_listbox = new wxListBox( this, wxID_LISTBOX,
                                wxDefaultPosition, wxDefaultSize,
@@ -292,9 +302,12 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 
 #else // __SMARTPHONE__/!__SMARTPHONE__
 
+    // Mac Human Interface Guidelines recommend not to use static lines as grouping elements
+#ifndef __WXMAC__
 #if wxUSE_STATLINE
     // 3) static line
     topsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
+#endif
 #endif
 
     // 4) buttons

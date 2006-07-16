@@ -448,6 +448,7 @@ void TextWindow::LogEvent(const wxChar *name, wxKeyEvent& event)
         case WXK_NUMPAD_RIGHT: key = _T("NUMPAD_RIGHT"); break;
         case WXK_NUMPAD_DOWN: key = _T("NUMPAD_DOWN"); break;
         case WXK_NUMPAD_PRIOR: key = _T("NUMPAD_PRIOR"); break;
+        case WXK_NUMPAD_NEXT: key = _T("NUMPAD_NEXT"); break;
         case WXK_NUMPAD_PAGEUP: key = _T("NUMPAD_PAGEUP"); break;
         case WXK_NUMPAD_PAGEDOWN: key = _T("NUMPAD_PAGEDOWN"); break;
         case WXK_NUMPAD_END: key = _T("NUMPAD_END"); break;

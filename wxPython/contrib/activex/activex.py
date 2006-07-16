@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _activex
@@ -665,5 +665,6 @@ class %s(wx.activex.ActiveXWindow):
 
 
 #---------------------------------------------------------------------------
+
 
 

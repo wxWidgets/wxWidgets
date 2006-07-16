@@ -65,3 +65,9 @@ def ifDefPy(comment=False):
     
 def endIfDef():
     pass
+    
+def ag_isPHP():
+    return False
+    
+def ag_isPython():
+    return True

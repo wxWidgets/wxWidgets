@@ -293,7 +293,12 @@ methodOverrideMap = {
     'AutoCGetTypeSeparator' : ('AutoCompGetTypeSeparator', 0, 0, 0),
     'AutoCSetTypeSeparator' : ('AutoCompSetTypeSeparator', 0, 0, 0),
     'AutoCGetCurrent'       : ('AutoCompGetCurrent', 0, 0, 0),
-
+    'AutoCSetMaxWidth'      : ('AutoCompSetMaxWidth', 0, 0, 0),
+    'AutoCGetMaxWidth'      : ('AutoCompGetMaxWidth', 0, 0, 0),
+    'AutoCSetMaxHeight'     : ('AutoCompSetMaxHeight', 0, 0, 0),
+    'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0, 0),
+    'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0, 0),
+    
     'RegisterImage' :
     (0,
      '''void %s(int type, const wxBitmap& bmp);''',
@@ -519,7 +524,45 @@ methodOverrideMap = {
     'TargetAsUTF8' :       ( None, 0, 0, 0),
     'SetLengthForEncode' : ( None, 0, 0, 0),
     'EncodedFromUTF8' :    ( None, 0, 0, 0),
-    
+
+
+    'GetProperty' :
+    (0,
+     'wxString %s(const wxString& key);',
+
+     '''wxString %s(const wxString& key) {
+         int len = SendMsg(SCI_GETPROPERTY, (long)(const char*)wx2stc(key), (long)NULL);
+         if (!len) return wxEmptyString;
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(%s, (long)(const char*)wx2stc(key), (long)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+     ("Retrieve a 'property' value previously set with SetProperty.",)),
+
+    'GetPropertyExpanded' :
+    (0,
+     'wxString %s(const wxString& key);',
+
+     '''wxString %s(const wxString& key) {
+         int len = SendMsg(SCI_GETPROPERTYEXPANDED, (long)(const char*)wx2stc(key), (long)NULL);
+         if (!len) return wxEmptyString;
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(%s, (long)(const char*)wx2stc(key), (long)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+     ("Retrieve a 'property' value previously set with SetProperty,",
+      "with '$()' variable replacement on returned buffer.")),
+
+    'GetPropertyInt'   : (0, 0, 0,
+       ("Retrieve a 'property' value previously set with SetProperty,",
+        "interpreted as an int AFTER any '$()' variable replacement.")),
+
 
     'GetDocPointer' :
     (0,

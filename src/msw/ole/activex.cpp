@@ -24,8 +24,13 @@
 #endif
 
 #include "wx/dcclient.h"
-#include "wx/msw/ole/activex.h"
+#include "wx/math.h"
 
+// I don't know why members of tagVARIANT aren't found when compiling
+// with Wine
+#ifndef __WINE__
+
+#include "wx/msw/ole/activex.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
@@ -375,7 +380,17 @@ public:
     //*************************IOleInPlaceSiteEx***********************
     HRESULT STDMETHODCALLTYPE OnInPlaceActivateEx(BOOL * pfNoRedraw, DWORD)
     {
+#ifdef __WXWINCE__
+        IRunnableObject* runnable = NULL;
+        HRESULT hr = QueryInterface(
+            IID_IRunnableObject, (void**)(& runnable));
+        if (SUCCEEDED(hr))
+        {
+            runnable->LockRunning(TRUE, FALSE);
+        }
+#else
         OleLockRunning(m_window->m_ActiveX, TRUE, FALSE);
+#endif
         if (pfNoRedraw)
             (*pfNoRedraw) = FALSE;
         return S_OK;
@@ -383,7 +398,17 @@ public:
 
     HRESULT STDMETHODCALLTYPE OnInPlaceDeactivateEx(BOOL)
     {
+#ifdef __WXWINCE__
+        IRunnableObject* runnable = NULL;
+        HRESULT hr = QueryInterface(
+            IID_IRunnableObject, (void**)(& runnable));
+        if (SUCCEEDED(hr))
+        {
+            runnable->LockRunning(FALSE, FALSE);
+        }
+#else
         OleLockRunning(m_window->m_ActiveX, FALSE, FALSE);
+#endif
         return S_OK;
     }
     STDMETHOD(RequestUIActivate)(){ return S_OK;}
@@ -437,7 +462,9 @@ public:
     HRESULT STDMETHODCALLTYPE LockContainer(BOOL){return S_OK;}
     //********************IOleItemContainer***************************
     HRESULT STDMETHODCALLTYPE
-    #ifdef _UNICODE
+    #if 0 // defined(__WXWINCE__) && __VISUALC__ < 1400
+    GetObject
+    #elif defined(_UNICODE)
     GetObjectW
     #else
     GetObjectA
@@ -741,7 +768,7 @@ static void PixelsToHimetric(SIZEL &sz)
     };
 
 #define HIMETRIC_INCH   2540
-#define CONVERT(x, logpixels)   MulDiv(HIMETRIC_INCH, (x), (logpixels))
+#define CONVERT(x, logpixels)   wxMulDivInt32(HIMETRIC_INCH, (x), (logpixels))
 
     sz.cx = CONVERT(sz.cx, logX);
     sz.cy = CONVERT(sz.cy, logY);
@@ -799,7 +826,11 @@ void wxActiveXContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
         posRect.right = w;
         posRect.bottom = h;
 
+#if !(defined(_WIN32_WCE) && _WIN32_WCE < 400)
         ::RedrawWindow(m_oleObjectHWND, NULL, NULL, RDW_INTERNALPAINT);
+#else
+        ::InvalidateRect(m_oleObjectHWND, NULL, false);
+#endif
         RECTL *prcBounds = (RECTL *) &posRect;
         m_viewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL,
             (HDC)dc.GetHDC(), prcBounds, NULL, NULL, 0);
@@ -826,3 +857,6 @@ void wxActiveXContainer::OnKillFocus(wxFocusEvent& event)
 
     event.Skip();
 }
+
+#endif
+// __WINE__

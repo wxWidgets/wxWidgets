@@ -77,6 +77,19 @@
 /*  This one is really annoying, since it occurs for each cast to (HANDLE)... */
 #   pragma warning(disable:4305)    /*  truncation of long to near ptr */
 #endif
+
+    /* For VC++ 5.0 for release mode, the warning 'C4702: unreachable code */
+    /* is buggy, and occurs for code that does actually get executed */
+#   if !defined __WXDEBUG__ && __VISUALC__ <= 1100
+#       pragma warning(disable:4702)    /* unreachable code */ 
+#   endif
+
+/* Deprecated functions such as sprintf, localtime */
+#if __VISUALC__ >= 1400
+#define _CRT_SECURE_NO_DEPRECATE 1
+#define _CRT_NON_CONFORMING_SWPRINTFS 1
+#endif
+
 #endif /*  __VISUALC__ */
 
 /*  suppress some Salford C++ warnings */
@@ -297,7 +310,44 @@ typedef int wxWindowID;
    truncate from a larger to smaller type, static_cast<> can't be used for it
    as it results in warnings when using some compilers (SGI mipspro for example)
  */
-#define wx_truncate_cast(t, x) ((t)(x))
+#if defined(__cplusplus) && wxABI_VERSION >= 20603
+    #if defined(__INTELC__)
+        template <typename T, typename X>
+        inline T wx_truncate_cast_impl(X x)
+        {
+            #pragma warning(push)
+            /* implicit conversion of a 64-bit integral type to a smaller integral type */
+            #pragma warning(disable: 1682)
+            /* conversion from "X" to "T" may lose significant bits */
+            #pragma warning(disable: 810)
+
+            return x;
+
+            #pragma warning(pop)
+        }
+
+        #define wx_truncate_cast(t, x) wx_truncate_cast_impl<t>(x)
+
+    #elif defined(__VISUALC__) && __VISUALC__ >= 1310
+        template <typename T, typename X>
+        inline T wx_truncate_cast_impl(X x)
+        {
+            #pragma warning(push)
+            /* conversion from 'X' to 'T', possible loss of data */
+            #pragma warning(disable: 4267)
+
+            return x;
+
+            #pragma warning(pop)
+        }
+
+        #define wx_truncate_cast(t, x) wx_truncate_cast_impl<t>(x)
+    #else
+        #define wx_truncate_cast(t, x) ((t)(x))
+    #endif
+#else  /* defined(__cplusplus) && wxABI_VERSION >= 20603 */
+    #define wx_truncate_cast(t, x) ((t)(x))
+#endif /* defined(__cplusplus) && wxABI_VERSION >= 20603 */
 
 /* for consistency with wxStatic/DynamicCast defined in wx/object.h */
 #define wxConstCast(obj, className) wx_const_cast(className *, obj)
@@ -580,7 +630,7 @@ typedef int wxWindowID;
     #define except(x) catch(...)
 #endif /*  Metrowerks */
 
-#if defined(__WATCOMC__) && (__WATCOMC__ < 1240)
+#if wxONLY_WATCOM_EARLIER_THAN(1,4)
     typedef short mode_t;
 #endif
 
@@ -963,7 +1013,7 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 #if defined(__PALMOS__) && !defined(HAVE_SSIZE_T)
     #define HAVE_SSIZE_T
 #endif
-#if defined(__WATCOMC__) && __WATCOMC__ > 1230
+#if wxCHECK_WATCOM_VERSION(1,4)
     #define HAVE_SSIZE_T
 #endif
 #ifndef HAVE_SSIZE_T
@@ -2815,6 +2865,33 @@ typedef struct window_t *WXWidget;
 #define DECLARE_NO_ASSIGN_CLASS(classname)      \
     private:                                    \
         classname& operator=(const classname&);
+
+/*  --------------------------------------------------------------------------- */
+/*  If a manifest is being automatically generated, add common controls 6 to it */
+/*  --------------------------------------------------------------------------- */
+
+#if (!defined wxUSE_NO_MANIFEST || wxUSE_NO_MANIFEST == 0 ) && \
+    ( defined _MSC_FULL_VER && _MSC_FULL_VER >= 140040130 )
+
+#define WX_CC_MANIFEST(cpu)                     \
+    "/manifestdependency:\"type='win32'         \
+     name='Microsoft.Windows.Common-Controls'   \
+     version='6.0.0.0'                          \
+     processorArchitecture='"cpu"'              \
+     publicKeyToken='6595b64144ccf1df'          \
+     language='*'\""
+
+#if defined _M_IX86
+    #pragma comment(linker, WX_CC_MANIFEST("x86"))
+#elif defined _M_X64
+    #pragma comment(linker, WX_CC_MANIFEST("amd64"))
+#elif defined _M_IA64
+    #pragma comment(linker, WX_CC_MANIFEST("ia64"))
+#else
+    #pragma comment(linker, WX_CC_MANIFEST("*"))
+#endif
+
+#endif /* !wxUSE_NO_MANIFEST && _MSC_FULL_VER >= 140040130 */
 
 #endif
     /*  _WX_DEFS_H_ */

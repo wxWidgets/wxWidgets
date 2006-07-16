@@ -101,11 +101,20 @@
             </command>
         </action>
 
-        <data-files>
-            <srcdir>$(BUILDDIR)</srcdir>
-            <files>lib/wx/include/$(TOOLCHAIN_FULLNAME)/wx/setup.h</files>
-            <install-to>$(LIBDIR)/wx/include/$(TOOLCHAIN_FULLNAME)/wx</install-to>
-        </data-files>
+        <set var="RCDEFS_H">
+            <if cond="TOOLKIT=='MSW'">msw/rcdefs.h</if>
+        </set>
+        <headers>
+            <srcdir>
+                $(BUILDDIR)/lib/wx/include/$(TOOLCHAIN_FULLNAME)/wx
+            </srcdir>
+            <files>
+                setup.h $(RCDEFS_H)
+            </files>
+            <install-to>
+                $(LIBDIR)/wx/include/$(TOOLCHAIN_FULLNAME)/wx
+            </install-to>
+        </headers>
 
         <headers>
             <srcdir>$(SRCDIR)/include</srcdir>
@@ -141,7 +150,7 @@
             <dependency-of>all</dependency-of>
             <set var="__targetname">$(MACOS_R)</set>
             <command>
-                $(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o $(MACOS_RSRC)
+                $(REZ) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o $(MACOS_RSRC)
                 $(DEREZ) $(MACOS_RSRC) -useDF >$(MACOS_R)
             </command>
             <clean-files>$(MACOS_RSRC) $(MACOS_R)</clean-files>
@@ -193,6 +202,33 @@
     </if>
 
 
+    <!-- create rcdefs.h on Windows: -->
+    <if cond="FORMAT in ['borland','mingw','msvc','watcom'] and TOOLKIT == 'MSW'">
+
+        <mkdir id="libdir_setup_wx_msw">
+            <depends>libdir_setup_wx</depends>
+            <dir>$(SETUPHDIR)/wx/msw</dir>
+        </mkdir>
+
+        <action id="rcdefs.h">
+
+            <!-- Can't seem to set id to a name with a dollar sign
+                 so use __targetname as a temporary work around -->
+            <set var="__targetname">$(SETUPHDIR)\wx\msw\rcdefs.h</set>
+
+            <dependency-of>setup_h</dependency-of>
+            <depends>libdir_setup_wx_msw</depends>
+            <depends-on-file>$(SRCDIR)/include/wx/msw/genrcdefs.h</depends-on-file>
+
+            <command>
+                $(DOLLAR)(CPP) "$(SRCDIR)\include\wx\msw\genrcdefs.h" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
+            </command>
+
+        </action>
+
+    </if>
+
+
     <if cond="FORMAT=='autoconf'">
 
         <!-- Show this banner after installation: -->
@@ -218,7 +254,7 @@
 
         <!-- add "make dist" target to autoconf: -->
         <set var="VARS_DONT_ELIMINATE" append="1">
-            ALL_BASE_SOURCES WX_VERSION
+            ALL_PORTS_BASE_HEADERS ALL_BASE_SOURCES WX_VERSION
         </set>
         <fragment format="autoconf" file="make_dist.mk"/>
 

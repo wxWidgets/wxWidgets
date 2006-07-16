@@ -372,7 +372,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( InReportView() && wxApp::GetComCtl32Version() >= 470 )
     {
         ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE,
-                      0, LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT);
+                      0, LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT | LVS_EX_SUBITEMIMAGES);
     }
 
     return true;
@@ -915,14 +915,23 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 // Sets the item image
 bool wxListCtrl::SetItemImage(long item, int image, int WXUNUSED(selImage))
 {
+    return SetItemColumnImage(item, 0, image);
+}
+
+#if wxABI_VERSION >= 20603
+// Sets the item image
+bool wxListCtrl::SetItemColumnImage(long item, long column, int image)
+{
     wxListItem info;
 
     info.m_mask = wxLIST_MASK_IMAGE;
     info.m_image = image;
     info.m_itemId = item;
+    info.m_col = column;
 
     return SetItem(info);
 }
+#endif
 
 // Gets the item text
 wxString wxListCtrl::GetItemText(long item) const
@@ -1215,7 +1224,7 @@ void wxListCtrl::SetImageList(wxImageList *imageList, int which)
         m_imageListState = imageList;
         m_ownsImageListState = false;
     }
-    ListView_SetImageList(GetHwnd(), (HIMAGELIST) imageList ? imageList->GetHIMAGELIST() : 0, flags);
+    (void) ListView_SetImageList(GetHwnd(), (HIMAGELIST) imageList ? imageList->GetHIMAGELIST() : 0, flags);
 }
 
 void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
@@ -1368,11 +1377,25 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 }
 
 // End label editing, optionally cancelling the edit
-bool wxListCtrl::EndEditLabel(bool WXUNUSED(cancel))
+bool wxListCtrl::EndEditLabel(bool cancel)
 {
-    wxFAIL_MSG( _T("not implemented") );
-
-    return false;
+    // m_textCtrl is not always ready, ie. in EVT_LIST_BEGIN_LABEL_EDIT
+    HWND hwnd = ListView_GetEditControl(GetHwnd());
+    bool b = (hwnd != NULL);
+    if (b)
+    {
+        if (cancel)
+            ::SetWindowText(hwnd, wxEmptyString); // dubious but better than nothing
+        if (m_textCtrl)
+        {
+            m_textCtrl->UnsubclassWin();
+            m_textCtrl->SetHWND(0);
+            delete m_textCtrl;
+            m_textCtrl = NULL;
+        }
+        ::DestroyWindow(hwnd);
+    }
+    return b;
 }
 
 // Ensures this item is visible
@@ -2251,7 +2274,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 #ifdef NM_CUSTOMDRAW
                     if ( lvi.mask & LVIF_IMAGE )
                     {
-                        lvi.iImage = OnGetItemImage(item);
+                        if ( lvi.iSubItem == 0 )
+                            lvi.iImage = OnGetItemImage(item);
+                        else
+                            lvi.iImage = -1;
                     }
 #endif // NM_CUSTOMDRAW
 
@@ -2836,4 +2862,3 @@ static void wxConvertToMSWListCol(int WXUNUSED(col), const wxListItem& item,
 }
 
 #endif // wxUSE_LISTCTRL
-

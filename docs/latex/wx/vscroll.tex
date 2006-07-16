@@ -186,7 +186,7 @@ Returns {\tt true} if the given line is (at least partially) visible or
 
 \membersection{wxVScrolledWindow::OnGetLineHeight}\label{wxvscrolledwindowongetlineheight}
 
-\constfunc{wxCoord}{OnGetLineHeight}{\param{size\_t }{n}}
+\constfunc{virtual wxCoord}{OnGetLineHeight}{\param{size\_t }{n}}
 
 This protected virtual function must be overridden in the derived class and it
 should return the height of the given line in pixels.
@@ -198,7 +198,7 @@ should return the height of the given line in pixels.
 
 \membersection{wxVScrolledWindow::OnGetLinesHint}\label{wxvscrolledwindowongetlineshint}
 
-\constfunc{void}{OnGetLinesHint}{\param{size\_t }{lineMin}, \param{size\_t }{lineMax}}
+\constfunc{virtual void}{OnGetLinesHint}{\param{size\_t }{lineMin}, \param{size\_t }{lineMax}}
 
 This function doesn't have to be overridden but it may be useful to do
 it if calculating the lines heights is a relatively expensive operation

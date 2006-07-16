@@ -1,5 +1,6 @@
 
 import  wx
+from wx.lib import stattext
 
 #---------------------------------------------------------------------------
 
@@ -11,7 +12,8 @@ class TestPanel(wx.Panel):
         btn = wx.Button(self, -1, "Select Font")
         self.Bind(wx.EVT_BUTTON, self.OnSelectFont, btn)
 
-        self.sampleText = wx.TextCtrl(self, -1, "Sample Text")
+        self.sampleText = stattext.GenStaticText(self, -1, "Sample Text")
+        self.sampleText.SetBackgroundColour(wx.WHITE)
 
         self.curFont = self.sampleText.GetFont()
         self.curClr = wx.BLACK
@@ -69,6 +71,7 @@ class TestPanel(wx.Panel):
 
     def UpdateUI(self):
         self.sampleText.SetFont(self.curFont)
+        self.sampleText.SetForegroundColour(self.curClr)
         self.ps.SetLabel(str(self.curFont.GetPointSize()))
         self.family.SetLabel(self.curFont.GetFamilyString())
         self.style.SetLabel(self.curFont.GetStyleString())

@@ -1891,8 +1891,6 @@ void wxGenericTreeCtrl::DoSelectItem(const wxTreeItemId& itemId,
         parent = GetItemParent( parent );
     }
 
-    EnsureVisible( itemId );
-
     // ctrl press
     if (unselect_others)
     {
@@ -1923,6 +1921,11 @@ void wxGenericTreeCtrl::DoSelectItem(const wxTreeItemId& itemId,
         m_current->SetHilight(select);
         RefreshLine( m_current );
     }
+
+    // This can cause idle processing to select the root
+    // if no item is selected, so it must be after the
+    // selection is set
+    EnsureVisible( itemId );
 
     event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
     GetEventHandler()->ProcessEvent( event );
@@ -2396,7 +2399,15 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             wxTRANSPARENT_PEN;
 
         wxColour colText;
-        if ( item->IsSelected() )
+        if ( item->IsSelected()
+#ifdef __WXMAC__
+            // On wxMac, if the tree doesn't have the focus we draw an empty
+            // rectangle, so we want to make sure that the text is visible
+            // against the normal background, not the highlightbackground, so
+            // don't use the highlight text colour unless we have the focus.
+             && m_hasFocus
+#endif
+            )
         {
             colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
         }
@@ -3121,7 +3132,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         wxTreeEvent nevent( command, GetId() );
         nevent.m_item = m_current;
         nevent.SetEventObject(this);
-        nevent.SetPoint(pt);
+        nevent.SetPoint(CalcScrolledPosition(pt));
 
         // by default the dragging is not supported, the user code must
         // explicitly allow the event for it to take place
@@ -3172,6 +3183,8 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
     }
     else if ( (event.LeftUp() || event.RightUp()) && m_isDragging )
     {
+        ReleaseMouse();
+
         // erase the highlighting
         DrawDropEffect(m_dropTarget);
 
@@ -3186,15 +3199,13 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         wxTreeEvent event(wxEVT_COMMAND_TREE_END_DRAG, GetId());
 
         event.m_item = item;
-        event.m_pointDrag = pt;
+        event.m_pointDrag = CalcScrolledPosition(pt);
         event.SetEventObject(this);
 
         (void)GetEventHandler()->ProcessEvent(event);
 
         m_isDragging = false;
         m_dropTarget = (wxGenericTreeItem *)NULL;
-
-        ReleaseMouse();
 
         SetCursor(m_oldCursor);
 
@@ -3546,7 +3557,7 @@ void wxGenericTreeCtrl::Thaw()
 {
     wxCHECK_RET( m_freezeCount > 0, _T("thawing unfrozen tree control?") );
 
-    if ( !--m_freezeCount )
+    if ( --m_freezeCount == 0 )
     {
         Refresh();
     }

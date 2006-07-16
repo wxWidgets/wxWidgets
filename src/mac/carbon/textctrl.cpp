@@ -182,11 +182,12 @@ public :
     virtual bool CanPaste() const ;
     virtual void SetEditable(bool editable) ;
     virtual wxTextPos GetLastPosition() const ;
-    virtual void Replace( long from , long to , const wxString str ) ;
-    virtual void Remove( long from , long to ) = 0 ;
+    virtual void Replace( long from , long to , const wxString& str ) ;
+    virtual void Remove( long from , long to ) ;
     virtual void SetSelection( long from , long to ) = 0 ;
     virtual void GetSelection( long* from, long* to) const = 0 ;
     virtual void WriteText(const wxString& str) = 0 ;
+    virtual bool HasOwnContextMenu() const { return false ; }
 
     virtual void Clear() ;
     virtual bool CanUndo() const;
@@ -234,12 +235,25 @@ public :
     virtual bool CanPaste() const ;
     virtual void SetEditable(bool editable) ;
     virtual wxTextPos GetLastPosition() const ;
-    virtual void Replace( long from , long to , const wxString str ) ;
+    virtual void Replace( long from , long to , const wxString& str ) ;
     virtual void Remove( long from , long to )  ;
     virtual void GetSelection( long* from, long* to) const ;
     virtual void SetSelection( long from , long to ) ;
 
     virtual void WriteText(const wxString& str) ;
+    virtual bool HasOwnContextMenu() const 
+    { 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+        if ( UMAGetSystemVersion() >= 0x1040 )
+        {
+            TXNCommandEventSupportOptions options ;
+            TXNGetCommandEventSupport( m_txn , & options ) ;
+            return options & kTXNSupportEditCommandProcessing ;
+        }
+#endif
+        return false ;
+    }
+
     virtual void Clear() ;
 
     virtual bool CanUndo() const ;
@@ -275,6 +289,7 @@ public :
                              const wxSize& size, long style ) ;
     virtual OSStatus SetFocus( ControlFocusPart focusPart ) ;
     virtual bool HasFocus() const ;
+    virtual void SetBackground( const wxBrush &brush) ;
 protected :
     HIViewRef m_scrollView ;
     HIViewRef m_textView ;
@@ -298,7 +313,6 @@ public :
     virtual void Paste();
     virtual bool CanPaste() const;
     virtual void SetEditable(bool editable) ;
-    virtual void Remove( long from , long to ) ;
     virtual void GetSelection( long* from, long* to) const ;
     virtual void SetSelection( long from , long to ) ;
     virtual void WriteText(const wxString& str) ;
@@ -555,6 +569,7 @@ void wxTextCtrl::Cut()
         GetPeer()->Cut() ;
 
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
+        event.SetString( GetValue() ) ;
         event.SetEventObject( this );
         GetEventHandler()->ProcessEvent(event);
       }
@@ -568,6 +583,7 @@ void wxTextCtrl::Paste()
         // eventually we should add setting the default style again
 
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
+        event.SetString( GetValue() ) ;
         event.SetEventObject( this );
         GetEventHandler()->ProcessEvent(event);
     }
@@ -953,6 +969,9 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     if (!eat_key)
     {
         // perform keystroke handling
+#if TARGET_API_MAC_OSX
+		event.Skip() ;
+#else
         if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
             CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
         else
@@ -969,13 +988,16 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 m_peer->HandleKey( keycode , keychar , ev->modifiers ) ;
             }
         }
+#endif
     }
     if ( ( key >= 0x20 && key < WXK_START ) ||
+         ( key >= WXK_NUMPAD0 && key <= WXK_DIVIDE ) ||
          key == WXK_RETURN ||
          key == WXK_DELETE ||
          key == WXK_BACK)
     {
         wxCommandEvent event1(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
+        event1.SetString( GetValue() ) ;
         event1.SetEventObject( this );
         wxPostEvent(GetEventHandler(),event1);
     }
@@ -1064,6 +1086,12 @@ void wxTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
 
 void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
 {
+    if ( GetPeer()->HasOwnContextMenu() )
+    {
+        event.Skip() ;
+        return ;
+    }
+    
     if (m_privateContextMenu == NULL)
     {
         m_privateContextMenu = new wxMenu;
@@ -1177,8 +1205,16 @@ wxTextPos wxMacTextControl::GetLastPosition() const
     return GetStringValue().Length() ;
 }
 
-void wxMacTextControl::Replace( long from , long to , const wxString str )
+void wxMacTextControl::Replace( long from , long to , const wxString& str )
 {
+    SetSelection( from , to ) ;
+    WriteText( str) ;
+}
+
+void wxMacTextControl::Remove( long from , long to )
+{
+    SetSelection( from , to ) ;
+    WriteText( wxEmptyString) ;
 }
 
 void wxMacTextControl::Clear()
@@ -1374,9 +1410,6 @@ void wxMacUnicodeTextControl::SetEditable(bool editable)
 {
     SetData<Boolean>( 0 , kControlEditTextLockedTag , (Boolean) !editable ) ;
 }
-void wxMacUnicodeTextControl::Remove( long from , long to )
-{
-}
 
 void wxMacUnicodeTextControl::GetSelection( long* from, long* to) const
 {
@@ -1571,8 +1604,11 @@ TXNFrameOptions wxMacMLTEControl::FrameOptionsFromWXStyle( long wxStyle )
         if ( !(wxStyle & wxTE_NO_VSCROLL ) )
         {
             frameOptions |= kTXNWantVScrollBarMask ;
-            if ( frameOptions & kTXNWantHScrollBarMask )
-                frameOptions |= kTXNDrawGrowIconMask ;
+            // The following code causes drawing problems on 10.4. Perhaps it can be restored for
+            // older versions of the OS, but I'm not sure it's appropriate to put a grow icon here
+            // anyways, as AFAIK users can't actually use it to resize the text ctrl.
+            //if ( frameOptions & kTXNWantHScrollBarMask )
+            //    frameOptions |= kTXNDrawGrowIconMask ;
         }
     }
     else
@@ -1642,6 +1678,21 @@ void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, boo
     tback.bgType = kTXNBackgroundTypeRGB;
     tback.bg.color = MAC_WXCOLORREF( background.GetPixel() );
     TXNSetBackground( m_txn , &tback);
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    if ( UMAGetSystemVersion() >= 0x1040 )
+    {
+        TXNCommandEventSupportOptions options ;
+        if ( TXNGetCommandEventSupport( m_txn, &options) == noErr )
+        {
+            options |= kTXNSupportEditCommandProcessing ;
+            options |= kTXNSupportSpellCheckCommandProcessing ;
+            options |= kTXNSupportFontCommandProcessing ;
+            options |= kTXNSupportFontCommandUpdating ;
+            
+            TXNSetCommandEventSupport( m_txn , options ) ;
+        }
+    }
+#endif
 }
 
 void wxMacMLTEControl::SetBackground( const wxBrush &brush )
@@ -1761,7 +1812,7 @@ wxTextPos wxMacMLTEControl::GetLastPosition() const
     return actualsize ;
 }
 
-void wxMacMLTEControl::Replace( long from , long to , const wxString str )
+void wxMacMLTEControl::Replace( long from , long to , const wxString& str )
 {
     wxString value = str ;
     wxMacConvertNewlines10To13( &value ) ;
@@ -2818,6 +2869,25 @@ bool wxMacMLTEHIViewControl::HasFocus() const
     ControlRef control ;
     GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
     return control == m_textView ;
+}
+
+void wxMacMLTEHIViewControl::SetBackground( const wxBrush &brush )
+{
+    wxMacMLTEControl::SetBackground( brush ) ;
+/*
+    CGColorSpaceRef rgbSpace = CGColorSpaceCreateDeviceRGB();
+    RGBColor col = MAC_WXCOLORREF(brush.GetColour().GetPixel()) ;
+
+    float component[4] ;
+    component[0] = col.red / 65536.0 ;
+    component[1] = col.green / 65536.0 ;
+    component[2] = col.blue / 65536.0 ;
+    component[3] = 1.0 ; // alpha
+    
+    CGColorRef color = CGColorCreate (rgbSpace , component );
+    HITextViewSetBackgroundColor( m_textView , color ) ;
+    CGColorSpaceRelease( rgbSpace );
+*/
 }
 
 #endif // MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2

@@ -8,12 +8,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_UNIV_STATLINE_H_
+#define _WX_UNIV_STATLINE_H_
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "univstatline.h"
 #endif
-
-#ifndef _WX_UNIV_STATLINE_H_
-#define _WX_UNIV_STATLINE_H_
 
 class WXDLLEXPORT wxStaticLine : public wxStaticLineBase
 {

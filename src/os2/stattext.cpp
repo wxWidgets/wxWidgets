@@ -60,7 +60,10 @@ bool wxStaticText::Create(
 
     long                            lSstyle = 0L;
 
-    lSstyle = WS_VISIBLE | SS_TEXT | DT_VCENTER | DT_MNEMONIC;
+    // Used to have DT_VCENTER but that doesn't work correctly with
+    // multiline strings and DT_WORDBREAK. Accept a reasonable
+    // compromise for now
+    lSstyle = WS_VISIBLE | SS_TEXT | DT_WORDBREAK | DT_MNEMONIC;
     if (m_windowStyle & wxALIGN_CENTRE)
         lSstyle |= DT_CENTER;
     else if (m_windowStyle & wxALIGN_RIGHT)

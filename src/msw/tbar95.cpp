@@ -322,7 +322,6 @@ void wxToolBar::Recreate()
     }
 
     Realize();
-    UpdateSize();
 }
 
 wxToolBar::~wxToolBar()
@@ -475,8 +474,8 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
     if ( tool->IsControl() )
     {
         nButtonsToDelete = ((wxToolBarTool *)tool)->GetSeparatorsCount();
-
         width *= nButtonsToDelete;
+        tool->GetControl()->Destroy();
     }
 
     // do delete all buttons
@@ -603,7 +602,8 @@ bool wxToolBar::Realize()
         sizeBmp.x = m_defaultWidth;
         sizeBmp.y = m_defaultHeight;
 
-        const wxCoord totalBitmapWidth = m_defaultWidth * nTools,
+        const wxCoord totalBitmapWidth  = m_defaultWidth *
+                                          wx_truncate_cast(wxCoord, nTools),
                       totalBitmapHeight = m_defaultHeight;
 
         // Create a bitmap and copy all the tool bitmaps to it
@@ -616,7 +616,7 @@ bool wxToolBar::Realize()
         if (doTransparent)
             dcAllButtons.SetBackground(*wxTRANSPARENT_BRUSH);
         else
-            dcAllButtons.SetBackground(*wxLIGHT_GREY_BRUSH);
+            dcAllButtons.SetBackground(wxBrush(GetBackgroundColour()));
 #endif
         dcAllButtons.Clear();
 
@@ -673,7 +673,7 @@ bool wxToolBar::Realize()
                 if ( m_disabledImgList )
                 {
                     wxBitmap bmpDisabled = tool->GetDisabledBitmap();
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && wxUSE_WXDIB
                     if ( !bmpDisabled.Ok() )
                     {
                         // no disabled bitmap specified but we still need to
@@ -1071,7 +1071,7 @@ bool wxToolBar::Realize()
     }
 
     InvalidateBestSize();
-    SetBestFittingSize();
+    UpdateSize();
 
     return true;
 }
@@ -1253,12 +1253,18 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 
 void wxToolBar::UpdateSize()
 {
-    // the toolbar size changed
+    wxPoint pos = GetPosition();
     ::SendMessage(GetHwnd(), TB_AUTOSIZE, 0, 0);
+    if (pos != GetPosition())
+        Move(pos);
 
-    // we must also refresh the frame after the toolbar size (possibly) changed
+    // In case Realize is called after the initial display (IOW the programmer
+    // may have rebuilt the toolbar) give the frame the option of resizing the
+    // toolbar to full width again, but only if the parent is a frame and the
+    // toolbar is managed by the frame.  Otherwise assume that some other
+    // layout mechanism is controlling the toolbar size and leave it alone.
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
-    if ( frame )
+    if ( frame && frame->GetToolBar() == this )
     {
         frame->SendSizeEvent();
     }
@@ -1348,7 +1354,7 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
     if ( event.RightDown() )
     {
         // find the tool under the mouse
-        wxCoord x,y;
+        wxCoord x = 0, y = 0;
         event.GetPosition(&x, &y);
 
         wxToolBarToolBase *tool = FindToolForPosition(x, y);

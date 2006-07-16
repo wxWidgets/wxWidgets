@@ -90,27 +90,6 @@ int wxDisplayDepth()
     return g_displayDC->getBitsPerPixel();
 }
 
-wxString wxGetOsDescription()
-{
-    wxString osname(
-
-#if defined(__UNIX__)
-        _T("Unix")
-#elif defined(__OS2__)
-        _T("OS/2")
-#elif defined(__WIN32__)
-        _T("Windows")
-#elif defined(__DOS__)
-        _T("DOS")
-#else
-        _T("unknown")
-#endif
-
-    );
-
-    return osname;
-}
-
 #if wxUSE_GUI
 
 wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
@@ -173,7 +152,28 @@ wxPoint wxGetMousePosition()
     return pt;
 }
 
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+    int x, y;
 
+    wxGetMousePosition(&x, &y);
+
+    ms.SetX(x);
+    ms.SetY(y);
+
+    extern unsigned long g_buttonState;
+    ms.SetLeftDown(g_buttonState & EVT_LEFTBUT);
+    ms.SetMiddleDown(g_buttonState & EVT_MIDDLEBUT);
+    ms.SetRightDown(g_buttonState & EVT_RIGHTBUT);
+
+    ms.SetControlDown(EVT_isKeyDown(KB_leftCtrl) || EVT_isKeyDown(KB_rightCtrl));
+    ms.SetShiftDown(EVT_isKeyDown(KB_leftShift) || EVT_isKeyDown(KB_rightShift));
+    ms.SetAltDown(EVT_isKeyDown(KB_leftAlt));
+    ms.SetMetaDown(EVT_isKeyDown(KB_rightAlt));
+
+    return ms;
+}
 
 #ifdef __UNIX__
 

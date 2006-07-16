@@ -25,7 +25,7 @@
 
 #include "wx/msw/debughlp.h"
 
-#if wxUSE_DBGHELP
+#if wxUSE_DBGHELP && wxUSE_DYNLIB_CLASS
 
 // ----------------------------------------------------------------------------
 // constants

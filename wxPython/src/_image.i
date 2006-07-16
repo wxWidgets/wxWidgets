@@ -59,6 +59,43 @@ public:
 
 //---------------------------------------------------------------------------
 
+
+DocStr(wxPyImageHandler,
+"This is the base class for implementing image file loading/saving, and
+image creation from data, all written in Python.  To create a custom
+image handler derive a new class from wx.PyImageHandler and provide
+the following methods::
+
+    def DoCanRead(self, stream) --> bool
+        '''Check if this handler can read the image on the stream'''
+
+    def LoadFile(self, image, stream, verbose, index) --> bool
+        '''Load image data from the stream and load it into image.'''
+
+    def SaveFile(self, image, stream, verbose) --> bool
+        '''Save the iamge data in image to the stream using
+           this handler's image file format.'''
+
+    def GetImageCount(self, stream) --> int
+        '''If this image format can hold more than one image,
+           how many does the image on the stream have?'''
+
+To activate your handler create an instance of it and pass it to
+`wx.Image_AddHandler`.  Be sure to call `SetName`, `SetType`, and
+`SetExtension` from your constructor.
+
+", "");
+class wxPyImageHandler: public wxImageHandler {
+public:
+    %pythonAppend wxPyImageHandler() "self._SetSelf(self)"
+    wxPyImageHandler();
+    void _SetSelf(PyObject *self);
+};
+
+
+//---------------------------------------------------------------------------
+
+
 class wxImageHistogram /* : public wxImageHistogramBase */
 {
 public:
@@ -155,25 +192,41 @@ Unlike RGB data, not all images have an alpha channel and before using
 with `HasAlpha`. Note that currently only images loaded from PNG files
 with transparency information will have an alpha channel.", "");
 
+
 %{
 // Pull the nested class out to the top level for SWIG's sake
 #define wxImage_RGBValue wxImage::RGBValue
 #define wxImage_HSVValue wxImage::HSVValue
 %}
- 
+
+DocStr(wxImage_RGBValue,
+"An object that contains values for red, green and blue which represent
+the value of a color. It is used by `wx.Image.HSVtoRGB` and
+`wx.Image.RGBtoHSV`, which converts between HSV color space and RGB
+color space.", "");       
 class wxImage_RGBValue
 {
 public:
-    wxImage_RGBValue(byte r=0, byte g=0, byte b=0);    
+    DocCtorStr(
+        wxImage_RGBValue(byte r=0, byte g=0, byte b=0),
+        "Constructor.", "");
     byte red;  
     byte green;
     byte blue;
 };
-    
+
+
+DocStr(wxImage_HSVValue,
+"An object that contains values for hue, saturation and value which
+represent the value of a color.  It is used by `wx.Image.HSVtoRGB` and
+`wx.Image.RGBtoHSV`, which +converts between HSV color space and RGB
+color space.", "");
 class wxImage_HSVValue
 {
 public:
-    wxImage_HSVValue(double h=0.0, double s=0.0, double v=0.0);
+    DocCtorStr(
+        wxImage_HSVValue(double h=0.0, double s=0.0, double v=0.0),
+        "Constructor.", "");
     double hue;  
     double saturation;
     double value;
@@ -886,6 +939,12 @@ option is not present, the function returns 0.", "
     static void AddHandler( wxImageHandler *handler );
     static void InsertHandler( wxImageHandler *handler );
     static bool RemoveHandler( const wxString& name );
+    %extend {
+        static PyObject* GetHandlers() {
+            wxList& list = wxImage::GetHandlers();
+            return wxPy_ConvertList(&list);
+        }
+    }
     
     DocDeclStr(
         static wxString , GetImageExtWildcard(),
@@ -919,8 +978,14 @@ MustHaveApp(ConvertToMonoBitmap);
         "Rotates the hue of each pixel of the image. Hue is a double in the
 range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees", "");
         
-    static wxImage_HSVValue RGBtoHSV(wxImage_RGBValue rgb);
-    static wxImage_RGBValue HSVtoRGB(wxImage_HSVValue hsv);
+    DocDeclStr(
+        static wxImage_HSVValue , RGBtoHSV(wxImage_RGBValue rgb),
+        "Converts a color in RGB color space to HSV color space.", "");
+    
+    DocDeclStr(
+        static wxImage_RGBValue , HSVtoRGB(wxImage_HSVValue hsv),
+        "Converts a color in HSV color space to RGB color space.", "");
+    
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
 };

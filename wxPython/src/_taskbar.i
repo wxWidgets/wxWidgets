@@ -61,7 +61,7 @@ enum {
 // Otherwise make a class that can virtualize CreatePopupMenu
 class wxPyTaskBarIcon : public wxTaskBarIcon
 {
-    DECLARE_ABSTRACT_CLASS(wxPyTaskBarIcon);
+    DECLARE_ABSTRACT_CLASS(wxPyTaskBarIcon)
 public:
     wxPyTaskBarIcon() : wxTaskBarIcon()
     {}

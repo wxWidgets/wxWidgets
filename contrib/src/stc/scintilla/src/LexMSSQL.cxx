@@ -2,7 +2,7 @@
 /** @file LexMSSQL.cxx
  ** Lexer for MSSQL.
  **/
-// Copyright 1998-2002 by Filip Yaghob <fy@eg.cz>
+// By Filip Yaghob <fyaghob@gmail.com>
 
 
 #include <stdlib.h>
@@ -26,24 +26,6 @@
 #define KW_MSSQL_FUNCTIONS          4
 #define KW_MSSQL_STORED_PROCEDURES  5
 #define KW_MSSQL_OPERATORS          6
-
-//~ val SCE_MSSQL_DEFAULT=0
-//~ val SCE_MSSQL_COMMENT=1
-//~ val SCE_MSSQL_LINE_COMMENT=2
-//~ val SCE_MSSQL_NUMBER=3
-//~ val SCE_MSSQL_STRING=4
-//~ val SCE_MSSQL_OPERATOR=5
-//~ val SCE_MSSQL_IDENTIFIER=6
-//~ val SCE_MSSQL_VARIABLE=7
-//~ val SCE_MSSQL_COLUMN_NAME=8
-//~ val SCE_MSSQL_STATEMENT=9
-//~ val SCE_MSSQL_DATATYPE=10
-//~ val SCE_MSSQL_SYSTABLE=11
-//~ val SCE_MSSQL_GLOBAL_VARIABLE=12
-//~ val SCE_MSSQL_FUNCTION=13
-//~ val SCE_MSSQL_STORED_PROCEDURE=14
-//~ val SCE_MSSQL_DEFAULT_PREF_DATATYPE 15
-//~ val SCE_MSSQL_COLUMN_NAME_2 16
 
 static bool isMSSQLOperator(char ch) {
 	if (isascii(ch) && isalnum(ch))
@@ -133,22 +115,7 @@ static void ColouriseMSSQLDoc(unsigned int startPos, int length,
 	bool fold = styler.GetPropertyInt("fold") != 0;
 	int lineCurrent = styler.GetLine(startPos);
 	int spaceFlags = 0;
-/*
-	WordList &kwStatements          = *keywordlists[KW_MSSQL_STATEMENTS];
-    WordList &kwDataTypes           = *keywordlists[KW_MSSQL_DATA_TYPES];
-    WordList &kwSystemTables        = *keywordlists[KW_MSSQL_SYSTEM_TABLES];
-    WordList &kwGlobalVariables     = *keywordlists[KW_MSSQL_GLOBAL_VARIABLES];
-    WordList &kwFunctions           = *keywordlists[KW_MSSQL_FUNCTIONS];
 
-	char s[100];
-	int iixx = 0;
-	s[0] = 's';	s[1] = 'e'; s[2] = 'l'; s[3] = 'e'; s[4] = 'c'; s[5] = 't'; s[6] = 0;
-	if (kwStatements.InList(s))
-		iixx = 1;
-	s[0] = 's';	s[1] = 'e'; s[2] = 'r'; s[3] = 'v'; s[4] = 'e'; s[5] = 'r'; s[6] = 'n'; s[7] = 'a'; s[8] = 'm'; s[9] = 'e'; s[10] = 0;
-	if (kwGlobalVariables.InList(s))
-		iixx += 2;
-*/
 	int state = initStyle;
 	int prevState = initStyle;
 	char chPrev = ' ';
@@ -315,6 +282,69 @@ static void ColouriseMSSQLDoc(unsigned int startPos, int length,
 	styler.ColourTo(lengthDoc - 1, state);
 }
 
+static void FoldMSSQLDoc(unsigned int startPos, int length, int, WordList *[], Accessor &styler) {
+	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
+	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
+	unsigned int endPos = startPos + length;
+	int visibleChars = 0;
+	int lineCurrent = styler.GetLine(startPos);
+	int levelPrev = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
+	int levelCurrent = levelPrev;
+	char chNext = styler[startPos];
+	bool inComment = (styler.StyleAt(startPos-1) == SCE_MSSQL_COMMENT);
+    char s[10];
+	for (unsigned int i = startPos; i < endPos; i++) {
+		char ch = chNext;
+		chNext = styler.SafeGetCharAt(i + 1);
+		int style = styler.StyleAt(i);
+		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
+        // Comment folding
+		if (foldComment) {
+			if (!inComment && (style == SCE_MSSQL_COMMENT))
+				levelCurrent++;
+			else if (inComment && (style != SCE_MSSQL_COMMENT))
+				levelCurrent--;
+			inComment = (style == SCE_MSSQL_COMMENT);
+		}
+        if (style == SCE_MSSQL_STATEMENT) {
+            // Folding between begin and end
+            if (ch == 'b' || ch == 'e') {
+                for (unsigned int j = 0; j < 5; j++) {
+					if (!iswordchar(styler[i + j])) {
+						break;
+					}
+					s[j] = styler[i + j];
+					s[j + 1] = '\0';
+                }
+				if (strcmp(s, "begin") == 0) {
+					levelCurrent++;
+				}
+				if (strcmp(s, "end") == 0) {
+					levelCurrent--;
+				}
+            }
+        }
+		if (atEOL) {
+			int lev = levelPrev;
+			if (visibleChars == 0 && foldCompact)
+				lev |= SC_FOLDLEVELWHITEFLAG;
+			if ((levelCurrent > levelPrev) && (visibleChars > 0))
+				lev |= SC_FOLDLEVELHEADERFLAG;
+			if (lev != styler.LevelAt(lineCurrent)) {
+				styler.SetLevel(lineCurrent, lev);
+			}
+			lineCurrent++;
+			levelPrev = levelCurrent;
+			visibleChars = 0;
+		}
+		if (!isspacechar(ch))
+			visibleChars++;
+	}
+	// Fill in the real level of the next line, keeping the current flags as they will be filled in later
+	int flagsNext = styler.LevelAt(lineCurrent) & ~SC_FOLDLEVELNUMBERMASK;
+	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
+}
+
 static const char * const sqlWordListDesc[] = {
 	"Statements",
     "Data Types",
@@ -326,4 +356,4 @@ static const char * const sqlWordListDesc[] = {
 	0,
 };
 
-LexerModule lmMSSQL(SCLEX_MSSQL, ColouriseMSSQLDoc, "mssql", 0, sqlWordListDesc);
+LexerModule lmMSSQL(SCLEX_MSSQL, ColouriseMSSQLDoc, "mssql", FoldMSSQLDoc, sqlWordListDesc);

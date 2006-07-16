@@ -114,7 +114,7 @@ wxSize wxToggleButton::DoGetBestSize() const
 {
    wxString label = wxGetWindowText(GetHWND());
    int wBtn;
-   GetTextExtent(label, &wBtn, NULL);
+   GetTextExtent(wxStripMenuCodes(label), &wBtn, NULL);
 
    int wChar, hChar;
    wxGetCharSize(GetHWND(), &wChar, &hChar, GetFont());

@@ -19,10 +19,12 @@
     #error "this file is only for builds with Metrowerks CodeWarrior"
 #endif
 
-#define WX_COMP_INLINE_NO_CLASS // defined if the compiler does not want the classname repeated for inlines within a class definition
+// defined if the compiler does not want the classname repeated for inlines
+// within a class definition
+#define WX_COMP_INLINE_NO_CLASS
 
-#if __MWERKS__ >= 0x2400 && __MWERKS__ <= 0x3200
-#pragma old_argmatch on
+#if __MWERKS__ >= 0x2400 && __MWERKS__ < 0x3200
+    #pragma old_argmatch on
 #endif
 
 #if (__MWERKS__ < 0x0900) || macintosh || __MACH__
@@ -55,14 +57,23 @@
     #endif
     #endif
 #elif defined( __WXMAC__)
-    #define USE_PRECOMPILED_MAC_HEADERS  0  /*Set to 0 if you don't want to use precompiled MacHeaders*/
+    /* Set to 0 if you don't want to use precompiled MacHeaders */
+    #define USE_PRECOMPILED_MAC_HEADERS  0
     #define ACCESSOR_CALLS_ARE_FUNCTIONS 1
     #define OPAQUE_TOOLBOX_STRUCTS 1
-    #ifdef __MACH__
-		typedef int mbstate_t;
-		#define	_MBSTATE_T
+
+    /* CW8.3+ has mbstate_t */
+    #if defined(__MACH__) && __MWERKS__ < 0x3003
+        typedef int mbstate_t;
+        #define    _MBSTATE_T
     #endif
-	#include <mslconfig>
+
+    /* CW9 has ssize_t */
+    #if defined(__MACH__) && __MWERKS__ >= 0x3200
+        #define HAVE_SSIZE_T
+    #endif
+
+    #include <mslconfig>
     // for getting the correct expat includes
     #define MACOS_CLASSIC
     /*

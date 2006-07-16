@@ -38,9 +38,9 @@ import distutils.command.clean
 
 VER_MAJOR        = 2      # The first three must match wxWidgets
 VER_MINOR        = 6
-VER_RELEASE      = 1
-VER_SUBREL       = 1      # wxPython release num for x.y.z release of wxWidgets
-VER_FLAGS        = "pre"  # release flags, such as prerelease or RC num, etc.
+VER_RELEASE      = 3
+VER_SUBREL       = 3      # wxPython release num for x.y.z release of wxWidgets
+VER_FLAGS        = ""     # release flags, such as prerelease or RC num, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
@@ -55,8 +55,8 @@ LONG_DESCRIPTION = """\
 wxPython is a GUI toolkit for Python that is a wrapper around the
 wxWidgets C++ GUI library.  wxPython provides a large variety of
 window types and controls, all implemented with a native look and
-feel (by using the native widgets) on the platforms it is supported
-on.
+feel (by using the native widgets) on the platforms upon which it is
+supported.
 """
 
 CLASSIFIERS      = """\
@@ -130,7 +130,7 @@ INSTALL_MULTIVERSION = 1 # Install the packages such that multiple versions
                    # created that adds that dir to the sys.path.  In
                    # addition, a wxselect.py module will be installed
                    # to site-pacakges that will allow applications to
-                   # choose a specific version if more than one are
+                   # choose a specific version if more than one is
                    # installed.
                    
 FLAVOUR = ""       # Optional flavour string to be appended to VERSION
@@ -139,14 +139,29 @@ FLAVOUR = ""       # Optional flavour string to be appended to VERSION
 EP_ADD_OPTS = 1    # When doing MULTIVERSION installs the wx port and
                    # ansi/unicode settings can optionally be added to the
                    # subdir path used in site-packages
-                   
-                   
+
+EP_FULL_VER = 0    # When doing MULTIVERSION installs the default is to
+                   # put only 2 or 3 (depending on stable/unstable) of
+                   # the version compnonents into the "extra path"
+                   # subdir of site-packages.  Setting this option to
+                   # 1 will cause the full 4 components of the version
+                   # number to be used instead.
+                                      
 WX_CONFIG = None   # Usually you shouldn't need to touch this, but you can set
                    # it to pass an alternate version of wx-config or alternate
                    # flags, eg. as required by the .deb in-tree build.  By
                    # default a wx-config command will be assembled based on
                    # version, port, etc. and it will be looked for on the
                    # default $PATH.
+
+SYS_WX_CONFIG = None # When installing an in tree build, setup.py uses wx-config
+                     # for two different purposes.  First, to determine the prefix
+		     # where files will be installed, and secondly, to initialise
+		     # build_options.py with the correct options for it.
+		     # WX_CONFIG is used for the first task.  SYS_WX_CONFIG may
+		     # be set independently, to the value that should appear in
+		     # build_options.py, if it is different to that.  The default
+		     # is to use the value of WX_CONFIG.
 
 WXPORT = 'gtk2'    # On Linux/Unix there are several ports of wxWidgets available.
                    # Setting this value lets you select which will be used for
@@ -246,7 +261,7 @@ for flag in [ 'BUILD_ACTIVEX', 'BUILD_ANIMATE', 'BUILD_DLLWIDGET',
               'BUILD_OGL', 'BUILD_STC',     
              'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'UNICODE',
              'UNDEF_NDEBUG', 'NO_SCRIPTS', 'NO_HEADERS', 'BUILD_RENAMERS',
-             'FULL_DOCS', 'INSTALL_MULTIVERSION', 'EP_ADD_OPTS',
+             'FULL_DOCS', 'INSTALL_MULTIVERSION', 'EP_ADD_OPTS', 'EP_FULL_VER',
              'MONOLITHIC', 'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(flag) == 0:
@@ -256,8 +271,8 @@ for flag in [ 'BUILD_ACTIVEX', 'BUILD_ANIMATE', 'BUILD_DLLWIDGET',
                 sys.argv[x] = ''
 
 # String options
-for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE', 'WXPORT', 'SWIG',
-               'CONTRIBS_INC', 'WXPY_SRC', 'FLAVOUR', 
+for option in ['WX_CONFIG', 'SYS_WX_CONFIG', 'WXDLLVER', 'BUILD_BASE',
+               'WXPORT', 'SWIG', 'CONTRIBS_INC', 'WXPY_SRC', 'FLAVOUR', 
                ]:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(option) == 0:
@@ -270,43 +285,12 @@ sys.argv = filter(None, sys.argv)
 
 
 #----------------------------------------------------------------------
-# build options file
-#----------------------------------------------------------------------
-
-build_options_template = """
-UNICODE=%d
-UNDEF_NDEBUG=%d
-INSTALL_MULTIVERSION=%d
-FLAVOUR="%s"
-EP_ADD_OPTS=%d
-WX_CONFIG="%s"
-WXPORT="%s"
-MONOLITHIC=%d
-FINAL=%d
-HYBRID=%d
-""" % (UNICODE, UNDEF_NDEBUG, INSTALL_MULTIVERSION, FLAVOUR, EP_ADD_OPTS,
-       WX_CONFIG, WXPORT, MONOLITHIC, FINAL, HYBRID)
-
-try: 
-    from build_options import *
-except:
-    build_options_file = os.path.join(os.path.dirname(__file__), "build_options.py")
-    if not os.path.exists(build_options_file):
-        try:
-            myfile = open(build_options_file, "w")
-            myfile.write(build_options_template)
-            myfile.close()
-        except:
-            print "WARNING: Unable to create build_options.py."
-    
-
-#----------------------------------------------------------------------
 # some helper functions
 #----------------------------------------------------------------------
 
 def Verify_WX_CONFIG():
     """ Called below for the builds that need wx-config, if WX_CONFIG
-        is not set then determins the flags needed based on build
+        is not set then determines the flags needed based on build
         options and searches for wx-config on the PATH.  
     """
     # if WX_CONFIG hasn't been set to an explicit value then construct one.
@@ -335,7 +319,7 @@ def Verify_WX_CONFIG():
             msg("ERROR: WX_CONFIG not specified and wx-config not found on the $PATH")
             # should we exit?
 
-        # TODO:  exeucte WX_CONFIG --list and verify a matching config is found
+        # TODO:  execute WX_CONFIG --list and verify a matching config is found
         
 
 def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args,
@@ -381,7 +365,7 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args,
                     pass
 
             if force or newer(i_file, py_file) or newer(i_file, cpp_file):
-                ## we need forward slashes here even on win32
+                ## we need forward slashes here, even on win32
                 #cpp_file = opj(cpp_file) #'/'.join(cpp_file.split('\\'))
                 #i_file = opj(i_file)     #'/'.join(i_file.split('\\'))
 
@@ -513,7 +497,7 @@ def build_locale_dir(destdir, verbose=1):
     moFiles = glob.glob(opj(WXDIR, 'locale', '*.mo'))
     for src in moFiles:
         lang = os.path.splitext(os.path.basename(src))[0]
-        dest = opj(destdir, lang, 'LC_MESSAGES')
+        dest = opj(destdir, lang)
         mkpath(dest, verbose=verbose)
         copy_file(src, opj(dest, 'wxstd.mo'), update=1, verbose=verbose)
         CLEANUP.append(opj(dest, 'wxstd.mo'))
@@ -584,7 +568,7 @@ def adjustCFLAGS(cflags, defines, includes):
 
 
 
-def adjustLFLAGS(lfags, libdirs, libs):
+def adjustLFLAGS(lflags, libdirs, libs):
     '''Extract the -L and -l flags and put them in libdirs and libs as needed'''
     newLFLAGS = []
     for flag in lflags:
@@ -595,7 +579,11 @@ def adjustLFLAGS(lfags, libdirs, libs):
         else:
             newLFLAGS.append(flag)
 
-    return newLFLAGS
+    # remove any flags for universal binaries, we'll get those from
+    # distutils instead
+    return [flag for flag in newLFLAGS
+            if flag not in ['-isysroot', '-arch', 'ppc', 'i386'] and
+            not flag.startswith('/Developer') ]
 
 
 
@@ -765,6 +753,7 @@ elif os.name == 'posix':
         cflags.append('-O3')
 
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
+    MONOLITHIC = (lflags.find("_xrc") == -1)
     lflags = lflags.split()
 
     WXBASENAME = os.popen(WX_CONFIG + ' --basename').read()[:-1]
@@ -820,6 +809,41 @@ else:
 
 
 #----------------------------------------------------------------------
+# build options file
+#----------------------------------------------------------------------
+
+if SYS_WX_CONFIG is None:
+    SYS_WX_CONFIG = WX_CONFIG
+
+build_options_template = """
+UNICODE=%d
+UNDEF_NDEBUG=%d
+INSTALL_MULTIVERSION=%d
+FLAVOUR="%s"
+EP_ADD_OPTS=%d
+EP_FULL_VER=%d
+WX_CONFIG="%s"
+WXPORT="%s"
+MONOLITHIC=%d
+FINAL=%d
+HYBRID=%d
+""" % (UNICODE, UNDEF_NDEBUG, INSTALL_MULTIVERSION, FLAVOUR, EP_ADD_OPTS,
+       EP_FULL_VER, SYS_WX_CONFIG, WXPORT, MONOLITHIC, FINAL, HYBRID)
+
+try: 
+    from build_options import *
+except:
+    build_options_file = os.path.join(os.path.dirname(__file__), "build_options.py")
+    if not os.path.exists(build_options_file):
+        try:
+            myfile = open(build_options_file, "w")
+            myfile.write(build_options_template)
+            myfile.close()
+        except:
+            print "WARNING: Unable to create build_options.py."
+    
+
+#----------------------------------------------------------------------
 # post platform setup checks and tweaks, create the full version string
 #----------------------------------------------------------------------
 
@@ -858,9 +882,7 @@ swig_force = force
 swig_args = ['-c++',
              '-Wall',
              '-nodefault',
-
              '-python',
-             '-keyword',
              '-new_repr',
              '-modern',
              '-D'+WXPLAT,

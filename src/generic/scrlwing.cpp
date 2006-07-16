@@ -230,7 +230,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         // normally, nothing more to do here - except if it was a paint event
         // which wasn't really processed, then we'll try to call our
         // OnDraw() below (from HandleOnPaint)
-        if ( m_hasDrawnWindow )
+        if ( m_hasDrawnWindow || event.IsCommandEvent() )
         {
             return true;
         }
@@ -882,7 +882,7 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
     if (((x_pos == -1) || (x_pos == m_xScrollPosition)) &&
         ((y_pos == -1) || (y_pos == m_yScrollPosition))) return;
 
-    int w, h;
+    int w = 0, h = 0;
     GetTargetSize(&w, &h);
 
     if ((x_pos != -1) && (m_xScrollPixelsPerLine))
@@ -1278,7 +1278,7 @@ bool wxGenericScrolledWindow::Layout()
         // If we're the scroll target, take into account the
         // virtual size and scrolled position of the window.
 
-        int x, y, w, h;
+        int x = 0, y = 0, w = 0, h = 0;
         CalcScrolledPosition(0,0, &x,&y);
         GetVirtualSize(&w, &h);
         GetSizer()->SetDimension(x, y, w, h);
@@ -1319,6 +1319,7 @@ wxSize wxGenericScrolledWindow::DoGetBestSize() const
 {
     wxSize best;
 
+    bool addClientSizeDiff = true;
     if ( GetSizer() )
     {
         wxSize b = GetSizer()->GetMinSize();
@@ -1333,7 +1334,14 @@ wxSize wxGenericScrolledWindow::DoGetBestSize() const
         if ( GetMinSize().IsFullySpecified() )
             minSize = GetMinSize();
         else
+        {
             minSize = GetSize();
+            
+            // If we're using the overall size, we don't want to then
+            // add to it, or we'll successively grow the window over
+            // multiple layouts.
+            addClientSizeDiff = false;
+        }
 
         if (ppuX > 0)
             b.x = minSize.x;
@@ -1345,9 +1353,12 @@ wxSize wxGenericScrolledWindow::DoGetBestSize() const
         return wxWindow::DoGetBestSize();
 
     // Add any difference between size and client size
-    wxSize diff = GetSize() - GetClientSize();
-    best.x += wxMax(0, diff.x);
-    best.y += wxMax(0, diff.y);
+    if (addClientSizeDiff)
+    {
+        wxSize diff = GetSize() - GetClientSize();
+        best.x += wxMax(0, diff.x);
+        best.y += wxMax(0, diff.y);
+    }
 
     return best;
 }

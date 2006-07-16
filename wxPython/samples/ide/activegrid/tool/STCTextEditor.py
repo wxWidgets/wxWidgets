@@ -6,7 +6,7 @@
 #
 # Created:      8/10/03
 # CVS-ID:       $Id$
-# Copyright:    (c) 2003-2005 ActiveGrid, Inc.
+# Copyright:    (c) 2003-2006 ActiveGrid, Inc.
 # License:      wxWindows License
 #----------------------------------------------------------------------------
 
@@ -47,9 +47,15 @@ TEXT_STATUS_BAR_ID = wx.NewId()
 class TextDocument(wx.lib.docview.Document):
 
 
+    def __init__(self):
+        wx.lib.docview.Document .__init__(self)
+        self._inModify = False
+
+
     def SaveObject(self, fileObject):
         view = self.GetFirstView()
         fileObject.write(view.GetValue())
+        view.SetModifyFalse()
         return True
         
 
@@ -57,28 +63,42 @@ class TextDocument(wx.lib.docview.Document):
         view = self.GetFirstView()
         data = fileObject.read()
         view.SetValue(data)
+        view.SetModifyFalse()
         return True
 
 
     def IsModified(self):
         view = self.GetFirstView()
         if view:
-            return wx.lib.docview.Document.IsModified(self) or view.IsModified()
-        else:
-            return wx.lib.docview.Document.IsModified(self)
+            return view.IsModified()
+        return False
 
 
-    def Modify(self, mod):
+    def Modify(self, modify):
+        if self._inModify:
+            return
+        self._inModify = True
+        
         view = self.GetFirstView()
-        wx.lib.docview.Document.Modify(self, mod)
-        if not mod and view:
+        if not modify and view:
             view.SetModifyFalse()
 
+        wx.lib.docview.Document.Modify(self, modify)  # this must called be after the SetModifyFalse call above.
 
+        self._inModify = False
+        
+    
     def OnCreateCommandProcessor(self):
         # Don't create a command processor, it has its own
         pass
 
+
+# Use this to override MultiClient.Select to prevent yellow background.	 
+def MultiClientSelectBGNotYellow(a):	 
+    a.GetParent().multiView.UnSelect()	 
+    a.selected = True	 
+    #a.SetBackgroundColour(wx.Colour(255,255,0)) # Yellow	 
+    a.Refresh()
 
 class TextView(wx.lib.docview.View):
     MARKER_NUM = 0
@@ -102,6 +122,12 @@ class TextView(wx.lib.docview.View):
         
 
     def GetCtrl(self):
+        if wx.Platform == "__WXMAC__":
+            # look for active one first	 
+            self._textEditor = self._GetActiveCtrl(self._dynSash)	 
+            if self._textEditor == None:  # it is possible none are active	 
+                # look for any existing one	 
+                self._textEditor = self._FindCtrl(self._dynSash)
         return self._textEditor
 
 
@@ -116,9 +142,21 @@ class TextView(wx.lib.docview.View):
             
     def OnCreate(self, doc, flags):
         frame = wx.GetApp().CreateDocumentFrame(self, doc, flags, style = wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
-        self._dynSash = wx.gizmos.DynamicSashWindow(frame, -1, style=wx.CLIP_CHILDREN)
-        self._dynSash._view = self
-        self._textEditor = self.GetCtrlClass()(self._dynSash, -1, style=wx.NO_BORDER)
+        # wxBug: DynamicSashWindow doesn't work on Mac, so revert to
+        # multisash implementation
+        if wx.Platform == "__WXMAC__":
+            wx.lib.multisash.MultiClient.Select = MultiClientSelectBGNotYellow
+            self._dynSash = wx.lib.multisash.MultiSash(frame, -1)
+            self._dynSash.SetDefaultChildClass(self.GetCtrlClass()) # wxBug:  MultiSash instantiates the first TextCtrl with this call
+            
+            self._textEditor = self.GetCtrl()  # wxBug: grab the TextCtrl from the MultiSash datastructure
+        else:
+            self._dynSash = wx.gizmos.DynamicSashWindow(frame, -1, style=wx.CLIP_CHILDREN)
+            self._dynSash._view = self
+            self._textEditor = self.GetCtrlClass()(self._dynSash, -1, style=wx.NO_BORDER)
+        wx.EVT_LEFT_DOWN(self._textEditor, self.OnLeftClick)
+        self._textEditor.Bind(wx.stc.EVT_STC_MODIFIED, self.OnModify)
+        
         self._CreateSizer(frame)
         self.Activate()
         frame.Show(True)
@@ -126,18 +164,29 @@ class TextView(wx.lib.docview.View):
         return True
 
 
+    def OnModify(self, event):
+        self.GetDocument().Modify(self._textEditor.GetModify())
+        
+
     def _CreateSizer(self, frame):
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add(self._dynSash, 1, wx.EXPAND)
         frame.SetSizer(sizer)
-        frame.SetAutoLayout(True)
+
+
+    def OnLeftClick(self, event):
+        self.Activate()
+        event.Skip()
 
 
     def OnUpdate(self, sender = None, hint = None):
+        if wx.lib.docview.View.OnUpdate(self, sender, hint):
+            return
+
         if hint == "ViewStuff":
             self.GetCtrl().SetViewDefaults()
         elif hint == "Font":
-            font, color = self.GetFontAndColorFromConfig()
+            font, color = self.GetCtrl().GetFontAndColorFromConfig()
             self.GetCtrl().SetFont(font)
             self.GetCtrl().SetFontColor(color)
 
@@ -195,7 +244,7 @@ class TextView(wx.lib.docview.View):
             self.GetCtrl().SetViewEOL(not self.GetCtrl().GetViewEOL())
             return True
         elif id == VIEW_INDENTATION_GUIDES_ID:
-            self.GetCtrl().SetViewIndentationGuides(not self.GetCtrl().GetViewIndentationGuides())
+            self.GetCtrl().SetIndentationGuides(not self.GetCtrl().GetIndentationGuides())
             return True
         elif id == VIEW_RIGHT_EDGE_ID:
             self.GetCtrl().SetViewRightEdge(not self.GetCtrl().GetViewRightEdge())
@@ -352,6 +401,29 @@ class TextView(wx.lib.docview.View):
     def _GetParentFrame(self):
         return wx.GetTopLevelParent(self.GetFrame())
 
+    def _GetActiveCtrl(self, parent):	 
+        """ Walk through the MultiSash windows and find the active Control """	 
+        if isinstance(parent, wx.lib.multisash.MultiClient) and parent.selected:	 
+            return parent.child	 
+        if hasattr(parent, "GetChildren"):	 
+            for child in parent.GetChildren():	 
+                found = self._GetActiveCtrl(child)	 
+                if found:	 
+                    return found	 
+        return None	 
+
+ 	 
+    def _FindCtrl(self, parent):	 
+        """ Walk through the MultiSash windows and find the first TextCtrl """	 
+        if isinstance(parent, self.GetCtrlClass()):	 
+            return parent	 
+        if hasattr(parent, "GetChildren"):	 
+            for child in parent.GetChildren():	 
+                found = self._FindCtrl(child)	 
+                if found:	 
+                    return found	 
+        return None	 
+ 
 
     #----------------------------------------------------------------------------
     # Methods for TextDocument to call
@@ -401,6 +473,7 @@ class TextView(wx.lib.docview.View):
         data.SetInitialFont(self.GetCtrl().GetFont())
         data.SetColour(self.GetCtrl().GetFontColor())
         fontDialog = wx.FontDialog(self.GetFrame(), data)
+        fontDialog.CenterOnParent()
         if fontDialog.ShowModal() == wx.ID_OK:
             data = fontDialog.GetFontData()
             self.GetCtrl().SetFont(data.GetChosenFont())
@@ -520,8 +593,10 @@ class TextView(wx.lib.docview.View):
     def EnsureVisible(self, line):
         self.GetCtrl().EnsureVisible(line-1)  # line numbering for editor is 0 based, we are 1 based.
 
+
     def EnsureVisibleEnforcePolicy(self, line):
         self.GetCtrl().EnsureVisibleEnforcePolicy(line-1)  # line numbering for editor is 0 based, we are 1 based.
+
 
     def LineFromPosition(self, pos):
         return self.GetCtrl().LineFromPosition(pos)+1  # line numbering for editor is 0 based, we are 1 based.
@@ -614,7 +689,13 @@ class TextView(wx.lib.docview.View):
         else:
             return False
 
-
+    def GetMarkerLines(self, mask=MARKER_MASK):
+        retval = []
+        for lineNum in range(self.GetCtrl().GetLineCount()):
+            if self.GetCtrl().MarkerGet(lineNum) & mask:
+                retval.append(lineNum)
+        return retval
+        
     def GetMarkerCount(self):
         return self._markerCount
 
@@ -756,11 +837,12 @@ class TextStatusBar(wx.StatusBar):
 class TextOptionsPanel(wx.Panel):
 
 
-    def __init__(self, parent, id, configPrefix = "Text", label = "Text", hasWordWrap = True, hasTabs = False, addPage=True):
+    def __init__(self, parent, id, configPrefix = "Text", label = "Text", hasWordWrap = True, hasTabs = False, addPage=True, hasFolding=False):
         wx.Panel.__init__(self, parent, id)
         self._configPrefix = configPrefix
         self._hasWordWrap = hasWordWrap
         self._hasTabs = hasTabs
+        self._hasFolding = hasFolding
         SPACE = 10
         HALF_SPACE   = 5
         config = wx.ConfigBase_Get()
@@ -797,6 +879,9 @@ class TextOptionsPanel(wx.Panel):
         self._viewRightEdgeCheckBox.SetValue(config.ReadInt(self._configPrefix + "EditorViewRightEdge", False))
         self._viewLineNumbersCheckBox = wx.CheckBox(self, -1, _("Show line numbers"))
         self._viewLineNumbersCheckBox.SetValue(config.ReadInt(self._configPrefix + "EditorViewLineNumbers", True))
+        if self._hasFolding:
+            self._viewFoldingCheckBox = wx.CheckBox(self, -1, _("Show folding"))
+            self._viewFoldingCheckBox.SetValue(config.ReadInt(self._configPrefix + "EditorViewFolding", True))
         if self._hasTabs:
             self._hasTabsCheckBox = wx.CheckBox(self, -1, _("Use spaces instead of tabs"))
             self._hasTabsCheckBox.SetValue(not wx.ConfigBase_Get().ReadInt(self._configPrefix + "EditorUseTabs", False))
@@ -807,9 +892,9 @@ class TextOptionsPanel(wx.Panel):
         textPanelSizer = wx.BoxSizer(wx.VERTICAL)
         textFontSizer = wx.BoxSizer(wx.HORIZONTAL)
         textFontSizer.Add(fontLabel, 0, wx.ALIGN_LEFT | wx.RIGHT | wx.TOP, HALF_SPACE)
-        textFontSizer.Add(self._sampleTextCtrl, 0, wx.ALIGN_LEFT | wx.EXPAND | wx.RIGHT, HALF_SPACE)
+        textFontSizer.Add(self._sampleTextCtrl, 1, wx.ALIGN_LEFT | wx.EXPAND | wx.RIGHT, HALF_SPACE)
         textFontSizer.Add(chooseFontButton, 0, wx.ALIGN_RIGHT | wx.LEFT, HALF_SPACE)
-        textPanelSizer.Add(textFontSizer, 0, wx.ALL, HALF_SPACE)
+        textPanelSizer.Add(textFontSizer, 0, wx.ALL|wx.EXPAND, HALF_SPACE)
         if self._hasWordWrap:
             textPanelSizer.Add(self._wordWrapCheckBox, 0, wx.ALL, HALF_SPACE)
         textPanelSizer.Add(self._viewWhitespaceCheckBox, 0, wx.ALL, HALF_SPACE)
@@ -817,13 +902,15 @@ class TextOptionsPanel(wx.Panel):
         textPanelSizer.Add(self._viewIndentationGuideCheckBox, 0, wx.ALL, HALF_SPACE)
         textPanelSizer.Add(self._viewRightEdgeCheckBox, 0, wx.ALL, HALF_SPACE)
         textPanelSizer.Add(self._viewLineNumbersCheckBox, 0, wx.ALL, HALF_SPACE)
+        if self._hasFolding:
+            textPanelSizer.Add(self._viewFoldingCheckBox, 0, wx.ALL, HALF_SPACE)
         if self._hasTabs:
             textPanelSizer.Add(self._hasTabsCheckBox, 0, wx.ALL, HALF_SPACE)
             textIndentWidthSizer = wx.BoxSizer(wx.HORIZONTAL)
             textIndentWidthSizer.Add(indentWidthLabel, 0, wx.ALIGN_LEFT | wx.RIGHT | wx.TOP, HALF_SPACE)
             textIndentWidthSizer.Add(self._indentWidthChoice, 0, wx.ALIGN_LEFT | wx.EXPAND, HALF_SPACE)
             textPanelSizer.Add(textIndentWidthSizer, 0, wx.ALL, HALF_SPACE)
-        textPanelBorderSizer.Add(textPanelSizer, 0, wx.ALL, SPACE)
+        textPanelBorderSizer.Add(textPanelSizer, 0, wx.ALL|wx.EXPAND, SPACE)
 ##        styleButton = wx.Button(self, -1, _("Choose Style..."))
 ##        wx.EVT_BUTTON(self, styleButton.GetId(), self.OnChooseStyle)
 ##        textPanelBorderSizer.Add(styleButton, 0, wx.ALL, SPACE)
@@ -856,6 +943,7 @@ class TextOptionsPanel(wx.Panel):
 ##                                #'HTML', 'html',
 ##                                #'XML', 'xml',
 ##                                config)
+##        dlg.CenterOnParent()
 ##        try:
 ##            dlg.ShowModal()
 ##        finally:
@@ -868,6 +956,7 @@ class TextOptionsPanel(wx.Panel):
         data.SetInitialFont(self._textFont)
         data.SetColour(self._textColor)
         fontDialog = wx.FontDialog(self, data)
+        ##fontDialog.CenterOnParent()
         if fontDialog.ShowModal() == wx.ID_OK:
             data = fontDialog.GetFontData()
             self._textFont = data.GetChosenFont()
@@ -888,6 +977,9 @@ class TextOptionsPanel(wx.Panel):
         config.WriteInt(self._configPrefix + "EditorViewRightEdge", self._viewRightEdgeCheckBox.GetValue())
         doViewStuffUpdate = doViewStuffUpdate or config.ReadInt(self._configPrefix + "EditorViewLineNumbers", True) != self._viewLineNumbersCheckBox.GetValue()
         config.WriteInt(self._configPrefix + "EditorViewLineNumbers", self._viewLineNumbersCheckBox.GetValue())
+        if self._hasFolding:
+            doViewStuffUpdate = doViewStuffUpdate or config.ReadInt(self._configPrefix + "EditorViewFolding", True) != self._viewFoldingCheckBox.GetValue()
+            config.WriteInt(self._configPrefix + "EditorViewFolding", self._viewFoldingCheckBox.GetValue())
         if self._hasWordWrap:
             doViewStuffUpdate = doViewStuffUpdate or config.ReadInt(self._configPrefix + "EditorWordWrap", False) != self._wordWrapCheckBox.GetValue()
             config.WriteInt(self._configPrefix + "EditorWordWrap", self._wordWrapCheckBox.GetValue())
@@ -909,6 +1001,10 @@ class TextOptionsPanel(wx.Panel):
                         document.UpdateAllViews(hint = "ViewStuff")
                     if doFontUpdate:
                         document.UpdateAllViews(hint = "Font")
+               
+         
+    def GetIcon(self):
+        return getTextIcon()
 
 
 class TextCtrl(wx.stc.StyledTextCtrl):
@@ -958,8 +1054,27 @@ class TextCtrl(wx.stc.StyledTextCtrl):
         self.SetFontColor(color)
         self.MarkerDefineDefault()
 
+        # for multisash initialization	 
+        if isinstance(parent, wx.lib.multisash.MultiClient):	 
+            while parent.GetParent():	 
+                parent = parent.GetParent()	 
+                if hasattr(parent, "GetView"):	 
+                    break	 
+            if hasattr(parent, "GetView"):	 
+                textEditor = parent.GetView()._textEditor	 
+                if textEditor:	 
+                    doc = textEditor.GetDocPointer()	 
+                    if doc:	 
+                        self.SetDocPointer(doc)
+
 
     def OnFocus(self, event):
+        # wxBug: On Mac, the STC control may fire a focus/kill focus event
+        # on shutdown even if the control is in an invalid state. So check
+        # before handling the event.
+        if self.IsBeingDeleted():
+            return
+            
         self.SetSelBackground(1, "BLUE")
         self.SetSelForeground(1, "WHITE")
         if hasattr(self, "_dynSash"):
@@ -968,6 +1083,11 @@ class TextCtrl(wx.stc.StyledTextCtrl):
 
 
     def OnKillFocus(self, event):
+        # wxBug: On Mac, the STC control may fire a focus/kill focus event
+        # on shutdown even if the control is in an invalid state. So check
+        # before handling the event.
+        if self.IsBeingDeleted():
+            return
         self.SetSelBackground(0, "BLUE")
         self.SetSelForeground(0, "WHITE")
         self.SetSelBackground(1, "#C0C0C0")
@@ -975,13 +1095,15 @@ class TextCtrl(wx.stc.StyledTextCtrl):
         event.Skip()
         
 
-    def SetViewDefaults(self, configPrefix = "Text", hasWordWrap = True, hasTabs = False):
+    def SetViewDefaults(self, configPrefix="Text", hasWordWrap=True, hasTabs=False, hasFolding=False):
         config = wx.ConfigBase_Get()
         self.SetViewWhiteSpace(config.ReadInt(configPrefix + "EditorViewWhitespace", False))
         self.SetViewEOL(config.ReadInt(configPrefix + "EditorViewEOL", False))
         self.SetIndentationGuides(config.ReadInt(configPrefix + "EditorViewIndentationGuides", False))
         self.SetViewRightEdge(config.ReadInt(configPrefix + "EditorViewRightEdge", False))
         self.SetViewLineNumbers(config.ReadInt(configPrefix + "EditorViewLineNumbers", True))
+        if hasFolding:
+            self.SetViewFolding(config.ReadInt(configPrefix + "EditorViewFolding", True))
         if hasWordWrap:
             self.SetWordWrap(config.ReadInt(configPrefix + "EditorWordWrap", False))
         if hasTabs:  # These methods do not exist in STCTextEditor and are meant for subclasses
@@ -1148,6 +1270,17 @@ class TextCtrl(wx.stc.StyledTextCtrl):
             self.SetMarginWidth(1, self.EstimatedLineNumberMarginWidth())
         else:
             self.SetMarginWidth(1, 0)
+
+
+    def GetViewFolding(self):
+        return self.GetMarginWidth(2) > 0
+
+
+    def SetViewFolding(self, viewFolding = True):
+        if viewFolding:
+            self.SetMarginWidth(2, 12)
+        else:
+            self.SetMarginWidth(2, 0)
 
 
     def CanWordWrap(self):
@@ -1328,13 +1461,21 @@ import cStringIO
 
 def getTextData():
     return \
-'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00`IDAT8\x8d\xed\x931\x0e\xc00\x08\x03m\x92\xff\xff8q\xa7JU!$\x12\x1d\
-\xeb\t\t8n\x81\xb4\x86J\xfa]h\x0ee\x83\xb4\xc6\x14\x00\x00R\xcc \t\xcd\xa1\
-\x08\xd2\xa3\xe1\x08*\t$\x1d\xc4\x012\x0b\x00\xce\xe4\xc8\xe0\t}\xf7\x8f\rV\
-\xd9\x1a\xec\xe0\xbf\xc1\xd7\x06\xd9\xf5UX\xfdF+m\x03\xb8\x00\xe4\xc74B"x\
-\xf1\xf4\x00\x00\x00\x00IEND\xaeB`\x82' 
+\x00\x015IDAT8\x8d\xad\x90\xb1N\xc2P\x14\x86\xbf\x02/\xe0\xec#\x18g\xc3\xe6T\
+\x13':1\x18H\x98\x14\x12\x17G\x177\x17\x9c4a\xc5\xc0d0\xc2\xccdLx\x02^@+\t\
+\xc1\x90\xf6r\xdb\xc6\x94\xe5:\\\xdbP)\xc5DOr\x92\x9b{\xff\xfb\xfd\xff9\xc6h\
+l+\xbek.\x02\x00\xec\x99\x03\x80\xeb\xf8\\\x9d\x1d\x1bd\xd5hl\xab\xd7O\x15\
+\xf7x\xa1\xfb\xeeq\xa4^>\x94\xba\xb8yRF.\xcf\xa6.D\xa0Nw\x18C\xad\xb2\x19\
+\x9f\x0f\xca\x165\xd1V\xed\xebZj\x92\xc2\\\x04\xec\x02\xd5\x8a\x89\xb7\xd4\
+\x97n\xa8\xe3?\x0f\x86\x08\x19dNP\x00\xf0\x96\xd0\x7f\xd0\t\x84\x0c(U-\x0eK&\
+\xd3P\x8bz\xcdV6 \x8a\xed\x86\x99f\xe9\x00{\xe6\xb0\x13\xc2\xa0\xd3\xd7\t\
+\x84\x9f\x10\xec\x9dTp\x1d\xb1=A\xa9j\x01\xc4\xb1\x01&\xfe\x9a~\x1d\xe0:Zu\
+\x7f\xdb\x05@J/!(\xd6\x1bL\xde\xec\xcd\x00!\x03\xa6!\x1c\x9dVR\x9d\xdf\xe5\
+\x96\x04\xd1au\xd3\xab3\xef\x9f_f\x03\xa2\xa5\x15\xeb\x8d\xc4\xc36\xe7\x18 \
+\xa5G\xaf\xd9J\xb8f\xcd\xfc\xb3\x0c#\x97\xff\xb58\xadr\x7f\xfa\xfd\x1f\x80/\
+\x04\x1f\x8fW\x0e^\xc3\x12\x00\x00\x00\x00IEND\xaeB`\x82" 
 
 
 def getTextBitmap():
@@ -1356,12 +1497,20 @@ def getZoomInData():
     return \
 '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00wIDAT8\x8d\xa5\x93Q\x12\x80 \x08D\xb5\xe9X\xee\xe9\xb7{\xd5Gc\xa9\
-\xacX\xca\x1f\xa0\x8fE0\x92<\xc3\x82\xed*\x08\xa0\xf2I~\x07\x000\x17T,\xdb\
-\xd6;\x08\xa4\x00\xa4GA\xab\xca\x00\xbc*\x1eD\xb4\x90\xa4O\x1e\xe3\x16f\xcc(\
-\xc8\x95F\x95\x8d\x02\xef\xa1n\xa0\xce\xc5v\x91zc\xacU\xbey\x03\xf0.\xa8\xb8\
-\x04\x8c\xac\x04MM\xa1lA\xfe\x85?\x90\xe5=X\x06\\\xebCA\xb3Q\xf34\x14\x00\
-\x00\x00\x00IEND\xaeB`\x82' 
+\x00\x01TIDAT8\x8d\x8d\x93\xbbJ\x03A\x14\x86\xbf\xd9,\xc6\xd8E%`)VF[{\xc1v\
+\xf1\x82\x8f\xb0\xb94\xda\xa5\x13\x11\x8b`\xa9h\x10F\xe3#H.\xa6\x15\xccKhg\
+\x10\xc1B\x8bTF\x90\xc0X\x8c3\xbb\xd9\xcdF\x7f\x18\xf6\xec\x9cs\xbe\xfd\xe70\
++\x84\x93"\xacb\xc1W\xe1\xf7\xeb\xfa\x8d`\x82\xdcXcI\x8e\x02AM\x02\t\xe1\xa4\
+(\x16|uz)y\x19\xc0\xc9\xdd;\x99\xee!\x00\xd9\xbd\x00\xd6\xaf\x95\xc7B\xac\
+\x03\xd3\x1c\xd6\xc2t\x10\xf7\x13\x8e\xe0\x14\x0b\xbe\xa2$m\xf3\xca\xea\xacM\
+\xe6\xd2\xc1\xcaWdl>#\x0e\x8c\xed\xe7n\x90|\xa8\x96m\xbc~ y\x04Z\xcd\x86\xda\
+\xda\xde\xb1Gq\x00\xb2S\t\xfeB\x9aK\xa8\xb1\x0e\xf2\x15I.\xad\x0bo\x8f\xf4\
+\x97\xab\xe7z\x88\x1f\xdf\xf0\xfa9\x1e\xe0x\x9eG\xbf\x16X\xcd\xb8Ar\xc6\xd5\
+\x0b4\xd4\xf3\xbcd\x07F_\xc3 \x1e\x0c\xa3Y\x08\x9f\x1f~\xefA\xab\xd9P\x9dN\
+\x07\x80\xddcI\xc6\x85\xf9\xb4.8\xabhwK\xbd+6\x16\xf5\xdeZ=%F\x00\xa0\xa7\
+\x0b`@F\xc6\xf6\xd3\xc5&@\x0c"\xa2\xff\x82\x01\x85-\xb7\x9a\re\x00QH\x0c0N\
+\x06\x1a\x85\xbcym}\x0f\xfe\x92\x19\xdc\xf2~\xdb\xee\xdd\xf7\xf4\xf3_\x0e\
+\xa2N\xc2\xfa\x01MYp\xbc\xe4a\x0f\xa9\x00\x00\x00\x00IEND\xaeB`\x82' 
 
 def getZoomInBitmap():
     return BitmapFromImage(getZoomInImage())
@@ -1375,11 +1524,20 @@ def getZoomOutData():
     return \
 '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00qIDAT8\x8d\xa5\x92Q\x0e\xc0 \x08C-z\xff\x13O\xd9\xd7\x16"\x05\x8d\
-\xf6O\xa2\x8f"\x05\xa4\x96\x1b5V\xd4\xd1\xd5\x9e!\x15\xdb\x00\x1d]\xe7\x07\
-\xac\xf6Iv.B*fW\x0e\x90u\xc9 d\x84\x87v\x82\xb4\xf5\x08\'r\x0e\xa2N\x91~\x07\
-\xd9G\x95\xe2W\xeb\x00\x19\xc4\xd6\\FX\x12\xa3 \xb1:\x05\xacdAG[\xb0y9r`u\
-\x9d\x83k\xc0\x0b#3@0A\x0c"\x93\x00\x00\x00\x00IEND\xaeB`\x82' 
+\x00\x01RIDAT8\x8d\x8d\x93\xbbJ\x03A\x14\x86\xbf\xd9\x04\x93\x90J\x0cj#Dl\
+\xf4\x01\xec\x05\xdb\xc5\x0b>B\x92]\x1b+\xed,D\xb0\xb4\x08\x9afc|\x04\xc9\
+\x85\xb4>\x84\x95`\x93\x80`\x15\xd8*\x98\x84\xc0X\xcc\xce\xde7\xf8\xc30\x97=\
+\xf3\xcd\x7f\xce\xcc\na\xe4\x08\xabQ\xaf\xc9\xf0\xfc\xa5\xf3*X\xa1|b\xa3\xe5\
+D\x81 W\x81\x840r4\xea5\xf9\xf0\xe40Y@\xf3+\xf8\xb8\xbe\x16\x8c\xdd\x96\x9d\
+\n1\xf4\xc0\xdf\xdc\xb6\x01\xa8\xca\x19[\x05\xfc\x96%aY\x96\x0c\xdb\xae\xca\
+\x99\xea7\x8b\x91@w.\xf9x\xbcL\xb8\xf0k\xa0O\x1e{\xd31Q\x1d\xdd\xaaC\xfa\xbd\
+\xae<=;\xf7!F<\xd7,md\xc4\xf8\x0e\xf6\xaf\x1d\xb6\x8b*p\xa7\x0c\x95\xd0\x86\
+\xc9\x02\xbe\xa7\xe9\x00\xc34M\xdc\x96MA\xa8[,y\xc8r>h\x00ow6\xa6if;\x98K\
+\x95\xd6\xef\x12(\xc0t\x99~b8\x7f\xf0\xdeA\xbf\xd7\x95\xc3\xe1\x10\x80\x8b{\
+\x87R\x1e*\xde\xd55oTq\xf7Fm\x8ew\xd5\xdaa\'\'"\x00P\xd5\x05\xd0 -m\xfb\xf3\
+\xf9\x04 \x01\x11\xf1\x7fA\x83\xc2\x96\xfb\xbd\xae\xd4\x808$\x01H\x93\x86\
+\xc6!?\xe6 x\xca\xab\xa4\x0bwp5\xf0\xd7\xdeG\xaa\xff\x97\x83\xb8\x93\xb0\xfe\
+\x00\xc3\xa8ov\xfd\xe4\x9c\xa2\x00\x00\x00\x00IEND\xaeB`\x82' 
  
 
 def getZoomOutBitmap():
