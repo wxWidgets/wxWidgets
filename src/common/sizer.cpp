@@ -1153,7 +1153,7 @@ wxSize wxGridSizer::CalcMin()
 {
     int nrows, ncols;
     if ( CalcRowsCols(nrows, ncols) == 0 )
-        return wxSize(10, 10);
+        return wxSize();
 
     // Find the max width and height for any component
     int w = 0;
@@ -1278,7 +1278,7 @@ wxSize wxFlexGridSizer::CalcMin()
 
     // Number of rows/columns can change as items are added or removed.
     if ( !CalcRowsCols(nrows, ncols) )
-        return wxSize(10, 10);
+        return wxSize();
 
     m_rowHeights.SetCount(nrows);
     m_colWidths.SetCount(ncols);
@@ -1610,7 +1610,7 @@ void wxBoxSizer::RecalcSizes()
 wxSize wxBoxSizer::CalcMin()
 {
     if (m_children.GetCount() == 0)
-        return wxSize(10,10);
+        return wxSize();
 
     m_stretchable = 0;
     m_minWidth = 0;
