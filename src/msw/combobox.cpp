@@ -321,6 +321,12 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
             // CBN_EDITCHANGE below
             sel = GetSelection();
             value = GetStringSelection();
+
+            // this string is going to become the new combobox value soon but
+            // we need it to be done right now, otherwise the event handler
+            // could get a wrong value when it calls our GetValue()
+            ::SetWindowText(GetHwnd(), value);
+
             {
                 wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, GetId());
                 event.SetInt(sel);
