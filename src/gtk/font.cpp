@@ -418,31 +418,22 @@ int wxFont::GetPointSize() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
 
-#if wxUSE_PANGO
     return M_FONTDATA->HasNativeFont() ? M_FONTDATA->m_nativeFontInfo.GetPointSize()
                                        : M_FONTDATA->m_pointSize;
-#else
-    return M_FONTDATA->m_pointSize;
-#endif
 }
 
 wxString wxFont::GetFaceName() const
 {
     wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
 
-#if wxUSE_PANGO
     return M_FONTDATA->HasNativeFont() ? M_FONTDATA->m_nativeFontInfo.GetFaceName()
                                        : M_FONTDATA->m_faceName;
-#else
-    return M_FONTDATA->m_faceName;
-#endif
 }
 
 int wxFont::GetFamily() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
 
-#if wxUSE_PANGO
     int ret = M_FONTDATA->m_family;
     if (M_FONTDATA->HasNativeFont())
         // wxNativeFontInfo::GetFamily is expensive, must not call more than once
@@ -452,33 +443,22 @@ int wxFont::GetFamily() const
         ret = M_FONTDATA->m_family;
 
     return ret;
-#else
-    return M_FONTDATA->m_family;
-#endif
 }
 
 int wxFont::GetStyle() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
 
-#if wxUSE_PANGO
     return M_FONTDATA->HasNativeFont() ? M_FONTDATA->m_nativeFontInfo.GetStyle()
                                        : M_FONTDATA->m_style;
-#else
-    return M_FONTDATA->m_style;
-#endif
 }
 
 int wxFont::GetWeight() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
 
-#if wxUSE_PANGO
     return M_FONTDATA->HasNativeFont() ? M_FONTDATA->m_nativeFontInfo.GetWeight()
                                        : M_FONTDATA->m_weight;
-#else
-    return M_FONTDATA->m_weight;
-#endif
 }
 
 bool wxFont::GetUnderlined() const
