@@ -275,7 +275,7 @@ struct in_addr* wxGethostbyname_r(const char *hostname)
     address = NULL;
   else
   {	
-    if (he->h_add_list[0] == NULL)
+    if (he->h_addr_list[0] == NULL)
       address = NULL;
     else
       address = &(((struct in_addr *) *(he->h_addr_list))[0]);
@@ -1977,11 +1977,11 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
 
     /* It is a real name, we solve it */
     
-    struct in_addr* newaddr = wxGethostbyname_r(hostname)->s_addr;
+    struct in_addr* newaddr = wxGethostbyname_r(hostname);
     if (!newaddr)
     {
       /* Reset to invalid address */
-      addr->s_addr = INVALID_HOST;
+      addr->s_addr = INADDR_NONE;
       address->m_error = GSOCK_NOHOST;
       return GSOCK_NOHOST;
     }
