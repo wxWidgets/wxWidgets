@@ -121,6 +121,15 @@
 #define TPM_RECURSE 1
 #endif
 
+
+#ifndef WS_EX_LAYERED
+#define WS_EX_LAYERED 0x80000
+#endif
+
+#ifndef LWA_ALPHA
+#define LWA_ALPHA 2
+#endif
+
 // ----------------------------------------------------------------------------
 // ListView common control
 // Needed by listctrl.cpp

@@ -29,6 +29,16 @@ applicable for the two classes above.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+\membersection{wxTopLevelWindow::CanSetTranslucency}\label{wxtoplevelwindowcansettranslucency}
+
+\func{virtual bool}{CanSetTranslucency}{\void}
+
+Returns \true if the platform supports making the window translucent.
+
+\wxheading{See also}
+
+\helpref{wxTopLevelWindow::SetTranslucency}{wxtoplevelwindowsettranslucency}
+
 
 \membersection{wxTopLevelWindow::GetIcon}\label{wxtoplevelwindowgeticon}
 
@@ -269,6 +279,22 @@ Sets the window title.
 \wxheading{See also}
 
 \helpref{wxTopLevelWindow::GetTitle}{wxtoplevelwindowgettitle}
+
+
+\membersection{wxTopLevelWindow::SetTranslucency}\label{wxtoplevelwindowsettranslucency}
+
+\func{virtual bool}{SetTranslucency}{\param{int }{ alpha}}
+
+If the platform supports it will set the window to be translucent
+
+\wxheading{Parameters}
+
+\docparam{alpha}{Determines how opaque or transparent the window will
+  be.  A value of 0 sets the window to be fully transparent, and a
+  value of 255 sets the window to be fully opaque.}
+
+Returns \true if the translucency was successfully changed.
+
 
 
 \membersection{wxTopLevelWindow::ShouldPreventAppExit}\label{wxtoplevelwindowshouldpreventappexit}

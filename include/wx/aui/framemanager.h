@@ -340,7 +340,7 @@ public:
     wxString caption;     // caption displayed on the window
 
     wxWindow* window;     // window that is in this pane
-    wxWindow* frame;      // floating frame window that holds the pane
+    wxFrame* frame;       // floating frame window that holds the pane
     unsigned int state;   // a combination of wxPaneState values
 
     int dock_direction;   // dock direction (top, bottom, left, right, center)
@@ -527,9 +527,9 @@ protected:
     wxRect m_last_hint;          // last hint rectangle
     wxPoint m_last_mouse_move;   // last mouse move position (see OnMotion)
 
-    wxWindow* m_hint_wnd;        // transparent hint window (for now, only msw)
-    wxTimer m_hint_fadetimer;    // transparent fade timer (for now, only msw)
-    int m_hint_fadeamt;          // transparent fade amount (for now, only msw)
+    wxFrame* m_hint_wnd;         // transparent hint window, if supported by platform
+    wxTimer m_hint_fadetimer;    // transparent fade timer
+    int m_hint_fadeamt;          // transparent fade amount
 
 #ifndef SWIG
     DECLARE_EVENT_TABLE()

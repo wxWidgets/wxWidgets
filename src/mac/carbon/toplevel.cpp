@@ -1431,6 +1431,21 @@ bool wxTopLevelWindowMac::IsFullScreen() const
     return m_macFullScreenData != NULL ;
 }
 
+
+bool wxTopLevelWindowMac::SetTranslucency(int alpha)
+{
+    WindowRef handle = GetControlOwner((OpaqueControlRef*)GetHandle());
+    OSStatus result = SetWindowAlpha(handle, float(alpha)/255.0);
+    return result == noErr;
+}
+
+
+bool wxTopLevelWindowMac::CanSetTranslucency()
+{
+    return true;
+}
+
+
 void wxTopLevelWindowMac::SetExtraStyle(long exStyle)
 {
     if ( GetExtraStyle() == exStyle )

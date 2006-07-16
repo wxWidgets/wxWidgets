@@ -70,6 +70,11 @@ public:
     // button from the title bar
     bool EnableCloseButton(bool enable = true);
 
+    // Set window transparency if the platform supports it
+    virtual bool SetTranslucency(int alpha);
+    virtual bool CanSetTranslucency();
+
+    
     // implementation from now on
     // --------------------------
 

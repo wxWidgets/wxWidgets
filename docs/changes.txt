@@ -159,6 +159,8 @@ All (GUI):
 - Fixed problem with zoom setting in print preview.
 - Moved wxRichTextCtrl from the advanced library to its own.
 - wxNB_HITTEST_* flags renamed to wxBK_HITTEST_* to serve all book controls.
+- Added wxTopLevelWindow::SetTranslucency and CanSetTranslucency, with
+  implementations (so far) for wxMSW and wxMac.
 
 wxMSW:
 

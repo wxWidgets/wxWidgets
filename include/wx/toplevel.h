@@ -196,7 +196,11 @@ public:
     void CentreOnScreen(int dir = wxBOTH) { DoCentre(dir | wxCENTRE_ON_SCREEN); }
     void CenterOnScreen(int dir = wxBOTH) { CentreOnScreen(dir); }
 
+    // Set window transparency if the platform supports it
+    virtual bool SetTranslucency(int WXUNUSED(alpha)) { return false; }
+    virtual bool CanSetTranslucency() { return false; }
 
+    
     // implementation only from now on
     // -------------------------------
 

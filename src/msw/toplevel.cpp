@@ -1043,6 +1043,55 @@ void wxTopLevelWindowMSW::RequestUserAttention(int flags)
     }
 }
 
+// ---------------------------------------------------------------------------
+
+bool wxTopLevelWindowMSW::SetTranslucency(int alpha)
+{
+    typedef DWORD (WINAPI *PSETLAYEREDWINDOWATTR)(HWND, DWORD, BYTE, DWORD);
+    static PSETLAYEREDWINDOWATTR pSetLayeredWindowAttributes = NULL;
+
+    if (alpha < 0) alpha = 0;
+    if (alpha > 255) alpha = 255;
+    
+    if ( pSetLayeredWindowAttributes == NULL )
+    {
+        wxDynamicLibrary dllUser32(_T("user32.dll"));
+        pSetLayeredWindowAttributes = (PSETLAYEREDWINDOWATTR)
+            dllUser32.GetSymbol(wxT("SetLayeredWindowAttributes"));
+    }
+    if ( pSetLayeredWindowAttributes == NULL )
+        return false;
+
+    LONG exstyle = GetWindowLong(GetHwnd(), GWL_EXSTYLE);
+
+    // if setting alpha to fully opaque then turn off the layered style
+    if (alpha == 255)
+    {
+        SetWindowLong(GetHwnd(), GWL_EXSTYLE, exstyle & ~WS_EX_LAYERED);
+        Refresh();
+        return true;
+    }
+
+    // Otherwise, set the layered style if needed and set the alpha value
+    if ((exstyle & WS_EX_LAYERED) == 0 )
+        SetWindowLong(GetHwnd(), GWL_EXSTYLE, exstyle | WS_EX_LAYERED);
+
+    return pSetLayeredWindowAttributes(GetHwnd(), 0, (BYTE)alpha, LWA_ALPHA) != 0;   
+}
+
+bool wxTopLevelWindowMSW::CanSetTranslucency()
+{
+    // The API is available on win2k and above
+    
+    static int os_type = -1;
+    static int ver_major = -1;
+
+    if (os_type == -1)
+        os_type = ::wxGetOsVersion(&ver_major);
+
+    return (os_type == wxWINDOWS_NT && ver_major >= 5);
+}
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindow event handling
 // ----------------------------------------------------------------------------

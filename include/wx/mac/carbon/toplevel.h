@@ -69,6 +69,10 @@ public:
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) ;
     virtual bool IsFullScreen() const ;
 
+    virtual bool SetTranslucency(int alpha);
+    virtual bool CanSetTranslucency();
+
+
     // implementation from now on
     // --------------------------
 

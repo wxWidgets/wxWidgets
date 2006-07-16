@@ -162,6 +162,18 @@ public:
         void , CenterOnScreen(int dir = wxBOTH),
         "Center the window on screen", "");
     %pythoncode { CentreOnScreen = CenterOnScreen }
+
+#ifdef __WXMSW__
+    bool EnableCloseButton(bool enable = true);
+#else
+    %extend {
+        bool EnableCloseButton(bool enable = true) { return false; }
+    }
+#endif
+
+    virtual bool SetTranslucency(int alpha); 
+    virtual bool CanSetTranslucency();
+
 };
 
 
