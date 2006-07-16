@@ -207,45 +207,6 @@ int _System soclose(int);
 
 #warning Kry - Move to a separate implementation file
 
-#if defined(HAVE_GETHOSTBYNAME)
-static struct hostent * deepCopyHostent(struct hostent *h,
-					const struct hostent *he,
-					char *buffer, int size, int *err)
-{
-  memcpy(h, he, sizeof(struct hostent));
-  int len = strlen(h->h_name);
-  if (len > size)
-    len = size - 1;
-  memcpy(buffer, h->h_name, len);
-  buffer[len] = '\0';
-  h->h_name = buffer;
-  buffer += len + 1;
-  size -= len + 1;
-  len = h->h_length;
-  for (char **p = h->h_addr_list; *p != 0; p++) {
-    if (size < len){
-      *err = ENOMEM;
-      return NULL;
-    }
-    memcpy(buffer, *p, len);
-    *p = buffer;
-    buffer += len;
-    size -= len;
-  }
-  for (char **q = h->h_aliases; size > 0 && *q != 0; q++){
-    len = strlen(*q);
-    if (len > size)
-      len = size - 1;
-    memcpy(buffer, *q, len);
-    buffer[len] = '\0';
-    *q = buffer;
-    buffer += len + 1;
-    size -= len + 1;
-  }
-  return h;
-}
-#endif
-
 struct in_addr* wxGethostbyname_r(const char *hostname)
 
 {
@@ -294,25 +255,27 @@ struct in_addr* wxGethostbyname_r(const char *hostname)
   return address;
 }
 
-struct hostent * wxGethostbyaddr_r(const char *addr_buf, int buf_size,
-				   int proto, struct hostent *h,
-				   void *buffer, int size, int *err)
+char* wxGethostbyaddr_r(struct in_addr addr)
 {
   struct hostent *he = NULL;
-  *err = 0;
+  char* name = NULL;
+
 #if defined(HAVE_FUNC_GETHOSTBYNAME_R_6) 
-  if (gethostbyaddr_r(addr_buf, buf_size, proto, h,
-		      (char*)buffer, size, &he, err))
+  struct hostent h;
+  char buffer[1024];
+  int err;
+  if (gethostbyaddr_r(&addr, sizeof(struct in_addr), AF_INET, &h, buffer, 1024, &he, &err))
     he = NULL;
-#elif defined(HAVE_FUNC_GETHOSTBYNAME_R_5) 
-  he = gethostbyaddr_r(addr_buf, buf_size, proto, h, (char*)buffer, size, err);
+#elif defined(HAVE_FUNC_GETHOSTBYNAME_R_5)
+  struct hostent h;
+  char buffer[1024];
+  int err;
+  he = gethostbyaddr_r(&addr, sizeof(struct in_addr), AF_INET, &h, buffer, 1024, &err);
 #elif defined(HAVE_FUNC_GETHOSTBYNAME_R_3) 
-  if (gethostbyaddr_r(addr_buf, buf_size, proto, h,
-			(struct hostent_data*) buffer))
-  {
+  struct hostent h;
+  struct hostent_data buffer;
+  if (gethostbyaddr_r(&addr, sizeof(struct in_addr), AF_INET, &h, &buffer))
     he = NULL;
-    *err = h_errno;
-  }
   else
     he = h;
 #elif defined(HAVE_GETHOSTBYNAME)
@@ -320,13 +283,15 @@ struct hostent * wxGethostbyaddr_r(const char *addr_buf, int buf_size,
   static wxMutex addrLock;
   wxMutexLocker locker(addrLock);
 #endif
-  he = gethostbyaddr(addr_buf, buf_size, proto);
-  if (!he)
-    *err = h_errno;
-  else
-    he = deepCopyHostent(h, he, (char*)buffer, size, err);
+  he = gethostbyaddr(&addr, sizeof(struct in_addr), AF_INET);
 #endif
-  return he;
+
+  if (he && he->h_name)
+  {
+    name = strdup(he->h_name);
+  }
+
+  return name;
 }
 
 #if defined(HAVE_GETSERVBYNAME)
@@ -2084,34 +2049,18 @@ GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port)
   return GSOCK_NOERROR;
 }
 
-GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname, size_t sbuf)
+GSocketError GAddress_INET_GetHostName(GAddress *address, char **hostname)
 {
-  struct hostent *he;
-  char *addr_buf;
-  struct sockaddr_in *addr;
 
   assert(address != NULL);
   CHECK_ADDRESS(address, INET);
 
-  addr = (struct sockaddr_in *)address->m_addr;
-  addr_buf = (char *)&(addr->sin_addr);
-
-  struct hostent temphost;
-#if defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
-  struct hostent_data buffer;
-#else
-  char buffer[1024];
-#endif
-  int err;
-  he = wxGethostbyaddr_r(addr_buf, sizeof(addr->sin_addr), AF_INET, &temphost,
-			 (void*)&buffer, sizeof(buffer), &err);
-  if (he == NULL)
+  *hostname = wxGethostbyaddr_r(((struct sockaddr_in *)address->m_addr)->sin_addr);
+  if (*hostname == NULL)
   {
     address->m_error = GSOCK_NOHOST;
     return GSOCK_NOHOST;
   }
-
-  strncpy(hostname, he->h_name, sbuf);
 
   return GSOCK_NOERROR;
 }

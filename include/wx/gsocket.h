@@ -167,13 +167,11 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
                                        const char *protocol);
 GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port);
 
-GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname,
-                                       size_t sbuf);
+GSocketError GAddress_INET_GetHostName(GAddress *address, char **hostname);
 unsigned long GAddress_INET_GetHostAddress(GAddress *address);
 unsigned short GAddress_INET_GetPort(GAddress *address);
 
 /* TODO: Define specific parts (INET6, UNIX) */
-#warning Sorry, what? As in, WTH?
 
 GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path);
 GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);

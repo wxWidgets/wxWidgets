@@ -185,11 +185,16 @@ bool wxIPV4address::AnyAddress()
 
 wxString wxIPV4address::Hostname() const
 {
-   char hostname[1024];
-
-   hostname[0] = 0;
-   GAddress_INET_GetHostName(m_address, hostname, 1024);
-   return wxString::FromAscii(hostname);
+   char* hostname;
+   GAddress_INET_GetHostName(m_address, &hostname);
+   if (hostname)
+   {
+     wxString name = wxString::FromAscii(hostname);
+     free(hostname);
+     return name;
+   }
+   else
+     return wxEmptyString;
 }
 
 unsigned short wxIPV4address::Service() const
@@ -294,11 +299,16 @@ wxString wxIPV6address::IPAddress() const
 
 wxString wxIPV6address::Hostname() const
 {
-   char hostname[1024];
-
-   hostname[0] = 0;
-   GAddress_INET_GetHostName(m_address, hostname, 1024);
-   return wxString::FromAscii(hostname);
+   char* hostname;
+   GAddress_INET_GetHostName(m_address, &hostname);
+   if (hostname)
+   {
+     wxString name = wxString::FromAscii(hostname);
+     free(hostname);
+     return name;
+   }
+   else
+     return wxEmptyString;
 }
 
 unsigned short wxIPV6address::Service() const
