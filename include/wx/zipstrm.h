@@ -222,9 +222,9 @@ protected:
 
     void Notify();
 
+private:
     wxArchiveEntry* DoClone() const             { return ZipClone(); }
 
-private:
     size_t ReadLocal(wxInputStream& stream, wxMBConv& conv);
     size_t WriteLocal(wxOutputStream& stream, wxMBConv& conv) const;
 
@@ -300,11 +300,7 @@ public:
 
     int  GetLevel() const                       { return m_level; }
     void WXZIPFIX SetLevel(int level);
-
-    bool WXZIPFIX PutNextEntry(wxArchiveEntry *entry);
-    bool WXZIPFIX CopyEntry(wxArchiveEntry *entry, wxArchiveInputStream& stream);
-    bool WXZIPFIX CopyArchiveMetaData(wxArchiveInputStream& stream);
-
+    
 protected:
     virtual size_t WXZIPFIX OnSysWrite(const void *buffer, size_t size);
     virtual wxFileOffset OnSysTell() const      { return m_entrySize; }
@@ -320,6 +316,10 @@ protected:
         { return m_offsetAdjustment != wxInvalidOffset; }
 
 private:
+    bool WXZIPFIX PutNextEntry(wxArchiveEntry *entry);
+    bool WXZIPFIX CopyEntry(wxArchiveEntry *entry, wxArchiveInputStream& stream);
+    bool WXZIPFIX CopyArchiveMetaData(wxArchiveInputStream& stream);
+
     bool IsOpened() const { return m_comp || m_pending; }
 
     bool DoCreate(wxZipEntry *entry, bool raw = false);
@@ -364,7 +364,6 @@ public:
 
     virtual WXZIPFIX ~wxZipInputStream();
 
-    bool WXZIPFIX OpenEntry(wxArchiveEntry& entry);
     bool OpenEntry(wxZipEntry& entry)   { return DoOpen(&entry); }
     bool WXZIPFIX CloseEntry();
 
@@ -387,12 +386,14 @@ protected:
     virtual wxInputStream* WXZIPFIX OpenDecompressor(wxInputStream& stream);
     virtual bool WXZIPFIX CloseDecompressor(wxInputStream *decomp);
 
-    wxArchiveEntry *DoGetNextEntry()    { return GetNextEntry(); }
-
 private:
     void Init();
     void Init(const wxString& file);
     wxInputStream& OpenFile(const wxString& archive);
+
+    wxArchiveEntry *DoGetNextEntry()    { return GetNextEntry(); }
+
+    bool WXZIPFIX OpenEntry(wxArchiveEntry& entry);
 
     wxStreamError ReadLocal(bool readEndRec = false);
     wxStreamError ReadCentral();
