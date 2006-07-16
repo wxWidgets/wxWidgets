@@ -149,6 +149,7 @@ int _System soclose(int);
 #define IS_INTERRUPTED (WSAGetLastError() == WSAEINTR)
 //#define IN_PROGRESS ((WSAGetLastError() == WSAEWOULDBLOCK) || (WSAGetLastError() == WSAEAGAIN) || (WSAGetLastError() == WSAEINPROGRESS))
 #define IN_PROGRESS ((WSAGetLastError() == WSAEWOULDBLOCK) || (WSAGetLastError() == WSAEINPROGRESS))
+#define HAVE_GETHOSTBYNAME
 #else
 #define CLOSE_SOCKET close
 #define IOCTL_SOCKET ioctl
@@ -245,12 +246,11 @@ static struct hostent * deepCopyHostent(struct hostent *h,
 }
 #endif
 
-unsigned long wxGethostbyname_r(const char *hostname)
+struct in_addr* wxGethostbyname_r(const char *hostname)
 
 {
   struct hostent *he = NULL;
-  unsigned long address;
-#ifndef __WXMSW__
+  struct in_addr* address;
 
 #if defined(HAVE_FUNC_GETHOSTBYNAME_R_6) 
   if (gethostbyname_r(hostname, h, (char*)buffer, size, &he, err))
@@ -272,19 +272,14 @@ unsigned long wxGethostbyname_r(const char *hostname)
 #endif
   he = gethostbyname(hostname);
   if (!he)
-    address = INADDR_NONE;
+    address = NULL;
   else
   {	
-  	struct in_addr *array_addr;
-	array_addr = (struct in_addr *) *(he->h_addr_list);
-	if (array_addr == NULL)
-		address = INADDR_NONE;
-	else
-    	address = array_addr[0].s_addr;
+    if (he->h_add_list[0] == NULL)
+      address = NULL;
+    else
+      address = &(((struct in_addr *) *(he->h_addr_list))[0]);
   }
-#endif
-#else
-  he = gethostbyname(hostname);
 #endif
 
   return address;
@@ -1982,15 +1977,17 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
 
     /* It is a real name, we solve it */
     
-    addr->s_addr = wxGethostbyname_r(hostname);
-
-    if (addr->s_addr ==  INADDR_NONE)
+    struct in_addr* newaddr = wxGethostbyname_r(hostname)->s_addr;
+    if (!newaddr)
     {
       /* Reset to invalid address */
+      addr->s_addr = INVALID_HOST;
       address->m_error = GSOCK_NOHOST;
       return GSOCK_NOHOST;
     }
-    
+    else
+      addr->s_addr = newaddr->s_addr;
+
   }
 
   return GSOCK_NOERROR;
