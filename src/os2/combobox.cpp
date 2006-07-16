@@ -129,8 +129,9 @@ bool wxComboBox::Create(
     lSstyle = WS_TABSTOP   |
               WS_VISIBLE;
 
-    if (lStyle & wxCLIP_SIBLINGS )
-        lSstyle |= WS_CLIPSIBLINGS;
+    // clipping siblings does not yet work
+    // if (lStyle & wxCLIP_SIBLINGS )
+    //     lSstyle |= WS_CLIPSIBLINGS;
     if (lStyle & wxCB_READONLY)
         lSstyle |= CBS_DROPDOWNLIST;
     else if (lStyle & wxCB_SIMPLE)
@@ -163,10 +164,10 @@ bool wxComboBox::Create(
 
     // Set height to use with sizers i.e. without the dropdown listbox
     wxFont vFont = GetFont();
-    int nCx,nCy;
-    wxGetCharSize( GetHWND(), &nCx, &nCy, &vFont );
-    int nEditHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy);
-    SetBestFittingSize(wxSize(-1,nEditHeight));
+    int nEditHeight;
+    wxGetCharSize( GetHWND(), NULL, &nEditHeight, &vFont );
+    nEditHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nEditHeight);
+    SetBestFittingSize(wxSize(-1,nEditHeight+4));   // +2x2 for the border
 
     if (!rsValue.empty())
     {
@@ -388,7 +389,7 @@ bool wxComboBox::ProcessEditMsg(
                 return(HandleKillFocus((WXHWND)(HWND)wParam));
     }
     return false;
-} // end of WinGuiBase_CComboBox::ProcessEditMsg
+} // end of wxComboBox::ProcessEditMsg
 
 MRESULT EXPENTRY wxComboEditWndProc(
   HWND                              hWnd

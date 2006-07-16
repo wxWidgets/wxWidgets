@@ -131,6 +131,9 @@ bool wxControl::OS2CreateControl( const wxChar*   zClassname,
     else
         label = m_label;
 
+    // clipping siblings does not yet work
+    dwStyle &= ~WS_CLIPSIBLINGS;
+
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                        ,(PSZ)zClass              // Window class
                                        ,(PSZ)label.c_str()       // Initial Text

@@ -70,8 +70,9 @@ bool wxChoice::Create(
               WS_TABSTOP       |
               WS_VISIBLE;
 
-    if (lStyle & wxCLIP_SIBLINGS )
-        lSstyle |= WS_CLIPSIBLINGS;
+    // clipping siblings does not yet work
+    // if (lStyle & wxCLIP_SIBLINGS )
+    //     lSstyle |= WS_CLIPSIBLINGS;
 
     wxASSERT_MSG( !(lStyle & wxCB_DROPDOWN) &&
                   !(lStyle & wxCB_READONLY) &&
@@ -103,10 +104,10 @@ bool wxChoice::Create(
 
     // Set height to use with sizers i.e. without the dropdown listbox
     wxFont vFont = GetFont();
-    int nCx,nCy;
-    wxGetCharSize( GetHWND(), &nCx, &nCy, &vFont );
-    int nEditHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy);
-    SetBestFittingSize(wxSize(-1,nEditHeight));
+    int  nEditHeight;
+    wxGetCharSize( GetHWND(), NULL, &nEditHeight, &vFont );
+    nEditHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nEditHeight);
+    SetBestFittingSize(wxSize(-1,nEditHeight+4));   // +2x2 for the border
 
     return true;
 } // end of wxChoice::Create
@@ -126,8 +127,7 @@ int wxChoice::DoAppend(
 {
     int                             nIndex;
     LONG                            nIndexType = 0;
-
-    if (m_windowStyle & wxLB_SORT)
+    if (m_windowStyle & wxCB_SORT)
         nIndexType = LIT_SORTASCENDING;
     else
         nIndexType = LIT_END;
@@ -150,7 +150,7 @@ int wxChoice::DoInsert( const wxString& rsItem, unsigned int pos )
     int  nIndex;
     LONG nIndexType = 0;
 
-    if (m_windowStyle & wxLB_SORT)
+    if (m_windowStyle & wxCB_SORT)
         nIndexType = LIT_SORTASCENDING;
     else
         nIndexType = pos;
@@ -225,7 +225,7 @@ void wxChoice::SetString(unsigned int n, const wxString& rsStr)
 
     ::WinSendMsg(GetHwnd(), LM_DELETEITEM, (MPARAM)n, 0);
 
-    if (m_windowStyle & wxLB_SORT)
+    if (m_windowStyle & wxCB_SORT)
         nIndexType = LIT_SORTASCENDING;
     else
         nIndexType = LIT_END;
