@@ -318,7 +318,7 @@ void ComboboxWidgetsPage::CreateContent()
                                 wxDefaultPosition, wxDefaultSize,
                                 0, NULL,
                                 0);
-    sizerRight->Add(m_combobox, 1, wxGROW | wxALL, 5);
+    sizerRight->Add(m_combobox, 0, wxGROW | wxALL, 5);
     sizerRight->SetMinSize(150, 0);
     m_sizerCombo = sizerRight; // save it to modify it later
 
