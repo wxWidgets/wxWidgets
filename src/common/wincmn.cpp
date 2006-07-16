@@ -497,7 +497,8 @@ wxSize wxWindowBase::DoGetBestSize() const
 #endif
               )
     {
-        // our minimal acceptable size is such that all our visible child windows fit inside
+        // our minimal acceptable size is such that all our visible child
+        // windows fit inside
         int maxX = 0,
             maxY = 0;
 
@@ -506,9 +507,10 @@ wxSize wxWindowBase::DoGetBestSize() const
               node = node->GetNext() )
         {
             wxWindow *win = node->GetData();
-            if ( win->IsTopLevel()  || ( ! win->IsShown() )
+            if ( win->IsTopLevel()
+                    || !win->IsShown()
 #if wxUSE_STATUSBAR
-                    || wxDynamicCast(win, wxStatusBar)
+                        || wxDynamicCast(win, wxStatusBar)
 #endif // wxUSE_STATUSBAR
                )
             {
@@ -534,11 +536,6 @@ wxSize wxWindowBase::DoGetBestSize() const
             if ( wy + wh > maxY )
                 maxY = wy + wh;
         }
-
-        // for compatibility with the old versions and because it really looks
-        // slightly more pretty like this, add a pad
-        maxX += 7;
-        maxY += 14;
 
         best = wxSize(maxX, maxY);
     }
