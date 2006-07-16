@@ -202,6 +202,8 @@ bool wxPen::RealizeResource()
         }
         m_vLineBundle.lColor     = (LONG)vPmColour;
         m_vLineBundle.usMixMode  = FM_OVERPAINT;
+        if (M_PENDATA->m_nWidth < 1)
+            M_PENDATA->m_nWidth = 1;
         m_vLineBundle.fxWidth    = M_PENDATA->m_nWidth;
         m_vLineBundle.lGeomWidth = M_PENDATA->m_nWidth;
         m_vLineBundle.usType     = uLineType;
