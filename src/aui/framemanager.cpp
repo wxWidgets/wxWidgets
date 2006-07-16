@@ -764,6 +764,24 @@ bool wxFrameManager::DetachPane(wxWindow* window)
                 p.frame->Destroy();
                 p.frame = NULL;
             }
+            
+            // make sure there are no references to this pane in our uiparts,
+            // just in case the caller doesn't call Update() immediately after
+            // the DetachPane() call.  This prevets obscure crashes which would
+            // happen at window repaint if the caller forgets to call Update()
+            int pi, part_count;
+            for (pi = 0, part_count = (int)m_uiparts.GetCount(); pi < part_count; ++pi)
+            {
+                wxDockUIPart& part = m_uiparts.Item(pi);
+                if (part.pane == &p)
+                {
+                    m_uiparts.RemoveAt(pi);
+                    part_count--;
+                    pi--;
+                    continue;
+                }
+            }
+            
             m_panes.RemoveAt(i);
             return true;
         }
