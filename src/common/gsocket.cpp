@@ -294,66 +294,41 @@ char* wxGethostbyaddr_r(struct in_addr addr)
   return name;
 }
 
-#if defined(HAVE_GETSERVBYNAME)
-static struct servent * deepCopyServent(struct servent *s,
-					const struct servent *se,
-					char *buffer, int size)
-{
-  memcpy(s, se, sizeof(struct servent));
-  int len = strlen(s->s_name);
-  if (len > size)
-    len = size - 1;
-  memcpy(buffer, s->s_name, len);
-  buffer[len] = '\0';
-  s->s_name = buffer;
-  buffer += len + 1;
-  size -= len + 1;
-  len = strlen(s->s_proto);
-  if (len > size)
-    len = size - 1;
-  memcpy(buffer, s->s_proto, len);
-  buffer[len] = '\0';
-  s->s_proto = buffer;
-  buffer += len + 1;
-  size -= len + 1;
-  for (char **q = s->s_aliases; size > 0 && *q != 0; q++){
-    len = strlen(*q);
-    if (len > size)
-      len = size - 1;
-    memcpy(buffer, *q, len);
-    buffer[len] = '\0';
-    *q = buffer;
-    buffer += len + 1;
-    size -= len + 1;
-  }
-  return s;
-}
-#endif
-
-struct servent *wxGetservbyname_r(const char *port, const char *protocol,
-				  struct servent *serv, void *buffer, int size)
+struct servent *wxGetservbyname_r(const char *port, const char *protocol)
 {
   struct servent *se = NULL;
+  struct servent *result = NULL;
 #if defined(HAVE_FUNC_GETSERVBYNAME_R_6)
-  if (getservbyname_r(port, protocol, serv, (char*)buffer, size, &se))
+  struct servent serv;
+  char buffer[1024];
+  if (getservbyname_r(port, protocol, &serv, buffer, 1024, &se))
     se = NULL;
 #elif defined(HAVE_FUNC_GETSERVBYNAME_R_5)
-  se = getservbyname_r(port, protocol, serv, (char*)buffer, size);
+  struct servent serv;
+  char buffer[1024];
+  se = getservbyname_r(port, protocol, &serv, buffer, 1024);
 #elif defined(HAVE_FUNC_GETSERVBYNAME_R_4)
-  if (getservbyname_r(port, protocol, serv, (struct servent_data*) buffer))
+  struct servent serv;
+  struct servent_data  buffer;
+  if (getservbyname_r(port, protocol, &serv, &buffer))
     se = NULL;
   else
-    se = serv;
+    se = &serv;
 #elif defined(HAVE_GETSERVBYNAME)
 #if wxUSE_THREADS
   static wxMutex servLock;
   wxMutexLocker locker(servLock);
 #endif
   se = getservbyname(port, protocol);
-  if (se)
-    se = deepCopyServent(serv, se, (char*)buffer, size);
 #endif
-  return se;
+
+  if (se)
+  {
+    result = (struct servent*) malloc(sizeof(struct servent));
+    memcpy(result,se,sizeof(struct servent));
+  }
+
+  return result;
 }
 
 /* Table of GUI-related functions. We must call them indirectly because
@@ -1993,7 +1968,6 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
                                        const char *protocol)
 {
   struct servent *se;
-  struct sockaddr_in *addr;
 
   assert(address != NULL);
   CHECK_ADDRESS(address, INET);
@@ -2004,14 +1978,7 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
     return GSOCK_INVPORT;
   }
 
-#if defined(HAVE_FUNC_GETSERVBYNAME_R_4)
-    struct servent_data buffer;
-#else
-  char buffer[1024];
-#endif
-  struct servent serv;
-  se = wxGetservbyname_r(port, protocol, &serv,
-			 (void*)&buffer, sizeof(buffer));
+  se = wxGetservbyname_r(port, protocol);
   if (!se)
   {
     /* the cast to int suppresses compiler warnings about subscript having the
@@ -2021,17 +1988,18 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
       int port_int;
 
       port_int = atoi(port);
-      addr = (struct sockaddr_in *)address->m_addr;
-      addr->sin_port = htons(port_int);
+      ((struct sockaddr_in *)address->m_addr)->sin_port = htons(port_int);
       return GSOCK_NOERROR;
     }
 
     address->m_error = GSOCK_INVPORT;
     return GSOCK_INVPORT;
   }
-
-  addr = (struct sockaddr_in *)address->m_addr;
-  addr->sin_port = se->s_port;
+  else
+  {
+    ((struct sockaddr_in *)address->m_addr)->sin_port = se->s_port;
+    free(se);
+  }
 
   return GSOCK_NOERROR;
 }
