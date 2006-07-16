@@ -1,3 +1,9 @@
+wxwidgets2.6 (2.6.3.3-1rpd) unstable; urgency=low
+
+  * wxPython 2.6.3.3 release
+
+ -- Robin Dunn <robin@alldunn.com>  Sat, 15 Jul 2006 15:23:50 -0700
+
 wxwidgets2.6 (2.6.3.2-3rpd) unstable; urgency=low
 
   * Added icons and *.desktop files for the wpython-wxtools
