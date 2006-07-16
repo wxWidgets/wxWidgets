@@ -16,7 +16,7 @@ class WXDLLIMPEXP_CORE wxGTKRadioButtonInfo;
 
 #include "wx/list.h"
 
-WX_DECLARE_LIST(wxGTKRadioButtonInfo, wxRadioBoxButtonsInfoList);
+WX_DECLARE_EXPORTED_LIST(wxGTKRadioButtonInfo, wxRadioBoxButtonsInfoList);
 
 
 //-----------------------------------------------------------------------------
