@@ -252,17 +252,22 @@ struct in_addr* wxGethostbyname_r(const char *hostname)
   struct hostent *he = NULL;
   struct in_addr* address;
 
-#if defined(HAVE_FUNC_GETHOSTBYNAME_R_6) 
-  if (gethostbyname_r(hostname, h, (char*)buffer, size, &he, err))
+#if defined(HAVE_FUNC_GETHOSTBYNAME_R_6)
+  struct hostent h;
+  char buffer[1024];
+  int err;
+  if (gethostbyname_r(hostname, &h, buffer, 1024, &he, &err))
     he = NULL;
 #elif defined(HAVE_FUNC_GETHOSTBYNAME_R_5) 
-  he = gethostbyname_r(hostname, h, (char*)buffer, size, err);
+  struct hostent h;
+  char buffer[1024];
+  int err;
+  he = gethostbyname_r(hostname, &h, (char*)buffer, 1024, &err);
 #elif defined(HAVE_FUNC_GETHOSTBYNAME_R_3) 
-  if (gethostbyname_r(hostname, h, (struct hostent_data*) buffer))
-  {
+  struct hostent h;
+  struct hostent_data buffer;
+  if (gethostbyname_r(hostname, &h, &buffer))
     he = NULL;
-    *err = h_errno;
-  }
   else
     he = h;
 #elif defined(HAVE_GETHOSTBYNAME)
@@ -271,6 +276,8 @@ struct in_addr* wxGethostbyname_r(const char *hostname)
   wxMutexLocker locker(nameLock);
 #endif
   he = gethostbyname(hostname);
+#endif
+
   if (!he)
     address = NULL;
   else
@@ -278,9 +285,11 @@ struct in_addr* wxGethostbyname_r(const char *hostname)
     if (he->h_addr_list[0] == NULL)
       address = NULL;
     else
-      address = &(((struct in_addr *) *(he->h_addr_list))[0]);
+    {
+      address =(struct in_addr*)  malloc(sizeof(struct in_addr));
+      memcpy(address,&(((struct in_addr *) *(he->h_addr_list))[0]),sizeof(struct in_addr));
+    }
   }
-#endif
 
   return address;
 }
