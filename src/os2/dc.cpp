@@ -874,7 +874,7 @@ void wxDC::DoDrawPolygon(
 //   POLYGON_WINDING                 Constructs interior in winding mode.
 //////////////////////////////////////////////////////////////////////////////
 
-    ULONG                           flModel = 0L; // Drawing model.
+    ULONG                           flModel = POLYGON_INCL; // Drawing model.
 
 //////////////////////////////////////////////////////////////////////////////
 // Drawing model.
@@ -902,20 +902,17 @@ void wxDC::DoDrawPolygon(
 
     for(i = 0; i < n; i++)
     {
-        vPlgn.aPointl[i].x = vPoints[i].x;         // +xoffset;
-        vPlgn.aPointl[i].y = OS2Y(vPoints[i].y,0); // +yoffset;
+        vPlgn.aPointl[i].x = vPoints[i].x+vXoffset;
+        vPlgn.aPointl[i].y = OS2Y(vPoints[i].y+vYoffset,0);
     }
-    flModel = POLYGON_BOUNDARY;
+    flOptions = POLYGON_BOUNDARY;
     if(nFillStyle == wxWINDING_RULE)
-        flModel |= POLYGON_WINDING;
+        flOptions |= POLYGON_WINDING;
     else
-        flModel |= POLYGON_ALTERNATE;
-
-    vPoint.x = vXoffset;
-    vPoint.y = OS2Y(vYoffset,0);
+        flOptions |= POLYGON_ALTERNATE;
 
     ::GpiSetColor(m_hPS, lBorderColor);
-    ::GpiMove(m_hPS, &vPoint);
+    ::GpiMove(m_hPS, &vPlgn.aPointl[0]);
     lHits = ::GpiPolygons(m_hPS, ulCount, &vPlgn, flOptions, flModel);
     free(vPlgn.aPointl);
 } // end of wxDC::DoDrawPolygon
@@ -1746,13 +1743,7 @@ void wxDC::DrawAnyText( const wxString& rsText,
           m_vRclPaint.xRight == 0 &&
           m_vRclPaint.xLeft == 0))
     {
-        //
-        // Position Text a little differently in the Statusbar from other panels
-        //
-        if (m_pCanvas && m_pCanvas->IsKindOf(CLASSINFO(wxStatusBar)))
-            vPtlStart.y = OS2Y(vY,vTextY);
-        else
-            vPtlStart.y = (wxCoord)(OS2Y(vY,vTextY/1.5)); // Full extent is a bit much
+        vPtlStart.y = OS2Y(vY,vTextY);
     }
     else
     {
@@ -1760,10 +1751,7 @@ void wxDC::DrawAnyText( const wxString& rsText,
         {
             m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
             m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
-            if (m_pCanvas && m_pCanvas->IsKindOf(CLASSINFO(wxStatusBar)))
-                vPtlStart.y = OS2Y(vY,vTextY);
-            else
-                vPtlStart.y = (LONG)(OS2Y(vY,vTextY/1.5));
+	    vPtlStart.y = OS2Y(vY,vTextY);
         }
         else
             vPtlStart.y = vY;
