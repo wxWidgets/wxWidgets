@@ -394,6 +394,10 @@ public:
 
     bool AddPane(wxWindow* window,
                  const wxPaneInfo& pane_info);
+                 
+    bool AddPane(wxWindow* window,
+                 const wxPaneInfo& pane_info,
+                 const wxPoint& drop_pos);
 
     bool AddPane(wxWindow* window,
                  int direction = wxLEFT,
@@ -412,6 +416,15 @@ public:
 
     void Update();
 
+
+public:
+
+    void DrawHintRect(wxWindow* pane_window,
+                       const wxPoint& pt,
+                       const wxPoint& offset);
+    virtual void ShowHint(const wxRect& rect);
+    virtual void HideHint();
+
 public:
 
     // deprecated -- please use SetManagedWindow() and
@@ -422,10 +435,8 @@ public:
     
 protected:
 
-    void DrawHintRect(wxWindow* pane_window,
-                       const wxPoint& pt,
-                       const wxPoint& offset);
 
+    
     void DoFrameLayout();
 
     void LayoutAddPane(wxSizer* container,
@@ -472,8 +483,7 @@ protected:
     void GetPanePositionsAndSizes(wxDockInfo& dock,
                               wxArrayInt& positions,
                               wxArrayInt& sizes);
-    virtual void ShowHint(const wxRect& rect);
-    virtual void HideHint();
+
 
 public:
 

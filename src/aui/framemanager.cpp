@@ -669,6 +669,20 @@ bool wxFrameManager::AddPane(wxWindow* window,
     return AddPane(window, pinfo);
 }
 
+bool wxFrameManager::AddPane(wxWindow* window,
+                             const wxPaneInfo& pane_info,
+                             const wxPoint& drop_pos)
+{
+    if (!AddPane(window, pane_info))
+        return false;
+    
+    wxPaneInfo& pane = GetPane(window);
+    
+    DoDrop(m_docks, m_panes, pane, drop_pos, wxPoint(0,0));
+    
+    return true;
+}
+
 bool wxFrameManager::InsertPane(wxWindow* window, const wxPaneInfo& pane_info,
                                 int insert_level)
 {
