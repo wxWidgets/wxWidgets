@@ -1995,8 +1995,10 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
       return GSOCK_NOHOST;
     }
     else
+    {
       addr->s_addr = newaddr->s_addr;
-
+      free(newaddr);
+    }
   }
 
   return GSOCK_NOERROR;
