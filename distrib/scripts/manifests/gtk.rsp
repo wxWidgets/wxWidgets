@@ -1,3 +1,6 @@
+install-gtk.txt
+readme-gtk.txt
+
 docs/gtk/*.html
 docs/gtk/*.txt
 docs/gtk/COPYING.LIB

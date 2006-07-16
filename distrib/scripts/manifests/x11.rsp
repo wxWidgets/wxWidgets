@@ -1,3 +1,6 @@
+install-x11.txt
+readme-x11.txt
+
 src/x11/files.lst
 src/x11/*.cpp
 src/x11/*.c

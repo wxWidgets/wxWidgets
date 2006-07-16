@@ -1,3 +1,6 @@
+install-mgl.txt
+readme-mgl.txt
+
 build/mgl/*
 
 include/wx/mgl/*.h

@@ -1,3 +1,6 @@
+install-motif.txt
+readme-motif.txt
+
 src/motif/files.lst
 src/motif/*.cpp
 src/motif/*.c

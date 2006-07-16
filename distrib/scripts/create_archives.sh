@@ -132,15 +132,11 @@ dospinport(){
 
     copyfilelist $portfiles $APPDIR $TMPFILESDIR
     
-    if [ $port = "msw" ] || [ $port = "all" ]; then
-        cp -f README-MSW.txt INSTALL-MSW.txt $TMPFILESDIR      
-    fi
-    
-    if [ $port = "os2" ] || [ $port = "all" ]; then
-        cp -f INSTALL-OS2.txt $TMPFILESDIR        
-    fi
-    
     pushd /tmp/wx$port
+    # use DOS line endings for all files for MSW archives.
+    if [ $port = "msw" ]; then
+        unix2dos `cat $portfiles`
+    fi
     echo "Creating wx$portname-$VERSION.zip..."
     zip $ZIPFLAGS -r -9 $APPDIR/deliver/wx$portname-$VERSION.zip .
     echo "Creating wx$portname-$VERSION.tar.gz..."
@@ -167,6 +163,24 @@ prepareforrelease()
     cp $APPDIR/docs/lgpl.txt COPYING.LIB
     cp $APPDIR/docs/changes.txt CHANGES.txt
     cp $APPDIR/docs/readme.txt README.txt
+
+    cp $APPDIR/docs/mgl/readme.txt $APPDIR/readme-mgl.txt
+    cp $APPDIR/docs/mgl/install.txt $APPDIR/install-mgl.txt
+
+    cp $APPDIR/docs/x11/readme.txt $APPDIR/readme-x11.txt
+    cp $APPDIR/docs/x11/install.txt $APPDIR/install-x11.txt
+
+    cp $APPDIR/docs/motif/readme.txt $APPDIR/readme-motif.txt
+    cp $APPDIR/docs/motif/install.txt $APPDIR/install-motif.txt
+
+    cp $APPDIR/docs/gtk/readme.txt $APPDIR/readme-gtk.txt
+    cp $APPDIR/docs/gtk/install.txt $APPDIR/install-gtk.txt
+
+    cp $APPDIR/docs/mac/readme.txt $APPDIR/readme-mac.txt
+    cp $APPDIR/docs/mac/install.txt $APPDIR/install-mac.txt
+
+    cp $APPDIR/docs/cocoa/readme.txt $APPDIR/readme-cocoa.txt
+    cp $APPDIR/docs/cocoa/install.txt $APPDIR/install-cocoa.txt
     
     # Now delete a few files that are unnecessary
     rm -f BuildCVS.txt descrip.mms
@@ -183,7 +197,7 @@ prepareforrelease()
     cp $APPDIR/include/wx/msw/setup0.h $APPDIR/include/wx/msw/setup.h
     cp $APPDIR/include/wx/univ/setup0.h $APPDIR/include/wx/univ/setup.h
     
-    # Make MSW project files have DOS line endings.
+    # Make MSW project files always have DOS line endings.
     unix2dos `cat $MANIFESTDIR/vc.rsp` 
     
     popd
