@@ -133,9 +133,18 @@ dospinport(){
     copyfilelist $portfiles $APPDIR $TMPFILESDIR
     
     pushd /tmp/wx$port
-    # use DOS line endings for all files for MSW archives.
+    # use DOS line endings for text files for MSW archives.
     if [ $port = "msw" ]; then
-        unix2dos `cat $portfiles`
+        find . -name \*.txt -exec unix2dos {} \;
+        find . -name \*.htm* -exec unix2dos {} \;
+        find . -name \*.h -exec unix2dos {} \;
+        find . -name \*.c -exec unix2dos {} \;
+        find . -name \*.cpp -exec unix2dos {} \;
+        find . -name \*.cxx -exec unix2dos {} \;
+        find . -name \*.ini -exec unix2dos {} \;
+        find . -name \*.rc -exec unix2dos {} \;
+        find . -name \*.bkl -exec unix2dos {} \;
+        find . -name \*.tex -exec unix2dos {} \;
     fi
     echo "Creating wx$portname-$VERSION.zip..."
     zip $ZIPFLAGS -r -9 $APPDIR/deliver/wx$portname-$VERSION.zip .
