@@ -397,18 +397,13 @@ wxButton::SetDefaultStyle(wxButton *btn, bool on)
         if ( !wxTheApp->IsActive() )
             return;
 
-        // look for a panel-like window
-        wxWindow *win = btn->GetParent();
-        while ( win && !win->HasFlag(wxTAB_TRAVERSAL) )
-            win = win->GetParent();
+        wxWindow * const parent = btn->GetParent();
+        wxCHECK_RET( parent, _T("button without parent?") );
 
-        if ( win )
-        {
-            ::SendMessage(GetHwndOf(win), DM_SETDEFID, btn->GetId(), 0L);
+        ::SendMessage(GetHwndOf(parent), DM_SETDEFID, btn->GetId(), 0L);
 
-            // sending DM_SETDEFID also changes the button style to
-            // BS_DEFPUSHBUTTON so there is nothing more to do
-        }
+        // sending DM_SETDEFID also changes the button style to
+        // BS_DEFPUSHBUTTON so there is nothing more to do
     }
 
     // then also change the style as needed
