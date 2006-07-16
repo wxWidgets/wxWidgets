@@ -295,7 +295,7 @@ ul.auto-toc {
 <div class="section">
 <h1><a id="id1" name="id1">2.6.3.3</a></h1>
 <ul class="simple">
-<li></li>
+<li>15-July-2006</li>
 </ul>
 <dl class="docutils">
 <dt>wx.lib.pubsub updates from Oliver Schoenborn:</dt>
@@ -323,6 +323,11 @@ hidden before continuing with the CloseEditor method.  Also added code
 to OpenEditor to send the BEGIN_LABEL_EDIT event and to not allow the
 opening of the editor to continue if the event handler doesn't allow
 it.</p>
+<p>Undeprecated wx.GetNumberFromUser and added wx.NumberEntryDialog.</p>
+<p>Made necessaary changes for building wxPython for Python 2.5.  There
+may still be some issues related to the new Py_ssize_t type and 64-bit
+machines, but at least all compile errors and warnings related to it
+have been resolved.</p>
 </div>
 <div class="section">
 <h1><a id="id2" name="id2">2.6.3.2</a></h1>
