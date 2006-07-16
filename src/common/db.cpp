@@ -920,7 +920,7 @@ bool wxDb::Open(wxDbConnectInf *dbConnectInf, bool failOnDataTypeUnsupported)
 
     // Use the connection string if one is present
     if (dbConnectInf->UseConnectionStr())
-        return Open(GetConnectionInStr(), failOnDataTypeUnsupported);
+        return Open(dbConnectInf->GetConnectionStr(), failOnDataTypeUnsupported);
     else
         return Open(dbConnectInf->GetDsn(), dbConnectInf->GetUserID(),
                     dbConnectInf->GetPassword(), failOnDataTypeUnsupported);
