@@ -121,7 +121,7 @@ static void wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, const wxTreeItemId
     wxTreeItemIdValue cookie;
     for ( wxTreeItemId item = treeCtrl->GetFirstChild(id, cookie);
           item.IsOk();
-          item = treeCtrl->GetNextChild(item, cookie) )
+          item = treeCtrl->GetNextChild(id, cookie) )
     {
         wxGetBestTreeSize(treeCtrl, item, size);
     }
