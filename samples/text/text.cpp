@@ -967,6 +967,11 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
         case WXK_F10:
             AppendText(_T("AppendText() has been called"));
             break;
+
+        case WXK_F11:
+            DiscardEdits();
+            wxLogMessage(_T("Control marked as non modified"));
+            break;
     }
 
     if ( ms_logKey )
