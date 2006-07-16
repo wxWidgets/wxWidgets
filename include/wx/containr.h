@@ -56,6 +56,10 @@ public:
     // soon after a call to SetTmpDefaultItem(window)
     void SetTmpDefaultItem(wxWindow *win) { m_winTmpDefault = win; }
 
+    // return the temporary default item, can be NULL
+    wxWindow *GetTmpDefaultItem() const { return m_winTmpDefault; }
+
+
     // the methods to be called from the window event handlers
     void HandleOnNavigationKey(wxNavigationKeyEvent& event);
     void HandleOnFocus(wxFocusEvent& event);
@@ -114,6 +118,7 @@ public: \
     virtual wxWindow *GetDefaultItem() const; \
     virtual wxWindow *SetDefaultItem(wxWindow *child); \
     virtual void SetTmpDefaultItem(wxWindow *win); \
+    virtual wxWindow *GetTmpDefaultItem() const; \
     virtual bool AcceptsFocus() const; \
 \
 protected: \
@@ -140,6 +145,11 @@ void classname::SetTmpDefaultItem(wxWindow *child) \
 wxWindow *classname::GetDefaultItem() const \
 { \
     return m_container.GetDefaultItem(); \
+} \
+ \
+wxWindow *classname::GetTmpDefaultItem() const \
+{ \
+    return m_container.GetTmpDefaultItem(); \
 } \
  \
 void classname::OnNavigationKey( wxNavigationKeyEvent& event ) \

@@ -528,6 +528,9 @@ public:
         // set this child as temporary default
     virtual void SetTmpDefaultItem(wxWindow * WXUNUSED(win)) { }
 
+        // return the temporary default item, can be NULL
+    virtual wxWindow *GetTmpDefaultItem() const { return NULL; }
+
         // navigates in the specified direction by sending a wxNavigationKeyEvent
     virtual bool Navigate(int flags = wxNavigationKeyEvent::IsForward);
 

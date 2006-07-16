@@ -197,6 +197,11 @@ bool wxButton::Create(wxWindow *parent,
 
 wxButton::~wxButton()
 {
+    wxWindow *parent = GetParent();
+    if ( parent && parent->GetTmpDefaultItem() == this )
+    {
+        UnsetTmpDefault();
+    }
 }
 
 // ----------------------------------------------------------------------------
