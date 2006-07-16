@@ -3358,13 +3358,11 @@ void wxWindowGTK::OnInternalIdle()
                 gdk_window_set_cursor( window, cursor.GetCursor() );
 
         }
-        else
+        else if ( m_widget )
         {
-
             GdkWindow *window = m_widget->window;
-            if ((window) && !(GTK_WIDGET_NO_WINDOW(m_widget)))
+            if ( window && !GTK_WIDGET_NO_WINDOW(m_widget) )
                gdk_window_set_cursor( window, cursor.GetCursor() );
-
         }
     }
 
