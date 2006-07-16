@@ -790,7 +790,7 @@ void wxCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
 
     if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) && m_staticMonth )
     {
-        wxSize sizeCombo = m_comboMonth->GetSize();
+        wxSize sizeCombo = m_comboMonth->GetBestFittingSize();
         wxSize sizeStatic = m_staticMonth->GetSize();
         wxSize sizeSpin = m_spinYear->GetSize();
 
@@ -826,7 +826,7 @@ void wxCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
 void wxCalendarCtrl::DoGetPosition(int *x, int *y) const
 {
     wxControl::DoGetPosition(x, y);
-
+#ifndef __WXPM__
     if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) && GetMonthControl() )
     {
         // our real top corner is not in this position
@@ -835,13 +835,14 @@ void wxCalendarCtrl::DoGetPosition(int *x, int *y) const
             *y -= GetMonthControl()->GetSize().y + VERT_MARGIN;
         }
     }
+#endif
 }
 
 void wxCalendarCtrl::DoGetSize(int *width, int *height) const
 {
     wxControl::DoGetSize(width, height);
-
-    if ( !(GetWindowStyle() & wxCAL_SEQUENTIAL_MONTH_SELECTION) )
+#ifndef __WXPM__
+    if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
         // our real height is bigger
         if ( height && GetMonthControl())
@@ -849,6 +850,7 @@ void wxCalendarCtrl::DoGetSize(int *width, int *height) const
             *height += GetMonthControl()->GetSize().y + VERT_MARGIN;
         }
     }
+#endif
 }
 
 void wxCalendarCtrl::RecalcGeometry()
@@ -886,7 +888,7 @@ void wxCalendarCtrl::RecalcGeometry()
     m_widthCol += 2;
     m_heightRow += 2;
 
-    m_rowOffset = (GetWindowStyle() & wxCAL_SEQUENTIAL_MONTH_SELECTION) ? m_heightRow : 0; // conditional in relation to style
+    m_rowOffset = HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) ? m_heightRow : 0; // conditional in relation to style
 }
 
 // ----------------------------------------------------------------------------
