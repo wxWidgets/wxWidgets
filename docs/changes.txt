@@ -85,6 +85,7 @@ All:
 - Added wxPowerEvent (currently MSW-only).
 - Make wx-config compatible with Bourne shells.
 - Fixed wxDb::Open(wxDbConnectInf) when using connection string (Hellwolf Misty)
+- Fixed crash in wxDb::Open() in Unicode build (Massimiliano Marretta)
 
 All (GUI):
 
