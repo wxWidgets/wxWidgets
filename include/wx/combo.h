@@ -252,17 +252,19 @@ public:
     }
 
     // Set position of dropdown button.
-    //   width: 0 > for specific custom width, negative to adjust to smaller than default
-    //   height: 0 > for specific custom height, negative to adjust to smaller than default
+    //   width: button width. <= 0 for default.
+    //   height: button height. <= 0 for default.
     //   side: wxLEFT or wxRIGHT, indicates on which side the button will be placed.
     //   spacingX: empty space on sides of the button. Default is 0.
     // Remarks:
     //   There is no spacingY - the button will be centered vertically.
-    void SetButtonPosition( int width = 0,
-                            int height = 0,
+    void SetButtonPosition( int width = -1,
+                            int height = -1,
                             int side = wxRIGHT,
                             int spacingX = 0 );
 
+    // Returns current size of the dropdown button.
+    wxSize GetButtonSize();
 
     //
     // Sets dropbutton to be drawn with custom bitmaps.

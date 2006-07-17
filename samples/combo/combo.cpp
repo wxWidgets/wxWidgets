@@ -699,8 +699,11 @@ MyFrame::MyFrame(const wxString& title)
 
 
     odc->SetSelection(0);
-    odc->SetButtonPosition(-2, // width adjustment
-                           -6, // height adjustment
+
+    // Use button size that is slightly smaller than the default.
+    wxSize butSize = odc->GetButtonSize();
+    odc->SetButtonPosition(butSize.x - 2, // button width
+                           butSize.y - 6, // button height
                            wxLEFT, // side
                            2 // horizontal spacing
                           );
@@ -769,8 +772,8 @@ MyFrame::MyFrame(const wxString& title)
     gcc->SetValue(wxT("Subitem 05"));
 
     // Move button to left - it makes more sense for a tree ctrl
-    gcc->SetButtonPosition(0, // width adjustment
-                           0, // height adjustment
+    gcc->SetButtonPosition(-1, // button width
+                           -1, // button height
                            wxLEFT, // side
                            0 // horizontal spacing
                           );

@@ -289,6 +289,13 @@ Returns depressed button bitmap that has been set with
 A reference to the depressed state bitmap.
 
 
+\membersection{wxComboCtrl::GetButtonSize}\label{wxcomboctrlgetbuttonsize}
+
+\func{wxSize}{GetButtonSize}{\void}
+
+Returns current size of the dropdown button.
+
+
 \membersection{wxComboCtrl::GetCustomPaintWidth}\label{wxcomboctrlgetcustompaintwidth}
 
 \constfunc{int}{GetCustomPaintWidth}{\void}
@@ -466,15 +473,14 @@ different kind of button on mouse hover.}
 
 \membersection{wxComboCtrl::SetButtonPosition}\label{wxcomboctrlsetbuttonposition}
 
-\func{void}{SetButtonPosition}{\param{int }{width = 0}, \param{int }{height = 0}, \param{int }{side = wxRIGHT}, \param{int }{spacingX = 0}}
+\func{void}{SetButtonPosition}{\param{int }{width = -1}, \param{int }{height = -1}, \param{int }{side = wxRIGHT}, \param{int }{spacingX = 0}}
 
 Sets size and position of dropdown button.
 
 \wxheading{Parameters}
 
-\docparam{width}{If > $0$, defines specific button width. $0$ means platform default,
-while negative numbers allow adjusting smaller than default.}
-\docparam{height}{Same as width.}
+\docparam{width}{Button width. Value <= $0$ specifies default.}
+\docparam{height}{Button height. Value <= $0$ specifies default.}
 \docparam{side}{Indicates which side the button will be placed.
 Value can be {\tt wxLEFT} or {\tt wxRIGHT}.}
 \docparam{spacingX}{Horizontal spacing around the button. Default is $0$.}

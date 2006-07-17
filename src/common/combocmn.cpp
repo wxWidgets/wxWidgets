@@ -681,7 +681,7 @@ void wxComboCtrlBase::Init()
     m_btnState = 0;
     m_btnWidDefault = 0;
     m_blankButtonBg = false;
-    m_btnWid = m_btnHei = 0;
+    m_btnWid = m_btnHei = -1;
     m_btnSide = wxRIGHT;
     m_btnSpacingX = 0;
 
@@ -813,7 +813,7 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     if ( ( (m_iFlags & wxCC_BUTTON_OUTSIDE_BORDER) ||
                 (m_bmpNormal.Ok() && m_blankButtonBg) ) &&
          m_btnSpacingX == 0 &&
-         m_btnHei == 0 )
+         m_btnHei <= 0 )
     {
         m_iFlags |= wxCC_IFLAG_BUTTON_OUTSIDE;
         btnBorder = 0;
@@ -841,9 +841,7 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     int butHeight = sz.y - btnBorder*2;
 
     // Adjust button width
-    if ( m_btnWid < 0 )
-        butWidth += m_btnWid;
-    else if ( m_btnWid > 0 )
+    if ( m_btnWid > 0 )
         butWidth = m_btnWid;
     else
     {
@@ -865,9 +863,7 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     }
 
     // Adjust button height
-    if ( m_btnHei < 0 )
-        butHeight += m_btnHei;
-    else if ( m_btnHei > 0 )
+    if ( m_btnHei > 0 )
         butHeight = m_btnHei;
 
     // Use size of normal bitmap if...
@@ -1857,7 +1853,7 @@ void wxComboCtrlBase::HidePopup()
 // ----------------------------------------------------------------------------
 
 void wxComboCtrlBase::SetButtonPosition( int width, int height,
-                                            int side, int spacingX )
+                                         int side, int spacingX )
 {
     m_btnWid = width;
     m_btnHei = height;
@@ -1865,6 +1861,25 @@ void wxComboCtrlBase::SetButtonPosition( int width, int height,
     m_btnSpacingX = spacingX;
 
     RecalcAndRefresh();
+}
+
+wxSize wxComboCtrlBase::GetButtonSize()
+{
+    if ( m_btnSize.x > 0 )
+        return m_btnSize;
+
+    wxSize retSize(m_btnWid,m_btnHei);
+
+    // Need to call CalculateAreas now if button size is
+    // is not explicitly specified.
+    if ( retSize.x <= 0 || retSize.y <= 0)
+    {
+        OnResize();
+
+        retSize = m_btnSize;
+    }
+
+    return retSize;
 }
 
 void wxComboCtrlBase::SetButtonBitmaps( const wxBitmap& bmpNormal,
