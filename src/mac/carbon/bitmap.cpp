@@ -397,7 +397,7 @@ IconRef wxBitmapRefData::GetIconRef()
             SetIconFamilyData( iconFamily, 'PICT' , (Handle) pic ) ;
         }
         // transform into IconRef
-#ifdef __WXMAC_OSX__
+#if defined( __WXMAC_OSX__ ) && MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
         // cleaner version existing from 10.3 upwards
         HLock((Handle) iconFamily);
         OSStatus err = GetIconRefFromIconFamilyPtr( *iconFamily, GetHandleSize((Handle) iconFamily), &m_iconRef );
