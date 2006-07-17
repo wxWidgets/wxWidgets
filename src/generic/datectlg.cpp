@@ -580,7 +580,13 @@ wxSize wxDatePickerCtrlGeneric::DoGetBestSize() const
         int eh=m_txt->GetBestSize().y;
         return wxSize(DEFAULT_ITEM_WIDTH, bh > eh ? bh : eh);
     }
-    return wxSize(DEFAULT_ITEM_WIDTH,DEFAULT_ITEM_HEIGHT);
+    return wxSize(DEFAULT_ITEM_WIDTH,
+#if defined(__WXMSW__) || defined(__WXPM__)
+        DEFAULT_ITEM_HEIGHT
+#else
+        8 // FIXME ASAP
+#endif
+    );
 }
 
 
