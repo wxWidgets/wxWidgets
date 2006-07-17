@@ -178,6 +178,10 @@ record operations on a DC and then play them back later.
 
 Upgraded to Scintilla 1.70 for wx.stc.StyledTextCtrl.
 
+Added CanSetTransparent and SetTransparent methods to the
+wx.TopLevelWindow class.
+
+
 
 
 
