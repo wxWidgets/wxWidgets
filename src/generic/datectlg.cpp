@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        generic/datectlg.cpp
+// Name:        src/generic/datectlg.cpp
 // Purpose:     generic wxDatePickerCtrlGeneric implementation
 // Author:      Andreas Pflug
 // Modified by:
@@ -580,13 +580,7 @@ wxSize wxDatePickerCtrlGeneric::DoGetBestSize() const
         int eh=m_txt->GetBestSize().y;
         return wxSize(DEFAULT_ITEM_WIDTH, bh > eh ? bh : eh);
     }
-    return wxSize(DEFAULT_ITEM_WIDTH,
-#if defined(__WXMSW__) || defined(__WXPM__)
-        DEFAULT_ITEM_HEIGHT
-#else
-        8 // FIXME ASAP
-#endif
-    );
+    return wxControl::DoGetBestSize();
 }
 
 
@@ -963,4 +957,3 @@ void wxDatePickerCtrlGeneric::OnCalKey(wxKeyEvent & ev)
 #endif // wxUSE_DATEPICKCTRL_GENERIC
 
 #endif // wxUSE_DATEPICKCTRL
-
