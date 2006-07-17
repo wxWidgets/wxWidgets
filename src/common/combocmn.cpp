@@ -461,7 +461,7 @@ void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
 {
     int keycode = event.GetKeyCode();
 
-    if ( keycode == WXK_TAB )
+    if ( keycode == WXK_TAB && !m_combo->IsPopupShown() )
     {
         wxNavigationKeyEvent evt;
         evt.SetFlags(wxNavigationKeyEvent::FromTab|
