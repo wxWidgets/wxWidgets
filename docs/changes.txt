@@ -9,6 +9,8 @@ All:
 
 - wxSocket::_Read continues reading from socket after exhausting pushback buffer.
   Previously, only the buffer would be returned, even if more data was requested.
+- Fixed wxDb::Open(wxDbConnectInf) when using connection string (Hellwolf Misty)
+- Fixed crash in wxDb::Open() in Unicode build (Massimiliano Marretta)
 
 All (GUI):
 

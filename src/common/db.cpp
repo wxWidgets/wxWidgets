@@ -838,7 +838,7 @@ bool wxDb::Open(const wxString& inConnectStr, SQLHWND parentWnd, bool failOnData
 
     retcode = SQLDriverConnect(hdbc, parentWnd, (SQLTCHAR FAR *)inConnectionStr.c_str(),
                         (SWORD)inConnectionStr.Length(), (SQLTCHAR FAR *)outConnectBuffer,
-                        sizeof(outConnectBuffer), &outConnectBufferLen, SQL_DRIVER_COMPLETE );
+                        WXSIZEOF(outConnectBuffer), &outConnectBufferLen, SQL_DRIVER_COMPLETE );
 
     if ((retcode != SQL_SUCCESS) &&
         (retcode != SQL_SUCCESS_WITH_INFO))
@@ -943,7 +943,7 @@ bool wxDb::Open(wxDb *copyDb)
 
         retcode = SQLDriverConnect(hdbc, NULL, (SQLTCHAR FAR *)inConnectionStr.c_str(),
                             (SWORD)inConnectionStr.Length(), (SQLTCHAR FAR *)outConnectBuffer,
-                            sizeof(outConnectBuffer), &outConnectBufferLen, SQL_DRIVER_COMPLETE);
+                            WXSIZEOF(outConnectBuffer), &outConnectBufferLen, SQL_DRIVER_COMPLETE);
 
         if ((retcode != SQL_SUCCESS) &&
             (retcode != SQL_SUCCESS_WITH_INFO))
