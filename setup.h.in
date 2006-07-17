@@ -449,6 +449,8 @@
 
 #define wxUSE_HELP        0
 
+#define wxUSE_MS_HTML_HELP 0
+
 
 #define wxUSE_WXHTML_HELP 0
 
