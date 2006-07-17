@@ -557,6 +557,11 @@ public:
         }
     }
 
+    // Implement empty DoSetPopupControl to prevent assertion failure.
+    virtual void DoSetPopupControl(wxComboPopup* WXUNUSED(popup))
+    {
+    }
+
 private:
     void Init()
     {
