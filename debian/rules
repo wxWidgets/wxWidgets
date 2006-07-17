@@ -96,6 +96,10 @@ BASE_CONFIGURE_OPTIONS = $(COMMON_CONFIGURE_OPTIONS) \
 GTK_CONFIGURE_OPTIONS = $(COMMON_CONFIGURE_OPTIONS) \
     --with-gtk \
     --with-gnomeprint \
+    --enable-mediactrl \
+    --enable-sound \
+    --with-sdl \
+    --enable-display \
     --with-libjpeg=sys \
     --with-libpng=sys \
     --with-libtiff=sys \
@@ -110,7 +114,7 @@ ifeq ($(WX_UNICODE),1)
     COMMON_CONFIGURE_OPTIONS += --enable-unicode
     PY_WX_CONFIG_OPTIONS += --unicode
     PY_UNICODE="UNICODE=1"
-    wxpydir += "-unicode"
+    wxpydir := $(pydir)/wx-$(release)-$(pytoolkit)-unicode
 endif
 
 ifeq ($(WX_OPENGL),1)
