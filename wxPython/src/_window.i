@@ -875,7 +875,12 @@ by pressing <Enter> such as the OK button on a wx.Dialog.", "");
     DocDeclStr(
         virtual void , SetTmpDefaultItem(wxWindow * win),
         "Set this child as temporary default", "");
+
+    DocDeclStr(
+        virtual wxWindow *, GetTmpDefaultItem() const,
+        "Return the temporary default item, which can be None.", "");
     
+
 
     DocDeclAStr(
         virtual bool , Navigate(int flags = wxNavigationKeyEvent::IsForward),
