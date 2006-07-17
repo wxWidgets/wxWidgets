@@ -153,8 +153,11 @@ The following example shows a simple implementation that utilizes
 
 %rename(_AddPane1) wxFrameManager::AddPane(wxWindow* window, const wxPaneInfo& pane_info);
 %rename(_AddPane2) wxFrameManager::AddPane(wxWindow* window, int direction = wxLEFT,
-                                          const wxString& caption = wxEmptyString);
+                                           const wxString& caption = wxEmptyString);
 
+%rename(AddPaneAtPos) wxFrameManager::AddPane(wxWindow* window,
+                                              const wxPaneInfo& pane_info,
+                                              const wxPoint& drop_pos);
 
 // A typemap for the return value of wxFrameManager::GetAllPanes
 %typemap(out) wxPaneInfoArray& {
