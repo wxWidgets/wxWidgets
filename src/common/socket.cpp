@@ -707,8 +707,7 @@ bool wxSocketBase::_Wait(long seconds,
   // Do this at least once (important if timeout == 0, when
   // we are just polling). Also, if just polling, do not yield.
 
-  wxDateTime current_time = wxDateTime::UNow();
-  unsigned int time_limit = (current_time.GetTicks() * 1000) + current_time.GetMillisecond() + timeout;
+  wxLongLong time_limit = wxDateTime::UNow().GetValue() + timeout;
   bool done = false;
   bool valid_result = false;
 
@@ -752,8 +751,7 @@ bool wxSocketBase::_Wait(long seconds,
     }
 
     // Wait more?
-    current_time = wxDateTime::UNow();
-    int time_left = time_limit - ((current_time.GetTicks() * 1000) + current_time.GetMillisecond());
+    wxLongLong time_left = time_limit - wxDateTime::UNow().GetValue();
     if ((!timeout) || (time_left <= 0) || (m_interrupt))
       done = true;
     else
@@ -766,7 +764,7 @@ bool wxSocketBase::_Wait(long seconds,
       {
         // If there's less than 50 ms left, just call select with that timeout.
         if (time_left < 50)
-          m_socket->SetTimeout(time_left);
+          m_socket->SetTimeout(time_left.ToLong());
       }
     }
   }
