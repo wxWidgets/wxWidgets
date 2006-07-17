@@ -3520,6 +3520,8 @@ void wxFrameManager::OnChildFocus(wxChildFocusEvent& event)
             m_frame->Refresh();
         }
     }
+    
+    event.Skip();
 }
 
 
