@@ -107,7 +107,7 @@ EVT_UpdatePageStatus = wx.PyEventBinder(wxEVT_UpdatePageStatus, 1)
 EVT_PrivacyImpactedStateChange = wx.PyEventBinder(wxEVT_PrivacyImpactedStateChange, 1)
 
 
-# For this there are af ew special methods implemented in C++ in the
+# For this there are a few special methods implemented in C++ in the
 # IEHtmlWindowBase class, so derive from it instead of ActiveXWindow.
 class IEHtmlWindow(wx.activex.IEHtmlWindowBase):
     def __init__(self, parent, ID=-1, pos=wx.DefaultPosition,
