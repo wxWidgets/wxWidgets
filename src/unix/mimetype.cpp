@@ -280,7 +280,7 @@ void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename,
 {
     wxTextFile textfile(filename);
 #if defined(__WXGTK20__) && wxUSE_UNICODE
-    if ( !textfile.Open(wxConvUTF8) )
+    if ( !textfile.Open(wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL)) )
 #else
     if ( !textfile.Open() )
 #endif
