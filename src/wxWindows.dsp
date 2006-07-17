@@ -571,6 +571,10 @@ SOURCE=.\common\ftp.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\gaddr.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\gaugecmn.cpp
 # End Source File
 # Begin Source File
@@ -2540,6 +2544,10 @@ SOURCE=..\include\wx\fs_mem.h
 # Begin Source File
 
 SOURCE=..\include\wx\fs_zip.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\gaddr.h
 # End Source File
 # Begin Source File
 

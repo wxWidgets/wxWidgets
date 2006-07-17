@@ -270,6 +270,8 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_volume.o \
 	$(OBJS)\monodll_fs_inet.o \
 	$(OBJS)\monodll_ftp.o \
+	$(OBJS)\monodll_gsocket.o \
+	$(OBJS)\monodll_gaddr.o \
 	$(OBJS)\monodll_http.o \
 	$(OBJS)\monodll_protocol.o \
 	$(OBJS)\monodll_sckaddr.o \
@@ -278,7 +280,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_sckstrm.o \
 	$(OBJS)\monodll_socket.o \
 	$(OBJS)\monodll_url.o \
-	$(OBJS)\monodll_gsocket.o \
 	$(OBJS)\monodll_urlmsw.o \
 	$(____MONOLIB_GUI_SRC_FILENAMES_OBJECTS) \
 	$(OBJS)\monodll_xml.o \
@@ -381,6 +382,8 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_volume.o \
 	$(OBJS)\monolib_fs_inet.o \
 	$(OBJS)\monolib_ftp.o \
+	$(OBJS)\monolib_gsocket.o \
+	$(OBJS)\monolib_gaddr.o \
 	$(OBJS)\monolib_http.o \
 	$(OBJS)\monolib_protocol.o \
 	$(OBJS)\monolib_sckaddr.o \
@@ -389,7 +392,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_sckstrm.o \
 	$(OBJS)\monolib_socket.o \
 	$(OBJS)\monolib_url.o \
-	$(OBJS)\monolib_gsocket.o \
 	$(OBJS)\monolib_urlmsw.o \
 	$(____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS) \
 	$(OBJS)\monolib_xml.o \
@@ -602,6 +604,8 @@ NETDLL_OBJECTS =  \
 	$(OBJS)\netdll_version_rc.o \
 	$(OBJS)\netdll_fs_inet.o \
 	$(OBJS)\netdll_ftp.o \
+	$(OBJS)\netdll_gsocket.o \
+	$(OBJS)\netdll_gaddr.o \
 	$(OBJS)\netdll_http.o \
 	$(OBJS)\netdll_protocol.o \
 	$(OBJS)\netdll_sckaddr.o \
@@ -610,7 +614,6 @@ NETDLL_OBJECTS =  \
 	$(OBJS)\netdll_sckstrm.o \
 	$(OBJS)\netdll_socket.o \
 	$(OBJS)\netdll_url.o \
-	$(OBJS)\netdll_gsocket.o \
 	$(OBJS)\netdll_urlmsw.o
 NETLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
@@ -623,6 +626,8 @@ NETLIB_OBJECTS =  \
 	$(OBJS)\netlib_dummy.o \
 	$(OBJS)\netlib_fs_inet.o \
 	$(OBJS)\netlib_ftp.o \
+	$(OBJS)\netlib_gsocket.o \
+	$(OBJS)\netlib_gaddr.o \
 	$(OBJS)\netlib_http.o \
 	$(OBJS)\netlib_protocol.o \
 	$(OBJS)\netlib_sckaddr.o \
@@ -631,7 +636,6 @@ NETLIB_OBJECTS =  \
 	$(OBJS)\netlib_sckstrm.o \
 	$(OBJS)\netlib_socket.o \
 	$(OBJS)\netlib_url.o \
-	$(OBJS)\netlib_gsocket.o \
 	$(OBJS)\netlib_urlmsw.o
 COREDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
@@ -4659,6 +4663,12 @@ $(OBJS)\monodll_fs_inet.o: ../../src/common/fs_inet.cpp
 $(OBJS)\monodll_ftp.o: ../../src/common/ftp.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_gsocket.o: ../../src/common/gsocket.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_gaddr.o: ../../src/common/gaddr.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_http.o: ../../src/common/http.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -4681,9 +4691,6 @@ $(OBJS)\monodll_socket.o: ../../src/common/socket.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_url.o: ../../src/common/url.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monodll_gsocket.o: ../../src/common/gsocket.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_urlmsw.o: ../../src/msw/urlmsw.cpp
@@ -6622,6 +6629,12 @@ $(OBJS)\monolib_fs_inet.o: ../../src/common/fs_inet.cpp
 $(OBJS)\monolib_ftp.o: ../../src/common/ftp.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_gsocket.o: ../../src/common/gsocket.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_gaddr.o: ../../src/common/gaddr.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_http.o: ../../src/common/http.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6644,9 +6657,6 @@ $(OBJS)\monolib_socket.o: ../../src/common/socket.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_url.o: ../../src/common/url.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_gsocket.o: ../../src/common/gsocket.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_urlmsw.o: ../../src/msw/urlmsw.cpp
@@ -8837,6 +8847,12 @@ $(OBJS)\netdll_fs_inet.o: ../../src/common/fs_inet.cpp
 $(OBJS)\netdll_ftp.o: ../../src/common/ftp.cpp
 	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\netdll_gsocket.o: ../../src/common/gsocket.cpp
+	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\netdll_gaddr.o: ../../src/common/gaddr.cpp
+	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\netdll_http.o: ../../src/common/http.cpp
 	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8861,9 +8877,6 @@ $(OBJS)\netdll_socket.o: ../../src/common/socket.cpp
 $(OBJS)\netdll_url.o: ../../src/common/url.cpp
 	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\netdll_gsocket.o: ../../src/common/gsocket.cpp
-	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\netdll_urlmsw.o: ../../src/msw/urlmsw.cpp
 	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8874,6 +8887,12 @@ $(OBJS)\netlib_fs_inet.o: ../../src/common/fs_inet.cpp
 	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\netlib_ftp.o: ../../src/common/ftp.cpp
+	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\netlib_gsocket.o: ../../src/common/gsocket.cpp
+	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\netlib_gaddr.o: ../../src/common/gaddr.cpp
 	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\netlib_http.o: ../../src/common/http.cpp
@@ -8898,9 +8917,6 @@ $(OBJS)\netlib_socket.o: ../../src/common/socket.cpp
 	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\netlib_url.o: ../../src/common/url.cpp
-	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\netlib_gsocket.o: ../../src/common/gsocket.cpp
 	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\netlib_urlmsw.o: ../../src/msw/urlmsw.cpp

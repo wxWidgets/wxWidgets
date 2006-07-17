@@ -466,6 +466,10 @@ SOURCE=..\..\src\common\ftp.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\gaddr.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\gsocket.cpp
 # End Source File
 # Begin Source File
@@ -1015,6 +1019,10 @@ SOURCE=..\..\include\wx\fs_inet.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\protocol\ftp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\gaddr.h
 # End Source File
 # Begin Source File
 

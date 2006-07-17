@@ -23,6 +23,7 @@
 #if wxUSE_SOCKETS
 
 #include "wx/socket.h"
+#include "wx/gaddr.h"
 
 #ifndef WX_PRECOMP
     #include "wx/object.h"

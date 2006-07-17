@@ -32,7 +32,7 @@
     #endif
 #endif // !WX_PRECOMP
 
-#include "wx/gsocket.h"
+#include "wx/gaddr.h"
 #include "wx/socket.h"
 #include "wx/sckaddr.h"
 

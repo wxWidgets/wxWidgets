@@ -327,6 +327,8 @@ ALL_BASE_HEADERS =  \
 	wx/zstream.h \
 	$(BASE_PLATFORM_HDR) \
 	wx/fs_inet.h \
+	wx/gsocket.h \
+	wx/gaddr.h \
 	wx/protocol/file.h \
 	wx/protocol/ftp.h \
 	wx/protocol/http.h \
@@ -490,6 +492,8 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/palmos/stdpaths.h \
 	wx/msdos/mimetype.h \
 	wx/fs_inet.h \
+	wx/gsocket.h \
+	wx/gaddr.h \
 	wx/protocol/file.h \
 	wx/protocol/ftp.h \
 	wx/protocol/http.h \
@@ -499,11 +503,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/sckstrm.h \
 	wx/socket.h \
 	wx/url.h \
-	wx/gsocket.h \
-	wx/gsocket.h \
 	$(NET_WINCE_HDR) \
-	wx/gsocket.h \
-	wx/gsocket.h \
 	wx/mac/carbon/gsockmac.h \
 	wx/xml/xml.h \
 	wx/xtixml.h \
@@ -630,6 +630,8 @@ ALL_BASE_SOURCES =  \
 	src/msw/volume.cpp \
 	src/common/fs_inet.cpp \
 	src/common/ftp.cpp \
+	src/common/gsocket.cpp \
+	src/common/gaddr.cpp \
 	src/common/http.cpp \
 	src/common/protocol.cpp \
 	src/common/sckaddr.cpp \
@@ -638,8 +640,6 @@ ALL_BASE_SOURCES =  \
 	src/common/sckstrm.cpp \
 	src/common/socket.cpp \
 	src/common/url.cpp \
-	src/common/gsocket.cpp \
-	src/common/gsocket.cpp \
 	src/msw/urlmsw.cpp \
 	$(NET_WINCE_SRC) \
 	src/xml/xml.cpp \
@@ -724,6 +724,8 @@ MONODLL_OBJECTS =  \
 	$(__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS) \
 	monodll_fs_inet.o \
 	monodll_ftp.o \
+	monodll_gsocket.o \
+	monodll_gaddr.o \
 	monodll_http.o \
 	monodll_protocol.o \
 	monodll_sckaddr.o \
@@ -815,6 +817,8 @@ MONOLIB_OBJECTS =  \
 	$(__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1) \
 	monolib_fs_inet.o \
 	monolib_ftp.o \
+	monolib_gsocket.o \
+	monolib_gaddr.o \
 	monolib_http.o \
 	monolib_protocol.o \
 	monolib_sckaddr.o \
@@ -992,6 +996,8 @@ NETDLL_OBJECTS =  \
 	$(__netdll___win32rc) \
 	netdll_fs_inet.o \
 	netdll_ftp.o \
+	netdll_gsocket.o \
+	netdll_gaddr.o \
 	netdll_http.o \
 	netdll_protocol.o \
 	netdll_sckaddr.o \
@@ -1010,6 +1016,8 @@ NETLIB_CXXFLAGS = $(__netlib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 NETLIB_OBJECTS =  \
 	netlib_fs_inet.o \
 	netlib_ftp.o \
+	netlib_gsocket.o \
+	netlib_gaddr.o \
 	netlib_http.o \
 	netlib_protocol.o \
 	netlib_sckaddr.o \
@@ -1638,11 +1646,11 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/wrapwin.h \
 	$(BASE_WINCE_HDR)
 @COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR)
-@COND_PLATFORM_MACOSX_1@NET_PLATFORM_HDR = wx/gsocket.h
+@COND_PLATFORM_MACOSX_1@NET_PLATFORM_HDR = 
 @COND_PLATFORM_MACOS_1@NET_PLATFORM_HDR = wx/mac/carbon/gsockmac.h
-@COND_PLATFORM_OS2_1@NET_PLATFORM_HDR = wx/gsocket.h
-@COND_PLATFORM_UNIX_1@NET_PLATFORM_HDR = wx/gsocket.h
-@COND_PLATFORM_WIN32_1@NET_PLATFORM_HDR = wx/gsocket.h $(NET_WINCE_HDR)
+@COND_PLATFORM_OS2_1@NET_PLATFORM_HDR = 
+@COND_PLATFORM_UNIX_1@NET_PLATFORM_HDR = 
+@COND_PLATFORM_WIN32_1@NET_PLATFORM_HDR =  $(NET_WINCE_HDR)
 @COND_TOOLKIT_COCOA@LOWLEVEL_HDR = 
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
@@ -3131,13 +3139,12 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS =  \
 @COND_PLATFORM_WIN32_1@	= monodll_main.o monodll_mslu.o monodll_volume.o
 @COND_TOOLKIT_MAC@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS = \
 @COND_TOOLKIT_MAC@	monodll_utils.o monodll_uma.o
-@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
+@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS = 
 @COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
-@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
-@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
+@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS = 
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = 
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS = \
-@COND_PLATFORM_WIN32_1@	monodll_gsocket.o monodll_urlmsw.o \
-@COND_PLATFORM_WIN32_1@	$(__NET_WINCE_SRC_OBJECTS)
+@COND_PLATFORM_WIN32_1@	monodll_urlmsw.o $(__NET_WINCE_SRC_OBJECTS)
 @COND_TOOLKIT_WINCE@__NET_WINCE_SRC_OBJECTS = monodll_net.o
 COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	$(__CORE_SRC_OBJECTS) \
@@ -4791,13 +4798,12 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_WIN32_1@	= monolib_main.o monolib_mslu.o monolib_volume.o
 @COND_TOOLKIT_MAC@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MAC@	monolib_utils.o monolib_uma.o
-@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
+@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_1 = 
 @COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
-@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
-@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
+@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_1 = 
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = 
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_1 \
-@COND_PLATFORM_WIN32_1@	= monolib_gsocket.o monolib_urlmsw.o \
-@COND_PLATFORM_WIN32_1@	$(__NET_WINCE_SRC_OBJECTS_1)
+@COND_PLATFORM_WIN32_1@	= monolib_urlmsw.o $(__NET_WINCE_SRC_OBJECTS_1)
 @COND_TOOLKIT_WINCE@__NET_WINCE_SRC_OBJECTS_1 = monolib_net.o
 COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	$(__CORE_SRC_OBJECTS_1) \
@@ -6694,13 +6700,12 @@ COND_USE_SOSYMLINKS_1___netdll___so_symlinks_inst_cmd = rm -f \
 	$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOSYMLINKS_1@__netdll___so_symlinks_inst_cmd = $(COND_USE_SOSYMLINKS_1___netdll___so_symlinks_inst_cmd)
 @COND_PLATFORM_WIN32_1@__netdll___win32rc = netdll_version_rc.o
-@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
+@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_2 = 
 @COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
-@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
-@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
+@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_2 = 
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = 
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_2 \
-@COND_PLATFORM_WIN32_1@	= netdll_gsocket.o netdll_urlmsw.o \
-@COND_PLATFORM_WIN32_1@	$(__NET_WINCE_SRC_OBJECTS_2)
+@COND_PLATFORM_WIN32_1@	= netdll_urlmsw.o $(__NET_WINCE_SRC_OBJECTS_2)
 @COND_TOOLKIT_WINCE@__NET_WINCE_SRC_OBJECTS_2 = netdll_net.o
 COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
@@ -6711,13 +6716,12 @@ COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
 @COND_ICC_PCH_1@	.pch/wxprec_netlib/wx/wxprec.h.gch
 @COND_USE_PCH_1@___pch_wxprec_netlib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= .pch/wxprec_netlib/wx/wxprec.h.gch
-@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
+@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_3 = 
 @COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
-@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
-@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
+@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_3 = 
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = 
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_3 \
-@COND_PLATFORM_WIN32_1@	= netlib_gsocket.o netlib_urlmsw.o \
-@COND_PLATFORM_WIN32_1@	$(__NET_WINCE_SRC_OBJECTS_3)
+@COND_PLATFORM_WIN32_1@	= netlib_urlmsw.o $(__NET_WINCE_SRC_OBJECTS_3)
 @COND_TOOLKIT_WINCE@__NET_WINCE_SRC_OBJECTS_3 = netlib_net.o
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1___coredll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
@@ -11776,6 +11780,9 @@ monodll_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(MONODLL_ODEP)
 monodll_ftp.o: $(srcdir)/src/common/ftp.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/ftp.cpp
 
+monodll_gaddr.o: $(srcdir)/src/common/gaddr.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gaddr.cpp
+
 monodll_http.o: $(srcdir)/src/common/http.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/http.cpp
 
@@ -12601,17 +12608,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_main.o: $(srcdir)/src/os2/main.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/main.cpp
 
-@COND_PLATFORM_UNIX_1@monodll_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
-
-@COND_PLATFORM_WIN32_1@monodll_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
-
-@COND_PLATFORM_MACOSX_1@monodll_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
-
-@COND_PLATFORM_OS2_1@monodll_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
+monodll_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
 
 @COND_PLATFORM_MACOS_1@monodll_gsocket.o: $(srcdir)/src/mac/carbon/gsocket.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/gsocket.cpp
@@ -15652,6 +15650,9 @@ monolib_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(MONOLIB_ODEP)
 monolib_ftp.o: $(srcdir)/src/common/ftp.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/ftp.cpp
 
+monolib_gaddr.o: $(srcdir)/src/common/gaddr.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gaddr.cpp
+
 monolib_http.o: $(srcdir)/src/common/http.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/http.cpp
 
@@ -16477,17 +16478,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_main.o: $(srcdir)/src/os2/main.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/main.cpp
 
-@COND_PLATFORM_UNIX_1@monolib_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
-
-@COND_PLATFORM_WIN32_1@monolib_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
-
-@COND_PLATFORM_MACOSX_1@monolib_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
-
-@COND_PLATFORM_OS2_1@monolib_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
+monolib_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
 
 @COND_PLATFORM_MACOS_1@monolib_gsocket.o: $(srcdir)/src/mac/carbon/gsocket.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/gsocket.cpp
@@ -20407,6 +20399,9 @@ netdll_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(NETDLL_ODEP)
 netdll_ftp.o: $(srcdir)/src/common/ftp.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/ftp.cpp
 
+netdll_gaddr.o: $(srcdir)/src/common/gaddr.cpp $(NETDLL_ODEP)
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/gaddr.cpp
+
 netdll_http.o: $(srcdir)/src/common/http.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/http.cpp
 
@@ -20437,17 +20432,8 @@ netdll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETDLL_ODEP)
 netdll_net.o: $(srcdir)/src/msw/wince/net.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/wince/net.cpp
 
-@COND_PLATFORM_UNIX_1@netdll_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(NETDLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
-
-@COND_PLATFORM_WIN32_1@netdll_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(NETDLL_ODEP)
-@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
-
-@COND_PLATFORM_MACOSX_1@netdll_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(NETDLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
-
-@COND_PLATFORM_OS2_1@netdll_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(NETDLL_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
+netdll_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(NETDLL_ODEP)
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
 
 @COND_PLATFORM_MACOS_1@netdll_gsocket.o: $(srcdir)/src/mac/carbon/gsocket.cpp $(NETDLL_ODEP)
 @COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/gsocket.cpp
@@ -20457,6 +20443,9 @@ netlib_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(NETLIB_ODEP)
 
 netlib_ftp.o: $(srcdir)/src/common/ftp.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/ftp.cpp
+
+netlib_gaddr.o: $(srcdir)/src/common/gaddr.cpp $(NETLIB_ODEP)
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/gaddr.cpp
 
 netlib_http.o: $(srcdir)/src/common/http.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/http.cpp
@@ -20488,17 +20477,8 @@ netlib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETLIB_ODEP)
 netlib_net.o: $(srcdir)/src/msw/wince/net.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/wince/net.cpp
 
-@COND_PLATFORM_UNIX_1@netlib_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(NETLIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
-
-@COND_PLATFORM_WIN32_1@netlib_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(NETLIB_ODEP)
-@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
-
-@COND_PLATFORM_MACOSX_1@netlib_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(NETLIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
-
-@COND_PLATFORM_OS2_1@netlib_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(NETLIB_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
+netlib_gsocket.o: $(srcdir)/src/common/gsocket.cpp $(NETLIB_ODEP)
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/gsocket.cpp
 
 @COND_PLATFORM_MACOS_1@netlib_gsocket.o: $(srcdir)/src/mac/carbon/gsocket.cpp $(NETLIB_ODEP)
 @COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/gsocket.cpp
