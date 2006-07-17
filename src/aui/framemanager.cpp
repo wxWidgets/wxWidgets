@@ -495,7 +495,7 @@ void wxFrameManager::SetManagedWindow(wxWindow* frame)
     }
 #endif
 
-    // Make a window to use for a translucent hint
+    // Make a window to use for a transparent hint
 #if defined(__WXMSW__)
     m_hint_wnd = new wxFrame(m_frame, -1, wxEmptyString, wxDefaultPosition, wxSize(1,1),
                              wxFRAME_TOOL_WINDOW |
@@ -523,7 +523,7 @@ void wxFrameManager::SetManagedWindow(wxWindow* frame)
     p->SetBackgroundColour(*wxBLUE);
 #endif
 
-    if (m_hint_wnd && !m_hint_wnd->CanSetTranslucency())
+    if (m_hint_wnd && !m_hint_wnd->CanSetTransparent())
     {
         m_hint_wnd->Close();
         m_hint_wnd = NULL;
@@ -1840,7 +1840,7 @@ void wxFrameManager::Update()
                 // window should have this style by default
                 if (m_action == actionDragFloatingPane &&
                     (m_flags & wxAUI_MGR_TRANSPARENT_DRAG))
-                        frame->SetTranslucency(150);
+                        frame->SetTransparent(150);
 
                 frame->SetPaneWindow(p);
                 p.frame = frame;
@@ -2468,7 +2468,7 @@ void wxFrameManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
     }
 
     m_hint_fadeamt += 5;
-    m_hint_wnd->SetTranslucency(m_hint_fadeamt);
+    m_hint_wnd->SetTransparent(m_hint_fadeamt);
 }
 
 void wxFrameManager::ShowHint(const wxRect& rect)
@@ -2491,7 +2491,7 @@ void wxFrameManager::ShowHint(const wxRect& rect)
         if (m_action == actionDragFloatingPane && m_action_window)
             m_action_window->SetFocus();
 
-        m_hint_wnd->SetTranslucency(initial_fade);
+        m_hint_wnd->SetTransparent(initial_fade);
         m_hint_wnd->SetSize(rect);
         m_hint_wnd->Raise();
         
@@ -2505,7 +2505,7 @@ void wxFrameManager::ShowHint(const wxRect& rect)
         }
     }
 
-    else  // Not using a translucent hint window...
+    else  // Not using a transparent hint window...
     {
         
         if (m_last_hint != rect)
@@ -2559,7 +2559,7 @@ void wxFrameManager::HideHint()
     // hides a transparent window hint, if there is one
     if (m_hint_wnd)
     {
-        m_hint_wnd->SetTranslucency(0);
+        m_hint_wnd->SetTransparent(0);
         m_hint_fadetimer.Stop();
         m_last_hint = wxRect();
         return;
@@ -2666,7 +2666,7 @@ void wxFrameManager::OnFloatingPaneMoveStart(wxWindow* wnd)
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
     if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
-        pane.frame->SetTranslucency(150);
+        pane.frame->SetTransparent(150);
 }
 
 void wxFrameManager::OnFloatingPaneMoving(wxWindow* wnd)
@@ -2765,7 +2765,7 @@ void wxFrameManager::OnFloatingPaneMoved(wxWindow* wnd)
         pane.floating_pos = pane.frame->GetPosition();
 
         if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
-            pane.frame->SetTranslucency(255);
+            pane.frame->SetTransparent(255);
     }
 
     Update();

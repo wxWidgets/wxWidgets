@@ -71,8 +71,8 @@ public:
     bool EnableCloseButton(bool enable = true);
 
     // Set window transparency if the platform supports it
-    virtual bool SetTranslucency(int alpha);
-    virtual bool CanSetTranslucency();
+    virtual bool SetTransparent(wxByte alpha);
+    virtual bool CanSetTransparent();
 
     
     // implementation from now on

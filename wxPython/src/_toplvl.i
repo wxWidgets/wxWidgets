@@ -171,8 +171,8 @@ public:
     }
 #endif
 
-    virtual bool SetTranslucency(int alpha); 
-    virtual bool CanSetTranslucency();
+    virtual bool SetTransparent(byte alpha); 
+    virtual bool CanSetTransparent();
 
 };
 

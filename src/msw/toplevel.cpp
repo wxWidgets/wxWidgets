@@ -1045,14 +1045,11 @@ void wxTopLevelWindowMSW::RequestUserAttention(int flags)
 
 // ---------------------------------------------------------------------------
 
-bool wxTopLevelWindowMSW::SetTranslucency(int alpha)
+bool wxTopLevelWindowMSW::SetTransparent(wxByte alpha)
 {
     typedef DWORD (WINAPI *PSETLAYEREDWINDOWATTR)(HWND, DWORD, BYTE, DWORD);
     static PSETLAYEREDWINDOWATTR pSetLayeredWindowAttributes = NULL;
 
-    if (alpha < 0) alpha = 0;
-    if (alpha > 255) alpha = 255;
-    
     if ( pSetLayeredWindowAttributes == NULL )
     {
         wxDynamicLibrary dllUser32(_T("user32.dll"));
@@ -1079,7 +1076,7 @@ bool wxTopLevelWindowMSW::SetTranslucency(int alpha)
     return pSetLayeredWindowAttributes(GetHwnd(), 0, (BYTE)alpha, LWA_ALPHA) != 0;   
 }
 
-bool wxTopLevelWindowMSW::CanSetTranslucency()
+bool wxTopLevelWindowMSW::CanSetTransparent()
 {
     // The API is available on win2k and above
     

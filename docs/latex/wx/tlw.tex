@@ -29,15 +29,15 @@ applicable for the two classes above.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxTopLevelWindow::CanSetTranslucency}\label{wxtoplevelwindowcansettranslucency}
+\membersection{wxTopLevelWindow::CanSetTransparent}\label{wxtoplevelwindowcansettransparent}
 
-\func{virtual bool}{CanSetTranslucency}{\void}
+\func{virtual bool}{CanSetTransparent}{\void}
 
 Returns \true if the platform supports making the window translucent.
 
 \wxheading{See also}
 
-\helpref{wxTopLevelWindow::SetTranslucency}{wxtoplevelwindowsettranslucency}
+\helpref{wxTopLevelWindow::SetTransparent}{wxtoplevelwindowsettransparent}
 
 
 \membersection{wxTopLevelWindow::GetIcon}\label{wxtoplevelwindowgeticon}
@@ -281,19 +281,20 @@ Sets the window title.
 \helpref{wxTopLevelWindow::GetTitle}{wxtoplevelwindowgettitle}
 
 
-\membersection{wxTopLevelWindow::SetTranslucency}\label{wxtoplevelwindowsettranslucency}
+\membersection{wxTopLevelWindow::SetTransparent}\label{wxtoplevelwindowsettransparent}
 
-\func{virtual bool}{SetTranslucency}{\param{int }{ alpha}}
+\func{virtual bool}{SetTransparent}{\param{int }{ alpha}}
 
 If the platform supports it will set the window to be translucent
 
 \wxheading{Parameters}
 
 \docparam{alpha}{Determines how opaque or transparent the window will
-  be.  A value of 0 sets the window to be fully transparent, and a
-  value of 255 sets the window to be fully opaque.}
+  be, if the platform supports the opreration.  A value of 0 sets the
+  window to be fully transparent, and a value of 255 sets the window
+  to be fully opaque.}
 
-Returns \true if the translucency was successfully changed.
+Returns \true if the transparency was successfully changed.
 
 
 

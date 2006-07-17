@@ -1432,7 +1432,7 @@ bool wxTopLevelWindowMac::IsFullScreen() const
 }
 
 
-bool wxTopLevelWindowMac::SetTranslucency(int alpha)
+bool wxTopLevelWindowMac::SetTransparent(wxByte alpha)
 {
     WindowRef handle = GetControlOwner((OpaqueControlRef*)GetHandle());
     OSStatus result = SetWindowAlpha(handle, float(alpha)/255.0);
@@ -1440,7 +1440,7 @@ bool wxTopLevelWindowMac::SetTranslucency(int alpha)
 }
 
 
-bool wxTopLevelWindowMac::CanSetTranslucency()
+bool wxTopLevelWindowMac::CanSetTransparent()
 {
     return true;
 }
