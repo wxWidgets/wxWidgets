@@ -69,7 +69,8 @@ protected:
 //       fact that all classes being mapped as wxColourPickerWidget have the
 //       same prototype for their contructor (and also explains why we use
 //       define instead of a typedef)
-#if defined(__WXGTK24__)        // since GTK > 2.4, there is GtkColorButton
+// since GTK > 2.4, there is GtkColorButton
+#if defined(__WXGTK24__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/clrpicker.h"
     #define wxColourPickerWidget      wxColourButton
 #else

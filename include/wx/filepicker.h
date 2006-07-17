@@ -78,7 +78,8 @@ protected:
 // NOTE: wxFileDirPickerCtrlBase will allocate a wx{File|Dir}PickerWidget and this
 //       requires that all classes being mapped as wx{File|Dir}PickerWidget have the
 //       same prototype for the contructor...
-#if defined(__WXGTK26__)        // since GTK >= 2.6, there is GtkFileButton
+// since GTK >= 2.6, there is GtkFileButton
+#if defined(__WXGTK26__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/filepicker.h"
     #define wxFilePickerWidget      wxFileButton
     #define wxDirPickerWidget       wxDirButton

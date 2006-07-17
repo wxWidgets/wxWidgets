@@ -66,7 +66,8 @@ protected:
 // uses the currently selected font to draw the label of the button
 #define wxFNTP_USEFONT_FOR_LABEL      0x0010
 
-#if defined(__WXGTK24__)        // since GTK > 2.4, there is GtkFontButton
+// since GTK > 2.4, there is GtkFontButton
+#if defined(__WXGTK24__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/fontpicker.h"
     #define wxFontPickerWidget      wxFontButton
 #else
