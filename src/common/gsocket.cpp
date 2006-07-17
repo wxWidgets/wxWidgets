@@ -457,7 +457,6 @@ GSocket::~GSocket()
   /* Check that the socket is really shutdowned */
 
 
-  #warning Kry - Which is the correct order here? Unix shutdown, destroy, MSw destroy, shutdown. So... wtf.
   if (m_fd != INVALID_SOCKET)
     Shutdown();
 
