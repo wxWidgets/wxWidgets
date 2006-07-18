@@ -135,25 +135,7 @@ dospinport(){
     pushd /tmp/wx$port
     # use DOS line endings for text files for MSW archives.
     if [ $port = "msw" ]; then
-        find . -name \*.bkl  -exec unix2dos {} \;
-        find . -name \*.bcc  -exec unix2dos {} \;
-        find . -name \*.c    -exec unix2dos {} \;
-        find . -name \*.cpp  -exec unix2dos {} \;
-        find . -name \*.cxx  -exec unix2dos {} \;
-        find . -name \*.dmc  -exec unix2dos {} \;
-        find . -name \*.dms  -exec unix2dos {} \;
-        find . -name \*.dsp  -exec unix2dos {} \;
-        find . -name \*.dsw  -exec unix2dos {} \;
-        find . -name \*.h    -exec unix2dos {} \;
-        find . -name \*.htm* -exec unix2dos {} \;
-        find . -name \*.ini  -exec unix2dos {} \;
-        find . -name \*.rc   -exec unix2dos {} \;
-        find . -name \*.tex  -exec unix2dos {} \;
-        find . -name \*.txt  -exec unix2dos {} \;
-        find . -name \*.vc   -exec unix2dos {} \;
-        find . -name \*.vcp  -exec unix2dos {} \;
-        find . -name \*.vcw  -exec unix2dos {} \;
-        find . -name \*.wat  -exec unix2dos {} \;
+        find . -type f \( -path '*/CVS/*' -prune -o -exec $APPDIR/distrib/scripts/is_text.sh {} \; -print \)
     fi
     echo "Creating wx$portname-$VERSION.zip..."
     zip $ZIPFLAGS -r -9 $APPDIR/deliver/wx$portname-$VERSION.zip .
