@@ -10,6 +10,8 @@ echo "$WX_TEMP_DIR"
 START_DIR="$PWD"
 WX_WEB_DIR=$WX_TEMP_DIR/wxWebSite
 WX_SRC_DIR=$WX_TEMP_DIR/wxWidgets
+FTPDIR=/home/ftp/pub/CVS_HEAD/v2
+CURDATE=`date -I`
 
 # first, grab the latest revision with specified tag
 if [ ! -d $WX_TEMP_DIR ]; then
@@ -69,6 +71,7 @@ chmod +x $APPDIR/distrib/scripts/create_archives.sh
 $APPDIR/distrib/scripts/create_archives.sh --all
 
 # copy all the archives we created to the master machine's deliver directory
+rm -rf $START_DIR/$DIST_DIR/*
 cp $APPDIR/deliver/*.zip $START_DIR/$DIST_DIR
 cp $APPDIR/deliver/*.tar.gz $START_DIR/$DIST_DIR
 cp $APPDIR/deliver/*.tar.bz2 $START_DIR/$DIST_DIR
@@ -85,3 +88,26 @@ else
   
   echo "Pre-flight complete. Ready for takeoff."
 fi
+
+if [ "$KIND" = "daily" ]; then
+   ##delete old files and then copy new ones, add a symlink
+   find ${FTPDIR}/files -type f -name wx\* -mtime +6 | xargs rm -rf
+   cp  $START_DIR/$DIST_DIR/wx* ${FTPDIR}/files
+
+   rm -f ${FTPDIR}/wx* ${FTPDIR}/MD5SUM
+   for f in `find ${FTPDIR}/files -type f -name wx\* -mmin -601` ; do
+      ln -s $f `echo $f | sed -e "s/-${CURDATE}//" | sed -e "s|/files||" `
+   done
+else
+   ## not a daily build
+   mkdir ${FTPDIR}/
+   cp  $START_DIR/$DIST_DIR/wx* ${FTPDIR}/
+fi
+
+md5sum ${FTPDIR}/wx* > ${FTPDIR}/MD5SUM
+
+## make sure updated at is really last
+sleep 10
+echo cvs checkout done at  date -u > ${FTPDIR}/updated_at.txt
+       
+echo "Delivery complete. Flying."
