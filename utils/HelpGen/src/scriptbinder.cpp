@@ -20,9 +20,6 @@
 #include "wx/wx.h"
 #endif
 
-#ifndef __DARWIN__
-#  include <malloc.h>
-#endif
 #include <string.h>
 #include <memory.h>
 
