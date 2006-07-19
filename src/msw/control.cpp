@@ -231,6 +231,39 @@ WXDWORD wxControl::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
+void wxControl::SetLayoutDirection(wxLayoutDirection dir)
+{
+    const HWND hwnd = GetHwnd();
+    wxASSERT(hwnd);
+
+    if ( dir == wxLayout_LeftToRight )
+    {
+        // todo: how to insure here that this control will not inherit its parent's layout?
+        
+        // remove the RTL layout flag if it exists.
+        const LONG_PTR newExStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE) & ~WS_EX_LAYOUTRTL;
+        SetWindowLongPtr(hwnd, GWL_EXSTYLE, newExStyle);
+    }
+    else if ( dir == wxLayout_RightToLeft )
+    {
+        const LONG_PTR newExStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE) | WS_EX_LAYOUTRTL;
+        SetWindowLongPtr(hwnd, GWL_EXSTYLE, newExStyle);
+    }
+    // child windows inherit layout direction automatically from parent under Win32
+    /*
+    if (dir == wxLayout_Default)
+        {
+        const wxWindow *const parent = GetParent();
+        // todo: what to do in case of no parent?
+        wxASSERT_MSG(parent != NULL, "Each control must have a parent!");
+        
+        const wxLayoutDirection parentLayoutDirection = parent->GetLayoutDirection();
+        if ( parentLayoutDirection == )
+            {
+        }
+    */
+}
+
 wxSize wxControl::DoGetBestSize() const
 {
     return wxSize(DEFAULT_ITEM_WIDTH, DEFAULT_ITEM_HEIGHT);

@@ -503,6 +503,11 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
 
     const wxSize sz = IsAlwaysMaximized() ? wxDefaultSize : size;
 
+    if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+        exflags |= WS_EX_LAYOUTRTL;
+        }
+
     return MSWCreate(wxCanvasClassName, title, pos, sz, flags, exflags);
 }
 
@@ -561,6 +566,11 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
         // all dialogs are popups
         dlgTemplate->style |= WS_POPUP;
+        
+        if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            dlgTemplate->dwExtendedStyle |= WS_EX_LAYOUTRTL;
+        }
 
 #ifndef __WXWINCE__
         // force 3D-look if necessary, it looks impossibly ugly otherwise
@@ -760,6 +770,40 @@ void wxTopLevelWindowMSW::Restore()
 {
     DoShowWindow(SW_RESTORE);
 }
+
+void wxTopLevelWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
+    {
+    const HWND hwnd = GetHwnd();
+    wxASSERT(hwnd);
+
+    if (dir == wxLayout_LeftToRight)
+        {
+        // remove the RTL layout flag if it exists.
+        const LONG_PTR newExStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE) & ~WS_EX_LAYOUTRTL;
+        SetWindowLongPtr(hwnd, GWL_EXSTYLE, newExStyle);
+        }
+    else if (dir == wxLayout_RightToLeft)
+        {
+        const LONG_PTR newExStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE) | WS_EX_LAYOUTRTL;
+        SetWindowLongPtr(hwnd, GWL_EXSTYLE, newExStyle);
+        }
+    else if (dir == wxLayout_Default)
+        {
+        const LONG_PTR exStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
+        if ( wxTheApp->GetLayoutDirection() == wxLayout_LeftToRight )
+            {
+            SetWindowLongPtr(hwnd, GWL_EXSTYLE, exStyle);
+            }
+        else if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+            {
+            SetWindowLongPtr(hwnd, GWL_EXSTYLE, exStyle | WS_EX_LAYOUTRTL);
+            }
+        else
+            {
+            wxFAIL_MSG(wxT("Unhandled case"));
+            }
+        }
+    }
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMSW fullscreen

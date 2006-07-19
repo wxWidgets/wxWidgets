@@ -1018,6 +1018,41 @@ bool wxWindowMSW::ScrollPages(int pages)
                             down ? pages : -pages);
 }
 
+void wxWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
+{
+    const HWND hwnd = GetHwnd();
+    wxASSERT(hwnd);
+    
+    if (dir == wxLayout_LeftToRight)
+    {
+        // remove the RTL layout flag if it exists.
+        const LONG_PTR newExStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE) & ~WS_EX_LAYOUTRTL;
+        SetWindowLongPtr(hwnd, GWL_EXSTYLE, newExStyle);
+    }
+    else if (dir == wxLayout_RightToLeft)
+    {
+        const LONG_PTR newExStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE) | WS_EX_LAYOUTRTL;
+        SetWindowLongPtr(hwnd, GWL_EXSTYLE, newExStyle);
+    }
+    else
+    {
+        wxFAIL_MSG(wxT("wxLayout_Default is not allowed here"));
+    }
+}
+
+wxLayoutDirection wxWindowMSW::GetLayoutDirection() const
+{
+    const HWND hwnd = GetHwnd();
+    wxASSERT(hwnd);
+    
+    const LONG_PTR exStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
+    
+    if ((exStyle & WS_EX_LAYOUTRTL) != 0)
+        return wxLayout_RightToLeft;
+    else
+        return wxLayout_LeftToRight;
+}
+
 // ---------------------------------------------------------------------------
 // subclassing
 // ---------------------------------------------------------------------------

@@ -216,6 +216,39 @@ void wxAppConsole::Exit()
     exit(-1);
 }
 
+wxLayoutDirection wxAppConsole::GetLayoutDirection() const
+{
+    // warning: existing apps will break, because as soon as an RTL locale is defined,
+    // all windows created after such locale is defined will have a RTL layout, is this Ok or what? maybe add an ifdef that
+    // guarantees no change in behaviour from the library.
+    #if wxUSE_INTL
+    const wxLocale *const locale = wxGetLocale();
+    if ( locale )
+    {
+        const wxLanguageInfo *const info = wxLocale::GetLanguageInfo(locale->GetLanguage());
+        
+        // todo: when a variable of the type wxLocale is defined and no language is specified,
+        // the following assertion fails.
+        //wxASSERT(info);    // unknown language??
+
+        if (!info)
+            {
+            return wxLayout_LeftToRight;
+            }
+
+        return info->LayoutDirection;
+    }
+    else
+    {
+        // todo: what to do if no locale has been defined?
+        // for now, return LTR
+        return wxLayout_LeftToRight;
+    }
+    #else
+    return wxLayout_LeftToRight;
+    #endif    // wxUSE_INTL
+}
+
 // ----------------------------------------------------------------------------
 // traits stuff
 // ----------------------------------------------------------------------------

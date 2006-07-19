@@ -70,6 +70,8 @@ public:
 
     // default style for the control include WS_TABSTOP if it AcceptsFocus()
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+    
+    virtual void SetLayoutDirection(wxLayoutDirection dir);
 
 protected:
     // choose the default border for this window
