@@ -142,7 +142,7 @@ dospinport(){
     if [ $port = "msw" ]; then
         pushd /tmp/wx$port/wxWidgets-$VERSION
         for file in `cat /tmp/textfiles`; do
-            unix2dos $file
+            todos $file
         done
         popd
     fi
