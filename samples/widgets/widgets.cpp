@@ -650,6 +650,14 @@ void WidgetsFrame::OnGoToPage(wxCommandEvent& event)
 
 void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
 {
+    WidgetsPage *page = CurrentPage();
+
+    if(!page)
+    {
+        wxLogMessage(_T("Page not selected."));
+        return;
+    }
+
     static wxString s_tip = _T("This is a tooltip");
 
     wxTextEntryDialog dialog
@@ -666,7 +674,6 @@ void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
     s_tip = dialog.GetValue();
     s_tip.Replace(_T("\\n"), _T("\n"));
 
-    WidgetsPage *page = CurrentPage();
     page->GetWidget()->SetToolTip(s_tip);
 
     wxControl *ctrl2 = page->GetWidget2();
@@ -681,6 +688,12 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_COLOURDLG
     // allow for debugging the default colour the first time this is called
     WidgetsPage *page = CurrentPage();
+    if(!page)
+    {
+        wxLogMessage(_T("Page not selected."));
+        return;
+    }
+
     if (!m_colFg.Ok())
         m_colFg = page->GetForegroundColour();
 
@@ -708,6 +721,12 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_COLOURDLG
     WidgetsPage *page = CurrentPage();
+    if(!page)
+    {
+        wxLogMessage(_T("Page not selected."));
+        return;
+    }
+
     if ( !m_colBg.Ok() )
         m_colBg = page->GetBackgroundColour();
 
@@ -735,6 +754,12 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_FONTDLG
     WidgetsPage *page = CurrentPage();
+    if(!page)
+    {
+        wxLogMessage(_T("Page not selected."));
+        return;
+    }
+
     if (!m_font.Ok())
         m_font = page->GetFont();
 
@@ -761,6 +786,12 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 void WidgetsFrame::OnEnable(wxCommandEvent& event)
 {
     WidgetsPage *page = CurrentPage();
+    if(!page)
+    {
+        wxLogMessage(_T("Page not selected."));
+        return;
+    }
+
     page->GetWidget()->Enable(event.IsChecked());
 }
 
@@ -787,6 +818,13 @@ void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
     WidgetsPage::ms_defaultFlags |= border;
 
     WidgetsPage *page = CurrentPage();
+
+    if(!page)
+    {
+        wxLogMessage(_T("Page not selected."));
+        return;
+    }
+
     page->RecreateWidget();
 }
 
