@@ -25,6 +25,7 @@
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkwindow.h>
 #include <gdk/gdk.h>
+#include <gdk/gdkx.h>
 #include <gdk/gdkprivate.h>
 #endif
 

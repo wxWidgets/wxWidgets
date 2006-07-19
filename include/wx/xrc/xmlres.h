@@ -24,6 +24,7 @@
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #include "wx/artprov.h"
+#include "wx/colour.h"
 
 #include "wx/xml/xml.h"
 
