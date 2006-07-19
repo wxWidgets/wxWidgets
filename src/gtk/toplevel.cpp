@@ -1349,8 +1349,22 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 
 bool wxTopLevelWindowGTK::CanSetTransparent()
 {
+#if GTK_CHECK_VERSION(2,10,0)
+    if (!gtk_check_version(2,10,0))
+    {
+        if (gtk_widget_is_composited (m_widget))
+            return true;
+    }
+    else
+#endif // In case of lower versions than gtk+-2.10.0 we could look for _NET_WM_CM_Sn ourselves
+    {
+        return false;
+    }
+
+#if 0 // Don't be optimistic here for the sake of wxAUI
     int opcode, event, error;
     // Check for the existence of a RGBA visual instead?
     return XQueryExtension(gdk_x11_get_default_xdisplay (),
                            "Composite", &opcode, &event, &error);
+#endif
 }
