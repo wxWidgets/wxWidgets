@@ -10,7 +10,7 @@ echo "$WX_TEMP_DIR"
 START_DIR="$PWD"
 WX_WEB_DIR=$WX_TEMP_DIR/wxWebSite
 WX_SRC_DIR=$WX_TEMP_DIR/wxWidgets
-FTPDIR=/home/ftp/pub/CVS_HEAD/v2
+
 CURDATE=`date -I`
 
 # first, grab the latest revision with specified tag
