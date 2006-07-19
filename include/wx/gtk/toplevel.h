@@ -69,6 +69,9 @@ public:
     virtual void SetTitle( const wxString &title );
     virtual wxString GetTitle() const { return m_title; }
 
+    virtual bool SetTransparent(wxByte alpha);
+    virtual bool CanSetTransparent();
+
     // Experimental, to allow help windows to be
     // viewable from within modal dialogs
     virtual void AddGrab();
