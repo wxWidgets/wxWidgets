@@ -100,8 +100,22 @@ if [ "$KIND" = "daily" ]; then
    done
 else
    ## not a daily build
+   ##get install.txt files etc
+   ##.../docs/plat/install.txt goes to install-plat-2.7.0.txt
+   ## wince has a file down one dir
+   cp ${DOCDIR}/changes.txt $START_DIR/$DIST_DIR/changes-${BUILD_VERSION}.txt
+
+   for f in `find ${DOCDIR} -name install.txt` ; do
+     cp $f $START_DIR/$DIST_DIR/install-`echo $f | sed -e "s|${DOCDIR}||g" | sed -e "s|/install.txt||g"`-${BUILD_VERSION}.txt
+   done
+
+   for g in `find ${DOCDIR} -name readme.txt` ; do
+     cp $g $START_DIR/$DIST_DIR/readme-`echo $g | sed -e "s|${DOCDIR}||g" | sed -e "s|msw/wince|wince|g" | sed -e "s|/readme.txt||g"`-${BUILD_VERSION}.txt
+   done
+   ## copy files ...
    mkdir ${FTPDIR}/
-   cp  $START_DIR/$DIST_DIR/wx* ${FTPDIR}/
+   cp  $START_DIR/$DIST_DIR/* ${FTPDIR}/
+
 fi
 
 md5sum ${FTPDIR}/wx* > ${FTPDIR}/MD5SUM
