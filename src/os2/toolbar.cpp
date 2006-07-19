@@ -873,7 +873,7 @@ void wxToolBar::DrawTool( wxDC& rDc, wxToolBarToolBase* pToolBase )
                 GetSize(&vX, &vY);
                 rDc.DrawText( pTool->GetLabel()
                              ,vLeft
-                             ,vY - (m_vTextY - 2)
+                             ,vY - m_vTextY - 1
                             );
             }
             else  // normal tools
@@ -881,7 +881,7 @@ void wxToolBar::DrawTool( wxDC& rDc, wxToolBarToolBase* pToolBase )
                 vLeft += (wxCoord)((m_vTextX - vX)/2);
                 rDc.DrawText( pTool->GetLabel()
                              ,vLeft
-                             ,pTool->m_vY + m_vTextY + 4 // a bit of margin
+                             ,pTool->m_vY + m_vTextY - 1 // a bit of margin
                             );
             }
         }
@@ -915,7 +915,7 @@ void wxToolBar::DrawTool( wxDC& rDc, wxToolBarToolBase* pToolBase )
             vLeft += (wxCoord)((m_vTextX - vX)/2);
             rDc.DrawText( pTool->GetLabel()
                          ,vLeft
-                         ,pTool->m_vY + m_vTextY + 4 // a bit of margin
+                         ,pTool->m_vY + m_vTextY - 1 // a bit of margin
                         );
         }
     }
