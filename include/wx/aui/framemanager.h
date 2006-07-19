@@ -539,7 +539,7 @@ protected:
 
     wxFrame* m_hint_wnd;         // transparent hint window, if supported by platform
     wxTimer m_hint_fadetimer;    // transparent fade timer
-    int m_hint_fadeamt;          // transparent fade amount
+    wxByte m_hint_fadeamt;       // transparent fade amount
 
 #ifndef SWIG
     DECLARE_EVENT_TABLE()

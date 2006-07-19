@@ -2479,7 +2479,7 @@ void wxFrameManager::ShowHint(const wxRect& rect)
             return;
         m_last_hint = rect;
 
-        int initial_fade = 50;
+        wxByte initial_fade = 50;
         if (m_flags & wxAUI_MGR_TRANSPARENT_HINT_FADE)
             initial_fade = 0;
 
