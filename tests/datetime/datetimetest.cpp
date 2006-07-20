@@ -95,7 +95,7 @@ struct Date
     wxDateTime::WeekDay wday;
     time_t gmticks, ticks;
     long  flags;  //Test specific flags - currently only used by TestTimeFormat.
-    
+
     void Init(const wxDateTime::Tm& tm)
     {
         day = tm.mday;
@@ -187,6 +187,7 @@ private:
         CPPUNIT_TEST( TestTimeWDays );
         CPPUNIT_TEST( TestTimeDST );
         CPPUNIT_TEST( TestTimeFormat );
+        CPPUNIT_TEST( TestTimeSpanFormat );
         CPPUNIT_TEST( TestTimeTicks );
         CPPUNIT_TEST( TestParceRFC822 );
         CPPUNIT_TEST( TestDateParse );
@@ -201,6 +202,7 @@ private:
     void TestTimeWDays();
     void TestTimeDST();
     void TestTimeFormat();
+    void TestTimeSpanFormat();
     void TestTimeTicks();
     void TestParceRFC822();
     void TestDateParse();
@@ -594,7 +596,7 @@ void DateTimeTestCase::TestTimeFormat()
         CompareTime         // time only
     };
 
-    const int  WORKS_WITH_2DIGIT_YEAR(1);    
+    const int  WORKS_WITH_2DIGIT_YEAR(1);
     static const struct
     {
         CompareKind compareKind;
@@ -632,7 +634,7 @@ void DateTimeTestCase::TestTimeFormat()
         {
             //Skip test if date hasn't got the required flags.
             if ((d!=0) && !(formatTestDates[d - 1].IsSet(formatTestFormats[n].flagsneeded))) continue;
-            
+
             wxString s = dt.Format(formatTestFormats[n].format);
             // what can we recover?
             int kind = formatTestFormats[n].compareKind;
@@ -666,6 +668,28 @@ void DateTimeTestCase::TestTimeFormat()
                 }
             }
         }
+    }
+}
+
+void DateTimeTestCase::TestTimeSpanFormat()
+{
+    static const struct TimeSpanFormatTestData
+    {
+        long h, min, sec, msec;
+        const wxChar *fmt;
+        const wxChar *result;
+    } testSpans[] =
+    {
+        { 12, 34, 56, 789, _T("%H:%M:%S.%l"),   _T("12:34:56.789")          },
+        {  1,  2,  3,   0, _T("%H:%M:%S"),      _T("01:02:03")              },
+        {  1,  2,  3,   0, _T("%S"),            _T("3723")                  },
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(testSpans); n++ )
+    {
+        const TimeSpanFormatTestData& td = testSpans[n];
+        wxTimeSpan ts(td.h, td.min, td.sec, td.msec);
+        CPPUNIT_ASSERT_EQUAL( wxString(td.result), ts.Format(td.fmt) );
     }
 }
 
