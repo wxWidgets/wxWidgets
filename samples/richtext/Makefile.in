@@ -47,9 +47,9 @@ RICHTEXT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
 RICHTEXT_OBJECTS =  \
-	$(__richtext___win32rc) \
 	$(__richtext_os2_lib_res) \
-	richtext_richtext.o
+	richtext_richtext.o \
+	$(__richtext___win32rc)
 
 ### Conditionally set variables: ###
 
@@ -92,7 +92,6 @@ COND_PLATFORM_OS2_1___richtext___os2_emxbindcmd = $(NM) richtext$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
-@COND_PLATFORM_WIN32_1@__richtext___win32rc = richtext_sample_rc.o
 @COND_PLATFORM_OS2_1@__richtext_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__richtext_bundle___depname = richtext_bundle
@@ -118,6 +117,7 @@ COND_MONOLITHIC_0___WXLIB_XML_p = \
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
+@COND_PLATFORM_WIN32_1@__richtext___win32rc = richtext_sample_rc.o
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -194,11 +194,11 @@ richtext.app/Contents/PkgInfo: richtext$(EXEEXT) $(top_srcdir)/src/mac/carbon/In
 
 @COND_PLATFORM_MACOSX_1@richtext_bundle: $(____richtext_BUNDLE_TGT_REF_DEP)
 
-richtext_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
-
 richtext_richtext.o: $(srcdir)/richtext.cpp
 	$(CXXC) -c -o $@ $(RICHTEXT_CXXFLAGS) $(srcdir)/richtext.cpp
+
+richtext_sample_rc.o: $(srcdir)/../sample.rc
+	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 
 # Include dependency info, if present:

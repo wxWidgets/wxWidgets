@@ -472,7 +472,7 @@ SOURCE=.\richtext.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\..\..\samples\sample.rc
+SOURCE=.\..\sample.rc
 # End Source File
 # End Group
 # End Target

@@ -35,7 +35,10 @@
 #include "wx/sstream.h"
 #include "wx/html/htmlwin.h"
 
-#include "bitmaps/sample.xpm"
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
 #include "bitmaps/smiley.xpm"
 // #include "bitmaps/idea.xpm"
 #include "bitmaps/zebra.xpm"
@@ -384,7 +387,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
        : wxFrame(NULL, id, title, pos, size, style)
 {
     // set the frame icon
-    SetIcon(sample_xpm);
+    SetIcon(wxICON(sample));
 
     // create a menu bar
     wxMenu *fileMenu = new wxMenu;
