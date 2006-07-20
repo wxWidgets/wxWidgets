@@ -17,13 +17,13 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
 #endif
 
 #include "wx/datetime.h"
 
 #ifndef __WXMSW__
-#include "mondrian.xpm"
+    #include "../sample.xpm"
 #endif
 
 #include "wx/dataview.h"
@@ -325,11 +325,7 @@ bool MyApp::OnInit(void)
 MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
   wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
-#ifdef __WXMSW__
-    SetIcon(wxIcon(_T("mondrian")));
-#else
-    SetIcon(wxIcon(mondrian_xpm));
-#endif
+    SetIcon(wxICON(sample));
 
     wxMenu *file_menu = new wxMenu;
 
@@ -347,7 +343,7 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
 
     CreateStatusBar();
 
-    wxPanel *panel = new wxPanel( this, -1 );
+    wxPanel *panel = new wxPanel( this, wxID_ANY );
 
 
     // Left wxDataViewCtrl
@@ -421,11 +417,7 @@ END_EVENT_TABLE()
 MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
   wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
-#ifdef __WXMSW__
-    SetIcon(wxIcon(_T("mondrian")));
-#else
-    SetIcon(wxIcon(mondrian_xpm));
-#endif
+    SetIcon(wxICON(sample));
 
     wxMenu *file_menu = new wxMenu;
 

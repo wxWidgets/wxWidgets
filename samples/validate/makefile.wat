@@ -233,7 +233,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
 	-if exist $(OBJS)\validate.exe del $(OBJS)\validate.exe
 
-$(OBJS)\validate.exe :  $(VALIDATE_OBJECTS) $(OBJS)\validate_validate.res
+$(OBJS)\validate.exe :  $(VALIDATE_OBJECTS) $(OBJS)\validate_sample.res
 	@%create $(OBJS)\validate.lbc
 	@%append $(OBJS)\validate.lbc option quiet
 	@%append $(OBJS)\validate.lbc name $^@
@@ -241,13 +241,13 @@ $(OBJS)\validate.exe :  $(VALIDATE_OBJECTS) $(OBJS)\validate_validate.res
 	@%append $(OBJS)\validate.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(VALIDATE_OBJECTS)) do @%append $(OBJS)\validate.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\validate.lbc library %i
-	@%append $(OBJS)\validate.lbc option resource=$(OBJS)\validate_validate.res
+	@%append $(OBJS)\validate.lbc option resource=$(OBJS)\validate_sample.res
 	@for %i in () do @%append $(OBJS)\validate.lbc option stack=%i
 	wlink @$(OBJS)\validate.lbc
 
 $(OBJS)\validate_validate.obj :  .AUTODEPEND .\validate.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(VALIDATE_CXXFLAGS) $<
 
-$(OBJS)\validate_validate.res :  .AUTODEPEND .\validate.rc
+$(OBJS)\validate_sample.res :  .AUTODEPEND .\..\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 

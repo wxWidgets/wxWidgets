@@ -19,11 +19,11 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#   pragma hdrstop
+    #pragma hdrstop
 #endif // __BORLANDC__
 
 #ifndef WX_PRECOMP
-#   include "wx/wx.h"
+    #include "wx/wx.h"
 #endif // WX_PRECOMP
 
 #include "validate.h"
@@ -31,6 +31,10 @@
 #include "wx/sizer.h"
 #include "wx/valgen.h"
 #include "wx/valtext.h"
+
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
 
 // ----------------------------------------------------------------------------
 // Global data
@@ -89,15 +93,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int h)
-       : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h)),
+       : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),
          m_silent(true)
 {
-#ifdef __WXMSW__
-    SetIcon(wxIcon(_T("mondrian")));
-#endif // __WXMSW__
+    SetIcon(wxICON(sample));
 
     // Create a listbox to display the validated data.
-    m_listbox = new wxListBox(this, -1);
+    m_listbox = new wxListBox(this, wxID_ANY);
     m_listbox->Append(wxString(_T("Try 'File|Test' to see how validators work.")));
 
     wxMenu *file_menu = new wxMenu;
@@ -182,8 +184,8 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     // Pointers to some of these controls are saved in member variables
     // so that we can use them elsewhere, like this one.
-    text = new wxTextCtrl(this, VALIDATE_TEXT, wxT(""),
-        wxPoint(10, 10), wxSize(120, -1), 0,
+    text = new wxTextCtrl(this, VALIDATE_TEXT, wxEmptyString,
+        wxPoint(10, 10), wxSize(120, wxDefaultCoord), 0,
         wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
     flexgridsizer->Add(text);
 
@@ -192,16 +194,16 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     // We don't need any such pointer to query its state, which
     // can be gotten directly from g_data.
     flexgridsizer->Add(new wxCheckBox(this, VALIDATE_CHECK, wxT("Sample checkbox"),
-        wxPoint(130, 10), wxSize(120, -1), 0,
+        wxPoint(130, 10), wxSize(120, wxDefaultCoord), 0,
         wxGenericValidator(&g_data.m_checkbox_state)));
 
     flexgridsizer->Add(new wxListBox((wxWindow*)this, VALIDATE_LIST,
-        wxPoint(10, 30), wxSize(120, -1),
+        wxPoint(10, 30), wxSize(120, wxDefaultCoord),
         3, g_listbox_choices, wxLB_MULTIPLE,
         wxGenericValidator(&g_data.m_listbox_choices)));
 
-    combobox = new wxComboBox((wxWindow*)this, VALIDATE_COMBO, wxT(""),
-        wxPoint(130, 30), wxSize(120, -1),
+    combobox = new wxComboBox((wxWindow*)this, VALIDATE_COMBO, wxEmptyString,
+        wxPoint(130, 30), wxSize(120, wxDefaultCoord),
         3, g_combobox_choices, 0L,
         wxGenericValidator(&g_data.m_combobox_choice));
     flexgridsizer->Add(combobox);
@@ -209,7 +211,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     mainsizer->Add(flexgridsizer, 1, wxGROW | wxALL, 10);
 
     mainsizer->Add(new wxRadioBox((wxWindow*)this, VALIDATE_RADIO, wxT("Pick a color"),
-        wxPoint(10, 100), wxSize(-1, -1),
+        wxPoint(10, 100), wxDefaultSize,
         3, g_radiobox_choices, 1, wxRA_SPECIFY_ROWS,
         wxGenericValidator(&g_data.m_radiobox_choice)),
         0, wxGROW | wxALL, 10);
