@@ -149,11 +149,13 @@ dospinport(){
     echo "Creating wx$portname-$VERSION.zip..."
     zip $ZIPFLAGS -r -9 $APPDIR/deliver/wx$portname-$VERSION.zip .
     echo "Creating wx$portname-$VERSION.tar.gz..."
-    tar czvf $APPDIR/deliver/wx$portname-$VERSION.tar.gz wxWidgets-$VERSION
+    tar czf $APPDIR/deliver/wx$portname-$VERSION.tar.gz wxWidgets-$VERSION
     echo "Creating wx$portname-$VERSION.tar.bz2..."
     tar ch wxWidgets-$VERSION | bzip2 -f9 > $APPDIR/deliver/wx$portname-$VERSION.tar.bz2
     popd
     rm -rf /tmp/wx$port
+    rm ${portfiles}
+    rm /tmp/textfiles
 }
 
 prepareforrelease()
