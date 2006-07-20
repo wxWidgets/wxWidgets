@@ -202,7 +202,7 @@ supported. Future versions will support other calendars.
 \helpref{ConvertYearToBC}{wxdatetimeconvertyeartobc}\\
 \helpref{GetCurrentMonth}{wxdatetimegetcurrentmonth}\\
 \helpref{IsLeapYear}{wxdatetimeisleapyear}\\
-\helpref{GetCentury}{wxdatetimegetcentury}\\
+\helpref{GetCentury}{wxdatetimegetcenturystatic}\\
 \helpref{GetNumberOfDays}{wxdatetimegetnumberofdays}\\
 \helpref{GetNumberOfDays}{wxdatetimegetnumberofdays}\\
 \helpref{GetMonthName}{wxdatetimegetmonthname}\\
@@ -258,6 +258,7 @@ some more complicated calculations to find the answer are under the
 
 \helpref{IsValid}{wxdatetimeisvalid}\\
 \helpref{GetTicks}{wxdatetimegetticks}\\
+\helpref{GetCentury}{wxdatetimegetcentury}\\
 \helpref{GetYear}{wxdatetimegetyear}\\
 \helpref{GetMonth}{wxdatetimegetmonth}\\
 \helpref{GetDay}{wxdatetimegetday}\\
@@ -491,9 +492,9 @@ Get the current year in given calendar (only Gregorian is currently supported).
 Get the current month in given calendar (only Gregorian is currently supported).
 
 
-\membersection{wxDateTime::GetCentury}\label{wxdatetimegetcentury}
+\membersection{wxDateTime::GetCentury}\label{wxdatetimegetcenturystatic}
 
-\func{static int}{GetCentury}{\param{int }{year = Inv\_Year}}
+\func{static int}{GetCentury}{\param{int }{year}}
 
 Get the current century, i.e. first two digits of the year, in given calendar
 (only Gregorian is currently supported).
@@ -870,6 +871,13 @@ Returns broken down representation of the date and time.
 
 Returns the number of seconds since Jan 1, 1970. An assert failure will occur
 if the date is not in the range covered by {\tt time\_t} type.
+
+
+\membersection{wxDateTime::GetCentury}\label{wxdatetimegetcentury}
+
+\constfunc{int}{GetCentury}{\param{const TimeZone\& }{tz = Local}}
+
+Returns the century of this date.
 
 
 \membersection{wxDateTime::GetYear}\label{wxdatetimegetyear}

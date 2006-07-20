@@ -503,7 +503,7 @@ public:
     static bool IsLeapYear(int year = Inv_Year, Calendar cal = Gregorian);
 
         // get the century (19 for 1999, 20 for 2000 and -5 for 492 BC)
-    static int GetCentury(int year = Inv_Year);
+    static int GetCentury(int year);
 
         // returns the number of days in this year (356 or 355 for Gregorian
         // calendar usually :-)
@@ -838,6 +838,9 @@ public:
         // if the value is out of range
     inline time_t GetTicks() const;
 
+        // get the century, same as GetCentury(GetYear())
+    int GetCentury(const TimeZone& tz = Local) const
+            { return GetCentury(GetYear(tz)); }
         // get the year (returns Inv_Year if date is invalid)
     int GetYear(const TimeZone& tz = Local) const
             { return GetTm(tz).year; }
