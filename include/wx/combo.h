@@ -58,12 +58,8 @@ enum
     // In wxOwnerDrawnComboBox, for instance, it cycles item.
     wxCC_SPECIAL_DCLICK             = 0x0100,
 
-    // Use keyboard behaviour alternate to platform default:
-    // Up an down keys will show popup instead of cycling value.
-    wxCC_ALT_KEYS                   = 0x0200,
-
     // Dropbutton acts like standard push button.
-    wxCC_STD_BUTTON                 = 0x0400
+    wxCC_STD_BUTTON                 = 0x0200
 };
 
 

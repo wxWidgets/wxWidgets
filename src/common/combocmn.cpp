@@ -492,19 +492,7 @@ void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
              ( keycode != WXK_RIGHT && keycode != WXK_LEFT )
             )
         {
-            // Alternate keys: UP and DOWN show the popup instead of cycling
-            if ( (comboStyle & wxCC_ALT_KEYS) )
-            {
-                if ( keycode == WXK_UP || keycode == WXK_DOWN )
-                {
-                    m_combo->OnButtonClick();
-                    return;
-                }
-                else
-                    event.Skip();
-            }
-            else
-                popupInterface->OnComboKeyEvent(event);
+            popupInterface->OnComboKeyEvent(event);
         }
         else
             event.Skip();
