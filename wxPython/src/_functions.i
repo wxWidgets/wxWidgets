@@ -114,6 +114,15 @@ wxString wxGetOsDescription();
 // // "All files (*)|*|Image Files (*.jpeg *.png)|*.jpg;*.png"
 // int wxParseCommonDialogsFilter(const wxString& wildCard, wxArrayString& descriptions, wxArrayString& filters);
 
+
+%typemap(out) wxMemorySize {
+    %#if wxUSE_LONGLONG
+         $result = PyLong_FromLongLong($1.GetValue());
+    %#else
+         $result = PyInt_FromLong($1);
+    %#endif
+}
+
 #if defined(__WXMSW__) || defined(__WXMAC__)
 wxMemorySize wxGetFreeMemory();
 #else
