@@ -61,9 +61,11 @@ cd $WX_TEMP_DIR
 export APPDIR=$WX_TEMP_DIR/wxWidgets
 export WXWIN=$WX_TEMP_DIR/wxWidgets
 export VERSION=$BUILD_VERSION
+#remove old files
 rm -rf $APPDIR/deliver/*
+rm -rf $START_DIR/$DIST_DIR/*
 
-tar czvf $START_DIR/$DIST_DIR/wxWidgets-$BUILD_VERSION-snapshot.tar.gz $APPDIR
+tar czf $START_DIR/$DIST_DIR/wxWidgets-snapshot-$BUILD_VERSION.tar.gz `basename $APPDIR`
 
 #export DESTDIR=$STAGING_DIR
 cp $START_DIR/scripts/create_archives.sh $APPDIR/distrib/scripts
@@ -71,7 +73,6 @@ chmod +x $APPDIR/distrib/scripts/create_archives.sh
 $APPDIR/distrib/scripts/create_archives.sh --all
 
 # copy all the archives we created to the master machine's deliver directory
-rm -rf $START_DIR/$DIST_DIR/*
 cp $APPDIR/deliver/*.zip $START_DIR/$DIST_DIR
 cp $APPDIR/deliver/*.tar.gz $START_DIR/$DIST_DIR
 cp $APPDIR/deliver/*.tar.bz2 $START_DIR/$DIST_DIR
