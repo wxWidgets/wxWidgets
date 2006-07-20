@@ -228,8 +228,10 @@ public:
                                    int item, int flags ) const
     {
 
-        // If item is selected or even, use the default rendering.
+        // If item is selected or even, or we are painting the
+        // combo control itself, use the default rendering.
         if ( GetVListBoxComboPopup()->IsCurrent((size_t)item) ||
+             (flags & wxODCB_PAINTING_CONTROL) ||
              (item & 1) == 0 )
         {
             wxOwnerDrawnComboBox::OnDrawBackground(dc,rect,item,flags);

@@ -1041,7 +1041,8 @@ wxCoord wxOwnerDrawnComboBox::OnMeasureItemWidth( size_t WXUNUSED(item) ) const
 void wxOwnerDrawnComboBox::OnDrawBackground(wxDC& dc, const wxRect& rect, int item, int flags) const
 {
     // we need to render selected and current items differently
-    if ( GetVListBoxComboPopup()->IsCurrent((size_t)item) )
+    if ( GetVListBoxComboPopup()->IsCurrent((size_t)item) ||
+         (flags & wxODCB_PAINTING_CONTROL) )
     {
         DrawFocusBackground(dc,
                             rect,
