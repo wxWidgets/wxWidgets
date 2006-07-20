@@ -848,47 +848,44 @@ void wxDC::DoDrawPoint(
                    );
 } // end of wxDC::DoDrawPoint
 
-void wxDC::DoDrawPolygon(
-  int                               n
-, wxPoint                           vPoints[]
-, wxCoord                           vXoffset
-, wxCoord                           vYoffset
-, int                               nFillStyle
-)
+void wxDC::DoDrawPolygon( int n,
+                          wxPoint vPoints[],
+                          wxCoord vXoffset,
+                          wxCoord vYoffset,
+                          int nFillStyle )
 {
-    ULONG                           ulCount = 1;    // Number of polygons.
-    POLYGON                         vPlgn;          // polygon.
-    ULONG                           flOptions = 0L; // Drawing options.
+    ULONG     ulCount = 1;    // Number of polygons.
+    POLYGON   vPlgn;          // polygon.
+    ULONG     flOptions = 0L; // Drawing options.
 
-//////////////////////////////////////////////////////////////////////////////
-// This contains fields of option bits... to draw boundary lines as well as
-// the area interior.
-//
-// Drawing boundary lines:
-//   POLYGON_NOBOUNDARY              Does not draw boundary lines.
-//   POLYGON_BOUNDARY                Draws boundary lines (the default).
-//
-// Construction of the area interior:
-//   POLYGON_ALTERNATE               Constructs interior in alternate mode
-//                                   (the default).
-//   POLYGON_WINDING                 Constructs interior in winding mode.
-//////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+    // This contains fields of option bits... to draw boundary lines as well as
+    // the area interior.
+    //
+    // Drawing boundary lines:
+    //   POLYGON_NOBOUNDARY              Does not draw boundary lines.
+    //   POLYGON_BOUNDARY                Draws boundary lines (the default).
+    //
+    // Construction of the area interior:
+    //   POLYGON_ALTERNATE               Constructs interior in alternate mode
+    //                                   (the default).
+    //   POLYGON_WINDING                 Constructs interior in winding mode.
+    //////////////////////////////////////////////////////////////////////////////
 
-    ULONG                           flModel = POLYGON_INCL; // Drawing model.
+    ULONG     flModel = POLYGON_INCL; // Drawing model.
 
-//////////////////////////////////////////////////////////////////////////////
-// Drawing model.
-//   POLYGON_INCL  Fill is inclusive of bottom right (the default).
-//   POLYGON_EXCL  Fill is exclusive of bottom right.
-//       This is provided to aid migration from other graphics models.
-//////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+    // Drawing model.
+    //   POLYGON_INCL  Fill is inclusive of bottom right (the default).
+    //   POLYGON_EXCL  Fill is exclusive of bottom right.
+    //       This is provided to aid migration from other graphics models.
+    //////////////////////////////////////////////////////////////////////////////
 
-    LONG                            lHits = 0L; // Correlation/error indicator.
-    POINTL                          vPoint;
-    int                             i;
-    int                             nIsTRANSPARENT = 0;
-    LONG                            lBorderColor = 0L;
-    LONG                            lColor = 0L;
+    LONG      lHits = 0L; // Correlation/error indicator.
+    int       i;
+    int       nIsTRANSPARENT = 0;
+    LONG      lBorderColor = 0L;
+    LONG      lColor = 0L;
 
     lBorderColor = m_pen.GetColour().GetPixel();
     lColor       = m_brush.GetColour().GetPixel();
@@ -1751,7 +1748,7 @@ void wxDC::DrawAnyText( const wxString& rsText,
         {
             m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
             m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
-	    vPtlStart.y = OS2Y(vY,vTextY);
+            vPtlStart.y = OS2Y(vY,vTextY);
         }
         else
             vPtlStart.y = vY;

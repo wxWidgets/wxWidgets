@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        os2/spinctrl.cpp
+// Name:        src/os2/spinctrl.cpp
 // Purpose:     wxSpinCtrl class implementation for OS/2
 // Author:      David Webster
 // Modified by:
@@ -122,8 +122,6 @@ bool wxSpinCtrl::Create( wxWindow*       pParent,
                          int             nInitial,
                          const wxString& rsName )
 {
-    SWP                             vSwp;
-
     if (vId == wxID_ANY)
         m_windowId = NewControlId();
     else
@@ -134,7 +132,7 @@ bool wxSpinCtrl::Create( wxWindow*       pParent,
     SetParent(pParent);
     m_windowStyle      = lStyle;
 
-    int                             lSstyle = 0L;
+    int lSstyle = 0L;
 
     lSstyle = WS_VISIBLE      |
               WS_TABSTOP      |
@@ -175,11 +173,7 @@ bool wxSpinCtrl::Create( wxWindow*       pParent,
     SetFont(*wxSMALL_FONT);
     SetXComp(0);
     SetYComp(0);
-    SetSize( rPos.x
-            ,rPos.y
-            ,rSize.x
-            ,rSize.y
-           );
+    SetSize( rPos.x, rPos.y, rSize.x, rSize.y );
 
     SetRange(nMin, nMax);
     SetValue(nInitial);
