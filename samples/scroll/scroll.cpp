@@ -67,11 +67,11 @@ MySimpleCanvas::MySimpleCanvas( wxWindow *parent, wxWindowID id,
     SetBackgroundColour( *wxWHITE );
 }
 
-void MySimpleCanvas::OnPaint( wxPaintEvent &event )
+void MySimpleCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc(this);
     PrepareDC( dc );
-    
+
     dc.SetPen( *wxRED_PEN );
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
     dc.DrawRectangle( 0,0,92,97 );
@@ -514,7 +514,7 @@ BEGIN_EVENT_TABLE( MyAutoScrollWindow, wxScrolledWindow)
 END_EVENT_TABLE()
 
 MyAutoScrollWindow::MyAutoScrollWindow( wxWindow *parent )
-    : wxScrolledWindow( parent, -1, wxDefaultPosition, wxDefaultSize, 
+    : wxScrolledWindow( parent, -1, wxDefaultPosition, wxDefaultSize,
                         wxSUNKEN_BORDER|wxScrolledWindowStyle )
 {
     SetBackgroundColour( wxT("GREEN") );
