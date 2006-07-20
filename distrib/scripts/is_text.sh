@@ -10,7 +10,7 @@ if [ ! -f $entries ]; then
     exit 3
 fi
 
-re="^/`basename $1`/.*/-kb/\$"
+re="^/`basename $1`/.*/-kb/"
 if grep -q "$re" $entries; then
     exit 1
 fi
