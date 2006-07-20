@@ -28,7 +28,7 @@
 // need this to be able to use CPPUNIT_ASSERT_EQUAL with wxDateTime objects
 static wxSTD ostream& operator<<(wxSTD ostream& ostr, const wxDateTime& dt)
 {
-    ostr << dt.Format();
+    ostr << dt.FormatISODate() << _T(" ") << dt.FormatISOTime();
 
     return ostr;
 }
@@ -94,7 +94,6 @@ struct Date
     double jdn;
     wxDateTime::WeekDay wday;
     time_t gmticks, ticks;
-    long  flags;  //Test specific flags - currently only used by TestTimeFormat.
 
     void Init(const wxDateTime::Tm& tm)
     {
@@ -138,7 +137,6 @@ struct Date
                  year > 0 ? _T("AD") : _T("BC"));
         return s;
     }
-    bool IsSet(long f) const { return (f && flags) ==f; }
 };
 
 // ----------------------------------------------------------------------------
@@ -592,56 +590,54 @@ void DateTimeTestCase::TestTimeFormat()
     {
         CompareNone,        // don't try comparing
         CompareBoth,        // dates and times should be identical
+        CompareYear,        // don't compare centuries (fails for 2 digit years)
         CompareDate,        // dates only
         CompareTime         // time only
     };
 
-    const int  WORKS_WITH_2DIGIT_YEAR(1);
     static const struct
     {
         CompareKind compareKind;
-        long  flagsneeded;
         const wxChar *format;
     } formatTestFormats[] =
     {
-       { CompareBoth,0 , _T("---> %c") }, //Assumes %c show a 4digit year.
-       { CompareDate,0, _T("Date is %A, %d of %B, in year %Y") },
-       { CompareBoth,WORKS_WITH_2DIGIT_YEAR, _T("Date is %x, time is %X") },
-       { CompareTime,0, _T("Time is %H:%M:%S or %I:%M:%S %p") },
-       { CompareNone,0, _T("The day of year: %j, the week of year: %W") },
-       { CompareDate,0, _T("ISO date without separators: %Y%m%d") },
+       { CompareYear, _T("---> %c") }, // %c could use 2 digit years
+       { CompareDate, _T("Date is %A, %d of %B, in year %Y") },
+       { CompareYear, _T("Date is %x, time is %X") }, // %x could use 2 digits
+       { CompareTime, _T("Time is %H:%M:%S or %I:%M:%S %p") },
+       { CompareNone, _T("The day of year: %j, the week of year: %W") },
+       { CompareDate, _T("ISO date without separators: %Y%m%d") },
     };
 
     static const Date formatTestDates[] =
     {
-        { 29, wxDateTime::May, 1976, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay, 0, 0 , WORKS_WITH_2DIGIT_YEAR},
-        { 31, wxDateTime::Dec, 1999, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay, 0, 0 , WORKS_WITH_2DIGIT_YEAR },
-        {  6, wxDateTime::Feb, 1937, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay, 0, 0 ,0 },
-        {  6, wxDateTime::Feb, 1856, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay, 0, 0 ,0 },
-        {  6, wxDateTime::Feb, 1857, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay, 0, 0 ,0 },
-        { 29, wxDateTime::May, 2076, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay, 0, 0 ,0 },
-        { 29, wxDateTime::Feb, 2400, 02, 15, 25, 0.0, wxDateTime::Inv_WeekDay, 0, 0 ,0 },
+        { 29, wxDateTime::May, 1976, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
+        { 31, wxDateTime::Dec, 1999, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
+        {  6, wxDateTime::Feb, 1937, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
+        {  6, wxDateTime::Feb, 1856, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
+        {  6, wxDateTime::Feb, 1857, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
+        { 29, wxDateTime::May, 2076, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
+        { 29, wxDateTime::Feb, 2400, 02, 15, 25, 0.0, wxDateTime::Inv_WeekDay },
 #if 0
         // Need to add support for BCE dates.
-        { 01, wxDateTime::Jan,  -52, 03, 16, 47, 0.0, wxDateTime::Inv_WeekDay, 0, 0 ,0 },
+        { 01, wxDateTime::Jan,  -52, 03, 16, 47, 0.0, wxDateTime::Inv_WeekDay },
 #endif
     };
 
-    for ( size_t d = 0; d < WXSIZEOF(formatTestDates) + 1; d++ )
+    for ( size_t d = 0; d < WXSIZEOF(formatTestDates); d++ )
     {
-        wxDateTime dt = d == 0 ? wxDateTime::Now() : formatTestDates[d - 1].DT();
+        wxDateTime dt = formatTestDates[d].DT();
         for ( size_t n = 0; n < WXSIZEOF(formatTestFormats); n++ )
         {
-            //Skip test if date hasn't got the required flags.
-            if ((d!=0) && !(formatTestDates[d - 1].IsSet(formatTestFormats[n].flagsneeded))) continue;
+            const wxChar *fmt = formatTestFormats[n].format;
+            wxString s = dt.Format(fmt);
 
-            wxString s = dt.Format(formatTestFormats[n].format);
             // what can we recover?
-            int kind = formatTestFormats[n].compareKind;
+            CompareKind kind = formatTestFormats[n].compareKind;
 
             // convert back
             wxDateTime dt2;
-            const wxChar *result = dt2.ParseFormat(s, formatTestFormats[n].format);
+            const wxChar *result = dt2.ParseFormat(s, fmt);
             if ( !result )
             {
                 // converion failed - should it have?
@@ -654,8 +650,18 @@ void DateTimeTestCase::TestTimeFormat()
 
                 switch ( kind )
                 {
+                    case CompareYear:
+                        if ( dt2.GetCentury() != dt.GetCentury() )
+                        {
+                            CPPUNIT_ASSERT_EQUAL(dt.GetYear() % 100,
+                                                 dt2.GetYear() % 100);
+
+                            dt2.SetYear(dt.GetYear());
+                        }
+                        // fall through and compare everything
+
                     case CompareBoth:
-                        CPPUNIT_ASSERT( dt2 == dt );
+                        CPPUNIT_ASSERT_EQUAL( dt, dt2 );
                         break;
 
                     case CompareDate:
