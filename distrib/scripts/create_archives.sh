@@ -20,10 +20,10 @@ VERBOSE=0
 ZIPFLAGS=
 
 PROGNAME=$0
-SCRIPTDIR=$WXWIN/distrib/scripts
+##SCRIPTDIR=$WXWIN/distrib/scripts
 . $SCRIPTDIR/utils.inc
 
-MANIFESTDIR=$SCRIPTDIR/manifests
+MANIFESTDIR=$WXWIN/distrib/scripts/manifests
 WEBFILES=$WXWIN/../wxWebSite
 if [ ! "$CYGPATH" = "" ]; then
   WEBFILES=`$CYGPATH "$WEBFILES"`
@@ -133,7 +133,7 @@ dospinport(){
     copyfilelist $portfiles $APPDIR $TMPFILESDIR
 
     if [ $port = "msw" ]; then
-        FILES=`find . -type f \( -path '*/CVS/*' -prune -o -exec distrib/scripts/is_text.sh {} \; -print \)`
+        FILES=`find . -type f \( -path '*/CVS/*' -prune -o -exec ${SCRIPTDIR}/is_text.sh {} \; -print \)`
         echo "$FILES" > /tmp/textfiles
     fi
 
@@ -155,7 +155,7 @@ dospinport(){
     popd
     rm -rf /tmp/wx$port
     rm ${portfiles}
-    rm /tmp/textfiles
+#    rm /tmp/textfiles
 }
 
 prepareforrelease()

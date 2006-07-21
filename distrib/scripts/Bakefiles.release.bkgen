@@ -1,6 +1,8 @@
 <?xml version="1.0" ?>
 <bakefile-gen>
-  <include file="../../build/bakefiles/Bakefiles.bkgen"/>
+  <!-- this file is a symlink  -->
+  <include file="Bakefiles.bkgen"/>
   <!-- add extra formats to release -->
   <enable-formats>dmars,dmars_smake,msevc4prj</enable-formats>
 </bakefile-gen>
+

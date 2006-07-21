@@ -8,6 +8,7 @@ fi
 echo "$WX_TEMP_DIR"
 
 START_DIR="$PWD"
+SCRIPTDIR=${START_DIR}/scripts
 WX_WEB_DIR=$WX_TEMP_DIR/wxWebSite
 WX_SRC_DIR=$WX_TEMP_DIR/wxWidgets
 
@@ -47,7 +48,7 @@ fi
 #re-bake the bakefiles
 if [ $rebake = "yes" ]; then
   cd $WX_SRC_DIR/build/bakefiles
-  bakefile_gen -d ../../distrib/scripts/Bakefiles.release.bkgen
+  bakefile_gen -d ${SCRIPTDIR}/Bakefiles.release.bkgen
 fi
 
 cd $WX_SRC_DIR
@@ -61,6 +62,8 @@ cd $WX_TEMP_DIR
 export APPDIR=$WX_TEMP_DIR/wxWidgets
 export WXWIN=$WX_TEMP_DIR/wxWidgets
 export VERSION=$BUILD_VERSION
+export SCRIPTDIR=${SCRIPTDIR}
+
 #remove old files
 rm -rf $APPDIR/deliver/*
 rm -rf $START_DIR/$DIST_DIR/*
@@ -68,7 +71,7 @@ rm -rf $START_DIR/$DIST_DIR/*
 tar czf $START_DIR/$DIST_DIR/wxWidgets-snapshot-$BUILD_VERSION.tar.gz `basename $APPDIR`
 
 #export DESTDIR=$STAGING_DIR
-cp $START_DIR/scripts/create_archives.sh $APPDIR/distrib/scripts
+cp $SCRIPTDIR/create_archives.sh $APPDIR/distrib/scripts
 chmod +x $APPDIR/distrib/scripts/create_archives.sh
 $APPDIR/distrib/scripts/create_archives.sh --all
 
@@ -77,7 +80,7 @@ cp $APPDIR/deliver/*.zip $START_DIR/$DIST_DIR
 cp $APPDIR/deliver/*.tar.gz $START_DIR/$DIST_DIR
 cp $APPDIR/deliver/*.tar.bz2 $START_DIR/$DIST_DIR
 
-echo "Tarball located at: $WX_TARBALL"
+echo "Tarballs located at: $START_DIR/$DIST_DIR"
 
 if [ ! -f $WX_TARBALL ]; then
   echo "ERROR: wxAll tarball was not created by pre-flight.sh. Build cannot continue."
