@@ -1325,7 +1325,7 @@ static Window wxGetTopmostWindowX11(Display *dpy, Window child)
 
 bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 {
-    if (!m_widget || !m_widget->window || !CanSetTransparent())
+    if (!m_widget || !m_widget->window)
         return false;
 
     Display* dpy = GDK_WINDOW_XDISPLAY (m_widget->window);
