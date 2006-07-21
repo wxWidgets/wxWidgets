@@ -48,7 +48,7 @@ fi
 #re-bake the bakefiles
 if [ $rebake = "yes" ]; then
   cd $WX_SRC_DIR/build/bakefiles
-  bakefile_gen -d ${SCRIPTDIR}/Bakefiles.release.bkgen
+  bakefile_gen -d ${WX_SRC_DIR}/distrib/scripts/Bakefiles.release.bkgen
 fi
 
 cd $WX_SRC_DIR
