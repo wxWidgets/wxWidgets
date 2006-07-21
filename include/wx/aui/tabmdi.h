@@ -19,7 +19,7 @@
 #include "wx/frame.h"
 #include "wx/panel.h"
 #include "wx/notebook.h"
-#include "wx/aui/notebook.h"
+#include "wx/aui/auibook.h"
 
 extern WXDLLEXPORT_DATA(const wxChar) wxFrameNameStr[];
 extern WXDLLEXPORT_DATA(const wxChar) wxStatusLineNameStr[];

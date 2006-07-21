@@ -20,7 +20,7 @@
 
 #if wxUSE_AUI
 
-#include "wx/aui/notebook.h"
+#include "wx/aui/auibook.h"
 #include "wx/aui/tabmdi.h"
 #include "wx/dcbuffer.h"
 
