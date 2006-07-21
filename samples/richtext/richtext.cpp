@@ -454,9 +454,15 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     SetMenuBar(menuBar);
 
     // create a status bar just for fun (by default with 1 pane only)
+    // but don't create it on limited screen space (WinCE)
+    bool is_pda = wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA;
+
 #if wxUSE_STATUSBAR
-    CreateStatusBar(2);
-    SetStatusText(_T("Welcome to wxRichTextCtrl!"));
+    if ( !is_pda )
+    {
+        CreateStatusBar(2);
+        SetStatusText(_T("Welcome to wxRichTextCtrl!"));
+    }
 #endif
 
     wxToolBar* toolBar = CreateToolBar();
@@ -498,7 +504,16 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     m_richTextCtrl->SetFont(font);
 
     wxRichTextStyleListBox* styleListBox = new wxRichTextStyleListBox(splitter, wxID_ANY);
-    splitter->SplitVertically(m_richTextCtrl, styleListBox, 400);
+
+    wxSize display = wxGetDisplaySize();
+    if ( is_pda && ( display.GetWidth() < display.GetHeight() ) )
+    {
+        splitter->SplitHorizontally(m_richTextCtrl, styleListBox);
+    }
+    else
+    {
+        splitter->SplitVertically(m_richTextCtrl, styleListBox, 400);
+    }
 
     splitter->UpdateSize();
 
@@ -626,7 +641,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     attr.SetFlags(wxTEXT_ATTR_TABS);
     attr.SetTabs(tabs);
     r.SetDefaultStyle(attr);
-    
+
     r.Newline();
     r.WriteText(wxT("This line contains tabs:\tFirst tab\tSecond tab\tThird tab"));
 
