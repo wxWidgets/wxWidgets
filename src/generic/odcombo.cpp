@@ -265,7 +265,7 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
         value-=10;
         StopPartialCompletion();
     }
-    else if ( comboStyle && wxCB_READONLY )
+    else if ( comboStyle & wxCB_READONLY )
     {
         // Try partial completion
 
@@ -426,7 +426,7 @@ void wxVListBoxComboPopup::OnKey(wxKeyEvent& event)
         int comboStyle = m_combo->GetWindowStyle();
         int keycode = event.GetKeyCode();
         // Process partial completion key codes here, but not the arrow keys as the base class will do that for us
-        if ((comboStyle && wxCB_READONLY) &&
+        if ((comboStyle & wxCB_READONLY) &&
             (keycode >= WXK_SPACE) && (keycode <=255) && (keycode != WXK_DELETE) && wxIsprint(keycode))
         {
             OnComboKeyEvent(event);
