@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------
 # Name:        wx.lib.pdfwin
-# Purpose:     A class that allows the use of the Acrobat PSF reader
+# Purpose:     A class that allows the use of the Acrobat PDF reader
 #              ActiveX control
 #
 # Author:      Robin Dunn
@@ -44,8 +44,15 @@ def get_acroversion():
 # So instead we will use Internet Explorer (via the win32com modules
 # so we can use better dynamic dispatch) and embed the Acrobat control
 # within that.  Acrobat provides the IAcroAXDocShim COM class that is
-# accessible via the IE window's Docuemnt property after a PDF file
+# accessible via the IE window's Document property after a PDF file
 # has been loaded.
+#
+# Details of the Acrobat reader methods can be found in
+# http://partners.adobe.com/public/developer/en/acrobat/sdk/pdf/iac/IACOverview.pdf
+# http://partners.adobe.com/public/developer/en/acrobat/sdk/pdf/iac/IACReference.pdf
+#
+# Co-ordinates passed as parameters are in points (1/72 inch).
+
 
 if get_acroversion() >= '7.0':
 
@@ -75,6 +82,9 @@ if get_acroversion() >= '7.0':
 
             
         def LoadFile(self, fileName):
+            """
+            Opens and displays the specified document within the browser.
+            """
             if self.ie.Document:
                 return self.ie.Document.LoadFile(fileName)
             else:
@@ -82,78 +92,129 @@ if get_acroversion() >= '7.0':
                 return True  # can we sense failure at this point?
             
         def GetVersions(self):
+            """
+            Deprecated: No longer available - do not use.
+            """
             if self.ie.Document:
                 return self.ie.Document.GetVersions()
             else:
                 raise PDFWindowError()
             
         def Print(self):
+            """
+            Prints the document according to the specified options in a user dialog box.
+            """
             if self.ie.Document:
                 return self.ie.Document.Print()
             else:
                 raise PDFWindowError()
             
         def goBackwardStack(self):
+            """
+            Goes to the previous view on the view stack, if it exists.
+            """
             if self.ie.Document:
                 return self.ie.Document.goBackwardStack()
             else:
                 raise PDFWindowError()
 
         def goForwardStack(self):
+            """
+            Goes to the next view on the view stack, if it exists.
+            """
             if self.ie.Document:
                 return self.ie.Document.goForwardStack()
             else:
                 raise PDFWindowError()
 
         def gotoFirstPage(self):
+            """
+            Goes to the first page in the document.
+            """
             if self.ie.Document:
                 return self.ie.Document.gotoFirstPage()
             else:
                 raise PDFWindowError()
 
         def gotoLastPage(self):
+            """
+            Goes to the last page in the document.
+            """
             if self.ie.Document:
                 return self.ie.Document.gotoLastPage()
             else:
                 raise PDFWindowError()
 
         def gotoNextPage(self):
+            """
+            Goes to the next page in the document, if it exists
+            """
             if self.ie.Document:
                 return self.ie.Document.gotoNextPage()
             else:
                 raise PDFWindowError()
 
         def gotoPreviousPage(self):
+            """
+            Goes to the previous page in the document, if it exists.
+            """
             if self.ie.Document:
                 return self.ie.Document.gotoPreviousPage()
             else:
                 raise PDFWindowError()
 
         def printAll(self):
+            """
+            Prints the entire document without displaying a user
+            dialog box.  The current printer, page settings, and job
+            settings are used.  This method returns immediately, even
+            if the printing has not completed.
+            """
             if self.ie.Document:
                 return self.ie.Document.printAll()
             else:
                 raise PDFWindowError()
 
         def printAllFit(self, shrinkToFit):
+            """
+            Prints the entire document without a user dialog box, and
+            (if shrinkToFit) shrinks pages as needed to fit the
+            imageable area of a page in the printer.
+            """
             if self.ie.Document:
-                return self.ie.Document.printAllFit()
+                return self.ie.Document.printAllFit(shrinkToFit)
             else:
                 raise PDFWindowError()
 
         def printPages(self, from_, to):
+            """
+            Prints the specified pages without displaying a user dialog box.
+            """
             if self.ie.Document:
-                return self.ie.Document.printPages()
+                return self.ie.Document.printPages(from_, to)
             else:
                 raise PDFWindowError()
 
         def printPagesFit(self, from_, to, shrinkToFit):
+            """
+            Prints the specified pages without displaying a user
+            dialog box, and (if shrinkToFit) shrinks pages as needed
+            to fit the imageable area of a page in the printer.
+            """
             if self.ie.Document:
-                return self.ie.Document.printPagesFit()
+                return self.ie.Document.printPagesFit( from_, to, shrinkToFit)
             else:
                 raise PDFWindowError()
 
         def printWithDialog(self):
+            """
+            Prints the document according to the specified options in
+            a user dialog box. These options may include embedded
+            printing and specifying which printer is to be used.
+            
+            NB. The page range in the dialog defaults to
+            'From Page 1 to 1' - Use Print() above instead. (dfh) 
+            """
             if self.ie.Document:
                 return self.ie.Document.printWithDialog()
             else:
@@ -161,79 +222,157 @@ if get_acroversion() >= '7.0':
 
         def setCurrentHighlight(self, a, b, c, d):
             if self.ie.Document:
-                return self.ie.Document.setCurrentHighlight()
+                return self.ie.Document.setCurrentHighlight(a, b, c, d)
             else:
                 raise PDFWindowError()
 
-        def setCurrentHightlight(self, a, b, c, d):
+        def setCurrentPage(self, npage):
+            """
+            Goes to the specified page in the document.  Maintains the
+            current location within the page and zoom level.  npage is
+            the page number of the destination page.  The first page
+            in a document is page 0.
+            
+            ## Oh no it isn't! The first page is 1 (dfh)
+            """
             if self.ie.Document:
-                return self.ie.Document.setCurrentHightlight()
-            else:
-                raise PDFWindowError()
-
-        def setCurrentPage(self, n):
-            if self.ie.Document:
-                return self.ie.Document.setCurrentPage()
+                return self.ie.Document.setCurrentPage(npage)
             else:
                 raise PDFWindowError()
 
         def setLayoutMode(self, layoutMode):
+            """
+            LayoutMode possible values:
+            
+                =================  ====================================
+                'DontCare'         use the current user preference
+                'SinglePage'       use single page mode (as in pre-Acrobat
+                                   3.0 viewers)
+                'OneColumn'        use one-column continuous mode
+                'TwoColumnLeft'    use two-column continuous mode, first
+                                   page on the left
+                'TwoColumnRight'   use two-column continuous mode, first
+                                   page on the right
+                =================  ====================================
+            """
             if self.ie.Document:
-                return self.ie.Document.setLayoutMode()
+                return self.ie.Document.setLayoutMode(layoutMode)
             else:
                 raise PDFWindowError()
 
         def setNamedDest(self, namedDest):
+            """
+            Changes the page view to the named destination in the specified string.
+            """
             if self.ie.Document:
-                return self.ie.Document.setNamedDest()
+                return self.ie.Document.setNamedDest(namedDest)
             else:
                 raise PDFWindowError()
 
         def setPageMode(self, pageMode):
+            """
+            Sets the page mode to display the document only, or to
+            additionally display bookmarks or thumbnails.  pageMode =
+            'none' or 'bookmarks' or 'thumbs'.
+            
+            ## NB.'thumbs' is case-sensitive, the other are not (dfh)
+            """   
             if self.ie.Document:
-                return self.ie.Document.setPageMode()
+                return self.ie.Document.setPageMode(pageMode)
             else:
                 raise PDFWindowError()
 
         def setShowScrollbars(self, On):
+            """
+            Determines whether scrollbars will appear in the document
+            view.
+
+            ## NB. If scrollbars are off, the navigation tools disappear as well (dfh)
+            """
             if self.ie.Document:
-                return self.ie.Document.setShowScrollbars()
+                return self.ie.Document.setShowScrollbars(On)
             else:
                 raise PDFWindowError()
 
         def setShowToolbar(self, On):
+            """
+            Determines whether a toolbar will appear in the application.
+            """
             if self.ie.Document:
-                return self.ie.Document.setShowToolbar()
+                return self.ie.Document.setShowToolbar(On)
             else:
                 raise PDFWindowError()
 
         def setView(self, viewMode):
+            """
+            Determines how the page will fit in the current view.
+            viewMode possible values:
+
+                ========  ==============================================
+                'Fit'     fits whole page within the window both vertically
+                          and horizontally.
+                'FitH'    fits the width of the page within the window.
+                'FitV'    fits the height of the page within the window.
+                'FitB'    fits bounding box within the window both vertically
+                          and horizontally.
+                'FitBH'   fits the width of the bounding box within the window.
+                'FitBV'   fits the height of the bounding box within the window.
+                ========  ==============================================
+            """
             if self.ie.Document:
-                return self.ie.Document.setView()
+                return self.ie.Document.setView(viewMode)
             else:
                 raise PDFWindowError()
 
         def setViewRect(self, left, top, width, height):
+            """
+            Sets the view rectangle according to the specified coordinates.
+
+            :param left:   The upper left horizontal coordinate.
+            :param top:    The vertical coordinate in the upper left corner.
+            :param width:  The horizontal width of the rectangle.
+            :param height: The vertical height of the rectangle.
+            """
             if self.ie.Document:
-                return self.ie.Document.setViewRect()
+                return self.ie.Document.setViewRect(left, top, width, height)
             else:
                 raise PDFWindowError()
 
         def setViewScroll(self, viewMode, offset):
+            """
+            Sets the view of a page according to the specified string.
+            Depending on the view mode, the page is either scrolled to
+            the right or scrolled down by the amount specified in
+            offset. Possible values of viewMode are as in setView
+            above. offset is the horizontal or vertical coordinate
+            positioned either at the left or top edge.
+            """    
             if self.ie.Document:
-                return self.ie.Document.setViewScroll()
+                return self.ie.Document.setViewScroll(viewMode, offset)
             else:
                 raise PDFWindowError()
 
         def setZoom(self, percent):
+            """
+            Sets the magnification according to the specified value
+            expressed as a percentage (float)
+            """
             if self.ie.Document:
-                return self.ie.Document.setZoom()
+                return self.ie.Document.setZoom(percent)
             else:
                 raise PDFWindowError()
 
         def setZoomScroll(self, percent, left, top):
+            """
+            Sets the magnification according to the specified value,
+            and scrolls the page view both horizontally and vertically
+            according to the specified amounts.
+            
+            :param left:  the horizontal coordinate positioned at the left edge.
+            :param top:   the vertical coordinate positioned at the top edge.
+            """
             if self.ie.Document:
-                return self.ie.Document.setZoomScroll()
+                return self.ie.Document.setZoomScroll(percent, left, top)
             else:
                 raise PDFWindowError()
 
@@ -358,9 +497,6 @@ else:
 
         def GetVersions(self):
             return self.CallAXMethod('GetVersions')
-
-        def setCurrentHightlight(self, a, b, c, d):
-            return self.CallAXMethod('setCurrentHightlight', a, b, c, d)
 
         def setCurrentHighlight(self, a, b, c, d):
             return self.CallAXMethod('setCurrentHighlight', a, b, c, d)
