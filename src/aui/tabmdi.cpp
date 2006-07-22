@@ -26,6 +26,7 @@
 
 #if wxUSE_MDI
 
+#include "wx/settings.h"
 #include "wx/aui/tabmdi.h"
 
 #ifndef WX_PRECOMP

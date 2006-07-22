@@ -20,6 +20,7 @@
 
 #if wxUSE_AUI
 
+#include "wx/settings.h"
 #include "wx/aui/auibook.h"
 #include "wx/aui/tabmdi.h"
 #include "wx/dcbuffer.h"
@@ -126,6 +127,10 @@ wxAuiTabContainer::wxAuiTabContainer()
     m_normal_bkpen = wxPen(normaltab_colour);
     m_selected_bkbrush = wxBrush(selectedtab_colour);
     m_selected_bkpen = wxPen(selectedtab_colour);
+}
+
+wxAuiTabContainer::~wxAuiTabContainer()
+{
 }
 
 void wxAuiTabContainer::SetNormalFont(const wxFont& font)
