@@ -67,7 +67,7 @@ class PyAUIFrame(wx.Frame):
         
         # tell FrameManager to manage this frame        
         self._mgr = wx.aui.FrameManager()
-        self._mgr.SetFrame(self)
+        self._mgr.SetManagedWindow(self)
         
         self._perspectives = []
         self.n = 0
@@ -477,13 +477,13 @@ class PyAUIFrame(wx.Frame):
 
         flag = 0
         
-        if wx.Platform != "__WXMSW__" and wx.Platform != '__WXMAC__':
-            if event.GetId() == ID_TransparentDrag or \
-               event.GetId() == ID_TransparentHint or \
-               event.GetId() == ID_TransparentHintFade:
+##         if wx.Platform != "__WXMSW__" and wx.Platform != '__WXMAC__':
+##             if event.GetId() == ID_TransparentDrag or \
+##                event.GetId() == ID_TransparentHint or \
+##                event.GetId() == ID_TransparentHintFade:
             
-                wx.MessageBox("This option is presently only available on wxMSW and wxMac")
-                return
+##                 wx.MessageBox("This option is presently only available on wxMSW and wxMac")
+##                 return
 
         if event.GetId() == ID_AllowFloating:
             flag = wx.aui.AUI_MGR_ALLOW_FLOATING

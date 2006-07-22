@@ -48,7 +48,8 @@ _treeList = [
     # new stuff
     ('Recent Additions/Updates', [
         'AnalogClock',
-        'AUI',
+        'AUI_DockingWindowMgr',
+        'AUI_Notebook',
         'CheckListCtrlMixin',
         'Pickers',
         'PseudoDC',
@@ -59,7 +60,7 @@ _treeList = [
 
     # managed windows == things with a (optional) caption you can close
     ('Frames and Dialogs', [
-        'AUI',
+        'AUI_DockingWindowMgr',
         'Dialog',
         'Frame',
         'MDIWindows',
@@ -128,6 +129,7 @@ _treeList = [
         ]),
     
     ('"Book" Controls', [
+        'AUI_Notebook',
         'Choicebook',
         'Listbook',
         'Notebook',

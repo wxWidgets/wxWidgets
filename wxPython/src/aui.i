@@ -139,7 +139,8 @@ The following example shows a simple implementation that utilizes
 #define wxDEPRECATED(decl)
 
 
-// We'll let SWIG handle the function overloading for these
+// We'll skip making wrappers for these, they have overloads that take a
+// wxSize or wxPoint
 %ignore wxPaneInfo::MaxSize(int x, int y);
 %ignore wxPaneInfo::MinSize(int x, int y);
 %ignore wxPaneInfo::BestSize(int x, int y);
@@ -169,12 +170,21 @@ The following example shows a simple implementation that utilizes
 }
 
 
+%nokwargs wxAuiTabContainer::SetActivePage;
+
+%pythonAppend wxAuiTabCtrl::wxAuiTabCtrl "self._setOORInfo(self)";
+
+%pythonAppend wxAuiMultiNotebook::wxAuiMultiNotebook    "self._setOORInfo(self)";
+%pythonAppend wxAuiMultiNotebook::wxAuiMultiNotebook()  "self._setOORInfo(self)";
+%ignore wxAuiMultiNotebook::~wxAuiMultiNotebook;
+%rename(PreAuiMultiNotebook) wxAuiMultiNotebook::wxAuiMultiNotebook();
+
 //---------------------------------------------------------------------------
 // Get all our defs from the REAL header files.
 %include framemanager.h
 %include dockart.h
 %include floatpane.h
-
+%include auibook.h
 
 //---------------------------------------------------------------------------
 // Methods to inject into the FrameManager class that will sort out calls to
@@ -241,6 +251,7 @@ The following example shows a simple implementation that utilizes
 //---------------------------------------------------------------------------
 
 %{
+// A wxDocArt lcass that knows how to forward virtuals to Python methods  
 class wxPyDockArt :  public wxDefaultDockArt
 {
     wxPyDockArt() : wxDefaultDockArt() {}

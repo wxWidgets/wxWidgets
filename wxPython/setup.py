@@ -495,6 +495,7 @@ swig_sources = run_swig(['aui.i'], 'src', GENDIR, PKGDIR,
                                      opj(WXDIR, 'include/wx/aui/framemanager.h'),
                                      opj(WXDIR, 'include/wx/aui/floatpane.h'),
                                      opj(WXDIR, 'include/wx/aui/dockart.h'),
+                                     opj(WXDIR, 'include/wx/aui/auibook.h'),
                                      ])
 if not MONOLITHIC:
     auiLib = makeLibName('aui')
