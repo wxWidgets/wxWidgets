@@ -253,6 +253,7 @@ protected:
     
     wxFont m_selected_font;
     wxFont m_normal_font;
+    int m_tab_ctrl_height;
     
     DECLARE_EVENT_TABLE()
 };

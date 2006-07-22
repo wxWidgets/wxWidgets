@@ -788,6 +788,12 @@ public:
     {
         m_tabs = NULL;
         m_rect = wxRect(0,0,200,200);
+        m_tab_ctrl_height = 20;
+    }
+    
+    void SetTabCtrlHeight(int h)
+    {
+        m_tab_ctrl_height = h;
     }
     
     void DoSetSize(int x, int y,
@@ -809,7 +815,7 @@ public:
         if (!m_tabs)
             return;
             
-        int tab_height = wxMin(m_rect.height, 19);
+        int tab_height = wxMin(m_rect.height, m_tab_ctrl_height);
         m_tab_rect = wxRect(m_rect.x, m_rect.y, m_rect.width, tab_height);
         m_tabs->SetSize(m_rect.x, m_rect.y, m_rect.width, tab_height);
         m_tabs->SetRect(wxRect(0, 0, m_rect.width, tab_height));
@@ -849,6 +855,7 @@ public:
     wxRect m_rect;
     wxRect m_tab_rect;
     wxAuiTabCtrl* m_tabs;
+    int m_tab_ctrl_height;
 };
 
 
@@ -884,6 +891,7 @@ wxAuiMultiNotebook::wxAuiMultiNotebook()
     m_curpage = -1;
     m_tab_id_counter = 10000;
     m_dummy_wnd = NULL;
+    m_tab_ctrl_height = 20;
 }
 
 wxAuiMultiNotebook::wxAuiMultiNotebook(wxWindow *parent,
@@ -913,12 +921,21 @@ bool wxAuiMultiNotebook::Create(wxWindow* parent,
 // code called by all constructors
 void wxAuiMultiNotebook::InitNotebook()
 {
+    m_curpage = -1;
+    m_tab_id_counter = 10000;
+    m_dummy_wnd = NULL;
+    m_tab_ctrl_height = 20;
+    
     m_normal_font = *wxNORMAL_FONT;
     m_selected_font = *wxNORMAL_FONT;
     m_selected_font.SetWeight(wxBOLD);
     
-
-    m_tab_id_counter = 10000;
+    // choose a default for the tab height
+    wxClientDC dc(this);
+    int tx, ty;
+    dc.SetFont(m_selected_font);
+    dc.GetTextExtent(wxT("ABCDEFGHhijklm"), &tx, &ty);
+    m_tab_ctrl_height = (ty*150)/100;
     
     m_dummy_wnd = new wxWindow(this, -1, wxPoint(0,0), wxSize(0,0));
     m_dummy_wnd->SetSize(200, 200);
@@ -1230,6 +1247,7 @@ wxAuiTabCtrl* wxAuiMultiNotebook::GetActiveTabCtrl()
     
     // If there is no tabframe at all, create one
     wxTabFrame* tabframe = new wxTabFrame;
+    tabframe->SetTabCtrlHeight(m_tab_ctrl_height);
     tabframe->m_tabs = new wxAuiTabCtrl(this,
                                         m_tab_id_counter++,
                                         wxDefaultPosition,
@@ -1359,6 +1377,7 @@ void wxAuiMultiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
     {
         // If there is no tabframe at all, create one
         wxTabFrame* new_tabs = new wxTabFrame;
+        new_tabs->SetTabCtrlHeight(m_tab_ctrl_height);
         new_tabs->m_tabs = new wxAuiTabCtrl(this,
                                             m_tab_id_counter++,
                                             wxDefaultPosition,
