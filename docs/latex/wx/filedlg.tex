@@ -16,16 +16,16 @@ This class represents the file chooser dialog.
 \wxheading{Window styles}
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxFD\_DEFAULT\_STYLE}}{Equivalent to wxFD_OPEN.}
+\twocolitem{\windowstyle{wxFD\_DEFAULT\_STYLE}}{Equivalent to wxFD\_OPEN.}
 \twocolitem{\windowstyle{wxFD\_OPEN}}{This is an open dialog; usually this means that the default button's label of the dialog is "Open". Cannot be combined with wxFD\_SAVE.}
 \twocolitem{\windowstyle{wxFD\_SAVE}}{This is a save dialog; usually this means that the default button's label of the dialog is "Save". Cannot be combined with wxFD\_OPEN.}
 \twocolitem{{\windowstyle wxFD\_OVERWRITE\_PROMPT}}{For save dialog only: prompt for a confirmation if a file will be overwritten.}
 \twocolitem{{\windowstyle wxFD\_FILE\_MUST\_EXIST}}{For open dialog only: the user may only select files that actually exist.}
-\twocolitem{{\windowstyle wxFD_MULTIPLE}}{For open dialog only: allows selecting multiple files.}
-\twocolitem{{\windowstyle wxFD_CHANGE\_DIR}}{Change the current working directory to the directory where the file(s) chosen by the user are.}
+\twocolitem{{\windowstyle wxFD\_MULTIPLE}}{For open dialog only: allows selecting multiple files.}
+\twocolitem{{\windowstyle wxFD\_CHANGE\_DIR}}{Change the current working directory to the directory where the file(s) chosen by the user are.}
 \end{twocollist}
 
-{\bf NB:} Previous versions of wxWidgets used {\tt wxFD_CHANGE\_DIR} by default
+{\bf NB:} Previous versions of wxWidgets used {\tt wxFD\_CHANGE\_DIR} by default
 under MS Windows which allowed the program to simply remember the last
 directory where user selected the files to open/save. This (desired)
 functionality must be implemented in the program itself now (manually remember
@@ -89,7 +89,7 @@ Constructor. Use \helpref{wxFileDialog::ShowModal}{wxfiledialogshowmodal} to sho
 Note that the native Motif dialog has some limitations with respect to
 wildcards; see the Remarks section above.}
 
-\docparam{style}{A dialog style. See wxFD_* styles for more info.}
+\docparam{style}{A dialog style. See wxFD\_* styles for more info.}
 
 \docparam{pos}{Dialog position. Not implemented.}
 
