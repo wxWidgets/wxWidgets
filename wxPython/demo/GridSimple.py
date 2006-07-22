@@ -230,7 +230,7 @@ class SimpleGrid(gridlib.Grid): ##, mixins.GridAutoEditMixin):
 class TestFrame(wx.Frame):
     def __init__(self, parent, log):
         wx.Frame.__init__(self, parent, -1, "Simple Grid Demo", size=(640,480))
-        grid = SimpleGrid(self, log)
+        self.grid = SimpleGrid(self, log)
 
 
 
@@ -241,6 +241,9 @@ if __name__ == '__main__':
     app = wx.PySimpleApp()
     frame = TestFrame(None, sys.stdout)
     frame.Show(True)
+    #import wx.py
+    #shell = wx.py.shell.ShellFrame(frame, locals={'wx':wx, 'frame':frame})
+    #shell.Show()
     app.MainLoop()
 
 
