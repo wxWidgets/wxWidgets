@@ -809,6 +809,8 @@ public:
         *x = m_rect.width;
         *y = m_rect.height;
     }
+
+    bool Show( bool WXUNUSED(show = true) ) { return false; }
     
     void DoSizing()
     {
