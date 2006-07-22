@@ -251,7 +251,7 @@ bool wxFileDataObject::SetData( size_t nSize, const void *pBuf )
 #if wxUSE_UNICODE
     filenames = wxString( (const char*)pBuf, *wxConvFileName );
 #else
-    filenames = wxString( wxConvFileName->cMB2WX( (const char*)pBuf ), wxConvLocal );
+    filenames = wxString (wxConvLocal.cWC2WX(wxConvFileName->cMB2WC( (const char*)pBuf)));
 #endif
 
     m_filenames = wxStringTokenize( filenames, wxT("\n"), wxTOKEN_STRTOK );
