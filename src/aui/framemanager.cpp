@@ -64,6 +64,107 @@ DEFINE_EVENT_TYPE(wxEVT_AUI_RENDER)
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrameManagerEvent, wxEvent)
 
+class wxPseudoTransparentFrame : public wxFrame
+{
+public:
+    wxPseudoTransparentFrame(wxWindow* parent = NULL,
+                wxWindowID id = -1,
+                const wxString& title = wxT(""),
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString &name = wxT("frame"))
+                    : wxFrame(parent, id, title, pos, size, style | wxFRAME_SHAPED, name)
+    {
+        SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+        m_Amount=0;
+        m_MaxWidth=0;
+        m_MaxHeight=0;
+#ifdef __WXGTK__
+        m_CanSetShape = false; // have to wait for window create event on GTK
+#else
+        m_CanSetShape = true;
+#endif
+        SetTransparent(0);
+    }
+
+    virtual bool SetTransparent(wxByte alpha)
+    {
+        if (m_CanSetShape)
+        {
+            int w=100; // some defaults
+            int h=100;
+            GetClientSize(&w, &h);
+            if ((alpha != m_Amount) || (m_MaxWidth<w) | (m_MaxHeight<h))
+            {
+                // Make the region at least double the height and width so we don't have
+                // to rebuild if the size changes.
+                m_MaxWidth=w*2;
+                m_MaxHeight=h*2;
+                m_Amount = alpha;
+                m_Region.Clear();
+//				m_Region.Union(0, 0, 1, m_MaxWidth);
+                if (m_Amount)
+                {
+                    for (int y=0; y<m_MaxHeight; y++)
+                    {
+                        // Reverse the order of the bottom 4 bits
+                        int j=((y&8)?1:0)|((y&4)?2:0)|((y&2)?4:0)|((y&1)?8:0);
+                        if ((j*16+8)<m_Amount)
+                            m_Region.Union(0, y, m_MaxWidth, 1);
+                    }
+                }
+                SetShape(m_Region);
+                Refresh();
+            }
+        }
+        return true;
+    }
+
+    void OnPaint(wxPaintEvent & event)
+    {
+        wxPaintDC dc(this);
+        
+        dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        
+        wxRegionIterator upd(GetUpdateRegion()); // get the update rect list
+        
+        while (upd)
+        {
+            wxRect rect(upd.GetRect());
+            dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+
+            upd++;
+        }
+    }
+
+#ifdef __WXGTK__
+    void OnWindowCreate(wxWindowCreateEvent& WXUNUSED(event)) {m_CanSetShape=true; SetTransparent(0);}
+#endif
+
+private:
+    int m_Amount;
+    int m_MaxWidth;
+    int m_MaxHeight;
+    bool m_CanSetShape;
+
+    wxRegion m_Region;
+
+    DECLARE_DYNAMIC_CLASS(wxPseudoTransparentFrame);
+    DECLARE_EVENT_TABLE();
+};
+
+
+IMPLEMENT_DYNAMIC_CLASS( wxPseudoTransparentFrame, wxFrame )
+
+BEGIN_EVENT_TABLE(wxPseudoTransparentFrame, wxFrame)
+    EVT_PAINT(wxPseudoTransparentFrame::OnPaint)
+#ifdef __WXGTK__
+    EVT_WINDOW_CREATE(wxPseudoTransparentFrame::OnWindowCreate)
+#endif
+END_EVENT_TABLE()
+
 
 // -- static utility functions --
 
@@ -496,7 +597,7 @@ void wxFrameManager::SetManagedWindow(wxWindow* frame)
 #endif
 
     // Make a window to use for a transparent hint
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) || defined(__WXGTK__)
     m_hint_wnd = new wxFrame(m_frame, -1, wxEmptyString, wxDefaultPosition, wxSize(1,1),
                              wxFRAME_TOOL_WINDOW |
                              wxFRAME_FLOAT_ON_PARENT |
@@ -523,11 +624,23 @@ void wxFrameManager::SetManagedWindow(wxWindow* frame)
     p->SetBackgroundColour(*wxBLUE);
 #endif
 
+    m_hint_fademax=50;
+
     if (m_hint_wnd && !m_hint_wnd->CanSetTransparent())
     {
+
         m_hint_wnd->Close();
         m_hint_wnd->Destroy();
         m_hint_wnd = NULL;
+
+        // If we can convert it to a PseudoTransparent window, do so
+        m_hint_wnd = new wxPseudoTransparentFrame (m_frame, -1, wxEmptyString, wxDefaultPosition, wxSize(1,1),
+                                                wxFRAME_TOOL_WINDOW |
+                                                wxFRAME_FLOAT_ON_PARENT |
+                                                wxFRAME_NO_TASKBAR |
+                                                wxNO_BORDER);
+        
+        m_hint_fademax = 128;
     }    
 }
 
@@ -2462,25 +2575,29 @@ bool wxFrameManager::DoDrop(wxDockInfoArray& docks,
 
 void wxFrameManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
 {
-    if (!m_hint_wnd || m_hint_fadeamt >= 50)
+    if (!m_hint_wnd || m_hint_fadeamt >= m_hint_fademax)
     {
         m_hint_fadetimer.Stop();
         return;
     }
 
-    m_hint_fadeamt += 5;
+    m_hint_fadeamt += 4;
     m_hint_wnd->SetTransparent(m_hint_fadeamt);
 }
 
 void wxFrameManager::ShowHint(const wxRect& rect)
 {
-    if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) != 0 && m_hint_wnd)
+    if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) != 0
+        && m_hint_wnd
+        // Finally, don't use a venetian blind effect if it's been specifically disabled
+        && !((m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame))) && (m_flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS))
+       )
     {
         if (m_last_hint == rect)
             return;
         m_last_hint = rect;
 
-        wxByte initial_fade = 50;
+        wxByte initial_fade = m_hint_fademax;
         if (m_flags & wxAUI_MGR_TRANSPARENT_HINT_FADE)
             initial_fade = 0;
 
@@ -2565,6 +2682,7 @@ void wxFrameManager::HideHint()
     // hides a transparent window hint, if there is one
     if (m_hint_wnd)
     {
+        m_hint_wnd->Show(false);
         m_hint_wnd->SetTransparent(0);
         m_hint_fadetimer.Stop();
         m_last_hint = wxRect();

@@ -44,6 +44,10 @@ enum wxFrameManagerOption
     wxAUI_MGR_TRANSPARENT_DRAG      = 1 << 2,
     wxAUI_MGR_TRANSPARENT_HINT      = 1 << 3,
     wxAUI_MGR_TRANSPARENT_HINT_FADE = 1 << 4,
+    // The venetian blind effect is ONLY used when the wxAUI_MGR_TRANSPARENT_HINT has been used, but
+    // at runtime we determine we cannot use transparency (because, for instance, the OS does not support it).
+    // setting this flag drops back in such circumstances (only) to the behaviour without wxAUI_MGR_TRANSPARENT_HINT
+    wxAUI_MGR_DISABLE_VENETIAN_BLINDS = 1 << 5,
 
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
@@ -540,6 +544,7 @@ protected:
     wxFrame* m_hint_wnd;         // transparent hint window, if supported by platform
     wxTimer m_hint_fadetimer;    // transparent fade timer
     wxByte m_hint_fadeamt;       // transparent fade amount
+    wxByte m_hint_fademax;       // maximum value of hint fade
 
 #ifndef SWIG
     DECLARE_EVENT_TABLE()
