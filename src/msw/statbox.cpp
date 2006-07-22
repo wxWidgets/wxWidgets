@@ -372,24 +372,61 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& WXUNUSED(rc))
     // background mode doesn't change anything: the static box def window proc
     // still draws the label in its own colours, so we need to redraw the text
     // ourselves if we have a non default fg colour
-    if ( m_hasFgCol && wxUxThemeEngine::GetIfActive() )
+    if ( wxUxThemeEngine::GetIfActive() )
     {
         // draw over the text in default colour in our colour
         dc.SetFont(GetFont());
 
         HDC hdc = GetHdcOf(dc);
-        ::SetTextColor(hdc, GetForegroundColour().GetPixel());
+        if ( m_hasFgCol )
+        {
+            ::SetTextColor(hdc, GetForegroundColour().GetPixel());
+        }
+        else
+        {
+            wxUxThemeHandle hTheme(this, L"BUTTON");
+            if (hTheme)
+            {
+                COLORREF col;
+                wxUxThemeEngine::Get()->GetThemeColor(
+                                            hTheme,
+                                            4 /* BP_GROUPBOX */,
+                                            1 /* GBS_NORMAL */,
+                                            3803 /* TMT_TEXTCOLOR */,
+                                            &col);
+
+                ::SetTextColor(hdc, col);
+            }
+            else
+            {
+                // can't open the theme - default to blue
+                ::SetTextColor(hdc, 0x00D54600);
+            }
+        }
 
         // FIXME: value of x is hardcoded as this is what it is on my system,
         //        no idea if it's true everywhere
-        const int y = dc.GetCharHeight();
-        const int x = 9;
-
         // TODO: RTL?
-        RECT rc = { x, 0, GetSize().x, y };
-
+        const int x = 9;
+        const int y = dc.GetCharHeight();
         const wxString label = GetLabel();
-        ::DrawText(hdc, label, label.length(), &rc, DT_SINGLELINE | DT_VCENTER);
+
+        // first we need to correctly paint the background of the label
+        // as Windows ignores the brush offset when doing it
+        RECT rc = { x, 0, GetSize().x, y };
+        ::DrawText(hdc, label, label.length(), &rc,
+                   DT_SINGLELINE | DT_VCENTER | DT_CALCRECT);
+
+        // need to adjust the rectangle to cover all the label background
+        rc.left -= 2;
+        rc.right += 2;
+        rc.bottom += 2;
+        PaintBackground(dc, rc);
+
+        // now draw the text
+        RECT rc2 = { x, 0, GetSize().x, y };
+        ::DrawText(hdc, label, label.length(), &rc2,
+                   DT_SINGLELINE | DT_VCENTER);
     }
 }
 
