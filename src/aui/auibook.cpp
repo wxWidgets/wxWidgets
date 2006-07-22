@@ -826,6 +826,19 @@ public:
         }
     }
 
+    void DoGetSize(int* x, int* y) const
+    {
+        if (x)
+            *x = m_rect.GetWidth();
+        if (y)
+            *y = m_rect.GetHeight();
+    }
+    
+    void Update()
+    {
+        // does nothing
+    }
+    
 public:
 
     wxRect m_rect;
