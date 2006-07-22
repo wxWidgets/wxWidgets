@@ -2540,6 +2540,11 @@ void wxFrameManager::ShowHint(const wxRect& rect)
             }
         }
 
+        // As we can only hide the hint by redrawing the managed window, we
+        // need to clip the region to the managed window too or we get
+        // nasty redrawn problems.
+        clip.Intersect(m_frame->GetRect());
+
         screendc.SetClippingRegion(clip);
 
         wxBitmap stipple = wxPaneCreateStippleBitmap();
