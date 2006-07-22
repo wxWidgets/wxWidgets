@@ -335,6 +335,7 @@ class RichTextFrame(wx.Frame):
 
         r = self.rtc.GetSelectionRange()
         fontData = wx.FontData()
+        fontData.EnableEffects(False)
         attr = rt.RichTextAttr()
         attr.SetFlags(rt.TEXT_ATTR_FONT)
         if self.rtc.GetStyle(self.rtc.GetInsertionPoint(), attr):
@@ -349,6 +350,29 @@ class RichTextFrame(wx.Frame):
                 attr.SetFont(font)
                 self.rtc.SetStyle(r, attr)
         dlg.Destroy()
+
+
+    def OnColour(self, evt):
+        colourData = wx.ColourData()
+        attr = rt.RichTextAttr()
+        attr.SetFlags(rt.TEXT_ATTR_TEXT_COLOUR)
+        if self.rtc.GetStyle(self.rtc.GetInsertionPoint(), attr):
+            colourData.SetColour(attr.GetTextColour())
+
+        dlg = wx.ColourDialog(self, colourData)
+        if dlg.ShowModal() == wx.ID_OK:
+            colourData = dlg.GetColourData()
+            colour = colourData.GetColour()
+            if colour:
+                if not self.rtc.HasSelection():
+                    self.rtc.BeginTextColour(colour)
+                else:
+                    r = self.rtc.GetSelectionRange()
+                    attr.SetFlags(rt.TEXT_ATTR_TEXT_COLOUR)
+                    attr.SetTextColour(colour)
+                    self.rtc.SetStyle(r, attr)
+        dlg.Destroy()
+        
 
 
     def OnUpdateBold(self, evt):
@@ -498,6 +522,8 @@ class RichTextFrame(wx.Frame):
         tbar.AddSeparator()
         doBind( tbar.AddTool(-1, images.get_rt_fontBitmap(),
                             shortHelpString="Font"), self.OnFont)
+        doBind( tbar.AddTool(-1, images.get_rt_colourBitmap(),
+                            shortHelpString="Font Colour"), self.OnColour)
 
         tbar.Realize()
 

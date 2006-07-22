@@ -73,6 +73,7 @@ command_lines = [
     "-a -u -n _rt_alignright bmp_source/rt_alignright.xpm images.py",
     "-a -u -n _rt_bold bmp_source/rt_bold.xpm images.py",
     "-a -u -n _rt_centre bmp_source/rt_centre.xpm images.py",
+    "-a -u -n _rt_colour bmp_source/rt_colour.xpm images.py",
     "-a -u -n _rt_copy bmp_source/rt_copy.xpm images.py",
     "-a -u -n _rt_cut bmp_source/rt_cut.xpm images.py",
     "-a -u -n _rt_font bmp_source/rt_font.xpm images.py",
