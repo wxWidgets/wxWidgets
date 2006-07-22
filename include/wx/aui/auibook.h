@@ -85,9 +85,10 @@ public:
 };
 
 
+#ifndef SWIG
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiNotebookPage, wxAuiNotebookPageArray, WXDLLIMPEXP_AUI);
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiTabContainerButton, wxAuiTabContainerButtonArray, WXDLLIMPEXP_AUI);
-
+#endif
 
 
 class WXDLLIMPEXP_AUI wxAuiTabContainer
@@ -151,7 +152,7 @@ class WXDLLIMPEXP_AUI wxAuiTabCtrl : public wxControl,
 public:
 
     wxAuiTabCtrl(wxWindow* parent,
-                 wxWindowID id,
+                 wxWindowID id = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0);
@@ -173,7 +174,9 @@ protected:
     bool m_is_dragging;
     wxAuiTabContainerButton* m_hover_button;
 
+#ifndef SWIG
     DECLARE_EVENT_TABLE()
+#endif
 };
 
 
@@ -187,7 +190,7 @@ public:
     wxAuiMultiNotebook();
     
     wxAuiMultiNotebook(wxWindow* parent,
-                       wxWindowID id,
+                       wxWindowID id = wxID_ANY,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = 0);
@@ -195,7 +198,7 @@ public:
     virtual ~wxAuiMultiNotebook();
 
     bool Create(wxWindow* parent,
-                wxWindowID id,
+                wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0);            
@@ -255,7 +258,9 @@ protected:
     wxFont m_normal_font;
     int m_tab_ctrl_height;
     
+#ifndef SWIG
     DECLARE_EVENT_TABLE()
+#endif
 };
 
 
@@ -295,8 +300,21 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
 #else
 
 // wxpython/swig event work
+%constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED;
+%constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING;
+%constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_BUTTON;
+%constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG;
+%constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_END_DRAG;
+%constant wxEventType wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION;
 
-
+%pythoncode {
+    EVT_AUINOTEBOOK_PAGE_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, 1 )
+    EVT_AUINOTEBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, 1 )
+    EVT_AUINOTEBOOK_BUTTON = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_BUTTON, 1 )
+    EVT_AUINOTEBOOK_BEGIN_DRAG = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, 1 )
+    EVT_AUINOTEBOOK_END_DRAG = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, 1 )
+    EVT_AUINOTEBOOK_DRAG_MOTION = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, 1 )        
+}
 #endif
 
 
