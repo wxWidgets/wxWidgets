@@ -8561,6 +8561,10 @@ SOURCE=..\..\include\wx\aui\aui.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\aui\auibook.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\bitmap.h
 # End Source File
 # Begin Source File
@@ -9170,6 +9174,10 @@ SOURCE=..\..\include\wx\tab.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\tabctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\aui\tabmdi.h
 # End Source File
 # Begin Source File
 

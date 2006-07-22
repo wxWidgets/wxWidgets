@@ -2993,11 +2993,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/aui/framemanager.cpp
     src/aui/dockart.cpp
     src/aui/floatpane.cpp
+    src/aui/auibook.cpp
+    src/aui/tabmdi.cpp
 </set>
 <set var="AUI_HDR" hints="files">
     wx/aui/framemanager.h
     wx/aui/dockart.h
     wx/aui/floatpane.h
+    wx/aui/auibook.h
+    wx/aui/tabmdi.h
     wx/aui/aui.h
 </set>
 

@@ -962,6 +962,10 @@ SOURCE=..\..\include\wx\aui\aui.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\aui\auibook.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\aui\dockart.h
 # End Source File
 # Begin Source File
@@ -972,10 +976,18 @@ SOURCE=..\..\include\wx\aui\floatpane.h
 
 SOURCE=..\..\include\wx\aui\framemanager.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\aui\tabmdi.h
+# End Source File
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\aui\auibook.cpp
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\src\aui\dockart.cpp
@@ -987,6 +999,10 @@ SOURCE=..\..\src\aui\floatpane.cpp
 # Begin Source File
 
 SOURCE=..\..\src\aui\framemanager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\aui\tabmdi.cpp
 # End Source File
 # End Group
 # End Target

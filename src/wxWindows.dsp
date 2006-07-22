@@ -1743,6 +1743,10 @@ SOURCE=.\msw\window.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\aui\auibook.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\aui\dockart.cpp
 # End Source File
 # Begin Source File
@@ -1752,6 +1756,10 @@ SOURCE=.\aui\floatpane.cpp
 # Begin Source File
 
 SOURCE=.\aui\framemanager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\aui\tabmdi.cpp
 # End Source File
 # Begin Source File
 
@@ -2127,6 +2135,10 @@ SOURCE=..\include\wx\aui\aui.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\aui\auibook.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\aui\dockart.h
 # End Source File
 # Begin Source File
@@ -2136,6 +2148,10 @@ SOURCE=..\include\wx\aui\floatpane.h
 # Begin Source File
 
 SOURCE=..\include\wx\aui\framemanager.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\aui\tabmdi.h
 # End Source File
 # Begin Source File
 

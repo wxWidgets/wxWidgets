@@ -1108,7 +1108,9 @@ AUIDLL_OBJECTS =  \
 	$(OBJS)\auidll_version.res \
 	$(OBJS)\auidll_framemanager.obj \
 	$(OBJS)\auidll_dockart.obj \
-	$(OBJS)\auidll_floatpane.obj
+	$(OBJS)\auidll_floatpane.obj \
+	$(OBJS)\auidll_auibook.obj \
+	$(OBJS)\auidll_tabmdi.obj
 AUILIB_CXXFLAGS = /M$(__RUNTIME_LIBS_424)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui.pdb \
@@ -1123,7 +1125,9 @@ AUILIB_OBJECTS =  \
 	$(OBJS)\auilib_dummy.obj \
 	$(OBJS)\auilib_framemanager.obj \
 	$(OBJS)\auilib_dockart.obj \
-	$(OBJS)\auilib_floatpane.obj
+	$(OBJS)\auilib_floatpane.obj \
+	$(OBJS)\auilib_auibook.obj \
+	$(OBJS)\auilib_tabmdi.obj
 RICHTEXTDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_438)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext_vc$(VENDORTAG).pdb \
@@ -1401,6 +1405,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_framemanager.obj \
 	$(OBJS)\monodll_dockart.obj \
 	$(OBJS)\monodll_floatpane.obj \
+	$(OBJS)\monodll_auibook.obj \
+	$(OBJS)\monodll_tabmdi.obj \
 	$(OBJS)\monodll_richtextctrl.obj \
 	$(OBJS)\monodll_richtextbuffer.obj \
 	$(OBJS)\monodll_richtextstyles.obj \
@@ -1978,6 +1984,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_framemanager.obj \
 	$(OBJS)\monolib_dockart.obj \
 	$(OBJS)\monolib_floatpane.obj \
+	$(OBJS)\monolib_auibook.obj \
+	$(OBJS)\monolib_tabmdi.obj \
 	$(OBJS)\monolib_richtextctrl.obj \
 	$(OBJS)\monolib_richtextbuffer.obj \
 	$(OBJS)\monolib_richtextstyles.obj \
@@ -5306,6 +5314,12 @@ $(OBJS)\monodll_dockart.obj: ..\..\src\aui\dockart.cpp
 $(OBJS)\monodll_floatpane.obj: ..\..\src\aui\floatpane.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
+$(OBJS)\monodll_auibook.obj: ..\..\src\aui\auibook.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+
+$(OBJS)\monodll_tabmdi.obj: ..\..\src\aui\tabmdi.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+
 $(OBJS)\monodll_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
@@ -7163,6 +7177,12 @@ $(OBJS)\monolib_dockart.obj: ..\..\src\aui\dockart.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_floatpane.obj: ..\..\src\aui\floatpane.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+
+$(OBJS)\monolib_auibook.obj: ..\..\src\aui\auibook.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+
+$(OBJS)\monolib_tabmdi.obj: ..\..\src\aui\tabmdi.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
@@ -12086,6 +12106,12 @@ $(OBJS)\auidll_dockart.obj: ..\..\src\aui\dockart.cpp
 $(OBJS)\auidll_floatpane.obj: ..\..\src\aui\floatpane.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AUIDLL_CXXFLAGS) $**
 
+$(OBJS)\auidll_auibook.obj: ..\..\src\aui\auibook.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(AUIDLL_CXXFLAGS) $**
+
+$(OBJS)\auidll_tabmdi.obj: ..\..\src\aui\tabmdi.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(AUIDLL_CXXFLAGS) $**
+
 $(OBJS)\auilib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AUILIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
@@ -12096,6 +12122,12 @@ $(OBJS)\auilib_dockart.obj: ..\..\src\aui\dockart.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AUILIB_CXXFLAGS) $**
 
 $(OBJS)\auilib_floatpane.obj: ..\..\src\aui\floatpane.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(AUILIB_CXXFLAGS) $**
+
+$(OBJS)\auilib_auibook.obj: ..\..\src\aui\auibook.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(AUILIB_CXXFLAGS) $**
+
+$(OBJS)\auilib_tabmdi.obj: ..\..\src\aui\tabmdi.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AUILIB_CXXFLAGS) $**
 
 $(OBJS)\richtextdll_dummy.obj: ..\..\src\common\dummy.cpp
