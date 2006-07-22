@@ -95,6 +95,7 @@ class WXDLLIMPEXP_AUI wxAuiTabContainer
 public:
 
     wxAuiTabContainer();
+    virtual ~wxAuiTabContainer();
 
     bool AddPage(wxWindow* page, const wxAuiNotebookPage& info);
     bool InsertPage(wxWindow* page, const wxAuiNotebookPage& info, size_t idx);
