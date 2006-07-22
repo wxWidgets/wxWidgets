@@ -276,7 +276,7 @@ void wxPyApp::OnAssertFailure(const wxChar *file,
 
         // do the normal wx assert dialog?
         if (m_assertMode & wxPYAPP_ASSERT_DIALOG)
-            wxApp::OnAssert(file, line, cond, msg);
+            wxApp::OnAssertFailure(file, line, func, cond, msg);
     }
 }
 #endif
