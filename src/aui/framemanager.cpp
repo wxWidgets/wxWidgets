@@ -526,6 +526,7 @@ void wxFrameManager::SetManagedWindow(wxWindow* frame)
     if (m_hint_wnd && !m_hint_wnd->CanSetTransparent())
     {
         m_hint_wnd->Close();
+        m_hint_wnd->Destroy();
         m_hint_wnd = NULL;
     }    
 }
