@@ -43,6 +43,7 @@
 #include "wx/colordlg.h"
 #include "wx/fontdlg.h"
 #include "wx/numdlg.h"
+#include "wx/tokenzr.h"
 
 //----------------------------------------------------------------------
 // class definitions
@@ -348,6 +349,7 @@ public:
     void OnChangeBackgroundColour(wxCommandEvent& event);
     void OnLeftIndent(wxCommandEvent& event);
     void OnRightIndent(wxCommandEvent& event);
+    void OnTabStops(wxCommandEvent& event);
 
 private:
     wxTextCtrl *m_textCtrl;
@@ -1513,7 +1515,8 @@ enum
     RICHTEXT_CHANGE_TEXT_COLOUR,
     RICHTEXT_CHANGE_BACKGROUND_COLOUR,
     RICHTEXT_LEFT_INDENT,
-    RICHTEXT_RIGHT_INDENT
+    RICHTEXT_RIGHT_INDENT,
+    RICHTEXT_TAB_STOPS
 };
 
 BEGIN_EVENT_TABLE(RichTextFrame, wxFrame)
@@ -1528,6 +1531,7 @@ BEGIN_EVENT_TABLE(RichTextFrame, wxFrame)
     EVT_MENU(RICHTEXT_CHANGE_BACKGROUND_COLOUR, RichTextFrame::OnChangeBackgroundColour)
     EVT_MENU(RICHTEXT_LEFT_INDENT, RichTextFrame::OnLeftIndent)
     EVT_MENU(RICHTEXT_RIGHT_INDENT, RichTextFrame::OnRightIndent)
+    EVT_MENU(RICHTEXT_TAB_STOPS, RichTextFrame::OnTabStops)
 END_EVENT_TABLE()
 
 RichTextFrame::RichTextFrame(wxWindow* parent, const wxString& title):
@@ -1566,7 +1570,8 @@ RichTextFrame::RichTextFrame(wxWindow* parent, const wxString& title):
     editMenu->Append(RICHTEXT_CHANGE_BACKGROUND_COLOUR, _("Change Background Colour"));
     editMenu->AppendSeparator();
     editMenu->Append(RICHTEXT_LEFT_INDENT, _("Left Indent"));
-    editMenu->Append(RICHTEXT_RIGHT_INDENT, _("Right indent"));
+    editMenu->Append(RICHTEXT_RIGHT_INDENT, _("Right Indent"));
+    editMenu->Append(RICHTEXT_TAB_STOPS, _("Tab Stops"));
     menuBar->Append(editMenu, _("Edit"));
 
     SetMenuBar(menuBar);
@@ -1756,6 +1761,35 @@ void RichTextFrame::OnRightIndent(wxCommandEvent& WXUNUSED(event))
 
         m_currentPosition = -1;
     }
+}
+
+void RichTextFrame::OnTabStops(wxCommandEvent& WXUNUSED(event))
+{
+    wxString tabsStr = wxGetTextFromUser
+                         (
+                            _("Please enter the tab stop positions in tenths of a millimetre, separated by spaces.\nLeave empty to reset tab stops."),
+                            _("Tab Stops"),
+                            wxEmptyString,
+                            this
+                         );
+
+    wxArrayInt tabs;
+
+    wxStringTokenizer tokens(tabsStr, _T(" "));
+    while (tokens.HasMoreTokens())
+    {
+        wxString token = tokens.GetNextToken();
+        tabs.Add(wxAtoi(token));
+    }
+
+    wxTextAttr attr;
+    attr.SetTabs(tabs);
+
+    long start, end;
+    m_textCtrl->GetSelection(& start, & end);
+    m_textCtrl->SetStyle(start, end, attr);
+
+    m_currentPosition = -1;
 }
 
 void RichTextFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
