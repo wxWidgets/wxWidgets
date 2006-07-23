@@ -626,7 +626,13 @@ void wxFrameManager::SetManagedWindow(wxWindow* frame)
 
     m_hint_fademax=50;
 
-    if (m_hint_wnd && !m_hint_wnd->CanSetTransparent())
+    if (m_hint_wnd
+        // CanSetTransparent is only present in the 2.7.0 ABI. To allow this file to be easily used
+        // in a backported environment, conditionally compile this in.
+#if wxCHECK_VERSION(2,7,0)
+       && !m_hint_wnd->CanSetTransparent()
+#endif
+        )
     {
 
         m_hint_wnd->Close();
@@ -1949,12 +1955,14 @@ void wxFrameManager::Update()
                                                   this,
                                                   p);
 
+#if wxCHECK_VERSION(2,7,0)
                 // on MSW and Mac, if the owner desires transparent dragging, and
                 // the dragging is happening right now, then the floating
                 // window should have this style by default
                 if (m_action == actionDragFloatingPane &&
                     (m_flags & wxAUI_MGR_TRANSPARENT_DRAG))
                         frame->SetTransparent(150);
+#endif
 
                 frame->SetPaneWindow(p);
                 p.frame = frame;
@@ -2582,7 +2590,12 @@ void wxFrameManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
     }
 
     m_hint_fadeamt += 4;
+#if wxCHECK_VERSION(2,7,0)
     m_hint_wnd->SetTransparent(m_hint_fadeamt);
+#else
+    if (m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame)))
+        ((wxPseudoTransparentFrame *)m_hint_wnd)->SetTransparent(m_hint_fadeamt);
+#endif
 }
 
 void wxFrameManager::ShowHint(const wxRect& rect)
@@ -2613,7 +2626,12 @@ void wxFrameManager::ShowHint(const wxRect& rect)
         if (m_action == actionDragFloatingPane && m_action_window)
             m_action_window->SetFocus();
 
+#if wxCHECK_VERSION(2,7,0)
         m_hint_wnd->SetTransparent(m_hint_fadeamt);
+#else
+        if (m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame)))
+            ((wxPseudoTransparentFrame *)m_hint_wnd)->SetTransparent(m_hint_fadeamt);
+#endif
         m_hint_wnd->SetSize(rect);
         m_hint_wnd->Raise();
         
@@ -2686,7 +2704,12 @@ void wxFrameManager::HideHint()
     if (m_hint_wnd)
     {
         m_hint_wnd->Show(false);
+#if wxCHECK_VERSION(2,7,0)
         m_hint_wnd->SetTransparent(0);
+#else
+        if (m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame)))
+        ((wxPseudoTransparentFrame *)m_hint_wnd)->SetTransparent(0);
+#endif
         m_hint_fadetimer.Stop();
         m_last_hint = wxRect();
         return;
@@ -2792,8 +2815,10 @@ void wxFrameManager::OnFloatingPaneMoveStart(wxWindow* wnd)
     wxPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
+#if wxCHECK_VERSION(2,7,0)
     if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
         pane.frame->SetTransparent(150);
+#endif
 }
 
 void wxFrameManager::OnFloatingPaneMoving(wxWindow* wnd)
@@ -2891,8 +2916,10 @@ void wxFrameManager::OnFloatingPaneMoved(wxWindow* wnd)
     {
         pane.floating_pos = pane.frame->GetPosition();
 
+#if wxCHECK_VERSION(2,7,0)
         if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
             pane.frame->SetTransparent(255);
+#endif
     }
 
     Update();
