@@ -3716,6 +3716,8 @@ void wxWindowGTK::GtkUpdate()
 {
     if (m_wxwindow && GTK_PIZZA(m_wxwindow)->bin_window)
         gdk_window_process_updates( GTK_PIZZA(m_wxwindow)->bin_window, FALSE );
+    if (m_widget && m_widget->window)
+        gdk_window_process_updates( m_widget->window, FALSE );
 
     // for consistency with other platforms (and also because it's convenient
     // to be able to update an entire TLW by calling Update() only once), we
