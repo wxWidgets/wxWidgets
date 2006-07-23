@@ -2590,16 +2590,20 @@ void wxFrameManager::ShowHint(const wxRect& rect)
     if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) != 0
         && m_hint_wnd
         // Finally, don't use a venetian blind effect if it's been specifically disabled
-        && !((m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame))) && (m_flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS))
+        && !((m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame))) &&
+             (m_flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS))
        )
     {
         if (m_last_hint == rect)
             return;
         m_last_hint = rect;
 
-        wxByte initial_fade = m_hint_fademax;
-        if (m_flags & wxAUI_MGR_TRANSPARENT_HINT_FADE)
-            initial_fade = 0;
+        m_hint_fadeamt = m_hint_fademax;
+        if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT_FADE)
+            && !((m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame))) &&
+                 (m_flags & wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE))
+            )
+            m_hint_fadeamt = 0;
 
         if (! m_hint_wnd->IsShown())
             m_hint_wnd->Show();
@@ -2609,15 +2613,14 @@ void wxFrameManager::ShowHint(const wxRect& rect)
         if (m_action == actionDragFloatingPane && m_action_window)
             m_action_window->SetFocus();
 
-        m_hint_wnd->SetTransparent(initial_fade);
+        m_hint_wnd->SetTransparent(m_hint_fadeamt);
         m_hint_wnd->SetSize(rect);
         m_hint_wnd->Raise();
         
 
-        if (m_flags & wxAUI_MGR_TRANSPARENT_HINT_FADE)
+        if (m_hint_fadeamt != m_hint_fademax) //  Only fade if we need to
         {
             // start fade in timer
-            m_hint_fadeamt = 0;
             m_hint_fadetimer.SetOwner(this, 101);
             m_hint_fadetimer.Start(5);
         }

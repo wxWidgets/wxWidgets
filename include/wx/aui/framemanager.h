@@ -48,10 +48,12 @@ enum wxFrameManagerOption
     // at runtime we determine we cannot use transparency (because, for instance, the OS does not support it).
     // setting this flag drops back in such circumstances (only) to the behaviour without wxAUI_MGR_TRANSPARENT_HINT
     wxAUI_MGR_DISABLE_VENETIAN_BLINDS = 1 << 5,
+    wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE = 1 << 6,
 
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
-                        wxAUI_MGR_TRANSPARENT_HINT_FADE
+                        wxAUI_MGR_TRANSPARENT_HINT_FADE |
+                        wxAUI_MGR_DISABLE_VENETIAN_BLINDS_FADE
 };
 
 enum wxPaneDockArtSetting
