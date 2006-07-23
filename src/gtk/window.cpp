@@ -4137,6 +4137,8 @@ void wxWindowGTK::GtkUpdate()
 #ifdef __WXGTK20__
     if (m_wxwindow && GTK_PIZZA(m_wxwindow)->bin_window)
         gdk_window_process_updates( GTK_PIZZA(m_wxwindow)->bin_window, FALSE );
+    if (m_widget && m_widget->window)
+        gdk_window_process_updates( m_widget->window, FALSE );
 #else
     if (!m_updateRegion.IsEmpty())
         GtkSendPaintEvents();
