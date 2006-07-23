@@ -106,7 +106,7 @@ wxObject *wxOwnerDrawnComboBoxXmlHandler::DoCreateResource()
 
 bool wxOwnerDrawnComboBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
-#if wxABI_VERSION >= 20700
+#if wxCHECK_VERSION(2,7,0)
 
     return (IsOfClass(node, wxT("wxOwnerDrawnComboBox")) ||
            (m_insideBox && node->GetName() == wxT("item")));
