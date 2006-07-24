@@ -348,12 +348,16 @@ void wxXmlDocument::DoCopy(const wxXmlDocument& doc)
 bool wxXmlDocument::Load(const wxString& filename, const wxString& encoding)
 {
     wxFileInputStream stream(filename);
+    if (!stream.Ok())
+        return false;
     return Load(stream, encoding);
 }
 
 bool wxXmlDocument::Save(const wxString& filename) const
 {
     wxFileOutputStream stream(filename);
+    if (!stream.Ok())
+        return false;
     return Save(stream);
 }
 
