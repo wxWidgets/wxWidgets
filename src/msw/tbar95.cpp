@@ -383,7 +383,7 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( style & (wxTB_FLAT | wxTB_HORZ_LAYOUT) )
     {
         // static as it doesn't change during the program lifetime
-        static int s_verComCtl = wxApp::GetComCtl32Version();
+        static const int s_verComCtl = wxApp::GetComCtl32Version();
 
         // comctl32.dll 4.00 doesn't support the flat toolbars and using this
         // style with 6.00 (part of Windows XP) leads to the toolbar with
