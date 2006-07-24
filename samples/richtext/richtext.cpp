@@ -577,8 +577,6 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     editMenu->Append(wxID_COPY, _("&Copy\tCtrl+C"));
     editMenu->Append(wxID_PASTE, _("&Paste\tCtrl+V"));
 
-    editMenu->Append(wxID_CLEAR, _("&Delete\tDel"));
-
     editMenu->AppendSeparator();
     editMenu->Append(wxID_SELECTALL, _("Select A&ll\tCtrl+A"));
 #if 0
@@ -726,7 +724,9 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     r.BeginBold();
 
     r.BeginFontSize(14);
-    r.WriteText(wxT("Welcome to wxRichTextCtrl, a wxWidgets control for editing and presenting styled text and images"));
+    r.WriteText(wxT("Welcome to wxRichTextCtrl, a wxWidgets control"));
+    r.LineBreak();
+    r.WriteText(wxT("for editing and presenting styled text and images"));
     r.EndFontSize();
     r.Newline();
 
