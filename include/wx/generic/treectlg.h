@@ -208,6 +208,7 @@ public:
 
     virtual void Freeze();
     virtual void Thaw();
+    virtual void Refresh(bool eraseBackground = true, const wxRect *rect = NULL);
 
     virtual bool SetFont( const wxFont &font );
     virtual void SetWindowStyle(const long styles);

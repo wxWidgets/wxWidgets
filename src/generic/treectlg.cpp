@@ -3399,10 +3399,16 @@ void wxGenericTreeCtrl::CalculatePositions()
     CalculateLevel( m_anchor, dc, 0, y ); // start recursion
 }
 
+void wxGenericTreeCtrl::Refresh(bool eraseBackground, const wxRect *rect)
+{
+    if ( !m_freezeCount )
+        wxTreeCtrlBase::Refresh(eraseBackground, rect);
+}
+
 void wxGenericTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)
 {
-    if (m_dirty) return;
-    if (m_freezeCount) return;
+    if (m_dirty || m_freezeCount)
+        return;
 
     wxSize client = GetClientSize();
 
@@ -3418,8 +3424,8 @@ void wxGenericTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)
 
 void wxGenericTreeCtrl::RefreshLine( wxGenericTreeItem *item )
 {
-    if (m_dirty) return;
-    if (m_freezeCount) return;
+    if (m_dirty || m_freezeCount)
+        return;
 
     wxRect rect;
     CalcScrolledPosition(0, item->GetY(), NULL, &rect.y);
@@ -3431,7 +3437,8 @@ void wxGenericTreeCtrl::RefreshLine( wxGenericTreeItem *item )
 
 void wxGenericTreeCtrl::RefreshSelected()
 {
-    if (m_freezeCount) return;
+    if (m_freezeCount || m_freezeCount)
+        return;
 
     // TODO: this is awfully inefficient, we should keep the list of all
     //       selected items internally, should be much faster
@@ -3441,7 +3448,8 @@ void wxGenericTreeCtrl::RefreshSelected()
 
 void wxGenericTreeCtrl::RefreshSelectedUnder(wxGenericTreeItem *item)
 {
-    if (m_freezeCount) return;
+    if (m_freezeCount || m_freezeCount)
+        return;
 
     if ( item->IsSelected() )
         RefreshLine(item);
@@ -3478,8 +3486,6 @@ bool wxGenericTreeCtrl::SetBackgroundColour(const wxColour& colour)
     if ( !wxWindow::SetBackgroundColour(colour) )
         return false;
 
-    if (m_freezeCount) return true;
-
     Refresh();
 
     return true;
@@ -3489,8 +3495,6 @@ bool wxGenericTreeCtrl::SetForegroundColour(const wxColour& colour)
 {
     if ( !wxWindow::SetForegroundColour(colour) )
         return false;
-
-    if (m_freezeCount) return true;
 
     Refresh();
 
