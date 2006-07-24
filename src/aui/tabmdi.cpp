@@ -417,55 +417,6 @@ bool wxTabMDIChildFrame::Destroy()
     return false;
 }
 
-/*
-    wxTabMDIParentFrame* pParentFrame = GetMDIParentFrame();
-    wxASSERT_MSG(pParentFrame, wxT("Missing MDI Parent Frame"));
-
-    bool bActive = false;
-    if (pParentFrame->GetActiveChild() == this)
-    {
-        pParentFrame->SetActiveChild(NULL);
-        pParentFrame->SetChildMenuBar(NULL);
-        bActive = true;
-    }
-
-    wxTabMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
-
-    // remove page if it is still there
-    size_t pos;
-    for (pos = 0; pos < pClientWindow->GetPageCount(); pos++)
-    {
-        if (pClientWindow->GetPage(pos) == this)
-        {
-            if (pClientWindow->RemovePage(pos))
-                pClientWindow->Refresh();
-            break;
-        }
-    }
-
-    if (bActive)
-    {
-        // Set the new selection to the a remaining page
-        if (pos < pClientWindow->GetPageCount())
-        {
-            pClientWindow->SetSelection(pos);
-        }
-         else
-        {
-            if (pClientWindow->GetPageCount() >= 1)
-                pClientWindow->SetSelection(pClientWindow->GetPageCount() - 1);
-        }
-    }
-
-    // delete the child frame with pending delete, as is
-    // customary with frame windows
-    if (!wxPendingDelete.Member(this))
-        wxPendingDelete.Append(this);
-
-    return true;
-*/
-
-
 #if wxUSE_MENUS
 void wxTabMDIChildFrame::SetMenuBar(wxMenuBar *menu_bar)
 {
