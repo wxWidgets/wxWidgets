@@ -326,7 +326,7 @@ void wxAuiTabContainer::DrawTab(wxDC* dc,
 
     // if the caption is empty, measure some temporary text
     wxString caption = caption_text;
-    if (caption_text.IsEmpty())
+    if (caption_text.empty())
         caption = wxT("Xj");
         
     // measure text
