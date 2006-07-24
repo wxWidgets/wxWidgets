@@ -1282,6 +1282,12 @@ public:
     wxString GetRowLabelValue( int row );
     wxString GetColLabelValue( int col );
     wxColour GetGridLineColour() { return m_gridLineColour; }
+
+    // these methods may be overridden to customize individual grid lines
+    // appearance
+    virtual wxPen GetDefaultGridLinePen();
+    virtual wxPen GetRowGridLinePen(int row);
+    virtual wxPen GetColGridLinePen(int col);
     wxColour GetCellHighlightColour() { return m_cellHighlightColour; }
     int      GetCellHighlightPenWidth() { return m_cellHighlightPenWidth; }
     int      GetCellHighlightROPenWidth() { return m_cellHighlightROPenWidth; }

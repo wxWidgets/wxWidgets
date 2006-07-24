@@ -164,6 +164,7 @@ All (GUI):
 - wxNB_HITTEST_* flags renamed to wxBK_HITTEST_* to serve all book controls.
 - Added wxTopLevelWindow::SetTransparent and CanSetTransparent, with
   implementations (so far) for wxMSW and wxMac.
+- Allow customizing individual grid lines appearance (Søren Lassen)
 
 wxMSW:
 

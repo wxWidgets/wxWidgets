@@ -845,6 +845,62 @@ Returns the current grid cell row position.
 
 Returns the colour used for grid lines.
 
+\wxheading{See also}
+
+\helpref{GetDefaultGridLinePen()}{wxgridgetdefaultgridlinepen}
+
+
+\membersection{wxGrid::GetDefaultGridLinePen}\label{wxgridgetdefaultgridlinepen}
+
+\func{wxPen}{GetDefaultGridLinePen}{\void}
+
+Returns the pen used for grid lines. This virtual function may be overridden in
+derived classes in order to change the appearance of grid lines. Note that
+currently the pen width must be $1$.
+
+\wxheading{See also}
+
+\helpref{GetColGridLinePen()}{wxgridgetcolgridlinepen},\\
+\helpref{GetRowGridLinePen()}{wxgridgetrowgridlinepen}
+
+
+
+
+\membersection{wxGrid::GetRowGridLinePen}\label{wxgridgetrowgridlinepen}
+
+\func{wxPen}{GetRowGridLinePen}{\param{int }{row}}
+
+Returns the pen used for horizontal grid lines. This virtual function may be
+overridden in derived classes in order to change the appearance of individual
+grid line for the given row \arg{row}.
+
+Example: \\
+\\
+\begin{verbatim}
+   // in a grid displaying music notation, use a solid black pen between
+   // octaves (C0=row 127, C1=row 115 etc.)
+   wxPen MidiGrid::GetRowGridLinePen(int row)
+   {
+       if ( row%12 == 7 )
+          return wxPen(*wxBLACK, 1, wxSOLID);
+       else 
+          return GetDefaultGridLinePen();
+   }
+\end{verbatim}
+
+
+
+\membersection{wxGrid::GetColGridLinePen}\label{wxgridgetcolgridlinepen}
+
+\func{wxPen}{GetColGridLinePen}{\param{int }{col}}
+
+Returns the pen used for vertical grid lines. This virtual function may be
+overridden in derived classes in order to change the appearance of individual
+grid lines for the given column \arg{col}.
+
+See \helpref{GetRowGridLinePen()}{wxgridgetrowgridlinepen} for an example.
+
+
 
 
 \membersection{wxGrid::GridLinesEnabled}\label{wxgridgridlinesenabled}
