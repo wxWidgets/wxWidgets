@@ -100,8 +100,10 @@ All:
 wxMSW:
 
 - Fixed version script problems when using configure with cygwin/mingw32.
-- Use system default paper size for printing instead of A4
-- Fix colours when converting wxBitmap with alpha to wxImage (nusi)
+- Use system default paper size for printing instead of A4.
+- Fix colours when converting wxBitmap with alpha to wxImage (nusi).
+- Clipboard data is now retained after the application exits.
+
 
 2.7.2
 -----
