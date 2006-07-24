@@ -181,6 +181,9 @@ public:
     wxString FindFirst(const wxString& spec, int flags = 0);
     wxString FindNext();
 
+    // find a file in a list of directories, returns false if not found
+    bool FindFileInPath(wxString *pStr, const wxChar *path, const wxChar *file);
+
     // Adds FS handler.
     // In fact, this class is only front-end to the FS handlers :-)
     static void AddHandler(wxFileSystemHandler *handler);

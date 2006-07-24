@@ -26,11 +26,13 @@ provide access to user-defined virtual file systems.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxFileSystem::wxFileSystem}\label{wxfilesystemwxfilesystem}
 
 \func{}{wxFileSystem}{\void}
 
 Constructor. 
+
 
 \membersection{wxFileSystem::AddHandler}\label{wxfilesystemaddhandler}
 
@@ -50,6 +52,7 @@ wxFileSystem::AddHandler(new My_FS_Handler);
 This is because (a) AddHandler is a static method, and (b) the handlers
 are deleted in wxFileSystem's destructor so that you don't have to
 care about it.
+
 
 \membersection{wxFileSystem::ChangePathTo}\label{wxfilesystemchangepathto}
 
@@ -83,11 +86,13 @@ commands change the path to "dir/subdir/":
   f = fs -> OpenFile("hello.htm"); // opens file 'subdir/folder/hello.htm' !!
 \end{verbatim}
 
+
 \membersection{wxFileSystem::GetPath}\label{wxfilesystemgetpath}
 
 \func{wxString}{GetPath}{\void}
 
 Returns actual path (set by \helpref{ChangePathTo}{wxfilesystemchangepathto}).
+
 
 \membersection{wxFileSystem::FileNameToURL}\label{wxfilesystemfilenametourl}
 
@@ -100,6 +105,26 @@ Converts filename into URL.
 \helpref{wxFileSystem::URLToFileName}{wxfilesystemurltofilename},
 \helpref{wxFileName}{wxfilename}
 
+
+\membersection{wxFileSystem::FindFileInPath}\label{wxfilesystemfindfileinpath}
+
+\func{bool}{FindFileInPath}{\param{wxString }{*str}, \param{const wxChar }{*path}, \param{const wxChar }{*file}}
+
+Looks for the file with the given name \arg{file} in a colon or semi-colon
+(depending on the current platform) separated list of directories in
+\arg{path}. If the file is found in any directory, returns \true and the full
+path of the file in \arg{str}, otherwise returns \false and doesn't modify 
+\arg{str}.
+
+\wxheading{Parameters}
+
+\docparam{str}{Receives the full path of the file, must not be \NULL}
+
+\docparam{path}{\texttt{wxPATH\_SEP}-separated list of directories}
+
+\docparam{file}{the name of the file to look for}
+
+
 \membersection{wxFileSystem::FindFirst}\label{wxfilesystemfindfirst}
 
 \func{wxString}{FindFirst}{\param{const wxString\& }{wildcard}, \param{int }{flags = 0}}
@@ -108,11 +133,13 @@ Works like \helpref{wxFindFirstFile}{wxfindfirstfile}. Returns name of the first
 filename (within filesystem's current path) that matches {\it wildcard}. {\it flags} may be one of
 wxFILE (only files), wxDIR (only directories) or 0 (both).
 
+
 \membersection{wxFileSystem::FindNext}\label{wxfilesystemfindnext}
 
 \func{wxString}{FindNext}{\void}
 
 Returns the next filename that matches parameters passed to \helpref{FindFirst}{wxfilesystemfindfirst}.
+
 
 \membersection{wxFileSystem::OpenFile}\label{wxfilesystemopenfile}
 
@@ -123,6 +150,7 @@ or NULL if failed. It first tries to open the file in relative scope
 (based on value passed to ChangePathTo() method) and then as an
 absolute path.  Note that the user is responsible for deleting the returned
 wxFSFile.  
+
 
 \membersection{wxFileSystem::URLToFileName}\label{wxfilesystemurltofilename}
 

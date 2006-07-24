@@ -26,6 +26,7 @@
 #include "wx/module.h"
 #include "wx/mimetype.h"
 #include "wx/filename.h"
+#include "wx/tokenzr.h"
 
 
 //--------------------------------------------------------------------------------
@@ -447,7 +448,37 @@ wxString wxFileSystem::FindNext()
     else return m_FindFileHandler -> FindNext();
 }
 
+bool wxFileSystem::FindFileInPath(wxString *pStr,
+                                  const wxChar *path,
+                                  const wxChar *basename)
+{
+    // we assume that it's not empty
+    wxCHECK_MSG( !wxIsEmpty(basename), false,
+                _T("empty file name in wxFileSystem::FindFileInPath"));
 
+    // skip path separator in the beginning of the file name if present
+    if ( wxIsPathSeparator(*basename) )
+       basename++;
+
+    wxStringTokenizer tokenizer(path, wxPATH_SEP);
+    while ( tokenizer.HasMoreTokens() )
+    {
+        wxString strFile = tokenizer.GetNextToken();
+        if ( !wxEndsWithPathSeparator(strFile) )
+            strFile += wxFILE_SEP_PATH;
+        strFile += basename;
+
+        wxFSFile *file = OpenFile(strFile);
+        if ( file )
+        {
+            delete file;
+            *pStr = strFile;
+            return true;
+        }
+    }
+
+    return false;
+}
 
 void wxFileSystem::AddHandler(wxFileSystemHandler *handler)
 {
