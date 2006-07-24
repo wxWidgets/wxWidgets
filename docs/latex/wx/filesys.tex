@@ -54,6 +54,14 @@ are deleted in wxFileSystem's destructor so that you don't have to
 care about it.
 
 
+\membersection{wxFileSystem::HasHandlerForPath}\label{wxfilesystemhashandlerforpath}
+
+\func{static bool}{HasHandlerForPath}{\param{const wxString \&}{ location}}
+
+This static function returns \true if there is a registered handler which can open the given
+location.
+
+
 \membersection{wxFileSystem::ChangePathTo}\label{wxfilesystemchangepathto}
 
 \func{void}{ChangePathTo}{\param{const wxString\& }{location}, \param{bool }{is\_dir = false}}

@@ -485,6 +485,18 @@ void wxFileSystem::AddHandler(wxFileSystemHandler *handler)
     m_Handlers.Append(handler);
 }
 
+bool wxFileSystem::HasHandlerForPath(const wxString &location)
+{
+    for ( wxList::compatibility_iterator node = m_Handlers.GetFirst();
+           node; node = node->GetNext() )
+    {
+        wxFileSystemHandler *h = (wxFileSystemHandler*) node->GetData();
+        if (h->CanOpen(location))
+            return true;
+    }
+
+    return false;
+}
 
 void wxFileSystem::CleanUpHandlers()
 {
