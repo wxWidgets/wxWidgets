@@ -151,8 +151,8 @@ private:
 
     wxRegion m_Region;
 
-    DECLARE_DYNAMIC_CLASS(wxPseudoTransparentFrame);
-    DECLARE_EVENT_TABLE();
+    DECLARE_DYNAMIC_CLASS(wxPseudoTransparentFrame)
+    DECLARE_EVENT_TABLE()
 };
 
 
