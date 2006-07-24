@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 19 September 2006                                                   *
+# Date : 9 October 2006                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -90,7 +90,8 @@ OBJECTS = \
 		treectlg.obj,\
 		wizard.obj,\
 		hyperlink.obj,\
-		filepickerg.obj
+		filepickerg.obj,\
+		bmpcboxg.obj
 
 SOURCES = \
 		accel.cpp,\
@@ -155,7 +156,7 @@ SOURCES = \
 		hyperlink.cpp,\
 		filepickerg.cpp,\
 		vscroll.cpp,\
-		icon.cpp
+		icon.cpp,bmpcboxg.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=,statusbr.obj,statline.obj,notebook.obj,spinctlg.obj
@@ -255,3 +256,4 @@ combog.obj : combog.cpp
 fontpickerg.obj : fontpickerg.cpp
 hyperlink.obj : hyperlink.cpp
 filepickerg.obj : filepickerg.cpp
+bmpcboxg.obj : bmpcboxg.cpp

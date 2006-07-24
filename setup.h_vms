@@ -322,6 +322,7 @@ typedef pid_t GPid;
 
 #define wxUSE_TIPWINDOW    1
 
+#define wxUSE_ANIMATIONCTRL 1
 #define wxUSE_BUTTON       1
 #define wxUSE_BMPBUTTON    1
 #define wxUSE_CALENDARCTRL 1
@@ -444,6 +445,7 @@ typedef pid_t GPid;
 
 #define wxUSE_WIZARDDLG 1
 
+#define wxUSE_ABOUTDLG 1
 
 #define wxUSE_METAFILE              0
 #define wxUSE_ENH_METAFILE          0
@@ -484,6 +486,8 @@ typedef pid_t GPid;
 #define wxUSE_IPC         1
 
 #define wxUSE_HELP        1
+
+#define wxUSE_MS_HTML_HELP 0
 
 #define wxUSE_WXHTML_HELP 1
 

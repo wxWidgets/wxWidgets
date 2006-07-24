@@ -80,11 +80,18 @@
           #endif
         #endif
     #else
+      #if defined( __WXMOTIF__ ) && defined( __VMS )
+       // solves a type definition mismatch between IODBC and MOTIF on OpenVMS
+      #define BOOL int
+      #endif
         #include <sql.h>
         #include <sqlext.h>
         //#if wxUSE_UNICODE
         //    #include <sqlucode.h>
         //#endif
+      #if defined( __WXMOTIF__ ) && defined( __VMS )
+      #undef BOOL
+      #endif
     #endif
     }
 #endif
