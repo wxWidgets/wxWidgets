@@ -17961,13 +17961,7 @@ SWIGINTERN PyObject *_wrap_Grid_GetSelectedRows(PyObject *SWIGUNUSEDPARM(self), 
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = PyList_New(0);
-    size_t idx;
-    for (idx = 0; idx < (&result)->GetCount(); idx += 1) {
-      PyObject* val = PyInt_FromLong( (&result)->Item(idx) );
-      PyList_Append(resultobj, val);
-      Py_DECREF(val);
-    }
+    resultobj = wxArrayInt2PyList_helper(result);
   }
   return resultobj;
 fail:
@@ -17997,13 +17991,7 @@ SWIGINTERN PyObject *_wrap_Grid_GetSelectedCols(PyObject *SWIGUNUSEDPARM(self), 
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
-    resultobj = PyList_New(0);
-    size_t idx;
-    for (idx = 0; idx < (&result)->GetCount(); idx += 1) {
-      PyObject* val = PyInt_FromLong( (&result)->Item(idx) );
-      PyList_Append(resultobj, val);
-      Py_DECREF(val);
-    }
+    resultobj = wxArrayInt2PyList_helper(result);
   }
   return resultobj;
 fail:
