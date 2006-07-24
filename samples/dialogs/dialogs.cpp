@@ -729,7 +729,7 @@ void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
                                         wxFileSelectorDefaultWildcardStr,
                                         wxFileSelectorDefaultWildcardStr
                                     ),
-                                    wxFD_OPEN|wxFD_CHANGE_DIR,
+                                    wxFD_OPEN|wxFD_CHANGE_DIR|wxFD_PREVIEW,
                                     this
                                    );
 

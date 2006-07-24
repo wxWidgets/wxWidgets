@@ -86,16 +86,16 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
 // "clicked" for Cancel-button
 //-----------------------------------------------------------------------------
 
-extern "C" {
+extern "C"
+{
+
 static void gtk_filedialog_cancel_callback(GtkWidget *w, wxFileDialog *dialog)
 {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     event.SetEventObject(dialog);
     dialog->GetEventHandler()->ProcessEvent(event);
 }
-}
 
-extern "C" {
 static void gtk_filedialog_response_callback(GtkWidget *w,
                                              gint response,
                                              wxFileDialog *dialog)
@@ -107,7 +107,31 @@ static void gtk_filedialog_response_callback(GtkWidget *w,
     else    // GTK_RESPONSE_CANCEL or GTK_RESPONSE_NONE
         gtk_filedialog_cancel_callback(w, dialog);
 }
+
+static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
+                                                   gpointer user_data)
+{
+#if GTK_CHECK_VERSION(2,4,0)
+    GtkWidget *preview = GTK_WIDGET(user_data);
+    wxGtkString filename(gtk_file_chooser_get_preview_filename(chooser));
+    if ( !filename )
+        return;
+
+    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size(filename, 128, 128, NULL);
+    gboolean have_preview = pixbuf != NULL;
+
+    gtk_image_set_from_pixbuf(GTK_IMAGE(preview), pixbuf);
+    if ( pixbuf )
+        g_object_unref (pixbuf);
+
+    gtk_file_chooser_set_preview_widget_active(chooser, have_preview);
+#else
+    wxUnusedVar(chooser);
+    wxUnusedVar(user_data);
+#endif // GTK+ 2.4+
 }
+
+} // extern "C"
 
 
 //-----------------------------------------------------------------------------
@@ -130,103 +154,120 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     : wxGenericFileDialog(parent, message, defaultDir, defaultFileName,
                           wildCard, style, pos, sz, name, true )
 {
-    if (!gtk_check_version(2,4,0))
+    if (gtk_check_version(2,4,0))
     {
-        m_needParent = false;
+        wxGenericFileDialog::Create( parent, message, defaultDir,
+                                     defaultFileName, wildCard, style, pos );
+        return;
+    }
 
-        if (!PreCreation(parent, pos, wxDefaultSize) ||
-            !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
-                    wxDefaultValidator, wxT("filedialog")))
-        {
-            wxFAIL_MSG( wxT("wxFileDialog creation failed") );
-            return;
-        }
+    m_needParent = false;
 
-        GtkFileChooserAction gtk_action;
-        GtkWindow* gtk_parent = NULL;
-        if (parent)
-            gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
+    if (!PreCreation(parent, pos, wxDefaultSize) ||
+        !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
+                wxDefaultValidator, wxT("filedialog")))
+    {
+        wxFAIL_MSG( wxT("wxFileDialog creation failed") );
+        return;
+    }
 
-        const gchar* ok_btn_stock;
-        if ( style & wxFD_SAVE )
-        {
-            gtk_action = GTK_FILE_CHOOSER_ACTION_SAVE;
-            ok_btn_stock = GTK_STOCK_SAVE;
-        }
-        else
-        {
-            gtk_action = GTK_FILE_CHOOSER_ACTION_OPEN;
-            ok_btn_stock = GTK_STOCK_OPEN;
-        }
+    GtkFileChooserAction gtk_action;
+    GtkWindow* gtk_parent = NULL;
+    if (parent)
+        gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
-        m_widget = gtk_file_chooser_dialog_new(
-                       wxGTK_CONV(m_message),
-                       gtk_parent,
-                       gtk_action,
-                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                       ok_btn_stock, GTK_RESPONSE_ACCEPT,
-                       NULL);
-
-        gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
-
-        if ( style & wxFD_MULTIPLE )
-            gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(m_widget), true);
-
-        // gtk_widget_hide_on_delete is used here to avoid that Gtk automatically destroys
-        // the dialog when the user press ESC on the dialog: in that case a second call to
-        // ShowModal() would result in a bunch of Gtk-CRITICAL errors...
-        g_signal_connect (G_OBJECT(m_widget),
-                        "delete_event",
-                        G_CALLBACK (gtk_widget_hide_on_delete),
-                        (gpointer)this);
-
-        // local-only property could be set to false to allow non-local files to be loaded.
-        // In that case get/set_uri(s) should be used instead of get/set_filename(s) everywhere
-        // and the GtkFileChooserDialog should probably also be created with a backend,
-        // e.g "gnome-vfs", "default", ... (gtk_file_chooser_dialog_new_with_backend).
-        // Currently local-only is kept as the default - true:
-        // gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(m_widget), true);
-
-        g_signal_connect (m_widget, "response",
-            G_CALLBACK (gtk_filedialog_response_callback), this);
-
-        SetWildcard(wildCard);
-
-        if ( style & wxFD_SAVE )
-        {
-            if ( !defaultDir.empty() )
-                gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
-                wxConvFileName->cWX2MB(defaultDir));
-
-            gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
-                wxConvFileName->cWX2MB(defaultFileName));
-
-#if GTK_CHECK_VERSION(2,7,3)
-            if ((style & wxFD_OVERWRITE_PROMPT) && !gtk_check_version(2,7,3))
-                gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(m_widget), TRUE);
-#endif
-        }
-        else
-        {
-            if ( !defaultFileName.empty() )
-            {
-                wxString dir;
-                if ( defaultDir.empty() )
-                    dir = ::wxGetCwd();
-                else
-                    dir = defaultDir;
-
-                gtk_file_chooser_set_filename(
-                    GTK_FILE_CHOOSER(m_widget),
-                    wxConvFileName->cWX2MB( wxFileName(dir, defaultFileName).GetFullPath() ) );
-            }
-            else if ( !defaultDir.empty() )
-                gtk_file_chooser_set_current_folder( GTK_FILE_CHOOSER(m_widget),
-                    wxConvFileName->cWX2MB(defaultDir) );
-        }
+    const gchar* ok_btn_stock;
+    if ( style & wxFD_SAVE )
+    {
+        gtk_action = GTK_FILE_CHOOSER_ACTION_SAVE;
+        ok_btn_stock = GTK_STOCK_SAVE;
     }
     else
-        wxGenericFileDialog::Create( parent, message, defaultDir, defaultFileName, wildCard, style, pos );
+    {
+        gtk_action = GTK_FILE_CHOOSER_ACTION_OPEN;
+        ok_btn_stock = GTK_STOCK_OPEN;
+    }
+
+    m_widget = gtk_file_chooser_dialog_new(
+                   wxGTK_CONV(m_message),
+                   gtk_parent,
+                   gtk_action,
+                   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                   ok_btn_stock, GTK_RESPONSE_ACCEPT,
+                   NULL);
+
+    gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
+
+    if ( style & wxFD_MULTIPLE )
+        gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(m_widget), true);
+
+    // gtk_widget_hide_on_delete is used here to avoid that Gtk automatically destroys
+    // the dialog when the user press ESC on the dialog: in that case a second call to
+    // ShowModal() would result in a bunch of Gtk-CRITICAL errors...
+    g_signal_connect (G_OBJECT(m_widget),
+                    "delete_event",
+                    G_CALLBACK (gtk_widget_hide_on_delete),
+                    (gpointer)this);
+
+    // local-only property could be set to false to allow non-local files to be loaded.
+    // In that case get/set_uri(s) should be used instead of get/set_filename(s) everywhere
+    // and the GtkFileChooserDialog should probably also be created with a backend,
+    // e.g "gnome-vfs", "default", ... (gtk_file_chooser_dialog_new_with_backend).
+    // Currently local-only is kept as the default - true:
+    // gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(m_widget), true);
+
+    g_signal_connect (m_widget, "response",
+        G_CALLBACK (gtk_filedialog_response_callback), this);
+
+    SetWildcard(wildCard);
+
+    if ( style & wxFD_SAVE )
+    {
+        if ( !defaultDir.empty() )
+            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
+            wxConvFileName->cWX2MB(defaultDir));
+
+        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
+            wxConvFileName->cWX2MB(defaultFileName));
+
+#if GTK_CHECK_VERSION(2,7,3)
+        if ((style & wxFD_OVERWRITE_PROMPT) && !gtk_check_version(2,7,3))
+            gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(m_widget), TRUE);
+#endif
+    }
+    else // wxFD_OPEN
+    {
+        if ( !defaultFileName.empty() )
+        {
+            wxString dir;
+            if ( defaultDir.empty() )
+                dir = ::wxGetCwd();
+            else
+                dir = defaultDir;
+
+            gtk_file_chooser_set_filename(
+                GTK_FILE_CHOOSER(m_widget),
+                wxConvFileName->cWX2MB( wxFileName(dir, defaultFileName).GetFullPath() ) );
+        }
+        else if ( !defaultDir.empty() )
+        {
+            gtk_file_chooser_set_current_folder( GTK_FILE_CHOOSER(m_widget),
+                wxConvFileName->cWX2MB(defaultDir) );
+        }
+    }
+
+#if GTK_CHECK_VERSION(2,4,0)
+    if ( style & wxFD_PREVIEW )
+    {
+        GtkWidget *previewImage = gtk_image_new();
+
+        gtk_file_chooser_set_preview_widget(GTK_FILE_CHOOSER(m_widget),
+                                            previewImage);
+        g_signal_connect(m_widget, "update-preview",
+                         G_CALLBACK(gtk_filedialog_update_preview_callback),
+                         previewImage);
+    }
+#endif // GTK+ 2.4+
 }
 
 void wxFileDialog::OnFakeOk( wxCommandEvent &event )
