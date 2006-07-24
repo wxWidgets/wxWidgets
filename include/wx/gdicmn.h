@@ -229,6 +229,9 @@ public:
     void DecTo(const wxSize& sz)
         { if ( sz.x < x ) x = sz.x; if ( sz.y < y ) y = sz.y; }
 
+    void Scale(float xscale, float yscale)
+        { x = (int)(x*xscale); y = (int)(y*yscale); }
+
     // accessors
     void Set(int xx, int yy) { x = xx; y = yy; }
     void SetWidth(int w) { x = w; }

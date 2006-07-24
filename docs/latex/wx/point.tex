@@ -1,3 +1,13 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        point.tex
+%% Purpose:     wxPoint documentation
+%% Author:      wxTeam
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxTeam
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxPoint}}\label{wxpoint}
 
 A {\bf wxPoint} is a useful data structure for graphics operations.
@@ -39,16 +49,35 @@ x member.
 
 y member.
 
-\membersection{wxPoint::operator $==$}\label{wxpointequal}
+\membersection{Operators}\label{wxpointoperators}
+
+\func{void}{operator $=$}{\param{const wxPoint\& }{pt}}
+
+Assignment operator.
+
 
 \func{bool}{operator $==$}{\param{const wxPoint\& }{pt}}
 
-Equality operator: returns \true if two points are the same.
-
-
-\membersection{wxPoint::operator $!=$}\label{wxpointnotequal}
-
 \func{bool}{operator $!=$}{\param{const wxPoint\& }{pt}}
 
-Inequality operator: returns \true if two points are different.
+\func{wxPoint}{operator $+$}{\param{const wxPoint\& }{pt}}
 
+\func{wxPoint}{operator $-$}{\param{const wxPoint\& }{pt}}
+
+\func{wxPoint\&}{operator $+=$}{\param{const wxPoint\& }{pt}}
+
+\func{wxPoint\&}{operator $-=$}{\param{const wxPoint\& }{pt}}
+
+Operators for comparison, sum and subtraction between \helpref{wxPoint}{wxpoint} objects.
+
+
+\func{wxPoint}{operator $+$}{\param{const wxSize\& }{sz}}
+
+\func{wxPoint}{operator $-$}{\param{const wxSize\& }{sz}}
+
+\func{wxPoint\&}{operator $+=$}{\param{const wxSize\& }{sz}}
+
+\func{wxPoint\&}{operator $-=$}{\param{const wxSize\& }{sz}}
+ 
+Operators for sum and subtraction between a \helpref{wxPoint}{wxpoint} object and a
+\helpref{wxSize}{wxsize} object.
