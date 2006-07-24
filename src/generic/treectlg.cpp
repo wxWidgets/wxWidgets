@@ -1962,7 +1962,7 @@ void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
 #if defined( __WXMSW__ ) || defined(__WXMAC__)
         Update();
 #else
-        wxYieldIfNeeded();
+        DoDirtyProcessing();
 #endif
     wxGenericTreeItem *gitem = (wxGenericTreeItem*) item.m_pItem;
 
@@ -2906,7 +2906,7 @@ wxTextCtrl *wxGenericTreeCtrl::EditLabel(const wxTreeItemId& item,
 #if defined( __WXMSW__ ) || defined(__WXMAC__)
         Update();
 #else
-        wxYieldIfNeeded();
+        DoDirtyProcessing();
 #endif
 
     // TODO: use textCtrlClass here to create the control of correct class
@@ -3293,17 +3293,10 @@ void wxGenericTreeCtrl::OnInternalIdle()
             SelectItem(GetRootItem());
     }
 
-    /* after all changes have been done to the tree control,
-     * we actually redraw the tree when everything is over */
-
-    if (!m_dirty) return;
-    if (m_freezeCount) return;
-
-    m_dirty = false;
-
-    CalculatePositions();
-    Refresh();
-    AdjustMyScrollbars();
+    // after all changes have been done to the tree control,
+    // actually redraw the tree when everything is over
+    if (m_dirty)
+        DoDirtyProcessing();
 }
 
 void wxGenericTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
@@ -3549,5 +3542,17 @@ void wxGenericTreeCtrl::SetItemSelectedImage(const wxTreeItemId& item, int image
 }
 
 #endif // WXWIN_COMPATIBILITY_2_4
+
+void wxGenericTreeCtrl::DoDirtyProcessing()
+{
+    if (m_freezeCount)
+        return;
+
+    m_dirty = false;
+
+    CalculatePositions();
+    Refresh();
+    AdjustMyScrollbars();
+}
 
 #endif // wxUSE_TREECTRL

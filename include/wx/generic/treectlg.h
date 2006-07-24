@@ -341,6 +341,8 @@ protected:
     void UnselectAllChildren( wxGenericTreeItem *item );
     void ChildrenClosing(wxGenericTreeItem* item);
 
+    void DoDirtyProcessing();
+
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxGenericTreeCtrl)
