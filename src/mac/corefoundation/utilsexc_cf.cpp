@@ -91,7 +91,7 @@ void* wxProcessTerminationThread::Entry()
             break;
         }
     }
-    
+
     return NULL;
 }
 
@@ -100,9 +100,9 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
     if (pid < 1)
         return -1;
 
-    wxProcessTerminationEventHandler* handler = new wxProcessTerminationEventHandler(proc_data);    
+    wxProcessTerminationEventHandler* handler = new wxProcessTerminationEventHandler(proc_data);
     wxProcessTerminationThread* thread = new wxProcessTerminationThread(proc_data, handler);
-    
+
     if (thread->Create() != wxTHREAD_NO_ERROR)
     {
         wxLogDebug(wxT("Could not create termination detection thread."));
@@ -112,7 +112,7 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
     }
 
     thread->Run();
-    
+
     return 0;
 }
 
@@ -201,7 +201,7 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
         wxLogDebug(wxT("Couldn't create runloopsource"));
         return -1;
     }
-    
+
     CFRelease(CFMachPortForProcess);
 
     CFRunLoopAddSource(CFRunLoopGetCurrent(),runloopsource,kCFRunLoopDefaultMode);
@@ -210,14 +210,17 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
     return 0;
 }
 
-#endif
-  // USE_POLLING
+#endif // USE_POLLING
 
-// NOTE: This doens't really belong here but this was a handy file to
+// NOTE: This doesn't really belong here but this was a handy file to
 // put it in because it's already compiled for wxCocoa and wxMac GUI lib.
+#if wxUSE_GUI
+
 static wxStandardPathsCF gs_stdPaths;
 wxStandardPathsBase& wxGUIAppTraits::GetStandardPaths()
 {
     return gs_stdPaths;
 }
+
+#endif // wxUSE_GUI
 
