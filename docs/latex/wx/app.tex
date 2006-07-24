@@ -74,6 +74,18 @@ implementation returns a new wxLogGui class.
 \helpref{wxLog}{wxlog}
 
 
+\membersection{wxApp::CreateTraits}\label{wxappcreatetraits}
+
+\func{virtual wxAppTraits *}{CreateTraits}{\void}
+
+Creates the \helpref{wxAppTraits}{wxapptraits} object when \helpref{GetTraits}{wxappgettraits}
+needs it for the first time.
+
+\wxheading{See also}
+
+\helpref{wxAppTraits}{wxapptraits}
+
+
 \membersection{wxApp::Dispatch}\label{wxappdispatch}
 
 \func{virtual void}{Dispatch}{\void}
@@ -176,6 +188,17 @@ function will find the first top-level window (frame or dialog) and return that.
 \wxheading{See also}
 
 \helpref{SetTopWindow}{wxappsettopwindow}
+
+
+
+\membersection{wxApp::GetTraits}\label{wxappgettraits}
+
+\func{wxAppTraits *}{GetTraits}{\void}
+
+Returns a pointer to the \helpref{wxAppTraits}{wxapptraits} object for the application.
+If you want to customize the \helpref{wxAppTraits}{wxapptraits} object, you must override the
+\helpref{CreateTraits}{wxappcreatetraits} function.
+
 
 
 \membersection{wxApp::GetUseBestVisual}\label{wxappgetusebestvisual}

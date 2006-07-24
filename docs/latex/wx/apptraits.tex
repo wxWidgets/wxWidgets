@@ -1,0 +1,109 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        apptraits.tex
+%% Purpose:     wxAppTraits
+%% Author:      Francesco Montorsi
+%% Modified by:
+%% Created:     5-7-2006
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxAppTraits}}\label{wxapptraits}
+
+The {\bf wxAppTraits} class defines various configurable aspects of a \helpref{wxApp}{wxapp}.
+You can access it using \helpref{wxApp::GetTraits}{wxappgettraits} function and you can
+create your own \helpref{wxAppTraits}{wxapptraits} overriding the
+\helpref{wxApp::CreateTraits}{wxappcreatetraits} function.
+
+By default, wxWidgets creates a {\tt wxConsoleAppTraits} object for console applications
+(i.e. those applications linked against wxBase library only - see the
+\helpref{Libraries list}{librarieslist} page) and a {\tt wxGUIAppTraits} object for GUI
+applications.
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/apptrait.h>
+
+\wxheading{See also}
+
+\helpref{wxApp overview}{wxappoverview}, \helpref{wxApp}{wxapp}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxAppTraits::GetToolkitInfo}\label{wxapptraitsgettoolkitinfo}
+
+\func{virtual wxToolkitInfo \&}{GetToolkitInfo}{\void}
+
+Returns information about which toolkit is running. See \helpref{wxToolkitInfo}{wxtoolkitinfo}
+for more details.
+
+
+\membersection{wxAppTraits::HasStderr}\label{wxapptraitshasstderr}
+
+\func{virtual bool}{HasStderr}{\void}
+
+Returns \true if {\tt fprintf(stderr)} goes somewhere, \false otherwise.
+
+
+
+\membersection{wxAppTraits::ShowAssertDialog}\label{wxapptraitsshowassertdialog}
+
+\func{virtual bool}{ShowAssertDialog}{\param{const wxString \&}{ msg}}
+
+Shows the assert dialog with the specified message in GUI mode or just prints
+the string to stderr in console mode.
+
+Returns \true to suppress subsequent asserts, \false to continue as before.
+
+
+
+\membersection{wxAppTraits::GetStandardPaths}\label{wxapptraitsgetstandardpaths}
+
+\func{virtual wxStandardPaths \&}{GetStandardPaths}{\void}
+
+Returns the wxStandardPaths object for the application.
+It's normally the same for wxBase and wxGUI except in the case of wxMac and wxCocoa.
+
+
+
+\membersection{wxAppTraits::CreateRenderer}\label{wxapptraitscreaterenderer}
+
+\func{virtual wxRendererNative *}{CreateRenderer}{\void}
+
+Returns the renderer to use for drawing the generic controls (return value may be \NULL
+in which case the default renderer for the current platform is used);
+this is used in GUI mode only and always returns \NULL in console.
+
+NOTE: returned pointer will be deleted by the caller.
+
+
+
+\membersection{wxAppTraits::CreateLogTarget}\label{wxapptraitscreatelogtarget}
+
+\func{virtual wxLog *}{CreateLogTarget}{\void}
+
+Creates the default log target for the application.
+
+
+
+\membersection{wxAppTraits::CreateMessageOutput}\label{wxapptraitscreatemessageoutput}
+
+\func{virtual wxMessageOutput *}{CreateMessageOutput}{\void}
+
+Creates the global object used for printing out messages.
+
+
+
+\membersection{wxAppTraits::CreateFontMapper}\label{wxapptraitscreatefontmapper}
+
+\func{virtual wxFontMapper *}{CreateFontMapper}{\void}
+
+Creates the global font mapper object used for encodings/charset mapping.
+
+
