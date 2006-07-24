@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/generic/mdig.h
+// Name:        wx/generic/tabmdi.h
 // Purpose:     Generic MDI (Multiple Document Interface) classes
 // Author:      Hans Van Leemputten
 // Modified by: Benjamin I. Williams / Kirix Corporation
@@ -20,9 +20,6 @@
 #include "wx/panel.h"
 #include "wx/notebook.h"
 #include "wx/aui/auibook.h"
-
-extern WXDLLEXPORT_DATA(const wxChar) wxFrameNameStr[];
-extern WXDLLEXPORT_DATA(const wxChar) wxStatusLineNameStr[];
 
 //-----------------------------------------------------------------------------
 // classes
@@ -49,7 +46,7 @@ public:
                         const wxString& name = wxFrameNameStr);
 
     ~wxTabMDIParentFrame();
-    
+
     bool Create(wxWindow *parent,
                 wxWindowID winid,
                 const wxString& title,
@@ -84,7 +81,7 @@ public:
 protected:
     wxTabMDIClientWindow   *m_pClientWindow;
     wxTabMDIChildFrame     *m_pActiveChild;
-    
+
 #if wxUSE_MENUS
     wxMenu              *m_pWindowMenu;
     wxMenuBar           *m_pMyMenuBar;
@@ -142,7 +139,7 @@ public:
 
     virtual void Activate();
     virtual bool Destroy();
-    
+
 #if wxUSE_STATUSBAR
     // no status bars
     virtual wxStatusBar* CreateStatusBar(int WXUNUSED(number) = 1,
@@ -190,7 +187,7 @@ public:
     void OnMenuHighlight(wxMenuEvent& evt);
     void OnActivate(wxActivateEvent& evt);
     void OnCloseWindow(wxCloseEvent& evt);
-    
+
     void SetMDIParentFrame(wxTabMDIParentFrame* parent);
     wxTabMDIParentFrame* GetMDIParentFrame() const;
 
@@ -235,7 +232,7 @@ public:
     wxTabMDIClientWindow();
     wxTabMDIClientWindow(wxTabMDIParentFrame *parent, long style = 0);
     ~wxTabMDIClientWindow();
-    
+
     virtual bool CreateClient(wxTabMDIParentFrame *parent,
                               long style = wxVSCROLL | wxHSCROLL);
 
@@ -243,7 +240,7 @@ public:
 
 protected:
 
-    void PageChanged(int old_selection, int new_selection);    
+    void PageChanged(int old_selection, int new_selection);
     void OnPageChanged(wxAuiNotebookEvent& event);
     void OnSize(wxSizeEvent& evt);
 

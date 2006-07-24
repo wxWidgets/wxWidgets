@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/generic/mdig.cpp
+// Name:        src/generic/tabmdi.cpp
 // Purpose:     Generic MDI (Multiple Document Interface) classes
 // Author:      Hans Van Leemputten
 // Modified by: Benjamin I. Williams / Kirix Corporation
@@ -26,7 +26,6 @@
 
 #if wxUSE_MDI
 
-#include "wx/settings.h"
 #include "wx/aui/tabmdi.h"
 
 #ifndef WX_PRECOMP
@@ -34,6 +33,7 @@
     #include "wx/menu.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/settings.h"
 #endif //WX_PRECOMP
 
 #include "wx/stockitem.h"
@@ -136,10 +136,10 @@ void wxTabMDIParentFrame::SetMenuBar(wxMenuBar *pMenuBar)
 {
     // Remove the Window menu from the old menu bar
     RemoveWindowMenu(GetMenuBar());
-    
+
     // Add the Window menu to the new menu bar.
     AddWindowMenu(pMenuBar);
-    
+
     wxFrame::SetMenuBar(pMenuBar);
     m_pMyMenuBar = GetMenuBar();
 }
@@ -230,7 +230,7 @@ wxTabMDIClientWindow *wxTabMDIParentFrame::OnCreateClient()
 
 void wxTabMDIParentFrame::ActivateNext()
 {
-    if (m_pClientWindow && m_pClientWindow->GetSelection() != -1)
+    if (m_pClientWindow && m_pClientWindow->GetSelection() != wxNOT_FOUND)
     {
         size_t active = m_pClientWindow->GetSelection() + 1;
         if (active >= m_pClientWindow->GetPageCount())
@@ -242,7 +242,7 @@ void wxTabMDIParentFrame::ActivateNext()
 
 void wxTabMDIParentFrame::ActivatePrevious()
 {
-    if (m_pClientWindow && m_pClientWindow->GetSelection() != -1)
+    if (m_pClientWindow && m_pClientWindow->GetSelection() != wxNOT_FOUND)
     {
         int active = m_pClientWindow->GetSelection() - 1;
         if (active < 0)
@@ -395,10 +395,10 @@ bool wxTabMDIChildFrame::Destroy()
 {
     wxTabMDIParentFrame* pParentFrame = GetMDIParentFrame();
     wxASSERT_MSG(pParentFrame, wxT("Missing MDI Parent Frame"));
-    
+
     wxTabMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
     wxASSERT_MSG(pClientWindow, wxT("Missing MDI Client Window"));
-    
+
     bool bActive = false;
     if (pParentFrame->GetActiveChild() == this)
     {
@@ -406,21 +406,21 @@ bool wxTabMDIChildFrame::Destroy()
         pParentFrame->SetChildMenuBar(NULL);
         bActive = true;
     }
-    
+
     size_t pos, page_count = pClientWindow->GetPageCount();
     for (pos = 0; pos < page_count; pos++)
     {
         if (pClientWindow->GetPage(pos) == this)
             return pClientWindow->DeletePage(pos);
     }
-    
+
     return false;
 }
 
 /*
     wxTabMDIParentFrame* pParentFrame = GetMDIParentFrame();
     wxASSERT_MSG(pParentFrame, wxT("Missing MDI Parent Frame"));
-    
+
     bool bActive = false;
     if (pParentFrame->GetActiveChild() == this)
     {
@@ -461,7 +461,7 @@ bool wxTabMDIChildFrame::Destroy()
     // customary with frame windows
     if (!wxPendingDelete.Member(this))
         wxPendingDelete.Append(this);
-        
+
     return true;
 */
 
@@ -623,7 +623,7 @@ void wxTabMDIChildFrame::ApplyMDIChildFrameRect()
 IMPLEMENT_DYNAMIC_CLASS(wxTabMDIClientWindow, wxAuiMultiNotebook)
 
 BEGIN_EVENT_TABLE(wxTabMDIClientWindow, wxAuiMultiNotebook)
-    EVT_AUINOTEBOOK_PAGE_CHANGED(-1, wxTabMDIClientWindow::OnPageChanged)
+    EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, wxTabMDIClientWindow::OnPageChanged)
     EVT_SIZE(wxTabMDIClientWindow::OnSize)
 END_EVENT_TABLE()
 
@@ -646,19 +646,19 @@ bool wxTabMDIClientWindow::CreateClient(wxTabMDIParentFrame* parent, long style)
     SetWindowStyleFlag(style);
 
     if (!wxAuiMultiNotebook::Create(parent,
-                                    -1,
+                                    wxID_ANY,
                                     wxPoint(0,0),
                                     wxSize(100, 100),
                                     wxNO_BORDER))
     {
         return false;
     }
-    
+
     wxColour bkcolour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
     SetBackgroundColour(bkcolour);
-    
+
     m_mgr.GetArtProvider()->SetColour(wxAUI_ART_BACKGROUND_COLOUR, bkcolour);
-    
+
     return true;
 }
 
@@ -672,7 +672,7 @@ void wxTabMDIClientWindow::PageChanged(int old_selection, int new_selection)
     // don't do anything if the page doesn't actually change
     if (old_selection == new_selection)
         return;
-        
+
     // don't do anything if the new page is already active
     if (new_selection != -1)
     {
@@ -686,7 +686,7 @@ void wxTabMDIClientWindow::PageChanged(int old_selection, int new_selection)
     {
         wxTabMDIChildFrame* old_child = (wxTabMDIChildFrame*)GetPage(old_selection);
         wxASSERT_MSG(old_child, wxT("wxTabMDIClientWindow::PageChanged - null page pointer"));
-        
+
         wxActivateEvent event(wxEVT_ACTIVATE, false, old_child->GetId());
         event.SetEventObject(old_child);
         old_child->GetEventHandler()->ProcessEvent(event);
@@ -697,7 +697,7 @@ void wxTabMDIClientWindow::PageChanged(int old_selection, int new_selection)
     {
         wxTabMDIChildFrame* active_child = (wxTabMDIChildFrame*)GetPage(new_selection);
         wxASSERT_MSG(active_child, wxT("wxTabMDIClientWindow::PageChanged - null page pointer"));
-        
+
         wxActivateEvent event(wxEVT_ACTIVATE, true, active_child->GetId());
         event.SetEventObject(active_child);
         active_child->GetEventHandler()->ProcessEvent(event);
@@ -717,7 +717,7 @@ void wxTabMDIClientWindow::OnPageChanged(wxAuiNotebookEvent& evt)
 }
 
 void wxTabMDIClientWindow::OnSize(wxSizeEvent& evt)
-{  
+{
     wxAuiMultiNotebook::OnSize(evt);
 
     for (size_t pos = 0; pos < GetPageCount(); pos++)
