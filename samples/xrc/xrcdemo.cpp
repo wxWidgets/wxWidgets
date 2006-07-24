@@ -31,16 +31,14 @@
 #include "xrcdemo.h"
 
 //-----------------------------------------------------------------------------
-// Remaining headers: Needed wx headers, then wx/contrib headers, then application headers
+// Remaining headers: Needed wx headers, then wx/contrib headers, then app one
 //-----------------------------------------------------------------------------
 
 #include "wx/image.h"               // wxImage
 
-//-----------------------------------------------------------------------------
+#include "wx/xrc/xmlres.h"          // XRC XML resources
 
-#include "wx/xrc/xmlres.h"          // XRC XML resouces
-
-//-----------------------------------------------------------------------------
+#include "wx/cshelp.h"              // wxSimpleHelpProvider for helptext
 
 #include "myframe.h"
 
@@ -101,6 +99,11 @@ bool MyApp::OnInit()
     wxXmlResource::Get()->Load(wxT("rc/platform.xrc"));
     // Variable expansion example
     wxXmlResource::Get()->Load(wxT("rc/variable.xrc"));
+
+#if wxUSE_HELP
+    // Use the simple help provider to show the context-sensitive help
+    wxHelpProvider::Set( new wxSimpleHelpProvider );
+#endif // wxUSE_HELP
 
     // Make an instance of your derived frame. Passing NULL (the default value
     // of MyFrame's constructor is NULL) as the frame doesn't have a parent
