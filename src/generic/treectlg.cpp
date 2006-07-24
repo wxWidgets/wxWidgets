@@ -3437,7 +3437,7 @@ void wxGenericTreeCtrl::RefreshLine( wxGenericTreeItem *item )
 
 void wxGenericTreeCtrl::RefreshSelected()
 {
-    if (m_freezeCount || m_freezeCount)
+    if (m_freezeCount)
         return;
 
     // TODO: this is awfully inefficient, we should keep the list of all
@@ -3448,7 +3448,7 @@ void wxGenericTreeCtrl::RefreshSelected()
 
 void wxGenericTreeCtrl::RefreshSelectedUnder(wxGenericTreeItem *item)
 {
-    if (m_freezeCount || m_freezeCount)
+    if (m_freezeCount)
         return;
 
     if ( item->IsSelected() )
