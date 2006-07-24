@@ -41,7 +41,8 @@ wxFloatingPane::wxFloatingPane(wxWindow* parent,
                 : wxFloatingPaneBaseClass(parent, id, wxEmptyString,
                         pane.floating_pos, pane.floating_size,
                         wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
-                        wxCLOSE_BOX | wxFRAME_NO_TASKBAR |
+                        (pane.HasCloseButton()?wxCLOSE_BOX:0) |
+                        wxFRAME_NO_TASKBAR |
                         wxFRAME_FLOAT_ON_PARENT | wxCLIP_CHILDREN |
                         (pane.IsFixed()?0:wxRESIZE_BORDER)
                         )
