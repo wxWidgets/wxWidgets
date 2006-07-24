@@ -2398,7 +2398,8 @@ void wxAuiNotebook::InitNotebook(long style)
     m_dummy_wnd->Show(false);
 
     m_mgr.SetManagedWindow(this);
-    m_mgr.SetFlags(wxAUI_MGR_DEFAULT | (1 << 28) /*wxAUI_MGR_NO_DOCK_SIZE_LIMIT*/);
+    m_mgr.SetFlags(wxAUI_MGR_DEFAULT);
+    m_mgr.SetDockSizeConstraint(1.0, 1.0); // no dock size constraint
 
     m_mgr.AddPane(m_dummy_wnd,
               wxAuiPaneInfo().Name(wxT("dummy")).Bottom().CaptionVisible(false).Show(false));

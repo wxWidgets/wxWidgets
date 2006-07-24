@@ -69,11 +69,6 @@ DEFINE_EVENT_TYPE(wxEVT_AUI_FIND_MANAGER)
 IMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent)
 IMPLEMENT_CLASS(wxAuiManager, wxEvtHandler)
 
-// private manager flags (not yet on the public API)
-enum wxAuiPrivateManagerOption
-{
-    wxAUI_MGR_NO_DOCK_SIZE_LIMIT = 1 << 28
-};
 
 
 const int auiToolBarLayer = 10;
@@ -504,6 +499,8 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
     m_skipping = false;
     m_has_maximized = false;
     m_frame = NULL;
+    m_dock_constraint_x = 0.3;
+    m_dock_constraint_y = 0.3;
     
     if (managed_wnd)
     {
@@ -1972,17 +1969,22 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
                 }
             }
 
-            if (!(m_flags & wxAUI_MGR_NO_DOCK_SIZE_LIMIT))
-            {
-                // new dock's size may not be more than 1/3 of the frame size
-                if (dock.IsHorizontal())
-                    size = wxMin(size, cli_size.y/3);
-                     else
-                    size = wxMin(size, cli_size.x/3);
-            }
+
+            // new dock's size may not be more than the dock constraint
+            // parameter specifies.  See SetDockSizeConstraint()
             
+            int max_dock_x_size = (int)(m_dock_constraint_x * ((double)cli_size.x));
+            int max_dock_y_size = (int)(m_dock_constraint_y * ((double)cli_size.y));
+            
+            if (dock.IsHorizontal())
+                size = wxMin(size, max_dock_y_size);
+                 else
+                size = wxMin(size, max_dock_x_size);
+
+            // absolute minimum size for a dock is 10 pixels
             if (size < 10)
                 size = 10;
+                
             dock.size = size;
         }
 
@@ -2213,6 +2215,27 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
     container->Add(cont, 1, wxEXPAND);
     return container;
 }
+
+
+// SetDockSizeConstraint() allows the dock constraints to be set.  For example,
+// specifying values of 0.5, 0.5 will mean that upon dock creation, a dock may
+// not be larger than half of the window's size
+
+void wxAuiManager::SetDockSizeConstraint(double width_pct, double height_pct)
+{
+    m_dock_constraint_x = wxMax(0.0, wxMin(1.0, width_pct));
+    m_dock_constraint_y = wxMax(0.0, wxMin(1.0, height_pct));
+}
+
+void wxAuiManager::GetDockSizeConstraint(double* width_pct, double* height_pct) const
+{
+    if (width_pct)
+        *width_pct = m_dock_constraint_x;
+    
+    if (height_pct)
+        *height_pct = m_dock_constraint_y;
+}
+
 
 
 // Update() updates the layout.  Whenever changes are made to

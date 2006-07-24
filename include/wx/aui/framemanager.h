@@ -466,20 +466,20 @@ public:
 
     bool DetachPane(wxWindow* window);
     
+    void Update();
+
+    wxString SavePaneInfo(wxAuiPaneInfo& pane);
+    void LoadPaneInfo(wxString pane_part, wxAuiPaneInfo &pane);
+    wxString SavePerspective();
+    bool LoadPerspective(const wxString& perspective, bool update = true);
+
+    void SetDockSizeConstraint(double width_pct, double height_pct);
+    void GetDockSizeConstraint(double* width_pct, double* height_pct) const;
+    
     void ClosePane(wxAuiPaneInfo& pane_info);
     void MaximizePane(wxAuiPaneInfo& pane_info);
     void RestorePane(wxAuiPaneInfo& pane_info);
     void RestoreMaximizedPane();
-
-    wxString SavePaneInfo(wxAuiPaneInfo& pane);
-    void LoadPaneInfo(wxString pane_part, wxAuiPaneInfo &pane);
-
-    wxString SavePerspective();
-
-    bool LoadPerspective(const wxString& perspective,
-                 bool update = true);
-
-    void Update();
 
 public:
 
@@ -609,12 +609,15 @@ protected:
     wxAuiDockUIPart* m_action_part; // ptr to the part the action happened to
     wxWindow* m_action_window;   // action frame or window (NULL if none)
     wxRect m_action_hintrect;    // hint rectangle for the action
-    bool m_skipping;
-    bool m_has_maximized;
     wxRect m_last_rect;
     wxAuiDockUIPart* m_hover_button;// button uipart being hovered over
     wxRect m_last_hint;          // last hint rectangle
     wxPoint m_last_mouse_move;   // last mouse move position (see OnMotion)
+    bool m_skipping;
+    bool m_has_maximized;
+
+    double m_dock_constraint_x;  // 0.0 .. 1.0; max pct of window width a dock can consume
+    double m_dock_constraint_y;  // 0.0 .. 1.0; max pct of window height a dock can consume
 
     wxFrame* m_hint_wnd;         // transparent hint window, if supported by platform
     wxTimer m_hint_fadetimer;    // transparent fade timer
