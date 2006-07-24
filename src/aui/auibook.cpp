@@ -1126,8 +1126,8 @@ bool wxAuiMultiNotebook::SetPageText(size_t page_idx, const wxString& text)
         wxAuiNotebookPage& info = ctrl->GetPage(ctrl_idx);
         info.caption = text;
         ctrl->Refresh();
+        ctrl->Update();
     }
-
 
     return true;
 }
