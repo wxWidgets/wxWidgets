@@ -4409,7 +4409,7 @@ WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC, WXHWND hWndToPaint)
     return 0;
 }
 
-bool wxWindowMSW::HandlePrintClient(WXHDC hDC)
+bool wxWindowMSW::HandlePrintClient(WXHDC WXUNUSED(hDC))
 {
     // TODO: handle wxBG_STYLE_CUSTOM and/or wxBG_STYLE_COLOUR here so when
     // DrawParentThemeBackground() from uxtheme.dll is called we don't get

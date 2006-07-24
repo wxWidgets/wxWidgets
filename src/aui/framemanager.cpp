@@ -68,8 +68,8 @@ class wxPseudoTransparentFrame : public wxFrame
 {
 public:
     wxPseudoTransparentFrame(wxWindow* parent = NULL,
-                wxWindowID id = -1,
-                const wxString& title = wxT(""),
+                wxWindowID id = wxID_ANY,
+                const wxString& title = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
@@ -103,7 +103,7 @@ public:
                 m_MaxHeight=h*2;
                 m_Amount = alpha;
                 m_Region.Clear();
-//				m_Region.Union(0, 0, 1, m_MaxWidth);
+//                m_Region.Union(0, 0, 1, m_MaxWidth);
                 if (m_Amount)
                 {
                     for (int y=0; y<m_MaxHeight; y++)
@@ -121,15 +121,15 @@ public:
         return true;
     }
 
-    void OnPaint(wxPaintEvent & event)
+    void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         wxPaintDC dc(this);
-        
+
         dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
         dc.SetPen(*wxTRANSPARENT_PEN);
-        
+
         wxRegionIterator upd(GetUpdateRegion()); // get the update rect list
-        
+
         while (upd)
         {
             wxRect rect(upd.GetRect());
@@ -598,22 +598,22 @@ void wxFrameManager::SetManagedWindow(wxWindow* frame)
 
     // Make a window to use for a transparent hint
 #if defined(__WXMSW__) || defined(__WXGTK__)
-    m_hint_wnd = new wxFrame(m_frame, -1, wxEmptyString, wxDefaultPosition, wxSize(1,1),
+    m_hint_wnd = new wxFrame(m_frame, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(1,1),
                              wxFRAME_TOOL_WINDOW |
                              wxFRAME_FLOAT_ON_PARENT |
                              wxFRAME_NO_TASKBAR |
                              wxNO_BORDER);
 
     m_hint_wnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
-            
+
 #elif defined(__WXMAC__)
     // Using a miniframe with float and tool styles keeps the parent
     // frame activated and highlighted as such...
-    m_hint_wnd = new wxMiniFrame(m_frame, -1, wxEmptyString, wxDefaultPosition, wxSize(1,1),
+    m_hint_wnd = new wxMiniFrame(m_frame, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(1,1),
                                  wxFRAME_FLOAT_ON_PARENT
                                  | wxFRAME_TOOL_WINDOW
                                  | wxCAPTION );
-    
+
     // Can't set the bg colour of a Frame in wxMac
     wxPanel* p = new wxPanel(m_hint_wnd);
 
@@ -640,14 +640,14 @@ void wxFrameManager::SetManagedWindow(wxWindow* frame)
         m_hint_wnd = NULL;
 
         // If we can convert it to a PseudoTransparent window, do so
-        m_hint_wnd = new wxPseudoTransparentFrame (m_frame, -1, wxEmptyString, wxDefaultPosition, wxSize(1,1),
+        m_hint_wnd = new wxPseudoTransparentFrame (m_frame, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(1,1),
                                                 wxFRAME_TOOL_WINDOW |
                                                 wxFRAME_FLOAT_ON_PARENT |
                                                 wxFRAME_NO_TASKBAR |
                                                 wxNO_BORDER);
-        
+
         m_hint_fademax = 128;
-    }    
+    }
 }
 
 
@@ -795,11 +795,11 @@ bool wxFrameManager::AddPane(wxWindow* window,
 {
     if (!AddPane(window, pane_info))
         return false;
-    
+
     wxPaneInfo& pane = GetPane(window);
-    
+
     DoDrop(m_docks, m_panes, pane, drop_pos, wxPoint(0,0));
-    
+
     return true;
 }
 
@@ -884,7 +884,7 @@ bool wxFrameManager::DetachPane(wxWindow* window)
                 p.frame->Destroy();
                 p.frame = NULL;
             }
-            
+
             // make sure there are no references to this pane in our uiparts,
             // just in case the caller doesn't call Update() immediately after
             // the DetachPane() call.  This prevets obscure crashes which would
@@ -901,7 +901,7 @@ bool wxFrameManager::DetachPane(wxWindow* window)
                     continue;
                 }
             }
-            
+
             m_panes.RemoveAt(i);
             return true;
         }
@@ -2634,7 +2634,7 @@ void wxFrameManager::ShowHint(const wxRect& rect)
 #endif
         m_hint_wnd->SetSize(rect);
         m_hint_wnd->Raise();
-        
+
 
         if (m_hint_fadeamt != m_hint_fademax) //  Only fade if we need to
         {
@@ -2646,7 +2646,7 @@ void wxFrameManager::ShowHint(const wxRect& rect)
 
     else  // Not using a transparent hint window...
     {
-        
+
         if (m_last_hint != rect)
         {
             // remove the last hint rectangle
@@ -2909,7 +2909,7 @@ void wxFrameManager::OnFloatingPaneMoved(wxWindow* wnd)
         // do the drop calculation
         DoDrop(m_docks, m_panes, pane, client_pt, action_offset);
     }
-    
+
     // if the pane is still floating, update it's floating
     // position (that we store)
     if (pane.IsFloating())
@@ -2987,7 +2987,7 @@ void wxFrameManager::OnFloatingPaneActivated(wxWindow* wnd)
 void wxFrameManager::OnRender(wxFrameManagerEvent& evt)
 {
     wxDC* dc = evt.GetDC();
-    
+
 #ifdef __WXMAC__
     dc->Clear() ;
 #endif
@@ -3674,7 +3674,7 @@ void wxFrameManager::OnChildFocus(wxChildFocusEvent& event)
             m_frame->Refresh();
         }
     }
-    
+
     event.Skip();
 }
 
