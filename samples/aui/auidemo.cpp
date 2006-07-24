@@ -748,8 +748,8 @@ MyFrame::MyFrame(wxWindow* parent,
                   Left());
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
-                  Name(wxT("test5")).Caption(wxT("Pane Caption")).
-                  Right());
+                  Name(wxT("test5")).Caption(wxT("No Close Button")).
+                  Right().CloseButton(false));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxPaneInfo().
                   Name(wxT("test6")).Caption(wxT("Client Size Reporter")).
