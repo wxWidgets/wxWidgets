@@ -311,6 +311,16 @@ logical drawing operations such as XOR, but there work in progress to
 provide other ways to do the same sort of thing that will work with
 Quartz and also on the other platforms.
 
+The first parts of a new 2D drawing API has been added with the
+wx.GraphicsPath and wx.GraphicsContext classes.  They wrap GDI+ on
+Windows, Cairo on wxGTK and CoreGraphics on OS X, and allow path-based
+drawing with alpha-blending and anti-aliasing, and use a floating
+point cooridnant system.  Currently they can only target drawing to
+windows, but other wx.DC backends are forthcoming.  The APIs may
+evolve a bit more before they are finalaized with the 2.8 release, but
+there is enough there now to get a good feel for how things will work.
+There is also a transitional wx.GCDC class that provides the wx.DC API
+on top of wx.GraphicsContext.  Docs and a demo are still MIA.
 
 
 
