@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/spinctrl.cpp
+// Name:        src/msw/spinctrl.cpp
 // Purpose:     wxSpinCtrl class implementation for Win32
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -24,13 +24,15 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/wx.h"
-#endif
-
 #if wxUSE_SPINCTRL
 
 #include "wx/spinctrl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/event.h"
+    #include "wx/textctrl.h"
+#endif
+
 #include "wx/msw/private.h"
 #include "wx/msw/wrapcctl.h"
 
@@ -266,7 +268,7 @@ void wxSpinCtrl::OnChar(wxKeyEvent& event)
 void wxSpinCtrl::OnKillFocus(wxFocusEvent& event)
 {
     // ensure that the value is shown correctly
-    SetValue(GetValue()) ; 
+    SetValue(GetValue()) ;
     event.Skip();
 }
 
@@ -443,7 +445,7 @@ void  wxSpinCtrl::SetValue(int val)
         // text control is currently empty, the spin button seems to be happy
         // to leave it like this, while we really want to always show the
         // current value in the control, so do it manually
-        ::SetWindowText(GetBuddyHwnd(), wxString::Format(_T("%ld"), val));
+        ::SetWindowText(GetBuddyHwnd(), wxString::Format(_T("%d"), val));
     }
 }
 
@@ -622,4 +624,3 @@ void wxSpinCtrl::DoGetPosition(int *x, int *y) const
 }
 
 #endif // wxUSE_SPINCTRL
-

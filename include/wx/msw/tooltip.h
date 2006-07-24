@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/tooltip.h
+// Name:        wx/msw/tooltip.h
 // Purpose:     wxToolTip class - tooltip control
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -13,6 +13,8 @@
 #define _WX_MSW_TOOLTIP_H_
 
 #include "wx/object.h"
+
+class WXDLLIMPEXP_CORE wxWindow;
 
 class WXDLLEXPORT wxToolTip : public wxObject
 {

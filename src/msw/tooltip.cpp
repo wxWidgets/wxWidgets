@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/tooltip.cpp
+// Name:        src/msw/tooltip.cpp
 // Purpose:     wxToolTip class implementation for MSW
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -23,13 +23,16 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/wx.h"
-#endif
-
 #if wxUSE_TOOLTIPS
 
 #include "wx/tooltip.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/control.h"
+    #include "wx/combobox.h"
+#endif
+
 #include "wx/msw/private.h"
 
 // include <commctrl.h> "properly"
@@ -246,8 +249,8 @@ wxToolTip::wxToolTip(const wxString &tip)
 wxToolTip::~wxToolTip()
 {
     // the tooltip has to be removed before deleting. Otherwise, if it is visible
-	// while being deleted, there will be a delay before it goes away.
-	Remove();
+    // while being deleted, there will be a delay before it goes away.
+    Remove();
 }
 
 // ----------------------------------------------------------------------------
