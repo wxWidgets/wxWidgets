@@ -39,19 +39,20 @@ void wxMacWakeUp() ;
 class wxMacCFStringHolder
 {
 public:
-    wxMacCFStringHolder() 
-        : m_cfs(NULL) , m_release(false) 
+    wxMacCFStringHolder()
+        : m_cfs(NULL) , m_release(false)
     {
     }
 
-    wxMacCFStringHolder(const wxString &str , wxFontEncoding encoding )
-        : m_cfs(NULL) , m_release(false) 
+    wxMacCFStringHolder(const wxString &str,
+                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+        : m_cfs(NULL) , m_release(false)
     {
         Assign( str , encoding ) ;
     }
 
     wxMacCFStringHolder(CFStringRef ref , bool release = true )
-        : m_cfs(ref) , m_release(release) 
+        : m_cfs(ref) , m_release(release)
     {
     }
 
@@ -75,7 +76,8 @@ public:
         m_cfs = NULL ;
     }
 
-    void Assign( const wxString &str , wxFontEncoding encoding ) ;
+    void Assign(const wxString &str,
+                wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     operator CFStringRef () const { return m_cfs; }
     wxString AsString( wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
@@ -84,7 +86,7 @@ private:
 
     CFStringRef m_cfs;
     bool m_release ;
-    
+
     DECLARE_NO_COPY_CLASS( wxMacCFStringHolder )
 } ;
 
@@ -94,13 +96,13 @@ class wxMacUniCharBuffer
 {
 public :
     wxMacUniCharBuffer( const wxString &str ) ;
-    
+
     ~wxMacUniCharBuffer() ;
-        
+
     UniChar* GetBuffer() ;
-       
+
     UniCharCount GetChars() ;
-    
+
 private :
     UniChar* m_ubuf ;
     UniCharCount m_chars ;

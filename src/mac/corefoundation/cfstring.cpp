@@ -105,9 +105,10 @@ wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding)
 #if wxUSE_GUI
         encoding = wxFont::GetDefaultEncoding() ;
 #else
-        encoding = wxLocale::GetSystemEncoding() ;
+        encoding = wxFONTENCODING_SYSTEM; // to be set below
 #endif
     }
+
     if ( encoding == wxFONTENCODING_SYSTEM )
     {
         enc = CFStringGetSystemEncoding();
