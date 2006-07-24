@@ -150,7 +150,7 @@ class DragCanvas(wx.ScrolledWindow):
         dc = evt.GetDC()
 
         if not dc:
-            dc = wxClientDC(self)
+            dc = wx.ClientDC(self)
             rect = self.GetUpdateRegion().GetBox()
             dc.SetClippingRect(rect)
         self.TileBackground(dc)
@@ -185,10 +185,8 @@ class DragCanvas(wx.ScrolledWindow):
         self.dragImage.EndDrag()
         self.dragImage = None
 
-        dc = wx.ClientDC(self)
-
         if self.hiliteShape:
-            self.hiliteShape.Draw(dc)
+            self.RefreshRect(self.hiliteShape.GetRect())
             self.hiliteShape = None
 
         # reposition and draw the shape
@@ -212,8 +210,9 @@ class DragCanvas(wx.ScrolledWindow):
             )
             
         self.dragShape.shown = True
-        self.dragShape.Draw(dc)
+        self.RefreshRect(self.dragShape.GetRect())
         self.dragShape = None
+
 
     # The mouse is moving
     def OnMotion(self, evt):
