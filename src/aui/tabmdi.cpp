@@ -132,7 +132,7 @@ void wxTabMDIParentFrame::SetWindowMenu(wxMenu* pMenu)
     }
 }
 
-void wxTabMDIParentFrame::SetMenuBar(wxMenuBar *pMenuBar)
+void wxTabMDIParentFrame::SetMenuBar(wxMenuBar* pMenuBar)
 {
     // Remove the Window menu from the old menu bar
     RemoveWindowMenu(GetMenuBar());
@@ -154,13 +154,13 @@ void wxTabMDIParentFrame::SetChildMenuBar(wxTabMDIChildFrame* pChild)
         SetMenuBar(m_pMyMenuBar);
 
         // Make sure we know our menu bar is in use
-        m_pMyMenuBar = NULL;
+        //m_pMyMenuBar = NULL;
     }
      else
     {
         if (pChild->GetMenuBar() == NULL)
             return;
-
+            
         // Do we need to save the current bar?
         if (m_pMyMenuBar == NULL)
             m_pMyMenuBar = GetMenuBar();
