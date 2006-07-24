@@ -167,6 +167,10 @@ Returns the current art provider being used.
 
 See also: \helpref{wxAuiDockArt}{wxauidockart}.
 
+\func{void}{GetDockSizeConstraint}{\param{double* }{width_pct}, \param{double* }{height_pct}}
+
+Returns the current dock constraint values.  See SetDockSizeConstraint() for more information.
+
 \membersection{wxAuiManager::GetFlags}\label{wxauimanagergetflags}
 
 \constfunc{unsigned int}{GetFlags}{\void}
@@ -265,6 +269,15 @@ look-and-feel features. The previous art provider object, if any,
 will be deleted by wxAuiManager.
 
 See also: \helpref{wxAuiDockArt}{wxauidockart}.
+
+\func{void}{SetDockSizeConstraint}{\param{double }{width_pct}, \param{double }{height_pct}}
+
+When a user creates a new dock by dragging a window into a docked position, often times the large size of the
+window will create a dock that is unwieldly large.  wxAuiManager by default limits the size of any
+new dock to 1/3 of the window size.  For horizontal docks, this would be 1/3 of the window height.  For
+vertical docks, 1/3 of the width.  Calling this function will adjust this constraint value.  The numbers
+must be between 0.0 and 1.0.  For instance, calling SetDockSizeContraint with 0.5, 0.5 will cause new
+docks to be limited to half of the size of the entire managed window. 
 
 \membersection{wxAuiManager::SetFlags}\label{wxauimanagersetflags}
 
