@@ -113,6 +113,9 @@ WX_DEFINE_ARRAY_PTR(wxThread *, wxArrayThread);
 // be left in memory
 static wxArrayThread gs_allThreads;
 
+// a mutex to protect gs_allThreads
+static wxMutex *gs_mutexAllThreads = NULL;
+
 // the id of the main thread
 static pthread_t gs_tidMain = (pthread_t)-1;
 
@@ -1066,7 +1069,11 @@ bool wxThread::SetConcurrency(size_t level)
 wxThread::wxThread(wxThreadKind kind)
 {
     // add this thread to the global list of all threads
-    gs_allThreads.Add(this);
+    {
+        wxMutexLocker lock(*gs_mutexAllThreads);
+
+        gs_allThreads.Add(this);
+    }
 
     m_internal = new wxThreadInternal();
 
@@ -1548,7 +1555,11 @@ wxThread::~wxThread()
     delete m_internal;
 
     // remove this thread from the global array
-    gs_allThreads.Remove(this);
+    {
+        wxMutexLocker lock(*gs_mutexAllThreads);
+
+        gs_allThreads.Remove(this);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1612,11 +1623,13 @@ bool wxThreadModule::OnInit()
 
     gs_tidMain = pthread_self();
 
+    gs_mutexAllThreads = new wxMutex();
+
     gs_mutexGui = new wxMutex();
     gs_mutexGui->Lock();
 
     gs_mutexDeleteThread = new wxMutex();
-    gs_condAllDeleted = new wxCondition( *gs_mutexDeleteThread );
+    gs_condAllDeleted = new wxCondition(*gs_mutexDeleteThread);
 
     return true;
 }
@@ -1643,13 +1656,19 @@ void wxThreadModule::OnExit()
         }
     }
 
-    // terminate any threads left
-    size_t count = gs_allThreads.GetCount();
-    if ( count != 0u )
+    size_t count;
+
     {
-        wxLogDebug(wxT("%lu threads were not terminated by the application."),
-                   (unsigned long)count);
-    }
+        wxMutexLocker lock(*gs_mutexAllThreads);
+
+        // terminate any threads left
+        count = gs_allThreads.GetCount();
+        if ( count != 0u )
+        {
+            wxLogDebug(wxT("%lu threads were not terminated by the application."),
+                       (unsigned long)count);
+        }
+    } // unlock mutex before deleting the threads as they lock it in their dtor
 
     for ( size_t n = 0u; n < count; n++ )
     {
@@ -1657,6 +1676,8 @@ void wxThreadModule::OnExit()
         // should only delete the first one each time.
         gs_allThreads[0]->Delete();
     }
+
+    delete gs_mutexAllThreads;
 
     // destroy GUI mutex
     gs_mutexGui->Unlock();
