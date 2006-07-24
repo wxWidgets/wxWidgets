@@ -1408,8 +1408,17 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
         }
 #endif // wxUSE_UXTHEME
 
-        event.Skip();
-        return;
+        // if we are transparent then paint our background ourselves
+        LRESULT style = ::SendMessage(GetHwnd(), TB_GETSTYLE, 0, 0L);
+        if ( style & TBSTYLE_TRANSPARENT )
+        {
+            ::FillRect(hdc, &rect, ::GetSysColorBrush(COLOR_BTNFACE));
+        }
+        else
+        {
+            // let the system do it for us
+            event.Skip();
+        }
     }
 }
 
