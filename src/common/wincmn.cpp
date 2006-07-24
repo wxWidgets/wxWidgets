@@ -2342,7 +2342,7 @@ struct WXDLLEXPORT wxWindowNext
 
 void wxWindowBase::CaptureMouse()
 {
-    wxLogTrace(_T("mousecapture"), _T("CaptureMouse(%p)"), this);
+    wxLogTrace(_T("mousecapture"), _T("CaptureMouse(%p)"), wx_static_cast(void*, this));
 
     wxWindow *winOld = GetCapture();
     if ( winOld )
@@ -2362,7 +2362,7 @@ void wxWindowBase::CaptureMouse()
 
 void wxWindowBase::ReleaseMouse()
 {
-    wxLogTrace(_T("mousecapture"), _T("ReleaseMouse(%p)"), this);
+    wxLogTrace(_T("mousecapture"), _T("ReleaseMouse(%p)"), wx_static_cast(void*, this));
 
     wxASSERT_MSG( GetCapture() == this, wxT("attempt to release mouse, but this window hasn't captured it") );
 
@@ -2380,7 +2380,7 @@ void wxWindowBase::ReleaseMouse()
 
     wxLogTrace(_T("mousecapture"),
         (const wxChar *) _T("After ReleaseMouse() mouse is captured by %p"),
-        GetCapture());
+        wx_static_cast(void*, GetCapture()));
 }
 
 #if wxUSE_HOTKEY

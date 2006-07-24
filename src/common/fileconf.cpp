@@ -1684,9 +1684,9 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
 
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("  (m_pLine) = prev: %p, this %p, next %p"),
-                m_pLine ? m_pLine->Prev() : NULL,
-                m_pLine,
-                m_pLine ? m_pLine->Next() : NULL );
+                m_pLine ? wx_static_cast(void*, m_pLine->Prev()) : 0,
+                wx_static_cast(void*, m_pLine),
+                m_pLine ? wx_static_cast(void*, m_pLine->Next()) : 0 );
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("  text: '%s'"),
                 m_pLine ? m_pLine->Text().c_str() : wxEmptyString );
