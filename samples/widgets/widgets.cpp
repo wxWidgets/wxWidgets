@@ -325,12 +325,7 @@ bool WidgetsApp::OnInit()
 // ----------------------------------------------------------------------------
 
 WidgetsFrame::WidgetsFrame(const wxString& title)
-            : wxFrame(NULL, wxID_ANY, title,
-                      wxDefaultPosition, wxDefaultSize,
-                      wxDEFAULT_FRAME_STYLE |
-                      wxNO_FULL_REPAINT_ON_RESIZE |
-                      wxCLIP_CHILDREN |
-                      wxTAB_TRAVERSAL)
+            : wxFrame(NULL, wxID_ANY, title)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -374,15 +369,14 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 #endif // wxUSE_MENUS
 
     // create controls
-    m_panel = new wxPanel(this, wxID_ANY,
-        wxDefaultPosition, wxDefaultSize, wxCLIP_CHILDREN);
+    m_panel = new wxPanel(this, wxID_ANY);
 
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
 
     // we have 2 panes: book with pages demonstrating the controls in the
     // upper one and the log window with some buttons in the lower
 
-    int style = wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|wxBK_DEFAULT;
+    int style = wxBK_DEFAULT;
     // Uncomment to suppress page theme (draw in solid colour)
     //style |= wxNB_NOPAGETHEME;
 
