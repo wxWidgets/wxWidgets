@@ -52,11 +52,11 @@ Returns the style name.
 
 Returns the attributes associated with this style.
 
-\membersection{wxRichTextStyleDefinition::Init}\label{wxrichtextstyledefinitioninit}
+\membersection{wxRichTextStyleDefinition::GetStyleMergedWithBase}\label{wxrichtextstyledefinitiongetstylemergedwithbase}
 
-\func{void}{Init}{\void}
+\constfunc{wxRichTextAttr}{GetStyleMergedWithBase}{\param{wxRichTextStyleSheet*}{ sheet}}
 
-Initialises the definition.
+Returns the style attributes combined with the attributes of the specified base style, if any. This function works recursively.
 
 \membersection{wxRichTextStyleDefinition::SetBaseStyle}\label{wxrichtextstyledefinitionsetbasestyle}
 

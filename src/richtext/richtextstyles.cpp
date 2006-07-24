@@ -53,6 +53,22 @@ bool wxRichTextStyleDefinition::Eq(const wxRichTextStyleDefinition& def) const
     return (m_name == def.m_name && m_baseStyle == def.m_baseStyle && m_style == def.m_style);
 }
 
+/// Gets the style combined with the base style
+wxRichTextAttr wxRichTextStyleDefinition::GetStyleMergedWithBase(const wxRichTextStyleSheet* sheet) const
+{
+    if (!m_baseStyle.IsEmpty())
+    {
+        wxRichTextStyleDefinition* baseStyle = sheet->FindStyle(m_baseStyle);
+        if (baseStyle)
+        {
+            wxRichTextAttr baseAttr = baseStyle->GetStyleMergedWithBase(sheet);
+            baseAttr.Apply(m_style, NULL);
+            return baseAttr;
+        }
+    }
+    return m_style;
+}
+
 /*!
  * Paragraph style definition
  */
@@ -162,7 +178,7 @@ int wxRichTextListStyleDefinition::FindLevelForIndent(int indent) const
 
 /// Combine the list style with a paragraph style, using the given indent (from which
 /// an appropriate level is found)
-wxRichTextAttr wxRichTextListStyleDefinition::CombineWithParagraphStyle(int indent, const wxRichTextAttr& paraStyle)
+wxRichTextAttr wxRichTextListStyleDefinition::CombineWithParagraphStyle(int indent, const wxRichTextAttr& paraStyle, wxRichTextStyleSheet* styleSheet)
 {
     int listLevel = FindLevelForIndent(indent);
 
@@ -171,10 +187,13 @@ wxRichTextAttr wxRichTextListStyleDefinition::CombineWithParagraphStyle(int inde
     int oldLeftSubIndent = attr.GetLeftSubIndent();
 
     // First apply the overall paragraph style, if any
-    wxRichTextApplyStyle(attr, GetStyle());
+    if (styleSheet)
+        attr.Apply(GetStyleMergedWithBase(styleSheet));
+    else
+        attr.Apply(GetStyle());
 
     // Then apply paragraph style, e.g. from paragraph style definition
-    wxRichTextApplyStyle(attr, paraStyle);
+    attr.Apply(paraStyle);
 
     // We override the indents according to the list definition
     attr.SetLeftIndent(oldLeftIndent, oldLeftSubIndent);
@@ -184,22 +203,25 @@ wxRichTextAttr wxRichTextListStyleDefinition::CombineWithParagraphStyle(int inde
 
 /// Combine the base and list style, using the given indent (from which
 /// an appropriate level is found)
-wxRichTextAttr wxRichTextListStyleDefinition::GetCombinedStyle(int indent)
+wxRichTextAttr wxRichTextListStyleDefinition::GetCombinedStyle(int indent, wxRichTextStyleSheet* styleSheet)
 {
     int listLevel = FindLevelForIndent(indent);
-    return GetCombinedStyleForLevel(listLevel);
+    return GetCombinedStyleForLevel(listLevel, styleSheet);
 }
 
 /// Combine the base and list style, using the given indent (from which
 /// an appropriate level is found)
-wxRichTextAttr wxRichTextListStyleDefinition::GetCombinedStyleForLevel(int listLevel)
+wxRichTextAttr wxRichTextListStyleDefinition::GetCombinedStyleForLevel(int listLevel, wxRichTextStyleSheet* styleSheet)
 {
     wxRichTextAttr attr(*GetLevelAttributes(listLevel));
     int oldLeftIndent = attr.GetLeftIndent();
     int oldLeftSubIndent = attr.GetLeftSubIndent();
 
     // Apply the overall paragraph style, if any
-    wxRichTextApplyStyle(attr, GetStyle());
+    if (styleSheet)
+        attr.Apply(GetStyleMergedWithBase(styleSheet));
+    else
+        attr.Apply(GetStyle());
 
     // We override the indents according to the list definition
     attr.SetLeftIndent(oldLeftIndent, oldLeftSubIndent);
@@ -264,6 +286,18 @@ bool wxRichTextStyleSheet::RemoveStyle(wxList& list, wxRichTextStyleDefinition* 
     }
     else
         return false;
+}
+
+/// Remove a style
+bool wxRichTextStyleSheet::RemoveStyle(wxRichTextStyleDefinition* def, bool deleteStyle)
+{
+    if (RemoveParagraphStyle(def, deleteStyle))
+        return true;
+    if (RemoveCharacterStyle(def, deleteStyle))
+        return true;
+    if (RemoveListStyle(def, deleteStyle))
+        return true;
+    return false;
 }
 
 /// Find a definition by name
@@ -351,6 +385,42 @@ bool wxRichTextStyleSheet::AddListStyle(wxRichTextListStyleDefinition* def)
 {
     def->GetStyle().SetListStyleName(def->GetName());
     return AddStyle(m_listStyleDefinitions, def);
+}
+
+/// Add a definition to the appropriate style list
+bool wxRichTextStyleSheet::AddStyle(wxRichTextStyleDefinition* def)
+{
+    wxRichTextListStyleDefinition* listDef = wxDynamicCast(def, wxRichTextListStyleDefinition);
+    if (listDef)
+        return AddListStyle(listDef);
+
+    wxRichTextParagraphStyleDefinition* paraDef = wxDynamicCast(def, wxRichTextParagraphStyleDefinition);
+    if (paraDef)
+        return AddParagraphStyle(paraDef);
+
+    wxRichTextCharacterStyleDefinition* charDef = wxDynamicCast(def, wxRichTextCharacterStyleDefinition);
+    if (charDef)
+        return AddCharacterStyle(charDef);
+    
+    return false;
+}
+
+/// Find any definition by name
+wxRichTextStyleDefinition* wxRichTextStyleSheet::FindStyle(const wxString& name, bool recurse) const
+{
+    wxRichTextListStyleDefinition* listDef = FindListStyle(name, recurse);
+    if (listDef)
+        return listDef;
+
+    wxRichTextParagraphStyleDefinition* paraDef = FindParagraphStyle(name, recurse);
+    if (paraDef)
+        return paraDef;
+
+    wxRichTextCharacterStyleDefinition* charDef = FindCharacterStyle(name, recurse);
+    if (charDef)
+        return charDef;
+    
+    return NULL;    
 }
 
 /// Copy
@@ -540,8 +610,10 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     wxString str;
 
     bool isCentred = false;
+    
+    wxRichTextAttr attr(def->GetStyleMergedWithBase(GetStyleSheet()));
 
-    if (def->GetStyle().HasAlignment() && def->GetStyle().GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
+    if (attr.HasAlignment() && attr.GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
         isCentred = true;
 
     if (isCentred)
@@ -550,11 +622,11 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     
     str << wxT("<table><tr>");
 
-    if (def->GetStyle().GetLeftIndent() > 0)
+    if (attr.GetLeftIndent() > 0)
     {
         wxClientDC dc((wxWindow*) this);
 
-        str << wxT("<td width=") << wxMin(50, (ConvertTenthsMMToPixels(dc, def->GetStyle().GetLeftIndent())/2)) << wxT("></td>");
+        str << wxT("<td width=") << wxMin(50, (ConvertTenthsMMToPixels(dc, attr.GetLeftIndent())/2)) << wxT("></td>");
     }
 
     if (isCentred)
@@ -569,7 +641,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
 #endif
 
     int stdFontSize = 12;
-    int thisFontSize = ((def->GetStyle().GetFlags() & wxTEXT_ATTR_FONT_SIZE) != 0) ? def->GetStyle().GetFontSize() : stdFontSize;
+    int thisFontSize = ((attr.GetFlags() & wxTEXT_ATTR_FONT_SIZE) != 0) ? attr.GetFontSize() : stdFontSize;
 
     if (thisFontSize < stdFontSize)
         size ++;
@@ -580,11 +652,11 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
 
     str << wxT(" size=") << size;
 
-    if (!def->GetStyle().GetFontFaceName().IsEmpty())
-        str << wxT(" face=\"") << def->GetStyle().GetFontFaceName() << wxT("\"");
+    if (!attr.GetFontFaceName().IsEmpty())
+        str << wxT(" face=\"") << attr.GetFontFaceName() << wxT("\"");
 
-    if (def->GetStyle().GetTextColour().Ok())
-        str << wxT(" color=\"#") << ColourToHexString(def->GetStyle().GetTextColour()) << wxT("\"");
+    if (attr.GetTextColour().Ok())
+        str << wxT(" color=\"#") << ColourToHexString(attr.GetTextColour()) << wxT("\"");
 
     str << wxT(">");
 
@@ -592,11 +664,11 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     bool hasItalic = false;
     bool hasUnderline = false;
 
-    if (def->GetStyle().GetFontWeight() == wxBOLD)
+    if (attr.GetFontWeight() == wxBOLD)
         hasBold = true;
-    if (def->GetStyle().GetFontStyle() == wxITALIC)
+    if (attr.GetFontStyle() == wxITALIC)
         hasItalic = true;
-    if (def->GetStyle().GetFontUnderlined())
+    if (attr.GetFontUnderlined())
         hasUnderline = true;
 
     if (hasBold)

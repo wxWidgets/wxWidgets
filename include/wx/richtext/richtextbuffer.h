@@ -391,11 +391,11 @@ public:
     int GetTextEffectFlags() const { return m_textEffectFlags; }
     int GetOutlineLevel() const { return m_outlineLevel; }
 
-    bool HasWeight() const { return (GetFlags() & wxTEXT_ATTR_FONT_WEIGHT) != 0; }
-    bool HasSize() const { return (GetFlags() & wxTEXT_ATTR_FONT_SIZE) != 0; }
-    bool HasItalic() const { return (GetFlags() & wxTEXT_ATTR_FONT_ITALIC) != 0; }
-    bool HasUnderlined() const { return (GetFlags() & wxTEXT_ATTR_FONT_UNDERLINE) != 0; }
-    bool HasFaceName() const { return (GetFlags() & wxTEXT_ATTR_FONT_FACE) != 0; }
+    bool HasFontWeight() const { return (GetFlags() & wxTEXT_ATTR_FONT_WEIGHT) != 0; }
+    bool HasFontSize() const { return (GetFlags() & wxTEXT_ATTR_FONT_SIZE) != 0; }
+    bool HasFontItalic() const { return (GetFlags() & wxTEXT_ATTR_FONT_ITALIC) != 0; }
+    bool HasFontUnderlined() const { return (GetFlags() & wxTEXT_ATTR_FONT_UNDERLINE) != 0; }
+    bool HasFontFaceName() const { return (GetFlags() & wxTEXT_ATTR_FONT_FACE) != 0; }
 
     bool HasParagraphSpacingAfter() const { return HasFlag(wxTEXT_ATTR_PARA_SPACING_AFTER); }
     bool HasParagraphSpacingBefore() const { return HasFlag(wxTEXT_ATTR_PARA_SPACING_BEFORE); }
@@ -566,11 +566,11 @@ public:
     bool HasTabs() const { return (m_flags & wxTEXT_ATTR_TABS) != 0 ; }
     bool HasLeftIndent() const { return (m_flags & wxTEXT_ATTR_LEFT_INDENT) != 0 ; }
     bool HasRightIndent() const { return (m_flags & wxTEXT_ATTR_RIGHT_INDENT) != 0 ; }
-    bool HasWeight() const { return (m_flags & wxTEXT_ATTR_FONT_WEIGHT) != 0; }
-    bool HasSize() const { return (m_flags & wxTEXT_ATTR_FONT_SIZE) != 0; }
-    bool HasItalic() const { return (m_flags & wxTEXT_ATTR_FONT_ITALIC) != 0; }
-    bool HasUnderlined() const { return (m_flags & wxTEXT_ATTR_FONT_UNDERLINE) != 0; }
-    bool HasFaceName() const { return (m_flags & wxTEXT_ATTR_FONT_FACE) != 0; }
+    bool HasFontWeight() const { return (m_flags & wxTEXT_ATTR_FONT_WEIGHT) != 0; }
+    bool HasFontSize() const { return (m_flags & wxTEXT_ATTR_FONT_SIZE) != 0; }
+    bool HasFontItalic() const { return (m_flags & wxTEXT_ATTR_FONT_ITALIC) != 0; }
+    bool HasFontUnderlined() const { return (m_flags & wxTEXT_ATTR_FONT_UNDERLINE) != 0; }
+    bool HasFontFaceName() const { return (m_flags & wxTEXT_ATTR_FONT_FACE) != 0; }
     bool HasFont() const { return (m_flags & (wxTEXT_ATTR_FONT)) != 0; }
 
     bool HasParagraphSpacingAfter() const { return (m_flags & wxTEXT_ATTR_PARA_SPACING_AFTER) != 0; }
@@ -601,12 +601,16 @@ public:
         return GetFlags() == 0;
     }
 
-    // return the attribute having the valid font and colours: it uses the
-    // attributes set in attr and falls back first to attrDefault and then to
-    // the text control font/colours for those attributes which are not set
-    static wxRichTextAttr Combine(const wxRichTextAttr& attr,
-                              const wxRichTextAttr& attrDef,
-                              const wxTextCtrlBase *text);
+    // Merges the given attributes. Does not affect 'this'. If compareWith
+    // is non-NULL, then it will be used to mask out those attributes that are the same in style
+    // and compareWith, for situations where we don't want to explicitly set inherited attributes.
+    bool Apply(const wxRichTextAttr& style, const wxRichTextAttr* compareWith = NULL);
+
+    // Merges the given attributes and returns the result. Does not affect 'this'. If compareWith
+    // is non-NULL, then it will be used to mask out those attributes that are the same in style
+    // and compareWith, for situations where we don't want to explicitly set inherited attributes.
+    wxRichTextAttr Combine(const wxRichTextAttr& style, const wxRichTextAttr* compareWith = NULL) const;
+
 private:
     long                m_flags;
 

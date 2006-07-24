@@ -893,22 +893,22 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttrEx& attr, bool isPara
 
     if (attr.GetFont().Ok())
     {
-        if (attr.HasSize())
+        if (attr.HasFontSize())
             str << wxT(" fontsize=\"") << attr.GetFont().GetPointSize() << wxT("\"");
         
-        //if (attr.HasFamily())
+        //if (attr.HasFontFamily())
         //    str << wxT(" fontfamily=\"") << attr.GetFont().GetFamily() << wxT("\"");
 
-        if (attr.HasItalic())
+        if (attr.HasFontItalic())
             str << wxT(" fontstyle=\"") << attr.GetFont().GetStyle() << wxT("\"");
 
-        if (attr.HasWeight())
+        if (attr.HasFontWeight())
             str << wxT(" fontweight=\"") << attr.GetFont().GetWeight() << wxT("\"");
 
-        if (attr.HasUnderlined())
+        if (attr.HasFontUnderlined())
             str << wxT(" fontunderlined=\"") << (int) attr.GetFont().GetUnderlined() << wxT("\"");
 
-        if (attr.HasFaceName())
+        if (attr.HasFontFaceName())
             str << wxT(" fontface=\"") << attr.GetFont().GetFaceName() << wxT("\"");
     }
 

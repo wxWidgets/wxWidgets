@@ -1569,7 +1569,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
     {
         wxRichTextParagraphStyleDefinition* def = GetStyleSheet()->FindParagraphStyle(wholeStyle.GetParagraphStyleName());
         if (def)
-            wxRichTextApplyStyle(wholeStyle, def->GetStyle());
+            wxRichTextApplyStyle(wholeStyle, def->GetStyleMergedWithBase(GetStyleSheet()));
     }
 
     // Limit the attributes to be set to the content to only character attributes.
@@ -1580,7 +1580,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
     {
         wxRichTextCharacterStyleDefinition* def = GetStyleSheet()->FindCharacterStyle(characterAttributes.GetCharacterStyleName());
         if (def)
-            wxRichTextApplyStyle(characterAttributes, def->GetStyle());
+            wxRichTextApplyStyle(characterAttributes, def->GetStyleMergedWithBase(GetStyleSheet()));
     }
 
     // If we are associated with a control, make undoable; otherwise, apply immediately
@@ -1838,9 +1838,9 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
 {
     if (style.HasFont())
     {
-        if (style.HasSize() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_SIZE))
+        if (style.HasFontSize() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_SIZE))
         {
-            if (currentStyle.GetFont().Ok() && currentStyle.HasSize())
+            if (currentStyle.GetFont().Ok() && currentStyle.HasFontSize())
             {
                 if (currentStyle.GetFont().GetPointSize() != style.GetFont().GetPointSize())
                 {
@@ -1861,9 +1861,9 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
             }
         }
 
-        if (style.HasItalic() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_ITALIC))
+        if (style.HasFontItalic() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_ITALIC))
         {
-            if (currentStyle.GetFont().Ok() && currentStyle.HasItalic())
+            if (currentStyle.GetFont().Ok() && currentStyle.HasFontItalic())
             {
                 if (currentStyle.GetFont().GetStyle() != style.GetFont().GetStyle())
                 {
@@ -1883,9 +1883,9 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
             }
         }
 
-        if (style.HasWeight() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_WEIGHT))
+        if (style.HasFontWeight() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_WEIGHT))
         {
-            if (currentStyle.GetFont().Ok() && currentStyle.HasWeight())
+            if (currentStyle.GetFont().Ok() && currentStyle.HasFontWeight())
             {
                 if (currentStyle.GetFont().GetWeight() != style.GetFont().GetWeight())
                 {
@@ -1905,9 +1905,9 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
             }
         }
 
-        if (style.HasFaceName() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_FACE))
+        if (style.HasFontFaceName() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_FACE))
         {
-            if (currentStyle.GetFont().Ok() && currentStyle.HasFaceName())
+            if (currentStyle.GetFont().Ok() && currentStyle.HasFontFaceName())
             {
                 wxString faceName1(currentStyle.GetFont().GetFaceName());
                 wxString faceName2(style.GetFont().GetFaceName());
@@ -1930,9 +1930,9 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
             }
         }
 
-        if (style.HasUnderlined() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_UNDERLINE))
+        if (style.HasFontUnderlined() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_UNDERLINE))
         {
-            if (currentStyle.GetFont().Ok() && currentStyle.HasUnderlined())
+            if (currentStyle.GetFont().Ok() && currentStyle.HasFontUnderlined())
             {
                 if (currentStyle.GetFont().GetUnderlined() != style.GetFont().GetUnderlined())
                 {
@@ -2512,13 +2512,13 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
                 wxRichTextListStyleDefinition* listDef = styleSheet->FindListStyle(para->GetAttributes().GetListStyleName());
                 if (paraDef && !listDef)
                 {
-                    para->GetAttributes() = paraDef->GetStyle();
+                    para->GetAttributes() = paraDef->GetStyleMergedWithBase(styleSheet);
                     foundCount ++;
                 }
                 else if (listDef && !paraDef)
                 {
                     // Set overall style defined for the list style definition
-                    para->GetAttributes() = listDef->GetStyle();
+                    para->GetAttributes() = listDef->GetStyleMergedWithBase(styleSheet);
 
                     // Apply the style for this level
                     wxRichTextApplyStyle(para->GetAttributes(), * listDef->GetLevelAttributes(listDef->FindLevelForIndent(currentIndent)));
@@ -2527,7 +2527,7 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
                 else if (listDef && paraDef)
                 {
                     // Combines overall list style, style for level, and paragraph style
-                    para->GetAttributes() = listDef->CombineWithParagraphStyle(currentIndent, paraDef->GetStyle());
+                    para->GetAttributes() = listDef->CombineWithParagraphStyle(currentIndent, paraDef->GetStyleMergedWithBase(styleSheet));
                     foundCount ++;
                 }
             }
@@ -2538,7 +2538,7 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
                 wxRichTextListStyleDefinition* listDef = styleSheet->FindListStyle(para->GetAttributes().GetListStyleName());
 
                 // Overall list definition style
-                para->GetAttributes() = listDef->GetStyle();
+                para->GetAttributes() = listDef->GetStyleMergedWithBase(styleSheet);
 
                 // Style for this level
                 wxRichTextApplyStyle(para->GetAttributes(), * listDef->GetLevelAttributes(listDef->FindLevelForIndent(currentIndent)));
@@ -2550,7 +2550,7 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
                 wxRichTextParagraphStyleDefinition* def = styleSheet->FindParagraphStyle(para->GetAttributes().GetParagraphStyleName());
                 if (def)
                 {
-                    para->GetAttributes() = def->GetStyle();
+                    para->GetAttributes() = def->GetStyleMergedWithBase(styleSheet);
                     foundCount ++;
                 }
             }
@@ -2564,6 +2564,8 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
 /// Set list style
 bool wxRichTextParagraphLayoutBox::SetListStyle(const wxRichTextRange& range, wxRichTextListStyleDefinition* def, int flags, int startFrom, int specifiedLevel)
 {
+    wxRichTextStyleSheet* styleSheet = GetStyleSheet();
+    
     bool withUndo = ((flags & wxRICHTEXT_SETSTYLE_WITH_UNDO) != 0);
     // bool applyMinimal = ((flags & wxRICHTEXT_SETSTYLE_OPTIMIZE) != 0);
     bool specifyLevel = ((flags & wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL) != 0);
@@ -2631,7 +2633,7 @@ bool wxRichTextParagraphLayoutBox::SetListStyle(const wxRichTextRange& range, wx
                     // Renumbering will need to be done when we promote/demote a paragraph.
 
                     // Apply the overall list style, and item style for this level
-                    wxTextAttrEx listStyle(def->GetCombinedStyleForLevel(thisLevel));
+                    wxTextAttrEx listStyle(def->GetCombinedStyleForLevel(thisLevel, styleSheet));
                     wxRichTextApplyStyle(newPara->GetAttributes(), listStyle);
 
                     // Now we need to do numbering
@@ -2654,13 +2656,12 @@ bool wxRichTextParagraphLayoutBox::SetListStyle(const wxRichTextRange& range, wx
                     // Eliminate the main list-related attributes
                     newPara->GetAttributes().SetFlags(newPara->GetAttributes().GetFlags() & ~wxTEXT_ATTR_LEFT_INDENT & ~wxTEXT_ATTR_BULLET_STYLE & ~wxTEXT_ATTR_BULLET_NUMBER & ~wxTEXT_ATTR_BULLET_TEXT & wxTEXT_ATTR_LIST_STYLE_NAME);
 
-                    wxRichTextStyleSheet* styleSheet = GetStyleSheet();
                     if (styleSheet && !newPara->GetAttributes().GetParagraphStyleName().IsEmpty())
                     {
                         wxRichTextParagraphStyleDefinition* def = styleSheet->FindParagraphStyle(newPara->GetAttributes().GetParagraphStyleName());
                         if (def)
                         {
-                            newPara->GetAttributes() = def->GetStyle();
+                            newPara->GetAttributes() = def->GetStyleMergedWithBase(styleSheet);
                         }
                     }
                 }
@@ -2704,6 +2705,8 @@ bool wxRichTextParagraphLayoutBox::NumberList(const wxRichTextRange& range, wxRi
 bool wxRichTextParagraphLayoutBox::DoNumberList(const wxRichTextRange& range, const wxRichTextRange& promotionRange, int promoteBy,
                                                 wxRichTextListStyleDefinition* def, int flags, int startFrom, int specifiedLevel)
 {
+    wxRichTextStyleSheet* styleSheet = GetStyleSheet();
+
     bool withUndo = ((flags & wxRICHTEXT_SETSTYLE_WITH_UNDO) != 0);
     // bool applyMinimal = ((flags & wxRICHTEXT_SETSTYLE_OPTIMIZE) != 0);
 #ifdef __WXDEBUG__
@@ -2781,10 +2784,8 @@ bool wxRichTextParagraphLayoutBox::DoNumberList(const wxRichTextRange& range, co
                 wxRichTextListStyleDefinition* defToUse = def;
                 if (!defToUse)
                 {
-                    wxRichTextStyleSheet* sheet = GetStyleSheet();
-
-                    if (sheet && !newPara->GetAttributes().GetListStyleName().IsEmpty())
-                        defToUse = sheet->FindListStyle(newPara->GetAttributes().GetListStyleName());
+                    if (styleSheet && !newPara->GetAttributes().GetListStyleName().IsEmpty())
+                        defToUse = styleSheet->FindListStyle(newPara->GetAttributes().GetListStyleName());
                 }
 
                 if (defToUse)
@@ -2807,7 +2808,7 @@ bool wxRichTextParagraphLayoutBox::DoNumberList(const wxRichTextRange& range, co
                     }
 
                     // Apply the overall list style, and item style for this level
-                    wxTextAttrEx listStyle(defToUse->GetCombinedStyleForLevel(thisLevel));
+                    wxTextAttrEx listStyle(defToUse->GetCombinedStyleForLevel(thisLevel, styleSheet));
                     wxRichTextApplyStyle(newPara->GetAttributes(), listStyle);
 
                     // OK, we've (re)applied the style, now let's get the numbering right.
@@ -2923,10 +2924,10 @@ bool wxRichTextParagraphLayoutBox::FindNextParagraphNumber(wxRichTextParagraph* 
     if (!previousParagraph->GetAttributes().HasFlag(wxTEXT_ATTR_BULLET_STYLE) || previousParagraph->GetAttributes().GetBulletStyle() == wxTEXT_ATTR_BULLET_STYLE_NONE)
         return false;
     
-    wxRichTextStyleSheet* sheet = GetStyleSheet();
-    if (sheet && !previousParagraph->GetAttributes().GetListStyleName().IsEmpty())
+    wxRichTextStyleSheet* styleSheet = GetStyleSheet();
+    if (styleSheet && !previousParagraph->GetAttributes().GetListStyleName().IsEmpty())
     {
-        wxRichTextListStyleDefinition* def = sheet->FindListStyle(previousParagraph->GetAttributes().GetListStyleName());
+        wxRichTextListStyleDefinition* def = styleSheet->FindListStyle(previousParagraph->GetAttributes().GetListStyleName());
         if (def)
         {
             // int thisIndent = previousParagraph->GetAttributes().GetLeftIndent();
@@ -4848,7 +4849,7 @@ wxRichTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPos
                     if (nextParaDef)
                     {
                         foundAttributes = true;
-                        attr = nextParaDef->GetStyle();
+                        attr = nextParaDef->GetStyleMergedWithBase(GetStyleSheet());
                     }
                 }
                 
@@ -4856,7 +4857,7 @@ wxRichTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPos
                 if (!foundAttributes)
                 {
                     foundAttributes = true;
-                    attr = paraDef->GetStyle();
+                    attr = paraDef->GetStyleMergedWithBase(GetStyleSheet());
                 }
             }
         }
@@ -5214,7 +5215,7 @@ bool wxRichTextBuffer::BeginCharacterStyle(const wxString& characterStyle)
         wxRichTextCharacterStyleDefinition* def = GetStyleSheet()->FindCharacterStyle(characterStyle);
         if (def)
         {
-            wxTextAttrEx attr = def->GetStyle();
+            wxTextAttrEx attr = def->GetStyleMergedWithBase(GetStyleSheet());
             return BeginStyle(attr);
         }
     }
@@ -5229,7 +5230,7 @@ bool wxRichTextBuffer::BeginParagraphStyle(const wxString& paragraphStyle)
         wxRichTextParagraphStyleDefinition* def = GetStyleSheet()->FindParagraphStyle(paragraphStyle);
         if (def)
         {
-            wxTextAttrEx attr = def->GetStyle();
+            wxTextAttrEx attr = def->GetStyleMergedWithBase(GetStyleSheet());
             return BeginStyle(attr);
         }
     }
@@ -5264,7 +5265,7 @@ bool wxRichTextBuffer::BeginURL(const wxString& url, const wxString& characterSt
         wxRichTextCharacterStyleDefinition* def = GetStyleSheet()->FindCharacterStyle(characterStyle);
         if (def)
         {
-            attr = def->GetStyle();
+            attr = def->GetStyleMergedWithBase(GetStyleSheet());
         }
     }
     attr.SetURL(url);
@@ -6848,9 +6849,7 @@ bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxTextAttrEx& style)
 
 bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith)
 {
-    wxTextAttrEx attr(destStyle);
-    wxRichTextApplyStyle(attr, style, compareWith);
-    destStyle = attr;
+    destStyle = destStyle.Combine(style, compareWith);
     return true;
 }
 
@@ -6869,7 +6868,7 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
 
         if (style.GetFlags() & wxTEXT_ATTR_FONT_FACE)
         {
-            if (compareWith && compareWith->HasFaceName() && compareWith->GetFontFaceName() == style.GetFontFaceName())
+            if (compareWith && compareWith->HasFontFaceName() && compareWith->GetFontFaceName() == style.GetFontFaceName())
             {
                 // The same as currently displayed, so don't set
             }
@@ -6882,7 +6881,7 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
 
         if (style.GetFlags() & wxTEXT_ATTR_FONT_SIZE)
         {
-            if (compareWith && compareWith->HasSize() && compareWith->GetFontSize() == style.GetFontSize())
+            if (compareWith && compareWith->HasFontSize() && compareWith->GetFontSize() == style.GetFontSize())
             {
                 // The same as currently displayed, so don't set
             }
@@ -6895,7 +6894,7 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
 
         if (style.GetFlags() & wxTEXT_ATTR_FONT_ITALIC)
         {
-            if (compareWith && compareWith->HasItalic() && compareWith->GetFontStyle() == style.GetFontStyle())
+            if (compareWith && compareWith->HasFontItalic() && compareWith->GetFontStyle() == style.GetFontStyle())
             {
                 // The same as currently displayed, so don't set
             }
@@ -6908,7 +6907,7 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
 
         if (style.GetFlags() & wxTEXT_ATTR_FONT_WEIGHT)
         {
-            if (compareWith && compareWith->HasWeight() && compareWith->GetFontWeight() == style.GetFontWeight())
+            if (compareWith && compareWith->HasFontWeight() && compareWith->GetFontWeight() == style.GetFontWeight())
             {
                 // The same as currently displayed, so don't set
             }
@@ -6921,7 +6920,7 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
 
         if (style.GetFlags() & wxTEXT_ATTR_FONT_UNDERLINE)
         {
-            if (compareWith && compareWith->HasUnderlined() && compareWith->GetFontUnderlined() == style.GetFontUnderlined())
+            if (compareWith && compareWith->HasFontUnderlined() && compareWith->GetFontUnderlined() == style.GetFontUnderlined())
             {
                 // The same as currently displayed, so don't set
             }
@@ -7411,116 +7410,184 @@ bool wxRichTextAttr::GetFontAttributes(const wxFont& font)
     return true;
 }
 
-wxRichTextAttr wxRichTextAttr::Combine(const wxRichTextAttr& attr,
-                               const wxRichTextAttr& attrDef,
-                               const wxTextCtrlBase *text)
+wxRichTextAttr wxRichTextAttr::Combine(const wxRichTextAttr& style, const wxRichTextAttr* compareWith) const
 {
-    wxColour colFg = attr.GetTextColour();
-    if ( !colFg.Ok() )
-    {
-        colFg = attrDef.GetTextColour();
+    wxRichTextAttr destStyle = (*this);
+    destStyle.Apply(style, compareWith);
+    
+    return destStyle;
+}
 
-        if ( text && !colFg.Ok() )
-            colFg = text->GetForegroundColour();
+bool wxRichTextAttr::Apply(const wxRichTextAttr& style, const wxRichTextAttr* compareWith)
+{
+    wxRichTextAttr& destStyle = (*this);
+    
+    if (style.HasFontWeight())
+    {
+        if (!(compareWith && compareWith->HasFontWeight() && compareWith->GetFontWeight() == style.GetFontWeight()))
+            destStyle.SetFontWeight(style.GetFontWeight());
     }
 
-    wxColour colBg = attr.GetBackgroundColour();
-    if ( !colBg.Ok() )
+    if (style.HasFontSize())
     {
-        colBg = attrDef.GetBackgroundColour();
-
-        if ( text && !colBg.Ok() )
-            colBg = text->GetBackgroundColour();
+        if (!(compareWith && compareWith->HasFontSize() && compareWith->GetFontSize() == style.GetFontSize()))
+            destStyle.SetFontSize(style.GetFontSize());
     }
 
-    wxRichTextAttr newAttr(colFg, colBg);
-
-    if (attr.HasWeight())
-        newAttr.SetFontWeight(attr.GetFontWeight());
-
-    if (attr.HasSize())
-        newAttr.SetFontSize(attr.GetFontSize());
-
-    if (attr.HasItalic())
-        newAttr.SetFontStyle(attr.GetFontStyle());
-
-    if (attr.HasUnderlined())
-        newAttr.SetFontUnderlined(attr.GetFontUnderlined());
-
-    if (attr.HasFaceName())
-        newAttr.SetFontFaceName(attr.GetFontFaceName());
-
-    if (attr.HasAlignment())
-        newAttr.SetAlignment(attr.GetAlignment());
-    else if (attrDef.HasAlignment())
-        newAttr.SetAlignment(attrDef.GetAlignment());
-
-    if (attr.HasTabs())
-        newAttr.SetTabs(attr.GetTabs());
-    else if (attrDef.HasTabs())
-        newAttr.SetTabs(attrDef.GetTabs());
-
-    if (attr.HasLeftIndent())
-        newAttr.SetLeftIndent(attr.GetLeftIndent(), attr.GetLeftSubIndent());
-    else if (attrDef.HasLeftIndent())
-        newAttr.SetLeftIndent(attrDef.GetLeftIndent(), attr.GetLeftSubIndent());
-
-    if (attr.HasRightIndent())
-        newAttr.SetRightIndent(attr.GetRightIndent());
-    else if (attrDef.HasRightIndent())
-        newAttr.SetRightIndent(attrDef.GetRightIndent());
-
-    // NEW ATTRIBUTES
-
-    if (attr.HasParagraphSpacingAfter())
-        newAttr.SetParagraphSpacingAfter(attr.GetParagraphSpacingAfter());
-
-    if (attr.HasParagraphSpacingBefore())
-        newAttr.SetParagraphSpacingBefore(attr.GetParagraphSpacingBefore());
-
-    if (attr.HasLineSpacing())
-        newAttr.SetLineSpacing(attr.GetLineSpacing());
-
-    if (attr.HasCharacterStyleName())
-        newAttr.SetCharacterStyleName(attr.GetCharacterStyleName());
-
-    if (attr.HasParagraphStyleName())
-        newAttr.SetParagraphStyleName(attr.GetParagraphStyleName());
-
-    if (attr.HasListStyleName())
-        newAttr.SetListStyleName(attr.GetListStyleName());
-
-    if (attr.HasBulletStyle())
-        newAttr.SetBulletStyle(attr.GetBulletStyle());
-
-    if (attr.HasBulletNumber())
-        newAttr.SetBulletNumber(attr.GetBulletNumber());
-
-    if (attr.HasBulletName())
-        newAttr.SetBulletName(attr.GetBulletName());
-
-    if (attr.HasBulletText())
+    if (style.HasFontItalic())
     {
-        newAttr.SetBulletText(attr.GetBulletText());
-        newAttr.SetBulletFont(attr.GetBulletFont());
+        if (!(compareWith && compareWith->HasFontItalic() && compareWith->GetFontStyle() == style.GetFontStyle()))
+            destStyle.SetFontStyle(style.GetFontStyle());
     }
 
-    if (attr.HasURL())
-        newAttr.SetURL(attr.GetURL());
-
-    if (attr.HasPageBreak())
-        newAttr.SetPageBreak();
-
-    if (attr.HasTextEffects())
+    if (style.HasFontUnderlined())
     {
-        newAttr.SetTextEffects(attr.GetTextEffects());
-        newAttr.SetTextEffectFlags(attr.GetTextEffectFlags());
+        if (!(compareWith && compareWith->HasFontUnderlined() && compareWith->GetFontUnderlined() == style.GetFontUnderlined()))
+            destStyle.SetFontUnderlined(style.GetFontUnderlined());
     }
 
-    if (attr.HasOutlineLevel())
-        newAttr.SetOutlineLevel(attr.GetOutlineLevel());
+    if (style.HasFontFaceName())
+    {
+        if (!(compareWith && compareWith->HasFontFaceName() && compareWith->GetFontFaceName() == style.GetFontFaceName()))
+            destStyle.SetFontFaceName(style.GetFontFaceName());
+    }
 
-    return newAttr;
+    if (style.GetTextColour().Ok() && style.HasTextColour())
+    {
+        if (!(compareWith && compareWith->HasTextColour() && compareWith->GetTextColour() == style.GetTextColour()))
+            destStyle.SetTextColour(style.GetTextColour());
+    }
+
+    if (style.GetBackgroundColour().Ok() && style.HasBackgroundColour())
+    {
+        if (!(compareWith && compareWith->HasBackgroundColour() && compareWith->GetBackgroundColour() == style.GetBackgroundColour()))
+            destStyle.SetBackgroundColour(style.GetBackgroundColour());
+    }
+
+    if (style.HasAlignment())
+    {
+        if (!(compareWith && compareWith->HasAlignment() && compareWith->GetAlignment() == style.GetAlignment()))
+            destStyle.SetAlignment(style.GetAlignment());
+    }
+
+    if (style.HasTabs())
+    {
+        if (!(compareWith && compareWith->HasTabs() && wxRichTextTabsEq(compareWith->GetTabs(), style.GetTabs())))
+            destStyle.SetTabs(style.GetTabs());
+    }
+
+    if (style.HasLeftIndent())
+    {
+        if (!(compareWith && compareWith->HasLeftIndent() && compareWith->GetLeftIndent() == style.GetLeftIndent()
+                          && compareWith->GetLeftSubIndent() == style.GetLeftSubIndent()))
+            destStyle.SetLeftIndent(style.GetLeftIndent(), style.GetLeftSubIndent());
+    }
+
+    if (style.HasRightIndent())
+    {
+        if (!(compareWith && compareWith->HasRightIndent() && compareWith->GetRightIndent() == style.GetRightIndent()))
+            destStyle.SetRightIndent(style.GetRightIndent());
+    }
+
+    if (style.HasParagraphSpacingAfter())
+    {
+        if (!(compareWith && compareWith->HasParagraphSpacingAfter() && compareWith->GetParagraphSpacingAfter() == style.GetParagraphSpacingAfter()))
+            destStyle.SetParagraphSpacingAfter(style.GetParagraphSpacingAfter());
+    }
+
+    if (style.HasParagraphSpacingBefore())
+    {
+        if (!(compareWith && compareWith->HasParagraphSpacingBefore() && compareWith->GetParagraphSpacingBefore() == style.GetParagraphSpacingBefore()))
+            destStyle.SetParagraphSpacingBefore(style.GetParagraphSpacingBefore());
+    }
+
+    if (style.HasLineSpacing())
+    {
+        if (!(compareWith && compareWith->HasLineSpacing() && compareWith->GetLineSpacing() == style.GetLineSpacing()))
+            destStyle.SetLineSpacing(style.GetLineSpacing());
+    }
+
+    if (style.HasCharacterStyleName())
+    {
+        if (!(compareWith && compareWith->HasCharacterStyleName() && compareWith->GetCharacterStyleName() == style.GetCharacterStyleName()))
+            destStyle.SetCharacterStyleName(style.GetCharacterStyleName());
+    }
+
+    if (style.HasParagraphStyleName())
+    {
+        if (!(compareWith && compareWith->HasParagraphStyleName() && compareWith->GetParagraphStyleName() == style.GetParagraphStyleName()))
+            destStyle.SetParagraphStyleName(style.GetParagraphStyleName());
+    }
+
+    if (style.HasListStyleName())
+    {
+        if (!(compareWith && compareWith->HasListStyleName() && compareWith->GetListStyleName() == style.GetListStyleName()))
+            destStyle.SetListStyleName(style.GetListStyleName());
+    }
+
+    if (style.HasBulletStyle())
+    {
+        if (!(compareWith && compareWith->HasBulletStyle() && compareWith->GetBulletStyle() == style.GetBulletStyle()))
+            destStyle.SetBulletStyle(style.GetBulletStyle());
+    }
+
+    if (style.HasBulletText())
+    {
+        if (!(compareWith && compareWith->HasBulletText() && compareWith->GetBulletText() == style.GetBulletText()))
+        {
+            destStyle.SetBulletText(style.GetBulletText());
+            destStyle.SetBulletFont(style.GetBulletFont());
+        }
+    }
+
+    if (style.HasBulletNumber())
+    {
+        if (!(compareWith && compareWith->HasBulletNumber() && compareWith->GetBulletNumber() == style.GetBulletNumber()))
+            destStyle.SetBulletNumber(style.GetBulletNumber());
+    }
+
+    if (style.HasBulletName())
+    {
+        if (!(compareWith && compareWith->HasBulletName() && compareWith->GetBulletName() == style.GetBulletName()))
+            destStyle.SetBulletName(style.GetBulletName());
+    }
+
+    if (style.HasURL())
+    {
+        if (!(compareWith && compareWith->HasURL() && compareWith->GetURL() == style.GetURL()))
+            destStyle.SetURL(style.GetURL());
+    }
+
+    if (style.HasPageBreak())
+    {
+        if (!(compareWith && compareWith->HasPageBreak()))
+            destStyle.SetPageBreak();
+    }
+
+    if (style.HasTextEffects())
+    {
+        if (!(compareWith && compareWith->HasTextEffects() && compareWith->GetTextEffects() == style.GetTextEffects()))
+        {
+            int destBits = destStyle.GetTextEffects();
+            int destFlags = destStyle.GetTextEffectFlags();
+
+            int srcBits = style.GetTextEffects();
+            int srcFlags = style.GetTextEffectFlags();
+            
+            wxRichTextCombineBitlists(destBits, srcBits, destFlags, srcFlags);
+            
+            destStyle.SetTextEffects(destBits);
+            destStyle.SetTextEffectFlags(destFlags);
+        }
+    }
+
+    if (style.HasOutlineLevel())
+    {
+        if (!(compareWith && compareWith->HasOutlineLevel() && compareWith->GetOutlineLevel() == style.GetOutlineLevel()))
+            destStyle.SetOutlineLevel(style.GetOutlineLevel());
+    }
+
+    return true;
 }
 
 /*!
@@ -7643,27 +7710,27 @@ wxTextAttrEx wxTextAttrEx::CombineEx(const wxTextAttrEx& attr,
         // Otherwise, if there are font attributes in attr, apply them
         if (attr.GetFlags() & wxTEXT_ATTR_FONT)
         {
-            if (attr.HasSize())
+            if (attr.HasFontSize())
             {
                 flags |= wxTEXT_ATTR_FONT_SIZE;
                 font.SetPointSize(attr.GetFont().GetPointSize());
             }
-            if (attr.HasItalic())
+            if (attr.HasFontItalic())
             {
                 flags |= wxTEXT_ATTR_FONT_ITALIC;;
                 font.SetStyle(attr.GetFont().GetStyle());
             }
-            if (attr.HasWeight())
+            if (attr.HasFontWeight())
             {
                 flags |= wxTEXT_ATTR_FONT_WEIGHT;
                 font.SetWeight(attr.GetFont().GetWeight());
             }
-            if (attr.HasFaceName())
+            if (attr.HasFontFaceName())
             {
                 flags |= wxTEXT_ATTR_FONT_FACE;
                 font.SetFaceName(attr.GetFont().GetFaceName());
             }
-            if (attr.HasUnderlined())
+            if (attr.HasFontUnderlined())
             {
                 flags |= wxTEXT_ATTR_FONT_UNDERLINE;
                 font.SetUnderlined(attr.GetFont().GetUnderlined());

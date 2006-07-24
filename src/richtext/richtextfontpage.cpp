@@ -383,7 +383,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
     m_dontUpdate = true;
     wxTextAttrEx* attr = GetAttributes();
 
-    if (attr->HasFont() && attr->HasFaceName())
+    if (attr->HasFont() && attr->HasFontFaceName())
     {
         m_faceTextCtrl->SetValue(attr->GetFont().GetFaceName());
         m_faceListBox->SetFaceNameSelection(attr->GetFont().GetFaceName());
@@ -394,7 +394,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
         m_faceListBox->SetFaceNameSelection(wxEmptyString);
     }
 
-    if (attr->HasFont() && attr->HasSize())
+    if (attr->HasFont() && attr->HasFontSize())
     {
         wxString strSize = wxString::Format(wxT("%d"), attr->GetFont().GetPointSize());
         m_sizeTextCtrl->SetValue(strSize);
@@ -407,7 +407,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
         m_sizeListBox->SetSelection(wxNOT_FOUND);
     }
 
-    if (attr->HasFont() && attr->HasWeight())
+    if (attr->HasFont() && attr->HasFontWeight())
     {
         if (attr->GetFont().GetWeight() == wxBOLD)
             m_weightCtrl->SetSelection(1);
@@ -419,7 +419,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
         m_weightCtrl->SetSelection(wxNOT_FOUND);
     }
 
-    if (attr->HasFont() && attr->HasItalic())
+    if (attr->HasFont() && attr->HasFontItalic())
     {
         if (attr->GetFont().GetStyle() == wxITALIC)
             m_styleCtrl->SetSelection(1);
@@ -431,7 +431,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
         m_styleCtrl->SetSelection(wxNOT_FOUND);
     }
 
-    if (attr->HasFont() && attr->HasUnderlined())
+    if (attr->HasFont() && attr->HasFontUnderlined())
     {
         if (attr->GetFont().GetUnderlined())
             m_underliningCtrl->SetSelection(1);

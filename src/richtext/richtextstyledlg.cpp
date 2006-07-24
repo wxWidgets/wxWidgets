@@ -425,16 +425,8 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     wxRichTextStyleDefinition* def = m_stylesListBox->GetStyleListBox()->GetStyle(sel);
 
     wxRichTextListStyleDefinition* listDef = wxDynamicCast(def, wxRichTextListStyleDefinition);
-    //wxRichTextParagraphStyleDefinition* paraDef = wxDynamicCast(def, wxRichTextParagraphStyleDefinition);
-    //wxRichTextCharacterStyleDefinition* charDef = wxDynamicCast(def, wxRichTextCharacterStyleDefinition);
 
-    wxTextAttrEx attr(def->GetStyle());
-#if 0
-    attr.SetFlags(attr.GetFlags() &
-      (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|
-       wxTEXT_ATTR_LINE_SPACING|
-       wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_SYMBOL));
-#endif
+    wxTextAttrEx attr(def->GetStyleMergedWithBase(GetStyleSheet()));
 
     wxFont font(m_previewCtrl->GetFont());
     font.SetPointSize(9);

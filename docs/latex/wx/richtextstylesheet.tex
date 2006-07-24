@@ -49,6 +49,12 @@ Adds a definition to the list style list.
 
 Adds a definition to the paragraph style list.
 
+\membersection{wxRichTextStyleSheet::AddStyle}\label{wxrichtextstylesheetaddstyle}
+
+\func{bool}{AddStyle}{\param{wxRichTextStyleDefinition* }{def}}
+
+Adds a definition to the appropriate style list.
+
 \membersection{wxRichTextStyleSheet::DeleteStyles}\label{wxrichtextstylesheetdeletestyles}
 
 \func{void}{DeleteStyles}{\void}
@@ -72,6 +78,12 @@ Finds a list definition by name.
 \constfunc{wxRichTextParagraphStyleDefinition*}{FindParagraphStyle}{\param{const wxString\& }{name}}
 
 Finds a paragraph definition by name.
+
+\membersection{wxRichTextStyleSheet::FindStyle}\label{wxrichtextstylesheetfindstyle}
+
+\constfunc{wxRichTextStyleDefinition*}{FindStyle}{\param{const wxString\& }{name}}
+
+Finds a style definition by name.
 
 \membersection{wxRichTextStyleSheet::GetCharacterStyle}\label{wxrichtextstylesheetgetcharacterstyle}
 
@@ -121,12 +133,6 @@ Returns the {\it n}th paragraph style.
 
 Returns the number of paragraph styles.
 
-\membersection{wxRichTextStyleSheet::Init}\label{wxrichtextstylesheetinit}
-
-\func{void}{Init}{\void}
-
-Initialises the style sheet.
-
 \membersection{wxRichTextStyleSheet::RemoveCharacterStyle}\label{wxrichtextstylesheetremovecharacterstyle}
 
 \func{bool}{RemoveCharacterStyle}{\param{wxRichTextStyleDefinition* }{def}, \param{bool }{deleteStyle = false}}
@@ -144,6 +150,12 @@ Removes a list style.
 \func{bool}{RemoveParagraphStyle}{\param{wxRichTextStyleDefinition* }{def}, \param{bool }{deleteStyle = false}}
 
 Removes a paragraph style.
+
+\membersection{wxRichTextStyleSheet::RemoveStyle}\label{wxrichtextstylesheetremovestyle}
+
+\func{bool}{RemoveStyle}{\param{wxRichTextStyleDefinition* }{def}, \param{bool }{deleteStyle = false}}
+
+Removes a style.
 
 \membersection{wxRichTextStyleSheet::SetDescription}\label{wxrichtextstylesheetsetdescription}
 

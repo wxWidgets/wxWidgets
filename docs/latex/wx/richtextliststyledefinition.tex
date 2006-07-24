@@ -37,9 +37,10 @@ Destructor.
 
 \membersection{wxRichTextListStyleDefinition::CombineWithParagraphStyle}\label{wxrichtextliststyledefinitioncombinewithparagraphstyle}
 
-\func{wxRichTextAttr}{CombineWithParagraphStyle}{\param{int }{indent}, \param{const wxRichTextAttr\&}{ paraStyle}}
+\func{wxRichTextAttr}{CombineWithParagraphStyle}{\param{int }{indent}, \param{const wxRichTextAttr\&}{ paraStyle}, \param{wxRichTextStyleSheet*}{ styleSheet = NULL}}
 
 This function combines the given paragraph style with the list style's base attributes and level style matching the given indent, returning the combined attributes.
+If {\it styleSheet} is specified, the base style for this definition will also be included in the result.
 
 \membersection{wxRichTextListStyleDefinition::FindLevelForIndent}\label{wxrichtextliststyledefinitionfindlevelforindent}
 
@@ -49,9 +50,17 @@ This function finds the level (from 0 to 9) whose indentation attribute mostly c
 
 \membersection{wxRichTextListStyleDefinition::GetCombinedStyle}\label{wxrichtextliststyledefinitioncombinewithparagraphstyle}
 
-\constfunc{wxRichTextAttr}{GetCombinedStyle}{\param{int }{indent}}
+\constfunc{wxRichTextAttr}{GetCombinedStyle}{\param{int }{indent}, \param{wxRichTextStyleSheet*}{ styleSheet = NULL}}
 
 This function combines the list style's base attributes and the level style matching the given indent, returning the combined attributes.
+If {\it styleSheet} is specified, the base style for this definition will also be included in the result.
+
+\membersection{wxRichTextListStyleDefinition::GetCombinedStyleForLevel}\label{wxrichtextliststyledefinitioncombinewithparagraphstyleforlevel}
+
+\constfunc{wxRichTextAttr}{GetCombinedStyleLevel}{\param{int }{level}, \param{wxRichTextStyleSheet*}{ styleSheet = NULL}}
+
+This function combines the list style's base attributes and the style for the specified level, returning the combined attributes.
+If {\it styleSheet} is specified, the base style for this definition will also be included in the result.
 
 \membersection{wxRichTextListStyleDefinition::GetLevelAttributes}\label{wxrichtextliststyledefinitiongetlevelattributes}
 

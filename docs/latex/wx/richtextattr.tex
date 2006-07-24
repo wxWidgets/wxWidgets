@@ -155,11 +155,22 @@ Of these, only wxTEXT\_ATTR\_EFFECT\_CAPITALS and wxTEXT\_ATTR\_EFFECT\_STRIKETH
 
 Constructors.
 
-\membersection{wxRichTextAttr::CopyTo}\label{wxrichtextattrcopyto}
+\membersection{wxRichTextAttr::Apply}\label{wxrichtextattrapply}
 
-\constfunc{void}{CopyTo}{\param{wxTextAttrEx\& }{attr}}
+\func{bool}{Combine}{\param{const wxRichTextAttrEx\& }{style}, \param{const wxRichTextAttrEx* }{compareWith = NULL}}
 
-Copies the wxRichTextAttr attributes to a \helpref{wxTextAttrEx}{wxtextattrex} object.
+Applies the attributes in {\it style} to the original object, but not those attributes from {\it style} that are the same as those in {\it compareWith} (if passed).
+
+See also \helpref{wxRichTextAttr::Combine}{wxrichtextattrcombine} for a function that does almost the same but returns a new object instead of modifying the original object.
+
+\membersection{wxRichTextAttr::Combine}\label{wxrichtextattrcombine}
+
+\constfunc{wxRichTextAttr}{Combine}{\param{const wxRichTextAttrEx\& }{style}, \param{const wxRichTextAttrEx* }{compareWith = NULL}}
+
+Combines 'this' with {\it style}, but not applying attributes from {\it style} that are the same as those in {\it compareWith} (if passed).
+A wxRichTextAttr object is returned and the original object is not changed.
+
+See also \helpref{wxRichTextAttr::Apply}{wxrichtextattrapply} for a function that does almost the same but modifies the original object instead of returning a new one.
 
 \membersection{wxRichTextAttr::CreateFont}\label{wxrichtextattrcreatefont}
 
@@ -404,9 +415,9 @@ Returns \true if the attribute object specifies bullet text (usually specifying 
 
 Returns \true if the attribute object specifies a character style name.
 
-\membersection{wxRichTextAttr::HasFaceName}\label{wxrichtextattrhasfacename}
+\membersection{wxRichTextAttr::HasFontFaceName}\label{wxrichtextattrhasfontfacename}
 
-\constfunc{bool}{HasFaceName}{\void}
+\constfunc{bool}{HasFontFaceName}{\void}
 
 Returns \true if the attribute object specifies a font face name.
 
@@ -422,9 +433,9 @@ Returns \true if the {\it flag} is present in the attribute object's flag bitlis
 
 Returns \true if the attribute object specifies any font attributes.
 
-\membersection{wxRichTextAttr::HasItalic}\label{wxrichtextattrhasitalic}
+\membersection{wxRichTextAttr::HasFontItalic}\label{wxrichtextattrhasfontitalic}
 
-\constfunc{bool}{HasItalic}{\void}
+\constfunc{bool}{HasFontItalic}{\void}
 
 Returns \true if the attribute object specifies italic style.
 
@@ -482,9 +493,9 @@ Returns \true if the attribute object specifies a paragraph style name.
 
 Returns \true if the attribute object specifies a right indent.
 
-\membersection{wxRichTextAttr::HasSize}\label{wxrichtextattrhassize}
+\membersection{wxRichTextAttr::HasFontSize}\label{wxrichtextattrhasfontsize}
 
-\constfunc{bool}{HasSize}{\void}
+\constfunc{bool}{HasFontSize}{\void}
 
 Returns \true if the attribute object specifies a font point size.
 
@@ -506,9 +517,9 @@ Returns \true if the attribute object specifies a text foreground colour.
 
 Returns \true if the attribute object specifies text effects.
 
-\membersection{wxRichTextAttr::HasUnderlined}\label{wxrichtextattrhasunderlined}
+\membersection{wxRichTextAttr::HasFontUnderlined}\label{wxrichtextattrhasfontunderlined}
 
-\constfunc{bool}{HasUnderlined}{\void}
+\constfunc{bool}{HasFontUnderlined}{\void}
 
 Returns \true if the attribute object specifies either underlining or no underlining.
 
@@ -518,17 +529,11 @@ Returns \true if the attribute object specifies either underlining or no underli
 
 Returns \true if the attribute object specifies a URL.
 
-\membersection{wxRichTextAttr::HasWeight}\label{wxrichtextattrhasweight}
+\membersection{wxRichTextAttr::HasFontWeight}\label{wxrichtextattrhasfontweight}
 
-\constfunc{bool}{HasWeight}{\void}
+\constfunc{bool}{HasFontWeight}{\void}
 
 Returns \true if the attribute object specifies font weight (bold, light or normal).
-
-\membersection{wxRichTextAttr::Init}\label{wxrichtextattrinit}
-
-\func{void}{Init}{\void}
-
-Initialise the object.
 
 \membersection{wxRichTextAttr::IsCharacterStyle}\label{wxrichtextattrischaracterstyle}
 

@@ -527,8 +527,11 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
 
     wxRichTextListStyleDefinition* def = wxDynamicCast(wxRichTextFormattingDialog::GetDialogStyleDefinition(this),
         wxRichTextListStyleDefinition);
+        
+    wxRichTextStyleSheet* styleSheet = wxRichTextFormattingDialog::GetDialog(this)->GetStyleSheet();
 
-    wxTextAttrEx attr(def->GetStyle());
+    wxTextAttrEx attr(styleSheet ? def->GetStyle() : def->GetStyleMergedWithBase(styleSheet));
+
     attr.SetFlags(attr.GetFlags() &
       (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|
        wxTEXT_ATTR_LINE_SPACING|

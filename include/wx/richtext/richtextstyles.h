@@ -93,10 +93,13 @@ public:
     void SetBaseStyle(const wxString& name) { m_baseStyle = name; }
     const wxString& GetBaseStyle() const { return m_baseStyle; }
 
-    /// Sets the style
+    /// Sets and gets the style
     void SetStyle(const wxRichTextAttr& style) { m_style = style; }
     const wxRichTextAttr& GetStyle() const { return m_style; }
     wxRichTextAttr& GetStyle() { return m_style; }
+
+    /// Gets the style combined with the base style
+    virtual wxRichTextAttr GetStyleMergedWithBase(const wxRichTextStyleSheet* sheet) const;
 
 protected:
     wxString        m_name;
@@ -215,15 +218,15 @@ public:
 
     /// Combine the base and list style with a paragraph style, using the given indent (from which
     /// an appropriate level is found)
-    wxRichTextAttr CombineWithParagraphStyle(int indent, const wxRichTextAttr& paraStyle);
+    wxRichTextAttr CombineWithParagraphStyle(int indent, const wxRichTextAttr& paraStyle, wxRichTextStyleSheet* styleSheet = NULL);
 
     /// Combine the base and list style, using the given indent (from which
     /// an appropriate level is found)
-    wxRichTextAttr GetCombinedStyle(int indent);
+    wxRichTextAttr GetCombinedStyle(int indent, wxRichTextStyleSheet* styleSheet = NULL);
 
     /// Combine the base and list style, using the given level from which
     /// an appropriate level is found)
-    wxRichTextAttr GetCombinedStyleForLevel(int level);
+    wxRichTextAttr GetCombinedStyleForLevel(int level, wxRichTextStyleSheet* styleSheet = NULL);
 
     /// Gets the number of available levels
     int GetLevelCount() const { return 10; }
@@ -276,6 +279,9 @@ public:
     /// Add a definition to the list style list
     bool AddListStyle(wxRichTextListStyleDefinition* def);
 
+    /// Add a definition to the appropriate style list
+    bool AddStyle(wxRichTextStyleDefinition* def);
+
     /// Remove a character style
     bool RemoveCharacterStyle(wxRichTextStyleDefinition* def, bool deleteStyle = false) { return RemoveStyle(m_characterStyleDefinitions, def, deleteStyle); }
 
@@ -285,6 +291,9 @@ public:
     /// Remove a list style
     bool RemoveListStyle(wxRichTextStyleDefinition* def, bool deleteStyle = false) { return RemoveStyle(m_listStyleDefinitions, def, deleteStyle); }
 
+    /// Remove a style
+    bool RemoveStyle(wxRichTextStyleDefinition* def, bool deleteStyle = false);
+
     /// Find a character definition by name
     wxRichTextCharacterStyleDefinition* FindCharacterStyle(const wxString& name, bool recurse = true) const { return (wxRichTextCharacterStyleDefinition*) FindStyle(m_characterStyleDefinitions, name, recurse); }
 
@@ -293,6 +302,9 @@ public:
 
     /// Find a list definition by name
     wxRichTextListStyleDefinition* FindListStyle(const wxString& name, bool recurse = true) const { return (wxRichTextListStyleDefinition*) FindStyle(m_listStyleDefinitions, name, recurse); }
+
+    /// Find any definition by name
+    wxRichTextStyleDefinition* FindStyle(const wxString& name, bool recurse = true) const;
 
     /// Return the number of character styles
     size_t GetCharacterStyleCount() const { return m_characterStyleDefinitions.GetCount(); }
