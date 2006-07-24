@@ -182,7 +182,6 @@ private:
     DECLARE_NO_COPY_CLASS(wxToolBarTool)
 };
 
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -248,7 +247,7 @@ bool wxToolBar::Create(wxWindow *parent,
 #if wxUSE_UXTHEME
     if ( style & wxTB_FLAT )
     {
-        LRESULT style = ::SendMessage(GetHwnd(), TB_GETSTYLE, 0, 0L);
+        LRESULT style = GetMSWToolbarStyle();
 
         if ( !(style & TBSTYLE_FLAT) )
             ::SendMessage(GetHwnd(), TB_SETSTYLE, 0, style | TBSTYLE_FLAT);
@@ -1273,6 +1272,12 @@ void wxToolBar::UpdateSize()
 // toolbar styles
 // ---------------------------------------------------------------------------
 
+// get the TBSTYLE of the given toolbar window
+long wxToolBar::GetMSWToolbarStyle() const
+{
+    return ::SendMessage(GetHwnd(), TB_GETSTYLE, 0, 0L);
+}
+
 void wxToolBar::SetWindowStyleFlag(long style)
 {
     // the style bits whose changes force us to recreate the toolbar
@@ -1372,7 +1377,29 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
     RECT rect = wxGetClientRect(GetHwnd());
     HDC hdc = GetHdcOf((*event.GetDC()));
 
-    if ( UseBgCol() )
+#if wxUSE_UXTHEME
+    // we may need to draw themed colour so that we appear correctly on
+    // e.g. notebook page under XP with themes but only do it if the parent
+    // draws themed background itself
+    if ( !UseBgCol() && !GetParent()->UseBgCol() )
+    {
+        wxUxThemeEngine *theme = wxUxThemeEngine::GetIfActive();
+        if ( theme )
+        {
+            HRESULT
+                hr = theme->DrawThemeParentBackground(GetHwnd(), hdc, &rect);
+            if ( hr == S_OK )
+                return;
+
+            // it can also return S_FALSE which seems to simply say that it
+            // didn't draw anything but no error really occurred
+            if ( FAILED(hr) )
+                wxLogApiError(_T("DrawThemeParentBackground(toolbar)"), hr);
+        }
+    }
+#endif // wxUSE_UXTHEME
+
+    if ( UseBgCol() || (GetMSWToolbarStyle() & TBSTYLE_TRANSPARENT) )
     {
         // do draw our background
         //
@@ -1386,39 +1413,8 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
     }
     else // we have no non default background colour
     {
-#if wxUSE_UXTHEME
-        // we may need to draw themed colour so that we appear correctly on
-        // e.g. notebook page under XP with themes but only do it if the parent
-        // draws themed background itself
-        if ( !GetParent()->UseBgCol() )
-        {
-            wxUxThemeEngine *theme = wxUxThemeEngine::GetIfActive();
-            if ( theme )
-            {
-                HRESULT
-                    hr = theme->DrawThemeParentBackground(GetHwnd(), hdc, &rect);
-                if ( hr == S_OK )
-                    return;
-
-                // it can also return S_FALSE which seems to simply say that it
-                // didn't draw anything but no error really occurred
-                if ( FAILED(hr) )
-                    wxLogApiError(_T("DrawThemeParentBackground(toolbar)"), hr);
-            }
-        }
-#endif // wxUSE_UXTHEME
-
-        // if we are transparent then paint our background ourselves
-        LRESULT style = ::SendMessage(GetHwnd(), TB_GETSTYLE, 0, 0L);
-        if ( style & TBSTYLE_TRANSPARENT )
-        {
-            ::FillRect(hdc, &rect, ::GetSysColorBrush(COLOR_BTNFACE));
-        }
-        else
-        {
-            // let the system do it for us
-            event.Skip();
-        }
+        // let the system do it for us
+        event.Skip();
     }
 }
 

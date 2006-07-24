@@ -118,6 +118,9 @@ protected:
     // unneeded
     void CreateDisabledImageList();
 
+    // get the Windows toolbar style of this control
+    long GetMSWToolbarStyle() const;
+
 
     // the big bitmap containing all bitmaps of the toolbar buttons
     WXHBITMAP m_hBitmap;
