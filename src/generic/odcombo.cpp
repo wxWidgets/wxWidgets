@@ -242,7 +242,7 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
     }
     else if (unicode>0)
     {
-        keychar = unicode; 
+        keychar = unicode;
     }
 
     if ( keycode == WXK_DOWN || keycode == WXK_RIGHT )
@@ -279,12 +279,12 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
 
         // now search through the values to see if this is found
         int found = -1;
-        unsigned int length=m_partialCompletionString.Length();
+        unsigned int length=m_partialCompletionString.length();
         int i;
         for (i=0; i<itemCount; i++)
         {
             wxString item=GetString(i);
-            if (( item.Length() >=length) && (!  m_partialCompletionString.CmpNoCase(item.Left(length))))
+            if (( item.length() >= length) && (!  m_partialCompletionString.CmpNoCase(item.Left(length))))
             {
                 found=i;
                 break;
@@ -1044,10 +1044,12 @@ void wxOwnerDrawnComboBox::OnDrawBackground(wxDC& dc, const wxRect& rect, int it
     if ( GetVListBoxComboPopup()->IsCurrent((size_t)item) ||
          (flags & wxODCB_PAINTING_CONTROL) )
     {
-        DrawFocusBackground(dc,
-                            rect,
-                            (flags&wxODCB_PAINTING_CONTROL?0:wxCONTROL_ISSUBMENU) |
-                            wxCONTROL_SELECTED);
+        int focusFlag = wxCONTROL_SELECTED;
+
+        if ( flags & wxODCB_PAINTING_CONTROL != wxODCB_PAINTING_CONTROL )
+            focusFlag |= wxCONTROL_ISSUBMENU;
+
+        DrawFocusBackground(dc, rect, focusFlag );
     }
     //else: do nothing for the normal items
 }
