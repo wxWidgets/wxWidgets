@@ -24,6 +24,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/aui/tabmdi.h"
