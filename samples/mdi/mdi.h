@@ -28,7 +28,11 @@ public:
 
     void OnEvent(wxMouseEvent& event);
 
+    void SetText(const wxString& text) { m_text = text; Refresh(); }
+
 private:
+    wxString m_text;
+
     bool m_dirty;
 
     DECLARE_EVENT_TABLE()
@@ -72,6 +76,11 @@ public:
     void OnSize(wxSizeEvent& event);
     void OnMove(wxMoveEvent& event);
     void OnClose(wxCloseEvent& event);
+
+#if wxUSE_CLIPBOARD
+    void OnPaste(wxCommandEvent& event);
+    void OnUpdatePaste(wxUpdateUIEvent& event);
+#endif // wxUSE_CLIPBOARD
 
     DECLARE_EVENT_TABLE()
 };

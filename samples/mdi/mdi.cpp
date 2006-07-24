@@ -85,6 +85,11 @@ BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
     EVT_MENU(MDI_CHANGE_POSITION, MyChild::OnChangePosition)
     EVT_MENU(MDI_CHANGE_SIZE, MyChild::OnChangeSize)
 
+#if wxUSE_CLIPBOARD
+    EVT_MENU(wxID_PASTE, MyChild::OnPaste)
+    EVT_UPDATE_UI(wxID_PASTE, MyChild::OnUpdatePaste)
+#endif // wxUSE_CLIPBOARD
+
     EVT_SIZE(MyChild::OnSize)
     EVT_MOVE(MyChild::OnMove)
 
@@ -251,6 +256,10 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     option_menu->AppendSeparator();
     option_menu->Append(MDI_CHANGE_POSITION, _T("Move frame\tCtrl-M"));
     option_menu->Append(MDI_CHANGE_SIZE, _T("Resize frame\tCtrl-S"));
+#if wxUSE_CLIPBOARD
+    option_menu->AppendSeparator();
+    option_menu->Append(wxID_PASTE, _T("Copy text from clipboard\tCtrl-V"));
+#endif // wxUSE_CLIPBOARD
 
     wxMenu *help_menu = new wxMenu;
     help_menu->Append(MDI_ABOUT, _T("&About"));
@@ -367,6 +376,9 @@ MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
 // Define the repainting behaviour
 void MyCanvas::OnDraw(wxDC& dc)
 {
+    if ( !m_text.empty() )
+        dc.DrawText(m_text, 10, 10);
+
     dc.SetFont(*wxSWISS_FONT);
     dc.SetPen(*wxGREEN_PEN);
     dc.DrawLine(0, 0, 200, 200);
@@ -521,3 +533,23 @@ void MyChild::OnClose(wxCloseEvent& event)
 
     event.Skip();
 }
+
+#if wxUSE_CLIPBOARD
+
+#include "wx/clipbrd.h"
+
+void MyChild::OnPaste(wxCommandEvent& WXUNUSED(event))
+{
+    wxClipboardLocker lock;
+    wxTextDataObject data;
+    canvas->SetText(wxTheClipboard->GetData(data) ? data.GetText()
+                                                  : _T("No text on clipboard"));
+}
+
+void MyChild::OnUpdatePaste(wxUpdateUIEvent& event)
+{
+    wxClipboardLocker lock;
+    event.Enable( wxTheClipboard->IsSupported(wxDF_TEXT) );
+}
+
+#endif // wxUSE_CLIPBOARD
