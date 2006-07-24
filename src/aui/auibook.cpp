@@ -313,7 +313,7 @@ void wxAuiTabContainer::AddButton(int id, const wxBitmap& bmp)
 
 void wxAuiTabContainer::DrawTab(wxDC* dc,
                                 const wxRect& in_rect,
-                                const wxString& _caption,
+                                const wxString& caption_text,
                                 bool active,
                                 wxRect* out_rect,
                                 int* x_extent)
@@ -325,8 +325,8 @@ void wxAuiTabContainer::DrawTab(wxDC* dc,
 
 
     // if the caption is empty, measure some temporary text
-    wxString caption = _caption;
-    if (_caption.IsEmpty())
+    wxString caption = caption_text;
+    if (caption_text.IsEmpty())
         caption = wxT("Xj");
         
     // measure text
@@ -339,7 +339,7 @@ void wxAuiTabContainer::DrawTab(wxDC* dc,
     dc->SetFont(m_normal_font);
     dc->GetTextExtent(caption, &normal_textx, &normal_texty);
 
-    caption = _caption;
+    caption = caption_text;
 
     wxCoord tab_height = measured_texty + 4;
     wxCoord tab_width = measured_textx + tab_height + 5;
