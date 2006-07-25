@@ -1775,6 +1775,51 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
         pango_layout_set_font_description( m_layout, m_fontdesc );
 }
 
+
+bool wxWindowDC::DoGetPartialTextExtents(const wxString& text,
+                                         wxArrayInt& widths) const
+{
+    const size_t len = text.length();
+    widths.Empty();
+    widths.Add(0, len);
+
+    if (text.empty())
+        return true;
+
+    // Set layout's text
+    const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(text, m_font);
+    if ( !dataUTF8 )
+    {
+        // hardly ideal, but what else can we do if conversion failed?
+        wxLogLastError(wxT("DoGetPartialTextExtents"));
+        return false;
+    }
+
+    pango_layout_set_text( m_layout, dataUTF8, strlen(dataUTF8) );
+    
+    // Calculate the position of each character based on the widths of
+    // the previous characters
+
+    // Code borrowed from Scintilla's PlatGTK
+    PangoLayoutIter *iter = pango_layout_get_iter(m_layout);
+    PangoRectangle pos;
+    pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
+    size_t i = 0;
+    while (pango_layout_iter_next_cluster(iter))
+    {
+        pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
+        int position = PANGO_PIXELS(pos.x);
+        size_t curIndex = pango_layout_iter_get_index(iter);
+        widths[i++] = position;
+    }
+    while (i < len)
+        widths[i++] = PANGO_PIXELS(pos.x + pos.width);
+    pango_layout_iter_free(iter);
+
+    return true;
+}
+
+
 wxCoord wxWindowDC::GetCharWidth() const
 {
     pango_layout_set_text( m_layout, "H", 1 );
