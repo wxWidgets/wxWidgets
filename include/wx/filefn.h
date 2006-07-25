@@ -595,29 +595,35 @@ private:
 
 
 // Path searching
-class WXDLLIMPEXP_BASE wxPathList : public wxStringList
+class WXDLLIMPEXP_BASE wxPathList : public wxArrayString
 {
 public:
+    wxPathList() {}
+    wxPathList(const wxArrayString &arr)
+        { Add(arr); }
+
     // avoid GCC warning about virtual functions w/o virtual dtor
     virtual ~wxPathList() {}
 
     // Adds all paths in environment variable
     void AddEnvList(const wxString& envVariable);
 
+    // Adds given path to this list
     void Add(const wxString& path);
+    void Add(const wxArrayString &paths);
+
     // Find the first full path for which the file exists
-    wxString FindValidPath(const wxString& filename);
+    wxString FindValidPath(const wxString& filename) const;
+
     // Find the first full path for which the file exists; ensure it's an
     // absolute path that gets returned.
-    wxString FindAbsoluteValidPath(const wxString& filename);
+    wxString FindAbsoluteValidPath(const wxString& filename) const;
+
     // Given full path and filename, add path to list
     void EnsureFileAccessible(const wxString& path);
-    // Returns true if the path is in the list
-    bool Member(const wxString& path);
 
-private:
-    // DECLARE_DYNAMIC_CLASS(wxPathList)
+    // Returns true if the path is in the list
+    wxDEPRECATED( bool Member(const wxString& path) const );
 };
 
-#endif
-  // _WX_FILEFN_H_
+#endif // _WX_FILEFN_H_

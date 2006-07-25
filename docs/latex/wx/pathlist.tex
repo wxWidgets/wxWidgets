@@ -6,13 +6,12 @@ in those directories.  Storing the filename only in an application's files and
 using a locally-defined list of directories makes the application and its files more
 portable.
 
-Use the {\it wxFileNameFromPath} global function to extract the filename
-from the path.
+Use the \helpref{wxFileName::SplitPath}{wxfilenamesplitpath} global function 
+to extract the filename from the path.
 
 \wxheading{Derived from}
 
-\helpref{wxList}{wxlist}\\
-\helpref{wxObject}{wxobject}
+\helpref{wxArrayString}{wxarraystring}
 
 \wxheading{Include files}
 
@@ -20,7 +19,7 @@ from the path.
 
 \wxheading{See also}
 
-\helpref{wxList}{wxlist}
+\helpref{wxArrayString}{wxarraystring}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -29,7 +28,11 @@ from the path.
 
 \func{}{wxPathList}{\void}
 
-Constructor.
+Empty constructor.
+
+\func{}{wxPathList}{\param{const wxArrayString\& }{arr}}
+
+Constructs the object calling the \helpref{Add}{wxpathlistadd} function.
 
 
 \membersection{wxPathList::AddEnvList}\label{wxpathlistaddenvlist}
@@ -45,9 +48,12 @@ example.
 
 \func{void}{Add}{\param{const wxString\& }{path}}
 
-Adds the given directory to the path list, but does not
-check if the path was already on the list (use 
-\helpref{wxPathList::Member()}{wxpathlistmember} for this).
+\func{void}{Add}{\param{const wxArrayString\& }{arr}}
+
+The first form adds the given directory (the filename if present is removed)
+to the path list, if the path is not already in the list.
+
+The second form just calls the first form on all elements of the given array.
 
 
 \membersection{wxPathList::EnsureFileAccessible}\label{wxpathlistensurefileaccessible}
@@ -61,7 +67,7 @@ filename and adding the path to the list if not already there.
 
 \membersection{wxPathList::FindAbsoluteValidPath}\label{wxpathlistfindabsolutepath}
 
-\func{wxString}{FindAbsoluteValidPath}{\param{const wxString\& }{file}}
+\constfunc{wxString}{FindAbsoluteValidPath}{\param{const wxString\& }{file}}
 
 Searches for a full path for an existing file by appending {\it file} to
 successive members of the path list.  If the file wasn't found, an empty
@@ -70,16 +76,9 @@ string is returned.
 
 \membersection{wxPathList::FindValidPath}\label{wxpathlistfindvalidpath}
 
-\func{wxString}{FindValidPath}{\param{const wxString\& }{file}}
+\constfunc{wxString}{FindValidPath}{\param{const wxString\& }{file}}
 
 Searches for a full path for an existing file by appending {\it file} to
 successive members of the path list.  If the file wasn't found, an empty string
 is returned. This path may be relative to the current working directory.
-
-
-\membersection{wxPathList::Member}\label{wxpathlistmember}
-
-\func{bool}{Member}{\param{const wxString\& }{file}}
-
-true if the path is in the path list (ignoring case).
 
