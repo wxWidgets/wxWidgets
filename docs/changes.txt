@@ -87,6 +87,7 @@ All:
 - Fixed wxDb::Open(wxDbConnectInf) when using connection string (Hellwolf Misty)
 - Fixed crash in wxDb::Open() in Unicode build (Massimiliano Marretta)
 - Fixed wxTimeSpan::Format() for negative time spans
+- Optionally count repeating wxLog messages instead of logging all (Lauri Nurmi)
 
 All (GUI):
 

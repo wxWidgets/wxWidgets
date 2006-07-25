@@ -155,7 +155,9 @@ window on the corresponding error message. If you wish to enable it, please use
 \helpref{SetTimestamp}{wxlogsettimestamp}\\
 \helpref{GetTimestamp}{wxloggettimestamp}\\
 \helpref{SetTraceMask}{wxlogsettracemask}\\
-\helpref{GetTraceMask}{wxloggettracemask}
+\helpref{GetTraceMask}{wxloggettracemask}\\
+\helpref{SetRepetitionCounting}{wxlogsetrepetitioncounting}\\
+\helpref{GetRepetitionCounting}{wxloggetrepetitioncounting}
 
 %%%%% MEMBERS HERE %%%%%
 \helponly{\insertatlevel{2}{
@@ -321,6 +323,21 @@ and not sent to the active log target.
 \func{static wxLogLevel}{GetLogLevel}{\void}
 
 Returns the current log level limit.
+
+\membersection{wxLog::SetRepetitionCounting}\label{wxlogsetrepetitioncounting}
+
+\func{static void}{SetRepetitionCounting}{\param{bool }{ repetCounting = true}}
+
+Enables logging mode in which a log message is logged once, and in case exactly
+the same message successively repeats one or more times, only the number of 
+repetitions is logged.
+
+\membersection{wxLog::GetRepetitionCounting}\label{wxloggetrepetitioncounting}
+
+\func{static bool}{GetRepetitionCounting}{\void}
+
+Returns whether the repetition counting mode is enabled.
+
 
 \membersection{wxLog::SetTimestamp}\label{wxlogsettimestamp}
 

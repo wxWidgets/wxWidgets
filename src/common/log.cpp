@@ -357,6 +357,62 @@ void WXDLLEXPORT wxLogSysError(long lErrCode, const wxChar *szFormat, ...)
 // wxLog class implementation
 // ----------------------------------------------------------------------------
 
+/* static */
+unsigned wxLog::DoLogNumberOfRepeats()
+{
+    long retval = ms_prevCounter;
+    wxLog *pLogger = GetActiveTarget();
+    if ( pLogger && ms_prevCounter > 0 )
+    {
+        wxString msg;
+        msg.Printf(wxPLURAL("The previous message repeated once.",
+                            "The previous message repeated %lu times.",
+                            ms_prevCounter),
+                   ms_prevCounter);
+        ms_prevCounter = 0;
+        ms_prevString.clear();
+        pLogger->DoLog(ms_prevLevel, msg.c_str(), ms_prevTimeStamp);
+    }
+    return retval;
+}
+
+wxLog::~wxLog()
+{
+    if ( ms_prevCounter > 0 )
+    {
+        // looks like the repeat count has not been logged yet,
+        // so let's do it now
+        wxLog::DoLogNumberOfRepeats();
+    }
+}
+
+/* static */
+void wxLog::OnLog(wxLogLevel level, const wxChar *szString, time_t t)
+{
+    if ( IsEnabled() && ms_logLevel >= level )
+    {
+        wxLog *pLogger = GetActiveTarget();
+        if ( pLogger )
+        {
+            if ( GetRepetitionCounting() && ms_prevString == szString )
+            {
+                ms_prevCounter++;
+            }
+            else
+            {
+                if ( GetRepetitionCounting() )
+                {
+                    pLogger->DoLogNumberOfRepeats();
+                }
+                ms_prevString = szString;
+                ms_prevLevel = level;
+                ms_prevTimeStamp = t;
+                pLogger->DoLog(level, szString, t);
+            }
+        }
+    }
+}
+
 wxChar *wxLog::SetLogBuffer( wxChar *buf, size_t size)
 {
     wxChar *oldbuf = s_szBuf;
@@ -695,6 +751,12 @@ wxLogPassThrough::wxLogPassThrough()
 // ----------------------------------------------------------------------------
 // static variables
 // ----------------------------------------------------------------------------
+
+bool            wxLog::ms_bRepetCounting = false;
+wxString        wxLog::ms_prevString;
+size_t          wxLog::ms_prevCounter = 0;
+time_t          wxLog::ms_prevTimeStamp= 0;
+wxLogLevel      wxLog::ms_prevLevel;
 
 wxLog          *wxLog::ms_pLogger      = (wxLog *)NULL;
 bool            wxLog::ms_doLog        = true;
