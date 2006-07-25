@@ -13,6 +13,11 @@
 #if wxUSE_BUTTON
 
 #include "wx/button.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/toplevel.h"
+#endif
+
 #include "wx/stockitem.h"
 
 #include "wx/gtk1/private.h"

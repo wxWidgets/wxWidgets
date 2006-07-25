@@ -27,6 +27,11 @@
 #pragma message enable nosimpint
 #endif
 
+
+#ifndef WX_PRECOMP
+    #include "wx/toplevel.h"
+#endif
+
 #include "wx/stockitem.h"
 #include "wx/motif/private.h"
 #include "wx/sysopt.h"
