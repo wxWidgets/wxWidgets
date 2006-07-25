@@ -2188,9 +2188,9 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                     // we treat PageUp/Dn as arrows because chances are that
                     // a control which needs arrows also needs them for
                     // navigation (e.g. wxTextCtrl, wxListCtrl, ...)
-                    if ( (lDlgCode & DLGC_WANTARROWS) || !bCtrlDown )
+                    if ( (lDlgCode & DLGC_WANTARROWS) && !bCtrlDown )
                         bProcess = false;
-                    else
+                    else // OTOH Ctrl-PageUp/Dn works as [Shift-]Ctrl-Tab
                         bWindowChange = true;
                     break;
 
