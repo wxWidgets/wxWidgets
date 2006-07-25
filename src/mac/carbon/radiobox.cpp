@@ -128,7 +128,7 @@ bool wxRadioBox::Create( wxWindow *parent,
         wxRadioButton *radBtn = new wxRadioButton(
             this,
             wxID_ANY,
-            wxStripMenuCodes(choices[i]),
+            GetLabelText(choices[i]),
             wxPoint( 5, 20 * i + 10 ),
             wxDefaultSize,
             i == 0 ? wxRB_GROUP : 0 );

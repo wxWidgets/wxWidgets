@@ -207,7 +207,7 @@ wxControl::~wxControl()
 
 void wxControl::SetLabel(const wxString& title)
 {
-    m_label = wxStripMenuCodes(title) ;
+    m_label = GetLabelText(title) ;
 
     if ( m_macControl )
     {
@@ -309,7 +309,7 @@ void wxControl::MacPreControlCreate( wxWindow *parent, wxWindowID id, wxString l
     ((Rect*)outBounds)->bottom = 0;
     ((Rect*)outBounds)->right = 0;
 
-    wxMacStringToPascal( wxStripMenuCodes(label) , maclabel ) ;
+    wxMacStringToPascal( GetLabelText(label) , maclabel ) ;
 }
 
 void wxControl::MacPostControlCreate()
@@ -398,7 +398,7 @@ void wxControl::MacPostControlCreate()
     SetSize(pos.x, pos.y, new_size.x, new_size.y);
 
 #if wxUSE_UNICODE
-    UMASetControlTitle( (ControlHandle) m_macControl , wxStripMenuCodes(m_label) , m_font.GetEncoding() ) ;
+    UMASetControlTitle( (ControlHandle) m_macControl , GetLabelText(m_label) , m_font.GetEncoding() ) ;
 #endif
 
     if ( m_macControlIsShown )

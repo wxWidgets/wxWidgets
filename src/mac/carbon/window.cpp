@@ -1136,7 +1136,7 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos, const wxSize& size)
     // adjust font, controlsize etc
     DoSetWindowVariant( m_windowVariant ) ;
 
-    m_peer->SetLabel( wxStripMenuCodes(m_label) ) ;
+    m_peer->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics) ) ;
 
     if (!m_macIsUserPane)
         SetInitialBestSize(size);
@@ -2088,7 +2088,7 @@ void wxWindowMac::DoSetClientSize(int clientwidth, int clientheight)
 
 void wxWindowMac::SetLabel(const wxString& title)
 {
-    m_label = wxStripMenuCodes(title) ;
+    m_label = wxStripMenuCodes(title, wxStrip_Mnemonics) ;
 
     if ( m_peer && m_peer->Ok() )
         m_peer->SetLabel( m_label ) ;

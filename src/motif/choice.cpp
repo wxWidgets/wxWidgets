@@ -195,7 +195,7 @@ int wxChoice::DoInsert(const wxString& item, unsigned int pos)
 #ifndef XmNpositionIndex
     wxCHECK_MSG( pos == GetCount(), -1, wxT("insert not implemented"));
 #endif
-    Widget w = XtVaCreateManagedWidget (wxStripMenuCodes(item),
+    Widget w = XtVaCreateManagedWidget (GetLabelText(item),
 #if wxUSE_GADGETS
         xmPushButtonGadgetClass, (Widget) m_menuWidget,
 #else

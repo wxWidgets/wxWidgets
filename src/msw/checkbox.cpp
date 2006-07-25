@@ -215,7 +215,7 @@ wxSize wxCheckBox::DoGetBestSize() const
     int wCheckbox, hCheckbox;
     if ( !str.empty() )
     {
-        GetTextExtent(wxStripMenuCodes(str), &wCheckbox, &hCheckbox);
+        GetTextExtent(GetLabelText(str), &wCheckbox, &hCheckbox);
         wCheckbox += s_checkSize + GetCharWidth();
 
         if ( hCheckbox < s_checkSize )

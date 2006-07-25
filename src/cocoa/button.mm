@@ -48,7 +48,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID winid,
     [m_cocoaNSView release];
 
     [GetNSButton() setBezelStyle:NSRoundedBezelStyle];
-    [GetNSButton() setTitle:wxNSStringWithWxString(wxStripMenuCodes(label))];
+    [GetNSButton() setTitle:wxNSStringWithWxString(GetLabelText(label))];
     [GetNSControl() sizeToFit];
 
     if(m_parent)
@@ -78,7 +78,7 @@ wxString wxButton::GetLabel() const
 
 void wxButton::SetLabel(const wxString& label)
 {
-    [GetNSButton() setTitle:wxNSStringWithWxString(wxStripMenuCodes(label))];
+    [GetNSButton() setTitle:wxNSStringWithWxString(GetLabelText(label))];
 }
 
 wxSize wxButton::DoGetBestSize() const

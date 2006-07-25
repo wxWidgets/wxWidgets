@@ -37,7 +37,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID winid,
         return false;
     m_cocoaNSView = NULL;
     SetNSBox([[NSBox alloc] initWithFrame:MakeDefaultNSRect(size)]);
-    [GetNSBox() setTitle:wxNSStringWithWxString(wxStripMenuCodes(title))];
+    [GetNSBox() setTitle:wxNSStringWithWxString(GetLabelText(title))];
     if(m_parent)
         m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,size);

@@ -63,8 +63,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
                                    name ) )
         return false;
 
-    wxString label1(wxStripMenuCodes(label));
-    wxXmString text( label1 );
+    wxXmString text( GetLabelText(label) );
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 

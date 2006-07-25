@@ -104,7 +104,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
 
     if (!label.empty())
     {
-        wxString label1(wxStripMenuCodes(label));
+        wxString label1(GetLabelText(label));
         wxXmString text(label1);
         Display* dpy = XtDisplay( parentWidget );
 

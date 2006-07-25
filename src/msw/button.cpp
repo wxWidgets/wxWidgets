@@ -254,7 +254,7 @@ wxSize wxButton::DoGetBestSize() const
 
     wxCoord wBtn,
             hBtn;
-    dc.GetMultiLineTextExtent(wxStripMenuCodes(GetLabel()), &wBtn, &hBtn);
+    dc.GetMultiLineTextExtent(GetLabelText(), &wBtn, &hBtn);
 
     // add a margin -- the button is wider than just its label
     wBtn += 3*GetCharWidth();
@@ -850,8 +850,8 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 
     COLORREF colFg = wxColourToRGB(GetForegroundColour());
     DrawButtonText(hdc, &rectBtn,
-                   (state & ODS_NOACCEL ? wxStripMenuCodes(GetLabel())
-                                        : GetLabel()),
+                   state & ODS_NOACCEL ? GetLabelText()
+                                       : GetLabel(),
                    state & ODS_DISABLED ? GetSysColor(COLOR_GRAYTEXT)
                                         : colFg);
 

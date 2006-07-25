@@ -55,7 +55,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
     Widget parentWidget = (Widget) parent->GetClientWidget();
     Display* dpy = XtDisplay(parentWidget);
 
-    wxString label1(wxStripMenuCodes(label));
+    wxString label1(GetLabelText(label));
 
     wxXmString text( label1 );
 

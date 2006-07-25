@@ -47,7 +47,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID winid,
     [m_cocoaNSView release];
     [GetNSButton() setButtonType: NSSwitchButton];
     [GetNSButton() setAllowsMixedState: Is3State()];
-    [GetNSButton() setTitle:wxNSStringWithWxString(wxStripMenuCodes(label))];
+    [GetNSButton() setTitle:wxNSStringWithWxString(GetLabelText(label))];
     [GetNSControl() sizeToFit];
 
     if(m_parent)

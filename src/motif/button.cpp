@@ -58,8 +58,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& lbl,
     if( !CreateControl( parent, id, pos, size, style, validator, name ) )
         return false;
 
-    wxString label1(wxStripMenuCodes(label));
-    wxXmString text( label1 );
+    wxXmString text( GetLabelText(label) );
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 

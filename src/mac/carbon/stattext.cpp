@@ -43,7 +43,7 @@ bool wxStaticText::Create( wxWindow *parent,
 {
     m_macIsUserPane = false;
 
-    m_label = wxStripMenuCodes( label );
+    m_label = GetLabelText( label );
 
     if ( !wxControl::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;
@@ -113,7 +113,7 @@ wxSize wxStaticText::DoGetBestSize() const
 
 void wxStaticText::SetLabel( const wxString& st )
 {
-    m_label = wxStripMenuCodes( st );
+    m_label = GetLabelText( st );
 
     wxMacCFStringHolder str( m_label, m_font.GetEncoding() );
     CFStringRef ref = str;

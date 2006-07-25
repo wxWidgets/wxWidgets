@@ -76,7 +76,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
                                      XmNresizeWidth, True,
                                      NULL);
 
-    wxString label1(wxStripMenuCodes(title));
+    wxString label1(GetLabelText(title));
 
     if (!label1.empty())
     {
@@ -120,7 +120,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     int i;
     for (i = 0; i < n; i++)
     {
-        wxString str(wxStripMenuCodes(choices[i]));
+        wxString str(GetLabelText(choices[i]));
         m_radioButtonLabels.push_back(str);
         Widget radioItem =  XtVaCreateManagedWidget (
                                 wxConstCast(str.c_str(), char),
@@ -179,7 +179,7 @@ void wxRadioBox::SetString(unsigned int item, const wxString& label)
     Widget widget = (Widget)m_radioButtons[item];
     if (!label.empty())
     {
-        wxString label1(wxStripMenuCodes(label));
+        wxString label1(GetLabelText(label));
         wxXmString text( label1 );
         m_radioButtonLabels[item] = label1;
         XtVaSetValues (widget,

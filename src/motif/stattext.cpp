@@ -47,7 +47,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
     Widget borderWidget =
         (Widget) wxCreateBorderWidget( (WXWidget)parentWidget, style );
-    wxXmString text( wxStripMenuCodes( label ) );
+    wxXmString text( GetLabelText( label ) );
 
     m_labelWidget =
         XtVaCreateManagedWidget (wxConstCast(name.c_str(), char),
@@ -73,7 +73,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
 void wxStaticText::SetLabel(const wxString& label)
 {
-    wxXmString label_str(wxStripMenuCodes(label));
+    wxXmString label_str(GetLabelText(label));
 
     // This variable means we don't need so many casts later.
     Widget widget = (Widget) m_labelWidget;
