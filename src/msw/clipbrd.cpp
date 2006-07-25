@@ -537,9 +537,7 @@ wxClipboard::~wxClipboard()
 {
     if ( m_lastDataObject )
     {
-        // Retain any remaining clipboard data
-        // after application exits.
-        Flush();
+        Clear();
     }
 
 #if wxUSE_OLE_CLIPBOARD
