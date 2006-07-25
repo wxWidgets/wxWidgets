@@ -583,7 +583,8 @@ void wxAnimationCtrl::DisposeToBackground()
     // clear the backing store
     wxMemoryDC dc;
     dc.SelectObject(m_backingStore);
-    DisposeToBackground(dc);
+    if ( dc.IsOk() )
+        DisposeToBackground(dc);
 }
 
 void wxAnimationCtrl::DisposeToBackground(wxDC& dc)
