@@ -35,6 +35,14 @@ class Crust(wx.SplitterWindow):
                  *args, **kwds):
         """Create Crust instance."""
         wx.SplitterWindow.__init__(self, parent, id, pos, size, style, name)
+
+        # Turn off the tab-traversal style that is automatically
+        # turned on by wx.SplitterWindow.  We do this because on
+        # Windows the event for Ctrl-Enter is stolen and used as a
+        # navigation key, but the Shell window uses it to insert lines.
+        style = self.GetWindowStyle()
+        self.SetWindowStyle(style & ~wx.TAB_TRAVERSAL)
+        
         self.shell = Shell(parent=self, introText=intro,
                            locals=locals, InterpClass=InterpClass,
                            startupScript=startupScript,
