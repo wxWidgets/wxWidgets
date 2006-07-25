@@ -1922,6 +1922,10 @@ class TextCtrl(_core.Control):
         """SetEditable(self, bool editable)"""
         return _controls_.TextCtrl_SetEditable(*args, **kwargs)
 
+    def MacCheckSpelling(*args, **kwargs):
+        """MacCheckSpelling(self, bool check)"""
+        return _controls_.TextCtrl_MacCheckSpelling(*args, **kwargs)
+
     def SendTextUpdatedEvent(*args, **kwargs):
         """SendTextUpdatedEvent(self)"""
         return _controls_.TextCtrl_SendTextUpdatedEvent(*args, **kwargs)

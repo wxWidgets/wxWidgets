@@ -638,21 +638,9 @@ class AuiManager(_core.EvtHandler):
         """DetachPane(self, Window window) -> bool"""
         return _aui.AuiManager_DetachPane(*args, **kwargs)
 
-    def ClosePane(*args, **kwargs):
-        """ClosePane(self, AuiPaneInfo pane_info)"""
-        return _aui.AuiManager_ClosePane(*args, **kwargs)
-
-    def MaximizePane(*args, **kwargs):
-        """MaximizePane(self, AuiPaneInfo pane_info)"""
-        return _aui.AuiManager_MaximizePane(*args, **kwargs)
-
-    def RestorePane(*args, **kwargs):
-        """RestorePane(self, AuiPaneInfo pane_info)"""
-        return _aui.AuiManager_RestorePane(*args, **kwargs)
-
-    def RestoreMaximizedPane(*args, **kwargs):
-        """RestoreMaximizedPane(self)"""
-        return _aui.AuiManager_RestoreMaximizedPane(*args, **kwargs)
+    def Update(*args, **kwargs):
+        """Update(self)"""
+        return _aui.AuiManager_Update(*args, **kwargs)
 
     def SavePaneInfo(*args, **kwargs):
         """SavePaneInfo(self, AuiPaneInfo pane) -> String"""
@@ -670,9 +658,29 @@ class AuiManager(_core.EvtHandler):
         """LoadPerspective(self, String perspective, bool update=True) -> bool"""
         return _aui.AuiManager_LoadPerspective(*args, **kwargs)
 
-    def Update(*args, **kwargs):
-        """Update(self)"""
-        return _aui.AuiManager_Update(*args, **kwargs)
+    def SetDockSizeConstraint(*args, **kwargs):
+        """SetDockSizeConstraint(self, double width_pct, double height_pct)"""
+        return _aui.AuiManager_SetDockSizeConstraint(*args, **kwargs)
+
+    def GetDockSizeConstraint(*args, **kwargs):
+        """GetDockSizeConstraint(self, double width_pct, double height_pct)"""
+        return _aui.AuiManager_GetDockSizeConstraint(*args, **kwargs)
+
+    def ClosePane(*args, **kwargs):
+        """ClosePane(self, AuiPaneInfo pane_info)"""
+        return _aui.AuiManager_ClosePane(*args, **kwargs)
+
+    def MaximizePane(*args, **kwargs):
+        """MaximizePane(self, AuiPaneInfo pane_info)"""
+        return _aui.AuiManager_MaximizePane(*args, **kwargs)
+
+    def RestorePane(*args, **kwargs):
+        """RestorePane(self, AuiPaneInfo pane_info)"""
+        return _aui.AuiManager_RestorePane(*args, **kwargs)
+
+    def RestoreMaximizedPane(*args, **kwargs):
+        """RestoreMaximizedPane(self)"""
+        return _aui.AuiManager_RestoreMaximizedPane(*args, **kwargs)
 
     def CreateFloatingFrame(*args, **kwargs):
         """CreateFloatingFrame(self, Window parent, AuiPaneInfo p) -> AuiFloatingFrame"""
@@ -906,18 +914,18 @@ class AuiPaneButton(object):
     __del__ = lambda self : None;
 _aui.AuiPaneButton_swigregister(AuiPaneButton)
 
-wxEVT_AUI_PANEBUTTON = _aui.wxEVT_AUI_PANEBUTTON
-wxEVT_AUI_PANECLOSE = _aui.wxEVT_AUI_PANECLOSE
-wxEVT_AUI_PANEMAXIMIZE = _aui.wxEVT_AUI_PANEMAXIMIZE
-wxEVT_AUI_PANERESTORE = _aui.wxEVT_AUI_PANERESTORE
+wxEVT_AUI_PANE_BUTTON = _aui.wxEVT_AUI_PANE_BUTTON
+wxEVT_AUI_PANE_CLOSE = _aui.wxEVT_AUI_PANE_CLOSE
+wxEVT_AUI_PANE_MAXIMIZE = _aui.wxEVT_AUI_PANE_MAXIMIZE
+wxEVT_AUI_PANE_RESTORE = _aui.wxEVT_AUI_PANE_RESTORE
 wxEVT_AUI_RENDER = _aui.wxEVT_AUI_RENDER
-wxEVT_AUI_FINDMANAGER = _aui.wxEVT_AUI_FINDMANAGER
-EVT_AUI_PANEBUTTON = wx.PyEventBinder( wxEVT_AUI_PANEBUTTON )
-EVT_AUI_PANECLOSE = wx.PyEventBinder( wxEVT_AUI_PANECLOSE )
-EVT_AUI_PANEMAXIMIZE = wx.PyEventBinder( wxEVT_AUI_PANEMAXIMIZE )
-EVT_AUI_PANERESTORE = wx.PyEventBinder( wxEVT_AUI_PANERESTORE )
+wxEVT_AUI_FIND_MANAGER = _aui.wxEVT_AUI_FIND_MANAGER
+EVT_AUI_PANE_BUTTON = wx.PyEventBinder( wxEVT_AUI_PANE_BUTTON )
+EVT_AUI_PANE_CLOSE = wx.PyEventBinder( wxEVT_AUI_PANE_CLOSE )
+EVT_AUI_PANE_MAXIMIZE = wx.PyEventBinder( wxEVT_AUI_PANE_MAXIMIZE )
+EVT_AUI_PANE_RESTORE = wx.PyEventBinder( wxEVT_AUI_PANE_RESTORE )
 EVT_AUI_RENDER = wx.PyEventBinder( wxEVT_AUI_RENDER )
-EVT_AUI_FINDMANAGER = wx.PyEventBinder( wxEVT_AUI_FINDMANAGER )
+EVT_AUI_FIND_MANAGER = wx.PyEventBinder( wxEVT_AUI_FIND_MANAGER )
 
 class AuiDockArt(object):
     """Proxy of C++ AuiDockArt class"""
