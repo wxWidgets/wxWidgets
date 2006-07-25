@@ -346,6 +346,10 @@ the client area origin nor scrolling. ", "",
     
 #ifdef __WXMAC__
     virtual void MacCheckSpelling(bool check);
+#else
+    %extend {
+        void MacCheckSpelling(bool check) {}
+    }
 #endif
 
     // generate the wxEVT_COMMAND_TEXT_UPDATED event, like SetValue() does
