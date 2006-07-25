@@ -23,6 +23,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/filename.h"
