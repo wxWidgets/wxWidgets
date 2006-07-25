@@ -3259,7 +3259,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         }
         else if ( event.MiddleDown() )
         {
-            wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK,  this, item);
+            wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, GetId());
             nevent.m_pointDrag = CalcScrolledPosition(pt);
             event.Skip(!GetEventHandler()->ProcessEvent(nevent));
         }
