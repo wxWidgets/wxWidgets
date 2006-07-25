@@ -429,7 +429,7 @@ public:
     bool DetachPane(wxWindow* window);
 
     wxString SavePaneInfo(wxPaneInfo& pane);
-    wxString LoadPaneInfo(wxString pane_part, wxPaneInfo &pane);
+    void LoadPaneInfo(wxString pane_part, wxPaneInfo &pane);
 
     wxString SavePerspective();
 
