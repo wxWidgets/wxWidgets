@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        richtextstyles.cpp
+// Name:        src/richtext/richtextstyles.cpp
 // Purpose:     Style management for wxRichTextCtrl
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     2005-09-30
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@
 #include "wx/richtext/richtextstyles.h"
 
 #ifndef WX_PRECOMP
-  #include "wx/wx.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/filename.h"
@@ -79,7 +79,7 @@ wxRichTextStyleDefinition* wxRichTextStyleSheet::FindStyle(const wxList& list, c
         if (def->GetName().Lower() == name.Lower())
             return def;
     }
-    return NULL;        
+    return NULL;
 }
 
 /// Delete all styles
@@ -193,7 +193,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     int size = 5;
 
     // Standard size is 12, say
-    size += 12 - def->GetStyle().GetFontSize();    
+    size += 12 - def->GetStyle().GetFontSize();
 
     str += wxT("<font");
 
@@ -276,7 +276,7 @@ void wxRichTextStyleListBox::OnLeftDown(wxMouseEvent& event)
         if (def && GetRichTextCtrl())
         {
             wxRichTextRange range(m_richTextCtrl->GetInsertionPoint(), m_richTextCtrl->GetInsertionPoint());
-            
+
             // Flags are defined within each definition, so only certain
             // attributes are applied.
             wxRichTextAttr attr(def->GetStyle());
@@ -308,4 +308,3 @@ wxColour wxRichTextStyleListBox::GetSelectedTextBgColour(const wxColour& colBg) 
 
 #endif
     // wxUSE_RICHTEXT
-

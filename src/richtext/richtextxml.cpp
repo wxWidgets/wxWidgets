@@ -13,7 +13,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_RICHTEXT && wxUSE_XML
@@ -21,7 +21,6 @@
 #include "wx/richtext/richtextxml.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
     #include "wx/intl.h"
 #endif
 
