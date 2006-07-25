@@ -602,9 +602,6 @@ public:
     wxPathList(const wxArrayString &arr)
         { Add(arr); }
 
-    // avoid GCC warning about virtual functions w/o virtual dtor
-    virtual ~wxPathList() {}
-
     // Adds all paths in environment variable
     void AddEnvList(const wxString& envVariable);
 
