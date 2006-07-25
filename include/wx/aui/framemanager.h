@@ -191,7 +191,20 @@ public:
         return *this;
     }
 #endif // SWIG
-    
+
+    // Write the safe parts of a newly loaded PaneInfo structure "source" into "this"
+    // used on loading perspectives etc.
+    void SafeSet(wxPaneInfo source)
+    {
+        // note source is not passed by reference so we can overwrite, to keep the
+        // unsafe bits of "dest"
+        source.window = window;
+        source.frame = frame;
+        source.buttons = buttons;
+        // now assign
+        *this = source;
+    }
+
     bool IsOk() const { return (window != NULL) ? true : false; }
     bool IsFixed() const { return !HasFlag(optionResizable); }
     bool IsResizable() const { return HasFlag(optionResizable); }
@@ -414,6 +427,9 @@ public:
                  int insert_level = wxAUI_INSERT_PANE);
 
     bool DetachPane(wxWindow* window);
+
+    wxString SavePaneInfo(wxPaneInfo& pane);
+    wxString LoadPaneInfo(wxString pane_part, wxPaneInfo &pane);
 
     wxString SavePerspective();
 

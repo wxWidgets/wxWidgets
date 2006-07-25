@@ -928,6 +928,110 @@ static wxString EscapeDelimiters(const wxString& s)
     return result;
 }
 
+wxString wxFrameManager::SavePaneInfo(wxPaneInfo& pane)
+{
+    wxString result = wxT("name=");
+    result += EscapeDelimiters(pane.name);
+    result += wxT(";");
+
+    result += wxT("caption=");
+    result += EscapeDelimiters(pane.caption);
+    result += wxT(";");
+
+    result += wxString::Format(wxT("state=%u;"), pane.state);
+    result += wxString::Format(wxT("dir=%d;"), pane.dock_direction);
+    result += wxString::Format(wxT("layer=%d;"), pane.dock_layer);
+    result += wxString::Format(wxT("row=%d;"), pane.dock_row);
+    result += wxString::Format(wxT("pos=%d;"), pane.dock_pos);
+    result += wxString::Format(wxT("prop=%d;"), pane.dock_proportion);
+    result += wxString::Format(wxT("bestw=%d;"), pane.best_size.x);
+    result += wxString::Format(wxT("besth=%d;"), pane.best_size.y);
+    result += wxString::Format(wxT("minw=%d;"), pane.min_size.x);
+    result += wxString::Format(wxT("minh=%d;"), pane.min_size.y);
+    result += wxString::Format(wxT("maxw=%d;"), pane.max_size.x);
+    result += wxString::Format(wxT("maxh=%d;"), pane.max_size.y);
+    result += wxString::Format(wxT("floatx=%d;"), pane.floating_pos.x);
+    result += wxString::Format(wxT("floaty=%d;"), pane.floating_pos.y);
+    result += wxString::Format(wxT("floatw=%d;"), pane.floating_size.x);
+    result += wxString::Format(wxT("floath=%d"), pane.floating_size.y);
+
+    return result;
+}
+
+// Load a "pane" with the pane infor settings in pane_part; return the remainder of the
+// string
+wxString wxFrameManager::LoadPaneInfo(wxString pane_part, wxPaneInfo &pane)
+{
+    // replace escaped characters so we can
+    // split up the string easily
+    pane_part.Replace(wxT("\\|"), wxT("\a"));
+    pane_part.Replace(wxT("\\;"), wxT("\b"));
+
+    wxString val_part = pane_part.BeforeFirst(wxT(';'));
+    pane_part = pane_part.AfterFirst(wxT(';'));
+    wxString val_name = val_part.BeforeFirst(wxT('='));
+    wxString value = val_part.AfterFirst(wxT('='));
+    val_name.MakeLower();
+    val_name.Trim(true);
+    val_name.Trim(false);
+    value.Trim(true);
+    value.Trim(false);
+
+    if (val_name.empty())
+        return wxEmptyString;
+
+    if (val_name == wxT("name"))
+        pane.name = value;
+    else if (val_name == wxT("caption"))
+        pane.caption = value;
+    else if (val_name == wxT("state"))
+        pane.state = (unsigned int)wxAtoi(value.c_str());
+    else if (val_name == wxT("dir"))
+        pane.dock_direction = wxAtoi(value.c_str());
+    else if (val_name == wxT("layer"))
+        pane.dock_layer = wxAtoi(value.c_str());
+    else if (val_name == wxT("row"))
+        pane.dock_row = wxAtoi(value.c_str());
+    else if (val_name == wxT("pos"))
+        pane.dock_pos = wxAtoi(value.c_str());
+    else if (val_name == wxT("prop"))
+        pane.dock_proportion = wxAtoi(value.c_str());
+    else if (val_name == wxT("bestw"))
+        pane.best_size.x = wxAtoi(value.c_str());
+    else if (val_name == wxT("besth"))
+        pane.best_size.y = wxAtoi(value.c_str());
+    else if (val_name == wxT("minw"))
+        pane.min_size.x = wxAtoi(value.c_str());
+    else if (val_name == wxT("minh"))
+        pane.min_size.y = wxAtoi(value.c_str());
+    else if (val_name == wxT("maxw"))
+        pane.max_size.x = wxAtoi(value.c_str());
+    else if (val_name == wxT("maxh"))
+        pane.max_size.y = wxAtoi(value.c_str());
+    else if (val_name == wxT("floatx"))
+        pane.floating_pos.x = wxAtoi(value.c_str());
+    else if (val_name == wxT("floaty"))
+        pane.floating_pos.y = wxAtoi(value.c_str());
+    else if (val_name == wxT("floatw"))
+        pane.floating_size.x = wxAtoi(value.c_str());
+    else if (val_name == wxT("floath"))
+        pane.floating_size.y = wxAtoi(value.c_str());
+    else {
+        wxFAIL_MSG(wxT("Bad Perspective String"));
+    }
+
+    // replace escaped characters so we can
+    // split up the string easily
+    pane.name.Replace(wxT("\a"), wxT("|"));
+    pane.name.Replace(wxT("\b"), wxT(";"));
+    pane.caption.Replace(wxT("\a"), wxT("|"));
+    pane.caption.Replace(wxT("\b"), wxT(";"));
+    pane_part.Replace(wxT("\a"), wxT("|"));
+    pane_part.Replace(wxT("\b"), wxT(";"));
+
+    return pane_part;
+}
+
 
 // SavePerspective() saves all pane information as a single string.
 // This string may later be fed into LoadPerspective() to restore
@@ -944,32 +1048,7 @@ wxString wxFrameManager::SavePerspective()
     for (pane_i = 0; pane_i < pane_count; ++pane_i)
     {
         wxPaneInfo& pane = m_panes.Item(pane_i);
-
-        result += wxT("name=");
-        result += EscapeDelimiters(pane.name);
-        result += wxT(";");
-
-        result += wxT("caption=");
-        result += EscapeDelimiters(pane.caption);
-        result += wxT(";");
-
-        result += wxString::Format(wxT("state=%u;"), pane.state);
-        result += wxString::Format(wxT("dir=%d;"), pane.dock_direction);
-        result += wxString::Format(wxT("layer=%d;"), pane.dock_layer);
-        result += wxString::Format(wxT("row=%d;"), pane.dock_row);
-        result += wxString::Format(wxT("pos=%d;"), pane.dock_pos);
-        result += wxString::Format(wxT("prop=%d;"), pane.dock_proportion);
-        result += wxString::Format(wxT("bestw=%d;"), pane.best_size.x);
-        result += wxString::Format(wxT("besth=%d;"), pane.best_size.y);
-        result += wxString::Format(wxT("minw=%d;"), pane.min_size.x);
-        result += wxString::Format(wxT("minh=%d;"), pane.min_size.y);
-        result += wxString::Format(wxT("maxw=%d;"), pane.max_size.x);
-        result += wxString::Format(wxT("maxh=%d;"), pane.max_size.y);
-        result += wxString::Format(wxT("floatx=%d;"), pane.floating_pos.x);
-        result += wxString::Format(wxT("floaty=%d;"), pane.floating_pos.y);
-        result += wxString::Format(wxT("floatw=%d;"), pane.floating_size.x);
-        result += wxString::Format(wxT("floath=%d"), pane.floating_size.y);
-        result += wxT("|");
+        result += SavePaneInfo(pane)+wxT("|");
     }
 
     int dock_i, dock_count = m_docks.GetCount();
@@ -1001,7 +1080,6 @@ bool wxFrameManager::LoadPerspective(const wxString& layout, bool update)
     if (part != wxT("layout1"))
         return false;
 
-
     // mark all panes currently managed as docked and hidden
     int pane_i, pane_count = m_panes.GetCount();
     for (pane_i = 0; pane_i < pane_count; ++pane_i)
@@ -1027,7 +1105,6 @@ bool wxFrameManager::LoadPerspective(const wxString& layout, bool update)
         if (pane_part.empty())
             break;
 
-
         if (pane_part.Left(9) == wxT("dock_size"))
         {
             wxString val_name = pane_part.BeforeFirst(wxT('='));
@@ -1051,68 +1128,15 @@ bool wxFrameManager::LoadPerspective(const wxString& layout, bool update)
             continue;
         }
 
-        while (1)
+        // Undo our escaping as LoadPaneInfo needs to take an unescaped
+        // name so it can be called by external callers
+        pane_part.Replace(wxT("\a"), wxT("|"));
+        pane_part.Replace(wxT("\b"), wxT(";"));
+
+        while (!pane_part.empty())
         {
-            wxString val_part = pane_part.BeforeFirst(wxT(';'));
-            pane_part = pane_part.AfterFirst(wxT(';'));
-            wxString val_name = val_part.BeforeFirst(wxT('='));
-            wxString value = val_part.AfterFirst(wxT('='));
-            val_name.MakeLower();
-            val_name.Trim(true);
-            val_name.Trim(false);
-            value.Trim(true);
-            value.Trim(false);
-
-            if (val_name.empty())
-                break;
-
-            if (val_name == wxT("name"))
-                pane.name = value;
-            else if (val_name == wxT("caption"))
-                pane.caption = value;
-            else if (val_name == wxT("state"))
-                pane.state = (unsigned int)wxAtoi(value.c_str());
-            else if (val_name == wxT("dir"))
-                pane.dock_direction = wxAtoi(value.c_str());
-            else if (val_name == wxT("layer"))
-                pane.dock_layer = wxAtoi(value.c_str());
-            else if (val_name == wxT("row"))
-                pane.dock_row = wxAtoi(value.c_str());
-            else if (val_name == wxT("pos"))
-                pane.dock_pos = wxAtoi(value.c_str());
-            else if (val_name == wxT("prop"))
-                pane.dock_proportion = wxAtoi(value.c_str());
-            else if (val_name == wxT("bestw"))
-                pane.best_size.x = wxAtoi(value.c_str());
-            else if (val_name == wxT("besth"))
-                pane.best_size.y = wxAtoi(value.c_str());
-            else if (val_name == wxT("minw"))
-                pane.min_size.x = wxAtoi(value.c_str());
-            else if (val_name == wxT("minh"))
-                pane.min_size.y = wxAtoi(value.c_str());
-            else if (val_name == wxT("maxw"))
-                pane.max_size.x = wxAtoi(value.c_str());
-            else if (val_name == wxT("maxh"))
-                pane.max_size.y = wxAtoi(value.c_str());
-            else if (val_name == wxT("floatx"))
-                pane.floating_pos.x = wxAtoi(value.c_str());
-            else if (val_name == wxT("floaty"))
-                pane.floating_pos.y = wxAtoi(value.c_str());
-            else if (val_name == wxT("floatw"))
-                pane.floating_size.x = wxAtoi(value.c_str());
-            else if (val_name == wxT("floath"))
-                pane.floating_size.y = wxAtoi(value.c_str());
-            else {
-                wxFAIL_MSG(wxT("Bad Perspective String"));
-            }
+            pane_part = LoadPaneInfo(pane_part, pane);
         }
-
-        // replace escaped characters so we can
-        // split up the string easily
-        pane.name.Replace(wxT("\a"), wxT("|"));
-        pane.name.Replace(wxT("\b"), wxT(";"));
-        pane.caption.Replace(wxT("\a"), wxT("|"));
-        pane.caption.Replace(wxT("\b"), wxT(";"));
 
         wxPaneInfo& p = GetPane(pane.name);
         if (!p.IsOk())
@@ -1122,10 +1146,8 @@ bool wxFrameManager::LoadPerspective(const wxString& layout, bool update)
             return false;
         }
 
-        pane.window = p.window;
-        pane.frame = p.frame;
-        pane.buttons = p.buttons;
-        p = pane;
+        p.SafeSet(pane);
+
     }
 
     if (update)
@@ -1133,7 +1155,6 @@ bool wxFrameManager::LoadPerspective(const wxString& layout, bool update)
 
     return true;
 }
-
 
 void wxFrameManager::GetPanePositionsAndSizes(wxDockInfo& dock,
                                               wxArrayInt& positions,
