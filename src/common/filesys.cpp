@@ -484,7 +484,7 @@ void wxFileSystem::AddHandler(wxFileSystemHandler *handler)
 {
     // prepend the handler to the beginning of the list because handlers added
     // last should have the highest priority to allow overriding them
-    m_Handlers.Insert(0u, handler);
+    m_Handlers.Insert((size_t)0, handler);
 }
 
 bool wxFileSystem::HasHandlerForPath(const wxString &location)

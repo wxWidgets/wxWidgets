@@ -754,7 +754,7 @@ wxLogPassThrough::wxLogPassThrough()
 
 bool            wxLog::ms_bRepetCounting = false;
 wxString        wxLog::ms_prevString;
-size_t          wxLog::ms_prevCounter = 0;
+unsigned int    wxLog::ms_prevCounter = 0;
 time_t          wxLog::ms_prevTimeStamp= 0;
 wxLogLevel      wxLog::ms_prevLevel;
 
