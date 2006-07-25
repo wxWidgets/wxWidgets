@@ -15,6 +15,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
+    #include "wx/toplevel.h"
 #endif
 
 #include "wx/stockitem.h"
