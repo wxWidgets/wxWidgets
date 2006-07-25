@@ -71,6 +71,8 @@ public:
 
 protected:
 
+    wxSize DoGetBestSize() const;
+
     void UpdateColour();
 
     // the colour data shown in wxColourPickerCtrlGeneric

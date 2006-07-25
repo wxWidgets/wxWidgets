@@ -117,4 +117,16 @@ void wxGenericColourButton::UpdateColour()
         SetLabel(m_colour.GetAsString(wxC2S_HTML_SYNTAX));
 }
 
+wxSize wxGenericColourButton::DoGetBestSize() const
+{
+    wxSize sz(wxButton::DoGetBestSize());
+    if ( HasFlag(wxCLRP_SHOW_LABEL) )
+        return sz;
+
+    // if we have no label, then make this button a square
+    // (like e.g. native GTK version of this control)
+    sz.SetWidth(sz.GetHeight());
+    return sz;
+}
+
 #endif      // wxUSE_COLOURPICKERCTRL
