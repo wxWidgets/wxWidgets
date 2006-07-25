@@ -16,6 +16,10 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/private/fontmgr.h"
 #include "wx/sysopt.h"
 
