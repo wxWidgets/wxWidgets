@@ -3016,11 +3016,12 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
     }
 #endif
 
-    // we process left mouse up event (enables in-place edit), right down
+    // we process left mouse up event (enables in-place edit), middle/right down
     // (pass to the user code), left dbl click (activate item) and
     // dragging/moving events for items drag-and-drop
     if ( !(event.LeftDown() ||
            event.LeftUp() ||
+           event.MiddleDown() ||
            event.RightDown() ||
            event.LeftDClick() ||
            event.Dragging() ||
@@ -3171,6 +3172,12 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             nevent2.m_pointDrag = CalcScrolledPosition(pt);
             GetEventHandler()->ProcessEvent(nevent2);
         }
+        else if ( event.MiddleDown() )
+        {
+            wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK,  this, item);
+            nevent.m_pointDrag = CalcScrolledPosition(pt);
+            event.Skip(!GetEventHandler()->ProcessEvent(nevent));
+        }
         else if ( event.LeftUp() )
         {
             // this facilitates multiple-item drag-and-drop
@@ -3210,7 +3217,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                 m_lastOnSame = false;
             }
         }
-        else // !RightDown() && !LeftUp() ==> LeftDown() || LeftDClick()
+        else // !RightDown() && !MiddleDown() && !LeftUp() ==> LeftDown() || LeftDClick()
         {
             if ( event.LeftDown() )
             {
