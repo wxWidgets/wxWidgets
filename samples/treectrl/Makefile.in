@@ -101,7 +101,7 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
-@COND_PLATFORM_WIN32_1@__treectrl___win32rc = treectrl_treetest_rc.o
+@COND_PLATFORM_WIN32_1@__treectrl___win32rc = treectrl_sample_rc.o
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -181,7 +181,7 @@ treectrl.app/Contents/PkgInfo: treectrl$(EXEEXT) $(top_srcdir)/src/mac/carbon/In
 treectrl_treetest.o: $(srcdir)/treetest.cpp
 	$(CXXC) -c -o $@ $(TREECTRL_CXXFLAGS) $(srcdir)/treetest.cpp
 
-treectrl_treetest_rc.o: $(srcdir)/treetest.rc
+treectrl_sample_rc.o: $(srcdir)/../sample.rc
 	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 

@@ -468,11 +468,11 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\treetest.cpp
+SOURCE=.\..\sample.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\treetest.rc
+SOURCE=.\treetest.cpp
 # End Source File
 # End Group
 # End Target

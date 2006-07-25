@@ -13,12 +13,12 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-  #include "wx/wx.h"
-  #include "wx/log.h"
+    #include "wx/wx.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/colordlg.h"
@@ -42,10 +42,9 @@
 #include "icon4.xpm"
 #include "icon5.xpm"
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXPM__)
-#include "mondrian.xpm"
+#ifndef __WXMSW__
+    #include "../sample.xpm"
 #endif
-
 
 // verify that the item is ok and insult the user if it is not
 #define CHECK_ITEM( item ) if ( !item.IsOk() ) {                                 \
@@ -179,7 +178,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     SetBackgroundColour(wxColour(255, 255, 255));
 
     // Give it an icon
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
 
 #if wxUSE_MENUS
     // Make a menubar
