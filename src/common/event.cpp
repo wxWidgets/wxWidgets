@@ -30,6 +30,7 @@
     #include "wx/list.h"
     #include "wx/app.h"
     #include "wx/utils.h"
+    #include "wx/stopwatch.h"
 
     #if wxUSE_GUI
         #include "wx/control.h"
@@ -40,10 +41,6 @@
 #endif
 
 #include "wx/module.h"
-
-#if wxUSE_GUI && wxUSE_STOPWATCH
-    #include "wx/stopwatch.h"
-#endif // wxUSE_GUI && wxUSE_STOPWATCH
 
 // ----------------------------------------------------------------------------
 // wxWin macros

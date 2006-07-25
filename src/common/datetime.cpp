@@ -69,6 +69,7 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/stopwatch.h"           // for wxGetLocalTimeMillis()
 #endif // WX_PRECOMP
 
 #include "wx/thread.h"
@@ -86,7 +87,6 @@
 #endif
 
 #include "wx/datetime.h"
-#include "wx/stopwatch.h"           // for wxGetLocalTimeMillis()
 
 const long wxDateTime::TIME_T_FACTOR = 1000l;
 

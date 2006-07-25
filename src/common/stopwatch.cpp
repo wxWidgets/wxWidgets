@@ -28,13 +28,12 @@
     #pragma hdrstop
 #endif
 
+#include "wx/stopwatch.h"
+
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
 #endif //WX_PRECOMP
-
-#include "wx/longlong.h"
-#include "wx/stopwatch.h"
 
 // ----------------------------------------------------------------------------
 // System headers

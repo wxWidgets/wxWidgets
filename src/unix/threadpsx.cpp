@@ -34,10 +34,10 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/timer.h"
+    #include "wx/stopwatch.h"
 #endif
 
 #include "wx/module.h"
-#include "wx/stopwatch.h"
 
 #include <stdio.h>
 #include <unistd.h>
