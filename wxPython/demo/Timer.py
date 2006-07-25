@@ -25,10 +25,10 @@ specify an ID for the timer and the event binding.
 
 
 doc2 = """\
-wx.FutureCall is a convenience class for wx.Timer.  You just
+wx.CallLater is a convenience class for wx.Timer.  You just
 specify the timeout in milliseconds and a callable object, along
-with any ard or keyword arg you woudl like to be passed to your
-callable, and wx.FutureCall takes care of the rest.  If you don't
+with any args or keyword args you would like to be passed to your
+callable, and wx.CallLater takes care of the rest.  If you don't
 need to get the return value of the callable or to restart the
 timer then there is no need to hold a reference to this object.
 """
@@ -76,7 +76,7 @@ class TestPanel(sp.ScrolledPanel):
         self.Bind(wx.EVT_TIMER, self.OnTest1Timer)
 
         
-        t2b1 = wx.Button(self, -1, "wx.FutureCall")
+        t2b1 = wx.Button(self, -1, "wx.CallLater")
         t2b2 = wx.Button(self, -1, "stop timer")
         t2st = wx.StaticText(self, -1, doc2)
         t2b2.Disable()
@@ -146,27 +146,27 @@ class TestPanel(sp.ScrolledPanel):
     
 
 
-    # Test 2 shows how to use the wx.FutureCall class.
+    # Test 2 shows how to use the wx.CallLater class.
     
     def OnTest2Start(self, evt):
         # Call OnTest2Timer one second in the future, passing some
         # optional arbitrary args.  There is no need to hold a
         # reference to this one, unless we want to manipulate or query
         # it later like we do in the two methods below
-        self.t2 = wx.FutureCall(1000, self.OnTest2Timer,
+        self.t2 = wx.CallLater(1000, self.OnTest2Timer,
                                 'a', 'b', 'c', one=1, two=2)
-        self.log.write("FutureCall scheduled\n")
+        self.log.write("CallLater scheduled\n")
         self.t2b2.Enable()
         
     def OnTest2Stop(self, evt):
         self.t2.Stop()
-        self.log.write("FutureCall stopped, last return value was: %s\n" %
+        self.log.write("CallLater stopped, last return value was: %s\n" %
                        repr(self.t2.GetResult()))
         del self.t2
         self.t2b2.Disable()
            
     def OnTest2Timer(self, *args, **kw):
-        self.log.write("FutureCall called with args=%s, kwargs=%s\n" % (args, kw))
+        self.log.write("CallLater called with args=%s, kwargs=%s\n" % (args, kw))
 
         # Normally a FutureCall is one-shot, but we can make it
         # recurring just by calling Restart.  We can even use a
