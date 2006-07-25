@@ -3017,6 +3017,12 @@ wxPyTimer::wxPyTimer(wxEvtHandler *owner, int id)
         SetOwner(this);
 }
 
+wxPyTimer::~wxPyTimer()
+{
+//    printf("-=* ~wxPyTimer\n");
+}
+
+
 
 SWIGINTERN swig_type_info*
 SWIG_pchar_descriptor()

@@ -1277,7 +1277,7 @@ class Timer(_core.EvtHandler):
     def __init__(self, *args, **kwargs): 
         """__init__(self, EvtHandler owner=None, int id=ID_ANY) -> Timer"""
         _misc_.Timer_swiginit(self,_misc_.new_Timer(*args, **kwargs))
-        self._setOORInfo(self, 0);Timer._setCallbackInfo(self, self, Timer)
+        self._setOORInfo(self,0); self.this.own(True); Timer._setCallbackInfo(self, self, Timer)
 
     __swig_destroy__ = _misc_.delete_Timer
     __del__ = lambda self : None;

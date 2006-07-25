@@ -3769,7 +3769,7 @@ class EvtHandler(Object):
     def _setOORInfo(*args, **kwargs):
         """_setOORInfo(self, PyObject _self, bool incref=True)"""
         val = _core_.EvtHandler__setOORInfo(*args, **kwargs)
-        args[0].thisown = 0
+        args[0].this.own(False)
         return val
 
     def Bind(self, event, handler, source=None, id=wx.ID_ANY, id2=wx.ID_ANY):
