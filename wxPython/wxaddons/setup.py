@@ -1,7 +1,9 @@
 import distutils.command.install_lib
+import distutils.command.install_data
 import distutils.command.install
 import os, string
 from distutils.core import setup
+from user import home # this gives us the user's home dir on all platforms
 
 class wxaddon_install_lib(distutils.command.install_lib.install_lib):
     """need to change self.install_dir to the actual library dir"""
@@ -10,6 +12,13 @@ class wxaddon_install_lib(distutils.command.install_lib.install_lib):
         self.install_dir = os.path.join(getattr(install_cmd, 'install_purelib'), "wxaddons")
         return distutils.command.install_lib.install_lib.run(self)
         
+class wxaddon_install_data(distutils.command.install_data.install_data):
+    def run(self):
+        self.install_dir = os.path.join(home, ".wxaddons_data", self.distribution.get_name())
+        if not os.path.exists(self.install_dir):
+            os.makedirs(self.install_dir)
+        return distutils.command.install_data.install_data.run(self)
+
 class wxaddon_install(distutils.command.install.install):
     def run(self):
         result = distutils.command.install.install.run(self)
@@ -44,5 +53,6 @@ class wxaddon_install(distutils.command.install.install):
         
 def wxaddon(**kwargs):
     kwargs['cmdclass'] =  {'install_lib' :    wxaddon_install_lib, 
-                           'install' :  wxaddon_install }
+                           'install' :  wxaddon_install,
+                           'install_data' : wxaddon_install_data }
     setup(**kwargs)
