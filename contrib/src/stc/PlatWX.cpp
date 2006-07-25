@@ -1330,9 +1330,6 @@ unsigned int Platform::DoubleClickTime() {
 bool Platform::MouseButtonBounce() {
     return false;
 }
-void Platform::DebugDisplay(const char *s) {
-    wxLogDebug(stc2wx(s));
-}
 
 bool Platform::IsKeyDown(int WXUNUSED(key)) {
     return false;  // I don't think we'll need this.
@@ -1373,7 +1370,15 @@ int Platform::Maximum(int a, int b) {
         return b;
 }
 
-#define TRACE
+//#define TRACE
+
+void Platform::DebugDisplay(const char *s) {
+#ifdef TRACE
+    wxLogDebug(stc2wx(s));
+#else
+    wxUnusedVar(s);
+#endif
+}
 
 void Platform::DebugPrintf(const char *format, ...) {
 #ifdef TRACE
@@ -1396,6 +1401,7 @@ bool Platform::ShowAssertionPopUps(bool assertionPopUps_) {
 }
 
 void Platform::Assert(const char *c, const char *file, int line) {
+#ifdef TRACE
     char buffer[2000];
     sprintf(buffer, "Assertion [%s] failed at %s %d", c, file, line);
     if (assertionPopUps) {
@@ -1403,18 +1409,16 @@ void Platform::Assert(const char *c, const char *file, int line) {
         wxMessageBox(stc2wx(buffer),
                      wxT("Assertion failure"),
                      wxICON_HAND | wxOK);
-//      if (idButton == IDRETRY) {
-//          ::DebugBreak();
-//      } else if (idButton == IDIGNORE) {
-//          // all OK
-//      } else {
-//          abort();
-//      }
     } else {
         strcat(buffer, "\r\n");
         Platform::DebugDisplay(buffer);
         abort();
     }
+#else
+    wxUnusedVar(c);
+    wxUnusedVar(file);
+    wxUnusedVar(line);
+#endif
 }
 
 
