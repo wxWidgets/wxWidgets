@@ -42,6 +42,12 @@ wxPyTimer::wxPyTimer(wxEvtHandler *owner, int id)
     if (owner == NULL)
         SetOwner(this);
 }
+
+wxPyTimer::~wxPyTimer()
+{
+//    printf("-=* ~wxPyTimer\n");
+}
+
 %}
 
 
@@ -55,7 +61,7 @@ public:
     // there won't be a reference cycle and it can clean itself up via normal
     // Python refcounting
     %pythonAppend wxPyTimer
-        "self._setOORInfo(self, 0);" setCallbackInfo(Timer); 
+        "self._setOORInfo(self,0); self.this.own(True); " setCallbackInfo(Timer); 
 
     // if you don't call SetOwner() or provide an owner in the ctor
     // then you must override Notify() in order to receive the timer

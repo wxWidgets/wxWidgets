@@ -80,7 +80,8 @@ class wxPyTimer : public wxTimer
 {
 public:
     wxPyTimer(wxEvtHandler *owner=NULL, int id = -1);
-
+    ~wxPyTimer();
+    
     DEC_PYCALLBACK__(Notify);
     PYPRIVATE;
     DECLARE_ABSTRACT_CLASS(wxPyTimer)
