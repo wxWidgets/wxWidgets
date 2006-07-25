@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcmemory.h
+// Name:        wx/motif/dcmemory.h
 // Purpose:     wxMemoryDC class
 // Author:      Julian Smart
 // Modified by:
@@ -17,21 +17,21 @@
 class WXDLLIMPEXP_CORE wxMemoryDC : public wxWindowDC
 {
     DECLARE_DYNAMIC_CLASS(wxMemoryDC)
-        
+
 public:
     wxMemoryDC();
     wxMemoryDC( wxDC *dc ); // Create compatible DC
     ~wxMemoryDC();
-    
+
     virtual void SelectObject( const wxBitmap& bitmap );
-    
+
     void DoGetSize( int *width, int *height ) const;
-    
+
     wxBitmap& GetBitmap() const { return (wxBitmap&) m_bitmap; }
-    
+
 private:
     friend class wxPaintDC;
-    
+
     wxBitmap  m_bitmap;
 };
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textctrl.h
+// Name:        wx/motif/textctrl.h
 // Purpose:     wxTextCtrl class
 // Author:      Julian Smart
 // Modified by:

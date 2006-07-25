@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        control.h
+// Name:        wx/motif/control.h
 // Purpose:     wxControl class
 // Author:      Julian Smart
 // Modified by:
@@ -20,7 +20,7 @@
 class WXDLLEXPORT wxControl: public wxControlBase
 {
     DECLARE_ABSTRACT_CLASS(wxControl)
-        
+
 public:
     wxControl();
     wxControl( wxWindow *parent,
@@ -33,25 +33,25 @@ public:
     {
         Create(parent, id, pos, size, style, validator, name);
     }
-    
+
     bool Create(wxWindow *parent, wxWindowID id,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0,
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxControlNameStr);
-    
+
     // simulates the event, returns true if the event was processed
     virtual void Command(wxCommandEvent& WXUNUSED(event)) { }
-    
+
     // calls the callback and appropriate event handlers, returns true if
     // event was processed
     virtual bool ProcessCommand(wxCommandEvent& event);
-    
+
     virtual void SetLabel(const wxString& label);
     virtual wxString GetLabel() const ;
-    
+
     bool InSetValue() const { return m_inSetValue; }
-    
+
 protected:
     // calls wxControlBase::CreateControl, also sets foreground, background and
     // font to parent's values
@@ -68,9 +68,8 @@ protected:
 
     // Motif: prevent callbacks being called while in SetValue
     bool m_inSetValue;
-    
+
     DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_CONTROL_H_
-

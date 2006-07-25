@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        private.h
+// Name:        wx/motif/private.h
 // Purpose:     Private declarations for wxMotif port
 // Author:      Julian Smart
 // Modified by:
@@ -55,11 +55,11 @@ WXWidget wxCreateBorderWidget( WXWidget parent, long style );
 // ----------------------------------------------------------------------------
 
 // All widgets should have this as their resize proc.
-extern void wxWidgetResizeProc(Widget w, XConfigureEvent *event, 
+extern void wxWidgetResizeProc(Widget w, XConfigureEvent *event,
                                String args[], int *num_args);
 
 // For repainting arbitrary windows
-void wxUniversalRepaintProc(Widget w, XtPointer WXUNUSED(c_data), 
+void wxUniversalRepaintProc(Widget w, XtPointer WXUNUSED(c_data),
                             XEvent *event, char *);
 
 // ----------------------------------------------------------------------------
@@ -147,11 +147,11 @@ public:
     wxXmString(const XmString& string) { m_string = string; }
 
     ~wxXmString() { XmStringFree(m_string); }
-    
+
     // semi-implicit conversion to XmString (shouldn't rely on implicit
     // conversion because many of Motif functions are macros)
     XmString operator()() const { return m_string; }
-    
+
 private:
     XmString m_string;
 };

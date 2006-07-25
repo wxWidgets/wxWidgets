@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        app.h
+// Name:        wx/motif/app.h
 // Purpose:     wxApp class
 // Author:      Julian Smart
 // Modified by:
@@ -41,34 +41,34 @@ WX_DECLARE_VOIDPTR_HASH_MAP( wxPerDisplayData*, wxPerDisplayDataMap );
 class WXDLLEXPORT wxApp : public wxAppBase
 {
     DECLARE_DYNAMIC_CLASS(wxApp)
-        
+
 public:
     wxApp();
     virtual ~wxApp();
-    
+
     // override base class (pure) virtuals
     // -----------------------------------
-    
+
     virtual int MainLoop();
 
     virtual void Exit();
 
     virtual bool Yield(bool onlyIfNeeded = false);
     virtual void WakeUpIdle(); // implemented in motif/evtloop.cpp
-    
+
     virtual bool OnInitGui();
-    
+
     // implementation from now on
     // --------------------------
-    
+
 protected:
     bool                  m_showOnInit;
-    
+
 public:
     // Implementation
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
-    
+
     // Motif-specific
     WXAppContext   GetAppContext() const { return m_appContext; }
     WXWidget       GetTopLevelWidget();
@@ -97,4 +97,3 @@ private:
 
 #endif
 // _WX_APP_H_
-

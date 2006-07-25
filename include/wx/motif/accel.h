@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        accel.h
+// Name:        wx/motif/accel.h
 // Purpose:     wxAcceleratorTable class
 // Author:      Julian Smart
 // Modified by:
@@ -28,9 +28,9 @@ public:
 
     bool operator == (const wxAcceleratorTable& accel) const { return m_refData == accel.m_refData; }
     bool operator != (const wxAcceleratorTable& accel) const { return m_refData != accel.m_refData; }
-    
+
     bool Ok() const;
-    
+
     // Implementation only
     int GetCount() const;
     wxAcceleratorEntry* GetEntries() const;

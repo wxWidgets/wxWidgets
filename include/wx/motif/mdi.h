@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mdi.h
+// Name:        wx/motif/mdi.h
 // Purpose:     MDI (Multiple Document Interface) classes.
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MDI_H_
@@ -152,7 +152,12 @@ public:
     void ReleaseMouse();
     void Raise();
     void Lower(void);
-    void DoSetSizeHints(int minW = -1, int minH = -1, int maxW = -1, int maxH = -1, int incW = -1, int incH = -1);
+    void DoSetSizeHints(int minW = wxDefaultCoord,
+                        int minH = wxDefaultCoord,
+                        int maxW = wxDefaultCoord,
+                        int maxH = wxDefaultCoord,
+                        int incW = wxDefaultCoord,
+                        int incH = wxDefaultCoord);
 
     // MDI operations
     virtual void Maximize();

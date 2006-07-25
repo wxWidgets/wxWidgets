@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcclient.h
+// Name:        wx/motif/dcclient.h
 // Purpose:     wxClientDC, wxPaintDC and wxWindowDC classes
 // Author:      Julian Smart
 // Modified by:
@@ -187,4 +187,3 @@ public:
 };
 
 #endif // _WX_DCCLIENT_H_
-

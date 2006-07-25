@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filedlg.h
+// Name:        wx/motif/filedlg.h
 // Purpose:     wxFileDialog class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_FILEDLG_H_
@@ -20,11 +20,11 @@ class WXDLLEXPORT wxFileDialog: public wxFileDialogBase
 {
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
 public:
-    
+
     // For Motif
     static wxString m_fileSelectorAnswer;
     static bool m_fileSelectorReturned;
-    
+
 public:
     wxFileDialog(wxWindow *parent,
                  const wxString& message = wxFileSelectorPromptStr,
@@ -35,7 +35,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& sz = wxDefaultSize,
                  const wxString& name = wxFileDialogNameStr);
-    
+
     virtual int ShowModal();
 };
 

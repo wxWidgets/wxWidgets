@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bmpmotif.h
+// Name:        wx/motif/bmpmotif.h
 // Purpose:     Motif-specific bitmap routines
 // Author:      Julian Smart, originally in bitmap.h
 // Modified by:
 // Created:     25/03/2003
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_BMPMOTIF_H_

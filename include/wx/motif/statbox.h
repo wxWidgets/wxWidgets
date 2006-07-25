@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statbox.h
+// Name:        wx/motif/statbox.h
 // Purpose:     wxStaticBox class
 // Author:      Julian Smart
 // Modified by:
@@ -16,7 +16,7 @@
 class WXDLLEXPORT wxStaticBox: public wxStaticBoxBase
 {
     DECLARE_DYNAMIC_CLASS(wxStaticBox)
-        
+
 public:
     wxStaticBox();
     wxStaticBox(wxWindow *parent, wxWindowID id,
@@ -30,14 +30,14 @@ public:
     }
 
     ~wxStaticBox();
-    
+
     bool Create(wxWindow *parent, wxWindowID id,
         const wxString& label,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
         const wxString& name = wxStaticBoxNameStr);
-    
+
     virtual bool ProcessCommand(wxCommandEvent& WXUNUSED(event))
     {
         return false;
@@ -50,7 +50,7 @@ public:
 
 private:
     WXWidget  m_labelWidget;
-   
+
 private:
     DECLARE_EVENT_TABLE()
 };

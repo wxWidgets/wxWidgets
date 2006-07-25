@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.h
+// Name:        wx/motif/cursor.h
 // Purpose:     wxCursor class
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CURSOR_H_
@@ -21,26 +21,26 @@ class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxCursor: public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxCursor)
-        
+
 public:
     wxCursor();
 
     wxCursor(const char bits[], int width, int height,
              int hotSpotX = -1, int hotSpotY = -1,
              const char maskBits[] = NULL);
-    
+
     wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_XBM,
         int hotSpotX = 0, int hotSpotY = 0);
 
-#if wxUSE_IMAGE   
+#if wxUSE_IMAGE
     wxCursor(const wxImage& image);
 #endif
-   
+
     wxCursor(wxStockCursor id);
     ~wxCursor();
-    
+
     virtual bool Ok() const;
-    
+
     bool operator == (const wxCursor& cursor) const
         { return m_refData == cursor.m_refData; }
     bool operator != (const wxCursor& cursor) const
