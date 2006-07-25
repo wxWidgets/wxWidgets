@@ -233,7 +233,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
 	-if exist $(OBJS)\treectrl.exe del $(OBJS)\treectrl.exe
 
-$(OBJS)\treectrl.exe :  $(TREECTRL_OBJECTS) $(OBJS)\treectrl_treetest.res
+$(OBJS)\treectrl.exe :  $(TREECTRL_OBJECTS) $(OBJS)\treectrl_sample.res
 	@%create $(OBJS)\treectrl.lbc
 	@%append $(OBJS)\treectrl.lbc option quiet
 	@%append $(OBJS)\treectrl.lbc name $^@
@@ -241,13 +241,13 @@ $(OBJS)\treectrl.exe :  $(TREECTRL_OBJECTS) $(OBJS)\treectrl_treetest.res
 	@%append $(OBJS)\treectrl.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(TREECTRL_OBJECTS)) do @%append $(OBJS)\treectrl.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\treectrl.lbc library %i
-	@%append $(OBJS)\treectrl.lbc option resource=$(OBJS)\treectrl_treetest.res
+	@%append $(OBJS)\treectrl.lbc option resource=$(OBJS)\treectrl_sample.res
 	@for %i in () do @%append $(OBJS)\treectrl.lbc option stack=%i
 	wlink @$(OBJS)\treectrl.lbc
 
 $(OBJS)\treectrl_treetest.obj :  .AUTODEPEND .\treetest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TREECTRL_CXXFLAGS) $<
 
-$(OBJS)\treectrl_treetest.res :  .AUTODEPEND .\treetest.rc
+$(OBJS)\treectrl_sample.res :  .AUTODEPEND .\..\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 
