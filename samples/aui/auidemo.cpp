@@ -822,13 +822,13 @@ MyFrame::MyFrame(wxWindow* parent,
                   LeftDockable(false).RightDockable(false));
 
     m_mgr.AddPane(tb5, wxPaneInfo().
-                  Name(wxT("tb4")).Caption(wxT("Sample Vertical Toolbar")).
+                  Name(wxT("tb5")).Caption(wxT("Sample Vertical Toolbar")).
                   ToolbarPane().Left().
                   GripperTop().
                   TopDockable(false).BottomDockable(false));
 
     m_mgr.AddPane(new wxButton(this, wxID_ANY, _("Test Button")),
-                  wxPaneInfo().Name(wxT("tb5")).
+                  wxPaneInfo().Name(wxT("tb6")).
                   ToolbarPane().Top().Row(2).Position(1).
                   LeftDockable(false).RightDockable(false));
 
