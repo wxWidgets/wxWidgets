@@ -545,6 +545,8 @@ int wxCharCodeXToWX(KeySym keySym)
         case XK_Meta_L:
         case XK_Meta_R:
             id = WXK_ALT; break;
+        case XK_Caps_Lock:
+            id = WXK_CAPITAL; break;
         case XK_BackSpace:
             id = WXK_BACK; break;
         case XK_Delete:
@@ -599,23 +601,23 @@ int wxCharCodeXToWX(KeySym keySym)
             id = WXK_HELP; break;
 
         case XK_KP_Multiply:
-            id = WXK_MULTIPLY; break;
+            id = WXK_NUMPAD_MULTIPLY; break;
         case XK_KP_Add:
-            id = WXK_ADD; break;
+            id = WXK_NUMPAD_ADD; break;
         case XK_KP_Subtract:
-            id = WXK_SUBTRACT; break;
+            id = WXK_NUMPAD_SUBTRACT; break;
         case XK_KP_Divide:
-            id = WXK_DIVIDE; break;
+            id = WXK_NUMPAD_DIVIDE; break;
         case XK_KP_Decimal:
-            id = WXK_DECIMAL; break;
+            id = WXK_NUMPAD_DECIMAL; break;
         case XK_KP_Equal:
-            id = '='; break;
+            id = WXK_NUMPAD_EQUAL; break;
         case XK_KP_Space:
-            id = ' '; break;
+            id = WXK_NUMPAD_SPACE; break;
         case XK_KP_Tab:
-            id = WXK_TAB; break;
+            id = WXK_NUMPAD_TAB; break;
         case XK_KP_Enter:
-            id = WXK_RETURN; break;
+            id = WXK_NUMPAD_ENTER; break;
         case XK_KP_0:
             id = WXK_NUMPAD0; break;
         case XK_KP_1:
@@ -636,6 +638,24 @@ int wxCharCodeXToWX(KeySym keySym)
             id = WXK_NUMPAD8; break;
         case XK_KP_9:
             id = WXK_NUMPAD9; break;
+        case XK_KP_Insert:
+            id = WXK_NUMPAD_INSERT; break;
+        case XK_KP_End:
+            id = WXK_NUMPAD_END; break;
+        case XK_KP_Down:
+            id = WXK_NUMPAD_DOWN; break;
+        case XK_KP_Page_Down:
+            id = WXK_NUMPAD_PAGEDOWN; break;
+        case XK_KP_Left:
+            id = WXK_NUMPAD_LEFT; break;
+        case XK_KP_Right:
+            id = WXK_NUMPAD_RIGHT; break;
+        case XK_KP_Home:
+            id = WXK_NUMPAD_HOME; break;
+        case XK_KP_Up:
+            id = WXK_NUMPAD_UP; break;
+        case XK_KP_Page_Up:
+            id = WXK_NUMPAD_PAGEUP; break;
         case XK_F1:
             id = WXK_F1; break;
         case XK_F2:
@@ -705,6 +725,7 @@ KeySym wxCharCodeWXToX(int id)
         case WXK_SHIFT:         keySym = XK_Shift_L; break;
         case WXK_CONTROL:       keySym = XK_Control_L; break;
         case WXK_ALT:           keySym = XK_Meta_L; break;
+        case WXK_CAPITAL:       keySym = XK_Caps_Lock; break;
         case WXK_MENU :         keySym = XK_Menu; break;
         case WXK_PAUSE:         keySym = XK_Pause; break;
         case WXK_ESCAPE:        keySym = XK_Escape; break;
@@ -723,21 +744,23 @@ KeySym wxCharCodeWXToX(int id)
         case WXK_INSERT:        keySym = XK_Insert; break;
         case WXK_DELETE:        keySym = XK_Delete; break;
         case WXK_HELP :         keySym = XK_Help; break;
-        case WXK_NUMPAD0:       keySym = XK_KP_0; break;
-        case WXK_NUMPAD1:       keySym = XK_KP_1; break;
-        case WXK_NUMPAD2:       keySym = XK_KP_2; break;
-        case WXK_NUMPAD3:       keySym = XK_KP_3; break;
-        case WXK_NUMPAD4:       keySym = XK_KP_4; break;
+        case WXK_NUMPAD0:       keySym = XK_KP_0; break; case WXK_NUMPAD_INSERT:     keySym = XK_KP_Insert; break;
+        case WXK_NUMPAD1:       keySym = XK_KP_1; break; case WXK_NUMPAD_END:           keySym = XK_KP_End; break;
+        case WXK_NUMPAD2:       keySym = XK_KP_2; break; case WXK_NUMPAD_DOWN:      keySym = XK_KP_Down; break;
+        case WXK_NUMPAD3:       keySym = XK_KP_3; break; case WXK_NUMPAD_PAGEDOWN:  keySym = XK_KP_Page_Down; break;
+        case WXK_NUMPAD4:       keySym = XK_KP_4; break; case WXK_NUMPAD_LEFT:         keySym = XK_KP_Left; break;
         case WXK_NUMPAD5:       keySym = XK_KP_5; break;
-        case WXK_NUMPAD6:       keySym = XK_KP_6; break;
-        case WXK_NUMPAD7:       keySym = XK_KP_7; break;
-        case WXK_NUMPAD8:       keySym = XK_KP_8; break;
-        case WXK_NUMPAD9:       keySym = XK_KP_9; break;
-        case WXK_MULTIPLY:      keySym = XK_KP_Multiply; break;
-        case WXK_ADD:           keySym = XK_KP_Add; break;
-        case WXK_SUBTRACT:      keySym = XK_KP_Subtract; break;
-        case WXK_DECIMAL:       keySym = XK_KP_Decimal; break;
-        case WXK_DIVIDE:        keySym = XK_KP_Divide; break;
+        case WXK_NUMPAD6:       keySym = XK_KP_6; break; case WXK_NUMPAD_RIGHT:       keySym = XK_KP_Right; break;
+        case WXK_NUMPAD7:       keySym = XK_KP_7; break; case WXK_NUMPAD_HOME:       keySym = XK_KP_Home; break;
+        case WXK_NUMPAD8:       keySym = XK_KP_8; break; case WXK_NUMPAD_UP:             keySym = XK_KP_Up; break;
+        case WXK_NUMPAD9:       keySym = XK_KP_9; break; case WXK_NUMPAD_PAGEUP:   keySym = XK_KP_Page_Up; break;
+        case WXK_NUMPAD_DECIMAL:    keySym = XK_KP_Decimal; break; case WXK_NUMPAD_DELETE:   keySym = XK_KP_Delete; break;
+        case WXK_NUMPAD_MULTIPLY:   keySym = XK_KP_Multiply; break;
+        case WXK_NUMPAD_ADD:             keySym = XK_KP_Add; break;
+        case WXK_NUMPAD_SUBTRACT: keySym = XK_KP_Subtract; break;
+        case WXK_NUMPAD_DIVIDE:        keySym = XK_KP_Divide; break;
+        case WXK_NUMPAD_ENTER:        keySym = XK_KP_Enter; break;
+        case WXK_NUMPAD_SEPARATOR:  keySym = XK_KP_Separator; break;
         case WXK_F1:            keySym = XK_F1; break;
         case WXK_F2:            keySym = XK_F2; break;
         case WXK_F3:            keySym = XK_F3; break;
@@ -800,7 +823,8 @@ bool wxGetKeyState(wxKeyCode key)
     if (keyCode == NoSymbol)
         return false;
 
-    for (int i = 0; i < 8; ++i)
+    if ( IsModifierKey(iKey) )  // If iKey is a modifier key, use a different method
+        {  for (int i = 0; i < 8; ++i)
     {
         if ( map->modifiermap[map->max_keypermod * i] == keyCode)
         {
@@ -812,6 +836,15 @@ bool wxGetKeyState(wxKeyCode key)
                   &iDummy3, &iDummy4, &iDummy5, &iDummy6, &iMask );
     XFreeModifiermap(map);
     return (iMask & iKeyMask) != 0;
+        }
+    // From the XLib manual:
+    // The XQueryKeymap() function returns a bit vector for the logical state of the keyboard, 
+    // where each bit set to 1 indicates that the corresponding key is currently pressed down. 
+    // The vector is represented as 32 bytes. Byte N (from 0) contains the bits for keys 8N to 8N + 7 
+    // with the least-significant bit in the byte representing key 8N.
+    char key_vector[32];
+    XQueryKeymap(pDisplay, key_vector);
+    return key_vector[keyCode >> 3] & (1 << (keyCode & 7)); 
 }
 
 #endif // __WXX11__ || __WXGTK__ || __WXMOTIF__
