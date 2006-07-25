@@ -50,7 +50,7 @@ void wxRichTextPrintout::OnPreparePrinting()
 {
     wxBusyCursor wait;
 
-    m_numPages = 0;
+    m_numPages = 1;
 
     m_pageBreaksStart.Clear();
     m_pageBreaksEnd.Clear();
@@ -127,11 +127,10 @@ void wxRichTextPrintout::OnPreparePrinting()
         }
 
         // Closing page break
-        if (m_pageBreaksStart.GetCount() > 0 && (m_pageBreaksEnd[m_pageBreaksEnd.GetCount()-1] < (GetRichTextBuffer()->GetRange().GetEnd()-1)))
+        if (m_pageBreaksStart.GetCount() == 0 || (m_pageBreaksEnd[m_pageBreaksEnd.GetCount()-1] < (GetRichTextBuffer()->GetRange().GetEnd()-1)))
         {
             m_pageBreaksStart.Add(lastStartPos);
             m_pageBreaksEnd.Add(GetRichTextBuffer()->GetRange().GetEnd());
-            m_numPages ++;
         }
     }
 }
