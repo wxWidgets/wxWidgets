@@ -532,8 +532,29 @@ WXDLLIMPEXP_BASE bool wxGetDiskSpace(const wxString& path,
 // Menu accelerators related things
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT wxChar* wxStripMenuCodes(const wxChar *in, wxChar *out = (wxChar *) NULL);
-WXDLLEXPORT wxString wxStripMenuCodes(const wxString& str);
+// flags for wxStripMenuCodes
+enum
+{
+    // strip '&' characters
+    wxStrip_Mnemonics = 1,
+
+    // strip everything after '\t'
+    wxStrip_Accel = 2,
+
+    // strip everything (this is the default)
+    wxStrip_All = wxStrip_Mnemonics | wxStrip_Accel
+};
+
+// strip mnemonics and/or accelerators from the label
+WXDLLEXPORT wxString
+wxStripMenuCodes(const wxString& str, int flags = wxStrip_All);
+
+// obsolete and deprecated version, do not use
+#if WXWIN_COMPATIBILITY_2_6
+wxDEPRECATED(
+    WXDLLEXPORT wxChar* wxStripMenuCodes(const wxChar *in, wxChar *out = NULL)
+);
+#endif
 
 #if wxUSE_ACCEL
 class WXDLLEXPORT wxAcceleratorEntry;

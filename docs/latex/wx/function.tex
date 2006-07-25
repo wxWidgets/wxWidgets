@@ -3222,18 +3222,20 @@ See also \helpref{wxGetDisplayName}{wxgetdisplayname}.
 
 \membersection{::wxStripMenuCodes}\label{wxstripmenucodes}
 
-\func{wxString}{wxStripMenuCodes}{\param{const wxString\& }{in}}
+\func{wxString}{wxStripMenuCodes}{\param{const wxString\& }{str}, \param{int }{flags = wxStrip\_All}}
 
-\func{void}{wxStripMenuCodes}{\param{char *}{in}, \param{char *}{out}}
+Strips any menu codes from \arg{str} and returns the result.
 
-{\bf NB:} This function is obsolete, please use
-\helpref{wxMenuItem::GetLabelFromText}{wxmenuitemgetlabelfromtext} instead.
+By default, the functions strips both the mnemonics character (\texttt{'\&'})
+which is used to indicate a keyboard shortkey, and the accelerators, which are
+used only in the menu items and are separated from the main text by the
+\texttt{$\backslash$t} (TAB) character. By using \arg{flags} of
+\texttt{wxStrip\_Mnemonics} or \texttt{wxStrip\_Accel} to strip only the former
+or the latter part, respectively.
 
-Strips any menu codes from {\it in} and places the result
-in {\it out} (or returns the new string, in the first form).
-
-Menu codes include \& (mark the next character with an underline
-as a keyboard shortkey in Windows and Motif) and $\backslash$t (tab in Windows).
+Notice that in most cases 
+\helpref{wxMenuItem::GetLabelFromText}{wxmenuitemgetlabelfromtext} or 
+\helpref{wxControl::GetLabelText}{wxcontrolgetlabeltext} can be used instead.
 
 \wxheading{Include files}
 

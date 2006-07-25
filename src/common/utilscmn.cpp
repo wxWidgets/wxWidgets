@@ -941,8 +941,10 @@ wxChar *wxStripMenuCodes(const wxChar *in, wxChar *out)
     return out;
 }
 
-wxString wxStripMenuCodes(const wxString& in)
+wxString wxStripMenuCodes(const wxString& in, int flags)
 {
+    wxASSERT_MSG( flags, _T("this is useless to call without any flags") );
+
     wxString out;
 
     size_t len = in.length();
@@ -951,7 +953,7 @@ wxString wxStripMenuCodes(const wxString& in)
     for ( size_t n = 0; n < len; n++ )
     {
         wxChar ch = in[n];
-        if ( ch == _T('&') )
+        if ( (flags & wxStrip_Mnemonics) && ch == _T('&') )
         {
             // skip it, it is used to introduce the accel char (or to quote
             // itself in which case it should still be skipped): note that it
@@ -966,7 +968,7 @@ wxString wxStripMenuCodes(const wxString& in)
                 ch = in[n];
             }
         }
-        else if ( ch == _T('\t') )
+        else if ( (flags & wxStrip_Accel) && ch == _T('\t') )
         {
             // everything after TAB is accel string, exit the loop
             break;

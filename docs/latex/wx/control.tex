@@ -31,12 +31,23 @@ Simulates the effect of the user issuing a command to the item. See \helpref{wxC
 
 \membersection{wxControl::GetLabel}\label{wxcontrolgetlabel}
 
-\func{wxString\&}{GetLabel}{\void}
+\constfunc{const wxString\&}{GetLabel}{\void}
 
 Returns the control's text.
 
 Note that the returned string contains the mnemonics (\texttt{\&} characters) if
-any.
+any, use \helpref{wxControl::GetLabelText}{wxcontrolgetlabeltext} if they are
+undesired.
+
+
+\membersection{wxControl::GetLabelText}\label{wxcontrolgetlabeltext}
+
+\constfunc{const wxString\&}{GetLabelText}{\void}
+
+\func{static const wxString\&}{GetLabelText}{\param{const wxString\& }{label}}
+
+Returns the control's label or the given \arg{label} string for the static
+version without the mnemonics characters.
 
 
 \membersection{wxControl::SetLabel}\label{wxcontrolsetlabel}

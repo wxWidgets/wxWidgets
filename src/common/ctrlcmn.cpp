@@ -33,6 +33,7 @@
     #include "wx/radiobut.h"
     #include "wx/statbmp.h"
     #include "wx/bitmap.h"
+    #include "wx/utils.h"       // for wxStripMenuCodes()
 #endif
 
 const wxChar wxControlNameStr[] = wxT("control");
@@ -83,6 +84,13 @@ bool wxControlBase::CreateControl(wxWindowBase *parent,
     parent->AddChild(this);
 
     return true;
+}
+
+/* static */
+wxString wxControlBase::GetLabelText(const wxString& label)
+{
+    // we don't want strip the TABs here, just the mnemonics
+    return wxStripMenuCodes(label, wxStrip_Mnemonics);
 }
 
 void wxControlBase::Command(wxCommandEvent& event)
