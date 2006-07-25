@@ -74,6 +74,12 @@ for example after the user has viewed the HTML file.
 
 Saves the buffer content to the HTML stream.
 
+\membersection{wxRichTextHTMLHandler::GetFontSizeMapping}\label{wxrichtexthtmlhandlergetfontsizemapping}
+
+\func{wxArrayInt}{GetFontSizeMapping}{\void}
+
+Returns the mapping for converting point sizes to HTML font sizes.
+
 \membersection{wxRichTextHTMLHandler::GetTempDir}\label{wxrichtexthtmlhandlergettempdir}
 
 \constfunc{const wxString\&}{GetTempDir}{\void}
@@ -91,6 +97,29 @@ Returns the image locations for the last operation.
 \func{void}{SetFileCounter}{\param{int }{counter}}
 
 Reset the file counter, in case, for example, the same names are required each time
+
+\membersection{wxRichTextHTMLHandler::SetFontSizeMapping}\label{wxrichtexthtmlhandlersetfontsizemapping}
+
+\func{void}{SetFontSizeMapping}{\param{const wxArrayInt\& }{fontSizeMapping}}
+
+Sets the mapping for converting point sizes to HTML font sizes.
+There should be 7 elements, one for each HTML font size, each element specifying the maximum point size for that
+HTML font size.
+
+For example:
+
+\begin{verbatim}
+    wxArrayInt fontSizeMapping;
+    fontSizeMapping.Add(7);
+    fontSizeMapping.Add(9);
+    fontSizeMapping.Add(11);
+    fontSizeMapping.Add(12);
+    fontSizeMapping.Add(14);
+    fontSizeMapping.Add(22);
+    fontSizeMapping.Add(100);
+    
+    htmlHandler.SetFontSizeMapping(fontSizeMapping);
+\end{verbatim}
 
 \membersection{wxRichTextHTMLHandler::SetTempDir}\label{wxrichtexthtmlhandlersettempdir}
 

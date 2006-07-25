@@ -26,9 +26,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextHTMLHandler: public wxRichTextFileHandler
 {
     DECLARE_CLASS(wxRichTextHTMLHandler)
 public:
-    wxRichTextHTMLHandler(const wxString& name = wxT("HTML"), const wxString& ext = wxT("html"), int type = wxRICHTEXT_TYPE_HTML)
-        : wxRichTextFileHandler(name, ext, type), m_indent(0), m_font(false), m_list(false), m_is_ul(false)
-        { }
+    wxRichTextHTMLHandler(const wxString& name = wxT("HTML"), const wxString& ext = wxT("html"), int type = wxRICHTEXT_TYPE_HTML);
 
     /// Can we save using this handler?
     virtual bool CanSave() const { return true; }
@@ -64,6 +62,12 @@ public:
     void SetTempDir(const wxString& tempDir) { m_tempDir = tempDir; }
     const wxString& GetTempDir() const { return m_tempDir; }
 
+    /// Set and get mapping from point size to HTML font size. There should be 7 elements,
+    /// one for each HTML font size, each element specifying the maximum point size for that
+    /// HTML font size. E.g. 8, 10, 13, 17, 22, 29, 100
+    void SetFontSizeMapping(const wxArrayInt& fontSizeMapping) { m_fontSizeMapping = fontSizeMapping; }
+    wxArrayInt GetFontSizeMapping() const { return m_fontSizeMapping; }
+
 protected:
 
 // Implementation
@@ -73,20 +77,21 @@ protected:
     virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
 
     /// Output character formatting
-    virtual void BeginCharacterFormatting(const wxTextAttrEx& currentStyle, const wxTextAttrEx& thisStyle, const wxTextAttrEx& paraStyle, wxOutputStream& stream );
-    virtual void EndCharacterFormatting(const wxTextAttrEx& WXUNUSED(currentStyle), const wxTextAttrEx& thisStyle, const wxTextAttrEx& paraStyle, wxOutputStream& stream );
+    void BeginCharacterFormatting(const wxTextAttrEx& currentStyle, const wxTextAttrEx& thisStyle, const wxTextAttrEx& paraStyle, wxTextOutputStream& stream );
+    void EndCharacterFormatting(const wxTextAttrEx& currentStyle, const wxTextAttrEx& thisStyle, const wxTextAttrEx& paraStyle, wxTextOutputStream& stream );
 
     /// Output paragraph formatting
-    virtual void OutputParagraphFormatting(const wxTextAttrEx& WXUNUSED(currentStyle), const wxTextAttrEx& thisStyle, wxOutputStream& stream/*, bool start*/);
+    void BeginParagraphFormatting(const wxTextAttrEx& currentStyle, const wxTextAttrEx& thisStyle, wxTextOutputStream& stream);
+    void EndParagraphFormatting(const wxTextAttrEx& currentStyle, const wxTextAttrEx& thisStyle, wxTextOutputStream& stream);
+
+    /// Output font tag
+    void OutputFont(const wxTextAttrEx& style, wxTextOutputStream& stream);
+
+    /// Closes lists to level (-1 means close all)
+    void CloseLists(int level, wxTextOutputStream& str);
 
     /// Writes an image to its base64 equivalent, or to the memory filesystem, or to a file
     void WriteImage(wxRichTextImage* image, wxOutputStream& stream);
-
-    /// Builds required indentation
-    void Indent(const wxTextAttrEx& thisStyle, wxTextOutputStream& str);
-
-    /// Left indent
-    void LIndent(const wxTextAttrEx& thisStyle, wxTextOutputStream& str);
 
     /// Converts from pt to size property compatible height
     long PtToSize(long size);
@@ -104,34 +109,33 @@ protected:
     wxString SymbolicIndent(long indent);
 
     /// Finds the html equivalent of the specified bullet
-    void TypeOfList(const wxTextAttrEx& thisStyle, wxString& tag);
-
-    /// Closes existings or Opens new tables for navigation to an item's horizontal position.
-    void NavigateToListPosition(const wxTextAttrEx& thisStyle, wxTextOutputStream& str);
+    int TypeOfList(const wxTextAttrEx& thisStyle, wxString& tag);
 #endif
 
 // Data members
 
+    wxRichTextBuffer* m_buffer;
+
     /// Indentation values of the table tags
     wxArrayInt      m_indents;
 
-    /// Horizontal position of the current table
-    long            m_indent;
+    /// Stack of list types: 0 = ol, 1 = ul
+    wxArrayInt      m_listTypes;
 
-    /// Is there any opened font tag
+    /// Is there any opened font tag?
     bool            m_font;
 
-    /// Is there any opened ul/ol tag
-    bool            m_list;
-
-    /// type of list, ul or ol?
-    bool            m_is_ul;
+    /// Are we in a table?
+    bool            m_inTable;
 
     /// A list of the image files or in-memory images created by the last operation.
     wxArrayString   m_imageLocations;
 
     /// A location for the temporary files
     wxString        m_tempDir;
+
+    /// A mapping from point size to HTML font size
+    wxArrayInt      m_fontSizeMapping;
 
     /// A counter for generating filenames
     static int      sm_fileCounter;

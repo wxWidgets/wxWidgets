@@ -724,9 +724,10 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     r.BeginBold();
 
     r.BeginFontSize(14);
-    r.WriteText(wxT("Welcome to wxRichTextCtrl, a wxWidgets control"));
-    r.LineBreak();
-    r.WriteText(wxT("for editing and presenting styled text and images"));
+    
+    wxString lineBreak = (wxChar) 29;
+    
+    r.WriteText(wxString(wxT("Welcome to wxRichTextCtrl, a wxWidgets control")) + lineBreak + wxT("for editing and presenting styled text and images"));
     r.EndFontSize();
     r.Newline();
 
@@ -1331,6 +1332,17 @@ void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
 
     wxRichTextHTMLHandler htmlHandler;
     htmlHandler.SetFlags(wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_MEMORY);
+    
+    wxArrayInt fontSizeMapping;
+    fontSizeMapping.Add(7);
+    fontSizeMapping.Add(9);
+    fontSizeMapping.Add(11);
+    fontSizeMapping.Add(12);
+    fontSizeMapping.Add(14);
+    fontSizeMapping.Add(22);
+    fontSizeMapping.Add(100);
+    
+    htmlHandler.SetFontSizeMapping(fontSizeMapping);
 
     if (htmlHandler.SaveFile(& m_richTextCtrl->GetBuffer(), strStream))
     {
