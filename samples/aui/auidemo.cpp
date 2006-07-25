@@ -843,7 +843,7 @@ MyFrame::MyFrame(wxWindow* parent,
         if (!all_panes.Item(i).IsToolbar())
             all_panes.Item(i).Hide();
     m_mgr.GetPane(wxT("tb1")).Hide();
-    m_mgr.GetPane(wxT("tb5")).Hide();
+    m_mgr.GetPane(wxT("tb6")).Hide();
     m_mgr.GetPane(wxT("test8")).Show().Left().Layer(0).Row(0).Position(0);
     m_mgr.GetPane(wxT("test10")).Show().Bottom().Layer(0).Row(0).Position(0);
     m_mgr.GetPane(wxT("html_content")).Show();
