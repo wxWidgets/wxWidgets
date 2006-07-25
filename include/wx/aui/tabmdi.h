@@ -33,7 +33,7 @@ class WXDLLEXPORT wxTabMDIChildFrame;
 // wxTabMDIParentFrame
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTabMDIParentFrame : public wxFrame
+class WXDLLIMPEXP_AUI wxTabMDIParentFrame : public wxFrame
 {
 public:
     wxTabMDIParentFrame();
@@ -108,7 +108,7 @@ private:
 // wxTabMDIChildFrame
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTabMDIChildFrame : public wxPanel
+class WXDLLIMPEXP_AUI wxTabMDIChildFrame : public wxPanel
 {
 public:
     wxTabMDIChildFrame();
@@ -226,7 +226,7 @@ private:
 // wxTabMDIClientWindow
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTabMDIClientWindow : public wxAuiMultiNotebook
+class WXDLLIMPEXP_AUI wxTabMDIClientWindow : public wxAuiMultiNotebook
 {
 public:
     wxTabMDIClientWindow();
