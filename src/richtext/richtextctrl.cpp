@@ -24,6 +24,7 @@
     #include "wx/settings.h"
     #include "wx/menu.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
     #include "wx/stopwatch.h"
 #endif
 
