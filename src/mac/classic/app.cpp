@@ -2015,31 +2015,34 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     // backdoor handler for default return and command escape
     if ( !handled && (!focus->IsKindOf(CLASSINFO(wxControl) ) || !focus->MacCanFocus() ) )
     {
-          // if window is not having a focus still testing for default enter or cancel
-          // TODO add the UMA version for ActiveNonFloatingWindow
-          wxWindow* focus = wxFindWinFromMacWindow( (WXWindow) FrontWindow() ) ;
-          if ( focus )
-          {
+        // if window is not having a focus still testing for default enter or cancel
+        // TODO add the UMA version for ActiveNonFloatingWindow
+        wxWindow* focus = wxFindWinFromMacWindow( (WXWindow) FrontWindow() ) ;
+        if ( focus )
+        {
             if ( keyval == WXK_RETURN )
             {
-                 wxButton *def = wxDynamicCast(focus->GetDefaultItem(),
-                                                       wxButton);
-                 if ( def && def->IsEnabled() )
-                 {
-                     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
-                     event.SetEventObject(def);
-                     def->Command(event);
-                     return true ;
+                wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+                if ( tlw && tlw->GetDefaultItem() )
+                {
+                    wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+                    if ( def && def->IsEnabled() )
+                    {
+                        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+                        event.SetEventObject(def);
+                        def->Command(event);
+                        return true ;
+                    }
                 }
             }
             /* generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs) */
             else if (keyval == WXK_ESCAPE || (keyval == '.' && modifiers & cmdKey ) )
             {
-                  wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
-                  new_event.SetEventObject( focus );
-                  handled = focus->GetEventHandler()->ProcessEvent( new_event );
+                wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+                new_event.SetEventObject( focus );
+                handled = focus->GetEventHandler()->ProcessEvent( new_event );
             }
-          }
+        }
     }
     return handled ;
 }

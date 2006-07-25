@@ -2146,14 +2146,17 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                         else // not a button itself
                         {
 #if wxUSE_BUTTON
-                            wxButton *btn = wxDynamicCast(GetDefaultItem(),
-                                                          wxButton);
-                            if ( btn && btn->IsEnabled() )
+                            wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+                            if ( tlw )
                             {
-                                // if we do have a default button, do press it
-                                btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+                                wxButton *btn = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+                                if ( btn && btn->IsEnabled() )
+                                {
+                                    // if we do have a default button, do press it
+                                    btn->MSWCommand(BN_CLICKED, 0 /* unused */);
 
-                                return true;
+                                    return true;
+                                }
                             }
                             else // no default button
 #endif // wxUSE_BUTTON

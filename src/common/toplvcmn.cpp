@@ -55,6 +55,8 @@ wxTopLevelWindowBase::wxTopLevelWindowBase()
 {
     // Unlike windows, top level windows are created hidden by default.
     m_isShown = false;
+    m_winDefault = NULL;
+    m_winTmpDefault = NULL;
 }
 
 wxTopLevelWindowBase::~wxTopLevelWindowBase()
@@ -392,4 +394,15 @@ void wxTopLevelWindowBase::RequestUserAttention(int WXUNUSED(flags))
 {
     // it's probably better than do nothing, isn't it?
     Raise();
+}
+
+void wxTopLevelWindowBase::RemoveChild(wxWindowBase *child)
+{
+    if ( child == m_winDefault )
+        m_winDefault = NULL;
+
+    if ( child == m_winTmpDefault )
+        m_winTmpDefault = NULL;
+
+    wxWindow::RemoveChild(child);
 }

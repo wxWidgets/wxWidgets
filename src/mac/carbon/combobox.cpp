@@ -25,7 +25,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxComboBox)
+WX_DELEGATE_TO_CONTROL_CONTAINER(wxComboBox, wxControl)
 
 BEGIN_EVENT_TABLE(wxComboBox, wxControl)
     WX_EVENT_TABLE_CONTROL_CONTAINER(wxComboBox)
@@ -109,13 +109,10 @@ protected:
             // such as the clicking the default button.
             if (!m_cb->GetEventHandler()->ProcessEvent( event ))
             {
-                wxWindow *parent = GetParent();
-                while ( parent && !parent->IsTopLevel() && parent->GetDefaultItem() == NULL )
-                    parent = parent->GetParent() ;
-
-                if ( parent && parent->GetDefaultItem() )
+                wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+                if ( tlw && tlw->GetDefaultItem() )
                 {
-                    wxButton *def = wxDynamicCast(parent->GetDefaultItem(), wxButton);
+                    wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
                     if ( def && def->IsEnabled() )
                     {
                         wxCommandEvent event( wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );

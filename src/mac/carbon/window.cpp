@@ -993,11 +993,11 @@ wxWindowMac::~wxWindowMac()
     // wxRemoveMacControlAssociation( this ) ;
     // If we delete an item, we should initialize the parent panel,
     // because it could now be invalid.
-    wxWindow *parent = GetParent() ;
-    if ( parent )
+    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+    if ( tlw )
     {
-        if (parent->GetDefaultItem() == (wxButton*) this)
-            parent->SetDefaultItem(NULL);
+        if ( tlw->GetDefaultItem() == (wxButton*) this)
+            tlw->SetDefaultItem(NULL);
     }
 
     if ( m_peer && m_peer->Ok() )

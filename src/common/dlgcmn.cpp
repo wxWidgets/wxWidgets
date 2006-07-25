@@ -104,7 +104,7 @@ BEGIN_EVENT_TABLE(wxDialogBase, wxTopLevelWindow)
     WX_EVENT_TABLE_CONTROL_CONTAINER(wxDialogBase)
 END_EVENT_TABLE()
 
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxDialogBase)
+WX_DELEGATE_TO_CONTROL_CONTAINER(wxDialogBase, wxTopLevelWindow)
 #endif
 
 void wxDialogBase::Init()

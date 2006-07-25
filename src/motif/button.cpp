@@ -123,9 +123,9 @@ void wxButton::SetDefaultShadowThicknessAndResize()
 
 void wxButton::SetDefault()
 {
-    wxWindow *parent = GetParent();
-    if ( parent )
-        parent->SetDefaultItem(this);
+    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+    if ( tlw )
+        tlw->SetDefaultItem(this);
 
     // We initially do not set XmNdefaultShadowThickness, to have
     // small buttons.  Unfortunately, buttons are now mis-aligned. We
@@ -134,6 +134,7 @@ void wxButton::SetDefault()
     // wxButton in the same row, correction is straighforward: we set
     // resource for all wxButton in this parent (but not sub panels)
 
+    wxWindow *parent = GetParent();
     for (wxWindowList::compatibility_iterator node = parent->GetChildren().GetFirst ();
          node; node = node->GetNext ())
     {

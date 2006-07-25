@@ -2021,9 +2021,13 @@ bool wxWindowOS2::OS2ProcessMessage( WXMSG* pMsg )
                         }
                         else
                         {
-                            wxButton*   pBtn = wxDynamicCast( GetDefaultItem()
-                                                             ,wxButton
-                                                            );
+                            wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+                            wxButton*   pBtn = NULL;
+
+                            if (tlw)
+                            {
+                                pBtn = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+                            }
 
                             if (pBtn && pBtn->IsEnabled())
                             {

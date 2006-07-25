@@ -291,11 +291,6 @@ wxWindowBase::~wxWindowBase()
     // reset the dangling pointer our parent window may keep to us
     if ( m_parent )
     {
-        if ( m_parent->GetDefaultItem() == this )
-        {
-            m_parent->SetDefaultItem(NULL);
-        }
-
         m_parent->RemoveChild(this);
     }
 

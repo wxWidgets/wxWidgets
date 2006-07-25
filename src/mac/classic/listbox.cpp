@@ -924,14 +924,10 @@ void wxListBox::OnChar(wxKeyEvent& event)
 {
     if ( event.GetKeyCode() == WXK_RETURN || event.GetKeyCode() == WXK_NUMPAD_ENTER)
     {
-        wxWindow* parent = GetParent() ;
-        while( parent  && !parent->IsTopLevel() && parent->GetDefaultItem() == NULL )
-            parent = parent->GetParent() ;
-
-        if ( parent && parent->GetDefaultItem() )
+        wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+        if ( tlw && tlw->GetDefaultItem() )
         {
-            wxButton *def = wxDynamicCast(parent->GetDefaultItem(),
-                wxButton);
+            wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
             if ( def && def->IsEnabled() )
             {
                 wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );

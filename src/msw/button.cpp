@@ -197,8 +197,8 @@ bool wxButton::Create(wxWindow *parent,
 
 wxButton::~wxButton()
 {
-    wxWindow *parent = GetParent();
-    if ( parent && parent->GetTmpDefaultItem() == this )
+    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+    if ( tlw && tlw->GetTmpDefaultItem() == this )
     {
         UnsetTmpDefault();
     }
@@ -344,12 +344,12 @@ wxSize wxButtonBase::GetDefaultSize()
 // set this button as the (permanently) default one in its panel
 void wxButton::SetDefault()
 {
-    wxWindow *parent = GetParent();
+    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
 
-    wxCHECK_RET( parent, _T("button without parent?") );
+    wxCHECK_RET( tlw, _T("button without top level window?") );
 
     // set this one as the default button both for wxWidgets ...
-    wxWindow *winOldDefault = parent->SetDefaultItem(this);
+    wxWindow *winOldDefault = tlw->SetDefaultItem(this);
 
     // ... and Windows
     SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), false);
@@ -359,12 +359,12 @@ void wxButton::SetDefault()
 // set this button as being currently default
 void wxButton::SetTmpDefault()
 {
-    wxWindow *parent = GetParent();
+    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
 
-    wxCHECK_RET( parent, _T("button without parent?") );
+    wxCHECK_RET( tlw, _T("button without top level window?") );
 
-    wxWindow *winOldDefault = parent->GetDefaultItem();
-    parent->SetTmpDefaultItem(this);
+    wxWindow *winOldDefault = tlw->GetDefaultItem();
+    tlw->SetTmpDefaultItem(this);
 
     SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), false);
     SetDefaultStyle(this, true);
@@ -373,13 +373,13 @@ void wxButton::SetTmpDefault()
 // unset this button as currently default, it may still stay permanent default
 void wxButton::UnsetTmpDefault()
 {
-    wxWindow *parent = GetParent();
+    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
 
-    wxCHECK_RET( parent, _T("button without parent?") );
+    wxCHECK_RET( tlw, _T("button without top level window?") );
 
-    parent->SetTmpDefaultItem(NULL);
+    tlw->SetTmpDefaultItem(NULL);
 
-    wxWindow *winOldDefault = parent->GetDefaultItem();
+    wxWindow *winOldDefault = tlw->GetDefaultItem();
 
     SetDefaultStyle(this, false);
     SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), true);
@@ -402,10 +402,10 @@ wxButton::SetDefaultStyle(wxButton *btn, bool on)
         if ( !wxTheApp->IsActive() )
             return;
 
-        wxWindow * const parent = btn->GetParent();
-        wxCHECK_RET( parent, _T("button without parent?") );
+        wxWindow * const tlw = wxGetTopLevelParent(btn);
+        wxCHECK_RET( tlw, _T("button without top level window?") );
 
-        ::SendMessage(GetHwndOf(parent), DM_SETDEFID, btn->GetId(), 0L);
+        ::SendMessage(GetHwndOf(tlw), DM_SETDEFID, btn->GetId(), 0L);
 
         // sending DM_SETDEFID also changes the button style to
         // BS_DEFPUSHBUTTON so there is nothing more to do
@@ -817,10 +817,10 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
         bool selected = (state & ODS_SELECTED) != 0;
         if ( !selected )
         {
-            wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
-            if ( panel )
+            wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+            if ( tlw )
             {
-                selected = panel->GetDefaultItem() == this;
+                selected = tlw->GetDefaultItem() == this;
             }
         }
         bool pushed = (SendMessage(GetHwnd(), BM_GETSTATE, 0, 0) & BST_PUSHED) != 0;

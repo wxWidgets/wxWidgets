@@ -514,23 +514,6 @@ public:
         // click it
     virtual bool AcceptsFocusFromKeyboard() const { return AcceptsFocus(); }
 
-        // NB: these methods really don't belong here but with the current
-        //     class hierarchy there is no other place for them :-(
-
-        // get the default child of this parent, i.e. the one which is
-        // activated by pressing <Enter>
-    virtual wxWindow *GetDefaultItem() const { return NULL; }
-
-        // set this child as default, return the old default
-    virtual wxWindow *SetDefaultItem(wxWindow * WXUNUSED(child))
-        { return NULL; }
-
-        // set this child as temporary default
-    virtual void SetTmpDefaultItem(wxWindow * WXUNUSED(win)) { }
-
-        // return the temporary default item, can be NULL
-    virtual wxWindow *GetTmpDefaultItem() const { return NULL; }
-
         // navigates in the specified direction by sending a wxNavigationKeyEvent
     virtual bool Navigate(int flags = wxNavigationKeyEvent::IsForward);
 

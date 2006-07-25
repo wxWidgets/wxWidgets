@@ -200,7 +200,33 @@ public:
     virtual bool SetTransparent(wxByte WXUNUSED(alpha)) { return false; }
     virtual bool CanSetTransparent() { return false; }
 
-    
+
+    // default item access: we have a permanent default item which is the one
+    // set by the user code but we may also have a temporary default item which
+    // would be chosen if the user pressed "Enter" now but the default action
+    // reverts to the "permanent" default as soon as this temporary default
+    // item loses focus
+
+    // used to reset default if pointing to removed child
+    virtual void RemoveChild(wxWindowBase *child);
+
+    // get the default item, temporary or permanent
+    wxWindow *GetDefaultItem() const
+        { return m_winTmpDefault ? m_winTmpDefault : m_winDefault; }
+
+    // set the permanent default item, return the old default
+    wxWindow *SetDefaultItem(wxWindow *win)
+        { wxWindow *old = GetDefaultItem(); m_winDefault = win; return old; }
+
+    // return the temporary default item, can be NULL
+    wxWindow *GetTmpDefaultItem() const { return m_winTmpDefault; }
+
+    // set a temporary default item, SetTmpDefaultItem(NULL) should be called
+    // soon after a call to SetTmpDefaultItem(window), return the old default
+    wxWindow *SetTmpDefaultItem(wxWindow *win)
+        { wxWindow *old = GetDefaultItem(); m_winTmpDefault = win; return old; }
+
+
     // implementation only from now on
     // -------------------------------
 
@@ -263,6 +289,12 @@ protected:
 
     // the frame icon
     wxIconBundle m_icons;
+
+    // a default window (usually a button) or NULL
+    wxWindow *m_winDefault;
+
+    // a temporary override of m_winDefault, use the latter if NULL
+    wxWindow *m_winTmpDefault;
 
     DECLARE_NO_COPY_CLASS(wxTopLevelWindowBase)
     DECLARE_EVENT_TABLE()

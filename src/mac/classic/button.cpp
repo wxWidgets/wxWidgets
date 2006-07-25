@@ -66,13 +66,12 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& lbl,
 
 void wxButton::SetDefault()
 {
-    wxWindow *parent = GetParent();
+    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
     wxButton *btnOldDefault = NULL;
-    if ( parent )
+    if ( tlw )
     {
-        btnOldDefault = wxDynamicCast(parent->GetDefaultItem(),
-           wxButton);
-        parent->SetDefaultItem(this);
+        btnOldDefault = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+        tlw->SetDefaultItem(this);
     }
 
     Boolean inData;

@@ -1576,14 +1576,18 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
         {
             if ( keyval == WXK_RETURN )
             {
-                wxButton *def = wxDynamicCast(focus->GetDefaultItem(), wxButton);
-                if ( def && def->IsEnabled() )
+                wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(focus), wxTopLevelWindow);
+                if ( tlw && tlw->GetDefaultItem() )
                 {
-                    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
-                    event.SetEventObject(def);
-                    def->Command(event);
+                    wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+                    if ( def && def->IsEnabled() )
+                    {
+                        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+                        event.SetEventObject(def);
+                        def->Command(event);
 
-                    return true ;
+                        return true ;
+                    }
                 }
             }
             else if (keyval == WXK_ESCAPE || (keyval == '.' && modifiers & cmdKey ) )
