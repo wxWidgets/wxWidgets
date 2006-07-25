@@ -365,10 +365,14 @@ unsigned wxLog::DoLogNumberOfRepeats()
     if ( pLogger && ms_prevCounter > 0 )
     {
         wxString msg;
+#if wxUSE_INTL
         msg.Printf(wxPLURAL("The previous message repeated once.",
                             "The previous message repeated %lu times.",
                             ms_prevCounter),
                    ms_prevCounter);
+#else
+        msg.Printf(wxT("The previous message was repeated."));
+#endif
         ms_prevCounter = 0;
         ms_prevString.clear();
         pLogger->DoLog(ms_prevLevel, msg.c_str(), ms_prevTimeStamp);
