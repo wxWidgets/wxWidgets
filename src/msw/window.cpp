@@ -2155,10 +2155,13 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             switch ( msg->wParam )
             {
                 case VK_TAB:
-                    if ( lDlgCode & DLGC_WANTTAB ) {
+                    if ( (lDlgCode & DLGC_WANTTAB) && !bCtrlDown )
+                    {
+                        // let the control have the TAB
                         bProcess = false;
                     }
-                    else {
+                    else // use it for navigation
+                    {
                         // Ctrl-Tab cycles thru notebook pages
                         bWindowChange = bCtrlDown;
                         bForward = !bShiftDown;
