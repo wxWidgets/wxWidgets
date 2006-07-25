@@ -38,8 +38,10 @@ Constructor.
 
 \func{static void}{AddHandler}{\param{wxFileSystemHandler }{*handler}}
 
-This static function adds new handler into the list of handlers.
-The \helpref{handlers}{wxfilesystemhandler} provide access to virtual FS.
+This static function adds new handler into the list of 
+\helpref{handlers}{wxfilesystemhandler} which provide access to virtual FS.
+Note that if two handlers for the same protocol are added, the last one added
+takes precedence.
 
 \wxheading{Note}
 

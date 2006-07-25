@@ -482,7 +482,9 @@ bool wxFileSystem::FindFileInPath(wxString *pStr,
 
 void wxFileSystem::AddHandler(wxFileSystemHandler *handler)
 {
-    m_Handlers.Append(handler);
+    // prepend the handler to the beginning of the list because handlers added
+    // last should have the highest priority to allow overriding them
+    m_Handlers.Insert(0u, handler);
 }
 
 bool wxFileSystem::HasHandlerForPath(const wxString &location)
