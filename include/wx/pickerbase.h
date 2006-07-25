@@ -57,12 +57,17 @@ public:     // public API
     int GetInternalMargin() const
         { return GetTextCtrlItem()->GetBorder(); }
 
-    // proportion of the text control respect the picker
-    // (which has a fixed proportion value of 1)
+    // proportion of the text control
     void SetTextCtrlProportion(int prop)
         { GetTextCtrlItem()->SetProportion(prop); m_sizer->Layout(); }
     int GetTextCtrlProportion() const
         { return GetTextCtrlItem()->GetProportion(); }
+
+    // proportion of the picker control
+    void SetPickerCtrlProportion(int prop)
+        { GetPickerCtrlItem()->SetProportion(prop); m_sizer->Layout(); }
+    int GetPickerCtrlProportion() const
+        { return GetPickerCtrlItem()->GetProportion(); }
 
     bool IsTextCtrlGrowable() const
         { return (GetTextCtrlItem()->GetFlag() & wxGROW) != 0; }

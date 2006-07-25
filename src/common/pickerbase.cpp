@@ -104,6 +104,7 @@ bool wxPickerBase::CreateBase(wxWindow *parent,
                 wxWindowDestroyEventHandler(wxPickerBase::OnTextCtrlDelete),
                 NULL, this);
 
+        // the text control's proportion values defaults to 2
         m_sizer->Add(m_text, 2, GetDefaultTextCtrlFlag(), 5);
     }
 
@@ -112,8 +113,9 @@ bool wxPickerBase::CreateBase(wxWindow *parent,
 
 void wxPickerBase::PostCreation()
 {
-    // the picker's proportion value is fixed
-    m_sizer->Add(m_picker, 1, GetDefaultPickerCtrlFlag(), 5);
+    // the picker's proportion value defaults to 1 when there's no text control
+    // associated with it - in that case it defaults to 0
+    m_sizer->Add(m_picker, HasTextCtrl() ? 0 : 1, GetDefaultPickerCtrlFlag(), 5);
 
     SetSizer(m_sizer);
     m_sizer->SetSizeHints(this);

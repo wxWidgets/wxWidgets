@@ -13,7 +13,10 @@
 Base abstract class for all pickers which support an auxiliary text control.
 This class handles all positioning and sizing of the text control like a
 an horizontal \helpref{wxBoxSizer}{wxboxsizer} would do, with the text control on
-the left of the picker button and the proportion of the picker fixed to value 1.
+the left of the picker button.
+The proportion (see \helpref{wxSizer}{wxsizer} documentation for more info about
+proportion values) of the picker control defaults to $1$ when there isn't a text control
+associated (see {\tt wxPB\_USE\_TEXTCTRL} style) and to $0$ otherwise.
 
 \wxheading{Derived from}
 
@@ -62,18 +65,32 @@ This function can be used only when \helpref{HasTextCtrl}{wxpickerbasehastextctr
 
 \func{void}{SetTextCtrlProportion}{\param{int}{prop}}
 
-Sets the proportion between the text control and the picker.
+Sets the proportion value of the text control.
 Look at the overview of wxPickerBase for more details about this.
 This function can be used only when \helpref{HasTextCtrl}{wxpickerbasehastextctrl} returns \true.
+
+
+\membersection{wxPickerBase::SetPickerCtrlProportion}\label{wxpickerbasesetpickerctrlproportion}
+
+\func{void}{SetPickerCtrlProportion}{\param{int}{prop}}
+
+Sets the proportion value of the picker.
+Look at the overview of wxPickerBase for more details about this.
 
 
 \membersection{wxPickerBase::GetTextCtrlProportion}\label{wxpickerbasegettextctrlproportion}
 
 \constfunc{int}{GetTextCtrlProportion}{}
 
-Returns the proportion between the text control and the picker.
+Returns the proportion value of the text control.
 This function can be used only when \helpref{HasTextCtrl}{wxpickerbasehastextctrl} returns \true.
 
+
+\membersection{wxPickerBase::GetPickerCtrlProportion}\label{wxpickerbasegetpickerctrlproportion}
+
+\constfunc{int}{GetPickerCtrlProportion}{}
+
+Returns the proportion value of the picker.
 
 
 \membersection{wxPickerBase::HasTextCtrl}\label{wxpickerbasehastextctrl}
@@ -98,6 +115,13 @@ Very important: the contents of the text control could be containing an invalid 
 
 Returns \true if the text control is growable.
 This function can be used only when \helpref{HasTextCtrl}{wxpickerbasehastextctrl} returns \true.
+
+
+\membersection{wxPickerBase::SetPickerCtrlGrowable}\label{wxpickerbasesetpickerctrlgrowable}
+
+\func{void}{SetPickerCtrlGrowable}{\param{bool}{ grow = true}}
+
+Sets the picker control as growable when {\tt grow} is \true.
 
 
 \membersection{wxPickerBase::SetTextCtrlGrowable}\label{wxpickerbasesettextctrlgrowable}
