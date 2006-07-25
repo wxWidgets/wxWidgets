@@ -1046,7 +1046,7 @@ void wxOwnerDrawnComboBox::OnDrawBackground(wxDC& dc, const wxRect& rect, int it
     {
         int focusFlag = wxCONTROL_SELECTED;
 
-        if ( flags & wxODCB_PAINTING_CONTROL != wxODCB_PAINTING_CONTROL )
+        if ( (flags & wxODCB_PAINTING_CONTROL) != wxODCB_PAINTING_CONTROL )
             focusFlag |= wxCONTROL_ISSUBMENU;
 
         DrawFocusBackground(dc, rect, focusFlag );
