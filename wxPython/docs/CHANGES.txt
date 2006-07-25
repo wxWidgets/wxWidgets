@@ -29,6 +29,11 @@ works.
 Added wx.combo.BitmapComboBox which is a combobox that displays a
 bitmap in front of the list items.
 
+Added the wx.lib.mixins.inspect module.  It contains the InspectMixin
+class which can be mixed with a wx.App class and provides a PyCrust
+window that can be activated with a Ctrl-Alt-I keystroke (or Cmd-Alt-I
+on the Mac.)
+
 
 
 

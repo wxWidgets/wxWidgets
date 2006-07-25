@@ -1772,8 +1772,9 @@ class MySplashScreen(wx.SplashScreen):
         if self.fc.IsRunning():
             self.Raise()
         
+import wx.lib.mixins.inspect
 
-class MyApp(wx.App):
+class MyApp(wx.App, wx.lib.mixins.inspect.InspectionMixin):
     def OnInit(self):
         """
         Create and show the splash screen.  It will then create and show
@@ -1794,6 +1795,9 @@ class MyApp(wx.App):
         splash = MySplashScreen()
         splash.Show()
 
+        # Setup the InspectionMixin
+        self.Init()
+        
         return True
 
 
