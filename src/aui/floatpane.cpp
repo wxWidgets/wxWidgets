@@ -125,6 +125,16 @@ void wxFloatingPane::OnClose(wxCloseEvent& evt)
 
 void wxFloatingPane::OnMoveEvent(wxMoveEvent& event)
 {
+#ifdef __WXGTK__
+    // On wxGTK 2.6 and 2.7 for some unknown reason, wxSizeEvents are not
+    // emitted for wxFloatingPanes when they are manually resized.
+    // See Bug #1528554.
+    // However, it does (fortunately) wrongly emit wxMoveEvent in this scenario.
+    // So we having on that to update the floating pane size - let's hope noone
+    // fixes this useful bug, without fixing the above.
+    m_owner_mgr->OnFloatingPaneResized(m_pane_window, GetSize());
+#endif
+
     wxRect win_rect = GetRect();
 
     // skip the first move event
