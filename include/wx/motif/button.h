@@ -43,8 +43,12 @@ public:
     static wxSize GetDefaultSize();
     
     // Implementation
-private:
+protected:
+
     virtual wxSize DoGetBestSize() const;
+
+private:
+
     virtual wxSize GetMinSize() const;
     wxSize OldGetBestSize() const;
     wxSize OldGetMinSize() const;
