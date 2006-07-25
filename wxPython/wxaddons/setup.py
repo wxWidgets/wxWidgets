@@ -1,6 +1,6 @@
 import distutils.command.install_lib
 import distutils.command.install
-import os
+import os, string
 from distutils.core import setup
 
 class wxaddon_install_lib(distutils.command.install_lib.install_lib):
@@ -14,15 +14,32 @@ class wxaddon_install(distutils.command.install.install):
     def run(self):
         result = distutils.command.install.install.run(self)
                 
-        metadata_file = 'addon.info'
-        if os.path.exists(metadata_file):
-            import wx
-            import email
-            fields = email.message_from_string(open(metadata_file).read())
-            config = wx.Config("wxaddons-receipts")
-            config.SetPath(fields['name'])
-            for field in fields._headers:
-                config.Write(field[0], field[1])
+        import wx
+        config = wx.Config("wxaddons-receipts")
+        config.SetPath(self.distribution.get_name())
+        config.Write("Version", str(self.distribution.get_version()))
+        config.Write("Summary", self.distribution.get_description())
+        config.Write("Home-page", self.distribution.get_url())
+        
+        # NB: Although self.distribution has get_author() and get_author_email()
+        # methods, get_contact* returns either author or maintainer, and I think
+        # either is suitable for our purposes.
+        config.Write("Author", self.distribution.get_contact())
+        config.Write("Author-email", self.distribution.get_contact_email())
+        config.Write("License", self.distribution.get_license())
+        
+        keywords = string.join( self.distribution.get_keywords(), ';')
+        if keywords:
+            config.Write('Keywords', keywords)
+
+        platforms = string.join( self.distribution.get_platforms(), ';')
+        if platforms:
+            config.Write('Platforms', platforms )
+
+        classifiers = string.join( self.distribution.get_classifiers(), ';')
+        if classifiers:
+            config.Write('Classifiers', classifiers )
+
         return result     
         
 def wxaddon(**kwargs):
