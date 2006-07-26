@@ -1192,27 +1192,30 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
 {
     if ( wxGridCellEditor::IsAcceptedKey(event) )
     {
-        int keycode = event.GetKeyCode();
-        printf("%d\n", keycode);
-        // accept digits, 'e' as in '1e+6', also '-', '+', and '.'
-        char tmpbuf[2];
-        tmpbuf[0] = (char) keycode;
-        tmpbuf[1] = '\0';
-        wxString strbuf(tmpbuf, *wxConvCurrent);
+        const int keycode = event.GetKeyCode();
+        if ( isascii(keycode) )
+        {
+            char tmpbuf[2];
+            tmpbuf[0] = (char) keycode;
+            tmpbuf[1] = '\0';
+            wxString strbuf(tmpbuf, *wxConvCurrent);
 
 #if wxUSE_INTL
-        bool is_decimal_point =
-            ( strbuf == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
-                                          wxLOCALE_CAT_NUMBER) );
+            const wxString decimalPoint =
+                wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER);
 #else
-        bool is_decimal_point = ( strbuf == _T(".") );
+            const wxString decimalPoint(_T('.'));
 #endif
 
-        if ( (keycode < 128) &&
-             (wxIsdigit(keycode) || tolower(keycode) == 'e' ||
-              is_decimal_point || keycode == '+' || keycode == '-') )
-        {
-            return true;
+            // accept digits, 'e' as in '1e+6', also '-', '+', and '.'
+            if ( wxIsdigit(keycode) ||
+                    tolower(keycode) == 'e' ||
+                        keycode == decimalPoint ||
+                            keycode == '+' ||
+                                keycode == '-' )
+            {
+                return true;
+            }
         }
     }
 
