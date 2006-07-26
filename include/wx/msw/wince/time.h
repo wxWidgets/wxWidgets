@@ -9,6 +9,8 @@
 
 #ifndef _TM_DEFINED
 
+#define _TM_DEFINED
+
 struct tm {
         int tm_sec;     /* seconds after the minute - [0,59] */
         int tm_min;     /* minutes after the hour - [0,59] */
