@@ -19,6 +19,7 @@
     #include "wx/button.h"
     #include "wx/menu.h"
     #include "wx/containr.h"
+    #include "wx/toplevel.h"
 #endif
 
 #include "wx/mac/uma.h"
