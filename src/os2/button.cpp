@@ -22,6 +22,7 @@
     #include "wx/settings.h"
     #include "wx/dcscreen.h"
     #include "wx/scrolwin.h"
+    #include "wx/toplevel.h"
 #endif
 
 #include "wx/stockitem.h"
