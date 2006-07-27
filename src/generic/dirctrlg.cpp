@@ -698,8 +698,8 @@ void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
         return;
 
     if ((event.GetLabel().empty()) ||
-        (event.GetLabel() == _(".")) ||
-        (event.GetLabel() == _("..")) ||
+        (event.GetLabel() == wxT(".")) ||
+        (event.GetLabel() == wxT("..")) ||
         (event.GetLabel().Find(wxT('/')) != wxNOT_FOUND) ||
         (event.GetLabel().Find(wxT('\\')) != wxNOT_FOUND) ||
         (event.GetLabel().Find(wxT('|')) != wxNOT_FOUND))
