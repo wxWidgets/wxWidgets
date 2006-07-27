@@ -923,7 +923,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
                     verbose, IsBmp, true) )
     {
         if (verbose)
-            wxLogError( _("Error in reading image DIB .") );
+            wxLogError( _("Error in reading image DIB.") );
         return false;
     }
 
