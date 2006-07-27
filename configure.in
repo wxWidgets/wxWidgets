@@ -6919,7 +6919,7 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
     dnl GStreamer
     dnl -----------------------------------------------------------------------
     if test "$wxUSE_GTK" = 1; then
-        wxUSE_GSTREAMER="yes"
+        wxUSE_GSTREAMER="no"
 
         dnl -------------------------------------------------------------------
         dnl Test for at least 0.8 gstreamer module from pkg-config
@@ -6939,8 +6939,8 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
                                gstreamer-plugins-base-$GST_MAJORMINOR
                                gconf-2.0,
         [
-                    CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
-                    LIBS="$LIBS $GST_LIBS -lgstinterfaces-$GST_MAJORMINOR"
+            wxUSE_GSTREAMER="yes"
+            GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_MAJORMINOR"
         ],
         [
                     GST_VERSION_MINOR=8
@@ -6957,17 +6957,28 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
                 gstreamer-interfaces-$GST_MAJORMINOR
                 gstreamer-gconf-$GST_MAJORMINOR,
                         [
-                    CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
-                    LIBS="$LIBS $GST_LIBS"
+                wxUSE_GSTREAMER="yes"
                         ],
                 [
                     AC_MSG_WARN([Proper GStreamer .8/.10 installation not found])
-            wxUSE_GSTREAMER="no"
                 ])
         fi
 
 
         if test "$wxUSE_GSTREAMER" = "yes"; then
+            dnl system gstreamer package is compiled with Sun CC and outputs
+            dnl CC-specific "-mt" in its flags, remove it for gcc compilation
+            case "${host}" in
+                *-*-solaris2* )
+                    if "$GCC" = yes; then
+                        GST_CFLAGS=`echo $GST_CFLAGS | sed 's/-mt//'`
+                        GST_LIBS=`echo $GST_LIBS | sed 's/-mt//'`
+                    fi
+            esac
+
+            CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
+            LIBS="$GST_LIBS $LIBS"
+
             AC_DEFINE(wxUSE_GSTREAMER)
             AC_MSG_RESULT([GStreamer detection successful])
         fi
