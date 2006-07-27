@@ -129,7 +129,7 @@ gtk_value_changed(GtkRange* range, wxSlider* win)
     if (!win->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    GtkAdjustment* adj = range->adjustment;
+    GtkAdjustment* adj = gtk_range_get_adjustment (range);
     const int pos = wxRound(adj->value);
     const double oldPos = win->m_pos;
     win->m_pos = adj->value;
@@ -225,7 +225,7 @@ gtk_event_after(GtkRange* range, GdkEvent* event, wxSlider* win)
 {
     if (event->type == GDK_BUTTON_RELEASE)
     {
-        g_signal_handlers_block_by_func(range, (void*)gtk_event_after, win);
+        g_signal_handlers_block_by_func(range, (gpointer) gtk_event_after, win);
 
         if (win->m_needThumbRelease)
         {
@@ -234,7 +234,7 @@ gtk_event_after(GtkRange* range, GdkEvent* event, wxSlider* win)
         }
         // Keep slider at an integral position
         win->BlockScrollEvent();
-        gtk_range_set_value((GtkRange*)win->m_widget, win->GetValue());
+        gtk_range_set_value(GTK_RANGE (win->m_widget), win->GetValue());
         win->UnblockScrollEvent();
     }
 }
@@ -252,7 +252,7 @@ gtk_button_release_event(GtkRange* range, GdkEventButton*, wxSlider* win)
     if (win->m_isScrolling)
     {
         win->m_isScrolling = false;
-        g_signal_handlers_unblock_by_func(range, (void*)gtk_event_after, win);
+        g_signal_handlers_unblock_by_func(range, (gpointer) gtk_event_after, win);
     }
     return false;
 }
@@ -307,9 +307,9 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     else
         m_widget = gtk_hscale_new( (GtkAdjustment *) NULL );
 
-    gtk_scale_set_draw_value((GtkScale*)m_widget, (style & wxSL_LABELS) != 0);
+    gtk_scale_set_draw_value(GTK_SCALE (m_widget), (style & wxSL_LABELS) != 0);
     // Keep full precision in position value
-    gtk_scale_set_digits((GtkScale*)m_widget, -1);
+    gtk_scale_set_digits(GTK_SCALE (m_widget), -1);
 
     if (style & wxSL_INVERSE)
         gtk_range_set_inverted( GTK_RANGE(m_widget), TRUE );
@@ -344,7 +344,7 @@ void wxSlider::SetValue( int value )
     if (GetValue() != value)
     {
         BlockScrollEvent();
-        gtk_range_set_value((GtkRange*)m_widget, value);
+        gtk_range_set_value(GTK_RANGE (m_widget), value);
         UnblockScrollEvent();
     }
 }
@@ -352,31 +352,31 @@ void wxSlider::SetValue( int value )
 void wxSlider::SetRange( int minValue, int maxValue )
 {
     BlockScrollEvent();
-    gtk_range_set_range((GtkRange*)m_widget, minValue, maxValue);
-    gtk_range_set_increments((GtkRange*)m_widget, 1, (maxValue - minValue + 9) / 10);
+    gtk_range_set_range(GTK_RANGE (m_widget), minValue, maxValue);
+    gtk_range_set_increments(GTK_RANGE (m_widget), 1, (maxValue - minValue + 9) / 10);
     UnblockScrollEvent();
 }
 
 int wxSlider::GetMin() const
 {
-    return int(((GtkRange*)m_widget)->adjustment->lower);
+    return int(gtk_range_get_adjustment (GTK_RANGE (m_widget))->lower);
 }
 
 int wxSlider::GetMax() const
 {
-    return int(((GtkRange*)m_widget)->adjustment->upper);
+    return int(gtk_range_get_adjustment (GTK_RANGE (m_widget))->upper);
 }
 
 void wxSlider::SetPageSize( int pageSize )
 {
     BlockScrollEvent();
-    gtk_range_set_increments((GtkRange*)m_widget, 1, pageSize);
+    gtk_range_set_increments(GTK_RANGE (m_widget), 1, pageSize);
     UnblockScrollEvent();
 }
 
 int wxSlider::GetPageSize() const
 {
-    return int(((GtkRange*)m_widget)->adjustment->page_increment);
+    return int(gtk_range_get_adjustment (GTK_RANGE (m_widget))->page_increment);
 }
 
 // GTK does not support changing the size of the slider
