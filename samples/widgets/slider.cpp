@@ -60,12 +60,16 @@ enum
     SliderPage_Clear,
     SliderPage_SetValue,
     SliderPage_SetMinAndMax,
+    SliderPage_SetLineSize,
+    SliderPage_SetPageSize,
     SliderPage_SetTickFreq,
     SliderPage_SetThumbLen,
     SliderPage_CurValueText,
     SliderPage_ValueText,
     SliderPage_MinText,
     SliderPage_MaxText,
+    SliderPage_LineSizeText,
+    SliderPage_PageSizeText,
     SliderPage_TickFreqText,
     SliderPage_ThumbLenText,
     SliderPage_RadioSides,
@@ -104,6 +108,8 @@ protected:
     void OnButtonClear(wxCommandEvent& event);
     void OnButtonSetValue(wxCommandEvent& event);
     void OnButtonSetMinAndMax(wxCommandEvent& event);
+    void OnButtonSetLineSize(wxCommandEvent& event);
+    void OnButtonSetPageSize(wxCommandEvent& event);
     void OnButtonSetTickFreq(wxCommandEvent& event);
     void OnButtonSetThumbLen(wxCommandEvent& event);
 
@@ -113,6 +119,8 @@ protected:
 
     void OnUpdateUIValueButton(wxUpdateUIEvent& event);
     void OnUpdateUIMinMaxButton(wxUpdateUIEvent& event);
+    void OnUpdateUILineSize(wxUpdateUIEvent& event);
+    void OnUpdateUIPageSize(wxUpdateUIEvent& event);
     void OnUpdateUITickFreq(wxUpdateUIEvent& event);
     void OnUpdateUIThumbLen(wxUpdateUIEvent& event);
     void OnUpdateUIRadioSides(wxUpdateUIEvent& event);
@@ -127,6 +135,12 @@ protected:
 
     // (re)create the slider
     void CreateSlider();
+
+    // set the line size from the text field value
+    void DoSetLineSize();
+
+    // set the page size from the text field value
+    void DoSetPageSize();
 
     // set the tick frequency from the text field value
     void DoSetTickFreq();
@@ -160,6 +174,8 @@ protected:
     wxTextCtrl *m_textValue,
                *m_textMin,
                *m_textMax,
+               *m_textLineSize,
+               *m_textPageSize,
                *m_textTickFreq,
                *m_textThumbLen;
 
@@ -176,14 +192,17 @@ BEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
     EVT_BUTTON(SliderPage_Reset, SliderWidgetsPage::OnButtonReset)
     EVT_BUTTON(SliderPage_SetValue, SliderWidgetsPage::OnButtonSetValue)
     EVT_BUTTON(SliderPage_SetMinAndMax, SliderWidgetsPage::OnButtonSetMinAndMax)
+    EVT_BUTTON(SliderPage_SetLineSize, SliderWidgetsPage::OnButtonSetLineSize)
+    EVT_BUTTON(SliderPage_SetPageSize, SliderWidgetsPage::OnButtonSetPageSize)
     EVT_BUTTON(SliderPage_SetTickFreq, SliderWidgetsPage::OnButtonSetTickFreq)
     EVT_BUTTON(SliderPage_SetThumbLen, SliderWidgetsPage::OnButtonSetThumbLen)
 
     EVT_UPDATE_UI(SliderPage_SetValue, SliderWidgetsPage::OnUpdateUIValueButton)
     EVT_UPDATE_UI(SliderPage_SetMinAndMax, SliderWidgetsPage::OnUpdateUIMinMaxButton)
+    EVT_UPDATE_UI(SliderPage_SetLineSize, SliderWidgetsPage::OnUpdateUILineSize)
+    EVT_UPDATE_UI(SliderPage_SetPageSize, SliderWidgetsPage::OnUpdateUIPageSize)
     EVT_UPDATE_UI(SliderPage_SetTickFreq, SliderWidgetsPage::OnUpdateUITickFreq)
     EVT_UPDATE_UI(SliderPage_SetThumbLen, SliderWidgetsPage::OnUpdateUIThumbLen)
-    EVT_UPDATE_UI(SliderPage_TickFreqText, SliderWidgetsPage::OnUpdateUITickFreq)
     EVT_UPDATE_UI(SliderPage_RadioSides, SliderWidgetsPage::OnUpdateUIRadioSides)
     EVT_UPDATE_UI(SliderPage_BothSides, SliderWidgetsPage::OnUpdateUIBothSides)
 
@@ -293,6 +312,20 @@ void SliderWidgetsPage::CreateContent()
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
+    sizerRow = CreateSizerWithTextAndButton(SliderPage_SetLineSize,
+                                            _T("Li&ne size"),
+                                            SliderPage_LineSizeText,
+                                            &m_textLineSize);
+
+    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+
+    sizerRow = CreateSizerWithTextAndButton(SliderPage_SetPageSize,
+                                            _T("P&age size"),
+                                            SliderPage_PageSizeText,
+                                            &m_textPageSize);
+
+    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetTickFreq,
                                             _T("Tick &frequency"),
                                             SliderPage_TickFreqText,
@@ -316,6 +349,9 @@ void SliderWidgetsPage::CreateContent()
 
     Reset();
     CreateSlider();
+
+    m_textLineSize->SetValue(wxString::Format(_T("%d"), m_slider->GetLineSize()));
+    m_textPageSize->SetValue(wxString::Format(_T("%d"), m_slider->GetPageSize()));
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
@@ -434,6 +470,42 @@ void SliderWidgetsPage::CreateSlider()
     m_sizerSlider->Layout();
 }
 
+void SliderWidgetsPage::DoSetLineSize()
+{
+    long lineSize;
+    if ( !m_textLineSize->GetValue().ToLong(&lineSize) )
+    {
+        wxLogWarning(_T("Invalid slider line size"));
+
+        return;
+    }
+
+    m_slider->SetLineSize(lineSize);
+
+    if ( m_slider->GetLineSize() != lineSize )
+    {
+        wxLogWarning(_T("Invalid line size in slider."));
+    }
+}
+
+void SliderWidgetsPage::DoSetPageSize()
+{
+    long pageSize;
+    if ( !m_textPageSize->GetValue().ToLong(&pageSize) )
+    {
+        wxLogWarning(_T("Invalid slider page size"));
+
+        return;
+    }
+
+    m_slider->SetPageSize(pageSize);
+
+    if ( m_slider->GetPageSize() != pageSize )
+    {
+        wxLogWarning(_T("Invalid page size in slider."));
+    }
+}
+
 void SliderWidgetsPage::DoSetTickFreq()
 {
     long freq;
@@ -469,6 +541,16 @@ void SliderWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
     Reset();
 
     CreateSlider();
+}
+
+void SliderWidgetsPage::OnButtonSetLineSize(wxCommandEvent& WXUNUSED(event))
+{
+    DoSetLineSize();
+}
+
+void SliderWidgetsPage::OnButtonSetPageSize(wxCommandEvent& WXUNUSED(event))
+{
+    DoSetPageSize();
 }
 
 void SliderWidgetsPage::OnButtonSetTickFreq(wxCommandEvent& WXUNUSED(event))
@@ -523,6 +605,20 @@ void SliderWidgetsPage::OnUpdateUIValueButton(wxUpdateUIEvent& event)
 {
     long val;
     event.Enable( m_textValue->GetValue().ToLong(&val) && IsValidValue(val) );
+}
+
+void SliderWidgetsPage::OnUpdateUILineSize(wxUpdateUIEvent& event)
+{
+    long lineSize;
+    event.Enable( m_textLineSize->GetValue().ToLong(&lineSize) &&
+            (lineSize > 0) && (lineSize <= m_max - m_min) );
+}
+
+void SliderWidgetsPage::OnUpdateUIPageSize(wxUpdateUIEvent& event)
+{
+    long pageSize;
+    event.Enable( m_textPageSize->GetValue().ToLong(&pageSize) &&
+            (pageSize > 0) && (pageSize <= m_max - m_min) );
 }
 
 void SliderWidgetsPage::OnUpdateUITickFreq(wxUpdateUIEvent& event)
