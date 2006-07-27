@@ -370,7 +370,7 @@ int wxSlider::GetMax() const
 void wxSlider::SetPageSize( int pageSize )
 {
     BlockScrollEvent();
-    gtk_range_set_increments(GTK_RANGE (m_widget), 1, pageSize);
+    gtk_range_set_increments(GTK_RANGE (m_widget), GetLineSize(), pageSize);
     UnblockScrollEvent();
 }
 
@@ -389,13 +389,16 @@ int wxSlider::GetThumbLength() const
     return 0;
 }
 
-void wxSlider::SetLineSize( int WXUNUSED(lineSize) )
+void wxSlider::SetLineSize( int lineSize )
 {
+    BlockScrollEvent();
+    gtk_range_set_increments(GTK_RANGE (m_widget), lineSize, GetPageSize());
+    UnblockScrollEvent();
 }
 
 int wxSlider::GetLineSize() const
 {
-    return 0;
+    return int(gtk_range_get_adjustment (GTK_RANGE (m_widget))->step_increment);
 }
 
 bool wxSlider::IsOwnGtkWindow( GdkWindow *window )
