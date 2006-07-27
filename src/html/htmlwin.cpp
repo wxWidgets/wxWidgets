@@ -24,12 +24,12 @@
     #include "wx/dcmemory.h"
     #include "wx/timer.h"
     #include "wx/settings.h"
+    #include "wx/dataobj.h"
 #endif
 
 #include "wx/html/htmlwin.h"
 #include "wx/html/htmlproc.h"
 #include "wx/clipbrd.h"
-#include "wx/dataobj.h"
 
 #include "wx/arrimpl.cpp"
 #include "wx/listimpl.cpp"

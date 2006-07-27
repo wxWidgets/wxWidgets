@@ -22,13 +22,14 @@
 
 #if wxUSE_DATAOBJ
 
+#include "wx/dataobj.h"
+
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/image.h"
 #endif
 
-#include "wx/dataobj.h"
 #include "wx/mstream.h"
 
 #include "wx/os2/private.h"

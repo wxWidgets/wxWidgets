@@ -62,6 +62,7 @@
 #include "wx/settings.h"
 #include "wx/msgdlg.h"
 #include "wx/cmndata.h"
+#include "wx/dataobj.h"
 
 #include "wx/control.h"
 #include "wx/ctrlsub.h"

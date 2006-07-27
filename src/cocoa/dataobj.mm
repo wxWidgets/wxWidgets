@@ -6,16 +6,17 @@
 // Created:     2003/07/23
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWidgets licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #if wxUSE_DATAOBJ
 
+#include "wx/dataobj.h"
+
 #ifndef WX_PRECOMP
 #endif //WX_PRECOMP
-#include "wx/dataobj.h"
 
 wxDataObject::wxDataObject()
 {

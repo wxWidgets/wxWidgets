@@ -24,11 +24,11 @@
     #include "wx/dc.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/dataobj.h"
 #endif
 
 #include "wx/filename.h"
 #include "wx/clipbrd.h"
-#include "wx/dataobj.h"
 #include "wx/wfstream.h"
 #include "wx/module.h"
 #include "wx/mstream.h"
@@ -908,7 +908,7 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
 
     wxRichTextRange range(-1, -1);
     size_t i = 0;
-    size_t len = text.Length();
+    size_t len = text.length();
     wxString line;
     while (i < len)
     {
@@ -2266,7 +2266,7 @@ bool wxRichTextParagraph::InsertText(long pos, const wxString& text)
                                text + textObject->GetText().Mid(posInString);
             textObject->SetText(newText);
 
-            int textLength = text.Length();
+            int textLength = text.length();
 
             textObject->SetRange(wxRichTextRange(textObject->GetRange().GetStart(),
                                                  textObject->GetRange().GetEnd() + textLength));
@@ -2760,7 +2760,7 @@ bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxDC& d
         int spacePos = plainText.Find(wxT(' '), true);
         if (spacePos != wxNOT_FOUND)
         {
-            int positionsFromEndOfString = plainText.Length() - spacePos - 1;
+            int positionsFromEndOfString = plainText.length() - spacePos - 1;
             breakPosition = breakPosition - positionsFromEndOfString;
         }
     }
@@ -3198,7 +3198,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 wxRichTextObject* wxRichTextPlainText::DoSplit(long pos)
 {
     int index = pos - GetRange().GetStart();
-    if (index < 0 || index >= (int) m_text.Length())
+    if (index < 0 || index >= (int) m_text.length())
         return NULL;
 
     wxString firstPart = m_text.Mid(0, index);
@@ -3218,7 +3218,7 @@ wxRichTextObject* wxRichTextPlainText::DoSplit(long pos)
 /// Calculate range
 void wxRichTextPlainText::CalculateRange(long start, long& end)
 {
-    end = start + m_text.Length() - 1;
+    end = start + m_text.length() - 1;
     m_range.SetRange(start, end);
 }
 
@@ -3343,7 +3343,7 @@ bool wxRichTextBuffer::InsertTextWithUndo(long pos, const wxString& text, wxRich
     action->SetPosition(pos);
 
     // Set the range we'll need to delete in Undo
-    action->SetRange(wxRichTextRange(pos, pos + text.Length() - 1));
+    action->SetRange(wxRichTextRange(pos, pos + text.length() - 1));
 
     SubmitAction(action);
 
@@ -5286,7 +5286,7 @@ bool wxRichTextPlainTextHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputSt
     wxString text = buffer->GetText();
     wxCharBuffer buf = text.ToAscii();
 
-    stream.Write((const char*) buf, text.Length());
+    stream.Write((const char*) buf, text.length());
     return true;
 }
 #endif // wxUSE_STREAMS
@@ -5485,7 +5485,7 @@ bool wxRichTextImageBlock::WriteHex(wxOutputStream& stream)
         hex = wxDecToHex(m_data[i]);
         wxCharBuffer buf = hex.ToAscii();
 
-        stream.Write((const char*) buf, hex.Length());
+        stream.Write((const char*) buf, hex.length());
     }
 
     return true;

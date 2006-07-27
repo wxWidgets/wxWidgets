@@ -131,6 +131,7 @@
     #include "wx/log.h"
     #include "wx/dcclient.h"
     #include "wx/validate.h"
+    #include "wx/dataobj.h"
 #endif
 
 #include <ctype.h>
@@ -147,10 +148,6 @@
 #include "wx/univ/theme.h"
 
 #include "wx/cmdproc.h"
-
-#if wxUSE_CLIPBOARD
-#include "wx/dataobj.h"
-#endif
 
 // turn extra wxTextCtrl-specific debugging on/off
 #define WXDEBUG_TEXT

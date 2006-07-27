@@ -37,6 +37,7 @@
     #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/dataobj.h"
 #endif
 
 #if wxUSE_METAFILE
@@ -56,10 +57,6 @@
 // wxDataObject is tied to OLE/drag and drop implementation, therefore so are
 // the functions using wxDataObject in wxClipboard
 //#define wxUSE_DATAOBJ wxUSE_DRAG_AND_DROP
-
-#if wxUSE_DATAOBJ
-    #include "wx/dataobj.h"
-#endif
 
 #if wxUSE_OLE && !defined(__WXWINCE__)
     // use OLE clipboard

@@ -18,9 +18,8 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/dataobj.h"
 #endif
-
-#include "wx/dataobj.h"
 
 #include "wx/x11/private.h"
 

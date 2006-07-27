@@ -29,9 +29,9 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/bitmap.h"
+    #include "wx/dataobj.h"
 #endif
 
-#include "wx/dataobj.h"
 #include "wx/ptr_scpd.h"
 
 #ifdef __VMS__

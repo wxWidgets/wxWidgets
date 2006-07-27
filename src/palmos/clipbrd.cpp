@@ -37,6 +37,7 @@
     #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/dataobj.h"
 #endif
 
 #if wxUSE_METAFILE
@@ -48,11 +49,7 @@
 #include "wx/palmos/private.h"
 
 #if wxUSE_WXDIB
-#include "wx/palmos/dib.h"
-#endif
-
-#if wxUSE_DATAOBJ
-    #include "wx/dataobj.h"
+    #include "wx/palmos/dib.h"
 #endif
 
 #if wxUSE_OLE && !defined(__WXWINCE__)
@@ -75,7 +72,7 @@
 // old-style clipboard functions
 // ---------------------------------------------------------------------------
 
-static bool gs_wxClipboardIsOpen = FALSE;
+static bool gs_wxClipboardIsOpen = false;
 
 bool wxOpenClipboard()
 {
@@ -142,8 +139,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject)
 
 wxClipboard::wxClipboard()
 {
-    m_clearOnExit = FALSE;
-    m_isOpened = FALSE;
+    m_clearOnExit = false;
+    m_isOpened = false;
 }
 
 wxClipboard::~wxClipboard()

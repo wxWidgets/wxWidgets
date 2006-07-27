@@ -37,10 +37,10 @@
     #include "wx/dcclient.h"
     #include "wx/menu.h"
     #include "wx/log.h"
+    #include "wx/dataobj.h"
 #endif
 
 #include "wx/clipbrd.h"
-#include "wx/dataobj.h"
 
 // ============================================================================
 // implementation
