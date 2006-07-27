@@ -355,7 +355,7 @@ wxString wxFileData::GetHint() const
     else if (IsDrive())
         s += _("<DRIVE>");
     else // plain file
-        s += wxString::Format(_("%ld bytes"),
+        s += wxString::Format(wxPLURAL("%ld byte", "%ld bytes", m_size),
                               wxLongLong(m_size).ToString().c_str());
 
     s += wxT(' ');
