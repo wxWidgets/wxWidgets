@@ -1190,7 +1190,6 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
     if ( wxGridCellEditor::IsAcceptedKey(event) )
     {
         int keycode = event.GetKeyCode();
-        printf("%d\n", keycode);
         // accept digits, 'e' as in '1e+6', also '-', '+', and '.'
         char tmpbuf[2];
         tmpbuf[0] = (char) keycode;
