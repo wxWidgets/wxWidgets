@@ -24,6 +24,7 @@ wxGTK:
 - Support underlined fonts in wxTextCtrl.
 - wxWindow and wxScrolledWindow now generate line, page and thumb-release scroll events.
 - Make Update() work on native controls (Alex Bligh).
+- Implemented SetLineSize and GetLineSize for wxSlider.
 
 wxUniv:
 

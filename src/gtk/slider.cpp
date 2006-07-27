@@ -335,13 +335,24 @@ int wxSlider::GetThumbLength() const
     return (int)ceil(m_adjust->page_size);
 }
 
-void wxSlider::SetLineSize( int WXUNUSED(lineSize) )
+void wxSlider::SetLineSize( int lineSize )
 {
+    double fline = (double)lineSize;
+
+    if (fabs(fline-m_adjust->step_increment) < 0.2) return;
+
+    m_adjust->step_increment = fline;
+
+    GtkDisableEvents();
+
+    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
+
+    GtkEnableEvents();
 }
 
 int wxSlider::GetLineSize() const
 {
-    return 0;
+    return (int)ceil(m_adjust->step_increment);
 }
 
 bool wxSlider::IsOwnGtkWindow( GdkWindow *window )
