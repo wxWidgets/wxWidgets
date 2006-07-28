@@ -215,13 +215,13 @@ IMPLEMENT_ABSTRACT_CLASS(wxXmlResourceHandler, wxObject)
 
 void wxXmlResource::AddHandler(wxXmlResourceHandler *handler)
 {
-    m_handlers.Add(handler);
+    m_handlers.Append(handler);
     handler->SetParentResource(this);
 }
 
 void wxXmlResource::InsertHandler(wxXmlResourceHandler *handler)
 {
-    m_handlers.Insert(handler, 0);
+    m_handlers.Insert(handler);
     handler->SetParentResource(this);
 }
 
@@ -229,7 +229,7 @@ void wxXmlResource::InsertHandler(wxXmlResourceHandler *handler)
 
 void wxXmlResource::ClearHandlers()
 {
-    WX_CLEAR_ARRAY(m_handlers);
+    WX_CLEAR_LIST(wxList, m_handlers);
 }
 
 
@@ -672,19 +672,26 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
         return CreateResFromNode(&copy, parent, instance);
     }
 
+    wxXmlResourceHandler *handler;
+
     if (handlerToUse)
     {
         if (handlerToUse->CanHandle(node))
+        {
             return handlerToUse->CreateResource(node, parent, instance);
+        }
     }
     else if (node->GetName() == wxT("object"))
     {
-        for ( wxXmlResourceHandlers::iterator i = m_handlers.begin();
-              i != m_handlers.end(); ++i )
+        wxList::compatibility_iterator ND = m_handlers.GetFirst();
+        while (ND)
         {
-            wxXmlResourceHandler *handler = *i;
+            handler = (wxXmlResourceHandler*)ND->GetData();
             if (handler->CanHandle(node))
+            {
                 return handler->CreateResource(node, parent, instance);
+            }
+            ND = ND->GetNext();
         }
     }
 

@@ -18,6 +18,7 @@
 #include "wx/string.h"
 #include "wx/dynarray.h"
 #include "wx/datetime.h"
+#include "wx/list.h"
 #include "wx/gdicmn.h"
 #include "wx/filesys.h"
 #include "wx/bitmap.h"
@@ -86,10 +87,6 @@ public:
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxXmlResourceDataRecord,
                                   wxXmlResourceDataRecords,
                                   WXDLLIMPEXP_XRC);
-
-WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxXmlResourceHandler*,
-                                  wxXmlResourceHandlers,
-                                  class WXDLLIMPEXP_XRC);
 
 enum wxXmlResourceFlags
 {
@@ -277,7 +274,7 @@ private:
     long m_version;
 
     int m_flags;
-    wxXmlResourceHandlers m_handlers;
+    wxList m_handlers;
     wxXmlResourceDataRecords m_data;
 #if wxUSE_FILESYSTEM
     wxFileSystem m_curFileSystem;
