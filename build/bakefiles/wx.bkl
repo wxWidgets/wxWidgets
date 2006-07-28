@@ -61,20 +61,20 @@
             <depends>xmllib</depends>
 
             <command>
-                (test -d utils/wxrc &amp;&amp; cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) all) || true
+                (if test -d utils/wxrc ; then cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) all ; fi)
             </command>
         </action>
         <action id="clean-wxrc" cond="USE_XRC=='1'">
             <dependency-of>clean</dependency-of>
             <command>
-                (test -d utils/wxrc &amp;&amp; cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) clean) || true
+                (if test -d utils/wxrc ; then cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) clean ; fi)
             </command>
         </action>
         <action id="install-wxrc" cond="USE_XRC=='1'">
             <dependency-of>install</dependency-of>
             <depends>wxrc</depends>
             <command>
-                (test -d utils/wxrc &amp;&amp; cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) install) || true
+                (if test -d utils/wxrc ; then cd utils/wxrc &amp;&amp; $(DOLLAR)(MAKE) install ; fi)
             </command>
         </action>
 
