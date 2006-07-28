@@ -546,9 +546,12 @@ void wxTabMDIChildFrame::DoShow(bool show)
     wxWindow::Show(show);
 }
 
-void wxTabMDIChildFrame::DoSetSize(int x, int y, int width, int height, int WXUNUSED(sizeFlags))
+void wxTabMDIChildFrame::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     m_mdi_newrect = wxRect(x, y, width, height);
+#ifdef __WXGTK__
+    wxPanel::DoSetSize(x,y,width, height, sizeFlags);
+#endif
 }
 
 void wxTabMDIChildFrame::DoMoveWindow(int x, int y, int width, int height)
