@@ -865,6 +865,10 @@ public:
         { return DoPopupMenu(menu, x, y); }
 #endif // wxUSE_MENUS
 
+    // override this method to return true for controls having multiple pages
+    virtual bool HasMultiplePages() const { return false; }
+
+
     // scrollbars
     // ----------
 

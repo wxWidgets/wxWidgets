@@ -1400,6 +1400,18 @@ Returns {\tt true} if this window has the current mouse capture.
 Returns \texttt{true} if the window has the given \arg{flag} bit set.
 
 
+\membersection{wxWindow::HasMultiplePages}\label{wxwindowhasmultiplepages}
+
+\constfunc{virtual bool}{HasMultiplePages}{\void}
+
+This method should be overridden to return \texttt{true} if this window has
+multiple pages. All standard class with multiple pages such as 
+\helpref{wxNotebook}{wxnotebook}, \helpref{wxListbook}{wxlistbook} and 
+\helpref{wxTreebook}{wxtreebook} already override it to return \texttt{true}
+and user-defined classes with similar behaviour should do it as well to allow
+the library to handle such windows appropriately.
+
+
 \membersection{wxWindow::HasScrollbar}\label{wxwindowhasscrollbar}
 
 \constfunc{virtual bool}{HasScrollbar}{\param{int }{orient}}
