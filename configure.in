@@ -338,7 +338,8 @@ case "${host}" in
   ;;
 
   *)
-    AC_MSG_ERROR(unknown system type ${host}.)
+    AC_MSG_WARN([*** System type ${host} is unknown, assuming generic Unix and continuing nevertheless.])
+    AC_MSG_WARN([*** Please report the build results to wx-dev@lists.wxwidgets.org.])
 esac
 
 dnl ---------------------------------------------------------------------------
