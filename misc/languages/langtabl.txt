@@ -158,7 +158,6 @@ wxLANGUAGE_SAMOAN                      sm     -                -                
 wxLANGUAGE_SANGHO                      sg     -                -                                   "Sangho"
 wxLANGUAGE_SANSKRIT                    sa     LANG_SANSKRIT    SUBLANG_DEFAULT                     "Sanskrit"
 wxLANGUAGE_SCOTS_GAELIC                gd     -                -                                   "Scots Gaelic"
-wxLANGUAGE_SERBIAN                     sr_YU  LANG_SERBIAN     SUBLANG_DEFAULT                     "Serbian"
 wxLANGUAGE_SERBIAN_CYRILLIC            sr_YU  LANG_SERBIAN     SUBLANG_SERBIAN_CYRILLIC            "Serbian (Cyrillic)"
 wxLANGUAGE_SERBIAN_LATIN               sr_YU  LANG_SERBIAN     SUBLANG_SERBIAN_LATIN               "Serbian (Latin)"
 wxLANGUAGE_SERBO_CROATIAN              sh     -                -                                   "Serbo-Croatian"
