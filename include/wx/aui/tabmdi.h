@@ -25,9 +25,9 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTabMDIParentFrame;
-class WXDLLEXPORT wxTabMDIClientWindow;
-class WXDLLEXPORT wxTabMDIChildFrame;
+class WXDLLIMPEXP_AUI wxTabMDIParentFrame;
+class WXDLLIMPEXP_AUI wxTabMDIClientWindow;
+class WXDLLIMPEXP_AUI wxTabMDIChildFrame;
 
 //-----------------------------------------------------------------------------
 // wxTabMDIParentFrame
