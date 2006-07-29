@@ -167,6 +167,7 @@ AUI_MGR_ALLOW_ACTIVE_PANE = _aui.AUI_MGR_ALLOW_ACTIVE_PANE
 AUI_MGR_TRANSPARENT_DRAG = _aui.AUI_MGR_TRANSPARENT_DRAG
 AUI_MGR_TRANSPARENT_HINT = _aui.AUI_MGR_TRANSPARENT_HINT
 AUI_MGR_TRANSPARENT_HINT_FADE = _aui.AUI_MGR_TRANSPARENT_HINT_FADE
+AUI_MGR_DISABLE_VENETIAN_BLINDS = _aui.AUI_MGR_DISABLE_VENETIAN_BLINDS
 AUI_MGR_DEFAULT = _aui.AUI_MGR_DEFAULT
 AUI_ART_SASH_SIZE = _aui.AUI_ART_SASH_SIZE
 AUI_ART_CAPTION_SIZE = _aui.AUI_ART_CAPTION_SIZE
@@ -895,13 +896,13 @@ class FrameManager(_core.EvtHandler):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, Frame frame=None, int flags=AUI_MGR_DEFAULT) -> FrameManager
+        __init__(self, Window managed_wnd=None, int flags=AUI_MGR_DEFAULT) -> FrameManager
 
         Constructor.
 
-            :param frame: Specifies the `wx.Frame` which should be managed.
-                If not set in the call to this constructor then `SetFrame`
-                should be called.
+            :param managed_wnd: Specifies the `wx.Window` which should be
+                managed.  If not set in the call to this constructor then
+                `SetManagedWindow` should be called later.
 
             :param flags: Specifies options which allow the frame management
                 behavior to be modified.
@@ -916,7 +917,7 @@ class FrameManager(_core.EvtHandler):
 
         UnInit uninitializes the framework and should be called before a
         managed frame is destroyed. UnInit is usually called in the managed
-        wx.Frame's destructor.
+        window's destructor.
 
         """
         return _aui.FrameManager_UnInit(*args, **kwargs)
@@ -940,26 +941,28 @@ class FrameManager(_core.EvtHandler):
         """
         return _aui.FrameManager_GetFlags(*args, **kwargs)
 
-    def SetFrame(*args, **kwargs):
+    def SetManagedWindow(*args, **kwargs):
         """
-        SetFrame(self, Window frame)
+        SetManagedWindow(self, Window managed_wnd)
 
-        SetFrame is called to specify the frame which is to be managed by the
-        FrameManager.  It only needs to be called if the Frame was not given
-        to the manager in the constructor.
+        SetManagedWindow is called to specify the window which is to be
+        managed by the FrameManager.  It is normally a `wx.Frame` but it is
+        possible to also allow docking within any container window.  This only
+        needs to be called if the window was not given to the manager in the
+        constructor.
 
         """
-        return _aui.FrameManager_SetFrame(*args, **kwargs)
+        return _aui.FrameManager_SetManagedWindow(*args, **kwargs)
 
-    def GetFrame(*args, **kwargs):
+    def GetManagedWindow(*args, **kwargs):
         """
-        GetFrame(self) -> Window
+        GetManagedWindow(self) -> Window
 
-        GetFrame returns the frame currently being managed by the
+        GetManagedWindow returns the window currently being managed by the
         FrameManager.
 
         """
-        return _aui.FrameManager_GetFrame(*args, **kwargs)
+        return _aui.FrameManager_GetManagedWindow(*args, **kwargs)
 
     def SetArtProvider(*args, **kwargs):
         """
@@ -1008,6 +1011,10 @@ class FrameManager(_core.EvtHandler):
     def _AddPane1(*args, **kwargs):
         """_AddPane1(self, Window window, PaneInfo pane_info) -> bool"""
         return _aui.FrameManager__AddPane1(*args, **kwargs)
+
+    def AddPaneAtPos(*args, **kwargs):
+        """AddPaneAtPos(self, Window window, PaneInfo pane_info, Point drop_pos) -> bool"""
+        return _aui.FrameManager_AddPaneAtPos(*args, **kwargs)
 
     def _AddPane2(*args, **kwargs):
         """_AddPane2(self, Window window, int direction=LEFT, String caption=wxEmptyString) -> bool"""
@@ -1079,6 +1086,18 @@ class FrameManager(_core.EvtHandler):
         """
         return _aui.FrameManager_Update(*args, **kwargs)
 
+    def DrawHintRect(*args, **kwargs):
+        """DrawHintRect(self, Window pane_window, Point pt, Point offset)"""
+        return _aui.FrameManager_DrawHintRect(*args, **kwargs)
+
+    def ShowHint(*args, **kwargs):
+        """ShowHint(self, Rect rect)"""
+        return _aui.FrameManager_ShowHint(*args, **kwargs)
+
+    def HideHint(*args, **kwargs):
+        """HideHint(self)"""
+        return _aui.FrameManager_HideHint(*args, **kwargs)
+
     def OnRender(*args, **kwargs):
         """OnRender(self, FrameManagerEvent evt)"""
         return _aui.FrameManager_OnRender(*args, **kwargs)
@@ -1132,6 +1151,11 @@ class FrameManager(_core.EvtHandler):
             if caption is None:
                 caption = ""
             return self._AddPane2(window, info, caption)
+
+    SetFrame = wx._deprecated(SetManagedWindow,
+                              "SetFrame is deprecated, use `SetManagedWindow` instead.")
+    GetFrame = wx._deprecated(GetManagedWindow,
+                              "GetFrame is deprecated, use `GetManagedWindow` instead.")
 
 _aui.FrameManager_swigregister(FrameManager)
 
@@ -1368,6 +1392,246 @@ class FloatingPane(_windows.MiniFrame):
         return _aui.FloatingPane_SetPaneWindow(*args, **kwargs)
 
 _aui.FloatingPane_swigregister(FloatingPane)
+
+class AuiNotebookEvent(_core.NotifyEvent):
+    """Proxy of C++ AuiNotebookEvent class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, EventType command_type=wxEVT_NULL, int win_id=0) -> AuiNotebookEvent"""
+        _aui.AuiNotebookEvent_swiginit(self,_aui.new_AuiNotebookEvent(*args, **kwargs))
+    def SetSelection(*args, **kwargs):
+        """SetSelection(self, int s)"""
+        return _aui.AuiNotebookEvent_SetSelection(*args, **kwargs)
+
+    def SetOldSelection(*args, **kwargs):
+        """SetOldSelection(self, int s)"""
+        return _aui.AuiNotebookEvent_SetOldSelection(*args, **kwargs)
+
+    def GetSelection(*args, **kwargs):
+        """
+        GetSelection(self) -> int
+
+        Returns item index for a listbox or choice selection event (not valid
+        for a deselection).
+        """
+        return _aui.AuiNotebookEvent_GetSelection(*args, **kwargs)
+
+    def GetOldSelection(*args, **kwargs):
+        """GetOldSelection(self) -> int"""
+        return _aui.AuiNotebookEvent_GetOldSelection(*args, **kwargs)
+
+    old_selection = property(_aui.AuiNotebookEvent_old_selection_get, _aui.AuiNotebookEvent_old_selection_set)
+    selection = property(_aui.AuiNotebookEvent_selection_get, _aui.AuiNotebookEvent_selection_set)
+_aui.AuiNotebookEvent_swigregister(AuiNotebookEvent)
+
+class AuiNotebookPage(object):
+    """Proxy of C++ AuiNotebookPage class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    window = property(_aui.AuiNotebookPage_window_get, _aui.AuiNotebookPage_window_set)
+    caption = property(_aui.AuiNotebookPage_caption_get, _aui.AuiNotebookPage_caption_set)
+    bitmap = property(_aui.AuiNotebookPage_bitmap_get, _aui.AuiNotebookPage_bitmap_set)
+    rect = property(_aui.AuiNotebookPage_rect_get, _aui.AuiNotebookPage_rect_set)
+    active = property(_aui.AuiNotebookPage_active_get, _aui.AuiNotebookPage_active_set)
+_aui.AuiNotebookPage_swigregister(AuiNotebookPage)
+
+class AuiTabContainerButton(object):
+    """Proxy of C++ AuiTabContainerButton class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    id = property(_aui.AuiTabContainerButton_id_get, _aui.AuiTabContainerButton_id_set)
+    cur_state = property(_aui.AuiTabContainerButton_cur_state_get, _aui.AuiTabContainerButton_cur_state_set)
+    bitmap = property(_aui.AuiTabContainerButton_bitmap_get, _aui.AuiTabContainerButton_bitmap_set)
+    rect = property(_aui.AuiTabContainerButton_rect_get, _aui.AuiTabContainerButton_rect_set)
+_aui.AuiTabContainerButton_swigregister(AuiTabContainerButton)
+
+class AuiTabContainer(object):
+    """Proxy of C++ AuiTabContainer class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self) -> AuiTabContainer"""
+        _aui.AuiTabContainer_swiginit(self,_aui.new_AuiTabContainer(*args, **kwargs))
+    __swig_destroy__ = _aui.delete_AuiTabContainer
+    __del__ = lambda self : None;
+    def AddPage(*args, **kwargs):
+        """AddPage(self, Window page, AuiNotebookPage info) -> bool"""
+        return _aui.AuiTabContainer_AddPage(*args, **kwargs)
+
+    def InsertPage(*args, **kwargs):
+        """InsertPage(self, Window page, AuiNotebookPage info, size_t idx) -> bool"""
+        return _aui.AuiTabContainer_InsertPage(*args, **kwargs)
+
+    def RemovePage(*args, **kwargs):
+        """RemovePage(self, Window page) -> bool"""
+        return _aui.AuiTabContainer_RemovePage(*args, **kwargs)
+
+    def SetActivePage(*args):
+        """
+        SetActivePage(self, Window page) -> bool
+        SetActivePage(self, size_t page) -> bool
+        """
+        return _aui.AuiTabContainer_SetActivePage(*args)
+
+    def SetNoneActive(*args, **kwargs):
+        """SetNoneActive(self)"""
+        return _aui.AuiTabContainer_SetNoneActive(*args, **kwargs)
+
+    def GetActivePage(*args, **kwargs):
+        """GetActivePage(self) -> int"""
+        return _aui.AuiTabContainer_GetActivePage(*args, **kwargs)
+
+    def TabHitTest(*args, **kwargs):
+        """TabHitTest(self, int x, int y, Window hit) -> bool"""
+        return _aui.AuiTabContainer_TabHitTest(*args, **kwargs)
+
+    def ButtonHitTest(*args, **kwargs):
+        """ButtonHitTest(self, int x, int y, AuiTabContainerButton hit) -> bool"""
+        return _aui.AuiTabContainer_ButtonHitTest(*args, **kwargs)
+
+    def GetWindowFromIdx(*args, **kwargs):
+        """GetWindowFromIdx(self, size_t idx) -> Window"""
+        return _aui.AuiTabContainer_GetWindowFromIdx(*args, **kwargs)
+
+    def GetIdxFromWindow(*args, **kwargs):
+        """GetIdxFromWindow(self, Window page) -> int"""
+        return _aui.AuiTabContainer_GetIdxFromWindow(*args, **kwargs)
+
+    def GetPageCount(*args, **kwargs):
+        """GetPageCount(self) -> size_t"""
+        return _aui.AuiTabContainer_GetPageCount(*args, **kwargs)
+
+    def GetPage(*args, **kwargs):
+        """GetPage(self, size_t idx) -> AuiNotebookPage"""
+        return _aui.AuiTabContainer_GetPage(*args, **kwargs)
+
+    def GetPages(*args, **kwargs):
+        """GetPages(self) -> wxAuiNotebookPageArray"""
+        return _aui.AuiTabContainer_GetPages(*args, **kwargs)
+
+    def SetNormalFont(*args, **kwargs):
+        """SetNormalFont(self, Font normal_font)"""
+        return _aui.AuiTabContainer_SetNormalFont(*args, **kwargs)
+
+    def SetSelectedFont(*args, **kwargs):
+        """SetSelectedFont(self, Font selected_font)"""
+        return _aui.AuiTabContainer_SetSelectedFont(*args, **kwargs)
+
+    def SetMeasuringFont(*args, **kwargs):
+        """SetMeasuringFont(self, Font measuring_font)"""
+        return _aui.AuiTabContainer_SetMeasuringFont(*args, **kwargs)
+
+    def DoShowHide(*args, **kwargs):
+        """DoShowHide(self)"""
+        return _aui.AuiTabContainer_DoShowHide(*args, **kwargs)
+
+    def SetRect(*args, **kwargs):
+        """SetRect(self, Rect rect)"""
+        return _aui.AuiTabContainer_SetRect(*args, **kwargs)
+
+    def AddButton(*args, **kwargs):
+        """AddButton(self, int id, Bitmap bmp)"""
+        return _aui.AuiTabContainer_AddButton(*args, **kwargs)
+
+_aui.AuiTabContainer_swigregister(AuiTabContainer)
+
+class AuiTabCtrl(_core.Control,AuiTabContainer):
+    """Proxy of C++ AuiTabCtrl class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0) -> AuiTabCtrl
+        """
+        _aui.AuiTabCtrl_swiginit(self,_aui.new_AuiTabCtrl(*args, **kwargs))
+        self._setOORInfo(self)
+
+_aui.AuiTabCtrl_swigregister(AuiTabCtrl)
+
+class AuiMultiNotebook(_core.Control):
+    """Proxy of C++ AuiMultiNotebook class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0) -> AuiMultiNotebook
+        """
+        _aui.AuiMultiNotebook_swiginit(self,_aui.new_AuiMultiNotebook(*args, **kwargs))
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0) -> bool
+
+        Do the 2nd phase and create the GUI control.
+        """
+        return _aui.AuiMultiNotebook_Create(*args, **kwargs)
+
+    def AddPage(*args, **kwargs):
+        """AddPage(self, Window page, String caption, bool select=False, Bitmap bitmap=wxNullBitmap) -> bool"""
+        return _aui.AuiMultiNotebook_AddPage(*args, **kwargs)
+
+    def InsertPage(*args, **kwargs):
+        """
+        InsertPage(self, size_t page_idx, Window page, String caption, bool select=False, 
+            Bitmap bitmap=wxNullBitmap) -> bool
+        """
+        return _aui.AuiMultiNotebook_InsertPage(*args, **kwargs)
+
+    def DeletePage(*args, **kwargs):
+        """DeletePage(self, size_t page) -> bool"""
+        return _aui.AuiMultiNotebook_DeletePage(*args, **kwargs)
+
+    def RemovePage(*args, **kwargs):
+        """RemovePage(self, size_t page) -> bool"""
+        return _aui.AuiMultiNotebook_RemovePage(*args, **kwargs)
+
+    def SetPageText(*args, **kwargs):
+        """SetPageText(self, size_t page, String text) -> bool"""
+        return _aui.AuiMultiNotebook_SetPageText(*args, **kwargs)
+
+    def SetSelection(*args, **kwargs):
+        """SetSelection(self, size_t new_page) -> size_t"""
+        return _aui.AuiMultiNotebook_SetSelection(*args, **kwargs)
+
+    def GetSelection(*args, **kwargs):
+        """GetSelection(self) -> int"""
+        return _aui.AuiMultiNotebook_GetSelection(*args, **kwargs)
+
+    def GetPageCount(*args, **kwargs):
+        """GetPageCount(self) -> size_t"""
+        return _aui.AuiMultiNotebook_GetPageCount(*args, **kwargs)
+
+    def GetPage(*args, **kwargs):
+        """GetPage(self, size_t page_idx) -> Window"""
+        return _aui.AuiMultiNotebook_GetPage(*args, **kwargs)
+
+_aui.AuiMultiNotebook_swigregister(AuiMultiNotebook)
+
+def PreAuiMultiNotebook(*args, **kwargs):
+    """PreAuiMultiNotebook() -> AuiMultiNotebook"""
+    val = _aui.new_PreAuiMultiNotebook(*args, **kwargs)
+    self._setOORInfo(self)
+    return val
+
+wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED = _aui.wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED
+wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING = _aui.wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING
+wxEVT_COMMAND_AUINOTEBOOK_BUTTON = _aui.wxEVT_COMMAND_AUINOTEBOOK_BUTTON
+wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG = _aui.wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG
+wxEVT_COMMAND_AUINOTEBOOK_END_DRAG = _aui.wxEVT_COMMAND_AUINOTEBOOK_END_DRAG
+wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION = _aui.wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION
+EVT_AUINOTEBOOK_PAGE_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, 1 )
+EVT_AUINOTEBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, 1 )
+EVT_AUINOTEBOOK_BUTTON = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_BUTTON, 1 )
+EVT_AUINOTEBOOK_BEGIN_DRAG = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, 1 )
+EVT_AUINOTEBOOK_END_DRAG = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, 1 )
+EVT_AUINOTEBOOK_DRAG_MOTION = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, 1 )        
 
 class PyDockArt(DefaultDockArt):
     """

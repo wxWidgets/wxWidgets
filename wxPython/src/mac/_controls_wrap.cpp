@@ -2625,21 +2625,20 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_wxToolBarToolBase swig_types[159]
 #define SWIGTYPE_p_wxToolbook swig_types[160]
 #define SWIGTYPE_p_wxToolbookEvent swig_types[161]
-#define SWIGTYPE_p_wxTreeCtrl swig_types[162]
-#define SWIGTYPE_p_wxTreeEvent swig_types[163]
-#define SWIGTYPE_p_wxTreeItemId swig_types[164]
-#define SWIGTYPE_p_wxTreebook swig_types[165]
-#define SWIGTYPE_p_wxTreebookEvent swig_types[166]
-#define SWIGTYPE_p_wxUpdateUIEvent swig_types[167]
-#define SWIGTYPE_p_wxValidator swig_types[168]
-#define SWIGTYPE_p_wxVisualAttributes swig_types[169]
-#define SWIGTYPE_p_wxWindow swig_types[170]
-#define SWIGTYPE_p_wxWindowBase swig_types[171]
-#define SWIGTYPE_p_wxWindowCreateEvent swig_types[172]
-#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[173]
-#define SWIGTYPE_p_wxXPMHandler swig_types[174]
-static swig_type_info *swig_types[176];
-static swig_module_info swig_module = {swig_types, 175, 0, 0, 0, 0};
+#define SWIGTYPE_p_wxTreeEvent swig_types[162]
+#define SWIGTYPE_p_wxTreeItemId swig_types[163]
+#define SWIGTYPE_p_wxTreebook swig_types[164]
+#define SWIGTYPE_p_wxTreebookEvent swig_types[165]
+#define SWIGTYPE_p_wxUpdateUIEvent swig_types[166]
+#define SWIGTYPE_p_wxValidator swig_types[167]
+#define SWIGTYPE_p_wxVisualAttributes swig_types[168]
+#define SWIGTYPE_p_wxWindow swig_types[169]
+#define SWIGTYPE_p_wxWindowBase swig_types[170]
+#define SWIGTYPE_p_wxWindowCreateEvent swig_types[171]
+#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[172]
+#define SWIGTYPE_p_wxXPMHandler swig_types[173]
+static swig_type_info *swig_types[175];
+static swig_module_info swig_module = {swig_types, 174, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -22027,7 +22026,7 @@ fail:
 SWIGINTERN PyObject *_wrap_Treebook_GetTreeCtrl(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxTreebook *arg1 = (wxTreebook *) 0 ;
-  wxTreeCtrl *result = 0 ;
+  wxPyTreeCtrl *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -22041,11 +22040,13 @@ SWIGINTERN PyObject *_wrap_Treebook_GetTreeCtrl(PyObject *SWIGUNUSEDPARM(self), 
   arg1 = reinterpret_cast< wxTreebook * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxTreeCtrl *)((wxTreebook const *)arg1)->GetTreeCtrl();
+    result = (wxPyTreeCtrl *)((wxTreebook const *)arg1)->GetTreeCtrl();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxTreeCtrl, 0 |  0 );
+  {
+    resultobj = wxPyMake_wxObject(result, (bool)0); 
+  }
   return resultobj;
 fail:
   return NULL;
@@ -47413,7 +47414,6 @@ static swig_type_info _swigt__p_wxToolBarBase = {"_p_wxToolBarBase", "wxToolBarB
 static swig_type_info _swigt__p_wxToolBarToolBase = {"_p_wxToolBarToolBase", "wxToolBarToolBase *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxToolbook = {"_p_wxToolbook", "wxToolbook *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxToolbookEvent = {"_p_wxToolbookEvent", "wxToolbookEvent *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_wxTreeCtrl = {"_p_wxTreeCtrl", "wxTreeCtrl *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxTreeEvent = {"_p_wxTreeEvent", "wxTreeEvent *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxTreeItemId = {"_p_wxTreeItemId", "wxTreeItemId *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxTreebook = {"_p_wxTreebook", "wxTreebook *", 0, 0, (void*)0, 0};
@@ -47586,7 +47586,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxToolBarToolBase,
   &_swigt__p_wxToolbook,
   &_swigt__p_wxToolbookEvent,
-  &_swigt__p_wxTreeCtrl,
   &_swigt__p_wxTreeEvent,
   &_swigt__p_wxTreeItemId,
   &_swigt__p_wxTreebook,
@@ -47767,7 +47766,6 @@ static swig_cast_info _swigc__p_wxToolBarBase[] = {  {&_swigt__p_wxToolBarBase, 
 static swig_cast_info _swigc__p_wxToolBarToolBase[] = {  {&_swigt__p_wxToolBarToolBase, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxToolbook[] = {  {&_swigt__p_wxToolbook, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxToolbookEvent[] = {  {&_swigt__p_wxToolbookEvent, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxTreeCtrl[] = {  {&_swigt__p_wxTreeCtrl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxTreeEvent[] = {  {&_swigt__p_wxTreeEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxTreeItemId[] = {  {&_swigt__p_wxTreeItemId, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxTreebook[] = {  {&_swigt__p_wxTreebook, 0, 0, 0},{0, 0, 0, 0}};
@@ -47940,7 +47938,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxToolBarToolBase,
   _swigc__p_wxToolbook,
   _swigc__p_wxToolbookEvent,
-  _swigc__p_wxTreeCtrl,
   _swigc__p_wxTreeEvent,
   _swigc__p_wxTreeItemId,
   _swigc__p_wxTreebook,

@@ -200,6 +200,8 @@ ID_HELP_CONTENTS = _core_.ID_HELP_CONTENTS
 ID_HELP_COMMANDS = _core_.ID_HELP_COMMANDS
 ID_HELP_PROCEDURES = _core_.ID_HELP_PROCEDURES
 ID_HELP_CONTEXT = _core_.ID_HELP_CONTEXT
+ID_HELP_INDEX = _core_.ID_HELP_INDEX
+ID_HELP_SEARCH = _core_.ID_HELP_SEARCH
 ID_CLOSE_ALL = _core_.ID_CLOSE_ALL
 ID_PREFERENCES = _core_.ID_PREFERENCES
 ID_CUT = _core_.ID_CUT
@@ -843,6 +845,14 @@ class Size(object):
         than the corresponding dimensions of the size.
         """
         return _core_.Size_DecTo(*args, **kwargs)
+
+    def Scale(*args, **kwargs):
+        """
+        Scale(self, float xscale, float yscale)
+
+        Scales the dimensions of this object by the given factors.
+        """
+        return _core_.Size_Scale(*args, **kwargs)
 
     def Set(*args, **kwargs):
         """
@@ -8277,31 +8287,6 @@ class Window(EvtHandler):
         """
         return _core_.Window_AcceptsFocusFromKeyboard(*args, **kwargs)
 
-    def GetDefaultItem(*args, **kwargs):
-        """
-        GetDefaultItem(self) -> Window
-
-        Get the default child of this parent, i.e. the one which is activated
-        by pressing <Enter> such as the OK button on a wx.Dialog.
-        """
-        return _core_.Window_GetDefaultItem(*args, **kwargs)
-
-    def SetDefaultItem(*args, **kwargs):
-        """
-        SetDefaultItem(self, Window child) -> Window
-
-        Set this child as default, return the old default.
-        """
-        return _core_.Window_SetDefaultItem(*args, **kwargs)
-
-    def SetTmpDefaultItem(*args, **kwargs):
-        """
-        SetTmpDefaultItem(self, Window win)
-
-        Set this child as temporary default
-        """
-        return _core_.Window_SetTmpDefaultItem(*args, **kwargs)
-
     def Navigate(*args, **kwargs):
         """
         Navigate(self, int flags=NavigationKeyEvent.IsForward) -> bool
@@ -9164,6 +9149,10 @@ class Window(EvtHandler):
         mouse cursor will be used.
         """
         return _core_.Window_PopupMenu(*args, **kwargs)
+
+    def HasMultiplePages(*args, **kwargs):
+        """HasMultiplePages(self) -> bool"""
+        return _core_.Window_HasMultiplePages(*args, **kwargs)
 
     def GetHandle(*args, **kwargs):
         """
@@ -10390,6 +10379,23 @@ class Control(Window):
         Do the 2nd phase and create the GUI control.
         """
         return _core_.Control_Create(*args, **kwargs)
+
+    def GetAlignment(*args, **kwargs):
+        """
+        GetAlignment(self) -> int
+
+        Get the control alignment (left/right/centre, top/bottom/centre)
+        """
+        return _core_.Control_GetAlignment(*args, **kwargs)
+
+    def GetLabelText(*args):
+        """
+        GetLabelText(self, String label) -> String
+        GetLabelText(self) -> String
+
+        Get just the text of the label, without mnemonic characters ('&')
+        """
+        return _core_.Control_GetLabelText(*args)
 
     def Command(*args, **kwargs):
         """

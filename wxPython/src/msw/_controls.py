@@ -3272,7 +3272,7 @@ class Treebook(BookCtrlBase):
         return _controls_.Treebook_GetPageParent(*args, **kwargs)
 
     def GetTreeCtrl(*args, **kwargs):
-        """GetTreeCtrl(self) -> wxTreeCtrl"""
+        """GetTreeCtrl(self) -> TreeCtrl"""
         return _controls_.Treebook_GetTreeCtrl(*args, **kwargs)
 
 _controls_.Treebook_swigregister(Treebook)

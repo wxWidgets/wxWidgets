@@ -5795,7 +5795,7 @@ fail:
 SWIGINTERN PyObject *_wrap_PaneInfo_frame_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPaneInfo *arg1 = (wxPaneInfo *) 0 ;
-  wxWindow *arg2 = (wxWindow *) 0 ;
+  wxFrame *arg2 = (wxFrame *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -5808,11 +5808,11 @@ SWIGINTERN PyObject *_wrap_PaneInfo_frame_set(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PaneInfo_frame_set" "', expected argument " "1"" of type '" "wxPaneInfo *""'"); 
   }
   arg1 = reinterpret_cast< wxPaneInfo * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxWindow, SWIG_POINTER_DISOWN |  0 );
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxFrame, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PaneInfo_frame_set" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PaneInfo_frame_set" "', expected argument " "2"" of type '" "wxFrame *""'"); 
   }
-  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  arg2 = reinterpret_cast< wxFrame * >(argp2);
   if (arg1) (arg1)->frame = arg2;
   
   resultobj = SWIG_Py_Void();
@@ -5825,7 +5825,7 @@ fail:
 SWIGINTERN PyObject *_wrap_PaneInfo_frame_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPaneInfo *arg1 = (wxPaneInfo *) 0 ;
-  wxWindow *result = 0 ;
+  wxFrame *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -5837,7 +5837,7 @@ SWIGINTERN PyObject *_wrap_PaneInfo_frame_get(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PaneInfo_frame_get" "', expected argument " "1"" of type '" "wxPaneInfo *""'"); 
   }
   arg1 = reinterpret_cast< wxPaneInfo * >(argp1);
-  result = (wxWindow *) ((arg1)->frame);
+  result = (wxFrame *) ((arg1)->frame);
   {
     resultobj = wxPyMake_wxObject(result, 0); 
   }
@@ -6557,7 +6557,7 @@ SWIGINTERN PyObject *PaneInfo_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject 
 
 SWIGINTERN PyObject *_wrap_new_FrameManager(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
-  wxFrame *arg1 = (wxFrame *) NULL ;
+  wxWindow *arg1 = (wxWindow *) NULL ;
   int arg2 = (int) wxAUI_MGR_DEFAULT ;
   wxFrameManager *result = 0 ;
   void *argp1 = 0 ;
@@ -6567,16 +6567,16 @@ SWIGINTERN PyObject *_wrap_new_FrameManager(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "frame",(char *) "flags", NULL 
+    (char *) "managed_wnd",(char *) "flags", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_FrameManager",kwnames,&obj0,&obj1)) SWIG_fail;
   if (obj0) {
-    res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxFrame, 0 |  0 );
+    res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FrameManager" "', expected argument " "1"" of type '" "wxFrame *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FrameManager" "', expected argument " "1"" of type '" "wxWindow *""'"); 
     }
-    arg1 = reinterpret_cast< wxFrame * >(argp1);
+    arg1 = reinterpret_cast< wxWindow * >(argp1);
   }
   if (obj1) {
     ecode2 = SWIG_AsVal_int(obj1, &val2);
@@ -6719,7 +6719,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_FrameManager_SetFrame(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_FrameManager_SetManagedWindow(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxFrameManager *arg1 = (wxFrameManager *) 0 ;
   wxWindow *arg2 = (wxWindow *) 0 ;
@@ -6730,23 +6730,23 @@ SWIGINTERN PyObject *_wrap_FrameManager_SetFrame(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "frame", NULL 
+    (char *) "self",(char *) "managed_wnd", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:FrameManager_SetFrame",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:FrameManager_SetManagedWindow",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxFrameManager, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FrameManager_SetFrame" "', expected argument " "1"" of type '" "wxFrameManager *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FrameManager_SetManagedWindow" "', expected argument " "1"" of type '" "wxFrameManager *""'"); 
   }
   arg1 = reinterpret_cast< wxFrameManager * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FrameManager_SetFrame" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FrameManager_SetManagedWindow" "', expected argument " "2"" of type '" "wxWindow *""'"); 
   }
   arg2 = reinterpret_cast< wxWindow * >(argp2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetFrame(arg2);
+    (arg1)->SetManagedWindow(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -6757,7 +6757,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_FrameManager_GetFrame(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_FrameManager_GetManagedWindow(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxFrameManager *arg1 = (wxFrameManager *) 0 ;
   wxWindow *result = 0 ;
@@ -6769,12 +6769,12 @@ SWIGINTERN PyObject *_wrap_FrameManager_GetFrame(PyObject *SWIGUNUSEDPARM(self),
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxFrameManager, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FrameManager_GetFrame" "', expected argument " "1"" of type '" "wxFrameManager const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FrameManager_GetManagedWindow" "', expected argument " "1"" of type '" "wxFrameManager const *""'"); 
   }
   arg1 = reinterpret_cast< wxFrameManager * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxWindow *)((wxFrameManager const *)arg1)->GetFrame();
+    result = (wxWindow *)((wxFrameManager const *)arg1)->GetManagedWindow();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -7020,6 +7020,66 @@ SWIGINTERN PyObject *_wrap_FrameManager__AddPane1(PyObject *SWIGUNUSEDPARM(self)
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (bool)(arg1)->AddPane(arg2,(wxPaneInfo const &)*arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FrameManager_AddPaneAtPos(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxFrameManager *arg1 = (wxFrameManager *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  wxPaneInfo *arg3 = 0 ;
+  wxPoint *arg4 = 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  wxPoint temp4 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "window",(char *) "pane_info",(char *) "drop_pos", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FrameManager_AddPaneAtPos",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxFrameManager, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FrameManager_AddPaneAtPos" "', expected argument " "1"" of type '" "wxFrameManager *""'"); 
+  }
+  arg1 = reinterpret_cast< wxFrameManager * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FrameManager_AddPaneAtPos" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxPaneInfo,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "FrameManager_AddPaneAtPos" "', expected argument " "3"" of type '" "wxPaneInfo const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FrameManager_AddPaneAtPos" "', expected argument " "3"" of type '" "wxPaneInfo const &""'"); 
+  }
+  arg3 = reinterpret_cast< wxPaneInfo * >(argp3);
+  {
+    arg4 = &temp4;
+    if ( ! wxPoint_helper(obj3, &arg4)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->AddPane(arg2,(wxPaneInfo const &)*arg3,(wxPoint const &)*arg4);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -7318,6 +7378,121 @@ SWIGINTERN PyObject *_wrap_FrameManager_Update(PyObject *SWIGUNUSEDPARM(self), P
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->Update();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FrameManager_DrawHintRect(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxFrameManager *arg1 = (wxFrameManager *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  wxPoint *arg3 = 0 ;
+  wxPoint *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  wxPoint temp3 ;
+  wxPoint temp4 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "pane_window",(char *) "pt",(char *) "offset", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FrameManager_DrawHintRect",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxFrameManager, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FrameManager_DrawHintRect" "', expected argument " "1"" of type '" "wxFrameManager *""'"); 
+  }
+  arg1 = reinterpret_cast< wxFrameManager * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FrameManager_DrawHintRect" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  {
+    arg3 = &temp3;
+    if ( ! wxPoint_helper(obj2, &arg3)) SWIG_fail;
+  }
+  {
+    arg4 = &temp4;
+    if ( ! wxPoint_helper(obj3, &arg4)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->DrawHintRect(arg2,(wxPoint const &)*arg3,(wxPoint const &)*arg4);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FrameManager_ShowHint(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxFrameManager *arg1 = (wxFrameManager *) 0 ;
+  wxRect *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxRect temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "rect", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:FrameManager_ShowHint",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxFrameManager, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FrameManager_ShowHint" "', expected argument " "1"" of type '" "wxFrameManager *""'"); 
+  }
+  arg1 = reinterpret_cast< wxFrameManager * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->ShowHint((wxRect const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FrameManager_HideHint(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxFrameManager *arg1 = (wxFrameManager *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxFrameManager, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FrameManager_HideHint" "', expected argument " "1"" of type '" "wxFrameManager *""'"); 
+  }
+  arg1 = reinterpret_cast< wxFrameManager * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->HideHint();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -10317,20 +10492,24 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FrameManager_UnInit", (PyCFunction)_wrap_FrameManager_UnInit, METH_O, NULL},
 	 { (char *)"FrameManager_SetFlags", (PyCFunction) _wrap_FrameManager_SetFlags, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_GetFlags", (PyCFunction)_wrap_FrameManager_GetFlags, METH_O, NULL},
-	 { (char *)"FrameManager_SetFrame", (PyCFunction) _wrap_FrameManager_SetFrame, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"FrameManager_GetFrame", (PyCFunction)_wrap_FrameManager_GetFrame, METH_O, NULL},
+	 { (char *)"FrameManager_SetManagedWindow", (PyCFunction) _wrap_FrameManager_SetManagedWindow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"FrameManager_GetManagedWindow", (PyCFunction)_wrap_FrameManager_GetManagedWindow, METH_O, NULL},
 	 { (char *)"FrameManager_SetArtProvider", (PyCFunction) _wrap_FrameManager_SetArtProvider, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_GetArtProvider", (PyCFunction)_wrap_FrameManager_GetArtProvider, METH_O, NULL},
 	 { (char *)"FrameManager__GetPaneByWidget", (PyCFunction) _wrap_FrameManager__GetPaneByWidget, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager__GetPaneByName", (PyCFunction) _wrap_FrameManager__GetPaneByName, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_GetAllPanes", (PyCFunction)_wrap_FrameManager_GetAllPanes, METH_O, NULL},
 	 { (char *)"FrameManager__AddPane1", (PyCFunction) _wrap_FrameManager__AddPane1, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"FrameManager_AddPaneAtPos", (PyCFunction) _wrap_FrameManager_AddPaneAtPos, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager__AddPane2", (PyCFunction) _wrap_FrameManager__AddPane2, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_InsertPane", (PyCFunction) _wrap_FrameManager_InsertPane, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_DetachPane", (PyCFunction) _wrap_FrameManager_DetachPane, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_SavePerspective", (PyCFunction)_wrap_FrameManager_SavePerspective, METH_O, NULL},
 	 { (char *)"FrameManager_LoadPerspective", (PyCFunction) _wrap_FrameManager_LoadPerspective, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_Update", (PyCFunction)_wrap_FrameManager_Update, METH_O, NULL},
+	 { (char *)"FrameManager_DrawHintRect", (PyCFunction) _wrap_FrameManager_DrawHintRect, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"FrameManager_ShowHint", (PyCFunction) _wrap_FrameManager_ShowHint, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"FrameManager_HideHint", (PyCFunction)_wrap_FrameManager_HideHint, METH_O, NULL},
 	 { (char *)"FrameManager_OnRender", (PyCFunction) _wrap_FrameManager_OnRender, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_OnPaneButton", (PyCFunction) _wrap_FrameManager_OnPaneButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FrameManager_swigregister", FrameManager_swigregister, METH_VARARGS, NULL},

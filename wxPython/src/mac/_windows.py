@@ -427,6 +427,18 @@ class TopLevelWindow(_core.Window):
         return _windows_.TopLevelWindow_CenterOnScreen(*args, **kwargs)
 
     CentreOnScreen = CenterOnScreen 
+    def EnableCloseButton(*args, **kwargs):
+        """EnableCloseButton(self, bool enable=True) -> bool"""
+        return _windows_.TopLevelWindow_EnableCloseButton(*args, **kwargs)
+
+    def SetTransparent(*args, **kwargs):
+        """SetTransparent(self, byte alpha) -> bool"""
+        return _windows_.TopLevelWindow_SetTransparent(*args, **kwargs)
+
+    def CanSetTransparent(*args, **kwargs):
+        """CanSetTransparent(self) -> bool"""
+        return _windows_.TopLevelWindow_CanSetTransparent(*args, **kwargs)
+
 _windows_.TopLevelWindow_swigregister(TopLevelWindow)
 cvar = _windows_.cvar
 FrameNameStr = cvar.FrameNameStr

@@ -8302,6 +8302,14 @@ class Window(EvtHandler):
         """
         return _core_.Window_SetTmpDefaultItem(*args, **kwargs)
 
+    def GetTmpDefaultItem(*args, **kwargs):
+        """
+        GetTmpDefaultItem(self) -> Window
+
+        Return the temporary default item, which can be None.
+        """
+        return _core_.Window_GetTmpDefaultItem(*args, **kwargs)
+
     def Navigate(*args, **kwargs):
         """
         Navigate(self, int flags=NavigationKeyEvent.IsForward) -> bool

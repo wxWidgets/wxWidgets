@@ -3264,7 +3264,7 @@ class Treebook(BookCtrlBase):
         return _controls_.Treebook_GetPageParent(*args, **kwargs)
 
     def GetTreeCtrl(*args, **kwargs):
-        """GetTreeCtrl(self) -> wxTreeCtrl"""
+        """GetTreeCtrl(self) -> TreeCtrl"""
         return _controls_.Treebook_GetTreeCtrl(*args, **kwargs)
 
 _controls_.Treebook_swigregister(Treebook)
@@ -6409,6 +6409,22 @@ class PickerBase(_core.Control):
         Returns the proportion between the text control and the picker.
         """
         return _controls_.PickerBase_GetTextCtrlProportion(*args, **kwargs)
+
+    def SetPickerCtrlProportion(*args, **kwargs):
+        """
+        SetPickerCtrlProportion(self, int prop)
+
+        Sets the proportion value of the picker.
+        """
+        return _controls_.PickerBase_SetPickerCtrlProportion(*args, **kwargs)
+
+    def GetPickerCtrlProportion(*args, **kwargs):
+        """
+        GetPickerCtrlProportion(self) -> int
+
+        Gets the proportion value of the picker.
+        """
+        return _controls_.PickerBase_GetPickerCtrlProportion(*args, **kwargs)
 
     def IsTextCtrlGrowable(*args, **kwargs):
         """IsTextCtrlGrowable(self) -> bool"""

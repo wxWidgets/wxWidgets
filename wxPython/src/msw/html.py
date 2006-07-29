@@ -1566,7 +1566,7 @@ class HtmlHelpWindow(_core.Window):
         return _html.HtmlHelpWindow_GetCfgData(*args, **kwargs)
 
     def GetTreeCtrl(*args, **kwargs):
-        """GetTreeCtrl(self) -> wxTreeCtrl"""
+        """GetTreeCtrl(self) -> wxPyTreeCtrl"""
         return _html.HtmlHelpWindow_GetTreeCtrl(*args, **kwargs)
 
 _html.HtmlHelpWindow_swigregister(HtmlHelpWindow)

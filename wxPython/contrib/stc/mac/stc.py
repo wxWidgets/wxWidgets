@@ -114,12 +114,15 @@ STC_MARKNUM_FOLDEROPEN = _stc.STC_MARKNUM_FOLDEROPEN
 STC_MASK_FOLDERS = _stc.STC_MASK_FOLDERS
 STC_MARGIN_SYMBOL = _stc.STC_MARGIN_SYMBOL
 STC_MARGIN_NUMBER = _stc.STC_MARGIN_NUMBER
+STC_MARGIN_BACK = _stc.STC_MARGIN_BACK
+STC_MARGIN_FORE = _stc.STC_MARGIN_FORE
 STC_STYLE_DEFAULT = _stc.STC_STYLE_DEFAULT
 STC_STYLE_LINENUMBER = _stc.STC_STYLE_LINENUMBER
 STC_STYLE_BRACELIGHT = _stc.STC_STYLE_BRACELIGHT
 STC_STYLE_BRACEBAD = _stc.STC_STYLE_BRACEBAD
 STC_STYLE_CONTROLCHAR = _stc.STC_STYLE_CONTROLCHAR
 STC_STYLE_INDENTGUIDE = _stc.STC_STYLE_INDENTGUIDE
+STC_STYLE_CALLTIP = _stc.STC_STYLE_CALLTIP
 STC_STYLE_LASTPREDEFINED = _stc.STC_STYLE_LASTPREDEFINED
 STC_STYLE_MAX = _stc.STC_STYLE_MAX
 STC_CHARSET_ANSI = _stc.STC_CHARSET_ANSI
@@ -154,6 +157,7 @@ STC_INDIC_DIAGONAL = _stc.STC_INDIC_DIAGONAL
 STC_INDIC_STRIKE = _stc.STC_INDIC_STRIKE
 STC_INDIC_HIDDEN = _stc.STC_INDIC_HIDDEN
 STC_INDIC_BOX = _stc.STC_INDIC_BOX
+STC_INDIC_ROUNDBOX = _stc.STC_INDIC_ROUNDBOX
 STC_INDIC0_MASK = _stc.STC_INDIC0_MASK
 STC_INDIC1_MASK = _stc.STC_INDIC1_MASK
 STC_INDIC2_MASK = _stc.STC_INDIC2_MASK
@@ -210,6 +214,9 @@ STC_CARET_EVEN = _stc.STC_CARET_EVEN
 STC_SEL_STREAM = _stc.STC_SEL_STREAM
 STC_SEL_RECTANGLE = _stc.STC_SEL_RECTANGLE
 STC_SEL_LINES = _stc.STC_SEL_LINES
+STC_ALPHA_TRANSPARENT = _stc.STC_ALPHA_TRANSPARENT
+STC_ALPHA_OPAQUE = _stc.STC_ALPHA_OPAQUE
+STC_ALPHA_NOALPHA = _stc.STC_ALPHA_NOALPHA
 STC_KEYWORDSET_MAX = _stc.STC_KEYWORDSET_MAX
 STC_MOD_INSERTTEXT = _stc.STC_MOD_INSERTTEXT
 STC_MOD_DELETETEXT = _stc.STC_MOD_DELETETEXT
@@ -320,8 +327,9 @@ STC_LEX_SMALLTALK = _stc.STC_LEX_SMALLTALK
 STC_LEX_FLAGSHIP = _stc.STC_LEX_FLAGSHIP
 STC_LEX_CSOUND = _stc.STC_LEX_CSOUND
 STC_LEX_FREEBASIC = _stc.STC_LEX_FREEBASIC
-STC_LEX_ASP = _stc.STC_LEX_ASP
-STC_LEX_PHP = _stc.STC_LEX_PHP
+STC_LEX_INNOSETUP = _stc.STC_LEX_INNOSETUP
+STC_LEX_OPAL = _stc.STC_LEX_OPAL
+STC_LEX_SPICE = _stc.STC_LEX_SPICE
 STC_LEX_AUTOMATIC = _stc.STC_LEX_AUTOMATIC
 STC_P_DEFAULT = _stc.STC_P_DEFAULT
 STC_P_COMMENTLINE = _stc.STC_P_COMMENTLINE
@@ -359,6 +367,28 @@ STC_C_WORD2 = _stc.STC_C_WORD2
 STC_C_COMMENTDOCKEYWORD = _stc.STC_C_COMMENTDOCKEYWORD
 STC_C_COMMENTDOCKEYWORDERROR = _stc.STC_C_COMMENTDOCKEYWORDERROR
 STC_C_GLOBALCLASS = _stc.STC_C_GLOBALCLASS
+STC_TCL_DEFAULT = _stc.STC_TCL_DEFAULT
+STC_TCL_COMMENT = _stc.STC_TCL_COMMENT
+STC_TCL_COMMENTLINE = _stc.STC_TCL_COMMENTLINE
+STC_TCL_NUMBER = _stc.STC_TCL_NUMBER
+STC_TCL_WORD_IN_QUOTE = _stc.STC_TCL_WORD_IN_QUOTE
+STC_TCL_IN_QUOTE = _stc.STC_TCL_IN_QUOTE
+STC_TCL_OPERATOR = _stc.STC_TCL_OPERATOR
+STC_TCL_IDENTIFIER = _stc.STC_TCL_IDENTIFIER
+STC_TCL_SUBSTITUTION = _stc.STC_TCL_SUBSTITUTION
+STC_TCL_SUB_BRACE = _stc.STC_TCL_SUB_BRACE
+STC_TCL_MODIFIER = _stc.STC_TCL_MODIFIER
+STC_TCL_EXPAND = _stc.STC_TCL_EXPAND
+STC_TCL_WORD = _stc.STC_TCL_WORD
+STC_TCL_WORD2 = _stc.STC_TCL_WORD2
+STC_TCL_WORD3 = _stc.STC_TCL_WORD3
+STC_TCL_WORD4 = _stc.STC_TCL_WORD4
+STC_TCL_WORD5 = _stc.STC_TCL_WORD5
+STC_TCL_WORD6 = _stc.STC_TCL_WORD6
+STC_TCL_WORD7 = _stc.STC_TCL_WORD7
+STC_TCL_WORD8 = _stc.STC_TCL_WORD8
+STC_TCL_COMMENT_BOX = _stc.STC_TCL_COMMENT_BOX
+STC_TCL_BLOCK_COMMENT = _stc.STC_TCL_BLOCK_COMMENT
 STC_H_DEFAULT = _stc.STC_H_DEFAULT
 STC_H_TAG = _stc.STC_H_TAG
 STC_H_TAGUNKNOWN = _stc.STC_H_TAGUNKNOWN
@@ -560,6 +590,7 @@ STC_PROPS_COMMENT = _stc.STC_PROPS_COMMENT
 STC_PROPS_SECTION = _stc.STC_PROPS_SECTION
 STC_PROPS_ASSIGNMENT = _stc.STC_PROPS_ASSIGNMENT
 STC_PROPS_DEFVAL = _stc.STC_PROPS_DEFVAL
+STC_PROPS_KEY = _stc.STC_PROPS_KEY
 STC_L_DEFAULT = _stc.STC_L_DEFAULT
 STC_L_COMMAND = _stc.STC_L_COMMAND
 STC_L_TAG = _stc.STC_L_TAG
@@ -1029,6 +1060,7 @@ STC_AU3_PREPROCESSOR = _stc.STC_AU3_PREPROCESSOR
 STC_AU3_SPECIAL = _stc.STC_AU3_SPECIAL
 STC_AU3_EXPAND = _stc.STC_AU3_EXPAND
 STC_AU3_COMOBJ = _stc.STC_AU3_COMOBJ
+STC_AU3_UDF = _stc.STC_AU3_UDF
 STC_APDL_DEFAULT = _stc.STC_APDL_DEFAULT
 STC_APDL_COMMENT = _stc.STC_APDL_COMMENT
 STC_APDL_COMMENTBLOCK = _stc.STC_APDL_COMMENTBLOCK
@@ -1242,6 +1274,38 @@ STC_CSOUND_KRATE_VAR = _stc.STC_CSOUND_KRATE_VAR
 STC_CSOUND_IRATE_VAR = _stc.STC_CSOUND_IRATE_VAR
 STC_CSOUND_GLOBAL_VAR = _stc.STC_CSOUND_GLOBAL_VAR
 STC_CSOUND_STRINGEOL = _stc.STC_CSOUND_STRINGEOL
+STC_INNO_DEFAULT = _stc.STC_INNO_DEFAULT
+STC_INNO_COMMENT = _stc.STC_INNO_COMMENT
+STC_INNO_KEYWORD = _stc.STC_INNO_KEYWORD
+STC_INNO_PARAMETER = _stc.STC_INNO_PARAMETER
+STC_INNO_SECTION = _stc.STC_INNO_SECTION
+STC_INNO_PREPROC = _stc.STC_INNO_PREPROC
+STC_INNO_PREPROC_INLINE = _stc.STC_INNO_PREPROC_INLINE
+STC_INNO_COMMENT_PASCAL = _stc.STC_INNO_COMMENT_PASCAL
+STC_INNO_KEYWORD_PASCAL = _stc.STC_INNO_KEYWORD_PASCAL
+STC_INNO_KEYWORD_USER = _stc.STC_INNO_KEYWORD_USER
+STC_INNO_STRING_DOUBLE = _stc.STC_INNO_STRING_DOUBLE
+STC_INNO_STRING_SINGLE = _stc.STC_INNO_STRING_SINGLE
+STC_INNO_IDENTIFIER = _stc.STC_INNO_IDENTIFIER
+STC_OPAL_SPACE = _stc.STC_OPAL_SPACE
+STC_OPAL_COMMENT_BLOCK = _stc.STC_OPAL_COMMENT_BLOCK
+STC_OPAL_COMMENT_LINE = _stc.STC_OPAL_COMMENT_LINE
+STC_OPAL_INTEGER = _stc.STC_OPAL_INTEGER
+STC_OPAL_KEYWORD = _stc.STC_OPAL_KEYWORD
+STC_OPAL_SORT = _stc.STC_OPAL_SORT
+STC_OPAL_STRING = _stc.STC_OPAL_STRING
+STC_OPAL_PAR = _stc.STC_OPAL_PAR
+STC_OPAL_BOOL_CONST = _stc.STC_OPAL_BOOL_CONST
+STC_OPAL_DEFAULT = _stc.STC_OPAL_DEFAULT
+STC_SPICE_DEFAULT = _stc.STC_SPICE_DEFAULT
+STC_SPICE_IDENTIFIER = _stc.STC_SPICE_IDENTIFIER
+STC_SPICE_KEYWORD = _stc.STC_SPICE_KEYWORD
+STC_SPICE_KEYWORD2 = _stc.STC_SPICE_KEYWORD2
+STC_SPICE_KEYWORD3 = _stc.STC_SPICE_KEYWORD3
+STC_SPICE_NUMBER = _stc.STC_SPICE_NUMBER
+STC_SPICE_DELIMITER = _stc.STC_SPICE_DELIMITER
+STC_SPICE_VALUE = _stc.STC_SPICE_VALUE
+STC_SPICE_COMMENTLINE = _stc.STC_SPICE_COMMENTLINE
 STC_CMD_REDO = _stc.STC_CMD_REDO
 STC_CMD_SELECTALL = _stc.STC_CMD_SELECTALL
 STC_CMD_UNDO = _stc.STC_CMD_UNDO
@@ -1755,6 +1819,14 @@ class StyledTextCtrl(_core.Control):
         """
         return _stc.StyledTextCtrl_MarkerAddSet(*args, **kwargs)
 
+    def MarkerSetAlpha(*args, **kwargs):
+        """
+        MarkerSetAlpha(self, int markerNumber, int alpha)
+
+        Set the alpha used for a marker that is drawn in the text area, not the margin.
+        """
+        return _stc.StyledTextCtrl_MarkerSetAlpha(*args, **kwargs)
+
     def SetMarginType(*args, **kwargs):
         """
         SetMarginType(self, int margin, int marginType)
@@ -1930,6 +2002,22 @@ class StyledTextCtrl(_core.Control):
         Set the background colour of the selection and whether to use this setting.
         """
         return _stc.StyledTextCtrl_SetSelBackground(*args, **kwargs)
+
+    def GetSelAlpha(*args, **kwargs):
+        """
+        GetSelAlpha(self) -> int
+
+        Get the alpha of the selection.
+        """
+        return _stc.StyledTextCtrl_GetSelAlpha(*args, **kwargs)
+
+    def SetSelAlpha(*args, **kwargs):
+        """
+        SetSelAlpha(self, int alpha)
+
+        Set the alpha of the selection.
+        """
+        return _stc.StyledTextCtrl_SetSelAlpha(*args, **kwargs)
 
     def SetCaretForeground(*args, **kwargs):
         """
@@ -3039,6 +3127,14 @@ class StyledTextCtrl(_core.Control):
         Set the foreground colour for the highlighted part of the call tip.
         """
         return _stc.StyledTextCtrl_CallTipSetForegroundHighlight(*args, **kwargs)
+
+    def CallTipUseStyle(*args, **kwargs):
+        """
+        CallTipUseStyle(self, int tabSize)
+
+        Enable use of STYLE_CALLTIP and set call tip tab size in pixels.
+        """
+        return _stc.StyledTextCtrl_CallTipUseStyle(*args, **kwargs)
 
     def VisibleFromDocLine(*args, **kwargs):
         """
@@ -4666,6 +4762,22 @@ class StyledTextCtrl(_core.Control):
         Duplicate the selection. If selection empty duplicate the line containing the caret.
         """
         return _stc.StyledTextCtrl_SelectionDuplicate(*args, **kwargs)
+
+    def SetCaretLineBackAlpha(*args, **kwargs):
+        """
+        SetCaretLineBackAlpha(self, int alpha)
+
+        Set background alpha of the caret line.
+        """
+        return _stc.StyledTextCtrl_SetCaretLineBackAlpha(*args, **kwargs)
+
+    def GetCaretLineBackAlpha(*args, **kwargs):
+        """
+        GetCaretLineBackAlpha(self) -> int
+
+        Get the background alpha of the caret line.
+        """
+        return _stc.StyledTextCtrl_GetCaretLineBackAlpha(*args, **kwargs)
 
     def StartRecord(*args, **kwargs):
         """

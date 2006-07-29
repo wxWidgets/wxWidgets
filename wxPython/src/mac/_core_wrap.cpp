@@ -32945,6 +32945,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Window_GetTmpDefaultItem(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  wxWindow *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_GetTmpDefaultItem" "', expected argument " "1"" of type '" "wxWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxWindow *)((wxWindow const *)arg1)->GetTmpDefaultItem();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, 0); 
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Window_Navigate(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
@@ -53653,6 +53683,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_GetDefaultItem", (PyCFunction)_wrap_Window_GetDefaultItem, METH_O, NULL},
 	 { (char *)"Window_SetDefaultItem", (PyCFunction) _wrap_Window_SetDefaultItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_SetTmpDefaultItem", (PyCFunction) _wrap_Window_SetTmpDefaultItem, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Window_GetTmpDefaultItem", (PyCFunction)_wrap_Window_GetTmpDefaultItem, METH_O, NULL},
 	 { (char *)"Window_Navigate", (PyCFunction) _wrap_Window_Navigate, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_MoveAfterInTabOrder", (PyCFunction) _wrap_Window_MoveAfterInTabOrder, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_MoveBeforeInTabOrder", (PyCFunction) _wrap_Window_MoveBeforeInTabOrder, METH_VARARGS | METH_KEYWORDS, NULL},

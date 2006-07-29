@@ -895,13 +895,13 @@ class FrameManager(_core.EvtHandler):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, Frame frame=None, int flags=AUI_MGR_DEFAULT) -> FrameManager
+        __init__(self, Window managed_wnd=None, int flags=AUI_MGR_DEFAULT) -> FrameManager
 
         Constructor.
 
-            :param frame: Specifies the `wx.Frame` which should be managed.
-                If not set in the call to this constructor then `SetFrame`
-                should be called.
+            :param managed_wnd: Specifies the `wx.Window` which should be
+                managed.  If not set in the call to this constructor then
+                `SetManagedWindow` should be called later.
 
             :param flags: Specifies options which allow the frame management
                 behavior to be modified.
@@ -916,7 +916,7 @@ class FrameManager(_core.EvtHandler):
 
         UnInit uninitializes the framework and should be called before a
         managed frame is destroyed. UnInit is usually called in the managed
-        wx.Frame's destructor.
+        window's destructor.
 
         """
         return _aui.FrameManager_UnInit(*args, **kwargs)
@@ -940,26 +940,28 @@ class FrameManager(_core.EvtHandler):
         """
         return _aui.FrameManager_GetFlags(*args, **kwargs)
 
-    def SetFrame(*args, **kwargs):
+    def SetManagedWindow(*args, **kwargs):
         """
-        SetFrame(self, Window frame)
+        SetManagedWindow(self, Window managed_wnd)
 
-        SetFrame is called to specify the frame which is to be managed by the
-        FrameManager.  It only needs to be called if the Frame was not given
-        to the manager in the constructor.
+        SetManagedWindow is called to specify the window which is to be
+        managed by the FrameManager.  It is normally a `wx.Frame` but it is
+        possible to also allow docking within any container window.  This only
+        needs to be called if the window was not given to the manager in the
+        constructor.
 
         """
-        return _aui.FrameManager_SetFrame(*args, **kwargs)
+        return _aui.FrameManager_SetManagedWindow(*args, **kwargs)
 
-    def GetFrame(*args, **kwargs):
+    def GetManagedWindow(*args, **kwargs):
         """
-        GetFrame(self) -> Window
+        GetManagedWindow(self) -> Window
 
-        GetFrame returns the frame currently being managed by the
+        GetManagedWindow returns the window currently being managed by the
         FrameManager.
 
         """
-        return _aui.FrameManager_GetFrame(*args, **kwargs)
+        return _aui.FrameManager_GetManagedWindow(*args, **kwargs)
 
     def SetArtProvider(*args, **kwargs):
         """
@@ -1008,6 +1010,10 @@ class FrameManager(_core.EvtHandler):
     def _AddPane1(*args, **kwargs):
         """_AddPane1(self, Window window, PaneInfo pane_info) -> bool"""
         return _aui.FrameManager__AddPane1(*args, **kwargs)
+
+    def AddPaneAtPos(*args, **kwargs):
+        """AddPaneAtPos(self, Window window, PaneInfo pane_info, Point drop_pos) -> bool"""
+        return _aui.FrameManager_AddPaneAtPos(*args, **kwargs)
 
     def _AddPane2(*args, **kwargs):
         """_AddPane2(self, Window window, int direction=LEFT, String caption=wxEmptyString) -> bool"""
@@ -1079,6 +1085,18 @@ class FrameManager(_core.EvtHandler):
         """
         return _aui.FrameManager_Update(*args, **kwargs)
 
+    def DrawHintRect(*args, **kwargs):
+        """DrawHintRect(self, Window pane_window, Point pt, Point offset)"""
+        return _aui.FrameManager_DrawHintRect(*args, **kwargs)
+
+    def ShowHint(*args, **kwargs):
+        """ShowHint(self, Rect rect)"""
+        return _aui.FrameManager_ShowHint(*args, **kwargs)
+
+    def HideHint(*args, **kwargs):
+        """HideHint(self)"""
+        return _aui.FrameManager_HideHint(*args, **kwargs)
+
     def OnRender(*args, **kwargs):
         """OnRender(self, FrameManagerEvent evt)"""
         return _aui.FrameManager_OnRender(*args, **kwargs)
@@ -1132,6 +1150,11 @@ class FrameManager(_core.EvtHandler):
             if caption is None:
                 caption = ""
             return self._AddPane2(window, info, caption)
+
+    SetFrame = wx._deprecated(SetManagedWindow,
+                              "SetFrame is deprecated, use `SetManagedWindow` instead.")
+    GetFrame = wx._deprecated(GetManagedWindow,
+                              "GetFrame is deprecated, use `GetManagedWindow` instead.")
 
 _aui.FrameManager_swigregister(FrameManager)
 
