@@ -45,17 +45,21 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileDirPickerEvent, wxCommandEvent)
 // wxFileDirPickerCtrlBase
 // ----------------------------------------------------------------------------
 
-bool wxFileDirPickerCtrlBase::CreateBase( wxWindow *parent, wxWindowID id,
-                        const wxString &path, const wxString &message,
-                        const wxString &wildcard,
-                        const wxPoint &pos, const wxSize &size,
-                        long style, const wxValidator& validator,
-                        const wxString &name )
+bool wxFileDirPickerCtrlBase::CreateBase(wxWindow *parent,
+                                         wxWindowID id,
+                                         const wxString &path,
+                                         const wxString &message,
+                                         const wxString &wildcard,
+                                         const wxPoint &pos,
+                                         const wxSize &size,
+                                         long style,
+                                         const wxValidator& validator,
+                                         const wxString &name )
 {
     wxASSERT_MSG(path.empty() || CheckPath(path), wxT("Invalid initial path!"));
 
     if (!wxPickerBase::CreateBase(parent, id, path, pos, size,
-                                   style, validator, name))
+                                   style, validator, name, wxTE_FILENAME))
         return false;
 
     if (!HasFlag(wxFLP_OPEN) && !HasFlag(wxFLP_SAVE))

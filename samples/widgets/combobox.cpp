@@ -134,7 +134,8 @@ protected:
 
     // the checkboxes for styles
     wxCheckBox *m_chkSort,
-               *m_chkReadonly;
+               *m_chkReadonly,
+               *m_chkFilename;
 
     // the combobox itself and the sizer it is in
     wxComboBox *m_combobox;
@@ -211,7 +212,8 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(WidgetsBookCtrl *book,
 {
     // init everything
     m_chkSort =
-    m_chkReadonly = (wxCheckBox *)NULL;
+    m_chkReadonly =
+    m_chkFilename = (wxCheckBox *)NULL;
 
     m_combobox = (wxComboBox *)NULL;
     m_sizerCombo = (wxSizer *)NULL;
@@ -247,6 +249,7 @@ void ComboboxWidgetsPage::CreateContent()
 
     m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Sort items"));
     m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Read only"));
+    m_chkFilename = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&File name"));
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
     sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
@@ -343,6 +346,7 @@ void ComboboxWidgetsPage::Reset()
 {
     m_chkSort->SetValue(false);
     m_chkReadonly->SetValue(false);
+    m_chkFilename->SetValue(false);
 }
 
 void ComboboxWidgetsPage::CreateCombo()
@@ -353,6 +357,8 @@ void ComboboxWidgetsPage::CreateCombo()
         flags |= wxCB_SORT;
     if ( m_chkReadonly->GetValue() )
         flags |= wxCB_READONLY;
+    if ( m_chkFilename->GetValue() )
+        flags |= wxCB_FILENAME;
 
     switch ( m_radioKind->GetSelection() )
     {
@@ -509,8 +515,9 @@ void ComboboxWidgetsPage::OnUpdateUIInsertionPointText(wxUpdateUIEvent& event)
 
 void ComboboxWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
-    if (m_combobox)
-        event.Enable( m_chkSort->GetValue() || m_chkReadonly->GetValue() );
+    event.Enable( m_chkSort->GetValue() ||
+                    m_chkReadonly->GetValue() ||
+                        m_chkFilename->GetValue() );
 }
 
 void ComboboxWidgetsPage::OnUpdateUIInsert(wxUpdateUIEvent& event)

@@ -73,10 +73,7 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // wxTextCtrl style flags
 // ----------------------------------------------------------------------------
 
-// the flag bit 0x0001 s free but should be used only for the things which
-// don't make sense for a text control used by wxTextEntryDialog because they
-// would otherwise conflict with wxOK, wxCANCEL, wxCENTRE
-
+#define wxTE_FILENAME       0x0001
 #define wxTE_NO_VSCROLL     0x0002
 #define wxTE_AUTO_SCROLL    0x0008
 

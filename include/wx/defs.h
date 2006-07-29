@@ -1571,14 +1571,6 @@ enum wxBorder
 #endif
 
 /*
- * wxComboBox style flags
- */
-#define wxCB_SIMPLE         0x0004
-#define wxCB_SORT           0x0008
-#define wxCB_READONLY       0x0010
-#define wxCB_DROPDOWN       0x0020
-
-/*
  * wxRadioBox style flags
  */
 /*  should we number the items from left to right or from top to bottom in a 2d */

@@ -59,7 +59,8 @@ bool wxPickerBase::CreateBase(wxWindow *parent,
                          const wxSize& size,
                          long style,
                          const wxValidator& validator,
-                         const wxString& name)
+                         const wxString& name,
+                         long textstyle)
 {
     // remove any border style from our style as wxPickerBase's window must be
     // invisible (user styles must be set on the textctrl or the platform-dependent picker)
@@ -75,8 +76,9 @@ bool wxPickerBase::CreateBase(wxWindow *parent,
         // NOTE: the style of this class (wxPickerBase) and the style of the
         //       attached text control are different: GetTextCtrlStyle() extracts
         //       the styles related to the textctrl from the styles passed here
-        m_text = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                wxDefaultSize, GetTextCtrlStyle(style));
+        m_text = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+                                wxDefaultPosition, wxDefaultSize,
+                                GetTextCtrlStyle(style) | textstyle);
         if (!m_text)
         {
             wxFAIL_MSG( wxT("wxPickerBase's textctrl creation failed") );

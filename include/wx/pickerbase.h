@@ -41,12 +41,15 @@ public:
 
     // if present, intercepts wxPB_USE_TEXTCTRL style and creates the text control
     // The 3rd argument is the initial wxString to display in the text control
-    bool CreateBase(wxWindow *parent, wxWindowID id,
-        const wxString& text = wxEmptyString,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = 0,
-        const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxButtonNameStr);
+    bool CreateBase(wxWindow *parent,
+                    wxWindowID id,
+                    const wxString& text = wxEmptyString,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = 0,
+                    const wxValidator& validator = wxDefaultValidator,
+                    const wxString& name = wxButtonNameStr,
+                    long textstyle = 0);
 
 
 public:     // public API

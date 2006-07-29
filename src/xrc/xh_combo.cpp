@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/xrc/xh_combo.cpp
-// Purpose:     XRC resource for wxRadioBox
+// Purpose:     XRC resource for wxComboBox
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // RCS-ID:      $Id$
@@ -34,6 +34,7 @@ wxComboBoxXmlHandler::wxComboBoxXmlHandler()
     XRC_ADD_STYLE(wxCB_SORT);
     XRC_ADD_STYLE(wxCB_READONLY);
     XRC_ADD_STYLE(wxCB_DROPDOWN);
+    XRC_ADD_STYLE(wxCB_FILENAME);
     AddWindowStyles();
 }
 

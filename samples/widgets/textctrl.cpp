@@ -106,6 +106,7 @@ static const struct ControlValues
 
     bool password;
     bool readonly;
+    bool filename;
 
     WrapStyle wrapStyle;
 
@@ -117,6 +118,7 @@ static const struct ControlValues
     TextLines_Multi,    // multiline
     false,              // not password
     false,              // not readonly
+    false,              // not filename
     WrapStyle_Word,     // wrap on word boundaries
 #ifdef __WXMSW__
     TextKind_Plain      // plain EDIT control
@@ -201,7 +203,8 @@ protected:
 
     // the checkboxes controlling text ctrl styles
     wxCheckBox *m_chkPassword,
-               *m_chkReadonly;
+               *m_chkReadonly,
+               *m_chkFilename;
 
     // under MSW we test rich edit controls as well here
 #ifdef __WXMSW__
@@ -359,7 +362,8 @@ TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
     m_radioTextLines = (wxRadioBox *)NULL;
 
     m_chkPassword =
-    m_chkReadonly = (wxCheckBox *)NULL;
+    m_chkReadonly =
+    m_chkFilename = (wxCheckBox *)NULL;
 
     m_text =
     m_textPosCur =
@@ -404,6 +408,9 @@ void TextWidgetsPage::CreateContent()
                     );
     m_chkReadonly = CreateCheckBoxAndAddToSizer(
                         sizerLeft, _T("&Read-only mode")
+                    );
+    m_chkFilename = CreateCheckBoxAndAddToSizer(
+                        sizerLeft, _T("&Filename control")
                     );
     sizerLeft->AddSpacer(5);
 
@@ -604,6 +611,7 @@ void TextWidgetsPage::Reset()
 
     m_chkPassword->SetValue(DEFAULTS.password);
     m_chkReadonly->SetValue(DEFAULTS.readonly);
+    m_chkFilename->SetValue(DEFAULTS.filename);
 
     m_radioWrap->SetSelection(DEFAULTS.wrapStyle);
 
@@ -633,6 +641,8 @@ void TextWidgetsPage::CreateText()
         flags |= wxTE_PASSWORD;
     if ( m_chkReadonly->GetValue() )
         flags |= wxTE_READONLY;
+    if ( m_chkFilename->GetValue() )
+        flags |= wxTE_FILENAME;
 
     switch ( m_radioWrap->GetSelection() )
     {
@@ -870,8 +880,9 @@ void TextWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 #ifdef __WXMSW__
                   (m_radioKind->GetSelection() != DEFAULTS.textKind) ||
 #endif // __WXMSW__
-                  (m_chkReadonly->GetValue() != DEFAULTS.readonly) ||
                   (m_chkPassword->GetValue() != DEFAULTS.password) ||
+                  (m_chkReadonly->GetValue() != DEFAULTS.readonly) ||
+                  (m_chkFilename->GetValue() != DEFAULTS.filename) ||
                   (m_radioWrap->GetSelection() != DEFAULTS.wrapStyle) );
 }
 
