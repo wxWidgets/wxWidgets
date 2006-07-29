@@ -483,11 +483,14 @@ void ScintillaWX::Paste() {
     if (gotData) {
         wxString   text = wxTextBuffer::Translate(data.GetText(),
                                                   wxConvertEOLMode(pdoc->eolMode));
-  data.SetText(wxEmptyString); // free the data object content
         wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-  text = wxEmptyString; // free text
 
-        int        len = strlen(buf);
+#if wxUSE_UNICODE
+        // free up the old character buffer in case the text is real big
+        data.SetText(wxEmptyString); 
+        text = wxEmptyString;
+#endif
+        int len = strlen(buf);
         pdoc->InsertString(currentPos, buf, len);
         SetEmptySelection(currentPos + len);
     }
