@@ -516,163 +516,34 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/sample.* $(DISTDIR)/samples
 
-	mkdir $(DISTDIR)/samples/artprov
-	$(CP_P) $(SAMPDIR)/artprov/Makefile.in $(DISTDIR)/samples/artprov
-	$(CP_P) $(SAMPDIR)/artprov/makefile.unx $(DISTDIR)/samples/artprov
-	$(CP_P) $(SAMPDIR)/artprov/*.cpp $(DISTDIR)/samples/artprov
-	$(CP_P) $(SAMPDIR)/artprov/*.h $(DISTDIR)/samples/artprov
-	$(CP_P) $(SAMPDIR)/artprov/*.xpm $(DISTDIR)/samples/artprov
+	# copy files common to all samples in a general way
+	for s in `find $(SAMPDIR) $(SAMPDIR)/html $(SAMPDIR)/mobile $(SAMPDIR)/opengl \
+		    -mindepth 1 -maxdepth 1 -type d -not -name CVS`; do \
+	    t="$(DISTDIR)/samples/`echo $$s | sed 's@$(SAMPDIR)/@@'`"; \
+	    mkdir -p $$t; \
+	    $(CP_P) $$s/Makefile.in \
+		    `find $$s -name 'makefile.*' -o -name descrip.mms -o \
+				-name '*.cpp' -o -name '*.h' -o \
+				-name '*.bmp' -o -name '*.ico' -o -name '*.png' -o \
+				-name '*.rc' -o -name '*.xpm'` $$t; \
+	    i=""; \
+	    if [ -d $$s/bitmaps ]; then i="bitmaps"; fi; \
+	    if [ -d $$s/icons ]; then i="icons"; fi; \
+	    if [ -n "$$i" ]; then \
+		mkdir $$t/$$i; \
+		cp `find $$s/$$i -name '*.bmp' -o -name '*.xpm'` $$t/$$i; \
+	    fi; \
+	done
 
-	mkdir $(DISTDIR)/samples/calendar
-	$(CP_P) $(SAMPDIR)/calendar/Makefile.in $(DISTDIR)/samples/calendar
-	$(CP_P) $(SAMPDIR)/calendar/makefile.unx $(DISTDIR)/samples/calendar
-	$(CP_P) $(SAMPDIR)/calendar/*.cpp $(DISTDIR)/samples/calendar
-
-	mkdir $(DISTDIR)/samples/caret
-	$(CP_P) $(SAMPDIR)/caret/Makefile.in $(DISTDIR)/samples/caret
-	$(CP_P) $(SAMPDIR)/caret/makefile.unx $(DISTDIR)/samples/caret
-	$(CP_P) $(SAMPDIR)/caret/*.cpp $(DISTDIR)/samples/caret
-	$(CP_P) $(SAMPDIR)/caret/*.xpm $(DISTDIR)/samples/caret
-
-	mkdir $(DISTDIR)/samples/checklst
-	$(CP_P) $(SAMPDIR)/checklst/Makefile.in $(DISTDIR)/samples/checklst
-	$(CP_P) $(SAMPDIR)/checklst/makefile.unx $(DISTDIR)/samples/checklst
-	$(CP_P) $(SAMPDIR)/checklst/*.cpp $(DISTDIR)/samples/checklst
-	$(CP_P) $(SAMPDIR)/checklst/*.xpm $(DISTDIR)/samples/checklst
-	$(CP_P) $(SAMPDIR)/checklst/*.mms $(DISTDIR)/samples/checklst
-
-	mkdir $(DISTDIR)/samples/config
-	$(CP_P) $(SAMPDIR)/config/Makefile.in $(DISTDIR)/samples/config
-	$(CP_P) $(SAMPDIR)/config/makefile.unx $(DISTDIR)/samples/config
-	$(CP_P) $(SAMPDIR)/config/*.cpp $(DISTDIR)/samples/config
-
-	mkdir $(DISTDIR)/samples/console
-	$(CP_P) $(SAMPDIR)/console/Makefile.in $(DISTDIR)/samples/console
-	$(CP_P) $(SAMPDIR)/console/makefile.unx $(DISTDIR)/samples/console
-	$(CP_P) $(SAMPDIR)/console/*.cpp $(DISTDIR)/samples/console
+	# copy the rest, not covered by the above loop
 	$(CP_P) $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
 
-	mkdir $(DISTDIR)/samples/controls
-	mkdir $(DISTDIR)/samples/controls/icons
-	$(CP_P) $(SAMPDIR)/controls/Makefile.in $(DISTDIR)/samples/controls
-	$(CP_P) $(SAMPDIR)/controls/makefile.unx $(DISTDIR)/samples/controls
-	$(CP_P) $(SAMPDIR)/controls/*.cpp $(DISTDIR)/samples/controls
-	$(CP_P) $(SAMPDIR)/controls/*.xpm $(DISTDIR)/samples/controls
-	$(CP_P) $(SAMPDIR)/controls/*.bmp $(DISTDIR)/samples/controls
-	$(CP_P) $(SAMPDIR)/controls/*.ico $(DISTDIR)/samples/controls
-	$(CP_P) $(SAMPDIR)/controls/*.rc $(DISTDIR)/samples/controls
-	$(CP_P) $(SAMPDIR)/controls/*.mms $(DISTDIR)/samples/controls
-	$(CP_P) $(SAMPDIR)/controls/icons/*.??? $(DISTDIR)/samples/controls/icons
+	$(CP_P) $(SAMPDIR)/dialogs/tips.txt $(DISTDIR)/samples/dialogs
 
-	mkdir $(DISTDIR)/samples/db
-	$(CP_P) $(SAMPDIR)/db/Makefile.in $(DISTDIR)/samples/db
-	$(CP_P) $(SAMPDIR)/db/makefile.unx $(DISTDIR)/samples/db
-	$(CP_P) $(SAMPDIR)/db/*.cpp $(DISTDIR)/samples/db
-	$(CP_P) $(SAMPDIR)/db/*.h $(DISTDIR)/samples/db
-	$(CP_P) $(SAMPDIR)/db/*.xpm $(DISTDIR)/samples/db
+	$(CP_P) $(SAMPDIR)/dnd/d_and_d.txt $(DISTDIR)/samples/dnd
 
-	mkdir $(DISTDIR)/samples/debugrpt
-	$(CP_P) $(SAMPDIR)/debugrpt/Makefile.in $(DISTDIR)/samples/debugrpt
-	$(CP_P) $(SAMPDIR)/debugrpt/*.cpp $(DISTDIR)/samples/debugrpt
-
-	mkdir $(DISTDIR)/samples/dialogs
-	$(CP_P) $(SAMPDIR)/dialogs/Makefile.in $(DISTDIR)/samples/dialogs
-	$(CP_P) $(SAMPDIR)/dialogs/makefile.unx $(DISTDIR)/samples/dialogs
-	$(CP_P) $(SAMPDIR)/dialogs/*.cpp $(DISTDIR)/samples/dialogs
-	$(CP_P) $(SAMPDIR)/dialogs/*.h $(DISTDIR)/samples/dialogs
-	$(CP_P) $(SAMPDIR)/dialogs/*.txt $(DISTDIR)/samples/dialogs
-	$(CP_P) $(SAMPDIR)/dialogs/*.mms $(DISTDIR)/samples/dialogs
-
-	mkdir $(DISTDIR)/samples/dialup
-	$(CP_P) $(SAMPDIR)/dialup/Makefile.in $(DISTDIR)/samples/dialup
-	$(CP_P) $(SAMPDIR)/dialup/makefile.unx $(DISTDIR)/samples/dialup
-	$(CP_P) $(SAMPDIR)/dialup/*.cpp $(DISTDIR)/samples/dialup
-
-	mkdir $(DISTDIR)/samples/display
-	$(CP_P) $(SAMPDIR)/display/Makefile.in $(DISTDIR)/samples/display
-	$(CP_P) $(SAMPDIR)/display/*.cpp $(DISTDIR)/samples/display
-
-	mkdir $(DISTDIR)/samples/dnd
-	$(CP_P) $(SAMPDIR)/dnd/Makefile.in $(DISTDIR)/samples/dnd
-	$(CP_P) $(SAMPDIR)/dnd/makefile.unx $(DISTDIR)/samples/dnd
-	$(CP_P) $(SAMPDIR)/dnd/*.cpp $(DISTDIR)/samples/dnd
-	$(CP_P) $(SAMPDIR)/dnd/*.xpm $(DISTDIR)/samples/dnd
-	$(CP_P) $(SAMPDIR)/dnd/*.txt $(DISTDIR)/samples/dnd
-	$(CP_P) $(SAMPDIR)/dnd/*.png $(DISTDIR)/samples/dnd
-
-	mkdir $(DISTDIR)/samples/docview
-	$(CP_P) $(SAMPDIR)/docview/Makefile.in $(DISTDIR)/samples/docview
-	$(CP_P) $(SAMPDIR)/docview/makefile.unx $(DISTDIR)/samples/docview
-	$(CP_P) $(SAMPDIR)/docview/*.cpp $(DISTDIR)/samples/docview
-	$(CP_P) $(SAMPDIR)/docview/*.h $(DISTDIR)/samples/docview
-	$(CP_P) $(SAMPDIR)/docview/*.xpm $(DISTDIR)/samples/docview
-
-	mkdir $(DISTDIR)/samples/docvwmdi
-	$(CP_P) $(SAMPDIR)/docvwmdi/Makefile.in $(DISTDIR)/samples/docvwmdi
-	$(CP_P) $(SAMPDIR)/docvwmdi/makefile.unx $(DISTDIR)/samples/docvwmdi
-	$(CP_P) $(SAMPDIR)/docvwmdi/*.cpp $(DISTDIR)/samples/docvwmdi
-	$(CP_P) $(SAMPDIR)/docvwmdi/*.h $(DISTDIR)/samples/docvwmdi
-
-	mkdir $(DISTDIR)/samples/dragimag
-	$(CP_P) $(SAMPDIR)/dragimag/Makefile.in $(DISTDIR)/samples/dragimag
-	$(CP_P) $(SAMPDIR)/dragimag/makefile.unx $(DISTDIR)/samples/dragimag
-	$(CP_P) $(SAMPDIR)/dragimag/*.cpp $(DISTDIR)/samples/dragimag
-	$(CP_P) $(SAMPDIR)/dragimag/*.h $(DISTDIR)/samples/dragimag
-	$(CP_P) $(SAMPDIR)/dragimag/*.xpm $(DISTDIR)/samples/dragimag
-	$(CP_P) $(SAMPDIR)/dragimag/*.png $(DISTDIR)/samples/dragimag
-
-	mkdir $(DISTDIR)/samples/drawing
-	$(CP_P) $(SAMPDIR)/drawing/Makefile.in $(DISTDIR)/samples/drawing
-	$(CP_P) $(SAMPDIR)/drawing/makefile.unx $(DISTDIR)/samples/drawing
-	$(CP_P) $(SAMPDIR)/drawing/*.cpp $(DISTDIR)/samples/drawing
-	$(CP_P) $(SAMPDIR)/drawing/*.xpm $(DISTDIR)/samples/drawing
-	$(CP_P) $(SAMPDIR)/drawing/*.bmp $(DISTDIR)/samples/drawing
-
-	mkdir $(DISTDIR)/samples/dynamic
-	$(CP_P) $(SAMPDIR)/dynamic/Makefile.in $(DISTDIR)/samples/dynamic
-	$(CP_P) $(SAMPDIR)/dynamic/makefile.unx $(DISTDIR)/samples/dynamic
-	$(CP_P) $(SAMPDIR)/dynamic/*.cpp $(DISTDIR)/samples/dynamic
-	$(CP_P) $(SAMPDIR)/dynamic/*.xpm $(DISTDIR)/samples/dynamic
-
-	mkdir $(DISTDIR)/samples/erase
-	$(CP_P) $(SAMPDIR)/erase/Makefile.in $(DISTDIR)/samples/erase
-	$(CP_P) $(SAMPDIR)/erase/makefile.unx $(DISTDIR)/samples/erase
-	$(CP_P) $(SAMPDIR)/erase/*.cpp $(DISTDIR)/samples/erase
-	$(CP_P) $(SAMPDIR)/erase/*.xml $(DISTDIR)/samples/erase
-	$(CP_P) $(SAMPDIR)/erase/*.xpm $(DISTDIR)/samples/erase
-
-	mkdir $(DISTDIR)/samples/event
-	$(CP_P) $(SAMPDIR)/event/Makefile.in $(DISTDIR)/samples/event
-	$(CP_P) $(SAMPDIR)/event/makefile.unx $(DISTDIR)/samples/event
-	$(CP_P) $(SAMPDIR)/event/*.cpp $(DISTDIR)/samples/event
-
-	mkdir $(DISTDIR)/samples/except
-	$(CP_P) $(SAMPDIR)/except/Makefile.in $(DISTDIR)/samples/except
-	$(CP_P) $(SAMPDIR)/except/*.cpp $(DISTDIR)/samples/except
-
-	mkdir $(DISTDIR)/samples/exec
-	$(CP_P) $(SAMPDIR)/exec/Makefile.in $(DISTDIR)/samples/exec
-	$(CP_P) $(SAMPDIR)/exec/makefile.unx $(DISTDIR)/samples/exec
-	$(CP_P) $(SAMPDIR)/exec/*.cpp $(DISTDIR)/samples/exec
-
-	mkdir $(DISTDIR)/samples/font
-	$(CP_P) $(SAMPDIR)/font/Makefile.in $(DISTDIR)/samples/font
-	$(CP_P) $(SAMPDIR)/font/makefile.unx $(DISTDIR)/samples/font
-	$(CP_P) $(SAMPDIR)/font/*.cpp $(DISTDIR)/samples/font
-
-	mkdir $(DISTDIR)/samples/grid
-	$(CP_P) $(SAMPDIR)/grid/Makefile.in $(DISTDIR)/samples/grid
-	$(CP_P) $(SAMPDIR)/grid/makefile.unx $(DISTDIR)/samples/grid
-	$(CP_P) $(SAMPDIR)/grid/*.cpp $(SAMPDIR)/grid/*.h $(DISTDIR)/samples/grid
-
-	mkdir $(DISTDIR)/samples/help
 	mkdir $(DISTDIR)/samples/help/doc
-	$(CP_P) $(SAMPDIR)/help/Makefile.in $(DISTDIR)/samples/help
-	$(CP_P) $(SAMPDIR)/help/makefile.unx $(DISTDIR)/samples/help
-	$(CP_P) $(SAMPDIR)/help/*.cpp $(DISTDIR)/samples/help
-	$(CP_P) $(SAMPDIR)/help/*.h* $(DISTDIR)/samples/help
-	$(CP_P) $(SAMPDIR)/help/*.xpm $(DISTDIR)/samples/help
-	$(CP_P) $(SAMPDIR)/help/*.bmp $(DISTDIR)/samples/help
+	$(CP_P) $(SAMPDIR)/help/*.h?? $(DISTDIR)/samples/help
 	$(CP_P) $(SAMPDIR)/help/*.gif $(DISTDIR)/samples/help
 	$(CP_P) $(SAMPDIR)/help/cshelp.txt $(DISTDIR)/samples/help
 	$(CP_P) $(SAMPDIR)/help/*.chm $(DISTDIR)/samples/help
@@ -680,367 +551,47 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/help/doc.zip $(DISTDIR)/samples/help
 	$(CP_P) $(SAMPDIR)/help/doc/*.* $(DISTDIR)/samples/help/doc
 
-	mkdir $(DISTDIR)/samples/htlbox
-	$(CP_P) $(SAMPDIR)/htlbox/Makefile.in $(DISTDIR)/samples/htlbox
-	$(CP_P) $(SAMPDIR)/htlbox/makefile.unx $(DISTDIR)/samples/htlbox
-	$(CP_P) $(SAMPDIR)/htlbox/*.cpp $(DISTDIR)/samples/htlbox
-	$(CP_P) $(SAMPDIR)/htlbox/*.xpm $(DISTDIR)/samples/htlbox
-
-	mkdir $(DISTDIR)/samples/html
-	$(CP_P) $(SAMPDIR)/html/Makefile.in $(DISTDIR)/samples/html
-	mkdir $(DISTDIR)/samples/html/about
-	$(CP_P) $(SAMPDIR)/html/about/Makefile.in $(DISTDIR)/samples/html/about
-	$(CP_P) $(SAMPDIR)/html/about/*.cpp $(DISTDIR)/samples/html/about
 	mkdir $(DISTDIR)/samples/html/about/data
 	$(CP_P) $(SAMPDIR)/html/about/data/*.htm $(DISTDIR)/samples/html/about/data
 	$(CP_P) $(SAMPDIR)/html/about/data/*.png $(DISTDIR)/samples/html/about/data
-	mkdir $(DISTDIR)/samples/html/help
-	$(CP_P) $(SAMPDIR)/html/help/Makefile.in $(DISTDIR)/samples/html/help
-	$(CP_P) $(SAMPDIR)/html/help/*.cpp $(DISTDIR)/samples/html/help
 	mkdir $(DISTDIR)/samples/html/help/helpfiles
 	$(CP_P) $(SAMPDIR)/html/help/helpfiles/*.??? $(DISTDIR)/samples/html/help/helpfiles
-	mkdir $(DISTDIR)/samples/html/helpview
-	$(CP_P) $(SAMPDIR)/html/helpview/Makefile.in $(DISTDIR)/samples/html/helpview
-	$(CP_P) $(SAMPDIR)/html/helpview/*.cpp $(DISTDIR)/samples/html/helpview
 	$(CP_P) $(SAMPDIR)/html/helpview/*.zip $(DISTDIR)/samples/html/helpview
-	mkdir $(DISTDIR)/samples/html/printing
-	$(CP_P) $(SAMPDIR)/html/printing/Makefile.in $(DISTDIR)/samples/html/printing
-	$(CP_P) $(SAMPDIR)/html/printing/*.cpp $(DISTDIR)/samples/html/printing
 	$(CP_P) $(SAMPDIR)/html/printing/*.htm $(DISTDIR)/samples/html/printing
 	$(CP_P) $(SAMPDIR)/html/printing/*.gif $(DISTDIR)/samples/html/printing
-	$(CP_P) $(SAMPDIR)/html/printing/*.ico $(DISTDIR)/samples/html/printing
-	mkdir $(DISTDIR)/samples/html/test
-	$(CP_P) $(SAMPDIR)/html/test/Makefile.in $(DISTDIR)/samples/html/test
-	$(CP_P) $(SAMPDIR)/html/test/*.cpp $(DISTDIR)/samples/html/test
-	$(CP_P) $(SAMPDIR)/html/test/*.bmp $(DISTDIR)/samples/html/test
-	$(CP_P) $(SAMPDIR)/html/test/*.png $(DISTDIR)/samples/html/test
 	$(CP_P) $(SAMPDIR)/html/test/*.gif $(DISTDIR)/samples/html/test
 	$(CP_P) $(SAMPDIR)/html/test/*.htm $(DISTDIR)/samples/html/test
 	$(CP_P) $(SAMPDIR)/html/test/*.html $(DISTDIR)/samples/html/test
-	mkdir $(DISTDIR)/samples/html/virtual
-	$(CP_P) $(SAMPDIR)/html/virtual/Makefile.in $(DISTDIR)/samples/html/virtual
-	$(CP_P) $(SAMPDIR)/html/virtual/*.cpp $(DISTDIR)/samples/html/virtual
 	$(CP_P) $(SAMPDIR)/html/virtual/*.htm $(DISTDIR)/samples/html/virtual
-	mkdir $(DISTDIR)/samples/html/widget
-	$(CP_P) $(SAMPDIR)/html/widget/Makefile.in $(DISTDIR)/samples/html/widget
-	$(CP_P) $(SAMPDIR)/html/widget/*.cpp $(DISTDIR)/samples/html/widget
 	$(CP_P) $(SAMPDIR)/html/widget/*.htm $(DISTDIR)/samples/html/widget
-	mkdir $(DISTDIR)/samples/html/zip
-	$(CP_P) $(SAMPDIR)/html/zip/Makefile.in $(DISTDIR)/samples/html/zip
-	$(CP_P) $(SAMPDIR)/html/zip/*.cpp $(DISTDIR)/samples/html/zip
 	$(CP_P) $(SAMPDIR)/html/zip/*.htm $(DISTDIR)/samples/html/zip
 	$(CP_P) $(SAMPDIR)/html/zip/*.zip $(DISTDIR)/samples/html/zip
 
-	mkdir $(DISTDIR)/samples/image
-	$(CP_P) $(SAMPDIR)/image/Makefile.in $(DISTDIR)/samples/image
-	$(CP_P) $(SAMPDIR)/image/makefile.unx $(DISTDIR)/samples/image
-	$(CP_P) $(SAMPDIR)/image/*.cpp $(DISTDIR)/samples/image
-	$(CP_P) $(SAMPDIR)/image/*.mms $(DISTDIR)/samples/image
 	$(CP_P) $(SAMPDIR)/image/horse*.* $(DISTDIR)/samples/image
 	$(CP_P) $(SAMPDIR)/image/smile.xbm $(DISTDIR)/samples/image
-	$(CP_P) $(SAMPDIR)/image/smile.xpm $(DISTDIR)/samples/image
 
-	mkdir $(DISTDIR)/samples/internat
-	$(CP_P) $(SAMPDIR)/internat/Makefile.in $(DISTDIR)/samples/internat
-	$(CP_P) $(SAMPDIR)/internat/makefile.unx $(DISTDIR)/samples/internat
-	$(CP_P) $(SAMPDIR)/internat/*.cpp $(DISTDIR)/samples/internat
-	$(CP_P) $(SAMPDIR)/internat/*.xpm $(DISTDIR)/samples/internat
-	$(CP_P) $(SAMPDIR)/internat/*.txt $(DISTDIR)/samples/internat
+	$(CP_P) $(SAMPDIR)/internat/readme.txt $(DISTDIR)/samples/internat
 	for f in `(cd $(SAMPDIR); find internat -name '*.[mp]o' -print)`; do \
 	    mkdir -p $(DISTDIR)/samples/`dirname $$f`;  \
 	    $(CP_P) $(SAMPDIR)/$$f $(DISTDIR)/samples/$$f; \
 	done
 
-	mkdir $(DISTDIR)/samples/ipc
-	$(CP_P) $(SAMPDIR)/ipc/Makefile.in $(DISTDIR)/samples/ipc
-	$(CP_P) $(SAMPDIR)/ipc/makefile.unx $(DISTDIR)/samples/ipc
-	$(CP_P) $(SAMPDIR)/ipc/*.cpp $(DISTDIR)/samples/ipc
-	$(CP_P) $(SAMPDIR)/ipc/*.h $(DISTDIR)/samples/ipc
-	$(CP_P) $(SAMPDIR)/ipc/*.xpm $(DISTDIR)/samples/ipc
-
-	mkdir $(DISTDIR)/samples/joytest
-	$(CP_P) $(SAMPDIR)/joytest/Makefile.in $(DISTDIR)/samples/joytest
-	$(CP_P) $(SAMPDIR)/joytest/makefile.unx $(DISTDIR)/samples/joytest
-	$(CP_P) $(SAMPDIR)/joytest/*.cpp $(DISTDIR)/samples/joytest
-	$(CP_P) $(SAMPDIR)/joytest/*.h $(DISTDIR)/samples/joytest
 	$(CP_P) $(SAMPDIR)/joytest/*.wav $(DISTDIR)/samples/joytest
 
-	mkdir $(DISTDIR)/samples/keyboard
-	$(CP_P) $(SAMPDIR)/keyboard/Makefile.in $(DISTDIR)/samples/keyboard
-	$(CP_P) $(SAMPDIR)/keyboard/*.cpp $(DISTDIR)/samples/keyboard
-
-	mkdir $(DISTDIR)/samples/layout
-	$(CP_P) $(SAMPDIR)/layout/Makefile.in $(DISTDIR)/samples/layout
-	$(CP_P) $(SAMPDIR)/layout/makefile.unx $(DISTDIR)/samples/layout
-	$(CP_P) $(SAMPDIR)/layout/*.cpp $(DISTDIR)/samples/layout
-	$(CP_P) $(SAMPDIR)/layout/*.h $(DISTDIR)/samples/layout
-
-	mkdir $(DISTDIR)/samples/listbox
-	$(CP_P) $(SAMPDIR)/listbox/Makefile.in $(DISTDIR)/samples/listbox
-	$(CP_P) $(SAMPDIR)/listbox/*.cpp $(DISTDIR)/samples/listbox
-
-	mkdir $(DISTDIR)/samples/listctrl
-	mkdir $(DISTDIR)/samples/listctrl/bitmaps
-	$(CP_P) $(SAMPDIR)/listctrl/Makefile.in $(DISTDIR)/samples/listctrl
-	$(CP_P) $(SAMPDIR)/listctrl/makefile.unx $(DISTDIR)/samples/listctrl
-	$(CP_P) $(SAMPDIR)/listctrl/*.cpp $(DISTDIR)/samples/listctrl
-	$(CP_P) $(SAMPDIR)/listctrl/*.h $(DISTDIR)/samples/listctrl
-	$(CP_P) $(SAMPDIR)/listctrl/*.xpm $(DISTDIR)/samples/listctrl
-	$(CP_P) $(SAMPDIR)/listctrl/bitmaps/*.xpm $(DISTDIR)/samples/listctrl/bitmaps
-
-	mkdir $(DISTDIR)/samples/mediaplayer
-	$(CP_P) $(SAMPDIR)/mediaplayer/Makefile.in $(DISTDIR)/samples/mediaplayer
-	$(CP_P) $(SAMPDIR)/mediaplayer/*.cpp $(DISTDIR)/samples/mediaplayer
-
-	mkdir $(DISTDIR)/samples/mdi
-	mkdir $(DISTDIR)/samples/mdi/bitmaps
-	$(CP_P) $(SAMPDIR)/mdi/Makefile.in $(DISTDIR)/samples/mdi
-	$(CP_P) $(SAMPDIR)/mdi/makefile.unx $(DISTDIR)/samples/mdi
-	$(CP_P) $(SAMPDIR)/mdi/*.cpp $(DISTDIR)/samples/mdi
-	$(CP_P) $(SAMPDIR)/mdi/*.h $(DISTDIR)/samples/mdi
-	$(CP_P) $(SAMPDIR)/mdi/*.xpm $(DISTDIR)/samples/mdi
-	$(CP_P) $(SAMPDIR)/mdi/bitmaps/*.xpm $(DISTDIR)/samples/mdi/bitmaps
-
-	mkdir $(DISTDIR)/samples/memcheck
-	$(CP_P) $(SAMPDIR)/memcheck/Makefile.in $(DISTDIR)/samples/memcheck
-	$(CP_P) $(SAMPDIR)/memcheck/makefile.unx $(DISTDIR)/samples/memcheck
-	$(CP_P) $(SAMPDIR)/memcheck/*.cpp $(DISTDIR)/samples/memcheck
-	$(CP_P) $(SAMPDIR)/memcheck/*.xpm $(DISTDIR)/samples/memcheck
-
-	mkdir $(DISTDIR)/samples/menu
-	$(CP_P) $(SAMPDIR)/menu/Makefile.in $(DISTDIR)/samples/menu
-	$(CP_P) $(SAMPDIR)/menu/makefile.unx $(DISTDIR)/samples/menu
-	$(CP_P) $(SAMPDIR)/menu/*.cpp $(DISTDIR)/samples/menu
-	$(CP_P) $(SAMPDIR)/menu/*.xpm $(DISTDIR)/samples/menu
-
-	mkdir $(DISTDIR)/samples/minifram
-	mkdir $(DISTDIR)/samples/minifram/bitmaps
-	$(CP_P) $(SAMPDIR)/minifram/Makefile.in $(DISTDIR)/samples/minifram
-	$(CP_P) $(SAMPDIR)/minifram/makefile.unx $(DISTDIR)/samples/minifram
-	$(CP_P) $(SAMPDIR)/minifram/*.cpp $(DISTDIR)/samples/minifram
-	$(CP_P) $(SAMPDIR)/minifram/*.h $(DISTDIR)/samples/minifram
-	$(CP_P) $(SAMPDIR)/minifram/*.xpm $(DISTDIR)/samples/minifram
-	$(CP_P) $(SAMPDIR)/minifram/bitmaps/*.xpm $(DISTDIR)/samples/minifram/bitmaps
-
-	mkdir $(DISTDIR)/samples/minimal
-	$(CP_P) $(SAMPDIR)/minimal/Makefile.in $(DISTDIR)/samples/minimal
-	$(CP_P) $(SAMPDIR)/minimal/makefile.unx $(DISTDIR)/samples/minimal
-	$(CP_P) $(SAMPDIR)/minimal/*.cpp $(DISTDIR)/samples/minimal
-	$(CP_P) $(SAMPDIR)/minimal/*.mms $(DISTDIR)/samples/minimal
-
-	mkdir $(DISTDIR)/samples/mobile
-	$(CP_P) $(SAMPDIR)/mobile/Makefile.in $(DISTDIR)/samples/mobile
-	mkdir $(DISTDIR)/samples/mobile/wxedit
-	$(CP_P) $(SAMPDIR)/mobile/wxedit/Makefile.in $(DISTDIR)/samples/mobile/wxedit
-	$(CP_P) $(SAMPDIR)/mobile/wxedit/*.cpp $(DISTDIR)/samples/mobile/wxedit
-	$(CP_P) $(SAMPDIR)/mobile/wxedit/*.h $(DISTDIR)/samples/mobile/wxedit
-	mkdir $(DISTDIR)/samples/mobile/styles
-	$(CP_P) $(SAMPDIR)/mobile/styles/Makefile.in $(DISTDIR)/samples/mobile/styles
-	$(CP_P) $(SAMPDIR)/mobile/styles/*.cpp $(DISTDIR)/samples/mobile/styles
-	$(CP_P) $(SAMPDIR)/mobile/styles/*.h $(DISTDIR)/samples/mobile/styles
 	$(CP_P) $(SAMPDIR)/mobile/styles/*.jpg $(DISTDIR)/samples/mobile/styles
 
-	mkdir $(DISTDIR)/samples/multimon
-	$(CP_P) $(SAMPDIR)/multimon/Makefile.in $(DISTDIR)/samples/multimon
-	$(CP_P) $(SAMPDIR)/multimon/makefile.unx $(DISTDIR)/samples/multimon
-	$(CP_P) $(SAMPDIR)/multimon/*.cpp $(DISTDIR)/samples/multimon
-
-	mkdir $(DISTDIR)/samples/notebook
-	$(CP_P) $(SAMPDIR)/notebook/Makefile.in $(DISTDIR)/samples/notebook
-	$(CP_P) $(SAMPDIR)/notebook/makefile.unx $(DISTDIR)/samples/notebook
-	$(CP_P) $(SAMPDIR)/notebook/*.cpp $(DISTDIR)/samples/notebook
-	$(CP_P) $(SAMPDIR)/notebook/*.h $(DISTDIR)/samples/notebook
-
-	mkdir $(DISTDIR)/samples/opengl
-	$(CP_P) $(SAMPDIR)/opengl/Makefile.in $(DISTDIR)/samples/opengl
-	mkdir $(DISTDIR)/samples/opengl/penguin
-	$(CP_P) $(SAMPDIR)/opengl/penguin/Makefile.in $(DISTDIR)/samples/opengl/penguin
-	$(CP_P) $(SAMPDIR)/opengl/penguin/makefile.unx $(DISTDIR)/samples/opengl/penguin
-	$(CP_P) $(SAMPDIR)/opengl/penguin/*.cpp $(DISTDIR)/samples/opengl/penguin
-	$(CP_P) $(SAMPDIR)/opengl/penguin/*.c $(DISTDIR)/samples/opengl/penguin
-	$(CP_P) $(SAMPDIR)/opengl/penguin/*.h $(DISTDIR)/samples/opengl/penguin
+	$(CP_P) $(SAMPDIR)/opengl/penguin/trackball.c $(DISTDIR)/samples/opengl/penguin
 	$(CP_P) $(SAMPDIR)/opengl/penguin/*.dxf.gz $(DISTDIR)/samples/opengl/penguin
-	mkdir $(DISTDIR)/samples/opengl/cube
-	$(CP_P) $(SAMPDIR)/opengl/cube/Makefile.in $(DISTDIR)/samples/opengl/cube
-	$(CP_P) $(SAMPDIR)/opengl/cube/makefile.unx $(DISTDIR)/samples/opengl/cube
-	$(CP_P) $(SAMPDIR)/opengl/cube/*.cpp $(DISTDIR)/samples/opengl/cube
-	$(CP_P) $(SAMPDIR)/opengl/cube/*.h $(DISTDIR)/samples/opengl/cube
-	mkdir $(DISTDIR)/samples/opengl/isosurf
-	$(CP_P) $(SAMPDIR)/opengl/isosurf/Makefile.in $(DISTDIR)/samples/opengl/isosurf
-	$(CP_P) $(SAMPDIR)/opengl/isosurf/makefile.unx $(DISTDIR)/samples/opengl/isosurf
-	$(CP_P) $(SAMPDIR)/opengl/isosurf/*.cpp $(DISTDIR)/samples/opengl/isosurf
-	$(CP_P) $(SAMPDIR)/opengl/isosurf/*.h $(DISTDIR)/samples/opengl/isosurf
 	$(CP_P) $(SAMPDIR)/opengl/isosurf/*.gz $(DISTDIR)/samples/opengl/isosurf
 
-	mkdir $(DISTDIR)/samples/png
-	$(CP_P) $(SAMPDIR)/png/Makefile.in $(DISTDIR)/samples/png
-	$(CP_P) $(SAMPDIR)/png/makefile.unx $(DISTDIR)/samples/png
-	$(CP_P) $(SAMPDIR)/png/*.cpp $(DISTDIR)/samples/png
-	$(CP_P) $(SAMPDIR)/png/*.h $(DISTDIR)/samples/png
-	$(CP_P) $(SAMPDIR)/png/*.png $(DISTDIR)/samples/png
-
-	mkdir $(DISTDIR)/samples/popup
-	$(CP_P) $(SAMPDIR)/popup/Makefile.in $(DISTDIR)/samples/popup
-	$(CP_P) $(SAMPDIR)/popup/makefile.unx $(DISTDIR)/samples/popup
-	$(CP_P) $(SAMPDIR)/popup/*.cpp $(DISTDIR)/samples/popup
-
-	mkdir $(DISTDIR)/samples/printing
-	$(CP_P) $(SAMPDIR)/printing/Makefile.in $(DISTDIR)/samples/printing
-	$(CP_P) $(SAMPDIR)/printing/makefile.unx $(DISTDIR)/samples/printing
-	$(CP_P) $(SAMPDIR)/printing/*.cpp $(DISTDIR)/samples/printing
-	$(CP_P) $(SAMPDIR)/printing/*.h $(DISTDIR)/samples/printing
-	$(CP_P) $(SAMPDIR)/printing/*.xpm $(DISTDIR)/samples/printing
-	$(CP_P) $(SAMPDIR)/printing/*.rc $(DISTDIR)/samples/printing
-
-	mkdir $(DISTDIR)/samples/render
-	$(CP_P) $(SAMPDIR)/render/Makefile.in $(DISTDIR)/samples/render
-	$(CP_P) $(SAMPDIR)/render/makefile.unx $(DISTDIR)/samples/render
-	$(CP_P) $(SAMPDIR)/render/*.cpp $(DISTDIR)/samples/render
-
-	mkdir $(DISTDIR)/samples/rotate
-	$(CP_P) $(SAMPDIR)/rotate/Makefile.in $(DISTDIR)/samples/rotate
-	$(CP_P) $(SAMPDIR)/rotate/makefile.unx $(DISTDIR)/samples/rotate
-	$(CP_P) $(SAMPDIR)/rotate/*.cpp $(DISTDIR)/samples/rotate
-	$(CP_P) $(SAMPDIR)/rotate/*.png $(DISTDIR)/samples/rotate
-
-	mkdir $(DISTDIR)/samples/richtext
-	mkdir $(DISTDIR)/samples/richtext/bitmaps
-	$(CP_P) $(SAMPDIR)/richtext/Makefile.in $(DISTDIR)/samples/richtext
-	$(CP_P) $(SAMPDIR)/richtext/*.cpp $(DISTDIR)/samples/richtext
-	$(CP_P) $(SAMPDIR)/richtext/bitmaps/*.xpm $(DISTDIR)/samples/richtext/bitmaps
 	$(CP_P) $(SAMPDIR)/richtext/readme.txt $(DISTDIR)/samples/richtext
 	$(CP_P) $(SAMPDIR)/richtext/todo.txt $(DISTDIR)/samples/richtext
 
-	mkdir $(DISTDIR)/samples/aui
-	$(CP_P) $(SAMPDIR)/aui/Makefile.in $(DISTDIR)/samples/aui
-	$(CP_P) $(SAMPDIR)/aui/*.cpp $(DISTDIR)/samples/aui
-
-	mkdir $(DISTDIR)/samples/propsize
-	$(CP_P) $(SAMPDIR)/propsize/Makefile.in $(DISTDIR)/samples/propsize
-	$(CP_P) $(SAMPDIR)/propsize/makefile.unx $(DISTDIR)/samples/propsize
-	$(CP_P) $(SAMPDIR)/propsize/*.cpp $(DISTDIR)/samples/propsize
-	$(CP_P) $(SAMPDIR)/propsize/*.xpm $(DISTDIR)/samples/propsize
-
-	mkdir $(DISTDIR)/samples/sashtest
-	$(CP_P) $(SAMPDIR)/sashtest/Makefile.in $(DISTDIR)/samples/sashtest
-	$(CP_P) $(SAMPDIR)/sashtest/makefile.unx $(DISTDIR)/samples/sashtest
-	$(CP_P) $(SAMPDIR)/sashtest/*.cpp $(DISTDIR)/samples/sashtest
-	$(CP_P) $(SAMPDIR)/sashtest/*.h $(DISTDIR)/samples/sashtest
-
-	mkdir $(DISTDIR)/samples/scroll
-	$(CP_P) $(SAMPDIR)/scroll/Makefile.in $(DISTDIR)/samples/scroll
-	$(CP_P) $(SAMPDIR)/scroll/makefile.unx $(DISTDIR)/samples/scroll
-	$(CP_P) $(SAMPDIR)/scroll/*.cpp $(DISTDIR)/samples/scroll
-
-	mkdir $(DISTDIR)/samples/scrollsub
-	$(CP_P) $(SAMPDIR)/scrollsub/Makefile.in $(DISTDIR)/samples/scrollsub
-	$(CP_P) $(SAMPDIR)/scrollsub/makefile.unx $(DISTDIR)/samples/scrollsub
-	$(CP_P) $(SAMPDIR)/scrollsub/*.cpp $(DISTDIR)/samples/scrollsub
-
-	mkdir $(DISTDIR)/samples/shaped
-	$(CP_P) $(SAMPDIR)/shaped/Makefile.in $(DISTDIR)/samples/shaped
-	$(CP_P) $(SAMPDIR)/shaped/makefile.unx $(DISTDIR)/samples/shaped
-	$(CP_P) $(SAMPDIR)/shaped/*.cpp $(DISTDIR)/samples/shaped
-	$(CP_P) $(SAMPDIR)/shaped/*.png $(DISTDIR)/samples/shaped
-
-	mkdir $(DISTDIR)/samples/sockets
-	$(CP_P) $(SAMPDIR)/sockets/Makefile.in $(DISTDIR)/samples/sockets
-	$(CP_P) $(SAMPDIR)/sockets/makefile.unx $(DISTDIR)/samples/sockets
-	$(CP_P) $(SAMPDIR)/sockets/*.cpp $(DISTDIR)/samples/sockets
-	$(CP_P) $(SAMPDIR)/sockets/*.xpm $(DISTDIR)/samples/sockets
-
-	mkdir $(DISTDIR)/samples/sound
-	$(CP_P) $(SAMPDIR)/sound/Makefile.in $(DISTDIR)/samples/sound
-	$(CP_P) $(SAMPDIR)/sound/*.cpp $(DISTDIR)/samples/sound
 	$(CP_P) $(SAMPDIR)/sound/*.wav $(DISTDIR)/samples/sound
 
-	mkdir $(DISTDIR)/samples/splash
-	$(CP_P) $(SAMPDIR)/splash/Makefile.in $(DISTDIR)/samples/splash
-	$(CP_P) $(SAMPDIR)/splash/*.cpp $(DISTDIR)/samples/splash
-	$(CP_P) $(SAMPDIR)/splash/*.png $(DISTDIR)/samples/splash
 	$(CP_P) $(SAMPDIR)/splash/*.mpg $(DISTDIR)/samples/splash
-	$(CP_P) $(SAMPDIR)/splash/*.xpm $(DISTDIR)/samples/splash
 
-	mkdir $(DISTDIR)/samples/splitter
-	$(CP_P) $(SAMPDIR)/splitter/Makefile.in $(DISTDIR)/samples/splitter
-	$(CP_P) $(SAMPDIR)/splitter/makefile.unx $(DISTDIR)/samples/splitter
-	$(CP_P) $(SAMPDIR)/splitter/*.cpp $(DISTDIR)/samples/splitter
-
-	mkdir $(DISTDIR)/samples/statbar
-	$(CP_P) $(SAMPDIR)/statbar/Makefile.in $(DISTDIR)/samples/statbar
-	$(CP_P) $(SAMPDIR)/statbar/makefile.unx $(DISTDIR)/samples/statbar
-	$(CP_P) $(SAMPDIR)/statbar/*.cpp $(DISTDIR)/samples/statbar
-	$(CP_P) $(SAMPDIR)/statbar/*.xpm $(DISTDIR)/samples/statbar
-
-	mkdir $(DISTDIR)/samples/taskbar
-	$(CP_P) $(SAMPDIR)/taskbar/Makefile.in $(DISTDIR)/samples/taskbar
-	$(CP_P) $(SAMPDIR)/taskbar/*.cpp $(DISTDIR)/samples/taskbar
-	$(CP_P) $(SAMPDIR)/taskbar/*.h $(DISTDIR)/samples/taskbar
-	$(CP_P) $(SAMPDIR)/taskbar/*.xpm $(DISTDIR)/samples/taskbar
-
-	mkdir $(DISTDIR)/samples/text
-	$(CP_P) $(SAMPDIR)/text/Makefile.in $(DISTDIR)/samples/text
-	$(CP_P) $(SAMPDIR)/text/makefile.unx $(DISTDIR)/samples/text
-	$(CP_P) $(SAMPDIR)/text/*.cpp $(DISTDIR)/samples/text
-	$(CP_P) $(SAMPDIR)/text/*.xpm $(DISTDIR)/samples/text
-
-	mkdir $(DISTDIR)/samples/thread
-	$(CP_P) $(SAMPDIR)/thread/Makefile.in $(DISTDIR)/samples/thread
-	$(CP_P) $(SAMPDIR)/thread/makefile.unx $(DISTDIR)/samples/thread
-	$(CP_P) $(SAMPDIR)/thread/*.cpp $(DISTDIR)/samples/thread
-
-	mkdir $(DISTDIR)/samples/toolbar
-	$(CP_P) $(SAMPDIR)/toolbar/Makefile.in $(DISTDIR)/samples/toolbar
-	$(CP_P) $(SAMPDIR)/toolbar/makefile.unx $(DISTDIR)/samples/toolbar
-	$(CP_P) $(SAMPDIR)/toolbar/*.cpp $(DISTDIR)/samples/toolbar
-	$(CP_P) $(SAMPDIR)/toolbar/*.xpm $(DISTDIR)/samples/toolbar
-	mkdir $(DISTDIR)/samples/toolbar/bitmaps
-	$(CP_P) $(SAMPDIR)/toolbar/bitmaps/*.xpm $(DISTDIR)/samples/toolbar/bitmaps
-
-	mkdir $(DISTDIR)/samples/treectrl
-	$(CP_P) $(SAMPDIR)/treectrl/Makefile.in $(DISTDIR)/samples/treectrl
-	$(CP_P) $(SAMPDIR)/treectrl/makefile.unx $(DISTDIR)/samples/treectrl
-	$(CP_P) $(SAMPDIR)/treectrl/*.cpp $(DISTDIR)/samples/treectrl
-	$(CP_P) $(SAMPDIR)/treectrl/*.h $(DISTDIR)/samples/treectrl
-	$(CP_P) $(SAMPDIR)/treectrl/*.xpm $(DISTDIR)/samples/treectrl
-
-	mkdir $(DISTDIR)/samples/typetest
-	$(CP_P) $(SAMPDIR)/typetest/Makefile.in $(DISTDIR)/samples/typetest
-	$(CP_P) $(SAMPDIR)/typetest/makefile.unx $(DISTDIR)/samples/typetest
-	$(CP_P) $(SAMPDIR)/typetest/*.cpp $(DISTDIR)/samples/typetest
-	$(CP_P) $(SAMPDIR)/typetest/*.h $(DISTDIR)/samples/typetest
-	$(CP_P) $(SAMPDIR)/typetest/*.xpm $(DISTDIR)/samples/typetest
-
-	mkdir $(DISTDIR)/samples/validate
-	$(CP_P) $(SAMPDIR)/validate/Makefile.in $(DISTDIR)/samples/validate
-	$(CP_P) $(SAMPDIR)/validate/makefile.unx $(DISTDIR)/samples/validate
-	$(CP_P) $(SAMPDIR)/validate/*.cpp $(DISTDIR)/samples/validate
-	$(CP_P) $(SAMPDIR)/validate/*.h $(DISTDIR)/samples/validate
-	$(CP_P) $(SAMPDIR)/validate/*.xpm $(DISTDIR)/samples/validate
-
-	mkdir $(DISTDIR)/samples/vscroll
-	$(CP_P) $(SAMPDIR)/vscroll/Makefile.in $(DISTDIR)/samples/vscroll
-	$(CP_P) $(SAMPDIR)/vscroll/*.cpp $(DISTDIR)/samples/vscroll
-
-	mkdir $(DISTDIR)/samples/wizard
-	$(CP_P) $(SAMPDIR)/wizard/Makefile.in $(DISTDIR)/samples/wizard
-	$(CP_P) $(SAMPDIR)/wizard/makefile.unx $(DISTDIR)/samples/wizard
-	$(CP_P) $(SAMPDIR)/wizard/*.cpp $(DISTDIR)/samples/wizard
-	$(CP_P) $(SAMPDIR)/wizard/*.xpm $(DISTDIR)/samples/wizard
-
-	mkdir $(DISTDIR)/samples/widgets
-	mkdir $(DISTDIR)/samples/widgets/icons
-	$(CP_P) $(SAMPDIR)/widgets/Makefile.in $(DISTDIR)/samples/widgets
-	$(CP_P) $(SAMPDIR)/widgets/*.cpp $(DISTDIR)/samples/widgets
-	$(CP_P) $(SAMPDIR)/widgets/*.h $(DISTDIR)/samples/widgets
-	$(CP_P) $(SAMPDIR)/widgets/icons/*.xpm $(DISTDIR)/samples/widgets/icons
-
-	mkdir $(DISTDIR)/samples/xrc
 	mkdir $(DISTDIR)/samples/xrc/rc
-	$(CP_P) $(SAMPDIR)/xrc/Makefile.in $(DISTDIR)/samples/xrc
-	$(CP_P) $(SAMPDIR)/xrc/*.cpp $(DISTDIR)/samples/xrc
-	$(CP_P) $(SAMPDIR)/xrc/*.h $(DISTDIR)/samples/xrc
-	$(CP_P) $(SAMPDIR)/xrc/*.rc $(DISTDIR)/samples/xrc
 	$(CP_P) $(SAMPDIR)/xrc/rc/*.xpm $(DISTDIR)/samples/xrc/rc
 	$(CP_P) $(SAMPDIR)/xrc/rc/*.xrc $(DISTDIR)/samples/xrc/rc
 	$(CP_P) $(SAMPDIR)/xrc/rc/*.gif $(DISTDIR)/samples/xrc/rc
