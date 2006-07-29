@@ -39295,6 +39295,7 @@ echo $ECHO_N "checking how many arguments gethostbyname_r() takes... $ECHO_C" >&
 else
 
 
+################################################################
 
 ac_cv_func_which_gethostbyname_r=unknown
 
@@ -39532,6 +39533,7 @@ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
 fi
 
+################################################################
 
 
 fi
@@ -44987,14 +44989,14 @@ fi
 USE_MEDIA=0
 
 if test "$wxUSE_MEDIACTRL" = "yes"; then
+    USE_MEDIA=1
+
                 if test "$wxUSE_GTK" = 1; then
         wxUSE_GSTREAMER="no"
 
                                                                 GST_VERSION_MAJOR=0
         GST_VERSION_MINOR=10
-        GST_VERSION_RELEASE=0
-        GSTREAMER_REQ=$GST_VERSION_MAJOR.$GST_VERSION_MINOR.$GST_VERSION_RELEASE
-        GST_MAJORMINOR=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
+        GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
         if test "$wxUSE_GSTREAMER8" = "no"; then
 
@@ -45051,33 +45053,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for gstreamer-$GST_MAJORMINOR
-                               gstreamer-plugins-base-$GST_MAJORMINOR
-                               gconf-2.0" >&5
-echo $ECHO_N "checking for gstreamer-$GST_MAJORMINOR
-                               gstreamer-plugins-base-$GST_MAJORMINOR
-                               gconf-2.0... $ECHO_C" >&6
+        echo "$as_me:$LINENO: checking for gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0" >&5
+echo $ECHO_N "checking for gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "gstreamer-$GST_MAJORMINOR
-                               gstreamer-plugins-base-$GST_MAJORMINOR
-                               gconf-2.0" ; then
+        if $PKG_CONFIG --exists "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0" ; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
             succeeded=yes
 
             echo "$as_me:$LINENO: checking GST_CFLAGS" >&5
 echo $ECHO_N "checking GST_CFLAGS... $ECHO_C" >&6
-            GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_MAJORMINOR
-                               gstreamer-plugins-base-$GST_MAJORMINOR
-                               gconf-2.0"`
+            GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0"`
             echo "$as_me:$LINENO: result: $GST_CFLAGS" >&5
 echo "${ECHO_T}$GST_CFLAGS" >&6
 
             echo "$as_me:$LINENO: checking GST_LIBS" >&5
 echo $ECHO_N "checking GST_LIBS... $ECHO_C" >&6
-            GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_MAJORMINOR
-                               gstreamer-plugins-base-$GST_MAJORMINOR
-                               gconf-2.0"`
+            GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0"`
             echo "$as_me:$LINENO: result: $GST_LIBS" >&5
 echo "${ECHO_T}$GST_LIBS" >&6
         else
@@ -45085,9 +45077,7 @@ echo "${ECHO_T}$GST_LIBS" >&6
             GST_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_MAJORMINOR
-                               gstreamer-plugins-base-$GST_MAJORMINOR
-                               gconf-2.0"`
+            GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0"`
 
         fi
 
@@ -45101,23 +45091,24 @@ echo "${ECHO_T}$GST_LIBS" >&6
 
   if test $succeeded = yes; then
 
-            wxUSE_GSTREAMER="yes"
-            GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_MAJORMINOR"
+                    wxUSE_GSTREAMER="yes"
+                    GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_VERSION"
 
   else
 
+                    { echo "$as_me:$LINENO: WARNING: GStreamer 0.10 not available, falling back to 0.8" >&5
+echo "$as_me: WARNING: GStreamer 0.10 not available, falling back to 0.8" >&2;}
                     GST_VERSION_MINOR=8
+
 
   fi
 
-            else
-            GST_VERSION_MINOR=8
+        else
+                        GST_VERSION_MINOR=8
         fi
 
-        GSTREAMER_REQ=$GST_VERSION_MAJOR.$GST_VERSION_MINOR.$GST_VERSION_RELEASE
-        GST_MAJORMINOR=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
-
-        if test x$GST_VERSION_MINOR = x8; then
+        if test $GST_VERSION_MINOR = "8"; then
+            GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
   succeeded=no
 
@@ -45172,33 +45163,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for gstreamer-$GST_MAJORMINOR
-                gstreamer-interfaces-$GST_MAJORMINOR
-                gstreamer-gconf-$GST_MAJORMINOR" >&5
-echo $ECHO_N "checking for gstreamer-$GST_MAJORMINOR
-                gstreamer-interfaces-$GST_MAJORMINOR
-                gstreamer-gconf-$GST_MAJORMINOR... $ECHO_C" >&6
+        echo "$as_me:$LINENO: checking for gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION" >&5
+echo $ECHO_N "checking for gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "gstreamer-$GST_MAJORMINOR
-                gstreamer-interfaces-$GST_MAJORMINOR
-                gstreamer-gconf-$GST_MAJORMINOR" ; then
+        if $PKG_CONFIG --exists "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION" ; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
             succeeded=yes
 
             echo "$as_me:$LINENO: checking GST_CFLAGS" >&5
 echo $ECHO_N "checking GST_CFLAGS... $ECHO_C" >&6
-            GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_MAJORMINOR
-                gstreamer-interfaces-$GST_MAJORMINOR
-                gstreamer-gconf-$GST_MAJORMINOR"`
+            GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION"`
             echo "$as_me:$LINENO: result: $GST_CFLAGS" >&5
 echo "${ECHO_T}$GST_CFLAGS" >&6
 
             echo "$as_me:$LINENO: checking GST_LIBS" >&5
 echo $ECHO_N "checking GST_LIBS... $ECHO_C" >&6
-            GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_MAJORMINOR
-                gstreamer-interfaces-$GST_MAJORMINOR
-                gstreamer-gconf-$GST_MAJORMINOR"`
+            GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION"`
             echo "$as_me:$LINENO: result: $GST_LIBS" >&5
 echo "${ECHO_T}$GST_LIBS" >&6
         else
@@ -45206,9 +45187,7 @@ echo "${ECHO_T}$GST_LIBS" >&6
             GST_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_MAJORMINOR
-                gstreamer-interfaces-$GST_MAJORMINOR
-                gstreamer-gconf-$GST_MAJORMINOR"`
+            GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION"`
 
         fi
 
@@ -45221,13 +45200,11 @@ echo "${ECHO_T}$GST_LIBS" >&6
   fi
 
   if test $succeeded = yes; then
-
-                wxUSE_GSTREAMER="yes"
-
+     wxUSE_GSTREAMER="yes"
   else
 
-                    { echo "$as_me:$LINENO: WARNING: Proper GStreamer .8/.10 installation not found" >&5
-echo "$as_me: WARNING: Proper GStreamer .8/.10 installation not found" >&2;}
+                    { echo "$as_me:$LINENO: WARNING: GStreamer 0.8/0.10 not available." >&5
+echo "$as_me: WARNING: GStreamer 0.8/0.10 not available." >&2;}
 
   fi
 
@@ -45250,16 +45227,18 @@ echo "$as_me: WARNING: Proper GStreamer .8/.10 installation not found" >&2;}
 #define wxUSE_GSTREAMER 1
 _ACEOF
 
-            echo "$as_me:$LINENO: result: GStreamer detection successful" >&5
-echo "${ECHO_T}GStreamer detection successful" >&6
+        else
+            USE_MEDIA=0
         fi
     fi
-    USE_MEDIA=1
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mediaplayer"
-    cat >>confdefs.h <<\_ACEOF
+
+    if test $USE_MEDIA = 1; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mediaplayer"
+        cat >>confdefs.h <<\_ACEOF
 #define wxUSE_MEDIACTRL 1
 _ACEOF
 
+    fi
 fi
 
 

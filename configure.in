@@ -6916,6 +6916,8 @@ dnl ---------------------------------------------------------------------------
 USE_MEDIA=0
 
 if test "$wxUSE_MEDIACTRL" = "yes"; then
+    USE_MEDIA=1
+
     dnl -----------------------------------------------------------------------
     dnl GStreamer
     dnl -----------------------------------------------------------------------
@@ -6931,37 +6933,32 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
         dnl -------------------------------------------------------------------
         GST_VERSION_MAJOR=0
         GST_VERSION_MINOR=10
-        GST_VERSION_RELEASE=0
-        GSTREAMER_REQ=$GST_VERSION_MAJOR.$GST_VERSION_MINOR.$GST_VERSION_RELEASE
-        GST_MAJORMINOR=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
+        GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
         if test "$wxUSE_GSTREAMER8" = "no"; then
-            PKG_CHECK_MODULES(GST, gstreamer-$GST_MAJORMINOR
-                               gstreamer-plugins-base-$GST_MAJORMINOR
-                               gconf-2.0,
-        [
-            wxUSE_GSTREAMER="yes"
-            GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_MAJORMINOR"
-        ],
-        [
+            PKG_CHECK_MODULES(GST,
+                [gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0],
+                [
+                    wxUSE_GSTREAMER="yes"
+                    GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_VERSION"
+                ],
+                [
+                    AC_MSG_WARN([GStreamer 0.10 not available, falling back to 0.8])
                     GST_VERSION_MINOR=8
-        ])
-            else
+                ]
+            )
+        else
+            dnl check only for 0.8
             GST_VERSION_MINOR=8
         fi
 
-        GSTREAMER_REQ=$GST_VERSION_MAJOR.$GST_VERSION_MINOR.$GST_VERSION_RELEASE
-        GST_MAJORMINOR=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
-
-        if test x$GST_VERSION_MINOR = x8; then
-            PKG_CHECK_MODULES(GST, gstreamer-$GST_MAJORMINOR
-                gstreamer-interfaces-$GST_MAJORMINOR
-                gstreamer-gconf-$GST_MAJORMINOR,
-                        [
-                wxUSE_GSTREAMER="yes"
-                        ],
+        if test $GST_VERSION_MINOR = "8"; then
+            GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
+            PKG_CHECK_MODULES(GST,
+                [gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION],
+                wxUSE_GSTREAMER="yes",
                 [
-                    AC_MSG_WARN([Proper GStreamer .8/.10 installation not found])
+                    AC_MSG_WARN([GStreamer 0.8/0.10 not available.])
                 ])
         fi
 
@@ -6981,12 +6978,15 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
             LIBS="$GST_LIBS $LIBS"
 
             AC_DEFINE(wxUSE_GSTREAMER)
-            AC_MSG_RESULT([GStreamer detection successful])
+        else
+            USE_MEDIA=0
         fi
     fi
-    USE_MEDIA=1
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mediaplayer"
-    AC_DEFINE(wxUSE_MEDIACTRL)
+
+    if test $USE_MEDIA = 1; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mediaplayer"
+        AC_DEFINE(wxUSE_MEDIACTRL)
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------
