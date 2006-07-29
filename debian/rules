@@ -86,7 +86,6 @@ COMMON_CONFIGURE_OPTIONS = \
     --prefix=/usr \
     --cache-file=$(config_cache) \
     --with-flavour=$(DEBIAN_WXFLAVOUR) \
-    --enable-debug \
     --with-zlib=sys \
     --disable-reserved_virtual \
 
