@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 2.6.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-21 17:37+0200\n"
-"PO-Revision-Date: 2006-05-27 01:33+0100\n"
+"PO-Revision-Date: 2006-07-28 19:49+0100\n"
 "Last-Translator: Adrián González Alba <correoadrian82@hotmail.com>\n"
 "Language-Team: Adrián González Alba <correoadrian82@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -512,38 +512,32 @@ msgid ".."
 msgstr ".."
 
 #: ../src/common/paper.cpp:147
-#, fuzzy
 msgid "10 x 11 in"
-msgstr "en 10 x 11"
+msgstr "10 x 11 pulgadas"
 
 #: ../src/common/paper.cpp:120
-#, fuzzy
 msgid "10 x 14 in"
-msgstr "en 10 x 14"
+msgstr "10 x 14 pulgadas"
 
 #: ../src/common/paper.cpp:121
-#, fuzzy
 msgid "11 x 17 in"
-msgstr "en 11 x 17"
+msgstr "11 x 17 pulgadas"
 
 #: ../src/common/paper.cpp:191
-#, fuzzy
 msgid "12 x 11 in"
-msgstr "en 12 x 11"
+msgstr "12 x 11 pulgadas"
 
 #: ../src/common/paper.cpp:148
-#, fuzzy
 msgid "15 x 11 in"
-msgstr "en 15 x 11"
+msgstr "15 x 11 pulgadas"
 
 #: ../src/common/paper.cpp:139
 msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
 msgstr "Sobre 6 3/4, 3 5/8 x 6 1/2 in"
 
 #: ../src/common/paper.cpp:146
-#, fuzzy
 msgid "9 x 11 in"
-msgstr "en 9 x 11"
+msgstr "9 x 11 pulgadas"
 
 #: ../src/html/htmprint.cpp:309
 msgid ": file does not exist!"
@@ -1042,7 +1036,7 @@ msgstr "No se puede inicializar el flujo de descompresión de zlib."
 #: ../src/common/image.cpp:1387
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
-msgstr "No se puede cargar imagen de fichero '%s': el fichero no existe."
+msgstr "No se puede cargar la imagen del fichero '%s': el fichero no existe."
 
 #: ../src/msw/registry.cpp:387
 #, c-format
