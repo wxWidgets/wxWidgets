@@ -1670,7 +1670,7 @@ test -n "$target_alias" &&
 wx_major_version_number=2
 wx_minor_version_number=6
 wx_release_number=3
-wx_subrelease_number=3
+wx_subrelease_number=4
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
 WX_VERSION=$WX_RELEASE.$wx_release_number
