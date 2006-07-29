@@ -56,7 +56,7 @@ endif
 # to correctly set the release below.
 DEBIAN_WXFLAVOUR := $(shell pwd | sed -e 's@.*/wxwidgets[0-9.]\+-\?\(.*\)-[0-9.]\+-\?.*@\1@')
 
-release   := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwidgets//p')
+release   := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwidgets//p' | sed 's/-ansi//')
 
 # This is broken completely now by bakefiles changes.  Until we add
 # some hocus pocus to the main tree, to export these values from it
@@ -115,6 +115,14 @@ ifeq ($(WX_UNICODE),1)
     PY_WX_CONFIG_OPTIONS += --unicode
     PY_UNICODE="UNICODE=1"
     wxpydir := $(pydir)/wx-$(release)-$(pytoolkit)-unicode
+
+    # for compatibility with the existing 2.6 packages, we don't use "u" in
+    # the Unicode (default) package names
+    unicode_suffix :=
+else
+    # but we do need to use something for non-Unicode packages to distinguish
+    # them
+    unicode_suffix := -ansi
 endif
 
 ifeq ($(WX_OPENGL),1)
@@ -124,13 +132,13 @@ else
 endif
 
 # Packages to build:
-package_wxbase_lib      := libwxbase$(sorelease)
-package_wxbase_dev      := libwxbase$(release)-dev
-package_wxbase_dbg      := libwxbase$(release)-dbg
+package_wxbase_lib      := libwxbase$(sorelease)$(unicode_suffix)
+package_wxbase_dev      := libwxbase$(release)$(unicode_suffix)-dev
+package_wxbase_dbg      := libwxbase$(release)$(unicode_suffix)-dbg
 
-package_gtk_lib         := libwxgtk$(sorelease)
-package_gtk_dev         := libwxgtk$(release)-dev
-package_gtk_dbg         := libwxgtk$(release)-dbg
+package_gtk_lib         := libwxgtk$(sorelease)$(unicode_suffix)
+package_gtk_dev         := libwxgtk$(release)$(unicode_suffix)-dev
+package_gtk_dbg         := libwxgtk$(release)$(unicode_suffix)-dbg
 
 
 
@@ -253,7 +261,7 @@ debian/python-version:
 	echo python_ver := python$(shell python -c "import sys;print sys.version[:3]") > $@
 
 debian/control: $(addprefix debian/,control.in python-version)
-	sed -e 's/=V/$(release)/g;s/=SOV/$(sorelease)/g;s/=PY/$(python_ver)/g'\
+	sed -e 's/=V/$(release)/g;s/=SOV/$(sorelease)/g;s/=PY/$(python_ver)/g;s/=U/$(unicode_suffix)/g'\
 		< debian/control.in > debian/control
 
 control-files-stamp: debian/control
