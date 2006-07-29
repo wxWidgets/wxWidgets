@@ -460,6 +460,7 @@ void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2)
 
 extern bool wxEnableFileNameAutoComplete(HWND hwnd)
 {
+#if wxUSE_DYNLIB_CLASS
     typedef HRESULT (WINAPI *SHAutoComplete_t)(HWND, DWORD);
 
     static SHAutoComplete_t s_pfnSHAutoComplete = NULL;
@@ -494,5 +495,9 @@ extern bool wxEnableFileNameAutoComplete(HWND hwnd)
     }
 
     return true;
+#else
+    wxUnusedVar(hwnd);
+    return false;
+#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
 }
 
