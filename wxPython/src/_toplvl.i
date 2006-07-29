@@ -174,6 +174,25 @@ public:
     virtual bool SetTransparent(byte alpha); 
     virtual bool CanSetTransparent();
 
+    
+    
+    DocDeclStr(
+        virtual wxWindow *, GetDefaultItem() const,
+        "Get the default child of this parent, i.e. the one which is activated
+by pressing <Enter> such as the OK button on a wx.Dialog.", "");
+    
+    DocDeclStr(
+        virtual wxWindow *, SetDefaultItem(wxWindow * child),
+        "Set this child as default, return the old default.", "");
+    
+    DocDeclStr(
+        virtual void , SetTmpDefaultItem(wxWindow * win),
+        "Set this child as temporary default", "");
+
+    DocDeclStr(
+        virtual wxWindow *, GetTmpDefaultItem() const,
+        "Return the temporary default item, which can be None.", "");
+       
 };
 
 

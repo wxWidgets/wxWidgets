@@ -599,6 +599,8 @@ enum {
     wxID_HELP_COMMANDS,
     wxID_HELP_PROCEDURES,
     wxID_HELP_CONTEXT,
+    wxID_HELP_INDEX,
+    wxID_HELP_SEARCH,
     wxID_CLOSE_ALL,
     wxID_PREFERENCES,
 

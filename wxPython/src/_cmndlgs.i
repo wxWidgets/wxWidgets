@@ -201,6 +201,7 @@ enum {
     wxFD_FILE_MUST_EXIST,
     wxFD_MULTIPLE,
     wxFD_CHANGE_DIR,
+    wxFD_PREVIEW,
     wxFD_DEFAULT_STYLE,
 };
 
@@ -458,7 +459,7 @@ public:
 
     DocDeclStr(
         int , GetSelection(),
-        "Get the index of teh currently selected item.", "");
+        "Get the index of the currently selected item.", "");
 
     DocDeclStr(
         wxString , GetStringSelection(),

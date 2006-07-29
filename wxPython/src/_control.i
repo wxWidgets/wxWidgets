@@ -68,6 +68,22 @@ __init__ as a plain old wx.Control is not very useful.", "");
     
 
     DocDeclStr(
+        int , GetAlignment() const,
+        "Get the control alignment (left/right/centre, top/bottom/centre)", "");
+    
+
+    DocDeclStr(
+        static wxString , GetLabelText(const wxString& label),
+        "Get the string without mnemonic characters ('&')", "");
+    
+
+    DocDeclStr(
+        wxString , GetLabelText() const,
+        "Get just the text of the label, without mnemonic characters ('&')", "");
+    
+
+    
+    DocDeclStr(
         void , Command(wxCommandEvent& event),
         "Simulates the effect of the user issuing a command to the item.
 

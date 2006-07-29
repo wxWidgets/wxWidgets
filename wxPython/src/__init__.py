@@ -52,8 +52,7 @@ if 'wxMSW' in PlatformInfo:
 import wx._core
 __docfilter__ = wx._core.__DocFilter(globals())
 
-__all__ += [name for name in dir(wx._core)
-            if not (name.startswith('__') and name.endswith('__'))]
+__all__ += [name for name in dir(wx._core) if not name.startswith('_')]
 
 
 

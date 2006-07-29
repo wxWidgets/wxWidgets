@@ -106,6 +106,13 @@ public:
     // current is NULL?
     static void DontCreateOnDemand();
 
+    // log the count of repeating messages instead of logging the messages
+    // multiple times
+    static void SetRepetitionCounting(bool bRepetCounting = true);
+
+    // gets duplicate counting status
+    static bool GetRepetitionCounting();
+
     // trace mask (see wxTraceXXX constants for details)
     static void SetTraceMask(wxTraceMask ulMask);
 

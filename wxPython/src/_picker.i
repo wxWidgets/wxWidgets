@@ -68,6 +68,16 @@ The value passed to this function must be >= 1.", "");
         int , GetTextCtrlProportion() const,
         "Returns the proportion between the text control and the picker.", "");
 
+
+    DocDeclStr(
+        void , SetPickerCtrlProportion(int prop),
+        "Sets the proportion value of the picker.", "");
+    
+    DocDeclStr(
+        int , GetPickerCtrlProportion() const,
+        "Gets the proportion value of the picker.", "");
+    
+    
     DocDeclStr(
         bool , IsTextCtrlGrowable() const,
         "", "");

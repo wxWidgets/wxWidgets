@@ -1804,6 +1804,12 @@ public:
     wxString GetRowLabelValue( int row );
     wxString GetColLabelValue( int col );
     wxColour GetGridLineColour();
+
+    virtual wxPen GetDefaultGridLinePen();
+    virtual wxPen GetRowGridLinePen(int row);
+    virtual wxPen GetColGridLinePen(int col);
+    
+    
     wxColour GetCellHighlightColour();
     int      GetCellHighlightPenWidth();
     int      GetCellHighlightROPenWidth();

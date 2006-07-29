@@ -176,6 +176,11 @@ than the corresponding dimensions of the size.", "");
         "Decrements this object so that both of its dimensions are not greater
 than the corresponding dimensions of the size.", "");
 
+    
+    DocDeclStr(
+        void , Scale(float xscale, float yscale),
+        "Scales the dimensions of this object by the given factors.", "");
+
     DocDeclStr(
         void, Set(int w, int h),
         "Set both width and height.", "");
