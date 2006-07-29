@@ -443,6 +443,12 @@ wxString wxHtmlPrintout::TranslateHeader(const wxString& instr, int page)
     num.Printf(wxT("%lu"), (unsigned long)(m_PageBreaks.Count() - 1));
     r.Replace(wxT("@PAGESCNT@"), num);
 
+    const wxDateTime now = wxDateTime::Now();
+    r.Replace(wxT("@DATE@"), now.FormatDate());
+    r.Replace(wxT("@TIME@"), now.FormatTime());
+
+    r.Replace(wxT("@TITLE@"), GetTitle());
+
     return r;
 }
 
