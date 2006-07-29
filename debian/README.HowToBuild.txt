@@ -134,7 +134,7 @@ this:
 
 To also make a set of test binaries you can do this:
 
-       fakeroot ./debian/rules binaries
+       fakeroot ./debian/rules binary
 
 To clean up from prior builds you can do this:
 
