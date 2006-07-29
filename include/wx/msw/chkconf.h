@@ -265,4 +265,15 @@
 #   endif
 #endif  /* wxUSE_DYNLIB_CLASS */
 
+#if !wxUSE_OLE
+#   if wxUSE_DATAOBJ
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_DATAOBJ requires wxUSE_OLE"
+#       else
+#           undef wxUSE_DATAOBJ
+#           define wxUSE_DATAOBJ 0
+#       endif
+#   endif
+#endif /* wxUSE_OLE */
+
 #endif /* _WX_MSW_CHKCONF_H_ */
