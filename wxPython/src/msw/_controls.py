@@ -6429,6 +6429,22 @@ class PickerBase(_core.Control):
         """
         return _controls_.PickerBase_GetTextCtrlProportion(*args, **kwargs)
 
+    def SetPickerCtrlProportion(*args, **kwargs):
+        """
+        SetPickerCtrlProportion(self, int prop)
+
+        Sets the proportion value of the picker.
+        """
+        return _controls_.PickerBase_SetPickerCtrlProportion(*args, **kwargs)
+
+    def GetPickerCtrlProportion(*args, **kwargs):
+        """
+        GetPickerCtrlProportion(self) -> int
+
+        Gets the proportion value of the picker.
+        """
+        return _controls_.PickerBase_GetPickerCtrlProportion(*args, **kwargs)
+
     def IsTextCtrlGrowable(*args, **kwargs):
         """IsTextCtrlGrowable(self) -> bool"""
         return _controls_.PickerBase_IsTextCtrlGrowable(*args, **kwargs)

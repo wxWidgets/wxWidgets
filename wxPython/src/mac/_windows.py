@@ -439,6 +439,39 @@ class TopLevelWindow(_core.Window):
         """CanSetTransparent(self) -> bool"""
         return _windows_.TopLevelWindow_CanSetTransparent(*args, **kwargs)
 
+    def GetDefaultItem(*args, **kwargs):
+        """
+        GetDefaultItem(self) -> Window
+
+        Get the default child of this parent, i.e. the one which is activated
+        by pressing <Enter> such as the OK button on a wx.Dialog.
+        """
+        return _windows_.TopLevelWindow_GetDefaultItem(*args, **kwargs)
+
+    def SetDefaultItem(*args, **kwargs):
+        """
+        SetDefaultItem(self, Window child) -> Window
+
+        Set this child as default, return the old default.
+        """
+        return _windows_.TopLevelWindow_SetDefaultItem(*args, **kwargs)
+
+    def SetTmpDefaultItem(*args, **kwargs):
+        """
+        SetTmpDefaultItem(self, Window win)
+
+        Set this child as temporary default
+        """
+        return _windows_.TopLevelWindow_SetTmpDefaultItem(*args, **kwargs)
+
+    def GetTmpDefaultItem(*args, **kwargs):
+        """
+        GetTmpDefaultItem(self) -> Window
+
+        Return the temporary default item, which can be None.
+        """
+        return _windows_.TopLevelWindow_GetTmpDefaultItem(*args, **kwargs)
+
 _windows_.TopLevelWindow_swigregister(TopLevelWindow)
 cvar = _windows_.cvar
 FrameNameStr = cvar.FrameNameStr
@@ -2200,6 +2233,7 @@ FD_OVERWRITE_PROMPT = _windows_.FD_OVERWRITE_PROMPT
 FD_FILE_MUST_EXIST = _windows_.FD_FILE_MUST_EXIST
 FD_MULTIPLE = _windows_.FD_MULTIPLE
 FD_CHANGE_DIR = _windows_.FD_CHANGE_DIR
+FD_PREVIEW = _windows_.FD_PREVIEW
 FD_DEFAULT_STYLE = _windows_.FD_DEFAULT_STYLE
 class FileDialog(Dialog):
     """
@@ -2414,7 +2448,7 @@ class SingleChoiceDialog(Dialog):
         """
         GetSelection(self) -> int
 
-        Get the index of teh currently selected item.
+        Get the index of the currently selected item.
         """
         return _windows_.SingleChoiceDialog_GetSelection(*args, **kwargs)
 

@@ -6177,6 +6177,145 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_TopLevelWindow_GetDefaultItem(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
+  wxWindow *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxTopLevelWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TopLevelWindow_GetDefaultItem" "', expected argument " "1"" of type '" "wxTopLevelWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxTopLevelWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxWindow *)((wxTopLevelWindow const *)arg1)->GetDefaultItem();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, 0); 
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TopLevelWindow_SetDefaultItem(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  wxWindow *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "child", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TopLevelWindow_SetDefaultItem",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxTopLevelWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TopLevelWindow_SetDefaultItem" "', expected argument " "1"" of type '" "wxTopLevelWindow *""'"); 
+  }
+  arg1 = reinterpret_cast< wxTopLevelWindow * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TopLevelWindow_SetDefaultItem" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxWindow *)(arg1)->SetDefaultItem(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, 0); 
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TopLevelWindow_SetTmpDefaultItem(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "win", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TopLevelWindow_SetTmpDefaultItem",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxTopLevelWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TopLevelWindow_SetTmpDefaultItem" "', expected argument " "1"" of type '" "wxTopLevelWindow *""'"); 
+  }
+  arg1 = reinterpret_cast< wxTopLevelWindow * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TopLevelWindow_SetTmpDefaultItem" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetTmpDefaultItem(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TopLevelWindow_GetTmpDefaultItem(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
+  wxWindow *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxTopLevelWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TopLevelWindow_GetTmpDefaultItem" "', expected argument " "1"" of type '" "wxTopLevelWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxTopLevelWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxWindow *)((wxTopLevelWindow const *)arg1)->GetTmpDefaultItem();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, 0); 
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *TopLevelWindow_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -30755,6 +30894,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TopLevelWindow_EnableCloseButton", (PyCFunction) _wrap_TopLevelWindow_EnableCloseButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_SetTransparent", (PyCFunction) _wrap_TopLevelWindow_SetTransparent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TopLevelWindow_CanSetTransparent", (PyCFunction)_wrap_TopLevelWindow_CanSetTransparent, METH_O, NULL},
+	 { (char *)"TopLevelWindow_GetDefaultItem", (PyCFunction)_wrap_TopLevelWindow_GetDefaultItem, METH_O, NULL},
+	 { (char *)"TopLevelWindow_SetDefaultItem", (PyCFunction) _wrap_TopLevelWindow_SetDefaultItem, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TopLevelWindow_SetTmpDefaultItem", (PyCFunction) _wrap_TopLevelWindow_SetTmpDefaultItem, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TopLevelWindow_GetTmpDefaultItem", (PyCFunction)_wrap_TopLevelWindow_GetTmpDefaultItem, METH_O, NULL},
 	 { (char *)"TopLevelWindow_swigregister", TopLevelWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Frame", (PyCFunction) _wrap_new_Frame, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreFrame", (PyCFunction)_wrap_new_PreFrame, METH_NOARGS, NULL},
@@ -33797,6 +33940,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "FD_FILE_MUST_EXIST",SWIG_From_int(static_cast< int >(wxFD_FILE_MUST_EXIST)));
   SWIG_Python_SetConstant(d, "FD_MULTIPLE",SWIG_From_int(static_cast< int >(wxFD_MULTIPLE)));
   SWIG_Python_SetConstant(d, "FD_CHANGE_DIR",SWIG_From_int(static_cast< int >(wxFD_CHANGE_DIR)));
+  SWIG_Python_SetConstant(d, "FD_PREVIEW",SWIG_From_int(static_cast< int >(wxFD_PREVIEW)));
   SWIG_Python_SetConstant(d, "FD_DEFAULT_STYLE",SWIG_From_int(static_cast< int >(wxFD_DEFAULT_STYLE)));
   SWIG_Python_SetConstant(d, "CHOICEDLG_STYLE",SWIG_From_int(static_cast< int >(wxCHOICEDLG_STYLE)));
   SWIG_Python_SetConstant(d, "TextEntryDialogStyle",SWIG_From_int(static_cast< int >(wxTextEntryDialogStyle)));

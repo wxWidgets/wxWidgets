@@ -11438,6 +11438,57 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Log_SetRepetitionCounting(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  bool arg1 = (bool) true ;
+  bool val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "bRepetCounting", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:Log_SetRepetitionCounting",kwnames,&obj0)) SWIG_fail;
+  if (obj0) {
+    ecode1 = SWIG_AsVal_bool(obj0, &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Log_SetRepetitionCounting" "', expected argument " "1"" of type '" "bool""'");
+    } 
+    arg1 = static_cast< bool >(val1);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxLog::SetRepetitionCounting(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Log_GetRepetitionCounting(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  bool result;
+  
+  if (!SWIG_Python_UnpackTuple(args,"Log_GetRepetitionCounting",0,0,0)) SWIG_fail;
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)wxLog::GetRepetitionCounting();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Log_SetTraceMask(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxTraceMask arg1 ;
@@ -36500,6 +36551,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Log_SetVerbose", (PyCFunction) _wrap_Log_SetVerbose, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Log_SetLogLevel", (PyCFunction) _wrap_Log_SetLogLevel, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Log_DontCreateOnDemand", (PyCFunction)_wrap_Log_DontCreateOnDemand, METH_NOARGS, NULL},
+	 { (char *)"Log_SetRepetitionCounting", (PyCFunction) _wrap_Log_SetRepetitionCounting, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Log_GetRepetitionCounting", (PyCFunction)_wrap_Log_GetRepetitionCounting, METH_NOARGS, NULL},
 	 { (char *)"Log_SetTraceMask", (PyCFunction) _wrap_Log_SetTraceMask, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Log_AddTraceMask", (PyCFunction) _wrap_Log_AddTraceMask, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Log_RemoveTraceMask", (PyCFunction) _wrap_Log_RemoveTraceMask, METH_VARARGS | METH_KEYWORDS, NULL},

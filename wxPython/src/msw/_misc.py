@@ -1299,6 +1299,16 @@ class Log(object):
         return _misc_.Log_DontCreateOnDemand(*args, **kwargs)
 
     DontCreateOnDemand = staticmethod(DontCreateOnDemand)
+    def SetRepetitionCounting(*args, **kwargs):
+        """SetRepetitionCounting(bool bRepetCounting=True)"""
+        return _misc_.Log_SetRepetitionCounting(*args, **kwargs)
+
+    SetRepetitionCounting = staticmethod(SetRepetitionCounting)
+    def GetRepetitionCounting(*args, **kwargs):
+        """GetRepetitionCounting() -> bool"""
+        return _misc_.Log_GetRepetitionCounting(*args, **kwargs)
+
+    GetRepetitionCounting = staticmethod(GetRepetitionCounting)
     def SetTraceMask(*args, **kwargs):
         """SetTraceMask(TraceMask ulMask)"""
         return _misc_.Log_SetTraceMask(*args, **kwargs)
@@ -1410,6 +1420,14 @@ def Log_SetLogLevel(*args, **kwargs):
 def Log_DontCreateOnDemand(*args):
   """Log_DontCreateOnDemand()"""
   return _misc_.Log_DontCreateOnDemand(*args)
+
+def Log_SetRepetitionCounting(*args, **kwargs):
+  """Log_SetRepetitionCounting(bool bRepetCounting=True)"""
+  return _misc_.Log_SetRepetitionCounting(*args, **kwargs)
+
+def Log_GetRepetitionCounting(*args):
+  """Log_GetRepetitionCounting() -> bool"""
+  return _misc_.Log_GetRepetitionCounting(*args)
 
 def Log_SetTraceMask(*args, **kwargs):
   """Log_SetTraceMask(TraceMask ulMask)"""

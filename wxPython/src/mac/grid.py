@@ -1400,6 +1400,18 @@ class Grid(_windows.ScrolledWindow):
         """GetGridLineColour(self) -> Colour"""
         return _grid.Grid_GetGridLineColour(*args, **kwargs)
 
+    def GetDefaultGridLinePen(*args, **kwargs):
+        """GetDefaultGridLinePen(self) -> wxPen"""
+        return _grid.Grid_GetDefaultGridLinePen(*args, **kwargs)
+
+    def GetRowGridLinePen(*args, **kwargs):
+        """GetRowGridLinePen(self, int row) -> wxPen"""
+        return _grid.Grid_GetRowGridLinePen(*args, **kwargs)
+
+    def GetColGridLinePen(*args, **kwargs):
+        """GetColGridLinePen(self, int col) -> wxPen"""
+        return _grid.Grid_GetColGridLinePen(*args, **kwargs)
+
     def GetCellHighlightColour(*args, **kwargs):
         """GetCellHighlightColour(self) -> Colour"""
         return _grid.Grid_GetCellHighlightColour(*args, **kwargs)

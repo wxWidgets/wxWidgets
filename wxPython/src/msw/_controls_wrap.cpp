@@ -42753,6 +42753,72 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_PickerBase_SetPickerCtrlProportion(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPickerBase *arg1 = (wxPickerBase *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "prop", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PickerBase_SetPickerCtrlProportion",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPickerBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PickerBase_SetPickerCtrlProportion" "', expected argument " "1"" of type '" "wxPickerBase *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPickerBase * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PickerBase_SetPickerCtrlProportion" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetPickerCtrlProportion(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PickerBase_GetPickerCtrlProportion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPickerBase *arg1 = (wxPickerBase *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPickerBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PickerBase_GetPickerCtrlProportion" "', expected argument " "1"" of type '" "wxPickerBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPickerBase * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxPickerBase const *)arg1)->GetPickerCtrlProportion();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_PickerBase_IsTextCtrlGrowable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPickerBase *arg1 = (wxPickerBase *) 0 ;
@@ -46294,6 +46360,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PickerBase_GetInternalMargin", (PyCFunction)_wrap_PickerBase_GetInternalMargin, METH_O, NULL},
 	 { (char *)"PickerBase_SetTextCtrlProportion", (PyCFunction) _wrap_PickerBase_SetTextCtrlProportion, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PickerBase_GetTextCtrlProportion", (PyCFunction)_wrap_PickerBase_GetTextCtrlProportion, METH_O, NULL},
+	 { (char *)"PickerBase_SetPickerCtrlProportion", (PyCFunction) _wrap_PickerBase_SetPickerCtrlProportion, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PickerBase_GetPickerCtrlProportion", (PyCFunction)_wrap_PickerBase_GetPickerCtrlProportion, METH_O, NULL},
 	 { (char *)"PickerBase_IsTextCtrlGrowable", (PyCFunction)_wrap_PickerBase_IsTextCtrlGrowable, METH_O, NULL},
 	 { (char *)"PickerBase_SetTextCtrlGrowable", (PyCFunction) _wrap_PickerBase_SetTextCtrlGrowable, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PickerBase_IsPickerCtrlGrowable", (PyCFunction)_wrap_PickerBase_IsPickerCtrlGrowable, METH_O, NULL},
