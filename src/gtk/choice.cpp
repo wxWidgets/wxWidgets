@@ -12,6 +12,7 @@
 #if wxUSE_CHOICE
 
 #include "wx/choice.h"
+#include "wx/combobox.h"
 
 #ifndef WX_PRECOMP
     #include "wx/arrstr.h"
