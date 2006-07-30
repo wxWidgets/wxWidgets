@@ -14,15 +14,6 @@
 
 #include "wx/defs.h"
 
-/*
- * wxComboBox style flags
- */
-#define wxCB_SIMPLE         0x0004
-#define wxCB_SORT           0x0008
-#define wxCB_READONLY       0x0010
-#define wxCB_DROPDOWN       0x0020
-#define wxCB_FILENAME       0x0040
-
 #if wxUSE_COMBOBOX
 
 extern WXDLLEXPORT_DATA(const wxChar) wxComboBoxNameStr[];
