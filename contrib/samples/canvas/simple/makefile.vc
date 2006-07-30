@@ -1,0 +1,14 @@
+# File:		makefile.vc for Plot sample
+# Author:	Julian Smart
+# Created:	2001-06-12
+# Updated:
+
+WXDIR = $(WXWIN)
+PROGRAM = simple
+
+OBJECTS = $(PROGRAM).obj
+EXTRALIBS = $(WXDIR)\lib\canvas$(LIBEXT).lib
+EXTRAINC = -I$(WXDIR)\contrib\include
+
+!include $(WXDIR)\src\makeprog.vc
+

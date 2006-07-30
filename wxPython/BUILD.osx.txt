@@ -1,0 +1,69 @@
+Building wxPython on Mac OS X
+-----------------------------
+
+NOTE:  OS X support is HIGHLY EXPERIMENTAL at this time.  Most things
+       don't work correctly (or at all) yet.
+
+These are the steps I have used for building wxPython on Mac OS X 10.1
+with the Apple Developer Tools, a.k.a the Darwin version.  I assume
+that you know your way around a command line and that you know how to
+get things from various CVS repositories as needed.
+
+
+1. As of this writing the CVS version of Python (2.2b1+) is required.
+   You can get it via anonymous CVS from the Python project at
+   Sourceforge.  Build Python.app and install it as described in the
+   Mac/OSX/README file in the Python distribution.
+
+2. You may want to make a symlink or two in /usr/local/bin so that
+   this version of Python can be found from the command line.  For
+   example:
+
+        cd /usr/local/bin
+	sudo ln -s /Library/Frameworks/Python.framework/Versions/2.2/bin/python2.2.exe python2.2
+        sudo ln -s python2.2 python
+
+3. In a wxWindows CVS tree make a build directory.
+
+	cd ~/proj/wxWindows	# or wherever you put it
+	mkdir build
+
+4. Run configure from that build directory.
+
+        cd build
+	../configure --with-mac --with-opengl --enable-debug
+
+5. Make and install wxMac.
+
+	make
+	sudo make install
+
+6. Build wxPython for testing (without installing it.)
+
+	cd ../wxPython
+	python setup.py IN_CVS_TREE=1 build_ext --inplace --debug
+
+7. Test.  The easiest way to do this from the CVS tree (witout having
+   to reinstall after every build) is to make a symlink in the demo
+   directory to the wxPython package dir, and then run stuff directly
+   from the demo.
+
+	cd demo
+	ln -s ../wxPython .
+
+8. Now just navigate in the Finder to the demo directory and double
+   click demo.py, or simple.py, or whatever you want to run.
+   (Unfortunately it can't be done from the commandline in a terminal
+   window.  You can open the Console app to see any tracebacks or
+   other output.)
+
+9. Figure out what's wrong, figure out how to fix it, and then send
+   the patches to me.  <wink>
+
+--Robin
+
+
+
+
+
+

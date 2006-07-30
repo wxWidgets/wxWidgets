@@ -1,0 +1,18 @@
+#
+# File:  makefile.b32
+# Author: Julian Smart
+# Created: 1999
+# Updated:
+# Copyright:
+#
+# Makefile : Builds convert for 32-bit BC++
+
+WXDIR = $(WXWIN)
+EXTRALIBS=$(WXDIR)\lib\wxxrc.lib $(WXDIR)\lib\wxdeprecated.lib
+
+TARGET=wxconvert
+
+OBJECTS=convert.obj rc2xml.obj rc2wxr.obj wxr2xml.obj
+
+!include $(WXDIR)\src\makeprog.b32
+

@@ -1,0 +1,85 @@
+\section{wx\-Auto\-Ole\-Interface$<$ I $>$ Class Template Reference}
+\label{classwxAutoOleInterface}\index{wxAutoOleInterface@{wxAutoOleInterface}}
+{\tt \#include $<$wxactivex.h$>$}
+
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class I$>$ class wx\-Auto\-Ole\-Interface$<$ I $>$}
+
+Template class for smart interface handling.
+
+\begin{itemize}
+\item Automatically dereferences ole interfaces\item Smart Copy Semantics\item Can Create Interfaces\item Can query for other interfaces \end{itemize}
+
+
+
+
+Definition at line 45 of file wxactivex.h.\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+\index{wxAutoOleInterface@{wxAutoOleInterface}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!wxAutoOleInterface@{wxAutoOleInterface}}
+{\bf wx\-Auto\-Ole\-Interface} (I $\ast$p\-Interface=NULL)\label{classwxAutoOleInterface_a0}
+
+\begin{CompactList}\small\item\em takes ownership of an existing interface Assumed to already have a Add\-Ref() applied\item\end{CompactList}\item 
+\index{wxAutoOleInterface@{wxAutoOleInterface}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!wxAutoOleInterface@{wxAutoOleInterface}}
+{\bf wx\-Auto\-Ole\-Interface} (REFIID riid, IUnknown $\ast$p\-Unk)\label{classwxAutoOleInterface_a1}
+
+\begin{CompactList}\small\item\em queries for an interface\item\end{CompactList}\item 
+\index{wxAutoOleInterface@{wxAutoOleInterface}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!wxAutoOleInterface@{wxAutoOleInterface}}
+{\bf wx\-Auto\-Ole\-Interface} (REFIID riid, IDispatch $\ast$p\-Dispatch)\label{classwxAutoOleInterface_a2}
+
+\begin{CompactList}\small\item\em queries for an interface\item\end{CompactList}\item 
+\index{wxAutoOleInterface@{wxAutoOleInterface}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!wxAutoOleInterface@{wxAutoOleInterface}}
+{\bf wx\-Auto\-Ole\-Interface} (REFCLSID clsid, REFIID riid)\label{classwxAutoOleInterface_a3}
+
+\begin{CompactList}\small\item\em Creates an Interface.\item\end{CompactList}\item 
+\index{wxAutoOleInterface@{wxAutoOleInterface}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!wxAutoOleInterface@{wxAutoOleInterface}}
+{\bf wx\-Auto\-Ole\-Interface} (const wx\-Auto\-Ole\-Interface$<$ I $>$ \&ti)\label{classwxAutoOleInterface_a4}
+
+\begin{CompactList}\small\item\em copy constructor\item\end{CompactList}\item 
+\index{operator=@{operator=}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!operator=@{operator=}}
+wx\-Auto\-Ole\-Interface$<$ I $>$ \& {\bf operator=} (const wx\-Auto\-Ole\-Interface$<$ I $>$ \&ti)\label{classwxAutoOleInterface_a5}
+
+\begin{CompactList}\small\item\em assignment operator\item\end{CompactList}\item 
+\index{operator=@{operator=}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!operator=@{operator=}}
+wx\-Auto\-Ole\-Interface$<$ I $>$ \& {\bf operator=} (I $\ast$\&ti)\label{classwxAutoOleInterface_a6}
+
+\begin{CompactList}\small\item\em takes ownership of an existing interface Assumed to already have a Add\-Ref() applied\item\end{CompactList}\item 
+\index{~wxAutoOleInterface@{$\sim$wxAutoOleInterface}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!~wxAutoOleInterface@{$\sim$wxAutoOleInterface}}
+{\bf $\sim$wx\-Auto\-Ole\-Interface} ()\label{classwxAutoOleInterface_a7}
+
+\begin{CompactList}\small\item\em invokes {\bf Free()}\item\end{CompactList}\item 
+\index{Free@{Free}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!Free@{Free}}
+void {\bf Free} ()\label{classwxAutoOleInterface_a8}
+
+\begin{CompactList}\small\item\em Releases interface (i.e decrements ref\-Count).\item\end{CompactList}\item 
+\index{QueryInterface@{QueryInterface}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!QueryInterface@{QueryInterface}}
+HRESULT {\bf Query\-Interface} (REFIID riid, IUnknown $\ast$p\-Unk)\label{classwxAutoOleInterface_a9}
+
+\begin{CompactList}\small\item\em queries for an interface\item\end{CompactList}\item 
+\index{CreateInstance@{CreateInstance}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!CreateInstance@{CreateInstance}}
+HRESULT {\bf Create\-Instance} (REFCLSID clsid, REFIID riid)\label{classwxAutoOleInterface_a10}
+
+\begin{CompactList}\small\item\em Create a Interface instance.\item\end{CompactList}\item 
+\index{operator I *@{operator I $\ast$}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!operator I *@{operator I $\ast$}}
+{\bf operator I $\ast$} () const\label{classwxAutoOleInterface_a11}
+
+\begin{CompactList}\small\item\em returns the interface pointer\item\end{CompactList}\item 
+\index{operator->@{operator-$>$}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!operator->@{operator-$>$}}
+I $\ast$ {\bf operator $\rightarrow$ } ()\label{classwxAutoOleInterface_a12}
+
+\begin{CompactList}\small\item\em returns the dereferenced interface pointer\item\end{CompactList}\item 
+\index{GetRef@{GetRef}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!GetRef@{GetRef}}
+I $\ast$$\ast$ {\bf Get\-Ref} ()\label{classwxAutoOleInterface_a13}
+
+\begin{CompactList}\small\item\em returns a pointer to the interface pointer\item\end{CompactList}\item 
+\index{Ok@{Ok}!wxAutoOleInterface@{wxAutoOleInterface}}\index{wxAutoOleInterface@{wxAutoOleInterface}!Ok@{Ok}}
+bool {\bf Ok} () const\label{classwxAutoOleInterface_a14}
+
+\begin{CompactList}\small\item\em returns true if we have a valid interface pointer\item\end{CompactList}\end{CompactItemize}
+
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+{\bf wxactivex.h}\end{CompactItemize}

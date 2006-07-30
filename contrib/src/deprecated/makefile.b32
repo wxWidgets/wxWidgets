@@ -1,0 +1,24 @@
+#
+# File:		makefile.b32
+# Author:	Julian Smart
+# Created:	1999
+# Updated:	
+# Copyright:
+#
+# Makefile : Builds Deprecated library for 32-bit BC++
+
+WXDIR = $(WXWIN)
+
+LIBTARGET=$(WXDIR)\lib\wxdeprecated.lib
+
+OBJECTS = prop.obj propform.obj proplist.obj y_tab.obj wxexpr.obj resource.obj treelay.obj
+
+!include $(WXDIR)\src\makelib.b32
+
+y_tab.c:     dosyacc.c
+        copy dosyacc.c y_tab.c
+
+lex_yy.c:    doslex.c
+        copy doslex.c lex_yy.c
+
+

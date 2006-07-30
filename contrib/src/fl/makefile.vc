@@ -1,0 +1,109 @@
+#
+# File:         makefile.vc
+# Author:       Hans Van Leemputten
+# Created:      2001
+# Updated:
+# Copyright:    (c) wxWorkshop team, 2001
+#
+# Makefile for wxWindows FrameLayout library (Microsoft VC++)
+# Use FINAL=1 argument to nmake to build final version with no debug info.
+
+WXDIR = ..\..\..
+LIB_NAME = fl
+OBJ_EXT	= obj
+
+!include files.lst
+
+!if "$(FINAL)" == "1"
+LIBTARGET=$(WXDIR)\lib\$(LIB_NAME).lib
+!else
+LIBTARGET=$(WXDIR)\lib\$(LIB_NAME)d.lib
+!endif
+
+OBJECTS = $(FL_OBJECTS)
+
+!include $(WXWIN)\src\makelib.vc
+
+DOCSOURCEDIR=$(WXDIR)\contrib\docs\latex\fl
+DOCDIR=$(WXDIR)\docs
+THISDIR = $(WXDIR)\contrib\src\fl
+DOCSOURCES=$(DOCSOURCEDIR)\fl.tex \
+ $(DOCSOURCEDIR)\classes.tex $(DOCSOURCEDIR)\topics.tex
+
+alldocs: mkdirs html htmlhelp htb hlp pdfrtf
+html: $(DOCDIR)\html\fl\fl.htm
+htmlhelp: $(DOCDIR)\htmlhelp\fl.chm
+htb:	$(DOCDIR)\htb\fl.htb
+hlp: $(DOCDIR)\winhelp\fl.hlp
+pdfrtf: $(DOCDIR)\pdf\fl.rtf
+ps: $(DOCDIR)\ps\fl.ps
+
+touchmanual:
+	touch $(DOCSOURCEDIR)\fl.tex
+
+$(DOCDIR)\winhelp\fl.hlp:         $(DOCSOURCEDIR)\fl.rtf $(DOCSOURCEDIR)\fl.hpj
+        cd $(DOCSOURCEDIR)
+        -erase fl.ph
+        hc fl
+        move fl.hlp $(DOCDIR)\winhelp\fl.hlp
+        move fl.cnt $(DOCDIR)\winhelp\fl.cnt
+        cd $(THISDIR)
+
+$(DOCSOURCEDIR)\fl.rtf: $(DOCSOURCES)
+        cd $(DOCSOURCEDIR)
+        -start $(WAITFLAG) tex2rtf $(DOCSOURCEDIR)\fl.tex $(DOCSOURCEDIR)\fl.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)\pdf\fl.rtf: $(DOCSOURCES)
+        cd $(DOCSOURCEDIR)
+        -copy *.bmp $(DOCDIR)\pdf
+        -start $(WAITFLAG) tex2rtf $(DOCSOURCEDIR)\fl.tex $(DOCDIR)\pdf\fl.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\fl\fl.htm:         $(DOCSOURCES)
+        cd $(DOCSOURCEDIR)
+        -mkdir $(DOCDIR)\html\fl
+        copy *.gif $(DOCDIR)\html\fl
+        -start $(WAITFLAG) tex2rtf $(DOCSOURCEDIR)\fl.tex $(DOCDIR)\html\fl\fl.htm -twice -html
+        -erase $(DOCDIR)\html\fl\*.con
+        -erase *.con
+        -erase $(DOCDIR)\html\fl\*.ref
+        cd $(THISDIR)
+
+$(DOCDIR)\htmlhelp\fl.chm: $(DOCDIR)\html\fl\fl.htm $(DOCDIR)\html\fl\fl.hhp
+	cd $(DOCDIR)\html\fl
+	-hhc fl.hhp
+    -erase $(DOCDIR)\htmlhelp\fl.chm
+    move fl.chm $(DOCDIR)\htmlhelp\fl.chm
+	cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\fl.htb: $(DOCDIR)\html\fl\fl.htm
+	cd $(DOCDIR)\html\fl
+    -erase fl.zip fl.htb
+    zip fl.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    -erase $(DOCDIR)\htb\fl.htb
+    -erase $(DOCDIR)\htb\fl.htb
+    move fl.zip $(DOCDIR)\htb\fl.htb
+    cd $(THISDIR)
+
+$(DOCSOURCEDIR)\fl.dvi:	$(DOCSOURCES)
+	cd $(DOCSOURCEDIR)
+        -latex fl
+        -latex fl
+        -makeindx fl
+        -bibtex fl
+        -latex fl
+        -latex fl
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\fl.ps:	$(DOCSOURCEDIR)\fl.dvi
+	cd $(DOCSOURCEDIR)
+        -dvips32 -o fl.ps fl
+        move fl.ps $(WXDIR)\docs\ps\fl.ps
+        cd $(THISDIR)
+

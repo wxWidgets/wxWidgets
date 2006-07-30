@@ -1,0 +1,14 @@
+Modules subdir, more info later...
+
+stubs contains a template for new modules.
+
+html, lseditor are more or less usuable.
+
+glcanvas is moved from the main src directory.
+
+Note, there are no SWIG generated files in CVS yet. I don't expect them to
+be useful at this stage, since you can't hack this stuff without a working &
+patched up SWIG anyway. Besides, those big files really bog down my phone
+line.
+
+Harm van der Heijden, Aug 11, 1999.

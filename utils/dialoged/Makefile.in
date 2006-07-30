@@ -1,0 +1,9 @@
+
+USE_RESOURCES=@USE_RESOURCES@
+
+all:
+	if test "$(USE_RESOURCES)" = "yes"; then cd src; $(MAKE); fi
+
+clean:
+	cd src; $(MAKE) clean
+

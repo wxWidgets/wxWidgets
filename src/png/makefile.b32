@@ -1,0 +1,71 @@
+#
+# File:		makefile.b32
+# Author:	Julian Smart
+# Created:	1993
+# Updated:
+# Copyright:
+#
+# "%W% %G%"
+#
+# Makefile : Builds PNG library (BC++ 32-bit)
+
+# WXWIN and BCCDIR are set by parent make
+
+
+WXWIN=..\..
+LIBTARGET=png
+
+!include ..\makeb32.env
+
+OBJECTS = $(OBJ_PATH)\png.obj \
+	$(OBJ_PATH)\pngread.obj \
+	$(OBJ_PATH)\pngrtran.obj \
+	$(OBJ_PATH)\pngrutil.obj \
+	$(OBJ_PATH)\pngpread.obj \
+	$(OBJ_PATH)\pngtrans.obj \
+	$(OBJ_PATH)\pngwrite.obj \
+	$(OBJ_PATH)\pngwtran.obj \
+	$(OBJ_PATH)\pngwutil.obj \
+	$(OBJ_PATH)\pngerror.obj \
+	$(OBJ_PATH)\pngmem.obj \
+	$(OBJ_PATH)\pngwio.obj \
+	$(OBJ_PATH)\pngrio.obj \
+	$(OBJ_PATH)\pngget.obj \
+	$(OBJ_PATH)\pngset.obj
+
+# Precompiled headers seem to interfere with correct compilation
+# of png library, so switch them off
+EXTRACPPFLAGS=-H-
+
+
+$(OBJ_PATH)\png.obj: png.c
+
+$(OBJ_PATH)\pngread.obj: pngread.c
+
+$(OBJ_PATH)\pngrtran.obj: pngrtran.c
+
+$(OBJ_PATH)\pngrutil.obj: pngrutil.c
+
+$(OBJ_PATH)\pngpread.obj: pngpread.c
+
+$(OBJ_PATH)\pngtrans.obj: pngtrans.c
+
+$(OBJ_PATH)\pngwrite.obj: pngwrite.c
+
+$(OBJ_PATH)\pngwtran.obj: pngwtran.c
+
+$(OBJ_PATH)\pngwutil.obj: pngwutil.c
+
+$(OBJ_PATH)\pngerror.obj: pngerror.c
+
+$(OBJ_PATH)\pngmem.obj: pngmem.c
+
+$(OBJ_PATH)\pngwio.obj: pngwio.c
+
+$(OBJ_PATH)\pngrio.obj: pngrio.c
+
+$(OBJ_PATH)\pngget.obj: pngget.c
+
+$(OBJ_PATH)\pngset.obj: pngset.c
+
+!include ..\makelib.b32

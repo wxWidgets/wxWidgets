@@ -1,0 +1,18 @@
+
+ifeq ($(WXWIN),)
+WXWIN=../..
+endif
+
+include $(WXWIN)/src/makelib.g95
+
+LIBTARGET=$(WXWIN)/lib/libregex$(MIN_SUFFIX).a
+
+OBJECTS= \
+		regcomp.o \
+		regexec.o \
+		regerror.o \
+		regfree.o
+
+# Pull in standard variable definitions
+
+include $(WXWIN)/src/makelib.g95

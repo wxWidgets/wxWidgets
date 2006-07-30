@@ -1,0 +1,16 @@
+
+To do
+-----
+
+Nov 26th 1995
+
+ - Add wxPropertyView::OnPropertyChange(wxProperty *property) member
+   so that when a property is changed, this can be immediately
+   reflected in the object. Derive a new wxPropertyListView
+   in dialoged.
+   
+ - Make the property list a modeless dialog or (preferably) resizeable
+   frame. Allow many property lists to be up at once. Associate
+   real window, resource and property list. When window is deleted,
+   delete property list.
+ 

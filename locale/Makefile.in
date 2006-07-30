@@ -1,0 +1,56 @@
+# this is the makefile for generating wxstd.po message catalog file and
+# building lang.mo files from the translated lang.po catalogs
+
+# this makefile may be invoked to build either wxstd.po or any lang.mo
+
+# Autodetect the languages we support.  Currently this relies on make
+# being called with this dir as the cwd, but if we generate this file
+# with configure an explicit path should be specified -- RL.
+
+WX_LINGUAS := `cd @srcdir@ ; ls *.po 2> /dev/null | sed -n 's/\(wxstd\)\?\.po//p'`
+LINGUAS_TARGETS := $(shell cd @srcdir@ ; ls *.po 2> /dev/null | sed -e 's/wxstd\.po//' | sed -e 's/po/mo/')
+
+# the programs we use (TODO: use configure to detect them)
+MSGFMT=msgfmt --verbose
+MSGMERGE=msgmerge
+XGETTEXT=xgettext
+XARGS=xargs
+
+# common xgettext args: C++ syntax, use the specified macro names as markers
+XGETTEXT_ARGS=-C -k_ -kwxGetTranslation -kwxTRANSLATE -s -j
+
+# default target
+all: allmo
+
+clean:
+	$(RM) $(LINGUAS_TARGETS)
+
+# implicit rules
+%.mo: @srcdir@/%.po
+	$(MSGFMT) -o $@ $<
+
+# a PO file must be updated from wxstd.po to include new translations
+@srcdir@/%.po: @srcdir@/wxstd.po
+	if [ -f $@ ]; then $(MSGMERGE) $@ @srcdir@/wxstd.po > $@.new && mv $@.new $@; else cp @srcdir@/wxstd.po $@; fi
+
+@srcdir@/wxstd.po:
+	touch $@
+	find @top_srcdir@/include -name "*.h" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o $@
+	find @top_srcdir@/src -name "*.cpp" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o $@
+	find @top_srcdir@/contrib/include -name "*.h" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o $@
+	find @top_srcdir@/contrib/src -name "*.cpp" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o $@
+
+allpo: force-update
+	@-for t in $(WX_LINGUAS); do $(MAKE) @srcdir@/$$t.po; done
+
+allmo: $(LINGUAS_TARGETS)
+
+force-update:
+	$(RM) @srcdir@/wxstd.po
+
+# targets depending on this one will be always remade
+FORCE:
+
+.PHONY: all allpo allmo force-update
+
+# $Id$

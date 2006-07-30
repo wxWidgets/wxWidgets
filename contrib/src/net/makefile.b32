@@ -1,0 +1,25 @@
+#
+# File:		makefile.b32
+# Author:	Julian Smart
+# Created:	1999
+# Updated:	
+# Copyright:
+#
+# Makefile : Builds Net library for 32-bit BC++
+
+WXDIR = $(WXWIN)
+
+LIBTARGET=net
+
+!include $(WXDIR)\src\makeb32.env
+
+OBJECTS = \
+	$(OBJ_PATH)\smapi.obj \
+	$(OBJ_PATH)\email.obj \
+	$(OBJ_PATH)\web.obj
+
+!include $(WXDIR)\src\makelib.b32
+
+$(OBJ_PATH)\smapi.obj : smapi.cpp
+$(OBJ_PATH)\email.obj : email.cpp
+$(OBJ_PATH)\web.obj : web.cpp

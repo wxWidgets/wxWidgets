@@ -1,0 +1,29 @@
+static char *dialog1 = "dialog(name = 'dialog1',\
+  style = 'wxRAISED_BORDER | wxCAPTION | wxTHICK_FRAME | wxSYSTEM_MENU',\
+  title = 'Installing wxInstall 0.1',\
+  id = 100,\
+  x = 10, y = 10, width = 264, height = 179,\
+  background_colour = 'D4D0C8',\
+  use_dialog_units = 1,\
+  use_system_defaults = 0,\
+  font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Shell Dlg'],\
+  control = [101, wxButton, 'Exit Installer', '0', 'button2', 5, 160, 60, 14, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Shell Dlg']],\
+  control = [102, wxButton, '<< Back', 'wxNO_BORDER', 'button3', 165, 160, 44, 14, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Shell Dlg']],\
+  control = [103, wxButton, 'Start', '0', 'button4', 209, 160, 44, 14, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Shell Dlg']],\
+  control = [104, wxStaticBitmap, '', 'wxNO_BORDER', 'static5', 9, 8, 60, 144, 'bitmap9',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Shell Dlg']],\
+  control = [105, wxStaticText, 'Ready to begin installation.', '0', 'statictext10', 81, 12, 164, 10, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Shell Dlg']],\
+  control = [6002, wxStaticText, 'Thanks for trying wxInstall.  Feel free to contact me at', '0', 'statictext2', 80, 27, 172, 10, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
+  control = [6003, wxStaticText, 'dbsoft@technologist.com with comments questions or bug reports.', '0', 'statictext3', 80, 36, 181, 6, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Shell Dlg']],\
+  control = [6004, wxButton, 'View Readme', '0', 'button5', 84, 81, 162, 15, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Shell Dlg']]).";
+
+static char *bitmap9 = "bitmap(name = 'bitmap9',\
+  bitmap = ['install.bmp', wxBITMAP_TYPE_BMP, 'ANY']).";
+

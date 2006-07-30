@@ -1,0 +1,15 @@
+# File:     makefile.g95 for Plot demo
+# Author:	Julian Smart
+# Created:	2001-06-12
+# Updated:
+
+WXDIR = ../../..
+
+TARGET = plot
+OBJECTS = $(TARGET).o
+EXTRAINC = -I$(WXDIR)/contrib/include
+RCEXTRAINC = --include-dir $(WXDIR)/contrib/include
+EXTRALIBS = -lplot
+
+include $(WXDIR)/src/makeprog.g95
+

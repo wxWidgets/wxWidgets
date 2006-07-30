@@ -1,0 +1,16 @@
+# Other names that need to be reverse-renamed for the old namespace
+
+PyTimer
+PyDropTarget
+
+#SystemSettings_GetSystemColour
+#SystemSettings_GetSystemFont
+#SystemSettings_GetSystemMetric
+
+TheClipboard
+
+# With the * on the end these will cause code to be added that 
+# will scan for other names in the source module tha have the
+# given prefix and will put a reference in the local module.
+
+

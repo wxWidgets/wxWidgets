@@ -1,0 +1,345 @@
+LIBRARY OS2JPEG INITINSTANCE TERMINSTANCE
+PROTMODE
+DATA MULTIPLE NONSHARED READWRITE LOADONCALL
+CODE LOADONCALL
+
+EXPORTS
+;From library:  H:\Dev\wx24\WxWindows\lib\os2jpeg.lib
+  ;From object file:  ..\jpeg\jcomapi.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_destroy
+      jpeg_abort
+      jpeg_alloc_huff_table
+      jpeg_alloc_quant_table
+  ;From object file:  ..\jpeg\jutils.c
+    ;PUBDEFs (Symbols available from object file):
+      jdiv_round_up
+      jzero_far
+      jround_up
+      jcopy_block_row
+      jcopy_sample_rows
+      jpeg_natural_order
+  ;From object file:  ..\jpeg\jerror.c
+    ;PUBDEFs (Symbols available from object file):
+      format_message
+      error_exit
+      reset_error_mgr
+      output_message
+      emit_message
+      jpeg_std_error
+  ;From object file:  ..\jpeg\jmemmgr.c
+    ;PUBDEFs (Symbols available from object file):
+      alloc_small
+      self_destruct
+      jinit_memory_mgr
+      realize_virt_arrays
+      alloc_sarray
+      access_virt_sarray
+      free_pool
+      request_virt_barray
+      alloc_large
+      alloc_barray
+      request_virt_sarray
+      access_virt_barray
+  ;From object file:  ..\jpeg\jmemnobs.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_free_large
+      jpeg_mem_term
+      jpeg_mem_available
+      jpeg_mem_init
+      jpeg_open_backing_store
+      jpeg_get_small
+      jpeg_free_small
+      jpeg_get_large
+  ;From object file:  ..\jpeg\jcapimin.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_write_marker
+      jpeg_destroy_compress
+      jpeg_abort_compress
+      jpeg_write_m_byte
+      jpeg_suppress_tables
+      jpeg_write_tables
+      jpeg_write_m_header
+      jpeg_CreateCompress
+      jpeg_finish_compress
+  ;From object file:  ..\jpeg\jcapistd.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_write_raw_data
+      jpeg_start_compress
+      jpeg_write_scanlines
+  ;From object file:  ..\jpeg\jctrans.c
+    ;PUBDEFs (Symbols available from object file):
+      start_pass_coef2
+      jpeg_write_coefficients
+      jpeg_copy_critical_parameters
+      compress_output2
+  ;From object file:  ..\jpeg\jcparam.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_set_quality
+      jpeg_set_colorspace
+      jpeg_simple_progression
+      jpeg_default_colorspace
+      jpeg_set_defaults
+      jpeg_add_quant_table
+      jpeg_set_linear_quality
+      jpeg_quality_scaling
+  ;From object file:  ..\jpeg\jdatadst.c
+    ;PUBDEFs (Symbols available from object file):
+      empty_output_buffer
+      term_destination
+      jpeg_stdio_dest
+      init_destination
+  ;From object file:  ..\jpeg\jcinit.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_compress_master
+  ;From object file:  ..\jpeg\jcmaster.c
+    ;PUBDEFs (Symbols available from object file):
+      pass_startup
+      prepare_for_pass
+      jinit_c_master_control
+      finish_pass_master
+  ;From object file:  ..\jpeg\jcmarker.c
+    ;PUBDEFs (Symbols available from object file):
+      write_tables_only
+      write_marker_header
+      jinit_marker_writer
+      write_marker_byte
+      write_frame_header
+      write_file_trailer
+      write_file_header
+      write_scan_header
+  ;From object file:  ..\jpeg\jcmainct.c
+    ;PUBDEFs (Symbols available from object file):
+      process_data_simple_main
+      jinit_c_main_controller
+      start_pass_main
+  ;From object file:  ..\jpeg\jcprepct.c
+    ;PUBDEFs (Symbols available from object file):
+      start_pass_prep
+      jinit_c_prep_controller
+      pre_process_data
+      pre_process_context
+  ;From object file:  ..\jpeg\jccoefct.c
+    ;PUBDEFs (Symbols available from object file):
+      start_pass_coef
+      compress_data
+      jinit_c_coef_controller
+      compress_first_pass
+      compress_output
+  ;From object file:  ..\jpeg\jccolor.c
+    ;PUBDEFs (Symbols available from object file):
+      null_convert
+      null_method
+      rgb_ycc_start
+      cmyk_ycck_convert
+      rgb_gray_convert
+      jinit_color_converter
+      grayscale_convert
+      rgb_ycc_convert
+  ;From object file:  ..\jpeg\jcsample.c
+    ;PUBDEFs (Symbols available from object file):
+      start_pass_downsample
+      int_downsample
+      h2v2_downsample
+      jinit_downsampler
+      fullsize_downsample
+      sep_downsample
+      h2v2_smooth_downsample
+      h2v1_downsample
+      fullsize_smooth_downsample
+  ;From object file:  ..\jpeg\jchuff.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_make_c_derived_tbl
+      finish_pass_gather
+      jinit_huff_encoder
+      encode_mcu_huff
+      start_pass_huff
+      finish_pass_huff
+      encode_mcu_gather
+      jpeg_gen_optimal_table
+  ;From object file:  ..\jpeg\jcphuff.c
+    ;PUBDEFs (Symbols available from object file):
+      encode_mcu_AC_first
+      encode_mcu_AC_refine
+      finish_pass_phuff
+      encode_mcu_DC_first
+      encode_mcu_DC_refine
+      finish_pass_gather_phuff
+      jinit_phuff_encoder
+      start_pass_phuff
+  ;From object file:  ..\jpeg\jcdctmgr.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_forward_dct
+      start_pass_fdctmgr
+      forward_DCT
+      forward_DCT_float
+  ;From object file:  ..\jpeg\jfdctfst.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_fdct_ifast
+  ;From object file:  ..\jpeg\jfdctflt.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_fdct_float
+  ;From object file:  ..\jpeg\jfdctint.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_fdct_islow
+  ;From object file:  ..\jpeg\jdapimin.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_has_multiple_scans
+      jpeg_finish_decompress
+      jpeg_read_header
+      jpeg_input_complete
+      jpeg_consume_input
+      jpeg_CreateDecompress
+      jpeg_destroy_decompress
+      jpeg_abort_decompress
+  ;From object file:  ..\jpeg\jdapistd.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_start_output
+      jpeg_read_raw_data
+      jpeg_start_decompress
+      jpeg_read_scanlines
+      jpeg_finish_output
+  ;From object file:  ..\jpeg\jdtrans.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_read_coefficients
+  ;From object file:  ..\jpeg\jdatasrc.c
+    ;PUBDEFs (Symbols available from object file):
+      fill_input_buffer
+      skip_input_data
+      term_source
+      jpeg_stdio_src
+      init_source
+  ;From object file:  ..\jpeg\jdmaster.c
+    ;PUBDEFs (Symbols available from object file):
+      prepare_for_output_pass
+      jpeg_calc_output_dimensions
+      finish_output_pass
+      jpeg_new_colormap
+      jinit_master_decompress
+  ;From object file:  ..\jpeg\jdinput.c
+    ;PUBDEFs (Symbols available from object file):
+      reset_input_controller
+      start_input_pass
+      jinit_input_controller
+      finish_input_pass
+      consume_markers
+  ;From object file:  ..\jpeg\jdmarker.c
+    ;PUBDEFs (Symbols available from object file):
+      read_restart_marker
+      reset_marker_reader
+      read_markers
+      jpeg_resync_to_restart
+      jpeg_save_markers
+      get_interesting_appn
+      save_marker
+      jpeg_set_marker_processor
+      skip_variable
+      jinit_marker_reader
+  ;From object file:  ..\jpeg\jdhuff.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_huff_decode
+      jpeg_fill_bit_buffer
+      jpeg_make_d_derived_tbl
+      start_pass_huff_decoder
+      jinit_huff_decoder
+      decode_mcu
+  ;From object file:  ..\jpeg\jdphuff.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_phuff_decoder
+      start_pass_phuff_decoder
+      decode_mcu_DC_first
+      decode_mcu_AC_first
+      decode_mcu_DC_refine
+      decode_mcu_AC_refine
+  ;From object file:  ..\jpeg\jdmainct.c
+    ;PUBDEFs (Symbols available from object file):
+      process_data_crank_post
+      start_pass_main2
+      process_data_simple_main2
+      process_data_context_main
+      jinit_d_main_controller
+  ;From object file:  ..\jpeg\jdcoefct.c
+    ;PUBDEFs (Symbols available from object file):
+      decompress_data
+      decompress_smooth_data
+      start_input_pass2
+      decompress_onepass
+      dummy_consume_data
+      consume_data
+      jinit_d_coef_controller
+      start_output_pass
+  ;From object file:  ..\jpeg\jdpostct.c
+    ;PUBDEFs (Symbols available from object file):
+      start_pass_dpost
+      post_process_prepass
+      jinit_d_post_controller
+      post_process_1pass
+      post_process_2pass
+  ;From object file:  ..\jpeg\jddctmgr.c
+    ;PUBDEFs (Symbols available from object file):
+      jinit_inverse_dct
+      start_pass
+  ;From object file:  ..\jpeg\jidctfst.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_idct_ifast
+  ;From object file:  ..\jpeg\jidctflt.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_idct_float
+  ;From object file:  ..\jpeg\jidctint.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_idct_islow
+  ;From object file:  ..\jpeg\jidctred.c
+    ;PUBDEFs (Symbols available from object file):
+      jpeg_idct_4x4
+      jpeg_idct_1x1
+      jpeg_idct_2x2
+  ;From object file:  ..\jpeg\jdsample.c
+    ;PUBDEFs (Symbols available from object file):
+      noop_upsample
+      int_upsample
+      start_pass_upsample
+      sep_upsample
+      h2v1_upsample
+      jinit_upsampler
+      fullsize_upsample
+      h2v2_upsample
+      h2v1_fancy_upsample
+      h2v2_fancy_upsample
+  ;From object file:  ..\jpeg\jdcolor.c
+    ;PUBDEFs (Symbols available from object file):
+      gray_rgb_convert
+      start_pass_dcolor
+      null_convert2
+      ycc_rgb_convert
+      ycck_cmyk_convert
+      grayscale_convert2
+      jinit_color_deconverter
+  ;From object file:  ..\jpeg\jquant1.c
+    ;PUBDEFs (Symbols available from object file):
+      start_pass_1_quant
+      new_color_map_1_quant
+      quantize3_ord_dither
+      quantize_fs_dither
+      color_quantize3
+      quantize_ord_dither
+      jinit_1pass_quantizer
+      finish_pass_1_quant
+      color_quantize
+  ;From object file:  ..\jpeg\jquant2.c
+    ;PUBDEFs (Symbols available from object file):
+      prescan_quantize
+      start_pass_2_quant
+      pass2_no_dither
+      new_color_map_2_quant
+      finish_pass1
+      pass2_fs_dither
+      finish_pass2
+      jinit_2pass_quantizer
+  ;From object file:  ..\jpeg\jdmerge.c
+    ;PUBDEFs (Symbols available from object file):
+      start_pass_merged_upsample
+      merged_1v_upsample
+      h2v1_merged_upsample
+      merged_2v_upsample
+      jinit_merged_upsampler
+      h2v2_merged_upsample

@@ -1,0 +1,12 @@
+mondrian ICON "mondrian.ico"
+#include "wx/msw/wx.rc"
+
+new BITMAP "bitmaps/new.bmp"
+open BITMAP "bitmaps/open.bmp"
+save BITMAP "bitmaps/save.bmp"
+copy BITMAP "bitmaps/copy.bmp"
+cut BITMAP "bitmaps/cut.bmp"
+paste BITMAP "bitmaps/paste.bmp"
+print BITMAP "bitmaps/print.bmp"
+help BITMAP "bitmaps/help.bmp"
+

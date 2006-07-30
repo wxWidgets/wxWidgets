@@ -1,0 +1,52 @@
+# Other names that need to be reverse-renamed for the old namespace
+
+PyOnDemandOutputWindow
+App
+GetApp
+PySimpleApp
+PyWidgetTester
+
+App_GetMacSupportPCMenuShortcuts
+App_GetMacAboutMenuItemId
+App_GetMacPreferencesMenuItemId
+App_GetMacExitMenuItemId
+App_GetMacHelpMenuTitleName
+App_SetMacSupportPCMenuShortcuts
+App_SetMacAboutMenuItemId
+App_SetMacPreferencesMenuItemId
+App_SetMacExitMenuItemId
+App_SetMacHelpMenuTitleName
+App_GetComCtl32Version
+
+Platform
+PlatformInfo
+USE_UNICODE
+VERSION_STRING
+MAJOR_VERSION
+MINOR_VERSION
+RELEASE_VERSION
+SUBREL_VERSION
+VERSION
+RELEASE_NUMBER
+PyUnbornObjectError
+PyDeadObjectError
+CallAfter
+FutureCall
+NotebookPage
+PyEventBinder
+DLG_PNT
+DLG_SZE
+
+PyAssertionError
+
+MemoryFSHandler_AddFile
+InitAllImageHandlers
+
+wxEVT_SCROLL_ENDSCROLL
+
+# With the * on the end these will cause code to be added that 
+# will scan for other names in the source module that have the
+# given prefix and will put a reference in the local module.
+EVT*
+WXK*
+__version__*

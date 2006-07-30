@@ -1,0 +1,33 @@
+TODO for XRCed
+==============
+
+* Undo/Redo
+
+* menu - accel not displayed in preview
+
+* tree icons
+
+* paste as sibling (toolbar toggle button)
+
+* replace object with abother, keeping children
+
+* write tmp file for current dialog/panel/etc.
+
+* XML indents
+
+* select same notebook pages after update
+
+* put some default values in tree ctrl etc.
+
+* special (fast) update for some values: pos/size, value/content, sizeritem
+  stuff (?), well, as much as possible
+
+* highlighting with better method
+
+* import XRC/WXR files
+
+* disable some window creation when it's not valid
+
+* check for memory leaks from wx objects
+
+* style defaults for `hidde' and `focused' should be false

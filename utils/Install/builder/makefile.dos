@@ -1,0 +1,10 @@
+# Purpose: makefile for toolbar example (VC++ 1.5x)
+# Created: 2000-03-14
+
+WXDIR = $(WXWIN)
+
+TARGET=toolbar
+OBJECTS=$(TARGET).obj
+
+!include $(WXDIR)\src\makeprog.msc
+

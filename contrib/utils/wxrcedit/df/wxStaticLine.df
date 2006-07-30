@@ -1,0 +1,3 @@
+node wxStaticLine
+var style of flags wxLI_HORIZONTAL,wxLI_VERTICAL
+derived from control

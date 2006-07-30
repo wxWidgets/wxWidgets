@@ -1,0 +1,4 @@
+libwxgtk2.5-dbg: non-dev-pkg-with-shlib-symlink
+libwxbase2.5-dbg: non-dev-pkg-with-shlib-symlink
+libwxgtk2.5-univ: non-dev-pkg-with-shlib-symlink
+

@@ -1,0 +1,42 @@
+0.0.6
+-----
+
+Toolbar, bitmap, icon support (no display yet).
+
+Changed parameter objects, added support for multiple parameters (like 
+`growablecols').
+
+Fixed double-clicking problem with tree control on Windows.
+
+Some performance improovements.
+
+0.0.5
+-----
+
+Added notebook with properties page and style page. Fixed some problems
+on Windows.
+
+0.0.4
+-----
+
+Some fixes suggested by RD
+
+0.0.3
+-----
+
+Faster preview window refresh.
+
+Cut/Paste works better.
+
+Some tree icons.
+
+Tree item names.
+
+Bugfixes.
+
+
+0.0.2
+-----
+
+The first release.
+

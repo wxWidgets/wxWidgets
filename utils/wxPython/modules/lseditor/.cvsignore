@@ -1,0 +1,13 @@
+
+*.exp
+*.lib
+*.obj
+*.pch
+Makefile
+Makefile.pre
+Setup
+build.local
+config.c
+lseditorc.ilk
+lseditorc.pyd
+sedscript

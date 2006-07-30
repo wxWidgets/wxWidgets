@@ -1,0 +1,4 @@
+node wxButton
+var label of text
+var default of bool
+derived from control

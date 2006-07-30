@@ -1,0 +1,35 @@
+# Purpose: makefile for grid example (TWIN)
+# Created: 2000-03-15
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/griddemo.$(OBJSUFF) $(OBJDIR)/griddemo.$(OBJSUFF)
+
+all:    $(OBJDIR) griddemo$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+griddemo$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o griddemo$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/griddemo.$(OBJSUFF):	griddemo.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ griddemo.$(SRCSUFF)
+
+griddemo.c:  griddemo.rc
+	$(RESCOMP) $(RCINPUTSWITCH) griddemo.rc $(RCOUTPUTSWITCH) griddemo.c $(RESFLAGS)
+
+$(OBJDIR)/griddemo.$(OBJSUFF):	griddemo.c
+	$(CC) -c $(CPPFLAGS) -o $@ griddemo.c
+
+#$(OBJDIR)/griddemo.o:  griddemo.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) griddemo.rc $(RCOUTPUTSWITCH) $(OBJDIR)/griddemo.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) griddemo$(GUISUFFIX).exe core *.rsc *.res

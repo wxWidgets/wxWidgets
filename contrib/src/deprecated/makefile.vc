@@ -1,0 +1,50 @@
+
+# File:		makefile.vc
+# Author:	Julian Smart
+# Created:	1993
+# Updated:
+# Copyright:
+#
+# "%W% %G%"
+#
+# Makefile : Builds Deprecated Features classes library (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+THISDIR = $(WXDIR)\contrib\src\deprecated
+
+!if "$(RM)" == ""
+RM= erase
+!endif
+
+NOPCH=1
+
+# Unfortunately we need this _before_ we include makelib.vc
+!if "$(FINAL)" == "1"
+D=Release
+!else
+D=Debug
+LIBEXT=d
+!endif
+
+LIBTARGET=$(WXDIR)\lib\wxdeprecated$(LIBEXT).lib
+EXTRATARGETS=$(D)
+
+OBJECTS=$(D)\prop.obj $(D)\propform.obj $(D)\proplist.obj $(D)\y_tab.obj $(D)\wxexpr.obj $(D)\resource.obj $(D)\treelay.obj
+
+!include $(WXDIR)\src\makelib.vc
+
+$D\y_tab.obj:     y_tab.c lex_yy.c
+        cl @<<
+$(CPPFLAGS2) /c y_tab.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
+<<
+
+y_tab.c:     dosyacc.c
+        copy dosyacc.c y_tab.c
+
+lex_yy.c:    doslex.c
+    copy doslex.c lex_yy.c
+
+

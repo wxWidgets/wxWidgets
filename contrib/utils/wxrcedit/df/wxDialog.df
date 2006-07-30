@@ -1,0 +1,5 @@
+node wxDialog
+var title of text
+var style of flags wxSTAY_ON_TOP,wxCAPTION,wxDEFAULT_DIALOG_STYLE,wxTHICK_FRAME,wxSYSTEM_MENU,wxRESIZE_BORDER,wxRESIZE_BOX,wxDIALOG_MODAL,wxDIALOG_MODELESS
+var centered of bool
+derived from panelbase

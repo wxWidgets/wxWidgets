@@ -1,0 +1,56 @@
+static char *project_dialog = "dialog(name = 'project_dialog',\
+  style = 'wxRAISED_BORDER | wxCAPTION | wxTHICK_FRAME | wxSYSTEM_MENU',\
+  title = 'VC++ Project Generation',\
+  id = 100,\
+  x = 10, y = 10, width = 269, height = 186,\
+  background_colour = 'C0C0C0',\
+  use_dialog_units = 1,\
+  use_system_defaults = 0,\
+  font = [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif'],\
+  control = [101, wxTextCtrl, '', '0', 'textctrl2', 136, 18, 120, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [102, wxStaticText, 'Project path:', '0', 'statictext3', 136, 9, 112, 9, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [104, wxStaticText, 'Project name:', '0', 'static1234', 8, 9, 58, 9, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [105, wxTextCtrl, '', '0', 'textctrl6', 9, 18, 60, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6002, wxStaticText, 'Project target:', '0', 'statictext6', 72, 8, 56, 10, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6003, wxTextCtrl, '', '0', 'textctrl7', 72, 18, 60, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6005, wxStaticText, 'Source files:', '0', 'statictext9', 8, 34, 248, 6, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6006, wxTextCtrl, '', '0', 'textctrl10', 8, 44, 249, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6007, wxStaticText, 'Include paths:', '0', 'statictext11', 8, 60, 116, 10, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6006, wxTextCtrl, '', '0', 'textctrl12', 8, 71, 128, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6009, wxStaticText, 'Resource include paths:', '0', 'statictext13', 140, 61, 104, 12, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6010, wxTextCtrl, '', '0', 'textctrl14', 140, 71, 116, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6011, wxStaticText, 'Library paths:', '0', 'statictext15', 9, 87, 246, 10, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6012, wxTextCtrl, '', '0', 'textctrl16', 8, 98, 248, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6013, wxTextCtrl, '', '0', 'textctrl17', 8, 121, 122, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6015, wxStaticText, 'Debug library paths:', '0', 'statictext19', 8, 112, 117, 9, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6016, wxStaticText, 'Release library paths:', '0', 'statictext20', 137, 112, 120, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6017, wxTextCtrl, '', '0', 'textctrl21', 136, 121, 120, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6018, wxStaticText, 'Extra libraries:', '0', 'statictext22', 8, 139, 240, 10, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6019, wxTextCtrl, '', '0', 'textctrl23', 8, 147, 248, 11, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6020, wxButton, 'Generate project', '0', 'button24', 8, 165, 65, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [5006, wxButton, 'Close', '0', 'button25', 73, 165, 64, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']],\
+  control = [6021, wxButton, 'Generate wxWin samples...', '0', 'button26', 172, 165, 84, 13, '',\
+      [8, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'MS Sans Serif']]).";
+

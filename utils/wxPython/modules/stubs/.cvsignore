@@ -1,0 +1,10 @@
+sedscript
+Makefile.pre
+Setup
+config.c
+Makefile
+*.obj
+*.pch
+*.lib
+*.exp
+

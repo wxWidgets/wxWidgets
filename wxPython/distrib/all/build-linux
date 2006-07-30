@@ -1,0 +1,83 @@
+#!/bin/bash
+# ---------------------------------------------------------------------------
+# Build the wxPython source RPMs on a Linux box.  This is normally called 
+# from build-all but it should be able to be used standalone too...
+# 
+# The command line must have the following parameters:
+#
+#    1. the path of the build dir.  The src RPMs will be here when we start
+#       and the binary RPMs will be left here when we're done.
+#    2. skipclean flag (yes|no)
+#    3. the VERSION
+#    4. the remaining args are the versions of Python to build for
+#
+# ---------------------------------------------------------------------------
+
+set -o errexit
+#set -o xtrace
+
+echo "-=-=-=-  Hello from $HOSTNAME  -=-=-=-"
+
+if [ $# -lt 4 ]; then
+    echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION PYVER..."
+    exit 1
+fi
+
+RELEASE=$1
+SKIPCLEAN=$2
+VERSION=$3
+shift;shift;shift
+PYVER=$@
+
+rpmtop=_rpm_top
+
+function DoRPMBuild {
+    echo "*** Setting up RPM build dirs"
+    for dir in SPECS BUILD RPMS SRPMS tmp; do
+	if [ ! -d $rpmtop/$dir ]; then
+	    mkdir -p $rpmtop/$dir
+	fi
+    done
+    if [ ! -e $rpmtop/SOURCES ]; then
+	ln -s $PWD $rpmtop/SOURCES
+    fi
+
+    rpmbuild --define "_topdir $PWD/$rpmtop" \
+	--define "_tmppath $PWD/$rpmtop/tmp" \
+	--define "release $RELEASE" \
+	$@
+
+    if [ $? != 0 ]; then
+	return $?
+    fi
+
+    echo "*** Moving RPMs to ."
+    find $rpmtop -name "*.rpm"
+    mv -f `find $rpmtop -name "*.rpm"` .
+
+    echo "*** Cleaning up $rpmtop"
+    rm -rf $rpmtop
+}
+
+
+
+for ver in $PYVER; do 
+    echo "Building the RPMs for Python $ver..."
+    for port in GTK GTK2; do
+	rpm2cpio wxPython$port-py$ver-$VERSION-1.src.rpm | \
+	    cpio --extract -R root.
+	DoRPMBuild -ba wxPython$port.spec
+    done
+done
+
+
+if [ $SKIPCLEAN != yes ]; then 
+    echo "Cleaning up..."
+    for ver in $PYVER; do 
+	rm wxPythonGTK-py$ver-$VERSION-*.src.rpm
+	rm wxPythonGTK2-py$ver-$VERSION-*.src.rpm
+    done
+    rm *.spec *.tar.gz
+fi
+
+echo "-=-=-=-  Goodbye!  -=-=-=-"

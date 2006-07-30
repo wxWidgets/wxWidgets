@@ -1,0 +1,35 @@
+# Purpose: makefile for treetest example (TWIN)
+# Created: 2000-03-15
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/treetest.$(OBJSUFF) $(OBJDIR)/treetest.$(OBJSUFF)
+
+all:    $(OBJDIR) treetest$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+treetest$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o treetest$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/treetest.$(OBJSUFF):	treetest.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ treetest.$(SRCSUFF)
+
+treetest.c:  treetest.rc
+	$(RESCOMP) $(RCINPUTSWITCH) treetest.rc $(RCOUTPUTSWITCH) treetest.c $(RESFLAGS)
+
+$(OBJDIR)/treetest.$(OBJSUFF):	treetest.c
+	$(CC) -c $(CPPFLAGS) -o $@ treetest.c
+
+#$(OBJDIR)/treetest.o:  treetest.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) treetest.rc $(RCOUTPUTSWITCH) $(OBJDIR)/treetest.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) treetest$(GUISUFFIX).exe core *.rsc *.res

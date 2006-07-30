@@ -1,0 +1,5 @@
+sourcedir: .
+builddir: .
+rpmdir: .
+srcrpmdir: .
+

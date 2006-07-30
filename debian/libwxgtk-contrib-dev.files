@@ -1,0 +1,11 @@
+usr/include/wx/
+usr/lib/libcanvas.so
+usr/lib/libfl.so
+usr/lib/libgizmos.so
+usr/lib/libmmedia.so
+usr/lib/libogl.so
+usr/lib/libstc.so
+usr/lib/libwx_net.so
+usr/lib/libwx_plot.so
+usr/lib/libwxxrc.so
+

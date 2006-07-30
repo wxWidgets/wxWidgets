@@ -1,0 +1,24 @@
+#
+# File:		makefile.b32
+# Author:	Julian Smart
+# Created:	1999
+# Updated:	
+# Copyright:
+#
+# Makefile : Builds Plot library for 32-bit BC++
+
+WXDIR = $(WXWIN)
+
+LIBTARGET=plot
+
+!include $(WXDIR)\src\makeb32.env
+
+OBJECTS = $(OBJ_PATH)\plot.obj
+
+!include $(WXDIR)\src\makelib.b32
+
+
+$(OBJ_PATH)\plot.obj : plot.cpp
+
+
+

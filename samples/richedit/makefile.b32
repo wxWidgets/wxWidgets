@@ -1,0 +1,16 @@
+#
+# File:		makefile.b32
+# Author:	Julian Smart
+# Created:	1999
+# Updated:	
+# Copyright:
+#
+# Makefile : Builds sample for 32-bit BC++
+
+WXDIR = $(WXWIN)
+
+TARGET=wxlayout
+OBJECTS = wxLayout.obj kbList.obj wxllist.obj wxlparser.obj wxlwindow.obj
+
+!include $(WXDIR)\src\makeprog.b32
+

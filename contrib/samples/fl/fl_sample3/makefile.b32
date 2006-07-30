@@ -1,0 +1,23 @@
+#
+# File:         Makefile
+# Author:       Hans Van Leemputten
+# Created:      2001
+# Updated:
+# Copyright:    (c) wxWorkshop team, 2001
+#
+# Makefile : Builds sample for 32-bit BC++
+
+WXDIR = ..\..\..\..
+TARGET = fl_sample3
+
+EXTRACPPFLAGS =-DBMP_DIR=\"../bitmaps/\"
+!if "$(FINAL)" == "1"
+EXTRALIBS = $(WSLIBDIR)\fl.lib
+!else
+EXTRALIBS = $(WSLIBDIR)\fld.lib
+!endif
+
+OBJECTS = $(TARGET).obj
+
+!include $(WXDIR)\src\makeprog.b32
+

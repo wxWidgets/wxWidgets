@@ -1,0 +1,35 @@
+# Purpose: makefile for statbar example (TWIN)
+# Created: 2000-02-04
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/statbar.$(OBJSUFF) $(OBJDIR)/statbar.$(OBJSUFF)
+
+all:    $(OBJDIR) statbar$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+statbar$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o statbar$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/statbar.$(OBJSUFF):	statbar.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ statbar.$(SRCSUFF)
+
+statbar.c:  statbar.rc
+	$(RESCOMP) $(RCINPUTSWITCH) statbar.rc $(RCOUTPUTSWITCH) statbar.c $(RESFLAGS)
+
+$(OBJDIR)/statbar.$(OBJSUFF):	statbar.c
+	$(CC) -c $(CPPFLAGS) -o $@ statbar.c
+
+#$(OBJDIR)/statbar.o:  statbar.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) statbar.rc $(RCOUTPUTSWITCH) $(OBJDIR)/statbar.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) statbar$(GUISUFFIX).exe core *.rsc *.res

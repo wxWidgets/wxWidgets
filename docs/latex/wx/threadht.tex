@@ -1,0 +1,75 @@
+\section{\class{wxThreadHelperThread}}\label{wxThreadHelperThread}
+
+The wxThreadHelperThread class is used internally by the
+\helpref{wxThreadHelper}{wxthreadhelper} mix-in class.  This class simply
+calls \helpref{wxThreadHelper::Entry}{wxthreadhelperentry} in its owner class
+when the thread runs.
+
+\wxheading{Derived from}
+
+\helpref{wxThread}{wxthread}
+
+\wxheading{Include files}
+
+<wx/thread.h>
+
+\wxheading{See also}
+
+\helpref{wxThread}{wxthread}, \helpref{wxThreadHelper}{wxthreadhelper}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxThreadHelperThread::wxThreadHelperThread}\label{wxthreadhelperthreadctor}
+
+\func{}{wxThreadHelperThread}{\void}
+
+This constructor simply initializes member variables.
+
+\membersection{wxThreadHelperThread::m\_owner}\label{wxthreadhelperthreadmowner}
+
+\member{wxThreadHelperThread\& }{m\_owner}
+
+the \helpref{wxThreadHelper}{wxthreadhelper} object which holds the code to
+run inside the thread.
+
+\membersection{wxThreadHelperThread::Entry}\label{wxthreadhelperthreadentry}
+
+\func{virtual ExitCode}{Entry}{\void}
+
+This is the entry point of the thread.  This function eventually calls
+\helpref{wxThreadHelper::Entry}{wxthreadhelperentry}.  The actual worker
+thread code should be implemented in
+\helpref{wxThreadHelper::Entry}{wxthreadhelperentry}, not here, so all
+shared data and synchronization objects can be shared easily between the
+main thread and the worker thread.
+
+The returned value is the thread exit code which is the value returned by
+\helpref{Wait()}{wxthreadwait}.
+
+This function is called by wxWidgets itself and should never be called
+directly.
+
+\membersection{wxThreadHelperThread::CallEntry}\label{wxthreadhelperthreadcallentry}
+
+\func{virtual ExitCode}{CallEntry}{\void}
+
+This is a convenience method that actually calls
+\helpref{wxThreadHelper::Entry}{wxthreadhelperentry}.  This function
+eventually calls \helpref{wxThreadHelper::Entry}{wxthreadhelperentry}.
+The actual worker thread code should be implemented in
+\helpref{wxThreadHelper::Entry}{wxthreadhelperentry}, not here, so all
+shared data and synchronization objects can be shared easily between the
+main thread and the worker thread.
+
+It must be declared after \helpref{wxThreadHelper}{wxthreadhelper} so it
+can access \helpref{wxThreadHelper::Entry}{wxthreadhelperentry} and avoid
+circular dependencies.  Thus, it uses the inline keyword to allow its
+definition outside of the class definition.  To avoid any conflicts
+between the virtual and inline keywords, it is a non-virtual method.
+
+The returned value is the thread exit code which is the value returned by
+\helpref{Wait()}{wxthreadwait}.
+
+This function is called by wxWidgets itself and should never be called
+directly.
+

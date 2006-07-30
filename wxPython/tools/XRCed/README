@@ -1,0 +1,60 @@
+********************************************************************************
+
+ 			          XRCed README
+
+********************************************************************************
+
+Installation on UNIX
+--------------------
+
+XRCed was developed using Python 2.1.1. xml.dom.minidom module should be
+available. XML support requires Expat package (http://expat.sourceforge.net),
+and you have to uncomment expat lines in Modules/Setup file of Python source:
+
+EXPAT_DIR=$(HOME)/expat
+pyexpat pyexpat.c -I$(EXPAT_DIR)/xmlparse -L$(EXPAT_DIR) -lexpat
+
+wxPython version used was 2.3.1, which itself uses wxGTK 2.3.1. wxPython
+should be modified to support some extra functions. To update it, go to
+wxPython source directory and untar "wxPython-update.tgz" (included with
+xrced) file there. Then recompile (run "b 21" for example) it and install as
+usual (or you can set your environment to use it from the source tree).
+
+
+Short manual
+------------
+
+To start xrced, change to the directory where you installed it and run
+"python2.1 xrced.py".
+
+To create an object, first you should select some object in the tree (or the
+root item if it's empty) then press the right mouse button and select right
+(in another sense now :) ) command. The pulldown menu is context-dependent on
+the selected object.
+
+XRCed tries to guess if new object should be added as a next sibling or a
+child of current object, depending on the possibility of the object to have
+child objects and expanded state (if tree item is collapsed, new object will
+be sibling). You can change this behavior to create siblings by pressing and
+holding the Control key before clicking the mouse.
+
+Same applies for copy/paste, but at the moment Control key is ignored.
+
+Panel on the right contains object properties. Properties which are optional
+should be "checked" first. XMLID of the object is the textbox to the right of
+the class name.
+
+All properties can be edited as text, and some are supplied with special
+editing controls.
+
+To display the preview window double-click a top-level object (you should
+assign an XMLID to it first). After that, if you select a child object, it
+becomes highlighted, and if you change it, preview is updated when you select
+another item or press Ctrl-R (refresh). To turn off automatic update, toggle
+"View->Auto-refresh" or toolbar auto-refresh button (to the right of refresh
+button).
+
+
+--------------------------------------------------------------------------------
+
+Copyright 2001 Roman Rolinsky <rolinsky@mema.ucl.ac.be>

@@ -1,0 +1,18 @@
+!if "$(FINAL)" == "1"
+LIBTARGET=$(WXDIR)\lib\regex.lib
+!else if "$(FINAL)" == "hybrid"
+LIBTARGET=$(WXDIR)\lib\regexh.lib
+!else
+LIBTARGET=$(WXDIR)\lib\regexd.lib
+!endif
+
+OBJECTS= \
+		$D\regcomp.obj \
+		$D\regexec.obj \
+		$D\regerror.obj \
+		$D\regfree.obj
+
+# Pull in standard variable definitions
+
+!include ..\makelib.vc
+

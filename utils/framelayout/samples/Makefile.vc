@@ -1,0 +1,35 @@
+#
+# File:		makefile.vc
+# Author:	J. Russell Smyth
+# Created:	1999
+# Updated:	
+# Copyright:
+#
+# "%W% %G%"
+#
+# Makefile : Builds framelayout samples for Win95, MSVC++ 4.0
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+THISDIR=$(WXDIR)\utils\framelayout\samples
+
+!include $(WXDIR)\src\makevc.env
+
+all:
+        cd $(WXDIR)\utils\framelayout\samples\test
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\utils\framelayout\samples\demo
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\utils\framelayout\samples\sample
+        nmake -f makefile.vc FINAL=$(FINAL)
+
+clean:
+        cd $(WXDIR)\utils\framelayout\samples\test
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\utils\framelayout\samples\demo
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\utils\framelayout\samples\sample
+        nmake -f makefile.vc clean

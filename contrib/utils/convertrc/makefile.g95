@@ -1,0 +1,17 @@
+#
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
+#
+# Makefile for wxrc (Cygwin/Mingw32).
+
+WXDIR = ../../..
+
+TARGET=wxconvert
+EXTRALIBS=-lwxxrc
+OBJECTS=convert.o rc2xml.o rc2wxr.o wxr2xml.o
+
+include $(WXDIR)/src/makeprog.g95
+

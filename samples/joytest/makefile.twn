@@ -1,0 +1,35 @@
+# Purpose: makefile for joytest example (TWIN)
+# Created: 2000-03-14
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/joytest.$(OBJSUFF) $(OBJDIR)/joytest.$(OBJSUFF)
+
+all:    $(OBJDIR) joytest$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+joytest$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o joytest$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/joytest.$(OBJSUFF):	joytest.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ joytest.$(SRCSUFF)
+
+joytest.c:  joytest.rc
+	$(RESCOMP) $(RCINPUTSWITCH) joytest.rc $(RCOUTPUTSWITCH) joytest.c $(RESFLAGS)
+
+$(OBJDIR)/joytest.$(OBJSUFF):	joytest.c
+	$(CC) -c $(CPPFLAGS) -o $@ joytest.c
+
+#$(OBJDIR)/joytest.o:  joytest.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) joytest.rc $(RCOUTPUTSWITCH) $(OBJDIR)/joytest.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) joytest$(GUISUFFIX).exe core *.rsc *.res

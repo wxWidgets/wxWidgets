@@ -1,0 +1,22 @@
+*** Modules/pycpp.cxx.orig	Fri Oct 12 16:37:36 2001
+--- Modules/pycpp.cxx	Fri Oct 12 16:38:20 2001
+***************
+*** 228,235 ****
+        *additional << "def " << realname << "(*_args,**_kwargs):\n";
+        *additional << tab4 << "val = " << class_name << "Ptr(apply("
+  		  << module << "." << name_construct(realname) << ",_args,_kwargs))\n"
+!                   << tab4 << "val.thisown = 1\n"
+! 		  << tab4 << "return val\n\n";
+      }
+      // Patch up the documentation entry
+      if (doc_entry) {
+--- 228,236 ----
+        *additional << "def " << realname << "(*_args,**_kwargs):\n";
+        *additional << tab4 << "val = " << class_name << "Ptr(apply("
+  		  << module << "." << name_construct(realname) << ",_args,_kwargs))\n"
+!                   << tab4 << "val.thisown = 1\n";
+!       emitAddPragmas(*additional, realname, tab4);
+!       *additional << tab4 << "return val\n\n";
+      }
+      // Patch up the documentation entry
+      if (doc_entry) {

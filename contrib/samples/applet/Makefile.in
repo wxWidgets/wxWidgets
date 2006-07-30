@@ -1,0 +1,25 @@
+#
+# File:		Makefile.in
+# Author:	Julian Smart
+# Created:	2000
+# Updated:	
+# Copyright:	(c) 2000 Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile for the multicell example (UNIX).
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../../..
+program_dir = contrib/samples/applet
+
+PROGRAM=monitor
+
+DATAFILES=about.html index.html
+
+OBJECTS=applet.o dialogs_wdr.o monitorapplet.o combobox.o
+
+APPEXTRALIBS=$(top_builddir)/lib/lib@WX_LIBRARY_BASENAME@_applet-@WX_RELEASE@.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
+
+include $(top_builddir)/src/makeprog.env
