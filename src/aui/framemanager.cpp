@@ -2004,7 +2004,8 @@ void wxFrameManager::Update()
                     //p.frame->Move(p.floating_pos.x, p.floating_pos.y);
                 }
 
-                 p.frame->Show(p.IsShown());
+                if (p.frame->IsShown() != p.IsShown())
+                    p.frame->Show(p.IsShown());
             }
         }
          else
