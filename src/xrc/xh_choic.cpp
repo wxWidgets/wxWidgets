@@ -22,7 +22,6 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/choice.h"
-    #include "wx/combobox.h"
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxChoiceXmlHandler, wxXmlResourceHandler)
