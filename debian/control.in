@@ -1,4 +1,4 @@
-Source: wxwidgets=V=U
+Source: wxwidgets=V
 Section: libs
 Priority: optional
 Build-Depends: debhelper (>=4.0), flex, bison, gettext, libgtk2.0-dev, =PY, =PY-dev, zlib1g-dev, libjpeg62-dev, libpng12-dev, libtiff4-dev, libgl1-mesa-dev | libgl-dev, libglu1-mesa-dev | libglu-dev, libesd0-dev, libgnomeprintui2.2-dev, libgconf2-dev, libgstreamer0.10-dev, libgstreamer-plugins-base0.10-dev
