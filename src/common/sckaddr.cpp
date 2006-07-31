@@ -145,7 +145,12 @@ bool wxIPV4address::Hostname(const wxString& name)
     return false;
   }
   m_origHostname = name;
-  return (GAddress_INET_SetHostName(m_address, name.mb_str()) == GSOCK_NOERROR);
+  
+  unsigned long ip;
+  if (CheckStringIP(name,ip)) // This name is a pure IP. Don't resolve and save time.
+	return (GAddress_INET_SetHostAddress(m_address, wxUINT32_SWAP_ALWAYS(ip)) == GSOCK_NOERROR);
+  else
+    return (GAddress_INET_SetHostName(m_address, name.mb_str()) == GSOCK_NOERROR);
 }
 
 bool wxIPV4address::Hostname(unsigned long addr)
@@ -224,6 +229,43 @@ bool wxIPV4address::operator==(const wxIPV4address& addr) const
 {
     return Hostname().Cmp(addr.Hostname().c_str()) == 0 &&
             Service() == addr.Service();
+}
+
+bool wxIPV4address::CheckStringIP(const wxString& strIP, unsigned long &result) {
+	
+	unsigned digit = 0, field = 0, value = 0;
+
+	unsigned long tmp_ip = 0;
+
+	wxString str = strIP.Strip( wxString::both );
+	for (size_t i = 0; i < str.Length(); i++) {
+		wxChar c = str.GetChar( i );
+		
+		if ( c >= wxT('0') && c <= wxT('9') && (value >> 8) == 0) {
+			value = ( value * 10 ) + ( c - wxT('0') );
+			++digit;
+		} else if ( c == wxT('.') ) {
+			if ( digit && (value >> 8) == 0) {
+				tmp_ip = tmp_ip | value << ( field * 8 );
+
+				// Reset the current field values
+				value = digit = 0;
+				++field;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	// If we detected a valid ip, set the return value and return true
+	if ( field == 3 && digit && (value >> 8) == 0) {
+		result = tmp_ip | value << 24;
+		return true;
+	}
+
+	return false;	
 }
 
 #if wxUSE_IPV6
