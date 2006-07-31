@@ -1193,7 +1193,13 @@ Note that wxWindows maintains the stack of windows having captured the
 mouse and when the mouse is released the capture returns to the window
 which had had captured it previously and it is only really released if
 there were no previous window. In particular, this means that you must
-release the mouse as many times as you capture it.", "");
+release the mouse as many times as you capture it, unless the window
+receives the `wx.MouseCaptureLostEvent` event.
+ 
+Any application which captures the mouse in the beginning of some
+operation *must* handle `wx.MouseCaptureLostEvent` and cancel this
+operation when it receives the event. The event handler must not
+recapture mouse.", "");
     
     DocDeclStr(
         void , ReleaseMouse(),

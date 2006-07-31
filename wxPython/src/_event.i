@@ -149,6 +149,7 @@ wxEventType wxNewEventType();
 %constant wxEventType wxEVT_ICONIZE;
 %constant wxEventType wxEVT_MAXIMIZE;
 %constant wxEventType wxEVT_MOUSE_CAPTURE_CHANGED;
+%constant wxEventType wxEVT_MOUSE_CAPTURE_LOST;
 %constant wxEventType wxEVT_PAINT;
 %constant wxEventType wxEVT_ERASE_BACKGROUND;
 %constant wxEventType wxEVT_NC_PAINT;
@@ -235,6 +236,7 @@ EVT_WINDOW_CREATE = wx.PyEventBinder( wxEVT_CREATE )
 EVT_WINDOW_DESTROY = wx.PyEventBinder( wxEVT_DESTROY )
 EVT_SET_CURSOR = wx.PyEventBinder( wxEVT_SET_CURSOR )
 EVT_MOUSE_CAPTURE_CHANGED = wx.PyEventBinder( wxEVT_MOUSE_CAPTURE_CHANGED )
+EVT_MOUSE_CAPTURE_LOST = wx.PyEventBinder( wxEVT_MOUSE_CAPTURE_LOST )         
 
 EVT_LEFT_DOWN = wx.PyEventBinder( wxEVT_LEFT_DOWN )
 EVT_LEFT_UP = wx.PyEventBinder( wxEVT_LEFT_UP )
@@ -2144,6 +2146,30 @@ public:
         "Returns the window that gained the capture, or ``None`` if it was a
 non-wxWidgets window.", "");
 
+};
+
+//---------------------------------------------------------------------------
+%newgroup;
+
+DocStr(wxMouseCaptureLostEvent,
+"A mouse capture lost event is sent to a window that obtained mouse
+capture, which was subsequently loss due to \"external\" event, for
+example when a dialog box is shown or if another application captures
+the mouse.
+
+If this happens, this event is sent to all windows that are on the
+capture stack (i.e. a window that called `wx.Window.CaptureMouse`, but
+didn't call `wx.Window.ReleaseMouse` yet). The event is *not* sent
+if the capture changes because of a call to CaptureMouse or
+ReleaseMouse.
+
+This event is currently emitted under Windows only.
+", "");
+
+class wxMouseCaptureLostEvent : public wxEvent
+{
+public:
+    wxMouseCaptureLostEvent(wxWindowID winid = 0);
 };
 
 //---------------------------------------------------------------------------
