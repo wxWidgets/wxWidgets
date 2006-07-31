@@ -1668,7 +1668,7 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
 #if wxUSE_FONTMAP
         const wxChar **names = wxFontMapperBase::GetAllEncodingNames(WC_ENC);
 #else // !wxUSE_FONTMAP
-        static const wxChar *names[] =
+        static const wxChar *names_static[] =
         {
 #if SIZEOF_WCHAR_T == 4
             _T("UCS-4"),
@@ -1677,6 +1677,7 @@ wxMBConv_iconv::wxMBConv_iconv(const wxChar *name)
 #endif
             NULL
         };
+        const wxChar **names = names_static;
 #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
 
         for ( ; *names && ms_wcCharsetName.empty(); ++names )
