@@ -3306,7 +3306,9 @@ wxMBConv *wxCSConv::DoCreate() const
 #endif // !wxUSE_FONTMAP
     {
         wxString name(m_name);
+#if wxUSE_FONTMAP
         wxFontEncoding encoding(m_encoding);
+#endif
 
         if ( !name.empty() )
         {
@@ -3475,7 +3477,7 @@ wxMBConv *wxCSConv::DoCreate() const
 #if wxUSE_FONTMAP
                          wxFontMapperBase::GetEncodingDescription(m_encoding).c_str()
 #else // !wxUSE_FONTMAP
-                         wxString::Format(_("encoding %s"), m_encoding).c_str()
+                         wxString::Format(_("encoding %i"), m_encoding).c_str()
 #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
               );
 
