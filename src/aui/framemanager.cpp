@@ -876,7 +876,9 @@ bool wxFrameManager::DetachPane(wxWindow* window)
 
                 // reduce flicker
                 p.window->SetSize(1,1);
-                p.frame->Show(false);
+
+                if (p.frame->IsShown())
+                    p.frame->Show(false);
 
                 // reparent to m_frame and destroy the pane
                 p.window->Reparent(m_frame);
@@ -1945,7 +1947,9 @@ void wxFrameManager::Update()
 
             // reduce flicker
             p.window->SetSize(1,1);
-            p.frame->Show(false);
+
+            if (p.frame->IsShown())
+                p.frame->Show(false);
 
             // reparent to m_frame and destroy the pane
             p.window->Reparent(m_frame);
@@ -1987,10 +1991,8 @@ void wxFrameManager::Update()
                 frame->SetPaneWindow(p);
                 p.frame = frame;
 
-                if (p.IsShown())
-                {
+                if (p.IsShown() && !frame->IsShown())
                     frame->Show();
-                }
             }
              else
             {
@@ -2010,7 +2012,8 @@ void wxFrameManager::Update()
         }
          else
         {
-            p.window->Show(p.IsShown());
+            if (p.window->IsShown() != p.IsShown())
+                p.window->Show(p.IsShown());
         }
 
         // if "active panes" are no longer allowed, clear
@@ -2724,7 +2727,8 @@ void wxFrameManager::HideHint()
     // hides a transparent window hint, if there is one
     if (m_hint_wnd)
     {
-        m_hint_wnd->Show(false);
+        if (m_hint_wnd->IsShown())
+            m_hint_wnd->Show(false);
 #if wxCHECK_VERSION(2,7,0)
         m_hint_wnd->SetTransparent(0);
 #else
@@ -2980,7 +2984,8 @@ void wxFrameManager::OnFloatingPaneClosed(wxWindow* wnd, wxCloseEvent& evt)
     {
         // reparent the pane window back to us and
         // prepare the frame window for destruction
-        pane.window->Show(false);
+        if (pane.window->IsShown())
+            pane.window->Show(false);
         pane.window->Reparent(m_frame);
         pane.frame = NULL;
         pane.Hide();
