@@ -1784,18 +1784,17 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 // kbd input processing
 // ----------------------------------------------------------------------------
 
-bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* pMsg)
+bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
 {
-    MSG *msg = (MSG *)pMsg;
-
     // check for our special keys here: if we don't do it and the parent frame
     // uses them as accelerators, they wouldn't work at all, so we disable
     // usual preprocessing for them
     if ( msg->message == WM_KEYDOWN )
     {
-        WORD vkey = (WORD) msg->wParam;
-        if ( (HIWORD(msg->lParam) & KF_ALTDOWN) == KF_ALTDOWN )
+        const WPARAM vkey = msg->wParam;
+        if ( HIWORD(msg->lParam) & KF_ALTDOWN )
         {
+            // Alt-Backspace is accelerator for "Undo"
             if ( vkey == VK_BACK )
                 return false;
         }
@@ -1813,6 +1812,9 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* pMsg)
                     // fall through
 
                 case 0:
+                    if ( vkey == VK_RETURN )
+                        return false;
+                    // fall through
                 case 2:
                     break;
 
@@ -1841,7 +1843,7 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* pMsg)
         }
     }
 
-    return wxControl::MSWShouldPreProcessMessage(pMsg);
+    return wxControl::MSWShouldPreProcessMessage(msg);
 }
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)

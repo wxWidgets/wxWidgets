@@ -1985,6 +1985,20 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
 // implementation
 // ----------------------------------------------------------------------------
 
+bool wxTreeCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
+{
+    if ( msg->message == WM_KEYDOWN )
+    {
+        if ( msg->wParam == VK_RETURN )
+        {
+            // we need VK_RETURN to generate wxEVT_COMMAND_TREE_ITEM_ACTIVATED
+            return false;
+        }
+    }
+
+    return wxTreeCtrlBase::MSWShouldPreProcessMessage(msg);
+}
+
 bool wxTreeCtrl::MSWCommand(WXUINT cmd, WXWORD id)
 {
     if ( cmd == EN_UPDATE )

@@ -1763,6 +1763,20 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
 // message processing
 // ----------------------------------------------------------------------------
 
+bool wxListCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
+{
+    if ( msg->message == WM_KEYDOWN )
+    {
+        if ( msg->wParam == VK_RETURN )
+        {
+            // we need VK_RETURN to generate wxEVT_COMMAND_LIST_ITEM_ACTIVATED
+            return false;
+        }
+    }
+
+    return wxControl::MSWShouldPreProcessMessage(msg);
+}
+
 bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id)
 {
     if (cmd == EN_UPDATE)

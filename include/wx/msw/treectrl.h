@@ -224,6 +224,7 @@ public:
     virtual WXLRESULT MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+    virtual bool MSWShouldPreProcessMessage(WXMSG* msg);
 
     // override some base class virtuals
     virtual bool SetBackgroundColour(const wxColour &colour);

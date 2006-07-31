@@ -346,6 +346,7 @@ public:
     // IMPLEMENTATION
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+    virtual bool MSWShouldPreProcessMessage(WXMSG* msg);
 
     // bring the control in sync with current m_windowStyle value
     void UpdateStyle();

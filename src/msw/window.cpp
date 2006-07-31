@@ -2119,13 +2119,15 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                         if ( (lDlgCode & DLGC_WANTMESSAGE) && !bCtrlDown )
                         {
                             // control wants to process Enter itself, don't
-                            // call IsDialogMessage() which would interpret
-                            // it
+                            // call IsDialogMessage() which would consume it
                             return false;
                         }
 
+#if wxUSE_BUTTON
                         // currently active button should get enter press even
-                        // if there is a default button elsewhere
+                        // if there is a default button elsewhere so check if
+                        // this window is a button first
+                        wxWindow *btn = NULL;
                         if ( lDlgCode & DLGC_DEFPUSHBUTTON )
                         {
                             // let IsDialogMessage() handle this for all
@@ -2135,59 +2137,38 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                             if ( (style & BS_OWNERDRAW) == BS_OWNERDRAW )
                             {
                                 // emulate the button click
-                                wxWindow *
-                                    btn = wxFindWinFromHandle((WXHWND)msg->hwnd);
-                                if ( btn )
-                                    btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+                                btn = wxFindWinFromHandle((WXHWND)msg->hwnd);
                             }
 
                             bProcess = false;
                         }
-                        else // not a button itself
+                        else // not a button itself, do we have default button?
                         {
-#if wxUSE_BUTTON
-                            wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+                            wxTopLevelWindow *
+                                tlw = wxDynamicCast(wxGetTopLevelParent(this),
+                                                    wxTopLevelWindow);
                             if ( tlw )
                             {
-                                wxButton *btn = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
-                                if ( btn && btn->IsEnabled() )
-                                {
-                                    // if we do have a default button, do press it
-                                    btn->MSWCommand(BN_CLICKED, 0 /* unused */);
-
-                                    return true;
-                                }
-                            }
-                            else // no default button
-#endif // wxUSE_BUTTON
-                            {
-#ifdef __WXWINCE__
-                                wxJoystickEvent event(wxEVT_JOY_BUTTON_DOWN);
-                                event.SetEventObject(this);
-                                if(GetEventHandler()->ProcessEvent(event))
-                                    return true;
-#endif
-                                // this is a quick and dirty test for a text
-                                // control
-                                if ( !(lDlgCode & DLGC_HASSETSEL) )
-                                {
-                                    // don't process Enter, the control might
-                                    // need it for itself and don't let
-                                    // ::IsDialogMessage() have it as it can
-                                    // eat the Enter events sometimes
-                                    return false;
-                                }
-                                else if (!IsTopLevel())
-                                {
-                                    // if not a top level window, let parent
-                                    // handle it
-                                    return false;
-                                }
-                                //else: treat Enter as TAB: pass to the next
-                                //      control as this is the best thing to do
-                                //      if the text doesn't handle Enter itself
+                                btn = wxDynamicCast(tlw->GetDefaultItem(),
+                                                    wxButton);
                             }
                         }
+
+                        if ( btn && btn->IsEnabled() )
+                        {
+                            btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+                            return true;
+                        }
+
+#endif // wxUSE_BUTTON
+
+#ifdef __WXWINCE__
+                        // map Enter presses into button presses on PDAs
+                        wxJoystickEvent event(wxEVT_JOY_BUTTON_DOWN);
+                        event.SetEventObject(this);
+                        if ( GetEventHandler()->ProcessEvent(event) )
+                            return true;
+#endif // __WXWINCE__
                     }
                     break;
 
