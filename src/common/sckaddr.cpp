@@ -152,7 +152,7 @@ bool wxIPV4address::Hostname(unsigned long addr)
 {
   bool rv = (GAddress_INET_SetHostAddress(m_address, addr) == GSOCK_NOERROR);
   if (rv)
-      m_origHostname = Hostname();
+      m_origHostname = IPAddress();
   else
       m_origHostname = wxEmptyString;
   return rv;
