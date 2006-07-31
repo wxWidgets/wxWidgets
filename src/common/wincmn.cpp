@@ -2399,10 +2399,10 @@ static void DoNotifyWindowAboutCaptureLost(wxWindow *win)
 {
     wxMouseCaptureLostEvent event(win->GetId());
     event.SetEventObject(win);
-    bool processed = win->GetEventHandler()->ProcessEvent(event);
-
-    wxASSERT_MSG( processed,
-                  _T("window that captured mouse didn't process wxEVT_MOUSE_CAPTURE_LOST") );
+    if ( !win->GetEventHandler()->ProcessEvent(event) )
+    {
+        wxFAIL_MSG( _T("window that captured the mouse didn't process wxEVT_MOUSE_CAPTURE_LOST") );
+    }
 }
 
 /* static */
