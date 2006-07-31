@@ -60,6 +60,7 @@ WIDGETS_OBJECTS =  \
 	widgets_fontpicker.o \
 	widgets_filepicker.o \
 	widgets_dirpicker.o \
+	widgets_odcombobox.o \
 	widgets_radiobox.o \
 	widgets_slider.o \
 	widgets_spinbtn.o \
@@ -244,6 +245,9 @@ widgets_filepicker.o: $(srcdir)/filepicker.cpp
 
 widgets_dirpicker.o: $(srcdir)/dirpicker.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/dirpicker.cpp
+
+widgets_odcombobox.o: $(srcdir)/odcombobox.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/odcombobox.cpp
 
 widgets_radiobox.o: $(srcdir)/radiobox.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/radiobox.cpp

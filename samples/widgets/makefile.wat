@@ -241,6 +241,7 @@ WIDGETS_OBJECTS =  &
 	$(OBJS)\widgets_fontpicker.obj &
 	$(OBJS)\widgets_filepicker.obj &
 	$(OBJS)\widgets_dirpicker.obj &
+	$(OBJS)\widgets_odcombobox.obj &
 	$(OBJS)\widgets_radiobox.obj &
 	$(OBJS)\widgets_slider.obj &
 	$(OBJS)\widgets_spinbtn.obj &
@@ -312,6 +313,9 @@ $(OBJS)\widgets_filepicker.obj :  .AUTODEPEND .\filepicker.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_dirpicker.obj :  .AUTODEPEND .\dirpicker.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_odcombobox.obj :  .AUTODEPEND .\odcombobox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_radiobox.obj :  .AUTODEPEND .\radiobox.cpp

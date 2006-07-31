@@ -17,6 +17,7 @@
             fontpicker.cpp
             filepicker.cpp
             dirpicker.cpp
+            odcombobox.cpp
             radiobox.cpp
             slider.cpp
             spinbtn.cpp
