@@ -545,8 +545,12 @@ WXDLLIMPEXP_BASE bool wxFindFileInPath(wxString *pStr, const wxChar *pszPath, co
 // On non-Windows platform, probably just return the empty string.
 WXDLLIMPEXP_BASE wxString wxGetOSDirectory();
 
+#if wxUSE_DATETIME
+
 // Get file modification time
 WXDLLIMPEXP_BASE time_t wxFileModificationTime(const wxString& filename);
+
+#endif // wxUSE_DATETIME
 
 // Parses the wildCard, returning the number of filters.
 // Returns 0 if none or if there's a problem,

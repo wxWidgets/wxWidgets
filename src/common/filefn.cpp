@@ -1625,6 +1625,8 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
     wxFileName::SplitPath(pszFileName, pstrPath, pstrName, pstrExt);
 }
 
+#if wxUSE_DATETIME
+
 time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
 {
     wxDateTime mtime;
@@ -1633,6 +1635,8 @@ time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
 
     return mtime.GetTicks();
 }
+
+#endif // wxUSE_DATETIME
 
 
 // Parses the filterStr, returning the number of filters.
