@@ -2406,7 +2406,7 @@ static void DoNotifyWindowAboutCaptureLost(wxWindow *win)
 }
 
 /* static */
-void wxWindowBase::NotifyCaptureLost(wxWindow *gainedCapture)
+void wxWindowBase::NotifyCaptureLost()
 {
     // don't do anything if capture lost was expected, i.e. resulted from
     // a wx call to ReleaseMouse or CaptureMouse:
