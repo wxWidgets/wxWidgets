@@ -27,6 +27,8 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
 - wxFontEnumerator::GetFacenames() and GetEncodings() now return arrays and
   not pointers to arrays.
 - wxStaticBoxSizer now deletes the associated wxStaticBox when it is deleted.
+- Windows calling CaptureMouse() are now required to handle
+  the wxEVT_MOUSE_CAPTURE_LOST event.
 
 
 Deprecated methods since 2.6.x and their replacements
@@ -168,6 +170,8 @@ All (GUI):
   implementations (so far) for wxMSW and wxMac.
 - Allow customizing individual grid lines appearance (Søren Lassen)
 - Fixed middle click events generation in generic wxTreeCtrl (Olly Betts)
+- Added wxEVT_MOUSE_CAPTURE_LOST event that must be handled by all windows
+  that CaptureMouse() is called on.
 
 wxMSW:
 
