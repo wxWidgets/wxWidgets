@@ -551,6 +551,8 @@ void wxTabMDIChildFrame::DoSetSize(int x, int y, int width, int height, int size
     m_mdi_newrect = wxRect(x, y, width, height);
 #ifdef __WXGTK__
     wxPanel::DoSetSize(x,y,width, height, sizeFlags);
+#else
+    wxUnusedVar(sizeFlags);
 #endif
 }
 
