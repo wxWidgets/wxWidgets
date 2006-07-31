@@ -515,6 +515,7 @@ public:
 #define wxTRACE_OleCalls wxEmptyString // OLE interface calls
 
 #endif // wxUSE_LOG/!wxUSE_LOG
+
 #define DECLARE_LOG_FUNCTION2(level, argclass, arg)                         \
     DECLARE_LOG_FUNCTION2_EXP(level, argclass, arg, WXDLLIMPEXP_BASE)
 
@@ -550,7 +551,7 @@ DECLARE_LOG_FUNCTION(SysError);
 DECLARE_LOG_FUNCTION2(SysError, long, lErrCode);
 
 // debug functions do nothing in release mode
-#if wxUSE_LOG_DEBUG
+#if wxUSE_LOG && wxUSE_LOG_DEBUG
     DECLARE_LOG_FUNCTION(Debug);
 
     // there is no more unconditional LogTrace: it is not different from
@@ -565,7 +566,7 @@ DECLARE_LOG_FUNCTION2(SysError, long, lErrCode);
     // wxLog::GetActive()->GetTraceMask() -- it's deprecated in favour of
     // string identifiers
     DECLARE_LOG_FUNCTION2(Trace, wxTraceMask, mask);
-#else   //!debug
+#else   //!debug || !wxUSE_LOG
     // these functions do nothing in release builds
 
     // note that leaving out "fmt" in the vararg functions provokes a warning
