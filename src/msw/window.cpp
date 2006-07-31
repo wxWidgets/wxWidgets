@@ -4107,9 +4107,14 @@ bool wxWindowMSW::HandlePaletteChanged(WXHWND hWndPalChange)
 
 bool wxWindowMSW::HandleCaptureChanged(WXHWND hWndGainedCapture)
 {
-    wxMouseCaptureChangedEvent event(GetId(), wxFindWinFromHandle(hWndGainedCapture));
-    event.SetEventObject(this);
+    wxWindow *win = wxFindWinFromHandle(hWndGainedCapture);
 
+    // notify windows on the capture stack about lost capture
+    // (see http://sourceforge.net/tracker/index.php?func=detail&aid=1153662&group_id=9863&atid=109863):
+    wxWindowBase::NotifyCaptureLost(win);
+
+    wxMouseCaptureChangedEvent event(GetId(), win);
+    event.SetEventObject(this);
     return GetEventHandler()->ProcessEvent(event);
 }
 

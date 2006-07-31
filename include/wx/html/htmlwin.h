@@ -409,6 +409,7 @@ protected:
     void OnCopy(wxCommandEvent& event);
     void OnMouseEnter(wxMouseEvent& event);
     void OnMouseLeave(wxMouseEvent& event);
+    void OnMouseCaptureLost(wxMouseCaptureLostEvent& event);
 #endif // wxUSE_CLIPBOARD
 
     // Returns new filter (will be stored into m_DefaultFilter variable)

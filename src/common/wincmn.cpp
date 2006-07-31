@@ -2334,10 +2334,16 @@ struct WXDLLEXPORT wxWindowNext
     wxWindow *win;
     wxWindowNext *next;
 } *wxWindowBase::ms_winCaptureNext = NULL;
+wxWindow *wxWindowBase::ms_winCaptureCurrent = NULL;
+bool wxWindowBase::ms_winCaptureChanging = false;
 
 void wxWindowBase::CaptureMouse()
 {
     wxLogTrace(_T("mousecapture"), _T("CaptureMouse(%p)"), wx_static_cast(void*, this));
+
+    wxASSERT_MSG( !ms_winCaptureChanging, _T("recursive CaptureMouse call?") );
+
+    ms_winCaptureChanging = true;
 
     wxWindow *winOld = GetCapture();
     if ( winOld )
@@ -2353,19 +2359,28 @@ void wxWindowBase::CaptureMouse()
     //else: no mouse capture to save
 
     DoCaptureMouse();
+    ms_winCaptureCurrent = (wxWindow*)this;
+
+    ms_winCaptureChanging = false;
 }
 
 void wxWindowBase::ReleaseMouse()
 {
     wxLogTrace(_T("mousecapture"), _T("ReleaseMouse(%p)"), wx_static_cast(void*, this));
 
+    wxASSERT_MSG( !ms_winCaptureChanging, _T("recursive ReleaseMouse call?") );
+
     wxASSERT_MSG( GetCapture() == this, wxT("attempt to release mouse, but this window hasn't captured it") );
 
+    ms_winCaptureChanging = true;
+
     DoReleaseMouse();
+    ms_winCaptureCurrent = NULL;
 
     if ( ms_winCaptureNext )
     {
         ((wxWindowBase*)ms_winCaptureNext->win)->DoCaptureMouse();
+        ms_winCaptureCurrent = ms_winCaptureNext->win;
 
         wxWindowNext *item = ms_winCaptureNext;
         ms_winCaptureNext = item->next;
@@ -2373,9 +2388,49 @@ void wxWindowBase::ReleaseMouse()
     }
     //else: stack is empty, no previous capture
 
+    ms_winCaptureChanging = false;
+
     wxLogTrace(_T("mousecapture"),
         (const wxChar *) _T("After ReleaseMouse() mouse is captured by %p"),
         wx_static_cast(void*, GetCapture()));
+}
+
+static void DoNotifyWindowAboutCaptureLost(wxWindow *win)
+{
+    wxMouseCaptureLostEvent event(win->GetId());
+    event.SetEventObject(win);
+    bool processed = win->GetEventHandler()->ProcessEvent(event);
+
+    wxASSERT_MSG( processed,
+                  _T("window that captured mouse didn't process wxEVT_MOUSE_CAPTURE_LOST") );
+}
+
+/* static */
+void wxWindowBase::NotifyCaptureLost(wxWindow *gainedCapture)
+{
+    // don't do anything if capture lost was expected, i.e. resulted from
+    // a wx call to ReleaseMouse or CaptureMouse:
+    if ( ms_winCaptureChanging )
+        return;
+
+    // if the capture was lost unexpectedly, notify every window that has
+    // capture (on stack or current) about it and clear the stack:
+
+    if ( ms_winCaptureCurrent )
+    {
+        DoNotifyWindowAboutCaptureLost(ms_winCaptureCurrent);
+        ms_winCaptureCurrent = NULL;
+    }
+
+    while ( ms_winCaptureNext )
+    {
+        wxWindowNext *item = ms_winCaptureNext;
+        ms_winCaptureNext = item->next;
+
+        DoNotifyWindowAboutCaptureLost(item->win);
+
+        delete item;
+    }
 }
 
 #if wxUSE_HOTKEY

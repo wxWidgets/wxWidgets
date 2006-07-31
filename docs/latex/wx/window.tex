@@ -203,11 +203,18 @@ Note that wxWidgets maintains the stack of windows having captured the mouse
 and when the mouse is released the capture returns to the window which had had
 captured it previously and it is only really released if there were no previous
 window. In particular, this means that you must release the mouse as many times
-as you capture it.
+as you capture it, unless the window receives
+the \helpref{wxMouseCaptureLostEvent}{wxmousecapturelostevent} event.
+
+Any application which captures the mouse in the beginning of some operation
+{\em must} handle \helpref{wxMouseCaptureLostEvent}{wxmousecapturelostevent}
+and cancel this operation when it receives the event. The event handler must
+not recapture mouse.
 
 \wxheading{See also}
 
 \helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse}
+\helpref{wxMouseCaptureLostEvent}{wxmousecapturelostevent}
 
 
 \membersection{wxWindow::Center}\label{wxwindowcenter}
@@ -787,6 +794,7 @@ Returns the currently captured window.
 \helpref{wxWindow::HasCapture}{wxwindowhascapture},
 \helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse},
 \helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse},
+\helpref{wxMouseCaptureLostEvent}{wxmousecapturelostevent}
 \helpref{wxMouseCaptureChangedEvent}{wxmousecapturechangedevent}
 
 
@@ -1390,6 +1398,7 @@ Returns {\tt true} if this window has the current mouse capture.
 
 \helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse},
 \helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse},
+\helpref{wxMouseCaptureLostEvent}{wxmousecapturelostevent}
 \helpref{wxMouseCaptureChangedEvent}{wxmousecapturechangedevent}
 
 
@@ -2361,6 +2370,7 @@ Releases mouse input captured with \helpref{wxWindow::CaptureMouse}{wxwindowcapt
 \helpref{wxWindow::CaptureMouse}{wxwindowcapturemouse},
 \helpref{wxWindow::HasCapture}{wxwindowhascapture},
 \helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse},
+\helpref{wxMouseCaptureLostEvent}{wxmousecapturelostevent}
 \helpref{wxMouseCaptureChangedEvent}{wxmousecapturechangedevent}
 
 

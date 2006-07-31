@@ -1135,6 +1135,19 @@ void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
     wxHtmlWindowMouseHelper::HandleMouseClick(m_Cell, pos, event);
 }
 
+#if wxUSE_CLIPBOARD
+void wxHtmlWindow::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
+{
+    if ( !m_makingSelection )
+        return;
+
+    // discard the selecting operation
+    m_makingSelection = false;
+    wxDELETE(m_selection);
+    m_tmpSelFromCell = NULL;
+    Refresh();
+}
+#endif // wxUSE_CLIPBOARD
 
 
 void wxHtmlWindow::OnInternalIdle()
@@ -1499,6 +1512,7 @@ BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_LEFT_DCLICK(wxHtmlWindow::OnDoubleClick)
     EVT_ENTER_WINDOW(wxHtmlWindow::OnMouseEnter)
     EVT_LEAVE_WINDOW(wxHtmlWindow::OnMouseLeave)
+    EVT_MOUSE_CAPTURE_LOST(wxHtmlWindow::OnMouseCaptureLost)
     EVT_KEY_UP(wxHtmlWindow::OnKeyUp)
     EVT_MENU(wxID_COPY, wxHtmlWindow::OnCopy)
 #endif // wxUSE_CLIPBOARD

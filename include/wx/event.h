@@ -238,14 +238,14 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_ICONIZE, 413)
     DECLARE_EVENT_TYPE(wxEVT_MAXIMIZE, 414)
     DECLARE_EVENT_TYPE(wxEVT_MOUSE_CAPTURE_CHANGED, 415)
-    DECLARE_EVENT_TYPE(wxEVT_PAINT, 416)
-    DECLARE_EVENT_TYPE(wxEVT_ERASE_BACKGROUND, 417)
-    DECLARE_EVENT_TYPE(wxEVT_NC_PAINT, 418)
-    DECLARE_EVENT_TYPE(wxEVT_PAINT_ICON, 419)
-    DECLARE_EVENT_TYPE(wxEVT_MENU_OPEN, 420)
-    DECLARE_EVENT_TYPE(wxEVT_MENU_CLOSE, 421)
-    DECLARE_EVENT_TYPE(wxEVT_MENU_HIGHLIGHT, 422)
-    // DECLARE_EVENT_TYPE(wxEVT_POPUP_MENU_INIT, 423) -- free slot
+    DECLARE_EVENT_TYPE(wxEVT_MOUSE_CAPTURE_LOST, 416)
+    DECLARE_EVENT_TYPE(wxEVT_PAINT, 417)
+    DECLARE_EVENT_TYPE(wxEVT_ERASE_BACKGROUND, 418)
+    DECLARE_EVENT_TYPE(wxEVT_NC_PAINT, 419)
+    DECLARE_EVENT_TYPE(wxEVT_PAINT_ICON, 420)
+    DECLARE_EVENT_TYPE(wxEVT_MENU_OPEN, 421)
+    DECLARE_EVENT_TYPE(wxEVT_MENU_CLOSE, 422)
+    DECLARE_EVENT_TYPE(wxEVT_MENU_HIGHLIGHT, 423)
     DECLARE_EVENT_TYPE(wxEVT_CONTEXT_MENU, 424)
     DECLARE_EVENT_TYPE(wxEVT_SYS_COLOUR_CHANGED, 425)
     DECLARE_EVENT_TYPE(wxEVT_DISPLAY_CHANGED, 426)
@@ -1798,6 +1798,29 @@ private:
 };
 
 /*
+ wxEVT_MOUSE_CAPTURE_LOST
+ The window losing the capture receives this message, unless it released it
+ it itself or unless wxWindow::CaptureMouse was called on another window
+ (and so capture will be restored when the new capturer releases it).
+ */
+
+class WXDLLIMPEXP_CORE wxMouseCaptureLostEvent : public wxEvent
+{
+public:
+    wxMouseCaptureLostEvent(wxWindowID winid = 0)
+        : wxEvent(winid, wxEVT_MOUSE_CAPTURE_LOST)
+    {}
+
+    wxMouseCaptureLostEvent(const wxMouseCaptureLostEvent& event)
+        : wxEvent(event)
+    {}
+
+    virtual wxEvent *Clone() const { return new wxMouseCaptureLostEvent(*this); }
+
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxMouseCaptureLostEvent)
+};
+
+/*
  wxEVT_DISPLAY_CHANGED
  */
 class WXDLLIMPEXP_CORE wxDisplayChangedEvent : public wxEvent
@@ -2584,6 +2607,7 @@ typedef void (wxEvtHandler::*wxNotifyEventFunction)(wxNotifyEvent&);
 typedef void (wxEvtHandler::*wxHelpEventFunction)(wxHelpEvent&);
 typedef void (wxEvtHandler::*wxContextMenuEventFunction)(wxContextMenuEvent&);
 typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureChangedEvent&);
+typedef void (wxEvtHandler::*wxMouseCaptureLostEventFunction)(wxMouseCaptureLostEvent&);
 typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&);
 
 // these typedefs don't have the same name structure as the others, keep for
@@ -2665,6 +2689,8 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxContextMenuEventFunction, &func)
 #define wxMouseCaptureChangedEventHandler(func) \
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxMouseCaptureChangedEventFunction, &func)
+#define wxMouseCaptureLostEventHandler(func) \
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxMouseCaptureLostEventFunction, &func)
 #define wxClipboardTextEventHandler(func) \
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxClipboardTextEventFunction, &func)
 
@@ -2883,6 +2909,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 #define EVT_WINDOW_DESTROY(func) wx__DECLARE_EVT0(wxEVT_DESTROY, wxWindowDestroyEventHandler(func))
 #define EVT_SET_CURSOR(func) wx__DECLARE_EVT0(wxEVT_SET_CURSOR, wxSetCursorEventHandler(func))
 #define EVT_MOUSE_CAPTURE_CHANGED(func) wx__DECLARE_EVT0(wxEVT_MOUSE_CAPTURE_CHANGED, wxMouseCaptureChangedEventHandler(func))
+#define EVT_MOUSE_CAPTURE_LOST(func) wx__DECLARE_EVT0(wxEVT_MOUSE_CAPTURE_LOST, wxMouseCaptureLostEventHandler(func))
 
 // Mouse events
 #define EVT_LEFT_DOWN(func) wx__DECLARE_EVT0(wxEVT_LEFT_DOWN, wxMouseEventHandler(func))
