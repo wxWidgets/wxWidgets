@@ -621,7 +621,7 @@ static const wxUint16 encoding_table__KOI8_U[128] = {
  *
  */
 
-static struct {
+static const struct {
     wxUint16 c  /*code*/;
     wxUint8  s /*inaccurate substitution*/;
 } encoding_unicode_fallback[] = {
@@ -829,7 +829,7 @@ static struct {
     {0, 0}
  };
 
-static unsigned encoding_unicode_fallback_count =  200;
+static const unsigned encoding_unicode_fallback_count =  200;
 
 
 
@@ -840,7 +840,7 @@ static unsigned encoding_unicode_fallback_count =  200;
  *
  */
 
-static struct {
+static const struct {
     wxFontEncoding encoding; // encoding identifier
     const wxUint16 *table;         // 8bit to unicode table
 } encodings_list[] = {

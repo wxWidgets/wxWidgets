@@ -78,7 +78,7 @@ echo "
  *
  */
 
-static struct {
+static const struct {
     wxUint16 c  /*code*/;
     wxUint8  s /*inaccurate substitution*/;
 } encoding_unicode_fallback[] = {
@@ -92,7 +92,7 @@ done
 echo "    {0, 0}" >> unictabl.inc
 echo " };" >> unictabl.inc
 echo "
-static unsigned encoding_unicode_fallback_count = "`cat Fallbacks | wc -l`";" >> unictabl.inc
+static const unsigned encoding_unicode_fallback_count = "`cat Fallbacks | wc -l`";" >> unictabl.inc
 
 
 echo "  * adding reference table..."
@@ -108,7 +108,7 @@ echo "
  *
  */
 
-static struct {
+static const struct {
     wxFontEncoding encoding; // encoding identifier
     const wxUint16 *table;         // 8bit to unicode table
 } encodings_list[] = {
