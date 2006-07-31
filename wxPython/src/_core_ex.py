@@ -256,7 +256,7 @@ class FutureCall:
 class __DocFilter:
     """
     A filter for epydoc that only allows non-Ptr classes and
-    fucntions, in order to reduce the clutter in the API docs.
+    functions, in order to reduce the clutter in the API docs.
     """
     def __init__(self, globals):
         self._globals = globals
