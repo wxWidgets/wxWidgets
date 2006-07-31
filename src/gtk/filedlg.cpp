@@ -202,10 +202,10 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         {
             if ( !defaultDir.empty() )
                 gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
-                wxConvFileName->cWX2MB(defaultDir));
+                    wxConvFileName->cWX2MB(defaultDir));
 
             gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
-                wxConvFileName->cWX2MB(defaultFileName));
+                                              wxGTK_CONV(defaultFileName));
 
 #if GTK_CHECK_VERSION(2,7,3)
             if ((style & wxOVERWRITE_PROMPT) && !gtk_check_version(2,7,3))
@@ -399,7 +399,7 @@ void wxFileDialog::SetFilename(const wxString& name)
     if (!gtk_check_version(2,4,0))
     {
         if (GetStyle() & wxSAVE)
-            gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget), wxConvFileName->cWX2MB(name));
+            gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget), wxGTK_CONV(name));
         else
             SetPath(wxFileName(GetDirectory(), name).GetFullPath());
     }
