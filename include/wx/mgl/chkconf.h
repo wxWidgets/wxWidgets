@@ -14,6 +14,12 @@
 #ifndef _WX_MGL_CHKCONF_H_
 #define _WX_MGL_CHKCONF_H_
 
+
+/* wxPalette is always needed */
+#if !wxUSE_PALETTE
+#   error "wxMGL requires wxUSE_PALETTE=1"
+#endif
+
 /*
    wxDisplay is not implemented for OS/2, use stub common version instead.
  */

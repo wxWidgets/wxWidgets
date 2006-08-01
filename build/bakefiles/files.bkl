@@ -1403,6 +1403,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/x11/app.h
     wx/x11/bitmap.h
     wx/x11/brush.h
+    wx/x11/chkconf.h
     wx/x11/clipbrd.h
     wx/x11/colour.h
     wx/x11/cursor.h

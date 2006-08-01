@@ -29,6 +29,8 @@
 #  include "wx/mgl/chkconf.h"
 #elif defined(__WXMOTIF__)
 #  include "wx/motif/chkconf.h"
+#elif defined(__WXX11__)
+#  include "wx/x11/chkconf.h"
 #endif
 
 /*
@@ -1280,20 +1282,6 @@
 #       endif
 #   endif
 #endif /* wxGTK && !wxUniv */
-
-/* wxMGL-specific dependencies */
-#ifdef __WXMGL__
-#   if !wxUSE_PALETTE
-#       error "wxMGL requires wxUSE_PALETTE=1"
-#   endif
-#endif /* wxMGL */
-
-/* wxX11-specific dependencies */
-#ifdef __WXX11__
-#   if !wxUSE_PALETTE
-#       error "wxX11 requires wxUSE_PALETTE=1"
-#   endif
-#endif /* wxX11 */
 
 /* Hopefully we can emulate these dialogs in due course */
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
