@@ -106,6 +106,9 @@ public:
 
   bool operator==(const wxIPV4address& addr) const;
 
+  // Static function that checks an wxString for a valid ip and returns the value.
+  static bool CheckStringIP(const wxString& strIP, unsigned long &result);
+  
 private:
   wxString m_origHostname;
 };

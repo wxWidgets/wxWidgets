@@ -219,8 +219,8 @@ public:
     virtual bool CanUseEventLoop();
     virtual bool Init_Socket(GSocket *socket);
     virtual void Destroy_Socket(GSocket *socket);
-    virtual void Install_Callback(GSocket *socket, GSocketEvent event);
-    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event);
+    virtual void Enable_Event(GSocket *socket, GSocketEvent event);
+    virtual void Disable_Event(GSocket *socket, GSocketEvent event);
     virtual void Enable_Events(GSocket *socket);
     virtual void Disable_Events(GSocket *socket);
 };
@@ -235,10 +235,10 @@ bool GSocketGUIFunctionsTableNull::Init_Socket(GSocket *WXUNUSED(socket))
 {   return true; }
 void GSocketGUIFunctionsTableNull::Destroy_Socket(GSocket *WXUNUSED(socket))
 {}
-void GSocketGUIFunctionsTableNull::Install_Callback(GSocket *WXUNUSED(socket), GSocketEvent WXUNUSED(event))
+void GSocketGUIFunctionsTableNull::Enable_Event(GSocket *socket, GSocketEvent event)
 {}
-void GSocketGUIFunctionsTableNull::Uninstall_Callback(GSocket *WXUNUSED(socket), GSocketEvent WXUNUSED(event))
-{}
+void GSocketGUIFunctionsTableNull::Disable_Event(GSocket *socket, GSocketEvent event)
+{}  
 void GSocketGUIFunctionsTableNull::Enable_Events(GSocket *WXUNUSED(socket))
 {}
 void GSocketGUIFunctionsTableNull::Disable_Events(GSocket *WXUNUSED(socket))
@@ -317,7 +317,6 @@ GSocket::GSocket()
 void GSocket::Close()
 {
     gs_gui_functions->Disable_Events(this);
-#warning Kry - Actually, does unix need also a close() here? Or is it redundant? What does Disable_Events do?.Defined INVALID_SOCKEt too? 
     if (m_fd != INVALID_SOCKET)
     {
       CLOSE_SOCKET(m_fd);
@@ -770,9 +769,7 @@ GSocketError GSocket::Connect(GSocketStream stream)
   IOCTL_SOCKET(m_fd, FIONBIO, &arg);
 #endif
 
-#ifdef __WXMSW__
   gs_gui_functions->Enable_Events(this);
-#endif
 
   // If the reuse flag is set, use the applicable socket reuse flags(s)
   if (m_reusable)
@@ -791,21 +788,6 @@ GSocketError GSocket::Connect(GSocketStream stream)
 
   /* Connect it to the peer address, with a timeout (see below) */
   ret = connect(m_fd, m_peer->m_addr, m_peer->m_len);
-
-#ifndef __WXMSW__
-
-  /* We only call Enable_Events if we know we aren't shutting down the socket.
-   * NB: Enable_Events needs to be called whether the socket is blocking or
-   * non-blocking, it just shouldn't be called prior to knowing there is a
-   * connection _if_ blocking sockets are being used.
-   * If connect above returns 0, we are already connected and need to make the
-   * call to Enable_Events now.
-   */
-
-  if (m_non_blocking || ret == 0)
-    gs_gui_functions->Enable_Events(this);
-
-#endif
 
   if (ret == SOCKET_ERROR)
   {
@@ -956,7 +938,7 @@ int GSocket::Read(char *buffer, int size)
     m_error = GSOCK_INVSOCK;
     return -1;
   }
-
+  
   /* Disable events during query of socket status */
   Disable(GSOCK_INPUT);
 
@@ -1058,7 +1040,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
 {
   if (!gs_gui_functions->CanUseEventLoop())
   {
-
+    
     GSocketEventFlags result = 0;
     fd_set readfds;
     fd_set writefds;
@@ -1300,17 +1282,13 @@ GSocketError GSocket::SetSockOpt(int level, int optname,
 void GSocket::Enable(GSocketEvent event)
 {
   m_detected &= ~(1 << event);
-#ifndef __WINDOWS__
-  gs_gui_functions->Install_Callback(this, event);
-#endif
+  gs_gui_functions->Enable_Event(this, event);
 }
 
 void GSocket::Disable(GSocketEvent event)
 {
   m_detected |= (1 << event);
-#ifndef __WINDOWS__
-  gs_gui_functions->Uninstall_Callback(this, event);
-#endif
+  gs_gui_functions->Disable_Event(this, event);
 }
 
 /* _GSocket_Input_Timeout:
@@ -1400,6 +1378,7 @@ GSocketError GSocket::Connect_Timeout()
 int GSocket::Recv_Stream(char *buffer, int size)
 {
   int ret;
+
   do
   {
     ret = recv(m_fd, buffer, size, GSOCKET_MSG_NOSIGNAL);
@@ -1512,7 +1491,7 @@ void GSocket::Detected_Read()
 {
 #ifndef __WINDOWS__
 
-  /* Safeguard against straggling call to Detectedw_Read */
+  /* Safeguard against straggling call to Detected_Read */
   if (m_fd == INVALID_SOCKET)
   {
     return;
@@ -1545,6 +1524,13 @@ void GSocket::Detected_Read()
 void GSocket::Detected_Write()
 {
 #ifndef __WINDOWS__
+  
+  /* Safeguard against straggling call to Detected_Write */
+  if (m_fd == INVALID_SOCKET)
+  {
+    return;
+  }
+
   /* If we have already detected a LOST event, then don't try
    * to do any further processing.
    */
@@ -1570,6 +1556,52 @@ void GSocket::Detected_Write()
   {
     CALL_CALLBACK(this, GSOCK_OUTPUT);
   }
+#endif
+}
+
+void GSocket::Detected_Lost()
+{
+#ifndef __WINDOWS__
+    
+  /* Safeguard against straggling call to Detected_Lost */
+  if (m_fd == INVALID_SOCKET)
+  {
+    return;
+  }
+
+  m_detected = GSOCK_LOST_FLAG;
+  m_establishing = false;
+
+  CALL_CALLBACK(this, GSOCK_LOST);
+  Shutdown();
+  
+#endif
+}
+
+void GSocket::Detected_Connect()
+{
+#ifndef __WINDOWS__
+  
+  /* Safeguard against straggling call to Detected_Connect */
+  if (m_fd == INVALID_SOCKET)
+  {
+    return;
+  }
+
+  /* If we have already detected a LOST event, then don't try
+   * to do any further processing.
+   */
+  if ((m_detected & GSOCK_LOST_FLAG) != 0)
+  {
+    m_establishing = false;
+
+    CALL_CALLBACK(this, GSOCK_LOST);
+    Shutdown();
+    return;
+  }
+
+  CALL_CALLBACK(this, GSOCK_CONNECTION);
+  
 #endif
 }
 

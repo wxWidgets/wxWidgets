@@ -112,8 +112,8 @@ public:
     virtual bool CanUseEventLoop() = 0;
     virtual bool Init_Socket(GSocket *socket) = 0;
     virtual void Destroy_Socket(GSocket *socket) = 0;
-    virtual void Install_Callback(GSocket *socket, GSocketEvent event) = 0;
-    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event) = 0;
+    virtual void Enable_Event(GSocket *socket, GSocketEvent event) = 0;
+    virtual void Disable_Event(GSocket *socket, GSocketEvent event) = 0;
     virtual void Enable_Events(GSocket *socket) = 0;
     virtual void Disable_Events(GSocket *socket) = 0;
 };
@@ -145,8 +145,8 @@ public:
     virtual bool CanUseEventLoop();
     virtual bool Init_Socket(GSocket *socket);
     virtual void Destroy_Socket(GSocket *socket);
-    virtual void Install_Callback(GSocket *socket, GSocketEvent event);
-    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event);
+    virtual void Enable_Event(GSocket *socket, GSocketEvent event);
+    virtual void Disable_Event(GSocket *socket, GSocketEvent event);
     virtual void Enable_Events(GSocket *socket);
     virtual void Disable_Events(GSocket *socket);
 };
@@ -195,10 +195,10 @@ public:
   GSocketError SetSockOpt(int level, int optname,
       const void *optval, int optlen);
 
-
-#warning Callback (gtK) specific stuff. Shouldn't this be out of this class?
   virtual void Detected_Read();
   virtual void Detected_Write();
+  virtual void Detected_Connect();
+  virtual void Detected_Lost();
 
 public:
   #warning To be changed to accessors
@@ -242,9 +242,6 @@ private:
   bool m_reusable;
   bool m_udpconnected;
 
-#warning - Whis is only used from the outside in MSw - FIX THIS
-public:
-  /* Callbacks */
   GSocketEventFlags m_detected;
   GSocketCallback m_cbacks[GSOCK_MAX_EVENT];
   char *m_data[GSOCK_MAX_EVENT];

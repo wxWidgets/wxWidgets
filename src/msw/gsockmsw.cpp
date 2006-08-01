@@ -465,15 +465,15 @@ void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 }
 
 /*
- * Callbacks. Unused on MSW.
+ * Event-Specific disabling. Unused on MSW.
  */
 
-void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket, GSocketEvent event)
+void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEvent event)
 {
    // Nothing to see, move on.
 }
 
-void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket, GSocketEvent event)
+void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEvent event)
 {
    // Nothing to see, move on.
 }

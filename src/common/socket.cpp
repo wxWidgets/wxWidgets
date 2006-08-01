@@ -305,7 +305,6 @@ wxSocketBase& wxSocketBase::Read(void* buffer, wxUint32 nbytes)
 {
   // Mask read events
   m_reading = true;
-
   m_lcount = _Read(buffer, nbytes);
 
   // If in wxSOCKET_WAITALL mode, all bytes should have been read.

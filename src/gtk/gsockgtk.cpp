@@ -20,6 +20,19 @@
 
 #include "wx/gsocket.h"
 
+GdkInputCondition TranslateEventCondition(GSocket* socket, GSocketEvent event) {
+  switch (event)
+  {
+    case GSOCK_LOST:       return GDK_INPUT_EXCEPTION;
+    case GSOCK_INPUT:      return GDK_INPUT_READ; 
+    case GSOCK_OUTPUT:   return GDK_INPUT_WRITE;
+    case GSOCK_CONNECTION: return ((socket->m_server) ? GDK_INPUT_READ : GDK_INPUT_WRITE); 
+    default: wxASSERT(0); return (GdkInputCondition)0; // This is invalid
+  }	
+}
+
+void Uninstall_Callback(GSocket *socket, GSocketEvent event);
+void Install_Callback(GSocket *socket, GSocketEvent event);
 
 extern "C" {
 static
@@ -30,10 +43,55 @@ void _GSocket_GDK_Input(gpointer data,
   GSocket *socket = (GSocket *)data;
 
   if (condition & GDK_INPUT_READ)
+  {
+    Uninstall_Callback(socket,GSOCK_INPUT);
     socket->Detected_Read();
+  }
+  
   if (condition & GDK_INPUT_WRITE)
+  {
+    Uninstall_Callback(socket,GSOCK_OUTPUT);
     socket->Detected_Write();
+  }
+  
+  if (condition & GDK_INPUT_EXCEPTION)
+  {
+    Uninstall_Callback(socket,GSOCK_LOST);
+    socket->Detected_Lost();
+  }
+  
 }
+}
+
+void Uninstall_Callback(GSocket *socket, GSocketEvent event)
+{
+  gint *m_id = (gint *)(socket->m_gui_dependent);
+
+  wxCHECK_RET( m_id != NULL, wxT("Critical: socket has no gui callback") );
+  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to install callback for an unknown socket event") );
+  
+  if ( socket->m_fd == -1 )
+    return;
+
+  if (m_id[event] != -1)
+  {
+    gdk_input_remove(m_id[event]);
+    m_id[event] = -1;
+  }
+}
+
+void Install_Callback(GSocket *socket, GSocketEvent event)
+{
+  gint *m_id = (gint *)(socket->m_gui_dependent);
+
+  // Just in case there's some callback left for this event
+  // Sanity checks are done on the Uninstall function, too.
+  Uninstall_Callback(socket,event);
+ 
+  m_id[event] = gdk_input_add(socket->m_fd,
+                          TranslateEventCondition(socket, event),
+                          _GSocket_GDK_Input,
+                          (gpointer)socket);
 }
 
 bool GSocketGUIFunctionsTableConcrete::CanUseEventLoop()
@@ -52,11 +110,11 @@ bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
 {
   gint *m_id;
 
-  socket->m_gui_dependent = (char *)malloc(sizeof(gint)*2);
+  socket->m_gui_dependent = (char *)malloc(sizeof(gint)*GSOCK_MAX_EVENT);
   m_id = (gint *)(socket->m_gui_dependent);
 
-  m_id[0] = -1;
-  m_id[1] = -1;
+  for (int i=0; i < GSOCK_MAX_EVENT; ++i)
+    m_id[i] = -1;
 
   return TRUE;
 }
@@ -66,65 +124,28 @@ void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
   free(socket->m_gui_dependent);
 }
 
-void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket, GSocketEvent event)
-{
-  gint *m_id = (gint *)(socket->m_gui_dependent);
-  int c;
-
-  if (socket->m_fd == -1)
-    return;
-
-  switch (event)
-  {
-    case GSOCK_LOST:       /* fall-through */
-    case GSOCK_INPUT:      c = 0; break;
-    case GSOCK_OUTPUT:     c = 1; break;
-    case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
-    default: return;
-  }
-
-  if (m_id[c] != -1)
-    gdk_input_remove(m_id[c]);
-
-  m_id[c] = gdk_input_add(socket->m_fd,
-                          (c ? GDK_INPUT_WRITE : GDK_INPUT_READ),
-                          _GSocket_GDK_Input,
-                          (gpointer)socket);
-}
-
-void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket, GSocketEvent event)
-{
-  gint *m_id = (gint *)(socket->m_gui_dependent);
-  int c;
-
-  assert( m_id != NULL );
-
-  switch (event)
-  {
-    case GSOCK_LOST:       /* fall-through */
-    case GSOCK_INPUT:      c = 0; break;
-    case GSOCK_OUTPUT:     c = 1; break;
-    case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
-    default: return;
-  }
-
-  if (m_id[c] != -1)
-  {
-    gdk_input_remove(m_id[c]);
-    m_id[c] = -1;
-  }
-}
-
 void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
 {
   Install_Callback(socket, GSOCK_INPUT);
   Install_Callback(socket, GSOCK_OUTPUT);
+  Install_Callback(socket, GSOCK_LOST);
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 {
   Uninstall_Callback(socket, GSOCK_INPUT);
   Uninstall_Callback(socket, GSOCK_OUTPUT);
+  Uninstall_Callback(socket, GSOCK_LOST);
+}
+
+void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket* socket, GSocketEvent event)
+{
+  Install_Callback(socket, event);
+}
+
+void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket* socket, GSocketEvent event)
+{
+  Uninstall_Callback(socket, event);
 }
 
 #else /* !wxUSE_SOCKETS */
