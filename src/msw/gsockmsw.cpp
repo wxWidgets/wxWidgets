@@ -348,17 +348,11 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
                                            LPARAM lParam)
 {
   GSocket *socket;
-  GSocketEvent event;
-  GSocketCallback cback;
-  char *data;
 
   if (uMsg >= WM_USER && uMsg <= (WM_USER + MAXSOCKETS - 1))
   {
     EnterCriticalSection(&critical);
     socket = socketList[(uMsg - WM_USER)];
-    event = (GSocketEvent) -1;
-    cback = NULL;
-    data = NULL;
 
     /* Check that the socket still exists (it has not been
      * destroyed) and for safety, check that the m_fd field
@@ -368,29 +362,18 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
     {
       switch WSAGETSELECTEVENT(lParam)
       {
-        case FD_READ:    event = GSOCK_INPUT; break;
-        case FD_WRITE:   event = GSOCK_OUTPUT; break;
-        case FD_ACCEPT:  event = GSOCK_CONNECTION; break;
+        case FD_READ:    socket->Detected_Read(); break;
+        case FD_WRITE:   socket->Detected_Write(); break;
+        case FD_ACCEPT:  socket->Detected_Connection(); break;
         case FD_CONNECT:
         {
           if (WSAGETSELECTERROR(lParam) != 0)
-            event = GSOCK_LOST;
+            socket->Detected_Lost();
           else
-            event = GSOCK_CONNECTION;
+            socket->Detected_Connection();
           break;
         }
-        case FD_CLOSE:   event = GSOCK_LOST; break;
-      }
-
-      if (event != -1)
-      {
-        cback = socket->m_cbacks[event];
-        data = socket->m_data[event];
-
-        if (event == GSOCK_LOST)
-          socket->m_detected = GSOCK_LOST_FLAG;
-        else
-          socket->m_detected |= (1 << event);
+        case FD_CLOSE:   socket->Detected_Lost; break;
       }
     }
 
@@ -401,9 +384,6 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
      * been closed!
      */
     LeaveCriticalSection(&critical);
-
-    if (cback != NULL)
-      (cback)(socket, event, data);
 
     return (LRESULT) 0;
   }
