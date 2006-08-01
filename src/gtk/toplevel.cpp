@@ -795,6 +795,9 @@ bool wxTopLevelWindowGTK::Show( bool show )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
+    if (show == IsShown())
+        return true;
+
     if (show && !m_sizeSet)
     {
         /* by calling GtkOnSize here, we don't have to call
@@ -805,8 +808,11 @@ bool wxTopLevelWindowGTK::Show( bool show )
         GtkOnSize( m_x, m_y, m_width, m_height );
     }
 
-    if (show)
-        gtk_widget_set_uposition( m_widget, m_x, m_y );
+    // This seems no longer to be needed and the call
+    // itself is deprecated.
+    //
+    //if (show)
+    //    gtk_widget_set_uposition( m_widget, m_x, m_y );
 
     return wxWindow::Show( show );
 }
