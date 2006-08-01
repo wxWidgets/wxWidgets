@@ -1770,6 +1770,7 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/x11/app.h \
 	wx/x11/bitmap.h \
 	wx/x11/brush.h \
+	wx/x11/chkconf.h \
 	wx/x11/clipbrd.h \
 	wx/x11/colour.h \
 	wx/x11/cursor.h \
@@ -28042,7 +28043,7 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 			   -o -name "*.dsw" -o -name "*.hh*" -o -name "*.mms"    \
 			   -o -name "*.mcp" -o -name "*M*.xml" -o -name "*.r"    \
 			   -o -name "*.pro"  \
-			   -o -name "*.vpj" -o -name "*.sc"                      \
+			   -o -name "*.vpj"  \
 			   -o \( -name "makefile.*" -a ! -name "makefile.unx" \) \
 			\) -print0 | xargs -0 rm -rf
 
