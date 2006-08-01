@@ -3339,20 +3339,26 @@ wxMBConv *wxCSConv::DoCreate() const
             }
 
             const wxChar** names = wxFontMapperBase::GetAllEncodingNames(encoding);
-
-            for ( ; *names; ++names )
+            // CS : in case this does not return valid names (eg for MacRoman) encoding
+            // got a 'failure' entry in the cache all the same, although it just has to 
+            // be created using a different method, so only store failed iconv creation
+            // attempts (or perhaps we shoulnd't do this at all ?)
+            if ( names[0] != NULL )
             {
-                wxMBConv_iconv *conv = new wxMBConv_iconv(*names);
-                if ( conv->IsOk() )
+                for ( ; *names; ++names )
                 {
-                    gs_nameCache[encoding] = *names;
-                    return conv;
+                    wxMBConv_iconv *conv = new wxMBConv_iconv(*names);
+                    if ( conv->IsOk() )
+                    {
+                        gs_nameCache[encoding] = *names;
+                        return conv;
+                    }
+
+                    delete conv;
                 }
 
-                delete conv;
+                gs_nameCache[encoding] = _T(""); // cache the failure
             }
-
-            gs_nameCache[encoding] = _T(""); // cache the failure
         }
 #endif // wxUSE_FONTMAP
     }
