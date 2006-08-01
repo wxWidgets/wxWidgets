@@ -297,7 +297,11 @@ class LEDNumberCtrl(_core.Control):
         return _gizmos.LEDNumberCtrl_Create(*args, **kwargs)
 
     def GetAlignment(*args, **kwargs):
-        """GetAlignment(self) -> int"""
+        """
+        GetAlignment(self) -> int
+
+        Get the control alignment (left/right/centre, top/bottom/centre)
+        """
         return _gizmos.LEDNumberCtrl_GetAlignment(*args, **kwargs)
 
     def GetDrawFaded(*args, **kwargs):
@@ -884,7 +888,11 @@ class StaticPicture(_core.Control):
         return _gizmos.StaticPicture_SetAlignment(*args, **kwargs)
 
     def GetAlignment(*args, **kwargs):
-        """GetAlignment(self) -> int"""
+        """
+        GetAlignment(self) -> int
+
+        Get the control alignment (left/right/centre, top/bottom/centre)
+        """
         return _gizmos.StaticPicture_GetAlignment(*args, **kwargs)
 
     def SetScale(*args, **kwargs):

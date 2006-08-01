@@ -122,6 +122,7 @@ CB_SIMPLE = _core_.CB_SIMPLE
 CB_DROPDOWN = _core_.CB_DROPDOWN
 CB_SORT = _core_.CB_SORT
 CB_READONLY = _core_.CB_READONLY
+CB_FILENAME = _core_.CB_FILENAME
 RA_HORIZONTAL = _core_.RA_HORIZONTAL
 RA_VERTICAL = _core_.RA_VERTICAL
 RA_SPECIFY_ROWS = _core_.RA_SPECIFY_ROWS
@@ -3511,6 +3512,7 @@ wxEVT_SHOW = _core_.wxEVT_SHOW
 wxEVT_ICONIZE = _core_.wxEVT_ICONIZE
 wxEVT_MAXIMIZE = _core_.wxEVT_MAXIMIZE
 wxEVT_MOUSE_CAPTURE_CHANGED = _core_.wxEVT_MOUSE_CAPTURE_CHANGED
+wxEVT_MOUSE_CAPTURE_LOST = _core_.wxEVT_MOUSE_CAPTURE_LOST
 wxEVT_PAINT = _core_.wxEVT_PAINT
 wxEVT_ERASE_BACKGROUND = _core_.wxEVT_ERASE_BACKGROUND
 wxEVT_NC_PAINT = _core_.wxEVT_NC_PAINT
@@ -3587,6 +3589,7 @@ EVT_WINDOW_CREATE = wx.PyEventBinder( wxEVT_CREATE )
 EVT_WINDOW_DESTROY = wx.PyEventBinder( wxEVT_DESTROY )
 EVT_SET_CURSOR = wx.PyEventBinder( wxEVT_SET_CURSOR )
 EVT_MOUSE_CAPTURE_CHANGED = wx.PyEventBinder( wxEVT_MOUSE_CAPTURE_CHANGED )
+EVT_MOUSE_CAPTURE_LOST = wx.PyEventBinder( wxEVT_MOUSE_CAPTURE_LOST )         
 
 EVT_LEFT_DOWN = wx.PyEventBinder( wxEVT_LEFT_DOWN )
 EVT_LEFT_UP = wx.PyEventBinder( wxEVT_LEFT_UP )
@@ -5850,6 +5853,47 @@ class MouseCaptureChangedEvent(Event):
         return _core_.MouseCaptureChangedEvent_GetCapturedWindow(*args, **kwargs)
 
 _core_.MouseCaptureChangedEvent_swigregister(MouseCaptureChangedEvent)
+
+#---------------------------------------------------------------------------
+
+class MouseCaptureLostEvent(Event):
+    """
+    A mouse capture lost event is sent to a window that obtained mouse
+    capture, which was subsequently loss due to "external" event, for
+    example when a dialog box is shown or if another application captures
+    the mouse.
+
+    If this happens, this event is sent to all windows that are on the
+    capture stack (i.e. a window that called `wx.Window.CaptureMouse`, but
+    didn't call `wx.Window.ReleaseMouse` yet). The event is *not* sent
+    if the capture changes because of a call to CaptureMouse or
+    ReleaseMouse.
+
+    This event is currently emitted under Windows only.
+
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, int winid=0) -> MouseCaptureLostEvent
+
+        A mouse capture lost event is sent to a window that obtained mouse
+        capture, which was subsequently loss due to "external" event, for
+        example when a dialog box is shown or if another application captures
+        the mouse.
+
+        If this happens, this event is sent to all windows that are on the
+        capture stack (i.e. a window that called `wx.Window.CaptureMouse`, but
+        didn't call `wx.Window.ReleaseMouse` yet). The event is *not* sent
+        if the capture changes because of a call to CaptureMouse or
+        ReleaseMouse.
+
+        This event is currently emitted under Windows only.
+
+        """
+        _core_.MouseCaptureLostEvent_swiginit(self,_core_.new_MouseCaptureLostEvent(*args, **kwargs))
+_core_.MouseCaptureLostEvent_swigregister(MouseCaptureLostEvent)
 
 #---------------------------------------------------------------------------
 
@@ -8659,7 +8703,13 @@ class Window(EvtHandler):
         mouse and when the mouse is released the capture returns to the window
         which had had captured it previously and it is only really released if
         there were no previous window. In particular, this means that you must
-        release the mouse as many times as you capture it.
+        release the mouse as many times as you capture it, unless the window
+        receives the `wx.MouseCaptureLostEvent` event.
+         
+        Any application which captures the mouse in the beginning of some
+        operation *must* handle `wx.MouseCaptureLostEvent` and cancel this
+        operation when it receives the event. The event handler must not
+        recapture mouse.
         """
         return _core_.Window_CaptureMouse(*args, **kwargs)
 
@@ -10388,14 +10438,13 @@ class Control(Window):
         """
         return _core_.Control_GetAlignment(*args, **kwargs)
 
-    def GetLabelText(*args):
+    def GetLabelText(*args, **kwargs):
         """
-        GetLabelText(self, String label) -> String
         GetLabelText(self) -> String
 
         Get just the text of the label, without mnemonic characters ('&')
         """
-        return _core_.Control_GetLabelText(*args)
+        return _core_.Control_GetLabelText(*args, **kwargs)
 
     def Command(*args, **kwargs):
         """
@@ -12870,7 +12919,7 @@ class FutureCall:
 class __DocFilter:
     """
     A filter for epydoc that only allows non-Ptr classes and
-    fucntions, in order to reduce the clutter in the API docs.
+    functions, in order to reduce the clutter in the API docs.
     """
     def __init__(self, globals):
         self._globals = globals
@@ -12878,10 +12927,22 @@ class __DocFilter:
     def __call__(self, name):
         import types
         obj = self._globals.get(name, None)
+
+        # only document classes and function
         if type(obj) not in [type, types.ClassType, types.FunctionType, types.BuiltinFunctionType]:
             return False
+
+        # skip other things that are private or will be documented as part of somethign else
         if name.startswith('_') or name.startswith('EVT') or name.endswith('_swigregister')  or name.endswith('Ptr') :
             return False
+
+        # skip functions that are duplicates of static functions in a class
+        if name.find('_') != -1:
+            cls = self._globals.get(name.split('_')[0], None)
+            methname = name.split('_')[1]
+            if hasattr(cls, methname) and type(getattr(cls, methname)) is types.FunctionType:
+                return False
+            
         return True
 
 #----------------------------------------------------------------------------
