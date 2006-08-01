@@ -168,6 +168,7 @@ AUI_MGR_TRANSPARENT_DRAG = _aui.AUI_MGR_TRANSPARENT_DRAG
 AUI_MGR_TRANSPARENT_HINT = _aui.AUI_MGR_TRANSPARENT_HINT
 AUI_MGR_TRANSPARENT_HINT_FADE = _aui.AUI_MGR_TRANSPARENT_HINT_FADE
 AUI_MGR_DISABLE_VENETIAN_BLINDS = _aui.AUI_MGR_DISABLE_VENETIAN_BLINDS
+AUI_MGR_DISABLE_VENETIAN_BLINDS_FADE = _aui.AUI_MGR_DISABLE_VENETIAN_BLINDS_FADE
 AUI_MGR_DEFAULT = _aui.AUI_MGR_DEFAULT
 AUI_ART_SASH_SIZE = _aui.AUI_ART_SASH_SIZE
 AUI_ART_CAPTION_SIZE = _aui.AUI_ART_CAPTION_SIZE
@@ -222,6 +223,10 @@ class PaneInfo(object):
         _aui.PaneInfo_swiginit(self,_aui.new_PaneInfo(*args, **kwargs))
     __swig_destroy__ = _aui.delete_PaneInfo
     __del__ = lambda self : None;
+    def SafeSet(*args, **kwargs):
+        """SafeSet(self, PaneInfo source)"""
+        return _aui.PaneInfo_SafeSet(*args, **kwargs)
+
     def IsOk(*args, **kwargs):
         """
         IsOk(self) -> bool
@@ -1047,6 +1052,14 @@ class FrameManager(_core.EvtHandler):
         """
         return _aui.FrameManager_DetachPane(*args, **kwargs)
 
+    def SavePaneInfo(*args, **kwargs):
+        """SavePaneInfo(self, PaneInfo pane) -> String"""
+        return _aui.FrameManager_SavePaneInfo(*args, **kwargs)
+
+    def LoadPaneInfo(*args, **kwargs):
+        """LoadPaneInfo(self, String pane_part, PaneInfo pane)"""
+        return _aui.FrameManager_LoadPaneInfo(*args, **kwargs)
+
     def SavePerspective(*args, **kwargs):
         """
         SavePerspective(self) -> String
@@ -1631,7 +1644,7 @@ EVT_AUINOTEBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_PAGE
 EVT_AUINOTEBOOK_BUTTON = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_BUTTON, 1 )
 EVT_AUINOTEBOOK_BEGIN_DRAG = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, 1 )
 EVT_AUINOTEBOOK_END_DRAG = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, 1 )
-EVT_AUINOTEBOOK_DRAG_MOTION = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, 1 )        
+EVT_AUINOTEBOOK_DRAG_MOTION = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, 1 )
 
 class PyDockArt(DefaultDockArt):
     """
