@@ -264,10 +264,22 @@ class __DocFilter:
     def __call__(self, name):
         import types
         obj = self._globals.get(name, None)
+
+        # only document classes and function
         if type(obj) not in [type, types.ClassType, types.FunctionType, types.BuiltinFunctionType]:
             return False
+
+        # skip other things that are private or will be documented as part of somethign else
         if name.startswith('_') or name.startswith('EVT') or name.endswith('_swigregister')  or name.endswith('Ptr') :
             return False
+
+        # skip functions that are duplicates of static functions in a class
+        if name.find('_') != -1:
+            cls = self._globals.get(name.split('_')[0], None)
+            methname = name.split('_')[1]
+            if hasattr(cls, methname) and type(getattr(cls, methname)) is types.FunctionType:
+                return False
+            
         return True
 
 #----------------------------------------------------------------------------
