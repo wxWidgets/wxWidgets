@@ -403,6 +403,7 @@ void wxFrameBase::SetStatusBar(wxStatusBar *statBar)
 
 #endif // wxUSE_STATUSBAR
 
+#if wxUSE_MENUS || wxUSE_TOOLBAR
 void wxFrameBase::DoGiveHelp(const wxString& text, bool show)
 {
 #if wxUSE_STATUSBAR
@@ -446,6 +447,7 @@ void wxFrameBase::DoGiveHelp(const wxString& text, bool show)
     wxUnusedVar(show);
 #endif // wxUSE_STATUSBAR
 }
+#endif // wxUSE_MENUS || wxUSE_TOOLBAR
 
 
 // ----------------------------------------------------------------------------
