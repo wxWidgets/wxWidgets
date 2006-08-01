@@ -34,10 +34,6 @@ do
 	    echo "Generating $mswdir/makefile.g95 for Cygwin/Mingw32..."
 	    $TMAKE -t g95 wxwin.pro -o $mswdir/makefile.g95;;
 
-	sc.t)
-	    echo "Generating $mswdir/makefile.sc for Symantec C++..."
-	    $TMAKE -t sc wxwin.pro -o $mswdir/makefile.sc;;
-
 	vc.t)
 	    echo "Generating $mswdir/makefile.vc for Visual C++ 4.0..."
 	    $TMAKE -t vc wxwin.pro -o $mswdir/makefile.vc;;

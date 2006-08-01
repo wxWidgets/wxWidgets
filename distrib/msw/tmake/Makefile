@@ -11,7 +11,6 @@ all: $(MSW_MAKEFILES_DIR)/makefile.vc \
      $(MSW_MAKEFILES_DIR)/makefile.b32 \
      $(MSW_MAKEFILES_DIR)/makefile.dos \
      $(MSW_MAKEFILES_DIR)/makefile.bcc \
-     $(MSW_MAKEFILES_DIR)/makefile.sc \
      $(MSW_MAKEFILES_DIR)/makefile.wat \
      $(MSW_MAKEFILES_DIR)/makefile.g95 \
      $(WXDIR)/Makefile.in \
@@ -42,9 +41,6 @@ $(MSW_MAKEFILES_DIR)/makefile.dos: dos.t filelist.txt wxwin.pro
 
 $(MSW_MAKEFILES_DIR)/makefile.bcc: bcc.t filelist.txt wxwin.pro
 	$(TMAKE) -t bcc wxwin.pro -o $@
-
-$(MSW_MAKEFILES_DIR)/makefile.sc: sc.t filelist.txt wxwin.pro
-	$(TMAKE) -t sc wxwin.pro -o $@
 
 $(MSW_MAKEFILES_DIR)/makefile.wat: wat.t filelist.txt wxwin.pro
 	$(TMAKE) -t wat wxwin.pro -o $@
