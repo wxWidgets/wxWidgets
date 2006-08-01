@@ -1288,6 +1288,13 @@
 #   endif
 #endif /* wxMGL */
 
+/* wxX11-specific dependencies */
+#ifdef __WXX11__
+#   if !wxUSE_PALETTE
+#       error "wxX11 requires wxUSE_PALETTE=1"
+#   endif
+#endif /* wxX11 */
+
 /* Hopefully we can emulate these dialogs in due course */
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
 #   ifdef wxUSE_COLOURDLG
