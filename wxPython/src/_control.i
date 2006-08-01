@@ -72,9 +72,9 @@ __init__ as a plain old wx.Control is not very useful.", "");
         "Get the control alignment (left/right/centre, top/bottom/centre)", "");
     
 
-    DocDeclStr(
-        static wxString , GetLabelText(const wxString& label),
-        "Get the string without mnemonic characters ('&')", "");
+//     DocDeclStr(
+//         static wxString , GetLabelText(const wxString& label),
+//         "Get the string without mnemonic characters ('&')", "");
     
 
     DocDeclStr(
