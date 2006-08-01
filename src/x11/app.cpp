@@ -668,10 +668,12 @@ void wxApp::WakeUpIdle()
 // Create display, and other initialization
 bool wxApp::OnInitGui()
 {
+#if wxUSE_LOG
     // Eventually this line will be removed, but for
     // now we don't want to try popping up a dialog
     // for error messages.
     delete wxLog::SetActiveTarget(new wxLogStderr);
+#endif
 
     if (!wxAppBase::OnInitGui())
         return false;
