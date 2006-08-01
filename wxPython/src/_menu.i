@@ -309,6 +309,9 @@ public:
     // called before deleting the menubar normally
     virtual void Detach();
 
+    // update all menu item states in all menus
+    virtual void UpdateMenus();
+
 #ifdef __WXMAC__
     static void SetAutoWindowMenu( bool enable );
     static bool GetAutoWindowMenu();
