@@ -10186,6 +10186,10 @@ class MenuBar(Window):
         """Detach(self)"""
         return _core_.MenuBar_Detach(*args, **kwargs)
 
+    def UpdateMenus(*args, **kwargs):
+        """UpdateMenus(self)"""
+        return _core_.MenuBar_UpdateMenus(*args, **kwargs)
+
     def SetAutoWindowMenu(*args, **kwargs):
         """SetAutoWindowMenu(bool enable)"""
         return _core_.MenuBar_SetAutoWindowMenu(*args, **kwargs)

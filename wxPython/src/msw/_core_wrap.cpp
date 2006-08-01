@@ -42175,6 +42175,33 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_MenuBar_UpdateMenus(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxMenuBar *arg1 = (wxMenuBar *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxMenuBar, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MenuBar_UpdateMenus" "', expected argument " "1"" of type '" "wxMenuBar *""'"); 
+  }
+  arg1 = reinterpret_cast< wxMenuBar * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->UpdateMenus();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_MenuBar_SetAutoWindowMenu(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   bool arg1 ;
@@ -53984,6 +54011,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MenuBar_IsAttached", (PyCFunction)_wrap_MenuBar_IsAttached, METH_O, NULL},
 	 { (char *)"MenuBar_Attach", (PyCFunction) _wrap_MenuBar_Attach, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuBar_Detach", (PyCFunction)_wrap_MenuBar_Detach, METH_O, NULL},
+	 { (char *)"MenuBar_UpdateMenus", (PyCFunction)_wrap_MenuBar_UpdateMenus, METH_O, NULL},
 	 { (char *)"MenuBar_SetAutoWindowMenu", (PyCFunction) _wrap_MenuBar_SetAutoWindowMenu, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MenuBar_GetAutoWindowMenu", (PyCFunction)_wrap_MenuBar_GetAutoWindowMenu, METH_NOARGS, NULL},
 	 { (char *)"MenuBar_swigregister", MenuBar_swigregister, METH_VARARGS, NULL},
