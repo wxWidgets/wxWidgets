@@ -29,7 +29,6 @@ contrib/src/xml/makefile.b32
 contrib/src/xml/makefile.wat
 contrib/src/xml/makefile.g95
 contrib/src/xml/makefile.unx
-contrib/src/xml/makefile.dos
 contrib/src/xml/makefile.vms
 contrib/src/xml/Makefile.in
 contrib/src/xml/*.txt
@@ -49,7 +48,6 @@ contrib/utils/wxrc/makefile.b32
 contrib/utils/wxrc/makefile.wat
 contrib/utils/wxrc/makefile.g95
 contrib/utils/wxrc/makefile.unx
-contrib/utils/wxrc/makefile.dos
 contrib/utils/wxrc/makefile.vms
 contrib/utils/wxrc/Makefile.in
 contrib/utils/wxrc/*.txt

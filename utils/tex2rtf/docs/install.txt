@@ -23,7 +23,7 @@ in wx/src/x, wx/src/base and wx/utils/tex2rtf/src.
 Use the makefile target 'xview' or 'motif' from each of the directories
 wx/src/x and wx/utils/tex2rtf/src.
 
-Under Windows, just type 'nmake -f makefile.dos' if you're
+Under Windows, just type 'nmake -f makefile.vc' if you're
 using a Microsoft-compatible compiler (you'll need to
 change the makefiles or build project files for other compilers.)
 

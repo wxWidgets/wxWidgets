@@ -12,7 +12,6 @@ utils/emulator/src/*.cpp
 utils/emulator/src/*.h
 utils/emulator/src/makefile.vc
 utils/emulator/src/makefile.bcc
-utils/emulator/src/makefile.dos
 utils/emulator/src/makefile.b32
 utils/emulator/src/makefile.wat
 utils/emulator/src/makefile.unx

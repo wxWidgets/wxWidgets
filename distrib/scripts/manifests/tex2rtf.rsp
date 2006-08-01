@@ -2,7 +2,6 @@ utils/tex2rtf/Makefile.in
 utils/tex2rtf/src/*.cpp
 utils/tex2rtf/src/*.h
 utils/tex2rtf/src/makefile.bcc
-utils/tex2rtf/src/makefile.dos
 utils/tex2rtf/src/makefile.b32
 utils/tex2rtf/src/makefile.wat
 utils/tex2rtf/src/makefile.unx

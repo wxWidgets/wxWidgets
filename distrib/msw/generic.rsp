@@ -753,8 +753,6 @@ samples/ipc/client.b32
 samples/ipc/server.b32
 samples/ipc/client.bcc
 samples/ipc/server.bcc
-samples/ipc/client.dos
-samples/ipc/server.dos
 samples/ipc/client.g95
 samples/ipc/server.g95
 samples/ipc/*.rc
@@ -1147,8 +1145,6 @@ samples/sockets/client.wat
 samples/sockets/server.wat
 samples/sockets/client.vc
 samples/sockets/server.vc
-samples/sockets/client.dos
-samples/sockets/server.dos
 samples/sockets/client.b32
 samples/sockets/server.b32
 samples/sockets/client.bcc

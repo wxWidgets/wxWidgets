@@ -185,8 +185,6 @@ src/makebcc.env
 src/makeprog.bcc
 src/makelib.bcc
 src/makemsc.env
-src/makeprog.msc
-src/makelib.msc
 src/makewat.env
 src/makeprog.wat
 src/makelib.wat
@@ -203,7 +201,6 @@ src/makelib.sl
 src/salford.lnk
 src/maketwin.env
 src/makefile.bcc
-src/makefile.dos
 src/makefile.vc
 src/*.bat
 

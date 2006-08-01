@@ -30,10 +30,6 @@ do
 	    echo "Generating $mswdir/makefile.bcc for Borland C++ (16 bits)..."
 	    $TMAKE -t bcc wxwin.pro -o $mswdir/makefile.bcc;;
 
-	dos.t)
-	    echo "Generating $mswdir/makefile.dos for Visual C++ 1.52..."
-	    $TMAKE -t dos wxwin.pro -o $mswdir/makefile.dos;;
-
 	g95.t)
 	    echo "Generating $mswdir/makefile.g95 for Cygwin/Mingw32..."
 	    $TMAKE -t g95 wxwin.pro -o $mswdir/makefile.g95;;

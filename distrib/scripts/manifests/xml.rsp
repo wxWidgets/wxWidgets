@@ -54,7 +54,6 @@ src/xrc/makefile.b32
 src/xrc/makefile.wat
 src/xrc/makefile.g95
 src/xrc/makefile.unx
-src/xrc/makefile.dos
 src/xrc/makefile.vms
 src/xrc/Makefile.in
 src/xrc/*.txt
@@ -94,7 +93,6 @@ contrib/utils/convertrc/makefile.b32
 contrib/utils/convertrc/makefile.wat
 contrib/utils/convertrc/makefile.g95
 contrib/utils/convertrc/makefile.unx
-contrib/utils/convertrc/makefile.dos
 contrib/utils/convertrc/makefile.vms
 contrib/utils/convertrc/Makefile.in
 contrib/utils/convertrc/*.txt

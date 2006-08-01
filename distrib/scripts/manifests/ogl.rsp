@@ -29,7 +29,6 @@ contrib/src/ogl/makefile.b32
 contrib/src/ogl/makefile.wat
 contrib/src/ogl/makefile.g95
 contrib/src/ogl/makefile.unx
-contrib/src/ogl/makefile.dos
 contrib/src/ogl/makefile.vms
 contrib/src/ogl/Makefile.in
 contrib/src/ogl/*.txt
@@ -49,7 +48,6 @@ contrib/samples/ogl/ogledit/makefile.b32
 contrib/samples/ogl/ogledit/makefile.wat
 contrib/samples/ogl/ogledit/makefile.g95
 contrib/samples/ogl/ogledit/makefile.unx
-contrib/samples/ogl/ogledit/makefile.dos
 contrib/samples/ogl/ogledit/makefile.vms
 contrib/samples/ogl/ogledit/Makefile.in
 contrib/samples/ogl/ogledit/*.txt
@@ -73,7 +71,6 @@ contrib/samples/ogl/studio/makefile.b32
 contrib/samples/ogl/studio/makefile.wat
 contrib/samples/ogl/studio/makefile.g95
 contrib/samples/ogl/studio/makefile.unx
-contrib/samples/ogl/studio/makefile.dos
 contrib/samples/ogl/studio/makefile.vms
 contrib/samples/ogl/studio/Makefile.in
 contrib/samples/ogl/studio/*.txt
