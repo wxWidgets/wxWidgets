@@ -405,18 +405,26 @@ void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
     /* We could probably just subscribe to all events regardless
      * of the socket type, but MS recommends to do it this way.
      */
-    long lEvent = socket->m_server?
-                  FD_ACCEPT : (FD_READ | FD_WRITE | FD_CONNECT | FD_CLOSE);
-#ifndef __WXWINCE__
-    gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, lEvent);
-#else
+    if (socket->server)
+    {
+      Enable_Event(socket, FD_ACCEPT)
+    }
+    else
+    {
+      Enable_Event(socket, FD_READ);
+      Enable_Event(socket, FD_WRITE);
+      Enable_Event(socket, FD_CLOSE);
+      Enable_Event(socket, FD_CONNECT);
+    }
+    
+#ifdef __WXWINCE__
 /*
 *  WinCE creates a thread for socket event handling.
 *  All needed parameters get passed through the thread_data structure.
 */
 
     thread_data* d = new thread_data;
-    d->lEvent = lEvent;
+    d->lEvent = eventflags;
     d->hEvtWin = hWin;
     d->msgnumber = socket->m_msgnumber;
     d->fd = socket->m_fd;
@@ -435,6 +443,7 @@ void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 
   if (socket->m_fd != INVALID_SOCKET)
   {
+    eventflags = 0;
 #ifndef __WXWINCE__
     gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, 0);
 #else
@@ -445,17 +454,37 @@ void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 }
 
 /*
- * Event-Specific disabling. Unused on MSW.
+ * Event-Specific disabling.
  */
+
+long TranslateEventCondition(GSocket* socket, GSocketEvent event) {
+  switch (event) {
+    case GSOCK_INPUT: return FD_READ;
+    case GSOCK_OUTPUT: return FD_WRITE;
+    case GSOCK_CONNECTION: return (socket->m_server ? FD_ACCEPT : FD_CONNECT);
+    case GSOCK_ERROR: return FD_CLOSE;
+    default: assert(0); return 0;
+  }  
+}
 
 void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEvent event)
 {
-   // Nothing to see, move on.
+#ifndef __WXWINCE__
+  eventflags |= TranslateEventCondition(socket,event);
+  gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, eventflags);
+#else
+  #error WinCE not supported yet
+#endif  
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEvent event)
 {
-   // Nothing to see, move on.
+#ifndef __WXWINCE__
+  eventflags &= ~(TranslateEventCondition(socket,event));
+  gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, eventflags);
+#else
+  #error WinCE not supported yet
+#endif  
 }
 
 #else /* !wxUSE_SOCKETS */

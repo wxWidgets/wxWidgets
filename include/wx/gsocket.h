@@ -116,6 +116,8 @@ public:
     virtual void Disable_Event(GSocket *socket, GSocketEvent event) = 0;
     virtual void Enable_Events(GSocket *socket) = 0;
     virtual void Disable_Events(GSocket *socket) = 0;
+private:
+    int eventflags;
 };
 
 
