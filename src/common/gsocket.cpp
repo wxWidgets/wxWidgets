@@ -1486,8 +1486,6 @@ int GSocket::Send_Dgram(const char *buffer, int size)
 
 void GSocket::Detected_Read()
 {
-#ifndef __WINDOWS__
-
   /* Safeguard against straggling call to Detected_Read */
   if (m_fd == INVALID_SOCKET)
   {
@@ -1515,13 +1513,11 @@ void GSocket::Detected_Read()
   {
     CALL_CALLBACK(this, GSOCK_INPUT);
   }
-#endif
 }
 
 void GSocket::Detected_Write()
 {
-#ifndef __WINDOWS__
-  
+
   /* Safeguard against straggling call to Detected_Write */
   if (m_fd == INVALID_SOCKET)
   {
@@ -1553,13 +1549,11 @@ void GSocket::Detected_Write()
   {
     CALL_CALLBACK(this, GSOCK_OUTPUT);
   }
-#endif
 }
 
 void GSocket::Detected_Lost()
 {
-#ifndef __WINDOWS__
-    
+   
   /* Safeguard against straggling call to Detected_Lost */
   if (m_fd == INVALID_SOCKET)
   {
@@ -1570,15 +1564,12 @@ void GSocket::Detected_Lost()
   m_establishing = false;
 
   CALL_CALLBACK(this, GSOCK_LOST);
-  Shutdown();
-  
-#endif
+  Shutdown(); 
 }
 
 void GSocket::Detected_Connect()
 {
-#ifndef __WINDOWS__
-  
+ 
   /* Safeguard against straggling call to Detected_Connect */
   if (m_fd == INVALID_SOCKET)
   {
@@ -1598,8 +1589,6 @@ void GSocket::Detected_Connect()
   }
 
   CALL_CALLBACK(this, GSOCK_CONNECTION);
-  
-#endif
 }
 
 /* Compatibility functions for GSocket */
