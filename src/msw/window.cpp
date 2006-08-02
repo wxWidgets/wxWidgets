@@ -1429,6 +1429,26 @@ void wxWindowMSW::Update()
 // drag and drop
 // ---------------------------------------------------------------------------
 
+// we need to lower the sibling static boxes so controls contained within can be
+// a drop target
+static inline void AdjustStaticBoxZOrder(wxWindow *parent)
+{
+    // no sibling static boxes if we have no parent (ie TLW)
+    if ( !parent )
+        return;
+
+    for ( wxWindowList::compatibility_iterator node = parent->GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxStaticBox *statbox = wxDynamicCast(node->GetData(), wxStaticBox);
+        if ( statbox )
+        {
+            ::SetWindowPos(GetHwndOf(statbox), HWND_BOTTOM, 0, 0, 0, 0,
+                           SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        }
+    }
+}
 
 #if wxUSE_DRAG_AND_DROP
 void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
@@ -1440,7 +1460,10 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
 
     m_dropTarget = pDropTarget;
     if ( m_dropTarget != 0 )
+    {
+        AdjustStaticBoxZOrder(GetParent());
         m_dropTarget->Register(m_hWnd);
+    }
 }
 #endif // wxUSE_DRAG_AND_DROP
 
@@ -1451,7 +1474,10 @@ void wxWindowMSW::DragAcceptFiles(bool WXUNUSED_IN_WINCE(accept))
 #ifndef __WXWINCE__
     HWND hWnd = GetHwnd();
     if ( hWnd )
+    {
+        AdjustStaticBoxZOrder(GetParent());
         ::DragAcceptFiles(hWnd, (BOOL)accept);
+    }
 #endif
 }
 

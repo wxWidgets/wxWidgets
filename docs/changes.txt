@@ -11,6 +11,8 @@ All:
   Previously, only the buffer would be returned, even if more data was requested.
 - Fixed wxDb::Open(wxDbConnectInf) when using connection string (Hellwolf Misty)
 - Fixed crash in wxDb::Open() in Unicode build (Massimiliano Marretta)
+- Fixed bug where wxDateTime::Now() would sometimes return an incorrect value
+  the first time it was called.
 
 All (GUI):
 
@@ -46,6 +48,9 @@ wxMotif:
 
 wxX11:
 - Implement wxGetMouseState()
+
+wxMSW:
+- Drag and drop now works inside wxStaticBox.
 
 
 2.6.3
