@@ -742,9 +742,6 @@ GSocketError GSocket::Connect(GSocketStream stream)
 
   // TCP sockets have a lot of stuff to do before connecting...
 
-  /* Enable CONNECTION events (needed for nonblocking connections) */
-  Enable(GSOCK_CONNECTION);
-
   m_server   = false;
   m_establishing = false;
 
