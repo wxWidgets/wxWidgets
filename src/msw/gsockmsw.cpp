@@ -58,7 +58,6 @@
 
 #ifndef __GSOCKET_STANDALONE__
 
-#include "wx/msw/gsockmsw.h"
 #include "wx/gsocket.h"
 
 extern "C" WXDLLIMPEXP_BASE HINSTANCE wxGetInstance(void);
@@ -66,7 +65,6 @@ extern "C" WXDLLIMPEXP_BASE HINSTANCE wxGetInstance(void);
 
 #else /* __GSOCKET_STANDALONE__ */
 
-#include "gsockmsw.h"
 #include "gsocket.h"
 
 /* If not using wxWidgets, a global var called hInst must
@@ -364,16 +362,16 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
       {
         case FD_READ:    socket->Detected_Read(); break;
         case FD_WRITE:   socket->Detected_Write(); break;
-        case FD_ACCEPT:  socket->Detected_Connection(); break;
+        case FD_ACCEPT:  socket->Detected_Connect(); break;
         case FD_CONNECT:
         {
           if (WSAGETSELECTERROR(lParam) != 0)
             socket->Detected_Lost();
           else
-            socket->Detected_Connection();
+            socket->Detected_Connect();
           break;
         }
-        case FD_CLOSE:   socket->Detected_Lost; break;
+        case FD_CLOSE:   socket->Detected_Lost(); break;
       }
     }
 
@@ -405,16 +403,16 @@ void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
     /* We could probably just subscribe to all events regardless
      * of the socket type, but MS recommends to do it this way.
      */
-    if (socket->server)
+    if (socket->m_server)
     {
-      Enable_Event(socket, FD_ACCEPT)
+      Enable_Event(socket, GSOCK_CONNECTION);
     }
     else
     {
-      Enable_Event(socket, FD_READ);
-      Enable_Event(socket, FD_WRITE);
-      Enable_Event(socket, FD_CLOSE);
-      Enable_Event(socket, FD_CONNECT);
+      Enable_Event(socket, GSOCK_INPUT);
+      Enable_Event(socket, GSOCK_OUTPUT);
+      Enable_Event(socket, GSOCK_CONNECTION);
+      Enable_Event(socket, GSOCK_LOST);
     }
     
 #ifdef __WXWINCE__
@@ -462,7 +460,7 @@ long TranslateEventCondition(GSocket* socket, GSocketEvent event) {
     case GSOCK_INPUT: return FD_READ;
     case GSOCK_OUTPUT: return FD_WRITE;
     case GSOCK_CONNECTION: return (socket->m_server ? FD_ACCEPT : FD_CONNECT);
-    case GSOCK_ERROR: return FD_CLOSE;
+    case GSOCK_LOST: return FD_CLOSE;
     default: assert(0); return 0;
   }  
 }
