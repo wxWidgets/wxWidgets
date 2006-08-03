@@ -260,9 +260,11 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     SetMenuBar(menu_bar);
 #endif // wxUSE_MENUS
 
+    m_panel = new wxPanel(this);
+
 #if wxUSE_LOG
     // create the controls
-    m_textCtrl = new wxTextCtrl(this, wxID_ANY, wxT(""),
+    m_textCtrl = new wxTextCtrl(m_panel, wxID_ANY, wxT(""),
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
 #endif // wxUSE_LOG
@@ -321,7 +323,7 @@ void MyFrame::CreateTreeWithDefStyle()
 
 void MyFrame::CreateTree(long style)
 {
-    m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
+    m_treeCtrl = new MyTreeCtrl(m_panel, TreeTest_Ctrl,
                                 wxDefaultPosition, wxDefaultSize,
                                 style);
     Resize();

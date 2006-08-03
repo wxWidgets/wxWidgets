@@ -229,6 +229,7 @@ private:
     void CreateTreeWithDefStyle();
     void CreateTree(long style);
 
+    wxPanel *m_panel;
     MyTreeCtrl *m_treeCtrl;
 #if wxUSE_LOG
     wxTextCtrl *m_textCtrl;
