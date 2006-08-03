@@ -43,55 +43,15 @@ void _GSocket_GDK_Input(gpointer data,
   GSocket *socket = (GSocket *)data;
 
   if (condition & GDK_INPUT_READ)
-  {
-    Uninstall_Callback(socket,GSOCK_INPUT);
     socket->Detected_Read();
-  }
   
   if (condition & GDK_INPUT_WRITE)
-  {
-    Uninstall_Callback(socket,GSOCK_OUTPUT);
     socket->Detected_Write();
-  }
   
   if (condition & GDK_INPUT_EXCEPTION)
-  {
-    Uninstall_Callback(socket,GSOCK_LOST);
     socket->Detected_Lost();
-  }
   
 }
-}
-
-void Uninstall_Callback(GSocket *socket, GSocketEvent event)
-{
-  gint *m_id = (gint *)(socket->m_gui_dependent);
-
-  wxCHECK_RET( m_id != NULL, wxT("Critical: socket has no gui callback") );
-  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to install callback for an unknown socket event") );
-  
-  if ( socket->m_fd == -1 )
-    return;
-
-  if (m_id[event] != -1)
-  {
-    gdk_input_remove(m_id[event]);
-    m_id[event] = -1;
-  }
-}
-
-void Install_Callback(GSocket *socket, GSocketEvent event)
-{
-  gint *m_id = (gint *)(socket->m_gui_dependent);
-
-  // Just in case there's some callback left for this event
-  // Sanity checks are done on the Uninstall function, too.
-  Uninstall_Callback(socket,event);
- 
-  m_id[event] = gdk_input_add(socket->m_fd,
-                          TranslateEventCondition(socket, event),
-                          _GSocket_GDK_Input,
-                          (gpointer)socket);
 }
 
 bool GSocketGUIFunctionsTableConcrete::CanUseEventLoop()
@@ -108,44 +68,71 @@ void GSocketGUIFunctionsTableConcrete::OnExit(void)
 
 bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
 {
-  gint *m_id;
-
-  socket->m_gui_dependent = (char *)malloc(sizeof(gint)*GSOCK_MAX_EVENT);
-  m_id = (gint *)(socket->m_gui_dependent);
-
-  for (int i=0; i < GSOCK_MAX_EVENT; ++i)
-    m_id[i] = -1;
-
+  socket->m_platform_specific_id = -1;
+  socket->m_eventflags = 0;
   return TRUE;
 }
 
 void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
 {
-  free(socket->m_gui_dependent);
+  if (socket->m_platform_specific_id != -1)
+    gdk_input_remove((gint)socket->m_platform_specific_id);
+}
+
+// Helper function for {En|Dis}able*
+void SetNewCallback(GSocket* socket)
+{
+  if (socket->m_platform_specific_id != -1)
+    gdk_input_remove((gint)socket->m_platform_specific_id);  
+  
+  if (socket->m_eventflags) // Readd the other events if there's any left
+    socket->m_platform_specific_id = (long int)gdk_input_add(socket->m_fd,
+                          (GdkInputCondition)socket->m_eventflags,
+                          _GSocket_GDK_Input,
+                          (gpointer)socket);
+  else // Set the callback id to -1
+    socket->m_platform_specific_id = -1;
 }
 
 void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
 {
-  Install_Callback(socket, GSOCK_INPUT);
-  Install_Callback(socket, GSOCK_OUTPUT);
-  Install_Callback(socket, GSOCK_LOST);
+  // Dont' use the Enable_Event function, as it removes/readds
+  socket->m_eventflags |= TranslateEventCondition(socket, GSOCK_INPUT);
+  socket->m_eventflags |= TranslateEventCondition(socket, GSOCK_OUTPUT);
+  socket->m_eventflags |= TranslateEventCondition(socket, GSOCK_LOST);
+  
+  SetNewCallback(socket);
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 {
-  Uninstall_Callback(socket, GSOCK_INPUT);
-  Uninstall_Callback(socket, GSOCK_OUTPUT);
-  Uninstall_Callback(socket, GSOCK_LOST);
+  socket->m_eventflags = 0;
+  
+  SetNewCallback(socket);
 }
 
 void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket* socket, GSocketEvent event)
 {
-  Install_Callback(socket, event);
+  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to install callback for an unknown socket event") );
+
+  if ( socket->m_fd == -1 )
+    return;
+
+  socket->m_eventflags |= TranslateEventCondition(socket, event);
+
+  SetNewCallback(socket);  
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket* socket, GSocketEvent event)
 {
-  Uninstall_Callback(socket, event);
+  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to uninstall callback for an unknown socket event") );
+ 
+  if ( socket->m_fd == -1 )
+    return;
+
+  socket->m_eventflags &= ~TranslateEventCondition(socket, event);
+  
+  SetNewCallback(socket);
 }
 
 #else /* !wxUSE_SOCKETS */

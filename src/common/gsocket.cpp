@@ -299,9 +299,6 @@ GSocket::GSocket()
   m_non_blocking        = false;
   m_reusable            = false;
   m_udpconnected        = false;
-#ifndef __WINDOWS__
-  m_gui_dependent       = NULL;
-#endif
 
   /* Default timeout is 10 minutes * 60 sec*/
   m_timeout.tv_sec      = 10*60;

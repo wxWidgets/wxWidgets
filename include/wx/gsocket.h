@@ -116,7 +116,6 @@ public:
     virtual void Disable_Event(GSocket *socket, GSocketEvent event) = 0;
     virtual void Enable_Events(GSocket *socket) = 0;
     virtual void Disable_Events(GSocket *socket) = 0;
-    int eventflags;
 };
 
 
@@ -207,13 +206,9 @@ public:
   SOCKET m_fd;
   bool m_server;
 
-/* Platform-specific */
-#warning Probably to be removed?-
-#ifdef __WINDOWS__
-  int m_msgnumber;
-#else
-  char *m_gui_dependent;
-#endif
+  long int m_platform_specific_id;
+
+  int m_eventflags;
 
 private:
 

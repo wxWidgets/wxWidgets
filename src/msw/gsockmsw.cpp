@@ -322,8 +322,8 @@ bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
   }
   socketList[i] = socket;
   firstAvailable = (i + 1) % MAXSOCKETS;
-  socket->m_msgnumber = (i + WM_USER);
-
+  socket->m_platform_specific_id = (i + WM_USER);
+  socket->m_eventflags = 0;
   LeaveCriticalSection(&critical);
 
   return true;
@@ -334,7 +334,7 @@ void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
   /* Remove the socket from the list */
   EnterCriticalSection(&critical);
   if ( socket->IsOk() )
-      socketList[(socket->m_msgnumber - WM_USER)] = NULL;
+      socketList[(socket->m_platform_specific_id - WM_USER)] = NULL;
   LeaveCriticalSection(&critical);
 }
 
@@ -422,9 +422,9 @@ void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
 */
 
     thread_data* d = new thread_data;
-    d->lEvent = eventflags;
+    d->lEvent = socket->m_eventflags;
     d->hEvtWin = hWin;
-    d->msgnumber = socket->m_msgnumber;
+    d->msgnumber = socket->m_platform_specific_id;
     d->fd = socket->m_fd;
     socketHash[socket->m_fd] = true;
     hThread[currSocket++] = CreateThread(NULL, 0, &SocketThread,(LPVOID)d, 0, NULL);
@@ -441,9 +441,9 @@ void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 
   if (socket->m_fd != INVALID_SOCKET)
   {
-    eventflags = 0;
+    socket->m_eventflags = 0;
 #ifndef __WXWINCE__
-    gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, 0);
+    gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_platform_specific_id, 0);
 #else
     //Destroy the thread
     socketHash[socket->m_fd] = false;
@@ -468,8 +468,8 @@ long TranslateEventCondition(GSocket* socket, GSocketEvent event) {
 void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEvent event)
 {
 #ifndef __WXWINCE__
-  eventflags |= TranslateEventCondition(socket,event);
-  gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, eventflags);
+  socket->m_eventflags |= TranslateEventCondition(socket,event);
+  gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_platform_specific_id, socket->m_eventflags);
 #else
   #error WinCE not supported yet
 #endif  
@@ -478,8 +478,8 @@ void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEven
 void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEvent event)
 {
 #ifndef __WXWINCE__
-  eventflags &= ~(TranslateEventCondition(socket,event));
-  gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, eventflags);
+  socket->m_eventflags &= ~(TranslateEventCondition(socket,event));
+  gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_platform_specific_id, socket->m_eventflags);
 #else
   #error WinCE not supported yet
 #endif  
