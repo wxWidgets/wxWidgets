@@ -192,30 +192,43 @@ void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 
 void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEvent event)
 {
-    DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
   
-    if (!data) 
-      return;
+  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to install callback for an unknown socket event") );
+
+  if ( socket->m_fd == -1 )
+    return;
+  
+  if (socket->m_eventflags & TranslateEventCondition(socket, event))
+    return;
+  
+  socket->m_eventflags |= TranslateEventCondition(socket, event);
+  
+  DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
+  
+  if (!data) 
+    return;
     
-    wxCHECK_RET(!(socket->m_eventflags & TranslateEventCondition(socket, event)), wxT("Warning: Trying to re-enable an already enabled event callback"));
-    
-    socket->m_eventflags |= TranslateEventCondition(socket, event);
-    
-    CFSocketEnableCallBacks(data->socket, TranslateEventCondition(socket,event));
+  CFSocketEnableCallBacks(data->socket, TranslateEventCondition(socket,event));
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEvent event)
 {
-    DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
+  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to uninstall callback for an unknown socket event") );
+ 
+  if ( socket->m_fd == -1 )
+    return;
+
+  if (!(socket->m_eventflags & TranslateEventCondition(socket, event)))
+    return;
   
-    if (!data) 
-      return;
-    
-    wxCHECK_RET((socket->m_eventflags & TranslateEventCondition(socket, event)), wxT("Warning: Trying to re-disable an already disabled event callback"));
-    
-    socket->m_eventflags &= ~TranslateEventCondition(socket, event);
-    
-    CFSocketDisableCallBacks(data->socket, TranslateEventCondition(socket,event));
+  socket->m_eventflags &= ~(TranslateEventCondition(socket,event)); 
+  
+  DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
+  
+  if (!data) 
+    return;
+        
+  CFSocketDisableCallBacks(data->socket, TranslateEventCondition(socket,event));
 }
 
 #endif // wxUSE_SOCKETS

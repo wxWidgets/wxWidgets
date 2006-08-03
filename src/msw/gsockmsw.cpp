@@ -487,8 +487,17 @@ void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 
 void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEvent event)
 {
-#ifndef __WXWINCE__
+  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to install callback for an unknown socket event") );
+
+  if ( socket->m_fd == -1 )
+    return;
+  
+  if (socket->m_eventflags & TranslateEventCondition(socket, event))
+    return;
+
   socket->m_eventflags |= TranslateEventCondition(socket,event);
+  
+#ifndef __WXWINCE__
   SetNewCallback(socket);
 #else
   #error WinCE not supported yet
@@ -497,8 +506,17 @@ void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEven
 
 void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEvent event)
 {
+  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to uninstall callback for an unknown socket event") );
+ 
+  if ( socket->m_fd == -1 )
+    return;
+
+  if (!(socket->m_eventflags & TranslateEventCondition(socket, event)))
+    return;
+  
+  socket->m_eventflags &= ~(TranslateEventCondition(socket,event)); 
+  
 #ifndef __WXWINCE__
-  socket->m_eventflags &= ~(TranslateEventCondition(socket,event));
   SetNewCallback(socket);
 #else
   #error WinCE not supported yet

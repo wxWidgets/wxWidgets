@@ -130,6 +130,9 @@ void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket* socket, GSocketEven
   if ( socket->m_fd == -1 )
     return;
 
+  if (socket->m_eventflags & TranslateEventCondition(socket, event))
+    return;
+  
   socket->m_eventflags |= TranslateEventCondition(socket, event);
 
   SetNewCallback(socket);  
@@ -142,6 +145,9 @@ void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket* socket, GSocketEve
   if ( socket->m_fd == -1 )
     return;
 
+  if (!(socket->m_eventflags & TranslateEventCondition(socket, event)))
+    return;
+  
   socket->m_eventflags &= ~TranslateEventCondition(socket, event);
   
   SetNewCallback(socket);
