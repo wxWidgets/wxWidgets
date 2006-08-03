@@ -12,6 +12,7 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_IMAGE && wxUSE_XPM
 
 class WXDLLIMPEXP_CORE wxImage;
 class WXDLLIMPEXP_BASE wxInputStream;
@@ -37,6 +38,7 @@ public:
     wxImage ReadData(const char **xpm_data);
 };
 
+#endif // wxUSE_IMAGE && wxUSE_XPM
 
-#endif  // _WX_GIFDECOD_H_
+#endif  // _WX_XPM_H_
 
