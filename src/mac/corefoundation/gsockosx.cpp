@@ -19,6 +19,7 @@
 
 class MacGSocketData
 {
+public:  
   MacGSocketData()
   {
     socket = NULL;
@@ -27,10 +28,12 @@ class MacGSocketData
   
   ~MacGSocketData()
   {
-    if ( data->source )
+    if ( source )
       CFRelease(source);
-    if ( data->socket )
+    if ( socket )
       CFRelease(socket);
+    socket = NULL;
+    source = NULL;    
   }
   
   CFSocketRef socket;
@@ -97,7 +100,7 @@ DATATYPE* _GSocket_Get_Mac_Socket(GSocket *socket)
   DATATYPE* data = PLATFORM_POINTER(socket->m_platform_specific_data);
 
   if (data && data->source) 
-    return ;
+    return data;
 
   /* CFSocket has not been created, create it: */
   if (socket->m_fd < 0 || !data) 
