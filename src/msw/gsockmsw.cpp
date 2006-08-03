@@ -165,6 +165,15 @@ typedef struct thread_data{
 
 static HMODULE gs_wsock32dll = 0;
 
+long TranslateEventCondition(GSocket* socket, GSocketEvent event) {
+  switch (event) {
+    case GSOCK_INPUT: return FD_READ;
+    case GSOCK_OUTPUT: return FD_WRITE;
+    case GSOCK_CONNECTION: return (socket->m_server ? FD_ACCEPT : FD_CONNECT);
+    case GSOCK_LOST: return FD_CLOSE;
+    default: assert(0); return 0;
+  }  
+}
 
 #ifdef __WXWINCE__
 /* This thread handles socket events on WinCE using WSAEventSelect() as WSAAsyncSelect is not supported.
@@ -401,7 +410,6 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-
 // Helper function for {En|Dis}able*
 void SetNewCallback(GSocket* socket)
 {
@@ -476,16 +484,6 @@ void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 /*
  * Event-Specific disabling.
  */
-
-long TranslateEventCondition(GSocket* socket, GSocketEvent event) {
-  switch (event) {
-    case GSOCK_INPUT: return FD_READ;
-    case GSOCK_OUTPUT: return FD_WRITE;
-    case GSOCK_CONNECTION: return (socket->m_server ? FD_ACCEPT : FD_CONNECT);
-    case GSOCK_LOST: return FD_CLOSE;
-    default: assert(0); return 0;
-  }  
-}
 
 void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEvent event)
 {
