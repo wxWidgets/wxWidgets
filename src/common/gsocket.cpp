@@ -306,6 +306,9 @@ GSocket::GSocket()
 
   m_establishing        = false;
 
+  m_platform_specific_data = NULL;
+  m_eventflags = 0;
+  
   assert(gs_gui_functions);
   /* Per-socket GUI-specific initialization */
   m_ok = gs_gui_functions->Init_Socket(this);

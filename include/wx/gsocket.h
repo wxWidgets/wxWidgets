@@ -206,7 +206,7 @@ public:
   SOCKET m_fd;
   bool m_server;
 
-  long int m_platform_specific_id;
+  void* m_platform_specific_data;
 
   int m_eventflags;
 

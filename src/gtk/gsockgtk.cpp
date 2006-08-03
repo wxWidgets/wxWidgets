@@ -20,6 +20,9 @@
 
 #include "wx/gsocket.h"
 
+#define DATATYPE gint
+#define PLATFORM_DATA(x) (*(DATATYPE*)x)
+
 GdkInputCondition TranslateEventCondition(GSocket* socket, GSocketEvent event) {
   switch (event)
   {
@@ -30,9 +33,6 @@ GdkInputCondition TranslateEventCondition(GSocket* socket, GSocketEvent event) {
     default: wxASSERT(0); return (GdkInputCondition)0; // This is invalid
   }	
 }
-
-void Uninstall_Callback(GSocket *socket, GSocketEvent event);
-void Install_Callback(GSocket *socket, GSocketEvent event);
 
 extern "C" {
 static
@@ -68,38 +68,50 @@ void GSocketGUIFunctionsTableConcrete::OnExit(void)
 
 bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
 {
-  socket->m_platform_specific_id = -1;
-  socket->m_eventflags = 0;
+  wxCHECK_MSG( !socket->m_platform_specific_data, false, wxT("Critical: Double inited socket.") );
+  
+  socket->m_platform_specific_data = malloc(sizeof(DATATYPE));
+  PLATFORM_DATA(socket->m_platform_specific_data) = -1;
+  
   return TRUE;
 }
 
 void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
 {
-  if (socket->m_platform_specific_id != -1)
-    gdk_input_remove((gint)socket->m_platform_specific_id);
+  wxCHECK_RET( socket->m_platform_specific_data, wxT("Critical: Destroying non-inited socket or double destroy.") );
+  
+  if (PLATFORM_DATA(socket->m_platform_specific_data) != -1)
+    gdk_input_remove(PLATFORM_DATA(socket->m_platform_specific_data));
+  
+  if (socket->m_platform_specific_data)
+    free(socket->m_platform_specific_data);
+  
+  socket->m_platform_specific_data = NULL;
 }
 
 // Helper function for {En|Dis}able*
 void SetNewCallback(GSocket* socket)
 {
-  if (socket->m_platform_specific_id != -1)
-    gdk_input_remove((gint)socket->m_platform_specific_id);  
+  wxCHECK_RET( socket->m_platform_specific_data, wxT("Critical: Setting callback for non-init or destroyed socket") );
+  
+  if (PLATFORM_DATA(socket->m_platform_specific_data) != -1)
+    gdk_input_remove(PLATFORM_DATA(socket->m_platform_specific_data));
   
   if (socket->m_eventflags) // Readd the other events if there's any left
-    socket->m_platform_specific_id = (long int)gdk_input_add(socket->m_fd,
+    PLATFORM_DATA(socket->m_platform_specific_data) = gdk_input_add(socket->m_fd,
                           (GdkInputCondition)socket->m_eventflags,
                           _GSocket_GDK_Input,
                           (gpointer)socket);
   else // Set the callback id to -1
-    socket->m_platform_specific_id = -1;
+    PLATFORM_DATA(socket->m_platform_specific_data) = -1;
 }
 
 void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
 {
   // Dont' use the Enable_Event function, as it removes/readds
-  socket->m_eventflags |= TranslateEventCondition(socket, GSOCK_INPUT);
-  socket->m_eventflags |= TranslateEventCondition(socket, GSOCK_OUTPUT);
-  socket->m_eventflags |= TranslateEventCondition(socket, GSOCK_LOST);
+  socket->m_eventflags = TranslateEventCondition(socket, GSOCK_INPUT)
+                                        | TranslateEventCondition(socket, GSOCK_OUTPUT)
+                                        | TranslateEventCondition(socket, GSOCK_LOST);
   
   SetNewCallback(socket);
 }

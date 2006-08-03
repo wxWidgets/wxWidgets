@@ -17,23 +17,52 @@
 
 #define ALL_CALLBACK_TYPES (kCFSocketReadCallBack | kCFSocketWriteCallBack | kCFSocketConnectCallBack)
 
-struct MacGSocketData
+class MacGSocketData
 {
+  MacGSocketData()
+  {
+    socket = NULL;
+    source = NULL;
+  }
+  
+  ~MacGSocketData()
+  {
+    if ( data->source )
+      CFRelease(source);
+    if ( data->socket )
+      CFRelease(socket);
+  }
+  
   CFSocketRef socket;
   CFRunLoopSourceRef source;
 };
+
+#define DATATYPE MacGSocketData
+#define PLATFORM_POINTER(x) ((DATATYPE*)x)
 
 // Sockets must use the event loop on the main thread
 // We will store the main loop's reference when Initialize is called
 static CFRunLoopRef s_mainRunLoop = NULL;
 
+int TranslateEventCondition(GSocket* socket, GSocketEvent event) {
+  switch (event)
+  {
+    case GSOCK_LOST:        // Fallback
+    case GSOCK_INPUT:      return kCFSocketReadCallBack; 
+    case GSOCK_OUTPUT:   return kCFSocketWriteCallBack;
+    case GSOCK_CONNECTION: return socket->m_server ? kCFSocketReadCallBack : kCFSocketConnectCallBack;
+    default: wxASSERT(0); return 0; // This is invalid
+  }	
+}
+
 void Mac_Socket_Callback(CFSocketRef s, CFSocketCallBackType callbackType,
                          CFDataRef address, const void* data, void* info)
 {
   GSocket* socket = (GSocket*)info;
-  struct MacGSocketData* macdata;
-  macdata = (struct MacGSocketData*)socket->m_gui_dependent;
-  if (!macdata) return;
+
+  if (!socket->m_platform_specific_data)
+    return;
+  
   switch (callbackType)
   {
     case kCFSocketConnectCallBack:
@@ -45,7 +74,9 @@ void Mac_Socket_Callback(CFSocketRef s, CFSocketCallBackType callbackType,
       // timeframe so I'm not sure what to think, but after so many hours,
       // this seems to address the issue and it's time to move on.
       if (data == NULL)
-        socket->Detected_Write();
+        socket->Detected_Connect();
+      else
+        socket->Detected_Lost();
       break;
     case kCFSocketReadCallBack:
       socket->Detected_Read();
@@ -58,26 +89,30 @@ void Mac_Socket_Callback(CFSocketRef s, CFSocketCallBackType callbackType,
   }
 }
 
-struct MacGSocketData* _GSocket_Get_Mac_Socket(GSocket *socket)
+DATATYPE* _GSocket_Get_Mac_Socket(GSocket *socket)
 {
   /* If socket is already created, returns a pointer to the data */
   /* Otherwise, creates socket and returns the pointer */
   CFSocketContext cont;
-  struct MacGSocketData* data = (struct MacGSocketData*)socket->m_gui_dependent;
+  DATATYPE* data = PLATFORM_POINTER(socket->m_platform_specific_data);
 
-  if (data && data->source) return data;
+  if (data && data->source) 
+    return ;
 
   /* CFSocket has not been created, create it: */
-  if (socket->m_fd < 0 || !data) return NULL;
-  cont.version = 0; cont.retain = NULL;
-  cont.release = NULL; cont.copyDescription = NULL;
+  if (socket->m_fd < 0 || !data) 
+    return NULL;
+  
+  cont.version = 0; 
+  cont.retain = NULL;
+  cont.release = NULL; 
+  cont.copyDescription = NULL;
   cont.info = socket;
 
   CFSocketRef cf = CFSocketCreateWithNative(NULL, socket->m_fd,
                    ALL_CALLBACK_TYPES, Mac_Socket_Callback, &cont);
   CFRunLoopSourceRef source = CFSocketCreateRunLoopSource(NULL, cf, 0);
   assert(source);
-  socket->m_gui_dependent = (char*)data;
 
   /* Keep the source and the socket around. */
   data->source = source;
@@ -113,98 +148,71 @@ void GSocketGUIFunctionsTableConcrete::OnExit(void)
 
 bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
 {
-    struct MacGSocketData *data = (struct MacGSocketData *)malloc(sizeof(struct MacGSocketData));
-    if (data)
-    {
-        socket->m_gui_dependent = (char*)data;
-        data->socket = NULL;
-        data->source = NULL;
-        return 1;
-    }
-    return 0;
+  wxCHECK_MSG( !socket->m_platform_specific_data, false, wxT("Critical: Double inited socket.") );
+  
+  socket->m_platform_specific_data = (void*) new DATATYPE;
+  return (socket->m_platform_specific_data != NULL);
 }
 
 void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
 {
-    struct MacGSocketData *data = (struct MacGSocketData*)(socket->m_gui_dependent);
-    if (data)
-    {
-        if ( data->source )
-            CFRelease(data->source);
-        if ( data->socket )
-            CFRelease(data->socket);
-        free(data);
-    }
-}
-
-void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket, GSocketEvent event)
-{
-    int c;
-    struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
-    if (!data) return;
-    switch (event)
-    {
-     case GSOCK_CONNECTION:
-         if(socket->m_server)
-            c = kCFSocketReadCallBack;
-         else
-            c = kCFSocketConnectCallBack;
-         break;
-     case GSOCK_LOST:
-     case GSOCK_INPUT:
-         c = kCFSocketReadCallBack;
-         break;
-     case GSOCK_OUTPUT:
-         c = kCFSocketWriteCallBack;
-         break;
-     default:
-         c = 0;
-    }
-    CFSocketEnableCallBacks(data->socket, c);
-}
-
-void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket, GSocketEvent event)
-{
-    int c;
-    struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
-    if (!data) return;
-    switch (event)
-    {
-     case GSOCK_CONNECTION:
-         if(socket->m_server)
-            c = kCFSocketReadCallBack;
-         else
-            c = kCFSocketConnectCallBack;
-         break;
-     case GSOCK_LOST:
-     case GSOCK_INPUT:
-         c = kCFSocketReadCallBack;
-         break;
-     case GSOCK_OUTPUT:
-         c = kCFSocketWriteCallBack;
-         break;
-     default:
-         c = 0;
-    }
-    CFSocketDisableCallBacks(data->socket, c);
+  wxCHECK_RET( socket->m_platform_specific_data, wxT("Critical: Destroying non-inited socket or double destroy.") );
+  
+  if (socket->m_platform_specific_data)
+    delete PLATFORM_POINTER(socket->m_platform_specific_data);
+  socket->m_platform_specific_data = NULL;
 }
 
 void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
 {
-    struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
-    if (!data) return;
+    DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
+  
+    if (!data)
+      return;
 
+    socket->m_eventflags = ALL_CALLBACK_TYPES;
+    
     CFRunLoopAddSource(s_mainRunLoop, data->source, kCFRunLoopCommonModes);
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 {
-    struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
-    if (!data) return;
+    DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
+  
+    if (!data) 
+      return;
 
-    /* CFSocketInvalidate does CFRunLoopRemoveSource anyway */
-    CFRunLoopRemoveSource(s_mainRunLoop, data->source, kCFRunLoopCommonModes);
+    socket->m_eventflags = 0;
+    
     CFSocketInvalidate(data->socket);
+}
+
+void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEvent event)
+{
+    DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
+  
+    if (!data) 
+      return;
+    
+    wxCHECK_RET(!(socket->m_eventflags & TranslateEventCondition(socket, event)), wxT("Warning: Trying to re-enable an already enabled event callback"));
+    
+    socket->m_eventflags |= TranslateEventCondition(socket, event);
+    
+    CFSocketEnableCallBacks(data->socket, TranslateEventCondition(socket,event));
+}
+
+void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEvent event)
+{
+    DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
+  
+    if (!data) 
+      return;
+    
+    wxCHECK_RET((socket->m_eventflags & TranslateEventCondition(socket, event)), wxT("Warning: Trying to re-disable an already disabled event callback"));
+    
+    socket->m_eventflags &= ~TranslateEventCondition(socket, event);
+    
+    CFSocketDisableCallBacks(data->socket, TranslateEventCondition(socket,event));
 }
 
 #endif // wxUSE_SOCKETS
