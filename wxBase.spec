@@ -91,8 +91,8 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-(cd obj-static ; make prefix=$RPM_BUILD_ROOT%{pref} install)
-(cd obj-shared ; make prefix=$RPM_BUILD_ROOT%{pref} install)
+(cd obj-static ; make DESTDIR=$RPM_BUILD_ROOT prefix=%{pref} install)
+(cd obj-shared ; make DESTDIR=$RPM_BUILD_ROOT prefix=%{pref} install)
 
 %find_lang wxstd
 
@@ -132,12 +132,15 @@ rm -f %{_bindir}/%{wxconfiglink}
 
 %files devel
 %defattr (-,root,root)
+%{_bindir}/wx-config
 %dir %{_includedir}/wx-%{ver2}
 %{_includedir}/wx-%{ver2}/*
 %{_libdir}/libwx_base*-%{ver2}.so
 %dir %{_libdir}/wx
 %{_libdir}/wx/*
 %{_datadir}/aclocal/*.m4
+%{_datadir}/bakefile/presets/*
+%{_datadir}/locale/*/LC_MESSAGES/*.mo
 
 %files static
 %defattr (-,root,root)
