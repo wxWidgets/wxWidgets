@@ -360,8 +360,8 @@ bool MyApp::OnInit()
     wxMenu *dialogs_menu = new wxMenu;
     dialogs_menu->Append(DIALOGS_MODAL, _T("&Modal dialog\tCtrl-W"));
     dialogs_menu->AppendCheckItem(DIALOGS_MODELESS, _T("Mode&less dialog\tCtrl-Z"));
-    dialogs_menu->AppendCheckItem(DIALOGS_CENTRE_SCREEN, _T("Centered on &screen\tShift-Ctrl-1"));
-    dialogs_menu->AppendCheckItem(DIALOGS_CENTRE_PARENT, _T("Centered on &parent\tShift-Ctrl-2"));
+    dialogs_menu->Append(DIALOGS_CENTRE_SCREEN, _T("Centered on &screen\tShift-Ctrl-1"));
+    dialogs_menu->Append(DIALOGS_CENTRE_PARENT, _T("Centered on &parent\tShift-Ctrl-2"));
     file_menu->Append(wxID_ANY, _T("&Generic dialogs"), dialogs_menu);
 #endif // USE_MODAL_PRESENTATION
 
