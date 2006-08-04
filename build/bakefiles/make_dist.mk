@@ -62,6 +62,7 @@ WXDEMOS_BZIP=wx$(TOOLKIT)-demos-$(WX_VERSION).tar.bz2
 
 DISTDIRNAME=@DISTDIR@-$(WX_VERSION)
 DISTDIR=./_dist_dir/$(DISTDIRNAME)
+BASEDISTDIR=./_dist_dir/wxBase-$(WX_VERSION)
 
 ########################## Tools ###############################
 
@@ -211,7 +212,7 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(TIFFDIR)/*.c $(DISTDIR)/src/tiff
 	$(CP_P) $(TIFFDIR)/README $(DISTDIR)/src/tiff
 
-BASE_DIST: ALL_DIST
+BASE_DIST: ALL_DIST INTL_DIST
 	# make --disable-gui the default
 	rm $(DISTDIR)/configure.in
 	sed 's/DEFAULT_wxUSE_GUI=yes/DEFAULT_wxUSE_GUI=no/' \
@@ -280,6 +281,8 @@ BASE_DIST: ALL_DIST
 	$(CP_P) $(UTILSDIR)/tex2rtf/src/tex2rtf.ini $(DISTDIR)/utils/tex2rtf/src
 	$(CP_P) $(UTILSDIR)/tex2rtf/src/tex2rtf.rc $(DISTDIR)/utils/tex2rtf/src
 	$(CP_P) $(UTILSDIR)/tex2rtf/src/tex2rtf.xpm $(DISTDIR)/utils/tex2rtf/src
+
+	mv $(DISTDIR) $(BASEDISTDIR)
 
 GTK_DIST: UNIV_DIST
 	$(CP_P) $(WXDIR)/wxGTK.spec $(DISTDIR)
