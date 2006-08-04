@@ -67,12 +67,23 @@ release   := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwidgets//p' | se
 soversion := 0
 sorelease := $(release:%-$(DEBIAN_WXFLAVOUR)=%)-$(soversion)$(addprefix -,$(DEBIAN_WXFLAVOUR))
 
+# In some places we use the full version number, including the micro version,
+# for the development releases (which can be incompatible for the same major
+# and minor version) but just the major.minor for the stable releases (which
+# are supposed to be compatible), this variable contains the appropriate value
+ifeq ($(shell echo `echo $(release) | sed 's/.\+\.\(.\+\)/\1/'`%2 | bc),1)
+    # development release
+    compatible_release := $(release).$(soversion)
+else
+    compatible_release := $(release)
+endif
+
 # Base value for alternative priorities.
 alt_prio  := $(subst .,,$(release))
 
 pytoolkit := gtk2
 pydir     := usr/lib/$(python_ver)/site-packages
-wxpydir   := $(pydir)/wx-$(release)-$(pytoolkit)
+wxpydir   := $(pydir)/wx-$(compatible_release)-$(pytoolkit)
 
 cross_host  := i586-mingw32msvc
 cross_build := $(shell ./config.guess)
@@ -113,7 +124,7 @@ ifeq ($(WX_UNICODE),1)
     COMMON_CONFIGURE_OPTIONS += --enable-unicode
     PY_WX_CONFIG_OPTIONS += --unicode
     PY_UNICODE="UNICODE=1"
-    wxpydir := $(pydir)/wx-$(release)-$(pytoolkit)-unicode
+    wxpydir := $(pydir)/wx-$(compatible_release)-$(pytoolkit)-unicode
 
     # for compatibility with the existing 2.6 packages, we don't use "u" in
     # the Unicode (default) package names
