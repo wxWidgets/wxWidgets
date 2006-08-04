@@ -5,28 +5,30 @@ import wx.aui
 
 import cStringIO
 
-ID_CreateTree = wx.ID_HIGHEST+1
-ID_CreateGrid = ID_CreateTree+2
-ID_CreateText = ID_CreateTree+3
-ID_CreateHTML = ID_CreateTree+4
-ID_CreateSizeReport = ID_CreateTree+5
-ID_GridContent = ID_CreateTree+6
-ID_TextContent = ID_CreateTree+7
-ID_TreeContent = ID_CreateTree+8
-ID_HTMLContent = ID_CreateTree+9
-ID_SizeReportContent = ID_CreateTree+10
-ID_CreatePerspective = ID_CreateTree+11
-ID_CopyPerspective = ID_CreateTree+12
-ID_AllowFloating = ID_CreateTree+13
-ID_AllowActivePane = ID_CreateTree+14
-ID_TransparentHint = ID_CreateTree+15
-ID_TransparentHintFade = ID_CreateTree+16
-ID_TransparentDrag = ID_CreateTree+17
-ID_NoGradient = ID_CreateTree+18
-ID_VerticalGradient = ID_CreateTree+19
-ID_HorizontalGradient = ID_CreateTree+20
-ID_Settings = ID_CreateTree+21
-ID_About = ID_CreateTree+22
+ID_CreateTree = wx.NewId()
+ID_CreateGrid = wx.NewId()
+ID_CreateText = wx.NewId()
+ID_CreateHTML = wx.NewId()
+ID_CreateSizeReport = wx.NewId()
+ID_GridContent = wx.NewId()
+ID_TextContent = wx.NewId()
+ID_TreeContent = wx.NewId()
+ID_HTMLContent = wx.NewId()
+ID_SizeReportContent = wx.NewId()
+ID_CreatePerspective = wx.NewId()
+ID_CopyPerspective = wx.NewId()
+ID_AllowFloating = wx.NewId()
+ID_AllowActivePane = wx.NewId()
+ID_TransparentHint = wx.NewId()
+ID_TransparentHintFade = wx.NewId()
+ID_TransparentDrag = wx.NewId()
+ID_DisableVenetianBlinds = wx.NewId()
+ID_DisableVenetianBlindsFade = wx.NewId()
+ID_NoGradient = wx.NewId()
+ID_VerticalGradient = wx.NewId()
+ID_HorizontalGradient = wx.NewId()
+ID_Settings = wx.NewId()
+ID_About = wx.NewId()
 ID_FirstPerspective = ID_CreatePerspective+1000
 
 #----------------------------------------------------------------------
@@ -99,6 +101,8 @@ class PyAUIFrame(wx.Frame):
         options_menu.AppendCheckItem(ID_TransparentHint, "Transparent Hint")
         options_menu.AppendCheckItem(ID_TransparentHintFade, "Transparent Hint Fade-in")
         options_menu.AppendCheckItem(ID_TransparentDrag, "Transparent Drag")
+        options_menu.AppendCheckItem(ID_DisableVenetianBlinds, "Disable Venetian Blinds Effect")
+        options_menu.AppendCheckItem(ID_DisableVenetianBlindsFade, "Disable Venetian Blinds Fade-in")
         options_menu.AppendCheckItem(ID_AllowActivePane, "Allow Active Pane")
         options_menu.AppendSeparator()
         options_menu.AppendRadioItem(ID_NoGradient, "No Caption Gradient")
@@ -365,6 +369,8 @@ class PyAUIFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnManagerFlag, id=ID_TransparentHint)
         self.Bind(wx.EVT_MENU, self.OnManagerFlag, id=ID_TransparentHintFade)
         self.Bind(wx.EVT_MENU, self.OnManagerFlag, id=ID_TransparentDrag)
+        self.Bind(wx.EVT_MENU, self.OnManagerFlag, id=ID_DisableVenetianBlinds)
+        self.Bind(wx.EVT_MENU, self.OnManagerFlag, id=ID_DisableVenetianBlindsFade)
         self.Bind(wx.EVT_MENU, self.OnManagerFlag, id=ID_AllowActivePane)
         self.Bind(wx.EVT_MENU, self.OnGradient, id=ID_NoGradient)
         self.Bind(wx.EVT_MENU, self.OnGradient, id=ID_VerticalGradient)
@@ -382,6 +388,8 @@ class PyAUIFrame(wx.Frame):
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_TransparentHint)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_TransparentHintFade)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_TransparentDrag)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_DisableVenetianBlinds)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_DisableVenetianBlindsFade)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_NoGradient)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_VerticalGradient)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_HorizontalGradient)
@@ -477,14 +485,6 @@ class PyAUIFrame(wx.Frame):
 
         flag = 0
         
-##         if wx.Platform != "__WXMSW__" and wx.Platform != '__WXMAC__':
-##             if event.GetId() == ID_TransparentDrag or \
-##                event.GetId() == ID_TransparentHint or \
-##                event.GetId() == ID_TransparentHintFade:
-            
-##                 wx.MessageBox("This option is presently only available on wxMSW and wxMac")
-##                 return
-
         if event.GetId() == ID_AllowFloating:
             flag = wx.aui.AUI_MGR_ALLOW_FLOATING
 
@@ -499,6 +499,12 @@ class PyAUIFrame(wx.Frame):
 
         elif event.GetId() == ID_AllowActivePane:
             flag = wx.aui.AUI_MGR_ALLOW_ACTIVE_PANE
+
+        elif event.GetId() == ID_DisableVenetianBlinds:
+            flag = wx.aui.AUI_MGR_DISABLE_VENETIAN_BLINDS
+
+        elif event.GetId() == ID_DisableVenetianBlindsFade:
+            flag = wx.aui.AUI_MGR_DISABLE_VENETIAN_BLINDS_FADE
             
         self._mgr.SetFlags(self._mgr.GetFlags() ^ flag)
 
@@ -508,29 +514,33 @@ class PyAUIFrame(wx.Frame):
         flags = self._mgr.GetFlags()
 
         if event.GetId() == ID_NoGradient:
-            event.Check(((self._mgr.GetArtProvider().GetMetric(wx.aui.AUI_ART_GRADIENT_TYPE) == wx.aui.AUI_GRADIENT_NONE) and \
-                        [True] or [False])[0])
-
+            event.Check(self._mgr.GetArtProvider().GetMetric(wx.aui.AUI_ART_GRADIENT_TYPE) == wx.aui.AUI_GRADIENT_NONE)
+               
         elif event.GetId() == ID_VerticalGradient:
-            event.Check(((self._mgr.GetArtProvider().GetMetric(wx.aui.AUI_ART_GRADIENT_TYPE) == wx.aui.AUI_GRADIENT_VERTICAL) and \
-                        [True] or [False])[0])
-
+            event.Check(self._mgr.GetArtProvider().GetMetric(wx.aui.AUI_ART_GRADIENT_TYPE) == wx.aui.AUI_GRADIENT_VERTICAL)
+               
         elif event.GetId() == ID_HorizontalGradient:
-            event.Check(((self._mgr.GetArtProvider().GetMetric(wx.aui.AUI_ART_GRADIENT_TYPE) == wx.aui.AUI_GRADIENT_HORIZONTAL) and \
-                        [True] or [False])[0])
-
+            event.Check(self._mgr.GetArtProvider().GetMetric(wx.aui.AUI_ART_GRADIENT_TYPE) == wx.aui.AUI_GRADIENT_HORIZONTAL)
+                        
         elif event.GetId() == ID_AllowFloating:
-            event.Check(((flags & wx.aui.AUI_MGR_ALLOW_FLOATING) and [True] or [False])[0])
+            event.Check((flags & wx.aui.AUI_MGR_ALLOW_FLOATING) != 0)
 
         elif event.GetId() == ID_TransparentDrag:
-            event.Check(((flags & wx.aui.AUI_MGR_TRANSPARENT_DRAG) and [True] or [False])[0])
+            event.Check((flags & wx.aui.AUI_MGR_TRANSPARENT_DRAG) != 0)
 
         elif event.GetId() == ID_TransparentHint:
-            event.Check(((flags & wx.aui.AUI_MGR_TRANSPARENT_HINT) and [True] or [False])[0])
+            event.Check((flags & wx.aui.AUI_MGR_TRANSPARENT_HINT) != 0)
 
         elif event.GetId() == ID_TransparentHintFade:
-            event.Check(((flags & wx.aui.AUI_MGR_TRANSPARENT_HINT_FADE) and [True] or [False])[0])
+            event.Check((flags & wx.aui.AUI_MGR_TRANSPARENT_HINT_FADE) != 0)
                 
+        elif event.GetId() == ID_DisableVenetianBlinds:
+            event.Check((flags & wx.aui.AUI_MGR_DISABLE_VENETIAN_BLINDS) != 0)
+                
+        elif event.GetId() == ID_DisableVenetianBlindsFade:
+            event.Check((flags & wx.aui.AUI_MGR_DISABLE_VENETIAN_BLINDS_FADE) != 0)
+                
+
 
     def OnCreatePerspective(self, event):
 
