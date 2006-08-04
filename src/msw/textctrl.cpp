@@ -1809,7 +1809,7 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
                     // fall through
 
                 case 0:
-                    if ( vkey == VK_RETURN )
+                    if ( IsMultiLine() && vkey == VK_RETURN )
                         return false;
                     // fall through
                 case 2:
