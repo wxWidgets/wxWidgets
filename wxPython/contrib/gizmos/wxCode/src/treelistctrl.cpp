@@ -568,6 +568,8 @@ public:
     // implementation helpers
     void SendDeleteEvent(wxTreeListItem *itemBeingDeleted);
 
+    void DoDirtyProcessing();
+    
     void DrawBorder(const wxTreeItemId& item);
     void DrawLine(const wxTreeItemId& item, bool below);
 
@@ -1197,22 +1199,18 @@ void wxTreeListHeaderWindow::OnEraseBackground( wxEraseEvent& event )
 void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
 #ifdef __WXGTK__
-    wxClientDC real_dc( this );
+    wxClientDC dc( this );
 #else
-    wxPaintDC real_dc( this );
+    wxPaintDC dc( this );
 #endif
 
-    AdjustDC( real_dc );
+    AdjustDC( dc );
 
     // width and height of the entire header window
     int w, h;
     GetClientSize( &w, &h );
     m_owner->CalcUnscrolledPosition(w, 0, &w, NULL);
 
-    // Setup double buffering to eliminate the flicker
-    wxMemoryDC dc;
-    wxBitmap   buffer(w, h);
-    dc.SelectObject(buffer);
     dc.SetBackground(wxBrush(GetBackgroundColour()));
     dc.Clear();
     
@@ -1304,10 +1302,6 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             this, dc, wxRect(x, HEADER_OFFSET_Y, more_w, h-2),
             m_parent->IsEnabled() ? 0 : wxCONTROL_DISABLED);
     }
-
-    // Finish up by drawing the buffer to the real dc
-    dc.SelectObject(wxNullBitmap);
-    real_dc.DrawBitmap(buffer, 0, 0, false);
 }
 
 void wxTreeListHeaderWindow::DrawCurrent()
@@ -3016,7 +3010,8 @@ void wxTreeListMainWindow::ScrollTo(const wxTreeItemId &item)
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYieldIfNeeded();
+    if (m_dirty) 
+        DoDirtyProcessing();
 
     wxTreeListItem *gitem = (wxTreeListItem*) item.m_pItem;
 
@@ -4076,7 +4071,8 @@ void wxTreeListMainWindow::Edit( const wxTreeItemId& item )
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYieldIfNeeded();
+    if (m_dirty) 
+        DoDirtyProcessing();
 
     wxString s = m_currentEdit->GetText(/*ALB*/m_main_column);
     int x = m_currentEdit->GetX() + m_imgWidth2;
@@ -4263,7 +4259,7 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
             // highlight the current drop target if any
             DrawDropEffect(m_dropTarget);
 
-            wxYieldIfNeeded();
+            DoDirtyProcessing();
         }
     }
     else if ( (event.LeftUp() || event.RightUp()) && m_isDragging )
@@ -4294,7 +4290,7 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
 
         SetCursor(m_oldCursor);
 
-        wxYieldIfNeeded();
+        DoDirtyProcessing();
     }
     else
     {
@@ -4397,6 +4393,11 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
 }
 
 void wxTreeListMainWindow::OnIdle( wxIdleEvent &WXUNUSED(event) )
+{
+    DoDirtyProcessing();
+}
+
+void wxTreeListMainWindow::DoDirtyProcessing()
 {
     /* after all changes have been done to the tree control,
      * we actually redraw the tree when everything is over */
