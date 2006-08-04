@@ -50,7 +50,7 @@
 #include <windowsx.h>
 
 #include "wx/msw/private.h"
-#include "wx/msw/wrapshl.h"
+#include "wx/msw/winundef.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -517,9 +517,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         ::SendMessage(GetHwnd(), EM_SETEVENTMASK, 0, mask);
     }
 #endif // wxUSE_RICHEDIT
-
-    if ( style & wxTE_FILENAME )
-        wxEnableFileNameAutoComplete(GetHwnd());
 
     gs_wndprocEdit = wxSetWindowProc((HWND)GetHwnd(),
                                      wxTextCtrlWndProc);

@@ -42,7 +42,6 @@
 
 // include <commctrl.h> "properly"
 #include "wx/msw/wrapcctl.h"
-#include "wx/msw/wrapshl.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -418,14 +417,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     // edit control, we must subclass it as well
     if ( !(style & wxCB_READONLY) )
     {
-        const HWND hwndEdit = (HWND)GetEditHWND();
-
-        gs_wndprocEdit = wxSetWindowProc(hwndEdit, wxComboEditWndProc);
-
-        if ( style & wxCB_FILENAME )
-        {
-            wxEnableFileNameAutoComplete(hwndEdit);
-        }
+        gs_wndprocEdit = wxSetWindowProc((HWND)GetEditHWND(), wxComboEditWndProc);
     }
 
     // and finally, show the control
