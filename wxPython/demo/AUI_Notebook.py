@@ -8,11 +8,7 @@ Hello!
 
 Welcome to this little demo of draggable tabs using the wx.aui module.
 
-To try it out, drag a tab from the top of the window all the way to
-the bottom.  After releasing the mouse, the tab will dock at the
-hinted position.  Then try it again with the remaining tabs in various
-other positions.  Finally, try dragging a tab to an existing tab ctrl.
-You'll soon see that very complex tab layouts may be achieved.
+To try it out, drag a tab from the top of the window all the way to the bottom.  After releasing the mouse, the tab will dock at the hinted position.  Then try it again with the remaining tabs in various other positions.  Finally, try dragging a tab to an existing tab ctrl.  You'll soon see that very complex tab layouts may be achieved.
 """
 
 #----------------------------------------------------------------------
