@@ -91,8 +91,9 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-(cd obj-static ; make DESTDIR=$RPM_BUILD_ROOT prefix=%{pref} install)
-(cd obj-shared ; make DESTDIR=$RPM_BUILD_ROOT prefix=%{pref} install)
+make -C locale allmo
+make -C obj-static DESTDIR=$RPM_BUILD_ROOT prefix=%{pref} install
+make -C obj-shared DESTDIR=$RPM_BUILD_ROOT prefix=%{pref} install
 
 %find_lang wxstd
 
