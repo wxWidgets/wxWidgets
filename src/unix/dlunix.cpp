@@ -348,7 +348,7 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
         {
             // format is: start-end perm something? maj:min inode path
             unsigned long start, end;
-            switch ( sscanf(buf, "%08lx-%08lx %*4s %*08x %*02d:%*02d %*d %1024s\n",
+            switch ( sscanf(buf, "%08lx-%08lx %*4s %*08x %*02x:%*02x %*d %1024s\n",
                             &start, &end, path) )
             {
                 case 2:
