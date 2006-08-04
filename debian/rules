@@ -977,17 +977,21 @@ binary-dbg-py: control-files-stamp install-gtk-dbg-py
 # Debian policy.  Do not distribute packages built with these rules, they
 # are currently useful for rapid in-house testing by developers only.
 
+DH_OPTIONS_GTK := -p$(package_wxbase_lib) -p$(package_gtk_lib) -p$(package_headers)
+
 # libwxgtk shared lib package
-binary-gtk: control-files-stamp install-gtk-lib install-headers
-	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_gtk_lib) -p$(package_headers)" binary-common
+binary-gtk: control-files-stamp install-gtk-lib install-wxbase-lib install-headers
+	$(MAKE) -f debian/rules DH_OPTIONS="$(DH_OPTIONS_GTK)" binary-common
 
-binary-gtk-dev: control-files-stamp install-gtk-dev install-headers
+binary-gtk-dev: control-files-stamp install-gtk-dev install-wxbase-dev install-headers
 	$(MAKE) -f debian/rules \
-	  DH_OPTIONS="-p$(package_gtk_lib) -p$(package_gtk_dev) -p$(package_headers)" \
-	  binary-common
+	    DH_OPTIONS="-p$(package_wxbase_dev) -p$(package_gtk_dev) $(DH_OPTIONS_GTK)" \
+	    binary-common
 
-binary-gtk-dbg: control-files-stamp install-gtk-dbg install-headers
-	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_gtk_dbg) -p$(package_headers)" binary-common
+binary-gtk-dbg: control-files-stamp install-gtk-dbg install-wxbase-dbg install-headers
+	$(MAKE) -f debian/rules \
+	    DH_OPTIONS="-p$(package_wxbase_dbg) -p$(package_gtk_dbg) -p$(package_headers)" \
+	    binary-common
 
 
 # docs package
