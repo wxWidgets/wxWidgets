@@ -1,6 +1,6 @@
 %define _prefix /opt/gnome
-%define ver  2.6.2
-%define ver2 2.6
+%define ver  2.7.0
+%define ver2 2.7
 %define rel  1
 
 # Configurable settings (use --with(out) {unicode,gtk2} on rpmbuild cmd line):

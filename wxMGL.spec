@@ -1,13 +1,13 @@
 %define pref /usr
-%define ver 2.6.2
-%define ver2 2.6
+%define ver 2.7.0
+%define ver2 2.7
 %define rel 1
 
 Summary: The SciTech MGL port of the wxWindows library
 Name: wxMGL
 Version: %{ver}
 Release: %{rel}
-Copyright: wxWindows Licence
+License: wxWindows Licence
 Group: System/Libraries
 Source: wxMGL-%{ver}.tar.bz2
 URL: http://www.wxwindows.org
