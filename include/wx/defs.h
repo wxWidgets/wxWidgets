@@ -1577,7 +1577,6 @@ enum wxBorder
 #define wxCB_SORT           0x0008
 #define wxCB_READONLY       0x0010
 #define wxCB_DROPDOWN       0x0020
-#define wxCB_FILENAME       0x0040
 
 /*
  * wxRadioBox style flags

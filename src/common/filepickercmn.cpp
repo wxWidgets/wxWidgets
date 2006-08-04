@@ -59,7 +59,7 @@ bool wxFileDirPickerCtrlBase::CreateBase(wxWindow *parent,
     wxASSERT_MSG(path.empty() || CheckPath(path), wxT("Invalid initial path!"));
 
     if (!wxPickerBase::CreateBase(parent, id, path, pos, size,
-                                   style, validator, name, wxTE_FILENAME))
+                                   style, validator, name))
         return false;
 
     if (!HasFlag(wxFLP_OPEN) && !HasFlag(wxFLP_SAVE))

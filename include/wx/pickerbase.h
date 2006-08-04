@@ -48,8 +48,7 @@ public:
                     const wxSize& size = wxDefaultSize,
                     long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxButtonNameStr,
-                    long textstyle = 0);
+                    const wxString& name = wxButtonNameStr);
 
 
 public:     // public API

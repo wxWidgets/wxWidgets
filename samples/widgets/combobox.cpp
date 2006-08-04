@@ -250,6 +250,7 @@ void ComboboxWidgetsPage::CreateContent()
     m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Sort items"));
     m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Read only"));
     m_chkFilename = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&File name"));
+    m_chkFilename->Disable(); // not implemented yet
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
     sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
@@ -357,8 +358,6 @@ void ComboboxWidgetsPage::CreateCombo()
         flags |= wxCB_SORT;
     if ( m_chkReadonly->GetValue() )
         flags |= wxCB_READONLY;
-    if ( m_chkFilename->GetValue() )
-        flags |= wxCB_FILENAME;
 
     switch ( m_radioKind->GetSelection() )
     {
@@ -395,6 +394,11 @@ void ComboboxWidgetsPage::CreateCombo()
                                 wxDefaultPosition, wxDefaultSize,
                                 0, NULL,
                                 flags);
+
+#if 0
+    if ( m_chkFilename->GetValue() )
+        ;
+#endif // TODO
 
     unsigned int count = items.GetCount();
     for ( unsigned int n = 0; n < count; n++ )

@@ -34,7 +34,6 @@ wxComboBoxXmlHandler::wxComboBoxXmlHandler()
     XRC_ADD_STYLE(wxCB_SORT);
     XRC_ADD_STYLE(wxCB_READONLY);
     XRC_ADD_STYLE(wxCB_DROPDOWN);
-    XRC_ADD_STYLE(wxCB_FILENAME);
     AddWindowStyles();
 }
 

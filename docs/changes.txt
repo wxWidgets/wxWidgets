@@ -99,7 +99,6 @@ All (GUI):
 - Added wxDC::GradientFillLinear/Concentric().
 - Added wxHyperlinkCtrl (Francesco Montorsi).
 - Added clipboard events (wxEVT_COMMAND_TEXT_COPY/CUT/PASTE).
-- Added wxTE_FILENAME and wxCB_FILENAME (MSW-only for now)
 - Allow to reorder wxGrid columns by drag-and-drop (Santiago Palacios).
 - Added wxRadioBox::SetItemToolTip().
 - Added support for CMYK JPEG images loading (Robert Wruck).

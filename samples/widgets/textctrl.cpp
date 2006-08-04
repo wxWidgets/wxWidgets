@@ -412,6 +412,7 @@ void TextWidgetsPage::CreateContent()
     m_chkFilename = CreateCheckBoxAndAddToSizer(
                         sizerLeft, _T("&Filename control")
                     );
+    m_chkFilename->Disable(); // not implemented yet
     sizerLeft->AddSpacer(5);
 
     static const wxString wrap[] =
@@ -641,8 +642,6 @@ void TextWidgetsPage::CreateText()
         flags |= wxTE_PASSWORD;
     if ( m_chkReadonly->GetValue() )
         flags |= wxTE_READONLY;
-    if ( m_chkFilename->GetValue() )
-        flags |= wxTE_FILENAME;
 
     switch ( m_radioWrap->GetSelection() )
     {
@@ -700,6 +699,11 @@ void TextWidgetsPage::CreateText()
     }
 
     m_text = new WidgetsTextCtrl(this, TextPage_Textctrl, valueOld, flags);
+
+#if 0
+    if ( m_chkFilename->GetValue() )
+        ;
+#endif // TODO
 
     // cast to int needed to silence gcc warning about different enums
     m_sizerText->Add(m_text, 1, wxALL |

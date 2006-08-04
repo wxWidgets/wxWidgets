@@ -73,7 +73,6 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // wxTextCtrl style flags
 // ----------------------------------------------------------------------------
 
-#define wxTE_FILENAME       0x0001
 #define wxTE_NO_VSCROLL     0x0002
 #define wxTE_AUTO_SCROLL    0x0008
 
