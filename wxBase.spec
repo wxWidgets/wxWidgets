@@ -95,6 +95,10 @@ make -C locale allmo
 make -C obj-static DESTDIR=$RPM_BUILD_ROOT prefix=%{pref} install
 make -C obj-shared DESTDIR=$RPM_BUILD_ROOT prefix=%{pref} install
 
+# we need to modify the absolute wx-config link to be relative or rpm complains
+# (and our package wouldn't be relocatable)
+ln -sf ../lib/wx/config/%{wxconfig} $RPM_BUILD_ROOT/%{pref}/bin/wx-config
+
 %find_lang wxstd
 
 %clean
