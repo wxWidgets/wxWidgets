@@ -55903,7 +55903,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "CB_DROPDOWN",SWIG_From_int(static_cast< int >(wxCB_DROPDOWN)));
   SWIG_Python_SetConstant(d, "CB_SORT",SWIG_From_int(static_cast< int >(wxCB_SORT)));
   SWIG_Python_SetConstant(d, "CB_READONLY",SWIG_From_int(static_cast< int >(wxCB_READONLY)));
-  SWIG_Python_SetConstant(d, "CB_FILENAME",SWIG_From_int(static_cast< int >(wxCB_FILENAME)));
   SWIG_Python_SetConstant(d, "RA_HORIZONTAL",SWIG_From_int(static_cast< int >(wxRA_HORIZONTAL)));
   SWIG_Python_SetConstant(d, "RA_VERTICAL",SWIG_From_int(static_cast< int >(wxRA_VERTICAL)));
   SWIG_Python_SetConstant(d, "RA_SPECIFY_ROWS",SWIG_From_int(static_cast< int >(wxRA_SPECIFY_ROWS)));

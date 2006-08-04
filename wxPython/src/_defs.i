@@ -515,7 +515,6 @@ enum {
     wxCB_DROPDOWN,
     wxCB_SORT,
     wxCB_READONLY,
-    wxCB_FILENAME,
     wxRA_HORIZONTAL,
     wxRA_VERTICAL,
     wxRA_SPECIFY_ROWS,
