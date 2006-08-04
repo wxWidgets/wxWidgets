@@ -522,7 +522,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	    t="$(DISTDIR)/samples/`echo $$s | sed 's@$(SAMPDIR)/@@'`"; \
 	    mkdir -p $$t; \
 	    $(CP_P) $$s/Makefile.in \
-		    `find $$s -name 'makefile.*' -o -name descrip.mms -o \
+		    `find $$s -maxdepth 1 -name 'makefile.*' -o -name descrip.mms -o \
 				-name '*.cpp' -o -name '*.h' -o \
 				-name '*.bmp' -o -name '*.ico' -o -name '*.png' -o \
 				-name '*.rc' -o -name '*.xpm'` $$t; \
