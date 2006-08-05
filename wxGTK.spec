@@ -357,6 +357,7 @@ cat <<EOF >wxbase-headers.paths
 %{_includedir}/wx-%{ver2}/wx/confbase.h
 %{_includedir}/wx-%{ver2}/wx/config.h
 %{_includedir}/wx-%{ver2}/wx/containr.h
+%{_includedir}/wx-%{ver2}/wx/convauto.h
 %{_includedir}/wx-%{ver2}/wx/datetime.h
 %{_includedir}/wx-%{ver2}/wx/datstrm.h
 %{_includedir}/wx-%{ver2}/wx/dde.h
@@ -394,6 +395,7 @@ cat <<EOF >wxbase-headers.paths
 %{_includedir}/wx-%{ver2}/wx/ipcbase.h
 %{_includedir}/wx-%{ver2}/wx/isql.h
 %{_includedir}/wx-%{ver2}/wx/isqlext.h
+%{_includedir}/wx-%{ver2}/wx/link.h
 %{_includedir}/wx-%{ver2}/wx/list.h
 %{_includedir}/wx-%{ver2}/wx/listimpl.cpp
 %{_includedir}/wx-%{ver2}/wx/log.h
@@ -408,8 +410,10 @@ cat <<EOF >wxbase-headers.paths
 %{_includedir}/wx-%{ver2}/wx/mstream.h
 %{_includedir}/wx-%{ver2}/wx/object.h
 %{_includedir}/wx-%{ver2}/wx/platform.h
+%{_includedir}/wx-%{ver2}/wx/power.h
 %{_includedir}/wx-%{ver2}/wx/process.h
 %{_includedir}/wx-%{ver2}/wx/ptr_scpd.h
+%{_includedir}/wx-%{ver2}/wx/recguard.h
 %{_includedir}/wx-%{ver2}/wx/regex.h
 %{_includedir}/wx-%{ver2}/wx/scopeguard.h
 %{_includedir}/wx-%{ver2}/wx/snglinst.h
@@ -467,6 +471,7 @@ cat <<EOF >wxbase-headers.paths
 %{_includedir}/wx-%{ver2}/wx/unix/gsockunx.h
 %{_includedir}/wx-%{ver2}/wx/unix/mimetype.h
 %{_includedir}/wx-%{ver2}/wx/unix/pipe.h
+%{_includedir}/wx-%{ver2}/wx/unix/private.h
 %{_includedir}/wx-%{ver2}/wx/unix/stackwalk.h
 %{_includedir}/wx-%{ver2}/wx/unix/stdpaths.h
 EOF
