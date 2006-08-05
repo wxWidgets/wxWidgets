@@ -777,10 +777,13 @@ install-common: install-gtk-shared-stamp
 	dh_testroot
 	dh_clean -k
 
-	dh_install $(objdir_gtk_install)/share/aclocal 	usr/share
+	dh_install $(objdir_gtk_install)/share/bakefile/presets usr/share/bakefile
+	dh_install $(objdir_gtk_install)/share/bakefile/presets/wx*.bkl usr/share/bakefile/presets
+
+	dh_install $(objdir_gtk_install)/share/aclocal usr/share
 	dh_installman debian/wx-config.1
 
-	dh_install $(objdir_gtk_shared)/utils/wxrc/wxrc	usr/bin
+	dh_install $(objdir_gtk_shared)/utils/wxrc/wxrc usr/bin
 	dh_installman debian/wxrc-tools.1
 	dh_link usr/share/man/man1/wxrc-tools.1 usr/share/man/man1/wxrc.1
 
