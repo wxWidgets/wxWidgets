@@ -57,16 +57,16 @@ Version: %{ver}
 Release: %{rel}
 License: wxWindows Licence
 Group: X11/Libraries
-Source: wxGTK-%{ver}.tar.gz
+Source: wxGTK-%{ver}.tar.bz2
 URL: http://www.wxwidgets.org
 Packager: Vadim Zeitlin <vadim@wxwindows.org>
 Prefix: %{_prefix}
 BuildRoot: %{_tmppath}/%{name}-root
 Requires: %{wxbasename} = %{ver}
 %if %{portname} == gtk2
-# BuildRequires: gtk+-2.0-devel
+BuildRequires: gtk+-2.0-devel
 %else
-# BuildRequires: gtk+-devel >= 1.2.0
+BuildRequires: gtk+-devel >= 1.2.0
 %endif
 
 BuildRequires: zlib-devel, libjpeg-devel, libpng-devel, libtiff-devel
