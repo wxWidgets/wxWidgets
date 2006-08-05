@@ -20,11 +20,11 @@
 // this macro avoids to repeat these lines across all colour.h files, since
 // Set() is a virtual function and thus cannot be called by wxColourBase
 // constructors
-#define DEFINE_STD_WXCOLOUR_CONSTRUCTORS                                        \
-    wxColour( unsigned char red, unsigned char green, unsigned char blue )      \
-        { Set(red, green, blue); }                                              \
-    wxColour( unsigned long colRGB ) { Set(colRGB); }                           \
-    wxColour(const wxString &colourName) { Set(colourName); }                   \
+#define DEFINE_STD_WXCOLOUR_CONSTRUCTORS                                    \
+    wxColour( unsigned char red, unsigned char green, unsigned char blue )  \
+        { Set(red, green, blue); }                                          \
+    wxColour( unsigned long colRGB ) { Set(colRGB); }                       \
+    wxColour(const wxString &colourName) { Set(colourName); }               \
     wxColour(const wxChar *colourName) { Set(colourName); }
 
 
