@@ -395,7 +395,6 @@ COCOA_DIST: ALL_GUI_DIST
 	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 MSW_DIST: UNIV_DIST
-	$(CP_P) $(WXDIR)/wxWINE.spec $(DISTDIR)
 	mkdir $(DISTDIR)/include/wx/msw/ole
 	mkdir $(DISTDIR)/include/wx/msw/wince
 	$(CP_P) $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
@@ -415,7 +414,6 @@ MSW_DIST: UNIV_DIST
 	$(CP_PR) $(WXDIR)/contrib $(DISTDIR)/contrib
 
 MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
-	$(CP_P) $(WXDIR)/wxWINE.spec $(DISTDIR)
 	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/msw/ole
 	mkdir $(DISTDIR)/include/wx/msw/wince
