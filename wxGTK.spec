@@ -157,18 +157,6 @@ else
     export MAKE="make"
 fi
 
-mkdir obj-shared-no-gui
-cd obj-shared-no-gui
-../configure --prefix=%{_prefix} \
-			      --disable-gui \
-%if %{unicode}
-                              --enable-unicode
-%else
-                              --disable-unicode
-%endif
-$MAKE
-cd ..
-
 mkdir obj-shared
 cd obj-shared
 ../configure --prefix=%{_prefix} \
@@ -189,19 +177,6 @@ $MAKE
 cd contrib/src
 $MAKE
 cd ../../..
-
-mkdir obj-static-no-gui
-cd obj-static-no-gui
-../configure --prefix=%{_prefix} \
-			      --disable-gui \
-			      --disable-shared \
-%if %{unicode}
-                              --enable-unicode
-%else
-                              --disable-unicode
-%endif
-$MAKE
-cd ..
 
 mkdir obj-static
 cd obj-static
@@ -227,10 +202,8 @@ cd ../../..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-(cd obj-static-no-gui; make DESTDIR=$RPM_BUILD_ROOT install)
-(cd obj-static; make DESTDIR=$RPM_BUILD_ROOT install)
-(cd obj-shared-no-gui; make DESTDIR=$RPM_BUILD_ROOT install)
-(cd obj-shared; make DESTDIR=$RPM_BUILD_ROOT install)
+(cd obj-static; make DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix} install)
+(cd obj-shared; make DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix} install)
 
 # --- wxBase headers list begins here ---
 cat <<EOF >wxbase-headers.files
