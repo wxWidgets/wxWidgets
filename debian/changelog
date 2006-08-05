@@ -1,3 +1,11 @@
+wxwidgets2.7 (2.7.0.0-1) unstable; urgency=low
+
+  * New 2.7.0 release of the new development series.
+  * It's not possible to build both ansi and unicode versions.
+  * Maintainer change.
+
+ -- Vadim Zeitlin <vadim@wxwindows.org>  Fri,  4 Aug 2006 16:12:47 +0200
+
 wxwidgets2.7 (2.7.0.0-0rpd) unstable; urgency=low
 
   * First test build with wx 2.7 tree.
@@ -9,7 +17,7 @@ wxwidgets2.6 (2.6.3.2-3rpd) unstable; urgency=low
   * Added icons and *.desktop files for the wpython-wxtools
 
  -- Robin Dunn <robin@alldunn.com>  Thu,  4 May 2006 15:35:08 -0700
- 
+
 wxwidgets2.6 (2.6.3.2) unstable; urgency=low
 
   * Next try for an upload candidate.
