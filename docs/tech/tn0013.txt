@@ -16,7 +16,7 @@ below.
 
 a) Do a fresh checkout using the command
 
-        cvs -d :pserver:anoncvs@cvs.wxwidgets.org:/packs/cvsroots/wxwidgets co wxGTK
+   cvs -d :pserver:anoncvs@cvs.wxwidgets.org:/packs/cvsroots/wxwidgets co wxGTK
 
    NB: if you realize later that some needed files were not checked out
        by this command, please modify CVSROOT/modules to include the missing
@@ -24,13 +24,15 @@ a) Do a fresh checkout using the command
 
    You also need the samples, demos and contrib directories, so change to
    wxWidgets directory created by the first cvs command and do "cvs up -d"
-   for each of them.
+   for each of them. Of course, you can also check out everything (use
+   wxWidgets module name instead of wxGTK) if the bandwidth and disk space
+   are not a problem.
 
 b) Create a build directory under wxWidgets, e.g. I use "gtk-release",
    "cd" to it and run configure: the options don't really matter, you can use
    something like
 
-       ../configure --no-recursion
+       ../configure -C --without-subdirs
 
    to make it run a bit faster.
 
@@ -91,16 +93,12 @@ b) Start RPM build by going to RPM_ROOT directory and typing "rpm -ba
    you'll have to restart from the very beginning because rpm doesn't allow
    to short circuit the package generation).
 
-   If everything goes well, the following files are produced:
-
-   SRPMS/wxGTK-${version}-1.src.rpm
-   RPMS/i386/wxGTK-${version}-1.i386.rpm
-   RPMS/i386/wxGTK-devel-${version}-1.i386.rpm
-   RPMS/i386/wxGTK-gl-${version}-1.i386.rpm
-   RPMS/i386/wxGTK-static-${version}-1.i386.rpm
+   If everything goes well, this should produce many files in SRPMS and
+   RPMS/i386 subdirectories.
 
    Use "rpm -ba --with gtk2" to build GTK+2 version of wxGTK and use
-   "rpm -ba --with gtk2 --with unicode" to build GTK+2 Unicode build.
+   "rpm -ba --with gtk2 --with unicode" to build GTK+2 Unicode build
+   (these are defaults, you can use --without option to change this).
 
    Note: you may want to set the environment variable SMP to 3 or 4 on an
          SMP machine to speed up the build (it uses "make -j$SMP" if the
@@ -113,7 +111,8 @@ c) Test the resulting RPMs: install them using "rpm -i" (or "rpm -U) as usual
 3. Building the DEBs
 --------------------
 
-[Ron is doing this]
+This is explained in more details in debian/README.HowToBuild.txt.
+
 
 4. Uploading the files
 ----------------------
