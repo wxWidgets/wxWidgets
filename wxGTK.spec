@@ -200,6 +200,8 @@ cd contrib/src
 $MAKE
 cd ../../..
 
+make -C locale allmo
+
 %install
 rm -rf $RPM_BUILD_ROOT
 (cd obj-static; make DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix} install)
@@ -565,6 +567,7 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 
 %files -n wx-i18n
 %defattr(-,root,root)
+%{_datadir}/locale/*/LC_MESSAGES/*.mo
 
 %files devel -f core-headers.files
 %defattr(-,root,root)
@@ -615,6 +618,7 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/wx/config/%{wxbaseconfigstatic}
 %{_libdir}/wx/include/%{wxbaseconfigstatic}/wx/setup.h
 %{_datadir}/aclocal/*.m4
+%{_datadir}/bakefile/presets/*
 
 %files gl
 %defattr(-,root,root)
