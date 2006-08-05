@@ -557,6 +557,7 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %defattr(-,root,root)
 %doc COPYING.LIB *.txt
 %{_libdir}/libwx_%{buildname}_adv-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_aui-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.so.*
 %if !%{unicode}
     %{_libdir}/libwx_%{buildname}_dbgrid-%{ver2}.so.*
@@ -564,6 +565,7 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_richtext-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.so.*
 
 %files -n wx-i18n
@@ -574,6 +576,7 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %defattr(-,root,root)
 # shared libs
 %{_libdir}/libwx_%{buildname}_adv-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_aui-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.so
 %if !%{unicode}
     %{_libdir}/libwx_%{buildname}_dbgrid-%{ver2}.so
@@ -582,9 +585,11 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_richtext-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.so
 # static libs
 %{_libdir}/libwx_%{buildname}_adv-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_aui-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_core-%{ver2}.a
 %if !%{unicode}
     %{_libdir}/libwx_%{buildname}_dbgrid-%{ver2}.a
@@ -592,6 +597,7 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_richtext-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.a
 %dir %{_libdir}/wx
 %{_libdir}/wx/config/%{wxconfig}
