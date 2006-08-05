@@ -630,6 +630,18 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_stc-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_svg-%{ver2}.so.*
 
+# static libs
+%{_libdir}/libwx_%{buildname}_animate-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_deprecated-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_fl-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_gizmos-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_gizmos_xrc-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_ogl-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_plot-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_stc-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_svg-%{ver2}.a
+
 %files contrib-devel
 %defattr(-,root,root)
 %dir %{_includedir}/wx-%{ver2}/wx/animate
