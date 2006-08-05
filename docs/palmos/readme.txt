@@ -12,7 +12,7 @@ First, you need the freely distributable Palm OS Developer Studio available at
 
 Beware, its installation takes about 500Mb (+ 150 Mb of cygwin if not installed
 yet), so make sure you have enough disk space for it and for wxWidgets build
-tree (another 50Mb). Last tested set: PODS 1.2, SDK 6.1, wxWidgets 2.6.2.
+tree (another 50Mb). Last tested set: PODS 1.2, SDK 6.1, wxWidgets 2.7.0.
 
 The Developer Studio is Eclipse-based and so is a GUI environment, however it
 is also possible to build Palm applications from the command line using the

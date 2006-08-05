@@ -1,4 +1,4 @@
-wxWidgets 2.6.2
+wxWidgets 2.7.0
 ---------------------------------------------------------
 
 Welcome to wxWidgets, a sophisticated cross-platform C++
@@ -44,9 +44,10 @@ Most popular C++ compilers are supported; see the install.txt
 file for each platform (available via docs/html/index.htm) for details.
 See also http://www.wxwidgets.org/platform.htm.
 
-The 2.6 series is the last to fully support GTK+ 1.2, and Mac OS
-9/Mac OS 10.2 and below. wxWidgets 2.7 and above will focus on
-GTK+ 2, and Mac OS 10.3 and above.
+Note that 2.6 series were the last to fully support GTK+ 1.2, and Mac OS
+9/Mac OS 10.2 and below. wxWidgets 2.7 and above focuses on GTK+ 2 and Mac OS
+10.3 and above and compatibility with earlier systems is not guaranteed any
+more.
 
 Files
 -----

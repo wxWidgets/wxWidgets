@@ -1,7 +1,7 @@
+   Welcome to wxWidgets 2.7.0 for GTK+
+   -----------------------------------
 
-   Welcome to wxWidgets 2.6 for GTK+
-
-You have downloaded version 2.6 of the GTK+ port of the 
+You have downloaded version 2.7 of the GTK+ port of the 
 wxWidgets GUI library.
 
 wxWidgets no longer supports GTK 1.0.x (as did some early
@@ -14,7 +14,7 @@ More info about the wxWidgets project (including all the
 other ports and version of wxWidgets) can be found at the
 main wxWidgets homepage at:
 
-                  http://www.wxwidgets.org
+                  http://www.wxwidgets.org/
   
 Information on how to install can be found in the file 
 INSTALL.txt, but if you cannot wait, this should work on
@@ -22,7 +22,7 @@ many systems:
 
     mkdir build_gtk
     cd build_gtk
-    ../configure --with-gtk=2
+    ../configure
     make
     su <type root password>
     make install

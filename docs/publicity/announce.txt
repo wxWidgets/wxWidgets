@@ -1,45 +1,45 @@
-Announcing wxWidgets 2.6.1: a cross-platform GUI toolkit
+Announcing wxWidgets 2.7.0: a cross-platform GUI toolkit
 ----------------------------------------------------------------
 
-June 5th, 2005 -- the wxWidgets team is pleased to announce
-a new official release of the mature cross-platform C++
-application framework.
+August 5th, 2006 -- the wxWidgets team is pleased to announce
+a new release of the mature cross-platform C++ application framework.
 
 The following platforms are supported:
 
 - Windows 95/98/ME, Windows NT, Windows 2000, Windows XP
+- Windows 64 on Itanium and x86-64 architectures
 - Windows CE, including Pocket PC 2003 and Smartphone 2003
-- Linux/Unix/VMS with GTK+ 1.x and 2.0
-- Linux/Unix with X11 (beta)
-- Linux/Unix with Motif/Lesstif
-- Mac OS 9.x and 10.2 and above using Carbon
-- Mac OS 10.x using Cocoa (beta)
+- Unix (Linux, *BSD, Solaris, AIX, HP-UX, IRIX, Tru64) and VMS with GTK+
+- Unix with X11 (beta)
+- Unix with Motif/Lesstif
+- Mac OS X using Carbon
+- Mac OS X using Cocoa (beta)
 - OS/2 (beta)
 - MGL for Linux and DOS
 - Palm OS (alpha)
 
-A non-GUI subset of wxWidgets called wxBase is also supported
-on most of these platforms.
+To get wxWidgets, please go to the Download page at:
 
-To get wxWidgets, go to the Download page at:
+  http://www.wxwidgets.org/
 
-  http://www.wxwidgets.org
+This is the first version in the new 2.7 series. Please notice
+that this series is called "development" and not "stable" solely
+because compatibility is not assured among between different 2.7
+series versions but there are no known issues with the stability
+of the programs using this version.
 
-Since 2.4.2, we have added support for Windows Mobile devices,
-enhanced GTK+ 2 support, radically overhauled the Mac OS X port,
-replaced the build system with Bakefile, added better
-integration with STL, and added a CppUnit-based test suite.
-Other changes include sizer improvements, new Gnome printing
-features, ODBC enhancements such as BLOB support and Unicode
-support on Windows, wxTaskBarIcon support on Mac OS X and Linux
-as well as Windows, top-level windows can have arbitrary shapes,
-images can have alpha channels, plus many API enhancements and
-bug fixes to existing classes. New classes include
-wxVScrolledWindow, wxVListBox, wxHtmlListbox,
-wxPropertySheetDialog, wxGridBagSizer, wxMediaCtrl,
-wxDatePickerCtrl, wxArchiveInputStream/wxArchiveOutputStream
-(including zip archive read/write support), wxListbook,
-wxChoicebook, wxDebugReport, and more.
+There have been many changes since the 2.6 series, please see the
+change log file included in the distribution for more details. The
+most significant additions to the GUI part of the libraries were:
+
+    - AUI (advanced user interface) library providing dockable
+      windows and much more
+    - richtext library implementing wxRichTextCtrl
+    - New wxComboCtrl and wxOwnerDrawnComboBox controls
+    - New wxTreebook book-like control
+    - New wxColour/Dir/File/Font/PickerCtrls
+    - wxHyperlinkCtrl control
+
 
 *** About wxWidgets
 
@@ -75,15 +75,14 @@ If you're an MFC user, you'll find many wxWidgets concepts
 reassuringly familiar, while often clearer and more consistent.
 If you're not, you should still find it intuitive from the start.
 
-wxWidgets bindings for several other languages are available,
+wxWidgets bindings for many other languages are available,
 including Python, Perl, Basic, Lua, JavaScript and Eiffel.
 
 If you're considering wxWidgets, do check out some of these links:
 
-    http://www.wxwidgets.org/feedback.htm ; Comments from users
-    http://www.wxwidgets.org/screensh.htm ; Screenshots
-    http://www.wxwidgets.org/users.htm    ; A list of some of our
-                                          ; users
+    http://www.wxwidgets.org/about/feedback.htm ; Comments from users
+    http://www.wxwidgets.org/about/screensh.htm ; Screenshots
+    http://www.wxwidgets.org/about/users.htm    ; Some of our users
 
 Have fun!
 
