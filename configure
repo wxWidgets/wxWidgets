@@ -40881,8 +40881,8 @@ _ACEOF
 fi
 
 if test "$USE_UNIX" = "1" ; then
-                echo "$as_me:$LINENO: checking for ioctl() in sys/soundcard.h" >&5
-echo $ECHO_N "checking for ioctl() in sys/soundcard.h... $ECHO_C" >&6
+                echo "$as_me:$LINENO: checking for SNDCTL_DSP_SPEED in sys/soundcard.h" >&5
+echo $ECHO_N "checking for SNDCTL_DSP_SPEED in sys/soundcard.h... $ECHO_C" >&6
 if test "${ac_cv_header_sys_soundcard+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -40894,13 +40894,14 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
+                #include <sys/ioctl.h>
                 #include <sys/soundcard.h>
 
 int
 main ()
 {
 
-                ioctl(0, SNDCTL_DSP_SYNC, 0);
+                ioctl(0, SNDCTL_DSP_SPEED, 0);
 
   ;
   return 0;
@@ -40942,13 +40943,14 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
+                        #include <sys/ioctl.h>
                         #include <sys/soundcard.h>
 
 int
 main ()
 {
 
-                        ioctl(0, SNDCTL_DSP_SYNC, 0);
+                        ioctl(0, SNDCTL_DSP_SPEED, 0);
 
   ;
   return 0;

@@ -5423,22 +5423,24 @@ if test "$USE_UNIX" = "1" ; then
     dnl it's not enough to check for just the header because OSS under NetBSD
     dnl redefines ioctl as oss_ioctrl inside it and so we also need to test
     dnl whether we need -lossaudio at link-time
-    AC_CACHE_CHECK([for ioctl() in sys/soundcard.h], ac_cv_header_sys_soundcard, [
+    AC_CACHE_CHECK([for SNDCTL_DSP_SPEED in sys/soundcard.h], ac_cv_header_sys_soundcard, [
         AC_TRY_LINK([
+                #include <sys/ioctl.h>
                 #include <sys/soundcard.h>
             ],
             [
-                ioctl(0, SNDCTL_DSP_SYNC, 0);
+                ioctl(0, SNDCTL_DSP_SPEED, 0);
             ],
             ac_cv_header_sys_soundcard=yes,
             [
                 saveLibs="$LIBS"
                 LIBS="$saveLibs -lossaudio"
                 AC_TRY_LINK([
+                        #include <sys/ioctl.h>
                         #include <sys/soundcard.h>
                     ],
                     [
-                        ioctl(0, SNDCTL_DSP_SYNC, 0);
+                        ioctl(0, SNDCTL_DSP_SPEED, 0);
                     ],
                     ac_cv_header_sys_soundcard=yes,
                     [
