@@ -496,6 +496,9 @@ rm -rf $RPM_BUILD_ROOT/_save_dir
 # utils:
 (cd obj-shared/utils/wxrc; make DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix} install)
 
+# wx-config link is created during package installation, remove it for now
+rm -f $RPM_BUILD_ROOT%{_bindir}/wx-config
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
