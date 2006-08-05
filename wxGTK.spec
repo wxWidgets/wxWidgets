@@ -485,8 +485,11 @@ cp -f -r $RPM_BUILD_ROOT/_save_dir/* $RPM_BUILD_ROOT%{_includedir}
 rm -rf $RPM_BUILD_ROOT/_save_dir
 
 # contrib stuff:
-(cd obj-shared/contrib/src; make DESTDIR=$RPM_BUILD_ROOT install)
-(cd obj-shared/utils/wxrc; make DESTDIR=$RPM_BUILD_ROOT install)
+(cd obj-static/contrib; make DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix} install)
+(cd obj-shared/contrib; make DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix} install)
+
+# utils:
+(cd obj-shared/utils/wxrc; make DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix} install)
 
 %clean
 rm -rf $RPM_BUILD_ROOT
