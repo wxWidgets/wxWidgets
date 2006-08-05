@@ -1,4 +1,4 @@
-%define _prefix /opt/gnome
+%define _prefix /usr
 %define ver  2.7.0
 %define ver2 2.7
 %define rel  1
