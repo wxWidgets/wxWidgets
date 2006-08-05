@@ -194,7 +194,7 @@ mkdir obj-static-no-gui
 cd obj-static-no-gui
 ../configure --prefix=%{_prefix} \
 			      --disable-gui \
-      			      --disable-shared \
+			      --disable-shared \
 %if %{unicode}
                               --enable-unicode
 %else
@@ -213,12 +213,12 @@ cd obj-static
 %endif
 			      --disable-shared \
 %if %{unicode}
-                	      --enable-unicode \
+			      --enable-unicode \
 %else
-            		      --disable-unicode \
+			      --disable-unicode \
 			      --with-odbc \
 %endif
-            		      --with-opengl
+			      --with-opengl
 $MAKE
 
 cd contrib/src
@@ -385,7 +385,6 @@ cat <<EOF >wxbase-headers.paths
 %{_includedir}/wx-%{ver2}/wx/config.h
 %{_includedir}/wx-%{ver2}/wx/containr.h
 %{_includedir}/wx-%{ver2}/wx/datetime.h
-%{_includedir}/wx-%{ver2}/wx/datetime.inl
 %{_includedir}/wx-%{ver2}/wx/datstrm.h
 %{_includedir}/wx-%{ver2}/wx/dde.h
 %{_includedir}/wx-%{ver2}/wx/debug.h
@@ -593,7 +592,6 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 
 %files -n wx-i18n
 %defattr(-,root,root)
-%{_datadir}/locale/*/*/*
 
 %files devel -f core-headers.files
 %defattr(-,root,root)
