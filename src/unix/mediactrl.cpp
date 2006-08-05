@@ -913,7 +913,7 @@ bool wxGStreamerMediaBackend::TryVideoSink(GstElement* videosink)
 //
 // Called when the media is about to stop
 //-----------------------------------------------------------------------------
-void wxGStreamerMediaEventHandler::OnMediaFinish(wxMediaEvent& event)
+void wxGStreamerMediaEventHandler::OnMediaFinish(wxMediaEvent& WXUNUSED(event))
 {
     // (RN - I have no idea why I thought this was good behaviour....
     // maybe it made sense for streaming/nonseeking data but
