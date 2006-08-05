@@ -63,13 +63,13 @@ Packager: Vadim Zeitlin <vadim@wxwindows.org>
 Prefix: %{_prefix}
 BuildRoot: %{_tmppath}/%{name}-root
 Requires: %{wxbasename} = %{ver}
-%if %{portname} == gtk2
-BuildRequires: gtk+-2.0-devel
-%else
-BuildRequires: gtk+-devel >= 1.2.0
-%endif
-
-BuildRequires: zlib-devel, libjpeg-devel, libpng-devel, libtiff-devel
+#%if %{portname} == gtk2
+#BuildRequires: gtk+-2.0-devel
+#%else
+#BuildRequires: gtk+-devel >= 1.2.0
+#%endif
+#
+#BuildRequires: zlib-devel, libjpeg-devel, libpng-devel, libtiff-devel
 
 # all packages providing an implementation of wxWidgets library (regardless of
 # the toolkit used) should provide the (virtual) wxwin package, this makes it
@@ -561,7 +561,7 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
     %{_libdir}/libwx_%{buildname}_dbgrid-%{ver2}.so.*
 %endif
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.so.*
-%{_libdir}/libwx_%{buildname}_media-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.so.*
 
@@ -579,7 +579,7 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %endif
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.so
-%{_libdir}/libwx_%{buildname}_media-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.so
 # static libs
@@ -590,7 +590,7 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %endif
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_media-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.a
 %dir %{_libdir}/wx
