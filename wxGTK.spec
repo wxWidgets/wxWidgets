@@ -42,12 +42,10 @@
 %if %{unicode}
     %define wxbasename		wx-base-unicode
     %define wxbaseconfig	base-unicode-release-%{ver2}
-    %define wxbaseconfigstatic	base-unicode-release-static-%{ver2}
     %define wxbaseconfiglink	wxbaseu-%{ver2}-config
 %else
     %define wxbasename		wx-base-ansi
     %define wxbaseconfig	base-ansi-release-%{ver2}
-    %define wxbaseconfigstatic	base-ansi-release-static-%{ver2}
     %define wxbaseconfiglink	wxbase-%{ver2}-config
 %endif
 
@@ -590,7 +588,6 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %endif
 %{_libdir}/libwx_%{buildname}_gl-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_html-%{ver2}.a
-%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.a
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.a
 %dir %{_libdir}/wx
@@ -613,10 +610,6 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
     %{_libdir}/libwxregexu-%{ver2}.a
 %endif
 %dir %{_libdir}/wx
-%{_libdir}/wx/config/%{wxbaseconfig}
-%{_libdir}/wx/include/%{wxbaseconfig}/wx/setup.h
-%{_libdir}/wx/config/%{wxbaseconfigstatic}
-%{_libdir}/wx/include/%{wxbaseconfigstatic}/wx/setup.h
 %{_datadir}/aclocal/*.m4
 %{_datadir}/bakefile/presets/*
 
