@@ -135,7 +135,7 @@ a) FreshMeat:
 
 b) wx-announce mailing list: mailto:wx-announce@lists.wxwidgets.org
 
-   [where is the announcement text? TODO]
+   The standard announcement text is in docs/publicity/announce.txt
 
 c) update www.wxwidgets.org
 
