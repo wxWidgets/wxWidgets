@@ -117,7 +117,7 @@ This is explained in more details in debian/README.HowToBuild.txt.
 4. Uploading the files
 ----------------------
 
-All 11 files should be uploaded (via FTP) to several locations.
+All files should be uploaded (via FTP) to several locations.
 
 a) incoming.sourceforge.net, go to project admin page on sf.net and choose
    add/edit releases for more details
@@ -127,37 +127,30 @@ b) ftp://biolpc22.york.ac.uk/pub (Julian has the password)
 5. Announcing the release
 -------------------------
 
-a) FreshMeat:
-   - http://freshmeat.net/projects/wxwidgetsgtk/
-   - username and password are "wxgtk" for logging in
++ update www.wxwidgets.org
+
++ FreshMeat:
+   - http://freshmeat.net/projects/wxwidgets/
    - hit "new release" at the top
    - follow the step by step
 
-b) wx-announce mailing list: mailto:wx-announce@lists.wxwidgets.org
++ wx-announce mailing list: mailto:wx-announce@lists.wxwidgets.org
 
    The standard announcement text is in docs/publicity/announce.txt
 
-c) update www.wxwidgets.org
-
-d) GNOME (very effective, stays on front page for days):
-    - http://www.gnome.org/applist
-    - Search for wxWidgets
-    - Update the version number
-    - Ignore the error message
-
-e) MacNN:
++ MacNN:
    - http://www.macnn.com
    - Contact or Contribute or something
 
-f) MacRumors:
++ MacRumors:
    - http://www.macrumors.com
    - Contact or Contribute or something
 
-g) Apple Developers Connection:
++ Apple Developers Connection:
     mailto: adcnews@apple.com
 
-h) LinuxDevices.com:
++ LinuxDevices.com:
     Interesting for wxUniversal.
 
-i) The Python mailing list:
++ The Python mailing list:
 
