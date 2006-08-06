@@ -22,11 +22,16 @@ To get wxWidgets, please go to the Download page at:
 
   http://www.wxwidgets.org/
 
-This is the first version in the new 2.7 series. Please notice
-that this series is called "development" and not "stable" solely
-because compatibility is not assured among between different 2.7
-series versions but there are no known issues with the stability
-of the programs using this version.
+This is the first version in the new 2.7 development series. Please
+notice that this series is called "development" and not "stable"
+solely because ABI or API compatibility is not assured between
+different 2.7.x series versions.  Rest assured however that these
+potentially incompatible changes are made in order to evolve the
+toolkit to the next ABI stable release series (2.8.x) and that
+normally efforts are made to preserve compilation compatibility, so
+often moving to a new development release just requires a full
+recompile of the application using wxWidgets.  There are currently no
+known issues with the stability of the programs using this version.
 
 There have been many changes since the 2.6 series, please see the
 change log file included in the distribution for more details. The

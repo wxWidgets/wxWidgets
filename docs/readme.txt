@@ -19,6 +19,21 @@ and Windows Help form: see the docs hierarchy.
 For a quick start, point your Web browser at docs/html/index.htm
 for a list of important documents and samples.
 
+Releases in the 2.7 series are considered development releases,
+and as such, each new release may contain significant new
+features or code changes which have not yet received thorough
+testing and/or may break ABI or API compatibility with previous
+releases. Therefore, we recommend that you keep this in mind if
+you are to base your software on a 2.7 release, and thoroughly
+test the parts of the wx library your application uses.  Rest
+assured however that these potentially incompatible changes are
+made in order to evolve the toolkit to the next ABI stable
+release series (2.8.x) and that normally efforts are made to
+preserve compilation compatibility, so often moving to a new
+development release just requires a full recompile of the
+application using wxWidgets.
+
+
 Changes in this release
 -----------------------
 
