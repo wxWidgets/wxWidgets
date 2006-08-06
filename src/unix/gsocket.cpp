@@ -1084,7 +1084,13 @@ int GSocket::Read(char *buffer, int size)
      * socket only if errno does _not_ indicate that there may be more data to read.
      */
     if (ret == 0)
+    {
       m_error = GSOCK_IOERR;
+      m_detected = GSOCK_LOST_FLAG;
+      Close();
+      // Signal an error for return
+      return -1;
+    }
     else if (ret == -1)
     {
       if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
