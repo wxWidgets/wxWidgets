@@ -5,7 +5,7 @@
 // Modified by:
 // Created:   10/15/99
 // RCS-ID:    $Id$
-// Copyright: (c) Davdi Webster
+// Copyright: (c) David Webster
 // Licence:   wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -86,6 +86,13 @@ public:
 // wxRegion
 //-----------------------------------------------------------------------------
 
+// General remark:
+// wxRegion is always basically stored in wx coordinates. However, since
+// OS/2's internal functions rely on "top > bottom", the values of top and
+// bottom values of a region need to be interchanged, as compared to wx.
+// This needs to be taken into account when feeding any rectangle to wx _or_
+// when accessing the region data via GetBox, wxRegionIterator or otherwise.
+
 /*!
  * Create an empty region.
  */
@@ -162,8 +169,8 @@ wxRegion::wxRegion(
 
     vRect.xLeft   = rTopLeft.x;
     vRect.xRight  = rBottomRight.x;
-    vRect.yBottom = rBottomRight.y;
-    vRect.yTop    = rTopLeft.y;
+    vRect.yBottom = rTopLeft.y;
+    vRect.yTop    = rBottomRight.y;
 
     m_refData     = new wxRegionRefData;
 
@@ -428,47 +435,20 @@ bool wxRegion::Empty() const
 //-----------------------------------------------------------------------------
 // Tests
 //-----------------------------------------------------------------------------
-
-//
-// Does the region contain the point (x,y)?
-wxRegionContain wxRegion::Contains(
-  wxCoord                           x
-, wxCoord                           y
-) const
-{
-    POINTL                          vPoint;
-
-    vPoint.x = x;
-    vPoint.y = y;
-
-    if (!m_refData)
-        return wxOutRegion;
-
-    LONG                            lInside = ::GpiPtInRegion( ((wxRegionRefData*)m_refData)->m_hPS
-                                                              ,M_REGION
-                                                              ,&vPoint
-                                                             );
-    if (lInside == PRGN_INSIDE)
-        return wxInRegion;
-    return wxOutRegion;
-} // end of wxRegion::Contains
-
 //
 // Does the region contain the point pt?
 //
-wxRegionContain wxRegion::Contains(
-  const wxPoint&                    rPoint
-) const
+wxRegionContain wxRegion::Contains( const wxPoint& rPoint ) const
 {
     POINTL                          vPoint = { rPoint.x, rPoint.y };
 
     if (!m_refData)
         return wxOutRegion;
 
-    LONG                            lInside = ::GpiPtInRegion( ((wxRegionRefData*)m_refData)->m_hPS
-                                                              ,M_REGION
-                                                              ,&vPoint
-                                                             );
+    LONG lInside = ::GpiPtInRegion( ((wxRegionRefData*)m_refData)->m_hPS,
+                                    M_REGION,
+                                    &vPoint
+				  );
     if (lInside == PRGN_INSIDE)
         return wxInRegion;
     else
@@ -478,56 +458,31 @@ wxRegionContain wxRegion::Contains(
 //
 // Does the region contain the rectangle (x, y, w, h)?
 //
-wxRegionContain wxRegion::Contains(
-  wxCoord                           x
-, wxCoord                           y
-, wxCoord                           vWidth
-, wxCoord                           vHeight
-) const
+wxRegionContain wxRegion::Contains( wxCoord x,
+				    wxCoord y,
+				    wxCoord vWidth,
+				    wxCoord vHeight ) const
 {
-    RECTL                           vRect;
-
     if (!m_refData)
         return wxOutRegion;
 
+    RECTL   vRect;
     vRect.xLeft   = x;
-    vRect.yTop    = y;
     vRect.xRight  = x + vWidth;
-    vRect.yBottom = y + vHeight;
+    vRect.yTop    = y + vHeight;
+    vRect.yBottom = y;
 
-    if (PRGN_INSIDE == ::GpiRectInRegion( ((wxRegionRefData*)m_refData)->m_hPS
-                                         ,M_REGION
-                                         ,&vRect
-                                        ))
-        return wxInRegion;
-    else
-        return wxOutRegion;
-} // end of wxRegion::Contains
-
-//
-// Does the region contain the rectangle rect
-//
-wxRegionContain wxRegion::Contains(
-  const wxRect&                     rRect
-) const
-{
-    if (!m_refData)
-        return wxOutRegion;
-
-    wxCoord                         x;
-    wxCoord                         y;
-    wxCoord                         vWidth;
-    wxCoord                         vHeight;
-
-    x       = rRect.x;
-    y       = rRect.y;
-    vWidth  = rRect.GetWidth();
-    vHeight = rRect.GetHeight();
-    return Contains( x
-                    ,y
-                    ,vWidth
-                    ,vHeight
-                   );
+    LONG lInside = ::GpiRectInRegion( ((wxRegionRefData*)m_refData)->m_hPS,
+                                      M_REGION,
+                                      &vRect    
+                                    );
+    switch (lInside)
+    {
+        case RRGN_INSIDE    :   return wxInRegion;
+        case RRGN_PARTIAL   :   return wxPartRegion;
+        case RRGN_ERROR     :
+        default             :   return wxOutRegion;
+    }
 } // end of wxRegion::Contains
 
 //
