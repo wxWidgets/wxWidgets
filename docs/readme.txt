@@ -37,7 +37,7 @@ application using wxWidgets.
 Changes in this release
 -----------------------
 
-Please see changes.txt and "Changes since 2.4" in the manual
+Please see changes.txt and "Changes since 2.6" in the manual
 for details.
 
 Platforms supported
