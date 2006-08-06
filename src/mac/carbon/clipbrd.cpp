@@ -239,9 +239,18 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     for (size_t i = 0; i < m_data->GetFormatCount(); i++)
     {
-        wxLogTrace( TRACE_CLIPBOARD,
-                    wxT("wxClipboard now supports atom %s"),
-                    array[i].GetId().c_str() );
+        if (array[i].IsStandard())
+        {
+            wxLogTrace( TRACE_CLIPBOARD,
+                        wxT("wxClipboard now supports standard atom type %d"),
+                        array[i].GetType() );
+        }
+        else
+        {
+            wxLogTrace( TRACE_CLIPBOARD,
+                        wxT("wxClipboard now supports atom %s"),
+                        array[i].GetId().c_str() );
+        }
 
         size_t sz = data->GetDataSize( array[i] ) ;
         void* buf = malloc( sz + 1 ) ;
