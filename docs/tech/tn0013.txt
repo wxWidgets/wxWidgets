@@ -140,7 +140,7 @@ b) ftp://biolpc22.york.ac.uk/pub (Julian has the password)
 
 + GnomeFiles:
    - http://www.gnomefiles.org/app.php/wxWidgets
-     (you need an account, Vadim and Robert already have them)
+     (only for stable releases, probably need Robert's account)
 
 + MacNN:
    - http://www.macnn.com
