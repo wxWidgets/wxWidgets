@@ -1,7 +1,14 @@
+wxwidgets2.7 (2.7.0.0-2) unstable; urgency=low
+
+  * Fixes to ansi packages builds
+  * Corresponds to the official wxWidgets 2.7.0 sources
+
+ -- Vadim Zeitlin <vadim@wxwindows.org>  Fri,  6 Aug 2006 16:31:08 +0200
+
 wxwidgets2.7 (2.7.0.0-1) unstable; urgency=low
 
   * New 2.7.0 release of the new development series.
-  * It's not possible to build both ansi and unicode versions.
+  * It's now possible to build both ansi and unicode versions.
   * Maintainer change.
 
  -- Vadim Zeitlin <vadim@wxwindows.org>  Fri,  4 Aug 2006 16:12:47 +0200
