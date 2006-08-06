@@ -151,7 +151,7 @@ Description: wxWidgets Cross-platform C++ GUI toolkit (wxPython version selector
 Package: python-wxtools
 Architecture: all
 Section: python
-Depends: python-wxgtk=V=U, ${shlibs:Depends}
+Depends: python-wxgtk=V=U
 Conflicts: wxpython2.6-0
 Replaces: wxpython2.6-0, libwxgtk2.4-python, wxpython2.4-1
 Description: wxWidgets Cross-platform C++ GUI toolkit (wxPython common files)
