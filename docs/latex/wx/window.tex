@@ -2799,14 +2799,12 @@ default for the reasons explained in the
 window from being used as an implicit parent for the dialogs which were
 created without a parent. It is useful for the windows which can disappear at
 any moment as creating children of such windows results in fatal problems.}
-\twocolitem{\windowstyle{wxFRAME\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
-caption. When pressed, Windows will go into a context-sensitive help mode and wxWidgets will send
-a wxEVT\_HELP event if the user clicked on an application window.
+\twocolitem{\windowstyle{wxWS\_EX\_CONTEXTHELP}}{Under Windows, puts a query
+button on the caption. When pressed, Windows will go into a context-sensitive
+help mode and wxWidgets will send a wxEVT\_HELP event if the user clicked on an
+application window.
 This style cannot be used together with wxMAXIMIZE\_BOX or wxMINIMIZE\_BOX, so
-you should use the style of
-{\tt wxDEFAULT\_FRAME\_STYLE \& \textasciitilde(wxMINIMIZE\_BOX | wxMAXIMIZE\_BOX)} for the
-frames having this style (the dialogs don't have minimize nor maximize box by
-default)}
+these two styles are automatically turned of if this one is used.}
 \twocolitem{\windowstyle{wxWS\_EX\_PROCESS\_IDLE}}{This window should always process idle events, even
 if the mode set by \helpref{wxIdleEvent::SetMode}{wxidleeventsetmode} is wxIDLE\_PROCESS\_SPECIFIED.}
 \twocolitem{\windowstyle{wxWS\_EX\_PROCESS\_UI\_UPDATES}}{This window should always process UI update events,

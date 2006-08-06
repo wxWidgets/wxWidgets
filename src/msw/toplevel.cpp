@@ -210,10 +210,10 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
 
     // WS_EX_CONTEXTHELP is incompatible with WS_MINIMIZEBOX and WS_MAXIMIZEBOX
     // and is ignored if we specify both of them, but chances are that if we
-    // use wxFRAME_EX_CONTEXTHELP, we really do want to have the context help
+    // use wxWS_EX_CONTEXTHELP, we really do want to have the context help
     // button while wxMINIMIZE/wxMAXIMIZE are included by default, so the help
     // takes precedence
-    if ( !(GetExtraStyle() & wxFRAME_EX_CONTEXTHELP) )
+    if ( !(GetExtraStyle() & wxWS_EX_CONTEXTHELP) )
     {
         if ( style & wxMINIMIZE_BOX )
             msflags |= WS_MINIMIZEBOX;
@@ -273,7 +273,7 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
             //else: nothing to do [here]
         }
 
-        if ( GetExtraStyle() & wxFRAME_EX_CONTEXTHELP )
+        if ( GetExtraStyle() & wxWS_EX_CONTEXTHELP )
             *exflags |= WS_EX_CONTEXTHELP;
 #endif // !__WXWINCE__
 

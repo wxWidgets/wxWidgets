@@ -97,8 +97,7 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
                    wxSYSTEM_MENU | wxRESIZE_BORDER | wxFRAME_TOOL_WINDOW |
                    wxRESIZE_BORDER);
         style |= wxSIMPLE_BORDER;
-        SetExtraStyle(exstyleOrig &
-                      ~(wxFRAME_EX_CONTEXTHELP | wxDIALOG_EX_CONTEXTHELP));
+        SetExtraStyle(exstyleOrig & ~wxWS_EX_CONTEXTHELP);
     }
 
     if ( !wxTopLevelWindowNative::Create(parent, id, title, pos,
@@ -154,7 +153,7 @@ long wxTopLevelWindow::GetDecorationsStyle() const
                 style |= wxTOPLEVEL_BUTTON_MAXIMIZE;
         }
 #if wxUSE_HELP
-        if ( m_exStyle & (wxFRAME_EX_CONTEXTHELP | wxDIALOG_EX_CONTEXTHELP))
+        if ( m_exStyle & wxWS_EX_CONTEXTHELP)
             style |= wxTOPLEVEL_BUTTON_HELP;
 #endif
     }
