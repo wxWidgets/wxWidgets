@@ -138,6 +138,10 @@ b) ftp://biolpc22.york.ac.uk/pub (Julian has the password)
 
    The standard announcement text is in docs/publicity/announce.txt
 
++ GnomeFiles:
+   - http://www.gnomefiles.org/app.php/wxWidgets
+     (you need an account, Vadim and Robert already have them)
+
 + MacNN:
    - http://www.macnn.com
    - Contact or Contribute or something
