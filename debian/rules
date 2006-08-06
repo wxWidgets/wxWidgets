@@ -943,7 +943,7 @@ binary-common:
 	fi
 
 	dh_installdeb
-	dh_shlibdeps -ldebian/$(package_gtk_lib)/usr/lib:debian/$(package_gtk_dbg)/usr/lib
+	dh_shlibdeps -ldebian/$(package_wxbase_lib)/usr/lib:debian/$(package_wxbase_dbg)/usr/lib:debian/$(package_gtk_lib)/usr/lib:debian/$(package_gtk_dbg)/usr/lib
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
