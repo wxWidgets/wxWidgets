@@ -76,7 +76,7 @@ getfilelist(){
   fi
   
   if [ $port = "all" ]; then
-    filelist="$filelist palmos.rsp"
+    filelist="$filelist palmos.rsp docsrc.rsp"
   fi
   
   tempfile="/tmp/wx$port.files.in"
