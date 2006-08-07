@@ -40,6 +40,14 @@ Returns \true if the platform supports making the window translucent.
 \helpref{wxTopLevelWindow::SetTransparent}{wxtoplevelwindowsettransparent}
 
 
+\membersection{wxTopLevelWindow::GetDefaultItem}\label{wxtoplevelwindowgetdefaultitem}
+
+\constfunc{wxWindow *}{GetDefaultItem}{\void}
+
+Returns a pointer to the button which is the default for this window, or \NULL.
+The default button is the one activated by pressing the Enter key.
+
+
 \membersection{wxTopLevelWindow::GetIcon}\label{wxtoplevelwindowgeticon}
 
 \constfunc{const wxIcon\&}{GetIcon}{\void}
@@ -175,6 +183,17 @@ not already in foreground.
 
 This function is currently implemented for Win32 where it flashes the
 window icon in the taskbar, and for wxGTK with task bars supporting it.
+
+
+\membersection{wxTopLevelWindow::SetDefaultItem}\label{wxtoplevelwindowsetdefaultitem}
+
+\func{void}{SetDefaultItem}{\param{wxWindow }{*win}}
+
+Changes the default item for the panel, usually \arg{win} is a button.
+
+\wxheading{See also}
+
+\helpref{GetDefaultItem}{wxtoplevelwindowgetdefaultitem}
 
 
 \membersection{wxTopLevelWindow::SetIcon}\label{wxtoplevelwindowseticon}

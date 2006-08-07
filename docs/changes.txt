@@ -29,6 +29,7 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
 - wxStaticBoxSizer now deletes the associated wxStaticBox when it is deleted.
 - Windows calling CaptureMouse() are now required to handle
   the wxEVT_MOUSE_CAPTURE_LOST event.
+- SetDefaultItem() method was moved from wxPanel to wxTopLevelWindow
 
 
 Deprecated methods since 2.6.x and their replacements

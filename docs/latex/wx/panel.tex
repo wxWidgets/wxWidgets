@@ -88,13 +88,6 @@ Destructor. Deletes any child windows before deleting the physical window.
 Used for two-step panel construction. See \helpref{wxPanel::wxPanel}{wxpanelctor}\rtfsp
 for details.
 
-\membersection{wxPanel::GetDefaultItem}\label{wxpanelgetdefaultitem}
-
-\constfunc{wxWindow*}{GetDefaultItem}{\void}
-
-Returns a pointer to the button which is the default for this window, or NULL.
-The default button is the one activated by pressing the Enter key.
-
 \membersection{wxPanel::InitDialog}\label{wxpanelinitdialog}
 
 \func{void}{InitDialog}{\void}
@@ -127,17 +120,6 @@ propagate the notification to child windows and controls.
 \wxheading{See also}
 
 \helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent}
-
-
-\membersection{wxPanel::SetDefaultItem}\label{wxpanelsetdefaultitem}
-
-\func{void}{SetDefaultItem}{\param{wxButton }{*btn}}
-
-Changes the default button for the panel.
-
-\wxheading{See also}
-
-\helpref{GetDefaultItem}{wxpanelgetdefaultitem}
 
 
 \membersection{wxPanel::SetFocus}\label{wxpanelsetfocus}
