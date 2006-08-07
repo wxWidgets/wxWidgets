@@ -93,6 +93,7 @@ All:
 
 All (GUI):
 
+- New AUI (Advanced User Interface) library for docking windows and much more
 - Added wxComboCtrl and wxOwnerDrawnComboBox (Jaakko Salli).
 - Added wxTreebook (uses a wxTreeCtrl to control pages).
 - Added wxColour/Dir/File/Font/PickerCtrls (Francesco Montorsi).
