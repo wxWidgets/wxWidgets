@@ -210,6 +210,7 @@ samples/combo/*.xpm
 samples/combo/*.ico
 samples/combo/*.bmp
 samples/combo/*.rc
+samples/combo/*.png
 samples/combo/*.pro
 samples/combo/icons/*.bmp
 samples/combo/icons/*.ico
@@ -716,6 +717,8 @@ samples/internat/de/*.mo
 samples/internat/de/*.po
 samples/internat/ja/*.mo
 samples/internat/ja/*.po
+samples/internat/ja_JP.EUC-JP/*.mo
+samples/internat/ja_JP.EUC-JP/*.po
 samples/internat/ka/*.mo
 samples/internat/ka/*.po
 samples/internat/pl/*.mo
