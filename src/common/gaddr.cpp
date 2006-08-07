@@ -102,6 +102,7 @@ struct sockaddr_un
 #endif
 
 #include "wx/gaddr.h"
+#include "wx/thread.h" // Needed for wxMutex
 
 struct in_addr* wxGethostbyname_r(const char *hostname)
 
