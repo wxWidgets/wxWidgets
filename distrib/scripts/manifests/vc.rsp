@@ -188,8 +188,6 @@ samples/statbar/statbar.dsp
 
 samples/taskbar/taskbar.dsp
 
-samples/tab/tab.dsp
-
 samples/text/text.dsp
 
 samples/thread/thread.dsp

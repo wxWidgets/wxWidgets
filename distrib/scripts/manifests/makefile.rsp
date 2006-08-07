@@ -190,7 +190,6 @@ samples/image/descrip.mms
 samples/mdi/descrip.mms
 samples/menu/descrip.mms
 samples/minimal/descrip.mms
-samples/resource/descrip.mms
 src/common/descrip.mms
 src/generic/descrip.mms
 src/gtk/descrip.mms
