@@ -180,7 +180,7 @@ char* wxGethostbyaddr_r(struct in_addr addr)
   static wxMutex addrLock;
   wxMutexLocker locker(addrLock);
 #endif
-  he = gethostbyaddr(&addr, sizeof(struct in_addr), AF_INET);
+  he = gethostbyaddr((char*)&addr, sizeof(struct in_addr), AF_INET);
 #endif
 
   if (he && he->h_name)
