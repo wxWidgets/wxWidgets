@@ -205,9 +205,6 @@ samples/render/render_renddll.vcw
 samples/render/render_render.vcp
 samples/render/render_render.vcw
 
-samples/richedit/richedit.vcp
-samples/richedit/richedit.vcw
-
 samples/richtext/richtext.vcp
 samples/richtext/richtext.vcw
 
@@ -239,9 +236,6 @@ samples/splitter/splitter.vcw
 
 samples/statbar/statbar.vcp
 samples/statbar/statbar.vcw
-
-samples/tab/tab.vcp
-samples/tab/tab.vcw
 
 samples/taskbar/taskbar.vcp
 samples/taskbar/taskbar.vcw

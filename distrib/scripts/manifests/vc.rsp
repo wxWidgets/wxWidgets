@@ -27,7 +27,7 @@ samples/access/access.dsp
 
 samples/artprov/artprov.dsp
 
-samples/aui/aui.dsp
+samples/aui/auidemo.dsp
 
 samples/calendar/calendar.dsp
 
@@ -161,8 +161,6 @@ samples/regtest/regtest.dsp
 
 samples/render/*.dsp
 
-samples/richedit/*.dsp
-
 samples/richtext/*.dsp
 
 samples/rotate/rotate.dsp
@@ -187,8 +185,6 @@ samples/splitter/splitter.dsp
 samples/statbar/statbar.dsp
 
 samples/taskbar/taskbar.dsp
-
-samples/tab/tab.dsp
 
 samples/text/text.dsp
 

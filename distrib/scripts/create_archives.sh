@@ -76,7 +76,7 @@ getfilelist(){
   fi
   
   if [ $port = "all" ]; then
-    filelist="$filelist palmos.rsp"
+    filelist="$filelist gtk1.rsp palmos.rsp docsrc.rsp"
   fi
   
   tempfile="/tmp/wx$port.files.in"
@@ -199,7 +199,7 @@ prepareforrelease()
     rm -f docs/html/wxbook.htm docs/html/roadmap.htm
     rm -f -r contrib/docs/latex/ogl
     rm -f src/mingegcs.bat
-    rm -f *.spec
+#    rm -f *.spec
     rm -f src/gtk/descrip.mms src/motif/descrip.mms
     
     # Copy setup0.h files to setup.h
