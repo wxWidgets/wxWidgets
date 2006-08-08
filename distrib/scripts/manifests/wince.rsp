@@ -205,9 +205,6 @@ samples/render/render_renddll.vcw
 samples/render/render_render.vcp
 samples/render/render_render.vcw
 
-samples/richedit/richedit.vcp
-samples/richedit/richedit.vcw
-
 samples/richtext/richtext.vcp
 samples/richtext/richtext.vcw
 

@@ -70,7 +70,6 @@ samples/printing/Makefile.in
 samples/propsize/Makefile.in
 samples/regtest/Makefile.in
 samples/render/Makefile.in
-samples/richedit/Makefile.in
 samples/richtext/Makefile.in
 samples/rotate/Makefile.in
 samples/sashtest/Makefile.in

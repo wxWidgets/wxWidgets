@@ -161,8 +161,6 @@ samples/regtest/regtest.dsp
 
 samples/render/*.dsp
 
-samples/richedit/*.dsp
-
 samples/richtext/*.dsp
 
 samples/rotate/rotate.dsp
