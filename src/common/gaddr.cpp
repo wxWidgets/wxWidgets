@@ -180,6 +180,10 @@ char* wxGethostbyaddr_r(struct in_addr addr)
   static wxMutex addrLock;
   wxMutexLocker locker(addrLock);
 #endif
+  // Some versions of gethostbyaddr (specially MacOS 10.3 and *BSD flavours
+  // have (char*) as the first parameter of the funtion, as oposed to 
+  // (void*) used in MacOS 10.4 and linux. So the cast is needed here,
+  // and the (void*) versions will just handle it the same way.
   he = gethostbyaddr((char*)&addr, sizeof(struct in_addr), AF_INET);
 #endif
 
