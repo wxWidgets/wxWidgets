@@ -88,7 +88,7 @@ private:
     int m_fds[2];
 };
 
-#if wxUSE_STREAMS
+#if wxUSE_STREAMS && wxUSE_FILE
 
 #include "wx/wfstream.h"
 
@@ -108,7 +108,7 @@ public:
     virtual bool CanRead() const;
 };
 
-#endif // wxUSE_STREAMS
+#endif // wxUSE_STREAMS && wxUSE_FILE
 
 #endif // _WX_UNIX_PIPE_H_
 
