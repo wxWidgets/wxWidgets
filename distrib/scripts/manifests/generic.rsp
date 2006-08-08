@@ -920,20 +920,6 @@ samples/notebook/*.txt
 samples/notebook/*.pro
 samples/notebook/*.bkl
 
-samples/odbc/*.h
-samples/odbc/*.cpp
-samples/odbc/*.rc
-samples/odbc/makefile*
-samples/odbc/*.inf
-samples/odbc/*.xbm
-samples/odbc/*.xpm
-samples/odbc/*.ico
-samples/odbc/*.bmp
-samples/odbc/*.dbf
-samples/odbc/*.cdx
-samples/odbc/*.pro
-samples/odbc/*.bkl
-
 samples/opengl/*.bkl
 samples/opengl/make*
 samples/opengl/cube/*.cpp
