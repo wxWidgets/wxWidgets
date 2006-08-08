@@ -23,6 +23,8 @@
 
 #include <stddef.h>
 
+#include <sys/time.h>
+
 /*
    Including sys/types.h under cygwin results in the warnings about "fd_set
    having been defined in sys/types.h" when winsock.h is included later and
