@@ -39,13 +39,15 @@
 
 #include <pwd.h>
 
-#if wxUSE_STREAMS
+#define HAS_PIPE_INPUT_STREAM (wxUSE_STREAMS && wxUSE_FILE)
+
+#if HAS_PIPE_INPUT_STREAM
 
 // define this to let wxexec.cpp know that we know what we're doing
 #define _WX_USED_BY_WXEXECUTE_
 #include "../common/execcmn.cpp"
 
-#endif // wxUSE_STREAMS
+#endif // HAS_PIPE_INPUT_STREAM
 
 #if wxUSE_BASE
 
@@ -407,7 +409,7 @@ bool wxShutdown(wxShutdownFlags wFlags)
 // wxStream classes to support IO redirection in wxExecute
 // ----------------------------------------------------------------------------
 
-#if wxUSE_STREAMS
+#if HAS_PIPE_INPUT_STREAM
 
 bool wxPipeInputStream::CanRead() const
 {
@@ -447,7 +449,7 @@ bool wxPipeInputStream::CanRead() const
     }
 }
 
-#endif // wxUSE_STREAMS
+#endif // HAS_PIPE_INPUT_STREAM
 
 // ----------------------------------------------------------------------------
 // wxExecute: the real worker function
@@ -631,16 +633,16 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
 
         // prepare for IO redirection
 
-#if wxUSE_STREAMS
+#if HAS_PIPE_INPUT_STREAM
         // the input buffer bufOut is connected to stdout, this is why it is
         // called bufOut and not bufIn
         wxStreamTempInputBuffer bufOut,
                                 bufErr;
-#endif // wxUSE_STREAMS
+#endif // HAS_PIPE_INPUT_STREAM
 
         if ( process && process->IsRedirected() )
         {
-#if wxUSE_STREAMS
+#if HAS_PIPE_INPUT_STREAM
             wxOutputStream *inStream =
                 new wxFileOutputStream(pipeIn.Detach(wxPipe::Write));
 
@@ -657,7 +659,7 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
 
             execData.bufOut = &bufOut;
             execData.bufErr = &bufErr;
-#endif // wxUSE_STREAMS
+#endif // HAS_PIPE_INPUT_STREAM
         }
 
         if ( pipeIn.IsOk() )
@@ -1172,7 +1174,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
         {
             bool idle = true;
 
-#if wxUSE_STREAMS
+#if HAS_PIPE_INPUT_STREAM
             if ( execData.bufOut )
             {
                 execData.bufOut->Update();
@@ -1184,7 +1186,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
                 execData.bufErr->Update();
                 idle = false;
             }
-#endif // wxUSE_STREAMS
+#endif // HAS_PIPE_INPUT_STREAM
 
             // don't consume 100% of the CPU while we're sitting in this
             // loop
