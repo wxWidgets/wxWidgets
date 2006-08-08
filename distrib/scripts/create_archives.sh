@@ -199,7 +199,7 @@ prepareforrelease()
     rm -f docs/html/wxbook.htm docs/html/roadmap.htm
     rm -f -r contrib/docs/latex/ogl
     rm -f src/mingegcs.bat
-    rm -f *.spec
+#    rm -f *.spec
     rm -f src/gtk/descrip.mms src/motif/descrip.mms
     
     # Copy setup0.h files to setup.h
