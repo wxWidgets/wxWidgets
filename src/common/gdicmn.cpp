@@ -186,6 +186,11 @@ bool wxRect::Inside(int cx, int cy) const
           );
 }
 
+bool wxRect::Inside(const wxRect& rect) const
+{
+    return Inside(rect.GetTopLeft()) && Inside(rect.GetBottomRight());
+}
+
 wxRect& wxRect::Intersect(const wxRect& rect)
 {
     int x2 = GetRight(),
