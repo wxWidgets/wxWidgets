@@ -1122,7 +1122,7 @@ void wxDC::SetBackground(const wxBrush& brush)
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    if (!m_backgroundBrush.Ok()) return;
+    if (!brush.Ok()) return;
 
     m_backgroundBrush = brush;
     wxColour &clr = m_backgroundBrush.GetColour();
