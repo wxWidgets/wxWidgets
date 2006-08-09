@@ -191,15 +191,6 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
     $1 = wxColour_typecheck($input);
 }
 
-%typemap(in) wxColour* (wxColour temp) {
-    $1 = &temp;
-    if ( ! wxColour_helper($input, &$1)) SWIG_fail;
-}
-%typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxColour* {
-    $1 = wxColour_typecheck($input);
-}
-
-
 //---------------------------------------------------------------------------
 // Typemap for wxArrayString from Python sequence objects
 
