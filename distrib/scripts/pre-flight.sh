@@ -48,6 +48,10 @@ fi
 #re-bake the bakefiles
 if [ $rebake = "yes" ]; then
   cd $WX_SRC_DIR/build/bakefiles
+  # always rebuild the bakefiles to avoid conflicts with cvs
+  ## better to not use unix2dos on the wxWidgets tree so we don't get the conflicts
+  ##fix this -B gave an option not recognised  error (sf bug 1537221)...
+  rm .ba*
   bakefile_gen -d ../../distrib/scripts/Bakefiles.release.bkgen
 fi
 
