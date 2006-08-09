@@ -31,6 +31,7 @@
 		1842CB01085664390032BCF7 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAF9085664390032BCF7 /* OpenGL.framework */; };
 		1842CB02085664390032BCF7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1842CAFA085664390032BCF7 /* WebKit.framework */; };
 		403608C909953BFD00700A19 /* minimal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F591E05701FCC5DE01000133 /* minimal.cpp */; };
+		407C6AC00A899DD50056252A /* libwx_mac.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 40F017230A3067FE00AC9076 /* libwx_mac.dylib */; };
 		4086D0E5063BBC5B00D4CD53 /* wxmac.icns in Resources */ = {isa = PBXBuildFile; fileRef = F5F5A69A02CDB0E101000133 /* wxmac.icns */; };
 		4086D0E9063BBC5B00D4CD53 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
 		4086D0EC063BBC5B00D4CD53 /* System.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA60173504D423C000000080 /* System.framework */; };
@@ -69,7 +70,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 409F03930977B96200D1030F /* wxWindows.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 4086CBE1063AB30000D4CD53 /* libwx_mac.dylib */;
+			remoteGlobalIDString = 4086CBE1063AB30000D4CD53;
 			remoteInfo = dynamic;
 		};
 /* End PBXContainerItemProxy section */
@@ -122,6 +123,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				407C6AC00A899DD50056252A /* libwx_mac.dylib in Frameworks */,
 				4086D109063BBC5C00D4CD53 /* Carbon.framework in Frameworks */,
 				4086D10B063BBC5C00D4CD53 /* System.framework in Frameworks */,
 				1842CAFF085664390032BCF7 /* AGL.framework in Frameworks */,
