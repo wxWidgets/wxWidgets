@@ -1453,8 +1453,8 @@ void wxDC::DoDrawSpline(wxList *points)
     wxCoord cx1 = ( x1 + x2 ) / 2;
     wxCoord cy1 = ( y1 + y2 ) / 2;
 
-    path->MoveToPoint( XLOG2DEVMAC( x1 ) , XLOG2DEVMAC( y1 ) ) ;
-    path->AddLineToPoint( XLOG2DEVMAC( cx1 ) , XLOG2DEVMAC( cy1 ) ) ;
+    path->MoveToPoint( XLOG2DEVMAC( x1 ) , YLOG2DEVMAC( y1 ) ) ;
+    path->AddLineToPoint( XLOG2DEVMAC( cx1 ) , YLOG2DEVMAC( cy1 ) ) ;
 
 #if !wxUSE_STL
     while ((node = node->GetNext()) != NULL)
@@ -1471,14 +1471,14 @@ void wxDC::DoDrawSpline(wxList *points)
         wxCoord cy4 = (y1 + y2) / 2;
 
         path->AddQuadCurveToPoint(
-            XLOG2DEVMAC( x1 ) , XLOG2DEVMAC( y1 ) ,
-            XLOG2DEVMAC( cx4 ) , XLOG2DEVMAC( cy4 ) ) ;
+            XLOG2DEVMAC( x1 ) , YLOG2DEVMAC( y1 ) ,
+            XLOG2DEVMAC( cx4 ) , YLOG2DEVMAC( cy4 ) ) ;
 
         cx1 = cx4;
         cy1 = cy4;
     }
 
-    path->AddLineToPoint( XLOG2DEVMAC( x2 ) , XLOG2DEVMAC( y2 ) ) ;
+    path->AddLineToPoint( XLOG2DEVMAC( x2 ) , YLOG2DEVMAC( y2 ) ) ;
 
     m_graphicContext->StrokePath( path ) ;
     delete path ;
