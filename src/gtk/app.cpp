@@ -70,6 +70,9 @@
     #include <sys/types.h>
     #include <sys/time.h>
     #include <unistd.h>
+    #ifdef HAVE_SYS_SELECT_H
+        #include <sys/select.h>
+    #endif
 #endif // HAVE_POLL/!HAVE_POLL
 
 #include "wx/unix/private.h"

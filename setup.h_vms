@@ -1155,6 +1155,9 @@ typedef pid_t GPid;
 /* Define if you have Pango xft support */
 #undef HAVE_PANGO_XFT
 
+/* Define if you have the <sys/select.h> header file.  */
+#undef HAVE_SYS_SELECT_H
+
 /* ---------------------------------------------------------------------
    Win32 adjustments section
    ---------------------------------------------------------------------

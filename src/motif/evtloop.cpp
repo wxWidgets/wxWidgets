@@ -45,6 +45,10 @@
 #include "wx/unix/private.h"
 #include "wx/motif/private.h"
 
+#ifdef HAVE_SYS_SELECT_H
+#   include <sys/select.h>
+#endif
+
 static bool CheckForKeyUp(XEvent* event);
 static bool CheckForKeyDown(XEvent* event);
 static bool CheckForAccelerator(XEvent* event);

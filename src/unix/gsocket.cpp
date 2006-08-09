@@ -39,6 +39,10 @@
 #include <netdb.h>
 #include <sys/ioctl.h>
 
+#ifdef HAVE_SYS_SELECT_H
+#   include <sys/select.h>
+#endif
+
 #ifdef __VMS__
 #include <socket.h>
 struct sockaddr_un

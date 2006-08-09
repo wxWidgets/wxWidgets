@@ -39,6 +39,10 @@
 
 #include <pwd.h>
 
+#ifdef HAVE_SYS_SELECT_H
+#   include <sys/select.h>
+#endif
+
 #define HAS_PIPE_INPUT_STREAM (wxUSE_STREAMS && wxUSE_FILE)
 
 #if HAS_PIPE_INPUT_STREAM

@@ -1801,6 +1801,11 @@ case "${host}" in
   ;;
 esac
 
+dnl POSIX needs this for select(), but old systems don't have it
+if test "$USE_UNIX" = 1 ; then
+    AC_CHECK_HEADERS([sys/select.h])
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl Checks for compiler characteristics
 dnl ---------------------------------------------------------------------------
