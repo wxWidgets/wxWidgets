@@ -1183,6 +1183,9 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
 #if TARGET_API_MAC_OSX
     if ( m_macUsesCompositing )
         attr |= kWindowCompositingAttribute;
+#if 0 // wxMAC_USE_CORE_GRAPHICS ; TODO : decide on overall handling of high dpi screens (pixel vs userscale)
+    attr |= kWindowFrameworkScaledAttribute;
+#endif
 #endif
 
     if ( HasFlag(wxFRAME_SHAPED) )
@@ -1434,8 +1437,7 @@ bool wxTopLevelWindowMac::IsFullScreen() const
 
 bool wxTopLevelWindowMac::SetTransparent(wxByte alpha)
 {
-    WindowRef handle = GetControlOwner((OpaqueControlRef*)GetHandle());
-    OSStatus result = SetWindowAlpha(handle, float(alpha)/255.0);
+    OSStatus result = SetWindowAlpha((WindowRef)m_macWindow, float(alpha)/255.0);
     return result == noErr;
 }
 
