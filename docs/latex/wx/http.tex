@@ -29,26 +29,23 @@ Returns the HTTP response code returned by the server. Please refer to
 
 \func{wxInputStream *}{GetInputStream}{\param{const wxString\&}{ path}}
 
-Creates a new input stream on the specified path. You can use all except the seek
-functionality of wxStream. Seek isn't available on all streams. For example,
-HTTP or FTP streams don't deal with it. Other functions like Tell and SeekI
-aren't available for the moment for this sort of stream.
-You will be notified when the EOF is reached by an error.
+Creates a new input stream on the specified path. Notice that this stream is
+unseekable, i.e. SeekI() and TellI() methods shouldn't be used.
 
-\wxheading{Note}
-
-You can know the size of the file you are getting using \helpref{wxStreamBase::GetSize()}{wxstreambasegetsize}.
-But there is a limitation: as HTTP servers aren't obliged to pass the size of
-the file, in some case, you will be returned 0xfffffff by GetSize(). In these
-cases, you should use the value returned by \helpref{wxInputStream::LastRead()}{wxinputstreamlastread}:
-this value will be 0 when the stream is finished.
+Note that you can still know the size of the file you are getting using 
+\helpref{wxStreamBase::GetSize()}{wxstreambasegetsize}. However there is a
+limitation: in HTTP protocol, the size is not always specified so sometimes
+\texttt{(size\_t)-1} can returned ot indicate that the size is unknown. In such
+case, you may want to use \helpref{wxInputStream::LastRead()}{wxinputstreamlastread} 
+method in a loop to get the total size.
 
 \wxheading{Return value}
 
-Returns the initialized stream. You will have to delete it yourself once you
-don't use it anymore. The destructor closes the network connection.
-The next time you will try to get a file the network connection will have
-to be reestablished: but you don't have to take care of this since wxHTTP reestablishes it automatically.
+Returns the initialized stream. You must delete it yourself once you
+don't use it anymore and this must be done before the wxHTTP object itself is
+destroyed. The destructor closes the network connection. The next time you will
+try to get a file the network connection will have to be reestablished, but you
+don't have to take care of this since wxHTTP reestablishes it automatically.
 
 \wxheading{See also}
 
