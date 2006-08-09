@@ -323,8 +323,7 @@ wxQTMediaBackend::~wxQTMediaBackend()
         // Dispose of the movie controller
         ::DisposeMovieController(m_mc);
         m_mc = NULL;
-        DisposeMCActionFilterWithRefConUPP(m_mcactionupp);
-
+        
         // Dispose of offscreen GWorld
         ::DisposeGWorld(m_movieWorld);
     }
@@ -521,8 +520,7 @@ bool wxQTMediaBackend::Load(const wxURI& location)
         //  require it if you don't use a Movie Controller,
         //  which we don't by default.
         //
-        m_preprerollupp =
-            NewMoviePrePrerollCompleteUPP( wxQTMediaBackend::PPRMProc );
+        m_preprerollupp = wxQTMediaBackend::PPRMProc;
         ::PrePrerollMovie( m_movie, timeNow, playRate,
                            m_preprerollupp, (void*)this);
 
@@ -567,8 +565,7 @@ void wxQTMediaBackend::DoNewMovieController()
 
         // Setup a callback so we can tell when the user presses
         // play on the player controls
-        m_mcactionupp =
-            NewMCActionFilterWithRefConUPP( wxQTMediaBackend::MCFilterProc );
+        m_mcactionupp = wxQTMediaBackend::MCFilterProc;
         ::MCSetActionFilterWithRefCon( m_mc, m_mcactionupp, (long)this );
         wxASSERT(::GetMoviesError() == noErr);
 
@@ -625,9 +622,6 @@ void wxQTMediaBackend::DoNewMovieController()
 //---------------------------------------------------------------------------
 void wxQTMediaBackend::FinishLoad()
 {
-    // Dispose of the PrePrerollMovieUPP if we used it
-    DisposeMoviePrePrerollCompleteUPP(m_preprerollupp);
-
     // get the real size of the movie
     DoLoadBestSize();
 
