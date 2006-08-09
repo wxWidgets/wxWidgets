@@ -648,6 +648,12 @@ bottom, otherwise it is moved to the left or top respectively.", "",
     %Rename(InsideXY, bool, Inside(int x, int y) const);
     bool Inside(const wxPoint& pt) const;
 
+    DocDeclStrName(
+        bool, Inside(const wxRect& rect) const,
+        "Returns ``True`` if the given rectangle is completely inside this
+rectangle or touches its boundary.", "",
+        InsideRect);
+    
     DocDeclStr(    
         bool, Intersects(const wxRect& rect) const,
         "Returns True if the rectangles have a non empty intersection.", "");
