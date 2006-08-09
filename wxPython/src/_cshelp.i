@@ -20,10 +20,6 @@
 
 //----------------------------------------------------------------------
 
-enum {
-    wxFRAME_EX_CONTEXTHELP,
-    wxDIALOG_EX_CONTEXTHELP,
-};
 %constant wxEventType wxEVT_HELP;
 %constant wxEventType wxEVT_DETAILED_HELP;
 
@@ -137,7 +133,7 @@ help.
 
 There are a couple of ways to invoke this behaviour implicitly:
 
-    * Use the wx.DIALOG_EX_CONTEXTHELP extended style for a dialog
+    * Use the wx.WS_EX_CONTEXTHELP extended style for a dialog or frame
       (Windows only). This will put a question mark in the titlebar,
       and Windows will put the application into context-sensitive help
       mode automatically, with further programming.
@@ -145,7 +141,7 @@ There are a couple of ways to invoke this behaviour implicitly:
     * Create a `wx.ContextHelpButton`, whose predefined behaviour is
       to create a context help object. Normally you will write your
       application so that this button is only added to a dialog for
-      non-Windows platforms (use ``wx.DIALOG_EX_CONTEXTHELP`` on
+      non-Windows platforms (use ``wx.WS_EX_CONTEXTHELP`` on
       Windows).
 
 :see: `wx.ContextHelpButton`

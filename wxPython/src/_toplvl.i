@@ -53,13 +53,18 @@ enum
 
     wxFRAME_EX_METAL,
     wxDIALOG_EX_METAL,
+    wxWS_EX_CONTEXTHELP,
     
     // Obsolete
     wxDIALOG_MODAL,
     wxDIALOG_MODELESS,
     wxUSER_COLOURS,
     wxNO_3D,
+
+    wxFRAME_EX_CONTEXTHELP,
+    wxDIALOG_EX_CONTEXTHELP,
 };    
+
 
 enum
 {
