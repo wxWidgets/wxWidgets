@@ -21,10 +21,6 @@
 class WXDLLEXPORT wxRect;
 class WXDLLEXPORT wxPoint;
 
-enum wxRegionContain {
-    wxOutRegion = 0, wxPartRegion = 1, wxInRegion = 2
-};
-
 // So far, for internal use only
 enum wxRegionOp { wxRGN_AND         // Creates the intersection of the two combined regions.
                  ,wxRGN_COPY         // Creates a copy of the region identified by hrgnSrc1.

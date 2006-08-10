@@ -14,6 +14,13 @@
 
 #include "wx/colour.h"
 
+enum wxRegionContain
+{
+    wxOutRegion = 0,
+    wxPartRegion = 1,
+    wxInRegion = 2
+};
+
 #if defined(__WXPALMOS__)
     #include "wx/palmos/region.h"
 #elif defined(__WXMSW__)

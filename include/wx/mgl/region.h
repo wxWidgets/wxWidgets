@@ -19,13 +19,6 @@ class WXDLLEXPORT wxRect;
 class WXDLLEXPORT wxPoint;
 class MGLRegion;
 
-enum wxRegionContain
-{
-    wxOutRegion = 0,
-    wxPartRegion = 1,
-    wxInRegion = 2
-};
-
 class WXDLLEXPORT wxRegion : public wxGDIObject
 {
     DECLARE_DYNAMIC_CLASS(wxRegion);

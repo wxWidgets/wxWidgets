@@ -18,13 +18,6 @@
 class WXDLLEXPORT wxRect;
 class WXDLLEXPORT wxPoint;
 
-enum wxRegionContain
-{
-    wxOutRegion = 0,
-    wxPartRegion = 1,
-    wxInRegion = 2
-};
-
 // So far, for internal use only
 enum wxRegionOp
 {
