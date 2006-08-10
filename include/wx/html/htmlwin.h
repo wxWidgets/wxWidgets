@@ -488,8 +488,6 @@ protected:
     // defaults to 10 pixels.
     int m_Borders;
 
-    int m_Style;
-
     // current text selection or NULL
     wxHtmlSelection *m_selection;
 

@@ -277,7 +277,6 @@ void wxHtmlWindow::Init()
     m_HistoryOn = true;
     m_History = new wxHtmlHistoryArray;
     m_Processors = NULL;
-    m_Style = 0;
     SetBorders(10);
     m_selection = NULL;
     m_makingSelection = false;
@@ -299,7 +298,6 @@ bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
                                   name))
         return false;
 
-    m_Style = style;
     SetPage(wxT("<html><body></body></html>"));
     return true;
 }
@@ -638,14 +636,14 @@ void wxHtmlWindow::CreateLayout()
 
     if (!m_Cell) return;
 
-    if (m_Style & wxHW_SCROLLBAR_NEVER)
+    if ( HasFlag(wxHW_SCROLLBAR_NEVER) )
     {
         SetScrollbars(1, 1, 0, 0); // always off
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell->Layout(ClientWidth);
     }
-
-    else {
+    else // !wxHW_SCROLLBAR_NEVER
+    {
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell->Layout(ClientWidth);
         if (ClientHeight < m_Cell->GetHeight() + GetCharHeight())
@@ -842,7 +840,7 @@ void wxHtmlWindow::AddFilter(wxHtmlFilter *filter)
 bool wxHtmlWindow::IsSelectionEnabled() const
 {
 #if wxUSE_CLIPBOARD
-    return !(m_Style & wxHW_NO_SELECTION);
+    return !HasFlag(wxHW_NO_SELECTION);
 #else
     return false;
 #endif
