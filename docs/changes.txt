@@ -39,6 +39,12 @@ Deprecated methods since 2.6.x and their replacements
 - wxDC::BeginDrawing() and wxDC::EndDrawing() deprecated, just don't use them.
 
 
+Major changes in 2.7 release
+----------------------------
+
+- New AUI library supporting docking windows and much more
+
+
 2.7.0
 -----
 
