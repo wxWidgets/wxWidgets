@@ -331,48 +331,6 @@ bool wxTopLevelWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
 }
 #endif
 
-bool wxTopLevelWindowMSW::MSWProcessMessage(WXMSG* pMsg)
-{
-    // MSW specific feature: if the dialog has only one notebook-like child
-    // window (actually it could be any window that returns true from its
-    // HasMultiplePages()), then [Shift-]Ctrl-Tab and Ctrl-PageUp/Down keys
-    // should iterate over its pages even if the focus is outside of the
-    // control because this is how the standard MSW properties dialogs behave
-    if ( pMsg->message == WM_KEYDOWN && wxIsCtrlDown() &&
-            (pMsg->wParam == VK_TAB ||
-                pMsg->wParam == VK_PRIOR ||
-                    pMsg->wParam == VK_NEXT) )
-    {
-        // check if we have a unique notebook-like child
-        wxWindow *bookctrl = NULL;
-        for ( wxWindowList::const_iterator i = GetChildren().begin(),
-                                         end = GetChildren().end();
-              i != end;
-              ++i )
-        {
-            wxWindow * const window = *i;
-            if ( window->HasMultiplePages() )
-            {
-                if ( bookctrl )
-                {
-                    // this is the second book-like control already so don't do
-                    // anything as we don't know which one should have its page
-                    // changed
-                    bookctrl = NULL;
-                    break;
-                }
-
-                bookctrl = window;
-            }
-        }
-
-        if ( bookctrl && bookctrl->wxWindowMSW::MSWProcessMessage(pMsg) )
-            return true;
-    }
-
-    return wxTopLevelWindowBase::MSWProcessMessage(pMsg);
-}
-
 WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     WXLRESULT rc = 0;

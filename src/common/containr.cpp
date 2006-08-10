@@ -276,6 +276,42 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
 
     const wxWindowList& children = m_winParent->GetChildren();
 
+    // if we have exactly one notebook-like child window (actually it could be
+    // any window that returns true from its HasMultiplePages()), then
+    // [Shift-]Ctrl-Tab and Ctrl-PageUp/Down keys should iterate over its pages
+    // even if the focus is outside of the control because this is how the
+    // standard MSW properties dialogs behave and we do it under other platforms
+    // as well because it seems like a good idea -- but we can always put this
+    // block inside "#ifdef __WXMSW__" if it's not suitable there
+    if ( event.IsWindowChange() && !goingDown )
+    {
+        // check if we have a unique notebook-like child
+        wxWindow *bookctrl = NULL;
+        for ( wxWindowList::const_iterator i = children.begin(),
+                                         end = children.end();
+              i != end;
+              ++i )
+        {
+            wxWindow * const window = *i;
+            if ( window->HasMultiplePages() )
+            {
+                if ( bookctrl )
+                {
+                    // this is the second book-like control already so don't do
+                    // anything as we don't know which one should have its page
+                    // changed
+                    bookctrl = NULL;
+                    break;
+                }
+
+                bookctrl = window;
+            }
+        }
+
+        if ( bookctrl && bookctrl->GetEventHandler()->ProcessEvent(event) )
+            return;
+    }
+
     // there is not much to do if we don't have children and we're not
     // interested in "notebook page change" events here
     if ( !children.GetCount() || event.IsWindowChange() )

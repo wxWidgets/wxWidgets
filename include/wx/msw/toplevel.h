@@ -103,9 +103,6 @@ public:
     // choose the right parent to use with CreateWindow()
     virtual WXHWND MSWGetParent() const;
 
-    // return true if the message was preprocessed and shouldn't be dispatched
-    virtual bool MSWProcessMessage(WXMSG* pMsg);
-
     // window proc for the frames
     WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
