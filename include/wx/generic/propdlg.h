@@ -16,7 +16,7 @@
 
 #if wxUSE_BOOKCTRL
 
-class WXDLLEXPORT wxBookCtrlBase;
+#include "wx/bookctrl.h"
 
 //-----------------------------------------------------------------------------
 // wxPropertySheetDialog
