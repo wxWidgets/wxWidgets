@@ -26,6 +26,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
+    #include "wx/gdicmn.h"
 #endif // WX_PRECOMP
 
 #include "wx/univ/colschem.h"
