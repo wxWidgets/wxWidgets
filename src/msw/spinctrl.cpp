@@ -253,8 +253,8 @@ void wxSpinCtrl::OnChar(wxKeyEvent& event)
 
 void wxSpinCtrl::OnKillFocus(wxFocusEvent& event)
 {
-    // ensure that the value is shown correctly
-    SetValue(GetValue()) ;
+    // ensure that a correct value is shown by the control
+    NormalizeValue();
     event.Skip();
 }
 
