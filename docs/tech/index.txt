@@ -22,6 +22,8 @@ tn0018.txt   How to add a new font encoding/charset to wxWidgets
 tn0019.txt   Special notes about writing wxMSW code
 tn0020.txt   Binary Compatability and wxWidgets
 tn0021.txt   How to add a new wxUSE_XXX preprocessor constant
+tn0022.txt   Working with the the wxWidgets release system
+tn0023.txt   Adding a new app/screenshot to the wxWidgets.org front page
 
 
 Version: $Id$

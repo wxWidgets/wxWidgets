@@ -1,0 +1,49 @@
+                  Working with the the wxWidgets release system
+                    =====================================
+
+Currently, to generate the release tarballs, wxWidgets uses a script which 
+reads from a series of manifest files to determine which files should be
+installed for a particular port. This document explains how to alter the list 
+of files that are distributed in the release tarballs.
+
+The scripts are located in the <wxWidgets root>/distrib/scripts folder, with 
+create_archives.sh doing most of the work to create the actual tarballs. 
+pre-flight.sh runs the entire process of doing a checkout, building the releases, 
+and putting them into the <wxWidgets root>/deliver folder. The manifest files
+are located in the <wxWidgets root>/distrib/scripts/manifests folder and
+they have a .rsp extension for historical reasons.
+
+
+Adding/removing a file from releases
+------------------------------------
+
+First, you must decide which tarballs you'd like to make the change to, in 
+order to determine which manifest file(s) the file should appear in.
+
+Below is a list of each port and the primary manifest files that are used to 
+generate that release. The "ALL" in the list is not for wxALL, it means that
+those manifests are where things that go in all ports should be.
+
+tarball     primary manifests
+-------     ----------------
+ALL         generic.rsp
+wxBase      base.rsp
+wxMSW       msw.rsp, wince.rsp
+wxOS2       os2.rsp
+wxGTK       gtk.rsp
+wxMAC       mac.rsp cocoa.rsp
+wxMotif     motif.rsp
+wxMGL       mgl.rsp
+wxX11       x11.rsp
+       
+Once you've decided which manifest file is most appropriate to add your file
+in, then open that manifest and add a line with your file(s) at the bottom.
+The file(s) should give the path relative to the wxWidgets root directory,
+like so:
+
+docs/tech/tn0033.txt
+
+At the current time, wildcards in filenames are also accepted. Once the files are
+added, they should show up in releases when distrib/scripts/pre-flight.sh is run.
+
+
