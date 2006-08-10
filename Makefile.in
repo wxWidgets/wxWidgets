@@ -1716,6 +1716,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR =  \
 @COND_TOOLKIT_MAC@LOWLEVEL_HDR = 
 COND_TOOLKIT_MGL_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
+	wx/generic/colour.h \
 	wx/generic/icon.h \
 	wx/generic/timer.h \
 	wx/mgl/app.h \
@@ -1723,7 +1724,6 @@ COND_TOOLKIT_MGL_LOWLEVEL_HDR =  \
 	wx/mgl/brush.h \
 	wx/mgl/chkconf.h \
 	wx/mgl/clipbrd.h \
-	wx/mgl/colour.h \
 	wx/mgl/cursor.h \
 	wx/mgl/dc.h \
 	wx/mgl/dcclient.h \
@@ -3609,13 +3609,13 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS =  \
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS = $(__MAC_LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_caret.o \
+	monodll_colour.o \
 	monodll_icon.o \
 	monodll_timer.o \
 	monodll_app.o \
 	monodll_bitmap.o \
 	monodll_brush.o \
 	monodll_clipbrd.o \
-	monodll_colour.o \
 	monodll_cursor.o \
 	monodll_data.o \
 	monodll_dc.o \
@@ -4408,13 +4408,13 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_1 = $(__MAC_LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_caret.o \
+	monodll_colour.o \
 	monodll_icon.o \
 	monodll_timer.o \
 	monodll_app.o \
 	monodll_bitmap.o \
 	monodll_brush.o \
 	monodll_clipbrd.o \
-	monodll_colour.o \
 	monodll_cursor.o \
 	monodll_data.o \
 	monodll_dc.o \
@@ -5272,13 +5272,13 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_MAC@	$(__MAC_LOWLEVEL_SRC_OBJECTS_0)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_caret.o \
+	monolib_colour.o \
 	monolib_icon.o \
 	monolib_timer.o \
 	monolib_app.o \
 	monolib_bitmap.o \
 	monolib_brush.o \
 	monolib_clipbrd.o \
-	monolib_colour.o \
 	monolib_cursor.o \
 	monolib_data.o \
 	monolib_dc.o \
@@ -6072,13 +6072,13 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_MAC@	$(__MAC_LOWLEVEL_SRC_OBJECTS_0)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_caret.o \
+	monolib_colour.o \
 	monolib_icon.o \
 	monolib_timer.o \
 	monolib_app.o \
 	monolib_bitmap.o \
 	monolib_brush.o \
 	monolib_clipbrd.o \
-	monolib_colour.o \
 	monolib_cursor.o \
 	monolib_data.o \
 	monolib_dc.o \
@@ -7153,13 +7153,13 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4 =  \
 @COND_TOOLKIT_MAC@	$(__MAC_LOWLEVEL_SRC_OBJECTS_8)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_caret.o \
+	coredll_colour.o \
 	coredll_icon.o \
 	coredll_timer.o \
 	coredll_app.o \
 	coredll_bitmap.o \
 	coredll_brush.o \
 	coredll_clipbrd.o \
-	coredll_colour.o \
 	coredll_cursor.o \
 	coredll_data.o \
 	coredll_dc.o \
@@ -7953,13 +7953,13 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5 =  \
 @COND_TOOLKIT_MAC@	$(__MAC_LOWLEVEL_SRC_OBJECTS_8)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_caret.o \
+	coredll_colour.o \
 	coredll_icon.o \
 	coredll_timer.o \
 	coredll_app.o \
 	coredll_bitmap.o \
 	coredll_brush.o \
 	coredll_clipbrd.o \
-	coredll_colour.o \
 	coredll_cursor.o \
 	coredll_data.o \
 	coredll_dc.o \
@@ -8512,13 +8512,13 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6 =  \
 @COND_TOOLKIT_MAC@	$(__MAC_LOWLEVEL_SRC_OBJECTS_9)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_caret.o \
+	corelib_colour.o \
 	corelib_icon.o \
 	corelib_timer.o \
 	corelib_app.o \
 	corelib_bitmap.o \
 	corelib_brush.o \
 	corelib_clipbrd.o \
-	corelib_colour.o \
 	corelib_cursor.o \
 	corelib_data.o \
 	corelib_dc.o \
@@ -9312,13 +9312,13 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7 =  \
 @COND_TOOLKIT_MAC@	$(__MAC_LOWLEVEL_SRC_OBJECTS_9)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_caret.o \
+	corelib_colour.o \
 	corelib_icon.o \
 	corelib_timer.o \
 	corelib_app.o \
 	corelib_bitmap.o \
 	corelib_brush.o \
 	corelib_clipbrd.o \
-	corelib_colour.o \
 	corelib_cursor.o \
 	corelib_data.o \
 	corelib_dc.o \
@@ -12942,8 +12942,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_colour.o: $(srcdir)/src/x11/colour.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/colour.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_colour.o: $(srcdir)/src/mgl/colour.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/colour.cpp
+@COND_TOOLKIT_MGL_USE_GUI_1@monodll_colour.o: $(srcdir)/src/generic/colour.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_colour.o: $(srcdir)/src/motif/colour.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/colour.cpp
@@ -16824,8 +16824,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_colour.o: $(srcdir)/src/x11/colour.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/colour.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_colour.o: $(srcdir)/src/mgl/colour.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/colour.cpp
+@COND_TOOLKIT_MGL_USE_GUI_1@monolib_colour.o: $(srcdir)/src/generic/colour.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_colour.o: $(srcdir)/src/motif/colour.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/colour.cpp
@@ -21084,8 +21084,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_colour.o: $(srcdir)/src/x11/colour.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/colour.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_colour.o: $(srcdir)/src/mgl/colour.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/colour.cpp
+@COND_TOOLKIT_MGL_USE_GUI_1@coredll_colour.o: $(srcdir)/src/generic/colour.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_colour.o: $(srcdir)/src/motif/colour.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/colour.cpp
@@ -23904,8 +23904,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_colour.o: $(srcdir)/src/x11/colour.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/colour.cpp
 
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_colour.o: $(srcdir)/src/mgl/colour.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/colour.cpp
+@COND_TOOLKIT_MGL_USE_GUI_1@corelib_colour.o: $(srcdir)/src/generic/colour.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/colour.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_colour.o: $(srcdir)/src/motif/colour.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/colour.cpp

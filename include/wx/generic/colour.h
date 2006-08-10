@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mgl/colour.h
+// Name:        wx/generic/colour.h
 // Purpose:     wxColour class
 // Author:      Julian Smart
 // Modified by:
@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_COLOUR_H_
-#define _WX_COLOUR_H_
+#ifndef _WX_GENERIC_COLOUR_H_
+#define _WX_GENERIC_COLOUR_H_
 
 #include "wx/object.h"
 
@@ -67,5 +67,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxColour)
 };
 
-#endif
-        // _WX_COLOUR_H_
+#endif // _WX_GENERIC_COLOUR_H_

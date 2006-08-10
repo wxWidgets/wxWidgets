@@ -1722,13 +1722,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="MGL_LOWLEVEL_SRC" hints="files">
     src/generic/caret.cpp
+    src/generic/colour.cpp
     src/generic/icon.cpp
     src/generic/timer.cpp
     src/mgl/app.cpp
     src/mgl/bitmap.cpp
     src/mgl/brush.cpp
     src/mgl/clipbrd.cpp
-    src/mgl/colour.cpp
     src/mgl/cursor.cpp
     src/mgl/data.cpp
     src/mgl/dc.cpp
@@ -1751,6 +1751,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="MGL_LOWLEVEL_HDR" hints="files">
     wx/generic/caret.h
+    wx/generic/colour.h
     wx/generic/icon.h
     wx/generic/timer.h
     wx/mgl/app.h
@@ -1758,7 +1759,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mgl/brush.h
     wx/mgl/chkconf.h
     wx/mgl/clipbrd.h
-    wx/mgl/colour.h
     wx/mgl/cursor.h
     wx/mgl/dc.h
     wx/mgl/dcclient.h

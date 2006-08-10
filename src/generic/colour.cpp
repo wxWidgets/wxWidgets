@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mgl/colour.cpp
+// Name:        src/generic/colour.cpp
 // Purpose:     wxColour class
 // Author:      Julian Smart
 // Modified by:

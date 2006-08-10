@@ -114,7 +114,7 @@ public:
 #elif defined(__WXGTK__)
 #include "wx/gtk1/colour.h"
 #elif defined(__WXMGL__)
-#include "wx/mgl/colour.h"
+#include "wx/generic/colour.h"
 #elif defined(__WXX11__)
 #include "wx/x11/colour.h"
 #elif defined(__WXMAC__)
