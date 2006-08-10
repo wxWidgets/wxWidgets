@@ -14,6 +14,9 @@
 #ifndef _WX_MGL_CHKCONF_H_
 #define _WX_MGL_CHKCONF_H_
 
+#ifndef __WXUNIVERSAL__
+#   error "wxMGL cannot be built without wxUniversal"
+#endif
 
 /* wxPalette is always needed */
 #if !wxUSE_PALETTE
