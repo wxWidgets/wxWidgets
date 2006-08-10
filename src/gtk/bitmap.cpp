@@ -24,8 +24,6 @@
 #include "wx/filefn.h"
 
 #include "wx/rawbmp.h"
-    // need this to get gdk_image_new_bitmap()
-    #define GDK_ENABLE_BROKEN
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
@@ -446,7 +444,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
 
                 if ( dst )
                 {
-                    if (!pixval)
+                    if (pixval)
                     {
                         char bit=1;
                         char shift = bit << (w % 8);
@@ -584,27 +582,28 @@ bool wxBitmap::CreateFromImageAsBitmap(const wxImage& img)
 
     SetDepth( 1 );
 
-    GdkVisual *visual = wxTheApp->GetGdkVisual();
-
     // Create picture image
 
-    unsigned char *data_data = (unsigned char*)malloc( ((width >> 3)+8) * height );
-
-    GdkImage *data_image =
-        gdk_image_new_bitmap( visual, data_data, width, height );
+    GdkGC* data_gc = gdk_gc_new(M_BMPDATA->m_pixmap);
+    GdkColor color;
+    color.pixel = 1;
+    gdk_gc_set_foreground(data_gc, &color);
+    gdk_draw_rectangle(M_BMPDATA->m_pixmap, data_gc, true, 0, 0, width, height);
+    GdkImage* data_image = gdk_drawable_get_image(M_BMPDATA->m_pixmap, 0, 0, width, height);
 
     // Create mask image
 
     GdkImage *mask_image = (GdkImage*) NULL;
+    GdkGC* mask_gc = NULL;
 
     if (image.HasMask())
     {
-        unsigned char *mask_data = (unsigned char*)malloc( ((width >> 3)+8) * height );
-
-        mask_image =  gdk_image_new_bitmap( visual, mask_data, width, height );
-
         wxMask *mask = new wxMask();
         mask->m_bitmap = gdk_pixmap_new( wxGetRootWindow()->window, width, height, 1 );
+        mask_gc = gdk_gc_new(mask->m_bitmap);
+        gdk_gc_set_foreground(mask_gc, &color);
+        gdk_draw_rectangle(mask->m_bitmap, mask_gc, true, 0, 0, width, height);
+        mask_image = gdk_drawable_get_image(mask->m_bitmap, 0, 0, width, height);
 
         SetMask( mask );
     }
@@ -627,25 +626,19 @@ bool wxBitmap::CreateFromImageAsBitmap(const wxImage& img)
             int b = data[index];
             index++;
 
-            if (image.HasMask())
+            if (mask_image != NULL)
             {
                 if ((r == r_mask) && (b == b_mask) && (g == g_mask))
-                    gdk_image_put_pixel( mask_image, x, y, 1 );
-                else
                     gdk_image_put_pixel( mask_image, x, y, 0 );
             }
 
             if ((r == 255) && (b == 255) && (g == 255))
-                gdk_image_put_pixel( data_image, x, y, 1 );
-            else
                 gdk_image_put_pixel( data_image, x, y, 0 );
 
         } // for
     }  // for
 
     // Blit picture
-
-    GdkGC *data_gc = gdk_gc_new( GetPixmap() );
 
     gdk_draw_image( GetPixmap(), data_gc, data_image, 0, 0, 0, 0, width, height );
 
@@ -654,10 +647,8 @@ bool wxBitmap::CreateFromImageAsBitmap(const wxImage& img)
 
     // Blit mask
 
-    if (image.HasMask())
+    if (mask_image != NULL)
     {
-        GdkGC *mask_gc = gdk_gc_new( GetMask()->GetBitmap() );
-
         gdk_draw_image( GetMask()->GetBitmap(), mask_gc, mask_image, 0, 0, 0, 0, width, height );
 
         g_object_unref (mask_image);
@@ -702,17 +693,17 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& img)
 
     // Create mask image
 
-    GdkImage *mask_image = (GdkImage*) NULL;
-
     if (!image.HasMask())
         return true;
 
-    unsigned char *mask_data = (unsigned char*)malloc( ((width >> 3)+8) * height );
-
-    mask_image =  gdk_image_new_bitmap( visual, mask_data, width, height );
-
     wxMask *mask = new wxMask();
     mask->m_bitmap = gdk_pixmap_new( wxGetRootWindow()->window, width, height, 1 );
+    GdkGC* mask_gc = gdk_gc_new(mask->m_bitmap);
+    GdkColor color;
+    color.pixel = 1;
+    gdk_gc_set_foreground(mask_gc, &color);
+    gdk_draw_rectangle(mask->m_bitmap, mask_gc, true, 0, 0, width, height);
+    GdkImage* mask_image = gdk_drawable_get_image(mask->m_bitmap, 0, 0, width, height);
 
     SetMask( mask );
 
@@ -735,15 +726,11 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& img)
             index++;
 
             if ((r == r_mask) && (b == b_mask) && (g == g_mask))
-                gdk_image_put_pixel( mask_image, x, y, 1 );
-            else
                 gdk_image_put_pixel( mask_image, x, y, 0 );
         } // for
     }  // for
 
     // Blit mask
-
-    GdkGC *mask_gc = gdk_gc_new( GetMask()->GetBitmap() );
 
     gdk_draw_image( GetMask()->GetBitmap(), mask_gc, mask_image, 0, 0, 0, 0, width, height );
 
