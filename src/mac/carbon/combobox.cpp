@@ -37,7 +37,7 @@ static int nextPopUpMenuId = 1000 ;
 
 MenuHandle NewUniqueMenu()
 {
-    MenuHandle handle = NewMenu( nextPopUpMenuId , "\pMenu" ) ;
+    MenuHandle handle = UMANewMenu(nextPopUpMenuId, wxString(wxT("Menu")), wxFont::GetDefaultEncoding() );
     nextPopUpMenuId++ ;
 
     return handle ;

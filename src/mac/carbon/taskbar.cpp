@@ -235,7 +235,7 @@ pascal OSStatus wxDockEventHandler( EventHandlerCallRef inHandlerCallRef,
         // When SetEventParameter is called it will decrement
         // the reference count of the menu - we need to make
         // sure it stays around in the wxMenu class here
-        RetainMenu(hMenu);
+        CFRetain(hMenu);
 
         // set the actual dock menu
         err = SetEventParameter(
