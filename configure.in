@@ -898,7 +898,7 @@ WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI
 WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ exceptions handling], wxUSE_NO_EXCEPTIONS)
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
-WX_ARG_ENABLE(universal_binary, [  --enable-universal_binary create Mac PowerPC and Intel Universal binary (not yet working)], wxUSE_UNIVERSAL_BINARY)
+WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary[=SDK] create Mac PowerPC and Intel Universal binary (not yet working)]], wxUSE_UNIVERSAL_BINARY)
 
 WX_ARG_ENABLE(compat24,      [  --enable-compat24       enable wxWidgets 2.4 compatibility], WXWIN_COMPATIBILITY_2_4, enable)
 WX_ARG_ENABLE(compat26,      [  --disable-compat26      disable wxWidgets 2.6 compatibility], WXWIN_COMPATIBILITY_2_6, disable)
@@ -7346,15 +7346,24 @@ dnl Note we don't do this earlier because adding these cpp/ld flags could
 dnl cause configure tests to fail.
 dnl ---------------------------------------------------------------------------
 if test "$wxUSE_MAC" = 1 ; then
-    if test "$wxUSE_UNIVERSAL_BINARY" = "yes" ; then
-        CXXFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $CXXFLAGS"
-        CFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $CFLAGS"
-        LDFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $LDFLAGS"
+    if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
+        dnl --enable-universal_binary uses a default SDK (currently 10.4u)
+        dnl --enable-universal_binary=SDK names a path to an SDK
+        if test "x$wxUSE_UNIVERSAL_BINARY" == xyes; then
+            OSX_UNIV_OPTS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk"
+        else 
+            dnl '' would mean universal with no SDK, which may be the case if
+            dnl the compiler uses a sysroot by default
+            OSX_UNIV_OPTS=${wxUSE_UNIVERSAL_BINARY:+"-isysroot '$wxUSE_UNIVERSAL_BINARY'"}
+        fi
+        OSX_UNIV_OPTS="$OSX_UNIV_OPTS -arch ppc -arch i386"
+        CXXFLAGS="$OSX_UNIV_OPTS $CXXFLAGS"
+        CFLAGS="$OSX_UNIV_OPTS $CFLAGS"
+        LDFLAGS="$OSX_UNIV_OPTS $LDFLAGS"
         bk_use_pch=no
     fi
     # TODO: where do we add "-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk" for libtool (static builds only)?
     #       The makefile currently uses AR and RANLIB, which libtool apparently supercedes.
-    # TODO: how can we avoid a hardwired reference to the SDK, above? (Someone used -lSystemStubs to avoid it)
 fi
 
 AC_BAKEFILE([m4_include(autoconf_inc.m4)])
@@ -7366,7 +7375,7 @@ dnl The next version of Bakefile will have the correct fix for this
 dnl at which time, this hack can be removed.
 
 if test "$wxUSE_MAC" = 1 ; then
-    if test "$wxUSE_UNIVERSAL_BINARY" = "yes" ; then
+    if test "x$wxUSE_UNIVERSAL_BINARY" != "xno" ; then
         sed "s/DEPSMODE=gcc/DEPSMODE=none/" < bk-deps > temp
         mv temp bk-deps
         chmod +x bk-deps

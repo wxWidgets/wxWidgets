@@ -52,6 +52,11 @@ All (GUI):
 
 - Added wxID_PAGE_SETUP standard id
 
+wxMac:
+
+- Add parameter to the --enable-universal_binary configure option for the path
+  to the SDK.
+
 
 2.7.0
 -----

@@ -889,7 +889,7 @@ Optional Features:
   --enable-no_exceptions  create code without C++ exceptions handling
   --enable-permissive     compile code disregarding strict ANSI
   --enable-no_deps        create code without dependency information
-  --enable-universal_binary create Mac PowerPC and Intel Universal binary (not yet working)
+  --enable-universal_binary[=SDK] create Mac PowerPC and Intel Universal binary (not yet working)
   --enable-compat24       enable wxWidgets 2.4 compatibility
   --disable-compat26      disable wxWidgets 2.6 compatibility
   --disable-rpath         disable use of rpath for uninstalled builds
@@ -4260,7 +4260,7 @@ echo "${ECHO_T}no" >&6
           fi
 
 
-	  enablestring=
+          enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-universal_binary" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-universal_binary... $ECHO_C" >&6
           no_cache=0
@@ -4268,37 +4268,28 @@ echo $ECHO_N "checking for --${enablestring:-enable}-universal_binary... $ECHO_C
 if test "${enable_universal_binary+set}" = set; then
   enableval="$enable_universal_binary"
 
-                          if test "$enableval" = yes; then
-                            ac_cv_use_universal_binary='wxUSE_UNIVERSAL_BINARY=yes'
-                          else
-                            ac_cv_use_universal_binary='wxUSE_UNIVERSAL_BINARY=no'
-                          fi
+                          wx_cv_use_universal_binary="wxUSE_UNIVERSAL_BINARY='$enableval'"
 
 else
 
                           LINE=`grep "wxUSE_UNIVERSAL_BINARY" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
+                            wx_cv_use_universal_binary='wxUSE_UNIVERSAL_BINARY='$DEFAULT_wxUSE_UNIVERSAL_BINARY
                           else
                             no_cache=1
+                            wx_cv_use_universal_binary="wxUSE_UNIVERSAL_BINARY=no"
                           fi
-
-                          ac_cv_use_universal_binary='wxUSE_UNIVERSAL_BINARY='$DEFAULT_wxUSE_UNIVERSAL_BINARY
 
 fi;
 
-          eval "$ac_cv_use_universal_binary"
+          eval "$wx_cv_use_universal_binary"
           if test "$no_cache" != 1; then
-            echo $ac_cv_use_universal_binary >> ${wx_arg_cache_file}.tmp
+            echo $wx_cv_use_universal_binary >> ${wx_arg_cache_file}.tmp
           fi
 
-          if test "$wxUSE_UNIVERSAL_BINARY" = yes; then
-            echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-          else
-            echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-          fi
+          echo "$as_me:$LINENO: result: $wxUSE_UNIVERSAL_BINARY" >&5
+echo "${ECHO_T}$wxUSE_UNIVERSAL_BINARY" >&6
 
 
 
@@ -45686,15 +45677,20 @@ if test "$wxUSE_WINE" = "yes"; then
 fi
 
 if test "$wxUSE_MAC" = 1 ; then
-    if test "$wxUSE_UNIVERSAL_BINARY" = "yes" ; then
-        CXXFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $CXXFLAGS"
-        CFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $CFLAGS"
-        LDFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 $LDFLAGS"
+    if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
+                        if test "x$wxUSE_UNIVERSAL_BINARY" == xyes; then
+            OSX_UNIV_OPTS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk"
+        else
+                                    OSX_UNIV_OPTS=${wxUSE_UNIVERSAL_BINARY:+"-isysroot '$wxUSE_UNIVERSAL_BINARY'"}
+        fi
+        OSX_UNIV_OPTS="$OSX_UNIV_OPTS -arch ppc -arch i386"
+        CXXFLAGS="$OSX_UNIV_OPTS $CXXFLAGS"
+        CFLAGS="$OSX_UNIV_OPTS $CFLAGS"
+        LDFLAGS="$OSX_UNIV_OPTS $LDFLAGS"
         bk_use_pch=no
     fi
     # TODO: where do we add "-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk" for libtool (static builds only)?
     #       The makefile currently uses AR and RANLIB, which libtool apparently supercedes.
-    # TODO: how can we avoid a hardwired reference to the SDK, above? (Someone used -lSystemStubs to avoid it)
 fi
 
 
@@ -48627,7 +48623,7 @@ echo "$as_me: error: Versions of Bakefile used to generate makefiles ($BAKEFILE_
 
 
 if test "$wxUSE_MAC" = 1 ; then
-    if test "$wxUSE_UNIVERSAL_BINARY" = "yes" ; then
+    if test "x$wxUSE_UNIVERSAL_BINARY" != "xno" ; then
         sed "s/DEPSMODE=gcc/DEPSMODE=none/" < bk-deps > temp
         mv temp bk-deps
         chmod +x bk-deps

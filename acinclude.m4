@@ -415,6 +415,47 @@ AC_DEFUN([WX_ARG_ENABLE],
         ])
 
 
+dnl Like WX_ARG_ENABLE but accepts a parameter.
+dnl
+dnl Usage:
+dnl   WX_ARG_ENABLE_PARAM(option, helpmessage, variable-name, enablestring)
+dnl
+dnl Example:
+dnl   WX_ARG_ENABLE_PARAM(foo, [[  --enable-foo[=bar] use foo]], wxUSE_FOO)
+dnl 
+dnl  --enable-foo       wxUSE_FOO=yes
+dnl  --disable-foo      wxUSE_FOO=no
+dnl  --enable-foo=bar   wxUSE_FOO=bar
+dnl  <not given>        value from configarg.cache or wxUSE_FOO=no
+dnl 
+AC_DEFUN([WX_ARG_ENABLE_PARAM],
+        [
+          enablestring=$4
+          AC_MSG_CHECKING([for --${enablestring:-enable}-$1])
+          no_cache=0
+          AC_ARG_ENABLE($1, [$2],
+                        [
+                          wx_cv_use_$1="$3='$enableval'"
+                        ],
+                        [
+                          LINE=`grep "$3" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                            eval "DEFAULT_$LINE"
+                            wx_cv_use_$1='$3='$DEFAULT_$3
+                          else
+                            no_cache=1
+                            wx_cv_use_$1="$3=no"
+                          fi
+                        ])
+
+          eval "$wx_cv_use_$1"
+          if test "$no_cache" != 1; then
+            echo $wx_cv_use_$1 >> ${wx_arg_cache_file}.tmp
+          fi
+
+          AC_MSG_RESULT([$$3])
+        ])
+
 dnl ===========================================================================
 dnl Linker features test
 dnl ===========================================================================
