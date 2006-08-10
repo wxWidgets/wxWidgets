@@ -1607,6 +1607,7 @@ static void AddStdXRCID_Records()
     stdID(wxID_HELP);
     stdID(wxID_PRINT);
     stdID(wxID_PRINT_SETUP);
+    stdID(wxID_PAGE_SETUP);
     stdID(wxID_PREVIEW);
     stdID(wxID_ABOUT);
     stdID(wxID_HELP_CONTENTS);
