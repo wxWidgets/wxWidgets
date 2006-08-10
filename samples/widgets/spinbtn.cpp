@@ -353,7 +353,7 @@ void SpinBtnWidgetsPage::OnButtonSetMinAndMax(wxCommandEvent& WXUNUSED(event))
          maxNew = 0; // init to suppress compiler warning
     if ( !m_textMin->GetValue().ToLong(&minNew) ||
          !m_textMax->GetValue().ToLong(&maxNew) ||
-         minNew >= maxNew )
+         minNew > maxNew )
     {
         wxLogWarning(_T("Invalid min/max values for the spinbtn."));
 
@@ -392,7 +392,7 @@ void SpinBtnWidgetsPage::OnUpdateUIMinMaxButton(wxUpdateUIEvent& event)
     long mn, mx;
     event.Enable( m_textMin->GetValue().ToLong(&mn) &&
                   m_textMax->GetValue().ToLong(&mx) &&
-                  mn < mx);
+                  mn <= mx);
 }
 
 void SpinBtnWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
