@@ -258,6 +258,8 @@ void wxSpinButton::SetValue(int val)
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
+    const bool hadRange = m_min < m_max;
+
     wxSpinButtonBase::SetRange(minVal, maxVal);
 
 #ifdef UDM_SETRANGE32
@@ -271,6 +273,18 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
     {
         ::SendMessage(GetHwnd(), UDM_SETRANGE, 0,
                       (LPARAM) MAKELONG((short)maxVal, (short)minVal));
+    }
+
+    // the current value might be out of the new range, force it to be in it
+    NormalizeValue();
+
+    // if range was valid but becomes degenerated (min == max) now or vice
+    // versa then the spin buttons are automatically disabled/enabled back
+    // but don't update themselves for some reason, so do it manually
+    if ( hadRange != (m_min < m_max) )
+    {
+        // update the visual state of the button
+        Refresh();
     }
 }
 
