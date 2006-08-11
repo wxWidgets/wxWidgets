@@ -44,6 +44,10 @@ IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 #define wxMAC_USE_CORE_GRAPHICS_BLEND_MODES 0
 #endif
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+typedef float CGFloat ;
+#endif
+
 //-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
@@ -396,7 +400,7 @@ protected :
         m_image = image ;
         if ( m_image )
         {
-            m_imageBounds = CGRectMake( 0.0, 0.0, (float)CGImageGetWidth( m_image ), (float)CGImageGetHeight( m_image ) ) ;
+            m_imageBounds = CGRectMake( 0.0, 0.0, (CGFloat)CGImageGetWidth( m_image ), (CGFloat)CGImageGetHeight( m_image ) ) ;
             m_patternRef = CGPatternCreate(
                 this , m_imageBounds, transform ,
                 m_imageBounds.size.width, m_imageBounds.size.height,
@@ -552,7 +556,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
             CGContextSetRGBStrokeColor( m_cgContext , col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 ) ;
 
             // TODO: * m_dc->m_scaleX
-            float penWidth = pen.GetWidth();
+            CGFloat penWidth = pen.GetWidth();
             if (penWidth <= 0.0)
                 penWidth = 0.1;
             CGContextSetLineWidth( m_cgContext , penWidth ) ;
@@ -600,15 +604,15 @@ void wxMacCGContext::SetPen( const wxPen &pen )
             m_mode = kCGPathStroke ;
             int count = 0 ;
 
-            const float *lengths = NULL ;
-            float *userLengths = NULL ;
+            const CGFloat *lengths = NULL ;
+            CGFloat *userLengths = NULL ;
 
-            const float dashUnit = penWidth < 1.0 ? 1.0 : penWidth;
+            const CGFloat dashUnit = penWidth < 1.0 ? 1.0 : penWidth;
 
-            const float dotted[] = { dashUnit , dashUnit + 2.0 };
-            const float short_dashed[] = { 9.0 , 6.0 };
-            const float dashed[] = { 19.0 , 9.0 };
-            const float dotted_dashed[] = { 9.0 , 6.0 , 3.0 , 3.0 };
+            const CGFloat dotted[] = { dashUnit , dashUnit + 2.0 };
+            const CGFloat short_dashed[] = { 9.0 , 6.0 };
+            const CGFloat dashed[] = { 19.0 , 9.0 };
+            const CGFloat dotted_dashed[] = { 9.0 , 6.0 , 3.0 , 3.0 };
 
             switch ( pen.GetStyle() )
             {
@@ -640,7 +644,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
                     count = pen.GetDashes( &dashes ) ;
                     if ((dashes != NULL) && (count > 0))
                     {
-                        userLengths = new float[count] ;
+                        userLengths = new CGFloat[count] ;
                         for ( int i = 0 ; i < count ; ++i )
                         {
                             userLengths[i] = dashes[i] * dashUnit ;
@@ -656,7 +660,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
 
                 case wxSTIPPLE :
                     {
-                        float  alphaArray[1] = { 1.0 } ;
+                        CGFloat  alphaArray[1] = { 1.0 } ;
                         wxBitmap* bmp = pen.GetStipple() ;
                         if ( bmp && bmp->Ok() )
                         {
@@ -675,7 +679,7 @@ void wxMacCGContext::SetPen( const wxPen &pen )
                         wxMacCFRefHolder<CGPatternRef> pattern( *( new HatchPattern( pen.GetStyle() , CGContextGetCTM( m_cgContext ) ) ) );
 
                         RGBColor col = MAC_WXCOLORREF( pen.GetColour().GetPixel() ) ;
-                        float  colorArray[4] = { col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 } ;
+                        CGFloat  colorArray[4] = { col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 } ;
 
                         CGContextSetStrokePattern( m_cgContext, pattern , colorArray ) ;
                     }
@@ -737,14 +741,14 @@ void wxMacCGContext::SetBrush( const wxBrush &brush )
                 wxMacCFRefHolder<CGPatternRef> pattern( *( new HatchPattern( brush.GetStyle() , CGContextGetCTM( m_cgContext ) ) ) );
 
                 RGBColor col = MAC_WXCOLORREF( brush.GetColour().GetPixel() ) ;
-                float  colorArray[4] = { col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 } ;
+                CGFloat  colorArray[4] = { col.red / 65536.0 , col.green / 65536.0 , col.blue / 65536.0 , 1.0 } ;
 
                 CGContextSetFillPattern( m_cgContext, pattern , colorArray ) ;
             }
             else
             {
                 // now brush is a bitmap
-                float  alphaArray[1] = { 1.0 } ;
+                CGFloat  alphaArray[1] = { 1.0 } ;
                 wxBitmap* bmp = brush.GetStipple() ;
                 if ( bmp && bmp->Ok() )
                 {
@@ -765,7 +769,7 @@ void wxMacCGContext::SetBrush( const wxBrush &brush )
     }
 }
 
-void AddEllipticArcToPath(CGContextRef c, CGPoint center, float a, float b, float fromDegree , float toDegree )
+void AddEllipticArcToPath(CGContextRef c, CGPoint center, CGFloat a, CGFloat b, CGFloat fromDegree , CGFloat toDegree )
 {
     CGContextSaveGState(c);
     CGContextTranslateCTM(c, center.x, center.y);
@@ -776,10 +780,10 @@ void AddEllipticArcToPath(CGContextRef c, CGPoint center, float a, float b, floa
     CGContextRestoreGState(c);
 }
 
-void AddRoundedRectToPath(CGContextRef c, CGRect rect, float ovalWidth,
-      float ovalHeight)
+void AddRoundedRectToPath(CGContextRef c, CGRect rect, CGFloat ovalWidth,
+      CGFloat ovalHeight)
 {
-    float fw, fh;
+    CGFloat fw, fh;
     if (ovalWidth == 0 || ovalHeight == 0)
     {
         CGContextAddRect(c, rect);
@@ -2056,8 +2060,8 @@ void wxDC::Clear(void)
                     {
                         RGBColor color;
                         GetThemeBrushAsColor( m_backgroundBrush.MacGetTheme(), 32, true, &color );
-                        CGContextSetRGBFillColor( cg, (float) color.red / 65536,
-                            (float) color.green / 65536, (float) color.blue / 65536, 1 );
+                        CGContextSetRGBFillColor( cg, (CGFloat) color.red / 65536,
+                            (CGFloat) color.green / 65536, (CGFloat) color.blue / 65536, 1 );
                             CGContextFillRect( cg, rect );
                     }
 
