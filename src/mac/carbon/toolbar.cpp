@@ -545,9 +545,243 @@ void wxToolBar::Init()
 #endif
 }
 
+#define kControlToolbarItemClassID		CFSTR( "org.wxwidgets.controltoolbaritem" )
+
+const EventTypeSpec kEvents[] = 
+{
+	{ kEventClassHIObject, kEventHIObjectConstruct },
+	{ kEventClassHIObject, kEventHIObjectInitialize },
+	{ kEventClassHIObject, kEventHIObjectDestruct },
+	
+	{ kEventClassToolbarItem, kEventToolbarItemCreateCustomView }
+};
+
+const EventTypeSpec kViewEvents[] = 
+{ 
+    { kEventClassControl, kEventControlGetSizeConstraints } 
+};
+
+struct ControlToolbarItem 
+{ 
+    HIToolbarItemRef    toolbarItem; 
+    HIViewRef           viewRef;
+    wxSize              lastValidSize ;
+}; 
+
+static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef, EventRef inEvent, void* inUserData )
+{
+	OSStatus			result = eventNotHandledErr;
+	ControlToolbarItem*	object = (ControlToolbarItem*)inUserData;
+
+	switch ( GetEventClass( inEvent ) )
+	{
+		case kEventClassHIObject:
+			switch ( GetEventKind( inEvent ) )
+			{
+				case kEventHIObjectConstruct:
+					{
+						HIObjectRef			toolbarItem;
+						ControlToolbarItem*	item;
+						
+						GetEventParameter( inEvent, kEventParamHIObjectInstance, typeHIObjectRef, NULL,
+                            sizeof( HIObjectRef ), NULL, &toolbarItem );
+						
+                        item = (ControlToolbarItem*) malloc(sizeof(ControlToolbarItem)) ;
+                        item->toolbarItem = toolbarItem ;
+                        item->viewRef = NULL ;
+                        
+						SetEventParameter( inEvent, kEventParamHIObjectInstance, typeVoidPtr, sizeof( void * ), &item );
+                        
+                        result = noErr ;
+					}
+					break;
+ 
+                case kEventHIObjectInitialize:
+                    result = CallNextEventHandler( inCallRef, inEvent );
+					if ( result == noErr )
+                    {
+                        CFDataRef           data;
+                        GetEventParameter( inEvent, kEventParamToolbarItemConfigData, typeCFTypeRef, NULL,
+                            sizeof( CFTypeRef ), NULL, &data );
+					
+                        HIViewRef viewRef ;
+                        
+                        wxASSERT_MSG( CFDataGetLength( data ) == sizeof( viewRef ) , wxT("Illegal Data passed") ) ;
+                        memcpy( &viewRef , CFDataGetBytePtr( data ) , sizeof( viewRef ) ) ;
+                    
+                        object->viewRef = (HIViewRef) viewRef ;
+
+						result = noErr ;
+					}
+                    break;
+
+				case kEventHIObjectDestruct:
+                    free( object ) ;
+					result = noErr;
+					break;
+			}
+			break;
+		
+		case kEventClassToolbarItem:
+			switch ( GetEventKind( inEvent ) )
+			{				
+				case kEventToolbarItemCreateCustomView:
+				{
+                    HIViewRef viewRef = object->viewRef ;
+
+                    HIViewRemoveFromSuperview( viewRef ) ;
+                    HIViewSetVisible(viewRef, true) ;
+                    InstallEventHandler( GetControlEventTarget( viewRef ), ControlToolbarItemHandler,
+                                            GetEventTypeCount( kViewEvents ), kViewEvents, object, NULL );
+                    
+                    result = SetEventParameter( inEvent, kEventParamControlRef, typeControlRef, sizeof( HIViewRef ), &viewRef );
+				}
+				break;
+			}
+			break;
+		
+		case kEventClassControl:
+			switch ( GetEventKind( inEvent ) )
+			{
+				case kEventControlGetSizeConstraints:
+				{
+                    wxWindow* wxwindow = wxFindControlFromMacControl(object->viewRef ) ;
+                    if ( wxwindow )
+                    {
+                        wxSize sz = wxwindow->GetSize() ;
+                        // during toolbar layout the native window sometimes gets negative sizes
+                        // so we always keep the last valid size here, to make sure we survive the
+                        // shuffle ...
+                        if ( sz.x > 0 && sz.y > 0 )
+                            object->lastValidSize = sz ;
+                        else
+                            sz = object->lastValidSize ;
+                            
+                        HISize min, max;
+                        min.width = max.width = sz.x ;
+                        min.height = max.height = sz.y ;
+                        
+                        result = SetEventParameter( inEvent, kEventParamMinimumSize, typeHISize,
+                                                        sizeof( HISize ), &min );
+                        
+                        result = SetEventParameter( inEvent, kEventParamMaximumSize, typeHISize,
+                                                        sizeof( HISize ), &max );
+                        result = noErr ;
+                    }
+				}
+				break;
+			}
+			break;
+	}
+	
+	return result;
+}
+
+void RegisterControlToolbarItemClass()
+{
+	static bool sRegistered;
+	
+	if ( !sRegistered )
+	{
+		HIObjectRegisterSubclass( kControlToolbarItemClassID, kHIToolbarItemClassID, 0,
+				ControlToolbarItemHandler, GetEventTypeCount( kEvents ), kEvents, 0, NULL );
+		
+		sRegistered = true;
+	}
+}
+
+HIToolbarItemRef CreateControlToolbarItem(CFStringRef inIdentifier, CFTypeRef inConfigData)
+{
+	RegisterControlToolbarItemClass();
+    
+	OSStatus			err;
+	EventRef			event;
+	UInt32				options = kHIToolbarItemAllowDuplicates;
+	HIToolbarItemRef	result = NULL;
+	
+	err = CreateEvent( NULL, kEventClassHIObject, kEventHIObjectInitialize, GetCurrentEventTime(), 0, &event );
+	require_noerr( err, CantCreateEvent );
+	
+	SetEventParameter( event, kEventParamAttributes, typeUInt32, sizeof( UInt32 ), &options );
+	SetEventParameter( event, kEventParamToolbarItemIdentifier, typeCFStringRef, sizeof( CFStringRef ), &inIdentifier );
+	
+	if ( inConfigData )
+		SetEventParameter( event, kEventParamToolbarItemConfigData, typeCFTypeRef, sizeof( CFTypeRef ), &inConfigData );
+	
+	err = HIObjectCreate( kControlToolbarItemClassID, event, (HIObjectRef*)&result );
+	check_noerr( err );
+	
+	ReleaseEvent( event );
+CantCreateEvent :	
+	return result ;
+}
+
+static const EventTypeSpec kToolbarEvents[] =
+{
+	{ kEventClassToolbar, kEventToolbarGetDefaultIdentifiers },
+	{ kEventClassToolbar, kEventToolbarGetAllowedIdentifiers },
+	{ kEventClassToolbar, kEventToolbarCreateItemWithIdentifier },
+};
+
+static OSStatus ToolbarDelegateHandler( EventHandlerCallRef inCallRef, EventRef inEvent, void* inUserData )
+{
+	OSStatus result = eventNotHandledErr;
+    wxToolBar* toolbar = (wxToolBar*) inUserData ;
+	CFMutableArrayRef	array;
+
+	switch ( GetEventKind( inEvent ) )
+	{
+		case kEventToolbarGetDefaultIdentifiers:
+            {
+                GetEventParameter( inEvent, kEventParamMutableArray, typeCFMutableArrayRef, NULL,
+					sizeof( CFMutableArrayRef ), NULL, &array );
+                // not implemented yet
+                // GetToolbarDefaultItems( array );
+                result = noErr;
+            }
+			break;
+			
+		case kEventToolbarGetAllowedIdentifiers:
+            {
+                GetEventParameter( inEvent, kEventParamMutableArray, typeCFMutableArrayRef, NULL,
+					sizeof( CFMutableArrayRef ), NULL, &array );
+                // not implemented yet
+                // GetToolbarAllowedItems( array );
+                result = noErr;
+            }
+			break;
+		case kEventToolbarCreateItemWithIdentifier:
+			{
+				HIToolbarItemRef		item = NULL;
+				CFTypeRef				data = NULL;
+                CFStringRef             identifier = NULL ;
+				
+				GetEventParameter( inEvent, kEventParamToolbarItemIdentifier, typeCFStringRef, NULL,
+						sizeof( CFStringRef ), NULL, &identifier );
+				
+				GetEventParameter( inEvent, kEventParamToolbarItemConfigData, typeCFTypeRef, NULL,
+						sizeof( CFTypeRef ), NULL, &data );
+					
+                if ( CFStringCompare( kControlToolbarItemClassID, identifier, kCFCompareBackwards ) == kCFCompareEqualTo )
+                {
+                    item = CreateControlToolbarItem( kControlToolbarItemClassID, data );
+                    if ( item )
+                    {
+                        SetEventParameter( inEvent, kEventParamToolbarItem, typeHIToolbarItemRef,
+                            sizeof( HIToolbarItemRef ), &item );
+                        result = noErr;
+                    }
+				}
+                
+			}
+			break;
+    }
+    return result ;
+}
+
 // also for the toolbar we have the dual implementation:
 // only when MacInstallNativeToolbar is called is the native toolbar set as the window toolbar
-//
+
 bool wxToolBar::Create(
     wxWindow *parent,
     wxWindowID id,
@@ -569,6 +803,9 @@ bool wxToolBar::Create(
 
     if (m_macHIToolbarRef != NULL)
     {
+		InstallEventHandler( HIObjectGetEventTarget((HIToolbarRef)m_macHIToolbarRef ), ToolbarDelegateHandler,
+				GetEventTypeCount( kToolbarEvents ), kToolbarEvents, this, NULL );
+
         HIToolbarDisplayMode mode = kHIToolbarDisplayModeDefault;
         HIToolbarDisplaySize displaySize = kHIToolbarDisplaySizeSmall;
 
@@ -1199,39 +1436,25 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
             break;
 
         case wxTOOL_STYLE_CONTROL:
-            wxASSERT( tool->GetControl() != NULL );
 
-#if 0 // wxMAC_USE_NATIVE_TOOLBAR
-            // FIXME: doesn't work yet...
+#if wxMAC_USE_NATIVE_TOOLBAR
             {
+	            wxASSERT( tool->GetControl() != NULL );
                 HIToolbarItemRef    item;
-                wxString labelStr = wxString::Format( wxT("%xd"), (int)tool );
-                result = HIToolbarItemCreate(
-                    wxMacCFStringHolder( labelStr, wxFont::GetDefaultEncoding() ),
-                    kHIToolbarItemCantBeRemoved | kHIToolbarItemAnchoredLeft | kHIToolbarItemAllowDuplicates,
-                    &item );
-                if ( result == noErr )
+                HIViewRef viewRef = (HIViewRef) tool->GetControl()->GetHandle() ;
+                CFDataRef data = CFDataCreate( kCFAllocatorDefault , (UInt8*) &viewRef , sizeof(viewRef) ) ;
+                 err = HIToolbarCreateItemWithIdentifier((HIToolbarRef) m_macHIToolbarRef,kControlToolbarItemClassID,
+                   data , &item ) ;
+
+                if (err  == noErr)
                 {
-                    HIToolbarItemSetLabel( item, wxMacCFStringHolder( tool->GetLabel(), m_font.GetEncoding() ) );
-                    HIToolbarItemSetCommandID( item, tool->GetId() );
                     tool->SetToolbarItemRef( item );
-
-                    controlHandle = ( ControlRef ) tool->GetControlHandle();
-                    wxASSERT_MSG( controlHandle != NULL, wxT("NULL tool control") );
-
-                    // FIXME: is this necessary ??
-                    ::GetControlBounds( controlHandle, &toolrect );
-                    UMAMoveControl( controlHandle, -toolrect.left, -toolrect.top );
-
-                    // FIXME: is this necessary ??
-                    InstallControlEventHandler(
-                        controlHandle, GetwxMacToolBarToolEventHandlerUPP(),
-                        GetEventTypeCount(eventList), eventList, tool, NULL );
                 }
-            }
+                CFRelease( data ) ;
+           }
 
 #else
-                // FIXME: right now there's nothing to do here
+                // right now there's nothing to do here
 #endif
                 break;
 
