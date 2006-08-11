@@ -99,7 +99,6 @@ public:
 
     virtual void MacSetBackgroundBrush( const wxBrush &brush ) ;
 
-    bool MacUsesCompositing() { return m_macUsesCompositing; }
     virtual void MacInstallTopLevelWindowEventHandler() ;
 
     bool MacGetMetalAppearance() const ;
@@ -126,8 +125,7 @@ protected:
     // should the frame be maximized when it will be shown? set by Maximize()
     // when it is called while the frame is hidden
     bool m_maximizeOnShow;
-    bool m_macUsesCompositing ;
-
+ 
     WXWindow m_macWindow ;
 
     wxWindowMac* m_macFocus ;
