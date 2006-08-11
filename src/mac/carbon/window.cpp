@@ -203,42 +203,21 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 wxRegion visRegion = thisWindow->MacGetVisibleRegion() ;
                 Rect controlBounds ;
 
-                if ( ! thisWindow->GetPeer()->IsCompositing() )
-                {
-                    if ( thisWindow->GetPeer()->IsRootControl() )
-                        thisWindow->GetPeer()->GetRect( &controlBounds ) ;
-                    else
-                        GetControlBounds( thisWindow->GetPeer()->GetControlRef() , &controlBounds ) ;
-                }
-
                 if ( cEvent.GetParameter<RgnHandle>(kEventParamRgnHandle, &updateRgn) != noErr )
                 {
                     updateRgn = (RgnHandle) visRegion.GetWXHRGN() ;
                 }
                 else
                 {
-                    if ( ! thisWindow->GetPeer()->IsCompositing() )
+                    if ( thisWindow->MacGetLeftBorderSize() != 0 || thisWindow->MacGetTopBorderSize() != 0 )
                     {
+                        // as this update region is in native window locals we must adapt it to wx window local
                         allocatedRgn = NewRgn() ;
                         CopyRgn( updateRgn , allocatedRgn ) ;
-                        OffsetRgn( allocatedRgn , -controlBounds.left , -controlBounds.top ) ;
 
                         // hide the given region by the new region that must be shifted
                         wxMacNativeToWindow( thisWindow , allocatedRgn ) ;
                         updateRgn = allocatedRgn ;
-                    }
-                    else
-                    {
-                        if ( thisWindow->MacGetLeftBorderSize() != 0 || thisWindow->MacGetTopBorderSize() != 0 )
-                        {
-                            // as this update region is in native window locals we must adapt it to wx window local
-                            allocatedRgn = NewRgn() ;
-                            CopyRgn( updateRgn , allocatedRgn ) ;
-
-                            // hide the given region by the new region that must be shifted
-                            wxMacNativeToWindow( thisWindow , allocatedRgn ) ;
-                            updateRgn = allocatedRgn ;
-                        }
                     }
                 }
 
@@ -272,43 +251,25 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 #if wxMAC_USE_CORE_GRAPHICS
                     bool created = false ;
                     CGContextRef cgContext = NULL ;
-                    if ( cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef, &cgContext) != noErr )
-                    {
-                        wxASSERT( thisWindow->GetPeer()->IsCompositing() == false ) ;
-
-                        // this parameter is not provided on non-composited windows
-                        created = true ;
-
-                        // rest of the code expects this to be already transformed and clipped for local
-                        CGrafPtr port = GetWindowPort( (WindowRef) thisWindow->MacGetTopLevelWindowRef() ) ;
-                        Rect bounds ;
-                        GetPortBounds( port , &bounds ) ;
-                        CreateCGContextForPort( port , &cgContext ) ;
-
-                        wxMacWindowToNative( thisWindow , updateRgn ) ;
-                        OffsetRgn( updateRgn , controlBounds.left , controlBounds.top ) ;
-                        ClipCGContextToRegion( cgContext , &bounds , updateRgn ) ;
-                        wxMacNativeToWindow( thisWindow , updateRgn ) ;
-                        OffsetRgn( updateRgn , -controlBounds.left , -controlBounds.top ) ;
-
-                        CGContextTranslateCTM( cgContext , 0 , bounds.bottom - bounds.top ) ;
-                        CGContextScaleCTM( cgContext , 1 , -1 ) ;
-
-                        CGContextTranslateCTM( cgContext , controlBounds.left , controlBounds.top ) ;
-
-#if 0
-                        CGContextSetRGBFillColor( cgContext , 1.0 , 1.0 , 1.0 , 1.0 ) ;
-                        CGContextFillRect( cgContext ,
-                            CGRectMake( 0 , 0 ,
-                                controlBounds.right - controlBounds.left ,
-                                controlBounds.bottom - controlBounds.top ) );
-#endif
-                    }
-
+                    OSStatus err = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef, &cgContext) ;
+                    wxASSERT_MSG( err == noErr , wxT("Unable to retrieve CGContextRef") ) ;
                     thisWindow->MacSetCGContextRef( cgContext ) ;
 
                     {
                         wxMacCGContextStateSaver sg( cgContext ) ;
+                        float alpha = 1.0 ;
+                        {
+                            wxWindow* iter = thisWindow ;
+                            while ( iter ) 
+                            {
+                                alpha *= (float) iter->GetTransparent()/255.0 ;
+                                if ( iter->IsTopLevel() )
+                                    iter = NULL ;
+                                else
+                                    iter = iter->GetParent() ;
+                            }
+                        }
+                        CGContextSetAlpha( cgContext , alpha ) ;
 #endif
                         if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
                             result = noErr ;
@@ -941,6 +902,7 @@ void wxWindowMac::Init()
 {
     m_peer = NULL ;
     m_frozenness = 0 ;
+    m_macAlpha = 255 ;
 
 #if WXWIN_COMPATIBILITY_2_4
     m_backgroundTransparent = false;
@@ -1395,10 +1357,6 @@ bool wxWindowMac::MacGetBoundsForControl(
     // TODO: the default calls may be used as soon as PostCreateControl Is moved here
     w = wxMax(size.x, 0) ; // WidthDefault( size.x );
     h = wxMax(size.y, 0) ; // HeightDefault( size.y ) ;
-
-    bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
-    if ( !isCompositing )
-        GetParent()->MacWindowToRootWindow( &x , &y ) ;
 
     x += MacGetLeftBorderSize() ;
     y += MacGetTopBorderSize() ;
@@ -2357,7 +2315,7 @@ void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
         return ;
 
 #if TARGET_API_MAC_OSX
-    if ( MacGetTopLevelWindow()->MacUsesCompositing() && (!m_macBackgroundBrush.Ok() || m_macBackgroundBrush.GetStyle() == wxTRANSPARENT ) )
+    if ( !m_macBackgroundBrush.Ok() || m_macBackgroundBrush.GetStyle() == wxTRANSPARENT )
     {
         event.Skip() ;
     }
@@ -2595,7 +2553,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
     GetClientSize( &width , &height ) ;
 
 #if TARGET_API_MAC_OSX
-    if ( true /* m_peer->IsCompositing() */ )
+    if ( true )
     {
         // note there currently is a bug in OSX which makes inefficient refreshes in case an entire control
         // area is scrolled, this does not occur if width and height are 2 pixels less,
@@ -2615,7 +2573,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
             // this would be the preferred version for fast drawing controls
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-            if ( UMAGetSystemVersion() >= 0x1030 && m_peer->IsCompositing() )
+            if ( UMAGetSystemVersion() >= 0x1030 )
                 HIViewRender(m_peer->GetControlRef()) ;
             else
 #endif
@@ -2636,7 +2594,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         // this would be the preferred version for fast drawing controls
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-            if ( UMAGetSystemVersion() >= 0x1030 && m_peer->IsCompositing() )
+            if ( UMAGetSystemVersion() >= 0x1030 )
                 HIViewRender(m_peer->GetControlRef()) ;
             else
 #endif
@@ -3449,4 +3407,33 @@ bool wxWindowMac::Reparent(wxWindowBase *newParentBase)
     ::EmbedControl( m_peer->GetControlRef() , container ) ;
 
     return true;
+}
+
+bool wxWindowMac::SetTransparent(wxByte alpha)
+{
+#if wxMAC_USE_CORE_GRAPHICS
+    if ( alpha != m_macAlpha )
+    {
+        m_macAlpha = alpha ;
+        Refresh() ;
+    }
+    return true ;
+#else
+    return false ;
+#endif
+}
+
+
+bool wxWindowMac::CanSetTransparent()
+{
+#if wxMAC_USE_CORE_GRAPHICS
+    return true ;
+#else
+    return false ;
+#endif
+}
+
+wxByte wxWindowMac::GetTransparent() const 
+{
+    return m_macAlpha ;
 }
