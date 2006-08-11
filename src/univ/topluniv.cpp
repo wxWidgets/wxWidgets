@@ -28,6 +28,7 @@
     #include "wx/settings.h"
     #include "wx/bitmap.h"
     #include "wx/image.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/univ/renderer.h"
