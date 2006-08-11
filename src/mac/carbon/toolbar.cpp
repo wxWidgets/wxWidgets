@@ -392,13 +392,6 @@ void wxToolBarTool::SetPosition( const wxPoint& position )
     int mac_x = position.x;
     int mac_y = position.y;
 
-    if ( ! GetToolBar()->MacGetTopLevelWindow()->MacUsesCompositing() )
-    {
-        GetToolBar()->MacWindowToRootWindow( &x, &y );
-        mac_x += x;
-        mac_y += y;
-    }
-
     if ( IsButton() )
     {
         Rect contrlRect;
