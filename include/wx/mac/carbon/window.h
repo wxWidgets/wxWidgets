@@ -121,6 +121,10 @@ public:
 
     virtual WXWidget GetHandle() const;
 
+    virtual bool SetTransparent(wxByte alpha);
+    virtual bool CanSetTransparent();
+    virtual wxByte GetTransparent() const ;
+    
 #if WXWIN_COMPATIBILITY_2_4
     bool GetTransparentBackground() const { return m_backgroundTransparent; }
     void SetTransparent(bool t = true) { m_backgroundTransparent = t; }
@@ -290,6 +294,7 @@ protected:
     // insets of the mac control from the wx top left corner
     wxPoint             m_macTopLeftInset ;
     wxPoint             m_macBottomRightInset ;
+    wxByte              m_macAlpha ;
 
     wxScrollBar*        m_hScrollBar ;
     wxScrollBar*        m_vScrollBar ;
