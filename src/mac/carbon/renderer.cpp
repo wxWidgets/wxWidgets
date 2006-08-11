@@ -138,81 +138,58 @@ void wxRendererMac::DrawHeaderButton( wxWindow *win,
 
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
-#if defined(__WXMAC_OSX__) && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3 )
-    if ( HIThemeDrawButton != 0 )
+    HIRect headerRect = CGRectMake( x, y, w, h );
+    if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
     {
-        HIRect headerRect = CGRectMake( x, y, w, h );
-        if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
+        Rect r =
         {
-            Rect r =
-            {
-                (short) headerRect.origin.y, (short) headerRect.origin.x,
-                (short) (headerRect.origin.y + headerRect.size.height),
-                (short) (headerRect.origin.x + headerRect.size.width)
-            };
+            (short) headerRect.origin.y, (short) headerRect.origin.x,
+            (short) (headerRect.origin.y + headerRect.size.height),
+            (short) (headerRect.origin.x + headerRect.size.width)
+        };
 
-            RgnHandle updateRgn = NewRgn();
-            RectRgn( updateRgn, &r );
-            HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle(), updateRgn, true );
-            DisposeRgn( updateRgn );
-        }
-        else
-        {
-            CGContextRef cgContext;
-
-#if wxMAC_USE_CORE_GRAPHICS
-            cgContext = ((wxMacCGContext*)(dc.GetGraphicContext()))->GetNativeContext();
-#else
-            Rect bounds;
-
-            GetPortBounds( (CGrafPtr) dc.m_macPort, &bounds );
-            QDBeginCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
-
-            CGContextTranslateCTM( cgContext, 0, bounds.bottom - bounds.top );
-            CGContextScaleCTM( cgContext, 1, -1 );
-
-            HIShapeReplacePathInCGContext( HIShapeCreateWithQDRgn( (RgnHandle) dc.m_macCurrentClipRgn ), cgContext );
-            CGContextClip( cgContext );
-            HIViewConvertRect( &headerRect, (HIViewRef) win->GetHandle(), (HIViewRef) win->MacGetTopLevelWindow()->GetHandle() );
-#endif
-
-            {
-                HIThemeButtonDrawInfo drawInfo;
-                HIRect labelRect;
-
-                memset( &drawInfo, 0, sizeof(drawInfo) );
-                drawInfo.version = 0;
-                drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
-                drawInfo.kind = kThemeListHeaderButton;
-                drawInfo.value = 0;
-                drawInfo.adornment = kThemeAdornmentNone;
-                HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
-            }
-
-#if wxMAC_USE_CORE_GRAPHICS
-#else
-            QDEndCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
-#endif
-        }
+        RgnHandle updateRgn = NewRgn();
+        RectRgn( updateRgn, &r );
+        HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle(), updateRgn, true );
+        DisposeRgn( updateRgn );
     }
     else
-#endif
     {
-        wxMacWindowClipper clipper(win);
-        Rect rect = { y, x, y + h, x + w };
-        wxPoint origin = win->GetClientAreaOrigin();
-        int dx, dy;
-        dx = origin.x;
-        dy = origin.y;
-        win->MacWindowToRootWindow( &dx, &dy );
-        OffsetRect( &rect, dx, dy );
+        CGContextRef cgContext;
 
-        ThemeButtonDrawInfo drawInfo;
-        memset( &drawInfo, 0, sizeof(drawInfo) );
-        drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
-        drawInfo.value = 0;
-        drawInfo.adornment = kThemeAdornmentNone;
-        DrawThemeButton( &rect, kThemeListHeaderButton, &drawInfo, NULL, NULL, NULL, 0 );
+#if wxMAC_USE_CORE_GRAPHICS
+        cgContext = ((wxMacCGContext*)(dc.GetGraphicContext()))->GetNativeContext();
+#else
+        Rect bounds;
+
+        GetPortBounds( (CGrafPtr) dc.m_macPort, &bounds );
+        QDBeginCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
+
+        CGContextTranslateCTM( cgContext, 0, bounds.bottom - bounds.top );
+        CGContextScaleCTM( cgContext, 1, -1 );
+
+        HIShapeReplacePathInCGContext( HIShapeCreateWithQDRgn( (RgnHandle) dc.m_macCurrentClipRgn ), cgContext );
+        CGContextClip( cgContext );
+        HIViewConvertRect( &headerRect, (HIViewRef) win->GetHandle(), (HIViewRef) win->MacGetTopLevelWindow()->GetHandle() );
+#endif
+
+        {
+            HIThemeButtonDrawInfo drawInfo;
+            HIRect labelRect;
+
+            memset( &drawInfo, 0, sizeof(drawInfo) );
+            drawInfo.version = 0;
+            drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
+            drawInfo.kind = kThemeListHeaderButton;
+            drawInfo.value = 0;
+            drawInfo.adornment = kThemeAdornmentNone;
+            HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
+        }
+
+#if wxMAC_USE_CORE_GRAPHICS
+#else
+        QDEndCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
+#endif
     }
 }
 
@@ -267,95 +244,63 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
     wxOrientation orient,
     int WXUNUSED(flags) )
 {
-#if defined(__WXMAC_OSX__) && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3 )
-    if ( HIThemeDrawPaneSplitter != 0 )
-    {
-        bool hasMetal = win->MacGetTopLevelWindow()->MacGetMetalAppearance();
-        SInt32 height;
-        GetThemeMetric( kThemeMetricSmallPaneSplitterHeight, &height );
-        HIRect splitterRect;
-        if (orient == wxVERTICAL)
-            splitterRect = CGRectMake( position, 0, height, size.y );
-        else
-            splitterRect = CGRectMake( 0, position, size.x, height );
+    bool hasMetal = win->MacGetTopLevelWindow()->MacGetMetalAppearance();
+    SInt32 height;
+    GetThemeMetric( kThemeMetricSmallPaneSplitterHeight, &height );
+    HIRect splitterRect;
+    if (orient == wxVERTICAL)
+        splitterRect = CGRectMake( position, 0, height, size.y );
+    else
+        splitterRect = CGRectMake( 0, position, size.x, height );
 
 #if !wxMAC_USE_CORE_GRAPHICS
-        HIViewConvertRect(
-            &splitterRect,
-            (HIViewRef) win->GetHandle(),
-            (HIViewRef) win->MacGetTopLevelWindow()->GetHandle() );
+    HIViewConvertRect(
+        &splitterRect,
+        (HIViewRef) win->GetHandle(),
+        (HIViewRef) win->MacGetTopLevelWindow()->GetHandle() );
 #endif
 
-        // under compositing we should only draw when called by the OS, otherwise just issue a redraw command
-        // strange redraw errors occur if we don't do this
+    // under compositing we should only draw when called by the OS, otherwise just issue a redraw command
+    // strange redraw errors occur if we don't do this
 
-        if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
+    if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
+    {
+        Rect r =
         {
-            Rect r =
-            {
-                (short) splitterRect.origin.y,
-                (short) splitterRect.origin.x,
-                (short) (splitterRect.origin.y + splitterRect.size.height),
-                (short) (splitterRect.origin.x + splitterRect.size.width)
-            };
+            (short) splitterRect.origin.y,
+            (short) splitterRect.origin.x,
+            (short) (splitterRect.origin.y + splitterRect.size.height),
+            (short) (splitterRect.origin.x + splitterRect.size.width)
+        };
 
-            RgnHandle updateRgn = NewRgn();
-            RectRgn( updateRgn, &r );
-            HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle(), updateRgn, true );
-            DisposeRgn( updateRgn );
-        }
-        else
-        {
-            CGContextRef cgContext;
-
-#if wxMAC_USE_CORE_GRAPHICS
-            cgContext = ((wxMacCGContext*)(dc.GetGraphicContext()))->GetNativeContext();
-#else
-            Rect bounds;
-            GetPortBounds( (CGrafPtr) dc.m_macPort, &bounds );
-            QDBeginCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
-            CGContextTranslateCTM( cgContext, 0, bounds.bottom - bounds.top );
-            CGContextScaleCTM( cgContext, 1, -1 );
-#endif
-
-            HIThemeSplitterDrawInfo drawInfo;
-            drawInfo.version = 0;
-            drawInfo.state = kThemeStateActive;
-            drawInfo.adornment = hasMetal ? kHIThemeSplitterAdornmentMetal : kHIThemeSplitterAdornmentNone;
-            HIThemeDrawPaneSplitter( &splitterRect, &drawInfo, cgContext, kHIThemeOrientationNormal );
-
-#if wxMAC_USE_CORE_GRAPHICS
-#else
-            QDEndCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
-#endif
-        }
+        RgnHandle updateRgn = NewRgn();
+        RectRgn( updateRgn, &r );
+        HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle(), updateRgn, true );
+        DisposeRgn( updateRgn );
     }
     else
-#endif
     {
-        // Do the gradient fill:
-        static int grayValues[] =
-        {
-            0xA0, 0xF6, 0xED, 0xE4, 0xE2, 0xD0, 0xA0
-        };
-        int i;
+        CGContextRef cgContext;
 
-        dc.SetBrush( *wxTRANSPARENT_BRUSH );
-        if (orient == wxVERTICAL)
-        {
-            for (i=0; i < (int)WXSIZEOF(grayValues); i++)
-            {
-                dc.SetPen( wxPen( wxColour( grayValues[i], grayValues[i], grayValues[i] ), 1, wxSOLID ) );
-                dc.DrawRectangle( position + i, 0, 1, size.y );
-            }
-        }
-        else
-        {
-            for (i=0; i < (int)WXSIZEOF(grayValues); i++)
-            {
-                dc.SetPen( wxPen( wxColour( grayValues[i], grayValues[i], grayValues[i] ), 1, wxSOLID ) );
-                dc.DrawRectangle( 0, position + i, size.x, 1 );
-            }
-        }
+#if wxMAC_USE_CORE_GRAPHICS
+        cgContext = ((wxMacCGContext*)(dc.GetGraphicContext()))->GetNativeContext();
+#else
+        Rect bounds;
+        GetPortBounds( (CGrafPtr) dc.m_macPort, &bounds );
+        QDBeginCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
+        CGContextTranslateCTM( cgContext, 0, bounds.bottom - bounds.top );
+        CGContextScaleCTM( cgContext, 1, -1 );
+#endif
+
+        HIThemeSplitterDrawInfo drawInfo;
+        drawInfo.version = 0;
+        drawInfo.state = kThemeStateActive;
+        drawInfo.adornment = hasMetal ? kHIThemeSplitterAdornmentMetal : kHIThemeSplitterAdornmentNone;
+        HIThemeDrawPaneSplitter( &splitterRect, &drawInfo, cgContext, kHIThemeOrientationNormal );
+
+#if wxMAC_USE_CORE_GRAPHICS
+#else
+        QDEndCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
+#endif
     }
 }
