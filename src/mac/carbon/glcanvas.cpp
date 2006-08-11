@@ -273,7 +273,6 @@ void wxGLCanvas::SetViewport()
         parms[2] = hiRect.size.width ;
         parms[3] = hiRect.size.height ;
 #else
-        Rect bounds ;
         GetWindowPortBounds( MAC_WXHWND(MacGetTopLevelWindowRef()) , &bounds ) ;
         GLint parms[4] ;
         parms[0] = x ;
