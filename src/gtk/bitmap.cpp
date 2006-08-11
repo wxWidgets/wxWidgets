@@ -343,7 +343,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
     }
     else
     {
-        GdkImage* img = gdk_image_get(GetPixmap(), 0, 0, GetWidth(), GetHeight());
+        GdkImage* img = gdk_drawable_get_image(GetPixmap(), 0, 0, GetWidth(), GetHeight());
 
         wxCHECK_MSG(img, bmp, wxT("couldn't create image"));
 
@@ -443,7 +443,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
         {
             dstbyteperline = (width + 7) / 8;
             dst = (char*) malloc(dstbyteperline*height);
-            img = gdk_image_get( GetMask()->GetBitmap(), 0, 0, GetWidth(), GetHeight() );
+            img = gdk_drawable_get_image(GetMask()->GetBitmap(), 0, 0, GetWidth(), GetHeight());
 
             for (int h = 0; h < height; h++)
             {
@@ -767,7 +767,7 @@ wxImage wxBitmap::ConvertToImage() const
 
         if (HasPixmap())
         {
-            gdk_image = gdk_image_get( GetPixmap(),
+            gdk_image = gdk_drawable_get_image( GetPixmap(),
                                        0, 0,
                                        GetWidth(), GetHeight() );
         }
@@ -781,7 +781,7 @@ wxImage wxBitmap::ConvertToImage() const
         GdkImage *gdk_image_mask = (GdkImage*) NULL;
         if (GetMask())
         {
-            gdk_image_mask = gdk_image_get( GetMask()->GetBitmap(),
+            gdk_image_mask = gdk_drawable_get_image( GetMask()->GetBitmap(),
                                             0, 0,
                                             GetWidth(), GetHeight() );
 
