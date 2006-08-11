@@ -1039,7 +1039,7 @@ OSStatus wxThreadInternal::MacThreadStart(void *parameter)
     wxThreadInternal *pthread = thread->m_internal;
 
     // add to TLS so that This() will work
-    verify_noerr( MPSetTaskStorageValue( gs_tlsForWXThread , (long) thread ) ) ;
+    verify_noerr( MPSetTaskStorageValue( gs_tlsForWXThread , (TaskStorageValue) thread ) ) ;
 
     // have to declare this before pthread_cleanup_push() which defines a
     // block!
