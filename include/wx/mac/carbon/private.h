@@ -625,7 +625,6 @@ public :
     virtual OSStatus GetRegion( ControlPartCode partCode , RgnHandle region );
     virtual OSStatus SetZOrder( bool above , wxMacControl* other );
 
-    bool    IsCompositing() { return m_isCompositing; }
     bool    IsRootControl() { return m_isRootControl; }
 
     wxWindow* GetPeer() const
@@ -642,7 +641,6 @@ protected :
     long        m_windowStyle;
     wxWindow*   m_peer;
     bool        m_needsFocusRect;
-    bool        m_isCompositing;
     bool        m_isRootControl;
 };
 
