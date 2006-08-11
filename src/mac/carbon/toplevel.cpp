@@ -409,7 +409,7 @@ ControlRef wxMacFindSubControl( wxTopLevelWindowMac* toplevelWindow, const Point
                     {
                         Point testLocation = location ;
 
-                        if ( toplevelWindow && toplevelWindow->MacUsesCompositing() )
+                        if ( toplevelWindow )
                         {
                             testLocation.h -= r.left ;
                             testLocation.v -= r.top ;
@@ -430,7 +430,7 @@ ControlRef wxMacFindSubControl( wxTopLevelWindowMac* toplevelWindow, const Point
 ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow , const Point& location , WindowRef window , ControlPartCode *outPart )
 {
 #if TARGET_API_MAC_OSX
-    if ( UMAGetSystemVersion() >= 0x1030 && ( toplevelWindow == 0 || toplevelWindow->MacUsesCompositing() ) )
+    if ( UMAGetSystemVersion() >= 0x1030 )
         return FindControlUnderMouse( location , window , outPart ) ;
 #endif
 
@@ -612,8 +612,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                     EventModifiers modifiers = cEvent.GetParameter<EventModifiers>(kEventParamKeyModifiers, typeUInt32) ;
                     Point clickLocation = windowMouseLocation ;
 
-                    if ( toplevelWindow->MacUsesCompositing() )
-                        currentMouseWindow->MacRootWindowToWindow( &clickLocation.h , &clickLocation.v ) ;
+                    currentMouseWindow->MacRootWindowToWindow( &clickLocation.h , &clickLocation.v ) ;
 
                     HandleControlClick( (ControlRef) currentMouseWindow->GetHandle() , clickLocation ,
                         modifiers , (ControlActionUPP ) -1 ) ;
@@ -658,15 +657,12 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             EventModifiers modifiers = cEvent.GetParameter<EventModifiers>(kEventParamKeyModifiers, typeUInt32) ;
             Point clickLocation = windowMouseLocation ;
 #if TARGET_API_MAC_OSX
-            if ( toplevelWindow->MacUsesCompositing() )
-            {
-                HIPoint hiPoint ;
-                hiPoint.x = clickLocation.h ;
-                hiPoint.y = clickLocation.v ;
-                HIViewConvertPoint( &hiPoint , (ControlRef) toplevelWindow->GetHandle() , control  ) ;
-                clickLocation.h = (int)hiPoint.x ;
-                clickLocation.v = (int)hiPoint.y ;
-            }
+            HIPoint hiPoint ;
+            hiPoint.x = clickLocation.h ;
+            hiPoint.y = clickLocation.v ;
+            HIViewConvertPoint( &hiPoint , (ControlRef) toplevelWindow->GetHandle() , control  ) ;
+            clickLocation.h = (int)hiPoint.x ;
+            clickLocation.v = (int)hiPoint.y ;
 #endif // TARGET_API_MAC_OSX
 
             HandleControlClick( control , clickLocation , modifiers , (ControlActionUPP ) -1 ) ;
@@ -897,12 +893,6 @@ void wxTopLevelWindowMac::Init()
     m_maximizeOnShow = false;
     m_macWindow = NULL ;
 
-#if TARGET_API_MAC_OSX
-    m_macUsesCompositing = ( UMAGetSystemVersion() >= 0x1030 );
-#else
-    m_macUsesCompositing = false;
-#endif
-
     m_macEventHandler = NULL ;
     m_macFullScreenData = NULL ;
 }
@@ -990,22 +980,6 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
 
 void wxTopLevelWindowMac::Maximize(bool maximize)
 {
-    // TODO: check if this is still necessary
-#if 0
-    wxMacPortStateHelper help( (GrafPtr)GetWindowPort( (WindowRef)m_macWindow) ) ;
-    wxMacWindowClipper clip( this );
-#endif
-#if 0
-    if ( !IsWindowInStandardState( (WindowRef)m_macWindow, NULL, NULL ) )
-    {
-        Rect rect;
-
-        GetWindowBounds((WindowRef)m_macWindow, kWindowGlobalPortRgn, &rect);
-        SetWindowIdealUserState((WindowRef)m_macWindow, &rect);
-        SetWindowUserState((WindowRef)m_macWindow, &rect);
-    }
-    ZoomWindow( (WindowRef)m_macWindow , maximize ? inZoomOut : inZoomIn , false ) ;
-#else
     Point idealSize = { 0 , 0 } ;
     if ( maximize )
     {
@@ -1015,7 +989,6 @@ void wxTopLevelWindowMac::Maximize(bool maximize)
         idealSize.v = rect.bottom - rect.top ;
     }
     ZoomWindowIdeal( (WindowRef)m_macWindow , maximize ? inZoomOut : inZoomIn , &idealSize ) ;
-#endif
 }
 
 bool wxTopLevelWindowMac::IsMaximized() const
@@ -1141,8 +1114,6 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
     else if ( HasFlag( wxFRAME_DRAWER ) )
     {
         wclass = kDrawerWindowClass;
-        // we must force compositing on a drawer
-        m_macUsesCompositing = true ;
     }
 #endif  //10.2 and up
     else
@@ -1180,12 +1151,9 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
     if ( HasFlag(wxSTAY_ON_TOP) )
         group = GetWindowGroupOfClass(kUtilityWindowClass) ;
 
-#if TARGET_API_MAC_OSX
-    if ( m_macUsesCompositing )
-        attr |= kWindowCompositingAttribute;
+    attr |= kWindowCompositingAttribute;
 #if 0 // wxMAC_USE_CORE_GRAPHICS ; TODO : decide on overall handling of high dpi screens (pixel vs userscale)
     attr |= kWindowFrameworkScaledAttribute;
-#endif
 #endif
 
     if ( HasFlag(wxFRAME_SHAPED) )
@@ -1216,22 +1184,14 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
     UMASetWTitle( (WindowRef) m_macWindow , title , m_font.GetEncoding() ) ;
     m_peer = new wxMacControl(this , true /*isRootControl*/) ;
 
-#if TARGET_API_MAC_OSX
-    if ( m_macUsesCompositing )
+    // There is a bug in 10.2.X for ::GetRootControl returning the window view instead of
+    // the content view, so we have to retrieve it explicitly
+    HIViewFindByID( HIViewGetRoot( (WindowRef) m_macWindow ) , kHIViewWindowContentID ,
+        m_peer->GetControlRefAddr() ) ;
+    if ( !m_peer->Ok() )
     {
-        // There is a bug in 10.2.X for ::GetRootControl returning the window view instead of
-        // the content view, so we have to retrieve it explicitly
-        HIViewFindByID( HIViewGetRoot( (WindowRef) m_macWindow ) , kHIViewWindowContentID ,
-            m_peer->GetControlRefAddr() ) ;
-        if ( !m_peer->Ok() )
-        {
-            // compatibility mode fallback
-            GetRootControl( (WindowRef) m_macWindow , m_peer->GetControlRefAddr() ) ;
-        }
-    }
-#endif
-    {
-        ::CreateRootControl( (WindowRef)m_macWindow , m_peer->GetControlRefAddr() ) ;
+        // compatibility mode fallback
+        GetRootControl( (WindowRef) m_macWindow , m_peer->GetControlRefAddr() ) ;
     }
 
     // the root control level handler
@@ -1456,7 +1416,7 @@ void wxTopLevelWindowMac::SetExtraStyle(long exStyle)
     wxTopLevelWindowBase::SetExtraStyle( exStyle ) ;
 
 #if TARGET_API_MAC_OSX
-    if ( m_macUsesCompositing && m_macWindow != NULL )
+    if ( m_macWindow != NULL )
     {
         bool metal = GetExtraStyle() & wxFRAME_EX_METAL ;
         if ( MacGetMetalAppearance() != metal )
@@ -1528,9 +1488,6 @@ void wxTopLevelWindowMac::DoGetClientSize( int *width, int *height ) const
 void wxTopLevelWindowMac::MacSetMetalAppearance( bool set )
 {
 #if TARGET_API_MAC_OSX
-    wxASSERT_MSG( m_macUsesCompositing ,
-        wxT("Cannot set metal appearance on a non-compositing window") ) ;
-
     MacChangeWindowAttributes( set ? kWindowMetalAttribute : kWindowNoAttributes ,
         set ? kWindowNoAttributes : kWindowMetalAttribute ) ;
 #endif
@@ -1560,57 +1517,33 @@ wxUint32 wxTopLevelWindowMac::MacGetWindowAttributes() const
 
 void wxTopLevelWindowMac::MacPerformUpdates()
 {
-#if TARGET_API_MAC_OSX
-    if ( m_macUsesCompositing )
-    {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-        // for composited windows this also triggers a redraw of all
-        // invalid views in the window
-        if ( UMAGetSystemVersion() >= 0x1030 )
-            HIWindowFlush((WindowRef) m_macWindow) ;
-        else
-#endif
-        {
-            // the only way to trigger the redrawing on earlier systems is to call
-            // ReceiveNextEvent
-
-            EventRef currentEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
-            UInt32 currentEventClass = 0 ;
-            UInt32 currentEventKind = 0 ;
-            if ( currentEvent != NULL )
-            {
-                currentEventClass = ::GetEventClass( currentEvent ) ;
-                currentEventKind = ::GetEventKind( currentEvent ) ;
-            }
-
-            if ( currentEventClass != kEventClassMenu )
-            {
-                // when tracking a menu, strange redraw errors occur if we flush now, so leave..
-                EventRef theEvent;
-                OSStatus status = noErr ;
-                status = ReceiveNextEvent( 0 , NULL , kEventDurationNoWait , false , &theEvent ) ;
-            }
-        }
-    }
+    // for composited windows this also triggers a redraw of all
+    // invalid views in the window
+    if ( UMAGetSystemVersion() >= 0x1030 )
+        HIWindowFlush((WindowRef) m_macWindow) ;
     else
 #endif
     {
-        BeginUpdate( (WindowRef) m_macWindow ) ;
+        // the only way to trigger the redrawing on earlier systems is to call
+        // ReceiveNextEvent
 
-        RgnHandle updateRgn = NewRgn();
-        if ( updateRgn )
+        EventRef currentEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
+        UInt32 currentEventClass = 0 ;
+        UInt32 currentEventKind = 0 ;
+        if ( currentEvent != NULL )
         {
-            GetPortVisibleRegion( GetWindowPort( (WindowRef)m_macWindow ), updateRgn );
-            UpdateControls(  (WindowRef)m_macWindow , updateRgn ) ;
-
-            // if ( !EmptyRgn( updateRgn ) )
-            //    MacDoRedraw( updateRgn , 0 , true) ;
-
-            DisposeRgn( updateRgn );
+            currentEventClass = ::GetEventClass( currentEvent ) ;
+            currentEventKind = ::GetEventKind( currentEvent ) ;
         }
 
-        EndUpdate( (WindowRef)m_macWindow ) ;
-        QDFlushPortBuffer( GetWindowPort( (WindowRef)m_macWindow ) , NULL ) ;
+        if ( currentEventClass != kEventClassMenu )
+        {
+            // when tracking a menu, strange redraw errors occur if we flush now, so leave..
+            EventRef theEvent;
+            OSStatus status = noErr ;
+            status = ReceiveNextEvent( 0 , NULL , kEventDurationNoWait , false , &theEvent ) ;
+        }
     }
 }
 
