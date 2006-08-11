@@ -31,6 +31,8 @@
 #include "wx/build.h"
 WX_CHECK_BUILD_OPTIONS("wxGL")
 
+#include "wx/mac/private.h"
+
 /*
 * GLContext implementation
 */
@@ -258,13 +260,27 @@ void wxGLCanvas::SetViewport()
         int width, height;
         GetClientSize(& width, & height);
         Rect bounds ;
+#if 0
+		// TODO in case we adopt point vs pixel coordinates, this will make the conversion
+        GetWindowPortBounds( MAC_WXHWND(MacGetTopLevelWindowRef()) , &bounds ) ;
+        HIRect hiRect = CGRectMake( x, y, width, height ) ;
+        HIRectConvert( &hiRect, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceScreenPixel, NULL) ;
+        HIRect hiBounds = CGRectMake( 0, 0, bounds.right - bounds.left , bounds.bottom - bounds.top ) ;
+        HIRectConvert( &hiBounds, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceScreenPixel, NULL) ;
+        GLint parms[4] ;
+        parms[0] = hiRect.origin.x ;
+        parms[1] = hiBounds.size.height - (hiRect.origin.y + hiRect.size.height) ;
+        parms[2] = hiRect.size.width ;
+        parms[3] = hiRect.size.height ;
+#else
+        Rect bounds ;
         GetWindowPortBounds( MAC_WXHWND(MacGetTopLevelWindowRef()) , &bounds ) ;
         GLint parms[4] ;
         parms[0] = x ;
         parms[1] = bounds.bottom - bounds.top - ( y + height ) ;
         parms[2] = width ;
         parms[3] = height ;
-
+#endif
         if ( !m_macCanvasIsShown )
             parms[0] += 20000 ;
         aglSetInteger( m_glContext->m_glContext , AGL_BUFFER_RECT , parms ) ;
