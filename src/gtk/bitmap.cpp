@@ -723,7 +723,9 @@ wxImage wxBitmap::ConvertToImage() const
 
     wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
 
-    image.Create(GetWidth(), GetHeight());
+    const int w = GetWidth();
+    const int h = GetHeight();
+    image.Create(w, h);
     unsigned char *data = image.GetData();
 
     wxCHECK_MSG(data != NULL, wxNullImage, wxT("couldn't create image") );
@@ -732,9 +734,6 @@ wxImage wxBitmap::ConvertToImage() const
     {
         GdkPixbuf *pixbuf = GetPixbuf();
         wxASSERT( gdk_pixbuf_get_has_alpha(pixbuf) );
-
-        int w = GetWidth();
-        int h = GetHeight();
 
         image.SetAlpha();
 
@@ -756,134 +755,58 @@ wxImage wxBitmap::ConvertToImage() const
     }
     else
     {
-        // the colour used as transparent one in wxImage and the one it is
-        // replaced with when it really occurs in the bitmap
-        static const int MASK_RED = 1;
-        static const int MASK_GREEN = 2;
-        static const int MASK_BLUE = 3;
-        static const int MASK_BLUE_REPLACEMENT = 2;
-
-        GdkImage *gdk_image = (GdkImage*) NULL;
-
-        if (HasPixmap())
+        GdkPixmap* pixmap = GetPixmap();
+        GdkPixmap* pixmap_invert = NULL;
+        if (GetDepth() == 1)
         {
-            gdk_image = gdk_drawable_get_image( GetPixmap(),
-                                       0, 0,
-                                       GetWidth(), GetHeight() );
+            // mono bitmaps are inverted
+            pixmap_invert = gdk_pixmap_new(pixmap, w, h, 1);
+            GdkGC* gc = gdk_gc_new(pixmap_invert);
+            gdk_gc_set_function(gc, GDK_COPY_INVERT);
+            gdk_draw_drawable(pixmap_invert, gc, pixmap, 0, 0, 0, 0, w, h);
+            g_object_unref(gc);
+            pixmap = pixmap_invert;
         }
-        else
-        {
-            wxFAIL_MSG( wxT("Ill-formed bitmap") );
-        }
+        // create a pixbuf which shares data with the wxImage
+        GdkPixbuf* pixbuf = gdk_pixbuf_new_from_data(
+            data, GDK_COLORSPACE_RGB, false, 8, w, h, 3 * w, NULL, NULL);
 
-        wxCHECK_MSG( gdk_image, wxNullImage, wxT("couldn't create image") );
+        gdk_pixbuf_get_from_drawable(pixbuf, pixmap, NULL, 0, 0, 0, 0, w, h);
 
-        GdkImage *gdk_image_mask = (GdkImage*) NULL;
+        g_object_unref(pixbuf);
+        if (pixmap_invert != NULL)
+            g_object_unref(pixmap_invert);
+
         if (GetMask())
         {
-            gdk_image_mask = gdk_drawable_get_image( GetMask()->GetBitmap(),
-                                            0, 0,
-                                            GetWidth(), GetHeight() );
+            // the colour used as transparent one in wxImage and the one it is
+            // replaced with when it really occurs in the bitmap
+            const int MASK_RED = 1;
+            const int MASK_GREEN = 2;
+            const int MASK_BLUE = 3;
+            const int MASK_BLUE_REPLACEMENT = 2;
 
-            image.SetMaskColour( MASK_RED, MASK_GREEN, MASK_BLUE );
-        }
+            image.SetMaskColour(MASK_RED, MASK_GREEN, MASK_BLUE);
+            GdkImage* image_mask = gdk_drawable_get_image(GetMask()->GetBitmap(), 0, 0, w, h);
 
-        int bpp = -1;
-        int red_shift_right = 0;
-        int green_shift_right = 0;
-        int blue_shift_right = 0;
-        int red_shift_left = 0;
-        int green_shift_left = 0;
-        int blue_shift_left = 0;
-        bool use_shift = false;
-
-        if (GetDepth() != 1)
-        {
-            GdkVisual *visual = gdk_drawable_get_visual( GetPixmap() );
-            if (visual == NULL)
-                visual = wxTheApp->GetGdkVisual();
-
-            bpp = visual->depth;
-            if (bpp == 16)
-                bpp = visual->red_prec + visual->green_prec + visual->blue_prec;
-            red_shift_right = visual->red_shift;
-            red_shift_left = 8-visual->red_prec;
-            green_shift_right = visual->green_shift;
-            green_shift_left = 8-visual->green_prec;
-            blue_shift_right = visual->blue_shift;
-            blue_shift_left = 8-visual->blue_prec;
-
-            use_shift = (visual->type == GDK_VISUAL_TRUE_COLOR) || (visual->type == GDK_VISUAL_DIRECT_COLOR);
-        }
-        else
-        {
-            bpp = 1;
-        }
-
-
-        GdkColormap *cmap = gtk_widget_get_default_colormap();
-
-        long pos = 0;
-        for (int j = 0; j < GetHeight(); j++)
-        {
-            for (int i = 0; i < GetWidth(); i++)
+            for (int y = 0; y < h; y++)
             {
-                wxUint32 pixel = gdk_image_get_pixel( gdk_image, i, j );
-                if (bpp == 1)
+                for (int x = 0; x < w; x++, data += 3)
                 {
-                    if (pixel == 0)
+                    if (gdk_image_get_pixel(image_mask, x, y) == 0)
                     {
-                        data[pos]   = 0;
-                        data[pos+1] = 0;
-                        data[pos+2] = 0;
+                        data[0] = MASK_RED;
+                        data[1] = MASK_GREEN;
+                        data[2] = MASK_BLUE;
                     }
-                    else
+                    else if (data[0] == MASK_RED && data[1] == MASK_GREEN && data[2] == MASK_BLUE)
                     {
-                        data[pos]   = 255;
-                        data[pos+1] = 255;
-                        data[pos+2] = 255;
+                        data[2] = MASK_BLUE_REPLACEMENT;
                     }
                 }
-                else if (use_shift)
-                {
-                    data[pos] =   (pixel >> red_shift_right)   << red_shift_left;
-                    data[pos+1] = (pixel >> green_shift_right) << green_shift_left;
-                    data[pos+2] = (pixel >> blue_shift_right)  << blue_shift_left;
-                }
-                else if (cmap->colors)
-                {
-                    data[pos] =   cmap->colors[pixel].red   >> 8;
-                    data[pos+1] = cmap->colors[pixel].green >> 8;
-                    data[pos+2] = cmap->colors[pixel].blue  >> 8;
-                }
-                else
-                {
-                    wxFAIL_MSG( wxT("Image conversion failed. Unknown visual type.") );
-                }
-
-                if (gdk_image_mask)
-                {
-                    int mask_pixel = gdk_image_get_pixel( gdk_image_mask, i, j );
-                    if (mask_pixel == 0)
-                    {
-                        data[pos] = MASK_RED;
-                        data[pos+1] = MASK_GREEN;
-                        data[pos+2] = MASK_BLUE;
-                    }
-                    else if ( data[pos] == MASK_RED &&
-                                data[pos+1] == MASK_GREEN &&
-                                    data[pos+2] == MASK_BLUE )
-                    {
-                        data[pos+2] = MASK_BLUE_REPLACEMENT;
-                    }
-                }
-
-                pos += 3;
             }
+            g_object_unref(image_mask);
         }
-
-        g_object_unref (gdk_image);
-        if (gdk_image_mask) g_object_unref (gdk_image_mask);
     }
 
     return image;
