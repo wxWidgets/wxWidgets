@@ -114,7 +114,7 @@ public:
   inline bool IsData() { return WaitForRead(0, 0); };
   inline bool IsDisconnected() const { return !IsConnected(); };
   inline wxUint32 LastCount() const { return m_lcount; }
-  inline wxSocketError LastError() const { return (wxSocketError)m_socket->GetError(); }
+  inline wxSocketError LastError() const { if (m_socket) return (wxSocketError)m_socket->GetError(); else return wxSOCKET_INVSOCK; }
   void SaveState();
   void RestoreState();
 
@@ -331,4 +331,3 @@ typedef void (wxEvtHandler::*wxSocketEventFunction)(wxSocketEvent&);
 #endif // wxUSE_SOCKETS
 
 #endif // _WX_SOCKET_H_
-
