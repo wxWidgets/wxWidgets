@@ -96,6 +96,9 @@ int _wx_link_dummy_func_zipstrm()
 //
 static wxString ReadString(wxInputStream& stream, wxUint16 len, wxMBConv& conv)
 {
+    if (len == 0)
+        return wxEmptyString;
+
 #if wxUSE_UNICODE
     wxCharBuffer buf(len);
     stream.Read(buf.data(), len);
@@ -693,7 +696,7 @@ wxString wxZipEntry::GetName(wxPathFormat format /*=wxPATH_NATIVE*/) const
         case wxPATH_DOS:
         {
             wxString name(isDir ? m_Name + _T("\\") : m_Name);
-            for (size_t i = name.length() - 1; i > 0; --i)
+            for (size_t i = 0; i < name.length(); i++)
                 if (name[i] == _T('/'))
                     name[i] = _T('\\');
             return name;
@@ -1530,22 +1533,20 @@ wxStreamError wxZipInputStream::ReadLocal(bool readEndRec /*=false*/)
         return wxSTREAM_EOF;
     }
 
-    if (m_signature != LOCAL_MAGIC) {
-        wxLogError(_("error reading zip local header"));
-        return wxSTREAM_READ_ERROR;
+    if (m_signature == LOCAL_MAGIC) {
+        m_headerSize = m_entry.ReadLocal(*m_parent_i_stream, GetConv());
+        m_signature = 0;
+        m_entry.SetOffset(m_position);
+        m_entry.SetKey(m_position);
+
+        if (m_parent_i_stream->IsOk()) {
+            m_TotalEntries++;
+            return wxSTREAM_NO_ERROR;
+        }
     }
 
-    m_headerSize = m_entry.ReadLocal(*m_parent_i_stream, GetConv());
-    m_signature = 0;
-    m_entry.SetOffset(m_position);
-    m_entry.SetKey(m_position);
-
-    if (m_parent_i_stream->GetLastError() == wxSTREAM_READ_ERROR) {
-        return wxSTREAM_READ_ERROR;
-    } else {
-        m_TotalEntries++;
-        return wxSTREAM_NO_ERROR;
-    }
+    wxLogError(_("error reading zip local header"));
+    return wxSTREAM_READ_ERROR;
 }
 
 wxUint32 wxZipInputStream::ReadSignature()
