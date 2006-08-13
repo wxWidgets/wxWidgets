@@ -65,6 +65,8 @@ public:
 
     virtual ~wxGenericComboControl();
 
+    virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const;
+
     static int GetFeatures() { return wxComboCtrlFeatures::All; }
 
 #if defined(__WXUNIVERSAL__)

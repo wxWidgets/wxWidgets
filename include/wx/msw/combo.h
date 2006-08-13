@@ -60,6 +60,7 @@ public:
     virtual ~wxComboCtrl();
 
     virtual void DrawFocusBackground( wxDC& dc, const wxRect& rect, int flags ) const;
+    virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const;
 
     static int GetFeatures() { return wxComboCtrlFeatures::All; }
 

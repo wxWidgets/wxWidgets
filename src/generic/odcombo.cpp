@@ -410,16 +410,23 @@ void wxVListBoxComboPopup::OnLeftClick(wxMouseEvent& WXUNUSED(event))
 
 void wxVListBoxComboPopup::OnKey(wxKeyEvent& event)
 {
-    // Select item if ENTER is pressed
-    if ( event.GetKeyCode() == WXK_RETURN || event.GetKeyCode() == WXK_NUMPAD_ENTER )
-    {
-        DismissWithEvent();
-    }
-    // Hide popup if ESC is pressed
-    else if ( event.GetKeyCode() == WXK_ESCAPE )
+    // Hide popup if certain key or key combination was pressed
+    if ( m_combo->IsKeyPopupToggle(event) )
     {
         StopPartialCompletion();
         Dismiss();
+    }
+    else if ( event.AltDown() )
+    {
+        // On both wxGTK and wxMSW, pressing Alt down seems to
+        // completely freeze things in popup (ie. arrow keys and
+        // enter won't work).
+        return;
+    }
+    // Select item if ENTER is pressed
+    else if ( event.GetKeyCode() == WXK_RETURN || event.GetKeyCode() == WXK_NUMPAD_ENTER )
+    {
+        DismissWithEvent();
     }
     else
     {

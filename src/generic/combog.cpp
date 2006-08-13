@@ -161,7 +161,7 @@ bool wxGenericComboControl::Create(wxWindow *parent,
     CreateTextCtrl( wxNO_BORDER, validator );
 
     // Add keyboard input handlers for main control and textctrl
-    InstallInputHandlers( true );
+    InstallInputHandlers();
 
     // Set background
     SetBackgroundStyle( wxBG_STYLE_CUSTOM ); // for double-buffering
@@ -319,6 +319,28 @@ void wxGenericComboControl::OnMouseEvent( wxMouseEvent& event )
     // See header file for further information on this method.
     HandleNormalMouseEvent(event);
 
+}
+
+bool wxGenericComboControl::IsKeyPopupToggle(const wxKeyEvent& event) const
+{
+    int keycode = event.GetKeyCode();
+    bool isPopupShown = IsPopupShown();
+
+    // This code is AFAIK appropriate for wxGTK.
+
+    if ( isPopupShown )
+    {
+        if ( keycode == WXK_ESCAPE ||
+             ( keycode == WXK_UP && event.AltDown() ) )
+            return true;
+    }
+    else
+    {
+        if ( keycode == WXK_DOWN && event.AltDown() )
+            return true;
+    }
+
+    return false;
 }
 
 #ifdef __WXUNIVERSAL__

@@ -135,7 +135,7 @@ bool wxComboCtrl::Create(wxWindow *parent,
     CreateTextCtrl( wxNO_BORDER, validator );
 
     // Add keyboard input handlers for main control and textctrl
-    InstallInputHandlers( true );
+    InstallInputHandlers();
 
     // Prepare background for double-buffering
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
@@ -529,5 +529,30 @@ wxCoord wxComboCtrl::GetNativeTextIndent() const
     return NATIVE_TEXT_INDENT_CLASSIC;
 }
 
+bool wxComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
+{
+    int keycode = event.GetKeyCode();
+    bool isPopupShown = IsPopupShown();
+
+    if ( isPopupShown && keycode == WXK_ESCAPE )
+        return true;
+
+    // On XP or with writable combo in Classic,
+    // Alt is required, in addition to up/down, to
+    // show the popup.
+    if ( keycode == WXK_DOWN || keycode == WXK_UP )
+    {
+        if ( event.AltDown() ||
+                ( !isPopupShown &&
+                  HasFlag(wxCB_READONLY) &&
+                  !wxUxThemeEngine::GetIfActive()
+                ) )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 #endif // wxUSE_COMBOCTRL
