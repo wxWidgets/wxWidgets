@@ -2019,7 +2019,7 @@ void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
 #if defined( __WXMSW__ ) || defined(__WXMAC__)
         Update();
 #else
-        wxYieldIfNeeded();
+        DoDirtyProcessing();
 #endif
     wxGenericTreeItem *gitem = (wxGenericTreeItem*) item.m_pItem;
 
@@ -2988,7 +2988,7 @@ void wxGenericTreeCtrl::Edit( const wxTreeItemId& item )
 #if defined( __WXMSW__ ) || defined(__WXMAC__)
         Update();
 #else
-        wxYieldIfNeeded();
+        DoDirtyProcessing();
 #endif
 
     m_textCtrl = new wxTreeTextCtrl(this, itemEdit);
@@ -3387,17 +3387,10 @@ void wxGenericTreeCtrl::OnInternalIdle()
             SelectItem(GetRootItem());
     }
 
-    /* after all changes have been done to the tree control,
-     * we actually redraw the tree when everything is over */
-
-    if (!m_dirty) return;
-    if (m_freezeCount) return;
-
-    m_dirty = false;
-
-    CalculatePositions();
-    Refresh();
-    AdjustMyScrollbars();
+    // after all changes have been done to the tree control,
+    // actually redraw the tree when everything is over
+    if (m_dirty)
+        DoDirtyProcessing();
 }
 
 void wxGenericTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
@@ -3665,5 +3658,17 @@ wxTreeItemId wxGenericTreeCtrl::GetParent(const wxTreeItemId& item) const
 }
 
 #endif  // WXWIN_COMPATIBILITY_2_2
+
+void wxGenericTreeCtrl::DoDirtyProcessing()
+{
+    if (m_freezeCount)
+        return;
+
+    m_dirty = false;
+
+    CalculatePositions();
+    Refresh();
+    AdjustMyScrollbars();
+}
 
 #endif // wxUSE_TREECTRL
