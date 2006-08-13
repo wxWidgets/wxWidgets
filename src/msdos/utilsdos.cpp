@@ -467,22 +467,9 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
     return result;
 }
 
-//----------------------------------------------------------------------------
-// Traits for console apps
-//----------------------------------------------------------------------------
-
-wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
-{
-    static wxToolkitInfo info;
-    info.versionMajor = _osmajor;
-    info.versionMinor = _osminor;
-    info.name = _T("wxBase");
-    info.os = wxDOS;
-    return info;
-}
 
 //----------------------------------------------------------------------------
-// OS Description
+// OS-related
 //----------------------------------------------------------------------------
 
 wxString wxGetOsDescription()
@@ -490,3 +477,14 @@ wxString wxGetOsDescription()
     wxString osname(_T("DOS"));
     return osname;
 }
+
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
+{
+    if ( verMaj )
+        *verMaj = _osmajor;
+    if ( verMin )
+        *verMin = _osminor;
+
+    return wxOS_DOS;
+}
+

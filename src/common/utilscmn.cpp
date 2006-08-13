@@ -287,21 +287,19 @@ wxString wxGetDataDir()
     return dir;
 }
 
-int wxGetOsVersion(int *verMaj, int *verMin)
+bool wxIsPlatformLittleEndian()
 {
-    // we want this function to work even if there is no wxApp
-    wxConsoleAppTraits traitsConsole;
-    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-    if ( ! traits )
-        traits = &traitsConsole;
+    // Are we little or big endian? This method is from Harbison & Steele.
+    union
+    {
+        long l;
+        char c[sizeof(long)];
+    } u;
+    u.l = 1;
 
-    wxToolkitInfo& info = traits->GetToolkitInfo();
-    if ( verMaj )
-        *verMaj = info.versionMajor;
-    if ( verMin )
-        *verMin = info.versionMinor;
-    return info.os;
+    return u.c[0] == 1;
 }
+
 
 /*
  * Class to make it easier to specify platform-dependent values

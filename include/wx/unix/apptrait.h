@@ -23,8 +23,6 @@ public:
     virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
     virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
     virtual int WaitForChild(wxExecuteData& execData);
-
-    virtual wxToolkitInfo& GetToolkitInfo();
 };
 
 #if wxUSE_GUI
@@ -40,7 +38,7 @@ public:
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
     virtual wxStandardPathsBase& GetStandardPaths();
 #endif
-    virtual wxToolkitInfo& GetToolkitInfo();
+    virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
 };
 
 #endif // wxUSE_GUI

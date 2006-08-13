@@ -103,55 +103,15 @@ int wxDisplayDepth()
     return g_displayDC->getBitsPerPixel();
 }
 
-#if wxUSE_GUI
-
-wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 {
-    static wxToolkitInfo info;
-    info.shortName = _T("mgluniv");
-    info.name = _T("wxMGL");
-    info.versionMajor = MGL_RELEASE_MAJOR;
-    info.versionMinor = MGL_RELEASE_MINOR;
-    info.os = wxGTK;
-#if defined(__UNIX__)
-    info.os = wxMGL_UNIX;
-#elif defined(__OS2__)
-    info.os = wxMGL_OS2;
-#elif defined(__WIN32__)
-    info.os = wxMGL_WIN32;
-#elif defined(__DOS__)
-    info.os = wxMGL_DOS;
-#else
-    #error Platform not supported by wxMGL!
-#endif
-    return info;
-}
+    if ( verMaj )
+        *verMaj = MGL_RELEASE_MAJOR;
+    if ( verMin )
+        *verMin = MGL_RELEASE_MINOR;
 
-#endif
-
-#if 0
-wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
-{
-    static wxToolkitInfo info;
-    info.shortName = _T("mglbase");
-    info.versionMajor = MGL_RELEASE_MAJOR;
-    info.versionMinor = MGL_RELEASE_MINOR;
-    info.name = _T("wxBase");
-    info.os = wxGTK;
-#if defined(__UNIX__)
-    info.os = wxMGL_UNIX;
-#elif defined(__OS2__)
-    info.os = wxMGL_OS2;
-#elif defined(__WIN32__)
-    info.os = wxMGL_WIN32;
-#elif defined(__DOS__)
-    info.os = wxMGL_DOS;
-#else
-    #error Platform not supported by wxMGL!
-#endif
-    return info;
+    return wxPORT_MGL;
 }
-#endif
 
 void wxGetMousePosition(int* x, int* y)
 {

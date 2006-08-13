@@ -36,7 +36,7 @@ public:
     virtual void AfterChildWaitLoop(void *data);
 
     virtual bool DoMessageFromThreadWait();
-    virtual wxToolkitInfo& GetToolkitInfo();
+    virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
 };
 
 #endif // wxUSE_GUI

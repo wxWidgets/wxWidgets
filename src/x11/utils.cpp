@@ -153,16 +153,21 @@ void wxBell()
 }
 #endif
 
-wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 {
-    static wxToolkitInfo info;
-    info.shortName = _T("x11univ");
-    info.name = _T("wxX11");
-    info.versionMajor = 0;
-    info.versionMinor = 0;
-    info.os = wxX11;
-    return info;
+    // get X protocol version
+    Display *display = wxGlobalDisplay();
+    if (display)
+    {
+        if ( verMaj )
+            *verMaj = ProtocolVersion (display);
+        if ( verMin )
+            *verMin = ProtocolRevision (display);
+    }
+
+    return wxPORT_X11;
 }
+
 
 // ----------------------------------------------------------------------------
 // display info

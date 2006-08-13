@@ -1583,11 +1583,13 @@ bool wxLocale::Init(const wxChar *szName,
 
     // there may be a catalog with toolkit specific overrides, it is not
     // an error if this does not exist
-    if ( bOk && wxTheApp )
+    if ( bOk )
     {
-      wxAppTraits *traits = wxTheApp->GetTraits();
-      if (traits)
-        AddCatalog(traits->GetToolkitInfo().name.BeforeFirst(wxT('/')).MakeLower());
+      wxString port(wxPlatformInfo().GetPortIdName());
+      if ( !port.empty() )
+      {
+        AddCatalog(port.BeforeFirst(wxT('/')).MakeLower());
+      }
     }
   }
 

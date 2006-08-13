@@ -1,0 +1,392 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        platinfo.tex
+%% Purpose:     wxPlatformInfo
+%% Author:      Francesco Montorsi
+%% Modified by:
+%% Created:     31-7-2006
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxPlatformInfo}}\label{wxplatforminfo}
+
+This class holds informations about the operating system and the toolkit that the application
+is running under and some basic architecture info of the machine where it's running.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<include/wx/platinfo.h>
+
+\wxheading{See also}
+
+\helpref{wxGetOSVersion}{wxgetosversion}, \helpref{wxIsPlatformLittleEndian}{wxisplatformlittleendian},
+\helpref{wxIsPlatform64Bit}{wxisplatform64bit}, \helpref{wxAppTraits}{wxapptraits}
+
+\wxheading{Data structures}
+
+The following are the operating systems which are recognized by wxWidgets
+and whose version can be detected at run-time. The values of the constants
+are chosen so that they can be combined as flags; this allows to check
+for operating system {\it families} like e.g. wxOS\_MAC and wxOS\_UNIX.
+
+\begin{verbatim}
+enum wxOperatingSystemId
+{
+    wxOS_UNKNOWN = 0,                 // returned on error
+
+    wxOS_MAC_OS         = 1 << 0,     // Apple Mac OS 8/9/X with Mac paths
+    wxOS_MAC_OSX_DARWIN = 1 << 1,     // Apple Mac OS X with Unix paths
+    wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,
+
+    wxOS_WINDOWS_9X     = 1 << 2,     // Windows 9x family (95/98/ME)
+    wxOS_WINDOWS_NT     = 1 << 3,     // Windows NT family (NT/2000/XP)
+    wxOS_WINDOWS_MICRO  = 1 << 4,     // MicroWindows
+    wxOS_WINDOWS_CE     = 1 << 5,     // Windows CE (Window Mobile)
+    wxOS_WINDOWS = wxOS_WINDOWS_9X      |
+                   wxOS_WINDOWS_NT      |
+                   wxOS_WINDOWS_MICRO   |
+                   wxOS_WINDOWS_CE,
+
+    wxOS_UNIX_LINUX     = 1 << 6,       // Linux
+    wxOS_UNIX_FREEBSD   = 1 << 7,       // FreeBSD
+    wxOS_UNIX_OPENBSD   = 1 << 8,       // OpenBSD
+    wxOS_UNIX_NETBSD    = 1 << 9,       // NetBSD
+    wxOS_UNIX_SOLARIS   = 1 << 10,      // SunOS
+    wxOS_UNIX_AIX       = 1 << 11,      // AIX
+    wxOS_UNIX_HPUX      = 1 << 12,      // HP/UX
+    wxOS_UNIX = wxOS_UNIX_LINUX     |
+                wxOS_UNIX_FREEBSD   |
+                wxOS_UNIX_OPENBSD   |
+                wxOS_UNIX_NETBSD    |
+                wxOS_UNIX_SOLARIS   |
+                wxOS_UNIX_AIX       |
+                wxOS_UNIX_HPUX,
+
+    wxOS_DOS            = 1 << 15,      // Microsoft DOS
+    wxOS_OS2            = 1 << 16       // OS/2
+};
+\end{verbatim}
+
+The list of wxWidgets ports. Some of them can be used with more than
+a single (native) toolkit; e.g. wxWinCE port sources can be used with
+smartphones, pocket PCs and handheld devices SDKs.
+
+\begin{verbatim}
+enum wxPortId
+{
+    wxPORT_UNKNOWN  = 0,            // returned on error
+
+    wxPORT_BASE     = 1 << 0,       // wxBase, no native toolkit used
+
+    wxPORT_MSW      = 1 << 1,       // wxMSW, native toolkit is Windows API
+    wxPORT_MOTIF    = 1 << 2,       // wxMotif, using [Open]Motif or Lesstif
+    wxPORT_GTK      = 1 << 3,       // wxGTK, using GTK+ 1.x, 2.x, GPE or Maemo
+    wxPORT_MGL      = 1 << 4,       // wxMGL, using wxUniversal
+    wxPORT_X11      = 1 << 5,       // wxX11, using wxUniversal
+    wxPORT_OS2      = 1 << 6,       // wxOS2, using OS/2 Presentation Manager
+    wxPORT_MAC      = 1 << 7,       // wxMac, using Carbon or Classic Mac API
+    wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
+    wxPORT_WINCE    = 1 << 9,       // wxWinCE, toolkit is WinCE SDK API
+    wxPORT_PALMOS   = 1 << 10       // wxPalmOS, toolkit is PalmOS API
+};
+\end{verbatim}
+
+The architecture of the operating system (regardless of the build environment
+of wxWidgets library - see \helpref{wxIsPlatform64bit}{wxisplatform64bit} documentation
+for more info).
+
+\begin{verbatim}
+enum wxArchitecture
+{
+    wxARCH_INVALID = -1,        // returned on error
+
+    wxARCH_32,                  // 32 bit
+    wxARCH_64,
+
+    wxARCH_MAX
+}
+\end{verbatim}
+
+The endian-ness of the machine.
+
+\begin{verbatim}
+enum wxEndianness
+{
+    wxENDIAN_INVALID = -1,      // returned on error
+
+    wxENDIAN_BIG,               // 4321
+    wxENDIAN_LITTLE,            // 1234
+    wxENDIAN_PDP,               // 3412
+
+    wxENDIAN_MAX
+}
+\end{verbatim}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxPlatformInfo::wxPlatformInfo}\label{wxplatforminfowxplatforminfo}
+
+\func{}{wxPlatformInfo}{}
+
+Initializes the instance with the values corresponding to the currently running platform.
+
+\func{}{wxPlatformInfo}{\param{wxPortId }{pid = wxPORT\_UNKNOWN}, \param{int }{tkMajor = -1}, \param{int }{tkMinor = -1}, \param{wxOperatingSystemId }{id = wxOS\_UNKNOWN}, \param{int }{osMajor = -1}, \param{int }{osMinor = -1}, \param{wxArchitecture }{arch = wxARCH\_INVALID}, \param{wxEndianness }{endian = wxENDIAN\_INVALID}}
+
+Initializes the object using given values.
+
+
+
+
+\membersection{wxPlatformInfo::GetArch}\label{wxplatforminfogetarch}
+
+\func{static wxArchitecture}{GetArch}{\param{const wxString\& }{arch}}
+
+Converts the given string to a wxArchitecture enum value or to
+wxARCH_INVALID if the given string is not a valid architecture string
+(i.e. does not contain nor {\tt 32} nor {\tt 64} strings).
+
+
+\membersection{wxPlatformInfo::GetArchName}\label{wxplatforminfogetarchname}
+
+\func{static wxString}{GetArchName}{\param{wxArchitecture }{arch}}
+
+Returns the name for the given wxArchitecture enumeration value.
+
+\constfunc{wxString}{GetArchName}{\void}
+
+Returns the name for the architecture of this wxPlatformInfo instance.
+
+
+\membersection{wxPlatformInfo::GetArchitecture}\label{wxplatforminfogetarchitecture}
+
+\constfunc{wxArchitecture}{GetArchitecture}{\void}
+
+Returns the architecture ID of this wxPlatformInfo instance.
+
+
+
+
+\membersection{wxPlatformInfo::GetEndianness}\label{wxplatforminfogetendianness}
+
+\func{static wxEndianness}{GetEndianness}{\param{const wxString\& }{end}}
+
+Converts the given string to a wxEndianness enum value or to
+wxENDIAN_INVALID if the given string is not a valid endianness string
+(i.e. does not contain nor {\tt little} nor {\tt big} strings).
+
+\constfunc{wxEndianness}{GetEndianness}{\void}
+
+Returns the endianness ID of this wxPlatformInfo instance.
+
+\membersection{wxPlatformInfo::GetEndiannessName}\label{wxplatforminfogetendiannessname}
+
+\func{static wxString}{GetEndiannessName}{\param{wxEndianness }{end}}
+
+Returns name for the given wxEndianness enumeration value.
+
+\constfunc{wxString}{GetEndiannessName}{\void}
+
+Returns the name for the endianness of this wxPlatformInfo instance.
+
+
+
+
+
+\membersection{wxPlatformInfo::GetOSMajorVersion}\label{wxplatforminfogetosmajorversion}
+
+\constfunc{int}{GetOSMajorVersion}{\void}
+
+Returns the major version of the OS associated with this wxPlatformInfo instance.
+
+\membersection{wxPlatformInfo::GetOSMinorVersion}\label{wxplatforminfogetosminorversion}
+
+\constfunc{int}{GetOSMinorVersion}{\void}
+
+Returns the minor version of the OS associated with this wxPlatformInfo instance.
+
+
+
+
+\membersection{wxPlatformInfo::GetOperatingSystemFamilyName}\label{wxplatforminfogetoperatingsystemfamilyname}
+
+\func{static wxString}{GetOperatingSystemFamilyName}{\param{wxOperatingSystemId }{os}}
+
+Returns the operating system family name for the given wxOperatingSystemId enumeration value:
+{\tt Unix} for wxOS_UNIX, {\tt Macintosh} for wxOS_MAC, {\tt Windows} for wxOS_WINDOWS,
+{\tt DOS} for wxOS_DOS, {\tt OS/2} for wxOS_OS2.
+
+\constfunc{wxString}{GetOperatingSystemFamilyName}{\void}
+
+Returns the operating system family name of the OS associated with this wxPlatformInfo instance.
+
+
+
+\membersection{wxPlatformInfo::GetOperatingSystemId}\label{wxplatforminfogetoperatingsystemid}
+
+\func{static wxOperatingSystemId}{GetOperatingSystemId}{\param{const wxString\& }{name}}
+
+Converts the given string to a wxOperatingSystemId enum value or to
+wxOS_UNKNOWN if the given string is not a valid operating system name.
+
+\constfunc{wxOperatingSystemId}{GetOperatingSystemId}{\void}
+
+Returns the operating system ID of this wxPlatformInfo instance.
+
+
+
+\membersection{wxPlatformInfo::GetOperatingSystemIdName}\label{wxplatforminfogetoperatingsystemidname}
+
+\func{static wxString}{GetOperatingSystemIdName}{\param{wxOperatingSystemId }{os}}
+
+Returns the name for the given operating system ID value. This can be a long name
+(e.g. {\tt Microsoft Windows NT}); use \helpref{GetOperatingSystemFamilyName}{wxplatforminfogetoperatingsystemfamilyname} to
+retrieve a short, generic name.
+
+
+\constfunc{wxString}{GetOperatingSystemIdName}{\void}
+
+Returns the operating system name of the OS associated with this wxPlatformInfo instance.
+
+
+
+
+
+\membersection{wxPlatformInfo::GetPortId}\label{wxplatforminfogetportid}
+
+\func{static wxPortId}{GetPortId}{\param{const wxString\& }{portname}}
+
+Converts the given string to a wxWidgets port ID value or to wxPORT_UNKNOWN if
+the given string does not match any of the wxWidgets canonical name ports ("wxGTK", "wxMSW", etc)
+nor any of the short wxWidgets name ports ("gtk", "msw", etc).
+
+\constfunc{wxPortId}{GetPortId}{\void}
+
+Returns the wxWidgets port ID associated with this wxPlatformInfo instance.
+
+\membersection{wxPlatformInfo::GetPortIdName}\label{wxplatforminfogetportidname}
+
+\func{static wxString}{GetPortIdName}{\param{wxPortId }{port}}
+
+Returns the name of the given wxWidgets port ID value. The returned string always starts with
+the "wx" prefix and is a mixed-case string.
+
+\constfunc{wxString}{GetPortIdName}{\void}
+
+Returns the name of the wxWidgets port ID associated with this wxPlatformInfo instance.
+
+
+
+
+\membersection{wxPlatformInfo::GetPortIdShortName}\label{wxplatforminfogetportidshortname}
+
+\func{static wxString}{GetPortIdShortName}{\param{wxPortId }{port}}
+
+Returns the short name of the given wxWidgets port ID value. The returned string does not start with
+the "wx" prefix and is always lower case.
+
+\constfunc{wxString}{GetPortIdShortName}{\void}
+
+Returns the short name of the wxWidgets port ID associated with this wxPlatformInfo instance.
+
+
+
+
+\membersection{wxPlatformInfo::GetToolkitMajorVersion}\label{wxplatforminfogettoolkitmajorversion}
+
+\constfunc{int}{GetToolkitMajorVersion}{\void}
+
+Returns the major version of the toolkit associated with this wxPlatformInfo instance.
+Note that if {GetPortId}{wxplatforminfogetportid} returns wxPORT_BASE, then this value is zero (unless externally modified with SetToolkitVersion); that is, no native toolkit is in use.
+
+\membersection{wxPlatformInfo::GetToolkitMinorVersion}\label{wxplatforminfogettoolkitminorversion}
+
+\constfunc{int}{GetToolkitMinorVersion}{\void}
+
+Returns the minor version of the toolkit associated with this wxPlatformInfo instance.
+Note that if {GetPortId}{wxplatforminfogetportid} returns wxPORT_BASE, then this value is zero (unless externally modified with SetToolkitVersion); that is, no native toolkit is in use.
+
+
+
+
+\membersection{wxPlatformInfo::IsOk}\label{wxplatforminfoisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns \true if this instance is fully initialized with valid values.
+
+
+
+\membersection{wxPlatformInfo::IsUsingUniversalWidgets}\label{wxplatforminfoisusinguniversalwidgets}
+
+\func{bool}{IsUsingUniversalWidgets}{\void}
+
+Returns \true if __WXUNIVERSAL__ symbol is defined. Note that this function always
+returns a constant value defined at compile-time and exists just for completeness.
+
+
+\membersection{wxPlatformInfo::SetArchitecture}\label{wxplatforminfosetarchitecture}
+
+\func{void}{SetArchitecture}{\param{wxArchitecture }{n}}
+
+Sets the architecture enum value associated with this wxPlatformInfo instance.
+
+
+
+\membersection{wxPlatformInfo::SetEndianness}\label{wxplatforminfosetendianness}
+
+\func{void}{SetEndianness}{\param{wxEndianness }{n}}
+
+Sets the endianness enum value associated with this wxPlatformInfo instance.
+
+
+\membersection{wxPlatformInfo::SetOSVersion}\label{wxplatforminfosetosversion}
+
+\func{void}{SetOSVersion}{\param{int }{major}, \param{int }{minor}}
+
+Sets the version of the operating system associated with this wxPlatformInfo instance.
+
+
+
+\membersection{wxPlatformInfo::SetOperatingSystemId}\label{wxplatforminfosetoperatingsystemid}
+
+\func{void}{SetOperatingSystemId}{\param{wxOperatingSystemId }{n}}
+
+Sets the operating system associated with this wxPlatformInfo instance.
+
+
+
+\membersection{wxPlatformInfo::SetPortId}\label{wxplatforminfosetportid}
+
+\func{void}{SetPortId}{\param{wxPortId }{n}}
+
+Sets the wxWidgets port ID associated with this wxPlatformInfo instance.
+
+
+
+\membersection{wxPlatformInfo::SetToolkitVersion}\label{wxplatforminfosettoolkitversion}
+
+\func{void}{SetToolkitVersion}{\param{int }{major}, \param{int }{minor}}
+
+Sets the version of the toolkit associated with this wxPlatformInfo instance.
+
+
+
+\membersection{wxPlatformInfo::operator!=}\label{wxplatforminfooperatorunknown}
+
+\constfunc{bool}{operator!=}{\param{const wxPlatformInfo\& }{t}}
+
+Inequality operator. Tests all class' internal variables.
+
+
+\membersection{wxPlatformInfo::operator==}\label{wxplatforminfooperatorequal}
+
+\constfunc{bool}{operator==}{\param{const wxPlatformInfo\& }{t}}
+
+Equality operator. Tests all class' internal variables.
+

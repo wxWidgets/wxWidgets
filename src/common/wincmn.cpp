@@ -83,6 +83,8 @@
     extern const unsigned int gtk_micro_version;
 #endif
 
+#include "wx/platinfo.h"
+
 // Windows List
 WXDLLIMPEXP_DATA_CORE(wxWindowList) wxTopLevelWindows;
 
@@ -2164,69 +2166,35 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 #endif // __WXDEBUG__
 
 #if wxUSE_MSGDLG
-        // don't translate these strings
-        wxString port;
-
-#ifdef __WXUNIVERSAL__
-        port = _T("Univ/");
-#endif // __WXUNIVERSAL__
-
-        switch ( wxGetOsVersion() )
-        {
-            case wxMOTIF_X:            port += _T("Motif"); break;
-            case wxMAC:
-            case wxMAC_DARWIN:         port += _T("Mac"); break;
-            case wxBEOS:               port += _T("BeOS"); break;
-            case wxGTK:
-            case wxGTK_WIN32:
-            case wxGTK_OS2:
-            case wxGTK_BEOS:           port += _T("GTK"); break;
-            case wxWINDOWS:
-            case wxPENWINDOWS:
-            case wxWINDOWS_NT:
-            case wxWIN32S:
-            case wxWIN95:
-            case wxWIN386:             port += _T("MS Windows"); break;
-            case wxMGL_UNIX:
-            case wxMGL_X:
-            case wxMGL_WIN32:
-            case wxMGL_OS2:            port += _T("MGL"); break;
-            case wxWINDOWS_OS2:
-            case wxOS2_PM:             port += _T("OS/2"); break;
-            case wxPALMOS:             port += _T("Palm OS"); break;
-            case wxWINDOWS_CE:         port += _T("Windows CE (generic)"); break;
-            case wxWINDOWS_POCKETPC:   port += _T("Windows CE PocketPC"); break;
-            case wxWINDOWS_SMARTPHONE: port += _T("Windows CE Smartphone"); break;
-            default:            port += _T("unknown"); break;
-        }
-
-        wxMessageBox(wxString::Format(
-                                      _T(
-                                        "       wxWidgets Library (%s port)\nVersion %d.%d.%d%s%s, compiled at %s %s%s\n   Copyright (c) 1995-2006 wxWidgets team"
-                                        ),
-                                      port.c_str(),
-                                      wxMAJOR_VERSION,
-                                      wxMINOR_VERSION,
-                                      wxRELEASE_NUMBER,
+        // don't translate these strings, they're for diagnostics purposes only
+        wxString msg;
+        msg.Printf(_T("wxWidgets Library (%s port)\n")
+                   _T("Version %d.%d.%d%s%s, compiled at %s %s%s\n")
+                   _T("Copyright (c) 1995-2006 wxWidgets team"),
+                   wxPlatformInfo().GetPortIdName().c_str(),
+                   wxMAJOR_VERSION,
+                   wxMINOR_VERSION,
+                   wxRELEASE_NUMBER,
 #if wxUSE_UNICODE
-                                      L" (Unicode)",
+                   L" (Unicode)",
 #else
-                                      "",
+                   wxEmptyString,
 #endif
 #ifdef __WXDEBUG__
-                                      _T(" Debug build"),
+                   _T(" Debug build"),
 #else
-                                      wxEmptyString,
+                   wxEmptyString,
 #endif
-                                      __TDATE__,
-                                      __TTIME__,
+                   __TDATE__,
+                   __TTIME__,
 #ifdef __WXGTK__
-                                      wxString::Format(_T("\nagainst GTK+ %d.%d.%d. Runtime GTK+ version: %d.%d.%d"), GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION, gtk_major_version, gtk_minor_version, gtk_micro_version).c_str()
+                   wxString::Format(_T("\nagainst GTK+ %d.%d.%d. Runtime GTK+ version: %d.%d.%d"), GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION, gtk_major_version, gtk_minor_version, gtk_micro_version).c_str()
 #else
-                                      ""
+                   wxEmptyString
 #endif
-                                     ),
-                     _T("wxWidgets information"),
+                   );
+
+        wxMessageBox(msg, _T("wxWidgets information"),
                      wxICON_INFORMATION | wxOK,
                      (wxWindow *)this);
     }

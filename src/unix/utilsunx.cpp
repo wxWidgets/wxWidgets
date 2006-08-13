@@ -746,6 +746,35 @@ char *wxGetUserHome( const wxString &user )
 // network and user id routines
 // ----------------------------------------------------------------------------
 
+// private utility function which returns output of the given command, removing
+// the trailing newline
+static wxString wxGetCommandOutput(const wxString &cmd)
+{
+    FILE *f = popen(cmd.ToAscii(), "r");
+    if ( !f )
+    {
+        wxLogSysError(_T("Executing \"%s\" failed"), cmd.c_str());
+        return wxEmptyString;
+    }
+
+    wxString s;
+    char buf[256];
+    while ( !feof(f) )
+    {
+        if ( !fgets(buf, sizeof(buf), f) )
+            break;
+
+        s += wxString::FromAscii(buf);
+    }
+
+    pclose(f);
+
+    if ( !s.empty() && s.Last() == _T('\n') )
+        s.RemoveLast();
+
+    return s;
+}
+
 // retrieve either the hostname or FQDN depending on platform (caller must
 // check whether it's one or the other, this is why this function is for
 // private use only)
@@ -862,25 +891,54 @@ bool wxGetUserName(wxChar *buf, int sz)
     return false;
 }
 
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
+{
+    // get OS version
+    int major, minor;
+    wxString release = wxGetCommandOutput(wxT("uname -r"));
+    if ( !release.empty() && wxSscanf(release, "%d.%d", &major, &minor) != 2 )
+    {
+        // unrecognized uname string format
+        major =
+        minor = -1;
+    }
+
+    if ( verMaj )
+        *verMaj = major;
+    if ( verMin )
+        *verMin = minor;
+
+    // try to understand which OS are we running
+    wxString kernel = wxGetCommandOutput(wxT("uname -s"));
+    if ( kernel.empty() )
+        kernel = wxGetCommandOutput(wxT("uname -o"));
+
+    if ( kernel.empty() )
+        return wxOS_UNKNOWN;
+
+    return wxPlatformInfo::GetOperatingSystemId(kernel);
+}
+
+bool wxIsPlatform64Bit()
+{
+    wxString machine = wxGetCommandOutput(wxT("uname -m"));
+
+    // NOTE: these tests are not 100% reliable!
+    return machine.Contains(wxT("AMD64")) ||
+           machine.Contains(wxT("IA64")) ||
+           machine.Contains(wxT("x64")) ||
+           machine.Contains(wxT("X64")) ||
+           machine.Contains(wxT("alpha")) ||
+           machine.Contains(wxT("hppa64")) ||
+           machine.Contains(wxT("ppc64"));
+}
+
 // this function is in mac/utils.cpp for wxMac
 #ifndef __WXMAC__
 
 wxString wxGetOsDescription()
 {
-    FILE *f = popen("uname -s -r -m", "r");
-    if (f)
-    {
-        char buf[256];
-        size_t c = fread(buf, 1, sizeof(buf) - 1, f);
-        pclose(f);
-        // Trim newline from output.
-        if (c && buf[c - 1] == '\n')
-            --c;
-        buf[c] = '\0';
-        return wxString::FromAscii( buf );
-    }
-    wxFAIL_MSG( _T("uname failed") );
-    return wxEmptyString;
+    return wxGetCommandOutput(wxT("uname -s -r -m"));
 }
 
 #endif // !__WXMAC__

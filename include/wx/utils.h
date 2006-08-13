@@ -30,6 +30,9 @@ class WXDLLIMPEXP_BASE wxArrayInt;
 // wxLongLong
 #include "wx/longlong.h"
 
+// need for wxOperatingSystemId
+#include "wx/platinfo.h"
+
 #ifdef __WATCOMC__
     #include <direct.h>
 #elif defined(__X__)
@@ -93,8 +96,14 @@ WXDLLIMPEXP_BASE void wxBell();
 WXDLLIMPEXP_BASE wxString wxGetOsDescription();
 
 // Get OS version
-WXDLLIMPEXP_BASE int wxGetOsVersion(int *majorVsn = (int *) NULL,
-                               int *minorVsn = (int *) NULL);
+WXDLLIMPEXP_BASE wxOperatingSystemId wxGetOsVersion(int *majorVsn = (int *) NULL,
+                                                    int *minorVsn = (int *) NULL);
+
+// Get platform endianness
+WXDLLIMPEXP_BASE bool wxIsPlatformLittleEndian();
+
+// Get platform architecture
+WXDLLIMPEXP_BASE bool wxIsPlatform64Bit();
 
 // Return a string with the current date/time
 WXDLLIMPEXP_BASE wxString wxNow();

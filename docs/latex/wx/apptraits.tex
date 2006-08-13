@@ -36,12 +36,27 @@ None
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxAppTraits::GetToolkitInfo}\label{wxapptraitsgettoolkitinfo}
+\membersection{wxAppTraits::GetPlatformInfo}\label{wxapptraitsgetplatforminfo}
 
-\func{virtual wxToolkitInfo \&}{GetToolkitInfo}{\void}
+\func{virtual wxPlatformInfo \&}{GetPlatformInfo}{\void}
 
-Returns information about which toolkit is running. See \helpref{wxToolkitInfo}{wxtoolkitinfo}
-for more details.
+Returns information about which platform is the program running on.
+See \helpref{wxPlatformInfo}{wxplatforminfo} for more details.
+
+
+\membersection{wxAppTraits::GetToolkitVersion}\label{wxapptraitsgettoolkitversion}
+
+\func{virtual wxPortId}{GetToolkitVersion}{\param{int *}{major = NULL}, \param{int *}{minor = NULL}}
+
+Returns the wxWidgets port ID used by the running program and eventually
+fills the given pointers with the values of the major and minor digits
+of the native toolkit currently used.
+
+E.g. if your program is using wxGTK port this function will return wxPORT_GTK and
+put in given pointers the versions of the GTK library in use.
+
+See \helpref{wxPlatformInfo}{wxplatforminfo} for more details.
+
 
 
 \membersection{wxAppTraits::HasStderr}\label{wxapptraitshasstderr}

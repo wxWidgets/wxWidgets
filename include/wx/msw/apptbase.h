@@ -40,14 +40,6 @@ public:
     // process a message while waiting for a(nother) thread, should return
     // false if and only if we have to exit the application
     virtual bool DoMessageFromThreadWait() = 0;
-
-    // other miscellaneous helpers
-    // ---------------------------
-
-    // under MSW this function returns same version for both console and GUI
-    // applications so we can implement it directly in the base class and only
-    // override it wxGUIAppTraits to fill in toolkit information
-    virtual wxToolkitInfo& GetToolkitInfo();
 };
 
 #endif // _WX_MSW_APPTBASE_H_

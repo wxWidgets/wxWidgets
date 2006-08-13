@@ -61,23 +61,23 @@
 // ---------------------------------------------------------------------------
 
 // our OS version is the same in non GUI and GUI cases
-static int DoGetOSVersion(int *majorVsn, int *minorVsn)
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
-    long theSystem ;
+    long theSystem;
 
     // are there x-platform conventions ?
 
-    Gestalt(gestaltSystemVersion, &theSystem) ;
-    if (minorVsn != NULL) {
-        *minorVsn = (theSystem & 0xFF ) ;
-    }
-    if (majorVsn != NULL) {
-        *majorVsn = (theSystem >> 8 ) ;
-    }
-#ifdef __DARWIN__
-    return wxMAC_DARWIN;
+    Gestalt(gestaltSystemVersion, &theSystem);
+    if (minorVsn != NULL)
+        *minorVsn = (theSystem & 0xFF);
+
+    if (majorVsn != NULL)
+        *majorVsn = (theSystem >> 8);
+
+#if defined( __DARWIN__ )
+    return wxOS_MAC_OSX_DARWIN;
 #else
-    return wxMAC;
+    return wxOS_MAC_OS;
 #endif
 }
 
@@ -224,29 +224,16 @@ void wxBell()
     SysBeep(30);
 }
 
-wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
-{
-    static wxToolkitInfo info;
-    info.os = DoGetOSVersion(&info.versionMajor, &info.versionMinor);
-    info.name = _T("wxBase");
-    return info;
-}
-
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
 
-wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 {
-    static wxToolkitInfo info;
-    info.os = DoGetOSVersion(&info.versionMajor, &info.versionMinor);
-    info.shortName = _T("mac");
-    info.name = _T("wxMac");
-#ifdef __WXUNIVERSAL__
-    info.shortName << _T("univ");
-    info.name << _T("/wxUniversal");
-#endif
-    return info;
+    // We suppose that toolkit version is the same as OS version under Mac
+    wxGetOsVersion(verMaj, verMin);
+
+    return wxPORT_MAC;
 }
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)

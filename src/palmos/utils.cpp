@@ -215,12 +215,11 @@ wxString wxGetOsDescription()
     return strOS;
 }
 
-wxToolkitInfo& wxAppTraits::GetToolkitInfo()
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
-    static wxToolkitInfo info;
-    info.os = wxPALMOS;
-    info.name = _T("wxBase");
-    return info;
+    // TODO
+
+    return wxOS_UNKNOWN;
 }
 
 // ----------------------------------------------------------------------------

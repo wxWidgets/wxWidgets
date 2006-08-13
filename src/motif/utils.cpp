@@ -143,29 +143,17 @@ void wxBell()
 }
 #endif
 
-wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 {
-    static wxToolkitInfo info;
+    // XmVERSION and XmREVISION are defined in Xm/Xm.h
+    if ( verMaj )
+        *verMaj = XmVERSION;
+    if ( verMin )
+        *verMin = XmREVISION;
 
-    info.shortName = _T("motif");
-    info.name = _T("wxMotif");
-#ifdef __WXUNIVERSAL__
-    info.shortName << _T("univ");
-    info.name << _T("/wxUniversal");
-#endif
-    // FIXME TODO
-    // This code is WRONG!! Does NOT return the
-    // Motif version of the libs but the X protocol
-    // version!
-    Display *display = wxGlobalDisplay();
-    if (display)
-    {
-        info.versionMajor = ProtocolVersion (display);
-        info.versionMinor = ProtocolRevision (display);
-    }
-    info.os = wxMOTIF_X;
-    return info;
+    return wxPORT_MOTIF;
 }
+
 
 // ----------------------------------------------------------------------------
 // Reading and writing resources (eg WIN.INI, .Xdefaults)

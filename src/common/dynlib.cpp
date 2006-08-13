@@ -40,7 +40,7 @@
 
 #include "wx/filefn.h"
 #include "wx/filename.h"        // for SplitPath()
-#include "wx/apptrait.h"
+#include "wx/platinfo.h"
 
 #include "wx/arrimpl.cpp"
 
@@ -247,11 +247,7 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
     wxString suffix;
     if ( cat == wxDL_PLUGIN_GUI )
     {
-        wxAppTraits *traits = wxAppConsole::GetInstance() ?
-                              wxAppConsole::GetInstance()->GetTraits() : NULL;
-        wxCHECK_MSG( traits, wxEmptyString,
-                     _("can't query for GUI plugins name in console applications") );
-        suffix = traits->GetToolkitInfo().shortName;
+        suffix = wxPlatformInfo().GetPortIdShortName();
     }
 #if wxUSE_UNICODE
     suffix << _T('u');

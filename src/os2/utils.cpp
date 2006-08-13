@@ -326,26 +326,29 @@ void wxAppTraits::TerminateGui(unsigned long WXUNUSED(ulHab))
 {
 }
 
-wxToolkitInfo & wxConsoleAppTraits::GetToolkitInfo()
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
     static wxToolkitInfo  vInfo;
     ULONG                 ulSysInfo[QSV_MAX] = {0};
     APIRET                ulrc;
 
-    vInfo.name = _T("wxBase");
     ulrc = ::DosQuerySysInfo( 1L
                              ,QSV_MAX
                              ,(PVOID)ulSysInfo
                              ,sizeof(ULONG) * QSV_MAX
                             );
+
     if (ulrc == 0L)
     {
-        vInfo.versionMajor = ulSysInfo[QSV_VERSION_MAJOR] / 10;
-        vInfo.versionMinor = ulSysInfo[QSV_VERSION_MINOR];
+        if ( verMaj )
+            *verMaj = ulSysInfo[QSV_VERSION_MAJOR] / 10;
+        if ( verMin )
+            *verMin = ulSysInfo[QSV_VERSION_MINOR];
     }
-    vInfo.os = wxOS2_PM;
-    return vInfo;
+
+    return wxOS_OS2;
 }
+
 
 // ---------------------------------------------------------------------------
 const wxChar* wxGetHomeDir(

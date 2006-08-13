@@ -25,6 +25,8 @@
 #include "wx/file.h"
 #include "wx/app.h"
 #include "wx/log.h"
+#include "wx/apptrait.h"
+#include "wx/platinfo.h"
 
 // without this pragma, the stupid compiler precompiles #defines below so that
 // changing them doesn't "take place" later!
@@ -86,7 +88,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-    #define TEST_MODULE
+    #define TEST_INFO_FUNCTIONS
 #endif
 
 // some tests are interactive, define this to run them
@@ -1506,6 +1508,23 @@ static void TestOsInfo()
 
     wxPrintf(_T("Host name is %s (%s).\n"),
            wxGetHostName().c_str(), wxGetFullHostName().c_str());
+
+    wxPuts(wxEmptyString);
+}
+
+static void TestPlatformInfo()
+{
+    wxPuts(_T("*** Testing wxPlatformInfo functions ***\n"));
+
+    // get this platform
+    wxPlatformInfo plat;
+
+    wxPrintf(_T("Operating system family name is: %s\n"), plat.GetOperatingSystemFamilyName().c_str());
+    wxPrintf(_T("Operating system name is: %s\n"), plat.GetOperatingSystemIdName().c_str());
+    wxPrintf(_T("Port ID name is: %s\n"), plat.GetPortIdName().c_str());
+    wxPrintf(_T("Port ID short name is: %s\n"), plat.GetPortIdShortName().c_str());
+    wxPrintf(_T("Architecture is: %s\n"), plat.GetArchName().c_str());
+    wxPrintf(_T("Endianness is: %s\n"), plat.GetEndiannessName().c_str());
 
     wxPuts(wxEmptyString);
 }
@@ -4332,13 +4351,12 @@ int main(int argc, char **argv)
 #endif // TEST_MIME
 
 #ifdef TEST_INFO_FUNCTIONS
-    #if TEST_ALL
-        TestOsInfo();
-        TestUserInfo();
+    TestOsInfo();
+    TestPlatformInfo();
+    TestUserInfo();
 
-        #if TEST_INTERACTIVE
-            TestDiskInfo();
-        #endif
+    #if TEST_INTERACTIVE
+        TestDiskInfo();
     #endif
 #endif // TEST_INFO_FUNCTIONS
 

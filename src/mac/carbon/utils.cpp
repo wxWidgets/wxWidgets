@@ -72,7 +72,7 @@
 // ---------------------------------------------------------------------------
 
 // our OS version is the same in non GUI and GUI cases
-static int DoGetOSVersion(int *majorVsn, int *minorVsn)
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
     long theSystem;
 
@@ -85,12 +85,13 @@ static int DoGetOSVersion(int *majorVsn, int *minorVsn)
     if (majorVsn != NULL)
         *majorVsn = (theSystem >> 8);
 
-#ifdef __DARWIN__
-    return wxMAC_DARWIN;
+#if defined( __DARWIN__ )
+    return wxOS_MAC_OSX_DARWIN;
 #else
-    return wxMAC;
+    return wxOS_MAC_OS;
 #endif
 }
+
 
 
 #if wxUSE_BASE
@@ -370,34 +371,17 @@ void wxBell()
     SysBeep(30);
 }
 
-wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
-{
-    static wxToolkitInfo info;
-
-    info.os = DoGetOSVersion(&info.versionMajor, &info.versionMinor);
-    info.name = _T("wxBase");
-
-    return info;
-}
 
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
 
-wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 {
-    static wxToolkitInfo info;
+    // We suppose that toolkit version is the same as OS version under Mac
+    wxGetOsVersion(verMaj, verMin);
 
-    info.os = DoGetOSVersion(&info.versionMajor, &info.versionMinor);
-    info.shortName = _T("mac");
-    info.name = _T("wxMac");
-
-#ifdef __WXUNIVERSAL__
-    info.shortName << _T("univ");
-    info.name << _T("/wxUniversal");
-#endif
-
-    return info;
+    return wxPORT_MAC;
 }
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
@@ -1151,7 +1135,7 @@ void wxMacControl::SetRect( Rect *r )
         HIViewSetFrame ( m_controlRef , &hir );
         // eventuall we might have to do a SetVisibility( false , true );
         // before and a SetVisibility( true , true ); after
- }
+}
 
 void wxMacControl::GetRect( Rect *r )
 {

@@ -1162,61 +1162,49 @@ wxString wxGetOsDescription()
     return str;
 }
 
-wxToolkitInfo& wxAppTraits::GetToolkitInfo()
+// taken from http://blogs.msdn.com/oldnewthing/archive/2005/02/01/364563.aspx
+bool wxIsPlatform64Bit()
 {
-    // cache the version info, it's not going to change
-    //
-    // NB: this is MT-safe, we may use these static vars from different threads
-    //     but as they always have the same value it doesn't matter
-    static int s_ver = -1,
-               s_major = -1,
-               s_minor = -1;
-
-    if ( s_ver == -1 )
-    {
-        OSVERSIONINFO info;
-        wxZeroMemory(info);
-
-        s_ver = wxWINDOWS;
-        info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-        if ( ::GetVersionEx(&info) )
-        {
-            s_major = info.dwMajorVersion;
-            s_minor = info.dwMinorVersion;
-
-#ifdef __SMARTPHONE__
-            s_ver = wxWINDOWS_SMARTPHONE;
-#elif defined(__POCKETPC__)
-            s_ver = wxWINDOWS_POCKETPC;
+#if defined(_WIN64)
+    return true;  // 64-bit programs run only on Win64
+#elif defined(_WIN32)
+    // 32-bit programs run on both 32-bit and 64-bit Windows
+    // so must sniff
+    BOOL f64 = FALSE;
+    return IsWow64Process(GetCurrentProcess(), &f64) && f64;
 #else
-            switch ( info.dwPlatformId )
-            {
-                case VER_PLATFORM_WIN32s:
-                    s_ver = wxWIN32S;
-                    break;
-
-                case VER_PLATFORM_WIN32_WINDOWS:
-                    s_ver = wxWIN95;
-                    break;
-
-                case VER_PLATFORM_WIN32_NT:
-                    s_ver = wxWINDOWS_NT;
-                    break;
-#ifdef __WXWINCE__
-                case VER_PLATFORM_WIN32_CE:
-                    s_ver = wxWINDOWS_CE;
+    return false; // Win64 does not support Win16
 #endif
-            }
-#endif
-        }
+}
+
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
+{
+    OSVERSIONINFO info;
+    wxZeroMemory(info);
+
+    info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    if ( ::GetVersionEx(&info) )
+    {
+        if (verMaj) *verMaj = info.dwMajorVersion;
+        if (verMin) *verMin = info.dwMinorVersion;
     }
 
-    static wxToolkitInfo info;
-    info.versionMajor = s_major;
-    info.versionMinor = s_minor;
-    info.os = s_ver;
-    info.name = _T("wxBase");
-    return info;
+#if defined(__WXHANDHELD__) || defined( __WXWINCE__ )
+    return wxOS_WINDOWS_WINCE;
+#elif defined( __WXMICROWIN__ )
+    return wxOS_WINDOWS_MICRO;
+#else
+    switch ( info.dwPlatformId )
+    {
+    case VER_PLATFORM_WIN32_NT:
+        return wxOS_WINDOWS_NT;
+
+    case VER_PLATFORM_WIN32_WINDOWS:
+        return wxOS_WINDOWS_9X;
+    }
+
+    return wxOS_UNKNOWN;
+#endif
 }
 
 wxWinVersion wxGetWinVersion()

@@ -113,20 +113,10 @@ bool wxGUIAppTraits::DoMessageFromThreadWait()
     return false;
 }
 
-wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
 {
-    static wxToolkitInfo info;
-    wxToolkitInfo& baseInfo = wxAppTraits::GetToolkitInfo();
-    info.versionMajor = baseInfo.versionMajor;
-    info.versionMinor = baseInfo.versionMinor;
-    info.os = baseInfo.os;
-    info.shortName = _T("palmos");
-    info.name = _T("wxPalmOS");
-#ifdef __WXUNIVERSAL__
-    info.shortName << _T("univ");
-    info.name << _T("/wxUniversal");
-#endif
-    return info;
+    // TODO: how to get PalmOS GUI system version ?
+    return wxPORT_PALMOS;
 }
 
 // ===========================================================================

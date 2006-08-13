@@ -51,6 +51,7 @@ Major changes in 2.7 release
 All:
 
 - Added wxDir::FindFirst() (Francesco Montorsi)
+- Added wxPlatformInfo class (Francesco Montorsi)
 
 All (GUI):
 

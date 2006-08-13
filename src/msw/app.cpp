@@ -226,20 +226,27 @@ bool wxGUIAppTraits::DoMessageFromThreadWait()
     return evtLoop->Dispatch();
 }
 
-wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
 {
-    static wxToolkitInfo info;
-    wxToolkitInfo& baseInfo = wxAppTraits::GetToolkitInfo();
-    info.versionMajor = baseInfo.versionMajor;
-    info.versionMinor = baseInfo.versionMinor;
-    info.os = baseInfo.os;
-    info.shortName = _T("msw");
-    info.name = _T("wxMSW");
-#ifdef __WXUNIVERSAL__
-    info.shortName << _T("univ");
-    info.name << _T("/wxUniversal");
+    OSVERSIONINFO info;
+    wxZeroMemory(info);
+
+    // on Windows, the toolkit version is the same of the OS version
+    // as Windows integrates the OS kernel with the GUI toolkit.
+    info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    if ( ::GetVersionEx(&info) )
+    {
+        if ( majVer )
+            *majVer = info.dwMajorVersion;
+        if ( minVer )
+            *minVer = info.dwMinorVersion;
+    }
+
+#if defined(__WXHANDHELD__) || defined(__WXWINCE__)
+    return wxPORT_WINCE;
+#else
+    return wxPORT_MSW;
 #endif
-    return info;
 }
 
 // ===========================================================================

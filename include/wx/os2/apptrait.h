@@ -19,7 +19,6 @@
 class WXDLLIMPEXP_BASE wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
-    virtual wxToolkitInfo& GetToolkitInfo();
 };
 
 #if wxUSE_GUI
@@ -27,7 +26,7 @@ public:
 class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
-    virtual wxToolkitInfo& GetToolkitInfo();
+    virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
 
     // wxThread helpers
     // ----------------

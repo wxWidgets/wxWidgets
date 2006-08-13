@@ -163,21 +163,6 @@ int wxDisplayDepth()
     return gdk_drawable_get_visual( wxGetRootWindow()->window )->depth;
 }
 
-wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
-{
-    static wxToolkitInfo info;
-    info.shortName = _T("gtk2");
-    info.name = _T("wxGTK");
-#ifdef __WXUNIVERSAL__
-    info.shortName << _T("univ");
-    info.name << _T("/wxUniversal");
-#endif
-    info.versionMajor = gtk_major_version;
-    info.versionMinor = gtk_minor_version;
-    info.os = wxGTK;
-    return info;
-}
-
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
     return wxGenericFindWindowAtPoint(pt);
@@ -258,4 +243,20 @@ int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
                             (gpointer)proc_data);
 
     return tag;
+}
+
+
+
+// ----------------------------------------------------------------------------
+// wxPlatformInfo-related
+// ----------------------------------------------------------------------------
+
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
+{
+    if ( verMaj )
+        *verMaj = gtk_major_version;
+    if ( verMin )
+        *verMin = gtk_minor_version;
+
+    return wxPORT_GTK;
 }

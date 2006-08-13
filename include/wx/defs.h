@@ -665,68 +665,6 @@ typedef int wxWindowID;
 #endif
 
 /*  ---------------------------------------------------------------------------- */
-/*  OS mnemonics -- Identify the running OS (useful for Windows) */
-/*  ---------------------------------------------------------------------------- */
-
-/*  Not all platforms are currently available or supported */
-enum
-{
-    wxUNKNOWN_PLATFORM,
-    wxCURSES,                 /*  Text-only CURSES */
-    wxXVIEW_X,                /*  Sun's XView OpenLOOK toolkit */
-    wxMOTIF_X,                /*  OSF Motif 1.x.x */
-    wxCOSE_X,                 /*  OSF Common Desktop Environment */
-    wxNEXTSTEP,               /*  NeXTStep */
-    wxMAC,                    /*  Apple Mac OS 8/9/X with Mac paths */
-    wxMAC_DARWIN,             /*  Apple Mac OS X with Unix paths */
-    wxBEOS,                   /*  BeOS */
-    wxGTK,                    /*  GTK on X */
-    wxGTK_WIN32,              /*  GTK on Win32 */
-    wxGTK_OS2,                /*  GTK on OS/2 */
-    wxGTK_BEOS,               /*  GTK on BeOS */
-    wxGEOS,                   /*  GEOS */
-    wxOS2_PM,                 /*  OS/2 Workplace */
-    wxWINDOWS,                /*  Windows or WfW */
-    wxMICROWINDOWS,           /*  MicroWindows */
-    wxPENWINDOWS,             /*  Windows for Pen Computing */
-    wxWINDOWS_NT,             /*  Windows NT */
-    wxWIN32S,                 /*  Windows 32S API */
-    wxWIN95,                  /*  Windows 95 */
-    wxWIN386,                 /*  Watcom 32-bit supervisor modus */
-    wxWINDOWS_CE,             /*  Windows CE (generic) */
-    wxWINDOWS_POCKETPC,       /*  Windows CE PocketPC */
-    wxWINDOWS_SMARTPHONE,     /*  Windows CE Smartphone */
-    wxMGL_UNIX,               /*  MGL with direct hardware access */
-    wxMGL_X,                  /*  MGL on X */
-    wxMGL_WIN32,              /*  MGL on Win32 */
-    wxMGL_OS2,                /*  MGL on OS/2 */
-    wxMGL_DOS,                /*  MGL on MS-DOS */
-    wxWINDOWS_OS2,            /*  Native OS/2 PM */
-    wxUNIX,                   /*  wxBase under Unix */
-    wxX11,                    /*  Plain X11 and Universal widgets */
-    wxPALMOS,                 /*  PalmOS */
-    wxDOS                     /*  wxBase under MS-DOS */
-};
-
-/* Friendlier platform names */
-enum
-{
-    wxMotif = wxMOTIF_X,
-    wxMac = wxMAC,
-    wxMSW = wxWINDOWS,
-    wxWinCE = wxWINDOWS_CE,
-    wxWinPocketPC = wxWINDOWS_POCKETPC,
-    wxWinSmartPhone = wxWINDOWS_SMARTPHONE,
-    wxWin95= wxWIN95,
-    wxUnix = wxUNIX,                   /*  wxBase under Unix */
-    wxPalmOS = wxPALMOS,               /*  PalmOS */
-    wxOS2 = wxOS2_PM,
-
-    wxMGL = 100,
-    wxCocoa
-};
-
-/*  ---------------------------------------------------------------------------- */
 /*  standard wxWidgets types */
 /*  ---------------------------------------------------------------------------- */
 

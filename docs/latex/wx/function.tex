@@ -173,6 +173,8 @@ the corresponding topic.
 \helpref{wxIsEmpty}{wxisempty}\\
 \helpref{wxIsMainThread}{wxismainthread}\\
 \helpref{wxIsNaN}{wxisnan}\\
+\helpref{wxIsPlatformLittleEndian}{wxisplatformlittleendian}\\
+\helpref{wxIsPlatform64Bit}{wxisplatform64bit}\\
 \helpref{wxIsWild}{wxiswild}\\
 \helpref{wxKill}{wxkill}\\
 \helpref{wxLaunchDefaultBrowser}{wxlaunchdefaultbrowser}\\
@@ -1404,32 +1406,49 @@ user-readable form. For example, this function may return strings like
 
 \membersection{::wxGetOsVersion}\label{wxgetosversion}
 
-\func{int}{wxGetOsVersion}{\param{int *}{major = NULL}, \param{int *}{minor = NULL}}
+\func{wxOperatingSystemId}{wxGetOsVersion}{\param{int *}{major = NULL}, \param{int *}{minor = NULL}}
 
-Gets operating system version information.
-
-\begin{twocollist}\itemsep=0pt
-\twocolitemruled{Platform}{Return types}
-\twocolitem{Mac OS}{Return value is wxMAC when compiled with CodeWarrior under Mac OS 8.x/9.x and Mac OS X, wxMAC\_DARWIN when compiled with the Apple Developer Tools under Mac OS X.
-
-Both {\it major} and {\it minor} have to be looked at as hexadecimal numbers. So System 10.2.4 returns 0x10, resp 16 for {\it major} and 0x24, resp 36 for {\it minor}. }
-\twocolitem{GTK}{Return value is wxGTK, For GTK 1.0, {\it major} is 1, {\it minor} is 0. }
-\twocolitem{Motif}{Return value is wxMOTIF\_X, {\it major} is X version, {\it minor} is X revision.}
-\twocolitem{OS/2}{Return value is wxOS2\_PM.}
-\twocolitem{Windows 3.1}{Return value is wxWINDOWS, {\it major} is 3, {\it minor} is 1.}
-\twocolitem{Windows NT/2000}{Return value is wxWINDOWS\_NT, version is returned in {\it major} and {\it minor}.}
-\twocolitem{Windows 98}{Return value is wxWIN95, {\it major} is 4, {\it minor} is 1 or greater.}
-\twocolitem{Windows 95}{Return value is wxWIN95, {\it major} is 4, {\it minor} is 0.}
-\twocolitem{Win32s (Windows 3.1)}{Return value is wxWIN32S, {\it major} is 3, {\it minor} is 1.}
-\twocolitem{Windows PocketPC}{Return value is wxWINDOWS\_POCKETPC, version is returned in {\it major} and {\it minor}.}
-\twocolitem{Windows Smartphone}{Return value is wxWINDOWS\_SMARTPHONE, version is returned in {\it major} and {\it minor}.}
-\twocolitem{Windows CE (non-specific)}{Return value is wxWINDOWS\_CE, version is returned in {\it major} and {\it minor}.}
-\twocolitem{Watcom C++ 386 supervisor mode (Windows 3.1)}{Return value is wxWIN386, {\it major} is 3, {\it minor} is 1.}
-\end{twocollist}
+Gets the version and the operating system ID for currently running OS.
+See \helpref{wxPlatformInfo}{wxplatforminfo} for more details about wxOperatingSystemId.
 
 \wxheading{See also}
 
-\helpref{::wxGetOsDescription}{wxgetosdescription}
+\helpref{::wxGetOsDescription}{wxgetosdescription},
+\helpref{wxPlatformInfo}{wxplatforminfo}
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+
+\membersection{::wxIsPlatformLittleEndian}\label{wxisplatformlittleendian}
+
+\func{bool}{wxIsPlatformLittleEndian}{\void}
+
+Returns \true if the current platform is little endian (instead of big endian).
+The check is performed at run-time.
+
+\wxheading{See also}
+
+\helpref{Byte order macros}{byteordermacros}
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+
+\membersection{::wxIsPlatform64Bit}\label{wxisplatform64bit}
+
+\func{bool}{wxIsPlatform64Bit}{\void}
+
+Returns \true if the operating system the program is running under is 64 bit.
+The check is performed at run-time and may differ from the value available at
+compile-time (at compile-time you can just check if {\tt sizeof(void*)==8})
+since the program could be running in emulation mode or in a mixed 32/64 bit system
+(bi-architecture operating system).
+
+Very important: this function is not 100\% reliable on some systems given the fact
+that there isn't always a standard way to do a reliable check on the OS architecture.
 
 \wxheading{Include files}
 
@@ -3233,8 +3252,8 @@ used only in the menu items and are separated from the main text by the
 \texttt{wxStrip\_Mnemonics} or \texttt{wxStrip\_Accel} to strip only the former
 or the latter part, respectively.
 
-Notice that in most cases 
-\helpref{wxMenuItem::GetLabelFromText}{wxmenuitemgetlabelfromtext} or 
+Notice that in most cases
+\helpref{wxMenuItem::GetLabelFromText}{wxmenuitemgetlabelfromtext} or
 \helpref{wxControl::GetLabelText}{wxcontrolgetlabeltext} can be used instead.
 
 \wxheading{Include files}
