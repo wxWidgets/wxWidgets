@@ -86,78 +86,81 @@ bool wxMask::Create( const wxBitmap& bitmap,
         m_bitmap = (GdkBitmap*) NULL;
     }
 
-    wxImage image = bitmap.ConvertToImage();
-    if (!image.Ok()) return false;
-
-    m_bitmap = gdk_pixmap_new( wxGetRootWindow()->window, image.GetWidth(), image.GetHeight(), 1 );
+    const int w = bitmap.GetWidth();
+    const int h = bitmap.GetHeight();
+    m_bitmap = gdk_pixmap_new(wxGetRootWindow()->window, w, h, 1);
     GdkGC *gc = gdk_gc_new( m_bitmap );
 
     GdkColor color;
     color.pixel = 1;
     gdk_gc_set_foreground( gc, &color );
-    gdk_draw_rectangle( m_bitmap, gc, TRUE, 0, 0, image.GetWidth(), image.GetHeight() );
-
-    unsigned char *data = image.GetData();
-    int index = 0;
+    gdk_draw_rectangle(m_bitmap, gc, true, 0, 0, w, h);
 
     unsigned char red = colour.Red();
     unsigned char green = colour.Green();
     unsigned char blue = colour.Blue();
+    GdkImage* image = NULL;
+    wxByte* data = NULL;
+    guint32 mask_pixel = 1;
+    int rowpadding = 0;
+    int data_inc = 0;
 
-    GdkVisual *visual = wxTheApp->GetGdkVisual();
-
-    int bpp = visual->depth;
-    if ((bpp == 16) && (visual->red_mask != 0xf800))
-        bpp = 15;
-    if (bpp == 15)
+    if (bitmap.HasPixbuf())
     {
-        red = red & 0xf8;
-        green = green & 0xf8;
-        blue = blue & 0xf8;
+        GdkPixbuf* pixbuf = bitmap.GetPixbuf();
+        data = gdk_pixbuf_get_pixels(pixbuf);
+        data_inc = 3 + int(gdk_pixbuf_get_has_alpha(pixbuf) != 0);
+        rowpadding = gdk_pixbuf_get_rowstride(pixbuf) - data_inc * w;
     }
-    else if (bpp == 16)
+    else
     {
-        red = red & 0xf8;
-        green = green & 0xfc;
-        blue = blue & 0xf8;
-    }
-    else if (bpp == 12)
-    {
-        red = red & 0xf0;
-        green = green & 0xf0;
-        blue = blue & 0xf0;
+        image = gdk_drawable_get_image(bitmap.GetPixmap(), 0, 0, w, h);
+        GdkColormap* colormap = gdk_image_get_colormap(image);
+        if (colormap != NULL)
+        {
+            wxColor c(colour);
+            c.CalcPixel(colormap);
+            mask_pixel = c.GetPixel();
+        }
     }
 
     color.pixel = 0;
     gdk_gc_set_foreground( gc, &color );
 
-    for (int j = 0; j < image.GetHeight(); j++)
+    for (int y = 0; y < h; y++)
     {
         int start_x = -1;
-        int i;
-        for (i = 0; i < image.GetWidth(); i++)
+        int x;
+        for (x = 0; x < w; x++)
         {
-            if ((data[index] == red) &&
-                (data[index+1] == green) &&
-                (data[index+2] == blue))
+            bool isMask;
+            if (image != NULL)
+                isMask = gdk_image_get_pixel(image, x, y) == mask_pixel;
+            else
+            {
+                isMask = data[0] == red && data[1] == green && data[2] == blue;
+                data += data_inc;
+            }
+            if (isMask)
             {
                 if (start_x == -1)
-                    start_x = i;
+                    start_x = x;
             }
             else
             {
                 if (start_x != -1)
                 {
-                    gdk_draw_line( m_bitmap, gc, start_x, j, i-1, j );
+                    gdk_draw_line(m_bitmap, gc, start_x, y, x - 1, y);
                     start_x = -1;
                 }
             }
-            index += 3;
         }
         if (start_x != -1)
-            gdk_draw_line( m_bitmap, gc, start_x, j, i, j );
+            gdk_draw_line(m_bitmap, gc, start_x, y, x, y);
+        data += rowpadding;
     }
-
+    if (image != NULL)
+        g_object_unref(image);
     g_object_unref (gc);
 
     return true;
