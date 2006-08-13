@@ -570,7 +570,7 @@ void wxDatePickerCtrlGeneric::DoMoveWindow(int x, int y, int w, int h)
     wxControl::DoMoveWindow(x, y, w, h);
 
     if (m_dropped)
-        DropDown(true);
+        DropDown(false);
 }
 
 wxSize wxDatePickerCtrlGeneric::DoGetBestSize() const
