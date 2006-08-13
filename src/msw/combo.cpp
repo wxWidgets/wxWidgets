@@ -531,25 +531,34 @@ wxCoord wxComboCtrl::GetNativeTextIndent() const
 
 bool wxComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
 {
-    int keycode = event.GetKeyCode();
-    bool isPopupShown = IsPopupShown();
+    const bool isPopupShown = IsPopupShown();
 
-    if ( isPopupShown && keycode == WXK_ESCAPE )
-        return true;
-
-    // On XP or with writable combo in Classic,
-    // Alt is required, in addition to up/down, to
-    // show the popup.
-    if ( keycode == WXK_DOWN || keycode == WXK_UP )
+    switch ( event.GetKeyCode() )
     {
-        if ( event.AltDown() ||
-                ( !isPopupShown &&
-                  HasFlag(wxCB_READONLY) &&
-                  !wxUxThemeEngine::GetIfActive()
-                ) )
-        {
-            return true;
-        }
+        case WXK_F4:
+            // F4 toggles the popup in the native comboboxes, so emulate them
+            if ( !event.AltDown() )
+                return true;
+            break;
+
+        case WXK_ESCAPE:
+            if ( isPopupShown )
+                return true;
+            break;
+
+        case WXK_DOWN:
+        case WXK_UP:
+            // On XP or with writable combo in Classic, arrows don't open the
+            // popup but Alt-arrow does
+            if ( event.AltDown() ||
+                    ( !isPopupShown &&
+                      HasFlag(wxCB_READONLY) &&
+                      !wxUxThemeEngine::GetIfActive()
+                    ) )
+            {
+                return true;
+            }
+            break;
     }
 
     return false;
