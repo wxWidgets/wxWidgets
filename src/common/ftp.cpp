@@ -685,7 +685,7 @@ wxSocketBase *wxFTP::GetActivePort()
     // addresses because the addrNew has an IP of "0.0.0.0", so we need the
     // value in addrLocal
     wxString port = GetPortCmdArgument(addrLocal, addrNew);
-    if ( !DoSimpleCommand(_T("PORT "), port) )
+    if ( !DoSimpleCommand(_T("PORT"), port) )
     {
         m_lastError = wxPROTO_PROTERR;
         delete sockSrv;
@@ -1005,4 +1005,3 @@ int wxFTP::GetFileSize(const wxString& fileName)
 }
 
 #endif // wxUSE_PROTOCOL_FTP
-
