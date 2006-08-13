@@ -359,7 +359,7 @@ protected:
 
 size_t wxHTTPStream::OnSysRead(void *buffer, size_t bufsize)
 {
-    if (m_httpsize > 0 && m_read_bytes >= m_httpsize)
+    if (m_httpsize >= 0 && m_read_bytes >= m_httpsize)
     {
         m_lasterror = wxSTREAM_EOF;
         return 0;
