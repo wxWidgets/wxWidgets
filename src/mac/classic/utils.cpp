@@ -56,23 +56,20 @@
     #include <wtime.h>
 #endif
 
-// ---------------------------------------------------------------------------
-// code used in both base and GUI compilation
-// ---------------------------------------------------------------------------
+#if wxUSE_BASE
 
 // our OS version is the same in non GUI and GUI cases
-wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
+wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
     long theSystem;
-
-    // are there x-platform conventions ?
-
     Gestalt(gestaltSystemVersion, &theSystem);
-    if (minorVsn != NULL)
+
+    if ( majorVsn != NULL )
+        *majorVsn = (theSystem >> 8);
+
+    if ( minorVsn != NULL )
         *minorVsn = (theSystem & 0xFF);
 
-    if (majorVsn != NULL)
-        *majorVsn = (theSystem >> 8);
 
 #if defined( __DARWIN__ )
     return wxOS_MAC_OSX_DARWIN;
@@ -80,8 +77,6 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
     return wxOS_MAC_OS;
 #endif
 }
-
-#if wxUSE_BASE
 
 #ifndef __DARWIN__
 // defined in unix/utilsunx.cpp for Mac OS X

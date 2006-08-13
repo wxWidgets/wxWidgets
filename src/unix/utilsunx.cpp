@@ -891,6 +891,23 @@ bool wxGetUserName(wxChar *buf, int sz)
     return false;
 }
 
+bool wxIsPlatform64Bit()
+{
+    wxString machine = wxGetCommandOutput(wxT("uname -m"));
+
+    // NOTE: these tests are not 100% reliable!
+    return machine.Contains(wxT("AMD64")) ||
+           machine.Contains(wxT("IA64")) ||
+           machine.Contains(wxT("x64")) ||
+           machine.Contains(wxT("X64")) ||
+           machine.Contains(wxT("alpha")) ||
+           machine.Contains(wxT("hppa64")) ||
+           machine.Contains(wxT("ppc64"));
+}
+
+// these functions are in mac/utils.cpp for wxMac
+#ifndef __WXMAC__
+
 wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
     // get OS version
@@ -918,23 +935,6 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 
     return wxPlatformInfo::GetOperatingSystemId(kernel);
 }
-
-bool wxIsPlatform64Bit()
-{
-    wxString machine = wxGetCommandOutput(wxT("uname -m"));
-
-    // NOTE: these tests are not 100% reliable!
-    return machine.Contains(wxT("AMD64")) ||
-           machine.Contains(wxT("IA64")) ||
-           machine.Contains(wxT("x64")) ||
-           machine.Contains(wxT("X64")) ||
-           machine.Contains(wxT("alpha")) ||
-           machine.Contains(wxT("hppa64")) ||
-           machine.Contains(wxT("ppc64"));
-}
-
-// this function is in mac/utils.cpp for wxMac
-#ifndef __WXMAC__
 
 wxString wxGetOsDescription()
 {
