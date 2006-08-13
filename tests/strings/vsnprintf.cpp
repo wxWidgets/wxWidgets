@@ -25,13 +25,50 @@
 #endif // WX_PRECOMP
 
 
-// if 1 then instead of the hard-coded expected strings, the obtained results will be
-// compared to the output of the system's vsnprintf() implementation.
-// NOTE: this requires a vsnprintf() implementation which supports positional parameters.
-#define USE_LIBC            0
 
-// this makes it possible to write all tests without repeating a lot of times wxT() macro
-#define CMP(x, y, z)        Compare(wxT(x), wxT(y), z)
+#define MAX_TEST_LEN        1024
+
+
+// temporary buffers
+static wxChar buf[MAX_TEST_LEN], buf2[MAX_TEST_LEN];
+
+
+// these macros makes it possible to write all tests without repeating a lot of times wxT() macro
+
+#define CMP5(expected, x, y, z, w)                  \
+    wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y, z, w); \
+    snprintf(buf2, MAX_TEST_LEN, wxT(x), y, z, w);  \
+                                                    \
+    CPPUNIT_ASSERT_STR_EQUAL( buf2, buf );          \
+    CPPUNIT_ASSERT_STR_EQUAL( expected, buf );
+
+#define CMP4(expected, x, y, z)                     \
+    wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y, z);    \
+    snprintf(buf2, MAX_TEST_LEN, wxT(x), y, z);     \
+                                                    \
+    CPPUNIT_ASSERT_STR_EQUAL( buf2, buf );          \
+    CPPUNIT_ASSERT_STR_EQUAL( expected, buf );
+
+#define CMP3(expected, x, y)                        \
+    wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y);       \
+    snprintf(buf2, MAX_TEST_LEN, wxT(x), y);        \
+                                                    \
+    CPPUNIT_ASSERT_STR_EQUAL( buf2, buf );          \
+    CPPUNIT_ASSERT_STR_EQUAL( expected, buf );
+
+#define CMP2(expected, x)                           \
+    wxSnprintf(buf, MAX_TEST_LEN, wxT(x));          \
+    snprintf(buf2, MAX_TEST_LEN, wxT(x));           \
+                                                    \
+    CPPUNIT_ASSERT_STR_EQUAL( buf2, buf );          \
+    CPPUNIT_ASSERT_STR_EQUAL( expected, buf );
+
+#define CMPTOSIZE(buffer, size, fmt, x, y, z, w)                        \
+    wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt), x, y, z, w);                \
+    snprintf(buf2, MAX_TEST_LEN, wxT(fmt), x, y, z, w);                 \
+                                                                        \
+    CPPUNIT_ASSERT_EQUAL( wxString(buf2, size), wxString(buf, size) );
+
 
 // ----------------------------------------------------------------------------
 // test class
@@ -48,6 +85,7 @@ private:
         CPPUNIT_TEST( F );
         CPPUNIT_TEST( G );
         CPPUNIT_TEST( S );
+        CPPUNIT_TEST( Asterisk );
 
         CPPUNIT_TEST( BigToSmallBuffer );
     CPPUNIT_TEST_SUITE_END();
@@ -56,13 +94,10 @@ private:
     void F();
     void G();
     void S();
+    void Asterisk();
 
     void BigToSmallBuffer();
-
-    // some helpers
     void Misc(wxChar *buffer, int size);
-    void Compare(const wxChar *expected, const wxChar *format, ...) const;
-    void CompareV(wxChar *buf, wxChar *buf2, size_t len, const wxChar *format, va_list argptr) const;
 
     DECLARE_NO_COPY_CLASS(VsnprintfTestCase)
 };
@@ -75,42 +110,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( VsnprintfTestCase, "VsnprintfTestCase" );
 
 VsnprintfTestCase::VsnprintfTestCase()
 {
-}
-
-void VsnprintfTestCase::CompareV(wxChar *buf, wxChar *buf2, size_t len,
-                                 const wxChar *format, va_list argptr) const
-{
-#if USE_LIBC
-    va_list argptr2;
-    wxVaCopy(argptr2, argptr);
-#endif
-
-    wxVsnprintf( buf, len, format, argptr );
-    va_end(argptr);
-
-#if USE_LIBC
-    vsnprintf( buf2, len, format, argptr2 );       // use system's implementation
-    va_end(argptr2);
-#else
-    wxUnusedVar(buf2);
-#endif
-}
-
-void VsnprintfTestCase::Compare(const wxChar *expected, const wxChar *format, ...) const
-{
-    static wxChar buf[1024],
-                  buf2[1024];
-
-    va_list argptr;
-    va_start( argptr, format );
-    CompareV( buf, buf2, 1024, format, argptr );
-    va_end(argptr);
-
-#if USE_LIBC
-    CPPUNIT_ASSERT_STR_EQUAL( buf2, buf );
-#else
-    CPPUNIT_ASSERT_STR_EQUAL( expected, buf );
-#endif
 }
 
 void VsnprintfTestCase::E()
@@ -126,110 +125,117 @@ void VsnprintfTestCase::E()
     //       printf("%e",2.342E+02);
     //     -> under MSVC7.1 prints:      2.342000e+002
     //     -> under GNU libc 2.4 prints: 2.342000e+02
-    CMP("2.342000e+112", "%e",2.342E+112);
-    CMP("-2.3420e-112", "%10.4e",-2.342E-112);
-    CMP("-2.3420e-112", "%11.4e",-2.342E-112);
-    CMP("   -2.3420e-112", "%15.4e",-2.342E-112);
+    CMP3("2.342000e+112", "%e",2.342E+112);
+    CMP3("-2.3420e-112", "%10.4e",-2.342E-112);
+    CMP3("-2.3420e-112", "%11.4e",-2.342E-112);
+    CMP3("   -2.3420e-112", "%15.4e",-2.342E-112);
 
-    CMP("-0.02342", "%G",-2.342E-02);
-    CMP("3.1415E-116", "%G",3.1415e-116);
-    CMP("0003.141500e+103", "%016e", 3141.5e100);
-    CMP("   3.141500e+103", "%16e", 3141.5e100);
-    CMP("3.141500e+103   ", "%-16e", 3141.5e100);
-    CMP("3.142e+103", "%010.3e", 3141.5e100);
+    CMP3("-0.02342", "%G",-2.342E-02);
+    CMP3("3.1415E-116", "%G",3.1415e-116);
+    CMP3("0003.141500e+103", "%016e", 3141.5e100);
+    CMP3("   3.141500e+103", "%16e", 3141.5e100);
+    CMP3("3.141500e+103   ", "%-16e", 3141.5e100);
+    CMP3("3.142e+103", "%010.3e", 3141.5e100);
 }
 
 void VsnprintfTestCase::F()
 {
-    CMP("3.300000", "%5f", 3.3);
-    CMP("3.000000", "%5f", 3.0);
-    CMP("0.000100", "%5f", .999999E-4);
-    CMP("0.000990", "%5f", .99E-3);
-    CMP("3333.000000", "%5f", 3333.0);
+    CMP3("3.300000", "%5f", 3.3);
+    CMP3("3.000000", "%5f", 3.0);
+    CMP3("0.000100", "%5f", .999999E-4);
+    CMP3("0.000990", "%5f", .99E-3);
+    CMP3("3333.000000", "%5f", 3333.0);
 }
 
 void VsnprintfTestCase::G()
 {
     // NOTE: the same about E() testcase applies here...
 
-    CMP("  3.3", "%5g", 3.3);
-    CMP("    3", "%5g", 3.0);
-    CMP("9.99999e-115", "%5g", .999999E-114);
-    CMP("0.00099", "%5g", .99E-3);
-    CMP(" 3333", "%5g", 3333.0);
-    CMP(" 0.01", "%5g", 0.01);
+    CMP3("  3.3", "%5g", 3.3);
+    CMP3("    3", "%5g", 3.0);
+    CMP3("9.99999e-115", "%5g", .999999E-114);
+    CMP3("0.00099", "%5g", .99E-3);
+    CMP3(" 3333", "%5g", 3333.0);
+    CMP3(" 0.01", "%5g", 0.01);
 
-    CMP("    3", "%5.g", 3.3);
-    CMP("    3", "%5.g", 3.0);
-    CMP("1e-114", "%5.g", .999999E-114);
-    CMP("0.0001", "%5.g", 1.0E-4);
-    CMP("0.001", "%5.g", .99E-3);
-    CMP("3e+103", "%5.g", 3333.0E100);
-    CMP(" 0.01", "%5.g", 0.01);
+    CMP3("    3", "%5.g", 3.3);
+    CMP3("    3", "%5.g", 3.0);
+    CMP3("1e-114", "%5.g", .999999E-114);
+    CMP3("0.0001", "%5.g", 1.0E-4);
+    CMP3("0.001", "%5.g", .99E-3);
+    CMP3("3e+103", "%5.g", 3333.0E100);
+    CMP3(" 0.01", "%5.g", 0.01);
 
-    CMP("  3.3", "%5.2g", 3.3);
-    CMP("    3", "%5.2g", 3.0);
-    CMP("1e-114", "%5.2g", .999999E-114);
-    CMP("0.00099", "%5.2g", .99E-3);
-    CMP("3.3e+103", "%5.2g", 3333.0E100);
-    CMP(" 0.01", "%5.2g", 0.01);
+    CMP3("  3.3", "%5.2g", 3.3);
+    CMP3("    3", "%5.2g", 3.0);
+    CMP3("1e-114", "%5.2g", .999999E-114);
+    CMP3("0.00099", "%5.2g", .99E-3);
+    CMP3("3.3e+103", "%5.2g", 3333.0E100);
+    CMP3(" 0.01", "%5.2g", 0.01);
 }
 
 void VsnprintfTestCase::S()
 {
-    CMP("  abc", "%5s", wxT("abc"));
-    CMP("    a", "%5s", wxT("a"));
-    CMP("abcdefghi", "%5s", wxT("abcdefghi"));
-    CMP("abc  ", "%-5s", wxT("abc"));
-    CMP("abcdefghi", "%-5s", wxT("abcdefghi"));
+    CMP3("  abc", "%5s", wxT("abc"));
+    CMP3("    a", "%5s", wxT("a"));
+    CMP3("abcdefghi", "%5s", wxT("abcdefghi"));
+    CMP3("abc  ", "%-5s", wxT("abc"));
+    CMP3("abcdefghi", "%-5s", wxT("abcdefghi"));
 
-    CMP("abcde", "%.5s", wxT("abcdefghi"));
+    CMP3("abcde", "%.5s", wxT("abcdefghi"));
 
-    // some tests without any argument:
-    Compare(wxT("%"), wxT("%%"));
-    Compare(wxT("%%%"), wxT("%%%%%%"));
-    Compare(wxT("%%"), wxT("%%%"));
+    // some tests without any argument passed through ...
+    CMP2(wxT("%"), wxT("%%"));
+    CMP2(wxT("%%%"), wxT("%%%%%%"));
+
+    // do not test odd number of '%' symbols as different implementations
+    // of snprintf() give different outputs as this situation is not considered
+    // by any standard (in fact, GCC will also warn you about a spurious % if
+    // you write %%% as argument of some *printf function !)
+    // Compare(wxT("%"), wxT("%%%"));
+}
+
+void VsnprintfTestCase::Asterisk()
+{
+    CMP5("       0.1", "%*.*f", 10, 1, 0.123);
+    CMP5("    0.1230", "%*.*f", 10, 4, 0.123);
+    CMP5("0.1", "%*.*f", 3, 1, 0.123);
+
+    CMP4("%0.002", "%%%.*f", 3, 0.0023456789);
 }
 
 void VsnprintfTestCase::Misc(wxChar *buffer, int size)
 {
-    int ret;
+    // NB: remember that wx*printf could be mapped either to system implementation or to
+    //     wx implementation.
+    //     In the first case, when the output buffer is too small, the returned value can
+    //     be the number of characters required for the output buffer (conforming to ISO C99;
+    //     implemented in e.g. GNU libc >= 2.1), or just a negative number, usually -1;
+    //     (this is how e.g. MSVC's *printf() behaves).
+    //     Fortunately, in all implementations, when the output buffer is too small, it's
+    //     nonetheless filled up to its max size.
 
     // test without positionals
-    ret = wxSnprintf(buffer, size,
-          wxT("\n\n%s %e %le %i %li - test - %d %i %% -%*.*f-\n\n"), wxT("aa"), 123.123e100,
-          123123123123123123123123.123123123123e100, 456, (long int)33333333, 789, 999, 10, 1, 0.123);
-    if (ret >= 0)
-    {
-        CPPUNIT_ASSERT_STR_EQUAL(
-            wxT("\n\naa 1.231230e+102 1.231231e+123 456 33333333 - test - 789 999 % -       0.1-\n\n"),
-            buffer);
-    }
+    CMPTOSIZE(buffer, size,
+              wxT("%i %li - test - %d %.3f"),
+              123, (long int)444444444, 555, -0.666);
 
-    // test woth positional
-    ret = wxSnprintf(buffer, size,
-          wxT("\n\n%8$s %2$e %3$le %4$i %5$li - test - %6$d %7$i %% %1$.4f\n\n"), 0.123123123, 123.123e100,
-         123123123123123123123123.123123123123e100, 456, (long int)33333333, 789, 999, wxT("aa"));
-    if (ret >= 0)
-    {
-        CPPUNIT_ASSERT_STR_EQUAL(
-            wxT("\n\naa 1.231230e+102 1.231231e+123 456 33333333 - test - 789 999 % 0.1231\n\n"),
-            buffer);
-    }
+#if wxUSE_PRINTF_POS_PARAMS
+    // test with positional
+    CMPTOSIZE(buffer, size,
+              wxT("%4$.3f %1$i - test - %2$li %3$d"),
+              123, (long int)444444444, 555, -0.666);
+#endif
 
     // test unicode/ansi conversion specifiers
     // NB: this line will output two warnings like these, on GCC:
     //        warning: use of ‘h’ length modifier with ‘s’ type character
     //     (i.e. GCC warns you that 'h' is not legal on 's' conv spec) but they must be ignored
     //     as here we explicitely want to test the wxSnprintf() behaviour in such case
-    ret = wxSnprintf(buffer, size,
-        wxT("\n\nunicode string: %ls %lc - ansi string: %hs %hc\n\n"), L"unicode!!", L'W', "ansi!!", 'w');
-    if (ret >= 0)
-    {
-        CPPUNIT_ASSERT_STR_EQUAL(
-            wxT("\n\nunicode string: unicode!! W - ansi string: ansi!! w\n\n"),
-            buffer);
-    }
+
+    CMPTOSIZE(buffer, size,
+              wxT("unicode string: %ls %lc - ansi string: %hs %hc\n\n"),
+              L"unicode!!", L'W', "ansi!!", 'w');
 }
 
 void VsnprintfTestCase::BigToSmallBuffer()
