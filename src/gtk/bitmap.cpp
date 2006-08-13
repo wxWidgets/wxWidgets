@@ -24,16 +24,6 @@
 
 #include <gtk/gtk.h>
 
-extern void gdk_wx_draw_bitmap     (GdkDrawable  *drawable,
-                          GdkGC               *gc,
-                          GdkDrawable  *src,
-                          gint                xsrc,
-                          gint                ysrc,
-                          gint                xdest,
-                          gint                ydest,
-                          gint                width,
-                          gint                height);
-
 //-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
@@ -197,9 +187,8 @@ bool wxMask::Create( const wxBitmap& bitmap )
     if (!m_bitmap) return false;
 
     GdkGC *gc = gdk_gc_new( m_bitmap );
-
-    gdk_wx_draw_bitmap( m_bitmap, gc, bitmap.GetPixmap(), 0, 0, 0, 0, bitmap.GetWidth(), bitmap.GetHeight() );
-
+    gdk_gc_set_function(gc, GDK_COPY_INVERT);
+    gdk_draw_drawable(m_bitmap, gc, bitmap.GetPixmap(), 0, 0, 0, 0, bitmap.GetWidth(), bitmap.GetHeight());
     g_object_unref (gc);
 
     return true;
@@ -919,23 +908,9 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     else
     {
         ret = wxBitmap(rect.width, rect.height, M_BMPDATA->m_bpp);
-        if (M_BMPDATA->m_bpp != 1)
-        {
-            GdkGC *gc = gdk_gc_new( ret.GetPixmap() );
-            gdk_draw_drawable( ret.GetPixmap(), gc, GetPixmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
-            g_object_unref (gc);
-        }
-        else
-        {
-            GdkGC *gc = gdk_gc_new( ret.GetPixmap() );
-            GdkColor col;
-            col.pixel = 0xFFFFFF;
-            gdk_gc_set_foreground( gc, &col );
-            col.pixel = 0;
-            gdk_gc_set_background( gc, &col );
-            gdk_wx_draw_bitmap( ret.GetPixmap(), gc, GetPixmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
-            g_object_unref (gc);
-        }
+        GdkGC *gc = gdk_gc_new( ret.GetPixmap() );
+        gdk_draw_drawable( ret.GetPixmap(), gc, GetPixmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
+        g_object_unref (gc);
     }
 
     if (GetMask())
@@ -944,12 +919,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
         mask->m_bitmap = gdk_pixmap_new( wxGetRootWindow()->window, rect.width, rect.height, 1 );
 
         GdkGC *gc = gdk_gc_new( mask->m_bitmap );
-        GdkColor col;
-        col.pixel = 0xFFFFFF;
-        gdk_gc_set_foreground( gc, &col );
-        col.pixel = 0;
-        gdk_gc_set_background( gc, &col );
-        gdk_wx_draw_bitmap( mask->m_bitmap, gc, M_BMPDATA->m_mask->m_bitmap, rect.x, rect.y, 0, 0, rect.width, rect.height );
+        gdk_draw_drawable(mask->m_bitmap, gc, M_BMPDATA->m_mask->m_bitmap, rect.x, rect.y, 0, 0, rect.width, rect.height);
         g_object_unref (gc);
 
         ret.SetMask( mask );

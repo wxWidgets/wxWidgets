@@ -82,6 +82,7 @@ static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
 #include "gdk/gdkprivate.h"
 
+static
 void gdk_wx_draw_bitmap(GdkDrawable  *drawable,
                         GdkGC        *gc,
                         GdkDrawable  *src,
