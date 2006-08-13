@@ -2485,7 +2485,6 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
         wxMacWindowClipper cl( textctrl ) ;
 
 #ifdef __WXMAC_OSX__
-        bool isCompositing = textctrl->MacGetTopLevelWindow()->MacUsesCompositing() ;
         if ( m_sbHorizontal || m_sbVertical )
         {
             int w = bounds.right - bounds.left ;
@@ -2500,9 +2499,6 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
                 sbBounds.right = w + 1 ;
                 sbBounds.bottom = h + 1 ;
 
-                if ( !isCompositing )
-                    OffsetRect( &sbBounds , m_txnControlBounds.left , m_txnControlBounds.top ) ;
-
                 SetControlBounds( m_sbHorizontal , &sbBounds ) ;
                 SetControlViewSize( m_sbHorizontal , w ) ;
             }
@@ -2515,9 +2511,6 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
                 sbBounds.top = -1 ;
                 sbBounds.right = w + 1 ;
                 sbBounds.bottom = m_sbHorizontal ? h - 14 : h + 1 ;
-
-                if ( !isCompositing )
-                    OffsetRect( &sbBounds , m_txnControlBounds.left , m_txnControlBounds.top ) ;
 
                 SetControlBounds( m_sbVertical , &sbBounds ) ;
                 SetControlViewSize( m_sbVertical , h ) ;
@@ -2607,13 +2600,10 @@ wxInt16 wxMacMLTEClassicControl::MacControlUserPaneHitTestProc(wxInt16 x, wxInt1
         else
         {
             // sometimes we get the coords also in control local coordinates, therefore test again
-            if ( textctrl->MacGetTopLevelWindow()->MacUsesCompositing() )
-            {
-                int x = 0 , y = 0 ;
-                textctrl->MacClientToRootWindow( &x , &y ) ;
-                where.h += x ;
-                where.v += y ;
-            }
+            int x = 0 , y = 0 ;
+            textctrl->MacClientToRootWindow( &x , &y ) ;
+            where.h += x ;
+            where.v += y ;
 
             if (PtInRect( where, &m_txnControlBounds ))
                 result = kControlEditTextPart ;
@@ -2631,14 +2621,12 @@ wxInt16 wxMacMLTEClassicControl::MacControlUserPaneTrackingProc( wxInt16 x, wxIn
     if ( (textctrl != NULL) && textctrl->MacIsReallyShown() )
     {
         Point startPt = { y , x } ;
+
         // for compositing, we must convert these into toplevel window coordinates, because hittesting expects them
-        if ( textctrl->MacGetTopLevelWindow()->MacUsesCompositing() )
-        {
-            int x = 0 , y = 0 ;
-            textctrl->MacClientToRootWindow( &x , &y ) ;
-            startPt.h += x ;
-            startPt.v += y ;
-        }
+        int x = 0 , y = 0 ;
+        textctrl->MacClientToRootWindow( &x , &y ) ;
+        startPt.h += x ;
+        startPt.v += y ;
 
         switch (MacControlUserPaneHitTestProc( startPt.h , startPt.v ))
         {
