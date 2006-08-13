@@ -191,7 +191,7 @@ void wxComboFrameEventHandler::OnIdle( wxIdleEvent& event )
 {
     wxWindow* winFocused = ::wxWindow::FindFocus();
 
-    wxWindow* popup = m_combo->GetPopupControl();
+    wxWindow* popup = m_combo->GetPopupControl()->GetControl();
     wxWindow* winpopup = m_combo->GetPopupWindow();
 
     if (
@@ -1342,6 +1342,15 @@ bool wxComboCtrlBase::PreprocessMouseEvent( wxMouseEvent& event,
     wxLongLong t = ::wxGetLocalTimeMillis();
     int evtType = event.GetEventType();
 
+#if !USE_TRANSIENT_POPUP
+    if ( m_isPopupShown &&
+         ( evtType == wxEVT_LEFT_DOWN || evtType == wxEVT_RIGHT_DOWN ) )
+    {
+        HidePopup();
+        return true;
+    }
+#endif
+
     //
     // Generate our own double-clicks
     // (to allow on-focus dc-event on double-clicks instead of triple-clicks)
@@ -1541,12 +1550,12 @@ void wxComboCtrlBase::CreatePopup()
 // Destroy popup window and the child control
 void wxComboCtrlBase::DestroyPopup()
 {
+    HidePopup();
+
     if ( m_popup )
         m_popup->RemoveEventHandler(m_popupExtraHandler);
 
     delete m_popupExtraHandler;
-
-    HidePopup();
 
     delete m_popupInterface;
 
