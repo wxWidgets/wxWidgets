@@ -1502,7 +1502,7 @@ static void TestOsInfo()
     wxPrintf(_T("Running under: %s, version %d.%d\n"),
             wxGetOsDescription().c_str(), major, minor);
 
-    wxPrintf(_T("%ld free bytes of memory left.\n"), wxGetFreeMemory());
+    wxPrintf(_T("%ld free bytes of memory left.\n"), wxGetFreeMemory().ToLong());
 
     wxPrintf(_T("Host name is %s (%s).\n"),
            wxGetHostName().c_str(), wxGetFullHostName().c_str());
