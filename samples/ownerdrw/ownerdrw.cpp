@@ -70,7 +70,7 @@ enum
     Menu_Submenu, Menu_Sub1, Menu_Sub2, Menu_Sub3,
     Menu_Toggle, Menu_About,
     Control_First = 1000,
-    Control_Listbox, Control_Listbox2,
+    Control_Listbox, Control_Listbox2
 };
 
 BEGIN_EVENT_TABLE(OwnerDrawnFrame, wxFrame)
@@ -83,7 +83,7 @@ BEGIN_EVENT_TABLE(OwnerDrawnFrame, wxFrame)
                 OwnerDrawnFrame::OnListboxDblClick)
 END_EVENT_TABLE()
 
-IMPLEMENT_APP(OwnerDrawnApp);
+IMPLEMENT_APP(OwnerDrawnApp)
 
 // init our app: create windows
 bool OwnerDrawnApp::OnInit(void)

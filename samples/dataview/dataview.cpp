@@ -34,7 +34,7 @@
 
 WX_DECLARE_LIST(wxDateTime,wxArrayDate);
 #include <wx/listimpl.cpp>
-WX_DEFINE_LIST(wxArrayDate);
+WX_DEFINE_LIST(wxArrayDate)
 
 class MyTextModel: public wxDataViewListModel
 {

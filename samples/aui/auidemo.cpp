@@ -40,8 +40,8 @@ public:
     bool OnInit();
 };
 
-DECLARE_APP(MyApp);
-IMPLEMENT_APP(MyApp);
+DECLARE_APP(MyApp)
+IMPLEMENT_APP(MyApp)
 
 
 class wxSizeReportCtrl;

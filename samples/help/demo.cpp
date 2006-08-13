@@ -223,7 +223,7 @@ enum
     HelpDemo_Help_GNOME,
     HelpDemo_Help_Netscape,
     // controls start here (the numbers are, of course, arbitrary)
-    HelpDemo_Text = 1000,
+    HelpDemo_Text = 1000
 };
 
 // ----------------------------------------------------------------------------

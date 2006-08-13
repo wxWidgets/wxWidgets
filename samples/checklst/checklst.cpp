@@ -146,7 +146,7 @@ BEGIN_EVENT_TABLE(CheckListBoxFrame, wxFrame)
     EVT_BUTTON(Btn_Down, CheckListBoxFrame::OnButtonDown)
 END_EVENT_TABLE()
 
-IMPLEMENT_APP(CheckListBoxApp);
+IMPLEMENT_APP(CheckListBoxApp)
 
 // init our app: create windows
 bool CheckListBoxApp::OnInit(void)
