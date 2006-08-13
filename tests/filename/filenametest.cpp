@@ -144,9 +144,12 @@ void FileNameTestCase::TestConstruction()
 
 void FileNameTestCase::TestComparison()
 {
-    wxFileName fn1(wxT("/tmp"));
-    wxFileName fn2(wxT("/tmp/"));
-    assert(fn1.SameAs(fn2));
+    wxFileName fn1(wxT("/tmp/file1"));
+    wxFileName fn2(wxT("/tmp/dir2/../file2"));
+    fn1.Normalize();
+    fn2.Normalize();
+    CPPUNIT_ASSERT(fn1.GetPath() == fn2.GetPath());
+
 }
 
 void FileNameTestCase::TestSplit()
