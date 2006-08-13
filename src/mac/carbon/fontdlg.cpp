@@ -535,18 +535,18 @@ void wxFontDialog::CreateControls()
 
     wxFontEnumerator enumerator;
     enumerator.EnumerateFacenames();
-    wxArrayString* facenames = enumerator.GetFacenames();
+    wxArrayString facenames = enumerator.GetFacenames();
     if (facenames)
     {
-        facenames->Add(_("<Any>"));
-        facenames->Add(_("<Any Roman>"));
-        facenames->Add(_("<Any Decorative>"));
-        facenames->Add(_("<Any Modern>"));
-        facenames->Add(_("<Any Script>"));
-        facenames->Add(_("<Any Swiss>"));
-        facenames->Add(_("<Any Teletype>"));
-        facenames->Sort();
-        m_facenameCtrl->Append(*facenames);
+        facenames.Add(_("<Any>"));
+        facenames.Add(_("<Any Roman>"));
+        facenames.Add(_("<Any Decorative>"));
+        facenames.Add(_("<Any Modern>"));
+        facenames.Add(_("<Any Script>"));
+        facenames.Add(_("<Any Swiss>"));
+        facenames.Add(_("<Any Teletype>"));
+        facenames.Sort();
+        m_facenameCtrl->Append(facenames);
     }
 
     InitializeControls();
