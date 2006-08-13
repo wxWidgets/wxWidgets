@@ -178,6 +178,7 @@ wx/msgout.h
 wx/mstream.h
 wx/object.h
 wx/platform.h
+wx/platinfo.h
 wx/power.h
 wx/process.h
 wx/ptr_scpd.h

@@ -2807,6 +2807,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_module.obj &
 	$(OBJS)\monodll_mstream.obj &
 	$(OBJS)\monodll_object.obj &
+	$(OBJS)\monodll_platinfo.obj &
 	$(OBJS)\monodll_powercmn.obj &
 	$(OBJS)\monodll_process.obj &
 	$(OBJS)\monodll_regex.obj &
@@ -2919,6 +2920,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_module.obj &
 	$(OBJS)\monolib_mstream.obj &
 	$(OBJS)\monolib_object.obj &
+	$(OBJS)\monolib_platinfo.obj &
 	$(OBJS)\monolib_powercmn.obj &
 	$(OBJS)\monolib_process.obj &
 	$(OBJS)\monolib_regex.obj &
@@ -3031,6 +3033,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_module.obj &
 	$(OBJS)\basedll_mstream.obj &
 	$(OBJS)\basedll_object.obj &
+	$(OBJS)\basedll_platinfo.obj &
 	$(OBJS)\basedll_powercmn.obj &
 	$(OBJS)\basedll_process.obj &
 	$(OBJS)\basedll_regex.obj &
@@ -3128,6 +3131,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_module.obj &
 	$(OBJS)\baselib_mstream.obj &
 	$(OBJS)\baselib_object.obj &
+	$(OBJS)\baselib_platinfo.obj &
 	$(OBJS)\baselib_powercmn.obj &
 	$(OBJS)\baselib_process.obj &
 	$(OBJS)\baselib_regex.obj &
@@ -4747,6 +4751,9 @@ $(OBJS)\monodll_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_platinfo.obj :  .AUTODEPEND ..\..\src\common\platinfo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_powercmn.obj :  .AUTODEPEND ..\..\src\common\powercmn.cpp
@@ -6716,6 +6723,9 @@ $(OBJS)\monolib_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_platinfo.obj :  .AUTODEPEND ..\..\src\common\platinfo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_powercmn.obj :  .AUTODEPEND ..\..\src\common\powercmn.cpp
@@ -8690,6 +8700,9 @@ $(OBJS)\basedll_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
 $(OBJS)\basedll_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_platinfo.obj :  .AUTODEPEND ..\..\src\common\platinfo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_powercmn.obj :  .AUTODEPEND ..\..\src\common\powercmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -8931,6 +8944,9 @@ $(OBJS)\baselib_mstream.obj :  .AUTODEPEND ..\..\src\common\mstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_object.obj :  .AUTODEPEND ..\..\src\common\object.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_platinfo.obj :  .AUTODEPEND ..\..\src\common\platinfo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_powercmn.obj :  .AUTODEPEND ..\..\src\common\powercmn.cpp

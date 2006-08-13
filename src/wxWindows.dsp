@@ -739,6 +739,10 @@ SOURCE=.\common\pickerbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\platinfo.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\popupcmn.cpp
 # End Source File
 # Begin Source File
@@ -2868,6 +2872,10 @@ SOURCE=..\include\wx\pickerbase.h
 # Begin Source File
 
 SOURCE=..\include\wx\platform.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\platinfo.h
 # End Source File
 # Begin Source File
 

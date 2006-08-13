@@ -611,6 +611,10 @@ SOURCE=..\..\src\common\object.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\platinfo.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\powercmn.cpp
 # End Source File
 # Begin Source File
@@ -1624,6 +1628,10 @@ SOURCE=..\..\include\wx\object.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\platform.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\platinfo.h
 # End Source File
 # Begin Source File
 
