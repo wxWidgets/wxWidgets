@@ -410,6 +410,9 @@ public:
         return wx_truncate_cast(unsigned long, m_ll);
     }
 
+        // convert to double
+    double ToDouble() const { return wx_truncate_cast(double, m_ll); }
+
     // operations
         // addition
     wxULongLongNative operator+(const wxULongLongNative& ll) const
@@ -905,6 +908,9 @@ public:
 
         return (unsigned long)m_lo;
     }
+
+        // convert to double
+    double ToDouble() const;
 
     // operations
         // addition
