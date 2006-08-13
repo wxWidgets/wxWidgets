@@ -43,6 +43,7 @@ wxHTTP::wxHTTP()
     m_read = false;
     m_proxy_mode = false;
     m_post_buf = wxEmptyString;
+    m_post_conv = wxConvCurrent;
     m_http_response = 0;
 
     SetNotify(wxSOCKET_LOST_FLAG);
@@ -147,9 +148,11 @@ wxString wxHTTP::GenerateAuthString(const wxString& user, const wxString& pass) 
     return buf;
 }
 
-void wxHTTP::SetPostBuffer(const wxString& post_buf)
+void wxHTTP::SetPostBuffer(const wxString& post_buf, wxMBConv* conv)
 {
     m_post_buf = post_buf;
+    wxCHECK_RET(conv,wxT("Warning: Setting NULL as conversion class for wxHTTP::SetPostBuffer, ignoring."));
+    m_post_conv = conv;
 }
 
 void wxHTTP::SendHeaders()
@@ -280,8 +283,11 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     Write("\r\n", 2);
 
     if ( req == wxHTTP_POST ) {
-        Write(m_post_buf.mbc_str(), m_post_buf.Len());
+        const wxWX2MBbuf postbuf = m_post_conv->cWX2MB(m_post_buf);
+        Write(postbuf, strlen(wxMBSTRINGCAST postbuf));
+        // Reset the post buffer and conversion class.
         m_post_buf = wxEmptyString;
+        m_post_conv = wxConvCurrent;
     }
 
     wxString tmp_str;

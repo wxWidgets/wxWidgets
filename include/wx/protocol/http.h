@@ -37,7 +37,7 @@ public:
 
   void SetHeader(const wxString& header, const wxString& h_data);
   wxString GetHeader(const wxString& header) const;
-  void SetPostBuffer(const wxString& post_buf);
+  void SetPostBuffer(const wxString& post_buf, wxMBConv* conv = wxConvCurrent);
 
   void SetProxyMode(bool on);
 
@@ -76,6 +76,7 @@ protected:
        m_proxy_mode;
   wxSockAddress *m_addr;
   wxString m_post_buf;
+  wxMBConv* m_post_conv;
   int m_http_response;
   wxString m_username;
   wxString m_password;
@@ -88,4 +89,3 @@ protected:
 #endif // wxUSE_PROTOCOL_HTTP
 
 #endif // _WX_HTTP_H
-
