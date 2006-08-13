@@ -264,7 +264,10 @@ void wxVListBox::SetSelection(int selection)
 
     if ( HasMultipleSelection() )
     {
-        Select(selection);
+        if (selection != wxNOT_FOUND)
+            Select(selection);
+        else
+            DeselectAll();
         m_anchor = selection;
     }
 
