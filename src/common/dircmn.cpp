@@ -236,3 +236,51 @@ size_t wxDir::GetAllFiles(const wxString& dirname,
 
     return nFiles;
 }
+
+// ----------------------------------------------------------------------------
+// wxDir::FindFirst()
+// ----------------------------------------------------------------------------
+
+class wxDirTraverserFindFirst : public wxDirTraverser
+{
+public:
+    wxDirTraverserFindFirst() { }
+
+    virtual wxDirTraverseResult OnFile(const wxString& filename)
+    {
+        m_file = filename;
+        return wxDIR_STOP;
+    }
+
+    virtual wxDirTraverseResult OnDir(const wxString& WXUNUSED(dirname))
+    {
+        return wxDIR_CONTINUE;
+    }
+
+    const wxString& GetFile() const
+    {
+        return m_file;
+    }
+
+private:
+    wxString m_file;
+
+    DECLARE_NO_COPY_CLASS(wxDirTraverserFindFirst)
+};
+
+/* static */
+wxString wxDir::FindFirst(const wxString& dirname,
+                          const wxString& filespec,
+                          int flags)
+{
+    wxDir dir(dirname);
+    if ( dir.IsOpened() )
+    {
+        wxDirTraverserFindFirst traverser;
+
+        dir.Traverse(traverser, filespec, flags | wxDIR_FILES);
+        return traverser.GetFile();
+    }
+
+    return wxEmptyString;
+}

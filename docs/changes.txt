@@ -48,6 +48,10 @@ Major changes in 2.7 release
 2.7.1
 -----
 
+All:
+
+- Added wxDir::FindFirst() (Francesco Montorsi)
+
 All (GUI):
 
 - Added wxID_PAGE_SETUP standard id

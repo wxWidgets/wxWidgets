@@ -138,6 +138,13 @@ public:
                               const wxString& filespec = wxEmptyString,
                               int flags = wxDIR_DEFAULT);
 
+    // check if there any files matching the given filespec under the given
+    // directory (i.e. searches recursively), return the file path if found or
+    // empty string otherwise
+    static wxString FindFirst(const wxString& dirname,
+                              const wxString& filespec,
+                              int flags = wxDIR_DEFAULT);
+
 private:
     friend class wxDirData;
 

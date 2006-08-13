@@ -116,6 +116,22 @@ subdirectories (both flags are included in the value by default).
 See also: \helpref{Traverse}{wxdirtraverse}
 
 
+\membersection{wxDir::FindFirst}\label{wxdirfindfirst}
+
+\func{static wxString}{FindFirst}{\param{const wxString\& }{dirname}, \param{const wxString\& }{filespec}, \param{int }{flags = wxDIR\_DEFAULT}}
+
+The function returns the path of the first file matching the given \arg{filespec}
+or an empty string if there are no files matching it.
+
+The \arg{flags} parameter may or may not include {\tt wxDIR\_FILES}, the
+function always behaves as if it were specified. By default, \arg{flags} 
+includes {\tt wxDIR\_DIRS} and so the function recurses into the subdirectories
+but if this flag is not specified, the function restricts the search only to
+the directory \arg{dirname} itself.
+
+See also: \helpref{Traverse}{wxdirtraverse}
+
+
 \membersection{wxDir::GetFirst}\label{wxdirgetfirst}
 
 \constfunc{bool}{GetFirst}{\param{wxString* }{filename}, \param{const wxString\& }{filespec = wxEmptyString}, \param{int }{flags = wxDIR\_DEFAULT}}
