@@ -81,10 +81,6 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxProtocol)
 };
 
-#if wxUSE_SOCKETS
-wxProtocolError WXDLLIMPEXP_NET GetLine(wxSocketBase *sock, wxString& result);
-#endif
-
 // ----------------------------------------------------------------------------
 // macros for protocol classes
 // ----------------------------------------------------------------------------

@@ -167,46 +167,6 @@ wxProtocolError wxProtocol::ReadLine(wxString& result)
     return ReadLine(this, result);
 }
 
-// old function which only chops '\n' and not '\r\n'
-wxProtocolError GetLine(wxSocketBase *sock, wxString& result)
-{
-#define PROTO_BSIZE 2048
-    size_t avail, size;
-    char tmp_buf[PROTO_BSIZE], tmp_str[PROTO_BSIZE];
-    char *ret;
-    bool found;
-
-    avail = sock->Read(tmp_buf, PROTO_BSIZE).LastCount();
-    if (sock->Error() || avail == 0)
-        return wxPROTO_NETERR;
-
-    memcpy(tmp_str, tmp_buf, avail);
-
-    // Not implemented on all systems
-    // ret = (char *)memccpy(tmp_str, tmp_buf, '\n', avail);
-    found = false;
-    for (ret=tmp_str;ret < (tmp_str+avail); ret++)
-        if (*ret == '\n')
-        {
-            found = true;
-            break;
-        }
-
-    if (!found)
-        return wxPROTO_PROTERR;
-
-    *ret = 0;
-
-    result = wxString::FromAscii( tmp_str );
-    result = result.Left(result.Length()-1);
-
-    size = ret-tmp_str+1;
-    sock->Unread(&tmp_buf[size], avail-size);
-
-    return wxPROTO_NOERR;
-#undef PROTO_BSIZE
-}
 #endif // wxUSE_SOCKETS
 
 #endif // wxUSE_PROTOCOL
-
