@@ -287,16 +287,17 @@ LRESULT APIENTRY _EXPORT wxTextCtrlWndProc(HWND hWnd,
                                            WPARAM wParam,
                                            LPARAM lParam)
 {
-    wxWindow *win = wxFindWinFromHandle((WXHWND)hWnd);
-
     switch ( message )
     {
         case WM_CUT:
         case WM_COPY:
         case WM_PASTE:
-            if( win->HandleClipboardEvent( message ) )
-                return 0;
-            break;
+            {
+                wxWindow *win = wxFindWinFromHandle((WXHWND)hWnd);
+                if( win->HandleClipboardEvent( message ) )
+                    return 0;
+                break;
+            }
     }
     return ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, hWnd, message, wParam, lParam);
 }
@@ -1230,7 +1231,8 @@ void wxTextCtrl::SetInsertionPointEnd()
     // if it doesn't actually move the caret anywhere and so the simple fact of
     // doing it results in horrible flicker when appending big amounts of text
     // to the control in a few chunks (see DoAddText() test in the text sample)
-    if ( GetInsertionPoint() == GetLastPosition() )
+    const wxTextPos lastPosition = GetLastPosition();
+    if ( GetInsertionPoint() == lastPosition )
     {
         return;
     }
@@ -1246,7 +1248,7 @@ void wxTextCtrl::SetInsertionPointEnd()
     else // !RichEdit 1.0
 #endif // wxUSE_RICHEDIT
     {
-        pos = GetLastPosition();
+        pos = lastPosition;
     }
 
     SetInsertionPoint(pos);
