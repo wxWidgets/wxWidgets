@@ -440,11 +440,11 @@ void wxPlatform::ClearPlatforms()
 bool wxPlatform::Is(int platform)
 {
 #ifdef __WXMSW__
-    if (platform == wxMSW)
+    if (platform == wxOS_WINDOWS)
         return true;
 #endif
 #ifdef __WXWINCE__
-    if (platform == wxWinCE)
+    if (platform == wxOS_WINDOWS_CE)
         return true;
 #endif
 #if defined(__WXWINCE__) && defined(__POCKETPC__)
@@ -456,31 +456,31 @@ bool wxPlatform::Is(int platform)
         return true;
 #endif
 #ifdef __WXGTK__
-    if (platform == wxGTK)
+    if (platform == wxPORT_GTK)
         return true;
 #endif
 #ifdef __WXMAC__
-    if (platform == wxMac)
+    if (platform == wxPORT_MAC)
         return true;
 #endif
 #ifdef __WXX11__
-    if (platform == wxX11)
+    if (platform == wxPORT_X11)
         return true;
 #endif
 #ifdef __UNIX__
-    if (platform == wxUnix)
+    if (platform == wxOS_UNIX)
         return true;
 #endif
 #ifdef __WXMGL__
-    if (platform == wxMGL)
+    if (platform == wxPORT_MGL)
         return true;
 #endif
 #ifdef __WXOS2__
-    if (platform == wxOS2)
+    if (platform == wxPORT_OS2)
         return true;
 #endif
 #ifdef __WXCOCOA__
-    if (platform == wxCocoa)
+    if (platform == wxPORT_MAC)
         return true;
 #endif
 
