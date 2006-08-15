@@ -1511,7 +1511,20 @@ void GSocket::Detected_Read()
   }
   else
   {
+#ifdef  __WINDOWS__
+    // A socket lost event would have been detected at event callback time,
+    // as MSW posts FD_CLOSE events when sockets are closed.
     CALL_CALLBACK(this, GSOCK_INPUT);
+#else
+    // For non MSW platforms, we have to use MSG_PEEK to check 
+    // if this is a read or close event.
+    char t;
+    if (recv(m_fd,&t,1,MSG_DONTWAIT | MSG_PEEK) == 0) {
+      CALL_CALLBACK(this, GSOCK_LOST);
+    } else {
+      CALL_CALLBACK(this, GSOCK_INPUT);
+    }
+#endif    
   }
 }
 

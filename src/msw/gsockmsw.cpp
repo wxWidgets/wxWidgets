@@ -381,6 +381,7 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
     {
       switch WSAGETSELECTEVENT(lParam)
       {
+        case FD_CLOSE:   socket->Detected_Lost(); break;        
         case FD_READ:    socket->Detected_Read(); break;
         case FD_WRITE:   socket->Detected_Write(); break;
         case FD_ACCEPT:  socket->Detected_Connect(); break;
@@ -392,7 +393,6 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
             socket->Detected_Connect();
           break;
         }
-        case FD_CLOSE:   socket->Detected_Lost(); break;
       }
     }
 
