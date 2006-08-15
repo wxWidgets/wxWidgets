@@ -369,16 +369,16 @@ static wxPaneInfo* FindPaneInDock(const wxDockInfo& dock, wxWindow* window)
 }
 
 // RemovePaneFromDocks() removes a pane window from all docks
-// with a possible exception specified by parameter "except"
+// with a possible exception specified by parameter "ex_cept"
 static void RemovePaneFromDocks(wxDockInfoArray& docks,
                                 wxPaneInfo& pane,
-                                wxDockInfo* except = NULL)
+                                wxDockInfo* ex_cept  = NULL  )
 {
     int i, dock_count;
     for (i = 0, dock_count = docks.GetCount(); i < dock_count; ++i)
     {
         wxDockInfo& d = docks.Item(i);
-        if (&d == except)
+        if (&d == ex_cept)
             continue;
         wxPaneInfo* pi = FindPaneInDock(d, pane.window);
         if (pi)
