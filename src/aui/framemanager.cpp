@@ -611,8 +611,7 @@ void wxFrameManager::SetManagedWindow(wxWindow* frame)
     // frame activated and highlighted as such...
     m_hint_wnd = new wxMiniFrame(m_frame, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(1,1),
                                  wxFRAME_FLOAT_ON_PARENT
-                                 | wxFRAME_TOOL_WINDOW
-                                 | wxCAPTION );
+                                 | wxFRAME_TOOL_WINDOW );
 
     // Can't set the bg colour of a Frame in wxMac
     wxPanel* p = new wxPanel(m_hint_wnd);
