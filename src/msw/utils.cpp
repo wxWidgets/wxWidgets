@@ -1162,19 +1162,27 @@ wxString wxGetOsDescription()
     return str;
 }
 
-// taken from http://blogs.msdn.com/oldnewthing/archive/2005/02/01/364563.aspx
 bool wxIsPlatform64Bit()
 {
 #if defined(_WIN64)
     return true;  // 64-bit programs run only on Win64
-#elif defined(_WIN32)
-    // 32-bit programs run on both 32-bit and 64-bit Windows
-    // so must sniff
-    BOOL f64 = FALSE;
-    return IsWow64Process(GetCurrentProcess(), &f64) && f64;
-#else
-    return false; // Win64 does not support Win16
-#endif
+#else // Win32
+    // 32-bit programs run on both 32-bit and 64-bit Windows so check
+    typedef BOOL (WINAPI *IsWow64Process_t)(HANDLE, BOOL *);
+
+    wxDynamicLibrary dllKernel32(_T("kernel32.dll"));
+    IsWow64Process_t *pfnIsWow64Process =
+        (IsWow64Process_t *)dllKernel32.RawGetSymbol(_T("IsWow64Process"));
+
+    BOOL wow64 = FALSE;
+    if ( pfnIsWow64Process )
+    {
+        (*pfnIsWow64Process)(::GetCurrentProcess(), &wow64);
+    }
+    //else: running under a system without Win64 support
+
+    return wow64 != FALSE;
+#endif // Win64/Win32
 }
 
 wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
