@@ -24,11 +24,13 @@
     #pragma hdrstop
 #endif
 
+#include "wx/platinfo.h"
+
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
-#include "wx/platinfo.h"
 #include "wx/apptrait.h"
 
 // ----------------------------------------------------------------------------
