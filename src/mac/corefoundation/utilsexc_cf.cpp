@@ -21,6 +21,8 @@
 #include "wx/thread.h"
 #include "wx/process.h"
 
+#include <sys/wait.h>
+
 // Use polling instead of Mach ports, which doesn't work on Intel
 // due to task_for_pid security issues.
 
@@ -116,10 +118,9 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
     return 0;
 }
 
-#else
+#else // !USE_POLLING
 
 #include <CoreFoundation/CFMachPort.h>
-#include <sys/wait.h>
 extern "C" {
 #include <mach/mach.h>
 }
@@ -132,13 +133,13 @@ void wxMAC_MachPortEndProcessDetect(CFMachPortRef port, void *data)
     int rc = waitpid(abs(proc_data->pid), &status, WNOHANG);
     if(!rc)
     {
-    	wxLogDebug(wxT("Mach port was invalidated, but process hasn't terminated!"));
-    	return;
+        wxLogDebug(wxT("Mach port was invalidated, but process hasn't terminated!"));
+        return;
     }
     if((rc != -1) && WIFEXITED(status))
-    	proc_data->exitcode = WEXITSTATUS(status);
+        proc_data->exitcode = WEXITSTATUS(status);
     else
-    	proc_data->exitcode = -1;
+        proc_data->exitcode = -1;
     wxHandleProcessTermination(proc_data);
 }
 
@@ -210,7 +211,7 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
     return 0;
 }
 
-#endif // USE_POLLING
+#endif // USE_POLLING/!USE_POLLING
 
 // NOTE: This doesn't really belong here but this was a handy file to
 // put it in because it's already compiled for wxCocoa and wxMac GUI lib.
