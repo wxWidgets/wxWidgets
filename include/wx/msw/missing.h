@@ -130,6 +130,74 @@
 #define LWA_ALPHA 2
 #endif
 
+/*
+ * The following are required for VC++ 5 when the PSDK is not available.
+ */
+
+#if defined __VISUALC__ && __VISUALC__ <= 1100
+
+#ifndef VER_NT_WORKSTATION
+
+typedef struct _OSVERSIONINFOEXA {
+    DWORD dwOSVersionInfoSize;
+    DWORD dwMajorVersion;
+    DWORD dwMinorVersion;
+    DWORD dwBuildNumber;
+    DWORD dwPlatformId;
+    CHAR szCSDVersion[128];
+    WORD wServicePackMajor;
+    WORD wServicePackMinor;
+    WORD wSuiteMask;
+    BYTE wProductType;
+    BYTE wReserved;
+} OSVERSIONINFOEXA, *POSVERSIONINFOEXA, *LPOSVERSIONINFOEXA;
+typedef struct _OSVERSIONINFOEXW {
+    DWORD dwOSVersionInfoSize;
+    DWORD dwMajorVersion;
+    DWORD dwMinorVersion;
+    DWORD dwBuildNumber;
+    DWORD dwPlatformId;
+    WCHAR szCSDVersion[128];
+    WORD wServicePackMajor;
+    WORD wServicePackMinor;
+    WORD wSuiteMask;
+    BYTE wProductType;
+    BYTE wReserved;
+} OSVERSIONINFOEXW, *POSVERSIONINFOEXW, *LPOSVERSIONINFOEXW;
+
+#ifdef UNICODE
+typedef OSVERSIONINFOW OSVERSIONINFO,*POSVERSIONINFO,*LPOSVERSIONINFO;
+typedef OSVERSIONINFOEXW OSVERSIONINFOEX,*POSVERSIONINFOEX,*LPOSVERSIONINFOEX;
+#else
+typedef OSVERSIONINFOA OSVERSIONINFO,*POSVERSIONINFO,*LPOSVERSIONINFO;
+typedef OSVERSIONINFOEXA OSVERSIONINFOEX,*POSVERSIONINFOEX,*LPOSVERSIONINFOEX;
+#endif
+
+#endif // defined VER_NT_WORKSTATION
+
+#ifndef CP_SYMBOL
+    #define CP_SYMBOL 42
+#endif
+
+// NMLVCUSTOMDRAW originally didn't have the iSubItem member. It was added
+// with IE4, as was IPN_FIRST which is used as a test :-(.
+//
+#ifndef IPN_FIRST	
+
+typedef struct wxtagNMLVCUSTOMDRAW_ {
+    NMCUSTOMDRAW nmcd;
+    COLORREF     clrText;
+    COLORREF     clrTextBk;
+    int          iSubItem;
+} wxNMLVCUSTOMDRAW_, *wxLPNMLVCUSTOMDRAW_;
+
+#define NMLVCUSTOMDRAW wxNMLVCUSTOMDRAW_
+#define LPNMLVCUSTOMDRAW wxLPNMLVCUSTOMDRAW_
+
+#endif // defined IPN_FIRST	
+
+#endif // defined __VISUALC__ && __VISUALC__ <= 1100
+
 // ----------------------------------------------------------------------------
 // ListView common control
 // Needed by listctrl.cpp
