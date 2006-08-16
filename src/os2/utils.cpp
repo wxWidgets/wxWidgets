@@ -22,6 +22,7 @@
 
 #include "wx/os2/private.h"
 #include "wx/apptrait.h"
+#include "wx/platinfo.h"
 
 #include <ctype.h>
 #ifdef __EMX__

@@ -32,6 +32,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"
+#include "wx/platinfo.h"
 
 #include "wx/os2/private.h"     // includes <windows.h>
 
