@@ -15,14 +15,12 @@
 #include "wx/utils.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/log.h"
 #endif  //WX_PRECOMP
 
 #include "wx/os2/private.h"
 #include "wx/apptrait.h"
-#include "wx/platinfo.h"
 
 #include <ctype.h>
 #ifdef __EMX__
@@ -329,7 +327,6 @@ void wxAppTraits::TerminateGui(unsigned long WXUNUSED(ulHab))
 
 wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
-    static wxToolkitInfo  vInfo;
     ULONG                 ulSysInfo[QSV_MAX] = {0};
     APIRET                ulrc;
 
