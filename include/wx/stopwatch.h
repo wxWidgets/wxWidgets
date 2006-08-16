@@ -32,7 +32,7 @@ public:
     // pause the stop watch
     void Pause()
     {
-        if ( !m_pauseCount++ )
+        if ( m_pauseCount++ == 0 )
             m_pause = GetElapsedTime();
     }
 
@@ -42,7 +42,7 @@ public:
         wxASSERT_MSG( m_pauseCount > 0,
                       _T("Resuming stop watch which is not paused") );
 
-        if ( !--m_pauseCount )
+        if ( --m_pauseCount == 0 )
             Start(m_pause);
     }
 

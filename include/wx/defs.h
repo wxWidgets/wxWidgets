@@ -78,6 +78,12 @@
 #   if !defined __WXDEBUG__ && __VISUALC__ <= 1100
 #       pragma warning(disable:4702)    /* unreachable code */
 #   endif
+    /* The VC++ 5.0 warning 'C4003: not enough actual parameters for macro'
+     * is incompatible with the wxWidgets headers since it is given when
+     * parameters are empty but not missing. */
+#   if __VISUALC__ <= 1100
+#       pragma warning(disable:4003)    /* not enough actual parameters for macro */
+#   endif
 
     /*
        VC++ 8 gives a warning when using standard functions such as sprintf,
