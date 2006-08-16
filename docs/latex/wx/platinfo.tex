@@ -148,7 +148,7 @@ Initializes the object using given values.
 \func{static wxArchitecture}{GetArch}{\param{const wxString\& }{arch}}
 
 Converts the given string to a wxArchitecture enum value or to
-wxARCH_INVALID if the given string is not a valid architecture string
+wxARCH\_INVALID if the given string is not a valid architecture string
 (i.e. does not contain nor {\tt 32} nor {\tt 64} strings).
 
 
@@ -177,7 +177,7 @@ Returns the architecture ID of this wxPlatformInfo instance.
 \func{static wxEndianness}{GetEndianness}{\param{const wxString\& }{end}}
 
 Converts the given string to a wxEndianness enum value or to
-wxENDIAN_INVALID if the given string is not a valid endianness string
+wxENDIAN\_INVALID if the given string is not a valid endianness string
 (i.e. does not contain nor {\tt little} nor {\tt big} strings).
 
 \constfunc{wxEndianness}{GetEndianness}{\void}
@@ -218,8 +218,8 @@ Returns the minor version of the OS associated with this wxPlatformInfo instance
 \func{static wxString}{GetOperatingSystemFamilyName}{\param{wxOperatingSystemId }{os}}
 
 Returns the operating system family name for the given wxOperatingSystemId enumeration value:
-{\tt Unix} for wxOS_UNIX, {\tt Macintosh} for wxOS_MAC, {\tt Windows} for wxOS_WINDOWS,
-{\tt DOS} for wxOS_DOS, {\tt OS/2} for wxOS_OS2.
+{\tt Unix} for wxOS\_UNIX, {\tt Macintosh} for wxOS\_MAC, {\tt Windows} for wxOS\_WINDOWS,
+{\tt DOS} for wxOS\_DOS, {\tt OS/2} for wxOS\_OS2.
 
 \constfunc{wxString}{GetOperatingSystemFamilyName}{\void}
 
@@ -232,7 +232,7 @@ Returns the operating system family name of the OS associated with this wxPlatfo
 \func{static wxOperatingSystemId}{GetOperatingSystemId}{\param{const wxString\& }{name}}
 
 Converts the given string to a wxOperatingSystemId enum value or to
-wxOS_UNKNOWN if the given string is not a valid operating system name.
+wxOS\_UNKNOWN if the given string is not a valid operating system name.
 
 \constfunc{wxOperatingSystemId}{GetOperatingSystemId}{\void}
 
@@ -261,7 +261,7 @@ Returns the operating system name of the OS associated with this wxPlatformInfo 
 
 \func{static wxPortId}{GetPortId}{\param{const wxString\& }{portname}}
 
-Converts the given string to a wxWidgets port ID value or to wxPORT_UNKNOWN if
+Converts the given string to a wxWidgets port ID value or to wxPORT\_UNKNOWN if
 the given string does not match any of the wxWidgets canonical name ports ("wxGTK", "wxMSW", etc)
 nor any of the short wxWidgets name ports ("gtk", "msw", etc).
 
@@ -302,14 +302,14 @@ Returns the short name of the wxWidgets port ID associated with this wxPlatformI
 \constfunc{int}{GetToolkitMajorVersion}{\void}
 
 Returns the major version of the toolkit associated with this wxPlatformInfo instance.
-Note that if {GetPortId}{wxplatforminfogetportid} returns wxPORT_BASE, then this value is zero (unless externally modified with SetToolkitVersion); that is, no native toolkit is in use.
+Note that if {GetPortId}{wxplatforminfogetportid} returns wxPORT\_BASE, then this value is zero (unless externally modified with SetToolkitVersion); that is, no native toolkit is in use.
 
 \membersection{wxPlatformInfo::GetToolkitMinorVersion}\label{wxplatforminfogettoolkitminorversion}
 
 \constfunc{int}{GetToolkitMinorVersion}{\void}
 
 Returns the minor version of the toolkit associated with this wxPlatformInfo instance.
-Note that if {GetPortId}{wxplatforminfogetportid} returns wxPORT_BASE, then this value is zero (unless externally modified with SetToolkitVersion); that is, no native toolkit is in use.
+Note that if {GetPortId}{wxplatforminfogetportid} returns wxPORT\_BASE, then this value is zero (unless externally modified with SetToolkitVersion); that is, no native toolkit is in use.
 
 
 
@@ -326,7 +326,7 @@ Returns \true if this instance is fully initialized with valid values.
 
 \func{bool}{IsUsingUniversalWidgets}{\void}
 
-Returns \true if __WXUNIVERSAL__ symbol is defined. Note that this function always
+Returns \true if \_\_WXUNIVERSAL\_\_ symbol is defined. Note that this function always
 returns a constant value defined at compile-time and exists just for completeness.
 
 
