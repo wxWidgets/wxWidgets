@@ -36,6 +36,46 @@ None
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
+\membersection{wxAppTraits::CreateFontMapper}\label{wxapptraitscreatefontmapper}
+
+\func{virtual wxFontMapper *}{CreateFontMapper}{\void}
+
+Creates the global font mapper object used for encodings/charset mapping.
+
+
+
+\membersection{wxAppTraits::CreateLogTarget}\label{wxapptraitscreatelogtarget}
+
+\func{virtual wxLog *}{CreateLogTarget}{\void}
+
+Creates the default log target for the application.
+
+
+\membersection{wxAppTraits::CreateMessageOutput}\label{wxapptraitscreatemessageoutput}
+
+\func{virtual wxMessageOutput *}{CreateMessageOutput}{\void}
+
+Creates the global object used for printing out messages.
+
+
+\membersection{wxAppTraits::CreateRenderer}\label{wxapptraitscreaterenderer}
+
+\func{virtual wxRendererNative *}{CreateRenderer}{\void}
+
+Returns the renderer to use for drawing the generic controls (return value may be \NULL
+in which case the default renderer for the current platform is used);
+this is used in GUI mode only and always returns \NULL in console.
+
+NOTE: returned pointer will be deleted by the caller.
+
+
+\membersection{wxAppTraits::GetStandardPaths}\label{wxapptraitsgetstandardpaths}
+
+\func{virtual wxStandardPaths \&}{GetStandardPaths}{\void}
+
+Returns the wxStandardPaths object for the application.
+It's normally the same for wxBase and wxGUI except in the case of wxMac and wxCocoa.
+
 \membersection{wxAppTraits::GetToolkitVersion}\label{wxapptraitsgettoolkitversion}
 
 \func{virtual wxPortId}{GetToolkitVersion}{\param{int *}{major = NULL}, \param{int *}{minor = NULL}}
@@ -50,13 +90,19 @@ put in given pointers the versions of the GTK library in use.
 See \helpref{wxPlatformInfo}{wxplatforminfo} for more details.
 
 
-
 \membersection{wxAppTraits::HasStderr}\label{wxapptraitshasstderr}
 
 \func{virtual bool}{HasStderr}{\void}
 
 Returns \true if {\tt fprintf(stderr)} goes somewhere, \false otherwise.
 
+
+\membersection{wxAppTraits::IsUsingUniversalWidgets}\label{wxapptraitsisusinguniversalwidgets}
+
+\constfunc{bool}{IsUsingUniversalWidgets}{\void}
+
+Returns \true if the library was built as wxUniversal. Always returns
+\false for wxBase-only apps.
 
 
 \membersection{wxAppTraits::ShowAssertDialog}\label{wxapptraitsshowassertdialog}
@@ -67,50 +113,3 @@ Shows the assert dialog with the specified message in GUI mode or just prints
 the string to stderr in console mode.
 
 Returns \true to suppress subsequent asserts, \false to continue as before.
-
-
-
-\membersection{wxAppTraits::GetStandardPaths}\label{wxapptraitsgetstandardpaths}
-
-\func{virtual wxStandardPaths \&}{GetStandardPaths}{\void}
-
-Returns the wxStandardPaths object for the application.
-It's normally the same for wxBase and wxGUI except in the case of wxMac and wxCocoa.
-
-
-
-\membersection{wxAppTraits::CreateRenderer}\label{wxapptraitscreaterenderer}
-
-\func{virtual wxRendererNative *}{CreateRenderer}{\void}
-
-Returns the renderer to use for drawing the generic controls (return value may be \NULL
-in which case the default renderer for the current platform is used);
-this is used in GUI mode only and always returns \NULL in console.
-
-NOTE: returned pointer will be deleted by the caller.
-
-
-
-\membersection{wxAppTraits::CreateLogTarget}\label{wxapptraitscreatelogtarget}
-
-\func{virtual wxLog *}{CreateLogTarget}{\void}
-
-Creates the default log target for the application.
-
-
-
-\membersection{wxAppTraits::CreateMessageOutput}\label{wxapptraitscreatemessageoutput}
-
-\func{virtual wxMessageOutput *}{CreateMessageOutput}{\void}
-
-Creates the global object used for printing out messages.
-
-
-
-\membersection{wxAppTraits::CreateFontMapper}\label{wxapptraitscreatefontmapper}
-
-\func{virtual wxFontMapper *}{CreateFontMapper}{\void}
-
-Creates the global font mapper object used for encodings/charset mapping.
-
-

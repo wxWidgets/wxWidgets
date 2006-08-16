@@ -118,7 +118,8 @@ public:
                    wxOperatingSystemId id = wxOS_UNKNOWN,
                    int osMajor = -1, int osMinor = -1,
                    wxArchitecture arch = wxARCH_INVALID,
-                   wxEndianness endian = wxENDIAN_INVALID);
+                   wxEndianness endian = wxENDIAN_INVALID,
+                   bool usingUniversal = false);
 
     // default copy ctor, assignment operator and dtor are ok
 
@@ -142,8 +143,8 @@ public:
 
     static wxString GetOperatingSystemFamilyName(wxOperatingSystemId os);
     static wxString GetOperatingSystemIdName(wxOperatingSystemId os);
-    static wxString GetPortIdName(wxPortId port);
-    static wxString GetPortIdShortName(wxPortId port);
+    static wxString GetPortIdName(wxPortId port, bool usingUniversal);
+    static wxString GetPortIdShortName(wxPortId port, bool usingUniversal);
 
     static wxString GetArchName(wxArchitecture arch);
     static wxString GetEndiannessName(wxEndianness end);
@@ -160,6 +161,9 @@ public:
         { return m_tkVersionMajor; }
     int GetToolkitMinorVersion() const
         { return m_tkVersionMinor; }
+
+    bool IsUsingUniversalWidgets() const
+        { return m_usingUniversal; }
 
     wxOperatingSystemId GetOperatingSystemId() const
         { return m_os; }
@@ -179,9 +183,9 @@ public:
     wxString GetOperatingSystemIdName() const
         { return GetOperatingSystemIdName(m_os); }
     wxString GetPortIdName() const
-        { return GetPortIdName(m_port); }
+        { return GetPortIdName(m_port, m_usingUniversal); }
     wxString GetPortIdShortName() const
-        { return GetPortIdShortName(m_port); }
+        { return GetPortIdShortName(m_port, m_usingUniversal); }
     wxString GetArchName() const
         { return GetArchName(m_arch); }
     wxString GetEndiannessName() const
@@ -216,15 +220,6 @@ public:
                m_arch != wxARCH_INVALID && m_endian != wxENDIAN_INVALID;
     }
 
-    static bool IsUsingUniversalWidgets()
-    {
-    #ifdef __WXUNIVERSAL__
-        return true;
-    #else
-        return false;
-    #endif
-    }
-
 
 protected:
     // OS stuff
@@ -247,6 +242,9 @@ protected:
 
     // name of the wxWidgets port
     wxPortId m_port;
+
+    // is using wxUniversal widgets?
+    bool m_usingUniversal;
 
 
     // others

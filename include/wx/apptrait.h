@@ -114,6 +114,9 @@ public:
     // returns wxPORT_BASE for console applications and one of the remaining
     // wxPORT_* values for GUI applications.
     virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const = 0;
+
+    // return true if the port is using wxUniversal for the GUI, false if not
+    virtual bool IsUsingUniversalWidgets() const = 0;
 };
 
 // ----------------------------------------------------------------------------
@@ -172,7 +175,7 @@ public:
     virtual void RemoveFromPendingDelete(wxObject *object);
 
     // the GetToolkitVersion for console application is always the same
-    wxPortId GetToolkitVersion(int *verMaj, int *verMin) const
+    virtual wxPortId GetToolkitVersion(int *verMaj, int *verMin) const
     {
         // no toolkits (wxBase is for console applications without GUI support)
         // NB: zero means "no toolkit", -1 means "not initialized yet"
@@ -181,6 +184,8 @@ public:
         if (verMin) *verMin = 0;
         return wxPORT_BASE;
     }
+
+    virtual bool IsUsingUniversalWidgets() const { return false; }
 };
 
 // ----------------------------------------------------------------------------
@@ -211,6 +216,15 @@ public:
 
     virtual void ScheduleForDestroy(wxObject *object);
     virtual void RemoveFromPendingDelete(wxObject *object);
+
+    virtual bool IsUsingUniversalWidgets() const
+    {
+    #ifdef __WXUNIVERSAL__
+        return true;
+    #else
+        return false;
+    #endif
+    }
 };
 
 #endif // wxUSE_GUI

@@ -271,10 +271,13 @@ Returns the wxWidgets port ID associated with this wxPlatformInfo instance.
 
 \membersection{wxPlatformInfo::GetPortIdName}\label{wxplatforminfogetportidname}
 
-\func{static wxString}{GetPortIdName}{\param{wxPortId }{port}}
+\func{static wxString}{GetPortIdName}{\param{wxPortId }{port}, \param{bool }{usingUniversal}}
 
-Returns the name of the given wxWidgets port ID value. The returned string always starts with
-the "wx" prefix and is a mixed-case string.
+Returns the name of the given wxWidgets port ID value. The \arg{usingUniversal}
+argument specifies whether the port is in its native or wxUniversal variant.
+
+The returned string always starts with the "wx" prefix and is a mixed-case
+string.
 
 \constfunc{wxString}{GetPortIdName}{\void}
 
@@ -285,10 +288,14 @@ Returns the name of the wxWidgets port ID associated with this wxPlatformInfo in
 
 \membersection{wxPlatformInfo::GetPortIdShortName}\label{wxplatforminfogetportidshortname}
 
-\func{static wxString}{GetPortIdShortName}{\param{wxPortId }{port}}
+\func{static wxString}{GetPortIdShortName}{\param{wxPortId }{port}, \param{bool }{usingUniversal}}
 
-Returns the short name of the given wxWidgets port ID value. The returned string does not start with
-the "wx" prefix and is always lower case.
+Returns the short name of the given wxWidgets port ID value. The
+\arg{usingUniversal} argument specifies whether the port is in its native or
+wxUniversal variant.
+
+The returned string does not start with the "wx" prefix and is always lower
+case.
 
 \constfunc{wxString}{GetPortIdShortName}{\void}
 
@@ -324,10 +331,9 @@ Returns \true if this instance is fully initialized with valid values.
 
 \membersection{wxPlatformInfo::IsUsingUniversalWidgets}\label{wxplatforminfoisusinguniversalwidgets}
 
-\func{bool}{IsUsingUniversalWidgets}{\void}
+\constfunc{bool}{IsUsingUniversalWidgets}{\void}
 
-Returns \true if \_\_WXUNIVERSAL\_\_ symbol is defined. Note that this function always
-returns a constant value defined at compile-time and exists just for completeness.
+Returns \true if this wxPlatformInfo describes wxUniversal build.
 
 
 \membersection{wxPlatformInfo::SetArchitecture}\label{wxplatforminfosetarchitecture}

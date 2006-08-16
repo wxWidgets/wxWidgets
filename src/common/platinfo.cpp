@@ -123,12 +123,14 @@ wxPlatformInfo::wxPlatformInfo()
         wxFAIL_MSG( _T("failed to initialize wxPlatformInfo") );
 
         m_port = wxPORT_UNKNOWN;
+        m_usingUniversal = false;
         m_tkVersionMajor =
         m_tkVersionMinor = 0;
     }
     else
     {
         m_port = traits->GetToolkitVersion(&m_tkVersionMajor, &m_tkVersionMinor);
+        m_usingUniversal = traits->IsUsingUniversalWidgets();
     }
 
     m_os = wxGetOsVersion(&m_osVersionMajor, &m_osVersionMinor);
@@ -139,11 +141,13 @@ wxPlatformInfo::wxPlatformInfo()
 wxPlatformInfo::wxPlatformInfo(wxPortId pid, int tkMajor, int tkMinor,
                                wxOperatingSystemId id, int osMajor, int osMinor,
                                wxArchitecture arch,
-                               wxEndianness endian)
+                               wxEndianness endian,
+                               bool usingUniversal)
 {
     m_tkVersionMajor = tkMajor;
     m_tkVersionMinor = tkMinor;
     m_port = pid;
+    m_usingUniversal = usingUniversal;
 
     m_os = id;
     m_osVersionMajor = osMajor;
@@ -161,6 +165,7 @@ bool wxPlatformInfo::operator==(const wxPlatformInfo &t) const
            m_osVersionMinor == t.m_osVersionMinor &&
            m_os == t.m_os &&
            m_port == t.m_port &&
+           m_usingUniversal == t.m_usingUniversal &&
            m_arch == t.m_arch &&
            m_endian == t.m_endian;
 }
@@ -195,7 +200,7 @@ wxString wxPlatformInfo::GetOperatingSystemIdName(wxOperatingSystemId os)
     return wxOperatingSystemIdNames[idx];
 }
 
-wxString wxPlatformInfo::GetPortIdName(wxPortId port)
+wxString wxPlatformInfo::GetPortIdName(wxPortId port, bool usingUniversal)
 {
     const unsigned idx = wxGetIndexFromEnumValue(port);
 
@@ -204,13 +209,13 @@ wxString wxPlatformInfo::GetPortIdName(wxPortId port)
 
     wxString ret = wxPortIdNames[idx];
 
-    if ( IsUsingUniversalWidgets() )
+    if ( usingUniversal )
         ret += wxT("/wxUniversal");
 
     return ret;
 }
 
-wxString wxPlatformInfo::GetPortIdShortName(wxPortId port)
+wxString wxPlatformInfo::GetPortIdShortName(wxPortId port, bool usingUniversal)
 {
     const unsigned idx = wxGetIndexFromEnumValue(port);
 
@@ -220,7 +225,7 @@ wxString wxPlatformInfo::GetPortIdShortName(wxPortId port)
     wxString ret = wxPortIdNames[idx];
     ret = ret.Mid(2).Lower();       // remove 'wx' prefix
 
-    if ( IsUsingUniversalWidgets() )
+    if ( usingUniversal )
         ret += wxT("univ");
 
     return ret;
@@ -267,7 +272,8 @@ wxPortId wxPlatformInfo::GetPortId(const wxString &str)
 
         if ( wxPortIdNames[i].CmpNoCase(str) == 0 )
             return current;
-        if ( GetPortIdShortName(current).CmpNoCase(str) == 0 )
+        if ( GetPortIdShortName(current, true).CmpNoCase(str) == 0 ||
+             GetPortIdShortName(current, false).CmpNoCase(str) == 0 )
             return current;
     }
 
