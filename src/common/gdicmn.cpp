@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/gdicmn.h"
+#include "wx/gdiobj.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -30,6 +31,10 @@
     #include "wx/colour.h"
     #include "wx/font.h"
 #endif
+
+
+IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
+
 
 WXDLLIMPEXP_DATA_CORE(wxBrushList*) wxTheBrushList;
 WXDLLIMPEXP_DATA_CORE(wxFontList*)  wxTheFontList;

@@ -18,8 +18,6 @@
     #include "wx/gdicmn.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
-
 class wxStockGDIPM: public wxStockGDI
 {
 public:

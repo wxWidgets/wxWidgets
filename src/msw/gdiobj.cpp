@@ -27,8 +27,6 @@
 
 #include "wx/msw/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
-
 #define M_GDIDATA wx_static_cast(wxGDIRefData*, m_refData)
 
 /*

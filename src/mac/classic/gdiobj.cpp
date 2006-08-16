@@ -19,8 +19,6 @@
 
 #include "wx/mac/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
-
 class wxStockGDIMac: public wxStockGDI
 {
 public:

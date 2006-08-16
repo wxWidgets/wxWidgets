@@ -892,7 +892,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/dnd.cpp
     src/gtk/evtloop.cpp
     src/gtk/font.cpp
-    src/gtk/gdiobj.cpp
     src/gtk/gsockgtk.cpp
     src/gtk/main.cpp
     src/gtk/minifram.cpp
@@ -1070,7 +1069,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk1/dnd.cpp
     src/gtk1/evtloop.cpp
     src/gtk1/font.cpp
-    src/gtk1/gdiobj.cpp
     src/gtk1/gsockgtk.cpp
     src/gtk1/main.cpp
     src/gtk1/minifram.cpp
@@ -1253,7 +1251,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/motif/font.cpp
     src/motif/frame.cpp
     src/motif/gauge.cpp
-    src/motif/gdiobj.cpp
     src/motif/gsockmot.cpp
     src/motif/icon.cpp
     src/motif/listbox.cpp
@@ -1385,7 +1382,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/x11/dcscreen.cpp
     src/x11/evtloop.cpp
     src/x11/font.cpp
-    src/x11/gdiobj.cpp
     src/x11/gsockx11.cpp
     src/x11/minifram.cpp
     src/x11/nanox.c
@@ -1742,7 +1738,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mgl/font.cpp
     src/mgl/fontenum.cpp
     src/mgl/fontutil.cpp
-    src/mgl/gdiobj.cpp
     src/mgl/palette.cpp
     src/mgl/pen.cpp
     src/mgl/region.cpp
@@ -2301,7 +2296,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/fontutil.cpp
     src/cocoa/frame.mm
     src/cocoa/gauge.mm
-    src/cocoa/gdiobj.cpp
     src/cocoa/icon.mm
     src/cocoa/listbox.mm
     src/cocoa/main.cpp
