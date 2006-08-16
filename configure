@@ -313,7 +313,7 @@ ac_includes_default="\
 #endif"
 
 ac_subdirs_all="$ac_subdirs_all src/expat"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP EGREP CXX CXXFLAGS ac_ct_CXX RANLIB ac_ct_RANLIB AR ac_ct_AR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA STRIP ac_ct_STRIP WINDRES ac_ct_WINDRES DLLTOOL ac_ct_DLLTOOL IF_GNU_MAKE LN_S CXXCPP subdirs PKG_CONFIG GTK_CFLAGS GTK_LIBS GTK_CONFIG X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS PANGOX_CFLAGS PANGOX_LIBS PANGOFT2_CFLAGS PANGOFT2_LIBS PANGOXFT_CFLAGS PANGOXFT_LIBS REZ DEREZ SETFILE LIBICONV EXTRALIBS_ESD SDL_CONFIG SDL_CFLAGS SDL_LIBS LIBGNOMEPRINTUI_CFLAGS LIBGNOMEPRINTUI_LIBS GNOMEVFS_CFLAGS GNOMEVFS_LIBS HILDON_CFLAGS HILDON_LIBS GST_CFLAGS GST_LIBS CORE_BASE_LIBS CORE_GUI_LIBS wxUSE_ZLIB wxUSE_REGEX wxUSE_EXPAT wxUSE_ODBC wxUSE_LIBJPEG wxUSE_LIBPNG wxUSE_LIBTIFF VENDOR OFFICIAL_BUILD WX_FLAVOUR WX_LIB_FLAVOUR WXUNIV MONOLITHIC USE_PLUGINS EXTRALIBS EXTRALIBS_XML EXTRALIBS_HTML EXTRALIBS_ODBC EXTRALIBS_GUI EXTRALIBS_OPENGL EXTRALIBS_SDL WITH_PLUGIN_SDL EXTRALIBS_GNOMEPRINT EXTRALIBS_GNOMEVFS EXTRALIBS_HILDON UNICODE BUILD DEBUG_INFO DEBUG_FLAG TOOLKIT_LOWERCASE TOOLKIT_VERSION SAMPLES_RPATH_FLAG SAMPLES_RPATH_POSTLINK HOST_SUFFIX CPPUNIT_CFLAGS CPPUNIT_LIBS SET_MAKE MAKE_SET NM ac_ct_NM INSTALL_DIR LDFLAGS_GUI PLATFORM_UNIX PLATFORM_WIN32 PLATFORM_MSDOS PLATFORM_MAC PLATFORM_MACOS PLATFORM_MACOSX PLATFORM_OS2 PLATFORM_BEOS SO_SUFFIX SO_SUFFIX_MODULE DLLIMP_SUFFIX LIBPREFIX LIBEXT DLLPREFIX DLLPREFIX_MODULE dlldir AIX_CXX_LD SHARED_LD_CC SHARED_LD_CXX SHARED_LD_MODULE_CC SHARED_LD_MODULE_CXX PIC_FLAG WINDOWS_IMPLIB USE_SOVERSION USE_SOVERLINUX USE_SOVERSOLARIS USE_SOVERCYGWIN USE_MACVERSION USE_SOSYMLINKS SONAME_FLAG DEPS_TRACKING GCC_PCH ICC_PCH COND_BUILD_DEBUG COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT COND_BUILD_DEBUG_UNICODE_0 COND_BUILD_DEBUG_UNICODE_1 COND_BUILD_RELEASE COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT COND_BUILD_RELEASE_UNICODE_0 COND_BUILD_RELEASE_UNICODE_1 COND_DEBUG_FLAG_1 COND_DEBUG_INFO_0 COND_DEBUG_INFO_1 COND_DEPS_TRACKING_0 COND_DEPS_TRACKING_1 COND_GCC_PCH_1 COND_ICC_PCH_1 COND_MONOLITHIC_0 COND_MONOLITHIC_0_SHARED_0 COND_MONOLITHIC_0_SHARED_0_USE_AUI_1 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1 COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1 COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1 COND_MONOLITHIC_0_SHARED_0_USE_XRC_1 COND_MONOLITHIC_0_SHARED_1 COND_MONOLITHIC_0_SHARED_1_USE_AUI_1 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1 COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1 COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1 COND_MONOLITHIC_0_SHARED_1_USE_XRC_1 COND_MONOLITHIC_0_USE_MEDIA_1 COND_MONOLITHIC_0_USE_ODBC_1 COND_MONOLITHIC_1 COND_MONOLITHIC_1_SHARED_0 COND_MONOLITHIC_1_SHARED_1 COND_OFFICIAL_BUILD_0_PLATFORM_WIN32_1 COND_OFFICIAL_BUILD_1_PLATFORM_WIN32_1 COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1 COND_PLATFORM_MACOSX_0_USE_SOVERSION_1 COND_PLATFORM_MACOSX_1 COND_PLATFORM_MACOSX_1_TOOLKIT_ COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA COND_PLATFORM_MACOSX_1_TOOLKIT_GTK COND_PLATFORM_MACOSX_1_TOOLKIT_MAC COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1 COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0 COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF COND_PLATFORM_MACOSX_1_TOOLKIT_X11 COND_PLATFORM_MACOSX_1_USE_GUI_1 COND_PLATFORM_MACOSX_1_USE_SOVERSION_1 COND_PLATFORM_MACOS_1 COND_PLATFORM_MAC_1 COND_PLATFORM_MSDOS_0 COND_PLATFORM_MSDOS_1 COND_PLATFORM_OS2_1 COND_PLATFORM_UNIX_0 COND_PLATFORM_UNIX_1 COND_PLATFORM_UNIX_1_USE_GUI_1 COND_PLATFORM_UNIX_1_USE_PLUGINS_0 COND_PLATFORM_WIN32_0 COND_PLATFORM_WIN32_1 COND_SHARED_0 COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0 COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0 COND_SHARED_0_TOOLKIT_PM_WXUNIV_0 COND_SHARED_0_USE_GUI_1_USE_OPENGL_1 COND_SHARED_0_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN COND_SHARED_0_USE_GUI_1_WXUSE_LIBPNG_BUILTIN COND_SHARED_0_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN COND_SHARED_0_USE_XRC_1 COND_SHARED_0_WXUSE_EXPAT_BUILTIN COND_SHARED_0_WXUSE_ODBC_BUILTIN COND_SHARED_0_WXUSE_REGEX_BUILTIN COND_SHARED_0_WXUSE_ZLIB_BUILTIN COND_SHARED_1 COND_SHARED_1_USE_GUI_1_USE_OPENGL_1 COND_SHARED_1_USE_XRC_1 COND_TOOLKIT_ COND_TOOLKIT_COCOA COND_TOOLKIT_COCOA_USE_GUI_1 COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_GTK COND_TOOLKIT_GTK_TOOLKIT_VERSION_ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0 COND_TOOLKIT_GTK_USE_GUI_1 COND_TOOLKIT_MAC COND_TOOLKIT_MAC_USE_GUI_1 COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_MGL COND_TOOLKIT_MGL_USE_GUI_1 COND_TOOLKIT_MOTIF COND_TOOLKIT_MOTIF_USE_GUI_1 COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_MSW COND_TOOLKIT_MSW_USE_GUI_1 COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_MSW_WXUNIV_0 COND_TOOLKIT_PM COND_TOOLKIT_PM_USE_GUI_1 COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_WINCE COND_TOOLKIT_WINCE_USE_GUI_1 COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_WINCE_WXUNIV_0 COND_TOOLKIT_X11 COND_TOOLKIT_X11_USE_GUI_1 COND_UNICODE_1 COND_USE_EXCEPTIONS_0 COND_USE_EXCEPTIONS_1 COND_USE_GUI_0 COND_USE_GUI_1 COND_USE_GUI_1_WXUNIV_0 COND_USE_GUI_1_WXUNIV_1 COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN COND_USE_ODBC_1 COND_USE_OPENGL_1 COND_USE_PCH_1 COND_USE_PLUGINS_0 COND_USE_RTTI_0 COND_USE_RTTI_1 COND_USE_SOSYMLINKS_1 COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1 COND_USE_SOVERLINUX_1 COND_USE_SOVERSION_0 COND_USE_SOVERSOLARIS_1 COND_USE_THREADS_0 COND_USE_THREADS_1 COND_USE_XRC_1 COND_WINDOWS_IMPLIB_1 COND_WITH_PLUGIN_SDL_1 COND_WXUNIV_0 COND_WXUNIV_1 COND_WXUSE_EXPAT_BUILTIN COND_WXUSE_LIBJPEG_BUILTIN COND_WXUSE_LIBPNG_BUILTIN COND_WXUSE_LIBTIFF_BUILTIN COND_WXUSE_ODBC_BUILTIN COND_WXUSE_REGEX_BUILTIN COND_WXUSE_ZLIB_BUILTIN SHARED WX_LIBRARY_BASENAME_NOGUI WX_LIBRARY_BASENAME_GUI USE_GUI AFMINSTALL WIN32INSTALL TOOLKIT TOOLKIT_DIR TOOLCHAIN_NAME TOOLCHAIN_FULLNAME cross_compiling WIDGET_SET WX_RELEASE WX_VERSION WX_SUBVERSION WX_CHARTYPE WX_DEBUGTYPE WXCONFIG_CPPFLAGS WXCONFIG_CFLAGS WXCONFIG_CXXFLAGS WXCONFIG_LIBS WXCONFIG_RPATH WXCONFIG_LDFLAGS_GUI WXCONFIG_RESFLAGS EXE_LINKER GUIDIST DISTDIR SAMPLES_SUBDIRS LDFLAGS_GL OPENGL_LIBS DMALLOC_LIBS WX_VERSION_TAG RESCOMP RESFLAGS RESPROGRAMOBJ WX_RESOURCES_MACOSX_ASCII WX_RESOURCES_MACOSX_DATA LIBWXMACRES POSTLINK_COMMAND MACSETFILE GCC CPPUNIT_CONFIG LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP EGREP CXX CXXFLAGS ac_ct_CXX RANLIB ac_ct_RANLIB AR ac_ct_AR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA STRIP ac_ct_STRIP WINDRES ac_ct_WINDRES DLLTOOL ac_ct_DLLTOOL IF_GNU_MAKE LN_S CXXCPP subdirs PKG_CONFIG GTK_CFLAGS GTK_LIBS GTK_CONFIG X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS ac_pt_PKG_CONFIG PANGOX_CFLAGS PANGOX_LIBS PANGOFT2_CFLAGS PANGOFT2_LIBS PANGOXFT_CFLAGS PANGOXFT_LIBS REZ DEREZ SETFILE LIBICONV EXTRALIBS_ESD SDL_CONFIG SDL_CFLAGS SDL_LIBS LIBGNOMEPRINTUI_CFLAGS LIBGNOMEPRINTUI_LIBS GNOMEVFS_CFLAGS GNOMEVFS_LIBS HILDON_CFLAGS HILDON_LIBS GST_CFLAGS GST_LIBS CORE_BASE_LIBS CORE_GUI_LIBS wxUSE_ZLIB wxUSE_REGEX wxUSE_EXPAT wxUSE_ODBC wxUSE_LIBJPEG wxUSE_LIBPNG wxUSE_LIBTIFF VENDOR OFFICIAL_BUILD WX_FLAVOUR WX_LIB_FLAVOUR WXUNIV MONOLITHIC USE_PLUGINS EXTRALIBS EXTRALIBS_XML EXTRALIBS_HTML EXTRALIBS_ODBC EXTRALIBS_GUI EXTRALIBS_OPENGL EXTRALIBS_SDL WITH_PLUGIN_SDL EXTRALIBS_GNOMEPRINT EXTRALIBS_GNOMEVFS EXTRALIBS_HILDON UNICODE BUILD DEBUG_INFO DEBUG_FLAG TOOLKIT_LOWERCASE TOOLKIT_VERSION SAMPLES_RPATH_FLAG SAMPLES_RPATH_POSTLINK HOST_SUFFIX CPPUNIT_CFLAGS CPPUNIT_LIBS SET_MAKE MAKE_SET NM ac_ct_NM INSTALL_DIR LDFLAGS_GUI PLATFORM_UNIX PLATFORM_WIN32 PLATFORM_MSDOS PLATFORM_MAC PLATFORM_MACOS PLATFORM_MACOSX PLATFORM_OS2 PLATFORM_BEOS SO_SUFFIX SO_SUFFIX_MODULE DLLIMP_SUFFIX LIBPREFIX LIBEXT DLLPREFIX DLLPREFIX_MODULE dlldir AIX_CXX_LD SHARED_LD_CC SHARED_LD_CXX SHARED_LD_MODULE_CC SHARED_LD_MODULE_CXX PIC_FLAG WINDOWS_IMPLIB USE_SOVERSION USE_SOVERLINUX USE_SOVERSOLARIS USE_SOVERCYGWIN USE_MACVERSION USE_SOSYMLINKS SONAME_FLAG DEPS_TRACKING GCC_PCH ICC_PCH COND_BUILD_DEBUG COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT COND_BUILD_DEBUG_UNICODE_0 COND_BUILD_DEBUG_UNICODE_1 COND_BUILD_RELEASE COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT COND_BUILD_RELEASE_UNICODE_0 COND_BUILD_RELEASE_UNICODE_1 COND_DEBUG_FLAG_1 COND_DEBUG_INFO_0 COND_DEBUG_INFO_1 COND_DEPS_TRACKING_0 COND_DEPS_TRACKING_1 COND_GCC_PCH_1 COND_ICC_PCH_1 COND_MONOLITHIC_0 COND_MONOLITHIC_0_SHARED_0 COND_MONOLITHIC_0_SHARED_0_USE_AUI_1 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1 COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1 COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1 COND_MONOLITHIC_0_SHARED_0_USE_XRC_1 COND_MONOLITHIC_0_SHARED_1 COND_MONOLITHIC_0_SHARED_1_USE_AUI_1 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1 COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1 COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1 COND_MONOLITHIC_0_SHARED_1_USE_XRC_1 COND_MONOLITHIC_0_USE_MEDIA_1 COND_MONOLITHIC_0_USE_ODBC_1 COND_MONOLITHIC_1 COND_MONOLITHIC_1_SHARED_0 COND_MONOLITHIC_1_SHARED_1 COND_OFFICIAL_BUILD_0_PLATFORM_WIN32_1 COND_OFFICIAL_BUILD_1_PLATFORM_WIN32_1 COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1 COND_PLATFORM_MACOSX_0_USE_SOVERSION_1 COND_PLATFORM_MACOSX_1 COND_PLATFORM_MACOSX_1_TOOLKIT_ COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA COND_PLATFORM_MACOSX_1_TOOLKIT_GTK COND_PLATFORM_MACOSX_1_TOOLKIT_MAC COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1 COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0 COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF COND_PLATFORM_MACOSX_1_TOOLKIT_X11 COND_PLATFORM_MACOSX_1_USE_GUI_1 COND_PLATFORM_MACOSX_1_USE_SOVERSION_1 COND_PLATFORM_MACOS_1 COND_PLATFORM_MAC_1 COND_PLATFORM_MSDOS_0 COND_PLATFORM_MSDOS_1 COND_PLATFORM_OS2_1 COND_PLATFORM_UNIX_0 COND_PLATFORM_UNIX_1 COND_PLATFORM_UNIX_1_USE_GUI_1 COND_PLATFORM_UNIX_1_USE_PLUGINS_0 COND_PLATFORM_WIN32_0 COND_PLATFORM_WIN32_1 COND_SHARED_0 COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0 COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0 COND_SHARED_0_TOOLKIT_PM_WXUNIV_0 COND_SHARED_0_USE_GUI_1_USE_OPENGL_1 COND_SHARED_0_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN COND_SHARED_0_USE_GUI_1_WXUSE_LIBPNG_BUILTIN COND_SHARED_0_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN COND_SHARED_0_USE_XRC_1 COND_SHARED_0_WXUSE_EXPAT_BUILTIN COND_SHARED_0_WXUSE_ODBC_BUILTIN COND_SHARED_0_WXUSE_REGEX_BUILTIN COND_SHARED_0_WXUSE_ZLIB_BUILTIN COND_SHARED_1 COND_SHARED_1_USE_GUI_1_USE_OPENGL_1 COND_SHARED_1_USE_XRC_1 COND_TOOLKIT_ COND_TOOLKIT_COCOA COND_TOOLKIT_COCOA_USE_GUI_1 COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_GTK COND_TOOLKIT_GTK_TOOLKIT_VERSION_ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0 COND_TOOLKIT_GTK_USE_GUI_1 COND_TOOLKIT_MAC COND_TOOLKIT_MAC_USE_GUI_1 COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_MGL COND_TOOLKIT_MGL_USE_GUI_1 COND_TOOLKIT_MOTIF COND_TOOLKIT_MOTIF_USE_GUI_1 COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_MSW COND_TOOLKIT_MSW_USE_GUI_1 COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_MSW_WXUNIV_0 COND_TOOLKIT_PM COND_TOOLKIT_PM_USE_GUI_1 COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_WINCE COND_TOOLKIT_WINCE_USE_GUI_1 COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_WINCE_WXUNIV_0 COND_TOOLKIT_X11 COND_TOOLKIT_X11_USE_GUI_1 COND_UNICODE_1 COND_USE_EXCEPTIONS_0 COND_USE_EXCEPTIONS_1 COND_USE_GUI_0 COND_USE_GUI_1 COND_USE_GUI_1_WXUNIV_0 COND_USE_GUI_1_WXUNIV_1 COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN COND_USE_ODBC_1 COND_USE_OPENGL_1 COND_USE_PCH_1 COND_USE_PLUGINS_0 COND_USE_RTTI_0 COND_USE_RTTI_1 COND_USE_SOSYMLINKS_1 COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1 COND_USE_SOVERLINUX_1 COND_USE_SOVERSION_0 COND_USE_SOVERSOLARIS_1 COND_USE_THREADS_0 COND_USE_THREADS_1 COND_USE_XRC_1 COND_WINDOWS_IMPLIB_1 COND_WITH_PLUGIN_SDL_1 COND_WXUNIV_0 COND_WXUNIV_1 COND_WXUSE_EXPAT_BUILTIN COND_WXUSE_LIBJPEG_BUILTIN COND_WXUSE_LIBPNG_BUILTIN COND_WXUSE_LIBTIFF_BUILTIN COND_WXUSE_ODBC_BUILTIN COND_WXUSE_REGEX_BUILTIN COND_WXUSE_ZLIB_BUILTIN SHARED WX_LIBRARY_BASENAME_NOGUI WX_LIBRARY_BASENAME_GUI USE_GUI AFMINSTALL WIN32INSTALL TOOLKIT TOOLKIT_DIR TOOLCHAIN_NAME TOOLCHAIN_FULLNAME cross_compiling WIDGET_SET WX_RELEASE WX_VERSION WX_SUBVERSION WX_CHARTYPE WX_DEBUGTYPE WXCONFIG_CPPFLAGS WXCONFIG_CFLAGS WXCONFIG_CXXFLAGS WXCONFIG_LIBS WXCONFIG_RPATH WXCONFIG_LDFLAGS_GUI WXCONFIG_RESFLAGS EXE_LINKER GUIDIST DISTDIR SAMPLES_SUBDIRS LDFLAGS_GL OPENGL_LIBS DMALLOC_LIBS WX_VERSION_TAG RESCOMP RESFLAGS RESPROGRAMOBJ WX_RESOURCES_MACOSX_ASCII WX_RESOURCES_MACOSX_DATA LIBWXMACRES POSTLINK_COMMAND MACSETFILE GCC CPPUNIT_CONFIG LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -786,6 +786,66 @@ ac_env_CXXCPP_set=${CXXCPP+set}
 ac_env_CXXCPP_value=$CXXCPP
 ac_cv_env_CXXCPP_set=${CXXCPP+set}
 ac_cv_env_CXXCPP_value=$CXXCPP
+ac_env_PKG_CONFIG_set=${PKG_CONFIG+set}
+ac_env_PKG_CONFIG_value=$PKG_CONFIG
+ac_cv_env_PKG_CONFIG_set=${PKG_CONFIG+set}
+ac_cv_env_PKG_CONFIG_value=$PKG_CONFIG
+ac_env_PANGOX_CFLAGS_set=${PANGOX_CFLAGS+set}
+ac_env_PANGOX_CFLAGS_value=$PANGOX_CFLAGS
+ac_cv_env_PANGOX_CFLAGS_set=${PANGOX_CFLAGS+set}
+ac_cv_env_PANGOX_CFLAGS_value=$PANGOX_CFLAGS
+ac_env_PANGOX_LIBS_set=${PANGOX_LIBS+set}
+ac_env_PANGOX_LIBS_value=$PANGOX_LIBS
+ac_cv_env_PANGOX_LIBS_set=${PANGOX_LIBS+set}
+ac_cv_env_PANGOX_LIBS_value=$PANGOX_LIBS
+ac_env_PANGOFT2_CFLAGS_set=${PANGOFT2_CFLAGS+set}
+ac_env_PANGOFT2_CFLAGS_value=$PANGOFT2_CFLAGS
+ac_cv_env_PANGOFT2_CFLAGS_set=${PANGOFT2_CFLAGS+set}
+ac_cv_env_PANGOFT2_CFLAGS_value=$PANGOFT2_CFLAGS
+ac_env_PANGOFT2_LIBS_set=${PANGOFT2_LIBS+set}
+ac_env_PANGOFT2_LIBS_value=$PANGOFT2_LIBS
+ac_cv_env_PANGOFT2_LIBS_set=${PANGOFT2_LIBS+set}
+ac_cv_env_PANGOFT2_LIBS_value=$PANGOFT2_LIBS
+ac_env_PANGOXFT_CFLAGS_set=${PANGOXFT_CFLAGS+set}
+ac_env_PANGOXFT_CFLAGS_value=$PANGOXFT_CFLAGS
+ac_cv_env_PANGOXFT_CFLAGS_set=${PANGOXFT_CFLAGS+set}
+ac_cv_env_PANGOXFT_CFLAGS_value=$PANGOXFT_CFLAGS
+ac_env_PANGOXFT_LIBS_set=${PANGOXFT_LIBS+set}
+ac_env_PANGOXFT_LIBS_value=$PANGOXFT_LIBS
+ac_cv_env_PANGOXFT_LIBS_set=${PANGOXFT_LIBS+set}
+ac_cv_env_PANGOXFT_LIBS_value=$PANGOXFT_LIBS
+ac_env_LIBGNOMEPRINTUI_CFLAGS_set=${LIBGNOMEPRINTUI_CFLAGS+set}
+ac_env_LIBGNOMEPRINTUI_CFLAGS_value=$LIBGNOMEPRINTUI_CFLAGS
+ac_cv_env_LIBGNOMEPRINTUI_CFLAGS_set=${LIBGNOMEPRINTUI_CFLAGS+set}
+ac_cv_env_LIBGNOMEPRINTUI_CFLAGS_value=$LIBGNOMEPRINTUI_CFLAGS
+ac_env_LIBGNOMEPRINTUI_LIBS_set=${LIBGNOMEPRINTUI_LIBS+set}
+ac_env_LIBGNOMEPRINTUI_LIBS_value=$LIBGNOMEPRINTUI_LIBS
+ac_cv_env_LIBGNOMEPRINTUI_LIBS_set=${LIBGNOMEPRINTUI_LIBS+set}
+ac_cv_env_LIBGNOMEPRINTUI_LIBS_value=$LIBGNOMEPRINTUI_LIBS
+ac_env_GNOMEVFS_CFLAGS_set=${GNOMEVFS_CFLAGS+set}
+ac_env_GNOMEVFS_CFLAGS_value=$GNOMEVFS_CFLAGS
+ac_cv_env_GNOMEVFS_CFLAGS_set=${GNOMEVFS_CFLAGS+set}
+ac_cv_env_GNOMEVFS_CFLAGS_value=$GNOMEVFS_CFLAGS
+ac_env_GNOMEVFS_LIBS_set=${GNOMEVFS_LIBS+set}
+ac_env_GNOMEVFS_LIBS_value=$GNOMEVFS_LIBS
+ac_cv_env_GNOMEVFS_LIBS_set=${GNOMEVFS_LIBS+set}
+ac_cv_env_GNOMEVFS_LIBS_value=$GNOMEVFS_LIBS
+ac_env_HILDON_CFLAGS_set=${HILDON_CFLAGS+set}
+ac_env_HILDON_CFLAGS_value=$HILDON_CFLAGS
+ac_cv_env_HILDON_CFLAGS_set=${HILDON_CFLAGS+set}
+ac_cv_env_HILDON_CFLAGS_value=$HILDON_CFLAGS
+ac_env_HILDON_LIBS_set=${HILDON_LIBS+set}
+ac_env_HILDON_LIBS_value=$HILDON_LIBS
+ac_cv_env_HILDON_LIBS_set=${HILDON_LIBS+set}
+ac_cv_env_HILDON_LIBS_value=$HILDON_LIBS
+ac_env_GST_CFLAGS_set=${GST_CFLAGS+set}
+ac_env_GST_CFLAGS_value=$GST_CFLAGS
+ac_cv_env_GST_CFLAGS_set=${GST_CFLAGS+set}
+ac_cv_env_GST_CFLAGS_value=$GST_CFLAGS
+ac_env_GST_LIBS_set=${GST_LIBS+set}
+ac_env_GST_LIBS_value=$GST_LIBS
+ac_cv_env_GST_LIBS_set=${GST_LIBS+set}
+ac_cv_env_GST_LIBS_value=$GST_LIBS
 
 #
 # Report the --help message.
@@ -1118,6 +1178,31 @@ Some influential environment variables:
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   CXXCPP      C++ preprocessor
+  PKG_CONFIG  path to pkg-config utility
+  PANGOX_CFLAGS
+              C compiler flags for PANGOX, overriding pkg-config
+  PANGOX_LIBS linker flags for PANGOX, overriding pkg-config
+  PANGOFT2_CFLAGS
+              C compiler flags for PANGOFT2, overriding pkg-config
+  PANGOFT2_LIBS
+              linker flags for PANGOFT2, overriding pkg-config
+  PANGOXFT_CFLAGS
+              C compiler flags for PANGOXFT, overriding pkg-config
+  PANGOXFT_LIBS
+              linker flags for PANGOXFT, overriding pkg-config
+  LIBGNOMEPRINTUI_CFLAGS
+              C compiler flags for LIBGNOMEPRINTUI, overriding pkg-config
+  LIBGNOMEPRINTUI_LIBS
+              linker flags for LIBGNOMEPRINTUI, overriding pkg-config
+  GNOMEVFS_CFLAGS
+              C compiler flags for GNOMEVFS, overriding pkg-config
+  GNOMEVFS_LIBS
+              linker flags for GNOMEVFS, overriding pkg-config
+  HILDON_CFLAGS
+              C compiler flags for HILDON, overriding pkg-config
+  HILDON_LIBS linker flags for HILDON, overriding pkg-config
+  GST_CFLAGS  C compiler flags for GST, overriding pkg-config
+  GST_LIBS    linker flags for GST, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -29983,11 +30068,11 @@ _ACEOF
 
         if test "$wxUSE_UNICODE" = "yes"; then
 
-  succeeded=no
 
-  if test -z "$PKG_CONFIG"; then
-    # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
+set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
@@ -30012,7 +30097,6 @@ do
 done
 done
 
-  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
   ;;
 esac
 fi
@@ -30026,261 +30110,307 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
+fi
+if test -z "$ac_cv_path_PKG_CONFIG"; then
+  ac_pt_PKG_CONFIG=$PKG_CONFIG
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_ac_pt_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $ac_pt_PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
   fi
+done
+done
 
-  if test "$PKG_CONFIG" = "no" ; then
-     echo "*** The pkg-config script could not be found. Make sure it is"
-     echo "*** in your path, or set the PKG_CONFIG environment variable"
-     echo "*** to the full path to pkg-config."
-     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
-  else
-     PKG_CONFIG_MIN_VERSION=0.9.0
-     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for pangox" >&5
-echo $ECHO_N "checking for pangox... $ECHO_C" >&6
+  ;;
+esac
+fi
+ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
 
-        if $PKG_CONFIG --exists "pangox" ; then
-            echo "$as_me:$LINENO: result: yes" >&5
+if test -n "$ac_pt_PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $ac_pt_PKG_CONFIG" >&5
+echo "${ECHO_T}$ac_pt_PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  PKG_CONFIG=$ac_pt_PKG_CONFIG
+else
+  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
+fi
+
+fi
+if test -n "$PKG_CONFIG"; then
+	_pkg_min_version=0.9.0
+	echo "$as_me:$LINENO: checking pkg-config is at least version $_pkg_min_version" >&5
+echo $ECHO_N "checking pkg-config is at least version $_pkg_min_version... $ECHO_C" >&6
+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+		echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-            succeeded=yes
+	else
+		echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+		PKG_CONFIG=""
+	fi
 
-            echo "$as_me:$LINENO: checking PANGOX_CFLAGS" >&5
-echo $ECHO_N "checking PANGOX_CFLAGS... $ECHO_C" >&6
-            PANGOX_CFLAGS=`$PKG_CONFIG --cflags "pangox"`
-            echo "$as_me:$LINENO: result: $PANGOX_CFLAGS" >&5
-echo "${ECHO_T}$PANGOX_CFLAGS" >&6
+fi
 
-            echo "$as_me:$LINENO: checking PANGOX_LIBS" >&5
-echo $ECHO_N "checking PANGOX_LIBS... $ECHO_C" >&6
-            PANGOX_LIBS=`$PKG_CONFIG --libs "pangox"`
-            echo "$as_me:$LINENO: result: $PANGOX_LIBS" >&5
-echo "${ECHO_T}$PANGOX_LIBS" >&6
+pkg_failed=no
+echo "$as_me:$LINENO: checking for PANGOX" >&5
+echo $ECHO_N "checking for PANGOX... $ECHO_C" >&6
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$PANGOX_CFLAGS"; then
+        pkg_cv_PANGOX_CFLAGS="$PANGOX_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"pangox\"") >&5
+  ($PKG_CONFIG --exists --print-errors "pangox") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_PANGOX_CFLAGS=`$PKG_CONFIG --cflags "pangox" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$PANGOX_LIBS"; then
+        pkg_cv_PANGOX_LIBS="$PANGOX_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"pangox\"") >&5
+  ($PKG_CONFIG --exists --print-errors "pangox") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_PANGOX_LIBS=`$PKG_CONFIG --libs "pangox" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        PANGOX_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "pangox"`
         else
-            PANGOX_CFLAGS=""
-            PANGOX_LIBS=""
-            ## If we have a custom action on failure, don't print errors, but
-            ## do set a variable so people can do so.
-            PANGOX_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "pangox"`
-
+	        PANGOX_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "pangox"`
         fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$PANGOX_PKG_ERRORS" >&5
 
-
-
-     else
-        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
-        echo "*** See http://www.freedesktop.org/software/pkgconfig"
-     fi
-  fi
-
-  if test $succeeded = yes; then
-
-                        CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
-                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOX_LIBS"
-
-  else
 
                         { { echo "$as_me:$LINENO: error: pangox library not found, library cannot be compiled in Unicode mode" >&5
 echo "$as_me: error: pangox library not found, library cannot be compiled in Unicode mode" >&2;}
    { (exit 1); exit 1; }; }
 
 
-  fi
+elif test $pkg_failed = untried; then
+
+                        { { echo "$as_me:$LINENO: error: pangox library not found, library cannot be compiled in Unicode mode" >&5
+echo "$as_me: error: pangox library not found, library cannot be compiled in Unicode mode" >&2;}
+   { (exit 1); exit 1; }; }
 
 
-  succeeded=no
-
-  if test -z "$PKG_CONFIG"; then
-    # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
+	PANGOX_CFLAGS=$pkg_cv_PANGOX_CFLAGS
+	PANGOX_LIBS=$pkg_cv_PANGOX_LIBS
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 
-  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
-  ;;
-esac
+                        CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOX_LIBS"
+
 fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+pkg_failed=no
+echo "$as_me:$LINENO: checking for PANGOFT2" >&5
+echo $ECHO_N "checking for PANGOFT2... $ECHO_C" >&6
 
 if test -n "$PKG_CONFIG"; then
-  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
-echo "${ECHO_T}$PKG_CONFIG" >&6
+    if test -n "$PANGOFT2_CFLAGS"; then
+        pkg_cv_PANGOFT2_CFLAGS="$PANGOFT2_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"pangoft2\"") >&5
+  ($PKG_CONFIG --exists --print-errors "pangoft2") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_PANGOFT2_CFLAGS=`$PKG_CONFIG --cflags "pangoft2" 2>/dev/null`
 else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$PANGOFT2_LIBS"; then
+        pkg_cv_PANGOFT2_LIBS="$PANGOFT2_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"pangoft2\"") >&5
+  ($PKG_CONFIG --exists --print-errors "pangoft2") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_PANGOFT2_LIBS=`$PKG_CONFIG --libs "pangoft2" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
 fi
 
-  fi
 
-  if test "$PKG_CONFIG" = "no" ; then
-     echo "*** The pkg-config script could not be found. Make sure it is"
-     echo "*** in your path, or set the PKG_CONFIG environment variable"
-     echo "*** to the full path to pkg-config."
-     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
-  else
-     PKG_CONFIG_MIN_VERSION=0.9.0
-     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for pangoft2" >&5
-echo $ECHO_N "checking for pangoft2... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "pangoft2" ; then
-            echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-            succeeded=yes
+if test $pkg_failed = yes; then
 
-            echo "$as_me:$LINENO: checking PANGOFT2_CFLAGS" >&5
-echo $ECHO_N "checking PANGOFT2_CFLAGS... $ECHO_C" >&6
-            PANGOFT2_CFLAGS=`$PKG_CONFIG --cflags "pangoft2"`
-            echo "$as_me:$LINENO: result: $PANGOFT2_CFLAGS" >&5
-echo "${ECHO_T}$PANGOFT2_CFLAGS" >&6
-
-            echo "$as_me:$LINENO: checking PANGOFT2_LIBS" >&5
-echo $ECHO_N "checking PANGOFT2_LIBS... $ECHO_C" >&6
-            PANGOFT2_LIBS=`$PKG_CONFIG --libs "pangoft2"`
-            echo "$as_me:$LINENO: result: $PANGOFT2_LIBS" >&5
-echo "${ECHO_T}$PANGOFT2_LIBS" >&6
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        PANGOFT2_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "pangoft2"`
         else
-            PANGOFT2_CFLAGS=""
-            PANGOFT2_LIBS=""
-            ## If we have a custom action on failure, don't print errors, but
-            ## do set a variable so people can do so.
-            PANGOFT2_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "pangoft2"`
-
+	        PANGOFT2_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "pangoft2"`
         fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$PANGOFT2_PKG_ERRORS" >&5
 
-
-
-     else
-        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
-        echo "*** See http://www.freedesktop.org/software/pkgconfig"
-     fi
-  fi
-
-  if test $succeeded = yes; then
-
-                        CXXFLAGS="$PANGOFT2_CFLAGS $CXXFLAGS"
-                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
-
-  else
 
                         { echo "$as_me:$LINENO: WARNING: pangoft2 library not found, library will be compiled without printing support" >&5
 echo "$as_me: WARNING: pangoft2 library not found, library will be compiled without printing support" >&2;}
                         wxUSE_PRINTING_ARCHITECTURE="no"
 
 
-  fi
+elif test $pkg_failed = untried; then
+
+                        { echo "$as_me:$LINENO: WARNING: pangoft2 library not found, library will be compiled without printing support" >&5
+echo "$as_me: WARNING: pangoft2 library not found, library will be compiled without printing support" >&2;}
+                        wxUSE_PRINTING_ARCHITECTURE="no"
 
 
-  succeeded=no
-
-  if test -z "$PKG_CONFIG"; then
-    # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
+	PANGOFT2_CFLAGS=$pkg_cv_PANGOFT2_CFLAGS
+	PANGOFT2_LIBS=$pkg_cv_PANGOFT2_LIBS
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 
-  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
-  ;;
-esac
+                        CXXFLAGS="$PANGOFT2_CFLAGS $CXXFLAGS"
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
+
 fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+pkg_failed=no
+echo "$as_me:$LINENO: checking for PANGOXFT" >&5
+echo $ECHO_N "checking for PANGOXFT... $ECHO_C" >&6
 
 if test -n "$PKG_CONFIG"; then
-  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
-echo "${ECHO_T}$PKG_CONFIG" >&6
+    if test -n "$PANGOXFT_CFLAGS"; then
+        pkg_cv_PANGOXFT_CFLAGS="$PANGOXFT_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"pangoxft\"") >&5
+  ($PKG_CONFIG --exists --print-errors "pangoxft") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_PANGOXFT_CFLAGS=`$PKG_CONFIG --cflags "pangoxft" 2>/dev/null`
 else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$PANGOXFT_LIBS"; then
+        pkg_cv_PANGOXFT_LIBS="$PANGOXFT_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"pangoxft\"") >&5
+  ($PKG_CONFIG --exists --print-errors "pangoxft") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_PANGOXFT_LIBS=`$PKG_CONFIG --libs "pangoxft" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
 fi
 
-  fi
 
-  if test "$PKG_CONFIG" = "no" ; then
-     echo "*** The pkg-config script could not be found. Make sure it is"
-     echo "*** in your path, or set the PKG_CONFIG environment variable"
-     echo "*** to the full path to pkg-config."
-     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
-  else
-     PKG_CONFIG_MIN_VERSION=0.9.0
-     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for pangoxft" >&5
-echo $ECHO_N "checking for pangoxft... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "pangoxft" ; then
-            echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-            succeeded=yes
+if test $pkg_failed = yes; then
 
-            echo "$as_me:$LINENO: checking PANGOXFT_CFLAGS" >&5
-echo $ECHO_N "checking PANGOXFT_CFLAGS... $ECHO_C" >&6
-            PANGOXFT_CFLAGS=`$PKG_CONFIG --cflags "pangoxft"`
-            echo "$as_me:$LINENO: result: $PANGOXFT_CFLAGS" >&5
-echo "${ECHO_T}$PANGOXFT_CFLAGS" >&6
-
-            echo "$as_me:$LINENO: checking PANGOXFT_LIBS" >&5
-echo $ECHO_N "checking PANGOXFT_LIBS... $ECHO_C" >&6
-            PANGOXFT_LIBS=`$PKG_CONFIG --libs "pangoxft"`
-            echo "$as_me:$LINENO: result: $PANGOXFT_LIBS" >&5
-echo "${ECHO_T}$PANGOXFT_LIBS" >&6
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        PANGOXFT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "pangoxft"`
         else
-            PANGOXFT_CFLAGS=""
-            PANGOXFT_LIBS=""
-            ## If we have a custom action on failure, don't print errors, but
-            ## do set a variable so people can do so.
-            PANGOXFT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "pangoxft"`
-
+	        PANGOXFT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "pangoxft"`
         fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$PANGOXFT_PKG_ERRORS" >&5
 
 
+                        { echo "$as_me:$LINENO: WARNING: pangoxft library not found, library will be compiled without anti-aliasing support" >&5
+echo "$as_me: WARNING: pangoxft library not found, library will be compiled without anti-aliasing support" >&2;}
 
-     else
-        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
-        echo "*** See http://www.freedesktop.org/software/pkgconfig"
-     fi
-  fi
 
-  if test $succeeded = yes; then
+elif test $pkg_failed = untried; then
+
+                        { echo "$as_me:$LINENO: WARNING: pangoxft library not found, library will be compiled without anti-aliasing support" >&5
+echo "$as_me: WARNING: pangoxft library not found, library will be compiled without anti-aliasing support" >&2;}
+
+
+else
+	PANGOXFT_CFLAGS=$pkg_cv_PANGOXFT_CFLAGS
+	PANGOXFT_LIBS=$pkg_cv_PANGOXFT_LIBS
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 
                         cat >>confdefs.h <<\_ACEOF
 #define HAVE_PANGO_XFT 1
@@ -30289,14 +30419,7 @@ _ACEOF
                         CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
                         GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
 
-  else
-
-                        { echo "$as_me:$LINENO: WARNING: pangoxft library not found, library will be compiled without anti-aliasing support" >&5
-echo "$as_me: WARNING: pangoxft library not found, library will be compiled without anti-aliasing support" >&2;}
-
-
-  fi
-
+fi
                 save_CXXFLAGS="$CXXFLAGS"
                 save_LIBS="$LIBS"
                 CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
@@ -39835,6 +39958,12 @@ fi
       fi
                               echo "$as_me:$LINENO: checking for getservbyname_r" >&5
 echo $ECHO_N "checking for getservbyname_r... $ECHO_C" >&6
+if test "${ac_cv_func_which_getservbyname_r+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+echo "$as_me:$LINENO: checking for getservbyname_r" >&5
+echo $ECHO_N "checking for getservbyname_r... $ECHO_C" >&6
 if test "${ac_cv_func_getservbyname_r+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -39923,22 +40052,27 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_func_getservbyname_r" >&5
 echo "${ECHO_T}$ac_cv_func_getservbyname_r" >&6
 if test $ac_cv_func_getservbyname_r = yes; then
-  cat >conftest.$ac_ext <<_ACEOF
+
+        cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <netdb.h>
+
+#               include <netdb.h>
+
 int
 main ()
 {
 
-            char *name;
-            char *proto;
-            struct servent *se;
-            struct servent_data data;
-            (void) getservbyname_r(name, proto, se, &data);
+
+        char *name;
+        char *proto;
+        struct servent *se;
+        struct servent_data data;
+        (void) getservbyname_r(name, proto, se, &data);
+
 
   ;
   return 0;
@@ -39970,23 +40104,26 @@ else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-cat >conftest.$ac_ext <<_ACEOF
+
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <netdb.h>
+
+#   include <netdb.h>
+
 int
 main ()
 {
 
-                char *name;
-                char *proto;
-                struct servent *se, *res;
-                char buffer[2048];
-                int buflen = 2048;
-                (void) getservbyname_r(name, proto, se, buffer, buflen, &res);
+        char *name;
+        char *proto;
+        struct servent *se, *res;
+        char buffer[2048];
+        int buflen = 2048;
+        (void) getservbyname_r(name, proto, se, buffer, buflen, &res)
 
   ;
   return 0;
@@ -40018,23 +40155,26 @@ else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-cat >conftest.$ac_ext <<_ACEOF
+
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <netdb.h>
+
+#   include <netdb.h>
+
 int
 main ()
 {
 
-                    char *name;
-                    char *proto;
-                    struct servent *se;
-                    char buffer[2048];
-                    int buflen = 2048;
-                    (void) getservbyname_r(name, proto, se, buffer, buflen)
+        char *name;
+        char *proto;
+        struct servent *se;
+        char buffer[2048];
+        int buflen = 2048;
+        (void) getservbyname_r(name, proto, se, buffer, buflen)
 
   ;
   return 0;
@@ -40067,19 +40207,26 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 ac_cv_func_which_getservbyname_r=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
 else
   ac_cv_func_which_getservbyname_r=no
 fi
 
+fi
+echo "$as_me:$LINENO: result: $ac_cv_func_which_getservbyname_r" >&5
+echo "${ECHO_T}$ac_cv_func_which_getservbyname_r" >&6
 
 if test $ac_cv_func_which_getservbyname_r = six; then
   cat >>confdefs.h <<\_ACEOF
@@ -40095,6 +40242,7 @@ elif test $ac_cv_func_which_getservbyname_r = four; then
   cat >>confdefs.h <<\_ACEOF
 #define HAVE_FUNC_GETSERVBYNAME_R_4 1
 _ACEOF
+
 
 fi
 
@@ -41181,20 +41329,21 @@ else
 fi;
 
   if test x$sdl_exec_prefix != x ; then
-     sdl_args="$sdl_args --exec-prefix=$sdl_exec_prefix"
-     if test x${SDL_CONFIG+set} != xset ; then
-        SDL_CONFIG=$sdl_exec_prefix/bin/sdl-config
-     fi
+    sdl_args="$sdl_args --exec-prefix=$sdl_exec_prefix"
+    if test x${SDL_CONFIG+set} != xset ; then
+      SDL_CONFIG=$sdl_exec_prefix/bin/sdl-config
+    fi
   fi
   if test x$sdl_prefix != x ; then
-     sdl_args="$sdl_args --prefix=$sdl_prefix"
-     if test x${SDL_CONFIG+set} != xset ; then
-        SDL_CONFIG=$sdl_prefix/bin/sdl-config
-     fi
+    sdl_args="$sdl_args --prefix=$sdl_prefix"
+    if test x${SDL_CONFIG+set} != xset ; then
+      SDL_CONFIG=$sdl_prefix/bin/sdl-config
+    fi
   fi
 
-
-  PATH="$prefix/bin:$prefix/usr/bin:$PATH"
+  if test "x$prefix" != xNONE; then
+    PATH="$prefix/bin:$prefix/usr/bin:$PATH"
+  fi
   # Extract the first word of "sdl-config", so it can be a program name with args.
 set dummy sdl-config; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
@@ -41476,96 +41625,82 @@ if test "$WXGTK20" = 1; then
         if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
 
 
-  succeeded=no
-
-  if test -z "$PKG_CONFIG"; then
-    # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+pkg_failed=no
+echo "$as_me:$LINENO: checking for LIBGNOMEPRINTUI" >&5
+echo $ECHO_N "checking for LIBGNOMEPRINTUI... $ECHO_C" >&6
 
 if test -n "$PKG_CONFIG"; then
-  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
-echo "${ECHO_T}$PKG_CONFIG" >&6
+    if test -n "$LIBGNOMEPRINTUI_CFLAGS"; then
+        pkg_cv_LIBGNOMEPRINTUI_CFLAGS="$LIBGNOMEPRINTUI_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"libgnomeprintui-2.2 >= 2.8\"") >&5
+  ($PKG_CONFIG --exists --print-errors "libgnomeprintui-2.2 >= 2.8") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_LIBGNOMEPRINTUI_CFLAGS=`$PKG_CONFIG --cflags "libgnomeprintui-2.2 >= 2.8" 2>/dev/null`
 else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$LIBGNOMEPRINTUI_LIBS"; then
+        pkg_cv_LIBGNOMEPRINTUI_LIBS="$LIBGNOMEPRINTUI_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"libgnomeprintui-2.2 >= 2.8\"") >&5
+  ($PKG_CONFIG --exists --print-errors "libgnomeprintui-2.2 >= 2.8") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_LIBGNOMEPRINTUI_LIBS=`$PKG_CONFIG --libs "libgnomeprintui-2.2 >= 2.8" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
 fi
 
-  fi
 
-  if test "$PKG_CONFIG" = "no" ; then
-     echo "*** The pkg-config script could not be found. Make sure it is"
-     echo "*** in your path, or set the PKG_CONFIG environment variable"
-     echo "*** to the full path to pkg-config."
-     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
-  else
-     PKG_CONFIG_MIN_VERSION=0.9.0
-     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for libgnomeprintui-2.2 >= 2.8" >&5
-echo $ECHO_N "checking for libgnomeprintui-2.2 >= 2.8... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "libgnomeprintui-2.2 >= 2.8" ; then
-            echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-            succeeded=yes
+if test $pkg_failed = yes; then
 
-            echo "$as_me:$LINENO: checking LIBGNOMEPRINTUI_CFLAGS" >&5
-echo $ECHO_N "checking LIBGNOMEPRINTUI_CFLAGS... $ECHO_C" >&6
-            LIBGNOMEPRINTUI_CFLAGS=`$PKG_CONFIG --cflags "libgnomeprintui-2.2 >= 2.8"`
-            echo "$as_me:$LINENO: result: $LIBGNOMEPRINTUI_CFLAGS" >&5
-echo "${ECHO_T}$LIBGNOMEPRINTUI_CFLAGS" >&6
-
-            echo "$as_me:$LINENO: checking LIBGNOMEPRINTUI_LIBS" >&5
-echo $ECHO_N "checking LIBGNOMEPRINTUI_LIBS... $ECHO_C" >&6
-            LIBGNOMEPRINTUI_LIBS=`$PKG_CONFIG --libs "libgnomeprintui-2.2 >= 2.8"`
-            echo "$as_me:$LINENO: result: $LIBGNOMEPRINTUI_LIBS" >&5
-echo "${ECHO_T}$LIBGNOMEPRINTUI_LIBS" >&6
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBGNOMEPRINTUI_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libgnomeprintui-2.2 >= 2.8"`
         else
-            LIBGNOMEPRINTUI_CFLAGS=""
-            LIBGNOMEPRINTUI_LIBS=""
-            ## If we have a custom action on failure, don't print errors, but
-            ## do set a variable so people can do so.
-            LIBGNOMEPRINTUI_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libgnomeprintui-2.2 >= 2.8"`
-
+	        LIBGNOMEPRINTUI_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libgnomeprintui-2.2 >= 2.8"`
         fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBGNOMEPRINTUI_PKG_ERRORS" >&5
 
 
+                        { echo "$as_me:$LINENO: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&5
+echo "$as_me: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&2;}
+                        wxUSE_LIBGNOMEPRINT="no"
 
-     else
-        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
-        echo "*** See http://www.freedesktop.org/software/pkgconfig"
-     fi
-  fi
 
-  if test $succeeded = yes; then
+elif test $pkg_failed = untried; then
+
+                        { echo "$as_me:$LINENO: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&5
+echo "$as_me: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&2;}
+                        wxUSE_LIBGNOMEPRINT="no"
+
+
+else
+	LIBGNOMEPRINTUI_CFLAGS=$pkg_cv_LIBGNOMEPRINTUI_CFLAGS
+	LIBGNOMEPRINTUI_LIBS=$pkg_cv_LIBGNOMEPRINTUI_LIBS
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 
                         CXXFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CXXFLAGS"
                         cat >>confdefs.h <<\_ACEOF
@@ -41573,15 +41708,7 @@ echo "${ECHO_T}$LIBGNOMEPRINTUI_LIBS" >&6
 _ACEOF
 
 
-  else
-
-                        { echo "$as_me:$LINENO: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&5
-echo "$as_me: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&2;}
-                        wxUSE_LIBGNOMEPRINT="no"
-
-
-  fi
-
+fi
         fi
     fi
 fi
@@ -41591,96 +41718,82 @@ if test "$WXGTK20" = 1; then
         if test "$wxUSE_LIBGNOMEVFS" = "yes" ; then
 
 
-  succeeded=no
-
-  if test -z "$PKG_CONFIG"; then
-    # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+pkg_failed=no
+echo "$as_me:$LINENO: checking for GNOMEVFS" >&5
+echo $ECHO_N "checking for GNOMEVFS... $ECHO_C" >&6
 
 if test -n "$PKG_CONFIG"; then
-  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
-echo "${ECHO_T}$PKG_CONFIG" >&6
+    if test -n "$GNOMEVFS_CFLAGS"; then
+        pkg_cv_GNOMEVFS_CFLAGS="$GNOMEVFS_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"gnome-vfs-2.0 >= 2.0\"") >&5
+  ($PKG_CONFIG --exists --print-errors "gnome-vfs-2.0 >= 2.0") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_GNOMEVFS_CFLAGS=`$PKG_CONFIG --cflags "gnome-vfs-2.0 >= 2.0" 2>/dev/null`
 else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GNOMEVFS_LIBS"; then
+        pkg_cv_GNOMEVFS_LIBS="$GNOMEVFS_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"gnome-vfs-2.0 >= 2.0\"") >&5
+  ($PKG_CONFIG --exists --print-errors "gnome-vfs-2.0 >= 2.0") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_GNOMEVFS_LIBS=`$PKG_CONFIG --libs "gnome-vfs-2.0 >= 2.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
 fi
 
-  fi
 
-  if test "$PKG_CONFIG" = "no" ; then
-     echo "*** The pkg-config script could not be found. Make sure it is"
-     echo "*** in your path, or set the PKG_CONFIG environment variable"
-     echo "*** to the full path to pkg-config."
-     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
-  else
-     PKG_CONFIG_MIN_VERSION=0.9.0
-     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for gnome-vfs-2.0 >= 2.0" >&5
-echo $ECHO_N "checking for gnome-vfs-2.0 >= 2.0... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "gnome-vfs-2.0 >= 2.0" ; then
-            echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-            succeeded=yes
+if test $pkg_failed = yes; then
 
-            echo "$as_me:$LINENO: checking GNOMEVFS_CFLAGS" >&5
-echo $ECHO_N "checking GNOMEVFS_CFLAGS... $ECHO_C" >&6
-            GNOMEVFS_CFLAGS=`$PKG_CONFIG --cflags "gnome-vfs-2.0 >= 2.0"`
-            echo "$as_me:$LINENO: result: $GNOMEVFS_CFLAGS" >&5
-echo "${ECHO_T}$GNOMEVFS_CFLAGS" >&6
-
-            echo "$as_me:$LINENO: checking GNOMEVFS_LIBS" >&5
-echo $ECHO_N "checking GNOMEVFS_LIBS... $ECHO_C" >&6
-            GNOMEVFS_LIBS=`$PKG_CONFIG --libs "gnome-vfs-2.0 >= 2.0"`
-            echo "$as_me:$LINENO: result: $GNOMEVFS_LIBS" >&5
-echo "${ECHO_T}$GNOMEVFS_LIBS" >&6
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        GNOMEVFS_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gnome-vfs-2.0 >= 2.0"`
         else
-            GNOMEVFS_CFLAGS=""
-            GNOMEVFS_LIBS=""
-            ## If we have a custom action on failure, don't print errors, but
-            ## do set a variable so people can do so.
-            GNOMEVFS_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gnome-vfs-2.0 >= 2.0"`
-
+	        GNOMEVFS_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gnome-vfs-2.0 >= 2.0"`
         fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GNOMEVFS_PKG_ERRORS" >&5
 
 
+                        { echo "$as_me:$LINENO: WARNING: libgnomevfs not found, library won't be able to associate MIME type" >&5
+echo "$as_me: WARNING: libgnomevfs not found, library won't be able to associate MIME type" >&2;}
+                        wxUSE_LIBGNOMEVFS="no"
 
-     else
-        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
-        echo "*** See http://www.freedesktop.org/software/pkgconfig"
-     fi
-  fi
 
-  if test $succeeded = yes; then
+elif test $pkg_failed = untried; then
+
+                        { echo "$as_me:$LINENO: WARNING: libgnomevfs not found, library won't be able to associate MIME type" >&5
+echo "$as_me: WARNING: libgnomevfs not found, library won't be able to associate MIME type" >&2;}
+                        wxUSE_LIBGNOMEVFS="no"
+
+
+else
+	GNOMEVFS_CFLAGS=$pkg_cv_GNOMEVFS_CFLAGS
+	GNOMEVFS_LIBS=$pkg_cv_GNOMEVFS_LIBS
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 
                         CXXFLAGS="$GNOMEVFS_CFLAGS $CXXFLAGS"
                         cat >>confdefs.h <<\_ACEOF
@@ -41688,15 +41801,7 @@ echo "${ECHO_T}$GNOMEVFS_LIBS" >&6
 _ACEOF
 
 
-  else
-
-                        { echo "$as_me:$LINENO: WARNING: libgnomevfs not found, library won't be able to associate MIME type" >&5
-echo "$as_me: WARNING: libgnomevfs not found, library won't be able to associate MIME type" >&2;}
-                        wxUSE_LIBGNOMEVFS="no"
-
-
-  fi
-
+fi
         fi
     fi
 fi
@@ -41704,96 +41809,82 @@ fi
 if test "$WXGTK20" = 1; then
     if test "$wxUSE_LIBHILDON" = "yes" ; then
 
-  succeeded=no
-
-  if test -z "$PKG_CONFIG"; then
-    # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+pkg_failed=no
+echo "$as_me:$LINENO: checking for HILDON" >&5
+echo $ECHO_N "checking for HILDON... $ECHO_C" >&6
 
 if test -n "$PKG_CONFIG"; then
-  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
-echo "${ECHO_T}$PKG_CONFIG" >&6
+    if test -n "$HILDON_CFLAGS"; then
+        pkg_cv_HILDON_CFLAGS="$HILDON_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"hildon-lgpl >= 0.9\"") >&5
+  ($PKG_CONFIG --exists --print-errors "hildon-lgpl >= 0.9") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_HILDON_CFLAGS=`$PKG_CONFIG --cflags "hildon-lgpl >= 0.9" 2>/dev/null`
 else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$HILDON_LIBS"; then
+        pkg_cv_HILDON_LIBS="$HILDON_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"hildon-lgpl >= 0.9\"") >&5
+  ($PKG_CONFIG --exists --print-errors "hildon-lgpl >= 0.9") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_HILDON_LIBS=`$PKG_CONFIG --libs "hildon-lgpl >= 0.9" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
 fi
 
-  fi
 
-  if test "$PKG_CONFIG" = "no" ; then
-     echo "*** The pkg-config script could not be found. Make sure it is"
-     echo "*** in your path, or set the PKG_CONFIG environment variable"
-     echo "*** to the full path to pkg-config."
-     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
-  else
-     PKG_CONFIG_MIN_VERSION=0.9.0
-     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for hildon-lgpl >= 0.9" >&5
-echo $ECHO_N "checking for hildon-lgpl >= 0.9... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "hildon-lgpl >= 0.9" ; then
-            echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-            succeeded=yes
+if test $pkg_failed = yes; then
 
-            echo "$as_me:$LINENO: checking HILDON_CFLAGS" >&5
-echo $ECHO_N "checking HILDON_CFLAGS... $ECHO_C" >&6
-            HILDON_CFLAGS=`$PKG_CONFIG --cflags "hildon-lgpl >= 0.9"`
-            echo "$as_me:$LINENO: result: $HILDON_CFLAGS" >&5
-echo "${ECHO_T}$HILDON_CFLAGS" >&6
-
-            echo "$as_me:$LINENO: checking HILDON_LIBS" >&5
-echo $ECHO_N "checking HILDON_LIBS... $ECHO_C" >&6
-            HILDON_LIBS=`$PKG_CONFIG --libs "hildon-lgpl >= 0.9"`
-            echo "$as_me:$LINENO: result: $HILDON_LIBS" >&5
-echo "${ECHO_T}$HILDON_LIBS" >&6
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        HILDON_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "hildon-lgpl >= 0.9"`
         else
-            HILDON_CFLAGS=""
-            HILDON_LIBS=""
-            ## If we have a custom action on failure, don't print errors, but
-            ## do set a variable so people can do so.
-            HILDON_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "hildon-lgpl >= 0.9"`
-
+	        HILDON_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "hildon-lgpl >= 0.9"`
         fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$HILDON_PKG_ERRORS" >&5
 
 
+                { echo "$as_me:$LINENO: WARNING: libhildon_lgpl not found" >&5
+echo "$as_me: WARNING: libhildon_lgpl not found" >&2;}
+                        wxUSE_LIBHILDON="no"
 
-     else
-        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
-        echo "*** See http://www.freedesktop.org/software/pkgconfig"
-     fi
-  fi
 
-  if test $succeeded = yes; then
+elif test $pkg_failed = untried; then
+
+                { echo "$as_me:$LINENO: WARNING: libhildon_lgpl not found" >&5
+echo "$as_me: WARNING: libhildon_lgpl not found" >&2;}
+                        wxUSE_LIBHILDON="no"
+
+
+else
+	HILDON_CFLAGS=$pkg_cv_HILDON_CFLAGS
+	HILDON_LIBS=$pkg_cv_HILDON_LIBS
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 
                 EXTRALIBS_HILDON="$HILDON_LIBS"
                 CXXFLAGS="$CXXFLAGS $HILDON_CFLAGS"
@@ -41802,15 +41893,7 @@ echo "${ECHO_T}$HILDON_LIBS" >&6
 _ACEOF
 
 
-  else
-
-                { echo "$as_me:$LINENO: WARNING: libhildon_lgpl not found" >&5
-echo "$as_me: WARNING: libhildon_lgpl not found" >&2;}
-                        wxUSE_LIBHILDON="no"
-
-
-  fi
-
+fi
     fi
 fi
 
@@ -45145,109 +45228,87 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
 
         if test "$wxUSE_GSTREAMER8" = "no"; then
 
-  succeeded=no
-
-  if test -z "$PKG_CONFIG"; then
-    # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+pkg_failed=no
+echo "$as_me:$LINENO: checking for GST" >&5
+echo $ECHO_N "checking for GST... $ECHO_C" >&6
 
 if test -n "$PKG_CONFIG"; then
-  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
-echo "${ECHO_T}$PKG_CONFIG" >&6
+    if test -n "$GST_CFLAGS"; then
+        pkg_cv_GST_CFLAGS="$GST_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-plugins-base-\$GST_VERSION gconf-2.0\"") >&5
+  ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0" 2>/dev/null`
 else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GST_LIBS"; then
+        pkg_cv_GST_LIBS="$GST_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-plugins-base-\$GST_VERSION gconf-2.0\"") >&5
+  ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
 fi
 
-  fi
 
-  if test "$PKG_CONFIG" = "no" ; then
-     echo "*** The pkg-config script could not be found. Make sure it is"
-     echo "*** in your path, or set the PKG_CONFIG environment variable"
-     echo "*** to the full path to pkg-config."
-     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
-  else
-     PKG_CONFIG_MIN_VERSION=0.9.0
-     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0" >&5
-echo $ECHO_N "checking for gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0" ; then
-            echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-            succeeded=yes
+if test $pkg_failed = yes; then
 
-            echo "$as_me:$LINENO: checking GST_CFLAGS" >&5
-echo $ECHO_N "checking GST_CFLAGS... $ECHO_C" >&6
-            GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0"`
-            echo "$as_me:$LINENO: result: $GST_CFLAGS" >&5
-echo "${ECHO_T}$GST_CFLAGS" >&6
-
-            echo "$as_me:$LINENO: checking GST_LIBS" >&5
-echo $ECHO_N "checking GST_LIBS... $ECHO_C" >&6
-            GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0"`
-            echo "$as_me:$LINENO: result: $GST_LIBS" >&5
-echo "${ECHO_T}$GST_LIBS" >&6
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        GST_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0"`
         else
-            GST_CFLAGS=""
-            GST_LIBS=""
-            ## If we have a custom action on failure, don't print errors, but
-            ## do set a variable so people can do so.
-            GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0"`
-
+	        GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION gconf-2.0"`
         fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GST_PKG_ERRORS" >&5
 
-
-
-     else
-        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
-        echo "*** See http://www.freedesktop.org/software/pkgconfig"
-     fi
-  fi
-
-  if test $succeeded = yes; then
-
-                    wxUSE_GSTREAMER="yes"
-                    GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_VERSION"
-
-  else
 
                     { echo "$as_me:$LINENO: WARNING: GStreamer 0.10 not available, falling back to 0.8" >&5
 echo "$as_me: WARNING: GStreamer 0.10 not available, falling back to 0.8" >&2;}
                     GST_VERSION_MINOR=8
 
 
-  fi
+elif test $pkg_failed = untried; then
 
+                    { echo "$as_me:$LINENO: WARNING: GStreamer 0.10 not available, falling back to 0.8" >&5
+echo "$as_me: WARNING: GStreamer 0.10 not available, falling back to 0.8" >&2;}
+                    GST_VERSION_MINOR=8
+
+
+else
+	GST_CFLAGS=$pkg_cv_GST_CFLAGS
+	GST_LIBS=$pkg_cv_GST_LIBS
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+
+                    wxUSE_GSTREAMER="yes"
+                    GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_VERSION"
+
+fi
         else
                         GST_VERSION_MINOR=8
         fi
@@ -45255,104 +45316,80 @@ echo "$as_me: WARNING: GStreamer 0.10 not available, falling back to 0.8" >&2;}
         if test $GST_VERSION_MINOR = "8"; then
             GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
-  succeeded=no
-
-  if test -z "$PKG_CONFIG"; then
-    # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+pkg_failed=no
+echo "$as_me:$LINENO: checking for GST" >&5
+echo $ECHO_N "checking for GST... $ECHO_C" >&6
 
 if test -n "$PKG_CONFIG"; then
-  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
-echo "${ECHO_T}$PKG_CONFIG" >&6
+    if test -n "$GST_CFLAGS"; then
+        pkg_cv_GST_CFLAGS="$GST_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-interfaces-\$GST_VERSION gstreamer-gconf-\$GST_VERSION\"") >&5
+  ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION" 2>/dev/null`
 else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GST_LIBS"; then
+        pkg_cv_GST_LIBS="$GST_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-interfaces-\$GST_VERSION gstreamer-gconf-\$GST_VERSION\"") >&5
+  ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
 fi
 
-  fi
 
-  if test "$PKG_CONFIG" = "no" ; then
-     echo "*** The pkg-config script could not be found. Make sure it is"
-     echo "*** in your path, or set the PKG_CONFIG environment variable"
-     echo "*** to the full path to pkg-config."
-     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
-  else
-     PKG_CONFIG_MIN_VERSION=0.9.0
-     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION" >&5
-echo $ECHO_N "checking for gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION" ; then
-            echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-            succeeded=yes
+if test $pkg_failed = yes; then
 
-            echo "$as_me:$LINENO: checking GST_CFLAGS" >&5
-echo $ECHO_N "checking GST_CFLAGS... $ECHO_C" >&6
-            GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION"`
-            echo "$as_me:$LINENO: result: $GST_CFLAGS" >&5
-echo "${ECHO_T}$GST_CFLAGS" >&6
-
-            echo "$as_me:$LINENO: checking GST_LIBS" >&5
-echo $ECHO_N "checking GST_LIBS... $ECHO_C" >&6
-            GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION"`
-            echo "$as_me:$LINENO: result: $GST_LIBS" >&5
-echo "${ECHO_T}$GST_LIBS" >&6
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        GST_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION"`
         else
-            GST_CFLAGS=""
-            GST_LIBS=""
-            ## If we have a custom action on failure, don't print errors, but
-            ## do set a variable so people can do so.
-            GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION"`
-
+	        GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION"`
         fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GST_PKG_ERRORS" >&5
 
-
-
-     else
-        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
-        echo "*** See http://www.freedesktop.org/software/pkgconfig"
-     fi
-  fi
-
-  if test $succeeded = yes; then
-     wxUSE_GSTREAMER="yes"
-  else
 
                     { echo "$as_me:$LINENO: WARNING: GStreamer 0.8/0.10 not available." >&5
 echo "$as_me: WARNING: GStreamer 0.8/0.10 not available." >&2;}
 
-  fi
+elif test $pkg_failed = untried; then
 
+                    { echo "$as_me:$LINENO: WARNING: GStreamer 0.8/0.10 not available." >&5
+echo "$as_me: WARNING: GStreamer 0.8/0.10 not available." >&2;}
+
+else
+	GST_CFLAGS=$pkg_cv_GST_CFLAGS
+	GST_LIBS=$pkg_cv_GST_LIBS
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+	wxUSE_GSTREAMER="yes"
+fi
         fi
 
 
@@ -47212,7 +47249,6 @@ EOF
 
       powerpc-apple-macos* | \
       *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | *-*-k*bsd*-gnu | \
-      *-*-mirbsd* | \
       *-*-sunos4* | \
       *-*-osf* | \
       *-*-dgux5* | \
@@ -47221,10 +47257,7 @@ EOF
               ;;
 
       *)
-        { { echo "$as_me:$LINENO: error: unknown system type $BAKEFILE_HOST." >&5
-echo "$as_me: error: unknown system type $BAKEFILE_HOST." >&2;}
-   { (exit 1); exit 1; }; }
-    esac
+                    esac
 
     if test "x$PIC_FLAG" != "x" ; then
         PIC_FLAG="$PIC_FLAG -DPIC"
@@ -48863,6 +48896,8 @@ fi
 echo $ECHO_N "checking for Cppunit - version >= $cppunit_version_min... $ECHO_C" >&6
   no_cppunit=""
   if test "$CPPUNIT_CONFIG" = "no" ; then
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
     no_cppunit=yes
   else
     CPPUNIT_CFLAGS=`$CPPUNIT_CONFIG --cflags`
@@ -49639,6 +49674,7 @@ s,@X_CFLAGS@,$X_CFLAGS,;t t
 s,@X_PRE_LIBS@,$X_PRE_LIBS,;t t
 s,@X_LIBS@,$X_LIBS,;t t
 s,@X_EXTRA_LIBS@,$X_EXTRA_LIBS,;t t
+s,@ac_pt_PKG_CONFIG@,$ac_pt_PKG_CONFIG,;t t
 s,@PANGOX_CFLAGS@,$PANGOX_CFLAGS,;t t
 s,@PANGOX_LIBS@,$PANGOX_LIBS,;t t
 s,@PANGOFT2_CFLAGS@,$PANGOFT2_CFLAGS,;t t
