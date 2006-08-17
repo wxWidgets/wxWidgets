@@ -225,25 +225,14 @@ bool wxPen::RealizeResource()
            real_dash = (wxMSWDash*)NULL;
        }
 
-       // Win32s doesn't have ExtCreatePen function...
-       if (os == wxOS_WINDOWS_NT || os == wxOS_WINDOWS_9X)
-       {
-           M_PENDATA->m_hPen =
-             (WXHPEN) ExtCreatePen( ms_style,
-                                    M_PENDATA->m_width,
-                                    &logb,
-                                    M_PENDATA->m_style == wxUSER_DASH
-                                      ? M_PENDATA->m_nbDash
-                                      : 0,
-                                    (LPDWORD)real_dash );
-       }
-       else
-       {
-           M_PENDATA->m_hPen =
-              (WXHPEN) CreatePen( wx2msPenStyle(M_PENDATA->m_style),
-                                  M_PENDATA->m_width,
-                                  ms_colour );
-       }
+       M_PENDATA->m_hPen =
+         (WXHPEN) ExtCreatePen( ms_style,
+                                M_PENDATA->m_width,
+                                &logb,
+                                M_PENDATA->m_style == wxUSER_DASH
+                                  ? M_PENDATA->m_nbDash
+                                  : 0,
+                                (LPDWORD)real_dash );
 
        delete [] real_dash;
    }
@@ -389,8 +378,7 @@ int wx2msPenStyle(int wx_style)
             return PS_NULL;
 
         case wxUSER_DASH:
-            // if (wxGetOsVersion()==wxOS_WINDOWS_NT || wxGetOsVersion()==wxOS_WINDOWS_9X)
-                return PS_USERSTYLE;
+            return PS_USERSTYLE;
     }
 #else
     wxUnusedVar(wx_style);

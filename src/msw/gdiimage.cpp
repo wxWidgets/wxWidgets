@@ -572,7 +572,7 @@ wxSize wxGetHiconSize(HICON WXUNUSED_IN_WINCE(hicon))
     wxSize size(::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON));
 
 #ifndef __WXWINCE__
-    if ( hicon && wxGetOsVersion() != wxWIN32S )
+    if (hicon)
     {
         ICONINFO info;
         if ( !::GetIconInfo(hicon, &info) )
