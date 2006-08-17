@@ -1807,8 +1807,8 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
     {
         // Win9x and WinNT+ have different limits
         int version = wxGetOsVersion();
-        maxLenText = version == wxWINDOWS_NT ? 65535 : 8192;
-        maxWidth =   version == wxWINDOWS_NT ? INT_MAX : 32767;
+        maxLenText = version == wxOS_WINDOWS_NT ? 65535 : 8192;
+        maxWidth =   version == wxOS_WINDOWS_NT ? INT_MAX : 32767;
     }
 
     widths.Empty();

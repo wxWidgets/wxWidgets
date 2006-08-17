@@ -951,7 +951,7 @@ bool wxShutdown(wxShutdownFlags WXUNUSED_IN_WINCE(wFlags))
 #elif defined(__WIN32__)
     bool bOK = true;
 
-    if ( wxGetOsVersion(NULL, NULL) == wxWINDOWS_NT ) // if is NT or 2K
+    if ( wxGetOsVersion(NULL, NULL) == wxOS_WINDOWS_NT ) // if is NT or 2K
     {
         // Get a token for this process.
         HANDLE hToken;
@@ -1221,7 +1221,7 @@ wxWinVersion wxGetWinVersion()
         verMin;
     switch ( wxGetOsVersion(&verMaj, &verMin) )
     {
-        case wxWIN95:
+        case wxOS_WINDOWS_9X:
             if ( verMaj == 4 )
             {
                 switch ( verMin )
@@ -1238,7 +1238,7 @@ wxWinVersion wxGetWinVersion()
             }
             break;
 
-        case wxWINDOWS_NT:
+        case wxOS_WINDOWS_NT:
             switch ( verMaj )
             {
                 case 3:

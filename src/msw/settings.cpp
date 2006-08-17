@@ -228,7 +228,7 @@ wxFont wxCreateFontFromStockObject(int index)
             // We want Windows 2000 or later to have new fonts even MS Shell Dlg
             // is returned as default GUI font for compatibility
             int verMaj;
-            if(index == DEFAULT_GUI_FONT && wxGetOsVersion(&verMaj) == wxWINDOWS_NT && verMaj >= 5)
+            if(index == DEFAULT_GUI_FONT && wxGetOsVersion(&verMaj) == wxOS_WINDOWS_NT && verMaj >= 5)
                 wxStrcpy(info.lf.lfFaceName, wxT("MS Shell Dlg 2"));
 #endif
             // Under MicroWindows we pass the HFONT as well
@@ -449,12 +449,12 @@ extern wxFont wxGetCCDefaultFont()
     int verMaj, verMin;
     switch ( wxGetOsVersion(&verMaj, &verMin) )
     {
-        case wxWIN95:
+        case wxOS_WINDOWS_9X:
             // 4.10 is Win98
             useIconFont = verMaj == 4 && verMin >= 10;
             break;
 
-        case wxWINDOWS_NT:
+        case wxOS_WINDOWS_NT:
             // 5.0 is Win2k
             useIconFont = verMaj >= 5;
             break;

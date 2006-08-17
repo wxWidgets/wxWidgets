@@ -288,7 +288,7 @@ void wxGenericComboControl::OnMouseEvent( wxMouseEvent& event )
     if ( PreprocessMouseEvent(event,handlerFlags) )
         return;
 
-    const bool ctrlIsButton = wxPlatformIs(wxMSW);
+    const bool ctrlIsButton = wxPlatformIs(wxOS_WINDOWS);
 
     if ( ctrlIsButton &&
          (m_windowStyle & (wxCC_SPECIAL_DCLICK|wxCB_READONLY)) == wxCB_READONLY )

@@ -1086,7 +1086,7 @@ bool wxTopLevelWindowMSW::CanSetTransparent()
     if (os_type == -1)
         os_type = ::wxGetOsVersion(&ver_major);
 
-    return (os_type == wxWINDOWS_NT && ver_major >= 5);
+    return (os_type == wxOS_WINDOWS_NT && ver_major >= 5);
 }
 
 // ----------------------------------------------------------------------------

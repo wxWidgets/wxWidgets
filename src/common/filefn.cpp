@@ -1391,7 +1391,7 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
 
     #ifdef HAVE_WGETCWD
         #if wxUSE_UNICODE_MSLU
-            if ( wxGetOsVersion() != wxWIN95 )
+            if ( wxGetOsVersion() != wxOS_WINDOWS_9X )
         #else
             char *cbuf = NULL; // never really used because needsANSI will always be false
         #endif

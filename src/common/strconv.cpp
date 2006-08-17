@@ -2229,11 +2229,11 @@ private:
             int verMaj, verMin;
             switch ( wxGetOsVersion(&verMaj, &verMin) )
             {
-                case wxWIN95:
+                case wxOS_WINDOWS_9X:
                     s_isWin98Or2k = verMaj >= 4 && verMin >= 10;
                     break;
 
-                case wxWINDOWS_NT:
+                case wxOS_WINDOWS_NT:
                     s_isWin98Or2k = verMaj >= 5;
                     break;
 

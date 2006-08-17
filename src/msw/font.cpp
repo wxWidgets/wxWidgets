@@ -638,7 +638,7 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
             // is returned as default GUI font for compatibility
             int verMaj;
             ff_family = FF_SWISS;
-            if(wxGetOsVersion(&verMaj) == wxWINDOWS_NT && verMaj >= 5)
+            if(wxGetOsVersion(&verMaj) == wxOS_WINDOWS_NT && verMaj >= 5)
                 facename.Add(_T("MS Shell Dlg 2"));
             else
                 facename.Add(_T("MS Shell Dlg"));

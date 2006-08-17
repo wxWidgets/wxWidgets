@@ -247,7 +247,7 @@ static bool wxIsUnicodeAvailable()
 {
     static const wchar_t *ERROR_STRING = L"wxWidgets Fatal Error";
 
-    if ( wxGetOsVersion() != wxWINDOWS_NT )
+    if ( wxGetOsVersion() != wxOS_WINDOWS_NT )
     {
         // we need to be built with MSLU support
 #if !wxUSE_UNICODE_MSLU

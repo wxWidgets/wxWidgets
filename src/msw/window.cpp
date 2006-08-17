@@ -829,7 +829,7 @@ void wxWindowMSW::MSWUpdateUIState(int action, int state)
     if ( s_needToUpdate == -1 )
     {
         int verMaj, verMin;
-        s_needToUpdate = wxGetOsVersion(&verMaj, &verMin) == wxWINDOWS_NT &&
+        s_needToUpdate = wxGetOsVersion(&verMaj, &verMin) == wxOS_WINDOWS_NT &&
                             verMaj >= 5;
     }
 

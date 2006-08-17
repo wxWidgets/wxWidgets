@@ -123,7 +123,7 @@ bool wxPen::RealizeResource()
    // Join style, Cap style, Pen Stippling
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
    // Only NT can display dashed or dotted lines with width > 1
-   if ( os != wxWINDOWS_NT &&
+   if ( os != wxOS_WINDOWS_NT &&
            (M_PENDATA->m_style == wxDOT ||
             M_PENDATA->m_style == wxLONG_DASH ||
             M_PENDATA->m_style == wxSHORT_DASH ||
@@ -226,7 +226,7 @@ bool wxPen::RealizeResource()
        }
 
        // Win32s doesn't have ExtCreatePen function...
-       if (os==wxWINDOWS_NT || os==wxWIN95)
+       if (os == wxOS_WINDOWS_NT || os == wxOS_WINDOWS_9X)
        {
            M_PENDATA->m_hPen =
              (WXHPEN) ExtCreatePen( ms_style,
@@ -389,7 +389,7 @@ int wx2msPenStyle(int wx_style)
             return PS_NULL;
 
         case wxUSER_DASH:
-            // if (wxGetOsVersion()==wxWINDOWS_NT || wxGetOsVersion()==wxWIN95)
+            // if (wxGetOsVersion()==wxOS_WINDOWS_NT || wxGetOsVersion()==wxOS_WINDOWS_9X)
                 return PS_USERSTYLE;
     }
 #else
