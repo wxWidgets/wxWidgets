@@ -1171,13 +1171,13 @@ bool wxIsPlatform64Bit()
     typedef BOOL (WINAPI *IsWow64Process_t)(HANDLE, BOOL *);
 
     wxDynamicLibrary dllKernel32(_T("kernel32.dll"));
-    IsWow64Process_t *pfnIsWow64Process =
-        (IsWow64Process_t *)dllKernel32.RawGetSymbol(_T("IsWow64Process"));
+    IsWow64Process_t pfnIsWow64Process =
+        (IsWow64Process_t)dllKernel32.RawGetSymbol(_T("IsWow64Process"));
 
     BOOL wow64 = FALSE;
     if ( pfnIsWow64Process )
     {
-        (*pfnIsWow64Process)(::GetCurrentProcess(), &wow64);
+        pfnIsWow64Process(::GetCurrentProcess(), &wow64);
     }
     //else: running under a system without Win64 support
 
