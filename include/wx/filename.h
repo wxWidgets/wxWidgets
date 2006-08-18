@@ -19,16 +19,16 @@
     2. more file operations:
         a) chmod()
         b) [acm]time() - get and set
-        c) file size
-        d) file permissions with readable accessors for most common bits
+        c) file permissions with readable accessors for most common bits
            such as IsReadable() &c
-        e) rename()?
+        d) rename()?
     3. SameFileAs() function to compare inodes under Unix
  */
 
 #include "wx/arrstr.h"
 #include "wx/filefn.h"
 #include "wx/datetime.h"
+#include "wx/intl.h"
 
 #if wxUSE_FILE
 class WXDLLIMPEXP_BASE wxFile;
@@ -81,6 +81,10 @@ enum
 {
     wxPATH_MKDIR_FULL    = 0x0001   // create directories recursively
 };
+
+// error code of wxFileName::GetSize()
+extern wxULongLong wxInvalidSize;
+
 
 // ----------------------------------------------------------------------------
 // wxFileName: encapsulates a file path
@@ -434,6 +438,20 @@ public:
                             wxString *volume,
                             wxString *path,
                             wxPathFormat format = wxPATH_NATIVE);
+
+    // Filesize
+
+        // returns the size of the given filename
+    wxULongLong GetSize() const;
+    static wxULongLong GetSize(const wxString &file);
+
+        // returns the size in a human readable form
+    wxString GetHumanReadableSize(const wxString &nullsize = _("Not available"),
+                                  int precision = 1) const;
+    static wxString GetHumanReadableSize(const wxULongLong &sz,
+                                         const wxString &nullsize = _("Not available"),
+                                         int precision = 1);
+
 
     // deprecated methods, don't use any more
     // --------------------------------------
