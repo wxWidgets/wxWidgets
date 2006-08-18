@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/generic/tabmdi.cpp
+// Name:        src/aui/tabmdi.cpp
 // Purpose:     Generic MDI (Multiple Document Interface) classes
 // Author:      Hans Van Leemputten
 // Modified by: Benjamin I. Williams / Kirix Corporation
@@ -24,6 +24,7 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_AUI
 #if wxUSE_MDI
 
 #include "wx/aui/tabmdi.h"
@@ -680,4 +681,5 @@ void wxTabMDIClientWindow::OnSize(wxSizeEvent& evt)
         ((wxTabMDIChildFrame *)GetPage(pos))->ApplyMDIChildFrameRect();
 }
 
+#endif //wxUSE_AUI
 #endif // wxUSE_MDI

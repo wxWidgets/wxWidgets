@@ -12,6 +12,8 @@
 #ifndef _WX_AUITABMDI_H_
 #define _WX_AUITABMDI_H_
 
+#if wxUSE_AUI
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -248,5 +250,6 @@ private:
     DECLARE_DYNAMIC_CLASS(wxTabMDIClientWindow)
     DECLARE_EVENT_TABLE()
 };
+#endif // wxUSE_AUI
 
 #endif // _WX_AUITABMDI_H_
