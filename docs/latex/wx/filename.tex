@@ -513,6 +513,33 @@ This is the same as calling \helpref{GetPath}{wxfilenamegetpath}
 Return the short form of the path (returns identity on non-Windows platforms).
 
 
+\membersection{wxFileName::GetSize}\label{wxfilenamegetsize}
+
+\constfunc{wxULongLong}{GetSize}{\void}
+
+\func{static wxULongLong}{GetSize}{\param{const wxString\& }{filename}}
+
+Returns the size of this file (first form) or the size of the given file (second form).
+If the file does not exist or its size could not be read (because e.g. the file is locked
+by another process) the returned value is {\tt wxInvalidSize}.
+
+
+\membersection{wxFileName::GetHumanReadableSize}\label{wxfilenamegethumanreadablesize}
+
+\constfunc{wxString}{GetHumanReadableSize}{\param{const wxString\& }{failmsg = "Not available"}, \param{int }{precision = 1}}
+
+\func{static wxString}{GetHumanReadableSize}{\param{const wxULongLong\& }{bytes}, \param{const wxString\& }{nullsize = "Not available"}, \param{int }{precision = 1}}
+
+Returns the size of this file (first form) or the given number of bytes (second form)
+in a human-readable form.
+
+If the size could not be retrieved the {\tt failmsg} string is returned (first form).
+If {\tt bytes} is {\tt wxInvalidSize} or zero, then {\tt nullsize} is returned (second form).
+
+In case of success, the returned string is a floating-point number with {\tt precision} decimal digits
+followed by the size unit (B, kB, MB, GB, TB: respectively bytes, kilobytes, megabytes, gigabytes, terabytes).
+
+
 \membersection{wxFileName::GetTimes}\label{wxfilenamegettimes}
 
 \constfunc{bool}{GetTimes}{\param{wxDateTime* }{dtAccess}, \param{wxDateTime* }{dtMod}, \param{wxDateTime* }{dtCreate}}

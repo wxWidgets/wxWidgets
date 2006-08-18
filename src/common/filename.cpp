@@ -139,6 +139,10 @@
 #define MAX_PATH _MAX_PATH
 #endif
 
+
+wxULongLong wxInvalidSize = (unsigned)-1;
+
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -2018,6 +2022,84 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 }
 
 #endif // wxUSE_DATETIME
+
+
+// ----------------------------------------------------------------------------
+// file size functions
+// ----------------------------------------------------------------------------
+
+/* static */
+wxULongLong wxFileName::GetSize(const wxString &filename)
+{
+    if (!wxFileExists(filename))
+        return wxInvalidSize;
+
+#ifdef __WIN32__
+    wxFileHandle f(filename, wxFileHandle::Read);
+    if (!f.IsOk())
+        return wxInvalidSize;
+
+    DWORD lpFileSizeHigh;
+    DWORD ret = GetFileSize(f, &lpFileSizeHigh);
+    if (ret == INVALID_FILE_SIZE)
+        return wxInvalidSize;
+
+    // compose the low-order and high-order byte sizes
+    return wxULongLong(ret | (lpFileSizeHigh << sizeof(WORD)*2));
+
+#else           // ! __WIN32__
+
+    wxStructStat st;
+#ifndef wxNEED_WX_UNISTD_H
+    if (wxStat( filename.fn_str() , &st) != 0)
+#else
+    if (wxStat( filename, &st) != 0)
+#endif
+        return wxInvalidSize;
+    return wxULongLong(st.st_size);
+#endif
+}
+
+/* static */
+wxString wxFileName::GetHumanReadableSize(const wxULongLong &bs,
+                                          const wxString &nullsize,
+                                          int precision)
+{
+    static const double KILOBYTESIZE = 1024.0;
+    static const double MEGABYTESIZE = 1024.0*KILOBYTESIZE;
+    static const double GIGABYTESIZE = 1024.0*MEGABYTESIZE;
+    static const double TERABYTESIZE = 1024.0*GIGABYTESIZE;
+
+    if (bs == 0 || bs == wxInvalidSize)
+        return nullsize;
+
+    double bytesize = bs.ToDouble();
+    if (bytesize < KILOBYTESIZE)
+        return wxString::Format(_("%s B"), bs.ToString().c_str());
+    if (bytesize < MEGABYTESIZE)
+        return wxString::Format(_("%.*f kB"), precision, bytesize/KILOBYTESIZE);
+    if (bytesize < GIGABYTESIZE)
+        return wxString::Format(_("%.*f MB"), precision, bytesize/MEGABYTESIZE);
+    if (bytesize < TERABYTESIZE)
+        return wxString::Format(_("%.*f GB"), precision, bytesize/GIGABYTESIZE);
+
+    return wxString::Format(_("%.*f TB"), precision, bytesize/TERABYTESIZE);
+}
+
+wxULongLong wxFileName::GetSize() const
+{
+    return GetSize(GetFullPath());
+}
+
+wxString wxFileName::GetHumanReadableSize(const wxString &failmsg, int precision) const
+{
+    return GetHumanReadableSize(GetSize(), failmsg, precision);
+}
+
+
+// ----------------------------------------------------------------------------
+// Mac-specific functions
+// ----------------------------------------------------------------------------
 
 #ifdef __WXMAC__
 

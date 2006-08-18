@@ -137,7 +137,7 @@ See also: \helpref{Traverse}{wxdirtraverse}
 \constfunc{bool}{GetFirst}{\param{wxString* }{filename}, \param{const wxString\& }{filespec = wxEmptyString}, \param{int }{flags = wxDIR\_DEFAULT}}
 
 Start enumerating all files matching {\it filespec} (or all files if it is
-empty) and flags, return true on success.
+empty) and {\it flags}, return \true on success.
 
 
 \membersection{wxDir::GetName}\label{wxdirgetname}
@@ -154,6 +154,25 @@ trailing path separator (slash or backslash).
 
 Continue enumerating files which satisfy the criteria specified by the last
 call to \helpref{GetFirst}{wxdirgetfirst}.
+
+
+\membersection{wxDir::GetTotalSize}\label{wxdirgettotalsize}
+
+\func{static wxULongLong}{GetTotalSize}{\param{const wxString\& }{dir}, \param{wxArrayString* }{filesSkipped = NULL}}
+
+Returns the size (in bytes) of all files recursively found in {\tt dir} or
+{\tt wxInvalidSize} in case of error.
+
+In case it happens that while traversing folders a file's size can not be read,
+that file is added to the {\tt filesSkipped} array, if not \NULL, and then
+skipped.
+This usually happens with some special folders which are locked by the operating system
+or by another process. Remember that when {\tt filesSkipped->GetCount()} is not zero,
+then the returned value is not 100\% accurate and, if the skipped files were big, it could be
+far from real size of the directory.
+
+See also: \helpref{wxFileName::GetHumanReadableSize}{wxfilenamegethumanreadablesize},
+\helpref{wxGetDiskSpace}{wxgetdiskspace}
 
 
 \membersection{wxDir::HasFiles}\label{wxdirhasfiles}
