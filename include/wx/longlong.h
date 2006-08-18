@@ -411,7 +411,11 @@ public:
     }
 
         // convert to double
+#ifdef _MSC_VER
+    double ToDouble() const { return wx_truncate_cast(double, (__int64) m_ll); }
+#else
     double ToDouble() const { return wx_truncate_cast(double, m_ll); }
+#endif
 
     // operations
         // addition
