@@ -1460,22 +1460,13 @@ SettingsDialog::SettingsDialog(wxWindow* win, int dialogType)
         m_imageList = NULL;
 
     Create(win, wxID_ANY, _("Preferences"), wxDefaultPosition, wxDefaultSize,
-        wxDEFAULT_DIALOG_STYLE| (int)wxPlatform::IfNot(wxWinCE, resizeBorder)
-/*
-#ifndef __WXWINCE__
-        |resizeBorder
-#endif
-*/
+        wxDEFAULT_DIALOG_STYLE| (int)wxPlatform::IfNot(wxOS_WINDOWS_CE, resizeBorder)
     );
 
     // If using a toolbook, also follow Mac style and don't create buttons
     if (!useToolBook)
-        CreateButtons(wxOK|wxCANCEL| (int)wxPlatform::IfNot(wxWinPocketPC, wxHELP)
-/*
-#ifndef __POCKETPC__
-                      |wxHELP
-#endif
-*/
+        CreateButtons(wxOK | wxCANCEL |
+                        (int)wxPlatform::IfNot(wxOS_WINDOWS_CE, wxHELP)
     );
 
     wxBookCtrlBase* notebook = GetBookCtrl();
