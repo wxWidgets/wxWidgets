@@ -210,7 +210,6 @@ wxString wxFileTipProvider::GetTip()
 
 BEGIN_EVENT_TABLE(wxTipDialog, wxDialog)
     EVT_BUTTON(wxID_NEXT_TIP, wxTipDialog::OnNextTip)
-    EVT_BUTTON(wxID_CLOSE, wxTipDialog::OnCancel)
 END_EVENT_TABLE()
 
 wxTipDialog::wxTipDialog(wxWindow *parent,
@@ -229,6 +228,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     // smart phones does not support or do not waste space for wxButtons
 #ifndef __SMARTPHONE__
     wxButton *btnClose = new wxButton(this, wxID_CLOSE);
+    SetEscapeId(wxID_CLOSE);
 #endif
 
     m_checkbox = new wxCheckBox(this, wxID_ANY, _("&Show tips at startup"));
