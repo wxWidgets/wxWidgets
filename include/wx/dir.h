@@ -12,6 +12,7 @@
 #ifndef _WX_DIR_H_
 #define _WX_DIR_H_
 
+#include "wx/longlong.h"
 #include "wx/string.h"
 
 class WXDLLIMPEXP_BASE wxArrayString;
