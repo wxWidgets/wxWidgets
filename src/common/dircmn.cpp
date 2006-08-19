@@ -35,6 +35,9 @@
 #include "wx/dir.h"
 #include "wx/filename.h"
 
+// error code of wxFileName::GetSize()
+extern wxULongLong wxInvalidSize;
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -294,7 +297,7 @@ wxString wxDir::FindFirst(const wxString& dirname,
 class wxDirTraverserSumSize : public wxDirTraverser
 {
 public:
-    wxDirTraverserSumSize() { m_skippedFiles=false; }
+    wxDirTraverserSumSize() { }
 
     virtual wxDirTraverseResult OnFile(const wxString& filename)
     {
