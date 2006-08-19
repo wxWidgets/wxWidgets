@@ -7330,14 +7330,31 @@ AC_SUBST(CPPUNIT_LIBS)
 
 case "$TOOLKIT" in
     GTK)
-        TOOLKIT_USER="GTK+"
+        TOOLKIT_DESC="GTK+"
         if test "$WXGTK20" = 1; then
-            TOOLKIT_USER="$TOOLKIT_USER 2"
+            TOOLKIT_DESC="$TOOLKIT_DESC 2"
+            if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
+                TOOLKIT_EXTRA="$TOOLKIT_EXTRA gnomeprint";
+            fi
+            if test "$wxUSE_LIBGNOMEVFS" = "yes" ; then
+                TOOLKIT_EXTRA="$TOOLKIT_EXTRA gnomevfs"
+            fi
+            if test "$wxUSE_LIBHILDON" = "yes"; then
+                TOOLKIT_EXTRA="$TOOLKIT_EXTRA hildon"
+            fi
+
+            if test "$TOOLKIT_EXTRA" != ""; then
+                TOOLKIT_DESC="$TOOLKIT_DESC with support for `echo $TOOLKIT_EXTRA | tr -s ' '`"
+            fi
         fi
         ;;
 
+    ?*)
+        TOOLKIT_DESC=$TOOLKIT_LOWERCASE
+        ;;
+
     *)
-        TOOLKIT_USER=$TOOLKIT_LOWERCASE
+        TOOLKIT_DESC="base only"
         ;;
 esac
 
@@ -7643,7 +7660,7 @@ dnl report how we have been configured
 echo
 echo "Configured wxWidgets ${WX_VERSION} for \`${host}'"
 echo ""
-echo "  Which GUI toolkit should wxWidgets use?                 ${TOOLKIT_USER:-base only}"
+echo "  Which GUI toolkit should wxWidgets use?                 ${TOOLKIT_DESC}"
 echo "  Should wxWidgets be compiled into single library?       ${wxUSE_MONOLITHIC:-yes}"
 
 echo "  Should wxWidgets be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
@@ -7667,9 +7684,6 @@ echo "                                       odbc               ${wxUSE_ODBC}"
 echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
-echo "                                       gnomeprint         ${wxUSE_LIBGNOMEPRINT-none}"
-echo "                                       gnomevfs           ${wxUSE_LIBGNOMEVFS-none}"
-echo "                                       hildon             ${wxUSE_LIBHILDON-none}"
 
 echo ""
 
