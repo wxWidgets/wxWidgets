@@ -3653,7 +3653,7 @@ bool wxWindowGTK::ScrollLines(int lines)
     {
         GtkAdjustment* adj = range->adjustment;
         const int pos = int(adj->value + 0.5);
-        gtk_range_set_value(range, pos + lines);
+        gtk_range_set_value(range, pos + lines*adj->step_increment);
         changed = pos != int(adj->value + 0.5);
     }
     return changed;
@@ -3667,7 +3667,7 @@ bool wxWindowGTK::ScrollPages(int pages)
     {
         GtkAdjustment* adj = range->adjustment;
         const int pos = int(adj->value + 0.5);
-        gtk_range_set_value(range, pos + pages * adj->page_size);
+        gtk_range_set_value(range, pos + pages*adj->page_increment);
         changed = pos != int(adj->value + 0.5);
     }
     return changed;
