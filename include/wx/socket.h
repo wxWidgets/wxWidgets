@@ -273,7 +273,7 @@ public:
 
   void SetProxy(wxIPV4address& addr, wxSocketProxyType type, wxString login = wxEmptyString, wxString password = wxEmptyString);
 
-  char GetProxyError() const { return m_proxy_error; }
+  long int GetProxyError() const { return m_proxy_error; }
 
 private:
   virtual bool DoConnect(wxSockAddress& addr, wxSockAddress* local, bool wait = true);
@@ -283,7 +283,7 @@ private:
   wxString m_proxy_login;
   wxString m_proxy_passwd;
 
-  char m_proxy_error;
+  long int m_proxy_error;
 
   GSocketError ConnectSOCKS4(wxSockAddress& destination, bool socks4a = false);
   GSocketError ConnectSOCKS5(wxSockAddress& destination);
