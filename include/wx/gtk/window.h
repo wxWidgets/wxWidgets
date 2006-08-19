@@ -211,11 +211,36 @@ public:
 
     wxGtkIMData         *m_imData;
 
+
+    // indices for the arrays below
+    enum ScrollDir { ScrollDir_Horz, ScrollDir_Vert, ScrollDir_Max };
+
     // horizontal/vertical scroll bar
-    GtkRange* m_scrollBar[2];
+    GtkRange* m_scrollBar[ScrollDir_Max];
+
     // horizontal/vertical scroll position
-    double m_scrollPos[2];
-    bool m_blockValueChanged[2];
+    double m_scrollPos[ScrollDir_Max];
+
+    // if true, don't notify about adjustment change (without resetting the
+    // flag, so this has to be done manually)
+    bool m_blockValueChanged[ScrollDir_Max];
+
+    // return the scroll direction index corresponding to the given orientation
+    // (which is wxVERTICAL or wxHORIZONTAL)
+    static ScrollDir ScrollDirFromOrient(int orient)
+    {
+        return orient == wxVERTICAL ? ScrollDir_Vert : ScrollDir_Horz;
+    }
+
+    // return the orientation for the given scrolling direction
+    static int OrientFromScrollDir(ScrollDir dir)
+    {
+        return dir == ScrollDir_Horz ? wxHORIZONTAL : wxVERTICAL;
+    }
+
+    // find the direction of the given scrollbar (must be one of ours)
+    ScrollDir ScrollDirFromRange(GtkRange *range) const;
+
 
     // extra (wxGTK-specific) flags
     bool                 m_needParent:1;        // ! wxFrame, wxDialog, wxNotebookPage ?
@@ -291,6 +316,16 @@ protected:
     static void GtkScrolledWindowSetBorder(GtkWidget* w, int style);
 
 private:
+    enum ScrollUnit { ScrollUnit_Line, ScrollUnit_Page, ScrollUnit_Max };
+
+    // common part of ScrollLines() and ScrollPages() and could be used, in the
+    // future, for horizontal scrolling as well
+    //
+    // return true if we scrolled, false otherwise (on error or simply if we
+    // are already at the end)
+    bool DoScrollByUnits(ScrollDir dir, ScrollUnit unit, int units);
+
+
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)
     DECLARE_NO_COPY_CLASS(wxWindowGTK)
 };
