@@ -1394,7 +1394,8 @@ void wxSocketClient::SetProxy(wxIPV4address& addr, wxSocketProxyType type, wxStr
   m_proxy_passwd = password;
 }
 
-GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool socks4a) {
+GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool socks4a)
+{
   
   unsigned int total_len = 0;
   
@@ -1408,7 +1409,10 @@ GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool sock
     return GSOCK_INVSOCK;
   
   wxIPV4address* destination_ptr = dynamic_cast<wxIPV4address*>(&destination);
-  wxCHECK_MSG(destination_ptr, GSOCK_INVSOCK, wxT("Attempted to use proxy connection to a non-IPv4 address")); 
+  if (!destination_ptr)
+    m_socket->Shutdown();
+  
+  wxCHECK_MSG(destination_ptr, GSOCK_INVSOCK, wxT("Attempted to use SOCKS4(a) proxy connection to a non-IPv4 address")); 
   
   // Ok, we connected to the proxy server. Let's request the connection.
   unsigned char request_buffer[512]; // Should be enough
@@ -1507,13 +1511,236 @@ GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool sock
 }
 
 
-GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination) {
+GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
+{
+ 
+  unsigned int total_len = 0;
+  
   // Proxy Connect() code. Always blocking (at least for now).
-  m_socket->SetNonBlocking(0);  
+  m_socket->SetNonBlocking(0);
+  
+  if (m_socket->SetPeer(m_proxy_addr.GetAddress()) != GSOCK_NOERROR)
+    return GSOCK_INVSOCK;
+  
+  if (m_socket->Connect(GSOCK_STREAMED) != GSOCK_NOERROR)
+    return GSOCK_INVSOCK;  
+
+  wxIPV4address* destination_ptr = dynamic_cast<wxIPV4address*>(&destination);
+  
+  if (!destination_ptr)
+    m_socket->Shutdown();
+  
+  wxCHECK_MSG(destination_ptr, GSOCK_INVSOCK, wxT("Attempted to use SOCKS5 proxy connection to a non IPv4 address"));
+  
+  // Ok, we connected to the proxy server. Let's start auth.
+  unsigned char request_buffer[518]; // Should be enough
+  request_buffer[0] = 0x05; // SOCKS version
+  request_buffer[1] = 0x02; // 2 AUTH methods supported.
+  request_buffer[2] = 0x00; // No auth
+  request_buffer[4] = 0x02; // Login/Passwd
+
+  int old_flags = m_flags;
+  
+  m_connected = true;
+  m_flags = wxSOCKET_BLOCK | wxSOCKET_WAITALL;
+
+  unsigned long old_timeout = m_timeout;
+  SetTimeout(60);  // 60 seconds for the server to reply.
+
+  Write(request_buffer,  5);
+
+  if (Error() || LastCount() != 5)
+  {
+    m_connected = false;
+    m_flags = old_flags;
+    m_socket->Shutdown();
+    return GSOCK_INVSOCK;
+  }
+
+  unsigned char reply[512];
+  
+  Read(reply,2);
+  
+  if (Error() || LastCount() != 2)
+  {
+    m_connected = false;
+    m_flags = old_flags;
+    m_socket->Shutdown();
+    return GSOCK_INVSOCK;
+  }
+
+  if (reply[0] != 0x05 || reply[1] == 0xFF)
+  {
+    // Proxy refused all AUTH methods.
+    SetTimeout(old_timeout);
+    m_connected = false;
+    m_flags = old_flags;
+    m_socket->Shutdown();
+    return GSOCK_INVSOCK;        
+  }
+  
+  if (reply[1] == 0x02)
+  {
+
+    // Login needed.
+    if (m_proxy_login.Len() > 255 || m_proxy_passwd.Len() > 255)
+    {
+      // Login and password are limited to 255 chars in SOCKS5.
+      SetTimeout(old_timeout);
+      m_connected = false;
+      m_flags = old_flags;
+      m_socket->Shutdown();
+      return GSOCK_INVSOCK;      
+    }
+    
+    request_buffer[0] = 0x05; // Version
+    const wxWX2MBbuf login = wxConvLocal.cWX2MB(m_proxy_login);
+    unsigned char login_len = strlen((const char*)login);
+    const wxWX2MBbuf passwd = wxConvLocal.cWX2MB(m_proxy_passwd);
+    unsigned char passwd_len = strlen((const char*)passwd);
+    
+    request_buffer[1] = login_len;
+    memcpy(request_buffer + 1 + 1,(const char*)login,login_len);
+    // No zero!
+    request_buffer[1+login_len] = passwd_len;
+    memcpy(request_buffer + 1 + 1 + login_len + 1,(const char*)passwd,passwd_len);
+    
+    total_len = 1 + 1 + login_len + 1 + passwd_len;
+    
+    Write(request_buffer,total_len);
+  
+    if (Error() || LastCount() != total_len)
+    {
+      m_connected = false;
+      m_flags = old_flags;
+      m_socket->Shutdown();
+      return GSOCK_INVSOCK;
+    }
+    
+    Read(reply,2);
+    
+    if (Error() || LastCount() != 2)
+    {
+      m_connected = false;
+      m_flags = old_flags;
+      m_socket->Shutdown();
+      return GSOCK_INVSOCK;
+    }
+    
+    if (reply[0] != 0x05 || reply[1] != 0x00)
+    {
+      // Auth failed.
+      m_connected = false;
+      m_flags = old_flags;
+      m_socket->Shutdown();
+      return GSOCK_INVSOCK;
+    }
+  }
+    
+  // Either we needed no AUTH, or we just did complete it. Proceed.
+
+  request_buffer[0] = 0x05; // Version
+  request_buffer[1] = 0x01; // Command: Connect
+  request_buffer[2] = 0x00; // Reserved
+  
+  unsigned char host_type;
+  long unsigned int ip = -1;
+  wxASSERT(wxIPV4address::CheckStringIP(destination_ptr->IPAddress(), ip));
+  // This returns anti-host byte order, swap it.
+  ip = wxUINT32_SWAP_ALWAYS(ip);
+  if (ip == (long unsigned int)-1)
+    host_type = 0x03; // Hostname
+  else
+    host_type = 0x01;  // IP v4
+  
+  request_buffer[3] = host_type;
+  
+  if (host_type == 0x01)
+  {
+    PokeUInt32_BE(request_buffer + 4, ip);
+    total_len = 1 + 1 + 1 + 1 + 4;
+  }
+  else
+  {
+    const wxWX2MBbuf host = wxConvLocal.cWX2MB(destination_ptr->OrigHostname());
+    unsigned char host_len = strlen((const char*)host);
+    request_buffer[4] = host_len;
+    memcpy(request_buffer + 5,(const char*)host, host_len);
+    total_len = 1 + 1 + 1 + 1 + 1 + host_len;
+  }
+  
+  PokeUInt16_BE(request_buffer + total_len, destination_ptr->Service());
+  total_len += 2;
+  
+  Write(request_buffer,total_len);
+
+  if (Error() || LastCount() != total_len)
+  {
+    m_connected = false;
+    m_flags = old_flags;
+    m_socket->Shutdown();
+    return GSOCK_INVSOCK;
+  }
+  
+  Read(reply, 2);
+
+  if (Error() || LastCount() != 2)
+  {
+    m_connected = false;
+    m_flags = old_flags;
+    m_socket->Shutdown();
+    return GSOCK_INVSOCK;
+  }
+  
+  if (reply[0] != 0x05 || reply[1] != 0x00)
+  {
+    // Connect() request failed.
+    m_connected = false;
+    m_flags = old_flags;
+    m_socket->Shutdown();
+    return GSOCK_INVSOCK;    
+  }
+  
+  Read(reply + 2, 2);
+  
+  total_len = 4;
+  
+  // Consume all packet if success
+  switch (reply[3])
+  {
+    case 0x01:
+      // 4 bytes (IPv4)
+      Read(reply + 4, 4);
+      total_len += 4;
+      break;
+    case 0x03:
+      // Hostname
+      Read(reply+4, 1);
+      Read(reply+5, reply[5]);
+      total_len += reply[5] + 1;
+      break;
+    case 0x04:
+      // IPv6 (should never happen for now)
+      Read(reply+4, 16);
+      total_len += 16;
+      break;    
+    default:
+      // Server returned an unexpected address type. Ignore. Bad things will happen.
+      break;
+  }
+  
+  Read(reply + total_len, 2); // Port.
+  
+  // And now we ignore all the port/address info, and just return success.
+  
+  m_flags = old_flags;  
+  SetTimeout(old_timeout);  
+  
   return GSOCK_NOERROR;
 }
 
-GSocketError wxSocketClient::ConnectHTTP(wxSockAddress& destination) {
+GSocketError wxSocketClient::ConnectHTTP(wxSockAddress& destination)
+{
   // Proxy Connect() code. Always blocking (at least for now).
   m_socket->SetNonBlocking(0);  
   
