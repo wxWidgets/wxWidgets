@@ -1428,7 +1428,7 @@ GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool sock
   {
     wxASSERT(socks4a);
     // 0.0.0.1 is sent on socks4a when you can't solve the hostname.
-    PokeUInt32_BE(request_buffer+4, 16777216 /* 0.0.0.1 */);
+    PokeUInt32(request_buffer+4, 16777216 /* 0.0.0.1 */);
   }
   else
   {
