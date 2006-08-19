@@ -37,7 +37,7 @@
 // constants
 // ----------------------------------------------------------------------------
 
-static wxString wxOperatingSystemIdNames[] =
+static const wxChar* const wxOperatingSystemIdNames[] =
 {
     _T("Apple Mac OS"),
     _T("Apple Mac OS X"),
@@ -60,7 +60,7 @@ static wxString wxOperatingSystemIdNames[] =
     _T("OS/2")
 };
 
-static wxString wxPortIdNames[] =
+static const wxChar* const wxPortIdNames[] =
 {
     _T("wxBase"),
     _T("wxMSW"),
@@ -75,13 +75,13 @@ static wxString wxPortIdNames[] =
     _T("wxPalmOS")
 };
 
-static wxString wxArchitectureNames[] =
+static const wxChar* const wxArchitectureNames[] =
 {
     _T("32 bit"),
     _T("64 bit")
 };
 
-static wxString wxEndiannessNames[] =
+static const wxChar* const wxEndiannessNames[] =
 {
     _T("Big endian"),
     _T("Little endian"),
@@ -176,18 +176,19 @@ bool wxPlatformInfo::operator==(const wxPlatformInfo &t) const
 
 wxString wxPlatformInfo::GetOperatingSystemFamilyName(wxOperatingSystemId os)
 {
+    const wxChar* string = _T("Unknown");
     if ( os & wxOS_MAC )
-        return _T("Macintosh");
+        string = _T("Macintosh");
     else if ( os & wxOS_WINDOWS )
-        return _T("Windows");
+        string = _T("Windows");
     else if ( os & wxOS_UNIX )
-        return _T("Unix");
+        string = _T("Unix");
     else if ( os == wxOS_DOS )
-        return _T("DOS");
+        string = _T("DOS");
     else if ( os == wxOS_OS2 )
-        return _T("OS/2");
+        string = _T("OS/2");
 
-    return _T("Unknown");
+    return string;
 }
 
 wxString wxPlatformInfo::GetOperatingSystemIdName(wxOperatingSystemId os)
@@ -256,7 +257,7 @@ wxOperatingSystemId wxPlatformInfo::GetOperatingSystemId(const wxString &str)
 {
     for ( size_t i = 0; i < WXSIZEOF(wxOperatingSystemIdNames); i++ )
     {
-        if ( wxOperatingSystemIdNames[i].CmpNoCase(str) == 0 )
+        if ( wxString(wxOperatingSystemIdNames[i]).CmpNoCase(str) == 0 )
             return (wxOperatingSystemId)(1 << i);
     }
 
@@ -270,9 +271,8 @@ wxPortId wxPlatformInfo::GetPortId(const wxString &str)
     {
         wxPortId current = (wxPortId)(1 << i);
 
-        if ( wxPortIdNames[i].CmpNoCase(str) == 0 )
-            return current;
-        if ( GetPortIdShortName(current, true).CmpNoCase(str) == 0 ||
+        if ( wxString(wxPortIdNames[i]).CmpNoCase(str) == 0 ||
+             GetPortIdShortName(current, true).CmpNoCase(str) == 0 ||
              GetPortIdShortName(current, false).CmpNoCase(str) == 0 )
             return current;
     }
