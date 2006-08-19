@@ -85,17 +85,6 @@ public:
 
     virtual void Raise();
 
-    // event handlers
-    void OnCloseWindow(wxCloseEvent& event);
-
-    // Standard buttons
-    void OnOK(wxCommandEvent& event);
-    void OnApply(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
-
-    // Responds to colour changes
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
 #ifdef __POCKETPC__
     // Responds to the OK button in a PocketPC titlebar. This
     // can be overridden, or you can change the id used for
@@ -132,9 +121,6 @@ protected:
     // common part of all ctors
     void Init();
 
-    // end either modal or modeless dialog
-    void EndDialog(int rc);
-
 private:
     wxWindow*   m_oldFocus;
     bool        m_endModalCalled; // allow for closing within InitDialog
@@ -147,7 +133,6 @@ private:
     wxDialogModalData *m_modalData;
 
     DECLARE_DYNAMIC_CLASS(wxDialog)
-    DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxDialog)
 };
 

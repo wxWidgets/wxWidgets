@@ -66,23 +66,6 @@ public:
     virtual bool Show(bool show = true);
 
     //
-    // Event handlers
-    //
-    void OnCloseWindow(wxCloseEvent& rEvent);
-
-    //
-    // Standard buttons
-    //
-    void     OnOK(wxCommandEvent& rEvent);
-    void     OnApply(wxCommandEvent& rEvent);
-    void     OnCancel(wxCommandEvent& rEvent);
-
-    //
-    // Responds to colour changes
-    //
-    void     OnSysColourChanged(wxSysColourChangedEvent& rEvent);
-
-    //
     // Callbacks
     //
     virtual MRESULT OS2WindowProc( WXUINT   uMessage
@@ -124,9 +107,6 @@ protected:
     // Common part of all ctors
     //
     void Init(void);
-
-    // end either modal or modeless dialog
-    void EndDialog(int rc);
 
 private:
     wxWindow*                       m_pOldFocus;

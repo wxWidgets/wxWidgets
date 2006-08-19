@@ -57,18 +57,8 @@ public:
     virtual void ChangeFont(bool keepOriginalSize = true);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
-    inline WXWidget GetTopWidget() const { return m_mainWidget; }
-    inline WXWidget GetClientWidget() const { return m_mainWidget; }
-
-    // Standard buttons
-    void OnOK(wxCommandEvent& event);
-    void OnApply(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
-
-    // Responds to colour changes
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
-    void OnCloseWindow(wxCloseEvent& event);
+    WXWidget GetTopWidget() const { return m_mainWidget; }
+    WXWidget GetClientWidget() const { return m_mainWidget; }
 
 private:
     virtual bool XmDoCreateTLW(wxWindow* parent,
@@ -86,8 +76,8 @@ private:
 
 protected:
     virtual void DoSetSize(int x, int y,
-        int width, int height,
-        int sizeFlags = wxSIZE_AUTO);
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
 
     virtual void DoSetClientSize(int width, int height);
 

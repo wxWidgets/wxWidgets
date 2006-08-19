@@ -63,15 +63,6 @@ public:
 
     virtual void Raise();
 
-    // event handlers
-    void OnCharHook(wxKeyEvent& event);
-    void OnCloseWindow(wxCloseEvent& event);
-
-    // Standard buttons
-    void OnOK(wxCommandEvent& event);
-    void OnApply(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
-
 protected:
     // find the window to use as parent for this dialog if none has been
     // specified explicitly by the user

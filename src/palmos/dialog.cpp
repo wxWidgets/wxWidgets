@@ -100,14 +100,6 @@ wxCONSTRUCTOR_6( wxDialog , wxWindow* , Parent , wxWindowID , Id , wxString , Ti
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 #endif
 
-BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
-    EVT_BUTTON(wxID_OK, wxDialog::OnOK)
-    EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
-    EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
-
-    EVT_CLOSE(wxDialog::OnCloseWindow)
-END_EVENT_TABLE()
-
 // ----------------------------------------------------------------------------
 // wxDialogModalData
 // ----------------------------------------------------------------------------
@@ -190,23 +182,3 @@ void wxDialog::EndModal(int retCode)
 {
 }
 
-// ----------------------------------------------------------------------------
-// wxWin event handlers
-// ----------------------------------------------------------------------------
-
-// Standard buttons
-void wxDialog::OnOK(wxCommandEvent& WXUNUSED(event))
-{
-}
-
-void wxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
-{
-}
-
-void wxDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
-{
-}
-
-void wxDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
-{
-}

@@ -109,16 +109,6 @@ wxCONSTRUCTOR_6( wxDialog , wxWindow* , Parent , wxWindowID , Id , wxString , Ti
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 #endif
 
-BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
-    EVT_BUTTON(wxID_OK, wxDialog::OnOK)
-    EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
-    EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
-
-    EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
-
-    EVT_CLOSE(wxDialog::OnCloseWindow)
-END_EVENT_TABLE()
-
 // ----------------------------------------------------------------------------
 // wxDialogModalData
 // ----------------------------------------------------------------------------
@@ -377,75 +367,9 @@ void wxDialog::EndModal(int retCode)
     Hide();
 }
 
-void wxDialog::EndDialog(int rc)
-{
-    if ( IsModal() )
-        EndModal(rc);
-    else
-        Hide();
-}
-
 // ----------------------------------------------------------------------------
 // wxWin event handlers
 // ----------------------------------------------------------------------------
-
-// Standard buttons
-void wxDialog::OnOK(wxCommandEvent& WXUNUSED(event))
-{
-  if ( Validate() && TransferDataFromWindow() )
-  {
-      EndDialog(wxID_OK);
-  }
-}
-
-void wxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
-{
-    if ( Validate() )
-        TransferDataFromWindow();
-
-    // TODO probably need to disable the Apply button until things change again
-}
-
-void wxDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
-{
-    EndDialog(wxID_CANCEL);
-}
-
-void wxDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
-{
-    // We'll send a Cancel message by default, which may close the dialog.
-    // Check for looping if the Cancel event handler calls Close().
-
-    // Note that if a cancel button and handler aren't present in the dialog,
-    // nothing will happen when you close the dialog via the window manager, or
-    // via Close(). We wouldn't want to destroy the dialog by default, since
-    // the dialog may have been created on the stack. However, this does mean
-    // that calling dialog->Close() won't delete the dialog unless the handler
-    // for wxID_CANCEL does so. So use Destroy() if you want to be sure to
-    // destroy the dialog. The default OnCancel (above) simply ends a modal
-    // dialog, and hides a modeless dialog.
-
-    // VZ: this is horrible and MT-unsafe. Can't we reuse some of these global
-    //     lists here? don't dare to change it now, but should be done later!
-    static wxList closing;
-
-    if ( closing.Member(this) )
-        return;
-
-    closing.Append(this);
-
-    wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-    cancelEvent.SetEventObject( this );
-    GetEventHandler()->ProcessEvent(cancelEvent); // This may close the dialog
-
-    closing.DeleteObject(this);
-}
-
-void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
-{
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
-    Refresh();
-}
 
 #ifdef __POCKETPC__
 // Responds to the OK button in a PocketPC titlebar. This

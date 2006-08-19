@@ -25,7 +25,6 @@ WXDLLEXPORT_DATA(extern const wxChar) wxDialogNameStr[];
 class WXDLLEXPORT wxDialog : public wxDialogBase, protected wxCocoaNSPanel
 {
     DECLARE_DYNAMIC_CLASS(wxDialog)
-    DECLARE_EVENT_TABLE()
     WX_DECLARE_COCOA_OWNER(NSPanel,NSWindow,NSWindow)
 // ------------------------------------------------------------------------
 // initialization
@@ -93,20 +92,6 @@ public:
 
     // may be called to terminate the dialog with the given return code
     virtual void EndModal(int retCode);
-
-// ------------------------------------------------------------------------
-// Event handlers
-// ------------------------------------------------------------------------
-protected:
-    void OnCloseWindow(wxCloseEvent& event);
-    // Standard buttons
-    void OnOK(wxCommandEvent& event);
-    void OnApply(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
-
-    // end either modal or modeless dialog
-    void EndDialog(int rc);
-
 };
 
 #endif // _WX_COCOA_DIALOG_H_

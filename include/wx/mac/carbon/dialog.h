@@ -78,24 +78,13 @@ public:
     // implementation
     // --------------
 
-    // event handlers
-    void OnCloseWindow(wxCloseEvent& event);
-
-    // Standard buttons
-    void OnOK(wxCommandEvent& event);
-    void OnApply(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
-
-    // Responds to colour changes
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
     // show modal dialog and enter modal loop
     void DoShowModal();
 
 private:
     void Init();
+
     bool m_isModalStyle;
-    DECLARE_EVENT_TABLE()
 };
 
 #endif

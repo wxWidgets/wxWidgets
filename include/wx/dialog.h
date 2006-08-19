@@ -41,7 +41,11 @@ public:
     wxDialogBase() { Init(); }
     virtual ~wxDialogBase() { }
 
-    void Init();
+    // public wxDialog API, to be implemented by the derived classes
+    virtual int ShowModal() = 0;
+    virtual void EndModal(int retCode) = 0;
+    virtual bool IsModal() const = 0;
+
 
     // Modal dialogs have a return code - usually the id of the last
     // pressed button
@@ -84,6 +88,10 @@ protected:
     // could do something different if needed
     virtual bool IsEscapeKey(const wxKeyEvent& event);
 
+    // end either modal or modeless dialog, for the modal dialog rc is used as
+    // the dialog return code
+    void EndDialog(int rc);
+
 
     // The return code from modal dialog
     int m_returnCode;
@@ -95,8 +103,23 @@ protected:
     int m_escapeId;
 
 private:
+    // common part of all ctors
+    void Init();
+
     // handle Esc key presses
     void OnCharHook(wxKeyEvent& event);
+
+    // handle closing the dialog window
+    void OnCloseWindow(wxCloseEvent& event);
+
+    // handle the standard buttons
+    void OnOK(wxCommandEvent& event);
+    void OnApply(wxCommandEvent& event);
+    void OnCancel(wxCommandEvent& event);
+
+    // update the background colour
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
 
     DECLARE_NO_COPY_CLASS(wxDialogBase)
     DECLARE_EVENT_TABLE()
