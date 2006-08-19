@@ -35,9 +35,6 @@
 #include "wx/dir.h"
 #include "wx/filename.h"
 
-// error code of wxFileName::GetSize()
-extern wxULongLong wxInvalidSize;
-
 // ============================================================================
 // implementation
 // ============================================================================
