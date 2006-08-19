@@ -60,7 +60,7 @@ enum wxSocketError
   wxSOCKET_WOULDBLOCK = GSOCK_WOULDBLOCK,
   wxSOCKET_TIMEDOUT = GSOCK_TIMEDOUT,
   wxSOCKET_MEMERR = GSOCK_MEMERR,
-
+  
   // wxSocket-specific (not yet implemented)
   wxSOCKET_DUMMY
 };
@@ -273,6 +273,8 @@ public:
 
   void SetProxy(wxIPV4address& addr, wxSocketProxyType type, wxString login = wxEmptyString, wxString password = wxEmptyString);
 
+  char GetProxyError() const { return m_proxy_error; }
+
 private:
   virtual bool DoConnect(wxSockAddress& addr, wxSockAddress* local, bool wait = true);
 
@@ -280,6 +282,8 @@ private:
   wxSocketProxyType m_proxy_type;
   wxString m_proxy_login;
   wxString m_proxy_passwd;
+
+  char m_proxy_error;
 
   GSocketError ConnectSOCKS4(wxSockAddress& destination, bool socks4a = false);
   GSocketError ConnectSOCKS5(wxSockAddress& destination);

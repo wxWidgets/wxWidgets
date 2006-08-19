@@ -1310,6 +1310,7 @@ wxSocketClient::wxSocketClient(wxSocketFlags flags)
               : wxSocketBase(flags, wxSOCKET_CLIENT)
 {
   m_proxy_type = wxPROXY_NONE;
+  m_proxy_error = 0;
 }
 
 wxSocketClient::~wxSocketClient()
@@ -1439,6 +1440,7 @@ void wxSocketClient::SetProxy(wxIPV4address& addr, wxSocketProxyType type, wxStr
   m_proxy_type = type;
   m_proxy_login = login;
   m_proxy_passwd = password;
+  m_proxy_error = 0;
 }
 
 GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool socks4a)
@@ -1511,9 +1513,6 @@ GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool sock
   m_connected = true;
   m_flags = wxSOCKET_BLOCK | wxSOCKET_WAITALL;
 
-  unsigned long old_timeout = m_timeout;
-  SetTimeout(60);  // 60 seconds for the server to reply.
-
   Write(request_buffer,total_len);
   
   if (Error() || LastCount() != total_len)
@@ -1532,7 +1531,6 @@ GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool sock
   
   if (Error() || LastCount() != 8)
   {
-    SetTimeout(old_timeout);
     m_connected = false;
     m_flags = old_flags;
     m_socket->Shutdown();
@@ -1541,8 +1539,8 @@ GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool sock
   
   if (reply[0] != 0 || reply[1] != 90)
   {
+    m_proxy_error = reply[1];
     // Proxy refused connection.
-    SetTimeout(old_timeout);
     m_connected = false;
     m_flags = old_flags;
     m_socket->Shutdown();
@@ -1552,7 +1550,6 @@ GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool sock
   // Everything is ok. Restore old status.
   
   m_flags = old_flags;  
-  SetTimeout(old_timeout);
   
   return GSOCK_NOERROR;
 }
@@ -1591,9 +1588,6 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
   m_connected = true;
   m_flags = wxSOCKET_BLOCK | wxSOCKET_WAITALL;
 
-  unsigned long old_timeout = m_timeout;
-  SetTimeout(60);  // 60 seconds for the server to reply.
-
   Write(request_buffer,  4);
 
   if (Error() || LastCount() != 4)
@@ -1619,7 +1613,7 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
   if (reply[0] != 0x05 || reply[1] == 0xFF)
   {
     // Proxy refused all AUTH methods.
-    SetTimeout(old_timeout);
+    m_proxy_error = reply[1];
     m_connected = false;
     m_flags = old_flags;
     m_socket->Shutdown();
@@ -1632,7 +1626,6 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
     if (m_proxy_login.Len() > 255 || m_proxy_passwd.Len() > 255)
     {
       // Login and password are limited to 255 chars in SOCKS5.
-      SetTimeout(old_timeout);
       m_connected = false;
       m_flags = old_flags;
       m_socket->Shutdown();
@@ -1676,6 +1669,7 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
     if (reply[0] != 0x05 || reply[1] != 0x00)
     {
       // Auth failed.
+      m_proxy_error = reply[1];
       m_connected = false;
       m_flags = old_flags;
       m_socket->Shutdown();
@@ -1742,6 +1736,7 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
   if (reply[0] != 0x05 || reply[1] != 0x00)
   {
     // Connect() request failed.
+    m_proxy_error = reply[1];
     m_connected = false;
     m_flags = old_flags;
     m_socket->Shutdown();
@@ -1780,7 +1775,6 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
   
   // And now we ignore all the port/address info, and just return success.
   m_flags = old_flags;  
-  SetTimeout(old_timeout);  
   
   return GSOCK_NOERROR;
 }
@@ -1828,9 +1822,6 @@ GSocketError wxSocketClient::ConnectHTTP(wxSockAddress& destination)
   m_connected = true;
   m_flags = wxSOCKET_BLOCK | wxSOCKET_WAITALL;
 
-  unsigned long old_timeout = m_timeout;
-  SetTimeout(60);  // 60 seconds for the server to reply.
-   
   Write(request_buffer,  request_len);
 
   if (Error() || LastCount() != request_len)
@@ -1863,7 +1854,10 @@ GSocketError wxSocketClient::ConnectHTTP(wxSockAddress& destination)
   if (strncmp((char*)reply,"HTTP/",5) || strncmp((char*)reply+first_space, "200",3))
   {
     // Proxy refused CONNECT
-    SetTimeout(old_timeout);
+    char error[4];
+    memcpy(error,reply+first_space,3);
+    error[3] = '\0';
+    m_proxy_error = atoi(error);
     m_connected = false;
     m_flags = old_flags;
     m_socket->Shutdown();
@@ -1872,7 +1866,6 @@ GSocketError wxSocketClient::ConnectHTTP(wxSockAddress& destination)
     
   // All ok.
   m_flags = old_flags;  
-  SetTimeout(old_timeout);    
   
   return GSOCK_NOERROR;
 }
