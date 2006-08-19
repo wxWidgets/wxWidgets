@@ -42,7 +42,8 @@ class FileBrowseButton(wx.Panel):
                   fileMask = "*.*",
                   fileMode = wx.OPEN,
                   # callback for when value changes (optional)
-                  changeCallback= lambda x:x
+                  changeCallback= lambda x:x,
+                  labelWidth = 0
         ):
         """
         :param labelText:      Text for label to left of text field
@@ -53,6 +54,7 @@ class FileBrowseButton(wx.Panel):
         :param fileMask:       File mask (glob pattern, such as *.*) to use in file dialog
         :param fileMode:       wx.OPEN or wx.SAVE, indicates type of file dialog to use
         :param changeCallback: Optional callback called for all changes in value of the control
+        :param labelWidth:     Width of the label
         """
       
         # store variables
@@ -66,7 +68,7 @@ class FileBrowseButton(wx.Panel):
         self.fileMode = fileMode
         self.changeCallback = changeCallback
         self.callCallback = True
-
+        self.labelWidth = labelWidth
 
         # create the dialog
         self.createDialog(parent, id, pos, size, style )
@@ -117,7 +119,10 @@ class FileBrowseButton(wx.Panel):
         label = wx.StaticText(self, -1, self.labelText, style =wx.ALIGN_RIGHT )
         font = label.GetFont()
         w, h, d, e = self.GetFullTextExtent(self.labelText, font)
-        label.SetSize((w+5, h))
+        if self.labelWidth > 0:
+            label.SetSize((self.labelWidth+5, h))
+        else:
+            label.SetSize((w+5, h))
         return label
 
     def createTextControl( self):
