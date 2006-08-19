@@ -17,8 +17,6 @@ class WXDLLEXPORT wxEventLoop;
 // Dialog boxes
 class WXDLLEXPORT wxDialog : public wxDialogBase
 {
-    DECLARE_DYNAMIC_CLASS(wxDialog)
-
 public:
     wxDialog();
 
@@ -70,7 +68,6 @@ public:
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
-    void OnCharHook(wxKeyEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
 
 private:
@@ -97,7 +94,7 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxDialog)
 };
 
-#endif
-// _WX_DIALOG_H_
+#endif // _WX_DIALOG_H_

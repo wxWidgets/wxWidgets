@@ -99,6 +99,7 @@ private:
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxDialogBase, wxTopLevelWindow)
+    EVT_CHAR_HOOK(wxDialogBase::OnCharHook)
     WX_EVENT_TABLE_CONTROL_CONTAINER(wxDialogBase)
 END_EVENT_TABLE()
 
@@ -417,3 +418,58 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
 }
 
 #endif // wxUSE_BUTTON
+
+// ----------------------------------------------------------------------------
+// event handling stuff
+// ----------------------------------------------------------------------------
+
+bool wxDialogBase::EmulateButtonClickIfPresent(int id)
+{
+    wxButton *btn = wxDynamicCast(FindWindow(id), wxButton);
+
+    if ( !btn || !btn->IsEnabled() || !btn->IsShown() )
+        return false;
+
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, id);
+    event.SetEventObject(btn);
+    btn->GetEventHandler()->ProcessEvent(event);
+
+    return true;
+}
+
+bool wxDialogBase::IsEscapeKey(const wxKeyEvent& event)
+{
+    // for most platforms, Esc key is used to close the dialogs
+    return event.GetKeyCode() == WXK_ESCAPE &&
+                event.GetModifiers() == wxMOD_NONE;
+}
+
+void wxDialogBase::OnCharHook(wxKeyEvent& event)
+{
+    if ( event.GetKeyCode() == WXK_ESCAPE )
+    {
+        int idCancel = GetEscapeId();
+        switch ( idCancel )
+        {
+            case wxID_NONE:
+                // don't handle Esc specially at all
+                break;
+
+            case wxID_ANY:
+                // this value is special: it means translate Esc to wxID_CANCEL
+                // but if there is no such button, then fall back to wxID_OK
+                if ( EmulateButtonClickIfPresent(wxID_CANCEL) )
+                    return;
+                idCancel = wxID_OK;
+                // fall through
+
+            default:
+                // translate Esc to button press for the button with given id
+                if ( EmulateButtonClickIfPresent(idCancel) )
+                    return;
+        }
+    }
+
+    event.Skip();
+}
+

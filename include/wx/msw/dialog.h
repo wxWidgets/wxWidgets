@@ -86,7 +86,6 @@ public:
     virtual void Raise();
 
     // event handlers
-    void OnCharHook(wxKeyEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
 
     // Standard buttons
@@ -123,9 +122,6 @@ public:
     wxDEPRECATED( bool IsModalShowing() const );
 #endif // WXWIN_COMPATIBILITY_2_6
 
-    // handle Escape here
-    virtual bool MSWProcessMessage(WXMSG* pMsg);
-
 protected:
     // find the window to use as parent for this dialog if none has been
     // specified explicitly by the user
@@ -138,11 +134,6 @@ protected:
 
     // end either modal or modeless dialog
     void EndDialog(int rc);
-
-    // emulate click of a button with the given id if it's present in the dialog
-    //
-    // return true if button was "clicked" or false if we don't have it
-    bool EmulateButtonClickIfPresent(int id);
 
 private:
     wxWindow*   m_oldFocus;

@@ -68,7 +68,6 @@ public:
     //
     // Event handlers
     //
-    void OnCharHook(wxKeyEvent& rEvent);
     void OnCloseWindow(wxCloseEvent& rEvent);
 
     //

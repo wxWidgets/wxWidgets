@@ -1152,43 +1152,6 @@ gtk_window_key_press_callback( GtkWidget *widget,
         ret = win->GetParent()->GetEventHandler()->ProcessEvent( new_event );
     }
 
-    // generate wxID_CANCEL if <esc> has been pressed (typically in dialogs)
-    if ( !ret &&
-         (gdk_event->keyval == GDK_Escape) )
-    {
-        // however only do it if we have a Cancel button in the dialog,
-        // otherwise the user code may get confused by the events from a
-        // nonexistent button and, worse, a wxButton might get button event
-        // from another button which is not really expected
-        wxWindow *winForCancel = win,
-                 *btnCancel = NULL;
-        while ( winForCancel )
-        {
-            btnCancel = winForCancel->FindWindow(wxID_CANCEL);
-            if ( btnCancel )
-            {
-                // found a cancel button
-                break;
-            }
-
-            if ( winForCancel->IsTopLevel() )
-            {
-                // no need to look further
-                break;
-            }
-
-            // maybe our parent has a cancel button?
-            winForCancel = winForCancel->GetParent();
-        }
-
-        if ( btnCancel )
-        {
-            wxCommandEvent eventClick(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-            eventClick.SetEventObject(btnCancel);
-            ret = btnCancel->GetEventHandler()->ProcessEvent(eventClick);
-        }
-    }
-
     if (ret)
     {
         g_signal_stop_emission_by_name (widget, "key_press_event");

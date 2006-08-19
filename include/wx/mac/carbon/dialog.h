@@ -79,7 +79,6 @@ public:
     // --------------
 
     // event handlers
-    void OnCharHook(wxKeyEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
 
     // Standard buttons

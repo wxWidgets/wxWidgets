@@ -75,7 +75,6 @@ BEGIN_EVENT_TABLE(wxDialog, wxTopLevelWindow)
     EVT_BUTTON(wxID_OK, wxDialog::OnOK)
     EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
     EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
-    EVT_CHAR_HOOK(wxDialog::OnCharHook)
     EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
     EVT_CLOSE(wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
@@ -231,23 +230,6 @@ wxDialog::~wxDialog()
         wxDeleteWindowFromTable( (Widget)m_mainWidget );
         XtDestroyWidget( (Widget)m_mainWidget );
     }
-}
-
-// By default, pressing escape cancels the dialog
-void wxDialog::OnCharHook(wxKeyEvent& event)
-{
-    if (event.m_keyCode == WXK_ESCAPE)
-    {
-        // Behaviour changed in 2.0: we'll send a Cancel message
-        // to the dialog instead of Close.
-        wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-        cancelEvent.SetEventObject( this );
-        GetEventHandler()->ProcessEvent(cancelEvent);
-
-        return;
-    }
-    // We didn't process this event.
-    event.Skip();
 }
 
 void wxDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags)

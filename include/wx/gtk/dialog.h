@@ -52,9 +52,6 @@ public:
     void OnOK( wxCommandEvent &event );
     void OnPaint( wxPaintEvent& event );
     void OnCloseWindow( wxCloseEvent& event );
-    /*
-       void OnCharHook( wxKeyEvent& event );
-     */
 
     virtual bool Show( bool show = TRUE );
     virtual int ShowModal();

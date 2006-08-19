@@ -39,7 +39,6 @@ BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
     EVT_BUTTON(wxID_OK, wxDialog::OnOK)
     EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
     EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
-    EVT_CHAR_HOOK(wxDialog::OnCharHook)
     EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
 
     EVT_CLOSE(wxDialog::OnCloseWindow)
@@ -162,40 +161,6 @@ wxDialog::~wxDialog()
     // this will also reenable all the other windows for a modal dialog
     Show(false);
 } // end of wxDialog::~wxDialog
-
-//
-// By default, pressing escape cancels the dialog
-//
-void wxDialog::OnCharHook(
-  wxKeyEvent&                       rEvent
-)
-{
-    if (GetHWND())
-    {
-        if (rEvent.m_keyCode == WXK_ESCAPE)
-        {
-            //
-            // Behaviour changed in 2.0: we'll send a Cancel message
-            // to the dialog instead of Close.
-            //
-            wxCommandEvent          vCancelEvent( wxEVT_COMMAND_BUTTON_CLICKED
-                                                 ,wxID_CANCEL
-                                                );
-
-            vCancelEvent.SetEventObject( this );
-            GetEventHandler()->ProcessEvent(vCancelEvent);
-
-            //
-            // Ensure that there is another message for this window so the
-            // ShowModal loop will exit and won't get stuck in GetMessage().
-            //
-            ::WinPostMsg(GetHwnd(), WM_NULL, 0, 0);
-            return;
-        }
-    }
-    // We didn't process this event.
-    rEvent.Skip();
-}
 
 // ----------------------------------------------------------------------------
 // showing the dialogs

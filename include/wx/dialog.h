@@ -32,7 +32,6 @@ extern WXDLLEXPORT_DATA(const wxChar) wxDialogNameStr[];
 class WXDLLEXPORT wxDialogBase : public wxTopLevelWindow
 {
 public:
-
     enum
     {
         // all flags allowed in wxDialogBase::CreateButtonSizer()
@@ -72,6 +71,20 @@ public:
 #endif // wxUSE_BUTTON
 
 protected:
+    // emulate click of a button with the given id if it's present in the dialog
+    //
+    // return true if button was "clicked" or false if we don't have it
+    bool EmulateButtonClickIfPresent(int id);
+
+    // this function is used by OnCharHook() to decide whether the given key
+    // should close the dialog
+    //
+    // for most platforms the default implementation (which just checks for
+    // Esc) is sufficient, but Mac port also adds Cmd-. here and other ports
+    // could do something different if needed
+    virtual bool IsEscapeKey(const wxKeyEvent& event);
+
+
     // The return code from modal dialog
     int m_returnCode;
 
@@ -80,6 +93,10 @@ protected:
 
     // The identifier for cancel button (usually wxID_CANCEL)
     int m_escapeId;
+
+private:
+    // handle Esc key presses
+    void OnCharHook(wxKeyEvent& event);
 
     DECLARE_NO_COPY_CLASS(wxDialogBase)
     DECLARE_EVENT_TABLE()

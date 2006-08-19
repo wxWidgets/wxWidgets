@@ -34,8 +34,6 @@ BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
   EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
   EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
 
-  EVT_CHAR_HOOK(wxDialog::OnCharHook)
-
   EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
 
   EVT_CLOSE(wxDialog::OnCloseWindow)
@@ -102,24 +100,14 @@ wxDialog::~wxDialog()
     Show(false);
 }
 
-// By default, pressing escape cancels the dialog; on mac command-stop does the same thing
-void wxDialog::OnCharHook(wxKeyEvent& event)
+// On mac command-stop does the same thing as Esc, let the base class know
+// about it
+bool wxDialog::IsEscapeKey(const wxKeyEvent& event)
 {
-    if (( event.m_keyCode == WXK_ESCAPE ||
-        ( event.m_keyCode == '.' && event.MetaDown() ) )
-        && FindWindow(wxID_CANCEL) )
-    {
-        // Behaviour changed in 2.0: we'll send a Cancel message
-        // to the dialog instead of Close.
-        wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-        cancelEvent.SetEventObject( this );
-        GetEventHandler()->ProcessEvent(cancelEvent);
+    if ( event.GetKeyCode() == '.' && event.GetModifiers() == wxMOD_CMD )
+        return true;
 
-        return;
-    }
-
-    // We didn't process this event.
-    event.Skip();
+    return wxDialogBase::IsEscapeKey(event);
 }
 
 bool wxDialog::IsModal() const
