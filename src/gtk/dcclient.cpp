@@ -17,6 +17,7 @@
 #include "wx/dcclient.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/window.h"
     #include "wx/log.h"
     #include "wx/dcmemory.h"
     #include "wx/math.h" // for floating-point functions
@@ -1166,8 +1167,8 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     if (!m_window) return false;
 
     // transform the source DC coords to the device ones
-    xsrc = source->XLOG2DEV(xsrc);
-    ysrc = source->YLOG2DEV(ysrc);
+    xsrc = source->LogicalToDeviceX(xsrc);
+    ysrc = source->LogicalToDeviceY(ysrc);
 
     wxClientDC *srcDC = (wxClientDC*)source;
     wxMemoryDC *memDC = (wxMemoryDC*)source;

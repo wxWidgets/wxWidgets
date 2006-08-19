@@ -28,7 +28,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
-    #include "wx/dc.h"
     #include "wx/dcclient.h"
     #include "wx/settings.h"
 #endif
@@ -205,7 +204,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         NULL,
         button,
         "button",
-        dc.XLOG2DEV(rect.x), rect.y, rect.width, rect.height
+        dc.LogicalToDeviceX(rect.x), rect.y, rect.width, rect.height
     );
 }
 
