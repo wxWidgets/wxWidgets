@@ -1517,6 +1517,7 @@ GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool sock
   
   if (Error() || LastCount() != total_len)
   {
+    m_proxy_error = -1;
     m_connected = false;
     m_flags = old_flags;
     m_socket->Shutdown();
@@ -1531,6 +1532,7 @@ GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool sock
   
   if (Error() || LastCount() != 8)
   {
+    m_proxy_error = -1;
     m_connected = false;
     m_flags = old_flags;
     m_socket->Shutdown();
@@ -1592,6 +1594,7 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
 
   if (Error() || LastCount() != 4)
   {
+    m_proxy_error = -1;
     m_connected = false;
     m_flags = old_flags;
     m_socket->Shutdown();
@@ -1626,6 +1629,7 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
     if (m_proxy_login.Len() > 255 || m_proxy_passwd.Len() > 255)
     {
       // Login and password are limited to 255 chars in SOCKS5.
+      m_proxy_error = -1;
       m_connected = false;
       m_flags = old_flags;
       m_socket->Shutdown();
@@ -1660,6 +1664,7 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
     
     if (Error() || LastCount() != 2)
     {
+      m_proxy_error = -1;
       m_connected = false;
       m_flags = old_flags;
       m_socket->Shutdown();
@@ -1716,6 +1721,7 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
 
   if (Error() || LastCount() != total_len)
   {
+    m_proxy_error = -1;
     m_connected = false;
     m_flags = old_flags;
     m_socket->Shutdown();
@@ -1726,7 +1732,7 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
 
   if (Error() || LastCount() != 2)
   {
-    printf("Error: %d, Lastcount %d, LastError %d\n",Error(), LastCount(), LastError());
+    m_proxy_error = -1;
     m_connected = false;
     m_flags = old_flags;
     m_socket->Shutdown();
@@ -1826,6 +1832,7 @@ GSocketError wxSocketClient::ConnectHTTP(wxSockAddress& destination)
 
   if (Error() || LastCount() != request_len)
   {
+    m_proxy_error = -1;
     m_connected = false;
     m_flags = old_flags;
     m_socket->Shutdown();
