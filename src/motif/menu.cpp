@@ -318,20 +318,17 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 // Find the menu menuString, item itemString, and return the item id.
 // Returns -1 if none found.
-int wxMenuBar::FindMenuItem (const wxString& menuString, const wxString& itemString) const
+int wxMenuBar::FindMenuItem(const wxString& menuString, const wxString& itemString) const
 {
-    char buf1[200];
-    char buf2[200];
-    wxStripMenuCodes (wxConstCast(menuString.c_str(), char), buf1);
+    const wxString stripped = wxStripMenuCodes(menuString);
 
     size_t menuCount = GetMenuCount();
     for (size_t i = 0; i < menuCount; i++)
     {
-        wxStripMenuCodes (wxConstCast(m_titles[i].c_str(), char), buf2);
-        if (strcmp (buf1, buf2) == 0)
+        if ( wxStripMenuCodes(m_titles[i]) == stripped )
             return m_menus.Item(i)->GetData()->FindItem (itemString);
     }
-    return -1;
+    return wxNOT_FOUND;
 }
 
 wxMenuItem *wxMenuBar::FindItem(int id, wxMenu ** itemMenu) const
