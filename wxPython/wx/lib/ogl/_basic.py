@@ -232,9 +232,9 @@ class Shape(ShapeEvtHandler):
         self._canvas = canvas
         self._xpos = 0.0
         self._ypos = 0.0
-        self._pen = wx.Pen(wx.BLACK, 1, wx.SOLID)
+        self._pen = BlackForegroundPen
         self._brush = wx.WHITE_BRUSH
-        self._font = wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL)
+        self._font = NormalFont
         self._textColour = wx.BLACK
         self._textColourName = wx.BLACK
         self._visible = False
@@ -276,7 +276,7 @@ class Shape(ShapeEvtHandler):
         # the region eventually (the duplication is for compatibility)
         region = ShapeRegion()
         region.SetName("0")
-        region.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL))
+        region.SetFont(NormalFont)
         region.SetFormatMode(FORMAT_CENTRE_HORIZ | FORMAT_CENTRE_VERT)
         region.SetColour("BLACK")
         self._regions.append(region)
