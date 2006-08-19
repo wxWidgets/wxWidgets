@@ -98,14 +98,11 @@ private:
 // wxDialogBase
 // ----------------------------------------------------------------------------
 
-// FIXME - temporary hack in absence of wxTopLevelWindow, should be always used
-#ifdef wxTopLevelWindowNative
 BEGIN_EVENT_TABLE(wxDialogBase, wxTopLevelWindow)
     WX_EVENT_TABLE_CONTROL_CONTAINER(wxDialogBase)
 END_EVENT_TABLE()
 
 WX_DELEGATE_TO_CONTROL_CONTAINER(wxDialogBase, wxTopLevelWindow)
-#endif
 
 void wxDialogBase::Init()
 {
@@ -118,9 +115,7 @@ void wxDialogBase::Init()
     // undesirable and can lead to unexpected and hard to find bugs
     SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
 
-#ifdef wxTopLevelWindowNative // FIXME - temporary hack, should be always used!
     m_container.SetContainerWindow(this);
-#endif
 }
 
 #if wxUSE_STATTEXT
