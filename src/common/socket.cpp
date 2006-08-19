@@ -75,6 +75,40 @@ WX_CHECK_BUILD_OPTIONS("wxNet")
 #define wxTRACE_Socket _T("wxSocket")
 
 // --------------------------------------------------------------------------
+// Helper functions
+// --------------------------------------------------------------------------
+    
+void PokeUInt16(void* p, uint16_t value)
+{
+#if defined(__arm__) or defined(__sparc__)
+  // Avoid aligment issues.
+  memcpy(p, &value, sizeof(uint16_t));
+#else
+  *((uint16_t*)p) = value;
+#endif  
+}
+    
+void PokeUInt16_BE(void* p, uint16_t value)
+{
+  PokeUInt16(p,wxUINT16_SWAP_ON_LE(value));
+}
+
+void PokeUInt32(void* p, uint32_t value)
+{
+#if defined(__arm__) or defined(__sparc__)
+  // Avoid aligment issues.
+  memcpy(p, &value, sizeof(uint32_t));
+#else
+  *((uint32_t*)p) = value;
+#endif  
+}
+    
+void PokeUInt32_BE(void* p, uint32_t value)
+{
+  PokeUInt32(p,wxUINT32_SWAP_ON_LE(value));
+}
+
+// --------------------------------------------------------------------------
 // wxWin macros
 // --------------------------------------------------------------------------
 
@@ -1228,6 +1262,7 @@ bool wxSocketBase::SetLocal(wxIPV4address& local)
 wxSocketClient::wxSocketClient(wxSocketFlags flags)
               : wxSocketBase(flags, wxSOCKET_CLIENT)
 {
+  m_proxy_type = wxPROXY_NONE;
 }
 
 wxSocketClient::~wxSocketClient()
@@ -1288,9 +1323,30 @@ bool wxSocketClient::DoConnect(wxSockAddress& addr_man, wxSockAddress* local, bo
     if (la && la->m_addr)
       m_socket->SetLocal(la);
   }
-
-  m_socket->SetPeer(addr_man.GetAddress());
-  err = m_socket->Connect(GSOCK_STREAMED);
+  
+   switch (m_proxy_type)
+   {
+     case wxPROXY_NONE:
+       m_socket->SetPeer(addr_man.GetAddress());
+       err = m_socket->Connect(GSOCK_STREAMED);
+       break;
+     case wxPROXY_SOCKS5:
+       err = ConnectSOCKS5(addr_man);
+       break;
+     case wxPROXY_SOCKS4:
+       err = ConnectSOCKS4(addr_man);
+       break;
+     case wxPROXY_SOCKS4a:
+       err = ConnectSOCKS4(addr_man, true);
+       break;
+     case wxPROXY_HTTP:
+       err = ConnectHTTP(addr_man);
+       break;
+     default:
+       wxASSERT_MSG(0,wxT("Invalid proxy type in Connect()"));
+       err = GSOCK_INVSOCK;
+       break;
+   }
 
   if (!wait)
     m_socket->SetNonBlocking(0);
@@ -1299,12 +1355,13 @@ bool wxSocketClient::DoConnect(wxSockAddress& addr_man, wxSockAddress* local, bo
   {
     if (err == GSOCK_WOULDBLOCK)
       m_establishing = true;
-
-    return false;
+    
+    m_connected = false;
   }
+  else
+    m_connected = true;
 
-  m_connected = true;
-  return true;
+  return m_connected;
 }
 
 bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
@@ -1327,6 +1384,138 @@ bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)
 
     return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG |
                                         GSOCK_LOST_FLAG);
+}
+
+void wxSocketClient::SetProxy(wxIPV4address& addr, wxSocketProxyType type, wxString login, wxString password) {
+  wxCHECK_RET((type > wxPROXY_NONE) && (type < wxPROXY_INVALID), wxT("Invalid proxy type in SetProxy"));  
+  m_proxy_addr = addr;
+  m_proxy_type = type;
+  m_proxy_login = login;
+  m_proxy_passwd = password;
+}
+
+GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool socks4a) {
+  
+  unsigned int total_len = 0;
+  
+  // Proxy Connect() code. Always blocking (at least for now).
+  m_socket->SetNonBlocking(0);
+  
+  if (m_socket->SetPeer(m_proxy_addr.GetAddress()) != GSOCK_NOERROR)
+    return GSOCK_INVSOCK;
+  
+  if (m_socket->Connect(GSOCK_STREAMED) != GSOCK_NOERROR)
+    return GSOCK_INVSOCK;
+  
+  wxIPV4address* destination_ptr = dynamic_cast<wxIPV4address*>(&destination);
+  wxCHECK_MSG(destination_ptr, GSOCK_INVSOCK, wxT("Attempted to use proxy connection to a non-IPv4 address")); 
+  
+  // Ok, we connected to the proxy server. Let's request the connection.
+  unsigned char request_buffer[512]; // Should be enough
+  request_buffer[0] = 0x04; // SOCKS version
+  request_buffer[1] = 0x01; // Command: Connect
+  PokeUInt16_BE(request_buffer+2, destination_ptr->Service()); // Endianess and aligment-aware.
+  long unsigned int ip = -1;
+  wxASSERT(wxIPV4address::CheckStringIP(destination_ptr->IPAddress(), ip));
+  if ((ip == (long unsigned int)-1) && !socks4a)
+  {
+    // Can't solve the destination hostname, and we have no SOCKS4a extensions
+    m_socket->Shutdown();
+    return GSOCK_INVSOCK;
+  }
+  
+  if (ip == (long unsigned int)-1)
+  {
+    wxASSERT(socks4a);
+    // 0.0.0.1 is sent on socks4a when you can't solve the hostname.
+    PokeUInt32_BE(request_buffer+4, 16777216 /* 0.0.0.1 */);
+  }
+  else
+  {
+    // Solved address on SOCKS4 / SOCKS4a
+    PokeUInt32(request_buffer+4, ip); 
+  }
+  const wxWX2MBbuf login = wxConvLocal.cWX2MB(m_proxy_login);
+  int login_len = strlen((const char*)login);
+  wxCHECK_MSG(8+login_len+1 < 512, GSOCK_INVSOCK, wxT("Too long request on proxy data"));
+  memcpy(request_buffer+8, (const char*)login, login_len);
+  request_buffer[8+login_len] = '\0';
+  total_len = 1 + 1 + 2 + 4 + login_len + 1;
+  if (ip == (long unsigned int)-1)
+  {
+    wxASSERT(socks4a);
+    // SOCKS4a that couldn't solve the IP, add the hostname to the end.
+    const wxWX2MBbuf host = wxConvLocal.cWX2MB(destination_ptr->OrigHostname());
+    int host_len = strlen((const char*)host);
+    wxCHECK_MSG(total_len+host_len + 1 < 512, GSOCK_INVSOCK, wxT("Too long request on proxy data"));
+    memcpy(request_buffer+total_len,(const char*)host, host_len);
+    request_buffer[total_len+host_len] = '\0';
+    total_len += host_len + 1 ;
+  }
+
+  int old_flags = m_flags;
+  
+  m_connected = true;
+  m_flags = wxSOCKET_BLOCK | wxSOCKET_WAITALL;
+
+  unsigned long old_timeout = m_timeout;
+  SetTimeout(60);  // 60 seconds for the server to reply.
+
+  Write(request_buffer,total_len);
+  
+  if (Error() || LastCount() != total_len)
+  {
+    m_connected = false;
+    m_flags = old_flags;
+    m_socket->Shutdown();
+    return GSOCK_INVSOCK;
+  }
+  
+  // Ok, let's see what the server says.
+  
+  unsigned char reply[8]; // Fixed size.
+  
+  Read((char*)reply, 8);
+  
+  if (Error() || LastCount() != 8)
+  {
+    SetTimeout(old_timeout);
+    m_connected = false;
+    m_flags = old_flags;
+    m_socket->Shutdown();
+    return GSOCK_INVSOCK;
+  }
+  
+  if (reply[0] != 0 || reply[1] != 90)
+  {
+    // Proxy refused connection.
+    SetTimeout(old_timeout);
+    m_connected = false;
+    m_flags = old_flags;
+    m_socket->Shutdown();
+    return GSOCK_INVSOCK;    
+  }
+  
+  // Everything is ok. Restore old status.
+  
+  m_flags = old_flags;  
+  SetTimeout(old_timeout);
+  
+  return GSOCK_NOERROR;
+}
+
+
+GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination) {
+  // Proxy Connect() code. Always blocking (at least for now).
+  m_socket->SetNonBlocking(0);  
+  return GSOCK_NOERROR;
+}
+
+GSocketError wxSocketClient::ConnectHTTP(wxSockAddress& destination) {
+  // Proxy Connect() code. Always blocking (at least for now).
+  m_socket->SetNonBlocking(0);  
+  
+  return GSOCK_NOERROR;
 }
 
 // ==========================================================================

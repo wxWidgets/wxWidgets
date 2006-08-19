@@ -83,6 +83,16 @@ enum wxSocketType
   wxSOCKET_DATAGRAM
 };
 
+enum wxSocketProxyType
+{
+	wxPROXY_NONE = 0,
+	wxPROXY_SOCKS5,
+	wxPROXY_SOCKS4,
+	wxPROXY_SOCKS4a,
+	wxPROXY_HTTP,
+  wxPROXY_INVALID
+};
+
 typedef int wxSocketFlags;
 
 
@@ -260,8 +270,20 @@ public:
 
   bool WaitOnConnect(long seconds = -1, long milliseconds = 0);
 
+
+  void SetProxy(wxIPV4address& addr, wxSocketProxyType type, wxString login = wxEmptyString, wxString password = wxEmptyString);
+
 private:
   virtual bool DoConnect(wxSockAddress& addr, wxSockAddress* local, bool wait = true);
+
+  wxIPV4address m_proxy_addr;
+  wxSocketProxyType m_proxy_type;
+  wxString m_proxy_login;
+  wxString m_proxy_passwd;
+
+  GSocketError ConnectSOCKS4(wxSockAddress& destination, bool socks4a = false);
+  GSocketError ConnectSOCKS5(wxSockAddress& destination);
+  GSocketError ConnectHTTP(wxSockAddress& destination);
 
   DECLARE_NO_COPY_CLASS(wxSocketClient)
 };
@@ -278,9 +300,9 @@ class WXDLLIMPEXP_NET wxDatagramSocket : public wxSocketBase
 public:
   wxDatagramSocket(const wxSockAddress& addr, wxSocketFlags flags = wxSOCKET_NONE);
 
-    wxDEPRECATED( wxDatagramSocket& RecvFrom( wxSockAddress& addr,
+  wxDatagramSocket& RecvFrom( wxSockAddress& addr,
                               void* buf,
-                              wxUint32 nBytes ) );
+                              wxUint32 nBytes );
 
   wxDatagramSocket& SendTo( const wxSockAddress& addr,
                             const void* buf,
