@@ -273,7 +273,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 void wxFileDialog::OnFakeOk( wxCommandEvent &event )
 {
     if (!gtk_check_version(2,4,0))
-        wxDialog::OnOK( event );
+        EndDialog(wxID_OK);
     else
         wxGenericFileDialog::OnListOk( event );
 }
