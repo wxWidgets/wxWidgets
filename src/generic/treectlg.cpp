@@ -1021,6 +1021,12 @@ void wxGenericTreeCtrl::SetItemBold(const wxTreeItemId& item, bool bold)
     if ( pItem->IsBold() != bold )
     {
         pItem->SetBold(bold);
+
+        // recalculate the item size as bold and non bold fonts have different
+        // widths
+        wxClientDC dc(this);
+        CalculateSize(pItem, dc);
+
         RefreshLine(pItem);
     }
 }
