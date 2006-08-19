@@ -1537,7 +1537,7 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
   request_buffer[0] = 0x05; // SOCKS version
   request_buffer[1] = 0x02; // 2 AUTH methods supported.
   request_buffer[2] = 0x00; // No auth
-  request_buffer[4] = 0x02; // Login/Passwd
+  request_buffer[3] = 0x02; // Login/Passwd
 
   int old_flags = m_flags;
   
@@ -1547,9 +1547,9 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
   unsigned long old_timeout = m_timeout;
   SetTimeout(60);  // 60 seconds for the server to reply.
 
-  Write(request_buffer,  5);
+  Write(request_buffer,  4);
 
-  if (Error() || LastCount() != 5)
+  if (Error() || LastCount() != 4)
   {
     m_connected = false;
     m_flags = old_flags;
@@ -1578,10 +1578,9 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
     m_socket->Shutdown();
     return GSOCK_INVSOCK;        
   }
-  
+   
   if (reply[1] == 0x02)
   {
-
     // Login needed.
     if (m_proxy_login.Len() > 255 || m_proxy_passwd.Len() > 255)
     {
@@ -1616,7 +1615,7 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
       m_socket->Shutdown();
       return GSOCK_INVSOCK;
     }
-    
+  
     Read(reply,2);
     
     if (Error() || LastCount() != 2)
@@ -1686,6 +1685,7 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
 
   if (Error() || LastCount() != 2)
   {
+    printf("Error: %d, Lastcount %d, LastError %d\n",Error(), LastCount(), LastError());
     m_connected = false;
     m_flags = old_flags;
     m_socket->Shutdown();
@@ -1732,7 +1732,6 @@ GSocketError wxSocketClient::ConnectSOCKS5(wxSockAddress& destination)
   Read(reply + total_len, 2); // Port.
   
   // And now we ignore all the port/address info, and just return success.
-  
   m_flags = old_flags;  
   SetTimeout(old_timeout);  
   
