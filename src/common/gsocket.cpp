@@ -1520,7 +1520,7 @@ void GSocket::Detected_Read()
     // if this is a read or close event.
     char t;
     if (recv(m_fd,&t,1,MSG_DONTWAIT | MSG_PEEK) == 0) {
-      CALL_CALLBACK(this, GSOCK_LOST);
+      Detected_Lost();
     } else {
       CALL_CALLBACK(this, GSOCK_INPUT);
     }
