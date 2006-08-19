@@ -105,13 +105,12 @@
 
     inline bool wxIsNullDouble(double x) { return wxIsSameDouble(x, 0.); }
 
-    #ifdef __VMS
-        //Missing definition in OpenVMS C++ header files.
-        double round(double __x);
+    #if defined(HAVE_ROUND) && !defined(HAVE_DECL_ROUND)
+        extern "C" double round(double);
     #endif
     inline int wxRound(double x)
     {
-        #ifdef __VMS
+        #if defined(HAVE_ROUND)
             return int(round(x));
         #else
             return (int)(x < 0 ? x - 0.5 : x + 0.5);

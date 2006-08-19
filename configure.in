@@ -4386,6 +4386,11 @@ if test "$wxUSE_FILE" = "yes"; then
     AC_CHECK_FUNCS(fsync)
 fi
 
+AC_CHECK_FUNCS(round)
+if test "$ac_cv_func_round" = yes; then
+    AC_CHECK_DECLS(round,,,[#include <math.h>])
+fi
+
 
 dnl the following tests are for Unix(like) systems only
 if test "$TOOLKIT" != "MSW"; then
