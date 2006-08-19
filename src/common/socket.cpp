@@ -1417,6 +1417,8 @@ GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool sock
   PokeUInt16_BE(request_buffer+2, destination_ptr->Service()); // Endianess and aligment-aware.
   long unsigned int ip = -1;
   wxASSERT(wxIPV4address::CheckStringIP(destination_ptr->IPAddress(), ip));
+  // This returns anti-host byte order, swap it.
+  ip = wxUINT32_SWAP_ALWAYS(ip);
   if ((ip == (long unsigned int)-1) && !socks4a)
   {
     // Can't solve the destination hostname, and we have no SOCKS4a extensions
@@ -1428,12 +1430,12 @@ GSocketError wxSocketClient::ConnectSOCKS4(wxSockAddress& destination, bool sock
   {
     wxASSERT(socks4a);
     // 0.0.0.1 is sent on socks4a when you can't solve the hostname.
-    PokeUInt32(request_buffer+4, 16777216 /* 0.0.0.1 */);
+    PokeUInt32_BE(request_buffer+4, 16777216 /* 0.0.0.1 */);
   }
   else
   {
     // Solved address on SOCKS4 / SOCKS4a
-    PokeUInt32(request_buffer+4, ip); 
+    PokeUInt32_BE(request_buffer+4, ip); 
   }
   const wxWX2MBbuf login = wxConvLocal.cWX2MB(m_proxy_login);
   int login_len = strlen((const char*)login);
