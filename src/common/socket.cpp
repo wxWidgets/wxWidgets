@@ -108,6 +108,53 @@ void PokeUInt32_BE(void* p, uint32_t value)
   PokeUInt32(p,wxUINT32_SWAP_ON_LE(value));
 }
 
+static const wxString to_b64(
+	wxT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"));
+
+wxString EncodeBase64(wxString input)
+{
+	wxString pbBufferOut;
+  
+  const wxWX2MBbuf input_str = wxConvLocal.cWX2MB(input);
+  unsigned long input_len = strlen((const char*)input_str); 
+  
+	unsigned long nDiv = input_len / 3;
+	unsigned long nRem = input_len % 3;
+	
+	pbBufferOut.Alloc(
+		(input_len * 4) / 3 + 1);
+  
+	unsigned long nChars = 0;
+	const char *pIn = (const char*)input_str;
+	while( nDiv > 0 ) {
+		pbBufferOut += to_b64[ (pIn[0] >> 2) & 0x3f];
+		pbBufferOut += to_b64[((pIn[0] << 4) & 0x30) | ((pIn[1] >> 4) & 0xf)];
+		pbBufferOut += to_b64[((pIn[1] << 2) & 0x3c) | ((pIn[2] >> 6) & 0x3)];
+		pbBufferOut += to_b64[  pIn[2] & 0x3f];
+		pIn += 3;
+		nDiv--;
+		nChars += 4;
+	}
+	switch( nRem ) {
+	case 2:
+		pbBufferOut += to_b64[ (pIn[0] >> 2) & 0x3f];
+		pbBufferOut += to_b64[((pIn[0] << 4) & 0x30) | ((pIn[1] >> 4) & 0xf)];
+		pbBufferOut += to_b64[ (pIn[1] << 2) & 0x3c];
+		pbBufferOut += wxT("=");
+		nChars += 4;
+		break;
+	case 1:
+		pbBufferOut += to_b64[ (pIn[0] >> 2) & 0x3f];
+		pbBufferOut += to_b64[ (pIn[0] << 4) & 0x30];
+		pbBufferOut += wxT("=");
+		pbBufferOut += wxT("=");
+		nChars += 4;
+		break;
+	}
+	
+	return pbBufferOut;
+}
+
 // --------------------------------------------------------------------------
 // wxWin macros
 // --------------------------------------------------------------------------
@@ -1742,6 +1789,90 @@ GSocketError wxSocketClient::ConnectHTTP(wxSockAddress& destination)
 {
   // Proxy Connect() code. Always blocking (at least for now).
   m_socket->SetNonBlocking(0);  
+  
+  if (m_socket->SetPeer(m_proxy_addr.GetAddress()) != GSOCK_NOERROR)
+    return GSOCK_INVSOCK;
+  
+  if (m_socket->Connect(GSOCK_STREAMED) != GSOCK_NOERROR)
+    return GSOCK_INVSOCK;  
+
+  wxIPV4address* destination_ptr = dynamic_cast<wxIPV4address*>(&destination);
+  
+  if (!destination_ptr)
+    m_socket->Shutdown();
+  
+  wxCHECK_MSG(destination_ptr, GSOCK_INVSOCK, wxT("Attempted to use HTTP proxy connection to a non IPv4 address"));
+  
+  // Ok, we connected to the proxy server. Let's start auth.
+  unsigned char request_buffer[518]; // Should be enough
+
+  wxString request_str;
+  request_str << wxT("CONNECT ") << destination_ptr->OrigHostname() << wxT(":") << destination_ptr->Service() << wxT(" HTTP/1.1\r\n") <<
+			wxT("Host: ")   << destination_ptr->OrigHostname() << wxT(":") << destination_ptr->Service() << wxT("\r\n");
+			if (m_proxy_login.Len()) {
+        wxString auth_string = EncodeBase64(m_proxy_login + wxT(":") + m_proxy_passwd);
+				request_str << 
+				wxT("Authorization: Basic ")       << auth_string << wxT("\r\n") <<
+				wxT("Proxy-Authorization: Basic ") << auth_string;
+			}
+      
+	request_str << wxT("\r\n");
+      
+  const wxWX2MBbuf request = wxConvLocal.cWX2MB(request_str);
+  unsigned char request_len = strlen((const char*)request);  
+    
+  memcpy(request_buffer, (const char*)request, request_len); 
+  
+  int old_flags = m_flags;
+  
+  m_connected = true;
+  m_flags = wxSOCKET_BLOCK | wxSOCKET_WAITALL;
+
+  unsigned long old_timeout = m_timeout;
+  SetTimeout(60);  // 60 seconds for the server to reply.
+   
+  Write(request_buffer,  request_len);
+
+  if (Error() || LastCount() != request_len)
+  {
+    m_connected = false;
+    m_flags = old_flags;
+    m_socket->Shutdown();
+    return GSOCK_INVSOCK;
+  }
+  
+  unsigned char reply[512];
+  
+  int minlen = strlen("HTTP/1.1 200") + 4;
+  
+  Read(reply, minlen);
+  int read_data = LastCount();
+
+  if (Error() || read_data < minlen)
+  {
+    m_connected = false;
+    m_flags = old_flags;
+    m_socket->Shutdown();
+    return GSOCK_INVSOCK;
+  }
+  
+  int first_space = 8;
+  while (first_space < (read_data-3) && reply[first_space] == ' ')
+    first_space++;
+  
+  if (strncmp((char*)reply,"HTTP/",5) || strncmp((char*)reply+first_space, "200",3))
+  {
+    // Proxy refused CONNECT
+    SetTimeout(old_timeout);
+    m_connected = false;
+    m_flags = old_flags;
+    m_socket->Shutdown();
+    return GSOCK_INVSOCK;        
+  }
+    
+  // All ok.
+  m_flags = old_flags;  
+  SetTimeout(old_timeout);    
   
   return GSOCK_NOERROR;
 }
