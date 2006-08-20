@@ -78,6 +78,8 @@ public:
                        const wxFont& font = wxNullFont,
                        wxCalendarDateBorder border = wxCAL_BORDER_NONE);
 
+    ~wxCalendarDateAttr();
+    
     
     // setters
     void SetTextColour(const wxColour& colText);
@@ -167,7 +169,7 @@ month can be set independently using CalendarDateAttr class.
 
 An item without custom attributes is drawn with the default colours
 and font and without border, but setting custom attributes with
-SetAttr allows to modify its appearance. Just create a custom
+`SetAttr` allows to modify its appearance. Just create a custom
 attribute object and set it for the day you want to be displayed
 specially A day may be marked as being a holiday, (even if it is not
 recognized as one by `wx.DateTime`) by using the SetHoliday method.
@@ -357,12 +359,14 @@ used).", "");
         wxCalendarDateAttr*, GetAttr(size_t day) const,
         "Returns the attribute for the given date (should be in the range
 1...31).  The returned value may be None", "");
-    
+
+    %disownarg(wxCalendarDateAttr *attr);
     DocDeclStr(
         void, SetAttr(size_t day, wxCalendarDateAttr *attr),
         "Associates the attribute with the specified date (in the range
 1...31).  If the attribute passed is None, the items attribute is
 cleared.", "");
+    %cleardisown(wxCalendarDateAttr *attr);
 
     DocDeclStr(
         void, SetHoliday(size_t day),
