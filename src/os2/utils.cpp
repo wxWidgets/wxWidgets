@@ -317,6 +317,13 @@ wxString wxGetOsDescription()
     return strVer;
 }
 
+bool wxIsPlatform64Bit()
+{
+    // FIXME: No idea how to test for 64 bit processor
+    //        (Probably irrelevant anyhow, though).
+    return false;
+}
+
 void wxAppTraits::InitializeGui(unsigned long &WXUNUSED(ulHab))
 {
 }
