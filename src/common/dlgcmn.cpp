@@ -99,9 +99,7 @@ private:
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxDialogBase, wxTopLevelWindow)
-    EVT_BUTTON(wxID_OK, wxDialogBase::OnAffirmativeButton)
-    EVT_BUTTON(wxID_APPLY, wxDialogBase::OnApply)
-    EVT_BUTTON(wxID_CANCEL, wxDialogBase::OnCancelButton)
+    EVT_BUTTON(wxID_ANY, wxDialogBase::OnButton)
 
     EVT_CLOSE(wxDialogBase::OnCloseWindow)
 
@@ -427,84 +425,34 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
 #endif // wxUSE_BUTTON
 
 // ----------------------------------------------------------------------------
-// escape/affirmatives button handling
+// standard buttons handling
 // ----------------------------------------------------------------------------
+
+void wxDialogBase::EndDialog(int rc)
+{
+    if ( IsModal() )
+        EndModal(rc);
+    else
+        Hide();
+}
 
 void wxDialogBase::AcceptAndClose()
 {
     if ( Validate() && TransferDataFromWindow() )
     {
-        EndDialog(wxID_OK);
+        EndDialog(m_affirmativeId);
     }
 }
 
 void wxDialogBase::SetAffirmativeId(int affirmativeId)
 {
-    if ( affirmativeId == m_affirmativeId )
-        return;
-
-    // disconnect the handler for the old affirmative button
-    if ( m_affirmativeId != wxID_NONE && m_affirmativeId != wxID_OK )
-    {
-        if ( !Disconnect
-              (
-                m_affirmativeId,
-                wxEVT_COMMAND_BUTTON_CLICKED,
-                wxCommandEventHandler(wxDialogBase::OnAffirmativeButton)
-              ) )
-        {
-            wxFAIL_MSG( _T("failed to disconnect old ok handler") );
-        }
-    }
-    //else: wxID_OK is always handled
-
     m_affirmativeId = affirmativeId;
-
-    // connect the handler to the new button
-    if ( m_affirmativeId != wxID_NONE )
-    {
-        Connect(m_affirmativeId,
-                wxEVT_COMMAND_BUTTON_CLICKED,
-                wxCommandEventHandler(wxDialogBase::OnAffirmativeButton));
-    }
-    //else: no affirmative button
 }
 
 void wxDialogBase::SetEscapeId(int escapeId)
 {
-    if ( escapeId == m_escapeId )
-        return;
-
-    if ( m_escapeId != wxID_ANY &&
-            m_escapeId != wxID_CANCEL &&
-                m_escapeId != wxID_ANY )
-    {
-        if ( !Disconnect
-              (
-                m_escapeId,
-                wxEVT_COMMAND_BUTTON_CLICKED,
-                wxCommandEventHandler(wxDialogBase::OnCancelButton)
-              ) )
-        {
-            wxFAIL_MSG( _T("failed to disconnect old cancel handler") );
-        }
-    }
-    //else: wxID_CANCEL is always handled
-
     m_escapeId = escapeId;
-
-    // connect the handler to the new button
-    if ( m_escapeId != wxID_NONE )
-    {
-        Connect(m_escapeId,
-                wxEVT_COMMAND_BUTTON_CLICKED,
-                wxCommandEventHandler(wxDialogBase::OnCancelButton));
-    }
 }
-
-// ----------------------------------------------------------------------------
-// event handling stuff
-// ----------------------------------------------------------------------------
 
 bool wxDialogBase::EmulateButtonClickIfPresent(int id)
 {
@@ -518,14 +466,6 @@ bool wxDialogBase::EmulateButtonClickIfPresent(int id)
     btn->GetEventHandler()->ProcessEvent(event);
 
     return true;
-}
-
-void wxDialogBase::EndDialog(int rc)
-{
-    if ( IsModal() )
-        EndModal(rc);
-    else
-        Hide();
 }
 
 bool wxDialogBase::IsEscapeKey(const wxKeyEvent& event)
@@ -564,23 +504,34 @@ void wxDialogBase::OnCharHook(wxKeyEvent& event)
     event.Skip();
 }
 
-void wxDialogBase::OnAffirmativeButton(wxCommandEvent& WXUNUSED(event))
+void wxDialogBase::OnButton(wxCommandEvent& event)
 {
-    AcceptAndClose();
+    const int id = event.GetId();
+    if ( id == GetAffirmativeId() )
+    {
+        AcceptAndClose();
+    }
+    else if ( id == wxID_APPLY )
+    {
+        if ( Validate() )
+            TransferDataFromWindow();
+
+        // TODO: disable the Apply button until things change again
+    }
+    else if ( id == GetEscapeId() ||
+                (id == wxID_CANCEL && GetEscapeId() == wxID_ANY) )
+    {
+        EndDialog(wxID_CANCEL);
+    }
+    else // not a standard button
+    {
+        event.Skip();
+    }
 }
 
-void wxDialogBase::OnApply(wxCommandEvent& WXUNUSED(event))
-{
-    if ( Validate() )
-        TransferDataFromWindow();
-
-    // TODO probably need to disable the Apply button until things change again
-}
-
-void wxDialogBase::OnCancelButton(wxCommandEvent& WXUNUSED(event))
-{
-    EndDialog(wxID_CANCEL);
-}
+// ----------------------------------------------------------------------------
+// other event handlers
+// ----------------------------------------------------------------------------
 
 void wxDialogBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {

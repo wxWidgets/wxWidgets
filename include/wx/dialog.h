@@ -41,7 +41,7 @@ public:
     wxDialogBase() { Init(); }
     virtual ~wxDialogBase() { }
 
-    // public wxDialog API, to be implemented by the derived classes
+    // define public wxDialog methods to be implemented by the derived classes
     virtual int ShowModal() = 0;
     virtual void EndModal(int retCode) = 0;
     virtual bool IsModal() const = 0;
@@ -121,9 +121,7 @@ private:
     void OnCloseWindow(wxCloseEvent& event);
 
     // handle the standard buttons
-    void OnAffirmativeButton(wxCommandEvent& event);
-    void OnApply(wxCommandEvent& event);
-    void OnCancelButton(wxCommandEvent& event);
+    void OnButton(wxCommandEvent& event);
 
     // update the background colour
     void OnSysColourChanged(wxSysColourChangedEvent& event);
