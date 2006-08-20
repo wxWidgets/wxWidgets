@@ -1137,7 +1137,9 @@ bool success = client->IsConnected();
 
 \func{void}{SetProxy}{\param{wxIPV4address&}{ addr }, \param{wxSocketProxyType}{ type}, \param{wxString}{ login = wxEmptyString}, \param{wxString}{ password = wxEmptyString}}
 
-Sets a proxy for the next call to \helpref{Connect}{wxsocketclientconnect}.
+Sets a proxy for the next call to \helpref{wxSocketClient::Connect}{wxsocketclientconnect}.
+
+Warning: When using proxy to connect, you should be careful with the timeout set for this socket using \helpref{wxSocketBase::SetTimeout}{wxsocketbasesettimeout}, as the proxy negociation is currently blocking. Setting a too high timeout value will halt your app for that amount of time if the proxy won't reply, while setting a too low value can make the negociation fail. 
 
 \wxheading{Parameters}
 
