@@ -227,7 +227,7 @@ class XmlResourceCompiler:
             windowClass = re.sub("^wx", "", windowClass)
             windowName = topWindow.getAttribute("name")
             
-            if windowClass == "Menu":
+            if windowClass in ["Menu", "MenuItem"]:
                 outputList.append(self.templates.MENU_CLASS_HEADER % locals())
             else:
                 outputList.append(self.templates.CLASS_HEADER % locals())

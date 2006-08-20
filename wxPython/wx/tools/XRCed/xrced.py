@@ -1257,7 +1257,7 @@ class PythonOptions(wx.Dialog):
         if self.cfg.Read("filename", "") != "":
             self.FileNameTC.SetValue(self.cfg.Read("filename"))
         else:
-            name = os.path.splitext(dataFile)[0]
+            name = os.path.splitext(os.path.split(dataFile)[1])[0]
             name += '_xrc.py'
             self.FileNameTC.SetValue(name)
         self.AutoGenerateCB.SetValue(self.cfg.ReadBool("autogenerate", False))
