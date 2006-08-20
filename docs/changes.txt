@@ -30,6 +30,7 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
 - Windows calling CaptureMouse() are now required to handle
   the wxEVT_MOUSE_CAPTURE_LOST event.
 - SetDefaultItem() method was moved from wxPanel to wxTopLevelWindow
+- wxDialog::OnOK/OnCancel() don't exist any more, use SetAffirmative/EscapeId()
 
 
 Deprecated methods since 2.6.x and their replacements

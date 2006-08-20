@@ -234,7 +234,8 @@ invocation.
 
 \constfunc{int}{GetAffirmativeId}{\void}
 
-Gets the identifier to be used when the user presses an OK button in a PocketPC titlebar.
+Gets the identifier of the button which works like standard OK button in this
+dialog.
 
 \wxheading{See also}
 
@@ -394,24 +395,38 @@ propagate the notification to child windows and controls.
 
 \func{void}{SetAffirmativeId}{\param{int }{id}}
 
-Sets the identifier to be used when the user presses an OK button in a PocketPC titlebar.
-By default, this is wxID\_OK.
+Sets the identifier to be used as OK button. When the button with this
+identifier is pressed, the dialog calls \helpref{Validate}{wxwindowvalidate} 
+and \helpref{wxWindow::TransferDataFromWindow}{wxwindowtransferdatafromwindow} 
+and, if they both return \true, closes the dialog with \texttt{wxID\_OK} return
+code.
+
+Also, when the user presses a hardware OK button on the devices having one or
+the special OK button in the PocketPC title bar, an event with this id is
+generated.
+
+By default, the affirmative id is wxID\_OK.
 
 \wxheading{See also}
 
-\helpref{wxDialog::GetAffirmativeId}{wxdialoggetaffirmativeid}
+\helpref{wxDialog::GetAffirmativeId}{wxdialoggetaffirmativeid}, \helpref{wxDialog::SetEscapeId}{wxdialogsetescapeid}
 
 
 \membersection{wxDialog::SetEscapeId}\label{wxdialogsetescapeid}
 
 \func{void}{SetEscapeId}{\param{int }{id}}
 
-Sets the identifier to be used when the user presses \texttt{\textsc{ESC}}
-button in the dialog. By default, this is \texttt{wxID\_ANY} meaning that
-the first suitable button is used: if there a \texttt{wxID\_CANCEL} button, it
-is activated, otherwise \texttt{wxID\_OK} button is activated if present.
-Another possible special value for \arg{id} is \texttt{wxID\_NONE} meaning that
-\texttt{\textsc{ESC}} presses should be ignored. If another value is given, it
+Sets the identifier of the button which should work like the standard 
+\texttt{\textsc{Cancel}} button in this dialog. When the button with this id is
+clicked, the dialog is closed. Also, when the user presses \texttt{\textsc{ESC}} 
+key in the dialog or closes the dialog using the close button in the title bar,
+this is mapped to the click of the button with the specified id.
+
+By default, the escape id is the special value \texttt{wxID\_ANY} meaning that 
+\texttt{wxID\_CANCEL} button is used if it's present in the dialog and
+otherwise the button with \helpref{GetAffirmativeId()}{wxdialoggetaffirmativeid} 
+is used. Another special value for \arg{id} is \texttt{wxID\_NONE} meaning that
+\texttt{\textsc{ESC}} presses should be ignored. If any other value is given, it
 is interpreted as the id of the button to map the escape key to.
 
 
