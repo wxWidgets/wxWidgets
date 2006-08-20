@@ -446,10 +446,10 @@ public:
     static wxULongLong GetSize(const wxString &file);
 
         // returns the size in a human readable form
-    wxString GetHumanReadableSize(const wxString &nullsize = _("Not available"),
+    wxString GetHumanReadableSize(const wxString &nullsize = wxGetTranslation(_T("Not available")),
                                   int precision = 1) const;
     static wxString GetHumanReadableSize(const wxULongLong &sz,
-                                         const wxString &nullsize = _("Not available"),
+                                         const wxString &nullsize = wxGetTranslation(_T("Not available")),
                                          int precision = 1);
 
 
