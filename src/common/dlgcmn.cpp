@@ -458,16 +458,16 @@ void wxDialogBase::SetAffirmativeId(int affirmativeId)
     }
     //else: wxID_OK is always handled
 
+    m_affirmativeId = affirmativeId;
+
     // connect the handler to the new button
-    if ( affirmativeId != wxID_NONE )
+    if ( m_affirmativeId != wxID_NONE )
     {
         Connect(m_affirmativeId,
                 wxEVT_COMMAND_BUTTON_CLICKED,
                 wxCommandEventHandler(wxDialogBase::OnAffirmativeButton));
     }
     //else: no affirmative button
-
-    m_affirmativeId = affirmativeId;
 }
 
 void wxDialogBase::SetEscapeId(int escapeId)
@@ -491,15 +491,15 @@ void wxDialogBase::SetEscapeId(int escapeId)
     }
     //else: wxID_CANCEL is always handled
 
+    m_escapeId = escapeId;
+
     // connect the handler to the new button
-    if ( escapeId != wxID_NONE )
+    if ( m_escapeId != wxID_NONE )
     {
         Connect(m_escapeId,
                 wxEVT_COMMAND_BUTTON_CLICKED,
                 wxCommandEventHandler(wxDialogBase::OnCancelButton));
     }
-
-    m_escapeId = escapeId;
 }
 
 // ----------------------------------------------------------------------------
