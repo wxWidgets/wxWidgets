@@ -432,6 +432,10 @@ MyFrame::MyFrame(wxWindow *parent,
         );
     }
 #endif // wxUSE_COLOURDLG
+
+#if wxUSE_STATUSBAR
+    CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 }
 
 #if wxUSE_COLOURDLG
