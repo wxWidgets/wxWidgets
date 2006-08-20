@@ -1130,6 +1130,72 @@ bool success = client->IsConnected();
 \helpref{wxSocketBase::InterruptWait}{wxsocketbaseinterruptwait}, 
 \helpref{wxSocketBase::IsConnected}{wxsocketbaseisconnected}
 
+%
+% SetProxy
+%
+\membersection{wxSocketClient::SetProxy}\label{wxsocketclientsetproxy}
+
+\func{void}{SetProxy}{\param{wxIPV4address&}{ addr }, \param{wxSocketProxyType}{ type}, \param{wxString}{ login = wxEmptyString}, \param{wxString}{ password = wxEmptyString}}
+
+Sets a proxy for the next call to \helpref{Connect}{wxsocketclientconnect}.
+
+\wxheading{Parameters}
+
+\docparam{addr}{Address of the proxy to use. Currently only IPV4 adresses are valid}
+
+\docparam{type}{
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxPROXY\_SOCKS4}}{SOCKS4 proxy}
+\twocolitem{{\bf wxPROXY\_SOCKS4a}}{SOCKS4a proxy}
+\twocolitem{{\bf wxPROXY\_SOCKS5}}{SOCKS5 proxy}
+\twocolitem{{\bf wxPROXY\_HTTP}}{HTTP proxy}
+\end{twocollist}
+}
+
+\docparam{login}{Login to use when authenticating against the proxy server. 
+If this proxy is SOCKS4/SOCKS4a, the client ID to login in the server is sent in this parameter, and the {\bf password} parameter is ignored. 
+}
+
+\docparam{password}{Password to be used to authenticate against the proxy server. This value is unused on SOCKS4/SOCKS4a proxies.}
+
+\wxheading{Return value}
+
+SetProxy() doesn't return any value. The succcess/failure will happen on the next \helpref{wxSocketClient::Connect}{wxsocketclientconnect} call, and then the proxy type-specific error code can be retrieved with \helpref{wxSocketClient::GetProxyError}{wxsocketclientgetproxyerror}.
+
+\wxheading{See also}
+
+\helpref{wxSocketClient::Connect}{wxsocketclientconnect}, 
+\helpref{wxSocketClient::GetProxyError}{wxsocketclientgetproxyerror}
+
+
+%
+% GetProxyError
+%
+\membersection{wxSocketClient::GetProxyError}\label{wxsocketclientgetproxyerror}
+
+\func{long int}{GetProxyError}{\void}
+
+Gets the type-specific proxy error, if any, caused by a call to \helpref{wxSocketClient::Connect}{wxsocketclientconnect}
+after setting a proxy with \helpref{wxSocketClient::SetProxy}{wxsocketclientsetproxy}.
+
+\wxheading{Return value}
+
+The return value depends on the proxy type, except for two special values:
+
+A value of 0 means no error happened.
+
+A value of -1 means an error non related to the proxy protocol happened. This includes connection errors to the proxy server and IO errors, and can be checked using \helpref{wxSocketBase::LastError}{wxsocketbaselasterror}.
+
+A value different from 0 or -1 means the proxy server signaled an error.
+For HTTP proxies, the return value will be the HTTP error code for the CONNECT attempt (i.e 403 for forbidden). 
+For SOCKS4/4a/5, the return value will be the error specified in the matching proxy protocol RFC.
+
+\wxheading{See also}
+
+\helpref{wxSocketClient::Connect}{wxsocketclientconnect}, 
+\helpref{wxSocketClient::SetProxy}{wxsocketclientsetproxy}
+
 % ---------------------------------------------------------------------------
 % CLASS: wxSocketEvent
 % ---------------------------------------------------------------------------
