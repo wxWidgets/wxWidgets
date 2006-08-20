@@ -519,10 +519,6 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
                                      const wxRect& rect,
                                      int flags )
 {
-    // for reason why we do this, see DrawDropArrow
-    wxWindowDC& wdc = (wxWindowDC&)dc;
-    wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
-
     GtkStateType state;
     if (flags & wxCONTROL_SELECTED)
     {
