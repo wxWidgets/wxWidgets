@@ -593,6 +593,7 @@ enum {
     wxID_HELP,
     wxID_PRINT,
     wxID_PRINT_SETUP,
+    wxID_PAGE_SETUP,
     wxID_PREVIEW,
     wxID_ABOUT,
     wxID_HELP_CONTENTS,

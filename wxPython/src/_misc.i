@@ -215,6 +215,184 @@ public:
 };
 
 //---------------------------------------------------------------------------
+%newgroup
+
+// families & sub-families of operating systems
+enum wxOperatingSystemId
+{
+    wxOS_UNKNOWN = 0,                 // returned on error
+
+    wxOS_MAC_OS         = 1 << 0,     // Apple Mac OS 8/9/X with Mac paths
+    wxOS_MAC_OSX_DARWIN = 1 << 1,     // Apple Mac OS X with Unix paths
+    wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,
+
+    wxOS_WINDOWS_9X     = 1 << 2,     // Windows 9x family (95/98/ME)
+    wxOS_WINDOWS_NT     = 1 << 3,     // Windows NT family (NT/2000/XP)
+    wxOS_WINDOWS_MICRO  = 1 << 4,     // MicroWindows
+    wxOS_WINDOWS_CE     = 1 << 5,     // Windows CE (Window Mobile)
+    wxOS_WINDOWS = wxOS_WINDOWS_9X      |
+                   wxOS_WINDOWS_NT      |
+                   wxOS_WINDOWS_MICRO   |
+                   wxOS_WINDOWS_CE,
+
+    wxOS_UNIX_LINUX     = 1 << 6,       // Linux
+    wxOS_UNIX_FREEBSD   = 1 << 7,       // FreeBSD
+    wxOS_UNIX_OPENBSD   = 1 << 8,       // OpenBSD
+    wxOS_UNIX_NETBSD    = 1 << 9,       // NetBSD
+    wxOS_UNIX_SOLARIS   = 1 << 10,      // SunOS
+    wxOS_UNIX_AIX       = 1 << 11,      // AIX
+    wxOS_UNIX_HPUX      = 1 << 12,      // HP/UX
+    wxOS_UNIX = wxOS_UNIX_LINUX     |
+                wxOS_UNIX_FREEBSD   |
+                wxOS_UNIX_OPENBSD   |
+                wxOS_UNIX_NETBSD    |
+                wxOS_UNIX_SOLARIS   |
+                wxOS_UNIX_AIX       |
+                wxOS_UNIX_HPUX,
+
+    // 1<<13 and 1<<14 available for other Unix flavours
+
+    wxOS_DOS            = 1 << 15,      // Microsoft DOS
+    wxOS_OS2            = 1 << 16       // OS/2
+};
+
+// list of wxWidgets ports - some of them can be used with more than
+// a single toolkit.
+enum wxPortId
+{
+    wxPORT_UNKNOWN  = 0,            // returned on error
+
+    wxPORT_BASE     = 1 << 0,       // wxBase, no native toolkit used
+
+    wxPORT_MSW      = 1 << 1,       // wxMSW, native toolkit is Windows API
+    wxPORT_MOTIF    = 1 << 2,       // wxMotif, using [Open]Motif or Lesstif
+    wxPORT_GTK      = 1 << 3,       // wxGTK, using GTK+ 1.x, 2.x, GPE or Maemo
+    wxPORT_MGL      = 1 << 4,       // wxMGL, using wxUniversal
+    wxPORT_X11      = 1 << 5,       // wxX11, using wxUniversal
+    wxPORT_OS2      = 1 << 6,       // wxOS2, using OS/2 Presentation Manager
+    wxPORT_MAC      = 1 << 7,       // wxMac, using Carbon or Classic Mac API
+    wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
+    wxPORT_WINCE    = 1 << 9,       // wxWinCE, toolkit is WinCE SDK API
+    wxPORT_PALMOS   = 1 << 10       // wxPalmOS, toolkit is PalmOS API
+};
+
+// architecture of the operating system
+// (regardless of the build environment of wxWidgets library - see
+// wxIsPlatform64bit documentation for more info)
+enum wxArchitecture
+{
+    wxARCH_INVALID = -1,        // returned on error
+
+    wxARCH_32,                  // 32 bit
+    wxARCH_64,
+
+    wxARCH_MAX
+};
+
+
+// endian-ness of the machine
+enum wxEndianness
+{
+    wxENDIAN_INVALID = -1,      // returned on error
+
+    wxENDIAN_BIG,               // 4321
+    wxENDIAN_LITTLE,            // 1234
+    wxENDIAN_PDP,               // 3412
+
+    wxENDIAN_MAX
+};
+
+// Information about the toolkit that the app is running under and some basic
+// platform and architecture info
+
+%rename(PlatformInformation) wxPlatformInfo; // wxPython already has a wx.PlatformInfo
+
+class  wxPlatformInfo
+{
+public:
+    wxPlatformInfo();
+//     wxPlatformInfo(wxPortId pid,
+//                    int tkMajor = -1, int tkMinor = -1,
+//                    wxOperatingSystemId id = wxOS_UNKNOWN,
+//                    int osMajor = -1, int osMinor = -1,
+//                    wxArchitecture arch = wxARCH_INVALID,
+//                    wxEndianness endian = wxENDIAN_INVALID,
+//                    bool usingUniversal = false);
+
+    // default copy ctor, assignment operator and dtor are ok
+
+    bool operator==(const wxPlatformInfo &t) const;
+
+    bool operator!=(const wxPlatformInfo &t) const;
+
+
+//     // string -> enum conversions
+//     // ---------------------------------
+
+//     static wxOperatingSystemId GetOperatingSystemId(const wxString &name);
+//     static wxPortId GetPortId(const wxString &portname);
+
+//     static wxArchitecture GetArch(const wxString &arch);
+//     static wxEndianness GetEndianness(const wxString &end);
+
+//     // enum -> string conversions
+//     // ---------------------------------
+
+//     static wxString GetOperatingSystemFamilyName(wxOperatingSystemId os);
+//     static wxString GetOperatingSystemIdName(wxOperatingSystemId os);
+//     static wxString GetPortIdName(wxPortId port, bool usingUniversal);
+//     static wxString GetPortIdShortName(wxPortId port, bool usingUniversal);
+
+//     static wxString GetArchName(wxArchitecture arch);
+//     static wxString GetEndiannessName(wxEndianness end);
+
+    // getters
+    // -----------------
+
+    int GetOSMajorVersion() const;
+    int GetOSMinorVersion() const;
+
+    int GetToolkitMajorVersion() const;
+    int GetToolkitMinorVersion() const;
+
+    bool IsUsingUniversalWidgets() const;
+
+    wxOperatingSystemId GetOperatingSystemId() const;
+    wxPortId GetPortId() const;
+    wxArchitecture GetArchitecture() const;
+    wxEndianness GetEndianness() const;
+
+
+    // string getters
+    // -----------------
+
+    wxString GetOperatingSystemFamilyName() const;
+    wxString GetOperatingSystemIdName() const;
+    wxString GetPortIdName() const;
+    wxString GetPortIdShortName() const;
+    wxString GetArchName() const;
+    wxString GetEndiannessName() const;
+
+    // setters
+    // -----------------
+
+    void SetOSVersion(int major, int minor);
+    void SetToolkitVersion(int major, int minor);
+
+    void SetOperatingSystemId(wxOperatingSystemId n);
+    void SetPortId(wxPortId n);
+    void SetArchitecture(wxArchitecture n);
+    void SetEndianness(wxEndianness n);
+
+    // miscellaneous
+    // -----------------
+
+    bool IsOk() const;
+};
+
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // Experimental...
 
 %{
