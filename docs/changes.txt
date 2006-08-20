@@ -63,6 +63,10 @@ wxMac:
 - Add parameter to the --enable-universal_binary configure option for the path
   to the SDK.
 
+wxGTK:
+
+- Automatically use stock items for the menu items with standard ids
+
 
 2.7.0
 -----

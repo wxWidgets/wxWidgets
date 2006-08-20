@@ -378,6 +378,59 @@ MyFrame::MyFrame()
     // create the menubar
     wxMenu *fileMenu = new wxMenu;
 
+    wxMenu *stockSubMenu = new wxMenu;
+    stockSubMenu->Append(wxID_ADD,              "wxID_ADD");
+    stockSubMenu->Append(wxID_APPLY,            "wxID_APPLY");
+    stockSubMenu->Append(wxID_BOLD,             "wxID_BOLD");
+    stockSubMenu->Append(wxID_CANCEL,           "wxID_CANCEL");
+    stockSubMenu->Append(wxID_CLEAR,            "wxID_CLEAR");
+    stockSubMenu->Append(wxID_CLOSE,            "wxID_CLOSE");
+    stockSubMenu->Append(wxID_COPY,             "wxID_COPY");
+    stockSubMenu->Append(wxID_CUT,              "wxID_CUT");
+    stockSubMenu->Append(wxID_DELETE,           "wxID_DELETE");
+    stockSubMenu->Append(wxID_FIND,             "wxID_FIND");
+    stockSubMenu->Append(wxID_REPLACE,          "wxID_REPLACE");
+    stockSubMenu->Append(wxID_BACKWARD,         "wxID_BACKWARD");
+    stockSubMenu->Append(wxID_DOWN,             "wxID_DOWN");
+    stockSubMenu->Append(wxID_FORWARD,          "wxID_FORWARD");
+    stockSubMenu->Append(wxID_UP,               "wxID_UP");
+    stockSubMenu->Append(wxID_HELP,             "wxID_HELP");
+    stockSubMenu->Append(wxID_HOME,             "wxID_HOME");
+    stockSubMenu->Append(wxID_INDENT,           "wxID_INDENT");
+    stockSubMenu->Append(wxID_INDEX,            "wxID_INDEX");
+    stockSubMenu->Append(wxID_ITALIC,           "wxID_ITALIC");
+    stockSubMenu->Append(wxID_JUSTIFY_CENTER,   "wxID_JUSTIFY_CENTER");
+    stockSubMenu->Append(wxID_JUSTIFY_FILL,     "wxID_JUSTIFY_FILL");
+    stockSubMenu->Append(wxID_JUSTIFY_LEFT,     "wxID_JUSTIFY_LEFT");
+    stockSubMenu->Append(wxID_JUSTIFY_RIGHT,    "wxID_JUSTIFY_RIGHT");
+    stockSubMenu->Append(wxID_NEW,              "wxID_NEW");
+    stockSubMenu->Append(wxID_NO,               "wxID_NO");
+    stockSubMenu->Append(wxID_OK,               "wxID_OK");
+    stockSubMenu->Append(wxID_OPEN,             "wxID_OPEN");
+    stockSubMenu->Append(wxID_PASTE,            "wxID_PASTE");
+    stockSubMenu->Append(wxID_PREFERENCES,      "wxID_PREFERENCES");
+    stockSubMenu->Append(wxID_PRINT,            "wxID_PRINT");
+    stockSubMenu->Append(wxID_PREVIEW,          "wxID_PREVIEW");
+    stockSubMenu->Append(wxID_PROPERTIES,       "wxID_PROPERTIES");
+    stockSubMenu->Append(wxID_EXIT,             "wxID_EXIT");
+    stockSubMenu->Append(wxID_REDO,             "wxID_REDO");
+    stockSubMenu->Append(wxID_REFRESH,          "wxID_REFRESH");
+    stockSubMenu->Append(wxID_REMOVE,           "wxID_REMOVE");
+    stockSubMenu->Append(wxID_REVERT_TO_SAVED,  "wxID_REVERT_TO_SAVED");
+    stockSubMenu->Append(wxID_SAVE,             "wxID_SAVE");
+    stockSubMenu->Append(wxID_SAVEAS,           "wxID_SAVEAS");
+    stockSubMenu->Append(wxID_STOP,             "wxID_STOP");
+    stockSubMenu->Append(wxID_UNDELETE,         "wxID_UNDELETE");
+    stockSubMenu->Append(wxID_UNDERLINE,        "wxID_UNDERLINE");
+    stockSubMenu->Append(wxID_UNDO,             "wxID_UNDO");
+    stockSubMenu->Append(wxID_UNINDENT,         "wxID_UNINDENT");
+    stockSubMenu->Append(wxID_YES,              "wxID_YES");
+    stockSubMenu->Append(wxID_ZOOM_100,         "wxID_ZOOM_100");
+    stockSubMenu->Append(wxID_ZOOM_FIT,         "wxID_ZOOM_FIT");
+    stockSubMenu->Append(wxID_ZOOM_IN,          "wxID_ZOOM_IN");
+    stockSubMenu->Append(wxID_ZOOM_OUT,         "wxID_ZOOM_OUT");
+    fileMenu->AppendSubMenu(stockSubMenu, _T("&Standard items demo"));
+
 #if USE_LOG_WINDOW
     wxMenuItem *item = new wxMenuItem(fileMenu, Menu_File_ClearLog,
                                       _T("Clear &log\tCtrl-L"));
@@ -386,7 +439,8 @@ MyFrame::MyFrame()
 #endif
     fileMenu->Append(item);
     fileMenu->AppendSeparator();
-#endif
+#endif // USE_LOG_WINDOW
+
     fileMenu->Append(Menu_File_Quit, _T("E&xit\tAlt-X"), _T("Quit menu sample"));
 
     wxMenu *menubarMenu = new wxMenu;

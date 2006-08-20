@@ -23,6 +23,7 @@
     #include "wx/accel.h"
 #endif // wxUSE_ACCEL
 
+#include "wx/stockitem.h"
 #include "wx/gtk/private.h"
 
 #include <gdk/gdkkeysyms.h>
@@ -945,37 +946,56 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     {
         menuItem = gtk_separator_menu_item_new();
     }
-    else if (mitem->GetBitmap().Ok())
+    else if ( mitem->GetBitmap().Ok() ||
+                (mitem->GetKind() == wxITEM_NORMAL &&
+                    wxIsStockID(mitem->GetId())) )
     {
         text = mitem->GetText();
-        const wxBitmap *bitmap = &mitem->GetBitmap();
+        wxBitmap bitmap(mitem->GetBitmap());
 
         menuItem = gtk_image_menu_item_new_with_mnemonic( wxGTK_CONV_SYS( text ) );
 
         GtkWidget *image;
-        if (bitmap->HasPixbuf())
+        if ( !bitmap.Ok() )
         {
-            image = gtk_image_new_from_pixbuf(bitmap->GetPixbuf());
+            // use stock bitmap for this item if available on the assumption
+            // that it never hurts to follow GTK+ conventions more closely
+            const char *stock = wxGetStockGtkID(mitem->GetId());
+            image = stock ? gtk_image_new_from_stock(stock, GTK_ICON_SIZE_MENU)
+                          : NULL;
         }
-        else
+        else // we have a custom bitmap
         {
-            GdkPixmap *gdk_pixmap = bitmap->GetPixmap();
-            GdkBitmap *gdk_bitmap = bitmap->GetMask() ?
-                                        bitmap->GetMask()->GetBitmap() :
-                                        (GdkBitmap*) NULL;
-            image = gtk_image_new_from_pixmap( gdk_pixmap, gdk_bitmap );
+            wxASSERT_MSG( mitem->GetKind() == wxITEM_NORMAL,
+                            _T("only normal menu items can have bitmaps") );
+
+            if ( bitmap.HasPixbuf() )
+            {
+                image = gtk_image_new_from_pixbuf(bitmap.GetPixbuf());
+            }
+            else
+            {
+                GdkPixmap *gdk_pixmap = bitmap.GetPixmap();
+                GdkBitmap *gdk_bitmap = bitmap.GetMask() ?
+                                            bitmap.GetMask()->GetBitmap() :
+                                            (GdkBitmap*) NULL;
+                image = gtk_image_new_from_pixmap( gdk_pixmap, gdk_bitmap );
+            }
         }
 
-        gtk_widget_show(image);
+        if ( image )
+        {
+            gtk_widget_show(image);
 
-        gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM(menuItem), image );
+            gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM(menuItem), image );
+        }
 
         m_prevRadio = NULL;
     }
     else // a normal item
     {
         // text has "_" instead of "&" after mitem->SetText() so don't use it
-        text =  mitem->GetText() ;
+        text = mitem->GetText() ;
 
         switch ( mitem->GetKind() )
         {
