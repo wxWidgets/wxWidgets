@@ -52,12 +52,16 @@ public:
     void SetReturnCode(int returnCode) { m_returnCode = returnCode; }
     int GetReturnCode() const { return m_returnCode; }
 
-    // The identifier for the affirmative button
-    void SetAffirmativeId(int affirmativeId) { m_affirmativeId = affirmativeId; }
+    // Set the identifier for the affirmative button: this button will close
+    // the dialog after validating data and calling TransferDataFromWindow()
+    void SetAffirmativeId(int affirmativeId);
     int GetAffirmativeId() const { return m_affirmativeId; }
 
-    // Identifier for Esc key translation
-    void SetEscapeId(int escapeId) { m_escapeId = escapeId; }
+    // Set identifier for Esc key translation: the button with this id will
+    // close the dialog without doing anything else; special value wxID_NONE
+    // means to not handle Esc at all while wxID_ANY means to map Esc to
+    // wxID_CANCEL if present and GetAffirmativeId() otherwise
+    void SetEscapeId(int escapeId);
     int GetEscapeId() const { return m_escapeId; }
 
 #if wxUSE_STATTEXT // && wxUSE_TEXTCTRL
@@ -92,6 +96,10 @@ protected:
     // the dialog return code
     void EndDialog(int rc);
 
+    // call Validate() and TransferDataFromWindow() and close dialog with
+    // wxID_OK return code
+    void AcceptAndClose();
+
 
     // The return code from modal dialog
     int m_returnCode;
@@ -113,9 +121,9 @@ private:
     void OnCloseWindow(wxCloseEvent& event);
 
     // handle the standard buttons
-    void OnOK(wxCommandEvent& event);
+    void OnAffirmativeButton(wxCommandEvent& event);
     void OnApply(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
+    void OnCancelButton(wxCommandEvent& event);
 
     // update the background colour
     void OnSysColourChanged(wxSysColourChangedEvent& event);
