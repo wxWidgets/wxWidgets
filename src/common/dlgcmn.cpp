@@ -551,7 +551,7 @@ void wxDialogBase::OnCharHook(wxKeyEvent& event)
                 // but if there is no such button, then fall back to wxID_OK
                 if ( EmulateButtonClickIfPresent(wxID_CANCEL) )
                     return;
-                idCancel = wxID_OK;
+                idCancel = GetAffirmativeId();
                 // fall through
 
             default:
