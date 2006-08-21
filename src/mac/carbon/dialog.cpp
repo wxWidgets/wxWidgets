@@ -29,17 +29,6 @@ wxList wxModalDialogs;
 
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 
-BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
-  EVT_BUTTON(wxID_OK, wxDialog::OnOK)
-  EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
-  EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
-
-  EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
-
-  EVT_CLOSE(wxDialog::OnCloseWindow)
-END_EVENT_TABLE()
-
-
 void wxDialog::Init()
 {
     m_isModalStyle = false;
