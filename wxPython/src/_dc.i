@@ -883,12 +883,12 @@ colour.
 ", "");
     
 
-    DocDeclStr(
-        void , ComputeScaleAndOrigin(),
-        "Performs all necessary computations for given platform and context
-type after each change of scale and origin parameters. Usually called
-automatically internally after such changes.
-", "");
+//     DocDeclStr(
+//         void , ComputeScaleAndOrigin(),
+//         "Performs all necessary computations for given platform and context
+// type after each change of scale and origin parameters. Usually called
+// automatically internally after such changes.
+// ", "");
     
 
     

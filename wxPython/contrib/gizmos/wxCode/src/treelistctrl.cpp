@@ -1126,7 +1126,7 @@ void wxTreeListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
     GtkStateType state = m_parent->IsEnabled() ? GTK_STATE_NORMAL
                                                : GTK_STATE_INSENSITIVE;
 
-    x = dc->XLOG2DEV( x );
+    x = dc->LogicalToDeviceX( x );
 
     gtk_paint_box (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window,
                    state, GTK_SHADOW_OUT,
