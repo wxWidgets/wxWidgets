@@ -237,10 +237,10 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
     if ((win->m_width != alloc->width) || (win->m_height != alloc->height))
     {
 /*
-        wxPrintf( "OnSize from " );
+        wxPrintf( wxT("gtk_frame_size_callback from ") );
         if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
            wxPrintf( win->GetClassInfo()->GetClassName() );
-        wxPrintf( " %d %d %d %d\n", (int)alloc->x,
+        wxPrintf( wxT(" %d %d %d %d\n"), (int)alloc->x,
                                 (int)alloc->y,
                                 (int)alloc->width,
                                 (int)alloc->height );
@@ -435,9 +435,6 @@ static void wxInsertChildInTopLevelWindow( wxTopLevelWindowGTK* parent, wxWindow
                          child->m_width,
                          child->m_height );
     }
-
-    // resize on OnInternalIdle
-    parent->GtkUpdateSize();
 }
 
 // ----------------------------------------------------------------------------

@@ -190,9 +190,6 @@ static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
                          child->m_width,
                          child->m_height );
     }
-
-    // Resize on OnInternalIdle
-    parent->GtkUpdateSize();
 }
 
 // ----------------------------------------------------------------------------
