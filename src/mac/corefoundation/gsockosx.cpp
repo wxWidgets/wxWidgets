@@ -187,9 +187,9 @@ void SetNewCallback(GSocket* socket)
   {
     for (int i = 0; i < GSOCK_MAX_EVENT; ++i)
       if (socket->m_eventflags & i)
-        CFSocketEnableCallBacks(data->socket, TranslateEventCondition(socket, i));
+        CFSocketEnableCallBacks(data->socket, TranslateEventCondition(socket, (GSocketEvent)i));
       else
-        CFSocketDisableCallBacks(data->socket, TranslateEventCondition(socket, i));
+        CFSocketDisableCallBacks(data->socket, TranslateEventCondition(socket, (GSocketEvent)i));
   }
 }
 
@@ -201,14 +201,14 @@ void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
                                         | TranslateEventCondition(socket, GSOCK_LOST)
                                         | TranslateEventCondition(socket, GSOCK_CONNECTION);
     
-    SetNewCallback();
+    SetNewCallback(socket);
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 {
     socket->m_eventflags = 0;
     
-    SetNewCallback();
+    SetNewCallback(socket);
 }
 
 void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEvent event)
@@ -224,7 +224,7 @@ void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEven
   
   socket->m_eventflags |= TranslateEventCondition(socket, event);
   
-  SetNewCallback();
+  SetNewCallback(socket);
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEvent event)
@@ -239,7 +239,7 @@ void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEve
   
   socket->m_eventflags &= ~(TranslateEventCondition(socket,event)); 
          
-  SetNewCallback();
+  SetNewCallback(socket);
 }
 
 #endif // wxUSE_SOCKETS
