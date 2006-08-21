@@ -17,7 +17,6 @@
 
 #include <stdlib.h>
 #include "wx/gsocket.h"
-#include "wx/unix/gsockunx.h"
 
 /*
  * FIXME: have these in a common header instead of being repeated
@@ -32,6 +31,16 @@ typedef enum
 extern "C" void wxRegisterSocketCallback(int fd, wxSocketTableType socketType, wxSocketCallback cback, void* data);
 extern "C" void wxUnregisterSocketCallback(int fd, wxSocketTableType socketType);
 
+typedef struct {
+  int input;
+  int output;
+} CallbackData;
+
+#define GSOCKX11_INPUT 1
+#define GSOCKX11_OUTPUT 2
+
+#define DATATYPE CallbackData
+#define PLATFORM_DATA(x) (*(DATATYPE*)x)
 
 static void _GSocket_X11_Input(int *fid, void* data)
 {
@@ -61,95 +70,134 @@ void GSocketGUIFunctionsTableConcrete::OnExit(void)
 
 bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
 {
-  int *m_id;
 
-  socket->m_gui_dependent = (char *)malloc(sizeof(int)*2);
-  m_id = (int *)(socket->m_gui_dependent);
-
-  m_id[0] = -1;
-  m_id[1] = -1;
-
+  socket->m_platform_specific_data = malloc(sizeof(DATATYPE));
+  PLATFORM_DATA(socket->m_platform_specific_data).input = -1;
+  PLATFORM_DATA(socket->m_platform_specific_data).output = -1;
+  
   return true;
 }
 
 void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
 {
-  free(socket->m_gui_dependent);
+  // Just to be sure
+  Disable_Events(socket);
+  
+  if (socket->m_platform_specific_data)
+    free(socket->m_platform_specific_data);
+  
+  socket->m_platform_specific_data = NULL; 
 }
 
-void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket, GSocketEvent event)
-{
-  int *m_id = (int *)(socket->m_gui_dependent);
-  int c;
+int TranslateEventCondition(GSocket* socket, GSocketEvent event) {
+  switch (event)
+  {
+    case GSOCK_LOST:       
+    case GSOCK_INPUT:      return GSOCKX11_INPUT; 
+    case GSOCK_OUTPUT:   return GSOCKX11_OUTPUT;
+    case GSOCK_CONNECTION: return ((socket->m_server) ? GSOCKX11_INPUT : GSOCKX11_OUTPUT); 
+    default: wxASSERT(0); return 0; // This is invalid
+  }	
+}
 
-  if (socket->m_fd == -1)
+// Helper functions for {En|Dis}able*
+
+void CheckCurrentState(GSocket* socket, char event)
+{
+  int* current_state;
+  wxSocketTableType table;
+  wxSocketCallback callback;
+  switch (event)
+  {
+    case GSOCKX11_INPUT:
+      current_state = &(PLATFORM_DATA(socket->m_platform_specific_data).input);
+      table = wxSocketTableInput;
+      callback = (wxSocketCallback)_GSocket_X11_Input;
+      break;
+    case GSOCKX11_OUTPUT:
+      current_state = &(PLATFORM_DATA(socket->m_platform_specific_data).output);
+      table = wxSocketTableOutput;
+      callback = (wxSocketCallback)_GSocket_X11_Output;
+      break;
+    default:
+      wxASSERT_MSG(0,wxT("Error: Checking socket state for unknown event type\n"));
+      return;
+  }
+  
+  if (*current_state != -1)
+  {
+    if (!(socket->m_eventflags & event))
+    {
+      // We have to use *current_state here because the socket->fd 
+      // might have already been set to -1.
+      wxUnregisterSocketCallback(*current_state, table);
+      *current_state = -1;
+    }
+  }
+  else if (socket->m_eventflags | event)
+  {
+    wxRegisterSocketCallback(socket->m_fd, table, callback, (void*) socket);
+    *current_state = socket->m_fd;
+  } 
+}
+
+void SetNewCallback(GSocket* socket)
+{
+  wxCHECK_RET( socket->m_platform_specific_data, wxT("Critical: Setting callback for non-init or destroyed socket") );
+
+  // This functions updates each callback table
+  
+  CheckCurrentState(socket, GSOCKX11_INPUT);
+  CheckCurrentState(socket, GSOCKX11_OUTPUT);
+}
+
+void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEvent event)
+{
+  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to install callback for an unknown socket event") );
+
+  if ( socket->m_fd == -1 )
     return;
 
-  switch (event)
-  {
-    case GSOCK_LOST:       /* fall-through */
-    case GSOCK_INPUT:      c = 0; break;
-    case GSOCK_OUTPUT:     c = 1; break;
-    case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
-    default: return;
-  }
-
-#if 0
-  if (m_id[c] != -1)
-      XtRemoveInput(m_id[c]);
-#endif /* 0 */
-
-  if (c == 0)
-  {
-      m_id[0] = socket->m_fd;
-
-      wxRegisterSocketCallback(socket->m_fd, wxSocketTableInput,
-                               (wxSocketCallback) _GSocket_X11_Input, (void*) socket);
-  }
-  else
-  {
-      m_id[1] = socket->m_fd;
-
-      wxRegisterSocketCallback(socket->m_fd, wxSocketTableOutput,
-                               (wxSocketCallback) _GSocket_X11_Output, (void*) socket);
-  }
+  int internal_event = TranslateEventCondition(socket, event);
+  
+  if (socket->m_eventflags & internal_event)
+    return;
+  
+  socket->m_eventflags |= internal_event;
+  
+  // Don't use SetCallback here - It would check the other internal event too
+  CheckCurrentState(socket, internal_event);
 }
 
-void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket, GSocketEvent event)
+void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEvent event)
 {
-  int *m_id = (int *)(socket->m_gui_dependent);
-  int c;
+  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to uninstall callback for an unknown socket event") );
 
-  switch (event)
-  {
-    case GSOCK_LOST:       /* fall-through */
-    case GSOCK_INPUT:      c = 0; break;
-    case GSOCK_OUTPUT:     c = 1; break;
-    case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
-    default: return;
-  }
+  if ( socket->m_fd == -1 )
+    return;
 
-  if (m_id[c] != -1)
-  {
-      if (c == 0)
-          wxUnregisterSocketCallback(m_id[c], wxSocketTableInput);
-      else
-          wxUnregisterSocketCallback(m_id[c], wxSocketTableOutput);
-  }
-
-  m_id[c] = -1;
+  int internal_event = TranslateEventCondition(socket, event);
+  
+  if (!(socket->m_eventflags & internal_event))
+    return;
+  
+  socket->m_eventflags &= ~internal_event;
+  
+  // Don't use SetCallback here - It would check the other internal event too
+  CheckCurrentState(socket, internal_event);
 }
 
 void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
 {
-  Install_Callback(socket, GSOCK_INPUT);
-  Install_Callback(socket, GSOCK_OUTPUT);
+  socket->m_eventflags = TranslateEventCondition(socket, GSOCK_INPUT)
+                                        | TranslateEventCondition(socket, GSOCK_OUTPUT);
+  SetNewCallback(socket);
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 {
-  Uninstall_Callback(socket, GSOCK_INPUT);
-  Uninstall_Callback(socket, GSOCK_OUTPUT);
+  socket->m_eventflags = 0;
+  SetNewCallback(socket);
 }
 
 #else /* !wxUSE_SOCKETS */

@@ -205,6 +205,11 @@ void wxSocketTable::ProcessEvents(fd_set* readset, fd_set* writeset)
     wxHashTable::compatibility_iterator node = Next();
     while (node)
     {
+        // We have to store the next node here, because the event processing can 
+        // destroy the object before we call Next()
+
+	wxHashTable::compatibility_iterator next_node = Next();	
+
         wxSocketTableEntry* entry = (wxSocketTableEntry*) node->GetData();
 
         if (entry->m_fdInput != -1 && wxFD_ISSET(entry->m_fdInput, readset))
@@ -217,7 +222,7 @@ void wxSocketTable::ProcessEvents(fd_set* readset, fd_set* writeset)
             (entry->m_callbackOutput) (entry->m_fdOutput, entry->m_dataOutput);
         }
 
-        node = Next();
+        node = next_node;
     }
 }
 
