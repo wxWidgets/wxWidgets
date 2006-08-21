@@ -34,6 +34,12 @@ class TestPanel(wx.Panel):
         for month, day in self.holidays:
             if month == cur_month:
                 self.cal.SetHoliday(day)
+        if cur_month == 8:
+            attr = wx.calendar.CalendarDateAttr(border=wx.calendar.CAL_BORDER_SQUARE,
+                                                colBorder="blue")
+            self.cal.SetAttr(14, attr)
+        else:
+            self.cal.ResetAttr(14)
 
     def OnCalSelChanged(self, evt):
         cal = evt.GetEventObject()
