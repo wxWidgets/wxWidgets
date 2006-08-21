@@ -51,6 +51,7 @@ _treeList = [
         'AUI_DockingWindowMgr',
         'AUI_Notebook',
         'CheckListCtrlMixin',
+        'ComboTreeBox',
         'Pickers',
         'PseudoDC',
         'RichTextCtrl',
@@ -140,6 +141,7 @@ _treeList = [
     ('Custom Controls', [
         'AnalogClock',
         'ColourSelect',
+        'ComboTreeBox',
         'Editor',
         'GenericButtons',
         'GenericDirCtrl',

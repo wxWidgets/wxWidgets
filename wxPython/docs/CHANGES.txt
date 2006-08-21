@@ -182,6 +182,16 @@ Added CanSetTransparent and SetTransparent methods to the
 wx.TopLevelWindow class, with implementations (so far) for wxMSW and
 wxMac. 
 
+SetDefaultItem() and GetDefaultItem() are now members of
+wx.TopLevelWindow, not wx.Panel.
+
+wxGTK: Stock items (icons) will be used for menu items with stock
+IDs. 
+
+Added wx.lib.combotreebox from Frank Niessink
+
+
+
 
 
 
