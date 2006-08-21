@@ -469,7 +469,7 @@ void SetNewCallback(GSocket* socket)
     socketHash[socket->m_fd] = NULL;
   }
 #else
-  gs_WSAAsyncSelect(socket->m_fd, hWin, PLATFORM_DATA(socket->m_platform_specific_data), socket->m_eventflags); 
+  gs_WSAAsyncSelect(socket->m_fd, hWin, PLATFORM_DATA(socket->m_platform_specific_data).socket_number, socket->m_eventflags); 
 #endif
 }
 
