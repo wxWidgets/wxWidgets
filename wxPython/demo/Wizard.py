@@ -177,7 +177,7 @@ wxWizardPageSimple class can easily be used for the pages."""))
         #wizard.SetExtraStyle(wx.WIZARD_EX_HELPBUTTON)
         #wizard.Create(self, self.ID_wiz, "Simple Wizard",
         #              images.getWizTest1Bitmap())
-        wizard = wiz.Wizard(self, -1, "Simple Wizard", images.getWizTest1Bitmap())
+        wizard = wiz.Wizard(self, -1, "Dynamic Wizard", images.getWizTest1Bitmap())
 
         page1 = TitledPage(wizard, "Page 1")
         page2 = SkipNextPage(wizard, "Page 2")
