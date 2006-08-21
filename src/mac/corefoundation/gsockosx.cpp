@@ -24,6 +24,7 @@ public:
   {
     socket = NULL;
     source = NULL;
+    added = false;
   }
   
   ~MacGSocketData()
@@ -38,6 +39,7 @@ public:
   
   CFSocketRef socket;
   CFRunLoopSourceRef source;
+  bool added;
 };
 
 #define DATATYPE MacGSocketData
@@ -166,28 +168,47 @@ void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
   socket->m_platform_specific_data = NULL;
 }
 
-void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
+// Helper function for {En|Dis}able*
+void SetNewCallback(GSocket* socket)
 {
     DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
   
     if (!data)
       return;
 
-    socket->m_eventflags = ALL_CALLBACK_TYPES;
-    
+  if (socket->m_eventflags == ALL_CALLBACK_TYPES && !data->added)
+  {
     CFRunLoopAddSource(s_mainRunLoop, data->source, kCFRunLoopCommonModes);
+    data->added = true;
+  }
+  else if (socket->m_eventflags == 0)
+    CFSocketInvalidate(data->socket);
+  else 
+  {
+    for (int i = 0; i < GSOCK_MAX_EVENT; ++i)
+      if (socket->m_eventflags & i)
+        CFSocketEnableCallBacks(data->socket, TranslateEventCondition(socket, i));
+      else
+        CFSocketDisableCallBacks(data->socket, TranslateEventCondition(socket, i));
+  }
+}
+
+void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
+{
+
+    socket->m_eventflags = TranslateEventCondition(socket, GSOCK_INPUT)
+                                        | TranslateEventCondition(socket, GSOCK_OUTPUT)
+                                        | TranslateEventCondition(socket, GSOCK_LOST)
+                                        | TranslateEventCondition(socket, GSOCK_CONNECTION);
+    
+    SetNewCallback();
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 {
-    DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
-  
-    if (!data) 
-      return;
-
     socket->m_eventflags = 0;
     
-    CFSocketInvalidate(data->socket);
+    SetNewCallback();
 }
 
 void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEvent event)
@@ -203,12 +224,7 @@ void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEven
   
   socket->m_eventflags |= TranslateEventCondition(socket, event);
   
-  DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
-  
-  if (!data) 
-    return;
-    
-  CFSocketEnableCallBacks(data->socket, TranslateEventCondition(socket,event));
+  SetNewCallback();
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEvent event)
@@ -222,13 +238,8 @@ void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEve
     return;
   
   socket->m_eventflags &= ~(TranslateEventCondition(socket,event)); 
-  
-  DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
-  
-  if (!data) 
-    return;
-        
-  CFSocketDisableCallBacks(data->socket, TranslateEventCondition(socket,event));
+         
+  SetNewCallback();
 }
 
 #endif // wxUSE_SOCKETS

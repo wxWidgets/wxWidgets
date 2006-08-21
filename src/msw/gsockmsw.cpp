@@ -85,7 +85,16 @@ extern HINSTANCE hInst;
 #include <winsock.h>
 #include "wx/msw/wince/net.h"
 #include "wx/hashmap.h"
-WX_DECLARE_HASH_MAP(int,bool,wxIntegerHash,wxIntegerEqual,SocketHash);
+/* This structure will be used to pass data on to the thread that handles socket events.
+*/
+typedef struct thread_data{
+    HWND hEvtWin;
+    unsigned long msgnumber;
+    unsigned long fd;
+    unsigned long lEvent;
+} thread_data;
+
+WX_DECLARE_HASH_MAP(int,thread_data*,wxIntegerHash,wxIntegerEqual,SocketHash);
 #endif
 
 #include <string.h>
@@ -116,7 +125,12 @@ wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 #error "MAXSOCKETS is too big!"
 #endif
 
-#define DATATYPE long
+typedef struct {
+  int socket_number;
+  int old_fd;
+} socket_data;
+
+#define DATATYPE socket_data
 #define PLATFORM_DATA(x) (*(DATATYPE*)x)
 
 #ifndef __WXWINCE__
@@ -153,14 +167,6 @@ static WSACreateEventFunc gs_WSACreateEvent = NULL;
 static WSAEventSelectFunc gs_WSAEventSelect = NULL;
 static WSAWaitForMultipleEventsFunc gs_WSAWaitForMultipleEvents = NULL;
 static WSAEnumNetworkEventsFunc gs_WSAEnumNetworkEvents = NULL;
-/* This structure will be used to pass data on to the thread that handles socket events.
-*/
-typedef struct thread_data{
-    HWND hEvtWin;
-    unsigned long msgnumber;
-    unsigned long fd;
-    unsigned long lEvent;
-}thread_data;
 #endif
 
 static HMODULE gs_wsock32dll = 0;
@@ -186,10 +192,11 @@ DWORD WINAPI SocketThread(LPVOID data)
     thread_data* d = (thread_data *)data;
 
     HANDLE NetworkEvent = gs_WSACreateEvent();
-    gs_WSAEventSelect(d->fd, NetworkEvent, d->lEvent);
 
-    while(socketHash[d->fd] == true)
+    while(socketHash[d->fd] != NULL)
     {
+        gs_WSAEventSelect(d->fd, NetworkEvent, d->lEvent);
+      
         if ((gs_WSAWaitForMultipleEvents(1, &NetworkEvent, FALSE,INFINITE, FALSE)) == WAIT_FAILED)
         {
             printf("WSAWaitForMultipleEvents failed with error %d\n", WSAGetLastError());
@@ -216,7 +223,10 @@ DWORD WINAPI SocketThread(LPVOID data)
             ::PostMessage(d->hEvtWin, d->msgnumber,d->fd, FD_CLOSE);
 
     }
+    
     gs_WSAEventSelect(d->fd, NetworkEvent, 0);
+    delete d;
+    
     ExitThread(0);
     return 0;
 }
@@ -294,11 +304,13 @@ bool GSocketGUIFunctionsTableConcrete::OnInit()
 
 void GSocketGUIFunctionsTableConcrete::OnExit()
 {
-#ifdef __WXWINCE__
+
+  #ifdef __WXWINCE__
 /* Delete the threads here */
     for(unsigned int i=0; i < currSocket; i++)
         CloseHandle(hThread[i]);
 #endif
+    
   /* Destroy internal window */
   DestroyWindow(hWin);
   UnregisterClass(CLASSNAME, INSTANCE);
@@ -341,8 +353,9 @@ bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
   
   socket->m_platform_specific_data = malloc(sizeof(DATATYPE));
 
-  PLATFORM_DATA(socket->m_platform_specific_data) = (i + WM_USER);
-
+  PLATFORM_DATA(socket->m_platform_specific_data).socket_number = (i + WM_USER);
+  PLATFORM_DATA(socket->m_platform_specific_data).old_fd = -1;
+ 
   LeaveCriticalSection(&critical);
 
   return true;
@@ -355,7 +368,15 @@ void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
   
   EnterCriticalSection(&critical);
   if ( socket->IsOk() )
-      socketList[(PLATFORM_DATA(socket->m_platform_specific_data) - WM_USER)] = NULL;
+      socketList[(PLATFORM_DATA(socket->m_platform_specific_data).socket_number - WM_USER)] = NULL;
+  
+#ifdef __WXWINCE__
+  // Make sure no thread is left for this socket.
+  int old_fd = PLATFORM_DATA(socket->m_platform_specific_data).old_fd;
+  if (old_fd != -1 && socketHash[old_fd])
+      socketHash[old_fd] = NULL;
+#endif
+    
   LeaveCriticalSection(&critical);
 }
 
@@ -414,7 +435,42 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
 void SetNewCallback(GSocket* socket)
 {
   wxCHECK_RET( socket->m_platform_specific_data, wxT("Critical: Setting callback for non-init or destroyed socket") );
+
+#ifdef __WXWINCE__
+/*
+*  WinCE creates a thread for socket event handling.
+*  All needed parameters get passed through the thread_data structure.
+*/
+  if (socket->m_eventflags)
+  {
+    thread_data* data = socketHash[socket->m_fd];
+  
+    if (data == NULL)
+    {
+      // Thread doesn't exist yet, create it.
+      thread_data* d = new thread_data;
+      d->lEvent = socket->m_eventflags;
+      d->hEvtWin = hWin;
+      d->msgnumber = PLATFORM_DATA(socket->m_platform_specific_data).socket_number;
+      d->fd = socket->m_fd;
+      PLATFORM_DATA(socket->m_platform_specific_data).old_fd = socket->m_fd;
+      socketHash[socket->m_fd] = d;
+      hThread[currSocket++] = CreateThread(NULL, 0, &SocketThread,(LPVOID)d, 0, NULL);  
+    }
+    else
+    {
+      // Thread already exists, update flags
+      data->lEvent = socket->m_eventflags;
+    }
+  }
+  else
+  {
+    // Destroy the thread, no events needed.
+    socketHash[socket->m_fd] = NULL;
+  }
+#else
   gs_WSAAsyncSelect(socket->m_fd, hWin, PLATFORM_DATA(socket->m_platform_specific_data), socket->m_eventflags); 
+#endif
 }
 
 /* _GSocket_Enable_Events:
@@ -426,40 +482,26 @@ void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
 {
   assert (socket != NULL);
 
-  if (socket->m_fd != INVALID_SOCKET)
+  if (socket->m_fd == INVALID_SOCKET)
+    return;
+  
+  /* We could probably just subscribe to all events regardless
+   * of the socket type, but MS recommends to do it this way.
+   */
+  if (socket->m_server)
   {
-    /* We could probably just subscribe to all events regardless
-     * of the socket type, but MS recommends to do it this way.
-     */
-    if (socket->m_server)
-    {
-      socket->m_eventflags = (TranslateEventCondition(socket,GSOCK_CONNECTION));
-    }
-    else
-    {
-      socket->m_eventflags = (TranslateEventCondition(socket,GSOCK_CONNECTION))
-                                            | (TranslateEventCondition(socket,GSOCK_INPUT))
-                                            | (TranslateEventCondition(socket,GSOCK_OUTPUT))
-                                            | (TranslateEventCondition(socket,GSOCK_LOST));
-    }
-    
-#ifndef __WXWINCE__
-    SetNewCallback(socket);   
-#else
-/*
-*  WinCE creates a thread for socket event handling.
-*  All needed parameters get passed through the thread_data structure.
-*/
-
-    thread_data* d = new thread_data;
-    d->lEvent = socket->m_eventflags;
-    d->hEvtWin = hWin;
-    d->msgnumber = PLATFORM_DATA(socket->m_platform_specific_data);
-    d->fd = socket->m_fd;
-    socketHash[socket->m_fd] = true;
-    hThread[currSocket++] = CreateThread(NULL, 0, &SocketThread,(LPVOID)d, 0, NULL);
-#endif
+    socket->m_eventflags = (TranslateEventCondition(socket,GSOCK_CONNECTION));
   }
+  else
+  {
+    socket->m_eventflags = (TranslateEventCondition(socket,GSOCK_CONNECTION))
+                                          | (TranslateEventCondition(socket,GSOCK_INPUT))
+                                          | (TranslateEventCondition(socket,GSOCK_OUTPUT))
+                                          | (TranslateEventCondition(socket,GSOCK_LOST));
+  }
+  
+  SetNewCallback(socket); 
+  
 }
 
 /* _GSocket_Disable_Events:
@@ -469,16 +511,12 @@ void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 {
   assert (socket != NULL);
 
-  if (socket->m_fd != INVALID_SOCKET)
-  {
-    socket->m_eventflags = 0;
-#ifndef __WXWINCE__
-    SetNewCallback(socket);
-#else
-    //Destroy the thread
-    socketHash[socket->m_fd] = false;
-#endif
-  }
+  if (socket->m_fd == INVALID_SOCKET)
+    return;
+  
+  socket->m_eventflags = 0;
+  
+  SetNewCallback(socket);
 }
 
 /*
@@ -497,11 +535,7 @@ void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEven
 
   socket->m_eventflags |= TranslateEventCondition(socket,event);
   
-#ifndef __WXWINCE__
   SetNewCallback(socket);
-#else
-  #error WinCE not supported yet
-#endif  
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEvent event)
@@ -516,11 +550,7 @@ void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEve
   
   socket->m_eventflags &= ~(TranslateEventCondition(socket,event)); 
   
-#ifndef __WXWINCE__
   SetNewCallback(socket);
-#else
-  #error WinCE not supported yet
-#endif  
 }
 
 #else /* !wxUSE_SOCKETS */
