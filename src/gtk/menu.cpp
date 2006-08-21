@@ -259,6 +259,24 @@ void wxMenuBar::SetInvokingWindow( wxWindow *win )
     }
 }
 
+void wxMenuBar::Attach(wxFrame *frame)
+{
+    wxMenuBarBase::Attach(frame);
+
+    const GtkTextDirection dir = GetFrame()->GetLayoutDirection() == wxLayout_RightToLeft ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
+
+    gtk_widget_set_direction(GTK_WIDGET(m_menubar), dir);
+
+    // loop on all menus and properly set their layout direction.
+    wxMenuList::compatibility_iterator node = m_menus.GetFirst();
+    while (node)
+    {
+        wxMenu *const menu = node->GetData();
+        gtk_widget_set_direction(GTK_WIDGET(menu->m_owner), dir);
+        node = node->GetNext();
+    }
+}
+
 void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
 {
     m_invokingWindow = (wxWindow*) NULL;
@@ -1126,6 +1144,22 @@ int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
 
     return wxNOT_FOUND;
 }
+#if 0
+void wxMenu::Attach(wxMenuBarBase *menubar)
+{
+	wxMenuBase::Attach(menubar);
+	return;
+	/*
+	const wxWindow *const menubarFrame = menubar->GetFrame();
+	
+	// in case this menu is added to a menubar which is attached to a frame.
+	if (menubarFrame)
+		// properly set it's layout direciton
+		gtk_widget_set_direction(GTK_WIDGET(m_menu),
+			menubarFrame->GetLayoutDirection() == wxLayout_RightToLeft ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
+	*/
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // helpers

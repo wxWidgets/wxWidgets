@@ -37,6 +37,8 @@ public:
     virtual void SetLabelTop( size_t pos, const wxString& label );
     virtual wxString GetLabelTop( size_t pos ) const;
 
+    void Attach(wxFrame *frame);
+
     // implementation only from now on
     void SetInvokingWindow( wxWindow *win );
     void UnsetInvokingWindow( wxWindow *win );
