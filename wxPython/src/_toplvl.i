@@ -176,9 +176,6 @@ public:
     }
 #endif
 
-    virtual bool SetTransparent(byte alpha); 
-    virtual bool CanSetTransparent();
-
     
     
     DocDeclStr(
@@ -366,11 +363,15 @@ public:
     void SetReturnCode(int returnCode);
     int GetReturnCode() const;
 
-    // The identifier for the affirmative button
+    // Set the identifier for the affirmative button: this button will close
+    // the dialog after validating data and calling TransferDataFromWindow()
     void SetAffirmativeId(int affirmativeId);
     int GetAffirmativeId() const;
 
-    // Identifier for Esc key translation
+    // Set identifier for Esc key translation: the button with this id will
+    // close the dialog without doing anything else; special value wxID_NONE
+    // means to not handle Esc at all while wxID_ANY means to map Esc to
+    // wxID_CANCEL if present and GetAffirmativeId() otherwise
     void SetEscapeId(int escapeId);
     int GetEscapeId() const;
 

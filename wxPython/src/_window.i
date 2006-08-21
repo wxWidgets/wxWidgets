@@ -1981,6 +1981,26 @@ from the parent window.
 The base class version returns false, but this method is overridden in
 wxControl where it returns true.", "");
     
+
+
+    DocDeclStr(
+        virtual bool , CanSetTransparent(),
+        "Returns ``True`` if the platform supports setting the transparency for
+this window.  Note that this method will err on the side of caution,
+so it is possible that this will return ``False`` when it is in fact
+possible to set the transparency.
+
+NOTE: On X-windows systems the X server must have the composite
+extension loaded, and there must be a composite manager program (such
+as xcompmgr) running.", "");
+
+    DocDeclStr(
+        virtual bool , SetTransparent(byte alpha),
+        "Attempt to set the transparency of this window to the ``alpha`` value,
+returns True on success.  The ``alpha`` value is an integer in the
+range of 0 to 255, where 0 is fully transparent and 255 is fully
+opaque.", "");
+    
     
 
     %pythoncode {

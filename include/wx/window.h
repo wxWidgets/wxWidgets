@@ -1027,6 +1027,12 @@ public:
     wxAccessible* GetOrCreateAccessible() ;
 #endif
 
+    
+    // Set window transparency if the platform supports it
+    virtual bool SetTransparent(wxByte WXUNUSED(alpha)) { return false; }
+    virtual bool CanSetTransparent() { return false; }
+
+
     // implementation
     // --------------
 

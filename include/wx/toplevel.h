@@ -196,10 +196,6 @@ public:
     void CentreOnScreen(int dir = wxBOTH) { DoCentre(dir | wxCENTRE_ON_SCREEN); }
     void CenterOnScreen(int dir = wxBOTH) { CentreOnScreen(dir); }
 
-    // Set window transparency if the platform supports it
-    virtual bool SetTransparent(wxByte WXUNUSED(alpha)) { return false; }
-    virtual bool CanSetTransparent() { return false; }
-
 
     // default item access: we have a permanent default item which is the one
     // set by the user code but we may also have a temporary default item which
