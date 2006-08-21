@@ -87,7 +87,7 @@ wxObject *wxComboBoxXmlHandler::DoCreateResource()
         // add to the list
         wxString str = GetNodeContent(m_node);
         if (m_resource->GetFlags() & wxXRC_USE_LOCALE)
-            str = wxGetTranslation(str);
+            str = wxGetTranslation(str, m_resource->GetDomain());
         strList.Add(str);
 
         return NULL;

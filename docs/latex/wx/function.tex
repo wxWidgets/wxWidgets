@@ -1536,15 +1536,19 @@ This function is deprecated, use \helpref{wxString}{wxstring} class instead.
 
 \membersection{::wxGetTranslation}\label{wxgettranslation}
 
-\func{const char *}{wxGetTranslation}{\param{const char * }{str}}
+\func{const wxChar *}{wxGetTranslation}{\param{const wxChar* }{str},
+  \param{const wxChar* }{domain = NULL}}
 
-\func{const char *}{wxGetTranslation}{\param{const char * }{str}, \param{const char * }{strPlural}, \param{size\_t }{n}}
+\func{const wxChar *}{wxGetTranslation}{\param{const wxChar* }{str}, \param{const wxChar* }{strPlural}, \param{size\_t }{n},
+  \param{const wxChar* }{domain = NULL}}}
 
 This function returns the translation of string {\it str} in the current
 \helpref{locale}{wxlocale}. If the string is not found in any of the loaded
 message catalogs (see \helpref{internationalization overview}{internationalization}), the
 original string is returned. In debug build, an error message is logged -- this
-should help to find the strings which were not yet translated. As this function
+should help to find the strings which were not yet translated.  If
+{\it domain} is specified then only that domain/catalog is searched
+for a matching string.  As this function
 is used very often, an alternative (and also common in Unix world) syntax is
 provided: the \helpref{\_()}{underscore} macro is defined to do the same thing
 as wxGetTranslation.

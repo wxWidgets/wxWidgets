@@ -35,7 +35,9 @@ enum wxXmlResourceFlags
 
 \membersection{wxXmlResource::wxXmlResource}\label{wxxmlresourcector}
 
-\func{}{wxXmlResource}{\param{const wxString\& }{filemask}, \param{int }{flags = wxXRC\_USE\_LOCALE}}
+\func{}{wxXmlResource}{\param{const wxString\& }{filemask}, 
+    \param{int }{flags = wxXRC\_USE\_LOCALE},
+    \param{const wxString& }{domain = wxEmptyString}}
 
 Constructor.
 
@@ -46,7 +48,13 @@ load all resource files inside a zip archive.}
 wxXRC\_NO\_SUBCLASSING: subclass property of object nodes will be ignored
 (useful for previews in XRC editors).}
 
-\func{}{wxXmlResource}{\param{int }{flags = wxXRC\_USE\_LOCALE}}
+\docparam{domain}{The name of the gettext catalog to search for
+  translatable strings.  By default all loaded catalogs will be
+  searched.  This provides a way to allow the strings to only come
+  from a specific catalog.}
+
+\func{}{wxXmlResource}{\param{int }{flags = wxXRC\_USE\_LOCALE},
+    \param{const wxString& }{domain = wxEmptyString}}
 
 Constructor.
 
@@ -55,6 +63,11 @@ wxXRC\_NO\_SUBCLASSING: subclass property of object nodes will be ignored
 (useful for previews in XRC editors). wxXRC\_NO\_RELOADING will prevent the
 XRC files from being reloaded from disk in case they have been modified there
 since being last loaded (may slightly speed up loading them).}
+
+\docparam{domain}{The name of the gettext catalog to search for
+  translatable strings.  By default all loaded catalogs will be
+  searched.  This provides a way to allow the strings to only come
+  from a specific catalog.}
 
 
 \membersection{wxXmlResource::\destruct{wxXmlResource}}\label{wxxmlresourcedtor}
@@ -254,3 +267,19 @@ This function unloads a resource previously loaded by
 Returns \true if the resource was successfully unloaded and \false if it hasn't
 been found in the list of loaded resources.
 
+
+
+\membersection{wxXmlResource::GetDomain}\label{wxxmlresourcegetdomain}
+
+\func{wxChar*}{GetDomain}{}
+
+Returns the domain (message catalog) that will be used to load
+translatable strings in the XRC.
+
+
+\membersection{wxXmlResource::SetDomain}\label{wxxmlresourcesetdomain}
+
+\func{wxChar*}{SetDomain}{\param{const wxChar* }{domain}}
+
+Sets the domain (message catalog) that will be used to load
+translatable strings in the XRC.

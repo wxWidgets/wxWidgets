@@ -402,7 +402,7 @@ public:
               int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
 
         // restores old locale
-    ~wxLocale();
+    virtual ~wxLocale();
 
     // Try to get user's (or OS's) preferred language setting.
     // Return wxLANGUAGE_UNKNOWN if language-guessing algorithm failed
@@ -490,13 +490,13 @@ public:
     //
     // domains are searched in the last to first order, i.e. catalogs
     // added later override those added before.
-    const wxChar *GetString(const wxChar *szOrigString,
-                            const wxChar *szDomain = NULL) const;
+    virtual const wxChar *GetString(const wxChar *szOrigString,
+                                    const wxChar *szDomain = NULL) const;
     // plural form version of the same:
-    const wxChar *GetString(const wxChar *szOrigString,
-                            const wxChar *szOrigString2,
-                            size_t n,
-                            const wxChar *szDomain = NULL) const;
+    virtual const wxChar *GetString(const wxChar *szOrigString,
+                                    const wxChar *szOrigString2,
+                                    size_t n,
+                                    const wxChar *szDomain = NULL) const;
 
     // Returns the current short name for the locale
     const wxString& GetName() const { return m_strShort; }
@@ -548,20 +548,20 @@ private:
 extern WXDLLIMPEXP_BASE wxLocale* wxGetLocale();
 
 // get the translation of the string in the current locale
-inline const wxChar *wxGetTranslation(const wxChar *sz)
+inline const wxChar *wxGetTranslation(const wxChar *sz, const wxChar* domain=NULL)
 {
     wxLocale *pLoc = wxGetLocale();
     if (pLoc)
-        return pLoc->GetString(sz);
+        return pLoc->GetString(sz, domain);
     else
         return sz;
 }
 inline const wxChar *wxGetTranslation(const wxChar *sz1, const wxChar *sz2,
-                                      size_t n)
+                                      size_t n, const wxChar* domain=NULL)
 {
     wxLocale *pLoc = wxGetLocale();
     if (pLoc)
-        return pLoc->GetString(sz1, sz2, n);
+        return pLoc->GetString(sz1, sz2, n, domain);
     else
         return n == 1 ? sz1 : sz2;
 }

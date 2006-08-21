@@ -45,8 +45,10 @@ class wxXmlResource : public wxObject
 {
 public:
 
-    %pythonAppend wxXmlResource(const wxString& filemask, int flags)   "self.InitAllHandlers()"
-    %pythonAppend wxXmlResource(int flags)                             "val.InitAllHandlers()"
+    %pythonAppend wxXmlResource(const wxString& filemask, int flags,
+                  const wxString& domain=wxEmptyString)   "self.InitAllHandlers()"
+    %pythonAppend wxXmlResource(int flags,
+                  const wxString& domain=wxEmptyString)   "val.InitAllHandlers()"
 
     // Ctors.
     // Flags: wxXRC_USE_LOCALE
@@ -54,8 +56,11 @@ public:
     //        wxXRC_NO_SUBCLASSING
     //              subclass property of object nodes will be ignored
     //              (useful for previews in XRC editors)
-    wxXmlResource(const wxString& filemask, int flags = wxXRC_USE_LOCALE);
-    %RenameCtor(EmptyXmlResource,  wxXmlResource(int flags = wxXRC_USE_LOCALE));
+    wxXmlResource(const wxString& filemask, int flags = wxXRC_USE_LOCALE,
+                  const wxString& domain=wxEmptyString);
+    %RenameCtor(EmptyXmlResource,  wxXmlResource(int flags = wxXRC_USE_LOCALE,
+                  const wxString& domain=wxEmptyString));
+    
     ~wxXmlResource();
 
 
@@ -195,6 +200,9 @@ public:
     // Set flags after construction.
     void SetFlags(int flags) { m_flags = flags; }
 
+    // Get/Set the domain to be passed to the translation functions, defaults to NULL.
+    wxString GetDomain() const;
+    void SetDomain(const wxString& domain);
 };
 
 //----------------------------------------------------------------------

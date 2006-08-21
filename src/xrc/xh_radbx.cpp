@@ -116,11 +116,11 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
 
         if (m_resource->GetFlags() & wxXRC_USE_LOCALE)
         {
-            str = wxGetTranslation(str);
+            str = wxGetTranslation(str, m_resource->GetDomain());
             if ( !tooltip.empty() )
-                tooltip = wxGetTranslation(tooltip);
+                tooltip = wxGetTranslation(tooltip, m_resource->GetDomain());
             if ( hasHelptext )
-                helptext = wxGetTranslation(helptext);
+                helptext = wxGetTranslation(helptext, m_resource->GetDomain());
         }
 
         labels.push_back(str);

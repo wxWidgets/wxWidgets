@@ -461,7 +461,163 @@ public:
 
 };
 
+//---------------------------------------------------------------------------
 
+%{
+class wxPyLocale : public wxLocale
+{
+public:
+    wxPyLocale();
+
+    wxPyLocale(const wxChar *szName,                             // name (for messages)
+             const wxChar *szShort = (const wxChar *) NULL,      // dir prefix (for msg files)
+             const wxChar *szLocale = (const wxChar *) NULL,     // locale (for setlocale)
+             bool bLoadDefault = true,                           // preload wxstd.mo?
+             bool bConvertEncoding = false);                     // convert Win<->Unix if necessary?
+
+    wxPyLocale(int language, // wxLanguage id or custom language
+             int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
+             
+    ~wxPyLocale();
+
+    virtual const wxChar *GetString(const wxChar *szOrigString,
+                                    const wxChar *szDomain = NULL) const;
+    virtual const wxChar *GetString(const wxChar *szOrigString,
+                                    const wxChar *szOrigString2, size_t n,
+                                    const wxChar *szDomain = NULL) const;
+    
+    virtual wxChar *GetSingularString(const wxChar *szOrigString,
+                                      const wxChar *szDomain = NULL) const;
+    virtual wxChar *GetPluralString(const wxChar *szOrigString,
+                                    const wxChar *szOrigString2, size_t n,
+                                    const wxChar *szDomain = NULL) const;
+
+    PYPRIVATE;
+private:
+    DECLARE_NO_COPY_CLASS(wxPyLocale)
+};
+
+wxPyLocale::wxPyLocale() : wxLocale()
+{
+}
+
+wxPyLocale::wxPyLocale(const wxChar *szName,  // name (for messages)
+             const wxChar *szShort,           // dir prefix (for msg files)
+             const wxChar *szLocale,          // locale (for setlocale)
+             bool bLoadDefault,               // preload wxstd.mo?
+             bool bConvertEncoding)           // convert Win<->Unix if necessary?
+             : wxLocale(szName, szShort, szLocale, bLoadDefault, bConvertEncoding)
+{
+}
+
+wxPyLocale::wxPyLocale(int language, // wxLanguage id or custom language
+                       int flags) : wxLocale(language, flags)
+{
+}
+             
+wxPyLocale::~wxPyLocale()
+{
+}
+
+const wxChar *wxPyLocale::GetString(const wxChar *szOrigString,
+                                    const wxChar *szDomain) const 
+{
+    wxChar *str = GetSingularString(szOrigString, szDomain);
+    return (str != NULL) ? str : wxLocale::GetString(szOrigString, szDomain);
+}
+
+const wxChar *wxPyLocale::GetString(const wxChar *szOrigString,
+                                    const wxChar *szOrigString2, size_t n,
+                                    const wxChar *szDomain) const
+{
+    wxChar *str = GetPluralString(szOrigString, szOrigString2, n, szDomain);
+    return (str != NULL) ? str : wxLocale::GetString(szOrigString, szOrigString2, n, szDomain);
+}
+
+wxChar *wxPyLocale::GetSingularString(const wxChar *szOrigString,
+                                      const wxChar *szDomain) const
+{
+    bool found;
+    static wxString str;
+    str = _T("error in translation"); // when the first if condition is true but the second if condition is not we do not want to return the previously queried string.
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    if((found=wxPyCBH_findCallback(m_myInst, "GetSingularString"))) {
+        PyObject* param1 = wx2PyString(szOrigString);
+        PyObject* param2 = wx2PyString(szDomain);
+        PyObject* ret = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OO)", param1, param2));
+        Py_DECREF(param1);
+        Py_DECREF(param2);
+        if (ret) {
+            str = Py2wxString(ret);
+            Py_DECREF(ret);
+        }
+    }
+    wxPyEndBlockThreads(blocked);
+    return (found ? (wxChar*)str.c_str() : NULL);
+}
+
+wxChar *wxPyLocale::GetPluralString(const wxChar *szOrigString,
+                                    const wxChar *szOrigString2, size_t n,
+                                    const wxChar *szDomain) const
+{
+    bool found;
+    static wxString str;
+    str = _T("error in translation"); // when the first if condition is true but the second if condition is not we do not want to return the previously queried string.
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    if((found=wxPyCBH_findCallback(m_myInst, "GetPluralString"))) {
+        PyObject* param1 = wx2PyString(szOrigString);
+        PyObject* param2 = wx2PyString(szOrigString2);
+        PyObject* param4 = wx2PyString(szDomain);
+        PyObject* ret = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OOiO)", param1, param2, (int)n, param4));
+        Py_DECREF(param1);
+        Py_DECREF(param2);
+        Py_DECREF(param4);
+        if( ret) {
+            str = Py2wxString(ret);
+            Py_DECREF(ret);
+        }
+    }
+    wxPyEndBlockThreads(blocked);
+    return (found ? (wxChar*)str.c_str() : NULL);
+}
+%}
+
+
+class wxPyLocale : public wxLocale
+{
+public:
+    %pythonAppend wxPyLocale "self._setCallbackInfo(self, PyLocale)"
+
+    // ctor & dtor
+    // -----------
+    %extend {
+        wxPyLocale(int language = -1,
+                   int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING) {
+            wxPyLocale* loc;
+            if (language == -1)
+                loc = new wxPyLocale();
+            else
+                loc = new wxPyLocale(language, flags);
+            // Python before 2.4 needs to have LC_NUMERIC set to "C" in order
+            // for the floating point conversions and such to work right.
+%#if PY_VERSION_HEX < 0x02040000
+            setlocale(LC_NUMERIC, "C");
+%#endif
+            return loc;
+        }
+    }
+    ~wxPyLocale();
+    
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    
+    virtual const wxChar *GetSingularString(const wxChar *szOrigString,
+                                            const wxChar *szDomain = NULL) const;
+    virtual const wxChar *GetPluralString(const wxChar *szOrigString,
+                                          const wxChar *szOrigString2, size_t n,
+                                          const wxChar *szDomain = NULL) const;
+};
+
+//---------------------------------------------------------------------------
 
 // get the current locale object (note that it may be NULL!)
 wxLocale* wxGetLocale();
@@ -469,7 +625,9 @@ wxLocale* wxGetLocale();
 // get the translation of the string in the current locale
 %nokwargs wxGetTranslation;
 wxString wxGetTranslation(const wxString& str);
+wxString wxGetTranslation(const wxString& str, const wxString& domain);
 wxString wxGetTranslation(const wxString& str, const wxString& strPlural, size_t n);
+wxString wxGetTranslation(const wxString& str, const wxString& strPlural, size_t n, const wxString& domain);
 
 //---------------------------------------------------------------------------
 %newgroup
