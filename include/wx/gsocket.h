@@ -114,12 +114,14 @@ public:
     virtual bool CanUseEventLoop() = 0;
     virtual bool Init_Socket(GSocket *socket) = 0;
     virtual void Destroy_Socket(GSocket *socket) = 0;
-    virtual void Enable_Event(GSocket *socket, GSocketEvent event) = 0;
-    virtual void Disable_Event(GSocket *socket, GSocketEvent event) = 0;
-    virtual void Enable_Events(GSocket *socket) = 0;
-    virtual void Disable_Events(GSocket *socket) = 0;
+    virtual int TranslateEventCondition(GSocket *socket, GSocketEvent event) = 0;
+    virtual void SetNewCallback(GSocket *socket) = 0;    
+    // Generic functions
+    void Enable_Event(GSocket *socket, GSocketEvent event);
+    void Disable_Event(GSocket *socket, GSocketEvent event);
+    void Enable_Events(GSocket *socket);
+    void Disable_Events(GSocket *socket);
 };
-
 
 /* Global initializers */
 
@@ -147,10 +149,8 @@ public:
     virtual bool CanUseEventLoop();
     virtual bool Init_Socket(GSocket *socket);
     virtual void Destroy_Socket(GSocket *socket);
-    virtual void Enable_Event(GSocket *socket, GSocketEvent event);
-    virtual void Disable_Event(GSocket *socket, GSocketEvent event);
-    virtual void Enable_Events(GSocket *socket);
-    virtual void Disable_Events(GSocket *socket);
+    virtual void SetNewCallback(GSocket *socket);
+    virtual int TranslateEventCondition(GSocket *socket, GSocketEvent event);
 };
 
 class GSocket

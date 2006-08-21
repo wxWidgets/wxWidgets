@@ -23,14 +23,14 @@
 #define DATATYPE gint
 #define PLATFORM_DATA(x) (*(DATATYPE*)x)
 
-GdkInputCondition TranslateEventCondition(GSocket* socket, GSocketEvent event) {
+int GSocketGUIFunctionsTableConcrete::TranslateEventCondition(GSocket* socket, GSocketEvent event) {
   switch (event)
   {
-    case GSOCK_LOST:       return GDK_INPUT_EXCEPTION;
-    case GSOCK_INPUT:      return GDK_INPUT_READ; 
-    case GSOCK_OUTPUT:   return GDK_INPUT_WRITE;
-    case GSOCK_CONNECTION: return ((socket->m_server) ? GDK_INPUT_READ : GDK_INPUT_WRITE); 
-    default: wxASSERT(0); return (GdkInputCondition)0; // This is invalid
+    case GSOCK_LOST:       return (int)GDK_INPUT_EXCEPTION;
+    case GSOCK_INPUT:      return (int)GDK_INPUT_READ; 
+    case GSOCK_OUTPUT:   return (int)GDK_INPUT_WRITE;
+    case GSOCK_CONNECTION: return (int)((socket->m_server) ? GDK_INPUT_READ : GDK_INPUT_WRITE); 
+    default: wxASSERT(0); return 0; // This is invalid
   }	
 }
 
@@ -89,8 +89,7 @@ void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
   socket->m_platform_specific_data = NULL;
 }
 
-// Helper function for {En|Dis}able*
-void SetNewCallback(GSocket* socket)
+void GSocketGUIFunctionsTableConcrete::SetNewCallback(GSocket* socket)
 {
   wxCHECK_RET( socket->m_platform_specific_data, wxT("Critical: Setting callback for non-init or destroyed socket") );
   
@@ -104,53 +103,6 @@ void SetNewCallback(GSocket* socket)
                           (gpointer)socket);
   else // Set the callback id to -1
     PLATFORM_DATA(socket->m_platform_specific_data) = -1;
-}
-
-void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
-{
-  // Dont' use the Enable_Event function, as it removes/readds
-  socket->m_eventflags = TranslateEventCondition(socket, GSOCK_INPUT)
-                                        | TranslateEventCondition(socket, GSOCK_OUTPUT)
-                                        | TranslateEventCondition(socket, GSOCK_LOST);
-  
-  SetNewCallback(socket);
-}
-
-void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
-{
-  socket->m_eventflags = 0;
-  
-  SetNewCallback(socket);
-}
-
-void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket* socket, GSocketEvent event)
-{
-  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to install callback for an unknown socket event") );
-
-  if ( socket->m_fd == -1 )
-    return;
-
-  if (socket->m_eventflags & TranslateEventCondition(socket, event))
-    return;
-  
-  socket->m_eventflags |= TranslateEventCondition(socket, event);
-
-  SetNewCallback(socket);  
-}
-
-void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket* socket, GSocketEvent event)
-{
-  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to uninstall callback for an unknown socket event") );
- 
-  if ( socket->m_fd == -1 )
-    return;
-
-  if (!(socket->m_eventflags & TranslateEventCondition(socket, event)))
-    return;
-  
-  socket->m_eventflags &= ~TranslateEventCondition(socket, event);
-  
-  SetNewCallback(socket);
 }
 
 #else /* !wxUSE_SOCKETS */

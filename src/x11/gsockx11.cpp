@@ -89,7 +89,7 @@ void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
   socket->m_platform_specific_data = NULL; 
 }
 
-int TranslateEventCondition(GSocket* socket, GSocketEvent event) {
+int GSocketGUIFunctionsTableConcrete::TranslateEventCondition(GSocket* socket, GSocketEvent event) {
   switch (event)
   {
     case GSOCK_LOST:       
@@ -100,7 +100,7 @@ int TranslateEventCondition(GSocket* socket, GSocketEvent event) {
   }	
 }
 
-// Helper functions for {En|Dis}able*
+// Helper function for SetNewCallback
 
 void CheckCurrentState(GSocket* socket, char event)
 {
@@ -141,7 +141,7 @@ void CheckCurrentState(GSocket* socket, char event)
   } 
 }
 
-void SetNewCallback(GSocket* socket)
+void GSocketGUIFunctionsTableConcrete::SetNewCallback(GSocket* socket)
 {
   wxCHECK_RET( socket->m_platform_specific_data, wxT("Critical: Setting callback for non-init or destroyed socket") );
 
@@ -149,55 +149,6 @@ void SetNewCallback(GSocket* socket)
   
   CheckCurrentState(socket, GSOCKX11_INPUT);
   CheckCurrentState(socket, GSOCKX11_OUTPUT);
-}
-
-void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEvent event)
-{
-  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to install callback for an unknown socket event") );
-
-  if ( socket->m_fd == -1 )
-    return;
-
-  int internal_event = TranslateEventCondition(socket, event);
-  
-  if (socket->m_eventflags & internal_event)
-    return;
-  
-  socket->m_eventflags |= internal_event;
-  
-  // Don't use SetCallback here - It would check the other internal event too
-  CheckCurrentState(socket, internal_event);
-}
-
-void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEvent event)
-{
-  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to uninstall callback for an unknown socket event") );
-
-  if ( socket->m_fd == -1 )
-    return;
-
-  int internal_event = TranslateEventCondition(socket, event);
-  
-  if (!(socket->m_eventflags & internal_event))
-    return;
-  
-  socket->m_eventflags &= ~internal_event;
-  
-  // Don't use SetCallback here - It would check the other internal event too
-  CheckCurrentState(socket, internal_event);
-}
-
-void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
-{
-  socket->m_eventflags = TranslateEventCondition(socket, GSOCK_INPUT)
-                                        | TranslateEventCondition(socket, GSOCK_OUTPUT);
-  SetNewCallback(socket);
-}
-
-void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
-{
-  socket->m_eventflags = 0;
-  SetNewCallback(socket);
 }
 
 #else /* !wxUSE_SOCKETS */

@@ -49,17 +49,6 @@ public:
 // We will store the main loop's reference when Initialize is called
 static CFRunLoopRef s_mainRunLoop = NULL;
 
-int TranslateEventCondition(GSocket* socket, GSocketEvent event) {
-  switch (event)
-  {
-    case GSOCK_LOST:        // Fallback
-    case GSOCK_INPUT:      return kCFSocketReadCallBack; 
-    case GSOCK_OUTPUT:   return kCFSocketWriteCallBack;
-    case GSOCK_CONNECTION: return socket->m_server ? kCFSocketReadCallBack : kCFSocketConnectCallBack;
-    default: wxASSERT(0); return 0; // This is invalid
-  }	
-}
-
 void Mac_Socket_Callback(CFSocketRef s, CFSocketCallBackType callbackType,
                          CFDataRef address, const void* data, void* info)
 {
@@ -168,13 +157,23 @@ void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
   socket->m_platform_specific_data = NULL;
 }
 
-// Helper function for {En|Dis}able*
-void SetNewCallback(GSocket* socket)
+int GSocketGUIFunctionsTableConcrete::TranslateEventCondition(GSocket* socket, GSocketEvent event) {
+  switch (event)
+  {
+    case GSOCK_LOST:        // Fallback
+    case GSOCK_INPUT:      return kCFSocketReadCallBack; 
+    case GSOCK_OUTPUT:   return kCFSocketWriteCallBack;
+    case GSOCK_CONNECTION: return socket->m_server ? kCFSocketReadCallBack : kCFSocketConnectCallBack;
+    default: wxASSERT(0); return 0; // This is invalid
+  }	
+}
+
+void GSocketGUIFunctionsTableConcrete::SetNewCallback(GSocket* socket)
 {
-    DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
+  DATATYPE* data = _GSocket_Get_Mac_Socket(socket);
   
-    if (!data)
-      return;
+  if (!data)
+    return;
 
   if (socket->m_eventflags == ALL_CALLBACK_TYPES && !data->added)
   {
@@ -191,55 +190,6 @@ void SetNewCallback(GSocket* socket)
       else
         CFSocketDisableCallBacks(data->socket, TranslateEventCondition(socket, (GSocketEvent)i));
   }
-}
-
-void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
-{
-
-    socket->m_eventflags = TranslateEventCondition(socket, GSOCK_INPUT)
-                                        | TranslateEventCondition(socket, GSOCK_OUTPUT)
-                                        | TranslateEventCondition(socket, GSOCK_LOST)
-                                        | TranslateEventCondition(socket, GSOCK_CONNECTION);
-    
-    SetNewCallback(socket);
-}
-
-void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
-{
-    socket->m_eventflags = 0;
-    
-    SetNewCallback(socket);
-}
-
-void GSocketGUIFunctionsTableConcrete::Enable_Event(GSocket *socket, GSocketEvent event)
-{
-  
-  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to install callback for an unknown socket event") );
-
-  if ( socket->m_fd == -1 )
-    return;
-  
-  if (socket->m_eventflags & TranslateEventCondition(socket, event))
-    return;
-  
-  socket->m_eventflags |= TranslateEventCondition(socket, event);
-  
-  SetNewCallback(socket);
-}
-
-void GSocketGUIFunctionsTableConcrete::Disable_Event(GSocket *socket, GSocketEvent event)
-{
-  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: trying to uninstall callback for an unknown socket event") );
- 
-  if ( socket->m_fd == -1 )
-    return;
-
-  if (!(socket->m_eventflags & TranslateEventCondition(socket, event)))
-    return;
-  
-  socket->m_eventflags &= ~(TranslateEventCondition(socket,event)); 
-         
-  SetNewCallback(socket);
 }
 
 #endif // wxUSE_SOCKETS

@@ -206,6 +206,73 @@ int _System soclose(int);
 #  include "wx/thread.h"
 #endif
 
+// Implementation of GSocketGUIFunctionsTable generics
+void GSocketGUIFunctionsTable::Enable_Event(GSocket *socket, GSocketEvent event)
+{
+  wxCHECK_RET(socket, wxT("Critical: Trying to enable events on a NULL socket."));
+  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: Trying to install callback for an unknown socket event") );
+
+  if ( socket->m_fd == -1 )
+    return;
+
+  int internal_event = TranslateEventCondition(socket, event);
+  
+  if (socket->m_eventflags & internal_event)
+    return;
+  
+  socket->m_eventflags |= internal_event;
+  
+  SetNewCallback(socket);
+}
+
+void GSocketGUIFunctionsTable::Disable_Event(GSocket *socket, GSocketEvent event)
+{
+  wxCHECK_RET(socket, wxT("Critical: Trying to enable events on a NULL socket."));
+  wxCHECK_RET( event < GSOCK_MAX_EVENT, wxT("Critical: Trying to uninstall callback for an unknown socket event") );
+
+  if ( socket->m_fd == -1 )
+    return;
+
+  int internal_event = TranslateEventCondition(socket, event);
+  
+  if (!(socket->m_eventflags & internal_event))
+    return;
+  
+  socket->m_eventflags &= ~internal_event;
+  
+  SetNewCallback(socket);
+}
+
+void GSocketGUIFunctionsTable::Enable_Events(GSocket *socket)
+{
+  wxCHECK_RET(socket, wxT("Critical: Trying to enable events on a NULL socket."));
+  
+  if (socket->m_fd == -1)
+    return;
+  
+  /* We could probably just subscribe to all events regardless
+   * of the socket type, but MS recommends to do it this way.
+   */
+  if (socket->m_server)
+    socket->m_eventflags = (TranslateEventCondition(socket,GSOCK_CONNECTION));
+  else
+  {
+    socket->m_eventflags = (TranslateEventCondition(socket,GSOCK_CONNECTION))
+                                          | (TranslateEventCondition(socket,GSOCK_INPUT))
+                                          | (TranslateEventCondition(socket,GSOCK_OUTPUT))
+                                          | (TranslateEventCondition(socket,GSOCK_LOST));
+  }
+  
+  SetNewCallback(socket);
+}
+
+void GSocketGUIFunctionsTable::Disable_Events(GSocket *socket)
+{
+  wxCHECK_RET(socket, wxT("Critical: Trying to disable events on a NULL socket."));
+  socket->m_eventflags = 0;
+  SetNewCallback(socket);
+}
+    
 /* Table of GUI-related functions. We must call them indirectly because
  * of wxBase and GUI separation: */
 
@@ -219,10 +286,9 @@ public:
     virtual bool CanUseEventLoop();
     virtual bool Init_Socket(GSocket *socket);
     virtual void Destroy_Socket(GSocket *socket);
-    virtual void Enable_Event(GSocket *socket, GSocketEvent event);
-    virtual void Disable_Event(GSocket *socket, GSocketEvent event);
-    virtual void Enable_Events(GSocket *socket);
-    virtual void Disable_Events(GSocket *socket);
+    virtual void SetNewCallback(GSocket *socket);
+
+    virtual int TranslateEventCondition(GSocket *socket, GSocketEvent event);
 };
 
 bool GSocketGUIFunctionsTableNull::OnInit()
@@ -235,14 +301,10 @@ bool GSocketGUIFunctionsTableNull::Init_Socket(GSocket *WXUNUSED(socket))
 {   return true; }
 void GSocketGUIFunctionsTableNull::Destroy_Socket(GSocket *WXUNUSED(socket))
 {}
-void GSocketGUIFunctionsTableNull::Enable_Event(GSocket *socket, GSocketEvent event)
+void GSocketGUIFunctionsTableNull::SetNewCallback(GSocket *socket)
 {}
-void GSocketGUIFunctionsTableNull::Disable_Event(GSocket *socket, GSocketEvent event)
-{}  
-void GSocketGUIFunctionsTableNull::Enable_Events(GSocket *WXUNUSED(socket))
-{}
-void GSocketGUIFunctionsTableNull::Disable_Events(GSocket *WXUNUSED(socket))
-{}
+int GSocketGUIFunctionsTableNull::TranslateEventCondition(GSocket *socket, GSocketEvent event)
+{ return 0; }
 /* Global initialisers */
 
 void GSocket_SetGUIFunctions(GSocketGUIFunctionsTable *guifunc)
