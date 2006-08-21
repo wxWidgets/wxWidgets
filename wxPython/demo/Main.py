@@ -56,6 +56,7 @@ _treeList = [
         'FloatCanvas',
         'AnalogClock',
         'CheckListCtrlMixin',
+        'ComboTreeBox',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -133,6 +134,7 @@ _treeList = [
     ('Custom Controls', [
         'AnalogClock',
         'ColourSelect',
+        'ComboTreeBox',
         'Editor',
         'GenericButtons',
         'GenericDirCtrl',
