@@ -72,6 +72,9 @@ public:
     // may be called to terminate the dialog with the given return code
     virtual void EndModal(int retCode);
 
+    // mac also takes command-period as cancel
+    virtual bool IsEscapeKey(const wxKeyEvent& event);
+
     // returns TRUE if we're in a modal loop
     bool IsModalShowing() const;
 
