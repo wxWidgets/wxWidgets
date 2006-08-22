@@ -31,6 +31,7 @@ INCOMPATIBLE CHANGES SINCE 2.6.x
   the wxEVT_MOUSE_CAPTURE_LOST event.
 - SetDefaultItem() method was moved from wxPanel to wxTopLevelWindow
 - wxDialog::OnOK/OnCancel() don't exist any more, use SetAffirmative/EscapeId()
+- wxPathList doesn't derive from (deprecated) wxStringList any more
 
 
 Deprecated methods since 2.6.x and their replacements
