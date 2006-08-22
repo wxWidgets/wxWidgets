@@ -2656,6 +2656,8 @@ void wxFrameManager::ShowHint(const wxRect& rect)
             )
             m_hint_fadeamt = 0;
 
+        m_hint_wnd->SetSize(rect);
+        
         if (! m_hint_wnd->IsShown())
             m_hint_wnd->Show();
 
@@ -2670,7 +2672,6 @@ void wxFrameManager::ShowHint(const wxRect& rect)
         if (m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame)))
             ((wxPseudoTransparentFrame *)m_hint_wnd)->SetTransparent(m_hint_fadeamt);
 #endif
-        m_hint_wnd->SetSize(rect);
         m_hint_wnd->Raise();
 
 
