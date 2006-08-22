@@ -266,9 +266,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     menuFont->AppendSeparator();
     menuFont->Append(Font_CheckNativeToFromString,
-                     wxT("Check Native Font Info To/From String"));
+                     wxT("Set native font &description\tShift-Ctrl-D"));
     menuFont->Append(Font_CheckNativeToFromUserString,
-                     wxT("Check Native Font Info User String"));
+                     wxT("Set &user font description\tShift-Ctrl-U"));
     menuFont->Append(Font_CheckFaceName,
                      wxT("Check font face name"));                     
 
@@ -481,22 +481,26 @@ void MyFrame::OnEnumerateFamiliesForEncoding(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnCheckNativeToFromString(wxCommandEvent& WXUNUSED(event))
 {
-    wxString fontInfo = m_canvas->GetTextFont().GetNativeFontInfoDesc();
-
+    wxString fontInfo = wxGetTextFromUser
+                        (
+                            wxT("Enter native font string"),
+                            wxT("Input font description"),
+                            m_canvas->GetTextFont().GetNativeFontInfoDesc(),
+                            this
+                        );
     if ( fontInfo.empty() )
-    {
-        wxLogError(wxT("Native font info string is empty!"));
-    }
-    else
-    {
-        wxFont *font = wxFont::New(fontInfo);
-        if ( fontInfo != font->GetNativeFontInfoDesc() )
-            wxLogError(wxT("wxNativeFontInfo ToString()/FromString() broken!"));
-        else
-            wxLogMessage(wxT("wxNativeFontInfo works: %s"), fontInfo.c_str());
+        return;     // user clicked "Cancel" - do nothing
 
-        delete font;
-     }
+    wxFont font;
+    font.SetNativeFontInfo(fontInfo);
+    if ( !font.Ok() )
+    {
+        wxLogError(wxT("Font info string \"%s\" is invalid."),
+                   fontInfo.c_str());
+        return;
+    }
+
+    DoChangeFont(font);
 }
 
 void MyFrame::OnCheckFaceName(wxCommandEvent& WXUNUSED(event))
