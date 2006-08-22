@@ -252,7 +252,7 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size), m_textctrl(NULL)
 {
-    m_fontSize = 12;
+    m_fontSize = wxNORMAL_FONT->GetPointSize();
 
     SetIcon(wxIcon(sample_xpm));
 
@@ -439,7 +439,8 @@ bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
 
         if ( !facename.empty() )
         {
-            wxFont font(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+            wxFont font(wxNORMAL_FONT->GetPointSize(),
+                        wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
                         wxFONTWEIGHT_NORMAL, false, facename, encoding);
 
             DoChangeFont(font);
@@ -780,7 +781,8 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
     // and now create the correct font
     if ( !DoEnumerateFamilies(false, fontenc, true /* silent */) )
     {
-        wxFont font(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+        wxFont font(wxNORMAL_FONT->GetPointSize(),
+                    wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
                     wxFONTWEIGHT_NORMAL, false /* !underlined */,
                     wxEmptyString /* facename */, fontenc);
         if ( font.Ok() )
