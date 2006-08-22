@@ -134,6 +134,14 @@ void wxFloatingPane::OnMoveEvent(wxMoveEvent& event)
         return;
     }
 
+    // skip if moving fast
+    if ((abs(win_rect.x - m_last_rect.x) > 1) ||
+        (abs(win_rect.y - m_last_rect.y) > 1))
+    {
+        m_last_rect = win_rect;
+        return;
+    }
+
     // prevent frame redocking during resize
     if (m_last_rect.GetSize() != win_rect.GetSize())
     {

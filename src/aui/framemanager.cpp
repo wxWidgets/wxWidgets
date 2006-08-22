@@ -80,6 +80,8 @@ public:
         m_Amount=0;
         m_MaxWidth=0;
         m_MaxHeight=0;
+        m_lastWidth=0;
+        m_lastHeight=0;
 #ifdef __WXGTK__
         m_CanSetShape = false; // have to wait for window create event on GTK
 #else
@@ -149,6 +151,16 @@ public:
 
     void OnSize(wxSizeEvent& event)
     {
+        // We sometimes get surplus size events
+        if ((event.GetSize().GetWidth() == m_lastWidth) &&
+            (event.GetSize().GetHeight() == m_lastHeight))
+        {
+            event.Skip();
+            return;
+        }
+        m_lastWidth = event.GetSize().GetWidth();
+        m_lastHeight = event.GetSize().GetHeight();
+    
         SetTransparent(m_Amount);
         m_Region.Intersect(0, 0, event.GetSize().GetWidth(),
                            event.GetSize().GetHeight());
@@ -162,6 +174,7 @@ private:
     int m_MaxWidth;
     int m_MaxHeight;
     bool m_CanSetShape;
+    int m_lastWidth,m_lastHeight;
 
     wxRegion m_Region;
 
