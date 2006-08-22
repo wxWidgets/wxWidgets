@@ -340,6 +340,9 @@ case "${host}" in
   *)
     AC_MSG_WARN([*** System type ${host} is unknown, assuming generic Unix and continuing nevertheless.])
     AC_MSG_WARN([*** Please report the build results to wx-dev@lists.wxwidgets.org.])
+
+    DEFAULT_DEFAULT_wxUSE_X11=1
+    DEFAULT_wxUSE_SHARED=no
 esac
 
 dnl ---------------------------------------------------------------------------
@@ -365,7 +368,7 @@ if test $DEBUG_CONFIGURE = 1; then
 
   DEFAULT_wxUSE_THREADS=yes
 
-  DEFAULT_wxUSE_SHARED=yes
+  DEFAULT_wxUSE_SHARED=${DEFAULT_wxUSE_SHARED:-yes}
   DEFAULT_wxUSE_OPTIMISE=no
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
@@ -579,7 +582,7 @@ else
 
   DEFAULT_wxUSE_THREADS=yes
 
-  DEFAULT_wxUSE_SHARED=yes
+  DEFAULT_wxUSE_SHARED=${DEFAULT_wxUSE_SHARED:-yes}
   DEFAULT_wxUSE_OPTIMISE=yes
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
