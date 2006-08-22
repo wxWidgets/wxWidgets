@@ -1100,7 +1100,9 @@ void wxListBox::DoApplyWidgetStyle(GtkRcStyle *style)
 
 void wxListBox::OnInternalIdle()
 {
-    //RN: Is this needed anymore?
+    // Check if we have to show window now
+    if (GtkShowFromOnIdle()) return;
+
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 

@@ -181,6 +181,9 @@ bool wxToggleBitmapButton::IsOwnGtkWindow(GdkWindow *window)
 
 void wxToggleBitmapButton::OnInternalIdle()
 {
+    // Check if we have to show window now
+    if (GtkShowFromOnIdle()) return;
+    
     wxCursor cursor = m_cursor;
 
     if (g_globalCursor.Ok())

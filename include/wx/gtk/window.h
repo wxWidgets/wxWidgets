@@ -182,6 +182,9 @@ public:
     // until idle time. This partly mimmicks defered
     // sizing under MSW.
     void GtkShowOnIdle() { m_showOnIdle = true; }
+    
+    // This is called from the various OnInternalIdle methods
+    bool GtkShowFromOnIdle();
 
     // fix up the mouse event coords, used by wxListBox only so far
     virtual void FixUpMouseEvent(GtkWidget * WXUNUSED(widget),

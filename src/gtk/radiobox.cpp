@@ -659,6 +659,9 @@ bool wxRadioBox::IsOwnGtkWindow( GdkWindow *window )
 
 void wxRadioBox::OnInternalIdle()
 {
+    // Check if we have to show window now
+    if (GtkShowFromOnIdle()) return;
+    
     if ( m_lostFocus )
     {
         m_hasFocus = false;
@@ -678,6 +681,9 @@ void wxRadioBox::OnInternalIdle()
             SetFocus();
         }
     }
+
+    if (wxUpdateUIEvent::CanUpdate(this))
+        UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
 // static

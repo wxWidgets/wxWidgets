@@ -2959,22 +2959,8 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
     m_resizing = false;
 }
 
-void wxWindowGTK::OnInternalIdle()
+bool wxWindowGTK::GtkShowFromOnIdle()
 {
-    if ( m_dirtyTabOrder )
-    {
-        m_dirtyTabOrder = false;
-        RealizeTabOrder();
-    }
-
-    // Update style if the window was not yet realized
-    // and SetBackgroundStyle(wxBG_STYLE_CUSTOM) was called
-    if (m_needsStyleChange)
-    {
-        SetBackgroundStyle(GetBackgroundStyle());
-        m_needsStyleChange = false;
-    }
-
     if (IsShown() && m_showOnIdle && !GTK_WIDGET_VISIBLE (m_widget))
     {
         GtkAllocation alloc;
@@ -2988,8 +2974,31 @@ void wxWindowGTK::OnInternalIdle()
         eventShow.SetEventObject(this);
         GetEventHandler()->ProcessEvent(eventShow);
         m_showOnIdle = false;
-        return;
+        return true;
     }
+    
+    return false;
+}
+
+void wxWindowGTK::OnInternalIdle()
+{
+    // Check if we have to show window now
+    if (GtkShowFromOnIdle()) return;
+
+    if ( m_dirtyTabOrder )
+    {
+        m_dirtyTabOrder = false;
+        RealizeTabOrder();
+    }
+
+    // Update style if the window was not yet realized
+    // and SetBackgroundStyle(wxBG_STYLE_CUSTOM) was called
+    if (m_needsStyleChange)
+    {
+        SetBackgroundStyle(GetBackgroundStyle());
+        m_needsStyleChange = false;
+    }
+    
     // Update invalidated regions.
     GtkUpdate();
 

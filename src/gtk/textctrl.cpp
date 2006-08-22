@@ -1678,6 +1678,9 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 
 void wxTextCtrl::OnInternalIdle()
 {
+    // Check if we have to show window now
+    if (GtkShowFromOnIdle()) return;
+
     if (g_delayedFocus == this)
     {
         if (GTK_WIDGET_REALIZED(m_widget))
@@ -1686,7 +1689,7 @@ void wxTextCtrl::OnInternalIdle()
             g_delayedFocus = NULL;
         }
     }
-
+    
     if (wxUpdateUIEvent::CanUpdate(this))
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }

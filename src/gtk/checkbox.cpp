@@ -232,6 +232,9 @@ bool wxCheckBox::IsOwnGtkWindow( GdkWindow *window )
 
 void wxCheckBox::OnInternalIdle()
 {
+    // Check if we have to show window now
+    if (GtkShowFromOnIdle()) return;
+    
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;
 
