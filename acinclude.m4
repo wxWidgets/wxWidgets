@@ -228,44 +228,6 @@ AC_DEFUN([WX_CPP_EXPLICIT],
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl WX_CHECK_DECLS(TARGET...,
-dnl                HEADER,
-dnl                [ACTION-IF-FOUND],
-dnl                [ACTION-IF-NOT-FOUND])
-dnl
-dnl Checks that the functions, macros or variables listed in TARGET are
-dnl declared when HEADER is included.
-dnl ---------------------------------------------------------------------------
-
-AC_DEFUN([WX_CHECK_DECLS],
-[
-  for target in $1
-  do
-    AC_CACHE_CHECK([for $target in $2],
-                   [wx_cv_decl_$target],
-                   [
-                    AC_TRY_COMPILE([#include <$2>],
-                                   [
-                                    #ifndef $target
-                                      &$target;
-                                    #endif
-                                   ],
-                                   [eval wx_cv_decl_$target=yes],
-                                   [eval wx_cv_decl_$target=no])
-                   ])
-
-    if eval test \$wx_cv_decl_$target = yes
-    then
-      AC_DEFINE_UNQUOTED([HAVE_`echo $target | tr 'a-z' 'A-Z'`])
-      $3
-    else
-      :
-      $4
-    fi
-  done
-])
-
-dnl ---------------------------------------------------------------------------
 dnl a slightly better AC_C_BIGENDIAN macro which allows cross-compiling
 dnl ---------------------------------------------------------------------------
 
