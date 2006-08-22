@@ -153,19 +153,6 @@ key value from a RGB tripple.", "");
 
 //---------------------------------------------------------------------------
 
-%{
-    typedef unsigned char* buffer;
-%}    
-
-%typemap(in) (buffer data, int DATASIZE)
-    { if (!PyArg_Parse($input, "t#", &$1, &$2)) SWIG_fail; }
-
-%typemap(in) (buffer alpha, int ALPHASIZE)
-    { if (!PyArg_Parse($input, "t#", &$1, &$2)) SWIG_fail; }
-
-//---------------------------------------------------------------------------
-
-
 DocStr(wxImage,
 "A platform-independent image class.  An image can be created from
 data, or using `wx.Bitmap.ConvertToImage`, or loaded from a file in a
@@ -387,37 +374,6 @@ alpha data must be width*height bytes.", "
                 memcpy(acopy, alpha, ALPHASIZE);
             
                 return new wxImage(width, height, dcopy, acopy, false);
-            }
-
-       // NOTE: We need the junk parameter so the compiler will be able
-       // differentiate from the two functions above.  It isn't used for
-       // anything else.
-        %RenameDocCtor(
-            _ImageFromBuffer, ":see: `wx.ImageFromBuffer`", "",
-            wxImage(int width, int height, buffer data, int DATASIZE, PyObject* junk))
-            {
-                wxUnusedVar(junk);
-                if (DATASIZE != width*height*3) {
-                    wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
-                    return NULL;
-                }
-                return new wxImage(width, height, data, true);
-            }
-       
-        %RenameDocCtor(
-            _ImageFromBufferWithAlpha, ":see: `wx.ImageFromBuffer`", "",
-            wxImage(int width, int height, buffer data, int DATASIZE, buffer alpha, int ALPHASIZE, PyObject* junk))
-            {
-                wxUnusedVar(junk);
-                if (DATASIZE != width*height*3) {
-                    wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
-                    return NULL;
-                }
-                if (ALPHASIZE != width*height) {
-                    wxPyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
-                    return NULL;
-                }
-                return new wxImage(width, height, data, alpha, true);
             }
     }
 
@@ -1030,31 +986,65 @@ range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees", "");
 };
 
 
+
+// Make an image from buffer objects.  Not that this is here instead of in the
+// wxImage class (as a constructor) because there is already another one with
+// the exact same signature, so there woudl be ambiguities in the generated
+// C++.  Doing it as an independent factory function like this accomplishes
+// the same thing however.
+%newobject _ImageFromBuffer;
+%inline %{
+    wxImage* _ImageFromBuffer(int width, int height,
+                              buffer data, int DATASIZE,
+                              buffer alpha=NULL, int ALPHASIZE=0)
+    {
+        if (DATASIZE != width*height*3) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            return NULL;
+        }
+        if (alpha != NULL) {
+            if (ALPHASIZE != width*height) {
+                wxPyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
+                return NULL;
+            }
+            return new wxImage(width, height, data, alpha, true);
+        }                
+        return new wxImage(width, height, data, true);
+    }                              
+%}
+
 %pythoncode {
 def ImageFromBuffer(width, height, dataBuffer, alphaBuffer=None):
     """
     Creates a `wx.Image` from the data in dataBuffer.  The dataBuffer
-    parameter must be a Python object that implements the buffer
-    interface, such as a string, array, etc.  The dataBuffer object is
-    expected to contain a series of RGB bytes and be width*height*3
-    bytes long.  A buffer object can optionally be supplied for the
-    image's alpha channel data, and it is expected to be width*height
+    parameter must be a Python object that implements the buffer interface, or
+    is convertable to a buffer object, such as a string, array, etc.  The
+    dataBuffer object is expected to contain a series of RGB bytes and be
+    width*height*3 bytes long.  A buffer object can optionally be supplied for
+    the image's alpha channel data, and it is expected to be width*height
     bytes long.
 
-    A reference to the data and alpha buffer objects are kept with the
-    wx.Image, so that they won't get deleted until after the wx.Image
-    is deleted.  However please be aware that it is not guaranteed that
-    an object won't move its memory buffer to a new location when it
-    needs to resize its contents.  If that happens then the wx.Image
-    will end up referring to an invalid memory location and could cause
-    the application to crash.  Therefore care should be taken to not
-    manipulate the objects used for the data and alpha buffers in a
-    way that would cause them to change size.
+    The wx.Image will be created with its data and alpha pointers initialized
+    to the memory address pointed to by the buffer objects, thus saving the
+    time needed to copy the image data from the buffer object to the wx.Image.
+    While this has advantages, it also has the shoot-yourself-in-the-foot
+    risks associated with sharing a C pointer between two objects.
+
+    To help alleviate the risk a reference to the data and alpha buffer
+    objects are kept with the wx.Image, so that they won't get deleted until
+    after the wx.Image is deleted.  However please be aware that it is not
+    guaranteed that an object won't move its memory buffer to a new location
+    when it needs to resize its contents.  If that happens then the wx.Image
+    will end up referring to an invalid memory location and could cause the
+    application to crash.  Therefore care should be taken to not manipulate
+    the objects used for the data and alpha buffers in a way that would cause
+    them to change size.
     """
-    if alphaBuffer is not None:
-        image = _ImageFromBufferWithAlpha(width, height, dataBuffer, alphaBuffer, None)
-    else:
-        image = _ImageFromBuffer(width, height, dataBuffer, None)
+    if not isinstance(dataBuffer, buffer):
+        dataBuffer = buffer(dataBuffer)
+    if alphaBuffer is not None and not isinstance(alphaBuffer, buffer):
+        alphaBuffer = buffer(alphaBuffer)
+    image = _core_._ImageFromBuffer(width, height, dataBuffer, alphaBuffer)
     image._buffer = dataBuffer
     image._alpha = alphaBuffer
     return image
