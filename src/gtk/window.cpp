@@ -2457,6 +2457,8 @@ void wxWindowGTK::Init()
     m_hasVMT = false;
     m_needParent = true;
     m_isBeingDeleted = false;
+    
+    m_showOnIdle= false;
 
     m_noExpose = false;
     m_nativeSizeEvent = false;
@@ -2973,6 +2975,21 @@ void wxWindowGTK::OnInternalIdle()
         m_needsStyleChange = false;
     }
 
+    if (IsShown() && m_showOnIdle && !GTK_WIDGET_VISIBLE (m_widget))
+    {
+        GtkAllocation alloc;
+        alloc.x = m_x;
+        alloc.y = m_y;
+        alloc.width = m_width;
+        alloc.height = m_height;
+        gtk_widget_size_allocate( m_widget, &alloc );
+        gtk_widget_show( m_widget );
+        wxShowEvent eventShow(GetId(), true);
+        eventShow.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(eventShow);
+        m_showOnIdle = false;
+        return;
+    }
     // Update invalidated regions.
     GtkUpdate();
 
@@ -3182,14 +3199,22 @@ bool wxWindowGTK::Show( bool show )
     }
 
     if (show)
-        gtk_widget_show( m_widget );
+    {
+        if (!m_showOnIdle)
+        {
+            gtk_widget_show( m_widget );
+            wxShowEvent eventShow(GetId(), show);
+            eventShow.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(eventShow);
+        }
+    }
     else
+    {
         gtk_widget_hide( m_widget );
-
-    wxShowEvent eventShow(GetId(), show);
-    eventShow.SetEventObject(this);
-
-    GetEventHandler()->ProcessEvent(eventShow);
+        wxShowEvent eventShow(GetId(), show);
+        eventShow.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(eventShow);
+    }
 
     return true;
 }
@@ -3427,6 +3452,12 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
 
     if (newParent)
     {
+        if (GTK_WIDGET_VISIBLE (newParent->m_widget))
+        {
+            m_showOnIdle = true;
+            gtk_widget_hide( m_widget );
+        }
+    
         /* insert GTK representation */
         (*(newParent->m_insertCallback))(newParent, this);
     }
@@ -3661,6 +3692,8 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
 
     if (m_wxwindow)
     {
+        if (!GTK_PIZZA(m_wxwindow)->bin_window) return;
+    
         GdkRectangle gdk_rect,
                     *p;
         if (rect)

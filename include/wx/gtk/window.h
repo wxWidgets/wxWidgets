@@ -117,9 +117,6 @@ public:
 
     virtual WXWidget GetHandle() const { return m_widget; }
 
-    // I don't want users to override what's done in idle so everything that
-    // has to be done in idle time in order for wxGTK to work is done in
-    // OnInternalIdle
     virtual void OnInternalIdle();
 
     // Internal represention of Update()
@@ -179,6 +176,12 @@ public:
     // the layouting functions have to be called later on
     // (i.e. in idle time, implemented in OnInternalIdle() ).
     void GtkUpdateSize() { m_sizeSet = false; }
+    
+    
+    // Called when a window should delay showing itself
+    // until idle time. This partly mimmicks defered
+    // sizing under MSW.
+    void GtkShowOnIdle() { m_showOnIdle = true; }
 
     // fix up the mouse event coords, used by wxListBox only so far
     virtual void FixUpMouseEvent(GtkWidget * WXUNUSED(widget),
@@ -260,6 +263,8 @@ public:
                                                 // background style until OnIdle
     bool                 m_mouseButtonDown:1;
     bool                 m_blockScrollEvent:1;
+    
+    bool                 m_showOnIdle:1;        // postpone showing the window until idle
 
     // C++ has no virtual methods in the constrcutor of any class but we need
     // different methods of inserting a child window into a wxFrame,
