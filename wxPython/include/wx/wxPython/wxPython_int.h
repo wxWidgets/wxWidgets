@@ -103,7 +103,9 @@ public:
 #endif
 
 //---------------------------------------------------------------------------
-typedef unsigned char byte;
+typedef unsigned char  byte;
+typedef unsigned char* buffer;
+
 typedef wxPoint2DDouble wxPoint2D;    
 
 #ifndef SWIG_TYPE_TABLE

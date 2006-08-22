@@ -190,6 +190,11 @@ IDs.
 
 Added wx.lib.combotreebox from Frank Niessink
 
+Added wx.ImageFromBuffer, wx.BitmapFromBuffer and
+wx.BitmapFromBufferRGBA factory functions.  They enable loading of am
+image or bitmap directly from a Python object that implements the
+buffer interface, such as strings, arrays, etc.
+
 
 
 

@@ -12,6 +12,9 @@
 
 // Not a %module
 
+%{
+#include <wx/rawbmp.h>
+%}
 
 //---------------------------------------------------------------------------
 
@@ -62,6 +65,10 @@ converted to a wx.Bitmap, so any image file format supported by
 
 :todo: Find a way to do very efficient PIL Image <--> wx.Bitmap
        converstions.
+
+:see: `wx.EmptyBitmap`, `wx.BitmapFromIcon`, `wx.BitmapFromImage`,
+      `wx.BitmapFromXPMData`, `wx.BitmapFromBits`, `wx.BitmapFromBuffer`,
+      `wx.BitmapFromBufferRGBA`, `wx.Image`
 ");
 
 
@@ -126,35 +133,36 @@ that a colour reduction may have to take place.", "",
 
     
     %extend {
-        DocStr(wxBitmap(PyObject* listOfStrings),
-               "Construct a Bitmap from a list of strings formatted as XPM data.", "");
-        
-        %RenameCtor(BitmapFromXPMData, wxBitmap(PyObject* listOfStrings))
-        {
-            char**    cArray = NULL;
-            wxBitmap* bmp;
+        %RenameDocCtor(
+            BitmapFromXPMData,
+            "Construct a Bitmap from a list of strings formatted as XPM data.", "",
+            wxBitmap(PyObject* listOfStrings))
+            {
+                char**    cArray = NULL;
+                wxBitmap* bmp;
 
-            cArray = ConvertListOfStrings(listOfStrings);
-            if (! cArray)
-                return NULL;
-            bmp = new wxBitmap(cArray);
-            delete [] cArray;
-            return bmp;
-        }
+                cArray = ConvertListOfStrings(listOfStrings);
+                if (! cArray)
+                    return NULL;
+                bmp = new wxBitmap(cArray);
+                delete [] cArray;
+                return bmp;
+            }
 
-        DocStr(wxBitmap(PyObject* bits, int width, int height, int depth=1 ),
-               "Creates a bitmap from an array of bits.  You should only use this
+       
+        %RenameDocCtor(
+            BitmapFromBits,
+            "Creates a bitmap from an array of bits.  You should only use this
 function for monochrome bitmaps (depth 1) in portable programs: in
 this case the bits parameter should contain an XBM image.  For other
-bit depths, the behaviour is platform dependent.", "");
-        
-        %RenameCtor(BitmapFromBits, wxBitmap(PyObject* bits, int width, int height, int depth=1 ))
-        {
-            char*      buf;
-            Py_ssize_t length;
-            PyString_AsStringAndSize(bits, &buf, &length);
-            return new wxBitmap(buf, width, height, depth);
-        }
+bit depths, the behaviour is platform dependent.", "",
+            wxBitmap(PyObject* bits, int width, int height, int depth=1 ))
+            {
+                char*      buf;
+                Py_ssize_t length;
+                PyString_AsStringAndSize(bits, &buf, &length);
+                return new wxBitmap(buf, width, height, depth);
+            }
     }    
 
     
@@ -302,6 +310,181 @@ the ``type`` parameter.", "");
         bool __ne__(const wxBitmap* other) { return other ? (*self != *other) : true;  }
     }
 };
+
+
+//---------------------------------------------------------------------------
+// Factory functions for creating wxBitmaps from Python buffer objects.  They
+// use the Abstract Pixel API to be able to set RGB and A bytes directly into
+// the wxBitmap's pixel buffer.
+
+%newobject _BitmapFromBufferAlpha;
+%newobject _BitmapFromBuffer;
+%inline %{
+    wxBitmap* _BitmapFromBufferAlpha(int width, int height,
+                                    buffer data, int DATASIZE,
+                                    buffer alpha, int ALPHASIZE)
+    {
+        if (DATASIZE != width*height*3) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            return NULL;
+        }
+
+        if (ALPHASIZE != width*height) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
+            return NULL;
+        }
+
+        wxBitmap* bmp = new wxBitmap(width, height, 32);
+        wxAlphaPixelData pixels(*bmp, wxPoint(0,0), wxSize(width,height));
+        if (! pixels) {
+            // raise an exception...
+            wxPyErr_SetString(PyExc_RuntimeError,
+                              "Failed to gain raw access to bitmap data.");
+            return NULL;
+        }
+                
+        pixels.UseAlpha();
+        wxAlphaPixelData::Iterator p(pixels);
+        for (int y=0; y<height; y++) {
+            wxAlphaPixelData::Iterator rowStart = p;
+            for (int x=0; x<width; x++) {
+                p.Red()   = *(data++);
+                p.Green() = *(data++);
+                p.Blue()  = *(data++);
+                p.Alpha() = *(alpha++);
+                ++p; 
+            }
+            p = rowStart;
+            p.OffsetY(pixels, 1);
+        }
+        return bmp;
+    }        
+        
+    wxBitmap* _BitmapFromBuffer(int width, int height, buffer data, int DATASIZE)
+    {
+        if (DATASIZE != width*height*3) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            return NULL;
+        }
+
+        wxBitmap* bmp = new wxBitmap(width, height, 24);
+        wxNativePixelData pixels(*bmp, wxPoint(0,0), wxSize(width,height));
+        if (! pixels) {
+            // raise an exception...
+            wxPyErr_SetString(PyExc_RuntimeError,
+                              "Failed to gain raw access to bitmap data.");
+            return NULL;
+        }
+                
+        wxNativePixelData::Iterator p(pixels);
+        for (int y=0; y<height; y++) {
+            wxNativePixelData::Iterator rowStart = p;
+            for (int x=0; x<width; x++) {
+                p.Red()   = *(data++);
+                p.Green() = *(data++);
+                p.Blue()  = *(data++);
+                ++p; 
+            }
+            p = rowStart;
+            p.OffsetY(pixels, 1);
+        }
+        return bmp;
+    }
+%}    
+
+
+%pythoncode {
+def BitmapFromBuffer(width, height, dataBuffer, alphaBuffer=None):
+    """
+    Creates a `wx.Bitmap` from the data in dataBuffer.  The dataBuffer
+    parameter must be a Python object that implements the buffer interface, or
+    is convertable to a buffer object, such as a string, array, etc.  The
+    dataBuffer object is expected to contain a series of RGB bytes and be
+    width*height*3 bytes long.  A buffer object can optionally be supplied for
+    the image's alpha channel data, and it is expected to be width*height
+    bytes long.
+
+    Unlike `wx.ImageFromBuffer` the bitmap created with this function does not
+    share the memory buffer with the buffer object.  This is because the
+    native pixel buffer format varies on different platforms, and so instead
+    an efficient as possible copy of the data is made from the buffer objects
+    to the bitmap's native pixel buffer.  For direct access to a bitmap's
+    pixel buffer see `wx.NativePixelData` and `wx.AlphaPixelData`.
+
+    :see: `wx.Bitmap`, `wx.BitmapFromBufferRGBA`, `wx.NativePixelData`,
+          `wx.AlphaPixelData`, `wx.ImageFromBuffer`
+    """
+    if not isinstance(dataBuffer, buffer):
+        dataBuffer = buffer(dataBuffer)
+    if alphaBuffer is not None and not isinstance(alphaBuffer, buffer):
+        alphaBuffer = buffer(alphaBuffer)
+    if alphaBuffer is not None:
+        return _gdi_._BitmapFromBufferAlpha(width, height, dataBuffer, alphaBuffer)
+    else:
+        return _gdi_._BitmapFromBuffer(width, height, dataBuffer)
+}
+
+
+
+%newobject _BitmapFromBufferRGBA;
+%inline %{
+    wxBitmap* _BitmapFromBufferRGBA(int width, int height, buffer data, int DATASIZE)                                   
+    {
+        if (DATASIZE != width*height*4) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            return NULL;
+        }
+
+        wxBitmap* bmp = new wxBitmap(width, height, 32);
+        wxAlphaPixelData pixels(*bmp, wxPoint(0,0), wxSize(width,height));
+        if (! pixels) {
+            // raise an exception...
+            wxPyErr_SetString(PyExc_RuntimeError,
+                              "Failed to gain raw access to bitmap data.");
+            return NULL;
+        }
+                
+        pixels.UseAlpha();
+        wxAlphaPixelData::Iterator p(pixels);
+        for (int y=0; y<height; y++) {
+            wxAlphaPixelData::Iterator rowStart = p;
+            for (int x=0; x<width; x++) {
+                p.Red()   = *(data++);
+                p.Green() = *(data++);
+                p.Blue()  = *(data++);
+                p.Alpha() = *(data++);
+                ++p; 
+            }
+            p = rowStart;
+            p.OffsetY(pixels, 1);
+        }
+        return bmp;
+    }        
+%}
+
+%pythoncode {
+def BitmapFromBufferRGBA(width, height, dataBuffer):
+    """
+    Creates a `wx.Bitmap` from the data in dataBuffer.  The dataBuffer
+    parameter must be a Python object that implements the buffer interface, or
+    is convertable to a buffer object, such as a string, array, etc.  The
+    dataBuffer object is expected to contain a series of RGBA bytes (red,
+    gree, blue and alpha) and be width*height*4 bytes long.  
+
+    Unlike `wx.ImageFromBuffer` the bitmap created with this function does not
+    share the memory buffer with the buffer object.  This is because the
+    native pixel buffer format varies on different platforms, and so instead
+    an efficient as possible copy of the data is made from the buffer object
+    to the bitmap's native pixel buffer.  For direct access to a bitmap's
+    pixel buffer see `wx.NativePixelData` and `wx.AlphaPixelData`.
+
+    :see: `wx.Bitmap`, `wx.BitmapFromBuffer`, `wx.NativePixelData`,
+          `wx.AlphaPixelData`, `wx.ImageFromBuffer`
+    """
+    if not isinstance(dataBuffer, buffer):
+        dataBuffer = buffer(dataBuffer)
+    return _gdi_._BitmapFromBufferRGBA(width, height, dataBuffer)
+}
 
 
 //---------------------------------------------------------------------------
