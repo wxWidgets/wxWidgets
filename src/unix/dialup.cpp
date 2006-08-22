@@ -580,9 +580,11 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckConnect()
    }
    else // failed to connect
    {
+#ifdef ENETUNREACH
        if(errno == ENETUNREACH)
           return Net_No; // network is unreachable
        else
+#endif
           return Net_Unknown; // connect failed, but don't know why
    }
 }
