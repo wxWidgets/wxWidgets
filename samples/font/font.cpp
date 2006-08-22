@@ -35,9 +35,12 @@
 #include "../sample.xpm"
 
 #ifdef __WXMAC__
-#undef wxFontDialog
-#include "wx/mac/fontdlg.h"
+    #undef wxFontDialog
+    #include "wx/mac/fontdlg.h"
 #endif
+
+// used as title for several dialog boxes
+static const wxChar SAMPLE_TITLE[] = "wxWidgets Font Sample";
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -111,9 +114,10 @@ public:
         { DoEnumerateFamilies(true); }
     void OnEnumerateEncodings(wxCommandEvent& event);
 
-    void OnCheckNativeToFromString(wxCommandEvent& event);
-    void OnCheckNativeToFromUserString(wxCommandEvent& event);
-    void OnCheckFaceName(wxCommandEvent& event);
+    void OnSetNativeDesc(wxCommandEvent& event);
+    void OnSetNativeUserDesc(wxCommandEvent& event);
+    void OnSetFaceName(wxCommandEvent& event);
+    void OnSetEncoding(wxCommandEvent& event);
 
 protected:
     bool DoEnumerateFamilies(bool fixedWidthOnly,
@@ -122,6 +126,11 @@ protected:
 
     void DoResizeFont(int diff);
     void DoChangeFont(const wxFont& font, const wxColour& col = wxNullColour);
+
+    // ask the user to choose an encoding and return it or
+    // wxFONTENCODING_SYSTEM if the dialog was cancelled
+    wxFontEncoding GetEncodingFromUser();
+
 
     size_t      m_fontSize; // in points
 
@@ -160,9 +169,10 @@ enum
     Font_EnumFamilies,
     Font_EnumFixedFamilies,
     Font_EnumEncodings,
-    Font_CheckNativeToFromString,
-    Font_CheckNativeToFromUserString,
-    Font_CheckFaceName,
+    Font_SetNativeDesc,
+    Font_SetNativeUserDesc,
+    Font_SetFaceName,
+    Font_SetEncoding,
     Font_Max
 };
 
@@ -190,9 +200,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_wxSWISS_FONT, MyFrame::OnwxPointerFont)
 
 
-    EVT_MENU(Font_CheckNativeToFromString, MyFrame::OnCheckNativeToFromString)
-    EVT_MENU(Font_CheckNativeToFromUserString, MyFrame::OnCheckNativeToFromUserString)
-    EVT_MENU(Font_CheckFaceName, MyFrame::OnCheckFaceName)
+    EVT_MENU(Font_SetNativeDesc, MyFrame::OnSetNativeDesc)
+    EVT_MENU(Font_SetNativeUserDesc, MyFrame::OnSetNativeUserDesc)
+    EVT_MENU(Font_SetFaceName, MyFrame::OnSetFaceName)
+    EVT_MENU(Font_SetEncoding, MyFrame::OnSetEncoding)
 
     EVT_MENU(Font_Choose, MyFrame::OnSelectFont)
     EVT_MENU(Font_EnumFamiliesForEncoding, MyFrame::OnEnumerateFamiliesForEncoding)
@@ -265,12 +276,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                      wxT("Toggle underlined state"));
 
     menuFont->AppendSeparator();
-    menuFont->Append(Font_CheckNativeToFromString,
+    menuFont->Append(Font_SetNativeDesc,
                      wxT("Set native font &description\tShift-Ctrl-D"));
-    menuFont->Append(Font_CheckNativeToFromUserString,
+    menuFont->Append(Font_SetNativeUserDesc,
                      wxT("Set &user font description\tShift-Ctrl-U"));
-    menuFont->Append(Font_CheckFaceName,
-                     wxT("Check font face name"));                     
+    menuFont->Append(Font_SetFaceName, wxT("Check font face name"));                     
+    menuFont->Append(Font_SetEncoding, wxT("Set font &encoding\tShift-Ctrl-E"));
 
     wxMenu *menuSelect = new wxMenu;
     menuSelect->Append(Font_Choose, wxT("&Select font...\tCtrl-S"),
@@ -411,8 +422,14 @@ bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
             for ( n = 0; n < nFacenames; n++ )
                 facenames[n] = fontEnumerator.GetFacenames().Item(n);
 
-            n = wxGetSingleChoiceIndex(wxT("Choose a facename"), wxT("Font demo"),
-                                       nFacenames, facenames, this);
+            n = wxGetSingleChoiceIndex
+                (
+                    wxT("Choose a facename"),
+                    SAMPLE_TITLE,
+                    nFacenames,
+                    facenames,
+                    this
+                );
 
             if ( n != -1 )
                 facename = facenames[n];
@@ -440,46 +457,14 @@ bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
 
 void MyFrame::OnEnumerateFamiliesForEncoding(wxCommandEvent& WXUNUSED(event))
 {
-    static wxFontEncoding encodings[] =
+    wxFontEncoding enc = GetEncodingFromUser();
+    if ( enc != wxFONTENCODING_SYSTEM )
     {
-        wxFONTENCODING_ISO8859_1,
-        wxFONTENCODING_ISO8859_2,
-        wxFONTENCODING_ISO8859_5,
-        wxFONTENCODING_ISO8859_7,
-        wxFONTENCODING_ISO8859_15,
-        wxFONTENCODING_KOI8,
-        wxFONTENCODING_KOI8_U,
-        wxFONTENCODING_CP1250,
-        wxFONTENCODING_CP1251,
-        wxFONTENCODING_CP1252,
-    };
-
-    static const wxString encodingNames[] =
-    {
-        wxT("Western European (ISO-8859-1)"),
-        wxT("Central European (ISO-8859-2)"),
-        wxT("Cyrillic (ISO-8859-5)"),
-        wxT("Greek (ISO-8859-7)"),
-        wxT("Western European with Euro (ISO-8859-15)"),
-        wxT("KOI8-R"),
-        wxT("KOI8-U"),
-        wxT("Windows Central European (CP 1250)"),
-        wxT("Windows Cyrillic (CP 1251)"),
-        wxT("Windows Western European (CP 1252)"),
-    };
-
-    int n = wxGetSingleChoiceIndex(wxT("Choose an encoding"), wxT("Font demo"),
-                                   WXSIZEOF(encodingNames),
-                                   encodingNames,
-                                   this);
-
-    if ( n != -1 )
-    {
-        DoEnumerateFamilies(false, encodings[n]);
+        DoEnumerateFamilies(false, enc);
     }
 }
 
-void MyFrame::OnCheckNativeToFromString(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnSetNativeDesc(wxCommandEvent& WXUNUSED(event))
 {
     wxString fontInfo = wxGetTextFromUser
                         (
@@ -503,7 +488,7 @@ void MyFrame::OnCheckNativeToFromString(wxCommandEvent& WXUNUSED(event))
     DoChangeFont(font);
 }
 
-void MyFrame::OnCheckFaceName(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnSetFaceName(wxCommandEvent& WXUNUSED(event))
 {
     wxString facename = GetCanvas()->GetTextFont().GetFaceName();
     wxString newFaceName = wxGetTextFromUser(
@@ -527,7 +512,7 @@ void MyFrame::OnCheckFaceName(wxCommandEvent& WXUNUSED(event))
     }    
 }
 
-void MyFrame::OnCheckNativeToFromUserString(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnSetNativeUserDesc(wxCommandEvent& WXUNUSED(event))
 {
     wxString fontdesc = GetCanvas()->GetTextFont().GetNativeFontInfoUserDesc();
     wxString fontUserInfo = wxGetTextFromUser(
@@ -548,6 +533,44 @@ void MyFrame::OnCheckNativeToFromUserString(wxCommandEvent& WXUNUSED(event))
         wxASSERT_MSG(!font.Ok(), wxT("The font should now be invalid"));
         wxMessageBox(wxT("Error trying to create a font with such description..."));
     }
+}
+
+void MyFrame::OnSetEncoding(wxCommandEvent& WXUNUSED(event))
+{
+    wxFontEncoding enc = GetEncodingFromUser();
+    if ( enc == wxFONTENCODING_SYSTEM )
+        return;
+
+    wxFont font = m_canvas->GetTextFont();
+    font.SetEncoding(enc);
+    DoChangeFont(font);
+}
+
+wxFontEncoding MyFrame::GetEncodingFromUser()
+{
+    wxArrayString names;
+    wxArrayInt encodings;
+
+    const size_t count = wxFontMapper::GetSupportedEncodingsCount();
+    names.reserve(count);
+    encodings.reserve(count);
+
+    for ( size_t n = 0; n < count; n++ )
+    {
+        wxFontEncoding enc = wxFontMapper::GetEncoding(n);
+        encodings.push_back(enc);
+        names.push_back(wxFontMapper::GetEncodingName(enc));
+    }
+
+    int i = wxGetSingleChoiceIndex
+            (
+                wxT("Choose the encoding"),
+                SAMPLE_TITLE,
+                names,
+                this
+            );
+
+    return i == -1 ? wxFONTENCODING_SYSTEM : (wxFontEncoding)encodings[i];
 }
 
 void MyFrame::DoResizeFont(int diff)
@@ -586,13 +609,27 @@ void MyFrame::OnwxPointerFont(wxCommandEvent& event)
 {
     wxFont font;
 
-    switch (event.GetId())
+    switch ( event.GetId() )
     {
-        case Font_wxNORMAL_FONT : font = wxFont(*wxNORMAL_FONT); break;
-        case Font_wxSMALL_FONT  : font = wxFont(*wxSMALL_FONT); break;
-        case Font_wxITALIC_FONT : font = wxFont(*wxITALIC_FONT); break;
-        case Font_wxSWISS_FONT  : font = wxFont(*wxSWISS_FONT); break;
-        default                 : font = wxFont(*wxNORMAL_FONT); break;
+        case Font_wxNORMAL_FONT:
+            font = *wxNORMAL_FONT;
+            break;
+
+        case Font_wxSMALL_FONT:
+            font = *wxSMALL_FONT;
+            break;
+
+        case Font_wxITALIC_FONT:
+            font = *wxITALIC_FONT;
+            break;
+
+        case Font_wxSWISS_FONT:
+            font = *wxSWISS_FONT;
+            break;
+
+        default:
+            wxFAIL_MSG( wxT("unknown standard font") );
+            return;
     }
 
     DoChangeFont(font);
