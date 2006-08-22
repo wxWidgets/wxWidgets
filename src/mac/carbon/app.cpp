@@ -38,6 +38,7 @@
 #include "wx/tooltip.h"
 #include "wx/docview.h"
 #include "wx/filename.h"
+#include "wx/link.h"
 
 #include <string.h>
 
@@ -66,6 +67,9 @@
 #  include <DiskInit.h>
 #  include <Devices.h>
 #endif
+
+// Keep linker from discarding wxStockGDIMac
+wxFORCE_LINK_MODULE(gdiobj)
 
 #if wxUSE_THREADS
 extern size_t g_numberOfThreads;

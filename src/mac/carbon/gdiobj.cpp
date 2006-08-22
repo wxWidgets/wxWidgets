@@ -18,7 +18,11 @@
 #endif
 
 #include "wx/module.h"
+#include "wx/link.h"
 #include "wx/mac/private.h"
+
+// Linker will discard entire object file without this
+wxFORCE_LINK_THIS_MODULE(gdiobj)
 
 class wxStockGDIMac: public wxStockGDI, public wxModule
 {
