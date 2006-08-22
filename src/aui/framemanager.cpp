@@ -85,6 +85,7 @@ public:
 #else
         m_CanSetShape = true;
 #endif
+        m_Region = wxRegion(0, 0, 0, 0);
         SetTransparent(0);
     }
 
@@ -95,28 +96,24 @@ public:
             int w=100; // some defaults
             int h=100;
             GetClientSize(&w, &h);
-            if ((alpha != m_Amount) || (m_MaxWidth<w) | (m_MaxHeight<h))
+
+			m_MaxWidth = w;
+            m_MaxHeight = h;
+            m_Amount = alpha;
+            m_Region.Clear();
+//            m_Region.Union(0, 0, 1, m_MaxWidth);
+            if (m_Amount)
             {
-                // Make the region at least double the height and width so we don't have
-                // to rebuild if the size changes.
-                m_MaxWidth=w*2;
-                m_MaxHeight=h*2;
-                m_Amount = alpha;
-                m_Region.Clear();
-//                m_Region.Union(0, 0, 1, m_MaxWidth);
-                if (m_Amount)
+                for (int y=0; y<m_MaxHeight; y++)
                 {
-                    for (int y=0; y<m_MaxHeight; y++)
-                    {
-                        // Reverse the order of the bottom 4 bits
-                        int j=((y&8)?1:0)|((y&4)?2:0)|((y&2)?4:0)|((y&1)?8:0);
-                        if ((j*16+8)<m_Amount)
-                            m_Region.Union(0, y, m_MaxWidth, 1);
-                    }
+                    // Reverse the order of the bottom 4 bits
+                    int j=((y&8)?1:0)|((y&4)?2:0)|((y&2)?4:0)|((y&1)?8:0);
+                    if ((j*16+8)<m_Amount)
+                        m_Region.Union(0, y, m_MaxWidth, 1);
                 }
-                SetShape(m_Region);
-                Refresh();
             }
+            SetShape(m_Region);
+            Refresh();
         }
         return true;
     }
@@ -125,7 +122,14 @@ public:
     {
         wxPaintDC dc(this);
 
+        if (m_Region.IsEmpty())
+            return;
+
+#ifdef __WXMAC__
+        dc.SetBrush(wxColour(128, 192, 255));
+#else
         dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
+#endif
         dc.SetPen(*wxTRANSPARENT_PEN);
 
         wxRegionIterator upd(GetUpdateRegion()); // get the update rect list
@@ -142,6 +146,16 @@ public:
 #ifdef __WXGTK__
     void OnWindowCreate(wxWindowCreateEvent& WXUNUSED(event)) {m_CanSetShape=true; SetTransparent(0);}
 #endif
+
+    void OnSize(wxSizeEvent& event)
+    {
+        SetTransparent(m_Amount);
+        m_Region.Intersect(0, 0, event.GetSize().GetWidth(),
+                           event.GetSize().GetHeight());
+        SetShape(m_Region);
+        Refresh();
+        event.Skip();
+    }
 
 private:
     int m_Amount;
@@ -160,6 +174,7 @@ IMPLEMENT_DYNAMIC_CLASS( wxPseudoTransparentFrame, wxFrame )
 
 BEGIN_EVENT_TABLE(wxPseudoTransparentFrame, wxFrame)
     EVT_PAINT(wxPseudoTransparentFrame::OnPaint)
+    EVT_SIZE(wxPseudoTransparentFrame::OnSize)
 #ifdef __WXGTK__
     EVT_WINDOW_CREATE(wxPseudoTransparentFrame::OnWindowCreate)
 #endif
@@ -3118,13 +3133,14 @@ void wxFrameManager::OnEraseBackground(wxEraseEvent& event)
 #endif
 }
 
-void wxFrameManager::OnSize(wxSizeEvent& WXUNUSED(event))
+void wxFrameManager::OnSize(wxSizeEvent& event)
 {
     if (m_frame)
     {
         DoFrameLayout();
         Repaint();
     }
+    event.Skip();
 }
 
 
