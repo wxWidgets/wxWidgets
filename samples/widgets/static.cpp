@@ -208,7 +208,7 @@ END_EVENT_TABLE()
 // ============================================================================
 
 IMPLEMENT_WIDGETS_PAGE(StaticWidgetsPage, _T("Static"),
-                       (int)wxPlatform(GENERIC_CTRLS).If(wxMSW,NATIVE_CTRLS)
+                       (int)wxPlatform(GENERIC_CTRLS).If(wxOS_WINDOWS,NATIVE_CTRLS)
                        );
 
 StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
