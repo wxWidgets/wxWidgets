@@ -105,6 +105,7 @@ public:
 
     void OnwxPointerFont(wxCommandEvent& event);
 
+    void OnTestTextValue(wxCommandEvent& event);
     void OnViewMsg(wxCommandEvent& event);
     void OnSelectFont(wxCommandEvent& event);
     void OnEnumerateFamiliesForEncoding(wxCommandEvent& event);
@@ -153,6 +154,8 @@ enum
     Font_Quit = 1,
     Font_About,
     Font_ViewMsg,
+    Font_TestTextValue,
+
     Font_IncSize,
     Font_DecSize,
     Font_Bold,
@@ -185,6 +188,7 @@ enum
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_Quit,  MyFrame::OnQuit)
+    EVT_MENU(Font_TestTextValue, MyFrame::OnTestTextValue)
     EVT_MENU(Font_ViewMsg, MyFrame::OnViewMsg)
     EVT_MENU(Font_About, MyFrame::OnAbout)
 
@@ -259,6 +263,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
+    menuFile->Append(Font_TestTextValue, wxT("&Test text value"),
+                     wxT("Verify that getting and setting text value doesn't change it"));
     menuFile->Append(Font_ViewMsg, wxT("&View...\tCtrl-V"),
                      wxT("View an email message file"));
     menuFile->AppendSeparator();
@@ -680,6 +686,16 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(true);
 }
 
+void MyFrame::OnTestTextValue(wxCommandEvent& WXUNUSED(event))
+{
+    wxString value = m_textctrl->GetValue();
+    m_textctrl->SetValue(value);
+    if ( m_textctrl->GetValue() != value )
+    {
+        wxLogError(wxT("Text value changed after getting and setting it"));
+    }
+}
+
 void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_FILEDLG
@@ -800,9 +816,9 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(wxT("wxWidgets font demo\n")
-                 wxT("(c) 1999 Vadim Zeitlin"),
-                 wxT("About Font"),
+    wxMessageBox(wxT("wxWidgets font sample\n")
+                 wxT("(c) 1999-2006 Vadim Zeitlin"),
+                 wxString(wxT("About ")) + SAMPLE_TITLE,
                  wxOK | wxICON_INFORMATION, this);
 }
 
