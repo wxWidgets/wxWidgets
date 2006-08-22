@@ -36960,29 +36960,24 @@ done
 
 SAVE_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS -D_REENTRANT"
-
-  for target in strtok_r
-  do
-    echo "$as_me:$LINENO: checking for $target in string.h" >&5
-echo $ECHO_N "checking for $target in string.h... $ECHO_C" >&6
-if eval "test \"\${wx_cv_decl_$target+set}\" = set"; then
+echo "$as_me:$LINENO: checking whether strtok_r is declared" >&5
+echo $ECHO_N "checking whether strtok_r is declared... $ECHO_C" >&6
+if test "${ac_cv_have_decl_strtok_r+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-                    cat >conftest.$ac_ext <<_ACEOF
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <string.h>
+$ac_includes_default
 int
 main ()
 {
-
-                                    #ifndef $target
-                                      &$target;
-                                    #endif
+#ifndef strtok_r
+  char *p = (char *) strtok_r;
+#endif
 
   ;
   return 0;
@@ -37009,31 +37004,35 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  eval wx_cv_decl_$target=yes
+  ac_cv_have_decl_strtok_r=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-eval wx_cv_decl_$target=no
+ac_cv_have_decl_strtok_r=no
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-
 fi
-echo "$as_me:$LINENO: result: `eval echo '${'wx_cv_decl_$target'}'`" >&5
-echo "${ECHO_T}`eval echo '${'wx_cv_decl_$target'}'`" >&6
+echo "$as_me:$LINENO: result: $ac_cv_have_decl_strtok_r" >&5
+echo "${ECHO_T}$ac_cv_have_decl_strtok_r" >&6
+if test $ac_cv_have_decl_strtok_r = yes; then
 
-    if eval test \$wx_cv_decl_$target = yes
-    then
-      cat >>confdefs.h <<_ACEOF
-#define HAVE_`echo $target | tr 'a-z' 'A-Z'` 1
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_STRTOK_R 1
+_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_STRTOK_R 1
+_ACEOF
+
+else
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_STRTOK_R 0
 _ACEOF
 
 
-    else
-      :
+fi
 
-    fi
-  done
 
 CPPFLAGS="$SAVE_CPPFLAGS"
 
@@ -40519,7 +40518,7 @@ _ACEOF
 
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
 else
-      if test "$wx_cv_decl_strtok_r" = "yes"; then
+      if test "$ac_cv_have_decl_strtok_r" = "yes"; then
     echo "$as_me:$LINENO: checking if -D_REENTRANT is needed" >&5
 echo $ECHO_N "checking if -D_REENTRANT is needed... $ECHO_C" >&6
     if test "$NEEDS_D_REENTRANT_FOR_R_FUNCS" = 1; then
