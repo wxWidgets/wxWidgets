@@ -249,7 +249,7 @@ bool wxColour::FromString(const wxChar *name)
     Display *dpy = wxGlobalDisplay();
     WXColormap colormap = wxTheApp->GetMainColormap( dpy );
     XColor xcol;
-    if ( XParseColor( dpy, (Colormap)colormap, name , &xcol ) )
+/*    if ( XParseColor( dpy, (Colormap)colormap, name , &xcol ) )
     {
         UnRef();
 
@@ -258,6 +258,6 @@ bool wxColour::FromString(const wxChar *name)
         M_COLDATA->m_color = xcol;
         return true;
     }
-
+*/
     return wxColourBase::FromString(name);
 }

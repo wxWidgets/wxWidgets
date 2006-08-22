@@ -23,12 +23,10 @@
  * in evtloop.cpp and gsockx11.c
  */
 
-typedef void (*wxSocketCallback) (int fd, void* data);
-
 typedef enum
 { wxSocketTableInput, wxSocketTableOutput } wxSocketTableType ;
 
-extern "C" void wxRegisterSocketCallback(int fd, wxSocketTableType socketType, wxSocketCallback cback, void* data);
+extern "C" void wxRegisterSocketCallback(int fd, wxSocketTableType socketType, GSocket* socket);
 extern "C" void wxUnregisterSocketCallback(int fd, wxSocketTableType socketType);
 
 typedef struct {
@@ -41,20 +39,6 @@ typedef struct {
 
 #define DATATYPE CallbackData
 #define PLATFORM_DATA(x) (*(DATATYPE*)x)
-
-static void _GSocket_X11_Input(int *fid, void* data)
-{
-  GSocket *socket = (GSocket *)data;
-
-  socket->Detected_Read();
-}
-
-static void _GSocket_X11_Output(int *fid, void* data)
-{
-  GSocket *socket = (GSocket *)data;
-
-  socket->Detected_Write();
-}
 
 bool GSocketGUIFunctionsTableConcrete::CanUseEventLoop()
 {   return true; }
@@ -106,18 +90,15 @@ void CheckCurrentState(GSocket* socket, char event)
 {
   int* current_state;
   wxSocketTableType table;
-  wxSocketCallback callback;
   switch (event)
   {
     case GSOCKX11_INPUT:
       current_state = &(PLATFORM_DATA(socket->m_platform_specific_data).input);
       table = wxSocketTableInput;
-      callback = (wxSocketCallback)_GSocket_X11_Input;
       break;
     case GSOCKX11_OUTPUT:
       current_state = &(PLATFORM_DATA(socket->m_platform_specific_data).output);
       table = wxSocketTableOutput;
-      callback = (wxSocketCallback)_GSocket_X11_Output;
       break;
     default:
       wxASSERT_MSG(0,wxT("Error: Checking socket state for unknown event type\n"));
@@ -136,7 +117,7 @@ void CheckCurrentState(GSocket* socket, char event)
   }
   else if (socket->m_eventflags | event)
   {
-    wxRegisterSocketCallback(socket->m_fd, table, callback, (void*) socket);
+    wxRegisterSocketCallback(socket->m_fd, table, socket);
     *current_state = socket->m_fd;
   } 
 }

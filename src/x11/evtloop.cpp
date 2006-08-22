@@ -47,7 +47,7 @@
 // wxSocketTable
 // ----------------------------------------------------------------------------
 
-typedef void (*wxSocketCallback) (int fd, void* data);
+#include "wx/gsocket.h"
 
 class wxSocketTableEntry: public wxObject
 {
@@ -55,16 +55,12 @@ class wxSocketTableEntry: public wxObject
     wxSocketTableEntry()
     {
         m_fdInput = -1; m_fdOutput = -1;
-        m_callbackInput = NULL; m_callbackOutput = NULL;
-        m_dataInput = NULL; m_dataOutput = NULL;
+        m_socket = NULL;
     }
 
     int m_fdInput;
     int m_fdOutput;
-    wxSocketCallback m_callbackInput;
-    wxSocketCallback m_callbackOutput;
-    void* m_dataInput;
-    void* m_dataOutput;
+    GSocket* m_socket;
 };
 
 typedef enum
@@ -83,11 +79,9 @@ class wxSocketTable: public wxHashTable
 
     wxSocketTableEntry* FindEntry(int fd);
 
-    void RegisterCallback(int fd, wxSocketTableType socketType, wxSocketCallback callback, void* data);
+    void RegisterCallback(int fd, wxSocketTableType socketType, GSocket* socket);
 
     void UnregisterCallback(int fd, wxSocketTableType socketType);
-
-    bool CallCallback(int fd, wxSocketTableType socketType);
 
     void FillSets(fd_set* readset, fd_set* writeset, int* highest);
 
@@ -100,7 +94,7 @@ wxSocketTableEntry* wxSocketTable::FindEntry(int fd)
     return entry;
 }
 
-void wxSocketTable::RegisterCallback(int fd, wxSocketTableType socketType, wxSocketCallback callback, void* data)
+void wxSocketTable::RegisterCallback(int fd, wxSocketTableType socketType, GSocket* socket)
 {
     wxSocketTableEntry* entry = FindEntry(fd);
     if (!entry)
@@ -110,17 +104,11 @@ void wxSocketTable::RegisterCallback(int fd, wxSocketTableType socketType, wxSoc
     }
 
     if (socketType == wxSocketTableInput)
-    {
         entry->m_fdInput = fd;
-        entry->m_dataInput = data;
-        entry->m_callbackInput = callback;
-    }
     else
-    {
         entry->m_fdOutput = fd;
-        entry->m_dataOutput = data;
-        entry->m_callbackOutput = callback;
-    }
+     
+    entry->m_socket = socket;
 }
 
 void wxSocketTable::UnregisterCallback(int fd, wxSocketTableType socketType)
@@ -129,48 +117,17 @@ void wxSocketTable::UnregisterCallback(int fd, wxSocketTableType socketType)
     if (entry)
     {
         if (socketType == wxSocketTableInput)
-        {
             entry->m_fdInput = -1;
-            entry->m_dataInput = NULL;
-            entry->m_callbackInput = NULL;
-        }
         else
-        {
             entry->m_fdOutput = -1;
-            entry->m_dataOutput = NULL;
-            entry->m_callbackOutput = NULL;
-        }
+        
         if (entry->m_fdInput == -1 && entry->m_fdOutput == -1)
         {
+            entry->m_socket = NULL;          
             Delete(fd);
             delete entry;
         }
     }
-}
-
-bool wxSocketTable::CallCallback(int fd, wxSocketTableType socketType)
-{
-    wxSocketTableEntry* entry = FindEntry(fd);
-    if (entry)
-    {
-        if (socketType == wxSocketTableInput)
-        {
-            if (entry->m_fdInput != -1 && entry->m_callbackInput)
-            {
-                (entry->m_callbackInput) (entry->m_fdInput, entry->m_dataInput);
-            }
-        }
-        else
-        {
-            if (entry->m_fdOutput != -1 && entry->m_callbackOutput)
-            {
-                (entry->m_callbackOutput) (entry->m_fdOutput, entry->m_dataOutput);
-            }
-        }
-        return true;
-    }
-    else
-        return false;
 }
 
 void wxSocketTable::FillSets(fd_set* readset, fd_set* writeset, int* highest)
@@ -208,19 +165,17 @@ void wxSocketTable::ProcessEvents(fd_set* readset, fd_set* writeset)
         // We have to store the next node here, because the event processing can 
         // destroy the object before we call Next()
 
-	wxHashTable::compatibility_iterator next_node = Next();	
+        wxHashTable::compatibility_iterator next_node = Next();	
 
         wxSocketTableEntry* entry = (wxSocketTableEntry*) node->GetData();
 
+        wxCHECK_RET(entry->m_socket, wxT("Critical: Processing a NULL socket in wxSocketTable"));
+      
         if (entry->m_fdInput != -1 && wxFD_ISSET(entry->m_fdInput, readset))
-        {
-            (entry->m_callbackInput) (entry->m_fdInput, entry->m_dataInput);
-        }
+            entry->m_socket->Detected_Read();
 
         if (entry->m_fdOutput != -1 && wxFD_ISSET(entry->m_fdOutput, writeset))
-        {
-            (entry->m_callbackOutput) (entry->m_fdOutput, entry->m_dataOutput);
-        }
+            entry->m_socket->Detected_Write();;
 
         node = next_node;
     }
@@ -242,20 +197,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxSocketTableModule, wxModule)
 // Implement registration functions as C functions so they
 // can be called from gsock11.c
 
-extern "C" void wxRegisterSocketCallback(int fd, wxSocketTableType socketType, wxSocketCallback callback, void* data)
+extern "C" void wxRegisterSocketCallback(int fd, wxSocketTableType socketType, GSocket* socket)
 {
     if (wxTheSocketTable)
-    {
-        wxTheSocketTable->RegisterCallback(fd, socketType, callback, data);
-    }
+        wxTheSocketTable->RegisterCallback(fd, socketType, socket);
 }
 
 extern "C" void wxUnregisterSocketCallback(int fd, wxSocketTableType socketType)
 {
     if (wxTheSocketTable)
-    {
         wxTheSocketTable->UnregisterCallback(fd, socketType);
-    }
 }
 #endif
 
