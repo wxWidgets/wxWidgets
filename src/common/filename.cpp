@@ -1047,7 +1047,9 @@ bool wxFileName::Normalize(int flags,
 #include <shlguid.h>
 #endif
 
-bool wxFileName::GetShortcutTarget(const wxString& shortcutPath, wxString& targetFilename, wxString* arguments)
+bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
+                                   wxString& targetFilename,
+                                   wxString* arguments)
 {
     wxString path, file, ext;
     wxSplitPath(shortcutPath, & path, & file, & ext);
@@ -1076,6 +1078,8 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath, wxString& targe
                                 MAX_PATH);
 
             hres = ppf->Load(wsz, 0);
+            ppf->Release();
+
             if (SUCCEEDED(hres))
             {
                 wxChar buf[2048];
@@ -1096,11 +1100,13 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath, wxString& targe
                 }
             }
         }
+
+        psl->Release();
     }
-    psl->Release();
     return success;
 }
-#endif
+
+#endif // __WIN32__ && !__WXWINCE__
 
 
 // ----------------------------------------------------------------------------
