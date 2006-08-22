@@ -17,25 +17,33 @@
     #include "wx/gdicmn.h"
 #endif
 
+#include "wx/module.h"
 #include "wx/mac/private.h"
 
-class wxStockGDIMac: public wxStockGDI
+class wxStockGDIMac: public wxStockGDI, public wxModule
 {
 public:
-    wxStockGDIMac();
-
     virtual const wxFont* GetFont(Item item);
+
+    virtual bool OnInit();
+    virtual void OnExit();
 
 private:
     typedef wxStockGDI super;
+    DECLARE_DYNAMIC_CLASS(wxStockGDIMac)
 };
 
-static wxStockGDIMac gs_wxStockGDIMac_instance;
+IMPLEMENT_DYNAMIC_CLASS(wxStockGDIMac, wxModule)
 
-wxStockGDIMac::wxStockGDIMac()
+bool wxStockGDIMac::OnInit()
 {
     // Override default instance
     ms_instance = this;
+    return true;
+}
+
+void wxStockGDIMac::OnExit()
+{
 }
 
 const wxFont* wxStockGDIMac::GetFont(Item item)
