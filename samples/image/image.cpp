@@ -785,24 +785,24 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         int x = 750, y = 10, yy = 170;
 
         dc.DrawText(wxT("Original toucan"), x+50, y);
-        dc.DrawBitmap(my_toucan, x, y+15);
+        dc.DrawBitmap(my_toucan, x, y+15, true);
         y += yy;
         dc.DrawText(wxT("Flipped horizontally"), x+50, y);
-        dc.DrawBitmap(my_toucan_flipped_horiz, x, y+15);
+        dc.DrawBitmap(my_toucan_flipped_horiz, x, y+15, true);
         y += yy;
         dc.DrawText(wxT("Flipped vertically"), x+50, y);
-        dc.DrawBitmap(my_toucan_flipped_vert, x, y+15);
+        dc.DrawBitmap(my_toucan_flipped_vert, x, y+15, true);
         y += yy;
         dc.DrawText(wxT("Flipped both h&v"), x+50, y);
-        dc.DrawBitmap(my_toucan_flipped_both, x, y+15);
+        dc.DrawBitmap(my_toucan_flipped_both, x, y+15, true);
 
         y += yy;
         dc.DrawText(wxT("In greyscale"), x+50, y);
-        dc.DrawBitmap(my_toucan_grey, x, y+15);
+        dc.DrawBitmap(my_toucan_grey, x, y+15, true);
 
         y += yy;
         dc.DrawText(wxT("Toucan's head"), x+50, y);
-        dc.DrawBitmap(my_toucan_head, x, y+15);
+        dc.DrawBitmap(my_toucan_head, x, y+15, true);
     }
 
     if (my_smile_xbm.Ok())
