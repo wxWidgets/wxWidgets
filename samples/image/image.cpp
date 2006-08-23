@@ -302,28 +302,31 @@ public:
 
     MyRawBitmapFrame(wxFrame *parent)
         : wxFrame(parent, wxID_ANY, _T("Raw bitmaps (how exciting)")),
-          m_bitmap(SIZE, SIZE, 32)
+          m_bitmap(SIZE, SIZE, 24),
+          m_alphaBitmap(SIZE, SIZE, 32)
     {
-        SetClientSize(SIZE, SIZE);
+        SetClientSize(SIZE, SIZE*2+25);
 
-        // another possibility: wxNativePixelData (don't forget to remove code
-        // setting alpha in the loop below then)
-        typedef wxAlphaPixelData Data;
-        // typedef wxNativePixelData Data;
+        InitAlphaBitmap();
+        InitBitmap();
 
+    }
+
+    void InitAlphaBitmap()
+    {
         // First, clear the whole bitmap by making it alpha
         {
-            Data data( m_bitmap, wxPoint(0,0), wxSize(SIZE, SIZE) );
+            wxAlphaPixelData data( m_alphaBitmap, wxPoint(0,0), wxSize(SIZE, SIZE) );
             if ( !data )
             {
                 wxLogError(_T("Failed to gain raw access to bitmap data"));
                 return;
             }
             data.UseAlpha();
-            Data::Iterator p(data);
+            wxAlphaPixelData::Iterator p(data);
             for ( int y = 0; y < SIZE; ++y )
             {
-                Data::Iterator rowStart = p;
+                wxAlphaPixelData::Iterator rowStart = p;
                 for ( int x = 0; x < SIZE; ++x )
                 {
                     p.Alpha() = 0;
@@ -335,7 +338,8 @@ public:
         }
 
         // Then, draw colourful alpha-blended stripes
-        Data data(m_bitmap, wxPoint(BORDER, BORDER) , wxSize(REAL_SIZE, REAL_SIZE));
+        wxAlphaPixelData data(m_alphaBitmap, wxPoint(BORDER, BORDER),
+                              wxSize(REAL_SIZE, REAL_SIZE));
         if ( !data )
         {
             wxLogError(_T("Failed to gain raw access to bitmap data"));
@@ -343,12 +347,11 @@ public:
         }
 
         data.UseAlpha();
-
-        Data::Iterator p(data);
+        wxAlphaPixelData::Iterator p(data);
 
         for ( int y = 0; y < REAL_SIZE; ++y )
         {
-            Data::Iterator rowStart = p;
+            wxAlphaPixelData::Iterator rowStart = p;
 
             int r = y < REAL_SIZE/3 ? 255 : 0,
                 g = (REAL_SIZE/3 <= y) && (y < 2*(REAL_SIZE/3)) ? 255 : 0,
@@ -357,12 +360,44 @@ public:
             for ( int x = 0; x < REAL_SIZE; ++x )
             {
                 // note that RGB must be premultiplied by alpha
-                unsigned a = (Data::Iterator::ChannelType)((x*255.)/REAL_SIZE);
+                unsigned a = (wxAlphaPixelData::Iterator::ChannelType)((x*255.)/REAL_SIZE);
                 p.Red() = r * a / 256;
                 p.Green() = g * a / 256;
                 p.Blue() = b * a / 256;
                 p.Alpha() = a;
 
+                ++p; // same as p.OffsetX(1)
+            }
+
+            p = rowStart;
+            p.OffsetY(data, 1);
+        }
+    }
+
+    void InitBitmap()
+    {
+        // draw some colourful stripes without alpha
+        wxNativePixelData data(m_bitmap);
+        if ( !data )
+        {
+            wxLogError(_T("Failed to gain raw access to bitmap data"));
+            return;
+        }
+
+        wxNativePixelData::Iterator p(data);
+        for ( int y = 0; y < SIZE; ++y )
+        {
+            wxNativePixelData::Iterator rowStart = p;
+
+            int r = y < SIZE/3 ? 255 : 0,
+                g = (SIZE/3 <= y) && (y < 2*(SIZE/3)) ? 255 : 0,
+                b = 2*(SIZE/3) <= y ? 255 : 0;
+
+            for ( int x = 0; x < SIZE; ++x )
+            {
+                p.Red() = r;
+                p.Green() = g;
+                p.Blue() = b;
                 ++p; // same as p.OffsetX(1)
             }
 
@@ -377,11 +412,15 @@ public:
         dc.DrawText(_T("This is alpha and raw bitmap test"), 0, BORDER);
         dc.DrawText(_T("This is alpha and raw bitmap test"), 0, SIZE/2 - BORDER);
         dc.DrawText(_T("This is alpha and raw bitmap test"), 0, SIZE - 2*BORDER);
-        dc.DrawBitmap( m_bitmap, 0, 0, true /* use mask */ );
+        dc.DrawBitmap( m_alphaBitmap, 0, 0, true /* use mask */ );
+
+        dc.DrawText(_T("Raw bitmap access without alpha"), 0, SIZE+5);
+        dc.DrawBitmap( m_bitmap, 0, SIZE+5+dc.GetCharHeight());
     }
 
 private:
     wxBitmap m_bitmap;
+    wxBitmap m_alphaBitmap;
 
     DECLARE_EVENT_TABLE()
 };
