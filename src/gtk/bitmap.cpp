@@ -641,6 +641,7 @@ wxImage wxBitmap::ConvertToImage() const
     {
         GdkPixmap* pixmap = GetPixmap();
         GdkPixmap* pixmap_invert = NULL;
+#if 0
         if (GetDepth() == 1)
         {
             // mono bitmaps are inverted
@@ -651,6 +652,7 @@ wxImage wxBitmap::ConvertToImage() const
             g_object_unref(gc);
             pixmap = pixmap_invert;
         }
+#endif
         // create a pixbuf which shares data with the wxImage
         GdkPixbuf* pixbuf = gdk_pixbuf_new_from_data(
             data, GDK_COLORSPACE_RGB, false, 8, w, h, 3 * w, NULL, NULL);
