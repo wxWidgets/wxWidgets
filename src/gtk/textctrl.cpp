@@ -812,6 +812,24 @@ wxString wxTextCtrl::GetValue() const
     return tmp;
 }
 
+wxFontEncoding wxTextCtrl::GetTextEncoding() const
+{
+    // GTK+ uses UTF-8 internally, we need to convert to it but from which
+    // encoding?
+
+    // first check the default text style (we intentionally don't check the
+    // style for the current position as it doesn't make sense for SetValue())
+    const wxTextAttr& style = GetDefaultStyle();
+    wxFontEncoding enc = style.HasFont() ? style.GetFont().GetEncoding()
+                                         : wxFONTENCODING_SYSTEM;
+
+    // fall back to the controls font if no style
+    if ( enc == wxFONTENCODING_SYSTEM && m_hasFont )
+        enc = GetFont().GetEncoding();
+
+    return enc;
+}
+
 void wxTextCtrl::SetValue( const wxString &value )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
@@ -825,7 +843,7 @@ void wxTextCtrl::SetValue( const wxString &value )
 
     if ( IsMultiLine() )
     {
-        const wxCharBuffer buffer(wxGTK_CONV(value));
+        const wxCharBuffer buffer(wxGTK_CONV_ENC(value, GetTextEncoding()));
         if ( !buffer )
         {
             // what else can we do? at least don't crash...
@@ -860,10 +878,24 @@ void wxTextCtrl::WriteText( const wxString &text )
     if ( text.empty() )
         return;
 
-    const wxCharBuffer buffer(wxGTK_CONV(text));
+    // check if we have a specific style for the current position
+    wxFontEncoding enc = wxFONTENCODING_SYSTEM;
+    wxTextAttr style;
+    if ( GetStyle(GetInsertionPoint(), style) && style.HasFont() )
+    {
+        enc = style.GetFont().GetEncoding();
+    }
+
+    if ( enc == wxFONTENCODING_SYSTEM )
+        enc = GetTextEncoding();
+
+    const wxCharBuffer buffer(wxGTK_CONV_ENC(text, enc));
     if ( !buffer )
     {
-        // what else can we do? at least don't crash...
+        // we must log an error here as losing the text like this can be a
+        // serious problem (e.g. imagine the document edited by user being
+        // empty instead of containing the correct text)
+        wxLogWarning(_("Failed to insert text in the control."));
         return;
     }
 

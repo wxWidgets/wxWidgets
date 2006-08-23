@@ -191,6 +191,13 @@ private:
     // change the font for everything in this control
     void ChangeFontGlobally();
 
+    // get the encoding which is used in this control: this looks at our font
+    // and default style but not the current style (i.e. the style for the
+    // current position); returns wxFONTENCODING_SYSTEM if we have no specific
+    // encoding
+    wxFontEncoding GetTextEncoding() const;
+
+
     GtkWidget  *m_text;
 
     bool        m_modified:1;
