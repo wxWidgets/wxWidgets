@@ -411,18 +411,16 @@ int wxHtmlTag::ScanParam(const wxString& par,
 
 bool wxHtmlTag::GetParamAsColour(const wxString& par, wxColour *clr) const
 {
-    wxASSERT(clr);
+    wxCHECK_MSG( clr, false, _T("invalid colour argument") );
+
     wxString str = GetParam(par);
 
-    if (clr->Set(str))
-        return true;
-
-    if (!str.empty())
+    // handle colours defined in HTML 4.0 first:
+    if (str.length() > 1 && str[0] != _T('#'))
     {
-        // Handle colours defined in HTML 4.0:
-        #define HTML_COLOUR(name,r,g,b)                 \
+        #define HTML_COLOUR(name, r, g, b)              \
             if (str.IsSameAs(wxT(name), false))         \
-                { *clr = wxColour(r,g,b); return true; }
+                { clr->Set(r, g, b); return true; }
         HTML_COLOUR("black",   0x00,0x00,0x00)
         HTML_COLOUR("silver",  0xC0,0xC0,0xC0)
         HTML_COLOUR("gray",    0x80,0x80,0x80)
@@ -441,6 +439,13 @@ bool wxHtmlTag::GetParamAsColour(const wxString& par, wxColour *clr) const
         HTML_COLOUR("aqua",    0x00,0xFF,0xFF)
         #undef HTML_COLOUR
     }
+
+    // then try to parse #rrggbb representations or set from other well
+    // known names (note that this doesn't strictly conform to HTML spec,
+    // but it doesn't do real harm -- but it *must* be done after the standard
+    // colors are handled above):
+    if (clr->Set(str))
+        return true;
 
     return false;
 }
