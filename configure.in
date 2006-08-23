@@ -6607,8 +6607,10 @@ if test "$wxUSE_TOOLBAR" = "yes"; then
     AC_DEFINE(wxUSE_TOOLBAR)
     USES_CONTROLS=1
 
-    wxUSE_TOOLBAR_NATIVE="yes"
-    if test "$wxUSE_TOOLBAR_NATIVE" = "yes"; then
+    if test "$wxUSE_UNIVERSAL" = "yes"; then
+        wxUSE_TOOLBAR_NATIVE="no"
+    else
+        wxUSE_TOOLBAR_NATIVE="yes"
         AC_DEFINE(wxUSE_TOOLBAR_NATIVE)
     fi
 
