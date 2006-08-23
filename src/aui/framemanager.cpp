@@ -2882,7 +2882,7 @@ void wxFrameManager::OnFloatingPaneMoving(wxWindow* wnd, wxDirection dir)
 
     wxPoint pt = ::wxGetMousePosition();
 
-#if 1
+#if 0
     // Adapt pt to direction    
     if (dir == wxNORTH)
     {
@@ -2983,7 +2983,7 @@ void wxFrameManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
 
     wxPoint pt = ::wxGetMousePosition();
 
-#if 1
+#if 0
     // Adapt pt to direction    
     if (dir == wxNORTH)
     {
