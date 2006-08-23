@@ -317,6 +317,18 @@ the ``type`` parameter.", "");
 // use the Abstract Pixel API to be able to set RGB and A bytes directly into
 // the wxBitmap's pixel buffer.
 
+%{
+// See http://tinyurl.com/e5adr for what premultiplying alpha means.  It
+// appears to me that the other platforms are already doing it, so I'll just
+// automatically do it for wxMSW here.
+#ifdef __WXMSW__
+#define wxPy_premultiply(p, a)   ((p) * (a) / 256)
+#else
+#define wxPy_premultiply(p, a)   (p)
+#endif
+%}
+
+
 %newobject _BitmapFromBufferAlpha;
 %newobject _BitmapFromBuffer;
 %inline %{
@@ -348,10 +360,11 @@ the ``type`` parameter.", "");
         for (int y=0; y<height; y++) {
             wxAlphaPixelData::Iterator rowStart = p;
             for (int x=0; x<width; x++) {
-                p.Red()   = *(data++);
-                p.Green() = *(data++);
-                p.Blue()  = *(data++);
-                p.Alpha() = *(alpha++);
+                byte a = *(alpha++);
+                p.Red()   = wxPy_premultiply(*(data++), a);
+                p.Green() = wxPy_premultiply(*(data++), a);
+                p.Blue()  = wxPy_premultiply(*(data++), a);
+                p.Alpha() = a;
                 ++p; 
             }
             p = rowStart;
@@ -402,7 +415,9 @@ def BitmapFromBuffer(width, height, dataBuffer, alphaBuffer=None):
     dataBuffer object is expected to contain a series of RGB bytes and be
     width*height*3 bytes long.  A buffer object can optionally be supplied for
     the image's alpha channel data, and it is expected to be width*height
-    bytes long.
+    bytes long.  On Windows the RGB values are 'premultiplied' by the alpha
+    values.  (The other platforms appear to already be premultiplying the
+    alpha.)
 
     Unlike `wx.ImageFromBuffer` the bitmap created with this function does not
     share the memory buffer with the buffer object.  This is because the
@@ -449,10 +464,11 @@ def BitmapFromBuffer(width, height, dataBuffer, alphaBuffer=None):
         for (int y=0; y<height; y++) {
             wxAlphaPixelData::Iterator rowStart = p;
             for (int x=0; x<width; x++) {
-                p.Red()   = *(data++);
-                p.Green() = *(data++);
-                p.Blue()  = *(data++);
-                p.Alpha() = *(data++);
+                byte a = data[3];
+                p.Red()   = wxPy_premultiply(*(data++), a);
+                p.Green() = wxPy_premultiply(*(data++), a);
+                p.Blue()  = wxPy_premultiply(*(data++), a);
+                p.Alpha() = a; data++;
                 ++p; 
             }
             p = rowStart;
@@ -469,7 +485,9 @@ def BitmapFromBufferRGBA(width, height, dataBuffer):
     parameter must be a Python object that implements the buffer interface, or
     is convertable to a buffer object, such as a string, array, etc.  The
     dataBuffer object is expected to contain a series of RGBA bytes (red,
-    gree, blue and alpha) and be width*height*4 bytes long.  
+    green, blue and alpha) and be width*height*4 bytes long.  On Windows the
+    RGB values are 'premultiplied' by the alpha values.  (The other platforms
+    appear to already be premultiplying the alpha.)
 
     Unlike `wx.ImageFromBuffer` the bitmap created with this function does not
     share the memory buffer with the buffer object.  This is because the
