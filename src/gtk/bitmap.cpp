@@ -299,7 +299,7 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
     {
         bmp.SetDepth(GetDepth());
         bmp.SetPixbuf(gdk_pixbuf_new(GDK_COLORSPACE_RGB,
-                                     gdk_pixbuf_get_has_alpha(GetPixbuf()),
+                                     true, //gdk_pixbuf_get_has_alpha(GetPixbuf()),
                                      8, width, height));
         gdk_pixbuf_scale(GetPixbuf(), bmp.GetPixbuf(),
                          0, 0, width, height,
@@ -566,7 +566,7 @@ bool wxBitmap::CreateFromImageAsPixbuf(const wxImage& image)
     int height = image.GetHeight();
 
     GdkPixbuf *pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB,
-                                       image.HasAlpha(),
+                                       true, //image.HasAlpha(),
                                        8 /* bits per sample */,
                                        width, height);
     if (!pixbuf)
@@ -789,7 +789,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     if (HasPixbuf())
     {
         GdkPixbuf *pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB,
-                                           gdk_pixbuf_get_has_alpha(GetPixbuf()),
+                                           true, //gdk_pixbuf_get_has_alpha(GetPixbuf()),
                                            8, rect.width, rect.height);
         ret.SetPixbuf(pixbuf);
         ret.SetDepth(M_BMPDATA->m_bpp);
@@ -939,8 +939,10 @@ GdkPixbuf *wxBitmap::GetPixbuf() const
         int width = GetWidth();
         int height = GetHeight();
 
+        // always create the alpha channel so raw bitmap access will work
+        // correctly
         GdkPixbuf *pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB,
-                                           GetMask() != NULL,
+                                           true, // GetMask() != NULL,
                                            8, width, height);
         M_BMPDATA->m_pixbuf =
             gdk_pixbuf_get_from_drawable(pixbuf, M_BMPDATA->m_pixmap, NULL,
@@ -1021,11 +1023,14 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     if (!pixbuf)
         return NULL;
 
+    if (!gdk_pixbuf_get_has_alpha( pixbuf ))
+        return NULL;
+
 #if 0
     if (gdk_pixbuf_get_has_alpha( pixbuf ))
-        wxPrintf( wxT("Has alpha\n") );
+        wxPrintf( wxT("Has alpha, %d channels\n"), gdk_pixbuf_get_n_channels(pixbuf) );
     else
-        wxPrintf( wxT("No alpha.\n") );
+        wxPrintf( wxT("No alpha, %d channels.\n"), gdk_pixbuf_get_n_channels(pixbuf) );
 #endif
 
     data.m_height = gdk_pixbuf_get_height( pixbuf );
