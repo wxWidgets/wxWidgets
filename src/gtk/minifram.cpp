@@ -13,6 +13,7 @@
 #if wxUSE_MINIFRAME
 
 #include "wx/minifram.h"
+#include "wx/settings.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dcscreen.h"
@@ -37,6 +38,28 @@ extern GtkWidget  *wxGetRootWindow();
 //-----------------------------------------------------------------------------
 // "expose_event" of m_mainWidget
 //-----------------------------------------------------------------------------
+
+// StepColour() it a utility function that simply darkens
+// or lightens a color, based on the specified percentage
+static wxColor StepColour(const wxColor& c, int percent)
+{
+    int r = c.Red(), g = c.Green(), b = c.Blue();
+    return wxColour((unsigned char)wxMin((r*percent)/100,255),
+                    (unsigned char)wxMin((g*percent)/100,255),
+                    (unsigned char)wxMin((b*percent)/100,255));
+}
+
+static wxColor LightContrastColour(const wxColour& c)
+{
+    int amount = 120;
+
+    // if the color is especially dark, then
+    // make the contrast even lighter
+    if (c.Red() < 128 && c.Green() < 128 && c.Blue() < 128)
+        amount = 160;
+
+    return StepColour(c, amount);
+}
 
 extern "C" {
 static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxMiniFrame *win )
@@ -64,20 +87,17 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
          (style & wxTINY_CAPTION_VERT)))
     {
         wxClientDC dc(win);
+        // Hack alert
+        dc.m_window = pizza->bin_window;
+        
         dc.SetFont( *wxSMALL_FONT );
         int height = dc.GetCharHeight();
 
-        GdkGC *gc = gdk_gc_new( pizza->bin_window );
-        gdk_gc_set_foreground( gc, &widget->style->bg[GTK_STATE_SELECTED] );
-        gdk_draw_rectangle( pizza->bin_window, gc, TRUE,
-                            3,
-                            3,
-                            win->m_width - 7,
-                            height+1 );
-        g_object_unref (gc);
+        wxBrush brush( LightContrastColour( wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT) ) );
+        dc.SetBrush( brush );
+        dc.SetPen( *wxTRANSPARENT_PEN );
+        dc.DrawRectangle( 3, 3, win->m_width - 7, height-2 );
 
-        // Hack alert
-        dc.m_window = pizza->bin_window;
         dc.SetTextForeground( *wxWHITE );
         dc.DrawText( win->GetTitle(), 6, 3 );
 
@@ -252,7 +272,10 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     if ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT))
         m_miniTitle = 16;
 
-    m_miniEdge = 3;
+    if (style & wxRESIZE_BORDER)
+        m_miniEdge = 5;
+    else
+        m_miniEdge = 3;
     m_isDragging = false;
     m_oldX = -1;
     m_oldY = -1;
