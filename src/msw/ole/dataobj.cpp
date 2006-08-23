@@ -1163,7 +1163,7 @@ public:
 
 
 
-wxURLDataObject::wxURLDataObject()
+wxURLDataObject::wxURLDataObject(const wxString& url)
 {
     // we support CF_TEXT and CFSTR_SHELLURL formats which are basicly the same
     // but it seems that some browsers only provide one of them so we have to
@@ -1173,6 +1173,9 @@ wxURLDataObject::wxURLDataObject()
 
     // we don't have any data yet
     m_dataObjectLast = NULL;
+
+    if ( !url.empty() )
+        SetURL(url);
 }
 
 bool wxURLDataObject::SetData(const wxDataFormat& format,

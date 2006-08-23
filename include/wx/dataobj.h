@@ -525,6 +525,11 @@ private:
     class WXDLLEXPORT wxURLDataObject : public wxTextDataObject
     {
     public:
+        wxURLDataObject(const wxString& url = wxEmptyString)
+            : wxTextDataObject(url)
+        {
+        }
+
         wxString GetURL() const { return GetText(); }
         void SetURL(const wxString& url) { SetText(url); }
     };
