@@ -50,6 +50,7 @@ _treeList = [
         'AnalogClock',
         'AUI_DockingWindowMgr',
         'AUI_Notebook',
+        'BitmapFromBuffer',
         'CheckListCtrlMixin',
         'ComboTreeBox',
         'Pickers',
@@ -230,6 +231,7 @@ _treeList = [
     # Images
     ('Using Images', [
         'ArtProvider',
+        'BitmapFromBuffer',
         'Cursor',
         'DragImage',
         'GIFAnimationCtrl',
