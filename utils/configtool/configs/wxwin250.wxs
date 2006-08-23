@@ -2177,7 +2177,7 @@ Default: 1. Recommended setting: 1 (there is no advantage in using the generic o
 
 If wxUSE_TOOLBAR is 0, don't compile any toolbar
 classes at all. Otherwise, use the native toolbar class unless
-wxUSE_TOOLBAR_NATIVE is 0. Additionally, the generic toolbar class which supports some features which might not be supported by the native wxToolBar class may be compiled in if wxUSE_TOOLBAR_SIMPLE is 1.&lt;P&gt;
+wxUSE_TOOLBAR_NATIVE is 0.&lt;P&gt;
 
 Default: 1. Recommended setting: 1</description>
                 <default-state>1</default-state>
@@ -2205,25 +2205,6 @@ Default: 1. Recommended setting: 1</description>
                     <exclusivity></exclusivity>
                     <context></context>
                     <configure-command>--enable-tbarnative</configure-command>
-                    <help-topic>wxToolBar</help-topic>
-                    <notes></notes>
-                </setting>
-                <setting type="bool-check">
-                    <active>1</active>
-                    <enabled>0</enabled>
-                    <name>wxUSE_TOOLBAR_SIMPLE</name>
-                    <description>Compile wxToolBarSimple, a simple generic toolbar implementation, in addition to any others that are enabled.&lt;P&gt;
-
-This must be enabled if wxUSE_TOOLBAR_NATIVE is disabled.</description>
-                    <default-state>1</default-state>
-                    <requires></requires>
-                    <precludes></precludes>
-                    <enabled-if></enabled-if>
-                    <enabled-if-not>wxUSE_TOOLBAR_NATIVE</enabled-if-not>
-                    <indeterminate-if></indeterminate-if>
-                    <exclusivity></exclusivity>
-                    <context></context>
-                    <configure-command>--enable-tbarsmpl</configure-command>
                     <help-topic>wxToolBar</help-topic>
                     <notes></notes>
                 </setting>

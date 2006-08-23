@@ -550,7 +550,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_TOGGLEBTN=no
   DEFAULT_wxUSE_TOOLBAR=no
   DEFAULT_wxUSE_TOOLBAR_NATIVE=no
-  DEFAULT_wxUSE_TOOLBAR_SIMPLE=no
   DEFAULT_wxUSE_TREEBOOK=no
   DEFAULT_wxUSE_TOOLBOOK=no
   DEFAULT_wxUSE_TREECTRL=no
@@ -763,7 +762,6 @@ else
   DEFAULT_wxUSE_TOGGLEBTN=yes
   DEFAULT_wxUSE_TOOLBAR=yes
   DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
-  DEFAULT_wxUSE_TOOLBAR_SIMPLE=yes
   DEFAULT_wxUSE_TREEBOOK=yes
   DEFAULT_wxUSE_TOOLBOOK=yes
   DEFAULT_wxUSE_TREECTRL=yes
@@ -1080,7 +1078,6 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_TOGGLEBTN=yes
   DEFAULT_wxUSE_TOOLBAR=yes
   DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
-  DEFAULT_wxUSE_TOOLBAR_SIMPLE=yes
   DEFAULT_wxUSE_TOOLTIPS=yes
   DEFAULT_wxUSE_TREEBOOK=yes
   DEFAULT_wxUSE_TOOLBOOK=yes
@@ -1130,7 +1127,6 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_TOGGLEBTN=no
   DEFAULT_wxUSE_TOOLBAR=no
   DEFAULT_wxUSE_TOOLBAR_NATIVE=no
-  DEFAULT_wxUSE_TOOLBAR_SIMPLE=no
   DEFAULT_wxUSE_TOOLTIPS=no
   DEFAULT_wxUSE_TREEBOOK=no
   DEFAULT_wxUSE_TOOLBOOK=no
@@ -1184,7 +1180,6 @@ WX_ARG_ENABLE(textctrl,    [  --enable-textctrl       use wxTextCtrl class], wxU
 WX_ARG_ENABLE(togglebtn,   [  --enable-togglebtn      use wxToggleButton class], wxUSE_TOGGLEBTN)
 WX_ARG_ENABLE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUSE_TOOLBAR)
 WX_ARG_ENABLE(tbarnative,  [  --enable-tbarnative     use native wxToolBar class], wxUSE_TOOLBAR_NATIVE)
-WX_ARG_ENABLE(tbarsmpl,    [  --enable-tbarsmpl       use wxToolBarSimple class], wxUSE_TOOLBAR_SIMPLE)
 WX_ARG_ENABLE(treebook,    [  --enable-treebook       use wxTreebook class], wxUSE_TREEBOOK)
 WX_ARG_ENABLE(toolbook,    [  --enable-toolbook       use wxToolbook class], wxUSE_TOOLBOOK)
 WX_ARG_ENABLE(treectrl,    [  --enable-treectrl       use wxTreeCtrl class], wxUSE_TREECTRL)
@@ -6608,24 +6603,13 @@ if test "$wxUSE_TOGGLEBTN" = "yes"; then
     fi
 fi
 
-if test "$wxUSE_TOOLBAR_SIMPLE" = "yes"; then
-    AC_DEFINE(wxUSE_TOOLBAR_SIMPLE)
-    wxUSE_TOOLBAR="yes"
-    USES_CONTROLS=1
-fi
-
 if test "$wxUSE_TOOLBAR" = "yes"; then
     AC_DEFINE(wxUSE_TOOLBAR)
     USES_CONTROLS=1
 
-    dnl if wxUSE_TOOLBAR and !wxUSE_TOOLBAR_SIMPLE => wxUSE_TOOLBAR_NATIVE
-    if test "$wxUSE_TOOLBAR_SIMPLE" != "yes"; then
-        wxUSE_TOOLBAR_NATIVE="yes"
-    fi
-
+    wxUSE_TOOLBAR_NATIVE="yes"
     if test "$wxUSE_TOOLBAR_NATIVE" = "yes"; then
         AC_DEFINE(wxUSE_TOOLBAR_NATIVE)
-        USES_CONTROLS=1
     fi
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS toolbar"

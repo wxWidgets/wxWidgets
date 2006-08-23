@@ -500,17 +500,13 @@
 
 // wxToolBar related settings: if wxUSE_TOOLBAR is 0, don't compile any toolbar
 // classes at all. Otherwise, use the native toolbar class unless
-// wxUSE_TOOLBAR_NATIVE is 0. Additionally, the generic toolbar class which
-// supports some features which might not be supported by the native wxToolBar
-// class may be compiled in if wxUSE_TOOLBAR_SIMPLE is 1.
+// wxUSE_TOOLBAR_NATIVE is 0.
 //
 // Default is 1 for all settings.
 //
-// Recommended setting: 1 for wxUSE_TOOLBAR and wxUSE_TOOLBAR_NATIVE and 0 for
-// wxUSE_TOOLBAR_SIMPLE (the default is 1 mainly for backwards compatibility).
+// Recommended setting: 1 for wxUSE_TOOLBAR and wxUSE_TOOLBAR_NATIVE.
 #define wxUSE_TOOLBAR 0
 #define wxUSE_TOOLBAR_NATIVE 0
-#define wxUSE_TOOLBAR_SIMPLE 0
 
 // wxNotebook is a control with several "tabs" located on one of its sides. It
 // may be used ot logically organise the data presented to the user instead of

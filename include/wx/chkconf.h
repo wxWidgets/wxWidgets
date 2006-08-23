@@ -1623,15 +1623,6 @@
 #            define wxUSE_TOOLBAR_NATIVE 0
 #        endif
 #   endif
-
-#   if wxUSE_TOOLBAR_SIMPLE
-#        ifdef wxABORT_ON_CONFIG_ERROR
-#            error "wxUSE_TOOLBAR is set to 0 but wxUSE_TOOLBAR_SIMPLE is set to 1"
-#        else
-#            undef wxUSE_TOOLBAR_SIMPLE
-#            define wxUSE_TOOLBAR_SIMPLE 0
-#        endif
-#   endif
 #endif
 
 #if !wxUSE_IMAGLIST

@@ -33,9 +33,6 @@
 #include "wx/image.h"
 #include "wx/filedlg.h"
 
-// define this to 1 to use wxToolBarSimple instead of the native one
-#define USE_GENERIC_TBAR 0
-
 // define this to use XPMs everywhere (by default, BMPs are used under Win)
 // BMPs use less space, but aren't compiled into the executable on other platforms
 #ifdef __WXMSW__
@@ -43,15 +40,6 @@
 #else
     #define USE_XPM_BITMAPS 1
 #endif
-
-#if USE_GENERIC_TBAR
-    #if !wxUSE_TOOLBAR_SIMPLE
-        #error wxToolBarSimple is not compiled in, set wxUSE_TOOLBAR_SIMPLE \
-               to 1 in setup.h and recompile the library.
-    #else
-        #include "wx/tbarsmpl.h"
-    #endif
-#endif // USE_GENERIC_TBAR
 
 #if USE_XPM_BITMAPS && defined(__WXMSW__) && !wxUSE_XPM_IN_MSW
     #error You need to enable XPM support to use XPM bitmaps with toolbar!
@@ -135,12 +123,6 @@ public:
     void OnUpdateToggleHorzText(wxUpdateUIEvent& event);
     void OnUpdateToggleRadioBtn(wxUpdateUIEvent& event)
         { event.Enable( m_tbar != NULL ); }
-
-#if USE_GENERIC_TBAR
-    virtual wxToolBar *OnCreateToolBar(long style,
-                                       wxWindowID id,
-                                       const wxString& name );
-#endif // USE_GENERIC_TBAR
 
 private:
     void DoEnablePrint();
@@ -376,7 +358,7 @@ void MyFrame::RecreateToolbar()
     toolBar->AddTool(wxID_OPEN, _T("Open"), toolBarBitmaps[Tool_open], _T("Open file"));
 
     // the generic toolbar doesn't really support this
-#if (wxUSE_TOOLBAR_NATIVE && !USE_GENERIC_TBAR) && !defined(__WXX11__) || defined(__WXUNIVERSAL__)
+#if wxUSE_TOOLBAR_NATIVE && !defined(__WXX11__) || defined(__WXUNIVERSAL__)
     // adding a combo to a vertical toolbar is not very smart
     if ( m_horzToolbar )
     {
@@ -550,19 +532,6 @@ MyFrame::MyFrame(wxFrame* parent,
 
     m_textWindow = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(0, 0), wxDefaultSize, wxTE_MULTILINE);
 }
-
-#if USE_GENERIC_TBAR
-
-wxToolBar* MyFrame::OnCreateToolBar(long style,
-                                    wxWindowID id,
-                                    const wxString& name)
-{
-    return (wxToolBar *)new wxToolBarSimple(this, id,
-                                            wxDefaultPosition, wxDefaultSize,
-                                            style, name);
-}
-
-#endif // USE_GENERIC_TBAR
 
 void MyFrame::LayoutChildren()
 {
