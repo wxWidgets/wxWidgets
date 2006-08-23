@@ -49,9 +49,8 @@ wxFloatingPane::wxFloatingPane(wxWindow* parent,
 {
     m_owner_mgr = owner_mgr;
     m_moving = false;
-    m_last_rect = wxRect();
     m_mgr.SetManagedWindow(this);
-    // SetExtraStyle(wxWS_EX_PROCESS_IDLE);
+    SetExtraStyle(wxWS_EX_PROCESS_IDLE);
 }
 
 wxFloatingPane::~wxFloatingPane()
@@ -127,6 +126,9 @@ void wxFloatingPane::OnMoveEvent(wxMoveEvent& event)
 {
     wxRect win_rect = GetRect();
 
+    if (win_rect == m_last_rect)
+        return;
+
     // skip the first move event
     if (m_last_rect.IsEmpty())
     {
@@ -134,10 +136,13 @@ void wxFloatingPane::OnMoveEvent(wxMoveEvent& event)
         return;
     }
 
-    // skip if moving fast
-    if ((abs(win_rect.x - m_last_rect.x) > 1) ||
-        (abs(win_rect.y - m_last_rect.y) > 1))
+    // skip if moving too fast to avoid massive redraws and 
+    // jumping hint windows
+    if ((abs(win_rect.x - m_last_rect.x) > 3) ||
+        (abs(win_rect.y - m_last_rect.y) > 3))
     {
+        m_last3_rect = m_last2_rect;
+        m_last2_rect = m_last_rect;
         m_last_rect = win_rect;
         return;
     }
@@ -145,10 +150,34 @@ void wxFloatingPane::OnMoveEvent(wxMoveEvent& event)
     // prevent frame redocking during resize
     if (m_last_rect.GetSize() != win_rect.GetSize())
     {
+        m_last3_rect = m_last2_rect;
+        m_last2_rect = m_last_rect;
         m_last_rect = win_rect;
         return;
     }
 
+    wxDirection dir = wxALL;
+    
+    int horiz_dist = abs(win_rect.x - m_last3_rect.x);
+    int vert_dist = abs(win_rect.y - m_last3_rect.y);
+    
+    if (vert_dist >= horiz_dist)
+    {
+        if (win_rect.y < m_last3_rect.y)
+            dir = wxNORTH;
+        else
+            dir = wxSOUTH;
+    }
+    else
+    {
+        if (win_rect.x < m_last3_rect.x)
+            dir = wxWEST;
+        else
+            dir = wxEAST;
+    }
+    
+    m_last3_rect = m_last2_rect;
+    m_last2_rect = m_last_rect;
     m_last_rect = win_rect;
 
     if (!isMouseDown())
@@ -160,7 +189,10 @@ void wxFloatingPane::OnMoveEvent(wxMoveEvent& event)
         m_moving = true;
     }
 
-    OnMoving(event.GetRect());
+    if (m_last3_rect.IsEmpty())
+        return;
+        
+    OnMoving(event.GetRect(), dir );
 }
 
 void wxFloatingPane::OnIdle(wxIdleEvent& event)
@@ -185,16 +217,17 @@ void wxFloatingPane::OnMoveStart()
     m_owner_mgr->OnFloatingPaneMoveStart(m_pane_window);
 }
 
-void wxFloatingPane::OnMoving(const wxRect& WXUNUSED(window_rect))
+void wxFloatingPane::OnMoving(const wxRect& WXUNUSED(window_rect), wxDirection dir)
 {
     // notify the owner manager that the pane is moving
-    m_owner_mgr->OnFloatingPaneMoving(m_pane_window);
+    m_owner_mgr->OnFloatingPaneMoving(m_pane_window, dir);
+    m_lastDirection = dir;
 }
 
 void wxFloatingPane::OnMoveFinished()
 {
     // notify the owner manager that the pane has finished moving
-    m_owner_mgr->OnFloatingPaneMoved(m_pane_window);
+    m_owner_mgr->OnFloatingPaneMoved(m_pane_window, m_lastDirection);
 }
 
 void wxFloatingPane::OnActivate(wxActivateEvent& event)

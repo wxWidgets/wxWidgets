@@ -45,7 +45,7 @@ private:
     void OnMoveEvent(wxMoveEvent& event);
     void OnIdle(wxIdleEvent& event);
     void OnMoveStart();
-    void OnMoving(const wxRect& window_rect);
+    void OnMoving(const wxRect& window_rect, wxDirection dir);
     void OnMoveFinished();
     void OnActivate(wxActivateEvent& event);
     static bool isMouseDown();
@@ -53,7 +53,10 @@ private:
     wxWindow* m_pane_window;    // pane window being managed
     bool m_moving;
     wxRect m_last_rect;
+    wxRect m_last2_rect;
+    wxRect m_last3_rect;
     wxSize m_last_size;
+    wxDirection m_lastDirection;
 
     wxFrameManager* m_owner_mgr;
     wxFrameManager m_mgr;

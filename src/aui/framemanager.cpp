@@ -2874,13 +2874,48 @@ void wxFrameManager::OnFloatingPaneMoveStart(wxWindow* wnd)
 #endif
 }
 
-void wxFrameManager::OnFloatingPaneMoving(wxWindow* wnd)
+void wxFrameManager::OnFloatingPaneMoving(wxWindow* wnd, wxDirection dir)
 {
     // try to find the pane
     wxPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
     wxPoint pt = ::wxGetMousePosition();
+
+#if 1
+    // Adapt pt to direction    
+    if (dir == wxNORTH)
+    {
+        // move to pane's upper border
+        wxPoint pos( 0,0 );
+        pos = wnd->ClientToScreen( pos );
+        pt.y = pos.y;
+        // and some more pixels for the title bar
+        pt.y -= 5;
+    } else
+    if (dir == wxWEST)
+    {
+        // move to pane's left border
+        wxPoint pos( 0,0 );
+        pos = wnd->ClientToScreen( pos );
+        pt.x = pos.x;
+    } else
+    if (dir == wxEAST)
+    {
+        // move to pane's right border
+        wxPoint pos( wnd->GetSize().x, 0 );
+        pos = wnd->ClientToScreen( pos );
+        pt.x = pos.x;
+    } else
+    if (dir == wxSOUTH)
+    {
+        // move to pane's bottom border
+        wxPoint pos( 0, wnd->GetSize().y );
+        pos = wnd->ClientToScreen( pos );
+        pt.y = pos.y;
+    }
+#endif
+
     wxPoint client_pt = m_frame->ScreenToClient(pt);
 
     // calculate the offset from the upper left-hand corner
@@ -2940,13 +2975,48 @@ void wxFrameManager::OnFloatingPaneMoving(wxWindow* wnd)
     m_frame->Update();
 }
 
-void wxFrameManager::OnFloatingPaneMoved(wxWindow* wnd)
+void wxFrameManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
 {
     // try to find the pane
     wxPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
     wxPoint pt = ::wxGetMousePosition();
+
+#if 1
+    // Adapt pt to direction    
+    if (dir == wxNORTH)
+    {
+        // move to pane's upper border
+        wxPoint pos( 0,0 );
+        pos = wnd->ClientToScreen( pos );
+        pt.y = pos.y;
+        // and some more pixels for the title bar
+        pt.y -= 10;
+    } else
+    if (dir == wxWEST)
+    {
+        // move to pane's left border
+        wxPoint pos( 0,0 );
+        pos = wnd->ClientToScreen( pos );
+        pt.x = pos.x;
+    } else
+    if (dir == wxEAST)
+    {
+        // move to pane's right border
+        wxPoint pos( wnd->GetSize().x, 0 );
+        pos = wnd->ClientToScreen( pos );
+        pt.x = pos.x;
+    } else
+    if (dir == wxSOUTH)
+    {
+        // move to pane's bottom border
+        wxPoint pos( 0, wnd->GetSize().y );
+        pos = wnd->ClientToScreen( pos );
+        pt.y = pos.y;
+    }
+#endif
+
     wxPoint client_pt = m_frame->ScreenToClient(pt);
 
     // calculate the offset from the upper left-hand corner

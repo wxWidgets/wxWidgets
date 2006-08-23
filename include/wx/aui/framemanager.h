@@ -492,8 +492,8 @@ protected:
     wxDockUIPart* GetPanePart(wxWindow* pane);
     int GetDockPixelOffset(wxPaneInfo& test);
     void OnFloatingPaneMoveStart(wxWindow* window);
-    void OnFloatingPaneMoving(wxWindow* window);
-    void OnFloatingPaneMoved(wxWindow* window);
+    void OnFloatingPaneMoving(wxWindow* window, wxDirection dir );
+    void OnFloatingPaneMoved(wxWindow* window, wxDirection dir);
     void OnFloatingPaneActivated(wxWindow* window);
     void OnFloatingPaneClosed(wxWindow* window, wxCloseEvent& evt);
     void OnFloatingPaneResized(wxWindow* window, const wxSize& size);
