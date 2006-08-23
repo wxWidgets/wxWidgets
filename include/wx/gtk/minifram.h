@@ -15,6 +15,7 @@
 #if wxUSE_MINIFRAME
 
 #include "wx/object.h"
+#include "wx/bitmap.h"
 #include "wx/frame.h"
 
 //-----------------------------------------------------------------------------
@@ -58,6 +59,7 @@ public:
     bool   m_isDragging;
     int    m_oldX,m_oldY;
     int    m_diffX,m_diffY;
+    wxBitmap  m_closeButton;
 };
 
 #endif

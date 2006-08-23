@@ -39,7 +39,7 @@ extern GtkWidget  *wxGetRootWindow();
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxFrame *win )
+static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxMiniFrame *win )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
@@ -56,10 +56,12 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
                       0, 0,
                       win->m_width, win->m_height);
 
+    int style = win->GetWindowStyle();
+    
     if (!win->GetTitle().empty() &&
-        ((win->GetWindowStyle() & wxCAPTION) ||
-         (win->GetWindowStyle() & wxTINY_CAPTION_HORIZ) ||
-         (win->GetWindowStyle() & wxTINY_CAPTION_VERT)))
+        ((style & wxCAPTION) ||
+         (style & wxTINY_CAPTION_HORIZ) ||
+         (style & wxTINY_CAPTION_VERT)))
     {
         wxClientDC dc(win);
         dc.SetFont( *wxSMALL_FONT );
@@ -78,6 +80,9 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
         dc.m_window = pizza->bin_window;
         dc.SetTextForeground( *wxWHITE );
         dc.DrawText( win->GetTitle(), 6, 3 );
+
+        if (style & wxCLOSE_BOX)
+            dc.DrawBitmap( win->m_closeButton, win->m_width-19, 3, true );
     }
 }
 }
@@ -100,11 +105,26 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
     GtkPizza *pizza = GTK_PIZZA(widget);
     if (gdk_event->window != pizza->bin_window) return TRUE;
 
+    int y = (int)gdk_event->y;
+    int x = (int)gdk_event->x;
+
+    int style = win->GetWindowStyle();
+    if ((style & wxCLOSE_BOX) &&
+        ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))
+    {
+        if ((y > 3) && (y < 19) && (x > win->m_width-19) && (x < win->m_width-3))
+        {
+            win->Close();
+            return TRUE;
+        }
+    }
+        
     wxClientDC dc(win);
     dc.SetFont( *wxSMALL_FONT );
     int height = dc.GetCharHeight() + 1;
 
-    if (gdk_event->y > height) return TRUE;
+
+    if (y > height) return TRUE;
 
     gdk_window_raise( win->m_widget->window );
 
@@ -120,8 +140,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
                       (GdkCursor *) NULL,
                       (unsigned int) GDK_CURRENT_TIME );
 
-    win->m_diffX = (int)gdk_event->x;
-    win->m_diffY = (int)gdk_event->y;
+    win->m_diffX = x;
+    win->m_diffY = y;
     win->m_oldX = 0;
     win->m_oldY = 0;
 
@@ -212,34 +232,14 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
 }
 
 //-----------------------------------------------------------------------------
-// "clicked" of X system button
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxMiniFrame *mf )
-{
-    if (g_isIdle) wxapp_install_idle_handler();
-
-    mf->Close();
-}
-}
-
-//-----------------------------------------------------------------------------
 // wxMiniFrame
 //-----------------------------------------------------------------------------
 
-static const char *cross_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"5 5 2 1",
-"# c Gray0",
-"  c None",
-/* pixels */
-"#   #",
-" # # ",
-"  #  ",
-" # # ",
-"#   #",
-};
+static unsigned char close_bits[]={
+    0xff, 0xff, 0xff, 0xff, 0x07, 0xf0, 0xfb, 0xef, 0xdb, 0xed, 0x8b, 0xe8,
+    0x1b, 0xec, 0x3b, 0xee, 0x1b, 0xec, 0x8b, 0xe8, 0xdb, 0xed, 0xfb, 0xef,
+    0x07, 0xf0, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+
 
 IMPLEMENT_DYNAMIC_CLASS(wxMiniFrame,wxFrame)
 
@@ -250,7 +250,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     style = style | wxCAPTION;
 
     if ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT))
-        m_miniTitle = 13;
+        m_miniTitle = 16;
 
     m_miniEdge = 3;
     m_isDragging = false;
@@ -266,39 +266,14 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
         gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );
     }
 
-    if ((style & wxSYSTEM_MENU) &&
+    if ((style & wxCLOSE_BOX) &&
         ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))
     {
-        GdkBitmap *mask = (GdkBitmap*) NULL;
-        GdkPixmap *pixmap = gdk_pixmap_create_from_xpm_d
-                            (
-                                wxGetRootWindow()->window,
-                                &mask,
-                                NULL,
-                                (char **)cross_xpm
-                            );
-
-        GtkWidget *pw = gtk_pixmap_new( pixmap, mask );
-        g_object_unref (mask);
-        g_object_unref (pixmap);
-        gtk_widget_show( pw );
-
-        GtkWidget *close_button = gtk_button_new();
-#ifdef __WXGTK24__
-        if (!gtk_check_version(2,4,0))
-            gtk_button_set_focus_on_click( GTK_BUTTON(close_button), FALSE );
-#endif
-        gtk_container_add( GTK_CONTAINER(close_button), pw );
-
-        gtk_pizza_put( GTK_PIZZA(m_mainWidget),
-                         close_button,
-                         size.x-16, 4, 11, 11 );
-
-        gtk_widget_show( close_button );
-
-        g_signal_connect (close_button, "clicked",
-                          G_CALLBACK (gtk_button_clicked_callback),
-                          this);
+        wxImage img = wxBitmap((const char*)close_bits, 16, 16).ConvertToImage();
+        img.Replace(255,255,255,123,123,123);
+        img.Replace(0,0,0,255,255,255);
+        img.SetMaskColour(123,123,123);
+        m_closeButton = wxBitmap( img );
     }
 
     /* these are called when the borders are drawn */
