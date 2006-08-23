@@ -35,28 +35,6 @@ extern bool        g_blockEventsOnScroll;
 extern GtkWidget  *wxGetRootWindow();
 
 //-----------------------------------------------------------------------------
-// local functions
-//-----------------------------------------------------------------------------
-
-/* draw XOR rectangle when moving mine frame around */
-
-static void DrawFrame( GtkWidget *widget, int x, int y, int w, int h )
-{
-    int org_x = 0;
-    int org_y = 0;
-    gdk_window_get_origin( widget->window, &org_x, &org_y );
-    x += org_x;
-    y += org_y;
-
-    GdkGC *gc = gdk_gc_new( gdk_get_default_root_window() );
-    gdk_gc_set_subwindow( gc, GDK_INCLUDE_INFERIORS );
-    gdk_gc_set_function( gc, GDK_INVERT );
-
-    gdk_draw_rectangle( gdk_get_default_root_window(), gc, FALSE, x, y, w, h );
-    g_object_unref (gc);
-}
-
-//-----------------------------------------------------------------------------
 // "expose_event" of m_mainWidget
 //-----------------------------------------------------------------------------
 
@@ -144,7 +122,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 
     win->m_diffX = (int)gdk_event->x;
     win->m_diffY = (int)gdk_event->y;
-    DrawFrame( widget, 0, 0, win->m_width, win->m_height );
     win->m_oldX = 0;
     win->m_oldY = 0;
 
@@ -174,7 +151,6 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     int x = (int)gdk_event->x;
     int y = (int)gdk_event->y;
 
-    DrawFrame( widget, win->m_oldX, win->m_oldY, win->m_width, win->m_height );
     gdk_pointer_ungrab ( (guint32)GDK_CURRENT_TIME );
     int org_x = 0;
     int org_y = 0;
@@ -215,10 +191,21 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
        gdk_event->state = state;
     }
 
-    DrawFrame( widget, win->m_oldX, win->m_oldY, win->m_width, win->m_height );
     win->m_oldX = (int)gdk_event->x - win->m_diffX;
     win->m_oldY = (int)gdk_event->y - win->m_diffY;
-    DrawFrame( widget, win->m_oldX, win->m_oldY, win->m_width, win->m_height );
+
+    int x = (int)gdk_event->x;
+    int y = (int)gdk_event->y;
+    
+    int org_x = 0;
+    int org_y = 0;
+    gdk_window_get_origin( widget->window, &org_x, &org_y );
+    x += org_x - win->m_diffX;
+    y += org_y - win->m_diffY;
+    win->m_x = x;
+    win->m_y = y;
+    gtk_window_move( GTK_WINDOW(win->m_widget), x, y );
+
 
     return TRUE;
 }
