@@ -1,0 +1,66 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        urldataob.tex
+%% Purpose:     wxURLDataObject documentation
+%% Author:      Vadim Zeitlin
+%% Created:     2006-08-23
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2006 Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxURLDataObject}}\label{wxurldataobject}
+
+wxURLDataObject is a \helpref{wxDataObject}{wxdataobject} containing an URL
+and can be used e.g. when you need to put an URL on or retrieve it from the
+clipboard:
+\begin{verbatim}
+    wxTheClipboard->SetData(new wxURLDataObject(url));
+\end{verbatim}
+
+
+\wxheading{Derived from}
+
+Under MSW:
+
+\helpref{wxDataObjectComposite}{wxdataobjectcomposite}\\
+\helpref{wxDataObject}{wxdataobject}
+
+Under the other platforms:
+
+\helpref{wxTextDataObject}{wxtextdataobject}\\
+\helpref{wxDataObjectSimple}{wxdataobjectsimple}\\
+\helpref{wxDataObject}{wxdataobject}
+
+\wxheading{Include files}
+
+<wx/dataobj.h>
+
+\wxheading{See also}
+
+\helpref{Clipboard and drag and drop overview}{wxdndoverview},\\
+\helpref{wxDataObject}{wxdataobject}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxURLDataObject::wxURLDataObject}\label{wxurldataobjectctor}
+
+\func{}{wxURLDataObject}{\param{const wxString\& }{url = wxEmptyString}}
+
+Constructor, may be used to initialize the URL. If \arg{url} is empty, 
+\helpref{SetURL}{wxurldataobjectseturl} can be used later.
+
+
+\membersection{wxURLDataObject::GetURL}\label{wxurldataobjectgeturl}
+
+\constfunc{wxString}{GetURL}{\void}
+
+Returns the URL stored by this object, as a string.
+
+
+\membersection{wxURLDataObject::SetURL}\label{wxurldataobjectseturl}
+
+\func{void}{SetURL}{\param{const wxString\& }{url}}
+
+Sets the URL stored by this object.
+
