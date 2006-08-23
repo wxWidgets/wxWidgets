@@ -456,6 +456,7 @@ void wxDialogBase::SetEscapeId(int escapeId)
 
 bool wxDialogBase::EmulateButtonClickIfPresent(int id)
 {
+#if wxUSE_BUTTON
     wxButton *btn = wxDynamicCast(FindWindow(id), wxButton);
 
     if ( !btn || !btn->IsEnabled() || !btn->IsShown() )
@@ -466,6 +467,10 @@ bool wxDialogBase::EmulateButtonClickIfPresent(int id)
     btn->GetEventHandler()->ProcessEvent(event);
 
     return true;
+#else // !wxUSE_BUTTON
+    wxUnusedVar(id);
+    return false;
+#endif // wxUSE_BUTTON/!wxUSE_BUTTON
 }
 
 bool wxDialogBase::IsEscapeKey(const wxKeyEvent& event)
