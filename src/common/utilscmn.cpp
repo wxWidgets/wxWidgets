@@ -447,6 +447,11 @@ bool wxPlatform::Is(int platform)
     if (platform == wxOS_WINDOWS_CE)
         return true;
 #endif
+
+#if 0
+
+// FIXME: wxWinPocketPC and wxWinSmartPhone are unknown symbols
+
 #if defined(__WXWINCE__) && defined(__POCKETPC__)
     if (platform == wxWinPocketPC)
         return true;
@@ -455,6 +460,9 @@ bool wxPlatform::Is(int platform)
     if (platform == wxWinSmartPhone)
         return true;
 #endif
+
+#endif
+
 #ifdef __WXGTK__
     if (platform == wxPORT_GTK)
         return true;

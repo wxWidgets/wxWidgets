@@ -293,7 +293,7 @@ class wxTreeItemParam
 {
 public:
     wxTreeItemParam()
-        : m_item((long int)0),
+        : m_item(NULL),
           m_data(NULL)
     {
         for ( size_t n = 0; n < WXSIZEOF(m_images); n++ )

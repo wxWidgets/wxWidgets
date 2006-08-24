@@ -1197,8 +1197,8 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
         if (verMin) *verMin = info.dwMinorVersion;
     }
 
-#if defined(__WXHANDHELD__) || defined( __WXWINCE__ )
-    return wxOS_WINDOWS_WINCE;
+#if defined( __WXWINCE__ )
+    return wxOS_WINDOWS_CE;
 #elif defined( __WXMICROWIN__ )
     return wxOS_WINDOWS_MICRO;
 #else
