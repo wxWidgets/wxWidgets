@@ -109,8 +109,11 @@ bool wxMask::Create( const wxBitmap& bitmap,
     {
         GdkImage* image = gdk_drawable_get_image(bitmap.GetPixmap(), 0, 0, w, h);
         GdkColormap* colormap = gdk_image_get_colormap(image);
-        guint32 mask_pixel = 1;
-        if (colormap != NULL)
+        guint32 mask_pixel;
+        if (colormap == NULL)
+            // mono bitmap, white is pixel value 0
+            mask_pixel = guint32(colour.Red() != 255 || colour.Green() != 255 || colour.Blue() != 255);
+        else
         {
             wxColor c(colour);
             c.CalcPixel(colormap);
