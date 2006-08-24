@@ -99,7 +99,7 @@ public:
             int h=100;
             GetClientSize(&w, &h);
 
-			m_MaxWidth = w;
+            m_MaxWidth = w;
             m_MaxHeight = h;
             m_Amount = alpha;
             m_Region.Clear();
@@ -160,7 +160,7 @@ public:
         }
         m_lastWidth = event.GetSize().GetWidth();
         m_lastHeight = event.GetSize().GetHeight();
-    
+
         SetTransparent(m_Amount);
         m_Region.Intersect(0, 0, event.GetSize().GetWidth(),
                            event.GetSize().GetHeight());
@@ -170,7 +170,7 @@ public:
     }
 
 private:
-    int m_Amount;
+    wxByte m_Amount;
     int m_MaxWidth;
     int m_MaxHeight;
     bool m_CanSetShape;
@@ -1006,10 +1006,10 @@ void wxFrameManager::LoadPaneInfo(wxString pane_part, wxPaneInfo &pane)
         val_name.Trim(false);
         value.Trim(true);
         value.Trim(false);
-    
+
         if (val_name.empty())
             break;
-    
+
         if (val_name == wxT("name"))
             pane.name = value;
         else if (val_name == wxT("caption"))
@@ -2670,7 +2670,7 @@ void wxFrameManager::ShowHint(const wxRect& rect)
             m_hint_fadeamt = 0;
 
         m_hint_wnd->SetSize(rect);
-        
+
         if (! m_hint_wnd->IsShown())
             m_hint_wnd->Show();
 
@@ -2883,7 +2883,7 @@ void wxFrameManager::OnFloatingPaneMoving(wxWindow* wnd, wxDirection dir)
     wxPoint pt = ::wxGetMousePosition();
 
 #if 0
-    // Adapt pt to direction    
+    // Adapt pt to direction
     if (dir == wxNORTH)
     {
         // move to pane's upper border
@@ -2984,7 +2984,7 @@ void wxFrameManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
     wxPoint pt = ::wxGetMousePosition();
 
 #if 0
-    // Adapt pt to direction    
+    // Adapt pt to direction
     if (dir == wxNORTH)
     {
         // move to pane's upper border
