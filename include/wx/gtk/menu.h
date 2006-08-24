@@ -37,6 +37,8 @@ public:
     virtual void SetLabelTop( size_t pos, const wxString& label );
     virtual wxString GetLabelTop( size_t pos ) const;
 
+    void SetLayoutDirection(wxLayoutDirection dir);
+
     void Attach(wxFrame *frame);
 
     // implementation only from now on
