@@ -82,6 +82,9 @@ enum
     Widgets_BorderDouble,
     Widgets_BorderDefault,
 
+    Widgets_GlobalBusyCursor,
+    Widgets_BusyCursor,
+
     Widgets_GoToPage,
     Widgets_GoToPageLast = Widgets_GoToPage + 100
 };
@@ -145,6 +148,9 @@ protected:
     void OnSetFont(wxCommandEvent& event);
     void OnEnable(wxCommandEvent& event);
     void OnSetBorder(wxCommandEvent& event);
+
+    void OnToggleGlobalBusyCursor(wxCommandEvent& event);
+    void OnToggleBusyCursor(wxCommandEvent& event);
 #endif // wxUSE_MENUS
 
     // initialize the book: add all pages to it
@@ -274,6 +280,9 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
     EVT_MENU_RANGE(Widgets_BorderNone, Widgets_BorderDefault,
                    WidgetsFrame::OnSetBorder)
 
+    EVT_MENU(Widgets_GlobalBusyCursor,  WidgetsFrame::OnToggleGlobalBusyCursor)
+    EVT_MENU(Widgets_BusyCursor,        WidgetsFrame::OnToggleBusyCursor)
+
     EVT_MENU(wxID_EXIT, WidgetsFrame::OnExit)
 #endif // wxUSE_MENUS
 END_EVENT_TABLE()
@@ -359,6 +368,12 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     menuBorders->AppendRadioItem(Widgets_BorderRaised, _T("&Raised\tCtrl-Shift-4"));
     menuBorders->AppendRadioItem(Widgets_BorderSunken, _T("S&unken\tCtrl-Shift-5"));
     menuWidget->AppendSubMenu(menuBorders, _T("Set &border"));
+
+    menuWidget->AppendSeparator();
+    menuWidget->AppendCheckItem(Widgets_GlobalBusyCursor,
+                                _T("Toggle &global busy cursor\tCtrl-Shift-U"));
+    menuWidget->AppendCheckItem(Widgets_BusyCursor,
+                                _T("Toggle b&usy cursor\tCtrl-U"));
 
     menuWidget->AppendSeparator();
     menuWidget->Append(wxID_EXIT, _T("&Quit\tCtrl-Q"));
@@ -820,6 +835,21 @@ void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
     }
 
     page->RecreateWidget();
+}
+
+void WidgetsFrame::OnToggleGlobalBusyCursor(wxCommandEvent& event)
+{
+    if ( event.IsChecked() )
+        wxBeginBusyCursor();
+    else
+        wxEndBusyCursor();
+}
+
+void WidgetsFrame::OnToggleBusyCursor(wxCommandEvent& event)
+{
+    WidgetsPage *page = CurrentPage();
+    page->GetWidget()->SetCursor(*(event.IsChecked() ? wxHOURGLASS_CURSOR
+                                                     : wxSTANDARD_CURSOR));
 }
 
 #endif // wxUSE_MENUS
