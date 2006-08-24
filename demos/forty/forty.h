@@ -85,9 +85,6 @@ public:
         long style = wxDEFAULT_DIALOG_STYLE );
 
     bool AddControls(wxWindow* parent);
-
-private:
-    DECLARE_EVENT_TABLE()
 };
 
 #define ID_ABOUT_HTML_WINDOW    1000
