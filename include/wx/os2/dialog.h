@@ -122,7 +122,6 @@ private:
     class wxWindowDisabler*         m_pWindowDisabler;
 
     DECLARE_DYNAMIC_CLASS(wxDialog)
-    DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxDialog)
 }; // end of CLASS wxDialog
 
